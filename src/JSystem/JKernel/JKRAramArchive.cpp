@@ -121,6 +121,7 @@ bool JKRAramArchive::open(s32 entryNum) {
         JKRDvdToMainRam(entryNum, (u8*)mem, EXPAND_SWITCH_UNKNOWN1, 32, NULL,
                         JKRDvdRipper::ALLOC_DIRECTION_FORWARD, 0, &mCompression, NULL);
         DCInvalidateRange(mem, 32);
+        JKRSwapArcHeader(mem);
         int alignment = mMountDirection == MOUNT_DIRECTION_HEAD ? 32 : -32;
         u32 alignedSize = ALIGN_NEXT(mem->file_data_offset, 32);
         mArcInfoBlock = (SArcDataInfo*)JKRAllocFromHeap(mHeap, alignedSize, alignment);
@@ -130,6 +131,7 @@ bool JKRAramArchive::open(s32 entryNum) {
             JKRDvdToMainRam(entryNum, (u8*)mArcInfoBlock, EXPAND_SWITCH_UNKNOWN1, alignedSize, NULL,
                             JKRDvdRipper::ALLOC_DIRECTION_FORWARD, 32, NULL, NULL);
             DCInvalidateRange(mArcInfoBlock, alignedSize);
+            JKRSwapArchiveMemory(mArcInfoBlock);
 
             mNodes = (SDIDirEntry*)((u8*)mArcInfoBlock + mArcInfoBlock->node_offset);
             mFiles = (SDIFileEntry*)((u8*)mArcInfoBlock + mArcInfoBlock->file_entry_offset);

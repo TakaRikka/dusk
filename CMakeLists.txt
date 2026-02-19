@@ -1358,6 +1358,9 @@ set(DUSK_FILES
     #src/dusk/m_Do_ext_dusk.cpp
 	src/dusk/jsystem_stubs.cpp
     src/dusk/dvd_emu.cpp
+    src/dolphin/os/OSContext.cpp
+    src/dolphin/os/OSThread.cpp
+    src/dolphin/os/OSMutex.cpp
     )
 
 source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES})

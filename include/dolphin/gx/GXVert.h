@@ -3,6 +3,10 @@
 
 #ifdef __REVOLUTION_SDK__
 #include <revolution/gx/GXVert.h>
+#elif defined(TARGET_PC)
+// On PC, use Aurora's GXVert declarations (extern functions implemented in
+// GXVert.cpp, no hardware FIFO writes to 0xCC008000)
+#include "../../../extern/aurora/include/dolphin/gx/GXVert.h"
 #else
 #include <dolphin/types.h>
 #include <dolphin/os.h>

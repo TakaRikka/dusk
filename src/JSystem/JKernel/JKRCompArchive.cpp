@@ -88,6 +88,7 @@ bool JKRCompArchive::open(s32 entryNum) {
 
         JKRDvdToMainRam(entryNum, (u8 *)arcHeader, EXPAND_SWITCH_UNKNOWN1, 32, NULL, JKRDvdRipper::ALLOC_DIRECTION_FORWARD, 0, &mCompression, NULL);
         DCInvalidateRange(arcHeader, 32);
+        JKRSwapArcHeader(arcHeader);
 
         mSizeOfMemPart = arcHeader->field_0x14;
         mSizeOfAramPart = arcHeader->field_0x18;
@@ -108,6 +109,7 @@ bool JKRCompArchive::open(s32 entryNum) {
                 JKRDvdToMainRam(entryNum, (u8 *)mArcInfoBlock, EXPAND_SWITCH_UNKNOWN1, (uintptr_t)arcHeader->file_data_offset + mSizeOfMemPart,
                                 NULL, JKRDvdRipper::ALLOC_DIRECTION_FORWARD, 0x20, NULL, NULL);
                 DCInvalidateRange(mArcInfoBlock, (uintptr_t)arcHeader->file_data_offset + mSizeOfMemPart);
+                JKRSwapArchiveMemory(mArcInfoBlock);
                 field_0x64 = (uintptr_t)mArcInfoBlock + arcHeader->file_data_offset;
 
                 if (mSizeOfAramPart != 0) {
@@ -156,6 +158,7 @@ bool JKRCompArchive::open(s32 entryNum) {
                     else {
                         // arcHeader + 1 should lead to 0x20, which is the data after the header
                         JKRHeap::copyMemory((u8 *)mArcInfoBlock, arcHeader + 1, (arcHeader->file_data_offset + mSizeOfMemPart));
+                        JKRSwapArchiveMemory(mArcInfoBlock);
                         field_0x64 = (uintptr_t)mArcInfoBlock + arcHeader->file_data_offset;
                         if (mSizeOfAramPart != 0) {
                             mAramPart = (JKRAramBlock*)JKRAllocFromAram(mSizeOfAramPart, JKRAramHeap::HEAD);

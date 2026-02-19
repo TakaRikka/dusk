@@ -2,17 +2,18 @@
 #include <dolphin/gx/GXVert.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
+#include <cstdlib>
+#include <cstdint>
+#include <mutex>
+#include <condition_variable>
+#include <unordered_map>
+#include <memory>
+#include <dusk/dvd_emu.h>
 
-// Credits: Super Monkey Ball
-
-/*
-void OSReport(const char* msg, ...) {
-    va_list args;
-    va_start(args, msg);
-    vprintf(msg, args);
-    va_end(args);
-}
-*/
+// ==========================================================================
+// General OS
+// ==========================================================================
 
 u32 OSGetConsoleType() {
     return OS_CONSOLE_RETAIL1;
@@ -22,219 +23,155 @@ u32 OSGetSoundMode() {
     return 2;
 }
 
-// Consolidated OS functions (moved from other sections)
-void OSClearContext(OSContext* context) {
-    puts("OSClearContext is a stub");
-}
-
 void OSInit() {
-    puts("OSInit is a stub");
+    // Thread system is lazy-initialized via OSGetCurrentThread()
 }
 
-void OSInitMutex(OSMutex* mutex) {
-    puts("OSInitMutex is a stub");
+// ==========================================================================
+// Message Queue (thread-safe implementation)
+// ==========================================================================
+
+// Malloc-based allocator to bypass JKRHeap operator new/delete
+template<typename T>
+struct MallocAllocator {
+    using value_type = T;
+    MallocAllocator() = default;
+    template<typename U> MallocAllocator(const MallocAllocator<U>&) noexcept {}
+    T* allocate(std::size_t n) {
+        void* p = std::malloc(n * sizeof(T));
+        if (!p) throw std::bad_alloc();
+        return static_cast<T*>(p);
+    }
+    void deallocate(T* p, std::size_t) noexcept { std::free(p); }
+    template<typename U> bool operator==(const MallocAllocator<U>&) const noexcept { return true; }
+    template<typename U> bool operator!=(const MallocAllocator<U>&) const noexcept { return false; }
+};
+
+template<typename T>
+struct MallocDeleter {
+    void operator()(T* p) const {
+        p->~T();
+        std::free(p);
+    }
+};
+
+template<typename T, typename... Args>
+std::unique_ptr<T, MallocDeleter<T>> make_malloc_unique(Args&&... args) {
+    void* mem = std::malloc(sizeof(T));
+    if (!mem) throw std::bad_alloc();
+    T* obj = new (mem) T(std::forward<Args>(args)...);
+    return std::unique_ptr<T, MallocDeleter<T>>(obj);
 }
 
-void OSUnlockMutex(OSMutex* mutex) {
-    puts("OSUnlockMutex is a stub");
+template<typename K, typename V>
+using MallocMap = std::unordered_map<K, V, std::hash<K>, std::equal_to<K>,
+    MallocAllocator<std::pair<const K, V>>>;
+
+// Side-table for native synchronization per OSMessageQueue
+struct PCMessageQueueData {
+    std::mutex mtx;
+    std::condition_variable cvSend;     // Notified when space becomes available
+    std::condition_variable cvReceive;  // Notified when a message arrives
+};
+
+// Lazy-initialized to avoid DLL static init crashes
+static std::mutex& GetMsgQueueMapMutex() {
+    static std::mutex mtx;
+    return mtx;
+}
+static MallocMap<OSMessageQueue*, std::unique_ptr<PCMessageQueueData, MallocDeleter<PCMessageQueueData>>>& GetMsgQueueMap() {
+    static MallocMap<OSMessageQueue*, std::unique_ptr<PCMessageQueueData, MallocDeleter<PCMessageQueueData>>> map;
+    return map;
 }
 
-BOOL OSTryLockMutex(OSMutex* mutex) {
-    puts("OSTryLockMutex is a stub");
-    return FALSE;
+static PCMessageQueueData& GetMsgQueueData(OSMessageQueue* mq) {
+    std::lock_guard<std::mutex> lock(GetMsgQueueMapMutex());
+    auto& map = GetMsgQueueMap();
+    auto it = map.find(mq);
+    if (it == map.end()) {
+        auto result = map.emplace(mq, make_malloc_unique<PCMessageQueueData>());
+        return *result.first->second;
+    }
+    return *it->second;
 }
 
-void* OSAllocFromArenaLo(u32 size, u32 align) {
-    puts("OSAllocFromArenaLo is a stub");
-    return NULL;
+void OSInitMessageQueue(OSMessageQueue* mq, void* msgArray, s32 msgCount) {
+    if (!mq) return;
+    mq->queueSend.head = mq->queueSend.tail = nullptr;
+    mq->queueReceive.head = mq->queueReceive.tail = nullptr;
+    mq->msgArray   = msgArray;
+    mq->msgCount   = msgCount;
+    mq->firstIndex = 0;
+    mq->usedCount  = 0;
+    GetMsgQueueData(mq);  // Ensure side-table entry exists
 }
 
-BOOL OSDisableInterrupts() {
-    puts("OSDisableInterrupts is a stub");
-    return FALSE;
+int OSSendMessage(OSMessageQueue* mq, void* msg, s32 flags) {
+    if (!mq) return 0;
+
+    PCMessageQueueData& data = GetMsgQueueData(mq);
+    std::unique_lock<std::mutex> lock(data.mtx);
+
+    if (mq->usedCount >= mq->msgCount) {
+        if (flags == OS_MESSAGE_NOBLOCK) return 0;
+        // BLOCK: wait until space is available
+        data.cvSend.wait(lock, [mq]() { return mq->usedCount < mq->msgCount; });
+    }
+
+    s32 idx = (mq->firstIndex + mq->usedCount) % mq->msgCount;
+    ((OSMessage*)mq->msgArray)[idx] = msg;
+    mq->usedCount++;
+
+    data.cvReceive.notify_one();
+    return 1;
 }
 
-void OSSleepThread(OSThreadQueue* queue) {
-    puts("OSSleepThread is a stub");
+int OSReceiveMessage(OSMessageQueue* mq, void* msg, s32 flags) {
+    if (!mq) return 0;
+
+    PCMessageQueueData& data = GetMsgQueueData(mq);
+    std::unique_lock<std::mutex> lock(data.mtx);
+
+    if (mq->usedCount == 0) {
+        if (flags == OS_MESSAGE_NOBLOCK) return 0;
+        // BLOCK: wait until a message arrives
+        data.cvReceive.wait(lock, [mq]() { return mq->usedCount > 0; });
+    }
+
+    if (msg) {
+        *(OSMessage*)msg = ((OSMessage*)mq->msgArray)[mq->firstIndex];
+    }
+    mq->firstIndex = (mq->firstIndex + 1) % mq->msgCount;
+    mq->usedCount--;
+
+    data.cvSend.notify_one();
+    return 1;
 }
 
-void OSDumpContext(OSContext* context) {
-    puts("OSDumpContext is a stub");
+int OSJamMessage(OSMessageQueue* mq, void* msg, s32 flags) {
+    if (!mq) return 0;
+
+    PCMessageQueueData& data = GetMsgQueueData(mq);
+    std::unique_lock<std::mutex> lock(data.mtx);
+
+    if (mq->usedCount >= mq->msgCount) {
+        if (flags == OS_MESSAGE_NOBLOCK) return 0;
+        // BLOCK: wait until space is available
+        data.cvSend.wait(lock, [mq]() { return mq->usedCount < mq->msgCount; });
+    }
+
+    // Jam inserts at the front of the queue
+    mq->firstIndex = (mq->firstIndex - 1 + mq->msgCount) % mq->msgCount;
+    ((OSMessage*)mq->msgArray)[mq->firstIndex] = msg;
+    mq->usedCount++;
+
+    data.cvReceive.notify_one();
+    return 1;
 }
 
-void OSSignalCond(OSCond* cond) {
-    puts("OSSignalCond is a stub");
-}
-
-void OSCreateAlarm(OSAlarm* alarm) {
-    puts("OSCreateAlarm is a stub");
-}
-
-void OSCancelAlarm(OSAlarm* alarm) {
-    puts("OSCancelAlarm is a stub");
-}
-
-s32 OSCheckActiveThreads(void) {
-    puts("OSCheckActiveThreads is a stub");
-
-    return 0;
-}
-
-int OSCreateThread(OSThread* thread, void* (*func)(void*), void* param, void* stack, u32 stackSize,
-                   OSPriority priority, u16 attr) {
-    puts("OSCreateThread is a stub");
-    return 0;
-}
-
-s32 OSDisableScheduler() {
-    puts("OSDisableScheduler is a stub");
-    return 0;
-}
-
-void OSDetachThread(OSThread* thread) {
-    puts("OSDetachThread is a stub");
-}
-
-OSThread* OSGetCurrentThread() {
-    puts("OSGetCurrentThread is a stub");
-    return 0;
-}
-
-u16 OSGetFontEncode() {
-    puts("OSGetFontEncode is a stub");
-    return 0;
-}
-
-char* OSGetFontTexture(char* string, void** image, s32* x, s32* y, s32* width) {
-    puts("OSGetFontTexture is a stub");
-    return 0;
-}
-
-char* OSGetFontWidth(char* string, s32* width) {
-    puts("OSGetFontWidth is a stub");
-    return 0;
-}
-
-BOOL OSGetResetButtonState() {
-    puts("OSGetResetButtonState is a stub");
-    return FALSE;
-}
-
-u32 OSGetStackPointer() {
-    puts("OSGetStackPointer is a stub");
-    return 0;
-}
-
-BOOL OSInitFont(OSFontHeader* fontData) {
-    puts("OSInitFont is a stub");
-    return FALSE;
-}
-
-BOOL OSLink(OSModuleInfo* newModule, void* bss) {
-    puts("OSLink is a stub");
-    return TRUE;
-}
-
-void OSLoadContext(OSContext* context) {
-    puts("OSLoadContext is a stub");
-}
-
-void OSResetSystem(int reset, u32 resetCode, BOOL forceMenu) {
-    puts("OSResetSystem is a stub");
-}
-
-BOOL OSRestoreInterrupts(BOOL level) {
-    puts("OSRestoreInterrupts is a stub");
-    return FALSE;
-}
-
-s32 OSResumeThread(OSThread* thread) {
-    puts("OSResumeThread is a stub");
-    return 0;
-}
-
-void OSSetCurrentContext(OSContext* context) {
-    puts("OSSetCurrentContext is a stub");
-}
-
-void OSSetStringTable(void* stringTable) {
-    puts("OSSetStringTable is a stub");
-}
-
-OSSwitchThreadCallback OSSetSwitchThreadCallback(OSSwitchThreadCallback callback) {
-    puts("OSSetSwitchThreadCallback is a stub");
-    return NULL;
-}
-
-int OSSetThreadPriority(OSThread* thread, s32 priority) {
-    puts("OSSetThreadPriority is a stub");
-    return 0;
-}
-
-void OSWaitCond(OSCond* cond, OSMutex* mutex) {
-    puts("OSWaitCond is a stub");
-}
-
-void OSYieldThread(void) {
-    puts("OSYieldThread is a stub");
-}
-
-s32 OSSuspendThread(OSThread* thread) {
-    puts("OSSuspendThread is a stub");
-    return 0;
-}
-
-void OSCancelThread(OSThread* thread) {
-    puts("OSCancelThread is a stub");
-}
-
-void OSTicksToCalendarTime(OSTime ticks, OSCalendarTime* td) {
-    puts("OSTicksToCalendarTime is a stub");
-}
-
-BOOL OSUnlink(OSModuleInfo* oldModule) {
-    puts("OSUnlink is a stub");
-    return FALSE;
-}
-
-void OSSwitchFiberEx(__REGISTER u32 param_0, __REGISTER u32 param_1, __REGISTER u32 param_2,
-                     __REGISTER u32 param_3, __REGISTER u32 code, __REGISTER u32 stack) {
-    puts("OSSwitchFiberEx is a stub");
-}
-
-void OSWakeupThread(OSThreadQueue* queue) {
-    puts("OSWakeupThread is a stub");
-}
-
-u32 __OSGetDIConfig() {
-    puts("__OSGetDIConfig is a stub");
-    return 0;
-}
-
-__OSInterruptHandler __OSSetInterruptHandler(__OSInterrupt interrupt,
-                                             __OSInterruptHandler handler) {
-    puts("__OSSetInterruptHandler is a stub");
-    return 0;
-}
-
-OSInterruptMask __OSUnmaskInterrupts(OSInterruptMask mask) {
-    puts("__OSUnmaskInterrupts is a stub");
-    return 0;
-}
-
-BOOL OSEnableInterrupts() {
-    puts("OSEnableInterrupts is a stub");
-    return FALSE;
-}
-
-s32 OSEnableScheduler() {
-    puts("OSEnableScheduler is a stub");
-    return 0;
-}
-
-void OSExitThread(void* val) {
-    puts("OSExitThread is a stub");
-}
+// ==========================================================================
+// Arena Functions
+// ==========================================================================
 
 static void* sArenaLo = nullptr;
 static void* sArenaHi = nullptr;
@@ -247,86 +184,6 @@ void* OSGetArenaLo(void) {
     return sArenaLo;
 }
 
-OSContext* OSGetCurrentContext(void) {
-    puts("OSGetCurrentContext is a stub");
-    return NULL;
-}
-
-u32 OSGetProgressiveMode(void) {
-    puts("OSGetProgressiveMode is a stub");
-    return 0;
-}
-
-u32 OSGetResetCode(void) {
-    puts("OSGetResetCode is a stub");
-    return 0;
-}
-
-BOOL OSGetResetSwitchState() {
-    puts("OSGetResetSwitchState is a stub");
-    return FALSE;
-}
-
-s32 OSGetThreadPriority(OSThread* thread) {
-    puts("OSGetThreadPriority is a stub");
-    return 0;
-}
-
-OSTick OSGetTick(void) {
-    puts("OSGetTick is a stub");
-    return 0;
-}
-
-OSTime OSGetTime(void) {
-    puts("OSGetTime is a stub");
-    return 0;
-}
-
-void OSInitCond(OSCond* cond) {
-    puts("OSInitCond is a stub");
-}
-
-void OSInitMessageQueue(OSMessageQueue* mq, void* msgArray, s32 msgCount) {
-    puts("OSInitMessageQueue is a stub");
-}
-
-void OSInitThreadQueue(OSThreadQueue* queue) {
-    puts("OSInitThreadQueue is a stub");
-}
-
-BOOL OSIsThreadTerminated(OSThread* thread) {
-    puts("OSIsThreadTerminated is a stub");
-    return FALSE;
-}
-
-int OSJamMessage(OSMessageQueue* mq, void* msg, s32 flags) {
-    puts("OSJamMessage is a stub");
-    return 0;
-}
-
-BOOL OSLinkFixed(OSModuleInfo* newModule, void* bss) {
-    puts("OSLinkFixed is a stub");
-    return TRUE;
-}
-
-void OSLockMutex(OSMutex* mutex) {
-    puts("OSLockMutex is a stub");
-}
-
-void OSProtectRange(u32 chan, void* addr, u32 nBytes, u32 control) {
-    puts("OSProtectRange is a stub");
-}
-
-int OSReceiveMessage(OSMessageQueue* mq, void* msg, s32 flags) {
-    puts("OSReceiveMessage is a stub");
-    return 0;
-}
-
-int OSSendMessage(OSMessageQueue* mq, void* msg, s32 flags) {
-    puts("OSSendMessage is a stub");
-    return 0;
-}
-
 void OSSetArenaHi(void* newHi) {
     sArenaHi = newHi;
 }
@@ -335,37 +192,77 @@ void OSSetArenaLo(void* newLo) {
     sArenaLo = newLo;
 }
 
-void OSSetPeriodicAlarm(OSAlarm* alarm, OSTime start, OSTime period, OSAlarmHandler handler) {
-    puts("OSSetPeriodicAlarm is a stub");
-}
+void* OSAllocFromArenaLo(u32 size, u32 align) {
+    if (!sArenaLo || !sArenaHi) return nullptr;
 
-void OSSetProgressiveMode(u32 on) {
-    puts("OSSetProgressiveMode is a stub");
-}
+    uintptr_t lo = (uintptr_t)sArenaLo;
+    if (align > 0) {
+        lo = (lo + align - 1) & ~((uintptr_t)align - 1);
+    }
 
-void OSSetSaveRegion(void* start, void* end) {
-    puts("OSSetSaveRegion is a stub");
-}
+    uintptr_t hi = (uintptr_t)sArenaHi;
+    if (lo + size > hi) {
+        OSReport("[PC-Arena] OSAllocFromArenaLo: out of arena space (need %u, have %u)\n",
+                 size, (u32)(hi - lo));
+        return nullptr;
+    }
 
-OSErrorHandler OSSetErrorHandler(OSError error, OSErrorHandler handler) {
-    puts("OSSetErrorHandler is a stub");
-    return NULL;
-}
-
-void OSSetAlarm(OSAlarm* alarm, OSTime tick, OSAlarmHandler handler) {
-    puts("OSSetAlarm is a stub");
+    void* result = (void*)lo;
+    sArenaLo = (void*)(lo + size);
+    return result;
 }
 
 void* OSInitAlloc(void* arenaStart, void* arenaEnd, int maxHeaps) {
-    puts("OSInitAlloc is a stub");
-    return NULL;
+    return arenaStart;
 }
 
-void OSFillFPUContext(__REGISTER OSContext* context) {
-    puts("OSFillFPUContext is a stub");
-}
+// ==========================================================================
+// Remaining OS Stubs
+// ==========================================================================
 
 void OSSetSoundMode(u32 mode) {}
+
+void OSCreateAlarm(OSAlarm* alarm) {}
+
+void OSCancelAlarm(OSAlarm* alarm) {}
+
+void OSTicksToCalendarTime(OSTime ticks, OSCalendarTime* td) {
+    if (td) memset(td, 0, sizeof(OSCalendarTime));
+}
+
+OSTick OSGetTick(void) { return 0; }
+OSTime OSGetTime(void) { return 0; }
+
+u16 OSGetFontEncode() { return 0; }
+
+char* OSGetFontTexture(char* string, void** image, s32* x, s32* y, s32* width) { return 0; }
+char* OSGetFontWidth(char* string, s32* width) { return 0; }
+
+BOOL OSGetResetButtonState() { return FALSE; }
+BOOL OSInitFont(OSFontHeader* fontData) { return FALSE; }
+BOOL OSLink(OSModuleInfo* newModule, void* bss) { return TRUE; }
+
+void OSResetSystem(int reset, u32 resetCode, BOOL forceMenu) {
+    OSReport("[PC] OSResetSystem called (reset=%d, code=%u)\n", reset, resetCode);
+}
+
+void OSSetStringTable(void* stringTable) {}
+BOOL OSUnlink(OSModuleInfo* oldModule) { return FALSE; }
+
+void OSSwitchFiberEx(__REGISTER u32 param_0, __REGISTER u32 param_1, __REGISTER u32 param_2,
+                     __REGISTER u32 param_3, __REGISTER u32 code, __REGISTER u32 stack) {}
+
+u32 __OSGetDIConfig() { return 0; }
+u32 OSGetProgressiveMode(void) { return 0; }
+u32 OSGetResetCode(void) { return 0; }
+BOOL OSGetResetSwitchState() { return FALSE; }
+BOOL OSLinkFixed(OSModuleInfo* newModule, void* bss) { return TRUE; }
+void OSProtectRange(u32 chan, void* addr, u32 nBytes, u32 control) {}
+void OSSetPeriodicAlarm(OSAlarm* alarm, OSTime start, OSTime period, OSAlarmHandler handler) {}
+void OSSetProgressiveMode(u32 on) {}
+void OSSetSaveRegion(void* start, void* end) {}
+OSErrorHandler OSSetErrorHandler(OSError error, OSErrorHandler handler) { return NULL; }
+void OSSetAlarm(OSAlarm* alarm, OSTime tick, OSAlarmHandler handler) {}
 
 #pragma mark SOUND
 void SoundChoID(int a, int b) {
@@ -1274,30 +1171,84 @@ void AIStopDMA(void) {
 
 #pragma mark AR
 #include <dolphin/ar.h>
-// Auxilary RAM doesn't exist on PC platforms, do we need to call malloc/free for these instead?
-// For now, we will just stub these functions.
+
+// ARAM emulation: allocate a large buffer to simulate the GameCube's Auxiliary RAM.
+// ARAM "addresses" are offsets into this buffer. On GameCube, ARAM is 16 MB starting
+// at a base address returned by ARInit. We emulate this by malloc'ing a 16 MB buffer
+// and using a simple bump allocator (matching ARAlloc behavior on real hardware).
+static const u32 ARAM_EMU_SIZE = 16 * 1024 * 1024; // 16 MB (GameCube ARAM size)
+static u8* sAramBuffer = nullptr;
+static u32 sAramAllocPtr = 0; // bump allocator offset into sAramBuffer
+
+// Convert an ARAM "address" (offset) to a real host pointer
+static u8* aramToHost(u32 aramAddr) {
+    if (!sAramBuffer || aramAddr >= ARAM_EMU_SIZE) {
+        return nullptr;
+    }
+    return sAramBuffer + aramAddr;
+}
+
 u32 ARAlloc(u32 length) {
-    puts("ARAlloc is a stub");
-    return 0;
+    // Simple bump allocator (matching GameCube behavior - ARAlloc never frees)
+    u32 addr = sAramAllocPtr;
+    sAramAllocPtr += (length + 31) & ~31; // 32-byte align
+    if (sAramAllocPtr > ARAM_EMU_SIZE) {
+        OSReport("[ARAM] ERROR: ARAlloc overflow! Requested %u, used %u/%u\n",
+                 length, sAramAllocPtr, ARAM_EMU_SIZE);
+        return 0;
+    }
+    OSReport("[ARAM] ARAlloc(%u) -> 0x%08X\n", length, addr);
+    return addr;
 }
 
 u32 ARGetSize(void) {
-    return 0x10000;  // 64KB, this is the size of the AR memory region
+    return ARAM_EMU_SIZE;
 }
 
 u32 ARInit(u32* stack_index_addr, u32 num_entries) {
-    puts("ARInit is a stub");
+    if (!sAramBuffer) {
+        sAramBuffer = (u8*)malloc(ARAM_EMU_SIZE);
+        if (sAramBuffer) {
+            memset(sAramBuffer, 0, ARAM_EMU_SIZE);
+            OSReport("[ARAM] Initialized %u bytes of emulated ARAM\n", ARAM_EMU_SIZE);
+        } else {
+            OSReport("[ARAM] FATAL: Failed to allocate ARAM emulation buffer!\n");
+        }
+    }
+    // Return base address (start of usable ARAM, after stack entries)
+    sAramAllocPtr = 0;
     return 0;
 }
 
 #pragma mark ARQ
 void ARQPostRequest(ARQRequest* request, u32 owner, u32 type, u32 priority, u32 source, u32 dest,
                     u32 length, ARQCallback callback) {
-    puts("ARQPostRequest is a stub");
+    // Emulate ARAM DMA transfers using memcpy.
+    // type 0 = MRAM -> ARAM, type 1 = ARAM -> MRAM
+    if (type == ARAM_DIR_MRAM_TO_ARAM) {
+        // Main RAM -> ARAM: source is a host pointer (cast to u32), dest is an ARAM offset
+        u8* hostSrc = (u8*)(uintptr_t)source;
+        u8* aramDst = aramToHost(dest);
+        if (aramDst && hostSrc) {
+            memcpy(aramDst, hostSrc, length);
+        }
+    } else {
+        // ARAM -> Main RAM: source is an ARAM offset, dest is a host pointer (cast to u32)
+        u8* aramSrc = aramToHost(source);
+        u8* hostDst = (u8*)(uintptr_t)dest;
+        if (aramSrc && hostDst) {
+            memcpy(hostDst, aramSrc, length);
+        }
+    }
+
+    // Immediately invoke the callback (synchronous on PC, no DMA latency)
+    if (callback) {
+        callback((u32)(uintptr_t)request);
+    }
 }
 
 void ARQInit() {
-    puts("ARQInit is a stub");
+    // Nothing to do on PC - ARAM is initialized in ARInit
 }
 
 #pragma mark DVD
@@ -1327,11 +1278,24 @@ int DVDCloseDir(DVDDir* dir) {
     return 0;
 }
 s32 DVDConvertPathToEntrynum(const char* pathPtr) {
-    puts("DVDConvertPathToEntrynum is a stub");
-    return 0;
+    return DVDConvertPathToEntrynum_Emu(pathPtr);
 }
 BOOL DVDFastOpen(s32 entrynum, DVDFileInfo* fileInfo) {
-    puts("DVDFastOpen is a stub");
+    const char* path = DVDGetPathForEntry(entrynum);
+    if (!path) {
+        OSReport("[DVD] DVDFastOpen: no path for entry %d\n", entrynum);
+        return FALSE;
+    }
+    u32 fileSize = DvdEmu::getFileSize(path);
+    if (fileSize == 0) {
+        OSReport("[DVD] DVDFastOpen: file not found or empty for entry %d (%s)\n", entrynum, path);
+        return FALSE;
+    }
+    // Repurpose startAddr to store entrynum for later DVDReadPrio lookups
+    fileInfo->startAddr = (u32)entrynum;
+    fileInfo->length = fileSize;
+    fileInfo->callback = NULL;
+    fileInfo->cb.state = 0;
     return TRUE;
 }
 s32 DVDGetCommandBlockStatus(const DVDCommandBlock* block) {
@@ -1343,15 +1307,19 @@ DVDDiskID* DVDGetCurrentDiskID(void) {
     return NULL;
 }
 s32 DVDGetDriveStatus(void) {
-    puts("DVDGetDriveStatus is a stub");
+    //puts("DVDGetDriveStatus is a stub");
     return 0;
 }
 void DVDInit(void) {
     puts("DVDInit is a stub");
 }
 BOOL DVDOpen(const char* fileName, DVDFileInfo* fileInfo) {
-    puts("DVDOpen is a stub");
-    return TRUE;
+    s32 entryNum = DVDConvertPathToEntrynum(fileName);
+    if (entryNum < 0) {
+        OSReport("[DVD] DVDOpen: file not found: %s\n", fileName);
+        return FALSE;
+    }
+    return DVDFastOpen(entryNum, fileInfo);
 }
 int DVDOpenDir(const char* dirName, DVDDir* dir) {
     puts("DVDOpenDir is a stub");
@@ -1359,7 +1327,18 @@ int DVDOpenDir(const char* dirName, DVDDir* dir) {
 }
 BOOL DVDReadAsyncPrio(DVDFileInfo* fileInfo, void* addr, s32 length, s32 offset,
                       DVDCallback callback, s32 prio) {
-    puts("DVDReadAsyncPrio is a stub");
+    // Synchronous read, then invoke callback with result
+    s32 entryNum = (s32)fileInfo->startAddr;
+    const char* path = DVDGetPathForEntry(entryNum);
+    if (!path) {
+        OSReport("[DVD] DVDReadAsyncPrio: no path for entry %d\n", entryNum);
+        if (callback) callback(-1, fileInfo);
+        return FALSE;
+    }
+    u32 bytesRead = DvdEmu::loadFileToBuffer(path, addr, (u32)length, (u32)offset);
+    if (callback) {
+        callback((s32)bytesRead, fileInfo);
+    }
     return TRUE;
 }
 int DVDReadDir(DVDDir* dir, DVDDirEntry* dirent) {
@@ -1367,8 +1346,14 @@ int DVDReadDir(DVDDir* dir, DVDDirEntry* dirent) {
     return 0;
 }
 s32 DVDReadPrio(DVDFileInfo* fileInfo, void* addr, s32 length, s32 offset, s32 prio) {
-    puts("DVDReadPrio is a stub");
-    return 0;
+    s32 entryNum = (s32)fileInfo->startAddr;
+    const char* path = DVDGetPathForEntry(entryNum);
+    if (!path) {
+        OSReport("[DVD] DVDReadPrio: no path for entry %d\n", entryNum);
+        return -1;
+    }
+    u32 bytesRead = DvdEmu::loadFileToBuffer(path, addr, (u32)length, (u32)offset);
+    return (s32)bytesRead;
 }
 
 void DVDReadAbsAsyncForBS(void* a, struct bb2struct* b, int c, int d, void (*e)()) {
