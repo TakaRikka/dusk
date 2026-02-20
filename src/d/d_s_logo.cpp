@@ -3,6 +3,8 @@
  * Game Boot Logo's Display
  */
 
+#include <cstdio>
+
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "d/d_s_logo.h"
@@ -589,10 +591,20 @@ static int resLoad(request_of_phase_process_class* i_phase, dScnLogo_c* i_this) 
 }
 
 int dScnLogo_c::create() {
+    static bool sDiagLogged = false;
+    if (!sDiagLogged) {
+        printf("[DIAG] dScnLogo_c::create START\n"); fflush(stdout);
+    }
     int phase_state = resLoad(&field_0x1c4, this);
+    if (!sDiagLogged) {
+        printf("[DIAG] dScnLogo_c::create resLoad=%d (need %d for complete)\n", phase_state, cPhs_COMPLEATE_e); fflush(stdout);
+        sDiagLogged = true;
+    }
     if (phase_state != cPhs_COMPLEATE_e) {
         return phase_state;
     }
+
+    printf("[DIAG] dScnLogo_c::create resLoad COMPLETE, continuing init...\n"); fflush(stdout);
 
     #if PLATFORM_WII
     data_8053a730 = 1;
@@ -853,6 +865,7 @@ void dScnLogo_c::dvdDataLoad() {
 }
 
 static int dScnLogo_Create(scene_class* i_this) {
+    printf("[DIAG] dScnLogo_Create: entry i_this=%p\n", i_this); fflush(stdout);
     return (new (i_this) dScnLogo_c())->create();
 }
 

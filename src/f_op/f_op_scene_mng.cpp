@@ -7,6 +7,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "f_op/f_op_scene_iter.h"
 #include "f_op/f_op_scene_req.h"
+#include <cstdio>
 
 scene_class* fopScnM_SearchByID(fpc_ProcID id) {
     return (scene_class*)fopScnIt_Judge((fop_ScnItFunc)fpcSch_JudgeByID, &id);
@@ -29,7 +30,10 @@ fpc_ProcID fopScnM_DeleteReq(scene_class* i_scene) {
 }
 
 int fopScnM_CreateReq(s16 i_procName, s16 param_2, u16 param_3, u32 i_data) {
-    return fopScnRq_Request(0, 0, i_procName, (void*)i_data, param_2, param_3) != fpcM_ERROR_PROCESS_ID_e;
+    printf("[DIAG] fopScnM_CreateReq: procName=%d fade=%d\n", i_procName, param_2); fflush(stdout);
+    fpc_ProcID result = fopScnRq_Request(0, 0, i_procName, (void*)i_data, param_2, param_3);
+    printf("[DIAG] fopScnM_CreateReq: result=%d (error=%d)\n", result, fpcM_ERROR_PROCESS_ID_e); fflush(stdout);
+    return result != fpcM_ERROR_PROCESS_ID_e;
 }
 
 u32 fopScnM_ReRequest(s16 i_procName, u32 i_data) {

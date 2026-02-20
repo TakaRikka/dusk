@@ -18,8 +18,8 @@ public:
 
     void setFovy(f32 fovy) { mFovY = fovy; }
     void setAspect(f32 aspect) { mAspect = aspect; }
-    void setNear(f32 near) { mNear = near; }
-    void setFar(f32 far) { mFar = far; }
+    void setNear(f32 near_) { mNear = near_; }
+    void setFar(f32 far_) { mFar = far_; }
 
     f32 getFar() { return mFar; }
 

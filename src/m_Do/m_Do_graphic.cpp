@@ -3,6 +3,8 @@
  * Graphics Management Functions
  */
 
+#include <cstdio>
+
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
@@ -1511,6 +1513,14 @@ static void drawItem3D() {
 }
 
 int mDoGph_Painter() {
+    // Diagnostic: log windowNum to track game state machine progress
+    static bool sDiagLoggedWindow = false;
+    if (!sDiagLoggedWindow) {
+        int wn = dComIfGp_getWindowNum();
+        printf("[DIAG] mDoGph_Painter: windowNum=%d\n", wn); fflush(stdout);
+        if (wn != 0) sDiagLoggedWindow = true;
+    }
+
     #if DEBUG
     drawHeapMap();
     #endif

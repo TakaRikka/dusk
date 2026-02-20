@@ -14,6 +14,7 @@
 #include "f_pc/f_pc_profile.h"
 #include "f_pc/f_pc_debug_sv.h"
 #include "Z2AudioLib/Z2AudioMgr.h"
+#include <cstdio>
 
 BOOL fpcBs_Is_JustOfType(int i_typeA, int i_typeB) {
     if (i_typeB == i_typeA) {
@@ -118,10 +119,13 @@ base_process_class* fpcBs_Create(s16 i_profname, fpc_ProcID i_procID, void* i_ap
     u32 size;
 
     pprofile = (process_profile_definition*)fpcPf_Get(i_profname);
+    printf("[DIAG] fpcBs_Create: profname=%d profile=%p procSize=%d unkSize=%d\n",
+           i_profname, pprofile, pprofile->process_size, pprofile->unk_size); fflush(stdout);
     size = pprofile->process_size + pprofile->unk_size;
 
     pprocess = (base_process_class*)cMl::memalignB(-4, size);
     if (pprocess == NULL) {
+        printf("[DIAG] fpcBs_Create: memalignB FAILED for size=%u\n", size); fflush(stdout);
         return NULL;
     }
 

@@ -720,11 +720,20 @@ void fapGm_After() {
 }
 
 void fapGm_Execute() {
+    static u32 sExecCount = 0;
+    if (sExecCount < 10 || (sExecCount % 300 == 0)) {
+        printf("[DIAG] fapGm_Execute frame=%d\n", sExecCount);
+        fflush(stdout);
+    }
+    sExecCount++;
+
     #if DEBUG
     JUTDbPrint::getManager()->setCharColor(g_HIO.mColor);
     #endif
 
-    fpcM_Management(NULL, fapGm_After);
+    printf("[DIAG] fapGm_Execute: entering fpcM_Management...\n"); fflush(stdout);
+         fpcM_Management(NULL, fapGm_After);
+    printf("[DIAG] fapGm_Execute: fpcM_Management returned\n"); fflush(stdout);
     cCt_Counter(0);
 }
 

@@ -51,7 +51,7 @@ void setBasePath(const char* path) {
     g_basePath() = path;
 #endif
 
-    OSReport("[DvdEmu] Base path set to: %s\n", g_basePath().c_str());
+    printf("[DvdEmu] Base path set to: %s\n", g_basePath().c_str()); fflush(stdout);
 }
 
 const char* getBasePath() {
@@ -93,9 +93,9 @@ bool fileExists(const char* gcPath) {
 #endif
 
     if (exists) {
-        OSReport("[DvdEmu] FOUND: %s\n", gcPath);
+        printf("[DvdEmu] FOUND: %s\n", gcPath); fflush(stdout);
     } else {
-        OSReport("[DvdEmu] MISSING: %s\n", gcPath);
+        printf("[DvdEmu] MISSING: %s\n", gcPath); fflush(stdout);
     }
 
     return exists;
@@ -116,11 +116,11 @@ u32 getFileSize(const char* gcPath) {
 void* loadFile(const char* gcPath, u32* outSize, void* heap) {
     std::string fullPath = convertPath(gcPath);
 
-    OSReport("[DvdEmu] Loading request: '%s'\n", gcPath);
+    printf("[DvdEmu] Loading request: '%s'\n", gcPath); fflush(stdout);
 
     FILE* f = fopen(fullPath.c_str(), "rb");
     if (!f) {
-        OSReport("[DvdEmu] ERROR: Failed to open file at physical path: %s\n", fullPath.c_str());
+        printf("[DvdEmu] ERROR: Failed to open file at physical path: %s\n", fullPath.c_str()); fflush(stdout);
         if (outSize)
             *outSize = 0;
         return nullptr;
@@ -139,7 +139,7 @@ void* loadFile(const char* gcPath, u32* outSize, void* heap) {
 #endif
 
     if (!data) {
-        OSReport("[DvdEmu] FATAL: Failed to allocate %u bytes for %s\n", size, gcPath);
+        printf("[DvdEmu] FATAL: Failed to allocate %u bytes for %s\n", size, gcPath); fflush(stdout);
         fclose(f);
         if (outSize)
             *outSize = 0;
@@ -150,14 +150,14 @@ void* loadFile(const char* gcPath, u32* outSize, void* heap) {
     fclose(f);
 
     if (bytesRead != size) {
-        OSReport("[DvdEmu] WARNING: Read error: expected %u, got %u for %s\n", size, bytesRead,
-                 gcPath);
+        printf("[DvdEmu] WARNING: Read error: expected %u, got %u for %s\n", size, bytesRead,
+               gcPath); fflush(stdout);
     }
 
     if (outSize)
         *outSize = bytesRead;
 
-    OSReport("[DvdEmu] SUCCESS: Loaded %s (%u bytes)\n", gcPath, bytesRead);
+    printf("[DvdEmu] SUCCESS: Loaded %s (%u bytes)\n", gcPath, bytesRead); fflush(stdout);
     return data;
 }
 
@@ -166,7 +166,7 @@ u32 loadFileToBuffer(const char* gcPath, void* buffer, u32 bufferSize, u32 offse
 
     FILE* f = fopen(fullPath.c_str(), "rb");
     if (!f) {
-        OSReport("[DvdEmu] Failed to open file for buffer load: %s\n", fullPath.c_str());
+        printf("[DvdEmu] Failed to open file for buffer load: %s\n", fullPath.c_str()); fflush(stdout);
         return 0;
     }
 
@@ -186,7 +186,7 @@ u32 loadFileToBuffer(const char* gcPath, void* buffer, u32 bufferSize, u32 offse
 
 s32 DVDConvertPathToEntrynum_Emu(const char* path) {
     if (!DvdEmu::fileExists(path)) {
-        OSReport("[DVD] Error: File not found for entrynum conversion: %s\n", path);
+        printf("[DVD] Error: File not found for entrynum conversion: %s\n", path); fflush(stdout);
         return -1;
     }
 

@@ -520,8 +520,13 @@ static void JFWDrawDoneAlarm() {
 static void JFWGXAbortAlarmHandler(OSAlarm* param_0, OSContext* param_1) {
     diagnoseGpHang();
     GXAbortFrame();
+#ifdef TARGET_PC
+    GXCmd1u8(0x61);
+    GXCmd1u32(0x5800000F);
+#else
     GXWGFifo.u8 = 0x61;
     GXWGFifo.u32 = 0x5800000F;
+#endif
 
     GXFifoObj* fifo = GXGetCPUFifo();
     if (fifo != NULL) {

@@ -11,9 +11,59 @@
 #include <memory>
 #include <dusk/dvd_emu.h>
 
+/*
+#ifndef _WIN32
+#include <sys/time.h>
+#include <time.h>
+#include <unistd.h>
+#if __APPLE__
+#include <mach/mach_time.h>
+#endif
+#endif
+
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
+
+#undef IN
+#undef OUT
+#endif
+
+#if __APPLE__
+static u64 MachToDolphinNum;
+static u64 MachToDolphinDenom;
+#elif _WIN32
+static LARGE_INTEGER PerfFrequency;
+#endif
+
+*/
+
 // ==========================================================================
 // General OS
 // ==========================================================================
+
+
+// Credits: Super Monkey Ball
+/*
+static u64 GetGCTicks() {
+#if __APPLE__
+    return mach_absolute_time() * MachToDolphinNum / MachToDolphinDenom;
+#elif __linux__ || __FreeBSD__
+    struct timespec tp;
+    clock_gettime(CLOCK_MONOTONIC, &tp);
+
+    return ((tp.tv_sec * 1000000000ull) + tp.tv_nsec) * OS_CORE_CLOCK / 1000000000ull;
+#elif _WIN32
+    LARGE_INTEGER perf;
+    QueryPerformanceCounter(&perf);
+    perf.QuadPart *= OS_CORE_CLOCK;
+    perf.QuadPart /= PerfFrequency.QuadPart;
+    return perf.QuadPart;
+#else
+    return 0;
+#endif
+} */
 
 u32 OSGetConsoleType() {
     return OS_CONSOLE_RETAIL1;
@@ -230,8 +280,15 @@ void OSTicksToCalendarTime(OSTime ticks, OSCalendarTime* td) {
     if (td) memset(td, 0, sizeof(OSCalendarTime));
 }
 
-OSTick OSGetTick(void) { return 0; }
-OSTime OSGetTime(void) { return 0; }
+OSTime OSGetTime(void) {
+    //return (OSTime)GetGCTicks();
+    return 0;
+}
+
+OSTick OSGetTick(void) {
+    //return (OSTick)GetGCTicks();
+    return 0;
+}
 
 u16 OSGetFontEncode() { return 0; }
 
@@ -250,7 +307,13 @@ void OSSetStringTable(void* stringTable) {}
 BOOL OSUnlink(OSModuleInfo* oldModule) { return FALSE; }
 
 void OSSwitchFiberEx(__REGISTER u32 param_0, __REGISTER u32 param_1, __REGISTER u32 param_2,
-                     __REGISTER u32 param_3, __REGISTER u32 code, __REGISTER u32 stack) {}
+                     __REGISTER u32 param_3, __REGISTER u32 code, __REGISTER u32 stack) {
+    // On PC, call the function directly instead of switching stacks.
+    // The PPC version switches to 'stack' and calls code(param_0, param_1).
+    // Only caller is mDoPrintf_vprintf_Interrupt: OSSwitchFiberEx(fmt, args, 0, 0, vprintf, sp)
+    typedef void (*Func2)(u32, u32);
+    ((Func2)(uintptr_t)code)(param_0, param_1);
+}
 
 u32 __OSGetDIConfig() { return 0; }
 u32 OSGetProgressiveMode(void) { return 0; }
@@ -512,30 +575,35 @@ void LCEnable() {
 
 #pragma mark VI
 
-static VIRetraceCallback sVIRetraceCallback = NULL;
+// VI retrace emulation: on GameCube, the VI chip fires a hardware interrupt at
+// every VSync (~60Hz). This triggers pre/post retrace callbacks, which in turn
+// send messages to JUTVideo's message queue. waitForTick() blocks on that queue.
+// On PC, we simulate this by calling VIWaitForRetrace() once per frame in the
+// main loop, which increments the retrace counter and fires the callbacks.
+static u32 sRetraceCount = 0;
+static VIRetraceCallback sVIPreRetraceCallback = NULL;
+static VIRetraceCallback sVIPostRetraceCallback = NULL;
 
 extern "C" {
 
 void VIConfigure(const GXRenderModeObj* rm) {
-    puts("VIConfigure is a stub");
+    // puts("VIConfigure is a stub");
 }
 
 void VIConfigurePan(u16 xOrg, u16 yOrg, u16 width, u16 height) {
-    puts("VIConfigurePan is a stub");
+    // puts("VIConfigurePan is a stub");
 }
 
 u32 VIGetRetraceCount() {
-    // puts("VIGetRetraceCount is a stub");
-    return 0;  // TODO this might be important
+    return sRetraceCount;
 }
 
 u32 VIGetNextField() {
-    puts("VIGetNextField is a stub");
     return 0;
 }
 
 void VISetBlack(BOOL black) {
-    puts("VISetBlack is a stub");
+    // puts("VISetBlack is a stub");
 }
 
 void VISetNextFrameBuffer(void* fb) {
@@ -543,34 +611,37 @@ void VISetNextFrameBuffer(void* fb) {
 }
 
 void VIWaitForRetrace() {
-    if (sVIRetraceCallback) {
-        sVIRetraceCallback(0);
+    sRetraceCount++;
+    if (sVIPreRetraceCallback) {
+        sVIPreRetraceCallback(sRetraceCount);
+    }
+    if (sVIPostRetraceCallback) {
+        sVIPostRetraceCallback(sRetraceCount);
     }
 }
 
 void* VIGetCurrentFrameBuffer(void) {
-    puts("VIGetCurrentFrameBuffer is a stub");
     return NULL;
 }
 
 u32 VIGetDTVStatus(void) {
-    puts("VIGetDTVStatus is a stub");
     return 0;
 }
 
 void* VIGetNextFrameBuffer(void) {
-    puts("VIGetNextFrameBuffer is a stub");
     return NULL;
 }
 
 VIRetraceCallback VISetPostRetraceCallback(VIRetraceCallback callback) {
-    sVIRetraceCallback = callback;
-    return callback;
+    VIRetraceCallback old = sVIPostRetraceCallback;
+    sVIPostRetraceCallback = callback;
+    return old;
 }
 
 VIRetraceCallback VISetPreRetraceCallback(VIRetraceCallback cb) {
-    puts("VISetPreRetraceCallback is a stub");
-    return cb;
+    VIRetraceCallback old = sVIPreRetraceCallback;
+    sVIPreRetraceCallback = cb;
+    return old;
 }
 
 }  // extern "C"
@@ -1396,19 +1467,58 @@ void GDSetVtxDescv(const GXVtxDescList* attrPtr) {
 #pragma mark GX
 #include <dolphin/gx.h>
 
+// Dummy FIFO sink for direct GXWGFifo writes in J3D code (e.g. J3DFifo.h).
+// On GameCube these write to the GX command processor at 0xCC008000.
+// On PC, writes land here harmlessly and are discarded.
+volatile PPCWGPipe GXWGFifo;
+
+// GXCmd/GXParam/GXMatrixIndex: low-level command FIFO functions used by J3D.
+// Route through Aurora's software FIFO so display list data is actually recorded.
+//
+// We forward-declare Aurora's FIFO functions with explicit stdint types instead of
+// including fifo.hpp, because the game's u32 (unsigned long) differs from Aurora's
+// u32 (uint32_t = unsigned int on MSVC). Including fifo.hpp would resolve its u32
+// parameter types to the game's unsigned long (since game headers are included first
+// and set the include guards), causing MSVC name mangling mismatches at link time.
+namespace aurora::gfx::fifo {
+    void write_u8(uint8_t val);
+    void write_u16(uint16_t val);
+    void write_u32(uint32_t val);
+    void write_f32(float val);
+}
+
+// Cast to stdint types: game headers define u32=unsigned long, but Aurora uses
+// uint32_t=unsigned int. Both are 32-bit on Win32 but have different MSVC name mangling.
+void GXCmd1u8(const u8 x) { aurora::gfx::fifo::write_u8(static_cast<uint8_t>(x)); }
+void GXCmd1u16(const u16 x) { aurora::gfx::fifo::write_u16(static_cast<uint16_t>(x)); }
+void GXCmd1u32(const u32 x) { aurora::gfx::fifo::write_u32(static_cast<uint32_t>(x)); }
+
+void GXParam1u8(const u8 x) { aurora::gfx::fifo::write_u8(static_cast<uint8_t>(x)); }
+void GXParam1u16(const u16 x) { aurora::gfx::fifo::write_u16(static_cast<uint16_t>(x)); }
+void GXParam1u32(const u32 x) { aurora::gfx::fifo::write_u32(static_cast<uint32_t>(x)); }
+void GXParam1s8(const s8 x) { aurora::gfx::fifo::write_u8(static_cast<uint8_t>(x)); }
+void GXParam1s16(const s16 x) { aurora::gfx::fifo::write_u16(static_cast<uint16_t>(x)); }
+void GXParam1s32(const s32 x) { aurora::gfx::fifo::write_u32(static_cast<uint32_t>(x)); }
+void GXParam1f32(const f32 x) { aurora::gfx::fifo::write_f32(x); }
+void GXParam3f32(const f32 x, const f32 y, const f32 z) {
+    aurora::gfx::fifo::write_f32(x);
+    aurora::gfx::fifo::write_f32(y);
+    aurora::gfx::fifo::write_f32(z);
+}
+void GXParam4f32(const f32 x, const f32 y, const f32 z, const f32 w) {
+    aurora::gfx::fifo::write_f32(x);
+    aurora::gfx::fifo::write_f32(y);
+    aurora::gfx::fifo::write_f32(z);
+    aurora::gfx::fifo::write_f32(w);
+}
+
+void GXMatrixIndex1u8(const u8 x) { aurora::gfx::fifo::write_u8(static_cast<uint8_t>(x)); }
+
 // Moved-in GX helpers and helpers for metrics/project
 void __GXSetSUTexSize() {
     puts("__GXSetSUTexSize is a stub");
 }
-void __GXSetVAT() {
-    puts("__GXSetVAT is a stub");
-}
-void __GXSetVCD() {
-    puts("__GXSetVCD is a stub");
-}
-void __GXUpdateBPMask() {
-    puts("__GXUpdateBPMask is a stub");
-}
+// __GXSetVAT, __GXSetVCD, __GXUpdateBPMask: now provided by Aurora's GXManage.cpp (fifo branch)
 
 void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
     // puts("GXSetGPMetric is a stub");
@@ -1494,9 +1604,7 @@ void GXProject(f32 x, f32 y, f32 z, const f32 mtx[3][4], const f32* pm, const f3
 void GXAbortFrame(void) {
     puts("GXAbortFrame is a stub");
 }
-void GXEnableTexOffsets(GXTexCoordID coord, u8 line_enable, u8 point_enable) {
-    puts("GXEnableTexOffsets is a stub");
-}
+// GXEnableTexOffsets: now provided by Aurora's GXGeometry.cpp (fifo branch)
 OSThread* GXGetCurrentGXThread(void) {
     puts("GXGetCurrentGXThread is a stub");
     return NULL;

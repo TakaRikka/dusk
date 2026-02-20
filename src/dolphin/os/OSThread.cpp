@@ -313,7 +313,7 @@ int OSCreateThread(OSThread* thread, void* (*func)(void*), void* param,
 // ============================================================================
 // Resume / Suspend
 // ============================================================================
-
+/*
 s32 OSResumeThread(OSThread* thread) {
     if (!thread) return 0;
 
@@ -359,6 +359,103 @@ s32 OSSuspendThread(OSThread* thread) {
             if (data->started) {
                 data->suspended = true;
                 // The thread must check its suspended flag and wait
+            }
+        }
+    }
+
+    return prevSuspend;
+}
+*/
+
+// ============================================================================
+// Resume / Suspend
+// ============================================================================
+
+s32 OSResumeThread(OSThread* thread) {
+    if (!thread)
+        return 0;
+
+    s32 prevSuspend = thread->suspend;
+    if (thread->suspend > 0) {
+        thread->suspend--;
+    }
+
+    // Only wake up if suspend count drops to 0
+    if (thread->suspend == 0) {
+        PCThreadData* data = nullptr;
+
+        // Lock the global map to safely retrieve our thread data pointer
+        {
+            std::lock_guard<std::mutex> mapLock(GetThreadDataMutex());
+            auto it = GetThreadDataMap().find(thread);
+            if (it != GetThreadDataMap().end()) {
+                data = it->second.get();
+            }
+        }
+
+        if (data) {
+            // Lock the specific thread mutex to safely modify state and notify
+            std::unique_lock<std::mutex> threadLock(data->mtx);
+
+            if (!data->started) {
+                // First resume: launch the native thread
+                data->started = true;
+                data->suspended = false;
+
+                // Unlock before launching to avoid potential deadlocks in thread initialization
+                threadLock.unlock();
+
+                data->nativeThread = std::thread(ThreadEntryWrapper, thread, data);
+                data->nativeThread.detach();
+                OSReport("[PC-OSThread] Started thread %p\n", thread);
+            } else {
+                // Resume from suspension: signal the condition variable
+                // IMPORTANT: Set suspended to false BEFORE notifying to pass the wait predicate
+                data->suspended = false;
+                data->cv.notify_all();
+            }
+        }
+    }
+
+    return prevSuspend;
+}
+
+s32 OSSuspendThread(OSThread* thread) {
+    if (!thread)
+        return 0;
+
+    s32 prevSuspend = thread->suspend;
+    thread->suspend++;
+
+    // If transitioning from running (0) to suspended (1)
+    if (prevSuspend == 0) {
+        PCThreadData* data = nullptr;
+
+        // Lock the global map to find our thread data
+        {
+            std::lock_guard<std::mutex> mapLock(GetThreadDataMutex());
+            auto it = GetThreadDataMap().find(thread);
+            if (it != GetThreadDataMap().end()) {
+                data = it->second.get();
+            }
+        }
+
+        if (data && data->started) {
+            std::unique_lock<std::mutex> threadLock(data->mtx);
+            data->suspended = true;
+
+            // FIX: If the thread is suspending ITSELF, we must block execution here.
+            // This replicates the GameCube behavior where OSSuspendThread yields the CPU
+            // immediately.
+            if (thread == OSGetCurrentThread()) {
+                // Block until 'suspended' becomes false (set by OSResumeThread)
+                // The predicate protects against spurious wakeups.
+                data->cv.wait(threadLock, [data] { return !data->suspended; });
+            } else {
+                // NOTE: Suspending *other* threads is difficult in C++ std::thread
+                // without cooperative checkpoints or platform-specific hacks.
+                // For now, we only set the flag. The target thread would need to check 'suspended'
+                // periodically.
             }
         }
     }

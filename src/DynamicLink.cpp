@@ -184,8 +184,10 @@ static u32 calcSum2(u16 const* data, u32 size) {
 
 bool DynamicModuleControl::do_load() {
     if (mModule != NULL) {
+        printf("[DIAG] DynamicModuleControl::do_load(%s) already loaded\n", mName); fflush(stdout);
         return true;
     }
+    printf("[DIAG] DynamicModuleControl::do_load(%s) loading... sArchive=%p sFileCache=%p\n", mName, sArchive, sFileCache); fflush(stdout);
     JKRExpHeap* heap = mDoExt_getArchiveHeap();
     s32 i = 0;
     while (true) {
@@ -278,6 +280,7 @@ bool DynamicModuleControl::do_load() {
             break;
         }
     }
+    printf("[DIAG] DynamicModuleControl::do_load(%s) SUCCESS mModule=%p type=%d size=%d\n", mName, mModule, mResourceType, mSize); fflush(stdout);
     return true;
 }
 

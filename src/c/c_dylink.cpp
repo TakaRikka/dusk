@@ -2,6 +2,8 @@
  * c_dylink.cpp
  * REL to process name definitions and REL init functions
  */
+#include <cstdio>
+
 #include "c/c_dylink.h"
 #include "DynamicLink.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
@@ -912,6 +914,7 @@ int cDyl_LinkASync(s16 i_ProfName) {
     JUT_ASSERT(266, DMC_initialized);
 
     if (!cDyl_Initialized) {
+        printf("[DIAG] cDyl_LinkASync: NOT initialized yet, profName=%d\n", i_ProfName); fflush(stdout);
         OS_REPORT_ERROR("初期化が終わってないのに呼んでもらっても困ります %d %s\n", i_ProfName, fpcDbSv_getNameString(i_ProfName));
         return cPhs_INIT_e;
     }
@@ -932,10 +935,12 @@ int cDyl_LinkASync(s16 i_ProfName) {
                 return cPhs_COMPLEATE_e;
             } else {
                 // "cDyl_LinkASync: Link failed. Returning\n"
+                printf("[DIAG] cDyl_LinkASync: link FAILED for profName=%d\n", i_ProfName); fflush(stdout);
                 OSReport_Error("cDyl_LinkASync: リンクに失敗しました。諦めます\n");
                 return cPhs_ERROR_e;
             }
         } else {
+            printf("[DIAG] cDyl_LinkASync: load_async not ready for profName=%d\n", i_ProfName); fflush(stdout);
             return cPhs_INIT_e;
         }
     }
@@ -944,16 +949,29 @@ int cDyl_LinkASync(s16 i_ProfName) {
 }
 
 static int cDyl_InitCallback(void* param_0) {
+    printf("[DIAG] cDyl_InitCallback: START\n"); fflush(stdout);
     JUT_ASSERT(335, !cDyl_Initialized);
 
+#ifdef TARGET_PC
+    // On PC, the profile list is statically linked (g_fpcPf_ProfileList_p in f_pc_profile.cpp).
+    // Skip DVD-based REL loading and string table — OSLink/OSLinkFixed are stubs.
+    cDyl_Initialized = true;
+    fopScnM_CreateReq(PROC_LOGO_SCENE, 0x7FFF, 0, 0);
+    printf("[DIAG] cDyl_InitCallback: PROC_LOGO_SCENE created (PC path), DONE\n"); fflush(stdout);
+    return 1;
+#else
     #if PLATFORM_GCN
     JKRHeap* parentHeap = mDoExt_getArchiveHeap();
     #else
     JKRHeap* parentHeap = DynamicModuleControlBase::getHeap();
     #endif
+    printf("[DIAG] cDyl_InitCallback: parentHeap=%p\n", parentHeap); fflush(stdout);
 
     JKRFileCache* loader = JKRMountDvdDrive("/", parentHeap, NULL);
+    printf("[DIAG] cDyl_InitCallback: JKRMountDvdDrive loader=%p\n", loader); fflush(stdout);
+
     DynamicModuleControl::initialize();
+    printf("[DIAG] cDyl_InitCallback: DynamicModuleControl::initialize done\n"); fflush(stdout);
 
     #if PLATFORM_GCN
     void* strTbl = JKRGetResource("/dvd/str/Final/Release/frameworkF.str");
@@ -962,17 +980,22 @@ static int cDyl_InitCallback(void* param_0) {
     #else
     void* strTbl = JKRGetResource("/dvd/str/Final/Release/frameworkF.str");
     #endif
+    printf("[DIAG] cDyl_InitCallback: frameworkF.str=%p\n", strTbl); fflush(stdout);
 
     JKRDetachResource(strTbl, loader);
     JKRUnmountDvdDrive(loader);
     OSSetStringTable(strTbl);
 
     DynamicModuleControl dmc("f_pc_profile_lst");
+    printf("[DIAG] cDyl_InitCallback: linking f_pc_profile_lst...\n"); fflush(stdout);
     dmc.link();
+    printf("[DIAG] cDyl_InitCallback: link done\n"); fflush(stdout);
     cDyl_Initialized = true;
 
     fopScnM_CreateReq(PROC_LOGO_SCENE, 0x7FFF, 0, 0);
+    printf("[DIAG] cDyl_InitCallback: PROC_LOGO_SCENE created, DONE\n"); fflush(stdout);
     return 1;
+#endif
 }
 
 static mDoDvdThd_callback_c* cDyl_DVD;

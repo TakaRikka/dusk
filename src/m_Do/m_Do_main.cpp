@@ -5,6 +5,7 @@
  */
 
 #include "m_Do/m_Do_main.h"
+#include <dolphin/vi.h>
 #include <string>
 #include "DynamicLink.h"
 #include "JSystem/JAudio2/JASAudioThread.h"
@@ -178,11 +179,18 @@ void main01(void) {
 
         mDoCPd_c::read();  // Read Controller
 
+        // Simulate VI retrace interrupt — fires post-retrace callback which sends
+        // a message to JUTVideo's queue, unblocking waitForTick() in beginRender()
+        VIWaitForRetrace();
+
         // --- EXECUTE GAME LOGIC & RENDER ---
+        printf("[DIAG] main01: before fapGm_Execute (frame %d)\n", frame); fflush(stdout);
         fapGm_Execute();
+        printf("[DIAG] main01: after fapGm_Execute\n"); fflush(stdout);
 
         // --- Frame End & Limiter ---
         aurora_end_frame();
+        printf("[DIAG] main01: after aurora_end_frame\n"); fflush(stdout);
         std::this_thread::sleep_for(std::chrono::milliseconds(16));  // ~60 FPS Cap
 
     } while (true);
