@@ -2095,6 +2095,10 @@ bool Z2SceneMgr::loadSceneWave(u32 wave, u32 bank) {
 #endif
 
 bool Z2SceneMgr::loadSeWave(u32 wave) {
+    return 0;
+}
+
+/* //lw stub lw 
     JAUSectionHeap* sectionHeap = JASGlobalInstance<JAUSectionHeap>::getInstance();
     JUT_ASSERT(3030, sectionHeap);
 
@@ -2109,8 +2113,13 @@ bool Z2SceneMgr::loadSeWave(u32 wave) {
     JUT_WARN_DEVICE(3038, 1, "Z2SceneMgr::cannot load SE wave:%d\n", wave);
     return false;
 }
-
+*/
 bool Z2SceneMgr::loadBgmWave(u32 wave) {
+    return true;
+}
+
+    /* //lw stub lw 
+
     JAUSectionHeap* sectionHeap = JASGlobalInstance<JAUSectionHeap>::getInstance();
     JUT_ASSERT(3047, sectionHeap);
 
@@ -2124,4 +2133,4 @@ bool Z2SceneMgr::loadBgmWave(u32 wave) {
 
     JUT_WARN_DEVICE(3055, 1, "Z2SceneMgr::cannot load BGM wave:%d\n", wave);
     return false;
-}
+} */

@@ -39,8 +39,8 @@
 
 #include <chrono>
 #include <thread>
-#include "dusk/dvd_emu.h"
 #include "SSystem/SComponent/c_API.h"
+#include "dusk/dvd_emu.h"
 
 #include <aurora/aurora.h>
 #include <aurora/event.h>
@@ -52,6 +52,7 @@ OSTime mDoMain::sPowerOnTime;
 OSTime mDoMain::sHungUpTime;
 u32 mDoMain::memMargin = 0xFFFFFFFF;
 char mDoMain::COPYDATE_STRING[18] = "??/??/?? ??:??:??";
+const int audioHeapSize = 0x14D800;
 
 // --- PC LOGGING CALLBACK ---
 void aurora_log_callback(AuroraLogLevel level, const char* module, const char* message,
@@ -123,23 +124,14 @@ s32 LOAD_COPYDATE(void*) {
     return 1;
 }
 
-// =========================================================================
-// MAIN01 - THE GAME LOOP
-// =========================================================================
 void main01(void) {
     OS_REPORT("\x1b[m");
 
-    // 1. Setup heaps, RNG, Threads
-    // Nutzt den Speicher, den wir in game_main() per OSSetArena gesetzt haben
+    // 1. Setup
     mDoMch_Create();
-
-    // 2. Setup GFX (FrameBuffer, ZBuffer)
     mDoGph_Create();
 
-    // 3. Setup Pads
-    //mDoCPd_c::create();
-
-    // 4. Console Setup
+    // Console Setup
     JUTConsole* console = JFWSystem::getSystemConsole();
     if (console) {
         console->setOutput(mDoMain::developmentMode ? JUTConsole::OUTPUT_OSR_AND_CONSOLE :
@@ -147,7 +139,7 @@ void main01(void) {
         console->setPosition(32, 42);
     }
 
-    // 5. Init Framework & Loader
+    // Loader Init
     mDoDvdThd_callback_c::create((mDoDvdThd_callback_func)LOAD_COPYDATE, NULL);
 
     OSReport("Calling fapGm_Create()...\n");
@@ -159,39 +151,45 @@ void main01(void) {
     OSReport("Calling cDyl_InitAsync()...\n");
     cDyl_InitAsync();
 
-    // -----------------------------------------------------------
-    // THE GAME LOOP
-    // -----------------------------------------------------------
+    mDoAud_zelAudio_c::onInitFlag();
+
     OSReport("Entering Main Loop (main01)...\n");
+
+    // -----------------------------------------------------------
+    // THE GAME LOOP (RESTORED)
+    // -----------------------------------------------------------
     do {
-        // --- Window Events & Frame Start ---
+        // 1. Update Window Events
         const AuroraEvent* event = aurora_update();
         if (event && event->type == AURORA_EXIT)
             break;
 
+        static u32 frame = 0;
+        frame++;
+
+        // 2. Start Frame (REQUIRED for Vulkan)
         if (!aurora_begin_frame()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
             continue;
         }
 
-        static u32 frame;
-        frame++;
+        // 3. Game Inputs
+        mDoCPd_c::read();
 
-        mDoCPd_c::read();  // Read Controller
-
-        // Simulate VI retrace interrupt — fires post-retrace callback which sends
-        // a message to JUTVideo's queue, unblocking waitForTick() in beginRender()
+        // Simulate VI (can remain empty/stubbed for now if waitForTick is disabled)
         VIWaitForRetrace();
 
-        // --- EXECUTE GAME LOGIC & RENDER ---
-        printf("[DIAG] main01: before fapGm_Execute (frame %d)\n", frame); fflush(stdout);
+        // 4. EXECUTE GAME LOGIC & RENDER
+        // This calls mDoGph_Painter -> JFWDisplay -> GX Functions
         fapGm_Execute();
-        printf("[DIAG] main01: after fapGm_Execute\n"); fflush(stdout);
 
-        // --- Frame End & Limiter ---
+        mDoAud_Execute();
+
+        // 5. Present Frame (REQUIRED to see anything)
         aurora_end_frame();
-        printf("[DIAG] main01: after aurora_end_frame\n"); fflush(stdout);
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));  // ~60 FPS Cap
+
+        // Limiter
+        std::this_thread::sleep_for(std::chrono::milliseconds(16));
 
     } while (true);
 }
@@ -241,7 +239,7 @@ int game_main(int argc, char* argv[]) {
 
     // Development Mode
     mDoMain::developmentMode = 1;  // Force Dev Mode for Debugging
-
+    mDoDvdThd::SyncWidthSound = false;
     // START GAME
     OSReport("Starting main01 (Game Loop)...\n");
 
@@ -263,77 +261,77 @@ bool JKRHeap::dump_sort() {
     return true;
 }
 
-template<typename T>
+template <typename T>
 JHIComPortManager<T>* JHIComPortManager<T>::instance = nullptr;
 
-template<>
+template <>
 JHIComPortManager<JHICmnMem>* JHIComPortManager<JHICmnMem>::instance = nullptr;
 
-template<>
+template <>
 Z2WolfHowlMgr* JASGlobalInstance<Z2WolfHowlMgr>::sInstance;
 
-template<>
+template <>
 Z2EnvSeMgr* JASGlobalInstance<Z2EnvSeMgr>::sInstance;
 
-template<>
+template <>
 Z2FxLineMgr* JASGlobalInstance<Z2FxLineMgr>::sInstance;
 
-template<>
+template <>
 Z2Audience* JASGlobalInstance<Z2Audience>::sInstance;
 
-template<>
+template <>
 Z2SoundObjMgr* JASGlobalInstance<Z2SoundObjMgr>::sInstance;
 
-template<>
+template <>
 Z2SoundInfo* JASGlobalInstance<Z2SoundInfo>::sInstance;
 
-template<>
+template <>
 JAUSoundInfo* JASGlobalInstance<JAUSoundInfo>::sInstance;
 
-template<>
+template <>
 JAUSoundNameTable* JASGlobalInstance<JAUSoundNameTable>::sInstance;
 
-template<>
+template <>
 JAUSoundTable* JASGlobalInstance<JAUSoundTable>::sInstance;
 
-template<>
+template <>
 JAISoundInfo* JASGlobalInstance<JAISoundInfo>::sInstance;
 
-template<>
+template <>
 Z2SoundMgr* JASGlobalInstance<Z2SoundMgr>::sInstance;
 
-template<>
+template <>
 JAIStreamMgr* JASGlobalInstance<JAIStreamMgr>::sInstance;
 
-template<>
+template <>
 JAISeqMgr* JASGlobalInstance<JAISeqMgr>::sInstance;
 
-template<>
+template <>
 JAISeMgr* JASGlobalInstance<JAISeMgr>::sInstance;
 
-template<>
+template <>
 Z2SpeechMgr2* JASGlobalInstance<Z2SpeechMgr2>::sInstance;
 
-template<>
+template <>
 Z2SoundStarter* JASGlobalInstance<Z2SoundStarter>::sInstance;
 
-template<>
+template <>
 JAISoundStarter* JASGlobalInstance<JAISoundStarter>::sInstance;
 
-template<>
+template <>
 Z2StatusMgr* JASGlobalInstance<Z2StatusMgr>::sInstance;
 
-template<>
+template <>
 Z2SceneMgr* JASGlobalInstance<Z2SceneMgr>::sInstance;
 
-template<>
+template <>
 Z2SeqMgr* JASGlobalInstance<Z2SeqMgr>::sInstance;
 
-template<>
+template <>
 Z2SeMgr* JASGlobalInstance<Z2SeMgr>::sInstance;
 
-template<>
+template <>
 JASAudioThread* JASGlobalInstance<JASAudioThread>::sInstance;
 
-template<>
+template <>
 JASDefaultBankTable* JASGlobalInstance<JASDefaultBankTable>::sInstance;

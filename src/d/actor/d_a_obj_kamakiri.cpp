@@ -536,14 +536,14 @@ void daObjKAM_c::Z_BufferChk() {
     {
         dComIfGd_peekZ(currentProj.x, currentProj.y, &field_0x9bc);
     }
-    f32 near = dComIfGd_getView()->near;
-    f32 far = dComIfGd_getView()->far;
+    f32 near_ = dComIfGd_getView()->near_;
+    f32 far_ = dComIfGd_getView()->far_;
     mDoLib_pos2camera(&currentOffset, &currentProj);
     currentProj.z += 50.0f;
     if (currentProj.z > 0.0f) {
         currentProj.z = 0.0f;
     }
-    field_0x9b8 = ((near + (far * near) / currentProj.z) / (far - near) + 1.0f) * 16777215.0f;
+    field_0x9b8 = ((near_ + (far_ * near_) / currentProj.z) / (far_ - near_) + 1.0f) * 16777215.0f;
 }
 
 void daObjKAM_c::ParticleSet() {

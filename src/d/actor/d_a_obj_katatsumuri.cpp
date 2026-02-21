@@ -610,8 +610,8 @@ void daObjKAT_c::Z_BufferChk() {
         dComIfGd_peekZ(projected.x,projected.y, &field_0x804);
     }
 
-    f32 near = dComIfGd_getView()->near;
-    f32 far = dComIfGd_getView()->far;
+    f32 near_ = dComIfGd_getView()->near_;
+    f32 far_ = dComIfGd_getView()->far_;
     mDoLib_pos2camera(&curWithOff, &projected);
 
     projected.z += 50.0f;
@@ -619,7 +619,7 @@ void daObjKAT_c::Z_BufferChk() {
         projected.z = 0.0f;
     }
 
-    field_0x800 = ((near + far * near / projected.z) / (far - near) + 1.0f) * 16777215.0f;
+    field_0x800 = ((near_ + far_ * near_ / projected.z) / (far_ - near_) + 1.0f) * 16777215.0f;
 }
 
 int daObjKAT_c::Delete() {

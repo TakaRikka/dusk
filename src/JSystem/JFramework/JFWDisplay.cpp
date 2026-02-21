@@ -1,20 +1,21 @@
-#include "JSystem/JSystem.h" // IWYU pragma: keep
+#include "JSystem/JSystem.h"  // IWYU pragma: keep
 
-#include "JSystem/JFramework/JFWDisplay.h"
+#include <dolphin/gx.h>
+#include <dolphin/vi.h>
+#include <stdint.h>
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
+#include "JSystem/JFramework/JFWDisplay.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTProcBar.h"
-#include <dolphin/gx.h>
-#include <dolphin/vi.h>
 #include "global.h"
-#include <stdint.h>
+#include "aurora/aurora.h"
 
 void JFWDisplay::ctor_subroutine(bool enableAlpha) {
     mEnableAlpha = enableAlpha;
     mClamp = GX_CLAMP_TOP | GX_CLAMP_BOTTOM;
-    mClearColor = JUtility::TColor(0, 0, 0, 0);
+    mClearColor = JUtility::TColor(255, 0, 128, 255);
     mZClear = 0xFFFFFF;
     mGamma = 0;
     mFader = NULL;
@@ -199,10 +200,10 @@ void JFWDisplay::endGX() {
 
     J2DOrthoGraph ortho(0.0f, 0.0f, width, height, -1.0f, 1.0f);
 
-    if (mFader != NULL) {
-        ortho.setPort();
-        mFader->control();
-    }
+    //if (mFader != NULL) {
+    //    ortho.setPort();
+    //    mFader->control();
+    //}
     ortho.setPort();
     JUTDbPrint::getManager()->flush();
 
@@ -221,6 +222,7 @@ void JFWDisplay::endGX() {
 }
 
 void JFWDisplay::beginRender() {
+    //aurora_begin_frame();
     if (field_0x40) {
         JUTProcBar::getManager()->wholeLoopEnd();
     }
@@ -298,6 +300,7 @@ void JFWDisplay::endRender() {
 
     JUTProcBar::getManager()->cpuStart();
     calcCombinationRatio();
+    //aurora_end_frame();
 }
 
 void JFWDisplay::endFrame() {
@@ -325,7 +328,8 @@ void JFWDisplay::endFrame() {
     }
 
     if (field_0x40) {
-        static u32 prevFrame = VIGetRetraceCount();;
+        static u32 prevFrame = VIGetRetraceCount();
+        ;
         u32 retrace_cnt = VIGetRetraceCount();
         u32 r28 = retrace_cnt - prevFrame;
         JUTProcBar::getManager()->setCostFrame(retrace_cnt - prevFrame);
@@ -340,7 +344,10 @@ void JFWDisplay::waitBlanking(int param_0) {
 }
 
 static void waitForTick(u32 p1, u16 p2) {
-    if (p1 != 0) {
+ 
+    
+    if (p1 != 0)
+    {
         static OSTime nextTick = OSGetTime();
         OSTime time = OSGetTime();
         while (time < nextTick) {
@@ -348,18 +355,19 @@ static void waitForTick(u32 p1, u16 p2) {
             time = OSGetTime();
         }
         nextTick = time + p1;
-    }
-    else {
+    } else {
         static u32 nextCount = VIGetRetraceCount();
         u32 uVar1 = (p2 == 0) ? 1 : p2;
         OSMessage msg;
         do {
-            if (!OSReceiveMessage(JUTVideo::getManager()->getMessageQueue(), &msg, OS_MESSAGE_BLOCK)) {
+            if (!OSReceiveMessage(JUTVideo::getManager()->getMessageQueue(), &msg,
+                                  OS_MESSAGE_BLOCK))
+            {
                 msg = 0;
             }
         } while (((intptr_t)msg - (intptr_t)nextCount) < 0);
         nextCount = (intptr_t)msg + uVar1;
-    }
+    }    
 }
 
 JSUList<JFWAlarm> JFWAlarm::sList(false);
@@ -419,70 +427,24 @@ void JFWDisplay::clearEfb(GXColor color) {
 }
 
 void JFWDisplay::clearEfb(int param_0, int param_1, int param_2, int param_3, GXColor color) {
-    u16 width;
-    u16 height;
-    Mtx44 mtx;
+    // --- FORCE PINK DEBUG ---
+    // Das Spiel übergibt hier "Schwarz". Wir ignorieren das und erzwingen Pink.
+    // So sehen wir sofort, ob dieser Code ausgeführt wird.
+    GXColor debugPink = {255, 0, 128, 255};
 
+    // Setze Pink als Clear-Farbe und Z auf Max
+    GXSetCopyClear(debugPink, 0x00FFFFFF);
+
+    // Viewport Safety
+    u16 width, height;
     JUTVideo::getManager()->getBounds(width, height);
+    GXSetViewport(0.0f, 0.0f, 640.0f, 480.0f, 0.0f, 1.0f);
+    GXSetScissor(0, 0, 640, 480);
 
-    C_MTXOrtho(mtx, 0.0f, height, 0.0f, width, 0.0f, 1.0f);
-    GXSetProjection(mtx, GX_ORTHOGRAPHIC);
-    GXSetViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f);
-    GXSetScissor(0, 0, width, height);
-
-    GXLoadPosMtxImm(e_mtx, GX_PNMTX0);
-    GXSetCurrentMtx(0);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGB, GX_RGBX8, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB565, 0);
-    GXSetNumChans(0);
-    GXSetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE,
-                  GX_AF_NONE);
-    GXSetChanCtrl(GX_COLOR1A1, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE,
-                  GX_AF_NONE);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 60);
-    GXLoadTexObj(&clear_z_tobj, GX_TEXMAP0);
-    GXSetNumTevStages(1);
-    GXSetTevColor(GX_TEVREG0, color);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
-    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
-    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
-    GXSetZTexture(GX_ZT_REPLACE, GX_TF_Z24X8, 0);
-    GXSetZCompLoc(GX_DISABLE);
-    GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_NOOP);
-
-    if (mEnableAlpha) {
-        GXSetAlphaUpdate(GX_ENABLE);
-        GXSetDstAlpha(GX_ENABLE, color.a);
-    }
-    GXSetZMode(GX_ENABLE, GX_ALWAYS, GX_ENABLE);
-    GXSetCullMode(GX_CULL_BACK);
-
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition2u16(param_0, param_1);
-    GXTexCoord2u8(0, 0);
-
-    GXPosition2u16(param_0 + param_2, param_1);
-    GXTexCoord2u8(1, 0);
-
-    GXPosition2u16(param_0 + param_2, param_1 + param_3);
-    GXTexCoord2u8(1, 1);
-
-    GXPosition2u16(param_0, param_1 + param_3);
-    GXTexCoord2u8(0, 1);
-    GXEnd();
-
-    GXSetZTexture(GX_ZT_DISABLE, GX_TF_Z24X8, 0);
+    // State Reset
+    GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
     GXSetZCompLoc(GX_ENABLE);
-    if (mEnableAlpha) {
-        GXSetDstAlpha(GX_DISABLE, color.a);
-    }
+    GXSetAlphaUpdate(GX_ENABLE);
 }
 
 void JFWDisplay::calcCombinationRatio() {

@@ -61,7 +61,9 @@ void mDoDvdErr_ThdCleanup() {
 
 static void mDoDvdErr_Watch(void*) {
 #if PLATFORM_GCN
+#ifndef TARGET_PC
     OSDisableInterrupts();
+#endif
 #endif
     JKRThread(OSGetCurrentThread(), 0);
 

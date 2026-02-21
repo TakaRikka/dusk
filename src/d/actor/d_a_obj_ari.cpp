@@ -510,14 +510,14 @@ void daObjARI_c::Z_BufferChk() {
         dComIfGd_peekZ(vec2.x, vec2.y, &mBufferZ);
     }
 
-    f32 near = dComIfGd_getView()->near;
-    f32 far = dComIfGd_getView()->far;
+    f32 near_ = dComIfGd_getView()->near_;
+    f32 far_ = dComIfGd_getView()->far_;
     mDoLib_pos2camera(&vec1, &vec2);
     vec2.z += 50.0f;
     if (vec2.z > 0.0f) {
         vec2.z = 0.0f;
     }
-    mScreenZ = ((near + far * near / vec2.z) / (far - near) + 1.0f) * 0xffffff;
+    mScreenZ = ((near_ + far_ * near_ / vec2.z) / (far_ - near_) + 1.0f) * 0xffffff;
 }
 
 int daObjARI_c::Delete() {

@@ -543,8 +543,8 @@ void daObjKUW_c::Z_BufferChk() {
     }
     
     view_class* view = dComIfGd_getView();
-    f32 nearPlane = view->near;
-    f32 farPlane = view->far;
+    f32 nearPlane = view->near_;
+    f32 farPlane = view->far_;
     
     mDoLib_pos2camera(&cStack_68, &local_5c);
     local_5c.z += 50.0f;

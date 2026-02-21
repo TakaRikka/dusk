@@ -20,6 +20,7 @@ JUTGraphFifo::JUTGraphFifo(u32 size) {
         mBase = JKRAllocFromSysHeap(mSize + 0xA0, 32);
         mBase = (void*)((intptr_t)mBase + 0x1F & ~0x1F);
         mFifo = GXInit(mBase, mSize);
+        GXSetColorUpdate(GX_ENABLE);
         data_804514B8 = true;
         sCurrentFifo = this;
     }

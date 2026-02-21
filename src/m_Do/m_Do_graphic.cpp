@@ -33,6 +33,7 @@
 #include "d/d_meter2_info.h"
 #include "d/d_s_play.h"
 #include "DynamicLink.h"
+#include "dusk/endian.h"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/sc.h>
@@ -239,12 +240,12 @@ static ResTIMG* createTimg(u16 width, u16 height, u32 format) {
     cLib_memSet(timg, 0, bufferSize);
     timg->format = format;
     timg->alphaEnabled = false;
-    timg->width = width;
-    timg->height = height;
+    timg->width = RES_U16(width);
+    timg->height = RES_U16(height);
     timg->minFilter = GX_LINEAR;
     timg->magFilter = GX_LINEAR;
     timg->mipmapCount = 1;
-    timg->imageOffset = 0x20;
+    timg->imageOffset = RES_U32(0x20);
     return timg;
 }
 
@@ -467,7 +468,7 @@ void mDoGph_gInf_c::calcFade() {
     }
 
     if (mFadeColor.a != 0) {
-        darwFilter(mFadeColor);
+        //darwFilter(mFadeColor);
     }
 }
 

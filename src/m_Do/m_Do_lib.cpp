@@ -38,12 +38,12 @@ f32 mDoLib_clipper::mSystemFar;
 
 f32 mDoLib_clipper::mFovyRate;
 
-void mDoLib_clipper::setup(f32 fovy, f32 aspect, f32 near, f32 far) {
+void mDoLib_clipper::setup(f32 fovy, f32 aspect, f32 near_, f32 far_) {
     mClipper.setFovy(fovy);
     mClipper.setAspect(aspect);
-    mClipper.setNear(near);
-    mClipper.setFar(far);
-    mSystemFar = far;
+    mClipper.setNear(near_);
+    mClipper.setFar(far_);
+    mSystemFar = far_;
     mClipper.calcViewFrustum();
 
     s16 tmp = DEG2S(fovy);

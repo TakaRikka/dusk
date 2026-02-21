@@ -11,7 +11,7 @@
 #include <memory>
 #include <dusk/dvd_emu.h>
 
-/*
+
 #ifndef _WIN32
 #include <sys/time.h>
 #include <time.h>
@@ -35,9 +35,10 @@ static u64 MachToDolphinNum;
 static u64 MachToDolphinDenom;
 #elif _WIN32
 static LARGE_INTEGER PerfFrequency;
+static bool PerfInitialized = false;
 #endif
 
-*/
+
 
 // ==========================================================================
 // General OS
@@ -45,7 +46,7 @@ static LARGE_INTEGER PerfFrequency;
 
 
 // Credits: Super Monkey Ball
-/*
+
 static u64 GetGCTicks() {
 #if __APPLE__
     return mach_absolute_time() * MachToDolphinNum / MachToDolphinDenom;
@@ -55,15 +56,21 @@ static u64 GetGCTicks() {
 
     return ((tp.tv_sec * 1000000000ull) + tp.tv_nsec) * OS_CORE_CLOCK / 1000000000ull;
 #elif _WIN32
+    if (!PerfInitialized) {
+        QueryPerformanceFrequency(&PerfFrequency);
+        PerfInitialized = true;
+    }
     LARGE_INTEGER perf;
     QueryPerformanceCounter(&perf);
+
     perf.QuadPart *= OS_CORE_CLOCK;
     perf.QuadPart /= PerfFrequency.QuadPart;
+
     return perf.QuadPart;
 #else
     return 0;
 #endif
-} */
+} 
 
 u32 OSGetConsoleType() {
     return OS_CONSOLE_RETAIL1;
@@ -281,13 +288,11 @@ void OSTicksToCalendarTime(OSTime ticks, OSCalendarTime* td) {
 }
 
 OSTime OSGetTime(void) {
-    //return (OSTime)GetGCTicks();
-    return 0;
+    return (OSTime)GetGCTicks();
 }
 
 OSTick OSGetTick(void) {
-    //return (OSTick)GetGCTicks();
-    return 0;
+    return (OSTick)GetGCTicks();
 }
 
 u16 OSGetFontEncode() { return 0; }

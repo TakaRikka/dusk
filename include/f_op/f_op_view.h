@@ -43,8 +43,8 @@ struct view_class {
     /* 0x000 */ leafdraw_class base;
     /* 0x0C0 */ leafdraw_method_class* sub_method;
     /* 0x0C4 */ u8 field_0xc4;
-    /* 0x0C8 */ f32 near;
-    /* 0x0CC */ f32 far;
+    /* 0x0C8 */ f32 near_;
+    /* 0x0CC */ f32 far_;
     /* 0x0D0 */ f32 fovy;
     /* 0x0D4 */ f32 aspect;
     /* 0x0D8 */ lookat_class lookat;
