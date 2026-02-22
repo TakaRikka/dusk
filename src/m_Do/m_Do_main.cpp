@@ -126,7 +126,7 @@ s32 LOAD_COPYDATE(void*) {
 
 void main01(void) {
     OS_REPORT("\x1b[m");
-
+    GXSetColorUpdate(GX_ENABLE);
     // 1. Setup
     mDoMch_Create();
     mDoGph_Create();
@@ -155,9 +155,7 @@ void main01(void) {
 
     OSReport("Entering Main Loop (main01)...\n");
 
-    // -----------------------------------------------------------
-    // THE GAME LOOP (RESTORED)
-    // -----------------------------------------------------------
+
     do {
         // 1. Update Window Events
         const AuroraEvent* event = aurora_update();
@@ -167,26 +165,21 @@ void main01(void) {
         static u32 frame = 0;
         frame++;
 
-        // 2. Start Frame (REQUIRED for Vulkan)
-        if (!aurora_begin_frame()) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(1));
-            continue;
-        }
 
-        // 3. Game Inputs
+
+        // Game Inputs
         mDoCPd_c::read();
 
-        // Simulate VI (can remain empty/stubbed for now if waitForTick is disabled)
         VIWaitForRetrace();
 
-        // 4. EXECUTE GAME LOGIC & RENDER
+        // EXECUTE GAME LOGIC & RENDER
         // This calls mDoGph_Painter -> JFWDisplay -> GX Functions
         fapGm_Execute();
 
         mDoAud_Execute();
 
-        // 5. Present Frame (REQUIRED to see anything)
-        aurora_end_frame();
+
+        //aurora_end_frame();
 
         // Limiter
         std::this_thread::sleep_for(std::chrono::milliseconds(16));
@@ -212,7 +205,7 @@ int game_main(int argc, char* argv[]) {
     aurora_initialize(argc, argv, &config);
 
     // 2. Setup Virtual Game RAM
-    // Simuliert den GameCube RAM (24MB + Audio etc, nehmen wir 256MB)
+    // Simulates Gamecube RAM (24MB + Audio etc, we take 256MB)
 #define GAME_RAM_SIZE (256 * 1024 * 1024)
     void* virtualGameRam = malloc(GAME_RAM_SIZE);
     if (!virtualGameRam) {
@@ -240,23 +233,19 @@ int game_main(int argc, char* argv[]) {
     // Development Mode
     mDoMain::developmentMode = 1;  // Force Dev Mode for Debugging
     mDoDvdThd::SyncWidthSound = false;
-    // START GAME
+
     OSReport("Starting main01 (Game Loop)...\n");
 
-    // Auf PC rufen wir main01 direkt im Main Thread auf.
-    // Kein OSCreateThread noetig (und auch gefaehrlich wegen Window-Loop).
+
     main01();
 
-    // Cleanup (Erreicht nur bei Break der Loop)
     aurora_shutdown();
     free(virtualGameRam);
 
     return 0;
 }
 
-// =========================================================================
-// STUBS & TEMPLATE INSTANTIATIONS
-// =========================================================================
+
 bool JKRHeap::dump_sort() {
     return true;
 }

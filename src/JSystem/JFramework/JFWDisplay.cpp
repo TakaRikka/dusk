@@ -222,7 +222,7 @@ void JFWDisplay::endGX() {
 }
 
 void JFWDisplay::beginRender() {
-    //aurora_begin_frame();
+    aurora_begin_frame();
     if (field_0x40) {
         JUTProcBar::getManager()->wholeLoopEnd();
     }
@@ -300,7 +300,7 @@ void JFWDisplay::endRender() {
 
     JUTProcBar::getManager()->cpuStart();
     calcCombinationRatio();
-    //aurora_end_frame();
+    aurora_end_frame();
 }
 
 void JFWDisplay::endFrame() {
