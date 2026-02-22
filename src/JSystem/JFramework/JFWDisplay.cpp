@@ -428,11 +428,9 @@ void JFWDisplay::clearEfb(GXColor color) {
 
 void JFWDisplay::clearEfb(int param_0, int param_1, int param_2, int param_3, GXColor color) {
     // --- FORCE PINK DEBUG ---
-    // Das Spiel übergibt hier "Schwarz". Wir ignorieren das und erzwingen Pink.
-    // So sehen wir sofort, ob dieser Code ausgeführt wird.
     GXColor debugPink = {255, 0, 128, 255};
 
-    // Setze Pink als Clear-Farbe und Z auf Max
+    // Set pink as Clear-Farbe and Z to max
     GXSetCopyClear(debugPink, 0x00FFFFFF);
 
     // Viewport Safety

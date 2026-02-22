@@ -1658,12 +1658,12 @@ void GXReadXfRasMetric(u32* xf_wait_in, u32* xf_wait_out, u32* ras_busy, u32* cl
     *ras_busy = 0;
     *clocks = 0;
 }
-//void GXSetClipMode(GXClipMode mode) {
-//    puts("GXSetClipMode is a stub");
-//}
-//void GXSetCoPlanar(GXBool enable) {
-//    puts("GXSetCoPlanar is a stub");    
-//}
+void GXSetClipMode(GXClipMode mode) {
+    puts("GXSetClipMode is a stub");
+}
+void GXSetCoPlanar(GXBool enable) {
+    puts("GXSetCoPlanar is a stub");    
+}
 void GXSetCopyClamp(GXFBClamp clamp) {
     puts("GXSetCopyClamp is a stub");
 }
@@ -1680,9 +1680,9 @@ void GXSetMisc(GXMiscToken token, u32 val) {
 void GXSetPointSize(u8 pointSize, GXTexOffset texOffsets) {
     puts("GXSetPointSize is a stub");
 }
-//void GXSetProjectionv(const f32* ptr) {
-//    puts("GXSetProjectionv is a stub");
-//}
+void GXSetProjectionv(const f32* ptr) {
+    puts("GXSetProjectionv is a stub");
+}
 void GXSetVtxAttrFmtv(GXVtxFmt vtxfmt, const GXVtxAttrFmtList* list) {
     puts("GXSetVtxAttrFmtv is a stub");
 }
