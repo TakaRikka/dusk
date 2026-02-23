@@ -1640,10 +1640,11 @@ f32 GXGetYScaleFactor(u16 efbHeight, u16 xfbHeight) {
     puts("GXGetYScaleFactor is a stub");
     return 0.0f;
 }
+
 void GXInitTexCacheRegion(GXTexRegion* region, u8 is_32b_mipmap, u32 tmem_even,
                           GXTexCacheSize size_even, u32 tmem_odd, GXTexCacheSize size_odd) {
     puts("GXInitTexCacheRegion is a stub");
-}
+} 
 // XXX, this should be some struct?
 // GXRenderModeObj GXNtsc480IntDf;
 GXRenderModeObj GXNtsc480Int;

@@ -28,6 +28,10 @@ static inline void GXSetTexCoordGen(GXTexCoordID dst_coord, GXTexGenType func, G
 
 void GXBegin(GXPrimitive type, GXVtxFmt vtxfmt, u16 nverts);
 
+#ifndef TARGET_PC
+// On GameCube, GXEnd is a no-op (hardware reads FIFO directly).
+// On PC, Aurora provides an extern GXEnd() that drains the software FIFO
+// (declared in extern/aurora/include/dolphin/gx/GXVert.h).
 static inline void GXEnd(void) {
 #if DEBUG
     extern GXBool __GXinBegin;
@@ -38,6 +42,7 @@ static inline void GXEnd(void) {
     __GXinBegin = GX_FALSE;
 #endif
 }
+#endif
 
 void GXSetLineWidth(u8 width, GXTexOffset texOffsets);
 void GXSetPointSize(u8 pointSize, GXTexOffset texOffsets);

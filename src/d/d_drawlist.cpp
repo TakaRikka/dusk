@@ -1,5 +1,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
+#include <cstdio>
 #include "JSystem/J2DGraph/J2DAnimation.h"
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
@@ -865,6 +866,13 @@ dDlst_2D_c::dDlst_2D_c(ResTIMG* i_timg, s16 i_posX, s16 i_posY, s16 i_sizeX, s16
 }
 
 void dDlst_2D_c::draw() {
+    static int s2DDrawLogCount = 0;
+    if (s2DDrawLogCount < 10) {
+        printf("[DIAG] dDlst_2D_c::draw: pos=(%d,%d) size=(%d,%d) alpha=%d\n",
+               mPosX, mPosY, mSizeX, mSizeY, mAlpha);
+        fflush(stdout);
+        s2DDrawLogCount++;
+    }
     mpPicture.setAlpha(mAlpha);
     mpPicture.draw(mPosX, mPosY, mSizeX, mSizeY, false, false, false);
 }

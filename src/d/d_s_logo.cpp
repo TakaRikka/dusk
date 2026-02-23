@@ -107,8 +107,14 @@ void dScnLogo_c::checkProgSelect() {
 }
 
 int dScnLogo_c::draw() {
+    static int sDrawLogCount = 0;
+    if (sDrawLogCount < 10) {
+        printf("[DIAG] dScnLogo_c::draw: mExecCommand=%d mTimer=%d\n", mExecCommand, mTimer);
+        fflush(stdout);
+    }
     cLib_calcTimer<u16>(&mTimer);
     (this->*l_execFunc[mExecCommand])();
+    sDrawLogCount++;
     return 1;
 }
 

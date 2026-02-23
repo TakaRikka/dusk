@@ -2090,6 +2090,19 @@ int mDoGph_Painter() {
 
         dComIfGp_particle_draw2DmenuFore(&draw_info3);
         j3dSys.setViewMtx(m4);
+    } else {
+        // No camera window active — still draw 2D display lists
+        // (needed for logo scene, which has no 3D camera)
+        static int sElseLogCount = 0;
+        if (sElseLogCount < 10) {
+            printf("[DIAG] mDoGph_Painter else: drawing 2D lists (frame %d)\n", sElseLogCount);
+            fflush(stdout);
+            sElseLogCount++;
+        }
+        ortho.setPort();
+        dComIfGd_draw2DOpa();
+        dComIfGd_draw2DOpaTop();
+        dComIfGd_draw2DXlu();
     }
 
     #if DEBUG

@@ -166,6 +166,9 @@ void JUTTexture::initTexObj(GXTlut param_0) {
     mTlutName = param_0;
     u8* image = ((u8*)mTexInfo);
     u32 imgOffset = RES_U32(mTexInfo->imageOffset);  // Swap!
+    printf("[DIAG] initTexObj: Offset=%u, W=%u, H=%u, Ptr=%p\n", imgOffset, mTexInfo->width,
+           mTexInfo->height,
+           mTexInfo);
     image += (imgOffset ? imgOffset : 0x20);
     GXInitTexObjCI(&mTexObj, image, RES_U16(mTexInfo->width), RES_U16(mTexInfo->height),
                  (GXCITexFmt)mTexInfo->format, (GXTexWrapMode)mWrapS,
