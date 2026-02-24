@@ -130,6 +130,7 @@ void main01(void) {
     // 1. Setup
     mDoMch_Create();
     mDoGph_Create();
+    mDoCPd_c::create();
 
     // Console Setup
     JUTConsole* console = JFWSystem::getSystemConsole();
