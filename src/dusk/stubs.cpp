@@ -1645,9 +1645,6 @@ void GXInitTexCacheRegion(GXTexRegion* region, u8 is_32b_mipmap, u32 tmem_even,
                           GXTexCacheSize size_even, u32 tmem_odd, GXTexCacheSize size_odd) {
     puts("GXInitTexCacheRegion is a stub");
 } 
-// XXX, this should be some struct?
-// GXRenderModeObj GXNtsc480IntDf;
-GXRenderModeObj GXNtsc480Int;
 void GXPeekZ(u16 x, u16 y, u32* z) {
     puts("GXPeekZ is a stub");
     *z = 0;
@@ -1659,12 +1656,6 @@ void GXReadXfRasMetric(u32* xf_wait_in, u32* xf_wait_out, u32* ras_busy, u32* cl
     *ras_busy = 0;
     *clocks = 0;
 }
-void GXSetClipMode(GXClipMode mode) {
-    puts("GXSetClipMode is a stub");
-}
-void GXSetCoPlanar(GXBool enable) {
-    puts("GXSetCoPlanar is a stub");    
-}
 void GXSetCopyClamp(GXFBClamp clamp) {
     puts("GXSetCopyClamp is a stub");
 }
@@ -1672,14 +1663,8 @@ OSThread* GXSetCurrentGXThread(void) {
     puts("GXSetCurrentGXThread is a stub");
     return NULL;
 }
-void GXSetFogRangeAdj(GXBool enable, u16 center, const GXFogAdjTable* table) {
-    puts("GXSetFogRangeAdj is a stub");
-}
 void GXSetMisc(GXMiscToken token, u32 val) {
     puts("GXSetMisc is a stub");
-}
-void GXSetPointSize(u8 pointSize, GXTexOffset texOffsets) {
-    puts("GXSetPointSize is a stub");
 }
 void GXSetProjectionv(const f32* ptr) {
     puts("GXSetProjectionv is a stub");
