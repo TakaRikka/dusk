@@ -42,6 +42,9 @@ endif ()
 
 include(files.cmake)
 
+# TODO: version handling for res includes
+set(DUSK_TP_VERSION GZ2E01)
+
 source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${JSYSTEM_FILES} ${JSYSTEM_DEBUG_FILES} ${REL_FILES})
 source_group("dusk" FILES ${DUSK_FILES})
 
@@ -58,8 +61,6 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES})
 target_link_libraries(game PRIVATE game_debug)
 target_compile_definitions(game PRIVATE TARGET_PC VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0)
-# TODO: version handling for res includes
-set(DUSK_TP_VERSION GZ2E01)
 
 add_executable(dusk src/dusk/main.cpp)
 target_compile_definitions(dusk PRIVATE TARGET_PC VERSION=0)
