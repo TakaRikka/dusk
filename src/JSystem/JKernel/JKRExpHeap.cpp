@@ -373,7 +373,7 @@ void* JKRExpHeap::allocFromTail(u32 size, int align) {
     CMemBlock* foundBlock = NULL;
     CMemBlock* newBlock = NULL;
     u32 usedSize;
-    u32 start;
+    uintptr_t start;
 
     for (CMemBlock* block = mTailFreeList; block; block = block->mPrev) {
         start = ALIGN_PREV((uintptr_t)block->getContent() + block->size - size, align);
