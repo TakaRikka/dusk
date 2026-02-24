@@ -9,6 +9,8 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
+
 if (CMAKE_SYSTEM_NAME STREQUAL Linux)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unknown-pragmas -Wno-unused-variable -Wno-unused-parameter")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -stdlib=libc++ -Wno-register -fPIC")
@@ -32,8 +34,6 @@ if (NOT MSVC)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error -Wno-c++11-narrowing")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error -Wno-c++11-narrowing")
 endif ()
-add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
-
 set(DOLZEL_FILES
     src/m_Do/m_Do_main.cpp
     src/m_Do/m_Do_printf.cpp
