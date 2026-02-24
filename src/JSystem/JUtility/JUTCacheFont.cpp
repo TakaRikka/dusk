@@ -8,15 +8,6 @@
 #include <dolphin/gx.h>
 #include <stdint.h>
 
-#ifdef TARGET_PC
-#include "dusk/endian.h"
-static inline u32 R32(u32 v) { return be32(v); }
-static inline u16 R16(u16 v) { return be16(v); }
-#else
-static inline u32 R32(u32 v) { return v; }
-static inline u16 R16(u16 v) { return v; }
-#endif
-
 JUTCacheFont::JUTCacheFont(ResFONT const* p_fontRes, u32 cacheSize, JKRHeap* p_heap) {
     initialize_state();
     JUTResFont::initialize_state();
@@ -82,9 +73,9 @@ int JUTCacheFont::getMemorySize(ResFONT const* p_font, u16* o_widCount, u32* o_w
     u32 glyTexSize;
 
     u8* fontInf = (u8*)p_font->data;
-    for (int i = 0; i < (int)R32(p_font->numBlocks); i++) {
-        u32 blkMagic = R32(((BlockHeader*)fontInf)->magic);
-        u32 blkSize  = R32(((BlockHeader*)fontInf)->size);
+    for (int i = 0; i < (int)p_font->numBlocks; i++) {
+        u32 blkMagic = ((BlockHeader*)fontInf)->magic;
+        u32 blkSize  = ((BlockHeader*)fontInf)->size;
         switch (blkMagic) {
         case 'INF1':
             break;
@@ -94,7 +85,7 @@ int JUTCacheFont::getMemorySize(ResFONT const* p_font, u16* o_widCount, u32* o_w
             break;
         case 'GLY1':
             totalGlySize += blkSize;
-            glyTexSize = R32(((ResFONT::GLY1*)fontInf)->textureSize);
+            glyTexSize = ((ResFONT::GLY1*)fontInf)->textureSize;
             glyBlockCount++;
             if (glyTexSize > maxGlyTexSize) {
                 maxGlyTexSize = glyTexSize;
@@ -270,14 +261,14 @@ void JUTCacheFont::setBlock() {
     mMaxCode = 0xffff;
     const u8* pData = (const u8*)mResFont->data;
 
-    for (int i = 0; i < (int)R32(mResFont->numBlocks); i++) {
-        u32 blkMagic = R32(((BlockHeader*)pData)->magic);
-        u32 blkSize  = R32(((BlockHeader*)pData)->size);
+    for (int i = 0; i < (int)mResFont->numBlocks; i++) {
+        u32 blkMagic = ((BlockHeader*)pData)->magic;
+        u32 blkSize  = ((BlockHeader*)pData)->size;
         u32 u;
         switch (blkMagic) {
         case 'INF1':
             memcpy(mInf1Ptr, pData, 0x20);
-            u = R16(mInf1Ptr->fontType);
+            u = mInf1Ptr->fontType;
             JUT_ASSERT(448, u < suAboutEncoding_);
             mIsLeadByte = &JUTResFont::saoAboutEncoding_[u];
             break;
@@ -297,8 +288,8 @@ void JUTCacheFont::setBlock() {
                                     "trouble occurred in JKRMainRamToAram.");
             }
             piVar5->magic = aramAddress;
-            if (R32(piVar5->textureSize) > mMaxSheetSize) {
-                mMaxSheetSize = R32(piVar5->textureSize);
+            if (piVar5->textureSize > mMaxSheetSize) {
+                mMaxSheetSize = piVar5->textureSize;
             }
             mpGlyphBlocks[gylphNum] = piVar5;
             gylphNum++;
@@ -309,8 +300,8 @@ void JUTCacheFont::setBlock() {
         case 'MAP1':
             memcpy(pMap, pData, blkSize);
             mpMapBlocks[mapNum] = pMap;
-            if (mMaxCode > R16(mpMapBlocks[mapNum]->startCode)) {
-                mMaxCode = R16(mpMapBlocks[mapNum]->startCode);
+            if (mMaxCode > mpMapBlocks[mapNum]->startCode) {
+                mMaxCode = mpMapBlocks[mapNum]->startCode;
             }
             mapNum++;
             pMap = (ResFONT::MAP1*)((u8*)pMap + blkSize);
@@ -404,8 +395,8 @@ JUTCacheFont::TCachePage* JUTCacheFont::loadCache_char_subroutine(int* param_0, 
         rv = NULL;
         int i = 0;
         for (; i < mGly1BlockNum; i++) {
-            if (R16(mpGlyphBlocks[i]->startCode) <= *r29 && *r29 <= R16(mpGlyphBlocks[i]->endCode)) {
-                *r29 -= R16(mpGlyphBlocks[i]->startCode);
+            if (mpGlyphBlocks[i]->startCode <= *r29 && *r29 <= mpGlyphBlocks[i]->endCode) {
+                *r29 -= mpGlyphBlocks[i]->startCode;
                 break;
             }
         }
@@ -475,23 +466,23 @@ ResFONT* JUTResFont::getResFont() const {
 }
 
 int JUTResFont::getFontType() const {
-    return R16(mInf1Ptr->fontType);
+    return mInf1Ptr->fontType;
 }
 
 int JUTResFont::getLeading() const {
-    return R16(mInf1Ptr->leading);
+    return mInf1Ptr->leading;
 }
 
 s32 JUTResFont::getWidth() const {
-    return R16(mInf1Ptr->width);
+    return mInf1Ptr->width;
 }
 
 s32 JUTResFont::getAscent() const {
-    return R16(mInf1Ptr->ascent);
+    return mInf1Ptr->ascent;
 }
 
 s32 JUTResFont::getDescent() const {
-    return R16(mInf1Ptr->descent);
+    return mInf1Ptr->descent;
 }
 
 s32 JUTResFont::getHeight() const {
