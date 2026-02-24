@@ -169,9 +169,17 @@ public:
     static JKRHeap* getRootHeap2() { return sRootHeap2; }
 
     static JKRHeap* getSystemHeap() { return sSystemHeap; }
+#if TARGET_PC
+    static JKRHeap* getCurrentHeap();
+#else
     static JKRHeap* getCurrentHeap() { return sCurrentHeap; }
+#endif
     static void setSystemHeap(JKRHeap* heap) { sSystemHeap = heap; }
+#if TARGET_PC
+    static void setCurrentHeap(JKRHeap* heap);
+#else
     static void setCurrentHeap(JKRHeap* heap) { sCurrentHeap = heap; }
+#endif
 
     static void setState_u32ID_(TState* state, u32 id) { state->mId = id; }
     static void setState_uUsedSize_(TState* state, u32 usedSize) { state->mUsedSize = usedSize; }
@@ -195,7 +203,9 @@ public:
     static JKRHeap* sRootHeap2;
 
     static JKRHeap* sSystemHeap;
+#if !TARGET_PC // Hide sCurrentHeap, we need to make it thread local.
     static JKRHeap* sCurrentHeap;
+#endif
 
     static JKRErrorHandler mErrorHandler;
 };
