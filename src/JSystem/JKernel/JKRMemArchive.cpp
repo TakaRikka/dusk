@@ -95,6 +95,10 @@ bool JKRMemArchive::open(s32 entryNum, JKRArchive::EMountDirection mountDirectio
         mFiles = (SDIFileEntry *)((u8 *)&mArcInfoBlock->num_nodes + mArcInfoBlock->file_entry_offset);
         mStringTable = (char *)((u8 *)&mArcInfoBlock->num_nodes + mArcInfoBlock->string_table_offset);
 
+#if TARGET_PC
+        initFileDataPointers();
+#endif
+
         mArchiveData =
             (u8 *)((uintptr_t)mArcHeader + mArcHeader->header_length + mArcHeader->file_data_offset);
         mIsOpen = true;
@@ -120,20 +124,25 @@ bool JKRMemArchive::open(void* buffer, u32 bufferSize, JKRMemBreakFlag flag) {
     mIsOpen = (flag == JKRMEMBREAK_FLAG_UNKNOWN1) ? true : false; // mIsOpen might be u8
     mHeap = JKRHeap::findFromRoot(buffer);
     mCompression = COMPRESSION_NONE;
+
+#if TARGET_PC
+    initFileDataPointers();
+#endif
+
     return true;
 }
 
 void* JKRMemArchive::fetchResource(SDIFileEntry* fileEntry, u32* resourceSize) {
     JUT_ASSERT(555, isMounted());
-    if (!fileEntry->data) {
-        fileEntry->data = mArchiveData + fileEntry->data_offset;
+    if (!JKAR_DATA(fileEntry)) {
+        JKAR_DATA(fileEntry) = mArchiveData + fileEntry->data_offset;
     }
 
     if (resourceSize) {
         *resourceSize = fileEntry->data_size;
     }
 
-    return fileEntry->data;
+    return JKAR_DATA(fileEntry);
 }
 
 void* JKRMemArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* fileEntry,
@@ -144,8 +153,8 @@ void* JKRMemArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* f
         srcLength = bufferSize;
     }
 
-    if (fileEntry->data != NULL) {
-        memcpy(buffer, fileEntry->data, srcLength);
+    if (JKAR_DATA(fileEntry) != NULL) {
+        memcpy(buffer, JKAR_DATA(fileEntry), srcLength);
     } else {
         u8 flags = fileEntry->type_flags_and_name_offset >> 24;
         JKRCompression compression = JKRConvertAttrToCompressionType(flags);
@@ -172,8 +181,8 @@ void JKRMemArchive::removeResourceAll(void) {
     // first fileEntry will clear/remove the resource data.
     SDIFileEntry* fileEntry = mFiles;
     for (int i = 0; i < mArcInfoBlock->num_file_entries; i++) {
-        if (fileEntry->data) {
-            fileEntry->data = NULL;
+        if (JKAR_DATA(fileEntry)) {
+            JKAR_DATA(fileEntry) = NULL;
         }
     }
     fileEntry++;
@@ -186,7 +195,7 @@ bool JKRMemArchive::removeResource(void* resource) {
     if (!fileEntry)
         return false;
 
-    fileEntry->data = NULL;
+    JKAR_DATA(fileEntry) = NULL;
     return true;
 }
 

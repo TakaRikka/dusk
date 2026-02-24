@@ -248,9 +248,9 @@ void JKRArchive::removeResourceAll() {
     if (mArcInfoBlock && mMountMode != MOUNT_MEM) {
         SDIFileEntry* fileEntry = mFiles;
         for (int i = 0; i < mArcInfoBlock->num_file_entries; i++) {
-            if (fileEntry->data) {
-                JKRFreeToHeap(mHeap, fileEntry->data);
-                fileEntry->data = NULL;
+            if (JKAR_DATA(fileEntry)) {
+                JKRFreeToHeap(mHeap, JKAR_DATA(fileEntry));
+                JKAR_DATA(fileEntry) = NULL;
             }
             fileEntry++;
         }
@@ -263,7 +263,7 @@ bool JKRArchive::removeResource(void* resource) {
     if (fileEntry == NULL)
         return false;
 
-    fileEntry->data = NULL;
+    JKAR_DATA(fileEntry) = NULL;
     JKRFreeToHeap(mHeap, resource);
     return true;
 }
@@ -274,7 +274,7 @@ bool JKRArchive::detachResource(void* resource) {
     if (fileEntry == NULL)
         return false;
 
-    fileEntry->data = NULL;
+    JKAR_DATA(fileEntry) = NULL;
     return true;
 }
 

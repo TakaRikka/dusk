@@ -5,6 +5,10 @@
 #include <cctype>
 #include <string>
 
+#if TARGET_PC
+#include <cassert>
+#endif
+
 u32 JKRArchive::sCurrentDirID;
 
 JKRArchive::JKRArchive() {
@@ -30,7 +34,14 @@ JKRArchive::JKRArchive(s32 entryNumber, JKRArchive::EMountMode mountMode) {
     }
 }
 
-JKRArchive::~JKRArchive() {}
+JKRArchive::~JKRArchive() {
+#if TARGET_PC
+    if (mFileData != nullptr) {
+        mHeap->free(mFileData);
+        mFileData = nullptr;
+    }
+#endif
+}
 
 bool JKRArchive::isSameName(JKRArchive::CArcName& name, u32 nameOffset, u16 nameHash) const {
     u16 hash = name.getHash();
@@ -143,7 +154,7 @@ JKRArchive::SDIFileEntry* JKRArchive::findNameResource(const char* name) const {
 JKRArchive::SDIFileEntry* JKRArchive::findPtrResource(const void* resource) const {
     SDIFileEntry* fileEntry = mFiles;
     for (int i = 0; i < mArcInfoBlock->num_file_entries; i++) {
-        if (fileEntry->data == resource) {
+        if (JKAR_DATA(fileEntry) == resource) {
             return fileEntry;
         }
         fileEntry++;
@@ -225,3 +236,31 @@ u32 JKRArchive::getExpandSize(SDIFileEntry* fileEntry) const {
 
     return mExpandedSize[index];
 }
+
+#if TARGET_PC
+void*& JKRArchive::getFileDataPointer(int idx) const {
+    assert(mArcInfoBlock);
+    assert(idx < mArcInfoBlock->num_file_entries);
+    assert(mFileData);
+
+    return mFileData[idx];
+}
+
+void JKRArchive::initFileDataPointers() {
+    assert(mArcInfoBlock);
+    assert(mFiles);
+
+    if (mFileData != nullptr) {
+        mHeap->free(mFileData);
+    }
+
+    mFileData = static_cast<void**>(
+        mHeap->alloc(mArcInfoBlock->num_file_entries * sizeof(void*), alignof(void*)));
+
+    memset(mFileData, 0, mArcInfoBlock->num_file_entries * sizeof(void*));
+
+    for (u32 i = 0; i < mArcInfoBlock->num_file_entries; i++) {
+        mFiles[i].index = i;
+    }
+}
+#endif

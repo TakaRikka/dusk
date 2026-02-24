@@ -51,6 +51,12 @@ inline u16 read_big_endian_u16(void* ptr) {
 
 extern u32 sCurrentDirID__10JKRArchive;  // JKRArchive::sCurrentDirID
 
+#if TARGET_PC
+#define JKAR_DATA(entry) getFileDataPointer(entry->index)
+#else
+#define JKAR_DATA(entry) entry->data
+#endif
+
 /**
  * @ingroup jsystem-jkernel
  * 
@@ -78,7 +84,16 @@ public:
         BE(u32) type_flags_and_name_offset;
         BE(u32) data_offset;
         BE(u32) data_size;
+#if TARGET_PC
+        // Yes, they store the data pointer in the datastructure that's directly loaded from
+        // archive files.
+        // We can't expand this struct to fit a 64-bit pointer, so instead
+        // we'll need to store this data in a separate array.
+        // Store the *index* of this entry (!= file_id), so we can look up the real pointer easily.
+        u32 index;
+#else
         void* data;
+#endif
 
         u32 getNameOffset() const { return type_flags_and_name_offset & 0xFFFFFF; }
         u16 getNameHash() const { return name_hash; }
@@ -130,6 +145,11 @@ public:
 protected:
     JKRArchive();
     JKRArchive(s32, EMountMode);
+
+#if TARGET_PC
+    void*& getFileDataPointer(int idx) const;
+    void initFileDataPointers();
+#endif
 
 public:
     bool getDirEntry(SDirEntry*, u32) const;
@@ -188,6 +208,10 @@ public:
     /* 0x4C */ SDIFileEntry* mFiles;
     /* 0x50 */ s32* mExpandedSize;
     /* 0x54 */ const char* mStringTable;
+
+#if TARGET_PC
+    void** mFileData;
+#endif
 
 protected:
     /* 0x58 */ u32 field_0x58;
