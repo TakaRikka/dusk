@@ -106,9 +106,9 @@ void* JKRSolidHeap::do_alloc(u32 size, int alignment) {
 }
 
 void* JKRSolidHeap::allocFromHead(u32 size, int alignment) {
-    size = ALIGN_NEXT(size, 0x4);
+    size = ALIGN_NEXT(size, sizeof(void*));
     void* ptr = NULL;
-    u32 alignedStart = (alignment - 1 + (uintptr_t)mSolidHead) & ~(alignment - 1);
+    uintptr_t alignedStart = (alignment - 1 + (uintptr_t)mSolidHead) & ~(alignment - 1);
     u32 totalSize = size + (alignedStart - (uintptr_t)mSolidHead);
     if (totalSize <= mFreeSize) {
 #if DEBUG
@@ -133,9 +133,9 @@ void* JKRSolidHeap::allocFromHead(u32 size, int alignment) {
 }
 
 void* JKRSolidHeap::allocFromTail(u32 size, int alignment) {
-    size = ALIGN_NEXT(size, 4);
+    size = ALIGN_NEXT(size, sizeof(void*));
     void* ptr = NULL;
-    u32 alignedStart = ALIGN_PREV((uintptr_t)mSolidTail - size, alignment);
+    uintptr_t alignedStart = ALIGN_PREV((uintptr_t)mSolidTail - size, alignment);
     u32 totalSize = (uintptr_t)mSolidTail - (uintptr_t)alignedStart;
     if (totalSize <= mFreeSize) {
         ptr = (void*)alignedStart;
