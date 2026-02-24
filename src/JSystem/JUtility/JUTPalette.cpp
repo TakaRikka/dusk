@@ -3,7 +3,6 @@
 #include "JSystem/JUtility/JUTPalette.h"
 #include <dolphin/gx.h>
 #include <dolphin/os.h>
-#include "dusk/endian.h"
 
 void JUTPalette::storeTLUT(GXTlut param_0, ResTLUT* tlut) {
     if (tlut == NULL) {
@@ -12,7 +11,7 @@ void JUTPalette::storeTLUT(GXTlut param_0, ResTLUT* tlut) {
     mTlutName = param_0;
     mFormat = tlut->format;
     mTransparency = tlut->transparency;
-    mNumColors = RES_U16(tlut->numColors);
+    mNumColors = tlut->numColors;
     mColorTable = (ResTLUT*)((u8*)tlut + 0x20);
     GXInitTlutObj(&mTlutObj, (void*)mColorTable, (GXTlutFmt)mFormat, mNumColors);
 }

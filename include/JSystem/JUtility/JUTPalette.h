@@ -3,6 +3,8 @@
 
 #include <dolphin/gx.h>
 
+#include "dusk/endian.h"
+
 enum JUTTransparency { UNK0, UNK1 };
 
 /**
@@ -12,7 +14,7 @@ enum JUTTransparency { UNK0, UNK1 };
 struct ResTLUT {
     u8 format;
     u8 transparency;
-    u16 numColors;
+    BE(u16) numColors;
 };
 
 /**
