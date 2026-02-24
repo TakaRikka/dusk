@@ -35,7 +35,7 @@ public:
         CMemBlock* getNextBlock() const { return mNext; }
         u32 getSize() const { return size; }
         u8 getGroupId() const { return mGroupId; }
-        static CMemBlock* getBlock(void* data) { return (CMemBlock*)((uintptr_t)data + -0x10); }
+        static CMemBlock* getBlock(void* data) { return (CMemBlock*)((uintptr_t)data + -sizeof(CMemBlock)); }
 
     private:
         /* 0x0 */ u16 mMagic;
@@ -44,8 +44,16 @@ public:
         /* 0x4 */ u32 size;
         /* 0x8 */ CMemBlock* mPrev;
         /* 0xC */ CMemBlock* mNext;
+#if BIT_64
+        // Ensure padded to 0x20 bytes on 64-bit
+        void* _pad;
+#endif
     };  // Size: 0x10
     friend class CMemBlock;
+
+#if TARGET_PC
+    static_assert(sizeof(CMemBlock) == MEM_BLOCK_SIZE);
+#endif
 
 protected:
     JKRExpHeap(void* data, u32 size, JKRHeap* parent, bool errorFlag);

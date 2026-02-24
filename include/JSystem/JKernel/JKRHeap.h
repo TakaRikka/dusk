@@ -16,6 +16,12 @@ extern u8 JKRValue_DEBUGFILL_DELETE;
 extern s32 fillcheck_dispcount;
 extern bool data_8074A8D0_debug;
 
+#if BIT_64
+#define MEM_BLOCK_SIZE 0x20
+#else
+#define MEM_BLOCK_SIZE 0x10
+#endif
+
 /**
  * @ingroup jsystem-jkernel
  * 

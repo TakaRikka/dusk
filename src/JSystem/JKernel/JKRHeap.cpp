@@ -313,8 +313,8 @@ u8 JKRHeap::getCurrentGroupId() {
 }
 
 u32 JKRHeap::getMaxAllocatableSize(int alignment) {
-    u32 maxFreeBlock = (uintptr_t)getMaxFreeBlock();
-    u32 ptrOffset = (alignment - 1) & alignment - (maxFreeBlock & 0xf);
+    uintptr_t maxFreeBlock = (uintptr_t)getMaxFreeBlock();
+    uintptr_t ptrOffset = (alignment - 1) & alignment - (maxFreeBlock & (MEM_BLOCK_SIZE - 1));
     return ~(alignment - 1) & (getFreeSize() - ptrOffset);
 }
 
