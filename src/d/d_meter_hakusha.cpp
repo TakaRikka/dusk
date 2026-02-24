@@ -25,7 +25,7 @@ dMeterHakusha_c::~dMeterHakusha_c() {
 
 int dMeterHakusha_c::_create() {
     static u64 haku_tag[] = {
-        'haku_n00', 'haku_n01', 'haku_n02', 'haku_n03', 'haku_n04', 'haku_n05',
+        MULTI_CHAR('haku_n00'), MULTI_CHAR('haku_n01'), MULTI_CHAR('haku_n02'), MULTI_CHAR('haku_n03'), MULTI_CHAR('haku_n04'), MULTI_CHAR('haku_n05'),
     };
 
     for (int i = 0; i < 6; i++) {
@@ -33,7 +33,7 @@ int dMeterHakusha_c::_create() {
         JUT_ASSERT(0, mpHakushaPos[i] != NULL);
     }
 
-    mpHakushaParent = new CPaneMgr(field_0x004, 'hakunall', 0, NULL);
+    mpHakushaParent = new CPaneMgr(field_0x004, MULTI_CHAR('hakunall'), 0, NULL);
     JUT_ASSERT(0, mpHakushaParent != NULL);
 
     mpHakushaScreen = new J2DScreen();
@@ -44,10 +44,10 @@ int dMeterHakusha_c::_create() {
     JUT_ASSERT(0, fg != false);
     dPaneClass_showNullPane(mpHakushaScreen);
 
-    mpHakushaOn = new CPaneMgr(mpHakushaScreen, 'haku_n', 2, NULL);
+    mpHakushaOn = new CPaneMgr(mpHakushaScreen, MULTI_CHAR('haku_n'), 2, NULL);
     JUT_ASSERT(0, mpHakushaOn != NULL);
 
-    mpHakushaOff = new CPaneMgr(mpHakushaScreen, 'haku_b_n', 2, NULL);
+    mpHakushaOff = new CPaneMgr(mpHakushaScreen, MULTI_CHAR('haku_b_n'), 2, NULL);
     JUT_ASSERT(0, mpHakushaOff != NULL);
 
     mpHakushaOn->setAlphaRate(0.0f);
@@ -73,12 +73,12 @@ int dMeterHakusha_c::_create() {
     JUT_ASSERT(0, fg != false);
     dPaneClass_showNullPane(mpButtonScreen);
 
-    mpButtonA = new CPaneMgr(mpButtonScreen, 'abtn_n', 2, NULL);
+    mpButtonA = new CPaneMgr(mpButtonScreen, MULTI_CHAR('abtn_n'), 2, NULL);
     JUT_ASSERT(0, mpButtonA != NULL);
     mpButtonA->show();
     mpButtonA->setAlphaRate(0.0f);
 
-    mpButtonScreen->search('info_n')->translate(0.0f, 0.0f);
+    mpButtonScreen->search(MULTI_CHAR('info_n'))->translate(0.0f, 0.0f);
     field_0x100 = g_drawHIO.mButtonAHorsePosX;
     field_0x104 = g_drawHIO.mButtonAHorsePosY;
 

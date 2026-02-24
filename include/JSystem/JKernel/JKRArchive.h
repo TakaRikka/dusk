@@ -4,6 +4,7 @@
 #include "JSystem/JKernel/JKRCompression.h"
 #include "JSystem/JKernel/JKRFileLoader.h"
 #include "global.h"
+#include "dusk/endian.h"
 
 class JKRHeap;
 
@@ -12,14 +13,14 @@ class JKRHeap;
  * 
  */
 struct SArcHeader {
-    /* 0x00 */ u32 signature;
-    /* 0x04 */ u32 file_length;
-    /* 0x08 */ u32 header_length;
-    /* 0x0C */ u32 file_data_offset;
-    /* 0x10 */ u32 file_data_length;
-    /* 0x14 */ u32 field_0x14;
-    /* 0x18 */ u32 field_0x18;
-    /* 0x1C */ u32 field_0x1c;
+    /* 0x00 */ BE(u32) signature;
+    /* 0x04 */ BE(u32) file_length;
+    /* 0x08 */ BE(u32) header_length;
+    /* 0x0C */ BE(u32) file_data_offset;
+    /* 0x10 */ BE(u32) file_data_length;
+    /* 0x14 */ BE(u32) field_0x14;
+    /* 0x18 */ BE(u32) field_0x18;
+    /* 0x1C */ BE(u32) field_0x1c;
 };
 
 /**
@@ -27,13 +28,13 @@ struct SArcHeader {
  * 
  */
 struct SArcDataInfo {
-    /* 0x00 */ u32 num_nodes;
-    /* 0x04 */ u32 node_offset;
-    /* 0x08 */ u32 num_file_entries;
-    /* 0x0C */ u32 file_entry_offset;
-    /* 0x10 */ u32 string_table_length;
-    /* 0x14 */ u32 string_table_offset;
-    /* 0x18 */ u16 next_free_file_id;
+    /* 0x00 */ BE(u32) num_nodes;
+    /* 0x04 */ BE(u32) node_offset;
+    /* 0x08 */ BE(u32) num_file_entries;
+    /* 0x0C */ BE(u32) file_entry_offset;
+    /* 0x10 */ BE(u32) string_table_length;
+    /* 0x14 */ BE(u32) string_table_offset;
+    /* 0x18 */ BE(u16) next_free_file_id;
     /* 0x1A */ bool sync_file_ids_and_indices;
     /* 0x1B */ u8 field_1b[5];
 };
@@ -50,6 +51,12 @@ inline u16 read_big_endian_u16(void* ptr) {
 
 extern u32 sCurrentDirID__10JKRArchive;  // JKRArchive::sCurrentDirID
 
+#if TARGET_PC
+#define JKAR_DATA(entry) getFileDataPointer(entry->index)
+#else
+#define JKAR_DATA(entry) entry->data
+#endif
+
 /**
  * @ingroup jsystem-jkernel
  * 
@@ -64,20 +71,29 @@ public:
     };
 
     struct SDIDirEntry {
-        u32 type;
-        u32 name_offset;
-        u16 field_0x8;
-        u16 num_entries;
-        u32 first_file_index;
+        BE(u32) type;
+        BE(u32) name_offset;
+        BE(u16) field_0x8;
+        BE(u16) num_entries;
+        BE(u32) first_file_index;
     };
 
     struct SDIFileEntry {
-        u16 file_id;
-        u16 name_hash;
-        u32 type_flags_and_name_offset;
-        u32 data_offset;
-        u32 data_size;
+        BE(u16) file_id;
+        BE(u16) name_hash;
+        BE(u32) type_flags_and_name_offset;
+        BE(u32) data_offset;
+        BE(u32) data_size;
+#if TARGET_PC
+        // Yes, they store the data pointer in the datastructure that's directly loaded from
+        // archive files.
+        // We can't expand this struct to fit a 64-bit pointer, so instead
+        // we'll need to store this data in a separate array.
+        // Store the *index* of this entry (!= file_id), so we can look up the real pointer easily.
+        u32 index;
+#else
         void* data;
+#endif
 
         u32 getNameOffset() const { return type_flags_and_name_offset & 0xFFFFFF; }
         u16 getNameHash() const { return name_hash; }
@@ -129,6 +145,11 @@ public:
 protected:
     JKRArchive();
     JKRArchive(s32, EMountMode);
+
+#if TARGET_PC
+    void*& getFileDataPointer(int idx) const;
+    void initFileDataPointers();
+#endif
 
 public:
     bool getDirEntry(SDirEntry*, u32) const;
@@ -187,6 +208,10 @@ public:
     /* 0x4C */ SDIFileEntry* mFiles;
     /* 0x50 */ s32* mExpandedSize;
     /* 0x54 */ const char* mStringTable;
+
+#if TARGET_PC
+    void** mFileData;
+#endif
 
 protected:
     /* 0x58 */ u32 field_0x58;

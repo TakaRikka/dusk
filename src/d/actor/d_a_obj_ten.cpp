@@ -605,14 +605,14 @@ void daObjTEN_c::Z_BufferChk() {
     {
         dComIfGd_peekZ(local_5c.x, local_5c.y, &field_0x61c);
     }
-    f32 near = dComIfGd_getView()->near;
-    f32 far = dComIfGd_getView()->far;
+    f32 near_ = dComIfGd_getView()->near_;
+    f32 far_ = dComIfGd_getView()->far_;
     mDoLib_pos2camera(&cStack_68, &local_5c);
     local_5c.z += 50.0f;
     if (local_5c.z > 0.0f) {
         local_5c.z = 0.0f;
     }
-    field_0x618 = ((near + ((far * near) / local_5c.z)) / (far - near) + 1.0f) * 16777215.0f;
+    field_0x618 = ((near_ + ((far_ * near_) / local_5c.z)) / (far_ - near_) + 1.0f) * 16777215.0f;
 }
 
 static u8 hio_set;

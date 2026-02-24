@@ -124,9 +124,13 @@ void mDoPrintf_vprintf_Interrupt(char const* fmt, va_list args) {
     BOOL interruptStatus = OSDisableInterrupts();
     if (!data_80450BB5) {
         data_80450BB5 = true;
+#if TARGET_PC
+        vprintf(fmt, args);
+#else
         uintptr_t var_r29 = (uintptr_t)&mDoPrintf_FiberStack + sizeof(mDoPrintf_FiberStack);
         OSSwitchFiberEx((uintptr_t)fmt, (uintptr_t)args, 0, 0, (uintptr_t)vprintf,
                         var_r29);
+#endif
         data_80450BB5 = false;
     }
     OSRestoreInterrupts(interruptStatus);
@@ -228,9 +232,14 @@ void OSReport_Error(const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
     OSReportForceEnableOn();
+#if TARGET_PC
+    my_PutString("\x1B[31m[ERROR]\x1B[m ");
+    OSVReport(fmt, args);
+#else
     my_PutString("\x1B[41;37m[ERROR]");
     OSVReport(fmt, args);
     my_PutString("\x1B[m");
+#endif
     OSReportForceEnableOff();
     fflush(stdout);
     va_end(args);

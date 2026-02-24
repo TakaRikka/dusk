@@ -248,7 +248,7 @@ u8 fopMsgM_itemNumIdx(u8 i_no) {
     return itemicon[i_no] & 0xFF;
 }
 
-f32 dummy() {
+static f32 dummy() {
     J2DPane* dummyPlane = NULL;
     dummyPlane->getAlpha();
     dummyPlane->getHeight();

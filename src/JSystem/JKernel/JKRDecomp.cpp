@@ -206,7 +206,7 @@ void JKRDecomp::decodeSZS(u8* src_buffer, u8* dst_buffer, u32 srcSize, u32 dstSi
     s32 chunkBitsLeft = 0;
     s32 chunkBits;
 
-    decompEnd = dst_buffer + *(int*)(src_buffer + 4) - dstSize;
+    decompEnd = dst_buffer + JKRDecompExpandSize(src_buffer) - dstSize;
 
     if (srcSize == 0) {
         return;

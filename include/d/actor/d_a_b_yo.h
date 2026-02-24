@@ -8,7 +8,7 @@
 #include "d/d_bg_s_acch.h"
 
 class dBgW;
-class msg_class;
+struct msg_class;
 
 /**
  * @ingroup actors-enemies

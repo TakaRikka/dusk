@@ -1,8 +1,15 @@
 #ifndef JMATH_H
 #define JMATH_H
 
-#include <dolphin/mtx.h>
+#include "dolphin/mtx.h"
 #include <cmath>
+
+typedef f32 Mtx33[3][3];
+typedef f32 Mtx23[2][3];
+typedef f32 (*Mtx3P)[3];
+typedef f32 (*MtxP)[4];
+typedef const f32 (*CMtxP)[4];
+typedef f32 QuaternionP[4];
 
 void JMAMTXApplyScale(const Mtx, Mtx, f32, f32, f32);
 void JMAEulerToQuat(s16 param_0, s16 param_1, s16 param_2, Quaternion* param_3);
@@ -14,18 +21,24 @@ void JMAVECScaleAdd(__REGISTER const Vec* vec1, __REGISTER const Vec* vec2, __RE
 inline int JMAAbs(int value) {
 #ifdef __MWERKS__
     return __abs(value);
+#else
+    return abs(value);
 #endif
 }
 
 inline f32 JMAAbs(f32 x) {
 #ifdef __MWERKS__
     return __fabsf(x);
+#else
+    return fabsf(x);
 #endif
 }
 
 inline f32 JMAFastReciprocal(f32 value) {
 #ifdef __MWERKS__
     return __fres(value);
+#else
+    return 1.0f / value;
 #endif
 }
 
@@ -40,6 +53,8 @@ inline float __frsqrtes(__REGISTER double f) {
 
     // clang-format on
     return out;
+#else
+    return 1.0f / sqrtf(f);
 #endif
 }
 
@@ -54,6 +69,8 @@ inline f32 JMAFastSqrt(__REGISTER const f32 input) {
     } else {
         return input;
     }
+#else
+    return sqrt(input);
 #endif
 }
 
@@ -87,6 +104,15 @@ inline f32 JMAHermiteInterpolation(__REGISTER f32 p1, __REGISTER f32 p2, __REGIS
     }
     // clang-format on
     return ff25;
+#else
+    f32 t = (p1 - p2) / (p5 - p2);
+    f32 t2 = t * t;
+    f32 t3 = t2 * t;
+    f32 h1 = 2.0f * t3 - 3.0f * t2 + 1.0f;
+    f32 h2 = -2.0f * t3 + 3.0f * t2;
+    f32 h3 = t3 - 2.0f * t2 + t;
+    f32 h4 = t3 - t2;
+    return h1 * p4 + h2 * p7 + h3 * (p3 - p4) + h4 * (p6 - p3);
 #endif
 }
 
@@ -115,6 +141,12 @@ inline void gekko_ps_copy3(__REGISTER void* dst, __REGISTER const void* src) {
         psq_st src0, 0(dst), 0, 0
         stfs src1, 8(dst)
     };
+#else
+    f32* fsrc = (f32*)src;
+    f32* fdst = (f32*)dst;
+    fdst[0] = fsrc[0];
+    fdst[1] = fsrc[1];
+    fdst[2] = fsrc[2];
 #endif
 }
 
@@ -131,6 +163,15 @@ inline void gekko_ps_copy6(__REGISTER void* dst, __REGISTER const void* src) {
         psq_st src1, 8(dst), 0, 0
         psq_st src2, 16(dst), 0, 0
     };
+#else
+    f32* fsrc = (f32*)src;
+    f32* fdst = (f32*)dst;
+    fdst[0] = fsrc[0];
+    fdst[1] = fsrc[1];
+    fdst[2] = fsrc[2];
+    fdst[3] = fsrc[3];
+    fdst[4] = fsrc[4];
+    fdst[5] = fsrc[5];
 #endif
 }
 
@@ -156,6 +197,12 @@ inline void gekko_ps_copy12(__REGISTER void* dst, __REGISTER const void* src) {
         psq_st src4, 32(dst), 0, 0
         psq_st src5, 40(dst), 0, 0
     };
+#else
+    f32* fsrc = (f32*)src;
+    f32* fdst = (f32*)dst;
+    for (int i = 0; i < 12; i++) {
+        fdst[i] = fsrc[i];
+    }
 #endif
 }
 
@@ -187,13 +234,19 @@ inline void gekko_ps_copy16(__REGISTER void* dst, __REGISTER const void* src) {
         psq_st src6, 48(dst), 0, 0
         psq_st src7, 56(dst), 0, 0
     };
+#else
+    f32* fsrc = (f32*)src;
+    f32* fdst = (f32*)dst;
+    for (int i = 0; i < 16; i++) {
+        fdst[i] = fsrc[i];
+    }
 #endif
 }
 
 };  // namespace JMath
 
 namespace JMathInlineVEC {
-    inline void C_VECAdd(__REGISTER const Vec* a, __REGISTER const Vec* b, __REGISTER Vec* ab) {
+inline void C_VECAdd(__REGISTER const Vec* a, __REGISTER const Vec* b, __REGISTER Vec* ab) {
     #ifdef __MWERKS__
         __REGISTER f32 axy;
         __REGISTER f32 bxy;
@@ -211,17 +264,21 @@ namespace JMathInlineVEC {
             ps_add sumz, az, bz
             psq_st sumz, 8(ab), 1, 0
         }
+    #else
+    ab->x = a->x + b->x;
+    ab->y = a->y + b->y;
+    ab->z = a->z + b->z;
     #endif
-    }
+}
 
-    inline void C_VECSubtract(__REGISTER const Vec* a, __REGISTER const Vec* b, __REGISTER Vec* ab) {
-    #ifdef __MWERKS__
-        __REGISTER f32 axy;
-        __REGISTER f32 bxy;
-        __REGISTER f32 az;
-        __REGISTER f32 subz;
-        __REGISTER f32 bz;
-        asm {
+inline void C_VECSubtract(__REGISTER const Vec* a, __REGISTER const Vec* b, __REGISTER Vec* ab) {
+#ifdef __MWERKS__
+    __REGISTER f32 axy;
+    __REGISTER f32 bxy;
+    __REGISTER f32 az;
+    __REGISTER f32 subz;
+    __REGISTER f32 bz;
+    asm {
             psq_l axy, 0(a), 0, 0
             psq_l bxy, 0(b), 0, 0
             ps_sub bxy, axy, bxy
@@ -230,35 +287,41 @@ namespace JMathInlineVEC {
             psq_l bz, 8(b), 1, 0
             ps_sub subz, az, bz
             psq_st subz, 8(ab), 1, 0
-        }
-    #endif
     }
+#else
+    ab->x = a->x - b->x;
+    ab->y = a->y - b->y;
+    ab->z = a->z - b->z;
+#endif
+}
 
-    inline f32 C_VECSquareMag(__REGISTER const Vec* v) {
-    #ifdef __MWERKS__
-        __REGISTER f32 x_y;
-        __REGISTER f32 z;
-        __REGISTER f32 res;
-    
-        asm {
+inline f32 C_VECSquareMag(__REGISTER const Vec* v) {
+#ifdef __MWERKS__
+    __REGISTER f32 x_y;
+    __REGISTER f32 z;
+    __REGISTER f32 res;
+
+    asm {
             psq_l   x_y, 0(v), 0, 0
             ps_mul  x_y, x_y, x_y
             lfs     z,   8(v)
             ps_madd res, z, z, x_y
             ps_sum0 res, res, x_y, x_y
-        }
-        return res;
-    #endif
     }
+    return res;
+#else
+    return (v->x * v->x) + (v->y * v->y) + (v->z * v->z);
+#endif
+}
 
-    inline f32 C_VECDotProduct(__REGISTER const Vec *a, __REGISTER const Vec *b) {
-    #ifdef __MWERKS__
-        __REGISTER f32 res;
-        __REGISTER f32 thisyz;
-        __REGISTER f32 otheryz;
-        __REGISTER f32 otherxy;
-        __REGISTER f32 thisxy;
-        asm {
+inline f32 C_VECDotProduct(__REGISTER const Vec* a, __REGISTER const Vec* b) {
+#ifdef __MWERKS__
+    __REGISTER f32 res;
+    __REGISTER f32 thisyz;
+    __REGISTER f32 otheryz;
+    __REGISTER f32 otherxy;
+    __REGISTER f32 thisxy;
+    asm {
             psq_l thisyz, 4(a), 0, 0
             psq_l otheryz, 4(b), 0, 0
             ps_mul thisyz, thisyz, otheryz
@@ -266,13 +329,15 @@ namespace JMathInlineVEC {
             psq_l otherxy, 0(b), 0, 0
             ps_madd otheryz, thisxy, otherxy, thisyz
             ps_sum0 res, otheryz, thisyz, thisyz
-        };
-        return res;
-    #endif
-    }
-};
+    };
+    return res;
+#else
+    return (a->x * b->x) + (a->y * b->y) + (a->z * b->z);
+#endif
+}
+};  // namespace JMathInlineVEC
 
-template<typename T>
+template <typename T>
 inline T JMAMax(T param_0, T param_1) {
     T ret;
     if (param_0 > param_1) {

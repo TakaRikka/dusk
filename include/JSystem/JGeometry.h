@@ -46,6 +46,10 @@ struct TUtil<f32> {
         f32 root = __frsqrte(x);
         root = 0.5f * root * (3.0f - x * (root * root));
         return root;
+        #else
+        if (x <= 0.0f)
+            return x;
+        return 1.0f / std::sqrt(x);
         #endif
     }
 
@@ -58,6 +62,10 @@ struct TUtil<f32> {
         f32 root = __frsqrte(x);
         root = 0.5f * root * (3.0f - x * (root * root));
         return x * root;
+        #else
+        if (x <= 0.0f)
+            return x;
+        return std::sqrt(x);
         #endif
     }
 };

@@ -15,9 +15,11 @@ public:
     JGadget_outMessage(MessageFunc fn, const char* file, int line);
     ~JGadget_outMessage();
 
+#if !TARGET_PC
     JGadget_outMessage& operator<<(int param_1) { return *this << (s32)param_1; }
-    JGadget_outMessage& operator<<(u16);
     JGadget_outMessage& operator<<(uint);
+#endif
+    JGadget_outMessage& operator<<(u16);
     JGadget_outMessage& operator<<(u8 param_1) { return *this << (char)param_1; }
     JGadget_outMessage& operator<<(const char* str);
     JGadget_outMessage& operator<<(char);

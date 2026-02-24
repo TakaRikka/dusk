@@ -3,7 +3,7 @@
 
 #include "JSystem/JSupport/JSUList.h"
 
-class JASTrack;
+struct JASTrack;
 
 /**
  * @ingroup jsystem-jaudio

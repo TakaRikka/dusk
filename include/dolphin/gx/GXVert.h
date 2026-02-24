@@ -3,6 +3,46 @@
 
 #ifdef __REVOLUTION_SDK__
 #include <revolution/gx/GXVert.h>
+#elif defined(TARGET_PC)
+// On PC, include Aurora's GXVert for GXPosition/GXNormal/GXColor/GXTexCoord/GXEnd
+// (extern functions implemented in Aurora's GXVert.cpp, stream-based vertex buffers)
+#include "../../../extern/aurora/include/dolphin/gx/GXVert.h"
+
+// Aurora's GXVert.h does not provide GXCmd, GXParam, GXMatrixIndex, or a valid
+// GXWGFifo target. J3D code uses these for low-level display list writes.
+// We declare them as extern (implemented in stubs.cpp) and provide a dummy
+// GXWGFifo that writes into a throw-away buffer so direct FIFO writes don't crash.
+
+// Replace Aurora's GXWGFifo macro (pointing to 0xCC008000) with an extern variable
+#undef GXWGFifo
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+// PPCWGPipe is already typedef'd by Aurora's GXVert.h above.
+// Dummy FIFO sink: direct GXWGFifo writes in J3DFifo.h land here harmlessly.
+extern volatile PPCWGPipe GXWGFifo;
+
+void GXCmd1u8(const u8 x);
+void GXCmd1u16(const u16 x);
+void GXCmd1u32(const u32 x);
+
+void GXParam1u8(const u8 x);
+void GXParam1u16(const u16 x);
+void GXParam1u32(const u32 x);
+void GXParam1s8(const s8 x);
+void GXParam1s16(const s16 x);
+void GXParam1s32(const s32 x);
+void GXParam1f32(const f32 x);
+void GXParam3f32(const f32 x, const f32 y, const f32 z);
+void GXParam4f32(const f32 x, const f32 y, const f32 z, const f32 w);
+
+void GXMatrixIndex1u8(const u8 x);
+
+#ifdef __cplusplus
+}
+#endif
+
 #else
 #include <dolphin/types.h>
 #include <dolphin/os.h>

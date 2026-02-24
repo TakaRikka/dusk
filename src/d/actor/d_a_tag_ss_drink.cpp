@@ -246,9 +246,11 @@ static int daTag_SSDrink_IsDelete(void* i_this) {
 
 daTag_SSDrink_c::~daTag_SSDrink_c() {}
 
+#ifdef __MWERKS__
 void daObj_SSBase_c::setSoldOut() {
     /* empty function */
 }
+#endif
 
 static actor_method_class daTag_SSDrink_MethodTable = {
     (process_method_func)daTag_SSDrink_Create,  (process_method_func)daTag_SSDrink_Delete,

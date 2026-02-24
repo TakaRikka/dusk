@@ -10763,10 +10763,10 @@ static void view_setup(camera_process_class* i_this) {
     dComIfGd_setViewport(viewport);
     dComIfGd_setView(view);
 
-    f32 far;
+    f32 far_;
     f32 var_f30;
     if (getComStat(8)) {
-        far = view->far;
+        far_ = view->far_;
     } else {
 #if DEBUG
         if (g_envHIO.mOther.mAdjustCullFar != 0) {
@@ -10776,10 +10776,10 @@ static void view_setup(camera_process_class* i_this) {
         {
             var_f30 = dStage_stagInfo_GetCullPoint(dComIfGp_getStageStagInfo());
         }
-        far = var_f30;
+        far_ = var_f30;
     }
 
-    mDoLib_clipper::setup(view->fovy, view->aspect, view->near, far);
+    mDoLib_clipper::setup(view->fovy, view->aspect, view->near_, far_);
 }
 
 static void store(camera_process_class* i_camera) {
@@ -10990,7 +10990,7 @@ static int camera_draw(camera_process_class* i_this) {
 
     int trim_height = body->TrimHeight();
     window->setScissor(0.0f, trim_height, FB_WIDTH, FB_HEIGHT - trim_height * 2.0f);
-    C_MTXPerspective(process->projMtx, process->fovy, process->aspect, process->near, process->far);
+    C_MTXPerspective(process->projMtx, process->fovy, process->aspect, process->near_, process->far_);
     mDoMtx_lookAt(process->viewMtx, &process->lookat.eye, &process->lookat.center,
                   &process->lookat.up, process->bank);
 

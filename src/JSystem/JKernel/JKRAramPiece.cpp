@@ -6,7 +6,7 @@
 #include "JSystem/JUtility/JUTException.h"
 #include <dolphin/os.h>
 
-JKRAMCommand* JKRAramPiece::prepareCommand(int direction, u32 src, u32 dst, u32 length,
+JKRAMCommand* JKRAramPiece::prepareCommand(int direction, uintptr_t src, uintptr_t dst, u32 length,
                                            JKRAramBlock* block,
                                            JKRAMCommand::AsyncCallback callback) {
     JKRAMCommand* command = new (JKRGetSystemHeap(), -4) JKRAMCommand();
@@ -27,7 +27,7 @@ JSUList<JKRAMCommand> JKRAramPiece::sAramPieceCommandList;
 
 OSMutex JKRAramPiece::mMutex;
 
-JKRAMCommand* JKRAramPiece::orderAsync(int direction, u32 source, u32 destination, u32 length,
+JKRAMCommand* JKRAramPiece::orderAsync(int direction, uintptr_t source, uintptr_t destination, u32 length,
                                        JKRAramBlock* block, JKRAMCommand::AsyncCallback callback) {
     lock();
     if ((source & 0x1f) != 0 || (destination & 0x1f) != 0) {
@@ -73,7 +73,7 @@ BOOL JKRAramPiece::sync(JKRAMCommand* command, int is_non_blocking) {
     return TRUE;
 }
 
-BOOL JKRAramPiece::orderSync(int direction, u32 source, u32 destination, u32 length,
+BOOL JKRAramPiece::orderSync(int direction, uintptr_t source, uintptr_t destination, u32 length,
                              JKRAramBlock* block) {
     lock();
 
@@ -97,7 +97,7 @@ void JKRAramPiece::startDMA(JKRAMCommand* command) {
                    command->mDst, command->mDataLength, JKRAramPiece::doneDMA);
 }
 
-void JKRAramPiece::doneDMA(u32 requestAddress) {
+void JKRAramPiece::doneDMA(uintptr_t requestAddress) {
     JKRAMCommand* command = (JKRAMCommand*)requestAddress;
 
     if (command->mTransferDirection == 1) {

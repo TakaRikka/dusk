@@ -4,6 +4,7 @@
  */
 
 #include "SSystem/SComponent/c_phase.h"
+#include "global.h"
 
 void cPhs_Reset(request_of_phase_process_class* phase) {
     phase->id = cPhs_INIT_e;

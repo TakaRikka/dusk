@@ -38,7 +38,7 @@ void dScissorBegin_packet_c::draw() {
     cXyz spEC[5];
     int sp60 = 4;
     view_class* view_p = dComIfGd_getView();
-    f32 sp58 = -view_p->near;
+    f32 sp58 = -view_p->near_;
 
     cXyz* sp54 = mQuad;
     cXyz* var_r30 = spEC;

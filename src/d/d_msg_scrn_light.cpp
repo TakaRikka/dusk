@@ -143,7 +143,7 @@ dMsgScrnLight_c::dMsgScrnLight_c(u8 i_colorType, u8 param_1) {
     mpBpk->searchUpdateMaterialID(mpScreen);
     mBpkFrame = 0.0f;
 
-    mpParent_c = new CPaneMgr(mpScreen, 'moya00', 0, NULL);
+    mpParent_c = new CPaneMgr(mpScreen, MULTI_CHAR('moya00'), 0, NULL);
     JUT_ASSERT(0, mpParent_c != NULL);
 
     mpParent_c->getPanePtr()->setAnimation(mpBck);

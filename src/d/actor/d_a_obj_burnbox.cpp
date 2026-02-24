@@ -81,7 +81,7 @@ int daObjBurnBox_c::Create() {
     return 1;
 }
 
-const char* l_arcName[3] = {
+static const char* l_arcName[3] = {
     "Kkiba_00", // crate
     "Kkiba_00",
     "J_taru00", // barrel

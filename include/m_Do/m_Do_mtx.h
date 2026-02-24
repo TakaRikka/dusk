@@ -4,6 +4,7 @@
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include <dolphin/mtx.h>
+#include "JSystem/JMath/JMath.h"
 
 extern u8 g_printCurrentHeapDebug;
 extern u8 g_printOtherHeapDebug;

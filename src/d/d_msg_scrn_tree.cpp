@@ -44,36 +44,36 @@ dMsgScrnTree_c::dMsgScrnTree_c(JUTFont* param_0, JKRExpHeap* param_1) {
     field_0xd4->searchUpdateMaterialID(mpScreen);
     field_0xe0 = 0.0f;
 
-    mpPmP_c = new CPaneMgr(mpScreen, 'n_size', 2, NULL);
+    mpPmP_c = new CPaneMgr(mpScreen, MULTI_CHAR('n_size'), 2, NULL);
     mpPmP_c->getPanePtr()->setAnimation(field_0xcc);
     field_0xcc->setFrame(1.0f);
     mpPmP_c->getPanePtr()->animationTransform();
     mpPmP_c->getPanePtr()->setAnimation((J2DAnmTransform*)NULL);
     mpPmP_c->scale(g_MsgObject_HIO_c.mBoxWoodScaleX, g_MsgObject_HIO_c.mBoxWoodScaleY);
 
-    field_0xc4 = new CPaneMgr(mpScreen, 'back_b', 0, NULL);
-    field_0xc8 = new CPaneMgr(mpScreen, 'spot00', 0, NULL);
+    field_0xc4 = new CPaneMgr(mpScreen, MULTI_CHAR('back_b'), 0, NULL);
+    field_0xc8 = new CPaneMgr(mpScreen, MULTI_CHAR('spot00'), 0, NULL);
     field_0xc8->getPanePtr()->setAnimation(field_0xd0);
 
-    mpScreen->search('white_m')->setAnimation(field_0xd4);
+    mpScreen->search(MULTI_CHAR('white_m'))->setAnimation(field_0xd4);
 
 #if VERSION == VERSION_GCN_JPN
     if (dComIfGs_getOptRuby() != 0) {
         for (int i = 0; i < 3; i++) {
-            static u64 const t_tag[3] = {'mg_3line', 't3_w', 't3_s'};
+            static u64 const t_tag[3] = {MULTI_CHAR('mg_3line'), 't3_w', 't3_s'};
 
             mpTm_c[i] = new CPaneMgr(mpScreen, t_tag[i], 0, NULL);
             ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setFont(field_0x54);
             ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setString(0x210, "");
         }
 
-        mpScreen->search('n_3line')->show();
-        mpScreen->search('n_3fline')->hide();
-        mpScreen->search('n_e4line')->hide();
+        mpScreen->search(MULTI_CHAR('n_3line'))->show();
+        mpScreen->search(MULTI_CHAR('n_3fline'))->hide();
+        mpScreen->search(MULTI_CHAR('n_e4line'))->hide();
     } else {
         for (int i = 0; i < 3; i++) {
-            static u64 const t_tag[3] = {'t3fline', 't3f_w', 't3f_s'};
-            static u64 const tr_tag[3] = {'mg_3f', 'mg_3f_w', 'mg_3f_s'};
+            static u64 const t_tag[3] = {MULTI_CHAR('t3fline'), MULTI_CHAR('t3f_w'), MULTI_CHAR('t3f_s')};
+            static u64 const tr_tag[3] = {MULTI_CHAR('mg_3f'), MULTI_CHAR('mg_3f_w'), MULTI_CHAR('mg_3f_s')};
 
             mpTm_c[i] = new CPaneMgr(mpScreen, t_tag[i], 0, NULL);
             ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setFont(field_0x54);
@@ -84,22 +84,22 @@ dMsgScrnTree_c::dMsgScrnTree_c(JUTFont* param_0, JKRExpHeap* param_1) {
             ((J2DTextBox*)mpTmr_c[i]->getPanePtr())->setString(0x210, "");
         }
 
-        mpScreen->search('n_3line')->hide();
-        mpScreen->search('n_3fline')->show();
-        mpScreen->search('n_e4line')->hide();
+        mpScreen->search(MULTI_CHAR('n_3line'))->hide();
+        mpScreen->search(MULTI_CHAR('n_3fline'))->show();
+        mpScreen->search(MULTI_CHAR('n_e4line'))->hide();
     }
 #else
     for (int i = 0; i < 3; i++) {
-        static u64 const t_tag[3] = {'mg_e4lin', 'f4_w', 't4_s'};
+        static u64 const t_tag[3] = {MULTI_CHAR('mg_e4lin'), 'f4_w', 't4_s'};
 
         mpTm_c[i] = new CPaneMgr(mpScreen, t_tag[i], 0, NULL);
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setFont(field_0x54);
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setString(0x200, "");
     }
 
-    mpScreen->search('n_3line')->hide();
-    mpScreen->search('n_3fline')->hide();
-    mpScreen->search('n_e4line')->show();
+    mpScreen->search(MULTI_CHAR('n_3line'))->hide();
+    mpScreen->search(MULTI_CHAR('n_3fline'))->hide();
+    mpScreen->search(MULTI_CHAR('n_e4line'))->show();
 #endif
 
     ((J2DTextBox*)mpTm_c[0]->getPanePtr())->getFontSize(mFontSize);

@@ -92,11 +92,12 @@ void daObjSwChain_HIO_c::genMessage(JORMContext* ctx) {
     // Return Speed・Low
     ctx->genSlider("戻る速度・低速", &mReturnSpeedLow, 0.0f, 50.0f);
     // Process Stop
-    ctx->genCheckBox("処理停止", &mProcessStop, '\x01');
+    ctx->genCheckBox("処理停止", &mProcessStop, 0x1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
     // Clawshot Related
     ctx->genLabel("-- フックショット関係 --", 0);
     // Reaction Angle Display
-    ctx->genCheckBox("反応角度表示", &mReactionAngleDisplay, '\x01');
+    ctx->genCheckBox("反応角度表示", &mReactionAngleDisplay, 0x1, 0, NULL, 0xffff, 0xffff, 0x200,
+                     0x18);
     // Clawshot Reaction Angle
     ctx->genSlider("フックショット反応角度", &mReactionAngle, 0, 0x7fff);
 }

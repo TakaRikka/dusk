@@ -1,17 +1,15 @@
 #ifndef _DOLPHIN_OS_H_
 #define _DOLPHIN_OS_H_
 
-#ifdef __MWERKS__
 #include <cstdio>
-#else
-#include <stdio.h>
-#endif
 
 #ifdef __REVOLUTION_SDK__
 #include <revolution/os.h>
 #else
+
 #include <dolphin/types.h>
 #include <dolphin/gx/GXStruct.h>
+
 void OSReportInit(void);
 void OSSwitchFiberEx(u32, u32, u32, u32, u32, u32);
 void OSVAttention(const char* fmt, va_list args);
@@ -45,7 +43,9 @@ typedef u32 OSTick;
 #include <dolphin/os/OSLC.h>
 #include <dolphin/os/OSL2.h>
 #include <dolphin/os/OSReboot.h>
+#ifdef __MWERKS__
 #include <dolphin/os/OSExec.h>
+#endif
 #include <dolphin/os/OSMemory.h>
 #include <dolphin/os/OSSemaphore.h>
 #include <dolphin/os/OSUtf.h>
@@ -53,6 +53,18 @@ typedef u32 OSTick;
 
 // private macro, maybe shouldn't be defined here?
 #define OFFSET(addr, align) (((u32)(addr) & ((align)-1)))
+
+#ifndef __MWERKS__
+typedef struct {
+    BOOL valid;
+    u32 restartCode;
+    u32 bootDol;
+    void* regionStart;
+    void* regionEnd;
+    int argsUseDefault;
+    void* argsAddr;
+} OSExecParams;
+#endif
 
 #define DOLPHIN_ALIGNMENT 32
 
@@ -80,9 +92,9 @@ OSThread* __gUnkThread1 AT_ADDRESS(OS_BASE_CACHED | 0x00D8);
 int __gUnknown800030C0[2] AT_ADDRESS(OS_BASE_CACHED | 0x30C0);
 u8 __gUnknown800030E3 AT_ADDRESS(OS_BASE_CACHED | 0x30E3);
 #else
-#define __OSBusClock  (*(u32 *)(OS_BASE_CACHED | 0x00F8))
-#define __OSCoreClock (*(u32 *)(OS_BASE_CACHED | 0x00FC))
-#endif
+#define __OSBusClock  486000000
+#define __OSCoreClock (486000000 / 4)
+#endif // __MWERKS__
 
 #define OS_BUS_CLOCK   __OSBusClock
 #define OS_CORE_CLOCK  __OSCoreClock
@@ -210,7 +222,6 @@ DECL_WEAK void OSReportDisable(void);
 DECL_WEAK void OSReportEnable(void);
 DECL_WEAK void OSReportForceEnableOff(void);
 DECL_WEAK void OSReportForceEnableOn(void);
-DECL_WEAK void OSVReport(const char* format, va_list list);
 
 #if DEBUG
 #define OS_REPORT(...) OSReport(__VA_ARGS__)
@@ -233,6 +244,29 @@ extern u8 __OSReport_enable;
 #define OSRoundUp32B(x)   (((u32)(x) + 32 - 1) & ~(32 - 1))
 #define OSRoundDown32B(x) (((u32)(x)) & ~(32 - 1))
 
+#ifdef TARGET_PC
+
+static inline void* OSPhysicalToCached(u32 paddr) {
+    return reinterpret_cast<void*>(static_cast<uintptr_t>(paddr));
+}
+static inline void* OSPhysicalToUncached(u32 paddr) {
+    return reinterpret_cast<void*>(static_cast<uintptr_t>(paddr));
+}
+static inline u32 OSCachedToPhysical(void* caddr) {
+    return static_cast<u32>(reinterpret_cast<uintptr_t>(caddr));
+}
+static inline u32 OSUncachedToPhysical(void* ucaddr) {
+    return static_cast<u32>(reinterpret_cast<uintptr_t>(ucaddr));
+}
+static inline void* OSCachedToUncached(void* caddr) {
+    return caddr;
+}
+static inline void* OSUncachedToCached(void* ucaddr) {
+    return ucaddr;
+}
+
+#else // non-TARGET_PC
+
 void* OSPhysicalToCached(u32 paddr);
 void* OSPhysicalToUncached(u32 paddr);
 u32 OSCachedToPhysical(void* caddr);
@@ -240,7 +274,9 @@ u32 OSUncachedToPhysical(void* ucaddr);
 void* OSCachedToUncached(void* caddr);
 void* OSUncachedToCached(void* ucaddr);
 
-#if !DEBUG
+#endif // TARGET_PC
+
+#if !DEBUG && !defined(TARGET_PC)
 #define OSPhysicalToCached(paddr)    ((void*) ((u32)(OS_BASE_CACHED   + (u32)(paddr))))
 #define OSPhysicalToUncached(paddr)  ((void*) ((u32)(OS_BASE_UNCACHED + (u32)(paddr))))
 #define OSCachedToPhysical(caddr)    ((u32)   ((u32)(caddr)  - OS_BASE_CACHED))
@@ -257,6 +293,10 @@ extern OSTime __OSStartTime;
 extern int __OSInIPL;
 
 // helper for assert line numbers in different revisions
+#ifndef SDK_REVISION
+#define SDK_REVISION 0
+#endif
+
 #if SDK_REVISION < 1
     #define LINE(l0, l1, l2) (l0)
 #elif SDK_REVISION < 2
@@ -275,7 +315,6 @@ extern int __OSInIPL;
 // This is dumb but we dont have a Metrowerks way to do variadic macros in the macro to make this done in a not scrubby way.
 #define ASSERTMSG1LINE(line, cond, msg, arg1) \
     ((cond) || (OSPanic(__FILE__, line, msg, arg1), 0))
-    
 #define ASSERTMSG2LINE(line, cond, msg, arg1, arg2) \
     ((cond) || (OSPanic(__FILE__, line, msg, arg1, arg2), 0))
 
@@ -289,7 +328,6 @@ extern int __OSInIPL;
 #define ASSERTMSG2LINE(line, cond, msg, arg1, arg2) (void)0
 #define ASSERTMSGLINEV(line, cond, ...) (void)0
 #endif
-    
 #define ASSERT(cond) ASSERTLINE(__LINE__, cond)
 
 inline s16 __OSf32tos16(__REGISTER f32 inF) {
@@ -357,5 +395,5 @@ static inline void OSInitFastCast(void) {
 }
 #endif
 
-#endif
-#endif
+#endif // __REVOLUTION_SDK__
+#endif // _DOLPHIN_OS_H_

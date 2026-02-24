@@ -6,6 +6,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "SSystem/SComponent/c_m3d.h"
 #include <cmath>
+#include <global.h>
 
 s16 cM_rad2s(f32 rad) {
     s32 s = (std::fmod(rad, 2 * M_PI) * (0x8000 / M_PI));

@@ -1280,7 +1280,8 @@ int daNpcF_c::ctrlMsgAnm(int& o_expression, int& o_motion, fopAc_ac_c* param_2, 
     return mMsgTimer;
 }
 
-void daNpcF_c::orderEvent(int i_speak, char* i_evtName, u16 param_2, u16 i_priority, u8 i_mapToolID,
+void daNpcF_c::orderEvent(int i_speak, char* i_evtName, u16 param_2, u16 i_priority,
+                          u8 i_mapToolID,
                           u16 i_flag) {
     if (i_evtName != NULL) {
         mEventIdx = dComIfGp_getEventManager().getEventIdx(this, i_evtName, 0xff);

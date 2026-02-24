@@ -1,20 +1,21 @@
-#include "JSystem/JSystem.h" // IWYU pragma: keep
+#include "JSystem/JSystem.h"  // IWYU pragma: keep
 
-#include "JSystem/JFramework/JFWDisplay.h"
+#include <dolphin/gx.h>
+#include <dolphin/vi.h>
+#include <stdint.h>
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
+#include "JSystem/JFramework/JFWDisplay.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTProcBar.h"
-#include <dolphin/gx.h>
-#include <dolphin/vi.h>
 #include "global.h"
-#include <stdint.h>
+#include "aurora/aurora.h"
 
 void JFWDisplay::ctor_subroutine(bool enableAlpha) {
     mEnableAlpha = enableAlpha;
     mClamp = GX_CLAMP_TOP | GX_CLAMP_BOTTOM;
-    mClearColor = JUtility::TColor(0, 0, 0, 0);
+    mClearColor = JUtility::TColor(255, 0, 128, 255);
     mZClear = 0xFFFFFF;
     mGamma = 0;
     mFader = NULL;
@@ -199,10 +200,10 @@ void JFWDisplay::endGX() {
 
     J2DOrthoGraph ortho(0.0f, 0.0f, width, height, -1.0f, 1.0f);
 
-    if (mFader != NULL) {
-        ortho.setPort();
-        mFader->control();
-    }
+    //if (mFader != NULL) {
+    //    ortho.setPort();
+    //    mFader->control();
+    //}
     ortho.setPort();
     JUTDbPrint::getManager()->flush();
 
@@ -221,6 +222,7 @@ void JFWDisplay::endGX() {
 }
 
 void JFWDisplay::beginRender() {
+    aurora_begin_frame();
     if (field_0x40) {
         JUTProcBar::getManager()->wholeLoopEnd();
     }
@@ -298,6 +300,7 @@ void JFWDisplay::endRender() {
 
     JUTProcBar::getManager()->cpuStart();
     calcCombinationRatio();
+    aurora_end_frame();
 }
 
 void JFWDisplay::endFrame() {
@@ -325,7 +328,8 @@ void JFWDisplay::endFrame() {
     }
 
     if (field_0x40) {
-        static u32 prevFrame = VIGetRetraceCount();;
+        static u32 prevFrame = VIGetRetraceCount();
+        ;
         u32 retrace_cnt = VIGetRetraceCount();
         u32 r28 = retrace_cnt - prevFrame;
         JUTProcBar::getManager()->setCostFrame(retrace_cnt - prevFrame);
@@ -340,7 +344,10 @@ void JFWDisplay::waitBlanking(int param_0) {
 }
 
 static void waitForTick(u32 p1, u16 p2) {
-    if (p1 != 0) {
+ 
+    
+    if (p1 != 0)
+    {
         static OSTime nextTick = OSGetTime();
         OSTime time = OSGetTime();
         while (time < nextTick) {
@@ -348,18 +355,19 @@ static void waitForTick(u32 p1, u16 p2) {
             time = OSGetTime();
         }
         nextTick = time + p1;
-    }
-    else {
+    } else {
         static u32 nextCount = VIGetRetraceCount();
         u32 uVar1 = (p2 == 0) ? 1 : p2;
         OSMessage msg;
         do {
-            if (!OSReceiveMessage(JUTVideo::getManager()->getMessageQueue(), &msg, OS_MESSAGE_BLOCK)) {
+            if (!OSReceiveMessage(JUTVideo::getManager()->getMessageQueue(), &msg,
+                                  OS_MESSAGE_BLOCK))
+            {
                 msg = 0;
             }
         } while (((intptr_t)msg - (intptr_t)nextCount) < 0);
         nextCount = (intptr_t)msg + uVar1;
-    }
+    }    
 }
 
 JSUList<JFWAlarm> JFWAlarm::sList(false);
@@ -520,8 +528,13 @@ static void JFWDrawDoneAlarm() {
 static void JFWGXAbortAlarmHandler(OSAlarm* param_0, OSContext* param_1) {
     diagnoseGpHang();
     GXAbortFrame();
+#ifdef TARGET_PC
+    GXCmd1u8(0x61);
+    GXCmd1u32(0x5800000F);
+#else
     GXWGFifo.u8 = 0x61;
     GXWGFifo.u32 = 0x5800000F;
+#endif
 
     GXFifoObj* fifo = GXGetCPUFifo();
     if (fifo != NULL) {

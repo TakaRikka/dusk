@@ -72,9 +72,9 @@ static void messageSet(u32 status, bool i_drawBg) {
 
     JUT_ASSERT(102, strlen(msg_p)-1 < 512);
 
-    J2DTextBox tpane('TEXT1', JGeometry::TBox2<f32>(0.0f, 0.0f, FB_WIDTH, 200.0f), (ResFONT*)font_data, msg_p, 512, HBIND_CENTER, VBIND_CENTER);
-    J2DTextBox spane('TEXT2', JGeometry::TBox2<f32>(0.0f, 0.0f, FB_WIDTH, 200.0f), (ResFONT*)font_data, msg_p, 512, HBIND_CENTER, VBIND_CENTER);
-    J2DPicture ppane('PICT1', JGeometry::TBox2<f32>(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT), (ResTIMG*)black_tex, NULL);
+    J2DTextBox tpane(MULTI_CHAR('TEXT1'), JGeometry::TBox2<f32>(0.0f, 0.0f, FB_WIDTH, 200.0f), (ResFONT*)font_data, msg_p, 512, HBIND_CENTER, VBIND_CENTER);
+    J2DTextBox spane(MULTI_CHAR('TEXT2'), JGeometry::TBox2<f32>(0.0f, 0.0f, FB_WIDTH, 200.0f), (ResFONT*)font_data, msg_p, 512, HBIND_CENTER, VBIND_CENTER);
+    J2DPicture ppane(MULTI_CHAR('PICT1'), JGeometry::TBox2<f32>(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT), (ResTIMG*)black_tex, NULL);
 
     JUTResFont font((ResFONT*)font_data, NULL);
     JUTFont* pfont = (JUTFont*)&font;

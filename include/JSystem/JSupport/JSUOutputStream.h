@@ -18,6 +18,13 @@ public:
     s32 write(const void*, s32);
 	void write(const char*);
 
+#if defined(_MSVC_LANG) && defined(_WIN64)
+    JSUOutputStream& operator<<(uintptr_t param_0) {
+        write(&param_0, sizeof(uintptr_t));
+        return *this;
+    }
+#endif
+
 	JSUOutputStream& operator<<(u32 param_0) {
         write(&param_0, sizeof(u32));
         return *this;

@@ -3,7 +3,7 @@
 
 #include <dolphin/types.h>
 
-class JPAEmitterWorkData;
+struct JPAEmitterWorkData;
 class JPABaseParticle;
 
 /**

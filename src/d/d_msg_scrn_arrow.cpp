@@ -25,23 +25,23 @@ dMsgScrnArrow_c::dMsgScrnArrow_c() {
     mpBpk->searchUpdateMaterialID(mpScreen);
     mBpkFrame = 0.0f;
 
-    mpParent_c = new CPaneMgr(mpScreen, 'set_ya_n', 0, NULL);
+    mpParent_c = new CPaneMgr(mpScreen, MULTI_CHAR('set_ya_n'), 0, NULL);
     JUT_ASSERT(0, mpParent_c != NULL);
 
-    mpArw_c = new CPaneMgr(mpScreen, 'ya_next', 0, NULL);
+    mpArw_c = new CPaneMgr(mpScreen, MULTI_CHAR('ya_next'), 0, NULL);
     JUT_ASSERT(0, mpArw_c != NULL);
 
     mpArw_c->hide();
     mpArw_c->mPane->setAnimation(mpBck);
-    mpScreen->search('yajnext')->setAnimation(mpBpk);
-    mpScreen->search('yajinexl')->setAnimation(mpBpk);
+    mpScreen->search(MULTI_CHAR('yajnext'))->setAnimation(mpBpk);
+    mpScreen->search(MULTI_CHAR('yajinexl'))->setAnimation(mpBpk);
 
-    mpDot_c = new CPaneMgr(mpScreen, 'ya_end', 0, NULL);
+    mpDot_c = new CPaneMgr(mpScreen, MULTI_CHAR('ya_end'), 0, NULL);
     JUT_ASSERT(0, mpDot_c != NULL);
 
     mpDot_c->hide();
-    mpScreen->search('yaj_end')->setAnimation(mpBpk);
-    mpScreen->search('yajiendl')->setAnimation(mpBpk);
+    mpScreen->search(MULTI_CHAR('yaj_end'))->setAnimation(mpBpk);
+    mpScreen->search(MULTI_CHAR('yajiendl'))->setAnimation(mpBpk);
 }
 
 dMsgScrnArrow_c::~dMsgScrnArrow_c() {

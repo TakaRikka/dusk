@@ -11,8 +11,10 @@ extern "C" {
 #define NULL 0
 #endif
 
+#ifndef _MSVC_LANG
 typedef unsigned long size_t;
 typedef long ptrdiff_t;
+#endif
 
 #ifndef __cplusplus
 typedef unsigned short wchar_t;

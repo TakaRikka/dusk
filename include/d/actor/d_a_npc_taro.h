@@ -121,13 +121,12 @@ public:
     int practice(void*);
     int nurse(void*);
     int talk(void*);
-    daNpc_Taro_c(
-        daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
-        daNpcT_motionAnmData_c const* i_motionAnmData,
-        daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
-        int i_faceMotionStepNum,
-        daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_motionSequenceData, int i_motionStepNum,
-        daNpcT_evtData_c const* i_evtData, char** i_arcNames)
+    daNpc_Taro_c(daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
+                 daNpcT_motionAnmData_c const* i_motionAnmData,
+                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
+                 int i_faceMotionStepNum,
+                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_motionSequenceData,
+                 int i_motionStepNum, daNpcT_evtData_c const* i_evtData, char** i_arcNames)
         : daNpcT_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
                    i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
                    i_arcNames) {

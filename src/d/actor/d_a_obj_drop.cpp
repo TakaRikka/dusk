@@ -324,7 +324,7 @@ int daObjDrop_c::modeWait() {
             mModeAction = 3;
         }
         break;
-    case 3:
+    case 3: {
         removeBodyEffect();
 
         static const s16 target_rel_angle[] = {-0x4000, 0x0000, 0x4000};
@@ -338,8 +338,8 @@ int daObjDrop_c::modeWait() {
         mModeAction = 4;
         mDrawInTimer = 60;
         mSound.startSound(Z2SE_OBJ_LIGHTDROP_DRAW_IN, 0, -1);
-        break;
-    case 4:
+    } break;
+    case 4: {
         mDrawInTimer--;
         for (int i = 0; i < 3; i++) {
             speedF = 60.0f;
@@ -396,7 +396,7 @@ int daObjDrop_c::modeWait() {
             checkCompleteDemo();
             mModeAction = 5;
         }
-        break;
+    } break;
     case 5:
         if (cLib_calcTimer<u8>(&mDeleteTimer) == 0) {
             mModeAction = 6;

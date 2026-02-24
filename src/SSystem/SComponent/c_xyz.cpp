@@ -6,10 +6,13 @@
 #include "SSystem/SComponent/c_xyz.h"
 #include "SSystem/SComponent/c_math.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "global.h"
 
 #ifndef __MWERKS__
+#ifndef _MSVC_LANG
 #include <limits>
 #define FLT_EPSILON std::numeric_limits<float>::epsilon()
+#endif
 #endif
 
 cXyz cXyz::operator+(const Vec& vec) const {
@@ -82,7 +85,7 @@ cXyz cXyz::normZC() const {
             outVec.x = 0.0f;
             outVec.y = 0.0f;
             outVec.z = 1.0f;
-            outVec = (Vec){0,0,1};
+            outVec = COMPOUND_LITERAL(Vec){0,0,1};
         }
     }
 

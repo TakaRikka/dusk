@@ -4,12 +4,24 @@
 #ifdef __REVOLUTION_SDK__
 #include <revolution/types.h>
 #else
+
+#if _WIN64 || __LP64__
+#define BIT_64 1
+#else
+#define BIT_64 0
+#endif
+
 typedef signed   char          s8;
 typedef unsigned char          u8;
 typedef signed   short int     s16;
 typedef unsigned short int     u16;
+#if TARGET_PC
+typedef signed   int           s32;
+typedef unsigned int           u32;
+#else
 typedef signed   long          s32;
 typedef unsigned long          u32;
+#endif
 typedef signed   long long int s64;
 typedef unsigned long long int u64;
 

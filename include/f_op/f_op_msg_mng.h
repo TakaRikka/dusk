@@ -8,7 +8,7 @@
 class JKRExpHeap;
 class JKRHeap;
 class fopAc_ac_c;
-class msg_class;
+struct msg_class;
 
 struct msg_process_profile_definition {
     /* 0x00 */ leaf_process_profile_definition base;

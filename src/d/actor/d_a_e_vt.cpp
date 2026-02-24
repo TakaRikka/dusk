@@ -873,7 +873,7 @@ void daE_VA_c::setFireEffect(int param_0) {
         dComIfGp_particle_set(field_0x10f80[idx + 2], 0x3AE, &field_0x1140[param_0], NULL, &scale);
 }
 
-f32 dummy() {
+static f32 dummy() {
     return 3.2f;
 }
 

@@ -96,7 +96,7 @@ const daNpc_Gnd_HIOParam daNpc_Gnd_Param_c::m = {
     0.0f,
 };
 
-NPC_GND_HIO_CLASS l_HIO;
+static NPC_GND_HIO_CLASS l_HIO;
 
 daNpc_Gnd_c::~daNpc_Gnd_c() {
     OS_REPORT("|%06d:%x|daNpc_Gnd_c -> デストラクト\n", g_Counter.mCounter0, this);

@@ -141,7 +141,7 @@ u32 bef_brk[2] = {
     10,
 };
 
-int useHeapInit(fopAc_ac_c* i_this) {
+static int useHeapInit(fopAc_ac_c* i_this) {
     obj_brakeeff_class* a_this = static_cast<obj_brakeeff_class*>(i_this);
 
     J3DModelData* modelData =

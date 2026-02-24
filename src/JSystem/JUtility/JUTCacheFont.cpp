@@ -73,16 +73,18 @@ int JUTCacheFont::getMemorySize(ResFONT const* p_font, u16* o_widCount, u32* o_w
     u32 glyTexSize;
 
     u8* fontInf = (u8*)p_font->data;
-    for (int i = 0; i < p_font->numBlocks; i++) {
-        switch (((BlockHeader*)fontInf)->magic) {
+    for (int i = 0; i < (int)p_font->numBlocks; i++) {
+        u32 blkMagic = ((BlockHeader*)fontInf)->magic;
+        u32 blkSize  = ((BlockHeader*)fontInf)->size;
+        switch (blkMagic) {
         case 'INF1':
             break;
         case 'WID1':
-            totalWidSize += ((BlockHeader*)fontInf)->size;
+            totalWidSize += blkSize;
             widBlockCount++;
             break;
         case 'GLY1':
-            totalGlySize += ((BlockHeader*)fontInf)->size;
+            totalGlySize += blkSize;
             glyTexSize = ((ResFONT::GLY1*)fontInf)->textureSize;
             glyBlockCount++;
             if (glyTexSize > maxGlyTexSize) {
@@ -90,7 +92,7 @@ int JUTCacheFont::getMemorySize(ResFONT const* p_font, u16* o_widCount, u32* o_w
             }
             break;
         case 'MAP1':
-            totalMapSize += ((BlockHeader*)fontInf)->size;
+            totalMapSize += blkSize;
             mapBlockCount++;
             break;
         default:
@@ -98,7 +100,7 @@ int JUTCacheFont::getMemorySize(ResFONT const* p_font, u16* o_widCount, u32* o_w
             break;
         }
 
-        fontInf += ((BlockHeader*)fontInf)->size;
+        fontInf += blkSize;
     }
 
     if (o_widCount != NULL) {
@@ -257,11 +259,13 @@ void JUTCacheFont::setBlock() {
     ResFONT::MAP1* pMap = (ResFONT::MAP1*)field_0x84;
     u32 aramAddress = field_0xac->getAddress();
     mMaxCode = 0xffff;
-    const int* pData = (int*)mResFont->data;
+    const u8* pData = (const u8*)mResFont->data;
 
-    for (int i = 0; i < mResFont->numBlocks; i++) {
+    for (int i = 0; i < (int)mResFont->numBlocks; i++) {
+        u32 blkMagic = ((BlockHeader*)pData)->magic;
+        u32 blkSize  = ((BlockHeader*)pData)->size;
         u32 u;
-        switch (*pData) {
+        switch (blkMagic) {
         case 'INF1':
             memcpy(mInf1Ptr, pData, 0x20);
             u = mInf1Ptr->fontType;
@@ -269,15 +273,15 @@ void JUTCacheFont::setBlock() {
             mIsLeadByte = &JUTResFont::saoAboutEncoding_[u];
             break;
         case 'WID1':
-            memcpy(pWidth, pData, pData[1]);
+            memcpy(pWidth, pData, blkSize);
             mpWidthBlocks[widthNum] = (ResFONT::WID1*)pWidth;
             widthNum++;
-            pWidth += pData[1];
+            pWidth += blkSize;
             break;
-        case 'GLY1':
+        case 'GLY1': {
             memcpy(piVar5, pData, 0x20);
             JKRAramBlock* iVar1;
-            iVar1 = JKRMainRamToAram((u8*)pData + 0x20, aramAddress, pData[1] - 0x20,
+            iVar1 = JKRMainRamToAram((u8*)pData + 0x20, aramAddress, blkSize - 0x20,
                                      EXPAND_SWITCH_UNKNOWN0, 0, NULL, 0xffffffff, NULL);
             if (iVar1 == NULL) {
                 JUTException::panic("JUTCacheFont.cpp", 0x1dd,
@@ -290,23 +294,24 @@ void JUTCacheFont::setBlock() {
             mpGlyphBlocks[gylphNum] = piVar5;
             gylphNum++;
             piVar5++;
-            aramAddress += pData[1] - 0x20;
+            aramAddress += blkSize - 0x20;
             break;
+        }
         case 'MAP1':
-            memcpy(pMap, pData, pData[1]);
+            memcpy(pMap, pData, blkSize);
             mpMapBlocks[mapNum] = pMap;
             if (mMaxCode > mpMapBlocks[mapNum]->startCode) {
                 mMaxCode = mpMapBlocks[mapNum]->startCode;
             }
             mapNum++;
-            pMap = (ResFONT::MAP1*)((u8*)pMap + pData[1]);
+            pMap = (ResFONT::MAP1*)((u8*)pMap + blkSize);
             break;
         default:
             JUTReportConsole("Unknown data block\n");
             break;
         }
 
-        pData = (int*)((u8*)pData + pData[1]);
+        pData = pData + blkSize;
     }
 }
 

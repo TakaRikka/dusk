@@ -12,7 +12,7 @@ void JUTPalette::storeTLUT(GXTlut param_0, ResTLUT* tlut) {
     mFormat = tlut->format;
     mTransparency = tlut->transparency;
     mNumColors = tlut->numColors;
-    mColorTable = tlut + 8;
+    mColorTable = (ResTLUT*)((u8*)tlut + 0x20);
     GXInitTlutObj(&mTlutObj, (void*)mColorTable, (GXTlutFmt)mFormat, mNumColors);
 }
 

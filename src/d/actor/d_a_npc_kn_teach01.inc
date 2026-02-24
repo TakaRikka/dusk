@@ -333,7 +333,7 @@ int daNpc_Kn_c::ctrlWarp() {
         void(0);
         break;
     }
-    case 1:
+    case 1: {
         sp28 = 1;
         field_0x170d++;
 
@@ -367,7 +367,7 @@ int daNpc_Kn_c::ctrlWarp() {
             field_0x170d = 0;
         }
         void(0);
-        break;
+    } break;
     case 2:
         sp28 = 1;
         field_0x170d++;

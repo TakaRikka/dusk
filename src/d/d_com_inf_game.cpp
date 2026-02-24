@@ -2634,6 +2634,7 @@ BOOL dComIfGp_TransportWarp_check() {
 int dComLbG_PhaseHandler(request_of_phase_process_class* i_phaseReq, cPhs__Handler* i_handler,
                          void* i_data) {
     int phase = cPhs_Handler(i_phaseReq, i_handler, i_data);
+
     switch (phase) {
     case cPhs_NEXT_e:
         phase = dComLbG_PhaseHandler(i_phaseReq, i_handler, i_data);

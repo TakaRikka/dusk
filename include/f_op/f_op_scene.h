@@ -12,7 +12,7 @@ struct scene_method_class {
 };
 
 typedef struct scene_process_profile_definition {
-    /* 0x00 */ node_process_profile_definition nase;
+    /* 0x00 */ node_process_profile_definition base;
     /* 0x20 */ scene_method_class* submethod; // Subclass methods
     /* 0x24 */ u32 unk_0x24; // padding?
 } scene_process_profile_definition;

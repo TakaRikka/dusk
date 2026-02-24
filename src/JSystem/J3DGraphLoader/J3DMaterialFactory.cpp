@@ -464,7 +464,11 @@ u32 J3DMaterialFactory::calcSizeLockedMaterial(J3DMaterial* i_material, int i_id
 }
 
 J3DGXColor J3DMaterialFactory::newMatColor(int i_idx, int i_no) const {
+    #ifdef __MWERKS__
     J3DGXColor dflt = (GXColor){0xff, 0xff, 0xff, 0xff};
+    #else
+    J3DGXColor dflt = GXColor{0xff, 0xff, 0xff, 0xff};
+    #endif
     J3DMaterialInitData* mtl_init_data = &mpMaterialInitData[mpMaterialID[i_idx]];
     if (mtl_init_data->mMatColorIdx[i_no] != 0xffff) {
         return mpMatColor[mtl_init_data->mMatColorIdx[i_no]];
@@ -493,7 +497,11 @@ J3DColorChan J3DMaterialFactory::newColorChan(int i_idx, int i_no) const {
 }
 
 J3DGXColor J3DMaterialFactory::newAmbColor(int i_idx, int i_no) const {
+    #ifdef __MWERKS__
     J3DGXColor dflt = (GXColor){0x32, 0x32, 0x32, 0x32};
+    #else
+    J3DGXColor dflt = GXColor{0x32, 0x32, 0x32, 0x32};
+    #endif
     J3DMaterialInitData* mtl_init_data = &mpMaterialInitData[mpMaterialID[i_idx]];
     if (mtl_init_data->mAmbColorIdx[i_no] != 0xffff) {
         return mpAmbColor[mtl_init_data->mAmbColorIdx[i_no]];
@@ -570,7 +578,11 @@ J3DGXColorS10 J3DMaterialFactory::newTevColor(int i_idx, int i_no) const {
 }
 
 J3DGXColor J3DMaterialFactory::newTevKColor(int i_idx, int i_no) const {
+    #ifdef __MWERKS__
     J3DGXColor dflt = (GXColor){0xff, 0xff, 0xff, 0xff};
+    #else
+    J3DGXColor dflt = GXColor{0xff, 0xff, 0xff, 0xff};
+    #endif
     J3DMaterialInitData* mtl_init_data = &mpMaterialInitData[mpMaterialID[i_idx]];
     if (mtl_init_data->mTevKColorIdx[i_no] != 0xffff) {
         return mpTevKColor[mtl_init_data->mTevKColorIdx[i_no]];

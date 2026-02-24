@@ -247,7 +247,7 @@ int daMBdoorL1_c::getDoorType() {
 
 char* daMBdoorL1_c::getOpenAnm() {
     if (getDoorType() == DOOR_TYPE_1) {
-        return"oj_DoorOpD.bck";
+        return "oj_DoorOpD.bck";
     }
     if (getDoorType() == DOOR_TYPE_0) {
         return "oj_DoorOpC.bck";
@@ -257,7 +257,7 @@ char* daMBdoorL1_c::getOpenAnm() {
 
 char* daMBdoorL1_c::getCloseAnm() {
     if (getDoorType() == DOOR_TYPE_1) {
-        return"oj_DoorCloseD.bck";
+        return "oj_DoorCloseD.bck";
     }
     if (getDoorType() == DOOR_TYPE_0) {
         return "oj_DoorCloseC.bck";
@@ -271,7 +271,7 @@ char* daMBdoorL1_c::getBmd() {
     case 11:
         return "door-knob_00.bmd";
     default:
-        return"door-shutter_00.bmd";
+        return "door-shutter_00.bmd";
     }
 }
 

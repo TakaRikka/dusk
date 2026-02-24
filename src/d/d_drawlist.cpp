@@ -1,5 +1,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
+#include <cstdio>
 #include "JSystem/J2DGraph/J2DAnimation.h"
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
@@ -622,7 +623,7 @@ static u8 l_shadowSealDL[] ATTRIBUTE_ALIGN(32) = {
 };
 
 dDlst_2DT2_c::dDlst_2DT2_c() {
-    field_0x40 = (GXColor){0, 0, 0, 0};
+    field_0x40 = COMPOUND_LITERAL(GXColor){0, 0, 0, 0};
 }
 
 void dDlst_2DT2_c::init(ResTIMG* i_timg, f32 param_1, f32 param_2, f32 param_3, f32 param_4,
@@ -634,7 +635,7 @@ void dDlst_2DT2_c::init(ResTIMG* i_timg, f32 param_1, f32 param_2, f32 param_3, 
     field_0x30 = param_4;
     mScaleX = i_scaleX;
     mScaleY = i_scaleY;
-    field_0x3c = (GXColor){0, 0, 0, 255};
+    field_0x3c = COMPOUND_LITERAL(GXColor){0, 0, 0, 255};
 
     field_0x44 = param_6;
     if (field_0x44 != 0 && GXGetTexObjWrapS(&mTexObj) == 2) {
@@ -865,6 +866,13 @@ dDlst_2D_c::dDlst_2D_c(ResTIMG* i_timg, s16 i_posX, s16 i_posY, s16 i_sizeX, s16
 }
 
 void dDlst_2D_c::draw() {
+    static int s2DDrawLogCount = 0;
+    if (s2DDrawLogCount < 10) {
+        printf("[DIAG] dDlst_2D_c::draw: pos=(%d,%d) size=(%d,%d) alpha=%d\n",
+               mPosX, mPosY, mSizeX, mSizeY, mAlpha);
+        fflush(stdout);
+        s2DDrawLogCount++;
+    }
     mpPicture.setAlpha(mAlpha);
     mpPicture.draw(mPosX, mPosY, mSizeX, mSizeY, false, false, false);
 }

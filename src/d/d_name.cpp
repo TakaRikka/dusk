@@ -1290,18 +1290,18 @@ void dName_c::screenSet() {
         's_00', 's_01', 's_02', 's_03', 's_04', 's_05', 's_06', 's_07',
     };
     static u64 l_cur1TagName[8] = {
-        's_0r', 's_01r', 's_02r', 's_03r', 's_04r', 's_05r', 's_06r', 's_07r',
+        's_0r', MULTI_CHAR('s_01r'), MULTI_CHAR('s_02r'), MULTI_CHAR('s_03r'), MULTI_CHAR('s_04r'), MULTI_CHAR('s_05r'), MULTI_CHAR('s_06r'), MULTI_CHAR('s_07r'),
     };
 #if REGION_JPN
     static u64 l_menu_icon_tag[4] = {
-        'j_hira_n',
-        'j_kata_n',
-        'j_eigo_n',
-        'j_end_n',
+        MULTI_CHAR('j_hira_n'),
+        MULTI_CHAR('j_kata_n'),
+        MULTI_CHAR('j_eigo_n'),
+        MULTI_CHAR('j_end_n'),
     };
     static u64 l_menu_tag[5][3] = {
-        'm_hira_0',  'm_hira_1',  'm_hira_s',  'm_kata_0', 'm_kata_1', 'm_kata_s',
-        'm_eigo_0', 'm_eigo_1', 'm_eigo_s', 'j_end_0', 'j_end_1', 'j_end_s',
+        MULTI_CHAR('m_hira_0'),  MULTI_CHAR('m_hira_1'),  MULTI_CHAR('m_hira_s'),  MULTI_CHAR('m_kata_0'), MULTI_CHAR('m_kata_1'), MULTI_CHAR('m_kata_s'),
+        MULTI_CHAR('m_eigo_0'), MULTI_CHAR('m_eigo_1'), MULTI_CHAR('m_eigo_s'), MULTI_CHAR('j_end_0'), MULTI_CHAR('j_end_1'), MULTI_CHAR('j_end_s'),
     };
     static u32 l_menu_msg[4] = {
         0x386,
@@ -1311,14 +1311,14 @@ void dName_c::screenSet() {
     };
 #else
     static u64 l_menu_icon_tag[4] = {
-        'p_ABC_n',
-        'p_abc_n',
-        'j_eigo_n',
-        'p_end_n',
+        MULTI_CHAR('p_ABC_n'),
+        MULTI_CHAR('p_abc_n'),
+        MULTI_CHAR('j_eigo_n'),
+        MULTI_CHAR('p_end_n'),
     };
     static u64 l_menu_tag[5][3] = {
-        'p_ABC_0',  'p_ABC_1',  'p_ABC_2',  'p_abc_0', 'p_abc_1', 'p_abc_2',
-        'm_eigo_0', 'm_eigo_1', 'm_eigo_2', 'p_end_0', 'p_end_1', 'p_end_2',
+        MULTI_CHAR('p_ABC_0'),  MULTI_CHAR('p_ABC_1'),  MULTI_CHAR('p_ABC_2'),  MULTI_CHAR('p_abc_0'), MULTI_CHAR('p_abc_1'), MULTI_CHAR('p_abc_2'),
+        MULTI_CHAR('m_eigo_0'), MULTI_CHAR('m_eigo_1'), MULTI_CHAR('m_eigo_2'), MULTI_CHAR('p_end_0'), MULTI_CHAR('p_end_1'), MULTI_CHAR('p_end_2'),
     };
     static u32 l_menu_msg[4] = {
         0x38B,
@@ -1328,20 +1328,20 @@ void dName_c::screenSet() {
     };
 #endif
     static u64 l_tagName[65] = {
-        'm_00_0', 'm_00_1', 'm_00_2', 'm_00_3', 'm_00_4', 'm_01_0', 'm_01_1', 'm_01_2', 'm_01_3',
-        'm_01_4', 'm_02_0', 'm_02_1', 'm_02_2', 'm_02_3', 'm_02_4', 'm03_0',  'm03_1',  'm03_2',
-        'm03_3',  'm03_4',  'm_04_0', 'm_04_1', 'm_04_2', 'm_04_3', 'm_04_4', 'm_05_0', 'm_05_1',
-        'm_05_2', 'm_05_3', 'm_05_4', 'm_06_0', 'm_06_1', 'm_06_2', 'm_06_3', 'm_06_4', 'm_07_0',
-        'm_07_1', 'm_07_2', 'm_07_3', 'm_07_4', 'm_08_0', 'm_08_1', 'm_08_2', 'm_08_3', 'm_08_4',
-        'm_09_0', 'm_09_1', 'm_09_2', 'm_09_3', 'm_09_4', 'm_10_0', 'm_10_1', 'm_10_2', 'm_10_3',
-        'm_10_4', 'm_11_0', 'm_11_1', 'm_11_2', 'm_11_3', 'm_11_4', 'm12_0',  'm12_1',  'm12_2',
-        'm12_3',  'm12_4',
+        MULTI_CHAR('m_00_0'), MULTI_CHAR('m_00_1'), MULTI_CHAR('m_00_2'), MULTI_CHAR('m_00_3'), MULTI_CHAR('m_00_4'), MULTI_CHAR('m_01_0'), MULTI_CHAR('m_01_1'), MULTI_CHAR('m_01_2'), MULTI_CHAR('m_01_3'),
+        MULTI_CHAR('m_01_4'), MULTI_CHAR('m_02_0'), MULTI_CHAR('m_02_1'), MULTI_CHAR('m_02_2'), MULTI_CHAR('m_02_3'), MULTI_CHAR('m_02_4'), MULTI_CHAR('m03_0'),  MULTI_CHAR('m03_1'),  MULTI_CHAR('m03_2'),
+        MULTI_CHAR('m03_3'),  MULTI_CHAR('m03_4'),  MULTI_CHAR('m_04_0'), MULTI_CHAR('m_04_1'), MULTI_CHAR('m_04_2'), MULTI_CHAR('m_04_3'), MULTI_CHAR('m_04_4'), MULTI_CHAR('m_05_0'), MULTI_CHAR('m_05_1'),
+        MULTI_CHAR('m_05_2'), MULTI_CHAR('m_05_3'), MULTI_CHAR('m_05_4'), MULTI_CHAR('m_06_0'), MULTI_CHAR('m_06_1'), MULTI_CHAR('m_06_2'), MULTI_CHAR('m_06_3'), MULTI_CHAR('m_06_4'), MULTI_CHAR('m_07_0'),
+        MULTI_CHAR('m_07_1'), MULTI_CHAR('m_07_2'), MULTI_CHAR('m_07_3'), MULTI_CHAR('m_07_4'), MULTI_CHAR('m_08_0'), MULTI_CHAR('m_08_1'), MULTI_CHAR('m_08_2'), MULTI_CHAR('m_08_3'), MULTI_CHAR('m_08_4'),
+        MULTI_CHAR('m_09_0'), MULTI_CHAR('m_09_1'), MULTI_CHAR('m_09_2'), MULTI_CHAR('m_09_3'), MULTI_CHAR('m_09_4'), MULTI_CHAR('m_10_0'), MULTI_CHAR('m_10_1'), MULTI_CHAR('m_10_2'), MULTI_CHAR('m_10_3'),
+        MULTI_CHAR('m_10_4'), MULTI_CHAR('m_11_0'), MULTI_CHAR('m_11_1'), MULTI_CHAR('m_11_2'), MULTI_CHAR('m_11_3'), MULTI_CHAR('m_11_4'), MULTI_CHAR('m12_0'),  MULTI_CHAR('m12_1'),  MULTI_CHAR('m12_2'),
+        MULTI_CHAR('m12_3'),  MULTI_CHAR('m12_4'),
     };
     static u64 l_nameTagName[8] = {
-        'name_00', 'name_01', 'name_02', 'name_03', 'name_04', 'name_05', 'name_06', 'name_07',
+        MULTI_CHAR('name_00'), MULTI_CHAR('name_01'), MULTI_CHAR('name_02'), MULTI_CHAR('name_03'), MULTI_CHAR('name_04'), MULTI_CHAR('name_05'), MULTI_CHAR('name_06'), MULTI_CHAR('name_07'),
     };
     static u64 l_nameCurTagName[8] = {
-        's__n_00', 's__n_01', 's__n_02', 's__n_03', 's__n_04', 's__n_05', 's__n_06', 's__n_07',
+        MULTI_CHAR('s__n_00'), MULTI_CHAR('s__n_01'), MULTI_CHAR('s__n_02'), MULTI_CHAR('s__n_03'), MULTI_CHAR('s__n_04'), MULTI_CHAR('s__n_05'), MULTI_CHAR('s__n_06'), MULTI_CHAR('s__n_07'),
     };
 
     nameIn.NameInScr = new J2DScreen();
@@ -1350,7 +1350,7 @@ void dName_c::screenSet() {
     archive = dComIfGp_getNameResArchive();
     nameIn.NameInScr->setPriority("zelda_player_name.blo", 0x100000, archive);
     dPaneClass_showNullPane(nameIn.NameInScr);
-    nameIn.field_0x10 = nameIn.NameInScr->search('name_n');
+    nameIn.field_0x10 = nameIn.NameInScr->search(MULTI_CHAR('name_n'));
 
     void* bpk = JKRGetNameResource("zelda_player_name.bpk", archive);
     JUT_ASSERT(0, bpk != NULL);
@@ -1375,22 +1375,22 @@ void dName_c::screenSet() {
     }
 
     #if REGION_JPN
-    nameIn.NameInScr->search('pal_n')->hide();
-    mMenuPane = nameIn.NameInScr->search('jpn_n');
+    nameIn.NameInScr->search(MULTI_CHAR('pal_n'))->hide();
+    mMenuPane = nameIn.NameInScr->search(MULTI_CHAR('jpn_n'));
     mMenuPane->show();
 
-    nameIn.NameInScr->search('p_ABC_n')->scale(0.0f, 0.0f);
-    nameIn.NameInScr->search('p_abc_n')->scale(0.0f, 0.0f);
-    nameIn.NameInScr->search('p_end_n')->scale(0.0f, 0.0f);
+    nameIn.NameInScr->search(MULTI_CHAR('p_ABC_n'))->scale(0.0f, 0.0f);
+    nameIn.NameInScr->search(MULTI_CHAR('p_abc_n'))->scale(0.0f, 0.0f);
+    nameIn.NameInScr->search(MULTI_CHAR('p_end_n'))->scale(0.0f, 0.0f);
     #else
-    nameIn.NameInScr->search('jpn_n')->hide();
-    mMenuPane = nameIn.NameInScr->search('pal_n');
+    nameIn.NameInScr->search(MULTI_CHAR('jpn_n'))->hide();
+    mMenuPane = nameIn.NameInScr->search(MULTI_CHAR('pal_n'));
     mMenuPane->show();
 
-    nameIn.NameInScr->search('j_hira_n')->scale(0.0f, 0.0f);
-    nameIn.NameInScr->search('j_kata_n')->scale(0.0f, 0.0f);
-    nameIn.NameInScr->search('j_eigo_n')->scale(0.0f, 0.0f);
-    nameIn.NameInScr->search('j_end_n')->scale(0.0f, 0.0f);
+    nameIn.NameInScr->search(MULTI_CHAR('j_hira_n'))->scale(0.0f, 0.0f);
+    nameIn.NameInScr->search(MULTI_CHAR('j_kata_n'))->scale(0.0f, 0.0f);
+    nameIn.NameInScr->search(MULTI_CHAR('j_eigo_n'))->scale(0.0f, 0.0f);
+    nameIn.NameInScr->search(MULTI_CHAR('j_end_n'))->scale(0.0f, 0.0f);
     #endif
 
     J2DTextBox* menuPane[3];
@@ -1425,7 +1425,7 @@ void dName_c::screenSet() {
     mMenuIcon[0]->hide();
     mMenuIcon[1]->hide();
     #endif
-    mMojiPane = nameIn.NameInScr->search('moji_n');
+    mMojiPane = nameIn.NameInScr->search(MULTI_CHAR('moji_n'));
 
     for (u32 i = 0; i < 65; i++) {
         mMojiIcon[i] = new CPaneMgr(nameIn.NameInScr, l_tagName[i], 2, NULL);

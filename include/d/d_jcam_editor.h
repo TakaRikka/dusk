@@ -6,7 +6,7 @@
 #include "JSystem/JUtility/JUTResFont.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 
-class JUTGamePad;
+struct JUTGamePad;
 
 class dJcame_c {
 public:

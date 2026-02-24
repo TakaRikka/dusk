@@ -83,6 +83,24 @@ extern int __abs(int);
 void* __memcpy(void*, const void*, int);
 #endif
 
+#ifdef _MSVC_LANG
+inline int __builtin_clz(unsigned int v) {
+    int count = 32;
+    while (v != 0) {
+        count--;
+        v >>= 1;
+    }
+    return count;
+}
+
+#define COMPOUND_LITERAL(x)
+#define M_PI 3.14159265358979323846f
+#else
+
+#define COMPOUND_LITERAL(x) (x)
+
+#endif
+
 #define FAST_DIV(x, n) (x >> (n / 2))
 
 #define SQUARE(x) ((x) * (x))
@@ -143,6 +161,25 @@ static const float INF = 2000000000.0f;
     #define UNSET_FLAG(var, flag, type) (var) &= (type)~(flag)
 #else
     #define UNSET_FLAG(var, flag, type) (var) &= ~(flag)
+#endif
+
+#ifdef _MSVC_LANG
+    template <int N>
+    inline constexpr auto MultiCharLiteral(const char (&buf)[N]) {
+        // static_assert(buf[0] == '\'' && buf[N - 2] == '\'');  // can't constexpr strings, just pray
+        constexpr int len = N - 1;
+        static_assert(len >= 2 && len <= 10);
+
+        unsigned long long out = 0;
+        for (int i = 1; i < len - 1; i++) {
+            out = (out << 8) | ((unsigned long long)buf[i]);
+        }
+        return out;
+    }
+
+    #define MULTI_CHAR(x) MultiCharLiteral(#x)
+#else 
+    #define MULTI_CHAR(x) MultiCharLiteral(#x)
 #endif
 
 #endif

@@ -29,8 +29,8 @@ JKRDvdArchive::~JKRDvdArchive() {
             SDIFileEntry* fileEntry = mFiles;
             int i = 0;
             for (; i < mArcInfoBlock->num_file_entries; i++) {
-                if (fileEntry->data) {
-                    JKRFreeToHeap(mHeap, fileEntry->data);
+                if (JKAR_DATA(fileEntry)) {
+                    JKRFreeToHeap(mHeap, JKAR_DATA(fileEntry));
                 }
                 fileEntry++;
             }
@@ -96,6 +96,10 @@ bool JKRDvdArchive::open(s32 entryNum) {
     mStringTable = (char*)((intptr_t)&mArcInfoBlock->num_nodes + mArcInfoBlock->string_table_offset);
     mExpandedSize = NULL;
 
+#if TARGET_PC
+    initFileDataPointers();
+#endif
+
     u8 useCompression;
     useCompression = 0;
     SDIFileEntry* fileEntry;
@@ -148,7 +152,7 @@ void* JKRDvdArchive::fetchResource(SDIFileEntry* fileEntry, u32* returnSize) {
     }
 
     JKRCompression fileCompression = JKRConvertAttrToCompressionType(u8(fileEntry->type_flags_and_name_offset >> 24));
-    if (!fileEntry->data) {
+    if (!JKAR_DATA(fileEntry)) {
         u8* resourcePtr;
         u32 resourceSize = fetchResource_subroutine(
             mEntryNum, mDataOffset + fileEntry->data_offset, fileEntry->data_size, mHeap,
@@ -158,7 +162,7 @@ void* JKRDvdArchive::fetchResource(SDIFileEntry* fileEntry, u32* returnSize) {
             return NULL;
         }
 
-        fileEntry->data = resourcePtr;
+        JKAR_DATA(fileEntry) = resourcePtr;
         if (fileCompression == COMPRESSION_YAZ0) {
             setExpandSize(fileEntry, *returnSize);
         }
@@ -170,7 +174,7 @@ void* JKRDvdArchive::fetchResource(SDIFileEntry* fileEntry, u32* returnSize) {
         }
     }
 
-    return fileEntry->data;
+    return JKAR_DATA(fileEntry);
 }
 
 void* JKRDvdArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* fileEntry,
@@ -179,7 +183,7 @@ void* JKRDvdArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* f
     u32 size = fileEntry->data_size;
     JKRCompression fileCompression = JKRConvertAttrToCompressionType(u8(fileEntry->type_flags_and_name_offset >> 24));
 
-    if (!fileEntry->data) {
+    if (!JKAR_DATA(fileEntry)) {
         bufferSize = (s32)ALIGN_PREV(bufferSize, 0x20);
         size = fetchResource_subroutine(mEntryNum, mDataOffset + fileEntry->data_offset,
                                         fileEntry->data_size, (u8*)buffer, bufferSize, fileCompression,
@@ -196,7 +200,7 @@ void* JKRDvdArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* f
             size = bufferSize;
         }
 
-        JKRHeap::copyMemory(buffer, fileEntry->data, size);
+        JKRHeap::copyMemory(buffer, JKAR_DATA(fileEntry), size);
     }
 
     if (returnSize) {

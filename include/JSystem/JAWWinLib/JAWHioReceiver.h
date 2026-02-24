@@ -6,7 +6,7 @@
 #include "JSystem/JHostIO/JHICommonMem.h"
 #include "JSystem/JAudio2/JAISound.h"
 
-class JAISeqData;
+struct JAISeqData;
 
 class JADHioReceiver : JHITag<JHICmnMem> {
 public:

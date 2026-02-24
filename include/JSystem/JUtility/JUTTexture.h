@@ -3,6 +3,7 @@
 
 #include <dolphin/gx.h>
 #include <stdint.h>
+#include "dusk/endian.h"
 
 class JUTPalette;
 
@@ -25,7 +26,7 @@ struct ResTIMG {
     /* 0x08 */ u8 indexTexture;
     /* 0x09 */ u8 colorFormat;
     /* 0x0A */ u16 numColors;
-    /* 0x0C */ uintptr_t paletteOffset;
+    /* 0x0C */ u32 paletteOffset;
     /* 0x10 */ u8 mipmapEnabled;
     /* 0x11 */ u8 doEdgeLOD;
     /* 0x12 */ u8 biasClamp;
@@ -37,7 +38,7 @@ struct ResTIMG {
     /* 0x18 */ u8 mipmapCount;
     /* 0x19 */ u8 unknown;
     /* 0x1A */ s16 LODBias;
-    /* 0x1C */ uintptr_t imageOffset;
+    /* 0x1C */ u32 imageOffset;
 };  // Size: 0x20
 
 /**
@@ -71,8 +72,8 @@ public:
     const ResTIMG* getTexInfo() const { return mTexInfo; }
     s32 getFormat() const { return mTexInfo->format; }
     s32 getTransparency() const { return mTexInfo->alphaEnabled; }
-    s32 getWidth() const { return mTexInfo->width; }
-    s32 getHeight() const { return mTexInfo->height; }
+    s32 getWidth() const { return RES_U16(mTexInfo->width); }
+    s32 getHeight() const { return RES_U16(mTexInfo->height); }
     void setCaptureFlag(bool flag) { mFlags &= 2 | flag; }
     bool getCaptureFlag() const { return mFlags & 1; }
     bool getEmbPaletteDelFlag() const { return mFlags & 2; }

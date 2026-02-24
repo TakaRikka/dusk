@@ -435,7 +435,7 @@ void daWdStick_c::mode_proc_roll() {
     bgCheck();
 }
 
-f32 dummyLiteral() { return 100.0f; }
+static f32 dummyLiteral() { return 100.0f; }
 
 BOOL daWdStick_c::chkWaterLineIn() {
     return mAcch.m_wtr.GetHeight() > current.pos.y + 40.0f;

@@ -38,12 +38,12 @@ inline void fopCamM_SetAngleY(camera_class* i_camera, s16 angle) {
     i_camera->angle.y = angle;
 }
 
-inline void fopCamM_SetNear(camera_class* i_this, f32 near) {
-    i_this->near = near;
+inline void fopCamM_SetNear(camera_class* i_this, f32 near_) {
+    i_this->near_ = near_;
 }
 
-inline void fopCamM_SetFar(camera_class* i_this, f32 far) {
-    i_this->far = far;
+inline void fopCamM_SetFar(camera_class* i_this, f32 far_) {
+    i_this->far_ = far_;
 }
 
 inline void fopCamM_SetFovy(camera_class* i_this, f32 fovy) {

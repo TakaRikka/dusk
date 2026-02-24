@@ -270,7 +270,7 @@ void dMirror_packet_c::mainDraw() {
     int prjPosNum = 4;
 
     view_class* view = dComIfGd_getView();
-    f32 temp_f22 = -view->near;
+    f32 temp_f22 = -view->near_;
     cXyz* var_r21 = mQuad;
     cXyz* var_r22 = sp19C;
     int var_r23 = 0;
@@ -427,12 +427,12 @@ void dMirror_packet_c::mainDraw() {
 
         j3dSys.reinitGX();
         GXSetScissor(scissor[0], scissor[1], scissor[2], scissor[3]);
-        mirrorZdraw(sp150, sp138, view->far, var_f31, var_f30, var_f29, var_f28, var_f27);
+        mirrorZdraw(sp150, sp138, view->far_, var_f31, var_f30, var_f29, var_f28, var_f27);
     }
 }
 
 void dMirror_packet_c::draw() {
-    mDoLib_clipper::changeFar(dComIfGd_getView()->far);
+    mDoLib_clipper::changeFar(dComIfGd_getView()->far_);
     if (!mDoLib_clipper::clip(j3dSys.getViewMtx(), &mMaxVal, &mMinVal)) {
         mainDraw();
     }

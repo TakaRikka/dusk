@@ -4,8 +4,8 @@
 #include "JSystem/JAudio2/JAISeqDataMgr.h"
 #include "JSystem/JSupport/JSUList.h"
 
-class JAISeqData;
-class JAISeqDataUser;
+struct JAISeqData;
+struct JAISeqDataUser;
 class JKRArchive;
 
 /**

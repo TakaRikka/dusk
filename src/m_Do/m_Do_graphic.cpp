@@ -3,6 +3,8 @@
  * Graphics Management Functions
  */
 
+#include <cstdio>
+
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
@@ -31,6 +33,7 @@
 #include "d/d_meter2_info.h"
 #include "d/d_s_play.h"
 #include "DynamicLink.h"
+#include "dusk/endian.h"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/sc.h>
@@ -237,12 +240,12 @@ static ResTIMG* createTimg(u16 width, u16 height, u32 format) {
     cLib_memSet(timg, 0, bufferSize);
     timg->format = format;
     timg->alphaEnabled = false;
-    timg->width = width;
-    timg->height = height;
+    timg->width = RES_U16(width);
+    timg->height = RES_U16(height);
     timg->minFilter = GX_LINEAR;
     timg->magFilter = GX_LINEAR;
     timg->mipmapCount = 1;
-    timg->imageOffset = 0x20;
+    timg->imageOffset = RES_U32(0x20);
     return timg;
 }
 
@@ -465,7 +468,7 @@ void mDoGph_gInf_c::calcFade() {
     }
 
     if (mFadeColor.a != 0) {
-        darwFilter(mFadeColor);
+        //darwFilter(mFadeColor);
     }
 }
 
@@ -1090,7 +1093,7 @@ void mDoGph_gInf_c::bloom_c::create() {
         mPoint = 128;
         mBlureSize = 64;
         mBlureRatio = 128;
-        mBlendColor = (GXColor){255, 255, 255, 255};
+        mBlendColor = COMPOUND_LITERAL(GXColor){255, 255, 255, 255};
     }
 }
 
@@ -1511,6 +1514,14 @@ static void drawItem3D() {
 }
 
 int mDoGph_Painter() {
+    // Diagnostic: log windowNum to track game state machine progress
+    static bool sDiagLoggedWindow = false;
+    if (!sDiagLoggedWindow) {
+        int wn = dComIfGp_getWindowNum();
+        printf("[DIAG] mDoGph_Painter: windowNum=%d\n", wn); fflush(stdout);
+        if (wn != 0) sDiagLoggedWindow = true;
+    }
+
     #if DEBUG
     drawHeapMap();
     #endif
@@ -2079,6 +2090,19 @@ int mDoGph_Painter() {
 
         dComIfGp_particle_draw2DmenuFore(&draw_info3);
         j3dSys.setViewMtx(m4);
+    } else {
+        // No camera window active — still draw 2D display lists
+        // (needed for logo scene, which has no 3D camera)
+        static int sElseLogCount = 0;
+        if (sElseLogCount < 10) {
+            printf("[DIAG] mDoGph_Painter else: drawing 2D lists (frame %d)\n", sElseLogCount);
+            fflush(stdout);
+            sElseLogCount++;
+        }
+        ortho.setPort();
+        dComIfGd_draw2DOpa();
+        dComIfGd_draw2DOpaTop();
+        dComIfGd_draw2DXlu();
     }
 
     #if DEBUG

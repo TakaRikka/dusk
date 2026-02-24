@@ -196,8 +196,8 @@ void daAlink_c::preKandelaarDraw() {
         field_0x32c8 = 0;
     }
 
-    f32 near = dComIfGd_getView()->near;
-    f32 far = dComIfGd_getView()->far;
+    f32 near_ = dComIfGd_getView()->near_;
+    f32 far_ = dComIfGd_getView()->far_;
 
     mDoLib_pos2camera(&mKandelaarFlamePos, &proj);
     proj.z += 30.0f;
@@ -205,7 +205,7 @@ void daAlink_c::preKandelaarDraw() {
         proj.z = -0.01f;
     }
 
-    field_0x344c = ((near + (far * near) / proj.z) / (far - near) + 1.0f) * 1.6777215E7f;
+    field_0x344c = ((near_ + (far_ * near_) / proj.z) / (far_ - near_) + 1.0f) * 1.6777215E7f;
 }
 
 void daAlink_c::setKandelaarModel() {

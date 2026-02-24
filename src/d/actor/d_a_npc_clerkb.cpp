@@ -932,7 +932,7 @@ static int daNpc_clerkB_IsDelete(void* i_this) {
     return 1;
 }
 
-NPC_CLERKB_HIO_CLASS l_HIO;
+static NPC_CLERKB_HIO_CLASS l_HIO;
 
 static actor_method_class daNpc_clerkB_MethodTable = {
     (process_method_func)daNpc_clerkB_Create,  (process_method_func)daNpc_clerkB_Delete,

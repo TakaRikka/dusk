@@ -347,7 +347,7 @@ int daNpc_Jagar_c::create() {
     static int const heapSize[4] = {14416, 14448, 14448, 0};
     daNpcT_ct(this, daNpc_Jagar_c, l_faceMotionAnmData,
         (const daNpcT_motionAnmData_c *)l_motionAnmData, (const daNpcT_MotionSeqMngr_c::sequenceStepData_c *) l_faceMotionSequenceData, 4,
-        (const daNpcT_MotionSeqMngr_c::sequenceStepData_c *)l_motionSequenceData, 4, (const daNpcT_evtData_c *)l_evtList, (char **)l_resNameList
+        (const daNpcT_MotionSeqMngr_c::sequenceStepData_c *)l_motionSequenceData, 4, (const daNpcT_evtData_c *)l_evtList, l_resNameList
     );
 
     mType = getType();

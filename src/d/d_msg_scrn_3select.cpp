@@ -25,16 +25,16 @@ processFn process[] = {
 dMsgScrn3Select_c::dMsgScrn3Select_c() {
     static u64 const tag_name[3][12] = {
         // A
-        'a_n', 'a_g', 'a_gr', 'a_m', 'w_yes_00', 'w_yes_01', 'w_yes_02', 'w_yes_03', 'w_yes_04',
-        'sel_po00', 'a_kahen', 'a_cursor',
+        'a_n', 'a_g', 'a_gr', 'a_m', MULTI_CHAR('w_yes_00'), MULTI_CHAR('w_yes_01'), MULTI_CHAR('w_yes_02'), MULTI_CHAR('w_yes_03'), MULTI_CHAR('w_yes_04'),
+        MULTI_CHAR('sel_po00'), MULTI_CHAR('a_kahen'), MULTI_CHAR('a_cursor'),
 
         // B
-        'b_n', 'b_g', 'b_gr', 'b_m', 'w_yes_07', 'w_yes_06', 'w_yes_05', 'w_yes_08', 'w_yes_09',
-        'sel_po01', 'b_kahen', 'b_cursor',
+        'b_n', 'b_g', 'b_gr', 'b_m', MULTI_CHAR('w_yes_07'), MULTI_CHAR('w_yes_06'), MULTI_CHAR('w_yes_05'), MULTI_CHAR('w_yes_08'), MULTI_CHAR('w_yes_09'),
+        MULTI_CHAR('sel_po01'), MULTI_CHAR('b_kahen'), MULTI_CHAR('b_cursor'),
 
         // C
-        'c_n', 'c_g', 'c_gr', 'c_m', 'w_yes_12', 'w_yes_11', 'w_yes_10', 'w_yes_13', 'w_yes_14',
-        'sel_po02', 'c_kahen', 'c_cursor'
+        'c_n', 'c_g', 'c_gr', 'c_m', MULTI_CHAR('w_yes_12'), MULTI_CHAR('w_yes_11'), MULTI_CHAR('w_yes_10'), MULTI_CHAR('w_yes_13'), MULTI_CHAR('w_yes_14'),
+        MULTI_CHAR('sel_po02'), MULTI_CHAR('c_kahen'), MULTI_CHAR('c_cursor')
     };
 
     mpScreen = new J2DScreen();
@@ -66,7 +66,7 @@ dMsgScrn3Select_c::dMsgScrn3Select_c() {
     JUT_ASSERT(0, mpSelectCursor != NULL);
     mpSelectCursor->setAlphaRate(0.0f);
 
-    mpParent = new CPaneMgr(mpScreen, 'abc_n', 0, NULL);
+    mpParent = new CPaneMgr(mpScreen, MULTI_CHAR('abc_n'), 0, NULL);
     JUT_ASSERT(0, mpParent != NULL);
 
     for (int i = 0; i < 3; i++) {
@@ -115,11 +115,11 @@ dMsgScrn3Select_c::dMsgScrn3Select_c() {
 
         mpTmSel_c[2] = new CPaneMgr(mpScreen, 'c_tf', 0, NULL);
 
-        mpTmrSel_c[0] = new CPaneMgr(mpScreen, 'a_tf_f', 0, NULL);
+        mpTmrSel_c[0] = new CPaneMgr(mpScreen, MULTI_CHAR('a_tf_f'), 0, NULL);
 
-        mpTmrSel_c[1] = new CPaneMgr(mpScreen, 'b_tf_f', 0, NULL);
+        mpTmrSel_c[1] = new CPaneMgr(mpScreen, MULTI_CHAR('b_tf_f'), 0, NULL);
 
-        mpTmrSel_c[2] = new CPaneMgr(mpScreen, 'c_tf_f', 0, NULL);
+        mpTmrSel_c[2] = new CPaneMgr(mpScreen, MULTI_CHAR('c_tf_f'), 0, NULL);
 
         for (int i = 0; i < 3; i++) {
             ((J2DTextBox*)(mpTmSel_c[i]->getPanePtr()))->setString(64, "");
@@ -129,15 +129,15 @@ dMsgScrn3Select_c::dMsgScrn3Select_c() {
             ((J2DTextBox*)(mpTmrSel_c[i]->getPanePtr()))->setFont(mDoExt_getMesgFont());
         }
 
-        mpScreen->search('a_t_e')->hide();
-        mpScreen->search('b_t_e')->hide();
-        mpScreen->search('c_t_e')->hide();
+        mpScreen->search(MULTI_CHAR('a_t_e'))->hide();
+        mpScreen->search(MULTI_CHAR('b_t_e'))->hide();
+        mpScreen->search(MULTI_CHAR('c_t_e'))->hide();
         mpScreen->search('a_tf')->show();
         mpScreen->search('b_tf')->show();
         mpScreen->search('c_tf')->show();
-        mpScreen->search('a_tf_f')->show();
-        mpScreen->search('b_tf_f')->show();
-        mpScreen->search('c_tf_f')->show();
+        mpScreen->search(MULTI_CHAR('a_tf_f'))->show();
+        mpScreen->search(MULTI_CHAR('b_tf_f'))->show();
+        mpScreen->search(MULTI_CHAR('c_tf_f'))->show();
         mpScreen->search('a_t')->hide();
         mpScreen->search('b_t')->hide();
         mpScreen->search('c_t')->hide();
@@ -154,27 +154,27 @@ dMsgScrn3Select_c::dMsgScrn3Select_c() {
             mpTmrSel_c[i] = NULL;
         }
 
-        mpScreen->search('a_t_e')->hide();
-        mpScreen->search('b_t_e')->hide();
-        mpScreen->search('c_t_e')->hide();
+        mpScreen->search(MULTI_CHAR('a_t_e'))->hide();
+        mpScreen->search(MULTI_CHAR('b_t_e'))->hide();
+        mpScreen->search(MULTI_CHAR('c_t_e'))->hide();
         mpScreen->search('a_tf')->hide();
         mpScreen->search('b_tf')->hide();
         mpScreen->search('c_tf')->hide();
-        mpScreen->search('a_tf_f')->hide();
-        mpScreen->search('b_tf_f')->hide();
-        mpScreen->search('c_tf_f')->hide();
+        mpScreen->search(MULTI_CHAR('a_tf_f'))->hide();
+        mpScreen->search(MULTI_CHAR('b_tf_f'))->hide();
+        mpScreen->search(MULTI_CHAR('c_tf_f'))->hide();
         mpScreen->search('a_t')->show();
         mpScreen->search('b_t')->show();
         mpScreen->search('c_t')->show();
     }
 #else
-    mpTmSel_c[0] = new CPaneMgr(mpScreen, 'a_t_e', 0, NULL);
+    mpTmSel_c[0] = new CPaneMgr(mpScreen, MULTI_CHAR('a_t_e'), 0, NULL);
     JUT_ASSERT(0, mpTmSel_c[0] != NULL);
 
-    mpTmSel_c[1] = new CPaneMgr(mpScreen, 'b_t_e', 0, NULL);
+    mpTmSel_c[1] = new CPaneMgr(mpScreen, MULTI_CHAR('b_t_e'), 0, NULL);
     JUT_ASSERT(0, mpTmSel_c[1] != NULL);
 
-    mpTmSel_c[2] = new CPaneMgr(mpScreen, 'c_t_e', 0, NULL);
+    mpTmSel_c[2] = new CPaneMgr(mpScreen, MULTI_CHAR('c_t_e'), 0, NULL);
     JUT_ASSERT(0, mpTmSel_c[2] != NULL);
 
     for (int i = 0; i < 3; i++) {
@@ -183,15 +183,15 @@ dMsgScrn3Select_c::dMsgScrn3Select_c() {
         mpTmrSel_c[i] = NULL;
     }
 
-    mpScreen->search('a_t_e')->show();
-    mpScreen->search('b_t_e')->show();
-    mpScreen->search('c_t_e')->show();
+    mpScreen->search(MULTI_CHAR('a_t_e'))->show();
+    mpScreen->search(MULTI_CHAR('b_t_e'))->show();
+    mpScreen->search(MULTI_CHAR('c_t_e'))->show();
     mpScreen->search('a_tf')->hide();
     mpScreen->search('b_tf')->hide();
     mpScreen->search('c_tf')->hide();
-    mpScreen->search('a_tf_f')->hide();
-    mpScreen->search('b_tf_f')->hide();
-    mpScreen->search('c_tf_f')->hide();
+    mpScreen->search(MULTI_CHAR('a_tf_f'))->hide();
+    mpScreen->search(MULTI_CHAR('b_tf_f'))->hide();
+    mpScreen->search(MULTI_CHAR('c_tf_f'))->hide();
     mpScreen->search('a_t')->hide();
     mpScreen->search('b_t')->hide();
     mpScreen->search('c_t')->hide();

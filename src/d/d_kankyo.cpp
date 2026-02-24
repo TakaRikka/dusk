@@ -4398,8 +4398,8 @@ static void setLightTevColorType_MAJI_sub(J3DMaterial* material_p, dKy_tevstr_c*
                 fog_info->mEndZ = tevstr_p->mFogEndZ;
 
                 if (dComIfGd_getView() != NULL) {
-                    fog_info->mNearZ = dComIfGd_getView()->near;
-                    fog_info->mFarZ = dComIfGd_getView()->far;
+                    fog_info->mNearZ = dComIfGd_getView()->near_;
+                    fog_info->mFarZ = dComIfGd_getView()->far_;
                 }
 
                 if (fog_info->mType == 7) {
@@ -9326,10 +9326,10 @@ static void GxFogSet_Sub(GXColor* fog_col_p) {
     color = *fog_col_p;
 
     if (dComIfGd_getView() != NULL) {
-        if (dComIfGd_getView()->near >= 0.0f && dComIfGd_getView()->far >= 0.0f) {
-            if (dComIfGd_getView()->near < dComIfGd_getView()->far) {
-                near_z = dComIfGd_getView()->near;
-                far_z = dComIfGd_getView()->far;
+        if (dComIfGd_getView()->near_ >= 0.0f && dComIfGd_getView()->far_ >= 0.0f) {
+            if (dComIfGd_getView()->near_ < dComIfGd_getView()->far_) {
+                near_z = dComIfGd_getView()->near_;
+                far_z = dComIfGd_getView()->far_;
             }
         }
     }
@@ -9361,10 +9361,10 @@ void dKy_GxFog_tevstr_set(dKy_tevstr_c* tevstr_p) {
     color.b = tevstr_p->FogCol.b;
 
     if (dComIfGd_getView() != NULL) {
-        if (dComIfGd_getView()->near >= 0.0f && dComIfGd_getView()->far >= 0.0f) {
-            if (dComIfGd_getView()->near < dComIfGd_getView()->far) {
-                near_z = dComIfGd_getView()->near;
-                far_z = dComIfGd_getView()->far;
+        if (dComIfGd_getView()->near_ >= 0.0f && dComIfGd_getView()->far_ >= 0.0f) {
+            if (dComIfGd_getView()->near_ < dComIfGd_getView()->far_) {
+                near_z = dComIfGd_getView()->near_;
+                far_z = dComIfGd_getView()->far_;
             }
         }
     }
@@ -9383,10 +9383,10 @@ void dKy_GfFog_tevstr_set(dKy_tevstr_c* tevstr_p) {
     color.b = tevstr_p->FogCol.b;
 
     if (dComIfGd_getView() != NULL) {
-        if (dComIfGd_getView()->near >= 0.0f && dComIfGd_getView()->far >= 0.0f) {
-            if (dComIfGd_getView()->near < dComIfGd_getView()->far) {
-                near_z = dComIfGd_getView()->near;
-                far_z = dComIfGd_getView()->far;
+        if (dComIfGd_getView()->near_ >= 0.0f && dComIfGd_getView()->far_ >= 0.0f) {
+            if (dComIfGd_getView()->near_ < dComIfGd_getView()->far_) {
+                near_z = dComIfGd_getView()->near_;
+                far_z = dComIfGd_getView()->far_;
             }
         }
     }

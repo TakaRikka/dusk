@@ -29,10 +29,11 @@ public:
     };
 
     dShopSystem_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
-             daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3, int param_4,
-             daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5, int param_6, daNpcT_evtData_c const* param_7,
-             char** param_8) : daNpcT_c(param_1,param_2,param_3,param_4,param_5,param_6,param_7,param_8) {
-            OS_REPORT("|%06d:%x|dShopSystem_c -> コンストラクト\n", g_Counter.mCounter0, this);
+                  daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3, int param_4,
+                  daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5, int param_6,
+                  daNpcT_evtData_c const* param_7, char** param_8)
+        : daNpcT_c(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8) {
+        OS_REPORT("|%06d:%x|dShopSystem_c -> コンストラクト\n", g_Counter.mCounter0, this);
             initShopSystem();
     }
 

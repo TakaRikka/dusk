@@ -147,7 +147,7 @@ namespace JASKernel { JKRHeap* getSystemHeap(); };
  * 
  */
 template<u32 ChunkSize, template<typename> class T>
-class JASMemChunkPool : public T<JASMemChunkPool<ChunkSize, T> >::ObjectLevelLockable {
+class JASMemChunkPool : public T<JASMemChunkPool<ChunkSize, T> > {
     struct MemoryChunk {
         MemoryChunk(MemoryChunk* nextChunk) {
             mNextChunk = nextChunk;

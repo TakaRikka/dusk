@@ -38,12 +38,12 @@ f32 mDoLib_clipper::mSystemFar;
 
 f32 mDoLib_clipper::mFovyRate;
 
-void mDoLib_clipper::setup(f32 fovy, f32 aspect, f32 near, f32 far) {
+void mDoLib_clipper::setup(f32 fovy, f32 aspect, f32 near_, f32 far_) {
     mClipper.setFovy(fovy);
     mClipper.setAspect(aspect);
-    mClipper.setNear(near);
-    mClipper.setFar(far);
-    mSystemFar = far;
+    mClipper.setNear(near_);
+    mClipper.setFar(far_);
+    mSystemFar = far_;
     mClipper.calcViewFrustum();
 
     s16 tmp = DEG2S(fovy);
@@ -121,11 +121,11 @@ void mDoLib_pos2camera(Vec* src, Vec* dst) {
 static void dummy() {
     std::tan(0.0f);
     J3DAlphaComp* alphaComp = NULL;
-    alphaComp->setAlphaCompInfo((J3DAlphaCompInfo){});
+    alphaComp->setAlphaCompInfo(COMPOUND_LITERAL(J3DAlphaCompInfo){});
     J3DPEBlock* peBlock = NULL;
-    peBlock->getZMode()->setZModeInfo((J3DZModeInfo){});
+    peBlock->getZMode()->setZModeInfo(COMPOUND_LITERAL(J3DZModeInfo){});
     dComIfGd_getInvViewMtx();
     J3DMaterial* mat = NULL;
     mat->getTevKColor(0);
-    mDoLib_clipper::clip(j3dSys.getViewMtx(), (Vec){}, 0.0f);
+    mDoLib_clipper::clip(j3dSys.getViewMtx(), COMPOUND_LITERAL(Vec){}, 0.0f);
 }

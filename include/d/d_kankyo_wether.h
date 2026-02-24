@@ -5,7 +5,7 @@
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
 
-class WIND_INFLUENCE;
+struct WIND_INFLUENCE;
 
 void dKyw_wether_draw();
 void dKyw_wether_delete();

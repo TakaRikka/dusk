@@ -20,6 +20,7 @@
 #include "f_pc/f_pc_pause.h"
 #include "f_pc/f_pc_priority.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include <cstdio>
 
 void fpcM_Draw(void* i_proc) {
     fpcDw_Execute((base_process_class*)i_proc);
@@ -42,16 +43,26 @@ BOOL fpcM_IsCreating(fpc_ProcID i_id) {
 }
 
 void fpcM_Management(fpcM_ManagementFunc i_preExecuteFn, fpcM_ManagementFunc i_postExecuteFn) {
+    static int sMgmtLogCount = 0;
+
     MtxInit();
     if (!fapGm_HIO_c::isCaptureScreen()) {
         dComIfGd_peekZdata();
     }
     fapGm_HIO_c::executeCaptureScreen();
 
-    if (!dShutdownErrorMsg_c::execute()) {
+    bool shutdownRet = dShutdownErrorMsg_c::execute();
+    if (sMgmtLogCount < 10) {
+        printf("[DIAG] fpcM_Management: shutdown=%d\n", shutdownRet); fflush(stdout);
+    }
+    if (!shutdownRet) {
         static bool l_dvdError = false;
 
-        if (!dDvdErrorMsg_c::execute()) {
+        bool dvdErrRet = dDvdErrorMsg_c::execute();
+        if (sMgmtLogCount < 10) {
+            printf("[DIAG] fpcM_Management: dvdError=%d\n", dvdErrRet); fflush(stdout);
+        }
+        if (!dvdErrRet) {
             if (l_dvdError) {
                 dLib_time_c::startTime();
                 Z2GetSoundMgr()->pauseAllGameSound(false);
@@ -60,36 +71,55 @@ void fpcM_Management(fpcM_ManagementFunc i_preExecuteFn, fpcM_ManagementFunc i_p
 
             cAPIGph_Painter();
 
+            if (sMgmtLogCount < 10) { printf("[DIAG] fpcM_Management: after cAPIGph_Painter\n"); fflush(stdout); }
+
             if (!dPa_control_c::isStatus(1)) {
                 fpcDt_Handler();
             } else {
                 dPa_control_c::offStatus(1);
             }
 
+            if (sMgmtLogCount < 10) { printf("[DIAG] fpcM_Management: after fpcDt_Handler\n"); fflush(stdout); }
+
             if (!fpcPi_Handler()) {
                 JUT_ASSERT(353, FALSE);
             }
+
+            if (sMgmtLogCount < 10) { printf("[DIAG] fpcM_Management: after fpcPi_Handler\n"); fflush(stdout); }
 
             if (!fpcCt_Handler()) {
                 JUT_ASSERT(357, FALSE);
             }
 
+            if (sMgmtLogCount < 10) { printf("[DIAG] fpcM_Management: after fpcCt_Handler\n"); fflush(stdout); }
+
             if (i_preExecuteFn != NULL) {
                 i_preExecuteFn();
             }
 
+            if (sMgmtLogCount < 10) { printf("[DIAG] fpcM_Management: after preExecute\n"); fflush(stdout); }
+
             if (!fapGm_HIO_c::isCaptureScreen()) {
                 fpcEx_Handler((fpcLnIt_QueueFunc)fpcM_Execute);
             }
+
+            if (sMgmtLogCount < 10) { printf("[DIAG] fpcM_Management: after fpcEx_Handler\n"); fflush(stdout); }
+
             if (!fapGm_HIO_c::isCaptureScreen() || fapGm_HIO_c::getCaptureScreenDivH() != 1) {
                 fpcDw_Handler((fpcDw_HandlerFuncFunc)fpcM_DrawIterater, (fpcDw_HandlerFunc)fpcM_Draw);
             }
 
+            if (sMgmtLogCount < 10) { printf("[DIAG] fpcM_Management: after fpcDw_Handler\n"); fflush(stdout); }
+
             if (i_postExecuteFn != NULL) {
+                if (sMgmtLogCount < 10) {
+                    printf("[DIAG] fpcM_Management: calling postExecuteFn (fapGm_After)\n"); fflush(stdout);
+                }
                 i_postExecuteFn();
             }
 
             dComIfGp_drawSimpleModel();
+            sMgmtLogCount++;
         } else if (!l_dvdError) {
             dLib_time_c::stopTime();
             Z2GetSoundMgr()->pauseAllGameSound(true);

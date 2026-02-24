@@ -16,7 +16,7 @@ enum {
 };
 
 class fopAc_ac_c;
-class msg_class;
+struct msg_class;
 
 // all mesg_flow_node structs members might be wrong
 struct mesg_flow_node {

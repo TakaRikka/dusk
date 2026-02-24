@@ -336,7 +336,7 @@ static BOOL way_bg_check(e_dd_class* i_this, f32 param_2) {
     return FALSE;
 }
 
-u8 hio_set;
+static u8 hio_set;
 
 static daE_DD_HIO_c l_HIO;
 

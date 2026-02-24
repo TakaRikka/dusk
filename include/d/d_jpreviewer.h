@@ -10,7 +10,7 @@ namespace JStudio {
 
 class J2DOrthoGraph;
 class JKRExpHeap;
-class JUTGamePad;
+struct JUTGamePad;
 class JUTResFont;
 class tParse_;
 

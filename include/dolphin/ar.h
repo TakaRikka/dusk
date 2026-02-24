@@ -10,7 +10,7 @@
 extern "C" {
 #endif
 
-typedef void (*ARQCallback)(u32 pointerToARQRequest);
+typedef void (*ARQCallback)(uintptr_t pointerToARQRequest);
 
 struct ARQRequest {
     /* 0x00 */ struct ARQRequest *next;
@@ -59,7 +59,7 @@ void ARClear(u32 flag);
 // ARQ
 void ARQInit(void);
 void ARQReset(void);
-void ARQPostRequest(ARQRequest* request, u32 owner, u32 type, u32 priority, u32 source, u32 dest, u32 length, ARQCallback callback);
+void ARQPostRequest(ARQRequest* request, u32 owner, u32 type, u32 priority, uintptr_t source, uintptr_t dest, u32 length, ARQCallback callback);
 void ARQRemoveRequest(ARQRequest* request);
 void ARQRemoveOwnerRequest(u32 owner);
 void ARQFlushQueue(void);

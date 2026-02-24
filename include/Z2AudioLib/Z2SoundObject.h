@@ -4,7 +4,7 @@
 #include "Z2AudioLib/Z2SoundHandles.h"
 #include "JSystem/JAudio2/JAUSoundAnimator.h"
 
-class Z2SoundStarter;
+struct Z2SoundStarter;
 
 class Z2SoundObjBase : public Z2SoundHandles
 #if DEBUG

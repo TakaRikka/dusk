@@ -384,7 +384,7 @@ void daE_ZM_c::executeWait() {
             }
             break;
             
-        case MODE_2:
+        case MODE_2: {
             mStts.Move();
             mCyl.OffTgSetBit();
             mCyl.OffCoSetBit();
@@ -406,6 +406,7 @@ void daE_ZM_c::executeWait() {
 
             mSound.startCreatureSound(Z2SE_EN_ZM_DISAPPER, 0, -1);
             mMode++;
+        }
             // fallthrough
         case MODE_3:
             cLib_addCalc0(&field_0x6f4.x, 0.7f, 1.0f);

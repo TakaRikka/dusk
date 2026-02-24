@@ -16,7 +16,7 @@ static int l_bmdData[1][2] = {
     {11, 1},
 };
 
-daNpcT_evtData_c l_evtList[11] = {
+static daNpcT_evtData_c l_evtList[11] = {
     {"", 0},
     {"NO_RESPONSE", 0},
     {"WILDGOAT", 2},

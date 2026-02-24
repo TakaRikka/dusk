@@ -4,7 +4,7 @@
 #include "global.h"
 #include "f_pc/f_pc_base.h"
 
-class msg_class;
+struct msg_class;
 
 struct event_binary_data_header {
     /* 0x00 */ u32 eventTop;  // offset to Event chunk

@@ -450,7 +450,7 @@ f32 dDemo_camera_c::JSGGetProjectionNear() const {
         return 0.0f;
     }
     
-    return view->near;
+    return view->near_;
 }
 
 void dDemo_camera_c::JSGSetProjectionNear(f32 i_projNear) {
@@ -465,7 +465,7 @@ f32 dDemo_camera_c::JSGGetProjectionFar() const {
         return 1.0f;
     }
     
-    return view->far;
+    return view->far_;
 }
 
 void dDemo_camera_c::JSGSetProjectionFar(f32 i_projFar) {

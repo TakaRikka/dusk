@@ -1246,7 +1246,7 @@ void daAlink_c::setWolfDigEffect() {
         } else if (field_0x3198 == 7) {
             var_r29 = 0;
             var_r28 = ID_ZI_J_DASHWTRA_C;
-            setEmitterPolyColor(&field_0x32cc, ID_ZI_J_DASHWTRA_A, mPolyInfo2, &field_0x37d4, &sp18);
+            setEmitterPolyColor((u32*)&field_0x32cc, ID_ZI_J_DASHWTRA_A, mPolyInfo2, &field_0x37d4, &sp18);
             setEmitterPolyColor(&field_0x31bc, ID_ZI_J_DASHWTRA_B, mPolyInfo2, &field_0x37d4, &sp18);
         } else {
             var_r29 = 0;
@@ -1281,7 +1281,7 @@ void daAlink_c::setWolfSwimEndEffect(JPABaseEmitter** param_0, JPABaseEmitter** 
         var_r30 = 1;
     }
 
-    *param_0 = setEmitterColor(&field_0x32cc, name0[var_r30], &field_0x37c8, &shape_angle);
+    *param_0 = setEmitterColor((u32*)&field_0x32cc, name0[var_r30], &field_0x37c8, &shape_angle);
 
     if (var_r30 != 0) {
         *param_1 = setEmitterColor(&field_0x31bc, name1[var_r30], &field_0x37c8, &shape_angle);
@@ -2111,10 +2111,10 @@ BOOL daAlink_lockCursor_c::create() {
         return false;
     }
 
-    field_0xc = mScrn->search('n_all');
-    mCursor0 = mScrn->search('cursor0');
-    mCursor1 = mScrn->search('cursor1');
-    mCursor2 = mScrn->search('cursor2');
+    field_0xc = mScrn->search(MULTI_CHAR('n_all'));
+    mCursor0 = mScrn->search(MULTI_CHAR('cursor0'));
+    mCursor1 = mScrn->search(MULTI_CHAR('cursor1'));
+    mCursor2 = mScrn->search(MULTI_CHAR('cursor2'));
 
     field_0x28->searchUpdateMaterialID(mScrn);
     field_0xc->setAnimation(field_0x28);
@@ -2127,8 +2127,7 @@ BOOL daAlink_lockCursor_c::create() {
     mCursor0->setAnimation(field_0x24);
     mCursor1->setAnimation(field_0x24);
     mCursor2->setAnimation(field_0x24);
-    J2DPane* sp8 = mScrn->search('flash');
-    sp8->setAnimation(field_0x24);
+    mScrn->search(MULTI_CHAR('flash'))->setAnimation(field_0x24);
     field_0x24->setFrame(0.0f);
 
     field_0x1c->searchUpdateMaterialID(mScrn);

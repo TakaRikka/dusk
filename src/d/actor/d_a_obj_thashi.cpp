@@ -9,7 +9,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 
-char* l_arcName = "S_thashi";
+static const char* l_arcName = "S_thashi";
 
 static void dataStripping() {
     const static u32 ccCylSrc[] = {0, 0x100000, 0,   0x13, 0x100000, 0x1f, 0x75, 0,

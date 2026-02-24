@@ -11,6 +11,7 @@
 #include "f_pc/f_pc_executor.h"
 #include "f_pc/f_pc_layer.h"
 #include "f_pc/f_pc_debug_sv.h"
+#include <cstdio>
 
 BOOL fpcCtRq_isCreatingByID(create_tag* i_createTag, fpc_ProcID* i_id) {
     fpc_ProcID id = ((create_request*)i_createTag->base.mpTagData)->id;
@@ -89,6 +90,12 @@ BOOL fpcCtRq_Do(create_request* i_request) {
             phase = pHandler(i_request);
             i_request->is_doing = FALSE;
         }
+    }
+
+    static int sCtRqDoLogCount = 0;
+    if (sCtRqDoLogCount < 30) {
+        printf("[DIAG] fpcCtRq_Do: phase=%d process=%p\n", phase, i_request->process); fflush(stdout);
+        sCtRqDoLogCount++;
     }
 
     switch (phase) {

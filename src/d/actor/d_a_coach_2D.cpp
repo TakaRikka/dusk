@@ -124,13 +124,13 @@ int daCoach2D_c::createHeap() {
     mpFireIconBrk->searchUpdateMaterialID(mpScrn);
     setBrkAnime(true);
 
-    mpPaneAll = new CPaneMgr(mpScrn, 'n_all', 2, NULL);
-    mpPaneBasha = new CPaneMgr(mpScrn, 'basha_n', 2, NULL);
-    mpPaneFire = new CPaneMgr(mpScrn, 'fire_n', 2, NULL);
+    mpPaneAll = new CPaneMgr(mpScrn, MULTI_CHAR('n_all'), 2, NULL);
+    mpPaneBasha = new CPaneMgr(mpScrn, MULTI_CHAR('basha_n'), 2, NULL);
+    mpPaneFire = new CPaneMgr(mpScrn, MULTI_CHAR('fire_n'), 2, NULL);
 
-    mpScrn->search('fire_b_n')->move(mpPaneFire->getPosX(), mpPaneFire->getPosY());
+    mpScrn->search(MULTI_CHAR('fire_b_n'))->move(mpPaneFire->getPosX(), mpPaneFire->getPosY());
 
-    mpPaneFireB = new CPaneMgr(mpScrn, 'fire_b_n', 2, NULL);
+    mpPaneFireB = new CPaneMgr(mpScrn, MULTI_CHAR('fire_b_n'), 2, NULL);
 
     mMsgLight = new dMsgScrnLight_c(6, 0xFF);
 
@@ -287,7 +287,7 @@ void daCoach2D_c::update() {
         icon_pos_x -= var_f29;
     }
 
-    f32 var_f30 = 4.0f * ((J2DPicture*)mpScrn->search('basha_p0'))->getWhite().r;
+    f32 var_f30 = 4.0f * ((J2DPicture*)mpScrn->search(MULTI_CHAR('basha_p0')))->getWhite().r;
     if (var_f30 > 255.0f) {
         var_f30 = 255.0f;
     }
@@ -319,14 +319,14 @@ void daCoach2D_c::setBrkAnime(bool param_0) {
         if (mBrkFrame >= mpFireIconBrk->getFrameMax()) {
             mBrkFrame -= mpFireIconBrk->getFrameMax();
         }
-        mpScrn->search('basha_f0')->show();
+        mpScrn->search(MULTI_CHAR('basha_f0'))->show();
     } else {
-        mpScrn->search('basha_f0')->hide();
+        mpScrn->search(MULTI_CHAR('basha_f0'))->hide();
         mBrkFrame = 0.0f;
     }
 
     mpFireIconBrk->setFrame(mBrkFrame);
-    mpScrn->search('basha_p0')->setAnimation(mpFireIconBrk);
+    mpScrn->search(MULTI_CHAR('basha_p0'))->setAnimation(mpFireIconBrk);
 }
 
 static int daCoach2D_create(daCoach2D_c* i_this) {

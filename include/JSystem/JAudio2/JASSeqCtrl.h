@@ -3,7 +3,7 @@
 
 #include "JSystem/JAudio2/JASSeqReader.h"
 
-class JASTrack;
+struct JASTrack;
 class JASSeqParser;
 
 /**

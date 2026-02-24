@@ -284,8 +284,8 @@ void daMant_packet_c::draw() {
     dKy_Global_amb_set(this->mTevStr);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
 
-    GXSetTevColor(GX_TEVREG0, (GXColor){1, 0, 0, 0});
-    GXSetTevKColor(GX_KCOLOR0, (GXColor){1, 0, 0, 0});
+    GXSetTevColor(GX_TEVREG0, COMPOUND_LITERAL(GXColor){1, 0, 0, 0});
+    GXSetTevKColor(GX_KCOLOR0, COMPOUND_LITERAL(GXColor){1, 0, 0, 0});
 
     GXSetTevKColorSel(GX_TEVSTAGE0, GX_TEV_KCSEL_K0);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_KONST, GX_CC_TEXC, GX_CC_RASC, GX_CC_C0);
@@ -318,8 +318,8 @@ void daMant_packet_c::draw() {
     GXInitTexObjLOD(&GStack_74, GX_LINEAR, GX_LINEAR, 0.0, 0.0, 0.0, 0, 0, GX_ANISO_1);
     GXLoadTexObj(&GStack_74, GX_TEXMAP0);
 
-    GXSetTevColor(GX_TEVREG0, (GXColor){0, 0, 0, 0});
-    GXSetTevKColor(GX_KCOLOR0, (GXColor){0, 0, 0, 0});
+    GXSetTevColor(GX_TEVREG0, COMPOUND_LITERAL(GXColor){0, 0, 0, 0});
+    GXSetTevKColor(GX_KCOLOR0, COMPOUND_LITERAL(GXColor){0, 0, 0, 0});
 
     GXSetCullMode(GX_CULL_FRONT);
     GXLoadPosMtxImm(this->mMtx2, GX_PNMTX0);

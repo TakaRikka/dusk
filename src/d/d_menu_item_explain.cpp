@@ -41,17 +41,17 @@ static moveFunc move_process[] = {
 dMenu_ItemExplain_c::dMenu_ItemExplain_c(JKRExpHeap* i_heap, JKRArchive* i_archive,
                                          STControl* i_stick, bool param_3) {
     static const u64 name_tag[4] = {
-        'item_n04',
-        'item_n05',
-        'item_n06',
-        'item_n07',
+        MULTI_CHAR('item_n04'),
+        MULTI_CHAR('item_n05'),
+        MULTI_CHAR('item_n06'),
+        MULTI_CHAR('item_n07'),
     };
 
     static const u64 fame_tag[4] = {
-        'f_item_1',
-        'f_item_2',
-        'f_item_3',
-        'f_item_4',
+        MULTI_CHAR('f_item_1'),
+        MULTI_CHAR('f_item_2'),
+        MULTI_CHAR('f_item_3'),
+        MULTI_CHAR('f_item_4'),
     };
     
     mpHeap = i_heap;
@@ -96,18 +96,18 @@ dMenu_ItemExplain_c::dMenu_ItemExplain_c(JKRExpHeap* i_heap, JKRArchive* i_archi
     mpKanteraMeter = new dKantera_icon_c();
     mpInfoScreen = new J2DScreen();
     mpInfoScreen->setPriority("zelda_item_screen_info.blo", 0x20000, mpArchive);
-    mpParent[0] = new CPaneMgr(mpInfoScreen, 'n_all', 2, NULL);
+    mpParent[0] = new CPaneMgr(mpInfoScreen, MULTI_CHAR('n_all'), 2, NULL);
     mpParent[1] = NULL;
-    mpLabel = new CPaneMgr(mpInfoScreen, 'label_n', 0, NULL);
+    mpLabel = new CPaneMgr(mpInfoScreen, MULTI_CHAR('label_n'), 0, NULL);
     mDescAlpha = 0.0f;
     field_0x78 = 0;
     mAlphaRatio = 201.0f;
 #if VERSION == VERSION_GCN_JPN
-    mpInfoText = new CPaneMgr(mpInfoScreen, 'i_text4', 0, NULL);
-    mpInfoScreen->search('i_text1')->hide();
+    mpInfoText = new CPaneMgr(mpInfoScreen, MULTI_CHAR('i_text4'), 0, NULL);
+    mpInfoScreen->search(MULTI_CHAR('i_text1'))->hide();
 #else
-    mpInfoText = new CPaneMgr(mpInfoScreen, 'i_text1', 0, NULL);
-    mpInfoScreen->search('i_text4')->hide();
+    mpInfoText = new CPaneMgr(mpInfoScreen, MULTI_CHAR('i_text1'), 0, NULL);
+    mpInfoScreen->search(MULTI_CHAR('i_text4'))->hide();
 #endif
     ((J2DTextBox*)(mpInfoText->getPanePtr()))->setFont(mDoExt_getMesgFont());
     ((J2DTextBox*)(mpInfoText->getPanePtr()))->setString(0x200, "");
@@ -123,25 +123,25 @@ dMenu_ItemExplain_c::dMenu_ItemExplain_c(JKRExpHeap* i_heap, JKRArchive* i_archi
         ((J2DTextBox*)(mpNameText[i]->getPanePtr()))->setFont(mDoExt_getMesgFont());
         ((J2DTextBox*)(mpNameText[i]->getPanePtr()))->setString(0x20, "");
     }
-    mpInfoIcon = new CPaneMgr(mpInfoScreen, 'i_icon_p', 0, NULL);
+    mpInfoIcon = new CPaneMgr(mpInfoScreen, MULTI_CHAR('i_icon_p'), 0, NULL);
     for (int i = 0; i < 4; i++) {
         mpExpItemTex[i] = (ResTIMG*)mpHeap->alloc(0xC00, 0x20);
     }
 
     mpExpItemPane[0] = new J2DPicture(
-        'i_icon_1',
+        MULTI_CHAR('i_icon_1'),
         JGeometry::TBox2<f32>(0.0f, 0.0f, mpInfoIcon->getInitSizeX(), mpInfoIcon->getInitSizeY()),
         ((J2DPicture*)(mpInfoIcon->getPanePtr()))->getTexture(0)->getTexInfo(), NULL);
     mpExpItemPane[0]->setBasePosition(J2DBasePosition_4);
     mpInfoIcon->getPanePtr()->appendChild(mpExpItemPane[0]);
     mpExpItemPane[1] = new J2DPicture(
-        'i_icon_2',
+        MULTI_CHAR('i_icon_2'),
         JGeometry::TBox2<f32>(0.0f, 0.0f, mpInfoIcon->getInitSizeX(), mpInfoIcon->getInitSizeY()),
         ((J2DPicture*)(mpInfoIcon->getPanePtr()))->getTexture(0)->getTexInfo(), NULL);
     mpExpItemPane[1]->setBasePosition(J2DBasePosition_4);
     mpInfoIcon->getPanePtr()->appendChild(mpExpItemPane[1]);
     mpExpItemPane[2] = new J2DPicture(
-        'i_icon_3',
+        MULTI_CHAR('i_icon_3'),
         JGeometry::TBox2<f32>(0.0f, 0.0f, mpInfoIcon->getInitSizeX(), mpInfoIcon->getInitSizeY()),
         ((J2DPicture*)(mpInfoIcon->getPanePtr()))->getTexture(0)->getTexInfo(), NULL);
     mpExpItemPane[2]->setBasePosition(J2DBasePosition_4);
@@ -151,7 +151,7 @@ dMenu_ItemExplain_c::dMenu_ItemExplain_c(JKRExpHeap* i_heap, JKRArchive* i_archi
         'TIMG', dMeter2Info_getNumberTextureName(0));
     for (int i = 0; i < 3; i++) {
         mpItemNumTex[i] = new J2DPicture(texResource);
-        mpInfoScreen->search('info_n1')->appendChild(mpItemNumTex[i]);
+        mpInfoScreen->search(MULTI_CHAR('info_n1'))->appendChild(mpItemNumTex[i]);
         mpItemNumTex[i]->move(i * 16.0f + (mpInfoIcon->getPosX() + mpInfoIcon->getSizeX() * 0.5f),
                               mpInfoIcon->getPosY() + mpInfoIcon->getSizeY() - 3.0f);
         mpItemNumTex[i]->resize(16.0f, 16.0f);
@@ -395,7 +395,7 @@ void dMenu_ItemExplain_c::open_init() {
             }
         }
         setNumber();
-        mpInfoScreen->search('i_i_back')->show();
+        mpInfoScreen->search(MULTI_CHAR('i_i_back'))->show();
         field_0xe6 = 0;
     } else {
         mpInfoIcon->hide();
@@ -403,7 +403,7 @@ void dMenu_ItemExplain_c::open_init() {
             mpExpItemPane[i]->hide();
         }
         setNumber();
-        mpInfoScreen->search('i_i_back')->hide();
+        mpInfoScreen->search(MULTI_CHAR('i_i_back'))->hide();
         field_0xe6 = 1;
     }
     if (mpArrow != NULL) {

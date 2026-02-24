@@ -221,7 +221,7 @@ private:
     /* 0x14 */ J3DAnmCluster* mpAnm;
 };
 
-class J3DTransformInfo;
+struct J3DTransformInfo;
 
 class mDoExt_AnmRatioPack {
 public:
@@ -832,7 +832,7 @@ intptr_t mDoExt_getSafeZeldaHeapSize();
 JKRHeap* mDoExt_createHostIOHeap(u32, JKRHeap*);
 #endif
 
-struct JUTFont;
+class JUTFont;
 JUTFont* mDoExt_getMesgFont();
 JUTFont* mDoExt_getSubFont();
 JUTFont* mDoExt_getRubyFont();

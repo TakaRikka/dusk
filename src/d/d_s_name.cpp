@@ -96,8 +96,8 @@ s32 dScnName_c::create() {
         dDlst_window_c* window = dComIfGp_getWindow(0);
         dComIfGp_setCamera(0, (camera_class*)&mCamera);
 
-        mCamera.near = 1.0f;
-        mCamera.far = 100000.0f;
+        mCamera.near_ = 1.0f;
+        mCamera.far_ = 100000.0f;
         mCamera.fovy = 45.0f;
         mCamera.aspect = mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getHeightF();
         mCamera.lookat.eye.set(0.0f, 0.0f, -1000.0f);
@@ -139,8 +139,8 @@ static const char* dummyString(int i) {
 #endif
 
 void dScnName_c::setView() {
-    C_MTXPerspective(mCamera.projMtx, mCamera.fovy, mCamera.aspect, mCamera.near,
-                     mCamera.far);
+    C_MTXPerspective(mCamera.projMtx, mCamera.fovy, mCamera.aspect, mCamera.near_,
+                     mCamera.far_);
     mDoMtx_lookAt(mCamera.viewMtx, &mCamera.lookat.eye, &mCamera.lookat.center,
                   mCamera.bank);
     MTXInverse(mCamera.viewMtx, mCamera.invViewMtx);

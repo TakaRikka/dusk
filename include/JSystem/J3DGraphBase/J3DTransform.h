@@ -2,6 +2,7 @@
 #define J3DTRANSFORM_H
 
 #include <dolphin/mtx.h>
+#include "JSystem/JMath/JMath.h"
 
 struct J3DTextureSRTInfo;
 

@@ -99,7 +99,7 @@ int __fpclassifyl(long double __value);
 #define FLT_MAX_EXP    128
 #define FLT_MAX_10_EXP 38
 
-#if DEBUG
+#if DEBUG || defined(_MSVC_LANG)
 #define FLT_MAX 3.4028235e38f
 #define FLT_EPSILON 1.1920929e-7f
 #else

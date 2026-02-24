@@ -351,7 +351,8 @@ int decompSZS_subroutine(u8* src, u8* dest) {
     }
 
     SYaz0Header* header = (SYaz0Header*)src;
-    endPtr = dest + (header->length - fileOffset);
+    u32 decompressedLength = JKRDecompExpandSize(src);
+    endPtr = dest + (decompressedLength - fileOffset);
     if (endPtr > dest + maxDest) {
         endPtr = dest + maxDest;
     }

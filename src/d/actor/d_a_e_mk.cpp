@@ -137,7 +137,7 @@ static cXyz STAGE_CENTER_POS;
 
 static s16 STAGE_ANGLE_Y;
 
-u8 hio_set;
+static u8 hio_set;
 
 static daE_MK_HIO_c l_HIO;
 

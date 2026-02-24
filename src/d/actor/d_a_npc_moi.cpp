@@ -244,7 +244,7 @@ enum Motion {
     /* 0x2F */ MOT_UNK_47 = 47,
 };
 
-NPC_MOI_HIO_CLASS l_HIO;
+static NPC_MOI_HIO_CLASS l_HIO;
 
 daNpc_Moi_c::~daNpc_Moi_c() {
     if (mpMorf[0] != 0) {
@@ -267,7 +267,7 @@ int daNpc_Moi_c::create() {
                        (const daNpcT_motionAnmData_c*)l_motionAnmData,
                        (const daNpcT_MotionSeqMngr_c::sequenceStepData_c*)l_faceMotionSequenceData,
                        4, (const daNpcT_MotionSeqMngr_c::sequenceStepData_c*)l_motionSequenceData,
-                       4, (const daNpcT_evtData_c*)l_evtList, (char**)l_resNameList);
+                       4, (const daNpcT_evtData_c*)l_evtList, l_resNameList);
 
     mType = getType();
     mFlowNodeNo = getFlowNodeNo();

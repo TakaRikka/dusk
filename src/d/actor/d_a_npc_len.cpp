@@ -174,7 +174,7 @@ int daNpc_Len_c::create() {
                        (const daNpcT_motionAnmData_c*)l_motionAnmData,
                        (const daNpcT_MotionSeqMngr_c::sequenceStepData_c*)l_faceMotionSequenceData,
                        4, (const daNpcT_MotionSeqMngr_c::sequenceStepData_c*)l_motionSequenceData,
-                       4, (const daNpcT_evtData_c*)l_evtList, (char**)l_resNameList);
+                       4, (const daNpcT_evtData_c*)l_evtList, l_resNameList);
 
     mType = getType();
     mFlowNodeNo = getFlowNodeNo();
@@ -652,7 +652,7 @@ void daNpc_Len_c::beforeMove() {
     }
 }
 
-NPC_LEN_HIO_CLASS l_HIO;
+static NPC_LEN_HIO_CLASS l_HIO;
 
 void daNpc_Len_c::setAttnPos() {
     cXyz acStack_40(-30.0f, 15.0f, 0.0f);

@@ -11,8 +11,8 @@ struct ResTIMG;
 struct mDoLib_clipper {
     static void setup(f32, f32, f32, f32);
 
-    static void changeFar(f32 far) {
-        mClipper.setFar(far);
+    static void changeFar(f32 far_) {
+        mClipper.setFar(far_);
         mClipper.calcViewFrustum();
     }
 

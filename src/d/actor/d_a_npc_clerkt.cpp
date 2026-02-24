@@ -693,7 +693,7 @@ void daNpcClerkT_c::setCollision() {
     mCyl.ClrTgHit();
 }
 
-NPC_CLERKT_HIO_CLASS l_HIO;
+static NPC_CLERKT_HIO_CLASS l_HIO;
 
 static actor_method_class daNpcClerkt_MethodTable = {
     (process_method_func)daNpcClerkt_Create,  (process_method_func)daNpcClerkt_Delete,

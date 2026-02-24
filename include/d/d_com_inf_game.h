@@ -1087,7 +1087,8 @@ inline void dComIfG_ct() {
     g_dComIfG_gameInfo.ct();
 }
 
-int dComLbG_PhaseHandler(request_of_phase_process_class*, request_of_phase_process_fn*, void*);
+int dComLbG_PhaseHandler(request_of_phase_process_class*, request_of_phase_process_fn*,
+                         void*);
 BOOL dComIfG_resetToOpening(scene_class* scene);
 char* dComIfG_getRoomArcName(int roomNo);
 void* dComIfG_getStageRes(char const* i_resName);
@@ -3920,7 +3921,8 @@ inline int dComIfGp_evmng_getMyStaffId(const char* i_staffname, fopAc_ac_c* i_ac
     return dComIfGp_getPEvtManager()->getMyStaffId(i_staffname, i_actor, i_tagId);
 }
 
-inline int dComIfGp_evmng_getMyActIdx(int i_staffId, char** i_actions, int i_actionNum, BOOL param_3, BOOL param_4) {
+inline int dComIfGp_evmng_getMyActIdx(int i_staffId, char** i_actions, int i_actionNum,
+                                      BOOL param_3, BOOL param_4) {
     return dComIfGp_getPEvtManager()->getMyActIdx(i_staffId, i_actions, i_actionNum, param_3, param_4);
 }
 

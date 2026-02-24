@@ -358,69 +358,69 @@ static void e_arrow_demo_fire(e_arrow_class* i_this) {
         }
 
         i_this->mTimers[0] = 20;
-    case 1:
-        spB0.set(0, i_this->field_0xa0c, 0);
+        case 1: {
+            spB0.set(0, i_this->field_0xa0c, 0);
 
-        static u16 fire_name[] = {0x84EE, 0x84EF, 0x84F0, 0x84F1};
+            static u16 fire_name[] = {0x84EE, 0x84EF, 0x84F0, 0x84F1};
 
-        for (int i = 0; i < 4; i++) {
-            i_this->field_0x9f0[i] = dComIfGp_particle_set(i_this->field_0x9f0[i], fire_name[i],
-                                                           &i_this->field_0xa00, &spB0, NULL);
+            for (int i = 0; i < 4; i++) {
+                i_this->field_0x9f0[i] = dComIfGp_particle_set(i_this->field_0x9f0[i], fire_name[i],
+                                                               &i_this->field_0xa00, &spB0, NULL);
 
-            dComIfGp_particle_levelEmitterOnEventMove(i_this->field_0x9f0[i]);
-        }
-
-        if (i_this->mTimers[0] == 0) {
-            daPy_py_c* player_p = (daPy_py_c*)dComIfGp_getPlayer(0);
-
-            f32 var_f31;
-            if (i_this->field_0xa0c == 0) {
-                var_f31 = 41200.0f;
-                sp9C.z = -700.0f;
-            } else {
-                var_f31 = 36800.0f;
-                sp9C.z = 700.0f;
+                dComIfGp_particle_levelEmitterOnEventMove(i_this->field_0x9f0[i]);
             }
 
-            if (!player_p->checkWolfDig() &&
-                (!dComIfGp_event_runCheck() ||
-                 fopAcM_getTalkEventPartner(daPy_getLinkPlayerActorClass()) !=
-                     (fopAc_ac_c*)daPy_py_c::getMidnaActor()))
-            {
-                if (!dMsgObject_isTalkNowCheck()) {
-                    cLib_addCalc2(&i_this->field_0xa00.z, var_f31, 0.1f, i_this->field_0xa10);
+            if (i_this->mTimers[0] == 0) {
+                daPy_py_c* player_p = (daPy_py_c*)dComIfGp_getPlayer(0);
+
+                f32 var_f31;
+                if (i_this->field_0xa0c == 0) {
+                    var_f31 = 41200.0f;
+                    sp9C.z = -700.0f;
+                } else {
+                    var_f31 = 36800.0f;
+                    sp9C.z = 700.0f;
                 }
-            }
 
-            if (i_this->field_0xa0c == 0 && fpcM_Search(s_limit_sub, i_this) != NULL) {
-                dBgS_ObjGndChk gnd_chk;
-                sp9C = player_p->current.pos;
-                sp9C.y += 200.0f;
-                gnd_chk.SetPos(&sp9C);
-
-                if (dComIfG_Bgsp().GroundCross(&gnd_chk) > -10000.0f) {
-                    i_this->mMode = 2;
-                    return;
+                if (!player_p->checkWolfDig() &&
+                    (!dComIfGp_event_runCheck() ||
+                     fopAcM_getTalkEventPartner(daPy_getLinkPlayerActorClass()) !=
+                         (fopAc_ac_c*)daPy_py_c::getMidnaActor()))
+                {
+                    if (!dMsgObject_isTalkNowCheck()) {
+                        cLib_addCalc2(&i_this->field_0xa00.z, var_f31, 0.1f, i_this->field_0xa10);
+                    }
                 }
+
+                if (i_this->field_0xa0c == 0 && fpcM_Search(s_limit_sub, i_this) != NULL) {
+                    dBgS_ObjGndChk gnd_chk;
+                    sp9C = player_p->current.pos;
+                    sp9C.y += 200.0f;
+                    gnd_chk.SetPos(&sp9C);
+
+                    if (dComIfG_Bgsp().GroundCross(&gnd_chk) > -10000.0f) {
+                        i_this->mMode = 2;
+                        return;
+                    }
+                }
+
+                cLib_addCalc2(&i_this->field_0xa10, 10.0f, 1.0f, 1.0f);
+
+                if (!dComIfGp_event_runCheck()) {
+                    sp9C.y = 0.0f;
+                    sp9C.x = 0.0f;
+
+                    i_this->mCcFireEffSph.SetC(i_this->field_0xa00 + sp9C);
+                    i_this->mCcFireEffSph.SetR(800.0f);
+                    dComIfG_Ccsp()->Set(&i_this->mCcFireEffSph);
+                }
+
+                i_this->mpModel = NULL;
             }
 
-            cLib_addCalc2(&i_this->field_0xa10, 10.0f, 1.0f, 1.0f);
-
-            if (!dComIfGp_event_runCheck()) {
-                sp9C.y = 0.0f;
-                sp9C.x = 0.0f;
-
-                i_this->mCcFireEffSph.SetC(i_this->field_0xa00 + sp9C);
-                i_this->mCcFireEffSph.SetR(800.0f);
-                dComIfG_Ccsp()->Set(&i_this->mCcFireEffSph);
-            }
-
-            i_this->mpModel = NULL;
-        }
-
-        Z2GetAudioMgr()->seStartLevel(Z2SE_OBJ_STRAWFENCE_BURNING, &i_this->field_0xa00, 0, 0, 1.0f,
-                                      1.0f, -1.0f, -1.0f, 0);
-        break;
+            Z2GetAudioMgr()->seStartLevel(Z2SE_OBJ_STRAWFENCE_BURNING, &i_this->field_0xa00, 0, 0,
+                                          1.0f, 1.0f, -1.0f, -1.0f, 0);
+        } break;
     case 2:
         dMeter2Info_getMeterClass()->setLifeZero();
         break;
