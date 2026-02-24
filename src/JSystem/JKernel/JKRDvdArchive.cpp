@@ -76,7 +76,6 @@ bool JKRDvdArchive::open(s32 entryNum) {
     JKRDvdToMainRam(entryNum, (u8*)arcHeader, EXPAND_SWITCH_UNKNOWN1, sizeof(SArcHeader), NULL,
                     JKRDvdRipper::ALLOC_DIRECTION_FORWARD, 0, &mCompression, NULL);
     DCInvalidateRange(arcHeader, sizeof(SArcHeader));
-    JKRSwapArcHeader(arcHeader);
 
     int alignment;
     alignment = mMountDirection == MOUNT_DIRECTION_HEAD ? 0x20 : -0x20;
@@ -91,7 +90,6 @@ bool JKRDvdArchive::open(s32 entryNum) {
                     arcHeader->file_data_offset, NULL, JKRDvdRipper::ALLOC_DIRECTION_FORWARD,
                     sizeof(SArcHeader), NULL, NULL);
     DCInvalidateRange(mArcInfoBlock, arcHeader->file_data_offset);
-    JKRSwapArchiveMemory(mArcInfoBlock);
 
     mNodes = (SDIDirEntry*)((intptr_t)&mArcInfoBlock->num_nodes + mArcInfoBlock->node_offset);
     mFiles = (SDIFileEntry*)((intptr_t)&mArcInfoBlock->num_nodes + mArcInfoBlock->file_entry_offset);

@@ -89,10 +89,8 @@ bool JKRMemArchive::open(s32 entryNum, JKRArchive::EMountDirection mountDirectio
         mMountMode = UNKNOWN_MOUNT_MODE;
     }
     else {
-        JKRSwapArcHeader(mArcHeader);
         JUT_ASSERT(438, mArcHeader->signature == 'RARC');
         mArcInfoBlock = (SArcDataInfo *)((u8 *)mArcHeader + mArcHeader->header_length);
-        JKRSwapArchiveMemory(mArcInfoBlock);
         mNodes = (SDIDirEntry *)((u8 *)&mArcInfoBlock->num_nodes + mArcInfoBlock->node_offset);
         mFiles = (SDIFileEntry *)((u8 *)&mArcInfoBlock->num_nodes + mArcInfoBlock->file_entry_offset);
         mStringTable = (char *)((u8 *)&mArcInfoBlock->num_nodes + mArcInfoBlock->string_table_offset);
@@ -113,10 +111,8 @@ bool JKRMemArchive::open(s32 entryNum, JKRArchive::EMountDirection mountDirectio
 
 bool JKRMemArchive::open(void* buffer, u32 bufferSize, JKRMemBreakFlag flag) {
     mArcHeader = (SArcHeader *)buffer;
-    JKRSwapArcHeader(mArcHeader);
     JUT_ASSERT(491, mArcHeader->signature == 'RARC');
     mArcInfoBlock = (SArcDataInfo *)((u8 *)mArcHeader + mArcHeader->header_length);
-    JKRSwapArchiveMemory(mArcInfoBlock);
     mNodes = (SDIDirEntry *)((u8 *)&mArcInfoBlock->num_nodes + mArcInfoBlock->node_offset);
     mFiles = (SDIFileEntry *)((u8 *)&mArcInfoBlock->num_nodes + mArcInfoBlock->file_entry_offset);
     mStringTable = (char *)((u8 *)&mArcInfoBlock->num_nodes + mArcInfoBlock->string_table_offset);
