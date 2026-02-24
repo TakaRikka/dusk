@@ -16,7 +16,13 @@
 
 s32 mDoDvdThd::main(void* param_0) {
     JKRThread(OSGetCurrentThread(), 0);
+#if TARGET_PC
+    // Disable assert heap, our DVD impl does allocs
+    // Can be turned back if we isolate the OS impl from game code properly.
+    JKRSetCurrentHeap(JKRHeap::getSystemHeap());
+#else
     JKRSetCurrentHeap(mDoExt_getAssertHeap());
+#endif
     mDoDvdThd_param_c* param = static_cast<mDoDvdThd_param_c*>(param_0);
     param->mainLoop();
     return 0;
