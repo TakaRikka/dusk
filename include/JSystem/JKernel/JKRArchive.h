@@ -1,4 +1,4 @@
-#ifndef JKRARCHIVE_H                                                                       -j n       
+#ifndef JKRARCHIVE_H
 #define JKRARCHIVE_H
 
 #include "JSystem/JKernel/JKRCompression.h"
@@ -7,7 +7,7 @@
 
 class JKRHeap;
 
-/**                                            m
+/**
  * @ingroup jsystem-jkernel
  * 
  */
