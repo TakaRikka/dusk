@@ -293,7 +293,9 @@ void OSPanic(const char* file, int line, const char* fmt, ...) {
     mDoPrintf_vprintf(fmt, args);
     va_end(args);
     OSAttention(" in \"%s\" on line %d.\n", file, line);
-
+#if TARGET_PC
+    abort();
+#else
     OSAttention("\nAddress:      Back Chain    LR Save\n");
     for (i = 0, p = (u32*)OSGetStackPointer(); p && (uintptr_t)p != 0xFFFFFFFF && i++ < 16; p = (u32*)*p) {
         OSAttention("0x%08x:   0x%08x    0x%08x\n", p, p[0], p[1]);
@@ -303,4 +305,5 @@ void OSPanic(const char* file, int line, const char* fmt, ...) {
     tmp = (u32*)0x1234567;
     *tmp = (uintptr_t)tmp;
     PPCHalt();
+#endif
 }
