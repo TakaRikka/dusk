@@ -4,6 +4,13 @@
 #ifdef __REVOLUTION_SDK__
 #include <revolution/types.h>
 #else
+
+#if _WIN64 || __LP64__
+#define BIT_64 1
+#else
+#define BIT_64 0
+#endif
+
 typedef signed   char          s8;
 typedef unsigned char          u8;
 typedef signed   short int     s16;
