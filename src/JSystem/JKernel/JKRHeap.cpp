@@ -28,7 +28,13 @@ bool JKRHeap::sDefaultFillFlag = true;
 
 JKRHeap* JKRHeap::sSystemHeap;
 
+#if TARGET_PC
+// JSystem normally has a thread switch callback to track the correct heap.
+// We can't do this as we're (currently) using true OS threads. So use a true thread local.
+static thread_local JKRHeap* sCurrentHeap;
+#else
 JKRHeap* JKRHeap::sCurrentHeap;
+#endif
 
 JKRHeap* JKRHeap::sRootHeap;
 
@@ -498,7 +504,7 @@ void* operator new(size_t size) {
 }
 #else
 void* operator new(size_t size) {
-    if (JKRHeap::sCurrentHeap == NULL) {
+    if (sCurrentHeap == NULL) {
         return malloc(size);
     }
     void* mem = JKRHeap::alloc(size, alignof(max_align_t), NULL);
@@ -516,7 +522,7 @@ void* operator new(size_t size, int alignment) {
 }
 #else
 void* operator new(size_t size, int alignment) {
-    if (JKRHeap::sCurrentHeap == nullptr)
+    if (sCurrentHeap == nullptr)
         return _aligned_malloc(size, alignment);
     void* mem = JKRHeap::alloc(size, alignment, nullptr);
     if (mem == nullptr) {
@@ -537,7 +543,7 @@ void* operator new[](size_t size) {
 }
 #else
 void* operator new[](size_t size) {
-    if (JKRHeap::sCurrentHeap == NULL)
+    if (sCurrentHeap == NULL)
         return malloc(size);
     void* mem = JKRHeap::alloc(size, alignof(max_align_t), NULL);
     if (mem == NULL) {
@@ -553,7 +559,7 @@ void* operator new[](size_t size, int alignment) {
 }
 #else
 void* operator new[](size_t size, int alignment) {
-    if (JKRHeap::sCurrentHeap == nullptr)
+    if (sCurrentHeap == nullptr)
         return _aligned_malloc(size, alignment);
     void* mem = JKRHeap::alloc(size, alignment, nullptr);
     if (mem == nullptr)
@@ -630,3 +636,13 @@ s32 JKRHeap::do_changeGroupID(u8 param_0) {
 u8 JKRHeap::do_getCurrentGroupId() {
     return 0;
 }
+
+#if TARGET_PC
+void JKRHeap::setCurrentHeap(JKRHeap* heap) {
+    sCurrentHeap = heap;
+}
+
+JKRHeap* JKRHeap::getCurrentHeap() {
+    return sCurrentHeap;
+}
+#endif
