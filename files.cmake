@@ -1314,6 +1314,7 @@ set(REL_FILES
 )
 
 set(DUSK_FILES
+        src/dusk/asserts.cpp
         src/dusk/imgui.cpp
         src/dusk/stubs.cpp
         src/dusk/extras.c
