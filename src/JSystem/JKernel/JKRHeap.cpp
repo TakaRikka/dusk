@@ -501,7 +501,7 @@ void* operator new(size_t size) {
     if (JKRHeap::sCurrentHeap == NULL) {
         return malloc(size);
     }
-    void* mem = JKRHeap::alloc(size, 4, NULL);
+    void* mem = JKRHeap::alloc(size, alignof(max_align_t), NULL);
     if (mem == NULL) {
         OSReport("[NEW] JKRHeap FULL! Fallback to malloc for size %u\n", (unsigned)size);
         mem = malloc(size);
@@ -539,7 +539,7 @@ void* operator new[](size_t size) {
 void* operator new[](size_t size) {
     if (JKRHeap::sCurrentHeap == NULL)
         return malloc(size);
-    void* mem = JKRHeap::alloc(size, 4, NULL);
+    void* mem = JKRHeap::alloc(size, alignof(max_align_t), NULL);
     if (mem == NULL) {
         mem = malloc(size);
     }
