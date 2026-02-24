@@ -1297,7 +1297,7 @@ u32 ARInit(u32* stack_index_addr, u32 num_entries) {
 }
 
 #pragma mark ARQ
-void ARQPostRequest(ARQRequest* request, u32 owner, u32 type, u32 priority, u32 source, u32 dest,
+void ARQPostRequest(ARQRequest* request, u32 owner, u32 type, u32 priority, uintptr_t source, uintptr_t dest,
                     u32 length, ARQCallback callback) {
     // Emulate ARAM DMA transfers using memcpy.
     // type 0 = MRAM -> ARAM, type 1 = ARAM -> MRAM
@@ -1319,7 +1319,7 @@ void ARQPostRequest(ARQRequest* request, u32 owner, u32 type, u32 priority, u32 
 
     // Immediately invoke the callback (synchronous on PC, no DMA latency)
     if (callback) {
-        callback((u32)(uintptr_t)request);
+        callback((uintptr_t)request);
     }
 }
 

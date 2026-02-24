@@ -27,8 +27,8 @@ public:
 
     /* 0x40 */ s32 mTransferDirection;
     /* 0x44 */ u32 mDataLength;
-    /* 0x48 */ u32 mSrc;
-    /* 0x4C */ u32 mDst;
+    /* 0x48 */ uintptr_t mSrc;
+    /* 0x4C */ uintptr_t mDst;
     /* 0x50 */ JKRAramBlock* mAramBlock;
     /* 0x54 */ u32 field_0x54;
     /* 0x58 */ AsyncCallback mCallback;
@@ -63,15 +63,15 @@ public:
     static JSUList<JKRAMCommand> sAramPieceCommandList;
 
 public:
-    static JKRAMCommand* prepareCommand(int, u32, u32, u32, JKRAramBlock*,
+    static JKRAMCommand* prepareCommand(int, uintptr_t, uintptr_t, u32, JKRAramBlock*,
                                         JKRAMCommand::AsyncCallback);
     static void sendCommand(JKRAMCommand*);
 
-    static JKRAMCommand* orderAsync(int, u32, u32, u32, JKRAramBlock*, JKRAMCommand::AsyncCallback);
+    static JKRAMCommand* orderAsync(int, uintptr_t, uintptr_t, u32, JKRAramBlock*, JKRAMCommand::AsyncCallback);
     static BOOL sync(JKRAMCommand*, int);
-    static BOOL orderSync(int, u32, u32, u32, JKRAramBlock*);
+    static BOOL orderSync(int, uintptr_t, uintptr_t, u32, JKRAramBlock*);
     static void startDMA(JKRAMCommand*);
-    static void doneDMA(u32);
+    static void doneDMA(uintptr_t);
 
 private:
     static void lock() { OSLockMutex(&mMutex); }
@@ -82,7 +82,7 @@ inline void JKRAramPcs_SendCommand(JKRAMCommand* command) {
     JKRAramPiece::sendCommand(command);
 }
 
-inline BOOL JKRAramPcs(int direction, u32 source, u32 destination, u32 length,
+inline BOOL JKRAramPcs(int direction, uintptr_t source, uintptr_t destination, u32 length,
                        JKRAramBlock* block) {
     return JKRAramPiece::orderSync(direction, source, destination, length, block);
 }
