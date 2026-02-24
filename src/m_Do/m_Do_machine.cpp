@@ -831,6 +831,19 @@ int mDoMch_Create() {
     arenaSize -= 0x6C00;
     arenaSize -= 0xC800;
     #endif
+
+#if TARGET_PC
+    // Change heap sizes to account for 64bit pointers & extra memory available.
+    arenaSize = 32 * 1024 * 1024;
+    commandHeapSize *= 2;
+#if DEBUG
+    dynamicLinkHeapSize *= 2;
+#endif
+    archiveHeapSize *= 2;
+    j2dHeapSize *= 2;
+    gameHeapSize *= 2;
+#endif
+
     JFWSystem::setSysHeapSize(arenaSize);
     my_PrintHeap("システムヒープ", arenaSize);
 
