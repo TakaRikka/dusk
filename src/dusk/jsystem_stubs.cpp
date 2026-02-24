@@ -140,6 +140,6 @@ int JOREventCallbackListNode::JORAct(u32 eventID, const char* eventName) {
 }
 */
 #pragma mark J3DPSMtxArrayConcat
-void J3DPSMtxArrayConcat(float (*a)[4], float (*b)[4], float (*out)[4], unsigned long count) {
+void J3DPSMtxArrayConcat(float (*a)[4], float (*b)[4], float (*out)[4], u32 count) {
     puts("J3DPSMtxArrayConcat is a stub");
 }
