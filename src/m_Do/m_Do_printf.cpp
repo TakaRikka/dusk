@@ -232,9 +232,14 @@ void OSReport_Error(const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
     OSReportForceEnableOn();
+#if TARGET_PC
+    my_PutString("\x1B[31m[ERROR]\x1B[m ");
+    OSVReport(fmt, args);
+#else
     my_PutString("\x1B[41;37m[ERROR]");
     OSVReport(fmt, args);
     my_PutString("\x1B[m");
+#endif
     OSReportForceEnableOff();
     fflush(stdout);
     va_end(args);
