@@ -42,16 +42,24 @@ endif ()
 
 include(files.cmake)
 
-source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES})
+source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${JSYSTEM_FILES} ${JSYSTEM_DEBUG_FILES} ${REL_FILES})
 source_group("dusk" FILES ${DUSK_FILES})
+
+# game_debug is for game code files that we know work when compiled with DEBUG=1
+# Of course, if building a release build, this distinction is irrelevant
+add_library(game_debug STATIC ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES})
+target_compile_definitions(game_debug PRIVATE TARGET_PC VERSION=0 $<$<CONFIG:Debug>:DEBUG=1>)
+
+# Make these properties PUBLIC so that the regular game target also sees them.
+target_include_directories(game_debug PUBLIC include src assets/${DUSK_TP_VERSION} ${CMAKE_BINARY_DIR}/../${DUSK_TP_VERSION}/include)
+target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::si aurora::vi aurora::pad aurora::mtx)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES})
+target_link_libraries(game PRIVATE game_debug)
 target_compile_definitions(game PRIVATE TARGET_PC VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0)
 # TODO: version handling for res includes
 set(DUSK_TP_VERSION GZ2E01)
-target_include_directories(game PRIVATE include src assets/${DUSK_TP_VERSION} ${CMAKE_BINARY_DIR}/../${DUSK_TP_VERSION}/include)
-target_link_libraries(game PRIVATE aurora::core aurora::gx aurora::si aurora::vi aurora::pad aurora::mtx)
 
 add_executable(dusk src/dusk/main.cpp)
 target_compile_definitions(dusk PRIVATE TARGET_PC VERSION=0)
