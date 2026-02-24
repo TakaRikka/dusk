@@ -54,4 +54,41 @@ static inline s32 RES_S32(s32 v) {
 #define RES_S32(x) (x)
 #endif
 
+#ifdef TARGET_PC
+
+/*
+ * Declares a big-endian integer type.
+ */
+template<class T>
+struct BE {
+    T inner;
+    operator T() const;
+};
+
+template<>
+inline BE<u16>::operator u16() const {
+    return RES_U16(inner);
+}
+
+template<>
+inline BE<s16>::operator s16() const {
+    return RES_S16(inner);
+}
+
+template<>
+inline BE<u32>::operator u32() const {
+    return RES_U32(inner);
+}
+
+template<>
+inline BE<s32>::operator s32() const {
+    return RES_S32(inner);
+}
+
+#define BE(T) BE<T>
+#else
+#define BE(T) T
+#endif
+
+
 #endif // DOLPHIN_ENDIAN_H
