@@ -12,7 +12,7 @@
 
 class JPABaseEmitter;
 class cBgS_PolyInfo;
-class color_RGB_class;
+struct color_RGB_class;
 
 struct LIGHT_INFLUENCE {
     /* 0x00 */ cXyz mPosition;
@@ -148,12 +148,12 @@ struct LightStatus {
 };  // Size: 0xE8
 
 class fopAc_ac_c;
-class dKyd_lightSchejule;
-class stage_palette_info_class;
-class stage_pselect_info_class;
-class stage_envr_info_class;
-class stage_vrboxcol_info_class;
-class stage_plight_info_class;
+struct dKyd_lightSchejule;
+struct stage_palette_info_class;
+struct stage_pselect_info_class;
+struct stage_envr_info_class;
+struct stage_vrboxcol_info_class;
+struct stage_plight_info_class;
 class kytag08_class;
 
 struct dKy_pol_arg_struct {

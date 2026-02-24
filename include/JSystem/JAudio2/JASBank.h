@@ -8,7 +8,7 @@ class JASInstParam;
 class JASWaveBank;
 
 namespace JASDsp {
-    class TChannel;
+    struct TChannel;
 }
 
 /**

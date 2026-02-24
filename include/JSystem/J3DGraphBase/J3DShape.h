@@ -100,7 +100,7 @@ protected:
 
 class J3DMaterial;
 class J3DVertexData;
-class J3DDrawMtxData;
+struct J3DDrawMtxData;
 
 enum J3DShpFlag {
     J3DShpFlag_Visible    = 0x0001,

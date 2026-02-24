@@ -61,7 +61,7 @@ public:
     static Z2CreatureLink* getLink() { return mLinkPtr; }
 
     friend class Z2LinkSoundStarter;
-    friend class Z2RideSoundStarter;
+    friend struct Z2RideSoundStarter;
 
 private:
     /* 0x90 Z2LinkSoundStarter */

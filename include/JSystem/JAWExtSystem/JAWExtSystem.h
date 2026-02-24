@@ -5,7 +5,7 @@
 #include "JSystem/JGadget/std-list.h"
 
 class JAWWindow;
-class JUTGamePad;
+struct JUTGamePad;
 
 namespace JAWExtSystem {
     BOOL registWindow(u32, JAWWindow*, int, int);

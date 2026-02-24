@@ -12,7 +12,7 @@ class cM3dGPla;
 class cM3dGSph;
 class cM3dGTri;
 class csXyz;
-class cXyz;
+struct cXyz;
 
 struct cM3d_Range {
     /* 0x0 */ f32 mMin;

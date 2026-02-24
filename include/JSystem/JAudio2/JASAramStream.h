@@ -8,7 +8,7 @@
 class JASChannel;
 
 namespace JASDsp {
-    class TChannel;
+    struct TChannel;
 }
 
 /**

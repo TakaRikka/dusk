@@ -4,7 +4,7 @@
 #include <dolphin/types.h>
 
 class JKRHeap;
-class JPAEmitterWorkData;
+struct JPAEmitterWorkData;
 class JPABaseEmitter;
 class JPABaseParticle;
 

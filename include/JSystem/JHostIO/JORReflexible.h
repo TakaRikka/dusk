@@ -33,8 +33,8 @@ struct JORNodeEvent : JOREvent {
     /* 0x00 */ u32 field_0x0;
 };
 
-struct JORMContext;
-struct JORServer;
+class JORMContext;
+class JORServer;
 
 class JOREventListener {
 public:

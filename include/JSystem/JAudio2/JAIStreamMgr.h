@@ -6,7 +6,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 
 class JAIStreamAramMgr;
-class JAIStreamDataMgr;
+struct JAIStreamDataMgr;
 
 /**
  * @ingroup jsystem-jaudio

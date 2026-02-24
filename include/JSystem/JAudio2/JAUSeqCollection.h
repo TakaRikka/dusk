@@ -3,8 +3,8 @@
 
 #include "JSystem/JAudio2/JAISeqDataMgr.h"
 
-class JAISeqData;
-class JAISeqDataRegion;
+struct JAISeqData;
+struct JAISeqDataRegion;
 
 /**
  * @ingroup jsystem-jaudio

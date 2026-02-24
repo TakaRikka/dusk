@@ -6,10 +6,10 @@
 #include "JSystem/JKernel/JKRDisposer.h"
 #include <bitset>
 
-class JAISeqData;
-class JAISeqDataMgr;
-class JAISeqDataUser;
-class JAIStreamDataMgr;
+struct JAISeqData;
+struct JAISeqDataMgr;
+struct JAISeqDataUser;
+struct JAIStreamDataMgr;
 class JASVoiceBank;
 class JAUBankTableLink;
 class JAUDisposer_;

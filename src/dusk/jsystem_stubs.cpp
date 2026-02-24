@@ -5,10 +5,6 @@
 #pragma mark J3DShapeTable
 #include "JSystem/J3DGraphAnimator/J3DShapeTable.h"
 
-void J3DShapeTable::initShapeNodes(J3DDrawMtxData* mtxData, J3DVertexData* vtxData) {
-    puts("J3DShapeTable::initShapeNodes is a stub");
-}
-
 // JAISe::JAISeMgr_startID_, JAISeq::JAISeqMgr_startID_, JAIStream::JAIStreamMgr_startID_
 // are compiled from their real source files (JAISe.obj, JAISeq.obj, JAIStream.obj)
 
@@ -22,11 +18,6 @@ JAUSoundTable* JAUSection::newSoundTable(void const* data, u32 size, bool flag) 
 
 JAUSoundNameTable* JAUSection::newSoundNameTable(void const* data, u32 size, bool flag) {
     puts("JAUSection::newSoundNameTable is a stub");
-    return nullptr;
-}
-
-JAIStreamDataMgr* JAUSection::newStreamFileTable(void const* data, bool flag) {
-    puts("JAUSection::newStreamFileTable is a stub");
     return nullptr;
 }
 

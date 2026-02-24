@@ -8,7 +8,7 @@
 
 class J2DOrthoGraph;
 class JUTFont;
-class JUTGamePad;
+struct JUTGamePad;
 
 namespace JStudio {
     class TControl;

@@ -7,7 +7,7 @@
 #include "JSystem/JGeometry.h"
 
 class JAWGraphContext;
-class JUTGamePad;
+struct JUTGamePad;
 
 class JUTPoint {
 public:
