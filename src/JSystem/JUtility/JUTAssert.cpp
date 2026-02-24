@@ -90,6 +90,10 @@ void showAssert_f_va(u32 device, const char* file, int line, const char* msg, va
     sMessageLife = -1;
     vsnprintf(sMessageString, 255, msg, args);
 
+#if TARGET_PC
+    OSReport_Error("Failed assertion: %s:%d\n", file, line);
+    OSReport_Error("%s\n", sMessageString);
+#else
     if (device & 2) {
         OSReport("Failed assertion: %s:%d\n", file, line);
         OSReport("%s\n", sMessageString);
@@ -121,6 +125,7 @@ void showAssert_f_va(u32 device, const char* file, int line, const char* msg, va
             }
         }
     }
+#endif
 }
 
 void showAssert_f(u32 device, const char* file, int line, const char* msg, ...) {
