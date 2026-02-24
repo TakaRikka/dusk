@@ -3,6 +3,7 @@
 
 #include "JSystem/JUtility/TColor.h"
 #include <string>
+#include "dusk/endian.h"
 
 /**
 * @ingroup jsystem-jutility
@@ -10,48 +11,48 @@
 */
 struct ResFONT {
     struct INF1 {
-        /* 0x00 */ u32 magic;
-        /* 0x04 */ u32 size;
-        /* 0x08 */ u16 fontType;
-        /* 0x0A */ u16 ascent;
-        /* 0x0C */ u16 descent;
-        /* 0x0E */ u16 width;
-        /* 0x10 */ u16 leading;
-        /* 0x12 */ u16 defaultCode;
+        /* 0x00 */ BE(u32) magic;
+        /* 0x04 */ BE(u32) size;
+        /* 0x08 */ BE(u16) fontType;
+        /* 0x0A */ BE(u16) ascent;
+        /* 0x0C */ BE(u16) descent;
+        /* 0x0E */ BE(u16) width;
+        /* 0x10 */ BE(u16) leading;
+        /* 0x12 */ BE(u16) defaultCode;
     };
 
     struct WID1 {
-        /* 0x00 */ u32 magic;
-        /* 0x04 */ u32 size;
-        /* 0x08 */ u16 startCode;
-        /* 0x0A */ u16 endCode;
+        /* 0x00 */ BE(u32) magic;
+        /* 0x04 */ BE(u32) size;
+        /* 0x08 */ BE(u16) startCode;
+        /* 0x0A */ BE(u16) endCode;
         /* 0x0C */ u8 mChunkNum[4];
     };
 
     struct MAP1 {
-        /* 0x00 */ u32 magic;
-        /* 0x04 */ u32 size;
-        /* 0x08 */ u16 mappingMethod;
-        /* 0x0A */ u16 startCode;
-        /* 0x0C */ u16 endCode;
-        /* 0x0E */ u16 numEntries;
-        /* 0x10 */ u16 mLeading;
+        /* 0x00 */ BE(u32) magic;
+        /* 0x04 */ BE(u32) size;
+        /* 0x08 */ BE(u16) mappingMethod;
+        /* 0x0A */ BE(u16) startCode;
+        /* 0x0C */ BE(u16) endCode;
+        /* 0x0E */ BE(u16) numEntries;
+        /* 0x10 */ BE(u16) mLeading;
     };
 
     struct GLY1 {
-        /* 0x00 */ u32 magic;
-        /* 0x04 */ u32 size;
-        /* 0x08 */ u16 startCode;
-        /* 0x0A */ u16 endCode;
-        /* 0x0C */ u16 cellWidth;
-        /* 0x0E */ u16 cellHeight;
-        /* 0x10 */ u32 textureSize;
-        /* 0x14 */ u16 textureFormat;
-        /* 0x16 */ u16 numRows;
-        /* 0x18 */ u16 numColumns;
-        /* 0x1A */ u16 textureWidth;
-        /* 0x1C */ u16 textureHeight;
-        /* 0x1E */ u16 padding;
+        /* 0x00 */ u32 magic; // Don't mark BE (seemingly only written by code)
+        /* 0x04 */ BE(u32) size;
+        /* 0x08 */ BE(u16) startCode;
+        /* 0x0A */ BE(u16) endCode;
+        /* 0x0C */ BE(u16) cellWidth;
+        /* 0x0E */ BE(u16) cellHeight;
+        /* 0x10 */ BE(u32) textureSize;
+        /* 0x14 */ BE(u16) textureFormat;
+        /* 0x16 */ BE(u16) numRows;
+        /* 0x18 */ BE(u16) numColumns;
+        /* 0x1A */ BE(u16) textureWidth;
+        /* 0x1C */ BE(u16) textureHeight;
+        /* 0x1E */ BE(u16) padding;
 #ifdef _MSVC_LANG
         u8* __get_data() const { return (u8*)(this + 1); }
         __declspec(property(get = __get_data)) u8* data;
@@ -60,9 +61,9 @@ struct ResFONT {
 #endif
     };
 
-    /* 0x00 */ u64 magic;
-    /* 0x08 */ u32 filesize;
-    /* 0x0C */ u32 numBlocks;
+    /* 0x00 */ BE(u64) magic;
+    /* 0x08 */ BE(u32) filesize;
+    /* 0x0C */ BE(u32) numBlocks;
     /* 0x10 */ u8 padding[0x10];
     /* 0x20 */ u8 data[];
 };

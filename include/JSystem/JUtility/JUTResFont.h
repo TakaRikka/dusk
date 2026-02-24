@@ -13,8 +13,8 @@ typedef bool (*IsLeadByte_func)(int);
 */
 struct BlockHeader {
     const BlockHeader* getNext() const { return reinterpret_cast<const BlockHeader*>(reinterpret_cast<const u8*>(this) + size); }
-    u32 magic;
-    u32 size;
+    BE(u32) magic;
+    BE(u32) size;
 };
 
 /**
@@ -50,7 +50,7 @@ public:
     void countBlock();
     void loadFont(int, _GXTexMapID, JUTFont::TWidth*);
     int getFontCode(int) const;
-    int convertSjis(int, u16*) const;
+    int convertSjis(int, BE(u16)*) const;
 
     inline void delete_and_initialize() {
         deleteMemBlocks_ResFont();

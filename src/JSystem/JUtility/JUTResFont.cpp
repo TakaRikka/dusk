@@ -7,19 +7,6 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include <dolphin/gx.h>
 
-#ifdef TARGET_PC
-#include "dusk/endian.h"
-// Font resource data is embedded as Big-Endian (GameCube format).
-// Wrap all multi-byte field accesses through these helpers.
-static inline u32 R32(u32 v) { return be32(v); }
-static inline u16 R16(u16 v) { return be16(v); }
-static inline s16 RS16(s16 v) { return be16s(v); }
-#else
-static inline u32 R32(u32 v) { return v; }
-static inline u16 R16(u16 v) { return v; }
-static inline s16 RS16(s16 v) { return v; }
-#endif
-
 JUTResFont::JUTResFont() {
     initialize_state();
     JUTFont::initialize_state();
@@ -103,8 +90,8 @@ void JUTResFont::countBlock() {
     mMap1BlockNum = 0;
 
     u8* pData = (u8*)&mResFont->data;
-    for (u32 i = 0; i < R32(mResFont->numBlocks); i++, pData += R32(((BlockHeader*)pData)->size)) {
-        u32 magic = R32(((BlockHeader*)pData)->magic);
+    for (u32 i = 0; i < mResFont->numBlocks; i++, pData += ((BlockHeader*)pData)->size) {
+        u32 magic = ((BlockHeader*)pData)->magic;
         switch (magic) {
         case 'WID1':
             mWid1BlockNum++;
@@ -137,13 +124,13 @@ void JUTResFont::setBlock() {
     mMaxCode = -1;
 
 	BlockHeader* data = (BlockHeader*)mResFont->data;
-	for (u32 i = 0; i < R32(mResFont->numBlocks);
-	     data = (BlockHeader*)((u8*)data + R32(data->size)), i++) {
-		u32 magic = R32(data->magic);
+	for (u32 i = 0; i < mResFont->numBlocks;
+	     data = (BlockHeader*)((u8*)data + data->size), i++) {
+		u32 magic = data->magic;
 		switch (magic) {
         case 'INF1': {
             mInf1Ptr = (ResFONT::INF1*)data;
-            u32 u = R16(mInf1Ptr->fontType);
+            u32 u = mInf1Ptr->fontType;
             JUT_ASSERT(244, u < suAboutEncoding_);
             mIsLeadByte = &saoAboutEncoding_[u];
             break;
@@ -161,8 +148,8 @@ void JUTResFont::setBlock() {
 
 		case 'MAP1':
 			mpMapBlocks[mapNum] = (ResFONT::MAP1*)data;
-			if (mMaxCode > R16(mpMapBlocks[mapNum]->startCode)) {
-				mMaxCode = R16(mpMapBlocks[mapNum]->startCode);
+			if (mMaxCode > mpMapBlocks[mapNum]->startCode) {
+				mMaxCode = mpMapBlocks[mapNum]->startCode;
 			}
 			mapNum++;
 			break;
@@ -251,10 +238,10 @@ f32 JUTResFont::drawChar_scale(f32 pos_x, f32 pos_y, f32 scale_x, f32 scale_y, i
     y1 = pos_y - getAscent() * (scale_y / getHeight());
     f32 y2 = getDescent() * (scale_y / getHeight()) + pos_y;
 
-    u16 texW  = R16(mpGlyphBlocks[field_0x66]->textureWidth);
-    u16 texH  = R16(mpGlyphBlocks[field_0x66]->textureHeight);
-    u16 cellW = R16(mpGlyphBlocks[field_0x66]->cellWidth);
-    u16 cellH = R16(mpGlyphBlocks[field_0x66]->cellHeight);
+    u16 texW  = mpGlyphBlocks[field_0x66]->textureWidth;
+    u16 texH  = mpGlyphBlocks[field_0x66]->textureHeight;
+    u16 cellW = mpGlyphBlocks[field_0x66]->cellWidth;
+    u16 cellH = mpGlyphBlocks[field_0x66]->cellHeight;
     s32 u1 = (mWidth * 0x8000) / texW;
     s32 v1 = (mHeight * 0x8000) / texH;
     s32 u2 = ((mWidth + cellW) * 0x8000) / texW;
@@ -301,11 +288,11 @@ void JUTResFont::loadFont(int code, GXTexMapID texMapID, JUTFont::TWidth* pDstWi
 void JUTResFont::getWidthEntry(int code, JUTFont::TWidth* i_width) const {
     int fontCode = getFontCode(code);
     i_width->field_0x0 = 0;
-    i_width->field_0x1 = R16(mInf1Ptr->width);
+    i_width->field_0x1 = mInf1Ptr->width;
 
     for (int i = 0; i < mWid1BlockNum; i++) {
-        u16 sc = R16(mpWidthBlocks[i]->startCode);
-        u16 ec = R16(mpWidthBlocks[i]->endCode);
+        u16 sc = mpWidthBlocks[i]->startCode;
+        u16 ec = mpWidthBlocks[i]->endCode;
         if (sc <= fontCode && fontCode <= ec) {
             // TWidth is two u8 fields, no byte-swap needed
             *i_width = *(JUTFont::TWidth*)&mpWidthBlocks[i]->mChunkNum[(fontCode - sc) * 2];
@@ -317,7 +304,7 @@ void JUTResFont::getWidthEntry(int code, JUTFont::TWidth* i_width) const {
 s32 JUTResFont::getCellWidth() const {
     if (mpGlyphBlocks) {
         if (mpGlyphBlocks[0]) {
-            return R16(mpGlyphBlocks[0]->cellWidth);
+            return mpGlyphBlocks[0]->cellWidth;
         }
     }
 
@@ -327,7 +314,7 @@ s32 JUTResFont::getCellWidth() const {
 s32 JUTResFont::getCellHeight() const {
     if (mpGlyphBlocks) {
         if (mpGlyphBlocks[0]) {
-            return R16(mpGlyphBlocks[0]->cellHeight);
+            return mpGlyphBlocks[0]->cellHeight;
         }
     }
 
@@ -350,46 +337,46 @@ int JUTResFont::getFontCode(int chr) const {
         0x8294, 0x8295, 0x8296, 0x8297, 0x8298, 0x8299, 0x829A, 0x816F, 0x8162, 0x8170, 0x8160,
     };
 
-    int ret = R16(mInf1Ptr->defaultCode);
+    int ret = mInf1Ptr->defaultCode;
     if ((getFontType() == 2) && (mMaxCode >= 0x8000U) && (chr >= 0x20) && (chr < 0x7FU)) {
         chr = halftofull[chr - 32];
     }
     for (int i = 0; i < mMap1BlockNum; i++) {
-        u16 sc = R16(mpMapBlocks[i]->startCode);
-        u16 ec = R16(mpMapBlocks[i]->endCode);
-        u16 mm = R16(mpMapBlocks[i]->mappingMethod);
+        u16 sc = mpMapBlocks[i]->startCode;
+        u16 ec = mpMapBlocks[i]->endCode;
+        u16 mm = mpMapBlocks[i]->mappingMethod;
         if ((sc <= chr) && (chr <= ec)) {
             if (mm == 0) {
                 ret = chr - sc;
                 break;
             } else if (mm == 2) {
-                u16* leading_temp = &mpMapBlocks[i]->mLeading;
-                ret = R16(leading_temp[chr - sc]);
+                BE(u16)* leading_temp = &mpMapBlocks[i]->mLeading;
+                ret = leading_temp[chr - sc];
                 break;
             } else if (mm == 3) {
-                u16* leading_temp = &mpMapBlocks[i]->mLeading;
+                BE(u16)* leading_temp = &mpMapBlocks[i]->mLeading;
                 int phi_r5 = 0;
-                int phi_r6_2 = R16(mpMapBlocks[i]->numEntries) - 1;
+                int phi_r6_2 = mpMapBlocks[i]->numEntries - 1;
 
                 while (phi_r6_2 >= phi_r5) {
                     int temp_r7 = (phi_r6_2 + phi_r5) / 2;
 
-                    if (chr < R16(leading_temp[temp_r7 * 2])) {
+                    if (chr < leading_temp[temp_r7 * 2]) {
                         phi_r6_2 = temp_r7 - 1;
                         continue;
                     }
 
-                    if (chr > R16(leading_temp[temp_r7 * 2])) {
+                    if (chr > leading_temp[temp_r7 * 2]) {
                         phi_r5 = temp_r7 + 1;
                         continue;
                     }
 
-                    ret = R16(leading_temp[temp_r7 * 2 + 1]);
+                    ret = leading_temp[temp_r7 * 2 + 1];
                     break;
                 }
             } else if (mm == 1) {
-                u16* phi_r5_2 = NULL;
-                if (R16(mpMapBlocks[i]->numEntries) == 1) {
+                BE(u16)* phi_r5_2 = NULL;
+                if (mpMapBlocks[i]->numEntries == 1) {
                     phi_r5_2 = &mpMapBlocks[i]->mLeading;
                 }
                 ret = convertSjis(chr, phi_r5_2);
@@ -405,8 +392,8 @@ void JUTResFont::loadImage(int code, GXTexMapID id){
     int i = 0;
     for (; i < mGly1BlockNum; i++)
     {
-        u16 sc = R16(mpGlyphBlocks[i]->startCode);
-        u16 ec = R16(mpGlyphBlocks[i]->endCode);
+        u16 sc = mpGlyphBlocks[i]->startCode;
+        u16 ec = mpGlyphBlocks[i]->endCode;
         if (sc <= code && code <= ec)
         {
             code -= sc;
@@ -415,14 +402,14 @@ void JUTResFont::loadImage(int code, GXTexMapID id){
     }
 
     if (i != mGly1BlockNum) {
-        u16 numRows = R16(mpGlyphBlocks[i]->numRows);
-        u16 numCols = R16(mpGlyphBlocks[i]->numColumns);
-        u16 cellW   = R16(mpGlyphBlocks[i]->cellWidth);
-        u16 cellH   = R16(mpGlyphBlocks[i]->cellHeight);
-        u32 texSize = R32(mpGlyphBlocks[i]->textureSize);
-        u16 texW    = R16(mpGlyphBlocks[i]->textureWidth);
-        u16 texH    = R16(mpGlyphBlocks[i]->textureHeight);
-        u16 texFmt  = R16(mpGlyphBlocks[i]->textureFormat);
+        u16 numRows = mpGlyphBlocks[i]->numRows;
+        u16 numCols = mpGlyphBlocks[i]->numColumns;
+        u16 cellW   = mpGlyphBlocks[i]->cellWidth;
+        u16 cellH   = mpGlyphBlocks[i]->cellHeight;
+        u32 texSize = mpGlyphBlocks[i]->textureSize;
+        u16 texW    = mpGlyphBlocks[i]->textureWidth;
+        u16 texH    = mpGlyphBlocks[i]->textureHeight;
+        u16 texFmt  = mpGlyphBlocks[i]->textureFormat;
 
         s32 pageNumCells = numRows * numCols;
         s32 pageIdx = code / pageNumCells;
@@ -446,7 +433,7 @@ void JUTResFont::loadImage(int code, GXTexMapID id){
     }
 }
 
-int JUTResFont::convertSjis(int inChr, u16* inLead) const {
+int JUTResFont::convertSjis(int inChr, BE(u16)* inLead) const {
     int r29;
     int tmp = JSUHiByte(inChr);
     int tmp2 = JSULoByte(inChr) - 0x40;
@@ -458,7 +445,7 @@ int JUTResFont::convertSjis(int inChr, u16* inLead) const {
     u16 lead = 0x31c;
 
     if (inLead) {
-        lead = R16(*inLead);
+        lead = *inLead;
     }
 
     r29 = tmp2 + (tmp - 0x88) * 0xbc + -0x5e + lead;
