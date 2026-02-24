@@ -344,9 +344,15 @@ static void myMemoryErrorRoutine(void* p_heap, u32 size, int alignment) {
 
     if (notSolidHeap) {
         // "Error: Can't allocate memory %d(0x%x)Bytes, %d Byte Alignment from %08x\n"
+#if TARGET_PC
+        OSReport_Error(
+            "Error: Can't allocate memory %d(0x%x)Bytes, %d Byte Alignment from %08x\n",
+            size, size, alignment, p_heap);
+#else
         OSReport_Error(
             "エラー: メモリを確保できません %d(0x%x)バイト、 %d バイトアライメント from %08x\n",
             size, size, alignment, p_heap);
+#endif
     }
 
     union {
