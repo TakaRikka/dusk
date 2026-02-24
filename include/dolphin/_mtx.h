@@ -31,14 +31,6 @@ typedef f32 (*Mtx44Ptr)[4];
 typedef f32 ROMtx[4][3];
 typedef f32 (*ROMtxPtr)[4];
 
-// do these belong in the sdk?
-typedef f32 Mtx33[3][3];
-typedef f32 Mtx23[2][3];
-typedef f32 (*Mtx3P)[3];
-typedef f32 (*MtxP)[4];
-typedef const f32 (*CMtxP)[4];
-typedef f32 QuaternionP[4];
-
 typedef struct {
     u32 numMtx;
     MtxPtr stackBase;

@@ -5,6 +5,7 @@
 #include <dolphin/mtx.h>
 #include <dolphin/mtx.h>
 #include "global.h"
+#include "JSystem/JMath/JMath.h"
 
 /**
  * @ingroup jsystem-j3d

@@ -4,6 +4,13 @@
 #include "dolphin/mtx.h"
 #include <cmath>
 
+typedef f32 Mtx33[3][3];
+typedef f32 Mtx23[2][3];
+typedef f32 (*Mtx3P)[3];
+typedef f32 (*MtxP)[4];
+typedef const f32 (*CMtxP)[4];
+typedef f32 QuaternionP[4];
+
 void JMAMTXApplyScale(const Mtx, Mtx, f32, f32, f32);
 void JMAEulerToQuat(s16 param_0, s16 param_1, s16 param_2, Quaternion* param_3);
 void JMAQuatLerp(const Quaternion*, const Quaternion*, f32, Quaternion*);

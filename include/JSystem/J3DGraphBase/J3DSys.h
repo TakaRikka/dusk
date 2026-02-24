@@ -4,6 +4,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "JSystem/J3DAssert.h"
+#include "JSystem/JMath/JMath.h"
 
 enum J3DSysDrawBuf {
     /* 0x0 */ J3DSysDrawBuf_Opa,
