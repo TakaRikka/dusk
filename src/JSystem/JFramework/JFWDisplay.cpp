@@ -200,10 +200,10 @@ void JFWDisplay::endGX() {
 
     J2DOrthoGraph ortho(0.0f, 0.0f, width, height, -1.0f, 1.0f);
 
-    //if (mFader != NULL) {
-    //    ortho.setPort();
-    //    mFader->control();
-    //}
+    if (mFader != NULL) {
+        ortho.setPort();
+        mFader->control();
+    }
     ortho.setPort();
     JUTDbPrint::getManager()->flush();
 
