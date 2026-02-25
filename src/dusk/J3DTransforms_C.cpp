@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <dolphin/mtx.h>
+#include "JSystem/J3DGraphBase/J3DTransform.h"
 
 // translated to C, should be correct, but not tested.
 

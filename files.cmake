@@ -1325,7 +1325,6 @@ set(DUSK_FILES
         src/dusk/globals.cpp
         src/dusk/J3DTransforms_C.cpp
         #src/dusk/m_Do_ext_dusk.cpp
-        src/dusk/jsystem_stubs.cpp
         src/dusk/dvd_emu.cpp
         src/dolphin/os/OSContext.cpp
         src/dolphin/os/OSThread.cpp

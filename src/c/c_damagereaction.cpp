@@ -62,6 +62,6 @@ BOOL cDmrNowMidnaTalk() {
 
 u8 data_80450CA0;
 
-#if !TARGET_PC
-JPTraceParticleCallBack4 JPTracePCB4;
-#endif
+extern "C" {
+    JPTraceParticleCallBack4 JPTracePCB4;
+}

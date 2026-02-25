@@ -4,7 +4,7 @@
 #include <dolphin/types.h>
 
 class JASChannel;
-class JASInstParam;
+struct JASInstParam;
 class JASWaveBank;
 
 namespace JASDsp {

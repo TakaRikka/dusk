@@ -7,7 +7,7 @@
 #include <dolphin/os.h>
 #include <dolphin/os.h>
 
-class JASDisposer;
+struct JASDisposer;
 class JKRHeap;
 class JKRSolidHeap;
 
