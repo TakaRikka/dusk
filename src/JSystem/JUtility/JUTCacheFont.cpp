@@ -211,7 +211,7 @@ bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
     }
 
     if (cacheBuffer != NULL) {
-        JUT_ASSERT(352, ( (u32)cacheBuffer & 0x1f ) == 0);
+        JUT_ASSERT(352, ( (uintptr_t)cacheBuffer & 0x1f ) == 0);
         mCacheBuffer = cacheBuffer;
         field_0xb0 = 0;
     } else {
