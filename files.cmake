@@ -445,9 +445,6 @@ set(JSYSTEM_DEBUG_FILES
         src/JSystem/J3DGraphLoader/J3DJointFactory.cpp
         src/JSystem/J3DGraphLoader/J3DShapeFactory.cpp
         src/JSystem/J3DGraphLoader/J3DAnmLoader.cpp
-)
-
-set(JSYSTEM_FILES
         src/JSystem/JStudio/JStudio/ctb.cpp
         src/JSystem/JStudio/JStudio/ctb-data.cpp
         src/JSystem/JStudio/JStudio/functionvalue.cpp
@@ -547,6 +544,7 @@ set(JSYSTEM_FILES
         src/JSystem/JMessage/resource.cpp
         src/JSystem/JMessage/locale.cpp
         src/JSystem/JGadget/binary.cpp
+        src/JSystem/JGadget/define.cpp
         src/JSystem/JGadget/linklist.cpp
         src/JSystem/JGadget/std-vector.cpp
         src/JSystem/JHostIO/JORHostInfo.cpp
@@ -554,6 +552,9 @@ set(JSYSTEM_FILES
         src/JSystem/JHostIO/JHIhioASync.cpp
         src/JSystem/JHostIO/JHIRMcc.cpp
         src/JSystem/JHostIO/JHIMccBuf.cpp
+)
+
+set(JSYSTEM_FILES
 )
 
 set(REL_FILES
