@@ -70,3 +70,12 @@ JGadget_outMessage& JGadget_outMessage::operator<<(const void* data) {
 void JGadget_outMessage::warning(const char* file, int line, const char* message) {
     JUTAssertion::setWarningMessage(3, (char*)file, line, message);
 }
+
+#if TARGET_PC
+JGadget_outMessage& JGadget_outMessage::operator<<(u16 value) {
+    char sz[64];
+    snprintf(sz, sizeof(sz), "%uh", value);
+
+    return *this << sz;
+}
+#endif

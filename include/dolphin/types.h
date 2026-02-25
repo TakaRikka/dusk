@@ -106,5 +106,11 @@ typedef unsigned int uint;
 #include <stddef.h>
 #endif
 
+#if TARGET_PC && __cplusplus
+#define NORETURN [[noreturn]]
+#else
+#define NORETURN
+#endif
+
 #endif
 #endif

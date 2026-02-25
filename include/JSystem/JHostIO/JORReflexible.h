@@ -48,7 +48,13 @@ class JORReflexible : public JOREventListener {
 public:
 #if DEBUG
     JORReflexible() {}
+#if TARGET_PC
+    static JORServer* getJORServer() {
+        OSPanic(__FILE__, __LINE__, "getJORServer is unimplemented");
+    }
+#else
     static JORServer* getJORServer();
+#endif
     
     virtual void listenPropertyEvent(const JORPropertyEvent*);
     virtual void listen(u32, const JOREvent*);

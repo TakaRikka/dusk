@@ -158,7 +158,11 @@ bool JAISe::prepare_getSeqData_() {
 
     switch (inner_.seMgr->getSeqDataMgr()->getSeqData(getID(), &inner_.mSeqData)) {
     case 0:
+#if TARGET_PC
+        OS_REPORT("Failed In Loading Sequence Data:SE(0x%08x)\n", (u32)getID());
+#else
         OS_REPORT("Failed In Loading Sequence Data:SE(0x%08x)\n", *(u32*)&getID());
+#endif
         status_.state.unk = 2;
         return false;
     case 1:
