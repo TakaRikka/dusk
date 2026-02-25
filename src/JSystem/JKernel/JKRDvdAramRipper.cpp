@@ -182,7 +182,7 @@ JKRADCommand* JKRDvdAramRipper::callCommand_Async(JKRADCommand* command) {
         if (!command->mCallback) {
             (*((JSUList<JKRADCommand>*)&sDvdAramAsyncList)).append(&command->mLink);
         } else {
-            command->mCallback((u32)command);
+            command->mCallback((uintptr_t)command);
         }
     }
 

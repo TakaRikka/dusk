@@ -317,8 +317,7 @@ void JStudio_JStage::TAdaptor_actor::TVVOutput_ANIMATION_FRAME_::operator()(
     f32 param_1, JStudio::TAdaptor* adaptor) const {
     JStage::TActor* actor = static_cast<TAdaptor_actor*>(adaptor)->get_pJSG_();
     // not sure what this bit is
-    u32 idx = *(u32*)(((u32)adaptor - 1) + field_0x8);
-
+    u32 idx = *(u32*)(((uintptr_t)adaptor - 1) + field_0x8);
     u8 idx_lowBytes  = idx;
     u8 idx_highBytes = idx >> 8;
 

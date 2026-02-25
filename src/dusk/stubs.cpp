@@ -1865,13 +1865,5 @@ u32 JHICommBufReader::Header::getReadableSize() const {
     return 0;
 }
 
-#pragma mark dMeter2Info
-#include <d/d_meter2_info.h>
-void dMeter2Info_c::getString(u32 i_stringID, char* o_string, JMSMesgEntry_c* i_msgEntry) {
-    puts("dMeter2Info_c::getString is a stub");
-}
-void dMeter2Info_c::getStringKanji(u32 i_stringID, char* o_string, JMSMesgEntry_c* i_msgEntry) {
-    puts("dMeter2Info_c::getStringKanji is a stub");
-}
 
 dPa_particleTracePcallBack_c JPTracePCB4;

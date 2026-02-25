@@ -211,7 +211,7 @@ bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
     }
 
     if (cacheBuffer != NULL) {
-        JUT_ASSERT(352, ( (u32)cacheBuffer & 0x1f ) == 0);
+        JUT_ASSERT(352, ( (uintptr_t)cacheBuffer & 0x1f ) == 0);
         mCacheBuffer = cacheBuffer;
         field_0xb0 = 0;
     } else {
@@ -356,8 +356,7 @@ void JUTCacheFont::getGlyphFromAram(JUTCacheFont::TGlyphCacheInfo* param_0,
     *param_3 = iVar2;
     *r30 -= iVar2 * iVar3;
     u8* result =
-        JKRAramToMainRam((u32)param_0->mPrev + pGylphCacheInfo->field_0x10 * iVar2, pCachePage->mImage,
-                         pGylphCacheInfo->field_0x10, EXPAND_SWITCH_UNKNOWN0, 0, NULL, 0xffffffff, NULL);
+        JKRAramToMainRam((uintptr_t) param_0->mPrev + pGylphCacheInfo->field_0x10 * iVar2, pCachePage->mImage, pGylphCacheInfo->field_0x10, EXPAND_SWITCH_UNKNOWN0, 0, NULL, 0xffffffff, NULL);
     JUT_ASSERT(624, result);
     GXInitTexObj(&pCachePage->mTexObj, pCachePage->mImage, pGylphCacheInfo->mWidth, pGylphCacheInfo->mHeight,
                  (GXTexFmt)pGylphCacheInfo->mTexFormat, GX_CLAMP, GX_CLAMP, GX_FALSE);

@@ -30,7 +30,7 @@ JUTConsole* JUTConsole::create(unsigned int param_0, void* buffer, u32 bufferSiz
     JUTConsoleManager* pManager = JUTConsoleManager::getManager();
     JUT_ASSERT(59, pManager != NULL);
 
-    JUT_ASSERT(62, ( (u32)buffer & 0x3 ) == 0);
+    JUT_ASSERT(62, ( (uintptr_t)buffer & 0x3 ) == 0);
     u32 maxLines = getLineFromObjectSize(bufferSize, param_0);
 
     JUTConsole* console = new (buffer) JUTConsole(param_0, maxLines, false);

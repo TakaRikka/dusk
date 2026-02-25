@@ -163,7 +163,7 @@ static const float INF = 2000000000.0f;
     #define UNSET_FLAG(var, flag, type) (var) &= ~(flag)
 #endif
 
-#ifdef _MSVC_LANG
+#ifdef TARGET_PC
     template <int N>
     inline constexpr auto MultiCharLiteral(const char (&buf)[N]) {
         // static_assert(buf[0] == '\'' && buf[N - 2] == '\'');  // can't constexpr strings, just pray

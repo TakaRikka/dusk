@@ -25,7 +25,7 @@ JKRMemArchive::JKRMemArchive(s32 entryNum, JKRArchive::EMountDirection mountDire
 }
 
 JKRMemArchive::JKRMemArchive(void* buffer, u32 bufferSize, JKRMemBreakFlag param_3)
-    : JKRArchive((s32)buffer, MOUNT_MEM) {
+    : JKRArchive((intptr_t)buffer, MOUNT_MEM) {
     mIsMounted = false;
     if (!open(buffer, bufferSize, param_3)) {
         return;
