@@ -7,7 +7,9 @@
 
 #ifndef __MWERKS__
 #include <limits>
+#if !defined(FLT_EPSILON)
 #define FLT_EPSILON std::numeric_limits<float>::epsilon()
+#endif
 #endif
 
 namespace JGeometry {
