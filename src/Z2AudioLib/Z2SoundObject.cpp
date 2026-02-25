@@ -487,7 +487,7 @@ void Z2SoundObjAnime::startSoundInner(const JGeometry::TVec3<f32>& pos, f32 para
     JUT_ASSERT(747, curSoundIndex_ < animation_->getNumSounds());
 
     const JAUSoundAnimationSound* animationSound = animation_->getSound(curSoundIndex_);
-    u32 user_data = (u32)animationSound;
+    u32 user_data = (uintptr_t)animationSound;
     if (reverse_) {
         curSoundIndex_--;
     } else {

@@ -11,16 +11,17 @@
 #pragma mark JAUSection
 #include "JSystem/JAudio2/JAUSectionHeap.h"
 
+#if 0
+
 JAUSoundTable* JAUSection::newSoundTable(void const* data, u32 size, bool flag) {
     puts("JAUSection::newSoundTable is a stub");
     return nullptr;
 }
-
 JAUSoundNameTable* JAUSection::newSoundNameTable(void const* data, u32 size, bool flag) {
     puts("JAUSection::newSoundNameTable is a stub");
     return nullptr;
 }
-
+#endif
 #pragma mark JASHeap
 #include "JSystem/JAudio2/JASHeapCtrl.h"
 
@@ -32,10 +33,11 @@ JASHeap::JASHeap(JASDisposer* disposer)
 #pragma mark JASVoiceBank
 #include "JSystem/JAudio2/JASVoiceBank.h"
 
+/*
 bool JASVoiceBank::getInstParam(int a, int b, int c, JASInstParam* param) const {
     puts("JASVoiceBank::getInstParam is a stub");
     return false;
-}
+}*/
 
 // JASSeqParser::sCallBackFunc is compiled from JASSeqParser.obj
 /*
@@ -130,7 +132,9 @@ int JOREventCallbackListNode::JORAct(u32 eventID, const char* eventName) {
     return 0;
 }
 */
+#if !TARGET_PC
 #pragma mark J3DPSMtxArrayConcat
 void J3DPSMtxArrayConcat(float (*a)[4], float (*b)[4], float (*out)[4], u32 count) {
     puts("J3DPSMtxArrayConcat is a stub");
 }
+#endif

@@ -523,11 +523,19 @@ void* operator new(size_t size, int alignment) {
 #else
 void* operator new(size_t size, int alignment) {
     if (sCurrentHeap == nullptr)
+#if TARGET_PC
+        return aligned_alloc(alignment, size);
+#else
         return _aligned_malloc(size, alignment);
+#endif
     void* mem = JKRHeap::alloc(size, alignment, nullptr);
     if (mem == nullptr) {
         OSReport("[NEW] JKRHeap FULL! Fallback to aligned_malloc size %u\n", (unsigned)size);
+#if TARGET_PC
+        return aligned_alloc(alignment, size);
+#else
         return _aligned_malloc(size, alignment);
+#endif
     }
     return mem;
 }
@@ -560,10 +568,18 @@ void* operator new[](size_t size, int alignment) {
 #else
 void* operator new[](size_t size, int alignment) {
     if (sCurrentHeap == nullptr)
+#if TARGET_PC
+        return aligned_alloc(alignment, size);
+#else
         return _aligned_malloc(size, alignment);
+#endif
     void* mem = JKRHeap::alloc(size, alignment, nullptr);
     if (mem == nullptr)
+#if TARGET_PC
+        return aligned_alloc(alignment, size);
+#else
         return _aligned_malloc(size, alignment);
+#endif
     return mem;
 }
 #endif

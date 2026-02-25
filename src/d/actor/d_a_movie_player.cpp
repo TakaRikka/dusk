@@ -520,7 +520,7 @@ static u8 __THPReadHuffmanTableSpecification() {
     u16 length, num_Vij;
 
     __THPHuffmanSizeTab = __THPWorkArea;
-    __THPHuffmanCodeTab = (u16*)((u32)__THPWorkArea + 256 + 1);
+    __THPHuffmanCodeTab = (u16*)((uintptr_t)__THPWorkArea + 256 + 1);
     length = (u16)((__THPInfo->c)[0] << 8 | (__THPInfo->c)[1]);
     __THPInfo->c += 2;
     length -= 2;
@@ -618,8 +618,8 @@ static void __THPPrepBitStream() {
     u32* ptr;
     u32 offset, i, j, k;
 
-    ptr = (u32*)((u32)__THPInfo->c & 0xFFFFFFFC);
-    offset = (u32)__THPInfo->c & 3;
+    ptr = (u32*)((uintptr_t)__THPInfo->c & 0xFFFFFFFC);
+    offset = (uintptr_t)__THPInfo->c & 3;
     ASSERTLINE(3799, __THPInfo->cnt <= 33);
 
     if (__THPInfo->cnt != 33) {
@@ -1685,7 +1685,7 @@ static void __THPHuffDecodeDCTCompY(__REGISTER THPFileInfo* info, THPCoeff* bloc
 
             _FailedCheckEnoughBits:
                 cnt += 5;
-                maxcodebase = (u32) & (h->maxCode);
+                maxcodebase = (uintptr_t) & (h->maxCode);
                 // clang-format off
 #ifdef __MWERKS__
                 asm {
@@ -1826,7 +1826,7 @@ static void __THPHuffDecodeDCTCompY(__REGISTER THPFileInfo* info, THPCoeff* bloc
             goto _DoneDecodeTab;
 
         _Read4 : {
-            __REGISTER u32 maxcodebase = (u32) & (h->maxCode);
+            __REGISTER u32 maxcodebase = (uintptr_t) & (h->maxCode);
             __REGISTER u32 tmp2;
 
             // clang-format off
@@ -1862,8 +1862,8 @@ static void __THPHuffDecodeDCTCompY(__REGISTER THPFileInfo* info, THPCoeff* bloc
             __REGISTER u32 mask = 0xFFFFFFFF << (33 - cnt);
             __REGISTER u32 tmp2;
             __REGISTER u32 tmp3;
-            code = (s32)(cb & (~mask));
-            mask = (u32) & (h->maxCode);
+            code = (uintptr_t)(cb & (~mask));
+            mask = (uintptr_t) & (h->maxCode);
 
             // clang-format off
 #ifdef __MWERKS__
@@ -2027,7 +2027,7 @@ _done:
         __REGISTER u32 tmp2;
 
     _FailedCheckEnoughBits:
-        maxcodebase = (u32) & (h->maxCode);
+        maxcodebase = (uintptr_t) & (h->maxCode);
         cnt += 5;
 
         // clang-format off
@@ -2133,7 +2133,7 @@ _FCEB_Done:
     return tmp;
 
 _Read4 : {
-    __REGISTER u32 maxcodebase = (u32) & (h->maxCode);
+    __REGISTER u32 maxcodebase = (uintptr_t) & (h->maxCode);
     __REGISTER u32 tmp2;
 
     // clang-format off
@@ -2218,7 +2218,7 @@ _FailedCheckNoBits1:
     __REGISTER u32 tmp2;
 
     code = (s32)(cb & (~mask));
-    mask = (u32) & (h->maxCode);
+    mask = (uintptr_t) & (h->maxCode);
 
     // clang-format off
 #ifdef __MWERKS__

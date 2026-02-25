@@ -1958,7 +1958,7 @@ int daE_HZ_c::CreateHeap() {
     }
 
     J3DModel* morfModel = mpMorfSO->getModel();
-    morfModel->setUserArea((u32)this);
+    morfModel->setUserArea((uintptr_t)this);
     for (u16 i = 0; i < morfModel->getModelData()->getJointNum(); i++) {
         if (i != 0) {
             morfModel->getModelData()->getJointNodePointer(i)->setCallBack(JointCallBack);

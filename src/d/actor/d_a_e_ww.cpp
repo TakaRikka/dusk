@@ -2157,7 +2157,7 @@ int daE_WW_c::CreateHeap() {
     }
 
     J3DModel* model = mpModelMorf->getModel();
-    model->setUserArea((u32)this);
+    model->setUserArea((uintptr_t)this);
     for (u16 i = JNT_BODY01; i < model->getModelData()->getJointNum(); i++) {
         if (i == JNT_NECK || i == JNT_HEAD) {
             model->getModelData()->getJointNodePointer(i)->setCallBack(JointCallBack);

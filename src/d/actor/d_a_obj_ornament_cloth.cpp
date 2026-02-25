@@ -232,7 +232,7 @@ int daObjOnCloth_c::createHeap() {
         J3DJoint* jointNode_p = mpModel->getModelData()->getJointNodePointer(i);
         if (jointNode_p != NULL) {
             jointNode_p->setCallBack(nodeCallBack);
-            mpModel->setUserArea((u32)this);
+            mpModel->setUserArea((uintptr_t)this);
         }
     }
 

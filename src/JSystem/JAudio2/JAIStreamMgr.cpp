@@ -59,7 +59,7 @@ void JAIStreamMgr::freeDeadStream_() {
             mStreamList.remove(i);
             void* aramAddr = stream->JAIStreamMgr_getAramAddr_();
             if (aramAddr != NULL) {
-                bool result = mStreamAramMgr->deleteStreamAram((u32)aramAddr);
+                bool result = mStreamAramMgr->deleteStreamAram((uintptr_t)aramAddr);
                 JUT_ASSERT(105, result);
             }
             

@@ -3649,7 +3649,7 @@ static int useHeapInit2(fopAc_ac_c* i_actor) {
         if (i_this->mpModel[0] == 0) {
             return 0;
         }
-        i_this->mpModel[0]->setUserArea((s32)i_this);
+        i_this->mpModel[0]->setUserArea((uintptr_t)i_this);
         for (u16 i = 0; i < modelData->getJointNum(); i++) {
             i_this->mpModel[0]->mModelData->getJointNodePointer(i)->setCallBack(nodeCallBackLH);
         }
@@ -3674,7 +3674,7 @@ static int useHeapInit2(fopAc_ac_c* i_actor) {
         if (i_this->mpModel[0] == 0) {
             return 0;
         }
-        i_this->mpModel[0]->setUserArea((s32)i_this);
+        i_this->mpModel[0]->setUserArea((uintptr_t)i_this);
         for (u16 i = 0; i < modelData->getJointNum(); i++) {
             i_this->mpModel[0]->mModelData->getJointNodePointer(i)->setCallBack(nodeCallBackBB);
         }
@@ -3732,7 +3732,7 @@ static int useHeapImg_fisht(fopAc_ac_c* i_actor) {
     }
 
     J3DModel* model = i_this->mpMorf->getModel();
-    model->setUserArea((s32)i_this);
+    model->setUserArea((uintptr_t)i_this);
     i_this->mNumJoints = fish_joint[i_this->mGedouKind];
     for (u16 i = 1; i < model->getModelData()->getJointNum(); i++) {
         model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);

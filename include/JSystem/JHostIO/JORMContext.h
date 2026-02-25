@@ -6,7 +6,7 @@
 #ifdef _MSVC_LANG
 #include <stdint.h>
 #else
-#include <stdint>
+#include <stdint.h>
 #endif
 
 #include <global.h>
