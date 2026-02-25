@@ -8,7 +8,6 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include <dolphin/ar.h>
 
-#if !TARGET_PC
 JASHeap::JASHeap(JASDisposer* disposer) : mTree(this) {
     mDisposer = disposer;
     mBase = NULL;
@@ -16,7 +15,6 @@ JASHeap::JASHeap(JASDisposer* disposer) : mTree(this) {
     field_0x40 = 0;
     OSInitMutex(&mMutex);
 }
-#endif
 
 void JASHeap::initRootHeap(void* param_0, u32 param_1) {
     JUT_ASSERT(97, ! isAllocated());

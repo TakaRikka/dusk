@@ -1859,6 +1859,3 @@ u32 JHICommBufReader::Header::getReadableSize() const {
     puts("JHICommBufReader::Header::getReadableSize is a stub");
     return 0;
 }
-
-
-dPa_particleTracePcallBack_c JPTracePCB4;

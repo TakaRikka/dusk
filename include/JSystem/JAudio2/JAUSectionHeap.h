@@ -14,8 +14,8 @@ class JASVoiceBank;
 class JAUBankTableLink;
 class JAUDisposer_;
 class JAUSectionHeap;
-class JAUSoundTable;
-class JAUSoundNameTable;
+struct JAUSoundTable;
+struct JAUSoundNameTable;
 class JKRArchive;
 class JKRSolidHeap;
 

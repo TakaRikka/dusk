@@ -33,7 +33,9 @@
 //#pragma nosyminline on
 #endif
 
-extern dPa_particleTracePcallBack_c JPTracePCB4;
+extern "C" {
+    extern dPa_particleTracePcallBack_c JPTracePCB4;
+}
 
 void dPa_cleanupGX() {
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

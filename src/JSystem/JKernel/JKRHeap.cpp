@@ -498,7 +498,7 @@ bool JKRHeap::isSubHeap(JKRHeap* heap) const {
     return false;
 }
 
-#ifdef __MWERKS__
+#if !TARGET_PC
 void* operator new(size_t size) {
     return JKRHeap::alloc(size, 4, NULL);
 }
@@ -516,14 +516,14 @@ void* operator new(size_t size) {
 }
 #endif
 
-#ifdef __MWERKS__
+#if !TARGET_PC
 void* operator new(size_t size, int alignment) {
     return JKRHeap::alloc(size, alignment, NULL);
 }
 #else
 void* operator new(size_t size, int alignment) {
     if (sCurrentHeap == nullptr)
-#if TARGET_PC
+#if !_WIN32
         return aligned_alloc(alignment, size);
 #else
         return _aligned_malloc(size, alignment);
@@ -531,7 +531,7 @@ void* operator new(size_t size, int alignment) {
     void* mem = JKRHeap::alloc(size, alignment, nullptr);
     if (mem == nullptr) {
         OSReport("[NEW] JKRHeap FULL! Fallback to aligned_malloc size %u\n", (unsigned)size);
-#if TARGET_PC
+#if !_WIN32
         return aligned_alloc(alignment, size);
 #else
         return _aligned_malloc(size, alignment);
@@ -545,7 +545,7 @@ void* operator new(size_t size, JKRHeap* heap, int alignment) {
     return JKRHeap::alloc(size, alignment, heap);
 }
 
-#ifdef __MWERKS__
+#if !TARGET_PC
 void* operator new[](size_t size) {
     return JKRHeap::alloc(size, 4, NULL);
 }
@@ -561,21 +561,21 @@ void* operator new[](size_t size) {
 }
 #endif
 
-#ifdef __MWERKS__
+#if !TARGET_PC
 void* operator new[](size_t size, int alignment) {
     return JKRHeap::alloc(size, alignment, NULL);
 }
 #else
 void* operator new[](size_t size, int alignment) {
     if (sCurrentHeap == nullptr)
-#if TARGET_PC
+#if !_WIN32
         return aligned_alloc(alignment, size);
 #else
         return _aligned_malloc(size, alignment);
 #endif
     void* mem = JKRHeap::alloc(size, alignment, nullptr);
     if (mem == nullptr)
-#if TARGET_PC
+#if !_WIN32
         return aligned_alloc(alignment, size);
 #else
         return _aligned_malloc(size, alignment);
@@ -588,7 +588,7 @@ void* operator new[](size_t size, JKRHeap* heap, int alignment) {
     return JKRHeap::alloc(size, alignment, heap);
 }
 
-#ifdef __MWERKS__
+#if !TARGET_PC
 void operator delete(void* ptr) {
     JKRHeap::free(ptr, NULL);
 }
@@ -605,7 +605,7 @@ void operator delete(void* ptr) {
 }
 #endif
 
-#ifdef __MWERKS__
+#if !TARGET_PC
 void operator delete[](void* ptr) {
     JKRHeap::free(ptr, NULL);
 }
