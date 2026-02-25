@@ -1317,9 +1317,11 @@ set(REL_FILES
 )
 
 set(DUSK_FILES
+        include/dusk/endian_gx.hpp
         src/dusk/asserts.cpp
         src/dusk/imgui.cpp
         src/dusk/stubs.cpp
+        src/dusk/endian.cpp
         src/dusk/extras.c
         src/dusk/extras.cpp
         src/dusk/globals.cpp

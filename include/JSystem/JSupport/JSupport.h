@@ -18,7 +18,11 @@ T* JSUConvertOffsetToPtr(const void* ptr, uintptr_t offset) {
 * 
 */
 template <typename T>
+#if TARGET_PC
+T* JSUConvertOffsetToPtr(const void* ptr, u32 offset) {
+#else
 T* JSUConvertOffsetToPtr(const void* ptr, const void* offset) {
+#endif
     T* ret;
     if (offset == NULL) {
         ret = NULL;

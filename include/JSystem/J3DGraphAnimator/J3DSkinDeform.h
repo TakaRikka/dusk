@@ -98,6 +98,11 @@ public:
     /* 0x08 */ f32* field_0x8;
     /* 0x0C */ f32* field_0xc;
     /* 0x10 */ u32 mFlags;
+
+#if TARGET_PC
+    void* mArrayBase;
+    const void* mBlockBase;
+#endif
 };  // Size: 0x14
 
 inline void J3DFillZero32B(__REGISTER void* param_0, __REGISTER u32 param_1) {

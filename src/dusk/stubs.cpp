@@ -1451,7 +1451,12 @@ void GDFlushCurrToMem(void) {
     puts("GDFlushCurrToMem is a stub");
 }
 void GDInitGDLObj(GDLObj* dl, void* start, u32 length) {
-    puts("GDInitGDLObj is a stub");
+    ASSERTMSGLINE(40, !((u32)start & 0x1F), "start must be aligned to 32 bytes");
+    ASSERTMSGLINE(41, !((u32)length & 0x1F), "length must be aligned to 32 bytes");
+    dl->start = static_cast<u8*>(start);
+    dl->ptr = static_cast<u8*>(start);
+    dl->top = (u8*)start + length;
+    dl->length = length;
 }
 void GDOverflowed(void) {
     puts("GDOverflowed is a stub");

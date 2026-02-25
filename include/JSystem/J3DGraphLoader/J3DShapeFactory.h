@@ -15,13 +15,13 @@ struct ResNTAB;
  */
 struct J3DShapeInitData {
     /* 0x00 */ u8 mShapeMtxType;
-    /* 0x02 */ u16 mMtxGroupNum;
-    /* 0x04 */ u16 mVtxDescListIndex;
-    /* 0x06 */ u16 mMtxInitDataIndex;
-    /* 0x08 */ u16 mDrawInitDataIndex;
-    /* 0x0C */ f32 mRadius;
-    /* 0x10 */ Vec mMin;
-    /* 0x1C */ Vec mMax;
+    /* 0x02 */ BE(u16) mMtxGroupNum;
+    /* 0x04 */ BE(u16) mVtxDescListIndex;
+    /* 0x06 */ BE(u16) mMtxInitDataIndex;
+    /* 0x08 */ BE(u16) mDrawInitDataIndex;
+    /* 0x0C */ BE(f32) mRadius;
+    /* 0x10 */ BE(Vec) mMin;
+    /* 0x1C */ BE(Vec) mMax;
 };
 
 /**
@@ -29,9 +29,9 @@ struct J3DShapeInitData {
  * 
  */
 struct J3DShapeMtxInitData {
-    /* 0x00 */ u16 mUseMtxIndex;
-    /* 0x02 */ u16 mUseMtxCount;
-    /* 0x04 */ u32 mFirstUseMtxIndex;
+    /* 0x00 */ BE(u16) mUseMtxIndex;
+    /* 0x02 */ BE(u16) mUseMtxCount;
+    /* 0x04 */ BE(u32) mFirstUseMtxIndex;
 };
 
 /**
@@ -39,8 +39,8 @@ struct J3DShapeMtxInitData {
  * 
  */
 struct J3DShapeDrawInitData {
-    /* 0x00 */ u32 mDisplayListSize;
-    /* 0x04 */ u32 mDisplayListIndex;
+    /* 0x00 */ BE(u32) mDisplayListSize;
+    /* 0x04 */ BE(u32) mDisplayListIndex;
 };
 
 /**
@@ -49,7 +49,7 @@ struct J3DShapeDrawInitData {
  */
 struct J3DShapeFactory {
     J3DShapeFactory(J3DShapeBlock const&);
-    J3DShape* create(int, u32, GXVtxDescList*);
+    J3DShape* create(int, u32, BE(GXVtxDescList)*);
     J3DShapeMtx* newShapeMtx(u32, int, int) const;
     J3DShapeDraw* newShapeDraw(int, int) const;
     void allocVcdVatCmdBuffer(u32);
@@ -58,19 +58,25 @@ struct J3DShapeFactory {
     s32 calcSizeShapeMtx(u32, int, int) const;
 
     /* 0x00 */ J3DShapeInitData* mShapeInitData;
-    /* 0x04 */ u16* mIndexTable;
-    /* 0x08 */ GXVtxDescList* mVtxDescList;
-    /* 0x0C */ u16* mMtxTable;
+    /* 0x04 */ BE(u16)* mIndexTable;
+    /* 0x08 */ BE(GXVtxDescList)* mVtxDescList;
+    /* 0x0C */ BE(u16)* mMtxTable;
     /* 0x10 */ u8* mDisplayListData;
     /* 0x14 */ J3DShapeMtxInitData* mMtxInitData;
     /* 0x18 */ J3DShapeDrawInitData* mDrawInitData;
     /* 0x1C */ u8* mVcdVatCmdBuffer;
 
     u16 getMtxGroupNum(int no) const { return mShapeInitData[mIndexTable[no]].mMtxGroupNum; }
-    GXVtxDescList* getVtxDescList(int no) const { return (GXVtxDescList*)((u8*)mVtxDescList + mShapeInitData[mIndexTable[no]].mVtxDescListIndex); }
+    BE(GXVtxDescList)* getVtxDescList(int no) const { return (BE(GXVtxDescList)*)((u8*)mVtxDescList + mShapeInitData[mIndexTable[no]].mVtxDescListIndex); }
     f32 getRadius(int no) const { return mShapeInitData[mIndexTable[no]].mRadius; }
+#if TARGET_PC
+    // Reference return only used for reading, messes with endian handling
+    Vec getMin[[nodiscard]](int no) const { return mShapeInitData[mIndexTable[no]].mMin; }
+    Vec getMax[[nodiscard]](int no) const { return mShapeInitData[mIndexTable[no]].mMax; }
+#else
     Vec& getMin(int no) const { return mShapeInitData[mIndexTable[no]].mMin; }
     Vec& getMax(int no) const { return mShapeInitData[mIndexTable[no]].mMax; }
+#endif
 };
 
 

@@ -3,6 +3,15 @@
 
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 
+#include "JSystem/J3DGraphAnimator/J3DAnimation.h"
+#include "dusk/endian.h"
+
+#if TARGET_PC
+#define OFFSET_PTR BE(u32)
+#else
+#define OFFSET_PTR void*
+#endif
+
 /**
  * @ingroup jsystem-j3d
  * 
@@ -17,18 +26,18 @@ struct J3DClusterLoaderDataBase {
  */
 class J3DClusterBlock : public JUTDataBlockHeader {
 public:
-    /* 0x08 */ u16 mClusterNum;
-    /* 0x0A */ u16 mClusterKeyNum;
-    /* 0x0C */ u16 mClusterVertexNum;
-    /* 0x0E */ u16 mVtxPosNum;
-    /* 0x10 */ u16 mVtxNrmNum;
-    /* 0x14 */ void* mClusterPointer;
-    /* 0x18 */ void* mClusterKeyPointer;
-    /* 0x1C */ void* mClusterVertex;
-    /* 0x20 */ void* mVtxPos;
-    /* 0x24 */ void* mVtxNrm;
-    /* 0x28 */ void* mClusterName;
-    /* 0x2C */ void* mClusterKeyName;
+    /* 0x08 */ BE(u16) mClusterNum;
+    /* 0x0A */ BE(u16) mClusterKeyNum;
+    /* 0x0C */ BE(u16) mClusterVertexNum;
+    /* 0x0E */ BE(u16) mVtxPosNum;
+    /* 0x10 */ BE(u16) mVtxNrmNum;
+    /* 0x14 */ OFFSET_PTR mClusterPointer;
+    /* 0x18 */ OFFSET_PTR mClusterKeyPointer;
+    /* 0x1C */ OFFSET_PTR mClusterVertex;
+    /* 0x20 */ OFFSET_PTR mVtxPos;
+    /* 0x24 */ OFFSET_PTR mVtxNrm;
+    /* 0x28 */ OFFSET_PTR mClusterName;
+    /* 0x2C */ OFFSET_PTR mClusterKeyName;
 };
 
 /**
@@ -57,5 +66,7 @@ public:
 
     /* 0x04 */ J3DDeformData* mpDeformData;
 };
+
+#undef OFFSET_PTR
 
 #endif /* J3DCLUSTERLOADER_H */

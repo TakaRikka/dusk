@@ -7,7 +7,7 @@
 
 class J3DMaterial;
 struct J3DTexCoord2Info;
-struct J3DCurrentMtxInfo;
+class J3DCurrentMtxInfo;
 
 /**
  * @ingroup jsystem-j3d

@@ -10,33 +10,33 @@
 
 J2DMaterialFactory::J2DMaterialFactory(J2DMaterialBlock const& param_0) {
     field_0x0 = param_0.field_0x8;
-    field_0x4 = JSUConvertOffsetToPtr<J2DMaterialInitData>(&param_0, (void*)param_0.field_0xc);
-    field_0x8 = JSUConvertOffsetToPtr<u16>(&param_0, (void*)param_0.field_0x10);
+    field_0x4 = JSUConvertOffsetToPtr<J2DMaterialInitData>(&param_0, param_0.field_0xc);
+    field_0x8 = JSUConvertOffsetToPtr<u16>(&param_0, param_0.field_0x10);
     if (param_0.field_0x18 && param_0.field_0x18 - param_0.field_0x14 > 4) {
-        field_0xc = JSUConvertOffsetToPtr<J2DIndInitData>(&param_0, (void*)param_0.field_0x18);
+        field_0xc = JSUConvertOffsetToPtr<J2DIndInitData>(&param_0, param_0.field_0x18);
     }
     else {
         field_0xc = NULL;
     }
-    field_0x30 = JSUConvertOffsetToPtr<_GXCullMode>(&param_0, (void*)param_0.field_0x1c);
-    field_0x10 = JSUConvertOffsetToPtr<GXColor>(&param_0, (void*)param_0.field_0x20);
-    field_0x14 = JSUConvertOffsetToPtr<u8>(&param_0, (void*)param_0.field_0x24);
-    field_0x18 = JSUConvertOffsetToPtr<J2DColorChanInfo>(&param_0, (void*)param_0.field_0x28);
-    field_0x1c = JSUConvertOffsetToPtr<u8>(&param_0, (void*)param_0.field_0x2c);
-    field_0x20 = JSUConvertOffsetToPtr<J2DTexCoordInfo>(&param_0, (void*)param_0.field_0x30);
-    field_0x24 = JSUConvertOffsetToPtr<J2DTexMtxInfo>(&param_0, (void*)param_0.field_0x34);
-    field_0x28 = JSUConvertOffsetToPtr<u16>(&param_0, (void*)param_0.field_0x38);
-    field_0x2c = JSUConvertOffsetToPtr<u16>(&param_0, (void*)param_0.field_0x3c);
-    field_0x34 = JSUConvertOffsetToPtr<J2DTevOrderInfo>(&param_0, (void*)param_0.field_0x40);
-    field_0x38 = JSUConvertOffsetToPtr<_GXColorS10>(&param_0, (void*)param_0.field_0x44);
-    field_0x3c = JSUConvertOffsetToPtr<GXColor>(&param_0, (void*)param_0.field_0x48);
-    field_0x40 = JSUConvertOffsetToPtr<u8>(&param_0, (void*)param_0.field_0x4c);
-    field_0x44 = JSUConvertOffsetToPtr<J2DTevStageInfo>(&param_0, (void*)param_0.field_0x50);
-    field_0x48 = JSUConvertOffsetToPtr<J2DTevSwapModeInfo>(&param_0, (void*)param_0.field_0x54);
-    field_0x4c = JSUConvertOffsetToPtr<J2DTevSwapModeTableInfo>(&param_0, (void*)param_0.field_0x58);
-    field_0x50 = JSUConvertOffsetToPtr<J2DAlphaCompInfo>(&param_0, (void*)param_0.field_0x5c);
-    field_0x54 = JSUConvertOffsetToPtr<J2DBlendInfo>(&param_0, (void*)param_0.field_0x60);
-    field_0x58 = JSUConvertOffsetToPtr<u8>(&param_0, (void*)param_0.field_0x64);
+    field_0x30 = JSUConvertOffsetToPtr<BE(GXCullMode)>(&param_0, param_0.field_0x1c);
+    field_0x10 = JSUConvertOffsetToPtr<GXColor>(&param_0, param_0.field_0x20);
+    field_0x14 = JSUConvertOffsetToPtr<u8>(&param_0, param_0.field_0x24);
+    field_0x18 = JSUConvertOffsetToPtr<J2DColorChanInfo>(&param_0, param_0.field_0x28);
+    field_0x1c = JSUConvertOffsetToPtr<u8>(&param_0, param_0.field_0x2c);
+    field_0x20 = JSUConvertOffsetToPtr<J2DTexCoordInfo>(&param_0, param_0.field_0x30);
+    field_0x24 = JSUConvertOffsetToPtr<J2DTexMtxInfo>(&param_0, param_0.field_0x34);
+    field_0x28 = JSUConvertOffsetToPtr<u16>(&param_0, param_0.field_0x38);
+    field_0x2c = JSUConvertOffsetToPtr<u16>(&param_0, param_0.field_0x3c);
+    field_0x34 = JSUConvertOffsetToPtr<J2DTevOrderInfo>(&param_0, param_0.field_0x40);
+    field_0x38 = JSUConvertOffsetToPtr<BE(GXColorS10)>(&param_0, param_0.field_0x44);
+    field_0x3c = JSUConvertOffsetToPtr<GXColor>(&param_0, param_0.field_0x48);
+    field_0x40 = JSUConvertOffsetToPtr<u8>(&param_0, param_0.field_0x4c);
+    field_0x44 = JSUConvertOffsetToPtr<J2DTevStageInfo>(&param_0, param_0.field_0x50);
+    field_0x48 = JSUConvertOffsetToPtr<J2DTevSwapModeInfo>(&param_0, param_0.field_0x54);
+    field_0x4c = JSUConvertOffsetToPtr<J2DTevSwapModeTableInfo>(&param_0, param_0.field_0x58);
+    field_0x50 = JSUConvertOffsetToPtr<J2DAlphaCompInfo>(&param_0, param_0.field_0x5c);
+    field_0x54 = JSUConvertOffsetToPtr<J2DBlendInfo>(&param_0, param_0.field_0x60);
+    field_0x58 = JSUConvertOffsetToPtr<u8>(&param_0, param_0.field_0x64);
 }
 
 u32 J2DMaterialFactory::countStages(int param_0) const {
@@ -273,7 +273,7 @@ J2DGXColorS10 J2DMaterialFactory::newTevColor(int param_0, int param_1) const {
     J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
 
     if (iVar2->field_0x92[param_1] != 0xffff) {
-        return field_0x38[iVar2->field_0x92[param_1]];
+        return (GXColorS10) field_0x38[iVar2->field_0x92[param_1]];
     }
     
     return rv;

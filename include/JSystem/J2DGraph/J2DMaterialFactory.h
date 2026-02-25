@@ -4,38 +4,40 @@
 #include "JSystem/J2DGraph/J2DManage.h"
 #include "JSystem/J2DGraph/J2DMatBlock.h"
 
+#include "dusk/endian.h"
+
 /**
  * @ingroup jsystem-j2d
  * 
  */
 struct J2DMaterialBlock {
-    u32 field_0x0;
-    u32 field_0x4;
-    u16 field_0x8;
-    u16 field_0xa;
-    u32 field_0xc;
-    u32 field_0x10;
-    u32 field_0x14;
-    u32 field_0x18;
-    u32 field_0x1c;
-    u32 field_0x20;
-    u32 field_0x24;
-    u32 field_0x28;
-    u32 field_0x2c;
-    u32 field_0x30;
-    u32 field_0x34;
-    u32 field_0x38;
-    u32 field_0x3c;
-    u32 field_0x40;
-    u32 field_0x44;
-    u32 field_0x48;
-    u32 field_0x4c;
-    u32 field_0x50;
-    u32 field_0x54;
-    u32 field_0x58;
-    u32 field_0x5c;
-    u32 field_0x60;
-    u32 field_0x64;
+    BE(u32) field_0x0;
+    BE(u32) field_0x4;
+    BE(u16) field_0x8;
+    BE(u16) field_0xa;
+    BE(u32) field_0xc;
+    BE(u32) field_0x10;
+    BE(u32) field_0x14;
+    BE(u32) field_0x18;
+    BE(u32) field_0x1c;
+    BE(u32) field_0x20;
+    BE(u32) field_0x24;
+    BE(u32) field_0x28;
+    BE(u32) field_0x2c;
+    BE(u32) field_0x30;
+    BE(u32) field_0x34;
+    BE(u32) field_0x38;
+    BE(u32) field_0x3c;
+    BE(u32) field_0x40;
+    BE(u32) field_0x44;
+    BE(u32) field_0x48;
+    BE(u32) field_0x4c;
+    BE(u32) field_0x50;
+    BE(u32) field_0x54;
+    BE(u32) field_0x58;
+    BE(u32) field_0x5c;
+    BE(u32) field_0x60;
+    BE(u32) field_0x64;
 };
 
 typedef struct _GXColor GXColor;
@@ -73,23 +75,23 @@ struct J2DMaterialInitData {
     u8 field_0x5;
     u8 field_0x6;
     u8 field_0x7;
-    u16 field_0x8[2];
-    u16 field_0xc[4];
-    u16 field_0x14[8];
-    u16 field_0x24[0xa];
-    u16 field_0x38[8];
-    u16 field_0x48;
-    u16 field_0x4a[4];
+    BE(u16) field_0x8[2];
+    BE(u16) field_0xc[4];
+    BE(u16) field_0x14[8];
+    BE(u16) field_0x24[0xa];
+    BE(u16) field_0x38[8];
+    BE(u16) field_0x48;
+    BE(u16) field_0x4a[4];
     u8 field_0x52[0x10];
     u8 field_0x62[0x10];
-    u16 field_0x72[0x10];
-    u16 field_0x92[0x4];
-    u16 field_0x9a[0x10];
-    u16 field_0xba[0x10];
-    u16 field_0xda[0x4];
-    u16 field_0xe2;
-    u16 field_0xe4;
-    u16 field_0xe6;
+    BE(u16) field_0x72[0x10];
+    BE(u16) field_0x92[0x4];
+    BE(u16) field_0x9a[0x10];
+    BE(u16) field_0xba[0x10];
+    BE(u16) field_0xda[0x4];
+    BE(u16) field_0xe2;
+    BE(u16) field_0xe4;
+    BE(u16) field_0xe6;
 };
 struct J2DTevStageInfo;
 struct J2DTevSwapModeTableInfo;
@@ -155,9 +157,9 @@ private:
     /* 0x24 */ J2DTexMtxInfo* field_0x24;
     /* 0x28 */ u16* field_0x28;
     /* 0x2C */ u16* field_0x2c;
-    /* 0x30 */ _GXCullMode* field_0x30;
+    /* 0x30 */ BE(GXCullMode)* field_0x30;
     /* 0x34 */ J2DTevOrderInfo* field_0x34;
-    /* 0x38 */ _GXColorS10* field_0x38;
+    /* 0x38 */ BE(GXColorS10)* field_0x38;
     /* 0x3C */ GXColor* field_0x3c;
     /* 0x40 */ u8* field_0x40;
     /* 0x44 */ J2DTevStageInfo* field_0x44;

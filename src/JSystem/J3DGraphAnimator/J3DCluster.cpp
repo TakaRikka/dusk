@@ -6,6 +6,8 @@
 #include "JSystem/JMath/JMATrigonometric.h"
 #include <dolphin/base/PPCArch.h>
 
+#include "JSystem/JSupport/JSupport.h"
+
 J3DDeformData::J3DDeformData() {
     mClusterNum = 0;
     mClusterKeyNum = 0;
@@ -19,11 +21,22 @@ J3DDeformData::J3DDeformData() {
     mVtxNrm = NULL;
     mClusterName = NULL;
     mClusterKeyName = NULL;
+#if TARGET_PC
+    mDeformers = NULL;
+#endif
 }
+
+#if TARGET_PC
+#define DEFORMER(i) mDeformers[i]
+#define CALC_OFFSET(ptr, type, base) JSUConvertOffsetToPtr<type>(base, ptr)
+#else
+#define DEFORMER(i) mClusterPointer[i].getDeformer()
+#define CALC_OFFSET(ptr, type, base) ((u16*)ptr)
+#endif
 
 void J3DDeformData::offAllFlag(u32 i_flag) {
     for (u16 i = 0; i < mClusterNum; i++) {
-        mClusterPointer[i].getDeformer()->offFlag(i_flag);
+        DEFORMER(i)->offFlag(i_flag);
     }
 }
 
@@ -40,7 +53,7 @@ void J3DDeformData::deform(J3DVertexBuffer* buffer) {
     buffer->swapVtxNrmArrayPointer();
 
     for (u16 i = 0; i < mClusterNum; i++) {
-        mClusterPointer[i].getDeformer()->deform(buffer, i);
+        DEFORMER(i)->deform(buffer, i);
     }
 
     DCStoreRangeNoSync(buffer->getVtxPosArrayPointer(0),
@@ -55,7 +68,7 @@ void J3DDeformData::deform(J3DVertexBuffer* buffer) {
 
 void J3DDeformData::setAnm(J3DAnmCluster* anm) {
     for (u16 i = 0; i < mClusterNum; i++) {
-        mClusterPointer[i].getDeformer()->setAnmCluster(anm);
+        DEFORMER(i)->setAnmCluster(anm);
     }
 }
 
@@ -92,7 +105,7 @@ void J3DDeformer::deform_VtxPosF32(J3DVertexBuffer* i_buffer, J3DCluster* i_clus
     int keyNum = i_cluster->mKeyNum;
     f32* vtxPosArray = (f32*)i_buffer->getVtxPosArrayPointer(0);
     f32* deformVtxPos = mDeformData->getVtxPos();
-    u16* iVar9 = i_cluster->field_0x18;
+    u16* iVar9 = CALC_OFFSET(i_cluster->field_0x18, u16, mBlockBase);
 
     for (int i = 0; i < posNum; i++) {
         int index = iVar9[i] * 3;
@@ -104,12 +117,12 @@ void J3DDeformer::deform_VtxPosF32(J3DVertexBuffer* i_buffer, J3DCluster* i_clus
     f32 local_58[2] = {1.0f, -1.0f};
     
     for (u16 i = 0; i < posNum; i++) {
-        int index = i_cluster->field_0x18[i] * 3;
+        int index = CALC_OFFSET(i_cluster->field_0x18, u16, mBlockBase)[i] * 3;
         for (u16 j = 0; j < keyNum; j++) {
             int uVar8;
             int uVar7;
             key = &i_key[j];
-            uVar8 = uVar7 = ((u16*)key->field_0x4)[i];
+            uVar8 = uVar7 = CALC_OFFSET(key->field_0x4, u16, mBlockBase)[i];
             uVar7 &= ~0xE000;
             uVar7 *= 3;
             f32 deform0 = deformVtxPos[uVar7];
@@ -141,7 +154,7 @@ void J3DDeformer::deform_VtxNrmF32(J3DVertexBuffer* i_buffer, J3DCluster* i_clus
         iVar13[index + 2] = 0.0f;
         for (u16 j = 0; j < keyNum; j++) {
             J3DClusterKey* key = &i_key[j];
-            int uVar3 = ((u16*)key->field_0x8)[i];
+            int uVar3 = CALC_OFFSET(key->field_0x8, u16, mBlockBase)[i];
             int uVar4 = uVar3;
             uVar3 &= ~0xE000;
             uVar3 *= 3;
@@ -169,14 +182,14 @@ void J3DDeformer::deform_VtxNrmF32(J3DVertexBuffer* i_buffer, J3DCluster* i_clus
     }
 
     for (u16 i = 0; i < uVar2; i++) {
-        J3DClusterVertex* clusterVtx = &i_cluster->mClusterVertex[i];
+        J3DClusterVertex* clusterVtx = &CALC_OFFSET(i_cluster->mClusterVertex, J3DClusterVertex, mArrayBase)[i];
         Vec vec;
         vec.x = 0.0f;
         vec.y = 0.0f;
         vec.z = 0.0f;
         f32 scale = 1.0f / clusterVtx->mNum;
         for (u16 j = 0; j < clusterVtx->mNum; j++) {
-            int index = clusterVtx->field_0x4[j] * 3;
+            int index = CALC_OFFSET(clusterVtx->field_0x4, u16, mBlockBase)[j] * 3;
             vec.x += scale * iVar13[index];
             vec.y += scale * iVar13[index + 1];
             vec.z += scale * iVar13[index + 2];
@@ -184,12 +197,12 @@ void J3DDeformer::deform_VtxNrmF32(J3DVertexBuffer* i_buffer, J3DCluster* i_clus
         normalize((f32*)&vec);
 
         for (u16 j = 0; j < clusterVtx->mNum; j++) {
-            u16 tmp = clusterVtx->field_0x8[j];
+            u16 tmp = CALC_OFFSET(clusterVtx->field_0x8, u16, mBlockBase)[j];
             if (tmp == 0xffff) {
                 continue;
             }
             int index = tmp * 3;
-            u16 iVar4 = clusterVtx->field_0x4[j];
+            u16 iVar4 = CALC_OFFSET(clusterVtx->field_0x4, u16, mBlockBase)[j];
             int index2 = iVar4 * 3;
             
             f32 dot = vec.x * iVar13[index2] + vec.y * iVar13[index2 + 1]

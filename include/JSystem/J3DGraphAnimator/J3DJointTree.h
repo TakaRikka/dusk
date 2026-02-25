@@ -3,6 +3,7 @@
 
 #include "JSystem/J3DAssert.h"
 #include "JSystem/J3DGraphBase/J3DTransform.h"
+#include "dusk/endian.h"
 
 class J3DJoint;
 class J3DMtxBuffer;
@@ -14,8 +15,8 @@ class JUTNameTab;
  * 
  */
 struct J3DModelHierarchy {
-    /* 0x0 */ u16 mType;
-    /* 0x2 */ u16 mValue;
+    /* 0x0 */ BE(u16) mType;
+    /* 0x2 */ BE(u16) mValue;
 };
 
 class J3DMaterialTable;

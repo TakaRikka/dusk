@@ -377,17 +377,22 @@ void J3DAnmFullLoader_v15::setAnmVtxColor(J3DAnmVtxColorFull* dst,
         data, data->mVtxColorIndexDataOffsets[0]);
     dst->mAnmVtxColorIndexData[1] = JSUConvertOffsetToPtr<J3DAnmVtxColorIndexData>(
         data, data->mVtxColorIndexDataOffsets[1]);
-    void* indexPtr0 =
+    u16* indexPtr0 =
         JSUConvertOffsetToPtr<u16>(data, data->mVtxColorIndexPointerOffsets[0]);
-    void* indexPtr1 =
+    u16* indexPtr1 =
         JSUConvertOffsetToPtr<u16>(data, data->mVtxColorIndexPointerOffsets[1]);
 
+#if TARGET_PC
+    dst->colorAddressBase[0] = indexPtr0;
+    dst->colorAddressBase[1] = indexPtr1;
+#else
     for (s32 i = 0; i < dst->mAnmTableNum[0]; i++)
         dst->mAnmVtxColorIndexData[0][i].mpData =
-            (void*)((uintptr_t)indexPtr0 + (uintptr_t)dst->mAnmVtxColorIndexData[0][i].mpData * 2);
+            (void*)((s32)indexPtr0 + (s32)dst->mAnmVtxColorIndexData[0][i].mpData * 2);
     for (s32 i = 0; i < dst->mAnmTableNum[1]; i++)
         dst->mAnmVtxColorIndexData[1][i].mpData =
-            (void*)((uintptr_t)indexPtr1 + (uintptr_t)dst->mAnmVtxColorIndexData[1][i].mpData * 2);
+            (void*)((s32)indexPtr1 + (s32)dst->mAnmVtxColorIndexData[1][i].mpData * 2);
+#endif
 
     dst->mColorR = JSUConvertOffsetToPtr<u8>(data, data->mRValuesOffset);
     dst->mColorG = JSUConvertOffsetToPtr<u8>(data, data->mGValuesOffset);
@@ -660,15 +665,20 @@ void J3DAnmKeyLoader_v15::setAnmVtxColor(J3DAnmVtxColorKey* dst,
         data, data->mVtxColoIndexDataOffset[0]);
     dst->mAnmVtxColorIndexData[1] = JSUConvertOffsetToPtr<J3DAnmVtxColorIndexData>(
         data, data->mVtxColoIndexDataOffset[1]);
-    void* indexPtr0 = JSUConvertOffsetToPtr<u16>(data, data->mVtxColoIndexPointerOffset[0]);
-    void* indexPtr1 = JSUConvertOffsetToPtr<u16>(data, data->mVtxColoIndexPointerOffset[1]);
+    u16* indexPtr0 = JSUConvertOffsetToPtr<u16>(data, data->mVtxColoIndexPointerOffset[0]);
+    u16* indexPtr1 = JSUConvertOffsetToPtr<u16>(data, data->mVtxColoIndexPointerOffset[1]);
 
+#if TARGET_PC
+    dst->colorAddressBase[0] = indexPtr0;
+    dst->colorAddressBase[1] = indexPtr1;
+#else
     for (s32 i = 0; i < dst->mAnmTableNum[0]; i++)
         dst->mAnmVtxColorIndexData[0][i].mpData =
-            (void*)((uintptr_t)indexPtr0 + (uintptr_t)dst->mAnmVtxColorIndexData[0][i].mpData * 2);
+            (void*)((s32)indexPtr0 + (s32)dst->mAnmVtxColorIndexData[0][i].mpData * 2);
     for (s32 i = 0; i < dst->mAnmTableNum[1]; i++)
         dst->mAnmVtxColorIndexData[1][i].mpData =
-            (void*)((uintptr_t)indexPtr1 + (uintptr_t)dst->mAnmVtxColorIndexData[1][i].mpData * 2);
+            (void*)((s32)indexPtr1 + (s32)dst->mAnmVtxColorIndexData[1][i].mpData * 2);
+#endif
 
     dst->mColorR = JSUConvertOffsetToPtr<s16>(data, data->mRValOffset);
     dst->mColorG = JSUConvertOffsetToPtr<s16>(data, data->mGValOffset);
