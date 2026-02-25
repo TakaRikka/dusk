@@ -314,11 +314,7 @@ set(SSYSTEM_FILES
         src/SSystem/SStandard/s_basic.cpp
 )
 
-set(JSYSTEM_FILES
-        src/JSystem/JFramework/JFWSystem.cpp
-        src/JSystem/JFramework/JFWDisplay.cpp
-        src/JSystem/J3DU/J3DUClipper.cpp
-        src/JSystem/J3DU/J3DUDL.cpp
+set(JSYSTEM_DEBUG_FILES
         src/JSystem/JParticle/JPAResourceManager.cpp
         src/JSystem/JParticle/JPAResource.cpp
         src/JSystem/JParticle/JPABaseShape.cpp
@@ -334,6 +330,63 @@ set(JSYSTEM_FILES
         src/JSystem/JParticle/JPAEmitter.cpp
         src/JSystem/JParticle/JPAParticle.cpp
         src/JSystem/JParticle/JPAMath.cpp
+        src/JSystem/JFramework/JFWSystem.cpp
+        src/JSystem/JFramework/JFWDisplay.cpp
+        src/JSystem/J3DU/J3DUClipper.cpp
+        src/JSystem/J3DU/J3DUDL.cpp
+        src/JSystem/JKernel/JKRHeap.cpp
+        src/JSystem/JKernel/JKRExpHeap.cpp
+        src/JSystem/JKernel/JKRSolidHeap.cpp
+        src/JSystem/JKernel/JKRAssertHeap.cpp
+        src/JSystem/JKernel/JKRDisposer.cpp
+        src/JSystem/JKernel/JKRThread.cpp
+        src/JSystem/JKernel/JKRAram.cpp
+        src/JSystem/JKernel/JKRAramHeap.cpp
+        src/JSystem/JKernel/JKRAramBlock.cpp
+        src/JSystem/JKernel/JKRAramPiece.cpp
+        src/JSystem/JKernel/JKRAramStream.cpp
+        src/JSystem/JKernel/JKRFileLoader.cpp
+        src/JSystem/JKernel/JKRFileFinder.cpp
+        src/JSystem/JKernel/JKRFileCache.cpp
+        src/JSystem/JKernel/JKRArchivePub.cpp
+        src/JSystem/JKernel/JKRArchivePri.cpp
+        src/JSystem/JKernel/JKRMemArchive.cpp
+        src/JSystem/JKernel/JKRAramArchive.cpp
+        src/JSystem/JKernel/JKRDvdArchive.cpp
+        src/JSystem/JKernel/JKRCompArchive.cpp
+        src/JSystem/JKernel/JKRFile.cpp
+        src/JSystem/JKernel/JKRDvdFile.cpp
+        src/JSystem/JKernel/JKRDvdRipper.cpp
+        src/JSystem/JKernel/JKRDvdAramRipper.cpp
+        src/JSystem/JKernel/JKRDecomp.cpp
+        src/JSystem/JMath/JMath.cpp
+        src/JSystem/JMath/random.cpp
+        src/JSystem/JMath/JMATrigonometric.cpp
+        src/JSystem/JSupport/JSUList.cpp
+        src/JSystem/JSupport/JSUInputStream.cpp
+        src/JSystem/JSupport/JSUOutputStream.cpp
+        src/JSystem/JSupport/JSUMemoryStream.cpp
+        src/JSystem/JSupport/JSUFileStream.cpp
+        src/JSystem/JUtility/JUTCacheFont.cpp
+        src/JSystem/JUtility/JUTResource.cpp
+        src/JSystem/JUtility/JUTTexture.cpp
+        src/JSystem/JUtility/JUTPalette.cpp
+        src/JSystem/JUtility/JUTNameTab.cpp
+        src/JSystem/JUtility/JUTGraphFifo.cpp
+        src/JSystem/JUtility/JUTFont.cpp
+        src/JSystem/JUtility/JUTResFont.cpp
+        src/JSystem/JUtility/JUTDbPrint.cpp
+        src/JSystem/JUtility/JUTGamePad.cpp
+        src/JSystem/JUtility/JUTException.cpp
+        src/JSystem/JUtility/JUTDirectPrint.cpp
+        src/JSystem/JUtility/JUTAssert.cpp
+        src/JSystem/JUtility/JUTVideo.cpp
+        src/JSystem/JUtility/JUTXfb.cpp
+        src/JSystem/JUtility/JUTFader.cpp
+        src/JSystem/JUtility/JUTProcBar.cpp
+        src/JSystem/JUtility/JUTConsole.cpp
+        src/JSystem/JUtility/JUTDirectFile.cpp
+        src/JSystem/JUtility/JUTFontData_Ascfont_fix12.cpp
         src/JSystem/JStage/JSGActor.cpp
         src/JSystem/JStage/JSGAmbientLight.cpp
         src/JSystem/JStage/JSGCamera.cpp
@@ -341,6 +394,60 @@ set(JSYSTEM_FILES
         src/JSystem/JStage/JSGLight.cpp
         src/JSystem/JStage/JSGObject.cpp
         src/JSystem/JStage/JSGSystem.cpp
+        src/JSystem/J2DGraph/J2DGrafContext.cpp
+        src/JSystem/J2DGraph/J2DOrthoGraph.cpp
+        src/JSystem/J2DGraph/J2DTevs.cpp
+        src/JSystem/J2DGraph/J2DMaterial.cpp
+        src/JSystem/J2DGraph/J2DMatBlock.cpp
+        src/JSystem/J2DGraph/J2DMaterialFactory.cpp
+        src/JSystem/J2DGraph/J2DPrint.cpp
+        src/JSystem/J2DGraph/J2DPane.cpp
+        src/JSystem/J2DGraph/J2DScreen.cpp
+        src/JSystem/J2DGraph/J2DWindow.cpp
+        src/JSystem/J2DGraph/J2DPicture.cpp
+        src/JSystem/J2DGraph/J2DTextBox.cpp
+        src/JSystem/J2DGraph/J2DWindowEx.cpp
+        src/JSystem/J2DGraph/J2DPictureEx.cpp
+        src/JSystem/J2DGraph/J2DTextBoxEx.cpp
+        src/JSystem/J2DGraph/J2DAnmLoader.cpp
+        src/JSystem/J2DGraph/J2DAnimation.cpp
+        src/JSystem/J2DGraph/J2DManage.cpp
+        src/JSystem/J3DGraphBase/J3DGD.cpp
+        src/JSystem/J3DGraphBase/J3DSys.cpp
+        src/JSystem/J3DGraphBase/J3DVertex.cpp
+        src/JSystem/J3DGraphBase/J3DTransform.cpp
+        src/JSystem/J3DGraphBase/J3DTexture.cpp
+        src/JSystem/J3DGraphBase/J3DPacket.cpp
+        src/JSystem/J3DGraphBase/J3DShapeMtx.cpp
+        src/JSystem/J3DGraphBase/J3DShapeDraw.cpp
+        src/JSystem/J3DGraphBase/J3DShape.cpp
+        src/JSystem/J3DGraphBase/J3DMaterial.cpp
+        src/JSystem/J3DGraphBase/J3DMatBlock.cpp
+        src/JSystem/J3DGraphBase/J3DTevs.cpp
+        src/JSystem/J3DGraphBase/J3DDrawBuffer.cpp
+        src/JSystem/J3DGraphBase/J3DStruct.cpp
+        src/JSystem/J3DGraphAnimator/J3DShapeTable.cpp
+        src/JSystem/J3DGraphAnimator/J3DJointTree.cpp
+        src/JSystem/J3DGraphAnimator/J3DModelData.cpp
+        src/JSystem/J3DGraphAnimator/J3DMtxBuffer.cpp
+        src/JSystem/J3DGraphAnimator/J3DModel.cpp
+        src/JSystem/J3DGraphAnimator/J3DAnimation.cpp
+        src/JSystem/J3DGraphAnimator/J3DMaterialAnm.cpp
+        src/JSystem/J3DGraphAnimator/J3DSkinDeform.cpp
+        src/JSystem/J3DGraphAnimator/J3DCluster.cpp
+        src/JSystem/J3DGraphAnimator/J3DJoint.cpp
+        src/JSystem/J3DGraphAnimator/J3DMaterialAttach.cpp
+        src/JSystem/J3DGraphLoader/J3DMaterialFactory.cpp
+        src/JSystem/J3DGraphLoader/J3DMaterialFactory_v21.cpp
+        src/JSystem/J3DGraphLoader/J3DClusterLoader.cpp
+        src/JSystem/J3DGraphLoader/J3DModelLoader.cpp
+        src/JSystem/J3DGraphLoader/J3DModelLoaderCalcSize.cpp
+        src/JSystem/J3DGraphLoader/J3DJointFactory.cpp
+        src/JSystem/J3DGraphLoader/J3DShapeFactory.cpp
+        src/JSystem/J3DGraphLoader/J3DAnmLoader.cpp
+)
+
+set(JSYSTEM_FILES
         src/JSystem/JStudio/JStudio/ctb.cpp
         src/JSystem/JStudio/JStudio/ctb-data.cpp
         src/JSystem/JStudio/JStudio/functionvalue.cpp
@@ -439,113 +546,9 @@ set(JSYSTEM_FILES
         src/JSystem/JMessage/processor.cpp
         src/JSystem/JMessage/resource.cpp
         src/JSystem/JMessage/locale.cpp
-        src/JSystem/JKernel/JKRHeap.cpp
-        src/JSystem/JKernel/JKRExpHeap.cpp
-        src/JSystem/JKernel/JKRSolidHeap.cpp
-        src/JSystem/JKernel/JKRAssertHeap.cpp
-        src/JSystem/JKernel/JKRDisposer.cpp
-        src/JSystem/JKernel/JKRThread.cpp
-        src/JSystem/JKernel/JKRAram.cpp
-        src/JSystem/JKernel/JKRAramHeap.cpp
-        src/JSystem/JKernel/JKRAramBlock.cpp
-        src/JSystem/JKernel/JKRAramPiece.cpp
-        src/JSystem/JKernel/JKRAramStream.cpp
-        src/JSystem/JKernel/JKRFileLoader.cpp
-        src/JSystem/JKernel/JKRFileFinder.cpp
-        src/JSystem/JKernel/JKRFileCache.cpp
-        src/JSystem/JKernel/JKRArchivePub.cpp
-        src/JSystem/JKernel/JKRArchivePri.cpp
-        src/JSystem/JKernel/JKRMemArchive.cpp
-        src/JSystem/JKernel/JKRAramArchive.cpp
-        src/JSystem/JKernel/JKRDvdArchive.cpp
-        src/JSystem/JKernel/JKRCompArchive.cpp
-        src/JSystem/JKernel/JKRFile.cpp
-        src/JSystem/JKernel/JKRDvdFile.cpp
-        src/JSystem/JKernel/JKRDvdRipper.cpp
-        src/JSystem/JKernel/JKRDvdAramRipper.cpp
-        src/JSystem/JKernel/JKRDecomp.cpp
-        src/JSystem/JSupport/JSUList.cpp
-        src/JSystem/JSupport/JSUInputStream.cpp
-        src/JSystem/JSupport/JSUOutputStream.cpp
-        src/JSystem/JSupport/JSUMemoryStream.cpp
-        src/JSystem/JSupport/JSUFileStream.cpp
         src/JSystem/JGadget/binary.cpp
         src/JSystem/JGadget/linklist.cpp
         src/JSystem/JGadget/std-vector.cpp
-        src/JSystem/JUtility/JUTCacheFont.cpp
-        src/JSystem/JUtility/JUTResource.cpp
-        src/JSystem/JUtility/JUTTexture.cpp
-        src/JSystem/JUtility/JUTPalette.cpp
-        src/JSystem/JUtility/JUTNameTab.cpp
-        src/JSystem/JUtility/JUTGraphFifo.cpp
-        src/JSystem/JUtility/JUTFont.cpp
-        src/JSystem/JUtility/JUTResFont.cpp
-        src/JSystem/JUtility/JUTDbPrint.cpp
-        src/JSystem/JUtility/JUTGamePad.cpp
-        src/JSystem/JUtility/JUTException.cpp
-        src/JSystem/JUtility/JUTDirectPrint.cpp
-        src/JSystem/JUtility/JUTAssert.cpp
-        src/JSystem/JUtility/JUTVideo.cpp
-        src/JSystem/JUtility/JUTXfb.cpp
-        src/JSystem/JUtility/JUTFader.cpp
-        src/JSystem/JUtility/JUTProcBar.cpp
-        src/JSystem/JUtility/JUTConsole.cpp
-        src/JSystem/JUtility/JUTDirectFile.cpp
-        src/JSystem/JUtility/JUTFontData_Ascfont_fix12.cpp
-        src/JSystem/J2DGraph/J2DGrafContext.cpp
-        src/JSystem/J2DGraph/J2DOrthoGraph.cpp
-        src/JSystem/J2DGraph/J2DTevs.cpp
-        src/JSystem/J2DGraph/J2DMaterial.cpp
-        src/JSystem/J2DGraph/J2DMatBlock.cpp
-        src/JSystem/J2DGraph/J2DMaterialFactory.cpp
-        src/JSystem/J2DGraph/J2DPrint.cpp
-        src/JSystem/J2DGraph/J2DPane.cpp
-        src/JSystem/J2DGraph/J2DScreen.cpp
-        src/JSystem/J2DGraph/J2DWindow.cpp
-        src/JSystem/J2DGraph/J2DPicture.cpp
-        src/JSystem/J2DGraph/J2DTextBox.cpp
-        src/JSystem/J2DGraph/J2DWindowEx.cpp
-        src/JSystem/J2DGraph/J2DPictureEx.cpp
-        src/JSystem/J2DGraph/J2DTextBoxEx.cpp
-        src/JSystem/J2DGraph/J2DAnmLoader.cpp
-        src/JSystem/J2DGraph/J2DAnimation.cpp
-        src/JSystem/J2DGraph/J2DManage.cpp
-        src/JSystem/J3DGraphBase/J3DGD.cpp
-        src/JSystem/J3DGraphBase/J3DSys.cpp
-        src/JSystem/J3DGraphBase/J3DVertex.cpp
-        src/JSystem/J3DGraphBase/J3DTransform.cpp
-        src/JSystem/J3DGraphBase/J3DTexture.cpp
-        src/JSystem/J3DGraphBase/J3DPacket.cpp
-        src/JSystem/J3DGraphBase/J3DShapeMtx.cpp
-        src/JSystem/J3DGraphBase/J3DShapeDraw.cpp
-        src/JSystem/J3DGraphBase/J3DShape.cpp
-        src/JSystem/J3DGraphBase/J3DMaterial.cpp
-        src/JSystem/J3DGraphBase/J3DMatBlock.cpp
-        src/JSystem/J3DGraphBase/J3DTevs.cpp
-        src/JSystem/J3DGraphBase/J3DDrawBuffer.cpp
-        src/JSystem/J3DGraphBase/J3DStruct.cpp
-        src/JSystem/J3DGraphAnimator/J3DShapeTable.cpp
-        src/JSystem/J3DGraphAnimator/J3DJointTree.cpp
-        src/JSystem/J3DGraphAnimator/J3DModelData.cpp
-        src/JSystem/J3DGraphAnimator/J3DMtxBuffer.cpp
-        src/JSystem/J3DGraphAnimator/J3DModel.cpp
-        src/JSystem/J3DGraphAnimator/J3DAnimation.cpp
-        src/JSystem/J3DGraphAnimator/J3DMaterialAnm.cpp
-        src/JSystem/J3DGraphAnimator/J3DSkinDeform.cpp
-        src/JSystem/J3DGraphAnimator/J3DCluster.cpp
-        src/JSystem/J3DGraphAnimator/J3DJoint.cpp
-        src/JSystem/J3DGraphAnimator/J3DMaterialAttach.cpp
-        src/JSystem/J3DGraphLoader/J3DMaterialFactory.cpp
-        src/JSystem/J3DGraphLoader/J3DMaterialFactory_v21.cpp
-        src/JSystem/J3DGraphLoader/J3DClusterLoader.cpp
-        src/JSystem/J3DGraphLoader/J3DModelLoader.cpp
-        src/JSystem/J3DGraphLoader/J3DModelLoaderCalcSize.cpp
-        src/JSystem/J3DGraphLoader/J3DJointFactory.cpp
-        src/JSystem/J3DGraphLoader/J3DShapeFactory.cpp
-        src/JSystem/J3DGraphLoader/J3DAnmLoader.cpp
-        src/JSystem/JMath/JMath.cpp
-        src/JSystem/JMath/random.cpp
-        src/JSystem/JMath/JMATrigonometric.cpp
         src/JSystem/JHostIO/JORHostInfo.cpp
         src/JSystem/JHostIO/JORServer.cpp
         src/JSystem/JHostIO/JHIhioASync.cpp
