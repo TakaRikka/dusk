@@ -32,6 +32,12 @@ elseif (MSVC)
     add_compile_options(/MP)
     if (NOT DUSK_BUILD_WARNINGS)
         add_compile_options(/W0)
+    else ()
+        # Disable warnings
+        add_compile_options(/wd4068) # unknown pragma
+        add_compile_options(/wd4291) # no matching delete operator, leaks if exception thrown
+        # Only show warnings once
+        add_compile_options(/wo4244) # narrowing conversion, possible data loss
     endif ()
     add_compile_options(/utf-8)
 endif ()
