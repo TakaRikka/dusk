@@ -10,7 +10,7 @@ namespace JGadget {
 namespace search {
 template <typename T>
 struct TExpandStride_ {
-#ifdef _MSC_VER
+#ifdef TARGET_PC
     static T get(T n) { return n << 3; }
 #endif
 };

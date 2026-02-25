@@ -498,7 +498,7 @@ int daNpc_Hoz_c::isDelete() {
 
 void daNpc_Hoz_c::reset() {
     initialize();
-    memset(&field_0xfac, 0, (u32)&field_0xfc4 - (u32)&field_0xfac);
+    memset(&field_0xfac, 0, (uintptr_t)&field_0xfc4 - (uintptr_t)&field_0xfac);
 
     if (mpMatAnm[0] != NULL) {
         mpMatAnm[0]->initialize();

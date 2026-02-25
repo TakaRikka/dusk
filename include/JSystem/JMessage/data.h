@@ -55,7 +55,7 @@ struct data {
         char* get() const { return (char*)getRaw(); }
         u8 get_formSupplement() const { return *(u8*)(get() + 0xB); }
         int get_number() const { return *(u16*)(get() + 0x8); }
-        u32* getContent() const { return (u32*)((u32)getRaw() + 0x10); }
+        u32* getContent() const { return (u32*)((uintptr_t)getRaw() + 0x10); }
         u32 get_form() const { return *(u8*)(get() + 0xA) & 0xF; }
         bool get_isOrdered() const { return *(u8*)(get() + 0xA) & 0xF0; }
     };

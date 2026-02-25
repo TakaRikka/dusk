@@ -173,7 +173,7 @@ private:
 class TFunctionValue_composite : public TFunctionValue, public TFunctionValueAttribute_refer {
 public:
     struct TData {
-        TData(void* data) : u32data((u32)data) {}
+        TData(void* data) : u32data((uintptr_t)data) {}
         TData(const void* data) : rawData(data) {}
         TData(u32 data) : u32data(data) {}
         TData(f32 data) : f32data(data) {}

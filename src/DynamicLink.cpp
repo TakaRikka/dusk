@@ -337,7 +337,7 @@ BOOL DynamicModuleControl::do_link() {
             u32 fixSizePtr;
             u32 fixSize = mModule->fixSize;
             u32 fixSize2 = (fixSize + 0x1f) & ~0x1f;
-            fixSizePtr = (u32)mModule + fixSize2;
+            fixSizePtr = (uintptr_t)mModule + fixSize2;
             s32 size = JKRGetMemBlockSize(NULL, mModule);
             if (size < 0) {
                 void* bss = JKRAlloc(mModule->bssSize, 0x20);
@@ -462,7 +462,7 @@ extern "C" void ModuleUnresolved() {
     OSReport_Error("Address:      Back Chain    LR Save\n");
     u32 i = 0;
     u32* stackPtr = (u32*)OSGetStackPointer();
-    while ((stackPtr != NULL) && ((u32)stackPtr != 0xFFFFFFFF) && (i++ < 0x10)) {
+    while ((stackPtr != NULL) && ((uintptr_t) stackPtr != 0xFFFFFFFF) && (i++ < 0x10)) {
         OSReport_Error("0x%08x:   0x%08x    0x%08x\n", stackPtr, *stackPtr, *(stackPtr + 1));
         stackPtr = (u32*)*stackPtr;
     }

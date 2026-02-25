@@ -449,7 +449,7 @@ int dRes_info_c::loadResource() {
                     void* bas;
 
                     if (chunk->some_data_offset != 0xFFFFFFFF) {
-                        bas = (void*)(chunk->some_data_offset + (u32)result);
+                        bas = (void*)(chunk->some_data_offset + (uintptr_t) result);
                     } else {
                         bas = NULL;
                     }

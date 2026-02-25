@@ -868,7 +868,7 @@ s32 JASSeqParser::cmdPrintf(JASTrack* param_0, u32* param_1) {
         stack_10[i] = (u8)seqCtrl->readByte();
         switch (stack_c[i]) {
         case 2:
-            stack_10[i] = (u32)seqCtrl->getAddr(stack_10[i]);
+            stack_10[i] = (uintptr_t)seqCtrl->getAddr(stack_10[i]);
             break;
         case 3:
         case 4:

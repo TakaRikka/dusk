@@ -241,8 +241,8 @@ extern u8 __OSReport_Warning_disable;
 extern u8 __OSReport_System_disable;
 extern u8 __OSReport_enable;
 
-#define OSRoundUp32B(x)   (((u32)(x) + 32 - 1) & ~(32 - 1))
-#define OSRoundDown32B(x) (((u32)(x)) & ~(32 - 1))
+#define OSRoundUp32B(x)   (((uintptr_t)(x) + 32 - 1) & ~(32 - 1))
+#define OSRoundDown32B(x) (((uintptr_t)(x)) & ~(32 - 1))
 
 #ifdef TARGET_PC
 

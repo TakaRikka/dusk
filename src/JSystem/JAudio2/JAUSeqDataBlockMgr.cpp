@@ -153,7 +153,7 @@ bool JAUDynamicSeqDataBlocks::loadDynamicSeq(JAISoundID param_0, bool param_1,
         JASResArcLoader::loadResourceAsync(
             seqDataArchive_, resourceId,
             link->getObject()->region.addr, link->getObject()->region.size,
-            JAUDynamicSeqDataBlocks_receiveLoaded_, (u32)link);
+            JAUDynamicSeqDataBlocks_receiveLoaded_, (uintptr_t)link);
     }
     return true;
 }

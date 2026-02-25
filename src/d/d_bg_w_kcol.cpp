@@ -695,7 +695,7 @@ void dBgWKCol::ShdwDraw(cBgS_ShdwDraw* param_0) {
 
                         int x_sp44 = minX_spA0;
                         do {
-                            u32 block_sp40 = (u32)m_pkc_head->m_block_data;
+                            u32 block_sp40 = (uintptr_t) m_pkc_head->m_block_data;
                             u32 shift_sp3C = m_pkc_head->m_block_width_shift;
                             int offset_sp38 =
                                 4 * (((u32)z_sp4C >> shift_sp3C) << m_pkc_head->m_area_xy_blocks_shift |
@@ -2007,7 +2007,7 @@ bool dBgWKCol::SplGrpChk(dBgS_SplGrpChk* param_0) {
 
     bool sp09 = false;
     do {
-        u32 sp28 = (u32)m_pkc_head->m_block_data;
+        u32 sp28 = (uintptr_t) m_pkc_head->m_block_data;
         u32 sp24 = m_pkc_head->m_block_width_shift;
         int sp20 = 4 * (((u32)sp34 >> sp24) << m_pkc_head->m_area_xy_blocks_shift |
                         ((u32)sp2C >> sp24) << m_pkc_head->m_area_x_blocks_shift |
