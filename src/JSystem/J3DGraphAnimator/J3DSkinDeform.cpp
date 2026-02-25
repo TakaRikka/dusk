@@ -239,7 +239,7 @@ int J3DSkinDeform::initMtxIndexArray(J3DModelData* pModelData) {
         int nrm_num = -1;
         int tex_num = -1;
         int r23 = 0;
-        for (GXVtxDescList* vtxDesc = pModelData->getShapeNodePointer(i)->getVtxDesc(); vtxDesc->attr != 0xff; vtxDesc++) {
+        for (BE(GXVtxDescList)* vtxDesc = pModelData->getShapeNodePointer(i)->getVtxDesc(); vtxDesc->attr != 0xff; vtxDesc++) {
             switch (vtxDesc->attr) {
             case GX_VA_PNMTXIDX:
                 pnmtx_num = r23;
@@ -356,7 +356,7 @@ void J3DSkinDeform::changeFastSkinDL(J3DModelData* pModelData) {
         int vtxSize = 0;
 
         J3DShape* pShapeNode = pModelData->getShapeNodePointer(i);
-        for (GXVtxDescList* vtxDesc = pShapeNode->getVtxDesc(); vtxDesc->attr != GX_VA_NULL; vtxDesc++) {
+        for (BE(GXVtxDescList)* vtxDesc = pShapeNode->getVtxDesc(); vtxDesc->attr != GX_VA_NULL; vtxDesc++) {
             if (vtxDesc->attr == GX_VA_PNMTXIDX) {
                 pnmtxIdxOffs = vtxSize;
             }
@@ -402,8 +402,8 @@ void J3DSkinDeform::changeFastSkinDL(J3DModelData* pModelData) {
 
     for (u16 i = 0; i < pModelData->getShapeNum(); i++) {
         J3DShape* shape = pModelData->getShapeNodePointer(i);
-        GXVtxDescList* desc = shape->getVtxDesc();
-        GXVtxDescList* descDst = desc;
+        BE(GXVtxDescList)* desc = shape->getVtxDesc();
+        BE(GXVtxDescList)* descDst = desc;
         for (; desc->attr != GX_VA_NULL; desc++) {
             if (desc->attr != GX_VA_PNMTXIDX) {
                 descDst->attr = desc->attr;
@@ -687,7 +687,11 @@ void J3DVtxColorCalc::calc(J3DVertexBuffer* buffer) {
             mpVtxColor->getColor(0, i, &color);
             J3DAnmVtxColorIndexData* r28 = mpVtxColor->getAnmVtxColorIndexData(0, i);
             for (u32 j = 0; j < r28->mNum; j++) {
+#if TARGET_PC
+                colorArray[mpVtxColor->offsetColorIndexAddress(0, r28->mpData)[j]] = color;
+#else
                 colorArray[((u16*)r28->mpData)[j]] = color;
+#endif
             }
         }
         DCStoreRange(colorArray, buffer->getVertexData()->getColNum() * 4);

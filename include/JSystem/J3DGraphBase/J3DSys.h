@@ -3,8 +3,10 @@
 
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+
 #include "JSystem/J3DAssert.h"
 #include "JSystem/JMath/JMath.h"
+#include "dusk/endian.h"
 
 enum J3DSysDrawBuf {
     /* 0x0 */ J3DSysDrawBuf_Opa,
@@ -63,7 +65,7 @@ struct J3DSys {
     /* 0x10C */ void* mVtxPos;
     /* 0x110 */ void* mVtxNrm;
     /* 0x114 */ GXColor* mVtxCol;
-    /* 0x118 */ Vec* mNBTScale;
+    /* 0x118 */ BE(Vec)* mNBTScale;
 
     J3DSys();
     void loadPosMtxIndx(int, u16) const;
@@ -131,8 +133,8 @@ struct J3DSys {
     }
     J3DTexture* getTexture() { return mTexture; }
 
-    void setNBTScale(Vec* scale) { mNBTScale = scale; }
-    Vec* getNBTScale() { return mNBTScale; }
+    void setNBTScale(BE(Vec)* scale) { mNBTScale = scale; }
+    BE(Vec)* getNBTScale() { return mNBTScale; }
 
     void onFlag(u32 flag) { mFlags |= flag; }
 

@@ -1,7 +1,10 @@
 #ifndef DOLPHIN_ENDIAN_H
 #define DOLPHIN_ENDIAN_H
 
+#include <bit>
+
 #include "dolphin/types.h"
+#include "dolphin/mtx.h"
 
 // Platform detection - Little Endian targets
 #if defined(_WIN32) || defined(__x86_64__) || defined(__i386__) || defined(__aarch64__) || defined(_M_X64) || defined(_M_IX86)
@@ -45,6 +48,9 @@ static inline u32 RES_U32(u32 v) {
 static inline s32 RES_S32(s32 v) {
     return be32s(v);
 }
+static inline f32 RES_F32(f32 v) {
+    return std::bit_cast<f32, s32>(RES_S32(std::bit_cast<s32, f32>(v)));
+}
 #else
 // On GameCube host-endian == file-endian, these are no-ops (keep as macros to allow compile in
 // original code paths)
@@ -62,32 +68,102 @@ static inline s32 RES_S32(s32 v) {
 template<class T>
 struct BE {
     T inner;
-    operator T() const;
+    BE() = default;
+    BE(const T& from) {
+        inner = swap(from);
+    }
+
+    operator T() const {
+        return swap(inner);
+    }
+
+    T host[[nodiscard]]() const {
+        return swap(inner);
+    }
+
+    static T swap[[nodiscard]](T val);
 };
 
 template<>
-inline BE<u16>::operator u16() const {
-    return RES_U16(inner);
+inline u16 BE<u16>::swap(u16 val) {
+    return RES_U16(val);
 }
 
 template<>
-inline BE<s16>::operator s16() const {
-    return RES_S16(inner);
+inline s16 BE<s16>::swap(s16 val) {
+    return RES_S16(val);
 }
 
 template<>
-inline BE<u32>::operator u32() const {
-    return RES_U32(inner);
+inline u32 BE<u32>::swap(u32 val) {
+    return RES_U32(val);
 }
 
 template<>
-inline BE<s32>::operator s32() const {
-    return RES_S32(inner);
+inline s32 BE<s32>::swap(s32 val) {
+    return RES_S32(val);
+}
+
+template<>
+inline f32 BE<f32>::swap(f32 val) {
+    return RES_F32(val);
+}
+
+template<>
+struct BE<Vec> {
+    BE<f32> x;
+    BE<f32> y;
+    BE<f32> z;
+
+    operator Vec() const {
+        return { x, y, z };
+    }
+
+    static Vec swap(Vec val) {
+        return {
+            BE<f32>::swap(val.x),
+            BE<f32>::swap(val.y),
+            BE<f32>::swap(val.z),
+        };
+    }
+};
+
+template <>
+struct BE<Mtx44> {
+    BE<f32> contents[4][4];
+
+    auto& operator[](int x) const {
+        return contents[x];
+    }
+};
+
+template<typename T>
+void be_swap(T& val) {
+    val = BE<T>::swap(val);
+}
+
+template<typename T, u32 N>
+void be_swap(T (& val)[N]) {
+    for (u32 i = 0; i < N; i++) {
+        be_swap(val[i]);
+    }
+    val = BE<T>::swap(val);
+}
+
+template<>
+inline void be_swap(Mtx44& val) {
+    for (auto & x : val) {
+        for (float & y : x) {
+            be_swap(y);
+        }
+    }
 }
 
 #define BE(T) BE<T>
+#define BE_HOST(T) (T.host())
 #else
 #define BE(T) T
+#define BE_HOST(T) (T)
 #endif
 
 

@@ -7,6 +7,8 @@
 #include "global.h"
 #include "JSystem/JMath/JMath.h"
 
+#include "dusk/endian.h"
+
 /**
  * @ingroup jsystem-j3d
  * 
@@ -15,6 +17,8 @@ struct J3DLightInfo {
     bool operator==(J3DLightInfo& other) const;
     J3DLightInfo& operator=(J3DLightInfo const&);
 
+    // NOTE: Values big endian, need fixup at load
+    // Actually, this class doesn't seem used?
     /* 0x00 */ Vec mLightPosition;
     /* 0x0C */ Vec mLightDirection;
     /* 0x18 */ GXColor mColor;
@@ -27,6 +31,7 @@ struct J3DLightInfo {
  * 
  */
 struct J3DTextureSRTInfo {
+    // NOTE: Big endian when loaded from file!
     /* 0x00 */ f32 mScaleX;
     /* 0x04 */ f32 mScaleY;
     /* 0x08 */ s16 mRotation;
@@ -85,9 +90,10 @@ struct J3DTexMtxInfo {
     /* 0x01 */ u8 mInfo;
     /* 0x02 */ u8 field_0x2;
     /* 0x03 */ u8 field_0x3;
+    // NOTE: big endian when loaded from file!
     /* 0x04 */ Vec mCenter;
     /* 0x10 */ J3DTextureSRTInfo mSRT;
-    /* 0x24 */ Mtx44 mEffectMtx;    
+    /* 0x24 */ Mtx44 mEffectMtx;
 };  // Size: 0x64
 
 /**
@@ -107,6 +113,9 @@ struct J3DIndTexMtxInfo {
 struct J3DFogInfo {
     bool operator==(J3DFogInfo&) const;
     J3DFogInfo& operator=(const J3DFogInfo&);
+
+    // TODO: Fog data should be converted from big endian (probably?)
+    // Not sure TP uses it.
 
     /* 0x00 */ u8 mType;
     /* 0x01 */ u8 mAdjEnable;
@@ -128,7 +137,7 @@ struct J3DNBTScaleInfo {
     J3DNBTScaleInfo& operator=(const J3DNBTScaleInfo&);
 
     /* 0x0 */ u8 mbHasScale;
-    /* 0x4 */ Vec mScale;
+    /* 0x4 */ BE(Vec) mScale;
 };  // Size: 0x10
 
 /**

@@ -10,16 +10,16 @@
 
 J3DShapeFactory::J3DShapeFactory(J3DShapeBlock const& block) {
     mShapeInitData = JSUConvertOffsetToPtr<J3DShapeInitData>(&block, (uintptr_t)block.mpShapeInitData);
-    mIndexTable = JSUConvertOffsetToPtr<u16>(&block, (uintptr_t)block.mpIndexTable);
-    mVtxDescList = JSUConvertOffsetToPtr<GXVtxDescList>(&block, (uintptr_t)block.mpVtxDescList);
-    mMtxTable = JSUConvertOffsetToPtr<u16>(&block, (uintptr_t)block.mpMtxTable);
+    mIndexTable = JSUConvertOffsetToPtr<BE(u16)>(&block, (uintptr_t)block.mpIndexTable);
+    mVtxDescList = JSUConvertOffsetToPtr<BE(GXVtxDescList)>(&block, (uintptr_t)block.mpVtxDescList);
+    mMtxTable = JSUConvertOffsetToPtr<BE(u16)>(&block, (uintptr_t)block.mpMtxTable);
     mDisplayListData = JSUConvertOffsetToPtr<u8>(&block, (uintptr_t)block.mpDisplayListData);
     mMtxInitData = JSUConvertOffsetToPtr<J3DShapeMtxInitData>(&block, (uintptr_t)block.mpMtxInitData);
     mDrawInitData = JSUConvertOffsetToPtr<J3DShapeDrawInitData>(&block, (uintptr_t)block.mpDrawInitData);
     mVcdVatCmdBuffer = NULL;
 }
 
-J3DShape* J3DShapeFactory::create(int no, u32 flag, GXVtxDescList* vtxDesc) {
+J3DShape* J3DShapeFactory::create(int no, u32 flag, BE(GXVtxDescList)* vtxDesc) {
     J3DShape* shape = new J3DShape;
     J3D_ASSERT_ALLOCMEM(67, shape);
     shape->mMtxGroupNum = getMtxGroupNum(no);

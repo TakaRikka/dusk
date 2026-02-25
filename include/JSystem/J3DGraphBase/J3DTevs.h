@@ -282,7 +282,7 @@ struct J3DNBTScale : public J3DNBTScaleInfo {
         mScale.z = info.mScale.z;
     }
 
-    Vec* getScale() { return &mScale; }
+    BE(Vec)* getScale() { return &mScale; }
 };
 
 extern const GXColor j3dDefaultColInfo;
