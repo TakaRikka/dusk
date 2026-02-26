@@ -107,7 +107,7 @@ static void mDoAud_Create() {
 #endif
         if (g_mDoAud_audioHeap != NULL) {
             s32 groupID = JKRGetCurrentHeap()->changeGroupID(5);
-#if PLATFORM_GCN
+#if PLATFORM_GCN && !TARGET_PC
             const int audioMemSize = 0xA00000;
 #else
             const int audioMemSize = 0xB00000;

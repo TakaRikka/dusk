@@ -20,7 +20,11 @@ JAU_JASInitializer::JAU_JASInitializer() {
     audioMemSize_ = 0;
     dvdThreadId_ = -1;
     audioThreadId_ = -1;
+#if TARGET_PC
+    heapSize_ = 0x4000;
+#else
     heapSize_ = 0x1000;
+#endif
     dvdThreadPriority_ = 3;
     audioThreadPriority_ = 2;
     field_0x1c = 0x80;

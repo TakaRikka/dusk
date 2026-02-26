@@ -52,7 +52,11 @@ OSTime mDoMain::sPowerOnTime;
 OSTime mDoMain::sHungUpTime;
 u32 mDoMain::memMargin = 0xFFFFFFFF;
 char mDoMain::COPYDATE_STRING[18] = "??/??/?? ??:??:??";
+#if TARGET_PC
+const int audioHeapSize = 0x14D800 * 2;
+#else
 const int audioHeapSize = 0x14D800;
+#endif
 
 // --- PC LOGGING CALLBACK ---
 void aurora_log_callback(AuroraLogLevel level, const char* module, const char* message,
