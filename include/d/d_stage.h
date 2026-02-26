@@ -7,6 +7,32 @@
 #include "f_op/f_op_actor_mng.h"
 #include "global.h"
 
+#if TARGET_PC
+struct StageOffsetPtr {
+    // Top bit is used to store "already relocated" flag as a guard thing.
+    BE<s32> value;
+
+    void setBase(void* base);
+
+    template<typename T>
+    explicit operator T*() const {
+        s32 swapped = value;
+        if (swapped == 0) {
+            // This shouldn't be able to happen but the original offsetting code has the safeguard.
+            return nullptr;
+        }
+
+        // Because we use the top (31st) bit as an "already relocated" flag,
+        // we need to make sure to check the 30th bit to see if we're actually negative.
+        // And cut off the 31st bit if we're supposed to be positive.
+        // Effective range this gives us is still like a gigabyte in both directions,
+        // so we'll be fine on that front.
+        s32 realOffset = (swapped & 0x4000'0000) ? swapped : (swapped & 0x7FFF'FFFF);
+        return (T*)POINTER_ADD(this, realOffset);
+    }
+};
+#endif
+
 enum StageType {
     /* 0x0 */ ST_FIELD,
     /* 0x1 */ ST_DUNGEON,
@@ -18,14 +44,20 @@ enum StageType {
 
 // made up name
 struct dStage_nodeHeader {
+    // m_tag is actually a 4-char string (like "STAG"),
+    // so keep it as big endian without conversion so matching it keeps working.
     /* 0x0 */ u32 m_tag;
-    /* 0x4 */ int m_entryNum;
+    /* 0x4 */ BE(int) m_entryNum;
+#if TARGET_PC
+    /* 0x8 */ StageOffsetPtr m_offset;
+#else
     /* 0x8 */ u32 m_offset;
+#endif
 };
 
 // made up name
 struct dStage_fileHeader {
-    /* 0x0 */ int m_chunkCount;
+    /* 0x0 */ BE(int) m_chunkCount;
     /* 0x4 */ dStage_nodeHeader m_nodes[1]; // Variable length
 };
 
@@ -61,21 +93,21 @@ struct stage_tresure_class {
 
 // STAG
 struct stage_stag_info_class {
-    /* 0x00 */ f32 mNear;
-    /* 0x04 */ f32 mFar;
+    /* 0x00 */ BE(f32) mNear;
+    /* 0x04 */ BE(f32) mFar;
     /* 0x08 */ u8 mCameraType;
     /* 0x09 */ u8 field_0x09;
-    /* 0x0A */ u16 field_0x0a;
-    /* 0x0C */ u32 field_0x0c;
-    /* 0x10 */ u32 field_0x10;
+    /* 0x0A */ BE(u16) field_0x0a;
+    /* 0x0C */ BE(u32) field_0x0c;
+    /* 0x10 */ BE(u32) field_0x10;
     /* 0x14 */ u8 field_0x14[6];  // usually all 0xFF
-    /* 0x1A */ s16 mGapLevel;
-    /* 0x1C */ s16 mRangeUp;
-    /* 0x1E */ s16 mRangeDown;
-    /* 0x20 */ f32 field_0x20;
-    /* 0x24 */ f32 field_0x24;
+    /* 0x1A */ BE(s16) mGapLevel;
+    /* 0x1C */ BE(s16) mRangeUp;
+    /* 0x1E */ BE(s16) mRangeDown;
+    /* 0x20 */ BE(f32) field_0x20;
+    /* 0x24 */ BE(f32) field_0x24;
     /* 0x28 */ u8 mMsgGroup;
-    /* 0x2A */ u16 mStageTitleNo;
+    /* 0x2A */ BE(u16) mStageTitleNo;
     /* 0x2C */ u8 mParticleNo[16];
 };  // Size: 0x3C
 

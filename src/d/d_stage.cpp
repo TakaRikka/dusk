@@ -2282,10 +2282,14 @@ static void dStage_dt_c_offsetToPtr(void* i_data) {
     dStage_nodeHeader* p_tno = file->m_nodes;
 
     for (int i = 0; i < file->m_chunkCount; i++) {
+#if TARGET_PC
+        p_tno->m_offset.setBase(i_data);
+#else
         JUT_ASSERT(3381, p_tno->m_offset != 0);
         if (p_tno->m_offset != 0 && p_tno->m_offset < 0x80000000) {
             p_tno->m_offset += (uintptr_t)i_data;
         }
+#endif
         p_tno++;
     }
 }
@@ -2903,5 +2907,25 @@ void dStage_escapeRestart() {
     daAlink_c* player_p = daAlink_getAlinkActorClass();
     dComIfGs_setTurnRestart(player_p->current.pos, player_p->shape_angle.y, fopAcM_GetRoomNo(player_p), fopAcM_GetParam(player_p));
     dComIfGp_setNextStage(dComIfGp_getStartStageName(), -2, dComIfGs_getTurnRestartRoomNo(), -1, 0.0f, 0, 0, 9, 0, 1, 0);
+}
+#endif
+
+#if TARGET_PC
+void StageOffsetPtr::setBase(void* base) {
+    JUT_ASSERT(__LINE__, value != 0);
+
+    if (value & 0x8000'0000) {
+        // Already relocated, don't touch it again!
+        return;
+    }
+
+    ptrdiff_t diff = (u8*)this - (u8*)base;
+    ptrdiff_t newDiff = value - diff;
+    // Check that it's in range given that we use the 31st bit as a flag.
+    if (newDiff < -0x4000'0000 || newDiff > 0x7FFF'FFFF) {
+        OSPanic(__FILE__, __LINE__, "Not enough space in StageOffsetPtr!");
+    }
+
+    value = newDiff | 0x8000'0000;
 }
 #endif
