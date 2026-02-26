@@ -2,6 +2,7 @@
 #define JAUAUDIOARCINTERPRETER_H
 
 #include <dolphin/types.h>
+#include "dusk/endian.h"
 
 /**
  * @ingroup jsystem-jaudio
@@ -33,7 +34,7 @@ public:
     }
 
     u32 readU32_() {
-        u32 temp = *(u32*)mReadPtr;
+        u32 temp = *(BE(u32)*)mReadPtr;
         mReadPtr += 4;
         return temp;
     }

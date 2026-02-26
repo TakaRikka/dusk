@@ -5,8 +5,8 @@
 
 struct BinaryStreamFileTable {
     /* 0x0 */ u8 mIdentifier[4];
-    /* 0x4 */ u32 mNumFiles;
-    /* 0x8 */ int mFilePathOffsets[];
+    /* 0x4 */ BE(u32) mNumFiles;
+    /* 0x8 */ BE(int) mFilePathOffsets[];
 };
 
 /**

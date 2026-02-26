@@ -13,9 +13,9 @@ struct JAISeqDataRegion;
 struct JAUSeqCollectionData {
     s8 field_0x0;
     s8 field_0x1;
-    u16 field_0x2;
-    u32 field_0x4;
-    u32 field_0x8;
+    BE(u16) field_0x2;
+    BE(u32) field_0x4;
+    BE(u32) field_0x8;
 };
 
 /**
@@ -32,7 +32,7 @@ public:
     bool isValid() const { return field_0x8; }
 
     /* 0x00 */ u16 field_0x0;
-    /* 0x04 */ const u32* field_0x4;
+    /* 0x04 */ const BE(u32)* field_0x4;
     /* 0x08 */ const JAUSeqCollectionData* field_0x8;
     /* 0x0C */ int field_0xc;
 };

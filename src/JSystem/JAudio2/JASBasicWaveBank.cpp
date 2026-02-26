@@ -125,7 +125,7 @@ u32 JASBasicWaveBank::TWaveGroup::getWaveID(int index) const {
     return mCtrlWaveArray[index].field_0x0;
 }
 
-int JASBasicWaveBank::TWaveHandle::getWavePtr() const {
+intptr_t JASBasicWaveBank::TWaveHandle::getWavePtr() const {
     JUT_ASSERT(313, mHeap);
     void* base = mHeap->getBase();
     if (base == 0) {

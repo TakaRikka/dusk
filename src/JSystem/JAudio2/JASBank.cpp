@@ -32,7 +32,7 @@ JASChannel* JASBank::noteOn(JASBank const* param_0, int param_1, u8 param_2, u8 
     if (!waveInfo) {
         return NULL;
     }
-    int wavePtr = waveHandle->getWavePtr();
+    intptr_t wavePtr = waveHandle->getWavePtr();
     if (!wavePtr) {
         return NULL;
     }

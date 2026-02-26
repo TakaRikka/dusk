@@ -40,8 +40,8 @@ public:
         /* 0x88 */ const void* mBstnDst;
         /* 0x8C */ JSUList<JAUDisposer_> field_0x8c;
         /* 0x98 */ s32 field_0x98;
-        /* 0x9C */ int field_0x9c;
-        /* 0xA0 */ int field_0xa0;
+        /* 0x9C */ int mBankMemoryUsage;
+        /* 0xA0 */ int mWaveBankMemoryUsage;
     };
 
     JAUSection(JAUSectionHeap*, u32, s32);

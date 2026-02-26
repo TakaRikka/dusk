@@ -39,7 +39,7 @@ class JASWaveHandle {
 public:
     virtual ~JASWaveHandle() {}
     virtual const JASWaveInfo* getWaveInfo() const = 0;
-    virtual int getWavePtr() const = 0;
+    virtual intptr_t getWavePtr() const = 0;
 };
 
 /**

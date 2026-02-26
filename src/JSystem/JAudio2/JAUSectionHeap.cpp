@@ -32,32 +32,32 @@ namespace {
             JAUStreamFileTable stack_14;
             stack_14.init(param_0);
             if (!stack_14.isValid()) {
-                field_0x4 = 0;
-                field_0x8 = NULL;
+                mNumStreamFiles = 0;
+                mStreamFileDVDEntryNums = NULL;
                 return;
             }
-            field_0x4 = stack_14.getNumFiles();
-            field_0x8 = new s32[field_0x4];
-            if (!field_0x8) {
-                field_0x4 = NULL;
+            mNumStreamFiles = stack_14.getNumFiles();
+            mStreamFileDVDEntryNums = new s32[mNumStreamFiles];
+            if (!mStreamFileDVDEntryNums) {
+                mNumStreamFiles = NULL;
                 return;
             }
-            for (u32 i = 0; i < field_0x4; i++) {
-                field_0x8[i] = DVDConvertPathToEntrynum(stack_14.getFilePath(i));
+            for (u32 i = 0; i < mNumStreamFiles; i++) {
+                mStreamFileDVDEntryNums[i] = DVDConvertPathToEntrynum(stack_14.getFilePath(i));
             }
         }
         virtual s32 getStreamFileEntry(JAISoundID id) {
             u32 short_id = id.id_.info.waveID;
-            if (short_id >= field_0x4) {
+            if (short_id >= mNumStreamFiles) {
                 return -1;
             }
-            return field_0x8[short_id];
+            return mStreamFileDVDEntryNums[short_id];
         }
 
-        bool isValid() { return field_0x4; }
+        bool isValid() { return mNumStreamFiles; }
 
-        u32 field_0x4;
-        s32* field_0x8;
+        u32 mNumStreamFiles;
+        s32* mStreamFileDVDEntryNums;
     };
 }
 
@@ -75,8 +75,8 @@ JAUSection::TSectionData::TSectionData() {
     mBstDst = NULL;
     mBstnDst = NULL;
     field_0x80 = NULL;
-    field_0xa0 = 0;
-    field_0x9c = 0;
+    mWaveBankMemoryUsage = 0;
+    mBankMemoryUsage = 0;
 }
 
 void JAUSection::TSectionData::resetRegisteredBankTables() {
@@ -293,13 +293,13 @@ JASWaveBank* JAUSection::newWaveBank(u32 bank_no, void const* param_1) {
     JUT_ASSERT(529, isBuilding());
     {
         TPushCurrentHeap push(getHeap_());
-        s32 r27 = getHeap_()->getFreeSize();
+        s32 previousFree = getHeap_()->getFreeSize();
         JASWaveBank* waveBank = JASWSParser::createWaveBank(param_1, getHeap_());
         if (waveBank) {
             JUT_ASSERT(536, sectionHeap_->getWaveBankTable().getWaveBank( bank_no ) == NULL);
             sectionHeap_->getWaveBankTable().registWaveBank(bank_no, waveBank);
             data_.registeredWaveBankTables.set(bank_no, true);
-            data_.field_0xa0 += r27 - getHeap_()->getFreeSize();
+            data_.mWaveBankMemoryUsage += previousFree - getHeap_()->getFreeSize();
             return waveBank;
         }
     }
@@ -331,7 +331,7 @@ JASBank* JAUSection::newBank(void const* param_0, u32 param_1) {
     {
         TPushCurrentHeap push(getHeap_());
         u32 bank_no = JASBNKParser::getBankNumber(param_0);
-        s32 r25 = getHeap_()->getFreeSize();
+        s32 previousFree = getHeap_()->getFreeSize();
         JASBank* bank = JASBNKParser::createBank(param_0, getHeap_());
         if (bank) {
             if (buildingBankTable_) {
@@ -343,7 +343,7 @@ JASBank* JAUSection::newBank(void const* param_0, u32 param_1) {
                 data_.registeredBankTables.set(bank_no, true);
             }
             bank->assignWaveBank(waveBank);
-            data_.field_0x9c += r25 - getHeap_()->getFreeSize();
+            data_.mBankMemoryUsage += previousFree - getHeap_()->getFreeSize();
             return bank;
         }
     }

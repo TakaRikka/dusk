@@ -11,7 +11,7 @@
 struct JASBasicWaveBank : public JASWaveBank {
     struct TWaveHandle : public JASWaveHandle {
         TWaveHandle() { mHeap = NULL; }
-        virtual int getWavePtr() const;
+        virtual intptr_t getWavePtr() const;
         virtual const JASWaveInfo* getWaveInfo() const { return &field_0x4; }
         bool compareHeap(JASHeap* heap) const { return mHeap == heap;}
 

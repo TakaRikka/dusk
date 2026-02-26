@@ -156,7 +156,7 @@ public:
         u32 field_0x0;
         JASWaveInfo field_0x4;
     } field_0xdc;
-    int field_0x104;
+    intptr_t field_0x104;
 
     static OSMessageQueue sBankDisposeMsgQ;
     static OSMessage sBankDisposeMsg[16];

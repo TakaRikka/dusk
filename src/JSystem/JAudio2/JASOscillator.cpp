@@ -109,7 +109,7 @@ void JASOscillator::update() {
         _08 = _10;
         _14++;
         _0C = _08;
-        const s16* ps = &psVar1[_14]._0;
+        const BE(s16)* ps = &psVar1[_14]._0;
         s16 r26 = ps[0];
         switch(r26) {
         case 0xf:

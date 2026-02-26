@@ -25,7 +25,7 @@ bool JAUSeqCollection::getSeqData(int param_0, int param_1, JAISeqData* param_2)
         return false;
     }
     u32 r29 = field_0x4[param_0];
-    u32* puVar2 = (u32*)((u8*)field_0x8 + r29);
+    BE(u32)* puVar2 = (BE(u32)*)((u8*)field_0x8 + r29);
     if (param_1 >= puVar2[0]) {
         return false;
     }

@@ -71,7 +71,7 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
     u8* envt = new (heap, 2) u8[envt_chunk->mSize];
     JASCalc::bcopy(envt_chunk->mData, envt, envt_chunk->mSize);
 
-    u32* ptr = &osc_chunk->mCount;
+    BE(u32)* ptr = &osc_chunk->mCount;
     u32 count = *ptr++;
     JASOscillator::Data* osc_data = new (heap, 0) JASOscillator::Data[count];
     for (int i = 0; i < count; i++, ptr += sizeof(TOsc) >> 2) {
@@ -91,7 +91,7 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
     bank->newInstTable(list_chunk->count, heap);
     for (int i = 0; i < list_chunk->count; i++) {
         if (list_chunk->mOffsets[i] != 0) {
-            u32* data = (u32*)((intptr_t)stream + list_chunk->mOffsets[i]);
+            BE(u32)* data = (BE(u32)*)((intptr_t)stream + list_chunk->mOffsets[i]);
             switch (*data++) {
             case 'Inst': {
                 JASBasicInst* instp = new (heap, 0) JASBasicInst();
@@ -112,15 +112,15 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
                     keymap->setHighKey(*data >> 0x18);
                     u32 fVar4 = data[1];
                     keymap->field_0x4 = JSULoHalf(data[3]);
-                    keymap->field_0x8 = *(f32*)&data[4];
-                    keymap->field_0xc = *(f32*)&data[5];
+                    keymap->field_0x8 = *(BE(f32)*)&data[4];
+                    keymap->field_0xc = *(BE(f32)*)&data[5];
                     data += 2;
                     for (int k = 0; k < fVar4; k++) {
                         data += 4;
                     }
                 }
-                instp->setVolume(*(f32*)&data[0]);
-                instp->setPitch(*(f32*)&data[1]);
+                instp->setVolume(*(BE(f32)*)&data[0]);
+                instp->setPitch(*(BE(f32)*)&data[1]);
                 bank->setInst(i, instp);
                 break;
             }
@@ -139,21 +139,21 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
                         JUT_ASSERT(277, percp);
                         u32 type = data[0];
                         JUT_ASSERT(282, type == 'Pmap');
-                        u32* ptr = (u32*)((intptr_t)stream + offset);
+                        BE(u32)* ptr = (BE(u32)*)((intptr_t)stream + offset);
                         TPercData* perc_data = (TPercData*)(ptr + 1);
                         percp->setVolume(perc_data->mVolume);
                         percp->setPitch(perc_data->mPitch);
                         percp->setPan((f32)perc_data->mPan / 127.0f);
                         percp->setRelease(perc_data->mRelease);
-                        ptr = (u32*)&perc_data->field_0xc;
+                        ptr = (BE(u32)*)&perc_data->field_0xc;
                         u32 count2 = *ptr++;
                         for (int k = 0; k < count2; k++) {
                             ptr++;
                         }
                         u32 pVar6 = ptr[0];
                         percp->field_0xe = JSULoHalf(ptr[2]);
-                        percp->field_0x10 = *(f32*)&ptr[3];
-                        percp->field_0x14 = *(f32*)&ptr[4];
+                        percp->field_0x10 = *(BE(f32)*)&ptr[3];
+                        percp->field_0x14 = *(BE(f32)*)&ptr[4];
                         for (int k = 0; k < pVar6; k++) {}
                         drump->setPerc(j, percp);
                     }

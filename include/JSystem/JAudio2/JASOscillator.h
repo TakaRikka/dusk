@@ -2,6 +2,7 @@
 #define JASOSCILLATOR_H
 
 #include <dolphin/types.h>
+#include "dusk/endian.h"
 
 /**
  * @ingroup jsystem-jaudio
@@ -9,9 +10,9 @@
  */
 struct JASOscillator {
 	struct Point {
-		/* 0x0 */ s16 _0;
-		/* 0x2 */ s16 _2;
-		/* 0x4 */ s16 _4;
+		/* 0x0 */ BE(s16) _0;
+		/* 0x2 */ BE(s16) _2;
+		/* 0x4 */ BE(s16) _4;
 	};
 
     struct EffectParams {
