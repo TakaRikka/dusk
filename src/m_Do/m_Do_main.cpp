@@ -152,7 +152,7 @@ void main01(void) {
     OSReport("Calling cDyl_InitAsync()...\n");
     cDyl_InitAsync();
 
-    mDoAud_zelAudio_c::onInitFlag();
+    g_mDoAud_audioHeap = JKRCreateSolidHeap(audioHeapSize, JKRGetCurrentHeap(), false);
 
     OSReport("Entering Main Loop (main01)...\n");
 
