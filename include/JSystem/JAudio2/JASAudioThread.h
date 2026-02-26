@@ -31,6 +31,12 @@ struct JASAudioThread : public JKRThread, public JASGlobalInstance<JASAudioThrea
 	/* 0x84 */ bool sbPauseFlag;        // type unsure
 	
     static volatile int snIntCount; // type unsure
+
+#if TARGET_PC
+    static bool sThreadInitComplete;
+    static OSMutex sThreadInitCompleteMutex;
+    static OSCond sThreadInitCompleteCond;
+#endif
 };
 
 #endif /* JASAUDIOTHREAD_H */

@@ -21,7 +21,18 @@ JASAudioThread::JASAudioThread(int stackSize, int msgCount, u32 threadPriority)
     OSInitThreadQueue(&sThreadQueue);
 }
 
+#if TARGET_PC
+bool JASAudioThread::sThreadInitComplete = false;
+OSMutex JASAudioThread::sThreadInitCompleteMutex;
+OSCond JASAudioThread::sThreadInitCompleteCond;
+#endif
+
 void JASAudioThread::create(s32 threadPriority) {
+#if TARGET_PC
+    OSInitMutex(&sThreadInitCompleteMutex);
+    OSInitCond(&sThreadInitCompleteCond);
+#endif
+
 #if PLATFORM_GCN
     const int size = 0x1400;
 #else
@@ -67,6 +78,13 @@ void* JASAudioThread::run() {
 
     JASPoolAllocObject_MultiThreaded<JASChannel>::newMemPool(0x48);
     JASDriver::startDMA();
+
+#if TARGET_PC
+    OSLockMutex(&sThreadInitCompleteMutex);
+    sThreadInitComplete = true;
+    OSUnlockMutex(&sThreadInitCompleteMutex);
+    OSSignalCond(&sThreadInitCompleteCond);
+#endif
 
     OSMessage msg;
     while (true) {
