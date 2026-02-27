@@ -105,8 +105,14 @@ inline int __builtin_clz(unsigned int v) {
 
 #define SQUARE(x) ((x) * (x))
 
-#define POINTER_ADD_TYPE(type_, ptr_, offset_) ((type_)((unsigned long)(ptr_) + (unsigned long)(offset_)))
-#define POINTER_ADD(ptr_, offset_) POINTER_ADD_TYPE(__typeof__(ptr_), ptr_, offset_)
+#if __MWERKS__ || !__cplusplus
+#define TYPEOF(value) __typeof__(value)
+#else
+#define TYPEOF(value) decltype(value)
+#endif
+
+#define POINTER_ADD_TYPE(type_, ptr_, offset_) ((type_)((uintptr_t)(ptr_) + (uintptr_t)(offset_)))
+#define POINTER_ADD(ptr_, offset_) POINTER_ADD_TYPE(TYPEOF(ptr_), ptr_, offset_)
 
 // floating-point constants
 static const float INF = 2000000000.0f;
