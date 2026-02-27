@@ -281,7 +281,7 @@ void J3DModelLoader::readInformation(J3DModelInfoBlock const* i_block, u32 i_fla
     mpModelData->setHierarchy(JSUConvertOffsetToPtr<J3DModelHierarchy>(i_block, i_block->mpHierarchy));
 }
 
-static _GXCompType getFmtType(BE(_GXVtxAttrFmtList)* i_fmtList, _GXAttr i_attr) {
+static _GXCompType getFmtType(_GXVtxAttrFmtList* i_fmtList, _GXAttr i_attr) {
     for (; i_fmtList->attr != GX_VA_NULL; i_fmtList++) {
         if (i_fmtList->attr == i_attr) {
             return i_fmtList->type;
@@ -294,7 +294,7 @@ void J3DModelLoader::readVertex(J3DVertexBlock const* i_block) {
     J3D_ASSERT_NULLPTR(577, i_block);
     J3DVertexData& vertex_data = mpModelData->getVertexData();
     vertex_data.mVtxAttrFmtList =
-        JSUConvertOffsetToPtr<BE(GXVtxAttrFmtList)>(i_block, i_block->mpVtxAttrFmtList);
+        JSUConvertOffsetToPtr<GXVtxAttrFmtList>(i_block, i_block->mpVtxAttrFmtList);
     vertex_data.mVtxPosArray = JSUConvertOffsetToPtr<void>(i_block, i_block->mpVtxPosArray);
     vertex_data.mVtxNrmArray = JSUConvertOffsetToPtr<void>(i_block, i_block->mpVtxNrmArray);
     vertex_data.mVtxNBTArray = JSUConvertOffsetToPtr<void>(i_block, i_block->mpVtxNBTArray);
@@ -306,6 +306,16 @@ void J3DModelLoader::readVertex(J3DVertexBlock const* i_block) {
         vertex_data.mVtxTexCoordArray[i] =
             JSUConvertOffsetToPtr<void>(i_block, i_block->mpVtxTexCoordArray[i]);
     }
+
+#if TARGET_LITTLE_ENDIAN
+    for (GXVtxAttrFmtList* attrFmt = vertex_data.mVtxAttrFmtList;; attrFmt++) {
+        *attrFmt = BE<GXVtxAttrFmtList>::swap(*attrFmt);
+
+        if (attrFmt->attr == GX_VA_NULL) {
+            break;
+        }
+    }
+#endif
 
     u32 nrm_size = 12;
     if (getFmtType(vertex_data.mVtxAttrFmtList, GX_VA_NRM) == GX_F32) {
@@ -517,7 +527,7 @@ void J3DModelLoader::readShape(J3DShapeBlock const* i_block, u32 i_flags) {
     J3D_ASSERT_ALLOCMEM(1034, shape_table->mShapeNodePointer);
     factory.allocVcdVatCmdBuffer(shape_table->mShapeNum);
     J3DModelHierarchy const* hierarchy_entry = mpModelData->getHierarchy();
-    BE(GXVtxDescList)* vtx_desc_list = NULL;
+    GXVtxDescList* vtx_desc_list = NULL;
     for (; hierarchy_entry->mType != 0; hierarchy_entry++) {
         if (hierarchy_entry->mType == 0x12) {
             shape_table->mShapeNodePointer[hierarchy_entry->mValue] =
