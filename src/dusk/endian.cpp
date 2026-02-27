@@ -1,15 +1,6 @@
 #include <dolphin/gx.h>
 #include "dusk/endian.h"
-
-template <>
-GXColorS10 BE<GXColorS10>::swap(GXColorS10 val) {
-    return {
-        be16s(val.r),
-        be16s(val.g),
-        be16s(val.b),
-        be16s(val.a),
-    };
-}
+#include "dusk/endian_gx.hpp"
 
 #define IMPL_ENUM(type) \
     template <> \
@@ -21,3 +12,30 @@ IMPL_ENUM(GXCullMode);
 IMPL_ENUM(GXAttr);
 IMPL_ENUM(GXAttrType);
 IMPL_ENUM(GXCompType);
+IMPL_ENUM(GXCompCnt);
+
+template <>
+GXColorS10 BE<GXColorS10>::swap(GXColorS10 val) {
+    return {
+        be16s(val.r),
+        be16s(val.g),
+        be16s(val.b),
+        be16s(val.a),
+    };
+}
+
+GXVtxDescList BE<GXVtxDescList>::swap(GXVtxDescList val) {
+    return {
+        BE<GXAttr>::swap(val.attr),
+        BE<GXAttrType>::swap(val.type),
+    };
+}
+
+GXVtxAttrFmtList BE<GXVtxAttrFmtList>::swap(GXVtxAttrFmtList val) {
+    return {
+        BE<GXAttr>::swap(val.attr),
+        BE<GXCompCnt>::swap(val.cnt),
+        BE<GXCompType>::swap(val.type),
+        val.frac
+    };
+}

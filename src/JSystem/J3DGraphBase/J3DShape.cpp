@@ -1,10 +1,13 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/J3DGraphBase/J3DShape.h"
+
+#include <malloc.h>
+
+#include <dolphin/gd.h>
+#include "JSystem/J3DGraphBase/J3DFifo.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "JSystem/J3DGraphBase/J3DVertex.h"
-#include "JSystem/J3DGraphBase/J3DFifo.h"
-#include <dolphin/gd.h>
 
 void J3DGDSetVtxAttrFmtv(_GXVtxFmt, GXVtxAttrFmtList const*, bool);
 void J3DFifoLoadPosMtxImm(Mtx, u32);
@@ -43,7 +46,7 @@ void J3DShape::addTexMtxIndexInDL(GXAttr attr, u32 valueBase) {
     s32 stride = 0;
     bool found = false;
 
-    for (BE(GXVtxDescList)* vtxDesc = getVtxDesc(); vtxDesc->attr != GX_VA_NULL; vtxDesc++) {
+    for (GXVtxDescList* vtxDesc = getVtxDesc(); vtxDesc->attr != GX_VA_NULL; vtxDesc++) {
         if (vtxDesc->attr == GX_VA_PNMTXIDX)
             pnmtxidxOffs = stride;
 
@@ -69,7 +72,7 @@ void J3DShape::addTexMtxIndexInVcd(GXAttr attr) {
     s32 attrOffs = -1;
     s32 stride = 0;
 
-    BE(GXVtxDescList)* vtxDesc = getVtxDesc();
+    GXVtxDescList* vtxDesc = getVtxDesc();
     s32 attrCount = 0;
 
     for (; vtxDesc->attr != GX_VA_NULL; vtxDesc++) {
@@ -82,11 +85,11 @@ void J3DShape::addTexMtxIndexInVcd(GXAttr attr) {
     if (attrIdx == -1)
         return;
 
-    BE(GXVtxDescList)* newVtxDesc = new BE(GXVtxDescList)[attrCount + 2];
+    GXVtxDescList* newVtxDesc = new GXVtxDescList[attrCount + 2];
     bool inserted = false;
 
     vtxDesc = getVtxDesc();
-    BE(GXVtxDescList)* dst = newVtxDesc;
+    GXVtxDescList* dst = newVtxDesc;
     for (; vtxDesc->attr != GX_VA_NULL; vtxDesc++) {
         if ((attr < vtxDesc->attr) && !inserted) {
             dst->attr = attr;
@@ -154,7 +157,7 @@ bool J3DShape::isSameVcdVatCmd(J3DShape* other) {
 }
 
 void J3DShape::makeVtxArrayCmd() {
-    BE(GXVtxAttrFmtList)* vtxAttr = mVertexData->getVtxAttrFmtList();
+    GXVtxAttrFmtList* vtxAttr = mVertexData->getVtxAttrFmtList();
 
     u8 stride[12];
     void* array[12];
@@ -210,7 +213,7 @@ void J3DShape::makeVtxArrayCmd() {
         }
     }
 
-    BE(GXVtxDescList)* vtxDesc = mVtxDesc;
+    GXVtxDescList* vtxDesc = mVtxDesc;
     mHasPNMTXIdx = false;
     for (; vtxDesc->attr != GX_VA_NULL; vtxDesc++) {
         if (vtxDesc->attr == GX_VA_NBT && vtxDesc->type != GX_NONE) {
@@ -237,11 +240,9 @@ void J3DShape::makeVcdVatCmd() {
     GDLObj gdl_obj;
     GDInitGDLObj(&gdl_obj, mVcdVatCmd, kVcdVatDLSize);
     GDSetCurrent(&gdl_obj);
-    puts("GDSetVtxDescv is stubbed out due to BE issues");
-    // GDSetVtxDescv(mVtxDesc);
+    GDSetVtxDescv(mVtxDesc);
     makeVtxArrayCmd();
-    puts("J3DGDSetVtxAttrFmtv is stubbed out due to BE issues");
-    // J3DGDSetVtxAttrFmtv(GX_VTXFMT0, mVertexData->getVtxAttrFmtList(), mHasNBT);
+    J3DGDSetVtxAttrFmtv(GX_VTXFMT0, mVertexData->getVtxAttrFmtList(), mHasNBT);
     GDPadCurr32();
     GDFlushCurrToMem();
     GDSetCurrent(NULL);
