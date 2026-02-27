@@ -7,19 +7,40 @@
 #include "JSystem/JSupport/JSupport.h"
 #include <dolphin/os.h>
 #include "global.h"
+#include <algorithm>
 
 J3DShapeFactory::J3DShapeFactory(J3DShapeBlock const& block) {
     mShapeInitData = JSUConvertOffsetToPtr<J3DShapeInitData>(&block, (uintptr_t)block.mpShapeInitData);
     mIndexTable = JSUConvertOffsetToPtr<BE(u16)>(&block, (uintptr_t)block.mpIndexTable);
-    mVtxDescList = JSUConvertOffsetToPtr<BE(GXVtxDescList)>(&block, (uintptr_t)block.mpVtxDescList);
+    mVtxDescList = JSUConvertOffsetToPtr<GXVtxDescList>(&block, (uintptr_t)block.mpVtxDescList);
     mMtxTable = JSUConvertOffsetToPtr<BE(u16)>(&block, (uintptr_t)block.mpMtxTable);
     mDisplayListData = JSUConvertOffsetToPtr<u8>(&block, (uintptr_t)block.mpDisplayListData);
     mMtxInitData = JSUConvertOffsetToPtr<J3DShapeMtxInitData>(&block, (uintptr_t)block.mpMtxInitData);
     mDrawInitData = JSUConvertOffsetToPtr<J3DShapeDrawInitData>(&block, (uintptr_t)block.mpDrawInitData);
     mVcdVatCmdBuffer = NULL;
+
+#if TARGET_LITTLE_ENDIAN
+    // mVtxDescList is in big endian, swap to little endian.
+    int maxVtxDescListStart = 0;
+    for (int shapeIdx = 0; shapeIdx < block.mShapeNum; shapeIdx++) {
+        u16 thisIndex = mShapeInitData[mIndexTable[shapeIdx]].mVtxDescListIndex;
+        maxVtxDescListStart = std::max(
+            maxVtxDescListStart,
+            (int)(thisIndex / sizeof(GXVtxDescList)));
+    }
+
+    GXVtxDescList* lastEntry = mVtxDescList + maxVtxDescListStart;
+    while (lastEntry->attr != BE(GXAttr)::swap(GX_VA_NULL)) {
+        lastEntry++;
+    }
+
+    for (GXVtxDescList* entry = mVtxDescList; entry <= lastEntry; entry++) {
+        *entry = BE(GXVtxDescList)::swap(*entry);
+    }
+#endif
 }
 
-J3DShape* J3DShapeFactory::create(int no, u32 flag, BE(GXVtxDescList)* vtxDesc) {
+J3DShape* J3DShapeFactory::create(int no, u32 flag, GXVtxDescList* vtxDesc) {
     J3DShape* shape = new J3DShape;
     J3D_ASSERT_ALLOCMEM(67, shape);
     shape->mMtxGroupNum = getMtxGroupNum(no);

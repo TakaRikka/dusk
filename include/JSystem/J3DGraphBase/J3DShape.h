@@ -185,7 +185,7 @@ public:
     bool getNBTFlag() const { return mHasNBT; }
     u32 getBumpMtxOffset() const { return mBumpMtxOffset; }
     void setBumpMtxOffset(u32 offset) { mBumpMtxOffset = offset; }
-    BE(GXVtxDescList)* getVtxDesc() { return mVtxDesc; }
+    GXVtxDescList* getVtxDesc() { return mVtxDesc; }
 
     J3DMaterial* getMaterial() const { return mMaterial; }
     u16 getIndex() const { return mIndex; }
@@ -213,7 +213,7 @@ private:
     /* 0x14 */ Vec mMin;
     /* 0x20 */ Vec mMax;
     /* 0x2C */ u8* mVcdVatCmd;
-    /* 0x30 */ BE(GXVtxDescList)* mVtxDesc;
+    /* 0x30 */ GXVtxDescList* mVtxDesc;
     /* 0x34 */ bool mHasNBT;
     /* 0x38 */ J3DShapeMtx** mShapeMtx;
     /* 0x3C */ J3DShapeDraw** mShapeDraw;
