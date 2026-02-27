@@ -427,6 +427,10 @@ void JFWDisplay::clearEfb(GXColor color) {
 }
 
 void JFWDisplay::clearEfb(int param_0, int param_1, int param_2, int param_3, GXColor color) {
+#if TARGET_PC
+    puts("clearEfb not implemented");
+    return;
+#endif
     u16 width;
     u16 height;
     Mtx44 mtx;
