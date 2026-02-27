@@ -158,6 +158,11 @@ void main01(void) {
 
     g_mDoAud_audioHeap = JKRCreateSolidHeap(audioHeapSize, JKRGetCurrentHeap(), false);
 
+    if (DUSK_AUDIO_DISABLED) {
+        // Pretend the audio engine initialized already. This is a lie, but needed to boot.
+        mDoAud_zelAudio_c::onInitFlag();
+    }
+
     OSReport("Entering Main Loop (main01)...\n");
 
 

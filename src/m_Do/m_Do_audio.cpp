@@ -45,6 +45,8 @@ static void dummy() {
 #endif
 
 static void mDoAud_Create() {
+    DUSK_AUDIO_SKIP()
+
     if (l_affCommand == NULL) {
 #if DEBUG
         if (!mDoRst::getLogoScnFlag()) {
@@ -154,6 +156,8 @@ static void mDoAud_Create() {
 }
 
 void mDoAud_Execute() {
+    DUSK_AUDIO_SKIP()
+
     if (!mDoAud_zelAudio_c::isInitFlag()) {
         if (!mDoRst::isShutdown() && !mDoRst::isReturnToMenu()) {
             mDoAud_Create();
@@ -188,23 +192,28 @@ void mDoAud_Execute() {
 }
 
 void mDoAud_setSceneName(char const* spot, s32 room, s32 layer) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->setSceneName((char*)spot, room, layer);
 }
 
 s32 mDoAud_load1stDynamicWave() {
+    DUSK_AUDIO_SKIP(1)
     Z2AudioMgr::getInterface()->load1stDynamicWave();
     return 1;
 }
 
 void mDoAud_setFadeOutStart(u8 param_0) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->setFadeOutStart((u8)param_0);
 }
 
 void mDoAud_setFadeInStart(u8 param_0) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->setFadeInStart((u8)param_0);
 }
 
 void mDoAud_resetProcess() {
+    DUSK_AUDIO_SKIP()
     if (!mDoAud_zelAudio_c::isResetFlag()) {
         Z2AudioMgr::getInterface()->resetProcess(0x1E, false);
         mDoAud_zelAudio_c::onResetFlag();
