@@ -3753,7 +3753,7 @@ int daKago_c::CreateHeap() {
     }
     JUT_ASSERT(0x139f, modelData != NULL);
 
-    mpMorf = new mDoExt_McaMorfSO(
+    mpMorf = JKR_NEW mDoExt_McaMorfSO(
         modelData, NULL, NULL,
         (J3DAnmTransform*)dComIfG_getObjectRes(field_0x75c, getBckName(9)), 2, 1.0f, 0, -1, &this->mSound, 0x80000, 0x11000084);
 

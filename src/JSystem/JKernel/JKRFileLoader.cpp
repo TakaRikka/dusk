@@ -4,8 +4,9 @@
 
 #define MSL_USE_INLINES 1  // needed to inline tolower call. not inlined elsewhere in the repo
 
-#include <string>
 #include <cctype>
+#include <string>
+#include "JSystem/JKernel/JKRHeap.h"
 #include "global.h"
 
 JKRFileLoader* JKRFileLoader::sCurrentVolume;
@@ -23,7 +24,7 @@ JKRFileLoader::~JKRFileLoader() {
 void JKRFileLoader::unmount(void) {
     if (mMountCount != 0) {
         if (--mMountCount == 0) {
-            delete this;
+            JKR_DELETE(this);
         }
     }
 }

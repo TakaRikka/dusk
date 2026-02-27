@@ -5172,8 +5172,8 @@ void daAlinkHIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
     }
     case PROPERTY_SAVE_FILE_e: {
         if (file.open(6, "すべてのファイル(*.*)\0*.*\0", NULL, NULL, NULL)) {
-            char* fileData = new (0x20) char[0x10000];
-            char* structData = new (0x20) char[0x10000];
+            char* fileData = JKR_NEW_ARGS (0x20) char[0x10000];
+            char* structData = JKR_NEW_ARGS (0x20) char[0x10000];
 
             if (fileData != NULL && structData != NULL) {
                 size_t dataSize = makeFileOutData(fileData, structData);
@@ -5187,15 +5187,15 @@ void daAlinkHIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
                     OS_REPORT("メモリ破壊が起こりました！！！！！\n");
                 }
 
-                delete[] fileData;
-                delete[] structData;
+                JKR_DELETE_ARRAY(fileData);
+                JKR_DELETE_ARRAY(structData);
             } else {
                 if (fileData != NULL) {
-                    delete[] fileData;
+                    JKR_DELETE_ARRAY(fileData);
                 }
 
                 if (structData != NULL) {
-                    delete[] structData;
+                    JKR_DELETE_ARRAY(structData);
                 }
 
                 // Could not secure the write area
@@ -5210,12 +5210,12 @@ void daAlinkHIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
     }
     case PROPERTY_LOAD_FILE_e: {
         if (file.open(1, "すべてのファイル(*.*)\0*.*\0", NULL, NULL, NULL)) {
-            char* fileData = new (0x20) char[0x10000];
+            char* fileData = JKR_NEW_ARGS (0x20) char[0x10000];
 
             if (fileData != NULL) {
                 file.readData(fileData, 0);
                 readFileData(fileData);
-                delete[] fileData;
+                JKR_DELETE_ARRAY(fileData);
             } else {
                 // Could not secure the read area
                 OS_REPORT("読み込み用領域確保できませんでした\n");

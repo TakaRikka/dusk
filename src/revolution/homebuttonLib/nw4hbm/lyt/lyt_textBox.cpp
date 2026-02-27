@@ -252,7 +252,7 @@ namespace nw4hbm {
                            resBlockSet.pResAccessor->GetResource('font', fontName, NULL))
             {
                 if (void* pMemFont = Layout::AllocMemory(sizeof(ut::ResFont))) {
-                    ut::ResFont* pResFont = new (pMemFont) ut::ResFont();
+                    ut::ResFont* pResFont = JKR_NEW_ARGS (pMemFont) ut::ResFont();
                     bool bSuccess = pResFont->SetResource(fontRes);
 
                     if (!bSuccess) {
@@ -273,7 +273,7 @@ namespace nw4hbm {
                 const res::Material* pResMaterial = detail::ConvertOffsToPtr<res::Material>(
                     resBlockSet.pMaterialList, matOffsTbl[pBlock->materialIdx]);
 
-                mpMaterial = new (pMemMaterial) Material(pResMaterial, resBlockSet);
+                mpMaterial = JKR_NEW_ARGS (pMemMaterial) Material(pResMaterial, resBlockSet);
             }
         }
 

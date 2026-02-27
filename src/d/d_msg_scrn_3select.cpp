@@ -37,7 +37,7 @@ dMsgScrn3Select_c::dMsgScrn3Select_c() {
         MULTI_CHAR('sel_po02'), MULTI_CHAR('c_kahen'), MULTI_CHAR('c_cursor')
     };
 
-    mpScreen = new J2DScreen();
+    mpScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(0, mpScreen != NULL);
 
     bool fg = mpScreen->setPriority("zelda_window_3menu.blo", 0x20000, dComIfGp_getMsgArchive(0));
@@ -62,11 +62,11 @@ dMsgScrn3Select_c::dMsgScrn3Select_c() {
     mpAnmBtk->searchUpdateMaterialID(mpScreen);
     mBtkFrame = 0.0f;
 
-    mpSelectCursor = new dSelect_cursor_c(0, 1.0f, NULL);
+    mpSelectCursor = JKR_NEW dSelect_cursor_c(0, 1.0f, NULL);
     JUT_ASSERT(0, mpSelectCursor != NULL);
     mpSelectCursor->setAlphaRate(0.0f);
 
-    mpParent = new CPaneMgr(mpScreen, MULTI_CHAR('abc_n'), 0, NULL);
+    mpParent = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('abc_n'), 0, NULL);
     JUT_ASSERT(0, mpParent != NULL);
 
     for (int i = 0; i < 3; i++) {
@@ -74,52 +74,52 @@ dMsgScrn3Select_c::dMsgScrn3Select_c() {
         mCursorPos[i].y = 0.0f;
         mCursorPos[i].z = 0.0f;
 
-        mpSel_c[i] = new CPaneMgr(mpScreen, tag_name[i][0], 0, NULL);
+        mpSel_c[i] = JKR_NEW CPaneMgr(mpScreen, tag_name[i][0], 0, NULL);
         JUT_ASSERT(0, mpSel_c[i] != NULL);
         mpSel_c[i]->hide();
 
-        mpSelCld_c[i] = new CPaneMgr(mpScreen, tag_name[i][1], 0, NULL);
+        mpSelCld_c[i] = JKR_NEW CPaneMgr(mpScreen, tag_name[i][1], 0, NULL);
         JUT_ASSERT(0, mpSelCld_c[i] != NULL);
         mpSelCld_c[i]->getPanePtr()->setAnimation(mpAnmBtk);
 
-        mpSelCldr_c[i] = new CPaneMgr(mpScreen, tag_name[i][2], 0, NULL);
+        mpSelCldr_c[i] = JKR_NEW CPaneMgr(mpScreen, tag_name[i][2], 0, NULL);
         JUT_ASSERT(0, mpSelCldr_c[i] != NULL);
         mpSelCldr_c[i]->getPanePtr()->setAnimation(mpAnmBtk);
 
-        mpSelCldm_c[i] = new CPaneMgr(mpScreen, tag_name[i][3], 0, NULL);
+        mpSelCldm_c[i] = JKR_NEW CPaneMgr(mpScreen, tag_name[i][3], 0, NULL);
         JUT_ASSERT(0, mpSelCldm_c[i] != NULL);
         mpSelCldm_c[i]->getPanePtr()->setAnimation(mpAnmBpk);
 
         for (int j = 0; j < 5; j++) {
-            mpSelCldw_c[j][i] = new CPaneMgr(mpScreen, tag_name[i][4 + j], 0, NULL);
+            mpSelCldw_c[j][i] = JKR_NEW CPaneMgr(mpScreen, tag_name[i][4 + j], 0, NULL);
             JUT_ASSERT(0, mpSelCldw_c[j][i] != NULL);
         }
 
-        mpSelPo_c[i] = new CPaneMgr(mpScreen, tag_name[i][9], 0, NULL);
+        mpSelPo_c[i] = JKR_NEW CPaneMgr(mpScreen, tag_name[i][9], 0, NULL);
         JUT_ASSERT(0, mpSelPo_c[i] != NULL);
         mpSelPo_c[i]->hide();
 
-        mpKahen_c[i] = new CPaneMgr(mpScreen, tag_name[i][10], 0, NULL);
+        mpKahen_c[i] = JKR_NEW CPaneMgr(mpScreen, tag_name[i][10], 0, NULL);
         JUT_ASSERT(0, mpKahen_c[i] != NULL);
 
-        mpCursor_c[i] = new CPaneMgr(mpScreen, tag_name[i][11], 0, NULL);
+        mpCursor_c[i] = JKR_NEW CPaneMgr(mpScreen, tag_name[i][11], 0, NULL);
         JUT_ASSERT(0, mpCursor_c[i] != NULL);
         mCursorPos[i] = mpCursor_c[i]->getGlobalVtxCenter(true, 0);
     }
 
 #if VERSION == VERSION_GCN_JPN
     if (dComIfGs_getOptRuby() == 0) {
-        mpTmSel_c[0] = new CPaneMgr(mpScreen, 'a_tf', 0, NULL);
+        mpTmSel_c[0] = JKR_NEW CPaneMgr(mpScreen, 'a_tf', 0, NULL);
 
-        mpTmSel_c[1] = new CPaneMgr(mpScreen, 'b_tf', 0, NULL);
+        mpTmSel_c[1] = JKR_NEW CPaneMgr(mpScreen, 'b_tf', 0, NULL);
 
-        mpTmSel_c[2] = new CPaneMgr(mpScreen, 'c_tf', 0, NULL);
+        mpTmSel_c[2] = JKR_NEW CPaneMgr(mpScreen, 'c_tf', 0, NULL);
 
-        mpTmrSel_c[0] = new CPaneMgr(mpScreen, MULTI_CHAR('a_tf_f'), 0, NULL);
+        mpTmrSel_c[0] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('a_tf_f'), 0, NULL);
 
-        mpTmrSel_c[1] = new CPaneMgr(mpScreen, MULTI_CHAR('b_tf_f'), 0, NULL);
+        mpTmrSel_c[1] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('b_tf_f'), 0, NULL);
 
-        mpTmrSel_c[2] = new CPaneMgr(mpScreen, MULTI_CHAR('c_tf_f'), 0, NULL);
+        mpTmrSel_c[2] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('c_tf_f'), 0, NULL);
 
         for (int i = 0; i < 3; i++) {
             ((J2DTextBox*)(mpTmSel_c[i]->getPanePtr()))->setString(64, "");
@@ -142,11 +142,11 @@ dMsgScrn3Select_c::dMsgScrn3Select_c() {
         mpScreen->search('b_t')->hide();
         mpScreen->search('c_t')->hide();
     } else {
-        mpTmSel_c[0] = new CPaneMgr(mpScreen, 'a_t', 0, NULL);
+        mpTmSel_c[0] = JKR_NEW CPaneMgr(mpScreen, 'a_t', 0, NULL);
 
-        mpTmSel_c[1] = new CPaneMgr(mpScreen, 'b_t', 0, NULL);
+        mpTmSel_c[1] = JKR_NEW CPaneMgr(mpScreen, 'b_t', 0, NULL);
 
-        mpTmSel_c[2] = new CPaneMgr(mpScreen, 'c_t', 0, NULL);
+        mpTmSel_c[2] = JKR_NEW CPaneMgr(mpScreen, 'c_t', 0, NULL);
 
         for (int i = 0; i < 3; i++) {
             ((J2DTextBox*)(mpTmSel_c[i]->getPanePtr()))->setString(64, "");
@@ -168,13 +168,13 @@ dMsgScrn3Select_c::dMsgScrn3Select_c() {
         mpScreen->search('c_t')->show();
     }
 #else
-    mpTmSel_c[0] = new CPaneMgr(mpScreen, MULTI_CHAR('a_t_e'), 0, NULL);
+    mpTmSel_c[0] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('a_t_e'), 0, NULL);
     JUT_ASSERT(0, mpTmSel_c[0] != NULL);
 
-    mpTmSel_c[1] = new CPaneMgr(mpScreen, MULTI_CHAR('b_t_e'), 0, NULL);
+    mpTmSel_c[1] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('b_t_e'), 0, NULL);
     JUT_ASSERT(0, mpTmSel_c[1] != NULL);
 
-    mpTmSel_c[2] = new CPaneMgr(mpScreen, MULTI_CHAR('c_t_e'), 0, NULL);
+    mpTmSel_c[2] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('c_t_e'), 0, NULL);
     JUT_ASSERT(0, mpTmSel_c[2] != NULL);
 
     for (int i = 0; i < 3; i++) {
@@ -218,57 +218,57 @@ dMsgScrn3Select_c::dMsgScrn3Select_c() {
 }
 
 dMsgScrn3Select_c::~dMsgScrn3Select_c() {
-    delete mpScreen;
+    JKR_DELETE(mpScreen);
     mpScreen = NULL;
 
-    delete mpAnmBck;
+    JKR_DELETE(mpAnmBck);
     mpAnmBck = NULL;
 
-    delete mpAnmBpk;
+    JKR_DELETE(mpAnmBpk);
     mpAnmBpk = NULL;
 
-    delete mpAnmBtk;
+    JKR_DELETE(mpAnmBtk);
     mpAnmBtk = NULL;
 
-    delete mpSelectCursor;
+    JKR_DELETE(mpSelectCursor);
     mpSelectCursor = NULL;
 
-    delete mpParent;
+    JKR_DELETE(mpParent);
     mpParent = NULL;
 
     for (int i = 0; i < 3; i++) {
-        delete mpSel_c[i];
+        JKR_DELETE(mpSel_c[i]);
         mpSel_c[i] = NULL;
 
-        delete mpSelCld_c[i];
+        JKR_DELETE(mpSelCld_c[i]);
         mpSelCld_c[i] = NULL;
 
-        delete mpSelCldr_c[i];
+        JKR_DELETE(mpSelCldr_c[i]);
         mpSelCldr_c[i] = NULL;
 
-        delete mpSelCldm_c[i];
+        JKR_DELETE(mpSelCldm_c[i]);
         mpSelCldm_c[i] = NULL;
 
-        delete mpTmSel_c[i];
+        JKR_DELETE(mpTmSel_c[i]);
         mpTmSel_c[i] = NULL;
 
-        delete mpKahen_c[i];
+        JKR_DELETE(mpKahen_c[i]);
         mpKahen_c[i] = NULL;
 
-        delete mpCursor_c[i];
+        JKR_DELETE(mpCursor_c[i]);
         mpCursor_c[i] = NULL;
 
         if (mpTmrSel_c[i] != NULL) {
-            delete mpTmrSel_c[i];
+            JKR_DELETE(mpTmrSel_c[i]);
             mpTmrSel_c[i] = NULL;
         }
 
         for (int j = 0; j < 5; j++) {
-            delete mpSelCldw_c[j][i];
+            JKR_DELETE(mpSelCldw_c[j][i]);
             mpSelCldw_c[j][i] = NULL;
         }
 
-        delete mpSelPo_c[i];
+        JKR_DELETE(mpSelPo_c[i]);
         mpSelPo_c[i] = NULL;
     }
 }

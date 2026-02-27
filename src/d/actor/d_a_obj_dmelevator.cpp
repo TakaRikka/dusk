@@ -223,7 +223,7 @@ int daObjDmElevator_c::CreateHeap() {
     if (mpSwitchModel == NULL) {
         return 0;
     }
-    mpBgW = new dBgW();
+    mpBgW = JKR_NEW dBgW();
 
     if (mpBgW != NULL && mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(l_sw_arcName, 8), 1, &mMtx) == 0)
     {

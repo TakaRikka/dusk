@@ -143,7 +143,7 @@ int daObjKWheel01_c::CreateHeap() {
             mKLiftCollisions[i] = NULL;
         }
         else {
-            mKLiftCollisions[i] = new (dBgW);
+            mKLiftCollisions[i] = JKR_NEW (dBgW);
 
             if(!mKLiftCollisions[i])
                 return 0;

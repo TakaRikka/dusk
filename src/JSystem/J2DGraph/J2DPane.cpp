@@ -209,7 +209,7 @@ void J2DPane::changeUseTrans(J2DPane* p_pane) {
 J2DPane::~J2DPane() {
     JSUTreeIterator<J2DPane> iterator = mPaneTree.getFirstChild();
     for (; iterator != mPaneTree.getEndChild();) {
-        delete (iterator++).getObject();
+        JKR_DELETE((iterator++).getObject());
     }
 }
 

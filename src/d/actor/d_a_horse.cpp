@@ -495,22 +495,22 @@ int daHorse_c::createHeap() {
         return 0;
     }
 
-    J3DTransformInfo* transInfoBuf = new J3DTransformInfo[38];
+    J3DTransformInfo* transInfoBuf = JKR_NEW J3DTransformInfo[38];
     if (transInfoBuf == NULL) {
         return 0;
     }
 
-    Quaternion* quatBuf = new Quaternion[38];
+    Quaternion* quatBuf = JKR_NEW Quaternion[38];
     if (quatBuf == NULL) {
         return 0;
     }
 
-    m_oldFrame = new mDoExt_MtxCalcOldFrame(transInfoBuf, quatBuf);
+    m_oldFrame = JKR_NEW mDoExt_MtxCalcOldFrame(transInfoBuf, quatBuf);
     if (m_oldFrame == NULL) {
         return 0;
     }
     
-    m_mtxcalc = new mDoExt_MtxCalcAnmBlendTblOld(m_oldFrame, 3, m_anmRatio);
+    m_mtxcalc = JKR_NEW mDoExt_MtxCalcAnmBlendTblOld(m_oldFrame, 3, m_anmRatio);
     if (m_mtxcalc == NULL) {
         return 0;
     }
@@ -519,7 +519,7 @@ int daHorse_c::createHeap() {
         return 0;
     }
 
-    m_hio = new HORSE_HIO_CLASS();
+    m_hio = JKR_NEW HORSE_HIO_CLASS();
     if (m_hio == NULL) {
         return 0;
     }
@@ -537,12 +537,12 @@ int daHorse_c::createHeap() {
 
     daHorseRein_c* rein_p = m_rein;
     for (int i = 0; i < 3; i++, rein_p++) {
-        rein_p->field_0x0[0] = new cXyz[rein_p->field_0x8[1]];
+        rein_p->field_0x0[0] = JKR_NEW cXyz[rein_p->field_0x8[1]];
         if (rein_p->field_0x0[0] == NULL) {
             return 0;
         }
 
-        rein_p->field_0x0[1] = new cXyz[rein_p->field_0x8[1]];
+        rein_p->field_0x0[1] = JKR_NEW cXyz[rein_p->field_0x8[1]];
         if (rein_p->field_0x0[1] == NULL) {
             return 0;
         }

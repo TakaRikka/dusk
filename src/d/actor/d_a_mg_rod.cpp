@@ -6151,7 +6151,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
             }
         }
 
-        a_this->rod_modelMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes(a_this->arcname, 4), NULL, NULL, NULL, 0, 1.0f, 0, -1, 1, 0, 0x80000, 0x11000084);
+        a_this->rod_modelMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes(a_this->arcname, 4), NULL, NULL, NULL, 0, 1.0f, 0, -1, 1, 0, 0x80000, 0x11000084);
         if (a_this->rod_modelMorf == NULL || a_this->rod_modelMorf->getModel() == NULL) {
             return 0;
         }

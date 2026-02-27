@@ -181,7 +181,7 @@ int daNpc_Knj_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(
         dComIfG_getObjectRes(l_resNameList[l_bmdData[0][1]], l_bmdData[0][0]));
 
-    mpMorf[0] = new mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000,
+    mpMorf[0] = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000,
                                      0x11020084);
 
     if (mpMorf[0] != NULL && mpMorf[0]->getModel() == NULL) {

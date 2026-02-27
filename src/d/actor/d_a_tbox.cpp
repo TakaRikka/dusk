@@ -107,7 +107,7 @@ cPhs_Step daTbox_c::commonShapeSet() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(model_info->mArcName, model_info->mModelResNo);
     JUT_ASSERT(0x191, modelData != NULL);
 
-    mpAnm = new mDoExt_bckAnm();
+    mpAnm = JKR_NEW mDoExt_bckAnm();
     if (mpAnm == NULL) {
         return cPhs_ERROR_e;
     }
@@ -145,7 +145,7 @@ cPhs_Step daTbox_c::commonShapeSet() {
             return cPhs_ERROR_e;
         }
 
-        mpEffectAnm = new mDoExt_brkAnm();
+        mpEffectAnm = JKR_NEW mDoExt_brkAnm();
         if (mpEffectAnm == NULL) {
             return cPhs_ERROR_e;
         }
@@ -183,7 +183,7 @@ cPhs_Step daTbox_c::bgCheckSet() {
 
     cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(model_info->mArcName, model_info->mOpenDzbResNo);
     JUT_ASSERT(528, bgd != NULL);
-    mpOpenBgW = new dBgW();
+    mpOpenBgW = JKR_NEW dBgW();
     if (mpOpenBgW == NULL) {
         return cPhs_ERROR_e;
     }

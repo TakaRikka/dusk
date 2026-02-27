@@ -127,7 +127,7 @@ JKRThreadSwitch* JKRThreadSwitch::createManager(JKRHeap* heap) {
         heap = JKRGetCurrentHeap();
     }
 
-    sManager = new (heap, 0) JKRThreadSwitch(heap);
+    sManager = JKR_NEW_ARGS (heap, 0) JKRThreadSwitch(heap);
     return sManager;
 }
 
@@ -282,7 +282,7 @@ void JKRThreadSwitch::draw(JKRThreadName_* thread_name_list, JUTConsole* console
 
 static void dummy4(JKRTask* thread, JSULink<JKRTask>* link) {
     thread->getStack();
-    delete link;
+    JKR_DELETE(link);
 }
 
 JKRTask::~JKRTask() {
@@ -322,7 +322,7 @@ int JKRTask::check() {
 #if !PLATFORM_GCN
 static void dummy(JKRIdleThread* thread) {
     thread->run();
-    delete thread;
+    JKR_DELETE(thread);
     thread->destroy();
 }
 #endif

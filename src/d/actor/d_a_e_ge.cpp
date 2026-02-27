@@ -1257,7 +1257,7 @@ static int daE_GE_Delete(daE_GE_c* i_this) {
 }
 
 int daE_GE_c::CreateHeap() {
-    mpMorfSO = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_GE", 0xF), NULL, NULL,
+    mpMorfSO = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_GE", 0xF), NULL, NULL,
                                     (J3DAnmTransform*)dComIfG_getObjectRes("E_GE", 0xC), 0, 1.0f, 0,
                                     -1, &mSound, 0x80000, 0x11000084);
 

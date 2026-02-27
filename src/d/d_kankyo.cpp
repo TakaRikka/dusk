@@ -1172,7 +1172,7 @@ static void undwater_init() {
         g_env_light.undwater_ef_model = mDoExt_J3DModel__create(modelData2, 0x80000, 0x11020202);
 
         if (g_env_light.undwater_ef_model != NULL) {
-            g_env_light.undwater_btk = new mDoExt_btkAnm();
+            g_env_light.undwater_btk = JKR_NEW mDoExt_btkAnm();
 
             if (g_env_light.undwater_btk != NULL) {
                 if (!g_env_light.undwater_btk->init(modelData2, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", 0x3C), TRUE,

@@ -59,7 +59,7 @@ int daObjOnsen_c::CreateHeap() {
 
     J3DAnmTextureSRTKey* srtKey =
         (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName[mType], l_btk[mType]);
-    mpBtk = new mDoExt_btkAnm();
+    mpBtk = JKR_NEW mDoExt_btkAnm();
     if (!mpBtk || !mpBtk->init(modelData, srtKey, 1, 2, 1.0f, 0, -1)) {
         return 0;
     }

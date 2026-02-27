@@ -16,6 +16,8 @@
 #include <cstdlib>
 #include <memory>
 
+#include "JSystem/JKernel/JKRHeap.h"
+
 // ============================================================================
 // Malloc-based allocator to bypass JKRHeap operator new/delete
 // ============================================================================
@@ -47,7 +49,7 @@ template<typename T, typename... Args>
 std::unique_ptr<T, MallocDeleter<T>> make_malloc_unique(Args&&... args) {
     void* mem = std::malloc(sizeof(T));
     if (!mem) throw std::bad_alloc();
-    T* obj = new (mem) T(std::forward<Args>(args)...);
+    T* obj = JKR_NEW_ARGS (mem) T(std::forward<Args>(args)...);
     return std::unique_ptr<T, MallocDeleter<T>>(obj);
 }
 

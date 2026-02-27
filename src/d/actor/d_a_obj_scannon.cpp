@@ -309,7 +309,7 @@ int daSCannon_c::createHeap() {
         if (mIsPortal != 0) {
             J3DAnmTextureSRTKey* a_btk_p = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName_Crash, 9);
             JUT_ASSERT(606, a_btk_p != NULL);
-            mpCrashBtk = new mDoExt_btkAnm();
+            mpCrashBtk = JKR_NEW mDoExt_btkAnm();
             if (mpCrashBtk == NULL || !mpCrashBtk->init(a_model_data_p, a_btk_p, 1, 0, 0.0f, 0, -1)) {
                 return 0;
             }
@@ -323,14 +323,14 @@ int daSCannon_c::createHeap() {
 
             a_btk_p = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName_Ptl, 0xC);
             JUT_ASSERT(642, a_btk_p != NULL);
-            mpPtlBtk = new mDoExt_btkAnm();
+            mpPtlBtk = JKR_NEW mDoExt_btkAnm();
             if (mpPtlBtk == NULL || !mpPtlBtk->init(a_ptl_model_data_p, a_btk_p, 1, 2, 0.0f, 0, -1)) {
                 return 0;
             }
         }
     }
 
-    mpBgW = new dBgW();
+    mpBgW = JKR_NEW dBgW();
     if (mpBgW == NULL) {
         return 0;
     }

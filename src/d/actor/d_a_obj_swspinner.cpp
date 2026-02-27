@@ -87,7 +87,7 @@ int daObjSwSpinner_c::CreateHeap() {
         return 0;
     }
 
-    mpBgW2 = new dBgW();
+    mpBgW2 = JKR_NEW dBgW();
     if (mpBgW2 == NULL || mpBgW2->Set((cBgD_t*)dComIfG_getObjectRes(l_arcName, 8), 1, &mMtx)) {
         mpBgW2 = NULL;
         return 0;

@@ -60,7 +60,7 @@ int daItemBase_c::CreateItemHeap(char const* i_arcName, s16 i_bmdName, s16 i_btk
             (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(i_arcName, i_btkName);
         JUT_ASSERT(0, pbtk != NULL);
 
-        mpBtkAnm = new mDoExt_btkAnm();
+        mpBtkAnm = JKR_NEW mDoExt_btkAnm();
         if (mpBtkAnm == NULL || !mpBtkAnm->init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1)) {
             return 0;
         }
@@ -71,7 +71,7 @@ int daItemBase_c::CreateItemHeap(char const* i_arcName, s16 i_bmdName, s16 i_btk
         J3DAnmColor* pbpk = (J3DAnmColor*)dComIfG_getObjectRes(i_arcName, i_bpkName);
         JUT_ASSERT(0, pbpk != NULL);
 
-        mpBpkAnm = new mDoExt_bpkAnm();
+        mpBpkAnm = JKR_NEW mDoExt_bpkAnm();
         if (mpBpkAnm == NULL || !mpBpkAnm->init(modelData, pbpk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1)) {
             return 0;
         }
@@ -82,7 +82,7 @@ int daItemBase_c::CreateItemHeap(char const* i_arcName, s16 i_bmdName, s16 i_btk
         J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(i_arcName, i_bckName);
         JUT_ASSERT(0, pbck != NULL);
 
-        mpBckAnm = new mDoExt_bckAnm();
+        mpBckAnm = JKR_NEW mDoExt_bckAnm();
         if (mpBckAnm == NULL || !mpBckAnm->init(pbck, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false)) {
             return 0;
         }
@@ -99,7 +99,7 @@ int daItemBase_c::CreateItemHeap(char const* i_arcName, s16 i_bmdName, s16 i_btk
             anmPlay = FALSE;
         }
 
-        mpBrkAnm = new mDoExt_brkAnm();
+        mpBrkAnm = JKR_NEW mDoExt_brkAnm();
         if (mpBrkAnm == NULL || !mpBrkAnm->init(modelData, pbrk, anmPlay, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1)) {
             return 0;
         }
@@ -110,7 +110,7 @@ int daItemBase_c::CreateItemHeap(char const* i_arcName, s16 i_bmdName, s16 i_btk
         J3DAnmTexPattern* pbtp = (J3DAnmTexPattern*)dComIfG_getObjectRes(i_arcName, i_btpName);
         JUT_ASSERT(0, pbtp != NULL);
 
-        mpBtpAnm = new mDoExt_btpAnm();
+        mpBtpAnm = JKR_NEW mDoExt_btpAnm();
         if (mpBtpAnm == NULL || !mpBtpAnm->init(modelData, pbtp, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1)) {
             return 0;
         }

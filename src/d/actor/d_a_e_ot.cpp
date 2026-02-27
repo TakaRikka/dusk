@@ -710,7 +710,7 @@ static int daE_OT_Delete(daE_OT_c* i_this) {
 
 int daE_OT_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes("E_OT", 14);
-    mpMorf = new mDoExt_McaMorfSO(model_data, NULL, NULL,
+    mpMorf = JKR_NEW mDoExt_McaMorfSO(model_data, NULL, NULL,
                                   (J3DAnmTransform*)dComIfG_getObjectRes("E_OT", ANM_BORN),
                                   J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, &mSound,
                                   0x80000, 0x11000084);
@@ -724,7 +724,7 @@ int daE_OT_c::CreateHeap() {
         return 0;
     }
 
-    mpEggAnm = new mDoExt_btkAnm();
+    mpEggAnm = JKR_NEW mDoExt_btkAnm();
     if (mpEggAnm == NULL) {
         return 0;
     }

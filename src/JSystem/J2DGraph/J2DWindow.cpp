@@ -150,19 +150,19 @@ J2DWindow::J2DWindow(u64 param_0, const JGeometry::TBox2<f32>& param_1, const ch
 
 void J2DWindow::initiate(const ResTIMG* param_0, const ResTIMG* param_1, const ResTIMG* param_2, const ResTIMG* param_3, const ResTLUT* param_4, J2DWindowMirror param_5, const JGeometry::TBox2<f32>& param_6) {
     if (param_0) {
-        field_0x100 = new JUTTexture(param_0, 0);
+        field_0x100 = JKR_NEW JUTTexture(param_0, 0);
     }
     if (param_1) {
-        field_0x104 = new JUTTexture(param_1, 0);
+        field_0x104 = JKR_NEW JUTTexture(param_1, 0);
     }
     if (param_2) {
-        field_0x108 = new JUTTexture(param_2, 0);
+        field_0x108 = JKR_NEW JUTTexture(param_2, 0);
     }
     if (param_3) {
-        field_0x10c = new JUTTexture(param_3, 0);
+        field_0x10c = JKR_NEW JUTTexture(param_3, 0);
     }
     if (param_4) {
-        mPalette = new JUTPalette(GX_TLUT0, const_cast<ResTLUT*>(param_4));
+        mPalette = JKR_NEW JUTPalette(GX_TLUT0, const_cast<ResTLUT*>(param_4));
     }
     field_0x144 = param_5;
     if (field_0x100 && field_0x104 && field_0x108 && field_0x10c) {
@@ -189,23 +189,23 @@ void J2DWindow::private_readStream(J2DPane* param_0, JSURandomInputStream* param
     field_0x114.set(f31, f30, f29, f28);
     ResTIMG* timg = (ResTIMG*)getPointer(param_1, 'TIMG', param_2);
     if (timg) {
-        field_0x100 = new JUTTexture(timg, 0);
+        field_0x100 = JKR_NEW JUTTexture(timg, 0);
     }
     timg = (ResTIMG*)getPointer(param_1, 'TIMG', param_2);
     if (timg) {
-        field_0x104 = new JUTTexture(timg, 0);
+        field_0x104 = JKR_NEW JUTTexture(timg, 0);
     }
     timg = (ResTIMG*)getPointer(param_1, 'TIMG', param_2);
     if (timg) {
-        field_0x108 = new JUTTexture(timg, 0);
+        field_0x108 = JKR_NEW JUTTexture(timg, 0);
     }
     timg = (ResTIMG*)getPointer(param_1, 'TIMG', param_2);
     if (timg) {
-        field_0x10c = new JUTTexture(timg, 0);
+        field_0x10c = JKR_NEW JUTTexture(timg, 0);
     }
     ResTLUT* tlut = (ResTLUT*)getPointer(param_1, 'TLUT', param_2);
     if (tlut) {
-        mPalette = new JUTPalette(GX_TLUT0, tlut);
+        mPalette = JKR_NEW JUTPalette(GX_TLUT0, tlut);
     }
     field_0x144 = param_1->read8b();
     field_0x128.set(param_1->read32b());
@@ -218,7 +218,7 @@ void J2DWindow::private_readStream(J2DPane* param_0, JSURandomInputStream* param
         int unused;
         timg = (ResTIMG*)getPointer(param_1, 'TIMG', param_2);
         if (timg) {
-            field_0x110 = new JUTTexture(timg, 0);
+            field_0x110 = JKR_NEW JUTTexture(timg, 0);
         }
         r27--;
     }
@@ -288,12 +288,12 @@ J2DWindowMirror J2DWindow::convertMirror(J2DTextureBase texBase) {
 }
 
 J2DWindow::~J2DWindow() {
-    delete field_0x100;
-    delete field_0x104;
-    delete field_0x108;
-    delete field_0x10c;
-    delete mPalette;
-    delete field_0x110;
+    JKR_DELETE(field_0x100);
+    JKR_DELETE(field_0x104);
+    JKR_DELETE(field_0x108);
+    JKR_DELETE(field_0x10c);
+    JKR_DELETE(mPalette);
+    JKR_DELETE(field_0x110);
 }
 
 void J2DWindow::draw(JGeometry::TBox2<f32> const& param_0) {

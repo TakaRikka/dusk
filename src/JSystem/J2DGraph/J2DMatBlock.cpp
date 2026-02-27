@@ -7,6 +7,8 @@
 #include "JSystem/JUtility/JUTTexture.h"
 #include <dolphin/gx.h>
 
+#include "JSystem/JKernel/JKRHeap.h"
+
 void J2DColorBlock::initialize() {
     for (int i = 0; i < 2; i++) {
         mMatColor[i] = JUtility::TColor(j2dDefaultColInfo);
@@ -56,7 +58,7 @@ void J2DTexGenBlock::setGX() {
 
 J2DTexGenBlock::~J2DTexGenBlock() {
     for (int i = 0; i < 8; i++) {
-        delete mTexMtx[i];
+        JKR_DELETE(mTexMtx[i]);
     }
 }
 
@@ -64,7 +66,7 @@ void J2DTexGenBlock::setTexMtx(u32 param_0, J2DTexMtx& param_1) {
     J3D_PANIC(103, param_0 < 8, "Error : range over.");
     
     if (!mTexMtx[param_0]) {
-        mTexMtx[param_0] = new J2DTexMtx(param_1.getTexMtxInfo());
+        mTexMtx[param_0] = JKR_NEW J2DTexMtx(param_1.getTexMtxInfo());
         if (!mTexMtx[param_0]) {
             return;
         }
@@ -101,13 +103,13 @@ J2DTevBlock1::J2DTevBlock1() {
 
 J2DTevBlock1::~J2DTevBlock1() {
     if (mUndeleteFlag & 1) {
-        delete mTexture[0];
+        JKR_DELETE(mTexture[0]);
     }
 
-    delete mPalette[0];
+    JKR_DELETE(mPalette[0]);
 
     if (mUndeleteFlag & 0x80) {
-        delete mFont;
+        JKR_DELETE(mFont);
     }
 }
 
@@ -139,7 +141,7 @@ bool J2DTevBlock1::prepareTexture(u8 param_0) {
     }
 
     if (mTexture[0] == NULL) {
-        mTexture[0] = new JUTTexture();
+        mTexture[0] = JKR_NEW JUTTexture();
 
         if (mTexture[0] == NULL) {
             return false;
@@ -166,7 +168,7 @@ bool J2DTevBlock1::insertTexture(u32 param_0, ResTIMG const* p_timg, JUTPalette*
     }
 
     if (mTexture[0] == NULL) {
-        mTexture[0] = new JUTTexture(p_timg, 0);
+        mTexture[0] = JKR_NEW JUTTexture(p_timg, 0);
 
         if (mTexture[0] == NULL) {
             return false;
@@ -197,7 +199,7 @@ bool J2DTevBlock1::insertTexture(u32 param_0, JUTTexture* p_tex) {
     }
 
     if (mUndeleteFlag & 1) {
-        delete mTexture[0];
+        JKR_DELETE(mTexture[0]);
     }
 
     mTexture[0] = p_tex;
@@ -214,7 +216,7 @@ bool J2DTevBlock1::setTexture(u32 param_0, ResTIMG const* p_timg) {
 
     if (mTexture[0] == NULL) {
         if (p_timg != NULL) {
-            mTexture[0] = new JUTTexture(p_timg, 0);
+            mTexture[0] = JKR_NEW JUTTexture(p_timg, 0);
 
             if (mTexture[0] == NULL) {
                 return false;
@@ -228,7 +230,7 @@ bool J2DTevBlock1::setTexture(u32 param_0, ResTIMG const* p_timg) {
         if (p_timg != NULL) {
             mTexture[0]->storeTIMG(p_timg, (u8)0);
         } else {
-            delete mTexture[0];
+            JKR_DELETE(mTexture[0]);
             mTexture[0] = NULL;
             mUndeleteFlag &= 0x80;
         }
@@ -236,7 +238,7 @@ bool J2DTevBlock1::setTexture(u32 param_0, ResTIMG const* p_timg) {
         mTexture[0] = NULL;
 
         if (p_timg != NULL) {
-            mTexture[0] = new JUTTexture(p_timg, 0);
+            mTexture[0] = JKR_NEW JUTTexture(p_timg, 0);
 
             if (mTexture[0] == NULL) {
                 return false;
@@ -246,7 +248,7 @@ bool J2DTevBlock1::setTexture(u32 param_0, ResTIMG const* p_timg) {
         }
     }
 
-    delete mPalette[0];
+    JKR_DELETE(mPalette[0]);
     mPalette[0] = NULL;
     mTexNo[0] = -1;
     return true;
@@ -258,12 +260,12 @@ bool J2DTevBlock1::setTexture(u32 param_0, JUTTexture* p_tex) {
     }
 
     if (mUndeleteFlag & 1) {
-        delete mTexture[0];
+        JKR_DELETE(mTexture[0]);
     }
 
     mTexture[0] = p_tex;
     mUndeleteFlag &= 0x80;
-    delete mPalette[0];
+    JKR_DELETE(mPalette[0]);
     mPalette[0] = NULL;
     mTexNo[0] = -1;
     return true;
@@ -275,12 +277,12 @@ bool J2DTevBlock1::removeTexture(u32 param_0) {
     }
 
     if (mUndeleteFlag & 1) {
-        delete mTexture[0];
+        JKR_DELETE(mTexture[0]);
     }
 
     mTexture[0] = NULL;
     mUndeleteFlag &= 0x80;
-    delete mPalette[0];
+    JKR_DELETE(mPalette[0]);
     mTexNo[0] = -1;
     return true;
 }
@@ -290,13 +292,13 @@ bool J2DTevBlock1::setFont(ResFONT* p_font) {
         return false;
     }
 
-    JUTResFont* resFont = new JUTResFont(p_font, NULL);
+    JUTResFont* resFont = JKR_NEW JUTResFont(p_font, NULL);
     if (resFont == NULL) {
         return false;
     }
 
     if (mUndeleteFlag & 0x80) {
-        delete mFont;
+        JKR_DELETE(mFont);
     }
 
     mFont = resFont;
@@ -310,7 +312,7 @@ bool J2DTevBlock1::setFont(JUTFont* p_font) {
     }
 
     if (mUndeleteFlag & 0x80) {
-        delete mFont;
+        JKR_DELETE(mFont);
     }
 
     mFont = (JUTResFont*)p_font;
@@ -325,7 +327,7 @@ bool J2DTevBlock1::setPalette(u32 param_0, ResTLUT const* p_tlut) {
 
     if (p_tlut != NULL) {
         if (mPalette[0] == NULL) {
-            mPalette[0] = new JUTPalette(GX_TLUT0, (ResTLUT*)p_tlut);
+            mPalette[0] = JKR_NEW JUTPalette(GX_TLUT0, (ResTLUT*)p_tlut);
 
             if (mPalette[0] == NULL) {
                 return false;
@@ -338,7 +340,7 @@ bool J2DTevBlock1::setPalette(u32 param_0, ResTLUT const* p_tlut) {
             mTexture[0]->attachPalette(mPalette[0]);
         }
     } else {
-        delete mPalette[0];
+        JKR_DELETE(mPalette[0]);
         mPalette[0] = NULL;
     }
 
@@ -403,18 +405,18 @@ J2DTevBlock2::J2DTevBlock2() {
 
 J2DTevBlock2::~J2DTevBlock2() {
     if (mUndeleteFlag & 1) {
-        delete mTexture[0];
+        JKR_DELETE(mTexture[0]);
     }
 
     if (mUndeleteFlag & 2) {
-        delete mTexture[1];
+        JKR_DELETE(mTexture[1]);
     }
 
-    delete mPalette[0];
-    delete mPalette[1];
+    JKR_DELETE(mPalette[0]);
+    JKR_DELETE(mPalette[1]);
 
     if (mUndeleteFlag & 0x80) {
-        delete mFont;
+        JKR_DELETE(mFont);
     }
 }
 
@@ -454,7 +456,7 @@ bool J2DTevBlock2::prepareTexture(u8 param_0) {
         }
 
         if (mTexture[i] == NULL) {
-            mTexture[i] = new JUTTexture();
+            mTexture[i] = JKR_NEW JUTTexture();
 
             if (mTexture[i] == NULL) {
                 return false;
@@ -499,7 +501,7 @@ bool J2DTevBlock2::insertTexture(u32 param_0, ResTIMG const* p_timg, JUTPalette*
 
     JUTTexture* tex;
     if (mTexture[texNo] == NULL) {
-        tex = new JUTTexture(p_timg, tlutid);
+        tex = JKR_NEW JUTTexture(p_timg, tlutid);
 
         if (tex == NULL) {
             return false;
@@ -575,7 +577,7 @@ bool J2DTevBlock2::insertTexture(u32 param_0, JUTTexture* p_tex) {
 
     if (mTexture[1] != NULL && mTexture[1]->getTexInfo() == NULL) {
         if (mUndeleteFlag & 2) {
-            delete mTexture[1];
+            JKR_DELETE(mTexture[1]);
         }
         
         mUndeleteFlag &= ~2;
@@ -617,7 +619,7 @@ bool J2DTevBlock2::setTexture(u32 param_0, ResTIMG const* p_timg) {
 
     if (mTexture[param_0] == NULL) {
         if (p_timg != NULL) {
-            mTexture[param_0] = new JUTTexture(p_timg, tlutid);
+            mTexture[param_0] = JKR_NEW JUTTexture(p_timg, tlutid);
 
             if (mTexture[param_0] == NULL) {
                 return false;
@@ -631,7 +633,7 @@ bool J2DTevBlock2::setTexture(u32 param_0, ResTIMG const* p_timg) {
         if (p_timg != NULL) {
             mTexture[param_0]->storeTIMG(p_timg, tlutid);
         } else {
-            delete mTexture[param_0];
+            JKR_DELETE(mTexture[param_0]);
             mTexture[param_0] = NULL;
             mUndeleteFlag &= ~(1 << param_0);
         }
@@ -639,7 +641,7 @@ bool J2DTevBlock2::setTexture(u32 param_0, ResTIMG const* p_timg) {
         mTexture[param_0] = NULL;
 
         if (p_timg != NULL) {
-            mTexture[param_0] = new JUTTexture(p_timg, 0);
+            mTexture[param_0] = JKR_NEW JUTTexture(p_timg, 0);
 
             if (mTexture[param_0] == NULL) {
                 return false;
@@ -649,7 +651,7 @@ bool J2DTevBlock2::setTexture(u32 param_0, ResTIMG const* p_timg) {
         }
     }
 
-    delete mPalette[param_0];
+    JKR_DELETE(mPalette[param_0]);
     mPalette[param_0] = NULL;
     mTexNo[param_0] = -1;
     return true;
@@ -661,12 +663,12 @@ bool J2DTevBlock2::setTexture(u32 param_0, JUTTexture* p_tex) {
     }
 
     if (mUndeleteFlag & (1 << param_0)) {
-        delete mTexture[param_0];
+        JKR_DELETE(mTexture[param_0]);
     }
 
     mTexture[param_0] = p_tex;
     mUndeleteFlag &= ~(1 << param_0);
-    delete mPalette[param_0];
+    JKR_DELETE(mPalette[param_0]);
     mPalette[param_0] = NULL;
     mTexNo[param_0] = -1;
     return true;
@@ -678,9 +680,9 @@ bool J2DTevBlock2::removeTexture(u32 param_0) {
     }
 
     if (mUndeleteFlag & (1 << param_0)) {
-        delete mTexture[param_0];
+        JKR_DELETE(mTexture[param_0]);
     }
-    delete mPalette[param_0];
+    JKR_DELETE(mPalette[param_0]);
 
     if (param_0 == 0) {
         mTexture[0] = mTexture[1];
@@ -700,13 +702,13 @@ bool J2DTevBlock2::setFont(ResFONT* p_font) {
         return false;
     }
 
-    JUTResFont* resFont = new JUTResFont(p_font, NULL);
+    JUTResFont* resFont = JKR_NEW JUTResFont(p_font, NULL);
     if (resFont == NULL) {
         return false;
     }
 
     if (mUndeleteFlag & 0x80) {
-        delete mFont;
+        JKR_DELETE(mFont);
     }
 
     mFont = resFont;
@@ -720,7 +722,7 @@ bool J2DTevBlock2::setFont(JUTFont* p_font) {
     }
 
     if (mUndeleteFlag & 0x80) {
-        delete mFont;
+        JKR_DELETE(mFont);
     }
 
     mFont = (JUTResFont*)p_font;
@@ -735,7 +737,7 @@ bool J2DTevBlock2::setPalette(u32 param_0, ResTLUT const* p_tlut) {
 
     if (p_tlut != NULL) {
         if (mPalette[param_0] == NULL) {
-            mPalette[param_0] = new JUTPalette((GXTlut)param_0, (ResTLUT*)p_tlut);
+            mPalette[param_0] = JKR_NEW JUTPalette((GXTlut)param_0, (ResTLUT*)p_tlut);
 
             if (mPalette[param_0] == NULL) {
                 return false;
@@ -748,7 +750,7 @@ bool J2DTevBlock2::setPalette(u32 param_0, ResTLUT const* p_tlut) {
             mTexture[param_0]->attachPalette(mPalette[param_0]);
         }
     } else {
-        delete mPalette[param_0];
+        JKR_DELETE(mPalette[param_0]);
         mPalette[param_0] = NULL;
     }
 
@@ -841,13 +843,13 @@ J2DTevBlock4::J2DTevBlock4() {
 J2DTevBlock4::~J2DTevBlock4() {
     for (int i = 0; i < 4; i++) {
         if (mUndeleteFlag & (1 << i)) {
-            delete mTexture[i];
+            JKR_DELETE(mTexture[i]);
         }
-        delete mPalette[i];
+        JKR_DELETE(mPalette[i]);
     }
 
     if (mUndeleteFlag & 0x80) {
-        delete mFont;
+        JKR_DELETE(mFont);
     }
 }
 
@@ -892,7 +894,7 @@ bool J2DTevBlock4::prepareTexture(u8 param_0) {
         }
 
         if (mTexture[i] == NULL) {
-            mTexture[i] = new JUTTexture();
+            mTexture[i] = JKR_NEW JUTTexture();
 
             if (mTexture[i] == NULL) {
                 return false;
@@ -949,7 +951,7 @@ bool J2DTevBlock4::insertTexture(u32 param_0, ResTIMG const* p_timg, JUTPalette*
     }
     JUTTexture* texture;
     if (!mTexture[idx]) {
-        texture = new JUTTexture(p_timg, local_43);
+        texture = JKR_NEW JUTTexture(p_timg, local_43);
         if (!texture) {
             return false;
         }
@@ -1017,7 +1019,7 @@ bool J2DTevBlock4::insertTexture(u32 param_0, JUTTexture* p_tex) {
 
     if (mTexture[3] != NULL && mTexture[3]->getTexInfo() == NULL) {
         if (mUndeleteFlag & 8) {
-            delete mTexture[3];
+            JKR_DELETE(mTexture[3]);
         }
         
         mUndeleteFlag &= ~8;
@@ -1069,7 +1071,7 @@ bool J2DTevBlock4::setTexture(u32 param_0, ResTIMG const* p_timg) {
 
     if (mTexture[param_0] == NULL) {
         if (p_timg != NULL) {
-            mTexture[param_0] = new JUTTexture(p_timg, tlutid);
+            mTexture[param_0] = JKR_NEW JUTTexture(p_timg, tlutid);
 
             if (mTexture[param_0] == NULL) {
                 return false;
@@ -1083,7 +1085,7 @@ bool J2DTevBlock4::setTexture(u32 param_0, ResTIMG const* p_timg) {
         if (p_timg != NULL) {
             mTexture[param_0]->storeTIMG(p_timg, tlutid);
         } else {
-            delete mTexture[param_0];
+            JKR_DELETE(mTexture[param_0]);
             mTexture[param_0] = NULL;
             mUndeleteFlag &= ~(1 << param_0);
         }
@@ -1091,7 +1093,7 @@ bool J2DTevBlock4::setTexture(u32 param_0, ResTIMG const* p_timg) {
         mTexture[param_0] = NULL;
 
         if (p_timg != NULL) {
-            mTexture[param_0] = new JUTTexture(p_timg, 0);
+            mTexture[param_0] = JKR_NEW JUTTexture(p_timg, 0);
 
             if (mTexture[param_0] == NULL) {
                 return false;
@@ -1101,7 +1103,7 @@ bool J2DTevBlock4::setTexture(u32 param_0, ResTIMG const* p_timg) {
         }
     }
 
-    delete mPalette[param_0];
+    JKR_DELETE(mPalette[param_0]);
     mPalette[param_0] = NULL;
     mTexNo[param_0] = -1;
     return true;
@@ -1113,12 +1115,12 @@ bool J2DTevBlock4::setTexture(u32 param_0, JUTTexture* p_tex) {
     }
 
     if (mUndeleteFlag & (1 << param_0)) {
-        delete mTexture[param_0];
+        JKR_DELETE(mTexture[param_0]);
     }
 
     mTexture[param_0] = p_tex;
     mUndeleteFlag &= ~(1 << param_0);
-    delete mPalette[param_0];
+    JKR_DELETE(mPalette[param_0]);
     mPalette[param_0] = NULL;
     mTexNo[param_0] = -1;
     return true;
@@ -1130,9 +1132,9 @@ bool J2DTevBlock4::removeTexture(u32 param_0) {
     }
 
     if (mUndeleteFlag & (1 << param_0)) {
-        delete mTexture[param_0];
+        JKR_DELETE(mTexture[param_0]);
     }
-    delete mPalette[param_0];
+    JKR_DELETE(mPalette[param_0]);
 
     for (u32 i = param_0; i < 3; i++) {
         mTexture[i] = mTexture[i + 1];
@@ -1152,13 +1154,13 @@ bool J2DTevBlock4::setFont(ResFONT* p_font) {
         return false;
     }
 
-    JUTResFont* resFont = new JUTResFont(p_font, NULL);
+    JUTResFont* resFont = JKR_NEW JUTResFont(p_font, NULL);
     if (resFont == NULL) {
         return false;
     }
 
     if (mUndeleteFlag & 0x80) {
-        delete mFont;
+        JKR_DELETE(mFont);
     }
 
     mFont = resFont;
@@ -1172,7 +1174,7 @@ bool J2DTevBlock4::setFont(JUTFont* p_font) {
     }
 
     if (mUndeleteFlag & 0x80) {
-        delete mFont;
+        JKR_DELETE(mFont);
     }
 
     mFont = (JUTResFont*)p_font;
@@ -1187,7 +1189,7 @@ bool J2DTevBlock4::setPalette(u32 param_0, ResTLUT const* p_tlut) {
 
     if (p_tlut != NULL) {
         if (mPalette[param_0] == NULL) {
-            mPalette[param_0] = new JUTPalette((GXTlut)param_0, (ResTLUT*)p_tlut);
+            mPalette[param_0] = JKR_NEW JUTPalette((GXTlut)param_0, (ResTLUT*)p_tlut);
 
             if (mPalette[param_0] == NULL) {
                 return false;
@@ -1200,7 +1202,7 @@ bool J2DTevBlock4::setPalette(u32 param_0, ResTLUT const* p_tlut) {
             mTexture[param_0]->attachPalette(mPalette[param_0]);
         }
     } else {
-        delete mPalette[param_0];
+        JKR_DELETE(mPalette[param_0]);
         mPalette[param_0] = NULL;
     }
 
@@ -1285,13 +1287,13 @@ J2DTevBlock8::J2DTevBlock8() {
 J2DTevBlock8::~J2DTevBlock8() {
     for (int i = 0; i < 8; i++) {
         if (mUndeleteFlag & (1 << i)) {
-            delete mTexture[i];
+            JKR_DELETE(mTexture[i]);
         }
-        delete mPalette[i];
+        JKR_DELETE(mPalette[i]);
     }
 
     if (mFontUndeleteFlag) {
-        delete mFont;
+        JKR_DELETE(mFont);
     }
 }
 
@@ -1337,7 +1339,7 @@ bool J2DTevBlock8::prepareTexture(u8 param_0) {
         }
 
         if (mTexture[i] == NULL) {
-            mTexture[i] = new JUTTexture();
+            mTexture[i] = JKR_NEW JUTTexture();
 
             if (mTexture[i] == NULL) {
                 return false;
@@ -1394,7 +1396,7 @@ bool J2DTevBlock8::insertTexture(u32 param_0, ResTIMG const* p_timg, JUTPalette*
     }
     JUTTexture* texture;
     if (!mTexture[idx]) {
-        texture = new JUTTexture(p_timg, local_43);
+        texture = JKR_NEW JUTTexture(p_timg, local_43);
         if (!texture) {
             return false;
         }
@@ -1462,7 +1464,7 @@ bool J2DTevBlock8::insertTexture(u32 param_0, JUTTexture* p_tex) {
 
     if (mTexture[7] != NULL && mTexture[7]->getTexInfo() == NULL) {
         if (mUndeleteFlag & 0x80) {
-            delete mTexture[7];
+            JKR_DELETE(mTexture[7]);
         }
         
         mUndeleteFlag &= ~0x80;
@@ -1514,7 +1516,7 @@ bool J2DTevBlock8::setTexture(u32 param_0, ResTIMG const* p_timg) {
 
     if (mTexture[param_0] == NULL) {
         if (p_timg != NULL) {
-            mTexture[param_0] = new JUTTexture(p_timg, tlutid);
+            mTexture[param_0] = JKR_NEW JUTTexture(p_timg, tlutid);
 
             if (mTexture[param_0] == NULL) {
                 return false;
@@ -1528,7 +1530,7 @@ bool J2DTevBlock8::setTexture(u32 param_0, ResTIMG const* p_timg) {
         if (p_timg != NULL) {
             mTexture[param_0]->storeTIMG(p_timg, tlutid);
         } else {
-            delete mTexture[param_0];
+            JKR_DELETE(mTexture[param_0]);
             mTexture[param_0] = NULL;
             mUndeleteFlag &= ~(1 << param_0);
         }
@@ -1536,7 +1538,7 @@ bool J2DTevBlock8::setTexture(u32 param_0, ResTIMG const* p_timg) {
         mTexture[param_0] = NULL;
 
         if (p_timg != NULL) {
-            mTexture[param_0] = new JUTTexture(p_timg, 0);
+            mTexture[param_0] = JKR_NEW JUTTexture(p_timg, 0);
 
             if (mTexture[param_0] == NULL) {
                 return false;
@@ -1546,7 +1548,7 @@ bool J2DTevBlock8::setTexture(u32 param_0, ResTIMG const* p_timg) {
         }
     }
 
-    delete mPalette[param_0];
+    JKR_DELETE(mPalette[param_0]);
     mPalette[param_0] = NULL;
     mTexNo[param_0] = -1;
     return true;
@@ -1558,12 +1560,12 @@ bool J2DTevBlock8::setTexture(u32 param_0, JUTTexture* p_tex) {
     }
 
     if (mUndeleteFlag & (1 << param_0)) {
-        delete mTexture[param_0];
+        JKR_DELETE(mTexture[param_0]);
     }
 
     mTexture[param_0] = p_tex;
     mUndeleteFlag &= ~(1 << param_0);
-    delete mPalette[param_0];
+    JKR_DELETE(mPalette[param_0]);
     mPalette[param_0] = NULL;
     mTexNo[param_0] = -1;
     return true;
@@ -1575,9 +1577,9 @@ bool J2DTevBlock8::removeTexture(u32 param_0) {
     }
 
     if (mUndeleteFlag & (1 << param_0)) {
-        delete mTexture[param_0];
+        JKR_DELETE(mTexture[param_0]);
     }
-    delete mPalette[param_0];
+    JKR_DELETE(mPalette[param_0]);
 
     for (u32 i = param_0; i < 7; i++) {
         mTexture[i] = mTexture[i + 1];
@@ -1597,13 +1599,13 @@ bool J2DTevBlock8::setFont(ResFONT* p_font) {
         return false;
     }
 
-    JUTResFont* resFont = new JUTResFont(p_font, NULL);
+    JUTResFont* resFont = JKR_NEW JUTResFont(p_font, NULL);
     if (resFont == NULL) {
         return false;
     }
 
     if (mFontUndeleteFlag) {
-        delete mFont;
+        JKR_DELETE(mFont);
     }
 
     mFont = resFont;
@@ -1617,7 +1619,7 @@ bool J2DTevBlock8::setFont(JUTFont* p_font) {
     }
 
     if (mFontUndeleteFlag) {
-        delete mFont;
+        JKR_DELETE(mFont);
     }
 
     mFont = (JUTResFont*)p_font;
@@ -1632,7 +1634,7 @@ bool J2DTevBlock8::setPalette(u32 param_0, ResTLUT const* p_tlut) {
 
     if (p_tlut != NULL) {
         if (mPalette[param_0] == NULL) {
-            mPalette[param_0] = new JUTPalette((GXTlut)param_0, (ResTLUT*)p_tlut);
+            mPalette[param_0] = JKR_NEW JUTPalette((GXTlut)param_0, (ResTLUT*)p_tlut);
 
             if (mPalette[param_0] == NULL) {
                 return false;
@@ -1645,7 +1647,7 @@ bool J2DTevBlock8::setPalette(u32 param_0, ResTLUT const* p_tlut) {
             mTexture[param_0]->attachPalette(mPalette[param_0]);
         }
     } else {
-        delete mPalette[param_0];
+        JKR_DELETE(mPalette[param_0]);
         mPalette[param_0] = NULL;
     }
 
@@ -1725,13 +1727,13 @@ J2DTevBlock16::J2DTevBlock16() {
 J2DTevBlock16::~J2DTevBlock16() {
     for (int i = 0; i < 8; i++) {
         if (mUndeleteFlag & (1 << i)) {
-            delete mTexture[i];
+            JKR_DELETE(mTexture[i]);
         }
-        delete mPalette[i];
+        JKR_DELETE(mPalette[i]);
     }
 
     if (mFontUndeleteFlag) {
-        delete mFont;
+        JKR_DELETE(mFont);
     }
 }
 
@@ -1777,7 +1779,7 @@ bool J2DTevBlock16::prepareTexture(u8 param_0) {
         }
 
         if (mTexture[i] == NULL) {
-            mTexture[i] = new JUTTexture();
+            mTexture[i] = JKR_NEW JUTTexture();
 
             if (mTexture[i] == NULL) {
                 return false;
@@ -1834,7 +1836,7 @@ bool J2DTevBlock16::insertTexture(u32 param_0, ResTIMG const* p_timg, JUTPalette
     }
     JUTTexture* texture;
     if (!mTexture[idx]) {
-        texture = new JUTTexture(p_timg, local_43);
+        texture = JKR_NEW JUTTexture(p_timg, local_43);
         if (!texture) {
             return false;
         }
@@ -1902,7 +1904,7 @@ bool J2DTevBlock16::insertTexture(u32 param_0, JUTTexture* p_tex) {
 
     if (mTexture[7] != NULL && mTexture[7]->getTexInfo() == NULL) {
         if (mUndeleteFlag & 0x80) {
-            delete mTexture[7];
+            JKR_DELETE(mTexture[7]);
         }
         
         mUndeleteFlag &= ~0x80;
@@ -1954,7 +1956,7 @@ bool J2DTevBlock16::setTexture(u32 param_0, ResTIMG const* p_timg) {
 
     if (mTexture[param_0] == NULL) {
         if (p_timg != NULL) {
-            mTexture[param_0] = new JUTTexture(p_timg, tlutid);
+            mTexture[param_0] = JKR_NEW JUTTexture(p_timg, tlutid);
 
             if (mTexture[param_0] == NULL) {
                 return false;
@@ -1968,7 +1970,7 @@ bool J2DTevBlock16::setTexture(u32 param_0, ResTIMG const* p_timg) {
         if (p_timg != NULL) {
             mTexture[param_0]->storeTIMG(p_timg, tlutid);
         } else {
-            delete mTexture[param_0];
+            JKR_DELETE(mTexture[param_0]);
             mTexture[param_0] = NULL;
             mUndeleteFlag &= ~(1 << param_0);
         }
@@ -1976,7 +1978,7 @@ bool J2DTevBlock16::setTexture(u32 param_0, ResTIMG const* p_timg) {
         mTexture[param_0] = NULL;
 
         if (p_timg != NULL) {
-            mTexture[param_0] = new JUTTexture(p_timg, 0);
+            mTexture[param_0] = JKR_NEW JUTTexture(p_timg, 0);
 
             if (mTexture[param_0] == NULL) {
                 return false;
@@ -1986,7 +1988,7 @@ bool J2DTevBlock16::setTexture(u32 param_0, ResTIMG const* p_timg) {
         }
     }
 
-    delete mPalette[param_0];
+    JKR_DELETE(mPalette[param_0]);
     mPalette[param_0] = NULL;
     mTexNo[param_0] = -1;
     return true;
@@ -1998,12 +2000,12 @@ bool J2DTevBlock16::setTexture(u32 param_0, JUTTexture* p_tex) {
     }
 
     if (mUndeleteFlag & (1 << param_0)) {
-        delete mTexture[param_0];
+        JKR_DELETE(mTexture[param_0]);
     }
 
     mTexture[param_0] = p_tex;
     mUndeleteFlag &= ~(1 << param_0);
-    delete mPalette[param_0];
+    JKR_DELETE(mPalette[param_0]);
     mPalette[param_0] = NULL;
     mTexNo[param_0] = -1;
     return true;
@@ -2015,9 +2017,9 @@ bool J2DTevBlock16::removeTexture(u32 param_0) {
     }
 
     if (mUndeleteFlag & (1 << param_0)) {
-        delete mTexture[param_0];
+        JKR_DELETE(mTexture[param_0]);
     }
-    delete mPalette[param_0];
+    JKR_DELETE(mPalette[param_0]);
 
     for (u32 i = param_0; i < 7; i++) {
         mTexture[i] = mTexture[i + 1];
@@ -2037,13 +2039,13 @@ bool J2DTevBlock16::setFont(ResFONT* p_font) {
         return false;
     }
 
-    JUTResFont* resFont = new JUTResFont(p_font, NULL);
+    JUTResFont* resFont = JKR_NEW JUTResFont(p_font, NULL);
     if (resFont == NULL) {
         return false;
     }
 
     if (mFontUndeleteFlag) {
-        delete mFont;
+        JKR_DELETE(mFont);
     }
 
     mFont = resFont;
@@ -2057,7 +2059,7 @@ bool J2DTevBlock16::setFont(JUTFont* p_font) {
     }
 
     if (mFontUndeleteFlag) {
-        delete mFont;
+        JKR_DELETE(mFont);
     }
 
     mFont = (JUTResFont*)p_font;
@@ -2072,7 +2074,7 @@ bool J2DTevBlock16::setPalette(u32 param_0, ResTLUT const* p_tlut) {
 
     if (p_tlut != NULL) {
         if (mPalette[param_0] == NULL) {
-            mPalette[param_0] = new JUTPalette((GXTlut)param_0, (ResTLUT*)p_tlut);
+            mPalette[param_0] = JKR_NEW JUTPalette((GXTlut)param_0, (ResTLUT*)p_tlut);
 
             if (mPalette[param_0] == NULL) {
                 return false;
@@ -2085,7 +2087,7 @@ bool J2DTevBlock16::setPalette(u32 param_0, ResTLUT const* p_tlut) {
             mTexture[param_0]->attachPalette(mPalette[param_0]);
         }
     } else {
-        delete mPalette[param_0];
+        JKR_DELETE(mPalette[param_0]);
         mPalette[param_0] = NULL;
     }
 

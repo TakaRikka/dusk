@@ -77,7 +77,7 @@ int daLv6SwGate_c::CreateHeap() {
     if (mModel2 == NULL) {
         return FALSE;
     }
-    mpBgW = new dBgW();
+    mpBgW = JKR_NEW dBgW();
     if (mpBgW != NULL && !mpBgW->Set((cBgD_t*)dComIfG_getObjectRes("L6SwGate", 7), 0x1, &mMtx)) {
         mpBgW->SetCrrFunc(dBgS_MoveBGProc_TypicalRotY);
     } else {

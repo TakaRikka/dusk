@@ -632,14 +632,14 @@ void dPa_modelEcallBack::setup(JPABaseEmitter* i_emitter, cXyz const* param_1, c
 }
 
 void dPa_modelEcallBack::create(u8 param_0) {
-    mModel = new model_c[param_0];
+    mModel = JKR_NEW model_c[param_0];
     struct_80450E9C = param_0;
     struct_80450E9D = 0;
 }
 
 void dPa_modelEcallBack::remove() {
     if (mModel != NULL) {
-        delete [] mModel;
+        JKR_DELETE_ARRAY(mModel);
         mModel = NULL;
     }
 }
@@ -767,7 +767,7 @@ JPABaseEmitter* dPa_simpleEcallBack::create(JPAEmitterManager* param_0, u16 id, 
     field_0xa = param_2;
     mID = id;
     field_0xe = 0x20;
-    mData = new dPa_simpleData_c[field_0xe];
+    mData = JKR_NEW dPa_simpleData_c[field_0xe];
     JUT_ASSERT(1747, mData != NULL);
     createEmitter(param_0);
     return mEmitter;
@@ -1202,10 +1202,10 @@ void dPa_control_c::createCommon(void const* param_0) {
 #endif
     mHeap = mDoExt_createSolidHeapFromSystem(0, 0);
     JUT_ASSERT(2518, mHeap != NULL);
-    mCommonResMng = new (mHeap, 0) JPAResourceManager(param_0, mHeap);
+    mCommonResMng = JKR_NEW_ARGS (mHeap, 0) JPAResourceManager(param_0, mHeap);
     JUT_ASSERT(2521, mCommonResMng != NULL);
     mCommonResMng->swapTexture(mDoGph_gInf_c::getFrameBufferTimg(), "dummy");
-    mEmitterMng = new (mHeap, 0) JPAEmitterManager(3000, 250, *(JKRHeap**)this, 0x13, 2);
+    mEmitterMng = JKR_NEW_ARGS (mHeap, 0) JPAEmitterManager(3000, 250, *(JKRHeap**)this, 0x13, 2);
     JUT_ASSERT(2531, mEmitterMng != NULL);
     mEmitterMng->entryResourceManager(mCommonResMng, 0);
     JKRHeap* prevHeap = mDoExt_setCurrentHeap(mHeap);
@@ -1227,7 +1227,7 @@ void dPa_control_c::createCommon(void const* param_0) {
 void dPa_control_c::createRoomScene() {
     mSceneHeap = mDoExt_createSolidHeapFromGame(0, 0);
     JUT_ASSERT(2573, mSceneHeap != NULL);
-    mSceneResMng = new (mSceneHeap, 0) JPAResourceManager(m_sceneRes, mSceneHeap);
+    mSceneResMng = JKR_NEW_ARGS (mSceneHeap, 0) JPAResourceManager(m_sceneRes, mSceneHeap);
     JUT_ASSERT(2576, mSceneResMng != NULL);
     mSceneResMng->swapTexture(mDoGph_gInf_c::getFrameBufferTimg(), "dummy");
     mEmitterMng->entryResourceManager(mSceneResMng, 1);

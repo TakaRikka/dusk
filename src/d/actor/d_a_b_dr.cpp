@@ -3999,12 +3999,12 @@ int daB_DR_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("B_DR", 0x49);
     JUT_ASSERT(6324, modelData != NULL);
     
-    mpModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_DR", 0x2F), 2, 1.0f, 0, -1, &mSound, 0, 0x11000084);
+    mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_DR", 0x2F), 2, 1.0f, 0, -1, &mSound, 0, 0x11000084);
     if (mpModelMorf == NULL || mpModelMorf->getModel() == NULL) {
         return 0;
     }
 
-    mpCoreBrk = new mDoExt_brkAnm();
+    mpCoreBrk = JKR_NEW mDoExt_brkAnm();
     if (mpCoreBrk == NULL) {
         return 0;
     }

@@ -114,12 +114,12 @@ int daTbox2_c::CreateHeap() {
     J3DAnmTransform* pbck =
         (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, l_resInfo[mModelType].bck_no);
     JUT_ASSERT(0, pbck != NULL);
-    mpBck = new mDoExt_bckAnm();
+    mpBck = JKR_NEW mDoExt_bckAnm();
     if (mpBck == NULL || !mpBck->init(pbck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
         return false;
     }
 
-    mBoxBgW = new dBgW();
+    mBoxBgW = JKR_NEW dBgW();
     if (mBoxBgW != NULL &&
         !mBoxBgW->Set((cBgD_t*)dComIfG_getObjectRes(l_arcName, l_resInfo[mModelType].dzb_no),
                       cBgW::MOVE_BG_e, &mBgMtx))

@@ -233,7 +233,7 @@ void daPy_anmHeap_c::initData() {
 }
 
 void* daPy_anmHeap_c::mallocBuffer() {
-    mBuffer = new (0x20) u8[mBufferSize];
+    mBuffer = JKR_NEW_ARGS (0x20) u8[mBufferSize];
     return mBuffer;
 }
 
@@ -262,19 +262,19 @@ void daPy_anmHeap_c::createHeap(daPy_anmHeap_c::daAlinkHEAP_TYPE i_heapType) {
     mAnimeHeap = mDoExt_createSolidHeapFromGameToCurrent(&tmp, size, 0x20);
     
     if (i_heapType == 4) {
-        tmpWork = new char[size];
+        tmpWork = JKR_NEW char[size];
         JUT_ASSERT(669, tmpWork != NULL);
     } else if (i_heapType == 3) {
-        tmpTransBas = new mDoExt_transAnmBas(NULL);
+        tmpTransBas = JKR_NEW mDoExt_transAnmBas(NULL);
         JUT_ASSERT(672, tmpTransBas != NULL);
     } else if (i_heapType == 0) {
-        tmpTrans = new J3DAnmTransformKey();
+        tmpTrans = JKR_NEW J3DAnmTransformKey();
         JUT_ASSERT(675, tmpTrans != NULL);
     } else if (i_heapType == 1) {
-        tmpTp = new J3DAnmTexPattern();
+        tmpTp = JKR_NEW J3DAnmTexPattern();
         JUT_ASSERT(678, tmpTp != NULL);
     } else {
-        tmpTk = new J3DAnmTextureSRTKey();
+        tmpTk = JKR_NEW J3DAnmTextureSRTKey();
         JUT_ASSERT(681, tmpTk != NULL);
     }
 

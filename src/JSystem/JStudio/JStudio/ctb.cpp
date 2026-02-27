@@ -5,6 +5,8 @@
 #include <string>
 #include <algorithm>
 
+#include "JSystem/JKernel/JKRHeap.h"
+
 JStudio::ctb::TObject::~TObject() {}
 
 JStudio::ctb::TObject_TxyzRy::TObject_TxyzRy(JStudio::ctb::data::TParse_TBlock const& param_0)
@@ -68,14 +70,14 @@ JStudio::ctb::TFactory::~TFactory() {}
 JStudio::ctb::TObject* JStudio::ctb::TFactory::create(JStudio::ctb::data::TParse_TBlock const& param_0) {
     switch(param_0.get_scheme()) {
     case 1:
-        return new TObject_TxyzRy(param_0);
+        return JKR_NEW TObject_TxyzRy(param_0);
     default:
         return NULL;
     }
 }
 
 void JStudio::ctb::TFactory::destroy(JStudio::ctb::TObject* param_0) {
-    delete param_0;
+    JKR_DELETE(param_0);
 }
 
 // NONMATCHING TParse_header_block vtable location

@@ -54,12 +54,12 @@ int daBdoor_c::CreateHeap() {
     }
 
     J3DAnmTransform* lock_bck = (J3DAnmTransform*)dComIfG_getObjectRes(getArcName(), "VlockB.bck");
-    mpLockAnm = new mDoExt_bckAnm();
+    mpLockAnm = JKR_NEW mDoExt_bckAnm();
     if (mpLockAnm == NULL || !mpLockAnm->init(lock_bck, 1, 0, 1.0f, 0, -1, false)) {
         return 0;
     }
 
-    J3DSkinDeform* deform = new J3DSkinDeform();
+    J3DSkinDeform* deform = JKR_NEW J3DSkinDeform();
     if (deform == NULL) {
         return 0;
     }
@@ -67,7 +67,7 @@ int daBdoor_c::CreateHeap() {
         return 0;
     }
 
-    mpBgW = new dBgW();
+    mpBgW = JKR_NEW dBgW();
     cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(getArcName(), getDzb());
     if (dzb == NULL) {
         return 0;

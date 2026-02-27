@@ -681,7 +681,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
             }
         }
     } else {
-        a_this->lock_modelMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes(a_this->arcname, bmd_d[a_this->arg0]), NULL, NULL, NULL, 0, 1.0f, 0, -1, 1, NULL, mdl_f[a_this->arg0], 0x11000084);
+        a_this->lock_modelMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes(a_this->arcname, bmd_d[a_this->arg0]), NULL, NULL, NULL, 0, 1.0f, 0, -1, 1, NULL, mdl_f[a_this->arg0], 0x11000084);
         if (a_this->lock_modelMorf == NULL || a_this->lock_modelMorf->getModel() == NULL) {
             return 0;
         }

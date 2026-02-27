@@ -655,7 +655,7 @@ void fapGm_HIO_c::listenPropertyEvent(const JORPropertyEvent* property) {
 
                 mDoExt_destroySolidHeap(heap);
                 JKRFree(model_buffer);
-                delete[] bdlData;
+                JKR_DELETE_ARRAY(bdlData);
             }
         }   
         break;

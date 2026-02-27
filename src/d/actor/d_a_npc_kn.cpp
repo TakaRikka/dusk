@@ -606,7 +606,7 @@ int daNpc_Kn_c::CreateHeap() {
     JUT_ASSERT(1259, NULL != mdlData_p);
 
     u32 sp2C = 0x11020284;
-    mpModelMorf[0] = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, sp2C);
+    mpModelMorf[0] = JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, sp2C);
     if (mpModelMorf[0] != NULL && mpModelMorf[0]->getModel() == NULL) {
         mpModelMorf[0]->stopZelAnime();
         mpModelMorf[0] = NULL;
@@ -635,7 +635,7 @@ int daNpc_Kn_c::CreateHeap() {
     JUT_ASSERT(1310, NULL != mdlData_p);
 
     sp2C = 0x11020284;
-    mpModelMorf[1] = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, sp2C);
+    mpModelMorf[1] = JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, sp2C);
 
     if (mpModelMorf[1] != NULL && mpModelMorf[1]->getModel() == NULL) {
         mpModelMorf[1] = NULL;

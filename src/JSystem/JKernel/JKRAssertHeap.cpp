@@ -23,7 +23,7 @@ JKRAssertHeap* JKRAssertHeap::create(JKRHeap* parent) {
     if (!ptr)
         return NULL;
 
-    JKRAssertHeap* heap = new (ptr) JKRAssertHeap(NULL, 0, parent, false);
+    JKRAssertHeap* heap = JKR_NEW_ARGS (ptr) JKRAssertHeap(NULL, 0, parent, false);
     return heap;
 }
 

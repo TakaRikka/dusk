@@ -29,7 +29,7 @@ int daTagLv7Gate_c::createHeap() {
     J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 7);
     JUT_ASSERT(100, bck != NULL);
 
-    mpBck = new mDoExt_bckAnm();
+    mpBck = JKR_NEW mDoExt_bckAnm();
 
     if (mpBck == NULL || !mpBck->init(bck, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false)) {
         return 0;

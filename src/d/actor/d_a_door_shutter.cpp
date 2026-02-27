@@ -147,7 +147,7 @@ int daDoor20_c::CreateHeap() {
             J3DAnmTextureSRTKey* pbtk;
             pbtk = (J3DAnmTextureSRTKey*)dComIfG_getStageRes(getBtk());
             JUT_ASSERT(421, pbtk != NULL);
-            field_0x5c0 = new mDoExt_btkAnm();
+            field_0x5c0 = JKR_NEW mDoExt_btkAnm();
             if (field_0x5c0 == NULL ||
                 !field_0x5c0->init(mModel1->getModelData(), pbtk, 1, 0, 1.0f, 0, -1))
             {
@@ -177,7 +177,7 @@ int daDoor20_c::CreateHeap() {
         mDoMtx_stack_c::scaleM(1.0f, 1.4f, 1.0f);
     }
     MTXCopy(mDoMtx_stack_c::get(), field_0x5f4);
-    field_0x5c4 = new dBgW();
+    field_0x5c4 = JKR_NEW dBgW();
     if (field_0x5c4 == 0 || field_0x5c4->Set((cBgD_t*)dComIfG_getObjectRes(getAlwaysArcName(), getDzbName()), 1, &field_0x5f4)) {
             return 0;
     }

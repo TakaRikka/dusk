@@ -1,8 +1,9 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
-#include "JSystem/J3DGraphLoader/J3DMaterialFactory_v21.h"
-#include "JSystem/J3DGraphLoader/J3DMaterialFactory.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
+#include "JSystem/J3DGraphLoader/J3DMaterialFactory.h"
+#include "JSystem/J3DGraphLoader/J3DMaterialFactory_v21.h"
+#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JMath/JMath.h"
 #include "JSystem/JSupport/JSupport.h"
 
@@ -89,7 +90,7 @@ J3DMaterial* J3DMaterialFactory_v21::create(J3DMaterial* i_material, int i_idx, 
     u32 pe_flag = getMdlDataFlag_PEFlag(i_flags);
     BOOL ind_flag = (i_flags & 0x1000000) ? TRUE : FALSE;
     if (i_material == NULL) {
-        i_material = new J3DMaterial();
+        i_material = JKR_NEW J3DMaterial();
     }
     i_material->mColorBlock = J3DMaterial::createColorBlock(color_flag);
     i_material->mTexGenBlock = J3DMaterial::createTexGenBlock(texgen_flag);
@@ -221,7 +222,7 @@ J3DTexMtx* J3DMaterialFactory_v21::newTexMtx(int i_idx, int i_no) const {
     J3DTexMtx* tex_mtx = NULL;
     J3DMaterialInitData_v21* mtl_init_data = &mpMaterialInitData[mpMaterialID[i_idx]];
     if (mtl_init_data->mTexMtxIdx[i_no] != 0xffff) {
-        tex_mtx = new J3DTexMtx(mpTexMtxInfo[mtl_init_data->mTexMtxIdx[i_no]]);
+        tex_mtx = JKR_NEW J3DTexMtx(mpTexMtxInfo[mtl_init_data->mTexMtxIdx[i_no]]);
     }
     return tex_mtx;
 }

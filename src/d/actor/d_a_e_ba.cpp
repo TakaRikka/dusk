@@ -978,7 +978,7 @@ static int daE_BA_Delete(e_ba_class* i_this) {
 
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_ba_class* _this = (e_ba_class*)i_this;
-    _this->mpMorf = new mDoExt_McaMorfSO(
+    _this->mpMorf = JKR_NEW mDoExt_McaMorfSO(
         static_cast<J3DModelData*>(dComIfG_getObjectRes(_this->mArcName, 13)), NULL, NULL,
         static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(_this->mArcName, 10)),
         2, 1.0f, 0, -1, &_this->mCreatureSound, 0x80000, 0x11000084);

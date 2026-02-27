@@ -1129,7 +1129,7 @@ static int koro2_heapinit(fopAc_ac_c* actor) {
 
     fshop_class* i_this = (fshop_class*)actor;
 
-    i_this->koro2WakuBgw = new dBgW();
+    i_this->koro2WakuBgw = JKR_NEW dBgW();
     if (i_this->koro2WakuBgw == NULL) {
         return 0;
     }
@@ -1225,7 +1225,7 @@ static int koro2_heapinit(fopAc_ac_c* actor) {
                     return 0;
                 }
                 
-                i_this->mKoro2[part_no].bgw = new dBgW();
+                i_this->mKoro2[part_no].bgw = JKR_NEW dBgW();
                 if (i_this->mKoro2[part_no].bgw == NULL) {
                     return 0;
                 }
@@ -1414,7 +1414,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
         return 0;
     }
 
-    i_this->tableBgw = new dBgW();
+    i_this->tableBgw = JKR_NEW dBgW();
     if (i_this->tableBgw == NULL) {
         return 0;
     }

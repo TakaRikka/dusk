@@ -11089,7 +11089,7 @@ static int init_phase2(camera_class* i_this) {
     fopAcM_setStageLayer(player);
     dComIfGp_setWindowNum(1);
 
-    new (body) dCamera_c(i_this);
+    JKR_NEW_ARGS (body) dCamera_c(i_this);
 
     f32 var_f31 = 0.0f;
     f32 var_f30 = 160000.0f;

@@ -16,7 +16,7 @@ struct TCreateObject {
 
     template<class AdaptorT>
     static typename AdaptorT::ObjectType* createFromAdaptor(JStudio::stb::data::TParse_TBlock_object const& param_1, AdaptorT* param_2) {
-        typename AdaptorT::ObjectType* rv = new typename AdaptorT::ObjectType(param_1, param_2);
+        typename AdaptorT::ObjectType* rv = JKR_NEW typename AdaptorT::ObjectType(param_1, param_2);
         if (rv == NULL) {
             return NULL;
         }

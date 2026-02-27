@@ -195,7 +195,7 @@ int daNpcThe_c::CreateHeap() {
             dComIfG_getObjectRes(l_resNames[l_bmdGetParamList[bmd_get_idx].arcIdx],
                                  l_bmdGetParamList[bmd_get_idx].fileIdx));
     }
-    mAnm_p = new mDoExt_McaMorfSO(model_data, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000,
+    mAnm_p = JKR_NEW mDoExt_McaMorfSO(model_data, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000,
                                   0x11020284);
 
     if (mAnm_p != NULL && mAnm_p->getModel() == NULL) {
@@ -212,7 +212,7 @@ int daNpcThe_c::CreateHeap() {
     }
     model->setUserArea((uintptr_t)this);
 
-    mpMatAnm = new daNpcF_MatAnm_c();
+    mpMatAnm = JKR_NEW daNpcF_MatAnm_c();
     if (mpMatAnm == NULL) {
         return 0;
     }

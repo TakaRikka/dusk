@@ -166,7 +166,7 @@ int daObjWarpKBrg_c::CreateHeap() {
 
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName[getNameArg()], l_btk_idx[getNameArg()]);
     JUT_ASSERT(394, pbtk != NULL);
-    mpBridgeBtk = new mDoExt_btkAnm();
+    mpBridgeBtk = JKR_NEW mDoExt_btkAnm();
     if (mpBridgeBtk == NULL || !mpBridgeBtk->init(modelData, pbtk, TRUE, 0, 1.0f, 0, -1)) {
         return 0;
     }
@@ -174,7 +174,7 @@ int daObjWarpKBrg_c::CreateHeap() {
 
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName[getNameArg()], l_bck_idx[getNameArg()]);
     JUT_ASSERT(407, pbck != NULL);
-    mpBridgeBck = new mDoExt_bckAnm();
+    mpBridgeBck = JKR_NEW mDoExt_bckAnm();
     if (mpBridgeBck == NULL || !mpBridgeBck->init(pbck, TRUE, 0, 1.0f, 0, -1, false)) {
         return 0;
     }
@@ -189,7 +189,7 @@ int daObjWarpKBrg_c::CreateHeap() {
 
         pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName[getNameArg()], 18);
         JUT_ASSERT(438, pbtk != NULL);
-        mpPortalBtk = new mDoExt_btkAnm();
+        mpPortalBtk = JKR_NEW mDoExt_btkAnm();
         if (mpPortalBtk == NULL || !mpPortalBtk->init(modelData, pbtk, TRUE, 2, 1.0f, 0, -1)) {
             return 0;
         }
@@ -197,7 +197,7 @@ int daObjWarpKBrg_c::CreateHeap() {
 
         J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName[getNameArg()], 14);
         JUT_ASSERT(451, pbrk != NULL);
-        mpPortalBrk = new mDoExt_brkAnm();
+        mpPortalBrk = JKR_NEW mDoExt_brkAnm();
         if (mpPortalBrk == NULL || !mpPortalBrk->init(modelData, pbrk, TRUE, 0, 1.0f, 0, -1)) {
             return 0;
         }

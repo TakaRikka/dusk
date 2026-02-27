@@ -359,13 +359,13 @@ int daObjRBridge_c::CreateHeap() {
 
     if (!fopAcM_isSwitch(this, getSwbit2()) && !fopAcM_isSwitch(this, getSwbit())) {
         mRopeSegmentNum = 10;
-        field_0xb04 = new cXyz[mRopeSegmentNum];
+        field_0xb04 = JKR_NEW cXyz[mRopeSegmentNum];
         if (field_0xb04 == NULL) {
             return 0;
         }
 
         for (int i = 0; i < 2; i++) {
-            mpLineMat[i] = new mDoExt_3DlineMat1_c();
+            mpLineMat[i] = JKR_NEW mDoExt_3DlineMat1_c();
             if (mpLineMat[i] == NULL) {
                 // "Rope Stop: 3D line material class creation failure"
                 OS_REPORT_ERROR("止め具ロープ：３Ｄラインマテリアルクラス生成失敗\n");

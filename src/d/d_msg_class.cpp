@@ -347,7 +347,7 @@ static u8 getPohNum() {
 }
 
 jmessage_tReference::jmessage_tReference() {
-    mpStick = new STControl(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x2000);
+    mpStick = JKR_NEW STControl(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x2000);
     JUT_ASSERT(518, mpStick != NULL);
     mpStick->setWaitParm(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x800);
 
@@ -409,7 +409,7 @@ jmessage_tReference::jmessage_tReference() {
 }
 
 jmessage_tReference::~jmessage_tReference() {
-    delete mpStick;
+    JKR_DELETE(mpStick);
     mpStick = NULL;
 }
 

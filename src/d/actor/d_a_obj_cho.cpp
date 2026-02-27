@@ -54,7 +54,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 
 int daObjCHO_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes("I_Cho", 10);
-    mpMorf = new mDoExt_McaMorfSO(model_data, NULL, NULL,
+    mpMorf = JKR_NEW mDoExt_McaMorfSO(model_data, NULL, NULL,
                                   (J3DAnmTransform*)dComIfG_getObjectRes("I_Cho", 6),
                                   2, 1.0f, 0, -1, &mCreatureSound, 0, 0x11000284);
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
@@ -62,7 +62,7 @@ int daObjCHO_c::CreateHeap() {
     }
     J3DModel* model = mpMorf->getModel();
 
-    mpBrkAnm = new mDoExt_brkAnm();
+    mpBrkAnm = JKR_NEW mDoExt_brkAnm();
     if (mpBrkAnm == NULL) {
         return 0;
     }
@@ -78,7 +78,7 @@ int daObjCHO_c::CreateHeap() {
         }
     }
 
-    mpBtkAnm = new mDoExt_btkAnm();
+    mpBtkAnm = JKR_NEW mDoExt_btkAnm();
     if (mpBtkAnm == NULL) {
         return 0;
     }

@@ -1136,7 +1136,7 @@ static int daE_HP_Delete(daE_HP_c* i_this) {
 int daE_HP_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_HP", 19);
     JUT_ASSERT(0x764, modelData != NULL);
-    mpMorfSO = new mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpMorfSO = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
                                     (J3DAnmTransform*)dComIfG_getObjectRes("E_HP", 13), 2, 1.0f, 0,
                                     -1, &mSound1, 0x80000, 0x11000084);
     if (mpMorfSO == NULL || mpMorfSO->getModel() == NULL) {
@@ -1173,7 +1173,7 @@ int daE_HP_c::CreateHeap() {
 
     modelData = (J3DModelData*)dComIfG_getObjectRes("E_HP", 18);
     mpMorf =
-        new mDoExt_McaMorf(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_HP", 4),
+        JKR_NEW mDoExt_McaMorf(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_HP", 4),
                            2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000084);
 
     if (mpMorf == NULL || mpMorf->getModel() == 0) {

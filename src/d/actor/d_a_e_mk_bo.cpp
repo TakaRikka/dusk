@@ -736,12 +736,12 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->efModelMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_mk", 0x2F), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_mk", 6), 2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000284);
+    a_this->efModelMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_mk", 0x2F), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_mk", 6), 2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000284);
     if (a_this->efModelMorf == NULL || a_this->efModelMorf->getModel() == NULL) {
         return 0;
     }
 
-    a_this->pbtk = new mDoExt_btkAnm();
+    a_this->pbtk = JKR_NEW mDoExt_btkAnm();
     if (a_this->pbtk == NULL) {
         return 0;
     }

@@ -60,7 +60,7 @@ int daObjPicture_c::createHeap() {
             break;
         }
 
-        mpBgw[i] = new dBgW();
+        mpBgw[i] = JKR_NEW dBgW();
         if (mpBgw[i] == NULL) {
             return 0;
         }
@@ -97,7 +97,7 @@ int daObjPicture_c::createHeap() {
     }
 
     for (int i = 0; i < 2; i++) {
-        mpRopeMat[i] = new mDoExt_3DlineMat1_c();
+        mpRopeMat[i] = JKR_NEW mDoExt_3DlineMat1_c();
         if (mpRopeMat[i] == NULL) {
             OS_REPORT_ERROR("止め具ロープ：３Ｄラインマテリアルクラス生成失敗\n");
             return 0;

@@ -210,15 +210,45 @@ public:
     static JKRErrorHandler mErrorHandler;
 };
 
-void* operator new(size_t size);
-void* operator new(size_t size, int alignment);
-void* operator new(size_t size, JKRHeap* heap, int alignment);
+#if TARGET_PC
+enum class JKRHeapToken {
+    Dummy
+};
 
-void* operator new[](size_t size);
-void* operator new[](size_t size, int alignment);
-void* operator new[](size_t size, JKRHeap* heap, int alignment);
+inline void* operator new(size_t, JKRHeapToken, void* where) {
+    return where;
+}
 
-void operator delete(void* ptr);
+template<typename T>
+void jkrDelete(T* ptr) {
+    ptr->~T();
+    operator delete(ptr, JKRHeapToken::Dummy);
+}
+
+#define JKR_NEW new (JKRHeapToken::Dummy)
+#define JKR_NEW_ARGS(...) new (JKRHeapToken::Dummy, __VA_ARGS__ )
+#define JKR_DELETE(expr) jkrDelete(expr)
+#define JKR_DELETE_ARRAY(expr)  delete[] (expr)
+#define JKR_HEAP_TOKEN , JKRHeapToken::Dummy
+#define JKR_HEAP_TOKEN_PARAM , JKRHeapToken
+#else
+#define JKR_NEW new
+#define JKR_NEW_ARGS(...) new (__VA_ARGS__ )
+#define JKR_DELETE(expr) delete (expr)
+#define JKR_DELETE_ARRAY(expr) delete[] (expr)
+#define JKR_HEAP_TOKEN
+#define JKR_HEAP_TOKEN_PARAM
+#endif
+
+void* operator new(size_t size JKR_HEAP_TOKEN_PARAM);
+void* operator new(size_t size JKR_HEAP_TOKEN_PARAM, int alignment);
+void* operator new(size_t size JKR_HEAP_TOKEN_PARAM, JKRHeap* heap, int alignment);
+
+void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM);
+void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM, int alignment);
+void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM, JKRHeap* heap, int alignment);
+
+void operator delete(void* ptr JKR_HEAP_TOKEN_PARAM);
 void operator delete[](void* ptr);
 
 void JKRDefaultMemoryErrorRoutine(void* heap, u32 size, int alignment);

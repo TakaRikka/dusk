@@ -218,7 +218,7 @@ int daSpiral_c::CreateHeap() {
         return 0;
     }
 
-    mpSpiralDzb = new dBgW();
+    mpSpiralDzb = JKR_NEW dBgW();
     if (mpSpiralDzb == NULL) {
         return 0;
     }
@@ -230,7 +230,7 @@ int daSpiral_c::CreateHeap() {
         return 0;
     }
 
-    mDoorDarkDzb = new dBgW();
+    mDoorDarkDzb = JKR_NEW dBgW();
     if (mDoorDarkDzb == NULL) {
         return 0;
     }
@@ -1048,7 +1048,7 @@ int dSpiral_stop_c::create(daSpiral_c* i_spiral) {
         return 0;
     }
 
-    mpBgw = new dBgW();
+    mpBgw = JKR_NEW dBgW();
     if (mpBgw == NULL) {
         return 0;
     }

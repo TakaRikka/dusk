@@ -1418,7 +1418,7 @@ static int daE_SM2_Delete(e_sm2_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_sm2_class* a_this = (e_sm2_class*)i_this;
 
-    a_this->modelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_sm2", 8), NULL, NULL, NULL, 2, 1.0f, 0, -1, &a_this->sound, 0, 0x11000284);
+    a_this->modelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_sm2", 8), NULL, NULL, NULL, 2, 1.0f, 0, -1, &a_this->sound, 0, 0x11000284);
     if (a_this->modelMorf == NULL || a_this->modelMorf->getModel() == NULL) {
         return 0;
     }
@@ -1435,7 +1435,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         }
     }
 
-    a_this->pbtk = new mDoExt_btkAnm();
+    a_this->pbtk = JKR_NEW mDoExt_btkAnm();
     if (a_this->pbtk == NULL) {
         return 0;
     }
@@ -1444,7 +1444,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->pieceModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_sm2", 5), NULL, NULL, NULL, 0, 1.0f, 0, -1, &a_this->sound, 0, 0x11000084);
+    a_this->pieceModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_sm2", 5), NULL, NULL, NULL, 0, 1.0f, 0, -1, &a_this->sound, 0, 0x11000084);
     if (a_this->pieceModelMorf == NULL || a_this->pieceModelMorf->getModel() == NULL) {
         return 0;
     }

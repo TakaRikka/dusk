@@ -257,7 +257,7 @@ int daNpc_Kakashi_c::CreateHeap() {
     }
 
     u32 diff_flags = J3D_DIFF_FLAG(FALSE, FALSE, TRUE, 8, 2, FALSE, 2, 0, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE);
-    mpMorf[0] = new mDoExt_McaMorfSO((J3DModelData*)mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, NULL, J3DMdlFlag_DifferedDLBuffer, diff_flags);
+    mpMorf[0] = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, NULL, J3DMdlFlag_DifferedDLBuffer, diff_flags);
     if (mpMorf[0] == NULL || mpMorf[0]->getModel() == NULL) {
         return 0;
     }

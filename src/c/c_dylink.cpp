@@ -895,7 +895,7 @@ int cCc_Init() {
             }
 
             if (DMC[d.mKey] == NULL) {
-                DMC[d.mKey] = new DynamicModuleControl(d.name);
+                DMC[d.mKey] = JKR_NEW DynamicModuleControl(d.name);
             }
         }
     }

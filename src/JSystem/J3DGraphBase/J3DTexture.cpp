@@ -1,7 +1,8 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
-#include "JSystem/J3DGraphBase/J3DTexture.h"
 #include "JSystem/J3DAssert.h"
+#include "JSystem/J3DGraphBase/J3DTexture.h"
+#include "JSystem/JKernel/JKRHeap.h"
 
 void J3DTexture::loadGX(u16 idx, GXTexMapID texMapID) const {
     J3D_ASSERT_RANGE(29, idx < mNum);
@@ -36,7 +37,7 @@ void J3DTexture::entryNum(u16 num) {
     J3D_ASSERT_NONZEROARG(79, num != 0);
 
     mNum = num;
-    mpRes = new ResTIMG[num];
+    mpRes = JKR_NEW ResTIMG[num];
     J3D_ASSERT_ALLOCMEM(83, mpRes != NULL);
 
     for (int i = 0; i < mNum; i++) {

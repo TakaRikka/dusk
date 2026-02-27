@@ -220,7 +220,7 @@ int daNpcTkj_c::CreateHeap() {
     JUT_ASSERT(446, NULL != mdlData_p);
 
     u32 diff_flags = J3D_DIFF_FLAG(FALSE, FALSE, TRUE, 8, 2, FALSE, 2, 0, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE);
-    mpMorf[0] = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, J3DMdlFlag_DifferedDLBuffer, diff_flags);
+    mpMorf[0] = JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, J3DMdlFlag_DifferedDLBuffer, diff_flags);
     if (mpMorf[0] != NULL && mpMorf[0]->getModel() == NULL) {
         mpMorf[0]->stopZelAnime();
         mpMorf[0] = NULL;
@@ -237,7 +237,7 @@ int daNpcTkj_c::CreateHeap() {
 
     mdl_p->setUserArea((uintptr_t)this);
 
-    mpMatAnm[0] = new daNpcT_MatAnm_c();
+    mpMatAnm[0] = JKR_NEW daNpcT_MatAnm_c();
     if (mpMatAnm[0] == NULL) {
         return 0;
     }

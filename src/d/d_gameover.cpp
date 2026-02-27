@@ -141,8 +141,8 @@ int dGameover_c::_create() {
         JKRHeap* old_heap = mDoExt_setCurrentHeap(mpHeap);
         int temp = mpHeap->getTotalFreeSize();
 
-        dgo_screen_c = new dDlst_GameOverScrnDraw_c(resInfo->getArchive());
-        dMs_c = new dMenu_save_c();
+        dgo_screen_c = JKR_NEW dDlst_GameOverScrnDraw_c(resInfo->getArchive());
+        dMs_c = JKR_NEW dMenu_save_c();
         JUT_ASSERT(0, dMs_c != NULL);
 
         if (dMeter2Info_getGameOverType() == 1) {
@@ -161,7 +161,7 @@ int dGameover_c::_create() {
         }
 
         dMs_c->_create();
-        dgo_capture_c = new dDlst_Gameover_CAPTURE_c();
+        dgo_capture_c = JKR_NEW dDlst_Gameover_CAPTURE_c();
         JUT_ASSERT(0, dgo_capture_c != NULL);
 
         OS_REPORT("game over create size ===> %d\n", temp - mpHeap->getTotalFreeSize());
@@ -344,13 +344,13 @@ int dGameover_c::_delete() {
     JKRHeap* old_heap = mDoExt_setCurrentHeap(mpHeap);
 
     if (dgo_screen_c != NULL) {
-        delete dgo_screen_c;
+        JKR_DELETE(dgo_screen_c);
         dgo_screen_c = NULL;
     }
 
     dMs_c->_delete();
-    delete dMs_c;
-    delete dgo_capture_c;
+    JKR_DELETE(dMs_c);
+    JKR_DELETE(dgo_capture_c);
 
     mpHeap->freeAll();
     dComIfGp_offHeapLockFlag(0);
@@ -361,7 +361,7 @@ int dGameover_c::_delete() {
 }
 
 dDlst_GameOverScrnDraw_c::dDlst_GameOverScrnDraw_c(JKRArchive* i_archive) {
-    mpScreen = new J2DScreen();
+    mpScreen = JKR_NEW J2DScreen();
     mpScreen->setPriority("zelda_game_over.blo", 0x100000, i_archive);
     dPaneClass_showNullPane(mpScreen);
 
@@ -384,7 +384,7 @@ dDlst_GameOverScrnDraw_c::dDlst_GameOverScrnDraw_c(JKRArchive* i_archive) {
 
     ResTIMG* img = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "tt_block8x8.bti");
     mpBackImg =
-        new J2DPicture(MULTI_CHAR('PICT01'), JGeometry::TBox2<f32>(0.0f, 486.0f, 0.0f, 660.0f), img, NULL);
+        JKR_NEW J2DPicture(MULTI_CHAR('PICT01'), JGeometry::TBox2<f32>(0.0f, 486.0f, 0.0f, 660.0f), img, NULL);
     mpBackImg->setBlackWhite(img_white, img_black);
 
     J2DTextBox* gold_tbox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('gold_00'));
@@ -394,14 +394,14 @@ dDlst_GameOverScrnDraw_c::dDlst_GameOverScrnDraw_c(JKRArchive* i_archive) {
     dMeter2Info_getString(0x381, string, NULL);
     gold_tbox->setString(string);
 
-    mpLight = new dMsgScrnLight_c(6, 0xFF);
+    mpLight = JKR_NEW dMsgScrnLight_c(6, 0xFF);
     field_0x10 = 0.0f;
 }
 
 
 dDlst_GameOverScrnDraw_c::~dDlst_GameOverScrnDraw_c() {
-    delete mpBackImg;
-    delete mpScreen;
+    JKR_DELETE(mpBackImg);
+    JKR_DELETE(mpScreen);
     dComIfGp_getMain2DArchive()->removeResourceAll();
 }
 

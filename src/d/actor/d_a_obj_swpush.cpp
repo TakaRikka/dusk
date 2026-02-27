@@ -91,7 +91,7 @@ bool daObjSwpush::Act_c::create_heap() {
     JUT_ASSERT(569, bg_data != NULL);
 
     bool bVar2 = false;
-    mpBgW = new dBgWSv();
+    mpBgW = JKR_NEW dBgWSv();
     if (mpBgW != NULL && mpBgW->Set(bg_data, 0) == 0) {
         bVar2 = true;
     }

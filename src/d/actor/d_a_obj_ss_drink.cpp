@@ -64,14 +64,14 @@ int daObj_SSDrink_c::CreateHeap() {
 
     pbtp = (J3DAnmTexPattern*)dComIfG_getObjectRes(l_resFileName, "al_bottle.btp");
     JUT_ASSERT(230, pbtp != NULL);
-    mpBtpAnm = new mDoExt_btpAnm();
+    mpBtpAnm = JKR_NEW mDoExt_btpAnm();
     if (mpBtpAnm == NULL || !mpBtpAnm->init(mdlData_p, pbtp, 1, 2, 1.0f, 0, -1)) {
         return 0;
     }
 
     pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_resFileName, "al_bottle.brk");
     JUT_ASSERT(242, pbrk != NULL);
-    mpBrkAnm = new mDoExt_brkAnm();
+    mpBrkAnm = JKR_NEW mDoExt_brkAnm();
     if (mpBrkAnm == NULL || !mpBrkAnm->init(mdlData_p, pbrk, 1, 2, 1.0f, 0, -1)) {
         return 0;
     }

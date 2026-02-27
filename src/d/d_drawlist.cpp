@@ -887,7 +887,7 @@ static void dummy_misc() {
     J2DPane* pane;
     J2DPicture* picture;
     J2DAnmBase* anmBase;
-    delete anmBase;
+    JKR_DELETE(anmBase);
     picture->setBlack(JUtility::TColor(0, 0, 0, 0));
     picture->setWhite(JUtility::TColor(0, 0, 0, 0));
     pane->getTypeID();
@@ -1025,14 +1025,14 @@ void dDlst_shadowPoly_c::draw() {
 }
 
 static J3DDrawBuffer* J3DDrawBuffer__create(u32 size) {
-    J3DDrawBuffer* buffer = new J3DDrawBuffer();
+    J3DDrawBuffer* buffer = JKR_NEW J3DDrawBuffer();
 
     if (buffer) {
         int error = buffer->allocBuffer(size);
         if (error == kJ3DError_Success) {
             return buffer;
         }
-        delete buffer;
+        JKR_DELETE(buffer);
     }
     return NULL;
 }
@@ -1392,7 +1392,7 @@ void dDlst_shadowControl_c::init() {
         u16 size = l_realImageSize[i];
 
         u32 buffer_size = GXGetTexBufferSize(size, size, 5, GX_DISABLE, 0);
-        field_0x15ef0[i] = new (0x20) u8[buffer_size];
+        field_0x15ef0[i] = JKR_NEW_ARGS (0x20) u8[buffer_size];
         GXInitTexObj(&field_0x15eb0[i], field_0x15ef0[i], size, size, GX_TF_RGB5A3, GX_CLAMP,
                      GX_CLAMP, GX_DISABLE);
         GXInitTexObjLOD(&field_0x15eb0[i], GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE,
@@ -1758,7 +1758,7 @@ dDlst_list_c::~dDlst_list_c() {
         J3DDrawBuffer* tmp = *buffer;
         buffer++;
 
-        delete tmp;
+        JKR_DELETE(tmp);
     }
 }
 

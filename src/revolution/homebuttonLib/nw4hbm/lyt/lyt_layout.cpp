@@ -23,7 +23,7 @@ namespace {
         void* pMem = Layout::AllocMemory(sizeof(T));
 
         if (pMem) {
-            return new (pMem) T();
+            return JKR_NEW_ARGS (pMem) T();
         } else {
             NW4R_DB_WARNING(47, false, "can't alloc memory.");
             return NULL;
@@ -35,7 +35,7 @@ namespace {
         void* pMem = Layout::AllocMemory(sizeof(T));
 
         if (pMem) {
-            return new (pMem) T(p1);
+            return JKR_NEW_ARGS (pMem) T(p1);
         } else {
             return NULL;
         }
@@ -46,7 +46,7 @@ namespace {
         void* pMem = Layout::AllocMemory(sizeof(T));
 
         if (pMem) {
-            return new (pMem) T(p1, p2);
+            return JKR_NEW_ARGS (pMem) T(p1, p2);
         } else {
             return NULL;
         }

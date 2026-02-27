@@ -114,7 +114,7 @@ dMenu_save_c::dMenu_save_c() {
 }
 
 void dMenu_save_c::_create() {
-    stick = new STControl(2, 2, 1, 1, 0.9f, 0.5f, 0, 0x2000);
+    stick = JKR_NEW STControl(2, 2, 1, 1, 0.9f, 0.5f, 0, 0x2000);
 
     if (mUseType == TYPE_DEFAULT || mUseType == TYPE_WHITE_EVENT || mUseType == TYPE_BLACK_EVENT) {
         mpMount =
@@ -136,7 +136,7 @@ void dMenu_save_c::_create() {
             break;
         }
 
-        mpScrnExplain = new dMsgScrnExplain_c(stick, var_r31, false, 0);
+        mpScrnExplain = JKR_NEW dMsgScrnExplain_c(stick, var_r31, false, 0);
         field_0x219d = 0;
         field_0x2190 = 0;
         field_0x2192 = 0;
@@ -174,13 +174,13 @@ void dMenu_save_c::screenSet() {
     static u8 l_msgNum0[2] = {0x08, 0x07};
     static u8 l_msgNum[2] = {0x54, 0x55};
 
-    mSaveSel.Scr = new J2DScreen();
+    mSaveSel.Scr = JKR_NEW J2DScreen();
     mSaveSel.Scr->setPriority("zelda_file_select2.blo", 0x1100000, mpArchive);
     dPaneClass_showNullPane(mSaveSel.Scr);
 
     mSaveSel.font[0] = mDoExt_getMesgFont();
     mSaveSel.font[1] = mDoExt_getSubFont();
-    mSaveSel.mMsgString = new dMsgString_c();
+    mSaveSel.mMsgString = JKR_NEW dMsgString_c();
 
     void* bck = JKRGetNameResource("zelda_file_select2.bck", mpArchive);
     field_0x40 = (J2DAnmTransformKey*)J2DAnmLoaderDataBase::load(bck);
@@ -192,22 +192,22 @@ void dMenu_save_c::screenSet() {
     field_0x48->searchUpdateMaterialID(mSaveSel.Scr);
     field_0x4c->searchUpdateMaterialID(mSaveSel.Scr);
 
-    mpSelectMoveBase = new CPaneMgr(mSaveSel.Scr, MULTI_CHAR('w_move_n'), 0, NULL);
+    mpSelectMoveBase = JKR_NEW CPaneMgr(mSaveSel.Scr, MULTI_CHAR('w_move_n'), 0, NULL);
     field_0xa0 = mSaveSel.Scr->search(MULTI_CHAR('wmenu_n'));
 
     for (int i = 0; i < 3; i++) {
-        mpSelData[i] = new CPaneMgr(mSaveSel.Scr, l_tagName0[i], 0, NULL);
+        mpSelData[i] = JKR_NEW CPaneMgr(mSaveSel.Scr, l_tagName0[i], 0, NULL);
     }
 
-    mpNoYes[0] = new CPaneMgr(mSaveSel.Scr, MULTI_CHAR('w_no_n'), 0, NULL);
-    mpNoYes[1] = new CPaneMgr(mSaveSel.Scr, MULTI_CHAR('w_yes_n'), 0, NULL);
+    mpNoYes[0] = JKR_NEW CPaneMgr(mSaveSel.Scr, MULTI_CHAR('w_no_n'), 0, NULL);
+    mpNoYes[1] = JKR_NEW CPaneMgr(mSaveSel.Scr, MULTI_CHAR('w_yes_n'), 0, NULL);
 
     for (int i = 0; i < 2; i++) {
 #if VERSION == VERSION_GCN_JPN
-        mpNoYesTxt[i] = new CPaneMgr(mSaveSel.Scr, l_tagName000[i], 0, NULL);
+        mpNoYesTxt[i] = JKR_NEW CPaneMgr(mSaveSel.Scr, l_tagName000[i], 0, NULL);
         mSaveSel.Scr->search(l_tagName000U[i])->hide();
 #else
-        mpNoYesTxt[i] = new CPaneMgr(mSaveSel.Scr, l_tagName000U[i], 0, NULL);
+        mpNoYesTxt[i] = JKR_NEW CPaneMgr(mSaveSel.Scr, l_tagName000U[i], 0, NULL);
         mSaveSel.Scr->search(l_tagName000[i])->hide();
 #endif
         ((J2DTextBox*)mpNoYesTxt[i]->getPanePtr())->setFont(mSaveSel.font[0]);
@@ -220,14 +220,14 @@ void dMenu_save_c::screenSet() {
     mSaveSel.Scr->search(MULTI_CHAR('Wi_btn_n'))->hide();
     mSaveSel.Scr->search(MULTI_CHAR('GC_btn_n'))->show();
 
-    mpBBtnIcon = new CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('w_nbbtn'), 2, NULL);
-    mpABtnIcon = new CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('w_nabtn'), 2, NULL);
+    mpBBtnIcon = JKR_NEW CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('w_nbbtn'), 2, NULL);
+    mpABtnIcon = JKR_NEW CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('w_nabtn'), 2, NULL);
 #if VERSION == VERSION_GCN_JPN
-    mpBackTxt = new CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('w_modo'), 2, NULL);
-    mpConfirmTxt = new CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('w_kete'), 2, NULL);
+    mpBackTxt = JKR_NEW CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('w_modo'), 2, NULL);
+    mpConfirmTxt = JKR_NEW CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('w_kete'), 2, NULL);
 #else
-    mpBackTxt = new CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('f_modo'), 2, NULL);
-    mpConfirmTxt = new CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('f_kete'), 2, NULL);
+    mpBackTxt = JKR_NEW CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('f_modo'), 2, NULL);
+    mpConfirmTxt = JKR_NEW CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('f_kete'), 2, NULL);
 #endif
 
     mpBackTxt->setAlpha(0);
@@ -262,9 +262,9 @@ void dMenu_save_c::screenSet() {
     mFileWakuRotAnmFrame = 0;
 
     for (int i = 0; i < 3; i++) {
-        mpSelWakuMoyo[i] = new CPaneMgr(mSaveSel.Scr, l_tagName3[i], 0, NULL);
-        mpSelWakuGold[i] = new CPaneMgr(mSaveSel.Scr, l_tagName4[i], 0, NULL);
-        mpSelWakuGold2[i] = new CPaneMgr(mSaveSel.Scr, l_tagName5[i], 0, NULL);
+        mpSelWakuMoyo[i] = JKR_NEW CPaneMgr(mSaveSel.Scr, l_tagName3[i], 0, NULL);
+        mpSelWakuGold[i] = JKR_NEW CPaneMgr(mSaveSel.Scr, l_tagName4[i], 0, NULL);
+        mpSelWakuGold2[i] = JKR_NEW CPaneMgr(mSaveSel.Scr, l_tagName5[i], 0, NULL);
 
         mpSelWakuMoyo[i]->getPanePtr()->setAnimation(mpFileWakuAnm);
         mpSelWakuGold[i]->getPanePtr()->setAnimation(mpFileWakuAnm);
@@ -274,9 +274,9 @@ void dMenu_save_c::screenSet() {
     }
 
     for (int i = 0; i < 2; i++) {
-        mNoYesBase[i] = new CPaneMgr(mSaveSel.Scr, l_tagName9[i], 0, NULL);
-        mNoYesGold[i] = new CPaneMgr(mSaveSel.Scr, l_tagName10[i], 0, NULL);
-        mNoYesGold2[i] = new CPaneMgr(mSaveSel.Scr, l_tagName11[i], 0, NULL);
+        mNoYesBase[i] = JKR_NEW CPaneMgr(mSaveSel.Scr, l_tagName9[i], 0, NULL);
+        mNoYesGold[i] = JKR_NEW CPaneMgr(mSaveSel.Scr, l_tagName10[i], 0, NULL);
+        mNoYesGold2[i] = JKR_NEW CPaneMgr(mSaveSel.Scr, l_tagName11[i], 0, NULL);
 
         mNoYesBase[i]->getPanePtr()->setAnimation(mpFileWakuAnm);
         mNoYesGold[i]->getPanePtr()->setAnimation(mpFileWakuAnm);
@@ -304,7 +304,7 @@ void dMenu_save_c::screenSet() {
     field_0x164 = 0;
 
     for (int i = 0; i < 3; i++) {
-        mpBookWaku[i] = new CPaneMgr(mSaveSel.Scr, l_tagName12[i], 0, NULL);
+        mpBookWaku[i] = JKR_NEW CPaneMgr(mSaveSel.Scr, l_tagName12[i], 0, NULL);
 
         mpBookWaku[i]->getPanePtr()->setAnimation(field_0x150);
         mpBookWaku[i]->getPanePtr()->setAnimation(field_0x158);
@@ -325,7 +325,7 @@ void dMenu_save_c::screenSet() {
 #endif
 
     for (int i = 0; i < 2; i++) {
-        mpHeaderTxtPane[i] = new CPaneMgrAlpha(mSaveSel.Scr, l_tagName21[i], 0, NULL);
+        mpHeaderTxtPane[i] = JKR_NEW CPaneMgrAlpha(mSaveSel.Scr, l_tagName21[i], 0, NULL);
 
         ((J2DTextBox*)mpHeaderTxtPane[i]->getPanePtr())->setFont(mSaveSel.font[0]);
         ((J2DTextBox*)mpHeaderTxtPane[i]->getPanePtr())->setString(0x100, "");
@@ -356,9 +356,9 @@ void dMenu_save_c::screenSet() {
 
     for (int i = 0; i < 2; i++) {
 #if VERSION == VERSION_GCN_JPN
-        mpErrTxtPane[i] = new CPaneMgrAlpha(mSaveSel.Scr, l_tagName20[i], 0, NULL);
+        mpErrTxtPane[i] = JKR_NEW CPaneMgrAlpha(mSaveSel.Scr, l_tagName20[i], 0, NULL);
 #else
-        mpErrTxtPane[i] = new CPaneMgrAlpha(mSaveSel.Scr, l_tagName20[i], 0, NULL);
+        mpErrTxtPane[i] = JKR_NEW CPaneMgrAlpha(mSaveSel.Scr, l_tagName20[i], 0, NULL);
 #endif
 
         ((J2DTextBox*)mpErrTxtPane[i]->getPanePtr())->setFont(mSaveSel.font[0]);
@@ -382,7 +382,7 @@ void dMenu_save_c::screenSet() {
     mpErrTxtPane[mErrTxtType ^ 1]->setAlpha(0);
 
     mSelectedFile = dComIfGs_getDataNum();
-    mSelIcon = new dSelect_cursor_c(0, 1.0f, NULL);
+    mSelIcon = JKR_NEW dSelect_cursor_c(0, 1.0f, NULL);
     mSelIcon->setParam(0.96f, 0.94f, 0.03f, 0.7f, 0.7f);
 
     Vec pos;
@@ -402,13 +402,13 @@ void dMenu_save_c::screenSet() {
     mpHeaderTxtPane[1]->getPanePtr()->scale(1.0f, 1.0f);
 
     for (int i = 0; i < 3; i++) {
-        mFileInfo[i] = new dFile_info_c(mpArchive, 1);
+        mFileInfo[i] = JKR_NEW dFile_info_c(mpArchive, 1);
         mFileInfo[i]->setBasePane(mSaveSel.Scr->search(l_tagName13[i]));
         mpDataBase[i] = mFileInfo[i]->getDatBase();
         mpNoDataBase[i] = mFileInfo[i]->getNoDatBase();
     }
 
-    mWarning = new dFile_warning_c(mpArchive, 0);
+    mWarning = JKR_NEW dFile_warning_c(mpArchive, 0);
 }
 
 
@@ -492,139 +492,139 @@ int dMenu_save_c::_close() {
 }
 
 void dMenu_save_c::_delete() {
-    delete stick;
+    JKR_DELETE(stick);
 
     if (mpScrnExplain != NULL) {
-        delete mpScrnExplain;
+        JKR_DELETE(mpScrnExplain);
         mpScrnExplain = NULL;
     }
 
     if (mSaveSel.mMsgString != NULL) {
-        delete mSaveSel.mMsgString;
+        JKR_DELETE(mSaveSel.mMsgString);
     }
 
     if (mSaveSel.Scr != NULL) {
-        delete mSaveSel.Scr;
+        JKR_DELETE(mSaveSel.Scr);
     }
 
     for (int i = 0; i < 3; i++) {
         if (mpSelWakuMoyo[i] != NULL) {
-            delete mpSelWakuMoyo[i];
+            JKR_DELETE(mpSelWakuMoyo[i]);
         }
 
         if (mpSelWakuGold[i] != NULL) {
-            delete mpSelWakuGold[i];
+            JKR_DELETE(mpSelWakuGold[i]);
         }
 
         if (mpSelWakuGold2[i] != NULL) {
-            delete mpSelWakuGold2[i];
+            JKR_DELETE(mpSelWakuGold2[i]);
         }
 
         if (mpBookWaku[i] != NULL) {
-            delete mpBookWaku[i];
+            JKR_DELETE(mpBookWaku[i]);
         }
 
         if (mpSelData[i] != NULL) {
-            delete mpSelData[i];
+            JKR_DELETE(mpSelData[i]);
         }
 
         if (mFileInfo[i] != NULL) {
-            delete mFileInfo[i];
+            JKR_DELETE(mFileInfo[i]);
         }
     }
 
     if (mpSelectMoveBase != NULL) {
-        delete mpSelectMoveBase;
+        JKR_DELETE(mpSelectMoveBase);
     }
 
     for (int i = 0; i < 2; i++) {
         if (mpNoYes[i] != NULL) {
-            delete mpNoYes[i];
+            JKR_DELETE(mpNoYes[i]);
         }
 
         if (mNoYesBase[i] != NULL) {
-            delete mNoYesBase[i];
+            JKR_DELETE(mNoYesBase[i]);
         }
 
         if (mNoYesGold[i] != NULL) {
-            delete mNoYesGold[i];
+            JKR_DELETE(mNoYesGold[i]);
         }
 
         if (mNoYesGold2[i] != NULL) {
-            delete mNoYesGold2[i];
+            JKR_DELETE(mNoYesGold2[i]);
         }
 
         if (mpHeaderTxtPane[i] != NULL) {
-            delete mpHeaderTxtPane[i];
+            JKR_DELETE(mpHeaderTxtPane[i]);
         }
 
         if (mpErrTxtPane[i] != NULL) {
-            delete mpErrTxtPane[i];
+            JKR_DELETE(mpErrTxtPane[i]);
         }
 
         if (mpNoYesTxt[i] != NULL) {
-            delete mpNoYesTxt[i];
+            JKR_DELETE(mpNoYesTxt[i]);
         }
     }
 
     if (field_0x40 != NULL) {
-        delete field_0x40;
+        JKR_DELETE(field_0x40);
     }
 
     if (field_0x44 != NULL) {
-        delete field_0x44;
+        JKR_DELETE(field_0x44);
     }
 
     if (field_0x48 != NULL) {
-        delete field_0x48;
+        JKR_DELETE(field_0x48);
     }
 
     if (mpFileWakuAnm != NULL) {
-        delete mpFileWakuAnm;
+        JKR_DELETE(mpFileWakuAnm);
     }
 
     if (mpFileWakuRotAnm != NULL) {
-        delete mpFileWakuRotAnm;
+        JKR_DELETE(mpFileWakuRotAnm);
     }
 
     if (field_0x150 != NULL) {
-        delete field_0x150;
+        JKR_DELETE(field_0x150);
     }
 
     if (field_0x158 != NULL) {
-        delete field_0x158;
+        JKR_DELETE(field_0x158);
     }
 
     if (field_0x160 != NULL) {
-        delete field_0x160;
+        JKR_DELETE(field_0x160);
     }
 
     if (field_0x4c != NULL) {
-        delete field_0x4c;
+        JKR_DELETE(field_0x4c);
     }
 
     if (mpBBtnIcon != NULL) {
-        delete mpBBtnIcon;
+        JKR_DELETE(mpBBtnIcon);
     }
 
     if (mpABtnIcon != NULL) {
-        delete mpABtnIcon;
+        JKR_DELETE(mpABtnIcon);
     }
 
     if (mpBackTxt != NULL) {
-        delete mpBackTxt;
+        JKR_DELETE(mpBackTxt);
     }
 
     if (mpConfirmTxt != NULL) {
-        delete mpConfirmTxt;
+        JKR_DELETE(mpConfirmTxt);
     }
 
     if (mSelIcon != NULL) {
-        delete mSelIcon;
+        JKR_DELETE(mSelIcon);
     }
 
     if (mWarning != NULL) {
-        delete mWarning;
+        JKR_DELETE(mWarning);
     }
 
     mDoExt_removeMesgFont();

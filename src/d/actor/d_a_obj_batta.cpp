@@ -88,7 +88,7 @@ static u32 const l_batta_btk_index[2] = {
 inline int daObjBATTA_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Bat", 0xb);
     JUT_ASSERT(256, modelData != NULL);
-    mpMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
                                   (J3DAnmTransform*)dComIfG_getObjectRes("Bat", 8), 2, 1.0f, 0, -1,
                                   &mCreature, 0x80000, 0x11000284);
     if (mpMorf == NULL ||  mpMorf->getModel() == NULL) {
@@ -96,7 +96,7 @@ inline int daObjBATTA_c::CreateHeap() {
     }
 
     J3DModel* morfModel = mpMorf->getModel();
-    mBrk = new mDoExt_brkAnm();
+    mBrk = JKR_NEW mDoExt_brkAnm();
     if (mBrk == NULL) {
         return 0;
     }
@@ -106,7 +106,7 @@ inline int daObjBATTA_c::CreateHeap() {
         return 0;
     }
 
-    mBtk = new mDoExt_btkAnm();
+    mBtk = JKR_NEW mDoExt_btkAnm();
     if (mBtk == NULL) {
         return 0;
     }

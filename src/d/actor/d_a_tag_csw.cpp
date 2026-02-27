@@ -114,7 +114,7 @@ int daTagCsw_c::createHeap() {
     }
     field_0x8e8.x = field_0x8e8.y = field_0x8e8.z;
     setMtx();
-    field_0x57c = new mDoExt_brkAnm();
+    field_0x57c = JKR_NEW mDoExt_brkAnm();
     if (field_0x57c == NULL) {
         return 0;
     }
@@ -127,7 +127,7 @@ int daTagCsw_c::createHeap() {
     if (field_0x578 == NULL) {
         field_0x580 = NULL;
     } else {
-        field_0x580 = new mDoExt_brkAnm();
+        field_0x580 = JKR_NEW mDoExt_brkAnm();
         if (field_0x580 == NULL) {
             return 0;
         }
@@ -138,7 +138,7 @@ int daTagCsw_c::createHeap() {
             return 0;
         }
     }
-    field_0x584 = new dBgW();
+    field_0x584 = JKR_NEW dBgW();
     if (field_0x584 == NULL) {
         return 0;
     }
@@ -148,7 +148,7 @@ int daTagCsw_c::createHeap() {
     if (field_0x578 == NULL) {
         field_0x5f0 = NULL;
     } else {
-        field_0x5f0 = new dBgW();
+        field_0x5f0 = JKR_NEW dBgW();
         if (field_0x5f0 == NULL) {
             return 0;
         }
@@ -156,7 +156,7 @@ int daTagCsw_c::createHeap() {
             return 0;
         }
     }
-    field_0x588 = new dBgW();
+    field_0x588 = JKR_NEW dBgW();
     if (field_0x588 == NULL) {
         return 0;
     }

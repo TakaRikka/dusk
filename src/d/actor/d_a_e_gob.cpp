@@ -2244,7 +2244,7 @@ static int daE_GOB_Delete(e_gob_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_gob_class* a_this = (e_gob_class*)i_this;
 
-    a_this->mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_gob", BMDR_MG), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_gob", BCK_MG_WAIT), 2, 1.0f, 0, -1, &a_this->mSound, 0x80000, 0x11000084);
+    a_this->mpModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_gob", BMDR_MG), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_gob", BCK_MG_WAIT), 2, 1.0f, 0, -1, &a_this->mSound, 0x80000, 0x11000084);
     if (a_this->mpModelMorf == NULL || a_this->mpModelMorf->getModel() == NULL) {
         return 0;
     }

@@ -7133,7 +7133,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     J3DModel* model;
 
     if (i_this->mBossMode != 0) {
-        i_this->mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_rdb", e_rdb_class::BMDR_RB), NULL, NULL,
+        i_this->mpModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_rdb", e_rdb_class::BMDR_RB), NULL, NULL,
                                                    (J3DAnmTransform*)dComIfG_getObjectRes("E_rdb", e_rdb_class::BCK_RB_RWAIT), 2, 1.0f,
                                                    0, -1, &i_this->mSound, 0x80000, 0x11000084);
         if (i_this->mpModelMorf == NULL || i_this->mpModelMorf->getModel() == NULL) {
@@ -7148,7 +7148,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
         }
 
         if (i_this->mBossMode == 1) {
-            i_this->mpMorfHornAnm = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_rdb", e_rdb_class::BMDR_RB_HORN), 
+            i_this->mpMorfHornAnm = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_rdb", e_rdb_class::BMDR_RB_HORN),
                                                        NULL, NULL, NULL, 2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000084);
             if (i_this->mpMorfHornAnm == NULL || i_this->mpMorfHornAnm->getModel() == NULL) {
                 return 0;
@@ -7194,7 +7194,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
             }
         }
     } else {
-        i_this->mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(i_this->mResName, BMDR_RD), NULL, NULL,
+        i_this->mpModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(i_this->mResName, BMDR_RD), NULL, NULL,
                                                    (J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, BCK_RD_WAIT01), 0, 1.0f,
                                                    0, -1, &i_this->mSound, 0x80000, 0x11000084);
         if (i_this->mpModelMorf == NULL || i_this->mpModelMorf->getModel() == NULL) {
@@ -7226,7 +7226,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
 
             i_this->field_0x694->setBaseTRMtx(mDoMtx_stack_c::get());
         } else if (i_this->field_0x5bc >= 2) {
-            i_this->mpMorfBowAnm = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(i_this->mResName, BMDR_RD_BOW), NULL, NULL,
+            i_this->mpMorfBowAnm = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(i_this->mResName, BMDR_RD_BOW), NULL, NULL,
                                                        (J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, BCK_RD_BOW_SHOOT), 0, 1.0f,
                                                        0, -1, NULL, 0x80000, 0x11000084);
             if (i_this->mpMorfBowAnm == NULL || i_this->mpMorfBowAnm->getModel() == NULL) {

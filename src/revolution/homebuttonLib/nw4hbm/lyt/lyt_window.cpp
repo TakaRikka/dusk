@@ -232,7 +232,7 @@ namespace nw4hbm {
                 const res::Material* pResMaterial = detail::ConvertOffsToPtr<res::Material>(
                     resBlockSet.pMaterialList, matOffsTbl[pResContent->materialIdx]);
 
-                mpMaterial = new (pMemMaterial) Material(pResMaterial, resBlockSet);
+                mpMaterial = JKR_NEW_ARGS (pMemMaterial) Material(pResMaterial, resBlockSet);
             }
 
             mFrameNum = 0;
@@ -260,7 +260,7 @@ namespace nw4hbm {
                                     matOffsTbl[pResWindowFrame->materialIdx]);
 
                             mFrames[i].pMaterial =
-                                new (pMemMaterial) Material(pResMaterial, resBlockSet);
+                                JKR_NEW_ARGS (pMemMaterial) Material(pResMaterial, resBlockSet);
                         }
                     }
                 }

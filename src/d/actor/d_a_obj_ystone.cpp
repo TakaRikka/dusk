@@ -216,21 +216,21 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         J3DAnmTevRegKey* brk_anm =
             (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName[_this->mLevel],
                                                    l_brkIndex[_this->mLevel]);
-        _this->mpBrkAnm = new mDoExt_brkAnm();
+        _this->mpBrkAnm = JKR_NEW mDoExt_brkAnm();
         if (_this->mpBrkAnm == NULL ||
             !_this->mpBrkAnm->init((J3DModelData*)model_data, brk_anm, 1, 2, 1.0f, 0, -1))
         {
             return 0;
         }
     } else {
-        _this->mpMorf = new mDoExt_McaMorfSO((J3DModelData*)model_data, NULL, NULL,
+        _this->mpMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)model_data, NULL, NULL,
             (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName[_this->mLevel], 5),
             0, 1.0f, 0, -1, NULL, 0, 0x11000284);
         if (_this->mpMorf == NULL || _this->mpMorf->getModel() == NULL) {
             return 0;
         }
 
-        _this->mpBtkAnm = new mDoExt_btkAnm();
+        _this->mpBtkAnm = JKR_NEW mDoExt_btkAnm();
         if (_this->mpBtkAnm == NULL) {
             return 0;
         }

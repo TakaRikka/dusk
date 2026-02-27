@@ -73,7 +73,7 @@ J2DTextBox::J2DTextBox(J2DPane* p_pane, JSURandomInputStream* p_stream, u32 para
     mStringPtr = NULL;
 
     if (strLength != 0) {
-        mStringPtr = new char[strLength];
+        mStringPtr = JKR_NEW char[strLength];
     }
 
     if (mStringPtr != NULL) {
@@ -120,7 +120,7 @@ J2DTextBox::J2DTextBox(u64 tag, JGeometry::TBox2<f32> const& bounds, ResFONT con
 void J2DTextBox::initiate(ResFONT const* p_font, char const* string, s16 length,
                           J2DTextBoxHBinding hBind, J2DTextBoxVBinding vBind) {
     if (p_font != NULL) {
-        mFont = new JUTResFont(p_font, NULL);
+        mFont = JKR_NEW JUTResFont(p_font, NULL);
     }
 
     mCharColor.set(0xFFFFFFFF);
@@ -143,7 +143,7 @@ void J2DTextBox::initiate(ResFONT const* p_font, char const* string, s16 length,
             stringLen = len + 1;
         }
 
-        mStringPtr = new char[stringLen];
+        mStringPtr = JKR_NEW char[stringLen];
 
         if (stringLen != 0 && mStringPtr != NULL) {
             strncpy(mStringPtr, string, stringLen - 1);
@@ -184,7 +184,7 @@ void J2DTextBox::private_readStream(J2DPane* p_pane, JSURandomInputStream* p_str
 
     ResFONT* fontPtr = (ResFONT*)getPointer(p_stream, 'FONT', p_archive);
     if (fontPtr != NULL) {
-        mFont = new JUTResFont(fontPtr, NULL);
+        mFont = JKR_NEW JUTResFont(fontPtr, NULL);
     }
 
     mCharColor.set(p_stream->read32b());
@@ -197,7 +197,7 @@ void J2DTextBox::private_readStream(J2DPane* p_pane, JSURandomInputStream* p_str
     mFontSizeY = p_stream->read16b();
 
     s16 stringLen = p_stream->read16b();
-    mStringPtr = new char[stringLen + 1];
+    mStringPtr = JKR_NEW char[stringLen + 1];
 
     if (mStringPtr != NULL) {
         p_stream->read(mStringPtr, stringLen);
@@ -239,16 +239,16 @@ void J2DTextBox::private_readStream(J2DPane* p_pane, JSURandomInputStream* p_str
 
 J2DTextBox::~J2DTextBox() {
     if (mTextFontOwned) {
-        delete mFont;
+        JKR_DELETE(mFont);
     }
 
-    delete[] mStringPtr;
+    JKR_DELETE_ARRAY(mStringPtr);
 }
 
 void J2DTextBox::setFont(JUTFont* p_font) {
     if (p_font) {
         if (mTextFontOwned) {
-            delete mFont;
+            JKR_DELETE(mFont);
         }
         mFont = p_font;
         mTextFontOwned = false;
@@ -316,7 +316,7 @@ s32 J2DTextBox::setString(char const* string, ...) {
     va_list args;
     va_start(args, string);
 
-    delete[] mStringPtr;
+    JKR_DELETE_ARRAY(mStringPtr);
 
     u32 len = strlen(string);
 
@@ -325,7 +325,7 @@ s32 J2DTextBox::setString(char const* string, ...) {
     }
 
     mStringLength = 0;
-    mStringPtr = new char[len + 1];
+    mStringPtr = JKR_NEW char[len + 1];
 
     if (mStringPtr) {
         mStringLength = len + 1;
@@ -340,7 +340,7 @@ s32 J2DTextBox::setString(s16 length, char const* string, ...) {
     va_list args;
     va_start(args, string);
 
-    delete[] mStringPtr;
+    JKR_DELETE_ARRAY(mStringPtr);
     mStringPtr = NULL;
 
     u32 len = strlen(string);
@@ -356,7 +356,7 @@ s32 J2DTextBox::setString(s16 length, char const* string, ...) {
     mStringLength = 0;
 
     if (stringLen != 0) {
-        mStringPtr = new char[stringLen];
+        mStringPtr = JKR_NEW char[stringLen];
     }
 
     if (mStringPtr != NULL) {

@@ -61,11 +61,11 @@ bool JHINegotiateInterface(u32) {
 
 JHIMccContext JHIGetHiSpeedContext() {
     if (tContext_new.mp_reader == NULL) {
-        tContext_new.mp_reader = new JHIMccBufReader(1, 0x18, 0x6000);
+        tContext_new.mp_reader = JKR_NEW JHIMccBufReader(1, 0x18, 0x6000);
     }
     
     if (tContext_new.mp_writer == NULL) {
-        tContext_new.mp_writer = new JHIMccBufWriter(1, 0x18, 0x6000);
+        tContext_new.mp_writer = JKR_NEW JHIMccBufWriter(1, 0x18, 0x6000);
     }
 
     return tContext_new;
@@ -73,11 +73,11 @@ JHIMccContext JHIGetHiSpeedContext() {
 
 JHIMccContext JHIGetLowSpeedContext() {
     if (tContext_old.mp_reader == NULL) {
-        tContext_old.mp_reader = new JHIMccBufReader(1, 2, 0);
+        tContext_old.mp_reader = JKR_NEW JHIMccBufReader(1, 2, 0);
     }
     
     if (tContext_old.mp_writer == NULL) {
-        tContext_old.mp_writer = new JHIMccBufWriter(1, 2, 0);
+        tContext_old.mp_writer = JKR_NEW JHIMccBufWriter(1, 2, 0);
     }
 
     return tContext_old;

@@ -91,7 +91,7 @@ int daKnob20_c::CreateHeap() {
     if (mModel2 == 0) {
         return 0;
     }
-    field_0x5a0 = new dBgW();
+    field_0x5a0 = JKR_NEW dBgW();
     if (field_0x5a0 == NULL) {
         return 0;
     } 

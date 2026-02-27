@@ -96,11 +96,11 @@ dMenu_Collect2D_c::~dMenu_Collect2D_c() {
 
 void dMenu_Collect2D_c::_create() {
     mpHeap->getTotalFreeSize();
-    mpScreen = new J2DScreen();
+    mpScreen = JKR_NEW J2DScreen();
     mpScreen->setPriority("zelda_collect_soubi_screen.blo", 0x1020000,
                           dComIfGp_getCollectResArchive());
     dPaneClass_showNullPane(mpScreen);
-    mpScreenIcon = new J2DScreen();
+    mpScreenIcon = JKR_NEW J2DScreen();
     mpScreenIcon->setPriority("zelda_collect_soubi_do_icon_parts.blo", 0x20000,
                               dComIfGp_getCollectResArchive());
     for (int i = 0; i < 2; i++) {
@@ -108,13 +108,13 @@ void dMenu_Collect2D_c::_create() {
         mpButtonText[i] = NULL;
     }
     dPaneClass_showNullPane(mpScreenIcon);
-    mpDraw2DTop = new dMenu_Collect2DTop_c(this);
+    mpDraw2DTop = JKR_NEW dMenu_Collect2DTop_c(this);
     ResTIMG* image = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "tt_block8x8.bti");
-    mpBlackTex = new J2DPicture(image);
+    mpBlackTex = JKR_NEW J2DPicture(image);
     mpBlackTex->setBlackWhite(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(0, 0, 0, 255));
     mpBlackTex->setAlpha(0);
-    mpDrawCursor = new dSelect_cursor_c(2, 1.0f, NULL);
-    mpString = new dMsgString_c();
+    mpDrawCursor = JKR_NEW dSelect_cursor_c(2, 1.0f, NULL);
+    mpString = JKR_NEW dMsgString_c();
     mpSaveScrn = NULL;
     mpOptionScrn = NULL;
     mpLetterScrn = NULL;
@@ -131,81 +131,81 @@ void dMenu_Collect2D_c::_create() {
 void dMenu_Collect2D_c::_delete() {
     mpHeap->getTotalFreeSize();
     dMeter2Info_setCollectCursorPosXY(mCursorX, mCursorY);
-    delete mpScreen;
+    JKR_DELETE(mpScreen);
     mpScreen = NULL;
-    delete mpScreenIcon;
+    JKR_DELETE(mpScreenIcon);
     mpScreenIcon = NULL;
     for (int i = 0; i < 2; i++) {
         if (mpButtonAB[i]) {
-            delete mpButtonAB[i];
+            JKR_DELETE(mpButtonAB[i]);
             mpButtonAB[i] = NULL;
         }
         if (mpButtonText[i]) {
-            delete mpButtonText[i];
+            JKR_DELETE(mpButtonText[i]);
             mpButtonText[i] = NULL;
         }
     }
-    delete mpDraw2DTop;
+    JKR_DELETE(mpDraw2DTop);
     mpDraw2DTop = NULL;
-    delete mpBlackTex;
+    JKR_DELETE(mpBlackTex);
     mpBlackTex = NULL;
-    delete mpDrawCursor;
+    JKR_DELETE(mpDrawCursor);
     mpDrawCursor = NULL;
-    delete mpString;
+    JKR_DELETE(mpString);
     mpString = NULL;
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpSaveScrn) {
         mpSaveScrn->_delete();
-        delete mpSaveScrn;
+        JKR_DELETE(mpSaveScrn);
         mpSaveScrn = NULL;
         mpSubHeap->freeAll();
     }
     if (mpOptionScrn) {
         mpOptionScrn->_delete();
-        delete mpOptionScrn;
+        JKR_DELETE(mpOptionScrn);
         mpOptionScrn = NULL;
         mpSubHeap->freeAll();
     }
     if (mpLetterScrn) {
-        delete mpLetterScrn;
+        JKR_DELETE(mpLetterScrn);
         mpLetterScrn = NULL;
         mpSubHeap->freeAll();
     }
     if (mpFishingScrn) {
-        delete mpFishingScrn;
+        JKR_DELETE(mpFishingScrn);
         mpFishingScrn = NULL;
         mpSubHeap->freeAll();
     }
     if (mpSkillScrn) {
-        delete mpSkillScrn;
+        JKR_DELETE(mpSkillScrn);
         mpSkillScrn = NULL;
         mpSubHeap->freeAll();
     }
     if (mpInsectScrn) {
-        delete mpInsectScrn;
+        JKR_DELETE(mpInsectScrn);
         mpInsectScrn = NULL;
         mpSubHeap->freeAll();
     }
     mDoExt_setCurrentHeap(heap);
-    delete mpAnmKey;
+    JKR_DELETE(mpAnmKey);
     mpAnmKey = NULL;
     for (int i = 0; i < 7; i++) {
         for (int j = 0; j < 6; j++) {
             if (mpSelPm[i][j]) {
-                delete mpSelPm[i][j];
+                JKR_DELETE(mpSelPm[i][j]);
                 mpSelPm[i][j] = NULL;
             }
         }
     }
-    delete mpLinkPm;
+    JKR_DELETE(mpLinkPm);
     mpLinkPm = NULL;
-    delete mpMaskPm;
+    JKR_DELETE(mpMaskPm);
     mpMaskPm = NULL;
-    delete mpModelBg;
+    JKR_DELETE(mpModelBg);
     mpModelBg = NULL;
-    delete mpHeartParent;
+    JKR_DELETE(mpHeartParent);
     mpHeartParent = NULL;
-    delete mpHeartPiece;
+    JKR_DELETE(mpHeartPiece);
     mpHeartPiece = NULL;
     dComIfGp_getCollectResArchive()->removeResourceAll();
 }
@@ -634,7 +634,7 @@ void dMenu_Collect2D_c::screenSet() {
     for (int i = 0; i < 7; i++) {
         for (int j = 0; j < 6; j++) {
             if (getItemTag(i, j, true)) {
-                mpSelPm[i][j] = new CPaneMgr(mpScreen, getItemTag(i, j, true), 0, NULL);
+                mpSelPm[i][j] = JKR_NEW CPaneMgr(mpScreen, getItemTag(i, j, true), 0, NULL);
                 if (!bVar18) {
                     i_copy = i;
                     j_copy = j;
@@ -661,14 +661,14 @@ void dMenu_Collect2D_c::screenSet() {
         mCursorX = i_copy;
         mCursorY = j_copy;
     }
-    mpLinkPm = new CPaneMgr(mpScreen, MULTI_CHAR('linki_n'), 0, NULL);
+    mpLinkPm = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('linki_n'), 0, NULL);
     mLinkGlobalCenterPos.x = mpLinkPm->getInitGlobalCenterPosX();
     mLinkGlobalCenterPos.y = mpLinkPm->getInitGlobalCenterPosY();
     mLinkGlobalCenterPos.z = -1000.0f;
-    mpMaskPm = new CPaneMgr(mpScreen, MULTI_CHAR('kamen_n'), 0, NULL);
-    mpModelBg = new CPaneMgr(mpScreen, MULTI_CHAR('modelbgn'), 2, NULL);
-    mpHeartParent = new CPaneMgr(mpScreen, MULTI_CHAR('heart_n'), 0, NULL);
-    mpHeartPiece = new CPaneMgr(mpScreen, MULTI_CHAR('heart_kn'), 0, NULL);
+    mpMaskPm = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('kamen_n'), 0, NULL);
+    mpModelBg = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('modelbgn'), 2, NULL);
+    mpHeartParent = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('heart_n'), 0, NULL);
+    mpHeartPiece = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('heart_kn'), 0, NULL);
     setAButtonString(mCurrentAString);
     setBButtonString(mCurrentBString);
     setItemNameString(mCursorX, mCursorY);
@@ -1537,38 +1537,38 @@ void dMenu_Collect2D_c::wait_init() {
 
     if (mpSaveScrn != NULL) {
         mpSaveScrn->_delete();
-        delete mpSaveScrn;
+        JKR_DELETE(mpSaveScrn);
         mpSaveScrn = NULL;
         mpSubHeap->freeAll();
     }
 
     if (mpOptionScrn != NULL) {
         mpOptionScrn->_delete();
-        delete mpOptionScrn;
+        JKR_DELETE(mpOptionScrn);
         mpOptionScrn = NULL;
         mpSubHeap->freeAll();
     }
 
     if (mpLetterScrn != NULL) {
-        delete mpLetterScrn;
+        JKR_DELETE(mpLetterScrn);
         mpLetterScrn = NULL;
         mpSubHeap->freeAll();
     }
 
     if (mpFishingScrn != NULL) {
-        delete mpFishingScrn;
+        JKR_DELETE(mpFishingScrn);
         mpFishingScrn = NULL;
         mpSubHeap->freeAll();
     }
 
     if (mpSkillScrn != NULL) {
-        delete mpSkillScrn;
+        JKR_DELETE(mpSkillScrn);
         mpSkillScrn = NULL;
         mpSubHeap->freeAll();
     }
 
     if (mpInsectScrn != NULL) {
-        delete mpInsectScrn;
+        JKR_DELETE(mpInsectScrn);
         mpInsectScrn = NULL;
         mpSubHeap->freeAll();
     }
@@ -1682,7 +1682,7 @@ void dMenu_Collect2D_c::wait_proc() {
 void dMenu_Collect2D_c::save_open_init() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (!mpSaveScrn) {
-        mpSaveScrn = new dMenu_save_c();
+        mpSaveScrn = JKR_NEW dMenu_save_c();
     }
     mpSaveScrn->setUseType(1);
     mpSaveScrn->_create();
@@ -1740,7 +1740,7 @@ void dMenu_Collect2D_c::save_close_proc() {
 void dMenu_Collect2D_c::option_open_init() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (!mpOptionScrn) {
-        mpOptionScrn = new dMenu_Option_c(dComIfGp_getCollectResArchive(), mpStick);
+        mpOptionScrn = JKR_NEW dMenu_Option_c(dComIfGp_getCollectResArchive(), mpStick);
     }
     mpOptionScrn->initialize();
     setAButtonString(0);
@@ -1796,7 +1796,7 @@ void dMenu_Collect2D_c::option_close_proc() {
 void dMenu_Collect2D_c::letter_open_init() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (!mpLetterScrn) {
-        mpLetterScrn = new dMenu_Letter_c(mpSubHeap, mpStick, mpCStick);
+        mpLetterScrn = JKR_NEW dMenu_Letter_c(mpSubHeap, mpStick, mpCStick);
     }
     setAButtonString(0);
     setBButtonString(0);
@@ -1851,7 +1851,7 @@ void dMenu_Collect2D_c::letter_close_proc() {
 void dMenu_Collect2D_c::fishing_open_init() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (!mpFishingScrn) {
-        mpFishingScrn = new dMenu_Fishing_c(mpSubHeap, mpStick, mpCStick);
+        mpFishingScrn = JKR_NEW dMenu_Fishing_c(mpSubHeap, mpStick, mpCStick);
     }
     setAButtonString(0);
     setBButtonString(0);
@@ -1906,7 +1906,7 @@ void dMenu_Collect2D_c::fishing_close_proc() {
 void dMenu_Collect2D_c::skill_open_init() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (!mpSkillScrn) {
-        mpSkillScrn = new dMenu_Skill_c(mpSubHeap, mpStick, mpCStick);
+        mpSkillScrn = JKR_NEW dMenu_Skill_c(mpSubHeap, mpStick, mpCStick);
     }
     setAButtonString(0);
     setBButtonString(0);
@@ -1961,7 +1961,7 @@ void dMenu_Collect2D_c::skill_close_proc() {
 void dMenu_Collect2D_c::insect_open_init() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (!mpInsectScrn) {
-        mpInsectScrn = new dMenu_Insect_c(mpSubHeap, mpStick, mpCStick, 0);
+        mpInsectScrn = JKR_NEW dMenu_Insect_c(mpSubHeap, mpStick, mpCStick, 0);
     }
     setAButtonString(0);
     setBButtonString(0);
@@ -2336,15 +2336,15 @@ void dMenu_Collect3D_c::setJ3D(const char* param_0, const char* param_1, const c
         resArchive->getResource('BMD ', param_0), 0x51020010);
 
     for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
-        J3DMaterialAnm* matAnm = new J3DMaterialAnm();
+        J3DMaterialAnm* matAnm = JKR_NEW J3DMaterialAnm();
         modelData->getMaterialNodePointer(i)->change();
         modelData->getMaterialNodePointer(i)->setMaterialAnm(matAnm);
     }
-    mpModel = new J3DModel(modelData, 0, 1);
+    mpModel = JKR_NEW J3DModel(modelData, 0, 1);
     if (param_1 != NULL) {
         J3DAnmTransform* pbck = (J3DAnmTransform*)J3DAnmLoaderDataBase::load(
             resArchive->getResource('BCK ', param_1), J3DLOADER_UNK_FLAG0);
-        mpBckAnm = new mDoExt_bckAnm();
+        mpBckAnm = JKR_NEW mDoExt_bckAnm();
         if (mpBckAnm == NULL || !mpBckAnm->init(pbck, 1, 2, 1.0f, 0, -1, false)) {
             return;
         }
@@ -2353,7 +2353,7 @@ void dMenu_Collect3D_c::setJ3D(const char* param_0, const char* param_1, const c
         J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)J3DAnmLoaderDataBase::load(
             resArchive->getResource('BRK ', param_2), J3DLOADER_UNK_FLAG0);
         pbrk->searchUpdateMaterialID(modelData);
-        mpBrkAnm = new mDoExt_brkAnm();
+        mpBrkAnm = JKR_NEW mDoExt_brkAnm();
         if (mpBrkAnm == NULL || !mpBrkAnm->init(modelData, pbrk, -1, 2, 1.0f, 0, -1)) {
             return;
         }
@@ -2615,17 +2615,17 @@ void dMenu_Collect2DTop_c::draw() {
 }
 
 dMenu_Collect_c::dMenu_Collect_c(JKRExpHeap* param_0, STControl* param_1, CSTControl* param_2) {
-    mpCollect2D = new dMenu_Collect2D_c(param_0, param_1, param_2);
-    mpCollect3D = new dMenu_Collect3D_c(param_0, mpCollect2D, param_2);
+    mpCollect2D = JKR_NEW dMenu_Collect2D_c(param_0, param_1, param_2);
+    mpCollect3D = JKR_NEW dMenu_Collect3D_c(param_0, mpCollect2D, param_2);
 }
 
 dMenu_Collect_c::~dMenu_Collect_c() {
     if (mpCollect2D) {
-        delete mpCollect2D;
+        JKR_DELETE(mpCollect2D);
         mpCollect2D = NULL;
     }
     if (mpCollect3D) {
-        delete mpCollect3D;
+        JKR_DELETE(mpCollect3D);
         mpCollect3D = NULL;
     }
 }

@@ -11,7 +11,7 @@
 static const char l_arcName[] = "Dmidna";
 
 int daDmidna_c::createHeap() {
-    mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(l_arcName, 8), NULL,
+    mpModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(l_arcName, 8), NULL,
                                        NULL, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 4),
                                        2, 1.0f, 0, -1, NULL, 0, 0);
     if (mpModelMorf == NULL || mpModelMorf->getModel() == NULL) {

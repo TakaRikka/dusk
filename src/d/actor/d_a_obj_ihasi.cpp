@@ -117,7 +117,7 @@ static int useHeapInit(fopAc_ac_c* i_actor) {
         return 0;
     }
 
-    i_this->mpBgW = new dBgW();
+    i_this->mpBgW = JKR_NEW dBgW();
     if (i_this->mpBgW == NULL) {
         return 0;
     }
@@ -136,7 +136,7 @@ static int useHeapInit(fopAc_ac_c* i_actor) {
         return 0;
     }
 
-    i_this->mpBtkAnm = new mDoExt_btkAnm();
+    i_this->mpBtkAnm = JKR_NEW mDoExt_btkAnm();
     if (i_this->mpBtkAnm == NULL) {
         return 0;
     }

@@ -384,7 +384,7 @@ int dMpath_c::getTopBottomFloorNo(s8* i_topFloorNo, s8* i_bottomFloorNo) {
 }
 
 void dMpath_c::createWork() {
-    mLayerList = new dDrawPath_c::layer_data;
+    mLayerList = JKR_NEW dDrawPath_c::layer_data;
     JUT_ASSERT(1416, mLayerList!=NULL);
 }
 

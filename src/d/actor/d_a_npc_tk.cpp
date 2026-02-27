@@ -3207,7 +3207,7 @@ int daNPC_TK_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Npc_tk", "tk.bmd");
     JUT_ASSERT(0xf4f, modelData != NULL);
 
-    mpMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
                                   (J3DAnmTransform*)dComIfG_getObjectRes("Npc_tk", 6), 0, 1.0f, 0,
                                   -1, &mSound, 0x80000, 0x11000084);
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {

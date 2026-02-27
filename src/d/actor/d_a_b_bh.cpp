@@ -1427,7 +1427,7 @@ static int daB_BH_Delete(b_bh_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     b_bh_class* a_this = (b_bh_class*)i_this;
 
-    a_this->mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("B_BH", BMDV_BH), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_BH", 12), 2, 1.0f, 0, -1, &a_this->mSound, 0, 0x11000084);
+    a_this->mpModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("B_BH", BMDV_BH), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_BH", 12), 2, 1.0f, 0, -1, &a_this->mSound, 0, 0x11000084);
     if (a_this->mpModelMorf == NULL || a_this->mpModelMorf->getModel() == NULL) {
         return 0;
     }

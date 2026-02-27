@@ -156,7 +156,7 @@ int daBkyRock_c::createHeap() {
         }
     }
     if (nameNo == 1) {
-        mBgW = new dBgW();
+        mBgW = JKR_NEW dBgW();
         if (mBgW == NULL) {
             return 0;
         }

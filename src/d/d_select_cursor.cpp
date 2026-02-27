@@ -53,7 +53,7 @@ dSelect_cursor_c::dSelect_cursor_c(u8 param_0, f32 param_1, JKRArchive* param_2)
         "",
     };
 
-    mpCursorHIO = new dSelect_cursorHIO_c();
+    mpCursorHIO = JKR_NEW dSelect_cursorHIO_c();
     mpCursorHIO->field_0x4 = -1;
     mNameIdx = 0;
     field_0xb6 = param_0;
@@ -91,7 +91,7 @@ dSelect_cursor_c::dSelect_cursor_c(u8 param_0, f32 param_1, JKRArchive* param_2)
         param_2 = dComIfGp_getMain2DArchive();
     }
 
-    mpScreen = new J2DScreen();
+    mpScreen = JKR_NEW J2DScreen();
     mpScreen->setPriority(blo_name[mNameIdx], 0x20000, param_2);
     dPaneClass_showNullPane(mpScreen);
 
@@ -101,13 +101,13 @@ dSelect_cursor_c::dSelect_cursor_c(u8 param_0, f32 param_1, JKRArchive* param_2)
 
     switch(mNameIdx) {
     case 0: {
-            mpPaneMgr = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
+            mpPaneMgr = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
             mpPaneMgr->hide();
             mpPaneMgr->setAlpha(0);
 
             static u64 const corner_tag[4] = {MULTI_CHAR('l_u_null'), MULTI_CHAR('l_d_null'), MULTI_CHAR('r_u_null'), MULTI_CHAR('r_d_null')};
             for (int i = 0; i< 4; i++) {
-                field_0x1C[i] = new CPaneMgr(mpScreen, corner_tag[i], 0, NULL);
+                field_0x1C[i] = JKR_NEW CPaneMgr(mpScreen, corner_tag[i], 0, NULL);
                 field_0x94[i] = mpScreen->search(corner_tag[i])->getTranslateX();
                 field_0xa4[i] = mpScreen->search(corner_tag[i])->getTranslateY();
                 field_0x74[i] = field_0x94[i];
@@ -119,16 +119,16 @@ dSelect_cursor_c::dSelect_cursor_c(u8 param_0, f32 param_1, JKRArchive* param_2)
             field_0x18 = NULL;
     } break;
         case 1:
-            mpPaneMgr = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
+            mpPaneMgr = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
             mpPaneMgr->hide();
             mpPaneMgr->setAlpha(0);
             mpPaneMgr->scale(param_1, param_1);
-            field_0x14 = new CPaneMgr(mpScreen, MULTI_CHAR('sel_po00'), 0, NULL);
+            field_0x14 = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('sel_po00'), 0, NULL);
             field_0x14->hide();
-            field_0x18 = new CPaneMgr(mpScreen, MULTI_CHAR('n_all2'), 2, NULL);
+            field_0x18 = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('n_all2'), 2, NULL);
             break;
         case 2:
-            mpPaneMgr = new CPaneMgr(mpScreen, 'Null', 2, NULL);
+            mpPaneMgr = JKR_NEW CPaneMgr(mpScreen, 'Null', 2, NULL);
             mpPaneMgr->hide();
             mpPaneMgr->setAlpha(0);
             mpPaneMgr->scale(param_1, param_1);
@@ -136,7 +136,7 @@ dSelect_cursor_c::dSelect_cursor_c(u8 param_0, f32 param_1, JKRArchive* param_2)
             field_0x18 = NULL;
             break;
         case 3:
-            mpPaneMgr = new CPaneMgr(mpScreen, MULTI_CHAR('batsu'), 2, NULL);
+            mpPaneMgr = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('batsu'), 2, NULL);
             mpPaneMgr->hide();
             mpPaneMgr->setAlpha(0);
             mpPaneMgr->scale(param_1, param_1);
@@ -197,46 +197,46 @@ dSelect_cursor_c::dSelect_cursor_c(u8 param_0, f32 param_1, JKRArchive* param_2)
 
 
 dSelect_cursor_c::~dSelect_cursor_c() {
-    delete mpScreen;
+    JKR_DELETE(mpScreen);
     mpScreen = NULL;
     if (mpPaneMgr) {
-        delete mpPaneMgr;
+        JKR_DELETE(mpPaneMgr);
         mpPaneMgr = NULL;
     }
     for (int i = 0; i < 4; i++) {
         if (field_0x1C[i]) {
-            delete field_0x1C[i];
+            JKR_DELETE(field_0x1C[i]);
             field_0x1C[i] = NULL;
         }
     }
     if (field_0x14) {
-        delete field_0x14;
+        JKR_DELETE(field_0x14);
         field_0x14 = NULL;
     }
     if (field_0x18) {
-        delete field_0x18;
+        JKR_DELETE(field_0x18);
         field_0x18 = NULL;
     }
     if (mpSelectIcon) {
-        delete mpSelectIcon;
+        JKR_DELETE(mpSelectIcon);
         mpSelectIcon = NULL;
     }
     if (field_0x30) {
-        delete field_0x30;
+        JKR_DELETE(field_0x30);
         field_0x30 = NULL;
     }
     for (int i = 0; i < 2; i++) {
         if (field_0x34[i]) {
-            delete field_0x34[i];
+            JKR_DELETE(field_0x34[i]);
             field_0x34[i] = NULL;
         }
     }
     if (field_0x2C) {
-        delete field_0x2C;
+        JKR_DELETE(field_0x2C);
         field_0x2C = NULL;
     }
     if (mpCursorHIO) {
-        delete mpCursorHIO;
+        JKR_DELETE(mpCursorHIO);
         mpCursorHIO = NULL;
     }
 }

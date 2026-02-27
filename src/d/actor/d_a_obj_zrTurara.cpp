@@ -65,7 +65,7 @@ int daZrTurara_c::CreateHeap() {
     if (mpRockModel == NULL) {
         return 0;
     }
-    mpRockBgW = new dBgW();
+    mpRockBgW = JKR_NEW dBgW();
     if (mpRockBgW == NULL ||
         mpRockBgW->Set((cBgD_t*)dComIfG_getObjectRes("M_DrpRock", 8), 1, &mRockBgMtx))
     {

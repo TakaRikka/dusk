@@ -27,7 +27,7 @@ bool JStudio_JAudio2::TCreateObject::create(
 JStudio::TObject* JStudio_JAudio2::TCreateObject::createObject_JAI_SOUND_(
     JStudio::stb::data::TParse_TBlock_object const& param_1,
     JStudio_JAudio2::TCreateObject* param_2) {
-    JStudio_JAudio2::TAdaptor_sound* adaptor = new JStudio_JAudio2::TAdaptor_sound(param_2);
+    JStudio_JAudio2::TAdaptor_sound* adaptor = JKR_NEW JStudio_JAudio2::TAdaptor_sound(param_2);
     if (adaptor == NULL) {
         return NULL;
     }

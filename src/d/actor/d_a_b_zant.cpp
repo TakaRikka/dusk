@@ -5382,7 +5382,7 @@ static int daB_ZANT_Delete(daB_ZANT_c* i_this) {
 int daB_ZANT_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("B_zan", BMDR_ZAN);
     JUT_ASSERT(0, modelData != NULL);
-    mpModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_zan", BCK_ZAN_FLOAT_WAIT), 2, 1.0f, 0, -1, &mSound, 0, 0x11000084);
+    mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_zan", BCK_ZAN_FLOAT_WAIT), 2, 1.0f, 0, -1, &mSound, 0, 0x11000084);
     if (mpModelMorf == NULL || mpModelMorf->getModel() == NULL) {
         return 0;
     }
@@ -5397,7 +5397,7 @@ int daB_ZANT_c::CreateHeap() {
         return 0;
     }
 
-    mpMahojinEndBrk = new mDoExt_brkAnm();
+    mpMahojinEndBrk = JKR_NEW mDoExt_brkAnm();
     if (mpMahojinEndBrk == NULL) {
         return 0;
     }
@@ -5406,7 +5406,7 @@ int daB_ZANT_c::CreateHeap() {
         return 0;
     }
 
-    mpMahojinBtk = new mDoExt_btkAnm();
+    mpMahojinBtk = JKR_NEW mDoExt_btkAnm();
     if (mpMahojinBtk == NULL) {
         return 0;
     }
@@ -5415,7 +5415,7 @@ int daB_ZANT_c::CreateHeap() {
         return 0;
     }
 
-    mpMahojinStartBtk = new mDoExt_btkAnm();
+    mpMahojinStartBtk = JKR_NEW mDoExt_btkAnm();
     if (mpMahojinStartBtk == NULL) {
         return 0;
     }
@@ -5429,7 +5429,7 @@ int daB_ZANT_c::CreateHeap() {
         return 0;
     }
 
-    mpMahojinBrk2 = new mDoExt_brkAnm();
+    mpMahojinBrk2 = JKR_NEW mDoExt_brkAnm();
     if (mpMahojinBrk2 == NULL) {
         return 0;
     }
@@ -5438,7 +5438,7 @@ int daB_ZANT_c::CreateHeap() {
         return 0;
     }
 
-    mpMahojinStartBtk2 = new mDoExt_btkAnm();
+    mpMahojinStartBtk2 = JKR_NEW mDoExt_btkAnm();
     if (mpMahojinStartBtk2 == NULL) {
         return 0;
     }

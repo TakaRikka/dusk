@@ -204,14 +204,14 @@ int daBdoorL1_c::CreateHeap() {
     if (nowLevel == 8) {
         J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(getArcName(), "door_shutterBoss.btk");
         JUT_ASSERT(341, pbtk != NULL);
-        field_0x58c = new mDoExt_btkAnm();
+        field_0x58c = JKR_NEW mDoExt_btkAnm();
         if (field_0x58c == NULL || !field_0x58c->init(field_0x580->getModelData(), pbtk, 1, 0, 1.0f, 0, -1)) {
             return 0;
         }
     }
     J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes(getAnmArcName(), getOpenAnm());
     JUT_ASSERT(354, anm != NULL);
-    field_0x588 = new mDoExt_bckAnm();
+    field_0x588 = JKR_NEW mDoExt_bckAnm();
     if (field_0x588 == NULL || !field_0x588->init(anm, 1, 0, 1.0f, 0, -1,false)) {
         return 0;
     }
@@ -222,7 +222,7 @@ int daBdoorL1_c::CreateHeap() {
         field_0x584->calc();
     }
     calcMtx();
-    field_0x590 = new dBgW();
+    field_0x590 = JKR_NEW dBgW();
     if (field_0x590 == NULL || field_0x590->Set((cBgD_t*)dComIfG_getObjectRes(getAlwaysArcName(), getDzb()), 1, &field_0x7ec)) {
         return 0;
     }

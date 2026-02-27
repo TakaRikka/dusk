@@ -204,7 +204,7 @@ static BOOL awaCheck(J3DModel* i_model) {
             for (u16 i = 0; i < texture->getNum(); i++) {
                 const char* name = nameTab->getName(i);
                 if (strcmp(name, "B_dummy") == 0 || strcmp(name, "cy_kankyo") == 0) {
-                    J3DSkinDeform* skinDeform = new J3DSkinDeform();
+                    J3DSkinDeform* skinDeform = JKR_NEW J3DSkinDeform();
                     if (skinDeform == NULL) {
                         return FALSE;
                     }
@@ -251,7 +251,7 @@ int daDemo00_c::createHeap() {
         }
 
         if (mModel.mID.field_0xc != -1) {
-            mModel.mpBtpAnm = new mDoExt_btpAnm();
+            mModel.mpBtpAnm = JKR_NEW mDoExt_btpAnm();
             if (mModel.mpBtpAnm == NULL) {
                 return 0;
             }
@@ -271,7 +271,7 @@ int daDemo00_c::createHeap() {
         }
 
         if (mModel.mID.field_0x10 != -1) {
-            mModel.mpBtkAnm = new mDoExt_btkAnm();
+            mModel.mpBtkAnm = JKR_NEW mDoExt_btkAnm();
             if (mModel.mpBtkAnm == NULL) {
                 return 0;
             }
@@ -295,7 +295,7 @@ int daDemo00_c::createHeap() {
         }
 
         if (mModel.mID.field_0x14 != -1) {
-            mModel.mpBrkAnm = new mDoExt_brkAnm();
+            mModel.mpBrkAnm = JKR_NEW mDoExt_brkAnm();
             if (mModel.mpBrkAnm == NULL) {
                 return 0;
             }
@@ -313,7 +313,7 @@ int daDemo00_c::createHeap() {
         }
 
         if (mModel.mID.field_0x8 != -1) {
-            mModel.mpBpkAnm = new mDoExt_bpkAnm();
+            mModel.mpBpkAnm = JKR_NEW mDoExt_bpkAnm();
             if (mModel.mpBpkAnm == NULL) {
                 return 0;
             }
@@ -352,9 +352,9 @@ int daDemo00_c::createHeap() {
             }
 
             if (field_0x6ad == 0) {
-                mModel.mpModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, anm, -1, 1.0f, 0, -1, &mSound, 0x80000, uVar1);
+                mModel.mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, anm, -1, 1.0f, 0, -1, &mSound, 0x80000, uVar1);
             } else {
-                mModel.mpModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, anm, -1, 1.0f, 0, -1, &mSound, 0, uVar1);
+                mModel.mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, anm, -1, 1.0f, 0, -1, &mSound, 0, uVar1);
             }
 
             if (mModel.mpModelMorf == NULL || mModel.mpModelMorf->getModel() == NULL) {
@@ -369,7 +369,7 @@ int daDemo00_c::createHeap() {
         }
 
         if (field_0x6b4 != 0) {
-            mModel.field_0x5d8 = new mDoExt_invisibleModel();
+            mModel.field_0x5d8 = JKR_NEW mDoExt_invisibleModel();
             if (mModel.field_0x5d8 == NULL) {
                 return 0;
             }
@@ -383,7 +383,7 @@ int daDemo00_c::createHeap() {
 
         mModel.mID.field_0x18 = 1;
         if (mModel.mID.field_0x18 != -1) {
-            mModel.mShadow = new daDemo00_shadow_c();
+            mModel.mShadow = JKR_NEW daDemo00_shadow_c();
             if (mModel.mShadow == NULL) {
                 return 0;
             }
@@ -395,7 +395,7 @@ int daDemo00_c::createHeap() {
             setShadowSize();
         }
 
-        mModel.mBgc = new daDemo00_bgc_c();
+        mModel.mBgc = JKR_NEW daDemo00_bgc_c();
         if (mModel.mBgc == NULL) {
             return 0;
         }
@@ -406,7 +406,7 @@ int daDemo00_c::createHeap() {
             JUT_ASSERT(687, mModel.mDeformData != NULL);
 
             if (mModel.mID.field_0x20 != -1) {
-                mModel.mpBlkAnm = new mDoExt_blkAnm();
+                mModel.mpBlkAnm = JKR_NEW mDoExt_blkAnm();
                 if (mModel.mpBlkAnm == NULL) {
                     return 0;
                 }

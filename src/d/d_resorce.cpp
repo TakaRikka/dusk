@@ -32,7 +32,7 @@ dRes_info_c::dRes_info_c() {
 
 dRes_info_c::~dRes_info_c() {
     if (mDMCommand != NULL) {
-        delete mDMCommand;
+        JKR_DELETE(mDMCommand);
         mDMCommand = NULL;
     } else if (mArchive != NULL) {
         deleteArchiveRes();
@@ -139,7 +139,7 @@ static void addWarpMaterial(J3DModelData* i_modelData) {
     u16 textureNum = texture->getNum();
     texture->addResTIMG(1, resTimg - textureNum);
 
-    J3DTexMtx* newTexMtx = new J3DTexMtx(l_texMtxInfo);
+    J3DTexMtx* newTexMtx = JKR_NEW J3DTexMtx(l_texMtxInfo);
     JUT_ASSERT(0x11D, newTexMtx != NULL);
 
     for (u16 i = 0; i < i_modelData->getMaterialNum(); i++) {
@@ -280,7 +280,7 @@ J3DModelData* dRes_info_c::loaderBasicBmd(u32 i_tag, void* i_data) {
         material->getColorChan(0)->setLightMask(lightMask);
         material->change();
 
-        J3DMaterialAnm* materialAnm = new J3DMaterialAnm();
+        J3DMaterialAnm* materialAnm = JKR_NEW J3DMaterialAnm();
         if (materialAnm == NULL) {
             return NULL;
         }
@@ -310,7 +310,7 @@ int dRes_info_c::loadResource() {
     JUT_ASSERT(0x2C5, mRes == NULL);
 
     s32 countFile = mArchive->countFile();
-    mRes = new void*[countFile];
+    mRes = JKR_NEW void*[countFile];
     if (mRes == NULL) {
         OSReport_Error("<%s.arc> setRes: res pointer buffer nothing !!\n", mArchiveName);
         return -1;
@@ -379,7 +379,7 @@ int dRes_info_c::loadResource() {
                         J3DMaterial* material_p = modelData->getMaterialNodePointer(k);
                         material_p->change();
 
-                        J3DMaterialAnm* materialAnm = new J3DMaterialAnm();
+                        J3DMaterialAnm* materialAnm = JKR_NEW J3DMaterialAnm();
                         if (materialAnm == NULL) {
                             return -1;
                         }
@@ -454,7 +454,7 @@ int dRes_info_c::loadResource() {
                         bas = NULL;
                     }
 
-                    mDoExt_transAnmBas* transAnmBas = new mDoExt_transAnmBas(bas);
+                    mDoExt_transAnmBas* transAnmBas = JKR_NEW mDoExt_transAnmBas(bas);
                     if (transAnmBas == NULL) {
                         return -1;
                     }
@@ -550,7 +550,7 @@ int dRes_info_c::setRes() {
         mArchive = mDMCommand->getArchive();
         heap = mDMCommand->getHeap();
 
-        delete mDMCommand;
+        JKR_DELETE(mDMCommand);
         mDMCommand = NULL;
 
         if (mArchive == NULL) {
@@ -897,7 +897,7 @@ int dRes_control_c::setObjectRes(char const* i_arcName, void* i_archiveRes, u32 
         return 0;
     }
 
-    JKRMemArchive* memArchive = new JKRMemArchive(i_archiveRes, i_bufferSize, JKRMEMBREAK_FLAG_UNKNOWN0);
+    JKRMemArchive* memArchive = JKR_NEW JKRMemArchive(i_archiveRes, i_bufferSize, JKRMEMBREAK_FLAG_UNKNOWN0);
     if (memArchive == NULL || !memArchive->isMounted()) {
         return 0;
     }

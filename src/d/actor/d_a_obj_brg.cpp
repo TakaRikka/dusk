@@ -1603,7 +1603,7 @@ static int CallbackCreateHeap(fopAc_ac_c* i_this) {
 
     OS_REPORT("BGSV SET 1!\n");
 
-    a_this->mpBgW = new dBgWSv();
+    a_this->mpBgW = JKR_NEW dBgWSv();
     if (a_this->mpBgW == NULL) {
         return 0;
     }

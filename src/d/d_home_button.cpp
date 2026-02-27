@@ -164,7 +164,7 @@ void dHomeButton_c::onReset() {
 }
 
 void dHomeButton_c::create(int param_0, void* param_1) {
-    m_myObj = new dHomeButton_c();
+    m_myObj = JKR_NEW dHomeButton_c();
     m_myObj->create_(param_0, param_1);
 }
 

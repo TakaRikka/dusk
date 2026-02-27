@@ -89,7 +89,7 @@ namespace homebutton {
                 if (mpAllocator) {
                     MEMFreeToAllocator(mpAllocator, p);
                 } else {
-                    delete static_cast<IDToComponent*>(p);
+                    JKR_DELETE(static_cast<IDToComponent*>(p));
                 }
             }
         }
@@ -109,9 +109,9 @@ namespace homebutton {
 
             if (mpAllocator) {
                 void* p = MEMAllocFromAllocator(mpAllocator, sizeof(IDToComponent));
-                nw4hbm::ut::List_Append(&mIDToComponent, new (p) IDToComponent(uID, pComponent));
+                nw4hbm::ut::List_Append(&mIDToComponent, JKR_NEW_ARGS (p) IDToComponent(uID, pComponent));
             } else {
-                nw4hbm::ut::List_Append(&mIDToComponent, new IDToComponent(uID, pComponent));
+                nw4hbm::ut::List_Append(&mIDToComponent, JKR_NEW IDToComponent(uID, pComponent));
             }
         }
 
@@ -132,7 +132,7 @@ namespace homebutton {
             if (mpAllocator) {
                 MEMFreeToAllocator(mpAllocator, p);
             } else {
-                delete p;
+                JKR_DELETE(p);
             }
         }
 
@@ -220,8 +220,8 @@ namespace homebutton {
                     MEMFreeToAllocator(mpAllocator, pPaneToComponent->mpComponent);
                     MEMFreeToAllocator(mpAllocator, pPaneToComponent);
                 } else {
-                    delete pPaneToComponent->mpComponent;
-                    delete pPaneToComponent;
+                    JKR_DELETE(pPaneToComponent->mpComponent);
+                    JKR_DELETE(pPaneToComponent);
                 }
             }
         }
@@ -251,11 +251,11 @@ namespace homebutton {
                     void* p1 = MEMAllocFromAllocator(mpAllocator, sizeof(*pPaneComponent));
                     void* p2 = MEMAllocFromAllocator(mpAllocator, sizeof(*pPaneToComponent));
 
-                    pPaneComponent = new (p1) PaneComponent(suIDCounter);
-                    pPaneToComponent = new (p2) PaneToComponent(&(*it), pPaneComponent);
+                    pPaneComponent = JKR_NEW_ARGS (p1) PaneComponent(suIDCounter);
+                    pPaneToComponent = JKR_NEW_ARGS (p2) PaneToComponent(&(*it), pPaneComponent);
                 } else {
-                    pPaneComponent = new PaneComponent(suIDCounter);
-                    pPaneToComponent = new PaneToComponent(&(*it), pPaneComponent);
+                    pPaneComponent = JKR_NEW PaneComponent(suIDCounter);
+                    pPaneToComponent = JKR_NEW PaneToComponent(&(*it), pPaneComponent);
                 }
 
                 nw4hbm::ut::List_Append(&mPaneToComponent, pPaneToComponent);
@@ -306,8 +306,8 @@ namespace homebutton {
                     MEMFreeToAllocator(mpAllocator, pPaneToComponent->mpComponent);
                     MEMFreeToAllocator(mpAllocator, pPaneToComponent);
                 } else {
-                    delete pPaneToComponent->mpComponent;
-                    delete pPaneToComponent;
+                    JKR_DELETE(pPaneToComponent->mpComponent);
+                    JKR_DELETE(pPaneToComponent);
                 }
 
                 walkInChildrenDel(it->GetChildList());

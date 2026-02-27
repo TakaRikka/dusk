@@ -371,7 +371,7 @@ int daNpc_Saru_c::CreateHeap() {
     if (modelData == NULL) {
         return 0;
     }
-    mpMorf[0] = new mDoExt_McaMorfSO(modelData, NULL,
+    mpMorf[0] = JKR_NEW mDoExt_McaMorfSO(modelData, NULL,
                                   NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, 0x11020084);
     if (mpMorf[0] == NULL || mpMorf[0]->getModel() == NULL) {
         return 0;

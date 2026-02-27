@@ -624,7 +624,7 @@ static int phase_4(dScnPly_c* i_this) {
     mDoGph_gInf_c::setTickRate((OS_BUS_CLOCK / 4) / 30);
     g_envHIO.field_0x4 = -1;
     g_save_bit_HIO.field_0x4 = -1;
-    new (dComIfGp_getAttention()) dAttention_c(dComIfGp_getPlayer(0), 0);
+    JKR_NEW_ARGS (dComIfGp_getAttention()) dAttention_c(dComIfGp_getPlayer(0), 0);
     dComIfGp_getVibration().Init();
     daYkgr_c::init();
 

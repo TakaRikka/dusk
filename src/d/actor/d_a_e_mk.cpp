@@ -2791,14 +2791,14 @@ static int daE_MK_Delete(e_mk_class* i_this) {
 
 static int useHeapInit(fopAc_ac_c* actor) {
     e_mk_class* i_this = (e_mk_class*)actor;
-    i_this->anmP = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_mk", dRes_INDEX_E_MK_BMD_MK_e), NULL, NULL,
+    i_this->anmP = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_mk", dRes_INDEX_E_MK_BMD_MK_e), NULL, NULL,
                                                (J3DAnmTransform*)dComIfG_getObjectRes("E_mk", dRes_INDEX_E_MK_BCK_MK_WAIT_e), 0, 1.0f,
                                                0, -1, &i_this->sound, 0x80000, 0x11020084);
     if (i_this->anmP == NULL || i_this->anmP->getModel() == NULL) {
         return 0;
     }
 
-    i_this->btpP = new mDoExt_btpAnm();
+    i_this->btpP = JKR_NEW mDoExt_btpAnm();
     if (i_this->btpP == NULL) {
         return 0;
     }
@@ -2807,7 +2807,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
         return 0;
     }
 
-    i_this->crownAnmP = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_mk", dRes_INDEX_E_MK_BMD_OK_e), NULL, NULL,
+    i_this->crownAnmP = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_mk", dRes_INDEX_E_MK_BMD_OK_e), NULL, NULL,
                                               (J3DAnmTransform*)dComIfG_getObjectRes("E_mk", dRes_INDEX_E_MK_BCK_OK_DEFAULTPOSE_e), 0, 1.0f,
                                               0, -1, 1, NULL, 0x80000, 0x11000084);
     if (i_this->crownAnmP == NULL || i_this->crownAnmP->getModel() == NULL) {

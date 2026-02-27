@@ -204,7 +204,7 @@ static f32 dummy_m300() {
 }
 
 static void dummy_dt_cm3dgpla() {
-    delete (cM3dGPla*)NULL;
+    JKR_DELETE((cM3dGPla*)NULL);
 }
 
 static void* s_npc_sub(void* param_0, void* param_1) {
@@ -2608,7 +2608,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         resId = 38;
     }
 
-    a_this->mpMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Henna", resId), NULL,
+    a_this->mpMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Henna", resId), NULL,
                                         NULL, NULL, 0, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11020284);
     if (a_this->mpMorf == NULL || a_this->mpMorf->getModel() == NULL) {
         return 0;
@@ -2622,7 +2622,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     }
 
     for (s32 i = 0; i < 3; i++) {
-        a_this->mpBtkAnms[i] = new mDoExt_btkAnm();
+        a_this->mpBtkAnms[i] = JKR_NEW mDoExt_btkAnm();
         if (a_this->mpBtkAnms[i] == NULL) {
             return 0;
         }
@@ -2634,7 +2634,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     }
 
     for (s32 i = 0; i < 8; i++) {
-        a_this->mpBtpAnms[i] = new mDoExt_btpAnm();
+        a_this->mpBtpAnms[i] = JKR_NEW mDoExt_btpAnm();
         if (a_this->mpBtpAnms[i] == NULL) {
             return 0;
         }
@@ -2648,7 +2648,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     }
 
     for (s32 i = 0; i < 8; i++) {
-        a_this->mpBckAnms[i] = new mDoExt_bckAnm();
+        a_this->mpBckAnms[i] = JKR_NEW mDoExt_bckAnm();
         if (a_this->mpBckAnms[i] == 0) {
             return 0;
         }

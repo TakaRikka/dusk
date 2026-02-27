@@ -71,7 +71,7 @@ s32 dScnName_c::create() {
         field_0x1d0 = (JKRExpHeap*)mDoExt_setCurrentHeap(mHeap);
 
         dRes_info_c* res = dComIfG_getObjectResInfo("fileSel");
-        dFs_c = new dFile_select_c(res->getArchive());
+        dFs_c = JKR_NEW dFile_select_c(res->getArchive());
 
         #if VERSION == VERSION_GCN_PAL
         for (int i = 0; i < 5; i++);
@@ -84,7 +84,7 @@ s32 dScnName_c::create() {
             dComIfGs_setNoFile(0);
         }
 
-        mBrightCheck = new dBrightCheck_c(res->getArchive());
+        mBrightCheck = JKR_NEW dBrightCheck_c(res->getArchive());
 
         field_0x420 = 0;
         g_snHIO.field_0x4 = -1;
@@ -191,8 +191,8 @@ s32 dScnName_c::draw() {
 }
 
 dScnName_c::~dScnName_c() {
-    delete dFs_c;
-    delete mBrightCheck;
+    JKR_DELETE(dFs_c);
+    JKR_DELETE(mBrightCheck);
     dComIfG_deleteObjectResMain("fileSel");
     mHeap->destroy();
 
@@ -318,7 +318,7 @@ static int dScnName_Delete(dScnName_c* i_this) {
 }
 
 static int dScnName_Create(scene_class* i_this) {
-    new (i_this) dScnName_c();
+    JKR_NEW_ARGS (i_this) dScnName_c();
     return static_cast<dScnName_c*>(i_this)->create();
 }
 

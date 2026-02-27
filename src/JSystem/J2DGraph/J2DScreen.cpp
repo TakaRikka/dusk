@@ -27,19 +27,19 @@ J2DScreen::~J2DScreen() {
 }
 
 void J2DScreen::clean() {
-    delete[] mMaterials;
+    JKR_DELETE_ARRAY(mMaterials);
     mMaterialNum = 0;
     mMaterials = NULL;
 
-    delete[] mTexRes;
+    JKR_DELETE_ARRAY(mTexRes);
     mTexRes = NULL;
 
-    delete[] mFontRes;
+    JKR_DELETE_ARRAY(mFontRes);
     mFontRes = NULL;
 
     if (mNameTable != NULL) {
-        delete[] mNameTable->getResNameTable();
-        delete mNameTable;
+        JKR_DELETE_ARRAY(mNameTable->getResNameTable());
+        JKR_DELETE(mNameTable);
         mNameTable = NULL;
     }
 }
@@ -176,40 +176,40 @@ J2DPane* J2DScreen::createPane(J2DScrnBlockHeader const& header, JSURandomInputS
 
     switch (header.mTag) {
     case 'PAN1':
-        newPane = new J2DPane(p_basePane, p_stream, 0);
+        newPane = JKR_NEW J2DPane(p_basePane, p_stream, 0);
         break;
     case 'WIN1':
-        newPane = new J2DWindow(p_basePane, p_stream, p_archive);
+        newPane = JKR_NEW J2DWindow(p_basePane, p_stream, p_archive);
         break;
     case 'PIC1':
-        newPane = new J2DPicture(p_basePane, p_stream, p_archive);
+        newPane = JKR_NEW J2DPicture(p_basePane, p_stream, p_archive);
         break;
     case 'TBX1':
-        newPane = new J2DTextBox(p_basePane, p_stream, p_archive);
+        newPane = JKR_NEW J2DTextBox(p_basePane, p_stream, p_archive);
         break;
     case 'PAN2':
-        newPane = new J2DPane(p_basePane, p_stream, 1);
+        newPane = JKR_NEW J2DPane(p_basePane, p_stream, 1);
         break;
     case 'WIN2':
         if (param_3 & 0x1F0000) {
-            newPane = new J2DWindowEx(p_basePane, p_stream, param_3, mMaterials);
+            newPane = JKR_NEW J2DWindowEx(p_basePane, p_stream, param_3, mMaterials);
             break;
         }
-        newPane = new J2DWindow(p_basePane, p_stream, mMaterials);
+        newPane = JKR_NEW J2DWindow(p_basePane, p_stream, mMaterials);
         break;
     case 'PIC2':
         if (param_3 & 0x1F0000) {
-            newPane = new J2DPictureEx(p_basePane, p_stream, param_3, mMaterials);
+            newPane = JKR_NEW J2DPictureEx(p_basePane, p_stream, param_3, mMaterials);
             break;
         }
-        newPane = new J2DPicture(p_basePane, p_stream, mMaterials);
+        newPane = JKR_NEW J2DPicture(p_basePane, p_stream, mMaterials);
         break;
     case 'TBX2':
         if (param_3 & 0x1F0000) {
-            newPane = new J2DTextBoxEx(p_basePane, p_stream, param_3, mMaterials);
+            newPane = JKR_NEW J2DTextBoxEx(p_basePane, p_stream, param_3, mMaterials);
             break;
         }
-        newPane = new J2DTextBox(p_basePane, p_stream, param_3, mMaterials);
+        newPane = JKR_NEW J2DTextBox(p_basePane, p_stream, param_3, mMaterials);
         break;
     default:
         JUT_WARN(446, "%s", "unknown pane");
@@ -217,7 +217,7 @@ J2DPane* J2DScreen::createPane(J2DScrnBlockHeader const& header, JSURandomInputS
         s32 size = header.mSize;
         s32 start = size + position;
 
-        newPane = new J2DPane(p_basePane, p_stream, 0);
+        newPane = JKR_NEW J2DPane(p_basePane, p_stream, 0);
         p_stream->seek(start, JSUStreamSeekFrom_SET);
         break;
     }
@@ -321,9 +321,9 @@ J2DResReference* J2DScreen::getResReference(JSURandomInputStream* p_stream, u32 
 
     char* buffer;
     if (param_1 & 0x1F0000) {
-        buffer = new char[size1];
+        buffer = JKR_NEW char[size1];
     } else {
-        buffer = new (-4) char[size1];
+        buffer = JKR_NEW_ARGS (-4) char[size1];
     }
 
     if (buffer != NULL) {
@@ -343,12 +343,12 @@ bool J2DScreen::createMaterial(JSURandomInputStream* p_stream, u32 param_1, JKRA
     p_stream->skip(2);
 
     if (param_1 & 0x1F0000) {
-        mMaterials = new J2DMaterial[mMaterialNum];
+        mMaterials = JKR_NEW J2DMaterial[mMaterialNum];
     } else {
-        mMaterials = new (-4) J2DMaterial[mMaterialNum];
+        mMaterials = JKR_NEW_ARGS (-4) J2DMaterial[mMaterialNum];
     }
 
-    u8* buffer = new (-4) u8[header.mSize];
+    u8* buffer = JKR_NEW_ARGS (-4) u8[header.mSize];
     if (mMaterials != NULL && buffer != NULL) {
         J2DMaterialBlock* pBlock = (J2DMaterialBlock*)buffer;
         p_stream->seek(position, JSUStreamSeekFrom_SET);
@@ -372,7 +372,7 @@ bool J2DScreen::createMaterial(JSURandomInputStream* p_stream, u32 param_1, JKRA
             }
             size++; 
 
-            u8* nametab = new u8[size];
+            u8* nametab = JKR_NEW u8[size];
             if (nametab == NULL) {
                 goto failure;
             }
@@ -380,20 +380,20 @@ bool J2DScreen::createMaterial(JSURandomInputStream* p_stream, u32 param_1, JKRA
                 nametab[i] = (buffer + offset)[i];
             }
 
-            mNameTable = new JUTNameTab((ResNTAB*)nametab);
+            mNameTable = JKR_NEW JUTNameTab((ResNTAB*)nametab);
             if (mNameTable == NULL) {
-                delete[] nametab;
+                JKR_DELETE_ARRAY(nametab);
                 goto failure;
             }
         }
 
     success:
-        delete[] buffer;
+        JKR_DELETE_ARRAY(buffer);
         return true;
     }
 
 failure:
-    delete[] buffer;
+    JKR_DELETE_ARRAY(buffer);
     clean();
     return false;
 }

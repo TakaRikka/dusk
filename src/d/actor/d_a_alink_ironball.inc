@@ -92,22 +92,22 @@ void daAlink_c::setIronBallModel() {
 
     mHeldItemModel = initModelEnv(loadAramBmd(dRes_ID_ALANM_BMD_AL_IB_e, 0x2800), 0);
     mpItemModelData = loadAramBmd(dRes_ID_ALANM_BMD_AL_HS_KUSARI_e, 0x1000);
-    mpHookChain = new hsChainShape_c();
+    mpHookChain = JKR_NEW hsChainShape_c();
 
-    mIronBallChainPos = new cXyz[102];
-    mIronBallChainAngle = new csXyz[102];
-    field_0x3848 = new cXyz[102];
+    mIronBallChainPos = JKR_NEW cXyz[102];
+    mIronBallChainAngle = JKR_NEW csXyz[102];
+    field_0x3848 = JKR_NEW cXyz[102];
 
-    field_0x0774 = new dBgS_AcchCir();
-    field_0x0778 = new dBgS_ObjAcch();
-    mpHookSound = new Z2SoundObjSimple();
+    field_0x0774 = JKR_NEW dBgS_AcchCir();
+    field_0x0778 = JKR_NEW dBgS_ObjAcch();
+    mpHookSound = JKR_NEW Z2SoundObjSimple();
     
-    mpHookshotLinChk = new dBgS_ObjLinChk();
+    mpHookshotLinChk = JKR_NEW dBgS_ObjLinChk();
     mpHookshotLinChk->OffFullGrp();
     mpHookshotLinChk->OnWaterGrp();
 
-    field_0x780 = new dBgS_ObjLinChk();
-    field_0x2f1c = new dPaPo_c();
+    field_0x780 = JKR_NEW dBgS_ObjLinChk();
+    field_0x2f1c = JKR_NEW dPaPo_c();
     field_0x2f1c->init(field_0x0778, 32.0f, 64.0f);
 
     mDoExt_setCurrentHeap(prev_heap);

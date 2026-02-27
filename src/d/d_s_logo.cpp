@@ -58,12 +58,12 @@ static execFunc l_execFunc[16] = {
 dLog_HIO_c::dLog_HIO_c() {}
 
 void dScnLogo_c::preLoad_dyl_create() {
-    m_preLoad_dylPhase = new request_of_phase_process_class[14];
+    m_preLoad_dylPhase = JKR_NEW request_of_phase_process_class[14];
     memset(m_preLoad_dylPhase, 0, sizeof(request_of_phase_process_class) * 14);
 }
 
 void dScnLogo_c::preLoad_dyl_remove() {
-    delete[] m_preLoad_dylPhase;
+    JKR_DELETE_ARRAY(m_preLoad_dylPhase);
 }
 
 static s16 const l_preLoad_dylKeyTbl[14] = {
@@ -428,14 +428,14 @@ dScnLogo_c::~dScnLogo_c() {
         mDoRst_reset(0, 0x80000000, 0);
     }
 
-    delete mNintendoLogo;
-    delete mWarning;
-    delete mWarningStart;
-    delete mDolbyLogo;
-    delete mProgressiveChoice;
-    delete mProgressiveYes;
-    delete mProgressiveNo;
-    delete mProgressiveSel;
+    JKR_DELETE(mNintendoLogo);
+    JKR_DELETE(mWarning);
+    JKR_DELETE(mWarningStart);
+    JKR_DELETE(mDolbyLogo);
+    JKR_DELETE(mProgressiveChoice);
+    JKR_DELETE(mProgressiveYes);
+    JKR_DELETE(mProgressiveNo);
+    JKR_DELETE(mProgressiveSel);
 
     #if VERSION == VERSION_GCN_PAL
     mpPalLogoResCommand->getArchive()->removeResourceAll();
@@ -653,7 +653,7 @@ int dScnLogo_c::create() {
 
 void dScnLogo_c::logoInitGC() {
     ResTIMG* nintendoImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 4);
-    mNintendoLogo = new dDlst_2D_c(nintendoImg, 117, 154, 376, 104, 255);
+    mNintendoLogo = JKR_NEW dDlst_2D_c(nintendoImg, 117, 154, 376, 104, 255);
 #if VERSION == VERSION_GCN_JPN
     mNintendoLogo->getPicture()->setWhite(JUtility::TColor(0, 70, 255, 255));
 #else
@@ -661,7 +661,7 @@ void dScnLogo_c::logoInitGC() {
 #endif
 
     ResTIMG* dolbyImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 3);
-    mDolbyLogo = new dDlst_2D_c(dolbyImg, 189, 150, 232, 112, 255);
+    mDolbyLogo = JKR_NEW dDlst_2D_c(dolbyImg, 189, 150, 232, 112, 255);
 
 #if VERSION == VERSION_GCN_PAL
     u8 language = getPalLanguage();
@@ -726,46 +726,46 @@ void dScnLogo_c::logoInitGC() {
     };
 
     ResTIMG* warningImg = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', warning[language]);
-    mWarning = new dDlst_2D_c(warningImg, 0, 0, FB_WIDTH, FB_HEIGHT, 255);
+    mWarning = JKR_NEW dDlst_2D_c(warningImg, 0, 0, FB_WIDTH, FB_HEIGHT, 255);
 
     ResTIMG* warnStartImg = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', warningPs[language]);
-    mWarningStart = new dDlst_2D_c(warnStartImg, 0, 359, FB_WIDTH, 48, 255);
+    mWarningStart = JKR_NEW dDlst_2D_c(warnStartImg, 0, 359, FB_WIDTH, 48, 255);
 
     ResTIMG* progChoiceImg = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', choice[language]);
-    mProgressiveChoice = new dDlst_2D_c(progChoiceImg, 113, 143, 416, 210, 255);
+    mProgressiveChoice = JKR_NEW dDlst_2D_c(progChoiceImg, 113, 143, 416, 210, 255);
 
     ResTIMG* progYesImg = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', yes[language]);
-    mProgressiveYes = new dDlst_2D_c(progYesImg, 121, 352, 200, 72, 255);
+    mProgressiveYes = JKR_NEW dDlst_2D_c(progYesImg, 121, 352, 200, 72, 255);
     mProgressiveYes->getPicture()->setWhite(JUtility::TColor(160, 160, 160, 255));
 
     ResTIMG* progNoImg = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', no[language]);
-    mProgressiveNo = new dDlst_2D_c(progNoImg, 320, 352, 200, 72, 255);
+    mProgressiveNo = JKR_NEW dDlst_2D_c(progNoImg, 320, 352, 200, 72, 255);
     mProgressiveNo->getPicture()->setWhite(JUtility::TColor(160, 160, 160, 255));
 
     mProgressivePro = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', prog[language]);
     mProgressiveInter = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', intr[language]);
-    mProgressiveSel = new dDlst_2D_c(mProgressivePro, 153, 309, 336, 88, 255);
+    mProgressiveSel = JKR_NEW dDlst_2D_c(mProgressivePro, 153, 309, 336, 88, 255);
 #else
     ResTIMG* warningImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 10);
-    mWarning = new dDlst_2D_c(warningImg, 0, 0, FB_WIDTH, FB_HEIGHT, 255);
+    mWarning = JKR_NEW dDlst_2D_c(warningImg, 0, 0, FB_WIDTH, FB_HEIGHT, 255);
 
     ResTIMG* warnStartImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 11);
-    mWarningStart = new dDlst_2D_c(warnStartImg, 0, 359, FB_WIDTH, 48, 255);
+    mWarningStart = JKR_NEW dDlst_2D_c(warnStartImg, 0, 359, FB_WIDTH, 48, 255);
 
     ResTIMG* progChoiceImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 5);
-    mProgressiveChoice = new dDlst_2D_c(progChoiceImg, 113, 281, 416, 72, 255);
+    mProgressiveChoice = JKR_NEW dDlst_2D_c(progChoiceImg, 113, 281, 416, 72, 255);
 
     ResTIMG* progYesImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 9);
-    mProgressiveYes = new dDlst_2D_c(progYesImg, 211, 372, 80, 32, 255);
+    mProgressiveYes = JKR_NEW dDlst_2D_c(progYesImg, 211, 372, 80, 32, 255);
     mProgressiveYes->getPicture()->setWhite(JUtility::TColor(160, 160, 160, 255));
 
     ResTIMG* progNoImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 7);
-    mProgressiveNo = new dDlst_2D_c(progNoImg, 350, 372, 80, 32, 255);
+    mProgressiveNo = JKR_NEW dDlst_2D_c(progNoImg, 350, 372, 80, 32, 255);
     mProgressiveNo->getPicture()->setWhite(JUtility::TColor(160, 160, 160, 255));
 
     mProgressivePro = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 8);
     mProgressiveInter = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 6);
-    mProgressiveSel = new dDlst_2D_c(mProgressivePro, 153, 309, 336, 88, 255);
+    mProgressiveSel = JKR_NEW dDlst_2D_c(mProgressivePro, 153, 309, 336, 88, 255);
 #endif
 }
 
@@ -872,7 +872,7 @@ void dScnLogo_c::dvdDataLoad() {
 
 static int dScnLogo_Create(scene_class* i_this) {
     printf("[DIAG] dScnLogo_Create: entry i_this=%p\n", i_this); fflush(stdout);
-    return (new (i_this) dScnLogo_c())->create();
+    return (JKR_NEW_ARGS (i_this) dScnLogo_c())->create();
 }
 
 static int dScnLogo_Execute(dScnLogo_c* i_this) {

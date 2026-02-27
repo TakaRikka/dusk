@@ -160,7 +160,7 @@ bool daObjSwpush2::Act_c::create_heap() {
     {
         J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(getArcName(), getNmlBrkName());
         JUT_ASSERT(452, pbrk != NULL);
-        mpNmlBrk = new mDoExt_brkAnm();
+        mpNmlBrk = JKR_NEW mDoExt_brkAnm();
         if (mpNmlBrk == NULL || !mpNmlBrk->init((J3DModelData*)model_data, pbrk, 1, 2, 1.0f, 0, -1)) {
             return 0;
         }
@@ -172,7 +172,7 @@ bool daObjSwpush2::Act_c::create_heap() {
         J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(getArcName(), getNmlBtkName());
         JUT_ASSERT(465, pbtk != NULL);
 
-        mpNmlBtk = new mDoExt_btkAnm();
+        mpNmlBtk = JKR_NEW mDoExt_btkAnm();
         if (mpNmlBtk == NULL || !mpNmlBtk->init((J3DModelData*)model_data, pbtk, 1, 2, 1.0f, 0, -1)) {
             return 0;
         }
@@ -183,7 +183,7 @@ bool daObjSwpush2::Act_c::create_heap() {
     {
         J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(getArcName(), getOnBtkName());
         JUT_ASSERT(478, pbtk != NULL);
-        mpOnBtk = new mDoExt_btkAnm();
+        mpOnBtk = JKR_NEW mDoExt_btkAnm();
         if (mpOnBtk == NULL || !mpOnBtk->init((J3DModelData*)model_data, pbtk, 1, 0, 1.0f, 0, -1)) {
             return 0;
         }
@@ -194,7 +194,7 @@ bool daObjSwpush2::Act_c::create_heap() {
     {
         J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(getArcName(), getRunBtkName());
         JUT_ASSERT(491, pbtk != NULL);
-        mpRunBtk = new mDoExt_btkAnm();
+        mpRunBtk = JKR_NEW mDoExt_btkAnm();
         if (mpRunBtk == NULL || !mpRunBtk->init((J3DModelData*)model_data, pbtk, 1, 0, 1.0f, 0, -1)) {
             return 0;
         }
@@ -205,7 +205,7 @@ bool daObjSwpush2::Act_c::create_heap() {
     {
         J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(getArcName(), getRunBrkName());
         JUT_ASSERT(504, pbrk != NULL);
-        mpRunBrk = new mDoExt_brkAnm();
+        mpRunBrk = JKR_NEW mDoExt_brkAnm();
         if (mpRunBrk == NULL || !mpRunBrk->init((J3DModelData*)model_data, pbrk, 1, 0, 1.0f, 0, -1)) {
             return 0;
         }
@@ -216,7 +216,7 @@ bool daObjSwpush2::Act_c::create_heap() {
     {
         J3DAnmColor* pbpk = (J3DAnmColor*)dComIfG_getObjectRes(getArcName(), getRunBpkName());
         JUT_ASSERT(517, pbpk != NULL);
-        mpRunBpk = new mDoExt_bpkAnm();
+        mpRunBpk = JKR_NEW mDoExt_bpkAnm();
         if (mpRunBpk == NULL || !mpRunBpk->init((J3DModelData*)model_data, pbpk, 1, 0, 1.0f, 0, -1)) {
             return 0;
         }

@@ -394,7 +394,7 @@ static int phase_2(room_of_scene_class* i_this) {
     #if DEBUG
     void* mpat = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getMapPath();
     if (mpat != NULL) {
-        dBgp_c* bgp = new dBgp_c();
+        dBgp_c* bgp = JKR_NEW dBgp_c();
         JUT_ASSERT(786, bgp != NULL);
         
         bgp->create(roomNo, mpat);

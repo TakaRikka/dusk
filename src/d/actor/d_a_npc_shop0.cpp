@@ -75,7 +75,7 @@ int daNpc_Shop0_c::createHeap() {
         return 0;
     }
     
-    mpShopParam = new daNpc_Shop0_Param_c();
+    mpShopParam = JKR_NEW daNpc_Shop0_Param_c();
     if (mpShopParam == NULL) {
         return 0;
     }

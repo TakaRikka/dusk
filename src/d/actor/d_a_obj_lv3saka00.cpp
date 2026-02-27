@@ -45,7 +45,7 @@ static int const l_dzbIdx2[] = {4, 4};
 static char* l_arcName[] = {"Obj_saka", "Obj_saka2"};
 
 int daObjLv3saka_c::CreateHeap() {
-    mpBgW2 = new dBgW();
+    mpBgW2 = JKR_NEW dBgW();
     if (mpBgW2 == NULL ||
         mpBgW2->Set((cBgD_t*)dComIfG_getObjectRes(l_arcName[getType()], l_dzbIdx2[getType()]), 1,
                     &mBgMtx))

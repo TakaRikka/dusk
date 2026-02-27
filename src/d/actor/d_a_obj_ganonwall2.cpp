@@ -65,7 +65,7 @@ int daObjGWall2_c::CreateHeap() {
         return 0;
     }
     J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 8);
-    mpBtkAnm = new mDoExt_btkAnm();
+    mpBtkAnm = JKR_NEW mDoExt_btkAnm();
     if (mpBtkAnm == NULL ||
         mpBtkAnm->init(model_data, btk, 1, 2, 1.0f, 0, -1) == 0)
     {

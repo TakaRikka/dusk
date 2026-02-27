@@ -584,8 +584,8 @@ void J2DAnmTexPattern::searchUpdateMaterialID(J2DScreen* pScreen) {
                 mUpdateMaterialID[entry] = 0xFFFF;
             }
         }
-        delete[] mTIMGPtrArray;
-        mTIMGPtrArray = new J2DAnmTexPatternTIMGPointer[pScreen->mTexRes->mCount];
+        JKR_DELETE_ARRAY(mTIMGPtrArray);
+        mTIMGPtrArray = JKR_NEW J2DAnmTexPatternTIMGPointer[pScreen->mTexRes->mCount];
         if (mTIMGPtrArray != NULL) {
             JUTResReference resRef;
             for (u16 i = 0; i < pScreen->mTexRes->mCount; i++) {
@@ -600,7 +600,7 @@ void J2DAnmTexPattern::searchUpdateMaterialID(J2DScreen* pScreen) {
                 }
                 mTIMGPtrArray[i].mRes = var2;
                 if (var2 != NULL && var2->indexTexture) {
-                    mTIMGPtrArray[i].mPalette = new JUTPalette(
+                    mTIMGPtrArray[i].mPalette = JKR_NEW JUTPalette(
                         GX_TLUT0,
                         GXTlutFmt(var2->colorFormat),
                         JUTTransparency(var2->alphaEnabled),

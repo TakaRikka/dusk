@@ -14,7 +14,7 @@
 
 #define fopAcM_ct(ptr, ClassName)                                           \
     if (!fopAcM_CheckCondition(ptr, fopAcCnd_INIT_e)) {                     \
-        new (ptr) ClassName();                                              \
+        JKR_NEW_ARGS (ptr) ClassName();                                     \
         fopAcM_OnCondition(ptr, fopAcCnd_INIT_e);                           \
     }
 

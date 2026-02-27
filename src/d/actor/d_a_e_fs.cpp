@@ -707,7 +707,7 @@ static int daE_Fs_Delete(e_fs_class* i_this) {
 
 static int useHeapIe_fst(fopAc_ac_c* i_this) {
     e_fs_class* _this = (e_fs_class*)i_this;
-    _this->mpMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_FS", 0xc), NULL,
+    _this->mpMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_FS", 0xc), NULL,
                                          NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_FS", 9),
                                          J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1,
                                          &_this->mCreatureSound, 0x80000, 0x11000084);

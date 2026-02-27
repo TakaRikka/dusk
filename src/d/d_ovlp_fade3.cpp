@@ -224,7 +224,7 @@ static int dOvlpFd3_Delete(dOvlpFd3_c* i_this) {
 }
 
 static int dOvlpFd3_Create(void* i_this) {
-    new (i_this) dOvlpFd3_c();
+    JKR_NEW_ARGS (i_this) dOvlpFd3_c();
     return cPhs_COMPLEATE_e;
 }
 

@@ -122,11 +122,11 @@ void dShopSystem_c::initShopSystem() {
     dShopSystem_camera_count = 0;
 
     if (mpStick == NULL) {
-        mpStick = new STControl();
+        mpStick = JKR_NEW STControl();
     }
 
     if (mpDrawCursor == NULL) {
-        mpDrawCursor = new dSelect_cursor_c(1, 1.0f, NULL);
+        mpDrawCursor = JKR_NEW dSelect_cursor_c(1, 1.0f, NULL);
         mpDrawCursor->setParam(1.0f, 1.0f, 0.1f, 0.7f, 0.7f);
     }
 
@@ -1387,12 +1387,12 @@ void dShopSystem_c::setSoldOutItemHide() {
 
 void dShopSystem_c::deleteObject() {
     if (mpStick != NULL) {
-        delete mpStick;
+        JKR_DELETE(mpStick);
         mpStick = NULL;
     }
 
     if (mpDrawCursor != NULL) {
-        delete mpDrawCursor;
+        JKR_DELETE(mpDrawCursor);
         mpDrawCursor = NULL;
     }
 }

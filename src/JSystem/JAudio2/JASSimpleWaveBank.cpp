@@ -9,12 +9,12 @@ JASSimpleWaveBank::JASSimpleWaveBank() {
 }
 
 JASSimpleWaveBank::~JASSimpleWaveBank() {
-    delete[] mWaveTable;
+    JKR_DELETE_ARRAY(mWaveTable);
 }
 
 void JASSimpleWaveBank::setWaveTableSize(u32 size, JKRHeap* heap) {
-    delete[] mWaveTable;
-    mWaveTable = new (heap, 0) TWaveHandle[size];
+    JKR_DELETE_ARRAY(mWaveTable);
+    mWaveTable = JKR_NEW_ARGS (heap, 0) TWaveHandle[size];
     JUT_ASSERT(29, mWaveTable != NULL);
     mWaveTableSize = size;
 }

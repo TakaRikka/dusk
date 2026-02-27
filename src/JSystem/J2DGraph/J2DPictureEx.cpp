@@ -61,7 +61,7 @@ J2DPictureEx::J2DPictureEx(J2DPane* param_0, JSURandomInputStream* param_1, u32 
 
 J2DPictureEx::~J2DPictureEx() {
     if (field_0x190) {
-        delete mMaterial;
+        JKR_DELETE(mMaterial);
     }
 }
 

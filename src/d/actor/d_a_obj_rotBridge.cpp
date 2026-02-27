@@ -78,7 +78,7 @@ int daRotBridge_c::CreateHeap() {
 
     u8 temp_r25 = (fopAcM_GetParam(this) & 0xF000) >> 0xC;
     if (mType == 1 && temp_r25 != 15) {
-        mpBgW2 = new dBgW();
+        mpBgW2 = JKR_NEW dBgW();
         if (mpBgW2 == NULL || mpBgW2->Set((cBgD_t*)dComIfG_getObjectRes(l_resNameIdx[mType], 0xB), 1, &mMtx)) {
             mpBgW2 = NULL;
             return 0;

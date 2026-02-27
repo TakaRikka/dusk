@@ -861,12 +861,12 @@ int e_ai_class::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_AI", 0xD);
     JUT_ASSERT(1703, modelData != NULL);
 
-    m_modelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_AI", 9), 2, 1.0f, 0, -1, &m_sound, 0, 0x11000084);
+    m_modelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_AI", 9), 2, 1.0f, 0, -1, &m_sound, 0, 0x11000084);
     if (m_modelMorf == NULL || m_modelMorf->getModel() == NULL) {
         return 0;
     }
 
-    m_brk = new mDoExt_brkAnm();
+    m_brk = JKR_NEW mDoExt_brkAnm();
     if (m_brk == NULL) {
         return 0;
     }

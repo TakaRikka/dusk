@@ -6,7 +6,7 @@
 void fmpTresTypeGroupDataList_c::addTypeGroupData(u8 i_typeGroupNo,
                                                   dTres_c::data_s const* i_tresData) {
     fmpTresTypeGroupData_c* next = mpNextData;
-    fmpTresTypeGroupData_c* fmpTresTypeGroupData_p = new fmpTresTypeGroupData_c();
+    fmpTresTypeGroupData_c* fmpTresTypeGroupData_p = JKR_NEW fmpTresTypeGroupData_c();
 
     if (mpTypeGroupDataHead == NULL) {
         mpTypeGroupDataHead = fmpTresTypeGroupData_p;
@@ -35,7 +35,7 @@ void dMenu_Fmap_room_data_c::buildTresTypeGroup(int i_stageNo, int i_roomIndex, 
         dTres_c::data_s* data_p = tresure_p->field_0x4->getDataPointer();
 
         if (mp_fmpTresTypeGroupDataListAll == NULL) {
-            mp_fmpTresTypeGroupDataListAll = new fmpTresTypeGroupDataListAll_c();
+            mp_fmpTresTypeGroupDataListAll = JKR_NEW fmpTresTypeGroupDataListAll_c();
         }
 
         for (int i = 0; i < num; i++) {

@@ -17,25 +17,25 @@ JPAEmitterManager::JPAEmitterManager(u32 i_ptclNum, u32 i_emtrNum, JKRHeap* pHea
 
     JUT_ASSERT(40, emtrNum && ptclNum && gidMax && ridMax);
 
-    JPABaseEmitter* p_emtr_link = new (pHeap, 0) JPABaseEmitter[emtrNum];
+    JPABaseEmitter* p_emtr_link = JKR_NEW_ARGS (pHeap, 0) JPABaseEmitter[emtrNum];
     JUT_ASSERT(44, p_emtr_link);
     for (u32 i = 0; i < emtrNum; i++)
         mFreeEmtrList.prepend(&p_emtr_link[i].mLink);
 
-    JPANode<JPABaseParticle>* p_ptcl_node = new (pHeap, 0) JPANode<JPABaseParticle>[ptclNum];
+    JPANode<JPABaseParticle>* p_ptcl_node = JKR_NEW_ARGS (pHeap, 0) JPANode<JPABaseParticle>[ptclNum];
     JUT_ASSERT(51, p_ptcl_node);
     for (u32 i = 0; i < ptclNum; i++)
         mPtclPool.push_back(&p_ptcl_node[i]);
 
-    pEmtrUseList = new (pHeap, 0) JSUList<JPABaseEmitter>[gidMax];
+    pEmtrUseList = JKR_NEW_ARGS (pHeap, 0) JSUList<JPABaseEmitter>[gidMax];
     JUT_ASSERT(58, pEmtrUseList);
-    pResMgrAry = new (pHeap, 0) JPAResourceManager*[ridMax];
+    pResMgrAry = JKR_NEW_ARGS (pHeap, 0) JPAResourceManager*[ridMax];
     JUT_ASSERT(62, pResMgrAry)
     for (int i = 0; i < ridMax; i++) {
         pResMgrAry[i] = NULL;
     }
 
-    pWd = new (pHeap, 0) JPAEmitterWorkData();
+    pWd = JKR_NEW_ARGS (pHeap, 0) JPAEmitterWorkData();
     JUT_ASSERT(67, pWd);
 }
 

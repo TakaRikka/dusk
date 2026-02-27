@@ -323,7 +323,7 @@ namespace nw4hbm {
                 std::memset(mAnimLinkAry, 0, sizeof(*mAnimLinkAry) * pRes->animContNum);
 
                 for (u16 i = 0; i < pRes->animContNum; i++) {
-                    new (&mAnimLinkAry[i]) AnimationLink();
+                    JKR_NEW_ARGS (&mAnimLinkAry[i]) AnimationLink();
                 }
             }
         }

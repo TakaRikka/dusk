@@ -852,19 +852,19 @@ int dComIfG_play_c::getLayerNo(int) {
 }
 
 void dComIfG_play_c::createParticle() {
-    mParticle = new dPa_control_c();
+    mParticle = JKR_NEW dPa_control_c();
 }
 
 dSmplMdl_draw_c* dComIfG_play_c::createSimpleModel() {
     if (mSimpleModel == NULL) {
-        mSimpleModel = new dSmplMdl_draw_c();
+        mSimpleModel = JKR_NEW dSmplMdl_draw_c();
     }
     return mSimpleModel;
 }
 
 void dComIfG_play_c::deleteSimpleModel() {
     if (mSimpleModel != NULL) {
-        delete mSimpleModel;
+        JKR_DELETE(mSimpleModel);
         mSimpleModel = NULL;
     }
 }
@@ -1115,7 +1115,7 @@ void dComIfG_inf_c::baseCsr_c::create() {
 
     field_0x8.getScreen()->setUserInfo((uintptr_t)m_navi);
 
-    m_navi = new navi_c();
+    m_navi = JKR_NEW navi_c();
     JUT_ASSERT(1517, m_navi != NULL);
     m_navi->create();
 }
@@ -1152,7 +1152,7 @@ void dComIfG_inf_c::ct() {
 #if PLATFORM_WII || VERSION == VERSION_SHIELD_DEBUG
 void dComIfG_inf_c::createBaseCsr() {
     JUT_ASSERT(1622, m_baseCsr == NULL);
-    m_baseCsr = new baseCsr_c(1);
+    m_baseCsr = JKR_NEW baseCsr_c(1);
     JUT_ASSERT(1624, m_baseCsr != NULL);
     m_baseCsr->create();
     mDoGph_gInf_c::entryBaseCsr(m_baseCsr);

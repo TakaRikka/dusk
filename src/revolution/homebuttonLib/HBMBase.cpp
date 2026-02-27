@@ -141,7 +141,7 @@ namespace homebutton {
         void* pvVar4 =
             MEMAllocFromAllocator(&sSoundAllocator, sizeof(nw4hbm::snd::NandSoundArchive));
         if (pvVar4 != NULL) {
-            mpNandSoundArchive = new (pvVar4) nw4hbm::snd::NandSoundArchive();
+            mpNandSoundArchive = JKR_NEW_ARGS (pvVar4) nw4hbm::snd::NandSoundArchive();
         }
 
         NW4HBM_ASSERT(LN(3941, 3884), mpNandSoundArchive);
@@ -261,7 +261,7 @@ namespace homebutton {
 
     void HomeButton::createInstance(const HBMDataInfo* pHBInfo) {
         if (void* pMem = HBMAllocMem(sizeof(*spHomeButtonObj))) {
-            spHomeButtonObj = new (pMem) HomeButton(pHBInfo);
+            spHomeButtonObj = JKR_NEW_ARGS (pMem) HomeButton(pHBInfo);
         }
     }
 
@@ -509,7 +509,7 @@ namespace homebutton {
         set_text();
 
         if (void* pMem = HBMAllocMem(sizeof(*mpResAccessor))) {
-            mpResAccessor = new (pMem) nw4hbm::lyt::ArcResourceAccessor();
+            mpResAccessor = JKR_NEW_ARGS (pMem) nw4hbm::lyt::ArcResourceAccessor();
         }
 
         NW4HBM_ASSERT(623, mpResAccessor);
@@ -518,7 +518,7 @@ namespace homebutton {
         if (!mpHBInfo->cursor) {
             for (i = 0; i < (int)ARRAY_SIZE(mpCursorLayout); i++) {
                 if (void* pMem = HBMAllocMem(sizeof(*mpCursorLayout)[i])) {
-                    mpCursorLayout[i] = new (pMem) nw4hbm::lyt::Layout();
+                    mpCursorLayout[i] = JKR_NEW_ARGS (pMem) nw4hbm::lyt::Layout();
                 }
 
                 NW4HBM_ASSERT(635, mpCursorLayout[i]);
@@ -530,7 +530,7 @@ namespace homebutton {
         }
 
         if (void* pMem = HBMAllocMem(sizeof(*mpLayout))) {
-            mpLayout = new (pMem) nw4hbm::lyt::Layout();
+            mpLayout = JKR_NEW_ARGS (pMem) nw4hbm::lyt::Layout();
         }
 
         {
@@ -546,7 +546,7 @@ namespace homebutton {
             NW4HBM_ASSERT_CHECK_NULL(665, lpaRes);
 
             if (void* pMem = HBMAllocMem(sizeof(*mpAnmController)[i])) {
-                mpAnmController[i] = new (pMem) GroupAnmController();
+                mpAnmController[i] = JKR_NEW_ARGS (pMem) GroupAnmController();
             }
 
             NW4HBM_ASSERT(671, mpAnmController[i]);
@@ -578,7 +578,7 @@ namespace homebutton {
             NW4HBM_ASSERT_CHECK_NULL(697, lpaRes);
 
             if (void* pMem = HBMAllocMem(sizeof(*mpGroupAnmController)[i])) {
-                mpGroupAnmController[i] = new (pMem) GroupAnmController();
+                mpGroupAnmController[i] = JKR_NEW_ARGS (pMem) GroupAnmController();
             }
 
             NW4HBM_ASSERT(703, mpGroupAnmController[i]);
@@ -611,7 +611,7 @@ namespace homebutton {
             NW4HBM_ASSERT_CHECK_NULL(729, lpaRes);
 
             if (void* pMem = HBMAllocMem(sizeof(*mpPairGroupAnmController)[i])) {
-                mpPairGroupAnmController[i] = new (pMem) GroupAnmController();
+                mpPairGroupAnmController[i] = JKR_NEW_ARGS (pMem) GroupAnmController();
             }
 
             NW4HBM_ASSERT(735, mpPairGroupAnmController[i]);
@@ -636,14 +636,14 @@ namespace homebutton {
         }
 
         if (void* pMem = HBMAllocMem(sizeof(*mpHomeButtonEventHandler))) {
-            mpHomeButtonEventHandler = new (pMem) HomeButtonEventHandler(this);
+            mpHomeButtonEventHandler = JKR_NEW_ARGS (pMem) HomeButtonEventHandler(this);
         }
 
         NW4HBM_ASSERT(758, mpHomeButtonEventHandler);
 
         if (void* pMem = HBMAllocMem(sizeof(*mpPaneManager))) {
             mpPaneManager =
-                new (pMem) gui::PaneManager(mpHomeButtonEventHandler, NULL, spAllocator);
+                JKR_NEW_ARGS (pMem) gui::PaneManager(mpHomeButtonEventHandler, NULL, spAllocator);
         }
 
         NW4HBM_ASSERT(765, mpPaneManager);
@@ -658,12 +658,12 @@ namespace homebutton {
         }
 
         if (void* pMem = HBMAllocMem(sizeof(*mpRemoteSpk))) {
-            mpRemoteSpk = new (pMem) RemoteSpk(mpHBInfo->spkSeBuf);
+            mpRemoteSpk = JKR_NEW_ARGS (pMem) RemoteSpk(mpHBInfo->spkSeBuf);
         }
 
         for (i = 0; i < WPAD_MAX_CONTROLLERS; i++) {
             if (void* pMem = HBMAllocMem(sizeof(*mpController)[i])) {
-                mpController[i] = new (pMem) Controller(i, mpRemoteSpk);
+                mpController[i] = JKR_NEW_ARGS (pMem) Controller(i, mpRemoteSpk);
             }
         }
 
@@ -2832,7 +2832,7 @@ namespace homebutton {
         void* buffer =
             MEMAllocFromAllocator(&sSoundAllocator, sizeof(nw4hbm::snd::SoundArchivePlayer));
         if (buffer != NULL) {
-            mpSoundArchivePlayer = new (buffer) nw4hbm::snd::SoundArchivePlayer();
+            mpSoundArchivePlayer = JKR_NEW_ARGS (buffer) nw4hbm::snd::SoundArchivePlayer();
         }
         NW4HBM_ASSERT(LN(3752, 3695), mpSoundArchivePlayer);
 
@@ -2848,14 +2848,14 @@ namespace homebutton {
 
         buffer = MEMAllocFromAllocator(&sSoundAllocator, sizeof(nw4hbm::snd::SoundHandle));
         if (buffer != NULL) {
-            mpSoundHandle = new (buffer) nw4hbm::snd::SoundHandle();
+            mpSoundHandle = JKR_NEW_ARGS (buffer) nw4hbm::snd::SoundHandle();
         }
         NW4HBM_ASSERT(LN(3777, 3720), mpSoundHandle);
 
         if (bCreateSoundHeap) {
             buffer = MEMAllocFromAllocator(&sSoundAllocator, sizeof(nw4hbm::snd::SoundHeap));
             if (buffer != NULL) {
-                mpSoundHeap = new (buffer) nw4hbm::snd::SoundHeap();
+                mpSoundHeap = JKR_NEW_ARGS (buffer) nw4hbm::snd::SoundHeap();
             }
             NW4HBM_ASSERT(LN(3786, 3729), mpSoundHeap);
 

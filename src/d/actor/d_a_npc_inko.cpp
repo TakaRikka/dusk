@@ -419,7 +419,7 @@ static int daNpc_Inko_Delete(npc_inko_class* i_this) {
 
 static int useHeapInit(fopAc_ac_c* actor) {
     npc_inko_class* i_this = (npc_inko_class*)actor;
-    i_this->anm_p = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Npc_inko", 8), NULL, NULL, NULL, 0, 1.0f, 0, -1, 1, 0, 0x80000, 0x11000084);
+    i_this->anm_p = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Npc_inko", 8), NULL, NULL, NULL, 0, 1.0f, 0, -1, 1, 0, 0x80000, 0x11000084);
     if (i_this->anm_p == NULL || i_this->anm_p->getModel() == NULL) {
         return 0;
     }

@@ -237,7 +237,7 @@ JASGenericMemPool::~JASGenericMemPool() {
     void* chunk = field_0x0;
     while (chunk != NULL) {
         void* next_chunk = *(void**)chunk;
-        delete[] chunk;
+        JKR_DELETE_ARRAY(chunk);
         chunk = next_chunk;
     }
 }
@@ -253,7 +253,7 @@ void JASGenericMemPool::newMemPool(u32 n, int param_1) {
     JUT_ASSERT(734, n >= sizeof(TNextOnFreeList));
     void* runner;
     for (int i = 0; i < param_1; i++) {
-        runner = new (JASDram, 0) u8[n];
+        runner = JKR_NEW_ARGS (JASDram, 0) u8[n];
         JUT_ASSERT(739, runner);
         *(void**)runner = field_0x0;
         field_0x0 = runner;
@@ -295,7 +295,7 @@ void JASKernel::setupRootHeap(JKRSolidHeap* heap, u32 size) {
     JUT_ASSERT(784, heap);
     sSystemHeap = JKRExpHeap::create(size, heap, false);
     JUT_ASSERT(787, sSystemHeap);
-    sCommandHeap = new (heap, 0) JASMemChunkPool<1024, JASThreadingModel::ObjectLevelLockable>();
+    sCommandHeap = JKR_NEW_ARGS (heap, 0) JASMemChunkPool<1024, JASThreadingModel::ObjectLevelLockable>();
     JUT_ASSERT(790, sCommandHeap);
     JASDram = heap;
 }

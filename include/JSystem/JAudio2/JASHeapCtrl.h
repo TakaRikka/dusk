@@ -209,12 +209,12 @@ public:
             return true;
         }
         MemoryChunk* pMVar4 = field_0x18;
-        field_0x18 = new (JASKernel::getSystemHeap(), 0) MemoryChunk(pMVar4);
+        field_0x18 = JKR_NEW_ARGS (JASKernel::getSystemHeap(), 0) MemoryChunk(pMVar4);
         if (field_0x18 != NULL) {
             return true;
         }
         JUT_WARN(428, "%s", "Not enough JASSystemHeap");
-        field_0x18 = new (JKRHeap::getSystemHeap(), 0) MemoryChunk(pMVar4);
+        field_0x18 = JKR_NEW_ARGS (JKRHeap::getSystemHeap(), 0) MemoryChunk(pMVar4);
         if (field_0x18 != NULL) {
             return true;
         }
@@ -246,7 +246,7 @@ public:
                 bool r26 = false;
                 if (chunk != field_0x18 && chunk->isEmpty()) {
                     MemoryChunk* nextChunk = chunk->getNextChunk();
-                    delete chunk;
+                    JKR_DELETE(chunk);
                     prevChunk->setNextChunk(nextChunk);
                 }
                 return;
@@ -283,6 +283,12 @@ namespace JASKernel {
 template <typename T>
 class JASPoolAllocObject {
 public:
+#if TARGET_PC
+    static void* operator new(size_t n, JKRHeapToken) {
+        return operator new(n);
+    }
+#endif
+
     static void* operator new(size_t n) {
 #if PLATFORM_GCN
         JASMemPool<T>& memPool_ = getMemPool_();
@@ -292,6 +298,13 @@ public:
     static void* operator new(size_t n, void* ptr) {
         return ptr;
     }
+
+#if TARGET_PC
+    static void operator delete(void* ptr, size_t n, JKRHeapToken) {
+        operator delete(ptr, n);
+    }
+#endif
+
     static void operator delete(void* ptr, size_t n) {
 #if PLATFORM_GCN
         JASMemPool<T>& memPool_ = getMemPool_();
@@ -362,6 +375,12 @@ public:
 template <typename T>
 class JASPoolAllocObject_MultiThreaded {
 public:
+#if TARGET_PC
+    static void* operator new(size_t n, JKRHeapToken) {
+        return operator new(n);
+    }
+#endif
+
     static void* operator new(size_t n) {
 #if PLATFORM_GCN
         JASMemPool_MultiThreaded<T>& memPool_ = getMemPool();
@@ -371,6 +390,13 @@ public:
     static void* operator new(size_t n, void* ptr) {
         return ptr;
     }
+
+#if TARGET_PC
+    static void operator delete(void* ptr, size_t n, JKRHeapToken) {
+        return operator delete(ptr, n);
+    }
+#endif
+
     static void operator delete(void* ptr, size_t n) {
 #if PLATFORM_GCN
         JASMemPool_MultiThreaded<T>& memPool_ = getMemPool();

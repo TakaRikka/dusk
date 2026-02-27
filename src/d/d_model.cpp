@@ -83,14 +83,14 @@ dMdl_c* dMdl_mng_c::entry(J3DModelData* i_modelData, u16 i_materialId, dKy_tevst
 dMdl_mng_c* dMdl_mng_c::m_myObj;
 
 void dMdl_mng_c::create() {
-    m_myObj = new dMdl_mng_c();
+    m_myObj = JKR_NEW dMdl_mng_c();
 }
 
 dMdl_c::~dMdl_c() {}
 
 void dMdl_mng_c::remove() {
     if (m_myObj != NULL) {
-        delete m_myObj;
+        JKR_DELETE(m_myObj);
         m_myObj = NULL;
     }
 }
