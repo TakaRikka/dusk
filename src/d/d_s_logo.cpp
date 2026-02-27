@@ -246,11 +246,11 @@ void dScnLogo_c::progOutDraw() {
                 mExecCommand = EXEC_WARNING_IN;
             }
 
-            mDoGph_gInf_c::startFadeIn(30);
+            mDoGph_gInf_c::startFadeIn(1);
         } else {
             mExecCommand = EXEC_PROG_SET;
             mTimer = 150;
-            mDoGph_gInf_c::startFadeIn(30);
+            mDoGph_gInf_c::startFadeIn(1);
         }
     }
 }
@@ -261,7 +261,7 @@ void dScnLogo_c::progSetDraw() {
     if (mTimer == 0) {
         mExecCommand = EXEC_PROG_SET2;
         mTimer = 30;
-        mDoGph_gInf_c::startFadeOut(30);
+        mDoGph_gInf_c::startFadeOut(1);
     }
 }
 
@@ -286,14 +286,14 @@ void dScnLogo_c::progChangeDraw() {
 
     if (mTimer == 0) {
         if (mDoRst::getWarningDispFlag() != 0) {
-            mTimer = 90;
+            mTimer = 1;
             mExecCommand = EXEC_NINTENDO_IN;
         } else {
-            mTimer = 120;
+            mTimer = 1;
             mExecCommand = EXEC_WARNING_IN;
         }
 
-        mDoGph_gInf_c::startFadeIn(30);
+        mDoGph_gInf_c::startFadeIn(1);
     }
 }
 
@@ -302,7 +302,7 @@ void dScnLogo_c::warningInDraw() {
 
     if (mTimer == 0) {
         mExecCommand = EXEC_WARNING_DISP;
-        mTimer = 3510;
+        mTimer = 30;
         field_0x20e = 30;
         field_0x210 = field_0x20e;
         field_0x212 = 1;
@@ -332,8 +332,8 @@ void dScnLogo_c::warningDispDraw() {
                             PAD_BUTTON_RIGHT | PAD_BUTTON_DOWN | PAD_BUTTON_UP))
     {
         mExecCommand = EXEC_WARNING_OUT;
-        mTimer = 30;
-        mDoGph_gInf_c::startFadeOut(30);
+        mTimer = 1;
+        mDoGph_gInf_c::startFadeOut(1);
         mDoRst::setWarningDispFlag(1);
     }
 }
@@ -342,9 +342,9 @@ void dScnLogo_c::warningOutDraw() {
     dComIfGd_set2DOpa(mWarning);
 
     if (mTimer == 0) {
-        mTimer = 90;
+        mTimer = 1;
         mExecCommand = EXEC_NINTENDO_IN;
-        mDoGph_gInf_c::startFadeIn(30);
+        mDoGph_gInf_c::startFadeIn(1);
     }
 }
 
@@ -353,8 +353,8 @@ void dScnLogo_c::nintendoInDraw() {
 
     if (mTimer == 0) {
         mExecCommand = EXEC_NINTENDO_OUT;
-        mTimer = 30;
-        mDoGph_gInf_c::startFadeOut(30);
+        mTimer = 1;
+        mDoGph_gInf_c::startFadeOut(1);
     }
 }
 
@@ -363,8 +363,8 @@ void dScnLogo_c::nintendoOutDraw() {
 
     if (mTimer == 0) {
         mExecCommand = EXEC_DOLBY_IN;
-        mTimer = 90;
-        mDoGph_gInf_c::startFadeIn(30);
+        mTimer = 1;
+        mDoGph_gInf_c::startFadeIn(1);
     }
 }
 
@@ -373,8 +373,8 @@ void dScnLogo_c::dolbyInDraw() {
 
     if (mTimer == 0) {
         mExecCommand = EXEC_DOLBY_OUT;
-        mTimer = 30;
-        mDoGph_gInf_c::startFadeOut(30);
+        mTimer = 1;
+        mDoGph_gInf_c::startFadeOut(1);
     }
 }
 
@@ -383,8 +383,8 @@ void dScnLogo_c::dolbyOutDraw() {
 
     if (mTimer == 0) {
         mExecCommand = EXEC_DOLBY_OUT2;
-        mTimer = 30;
-        mDoGph_gInf_c::startFadeIn(30);
+        mTimer = 1;
+        mDoGph_gInf_c::startFadeIn(1);
     }
 }
 
@@ -625,19 +625,19 @@ int dScnLogo_c::create() {
     mDoGph_gInf_c::setTickRate((OS_BUS_CLOCK / 4) / 60);
     mDoGph_gInf_c::waitBlanking(0);
     field_0x20a = 0;
-    mDoGph_gInf_c::startFadeIn(30);
+    mDoGph_gInf_c::startFadeIn(1);
 
     checkProgSelect();
     if (field_0x20a != 0) {
         mExecCommand = EXEC_PROG_IN;
-        mTimer = 30;
+        mTimer = 1;
         field_0x218 = getProgressiveMode();
     } else {
         if (mDoRst::getWarningDispFlag()) {
-            mTimer = 90;
+            mTimer = 1; // 90;
             mExecCommand = EXEC_NINTENDO_IN;
         } else {
-            mTimer = 120;
+            mTimer = 1;
             mExecCommand = EXEC_WARNING_IN;
         }
         mDoRst::setProgSeqFlag(1);
