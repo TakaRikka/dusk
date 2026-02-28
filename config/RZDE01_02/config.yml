@@ -16,6 +16,7 @@ force_active: [
 block_relocations:
 - source: .text:0x8032f348
 - source: .text:0x8032f3c0
+- source: .data:0x8042839c
 
 modules:
 - object: files/RELS.arc:rels/mmem/f_pc_profile_lst.rel
@@ -394,7 +395,7 @@ modules:
   hash: f8e3e0168adda41d4e8be0812800b564b64b7f88
   symbols: config/RZDE01_02/rels/d_a_cstaF/symbols.txt
   splits: config/RZDE01_02/rels/d_a_cstaF/splits.txt
-# map: orig/RZDE01_02/fixed_maps/d_a_cstaf.map
+# map: orig/RZDE01_02/fixed_maps/d_a_cstaF.map
 
 - object: files/RELS.arc:rels/amem/d_a_demo_item.rel
   hash: bcaae24c39723b575f98ad213156e6e2434f4f3b
@@ -406,7 +407,7 @@ modules:
   hash: be6a712badd7ba6601adfa0d9ebb129b380bb83f
   symbols: config/RZDE01_02/rels/d_a_door_bossL1/symbols.txt
   splits: config/RZDE01_02/rels/d_a_door_bossL1/splits.txt
-# map: orig/RZDE01_02/fixed_maps/d_a_door_bossl1.map
+# map: orig/RZDE01_02/fixed_maps/d_a_door_bossL1.map
 
 - object: files/RELS.arc:rels/amem/d_a_e_dn.rel
   hash: f4344908a4c3a0b1743553b9b73f88fce38ac732
@@ -670,7 +671,7 @@ modules:
   hash: f2ca43ea00c1bef0208080bcfa6649c28f5cd8f6
   symbols: config/RZDE01_02/rels/d_a_obj_gpTaru/symbols.txt
   splits: config/RZDE01_02/rels/d_a_obj_gpTaru/splits.txt
-# map: orig/RZDE01_02/fixed_maps/d_a_obj_gptaru.map
+# map: orig/RZDE01_02/fixed_maps/d_a_obj_gpTaru.map
 
 - object: files/RELS.arc:rels/amem/d_a_obj_hhashi.rel
   hash: 9369f82ef6b83224f0b31252960796f9aa17e1cd
@@ -712,7 +713,7 @@ modules:
   hash: 38b770638c42a703532de35a99d5566265f1e276
   symbols: config/RZDE01_02/rels/d_a_obj_lv2Candle/symbols.txt
   splits: config/RZDE01_02/rels/d_a_obj_lv2Candle/splits.txt
-# map: orig/RZDE01_02/fixed_maps/d_a_obj_lv2candle.map
+# map: orig/RZDE01_02/fixed_maps/d_a_obj_lv2Candle.map
 
 - object: files/RELS.arc:rels/amem/d_a_obj_magne_arm.rel
   hash: 2d48ca26e7b67467e76c2f0f82332a08b3ab267c
@@ -754,7 +755,7 @@ modules:
   hash: 963333fa5e3fb1553811e9eb9c01835815f1824a
   symbols: config/RZDE01_02/rels/d_a_obj_sWallShutter/symbols.txt
   splits: config/RZDE01_02/rels/d_a_obj_sWallShutter/splits.txt
-# map: orig/RZDE01_02/fixed_maps/d_a_obj_sWallshutter.map
+# map: orig/RZDE01_02/fixed_maps/d_a_obj_sWallShutter.map
 
 - object: files/RELS.arc:rels/amem/d_a_obj_stick.rel
   hash: 6383ec72da284ca6820abb565f1ffa3a4bbe46b8
@@ -766,7 +767,7 @@ modules:
   hash: 64427e5e1c733f1e779b1af4eed837de01ed55e0
   symbols: config/RZDE01_02/rels/d_a_obj_stoneMark/symbols.txt
   splits: config/RZDE01_02/rels/d_a_obj_stoneMark/splits.txt
-# map: orig/RZDE01_02/fixed_maps/d_a_obj_stonemark.map
+# map: orig/RZDE01_02/fixed_maps/d_a_obj_stoneMark.map
 
 - object: files/RELS.arc:rels/amem/d_a_obj_swpropeller.rel
   hash: 318186e4b4a9a18378a2c6e5b9e9ea1ace335085
@@ -814,7 +815,7 @@ modules:
   hash: f44c7136cd5c36c218c6756a4a369ddd4bb11cfb
   symbols: config/RZDE01_02/rels/d_a_tag_CstaSw/symbols.txt
   splits: config/RZDE01_02/rels/d_a_tag_CstaSw/splits.txt
-# map: orig/RZDE01_02/fixed_maps/d_a_tag_cstasw.map
+# map: orig/RZDE01_02/fixed_maps/d_a_tag_CstaSw.map
 
 - object: files/RELS.arc:rels/amem/d_a_tag_ajnot.rel
   hash: 081d06549f28073f2c6c0cf99785eeb743014282

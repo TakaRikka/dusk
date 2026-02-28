@@ -313,7 +313,7 @@ static void e_mm_mt_drop(e_mm_mt_class* i_this) {
                     if (wall_angle != 0x23) {
                         wall_angle = i_this->enemy.current.angle.y - wall_angle; 
                         i_this->m_spin = wall_angle * (TREG_F(6) + -0.3f);
-                        i_this->enemy.current.angle.y += (s16)(0x8000 - (wall_angle << 1)); 
+                        ANGLE_ADD(i_this->enemy.current.angle.y, 0x8000 - (wall_angle << 1));
                         if (i_this->m_acch.ChkWaterHit()) {
                             mDoAud_seStart(Z2SE_EN_MM_MET_BOUND_WTR, &i_this->enemy.current.pos, (u32)(i_this->enemy.speed.y), 0);
                         } else {
@@ -489,7 +489,7 @@ static void action(e_mm_mt_class* i_this) {
                     s16 playerAngleY = fopAcM_searchPlayerAngleY(actor);
                     s16 playerAngleDelta = i_this->m_rotation.y - playerAngleY;
                     if (playerAngleDelta > 0x4000 || playerAngleDelta < -0x4000) {
-                        playerAngleY += (s16)0x8000;
+                        ANGLE_ADD(playerAngleY, 0x8000);
                     }
                     cLib_addCalcAngleS2(&i_this->m_rotation.y, playerAngleY, 4, 0x100);
                 }

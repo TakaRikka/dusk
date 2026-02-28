@@ -1,0 +1,16 @@
+#ifndef RES_OBJ_SAKA_H
+#define RES_OBJ_SAKA_H
+
+enum dRes_INDEX_OBJ_SAKA {
+    /* DZB  */
+    dRes_INDEX_OBJ_SAKA_DZB_LV3R10SAKA00_e=0x3,
+    dRes_INDEX_OBJ_SAKA_DZB_LV3R10SAKA01_e=0x4,
+};
+
+enum dRes_ID_OBJ_SAKA {
+    /* DZB  */
+    dRes_ID_OBJ_SAKA_DZB_LV3R10SAKA00_e=0x3,
+    dRes_ID_OBJ_SAKA_DZB_LV3R10SAKA01_e=0x4,
+};
+
+#endif /* !RES_OBJ_SAKA_H */

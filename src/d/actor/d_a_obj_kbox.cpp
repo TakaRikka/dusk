@@ -232,8 +232,8 @@ static void kbox_float(obj_kbox_class* i_this) {
     a_this->shape_angle.x = i_this->field_0x594 * cM_ssin((i_this->field_0x578 * 1000));
     a_this->shape_angle.z = i_this->field_0x594 * cM_ssin((i_this->field_0x578 * 1100));
     cLib_addCalc2(&i_this->field_0x594, 500.0f, 0.1f, 30.0f);
-    a_this->shape_angle.x += (s16)(i_this->field_0x598 * cM_ssin((i_this->field_0x578 * 4000)));
-    a_this->shape_angle.z += (s16)(i_this->field_0x598 * cM_ssin((i_this->field_0x578 * 4200)));
+    ANGLE_ADD(a_this->shape_angle.x, i_this->field_0x598 * cM_ssin(i_this->field_0x578 * 4000));
+    ANGLE_ADD(a_this->shape_angle.z, i_this->field_0x598 * cM_ssin(i_this->field_0x578 * 4200));
     cLib_addCalc2(&i_this->field_0x598, 0, 0.1f, 30.0f);
     i_this->field_0x58c = 30.0f;
     cLib_addCalc2(&i_this->field_0x5a4, i_this->field_0x5a8, 0.2f, 20.0f);

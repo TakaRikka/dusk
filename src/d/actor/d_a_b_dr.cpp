@@ -2091,9 +2091,9 @@ bool daB_DR_c::mFeintBreath() {
             field_0x718++;
         } else {
             if (field_0x756 > 0) {
-                temp_r30 += (s16)(l_HIO.feint_angle * 0xB6);
+                ANGLE_ADD(temp_r30, l_HIO.feint_angle * 0xB6);
             } else {
-                temp_r30 -= (s16)(l_HIO.feint_angle * 0xB6);
+                ANGLE_SUB(temp_r30, l_HIO.feint_angle * 0xB6);
             }
 
             if (abs((s16)(current.angle.y - temp_r30)) > 0x100) {
@@ -3327,7 +3327,8 @@ void daB_DR_c::executeBullet() {
         if (parentActorID != 0) {
             daB_DR_c* dr_p = (daB_DR_c*)fopAcM_SearchByID(fopAcM_GetLinkId(this));
             if (dr_p != NULL) {
-                current.angle.y -= (s16)((s16)(dr_p->mHeadAngle.y - home.angle.y) * (0.002f + JREG_F(13)));
+                ANGLE_SUB(current.angle.y,
+                          (s16)(dr_p->mHeadAngle.y - home.angle.y) * (0.002f + JREG_F(13)));
             }
         }
 
@@ -3357,7 +3358,7 @@ void daB_DR_c::executeParts() {
     switch (mMoveMode) {
     case 0:
         speedF = 20.0f + ZREG_F(13) + cM_rndF(10.0f + ZREG_F(14));
-        current.angle.y += (s16)cM_rndFX(65536.0f);
+        ANGLE_ADD(current.angle.y, cM_rndFX(65536.0f));
         speed.y = 30.0f + ZREG_F(10);
         speed.y += cM_rndFX(10.0f + ZREG_F(11));
 
@@ -3396,11 +3397,11 @@ void daB_DR_c::executeParts() {
     case 10:
         speedF = 40.0f + ZREG_F(13) + cM_rndF(10.0f + ZREG_F(14));
         mTimer[0] = 50;
-        current.angle.x += (s16)cM_rndFX(16384.0f);
+        ANGLE_ADD(current.angle.x, cM_rndFX(16384.0f));
 
         mae = camera->lookat.center - current.pos;
         current.angle.y = mae.atan2sX_Z();
-        current.angle.y += (s16)cM_rndFX(16384.0f);
+        ANGLE_ADD(current.angle.y, cM_rndFX(16384.0f));
 
         cMtx_YrotS(*calc_mtx, current.angle.y);
         cMtx_XrotM(*calc_mtx, current.angle.x);

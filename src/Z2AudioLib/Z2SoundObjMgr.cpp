@@ -4,6 +4,7 @@
 #include "Z2AudioLib/Z2Calc.h"
 #include "Z2AudioLib/Z2SceneMgr.h"
 #include "Z2AudioLib/Z2LinkMgr.h"
+#include <cstring>
 
 Z2SoundObjMgr::Z2SoundObjMgr() : JASGlobalInstance<Z2SoundObjMgr>(true) {
     ghostEnemyState_ = 0;

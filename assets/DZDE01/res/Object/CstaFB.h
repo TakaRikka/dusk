@@ -1,0 +1,50 @@
+#ifndef RES_CSTAFB_H
+#define RES_CSTAFB_H
+
+enum dRes_INDEX_CSTAFB {
+    /* BCK  */
+    dRes_INDEX_CSTAFB_BCK_CS_F_B_FALL_e=0x7,
+    dRes_INDEX_CSTAFB_BCK_CS_F_B_SWING_REACTION_e=0x8,
+    dRes_INDEX_CSTAFB_BCK_CS_F_B_WALK_e=0x9,
+    /* BMDR */
+    dRes_INDEX_CSTAFB_BMD_CS_F_B_e=0xC,
+    dRes_INDEX_CSTAFB_BMD_CS_F_COVER_e=0xD,
+    /* BRK  */
+    dRes_INDEX_CSTAFB_BRK_CS_F_B_START_e=0x10,
+    dRes_INDEX_CSTAFB_BRK_CS_F_B_STOP_e=0x11,
+    dRes_INDEX_CSTAFB_BRK_CS_F_COVER_VANISH_e=0x12,
+    /* BTK  */
+    dRes_INDEX_CSTAFB_BTK_CS_F_B_START_e=0x15,
+    dRes_INDEX_CSTAFB_BTK_CS_F_COVER_VANISH_e=0x16,
+    /* DZB  */
+    dRes_INDEX_CSTAFB_DZB_CS_F_B_e=0x19,
+};
+
+enum dRes_ID_CSTAFB {
+    /* BCK  */
+    dRes_ID_CSTAFB_BCK_CS_F_B_FALL_e=0x7,
+    dRes_ID_CSTAFB_BCK_CS_F_B_SWING_REACTION_e=0x8,
+    dRes_ID_CSTAFB_BCK_CS_F_B_WALK_e=0x9,
+    /* BMDR */
+    dRes_ID_CSTAFB_BMD_CS_F_B_e=0xC,
+    dRes_ID_CSTAFB_BMD_CS_F_COVER_e=0xD,
+    /* BRK  */
+    dRes_ID_CSTAFB_BRK_CS_F_B_START_e=0x10,
+    dRes_ID_CSTAFB_BRK_CS_F_B_STOP_e=0x11,
+    dRes_ID_CSTAFB_BRK_CS_F_COVER_VANISH_e=0x12,
+    /* BTK  */
+    dRes_ID_CSTAFB_BTK_CS_F_B_START_e=0x15,
+    dRes_ID_CSTAFB_BTK_CS_F_COVER_VANISH_e=0x16,
+    /* DZB  */
+    dRes_ID_CSTAFB_DZB_CS_F_B_e=0x19,
+};
+
+enum CS_F_B_JNT {
+    CS_F_B_JNT_CS_F_B_e=0x0,
+};
+
+enum CS_F_COVER_JNT {
+    CS_F_COVER_JNT_CS_F_COVER_e=0x0,
+};
+
+#endif /* !RES_CSTAFB_H */

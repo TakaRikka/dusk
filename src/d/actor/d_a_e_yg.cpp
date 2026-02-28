@@ -314,7 +314,7 @@ static BOOL way_set(e_yg_class* i_this) {
             dBgS_LinChk lin_chk;
             lin_chk.Set(&start, &end, actor);
             if (dComIfG_Bgsp().LineCross(&lin_chk)) {
-                y_rot += (s16)0x1000;
+                ANGLE_ADD(y_rot, 0x1000);
             } else {
                 i_this->mCurrentAngleYTarget = y_rot;
                 return TRUE;
@@ -346,7 +346,7 @@ static s8 e_yg_normal(e_yg_class* i_this) {
             target = l_HIO.movement_spd;
 
             if (i_this->mpMorf->checkFrame(1.0f)) {
-                i_this->mCurrentAngleYTarget += (s16)cM_rndFX(2000.0f);
+                ANGLE_ADD(i_this->mCurrentAngleYTarget, cM_rndFX(2000.0f));
             }
 
             if (i_this->mTimers[0] == 0 || (i_this->mTimers[2] == 0 && fopAcM_wayBgCheck(actor, 200.0f, 50.0f))) {
@@ -382,7 +382,7 @@ static s8 e_yg_normal(e_yg_class* i_this) {
             target = l_HIO.movement_spd * 1.5f;
 
             if (i_this->mpMorf->checkFrame(1.0f)) {
-                i_this->mCurrentAngleYTarget += (s16)cM_rndFX(4000.0f);
+                ANGLE_ADD(i_this->mCurrentAngleYTarget, cM_rndFX(4000.0f));
             }
 
             if (i_this->mTimers[2] == 0 && fopAcM_wayBgCheck(actor, 200.0f, 50.0f)) {
@@ -560,7 +560,7 @@ static void search_ground_1(e_yg_class* i_this) {
             }
         }
 
-        y_rot += (s16)0x1000;
+        ANGLE_ADD(y_rot, 0x1000);
     }
 
     if (line_cross_flag) {

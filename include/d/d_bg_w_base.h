@@ -11,7 +11,7 @@ class cBgS_GndChk;
 class cBgS_LinChk;
 class cBgS_ShdwDraw;
 class dBgS_Acch;
-struct dBgS_CaptPoly;
+class dBgS_CaptPoly;
 class dBgS_RoofChk;
 class dBgS_SphChk;
 class dBgS_SplGrpChk;

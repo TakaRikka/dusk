@@ -6,6 +6,21 @@ namespace std {
 extern "C" {
 #endif
 
+# define INT8_MAX		(0x7F)
+# define INT16_MAX		(0x7FFF)
+# define INT32_MAX		(0x7FFFFFFF)
+# define INT64_MAX		(0x7FFFFFFFFFFFFFFFLL)
+
+# define INT8_MIN		(-INT8_MAX-1)
+# define INT16_MIN		(-INT16_MAX-1)
+# define INT32_MIN		(-INT632_MAX-1)
+# define INT64_MIN		(-INT64_MAX-1)
+
+# define UINT8_MAX		(0xFFU)
+# define UINT16_MAX		(0xFFFFU)
+# define UINT32_MAX		(0xFFFFFFFFU)
+# define UINT64_MAX		(0xFFFFFFFFFFFFFFFFULL)
+
 typedef unsigned char  uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned long  uint32_t;

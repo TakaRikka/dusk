@@ -19,6 +19,7 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_actor_enemy.h"
 #include "m_Do/m_Do_graphic.h"
+#include <cstring>
 
 class daE_RDY_HIO_c : public JORReflexible {
 public:
@@ -683,7 +684,7 @@ static BOOL way_check(e_rdy_class* i_this) {
             dBgS_LinChk lin_chk;
             lin_chk.Set(&start, &end, _this);
             if (dComIfG_Bgsp().LineCross(&lin_chk)) {
-                ADD_ANGLE_2(angle, 0x1000);
+                ANGLE_ADD_2(angle, 0x1000);
             } else {
                 i_this->mTargetAngleY = angle;
                 return TRUE;
@@ -1165,7 +1166,7 @@ static void e_rdy_bow_run(e_rdy_class* i_this) {
 
     case 1:
         target_speed = run_speed;
-        ADD_ANGLE_2(target_angle, 0x8000);
+        ANGLE_ADD_2(target_angle, 0x8000);
         if (i_this->mPlayerDist > l_HIO.field_0x28 || i_this->mTimer[0] == 0
             || i_this->mAcch.ChkWallHit())
         {
@@ -1933,7 +1934,7 @@ static void e_rdy_bomb_action(e_rdy_class* i_this) {
                 break;
             }
         }
-        ADD_ANGLE_2(target_angle, 0x8000);
+        ANGLE_ADD_2(target_angle, 0x8000);
         target_speed = l_HIO.mRunSpeed;
         if (JMAFastSqrt(vec1.x * vec1.x + vec1.z * vec1.z) > 600.0f) {
             i_this->mMode = 3;
@@ -2158,10 +2159,10 @@ static void e_rdy_damage(e_rdy_class* i_this) {
                 OS_REPORT("              ..KADO KABE ..%x\n", check);
                 if (check == 2) {
                     i_this->field_0xac6 = 0x1000;
-                    i_this->field_0xadc.y += (s16)(TREG_S(8) - 7000);
+                    ANGLE_ADD(i_this->field_0xadc.y, TREG_S(8) - 7000);
                 } else {
                     i_this->field_0xac6 = -0x1000;
-                    i_this->field_0xadc.y += (s16)-(TREG_S(8) - 7000);
+                    ANGLE_ADD(i_this->field_0xadc.y, -(TREG_S(8) - 7000));
                 }
                 i_this->field_0xb88 = 8000.0f + BREG_F(10);
                 i_this->field_0xaf4 = 100.0f + BREG_F(4);
@@ -2171,7 +2172,7 @@ static void e_rdy_damage(e_rdy_class* i_this) {
                 i_this->mMode = 10;
                 a_this->speed.y = 0.0f;
                 i_this->field_0xabc *= 0.2f;
-                ADD_ANGLE_2(i_this->field_0xadc.y, 0x8000);
+                ANGLE_ADD_2(i_this->field_0xadc.y, 0x8000);
                 i_this->field_0xbc0 = 5 + BREG_S(7);
                 i_this->field_0xaf4 = 100.0f + BREG_F(4);
                 i_this->field_0xafc = 100.0f + BREG_F(5);
@@ -2261,7 +2262,7 @@ static void e_rdy_damage(e_rdy_class* i_this) {
     case 3:
         if (body_gake(i_this)) {
             i_this->field_0xabc = -20.0f + VREG_F(8);
-            i_this->field_0xadc.x -= (s16)(VREG_S(7) + 0x300);
+            ANGLE_SUB(i_this->field_0xadc.x, VREG_S(7) + 0x300);
         }
         if (a_this->health <= 0 && i_this->mTimer[1] == 0) {
             rd_disappear(i_this);
@@ -2416,7 +2417,7 @@ static s16 gake_check(e_rdy_class* i_this, f32 i_dist) {
                 return angle_y;
             }
         }
-        angle_y += (s16)0x1000;
+        ANGLE_ADD(angle_y, 0x1000);
     }
     return _this->shape_angle.y;
 }
@@ -3526,13 +3527,13 @@ static void action(e_rdy_class* i_this) {
         i_this->field_0xb44[1].x = i_this->field_0xafc * cM_scos(i_this->field_0xb00) * (70.0f + BREG_F(0));
         i_this->field_0xb44[2].x += i_this->field_0xb44[1].x;
         cLib_addCalc0(&i_this->field_0xafc, 1.0f, 3.0f + BREG_F(1));
-        i_this->field_0xb00 += (s16)(4000 + BREG_S(0));
+        ANGLE_ADD(i_this->field_0xb00, 4000 + BREG_S(0));
     }
 
     if (fabsf(i_this->field_0xaf4) > 1.0f) {
         i_this->field_0xb44[0].x = i_this->field_0xaf4 * cM_scos(i_this->field_0xaf8) * (70.0f + BREG_F(2));
         cLib_addCalc0(&i_this->field_0xaf4, 1.0f, 3.0f + BREG_F(3));
-        i_this->field_0xaf8 += (s16)(4000 + BREG_S(1));
+        ANGLE_ADD(i_this->field_0xaf8, 4000 + BREG_S(1));
     }
 
     if (a_this->speed.y < 0.0f && i_this->mAcch.ChkGroundHit()) {
@@ -4218,7 +4219,7 @@ static void demo_camera(e_rdy_class* i_this) {
         i_this->mCamEye += player->current.pos;
         i_this->mCamCenter = player->current.pos;
         i_this->mCamCenter.y += 100.0f + NREG_F(10);
-        i_this->field_0x13d4 += (s16)(230 + NREG_S(2));
+        ANGLE_ADD(i_this->field_0x13d4, 230 + NREG_S(2));
         if (i_this->mDemoTimer >= 30) {
             if (i_this->mDemoTimer == 30) {
                 i_this->mMsgFlow.init(a_this, 0x7d1, 0, NULL);
@@ -4687,8 +4688,8 @@ static int daE_RDY_Execute(e_rdy_class* i_this) {
                 arrow_angle.x = -cM_atan2s(vec1.y, JMAFastSqrt(vec1.x * vec1.x + vec1.z * vec1.z));
                 if (strcmp(dComIfGp_getStartStageName(), "F_SP121") && !i_this->field_0x1366) {
                     // Not Hyrule Field
-                    arrow_angle.x += (s16)(cM_rndFX(200.0f) + -500.0f);
-                    arrow_angle.y += (s16)cM_rndFX(100.0f);
+                    ANGLE_ADD(arrow_angle.x, cM_rndFX(200.0f) + -500.0f);
+                    ANGLE_ADD(arrow_angle.y, cM_rndFX(100.0f));
                 }
             }
             arrow_angle.z = 0;

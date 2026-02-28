@@ -25,6 +25,8 @@ public:
     static J3DModelData* loaderBasicBmd(u32 i_tag, void* i_data);
     static void dump_long(dRes_info_c* i_resInfo, int i_infoNum);
     static void dump(dRes_info_c* i_resInfo, int i_infoNum);
+    static void dumpTag(dRes_info_c*, int, int, int);
+    static void dump(char*, dRes_info_c*, int);
 
     void* getRes(s32 i_index) {
         JUT_ASSERT(25, i_index >= 0 && i_index < getResNum());
@@ -37,10 +39,12 @@ public:
     char* getArchiveName() { return mArchiveName; }
     mDoDvdThd_mountArchive_c* getDMCommand() { return mDMCommand; }
     JKRArchive* getArchive() { return mArchive; }
-    void incCount() { mCount++; }
-    u16 decCount() {
-        return --mCount;
-    }
+    u32 incCount() { return ++mCount; }
+    u32 decCount() { return --mCount; }
+
+#if DEBUG
+    int getSize() { return mSize; }
+#endif
 
 #ifdef __MWERKS__
     static const int NAME_MAX = 9;
@@ -55,7 +59,7 @@ private:
     /* 0x1C */ JKRSolidHeap* mDataHeap;
     /* 0x20 */ void** mRes;
 #if DEBUG
-    /* 0x24 */ void* unk_0x24;
+    /* 0x24 */ int mSize;
 #endif
 };  // Size: 0x24
 
@@ -66,9 +70,13 @@ public:
     dRes_control_c() {}
     ~dRes_control_c();
 
+    int getSize(const char*, dRes_info_c*, int);
+    int getStageAllSize();
+    int getObjectAllSize();
     int setObjectRes(char const* i_arcName, void* i_archiveRes, u32 i_bufferSize, JKRHeap* i_heap);
     int setStageRes(char const* i_arcName, JKRHeap* i_heap);
     void dump();
+    void dumpTag();
     void dump(char*);
     int getObjectResName2Index(char const* i_arcName, char const* i_resName);
 
@@ -128,10 +136,6 @@ public:
 
     dRes_info_c* getStageResInfo(const char* i_arcName) {
         return getResInfo(i_arcName, mStageInfo, ARRAY_SIZEU(mStageInfo));
-    }
-    
-    void dumpTag() {
-        // TODO
     }
 
     /* 0x0000 */ dRes_info_c mObjectInfo[128];

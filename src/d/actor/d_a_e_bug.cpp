@@ -10,6 +10,7 @@
 #include "d/d_path.h"
 #include "d/actor/d_a_nbomb.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 enum E_bug_RES_File_ID {
     /* BMDG */
@@ -517,7 +518,7 @@ static void normal_move(e_bug_class* a_this, bug_s* i_this) {
         cLib_addCalcAngleS2(&i_this->field_0x3c.y, i_this->field_0x42 + (sVar1 + cM_atan2s(sp74.x, sp74.z)), 2, 0x800);
         i_this->field_0x3c.x = 0;
     } else {
-        i_this->field_0x3c.x += (s16)((i_this->field_0x8 << 1) + 0xE00);
+        ANGLE_ADD(i_this->field_0x3c.x, (i_this->field_0x8 << 1) + 0xE00);
     }
 
     i_this->field_0x30.x = i_this->field_0x24 * cM_ssin(i_this->field_0x3c.y);

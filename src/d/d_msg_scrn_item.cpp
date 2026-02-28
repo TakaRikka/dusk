@@ -22,6 +22,7 @@
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JUtility/JUTTexture.h"
+#include <cstring>
 
 dMsgScrnItem_c::dMsgScrnItem_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     if (param_3 != NULL) {

@@ -1711,7 +1711,7 @@ void daNpcF_c::setHitodamaPrtcl() {
     field_0x9b8.z = field_0x9b8.x * -cM_ssin(shape_angle.y);
 
     field_0x9b8.x *= cM_scos(shape_angle.y);
-    field_0x9d2 += (s16)0x400;
+    ANGLE_ADD(field_0x9d2, 0x400);
 
     pos.x = eyePos.x + field_0x9b8.x + field_0x9c4.x;
     pos.y = eyePos.y + field_0x9b8.y + field_0x9c4.y;

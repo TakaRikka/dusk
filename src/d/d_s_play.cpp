@@ -26,6 +26,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include "d/actor/d_a_suspend.h"
 #include "d/actor/d_a_ykgr.h"
+#include <cstring>
 
 #if PLATFORM_WII
 #include "d/d_cursor_mng.h"

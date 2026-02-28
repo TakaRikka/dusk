@@ -626,7 +626,7 @@ static void e_rb_base_1(e_rb_class* i_this) {
         }
 
         if (i_this->field_0xa64 != 0) {
-            i_this->field_0xa4e += (s16)(AREG_S(6) + 300);
+            ANGLE_ADD(i_this->field_0xa4e, AREG_S(6) + 300);
         }
         return;
     }

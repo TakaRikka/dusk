@@ -8,6 +8,7 @@
 #include "d/actor/d_a_obj_ganonwall.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
+#include <cstring>
 
 static u8 const l_idx[24][4] = {
     {0x17, 0x05, 0x06, 0x01}, {0x17, 0x05, 0x06, 0x02}, {0x17, 0x05, 0x06, 0x03},

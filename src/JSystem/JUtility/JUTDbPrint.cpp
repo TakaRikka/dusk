@@ -5,18 +5,7 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTVideo.h"
 #include <cstdio>
-#ifndef __MWERKS__
-#include <cstdarg>
-#endif
-
-inline void enter_(int param_0, int param_1, int param_2, const char* fmt, va_list args) {
-    char buf[0x100];
-    int ret = vsnprintf(buf, 0x100, fmt, args);
-    if (ret < 0) {
-        return;
-    }
-    JUTDbPrint::getManager()->enter(param_0, param_1, param_2, buf, ret < 0x100 ? ret : 0xFF);
-}
+#include <cstring>
 
 JUTDbPrint::JUTDbPrint(JUTFont* pFont, JKRHeap* pHeap) {
     mFont = pFont;
@@ -62,9 +51,13 @@ void JUTDbPrint::enter(int param_0, int param_1, int param_2, const char* param_
     }
 }
 
-static void dummy() {
-    va_list args;
-    enter_(0, 0, 0, 0, args);
+static inline void enter_(int param_0, int param_1, int param_2, const char* fmt, va_list args) {
+    char buf[0x100];
+    int ret = vsnprintf(buf, 0x100, fmt, args);
+
+    if (ret >= 0) {
+        JUTDbPrint::getManager()->enter(param_0, param_1, param_2, buf, ret < 0x100 ? ret : 0xFF);
+    }
 }
 
 void JUTDbPrint::flush() {
@@ -104,13 +97,17 @@ void JUTDbPrint::drawString(int posX, int posY, int len, const u8* str) {
 }
 
 void JUTReport(int param_0, int param_1, char const* fmt, ...) {
+    UNUSED(fmt); // although not really unused
+    
     va_list args;
     va_start(args, fmt);
-    enter_(param_0, param_1, 1, fmt, args);
+    enter_(param_0, param_1, TRUE, fmt, args);
     va_end(args);
 }
 
 void JUTReport(int param_0, int param_1, int param_2, char const* fmt, ...) {
+    UNUSED(fmt); // although not really unused
+
     va_list args;
     va_start(args, fmt);
     enter_(param_0, param_1, param_2, fmt, args);

@@ -1,0 +1,62 @@
+#ifndef RES_WATER_H
+#define RES_WATER_H
+
+enum dRes_INDEX_WATER {
+    /* BCK  */
+    dRes_INDEX_WATER_BCK_WATER_A_CL_e=0x7,
+    dRes_INDEX_WATER_BCK_WATER_A_OP_e=0x8,
+    dRes_INDEX_WATER_BCK_WATER_B_A_CL_e=0x9,
+    dRes_INDEX_WATER_BCK_WATER_B_A_OP_e=0xA,
+    dRes_INDEX_WATER_BCK_WATER_B_B_CL_e=0xB,
+    dRes_INDEX_WATER_BCK_WATER_B_B_OP_e=0xC,
+    dRes_INDEX_WATER_BCK_WATER_B_CL_e=0xD,
+    dRes_INDEX_WATER_BCK_WATER_B_OP_e=0xE,
+    /* BMDR */
+    dRes_INDEX_WATER_BMD_WATER_e=0x11,
+    dRes_INDEX_WATER_BMD_WATER_B_e=0x12,
+    /* BRK  */
+    dRes_INDEX_WATER_BRK_WATER_A_OP_e=0x15,
+    dRes_INDEX_WATER_BRK_WATER_B_OP_e=0x16,
+    /* BTK  */
+    dRes_INDEX_WATER_BTK_WATER_e=0x19,
+    dRes_INDEX_WATER_BTK_WATER_B_e=0x1A,
+    /* DZB  */
+    dRes_INDEX_WATER_DZB_WATER_e=0x1D,
+};
+
+enum dRes_ID_WATER {
+    /* BCK  */
+    dRes_ID_WATER_BCK_WATER_A_CL_e=0x7,
+    dRes_ID_WATER_BCK_WATER_A_OP_e=0x8,
+    dRes_ID_WATER_BCK_WATER_B_A_CL_e=0x9,
+    dRes_ID_WATER_BCK_WATER_B_A_OP_e=0xA,
+    dRes_ID_WATER_BCK_WATER_B_B_CL_e=0xB,
+    dRes_ID_WATER_BCK_WATER_B_B_OP_e=0xC,
+    dRes_ID_WATER_BCK_WATER_B_CL_e=0xD,
+    dRes_ID_WATER_BCK_WATER_B_OP_e=0xE,
+    /* BMDR */
+    dRes_ID_WATER_BMD_WATER_e=0x11,
+    dRes_ID_WATER_BMD_WATER_B_e=0x12,
+    /* BRK  */
+    dRes_ID_WATER_BRK_WATER_A_OP_e=0x15,
+    dRes_ID_WATER_BRK_WATER_B_OP_e=0x16,
+    /* BTK  */
+    dRes_ID_WATER_BTK_WATER_e=0x19,
+    dRes_ID_WATER_BTK_WATER_B_e=0x1A,
+    /* DZB  */
+    dRes_ID_WATER_DZB_WATER_e=0x1D,
+};
+
+enum WATER_JNT {
+    WATER_JNT_WATER_DCK_e=0x0,
+    WATER_JNT_WATER1_MA09_e=0x1,
+    WATER_JNT_WATER2_MA06_e=0x2,
+    WATER_JNT_RYUSUIA_e=0x3,
+    WATER_JNT_RYUSUIB_e=0x4,
+};
+
+enum WATER_B_JNT {
+    WATER_B_JNT_WATER_MA02_e=0x0,
+};
+
+#endif /* !RES_WATER_H */

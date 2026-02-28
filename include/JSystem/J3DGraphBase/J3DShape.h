@@ -181,7 +181,7 @@ public:
 
     void setDrawMtx(Mtx** pDrawMtx) { mDrawMtx = pDrawMtx; }
     void setNrmMtx(Mtx33** pNrmMtx) { mNrmMtx = pNrmMtx; }
-    void setTexMtxLoadType(u32 type) { mFlags = (mFlags & 0xFFFF0FFF) | type; }
+    void setTexMtxLoadType(u32 type) { mFlags = type | (mFlags & ~0xF000); }
     bool getNBTFlag() const { return mHasNBT; }
     u32 getBumpMtxOffset() const { return mBumpMtxOffset; }
     void setBumpMtxOffset(u32 offset) { mBumpMtxOffset = offset; }

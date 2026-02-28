@@ -1,0 +1,29 @@
+#ifndef RES_H_SUISHO_H
+#define RES_H_SUISHO_H
+
+enum dRes_INDEX_H_SUISHO {
+    /* BMDE */
+    dRes_INDEX_H_SUISHO_BMD_H_SUISHO00_e=0x4,
+    /* BMDR */
+    dRes_INDEX_H_SUISHO_BMD_H_SUISHO01_e=0x7,
+};
+
+enum dRes_ID_H_SUISHO {
+    /* BMDE */
+    dRes_ID_H_SUISHO_BMD_H_SUISHO00_e=0x4,
+    /* BMDR */
+    dRes_ID_H_SUISHO_BMD_H_SUISHO01_e=0x7,
+};
+
+enum H_SUISHO00_JNT {
+    H_SUISHO00_JNT_H_SUISHO00_e=0x0,
+    H_SUISHO00_JNT_POLYSURFACE1_e=0x1,
+    H_SUISHO00_JNT_POLYSURFACE2_e=0x2,
+    H_SUISHO00_JNT_POLYSURFACE3_e=0x3,
+};
+
+enum H_SUISHO01_JNT {
+    H_SUISHO01_JNT_PPLANE1_e=0x0,
+};
+
+#endif /* !RES_H_SUISHO_H */

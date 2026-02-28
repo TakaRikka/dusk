@@ -1,0 +1,48 @@
+#ifndef RES_MARO_TW_H
+#define RES_MARO_TW_H
+
+enum dRes_INDEX_MARO_TW {
+    /* BMDR */
+    dRes_INDEX_MARO_TW_BMD_MARO_TW_e=0x5,
+    /* BTK  */
+    dRes_INDEX_MARO_TW_BTK_MARO_TW_e=0x8,
+    /* BTP  */
+    dRes_INDEX_MARO_TW_BTP_MARO_TW_e=0xB,
+};
+
+enum dRes_ID_MARO_TW {
+    /* BMDR */
+    dRes_ID_MARO_TW_BMD_MARO_TW_e=0x5,
+    /* BTK  */
+    dRes_ID_MARO_TW_BTK_MARO_TW_e=0x8,
+    /* BTP  */
+    dRes_ID_MARO_TW_BTP_MARO_TW_e=0xB,
+};
+
+enum MARO_TW_JNT {
+    MARO_TW_JNT_CENTER_e=0x0,
+    MARO_TW_JNT_BACKBONE1_e=0x1,
+    MARO_TW_JNT_BACKBONE2_e=0x2,
+    MARO_TW_JNT_NECK_e=0x3,
+    MARO_TW_JNT_HEAD_e=0x4,
+    MARO_TW_JNT_CHIN_e=0x5,
+    MARO_TW_JNT_MOUTH_e=0x6,
+    MARO_TW_JNT_SHOULDERL_e=0x7,
+    MARO_TW_JNT_ARML1_e=0x8,
+    MARO_TW_JNT_ARML2_e=0x9,
+    MARO_TW_JNT_HANDL_e=0xA,
+    MARO_TW_JNT_FINGERL_e=0xB,
+    MARO_TW_JNT_SHOULDERR_e=0xC,
+    MARO_TW_JNT_ARMR1_e=0xD,
+    MARO_TW_JNT_ARMR2_e=0xE,
+    MARO_TW_JNT_HANDR_e=0xF,
+    MARO_TW_JNT_FINGERR_e=0x10,
+    MARO_TW_JNT_WAIST_e=0x11,
+    MARO_TW_JNT_LEGL1_e=0x12,
+    MARO_TW_JNT_LEGL2_e=0x13,
+    MARO_TW_JNT_FOOTL_e=0x14,
+    MARO_TW_JNT_LEGR1_e=0x15,
+    MARO_TW_JNT_FOOTR_e=0x16,
+};
+
+#endif /* !RES_MARO_TW_H */

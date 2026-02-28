@@ -1,0 +1,40 @@
+#ifndef RES_GRZ2_H
+#define RES_GRZ2_H
+
+enum dRes_INDEX_GRZ2 {
+    /* BCK  */
+    dRes_INDEX_GRZ2_BCK_GRZ_F_LAUGH_e=0x5,
+    dRes_INDEX_GRZ2_BCK_GRZ_F_SNIFF_e=0x6,
+    dRes_INDEX_GRZ2_BCK_GRZ_FH_LAUGH_e=0x7,
+    dRes_INDEX_GRZ2_BCK_GRZ_LAUGH_e=0x8,
+    dRes_INDEX_GRZ2_BCK_GRZ_SNIFF_e=0x9,
+    dRes_INDEX_GRZ2_BCK_GRZ_UNAZUKI_e=0xA,
+    dRes_INDEX_GRZ2_BCK_GRZ_WAIT_B_e=0xB,
+    dRes_INDEX_GRZ2_BCK_GRZ_WALK_A_e=0xC,
+    /* BTK  */
+    dRes_INDEX_GRZ2_BTK_GRZ_SNIFF_e=0xF,
+    /* BTP  */
+    dRes_INDEX_GRZ2_BTP_GRZ_F_LAUGH_e=0x12,
+    dRes_INDEX_GRZ2_BTP_GRZ_F_SNIFF_e=0x13,
+    dRes_INDEX_GRZ2_BTP_GRZ_FH_LAUGH_e=0x14,
+};
+
+enum dRes_ID_GRZ2 {
+    /* BCK  */
+    dRes_ID_GRZ2_BCK_GRZ_F_LAUGH_e=0x5,
+    dRes_ID_GRZ2_BCK_GRZ_F_SNIFF_e=0x6,
+    dRes_ID_GRZ2_BCK_GRZ_FH_LAUGH_e=0x7,
+    dRes_ID_GRZ2_BCK_GRZ_LAUGH_e=0x8,
+    dRes_ID_GRZ2_BCK_GRZ_SNIFF_e=0x9,
+    dRes_ID_GRZ2_BCK_GRZ_UNAZUKI_e=0xA,
+    dRes_ID_GRZ2_BCK_GRZ_WAIT_B_e=0xB,
+    dRes_ID_GRZ2_BCK_GRZ_WALK_A_e=0xC,
+    /* BTK  */
+    dRes_ID_GRZ2_BTK_GRZ_SNIFF_e=0xF,
+    /* BTP  */
+    dRes_ID_GRZ2_BTP_GRZ_F_LAUGH_e=0x12,
+    dRes_ID_GRZ2_BTP_GRZ_F_SNIFF_e=0x13,
+    dRes_ID_GRZ2_BTP_GRZ_FH_LAUGH_e=0x14,
+};
+
+#endif /* !RES_GRZ2_H */

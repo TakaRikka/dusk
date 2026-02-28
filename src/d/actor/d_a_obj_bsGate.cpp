@@ -9,11 +9,57 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
+class daBsGate_HIO_c : public mDoHIO_entry_c {
+public:
+    daBsGate_HIO_c();
+    ~daBsGate_HIO_c() {}
+
+    void genMessage(JORMContext*);
+
+    /* 0x4 */ f32 mOpenSpeed;
+    /* 0x8 */ f32 mCloseSpeed;
+    /* 0xC */ u8 mShockStrength;
+};
+
+STATIC_ASSERT(sizeof(daBsGate_HIO_c) == 0x10);
+
+static daBsGate_HIO_c l_HIO;
+
 daBsGate_HIO_c::daBsGate_HIO_c() {
     mOpenSpeed = 2.0f;
     mCloseSpeed = 12.0f;
     mShockStrength = 3;
 }
+
+#if DEBUG
+void daBsGate_HIO_c::genMessage(JORMContext* mctx) {
+    // OPEN speed
+    mctx->genSlider("OPEN速度", &mOpenSpeed, 0.1f, 100.0f);
+    // CLOSE speed
+    mctx->genSlider("CLOSE速度", &mCloseSpeed, 0.1f, 100.0f);
+
+    /* Vibration */
+    /* Vibration */
+    mctx->startComboBox("振動", &mShockStrength);
+    // Strength 1
+    mctx->genComboBoxItem("強さ１", VIBMODE_S_POWER1);
+    // Strength 2
+    mctx->genComboBoxItem("強さ２", VIBMODE_S_POWER2);
+    // Strength 3
+    mctx->genComboBoxItem("強さ３", VIBMODE_S_POWER3);
+    // Strength 4
+    mctx->genComboBoxItem("強さ４", VIBMODE_S_POWER4);
+    // Strength 5
+    mctx->genComboBoxItem("強さ５", VIBMODE_S_POWER5);
+    // Strength 6
+    mctx->genComboBoxItem("強さ６", VIBMODE_S_POWER6);
+    // Strength 7
+    mctx->genComboBoxItem("強さ７", VIBMODE_S_POWER7);
+    // Strength 8
+    mctx->genComboBoxItem("強さ８", VIBMODE_S_POWER8);
+    mctx->endComboBox();
+}
+#endif
 
 void daBsGate_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
@@ -24,8 +70,11 @@ void daBsGate_c::setBaseMtx() {
 }
 
 int daBsGate_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes("S_Zgate", 4);
-    mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000084);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("S_Zgate", 4);
+
+    JUT_ASSERT(178, modelData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
     if (mpModel == NULL) {
         return 0;
     }
@@ -42,10 +91,14 @@ cPhs_Step daBsGate_c::create() {
         fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
         fopAcM_setCullSizeBox2(this, mpModel->getModelData());
         mOpen = fopAcM_isSwitch(this, fopAcM_GetParam(this) & 0xff);
-        mSide = (fopAcM_GetParam(this) >> 8) & 0xff;
+        mSide = (fopAcM_GetParam(this) & 0xFF00) >> 8;
         mTargetDist = -250.0f;
         if (mSide == 1) {
+            #if DEBUG
+            shape_angle.y += static_cast<s16>(0x8000);
+            #else
             shape_angle.y += 0x8000;
+            #endif
         }
         mOpenDist = 0.0f;
         if (mOpen) {
@@ -53,6 +106,10 @@ cPhs_Step daBsGate_c::create() {
         }
         init_modeWait();
         setBaseMtx();
+
+        #if DEBUG
+        l_HIO.entryHIO("ぶら下がりスイッチゲート"); // "Hanging Switch Gate" / "Pull-Down Switch Gate"
+        #endif
     }
     return step;
 }
@@ -64,11 +121,9 @@ int daBsGate_c::Execute(Mtx** i_mtxP) {
     return 1;
 }
 
-static daBsGate_HIO_c l_HIO;
-
 void daBsGate_c::moveGate() {
     typedef void (daBsGate_c::*daBsGate_modeFunc)();
-    static daBsGate_modeFunc mode_proc[3] = {
+    static const daBsGate_modeFunc mode_proc[3] = {
         &daBsGate_c::modeWait,
         &daBsGate_c::modeOpen,
         &daBsGate_c::modeClose,
@@ -102,7 +157,9 @@ void daBsGate_c::modeOpen() {
         mDoAud_seStartLevel(Z2SE_OBJ_SW_W_DR_OP, &current.pos, 0,
                             dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
     }
-    if (cLib_addCalc(&mOpenDist, mTargetDist, 0.2f, l_HIO.mOpenSpeed, 0.5f) == 0.0f) {
+
+    const f32 distanceToOpenPosition = cLib_addCalc(&mOpenDist, mTargetDist, 0.2f, l_HIO.mOpenSpeed, 0.5f);
+    if (distanceToOpenPosition == 0.0f) {
         if (mSide == 0) {
             mDoAud_seStart(Z2SE_OBJ_SW_W_DR_OP_STOP, &current.pos, 0,
                            dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
@@ -121,7 +178,9 @@ void daBsGate_c::modeClose() {
         mDoAud_seStartLevel(Z2SE_OBJ_SW_W_DR_CL, &current.pos, 0,
                             dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
     }
-    if (cLib_addCalc(&mOpenDist, 0.0f, 0.4f, l_HIO.mCloseSpeed, 0.5f) == 0.0f) {
+
+    const f32 distanceToClosedPosition = cLib_addCalc(&mOpenDist, 0.0f, 0.4f, l_HIO.mCloseSpeed, 0.5f);
+    if (distanceToClosedPosition == 0.0f) {
         if (mSide == 0) {
             mDoAud_seStart(Z2SE_OBJ_SW_W_DR_CL_STOP, &current.pos, 0,
                            dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
@@ -142,6 +201,11 @@ int daBsGate_c::Draw() {
 
 int daBsGate_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, "S_Zgate");
+
+    #if DEBUG
+    l_HIO.removeHIO();
+    #endif
+
     return 1;
 }
 
@@ -155,6 +219,7 @@ static int daBsGate_Execute(daBsGate_c* i_this) {
 }
 
 static int daBsGate_Delete(daBsGate_c* i_this) {
+    fopAcM_RegisterDeleteID(i_this, "daBsGate");
     return i_this->MoveBGDelete();
 }
 

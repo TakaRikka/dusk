@@ -82,8 +82,8 @@ void dNpcLib_lookat_c::action(cXyz param_0, cXyz param_1, fopAc_ac_c* param_2, M
                 sp16 = -cM_atan2s(sp78.y, sp78.absXZ());
                 sp14 = cM_atan2s(sp78.x, sp78.z);
 
-                field_0x4c[i].x += (s16)(var_f31 * (f32)(sp1A - sp16));
-                field_0x4c[i].y += (s16)(var_f31 * (f32)(sp18 - sp14));
+                ANGLE_ADD(field_0x4c[i].x, var_f31 * (f32)(sp1A - sp16));
+                ANGLE_ADD(field_0x4c[i].y, var_f31 * (f32)(sp18 - sp14));
 
                 limitter(&field_0x4c[i].x, field_0x34[i].x, field_0x94[i].x, field_0x7c[i].x);
                 limitter(&field_0x4c[i].y, field_0x34[i].y, field_0x94[i].y, field_0x7c[i].y);
@@ -157,7 +157,7 @@ int dNpcLib_lookat_c::limitter(s16* o_value, s16 param_1, s16 param_2, s16 param
         if (param_2 <= param_1) {
             *o_value = 0;
         } else {
-            *o_value -= (s16)(limit - param_2);
+            S16_SUB(*o_value, limit - param_2);
             rt = TRUE;
         }
     }
@@ -166,7 +166,7 @@ int dNpcLib_lookat_c::limitter(s16* o_value, s16 param_1, s16 param_2, s16 param
         if (param_1 <= param_3) {
             *o_value = 0;
         } else {
-            *o_value -= (s16)(limit - param_3);
+            S16_SUB(*o_value, limit - param_3);
             rt = TRUE;
         }
     }

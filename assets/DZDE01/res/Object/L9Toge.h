@@ -1,0 +1,22 @@
+#ifndef RES_L9TOGE_H
+#define RES_L9TOGE_H
+
+enum dRes_INDEX_L9TOGE {
+    /* BMDR */
+    dRes_INDEX_L9TOGE_BMD_LV9_OBJ_TOGETRAP_e=0x4,
+    /* DZB  */
+    dRes_INDEX_L9TOGE_DZB_LV9_OBJ_TOGETRAP_e=0x7,
+};
+
+enum dRes_ID_L9TOGE {
+    /* BMDR */
+    dRes_ID_L9TOGE_BMD_LV9_OBJ_TOGETRAP_e=0x4,
+    /* DZB  */
+    dRes_ID_L9TOGE_DZB_LV9_OBJ_TOGETRAP_e=0x7,
+};
+
+enum LV9_OBJ_TOGETRAP_JNT {
+    LV9_OBJ_TOGETRAP_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_L9TOGE_H */

@@ -10,6 +10,7 @@
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
+#include <cstring>
 
 static char const l_arcName[] = "Fchain";
 

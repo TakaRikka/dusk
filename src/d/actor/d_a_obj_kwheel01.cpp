@@ -22,7 +22,6 @@ static const u32 l_dzbidx[3] = {9, 8, 10};
 
 static const int l_bmdidx[2] = {4, 5};
 
-
 static const char* l_arcName = "K_Wheel01";
 
 // Likely to have been a macro; matches for loop at beginning of create1st for both debug and retail, despite retail only calling getArg4567()
@@ -57,17 +56,17 @@ cPhs_Step daObjKWheel01_c::create1st() {
     bool atLeastOneKLiftExists = false;
     s8 debugStackVar;
 
-    for(int i = 0; i < 4; i++) {
-        if(CHECK_KLIFT_EXISTS(i)) {
+    for (int i = 0; i < 4; i++) {
+        if (CHECK_KLIFT_EXISTS(i)) {
             atLeastOneKLiftExists = true;
         } 
     }
 
-    if(!mCreatedKLifts) {
+    if (!mCreatedKLifts) {
         setMtx();
         u32 createLiftParameters = (getArg2() & 0x3F) | daObjKLift00_c::LOCK_e | daObjKLift00_c::NO_BASE_DISP;
-        for(int i = 0; i < 4; i++) {
-            if(CHECK_KLIFT_EXISTS(i)) {
+        for (int i = 0; i < 4; i++) {
+            if (CHECK_KLIFT_EXISTS(i)) {
                 cXyz kLiftPos;
                 MTXMultVec(mNewBgMtx, &l_pos[i], &kLiftPos);
                 m_klift_pid[i] = fopAcM_create(PROC_Obj_KLift00, createLiftParameters, &kLiftPos, fopAcM_GetHomeRoomNo(this), 0, 0, -1);
@@ -79,25 +78,32 @@ cPhs_Step daObjKWheel01_c::create1st() {
     }
 
     cPhs_Step phase = static_cast<cPhs_Step>(dComIfG_resLoad(this, l_arcName));
-    if(phase == cPhs_COMPLEATE_e) {
+    if (phase == cPhs_COMPLEATE_e) {
         mYAngularVelocity = 0;
         setMtx();
 
-
-        phase = static_cast<cPhs_Step>(MoveBGCreate(l_arcName, (getOut() ? l_dzbidx[2] : l_dzbidx[0]), dBgS_MoveBGProc_TypicalRotY, 0x5D98, &mNewBgMtx));
-        if(phase == cPhs_ERROR_e)
-            return phase;
-
-        for(int i = 0; i < 4; i++) {
-            if(CHECK_KLIFT_EXISTS(i) && dComIfG_Bgsp().Regist(mKLiftCollisions[i], this))
-                return cPhs_ERROR_e;
+        u32 dzbId;
+        if (getOut()) {
+            dzbId = l_dzbidx[2];
+        } else {
+            dzbId = l_dzbidx[0];
         }
-    }
+        phase = static_cast<cPhs_Step>(MoveBGCreate(l_arcName, dzbId, dBgS_MoveBGProc_TypicalRotY, 0x5D98, &mNewBgMtx));
+        if (phase == cPhs_ERROR_e) {
+            return phase;
+        }
 
-    #if DEBUG
-    // "Pulley(Lv3)"
-    l_HIO.entryHIO("滑車(Lv3)");
-    #endif
+        for (int i = 0; i < 4; i++) {
+            if (CHECK_KLIFT_EXISTS(i) && dComIfG_Bgsp().Regist(mKLiftCollisions[i], this)) {
+                return cPhs_ERROR_e;
+            }
+        }
+
+        #if DEBUG
+        // "Pulley(Lv3)"
+        l_HIO.entryHIO("滑車(Lv3)");
+        #endif
+    }
 
     return phase;
 }
@@ -114,14 +120,14 @@ void daObjKWheel01_c::setMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mTransformMtx);
     MTXCopy(mDoMtx_stack_c::get(), mNewBgMtx);
 
-    if(mYAngularVelocity) {
+    if (mYAngularVelocity) {
         mDoMtx_stack_c::copy(mTransformMtx);
         mDoMtx_stack_c::transM(cM_rndFX(1.0f), cM_rndFX(1.0f), cM_rndFX(1.0f));
         MTXCopy(mDoMtx_stack_c::get(), mTransformMtx);
     }
 
-    for(int i = 0; i < 4; i++) {
-        if(CHECK_KLIFT_EXISTS(i)) {
+    for (int i = 0; i < 4; i++) {
+        if (CHECK_KLIFT_EXISTS(i)) {
             Vec kLiftPos;
             MTXMultVec(mNewBgMtx, &l_pos[i], &kLiftPos);
             mDoMtx_stack_c::transS(kLiftPos.x, kLiftPos.y, kLiftPos.z);
@@ -135,20 +141,21 @@ int daObjKWheel01_c::CreateHeap() {
     JUT_ASSERT(229, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, (1 << 19), 0x11000084);
 
-    if(!mpModel)
+    if (!mpModel) {
         return 0;
+    }
 
-    for(int i = 0; i < 4; i++) {
-        if(!CHECK_KLIFT_EXISTS(i)) {
+    for (int i = 0; i < 4; i++) {
+        if (!CHECK_KLIFT_EXISTS(i)) {
             mKLiftCollisions[i] = NULL;
-        }
-        else {
+        } else {
             mKLiftCollisions[i] = new (dBgW);
 
-            if(!mKLiftCollisions[i])
+            if (!mKLiftCollisions[i]) {
                 return 0;
+            }
 
-            if(mKLiftCollisions[i]->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes(l_arcName, l_dzbidx[1])), 1, &mKLiftBaseMatrices[i])) {
+            if (mKLiftCollisions[i]->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes(l_arcName, l_dzbidx[1])), 1, &mKLiftBaseMatrices[i])) {
                 mKLiftCollisions[i] = NULL;
                 return 0;
             }
@@ -162,19 +169,20 @@ int daObjKWheel01_c::Create() {
     mpModel->setBaseTRMtx(mTransformMtx);
     fopAcM_SetMtx(this, mTransformMtx);
 
-    if(getSwNo() != 0xFF && fopAcM_isSwitch(this, getSwNo())) {
+    if (getSwNo() != 0xFF && fopAcM_isSwitch(this, getSwNo())) {
         #if DEBUG
-        if(getArg0()) {
+        if (getArg0()) {
             mYAngularVelocity = l_HIO.mTargetYAngularSpeed;
-        }
-        else
+        } else {
             mYAngularVelocity = -l_HIO.mTargetYAngularSpeed;
-        #else
-        if(getArg0())
+        }
+#else
+        if (getArg0()) {
             mYAngularVelocity = 64;
-        else
+        } else {
             mYAngularVelocity = -64;
-        #endif
+        }
+#endif
     }
 
     fopAcM_setCullSizeBox(this, l_cull_box.min.x, l_cull_box.min.y, l_cull_box.min.z, l_cull_box.max.x, l_cull_box.max.y, l_cull_box.max.z);
@@ -184,9 +192,9 @@ int daObjKWheel01_c::Create() {
 
 static void* searchKWheel00(void* param_0, void* i_this) {
     UNUSED(i_this);
-    if(param_0 && fopAcM_IsActor(param_0) && fopAcM_GetProfName(param_0) == PROC_Obj_KWheel00) {
+    if (param_0 && fopAcM_IsActor(param_0) && fopAcM_GetProfName(param_0) == PROC_Obj_KWheel00) {
         daObjKWheel00_c* const kWheel00 = static_cast<daObjKWheel00_c*>(param_0);
-        if(kWheel00->getType() == daObjKWheel00_c::TYPE_LARGE_GOLD) {
+        if (kWheel00->getType() == daObjKWheel00_c::TYPE_LARGE_GOLD) {
             return param_0;
         }
     }
@@ -197,17 +205,18 @@ static void* searchKWheel00(void* param_0, void* i_this) {
 int daObjKWheel01_c::Execute(Mtx** i_mtx) {
     eventUpdate();
 
-    if(getSwNo() == 0xFF) {
+    if (getSwNo() == 0xFF) {
         daObjKWheel00_c* const foundKWheel00 = static_cast<daObjKWheel00_c*>(fopAcM_Search(searchKWheel00, this));
-        if(foundKWheel00) {
-            if(getArg0())
-                current.angle.y += foundKWheel00->current.angle.z - foundKWheel00->old.angle.z;
-            else
-                current.angle.y -= foundKWheel00->current.angle.z - foundKWheel00->old.angle.z;
+        if (foundKWheel00) {
+            if (getArg0()) {
+                ANGLE_ADD_2(current.angle.y, foundKWheel00->current.angle.z - foundKWheel00->old.angle.z);
+            } else {
+                ANGLE_SUB_2(current.angle.y, foundKWheel00->current.angle.z - foundKWheel00->old.angle.z);
+            }
 
             shape_angle.y = current.angle.y;
 
-            if(current.angle.y != old.angle.y) {
+            if (current.angle.y != old.angle.y) {
                 #if DEBUG
                 mYAngularVelocity = l_HIO.mTargetYAngularSpeed;
                 #else
@@ -215,35 +224,32 @@ int daObjKWheel01_c::Execute(Mtx** i_mtx) {
                 #endif
             }
         }
-    }
-    else {
-        if(mYAngularVelocity == 0) {
-            if(fopAcM_isSwitch(this, getSwNo())) {
-                if(getEvent() != 0xFF) {
-                    const s32 eventIndex = dComIfGp_getEventManager().getEventIdx(this, getEvent());
-                    setEvent(eventIndex, getEvent(), 1);
-                }
-                else {
+    } else {
+        if (mYAngularVelocity == 0) {
+            if (fopAcM_isSwitch(this, getSwNo())) {
+                if (getEvent() != 0xFF) {
+                    s16 eventIndex = (s16)dComIfGp_getEventManager().getEventIdx(this, getEvent());
+                    setEvent(eventIndex, (u8)getEvent(), 1);
+                } else {
                     eventStart();
                 }
             }
         }
 
-        if(mYAngularVelocity != 0) {
+        if (mYAngularVelocity != 0) {
             #if DEBUG
-            if(mYAngularVelocity > 0) {
-                if(mYAngularVelocity < l_HIO.mTargetYAngularSpeed)
+            if (mYAngularVelocity > 0) {
+                if (mYAngularVelocity < l_HIO.mTargetYAngularSpeed) {
                     mYAngularVelocity += l_HIO.mYAngularAcceleration;
-            }
-            else if(mYAngularVelocity > -l_HIO.mTargetYAngularSpeed) {
+                }
+            } else if (mYAngularVelocity > -l_HIO.mTargetYAngularSpeed) {
                 mYAngularVelocity -= l_HIO.mYAngularAcceleration;
             }
             #else
-            if(mYAngularVelocity > 0) {
-                if(mYAngularVelocity < 64)
+            if (mYAngularVelocity > 0) {
+                if (mYAngularVelocity < 64)
                     mYAngularVelocity += 2;
-            }
-            else if(mYAngularVelocity > -64) {
+            } else if (mYAngularVelocity > -64) {
                 mYAngularVelocity -= 2;
             }
             #endif
@@ -257,11 +263,11 @@ int daObjKWheel01_c::Execute(Mtx** i_mtx) {
     mpModel->setBaseTRMtx(mTransformMtx);
     *i_mtx = &mNewBgMtx;
 
-    for(int i = 0; i < 4; i++) {
-        if(CHECK_KLIFT_EXISTS(i)) {
+    for (int i = 0; i < 4; i++) {
+        if (CHECK_KLIFT_EXISTS(i)) {
             daObjKLift00_c* const foundKLift = static_cast<daObjKLift00_c*>(fopAcM_SearchByID(m_klift_pid[i]));
 
-            if(foundKLift) {
+            if (foundKLift) {
                 cXyz kLiftOffset;
                 MTXMultVec(mNewBgMtx, &l_pos[i], &kLiftOffset);
 
@@ -273,14 +279,17 @@ int daObjKWheel01_c::Execute(Mtx** i_mtx) {
     }
 
 
-    for(int i = 0; i < 4; i++) {
-        if(CHECK_KLIFT_EXISTS(i)) 
+    for (int i = 0; i < 4; i++) {
+        if (CHECK_KLIFT_EXISTS(i)) {
             mKLiftCollisions[i]->Move();
+        }
     }
 
     // Stack ordering issues arise if mDoAud_seStartLevel is used
-    if(mYAngularVelocity)
-        Z2GetAudioMgr()->seStartLevel(Z2SE_OBJ_GEAR_LV, &current.pos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    if (mYAngularVelocity) {
+        Z2GetAudioMgr()->seStartLevel(Z2SE_OBJ_GEAR_LV, &current.pos, 0, 0, 1.0f, 1.0f, -1.0f,
+                                      -1.0f, 0);
+    }
 
     return 1;
 }
@@ -303,9 +312,10 @@ int daObjKWheel01_c::Delete() {
     l_HIO.removeHIO();
     #endif
 
-    for(int i = 0; i < 4; i++) {
-        if(CHECK_KLIFT_EXISTS(i) && mKLiftCollisions[i] && mKLiftCollisions[i]->ChkUsed())
+    for (int i = 0; i < 4; i++) {
+        if (CHECK_KLIFT_EXISTS(i) && mKLiftCollisions[i] && mKLiftCollisions[i]->ChkUsed()) {
             dComIfG_Bgsp().Release(mKLiftCollisions[i]);
+        }
     }
 
     return 1;
@@ -313,15 +323,17 @@ int daObjKWheel01_c::Delete() {
 
 bool daObjKWheel01_c::eventStart() {
     #if DEBUG
-    if(getArg0())
+    if (getArg0()) {
         mYAngularVelocity = l_HIO.mYAngularAcceleration;
-    else
+    } else {
         mYAngularVelocity = -l_HIO.mYAngularAcceleration;
+    }
     #else
-    if(getArg0())
+    if (getArg0()) {
         mYAngularVelocity = 2;
-    else
+    } else {
         mYAngularVelocity = -2;
+    }
     #endif
 
     return true;

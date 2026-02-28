@@ -19,6 +19,7 @@
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_camera_mng.h"
 #include <dolphin/types.h>
+#include <cstring>
 
 static daNpc_Maro_c::actionFunc dummy_lit_3931() {
     return &daNpc_Maro_c::choccai;

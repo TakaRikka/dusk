@@ -1,0 +1,29 @@
+#ifndef RES_MBN_A2_L_H
+#define RES_MBN_A2_L_H
+
+enum dRes_INDEX_MBN_A2_L {
+    /* BMDR */
+    dRes_INDEX_MBN_A2_L_BMD_MBN_A2_L_e=0x3,
+};
+
+enum dRes_ID_MBN_A2_L {
+    /* BMDR */
+    dRes_ID_MBN_A2_L_BMD_MBN_A2_L_e=0x3,
+};
+
+enum MBN_A2_L_JNT {
+    MBN_A2_L_JNT_WORLD_ROOT_e=0x0,
+    MBN_A2_L_JNT_BACKBONE_e=0x1,
+    MBN_A2_L_JNT_ARML1_e=0x2,
+    MBN_A2_L_JNT_ARML2_e=0x3,
+    MBN_A2_L_JNT_ARMR1_e=0x4,
+    MBN_A2_L_JNT_ARMR2_e=0x5,
+    MBN_A2_L_JNT_HEAD_e=0x6,
+    MBN_A2_L_JNT_WAIST_e=0x7,
+    MBN_A2_L_JNT_LEGL1_e=0x8,
+    MBN_A2_L_JNT_LEGL2_e=0x9,
+    MBN_A2_L_JNT_LEGR1_e=0xA,
+    MBN_A2_L_JNT_LEGR2_e=0xB,
+};
+
+#endif /* !RES_MBN_A2_L_H */

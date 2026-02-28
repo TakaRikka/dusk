@@ -1783,7 +1783,7 @@ fopAc_ac_c* fopAcM_fastCreateItem(const cXyz* i_pos, int i_itemNo, int i_roomNo,
                 angle = csXyz::Zero;
             }
             angle.z = 0xFF;
-            angle.y += (s16)cM_rndFX(0x2000);
+            ANGLE_ADD(angle.y, cM_rndFX(0x2000));
 
             ret = (fopAc_ac_c*)fopAcM_fastCreate(
                 PROC_ITEM, params, i_pos, i_roomNo, &angle, i_scale, -1, i_createFunc, NULL);
@@ -1833,7 +1833,7 @@ fpc_ProcID fopAcM_createBokkuri(u16 i_setId, const cXyz* i_pos, int i_itemNo, in
     csXyz params_ex(0, 0, 0);
     if (param_6 != NULL) {
         params_ex.y = param_6->atan2sX_Z();
-        params_ex.y += (s16)(2048.0f * cM_rndFX(1.0f));
+        ANGLE_ADD(params_ex.y, (f32)0x800 * cM_rndFX(1.0f));
         param_8 = 1;
     }
 

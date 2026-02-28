@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_npc_shop0.h"
+#include <cstring>
 
 static int createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Shop0_c*>(i_this)->createHeap();

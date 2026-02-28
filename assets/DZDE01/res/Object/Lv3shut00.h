@@ -1,0 +1,26 @@
+#ifndef RES_LV3SHUT00_H
+#define RES_LV3SHUT00_H
+
+enum dRes_INDEX_LV3SHUT00 {
+    /* BMDR */
+    dRes_INDEX_LV3SHUT00_BMD_DOOR_SHUTTER_00_e=0x5,
+    /* DZB  */
+    dRes_INDEX_LV3SHUT00_DZB_S_SHUT_ROU_e=0x8,
+    /* EVT  */
+    dRes_INDEX_LV3SHUT00_DAT_EVENT_LIST_e=0xB,
+};
+
+enum dRes_ID_LV3SHUT00 {
+    /* BMDR */
+    dRes_ID_LV3SHUT00_BMD_DOOR_SHUTTER_00_e=0x5,
+    /* DZB  */
+    dRes_ID_LV3SHUT00_DZB_S_SHUT_ROU_e=0x8,
+    /* EVT  */
+    dRes_ID_LV3SHUT00_DAT_EVENT_LIST_e=0xB,
+};
+
+enum DOOR_SHUTTER_00_JNT {
+    DOOR_SHUTTER_00_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_LV3SHUT00_H */

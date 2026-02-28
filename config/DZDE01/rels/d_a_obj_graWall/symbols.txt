@@ -1,0 +1,17 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+Create__14daObjGraWall_cFv = .text:0x0000005C; // type:function size:0x120 scope:global align:4
+Execute__14daObjGraWall_cFv = .text:0x0000017C; // type:function size:0xA0 scope:global align:4
+col_init__14daObjGraWall_cFv = .text:0x0000021C; // type:function size:0x54 scope:global align:4
+col_set__14daObjGraWall_cFv = .text:0x00000270; // type:function size:0x70 scope:global align:4
+daObjGraWall_Execute__FP14daObjGraWall_c = .text:0x000002E0; // type:function size:0x4 scope:global align:4
+daObjGraWall_IsDelete__FP14daObjGraWall_c = .text:0x000002E4; // type:function size:0x8 scope:global align:4
+daObjGraWall_Delete__FP14daObjGraWall_c = .text:0x000002EC; // type:function size:0x8 scope:global align:4
+daObjGraWall_create__FP10fopAc_ac_c = .text:0x000002F4; // type:function size:0x4 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+l_DATA = .rodata:0x00000000; // type:object size:0x8 scope:global align:4
+l_cyl_src = .rodata:0x00000008; // type:object size:0x44 scope:global align:4
+l_daObjGraWall_Method = .data:0x00000000; // type:object size:0x20 scope:global align:4
+g_profile_GRA_WALL = .data:0x00000020; // type:object size:0x30 scope:global align:4

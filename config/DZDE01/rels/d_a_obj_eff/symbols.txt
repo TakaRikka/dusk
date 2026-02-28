@@ -1,0 +1,14 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+_create__Q28daObjEff5Act_cFv = .text:0x0000005C; // type:function size:0xB4 scope:global align:4
+Mthd_Create__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv = .text:0x00000110; // type:function size:0x4 scope:global align:4
+Mthd_Delete__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv = .text:0x00000114; // type:function size:0x8 scope:global align:4
+Mthd_Execute__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv = .text:0x0000011C; // type:function size:0x8 scope:global align:4
+Mthd_Draw__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv = .text:0x00000124; // type:function size:0x8 scope:global align:4
+Mthd_IsDelete__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv = .text:0x0000012C; // type:function size:0x8 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+@89732 = .rodata:0x00000000; // type:object size:0x4 scope:local align:4
+lbl_95_data_0 = .data:0x00000000; // type:object size:0x20
+lbl_95_data_20 = .data:0x00000020; // type:object size:0x30

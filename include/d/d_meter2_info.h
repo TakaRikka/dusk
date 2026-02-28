@@ -188,7 +188,7 @@ public:
     u16 getFloatingMessageID() { return mFloatingMessageID; }
     s16 getHorseLifeCount() { return mHorseLifeCount; }
     void setMeterItemPanePtr(int i_no, CPaneMgr* i_pane) { mMeterItemPanePtr[i_no] = i_pane; }
-    bool isShopTalkFlag() { return mShopTalkFlag != false; }
+    bool isShopTalkFlag() { return mShopTalkFlag ? true : false; }
     u8 getCollectCursorPosX() { return mCollectCursorPosX; }
     u8 getCollectCursorPosY() { return mCollectCursorPosY; }
     void setCollectCursorPosXY(u8 x, u8 y) {

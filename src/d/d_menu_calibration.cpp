@@ -12,6 +12,7 @@
 #include "d/d_meter_HIO.h"
 #include "d/d_msg_string.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include <cstring>
 
 // Need 0xC bytes of padding with no symbol between dMenu_Calibration_c::__vtable and the end of .data
 // This is likely caused by the vtable of an abstract base class getting put there and then stripped out.

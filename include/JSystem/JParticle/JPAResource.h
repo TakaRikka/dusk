@@ -37,13 +37,13 @@ public:
     void calcWorkData_c(JPAEmitterWorkData*);
     void calcWorkData_d(JPAEmitterWorkData*);
 
-    JPABaseShape* getBsp() const { return mpBaseShape; }
-    JPAExtraShape* getEsp() const { return mpExtraShape; }
-    JPAChildShape* getCsp() const { return mpChildShape; }
-    JPAExTexShape* getEts() const { return mpExTexShape; }
-    JPADynamicsBlock* getDyn() const { return mpDynamicsBlock; }
+    JPABaseShape* getBsp() const { return pBsp; }
+    JPAExtraShape* getEsp() const { return pEsp; }
+    JPAChildShape* getCsp() const { return pCsp; }
+    JPAExTexShape* getEts() const { return pEts; }
+    JPADynamicsBlock* getDyn() const { return pDyn; }
 
-    u32 getTexIdx(u32 idx) const { return mpTDB1[idx]; }
+    const u16 getTexIdx(u8 idx) { return mpTDB1[idx]; }
     u16 getUsrIdx() const { return mUsrIdx; }
 
 public:
@@ -57,18 +57,18 @@ public:
     /* 0x14 */ ParticleFunc* mpCalcParticleChildFuncList;
     /* 0x18 */ ParticleFunc* mpDrawParticleChildFuncList;
 
-    /* 0x1C */ JPABaseShape* mpBaseShape;
-    /* 0x20 */ JPAExtraShape* mpExtraShape;
-    /* 0x24 */ JPAChildShape* mpChildShape;
-    /* 0x28 */ JPAExTexShape* mpExTexShape;
-    /* 0x2C */ JPADynamicsBlock* mpDynamicsBlock;
-    /* 0x30 */ JPAFieldBlock** mpFieldBlocks;
-    /* 0x34 */ JPAKeyBlock** mpKeyBlocks;
+    /* 0x1C */ JPABaseShape* pBsp;
+    /* 0x20 */ JPAExtraShape* pEsp;
+    /* 0x24 */ JPAChildShape* pCsp;
+    /* 0x28 */ JPAExTexShape* pEts;
+    /* 0x2C */ JPADynamicsBlock* pDyn;
+    /* 0x30 */ JPAFieldBlock** ppFld;
+    /* 0x34 */ JPAKeyBlock** ppKey;
     /* 0x38 */ u16 const* mpTDB1;
     /* 0x3C */ u16 mUsrIdx;
-    /* 0x3E */ u8 mFieldBlockNum;
-    /* 0x3F */ u8 mKeyBlockNum;
-    /* 0x40 */ u8 mTDB1Num;
+    /* 0x3E */ u8 fldNum;
+    /* 0x3F */ u8 keyNum;
+    /* 0x40 */ u8 texNum;
     /* 0x41 */ u8 mpCalcEmitterFuncListNum;
     /* 0x42 */ u8 mpDrawEmitterFuncListNum;
     /* 0x43 */ u8 mpDrawEmitterChildFuncListNum;

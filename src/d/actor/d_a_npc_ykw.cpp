@@ -18,6 +18,7 @@
 #include "d/d_tresure.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_ext.h"
+#include <cstring>
 
 #if DEBUG
 class daNpc_ykW_HIO_c : public mDoHIO_entry_c {

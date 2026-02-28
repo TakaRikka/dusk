@@ -1,0 +1,28 @@
+#ifndef RES_MARO2_H
+#define RES_MARO2_H
+
+enum dRes_INDEX_MARO2 {
+    /* BCK  */
+    dRes_INDEX_MARO2_BCK_MARO_CROUCH_e=0x5,
+    dRes_INDEX_MARO2_BCK_MARO_F_GLARE_TALK_e=0x6,
+    dRes_INDEX_MARO2_BCK_MARO_FH_GLARE_TALK_e=0x7,
+    /* BTP  */
+    dRes_INDEX_MARO2_BTP_MARO_F_GLARE_TALK_e=0xA,
+    dRes_INDEX_MARO2_BTP_MARO_FH_GLARE_TALK_e=0xB,
+    /* EVT  */
+    dRes_INDEX_MARO2_DAT_EVENT_LIST_e=0xE,
+};
+
+enum dRes_ID_MARO2 {
+    /* BCK  */
+    dRes_ID_MARO2_BCK_MARO_CROUCH_e=0x5,
+    dRes_ID_MARO2_BCK_MARO_F_GLARE_TALK_e=0x6,
+    dRes_ID_MARO2_BCK_MARO_FH_GLARE_TALK_e=0x7,
+    /* BTP  */
+    dRes_ID_MARO2_BTP_MARO_F_GLARE_TALK_e=0xA,
+    dRes_ID_MARO2_BTP_MARO_FH_GLARE_TALK_e=0xB,
+    /* EVT  */
+    dRes_ID_MARO2_DAT_EVENT_LIST_e=0xE,
+};
+
+#endif /* !RES_MARO2_H */

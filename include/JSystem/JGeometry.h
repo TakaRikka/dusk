@@ -296,12 +296,7 @@ struct TVec3<f32> : public Vec {
     }
 
     void scale(__REGISTER f32 sc) {
-#if DEBUG
-        x *= sc;
-        y *= sc;
-        z *= sc;
-#else
-#ifdef __MWERKS__
+#if PLATFORM_GCN && defined(__MWERKS__)
         __REGISTER f32 z;
         __REGISTER f32 x_y;
         __REGISTER f32* dst = &x;
@@ -315,12 +310,15 @@ struct TVec3<f32> : public Vec {
             ps_muls0 zres,       z, sc
             psq_st   zres,  8(dst),  1, 0
         };
-#endif
+#else
+        x *= sc;
+        y *= sc;
+        z *= sc;
 #endif
     }
 
     void scale(__REGISTER f32 sc, const TVec3<f32>& other) {
-#ifdef __MWERKS__
+#if PLATFORM_GCN && defined(__MWERKS__)
         __REGISTER const f32* src = &other.x;
         __REGISTER f32 z;
         __REGISTER f32 x_y;
@@ -335,6 +333,10 @@ struct TVec3<f32> : public Vec {
             ps_muls0 zres,       z, sc
             psq_st   zres,  8(dst),  1, 0
         };
+#else
+        x = other.x * sc;
+        y = other.y * sc;
+        z = other.z * sc;
 #endif
     }
 

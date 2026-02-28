@@ -12,6 +12,7 @@
 #include "d/actor/d_a_player.h"
 #include "f_op/f_op_camera_mng.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 static int daObj_Lp_Draw(obj_lp_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;

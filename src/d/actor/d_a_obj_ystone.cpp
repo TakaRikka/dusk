@@ -8,6 +8,7 @@
 #include "d/actor/d_a_obj_ystone.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include <cstring>
 
 static char const* l_arcName[7] = {
     "N_gD_mskF",

@@ -11,6 +11,7 @@
 #include "Z2AudioLib/Z2SoundObjMgr.h"
 #include "Z2AudioLib/Z2StatusMgr.h"
 #include "d/d_com_inf_game.h"
+#include <cstring>
 
 Z2SceneMgr::Z2SceneMgr() : JASGlobalInstance<Z2SceneMgr>(true) {
     sceneNum = -1;

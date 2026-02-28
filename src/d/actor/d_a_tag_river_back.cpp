@@ -82,7 +82,7 @@ void daTagRiverBack_c::actionOrderEvent() {
 
 void daTagRiverBack_c::actionEvent() {
     daPy_py_c* player = daPy_getPlayerActorClass();
-    mCount += (s16)1;
+    S16_ADD(mCount, 1);
     if (dComIfGp_evmng_endCheck(mEventID)) {
         setAction(ACTION_DEAD_e);
         dComIfGp_event_reset();

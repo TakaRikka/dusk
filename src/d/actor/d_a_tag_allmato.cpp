@@ -6,6 +6,7 @@
 #include "d/actor/d_a_obj_itamato.h"
 #include "d/actor/d_a_arrow.h"
 #include "f_op/f_op_camera_mng.h"
+#include <cstring>
 
 static daNpcT_evtData_c l_evtList[8] = {
     {"", 0},

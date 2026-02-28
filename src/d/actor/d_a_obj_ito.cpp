@@ -483,8 +483,7 @@ static void action(obj_ito_class* i_this) {
                         MtxPull();
 
                         *pcVar1 = (*pcVar2 + (sp10c * j)) + spf4;
-                        sVar5 += (s16)((TREG_F(13) + 2200.0f) + (TREG_F(12) + 1500.0f) * cM_ssin(j * (BREG_S(0) + 5000) + i * (BREG_S(1) + 3000)));
-
+                        ANGLE_ADD(sVar5, (TREG_F(13) + 2200.0f) + (TREG_F(12) + 1500.0f) * cM_ssin(j * (BREG_S(0) + 5000) + i * (BREG_S(1) + 3000)));
                         if (j >= 10) {
                             fVar1 -= fVar2;
                             sVar3 -= sVar4;

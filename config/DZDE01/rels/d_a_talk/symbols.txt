@@ -1,0 +1,15 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+__dt__8daTalk_cFv = .text:0x0000005C; // type:function size:0x70 scope:global align:4
+create__8daTalk_cFv = .text:0x000000CC; // type:function size:0x10C scope:global align:4
+execute__8daTalk_cFv = .text:0x000001D8; // type:function size:0x1B0 scope:global align:4
+messageSet__8daTalk_cFv = .text:0x00000388; // type:function size:0x3C scope:global align:4
+daTalk_Create__FP10fopAc_ac_c = .text:0x000003C4; // type:function size:0x4 scope:global align:4
+daTalk_Delete__FP8daTalk_c = .text:0x000003C8; // type:function size:0x28 scope:global align:4
+daTalk_Execute__FP8daTalk_c = .text:0x000003F0; // type:function size:0x4 scope:global align:4
+daTalk_Draw__FP8daTalk_c = .text:0x000003F4; // type:function size:0x8 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+l_daTalk_Method = .data:0x00000000; // type:object size:0x20 scope:global align:4
+g_profile_TALK = .data:0x00000020; // type:object size:0x30 scope:global align:4

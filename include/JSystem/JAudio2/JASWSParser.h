@@ -5,8 +5,8 @@
 
 class JKRHeap;
 class JASWaveBank;
-class JASBasicWaveBank;
-class JASSimpleWaveBank;
+struct JASBasicWaveBank;
+struct JASSimpleWaveBank;
 
 /**
  * @ingroup jsystem-jaudio

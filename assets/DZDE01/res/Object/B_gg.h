@@ -1,0 +1,133 @@
+#ifndef RES_B_GG_H
+#define RES_B_GG_H
+
+enum dRes_INDEX_B_GG {
+    /* BCK  */
+    dRes_INDEX_B_GG_BCK_GGA_ATTACK_1_e=0x4,
+    dRes_INDEX_B_GG_BCK_GGA_ATTACK_2_e=0x5,
+    dRes_INDEX_B_GG_BCK_GGA_ATTACK_3_e=0x6,
+    dRes_INDEX_B_GG_BCK_GGA_ATTACK_4_e=0x7,
+    dRes_INDEX_B_GG_BCK_GGA_FS_HIT_e=0x8,
+    dRes_INDEX_B_GG_BCK_GGA_FS_OFF_e=0x9,
+    dRes_INDEX_B_GG_BCK_GGA_GUARD_e=0xA,
+    dRes_INDEX_B_GG_BCK_GGA_PREPARATION_e=0xB,
+    dRes_INDEX_B_GG_BCK_GGA_PULL_e=0xC,
+    dRes_INDEX_B_GG_BCK_GGA_SHOUT_e=0xD,
+    dRes_INDEX_B_GG_BCK_GGA_WAIT_e=0xE,
+    dRes_INDEX_B_GG_BCK_GGB_ATTACK_A_e=0xF,
+    dRes_INDEX_B_GG_BCK_GGB_ATTACK_B_e=0x10,
+    dRes_INDEX_B_GG_BCK_GGB_ATTACK_C_e=0x11,
+    dRes_INDEX_B_GG_BCK_GGB_BACK_STEP_e=0x12,
+    dRes_INDEX_B_GG_BCK_GGB_DAMAGE_L_e=0x13,
+    dRes_INDEX_B_GG_BCK_GGB_DAMAGE_R_e=0x14,
+    dRes_INDEX_B_GG_BCK_GGB_DIE_e=0x15,
+    dRes_INDEX_B_GG_BCK_GGB_FAINT_e=0x16,
+    dRes_INDEX_B_GG_BCK_GGB_FS_HIT_e=0x17,
+    dRes_INDEX_B_GG_BCK_GGB_GUARD_e=0x18,
+    dRes_INDEX_B_GG_BCK_GGB_PULL_e=0x19,
+    dRes_INDEX_B_GG_BCK_GGB_SIDE_STEP_e=0x1A,
+    dRes_INDEX_B_GG_BCK_GGB_TAKE_OFF_e=0x1B,
+    dRes_INDEX_B_GG_BCK_GGB_WAIT_A_e=0x1C,
+    dRes_INDEX_B_GG_BCK_GGB_WAIT_B_e=0x1D,
+    dRes_INDEX_B_GG_BCK_GGB_WALK_e=0x1E,
+    dRes_INDEX_B_GG_BCK_GG_DIE_e=0x1F,
+    dRes_INDEX_B_GG_BCK_GG_WAIT_e=0x20,
+    /* BMDR */
+    dRes_INDEX_B_GG_BMD_GG_e=0x23,
+    dRes_INDEX_B_GG_BMD_GG_MET_e=0x24,
+    dRes_INDEX_B_GG_BMD_GG_SHIELD_e=0x25,
+    dRes_INDEX_B_GG_BMD_GG_SWORD_e=0x26,
+};
+
+enum dRes_ID_B_GG {
+    /* BCK  */
+    dRes_ID_B_GG_BCK_GGA_ATTACK_1_e=0x4,
+    dRes_ID_B_GG_BCK_GGA_ATTACK_2_e=0x5,
+    dRes_ID_B_GG_BCK_GGA_ATTACK_3_e=0x6,
+    dRes_ID_B_GG_BCK_GGA_ATTACK_4_e=0x7,
+    dRes_ID_B_GG_BCK_GGA_FS_HIT_e=0x8,
+    dRes_ID_B_GG_BCK_GGA_FS_OFF_e=0x9,
+    dRes_ID_B_GG_BCK_GGA_GUARD_e=0xA,
+    dRes_ID_B_GG_BCK_GGA_PREPARATION_e=0xB,
+    dRes_ID_B_GG_BCK_GGA_PULL_e=0xC,
+    dRes_ID_B_GG_BCK_GGA_SHOUT_e=0xD,
+    dRes_ID_B_GG_BCK_GGA_WAIT_e=0xE,
+    dRes_ID_B_GG_BCK_GGB_ATTACK_A_e=0xF,
+    dRes_ID_B_GG_BCK_GGB_ATTACK_B_e=0x10,
+    dRes_ID_B_GG_BCK_GGB_ATTACK_C_e=0x11,
+    dRes_ID_B_GG_BCK_GGB_BACK_STEP_e=0x12,
+    dRes_ID_B_GG_BCK_GGB_DAMAGE_L_e=0x13,
+    dRes_ID_B_GG_BCK_GGB_DAMAGE_R_e=0x14,
+    dRes_ID_B_GG_BCK_GGB_DIE_e=0x15,
+    dRes_ID_B_GG_BCK_GGB_FAINT_e=0x16,
+    dRes_ID_B_GG_BCK_GGB_FS_HIT_e=0x17,
+    dRes_ID_B_GG_BCK_GGB_GUARD_e=0x18,
+    dRes_ID_B_GG_BCK_GGB_PULL_e=0x19,
+    dRes_ID_B_GG_BCK_GGB_SIDE_STEP_e=0x1A,
+    dRes_ID_B_GG_BCK_GGB_TAKE_OFF_e=0x1B,
+    dRes_ID_B_GG_BCK_GGB_WAIT_A_e=0x1C,
+    dRes_ID_B_GG_BCK_GGB_WAIT_B_e=0x1D,
+    dRes_ID_B_GG_BCK_GGB_WALK_e=0x1E,
+    dRes_ID_B_GG_BCK_GG_DIE_e=0x1F,
+    dRes_ID_B_GG_BCK_GG_WAIT_e=0x20,
+    /* BMDR */
+    dRes_ID_B_GG_BMD_GG_e=0x23,
+    dRes_ID_B_GG_BMD_GG_MET_e=0x24,
+    dRes_ID_B_GG_BMD_GG_SHIELD_e=0x25,
+    dRes_ID_B_GG_BMD_GG_SWORD_e=0x26,
+};
+
+enum GG_JNT {
+    GG_JNT_WORLD_ROOT_e=0x0,
+    GG_JNT_BACKBONE01_e=0x1,
+    GG_JNT_BACKBONE02_e=0x2,
+    GG_JNT_NECK01_e=0x3,
+    GG_JNT_NECK02_e=0x4,
+    GG_JNT_HEAD_e=0x5,
+    GG_JNT_JAW_e=0x6,
+    GG_JNT_NECKLACE_e=0x7,
+    GG_JNT_SHOULDER_L_e=0x8,
+    GG_JNT_ARM_L_01_e=0x9,
+    GG_JNT_ARM_L_02_e=0xA,
+    GG_JNT_HAND_L_e=0xB,
+    GG_JNT_FINGER_L_e=0xC,
+    GG_JNT_SHOULDER_R_e=0xD,
+    GG_JNT_ARM_R01_e=0xE,
+    GG_JNT_ARM_R02_e=0xF,
+    GG_JNT_HAND_R_e=0x10,
+    GG_JNT_FINGER_R_e=0x11,
+    GG_JNT_WING_L01_e=0x12,
+    GG_JNT_WING_L02_e=0x13,
+    GG_JNT_WING_R01_e=0x14,
+    GG_JNT_WING_R02_e=0x15,
+    GG_JNT_WAIST_e=0x16,
+    GG_JNT_LEG_L01_e=0x17,
+    GG_JNT_LEG_L02_e=0x18,
+    GG_JNT_LEG_L03_e=0x19,
+    GG_JNT_FOOT_L_e=0x1A,
+    GG_JNT_LEG_R01_e=0x1B,
+    GG_JNT_LEG_R02_e=0x1C,
+    GG_JNT_LEG_R03_e=0x1D,
+    GG_JNT_FOOT_R_e=0x1E,
+    GG_JNT_MAEKAKE_e=0x1F,
+    GG_JNT_TAIL01_e=0x20,
+    GG_JNT_TAIL02_e=0x21,
+    GG_JNT_TAIL03_e=0x22,
+    GG_JNT_TAIL04_e=0x23,
+};
+
+enum GG_MET_JNT {
+    GG_MET_JNT_CENTER_MET_e=0x0,
+    GG_MET_JNT_EARRING_L_e=0x1,
+    GG_MET_JNT_EARRING_R_e=0x2,
+};
+
+enum GG_SHIELD_JNT {
+    GG_SHIELD_JNT_POLYSURFACE1_e=0x0,
+};
+
+enum GG_SWORD_JNT {
+    GG_SWORD_JNT_GG_SWORD_MODEL_e=0x0,
+};
+
+#endif /* !RES_B_GG_H */

@@ -1,0 +1,30 @@
+#ifndef RES_B_HASHI_H
+#define RES_B_HASHI_H
+
+enum dRes_INDEX_B_HASHI {
+    /* BMDG */
+    dRes_INDEX_B_HASHI_BMD_LV9_R07_PILLAR_HAHEN_e=0x5,
+    /* BMDR */
+    dRes_INDEX_B_HASHI_BMD_LV9_R07_PILLAR_e=0x8,
+    /* DZB  */
+    dRes_INDEX_B_HASHI_DZB_LV9_R07_PILLAR_e=0xB,
+};
+
+enum dRes_ID_B_HASHI {
+    /* BMDG */
+    dRes_ID_B_HASHI_BMD_LV9_R07_PILLAR_HAHEN_e=0x5,
+    /* BMDR */
+    dRes_ID_B_HASHI_BMD_LV9_R07_PILLAR_e=0x8,
+    /* DZB  */
+    dRes_ID_B_HASHI_DZB_LV9_R07_PILLAR_e=0xB,
+};
+
+enum LV9_R07_PILLAR_HAHEN_JNT {
+    LV9_R07_PILLAR_HAHEN_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum LV9_R07_PILLAR_JNT {
+    LV9_R07_PILLAR_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_B_HASHI_H */

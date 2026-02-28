@@ -17,6 +17,8 @@ void __VIInit(VITVMode mode);
 void __VISetAdjustingValues(s16 x, s16 y);
 void __VIGetAdjustingValues(s16* x, s16* y);
 void __VIGetCurrentPosition(s16* x, s16* y);
+BOOL __VIResetSIIdle();
+BOOL __VIResetRFIdle();
 BOOL __VIResetDev0Idle();
 
 /* vi3in1.c */

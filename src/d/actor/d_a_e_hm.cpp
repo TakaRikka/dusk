@@ -395,7 +395,7 @@ int daE_HM_c::W_MoveCheckWall() {
         dComIfG_Bgsp().GetTriPla(linChk, &plane1);
 
         if (!dComIfG_Bgsp().GetMagnetCode(linChk)) {
-            field_0x5b4 += (s16)0x200;
+            ANGLE_ADD(field_0x5b4, 0x200);
             return 1;
         }
 
@@ -438,7 +438,7 @@ int daE_HM_c::W_WallCheck() {
         cM3dGPla plane;
         dComIfG_Bgsp().GetTriPla(linChk, &plane);
         if (!dComIfG_Bgsp().GetMagnetCode(linChk)) {
-            field_0x5b4 += (s16)0x200;
+            ANGLE_ADD(field_0x5b4, 0x200);
             return 1;
         }
     }
@@ -841,7 +841,7 @@ void daE_HM_c::DeathMotion() {
     f32 frame = mAnm_p->getFrame();
     if (mAcch.ChkGroundHit() && (field_0x5da++, field_0x5da) == 1) {
         speed.y = yREG_F(11) + 35.0f;
-        current.angle.y -= (s16)0x1000;
+        ANGLE_SUB(current.angle.y, 0x1000);
         SetAnm(8, 0, nREG_F(9) + 1.0f, nREG_F(12) + 1.0f);
         mAnm_p->setPlaySpeed(yREG_F(12) + 2.0f);
     }
@@ -1075,7 +1075,7 @@ void daE_HM_c::At_Check() {
         }
 
         if ((s16)mAtInfo.mAttackPower > 0) {
-            health -= (s16)mAtInfo.mAttackPower;
+            S16_SUB(health, mAtInfo.mAttackPower);
         }
 
         s8 unkByte1 = 0;

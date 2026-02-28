@@ -33,8 +33,8 @@ public:
     s8 getExpScale() const { return mpData->mExpScale; }
     u8 getIndTexIdx() const { return mpData->mIndTexIdx; }
     u8 getSecTexIdx() const { return mpData->mSecTexIdx; }
-    bool isUseIndirect() const { return !!(mpData->mFlags & 0x01); }
-    bool isUseSecTex() const { return !!(mpData->mFlags & 0x0100); }
+    BOOL isUseIndirect() const { return mpData->mFlags & 0x01; }
+    BOOL isUseSecTex() const { return mpData->mFlags & 0x0100; }
 
 public:
     const JPAExTexShapeData* mpData;

@@ -1377,7 +1377,7 @@ void daObj_Kanban2_c::executeFloat() {
 
     if (!float_damage_check()) {
         field_0x5e8.x += 0x400;
-        field_0x5ee.x += (s16)(70.0f * cM_ssin(field_0x5e8.x));
+        ANGLE_ADD(field_0x5ee.x, 70.0f * cM_ssin(field_0x5e8.x));
 
         if (current.pos.y >= field_0x604) {
             current.pos.y = field_0x604;

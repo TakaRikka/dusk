@@ -21,17 +21,18 @@ public:
         u8 check(fopAc_ac_c*);
         bool check(cXyz const&);
         void execute();
+        void draw();
         ~data_c() {}
         data_c() { reset(); }
 
         void setNext(data_c* i_next) { mpNext = i_next; }
         data_c* getNext() { return mpNext; }
         u8 getType() { return mType; }
-        bool isUsed() { return mRoomNo < 0; }
+        bool isUsed() { return mRoomNo >= 0; }
         s8 getRoomNo() { return mRoomNo; }
 
         /* 0x00 */ s8 mRoomNo;
-        /* 0x01 */ bool field_0x1;
+        /* 0x01 */ u8 field_0x1;
         /* 0x02 */ u8 field_0x2;
         /* 0x03 */ u8 field_0x3;
         /* 0x04 */ u8 mType;
@@ -44,7 +45,7 @@ public:
     public:
         void add(daSus_c::data_c*);
         void reset();
-        room_c() { init(); }
+        room_c() { mpData = NULL; }
         void init() { mpData = NULL; }
 
         /* 0x0 */ data_c* mpData;
@@ -55,6 +56,7 @@ public:
     static void check(fopAc_ac_c*);
     static bool check(s8 i_roomNo, cXyz const& i_pos);
     static void execute();
+    static void draw();
     int create();
 
     static void reset(int roomNo) {

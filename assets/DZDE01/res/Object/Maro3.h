@@ -1,0 +1,26 @@
+#ifndef RES_MARO3_H
+#define RES_MARO3_H
+
+enum dRes_INDEX_MARO3 {
+    /* BCK  */
+    dRes_INDEX_MARO3_BCK_MARO_ASK_e=0x4,
+    dRes_INDEX_MARO3_BCK_MARO_ASKING_e=0x5,
+    dRes_INDEX_MARO3_BCK_MARO_F_BESUTALK_e=0x6,
+    dRes_INDEX_MARO3_BCK_MARO_FH_BESUTALK_e=0x7,
+    /* BTP  */
+    dRes_INDEX_MARO3_BTP_MARO_F_BESUTALK_e=0xA,
+    dRes_INDEX_MARO3_BTP_MARO_FH_BESUTALK_e=0xB,
+};
+
+enum dRes_ID_MARO3 {
+    /* BCK  */
+    dRes_ID_MARO3_BCK_MARO_ASK_e=0x4,
+    dRes_ID_MARO3_BCK_MARO_ASKING_e=0x5,
+    dRes_ID_MARO3_BCK_MARO_F_BESUTALK_e=0x6,
+    dRes_ID_MARO3_BCK_MARO_FH_BESUTALK_e=0x7,
+    /* BTP  */
+    dRes_ID_MARO3_BTP_MARO_F_BESUTALK_e=0xA,
+    dRes_ID_MARO3_BTP_MARO_FH_BESUTALK_e=0xB,
+};
+
+#endif /* !RES_MARO3_H */

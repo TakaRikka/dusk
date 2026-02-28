@@ -10,18 +10,14 @@ void JPALoadExTex(JPAEmitterWorkData* work) {
 
     GXTexCoordID secTexCoordID = GX_TEXCOORD1;
     if (ets->isUseIndirect()) {
-        GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE,
-                          GX_PTIDENTITY);
-        u8 texIdx = ets->getIndTexIdx();
-        work->mpResMgr->load(work->mpRes->getTexIdx(texIdx), GX_TEXMAP2);
+        GXSetTexCoordGen(secTexCoordID, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+        work->mpResMgr->load(work->mpRes->getTexIdx(ets->getIndTexIdx()), GX_TEXMAP2);
         secTexCoordID = GX_TEXCOORD2;
     }
 
     if (ets->isUseSecTex()) {
-        GXSetTexCoordGen2(secTexCoordID, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE,
-                          GX_PTIDENTITY);
-        u8 texIdx = ets->getSecTexIdx();
-        work->mpResMgr->load(work->mpRes->getTexIdx(texIdx), GX_TEXMAP3);
+        GXSetTexCoordGen(secTexCoordID, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+        work->mpResMgr->load(work->mpRes->getTexIdx(ets->getSecTexIdx()), GX_TEXMAP3);
     }
 }
 

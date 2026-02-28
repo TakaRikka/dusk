@@ -9,6 +9,7 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_lib.h"
+#include <cstring>
 
 const char* daShopItem_c::getShopArcname() {
     switch (m_itemNo) {

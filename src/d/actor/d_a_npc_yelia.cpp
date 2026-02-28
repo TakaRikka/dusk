@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_npc_yelia.h"
 #include "d/actor/d_a_demo_item.h"
+#include <cstring>
 
 static daNpc_GetParam1 l_bmdData[3] = {
     {3, 1},

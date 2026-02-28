@@ -16,6 +16,7 @@ force_active: [
 block_relocations:
 - source: .text:0x80330e68
 - source: .text:0x80330ee0
+- source: .data:0x8042621c
 
 modules:
 - object: files/RELS.arc:rels/mmem/f_pc_profile_lst.rel

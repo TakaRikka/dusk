@@ -96,18 +96,16 @@ public:
 
     void debugBfProc();
 
-    int setStartDemo(int mapToolId) { return mException.setStartDemo(mapToolId); }
-    void setCameraPlay(int status) { mCameraPlay = status; }
     dEvDtBase_c& getBase() { return mEventList[mCurrentEvType]; }
-    void setFlag(int flag) { mFlags.flagSet(flag); }
-    bool dataLoaded() { return mDataLoaded; }
-    int flagCheck(int flag) { return mFlags.flagCheck(flag); }
-    int cameraPlay() { return mCameraPlay; }
-
     event_binary_data_header* getHeader(u8 type) {return mEventList[type].getHeaderP(); }
     dEvDtEvent_c* getEventList(u8 type) { return mEventList[type].getEventP(); }
-
+    int cameraPlay() { return mCameraPlay; }
+    void setCameraPlay(int status) { mCameraPlay = status; }
+    int setStartDemo(int mapToolId) { return mException.setStartDemo(mapToolId); }
     dEvDtFlag_c& getFlags() { return mFlags; }
+    int flagCheck(int flag) { return mFlags.flagCheck(flag); }
+    void setFlag(int flag) { mFlags.flagSet(flag); }
+    bool dataLoaded() { return mDataLoaded; }
 
     #if DEBUG
     dEvM_HIO_c& getEventHIO();

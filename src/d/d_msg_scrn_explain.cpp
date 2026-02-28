@@ -12,6 +12,7 @@
 #include "d/d_pane_class.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include <cstdio>
+#include <cstring>
 
 #if VERSION == VERSION_GCN_JPN
 #define STR_BUF_LEN 528

@@ -1936,7 +1936,7 @@ BOOL daNpc_zrA_c::swimRiverDescend(void* param_0) {
         }
 
         if ((player_r26->current.pos - current.pos).absXZ() < 500.0f) {
-            angle_sp44.x += (s16)0x1000;
+            ANGLE_ADD(angle_sp44.x, 0x1000);
         }
 
         if (field_0x153c) {

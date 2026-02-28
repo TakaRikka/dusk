@@ -61,8 +61,8 @@ void daSpinLift_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
+static u32 const l_bmdIdx[] = {4, 4, 4, 4, 4, 4, 4, 4, 4};
 int daSpinLift_c::CreateHeap() {
-    static u32 const l_bmdIdx[] = {4, 4, 4, 4, 4, 4, 4, 4, 4};
     J3DModelData* modelData =
         (J3DModelData*)dComIfG_getObjectRes(l_resNameIdx[mModelType], l_bmdIdx[mModelType]);
     JUT_ASSERT(222, modelData != NULL);
@@ -73,8 +73,8 @@ int daSpinLift_c::CreateHeap() {
     return 1;
 }
 
+static const int l_dzbIdx[] = {7, 7, 7, 7, 7, 7, 7, 7, 7};
 int daSpinLift_c::create() {
-    static const int l_dzbIdx[] = {7, 7, 7, 7, 7, 7, 7, 7, 7};
     fopAcM_ct(this, daSpinLift_c);
     mModelType = getModelType();
     int phase = dComIfG_resLoad(&mPhase, l_resNameIdx[mModelType]);
@@ -123,7 +123,7 @@ int daSpinLift_c::Execute(Mtx** param_0) {
 }
 
 void daSpinLift_c::moveLift() {
-    static daSpinLift_c::modeFunc mode_proc[] = {
+    static const daSpinLift_c::modeFunc mode_proc[] = {
         &daSpinLift_c::modeWait,
         &daSpinLift_c::modeUpMove,
         &daSpinLift_c::modeDownMove,

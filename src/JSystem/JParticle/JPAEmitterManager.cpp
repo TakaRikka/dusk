@@ -79,7 +79,7 @@ void JPAEmitterManager::calc(u8 group_id) {
 
         JPABaseEmitter* emtr = pLink->getObject();
 
-        if (emtr->mpRes->calc(pWd, emtr) && !emtr->checkStatus(0x200))
+        if (emtr->pRes->calc(pWd, emtr) && !emtr->checkStatus(0x200))
             forceDeleteEmitter(emtr);
     }
 }
@@ -115,7 +115,7 @@ void JPAEmitterManager::draw(JPADrawInfo const* drawInfo, u8 group_id) {
         JPABaseEmitter* emtr = pLink->getObject();
         if (!emtr->checkStatus(0x04)) {
             pWd->mpResMgr = pResMgrAry[emtr->mResMgrID];
-            emtr->mpRes->draw(pWd, emtr);
+            emtr->pRes->draw(pWd, emtr);
         }
     }
 }

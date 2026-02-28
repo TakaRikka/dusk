@@ -9,7 +9,7 @@ extern "C" {
 
 typedef struct MEMiExpHeapMBlockHead MEMiExpHeapMBlockHead;
 
-struct MEMiExPheapMBlockHead {
+struct MEMiExpHeapMBlockHead {
     u16 signature;
 
     union {
@@ -25,6 +25,31 @@ struct MEMiExPheapMBlockHead {
     u32 blockSize;
     MEMiExpHeapMBlockHead* prev;
     MEMiExpHeapMBlockHead* next;
+};
+
+typedef struct MEMiExpMBlockList MEMiExpMBlockList;
+
+struct MEMiExpMBlockList {
+    MEMiExpHeapMBlockHead* head;
+    MEMiExpHeapMBlockHead* tail;
+};
+
+typedef struct MEMiExpHeapHead MEMiExpHeapHead;
+
+struct MEMiExpHeapHead {
+    MEMiExpMBlockList mbFreeList;
+    MEMiExpMBlockList mbUsedList;
+
+    u16 groupID;
+
+    union {
+        u16 val;
+        struct {
+            u16 _reserved : 14;
+            u16 useMarginOfAlign : 1;
+            u16 allocMode : 1;
+        } fields;
+    } feature;
 };
 
 MEMHeapHandle MEMCreateExpHeapEx(void*, u32, u16);

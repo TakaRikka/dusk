@@ -260,8 +260,8 @@ namespace homebutton {
         /* 0x5D0 */ nw4hbm::snd::SoundHeap* mpSoundHeap;
         /* 0x5D4 */ nw4hbm::snd::SoundHandle* mpSoundHandle;
         /* 0x5D8 */ u16 mAppVolume[3];
-        /* 0x5E0 */ AXFXAllocFunc mAxFxAlloc;
-        /* 0x5E4 */ AXFXFreeFunc mAxFxFree;
+        /* 0x5E0 */ AXFXAllocHook mAxFxAlloc;
+        /* 0x5E4 */ AXFXFreeHook mAxFxFree;
         /* 0x5E8 */ AXFX_REVERBHI mAxFxReverb;
         /* 0x748 */ AXAuxCallback mAuxCallback;
         /* 0x74C */ void* mpAuxContext;

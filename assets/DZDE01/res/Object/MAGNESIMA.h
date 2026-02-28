@@ -1,0 +1,36 @@
+#ifndef RES_MAGNESIMA_H
+#define RES_MAGNESIMA_H
+
+enum dRes_INDEX_MAGNESIMA {
+    /* BMDR */
+    dRes_INDEX_MAGNESIMA_BMD_KUSARI_e=0x6,
+    dRes_INDEX_MAGNESIMA_BMD_S_MAGNE_SIMA_e=0x7,
+    /* BRK  */
+    dRes_INDEX_MAGNESIMA_BRK_S_MAGNE_SIMA_e=0xA,
+    /* BTK  */
+    dRes_INDEX_MAGNESIMA_BTK_S_MAGNE_SIMA_e=0xD,
+    /* DZB  */
+    dRes_INDEX_MAGNESIMA_DZB_S_MAGNE_SIMA_e=0x10,
+};
+
+enum dRes_ID_MAGNESIMA {
+    /* BMDR */
+    dRes_ID_MAGNESIMA_BMD_KUSARI_e=0x6,
+    dRes_ID_MAGNESIMA_BMD_S_MAGNE_SIMA_e=0x7,
+    /* BRK  */
+    dRes_ID_MAGNESIMA_BRK_S_MAGNE_SIMA_e=0xA,
+    /* BTK  */
+    dRes_ID_MAGNESIMA_BTK_S_MAGNE_SIMA_e=0xD,
+    /* DZB  */
+    dRes_ID_MAGNESIMA_DZB_S_MAGNE_SIMA_e=0x10,
+};
+
+enum KUSARI_JNT {
+    KUSARI_JNT_KUSARI_MODEL_e=0x0,
+};
+
+enum S_MAGNE_SIMA_JNT {
+    S_MAGNE_SIMA_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_MAGNESIMA_H */

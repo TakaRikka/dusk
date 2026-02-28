@@ -1,0 +1,48 @@
+#ifndef RES_OBJECT_L_H
+#define RES_OBJECT_L_H
+
+enum dRes_INDEX_OBJECT_L {
+    /* BMDR */
+    dRes_INDEX_OBJECT_L_BMD_B_BROOM_L_e=0x3,
+    dRes_INDEX_OBJECT_L_BMD_B_MILKTUBO_L_e=0x4,
+    dRes_INDEX_OBJECT_L_BMD_B_SPEAR_L_e=0x5,
+    dRes_INDEX_OBJECT_L_BMD_B_TUBO_L_e=0x6,
+    dRes_INDEX_OBJECT_L_BMD_K_KAGOM_L_e=0x7,
+    dRes_INDEX_OBJECT_L_BMD_K_KAGOW_L_e=0x8,
+};
+
+enum dRes_ID_OBJECT_L {
+    /* BMDR */
+    dRes_ID_OBJECT_L_BMD_B_BROOM_L_e=0x3,
+    dRes_ID_OBJECT_L_BMD_B_MILKTUBO_L_e=0x4,
+    dRes_ID_OBJECT_L_BMD_B_SPEAR_L_e=0x5,
+    dRes_ID_OBJECT_L_BMD_B_TUBO_L_e=0x6,
+    dRes_ID_OBJECT_L_BMD_K_KAGOM_L_e=0x7,
+    dRes_ID_OBJECT_L_BMD_K_KAGOW_L_e=0x8,
+};
+
+enum B_BROOM_L_JNT {
+    B_BROOM_L_JNT_B_BROOM_MODEL_e=0x0,
+};
+
+enum B_MILKTUBO_L_JNT {
+    B_MILKTUBO_L_JNT_B_MILKTUBO_e=0x0,
+};
+
+enum B_SPEAR_L_JNT {
+    B_SPEAR_L_JNT_B_SPEAR_MODEL_e=0x0,
+};
+
+enum B_TUBO_L_JNT {
+    B_TUBO_L_JNT_B_TUBO_e=0x0,
+};
+
+enum K_KAGOM_L_JNT {
+    K_KAGOM_L_JNT_K_KAGOM_MODEL_e=0x0,
+};
+
+enum K_KAGOW_L_JNT {
+    K_KAGOW_L_JNT_K_KAGOW_MODEL_e=0x0,
+};
+
+#endif /* !RES_OBJECT_L_H */

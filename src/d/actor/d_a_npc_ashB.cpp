@@ -8,6 +8,7 @@
 #include "d/actor/d_a_npc_ashB.h"
 #include "d/actor/d_a_npc.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
+#include <cstring>
 
 const daNpcAshB_HIOParam daNpcAshB_Param_c::m = {
     205.0f,   // attention_offset

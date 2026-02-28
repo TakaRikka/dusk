@@ -6,6 +6,7 @@
 #include "d/d_com_static.h"
 #include "d/d_save.h"
 #include "f_op/f_op_actor_mng.h"
+#include <cstring>
 
 static char* l_evtNameList[] = {
     NULL,

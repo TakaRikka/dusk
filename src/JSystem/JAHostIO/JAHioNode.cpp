@@ -4,6 +4,7 @@
 #include "JSystem/JAHostIO/JAHioMessage.h"
 #include "JSystem/JAHostIO/JAHioMgr.h"
 #include "JSystem/JHostIO/JORServer.h"
+#include <cstring>
 
 JAHioNode::JAHioNode(const char* name) : mTree(this) {
     mLastChild = NULL;

@@ -14,6 +14,7 @@
 #if DEBUG
 #include "JSystem/JHostIO/JORFile.h"
 #include "d/d_debug_viewer.h"
+#include <cstring>
 #endif
 
 dCcD_SrcCyl daNpc_Kn_c::mCcDCyl = {
@@ -4994,22 +4995,14 @@ int daNpc_Kn_c::setSlipPrtcl() {
     mDoMtx_stack_c::multVecZero(&mParticleMngr[0].mPos);
     mParticleMngr[0].mPos.y -= 20.0f;
     mParticleMngr[0].mAngle = current.angle;
-    #if DEBUG
-    mParticleMngr[0].mAngle.y -= (s16) 0x8000;
-    #else
-    mParticleMngr[0].mAngle.y -= 0x8000;
-    #endif
+    ANGLE_SUB_2(mParticleMngr[0].mAngle.y, 0x8000);
     mParticleMngr[0].mpModel = true;
 
     mDoMtx_stack_c::copy(mpModelMorf[0]->getModel()->getAnmMtx(0x1b));
     mDoMtx_stack_c::multVecZero(&mParticleMngr[1].mPos);
     mParticleMngr[1].mPos.y -= 20.0f;
     mParticleMngr[1].mAngle = current.angle;
-    #if DEBUG
-    mParticleMngr[1].mAngle.y -= (s16) 0x8000;
-    #else
-    mParticleMngr[1].mAngle.y -= 0x8000;
-    #endif
+    ANGLE_SUB_2(mParticleMngr[1].mAngle.y, 0x8000);
     mParticleMngr[1].mpModel = true;
     return 1;
 }

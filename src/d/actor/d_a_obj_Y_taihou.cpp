@@ -156,7 +156,7 @@ void daObjYtaihou_c::setMtx() {
     static f32 l_wheelMinR;
     static u8 lbl_396_bss_4C;
 
-    home.angle.z += (s16) ((s16)(shape_angle.y - old.angle.y) * 0.8f);
+    ANGLE_ADD(home.angle.z, (s16)(shape_angle.y - old.angle.y) * 0.8f);
     if ((s8)lbl_396_bss_4C == 0) {
         l_wheelMinR = cM_scos(0xccc) * 60.0f;
         lbl_396_bss_4C = 1;

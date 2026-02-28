@@ -254,7 +254,7 @@ void daAlink_c::setSpeedAndAngleSwim() {
 
         if (checkInputOnR()) {
             if (getDirectionFromCurrentAngle() == DIR_BACKWARD) {
-                current.angle.y += 0x8000;
+                ANGLE_ADD_2(current.angle.y, 0x8000);
                 mNormalSpeed *= -1.0f;
             }
 
@@ -875,7 +875,7 @@ BOOL daAlink_c::checkSwimNeckUpDown() const {
 }
 
 void daAlink_c::setSwimUpDownOffset() {
-    mProcVar2.field_0x300c += (s16)((cM_rndF(0.3f) + 0.85f) * 2330.0f);
+    ANGLE_ADD(mProcVar2.field_0x300c, (cM_rndF(0.3f) + 0.85f) * 2330.0f);
 
     f32 var_f1;
     if (checkWolf()) {
@@ -1413,12 +1413,13 @@ int daAlink_c::procSwimDamageInit(dCcD_GObjInf* i_hitObj) {
               dmg_vec->z * var_f29 + dmg_vec->x * var_f30);
 
     mProcVar0.field_0x3008 =
-        cLib_minMaxLimit(cM_atan2s(sp24.z, sp24.y), (s16)-mpHIO->mDamage.mDamSwim.m.mFrontBackBodyMaxAngle,
-                         (s16)mpHIO->mDamage.mDamSwim.m.mFrontBackBodyMaxAngle);
+        cLib_minMaxLimit<s16>(cM_atan2s(sp24.z, sp24.y),
+                              -mpHIO->mDamage.mDamSwim.m.mFrontBackBodyMaxAngle,
+                              mpHIO->mDamage.mDamSwim.m.mFrontBackBodyMaxAngle);
 
-    mProcVar1.field_0x300a = cLib_minMaxLimit(
+    mProcVar1.field_0x300a = cLib_minMaxLimit<s16>(
         cM_atan2s(sp24.x, -JMAFastSqrt(sp24.y * sp24.y + sp24.z * sp24.z)),
-        (s16)-mpHIO->mDamage.mDamSwim.m.mLeftRightBodyMaxAngle, (s16)mpHIO->mDamage.mDamSwim.m.mLeftRightBodyMaxAngle);
+        -mpHIO->mDamage.mDamSwim.m.mLeftRightBodyMaxAngle, mpHIO->mDamage.mDamSwim.m.mLeftRightBodyMaxAngle);
 
     int dir = getDirectionFromAngle(cM_atan2s(-sp24.x, -sp24.z));
     if (bvar4) {

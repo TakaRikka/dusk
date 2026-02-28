@@ -95,7 +95,7 @@ int daTagWaterFall_c::draw() {
 
         cXyz endPos;
         for (int i = 0; i < 0x10; i++) {
-            angle += (s16)0x1000;
+            ANGLE_ADD(angle, 0x1000);
             endPos = current.pos;
             if (l_HIO.draw_ellipse == 0) {
                 paramX = l_HIO.ellipse_radius_a * cM_ssin(angle);

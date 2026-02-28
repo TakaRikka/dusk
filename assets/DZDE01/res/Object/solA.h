@@ -1,0 +1,46 @@
+#ifndef RES_SOLA_H
+#define RES_SOLA_H
+
+enum dRes_INDEX_SOLA {
+    /* BCK  */
+    dRes_INDEX_SOLA_BCK_SOLA_WAIT_A_e=0x4,
+    /* BMDR */
+    dRes_INDEX_SOLA_BMD_SOLA_e=0x7,
+};
+
+enum dRes_ID_SOLA {
+    /* BCK  */
+    dRes_ID_SOLA_BCK_SOLA_WAIT_A_e=0x4,
+    /* BMDR */
+    dRes_ID_SOLA_BMD_SOLA_e=0x7,
+};
+
+enum SOLA_JNT {
+    SOLA_JNT_CENTER_e=0x0,
+    SOLA_JNT_BACKBONE1_e=0x1,
+    SOLA_JNT_BACKBONE2_e=0x2,
+    SOLA_JNT_NECK_e=0x3,
+    SOLA_JNT_HEAD_e=0x4,
+    SOLA_JNT_SHOULDERL_e=0x5,
+    SOLA_JNT_ARM1L_e=0x6,
+    SOLA_JNT_ARM2L_e=0x7,
+    SOLA_JNT_HANDL_e=0x8,
+    SOLA_JNT_FINGERL_e=0x9,
+    SOLA_JNT_THUMBL_e=0xA,
+    SOLA_JNT_SHOULDERR_e=0xB,
+    SOLA_JNT_ARM1R_e=0xC,
+    SOLA_JNT_ARM2R_e=0xD,
+    SOLA_JNT_HANDR_e=0xE,
+    SOLA_JNT_FINGERR_e=0xF,
+    SOLA_JNT_THUMBR_e=0x10,
+    SOLA_JNT_WAIST_e=0x11,
+    SOLA_JNT_LEG1L_e=0x12,
+    SOLA_JNT_LEG2L_e=0x13,
+    SOLA_JNT_FOOTL_e=0x14,
+    SOLA_JNT_LEG1R_e=0x15,
+    SOLA_JNT_LEG2R_e=0x16,
+    SOLA_JNT_FOOTR_e=0x17,
+    SOLA_JNT_SAYA_e=0x18,
+};
+
+#endif /* !RES_SOLA_H */

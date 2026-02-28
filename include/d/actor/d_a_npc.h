@@ -10,6 +10,7 @@
 #include "d/d_msg_flow.h"
 #include "d/d_particle_copoly.h"
 #include "global.h"
+#include <cstring>
 
 struct daNpc_GetParam1 {  // name unknown
     /* 0x0 */ int fileIdx;
@@ -169,7 +170,7 @@ public:
     int chkPassed1(cXyz, int);
     int chkPassed2(cXyz, cXyz*, int, int);
 #if DEBUG
-    int drawDbgInfo(f32, int);
+    void drawDbgInfo(f32, int);
 #endif
 
     daNpcT_Path_c() {
@@ -276,7 +277,7 @@ public:
             cXyz cStack_50 = *mAttnPosP - param_1;
             sVar3 += cM_atan2s(cStack_50.x,  cStack_50.z);
             sVar3 -= param_2;
-            sVar3 -= (s16)(field_0x150.y - param_2);
+            ANGLE_SUB(sVar3, field_0x150.y - param_2);
             sVar3 += param_5;
         }
         if (param_3) {

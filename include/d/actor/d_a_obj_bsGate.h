@@ -48,18 +48,4 @@ private:
 
 STATIC_ASSERT(sizeof(daBsGate_c) == 0x5B8);
 
-class daBsGate_HIO_c : public mDoHIO_entry_c {
-public:
-    daBsGate_HIO_c();
-    ~daBsGate_HIO_c() {}
-
-    void genMessage(JORMContext*);
-
-    /* 0x4 */ f32 mOpenSpeed;
-    /* 0x8 */ f32 mCloseSpeed;
-    /* 0xC */ u8 mShockStrength;
-};
-
-STATIC_ASSERT(sizeof(daBsGate_HIO_c) == 0x10);
-
 #endif /* D_A_OBJ_BSGATE_H */

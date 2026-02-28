@@ -1,0 +1,91 @@
+#ifndef RES_COW_H
+#define RES_COW_H
+
+enum dRes_INDEX_COW {
+    /* BCK  */
+    dRes_INDEX_COW_BCK_COW_CATCH_e=0x5,
+    dRes_INDEX_COW_BCK_COW_CONNECT_A_e=0x6,
+    dRes_INDEX_COW_BCK_COW_DOWN_L_e=0x7,
+    dRes_INDEX_COW_BCK_COW_DOWN_R_e=0x8,
+    dRes_INDEX_COW_BCK_COW_EAT_A_e=0x9,
+    dRes_INDEX_COW_BCK_COW_FALL_L_e=0xA,
+    dRes_INDEX_COW_BCK_COW_FALL_R_e=0xB,
+    dRes_INDEX_COW_BCK_COW_GETUP_L_e=0xC,
+    dRes_INDEX_COW_BCK_COW_GETUP_R_e=0xD,
+    dRes_INDEX_COW_BCK_COW_JUMP_e=0xE,
+    dRes_INDEX_COW_BCK_COW_MOO_A_e=0xF,
+    dRes_INDEX_COW_BCK_COW_PRESS_e=0x10,
+    dRes_INDEX_COW_BCK_COW_PRESS_W_A_e=0x11,
+    dRes_INDEX_COW_BCK_COW_PRESS_W_B_e=0x12,
+    dRes_INDEX_COW_BCK_COW_RUN_e=0x13,
+    dRes_INDEX_COW_BCK_COW_RUSH_e=0x14,
+    dRes_INDEX_COW_BCK_COW_SHAKE_A_e=0x15,
+    dRes_INDEX_COW_BCK_COW_SHAKEOFF_e=0x16,
+    dRes_INDEX_COW_BCK_COW_SHOCK_e=0x17,
+    dRes_INDEX_COW_BCK_COW_TOSS_e=0x18,
+    dRes_INDEX_COW_BCK_COW_TROT_A_e=0x19,
+    dRes_INDEX_COW_BCK_COW_WAIT_A_e=0x1A,
+    dRes_INDEX_COW_BCK_COW_WALK_A_e=0x1B,
+    dRes_INDEX_COW_BCK_COW_WALK_DEJECTED_e=0x1C,
+    /* BMDR */
+    dRes_INDEX_COW_BMD_COW_e=0x1F,
+    /* BTP  */
+    dRes_INDEX_COW_BTP_COW_e=0x22,
+};
+
+enum dRes_ID_COW {
+    /* BCK  */
+    dRes_ID_COW_BCK_COW_CATCH_e=0x5,
+    dRes_ID_COW_BCK_COW_CONNECT_A_e=0x6,
+    dRes_ID_COW_BCK_COW_DOWN_L_e=0x7,
+    dRes_ID_COW_BCK_COW_DOWN_R_e=0x8,
+    dRes_ID_COW_BCK_COW_EAT_A_e=0x9,
+    dRes_ID_COW_BCK_COW_FALL_L_e=0xA,
+    dRes_ID_COW_BCK_COW_FALL_R_e=0xB,
+    dRes_ID_COW_BCK_COW_GETUP_L_e=0xC,
+    dRes_ID_COW_BCK_COW_GETUP_R_e=0xD,
+    dRes_ID_COW_BCK_COW_JUMP_e=0xE,
+    dRes_ID_COW_BCK_COW_MOO_A_e=0xF,
+    dRes_ID_COW_BCK_COW_PRESS_e=0x10,
+    dRes_ID_COW_BCK_COW_PRESS_W_A_e=0x11,
+    dRes_ID_COW_BCK_COW_PRESS_W_B_e=0x12,
+    dRes_ID_COW_BCK_COW_RUN_e=0x13,
+    dRes_ID_COW_BCK_COW_RUSH_e=0x14,
+    dRes_ID_COW_BCK_COW_SHAKE_A_e=0x15,
+    dRes_ID_COW_BCK_COW_SHAKEOFF_e=0x16,
+    dRes_ID_COW_BCK_COW_SHOCK_e=0x17,
+    dRes_ID_COW_BCK_COW_TOSS_e=0x18,
+    dRes_ID_COW_BCK_COW_TROT_A_e=0x19,
+    dRes_ID_COW_BCK_COW_WAIT_A_e=0x1A,
+    dRes_ID_COW_BCK_COW_WALK_A_e=0x1B,
+    dRes_ID_COW_BCK_COW_WALK_DEJECTED_e=0x1C,
+    /* BMDR */
+    dRes_ID_COW_BMD_COW_e=0x1F,
+    /* BTP  */
+    dRes_ID_COW_BTP_COW_e=0x22,
+};
+
+enum COW_JNT {
+    COW_JNT_CENTER_e=0x0,
+    COW_JNT_BACKBORN_e=0x1,
+    COW_JNT_LEGFLA_e=0x2,
+    COW_JNT_LEGFLB_e=0x3,
+    COW_JNT_FOOTFL_e=0x4,
+    COW_JNT_LEGFRA_e=0x5,
+    COW_JNT_LEGFRB_e=0x6,
+    COW_JNT_FOOTFR_e=0x7,
+    COW_JNT_NECK_e=0x8,
+    COW_JNT_HEAD_e=0x9,
+    COW_JNT_MOUTH_e=0xA,
+    COW_JNT_WAIST_e=0xB,
+    COW_JNT_LEGBLA_e=0xC,
+    COW_JNT_LEGBLB_e=0xD,
+    COW_JNT_FOOTBL_e=0xE,
+    COW_JNT_LEGBRA_e=0xF,
+    COW_JNT_LEGBRB_e=0x10,
+    COW_JNT_FOOTBR_e=0x11,
+    COW_JNT_TAIL1_e=0x12,
+    COW_JNT_TAIL2_e=0x13,
+};
+
+#endif /* !RES_COW_H */

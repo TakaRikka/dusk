@@ -9,6 +9,7 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_actor_enemy.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 enum E_st_RES_File_ID {
     /* BCK */

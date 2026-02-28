@@ -143,24 +143,24 @@ public:
     int isMagicFlag(u8 i_magic) const;
 
     u16 getMaxLife() const { return mMaxLife; }
+    void setMaxLife(u16 i_maxLife) { mMaxLife = i_maxLife; }
     u16 getLife() const { return mLife; }
-    u16 getRupee() const { return mRupee; }
-    u16 getOil() const { return mOil; }
-    u16 getMaxOil() const { return mMaxOil; }
-    u8 getMagic() const { return mMagic; }
-    u8 getMaxMagic() const { return mMaxMagic; }
-    u8 getSelectEquip(int item) const { return mSelectEquip[item]; }
-    u8 getTransformStatus() const { return mTransformStatus; }
-    u8 getWalletSize() const { return mWalletSize; }
-    void setOil(u16 i_oil) { mOil = i_oil; }
-    void setMaxOil(u16 i_maxOil) { mMaxOil = i_maxOil; }
-    void setWalletSize(u8 i_size) { mWalletSize = i_size; }
-    void setMagic(u8 i_magic) { mMagic = i_magic; }
-    void setMaxMagic(u8 i_maxMagic) { mMaxMagic = i_maxMagic; }
-    void setRupee(u16 i_rupees) { mRupee = i_rupees; }
     void setLife(u16 i_life) { mLife = i_life; }
-    void setMaxLife(u8 i_maxLife) { mMaxLife = i_maxLife; }
+    u16 getRupee() const { return mRupee; }
+    void setRupee(u16 i_rupees) { mRupee = i_rupees; }
+    u16 getMaxOil() const { return mMaxOil; }
+    void setMaxOil(u16 i_maxOil) { mMaxOil = i_maxOil; }
+    u16 getOil() const { return mOil; }
+    void setOil(u16 i_oil) { mOil = i_oil; }
+    u8 getSelectEquip(int item) const { return mSelectEquip[item]; }
     void setSelectEquip(int i_equipId, u8 i_itemNo) { mSelectEquip[i_equipId] = i_itemNo; }
+    u8 getWalletSize() const { return mWalletSize; }
+    void setWalletSize(u8 i_size) { mWalletSize = i_size; }
+    u8 getMaxMagic() const { return mMaxMagic; }
+    void setMaxMagic(u8 i_maxMagic) { mMaxMagic = i_maxMagic; }
+    u8 getMagic() const { return mMagic; }
+    void setMagic(u8 i_magic) { mMagic = i_magic; }
+    u8 getTransformStatus() const { return mTransformStatus; }
     void setTransformStatus(u8 i_status) { mTransformStatus = i_status; }
 
 private:
@@ -194,12 +194,12 @@ public:
     void offTransformLV(int i_no);
     BOOL isTransformLV(int i_no) const;
 
-    void setDateIpl(s64 i_time) { mDateIpl = i_time; }
-    u16 getDate() const { return mDate; }
-    f32 getTime() const { return mTime; }
-    void setDate(u16 i_date) { mDate = i_date; }
-    void setTime(f32 i_time) { mTime = i_time; }
     OSTime getDateIpl() const { return mDateIpl; }
+    void setDateIpl(OSTime i_time) { mDateIpl = i_time; }
+    f32 getTime() const { return mTime; }
+    void setTime(f32 i_time) { mTime = i_time; }
+    u16 getDate() const { return mDate; }
+    void setDate(u16 i_date) { mDate = i_date; }
 
 private:
     /* 0x00 */ OSTime mDateIpl;
@@ -236,9 +236,9 @@ class dSv_player_return_place_c {
 public:
     void init();
     void set(const char* i_name, s8 i_roomNo, u8 i_status);
-    s8 getRoomNo() const { return mRoomNo; }
-    u8 getPlayerStatus() const { return mPlayerStatus; }
     char* getName() { return mName; }
+    u8 getPlayerStatus() const { return mPlayerStatus; }
+    s8 getRoomNo() const { return mRoomNo; }
 
 private:
     /* 0x00 */ char mName[8];
@@ -257,13 +257,14 @@ public:
     void onRegionBit(int i_region);
     void set(const char* i_name, const cXyz& i_pos, s16 i_angle, s8 i_spawn, u8 i_regionNo);
 
-    bool isFieldDataExistFlag() const { return mFieldDataExistFlag; }
+    cXyz& getPos() { return mPos; }
+    s16 getAngleY() { return mAngleY; }
+    char* getName() { return mName; }
+    u8 getRegionNo() const { return mRegionNo; }
+    bool isFieldDataExistFlag() const { return mFieldDataExistFlag ? true : false; }
     void offFieldDataExistFlag() { mFieldDataExistFlag = false; }
     void onFieldDataExistFlag() { mFieldDataExistFlag = true; }
-    cXyz& getPos() { return mPos; }
-    u8 getRegionNo() const { return mRegionNo; }
-    char* getName() { return mName; }
-    s16 getAngleY() { return mAngleY; }
+
 
 private:
     /* 0x00 */ cXyz mPos;
@@ -283,13 +284,13 @@ public:
     void init();
     void setWarpItemData(const char* i_name, const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u8, u8);
 
-    const char* getName() { return mName; }
     cXyz& getPos() { return mPos; }
-    s16 getAngleY() { return mAngleY; }
-    s8 getRoomNo() { return mRoomNo; }
-    s8 getWarpAcceptStage() { return mWarpAcceptStage; }
-    void resetWarpAcceptStage() { mWarpAcceptStage = -1; }
+    s16 getAngleY() const { return mAngleY; }
+    const char* getName() { return mName; }
+    s8 getRoomNo() const { return mRoomNo; }
+    s8 getWarpAcceptStage() const { return mWarpAcceptStage; }
     void setWarpAcceptStage(s8 accept) { mWarpAcceptStage = accept; }
+    void resetWarpAcceptStage() { mWarpAcceptStage = -1; }
 
 private:
     /* 0x00 */ cXyz mPos;
@@ -375,8 +376,8 @@ public:
     void setBombNum(u8 i_bombType, u8 i_maxNum);
     u8 getBombNum(u8 i_bombType) const;
 
-    void setArrowNum(u8 i_maxNum) { mItemMax[ARROW_MAX] = i_maxNum; }
     u8 getArrowNum() const { return mItemMax[ARROW_MAX]; }
+    void setArrowNum(u8 i_maxNum) { mItemMax[ARROW_MAX] = i_maxNum; }
 
 private:
     /* 0x0 */ u8 mItemMax[8];
@@ -468,20 +469,18 @@ private:
 class dSv_player_info_c {
 public:
     void init();
-    char* getLinkName() { return mPlayerName; }
-    const char* getPlayerName() const { return mPlayerName; }
-    char* getHorseName() { return mHorseName; }
-    void setPlayerName(const char* i_name) { strcpy((char*)mPlayerName, i_name); }
-    void setHorseName(const char* i_name) { strcpy((char*)mHorseName, i_name); }
-    void setTotalTime(s64 i_time) { mTotalTime = i_time; }
-    s64 getTotalTime() const { return mTotalTime; }
-    u8 getClearCount() const { return mClearCount; }
-
+    OSTime getTotalTime() const { return mTotalTime; }
+    void setTotalTime(OSTime i_time) { mTotalTime = i_time; }
     void addDeathCount() {
         if (mDeathCount < 0xFFFF) {
             mDeathCount++;
         }
     }
+    char* getPlayerName() const { return const_cast<char*>(mPlayerName); }
+    void setPlayerName(const char* i_name) { strcpy(mPlayerName, i_name); }
+    char* getHorseName() const { return const_cast<char*>(mHorseName); }
+    void setHorseName(const char* i_name) { strcpy(mHorseName, i_name); }
+    u8 getClearCount() const { return mClearCount; }
 
 private:
     /* 0x00 */ u64 unk0;
@@ -509,7 +508,7 @@ public:
     // Ruby inline names are from TWW debug.
     u8 getRuby() { return mRuby; }
     void setRuby(u8 i_ruby) { mRuby = i_ruby; }
-    u8 getAttentionType() { return mAttentionType; }
+    u8 getAttentionType() const { return mAttentionType; }
     void setAttentionType(u8 i_mAttentionType) { mAttentionType = i_mAttentionType; }
     u16 getCalibrateDist() { return mCalibrateDist; }
     void setCalibrateDist(u16 i_mCalibrateDist) { mCalibrateDist = i_mCalibrateDist; }
@@ -549,24 +548,24 @@ public:
     dSv_player_c() {}
     void init();
 
-    dSv_player_info_c& getPlayerInfo() { return mPlayerInfo; }
     dSv_player_status_a_c& getPlayerStatusA() { return mPlayerStatusA; }
     dSv_player_status_b_c& getPlayerStatusB() { return mPlayerStatusB; }
     dSv_horse_place_c& getHorsePlace() { return mHorsePlace; }
-    dSv_player_item_c& getItem() { return mItem; }
-    dSv_player_collect_c& getCollect() { return mCollect; }
-    dSv_player_item_record_c& getItemRecord() { return mItemRecord; }
-    dSv_player_item_max_c& getItemMax() { return mItemMax; }
-    dSv_player_last_mark_info_c& getPlayerLastMarkInfo() { return mPlayerLastMarkInfo; }
     dSv_player_return_place_c& getPlayerReturnPlace() { return mPlayerReturnPlace; }
-    dSv_light_drop_c& getLightDrop() { return mLightDrop; }
-    dSv_player_get_item_c& getGetItem() { return mGetItem; }
-    dSv_player_config_c& getConfig() { return mConfig; }
-    dSv_letter_info_c& getLetterInfo() { return mLetterInfo; }
-    dSv_fishing_info_c& getFishingInfo() { return mFishingInfo; }
     dSv_player_field_last_stay_info_c& getPlayerFieldLastStayInfo() {
         return mPlayerFieldLastStayInfo;
     }
+    dSv_player_last_mark_info_c& getPlayerLastMarkInfo() { return mPlayerLastMarkInfo; }
+    dSv_player_item_c& getItem() { return mItem; }
+    dSv_player_get_item_c& getGetItem() { return mGetItem; }
+    dSv_player_item_record_c& getItemRecord() { return mItemRecord; }
+    dSv_player_item_max_c& getItemMax() { return mItemMax; }
+    dSv_player_collect_c& getCollect() { return mCollect; }
+    dSv_light_drop_c& getLightDrop() { return mLightDrop; }
+    dSv_letter_info_c& getLetterInfo() { return mLetterInfo; }
+    dSv_fishing_info_c& getFishingInfo() { return mFishingInfo; }
+    dSv_player_info_c& getPlayerInfo() { return mPlayerInfo; }
+    dSv_player_config_c& getConfig() { return mConfig; }
 
 private:
     /* 0x000 */ dSv_player_status_a_c mPlayerStatusA;
@@ -630,22 +629,32 @@ public:
     u8 getKeyNum() { return mKeyNum; }
     void setKeyNum(u8 i_keyNum) { mKeyNum = i_keyNum; }
     void onDungeonItemMap() { onDungeonItem(MAP); }
+    void offDungeonItemMap() { offDungeonItem(MAP); }
     s32 isDungeonItemMap() const { return isDungeonItem(MAP); }
     void onDungeonItemCompass() { onDungeonItem(COMPASS); }
+    void offDungeonItemCompass() { offDungeonItem(COMPASS); }
     s32 isDungeonItemCompass() const { return isDungeonItem(COMPASS); }
-    void onDungeonItemWarp() { onDungeonItem(OOCCOO_NOTE); }
     void onDungeonItemBossKey() { onDungeonItem(BOSS_KEY); }
+    void offDungeonItemBossKey() { offDungeonItem(BOSS_KEY); }
     s32 isDungeonItemBossKey() const { return isDungeonItem(BOSS_KEY); }
-    void onStageBossEnemy() {
+        void onStageBossEnemy() {
         onDungeonItem(STAGE_BOSS_ENEMY);
         onDungeonItem(OOCCOO_NOTE);
     }
-    void onStageBossEnemy2() { onDungeonItem(STAGE_BOSS_ENEMY_2); }
+    void offStageBossEnemy() { offDungeonItem(STAGE_BOSS_ENEMY); }
     s32 isStageBossEnemy() const { return isDungeonItem(STAGE_BOSS_ENEMY); }
-    s32 isStageBossEnemy2() const { return isDungeonItem(STAGE_BOSS_ENEMY_2); }
-    s32 isStageLife() const { return isDungeonItem(STAGE_LIFE); }
-    s32 isDungeonItemWarp() const { return isDungeonItem(OOCCOO_NOTE); }
     void onStageLife() { onDungeonItem(STAGE_LIFE); }
+    void offStageLife() { offDungeonItem(STAGE_LIFE); }
+    s32 isStageLife() const { return isDungeonItem(STAGE_LIFE); }
+    void onStageBossDemo() { onDungeonItem(STAGE_BOSS_DEMO); }
+    void offStageBossDemo() { offDungeonItem(STAGE_BOSS_DEMO); }
+    s32 isStageBossDemo() const { return isDungeonItem(STAGE_BOSS_DEMO); }
+    void onDungeonItemWarp() { onDungeonItem(OOCCOO_NOTE); }
+    void offDungeonItemWarp() { offDungeonItem(OOCCOO_NOTE); }
+    s32 isDungeonItemWarp() const { return isDungeonItem(OOCCOO_NOTE); }
+    void onStageBossEnemy2() { onDungeonItem(STAGE_BOSS_ENEMY_2); }
+    void offStageBossEnemy2() { offDungeonItem(STAGE_BOSS_ENEMY_2); }
+    s32 isStageBossEnemy2() const { return isDungeonItem(STAGE_BOSS_ENEMY_2); }
 
 private:
     /* 0x00 */ u32 mTbox[2];
@@ -674,13 +683,12 @@ class dSv_MiniGame_c {
 public:
     void init();
 
-    void setBalloonScore(u32 i_score) { mBalloonScore = i_score; }
-    void setRaceGameTime(u32 i_time) { mRaceGameTime = i_time; }
-    void setHookGameTime(u32 i_time) { mHookGameTime = i_time; }
-
-    u32 getRaceGameTime() const { return mRaceGameTime; }
-    u32 getBalloonScore() const { return mBalloonScore; }
     u32 getHookGameTime() const { return mHookGameTime; }
+    void setHookGameTime(u32 i_time) { mHookGameTime = i_time; }
+    u32 getBalloonScore() const { return mBalloonScore; }
+    void setBalloonScore(u32 i_score) { mBalloonScore = i_score; }
+    u32 getRaceGameTime() const { return mRaceGameTime; }
+    void setRaceGameTime(u32 i_time) { mRaceGameTime = i_time; }
 
 private:
     /* 0x00 */ u8 unk0[1][4];
@@ -734,7 +742,6 @@ public:
 private:
     /* 0x00 */ s8 mStageNo;
     /* 0x01 */ u8 unk1;
-    /* 0x02 */ u8 unk2[2];
     /* 0x04 */ u32 mSwitch[2];
     /* 0x0C */ u32 mItem[4];
     /* 0x1C */ s16 unk28[16];
@@ -783,16 +790,15 @@ private:
 
 class dSv_zone_c {
 public:
-    dSv_zone_c() { mRoomNo = -1; }
+    dSv_zone_c() { reset(); }
     void init(int i_roomNo);
 
+    int getRoomNo() const { return mRoomNo; }
+    void reset() { mRoomNo = -1; }
     dSv_zoneBit_c& getBit() { return mBit; }
     const dSv_zoneBit_c& getBit() const { return mBit; }
     dSv_zoneActor_c& getActor() { return mActor; }
     const dSv_zoneActor_c& getActor() const { return mActor; }
-
-    int getRoomNo() const { return mRoomNo; }
-    void reset() { mRoomNo = -1; }
 
 private:
     /* 0x00 */ s8 mRoomNo;
@@ -807,22 +813,21 @@ class dSv_restart_c {
 public:
     void setRoom(const cXyz& i_position, s16 i_angleY, s8 i_roomNo);
 
-    void setRoomParam(u32 param) { mRoomParam = param; }
+    s8 getRoomNo() const { return mRoomNo; }
+    s16 getStartPoint() const { return mStartPoint; }
     void setStartPoint(s16 point) { mStartPoint = point; }
+    s16 getRoomAngleY() const { return mRoomAngleY; }
+    const cXyz& getRoomPos() const { return mRoomPos; }
+    u32 getRoomParam() const { return mRoomParam; }
+    void setRoomParam(u32 param) { mRoomParam = param; }
+    f32 getLastSpeedF() const { return mLastSpeedF; }
+    u32 getLastMode() const { return mLastMode; }
+    s16 getLastAngleY() const { return mLastAngleY; }
     void setLastSceneInfo(f32 speed, u32 mode, s16 angle) {
         mLastSpeedF = speed;
         mLastMode = mode;
         mLastAngleY = angle;
     }
-
-    s16 getStartPoint() const { return mStartPoint; }
-    u32 getLastMode() const { return mLastMode; }
-    s8 getRoomNo() const { return mRoomNo; }
-    u32 getRoomParam() const { return mRoomParam; }
-    const cXyz& getRoomPos() const { return mRoomPos; }
-    s16 getRoomAngleY() const { return mRoomAngleY; }
-    s16 getLastAngleY() const { return mLastAngleY; }
-    f32 getLastSpeedF() const { return mLastSpeedF; }
 
 private:
     /* 0x00 */ s8 mRoomNo;
@@ -847,21 +852,18 @@ public:
 
     void set(const cXyz& i_position, s16 i_angleY, s8, u32 i_param);
 
-    u32 getParam() const { return mParam; }
     const cXyz& getPos() const { return mPosition; }
+    u32 getParam() const { return mParam; }
     s16 getAngleY() const { return mAngleY; }
     s8 getRoomNo() const { return unk18; }
-
+    const cXyz& getCameraCtr() const { return mCamera.mCameraCtr; }
+    void setCameraCtr(const cXyz& i_ctr) { mCamera.mCameraCtr = i_ctr; }
+    const cXyz& getCameraEye() const { return mCamera.mCameraEye; }
+    void setCameraEye(const cXyz& i_eye) { mCamera.mCameraEye = i_eye; }
+    const cXyz& getCameraUp() const { return mCamera.mCameraUp; }
+    void setCameraUp(const cXyz& i_up) { mCamera.mCameraUp = i_up; }
     f32 getCameraFvy() const { return mCameraFvy; }
     void setCameraFvy(f32 i_fvy) { mCameraFvy = i_fvy; }
-
-    const cXyz& getCameraUp() const { return mCamera.mCameraUp; }
-    const cXyz& getCameraEye() const { return mCamera.mCameraEye; }
-    const cXyz& getCameraCtr() const { return mCamera.mCameraCtr; }
-
-    void setCameraUp(const cXyz& i_up) { mCamera.mCameraUp = i_up; }
-    void setCameraEye(const cXyz& i_eye) { mCamera.mCameraEye = i_eye; }
-    void setCameraCtr(const cXyz& i_ctr) { mCamera.mCameraCtr = i_ctr; }
 
 private:
     /* 0x00 */ cXyz mPosition;
@@ -886,18 +888,16 @@ public:
     dSv_memory2_c* getSave2(int i_stage2No);
 
     dSv_player_c& getPlayer() { return mPlayer; }
-    dSv_event_c& getEvent() { return mEvent; }
-    dSv_MiniGame_c& getMiniGame() { return mMiniGame; }
-
     dSv_memory_c& getSave(int i_stageNo) {
         JUT_ASSERT(1412, 0 <= i_stageNo && i_stageNo < STAGE_MAX);
         return mSave[i_stageNo];
     }
-
     void putSave(int i_stageNo, dSv_memory_c mem) {
-        JUT_ASSERT(1417, 0 <= i_stageNo && i_stageNo < dSv_save_c::STAGE_MAX);
+        JUT_ASSERT(1417, 0 <= i_stageNo && i_stageNo < STAGE_MAX);
         mSave[i_stageNo] = mem;
     }
+    dSv_event_c& getEvent() { return mEvent; }
+    dSv_MiniGame_c& getMiniGame() { return mMiniGame; }
 
     static const int STAGE_MAX = 32;
     static const int STAGE2_MAX = 64;
@@ -923,7 +923,7 @@ public:
 
     flagFile_c();
     ~flagFile_c();
-    BOOL check_flag(u16);
+    BOOL check_flag(u16 i_flag) { return (m_flags & i_flag) != 0; }
 
     virtual void listenPropertyEvent(const JORPropertyEvent*);
     virtual void genMessage(JORMContext*);
@@ -954,33 +954,32 @@ public:
     int initdata_to_card(char* card_ptr, int dataNum);
 
     dSv_save_c& getSavedata() { return mSavedata; }
+    void setSavedata(dSv_save_c& i_save) { mSavedata = i_save; }
+    dSv_player_c& getPlayer() { return mSavedata.getPlayer(); }
+    dSv_event_c& getEvent() { return mSavedata.getEvent(); }
+    dSv_MiniGame_c& getMiniGame() { return mSavedata.getMiniGame(); }
     dSv_memory_c& getMemory() { return mMemory; }
+    void setMemory(dSv_memory_c& i_memory) { mMemory = i_memory; }
+    dSv_danBit_c& getDan() { return mDan; }
+    void setDan(dSv_danBit_c& i_dan) { mDan = i_dan; }
+    void resetDan() { mDan.reset(); }
+    void initDan(s8 i_stage) { mDan.init(i_stage); }
     dSv_zone_c* getZones() { return mZone; }
     dSv_zone_c& getZone(int id) { return mZone[id]; }
-    dSv_player_c& getPlayer() { return mSavedata.getPlayer(); }
-    dSv_event_c& getTmp() { return mTmp; }
+    void removeZone(int zoneNo) { mZone[zoneNo].reset(); }
     dSv_restart_c& getRestart() { return mRestart; }
+    dSv_event_c& getTmp() { return mTmp; }
     dSv_turnRestart_c& getTurnRestart() { return mTurnRestart; }
-    dSv_event_c& getEvent() { return mSavedata.getEvent(); }
-    dSv_danBit_c& getDan() { return mDan; }
-    dSv_MiniGame_c& getMiniGame() { return mSavedata.getMiniGame(); }
-    s64 getStartTime() const { return mStartTime; }
-    s64 getSaveTotalTime() const { return mSaveTotalTime; }
-    void setStartTime(s64 time) { mStartTime = time; }
-    void setSaveTotalTime(s64 time) { mSaveTotalTime = time; }
-    void initDan(s8 i_stage) { mDan.init(i_stage); }
-    void resetDan() { mDan.reset(); }
     u8 getDataNum() const { return mDataNum; }
     void setDataNum(u8 num) { mDataNum = num; }
-    void removeZone(int zoneNo) { mZone[zoneNo].reset(); }
-    u8 getNoFile() const { return mNoFile; }
-    void setNoFile(u8 file) { mNoFile = file; }
     u8 getNewFile() const { return mNewFile; }
     void setNewFile(u8 file) { mNewFile = file; }
-
-    void setSavedata(dSv_save_c& i_save) { mSavedata = i_save; }
-    void setMemory(dSv_memory_c& i_memory) { mMemory = i_memory; }
-    void setDan(dSv_danBit_c& i_dan) { mDan = i_dan; }
+    u8 getNoFile() const { return mNoFile; }
+    void setNoFile(u8 file) { mNoFile = file; }
+    s64 getStartTime() const { return mStartTime; }
+    void setStartTime(s64 time) { mStartTime = time; }
+    s64 getSaveTotalTime() const { return mSaveTotalTime; }
+    void setSaveTotalTime(s64 time) { mSaveTotalTime = time; }
 
     static const int MEMORY_SWITCH = 0x80;
     static const int DAN_SWITCH = 0x40;

@@ -1,0 +1,26 @@
+#ifndef RES_KR03WAT06_H
+#define RES_KR03WAT06_H
+
+enum dRes_INDEX_KR03WAT06 {
+    /* BMDR */
+    dRes_INDEX_KR03WAT06_BMD_K_R03WATER06_e=0x5,
+    /* BTK  */
+    dRes_INDEX_KR03WAT06_BTK_K_R03WATER06_e=0x8,
+    /* DZB  */
+    dRes_INDEX_KR03WAT06_DZB_K_R03WATER06_e=0xB,
+};
+
+enum dRes_ID_KR03WAT06 {
+    /* BMDR */
+    dRes_ID_KR03WAT06_BMD_K_R03WATER06_e=0x5,
+    /* BTK  */
+    dRes_ID_KR03WAT06_BTK_K_R03WATER06_e=0x8,
+    /* DZB  */
+    dRes_ID_KR03WAT06_DZB_K_R03WATER06_e=0xB,
+};
+
+enum K_R03WATER06_JNT {
+    K_R03WATER06_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_KR03WAT06_H */

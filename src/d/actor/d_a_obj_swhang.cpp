@@ -11,6 +11,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
+#include <cstring>
 
 static u32 const l_bmdIdx[5] = {
     4, 4, 4, 4, 4,

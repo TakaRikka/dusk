@@ -1,0 +1,47 @@
+#ifndef RES_TOBY_H
+#define RES_TOBY_H
+
+enum dRes_INDEX_TOBY {
+    /* BMDR */
+    dRes_INDEX_TOBY_BMD_TOBY_e=0x3,
+};
+
+enum dRes_ID_TOBY {
+    /* BMDR */
+    dRes_ID_TOBY_BMD_TOBY_e=0x3,
+};
+
+enum TOBY_JNT {
+    TOBY_JNT_CENTER_e=0x0,
+    TOBY_JNT_BACKBONE1_e=0x1,
+    TOBY_JNT_BACKBONE2_e=0x2,
+    TOBY_JNT_NECK_e=0x3,
+    TOBY_JNT_HEAD_e=0x4,
+    TOBY_JNT_CHIN_e=0x5,
+    TOBY_JNT_MAYU_L_e=0x6,
+    TOBY_JNT_MAYU_R_e=0x7,
+    TOBY_JNT_MOUTH_e=0x8,
+    TOBY_JNT_SHOULDERL_e=0x9,
+    TOBY_JNT_ARML1_e=0xA,
+    TOBY_JNT_ARML2_e=0xB,
+    TOBY_JNT_HANDL_e=0xC,
+    TOBY_JNT_FINGERL_e=0xD,
+    TOBY_JNT_THUMBL_e=0xE,
+    TOBY_JNT_SHOULDERR_e=0xF,
+    TOBY_JNT_ARMR1_e=0x10,
+    TOBY_JNT_ARMR2_e=0x11,
+    TOBY_JNT_HANDR_e=0x12,
+    TOBY_JNT_FINGERR_e=0x13,
+    TOBY_JNT_THUMBR_e=0x14,
+    TOBY_JNT_WAIST_e=0x15,
+    TOBY_JNT_LEGL1_e=0x16,
+    TOBY_JNT_LEGL2_e=0x17,
+    TOBY_JNT_FOOTL_e=0x18,
+    TOBY_JNT_LEGR1_e=0x19,
+    TOBY_JNT_LEGR2_e=0x1A,
+    TOBY_JNT_FOOTR_e=0x1B,
+    TOBY_JNT_POCKETL_e=0x1C,
+    TOBY_JNT_POCKETR_e=0x1D,
+};
+
+#endif /* !RES_TOBY_H */

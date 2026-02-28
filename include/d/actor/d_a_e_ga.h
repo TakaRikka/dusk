@@ -34,7 +34,7 @@ public:
     /* 0x0570 */ u8 prm0;
     /* 0x0571 */ u8 prm1;
     /* 0x0572 */ u8 prm2;
-    /* 0x0574 */ ga_s ga_s[256];
+    /* 0x0574 */ struct ga_s ga_s[256];
     /* 0x4D74 */ int ga_num;
     /* 0x4D78 */ u8 HIOInit;
     /* 0x4D79 */ u8 initialized;

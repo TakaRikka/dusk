@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_npc_seib.h"
+#include <cstring>
 
 static int l_bmdData[2][1] = {12, 1};
 

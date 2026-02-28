@@ -1,0 +1,32 @@
+#ifndef RES_GRZ3_H
+#define RES_GRZ3_H
+
+enum dRes_INDEX_GRZ3 {
+    /* BCK  */
+    dRes_INDEX_GRZ3_BCK_GRZ_F_PUNCH_e=0x4,
+    dRes_INDEX_GRZ3_BCK_GRZ_F_PUNCHING_e=0x5,
+    dRes_INDEX_GRZ3_BCK_GRZ_F_RECOVER_e=0x6,
+    dRes_INDEX_GRZ3_BCK_GRZ_PUNCH_e=0x7,
+    dRes_INDEX_GRZ3_BCK_GRZ_PUNCHING_e=0x8,
+    dRes_INDEX_GRZ3_BCK_GRZ_RECOVER_e=0x9,
+    dRes_INDEX_GRZ3_BCK_GRZ_ROTATE_e=0xA,
+    dRes_INDEX_GRZ3_BCK_GRZ_TO_STONE_NORMAL_e=0xB,
+    /* BTP  */
+    dRes_INDEX_GRZ3_BTP_GRZ_F_RECOVER_e=0xE,
+};
+
+enum dRes_ID_GRZ3 {
+    /* BCK  */
+    dRes_ID_GRZ3_BCK_GRZ_F_PUNCH_e=0x4,
+    dRes_ID_GRZ3_BCK_GRZ_F_PUNCHING_e=0x5,
+    dRes_ID_GRZ3_BCK_GRZ_F_RECOVER_e=0x6,
+    dRes_ID_GRZ3_BCK_GRZ_PUNCH_e=0x7,
+    dRes_ID_GRZ3_BCK_GRZ_PUNCHING_e=0x8,
+    dRes_ID_GRZ3_BCK_GRZ_RECOVER_e=0x9,
+    dRes_ID_GRZ3_BCK_GRZ_ROTATE_e=0xA,
+    dRes_ID_GRZ3_BCK_GRZ_TO_STONE_NORMAL_e=0xB,
+    /* BTP  */
+    dRes_ID_GRZ3_BTP_GRZ_F_RECOVER_e=0xE,
+};
+
+#endif /* !RES_GRZ3_H */

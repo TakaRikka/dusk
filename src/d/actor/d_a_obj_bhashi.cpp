@@ -316,8 +316,8 @@ void Hahen_c::Roll_Set(cXyz* i_pos, f32 param_1, s16 i_no) {
 
     rot_speed.x = cM_rndFX(5000.0f + nREG_F(6));
     rot_speed.y = cM_rndFX(5000.0f + nREG_F(6));
-    rotation.x += (s16)0x1000;
-    rotation.y += (s16)0x1000;
+    ANGLE_ADD(rotation.x, 0x1000);
+    ANGLE_ADD(rotation.y, 0x1000);
 }
 
 void daObjBHASHI_c::setBaseMtx() {

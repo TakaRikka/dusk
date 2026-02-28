@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 typedef void (*DSPCallback)(void* task);
-typedef struct STRUCT_DSP_TASK DSPTaskInfo;
+struct STRUCT_DSP_TASK;
 
 typedef struct STRUCT_DSP_TASK {                                   
     /* 0x00 */ volatile u32 state;
@@ -26,8 +26,8 @@ typedef struct STRUCT_DSP_TASK {
     /* 0x2C */ DSPCallback res_cb;
     /* 0x30 */ DSPCallback done_cb;
     /* 0x34 */ DSPCallback req_cb;
-    /* 0x38 */ DSPTaskInfo* next;
-    /* 0x3C */ DSPTaskInfo* prev;
+    /* 0x38 */ struct STRUCT_DSP_TASK* next;
+    /* 0x3C */ struct STRUCT_DSP_TASK* prev;
     /* 0x40 */ OSTime t_context;
     /* 0x48 */ OSTime t_task;
 } DSPTaskInfo;

@@ -169,10 +169,14 @@ static fopAc_ac_c* m_near_carry;
 static fopAc_ac_c* m_near_weapon;
 
 static void* s_obj_sub(void* i_actor, void* i_data) {
+    f32 actor_dist;
+
+    UNUSED(i_data);
+
     if (fopAcM_IsActor(i_actor)) {
         if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && !fopAcM_checkCarryNow((fopAc_ac_c*)i_actor))
         {
-            f32 actor_dist = fopAcM_searchActorDistance((fopAc_ac_c*)i_actor, (fopAc_ac_c*)i_data);
+            actor_dist = fopAcM_searchActorDistance((fopAc_ac_c*)i_actor, (fopAc_ac_c*)i_data);
 
             if (actor_dist < 100.0f && !fopAcM_GetSpeedF((fopAc_ac_c*)i_actor) &&
                 !fopAcM_GetSpeed((fopAc_ac_c*)i_actor).y)
@@ -463,7 +467,7 @@ void daE_HZ_c::executeWait() {
     case 4:
         target = home.pos.y + 30.0f;
         if (cLib_chaseF(&current.pos.y, target, 5.0f)) {
-            field_0x6b4 += (s16)0x800;
+            ANGLE_ADD(field_0x6b4, 0x800);
             current.pos.y += cM_ssin(field_0x6b4) * 1.5f;
             cLib_chaseAngleS(&shape_angle.y, mPlayerAngleY, 0x400);
         }
@@ -713,8 +717,12 @@ void daE_HZ_c::initBackWalk() {
         linChk.Set(&start, &end, NULL);
 
         if (dComIfG_Bgsp().LineCross(&linChk)) {
-            cLib_offsetPos(&field_0x678, &home.pos, modifiedTargetAngleY & 0x4000 ? (s16)((targetAngleY + 0x4000) & 0x8000) :
-                                                        (s16)((targetAngleY & 0x8000) + 0x4000), &position);
+            if (modifiedTargetAngleY & 0x4000) {
+                targetAngleY = (s16)(targetAngleY + 0x4000 & 0x8000);
+            } else {
+                targetAngleY = (s16)((targetAngleY & 0x8000) + 0x4000);
+            }
+            cLib_offsetPos(&field_0x678, &home.pos, targetAngleY, &position);
         }
     }
 }
@@ -863,6 +871,7 @@ void daE_HZ_c::executeWind() {
     dBgS_GndChk gndChk;
     dBgS_LinChk linChk;
     BOOL bVar = false;
+    f32 deltaY;
     f32 frame = mpMorfSO->getFrame();
     f32 playerDist;
     f32 groundCross;
@@ -890,13 +899,13 @@ void daE_HZ_c::executeWind() {
         field_0x6cc = (s16)((playerDist * 15.0f) / 1000.0f);
         /* fallthrough */
     case 1:
-        frame = 6.0f - frame / 3.0f;
-        if (frame < 0.0f) {
-            frame = 0.0f;
+        deltaY = 6.0f - frame / 3.0f;
+        if (deltaY < 0.0f) {
+            deltaY = 0.0f;
         }
 
-        current.pos.y += frame;
-        shape_angle.y -= (s16)0x7D0;
+        current.pos.y += deltaY;
+        ANGLE_SUB(shape_angle.y, 0x7D0);
 
         if (mpMorfSO->checkFrame(field_0x6cc) || mpBoomerangActor == NULL ||
             mpBoomerangActor->getReturnFlg())
@@ -962,7 +971,7 @@ void daE_HZ_c::executeWind() {
             return;
         }
 
-        field_0x6b2 += (s16)0x800;
+        ANGLE_ADD(field_0x6b2, 0x800);
         linChk.Set(&current.pos, &position, NULL);
         if (!dComIfG_Bgsp().LineCross(&linChk)) {
             cLib_chaseF(&current.pos.x, position.x + field_0x678.x * cM_ssin(field_0x6b2), 50.0f);
@@ -991,7 +1000,7 @@ void daE_HZ_c::executeWind() {
             cLib_chaseAngleS(&shape_angle.x, -0x8000, 0x400);
         }
 
-        shape_angle.y -= (s16)l_HIO.reeling_rotation_speed;
+        ANGLE_SUB(shape_angle.y, l_HIO.reeling_rotation_speed);
         break;
 
     case 4:
@@ -1277,7 +1286,7 @@ void daE_HZ_c::executeWindChance() {
         }
 
         end = mpBoomerangActor->current.pos;
-        field_0x6b6 += (s16)0x800;
+        ANGLE_ADD(field_0x6b6, 0x800);
         start = current.pos;
         start.y += 50.0f;
         linChk.Set(&start, &end, NULL);
@@ -1296,7 +1305,7 @@ void daE_HZ_c::executeWindChance() {
         }
 
         shape_angle.y -= field_0x6b2;
-        field_0x6b4 += (s16)0x1000;
+        ANGLE_ADD(field_0x6b4, 0x1000);
         shape_angle.x = (s16)(cM_scos(field_0x6b4) * 6144.0f);
         break;
         
@@ -1307,12 +1316,12 @@ void daE_HZ_c::executeWindChance() {
         cLib_chaseAngleS(&field_0x6b2, 0, 0x100);
         cLib_chaseAngleS(&field_0x6b6, 0, 0x200);
         shape_angle.y -= field_0x6b2;
-        field_0x6b4 += (s16)0x1000;
+        ANGLE_ADD(field_0x6b4, 0x1000);
         shape_angle.x = (s16)(field_0x6b6 * cM_scos(field_0x6b4));
-
+        
         if (mWaitTimer == 0) {
             if (mPiyoriTimer != 0) {
-                mPiyoriTimer += (s16)20;
+                S16_ADD(mPiyoriTimer, 20);
             }
 
             setActionMode(ACTION_CHANCE);
@@ -1345,15 +1354,14 @@ void daE_HZ_c::executeWindWalk() {
 }
 
 void daE_HZ_c::setWaterEffect() {
+    cXyz position(current.pos.x, mGroundCross, current.pos.z);
+    static cXyz sc(2.0f, 2.0f, 2.0f);
     static u16 w_eff_id[4] = {
         ID_ZI_J_DOWNWTRA_A,
         ID_ZI_J_DOWNWTRA_B,
         ID_ZI_J_DOWNWTRA_C,
         ID_ZI_J_DOWNWTRA_D,
     };
-    
-    cXyz position(current.pos.x, mGroundCross, current.pos.z);
-    static cXyz sc(2.0f, 2.0f, 2.0f);
 
     for (int i = 0; i < 4; i++) {
         mWaterEffects[i] = dComIfGp_particle_set(mWaterEffects[i], w_eff_id[i], &position, &tevStr,
@@ -1453,7 +1461,7 @@ void daE_HZ_c::executeDeathWait() {
 }
 
 void daE_HZ_c::damage_check() {
-    s16 angle;
+    s16 targetAngleY;
     
     if (mAction != 1 || mMode < 4) {
         if (mSpheres[0].ChkTgHit() && mSpheres[0].GetTgHitObj()->ChkAtType(AT_TYPE_BOOMERANG)) {
@@ -1533,68 +1541,68 @@ void daE_HZ_c::damage_check() {
                         }
 
                         setActionMode(ACTION_DEATH);
-                        return;
-                    }
+                    } else {
+                        if (mAction == ACTION_AWAY) {
+                            if (bVar) {
+                                field_0x6cc = 1;
+                                setActionMode(ACTION_DAMAGE);
+                                return;
+                            }
 
-                    if (mAction == ACTION_AWAY) {
-                        if (bVar) {
-                            field_0x6cc = 1;
-                            setActionMode(ACTION_DAMAGE);
+                            targetAngleY = cLib_targetAngleY(&mSpheres[1].GetCoCP(), &player_pos);
+                            targetAngleY = (s16)(targetAngleY - shape_angle.y);
+                            if (i == 1) {
+                                if (abs(targetAngleY) >= 0x4000) {
+                                    if (bVar) {
+                                        mBackbone1YZRot.z = 0x5000;
+                                        mBackbone2YZRot.z = -0x4000;
+                                        mBackbone3YZRot.z = 0;
+                                    } else {
+                                        mBackbone1YZRot.z = 0x3000;
+                                    }
+
+                                } else if (bVar) {
+                                    mBackbone1YZRot.z = -0x3000;
+                                    mBackbone2YZRot.z = -0x2000;
+                                    mBackbone3YZRot.z = -0x1000;
+                                } else {
+                                    mBackbone1YZRot.z = -0x2000;
+                                    mBackbone2YZRot.z = -0x1000;
+                                    mBackbone3YZRot.z = -0x800;
+                                }
+                                speedF = 0.0f;
+                            } else if (bVar) {
+                                mBackbone1YZRot.z = 0x5000;
+                                mBackbone2YZRot.z = -0x4000;
+                                mBackbone3YZRot.z = 0;
+                            } else {
+                                mBackbone1YZRot.z = 0x3000;
+                            }
+
+                            if (targetAngleY < -0x2800) {
+                                targetAngleY = -0x2800;
+                            }
+
+                            if (targetAngleY > 0x2800) {
+                                targetAngleY = 0x2800;
+                            }
+
+                            mBackbone1YZRot.y = targetAngleY;
+                            mSound.startCreatureVoice(Z2SE_EN_HZ_V_DAMAGE, -1);
                             return;
                         }
 
-                        angle = cLib_targetAngleY(&mSpheres[1].GetCoCP(), &player_pos) - shape_angle.y;
-                        if (i == 1) {
-                            if (abs(angle) >= 0x4000) {
-                                if (bVar) {
-                                    mBackbone1YZRot.z = 0x5000;
-                                    mBackbone2YZRot.z = -0x4000;
-                                    mBackbone3YZRot.z = 0;
-                                } else {
-                                    mBackbone1YZRot.z = 0x3000;
-                                }
-
-                            } else if (bVar) {
-                                mBackbone1YZRot.z = -0x3000;
-                                mBackbone2YZRot.z = -0x2000;
-                                mBackbone3YZRot.z = -0x1000;
-                            } else {
-                                mBackbone1YZRot.z = -0x2000;
-                                mBackbone2YZRot.z = -0x1000;
-                                mBackbone3YZRot.z = -0x800;
-                            }
-                            speedF = 0.0f;
-                        } else if (bVar) {
-                            mBackbone1YZRot.z = 0x5000;
-                            mBackbone2YZRot.z = -0x4000;
-                            mBackbone3YZRot.z = 0;
+                        if (bVar) {
+                            field_0x6cc = 1;
                         } else {
-                            mBackbone1YZRot.z = 0x3000;
+                            field_0x6cc = 0;
+                            if (mAtInfo.mpCollider->ChkAtType(AT_TYPE_SHIELD_ATTACK)) {
+                                field_0x6cc = 2;
+                            }
                         }
 
-                        if (angle < -0x2800) {
-                            angle = -0x2800;
-                        }
-
-                        if (angle > 0x2800) {
-                            angle = 0x2800;
-                        }
-
-                        mBackbone1YZRot.y = angle;
-                        mSound.startCreatureVoice(Z2SE_EN_HZ_V_DAMAGE, -1);
-                        return;
+                        setActionMode(ACTION_DAMAGE);
                     }
-                    
-                    if (bVar) {
-                        field_0x6cc = 1;
-                    } else {
-                        field_0x6cc = 0;
-                        if (mAtInfo.mpCollider->ChkAtType(AT_TYPE_SHIELD_ATTACK)) {
-                            field_0x6cc = 2;
-                        }
-                    }
-
-                    setActionMode(ACTION_DAMAGE);
                     return;
                 }
             }
@@ -1605,13 +1613,8 @@ void daE_HZ_c::damage_check() {
 bool daE_HZ_c::checkWaterSurface() {
     dBgS_ObjGndChk_Spl spline;
 
-    Vec modified_pos /* = current.pos; */;
-    // this might not match in debug since it's not calling
-    // Vec::operator_= in debug
-    // For retail, it's no problem since it gets optimized out
-    modified_pos.x = current.pos.x;
-    modified_pos.y = current.pos.y;
-    modified_pos.z = current.pos.z;
+    Vec modified_pos;
+    modified_pos = current.pos;
     modified_pos.y += 500.0f;
     spline.SetPos(&modified_pos);
     mGroundCross = dComIfG_Bgsp().GroundCross(&spline);
@@ -1722,59 +1725,64 @@ void daE_HZ_c::action() {
 void daE_HZ_c::mtx_set() {
     mDoMtx_stack_c::transS(home.pos.x, home.pos.y - 13.0f, home.pos.z);
     mpModel2->setBaseTRMtx(mDoMtx_stack_c::get());
-    if (field_0x6e8 == 0) {
-        mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
-        mDoMtx_stack_c::ZXYrotM(shape_angle);
-        mDoMtx_stack_c::scaleM(l_HIO.basic_size, l_HIO.basic_size, l_HIO.basic_size);
-        J3DModel* morfModel = mpMorfSO->getModel();
-        morfModel->setBaseTRMtx(mDoMtx_stack_c::get());
-        mpMorfSO->modelCalc();
-        MtxP anmMtx = morfModel->getAnmMtx(7);
-        mpModel->setBaseTRMtx(anmMtx);
-        mSmokeEffectPosition.set(anmMtx[0][3], anmMtx[1][3], anmMtx[2][3]);
-        if (mSetModelAnmMtx) {
-            mSetModelAnmMtx = false;
-            mDoMtx_stack_c::copy(anmMtx);
-            mDoMtx_stack_c::ZrotM(-0x4000);
-            mDoMtx_stack_c::transM(0.0f, 14.0f, 0.0f);
-            MTXCopy(mDoMtx_stack_c::get(), mMtx);
-        } else {
-            mDoMtx_stack_c::transS(home.pos);
-            MTXCopy(mDoMtx_stack_c::get(), mMtx);
-        }
 
-        if (mpBgW != NULL) {
-            mpBgW->Move();
-        }
+    if (field_0x6e8 != 0) {
+        return;
+    }
+
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mDoMtx_stack_c::scaleM(l_HIO.basic_size, l_HIO.basic_size, l_HIO.basic_size);
+    J3DModel* morfModel = mpMorfSO->getModel();
+    morfModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpMorfSO->modelCalc();
+    MtxP anmMtx = morfModel->getAnmMtx(7);
+    mpModel->setBaseTRMtx(anmMtx);
+    mSmokeEffectPosition.set(anmMtx[0][3], anmMtx[1][3], anmMtx[2][3]);
+    if (mSetModelAnmMtx) {
+        mSetModelAnmMtx = false;
+        mDoMtx_stack_c::copy(anmMtx);
+        mDoMtx_stack_c::ZrotM(-0x4000);
+        mDoMtx_stack_c::transM(0.0f, 14.0f, 0.0f);
+        cMtx_copy(mDoMtx_stack_c::get(), mMtx);
+    } else {
+        mDoMtx_stack_c::transS(home.pos);
+        cMtx_copy(mDoMtx_stack_c::get(), mMtx);
+    }
+
+    if (mpBgW != NULL) {
+        mpBgW->Move();
     }
 }
 
 void daE_HZ_c::cc_set() {
-    if (field_0x6e8 == 0) {
-        cXyz pos;
-        J3DModel* morfModel = mpMorfSO->getModel();
-
-        attention_info.position = eyePos = mSmokeEffectPosition;
-        attention_info.position.y += 30.0f;
-
-        MTXCopy(morfModel->getAnmMtx(7), mDoMtx_stack_c::get());
-        mDoMtx_stack_c::multVecZero(&pos);
-        mSpheres[0].SetC(pos);
-        mSpheres[0].SetR(80.0f);
-        dComIfG_Ccsp()->Set(&mSpheres[0]);
-
-        MTXCopy(morfModel->getAnmMtx(1), mDoMtx_stack_c::get());
-        mDoMtx_stack_c::multVecZero(&pos);
-        mSpheres[1].SetC(pos);
-        mSpheres[1].SetR(80.0f);
-        dComIfG_Ccsp()->Set(&mSpheres[1]);
-
-        MTXCopy(morfModel->getAnmMtx(0x12), mDoMtx_stack_c::get());
-        mDoMtx_stack_c::multVecZero(&pos);
-        mSpheres[2].SetC(pos);
-        mSpheres[2].SetR(80.0f);
-        dComIfG_Ccsp()->Set(&mSpheres[2]);
+    if (field_0x6e8 != 0) {
+        return;
     }
+
+    cXyz pos;
+    J3DModel* morfModel = mpMorfSO->getModel();
+
+    attention_info.position = eyePos = mSmokeEffectPosition;
+    attention_info.position.y += 30.0f;
+
+    MTXCopy(morfModel->getAnmMtx(7), mDoMtx_stack_c::get());
+    mDoMtx_stack_c::multVecZero(&pos);
+    mSpheres[0].SetC(pos);
+    mSpheres[0].SetR(80.0f);
+    dComIfG_Ccsp()->Set(&mSpheres[0]);
+
+    MTXCopy(morfModel->getAnmMtx(1), mDoMtx_stack_c::get());
+    mDoMtx_stack_c::multVecZero(&pos);
+    mSpheres[1].SetC(pos);
+    mSpheres[1].SetR(80.0f);
+    dComIfG_Ccsp()->Set(&mSpheres[1]);
+
+    MTXCopy(morfModel->getAnmMtx(0x12), mDoMtx_stack_c::get());
+    mDoMtx_stack_c::multVecZero(&pos);
+    mSpheres[2].SetC(pos);
+    mSpheres[2].SetR(80.0f);
+    dComIfG_Ccsp()->Set(&mSpheres[2]);
 }
 
 int daE_HZ_c::execute() {
@@ -1875,7 +1883,8 @@ static int daE_HZ_Delete(daE_HZ_c* i_this) {
 }
 
 int daE_HZ_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
-    int joint_no = i_joint->getJntNo();
+    J3DJoint* joint = i_joint;
+    int joint_no = joint->getJntNo();
 
     mDoMtx_stack_c::copy(i_model->getAnmMtx(joint_no));
 
@@ -1897,7 +1906,7 @@ int daE_HZ_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     }
 
     i_model->setAnmMtx(joint_no, mDoMtx_stack_c::get());
-    MTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+    cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
     return 1;
 }
 
@@ -2007,11 +2016,11 @@ int daE_HZ_c::create() {
 
     static dCcD_SrcSph cc_sph_src2 = {
         {
-            {0x0, {{AT_TYPE_CSTATUE_SWING, 0x1, 0x0}, {0xd8fafdff, 0x3}, 0x75}},  // mObj
-            {dCcD_SE_METAL, 0x0, 0x0, 0x0, 0x0},                                  // mGObjAt
-            {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x2},                                   // mGObjTg
-            {0x0},                                                                // mGObjCo
-        },                                                                        // mObjInf
+            {0x0, {{AT_TYPE_CSTATUE_SWING, 0x1, 0x0}, {(s32)0xd8fafdff, 0x3}, 0x75}},   // mObj
+            {dCcD_SE_METAL, 0x0, 0x0, 0x0, 0x0},                                        // mGObjAt
+            {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x2},                                         // mGObjTg
+            {0x0},                                                                      // mGObjCo
+        },                                                                              // mObjInf
         {
             {{0.0f, 0.0f, 0.0f}, 40.0f}  // mSph
         }  // mSphAttr
@@ -2026,7 +2035,10 @@ int daE_HZ_c::create() {
         return phase;
     }
 
-    if ((fopAcM_GetParam(this) >> 8 & 0xFF) == 1) {
+    u8 param = (fopAcM_GetParam(this) >> 8) & 0xFF;
+    if (param == 1) {
+        int dummy; // force debug to use r31 as stack pointer
+
         mpName = "E_hzp2";
     } else {
         mpName = "E_hzp";
@@ -2035,7 +2047,7 @@ int daE_HZ_c::create() {
     phase = dComIfG_resLoad(&mPhaseReq2, mpName);
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("E_HZ PARAM %x\n", fopAcM_GetParam(this));
-        
+
         if (!fopAcM_entrySolidHeap(this, useHeapInit, 0x2C20)) {
             return cPhs_ERROR_e;
         }
@@ -2046,7 +2058,7 @@ int daE_HZ_c::create() {
         if (!hio_set) {
             mHIOInit = true;
             hio_set = true;
-            l_HIO.enemy_sample = mDoHIO_CREATE_CHILD("Hajiki-san", &l_HIO);
+            l_HIO.enemy_sample = mDoHIO_CREATE_CHILD("ハジキさん", &l_HIO);
         }
 
         fopAcM_SetMtx(this, mpMorfSO->getModel()->getBaseTRMtx());

@@ -7,6 +7,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
+#include <cstring>
 
 static void add_update_proc(u8* mode, s16* param_1, s16* param_2, s16* param_3) {
     int value;
@@ -55,9 +56,9 @@ static void add_update_proc(u8* mode, s16* param_1, s16* param_2, s16* param_3) 
             }
         }
 
-        *param_1 += (s16)value;
-        *param_2 += (s16)value;
-        *param_3 += (s16)value;
+        S16_ADD(*param_1, value);
+        S16_ADD(*param_2, value);
+        S16_ADD(*param_3, value);
         *mode = 0;
 
         g_kankyoHIO.light.dKankyo_lightHIOInfoUpDateF();

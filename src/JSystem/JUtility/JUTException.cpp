@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <dolphin/dolphin.h>
 #include <stdint.h>
+#include <cstring>
 
 struct CallbackObject {
     /* 0x00 */ JUTExceptionUserCallback callback;
@@ -190,6 +191,8 @@ void JUTException::panic_f_va(char const* file, int line, char const* format, va
 }
 
 void JUTException::panic_f(char const* file, int line, char const* format, ...) {
+    UNUSED(format);
+
     va_list args;
     va_start(args, format);
     panic_f_va(file, line, format, args);
@@ -308,7 +311,9 @@ void JUTException::showStack(OSContext* context) {
     u32* stackPointer = (u32*)mStackPointer;
     sConsole->print_f("Address:   BackChain   LR save\n");
 
-    for (i = 0; (stackPointer != NULL) && (stackPointer != (u32*)0xFFFFFFFF) && (i++ < 0x100);) {
+    for (i = 0; (stackPointer != NULL) && ((uintptr_t)stackPointer != -1) && (i++ < 0x100);
+         stackPointer = (u32*)stackPointer[0])
+    {
         if (i > mTraceSuppress) {
             sConsole->print("Suppress trace.\n");
             return;
@@ -318,7 +323,6 @@ void JUTException::showStack(OSContext* context) {
         showMapInfo_subroutine(stackPointer[1], false);
         JUTConsoleManager::getManager()->drawDirect(true);
         waitTime(mPrintWaitTime1);
-        stackPointer = (u32*)stackPointer[0];
     }
 }
 
@@ -529,8 +533,10 @@ bool JUTException::isEnablePad() const {
 bool JUTException::readPad(u32* out_trigger, u32* out_button) {
     bool result = false;
     OSTime start_time = OSGetTime();
-    do {
-    } while (OSTicksToMilliseconds(OSGetTime() - start_time) < 0x32);
+    OSTime ms;
+    while (((OSGetTime() - start_time) / (OS_TIMER_CLOCK / 1000)) < 50){
+        // nop
+    }
 
     if (mGamePad == (JUTGamePad*)0xffffffff) {
         JUTGamePad gamePad0(JUTGamePad::EPort1);
@@ -683,7 +689,7 @@ void JUTException::printContext(OSError error, OSContext* context, u32 dsisr, u3
 
         int down = 0;
         int up = 0;
-        do {
+        while (true) {
             readPad(&trigger, &button);
 
             bool draw = false;
@@ -720,7 +726,7 @@ void JUTException::printContext(OSError error, OSContext* context, u32 dsisr, u3
             }
 
             waitTime(30);
-        } while (true);
+        } 
     }
 
     while (true) {
@@ -750,19 +756,19 @@ void JUTException::printContext(OSError error, OSContext* context, u32 dsisr, u3
 }
 
 void JUTException::waitTime(s32 timeout_ms) {
-    if (!timeout_ms) {
-        return;
+    OSTime start_time;
+    if (timeout_ms) {
+        start_time = OSGetTime();
+        while (((OSGetTime() - start_time) / (OS_TIMER_CLOCK / 1000)) < timeout_ms) {
+            // nop
+        }
     }
-
-    OSTime start_time = OSGetTime();
-    do {
-    } while (OSTicksToMilliseconds(OSGetTime() - start_time) < timeout_ms);
 }
 
 void JUTException::createFB() {
     _GXRenderModeObj* renderMode = &GXNtsc480Int;
     void* end = (void*)OSGetArenaHi();
-    u32 size = (u16(ALIGN_NEXT(u16(renderMode->fbWidth), 16)) * renderMode->xfbHeight) * 2;
+    u32 size = ((u16)ALIGN_NEXT((u16)renderMode->fbWidth, 16) * renderMode->xfbHeight) * 2;
 
     void* begin = (void*)ALIGN_PREV((uintptr_t)end - size, 32);
     void* object = (void*)ALIGN_PREV((intptr_t)begin - sizeof(JUTExternalFB), 32);
@@ -777,8 +783,9 @@ void JUTException::createFB() {
 
     for (int i = 0; i < 3; i++) {
         u32 start = VIGetRetraceCount();
-        while (start == VIGetRetraceCount())
-            ;
+        while (start == VIGetRetraceCount()) {
+            // nop
+        }
     }
 
     mFrameMemory = (JUTExternalFB*)object;
@@ -892,68 +899,74 @@ bool JUTException::queryMapAddress_single(char* mapPath, u32 address, s32 sectio
 		if (section_id >= 0 && section_id != section_idx)
 			continue;
 
-		int length;
+        
+        int length;
+        while (true) {
+            if ((length = file.fgets(buffer, ARRAY_SIZEU(buffer))) <= 4) {
+                break;
+            }
+            if (length >= 28) {
+                u32 addr;
+                if (buffer[28] == '4') {
+                    addr = ((buffer[18] - '0') << 28) | strtol(buffer + 19, NULL, 16);
+                    int size = strtol(buffer + 11, NULL, 16);
+                    if ((addr <= address && address < addr + size)) {
+                        if (out_addr) {
+                            *out_addr = addr;
+                        }
 
-		while (true) {
-			if ((length = file.fgets(buffer, ARRAY_SIZEU(buffer))) <= 4)
-				break;
-			if ((length < 28))
-				continue;
-			if (buffer[28] == '4') {
-				u32 addr = ((buffer[18] - '0') << 28) | strtol(buffer + 19, NULL, 16);
-				int size = strtol(buffer + 11, NULL, 16);
-				if ((addr <= address && address < addr + size)) {
-					if (out_addr)
-						*out_addr = addr;
+                        if (out_size) {
+                            *out_size = size;
+                        }
 
-					if (out_size)
-						*out_size = size;
+                        if (out_line) {
+                            const u8* src = (const u8*)&buffer[30];
+                            u8* dst = (u8*)out_line;
+                            u32 i = 0;
 
-					if (out_line) {
-						const u8* src = (const u8*)&buffer[0x1e];
-						u8* dst       = (u8*)out_line;
-						u32 i         = 0;
+                            for (i = 0; i < line_length - 1; src++) {
+                                if ((u8)*src < (u32)' ' && *src != (u32)'\t') {
+                                    break;
+                                }
+                                if ((*src == ' ' || *src == (u32)'\t') && (i != 0)) {
+                                    if (dst[-1] != ' ') {
+                                        *dst = ' ';
+                                        dst++;
+                                        i++;
+                                    }
+                                } else {
+                                    *dst++ = *src;
+                                    i++;
+                                }
+                            }
+                            if (i != 0 && dst[-1] == ' ') {
+                                dst--;
+                                i--;
+                            }
+                            (void)*src;  // needed to match debug
+                            *dst = 0;
+                            if (print) {
+                                if (begin_with_newline) {
+                                    sConsole->print("\n");
+                                }
+                                sConsole->print_f("  [%08X]: .%s [%08X: %XH]\n  %s\n", address,
+                                                  section_name, addr, size, out_line);
+                                begin_with_newline = false;
+                            }
+                        }
+                        result = true;
+                        break;
+                    }
+                }
+            }
+        }
 
-						for (i = 0; i < line_length - 1; ++src) {
-							if ((u32)(*src) < ' ' && (u32)*src != '\t')
-								break;
-							if ((*src == ' ' || (u32)*src == '\t') && (i != 0)) {
-								if (dst[-1] != ' ') {
-									*dst = ' ';
-									dst++;
-									++i;
-								}
-							} else {
-								*dst++ = *src;
-								i++;
-							}
-						}
-						if (i != 0 && dst[-1] == ' ') {
-							dst--;
-							i--;
-						}
-						*dst = 0;
-						if (print) {
-							if (begin_with_newline) {
-								sConsole->print("\n");
-							}
-							sConsole->print_f("  [%08X]: .%s [%08X: %XH]\n  %s\n", address, section_name, addr, size, out_line);
-							begin_with_newline = false;
-						}
-					}
-					result = true;
-					break;
-				}
-			}
+        if (result || (section_id >= 0 && section_id == section_idx)) {
+            if (print && begin_with_newline) {
+                sConsole->print("\n");
+            }
+            break;
 		}
-
-		if (!result && (section_id < 0 || section_id != section_idx)) {
-			continue;
-		}
-		if (print && begin_with_newline) {
-			sConsole->print("\n");
-		}
-		break;
 	}
 
 	file.fclose();
@@ -961,7 +974,7 @@ bool JUTException::queryMapAddress_single(char* mapPath, u32 address, s32 sectio
 }
 
 void JUTException::createConsole(void* console_buffer, u32 console_buffer_size) {
-    if (!console_buffer || !console_buffer_size) {
+    if (console_buffer == NULL || console_buffer_size == 0) {
         return;
     }
 

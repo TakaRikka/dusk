@@ -1,0 +1,66 @@
+#ifndef RES_BANS_H
+#define RES_BANS_H
+
+enum dRes_INDEX_BANS {
+    /* BCK  */
+    dRes_INDEX_BANS_BCK_BANS_F_TALK_A_e=0x6,
+    dRes_INDEX_BANS_BCK_BANS_F_TALK_B_e=0x7,
+    dRes_INDEX_BANS_BCK_BANS_FH_TALK_B_e=0x8,
+    dRes_INDEX_BANS_BCK_BANS_WAIT_A_e=0x9,
+    /* BMDE */
+    dRes_INDEX_BANS_BMD_BANS_e=0xC,
+    /* BTK  */
+    dRes_INDEX_BANS_BTK_BANS_e=0xF,
+    /* BTP  */
+    dRes_INDEX_BANS_BTP_BANS_e=0x12,
+};
+
+enum dRes_ID_BANS {
+    /* BCK  */
+    dRes_ID_BANS_BCK_BANS_F_TALK_A_e=0x6,
+    dRes_ID_BANS_BCK_BANS_F_TALK_B_e=0x7,
+    dRes_ID_BANS_BCK_BANS_FH_TALK_B_e=0x8,
+    dRes_ID_BANS_BCK_BANS_WAIT_A_e=0x9,
+    /* BMDE */
+    dRes_ID_BANS_BMD_BANS_e=0xC,
+    /* BTK  */
+    dRes_ID_BANS_BTK_BANS_e=0xF,
+    /* BTP  */
+    dRes_ID_BANS_BTP_BANS_e=0x12,
+};
+
+enum BANS_JNT {
+    BANS_JNT_CENTER_e=0x0,
+    BANS_JNT_BACKBONE1_e=0x1,
+    BANS_JNT_BACKBONE2_e=0x2,
+    BANS_JNT_BELTL_e=0x3,
+    BANS_JNT_BELTR_e=0x4,
+    BANS_JNT_NECK_e=0x5,
+    BANS_JNT_HEAD_e=0x6,
+    BANS_JNT_CHIN_e=0x7,
+    BANS_JNT_MASK_e=0x8,
+    BANS_JNT_MAYU_L_e=0x9,
+    BANS_JNT_MAYU_R_e=0xA,
+    BANS_JNT_MOUTH_e=0xB,
+    BANS_JNT_SHOULDERL_e=0xC,
+    BANS_JNT_ARML1_e=0xD,
+    BANS_JNT_ARML2_e=0xE,
+    BANS_JNT_HANDL_e=0xF,
+    BANS_JNT_FINGERL_e=0x10,
+    BANS_JNT_THOMBL_e=0x11,
+    BANS_JNT_SHOULDERR_e=0x12,
+    BANS_JNT_ARMR1_e=0x13,
+    BANS_JNT_ARMR2_e=0x14,
+    BANS_JNT_HANDR_e=0x15,
+    BANS_JNT_FINGERR_e=0x16,
+    BANS_JNT_THOMBR_e=0x17,
+    BANS_JNT_WAIST_e=0x18,
+    BANS_JNT_LEGL1_e=0x19,
+    BANS_JNT_LEGL2_e=0x1A,
+    BANS_JNT_FOOTL_e=0x1B,
+    BANS_JNT_LEGR1_e=0x1C,
+    BANS_JNT_LEGR2_e=0x1D,
+    BANS_JNT_FOOTR_e=0x1E,
+};
+
+#endif /* !RES_BANS_H */

@@ -2756,7 +2756,7 @@ static void action(e_fm_class* i_this) {
 
         for (int i = 0; i < create_num; i++) {
             fopAcM_createChild(PROC_E_BA, fopAcM_GetID(actor), 0xFFFF1F02, &actor->eyePos, fopAcM_GetRoomNo(actor), &rot, NULL, -1, NULL);
-            rot.y += (s16)(0x10000 / create_num);
+            ANGLE_ADD(rot.y, 0x10000 / create_num);
         }
     }
 

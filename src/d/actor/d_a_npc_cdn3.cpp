@@ -8,6 +8,7 @@
 #include "d/actor/d_a_npc_cdn3.h"
 #include "d/d_msg_object.h"
 #include "d/d_s_play.h"
+#include <cstring>
 
 const daNpcCdn3_c::ActionPair daNpcCdn3_c::ActionTable[8] = {
     {&daNpcCdn3_c::initWait, &daNpcCdn3_c::executeWait},

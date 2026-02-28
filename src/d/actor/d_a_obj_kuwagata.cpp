@@ -11,6 +11,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_menu_insect.h"
 #include "f_pc/f_pc_name.h"
+#include <cstring>
 
 class daObj_KuwHIO_c : public JORReflexible{
 public:

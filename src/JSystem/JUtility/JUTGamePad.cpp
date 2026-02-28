@@ -391,26 +391,26 @@ u32 JUTGamePad::CStick::update(s8 x, s8 y, JUTGamePad::EStickMode mode,
 }
 
 u32 JUTGamePad::CStick::getButton(u32 buttons) {
-    u32 button = buttons & 0xF;
+    u32 button = buttons & (PAD_BUTTON_UP | PAD_BUTTON_DOWN | PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT);
 
     if (-sReleasePoint < mPosX && mPosX < sReleasePoint) {
-        button = button & ~0x3;
+        button &= ~(PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT);
     } else if (mPosX <= -sPressPoint) {
-        button = (button & ~0x2);
-        button |= 1;
+        button &= ~PAD_BUTTON_RIGHT;
+        button |= PAD_BUTTON_LEFT;
     } else if (mPosX >= sPressPoint) {
-        button = (button & ~0x1);
-        button |= 2;
+        button &= ~PAD_BUTTON_LEFT;
+        button |= PAD_BUTTON_RIGHT;
     }
 
     if (-sReleasePoint < mPosY && mPosY < sReleasePoint) {
-        button = button & ~0xC;
+        button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN);
     } else if (mPosY <= -sPressPoint) {
-        button = (button & ~0x8);
-        button |= 4;
+        button &= ~PAD_BUTTON_UP;
+        button |= PAD_BUTTON_DOWN;
     } else if (mPosY >= sPressPoint) {
-        button = (button & ~0x4);
-        button |= 8;
+        button &= ~PAD_BUTTON_DOWN;
+        button |= PAD_BUTTON_UP;
     }
 
     return button;
@@ -481,7 +481,7 @@ void JUTGamePad::CRumble::update(s16 port) {
         return;
     } else {
         bool enabled = getNumBit(mPattern, mFrame % mFrameCount);
-        u8 status = mStatus[port] != false;
+        u32 status = mStatus[port] != false;
 
         if (enabled && !status) {
             startMotor(port);

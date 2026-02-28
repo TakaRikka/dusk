@@ -7,6 +7,7 @@
 #include "f_pc/f_pc_base.h"
 #include "f_pc/f_pc_layer.h"
 #include "f_pc/f_pc_load.h"
+#include "SSystem/SComponent/c_phase.h"
 
 int fpcFCtRq_Do(fast_create_request* i_createReq) {
     if (i_createReq->create_func != NULL &&

@@ -19,11 +19,12 @@ void* JUTResReference::getResource(JSUInputStream* stream, u32 resType, JKRArchi
 
 
 void* JUTResReference::getResource(const void* data, u32 resType, JKRArchive* archive) {
-    mType = *(u8*)data;
-    mNameLength = *((u8*)data + 1);
+    const u8* pData = (const u8*)data;
+    mType = pData[0];
+    mNameLength = pData[1];
 
     if (mNameLength != 0) {
-        memcpy(&mName, &((u8*)data)[2], mNameLength);
+        memcpy(&mName, &pData[2], mNameLength);
     }
 
     if (mType == RESTYPE_Unk2 || mType == RESTYPE_Unk3 || mType == RESTYPE_Unk4) {

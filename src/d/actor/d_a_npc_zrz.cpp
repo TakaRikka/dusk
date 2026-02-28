@@ -12,6 +12,7 @@
 #include "d/actor/d_a_obj_grave_stone.h"
 #include "d/actor/d_a_obj_zra_rock.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 static NPC_ZRZ_HIO_CLASS l_HIO;
 

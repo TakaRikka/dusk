@@ -2,6 +2,7 @@
 
 #include "d/d_msg_class.h"
 #include <cstdio>
+#include <cstring>
 #include "d/d_meter2_info.h"
 #include "d/d_msg_object.h"
 #include "d/d_msg_unit.h"

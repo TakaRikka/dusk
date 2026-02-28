@@ -865,7 +865,7 @@ static void b_gnd_h_run_a(b_gnd_class* i_this) {
                 i_this->field_0xc92 = cM_rndF(600.0f) + 300.0f;
             }
 
-            i_this->field_0x5cc += (s16)(var_f30 * cM_ssin(i_this->field_0xc90));
+            ANGLE_ADD(i_this->field_0x5cc, var_f30 * cM_ssin(i_this->field_0xc90));
         }
 
         if (i_this->field_0xc72 != 0) {

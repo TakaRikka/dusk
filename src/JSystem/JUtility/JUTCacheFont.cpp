@@ -7,6 +7,8 @@
 #include "JSystem/JKernel/JKRAram.h"
 #include <dolphin/gx.h>
 #include <stdint.h>
+#include <cstring>
+#include "angle_utils.h"
 
 JUTCacheFont::JUTCacheFont(ResFONT const* p_fontRes, u32 cacheSize, JKRHeap* p_heap) {
     initialize_state();
@@ -70,7 +72,6 @@ int JUTCacheFont::getMemorySize(ResFONT const* p_font, u16* o_widCount, u32* o_w
     u32 totalGlySize = 0;
     u32 totalMapSize = 0;
     u32 maxGlyTexSize = 0;
-    u32 glyTexSize;
 
     u8* fontInf = (u8*)p_font->data;
     for (int i = 0; i < (int)p_font->numBlocks; i++) {
@@ -84,11 +85,10 @@ int JUTCacheFont::getMemorySize(ResFONT const* p_font, u16* o_widCount, u32* o_w
             widBlockCount++;
             break;
         case 'GLY1':
-            totalGlySize += blkSize;
-            glyTexSize = ((ResFONT::GLY1*)fontInf)->textureSize;
+            totalGlySize += ((BlockHeader*)fontInf)->size;
             glyBlockCount++;
-            if (glyTexSize > maxGlyTexSize) {
-                maxGlyTexSize = glyTexSize;
+            if (((ResFONT::GLY1*)fontInf)->textureSize > maxGlyTexSize) {
+                maxGlyTexSize = ((ResFONT::GLY1*)fontInf)->textureSize;
             }
             break;
         case 'MAP1':
@@ -185,7 +185,7 @@ bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
     }
 
     if (mGly1BlockNum != 0) {
-        field_0x80 = new (heap, 0) ResFONT::GLY1[mGly1BlockNum];
+        field_0x80 = new (heap, 0) u8[mGly1BlockNum * sizeof(ResFONT::GLY1)];
         if (field_0x80 == NULL) {
             return false;
         }
@@ -350,7 +350,7 @@ void JUTCacheFont::getGlyphFromAram(JUTCacheFont::TGlyphCacheInfo* param_0,
     prepend(pGylphCacheInfo);
     int iVar3 = pGylphCacheInfo->field_0x16 * pGylphCacheInfo->field_0x18;
     int iVar2 = *r30 / iVar3;
-    pGylphCacheInfo->field_0x8 += iVar2 * iVar3;
+    U16_ADD_2(pGylphCacheInfo->field_0x8, iVar2 * iVar3);
     u16 local_30 = pGylphCacheInfo->field_0x8 + iVar3 - 1;
     pGylphCacheInfo->field_0xa = pGylphCacheInfo->field_0xa < local_30 ? pGylphCacheInfo->field_0xa : local_30;
     *param_3 = iVar2;

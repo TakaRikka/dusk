@@ -8,6 +8,7 @@
 #include "d/actor/d_a_npc_tkc.h"
 #include "d/actor/d_a_npc.h"
 #include "d/d_camera.h"
+#include <cstring>
 
 enum Tkc_RES_File_ID {
     /* BCK */

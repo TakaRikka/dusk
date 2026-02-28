@@ -2452,7 +2452,7 @@ void daE_PM_c::At_Check() {
         }
 
         if ((s16)mAtInfo.mAttackPower > 0) {
-            health -= (s16)mAtInfo.mAttackPower;
+            S16_SUB(health, mAtInfo.mAttackPower);
         }
 
         u32 pause_timer = 0;

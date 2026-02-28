@@ -5,6 +5,7 @@
 #include "JSystem/JSupport/JSURandomInputStream.h"
 #include "JSystem/JUtility/JUTResFont.h"
 #include "JSystem/JUtility/JUTResource.h"
+#include <cstring>
 
 J2DTextBox::J2DTextBox()
     : mFont(NULL), mCharColor(), mGradientColor(), mStringPtr(NULL), mWhiteColor(), mBlackColor() {

@@ -1,0 +1,42 @@
+#ifndef RES_E_TT_H
+#define RES_E_TT_H
+
+enum dRes_INDEX_E_TT {
+    /* BCK  */
+    dRes_INDEX_E_TT_BCK_TT_ATTACK_JUMP_A_e=0x3,
+    dRes_INDEX_E_TT_BCK_TT_ATTACK_JUMP_B_e=0x4,
+    dRes_INDEX_E_TT_BCK_TT_ATTACK_JUMP_C_e=0x5,
+    dRes_INDEX_E_TT_BCK_TT_DAMAGE_ARROW_e=0x6,
+    dRes_INDEX_E_TT_BCK_TT_DAMAGE_L_e=0x7,
+    dRes_INDEX_E_TT_BCK_TT_DAMAGE_R_e=0x8,
+    dRes_INDEX_E_TT_BCK_TT_EYE_DEATH_e=0x9,
+    dRes_INDEX_E_TT_BCK_TT_LEG_DEATH_e=0xA,
+    dRes_INDEX_E_TT_BCK_TT_MOVE_JUMP_A_e=0xB,
+    dRes_INDEX_E_TT_BCK_TT_MOVE_JUMP_B_e=0xC,
+    dRes_INDEX_E_TT_BCK_TT_MOVE_JUMP_C_e=0xD,
+    dRes_INDEX_E_TT_BCK_TT_NORMAL_WAIT_e=0xE,
+    dRes_INDEX_E_TT_BCK_TT_PUSH_e=0xF,
+    dRes_INDEX_E_TT_BCK_TT_WAIT_e=0x10,
+    dRes_INDEX_E_TT_BCK_TT_WIND_e=0x11,
+};
+
+enum dRes_ID_E_TT {
+    /* BCK  */
+    dRes_ID_E_TT_BCK_TT_ATTACK_JUMP_A_e=0x3,
+    dRes_ID_E_TT_BCK_TT_ATTACK_JUMP_B_e=0x4,
+    dRes_ID_E_TT_BCK_TT_ATTACK_JUMP_C_e=0x5,
+    dRes_ID_E_TT_BCK_TT_DAMAGE_ARROW_e=0x6,
+    dRes_ID_E_TT_BCK_TT_DAMAGE_L_e=0x7,
+    dRes_ID_E_TT_BCK_TT_DAMAGE_R_e=0x8,
+    dRes_ID_E_TT_BCK_TT_EYE_DEATH_e=0x9,
+    dRes_ID_E_TT_BCK_TT_LEG_DEATH_e=0xA,
+    dRes_ID_E_TT_BCK_TT_MOVE_JUMP_A_e=0xB,
+    dRes_ID_E_TT_BCK_TT_MOVE_JUMP_B_e=0xC,
+    dRes_ID_E_TT_BCK_TT_MOVE_JUMP_C_e=0xD,
+    dRes_ID_E_TT_BCK_TT_NORMAL_WAIT_e=0xE,
+    dRes_ID_E_TT_BCK_TT_PUSH_e=0xF,
+    dRes_ID_E_TT_BCK_TT_WAIT_e=0x10,
+    dRes_ID_E_TT_BCK_TT_WIND_e=0x11,
+};
+
+#endif /* !RES_E_TT_H */

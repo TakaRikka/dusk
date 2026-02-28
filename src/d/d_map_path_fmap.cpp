@@ -2,6 +2,7 @@
 
 #include "d/d_com_inf_game.h"
 #include "d/d_map_path_fmap.h"
+#include <cstring>
 
 void fmpTresTypeGroupDataList_c::addTypeGroupData(u8 i_typeGroupNo,
                                                   dTres_c::data_s const* i_tresData) {

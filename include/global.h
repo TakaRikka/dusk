@@ -188,4 +188,11 @@ static const float INF = 2000000000.0f;
     #define MULTI_CHAR(x) MultiCharLiteral(#x)
 #endif
 
+// potential fakematch?
+#if DEBUG
+#define FABSF fabsf
+#else
+#define FABSF std::fabsf
+#endif
+
 #endif

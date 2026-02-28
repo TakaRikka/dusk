@@ -1,0 +1,22 @@
+#ifndef RES_P_L4RWALL_H
+#define RES_P_L4RWALL_H
+
+enum dRes_INDEX_P_L4RWALL {
+    /* BMDR */
+    dRes_INDEX_P_L4RWALL_BMD_LV4R50_RALEWALL_e=0x4,
+    /* DZB  */
+    dRes_INDEX_P_L4RWALL_DZB_LV4R50_RALEWALL_e=0x7,
+};
+
+enum dRes_ID_P_L4RWALL {
+    /* BMDR */
+    dRes_ID_P_L4RWALL_BMD_LV4R50_RALEWALL_e=0x4,
+    /* DZB  */
+    dRes_ID_P_L4RWALL_DZB_LV4R50_RALEWALL_e=0x7,
+};
+
+enum LV4R50_RALEWALL_JNT {
+    LV4R50_RALEWALL_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_P_L4RWALL_H */

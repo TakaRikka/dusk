@@ -9,6 +9,7 @@
 #include "d/actor/d_a_tag_msg.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_debug_viewer.h"
+#include <cstring>
 
 static int createHeapCallBack(fopAc_ac_c* i_this) {
     daTag_Msg_c* msg = (daTag_Msg_c*)i_this;

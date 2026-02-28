@@ -416,7 +416,7 @@ d/d_lib.cpp:
 	.text       start:0x8003A8D0 end:0x8003B1D0
 	.data       start:0x804B88A0 end:0x804B88F8
 	.sdata      start:0x80505150 end:0x80505160
-	.sbss       start:0x80508C00 end:0x80508C20
+	.sbss       start:0x80508C00 end:0x80508C18
 
 d/d_save.cpp:
 	.text       start:0x8003B1D0 end:0x8003FC50
@@ -438,6 +438,7 @@ d/d_a_obj.cpp:
 	.text       start:0x80040C40 end:0x80041890
 	.rodata     start:0x804907F0 end:0x80490800
 	.sdata      start:0x80505190 end:0x80505198
+	.sbss       start:0x80508C18 end:0x80508C20
 	.sdata2     start:0x8050A068 end:0x8050A080
 	.bss        start:0x8056EE10 end:0x8056EE40
 
@@ -2370,7 +2371,7 @@ Z2AudioCS/SpkSpeakerCtrl.cpp:
 Z2AudioCS/SpkSystem.cpp:
 	.text       start:0x8035F630 end:0x8035F960
 	.ctors      start:0x8048E680 end:0x8048E684
-	.sbss       start:0x805091A0 end:0x805091B4
+	.sbss       start:0x805091A0 end:0x805091B0
 	.bss        start:0x8057EE78 end:0x8057EE98
 
 Z2AudioCS/SpkMixingBuffer.cpp:
@@ -2394,7 +2395,7 @@ Z2AudioCS/SpkSound.cpp:
 
 Z2AudioCS/Z2AudioCS.cpp:
 	.text       start:0x80360870 end:0x80360E90
-	.sbss       start:0x805091B4 end:0x805091B8
+	.sbss       start:0x805091B0 end:0x805091B8
 	.sdata2     start:0x8050DF18 end:0x8050DF20
 
 revolution/gf/GFGeometry.cpp:
@@ -2411,7 +2412,7 @@ revolution/gf/GFPixel.cpp:
 revolution/gf/GFTev.cpp:
 	.text       start:0x803611A0 end:0x80361200
 
-revolution/hbm/HBMBase.cpp:
+revolution/homebuttonLib/nw4hbm/HBMBase.cpp:
 	.text       start:0x80361200 end:0x803699C0
 	.rodata     start:0x804A93A0 end:0x804A9650
 	.data       start:0x804E11B0 end:0x804E1D58
@@ -2420,95 +2421,95 @@ revolution/hbm/HBMBase.cpp:
 	.sdata2     start:0x8050DF50 end:0x8050DFB0
 	.bss        start:0x8057EEA8 end:0x8057EEB8
 
-revolution/hbm/HBMAnmController.cpp:
+revolution/homebuttonLib/nw4hbm/HBMAnmController.cpp:
 	.text       start:0x803699C0 end:0x80369AD0
 	.data       start:0x804E1D58 end:0x804E1D68
 
-revolution/hbm/HBMFrameController.cpp:
+revolution/homebuttonLib/nw4hbm/HBMFrameController.cpp:
 	.text       start:0x80369AD0 end:0x80369C80
 	.sdata2     start:0x8050DFB0 end:0x8050DFB8
 
-revolution/hbm/HBMGUIManager.cpp:
+revolution/homebuttonLib/nw4hbm/HBMGUIManager.cpp:
 	.text       start:0x80369C80 end:0x8036B120
 	.data       start:0x804E1D68 end:0x804E1EC0
 	.sbss       start:0x805091C0 end:0x805091C8
 	.sdata2     start:0x8050DFB8 end:0x8050DFC8
 
-revolution/hbm/HBMController.cpp:
+revolution/homebuttonLib/nw4hbm/HBMController.cpp:
 	.text       start:0x8036B120 end:0x8036B9F0
 	.sbss       start:0x805091C8 end:0x805091D0
 	.sdata2     start:0x8050DFC8 end:0x8050DFD8
 	.bss        start:0x8057EEB8 end:0x8057F048
 
-revolution/hbm/HBMRemoteSpk.cpp:
+revolution/homebuttonLib/nw4hbm/HBMRemoteSpk.cpp:
 	.text       start:0x8036B9F0 end:0x8036C170
 	.data       start:0x804E1EC0 end:0x804E1ED0
 	.sbss       start:0x805091D0 end:0x805091D8
 
-revolution/hbm/db_DbgPrintBase.cpp:
+revolution/homebuttonLib/nw4hbm/db_DbgPrintBase.cpp:
 	.text       start:0x8036C170 end:0x8036C1B0
 
-revolution/hbm/lyt_animation.cpp:
+revolution/homebuttonLib/nw4hbm/lyt_animation.cpp:
 	.text       start:0x8036C1B0 end:0x8036CD40
 	.data       start:0x804E1ED0 end:0x804E1EF0
 	.sdata2     start:0x8050DFD8 end:0x8050DFF8
 
-revolution/hbm/lyt_arcResourceAccessor.cpp:
+revolution/homebuttonLib/nw4hbm/lyt_arcResourceAccessor.cpp:
 	.text       start:0x8036CD40 end:0x8036D0C0
 	.data       start:0x804E1EF0 end:0x804E1F08
 	.sdata      start:0x80507DA8 end:0x80507DB0
 
-revolution/hbm/lyt_bounding.cpp:
+revolution/homebuttonLib/nw4hbm/lyt_bounding.cpp:
 	.text       start:0x8036D0C0 end:0x8036D1F0
 	.ctors      start:0x8048E688 end:0x8048E68C
 	.data       start:0x804E1F08 end:0x804E1F70
 	.sbss       start:0x805091D8 end:0x805091E8
 
-revolution/hbm/lyt_common.cpp:
+revolution/homebuttonLib/nw4hbm/lyt_common.cpp:
 	.text       start:0x8036D1F0 end:0x8036E050
 	.sdata2     start:0x8050DFF8 end:0x8050E008
 	.bss        start:0x8057F048 end:0x8057F068
 
-revolution/hbm/lyt_drawInfo.cpp:
+revolution/homebuttonLib/nw4hbm/lyt_drawInfo.cpp:
 	.text       start:0x8036E050 end:0x8036E110
 	.data       start:0x804E1F70 end:0x804E1F80
 	.sdata2     start:0x8050E008 end:0x8050E010
 
-revolution/hbm/lyt_group.cpp:
+revolution/homebuttonLib/nw4hbm/lyt_group.cpp:
 	.text       start:0x8036E110 end:0x8036E450
 	.data       start:0x804E1F80 end:0x804E1F90
 
-revolution/hbm/lyt_layout.cpp:
+revolution/homebuttonLib/nw4hbm/lyt_layout.cpp:
 	.text       start:0x8036E450 end:0x8036EFD0
 	.data       start:0x804E1F90 end:0x804E1FC8
 	.sbss       start:0x805091E8 end:0x805091F0
 	.sdata2     start:0x8050E010 end:0x8050E018
 
-revolution/hbm/lyt_material.cpp:
+revolution/homebuttonLib/nw4hbm/lyt_material.cpp:
 	.text       start:0x8036EFD0 end:0x803721E0
 	.data       start:0x804E1FC8 end:0x804E2030
 	.sdata2     start:0x8050E018 end:0x8050E038
 	.sbss2      start:0x8050EFD0 end:0x8050EFD8
 
-revolution/hbm/lyt_pane.cpp:
+revolution/homebuttonLib/nw4hbm/lyt_pane.cpp:
 	.text       start:0x803721E0 end:0x803732E0
 	.ctors      start:0x8048E68C end:0x8048E690
 	.data       start:0x804E2030 end:0x804E2098
 	.sbss       start:0x805091F0 end:0x805091F8
 	.sdata2     start:0x8050E038 end:0x8050E058
 
-revolution/hbm/lyt_picture.cpp:
+revolution/homebuttonLib/nw4hbm/lyt_picture.cpp:
 	.text       start:0x803732E0 end:0x80373830
 	.ctors      start:0x8048E690 end:0x8048E694
 	.data       start:0x804E2098 end:0x804E2108
 	.sbss       start:0x805091F8 end:0x80509200
 	.sdata2     start:0x8050E058 end:0x8050E060
 
-revolution/hbm/lyt_resourceAccessor.cpp:
+revolution/homebuttonLib/nw4hbm/lyt_resourceAccessor.cpp:
 	.text       start:0x80373830 end:0x80373890
 	.data       start:0x804E2108 end:0x804E2120
 
-revolution/hbm/lyt_textBox.cpp:
+revolution/homebuttonLib/nw4hbm/lyt_textBox.cpp:
 	.text       start:0x80373890 end:0x80374C90
 	.ctors      start:0x8048E694 end:0x8048E698
 	.data       start:0x804E2120 end:0x804E2198
@@ -2516,66 +2517,66 @@ revolution/hbm/lyt_textBox.cpp:
 	.sbss       start:0x80509200 end:0x80509208
 	.sdata2     start:0x8050E060 end:0x8050E078
 
-revolution/hbm/lyt_window.cpp:
+revolution/homebuttonLib/nw4hbm/lyt_window.cpp:
 	.text       start:0x80374C90 end:0x80377210
 	.ctors      start:0x8048E698 end:0x8048E69C
 	.data       start:0x804E2198 end:0x804E2250
 	.sbss       start:0x80509208 end:0x80509214
 	.sdata2     start:0x8050E078 end:0x8050E090
 
-revolution/hbm/math_triangular.cpp:
+revolution/homebuttonLib/nw4hbm/math_triangular.cpp:
 	.text       start:0x80377210 end:0x803774C0
 	.data       start:0x804E2250 end:0x804E3368
 	.sdata2     start:0x8050E090 end:0x8050E0B0
 
-revolution/hbm/snd_SoundArchivePlayer.cpp:
+revolution/homebuttonLib/nw4hbm/snd_SoundArchivePlayer.cpp:
 	.text       start:0x803774C0 end:0x803774D0
 
-revolution/hbm/snd_SoundHandle.cpp:
+revolution/homebuttonLib/nw4hbm/snd_SoundHandle.cpp:
 	.text       start:0x803774D0 end:0x80377520
 
-revolution/hbm/snd_SoundPlayer.cpp:
+revolution/homebuttonLib/nw4hbm/snd_SoundPlayer.cpp:
 	.text       start:0x80377520 end:0x803775A0
 
-revolution/hbm/snd_SoundStartable.cpp:
+revolution/homebuttonLib/nw4hbm/snd_SoundStartable.cpp:
 	.text       start:0x803775A0 end:0x80377610
 
-revolution/hbm/ut_binaryFileFormat.cpp:
+revolution/homebuttonLib/nw4hbm/ut_binaryFileFormat.cpp:
 	.text       start:0x80377610 end:0x80377690
 
-revolution/hbm/ut_CharStrmReader.cpp:
+revolution/homebuttonLib/nw4hbm/ut_CharStrmReader.cpp:
 	.text       start:0x80377690 end:0x803777B0
 
-revolution/hbm/ut_CharWriter.cpp:
+revolution/homebuttonLib/nw4hbm/ut_CharWriter.cpp:
 	.text       start:0x803777B0 end:0x80379120
 	.sbss       start:0x80509214 end:0x80509218
 	.sdata2     start:0x8050E0B0 end:0x8050E0D0
 	.bss        start:0x8057F068 end:0x8057F078
 
-revolution/hbm/ut_Font.cpp:
+revolution/homebuttonLib/nw4hbm/ut_Font.cpp:
 	.text       start:0x80379120 end:0x803791D0
 	.data       start:0x804E3368 end:0x804E3398
 
-revolution/hbm/ut_LinkList.cpp:
+revolution/homebuttonLib/nw4hbm/ut_LinkList.cpp:
 	.text       start:0x803791D0 end:0x803792E0
 
-revolution/hbm/ut_list.cpp:
+revolution/homebuttonLib/nw4hbm/ut_list.cpp:
 	.text       start:0x803792E0 end:0x80379450
 
-revolution/hbm/ut_ResFont.cpp:
+revolution/homebuttonLib/nw4hbm/ut_ResFont.cpp:
 	.text       start:0x80379450 end:0x80379750
 	.data       start:0x804E3398 end:0x804E33F0
 
-revolution/hbm/ut_ResFontBase.cpp:
+revolution/homebuttonLib/nw4hbm/ut_ResFontBase.cpp:
 	.text       start:0x80379750 end:0x80379DA0
 	.data       start:0x804E33F0 end:0x804E34B0
 
-revolution/hbm/ut_TagProcessorBase.cpp:
+revolution/homebuttonLib/nw4hbm/ut_TagProcessorBase.cpp:
 	.text       start:0x80379DA0 end:0x8037A560
 	.data       start:0x804E34B0 end:0x804E34D8
 	.sdata2     start:0x8050E0D0 end:0x8050E0D8
 
-revolution/hbm/ut_TextWriterBase.cpp:
+revolution/homebuttonLib/nw4hbm/ut_TextWriterBase.cpp:
 	.text       start:0x8037A560 end:0x8037BAF0
 	.ctors      start:0x8048E69C end:0x8048E6A0
 	.sbss       start:0x80509218 end:0x80509228
@@ -3635,7 +3636,7 @@ revolution/sc/scsystem.c:
 	.rodata     start:0x804AE070 end:0x804AE0C8
 	.data       start:0x804FC0D8 end:0x804FC2D0
 	.sdata      start:0x80508608 end:0x80508718
-	.sbss       start:0x8050995C end:0x80509974
+	.sbss       start:0x8050995C end:0x80509970
 	.bss        start:0x8059DB80 end:0x805A5D20
 
 revolution/sc/scapi.c:
@@ -3662,7 +3663,7 @@ revolution/esp/esp.c:
 
 revolution/ipc/ipcMain.c:
 	.text       start:0x804264A0 end:0x80426590
-	.sbss       start:0x80509974 end:0x80509988
+	.sbss       start:0x80509970 end:0x80509988
 
 revolution/ipc/ipcclt.c:
 	.text       start:0x80426590 end:0x80427FF0
@@ -3723,7 +3724,7 @@ revolution/wpad/WPADMem.c:
 revolution/wpad/lint.c:
 	.text       start:0x8043CE50 end:0x8043D6C0
 
-revolution/wpad/WUD.c:
+revolution/wud/WUD.c:
 	.text       start:0x8043D6C0 end:0x80442DE0
 	.data       start:0x804FD9C8 end:0x804FDD10
 	.sdata      start:0x80508790 end:0x805087A0
@@ -3762,7 +3763,7 @@ revolution/usb/usb.c:
 	.text       start:0x8044B0D0 end:0x8044C620
 	.data       start:0x804FDE88 end:0x804FE6B8
 	.sdata      start:0x80508828 end:0x80508838
-	.sbss       start:0x80509B28 end:0x80509B3C
+	.sbss       start:0x80509B28 end:0x80509B38
 
 revolution/bte/gki_buffer.c:
 	.text       start:0x8044C620 end:0x8044DAC0
@@ -3785,7 +3786,7 @@ revolution/bte/hcisu_h2.c:
 revolution/bte/uusb_ppc.c:
 	.text       start:0x8044EA20 end:0x8044F6A0
 	.sdata      start:0x80508838 end:0x80508848
-	.sbss       start:0x80509B3C end:0x80509B50
+	.sbss       start:0x80509B38 end:0x80509B50
 	.bss        start:0x805DA1C0 end:0x805DC220
 
 revolution/bte/bta_dm_cfg.c:
@@ -4222,11 +4223,11 @@ PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wstring.c:
 PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wchar_io.c:
 	.text       start:0x804847F0 end:0x8048486C
 
-PowerPC_EABI_Support/MSL/MSL_C/PPC_EABI/SRC/uart_console_io_gcn.c:
+PowerPC_EABI_Support/MSL/MSL_C/PPC_EABI/Src/uart_console_io_gcn.c:
 	.text       start:0x8048486C end:0x80484944
 	.sbss       start:0x80509B90 end:0x80509B98
 
-PowerPC_EABI_Support/MSL/MSL_C/PPC_EABI/SRC/abort_exit_ppc_eabi.c:
+PowerPC_EABI_Support/MSL/MSL_C/PPC_EABI/Src/abort_exit_ppc_eabi.c:
 	.text       start:0x80484944 end:0x80484978
 	.sbss       start:0x80509B98 end:0x80509BA0
 
@@ -4350,105 +4351,105 @@ PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_sqrt.
 PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/extras.c:
 	.text       start:0x80488908 end:0x804889AC
 
-TRK_Hollywood_Revolution/metrotrk/targsupp.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Export/targsupp.s:
 	.text       start:0x804889AC end:0x804889CC
 
-TRK_Hollywood_Revolution/metrotrk/custconn/cc_gdev.c:
+TRK_MINNOW_DOLPHIN/gamedev/cust_connection/utils/gc/cc_gdev.c:
 	.text       start:0x804889CC end:0x80488C44
 	.sbss       start:0x80509BA8 end:0x80509BB0
 	.bss        start:0x805E6730 end:0x805E6C50
 
-TRK_Hollywood_Revolution/metrotrk/custconn/MWCriticalSection_gc.c:
+TRK_MINNOW_DOLPHIN/gamedev/cust_connection/utils/gc/MWCriticalSection_gc.c:
 	.text       start:0x80488C44 end:0x80488C80
 
-TRK_Hollywood_Revolution/metrotrk/custconn/CircleBuffer.c:
+TRK_MINNOW_DOLPHIN/gamedev/cust_connection/utils/common/CircleBuffer.c:
 	.text       start:0x80488C80 end:0x80488EBC
 
-TRK_Hollywood_Revolution/metrotrk/flush_cache.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/flush_cache.c:
 	.text       start:0x80488EBC end:0x80488EF4
 
-TRK_Hollywood_Revolution/metrotrk/main_TRK.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/main_TRK.c:
 	.text       start:0x80488EF4 end:0x80488F30
 	.sbss       start:0x80509BB0 end:0x80509BB8
 
-TRK_Hollywood_Revolution/metrotrk/mainloop.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/mainloop.c:
 	.text       start:0x80488F30 end:0x8048901C
 
-TRK_Hollywood_Revolution/metrotrk/mem_TRK.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/mem_TRK.c:
 	.text       start:0x8048901C end:0x80489280
 
-TRK_Hollywood_Revolution/metrotrk/dispatch.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/dispatch.c:
 	.text       start:0x80489280 end:0x804893A0
 	.data       start:0x80504848 end:0x805048B8
 
-TRK_Hollywood_Revolution/metrotrk/dolphin_trk.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/dolphin_trk.c:
 	.text       start:0x804893A0 end:0x804896C4
 	.data       start:0x805048B8 end:0x805048F8
 	.sbss       start:0x80509BB8 end:0x80509BC4
 
-TRK_Hollywood_Revolution/metrotrk/dolphin_trk_glue.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/dolphin_trk_glue.c:
 	.text       start:0x804896C4 end:0x80489A60
 	.data       start:0x805048F8 end:0x805049E0
 	.sbss       start:0x80509BC4 end:0x80509BC8
 	.sdata2     start:0x8050EFB0 end:0x8050EFB4
 	.bss        start:0x805E6C50 end:0x805E6C78
 
-TRK_Hollywood_Revolution/metrotrk/notify.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/notify.c:
 	.text       start:0x80489A60 end:0x80489AF0
 
-TRK_Hollywood_Revolution/metrotrk/nubevent.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/nubevent.c:
 	.text       start:0x80489AF0 end:0x80489C8C
 	.data       start:0x805049E0 end:0x80504A00
 	.bss        start:0x805E6C78 end:0x805E6CA0
 
-TRK_Hollywood_Revolution/metrotrk/nubinit.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/nubinit.c:
 	.text       start:0x80489C8C end:0x80489DDC
 	.data       start:0x80504A00 end:0x80504A20
 	.sbss       start:0x80509BC8 end:0x80509BD0
 
-TRK_Hollywood_Revolution/metrotrk/serpoll.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/serpoll.c:
 	.text       start:0x80489DDC end:0x80489F24
 	.sbss       start:0x80509BD0 end:0x80509BD8
 
-TRK_Hollywood_Revolution/metrotrk/string_TRK.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/string_TRK.c:
 	.text       start:0x80489F24 end:0x80489F40
 
-TRK_Hollywood_Revolution/metrotrk/support.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/support.c:
 	.text       start:0x80489F40 end:0x8048A564
 	.data       start:0x80504A20 end:0x80504A68
 
-TRK_Hollywood_Revolution/metrotrk/targcont.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/targcont.c:
 	.text       start:0x8048A564 end:0x8048A598
 
-TRK_Hollywood_Revolution/metrotrk/mpc_7xx_603e.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/mpc_7xx_603e.c:
 	.text       start:0x8048A598 end:0x8048A8C0
 
-TRK_Hollywood_Revolution/metrotrk/msg.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/msg.c:
 	.text       start:0x8048A8C0 end:0x8048A924
 	.data       start:0x80504A68 end:0x80504A90
 	.sbss       start:0x80509BD8 end:0x80509BE0
 
-TRK_Hollywood_Revolution/metrotrk/msgbuf.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/msgbuf.c:
 	.text       start:0x8048A924 end:0x8048B130
 	.data       start:0x80504A90 end:0x80504AB8
 	.bss        start:0x805E6CA0 end:0x805E8648
 
-TRK_Hollywood_Revolution/metrotrk/msghndlr.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/msghndlr.c:
 	.text       start:0x8048B130 end:0x8048C0B4
 	.data       start:0x80504AB8 end:0x80504B20
 	.sbss       start:0x80509BE0 end:0x80509BE8
 
-TRK_Hollywood_Revolution/metrotrk/mslsupp.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Export/mslsupp.c:
 	.text       start:0x8048C0B4 end:0x8048C240
 
-TRK_Hollywood_Revolution/metrotrk/targimpl.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/targimpl.c:
 	.text       start:0x8048C240 end:0x8048DA64
 	.rodata     start:0x804AF690 end:0x804AF718
 	.data       start:0x80504B20 end:0x80504B30
 	.sbss       start:0x80509BE8 end:0x80509BF8
 	.bss        start:0x805E8648 end:0x805E8BF0
 
-TRK_Hollywood_Revolution/metrotrk/target_options.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/target_options.c:
 	.text       start:0x8048DA64 end:0x8048DA74
 
 NdevExi2A/DebuggerDriver.c:

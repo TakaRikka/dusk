@@ -8,6 +8,7 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include "d/actor/d_a_npc_uri.h"
 #include "m_Do/m_Do_graphic.h"
+#include <cstring>
 
 const daNpc_Uri_HIOParam daNpc_Uri_Param_c::m = {
     200.0f,   // attention_offset

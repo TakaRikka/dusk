@@ -12,6 +12,7 @@
 #include "d/actor/d_a_npc_wrestler.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include "d/d_camera.h"
+#include <cstring>
 
 enum Bou_RES_File_ID {
     /* BCK */

@@ -497,7 +497,7 @@ static void bee_control(e_bee_class* i_this) {
         } else {
             daPy_py_c* player = daPy_getPlayerActorClass();
             if (cc_pl_cut_bit_get() == 0x80) {
-                i_this->mBoomerangAngle += (s16)0x1400;
+                ANGLE_ADD(i_this->mBoomerangAngle, 0x1400);
                 vec1.z = 150.0f + TREG_F(15);
             } else {
                 vec1.z = 100.0f + TREG_F(12);

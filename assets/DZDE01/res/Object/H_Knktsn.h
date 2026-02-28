@@ -1,0 +1,24 @@
+#ifndef RES_H_KNKTSN_H
+#define RES_H_KNKTSN_H
+
+enum dRes_INDEX_H_KNKTSN {
+    /* BMDR */
+    dRes_INDEX_H_KNKTSN_BMD_H_KANKETSUSEN_e=0x4,
+    /* DZB  */
+    dRes_INDEX_H_KNKTSN_DZB_H_KANEKETSUSEN_e=0x7,
+    dRes_INDEX_H_KNKTSN_DZB_H_KANKETSUSENYOKO_e=0x8,
+};
+
+enum dRes_ID_H_KNKTSN {
+    /* BMDR */
+    dRes_ID_H_KNKTSN_BMD_H_KANKETSUSEN_e=0x4,
+    /* DZB  */
+    dRes_ID_H_KNKTSN_DZB_H_KANEKETSUSEN_e=0x7,
+    dRes_ID_H_KNKTSN_DZB_H_KANKETSUSENYOKO_e=0x8,
+};
+
+enum H_KANKETSUSEN_JNT {
+    H_KANKETSUSEN_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_H_KNKTSN_H */

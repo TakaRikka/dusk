@@ -3,6 +3,7 @@
 
 #include "d/d_map_path_dmap.h"
 #include "JSystem/JHostIO/JORReflexible.h"
+#include <cstring>
 
 struct dMap_HIO_prm_other_s {
     /* 0x00 */ u8 field_0x0;

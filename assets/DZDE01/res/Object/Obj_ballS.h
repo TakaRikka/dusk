@@ -1,0 +1,18 @@
+#ifndef RES_OBJ_BALLS_H
+#define RES_OBJ_BALLS_H
+
+enum dRes_INDEX_OBJ_BALLS {
+    /* BMDR */
+    dRes_INDEX_OBJ_BALLS_BMD_LV8_OBJ_HIKARIS_e=0x3,
+};
+
+enum dRes_ID_OBJ_BALLS {
+    /* BMDR */
+    dRes_ID_OBJ_BALLS_BMD_LV8_OBJ_HIKARIS_e=0x3,
+};
+
+enum LV8_OBJ_HIKARIS_JNT {
+    LV8_OBJ_HIKARIS_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_OBJ_BALLS_H */

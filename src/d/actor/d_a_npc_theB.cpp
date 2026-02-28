@@ -11,6 +11,7 @@
 #include "d/actor/d_a_npc_coach.h"
 #include "d/actor/d_a_startAndGoal.h"
 #include "d/actor/d_a_coach_2D.h"
+#include <cstring>
 
 enum Coach_RES_File_ID {
     /* BCK */

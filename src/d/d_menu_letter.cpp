@@ -11,6 +11,7 @@
 #include "d/d_meter_HIO.h"
 #include "d/d_msg_string.h"
 #include <dolphin/types.h>
+#include <cstring>
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include "d/d_msg_scrn_arrow.h"

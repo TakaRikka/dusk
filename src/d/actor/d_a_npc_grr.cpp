@@ -8,6 +8,7 @@
 #include "d/actor/d_a_npc_grr.h"
 #include "d/actor/d_a_npc.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 enum grR_RES_File_ID {
     /* BCK */

@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_obj_ihasi.h"
 #include "d/d_com_inf_game.h"
+#include <cstring>
 
 static int daObj_Ihasi_Draw(obj_ihasi_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
@@ -170,11 +171,11 @@ static int daObj_Ihasi_Create(fopAc_ac_c* i_actor) {
             fopAcM_create(PROC_E_S1, param1, &pos, fopAcM_GetRoomNo(i_actor), &angle, NULL, -1);
 
             pos.set(35250.0f, -300.0f, -43500.0f);
-            angle.y += (s16)0x5555;
+            ANGLE_ADD(angle.y, 0x5555);
             fopAcM_create(PROC_E_S1, param1, &pos, fopAcM_GetRoomNo(i_actor), &angle, NULL, -1);
 
             pos.set(34250.0f, -300.0f, -43500.0f);
-            angle.y += (s16)0x5555;
+            ANGLE_ADD(angle.y, 0x5555);
             fopAcM_create(PROC_E_S1, param1, &pos, fopAcM_GetRoomNo(i_actor), &angle, NULL, -1);
 
             return cPhs_ERROR_e;

@@ -1,0 +1,32 @@
+#ifndef RES_K_WHEEL01_H
+#define RES_K_WHEEL01_H
+
+enum dRes_INDEX_K_WHEEL01 {
+    /* BMDR */
+    dRes_INDEX_K_WHEEL01_BMD_K_WHEEL01_e=0x4,
+    dRes_INDEX_K_WHEEL01_BMD_K_WHEEL02_e=0x5,
+    /* DZB  */
+    dRes_INDEX_K_WHEEL01_DZB_HSMA_COV_e=0x8,
+    dRes_INDEX_K_WHEEL01_DZB_K_WHEEL01_e=0x9,
+    dRes_INDEX_K_WHEEL01_DZB_K_WHEEL02_e=0xA,
+};
+
+enum dRes_ID_K_WHEEL01 {
+    /* BMDR */
+    dRes_ID_K_WHEEL01_BMD_K_WHEEL01_e=0x4,
+    dRes_ID_K_WHEEL01_BMD_K_WHEEL02_e=0x5,
+    /* DZB  */
+    dRes_ID_K_WHEEL01_DZB_HSMA_COV_e=0x8,
+    dRes_ID_K_WHEEL01_DZB_K_WHEEL01_e=0x9,
+    dRes_ID_K_WHEEL01_DZB_K_WHEEL02_e=0xA,
+};
+
+enum K_WHEEL01_JNT {
+    K_WHEEL01_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum K_WHEEL02_JNT {
+    K_WHEEL02_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_K_WHEEL01_H */

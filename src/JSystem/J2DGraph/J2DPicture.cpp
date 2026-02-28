@@ -471,8 +471,7 @@ const ResTIMG* J2DPicture::changeTexture(char const* resName, u8 param_1) {
     return changeTexture((ResTIMG*)J2DScreen::getNameResource(resName), param_1);
 }
 
-static bool dummy_weak_order(JUTTexture* tex) {
-    J2DPicture* picture;
+static bool dummy_weak_order(J2DPicture* picture, JUTTexture* tex) {
     return picture->append(tex, 1.0f);
 }
 

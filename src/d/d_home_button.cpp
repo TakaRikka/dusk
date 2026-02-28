@@ -2,13 +2,13 @@
 
 #include "d/d_home_button.h"
 #include "JSystem/JFramework/JFWDisplay.h"
-#include "Z2AudioLib/Z2AudioCS.h"
+#include "Z2AudioCS/Z2AudioCS.h"
 #include "Z2AudioLib/Z2AudioMgr.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
-#include "m_Do/m_Re_controller_pad.h"
+#include "m_Re/m_Re_controller_pad.h"
 
 int SECallback(int param_0, int param_1) {
     if (param_0 == 5) {

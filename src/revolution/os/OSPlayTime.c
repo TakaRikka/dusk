@@ -7,7 +7,7 @@
 
 #include "__os.h"
 
-OSAlarm __OSExpireAlarm;
+OSAlarm __OSExpireAlarm ATTRIBUTE_ALIGN(32);
 OSTime __OSExpireTime;
 OSPlayTimeCallbackFunc __OSExpireCallback;
 BOOL __OSExpireSetExpiredFlag;

@@ -1,0 +1,18 @@
+#ifndef RES_L3CANDL2_H
+#define RES_L3CANDL2_H
+
+enum dRes_INDEX_L3CANDL2 {
+    /* BMDR */
+    dRes_INDEX_L3CANDL2_BMD_S_LV3CANDLB_e=0x3,
+};
+
+enum dRes_ID_L3CANDL2 {
+    /* BMDR */
+    dRes_ID_L3CANDL2_BMD_S_LV3CANDLB_e=0x3,
+};
+
+enum S_LV3CANDLB_JNT {
+    S_LV3CANDLB_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_L3CANDL2_H */

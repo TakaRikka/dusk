@@ -120,10 +120,10 @@ void daObjH_Saku_c::Action() {
 
             shape_angle.y += field_0x5d6.y;
             shape_angle.x += field_0x5d6.x;
-            shape_angle.z -= (s16)0x100;
+            ANGLE_SUB(shape_angle.z, 0x100);
             field_0x5bc.y += field_0x5d0.y * 1.5f;
             field_0x5bc.x += field_0x5d0.x;
-            field_0x5bc.z -= (s16)0x100;
+            ANGLE_SUB(field_0x5bc.z, 0x100);
             break;
 
         case 2:
@@ -143,9 +143,9 @@ void daObjH_Saku_c::Action() {
 
             if (field_0x5dd != 0) {
                 if (speed.y > 0.0f) {
-                    shape_angle.z += (s16)0x400;
+                    ANGLE_ADD(shape_angle.z, 0x400);
                 } else {
-                    shape_angle.z -= (s16)0x400;
+                    ANGLE_SUB(shape_angle.z, 0x400);
                 }
 
                 cLib_chaseAngleS(&shape_angle.x, 0x4000, field_0x5d6.x);
@@ -181,9 +181,9 @@ void daObjH_Saku_c::Action() {
 
             if (field_0x5dc != 0) {
                 if (field_0x5b0.y > 0.0f) {
-                    field_0x5bc.z += (s16)0x400;
+                    ANGLE_ADD(field_0x5bc.z, 0x400);
                 } else {
-                    field_0x5bc.z -= (s16)0x400;
+                    ANGLE_SUB(field_0x5bc.z, 0x400);
                 }
 
                 cLib_chaseAngleS(&field_0x5bc.x, -0x4000, field_0x5d6.x);

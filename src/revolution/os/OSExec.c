@@ -515,8 +515,10 @@ void __OSLaunchNextFirmware(void) {
     }
 
     __OSInitIPCBuffer();
+#if SDK_AUG2010
     IPCReInit();
     IPCCltReInit();
+#endif
 
     DVDLowInit();
     DVDLowIntType = 0;

@@ -15,4 +15,3 @@ ninja
 cmake -B build/dusk -GNinja
 ninja -C build/dusk
 ```
-

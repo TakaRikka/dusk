@@ -13,6 +13,7 @@
 #include "d/d_meter2_info.h"
 #include "SSystem/SComponent/c_math.h"
 #include "f_op/f_op_actor_mng.h"
+#include <cstring>
 
 static char* l_stageName[20] = {
     "D_MN05",

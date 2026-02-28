@@ -9,6 +9,7 @@
 #include "SSystem/SComponent/c_counter.h"
 #include "f_op/f_op_actor_mng.h"
 #include "SSystem/SComponent/c_counter.h"
+#include <cstring>
 
 static int l_bmdData[2] = {
     7, 1

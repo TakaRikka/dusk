@@ -4,6 +4,7 @@
 #include "JSystem/JMessage/control.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_msg.h"
+#include <cstring>
 
 class COutFont_c;
 class J2DTextBox;

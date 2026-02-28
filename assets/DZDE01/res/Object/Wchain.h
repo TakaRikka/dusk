@@ -1,0 +1,24 @@
+#ifndef RES_WCHAIN_H
+#define RES_WCHAIN_H
+
+enum dRes_INDEX_WCHAIN {
+    /* BMDR */
+    dRes_INDEX_WCHAIN_BMD_J_UKUSARI00_e=0x3,
+    dRes_INDEX_WCHAIN_BMD_J_UKUSARI01_e=0x4,
+};
+
+enum dRes_ID_WCHAIN {
+    /* BMDR */
+    dRes_ID_WCHAIN_BMD_J_UKUSARI00_e=0x3,
+    dRes_ID_WCHAIN_BMD_J_UKUSARI01_e=0x4,
+};
+
+enum J_UKUSARI00_JNT {
+    J_UKUSARI00_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum J_UKUSARI01_JNT {
+    J_UKUSARI01_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_WCHAIN_H */

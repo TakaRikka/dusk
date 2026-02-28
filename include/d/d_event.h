@@ -108,8 +108,26 @@ public:
     void setPtD(void* actor);
     void setGtItm(u8 itemNo);
 
+    fopAc_ac_c* getPt1() { return convPId(mPt1); }
+    fopAc_ac_c* getPt2() { return convPId(mPt2); }
+    fopAc_ac_c* getPtT() { return convPId(mPtT); }
+    fopAc_ac_c* getPtI() { return convPId(mPtI); }
+    fopAc_ac_c* getPtD() { return convPId(mPtd); }
+    u16 chkEventFlag(u16 flag) { return flag & mEventFlag; }
+    void onEventFlag(u16 flag) { mEventFlag |= flag; }
+    void offEventFlag(u16 flag) { mEventFlag &= ~flag; }
     u16 chkFlag2(u16 flag) { return flag & mFlag2; }
-
+    void onFlag2(u16 flag) { mFlag2 |= flag; }
+    void offFlag2(u16 flag) { mFlag2 &= ~flag; }
+    bool checkSkipEdge() { return chkFlag2(8) != false; }
+    u16 checkHind(u16 flag) { return flag & mHindFlag; }
+    void onHindFlag(u16 flag) { mHindFlag |= flag; }
+    #if DEBUG
+    void offHindFlag(u16 flag) { mHindFlag &= (u16)~flag; }
+    #else
+    void offHindFlag(u16 flag) { mHindFlag &= ~flag; }
+    #endif
+    u8 getMode() const { return mMode; }
     BOOL runCheck() {
         #if DEBUG
         return mEventStatus != 0 || mDebugStb != 0;
@@ -117,39 +135,6 @@ public:
         return mEventStatus != 0;
         #endif
     }
-
-    f32 getCullRate() { return mCullRate; }
-    void setCullRate(f32 rate) { mCullRate = rate; }
-
-    u16 chkEventFlag(u16 flag) { return flag & mEventFlag; }
-    void onEventFlag(u16 flag) { mEventFlag |= flag; }
-    void offEventFlag(u16 flag) { mEventFlag &= ~flag; }
-
-    u8 getMode() const { return mMode; }
-
-    void onHindFlag(u16 flag) { mHindFlag |= flag; }
-    #if DEBUG
-    void offHindFlag(u16 flag) { mHindFlag &= (u16)~flag; }
-    #else
-    void offHindFlag(u16 flag) { mHindFlag &= ~flag; }
-    #endif
-
-    u16 checkHind(u16 flag) { return flag & mHindFlag; }
-    u8 checkCompulsory() { return mCompulsory; }
-    u8 getMapToolId() { return mMapToolId; }
-
-    void onFlag2(u16 flag) { mFlag2 |= flag; }
-    void offFlag2(u16 flag) { mFlag2 &= ~flag; }
-
-    BOOL chkTalkXY() 
-    {
-#if PLATFORM_WII || PLATFORM_SHIELD
-        return mTalkXyType == 1 || mTalkXyType == 2 || mTalkXyType == 3 || mTalkXyType == 4;
-#else
-        return mTalkXyType == 1 || mTalkXyType == 2;
-#endif
-    }
-
     BOOL isOrderOK() {
 #if DEBUG
         return (mEventStatus == 0 || mEventStatus == 2) && !mDebugStb;
@@ -157,19 +142,23 @@ public:
         return mEventStatus == 0 || mEventStatus == 2;
 #endif
     }
-
-    fopAc_ac_c* getPt1() { return convPId(mPt1); }
-    fopAc_ac_c* getPt2() { return convPId(mPt2); }
-    fopAc_ac_c* getPtT() { return convPId(mPtT); }
-    fopAc_ac_c* getPtI() { return convPId(mPtI); }
-    fopAc_ac_c* getPtD() { return convPId(mPtd); }
-
-    bool isChangeOK(void* actor) { return mChangeActor == actor; }
+    void setDebugStb(u8 stb) { mDebugStb = stb; }
+    u8 getMapToolId() { return mMapToolId; }
+    BOOL chkTalkXY() {
+#if PLATFORM_WII || PLATFORM_SHIELD
+        return mTalkXyType == 1 || mTalkXyType == 2 || mTalkXyType == 3 || mTalkXyType == 4;
+#else
+        return mTalkXyType == 1 || mTalkXyType == 2;
+#endif
+    }
     u8 getPreItemNo() { return mPreItemNo; }
     u8 getGtItm() { return mGtItm; }
+    f32 getCullRate() { return mCullRate; }
+    void setCullRate(f32 rate) { mCullRate = rate; }
+    bool isChangeOK(void* actor) { return mChangeActor == actor; }
+    u8 checkCompulsory() { return mCompulsory; }
+
     void startCheckSkipEdge(void* actor) { setSkipProc(actor, dEv_noFinishSkipProc, 0); }
-    bool checkSkipEdge() { return chkFlag2(8) != false; }
-    void setDebugStb(u8 stb) { mDebugStb = stb; }
 
 public:
     /* 0x000 */ u8 unk_0x0[4];

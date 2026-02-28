@@ -11,6 +11,7 @@
 #include "d/d_msg_object.h"
 
 #include <cmath>
+#include <cstring>
 
 #include "d/actor/d_a_balloon_2D.h"
 #include "d/actor/d_a_e_ym.h"
@@ -1290,13 +1291,13 @@ void daKago_c::executeStagger() {
 
         if (field_0x744 == 1) {
             shape_angle.z = 0x3000;
-            current.angle.y += (s16)-0x2000;
+            ANGLE_ADD(current.angle.y, -0x2000);
             if (abs((s16)(current.angle.y - field_0x714)) > 0x2000) {
                 current.angle.y = field_0x714 + -0x2000;
             }
         } else {
             shape_angle.z = -0x3000;
-            current.angle.y += (s16)0x2000;
+            ANGLE_ADD(current.angle.y, 0x2000);
             if (abs((s16)(current.angle.y - field_0x714)) > 0x2000) {
                 current.angle.y = field_0x714 + 0x2000;
             }

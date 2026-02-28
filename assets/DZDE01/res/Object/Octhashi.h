@@ -1,0 +1,22 @@
+#ifndef RES_OCTHASHI_H
+#define RES_OCTHASHI_H
+
+enum dRes_INDEX_OCTHASHI {
+    /* BMDR */
+    dRes_INDEX_OCTHASHI_BMD_S_OCTHASHI00_e=0x4,
+    /* DZB  */
+    dRes_INDEX_OCTHASHI_DZB_S_OCTHASHI00_e=0x7,
+};
+
+enum dRes_ID_OCTHASHI {
+    /* BMDR */
+    dRes_ID_OCTHASHI_BMD_S_OCTHASHI00_e=0x4,
+    /* DZB  */
+    dRes_ID_OCTHASHI_DZB_S_OCTHASHI00_e=0x7,
+};
+
+enum S_OCTHASHI00_JNT {
+    S_OCTHASHI00_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_OCTHASHI_H */

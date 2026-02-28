@@ -1,0 +1,28 @@
+#ifndef RES_P_LV4CHAN_H
+#define RES_P_LV4CHAN_H
+
+enum dRes_INDEX_P_LV4CHAN {
+    /* BMDR */
+    dRes_INDEX_P_LV4CHAN_BMD_LV4_CHANDELIER_e=0x4,
+    dRes_INDEX_P_LV4CHAN_BMD_P_CHAIN_e=0x5,
+    /* DZB  */
+    dRes_INDEX_P_LV4CHAN_DZB_LV4_CHANDELIER_e=0x8,
+};
+
+enum dRes_ID_P_LV4CHAN {
+    /* BMDR */
+    dRes_ID_P_LV4CHAN_BMD_LV4_CHANDELIER_e=0x4,
+    dRes_ID_P_LV4CHAN_BMD_P_CHAIN_e=0x5,
+    /* DZB  */
+    dRes_ID_P_LV4CHAN_DZB_LV4_CHANDELIER_e=0x8,
+};
+
+enum LV4_CHANDELIER_JNT {
+    LV4_CHANDELIER_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum P_CHAIN_JNT {
+    P_CHAIN_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_P_LV4CHAN_H */

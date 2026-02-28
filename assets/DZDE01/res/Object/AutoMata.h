@@ -1,0 +1,36 @@
+#ifndef RES_AUTOMATA_H
+#define RES_AUTOMATA_H
+
+enum dRes_INDEX_AUTOMATA {
+    /* BCK  */
+    dRes_INDEX_AUTOMATA_BCK_ATMA_RUN_A_e=0x5,
+    dRes_INDEX_AUTOMATA_BCK_ATMA_RUN_B_e=0x6,
+    /* BMDR */
+    dRes_INDEX_AUTOMATA_BMD_AUTOMATA_e=0x9,
+    /* BTK  */
+    dRes_INDEX_AUTOMATA_BTK_ATMA_RUN_A_e=0xC,
+    dRes_INDEX_AUTOMATA_BTK_ATMA_RUN_B_e=0xD,
+};
+
+enum dRes_ID_AUTOMATA {
+    /* BCK  */
+    dRes_ID_AUTOMATA_BCK_ATMA_RUN_A_e=0x5,
+    dRes_ID_AUTOMATA_BCK_ATMA_RUN_B_e=0x6,
+    /* BMDR */
+    dRes_ID_AUTOMATA_BMD_AUTOMATA_e=0x9,
+    /* BTK  */
+    dRes_ID_AUTOMATA_BTK_ATMA_RUN_A_e=0xC,
+    dRes_ID_AUTOMATA_BTK_ATMA_RUN_B_e=0xD,
+};
+
+enum AUTOMATA_JNT {
+    AUTOMATA_JNT_CENTER_e=0x0,
+    AUTOMATA_JNT_B01_e=0x1,
+    AUTOMATA_JNT_B02_e=0x2,
+    AUTOMATA_JNT_H06_e=0x3,
+    AUTOMATA_JNT_K04_e=0x4,
+    AUTOMATA_JNT_K05_e=0x5,
+    AUTOMATA_JNT_T03_e=0x6,
+};
+
+#endif /* !RES_AUTOMATA_H */

@@ -9,6 +9,7 @@
 #include "d/actor/d_a_npc.h"
 #include "d/actor/d_a_player.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 enum {
     NUM_EVT_CUTS_e = 5,

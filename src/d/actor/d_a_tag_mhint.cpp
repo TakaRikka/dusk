@@ -11,6 +11,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_procname.h"
 #include "d/d_meter2_info.h"
+#include <cstring>
 
 int daTagMhint_c::create() {
     fopAcM_ct(this, daTagMhint_c);

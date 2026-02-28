@@ -4,6 +4,14 @@
 #include <revolution/ipc.h>
 #include <cstring>
 
+#if SDK_AUG2010
+#define RESPONSE_REQ_BUF_LEN 0x30
+#define IPC_BUF_CNT 0x40
+#else
+#define RESPONSE_REQ_BUF_LEN 0x10
+#define IPC_BUF_CNT 0x10
+#endif
+
 /* macro for matching __ipcQueueRequest */
 #define diff(a, b)                                                           \
     ((a) < (b)) ? ((u32)0xffffffff - (b) + (a) + 1) : ((a) - (b))
@@ -23,9 +31,11 @@ typedef struct IOSRpcRequest {
 } IOSRpcRequest;
 
 static IOSRpcRequest* __relnchRpc = 0;
+#if SDK_AUG2010
 static IOSRpcRequest* __relnchRpcSave = 0;
+#endif
 
-#define ROUNDUP(sz)     (((u32)(sz) + 31) & ~(u32)(31))
+#define ROUNDUP(sz)     (((u32)(sz) + (IPC_BUF_CNT / 2 - 1)) & ~(u32)(IPC_BUF_CNT / 2 - 1))
 
 static u8 __rpcBuf[ROUNDUP(sizeof(IOSRpcRequest))] ATTRIBUTE_ALIGN(32);
 
@@ -34,7 +44,7 @@ static struct {
     u32 wcount;
     u32 rptr;
     u32 wptr;
-    IOSResourceRequest* buf[48];
+    IOSResourceRequest* buf[RESPONSE_REQ_BUF_LEN];
 } __responses;
 
 static OSAlarm __timeout_alarm;
@@ -93,6 +103,10 @@ static void __ipcSendRequest(void) {
     }
 
     if (rpc->relaunch_flag) {
+#if !SDK_AUG2010
+        __relnchFl = 1;
+        __relnchRpc = rpc;
+#endif
         __mailboxAck--;
     }
 
@@ -149,7 +163,12 @@ void IpcReplyHandler(__OSInterrupt interrupt, OSContext* context) {
             DCInvalidateRange(v->vector[i].base, v->vector[i].length);
         }
 
-        if (__relnchFl && __relnchRpcSave == rep) {
+#if SDK_AUG2010
+        if (__relnchFl && __relnchRpcSave == rep)
+#else
+        if (__relnchFl && __relnchRpc == rep)
+#endif
+        {
             __relnchFl = 0;
 
             if (__mailboxAck < 1) {
@@ -229,7 +248,7 @@ IOSError IPCCltInit(void) {
 
     IPCInit();
 
-    i = ROUNDUP(64 * (ROUNDUP(sizeof(IOSRpcRequest)) + 64));
+    i = ROUNDUP(IPC_BUF_CNT * (ROUNDUP(sizeof(IOSRpcRequest)) + 64));
     bufferLo = IPCGetBufferLo();
 
     if ((void*)((u8*)bufferLo + i) > IPCGetBufferHi()) {
@@ -245,18 +264,21 @@ IOSError IPCCltInit(void) {
 
     IPCWriteReg(1, (1 << 5 | 1<< 4 | 1 << 3));
     IPCiProfInit();
+#if SDK_AUG2010
     OSCreateAlarm(&__timeout_alarm);
+#endif
 
 out:
     return ret;
 }
 
+#if SDK_AUG2010
 IOSError IPCCltReInit(void) {
     u32 i;
     IOSError ret = 0;
     void* bufferLo;
 
-    i = ROUNDUP(64 * ROUNDUP(sizeof(IOSRpcRequest)));
+    i = ROUNDUP(IPC_BUF_CNT * ROUNDUP(sizeof(IOSRpcRequest)));
     bufferLo = IPCGetBufferLo();
 
     if ((void*)((u8*)bufferLo + i) > IPCGetBufferHi()) {
@@ -270,6 +292,7 @@ IOSError IPCCltReInit(void) {
 out:
     return ret;
 }
+#endif
 
 static IOSError __ios_Ipc1(IOSFd fd, u32 cmd, IOSIpcCb cb, void* cbArg, IOSRpcRequest** rpc) {
     IOSError ret = 0;
@@ -773,6 +796,7 @@ IOSError IOS_IoctlvReboot(IOSFd fd, s32 cmd, u32 readCount, u32 writeCount, IOSI
     u32 inten;
     IOSResourceRequest* req;
 
+#if SDK_AUG2010
     inten = OSDisableInterrupts();
 
     if (__relnchFl) {
@@ -783,6 +807,7 @@ IOSError IOS_IoctlvReboot(IOSFd fd, s32 cmd, u32 readCount, u32 writeCount, IOSI
 
     __relnchFl = 1;
     OSRestoreInterrupts(inten);
+#endif
 
     ret = __ios_Ipc1(fd, 7, 0, 0, &rpc);
 
@@ -790,15 +815,18 @@ IOSError IOS_IoctlvReboot(IOSFd fd, s32 cmd, u32 readCount, u32 writeCount, IOSI
         goto err;
     }
 
+#if SDK_AUG2010
     __relnchRpcSave = rpc;
+#endif
     rpc->relaunch_flag = 1;
 
     ret = __ios_Ioctlv(rpc, cmd, readCount, writeCount, vect);
-    
+
     if (ret != 0) {
         goto err;
     }
 
+#if SDK_AUG2010
     memcpy(&__rpcBuf, rpc, sizeof(IOSRpcRequest));
     __relnchRpc = (IOSRpcRequest*)&__rpcBuf;
     req = &rpc->request;
@@ -821,14 +849,19 @@ IOSError IOS_IoctlvReboot(IOSFd fd, s32 cmd, u32 readCount, u32 writeCount, IOSI
     OSSleepThread(&__relnchRpc->thread_queue);
     OSRestoreInterrupts(inten);
     ret = (&__relnchRpc->request)->status;
+#else
+    ret = __ios_Ipc2(rpc, NULL);
+#endif
 
 err:
+#if SDK_AUG2010
     __relnchFl = 0;
     __relnchRpcSave = NULL;
 
     if (rpc && (ret != 0)) {
         ipcFree(rpc);
     }
+#endif
 
 finish:
     return ret;

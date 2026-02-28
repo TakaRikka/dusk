@@ -9,6 +9,7 @@
 #include "d/actor/d_a_alink.h"
 #include "d/d_debug_viewer.h"
 #include "f_op/f_op_actor_enemy.h"
+#include <cstring>
 
 class daE_HP_HIO_c : public JORReflexible {
 public:

@@ -61,6 +61,10 @@ public:
 
     void ChkActor(fopAc_ac_c*);
 
+#if PLATFORM_WII
+    BOOL ChkLine(cXyz&, cXyz&, f32, fopAc_ac_c**);
+#endif
+
     static bool m_mtrl_hit_tbl[64];
 
     // /* 0x0000 */ cCcS mCCcS;

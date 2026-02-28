@@ -23,6 +23,7 @@
 #include "d/d_menu_window.h"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_graphic.h"
+#include <cstring>
 
 #if (PLATFORM_WII || PLATFORM_SHIELD)
 #define POINTER_OPT dComIfGs_getOptPointer()

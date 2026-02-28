@@ -12,38 +12,31 @@ JPAEmitterCallBack::~JPAEmitterCallBack() {
 
 void JPABaseEmitter::init(JPAEmitterManager* param_0, JPAResource* param_1) {
     mpEmtrMgr = param_0;
-    mpRes = param_1;
-    mpRes->getDyn()->getEmitterScl(&mLocalScl);
-    mpRes->getDyn()->getEmitterTrs(&mLocalTrs);
-    mpRes->getDyn()->getEmitterDir(&mLocalDir);
+    pRes = param_1;
+    pRes->getDyn()->getEmitterScl(&mLocalScl);
+    pRes->getDyn()->getEmitterTrs(&mLocalTrs);
+    pRes->getDyn()->getEmitterDir(&mLocalDir);
     mLocalDir.normalize();
-    mpRes->getDyn()->getEmitterRot(&mLocalRot);
-    mMaxFrame = mpRes->getDyn()->getMaxFrame();
-    mLifeTime = mpRes->getDyn()->getLifetime();
-    mVolumeSize = mpRes->getDyn()->getVolumeSize();
-    mRate = mpRes->getDyn()->getRate();
-    mRateStep = mpRes->getDyn()->getRateStep();
-    mVolumeSweep = mpRes->getDyn()->getVolumeSweep();
-    mVolumeMinRad = mpRes->getDyn()->getVolumeMinRad();
-    mAwayFromCenterSpeed = mpRes->getDyn()->getInitVelOmni();
-    mAwayFromAxisSpeed = mpRes->getDyn()->getInitVelAxis();
-    mDirSpeed = mpRes->getDyn()->getInitVelDir();
-    mSpread = mpRes->getDyn()->getInitVelDirSp();
-    mRndmDirSpeed = mpRes->getDyn()->getInitVelRndm();
-    mAirResist = mpRes->getDyn()->getAirRes();
+    pRes->getDyn()->getEmitterRot(&mLocalRot);
+    mMaxFrame = pRes->getDyn()->getMaxFrame();
+    mLifeTime = pRes->getDyn()->getLifetime();
+    mVolumeSize = pRes->getDyn()->getVolumeSize();
+    mRate = pRes->getDyn()->getRate();
+    mRateStep = pRes->getDyn()->getRateStep();
+    mVolumeSweep = pRes->getDyn()->getVolumeSweep();
+    mVolumeMinRad = pRes->getDyn()->getVolumeMinRad();
+    mAwayFromCenterSpeed = pRes->getDyn()->getInitVelOmni();
+    mAwayFromAxisSpeed = pRes->getDyn()->getInitVelAxis();
+    mDirSpeed = pRes->getDyn()->getInitVelDir();
+    mSpread = pRes->getDyn()->getInitVelDirSp();
+    mRndmDirSpeed = pRes->getDyn()->getInitVelRndm();
+    mAirResist = pRes->getDyn()->getAirRes();
     mRndm.set_seed(mpEmtrMgr->pWd->mRndm.get_rndm_u());
     MTXIdentity(mGlobalRot);
     mGlobalScl.set(1.0f, 1.0f, 1.0f);
     mGlobalTrs.zero();
     mGlobalPScl.set(1.0f, 1.0f);
-    mGlobalEnvClr.a = 0xff;
-    mGlobalEnvClr.b = 0xff;
-    mGlobalEnvClr.g = 0xff;
-    mGlobalEnvClr.r = 0xff;
-    mGlobalPrmClr.a = 0xff;
-    mGlobalPrmClr.b = 0xff;
-    mGlobalPrmClr.g = 0xff;
-    mGlobalPrmClr.r = 0xff;
+    mGlobalPrmClr.r = mGlobalPrmClr.g = mGlobalPrmClr.b = mGlobalPrmClr.a = mGlobalEnvClr.r = mGlobalEnvClr.g = mGlobalEnvClr.b = mGlobalEnvClr.a = 0xff;
     param_1->getBsp()->getPrmClr(&mPrmClr);
     param_1->getBsp()->getEnvClr(&mEnvClr);
     mpUserWork = NULL;
@@ -61,9 +54,11 @@ JPABaseParticle* JPABaseEmitter::createParticle() {
     if (mpPtclPool->getNum() != 0) {
         JPANode<JPABaseParticle>* node = mpPtclPool->pop_front();
         mAlivePtclBase.push_front(node);
-        mpRes->getDyn()->calc(mpEmtrMgr->pWd);
-        node->mData.init_p(mpEmtrMgr->pWd);
-        return &node->mData;
+        pRes->getDyn()->calc(mpEmtrMgr->pWd);
+        node->getObject()->init_p(mpEmtrMgr->pWd);
+        return node->getObject();
+    } else {
+        JUT_WARN(128, "%s", "JPA : Can NOT create particle more\n");
     }
 
     return NULL;
@@ -73,8 +68,10 @@ JPABaseParticle* JPABaseEmitter::createChild(JPABaseParticle* parent) {
     if (mpPtclPool->getNum() != 0) {
         JPANode<JPABaseParticle>* node = mpPtclPool->pop_front();
         mAlivePtclChld.push_front(node);
-        node->mData.init_c(mpEmtrMgr->pWd, parent);
-        return &node->mData;
+        node->getObject()->init_c(mpEmtrMgr->pWd, parent);
+        return node->getObject();
+    } else {
+        JUT_WARN(151, "%s", "JPA : Can NOT create child particle more\n")
     }
 
     return NULL;
@@ -88,14 +85,12 @@ void JPABaseEmitter::deleteAllParticle() {
 }
 
 bool JPABaseEmitter::processTillStartFrame() {
-    JPADynamicsBlock* dyn = mpRes->getDyn();
-    s16 startFrame = dyn->getStartFrame();
-
-    if (mWaitTime >= startFrame)
+    if (mWaitTime >= pRes->getDyn()->getStartFrame())
         return true;
 
-    if (!(mStatus & 2))
+    if (!checkStatus(2)) {
         mWaitTime++;
+    }
 
     return false;
 }
@@ -111,7 +106,7 @@ bool JPABaseEmitter::processTermination() {
     if (mMaxFrame < 0) {
         setStatus(8);
         return getParticleNumber() == 0;
-    } 
+    }
     if (mTick >= mMaxFrame) {
         setStatus(8);
         if (checkStatus(0x40)) {
@@ -129,7 +124,7 @@ void JPABaseEmitter::calcEmitterGlobalPosition(JGeometry::TVec3<f32>* dst) const
     mtx[0][3] = mGlobalTrs.x;
     mtx[1][3] = mGlobalTrs.y;
     mtx[2][3] = mGlobalTrs.z;
-    MTXMultVec(mtx, mLocalTrs, *dst);
+    MTXMultVec(mtx, &mLocalTrs, dst);
 }
 
 u32 JPABaseEmitter::getCurrentCreateNumber() const {
@@ -140,7 +135,8 @@ u8 JPABaseEmitter::getDrawCount() const {
     return mpEmtrMgr->pWd->mDrawCount;
 }
 
-bool JPABaseEmitter::loadTexture(u8 idx, GXTexMapID texMapID) {
-    mpEmtrMgr->pWd->mpResMgr->load(mpRes->getTexIdx(idx), texMapID);
+bool JPABaseEmitter::loadTexture(u8 no, GXTexMapID texMapID) {
+    JUT_ASSERT(286, pRes->texNum > no);
+    mpEmtrMgr->pWd->mpResMgr->load(pRes->getTexIdx(no), texMapID);
     return true;
 }

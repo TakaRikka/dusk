@@ -1,0 +1,16 @@
+#ifndef RES_CAMPARAM_H
+#define RES_CAMPARAM_H
+
+enum dRes_INDEX_CAMPARAM {
+    /* ROOT */
+    dRes_INDEX_CAMPARAM_DAT_CAMSTYLE_e=0x0,
+    dRes_INDEX_CAMPARAM_DAT_CAMTYPE_e=0x1,
+};
+
+enum dRes_ID_CAMPARAM {
+    /* ROOT */
+    dRes_ID_CAMPARAM_DAT_CAMSTYLE_e=0x0,
+    dRes_ID_CAMPARAM_DAT_CAMTYPE_e=0x1,
+};
+
+#endif /* !RES_CAMPARAM_H */

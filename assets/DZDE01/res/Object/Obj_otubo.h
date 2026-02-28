@@ -1,0 +1,28 @@
+#ifndef RES_OBJ_OTUBO_H
+#define RES_OBJ_OTUBO_H
+
+enum dRes_INDEX_OBJ_OTUBO {
+    /* BMDR */
+    dRes_INDEX_OBJ_OTUBO_BMD_X_OILTUBO_00_e=0x4,
+    dRes_INDEX_OBJ_OTUBO_BMD_X_OILTUBO_00B_e=0x5,
+    /* BTK  */
+    dRes_INDEX_OBJ_OTUBO_BTK_X_OILTUBO_00B_e=0x8,
+};
+
+enum dRes_ID_OBJ_OTUBO {
+    /* BMDR */
+    dRes_ID_OBJ_OTUBO_BMD_X_OILTUBO_00_e=0x4,
+    dRes_ID_OBJ_OTUBO_BMD_X_OILTUBO_00B_e=0x5,
+    /* BTK  */
+    dRes_ID_OBJ_OTUBO_BTK_X_OILTUBO_00B_e=0x8,
+};
+
+enum X_OILTUBO_00_JNT {
+    X_OILTUBO_00_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum X_OILTUBO_00B_JNT {
+    X_OILTUBO_00B_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_OBJ_OTUBO_H */

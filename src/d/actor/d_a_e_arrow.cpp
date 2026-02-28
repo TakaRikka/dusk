@@ -200,10 +200,10 @@ static void hit_check(e_arrow_class* i_this) {
             i_this->speedF *= 0.3f;
 
             if (i_this->mCcTgSph.ChkTgHit()) {
-                i_this->current.angle.y += (s16)(cM_rndFX(8000.0f) + 32768.0f);
+                ANGLE_ADD(i_this->current.angle.y, cM_rndFX(8000.0f) + 32768.0f);
                 i_this->mSound.startSound(Z2SE_COL_FLIP_ARROW, 0, -1);
             } else {
-                i_this->current.angle.y += (s16)(cM_rndFX(4000.0f) + 32768.0f);
+                ANGLE_ADD(i_this->current.angle.y, cM_rndFX(4000.0f) + 32768.0f);
             }
 
             dKy_Sound_set(i_this->current.pos, 3, fopAcM_GetID(i_this), 10);
@@ -470,7 +470,7 @@ static void e_arrow_demo_bound(e_arrow_class* i_this) {
     }
 
     if (i_this->field_0xa0c > 0) {
-        a_this->shape_angle.x += (s16)i_this->field_0xa10;
+        ANGLE_ADD(a_this->shape_angle.x, i_this->field_0xa10);
 
         if (a_this->shape_angle.x > i_this->field_0xa0c ||
             a_this->shape_angle.x < (s16)-i_this->field_0xa0c)

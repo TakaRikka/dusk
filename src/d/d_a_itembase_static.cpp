@@ -14,6 +14,11 @@ u8 daItemBase_c::getItemNo() {
     return m_itemNo;
 }
 
+static void dummy(dItem_data* data) {
+    data->getR(0);
+    data->getH(0);
+}
+
 void daItemBase_c::hide() {
     cLib_offBit<u8>(field_0x92b, 1);
 }
@@ -31,7 +36,7 @@ void daItemBase_c::changeDraw() {
 }
 
 bool daItemBase_c::chkDraw() {
-    return cLib_checkBit<u8>(field_0x92b, 1);
+    return cLib_checkBit<u8>(u8(field_0x92b), 1);
 }
 
 void daItemBase_c::dead() {
@@ -39,7 +44,7 @@ void daItemBase_c::dead() {
 }
 
 bool daItemBase_c::chkDead() {
-    return cLib_checkBit<u8>(field_0x92b, 2);
+    return cLib_checkBit<u8>(u8(field_0x92b), 2);
 }
 
 int CheckItemCreateHeap(fopAc_ac_c* i_this) {

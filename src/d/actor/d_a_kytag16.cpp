@@ -10,6 +10,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include <cstring>
 
 static int daKytag16_Draw(kytag16_class* i_this) {
     return 1;

@@ -1,0 +1,40 @@
+#ifndef RES_TITLE_H
+#define RES_TITLE_H
+
+enum dRes_INDEX_TITLE {
+    /* BCK  */
+    dRes_INDEX_TITLE_BCK_TITLELOGO_e=0x7,
+    /* BMDR */
+    dRes_INDEX_TITLE_BMD_TITLELOGO_R_e=0xA,
+    /* BPK  */
+    dRes_INDEX_TITLE_BPK_TITLELOGO_e=0xD,
+    /* BRK  */
+    dRes_INDEX_TITLE_BRK_TITLELOGO_e=0x10,
+    /* BTK  */
+    dRes_INDEX_TITLE_BTK_TITLELOGO_e=0x13,
+};
+
+enum dRes_ID_TITLE {
+    /* BCK  */
+    dRes_ID_TITLE_BCK_TITLELOGO_e=0x7,
+    /* BMDR */
+    dRes_ID_TITLE_BMD_TITLELOGO_R_e=0xA,
+    /* BPK  */
+    dRes_ID_TITLE_BPK_TITLELOGO_e=0xD,
+    /* BRK  */
+    dRes_ID_TITLE_BRK_TITLELOGO_e=0x10,
+    /* BTK  */
+    dRes_ID_TITLE_BTK_TITLELOGO_e=0x13,
+};
+
+enum TITLELOGO_R_JNT {
+    TITLELOGO_R_JNT_TITLELOGO_e=0x0,
+    TITLELOGO_R_JNT__01_ZELDABLUR_e=0x1,
+    TITLELOGO_R_JNT__02_LOGO_ZELDA_e=0x2,
+    TITLELOGO_R_JNT__03_LOGO_ZELDA_SHADOW_e=0x3,
+    TITLELOGO_R_JNT__04_LOGO_TP_e=0x4,
+    TITLELOGO_R_JNT__06_LOGO_MSK_WL_e=0x5,
+    TITLELOGO_R_JNT__07_NINTENDO_e=0x6,
+};
+
+#endif /* !RES_TITLE_H */

@@ -6,6 +6,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
 #include <cstdio>
+#include <cstring>
 #include "f_op/f_op_msg_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"

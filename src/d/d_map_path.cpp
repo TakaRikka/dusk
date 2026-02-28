@@ -12,6 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_map_path.h"
 #include "m_Do/m_Do_lib.h"
+#include <cstring>
 
 void dMpath_n::dTexObjAggregate_c::create() {
     static int const data[7] = {
@@ -94,10 +95,12 @@ void dMpath_HIO_n::hioList_c::update(JORMContext* mctx) {
 
 u32 dMpath_HIO_n::hioList_c::addString(char* param_1, u32 param_2, u32 param_3) const {
     // DEBUG NONMATCHING
+    return param_2;
 }
 
 u32 dMpath_HIO_n::hioList_c::addStringBinary(char* param_1, u32 param_2, u32 param_3) const {
     // DEBUG NONMATCHING
+    return param_2;
 }
 
 BOOL dMpath_HIO_file_base_c::writeHostioTextFile(const char* param_1) {

@@ -3,9 +3,9 @@
 
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
+#include "JSystem/JStudio/JStudio_JStage/object.h"
 #include "JSystem/JStudio/JStudio_JAudio2/control.h"
 #include "JSystem/JStudio/JStudio_JParticle/object-particle.h"
-#include "JSystem/JStudio/JStudio_JStage/object.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "Z2AudioLib/Z2SoundStarter.h"
@@ -27,12 +27,16 @@ public:
     ~dDemo_object_c();
     JStage::TObject* appendActor(fopAc_ac_c*);
     dDemo_actor_c* getActor(u8);
-    JStage::TObject* createCamera();
+    dDemo_camera_c* createCamera();
+    dDemo_camera_c* createEditorCamera();
     dDemo_camera_c* getActiveCamera();
     JStage::TObject* createAmbient();
     JStage::TObject* appendLight();
     JStage::TObject* createFog();
     void remove();
+    void removeEditorCamera();
+
+    dDemo_camera_c* getCamera() { return mpCamera; }
 
     /* 0x00 */ u8 mActorNum;
     /* 0x01 */ u8 mLightNum;
@@ -41,6 +45,9 @@ public:
     /* 0x88 */ dDemo_ambient_c* mpAmbient;
     /* 0x8C */ dDemo_light_c* mpLights[8];
     /* 0xAC */ dDemo_fog_c* mpFog;
+#if DEBUG
+    /* 0xB0 */ dDemo_camera_c* mpEditorCamera;
+#endif
 };
 
 // TODO: made up, figure out what this is
@@ -85,15 +92,15 @@ public:
     void setActor(fopAc_ac_c*);
     f32 getPrm_Morf();
     int getDemoIDData(int* o_arg0, int* o_arg1, int* o_arg2, u16* o_resID, u8*);
-    
+
     virtual ~dDemo_actor_c();
     virtual void JSGSetData(u32, void const*, u32);
     virtual s32 JSGFindNodeID(char const* param_0) const {
-        JUT_ASSERT(0, mModel != NULL);
+        JUT_ASSERT(115, mModel != NULL);
         return mModel->getModelData()->getJointName()->getIndex(param_0);
     }
     virtual bool JSGGetNodeTransformation(u32 param_0, Mtx param_1) const {
-        JUT_ASSERT(0, mModel != NULL);
+        JUT_ASSERT(120, mModel != NULL);
         cMtx_copy(mModel->getAnmMtx((u16)param_0), param_1);
         return true;
     }
@@ -113,10 +120,14 @@ public:
         return mTexAnmFrameMax;
     }
     virtual void JSGGetTranslation(Vec* o_trans) const {
-        *o_trans = mTrans;
+        o_trans->x = mTrans.x;
+        o_trans->y = mTrans.y;
+        o_trans->z = mTrans.z;
     }
     virtual void JSGGetScaling(Vec* o_scale) const {
-        *o_scale = mScale;
+        o_scale->x = mScale.x;
+        o_scale->y = mScale.y;
+        o_scale->z = mScale.z;
     }
     virtual void JSGGetRotation(Vec* param_0) const {
         param_0->x = S2DEG(mRotate.x);
@@ -163,96 +174,6 @@ private:
     /* 0x68 */ u32 mBrkId;
 };
 
-class dDemo_system_c : public JStage::TSystem {
-public:
-    dDemo_system_c() { mpObject = NULL; }
-
-    virtual int JSGFindObject(JStage::TObject**, char const*,
-                                              JStage::TEObject) const;
-    virtual ~dDemo_system_c();
-
-    void setObject(dDemo_object_c* i_object) { mpObject = i_object; }
-
-private:
-    /* 0x4 */ dDemo_object_c* mpObject;
-};
-
-class dDemo_particle_c : public JStudio_JParticle::TCreateObject {
-public:
-    dDemo_particle_c(JPAEmitterManager* p_emitMgr, const JStage::TSystem* p_system)
-        : JStudio_JParticle::TCreateObject(p_emitMgr, p_system) {}
-
-    virtual ~dDemo_particle_c();
-    virtual JPABaseEmitter* emitter_create(u32);
-};
-
-class dDemo_light_c : public JStage::TLight {
-public:
-    enum Enable_e {
-        ENABLE_LIGHT_TYPE_e = (1 << 0),
-        ENABLE_POSITION_e = (1 << 1),
-        ENABLE_COLOR_e = (1 << 2),
-        ENABLE_DIST_ATTEN_e = (1 << 3),
-        ENABLE_ANGLE_ATTEN_e = (1 << 4),
-        ENABLE_DIRECTION_e = (1 << 5),
-    };
-
-    dDemo_light_c() {
-        mFlags = 0;
-    }
-
-    virtual void JSGSetLightType(JStage::TELight);
-    virtual void JSGSetPosition(Vec const&);
-    virtual void JSGSetColor(GXColor);
-    virtual void JSGSetDistanceAttenuation(f32, f32, GXDistAttnFn);
-    virtual void JSGSetAngleAttenuation(f32, GXSpotFn);
-    virtual void JSGSetDirection(Vec const&);
-    virtual ~dDemo_light_c();
-
-    void onEnable(u8 flag) { mFlags |= flag; }
-
-private:
-    /* 0x04 */ u8 mFlags;
-    /* 0x08 */ JStage::TELight mLightType;
-    /* 0x0C */ GXDistAttnFn mDistAttenFn;
-    /* 0x10 */ GXSpotFn mSpotFn;
-    /* 0x14 */ cXyz mPosition;
-    /* 0x20 */ GXColor mColor;
-    /* 0x24 */ f32 field_0x24;
-    /* 0x28 */ f32 field_0x28;
-    /* 0x2C */ f32 field_0x2c;
-    /* 0x30 */ cXyz mDirection;
-};
-
-class dDemo_fog_c : public JStage::TFog {
-public:
-    enum Enable_e {
-        ENABLE_FOG_FN_e = (1 << 0),
-        ENABLE_START_Z_e = (1 << 1),
-        ENABLE_END_Z_e = (1 << 2),
-        ENABLE_COLOR_e = (1 << 3),
-    };
-
-    dDemo_fog_c() {
-        mFlags = 0;
-    }
-
-    virtual void JSGSetFogFunction(GXFogType);
-    virtual void JSGSetStartZ(f32);
-    virtual void JSGSetEndZ(f32);
-    virtual void JSGSetColor(GXColor);
-    virtual ~dDemo_fog_c();
-
-    void onEnable(u8 flag) { mFlags |= flag; }
-
-private:
-    /* 0x04 */ u8 mFlags;
-    /* 0x05 */ u8 mFogType;
-    /* 0x08 */ f32 mStartZ;
-    /* 0x0C */ f32 mEndZ;
-    /* 0x10 */ GXColor mColor;
-};
-
 class dDemo_camera_c : public JStage::TCamera {
 public:
     enum Enable_e {
@@ -266,9 +187,7 @@ public:
         ENABLE_VIEW_ROLL_e = (1 << 7),
     };
 
-    dDemo_camera_c() {
-        mFlags = 0;
-    }
+    dDemo_camera_c() : mFlags(0) {}
 
     virtual f32 JSGGetProjectionNear() const;
     virtual void JSGSetProjectionNear(f32);
@@ -329,15 +248,95 @@ private:
     /* 0x05 */ GXColor mColor;
 };
 
-namespace {
-class jstudio_tCreateObject_message : public JStudio::TCreateObject {
+class dDemo_light_c : public JStage::TLight {
 public:
-    jstudio_tCreateObject_message() {}
+    enum Enable_e {
+        ENABLE_LIGHT_TYPE_e = (1 << 0),
+        ENABLE_POSITION_e = (1 << 1),
+        ENABLE_COLOR_e = (1 << 2),
+        ENABLE_DIST_ATTEN_e = (1 << 3),
+        ENABLE_ANGLE_ATTEN_e = (1 << 4),
+        ENABLE_DIRECTION_e = (1 << 5),
+    };
 
-    virtual ~jstudio_tCreateObject_message();
-    virtual bool create(JStudio::TObject**, const JStudio::stb::data::TParse_TBlock_object&);
+    dDemo_light_c() : mFlags(0) {}
+
+    virtual void JSGSetLightType(JStage::TELight);
+    virtual void JSGSetPosition(Vec const&);
+    virtual void JSGSetColor(GXColor);
+    virtual void JSGSetDistanceAttenuation(f32, f32, GXDistAttnFn);
+    virtual void JSGSetAngleAttenuation(f32, GXSpotFn);
+    virtual void JSGSetDirection(Vec const&);
+    virtual ~dDemo_light_c();
+
+    void onEnable(u8 flag) { mFlags |= flag; }
+
+private:
+    /* 0x04 */ u8 mFlags;
+    /* 0x08 */ JStage::TELight mLightType;
+    /* 0x0C */ GXDistAttnFn mDistAttenFn;
+    /* 0x10 */ GXSpotFn mSpotFn;
+    /* 0x14 */ cXyz mPosition;
+    /* 0x20 */ GXColor mColor;
+    /* 0x24 */ f32 field_0x24;
+    /* 0x28 */ f32 field_0x28;
+    /* 0x2C */ f32 field_0x2c;
+    /* 0x30 */ cXyz mDirection;
 };
 
+class dDemo_fog_c : public JStage::TFog {
+public:
+    enum Enable_e {
+        ENABLE_FOG_FN_e = (1 << 0),
+        ENABLE_START_Z_e = (1 << 1),
+        ENABLE_END_Z_e = (1 << 2),
+        ENABLE_COLOR_e = (1 << 3),
+    };
+
+    dDemo_fog_c() {
+        mFlags = 0;
+    }
+
+    virtual void JSGSetFogFunction(GXFogType);
+    virtual void JSGSetStartZ(f32);
+    virtual void JSGSetEndZ(f32);
+    virtual void JSGSetColor(GXColor);
+    virtual ~dDemo_fog_c();
+
+    void onEnable(u8 flag) { mFlags |= flag; }
+
+private:
+    /* 0x04 */ u8 mFlags;
+    /* 0x05 */ s8 mFogType;
+    /* 0x08 */ f32 mStartZ;
+    /* 0x0C */ f32 mEndZ;
+    /* 0x10 */ GXColor mColor;
+};
+
+class dDemo_system_c : public JStage::TSystem {
+public:
+    dDemo_system_c() { mpObject = NULL; }
+
+    virtual int JSGFindObject(JStage::TObject**, char const*,
+                                              JStage::TEObject) const;
+    virtual ~dDemo_system_c();
+
+    void setObject(dDemo_object_c* i_object) { mpObject = i_object; }
+
+private:
+    /* 0x4 */ dDemo_object_c* mpObject;
+};
+
+class dDemo_particle_c : public JStudio_JParticle::TCreateObject {
+public:
+    dDemo_particle_c(JPAEmitterManager* p_emitMgr, const JStage::TSystem* p_system)
+        : JStudio_JParticle::TCreateObject(p_emitMgr, p_system) {}
+
+    virtual ~dDemo_particle_c();
+    virtual JPABaseEmitter* emitter_create(u32);
+};
+
+namespace {
 class jstudio_tAdaptor_message : public JStudio::TAdaptor_message {
 public:
     typedef JStudio::TObject_message ObjectType;
@@ -346,6 +345,14 @@ public:
 
     virtual ~jstudio_tAdaptor_message();
     virtual void adaptor_do_MESSAGE(JStudio::data::TEOperationData, const void*, u32);
+};
+
+class jstudio_tCreateObject_message : public JStudio::TCreateObject {
+public:
+    jstudio_tCreateObject_message() {}
+
+    virtual ~jstudio_tCreateObject_message();
+    virtual bool create(JStudio::TObject**, const JStudio::stb::data::TParse_TBlock_object&);
 };
 
 };  // namespace
@@ -373,12 +380,12 @@ public:
     static s32 getMode() { return m_mode; }
     static u32 getFrame() { return m_frame; }
     static JStudio::stb::TControl* getControl() { return m_control; }
-    static bool isStatus(u32 status) { return m_status & status; }
+    static u32 isStatus(u32 status) { return m_status & status; }
     static void onStatus(u32 status) { m_status |= status; }
     static void offStatus(u32 status) { m_status &= ~status; }
     static void setBranchData(const u8* p_data) { m_branchData = p_data; }
     static s16 getBranchId() { return m_branchId; }
-    static s16 getBranchNum() { return m_branchNum; }
+    static u16 getBranchNum() { return m_branchNum; }
     static jmessage_tControl* getMesgControl() { return m_mesgControl; }
 
     static void setBranchNum(u16 num) {

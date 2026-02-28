@@ -239,13 +239,6 @@ private:
     /* 0x1D4 */ u8 m_wtr_mode;
 }; // Size: 0x1D8
 
-class dBgS_LinkAcch : public dBgS_Acch {
-public:
-    dBgS_LinkAcch() { SetLink(); }
-
-    virtual ~dBgS_LinkAcch() {}
-};
-
 class dBgS_ObjAcch : public dBgS_Acch {
 public:
     dBgS_ObjAcch() {
@@ -254,6 +247,13 @@ public:
 
     virtual ~dBgS_ObjAcch() {}
 }; // Size: 0x1D8
+
+class dBgS_LinkAcch : public dBgS_Acch {
+public:
+    dBgS_LinkAcch() { SetLink(); }
+
+    virtual ~dBgS_LinkAcch() {}
+};
 
 STATIC_ASSERT(sizeof(dBgS_ObjAcch) == 0x1D8);
 

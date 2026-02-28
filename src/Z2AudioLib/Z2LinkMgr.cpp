@@ -2,7 +2,7 @@
 #include "d/d_com_inf_game.h"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
-#include "Z2AudioLib/Z2AudioCS.h"
+#include "Z2AudioCS/Z2AudioCS.h"
 #endif
 
 void Z2CreatureLink::setLinkGroupInfo(u8) {}

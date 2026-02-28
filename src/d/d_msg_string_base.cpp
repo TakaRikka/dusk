@@ -10,6 +10,7 @@
 #include "d/d_meter2_info.h"
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
+#include <cstring>
 
 dMsgStringBase_c::dMsgStringBase_c() {
     field_0x20 = 0;

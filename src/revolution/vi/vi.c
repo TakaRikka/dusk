@@ -1682,8 +1682,12 @@ BOOL VIEnableDimming(BOOL enable) {
     return old;
 }
 
-void VIResetDimmingCount() {
-    __VIResetDev0Idle();
+BOOL VIResetDimmingCount() {
+    return __VIResetDev0Idle();
+}
+
+BOOL VIResetRFIdle() {
+    return __VIResetRFIdle();
 }
 
 BOOL VIEnableDVDStopMotor(BOOL enable) {
@@ -1694,6 +1698,11 @@ BOOL VIEnableDVDStopMotor(BOOL enable) {
 
 BOOL __VIResetSIIdle() {
     __VIDimmingFlag_SI_IDLE = 0;
+    return TRUE;
+}
+
+BOOL __VIResetRFIdle() {
+    __VIDimmingFlag_RF_IDLE = 0;
     return TRUE;
 }
 

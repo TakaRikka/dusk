@@ -104,6 +104,8 @@ void daObjDust_c::setBaseMtx() {
 }
 
 static void rideCallBack(dBgW* i_bgw, fopAc_ac_c* i_bgActor, fopAc_ac_c* i_rideActor) {
+    UNUSED(i_bgw);
+    UNUSED(i_bgActor);
     fopAc_ac_c* ride_actor = (fopAc_ac_c*)i_rideActor;
     daObjDust_c* a_this = (daObjDust_c*)i_bgActor;
 
@@ -127,6 +129,18 @@ static int daObjDust_IsDelete(daObjDust_c* i_this) {
 static int daObjDust_Delete(daObjDust_c* i_this) {
     fpc_ProcID id = fopAcM_GetID(i_this);
     i_this->MoveBGDelete();
+    return 1;
+}
+
+int daObjDust_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "M_FloatingDust01.bmd");
+    JUT_ASSERT(86, modelData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
+    if (mpModel == NULL) {
+        return 0;
+    }
+
     return 1;
 }
 
@@ -166,18 +180,6 @@ static int daObjDust_Create(fopAc_ac_c* i_this) {
     daObjDust_c* a_this = (daObjDust_c*)i_this;
     fpc_ProcID id = fopAcM_GetID(i_this);
     return a_this->create();
-}
-
-int daObjDust_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "M_FloatingDust01.bmd");
-    JUT_ASSERT(86, modelData != NULL);
-
-    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
-    if (mpModel == NULL) {
-        return 0;
-    }
-
-    return 1;
 }
 
 int daObjDust_c::Create() {

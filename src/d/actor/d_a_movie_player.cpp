@@ -20,6 +20,7 @@
 #include "d/actor/d_a_movie_player.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include "f_op/f_op_overlap_mng.h"
+#include <cstring>
 
 inline s32 daMP_NEXT_READ_SIZE(daMP_THPReadBuffer* readBuf) {
     return *(s32*)readBuf->ptr;
@@ -689,17 +690,17 @@ static void __THPDecompressYUV(void* tileY, void* tileU, void* tileV) {
     if (__THPInfo->xPixelSize == 512 && targetY == 448) {
         while (currentY < targetY) {
             __THPDecompressiMCURow512x448();
-            currentY += (u16)16;
+            U16_ADD(currentY, 16);
         }
     } else if (__THPInfo->xPixelSize == 640 && targetY == 480) {
         while (currentY < targetY) {
             __THPDecompressiMCURow640x480();
-            currentY += (u16)16;
+            U16_ADD(currentY, 16);
         }
     } else {
         while (currentY < targetY) {
             __THPDecompressiMCURowNxN();
-            currentY += (u16)16;
+            U16_ADD(currentY, 16);
         }
     }
 

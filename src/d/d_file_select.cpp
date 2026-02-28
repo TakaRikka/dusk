@@ -21,6 +21,7 @@
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
+#include <cstring>
 
 static s32 SelStartFrameTbl[3] = {
     59,

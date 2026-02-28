@@ -1,0 +1,24 @@
+#ifndef RES_JAGAR3_H
+#define RES_JAGAR3_H
+
+enum dRes_INDEX_JAGAR3 {
+    /* BCK  */
+    dRes_INDEX_JAGAR3_BCK_JAGA_F_TALK_B_e=0x4,
+    dRes_INDEX_JAGAR3_BCK_JAGA_FH_TALK_B_e=0x5,
+    dRes_INDEX_JAGAR3_BCK_JAGA_TALK_A_e=0x6,
+    /* BTP  */
+    dRes_INDEX_JAGAR3_BTP_JAGA_F_TALK_B_e=0x9,
+    dRes_INDEX_JAGAR3_BTP_JAGA_FH_TALK_B_e=0xA,
+};
+
+enum dRes_ID_JAGAR3 {
+    /* BCK  */
+    dRes_ID_JAGAR3_BCK_JAGA_F_TALK_B_e=0x4,
+    dRes_ID_JAGAR3_BCK_JAGA_FH_TALK_B_e=0x5,
+    dRes_ID_JAGAR3_BCK_JAGA_TALK_A_e=0x6,
+    /* BTP  */
+    dRes_ID_JAGAR3_BTP_JAGA_F_TALK_B_e=0x9,
+    dRes_ID_JAGAR3_BTP_JAGA_FH_TALK_B_e=0xA,
+};
+
+#endif /* !RES_JAGAR3_H */

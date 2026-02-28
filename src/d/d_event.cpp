@@ -11,6 +11,7 @@
 #include "d/actor/d_a_tag_mstop.h"
 #include "d/d_event_debug.h"
 #include "SSystem/SComponent/c_counter.h"
+#include <cstring>
 
 namespace {
 static u8 event_debug_evnt() {

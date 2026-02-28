@@ -1,0 +1,172 @@
+#ifndef RES_B_YO_H
+#define RES_B_YO_H
+
+enum dRes_INDEX_B_YO {
+    /* BCK  */
+    dRes_INDEX_B_YO_BCK_YKW_B_ANGRY_e=0x7,
+    dRes_INDEX_B_YO_BCK_YKW_B_ANGRY_WAIT_e=0x8,
+    dRes_INDEX_B_YO_BCK_YKW_B_DOWN_e=0x9,
+    dRes_INDEX_B_YO_BCK_YKW_B_DOWNA_e=0xA,
+    dRes_INDEX_B_YO_BCK_YKW_B_DOWNB_e=0xB,
+    dRes_INDEX_B_YO_BCK_YKW_B_DOWNC_e=0xC,
+    dRes_INDEX_B_YO_BCK_YKW_B_FLOAT_e=0xD,
+    dRes_INDEX_B_YO_BCK_YKW_B_FLOATB_e=0xE,
+    dRes_INDEX_B_YO_BCK_YKW_B_SCREAM_e=0xF,
+    dRes_INDEX_B_YO_BCK_YKW_B_SCREAM_WAIT_e=0x10,
+    dRes_INDEX_B_YO_BCK_YKW_B_TALKA_e=0x11,
+    dRes_INDEX_B_YO_BCK_YKW_B_TALKB_e=0x12,
+    dRes_INDEX_B_YO_BCK_YKW_B_TO_TALKB_e=0x13,
+    dRes_INDEX_B_YO_BCK_YKW_B_WAITA_e=0x14,
+    dRes_INDEX_B_YO_BCK_YKW_B_WAITB_e=0x15,
+    dRes_INDEX_B_YO_BCK_YKW_B_WAITC_e=0x16,
+    dRes_INDEX_B_YO_BCK_YKW_B_WAITC2_e=0x17,
+    dRes_INDEX_B_YO_BCK_YKW_B_WAITD_e=0x18,
+    dRes_INDEX_B_YO_BCK_YKW_B_WALK_e=0x19,
+    /* BMDE */
+    dRes_INDEX_B_YO_BMD_YKW_B_e=0x1C,
+    dRes_INDEX_B_YO_BMD_YO01_e=0x1D,
+    dRes_INDEX_B_YO_BMD_YO02_e=0x1E,
+    dRes_INDEX_B_YO_BMD_YO_CORE_e=0x1F,
+    dRes_INDEX_B_YO_BMD_YO_HIBI_e=0x20,
+    dRes_INDEX_B_YO_BMD_YO_ICE_e=0x21,
+    /* BRK  */
+    dRes_INDEX_B_YO_BRK_YKW_B_e=0x24,
+    dRes_INDEX_B_YO_BRK_YKW_B_ANGRY_e=0x25,
+    dRes_INDEX_B_YO_BRK_YKW_B_ANGRY_WAIT_e=0x26,
+    dRes_INDEX_B_YO_BRK_YKW_B_WHITE_e=0x27,
+    /* BTK  */
+    dRes_INDEX_B_YO_BTK_YKW_B_ANGRY_e=0x2A,
+    dRes_INDEX_B_YO_BTK_YKW_B_DOWN_e=0x2B,
+    dRes_INDEX_B_YO_BTK_YKW_B_FLOAT_e=0x2C,
+    dRes_INDEX_B_YO_BTK_YKW_B_SCREAM_e=0x2D,
+    dRes_INDEX_B_YO_BTK_YKW_B_SCREAM_WAIT_e=0x2E,
+    dRes_INDEX_B_YO_BTK_YKW_B_TALKA_e=0x2F,
+    dRes_INDEX_B_YO_BTK_YKW_B_TALKB_e=0x30,
+    dRes_INDEX_B_YO_BTK_YKW_B_TO_TALKB_e=0x31,
+    dRes_INDEX_B_YO_BTK_YKW_B_WAITA_e=0x32,
+    dRes_INDEX_B_YO_BTK_YKW_B_WAITB_e=0x33,
+    dRes_INDEX_B_YO_BTK_YKW_B_WALK_e=0x34,
+    dRes_INDEX_B_YO_BTK_YO_KANNKYOU_e=0x35,
+    /* BTP  */
+    dRes_INDEX_B_YO_BTP_YKW_B_ANGRY_e=0x38,
+    dRes_INDEX_B_YO_BTP_YKW_B_FACEA_e=0x39,
+    dRes_INDEX_B_YO_BTP_YKW_B_FACEB_e=0x3A,
+    dRes_INDEX_B_YO_BTP_YKW_B_FLOAT_e=0x3B,
+    dRes_INDEX_B_YO_BTP_YKW_B_TALKA_e=0x3C,
+    dRes_INDEX_B_YO_BTP_YKW_B_TALKB_e=0x3D,
+    dRes_INDEX_B_YO_BTP_YKW_B_TO_TALKB_e=0x3E,
+    dRes_INDEX_B_YO_BTP_YKW_B_WAITA_e=0x3F,
+    dRes_INDEX_B_YO_BTP_YKW_B_WAITB_e=0x40,
+    dRes_INDEX_B_YO_BTP_YKW_B_WALK_e=0x41,
+};
+
+enum dRes_ID_B_YO {
+    /* BCK  */
+    dRes_ID_B_YO_BCK_YKW_B_ANGRY_e=0x7,
+    dRes_ID_B_YO_BCK_YKW_B_ANGRY_WAIT_e=0x8,
+    dRes_ID_B_YO_BCK_YKW_B_DOWN_e=0x9,
+    dRes_ID_B_YO_BCK_YKW_B_DOWNA_e=0xA,
+    dRes_ID_B_YO_BCK_YKW_B_DOWNB_e=0xB,
+    dRes_ID_B_YO_BCK_YKW_B_DOWNC_e=0xC,
+    dRes_ID_B_YO_BCK_YKW_B_FLOAT_e=0xD,
+    dRes_ID_B_YO_BCK_YKW_B_FLOATB_e=0xE,
+    dRes_ID_B_YO_BCK_YKW_B_SCREAM_e=0xF,
+    dRes_ID_B_YO_BCK_YKW_B_SCREAM_WAIT_e=0x10,
+    dRes_ID_B_YO_BCK_YKW_B_TALKA_e=0x11,
+    dRes_ID_B_YO_BCK_YKW_B_TALKB_e=0x12,
+    dRes_ID_B_YO_BCK_YKW_B_TO_TALKB_e=0x13,
+    dRes_ID_B_YO_BCK_YKW_B_WAITA_e=0x14,
+    dRes_ID_B_YO_BCK_YKW_B_WAITB_e=0x15,
+    dRes_ID_B_YO_BCK_YKW_B_WAITC_e=0x16,
+    dRes_ID_B_YO_BCK_YKW_B_WAITC2_e=0x17,
+    dRes_ID_B_YO_BCK_YKW_B_WAITD_e=0x18,
+    dRes_ID_B_YO_BCK_YKW_B_WALK_e=0x19,
+    /* BMDE */
+    dRes_ID_B_YO_BMD_YKW_B_e=0x1C,
+    dRes_ID_B_YO_BMD_YO01_e=0x1D,
+    dRes_ID_B_YO_BMD_YO02_e=0x1E,
+    dRes_ID_B_YO_BMD_YO_CORE_e=0x1F,
+    dRes_ID_B_YO_BMD_YO_HIBI_e=0x20,
+    dRes_ID_B_YO_BMD_YO_ICE_e=0x21,
+    /* BRK  */
+    dRes_ID_B_YO_BRK_YKW_B_e=0x24,
+    dRes_ID_B_YO_BRK_YKW_B_ANGRY_e=0x25,
+    dRes_ID_B_YO_BRK_YKW_B_ANGRY_WAIT_e=0x26,
+    dRes_ID_B_YO_BRK_YKW_B_WHITE_e=0x27,
+    /* BTK  */
+    dRes_ID_B_YO_BTK_YKW_B_ANGRY_e=0x2A,
+    dRes_ID_B_YO_BTK_YKW_B_DOWN_e=0x2B,
+    dRes_ID_B_YO_BTK_YKW_B_FLOAT_e=0x2C,
+    dRes_ID_B_YO_BTK_YKW_B_SCREAM_e=0x2D,
+    dRes_ID_B_YO_BTK_YKW_B_SCREAM_WAIT_e=0x2E,
+    dRes_ID_B_YO_BTK_YKW_B_TALKA_e=0x2F,
+    dRes_ID_B_YO_BTK_YKW_B_TALKB_e=0x30,
+    dRes_ID_B_YO_BTK_YKW_B_TO_TALKB_e=0x31,
+    dRes_ID_B_YO_BTK_YKW_B_WAITA_e=0x32,
+    dRes_ID_B_YO_BTK_YKW_B_WAITB_e=0x33,
+    dRes_ID_B_YO_BTK_YKW_B_WALK_e=0x34,
+    dRes_ID_B_YO_BTK_YO_KANNKYOU_e=0x35,
+    /* BTP  */
+    dRes_ID_B_YO_BTP_YKW_B_ANGRY_e=0x38,
+    dRes_ID_B_YO_BTP_YKW_B_FACEA_e=0x39,
+    dRes_ID_B_YO_BTP_YKW_B_FACEB_e=0x3A,
+    dRes_ID_B_YO_BTP_YKW_B_FLOAT_e=0x3B,
+    dRes_ID_B_YO_BTP_YKW_B_TALKA_e=0x3C,
+    dRes_ID_B_YO_BTP_YKW_B_TALKB_e=0x3D,
+    dRes_ID_B_YO_BTP_YKW_B_TO_TALKB_e=0x3E,
+    dRes_ID_B_YO_BTP_YKW_B_WAITA_e=0x3F,
+    dRes_ID_B_YO_BTP_YKW_B_WAITB_e=0x40,
+    dRes_ID_B_YO_BTP_YKW_B_WALK_e=0x41,
+};
+
+enum YKW_B_JNT {
+    YKW_B_JNT_CENTER_e=0x0,
+    YKW_B_JNT_BB1_e=0x1,
+    YKW_B_JNT_BB2_e=0x2,
+    YKW_B_JNT_BB3_e=0x3,
+    YKW_B_JNT_HEAD_e=0x4,
+    YKW_B_JNT_CHIN_e=0x5,
+    YKW_B_JNT_FACE_e=0x6,
+    YKW_B_JNT_CHIN_A_e=0x7,
+    YKW_B_JNT_CHIN_B_e=0x8,
+    YKW_B_JNT_EYEL_B_e=0x9,
+    YKW_B_JNT_EYER_B_e=0xA,
+    YKW_B_JNT_KIBA_B_e=0xB,
+    YKW_B_JNT_MAYUL_A_e=0xC,
+    YKW_B_JNT_MAYUL_B_e=0xD,
+    YKW_B_JNT_MAYUR_A_e=0xE,
+    YKW_B_JNT_MAYUR_B_e=0xF,
+    YKW_B_JNT_MOUTH_A_e=0x10,
+    YKW_B_JNT_MOUTH_B_e=0x11,
+    YKW_B_JNT_MAYUL_e=0x12,
+    YKW_B_JNT_MAYUR_e=0x13,
+    YKW_B_JNT_WAIST_e=0x14,
+    YKW_B_JNT_LEGL1_e=0x15,
+    YKW_B_JNT_LEGL2_e=0x16,
+    YKW_B_JNT_FOOTL_e=0x17,
+    YKW_B_JNT_LEGR1_e=0x18,
+    YKW_B_JNT_LEGR2_e=0x19,
+    YKW_B_JNT_FOOTR_e=0x1A,
+};
+
+enum YO01_JNT {
+    YO01_JNT_YKW3_MODEL_TMP02_TK_DETTACHEDOBJECT74_e=0x0,
+};
+
+enum YO02_JNT {
+    YO02_JNT_YKWE2_e=0x0,
+};
+
+enum YO_CORE_JNT {
+    YO_CORE_JNT_YO_CORE_MODEL_e=0x0,
+};
+
+enum YO_HIBI_JNT {
+    YO_HIBI_JNT_PPLANE1_e=0x0,
+};
+
+enum YO_ICE_JNT {
+    YO_ICE_JNT_YO_ICE_MODEL_e=0x0,
+};
+
+#endif /* !RES_B_YO_H */

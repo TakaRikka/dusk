@@ -1,0 +1,26 @@
+#ifndef RES_M_VOLCGND_H
+#define RES_M_VOLCGND_H
+
+enum dRes_INDEX_M_VOLCGND {
+    /* BMDR */
+    dRes_INDEX_M_VOLCGND_BMD_M_VOLCGROUND_e=0x5,
+    /* BRK  */
+    dRes_INDEX_M_VOLCGND_BRK_M_VOLCGROUND_e=0x8,
+    /* BTK  */
+    dRes_INDEX_M_VOLCGND_BTK_M_VOLCGROUND_e=0xB,
+};
+
+enum dRes_ID_M_VOLCGND {
+    /* BMDR */
+    dRes_ID_M_VOLCGND_BMD_M_VOLCGROUND_e=0x5,
+    /* BRK  */
+    dRes_ID_M_VOLCGND_BRK_M_VOLCGROUND_e=0x8,
+    /* BTK  */
+    dRes_ID_M_VOLCGND_BTK_M_VOLCGROUND_e=0xB,
+};
+
+enum M_VOLCGROUND_JNT {
+    M_VOLCGROUND_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_M_VOLCGND_H */

@@ -14,6 +14,7 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_enemy.h"
 #include "f_op/f_op_camera_mng.h"
+#include <cstring>
 
 class daE_YM_HIO_c: public JORReflexible {
 public:
@@ -964,13 +965,13 @@ void daE_YM_c::executeEscape() {
             cLib_chaseF(&speedF, 20.0f, 1.0f);
             setMoveSound(0);
             if (mAcch.ChkWallHit()) {
-                field_0x6e4 += (s16) 0x800;
+                ANGLE_ADD(field_0x6e4, 0x800);
             }
 
             if (field_0x6e8 >= 0) {
-                field_0x6e6 -= (s16) 200;
+                ANGLE_SUB(field_0x6e6, 200);
             } else {
-                field_0x6e6 += (s16) 200;
+                ANGLE_ADD(field_0x6e6, 200);
             }
 
             field_0x6e8 += field_0x6e6;
@@ -1971,9 +1972,9 @@ void daE_YM_c::executeFly() {
                     current.angle.y = cLib_targetAngleY(&current.pos, &mPrevPos);
                     current.angle.x = cLib_targetAngleX(&current.pos, &mPrevPos);
                     if ((s16)(cLib_targetAngleY(&current.pos, &player_pos) - current.angle.y) < 0) {
-                        current.angle.y += (s16) 0x3000;
+                        ANGLE_ADD(current.angle.y, 0x3000);
                     } else {
-                        current.angle.y -= (s16) 0x3000;
+                        ANGLE_SUB(current.angle.y, 0x3000);
                     }
                 }
             }
@@ -2080,9 +2081,9 @@ void daE_YM_c::executeFly() {
             } else {
                 tgt_ang_y = cLib_targetAngleY(&current.pos, &mPrevPos);
                 if (s16(cLib_targetAngleY(&current.pos, &player_pos) - tgt_ang_y) < 0) {
-                    tgt_ang_y += (s16) 0x3000;
+                    ANGLE_ADD(tgt_ang_y, 0x3000);
                 } else {
-                    tgt_ang_y -= (s16) 0x3000;
+                    ANGLE_SUB(tgt_ang_y, 0x3000);
                 }
 
                 cLib_chaseAngleS(&current.angle.y, tgt_ang_y, 0x400);
@@ -2100,7 +2101,7 @@ void daE_YM_c::executeFly() {
         }
     }
 
-    field_0x6e4 += (s16) 0x800;
+    ANGLE_ADD(field_0x6e4, 0x800);
     current.pos.y += cM_ssin(field_0x6e4) * 3.0f;
 }
 
@@ -2176,7 +2177,7 @@ void daE_YM_c::executeFlyAttack() {
 
         case 4:
         case 5: {
-            field_0x6e4 += (s16) 0x800;
+            ANGLE_ADD(field_0x6e4, 0x800);
             current.pos.y += cM_ssin(field_0x6e4) * 3.0f;
             cLib_chaseF(&speed.y, 0.0f, 3.0f);
             cLib_chaseF(&speedF, 0.0f, 3.0f);
@@ -2537,12 +2538,12 @@ void daE_YM_c::executeSwitch() {
             cLib_chaseF(&field_0x6dc, 0.0f, 15.0f);
             setMoveSound(0);
             if (mAcch.ChkWallHit()) {
-                field_0x6e4 += (s16) 0x800;
+                ANGLE_ADD(field_0x6e4, 0x800);
             }
             if (field_0x6e8 >= 0) {
-                field_0x6e6 -= (s16) 200;
+                ANGLE_SUB(field_0x6e6, 200);
             } else {
-                field_0x6e6 += (s16) 200;
+                ANGLE_ADD(field_0x6e6, 200);
             }
             field_0x6e8 += field_0x6e6;
             cLib_addCalcAngleS(&shape_angle.y, field_0x6e4 + field_0x6e8, 4, 0x1000, 0x100);
@@ -2742,7 +2743,7 @@ void daE_YM_c::executeFire() {
         default:
             break;
     }
-    field_0x6e4 += (s16) 0x2000;
+    ANGLE_ADD(field_0x6e4, 0x2000);
     current.pos.y += cM_ssin(field_0x6e4) * 3.0f;
     if (mMode) {
         mSound.startCreatureSoundLevel(Z2SE_EN_YM_FLY, 0, -1);
@@ -2851,7 +2852,7 @@ void daE_YM_c::executeRiver() {
 
         case 2: {
             setRiverAttention();
-            field_0x6e8 += (s16) 0x200;
+            ANGLE_ADD(field_0x6e8, 0x200);
             current.pos.y += cM_ssin(field_0x6e8 << 1) * 15.0f;
             f32 my_float_val = cM_scos(field_0x6e8) * 15.0f;
             current.pos.x += my_float_val * cM_ssin(shape_angle.y);

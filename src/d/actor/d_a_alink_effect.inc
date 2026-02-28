@@ -9,7 +9,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_k_wmark.h"
 
-EffParamProc daAlink_c::m_fEffParamProc[] = {
+const EffParamProc daAlink_c::m_fEffParamProc[] = {
     &daAlink_c::setEffectFrontRollParam,
     &daAlink_c::setEffectSlipParam,
     &daAlink_c::setEffectSmallLandParam,
@@ -554,7 +554,7 @@ void daAlink_c::setEffect() {
         (field_0x3198 == 0x14C || field_0x3198 == 0x14D || field_0x3198 == 0x155))
     {
         sp3C = TRUE;
-        current.angle.y += 0x8000;
+        ANGLE_ADD_2(current.angle.y, 0x8000);
     }
 
     f32 temp_f30 = field_0x3798.absXZ(current.pos);
@@ -643,7 +643,7 @@ void daAlink_c::setEffect() {
     }
 
     if (sp3C) {
-        current.angle.y += 0x8000;
+        ANGLE_ADD_2(current.angle.y, 0x8000);
     }
 
     setFirePointDamageEffect();
@@ -869,10 +869,6 @@ void daAlink_c::setSwordChargeEffect() {
 }
 
 void daAlink_c::setElecDamageEffect() {
-    static Vec const localOffset = {0.0f, -10.0f, -10.0f};
-    static Vec const localScale0 = {0.69999999f, 0.85f, 1.5f};
-    static Vec const localScale1 = {1.0f, 0.85f, 1.5f};
-
     static const u16 effName0[] = {
         dPa_RM(ID_ZI_S_LK_BIRIBIRIA_A),
         dPa_RM(ID_ZI_S_LK_BIRIBIRIA_B),
@@ -884,6 +880,10 @@ void daAlink_c::setElecDamageEffect() {
         dPa_RM(ID_ZI_S_LK_BIRIBIRIC_B),
         dPa_RM(ID_ZI_S_LK_BIRIBIRIC_C),
     };
+
+    static Vec const localOffset = {0.0f, -10.0f, -10.0f};
+    static Vec const localScale0 = {0.69999999f, 0.85f, 1.5f};
+    static Vec const localScale1 = {1.0f, 0.85f, 1.5f};
 
     cXyz pos;
 
@@ -938,9 +938,28 @@ void daAlink_c::clearCutTurnEffectID() {
 }
 
 void daAlink_c::setCutTurnEffect() {
+    if (mUnderFrameCtrl[0].getFrame() < mProcVar1.field_0x300a) {
+        return;
+    }
+
+    static Vec const waterEffScale = {1.5f, 1.5f, 1.5f};
+
+    static const int unused0 = 0;
+    static const int unused1 = 0;
+    static const int unused2 = 0;
+
     static const u16 effNameNormal[] = {
         ID_ZI_J_KAITENGIRI_A,
         ID_ZI_J_KAITENGIRI_B,
+    };
+
+    static s16 leftRotNormal[] = {
+        cM_deg2s(180), cM_deg2s(45), cM_deg2s(13), cM_deg2s(180), cM_deg2s(45), cM_deg2s(13),
+    };
+
+    static Vec const leftTransNormal[] = {
+        {0.0f, 0.0f, 0.0f},
+        {0.0f, 30.0f, 0.0f},
     };
 
     static const u16 effNameLight[] = {
@@ -950,25 +969,18 @@ void daAlink_c::setCutTurnEffect() {
         ID_ZI_J_KAITENGIRIL_D,
     };
 
-    static const u16 effNameWater[] = {
-        ID_ZI_J_KAITENGIRI_INWTR_A,
-        ID_ZI_J_KAITENGIRI_INWTR_B,
+    static s16 leftRotLight[] = {
+        cM_deg2s(180), cM_deg2s(100), cM_deg2s(13), cM_deg2s(180), cM_deg2s(80), cM_deg2s(13),
+        cM_deg2s(180), cM_deg2s(80),  cM_deg2s(13), cM_deg2s(180), cM_deg2s(80), cM_deg2s(13),
     };
 
-    static Vec const waterEffScale = {1.5f, 1.5f, 1.5f};
-
-    static Vec const leftTransNormal[] = {
-        {0.0f, 0.0f, 0.0f},
-        {0.0f, 30.0f, 0.0f},
-    };
-    
     static Vec const leftTransLight[] = {
         {0.0f, 0.0f, 0.0f},
         {0.0f, 0.0f, 0.0f},
         {0.0f, 35.0f, 0.0f},
         {0.0f, 0.0f, 0.0f},
     };
-    
+
     static u16 const effNameLarge[] = {
         ID_ZI_J_KAITENGIRID_A,
         ID_ZI_J_KAITENGIRID_B,
@@ -977,7 +989,13 @@ void daAlink_c::setCutTurnEffect() {
         ID_ZI_J_KAITENGIRID_E,
         ID_ZI_J_KAITENGIRID_F,
     };
-    
+
+    static s16 leftRotLarge[] = {
+        cM_deg2s(180), cM_deg2s(45), cM_deg2s(13), cM_deg2s(180), cM_deg2s(45), cM_deg2s(13),
+        cM_deg2s(180), cM_deg2s(60), cM_deg2s(13), cM_deg2s(180), cM_deg2s(60), cM_deg2s(13),
+        cM_deg2s(180), cM_deg2s(60), cM_deg2s(13), cM_deg2s(180), cM_deg2s(60), cM_deg2s(13),
+    };
+
     static Vec const leftTransLarge[] = {
         {0.0f, 0.0f, 0.0f},
         {0.0f, 35.0f, 0.0f},
@@ -987,97 +1005,86 @@ void daAlink_c::setCutTurnEffect() {
         {0.0f, 50.0f, 0.0f},
     };
 
+    static const u16 effNameWater[] = {
+        ID_ZI_J_KAITENGIRI_INWTR_A,
+        ID_ZI_J_KAITENGIRI_INWTR_B,
+    };
+
+    static s16 leftRotWater[] = {
+        cM_deg2s(-90), cM_deg2s(0), cM_deg2s(180), cM_deg2s(0), cM_deg2s(0), cM_deg2s(180),
+    };
+
     static Vec const leftTransWater[] = {
         {0.0f, 0.0f, 0.0f},
         {0.0f, 0.0f, 0.0f},
     };
 
-    if (!(mUnderFrameCtrl[0].getFrame() < mProcVar1.field_0x300a)) {
-        static s16 leftRotNormal[] = {
-            cM_deg2s(180), cM_deg2s(45), cM_deg2s(13), cM_deg2s(180), cM_deg2s(45), cM_deg2s(13),
-        };
+    JPABaseEmitter* emitter;
+    u32* emitterId = field_0x3204;
+    const u16* effNameList;
+    JGeometry::TVec3<s16>* rot;
+    JGeometry::TVec3<f32>* trans;
+    int effNum;
+    BOOL sp18 = FALSE;
 
-        static s16 leftRotLight[] = {
-            cM_deg2s(180), cM_deg2s(100), cM_deg2s(13), cM_deg2s(180), cM_deg2s(80), cM_deg2s(13),
-            cM_deg2s(180), cM_deg2s(80),  cM_deg2s(13), cM_deg2s(180), cM_deg2s(80), cM_deg2s(13),
-        };
-
-        static s16 leftRotLarge[] = {
-            cM_deg2s(180), cM_deg2s(45), cM_deg2s(13), cM_deg2s(180), cM_deg2s(45), cM_deg2s(13),
-            cM_deg2s(180), cM_deg2s(60), cM_deg2s(13), cM_deg2s(180), cM_deg2s(60), cM_deg2s(13),
-            cM_deg2s(180), cM_deg2s(60), cM_deg2s(13), cM_deg2s(180), cM_deg2s(60), cM_deg2s(13),
-        };
-
-        static s16 leftRotWater[] = {
-            cM_deg2s(-90), cM_deg2s(0), cM_deg2s(180), cM_deg2s(0), cM_deg2s(0), cM_deg2s(180),
-        };
-
-        u32* emitterId = field_0x3204;
-        const u16* effNameList;
-        JGeometry::TVec3<s16>* rot;
-        JGeometry::TVec3<f32>* trans;
-        int effNum;
-        BOOL sp18 = FALSE;
-
-        if (checkNoResetFlg0(FLG0_WATER_IN_MOVE)) {
-            if (checkZoraWearAbility()) {
-                effNameList = effNameWater;
-                rot = (JGeometry::TVec3<s16>*)leftRotWater;
-                trans = (JGeometry::TVec3<f32>*)leftTransWater;
-                effNum = 2;
-                if (mCutType == CUT_TYPE_LARGE_TURN_RIGHT || mCutType == CUT_TYPE_LARGE_TURN_LEFT) {
-                    sp18 = TRUE;
-                }
-            } else {
-                return;
-            }
-        } else if (mCutType == CUT_TYPE_LARGE_TURN_RIGHT || mCutType == CUT_TYPE_LARGE_TURN_LEFT) {
-            effNameList = effNameLarge;
-            rot = (JGeometry::TVec3<s16>*)leftRotLarge;
-            trans = (JGeometry::TVec3<f32>*)leftTransLarge;
-            effNum = 6;
-        } else if (checkNoResetFlg3(FLG3_UNK_100000)) {
-            effNameList = effNameLight;
-            rot = (JGeometry::TVec3<s16>*)leftRotLight;
-            trans = (JGeometry::TVec3<f32>*)leftTransLight;
-            effNum = 4;
-        } else {
-            effNameList = effNameNormal;
-            rot = (JGeometry::TVec3<s16>*)leftRotNormal;
-            trans = (JGeometry::TVec3<f32>*)leftTransNormal;
+    if (checkNoResetFlg0(FLG0_WATER_IN_MOVE)) {
+        if (checkZoraWearAbility()) {
+            effNameList = effNameWater;
+            rot = (JGeometry::TVec3<s16>*)leftRotWater;
+            trans = (JGeometry::TVec3<f32>*)leftTransWater;
             effNum = 2;
+            if (mCutType == CUT_TYPE_LARGE_TURN_RIGHT || mCutType == CUT_TYPE_LARGE_TURN_LEFT) {
+                sp18 = TRUE;
+            }
+        } else {
+            return;
         }
+    } else if (mCutType == CUT_TYPE_LARGE_TURN_RIGHT || mCutType == CUT_TYPE_LARGE_TURN_LEFT) {
+        effNameList = effNameLarge;
+        rot = (JGeometry::TVec3<s16>*)leftRotLarge;
+        trans = (JGeometry::TVec3<f32>*)leftTransLarge;
+        effNum = 6;
+    } else if (checkNoResetFlg3(FLG3_UNK_100000)) {
+        effNameList = effNameLight;
+        rot = (JGeometry::TVec3<s16>*)leftRotLight;
+        trans = (JGeometry::TVec3<f32>*)leftTransLight;
+        effNum = 4;
+    } else {
+        effNameList = effNameNormal;
+        rot = (JGeometry::TVec3<s16>*)leftRotNormal;
+        trans = (JGeometry::TVec3<f32>*)leftTransNormal;
+        effNum = 2;
+    }
 
-        cXyz pos;
-        mDoMtx_multVecZero(mpLinkModel->getAnmMtx(1), &pos);
+    cXyz pos;
+    mDoMtx_multVecZero(mpLinkModel->getAnmMtx(1), &pos);
 
-        if (checkMagneBootsOn()) {
-            mDoMtx_stack_c::transS(pos);
-            mDoMtx_stack_c::concat(mMagneBootMtx);
-            mDoMtx_stack_c::ZXYrotM(shape_angle);
-        }
+    if (checkMagneBootsOn()) {
+        mDoMtx_stack_c::transS(pos);
+        mDoMtx_stack_c::concat(mMagneBootMtx);
+        mDoMtx_stack_c::ZXYrotM(shape_angle);
+    }
 
-        for (int i = 0; i < effNum; i++, emitterId++, effNameList++, rot++, trans++) {
-            JPABaseEmitter* emitter = setEmitter(emitterId, *effNameList, &pos, &shape_angle);
-            if (emitter != NULL) {
-                if (checkMagneBootsOn()) {
-                    emitter->setGlobalRTMatrix(mDoMtx_stack_c::get());
+    for (int i = 0; i < effNum; i++, emitterId++, effNameList++, rot++, trans++) {
+        emitter = setEmitter(emitterId, *effNameList, &pos, &shape_angle);
+        if (emitter != NULL) {
+            if (checkMagneBootsOn()) {
+                emitter->setGlobalRTMatrix(mDoMtx_stack_c::get());
+            }
+
+            if (mProcVar4.field_0x3010 == 0) {
+                emitter->setLocalRotation(*rot);
+                if (trans->y > 1.0f) {
+                    emitter->setLocalTranslation(*trans);
                 }
+            }
 
-                if (mProcVar4.field_0x3010 == 0) {
-                    emitter->setLocalRotation(*rot);
-                    if (trans->y > 1.0f) {
-                        emitter->setLocalTranslation(*trans);
-                    }
-                }
-
-                if (sp18) {
-                    if (i == 0) {
-                        emitter->setGlobalParticleScale(waterEffScale);
-                    } else {
-                        emitter->setVolumeSize(225);
-                        emitter->setAwayFromAxisSpeed(15.0f);
-                    }
+            if (sp18) {
+                if (i == 0) {
+                    emitter->setGlobalParticleScale(waterEffScale);
+                } else {
+                    emitter->setVolumeSize(225);
+                    emitter->setAwayFromAxisSpeed(15.0f);
                 }
             }
         }
@@ -1094,6 +1101,8 @@ void daAlink_c::setHorseCutTurnEffect() {
 }
 
 void daAlink_c::setCutLargeJumpLandEffect() {
+    static const int dummy = 0;
+
     cXyz pos(current.pos.x + cM_ssin(shape_angle.y) * 20.0f, current.pos.y + 50.0f, current.pos.z + cM_scos(shape_angle.y) * 20.0f);
     csXyz rot;
     cM3dGPla tripla;
@@ -1195,7 +1204,7 @@ void daAlink_c::setWolfRollAttackEffect() {
     csXyz rot(shape_angle.x, shape_angle.y, 0);
 
     if (mProcVar2.field_0x300c == 0) {
-        rot.x += 0x8000;
+        ANGLE_ADD_2(rot.x, 0x8000);
     }
 
     setEmitter(&field_0x3204[0], ID_ZI_J_WL_KAITENAT_A, &pos, &rot);
@@ -1243,6 +1252,7 @@ void daAlink_c::setWolfDigEffect() {
                 emitter->setAwayFromAxisSpeed(var_f30);
                 dComIfGp_particle_levelEmitterOnEventMove(field_0x32cc);
             }
+            (void)0;
         } else if (field_0x3198 == 7) {
             var_r29 = 0;
             var_r28 = ID_ZI_J_DASHWTRA_C;
@@ -1364,6 +1374,7 @@ void daAlink_c::setWolfJumpAttackEffect() {
 }
 
 void daAlink_c::setWolfBarrierHitEffect(dBgS_LinChk& i_linchk) {
+    static const int dummy = 0;
     static const u16 normalNameID[] = {
         dPa_RM(ID_ZI_S_NSBARRIER_COLL_A),
         dPa_RM(ID_ZI_S_NSBARRIER_COLL_B),
@@ -1406,6 +1417,8 @@ void daAlink_c::setCutWaterDropEffect() {
 }
 
 void daAlink_c::setWaterDropEffect() {
+    static const int dummy1 = 0;
+    static const int dummy2 = 0;
     static const u16 effDataTable[] = {
         ID_ZI_J_LK_NUREPOTA_BACKBONE2,
         ID_ZI_J_LK_NUREPOTA_WAIST,
@@ -1467,7 +1480,7 @@ void daAlink_c::setWaterDropEffect() {
     
         if (field_0x32c0[i] != 0) {
             if (field_0x32a0[i].a > -20) {
-                field_0x32a0[i].a -= 2;
+                field_0x32a0[i].a -= (s16)2;
 
                 if (field_0x32a0[i].a < -20) {
                     field_0x32a0[i].a = -20;
@@ -1507,14 +1520,14 @@ void daAlink_c::setSwordUpColorEffect() {
 }
 
 void daAlink_c::setSwordCutSplash() {
+    static Vec const swordCutSplashScale = {0.6f, 0.6f, 0.6f};
+
     static const u16 cutSplashName[] = {
         ID_ZI_J_DOWNWTRA_A,
         ID_ZI_J_DOWNWTRA_B,
         ID_ZI_J_DOWNWTRA_C,
         ID_ZI_J_DOWNWTRA_D,
     };
-
-    static Vec const swordCutSplashScale = {0.6f, 0.6f, 0.6f};
 
     if (mCutType != 0 && mProcID != PROC_CUT_TURN && getCutAtFlg() && checkNoResetFlg0(FLG0_UNK_80) && mEquipItem == 0x103) {
         if (mSwordTopPos.y <= mWaterY && field_0x34b0.y > mWaterY) {
@@ -1543,7 +1556,7 @@ void daAlink_c::setMetamorphoseEffectStartLink() {
     JPABaseEmitter* emitter = setEmitter(&field_0x3200, ID_ZI_J_ATOW_C, &cXyz::Zero, NULL);
 
     #if VERSION == VERSION_SHIELD_DEBUG
-    static Vec effScale = {1.33f, 1.0f, 1.0f};
+    static const Vec effScale = {1.33f, 1.0f, 1.0f};
     if (emitter != NULL) {
         emitter->setGlobalParticleScale(effScale);
     }
@@ -1752,28 +1765,30 @@ void daAlink_c::initFirePointDamageEffect(cXyz const* param_0, dCcD_GObjInf* i_h
         }
     }
 
-    if (i != 4) {
-        cXyz* dmg_vec = getDamageVec(i_hitObj);
-
-        csXyz sp38(dmg_vec->atan2sY_XZ(), dmg_vec->atan2sX_Z(), 0);
-        csXyz sp40;
-        cXyz sp30;
-
-        int var_r30 = field_0x2e44.getHitmarkPosAndAngle(param_0, &sp38, &sp30, &sp40, 0);
-        if (var_r30 == -1 || (!checkWolf() && (var_r30 == 1 || var_r30 == 15 || var_r30 == 16))) {
-            return;
-        }
-
-        eff->field_0x2 = field_0x2e44.getJntNum(var_r30);
-        eff->field_0xc = *param_0;
-        eff->field_0x24 = cXyz::Zero;
-        eff->field_0x0 = 1;
-        eff->field_0x4 = 0;
-
-        mDoMtx_stack_c::copy(mpLinkModel->getAnmMtx(eff->field_0x2));
-        mDoMtx_stack_c::inverse();
-        mDoMtx_stack_c::multVec(&sp30, &eff->field_0x18);
+    if (i == 4) {
+        return;
     }
+
+    cXyz* dmg_vec = getDamageVec(i_hitObj);
+
+    csXyz sp38(dmg_vec->atan2sY_XZ(), dmg_vec->atan2sX_Z(), 0);
+    csXyz sp40;
+    cXyz sp30;
+
+    int var_r30 = field_0x2e44.getHitmarkPosAndAngle(param_0, &sp38, &sp30, &sp40, 0);
+    if (var_r30 == -1 || (!checkWolf() && (var_r30 == 1 || var_r30 == 15 || var_r30 == 16))) {
+        return;
+    }
+
+    eff->field_0x2 = field_0x2e44.getJntNum(var_r30);
+    eff->field_0xc = *param_0;
+    eff->field_0x24 = cXyz::Zero;
+    eff->field_0x0 = 1;
+    eff->field_0x4 = 0;
+
+    mDoMtx_stack_c::copy(mpLinkModel->getAnmMtx(eff->field_0x2));
+    mDoMtx_stack_c::inverse();
+    mDoMtx_stack_c::multVec(&sp30, &eff->field_0x18);
 }
 
 void daAlink_c::setFirePointDamageEffect() {
@@ -1827,6 +1842,11 @@ void daAlink_c::setFirePointDamageEffect() {
 }
 
 void daAlink_c::setFreezeEffect() {
+    static const int dummy = 0;
+    static const u16 effName[] = {
+        dPa_RM(ID_ZI_S_LK_FREEZEND_A),
+        dPa_RM(ID_ZI_S_LK_FREEZEND_B),
+    };
     static Vec const effScale = {1.0f, 1.8f, 1.0f};
     static Vec const wolfEffScale = {1.0f, 1.0f, 1.5f};
     static Vec const offsetPos = {0.0f, 0.0f, -10.0f};    
@@ -1859,10 +1879,6 @@ void daAlink_c::setFreezeEffect() {
         }
 
         for (int i = 0; i < 2; i++) {
-            static const u16 effName[] = {
-                dPa_RM(ID_ZI_S_LK_FREEZEND_A),
-                dPa_RM(ID_ZI_S_LK_FREEZEND_B),
-            };
             dComIfGp_particle_setColor(effName[i], &pos, &tevStr, NULL, NULL, 0.0f, 0xFF);
         }
 
@@ -1900,6 +1916,7 @@ void daAlink_c::clearWoodShieldBurnEffect() {
 }
 
 void daAlink_c::setWoodShieldBurnOutEffect() {
+    static const int dummy = 0;
     static const u16 effName[] = {
         ID_ZI_J_LK_SH_BURN_C,
         ID_ZI_J_LK_SH_BURN_D,
@@ -2061,7 +2078,7 @@ void daAlink_blur_c::draw() {
         GXTexCoord2s16(var_r27, 0);
 
         var_r27 = var_r28;
-        var_r28 += temp_r26;
+        ANGLE_ADD_2(var_r28, temp_r26);
     }
 
     GXEnd();

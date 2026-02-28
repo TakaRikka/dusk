@@ -5,6 +5,7 @@
 #include <iterator>
 #include <functional>
 #include <algorithm>
+#include <cstring>
 
 namespace JGadget {
 namespace search {

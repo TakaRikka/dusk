@@ -12,6 +12,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "SSystem/SComponent/c_math.h"
+#include <cstring>
 
 static int daVrbox2_color_set(vrbox2_class* param_0);
 
@@ -195,7 +196,7 @@ static int daVrbox2_Draw(vrbox2_class* i_this) {
             mDoMtx_stack_c::ZrotM(-mangZ);
             sun2_model_p->setBaseTRMtx(mDoMtx_stack_c::get());
             mDoExt_modelUpdateDL(sun2_model_p);
-            mangZ += (s16)(483.0f + cM_rndF(100.0f));
+            ANGLE_ADD(mangZ, 483.0f + cM_rndF(100.0f));
         }
     }
 

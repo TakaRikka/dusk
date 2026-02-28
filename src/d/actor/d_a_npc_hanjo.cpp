@@ -13,6 +13,7 @@
 #include "d/actor/d_a_tag_evtarea.h"
 #include "d/d_cc_uty.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 static int l_bmdData[4][2] = {
     {14, 1}, {26, 2},

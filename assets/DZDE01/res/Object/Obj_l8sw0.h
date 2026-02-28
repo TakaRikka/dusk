@@ -1,0 +1,22 @@
+#ifndef RES_OBJ_L8SW0_H
+#define RES_OBJ_L8SW0_H
+
+enum dRes_INDEX_OBJ_L8SW0 {
+    /* BMDR */
+    dRes_INDEX_OBJ_L8SW0_BMD_LV8_OBJ_LIGHTSW_e=0x4,
+    /* DZB  */
+    dRes_INDEX_OBJ_L8SW0_DZB_LV8_OBJ_LIGHTSW_e=0x7,
+};
+
+enum dRes_ID_OBJ_L8SW0 {
+    /* BMDR */
+    dRes_ID_OBJ_L8SW0_BMD_LV8_OBJ_LIGHTSW_e=0x4,
+    /* DZB  */
+    dRes_ID_OBJ_L8SW0_DZB_LV8_OBJ_LIGHTSW_e=0x7,
+};
+
+enum LV8_OBJ_LIGHTSW_JNT {
+    LV8_OBJ_LIGHTSW_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_OBJ_L8SW0_H */

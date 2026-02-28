@@ -1,0 +1,32 @@
+#ifndef RES_GRA_TOWN_H
+#define RES_GRA_TOWN_H
+
+enum dRes_INDEX_GRA_TOWN {
+    /* BCK  */
+    dRes_INDEX_GRA_TOWN_BCK_GRA_A_CHECK_L_e=0x5,
+    dRes_INDEX_GRA_TOWN_BCK_GRA_A_F_SALES_TALK_e=0x6,
+    dRes_INDEX_GRA_TOWN_BCK_GRA_A_SALES_TALK_e=0x7,
+    dRes_INDEX_GRA_TOWN_BCK_GRA_A_WAIT_C_e=0x8,
+    /* BMDR */
+    dRes_INDEX_GRA_TOWN_BMD_GRA_SHAKU_e=0xB,
+    /* BTP  */
+    dRes_INDEX_GRA_TOWN_BTP_GRA_A_F_SALES_TALK_e=0xE,
+};
+
+enum dRes_ID_GRA_TOWN {
+    /* BCK  */
+    dRes_ID_GRA_TOWN_BCK_GRA_A_CHECK_L_e=0x5,
+    dRes_ID_GRA_TOWN_BCK_GRA_A_F_SALES_TALK_e=0x6,
+    dRes_ID_GRA_TOWN_BCK_GRA_A_SALES_TALK_e=0x7,
+    dRes_ID_GRA_TOWN_BCK_GRA_A_WAIT_C_e=0x8,
+    /* BMDR */
+    dRes_ID_GRA_TOWN_BMD_GRA_SHAKU_e=0xB,
+    /* BTP  */
+    dRes_ID_GRA_TOWN_BTP_GRA_A_F_SALES_TALK_e=0xE,
+};
+
+enum GRA_SHAKU_JNT {
+    GRA_SHAKU_JNT_GRA_SHAKU_e=0x0,
+};
+
+#endif /* !RES_GRA_TOWN_H */

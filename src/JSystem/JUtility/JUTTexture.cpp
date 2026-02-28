@@ -139,12 +139,7 @@ void JUTTexture::init() {
 }
 
 void JUTTexture::initTexObj() {
-    GXBool mipmapEnabled;
-    if (mTexInfo->mipmapEnabled != 0) {
-        mipmapEnabled = 1;
-    } else {
-        mipmapEnabled = 0;
-    }
+    GXBool mipmapEnabled = mTexInfo->mipmapEnabled != 0 ? GX_TRUE : GX_FALSE;
     u8* image = ((u8*)mTexInfo);
     u32 imgOffset = RES_U32(mTexInfo->imageOffset);
     image += (imgOffset ? imgOffset : 0x20);
@@ -157,12 +152,7 @@ void JUTTexture::initTexObj() {
 }
 
 void JUTTexture::initTexObj(GXTlut param_0) {
-    GXBool mipmapEnabled;
-    if (mTexInfo->mipmapEnabled != 0) {
-        mipmapEnabled = 1;
-    } else {
-        mipmapEnabled = 0;
-    }
+    GXBool mipmapEnabled = mTexInfo->mipmapEnabled != 0 ? GX_TRUE : GX_FALSE;
     mTlutName = param_0;
     u8* image = ((u8*)mTexInfo);
     u32 imgOffset = RES_U32(mTexInfo->imageOffset);  // Swap!

@@ -23,10 +23,12 @@ void IPCInit(void) {
     Initialized = TRUE;
 }
 
+#if SDK_AUG2010
 void IPCReInit(void) {
     Initialized = FALSE;
     IPCInit();
 }
+#endif
 
 u32 IPCReadReg(u32 regIdx) {
     u32 reg = __IPCRegs[regIdx];

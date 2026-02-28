@@ -15,11 +15,39 @@
  *
 */
 
-class daObj_ItaMato_HIO_c;
+struct daObj_ItaMato_HIOParam {
+    /* 0x00 */ f32 attn_offset;
+    /* 0x04 */ f32 gravity;
+    /* 0x08 */ f32 scale;
+    /* 0x0C */ f32 real_shadow_size;
+    /* 0x10 */ f32 shake_pow;
+};
+
+class daObj_ItaMato_Param_c {
+public:
+    virtual ~daObj_ItaMato_Param_c() {}
+
+    static daObj_ItaMato_HIOParam const m;
+};
+
+#if DEBUG
+#define OBJ_ITAMATO_HIO_CLASS daObj_ItaMato_HIO_c
+
+class daObj_ItaMato_HIO_c : public mDoHIO_entry_c {
+public:
+    daObj_ItaMato_HIO_c();
+    void genMessage(JORMContext* ctx);
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    /* 0x8 */ daObj_ItaMato_HIOParam m;
+};
+#else
+#define OBJ_ITAMATO_HIO_CLASS daObj_ItaMato_Param_c
+#endif
 
 class daObj_ItaMato_c : public fopAc_ac_c {
 private:
-    /* 0x568 */ daObj_ItaMato_HIO_c* mHIO;
+    /* 0x568 */ OBJ_ITAMATO_HIO_CLASS* mHIO;
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ J3DModel* mpModels[2];
     /* 0x57C */ dBgS_ObjAcch mBgc;

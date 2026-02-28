@@ -15,7 +15,7 @@
 #endif
 
 #if PLATFORM_WII || PLATFORM_SHIELD
-#include "Z2AudioLib/Z2AudioCS.h"
+#include "Z2AudioCS/Z2AudioCS.h"
 #endif
 
 Z2SoundObjBase::Z2SoundObjBase()
