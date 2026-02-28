@@ -29,7 +29,7 @@ fpc_ProcID fopScnM_DeleteReq(scene_class* i_scene) {
     return fopScnRq_Request(1, i_scene, 0x7FFF, NULL, 0x7FFF, 0) != fpcM_ERROR_PROCESS_ID_e;
 }
 
-int fopScnM_CreateReq(s16 i_procName, s16 param_2, u16 param_3, u32 i_data) {
+int fopScnM_CreateReq(s16 i_procName, s16 param_2, u16 param_3, uintptr_t i_data) {
     printf("[DIAG] fopScnM_CreateReq: procName=%d fade=%d\n", i_procName, param_2); fflush(stdout);
     fpc_ProcID result = fopScnRq_Request(0, 0, i_procName, (void*)i_data, param_2, param_3);
     printf("[DIAG] fopScnM_CreateReq: result=%d (error=%d)\n", result, fpcM_ERROR_PROCESS_ID_e); fflush(stdout);
