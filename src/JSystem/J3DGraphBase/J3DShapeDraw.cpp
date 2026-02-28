@@ -15,7 +15,7 @@ u32 J3DShapeDraw::countVertex(u32 stride) {
         dl++;
         if (cmd != GX_TRIANGLEFAN && cmd != GX_TRIANGLESTRIP)
             break;
-        int vtxNum = *((u16*)(dl));
+        int vtxNum = be16(*((u16*)(dl)));
         dl += 2;
         count += vtxNum;
         dl = (u8*)dl + stride * vtxNum;
@@ -48,7 +48,7 @@ void J3DShapeDraw::addTexMtxIndexInDL(u32 stride, u32 attrOffs, u32 valueBase) {
         *(u16*)newDL = vtxNum;
         newDL += 2;
 
-        for (int i = 0; i < vtxNum; i++) {
+        for (int i = 0; i < be16(vtxNum); i++) {
             u8* oldDLVtx = &oldDL[stride * i];
             u8 pnmtxidx = *oldDLVtx;
             memcpy(newDL, oldDLVtx, (int)attrOffs);

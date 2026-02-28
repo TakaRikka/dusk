@@ -350,7 +350,7 @@ int daGrass_c::create() {
     }
 
     m_myObj = this;
-    fopAcM_setStageLayer(this);
+    fopAcM_setStageLayer(&base);
     return cPhs_COMPLEATE_e;
 }
 
@@ -406,7 +406,7 @@ actor_process_profile_definition g_profile_GRASS = {
   fpcPi_CURRENT_e,       // mListPrio
   PROC_GRASS,            // mProcName
   &g_fpcLf_Method.base, // sub_method
-  0x00000570,            // mSize
+  sizeof(daGrass_c),     // mSize
   0,                     // mSizeOther
   0,                     // mParameters
   &g_fopAc_Method.base,  // sub_method
