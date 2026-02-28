@@ -2,10 +2,6 @@
 
 #include "JSystem/J3DGraphBase/J3DShape.h"
 
-#if !__APPLE__
-#include <malloc.h>
-#endif
-
 #include <dolphin/gd.h>
 #include "JSystem/J3DGraphBase/J3DFifo.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
