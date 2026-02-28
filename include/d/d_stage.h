@@ -45,7 +45,7 @@ struct StageOffsetPtrT {
     }
 
     T* operator->() {
-        return (T*) this;
+        return (T*) value;
     }
 
     operator T*() const {
