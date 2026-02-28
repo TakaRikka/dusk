@@ -41,6 +41,7 @@
 #include <thread>
 #include "SSystem/SComponent/c_API.h"
 #include "dusk/dvd_emu.h"
+#include "dusk/dusk.h"
 
 #include <aurora/aurora.h>
 #include <aurora/event.h>
@@ -128,6 +129,8 @@ s32 LOAD_COPYDATE(void*) {
     return 1;
 }
 
+AuroraInfo auroraInfo;
+
 void main01(void) {
     OS_REPORT("\x1b[m");
     GXSetColorUpdate(GX_ENABLE);
@@ -212,7 +215,7 @@ int game_main(int argc, char* argv[]) {
     config.configPath = ".";
     config.logCallback = &aurora_log_callback;
 
-    aurora_initialize(argc, argv, &config);
+    auroraInfo = aurora_initialize(argc, argv, &config);
 
     // 2. Setup Virtual Game RAM
     // Simulates Gamecube RAM (24MB + Audio etc, we take 256MB)

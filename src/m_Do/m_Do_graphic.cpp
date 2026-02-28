@@ -43,6 +43,11 @@
 #include "d/d_cursor_mng.h"
 #endif
 
+#if TARGET_PC
+#include "dusk/imgui.h"
+#include "dusk/dusk.h"
+#endif
+
 class mDoGph_HIO_c : public JORReflexible {
 public:
     mDoGph_HIO_c() {
@@ -2118,6 +2123,10 @@ int mDoGph_Painter() {
     fapGm_HIO_c::stopCpuTimer("２Ｄ前（？）パーティクル描画まで（レンダリング）");
     JAWExtSystem::draw();
     #endif
+
+#if TARGET_PC
+    imgui_main(&auroraInfo);
+#endif
 
     mDoGph_gInf_c::endRender();
 
