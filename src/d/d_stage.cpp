@@ -2064,7 +2064,7 @@ static int dStage_doorInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
 static int dStage_roomReadInit(dStage_dt_c* i_stage, void* i_data, int param_2, void* param_3) {
     UNUSED(param_2);
     roomRead_class* p_node = (roomRead_class*)((int*)i_data + 1);
-    STAGE_OFFSET_PTR(roomRead_data_class)* rtbl = p_node->m_entries;
+    OFFSET_PTR(roomRead_data_class)* rtbl = p_node->m_entries;
 
     i_stage->setRoom(p_node);
 

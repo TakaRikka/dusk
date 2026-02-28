@@ -22,7 +22,7 @@ struct dPath {
     /* 0x5 */ bool m_closed;
     /* 0x6 */ u8 field_0x6;
     /* 0x7 */ u8 field_0x7;
-    /* 0x8 */ STAGE_OFFSET_PTR(dPnt) m_points;
+    /* 0x8 */ OFFSET_PTR(dPnt) m_points;
 };
 
 inline BOOL dPath_ChkClose(const dPath* i_path) { return i_path->m_closed & 1; }

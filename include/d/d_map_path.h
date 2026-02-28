@@ -115,13 +115,13 @@ public:
         /* 0x01 */ u8 field_0x1;
         /* 0x02 */ u8 mDataNum;
         /* 0x03 */ u8 field_0x3;
-        /* 0x04 */ STAGE_OFFSET_PTR(BE(u16)) mpData;
+        /* 0x04 */ OFFSET_PTR(BE(u16)) mpData;
     };  // Size: 0x8
 
     struct poly_class {
         /* 0x00 */ u8 field_0x0;
         /* 0x01 */ u8 mDataNum;
-        /* 0x04 */ STAGE_OFFSET_PTR(BE(u16)) mpData;
+        /* 0x04 */ OFFSET_PTR(BE(u16)) mpData;
     };  // Size: 0x8
 
     struct group_class {
@@ -130,21 +130,21 @@ public:
         /* 0x02 */ u8 mLineNum;
         /* 0x03 */ u8 field_0x3;
         /* 0x04 */ u8 mPolyNum;
-        /* 0x08 */ STAGE_OFFSET_PTR(dDrawPath_c::line_class) mpLine;
+        /* 0x08 */ OFFSET_PTR(dDrawPath_c::line_class) mpLine;
         /* 0x0C */ u8 field_0xc[4];
-        /* 0x10 */ STAGE_OFFSET_PTR(dDrawPath_c::poly_class) mpPoly;
+        /* 0x10 */ OFFSET_PTR(dDrawPath_c::poly_class) mpPoly;
     };  // Size: 0x14
 
     struct floor_class {
         /* 0x0 */ s8 mFloorNo;
         /* 0x1 */ u8 mGroupNum;
-        /* 0x4 */ STAGE_OFFSET_PTR(dDrawPath_c::group_class) mpGroup;
+        /* 0x4 */ OFFSET_PTR(dDrawPath_c::group_class) mpGroup;
     };  // Size: 0x8
 
     struct room_class {
         /* 0x0 */ u8 mFloorNum;
-        /* 0x4 */ STAGE_OFFSET_PTR(dDrawPath_c::floor_class) mpFloor;
-        /* 0x8 */ STAGE_OFFSET_PTR(BE(f32)) mpFloatData;  // might be Vec or cXyz instead
+        /* 0x4 */ OFFSET_PTR(dDrawPath_c::floor_class) mpFloor;
+        /* 0x8 */ OFFSET_PTR(BE(f32)) mpFloatData;  // might be Vec or cXyz instead
     };
 
     struct layer_data {

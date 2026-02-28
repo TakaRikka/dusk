@@ -2,6 +2,7 @@
 #define D_D_TRESURE_H
 
 #include <dolphin/mtx.h>
+#include "dusk/offset_ptr.h"
 
 class dTres_c {
 public:
@@ -49,7 +50,7 @@ public:
 
     struct list_class {
         /* 0x0 */ BE(int) field_0x0;
-        /* 0x4 */ STAGE_OFFSET_PTR(typeGroupData_c) field_0x4;
+        /* 0x4 */ OFFSET_PTR(typeGroupData_c) field_0x4;
         /* 0x8 */ u8 mNumber;
     };
 

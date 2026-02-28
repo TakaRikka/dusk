@@ -4,65 +4,9 @@
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_data.h"
+#include "dusk/offset_ptr.h"
 #include "f_op/f_op_actor_mng.h"
 #include "global.h"
-
-#if TARGET_PC
-struct StageOffsetPtr {
-    // Top bit is used to store "already relocated" flag as a guard thing.
-    BE<s32> value;
-
-    bool setBase(void* base);
-    bool isRelocated();
-
-    template<typename T>
-    explicit operator T*() const {
-        s32 swapped = value;
-        if (swapped == 0) {
-            // This shouldn't be able to happen but the original offsetting code has the safeguard.
-            return nullptr;
-        }
-
-        // Because we use the top (31st) bit as an "already relocated" flag,
-        // we need to make sure to check the 30th bit to see if we're actually negative.
-        // And cut off the 31st bit if we're supposed to be positive.
-        // Effective range this gives us is still like a gigabyte in both directions,
-        // so we'll be fine on that front.
-        s32 realOffset = (swapped & 0x4000'0000) ? swapped : (swapped & 0x7FFF'FFFF);
-        return (T*)POINTER_ADD(this, realOffset);
-    }
-};
-
-template<typename T>
-struct StageOffsetPtrT {
-    StageOffsetPtr value;
-
-    bool setBase(void* base) {
-        return value.setBase(base);
-    }
-    bool isRelocated() {
-        return value.isRelocated();
-    }
-
-    T* operator->() {
-        return (T*) value;
-    }
-
-    operator T*() const {
-        return (T*) value;
-    }
-
-    template<typename TOther>
-    explicit operator TOther*() const {
-        return (TOther*) value;
-    }
-};
-
-
-#define STAGE_OFFSET_PTR(T) StageOffsetPtrT<T>
-#else
-#define STAGE_OFFSET_PTR(T) T*
-#endif
 
 enum StageType {
     /* 0x0 */ ST_FIELD,
@@ -79,11 +23,7 @@ struct dStage_nodeHeader {
     // so keep it as big endian without conversion so matching it keeps working.
     /* 0x0 */ u32 m_tag;
     /* 0x4 */ BE(int) m_entryNum;
-#if TARGET_PC
-    /* 0x8 */ StageOffsetPtr m_offset;
-#else
-    /* 0x8 */ u32 m_offset;
-#endif
+    /* 0x8 */ OFFSET_PTR_RAW m_offset;
 };
 
 // made up name
@@ -119,7 +59,7 @@ struct stage_tresure_data_class {
 
 struct stage_tresure_class {
     /* 0x00 */ BE(int) num;
-    /* 0x04 */ STAGE_OFFSET_PTR(stage_tresure_data_class) m_entries;
+    /* 0x04 */ OFFSET_PTR(stage_tresure_data_class) m_entries;
 };
 
 // STAG
@@ -165,7 +105,7 @@ struct stage_scls_info_class {
 
 struct stage_scls_info_dummy_class {
     /* 0x00 */ BE(int) num;
-    /* 0x04 */ STAGE_OFFSET_PTR(stage_scls_info_class) m_entries;
+    /* 0x04 */ OFFSET_PTR(stage_scls_info_class) m_entries;
 };
 
 // LGT
@@ -222,7 +162,7 @@ struct stage_map_info_class {
 
 struct stage_map_info_dummy_class {
     /* 0x0 */ BE(int) num;
-    /* 0x4 */ STAGE_OFFSET_PTR(stage_map_info_class) m_entries;
+    /* 0x4 */ OFFSET_PTR(stage_map_info_class) m_entries;
 };
 
 // Env
@@ -243,7 +183,7 @@ struct stage_camera2_data_class {
 
 struct stage_camera_class {
     /* 0x0 */ BE(int) num;
-    /* 0x4 */ STAGE_OFFSET_PTR(stage_camera2_data_class) m_entries;
+    /* 0x4 */ OFFSET_PTR(stage_camera2_data_class) m_entries;
 };
 
 // AROB / RARO
@@ -259,7 +199,7 @@ struct stage_arrow_data_class {
 
 struct stage_arrow_class {
     /* 0x00 */ BE(int) num;
-    /* 0x04 */ STAGE_OFFSET_PTR(stage_arrow_data_class) m_entries;
+    /* 0x04 */ OFFSET_PTR(stage_arrow_data_class) m_entries;
 };
 
 // ACT
@@ -270,7 +210,7 @@ struct stage_actor_data_class {
 
 struct stage_actor_class {
     /* 0x0 */ BE(int) num;
-    /* 0x4 */ STAGE_OFFSET_PTR(stage_actor_data_class) m_entries;
+    /* 0x4 */ OFFSET_PTR(stage_actor_data_class) m_entries;
 };
 
 // TGSC / SCOB / TGDR / Door
@@ -284,13 +224,13 @@ STATIC_ASSERT(sizeof(stage_tgsc_data_class) == 0x24);
 
 struct stage_tgsc_class {
     /* 0x00 */ BE(int) num;
-    /* 0x04 */ STAGE_OFFSET_PTR(stage_tgsc_data_class) m_entries;
+    /* 0x04 */ OFFSET_PTR(stage_tgsc_data_class) m_entries;
 };
 
 // MPAT
 struct map_path_class {
     /* 0x0 */ BE(int) num;
-    /* 0x4 */ STAGE_OFFSET_PTR(void) m_entries;
+    /* 0x4 */ OFFSET_PTR(void) m_entries;
 };
 
 // RTBL
@@ -298,18 +238,18 @@ struct roomRead_data_class {
     /* 0x0 */ u8 num;
     /* 0x1 */ u8 field_0x1;
     /* 0x2 */ u8 field_0x2;
-    /* 0x4 */ STAGE_OFFSET_PTR(u8) m_rooms;
+    /* 0x4 */ OFFSET_PTR(u8) m_rooms;
 };  // Size: 0x8
 
 struct roomRead_class {
     /* 0x0 */ BE(int) num;
-    /* 0x4 */ STAGE_OFFSET_PTR(STAGE_OFFSET_PTR(roomRead_data_class)) m_entries;
+    /* 0x4 */ OFFSET_PTR(OFFSET_PTR(roomRead_data_class)) m_entries;
 };
 
 // MEM
 struct dStage_MemoryMap_c {
     /* 0x0 */ BE(int) m_num;
-    /* 0x4 */ STAGE_OFFSET_PTR(BE(u32)) field_0x4;
+    /* 0x4 */ OFFSET_PTR(BE(u32)) field_0x4;
 };
 
 // MEC
@@ -320,20 +260,20 @@ struct dStage_MemoryConfig_data {
 
 struct dStage_MemoryConfig_c {
     /* 0x0 */ BE(int) m_num;
-    /* 0x4 */ STAGE_OFFSET_PTR(dStage_MemoryConfig_data) field_0x4;
+    /* 0x4 */ OFFSET_PTR(dStage_MemoryConfig_data) field_0x4;
 };
 
 // PATH / RPAT
 struct dPath;
 struct dStage_dPath_c {
     /* 0x0 */ BE(int) m_num;
-    /* 0x4 */ STAGE_OFFSET_PTR(dPath) m_path;
+    /* 0x4 */ OFFSET_PTR(dPath) m_path;
 };
 
 // PPNT / RPPN
 struct dStage_dPnt_c {
     /* 0x0 */ BE(int) num;
-    /* 0x4 */ STAGE_OFFSET_PTR(void) m_pnt_offset;
+    /* 0x4 */ OFFSET_PTR(void) m_pnt_offset;
 };  // Size: 0x8
 
 // MULT
@@ -347,7 +287,7 @@ struct dStage_Mult_info {
 class dStage_Multi_c {
 public:
     /* 0x0 */ BE(int) num;
-    /* 0x4 */ STAGE_OFFSET_PTR(dStage_Mult_info) m_entries;
+    /* 0x4 */ OFFSET_PTR(dStage_Mult_info) m_entries;
 };
 
 // SOND
@@ -365,7 +305,7 @@ struct stage_sound_data {
 
 struct dStage_SoundInfo_c {
     /* 0x0 */ BE(int) num;
-    /* 0x4 */ STAGE_OFFSET_PTR(stage_sound_data) entries;
+    /* 0x4 */ OFFSET_PTR(stage_sound_data) entries;
 };
 
 // FILI
@@ -399,7 +339,7 @@ public:
 
 struct dStage_FileList2_c {
     /* 0x0 */ BE(int) num;
-    /* 0x4 */ STAGE_OFFSET_PTR(dStage_FileList2_dt_c) entries;
+    /* 0x4 */ OFFSET_PTR(dStage_FileList2_dt_c) entries;
 };
 
 // FLOR
@@ -412,7 +352,7 @@ struct dStage_FloorInfo_dt_c {
 
 struct dStage_FloorInfo_c {
     /* 0x00 */ BE(int) num;
-    /* 0x04 */ STAGE_OFFSET_PTR(dStage_FloorInfo_dt_c) m_entries;
+    /* 0x04 */ OFFSET_PTR(dStage_FloorInfo_dt_c) m_entries;
 };
 
 // LBNK
@@ -425,7 +365,7 @@ public:
 
 struct dStage_Lbnk_c {
     /* 0x0 */ BE(int) num;
-    /* 0x4 */ STAGE_OFFSET_PTR(dStage_Lbnk_dt_c) entries;
+    /* 0x4 */ OFFSET_PTR(dStage_Lbnk_dt_c) entries;
 };
 
 struct dStage_Elst_dt_c {
@@ -434,7 +374,7 @@ struct dStage_Elst_dt_c {
 
 struct dStage_Elst_c {
     /* 0x0 */ BE(int) m_entryNum;
-    /* 0x4 */ STAGE_OFFSET_PTR(dStage_Elst_dt_c) m_entries;
+    /* 0x4 */ OFFSET_PTR(dStage_Elst_dt_c) m_entries;
 };
 
 // DMAP
@@ -448,7 +388,7 @@ struct dStage_DMap_dt_c {
 
 struct dStage_DMap_c {
     /* 0x00 */ BE(int) num;
-    /* 0x04 */ STAGE_OFFSET_PTR(dStage_DMap_dt_c) entries;
+    /* 0x04 */ OFFSET_PTR(dStage_DMap_dt_c) entries;
 };
 
 /**
@@ -501,7 +441,7 @@ enum dStage_MapEvent_dt_type {
 
 struct dStage_MapEventInfo_c {
     /* 0x0 */ BE(int) num;
-    /* 0x4 */ STAGE_OFFSET_PTR(dStage_MapEvent_dt_c) m_entries;
+    /* 0x4 */ OFFSET_PTR(dStage_MapEvent_dt_c) m_entries;
 };
 
 class dStage_dt_c {
