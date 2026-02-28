@@ -2,8 +2,6 @@
 
 #include "JSystem/J3DGraphBase/J3DShape.h"
 
-#include <malloc.h>
-
 #include <dolphin/gd.h>
 #include "JSystem/J3DGraphBase/J3DFifo.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
