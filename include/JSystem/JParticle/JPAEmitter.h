@@ -115,7 +115,7 @@ public:
     void setStatus(u32 status) { mStatus |= status; }
     void clearStatus(u32 status) { mStatus &= ~status; }
     u32 checkStatus(u32 status) const { return (mStatus & status); }
-    bool checkFlag(u32 flag) const { return !!(mpRes->getDyn()->getFlag() & flag); }
+    u32 checkFlag(u32 flag) const { return pRes->getDyn()->getFlag() & flag; }
     u8 getResourceManagerID() const { return mResMgrID; }
     u8 getGroupID() const { return mGroupID; }
     u8 getDrawTimes() const { return mDrawTimes; }
@@ -258,7 +258,7 @@ public:
     /* 0xD4 */ JPAList<JPABaseParticle> mAlivePtclChld;
     /* 0xE0 */ JPAList<JPABaseParticle>* mpPtclPool;
     /* 0xE4 */ JPAEmitterManager* mpEmtrMgr;
-    /* 0xE8 */ JPAResource* mpRes;
+    /* 0xE8 */ JPAResource* pRes;
     /* 0xEC */ JPAEmitterCallBack* mpEmtrCallBack;
     /* 0xF0 */ JPAParticleCallBack* mpPtclCallBack;
     /* 0xF4 */ u32 mStatus;

@@ -1,0 +1,17 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+create__11daTagMmsg_cFv = .text:0x0000005C; // type:function size:0x160 scope:global align:4
+daTagMmsg_Create__FP10fopAc_ac_c = .text:0x000001BC; // type:function size:0x4 scope:global align:4
+daTagMmsg_Delete__FP11daTagMmsg_c = .text:0x000001C0; // type:function size:0x30 scope:global align:4
+execute__11daTagMmsg_cFv = .text:0x000001F0; // type:function size:0x1CC scope:global align:4
+daTagMmsg_Execute__FP11daTagMmsg_c = .text:0x000003BC; // type:function size:0x4 scope:global align:4
+daTagMmsg_Draw__FP11daTagMmsg_c = .text:0x000003C0; // type:function size:0x8 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+...rodata.0 = .rodata:0x00000000; // type:label scope:local align:4
+@93245 = .rodata:0x00000000; // type:object size:0x4 scope:local align:4
+@93246 = .rodata:0x00000004; // type:object size:0x4 scope:local align:4
+@93247 = .rodata:0x00000008; // type:object size:0x4 scope:local align:4
+l_daTagMmsg_Method = .data:0x00000000; // type:object size:0x20 scope:global align:4
+g_profile_Tag_Mmsg = .data:0x00000020; // type:object size:0x30 scope:global align:4

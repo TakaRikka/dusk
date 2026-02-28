@@ -1,0 +1,14 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+daE_BI_LEAF_Draw__FP15e_bi_leaf_class = .text:0x0000005C; // type:function size:0x7C scope:global align:4
+daE_BI_LEAF_Execute__FP15e_bi_leaf_class = .text:0x000000D8; // type:function size:0x168 scope:global align:4
+daE_BI_LEAF_IsDelete__FP15e_bi_leaf_class = .text:0x00000240; // type:function size:0x8 scope:global align:4
+useHeapInit__FP10fopAc_ac_c = .text:0x00000248; // type:function size:0x80 scope:global align:4
+daE_BI_LEAF_Create__FP10fopAc_ac_c = .text:0x000002C8; // type:function size:0xB4 scope:global align:4
+daE_BI_LEAF_Delete__FP15e_bi_leaf_class = .text:0x0000037C; // type:function size:0x30 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+lbl_176_data_0 = .data:0x00000000; // type:object size:0x5 data:string
+l_daE_BI_LEAF_Method = .data:0x00000008; // type:object size:0x20 scope:global align:4
+g_profile_E_BI_LEAF = .data:0x00000028; // type:object size:0x30 scope:global align:4

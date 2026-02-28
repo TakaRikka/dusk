@@ -20,6 +20,7 @@
 #include "global.h"
 #include "m_Do/m_Do_Reset.h"
 #include <cstdio>
+#include <cstring>
 
 void dStage_nextStage_c::set(const char* i_stage, s8 i_roomId, s16 i_point, s8 i_layer, s8 i_wipe,
                              u8 i_speed) {

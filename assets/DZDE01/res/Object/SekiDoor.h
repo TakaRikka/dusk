@@ -1,0 +1,22 @@
+#ifndef RES_SEKIDOOR_H
+#define RES_SEKIDOOR_H
+
+enum dRes_INDEX_SEKIDOOR {
+    /* BMDR */
+    dRes_INDEX_SEKIDOOR_BMD_A_SMGSEKIDOOR_e=0x4,
+    /* DZB  */
+    dRes_INDEX_SEKIDOOR_DZB_A_SMGSEKIDOOR_e=0x7,
+};
+
+enum dRes_ID_SEKIDOOR {
+    /* BMDR */
+    dRes_ID_SEKIDOOR_BMD_A_SMGSEKIDOOR_e=0x4,
+    /* DZB  */
+    dRes_ID_SEKIDOOR_DZB_A_SMGSEKIDOOR_e=0x7,
+};
+
+enum A_SMGSEKIDOOR_JNT {
+    A_SMGSEKIDOOR_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_SEKIDOOR_H */

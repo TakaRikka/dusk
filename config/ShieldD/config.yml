@@ -5358,3 +5358,7 @@ extract:
   header: assets/l_mat2Light4DL.h
   header_type: none
   custom_type: matDL
+
+- symbol: l_sightDL!.data:0x806C9C60
+  binary: assets/l_sightDL__d_a_player.bin
+  header: assets/l_sightDL__d_a_player.h

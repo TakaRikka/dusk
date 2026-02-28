@@ -23,7 +23,7 @@ public:
     void CheckHit();
     void WaitAction();
     void HalfBreakAction();
-    bool VibAction();
+    u8 VibAction();
     void DummyAction();
     void RealAction();
     void Action();

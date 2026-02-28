@@ -11,6 +11,7 @@
 #include "d/d_item_data.h"
 #include "d/d_tresure.h"
 #include "f_op/f_op_camera_mng.h"
+#include <cstring>
 
 const static dCcD_SrcCyl l_cyl_src = {
     {

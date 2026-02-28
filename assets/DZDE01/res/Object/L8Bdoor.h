@@ -1,0 +1,26 @@
+#ifndef RES_L8BDOOR_H
+#define RES_L8BDOOR_H
+
+enum dRes_INDEX_L8BDOOR {
+    /* BMDR */
+    dRes_INDEX_L8BDOOR_BMD_DOOR_SHUTTERBOSS_e=0x5,
+    /* BTK  */
+    dRes_INDEX_L8BDOOR_BTK_DOOR_SHUTTERBOSS_e=0x8,
+    /* EVT  */
+    dRes_INDEX_L8BDOOR_DAT_EVENT_LIST_e=0xB,
+};
+
+enum dRes_ID_L8BDOOR {
+    /* BMDR */
+    dRes_ID_L8BDOOR_BMD_DOOR_SHUTTERBOSS_e=0x5,
+    /* BTK  */
+    dRes_ID_L8BDOOR_BTK_DOOR_SHUTTERBOSS_e=0x8,
+    /* EVT  */
+    dRes_ID_L8BDOOR_DAT_EVENT_LIST_e=0xB,
+};
+
+enum DOOR_SHUTTERBOSS_JNT {
+    DOOR_SHUTTERBOSS_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_L8BDOOR_H */

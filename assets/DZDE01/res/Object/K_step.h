@@ -1,0 +1,38 @@
+#ifndef RES_K_STEP_H
+#define RES_K_STEP_H
+
+enum dRes_INDEX_K_STEP {
+    /* BMDR */
+    dRes_INDEX_K_STEP_BMD_DOOR_SPIRALSTOP_e=0x4,
+    dRes_INDEX_K_STEP_BMD_K_STEPD_e=0x5,
+    dRes_INDEX_K_STEP_BMD_K_STEPU_e=0x6,
+    /* DZB  */
+    dRes_INDEX_K_STEP_DZB_DOOR_DARK_e=0x9,
+    dRes_INDEX_K_STEP_DZB_DOOR_STEPD_e=0xA,
+    dRes_INDEX_K_STEP_DZB_DOOR_STEPU_e=0xB,
+};
+
+enum dRes_ID_K_STEP {
+    /* BMDR */
+    dRes_ID_K_STEP_BMD_DOOR_SPIRALSTOP_e=0x4,
+    dRes_ID_K_STEP_BMD_K_STEPD_e=0x5,
+    dRes_ID_K_STEP_BMD_K_STEPU_e=0x6,
+    /* DZB  */
+    dRes_ID_K_STEP_DZB_DOOR_DARK_e=0x9,
+    dRes_ID_K_STEP_DZB_DOOR_STEPD_e=0xA,
+    dRes_ID_K_STEP_DZB_DOOR_STEPU_e=0xB,
+};
+
+enum DOOR_SPIRALSTOP_JNT {
+    DOOR_SPIRALSTOP_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum K_STEPD_JNT {
+    K_STEPD_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum K_STEPU_JNT {
+    K_STEPU_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_K_STEP_H */

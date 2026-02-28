@@ -878,15 +878,11 @@ void dDlst_2D_c::draw() {
 }
 
 void dDlst_blo_c::draw() {
-    mScreen.draw(anm.field_0x4, anm.field_0x8, dComIfGp_getCurrentGrafPort());
+    mScreen.draw(field_0x120, field_0x124, dComIfGp_getCurrentGrafPort());
 }
 
 // stand-in for a function that pulls in a bunch of inline functions but was presumably stripped
-static void dummy_misc() {
-    J2DScreen* screen;
-    J2DPane* pane;
-    J2DPicture* picture;
-    J2DAnmBase* anmBase;
+static void dummy_misc(J2DAnmBase* anmBase, J2DPicture* picture, J2DPane* pane, J2DScreen* screen) {
     delete anmBase;
     picture->setBlack(JUtility::TColor(0, 0, 0, 0));
     picture->setWhite(JUtility::TColor(0, 0, 0, 0));
@@ -1113,12 +1109,12 @@ static BOOL realPolygonCheck(cXyz* param_0, f32 param_1, f32 param_2, cXyz* para
     ShdwDrawPoly_c shdwDrawPoly;
     cXyz local_8c;
     cXyz local_98;
-    f32 tmp1 = param_1 * param_1 * 0.002f;
-    f32 tmp2 = cLib_maxLimit(tmp1, 120.0f);
-    f32 var1 = param_1 + param_2 - tmp2;
-    local_8c.y = param_0->y - var1;
+    f32 f31 = param_1 * param_1 * 0.002f;
+    f31 = cLib_maxLimit(f31, 120.0f);
+    f31 = param_1 + param_2 - f31;
+    local_8c.y = param_0->y - f31;
     local_98.y = param_0->y + param_1 * 0.15f;
-    local_98.x = param_0->x + param_3->x * var1;
+    local_98.x = param_0->x + param_3->x * f31;
     if (local_98.x < param_0->x) {
         local_8c.x = local_98.x;
         local_98.x = param_0->x;
@@ -1127,9 +1123,8 @@ static BOOL realPolygonCheck(cXyz* param_0, f32 param_1, f32 param_2, cXyz* para
     }
     local_8c.x -= param_1;
     local_98.x += param_1;
-    var1 = param_0->z + param_3->z * var1;
-    local_98.z = var1;
-    if (var1 < param_0->z) {
+    local_98.z = param_0->z + param_3->z * f31;
+    if (local_98.z < param_0->z) {
         local_8c.z = local_98.z;
         local_98.z = param_0->z;
     } else {

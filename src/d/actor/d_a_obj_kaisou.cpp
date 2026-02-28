@@ -9,6 +9,7 @@
 #include "d/d_cc_d.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_s_play.h"
+#include <cstring>
 
 enum Joint {
     /* 0x0 */ JNT_JOINT1,

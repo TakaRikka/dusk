@@ -8,6 +8,7 @@
 #include "d/actor/d_a_npc_rafrel.h"
 #include "d/actor/d_a_npc.h"
 #include "d/d_debug_viewer.h"
+#include <cstring>
 
 static daNpc_GetParam2 l_bckGetParamList[29] = {
     {-1, 2, 0},
@@ -377,8 +378,8 @@ int daNpcRafrel_c::Draw() {
 }
 
 int daNpcRafrel_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
-    int jnt_no = i_joint->getJntNo();
-    u16 jointNo = jnt_no;
+    J3DJoint* joint = i_joint;
+    int jnt_no = joint->getJntNo();
     int spC[] = {1, 3, 4};
 
     if (jnt_no == 0) {

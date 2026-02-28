@@ -7,6 +7,8 @@
 extern "C" {
 #endif
 
+#define MTXRowCol(m, r, c) ((m)[(r)][(c)])
+
 typedef struct Vec {
 	f32 x, y, z;
 } Vec, *VecPtr, Point3d, *Point3dPtr;

@@ -9,7 +9,7 @@
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include <dolphin/os.h>
-#include <string>
+#include <cstring>
 
 void* J3DClusterLoaderDataBase::load(const void* i_data) {
     J3D_ASSERT_NULLPTR(41, i_data);

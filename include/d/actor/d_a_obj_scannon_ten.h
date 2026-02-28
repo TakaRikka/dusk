@@ -13,6 +13,8 @@
  */
 class daObjSCannonTen_c : public fopAc_ac_c, public request_of_phase_process_class {
 public:
+    typedef void (daObjSCannonTen_c::*ExeProc)(void);
+
     enum daSCannonTen_exeMode {
         MODE_WAIT,
         MODE_ORDER_EVT,
@@ -55,8 +57,8 @@ public:
     void exeEmtLine();
     void delEmtAll();
 
-    static void (daObjSCannonTen_c::*s_exeProc[])();
-    static void (daObjSCannonTen_c::*s_demoExeProc[][2])();
+    static const ExeProc s_exeProc[];
+    static const ExeProc s_demoExeProc[][2];
 
 private:
     /* 0x574 */ J3DModel* mpModel;

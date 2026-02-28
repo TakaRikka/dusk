@@ -2,6 +2,7 @@
 
 #include "d/actor/d_a_npc_cd.h"
 #include "d/actor/d_a_player.h"
+#include <cstring>
 
 static int jntNodeCallBack(J3DJoint* i_jnt, int param_1) {
     if (param_1 == 0) {

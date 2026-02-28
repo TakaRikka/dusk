@@ -236,7 +236,7 @@ static void obj_hb_drop(obj_hb_class* i_this) {
                 if (wall_angle != 35) {
                     s16 angle_delta = a_this->current.angle.y - wall_angle;
                     i_this->field_0x690 = angle_delta * (WREG_F(6) + -0.3f);
-                    a_this->current.angle.y += (s16)(0x8000 - (angle_delta << 1));
+                    ANGLE_ADD(a_this->current.angle.y, 0x8000 - (angle_delta << 1));
                     a_this->speedF *= AREG_F(4) + 0.5f;
                     i_this->mTimers[0] = 10;
                     i_this->mSound.startCollisionSE(Z2SE_HIT_SWORD, 41);
@@ -369,8 +369,8 @@ static void obj_hb_float(obj_hb_class* i_this) {
     i_this->field_0x676.x = i_this->field_0x694 * cM_ssin(i_this->field_0x650 * (WREG_S(3) + 1000));
     i_this->field_0x676.z = i_this->field_0x694 * cM_ssin(i_this->field_0x650 * (WREG_S(4) + 1100));
     cLib_addCalc2(&i_this->field_0x694, 500.0f, 0.1f, 30.0f);
-    i_this->field_0x676.x += (s16)(i_this->field_0x698 * cM_ssin(i_this->field_0x650 * (WREG_S(7) + 4000)));
-    a_this->shape_angle.z += (s16)(i_this->field_0x698 * cM_ssin(i_this->field_0x650 * (WREG_S(8) + 4200)));
+    ANGLE_ADD(i_this->field_0x676.x, i_this->field_0x698 * cM_ssin(i_this->field_0x650 * (WREG_S(7) + 4000)));
+    ANGLE_ADD(a_this->shape_angle.z, i_this->field_0x698 * cM_ssin(i_this->field_0x650 * (WREG_S(8) + 4200)));
     cLib_addCalc2(&i_this->field_0x698, 0.0f, 0.1f, 30.0f);
     i_this->field_0x676.y += i_this->field_0x690;
 
@@ -416,7 +416,7 @@ static void action(obj_hb_class* i_this) {
                         s16 target = fopAcM_searchPlayerAngleY(a_this);
                         s16 angle_delta = i_this->field_0x676.y - target;
                         if (angle_delta > 0x4000 || angle_delta < -0x4000) {
-                            ADD_ANGLE(target, 0x8000);
+                            ANGLE_ADD(target, 0x8000);
                         }
                         cLib_addCalcAngleS2(&i_this->field_0x676.y, target, 4, 0x100);
                     }

@@ -184,7 +184,7 @@ void daTagLv7Gate_c::flyAnime() {
 
     if (bck_anm == bck_anm_3) {
         if (field_0x5ac < 150) {
-            field_0x5ac += (u16)1;
+            U16_ADD(field_0x5ac, 1);
             if (field_0x5ac >= 150) {
                 bck = bck_anm_4;
                 attribute = J3DFrameCtrl::EMode_NONE;

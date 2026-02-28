@@ -20,6 +20,7 @@
 #include "d/actor/d_a_movie_player.h"
 #if DEBUG
 #include "d/d_debug_viewer.h"
+#include <cstring>
 #endif
 
 struct UnknownLightData {

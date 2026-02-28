@@ -1,0 +1,22 @@
+#ifndef RES_L5BDOOR_H
+#define RES_L5BDOOR_H
+
+enum dRes_INDEX_L5BDOOR {
+    /* BMDR */
+    dRes_INDEX_L5BDOOR_BMD_DOOR_SHUTTERBOSS_e=0x4,
+    /* EVT  */
+    dRes_INDEX_L5BDOOR_DAT_EVENT_LIST_e=0x7,
+};
+
+enum dRes_ID_L5BDOOR {
+    /* BMDR */
+    dRes_ID_L5BDOOR_BMD_DOOR_SHUTTERBOSS_e=0x4,
+    /* EVT  */
+    dRes_ID_L5BDOOR_DAT_EVENT_LIST_e=0x7,
+};
+
+enum DOOR_SHUTTERBOSS_JNT {
+    DOOR_SHUTTERBOSS_JNT_Z_BDOR00_e=0x0,
+};
+
+#endif /* !RES_L5BDOOR_H */

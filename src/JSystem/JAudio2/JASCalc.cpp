@@ -263,9 +263,6 @@ s16 const JASCalc::CUTOFF_TO_IIR_TABLE[128][4] = {
     0x7FFF, 0x0000, 0x0000, 0x0000,
 };
 
-template <>
-s16 JASCalc::clamp(s32);
-
 // currently required because of missing functions
 // JASCalc::hannWindow(short *, u32)
 // JASCalc::hammWindow(short *, u32)
@@ -318,13 +315,4 @@ f32 JASCalc::pow2(f32 x) {
     ret = exponent.f * (0.75f * two_to_frac[frac_index] + ((0.25f + ret) * two_to_frac[frac_index]));
 
     return ret;
-}
-
-template <>
-s16 JASCalc::clamp(s32 x) {
-    if (x <= std::numeric_limits<s16>::min())
-        return std::numeric_limits<s16>::min();
-    if (x >= std::numeric_limits<s16>::max())
-        return std::numeric_limits<s16>::max();
-    return x;
 }

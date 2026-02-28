@@ -18,7 +18,7 @@ struct fs_weed_s {
 
 struct fs_tsubo_s {
     /* 0x00 */ cXyz field_0x00;
-    /* 0x0C */ u8 field_0x0c[0x14 - 0x0c];
+    /* 0x0C */ csXyz field_0x0c; // unused
     /* 0x14 */ J3DModel* model;
     /* 0x18 */ u8 field_0x18[0x1C - 0x18];
     /* 0x1C */ f32 field_0x1c;
@@ -29,7 +29,7 @@ struct fs_tsubo_s {
 
 struct fs_rod_s {
     /* 0x00 */ cXyz field_0x00;
-    /* 0x0C */ u8 field_0x0C[0x14 - 0x0C];
+    /* 0x0C */ csXyz field_0x0C; // unused
     /* 0x14 */ J3DModel* model;
     /* 0x18 */ J3DModel* ringModel[6];
     /* 0x30 */ mDoExt_3DlineMat0_c line_mat;
@@ -41,9 +41,7 @@ struct fs_rod_s {
 
 struct fs_lure_s {
     /* 0x00 */ cXyz field_0x00;
-    /* 0x0C */ s16 field_0x0c;
-    /* 0x0E */ s16 field_0x0e;
-    /* 0x10 */ s16 field_0x10;
+    /* 0x0C */ csXyz field_0x0c;
     /* 0x14 */ J3DModel* model;
     /* 0x18 */ J3DModel* hookModel[2];
     /* 0x20 */ u8 field_0x20[0x24 - 0x20];
@@ -113,6 +111,10 @@ public:
     /* 0x40B4 */ dBgS_ObjAcch ballAcch;
     /* 0x428C */ u8 field_0x428c;
     /* 0x428D */ u8 field_0x428d;
+#if PLATFORM_SHIELD
+    u8 unk_dbg_padding[0x6];
+    J3DModel* dbg_models[2];
+#endif
     /* 0x4290 */ fs_koro2_s mKoro2[100];
     /* 0x6B30 */ J3DModel* canoeModel;
     /* 0x6B34 */ s16 field_0x6b34;

@@ -62,8 +62,8 @@ enum cCcD_ObjAtType {
     /* 0x10000000 */ AT_TYPE_10000000 = (1 << 28),
     /* 0x10000000 */ AT_TYPE_20000000 = (1 << 29),
     /* 0x40000000 */ AT_TYPE_WOLF_CUT_TURN = (1 << 30),
-    /* 0x80000000 */ AT_TYPE_WOLF_ATTACK = (1 << 31),
-    /* 0xD8000000 */ AT_TYPE_UNK = 0xD8000000
+    /* 0x80000000 */ AT_TYPE_WOLF_ATTACK = (1u << 31),
+    /* 0xD8000000 */ AT_TYPE_UNK = 0xD8000000u
 };
 
 struct cCcD_SrcTriAttr {
@@ -120,16 +120,16 @@ public:
 STATIC_ASSERT(0x40 == sizeof(cCcD_DivideArea));
 
 struct cCcD_SrcObjCommonBase {
-    /* 0x0 */ s32 mSPrm;
+    /* 0x0 */ u32 mSPrm;
 };
 
 struct cCcD_SrcObjTg {
-    /* 0x0 */ s32 mType;
+    /* 0x0 */ u32 mType;
     /* 0x4 */ cCcD_SrcObjCommonBase mBase;
 };  // Size: 0x8
 
 struct cCcD_SrcObjAt {
-    /* 0x0 */ s32 mType;
+    /* 0x0 */ u32 mType;
     /* 0x4 */ u8 mAtp;
     /* 0x8 */ cCcD_SrcObjCommonBase mBase;
 };  // Size: 0xC

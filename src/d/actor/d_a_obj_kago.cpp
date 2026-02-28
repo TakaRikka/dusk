@@ -13,6 +13,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
+#include <cstring>
 
 daObj_Kago_HIOParam const daObj_Kago_Param_c::m = {
     0.0f,
@@ -298,9 +299,9 @@ int daObj_Kago_c::Execute() {
                 if (field_0xb48 == 0 && mObjAcch.ChkWallHit() != 0) {
                     if (getWallAngle(current.angle.y, &sVar2)) {
                         current.angle.y = sVar2;
-                        current.angle.y += (s16)cM_rndFX(2000.0f);
+                        ANGLE_ADD(current.angle.y, cM_rndFX(2000.0f));
                     } else {
-                        current.angle.y += (s16)cM_rndFX(2000.0f);
+                        ANGLE_ADD(current.angle.y, cM_rndFX(2000.0f));
                         current.angle.y += -0x8000;
                     }
 

@@ -8,6 +8,7 @@
 #include "d/d_kyeff.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
+#include <cstring>
 
 #if DEBUG
 class dKyeff_HIO_c : public JORReflexible {

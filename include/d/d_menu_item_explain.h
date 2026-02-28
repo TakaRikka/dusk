@@ -38,7 +38,7 @@ public:
     u8 openExplainTx(u32, u32);
     f32 getAlphaRatio();
     void setNumber();
-    bool getWarpMarkFlag();
+    u8 getWarpMarkFlag();
     void setScale();
 
     u8 getStatus() { return mStatus; }

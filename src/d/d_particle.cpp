@@ -1913,7 +1913,7 @@ u16 dPa_control_c::setCommonPoly(u32* param_0, cBgS_PolyInfo* param_1, cXyz cons
 void dPa_wbPcallBack_c::execute(JPABaseEmitter* i_emitter, JPABaseParticle* param_1) {
     UNUSED(i_emitter);
     JGeometry::TVec3<f32> local_18;
-    param_1->getGlobalPosition(local_18);
+    param_1->getGlobalPosition(&local_18);
     cXyz cStack_24(local_18.x, local_18.y, local_18.z);
     if (fopAcM_wt_c::waterCheck(&cStack_24) && cStack_24.y > fopAcM_wt_c::getWaterY()) {
         param_1->setInvisibleParticleFlag();
@@ -1998,7 +1998,7 @@ void dPa_light8PcallBack::draw(JPABaseEmitter* param_1, JPABaseParticle* param_2
         MTXRotAxisRad(auStack_90, &local_178, (M_PI / 180.0f) * fVar3);
         MTXConcat(local_60, auStack_90, local_60);
     }
-    param_2->getGlobalPosition(local_100);
+    param_2->getGlobalPosition(&local_100);
     local_60[0][3] = local_100.x;
     local_60[1][3] = local_100.y;
     local_60[2][3] = local_100.z;
@@ -2084,7 +2084,7 @@ void dPa_gen_b_light8PcallBack::draw(JPABaseEmitter* param_1, JPABaseParticle* p
     JGeometry::TVec3<f32> local_e0;
     JGeometry::TVec3<f32> local_ec;
     JGeometry::TVec3<f32> local_f8;
-    param_2->getGlobalPosition(local_8c);
+    param_2->getGlobalPosition(&local_8c);
     MTXMultVec(j3dSys.getViewMtx(), &local_8c, &local_8c);
     f32 dVar9 = JMASSin(param_2->getRotateAngle());
     f32 dVar10 = JMASCos(param_2->getRotateAngle());
@@ -2178,7 +2178,7 @@ void dPa_gen_d_light8PcallBack::draw(JPABaseEmitter* param_1, JPABaseParticle* p
     MTXIdentity(local_60);
     MTXIdentity(auStack_90);
     param_2->getBaseAxis(local_10c);
-    param_2->getLocalPosition(local_118);
+    param_2->getLocalPosition(&local_118);
     if (local_118.isZero()) {
         local_118.set(0.0f, 1.0f, 0.0f);
     } else {
@@ -2207,7 +2207,7 @@ void dPa_gen_d_light8PcallBack::draw(JPABaseEmitter* param_1, JPABaseParticle* p
         MTXRotAxisRad(auStack_90, &local_178, (M_PI / 180.0f) * fVar3);
         MTXConcat(local_60, auStack_90, local_60);
     }
-    param_2->getGlobalPosition(local_100);
+    param_2->getGlobalPosition(&local_100);
     local_60[0][3] = local_100.x;
     local_60[1][3] = local_100.y;
     local_60[2][3] = local_100.z;

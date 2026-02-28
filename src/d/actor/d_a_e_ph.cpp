@@ -11,6 +11,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera_mng.h"
+#include <cstring>
 
 #define PH_BMD 20
 
@@ -617,9 +618,9 @@ void daE_PH_c::StopAction() {
     switch (mCAction) {
     case 0:
         if (mAnmID == ANM_HANG_WAIT || mAnmID == ANM_HANG_START) {
-            mHeadRotX += (s16)(field_0x612 + 0x1000);
+            ANGLE_ADD(mHeadRotX, field_0x612 + 0x1000);
         } else {
-            mHeadRotX += (s16)(field_0x612 + 0x500);
+            ANGLE_ADD(mHeadRotX, field_0x612 + 0x500);
         }
 
         mSound.startCreatureSoundLevel(Z2SE_EN_PH_PROPELLER, field_0x612 + 0x500, -1);

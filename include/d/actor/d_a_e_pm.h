@@ -9,7 +9,7 @@
 #include "d/d_cc_uty.h"
 #include "d/d_msg_flow.h"
 
-class dPath;
+struct dPath;
 
 /**
  * @ingroup actors-enemies

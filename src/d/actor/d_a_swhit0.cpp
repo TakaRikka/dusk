@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_swhit0.h"
 #include "d/d_com_inf_game.h"
+#include <cstring>
 
 #define COLOR_YELLOW 0
 #define COLOR_BLUE   1

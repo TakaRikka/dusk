@@ -19,6 +19,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
+#include <cstring>
 
 #if PLATFORM_WII
 #include "d/d_cursor_mng.h"

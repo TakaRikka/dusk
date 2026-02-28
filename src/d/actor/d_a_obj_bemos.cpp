@@ -16,6 +16,7 @@
 #endif
 #include "d/d_s_play.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 enum Action_e {
     /* 0x0 */ ACTION_SW_WAIT_e,
@@ -190,6 +191,7 @@ void daObjBm_HIO_c::genMessage(JORMContext* ctx) {
     ctx->genSlider("ビームＹスケール", &beam_scale.y, 0.1f, 10.0f);
     ctx->genCheckBox("チェック描画", &check_draw, 0x1);
 }
+
 #define BEAM_SCALE_X l_HIO.beam_scale.x
 #define BEAM_SCALE_Y l_HIO.beam_scale.y
 #define BEAM_SCALE_Z l_HIO.beam_scale.z
@@ -229,9 +231,11 @@ void daObjBm_HIO_c::genMessage(JORMContext* ctx) {
 #define CHECK_DRAW 0
 #endif
 
-fopAc_ac_c* daObjBm_c::PPCallBack(fopAc_ac_c* i_bgActor, fopAc_ac_c* i_actorP, s16 param_2, dBgW_Base::PushPullLabel pp_field) {
+fopAc_ac_c* daObjBm_c::PPCallBack(fopAc_ac_c* i_bgActor, fopAc_ac_c* i_actorP, s16 param_2,
+                                  dBgW_Base::PushPullLabel i_ppLabel) {
+    UNUSED(i_actorP);
+    dBgW::PushPullLabel pp_label = cLib_checkBit<dBgW::PushPullLabel>(i_ppLabel, dBgW::PPLABEL_3);
     daObjBm_c* actor_p = (daObjBm_c*)i_bgActor;
-    dBgW::PushPullLabel pp_label = cLib_checkBit<dBgW::PushPullLabel>(pp_field, dBgW::PPLABEL_3);
     u8 l_swNo3 = actor_p->getSwNo3();
     u8 l_moveType = actor_p->getMoveType();
 
@@ -240,23 +244,26 @@ fopAc_ac_c* daObjBm_c::PPCallBack(fopAc_ac_c* i_bgActor, fopAc_ac_c* i_actorP, s
                       (s16)param_2 - 0x8000 : (s16)param_2;
         s16 angle = spE - actor_p->home.angle.y;
 
+        // not sure if this is correct
+        const dBgW::PushPullLabel pp_field = dBgW::PPLABEL_3;
         JUT_ASSERT(513, pp_label != pp_field);
 
-        actor_p->mPPLabel = pp_field;
+        actor_p->mPPLabel = i_ppLabel;
 
+        dBgW::PushPullLabel pp_label_2;
         if (angle >= -0x2000 && angle < 0x2000) {
-            pp_label = dBgW::PPLABEL_NONE;
+            pp_label_2 = dBgW::PPLABEL_NONE;
         } else if (angle >= 0x2000 && angle < 0x6000) {
-            pp_label = dBgW::PPLABEL_PUSH;
+            pp_label_2 = dBgW::PPLABEL_PUSH;
         } else if (angle >= 0x6000 || angle < -0x6000) {
-            pp_label = dBgW::PPLABEL_PULL;
+            pp_label_2 = dBgW::PPLABEL_PULL;
         } else {
-            pp_label = dBgW::PPLABEL_3;
+            pp_label_2 = dBgW::PPLABEL_3;
         }
 
-        if (l_moveType != 0 || (l_moveType == 0 && pp_label == dBgW::PPLABEL_NONE)) {
+        if (l_moveType != 0 || (l_moveType == 0 && pp_label_2 == dBgW::PPLABEL_NONE)) {
             for (int i = 0; i < 4; i++) {
-                if (i == pp_label) {
+                if (i == pp_label_2) {
                     actor_p->mMomentCnt[i]++;
                 } else {
                     actor_p->mMomentCnt[i] = 0;
@@ -272,12 +279,13 @@ fopAc_ac_c* daObjBm_c::PPCallBack(fopAc_ac_c* i_bgActor, fopAc_ac_c* i_actorP, s
 
 static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
-        int jnt_no = i_joint->getJntNo();
+        J3DJoint* joint = i_joint;
+        int jnt_no = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         daObjBm_c* i_this = (daObjBm_c*)model->getUserArea();
 
         cMtx_copy(model->getAnmMtx(jnt_no), mDoMtx_stack_c::get());
-        s16 sVar1 = i_this->field_0x1000 * cM_scos(i_this->field_0xff0 * 0x2CEC + KREG_S(6));
+        s16 sVar1 = i_this->field_0x1000 * cM_scos(i_this->field_0xff0 * (11500 + KREG_S(6)));
 
         if (jnt_no == i_this->getHeadJoint()) {
             mDoMtx_stack_c::XrotM(i_this->field_0xf96 + sVar1);
@@ -341,10 +349,10 @@ int daObjBm_c::Create() {
 
     fopAcM_setCullSizeBox(this, l_cull_box.min.x, l_cull_box.min.y, l_cull_box.min.z, l_cull_box.max.x,
                           l_cull_box.max.y, l_cull_box.max.z);
-    JUTNameTab* joint_name = mpModel->getModelData()->getJointTree().getJointName();
+    JUTNameTab* name = mpModel->getModelData()->getJointTree().getJointName();
     for (int i = 0; i < 5; i++) {
         for (u16 j = 0; j < mpModel->getModelData()->getJointNum(); j++) {
-            if (strcmp(joint_name->getName(j), l_joint_table[i]) == 0) {
+            if (strcmp(name->getName(j), l_joint_table[i]) == 0) {
                 mJoints[i] = j;
                 mpModel->getModelData()->getJointNodePointer(j)->setCallBack(nodeCallBack);
             }
@@ -352,9 +360,9 @@ int daObjBm_c::Create() {
     }
 
     mpModel->setUserArea((uintptr_t)this);
-    JUTNameTab* material_name = mpModel->getModelData()->getMaterialTable().getMaterialName();
+    name = mpModel->getModelData()->getMaterialTable().getMaterialName();
     for (u16 i = 0; i < mpModel->getModelData()->getMaterialNum(); i++) {
-        if (strcmp(material_name->getName(i), l_eye_matName) == 0) {
+        if (strcmp(name->getName(i), l_eye_matName) == 0) {
             mpMaterial = mpModel->getModelData()->getMaterialNodePointer(i);
         }
     }
@@ -398,84 +406,101 @@ int daObjBm_c::Create() {
     return 1;
 }
 
-// FAKEMATCH
 int daObjBm_c::CreateHeap() {
-    J3DModelData* modelData;
-    
-    modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BMD_BM_e);
-    JUT_ASSERT(767, modelData != NULL);
-    mpModel = mDoExt_J3DModel__create(modelData, J3DMdlFlag_DifferedDLBuffer, 0x11000084);
-    if (mpModel == NULL) {
-        return 0;
+    J3DModelData* modelData =
+        (J3DModelData*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BMD_BM_e);
+
+    {
+        JUT_ASSERT(767, modelData != NULL);
+        mpModel = mDoExt_J3DModel__create(modelData, J3DMdlFlag_DifferedDLBuffer, 0x11000084);
+        if (mpModel == NULL) {
+            return 0;
+        }
     }
 
-    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BRK_SERCH_e);
-    JUT_ASSERT(780, pbrk != NULL);
-    mSerchBrk = new mDoExt_brkAnm();
-    if (mSerchBrk == NULL || mSerchBrk->init(modelData, pbrk, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1) == 0) {
-        return 0;
-    }
+    {
+        J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BRK_SERCH_e);
+        JUT_ASSERT(780, pbrk != NULL);
+        mSerchBrk = new mDoExt_brkAnm();
+        if (mSerchBrk == NULL || mSerchBrk->init(modelData, pbrk, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1) == 0) {
+            return 0;
+        }
 
 #if DEBUG
-    pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BRK_TURN_e);
-    JUT_ASSERT(791, pbrk != NULL);
+        pbrk =
+            (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BRK_TURN_e);
+        JUT_ASSERT(791, pbrk != NULL);
 #endif
-
-    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BCK_BM_UP_e);
-    JUT_ASSERT(798, pbck != NULL);
-    mBeamosBck = new mDoExt_bckAnm();
-    if (mBeamosBck == NULL || mBeamosBck->init(pbck, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
-        return 0;
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BMD_EF_BIMOBEAM_e);
-    JUT_ASSERT(813, modelData != NULL);
-    mBeamModel = mDoExt_J3DModel__create(modelData, J3DMdlFlag_DifferedDLBuffer, 0x11000284);
-    if (mBeamModel == NULL) {
-        return 0;
+    {
+        J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BCK_BM_UP_e);
+        JUT_ASSERT(798, pbck != NULL);
+        mBeamosBck = new mDoExt_bckAnm();
+        if (mBeamosBck == NULL || mBeamosBck->init(pbck, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
+            return 0;
+        }
     }
 
-    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BTK_EF_BIMOBEAMB_OFF_e);
-    JUT_ASSERT(827, pbtk != NULL);
-    mBeamBtk = new mDoExt_btkAnm();
-    if (mBeamBtk == NULL || mBeamBtk->init(modelData, pbtk, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1) == 0) {
-        return 0;
+    {
+        modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BMD_EF_BIMOBEAM_e);
+        JUT_ASSERT(813, modelData != NULL);
+        mBeamModel = mDoExt_J3DModel__create(modelData, J3DMdlFlag_DifferedDLBuffer, 0x11000284);
+        if (mBeamModel == NULL) {
+            return 0;
+        }
     }
-    mBeamBtk->setFrame(mBeamBtk->getEndFrame());
+
+    {
+        J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BTK_EF_BIMOBEAMB_OFF_e);
+        JUT_ASSERT(827, pbtk != NULL);
+        mBeamBtk = new mDoExt_btkAnm();
+        if (mBeamBtk == NULL || mBeamBtk->init(modelData, pbtk, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1) == 0) {
+            return 0;
+        }
+        mBeamBtk->setFrame(mBeamBtk->getEndFrame());
 
 #if DEBUG
-    J3DAnmTextureSRTKey* pbtk2 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BTK_EF_BIMOBEAM_ON_e);
-    JUT_ASSERT(840, pbtk != NULL);
+        pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BTK_EF_BIMOBEAM_ON_e);
+        JUT_ASSERT(840, pbtk != NULL);
 #endif
 
-    pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BTK_EF_BIMOBEAM_e);
-    JUT_ASSERT(846, pbtk != NULL);
-    mBeamEffBtk = new mDoExt_btkAnm();
-    if (mBeamEffBtk == NULL || mBeamEffBtk->init(modelData, pbtk, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1) == 0) {
-        return 0;
+        pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(
+            l_arcName, dRes_INDEX_OBJ_BM_BTK_EF_BIMOBEAM_e);
+        JUT_ASSERT(846, pbtk != NULL);
+        mBeamEffBtk = new mDoExt_btkAnm();
+        if (mBeamEffBtk == NULL || mBeamEffBtk->init(modelData, pbtk, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1) == 0) {
+            return 0;
+        }
     }
 
-    J3DAnmTransform* pbck2 = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BCK_EF_BIMOBEAM_e);
-    JUT_ASSERT(858, pbck != NULL);
-    mBeamEffBck = new mDoExt_bckAnm();
-    if (mBeamEffBck == NULL || mBeamEffBck->init(pbck2, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false) == 0) {
-        return 0;
+    {
+        J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BCK_EF_BIMOBEAM_e);
+        JUT_ASSERT(858, pbck != NULL);
+        mBeamEffBck = new mDoExt_bckAnm();
+        if (mBeamEffBck == NULL || mBeamEffBck->init(pbck, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false) == 0) {
+            return 0;
+        }
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BMD_P_BMF_e);
-    JUT_ASSERT(873, modelData != NULL);
-    mBmfModel = mDoExt_J3DModel__create(modelData, J3DMdlFlag_DifferedDLBuffer, 0x11000084);
-    if (mBmfModel == NULL) {
-        return 0;
+    {
+        modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BMD_P_BMF_e);
+        JUT_ASSERT(873, modelData != NULL);
+        mBmfModel = mDoExt_J3DModel__create(modelData, J3DMdlFlag_DifferedDLBuffer, 0x11000084);
+        if (mBmfModel == NULL) {
+            return 0;
+        }
     }
 
-    J3DAnmTransform* pbck3 = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BCK_BMF_OFF_e);
-    JUT_ASSERT(885, pbck != NULL);
-    mBmfOffBck = new mDoExt_bckAnm();
-    if (mBmfOffBck == NULL || mBmfOffBck->init(pbck3, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
-        return 0;
+    {
+        J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BCK_BMF_OFF_e);
+        JUT_ASSERT(885, pbck != NULL);
+        mBmfOffBck = new mDoExt_bckAnm();
+        if (mBmfOffBck == NULL || mBmfOffBck->init(pbck, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
+            return 0;
+        }
+        mBmfOffBck->setPlaySpeed(0.0f);
     }
-    mBmfOffBck->setPlaySpeed(0.0f);
 
     return 1;
 }
@@ -512,8 +537,9 @@ int daObjBm_c::Execute(Mtx** i_mtx) {
 #if DEBUG
     scale.setall(BODY_SCALE);
     mpModel->setBaseScale(scale);
-    daPy_py_c* player = daPy_getPlayerActorClass();
 #endif
+
+    daPy_py_c* player = daPy_getPlayerActorClass();
 
     field_0xff0++;
 
@@ -713,11 +739,19 @@ void daObjBm_c::calcBeamLenAndAt() {
     work.normalizeZP();
     end += work * 1200.0f;
     int frame = mBeamBtk->getFrame() + 0.5f;
-    f32 fVar1 = 360.0f;
+    f32 var_f31 = (f32)frame * 360.0f;
+    if (var_f31 > 1200.0f) {
+        var_f31 = 1200.0f;
+    }
+    f32 absVal = 1200.0f;
 
     if (fopAcM_lc_c::lineCheck(&field_0xfb8, &end, this) && fopAcM_lc_c::checkGroundHit()) {
-        f32 absVal = field_0xfb8.abs(fopAcM_lc_c::getCross());
+        absVal = field_0xfb8.abs(fopAcM_lc_c::getCross());
         mBeamScale.z = absVal / 1200.0f;
+
+        if (1200.0f * mBeamScale.z < var_f31) {
+            var_f31 = 1200.0f * mBeamScale.z;
+        }
     } else {
         mBeamScale.z = 1.0f;
     }
@@ -922,6 +956,8 @@ void daObjBm_c::effectSet1() {}
 void daObjBm_c::effectEnd() {}
 
 int daObjBm_c::check_to_walk() {
+    const int src_num = 5;
+
     int ret = -1;
     bool flag = true;
 
@@ -1045,8 +1081,9 @@ void daObjBm_c::mode_walk() {
     eyePos = current.pos;
 
     if (flag) {
-        const daObjBm_c::BgcSrc_c* bgcSrc = mBgc.M_lin5;
-        mBgc.chk_wall_pre(this, bgcSrc, 5, M_dir_base[field_0x10bc]);
+        const int src_num = 5;
+        const daObjBm_c::BgcSrc_c* bgcSrc = Bgc_c::M_lin5;
+        mBgc.chk_wall_pre(this, bgcSrc, src_num, M_dir_base[field_0x10bc]);
     }
 
     current.pos.x = local_58.x;
@@ -1170,6 +1207,8 @@ void daObjBm_c::Bgc_c::wall_pos(fopAc_ac_c const* i_actor, daObjBm_c::BgcSrc_c c
             if (absVal < field_0x17c) {
                 field_0x17c = absVal;
                 field_0x178 = i;
+            } else {
+                continue;
             }
         } else {
             field_0x64[i] = cXyz::Zero;
@@ -1346,11 +1385,7 @@ void daObjBm_c::initActionAttack() {
         dPa_RM(ID_ZF_S_BM_NESSENSRC01),
     };
 
-    #if DEBUG
     mPlayerDist = fopAcM_searchPlayerDistanceXZ(this) - TARGET_OFFSET_DIST;
-    #else
-    mPlayerDist = fopAcM_searchPlayerDistanceXZ(this);
-    #endif
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     mBeamBtk->init(mBeamModel->getModelData(),
@@ -1592,11 +1627,15 @@ void daObjBm_c::initActionDead() {
 
     field_0xfac = field_0xfaa = 0;
 
-    mBeamosBck->init((J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_ID_OBJ_BM_BCK_OC_DOWN_e), 1,
-                 J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, true);
-    if (mBeamBtk->getBtkAnm() == (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, dRes_ID_OBJ_BM_BTK_EF_BIMOBEAM_ON_e)) {
+    mBeamosBck->init((J3DAnmTransform*)dComIfG_getObjectRes(l_arcName,
+                     dRes_ID_OBJ_BM_BCK_OC_DOWN_e), 1,
+                     J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, true);
+    J3DAnmTextureSRTKey* anmTexSRTKey =
+        (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, dRes_ID_OBJ_BM_BTK_EF_BIMOBEAM_ON_e);
+    if (mBeamBtk->getBtkAnm() == anmTexSRTKey) {
         mBeamBtk->init(mBeamModel->getModelData(),
-                       (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BTK_EF_BIMOBEAMB_OFF_e),
+                       (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(
+                           l_arcName, dRes_INDEX_OBJ_BM_BTK_EF_BIMOBEAMB_OFF_e),
                        1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1);
     }
 

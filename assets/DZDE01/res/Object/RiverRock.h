@@ -1,0 +1,22 @@
+#ifndef RES_RIVERROCK_H
+#define RES_RIVERROCK_H
+
+enum dRes_INDEX_RIVERROCK {
+    /* BMDR */
+    dRes_INDEX_RIVERROCK_BMD_M_RIVERROCK_e=0x4,
+    /* DZB  */
+    dRes_INDEX_RIVERROCK_DZB_M_RIVERROCK_e=0x7,
+};
+
+enum dRes_ID_RIVERROCK {
+    /* BMDR */
+    dRes_ID_RIVERROCK_BMD_M_RIVERROCK_e=0x4,
+    /* DZB  */
+    dRes_ID_RIVERROCK_DZB_M_RIVERROCK_e=0x7,
+};
+
+enum M_RIVERROCK_JNT {
+    M_RIVERROCK_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_RIVERROCK_H */

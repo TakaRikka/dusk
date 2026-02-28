@@ -1,0 +1,22 @@
+#ifndef RES_L6SWGATE_H
+#define RES_L6SWGATE_H
+
+enum dRes_INDEX_L6SWGATE {
+    /* BMDR */
+    dRes_INDEX_L6SWGATE_BMD_LV6_OBJ_SWGATE_e=0x4,
+    /* DZB  */
+    dRes_INDEX_L6SWGATE_DZB_LV6_OBJ_SWGATE_e=0x7,
+};
+
+enum dRes_ID_L6SWGATE {
+    /* BMDR */
+    dRes_ID_L6SWGATE_BMD_LV6_OBJ_SWGATE_e=0x4,
+    /* DZB  */
+    dRes_ID_L6SWGATE_DZB_LV6_OBJ_SWGATE_e=0x7,
+};
+
+enum LV6_OBJ_SWGATE_JNT {
+    LV6_OBJ_SWGATE_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_L6SWGATE_H */

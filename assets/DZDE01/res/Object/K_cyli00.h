@@ -1,0 +1,26 @@
+#ifndef RES_K_CYLI00_H
+#define RES_K_CYLI00_H
+
+enum dRes_INDEX_K_CYLI00 {
+    /* BMDR */
+    dRes_INDEX_K_CYLI00_BMD_K_SIZE_CYLINDER_e=0x4,
+    /* DZB  */
+    dRes_INDEX_K_CYLI00_DZB_K_SIZE_CYL00_e=0x7,
+    dRes_INDEX_K_CYLI00_DZB_K_SIZE_CYL01_e=0x8,
+    dRes_INDEX_K_CYLI00_DZB_K_SIZE_CYL02_e=0x9,
+};
+
+enum dRes_ID_K_CYLI00 {
+    /* BMDR */
+    dRes_ID_K_CYLI00_BMD_K_SIZE_CYLINDER_e=0x4,
+    /* DZB  */
+    dRes_ID_K_CYLI00_DZB_K_SIZE_CYL00_e=0x7,
+    dRes_ID_K_CYLI00_DZB_K_SIZE_CYL01_e=0x8,
+    dRes_ID_K_CYLI00_DZB_K_SIZE_CYL02_e=0x9,
+};
+
+enum K_SIZE_CYLINDER_JNT {
+    K_SIZE_CYLINDER_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_K_CYLI00_H */

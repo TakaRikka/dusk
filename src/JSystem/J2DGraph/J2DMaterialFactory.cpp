@@ -5,7 +5,7 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JUtility/JUTResource.h"
-#include <string>
+#include <cstring>
 #include <dolphin/types.h>
 
 J2DMaterialFactory::J2DMaterialFactory(J2DMaterialBlock const& param_0) {

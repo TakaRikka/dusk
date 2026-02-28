@@ -11,6 +11,7 @@
 #include "d/d_a_obj.h"
 #include "d/d_meter2_info.h"
 #include "f_op/f_op_kankyo_mng.h"
+#include <cstring>
 
 enum TKS_RES_File_ID {
     /* BCK */

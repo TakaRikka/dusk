@@ -10,6 +10,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_bg_w.h"
 #include "d/d_path.h"
+#include <cstring>
 
 static const Vec l_swOffset = {
     0.0f,

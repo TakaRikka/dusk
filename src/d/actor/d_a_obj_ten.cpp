@@ -15,6 +15,7 @@
 #include "SSystem/SComponent/c_lib.h"
 #include "m_Do/m_Do_lib.h"
 #include "d/d_menu_insect.h"
+#include <cstring>
 
 daObj_TenHIO_c::daObj_TenHIO_c() {
     field_0x4 = -1;

@@ -1,0 +1,24 @@
+#ifndef RES_L7PROP_H
+#define RES_L7PROP_H
+
+enum dRes_INDEX_L7PROP {
+    /* BMDR */
+    dRes_INDEX_L7PROP_BMD_S_LV7PROP_00_e=0x3,
+    dRes_INDEX_L7PROP_BMD_S_LV7PROP_01_e=0x4,
+};
+
+enum dRes_ID_L7PROP {
+    /* BMDR */
+    dRes_ID_L7PROP_BMD_S_LV7PROP_00_e=0x3,
+    dRes_ID_L7PROP_BMD_S_LV7PROP_01_e=0x4,
+};
+
+enum S_LV7PROP_00_JNT {
+    S_LV7PROP_00_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum S_LV7PROP_01_JNT {
+    S_LV7PROP_01_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_L7PROP_H */

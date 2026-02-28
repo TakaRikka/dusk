@@ -201,10 +201,12 @@ struct J3DTevOrder : public J3DTevOrderInfo {
     J3DTevOrder() {
         J3DTevOrderInfo::operator=(j3dDefaultTevOrderInfoNull);
     }
-    J3DTevOrder(const J3DTevOrderInfo& info) : J3DTevOrderInfo(info) {}
+    J3DTevOrder(const J3DTevOrderInfo& info) {
+        J3DTevOrderInfo::operator=(info);
+    }
     J3DTevOrderInfo& getTevOrderInfo() { return *this; }
 
-    u8 getTexMap() { return mTexMap; }
+    u8 getTexMap() const { return mTexMap; }
 };
 
 extern u8 j3dTevSwapTableTable[1024];

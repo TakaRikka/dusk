@@ -21,16 +21,16 @@ public:
     void registTex(JPATexture*);
     u32 getResUserWork(u16) const;
 
-    void load(u16 idx, GXTexMapID texMapID) { mpTexArr[idx]->load(texMapID); }
+    void load(u16 idx, GXTexMapID texMapID) { pTexAry[idx]->load(texMapID); }
 
 public:
     /* 0x00 */ JKRHeap* mpHeap;
-    /* 0x04 */ JPAResource** mpResArr;
-    /* 0x08 */ JPATexture** mpTexArr;
-    /* 0x0C */ u16 mResMax;
-    /* 0x0E */ u16 mResNum;
-    /* 0x10 */ u16 mTexMax;
-    /* 0x12 */ u16 mTexNum;
+    /* 0x04 */ JPAResource** pResAry;
+    /* 0x08 */ JPATexture** pTexAry;
+    /* 0x0C */ u16 resMaxNum;
+    /* 0x0E */ u16 resRegNum;
+    /* 0x10 */ u16 texMaxNum;
+    /* 0x12 */ u16 texRegNum;
 };
 
 #endif /* JPARESOURCEMANAGER_H */

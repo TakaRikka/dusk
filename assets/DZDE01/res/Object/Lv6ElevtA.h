@@ -1,0 +1,22 @@
+#ifndef RES_LV6ELEVTA_H
+#define RES_LV6ELEVTA_H
+
+enum dRes_INDEX_LV6ELEVTA {
+    /* BMDR */
+    dRes_INDEX_LV6ELEVTA_BMD_LV6_ELEVETOR_B_e=0x4,
+    /* DZB  */
+    dRes_INDEX_LV6ELEVTA_DZB_LV6_ELEVETOR_B_e=0x7,
+};
+
+enum dRes_ID_LV6ELEVTA {
+    /* BMDR */
+    dRes_ID_LV6ELEVTA_BMD_LV6_ELEVETOR_B_e=0x4,
+    /* DZB  */
+    dRes_ID_LV6ELEVTA_DZB_LV6_ELEVETOR_B_e=0x7,
+};
+
+enum LV6_ELEVETOR_B_JNT {
+    LV6_ELEVETOR_B_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_LV6ELEVTA_H */

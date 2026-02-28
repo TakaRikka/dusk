@@ -8,7 +8,7 @@
 #include "JSystem/JUtility/JUTException.h"
 #include <dolphin/ar.h>
 #include <dolphin/os.h>
-#include <string>
+#include <cstring>
 
 #if PLATFORM_GCN
 const u32 stack_size = 0xc00;

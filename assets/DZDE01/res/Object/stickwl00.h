@@ -1,0 +1,22 @@
+#ifndef RES_STICKWL00_H
+#define RES_STICKWL00_H
+
+enum dRes_INDEX_STICKWL00 {
+    /* BMDR */
+    dRes_INDEX_STICKWL00_BMD_K_STICKWALL_00_e=0x4,
+    /* DZB  */
+    dRes_INDEX_STICKWL00_DZB_K_STICKWALL_00_e=0x7,
+};
+
+enum dRes_ID_STICKWL00 {
+    /* BMDR */
+    dRes_ID_STICKWL00_BMD_K_STICKWALL_00_e=0x4,
+    /* DZB  */
+    dRes_ID_STICKWL00_DZB_K_STICKWALL_00_e=0x7,
+};
+
+enum K_STICKWALL_00_JNT {
+    K_STICKWALL_00_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_STICKWL00_H */

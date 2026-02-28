@@ -418,7 +418,7 @@ void daSpiral_c::initProc(int param_0) {
 void daSpiral_c::initOpenDemo(int param_0) {
     shape_angle.y = current.angle.y;
     if (field_0x62c == 1) {
-        shape_angle.y += (s16)0x7FFF;
+        ANGLE_ADD(shape_angle.y, 0x7FFF);
     }
 
     mStaffId = dComIfGp_evmng_getMyStaffId("SHUTTER_DOOR", NULL, 0);
@@ -559,7 +559,7 @@ int daSpiral_c::actionWait() {
     fopAc_ac_c* door = dComIfGp_event_getDoorPartner();
     if (door == this) {
         shape_angle.y = current.angle.y;
-        shape_angle.y += (s16)0x7FFF;
+        ANGLE_ADD(shape_angle.y, 0x7FFF);
         mStaffId = dComIfGp_evmng_getMyStaffId("PARTNER_DOOR", NULL, 0);
         setAction(daSpiral_ACT_DEMO_e);
         eventInfo.setEventId(mEventIds[mDemoMode]);
@@ -573,7 +573,7 @@ int daSpiral_c::actionWait() {
             mStaffId = dComIfGp_evmng_getMyStaffId("SHUTTER_DOOR", NULL, 0);
             shape_angle.y = current.angle.y;
             if (field_0x62c == 1) {
-                shape_angle.y += (s16)0x7FFF;
+                ANGLE_ADD(shape_angle.y, 0x7FFF);
             }
             setAction(daSpiral_ACT_DEMO_e);
             demoProc();
@@ -667,10 +667,10 @@ void daSpiral_c::setNextSpiral() {
     s16 pl_angle = (s16)door->current.angle.y;
     if (mType == daSpiral_TYPE_DOWN_e) {
         pl_pos = l_spiral_path_point_u[0];
-        pl_angle += (s16)0x4000;
+        ANGLE_ADD(pl_angle, 0x4000);
     } else {
         pl_pos = l_spiral_path_point_d[0];
-        pl_angle -= (s16)0x4000;
+        ANGLE_SUB(pl_angle, 0x4000);
     }
 
     mDoMtx_stack_c::transS(door->current.pos.x, door->current.pos.y, door->current.pos.z);
@@ -829,7 +829,7 @@ void daSpiral_c::debugDraw() {
 
     s16 var_r25 = current.angle.y;
     if (field_0x62c == 1) {
-        var_r25 += (s16)0x7FFF;
+        ANGLE_ADD(var_r25, 0x7FFF);
     }
 
     mDoMtx_stack_c::YrotS(var_r25);
@@ -1083,7 +1083,7 @@ void dSpiral_stop_c::calcMtx(daSpiral_c* i_spiral) {
 
     s16 angle = i_spiral->current.angle.y;
     if (field_0x72 == 1) {
-        angle += (s16)0x7FFF;
+        ANGLE_ADD(angle, 0x7FFF);
     }
 
     mDoMtx_stack_c::transS(pos.x, pos.y, pos.z);

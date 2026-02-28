@@ -5,6 +5,7 @@
 #include "d/actor/d_a_npc_fish.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
+#include <cstring>
 
 static int daNpc_Fish_Draw(npc_fish_class* i_this) {
     return 1;

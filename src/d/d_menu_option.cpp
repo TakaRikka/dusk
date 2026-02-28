@@ -22,7 +22,7 @@
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
-#include <string>
+#include <cstring>
 
 typedef void (dMenu_Option_c::*initFunc)();
 static initFunc init[] = {

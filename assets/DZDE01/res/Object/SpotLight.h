@@ -1,0 +1,22 @@
+#ifndef RES_SPOTLIGHT_H
+#define RES_SPOTLIGHT_H
+
+enum dRes_INDEX_SPOTLIGHT {
+    /* BMDR */
+    dRes_INDEX_SPOTLIGHT_BMD_H_SPOTLIGHT_e=0x4,
+    /* BTK  */
+    dRes_INDEX_SPOTLIGHT_BTK_H_SPOTLIGHT_e=0x7,
+};
+
+enum dRes_ID_SPOTLIGHT {
+    /* BMDR */
+    dRes_ID_SPOTLIGHT_BMD_H_SPOTLIGHT_e=0x4,
+    /* BTK  */
+    dRes_ID_SPOTLIGHT_BTK_H_SPOTLIGHT_e=0x7,
+};
+
+enum H_SPOTLIGHT_JNT {
+    H_SPOTLIGHT_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_SPOTLIGHT_H */

@@ -8,7 +8,7 @@
 #include "JSystem/JAudio2/JASWaveInfo.h"
 #include <dolphin/os.h>
 
-class JASDSPChannel;
+struct JASDSPChannel;
 
 namespace JASDsp {
     struct TChannel;

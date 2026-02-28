@@ -1,0 +1,22 @@
+#ifndef RES_L6FURIKO_H
+#define RES_L6FURIKO_H
+
+enum dRes_INDEX_L6FURIKO {
+    /* BMDE */
+    dRes_INDEX_L6FURIKO_BMD_LV6_OBJ_HURIKO_e=0x4,
+    /* DZB  */
+    dRes_INDEX_L6FURIKO_DZB_LV6_OBJ_HURIKO_e=0x7,
+};
+
+enum dRes_ID_L6FURIKO {
+    /* BMDE */
+    dRes_ID_L6FURIKO_BMD_LV6_OBJ_HURIKO_e=0x4,
+    /* DZB  */
+    dRes_ID_L6FURIKO_DZB_LV6_OBJ_HURIKO_e=0x7,
+};
+
+enum LV6_OBJ_HURIKO_JNT {
+    LV6_OBJ_HURIKO_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_L6FURIKO_H */

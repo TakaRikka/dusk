@@ -4,7 +4,7 @@
  */
 
 #include "SSystem/SComponent/c_lib.h"
-#include <string>
+#include <cstring>
 #include "SSystem/SComponent/c_math.h"
 
 /**

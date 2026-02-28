@@ -1,0 +1,38 @@
+#ifndef RES_ASH1_H
+#define RES_ASH1_H
+
+enum dRes_INDEX_ASH1 {
+    /* BCK  */
+    dRes_INDEX_ASH1_BCK_ASH_ASK_e=0x3,
+    dRes_INDEX_ASH1_BCK_ASH_COOL_e=0x4,
+    dRes_INDEX_ASH1_BCK_ASH_EXPLAIN_A_e=0x5,
+    dRes_INDEX_ASH1_BCK_ASH_EXPLAIN_B_e=0x6,
+    dRes_INDEX_ASH1_BCK_ASH_F_ASK_e=0x7,
+    dRes_INDEX_ASH1_BCK_ASH_F_COOL_e=0x8,
+    dRes_INDEX_ASH1_BCK_ASH_F_EXPLAIN_A_e=0x9,
+    dRes_INDEX_ASH1_BCK_ASH_F_EXPLAIN_B_e=0xA,
+    dRes_INDEX_ASH1_BCK_ASH_F_SILENT_e=0xB,
+    dRes_INDEX_ASH1_BCK_ASH_F_TALK_B_e=0xC,
+    dRes_INDEX_ASH1_BCK_ASH_STEP_e=0xD,
+    dRes_INDEX_ASH1_BCK_ASH_WAIT_B_e=0xE,
+    dRes_INDEX_ASH1_BCK_ASH_WAIT_C_e=0xF,
+};
+
+enum dRes_ID_ASH1 {
+    /* BCK  */
+    dRes_ID_ASH1_BCK_ASH_ASK_e=0x3,
+    dRes_ID_ASH1_BCK_ASH_COOL_e=0x4,
+    dRes_ID_ASH1_BCK_ASH_EXPLAIN_A_e=0x5,
+    dRes_ID_ASH1_BCK_ASH_EXPLAIN_B_e=0x6,
+    dRes_ID_ASH1_BCK_ASH_F_ASK_e=0x7,
+    dRes_ID_ASH1_BCK_ASH_F_COOL_e=0x8,
+    dRes_ID_ASH1_BCK_ASH_F_EXPLAIN_A_e=0x9,
+    dRes_ID_ASH1_BCK_ASH_F_EXPLAIN_B_e=0xA,
+    dRes_ID_ASH1_BCK_ASH_F_SILENT_e=0xB,
+    dRes_ID_ASH1_BCK_ASH_F_TALK_B_e=0xC,
+    dRes_ID_ASH1_BCK_ASH_STEP_e=0xD,
+    dRes_ID_ASH1_BCK_ASH_WAIT_B_e=0xE,
+    dRes_ID_ASH1_BCK_ASH_WAIT_C_e=0xF,
+};
+
+#endif /* !RES_ASH1_H */

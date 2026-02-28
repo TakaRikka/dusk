@@ -90,7 +90,7 @@ struct J3DTexCoord : public J3DTexCoordInfo {
         mTexMtxReg = mTexGenMtx;
     }
     void setTexCoordInfo(const J3DTexCoordInfo& info) {
-        __memcpy(this, &info, sizeof(J3DTexCoordInfo));
+        J3DTexCoordInfo::operator=(info);
     }
 
     u8 getTexGenType() const { return mTexGenType; }

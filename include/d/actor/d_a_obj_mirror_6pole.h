@@ -43,11 +43,11 @@ public:
     void setAnmSpeed(f32 speed) { mpBck->setPlaySpeed(speed); }
 
     bool isSwitch() {
-        return fopAcM_isSwitch(this, getSwitchNo()) ||
-               /* dSv_event_flag_c::F_0361 - Arbiter's Grounds - Spun the spinning pillars */
-               dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[361]) ||
-               /* dSv_event_flag_c::F_0354 - Cutscene - [cutscene] Mirror complete */
-               dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[354]);
+        return (fopAcM_isSwitch(this, getSwitchNo()) ||
+                /* dSv_event_flag_c::F_0361 - Arbiter's Grounds - Spun the spinning pillars */
+                dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[361]) ||
+                /* dSv_event_flag_c::F_0354 - Cutscene - [cutscene] Mirror complete */
+                dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[354])) != false;
     }
 
     inline void setAction(Mode_e i_action);

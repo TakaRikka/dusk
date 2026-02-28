@@ -1,0 +1,42 @@
+#ifndef RES_WCN_A2_H
+#define RES_WCN_A2_H
+
+enum dRes_INDEX_WCN_A2 {
+    /* BMDR */
+    dRes_INDEX_WCN_A2_BMD_WCN_A2_e=0x4,
+    /* BTP  */
+    dRes_INDEX_WCN_A2_BTP_WCN_A2_e=0x7,
+};
+
+enum dRes_ID_WCN_A2 {
+    /* BMDR */
+    dRes_ID_WCN_A2_BMD_WCN_A2_e=0x4,
+    /* BTP  */
+    dRes_ID_WCN_A2_BTP_WCN_A2_e=0x7,
+};
+
+enum WCN_A2_JNT {
+    WCN_A2_JNT_CENTER_e=0x0,
+    WCN_A2_JNT_BACKBONE_e=0x1,
+    WCN_A2_JNT_NECK_e=0x2,
+    WCN_A2_JNT_HEAD_e=0x3,
+    WCN_A2_JNT_SHOULDERL_e=0x4,
+    WCN_A2_JNT_ARML1_e=0x5,
+    WCN_A2_JNT_ARML2_e=0x6,
+    WCN_A2_JNT_HANDL_e=0x7,
+    WCN_A2_JNT_SHOULDERR_e=0x8,
+    WCN_A2_JNT_ARMR1_e=0x9,
+    WCN_A2_JNT_ARMR2_e=0xA,
+    WCN_A2_JNT_HANDR_e=0xB,
+    WCN_A2_JNT_WAIST_e=0xC,
+    WCN_A2_JNT_LEGL1_e=0xD,
+    WCN_A2_JNT_LEGL2_e=0xE,
+    WCN_A2_JNT_FOOTL_e=0xF,
+    WCN_A2_JNT_SKIRTL_e=0x10,
+    WCN_A2_JNT_LEGR1_e=0x11,
+    WCN_A2_JNT_LEGR2_e=0x12,
+    WCN_A2_JNT_FOOTR_e=0x13,
+    WCN_A2_JNT_SKIRTR_e=0x14,
+};
+
+#endif /* !RES_WCN_A2_H */

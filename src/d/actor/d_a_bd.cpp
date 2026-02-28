@@ -13,6 +13,7 @@
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera_mng.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 
 

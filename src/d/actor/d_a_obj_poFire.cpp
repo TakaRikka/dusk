@@ -221,8 +221,8 @@ void daPoFire_c::modeWait() {
     if (eventInfo.checkCommandCatch()) {
         init_modeWaitSetEffect();
     } else {
-        dComIfGp_att_CatchRequest(this, itemNo[mActorID], l_HIO.mPickupRange, 70.0f, -70.0f, 0x5000,
-                                  1);
+        int result = dComIfGp_att_CatchRequest(this, itemNo[mActorID], l_HIO.mPickupRange, 70.0f,
+                                               -70.0f, 0x5000, 1);
         eventInfo.onCondition(dEvtCnd_40_e);
     }
     current.pos.y = unk5D4 + l_HIO.mWaitVertRange * cM_ssin(cM_deg2s(unk5D8 * l_HIO.mWaitPeriod));

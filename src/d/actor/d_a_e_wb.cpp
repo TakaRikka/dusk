@@ -18,6 +18,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include "res/Object/Always.h"
+#include <cstring>
 
 
 class daE_WB_HIO_c : public JORReflexible {
@@ -1657,7 +1658,7 @@ static void e_wb_b_run(e_wb_class* i_this) {
 
             i_this->mMovementType = 1;
             break;
-        case 3: 
+        case 3:
             i_this->mPursuitFlag = 1;
             target_speed = l_HIO.max_speed;
             acceleration = 3.0f;
@@ -1939,7 +1940,7 @@ static void e_wb_b_ikki(e_wb_class* i_this) {
         } else if (a_this->speedF < 1.0f) {
             anm_init(i_this, 0x2a, 10.0f, 2, 1.0f);
             i_this->mActionMode = 6;
-            i_this->mTargetFacingAngle += (s16)0x8000;
+            ANGLE_ADD(i_this->mTargetFacingAngle, 0x8000);
         }
         break;
     case 6:
@@ -2201,7 +2202,7 @@ static void e_wb_b_ikki2(e_wb_class* i_this) {
         } else if (a_this->speedF < 1.0f) {
             anm_init(i_this, 0x2a, 10.0f, 2, 1.0f);
             i_this->mActionMode = 6;
-            i_this->mTargetFacingAngle += (s16)0x8000;
+            ANGLE_ADD(i_this->mTargetFacingAngle, 0x8000);
         }
     } break;
 
@@ -2374,7 +2375,7 @@ static void e_wb_a_run(e_wb_class* i_this) {
 
         if (i_this->field_0x698[0] == 0) {
             i_this->field_0x698[0] = cM_rndF(30.0f) + 10.0f;
-            i_this->mTargetFacingAngle += (s16)cM_rndFX(10000.0f);
+            ANGLE_ADD(i_this->mTargetFacingAngle, cM_rndFX(10000.0f));
         }
 
         if (i_this->field_0x698[1] == 1 || i_this->mSpeedCapTimer == 2) {
@@ -2457,10 +2458,10 @@ static int e_wb_damage(e_wb_class* i_this) {
         i_this->mActionMode = 1;
         a_this->speedF = -15.0f + YREG_F(0);
         a_this->speed.y = 50.0f + YREG_F(1) + cM_rndF(20.0f);
-        a_this->current.angle.y += (s16)cM_rndFX(3000.0f);
+        ANGLE_ADD(a_this->current.angle.y, cM_rndFX(3000.0f));
         i_this->mStatusFlags |= (u16)0x40;
         break;
-        
+
     case 1:
         if (i_this->mAcch.ChkGroundHit()) {
             i_this->mActionMode = 2;
@@ -2470,7 +2471,7 @@ static int e_wb_damage(e_wb_class* i_this) {
             i_this->field_0x6b4.y = (s16)cM_rndFX(2000.0f + YREG_F(4));
         }
         break;
-        
+
     case 2:
         if (i_this->mpModelMorf->isStop()) {
             i_this->mActionMode = 3;
@@ -2484,7 +2485,7 @@ static int e_wb_damage(e_wb_class* i_this) {
             i_this->field_0x698[0] = (s16)(cM_rndF(40.0f) + 70.0f);
         }
         break;
-        
+
     case 3:
         local_48 = TRUE;
         if (i_this->mpModelMorf->isStop()) {
@@ -2494,12 +2495,12 @@ static int e_wb_damage(e_wb_class* i_this) {
                 anm_init(i_this, 0x13, 3.0f, 2, 1.0f);
             }
         }
-        
+
         if (i_this->mAcch.ChkGroundHit()) {
             a_this->speedF = 0.0f;
             cLib_addCalcAngleS2(&i_this->field_0x6b4.y, 0, 1, 0x96 + YREG_S(3));
         }
-        
+
         if (i_this->field_0x698[0] == 0 && i_this->field_0x6ae.x > -0x200) {
             if (i_this->field_0x6e4 == 0) {
                 anm_init(i_this, 0x10, 2.0f, 0, 1.0f);
@@ -2509,7 +2510,7 @@ static int e_wb_damage(e_wb_class* i_this) {
             i_this->mActionMode = 4;
         }
         break;
-        
+
     case 4:
         if (i_this->mpModelMorf->isStop()) {
             i_this->mActionID = ACT_WAIT;
@@ -2537,9 +2538,9 @@ static int e_wb_bg_damage(e_wb_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz local_30, unused;
     BOOL return_value = FALSE;
-    
+
     i_this->field_0x6a0 = 10;
-    
+
     switch (i_this->mActionMode) {
     case 0:
         dKy_Sound_set(a_this->current.pos, 100, fopAcM_GetID(&i_this->mEnemy), 5);
@@ -2549,7 +2550,7 @@ static int e_wb_bg_damage(e_wb_class* i_this) {
         i_this->mStatusFlags |= (u16)0x80;
         i_this->field_0x1432 = 0;
         break;
-        
+
     case 1:
         if (i_this->mpModelMorf->isStop()) {
             i_this->mActionMode = 2;
@@ -2557,7 +2558,7 @@ static int e_wb_bg_damage(e_wb_class* i_this) {
             i_this->field_0x698[0] = (s16)(cM_rndF(60.0f) + 150.0f);
         }
         break;
-        
+
     case 2:
         return_value = TRUE;
         if (i_this->field_0x698[0] == 0) {
@@ -2565,7 +2566,7 @@ static int e_wb_bg_damage(e_wb_class* i_this) {
             i_this->mActionMode = 3;
         }
         break;
-        
+
     case 3:
         if (i_this->mpModelMorf->isStop()) {
             i_this->mActionID = ACT_WAIT;
@@ -2573,7 +2574,7 @@ static int e_wb_bg_damage(e_wb_class* i_this) {
         }
         break;
     }
-    
+
     return return_value;
 }
 
@@ -2582,9 +2583,9 @@ static int e_wb_lr_damage(e_wb_class* i_this) {
     cXyz local_2c;
     cXyz local_38;
     BOOL return_value = FALSE;
-    
+
     i_this->field_0x6a0 = 10;
-    
+
     switch (i_this->mActionMode) {
     case 0: {
         if (cM_rndF(1.0f) < 0.5f || i_this->field_0x1720 != 0) {
@@ -2682,7 +2683,7 @@ static int e_wb_lr_damage(e_wb_class* i_this) {
 
     cLib_addCalc0(&a_this->speedF, 1.0f, 1.5f + YREG_F(11));
     i_this->field_0x6ae.y += i_this->field_0x6b4.y;
-    
+
     return return_value;
 }
 
@@ -2700,15 +2701,15 @@ static void e_wb_kiba_start(e_wb_class* i_this) {
     default:
         break;
     }
-    
+
     cLib_addCalc2(&a_this->speedF, target, 1.0f, 5.0f);
 }
 
 static void e_wb_kiba_end(e_wb_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
-    
+
     i_this->field_0x6a0 = 10;
-    
+
     switch (i_this->mActionMode) {
     case 0:
         if (i_this->mAnmID != 0x20) {
@@ -2717,7 +2718,7 @@ static void e_wb_kiba_end(e_wb_class* i_this) {
         i_this->mActionMode = 1;
         i_this->field_0x169e = 1;
         break;
-        
+
     case 1:
         i_this->mMovementType = 1;
         i_this->mAnimDuration = 60.0f + YREG_F(10);
@@ -2733,14 +2734,14 @@ static void e_wb_kiba_end(e_wb_class* i_this) {
             i_this->mStatusFlags |= (u16)0x100;
         }
         break;
-        
+
     case 2:
         if (a_this->speed.y < 10.0f) {
             anm_init(i_this, 0x19, 10.0f, 0, 1.0f);
             i_this->mActionMode = 3;
         }
         break;
-        
+
     case 3:
         if (i_this->mAnmID == 0x19) {
             if (a_this->speed.y < -30.0f + JREG_F(9) || i_this->mAcch.ChkGroundHit()) {
@@ -2757,28 +2758,28 @@ static void e_wb_kiba_end(e_wb_class* i_this) {
     case 4:
         break;
     }
-    
+
     cLib_addCalc2(&a_this->speedF, 40.0f, 1.0f, 5.0f);
 }
 
 static void damage_check(e_wb_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    
+
     a_this->health = 100;
-    
+
     if (i_this->field_0x6ba != 0) {
         i_this->field_0x6ba--;
     }
-    
+
     for (int i = 0; i <= 2; i++) {
         if (i_this->field_0xa00[i].ChkCoHit()) {
             fopAc_ac_c* hit_actor = dCc_GetAc(i_this->field_0xa00[i].GetCoHitObj()->GetAc());
 
-            if (!daAlink_getAlinkActorClass()->checkBoarRideOwn(a_this) && 
+            if (!daAlink_getAlinkActorClass()->checkBoarRideOwn(a_this) &&
                 i_this->field_0x6a0 == 0 && a_this->speedF < 1.0f &&
                 fopAcM_GetName(hit_actor) == PROC_ALINK) {
-                i_this->field_0x6ba += (s16)2;
+                ANGLE_ADD(i_this->field_0x6ba, 2);
                 if (i_this->field_0x6ba >= 150) {
                     i_this->field_0x692 = i_this->mActionID;
                     i_this->mActionID = ACT_S_DAMAGE;
@@ -2805,7 +2806,7 @@ static void damage_check(e_wb_class* i_this) {
             if (i_this->field_0x79d >= 2 && a_this->speedF >= 30.0f) {
                 i_this->mZ2Ride.startCreatureVoice(Z2SE_EN_RDB_V_RUNDOWN, -1);
                 i_this->mZ2Ride.startCreatureSound(Z2SE_EN_BB_RUNDOWN, 0, -1);
-                
+
                 e_rd_class* rider = (e_rd_class*)fopAcM_SearchByID(i_this->field_0x1434);
                 rider->field_0x998 = 20;
             } else {
@@ -2820,13 +2821,13 @@ static void damage_check(e_wb_class* i_this) {
                         {
                             cXyz pos_diff = hit_actor->current.pos - a_this->current.pos;
                             s16 angle = cM_atan2s(pos_diff.x, pos_diff.z) - a_this->shape_angle.y;
-                            
+
                             if (angle < 0) {
                                 i_this->field_0x5de = 0x1000;
-                                a_this->current.angle.y += (s16)0x800;
+                                ANGLE_ADD(a_this->current.angle.y, 0x800);
                             } else {
                                 i_this->field_0x5de = -0x1000;
-                                a_this->current.angle.y -= (s16)0x800;
+                                ANGLE_SUB(a_this->current.angle.y, 0x800);
                             }
                         }
                     }
@@ -2834,16 +2835,16 @@ static void damage_check(e_wb_class* i_this) {
             }
         }
     }
-    
+
     i_this->mStts.Move();
-    
+
     if (i_this->field_0x6a0 == 0) {
         dCcU_AtInfo at_info;
-        
+
         for (int i = 0; i <= 6; i++) {
             if (i_this->field_0xa00[i].ChkTgHit()) {
                 i_this->field_0x13c0.mpCollider = i_this->field_0xa00[i].GetTgHitObj();
-                
+
                 if (i_this->field_0x79d != 0 || (daPy_getPlayerActorClass()->checkHorseRide() &&
                         (i_this->mStatusFlags & 3) != 0)) {
                     if (i_this->field_0x79d != 0) {
@@ -2852,7 +2853,7 @@ static void damage_check(e_wb_class* i_this) {
                 } else {
                     at_power_check(&i_this->field_0x13c0);
                     cc_at_check(a_this, &i_this->field_0x13c0);
-                    
+
                     if ((i_this->mStatusFlags & 3) != 0) {
                         if (i_this->field_0x13c0.mAttackPower < 30) {
                             i_this->field_0x692 = i_this->mActionID;
@@ -2866,13 +2867,13 @@ static void damage_check(e_wb_class* i_this) {
                         i_this->mActionMode = 0;
                     }
                 }
-                
+
                 if (i_this->field_0x13c0.mpCollider->ChkAtType(AT_TYPE_UNK)) {
                     i_this->field_0x6a0 = 20;
                 } else {
                     i_this->field_0x6a0 = 10;
                 }
-                
+
                 i_this->mAnimDuration = 30.0f;
                 return;
             }
@@ -2886,19 +2887,19 @@ static void effect_set(e_wb_class* i_this) {
     cXyz effect_pos;
     dBgS_GndChk gnd_chk;
     dBgS_ObjGndChk_Spl obj_gnd_chk;
-    
+
     pos = a_this->current.pos;
     pos.y += 100.0f;
     gnd_chk.SetPos(&pos);
     obj_gnd_chk.SetPos(&pos);
-    
+
     s8 is_water = false;
     s8 in_water = false;
     f32 ground_y = dComIfG_Bgsp().GroundCross(&gnd_chk);
     if (dComIfG_Bgsp().GroundCross(&obj_gnd_chk) - ground_y > 0.0f) {
         is_water = true;
     }
-    
+
     if (i_this->mMovementType == 1) {
         if (i_this->mpModelMorf->checkFrame(11.0f)) {
             i_this->mCollisionFlags |= (u8)4;
@@ -2909,7 +2910,7 @@ static void effect_set(e_wb_class* i_this) {
         pos.set(0.0f, 0.0f, 0.0f);
         J3DModel* model = i_this->mpModelMorf->getModel();
         int foot_idx = (i_this->field_0x68e & 2) >> 1;
-        
+
         static int footd[2] = {
             6,
             10,
@@ -2926,49 +2927,49 @@ static void effect_set(e_wb_class* i_this) {
             MTXCopy(model->getAnmMtx(footd[foot_idx]), *calc_mtx);
         }
         MtxPosition(&pos, &effect_pos);
-        
+
         if (is_water) {
             in_water = true;
         } else if ((i_this->field_0x68e & 1) == 0) {
-            fopAcM_effSmokeSet2(&i_this->field_0x13e8[foot_idx], 
+            fopAcM_effSmokeSet2(&i_this->field_0x13e8[foot_idx],
                                &i_this->field_0x1408[foot_idx], &effect_pos, &a_this->shape_angle, a_this->scale.z * 2.0f, &a_this->tevStr);
         }
     }
-    
+
     if (i_this->mCollisionFlags != 0) {
         J3DModel* model = i_this->mpModelMorf->getModel();
         pos.set(0.0f, 0.0f, 0.0f);
-        
+
         if ((i_this->mCollisionFlags & 1) != 0) {
             MTXCopy(model->getAnmMtx(10), *calc_mtx);
             MtxPosition(&pos, &effect_pos);
             if (is_water) {
                 in_water = true;
             } else {
-                fopAcM_effSmokeSet2(i_this->field_0x13e8 + 1, 
+                fopAcM_effSmokeSet2(i_this->field_0x13e8 + 1,
                                    i_this->field_0x1408 + 1, &effect_pos, &a_this->shape_angle, a_this->scale.z * 2.0f, &a_this->tevStr);
                 if (i_this->mMovementType != 0) {
-                    i_this->field_0x13fc = dComIfGp_particle_set(i_this->field_0x13fc, dPa_RM(ID_ZI_S_WBCLOD_A), 
+                    i_this->field_0x13fc = dComIfGp_particle_set(i_this->field_0x13fc, dPa_RM(ID_ZI_S_WBCLOD_A),
                                                                  &effect_pos, &a_this->shape_angle, 0);
                 }
             }
         }
-        
+
         if ((i_this->mCollisionFlags & 2) != 0) {
             MTXCopy(model->getAnmMtx(6), *calc_mtx);
             MtxPosition(&pos, &effect_pos);
             if (is_water) {
                 in_water = true;
             } else {
-                fopAcM_effSmokeSet2(i_this->field_0x13e8, 
+                fopAcM_effSmokeSet2(i_this->field_0x13e8,
                                    i_this->field_0x1408, &effect_pos, &a_this->shape_angle, a_this->scale.z * 2.0f, &a_this->tevStr);
                 if (i_this->mMovementType != 0) {
-                    i_this->field_0x13f8 = dComIfGp_particle_set(i_this->field_0x13f8, dPa_RM(ID_ZI_S_WBCLOD_A), 
+                    i_this->field_0x13f8 = dComIfGp_particle_set(i_this->field_0x13f8, dPa_RM(ID_ZI_S_WBCLOD_A),
                                                                  &effect_pos, &a_this->shape_angle, 0);
                 }
             }
         }
-        
+
         if ((i_this->mCollisionFlags & 4) != 0) {
             if (i_this->field_0x79d != 0) {
                 MTXCopy(model->getAnmMtx(29), *calc_mtx);
@@ -2979,15 +2980,15 @@ static void effect_set(e_wb_class* i_this) {
             if (is_water) {
                 in_water = true;
             } else {
-                fopAcM_effSmokeSet2(&i_this->field_0x13f0, 
+                fopAcM_effSmokeSet2(&i_this->field_0x13f0,
                                    &i_this->field_0x1410, &effect_pos, &a_this->shape_angle, a_this->scale.z * 2.0f, &a_this->tevStr);
                 if (i_this->mMovementType != 0) {
-                    i_this->field_0x1400 = dComIfGp_particle_set(i_this->field_0x1400, dPa_RM(ID_ZI_S_WBCLOD_A), 
+                    i_this->field_0x1400 = dComIfGp_particle_set(i_this->field_0x1400, dPa_RM(ID_ZI_S_WBCLOD_A),
                                                                  &effect_pos, &a_this->shape_angle, 0);
                 }
             }
         }
-        
+
         if ((i_this->mCollisionFlags & 8) != 0) {
             if (i_this->field_0x79d != 0) {
                 MTXCopy(model->getAnmMtx(24), *calc_mtx);
@@ -2998,16 +2999,16 @@ static void effect_set(e_wb_class* i_this) {
             if (is_water) {
                 in_water = true;
             } else {
-                fopAcM_effSmokeSet2(&i_this->field_0x13f4, 
+                fopAcM_effSmokeSet2(&i_this->field_0x13f4,
                                    &i_this->field_0x1414, &effect_pos, &a_this->shape_angle, a_this->scale.z * 2.0f, &a_this->tevStr);
                 if (i_this->mMovementType != 0) {
-                    i_this->field_0x1404 = dComIfGp_particle_set(i_this->field_0x1404, dPa_RM(ID_ZI_S_WBCLOD_A), 
+                    i_this->field_0x1404 = dComIfGp_particle_set(i_this->field_0x1404, dPa_RM(ID_ZI_S_WBCLOD_A),
                                                                  &effect_pos, &a_this->shape_angle, 0);
                 }
             }
         }
     }
-    
+
     if (i_this->mLandingFlag != 0) {
         if (is_water) {
             in_water = true;
@@ -3016,11 +3017,11 @@ static void effect_set(e_wb_class* i_this) {
             MTXCopy(i_this->mpModelMorf->getModel()->getAnmMtx(i_this->field_0x688 + 0xb),
                     *calc_mtx);
             MtxPosition(&pos, &effect_pos);
-            fopAcM_effSmokeSet1(&i_this->field_0x1418, 
+            fopAcM_effSmokeSet1(&i_this->field_0x1418,
                                    &i_this->field_0x141c, &effect_pos, NULL, a_this->scale.z * 2.0f, &a_this->tevStr, 1);
         }
     }
-    
+
     if (in_water) {
         f32 v = 2.0f;
         cXyz scale(v, v, v);
@@ -3037,21 +3038,21 @@ static void effect_set(e_wb_class* i_this) {
             dPa_RM(ID_ZI_S_ENEMY_DOWNWTRA_B),
             dPa_RM(ID_ZI_S_ENEMY_DOWNWTRA_C),
         };
-        
+
         for (int i = 0; i < 3; i++) {
             if (i_this->mMovementType == 2) {
-                i_this->field_0x1420[i] = dComIfGp_particle_set(i_this->field_0x1420[i], 
+                i_this->field_0x1420[i] = dComIfGp_particle_set(i_this->field_0x1420[i],
                     w_eff_name2[i], &effect_pos, &a_this->tevStr, &angle, &scale, 0xff, 0, -1, 0, 0, 0);
             } else {
-                i_this->field_0x1420[i] = dComIfGp_particle_set(i_this->field_0x1420[i], 
+                i_this->field_0x1420[i] = dComIfGp_particle_set(i_this->field_0x1420[i],
                     w_eff_name[i], &effect_pos, &a_this->tevStr, &angle, &scale, 0xff, 0, -1, 0, 0, 0);
             }
         }
     }
-    
+
     if (is_water && i_this->field_0x1721 != 0) {
         static cXyz sc(4.0f, 4.0f, 4.0f);
-        
+
         for (int i = 0; i < 4; i++) {
             static u16 w_eff_id[4] = {
                 ID_ZI_J_DOWNWTRA_A,
@@ -3060,13 +3061,13 @@ static void effect_set(e_wb_class* i_this) {
                 ID_ZI_J_DOWNWTRA_D,
             };
 
-            i_this->field_0x17d0[i] = dComIfGp_particle_set(i_this->field_0x17d0[i], 
+            i_this->field_0x17d0[i] = dComIfGp_particle_set(i_this->field_0x17d0[i],
                 w_eff_id[i], &a_this->current.pos, &a_this->tevStr, &a_this->shape_angle,
                 &sc, 0xff, 0, -1, 0, 0, 0);
         }
         i_this->field_0x1721 = 0;
     }
-    
+
     i_this->mMovementType = 0;
     i_this->mCollisionFlags = 0;
     i_this->mLandingFlag = 0;
@@ -3076,7 +3077,7 @@ static void wb_rd_reset(e_wb_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz pos = a_this->current.pos;
-    
+
     if (i_this->mParam2 == 1 || i_this->mParam2 == 2) {
         fopAcM_create(PROC_E_RD, 0xff010301, &pos, fopAcM_GetRoomNo(a_this), &player->shape_angle, 0, -1);
         fopAcM_create(PROC_E_RD, 0xff010302, &pos, fopAcM_GetRoomNo(a_this), &player->shape_angle, 0, -1);
@@ -3228,7 +3229,7 @@ static s8 e_wb_c_run(e_wb_class* i_this) {
             i_this->field_0x17e1 = 1;
         }
     } break;
-    
+
     case 2: {
         if (i_this->field_0x7a6 == 0) {
             anm_init(i_this, 0x1b, 3.0f, 0, 1.0f);
@@ -3287,7 +3288,7 @@ static s8 e_wb_c_run(e_wb_class* i_this) {
             i_this->field_0x5d0 = sp88;
         }
 
-        
+
         if (!behind_obstacle) {
             static cXyz sh_pos[3] = {
                 cXyz(400.0f, 200.0f, 200.0f),
@@ -3323,7 +3324,7 @@ static s8 e_wb_c_run(e_wb_class* i_this) {
         sp94 = i_this->field_0x5c4 - a_this->current.pos;
 
         f32 dist = JMAFastSqrt(sp94.x * sp94.x + sp94.z * sp94.z);
-        
+
         if (dist < 500.0f) {
             target_speed = l_HIO.normal_speed_vi;
         } else if (dist > 3000.0f && i_this->field_0x5bf) {
@@ -3341,11 +3342,11 @@ static s8 e_wb_c_run(e_wb_class* i_this) {
         i_this->mTargetFacingAngle = cM_atan2s(sp94.x, sp94.z);
 
         if (rider && rider->mAnmID == 0x27) {
-            i_this->mTargetFacingAngle += static_cast<s16>(
-                (BREG_F(16) + 5000.0f) * cM_ssin(i_this->field_0x68e * (BREG_S(7) + 1000)));
+            ANGLE_ADD(i_this->mTargetFacingAngle,
+                      (BREG_F(16) + 5000.0f) * cM_ssin(i_this->field_0x68e * (BREG_S(7) + 1000)));
             turn_speed = 0x400;
         } else if (wall_check != 0) {
-            i_this->mTargetFacingAngle += (s16)((BREG_S(8) + -8000) * wall_check);
+            ANGLE_ADD(i_this->mTargetFacingAngle, (BREG_S(8) + -8000) * wall_check);
         }
 
         cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mTargetFacingAngle, 8, turn_speed);
@@ -3717,7 +3718,7 @@ static void demo_camera(e_wb_class* i_this) {
         rdb = (e_rdb_class*)fopAcM_SearchByName(PROC_E_RDB);
     }
     cXyz local_3c, cStack_48, cStack_54, cStack_60;
-    
+
     switch (i_this->field_0x169e) {
     case 1: {
         if (!a_this->eventInfo.checkCommandDemoAccrpt()) {
@@ -3739,7 +3740,7 @@ static void demo_camera(e_wb_class* i_this) {
         i_this->field_0x1704 = 0x2000 + XREG_S(0);
         daPy_getPlayerActorClass()->changeOriginalDemo();
         horse->changeOriginalDemo();
-        fpcM_Search(s_wbdel_sub, a_this);
+        fpcM_Search(s_wbdel_sub, i_this);
         dComIfGp_getEvent()->startCheckSkipEdge(a_this);
     }
         // fallthrough
@@ -3998,7 +3999,8 @@ static void demo_camera(e_wb_class* i_this) {
             dComIfGp_event_reset();
             i_this->field_0x169e = 0;
         }
-    } break;
+        break;
+    }
     case 0x19: {
         if (!a_this->eventInfo.checkCommandDemoAccrpt()) {
             fopAcM_orderPotentialEvent(a_this, 2, 0xffff, 0);
@@ -4453,7 +4455,7 @@ static void demo_camera(e_wb_class* i_this) {
         } else {
             break;
         }
-    } 
+    }
         // fallthrough
     case 0x34: {
         cLib_addCalc0(&rdb->field_0x6e0, 1.0f, 0.3f + KREG_F(3));
@@ -4992,7 +4994,7 @@ static void demo_camera(e_wb_class* i_this) {
 static void anm_se_eff_set(e_wb_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     J3DModel* model = i_this->mpModelMorf->getModel();
-    
+
     if (i_this->mAnmID == 12 || i_this->mAnmID == 13) {
         if (i_this->mpModelMorf->checkFrame(9.0f)) {
             i_this->mZ2Ride.startCreatureSound(Z2SE_CM_BODYFALL_L, 0, -1);
@@ -5000,19 +5002,19 @@ static void anm_se_eff_set(e_wb_class* i_this) {
         }
     } else if (i_this->mAnmID == 38) {
         i_this->field_0x17c4 = dComIfGp_particle_set(
-            i_this->field_0x17c4, dPa_RM(ID_ZI_S_BB_STARTHANAIKI), 
+            i_this->field_0x17c4, dPa_RM(ID_ZI_S_BB_STARTHANAIKI),
             &a_this->current.pos, &a_this->tevStr);
 
         JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(i_this->field_0x17c4);
         if (emitter != NULL) {
             emitter->setGlobalSRTMatrix(model->getAnmMtx(15));
         }
-        
+
         if (i_this->mpModelMorf->checkFrame(1.0f)) {
             cXyz scale(a_this->scale.z, a_this->scale.z, a_this->scale.z);
-            dComIfGp_particle_set(dPa_RM(ID_ZI_S_BB_STARTCLOD), &a_this->current.pos, 
+            dComIfGp_particle_set(dPa_RM(ID_ZI_S_BB_STARTCLOD), &a_this->current.pos,
                                  &a_this->tevStr, &a_this->shape_angle, &scale);
-            dComIfGp_particle_set(dPa_RM(ID_ZI_S_BB_STARTFOOTMARK), &a_this->current.pos, 
+            dComIfGp_particle_set(dPa_RM(ID_ZI_S_BB_STARTFOOTMARK), &a_this->current.pos,
                                  &a_this->tevStr, &a_this->shape_angle, &scale);
         }
     } else if (i_this->mAnmID == 5) {
@@ -5083,7 +5085,7 @@ static void anm_se_eff_set(e_wb_class* i_this) {
             i_this->mZ2Ride.startCreatureVoice(Z2SE_EN_WB_V_BREATH, -1);
         }
     }
-    
+
     // Special sound effects for the leader Bulblin
     if (i_this->field_0x79d != 0) {
         if (i_this->mAnmID == 0x20 || i_this->mAnmID == 0x21) {
@@ -5112,7 +5114,7 @@ static int c_start;
 static f32 dummy(){return 35.f;}
 #endif
 
-static int daE_WB_Execute(e_wb_class* i_this) {    
+static int daE_WB_Execute(e_wb_class* i_this) {
     if (c_start == 0) {
         if (dComIfGp_event_runCheck()) {
             if (lbl_244_bss_46 != 0 || cDmrNowMidnaTalk()) {
@@ -5120,7 +5122,7 @@ static int daE_WB_Execute(e_wb_class* i_this) {
             }
         }
     }
-    
+
     if (i_this->field_0x169e == 1000) {
         return 1;
     }
@@ -5129,47 +5131,47 @@ static int daE_WB_Execute(e_wb_class* i_this) {
 
     cXyz local_130;
     cXyz local_13c;
-    
+
     a_this->scale.z = l_HIO.base_size;
-    
+
     if (fopAcM_CheckCondition(a_this, fopAcCnd_NODRAW_e)) {
         i_this->field_0x5bf = 1;
     } else {
         i_this->field_0x5bf = 0;
     }
-    
+
     if (i_this->field_0x79d != 0) {
         a_this->scale.z = a_this->scale.z * l_HIO.leader_size_ratio;
     }
-    
+
     i_this->field_0x68e++;
-    
+
     if (i_this->field_0x1430 == 0) {
         fopAcM_OffStatus(a_this, 0);
         a_this->attention_info.flags = 0;
         i_this->mStatusFlags &= (u16)3;
-        
+
         for (int i = 0; i < 4; i++) {
             if (i_this->field_0x698[i] != 0) {
                 i_this->field_0x698[i]--;
             }
         }
-        
+
         if (i_this->field_0x6a0 != 0) {
             i_this->field_0x6a0--;
         }
-        
+
         if (i_this->field_0x1432 != 0) {
             i_this->field_0x1432--;
         }
-        
+
         action(i_this);
     }
-    
+
     if (i_this->field_0x79d != 0 || i_this->field_0x169e != 0) {
         demo_camera(i_this);
     }
-    
+
     if (i_this->field_0x1430 != 0) {
         a_this->eyePos = a_this->current.pos;
         return 1;
@@ -5184,7 +5186,7 @@ static int daE_WB_Execute(e_wb_class* i_this) {
             a_this->current.pos.z += move_p->z * move_scale;
         }
     }
-    
+
     if ((i_this->field_0x5bf == 0) && !dComIfGp_event_runCheck()) {
         s16 wall_check = e_wb_wall_check(i_this);
         if (wall_check != 0 && wall_check > -0x2000 && wall_check < 0x2000) {
@@ -5210,18 +5212,18 @@ static int daE_WB_Execute(e_wb_class* i_this) {
                         i_this->mActionMode = 0;
                     }
                 }
-                
+
                 if (i_this->mActionID != ACT_PL_RIDE2) {
                     a_this->current.pos = a_this->old.pos;
                 }
             }
-            
+
             dBgS_LinChk linChk;
             cXyz pos1;
             pos1 = a_this->current.pos;
             pos1.y += 100.0f;
             linChk.Set(&pos1, &a_this->eyePos, a_this);
-            
+
             if (dComIfG_Bgsp().LineCross(&linChk)) {
                 cMtx_YrotS(*calc_mtx, a_this->shape_angle.y);
                 local_130.x = 0.0f;
@@ -5229,29 +5231,29 @@ static int daE_WB_Execute(e_wb_class* i_this) {
                 local_130.z = KREG_F(11) + -20.0f;
                 MtxPosition(&local_130, &local_13c);
                 a_this->current.pos += local_13c;
-                
+
                 if (i_this->mActionID != ACT_PL_RIDE2) {
                     a_this->speedF = 0.0f;
                 }
             }
         }
     }
-    
+
     i_this->mAcch.CrrPos(dComIfG_Bgsp());
     cLib_addCalcAngleS2(&a_this->shape_angle.y, a_this->current.angle.y, 4, 0x2000);
-    
+
     if (i_this->mAcch.ChkGroundHit()) {
         dBgS_GndChk gndChk;
         Vec local_154;
         cXyz pos2;
-        
+
         cMtx_YrotS(*calc_mtx, a_this->shape_angle.y);
         local_130.x = 0.0f;
         local_130.y = 200.0f;
         local_130.z = 100.0f;
         MtxPosition(&local_130, &local_13c);
         local_13c += a_this->current.pos;
-        
+
         local_130.z = -100.0f;
         MtxPosition(&local_130, &pos2);
         pos2 += a_this->current.pos;
@@ -5262,14 +5264,14 @@ static int daE_WB_Execute(e_wb_class* i_this) {
 
         gndChk.SetPos(&local_154);
         local_13c.y = dComIfG_Bgsp().GroundCross(&gndChk);
-        
+
         local_154.x = pos2.x;
         local_154.y = pos2.y;
         local_154.z = pos2.z;
 
         gndChk.SetPos(&local_154);
         pos2.y = dComIfG_Bgsp().GroundCross(&gndChk);
-        
+
         if (fabsf(local_13c.y - pos2.y) <= 200.0f) {
             a_this->current.angle.x = -cM_atan2s(local_13c.y - pos2.y, 200.0f);
         }

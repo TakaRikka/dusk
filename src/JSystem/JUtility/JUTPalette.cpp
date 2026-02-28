@@ -9,8 +9,8 @@ void JUTPalette::storeTLUT(GXTlut param_0, ResTLUT* tlut) {
         OSPanic("JUTPalette.cpp", 35, "JUTTexture: TLUT is NULL\n");
     }
     mTlutName = param_0;
-    mFormat = tlut->format;
-    mTransparency = tlut->transparency;
+    mFormat = (const u8)tlut->format;
+    mTransparency = (const u8)tlut->transparency;
     mNumColors = tlut->numColors;
     mColorTable = (ResTLUT*)((u8*)tlut + 0x20);
     GXInitTlutObj(&mTlutObj, (void*)mColorTable, (GXTlutFmt)mFormat, mNumColors);

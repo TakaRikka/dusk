@@ -8,6 +8,7 @@
 #include "d/actor/d_a_npc_tkj2.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
+#include <cstring>
 
 enum Tkj2_RES_File_ID {
     /* BCK */

@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h"  // IWYU pragma: keep
 
 #include "d/actor/d_a_npc_grm.h"
+#include <cstring>
 
 enum grA_Base_RES_File_ID {
     /* BCK */

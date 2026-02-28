@@ -170,8 +170,7 @@ static void food_normal(obj_food_class* i_this) {
 
             Z2GetAudioMgr()->seStart(Z2SE_OBJ_TOY_BONE_BOUND, &i_this->current.pos,
                                      fabsf(i_this->mOldSpeedY), 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
-            
-            i_this->current.angle.y += (s16)cM_rndFX(8000.0f);
+            ANGLE_ADD(i_this->current.angle.y, cM_rndFX(8000.0f));
 
             if (i_this->mBounces == 3) {
                 i_this->mRotSpeed.z = 0;
@@ -271,7 +270,7 @@ static void action(obj_food_class* i_this) {
     }
 
     if (i_this->mType == obj_food_class::TYPE_BALL) {
-        i_this->current.angle.x += (s16)(i_this->speedF * 700.0f);
+        ANGLE_ADD(i_this->current.angle.x, i_this->speedF * 700.0f);
         cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
         vec1.x = 0.0f;
         vec1.y = 0.0f;

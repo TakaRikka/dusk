@@ -10,6 +10,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
+#include <cstring>
 
 static int daObj_Gb_Draw(obj_gb_class* i_this) {
     g_env_light.settingTevStruct(0x10, &i_this->current.pos, &i_this->tevStr);

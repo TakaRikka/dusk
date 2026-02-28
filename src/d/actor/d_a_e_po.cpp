@@ -12,6 +12,7 @@
 #include "f_op/f_op_actor_enemy.h"
 #include "f_op/f_op_camera_mng.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 
 static s16 mAttackNo = 3;
@@ -1864,21 +1865,21 @@ static void e_po_holl_demo(e_po_class* i_this) {
         i_this->field_0x7DE += 1;
         i_this->field_0x7E2 += 1;
         if (mArg0Check(i_this, 7) != 0) {
-            a_this->current.angle.x += (s16)(400.0f * cM_ssin(1000.0f * i_this->field_0x7DE));
-            a_this->current.angle.y += (s16)(500.0f * cM_scos(1000.0f * i_this->field_0x7E2));
-            a_this->current.angle.z += (s16)(500.0f * -cM_scos(1000.0f * i_this->field_0x7E2));
+            ANGLE_ADD(a_this->current.angle.x, 400.0f * cM_ssin(1000.0f * i_this->field_0x7DE));
+            ANGLE_ADD(a_this->current.angle.y, 500.0f * cM_scos(1000.0f * i_this->field_0x7E2));
+            ANGLE_ADD(a_this->current.angle.z, 500.0f * -cM_scos(1000.0f * i_this->field_0x7E2));
         } else if (mArg0Check(i_this, 8) != 0) {
-            a_this->current.angle.x += (s16)(-400.0f * cM_ssin(1000.0f * i_this->field_0x7DE));
-            a_this->current.angle.y += (s16)(500.0f * cM_scos(1000.0f * i_this->field_0x7E2));
-            a_this->current.angle.z += (s16)(500.0f * -cM_scos(1000.0f * i_this->field_0x7E2));
+            ANGLE_ADD(a_this->current.angle.x, -400.0f * cM_ssin(1000.0f * i_this->field_0x7DE));
+            ANGLE_ADD(a_this->current.angle.y, 500.0f * cM_scos(1000.0f * i_this->field_0x7E2));
+            ANGLE_ADD(a_this->current.angle.z, 500.0f * -cM_scos(1000.0f * i_this->field_0x7E2));
         } else if (mArg0Check(i_this, 9) != 0) {
-            a_this->current.angle.x -= (s16)(200.0f * cM_ssin(1000.0f * i_this->field_0x7DE));
-            a_this->current.angle.y -= (s16)(1000.0f * cM_scos(1000.0f * i_this->field_0x7E2));
-            a_this->current.angle.z -= (s16)(500.0f * -cM_scos(1000.0f * i_this->field_0x7E2));
+            ANGLE_SUB(a_this->current.angle.x, 200.0f * cM_ssin(1000.0f * i_this->field_0x7DE));
+            ANGLE_SUB(a_this->current.angle.y, 1000.0f * cM_scos(1000.0f * i_this->field_0x7E2));
+            ANGLE_SUB(a_this->current.angle.z, 500.0f * -cM_scos(1000.0f * i_this->field_0x7E2));
         } else {
-            a_this->current.angle.x -= (s16)(100.0f * cM_ssin(1000.0f * i_this->field_0x7DE));
-            a_this->current.angle.y -= (s16)(100.0f * cM_scos(1000.0f * i_this->field_0x7E2));
-            a_this->current.angle.z -= (s16)(500.0f * -cM_scos(1000.0f * i_this->field_0x7E2));
+            ANGLE_SUB(a_this->current.angle.x, 100.0f * cM_ssin(1000.0f * i_this->field_0x7DE));
+            ANGLE_SUB(a_this->current.angle.y, 100.0f * cM_scos(1000.0f * i_this->field_0x7E2));
+            ANGLE_SUB(a_this->current.angle.z, 500.0f * -cM_scos(1000.0f * i_this->field_0x7E2));
         }
         if (i_this->field_0x74A[2] != 0) {
             break;

@@ -1,0 +1,28 @@
+#ifndef RES_U_THOUSE_H
+#define RES_U_THOUSE_H
+
+enum dRes_INDEX_U_THOUSE {
+    /* BMDR */
+    dRes_INDEX_U_THOUSE_BMD_U_TOBYHOUSE_LOW2_e=0x4,
+    dRes_INDEX_U_THOUSE_BMD_U_TOBYHOUSE_TUP_e=0x5,
+    /* DZB  */
+    dRes_INDEX_U_THOUSE_DZB_U_TOBYHOUSE_TUP_e=0x8,
+};
+
+enum dRes_ID_U_THOUSE {
+    /* BMDR */
+    dRes_ID_U_THOUSE_BMD_U_TOBYHOUSE_LOW2_e=0x4,
+    dRes_ID_U_THOUSE_BMD_U_TOBYHOUSE_TUP_e=0x5,
+    /* DZB  */
+    dRes_ID_U_THOUSE_DZB_U_TOBYHOUSE_TUP_e=0x8,
+};
+
+enum U_TOBYHOUSE_LOW2_JNT {
+    U_TOBYHOUSE_LOW2_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum U_TOBYHOUSE_TUP_JNT {
+    U_TOBYHOUSE_TUP_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_U_THOUSE_H */

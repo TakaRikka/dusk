@@ -237,7 +237,7 @@ int daObj_GrA_c::startDemo(void* param_1) {
                             gra_p->setFaceMotion(12, -1.0f);
                             gra_p->setLookMode(0);
 
-                            current.angle.y += (s16) 0x4000;
+                            ANGLE_ADD(current.angle.y, 0x4000);
                             field_0x91a.y = shape_angle.y = current.angle.y;
                         }
 

@@ -1,0 +1,16 @@
+#ifndef RES_CARDICON_H
+#define RES_CARDICON_H
+
+enum dRes_INDEX_CARDICON {
+    /* ROOT */
+    dRes_INDEX_CARDICON_BTI_ZELDA2_GC_BANNER_e=0x0,
+    dRes_INDEX_CARDICON_BTI_ZELDA2_GC_ICON_e=0x1,
+};
+
+enum dRes_ID_CARDICON {
+    /* ROOT */
+    dRes_ID_CARDICON_BTI_ZELDA2_GC_BANNER_e=0x0,
+    dRes_ID_CARDICON_BTI_ZELDA2_GC_ICON_e=0x1,
+};
+
+#endif /* !RES_CARDICON_H */

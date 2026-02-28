@@ -1,6 +1,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
+#include "JSystem/J3DGraphAnimator/J3DModelData.h"
 #include "JSystem/J3DGraphBase/J3DStruct.h"
 #include "JSystem/JMath/JMath.h"
 

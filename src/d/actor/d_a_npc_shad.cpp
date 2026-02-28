@@ -10,6 +10,7 @@
 #include "d/actor/d_a_npc.h"
 #include "d/actor/d_a_tag_evtarea.h"
 #include "d/d_msg_object.h"
+#include <cstring>
 
 const daNpcShad_HIOParam daNpcShad_Param_c::m = {
     35.0f,      // attention_offset 

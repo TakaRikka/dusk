@@ -1550,7 +1550,7 @@ int vprintf(const char* format, va_list arg) {
     return ret;
 }
 
-int vsnprintf(char* s, size_t n, const char* format, va_list arg) {
+int vsnprintf(char* s, size_t n, const char* fmt, va_list args) {
     int end;
     __OutStrCtrl osc;
     osc.CharStr = s;
@@ -1558,9 +1558,9 @@ int vsnprintf(char* s, size_t n, const char* format, va_list arg) {
     osc.CharsWritten = 0;
 
     #if PLATFORM_GCN
-    end = __pformatter(&__StringWrite, &osc, format, arg);
+    end = __pformatter(&__StringWrite, &osc, fmt, args);
     #else
-    end = __pformatter(&__StringWrite, &osc, format, arg, 0);
+    end = __pformatter(&__StringWrite, &osc, fmt, args, 0);
     #endif
 
     if (s) {

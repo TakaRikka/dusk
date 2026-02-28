@@ -8,6 +8,7 @@
 #include "d/actor/d_a_obj_lv3waterEff.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "f_op/f_op_actor_mng.h"
 
 static u16 const l_eff_id[] = {
     0x86D2,
@@ -20,6 +21,11 @@ int daObjWaterEff_c::Create() {
     for (int i = 0; i < 4; i++) {
         mParticles[i] = dComIfGp_particle_set(l_eff_id[i], &current.pos, NULL, NULL, 0xFF, NULL, -1,
                                               NULL, NULL, NULL);
+
+        if(mParticles[i] == NULL) {
+            // "LV3R09 Water flow effect: Effect <%d> could not be set"
+            OS_REPORT_ERROR("Ｌｖ３Ｒ０９水流エフェクト：エフェクト<%d>セットできませんでした\n");
+        }
     }
 
     mSePositions[0].set(14420.0f, -1100.0f, -4950.0f);
@@ -76,11 +82,14 @@ static int daObjWaterEff_Execute(daObjWaterEff_c* i_this) {
 }
 
 static int daObjWaterEff_Delete(daObjWaterEff_c* i_this) {
+    const fpc_ProcID id = fopAcM_GetID(i_this);
     return i_this->_delete();
 }
 
 static int daObjWaterEff_Create(fopAc_ac_c* i_this) {
-    return static_cast<daObjWaterEff_c*>(i_this)->create();
+    daObjWaterEff_c* const actor = static_cast<daObjWaterEff_c*>(i_this);
+    const fpc_ProcID id = fopAcM_GetID(i_this);
+    return actor->create();
 }
 
 static actor_method_class l_daObjWaterEff_Method = {

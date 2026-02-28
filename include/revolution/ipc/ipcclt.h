@@ -12,7 +12,9 @@ extern "C" {
 typedef IOSError (*IOSIpcCb)(IOSError, void*);
 
 IOSError IPCCltInit(void);
+#if SDK_AUG2010
 IOSError IPCCltReInit(void);
+#endif
 
 IOSError IOS_OpenAsync(const char* pPath, u32 flags, IOSIpcCb cb, void* callback_arg);
 IOSError IOS_Open(const char* path, u32 flags);

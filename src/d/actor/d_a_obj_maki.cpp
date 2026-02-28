@@ -20,6 +20,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 #include <dolphin/types.h>
+#include <cstring>
 
 daObj_Maki_HIO_c::daObj_Maki_HIO_c() {
     field_0x4 = -1;

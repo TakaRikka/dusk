@@ -1,0 +1,32 @@
+#ifndef RES_J_UMAK_H
+#define RES_J_UMAK_H
+
+enum dRes_INDEX_J_UMAK {
+    /* BMDR */
+    dRes_INDEX_J_UMAK_BMD_AL_UMAKUSA_e=0x3,
+    dRes_INDEX_J_UMAK_BMD_J_UMAKUSA_e=0x4,
+    dRes_INDEX_J_UMAK_BMD_J_UMAKUSA_C_e=0x5,
+};
+
+enum dRes_ID_J_UMAK {
+    /* BMDR */
+    dRes_ID_J_UMAK_BMD_AL_UMAKUSA_e=0x3,
+    dRes_ID_J_UMAK_BMD_J_UMAKUSA_e=0x4,
+    dRes_ID_J_UMAK_BMD_J_UMAKUSA_C_e=0x5,
+};
+
+enum AL_UMAKUSA_JNT {
+    AL_UMAKUSA_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum J_UMAKUSA_JNT {
+    J_UMAKUSA_JNT_JOINT1_e=0x0,
+    J_UMAKUSA_JNT_JOINT2_e=0x1,
+    J_UMAKUSA_JNT_JOINT3_e=0x2,
+};
+
+enum J_UMAKUSA_C_JNT {
+    J_UMAKUSA_C_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_J_UMAK_H */

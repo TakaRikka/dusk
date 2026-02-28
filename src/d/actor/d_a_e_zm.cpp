@@ -579,7 +579,7 @@ void daE_ZM_c::executeDead() {
             break;
 
         case MODE_1: {
-            shape_angle.y += (s16)(field_0x722 * (JREG_S(1) + 100));
+            ANGLE_ADD(shape_angle.y, field_0x722 * (JREG_S(1) + 100));
             cLib_addCalc0(&speedF, 0.8f, 2.0f);
             field_0x72b += 10;
             field_0x700.x = field_0x714 * cM_ssin(field_0x72b * field_0x718);

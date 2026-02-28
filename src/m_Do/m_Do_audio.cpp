@@ -8,13 +8,13 @@
 #include "JSystem/JKernel/JKRMemArchive.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTConsole.h"
-#include "Z2AudioLib/Z2AudioCS.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_debug_viewer.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_dvd_thread.h"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
+#include "Z2AudioCS/Z2AudioCS.h"
 #include <revolution/sc.h>
 #endif
 

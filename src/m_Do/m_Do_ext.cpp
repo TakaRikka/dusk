@@ -23,6 +23,7 @@
 #include "m_Do/m_Do_main.h"
 #include "m_Do/m_Do_mtx.h"
 #include <cstdio>
+#include <cstring>
 
 u8 mDoExt::CurrentHeapAdjustVerbose;
 u8 mDoExt::HeapAdjustVerbose;

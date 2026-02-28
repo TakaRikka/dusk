@@ -105,10 +105,12 @@ u8 __gUnknown800030E3 AT_ADDRESS(OS_BASE_CACHED | 0x30E3);
 #define OSMillisecondsToTicks(msec)  ((msec) * (OS_TIMER_CLOCK / 1000))
 #define OSNanosecondsToTicks(nsec)   (((nsec) * (OS_TIMER_CLOCK / 125000)) / 8000)
 #define OSMicrosecondsToTicks(usec)  (((usec) * (OS_TIMER_CLOCK / 125000)) / 8)
+#define OSTicksDelta(x, y) ((s32)x, (s32)y)
 
 u32 OSGetConsoleType(void);
 void OSInit(void);
 void OSRegisterVersion(const char* id);
+const char* OSGetAppGamename(void);
 
 void* OSGetArenaHi(void);
 void* OSGetArenaLo(void);

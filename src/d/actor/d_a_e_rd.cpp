@@ -24,6 +24,7 @@
 #include "d/actor/d_a_npc_tk.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include "f_op/f_op_actor_enemy.h"
+#include <cstring>
 
 class daE_RD_HIO_c : public JORReflexible {
 public:
@@ -1038,7 +1039,7 @@ static BOOL way_check(e_rd_class* i_this) {
             dBgS_LinChk lin_chk;
             lin_chk.Set(&start, &end, a_this);
             if (dComIfG_Bgsp().LineCross(&lin_chk)) {
-                sVar1 += (s16) 0x1000;
+                ANGLE_ADD(sVar1, 0x1000);
             } else {
                 i_this->field_0x5cc = sVar1;
                 return TRUE;
@@ -1581,7 +1582,7 @@ static void e_rd_bow_run(e_rd_class* i_this) {
 
         case 1:
             fVar1 = fVar2;
-            ADD_ANGLE_2(playerAngleY, 0x8000);
+            ANGLE_ADD_2(playerAngleY, 0x8000);
             if (i_this->mPlayerDistance > l_HIO.attack_range || i_this->field_0x990[0] == 0 || i_this->mObjAcch.ChkWallHit() || move_gake_check(i_this, 100.0f)) {
                 bVar1 = 1;
             }
@@ -2608,7 +2609,7 @@ static void e_rd_bomb_action(e_rd_class* i_this) {
                 }
             }
 
-            ADD_ANGLE_2(sVar1, 0x8000);
+            ANGLE_ADD_2(sVar1, 0x8000);
             fVar1 = l_HIO.dash_speed;
             if (JMAFastSqrt(sp48.x * sp48.x + sp48.z * sp48.z) > 600.0f) {
                 i_this->mMode = 3;
@@ -2879,10 +2880,10 @@ static void e_rd_damage(e_rd_class* i_this) {
                     OS_REPORT("              ..KADO KABE ..%x\n", kado_kabe);
                     if (kado_kabe == 2) {
                         i_this->field_0x9f6 = 0x1000;
-                        i_this->field_0xa0c.y += (s16) (TREG_S(8) - 7000);
+                        ANGLE_ADD(i_this->field_0xa0c.y, TREG_S(8) - 7000);
                     } else {
                         i_this->field_0x9f6 = -0x1000;
-                        i_this->field_0xa0c.y += (s16) -(TREG_S(8) - 7000);
+                        ANGLE_ADD(i_this->field_0xa0c.y, -(TREG_S(8) - 7000));
                     }
 
                     i_this->field_0xab8 = 8000.0f + BREG_F(10);
@@ -2895,7 +2896,7 @@ static void e_rd_damage(e_rd_class* i_this) {
                 i_this->mMode = 10;
                 a_this->speed.y = 0.0f;
                 i_this->field_0x9ec *= 0.2f;
-                ADD_ANGLE_2(i_this->field_0xa0c.y, 0x8000);
+                ANGLE_ADD_2(i_this->field_0xa0c.y, 0x8000);
                 i_this->field_0xaf0 = 5 + BREG_S(7);
                 i_this->field_0xa24 = 100.0f + BREG_F(4);
                 i_this->field_0xa2c = 100.0f + BREG_F(5);
@@ -3163,7 +3164,7 @@ static s16 gake_check(e_rd_class* i_this, f32 param_2) {
             }
         }
 
-        sVar1 += (s16) 0x1000;
+        ANGLE_ADD(sVar1, 0x1000);
     }
 
     return a_this->shape_angle.y;
@@ -5322,7 +5323,8 @@ static void action(e_rd_class* i_this) {
             sp25c.x = 10.0f;
             MtxPosition(&sp25c, &sp268);
             sp25c = sp268 - i_this->field_0x9b0;
-            a_this->current.angle.x += (s16)-cM_atan2s(sp25c.y, JMAFastSqrt(sp25c.x * sp25c.x + sp25c.z * sp25c.z));
+            ANGLE_ADD(a_this->current.angle.x,
+                      -cM_atan2s(sp25c.y, JMAFastSqrt(sp25c.x * sp25c.x + sp25c.z * sp25c.z)));
             a_this->shape_angle.x = a_this->current.angle.x;
 
             if (i_this->field_0x9be == 1) {
@@ -6857,8 +6859,8 @@ static int daE_RD_Execute(e_rd_class* i_this) {
 
                 // NOT Hyrule Field
                 if (strcmp(dComIfGp_getStartStageName(), "F_SP121") != 0 && i_this->field_0x1296 == 0) {
-                    local_148.x += (s16)(cM_rndFX(200.0f) + -500.0f);
-                    local_148.y += (s16)cM_rndFX(100.0f);
+                    ANGLE_ADD(local_148.x, cM_rndFX(200.0f) + -500.0f);
+                    ANGLE_ADD(local_148.y, cM_rndFX(100.0f));
                 }
             }
 
@@ -6912,8 +6914,8 @@ static int daE_RD_Execute(e_rd_class* i_this) {
                 } else {
                     i_this->field_0x71c[i] += i_this->field_0x7c4[i];
                     i_this->field_0x7c4[i].y -= 3.0f;
-                    i_this->field_0x86c[i].y += (s16) 0x900;
-                    i_this->field_0x86c[i].x += (s16) 0xB00;
+                    ANGLE_ADD(i_this->field_0x86c[i].y, 0x900);
+                    ANGLE_ADD(i_this->field_0x86c[i].x, 0xB00);
 
                     mDoMtx_stack_c::transS(i_this->field_0x71c[i].x, i_this->field_0x71c[i].y, i_this->field_0x71c[i].z);
                     mDoMtx_stack_c::YrotM(i_this->field_0x86c[i].y);
@@ -6951,8 +6953,8 @@ static int daE_RD_Execute(e_rd_class* i_this) {
                 cMtx_XrotM(*calc_mtx, 0x7FFF);
                 cMtx_ZrotM(*calc_mtx, i_this->field_0x6bc.z);
                 MtxTrans(-(BREG_F(5) + 80.0f), -(BREG_F(6) + 50.0f), -(BREG_F(7) + 0.0f), 1);
-                i_this->field_0x6bc.y += (s16) 0x200;
-                i_this->field_0x6bc.z += (s16) 0xF00;
+                ANGLE_ADD(i_this->field_0x6bc.y, 0x200);
+                ANGLE_ADD(i_this->field_0x6bc.z, 0xF00);
             }
 
             i_this->mpMorfHornAnm->getModel()->setBaseTRMtx(*calc_mtx);
@@ -7073,7 +7075,7 @@ static void ride_game_actor_set(e_rd_class* i_this) {
             gnd_chk.SetPos(&i_pos);
             i_pos.y = dComIfG_Bgsp().GroundCross(&gnd_chk);
             i_angle = player->shape_angle;
-            i_angle.y += (s16) 0x4000;
+            ANGLE_ADD(i_angle.y, 0x4000);
             i_parameters = 0x80000005;
         } else if (i_this->mBossMode == 2) {
             i_pos.set(34789.0f, -290.0f, -36177.0f);

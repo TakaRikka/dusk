@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_npc_grmc.h"
 #include "d/actor/d_a_npc4.h"
+#include <cstring>
 
 enum grC_RES_File_ID {
     /* BCK */

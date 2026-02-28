@@ -5,6 +5,7 @@
 
 #include "f_pc/f_pc_create_req.h"
 #include "SSystem/SComponent/c_malloc.h"
+#include "SSystem/SComponent/c_phase.h"
 #include "f_pc/f_pc_base.h"
 #include "f_pc/f_pc_create_iter.h"
 #include "f_pc/f_pc_deletor.h"

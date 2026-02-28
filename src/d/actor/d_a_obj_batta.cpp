@@ -12,6 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_menu_insect.h"
 #include "f_pc/f_pc_name.h"
+#include <cstring>
 
 class daObj_BattaHIO_c : public JORReflexible {
 public:

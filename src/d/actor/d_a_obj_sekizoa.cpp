@@ -7,6 +7,7 @@
 #include "d/actor/d_a_tag_evtarea.h"
 #include "d/actor/d_a_tag_kmsg.h"
 #include <dolphin/types.h>
+#include <cstring>
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_msg.h"
 

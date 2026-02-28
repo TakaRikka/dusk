@@ -11,6 +11,7 @@
 #include "m_Do/m_Do_lib.h"
 #include "d/d_drawlist.h"
 #include "d/actor/d_a_alink.h"
+#include <cstring>
 
 #ifdef __MWERKS__
 #define LOAD_4BYTE_STRING_LITERAL(x) (*(u32*)(x))

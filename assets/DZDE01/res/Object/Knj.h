@@ -1,0 +1,76 @@
+#ifndef RES_KNJ_H
+#define RES_KNJ_H
+
+enum dRes_INDEX_KNJ {
+    /* BCK  */
+    dRes_INDEX_KNJ_BCK_KNJ_WAIT_A_e=0x6,
+    /* BMDR */
+    dRes_INDEX_KNJ_BMD_KNJ_e=0x9,
+    /* BRK  */
+    dRes_INDEX_KNJ_BRK_KNJ_e=0xC,
+    /* BTP  */
+    dRes_INDEX_KNJ_BTP_KNJ_HIKARI_e=0xF,
+    dRes_INDEX_KNJ_BTP_KNJ_HONOO_e=0x10,
+    dRes_INDEX_KNJ_BTP_KNJ_MIZU_e=0x11,
+    dRes_INDEX_KNJ_BTP_KNJ_MORI_e=0x12,
+    dRes_INDEX_KNJ_BTP_KNJ_TAMASHII_e=0x13,
+    dRes_INDEX_KNJ_BTP_KNJ_YAMI_e=0x14,
+};
+
+enum dRes_ID_KNJ {
+    /* BCK  */
+    dRes_ID_KNJ_BCK_KNJ_WAIT_A_e=0x6,
+    /* BMDR */
+    dRes_ID_KNJ_BMD_KNJ_e=0x9,
+    /* BRK  */
+    dRes_ID_KNJ_BRK_KNJ_e=0xC,
+    /* BTP  */
+    dRes_ID_KNJ_BTP_KNJ_HIKARI_e=0xF,
+    dRes_ID_KNJ_BTP_KNJ_HONOO_e=0x10,
+    dRes_ID_KNJ_BTP_KNJ_MIZU_e=0x11,
+    dRes_ID_KNJ_BTP_KNJ_MORI_e=0x12,
+    dRes_ID_KNJ_BTP_KNJ_TAMASHII_e=0x13,
+    dRes_ID_KNJ_BTP_KNJ_YAMI_e=0x14,
+};
+
+enum KNJ_JNT {
+    KNJ_JNT_CENTER_e=0x0,
+    KNJ_JNT_BB1_e=0x1,
+    KNJ_JNT_BB2_e=0x2,
+    KNJ_JNT_CLOTHB_e=0x3,
+    KNJ_JNT_CLOTHF1_e=0x4,
+    KNJ_JNT_CLOTHF2_e=0x5,
+    KNJ_JNT_NECK_e=0x6,
+    KNJ_JNT_HEAD_e=0x7,
+    KNJ_JNT_CIRCLEH1_e=0x8,
+    KNJ_JNT_CIRCLEH2_e=0x9,
+    KNJ_JNT_CIRCLEH3_e=0xA,
+    KNJ_JNT_CIRCLEH4_e=0xB,
+    KNJ_JNT_M_ANGRY_e=0xC,
+    KNJ_JNT_M_NORMAL_e=0xD,
+    KNJ_JNT_M_SAD_e=0xE,
+    KNJ_JNT_M_SMILE_e=0xF,
+    KNJ_JNT_M_SUPRISE_e=0x10,
+    KNJ_JNT_SHOULDERL_e=0x11,
+    KNJ_JNT_ARML1_e=0x12,
+    KNJ_JNT_HANDL_e=0x13,
+    KNJ_JNT_FINGERL_e=0x14,
+    KNJ_JNT_THUMBL_e=0x15,
+    KNJ_JNT_SODEL1_e=0x16,
+    KNJ_JNT_SODEL2_e=0x17,
+    KNJ_JNT_SHOULDERR_e=0x18,
+    KNJ_JNT_ARMR1_e=0x19,
+    KNJ_JNT_HANDR_e=0x1A,
+    KNJ_JNT_FINGERR_e=0x1B,
+    KNJ_JNT_THUMBR_e=0x1C,
+    KNJ_JNT_SODER1_e=0x1D,
+    KNJ_JNT_SODER2_e=0x1E,
+    KNJ_JNT_WAIST_e=0x1F,
+    KNJ_JNT_BOTTOM1_e=0x20,
+    KNJ_JNT_BOTTOM2_e=0x21,
+    KNJ_JNT_CIRCLEB1_e=0x22,
+    KNJ_JNT_CIRCLEB2_e=0x23,
+    KNJ_JNT_CIRCLEB3_e=0x24,
+};
+
+#endif /* !RES_KNJ_H */

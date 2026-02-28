@@ -1,0 +1,74 @@
+#ifndef RES_E_WW_H
+#define RES_E_WW_H
+
+enum dRes_INDEX_E_WW {
+    /* BCK  */
+    dRes_INDEX_E_WW_BCK_WW_APPEAR_e=0x4,
+    dRes_INDEX_E_WW_BCK_WW_BACKSTEP_e=0x5,
+    dRes_INDEX_E_WW_BCK_WW_DAMAGE_e=0x6,
+    dRes_INDEX_E_WW_BCK_WW_DEAD_e=0x7,
+    dRes_INDEX_E_WW_BCK_WW_JUMPATTACKA_e=0x8,
+    dRes_INDEX_E_WW_BCK_WW_JUMPATTACKB_e=0x9,
+    dRes_INDEX_E_WW_BCK_WW_JUMPATTACKC_e=0xA,
+    dRes_INDEX_E_WW_BCK_WW_RUN_e=0xB,
+    dRes_INDEX_E_WW_BCK_WW_SIDESTEPL_e=0xC,
+    dRes_INDEX_E_WW_BCK_WW_SIDESTEPR_e=0xD,
+    dRes_INDEX_E_WW_BCK_WW_TURN_e=0xE,
+    dRes_INDEX_E_WW_BCK_WW_WAIT_e=0xF,
+    dRes_INDEX_E_WW_BCK_WW_WALK_e=0x10,
+    /* BMDR */
+    dRes_INDEX_E_WW_BMD_WW_e=0x13,
+};
+
+enum dRes_ID_E_WW {
+    /* BCK  */
+    dRes_ID_E_WW_BCK_WW_APPEAR_e=0x4,
+    dRes_ID_E_WW_BCK_WW_BACKSTEP_e=0x5,
+    dRes_ID_E_WW_BCK_WW_DAMAGE_e=0x6,
+    dRes_ID_E_WW_BCK_WW_DEAD_e=0x7,
+    dRes_ID_E_WW_BCK_WW_JUMPATTACKA_e=0x8,
+    dRes_ID_E_WW_BCK_WW_JUMPATTACKB_e=0x9,
+    dRes_ID_E_WW_BCK_WW_JUMPATTACKC_e=0xA,
+    dRes_ID_E_WW_BCK_WW_RUN_e=0xB,
+    dRes_ID_E_WW_BCK_WW_SIDESTEPL_e=0xC,
+    dRes_ID_E_WW_BCK_WW_SIDESTEPR_e=0xD,
+    dRes_ID_E_WW_BCK_WW_TURN_e=0xE,
+    dRes_ID_E_WW_BCK_WW_WAIT_e=0xF,
+    dRes_ID_E_WW_BCK_WW_WALK_e=0x10,
+    /* BMDR */
+    dRes_ID_E_WW_BMD_WW_e=0x13,
+};
+
+enum WW_JNT {
+    WW_JNT_WORLD_ROOT_e=0x0,
+    WW_JNT_BODY01_e=0x1,
+    WW_JNT_BODY02_e=0x2,
+    WW_JNT_NECK_e=0x3,
+    WW_JNT_HEAD_e=0x4,
+    WW_JNT_AGO_e=0x5,
+    WW_JNT_EARL_e=0x6,
+    WW_JNT_EARR_e=0x7,
+    WW_JNT_SHOULDERL_e=0x8,
+    WW_JNT_ARML01_e=0x9,
+    WW_JNT_ARML02_e=0xA,
+    WW_JNT_HANDL01_e=0xB,
+    WW_JNT_HANDL02_e=0xC,
+    WW_JNT_SHOULDERR_e=0xD,
+    WW_JNT_ARMR01_e=0xE,
+    WW_JNT_ARMR02_e=0xF,
+    WW_JNT_HANDR01_e=0x10,
+    WW_JNT_HANDR02_e=0x11,
+    WW_JNT_WAIST_e=0x12,
+    WW_JNT_LEGL01_e=0x13,
+    WW_JNT_LEGL02_e=0x14,
+    WW_JNT_LEGL03_e=0x15,
+    WW_JNT_FOOTL_e=0x16,
+    WW_JNT_LEGR01_e=0x17,
+    WW_JNT_LEGR02_e=0x18,
+    WW_JNT_LEGR03_e=0x19,
+    WW_JNT_FOOTR_e=0x1A,
+    WW_JNT_TAIL01_e=0x1B,
+    WW_JNT_TAIL02_e=0x1C,
+};
+
+#endif /* !RES_E_WW_H */

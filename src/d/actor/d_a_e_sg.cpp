@@ -700,7 +700,7 @@ static void e_sg_drop(e_sg_class* i_this) {
                 i_this->mRotationTarget = -0x8000;
             }
 
-            i_this->current.angle.y += (s16)cM_rndFX(15000.0f);
+            ANGLE_ADD(i_this->current.angle.y, cM_rndFX(15000.0f));
             i_this->mSound.startCreatureSound(Z2SE_EN_SG_BOUND, 0, -1);
         }
 

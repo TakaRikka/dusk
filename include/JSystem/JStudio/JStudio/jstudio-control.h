@@ -79,9 +79,10 @@ public:
         transformOnGet_enable(param_0);
     }
 
-    void transform_setOrigin_TxyzRy(const Vec& xyz, f32 rotY) {
+    bool transform_setOrigin_TxyzRy(const Vec& xyz, f32 rotY) {
         transformOnSet_setOrigin_TxyzRy(xyz, rotY);
         transformOnGet_setOrigin_TxyzRy(xyz, rotY);
+        return true;
     }
 
     void transform_setOrigin(const Vec& xyz, f32 rotY) {

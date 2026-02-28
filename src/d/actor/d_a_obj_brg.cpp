@@ -14,6 +14,7 @@
 #include "d/d_path.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include "f_op/f_op_camera_mng.h"
+#include <cstring>
 
 static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* i_bgActor, fopAc_ac_c* i_rideActor) {
     obj_brg_class* a_this = (obj_brg_class*)i_bgActor;
@@ -674,7 +675,7 @@ static void obj_brg_move(obj_brg_class* i_this) {
         i_this->field_0xaf1c = 3;
         /* fallthrough */
     case 3: {
-        i_this->field_0xaf1e += (s16) 3000;
+        ANGLE_ADD(i_this->field_0xaf1e, 3000);
         part->field_0x0b0 = a_this->home.pos;
 
         if ((i_this->mType & 1) == 1) {
@@ -871,7 +872,7 @@ static void obj_brg_move(obj_brg_class* i_this) {
         }
 
         cLib_addCalc0(&i_this->field_0xaef4, 0.05f, 80.0f);
-        i_this->field_0xaf2e += (s16) 4500;
+        ANGLE_ADD(i_this->field_0xaf2e, 4500);
 
         if (i_this->field_0xb1ec) {
             spDC = i_this->mEndPos;

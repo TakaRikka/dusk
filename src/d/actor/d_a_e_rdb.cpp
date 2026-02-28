@@ -14,6 +14,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include "f_op/f_op_actor_enemy.h"
 #include "f_op/f_op_camera_mng.h"
+#include <cstring>
 
 class daE_RDB_HIO_c : public JORReflexible {
 public:

@@ -17,6 +17,7 @@
 #include "d/d_msg_scrn_explain.h"
 #include "m_Do/m_Do_graphic.h"
 #include "d/actor/d_a_midna.h"
+#include <cstring>
 
 dMenu_Fmap2DBack_c::dMenu_Fmap2DBack_c() {
     dMeter2Info_setMapDrugFlag(0);
@@ -938,9 +939,9 @@ void dMenu_Fmap2DBack_c::scrollCalc(f32 param_0) {
 }
 
 void dMenu_Fmap2DBack_c::mapBlink(s16* param_0) {
-    *param_0 += (s16)1;
+    S16_ADD(*param_0, 1);
     if (*param_0 >= 30) {
-        *param_0 -= (s16)30;
+        S16_SUB(*param_0, 30);
     }
 }
 

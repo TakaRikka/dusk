@@ -1,0 +1,25 @@
+#ifndef RES_D_HFSW00_H
+#define RES_D_HFSW00_H
+
+enum dRes_INDEX_D_HFSW00 {
+    /* BMDR */
+    dRes_INDEX_D_HFSW00_BMD_D_HFSWITCH_e=0x4,
+    /* DZB  */
+    dRes_INDEX_D_HFSW00_DZB_D_HFSWITCH00_e=0x7,
+    dRes_INDEX_D_HFSW00_DZB_D_HFSWITCH01_e=0x8,
+};
+
+enum dRes_ID_D_HFSW00 {
+    /* BMDR */
+    dRes_ID_D_HFSW00_BMD_D_HFSWITCH_e=0x4,
+    /* DZB  */
+    dRes_ID_D_HFSW00_DZB_D_HFSWITCH00_e=0x7,
+    dRes_ID_D_HFSW00_DZB_D_HFSWITCH01_e=0x8,
+};
+
+enum D_HFSWITCH_JNT {
+    D_HFSWITCH_JNT_BASE_e=0x0,
+    D_HFSWITCH_JNT_BUTTON_e=0x1,
+};
+
+#endif /* !RES_D_HFSW00_H */

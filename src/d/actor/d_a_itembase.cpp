@@ -135,7 +135,7 @@ int daItemBase_c::DrawBase() {
 }
 
 void daItemBase_c::RotateYBase() {
-    shape_angle.y += (s16)(0xFFFF / getData().mRotateYSpeed);
+    ANGLE_ADD(shape_angle.y, 0xFFFF / getData().mRotateYSpeed);
 }
 
 void daItemBase_c::setListStart() {

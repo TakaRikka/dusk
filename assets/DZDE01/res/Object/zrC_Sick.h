@@ -1,0 +1,20 @@
+#ifndef RES_ZRC_SICK_H
+#define RES_ZRC_SICK_H
+
+enum dRes_INDEX_ZRC_SICK {
+    /* BCK  */
+    dRes_INDEX_ZRC_SICK_BCK_ZRC_F_SICK_DEMO_WAIT_e=0x4,
+    dRes_INDEX_ZRC_SICK_BCK_ZRC_SICK_DEMO_WAIT_e=0x5,
+    /* BTP  */
+    dRes_INDEX_ZRC_SICK_BTP_ZRC_F_SICK_DEMO_WAIT_e=0x8,
+};
+
+enum dRes_ID_ZRC_SICK {
+    /* BCK  */
+    dRes_ID_ZRC_SICK_BCK_ZRC_F_SICK_DEMO_WAIT_e=0x4,
+    dRes_ID_ZRC_SICK_BCK_ZRC_SICK_DEMO_WAIT_e=0x5,
+    /* BTP  */
+    dRes_ID_ZRC_SICK_BTP_ZRC_F_SICK_DEMO_WAIT_e=0x8,
+};
+
+#endif /* !RES_ZRC_SICK_H */

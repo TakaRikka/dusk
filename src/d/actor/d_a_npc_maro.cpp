@@ -19,6 +19,7 @@
 #include "d/d_timer.h"
 #if DEBUG
 #include "d/d_debug_viewer.h"
+#include <cstring>
 #endif
 
 const daNpc_Maro_HIOParam daNpc_Maro_Param_c::m = {

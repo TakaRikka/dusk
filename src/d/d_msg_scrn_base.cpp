@@ -6,7 +6,7 @@
 #include "d/d_msg_object.h"
 #include "d/d_msg_out_font.h"
 #include "d/d_pane_class.h"
-#include <string>
+#include <cstring>
 
 dMsgScrnBase_c::dMsgScrnBase_c() {
     init();

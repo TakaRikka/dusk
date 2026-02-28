@@ -1,0 +1,26 @@
+#ifndef RES_OBJ_PROP2_H
+#define RES_OBJ_PROP2_H
+
+enum dRes_INDEX_OBJ_PROP2 {
+    /* BMDR */
+    dRes_INDEX_OBJ_PROP2_BMD_K_PROP02_e=0x4,
+    /* DZB  */
+    dRes_INDEX_OBJ_PROP2_DZB_K_PROP02_e=0x7,
+    dRes_INDEX_OBJ_PROP2_DZB_K_PROP02A_e=0x8,
+    dRes_INDEX_OBJ_PROP2_DZB_K_PROP02B_e=0x9,
+};
+
+enum dRes_ID_OBJ_PROP2 {
+    /* BMDR */
+    dRes_ID_OBJ_PROP2_BMD_K_PROP02_e=0x4,
+    /* DZB  */
+    dRes_ID_OBJ_PROP2_DZB_K_PROP02_e=0x7,
+    dRes_ID_OBJ_PROP2_DZB_K_PROP02A_e=0x8,
+    dRes_ID_OBJ_PROP2_DZB_K_PROP02B_e=0x9,
+};
+
+enum K_PROP02_JNT {
+    K_PROP02_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_OBJ_PROP2_H */

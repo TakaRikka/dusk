@@ -8,9 +8,9 @@
 /**
  * @ingroup actors-objects
  * @class daObjWaterFall_c
- * @brief Waterfall With Collision Object
+ * @brief Waterfall Collision
  *
- * @details Waterfalls that player cannot move through (e.g. those in Zora's Domain)
+ * @details Collision added to waterfalls that player shouldn't move through (e.g. those in Zora's Domain). Doesn't actually draw the waterfall.
  */
 class daObjWaterFall_c : public fopAc_ac_c {
 public:
@@ -30,23 +30,23 @@ private:
     /* 0x574 */ dCcD_Stts mCylColliderStts;
     /* 0x5B0 */ dCcD_Tri mUnusedTriCollider[2];
     /* 0x868 */ dCcD_Cyl mCylCollider;
-    /* 0x9A4 */ cXyz mCylColliderCenterOscillationTargets[2];
-    /* 0x9BC */ cXyz mCylColliderCenter;
-    /* 0x9C8 */ s8 mCylColliderCenterQuantizedOscillation;
+    /* 0x9A4 */ cXyz mColOscPosTargets[2];
+    /* 0x9BC */ cXyz mColCenter;
+    /* 0x9C8 */ s8 mColOscDir;
 
     enum Type_e {
         ALLOW_ARROWS_e
     };
 
     BOOL checkFallOut() {
-        return fopAcM_GetParamBit(this, 10, 4);
+        return (BOOL) fopAcM_GetParamBit(this, 10, 4) == TRUE;
     }
 
-    Type_e getType() {
-        return static_cast<Type_e>(fopAcM_GetParamBit(this, 8, 2));
+    u8 getType() {
+        return fopAcM_GetParamBit(this, 8, 2);
     }
 
-    u32 getSwbit() {
+    u8 getSwbit() {
         return fopAcM_GetParamBit(this, 0, 8);
     }
 };

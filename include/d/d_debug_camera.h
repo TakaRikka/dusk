@@ -3,6 +3,7 @@
 
 #include "d/d_camera.h"
 #include "JSystem/JHostIO/JORFile.h"
+#include <cstring>
 
 enum dDbgCam_KeyAction {
     /* | */ dDbgCam_KeyAction_FIXEDFRM,

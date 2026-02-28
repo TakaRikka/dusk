@@ -1,0 +1,111 @@
+#ifndef RES_E_PZ_H
+#define RES_E_PZ_H
+
+enum dRes_INDEX_E_PZ {
+    /* BCK  */
+    dRes_INDEX_E_PZ_BCK_EF_PZBALL_e=0x7,
+    dRes_INDEX_E_PZ_BCK_PZ_APPEAR_e=0x8,
+    dRes_INDEX_E_PZ_BCK_PZ_ATTACK02_THROW_e=0x9,
+    dRes_INDEX_E_PZ_BCK_PZ_ATTACK02_WAIT_e=0xA,
+    dRes_INDEX_E_PZ_BCK_PZ_ATTACK_READY_e=0xB,
+    dRes_INDEX_E_PZ_BCK_PZ_ATTACK_THROW_e=0xC,
+    dRes_INDEX_E_PZ_BCK_PZ_ATTACK_WAIT_e=0xD,
+    dRes_INDEX_E_PZ_BCK_PZ_DAMAGEF_e=0xE,
+    dRes_INDEX_E_PZ_BCK_PZ_DAMAGEL_e=0xF,
+    dRes_INDEX_E_PZ_BCK_PZ_DAMAGER_e=0x10,
+    dRes_INDEX_E_PZ_BCK_PZ_DEAD_e=0x11,
+    dRes_INDEX_E_PZ_BCK_PZ_DEMO_DEAD_e=0x12,
+    dRes_INDEX_E_PZ_BCK_PZ_FADEAWAY_e=0x13,
+    dRes_INDEX_E_PZ_BCK_PZ_MOVE_e=0x14,
+    dRes_INDEX_E_PZ_BCK_PZ_WAIT_e=0x15,
+    /* BMDR */
+    dRes_INDEX_E_PZ_BMD_EF_PORTAL_e=0x18,
+    dRes_INDEX_E_PZ_BMD_EF_PZBALL_e=0x19,
+    /* BMDV */
+    dRes_INDEX_E_PZ_BMD_PZ_e=0x1C,
+    /* BRK  */
+    dRes_INDEX_E_PZ_BRK_EF_PORTAL_RED_APP_e=0x1F,
+    dRes_INDEX_E_PZ_BRK_EF_PORTAL_RED_DISAPP_e=0x20,
+    dRes_INDEX_E_PZ_BRK_EF_PZBALL_e=0x21,
+    dRes_INDEX_E_PZ_BRK_PZ_e=0x22,
+    /* BTK  */
+    dRes_INDEX_E_PZ_BTK_EF_PORTAL_e=0x25,
+    dRes_INDEX_E_PZ_BTK_PZ_e=0x26,
+};
+
+enum dRes_ID_E_PZ {
+    /* BCK  */
+    dRes_ID_E_PZ_BCK_EF_PZBALL_e=0x7,
+    dRes_ID_E_PZ_BCK_PZ_APPEAR_e=0x8,
+    dRes_ID_E_PZ_BCK_PZ_ATTACK02_THROW_e=0x9,
+    dRes_ID_E_PZ_BCK_PZ_ATTACK02_WAIT_e=0xA,
+    dRes_ID_E_PZ_BCK_PZ_ATTACK_READY_e=0xB,
+    dRes_ID_E_PZ_BCK_PZ_ATTACK_THROW_e=0xC,
+    dRes_ID_E_PZ_BCK_PZ_ATTACK_WAIT_e=0xD,
+    dRes_ID_E_PZ_BCK_PZ_DAMAGEF_e=0xE,
+    dRes_ID_E_PZ_BCK_PZ_DAMAGEL_e=0xF,
+    dRes_ID_E_PZ_BCK_PZ_DAMAGER_e=0x10,
+    dRes_ID_E_PZ_BCK_PZ_DEAD_e=0x11,
+    dRes_ID_E_PZ_BCK_PZ_DEMO_DEAD_e=0x12,
+    dRes_ID_E_PZ_BCK_PZ_FADEAWAY_e=0x13,
+    dRes_ID_E_PZ_BCK_PZ_MOVE_e=0x14,
+    dRes_ID_E_PZ_BCK_PZ_WAIT_e=0x15,
+    /* BMDR */
+    dRes_ID_E_PZ_BMD_EF_PORTAL_e=0x18,
+    dRes_ID_E_PZ_BMD_EF_PZBALL_e=0x19,
+    /* BMDV */
+    dRes_ID_E_PZ_BMD_PZ_e=0x1C,
+    /* BRK  */
+    dRes_ID_E_PZ_BRK_EF_PORTAL_RED_APP_e=0x1F,
+    dRes_ID_E_PZ_BRK_EF_PORTAL_RED_DISAPP_e=0x20,
+    dRes_ID_E_PZ_BRK_EF_PZBALL_e=0x21,
+    dRes_ID_E_PZ_BRK_PZ_e=0x22,
+    /* BTK  */
+    dRes_ID_E_PZ_BTK_EF_PORTAL_e=0x25,
+    dRes_ID_E_PZ_BTK_PZ_e=0x26,
+};
+
+enum EF_PORTAL_JNT {
+    EF_PORTAL_JNT_EF_WARPHOLE_e=0x0,
+};
+
+enum EF_PZBALL_JNT {
+    EF_PZBALL_JNT_EF_PZBALL_e=0x0,
+};
+
+enum PZ_JNT {
+    PZ_JNT_CENTER_e=0x0,
+    PZ_JNT_BACKBONE1_e=0x1,
+    PZ_JNT_BACKBONE2_e=0x2,
+    PZ_JNT_SPADL_e=0x3,
+    PZ_JNT_SPADR_e=0x4,
+    PZ_JNT_SHOULDERL_e=0x5,
+    PZ_JNT_ARML1_e=0x6,
+    PZ_JNT_SUSOL1_e=0x7,
+    PZ_JNT_SUSOL2_e=0x8,
+    PZ_JNT_HIRALB1_e=0x9,
+    PZ_JNT_HIRALB2_e=0xA,
+    PZ_JNT_HIRALF1_e=0xB,
+    PZ_JNT_HIRALF2_e=0xC,
+    PZ_JNT_SHOULDERR1_e=0xD,
+    PZ_JNT_ARMR1_e=0xE,
+    PZ_JNT_SUSOR1_e=0xF,
+    PZ_JNT_SUSOR2_e=0x10,
+    PZ_JNT_HIRARB1_e=0x11,
+    PZ_JNT_HIRARB2_e=0x12,
+    PZ_JNT_HIRARF1_e=0x13,
+    PZ_JNT_HIRARF2_e=0x14,
+    PZ_JNT_WAIST_e=0x15,
+    PZ_JNT_LEGL1_e=0x16,
+    PZ_JNT_LEGL2_e=0x17,
+    PZ_JNT_FOOTL_e=0x18,
+    PZ_JNT_LEGR1_e=0x19,
+    PZ_JNT_LEGR2_e=0x1A,
+    PZ_JNT_FOOTR_e=0x1B,
+    PZ_JNT_TAREB1_e=0x1C,
+    PZ_JNT_TAREB2_e=0x1D,
+    PZ_JNT_TAREF1_e=0x1E,
+    PZ_JNT_TAREF2_e=0x1F,
+};
+
+#endif /* !RES_E_PZ_H */

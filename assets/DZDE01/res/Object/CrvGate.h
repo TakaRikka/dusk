@@ -1,0 +1,28 @@
+#ifndef RES_CRVGATE_H
+#define RES_CRVGATE_H
+
+enum dRes_INDEX_CRVGATE {
+    /* BMDR */
+    dRes_INDEX_CRVGATE_BMD_CARAVANGATE_e=0x4,
+    dRes_INDEX_CRVGATE_BMD_CARAVANKEY_e=0x5,
+    /* DZB  */
+    dRes_INDEX_CRVGATE_DZB_CARAVANGATE_e=0x8,
+};
+
+enum dRes_ID_CRVGATE {
+    /* BMDR */
+    dRes_ID_CRVGATE_BMD_CARAVANGATE_e=0x4,
+    dRes_ID_CRVGATE_BMD_CARAVANKEY_e=0x5,
+    /* DZB  */
+    dRes_ID_CRVGATE_DZB_CARAVANGATE_e=0x8,
+};
+
+enum CARAVANGATE_JNT {
+    CARAVANGATE_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum CARAVANKEY_JNT {
+    CARAVANKEY_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_CRVGATE_H */

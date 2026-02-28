@@ -2,6 +2,7 @@
 #include "d/d_camera.h"
 #include "d/actor/d_a_tag_gra.h"
 #include <cmath>
+#include <cstring>
 
 f32 daObj_GrA_c::getSrchCircleR() {
     f32 srchCircleR;

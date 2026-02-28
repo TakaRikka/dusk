@@ -9,6 +9,7 @@
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include <cstring>
 
 static int daKytag15_Draw(kytag15_class* i_this) {
     cXyz scale;

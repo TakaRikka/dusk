@@ -11,6 +11,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
 #include "d/d_kankyo_wether.h"
+#include <cstring>
 
 static BOOL d_kytag12_cut_turn_check() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);

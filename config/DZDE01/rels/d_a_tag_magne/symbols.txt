@@ -1,0 +1,11 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+Create__12daTagMagne_cFv = .text:0x0000005C; // type:function size:0x3C scope:global align:4
+create__12daTagMagne_cFv = .text:0x00000098; // type:function size:0x98 scope:global align:4
+daTagMagne_Delete__FP12daTagMagne_c = .text:0x00000130; // type:function size:0x14 scope:global align:4
+daTagMagne_Create__FP10fopAc_ac_c = .text:0x00000144; // type:function size:0x4 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+l_daTagMagne_Method = .data:0x00000000; // type:object size:0x20 scope:global align:4
+g_profile_Tag_Magne = .data:0x00000020; // type:object size:0x30 scope:global align:4

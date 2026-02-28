@@ -20,7 +20,7 @@
 #include "d/d_msg_class.h"
 #include "d/d_msg_object.h"
 #include "d/d_pane_class.h"
-#include <string>
+#include <cstring>
 
 dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap* mp_heap) {
     OS_REPORT("enter dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap *mp_heap)\n");

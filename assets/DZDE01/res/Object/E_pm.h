@@ -1,0 +1,120 @@
+#ifndef RES_E_PM_H
+#define RES_E_PM_H
+
+enum dRes_INDEX_E_PM {
+    /* BCK  */
+    dRes_INDEX_E_PM_BCK_EF_GLOW_e=0x5,
+    dRes_INDEX_E_PM_BCK_PM_APPEAR01_e=0x6,
+    dRes_INDEX_E_PM_BCK_PM_APPEAR02_e=0x7,
+    dRes_INDEX_E_PM_BCK_PM_DAMAGE_e=0x8,
+    dRes_INDEX_E_PM_BCK_PM_DIEA_e=0x9,
+    dRes_INDEX_E_PM_BCK_PM_DIEB_e=0xA,
+    dRes_INDEX_E_PM_BCK_PM_END_e=0xB,
+    dRes_INDEX_E_PM_BCK_PM_FOGBLOW_e=0xC,
+    dRes_INDEX_E_PM_BCK_PM_FOGBLOW_EN_e=0xD,
+    dRes_INDEX_E_PM_BCK_PM_FOGBLOW_LP_e=0xE,
+    dRes_INDEX_E_PM_BCK_PM_FOGBLOW_ST_e=0xF,
+    dRes_INDEX_E_PM_BCK_PM_GLAD_e=0x10,
+    dRes_INDEX_E_PM_BCK_PM_HIDE_e=0x11,
+    dRes_INDEX_E_PM_BCK_PM_KYORO2_e=0x12,
+    dRes_INDEX_E_PM_BCK_PM_MOVE_e=0x13,
+    dRes_INDEX_E_PM_BCK_PM_OP_e=0x14,
+    dRes_INDEX_E_PM_BCK_PM_RUN_e=0x15,
+    dRes_INDEX_E_PM_BCK_PM_WAIT01_e=0x16,
+    dRes_INDEX_E_PM_BCK_PM_WAIT02_e=0x17,
+    dRes_INDEX_E_PM_BCK_PM_WALK_e=0x18,
+    dRes_INDEX_E_PM_BCK_TR_FOGBLOW_e=0x19,
+    /* BMDR */
+    dRes_INDEX_E_PM_BMD_EF_GLOW_e=0x1C,
+    dRes_INDEX_E_PM_BMD_PM_e=0x1D,
+    dRes_INDEX_E_PM_BMD_PM_LAMP_e=0x1E,
+    dRes_INDEX_E_PM_BMD_PM_TRUMPET_e=0x1F,
+    /* BTP  */
+    dRes_INDEX_E_PM_BTP_EYE_APPEAR02_e=0x22,
+    dRes_INDEX_E_PM_BTP_EYE_MABA_e=0x23,
+};
+
+enum dRes_ID_E_PM {
+    /* BCK  */
+    dRes_ID_E_PM_BCK_EF_GLOW_e=0x5,
+    dRes_ID_E_PM_BCK_PM_APPEAR01_e=0x6,
+    dRes_ID_E_PM_BCK_PM_APPEAR02_e=0x7,
+    dRes_ID_E_PM_BCK_PM_DAMAGE_e=0x8,
+    dRes_ID_E_PM_BCK_PM_DIEA_e=0x9,
+    dRes_ID_E_PM_BCK_PM_DIEB_e=0xA,
+    dRes_ID_E_PM_BCK_PM_END_e=0xB,
+    dRes_ID_E_PM_BCK_PM_FOGBLOW_e=0xC,
+    dRes_ID_E_PM_BCK_PM_FOGBLOW_EN_e=0xD,
+    dRes_ID_E_PM_BCK_PM_FOGBLOW_LP_e=0xE,
+    dRes_ID_E_PM_BCK_PM_FOGBLOW_ST_e=0xF,
+    dRes_ID_E_PM_BCK_PM_GLAD_e=0x10,
+    dRes_ID_E_PM_BCK_PM_HIDE_e=0x11,
+    dRes_ID_E_PM_BCK_PM_KYORO2_e=0x12,
+    dRes_ID_E_PM_BCK_PM_MOVE_e=0x13,
+    dRes_ID_E_PM_BCK_PM_OP_e=0x14,
+    dRes_ID_E_PM_BCK_PM_RUN_e=0x15,
+    dRes_ID_E_PM_BCK_PM_WAIT01_e=0x16,
+    dRes_ID_E_PM_BCK_PM_WAIT02_e=0x17,
+    dRes_ID_E_PM_BCK_PM_WALK_e=0x18,
+    dRes_ID_E_PM_BCK_TR_FOGBLOW_e=0x19,
+    /* BMDR */
+    dRes_ID_E_PM_BMD_EF_GLOW_e=0x1C,
+    dRes_ID_E_PM_BMD_PM_e=0x1D,
+    dRes_ID_E_PM_BMD_PM_LAMP_e=0x1E,
+    dRes_ID_E_PM_BMD_PM_TRUMPET_e=0x1F,
+    /* BTP  */
+    dRes_ID_E_PM_BTP_EYE_APPEAR02_e=0x22,
+    dRes_ID_E_PM_BTP_EYE_MABA_e=0x23,
+};
+
+enum EF_GLOW_JNT {
+    EF_GLOW_JNT_EF_GLOW_e=0x0,
+};
+
+enum PM_JNT {
+    PM_JNT_CENTER_e=0x0,
+    PM_JNT_BACKBONE_e=0x1,
+    PM_JNT_CLOAK1_e=0x2,
+    PM_JNT_CLOAK2_e=0x3,
+    PM_JNT_HEAD_e=0x4,
+    PM_JNT_HAT1_e=0x5,
+    PM_JNT_HAT2_e=0x6,
+    PM_JNT_HAT3_e=0x7,
+    PM_JNT_HAT4_e=0x8,
+    PM_JNT_NECKLACE1_e=0x9,
+    PM_JNT_NECKLACE2_e=0xA,
+    PM_JNT_SHOULDERL_e=0xB,
+    PM_JNT_ARML1_e=0xC,
+    PM_JNT_ARML2_e=0xD,
+    PM_JNT_HANDL_e=0xE,
+    PM_JNT_SHOULDERR_e=0xF,
+    PM_JNT_ARMR1_e=0x10,
+    PM_JNT_ARMR2_e=0x11,
+    PM_JNT_HANDR_e=0x12,
+    PM_JNT_WAIST_e=0x13,
+    PM_JNT_LEGL1_e=0x14,
+    PM_JNT_LEGL2_e=0x15,
+    PM_JNT_FOOTL_e=0x16,
+    PM_JNT_LEGR1_e=0x17,
+    PM_JNT_LEGR2_e=0x18,
+    PM_JNT_FOOTR_e=0x19,
+    PM_JNT_SKIRT_e=0x1A,
+};
+
+enum PM_LAMP_JNT {
+    PM_LAMP_JNT_LAMP_LOC_e=0x0,
+    PM_LAMP_JNT_LAMP1_e=0x1,
+    PM_LAMP_JNT_LAMP2_e=0x2,
+};
+
+enum PM_TRUMPET_JNT {
+    PM_TRUMPET_JNT_TRUMPET_LOC_e=0x0,
+    PM_TRUMPET_JNT_TRUMPET_e=0x1,
+    PM_TRUMPET_JNT_BAG_e=0x2,
+    PM_TRUMPET_JNT_TUBE1_e=0x3,
+    PM_TRUMPET_JNT_TUBE2_e=0x4,
+    PM_TRUMPET_JNT_TUBE3_e=0x5,
+    PM_TRUMPET_JNT_TUBE4_e=0x6,
+};
+
+#endif /* !RES_E_PM_H */

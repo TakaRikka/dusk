@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_npc_seic.h"
 #include "SSystem/SComponent/c_counter.h"
+#include <cstring>
 
 static int l_bmdData[1][2] = {
     {9, 1}

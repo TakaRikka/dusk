@@ -11,6 +11,7 @@
 #include "f_op/f_op_draw_tag.h"
 #include "f_pc/f_pc_manager.h"
 #include "m_Do/m_Do_hostIO.h"
+#include "SSystem/SComponent/c_phase.h"
 
 #define fopAcM_ct(ptr, ClassName)                                           \
     if (!fopAcM_CheckCondition(ptr, fopAcCnd_INIT_e)) {                     \

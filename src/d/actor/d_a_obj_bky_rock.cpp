@@ -10,6 +10,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_model.h"
 #include "d/d_com_inf_game.h"
+#include <cstring>
 
 static int daBkyRock_c_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daBkyRock_c*>(i_this)->createHeap();

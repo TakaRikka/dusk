@@ -10,7 +10,7 @@
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
-#include <string>
+#include <cstring>
 #include "d/d_com_inf_game.h"
 #include "d/d_select_cursor.h"
 #include "d/d_msg_object.h"

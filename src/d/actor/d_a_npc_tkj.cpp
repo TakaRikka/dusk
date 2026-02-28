@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_npc_tkj.h"
 #include "d/actor/d_a_npc4.h"
+#include <cstring>
 
 static int l_bmdData[1][2] = {
     {12, 1},

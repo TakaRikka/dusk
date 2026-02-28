@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_npc_impal.h"
 #include "d/actor/d_a_npc.h"
+#include <cstring>
 
 daNpcImpal_HIOParam const daNpcImpal_Param_c::m = {
     135.0f,        // attention_offset

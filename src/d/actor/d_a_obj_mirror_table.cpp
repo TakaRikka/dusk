@@ -10,6 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_procname.h"
+#include <cstring>
 
 static char const* l_arcName = "MR-Table";
 

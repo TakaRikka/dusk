@@ -1,0 +1,32 @@
+#ifndef RES_H_KAONSEN_H
+#define RES_H_KAONSEN_H
+
+enum dRes_INDEX_H_KAONSEN {
+    /* BMDR */
+    dRes_INDEX_H_KAONSEN_BMD_H_KAKAONSEN_e=0x5,
+    dRes_INDEX_H_KAONSEN_BMD_H_KAKAONSENB_e=0x6,
+    /* BTK  */
+    dRes_INDEX_H_KAONSEN_BTK_H_KAKAONSENB_e=0x9,
+    /* DZB  */
+    dRes_INDEX_H_KAONSEN_DZB_H_KAKAONSEN_e=0xC,
+};
+
+enum dRes_ID_H_KAONSEN {
+    /* BMDR */
+    dRes_ID_H_KAONSEN_BMD_H_KAKAONSEN_e=0x5,
+    dRes_ID_H_KAONSEN_BMD_H_KAKAONSENB_e=0x6,
+    /* BTK  */
+    dRes_ID_H_KAONSEN_BTK_H_KAKAONSENB_e=0x9,
+    /* DZB  */
+    dRes_ID_H_KAONSEN_DZB_H_KAKAONSEN_e=0xC,
+};
+
+enum H_KAKAONSEN_JNT {
+    H_KAKAONSEN_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum H_KAKAONSENB_JNT {
+    H_KAKAONSENB_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_H_KAONSEN_H */

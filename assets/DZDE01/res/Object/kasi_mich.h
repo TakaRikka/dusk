@@ -1,0 +1,42 @@
+#ifndef RES_KASI_MICH_H
+#define RES_KASI_MICH_H
+
+enum dRes_INDEX_KASI_MICH {
+    /* BMDR */
+    dRes_INDEX_KASI_MICH_BMD_MICH_e=0x4,
+    /* BTP  */
+    dRes_INDEX_KASI_MICH_BTP_MICH_e=0x7,
+};
+
+enum dRes_ID_KASI_MICH {
+    /* BMDR */
+    dRes_ID_KASI_MICH_BMD_MICH_e=0x4,
+    /* BTP  */
+    dRes_ID_KASI_MICH_BTP_MICH_e=0x7,
+};
+
+enum MICH_JNT {
+    MICH_JNT_CENTER_e=0x0,
+    MICH_JNT_BACKBONE_e=0x1,
+    MICH_JNT_NECK_e=0x2,
+    MICH_JNT_HEAD_e=0x3,
+    MICH_JNT_SHOULDERL_e=0x4,
+    MICH_JNT_ARML1_e=0x5,
+    MICH_JNT_ARML2_e=0x6,
+    MICH_JNT_HANDL_e=0x7,
+    MICH_JNT_SHOULDERR_e=0x8,
+    MICH_JNT_ARMR1_e=0x9,
+    MICH_JNT_ARMR2_e=0xA,
+    MICH_JNT_HANDR_e=0xB,
+    MICH_JNT_WAIST_e=0xC,
+    MICH_JNT_LEGL1_e=0xD,
+    MICH_JNT_LEGL2_e=0xE,
+    MICH_JNT_FOOTL_e=0xF,
+    MICH_JNT_SKIRTL_e=0x10,
+    MICH_JNT_LEGR1_e=0x11,
+    MICH_JNT_LEGR2_e=0x12,
+    MICH_JNT_FOOTR_e=0x13,
+    MICH_JNT_SKIRTR_e=0x14,
+};
+
+#endif /* !RES_KASI_MICH_H */

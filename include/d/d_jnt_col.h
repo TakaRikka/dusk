@@ -2,6 +2,7 @@
 #define D_D_JNT_COL_H
 
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
+#include "JSystem/JHostIO/JORReflexible.h"
 #include "SSystem/SComponent/c_m3d_g_lin.h"
 #include "SSystem/SComponent/c_sxyz.h"
 
@@ -25,6 +26,7 @@ public:
     int getArrowOffsetPosAndAngle(cXyz const*, csXyz const*, cXyz*, cXyz*) const;
     int getHitmarkPosAndAngle(cXyz const*, csXyz const*, cXyz*, csXyz*, int) const;
     void setArrowPosAndAngle(cXyz const*, cXyz const*, int, cXyz*, csXyz*);
+    void debugDraw();
 
     BOOL checkPassNum(int bit) { return field_0xc & (1 << bit); }
     void onPassNum(int num) { field_0xc |= (1 << num); }
@@ -32,12 +34,34 @@ public:
     bool checkShieldType(int i) { return getType(i) == 3; }
 
     s8 getType(int i) { return mData[i].mType; }
-    int getJntNum(int i) { return mData[i].mJntNum; }
+    int getJntNum(int i) { return (s16)mData[i].mJntNum; }
 
     /* 0x00 */ const dJntColData_c* mData;
     /* 0x04 */ J3DModel* mModel;
     /* 0x08 */ int field_0x8;
     /* 0x0C */ int field_0xc;
+};
+
+extern dJntColData_c l_debugColData[];
+
+class dJntCol_HIO_c : public JORReflexible {
+public:
+    dJntCol_HIO_c() {
+        field_0x5 = 0;
+        field_0xc = l_debugColData;
+    }
+    virtual ~dJntCol_HIO_c() {}
+    virtual void listenPropertyEvent(const JORPropertyEvent*);
+    virtual void genMessage(JORMContext*);
+
+    void update();
+    void fileOut();
+
+    /* 0x04 */ s8 field_0x4;
+    /* 0x05 */ u8 field_0x5;
+    /* 0x06 */ u8 field_0x6[0xC - 0x6];
+    /* 0x0C */ dJntColData_c* field_0xc;
+
 };
 
 #endif /* D_D_JNT_COL_H */

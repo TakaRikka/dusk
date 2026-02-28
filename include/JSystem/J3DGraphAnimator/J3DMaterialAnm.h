@@ -93,7 +93,10 @@ public:
         J3D_ASSERT_NULLPTR(214, pAnmTexPattern != NULL);
     }
 
-    virtual void calc(u16* param_0) const { mAnmTexPattern->getTexNo(field_0x4, param_0); }
+    virtual void calc(u16* param_0) const {
+        J3D_ASSERT_NULLPTR(532, param_0);
+        mAnmTexPattern->getTexNo(field_0x4, param_0);
+    }
 
     void operator=(J3DTexNoAnm const& other) {
         mAnmTexPattern = other.mAnmTexPattern;

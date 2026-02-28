@@ -1,0 +1,46 @@
+#ifndef RES_TAROB_H
+#define RES_TAROB_H
+
+enum dRes_INDEX_TAROB {
+    /* BMDR */
+    dRes_INDEX_TAROB_BMD_GM_TARO_e=0x4,
+    /* BTP  */
+    dRes_INDEX_TAROB_BTP_TAROB_e=0x7,
+};
+
+enum dRes_ID_TAROB {
+    /* BMDR */
+    dRes_ID_TAROB_BMD_GM_TARO_e=0x4,
+    /* BTP  */
+    dRes_ID_TAROB_BTP_TAROB_e=0x7,
+};
+
+enum GM_TARO_JNT {
+    GM_TARO_JNT_CENTER_e=0x0,
+    GM_TARO_JNT_BACKBONE1_e=0x1,
+    GM_TARO_JNT_BACKBONE2_e=0x2,
+    GM_TARO_JNT_NECK_e=0x3,
+    GM_TARO_JNT_HEAD_e=0x4,
+    GM_TARO_JNT_CHINE_e=0x5,
+    GM_TARO_JNT_HEADBAND_e=0x6,
+    GM_TARO_JNT_MOUTH_e=0x7,
+    GM_TARO_JNT_SHOULDERL_e=0x8,
+    GM_TARO_JNT_ARML1_e=0x9,
+    GM_TARO_JNT_ARML2_e=0xA,
+    GM_TARO_JNT_HANDL_e=0xB,
+    GM_TARO_JNT_SHOULDERR_e=0xC,
+    GM_TARO_JNT_ARMR1_e=0xD,
+    GM_TARO_JNT_ARMR2_e=0xE,
+    GM_TARO_JNT_HANDR_e=0xF,
+    GM_TARO_JNT_WAIST_e=0x10,
+    GM_TARO_JNT_LEGL1_e=0x11,
+    GM_TARO_JNT_LEGL2_e=0x12,
+    GM_TARO_JNT_FOOTL_e=0x13,
+    GM_TARO_JNT_LEGR1_e=0x14,
+    GM_TARO_JNT_LEGR2_e=0x15,
+    GM_TARO_JNT_FOOTR_e=0x16,
+    GM_TARO_JNT_SKART1_e=0x17,
+    GM_TARO_JNT_SKART2_e=0x18,
+};
+
+#endif /* !RES_TAROB_H */

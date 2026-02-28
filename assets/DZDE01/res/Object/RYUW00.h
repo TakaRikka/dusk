@@ -1,0 +1,30 @@
+#ifndef RES_RYUW00_H
+#define RES_RYUW00_H
+
+enum dRes_INDEX_RYUW00 {
+    /* BMDR */
+    dRes_INDEX_RYUW00_BMD_K_RYUWOOD00_e=0x4,
+    dRes_INDEX_RYUW00_BMD_K_RYUWOOD01_e=0x5,
+    /* DZB  */
+    dRes_INDEX_RYUW00_DZB_K_RYUWOOD00_e=0x8,
+    dRes_INDEX_RYUW00_DZB_K_RYUWOOD01_e=0x9,
+};
+
+enum dRes_ID_RYUW00 {
+    /* BMDR */
+    dRes_ID_RYUW00_BMD_K_RYUWOOD00_e=0x4,
+    dRes_ID_RYUW00_BMD_K_RYUWOOD01_e=0x5,
+    /* DZB  */
+    dRes_ID_RYUW00_DZB_K_RYUWOOD00_e=0x8,
+    dRes_ID_RYUW00_DZB_K_RYUWOOD01_e=0x9,
+};
+
+enum K_RYUWOOD00_JNT {
+    K_RYUWOOD00_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum K_RYUWOOD01_JNT {
+    K_RYUWOOD01_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_RYUW00_H */

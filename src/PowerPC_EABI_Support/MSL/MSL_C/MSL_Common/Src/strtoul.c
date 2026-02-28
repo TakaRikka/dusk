@@ -72,7 +72,7 @@ unsigned long __strtoul(int base, int max_width, int (*ReadProc)(void*, int, int
             scan_state = need_digit;
             break;
 
-        case 4:
+        case leading_zero:
             if (c == 'X' || c == 'x') {
                 base = 16;
                 scan_state = need_digit;

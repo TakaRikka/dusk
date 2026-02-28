@@ -1,0 +1,14 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+CreateInit__12daSetBgObj_cFv = .text:0x0000005C; // type:function size:0x84 scope:global align:4
+create__12daSetBgObj_cFv = .text:0x000000E0; // type:function size:0x8C scope:global align:4
+daSetBgObj_Delete__FP12daSetBgObj_c = .text:0x0000016C; // type:function size:0x30 scope:global align:4
+daSetBgObj_Create__FP10fopAc_ac_c = .text:0x0000019C; // type:function size:0x4 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+lbl_26_rodata_0 = .rodata:0x00000000; // type:object size:0x9 data:string
+l_bg_profName$88959 = .data:0x00000000; // type:object size:0xA scope:local align:4
+lbl_26_data_A = .data:0x0000000A; // type:object size:0x3 data:string
+l_daSetBgObj_Method = .data:0x00000010; // type:object size:0x20 scope:global align:4
+g_profile_SET_BG_OBJ = .data:0x00000030; // type:object size:0x30 scope:global align:4

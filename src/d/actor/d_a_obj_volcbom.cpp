@@ -14,6 +14,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_meter2_info.h"
+#include <cstring>
 
 #if DEBUG
 daObjVolcBom_HIO_c::daObjVolcBom_HIO_c() {

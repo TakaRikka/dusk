@@ -18,6 +18,7 @@
 #include "d/actor/d_a_canoe.h"
 #include "d/actor/d_a_npc_hoz.h"
 #include "d/actor/d_a_obj_zraMark.h"
+#include <cstring>
 
 static NPC_ZRA_HIO_CLASS l_HIO;
 

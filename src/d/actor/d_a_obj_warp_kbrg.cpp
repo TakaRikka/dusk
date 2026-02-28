@@ -12,6 +12,7 @@
 #include "d/d_s_play.h"
 #include "d/d_bg_w.h"
 #include "d/d_meter2_info.h"
+#include <cstring>
 
 static const int l_bmd_idx[] = {9, 11};
 

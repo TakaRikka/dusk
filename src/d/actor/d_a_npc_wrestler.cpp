@@ -8,6 +8,7 @@
 #include "d/actor/d_a_npc_wrestler.h"
 #include "d/d_timer.h"
 #include <dolphin/types.h>
+#include <cstring>
 #include "d/actor/d_a_tag_arena.h"
 #include "d/actor/d_a_npc_gra.h"
 #include "d/actor/d_a_npc_bouS.h"

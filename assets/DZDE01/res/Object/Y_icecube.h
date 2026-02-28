@@ -1,0 +1,32 @@
+#ifndef RES_Y_ICECUBE_H
+#define RES_Y_ICECUBE_H
+
+enum dRes_INDEX_Y_ICECUBE {
+    /* BMDE */
+    dRes_INDEX_Y_ICECUBE_BMD_Y_ICECUBEICE_e=0x5,
+    /* BMDR */
+    dRes_INDEX_Y_ICECUBE_BMD_YICECUBE_e=0x8,
+    /* DZB  */
+    dRes_INDEX_Y_ICECUBE_DZB_Y_ICECUBEICE_e=0xB,
+    dRes_INDEX_Y_ICECUBE_DZB_YICECUBE_e=0xC,
+};
+
+enum dRes_ID_Y_ICECUBE {
+    /* BMDE */
+    dRes_ID_Y_ICECUBE_BMD_Y_ICECUBEICE_e=0x5,
+    /* BMDR */
+    dRes_ID_Y_ICECUBE_BMD_YICECUBE_e=0x8,
+    /* DZB  */
+    dRes_ID_Y_ICECUBE_DZB_Y_ICECUBEICE_e=0xB,
+    dRes_ID_Y_ICECUBE_DZB_YICECUBE_e=0xC,
+};
+
+enum Y_ICECUBEICE_JNT {
+    Y_ICECUBEICE_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum YICECUBE_JNT {
+    YICECUBE_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_Y_ICECUBE_H */

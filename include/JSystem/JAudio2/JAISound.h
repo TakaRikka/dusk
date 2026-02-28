@@ -253,7 +253,7 @@ class JAIAudible;
 struct JAIAudience;
 class JAISe;
 class JAISeq;
-class JAISoundChild;
+struct JAISoundChild;
 class JAIStream;
 class JAITempoMgr;
 

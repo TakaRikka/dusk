@@ -1,0 +1,30 @@
+#ifndef RES_URI3_H
+#define RES_URI3_H
+
+enum dRes_INDEX_URI3 {
+    /* BCK  */
+    dRes_INDEX_URI3_BCK_URI_NORMAL_SIT_e=0x4,
+    dRes_INDEX_URI3_BCK_URI_NORMAL_SITTALK_e=0x5,
+    dRes_INDEX_URI3_BCK_URI_SAD_SIT_e=0x6,
+    dRes_INDEX_URI3_BCK_URI_SAD_SITTALK_A_e=0x7,
+    dRes_INDEX_URI3_BCK_URI_STANDUP_e=0x8,
+    dRes_INDEX_URI3_BCK_URI_TO_SADSIT_e=0x9,
+    dRes_INDEX_URI3_BCK_URI_WORRY_e=0xA,
+    /* EVT  */
+    dRes_INDEX_URI3_DAT_EVENT_LIST_e=0xD,
+};
+
+enum dRes_ID_URI3 {
+    /* BCK  */
+    dRes_ID_URI3_BCK_URI_NORMAL_SIT_e=0x4,
+    dRes_ID_URI3_BCK_URI_NORMAL_SITTALK_e=0x5,
+    dRes_ID_URI3_BCK_URI_SAD_SIT_e=0x6,
+    dRes_ID_URI3_BCK_URI_SAD_SITTALK_A_e=0x7,
+    dRes_ID_URI3_BCK_URI_STANDUP_e=0x8,
+    dRes_ID_URI3_BCK_URI_TO_SADSIT_e=0x9,
+    dRes_ID_URI3_BCK_URI_WORRY_e=0xA,
+    /* EVT  */
+    dRes_ID_URI3_DAT_EVENT_LIST_e=0xD,
+};
+
+#endif /* !RES_URI3_H */

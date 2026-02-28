@@ -50,10 +50,7 @@ void JPAGetYZRotateMtx(s16 angleY, s16 angleZ, f32 (*param_2)[4]) {
     param_2[1][2] = (siny * sinz);
     param_2[2][0] = -siny;
     param_2[2][2] = cosy;
-    param_2[2][3] = 0.0f;
-    param_2[2][1] = 0.0f;
-    param_2[1][3] = 0.0f;
-    param_2[0][3] = 0.0f;
+    param_2[0][3] = param_2[1][3] = param_2[2][1] = param_2[2][3] = 0.0f;
 }
 
 void JPAGetXYZRotateMtx(s16 x, s16 y, s16 z, Mtx mtx) {
@@ -68,17 +65,15 @@ void JPAGetXYZRotateMtx(s16 x, s16 y, s16 z, Mtx mtx) {
     mtx[2][0] = -siny;
     mtx[2][1] = sinx * cosy;
     mtx[2][2] = cosx * cosy;
-    f32 cosxsinz = cosx * sinz;
-    f32 sinxcosz = sinx * cosz;
-    mtx[0][1] = sinxcosz * siny - cosxsinz;
-    mtx[1][2] = cosxsinz * siny - sinxcosz;
-    f32 sinxsinz = sinx * sinz;
-    f32 cosxcosz = cosx * cosz;
-    mtx[0][2] = sinxsinz + cosxcosz * siny;
-    mtx[1][1] = cosxcosz + sinxsinz * siny;
-    mtx[2][3] = 0.0f;
-    mtx[1][3] = 0.0f;
-    mtx[0][3] = 0.0f;
+    f32 f30 = cosx * sinz;
+    f32 f29 = sinx * cosz;
+    mtx[0][1] = f29 * siny - f30;
+    mtx[1][2] = f30 * siny - f29;
+    f30 = sinx * sinz;
+    f29 = cosx * cosz;
+    mtx[0][2] = f30 + f29 * siny;
+    mtx[1][1] = f29 + f30 * siny;
+    mtx[0][3] = mtx[1][3] = mtx[2][3] = 0.0f;
 }
 
 void JPASetRMtxTVecfromMtx(f32 const (*param_0)[4], f32 (*param_1)[4],
@@ -89,8 +84,7 @@ void JPASetRMtxTVecfromMtx(f32 const (*param_0)[4], f32 (*param_1)[4],
 
 void JPASetRMtxSTVecfromMtx(f32 const (*param_0)[4], f32 (*param_1)[4],
                                 JGeometry::TVec3<f32>* param_2, JGeometry::TVec3<f32>* param_3) {
-    JGeometry::TVec3<float> aTStack_54;
-    aTStack_54.set(param_0[0][0], param_0[1][0], param_0[2][0]);
+    JGeometry::TVec3<float> aTStack_54(param_0[0][0], param_0[1][0], param_0[2][0]);
     param_2->x = aTStack_54.length();
     aTStack_54.set(param_0[0][1], param_0[1][1], param_0[2][1]);
     param_2->y = aTStack_54.length();

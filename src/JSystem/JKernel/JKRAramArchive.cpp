@@ -8,7 +8,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
 #include <cmath>
-#include <string>
+#include <cstring>
 
 JKRAramArchive::JKRAramArchive() {}
 

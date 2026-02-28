@@ -1,0 +1,27 @@
+#ifndef RES_OBJ_KEYH_H
+#define RES_OBJ_KEYH_H
+
+enum dRes_INDEX_OBJ_KEYH {
+    /* BMDG */
+    dRes_INDEX_OBJ_KEYH_BMD_T_LOCKCHAIN_NORMAL_e=0x4,
+    /* BMDR */
+    dRes_INDEX_OBJ_KEYH_BMD_T_LOCK_NORMAL_e=0x7,
+};
+
+enum dRes_ID_OBJ_KEYH {
+    /* BMDG */
+    dRes_ID_OBJ_KEYH_BMD_T_LOCKCHAIN_NORMAL_e=0x4,
+    /* BMDR */
+    dRes_ID_OBJ_KEYH_BMD_T_LOCK_NORMAL_e=0x7,
+};
+
+enum T_LOCKCHAIN_NORMAL_JNT {
+    T_LOCKCHAIN_NORMAL_JNT_LOCK_KUSARI_e=0x0,
+};
+
+enum T_LOCK_NORMAL_JNT {
+    T_LOCK_NORMAL_JNT_LOCK_BODY_e=0x0,
+    T_LOCK_NORMAL_JNT_LOCK_BREAK_e=0x1,
+};
+
+#endif /* !RES_OBJ_KEYH_H */

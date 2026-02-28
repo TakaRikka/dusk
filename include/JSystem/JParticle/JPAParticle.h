@@ -33,17 +33,15 @@ public:
     void getOffsetPosition(JGeometry::TVec3<f32>& pos) { pos.set(mOffsetPosition); }
     void getOffsetPosition(JGeometry::TVec3<f32>* pos) const { pos->set(mOffsetPosition); }
     u16 getRotateAngle() const { return mRotateAngle; }
-    void getGlobalPosition(JGeometry::TVec3<f32>& pos) const { pos.set(mPosition); }
     void getGlobalPosition(JGeometry::TVec3<f32>* pos) const { pos->set(mPosition); }
     f32 getParticleScaleX() const { return mParticleScaleX; }
     f32 getParticleScaleY() const { return mParticleScaleY; }
     void setStatus(u32 flag) { mStatus |= flag; }
-    u32 checkStatus(u32 flag) { return mStatus & flag; }
+    u32 checkStatus(u32 flag) const { return mStatus & flag; }
     void initStatus(u32 status) { mStatus = status; }
     void setInvisibleParticleFlag() { setStatus(8); }
     void setDeleteParticleFlag() { setStatus(2); }
-    void getVelVec(JGeometry::TVec3<f32>& vec) const { vec.set(mVelocity); }
-    void getLocalPosition(JGeometry::TVec3<f32>& vec) const { vec.set(mLocalPosition); }
+    void getVelVec(JGeometry::TVec3<f32>* vec) const { vec->set(mVelocity); }
     void getLocalPosition(JGeometry::TVec3<f32>* vec) const { vec->set(mLocalPosition); }
     void getBaseAxis(JGeometry::TVec3<f32>& vec) const { vec.set(mBaseAxis); }
     void getBaseAxis(JGeometry::TVec3<f32>* vec) const { vec->set(mBaseAxis); }

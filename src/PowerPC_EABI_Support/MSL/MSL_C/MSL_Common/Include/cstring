@@ -26,6 +26,22 @@ size_t strlen(const char* str);
 
 #ifdef __cplusplus
 };
+
+namespace std {
+using ::memcpy;
+using ::memset;
+using ::memcmp;
+using ::memchr;
+using ::memmove;
+using ::strrchr;
+using ::strchr;
+using ::strlen;
+using ::strncmp;
+using ::strcmp;
+using ::strcat;
+using ::strncpy;
+using ::strcpy;
+} // namespace std
 #endif
 
 #endif /* _MSL_COMMON_STRING_H */

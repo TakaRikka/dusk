@@ -9,10 +9,15 @@
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_s_play.h"
+#include "f_op/f_op_actor.h"
+#include "f_op/f_op_actor_mng.h"
 
 static int daObj_Lv3waterB_Draw(obj_lv3WaterB_class* i_this) {
-    g_env_light.settingTevStruct(0x10, &i_this->current.pos, &i_this->tevStr);
-    g_env_light.setLightTevColorType_MAJI(i_this->mpBWaterModel, &i_this->tevStr);
+    fopAc_ac_c* const actor = i_this;
+
+    g_env_light.settingTevStruct(0x10, &actor->current.pos, &actor->tevStr);
+    g_env_light.setLightTevColorType_MAJI(i_this->mpBWaterModel, &actor->tevStr);
 
     i_this->mpBWaterBtk->entry(i_this->mpBWaterModel->getModelData());
 
@@ -24,15 +29,19 @@ static int daObj_Lv3waterB_Draw(obj_lv3WaterB_class* i_this) {
             Mtx m;
             C_MTXLightPerspective(m, dComIfGd_getView()->fovy, dComIfGd_getView()->aspect, 1.0f,
                                   1.0f, -0.015f, 0.0f);
+            #if WIDESCREEN_SUPPORT
+            mDoGph_gInf_c::setWideZoomLightProjection(m);
+            #endif
+
             tex_mtx_info->setEffectMtx(m);
-            i_this->mpBWaterModel->getModelData()->simpleCalcMaterial(0, (MtxP)j3dDefaultMtx);
+            i_this->mpBWaterModel->getModelData()->simpleCalcMaterial((MtxP)j3dDefaultMtx);
         }
     }
 
     mDoExt_modelUpdateDL(i_this->mpBWaterModel);
 
     if (i_this->mpOctHibiModel != NULL) {
-        g_env_light.setLightTevColorType_MAJI(i_this->mpOctHibiModel, &i_this->tevStr);
+        g_env_light.setLightTevColorType_MAJI(i_this->mpOctHibiModel, &actor->tevStr);
 
         dComIfGd_setListBG();
         mDoExt_modelUpdateDL(i_this->mpOctHibiModel);
@@ -43,6 +52,8 @@ static int daObj_Lv3waterB_Draw(obj_lv3WaterB_class* i_this) {
 }
 
 static void action(obj_lv3WaterB_class* i_this) {
+    fopAc_ac_c* const actor = i_this;
+
     switch (i_this->mAction) {
     case LV3WATERB_ACT_WAIT:
         break;
@@ -55,16 +66,16 @@ static void action(obj_lv3WaterB_class* i_this) {
         dKy_custom_colset(4, 4, 0.0f);
 
         if (i_this->field_0x586 == 0) {
-            i_this->current.pos.y = (i_this->home.pos.y - 14450.0f) + 160.0f + 4000.0f;
+            actor->current.pos.y = (actor->home.pos.y - 14450.0f) + AREG_F(17) + 160.0f + 4000.0f + AREG_F(16);
             i_this->field_0x586 = 1;
         }
 
-        cLib_addCalc2(&i_this->current.pos.y, (i_this->home.pos.y - 14450.0f) + 160.0f, 0.05f,
-                      10.0f);
+        cLib_addCalc2(&actor->current.pos.y, (actor->home.pos.y - 14450.0f) + AREG_F(17) + 160.0f, 0.05f,
+                      10.0f + AREG_F(19));
         break;
     }
 
-    mDoMtx_stack_c::transS(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z);
+    mDoMtx_stack_c::transS(actor->current.pos.x, actor->current.pos.y, actor->current.pos.z);
     i_this->mpBWaterModel->setBaseTRMtx(mDoMtx_stack_c::get());
     MTXCopy(mDoMtx_stack_c::get(), i_this->mpBWaterMtx);
 
@@ -81,6 +92,8 @@ static void action(obj_lv3WaterB_class* i_this) {
 }
 
 static int daObj_Lv3waterB_Execute(obj_lv3WaterB_class* i_this) {
+    fopAc_ac_c* const actor = i_this;
+
     action(i_this);
     return 1;
 }
@@ -90,7 +103,9 @@ static int daObj_Lv3waterB_IsDelete(obj_lv3WaterB_class* i_this) {
 }
 
 static int daObj_Lv3waterB_Delete(obj_lv3WaterB_class* i_this) {
-    fopAcM_GetID(i_this);
+    fopAc_ac_c* const actor = i_this;
+    fopAcM_RegisterDeleteID(i_this, "Obj_Lv3waterB");
+
     dComIfG_resDelete(&i_this->mBWaterPhase, "L3_bwater");
     dComIfG_resDelete(&i_this->mOcthibiPhase, "S_octhibi");
 
@@ -104,53 +119,53 @@ static int daObj_Lv3waterB_Delete(obj_lv3WaterB_class* i_this) {
 }
 
 static int useHeapInit(fopAc_ac_c* i_this) {
-    obj_lv3WaterB_class* a_this = static_cast<obj_lv3WaterB_class*>(i_this);
+    obj_lv3WaterB_class* const actor = static_cast<obj_lv3WaterB_class*>(i_this);
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("L3_bwater", 5);
-    JUT_ASSERT(0, modelData != NULL);
+    JUT_ASSERT(308, modelData != NULL);
 
-    a_this->mpBWaterModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000284);
-    if (a_this->mpBWaterModel == NULL) {
+    actor->mpBWaterModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000284);
+    if (actor->mpBWaterModel == NULL) {
         return 0;
     }
 
-    a_this->mpBWaterBtk = new mDoExt_btkAnm();
-    if (a_this->mpBWaterBtk == NULL) {
+    actor->mpBWaterBtk = new mDoExt_btkAnm();
+    if (actor->mpBWaterBtk == NULL) {
         return 0;
     }
 
-    J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("L3_bwater", 8);
-    if (!a_this->mpBWaterBtk->init(a_this->mpBWaterModel->getModelData(), btk, TRUE,
-                                   J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1))
+    if (!actor->mpBWaterBtk->init(actor->mpBWaterModel->getModelData(),
+                                  (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("L3_bwater", 8),
+                                  TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1))
     {
         return 0;
     }
 
-    a_this->mpBWaterBgW = new dBgW();
-    if (a_this->mpBWaterBgW == NULL) {
+    actor->mpBWaterBgW = new dBgW();
+    if (actor->mpBWaterBgW == NULL) {
         return 0;
     }
 
-    cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes("L3_bwater", 11);
-    if (a_this->mpBWaterBgW->Set(dzb, dBgW::MOVE_BG_e, &a_this->mpBWaterMtx) == true) {
+    if (actor->mpBWaterBgW->Set((cBgD_t*)dComIfG_getObjectRes("L3_bwater", 11),
+        dBgW::MOVE_BG_e, &actor->mpBWaterMtx) == true) {
         return 0;
     }
 
     modelData = (J3DModelData*)dComIfG_getObjectRes("S_octhibi", 4);
-    JUT_ASSERT(0, modelData != NULL);
+    JUT_ASSERT(343, modelData != NULL);
 
-    a_this->mpOctHibiModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
-    if (a_this->mpOctHibiModel == NULL) {
+    actor->mpOctHibiModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
+    if (actor->mpOctHibiModel == NULL) {
         return 0;
     }
 
-    a_this->mpOctHibiBgW = new dBgW();
-    if (a_this->mpOctHibiBgW == NULL) {
+    actor->mpOctHibiBgW = new dBgW();
+    if (actor->mpOctHibiBgW == NULL) {
         return 0;
     }
 
-    dzb = (cBgD_t*)dComIfG_getObjectRes("S_octhibi", 7);
-    if (a_this->mpOctHibiBgW->Set(dzb, dBgW::MOVE_BG_e, &a_this->mpOctHibiMtx) == true) {
+    if (actor->mpOctHibiBgW->Set((cBgD_t*) dComIfG_getObjectRes("S_octhibi", 7),
+        dBgW::MOVE_BG_e, &actor->mpOctHibiMtx) == true) {
         return 0;
     }
 
@@ -158,38 +173,38 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 }
 
 static int daObj_Lv3waterB_Create(fopAc_ac_c* i_this) {
-    obj_lv3WaterB_class* a_this = static_cast<obj_lv3WaterB_class*>(i_this);
-    fopAcM_ct(a_this, obj_lv3WaterB_class);
+    obj_lv3WaterB_class* const actor = static_cast<obj_lv3WaterB_class*>(i_this);
+    fopAcM_ct(actor, obj_lv3WaterB_class);
 
-    int phase_state = dComIfG_resLoad(&a_this->mBWaterPhase, "L3_bwater");
-    int octhibi_phase_state = dComIfG_resLoad(&a_this->mOcthibiPhase, "S_octhibi");
+    int phase_state = dComIfG_resLoad(&actor->mBWaterPhase, "L3_bwater");
+    int octhibi_phase_state = dComIfG_resLoad(&actor->mOcthibiPhase, "S_octhibi");
     if (phase_state == cPhs_COMPLEATE_e && octhibi_phase_state == cPhs_COMPLEATE_e) {
-        OS_REPORT("OBJ_LV3WATERB PARAM %x\n", fopAcM_GetParam(a_this));
+        OS_REPORT("OBJ_LV3WATERB PARAM %x\n", fopAcM_GetParam(i_this));
         OS_REPORT("OBJ_LV3WATERB//////////////OBJ_LV3WATERB SET 1 !!\n");
 
-        if (!fopAcM_entrySolidHeap(a_this, useHeapInit, 0x4B000)) {
+        if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x4B000)) {
             OS_REPORT("//////////////OBJ_LV3WATERB SET NON !!\n");
             return cPhs_ERROR_e;
         }
 
         OS_REPORT("//////////////OBJ_LV3WATERB SET 2 !!\n");
 
-        if (dComIfG_Bgsp().Regist(a_this->mpBWaterBgW, a_this)) {
+        if (dComIfG_Bgsp().Regist(actor->mpBWaterBgW, actor)) {
             return cPhs_ERROR_e;
         }
 
-        if (dComIfG_Bgsp().Regist(a_this->mpOctHibiBgW, a_this)) {
+        if (dComIfG_Bgsp().Regist(actor->mpOctHibiBgW, actor)) {
             return cPhs_ERROR_e;
         }
 
         if (dComIfGs_isStageBossEnemy()) {
-            a_this->current.pos.y = (a_this->home.pos.y - 14450.0f) + 160.0f;
-            a_this->mAction = LV3WATERB_ACT_END;
-            a_this->field_0x586 = 1;
-            a_this->mpOctHibiModel = NULL;
+            i_this->current.pos.y = (i_this->home.pos.y - 14450.0f) + AREG_F(17) + 160.0f;
+            actor->mAction = LV3WATERB_ACT_END;
+            actor->field_0x586 = 1;
+            actor->mpOctHibiModel = NULL;
         }
 
-        daObj_Lv3waterB_Execute(a_this);
+        daObj_Lv3waterB_Execute(actor);
         return phase_state;
     } else if (phase_state == cPhs_COMPLEATE_e) {
         return octhibi_phase_state;

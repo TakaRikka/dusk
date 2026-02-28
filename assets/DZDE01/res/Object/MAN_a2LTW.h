@@ -1,0 +1,29 @@
+#ifndef RES_MAN_A2LTW_H
+#define RES_MAN_A2LTW_H
+
+enum dRes_INDEX_MAN_A2LTW {
+    /* BMDR */
+    dRes_INDEX_MAN_A2LTW_BMD_MAN_A2_L_TW_e=0x3,
+};
+
+enum dRes_ID_MAN_A2LTW {
+    /* BMDR */
+    dRes_ID_MAN_A2LTW_BMD_MAN_A2_L_TW_e=0x3,
+};
+
+enum MAN_A2_L_TW_JNT {
+    MAN_A2_L_TW_JNT_WORLD_ROOT_e=0x0,
+    MAN_A2_L_TW_JNT_BACKBONE_e=0x1,
+    MAN_A2_L_TW_JNT_ARML1_e=0x2,
+    MAN_A2_L_TW_JNT_ARML2_e=0x3,
+    MAN_A2_L_TW_JNT_ARMR1_e=0x4,
+    MAN_A2_L_TW_JNT_ARMR2_e=0x5,
+    MAN_A2_L_TW_JNT_HEAD_e=0x6,
+    MAN_A2_L_TW_JNT_WAIST_e=0x7,
+    MAN_A2_L_TW_JNT_LEGL1_e=0x8,
+    MAN_A2_L_TW_JNT_LEGL2_e=0x9,
+    MAN_A2_L_TW_JNT_LEGR1_e=0xA,
+    MAN_A2_L_TW_JNT_LEGR2_e=0xB,
+};
+
+#endif /* !RES_MAN_A2LTW_H */

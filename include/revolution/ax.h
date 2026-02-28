@@ -362,6 +362,16 @@ void AXSetVoiceLpf(AXVPB* p, AXPBLPF* lpf);
 void AXSetVoiceLpfCoefs(AXVPB* p, u16 a0, u16 b0);
 void AXGetLpfCoefs(u16 freq, u16* a0, u16* b0);
 
+void AXGetAuxACallback(AXAuxCallback* cbOut, void** contextOut);
+u16 AXGetAuxAReturnVolume(void);
+u16 AXGetAuxBReturnVolume(void);
+u16 AXGetAuxCReturnVolume(void);
+void AXSetAuxAReturnVolume(u16 volume);
+void AXSetAuxBReturnVolume(u16 volume);
+void AXSetAuxCReturnVolume(u16 volume);
+void AXSetMasterVolume(u16 volume);
+u16 AXGetMasterVolume(void);
+
 // DSPCode
 extern u16 axDspSlaveLength;
 extern u16 axDspSlave[AX_DSP_SLAVE_LENGTH];

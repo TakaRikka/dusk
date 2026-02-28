@@ -1,0 +1,28 @@
+#ifndef RES_ZRA_NML_H
+#define RES_ZRA_NML_H
+
+enum dRes_INDEX_ZRA_NML {
+    /* BCK  */
+    dRes_INDEX_ZRA_NML_BCK_ZRA_DIVE_e=0x3,
+    dRes_INDEX_ZRA_NML_BCK_ZRA_DIVE_B_e=0x4,
+    dRes_INDEX_ZRA_NML_BCK_ZRA_FLOAT_e=0x5,
+    dRes_INDEX_ZRA_NML_BCK_ZRA_FLOAT_B_e=0x6,
+    dRes_INDEX_ZRA_NML_BCK_ZRA_SWIM_A_e=0x7,
+    dRes_INDEX_ZRA_NML_BCK_ZRA_SWIM_B_e=0x8,
+    dRes_INDEX_ZRA_NML_BCK_ZRA_WAIT_SWIM_e=0x9,
+    dRes_INDEX_ZRA_NML_BCK_ZRA_WALK_A_e=0xA,
+};
+
+enum dRes_ID_ZRA_NML {
+    /* BCK  */
+    dRes_ID_ZRA_NML_BCK_ZRA_DIVE_e=0x3,
+    dRes_ID_ZRA_NML_BCK_ZRA_DIVE_B_e=0x4,
+    dRes_ID_ZRA_NML_BCK_ZRA_FLOAT_e=0x5,
+    dRes_ID_ZRA_NML_BCK_ZRA_FLOAT_B_e=0x6,
+    dRes_ID_ZRA_NML_BCK_ZRA_SWIM_A_e=0x7,
+    dRes_ID_ZRA_NML_BCK_ZRA_SWIM_B_e=0x8,
+    dRes_ID_ZRA_NML_BCK_ZRA_WAIT_SWIM_e=0x9,
+    dRes_ID_ZRA_NML_BCK_ZRA_WALK_A_e=0xA,
+};
+
+#endif /* !RES_ZRA_NML_H */

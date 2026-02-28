@@ -132,8 +132,8 @@ int daPPolamp_c::createHeap() {
 
 void daPPolamp_c::moveSwing() {
     s16 sVar1 = field_0x598 * 65 - 500;
-    shape_angle.z += (s16)(field_0x5a4 * (field_0x59c * sVar1));
-    shape_angle.y += (s16)(field_0x59e * field_0x5a4);
+    ANGLE_ADD(shape_angle.z, field_0x5a4 * (field_0x59c * sVar1));
+    ANGLE_ADD(shape_angle.y, field_0x59e * field_0x5a4);
     if (sVar1 > 500) {
         field_0x598 = 0;
         field_0x59c *= -1;

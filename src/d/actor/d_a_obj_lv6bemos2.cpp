@@ -11,6 +11,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_camera.h"
 #include "d/d_s_play.h"
+#include <cstring>
 
 enum E_bm6_RES_File_ID {
     /* BCK */

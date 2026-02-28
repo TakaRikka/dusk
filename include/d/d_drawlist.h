@@ -39,6 +39,10 @@ public:
 
 class dDlst_blo_c : public dDlst_base_c {
 public:
+    dDlst_blo_c() {
+        field_0x120 = 0.0f;
+        field_0x124 = 0.0f;
+    }
     virtual void draw();
     bool create(JKRArchive* param_1, const char* param_2) {
         return mScreen.setPriority(param_2, 0x20000, param_1) != 0;
@@ -66,26 +70,21 @@ public:
     class anm_c {
     public:
         inline anm_c() {
-            field_0x4 = 0;
+            field_0x4 = NULL;
             field_0x8 = 1.0f;
         }
-        ~anm_c() { remove(); }
+        virtual ~anm_c() { remove(); }
 
-        void remove() {
-            if (field_0x4 != 0.0f) {
+        void remove();
 
-            }
-
-            field_0x4 = 0.0f;
-        }
-
-        f32 field_0x4;
+        void* field_0x4;
         f32 field_0x8;
     };
 
     /* 0x004 */ int field_0x4;
     /* 0x008 */ J2DScreen mScreen;
-    /* 0x120 */ anm_c anm;
+    /* 0x120 */ f32 field_0x120;
+    /* 0x124 */ f32 field_0x124;
 };
 
 class dDlst_snapShot_c : public dDlst_base_c {

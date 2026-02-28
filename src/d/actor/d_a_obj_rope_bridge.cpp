@@ -8,6 +8,7 @@
 #include "d/actor/d_a_obj_rope_bridge.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
+#include <cstring>
 
 static char* l_arcName[2] = {"L_RopeB_S", "L_RopeB_L"};
 

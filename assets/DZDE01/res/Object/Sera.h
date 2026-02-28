@@ -1,0 +1,49 @@
+#ifndef RES_SERA_H
+#define RES_SERA_H
+
+enum dRes_INDEX_SERA {
+    /* BMDR */
+    dRes_INDEX_SERA_BMD_SERA_e=0x4,
+    /* EVT  */
+    dRes_INDEX_SERA_DAT_EVENT_LIST_e=0x7,
+};
+
+enum dRes_ID_SERA {
+    /* BMDR */
+    dRes_ID_SERA_BMD_SERA_e=0x4,
+    /* EVT  */
+    dRes_ID_SERA_DAT_EVENT_LIST_e=0x7,
+};
+
+enum SERA_JNT {
+    SERA_JNT_CENTER_e=0x0,
+    SERA_JNT_BACKBONE1_e=0x1,
+    SERA_JNT_BACKBONE2_e=0x2,
+    SERA_JNT_NECK_e=0x3,
+    SERA_JNT_HEAD_e=0x4,
+    SERA_JNT_CHIN_e=0x5,
+    SERA_JNT_MAYU_L_e=0x6,
+    SERA_JNT_MAYU_R_e=0x7,
+    SERA_JNT_MOUTH_e=0x8,
+    SERA_JNT_SHOULDERL_e=0x9,
+    SERA_JNT_ARML1_e=0xA,
+    SERA_JNT_ARML2_e=0xB,
+    SERA_JNT_HANDL_e=0xC,
+    SERA_JNT_FINGERL_e=0xD,
+    SERA_JNT_THUMBL_e=0xE,
+    SERA_JNT_SHOULDERR_e=0xF,
+    SERA_JNT_ARMR1_e=0x10,
+    SERA_JNT_ARMR2_e=0x11,
+    SERA_JNT_HANDR_e=0x12,
+    SERA_JNT_FINGERR_e=0x13,
+    SERA_JNT_THUMBR_e=0x14,
+    SERA_JNT_WAIST_e=0x15,
+    SERA_JNT_LEGL1_e=0x16,
+    SERA_JNT_LEGL2_e=0x17,
+    SERA_JNT_FOOTL_e=0x18,
+    SERA_JNT_LEGR1_e=0x19,
+    SERA_JNT_LEGR2_e=0x1A,
+    SERA_JNT_FOOTR_e=0x1B,
+};
+
+#endif /* !RES_SERA_H */

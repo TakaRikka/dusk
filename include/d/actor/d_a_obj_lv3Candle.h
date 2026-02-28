@@ -3,7 +3,7 @@
 
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor_mng.h"
-#include "m_Do/m_Do_hostIO.h"
+#include "d/d_kankyo.h"
 
 
 /**
@@ -26,8 +26,8 @@ public:
     int Draw();
     int Delete();
 
-    u8 getSwBit() { return fopAcM_GetParamBit(this, 0, 8); }
-    u8 getType() { return fopAcM_GetParamBit(this, 8, 8); }
+    int getSwBit() { return fopAcM_GetParamBit(this, 0, 8); }
+    int getType() { return fopAcM_GetParamBit(this, 8, 8); }
 
 private:
     /* 0x568 */ request_of_phase_process_class mPhaseReq;
@@ -50,16 +50,5 @@ private:
 };  // Size: 0x754
 
 STATIC_ASSERT(sizeof(daLv3Candle_c) == 0x754);
-
-class daLv3Candle_HIO_c : public mDoHIO_entry_c {
-public:
-    daLv3Candle_HIO_c();
-    virtual ~daLv3Candle_HIO_c() {}
-
-    void genMessage(JORMContext*);
-
-    /* 0x00 vtable */
-    /* 0x04 */ u8 field_0x04;
-};
 
 #endif /* D_A_OBJ_LV3CANDLE_H */

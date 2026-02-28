@@ -16,6 +16,7 @@
 
 #if DEBUG
 #include "d/d_debug_viewer.h"
+#include <cstring>
 #endif
 
 static s8 r05yuka_image[192] = {

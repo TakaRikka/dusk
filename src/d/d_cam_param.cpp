@@ -13,6 +13,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
+#include <cstring>
 
 enum CameraFlags {
     CAM_PARAM_GAPX, CAM_PARAM_GAPZ,

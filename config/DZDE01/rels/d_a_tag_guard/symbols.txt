@@ -1,0 +1,11 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+getAppearPoint__12daTagGuard_cFP3Vec = .text:0x0000005C; // type:function size:0x64 scope:global align:4
+createGuard__12daTagGuard_cFUl = .text:0x000000C0; // type:function size:0xC4 scope:global align:4
+daTagGuard_Create__FP10fopAc_ac_c = .text:0x00000184; // type:function size:0xA8 scope:global align:4
+daTagGuard_Delete__FP12daTagGuard_c = .text:0x0000022C; // type:function size:0x30 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+l_daTagGuard_Method = .data:0x00000000; // type:object size:0x20 scope:global align:4
+g_profile_TAG_GUARD = .data:0x00000020; // type:object size:0x30 scope:global align:4

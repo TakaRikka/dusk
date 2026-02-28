@@ -182,8 +182,8 @@ void daObjChandelier_c::setModelMtx() {
 
 void daObjChandelier_c::moveSwing(f32 param_0, f32 param_1, f32 param_2, f32 param_3) {
     f32 f1 = -param_1 + param_0 * field_0x5fc;
-    shape_angle.z += (s16)(field_0x608 * (f1 * field_0x5ec));
-    shape_angle.y += (s16)(field_0x608 * field_0x604 * field_0x5ec);
+    ANGLE_ADD(shape_angle.z, field_0x608 * (f1 * field_0x5ec));
+    ANGLE_ADD(shape_angle.y, field_0x608 * field_0x604 * field_0x5ec);
     if (f1 > param_1) {
         field_0x5fc = 0;
         field_0x608 *= -1;
@@ -209,7 +209,7 @@ void daObjChandelier_c::moveSwingFall() {
     cLib_chaseF(&field_0x5ec, 0.0f, 0.04f);
     field_0x608 *= -1;
     shape_angle.z = field_0x608 * 50.0f * field_0x5ec;
-    shape_angle.y += (s16)cM_rndFX(50.0f);
+    ANGLE_ADD(shape_angle.y, cM_rndFX(50.0f));
     cXyz vec1 = field_0x5a8;
     mDoMtx_stack_c::transS(vec1);
     mDoMtx_stack_c::ZXYrotM(shape_angle);

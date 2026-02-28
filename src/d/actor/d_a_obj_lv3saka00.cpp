@@ -9,14 +9,44 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "m_Do/m_Do_mtx.h"
+
+static char* l_arcName[] = {"Obj_saka", "Obj_saka2"};
+
+#if DEBUG
+class daObjLv3saka_HIO_c : public mDoHIO_entry_c {
+    public:
+    daObjLv3saka_HIO_c();
+    ~daObjLv3saka_HIO_c() {}
+
+    void genMessage(JORMContext*);
+
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ u8 field_0x0C;
+};
+
+static daObjLv3saka_HIO_c l_HIO;
+
+daObjLv3saka_HIO_c::daObjLv3saka_HIO_c() {
+    field_0x08 = 0.0f;
+    field_0x0C = 0;
+}
+
+void daObjLv3saka_HIO_c::genMessage(JORMContext* mctx) {
+    /* Flowing Water Slippery Surface */
+    mctx->genLabel("水が流れると滑る", 0);
+    mctx->genCheckBox("チェック描画", &field_0x0C, 0x1);
+}
+
+#endif
 
 void daObjLv3saka_c::initBaseMtx() {
     setBaseMtx();
 }
 
 void daObjLv3saka_c::setBaseMtx() {
-    MTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_YrotM(mDoMtx_stack_c::get(), shape_angle.y);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
@@ -42,8 +72,6 @@ static int const l_dzbIdx[] = {3, 3};
 
 static int const l_dzbIdx2[] = {4, 4};
 
-static char* l_arcName[] = {"Obj_saka", "Obj_saka2"};
-
 int daObjLv3saka_c::CreateHeap() {
     mpBgW2 = new dBgW();
     if (mpBgW2 == NULL ||
@@ -67,6 +95,10 @@ int daObjLv3saka_c::create1st() {
         if (phase == cPhs_ERROR_e) {
             return phase;
         }
+
+        #if DEBUG
+        l_HIO.entryHIO("水が流れると滑る"); // "Flowing water slippery surface"
+        #endif
     }
     return phase;
 }
@@ -105,6 +137,14 @@ void daObjLv3saka_c::setWtrDzb() {
 }
 
 int daObjLv3saka_c::Draw() {
+    #if DEBUG
+    if(l_HIO.field_0x0C) {
+        if(mpBgW->ChkUsed())
+            mpBgW->DebugDraw();
+        else if(mpBgW2->ChkUsed())
+            mpBgW2->DebugDraw();
+    }
+    #endif
     return 1;
 }
 
@@ -113,6 +153,11 @@ int daObjLv3saka_c::Delete() {
         dComIfG_Bgsp().Release(mpBgW2);
     }
     dComIfG_resDelete(&mPhase, l_arcName[getType()]);
+
+    #if DEBUG
+    l_HIO.removeHIO();
+    #endif
+
     return 1;
 }
 

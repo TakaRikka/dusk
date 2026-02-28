@@ -1,4 +1,5 @@
 #include "d/actor/d_a_npc_cd2.h"
+#include <cstring>
 
 daNpcCd2_HIO_c::daNpcCd2_HIO_c() {
     static daNpcCd2_HIO_Jnt_UnkStruct_s a_jntTbl_M[16][19] = {

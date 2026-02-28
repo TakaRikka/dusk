@@ -1,0 +1,131 @@
+#ifndef RES_WMDL_H
+#define RES_WMDL_H
+
+enum dRes_INDEX_WMDL {
+    /* BMDR */
+    dRes_INDEX_WMDL_BMD_MD_HANDS_e=0x6,
+    dRes_INDEX_WMDL_BMD_MD_MASK_e=0x7,
+    /* BMDV */
+    dRes_INDEX_WMDL_BMD_MD_e=0xA,
+    dRes_INDEX_WMDL_BMD_MD_HAIR_HAND_e=0xB,
+    /* BMWR */
+    dRes_INDEX_WMDL_BMD_WL_e=0xE,
+    dRes_INDEX_WMDL_BMD_WL_KUSARI_e=0xF,
+    /* BRK  */
+    dRes_INDEX_WMDL_BRK_MD_D_COLOR_e=0x12,
+    dRes_INDEX_WMDL_BRK_MD_HAIR_HAND_D_COLOR_e=0x13,
+    dRes_INDEX_WMDL_BRK_MD_HANDS_D_COLOR_e=0x14,
+    dRes_INDEX_WMDL_BRK_MD_MASK_D_COLOR_e=0x15,
+};
+
+enum dRes_ID_WMDL {
+    /* BMDR */
+    dRes_ID_WMDL_BMD_MD_HANDS_e=0x6,
+    dRes_ID_WMDL_BMD_MD_MASK_e=0x7,
+    /* BMDV */
+    dRes_ID_WMDL_BMD_MD_e=0xA,
+    dRes_ID_WMDL_BMD_MD_HAIR_HAND_e=0xB,
+    /* BMWR */
+    dRes_ID_WMDL_BMD_WL_e=0xE,
+    dRes_ID_WMDL_BMD_WL_KUSARI_e=0xF,
+    /* BRK  */
+    dRes_ID_WMDL_BRK_MD_D_COLOR_e=0x12,
+    dRes_ID_WMDL_BRK_MD_HAIR_HAND_D_COLOR_e=0x13,
+    dRes_ID_WMDL_BRK_MD_HANDS_D_COLOR_e=0x14,
+    dRes_ID_WMDL_BRK_MD_MASK_D_COLOR_e=0x15,
+};
+
+enum MD_HANDS_JNT {
+    MD_HANDS_JNT_WORLD_ROOT_e=0x0,
+    MD_HANDS_JNT_MD_HANDSL_e=0x1,
+    MD_HANDS_JNT_MD_HANDSR_e=0x2,
+};
+
+enum MD_MASK_JNT {
+    MD_MASK_JNT_MD_MASK_e=0x0,
+};
+
+enum MD_JNT {
+    MD_JNT_WORLD_ROOT_e=0x0,
+    MD_JNT_BACKBONE1_e=0x1,
+    MD_JNT_BACKBONE2_e=0x2,
+    MD_JNT_NECK_e=0x3,
+    MD_JNT_HEAD_e=0x4,
+    MD_JNT_CHIN_e=0x5,
+    MD_JNT_HAIR_1_e=0x6,
+    MD_JNT_HAIR_2_e=0x7,
+    MD_JNT_HAIR_3_e=0x8,
+    MD_JNT_HAIR_4_e=0x9,
+    MD_JNT_HAIR_5_e=0xA,
+    MD_JNT_MOUTH_e=0xB,
+    MD_JNT_SHOULDER_L_e=0xC,
+    MD_JNT_ARM_L1_e=0xD,
+    MD_JNT_ARM_L2_e=0xE,
+    MD_JNT_HAND_L_e=0xF,
+    MD_JNT_SHOULDER_R_e=0x10,
+    MD_JNT_ARM_R1_e=0x11,
+    MD_JNT_ARM_R2_e=0x12,
+    MD_JNT_HAND_R_e=0x13,
+    MD_JNT_WAIST_e=0x14,
+    MD_JNT_CLOTCHL_e=0x15,
+    MD_JNT_LEG_L1_e=0x16,
+    MD_JNT_LEG_L2_e=0x17,
+    MD_JNT_FOOT_L_e=0x18,
+    MD_JNT_CLOTCHR_e=0x19,
+    MD_JNT_LEG_R1_e=0x1A,
+    MD_JNT_LEG_R2_e=0x1B,
+    MD_JNT_FOOT_R_e=0x1C,
+};
+
+enum MD_HAIR_HAND_JNT {
+    MD_HAIR_HAND_JNT_MD_HAIR_HANDS_e=0x0,
+};
+
+enum WL_JNT {
+    WL_JNT_CENTER_e=0x0,
+    WL_JNT_BACKBONE1_e=0x1,
+    WL_JNT_BACKBONE2_e=0x2,
+    WL_JNT_NECK_e=0x3,
+    WL_JNT_HEAD_e=0x4,
+    WL_JNT_CHIN_e=0x5,
+    WL_JNT_TONGUE1_e=0x6,
+    WL_JNT_TONGUE2_e=0x7,
+    WL_JNT_EARL_e=0x8,
+    WL_JNT_EARR_e=0x9,
+    WL_JNT_MANE_e=0xA,
+    WL_JNT_MAYUL_e=0xB,
+    WL_JNT_MAYUR_e=0xC,
+    WL_JNT_MOUTH_e=0xD,
+    WL_JNT_NOSE_e=0xE,
+    WL_JNT_SHOULDERL_e=0xF,
+    WL_JNT_FLEGL1_e=0x10,
+    WL_JNT_FLEGL2_e=0x11,
+    WL_JNT_FLEGL3_e=0x12,
+    WL_JNT_FLEGL4_e=0x13,
+    WL_JNT_SHOULDERR_e=0x14,
+    WL_JNT_FLEGR1_e=0x15,
+    WL_JNT_FLEGR2_e=0x16,
+    WL_JNT_FLEGR3_e=0x17,
+    WL_JNT_FLEGR4_e=0x18,
+    WL_JNT_MD_e=0x19,
+    WL_JNT_WAIST_e=0x1A,
+    WL_JNT_HIPL_e=0x1B,
+    WL_JNT_BLEGL1_e=0x1C,
+    WL_JNT_BLEGL2_e=0x1D,
+    WL_JNT_BLEGL3_e=0x1E,
+    WL_JNT_BLEGL4_e=0x1F,
+    WL_JNT_HIPR_e=0x20,
+    WL_JNT_BLEGR1_e=0x21,
+    WL_JNT_BLEGR2_e=0x22,
+    WL_JNT_BLEGR3_e=0x23,
+    WL_JNT_BLEGR4_e=0x24,
+    WL_JNT_TAIL1_e=0x25,
+    WL_JNT_TAIL2_e=0x26,
+    WL_JNT_TAIL3_e=0x27,
+};
+
+enum WL_KUSARI_JNT {
+    WL_KUSARI_JNT_WL_KUSARI_e=0x0,
+};
+
+#endif /* !RES_WMDL_H */

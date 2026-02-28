@@ -90,9 +90,8 @@ void JUTResFont::countBlock() {
     mMap1BlockNum = 0;
 
     u8* pData = (u8*)&mResFont->data;
-    for (u32 i = 0; i < mResFont->numBlocks; i++, pData += ((BlockHeader*)pData)->size) {
-        u32 magic = ((BlockHeader*)pData)->magic;
-        switch (magic) {
+    for (u32 i = 0; i < mResFont->numBlocks; i++) {
+        switch (((BlockHeader*)pData)->magic) {
         case 'WID1':
             mWid1BlockNum++;
             break;
@@ -107,6 +106,7 @@ void JUTResFont::countBlock() {
         default:
             JUTReportConsole("JUTResFont: Unknown data block\n");
         }
+        pData += ((BlockHeader*)pData)->size;
     }
 }
 
@@ -117,20 +117,18 @@ IsLeadByte_func const JUTResFont::saoAboutEncoding_[3] = {
 };
 
 void JUTResFont::setBlock() {
-	s32 widthNum, glyphNum, mapNum;
-	widthNum = 0;
-    glyphNum = 0;
-    mapNum = 0;
+	s32 widthNum = 0;
+    s32 glyphNum = 0;
+    s32 mapNum = 0;
+    u32 u;
     mMaxCode = -1;
 
-	BlockHeader* data = (BlockHeader*)mResFont->data;
-	for (u32 i = 0; i < mResFont->numBlocks;
-	     data = (BlockHeader*)((u8*)data + data->size), i++) {
-		u32 magic = data->magic;
-		switch (magic) {
+    BlockHeader* data = (BlockHeader*)mResFont->data;
+	for (u32 i = 0; i < mResFont->numBlocks; i++) {
+		switch (data->magic) {
         case 'INF1': {
             mInf1Ptr = (ResFONT::INF1*)data;
-            u32 u = mInf1Ptr->fontType;
+            u = mInf1Ptr->fontType;
             JUT_ASSERT(244, u < suAboutEncoding_);
             mIsLeadByte = &saoAboutEncoding_[u];
             break;
@@ -158,6 +156,7 @@ void JUTResFont::setBlock() {
 			JUTReportConsole("Unknown data block\n");
 			break;
 		}
+        data = (BlockHeader*)(((Ptr)data) + data->size);
 	}
 }
 
@@ -214,8 +213,8 @@ void JUTResFont::setGX(JUtility::TColor col1, JUtility::TColor col2) {
 f32 JUTResFont::drawChar_scale(f32 pos_x, f32 pos_y, f32 scale_x, f32 scale_y, int str_int,
                                bool flag) {
     f32 x1;
-    f32 y1;
     f32 x2;
+    f32 y1;
 
     JUT_ASSERT(378, mValid);
     JUTFont::TWidth width;
@@ -339,48 +338,44 @@ int JUTResFont::getFontCode(int chr) const {
 
     int ret = mInf1Ptr->defaultCode;
     if ((getFontType() == 2) && (mMaxCode >= 0x8000U) && (chr >= 0x20) && (chr < 0x7FU)) {
-        chr = halftofull[chr - 32];
+        chr = (halftofull - 0x20)[chr];
     }
     for (int i = 0; i < mMap1BlockNum; i++) {
-        u16 sc = mpMapBlocks[i]->startCode;
-        u16 ec = mpMapBlocks[i]->endCode;
-        u16 mm = mpMapBlocks[i]->mappingMethod;
-        if ((sc <= chr) && (chr <= ec)) {
-            if (mm == 0) {
-                ret = chr - sc;
-                break;
-            } else if (mm == 2) {
+        if ((mpMapBlocks[i]->startCode <= chr) && (chr <= mpMapBlocks[i]->endCode)) {
+            if (mpMapBlocks[i]->mappingMethod == 0) {
+                ret = chr - mpMapBlocks[i]->startCode;
+            } else if (mpMapBlocks[i]->mappingMethod == 2) {
                 BE(u16)* leading_temp = &mpMapBlocks[i]->mLeading;
-                ret = leading_temp[chr - sc];
-                break;
-            } else if (mm == 3) {
-                BE(u16)* leading_temp = &mpMapBlocks[i]->mLeading;
-                int phi_r5 = 0;
-                int phi_r6_2 = mpMapBlocks[i]->numEntries - 1;
+                ret = leading_temp[chr - mpMapBlocks[i]->startCode];
+            } else if (mpMapBlocks[i]->mappingMethod == 3) {
+                // invented struct to help match debug, unsure of real struct
+                struct paired_u16 {
+                    BE(u16) fullChar;
+                    BE(u16) fontCode;
+                };
 
-                while (phi_r6_2 >= phi_r5) {
-                    int temp_r7 = (phi_r6_2 + phi_r5) / 2;
+                paired_u16* leading_temp = (paired_u16*)&mpMapBlocks[i]->mLeading;
+                int binarySearchMin = 0;
+                int binarySearchMax = mpMapBlocks[i]->numEntries - 1;
 
-                    if (chr < leading_temp[temp_r7 * 2]) {
-                        phi_r6_2 = temp_r7 - 1;
-                        continue;
+                while (binarySearchMax >= binarySearchMin) {
+                    int midIndex = (binarySearchMax + binarySearchMin) / 2;
+
+                    if (chr < leading_temp[midIndex].fullChar) {
+                        binarySearchMax = midIndex - 1;
+                    } else if (chr > leading_temp[midIndex].fullChar) {
+                        binarySearchMin = midIndex + 1;
+                    } else {
+                        ret = leading_temp[midIndex].fontCode;
+                        break;
                     }
-
-                    if (chr > leading_temp[temp_r7 * 2]) {
-                        phi_r5 = temp_r7 + 1;
-                        continue;
-                    }
-
-                    ret = leading_temp[temp_r7 * 2 + 1];
-                    break;
                 }
-            } else if (mm == 1) {
+            } else if (mpMapBlocks[i]->mappingMethod == 1) {
                 BE(u16)* phi_r5_2 = NULL;
                 if (mpMapBlocks[i]->numEntries == 1) {
                     phi_r5_2 = &mpMapBlocks[i]->mLeading;
                 }
                 ret = convertSjis(chr, phi_r5_2);
-                break;
             }
             break;
         }
@@ -421,8 +416,10 @@ void JUTResFont::loadImage(int code, GXTexMapID id){
 
         if (pageIdx != mTexPageIdx || i != field_0x66)
         {
-            GXInitTexObj(&mTexObj, &mpGlyphBlocks[i]->data[pageIdx * texSize], texW,
-                        texH, (GXTexFmt)texFmt, GX_CLAMP, GX_CLAMP, 0);
+            void* pImg = &mpGlyphBlocks[i]->data[pageIdx * mpGlyphBlocks[i]->textureSize];
+            GXInitTexObj(&mTexObj, pImg, mpGlyphBlocks[i]->textureWidth,
+                         mpGlyphBlocks[i]->textureHeight, (GXTexFmt)(u16)mpGlyphBlocks[i]->textureFormat,
+                         GX_CLAMP, GX_CLAMP, 0);
 
             GXInitTexObjLOD(&mTexObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, 0U, 0U, GX_ANISO_1);
             mTexPageIdx = pageIdx;

@@ -1,0 +1,49 @@
+#ifndef RES_K_BRIDGE_H
+#define RES_K_BRIDGE_H
+
+enum dRes_INDEX_K_BRIDGE {
+    /* BCK  */
+    dRes_INDEX_K_BRIDGE_BCK_DR_BRIDG_DESTROYA_e=0x5,
+    dRes_INDEX_K_BRIDGE_BCK_DR_BRIDG_DESTROYB_e=0x6,
+    /* BMDR */
+    dRes_INDEX_K_BRIDGE_BMD_DR_BRIDG_e=0x9,
+    dRes_INDEX_K_BRIDGE_BMD_K_BRIDGE_A_e=0xA,
+    /* DZB  */
+    dRes_INDEX_K_BRIDGE_DZB_K_BRIDGE_A00_e=0xD,
+    dRes_INDEX_K_BRIDGE_DZB_K_BRIDGE_A01_e=0xE,
+};
+
+enum dRes_ID_K_BRIDGE {
+    /* BCK  */
+    dRes_ID_K_BRIDGE_BCK_DR_BRIDG_DESTROYA_e=0x5,
+    dRes_ID_K_BRIDGE_BCK_DR_BRIDG_DESTROYB_e=0x6,
+    /* BMDR */
+    dRes_ID_K_BRIDGE_BMD_DR_BRIDG_e=0x9,
+    dRes_ID_K_BRIDGE_BMD_K_BRIDGE_A_e=0xA,
+    /* DZB  */
+    dRes_ID_K_BRIDGE_DZB_K_BRIDGE_A00_e=0xD,
+    dRes_ID_K_BRIDGE_DZB_K_BRIDGE_A01_e=0xE,
+};
+
+enum DR_BRIDG_JNT {
+    DR_BRIDG_JNT_ROOT_e=0x0,
+    DR_BRIDG_JNT_P1_e=0x1,
+    DR_BRIDG_JNT_P10_e=0x2,
+    DR_BRIDG_JNT_P11_e=0x3,
+    DR_BRIDG_JNT_P12_e=0x4,
+    DR_BRIDG_JNT_P13_e=0x5,
+    DR_BRIDG_JNT_P2_e=0x6,
+    DR_BRIDG_JNT_P3_e=0x7,
+    DR_BRIDG_JNT_P4_e=0x8,
+    DR_BRIDG_JNT_P5_e=0x9,
+    DR_BRIDG_JNT_P6_e=0xA,
+    DR_BRIDG_JNT_P7_e=0xB,
+    DR_BRIDG_JNT_P8_e=0xC,
+    DR_BRIDG_JNT_P9_e=0xD,
+};
+
+enum K_BRIDGE_A_JNT {
+    K_BRIDGE_A_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_K_BRIDGE_H */

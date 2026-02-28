@@ -389,12 +389,19 @@ void daAlink_c::setCrawlMoveAngle() {
         }
 
         mLinkGndChk.SetPos(&sp20);
-        // Fakematch:
-        // dBgS::GroundCross is implicitly inlined to cBgS::GroundCross, but for some
-        // reason here that breaks the match. This is the only place in the code so
-        // far (September 2025) where it causes issues.
-        sp2C.set(sp20.x - sp38.x, dComIfG_Bgsp().cBgS::GroundCross(&mLinkGndChk) - sp38.y,
+#if PLATFORM_SHIELD
+        sp2C.set(sp20.x - sp38.x, dComIfG_Bgsp().GroundCross(&mLinkGndChk) - sp38.y,
                  sp20.z - sp38.z);
+#else
+        // Likely fakematch:
+        // dBgS::GroundCross is implicitly inlined to cBgS::GroundCross, but for some
+        // reason here that breaks instruction ordering. This is the only place in the code
+        // where it causes issues.
+        // It _is_ possible that this is caused by an actual version difference in Shield, given
+        // that the Wii versions need the cast but Shield prod does not.
+        sp2C.set(sp20.x - sp38.x, ((cBgS&)dComIfG_Bgsp()).GroundCross(&mLinkGndChk) - sp38.y,
+                 sp20.z - sp38.z);
+#endif
 
         if (cLib_distanceAngleS(sp2C.atan2sY_XZ(), shape_angle.x) > 0x800) {
             shape_angle.y = current.angle.y;
@@ -458,7 +465,7 @@ void daAlink_c::setCrawlAutoMoveAimPos() {
         mProcVar3.field_0x300e = 0;
         mProcVar0.field_0x3008 = -1;
     } else if ((shape_angle.y == current.angle.y && direction == DIR_BACKWARD) || (shape_angle.y != current.angle.y && direction == DIR_FORWARD)) {
-        current.angle.y += 0x8000;
+        ANGLE_ADD_2(current.angle.y, 0x8000);
         field_0x37c8.x -= 1.5f * (95.0f * cM_ssin(current.angle.y));
         field_0x37c8.z -= 1.5f * (95.0f * cM_scos(current.angle.y));
 

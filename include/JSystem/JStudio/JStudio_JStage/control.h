@@ -2,11 +2,11 @@
 #define JSTUDIO_JSTAGE_CONTROL_H
 
 #include "JSystem/JGadget/pointer.h"
+#include "JSystem/JStage/JSGLight.h"
 #include "JSystem/JStage/JSGActor.h"
 #include "JSystem/JStage/JSGAmbientLight.h"
 #include "JSystem/JStage/JSGCamera.h"
 #include "JSystem/JStage/JSGFog.h"
-#include "JSystem/JStage/JSGLight.h"
 #include "JSystem/JStage/JSGSystem.h"
 #include "JSystem/JStudio/JStudio/jstudio-object.h"
 #include "JSystem/JStudio/JStudio/jstudio-math.h"

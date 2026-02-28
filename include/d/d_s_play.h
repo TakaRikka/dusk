@@ -4,6 +4,7 @@
 #include "d/d_s_play_env.h"
 #include "f_op/f_op_scene.h"
 #include "m_Do/m_Do_hostIO.h"
+#include "SSystem/SComponent/c_phase.h"
 
 class mDoDvdThd_mountXArchive_c;
 class mDoDvdThd_toMainRam_c;

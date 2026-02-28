@@ -8,6 +8,7 @@
 #include "d/actor/d_a_obj_swLight.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
+#include <cstring>
 
 #if DEBUG
 class daObjSwLight_HIO_c : public mDoHIO_entry_c {

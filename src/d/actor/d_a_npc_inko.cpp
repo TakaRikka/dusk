@@ -14,9 +14,11 @@
 
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
-        int jnt_no = i_joint->getJntNo();
+        J3DJoint* joint = i_joint;
+        int jnt_no = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         npc_inko_class* i_this = (npc_inko_class*)model->getUserArea();
+        npc_inko_class* sp10 = i_this;
 
         if (i_this != NULL) {
             MTXCopy(model->getAnmMtx(jnt_no), *calc_mtx);
@@ -54,16 +56,22 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
 static int daNpc_Inko_Draw(npc_inko_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     g_env_light.settingTevStruct(0, &actor->current.pos, &actor->tevStr);
-    g_env_light.setLightTevColorType_MAJI(i_this->anm_p->getModel(), &actor->tevStr);
+    J3DModel* model = i_this->anm_p->getModel();
+    g_env_light.setLightTevColorType_MAJI(model, &actor->tevStr);
     i_this->anm_p->entryDL();
     return 1;
 }
 
 static void anm_init(npc_inko_class* i_this, int i_anmId, f32 i_morf, u8 i_mode, f32 i_speed) {
-    i_this->anm_p->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Npc_inko", i_anmId), i_mode, i_morf, i_speed, 0.0f, -1.0f, NULL);
+    i_this->anm_p->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Npc_inko", i_anmId), i_mode,
+                          i_morf, i_speed, 0.0f, -1.0f, NULL);
     i_this->anmId = i_anmId;
 }
 
+// DEBUG NONMATCHING
+// Two indirect branches (b/bne -> b) need to be direct somehow.
+// This can be matched by wrapping the relevant section with do...while(0)
+// and adding break statements, but this is almost certainly a fakematch.
 static int daNpc_Inko_Execute(npc_inko_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     cXyz sp78;
@@ -96,7 +104,8 @@ static int daNpc_Inko_Execute(npc_inko_class* i_this) {
         mDoMtx_stack_c::YrotM(i_this->field_0x59a);
         mDoMtx_stack_c::transM(0.0f, i_this->field_0x5e8, 40.0f + JREG_F(2));
         mDoMtx_stack_c::multVecZero(&i_this->field_0x5b4);
-        cLib_addCalcAngleS2(&actor->shape_angle.y, (i_this->field_0x5c0.y + i_this->field_0x59a), 1, 0xA00);
+        cLib_addCalcAngleS2(&actor->shape_angle.y, (i_this->field_0x5c0.y + i_this->field_0x59a),
+                            1, 0xA00);
         cLib_addCalcAngleS2(&actor->shape_angle.x, i_this->field_0x5ec, 1, 0xA00);
     }
 
@@ -156,7 +165,8 @@ static int daNpc_Inko_Execute(npc_inko_class* i_this) {
                 i_this->field_0x59a = (sp14 - i_this->field_0x5c0.y) + (s16)cM_rndFX(7000.0f);
 
                 u16 sp10 = i_this->field_0x59a;
-                if (cM_rndF(1.0f) < 0.5f && ((sp10 < 0x5000 && sp10 > 0xA000) || sp10 < 0x3000 || sp10 > 0xD000)) {
+                if (cM_rndF(1.0f) < 0.5f &&
+                    ((sp10 < 0x5000 && sp10 > 0xA000) || sp10 < 0x3000 || sp10 > 0xD000)) {
                     i_this->field_0x5e8 = -(70.0f + cM_rndF(8.0f));
                     i_this->field_0x5ec = -8000;
                 } else {
@@ -294,7 +304,8 @@ static int daNpc_Inko_Execute(npc_inko_class* i_this) {
         cLib_addCalcAngleS2(&i_this->field_0x5d4[i], i_this->field_0x5d8[i], 2, 0x1F4);
     }
 
-    mDoMtx_stack_c::transS(actor->current.pos.x, actor->current.pos.y + var_f31, actor->current.pos.z);
+    mDoMtx_stack_c::transS(actor->current.pos.x, actor->current.pos.y + var_f31,
+                           actor->current.pos.z);
     mDoMtx_stack_c::YrotM(BREG_S(0) + (actor->shape_angle.y + sp18));
     mDoMtx_stack_c::XrotM(BREG_S(1) + (actor->shape_angle.x + sp1A));
     mDoMtx_stack_c::ZrotM(actor->shape_angle.z);
@@ -317,7 +328,7 @@ static int daNpc_Inko_Execute(npc_inko_class* i_this) {
         npc_henna_class* henna = (npc_henna_class*)fopAcM_SearchByName(PROC_NPC_HENNA);
         if (henna != NULL) {
             henna->field_0x7b5 = 40;
-            data_80450C9D |= 0x40;
+            data_80450C9D |= (u8)0x40;
         }
     }
 
@@ -329,7 +340,9 @@ static int daNpc_Inko_Execute(npc_inko_class* i_this) {
         return 1;
     }
 
-    if (dComIfGp_event_runCheck() && actor->eventInfo.checkCommandTalk() && i_this->field_0x5f4 == 0) {
+    if (dComIfGp_event_runCheck() &&
+        actor->eventInfo.checkCommandTalk() &&
+        i_this->field_0x5f4 == 0) {
         int flowId;
         if (cM_rndF(1.0f) < 0.1f) {
             flowId = 0x361;
@@ -364,14 +377,15 @@ static int daNpc_Inko_Execute(npc_inko_class* i_this) {
         i_this->field_0x5f4 = 1;
 
         data_80450C9D++;
-        data_80450C9D &= 0xC3;
+        data_80450C9D &= (u8)0xC3;
     }
 
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     f32 temp_f28 = kage->actor.current.pos.x - player->current.pos.x;
     f32 temp_f27 = kage->actor.current.pos.z - player->current.pos.z;
 
-    if ((data_80450C9D & 0x80) && i_this->field_0x59c[3] < 15 && (SQUARE(temp_f28) + SQUARE(temp_f27)) < 23000.0f) {
+    if ((data_80450C9D & 0x80) && i_this->field_0x59c[3] < 15 &&
+        (SQUARE(temp_f28) + SQUARE(temp_f27)) < 23000.0f) {
         s16 spC = fopAcM_searchPlayerAngleY(actor);
         spC = (spC - player->shape_angle.y) + 0x8000;
         if (spC < 0x1800 && spC > -0x1800) {
@@ -391,11 +405,13 @@ static int daNpc_Inko_Execute(npc_inko_class* i_this) {
         actor->attention_info.position = actor->eyePos;
         actor->attention_info.position.y += 20.0f;
         fopAcM_OnStatus(actor, 0);
-        cLib_onBit<u32>(actor->attention_info.flags, fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
+        cLib_onBit<u32>(actor->attention_info.flags,
+                        fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
         actor->eventInfo.onCondition(1);
     } else {
         fopAcM_OffStatus(actor, 0);
-        cLib_offBit<u32>(actor->attention_info.flags, fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
+        cLib_offBit<u32>(actor->attention_info.flags,
+                         fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
     }
 
     return 1;
@@ -419,7 +435,8 @@ static int daNpc_Inko_Delete(npc_inko_class* i_this) {
 
 static int useHeapInit(fopAc_ac_c* actor) {
     npc_inko_class* i_this = (npc_inko_class*)actor;
-    i_this->anm_p = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Npc_inko", 8), NULL, NULL, NULL, 0, 1.0f, 0, -1, 1, 0, 0x80000, 0x11000084);
+    i_this->anm_p = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Npc_inko", 8), NULL,
+                                       NULL, NULL, 0, 1.0f, 0, -1, 1, 0, 0x80000, 0x11000084);
     if (i_this->anm_p == NULL || i_this->anm_p->getModel() == NULL) {
         return 0;
     }
@@ -438,7 +455,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
 
 static int daNpc_Inko_Create(fopAc_ac_c* actor) {
     npc_inko_class* i_this = (npc_inko_class*)actor;
-    fopAcM_ct(actor, npc_inko_class);
+    fopAcM_ct(&i_this->actor, npc_inko_class);
 
     int phase_state = dComIfG_resLoad(&i_this->phase, "Npc_inko");
     if (phase_state == cPhs_COMPLEATE_e) {

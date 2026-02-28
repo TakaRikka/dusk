@@ -357,7 +357,7 @@ void daArrow_c::clearNearActorData() {
 s16 daArrow_c::getVibAngle() {
     s16 angle;
     if (cLib_calcTimer(&field_0x952)) {
-        field_0x954 += (s16)(21243.0f - cM_rndF(4096.0f));
+        ANGLE_ADD(field_0x954, 21243.0f - cM_rndF(4096.0f));
 
         f32 f = field_0x952 * 0.02f;
         angle = f * 1024.0f * f * cM_ssin(field_0x954);

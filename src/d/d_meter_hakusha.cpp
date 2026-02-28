@@ -13,6 +13,7 @@
 #include "d/d_meter2_info.h"
 #include "d/d_meter_HIO.h"
 #include "d/d_pane_class.h"
+#include <cstring>
 
 dMeterHakusha_c::dMeterHakusha_c(void* i_screen) {
     field_0x004 = (J2DScreen*)i_screen;

@@ -6,13 +6,31 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "d/d_lib.h"
+#include "d/d_debug_viewer.h"
 #include "d/d_event.h"
+#include "d/d_path.h"
 #include "d/d_stage.h"
 #include "JSystem/JKernel/JKRAramArchive.h"
 #include "JSystem/JKernel/JKRAram.h"
 #include "JSystem/JKernel/JKRDecomp.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_controller_pad.h"
+
+static void dummy1(mDoExt_btkAnm* btk, cXyz& pos) {
+    GXColor color;
+    OS_REPORT("d_lib.cpp");
+    OS_REPORT("brk != 0");
+    OS_REPORT("btk != 0");
+    OS_REPORT("bck != 0");
+    OS_REPORT("0 <= room_no && room_no < 64");
+    OS_REPORT("scls_data != 0");
+    OS_REPORT("0 <= i_sclsnum && i_sclsnum < sclsinfo->num");
+    btk->init((J3DModelData*)NULL, NULL, 0, 0, 0.0f, 0, 0);
+    dDbVw_drawCircleOpa(pos, pos.x, color, 0, 0);
+    mDoMtx_stack_c::multVecZero(&pos);
+    mDoMtx_stack_c::multVec(&pos, &pos);
+    dDbVw_drawLineOpa(pos, pos, color, 0, 0);
+}
 
 Quaternion ZeroQuat = {
     0.0f,
@@ -42,8 +60,7 @@ void STControl::setWaitParm(s16 delayY, s16 delayX, s16 param_2, s16 param_3, f3
 void STControl::init() {
     field_0x0e = 0;
     field_0x10 = 0;
-    field_0x0d = 0;
-    mDirectionTrig = 0;
+    mDirectionTrig = field_0x0d = 0;
     field_0x22 = 0;
     mXwaitTimer = mRepeatDelayY;
     mYwaitTimer = mRepeatDelayY;
@@ -56,7 +73,7 @@ void STControl::init() {
 
 void STControl::Xinit() {
     field_0x0e = 0;
-    mDirectionTrig &= ~0x03;
+    mDirectionTrig &= u8(0xFC);
     mXwaitTimer = mRepeatDelayY;
     field_0x1e = field_0x1c;
     field_0x2a = mFirstWaitTime;
@@ -97,19 +114,23 @@ u8 STControl::checkTrigger() {
         if (stickAngle < field_0x22 - 0x7000 + temp_r7) {
             var_r6 |= TRIG_UP;
         } else if (stickAngle < field_0x22 - 0x5000 - temp_r7) {
-            var_r6 |= TRIG_UP_LEFT;
+            var_r6 |= TRIG_UP;
+            var_r6 |= TRIG_LEFT;
         } else if (stickAngle < field_0x22 - 0x3000 + temp_r7) {
             var_r6 |= TRIG_LEFT;
         } else if (stickAngle < field_0x22 - 0x1000 - temp_r7) {
-            var_r6 |= TRIG_DOWN_LEFT;
+            var_r6 |= TRIG_LEFT;
+            var_r6 |= TRIG_DOWN;
         } else if (stickAngle < field_0x22 + 0x1000 + temp_r7) {
             var_r6 |= TRIG_DOWN;
         } else if (stickAngle < field_0x22 + 0x3000 - temp_r7) {
-            var_r6 |= TRIG_DOWN_RIGHT;
+            var_r6 |= TRIG_DOWN;
+            var_r6 |= TRIG_RIGHT;
         } else if (stickAngle < field_0x22 + 0x5000 + temp_r7) {
             var_r6 |= TRIG_RIGHT;
         } else if (stickAngle < field_0x22 + 0x7000 - temp_r7) {
-            var_r6 |= TRIG_UP_RIGHT;
+            var_r6 |= TRIG_RIGHT;
+            var_r6 |= TRIG_UP;
         } else {
             var_r6 |= TRIG_UP;
         }
@@ -224,6 +245,14 @@ bool STControl::checkDownTrigger() {
     return false;
 }
 
+static void dummy2(dPath* path, dSv_player_status_b_c* statusB) {
+    OS_REPORT("i_path != 0");
+    OS_REPORT("i_startPoint < i_path->m_num");
+    OS_REPORT("mPath != 0");
+    dPath_ChkClose(path);
+    statusB->getDateIpl();
+}
+
 u8 dLib_getEventSwitchNo(int param_0) {
     dStage_MapEvent_dt_c* mapEvent = dEvt_control_c::searchMapEventData(param_0);
     if (mapEvent != NULL) {
@@ -259,10 +288,7 @@ u32 dLib_getExpandSizeFromAramArchive(JKRAramArchive* i_aramArchive, char const*
     JUT_ASSERT(1263, entry != NULL);
     u32 uVar1 = ALIGN_NEXT(JKRDecompExpandSize(header), 32);
     u32 uVar5 = ALIGN_NEXT(entry->data_size, 32);
-    if (uVar1 > uVar5) {
-        return uVar1;
-    }
-    return uVar5;
+    return uVar1 > uVar5 ? uVar1 : uVar5;
 }
 
 OSTime dLib_time_c::m_diffTime;

@@ -1,9 +1,16 @@
 #include "TRK_MINNOW_DOLPHIN/utils/common/CircleBuffer.h"
 #include "TRK_MINNOW_DOLPHIN/utils/common/MWTrace.h"
+#include "global.h"
 #include <dolphin/db.h>
 #include <dolphin/amc/AmcExi2Comm.h>
 
 #define GDEV_BUF_SIZE (0x500)
+
+#if PLATFORM_GCN
+#define TRACE(...) MWTRACE(__VA_ARGS__)
+#else
+#define TRACE(...) ((void)0)
+#endif
 
 static CircleBuffer gRecvCB;
 
@@ -12,9 +19,9 @@ static u8 gRecvBuf[GDEV_BUF_SIZE];
 static BOOL gIsInitialized;
 
 int gdev_cc_initialize(void* inputPendingPtrRef, EXICallback monitorCallback) {
-    MWTRACE(1, "CALLING EXI2_Init\n");
+    TRACE(1, "CALLING EXI2_Init\n");
     DBInitComm(inputPendingPtrRef, (int*)monitorCallback);
-    MWTRACE(1, "DONE CALLING EXI2_Init\n");
+    TRACE(1, "DONE CALLING EXI2_Init\n");
     CircleBufferInitialize(&gRecvCB, gRecvBuf, GDEV_BUF_SIZE);
     return 0;
 }
@@ -47,7 +54,7 @@ int gdev_cc_read(u8* data, int size) {
         return -0x2711;
     }
 
-    MWTRACE(1, "Expected packet size : 0x%08x (%ld)\n", size, size);
+    TRACE(1, "Expected packet size : 0x%08x (%ld)\n", size, size);
 
     p1 = size;
     p2 = size;
@@ -65,7 +72,7 @@ int gdev_cc_read(u8* data, int size) {
     if (retval == 0) {
         CircleBufferReadBytes(&gRecvCB, data, p1);
     } else {
-        MWTRACE(8, "cc_read : error reading bytes from EXI2 %ld\n", retval);
+        TRACE(8, "cc_read : error reading bytes from EXI2 %ld\n", retval);
     }
 
     return retval;
@@ -80,14 +87,14 @@ int gdev_cc_write(const u8* bytes, int length) {
     n_copy = length;
 
     if (gIsInitialized == FALSE) {
-        MWTRACE(8, "cc not initialized\n");
+        TRACE(8, "cc not initialized\n");
         return -0x2711;
     }
 
-    MWTRACE(8, "cc_write : Output data 0x%08x %ld bytes\n", bytes, length);
+    TRACE(8, "cc_write : Output data 0x%08x %ld bytes\n", bytes, length);
 
     while (n_copy > 0) {
-        MWTRACE(1, "cc_write sending %ld bytes\n", n_copy);
+        TRACE(1, "cc_write sending %ld bytes\n", n_copy);
         exi2Len = DBWrite((const void*)hexCopy, n_copy);
         if (exi2Len == AMC_EXI_NO_ERROR) {
             break;
@@ -110,7 +117,7 @@ int gdev_cc_post_stop() {
 }
 
 int gdev_cc_peek() {
-    int poll;
+    s32 poll;
     u8 buff[GDEV_BUF_SIZE];
 
     poll = DBQueryData();

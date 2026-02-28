@@ -81,7 +81,7 @@ static void impact_eff_set(e_tk_ball_class* i_this) {
     cXyz scale(2.0f + TREG_F(8), 2.0f + TREG_F(8), 2.0f + TREG_F(8));
 
     csXyz rotation = actor->current.angle;
-    ADD_ANGLE(rotation.y, 0x8000);
+    ANGLE_ADD(rotation.y, 0x8000);
 
     if (i_this->mType == TYPE_TK_BALL_WATER) {
         dComIfGp_particle_set(0x819B, &pos, &rotation, &scale);
@@ -157,7 +157,7 @@ static void e_tk_ball_move(e_tk_ball_class* i_this) {
         if (actor_lockon && daPy_getPlayerActorClass()->getCutType() != daPy_py_c::CUT_TYPE_NONE) {
             i_this->mAction = ACT_TK_BALL_RETURN;
             i_this->mMode = MODE_TK_BALL_INIT;
-            ADD_ANGLE(actor->current.angle.y, 0x8000);
+            ANGLE_ADD(actor->current.angle.y, 0x8000);
         } else {
             i_this->mAction = ACT_TK_BALL_DROP;
             i_this->mMode = MODE_TK_BALL_INIT;
@@ -335,8 +335,8 @@ static int daE_TK_BALL_Execute(e_tk_ball_class* i_this) {
 
     action(i_this);
 
-    ADD_ANGLE(actor->shape_angle.y, 0x1000);
-    ADD_ANGLE(actor->shape_angle.x, 0xE00);
+    ANGLE_ADD(actor->shape_angle.y, 0x1000);
+    ANGLE_ADD(actor->shape_angle.x, 0xE00);
 
     mDoMtx_stack_c::transS(actor->current.pos.x, actor->current.pos.y + i_this->mArcHeight,
                            actor->current.pos.z);

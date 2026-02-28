@@ -1,0 +1,30 @@
+#ifndef RES_O_GD_TAMA_H
+#define RES_O_GD_TAMA_H
+
+enum dRes_INDEX_O_GD_TAMA {
+    /* BMDR */
+    dRes_INDEX_O_GD_TAMA_BMD_O_GD_INOCHIDAMA_e=0x5,
+    /* BRK  */
+    dRes_INDEX_O_GD_TAMA_BRK_O_GD_INOCHIDAMA_e=0x8,
+    /* BTK  */
+    dRes_INDEX_O_GD_TAMA_BTK_O_GD_INOCHIDAMA_e=0xB,
+};
+
+enum dRes_ID_O_GD_TAMA {
+    /* BMDR */
+    dRes_ID_O_GD_TAMA_BMD_O_GD_INOCHIDAMA_e=0x5,
+    /* BRK  */
+    dRes_ID_O_GD_TAMA_BRK_O_GD_INOCHIDAMA_e=0x8,
+    /* BTK  */
+    dRes_ID_O_GD_TAMA_BTK_O_GD_INOCHIDAMA_e=0xB,
+};
+
+enum O_GD_INOCHIDAMA_JNT {
+    O_GD_INOCHIDAMA_JNT_LOCATOR1_e=0x0,
+    O_GD_INOCHIDAMA_JNT_P00_e=0x1,
+    O_GD_INOCHIDAMA_JNT_P01_e=0x2,
+    O_GD_INOCHIDAMA_JNT_P02_e=0x3,
+    O_GD_INOCHIDAMA_JNT_P03_e=0x4,
+};
+
+#endif /* !RES_O_GD_TAMA_H */

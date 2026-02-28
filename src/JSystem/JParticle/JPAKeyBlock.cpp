@@ -10,11 +10,11 @@ JPAKeyBlock::JPAKeyBlock(const u8* data)
 }
 
 f32 JPAKeyBlock::calc(float p1) {
-	if (mDataStart[0xB] != '\0') {
-		int v1 = (int)field_0x4[(mDataStart[9] - 1) * 4] + 1;
+	if (isLoop()) {
+		int v1 = (int)getKeyData()[(getKeyNum() - 1) * 4] + 1;
 		// p1 -= (v1 * ((int)p1 / v1));
 		int v2 = ((int)p1 / v1);
 		p1     = p1 - (v2 * v1);
 	}
-	return JPACalcKeyAnmValue(p1, mDataStart[9], field_0x4);
+	return JPACalcKeyAnmValue(p1, getKeyNum(), getKeyData());
 }

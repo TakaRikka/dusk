@@ -5,6 +5,7 @@
 #include <cstring>
 
 #include "__si.h"
+#include "revolution/vi/__vi.h"
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
@@ -14,11 +15,11 @@
 #if DEBUG
 #define BUILD_TIME "17:27:55"
 #else
-#define BUILD_TIME "17:33:06"
+#define BUILD_TIME "17:33:17"
 #endif
 #elif SDK_SEP2006
-#define BUILD_DATE  "Sep 21 2006"
-#define BUILD_TIME "14:32:13"
+#define BUILD_DATE  "Sep  7 2006"
+#define BUILD_TIME "07:20:50"
 #endif
 
 #ifdef SDK_AUG2010
@@ -143,7 +144,7 @@ static void DoReset() {
         ASSERTLINE(589, 0 <= ResettingChan && ResettingChan < SI_MAX_CHAN);
         chanBit = (PAD_CHAN0_BIT >> ResettingChan);
         ResettingBits &= ~chanBit;
-        
+
         memset(&Origin[ResettingChan], 0, sizeof(PADStatus));
         SIGetTypeAsync(ResettingChan, PADTypeAndStatusCallback);
     }
@@ -221,7 +222,7 @@ static void PADProbeCallback(s32 chan, u32 error, OSContext* context) {
     ASSERTLINE(740, 0 <= ResettingChan && ResettingChan < SI_MAX_CHAN);
     ASSERTLINE(741, chan == ResettingChan);
     ASSERTLINE(743, (Type[chan] & SI_WIRELESS_CONT_MASK) == SI_WIRELESS_CONT && !(Type[chan] & SI_WIRELESS_LITE));
-    
+
     if (!(error & (SI_ERROR_UNDER_RUN | SI_ERROR_OVER_RUN | SI_ERROR_NO_RESPONSE | SI_ERROR_COLLISION)))
     {
         PADEnable(ResettingChan);
@@ -381,7 +382,7 @@ BOOL PADInit() {
     if (Initialized) {
         return 1;
     }
-    
+
     OSRegisterVersion(__PADVersion);
 
     if (__PADSpec)
@@ -394,7 +395,7 @@ BOOL PADInit() {
         __OSWirelessPadFixMode
             = (u16)((((time)&0xffff) + ((time >> 16) & 0xffff) + ((time >> 32) & 0xffff) + ((time >> 48) & 0xffff))
                     & 0x3fffu);
-    
+
         RecalibrateBits = PAD_CHAN0_BIT | PAD_CHAN1_BIT | PAD_CHAN2_BIT | PAD_CHAN3_BIT;
     }
 
@@ -416,7 +417,9 @@ u32 PADRead(PADStatus* status) {
     u32 sr;
     int chanShift;
     u32 motor;
+#if SDK_AUG2010
     static PADStatus pre_status[4];
+#endif
     int threshold;
 
     threshold = 3;
@@ -462,7 +465,7 @@ u32 PADRead(PADStatus* status) {
                 if (!(SIGetType(chan) & SI_GC_NOMOTOR)) {
                     motor |= chanBit;
                 }
-    
+
                 if (!SIGetResponse(chan, &data)) {
                     status->err = PAD_ERR_TRANSFER;
                     memset(status, 0, offsetof(PADStatus, err));
@@ -470,7 +473,7 @@ u32 PADRead(PADStatus* status) {
                     status->err = PAD_ERR_TRANSFER;
                     memset(status, 0, offsetof(PADStatus, err));
                 } else {
-                    
+
 
                     MakeStatus(chan, status, data);
 
@@ -480,6 +483,7 @@ u32 PADRead(PADStatus* status) {
                         threshold = 3;
                     }
 
+#if SDK_AUG2010
                     #ifdef __MWERKS__
                     #define abs(x) __abs(x)
                     #else
@@ -500,19 +504,20 @@ u32 PADRead(PADStatus* status) {
                     #undef abs
 
                     memcpy(&pre_status[chan], status, sizeof(PADStatus));
-    
+#endif
+
                     // Check and clear PAD_ORIGIN bit
                     if (status->button & 0x2000) {
                         status->err = PAD_ERR_TRANSFER;
                         memset(status, 0, offsetof(PADStatus, err));
-        
+
                         // Get origin. It is okay if the following transfer fails
                         // since the PAD_ORIGIN bit remains until the read origin
                         // command complete.
                         SITransfer(chan, &CmdReadOrigin, 1, &Origin[chan], 10, PADOriginUpdateCallback, 0);
                     } else {
                         status->err = PAD_ERR_NONE;
-        
+
                         // Clear PAD_INTERFERE bit
                         status->button &= ~0x0080;
                     }
@@ -690,6 +695,10 @@ static u8 ClampU8(u8 var, u8 org) {
 }
 
 static void SPEC2_MakeStatus(s32 chan, PADStatus* status, u32 data[2]) {
+#if !SDK_AUG2010 || VERSION == VERSION_SHIELD
+    static PADStatus pre_status[4];
+#endif
+    s32 threshold;
     PADStatus* origin;
 
     status->button = (u16)((data[0] >> 16) & PAD_ALL);
@@ -765,6 +774,29 @@ static void SPEC2_MakeStatus(s32 chan, PADStatus* status, u32 data[2]) {
     status->substickY = ClampS8(status->substickY, origin->substickY);
     status->triggerLeft = ClampU8(status->triggerLeft, origin->triggerLeft);
     status->triggerRight = ClampU8(status->triggerRight, origin->triggerRight);
+
+#if !SDK_AUG2010
+    #ifdef __MWERKS__
+    #define abs(x) __abs(x)
+    #else
+    #define abs(x) __builtin_abs(x)
+    #endif
+
+    threshold = 9;
+    if (abs(status->stickX * status->stickX - pre_status[chan].stickX * pre_status[chan].stickX) >= threshold ||
+        abs(status->stickY * status->stickY - pre_status[chan].stickY * pre_status[chan].stickY) >= threshold ||
+        abs(status->substickX * status->substickX - pre_status[chan].substickX * pre_status[chan].substickX) >= threshold ||
+        abs(status->substickY * status->substickY - pre_status[chan].substickY * pre_status[chan].substickY) >= threshold ||
+        abs(status->triggerLeft * status->triggerLeft - pre_status[chan].triggerLeft * pre_status[chan].triggerLeft) >= threshold ||
+        abs(status->triggerRight * status->triggerRight - pre_status[chan].triggerRight * pre_status[chan].triggerRight) >= threshold ||
+        pre_status[chan].button != status->button) {
+        __VIResetSIIdle();
+    }
+
+    memcpy(&pre_status[chan], status, sizeof(PADStatus));
+#endif
+
+    #undef abs
 }
 
 int PADGetType(s32 chan, u32* type) {
@@ -889,6 +921,6 @@ BOOL PADIsBarrel(s32 chan) {
     if (BarrelBits & (PAD_CHAN0_BIT >> chan)) {
         return TRUE;
     }
-    
+
     return FALSE;
 }

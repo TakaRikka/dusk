@@ -1,0 +1,30 @@
+#ifndef RES_TWGTFIRO_H
+#define RES_TWGTFIRO_H
+
+enum dRes_INDEX_TWGTFIRO {
+    /* BMDR */
+    dRes_INDEX_TWGTFIRO_BMD_M_TGATE_FIRONE_e=0x6,
+    /* BRK  */
+    dRes_INDEX_TWGTFIRO_BRK_M_TGATE_FIRONE_e=0x9,
+    /* BTK  */
+    dRes_INDEX_TWGTFIRO_BTK_M_TGATE_FIRONE_e=0xC,
+    /* DZB  */
+    dRes_INDEX_TWGTFIRO_DZB_M_TGATE_FIRONE_COL_e=0xF,
+};
+
+enum dRes_ID_TWGTFIRO {
+    /* BMDR */
+    dRes_ID_TWGTFIRO_BMD_M_TGATE_FIRONE_e=0x6,
+    /* BRK  */
+    dRes_ID_TWGTFIRO_BRK_M_TGATE_FIRONE_e=0x9,
+    /* BTK  */
+    dRes_ID_TWGTFIRO_BTK_M_TGATE_FIRONE_e=0xC,
+    /* DZB  */
+    dRes_ID_TWGTFIRO_DZB_M_TGATE_FIRONE_COL_e=0xF,
+};
+
+enum M_TGATE_FIRONE_JNT {
+    M_TGATE_FIRONE_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_TWGTFIRO_H */

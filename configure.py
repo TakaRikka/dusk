@@ -48,9 +48,29 @@ VERSIONS = [
 # Versions to disable until properly configured
 DISABLED_VERSIONS = [
     7,  # Wii KOR
-    8,  # Wii USA Kiosk Demo
     9,  # Wii PAL Kiosk Demo
     11, # Shield Production
+]
+
+GCN_VERSIONS = [
+    "GZ2E01", # GCN USA
+    "GZ2P01", # GCN PAL
+    "GZ2J01", # GCN JPN
+]
+
+WII_VERSIONS = [
+    "RZDE01_00", # Wii USA Rev 0
+    "RZDE01_02", # Wii USA Rev 2
+    "RZDP01",    # Wii PAL
+    "RZDJ01",    # Wii JPN
+    "RZDK01",    # Wii KOR
+    "DZDE01",    # Wii USA Kiosk Demo
+    "DZDP01",    # Wii PAL Kiosk Demo
+]
+SHIELD_VERSIONS = [
+    "Shield",    # Shield
+    "ShieldP",   # Shield Production
+    "ShieldD",   # Shield Debug
 ]
 
 parser = argparse.ArgumentParser()
@@ -189,10 +209,10 @@ if not config.non_matching:
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20251118"
-config.dtk_tag = "v1.7.1"
-config.objdiff_tag = "v3.5.0"
+config.dtk_tag = "v1.8.0"
+config.objdiff_tag = "v3.6.1"
 config.sjiswrap_tag = "v1.2.2"
-config.wibo_tag = "1.0.0-beta.5"
+config.wibo_tag = "1.0.0"
 
 # Project
 config.config_path = Path("config") / config.version / "config.yml"
@@ -263,7 +283,7 @@ cflags_base = [
     "-D__GEKKO__",
 ]
 
-if config.version in ["RZDE01_00", "RZDE01_02", "RZDP01", "RZDJ01", "Shield", "ShieldD"]:
+if config.version in WII_VERSIONS or config.version in SHIELD_VERSIONS:
     cflags_base.extend(["-enc SJIS"])
 else:
     cflags_base.extend(["-multibyte"])
@@ -310,7 +330,7 @@ cflags_runtime = [
     "-DMSL_USE_INLINES=1",
 ]
 
-if config.version in ["RZDE01_00", "RZDE01_02", "RZDP01", "RZDJ01", "ShieldD", "Shield"]:
+if config.version in WII_VERSIONS or config.version in SHIELD_VERSIONS:
     cflags_runtime.extend(["-ipa file", "-fp_contract off"])
 else:
     cflags_runtime.extend(["-inline deferred,auto"])
@@ -378,14 +398,14 @@ if config.version != "ShieldD":
 
 if config.version == "ShieldD":
     cflags_framework.extend(["-O0,p", "-inline off", "-RTTI on", "-DDEBUG=1", "-DWIDESCREEN_SUPPORT=1"])
-elif config.version in ["RZDE01_00", "RZDE01_02", "RZDP01", "RZDJ01", "Shield"]:
+elif config.version in WII_VERSIONS or config.version in SHIELD_VERSIONS:
     cflags_framework.extend(["-ipa file", "-RTTI on", "-DWIDESCREEN_SUPPORT=1"])
 
 if config.version in ["RZDE01_00", "ShieldD"] or args.debug or args.reghio:
     cflags_framework.extend(["-DENABLE_REGHIO=1"])
 
 if config.version != "ShieldD":
-    if config.version in ["RZDE01_00", "RZDE01_02", "RZDP01", "RZDJ01"]:
+    if config.version in WII_VERSIONS:
         # TODO: whats the correct inlining flag? deferred looks better in some places, others not. something else wrong?
         cflags_framework.extend(["-inline noauto", "-O4,s", "-sym on"])
     elif config.version in ["Shield"]:
@@ -394,14 +414,14 @@ if config.version != "ShieldD":
     else:
         cflags_framework.extend(["-inline noauto", "-O3,s", "-sym on", "-str reuse,pool,readonly"])
 
-if config.version in ["RZDE01_00", "RZDE01_02", "RZDP01", "RZDJ01"]:
+if config.version in ["RZDE01_00", "RZDE01_02", "RZDP01", "RZDJ01", "DZDE01"]:
     cflags_framework.extend(["-DSDK_SEP2006"])
 
 cflags_jsystem = [
     *cflags_framework
 ]
 
-if config.version in ["RZDE01_00", "RZDE01_02", "RZDP01", "RZDJ01"]:
+if config.version in ["RZDE01_00", "RZDE01_02", "RZDP01", "RZDJ01", "DZDE01"]:
     cflags_jsystem.extend(["-RTTI off"])
 
 
@@ -422,27 +442,21 @@ cflags_dolzel_rel = [
 
 def MWVersion(cfg_version: str | None) -> str:
     match cfg_version:
-        case "GZ2E01":
+        case "GZ2E01" | "GZ2P01" | "GZ2J01":
             return "GC/2.7"
-        case "GZ2P01":
-            return "GC/2.7"
-        case "GZ2J01":
-            return "GC/2.7"
-        case "RZDE01_00" | "RZDE01_02" | "RZDP01" | "RZDJ01":
+        case "RZDE01_00" | "RZDE01_02" | "RZDP01" | "RZDJ01" | "DZDE01":
             # NOTE: we use a modified version of GC/3.0a3 to be able to handle multi-char constants.
             # This was probably a change made in some compiler version in the early days of transitioning GC to Wii development,
             # but we don't have that version. GC/3.0a3 appears to have the best overall codegen of any available GC/Wii compiler
             # However GC/3.0a5 is required for the linker version, GC/3.0a3 won't work.
             return "GC/3.0a3p1"
-        case "ShieldD":
-            return "Wii/1.0"
-        case "Shield":
+        case "ShieldD" | "Shield":
             return "Wii/1.0"
         case _:
             return "GC/2.7"
 
 # Wii versions specifically need linker GC/3.0a5
-if config.version in ["RZDE01_00", "RZDE01_02", "RZDP01", "RZDJ01"]:
+if config.version in WII_VERSIONS:
     config.linker_version = "GC/3.0a5"
 else:
     config.linker_version = MWVersion(config.version)
@@ -458,12 +472,12 @@ def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
         "objects": objects,
     }
 
-def RevolutionLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
+def RevolutionLib(lib_name: str, objects: List[Object], extra_cflags=[]) -> Dict[str, Any]:
     if config.version == "ShieldD":
         return {
             "lib": lib_name,
             "mw_version": "Wii/1.0",
-            "cflags": [*cflags_revolution_debug, "-DSDK_AUG2010"],
+            "cflags": [*cflags_revolution_debug, "-DSDK_AUG2010", *extra_cflags],
             "progress_category": "sdk",
             "objects": objects,
         }
@@ -471,7 +485,7 @@ def RevolutionLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
         return {
             "lib": lib_name,
             "mw_version": "Wii/1.0",
-            "cflags": [*cflags_revolution_retail, "-DSDK_AUG2010"],
+            "cflags": [*cflags_revolution_retail, "-DSDK_AUG2010", *extra_cflags],
             "progress_category": "sdk",
             "objects": objects,
         }
@@ -479,7 +493,7 @@ def RevolutionLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
         return {
             "lib": lib_name,
             "mw_version": "GC/3.0a3",
-            "cflags": [*cflags_revolution_retail, "-DSDK_SEP2006", "-DNW4HBM_DEBUG"],
+            "cflags": [*cflags_revolution_retail, "-DSDK_SEP2006", "-DNW4HBM_DEBUG", *extra_cflags],
             "progress_category": "sdk",
             "objects": objects,
         }
@@ -487,7 +501,7 @@ def RevolutionLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
         return {
             "lib": lib_name,
             "mw_version": "GC/3.0a3",
-            "cflags": [*cflags_revolution_retail, "-DSDK_SEP2006"],
+            "cflags": [*cflags_revolution_retail, "-DSDK_SEP2006", *extra_cflags],
             "progress_category": "sdk",
             "objects": objects,
         }
@@ -573,7 +587,7 @@ config.libs = [
             Object(MatchingFor(ALL_GCN), "m_Do/m_Do_printf.cpp"),
             Object(MatchingFor(ALL_GCN), "m_Do/m_Do_audio.cpp"),
             Object(MatchingFor(ALL_GCN), "m_Do/m_Do_controller_pad.cpp"),
-            Object(NonMatching, "m_Do/m_Re_controller_pad.cpp"),
+            Object(NonMatching, "m_Re/m_Re_controller_pad.cpp"),
             Object(MatchingFor(ALL_GCN), "m_Do/m_Do_graphic.cpp"),
             Object(MatchingFor(ALL_GCN), "m_Do/m_Do_machine.cpp"),
             Object(MatchingFor(ALL_GCN), "m_Do/m_Do_mtx.cpp"),
@@ -612,60 +626,60 @@ config.libs = [
 
             # f_op
             Object(MatchingFor(ALL_GCN, "Shield"), "f_op/f_op_actor.cpp"),
-            Object(MatchingFor(ALL), "f_op/f_op_actor_iter.cpp"),
-            Object(MatchingFor(ALL), "f_op/f_op_actor_tag.cpp"),
-            Object(MatchingFor(ALL), "f_op/f_op_camera.cpp"),
-            Object(MatchingFor(ALL), "f_op/f_op_actor_map.cpp"),
+            Object(Matching, "f_op/f_op_actor_iter.cpp"),
+            Object(Matching, "f_op/f_op_actor_tag.cpp"),
+            Object(Matching, "f_op/f_op_camera.cpp"),
+            Object(Matching, "f_op/f_op_actor_map.cpp"),
             Object(MatchingFor(ALL_GCN), "f_op/f_op_actor_mng.cpp"),
             Object(MatchingFor(ALL_GCN, ALL_WII, "Shield"), "f_op/f_op_camera_mng.cpp"),
-            Object(MatchingFor(ALL), "f_op/f_op_overlap.cpp"),
+            Object(Matching, "f_op/f_op_overlap.cpp"),
             Object(MatchingFor(ALL_GCN, ALL_WII, "Shield"), "f_op/f_op_overlap_mng.cpp"),
             Object(MatchingFor(ALL_GCN, ALL_WII, "ShieldD"), "f_op/f_op_overlap_req.cpp"),
-            Object(MatchingFor(ALL), "f_op/f_op_scene.cpp"),
+            Object(Matching, "f_op/f_op_scene.cpp"),
             Object(MatchingFor(ALL_GCN, "ShieldD"), "f_op/f_op_scene_iter.cpp"),
-            Object(MatchingFor(ALL), "f_op/f_op_scene_mng.cpp"),
-            Object(MatchingFor(ALL), "f_op/f_op_scene_req.cpp"),
-            Object(MatchingFor(ALL), "f_op/f_op_scene_tag.cpp"),
-            Object(MatchingFor(ALL), "f_op/f_op_view.cpp"),
-            Object(MatchingFor(ALL), "f_op/f_op_kankyo.cpp"),
-            Object(MatchingFor(ALL), "f_op/f_op_msg.cpp"),
+            Object(Matching, "f_op/f_op_scene_mng.cpp"),
+            Object(Matching, "f_op/f_op_scene_req.cpp"),
+            Object(Matching, "f_op/f_op_scene_tag.cpp"),
+            Object(Matching, "f_op/f_op_view.cpp"),
+            Object(Matching, "f_op/f_op_kankyo.cpp"),
+            Object(Matching, "f_op/f_op_msg.cpp"),
             Object(MatchingFor(ALL_GCN, ALL_WII, "Shield"), "f_op/f_op_kankyo_mng.cpp"),
             Object(MatchingFor(ALL_GCN), "f_op/f_op_msg_mng.cpp"),
-            Object(MatchingFor(ALL), "f_op/f_op_draw_iter.cpp"),
-            Object(MatchingFor(ALL), "f_op/f_op_draw_tag.cpp"),
-            Object(MatchingFor(ALL), "f_op/f_op_scene_pause.cpp"),
+            Object(Matching, "f_op/f_op_draw_iter.cpp"),
+            Object(Matching, "f_op/f_op_draw_tag.cpp"),
+            Object(Matching, "f_op/f_op_scene_pause.cpp"),
 
             # f_pc
             Object(MatchingFor(ALL_GCN, ALL_WII), "f_pc/f_pc_base.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_create_iter.cpp"),
+            Object(Matching, "f_pc/f_pc_create_iter.cpp"),
             Object(MatchingFor(ALL_GCN, ALL_SHIELD), "f_pc/f_pc_create_req.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_create_tag.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_creator.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_delete_tag.cpp"),
+            Object(Matching, "f_pc/f_pc_create_tag.cpp"),
+            Object(Matching, "f_pc/f_pc_creator.cpp"),
+            Object(Matching, "f_pc/f_pc_delete_tag.cpp"),
             Object(MatchingFor(ALL_GCN, ALL_SHIELD), "f_pc/f_pc_deletor.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_draw_priority.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_executor.cpp"),
+            Object(Matching, "f_pc/f_pc_draw_priority.cpp"),
+            Object(Matching, "f_pc/f_pc_executor.cpp"),
             Object(MatchingFor(ALL_GCN, ALL_SHIELD), "f_pc/f_pc_layer.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_leaf.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_layer_iter.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_layer_tag.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_line.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_load.cpp"),
+            Object(Matching, "f_pc/f_pc_leaf.cpp"),
+            Object(Matching, "f_pc/f_pc_layer_iter.cpp"),
+            Object(Matching, "f_pc/f_pc_layer_tag.cpp"),
+            Object(Matching, "f_pc/f_pc_line.cpp"),
+            Object(Matching, "f_pc/f_pc_load.cpp"),
             Object(MatchingFor(ALL_GCN), "f_pc/f_pc_manager.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_method.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_node.cpp"),
+            Object(Matching, "f_pc/f_pc_method.cpp"),
+            Object(Matching, "f_pc/f_pc_node.cpp"),
             Object(MatchingFor(ALL_GCN, "ShieldD"), "f_pc/f_pc_node_req.cpp"),
             Object(MatchingFor(ALL_GCN, ALL_SHIELD), "f_pc/f_pc_priority.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_profile.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_searcher.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_line_tag.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_line_iter.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_method_iter.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_method_tag.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_pause.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_draw.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_fstcreate_req.cpp"),
-            Object(MatchingFor(ALL), "f_pc/f_pc_stdcreate_req.cpp"),
+            Object(Matching, "f_pc/f_pc_profile.cpp"),
+            Object(Matching, "f_pc/f_pc_searcher.cpp"),
+            Object(Matching, "f_pc/f_pc_line_tag.cpp"),
+            Object(Matching, "f_pc/f_pc_line_iter.cpp"),
+            Object(Matching, "f_pc/f_pc_method_iter.cpp"),
+            Object(Matching, "f_pc/f_pc_method_tag.cpp"),
+            Object(Matching, "f_pc/f_pc_pause.cpp"),
+            Object(Matching, "f_pc/f_pc_draw.cpp"),
+            Object(Matching, "f_pc/f_pc_fstcreate_req.cpp"),
+            Object(Matching, "f_pc/f_pc_stdcreate_req.cpp"),
             Object(MatchingFor("ShieldD"), "f_pc/f_pc_debug_sv.cpp"),
         ],
     },
@@ -1239,20 +1253,20 @@ config.libs = [
         ],
     },
     {
-        "lib": "Z2AudioCSD",
+        "lib": "Z2AudioCS",
         "mw_version": MWVersion(config.version),
         "cflags": cflags_framework,
         "progress_category": "core",
         "host": True,
         "objects": [
-            Object(NonMatching, "Z2AudioCSD/SpkSpeakerCtrl.cpp"),
-            Object(NonMatching, "Z2AudioCSD/SpkSystem.cpp"),
-            Object(NonMatching, "Z2AudioCSD/SpkMixingBuffer.cpp"),
-            Object(NonMatching, "Z2AudioCSD/SpkWave.cpp"),
-            Object(NonMatching, "Z2AudioCSD/SpkTable.cpp"),
-            Object(NonMatching, "Z2AudioCSD/SpkData.cpp"),
-            Object(NonMatching, "Z2AudioCSD/SpkSound.cpp"),
-            Object(NonMatching, "Z2AudioCSD/Z2AudioCS.cpp"),
+            Object(Matching, "Z2AudioCS/SpkSpeakerCtrl.cpp"),
+            Object(Equivalent, "Z2AudioCS/SpkSystem.cpp"),
+            Object(MatchingFor(ALL_WII, ALL_DEMO, "Shield"), "Z2AudioCS/SpkMixingBuffer.cpp"),
+            Object(Matching, "Z2AudioCS/SpkWave.cpp"),
+            Object(Matching, "Z2AudioCS/SpkTable.cpp"),
+            Object(MatchingFor(ALL_WII, ALL_DEMO, "Shield"), "Z2AudioCS/SpkData.cpp"),
+            Object(Equivalent, "Z2AudioCS/SpkSound.cpp"), # weak func order (JSUList ctor)
+            Object(Equivalent, "Z2AudioCS/Z2AudioCS.cpp"),
         ],
     },
     {
@@ -1261,10 +1275,10 @@ config.libs = [
         "cflags": [*cflags_noopt, "-O3"],
         "progress_category": "sdk",
         "objects": [
-            Object(MatchingFor(ALL_GCN), "dolphin/gf/GFGeometry.cpp"),
-            Object(MatchingFor(ALL_GCN), "dolphin/gf/GFLight.cpp"),
-            Object(MatchingFor(ALL_GCN), "dolphin/gf/GFPixel.cpp"),
-            Object(MatchingFor(ALL_GCN), "dolphin/gf/GFTev.cpp"),
+            Object(Matching, "dolphin/gf/GFGeometry.cpp"),
+            Object(Matching, "dolphin/gf/GFLight.cpp"),
+            Object(Matching, "dolphin/gf/GFPixel.cpp"),
+            Object(Matching, "dolphin/gf/GFTev.cpp"),
         ],
     },
     JSystemLib(
@@ -1455,36 +1469,36 @@ config.libs = [
     DolphinLib(
         "base",
         [
-            Object(MatchingFor(ALL_GCN), "dolphin/base/PPCArch.c"),
+            Object(Matching, "dolphin/base/PPCArch.c"),
         ],
     ),
     DolphinLib(
         "os",
         [
-            Object(MatchingFor(ALL_GCN), "dolphin/os/__start.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OS.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSAlarm.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSAlloc.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSArena.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSAudioSystem.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSCache.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSContext.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSError.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSExec.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSFont.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSInterrupt.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSLink.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSMessage.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSMemory.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSMutex.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSReboot.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSReset.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSResetSW.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSRtc.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSSync.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSThread.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/OSTime.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/os/__ppc_eabi_init.cpp"),
+            Object(Matching, "dolphin/os/__start.c"),
+            Object(Matching, "dolphin/os/OS.c"),
+            Object(Matching, "dolphin/os/OSAlarm.c"),
+            Object(Matching, "dolphin/os/OSAlloc.c"),
+            Object(Matching, "dolphin/os/OSArena.c"),
+            Object(Matching, "dolphin/os/OSAudioSystem.c"),
+            Object(Matching, "dolphin/os/OSCache.c"),
+            Object(Matching, "dolphin/os/OSContext.c"),
+            Object(Matching, "dolphin/os/OSError.c"),
+            Object(Matching, "dolphin/os/OSExec.c"),
+            Object(Matching, "dolphin/os/OSFont.c"),
+            Object(Matching, "dolphin/os/OSInterrupt.c"),
+            Object(Matching, "dolphin/os/OSLink.c"),
+            Object(Matching, "dolphin/os/OSMessage.c"),
+            Object(Matching, "dolphin/os/OSMemory.c"),
+            Object(Matching, "dolphin/os/OSMutex.c"),
+            Object(Matching, "dolphin/os/OSReboot.c"),
+            Object(Matching, "dolphin/os/OSReset.c"),
+            Object(Matching, "dolphin/os/OSResetSW.c"),
+            Object(Matching, "dolphin/os/OSRtc.c"),
+            Object(Matching, "dolphin/os/OSSync.c"),
+            Object(Matching, "dolphin/os/OSThread.c"),
+            Object(Matching, "dolphin/os/OSTime.c"),
+            Object(Matching, "dolphin/os/__ppc_eabi_init.cpp"),
         ],
     ),
     {
@@ -1493,123 +1507,123 @@ config.libs = [
         "cflags": [*cflags_noopt, "-ir src/dolphin"],
         "progress_category": "sdk",
         "objects": [
-            Object(MatchingFor(ALL_GCN), "dolphin/exi/EXIBios.c", extra_cflags=["-O3,p"]),
-            Object(MatchingFor(ALL_GCN), "dolphin/exi/EXIUart.c", extra_cflags=["-O4,p"]),
+            Object(Matching, "dolphin/exi/EXIBios.c", extra_cflags=["-O3,p"]),
+            Object(Matching, "dolphin/exi/EXIUart.c", extra_cflags=["-O4,p"]),
         ],
     },
     DolphinLib(
         "si",
         [
-            Object(MatchingFor(ALL_GCN), "dolphin/si/SIBios.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/si/SISamplingRate.c"),
+            Object(Matching, "dolphin/si/SIBios.c"),
+            Object(Matching, "dolphin/si/SISamplingRate.c"),
         ],
     ),
     DolphinLib(
         "db",
         [
-            Object(MatchingFor(ALL_GCN), "dolphin/db/db.c"),
+            Object(Matching, "dolphin/db/db.c"),
         ],
     ),
     DolphinLib(
         "mtx",
         [
-            Object(MatchingFor(ALL_GCN), "dolphin/mtx/mtx.c", extra_cflags=["-char signed"]),
-            Object(MatchingFor(ALL_GCN), "dolphin/mtx/mtxvec.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/mtx/mtx44.c", extra_cflags=["-char signed"]),
-            Object(MatchingFor(ALL_GCN), "dolphin/mtx/vec.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/mtx/quat.c"),
+            Object(Matching, "dolphin/mtx/mtx.c", extra_cflags=["-char signed"]),
+            Object(Matching, "dolphin/mtx/mtxvec.c"),
+            Object(Matching, "dolphin/mtx/mtx44.c", extra_cflags=["-char signed"]),
+            Object(Matching, "dolphin/mtx/vec.c"),
+            Object(Matching, "dolphin/mtx/quat.c"),
         ],
     ),
     DolphinLib(
         "dvd",
         [
-            Object(MatchingFor(ALL_GCN), "dolphin/dvd/dvdlow.c", extra_cflags=["-char signed"]),
-            Object(MatchingFor(ALL_GCN), "dolphin/dvd/dvdfs.c", extra_cflags=["-char signed"]),
-            Object(MatchingFor(ALL_GCN), "dolphin/dvd/dvd.c", extra_cflags=["-char signed"]),
-            Object(MatchingFor(ALL_GCN), "dolphin/dvd/dvdqueue.c", extra_cflags=["-char signed"]),
-            Object(MatchingFor(ALL_GCN), "dolphin/dvd/dvderror.c", extra_cflags=["-char signed"]),
-            Object(MatchingFor(ALL_GCN), "dolphin/dvd/dvdidutils.c", extra_cflags=["-char signed"]),
-            Object(MatchingFor(ALL_GCN), "dolphin/dvd/dvdFatal.c", extra_cflags=["-char signed"]),
-            Object(MatchingFor(ALL_GCN), "dolphin/dvd/fstload.c", extra_cflags=["-char signed"]),
+            Object(Matching, "dolphin/dvd/dvdlow.c", extra_cflags=["-char signed"]),
+            Object(Matching, "dolphin/dvd/dvdfs.c", extra_cflags=["-char signed"]),
+            Object(Matching, "dolphin/dvd/dvd.c", extra_cflags=["-char signed"]),
+            Object(Matching, "dolphin/dvd/dvdqueue.c", extra_cflags=["-char signed"]),
+            Object(Matching, "dolphin/dvd/dvderror.c", extra_cflags=["-char signed"]),
+            Object(Matching, "dolphin/dvd/dvdidutils.c", extra_cflags=["-char signed"]),
+            Object(Matching, "dolphin/dvd/dvdFatal.c", extra_cflags=["-char signed"]),
+            Object(Matching, "dolphin/dvd/fstload.c", extra_cflags=["-char signed"]),
         ],
     ),
     DolphinLib(
         "vi",
         [
-            Object(MatchingFor(ALL_GCN), "dolphin/vi/vi.c"),
+            Object(Matching, "dolphin/vi/vi.c"),
         ],
     ),
     DolphinLib(
         "pad",
         [
-            Object(MatchingFor(ALL_GCN), "dolphin/pad/Padclamp.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/pad/Pad.c"),
+            Object(Matching, "dolphin/pad/Padclamp.c"),
+            Object(Matching, "dolphin/pad/Pad.c"),
         ],
     ),
     DolphinLib(
         "ai",
         [
-            Object(MatchingFor(ALL_GCN), "dolphin/ai/ai.c"),
+            Object(Matching, "dolphin/ai/ai.c"),
         ],
     ),
     DolphinLib(
         "ar",
         [
-            Object(MatchingFor(ALL_GCN), "dolphin/ar/ar.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/ar/arq.c"),
+            Object(Matching, "dolphin/ar/ar.c"),
+            Object(Matching, "dolphin/ar/arq.c"),
         ],
     ),
     DolphinLib(
         "dsp",
         [
-            Object(MatchingFor(ALL_GCN), "dolphin/dsp/dsp.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/dsp/dsp_debug.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/dsp/dsp_task.c"),
+            Object(Matching, "dolphin/dsp/dsp.c"),
+            Object(Matching, "dolphin/dsp/dsp_debug.c"),
+            Object(Matching, "dolphin/dsp/dsp_task.c"),
         ],
     ),
     DolphinLib(
         "card",
         [
-            Object(MatchingFor(ALL_GCN), "dolphin/card/CARDBios.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/card/CARDUnlock.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/card/CARDRdwr.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/card/CARDBlock.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/card/CARDDir.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/card/CARDCheck.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/card/CARDMount.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/card/CARDFormat.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/card/CARDOpen.c", extra_cflags=["-char signed"]),
-            Object(MatchingFor(ALL_GCN), "dolphin/card/CARDCreate.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/card/CARDRead.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/card/CARDWrite.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/card/CARDStat.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/card/CARDNet.c"),
+            Object(Matching, "dolphin/card/CARDBios.c"),
+            Object(Matching, "dolphin/card/CARDUnlock.c"),
+            Object(Matching, "dolphin/card/CARDRdwr.c"),
+            Object(Matching, "dolphin/card/CARDBlock.c"),
+            Object(Matching, "dolphin/card/CARDDir.c"),
+            Object(Matching, "dolphin/card/CARDCheck.c"),
+            Object(Matching, "dolphin/card/CARDMount.c"),
+            Object(Matching, "dolphin/card/CARDFormat.c"),
+            Object(Matching, "dolphin/card/CARDOpen.c", extra_cflags=["-char signed"]),
+            Object(Matching, "dolphin/card/CARDCreate.c"),
+            Object(Matching, "dolphin/card/CARDRead.c"),
+            Object(Matching, "dolphin/card/CARDWrite.c"),
+            Object(Matching, "dolphin/card/CARDStat.c"),
+            Object(Matching, "dolphin/card/CARDNet.c"),
         ],
     ),
     DolphinLib(
         "gx",
         [
-            Object(MatchingFor(ALL_GCN), "dolphin/gx/GXInit.c", extra_cflags=["-opt nopeephole"]),
-            Object(MatchingFor(ALL_GCN), "dolphin/gx/GXFifo.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/gx/GXAttr.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/gx/GXMisc.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/gx/GXGeometry.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/gx/GXFrameBuf.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/gx/GXLight.c", extra_cflags=["-fp_contract off"]),
-            Object(MatchingFor(ALL_GCN), "dolphin/gx/GXTexture.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/gx/GXBump.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/gx/GXTev.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/gx/GXPixel.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/gx/GXDisplayList.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/gx/GXTransform.c", extra_cflags=["-fp_contract off"]),
-            Object(MatchingFor(ALL_GCN), "dolphin/gx/GXPerf.c"),
+            Object(Matching, "dolphin/gx/GXInit.c", extra_cflags=["-opt nopeephole"]),
+            Object(Matching, "dolphin/gx/GXFifo.c"),
+            Object(Matching, "dolphin/gx/GXAttr.c"),
+            Object(Matching, "dolphin/gx/GXMisc.c"),
+            Object(Matching, "dolphin/gx/GXGeometry.c"),
+            Object(Matching, "dolphin/gx/GXFrameBuf.c"),
+            Object(Matching, "dolphin/gx/GXLight.c", extra_cflags=["-fp_contract off"]),
+            Object(Matching, "dolphin/gx/GXTexture.c"),
+            Object(Matching, "dolphin/gx/GXBump.c"),
+            Object(Matching, "dolphin/gx/GXTev.c"),
+            Object(Matching, "dolphin/gx/GXPixel.c"),
+            Object(Matching, "dolphin/gx/GXDisplayList.c"),
+            Object(Matching, "dolphin/gx/GXTransform.c", extra_cflags=["-fp_contract off"]),
+            Object(Matching, "dolphin/gx/GXPerf.c"),
         ],
     ),
     DolphinLib(
         "gd",
         [
-            Object(MatchingFor(ALL_GCN), "dolphin/gd/GDBase.c"),
-            Object(MatchingFor(ALL_GCN), "dolphin/gd/GDGeometry.c"),
+            Object(Matching, "dolphin/gd/GDBase.c"),
+            Object(Matching, "dolphin/gd/GDGeometry.c"),
         ],
     ),
     RevolutionLib(
@@ -1751,6 +1765,30 @@ config.libs = [
         ],
     ),
     RevolutionLib(
+        "ax",
+        [
+            Object(Matching, "revolution/ax/AXAux.c"),
+            Object(Matching, "revolution/ax/AXCL.c"),
+        ],
+    ),
+    RevolutionLib(
+        "axfx",
+        [
+            Object(Matching, "revolution/axfx/AXFXHooks.c"),
+            Object(Matching, "revolution/axfx/AXFXReverbHi.c"),
+            Object(Matching, "revolution/axfx/AXFXReverbHiExp.c"),
+        ],
+    ),
+    RevolutionLib(
+        "axfx",
+        [
+            Object(Matching, "revolution/mem/mem_heapCommon.c"),
+            Object(Matching, "revolution/mem/mem_expHeap.c"),
+            Object(Matching, "revolution/mem/mem_allocator.c"),
+            Object(Matching, "revolution/mem/mem_list.c"),
+        ],
+    ),
+    RevolutionLib(
         "dsp",
         [
             Object(NonMatching, "revolution/dsp/dsp.c"),
@@ -1809,6 +1847,12 @@ config.libs = [
         ],
     ),
     RevolutionLib(
+        "arc",
+        [
+            Object(Matching, "revolution/arc/arc.c"),
+        ],
+    ),
+    RevolutionLib(
         "esp",
         [
             Object(NonMatching, "revolution/esp/esp.c"),
@@ -1817,10 +1861,10 @@ config.libs = [
     RevolutionLib(
         "ipc",
         [
-            Object(NonMatching, "revolution/ipc/ipcMain.c"),
-            Object(NonMatching, "revolution/ipc/ipcclt.c"),
-            Object(NonMatching, "revolution/ipc/memory.c"),
-            Object(NonMatching, "revolution/ipc/ipcProfile.c"),
+            Object(Matching, "revolution/ipc/ipcMain.c"),
+            Object(MatchingFor(ALL_WII, ALL_DEMO, "Shield"), "revolution/ipc/ipcclt.c"), # strnlen issue in ShieldD
+            Object(Matching, "revolution/ipc/memory.c"),
+            Object(Matching, "revolution/ipc/ipcProfile.c"),
         ],
     ),
     RevolutionLib(
@@ -1832,21 +1876,50 @@ config.libs = [
     RevolutionLib(
         "pad",
         [
-            Object(NonMatching, "revolution/pad/Padclamp.c"),
-            Object(NonMatching, "revolution/pad/Pad.c"),
+            Object(MatchingFor("ShieldD"), "revolution/pad/Padclamp.c"), # sqrtf issue on retail versions
+            Object(Matching, "revolution/pad/Pad.c"),
         ],
     ),
     RevolutionLib(
         "wpad",
         [
             Object(NonMatching, "revolution/wpad/WPAD.c"),
-            Object(NonMatching, "revolution/wpad/WUD.c"),
+            Object(NonMatching, "revolution/wpad/WPADEncrypt.c"),
+            Object(NonMatching, "revolution/wpad/WPADHIDParser.c"),
+            Object(NonMatching, "revolution/wpad/WPADMem.c"),
+        ]
+    ),
+    RevolutionLib(
+        "wud",
+        [
+            Object(NonMatching, "revolution/wud/WUD.c"),
+            Object(MatchingFor(ALL_WII), "revolution/wud/WUDHidHost.c"),
+            Object(MatchingFor(ALL_WII), "revolution/wud/debug_msg.c"),
         ],
+    ),
+    RevolutionLib(
+        "kpad",
+        [
+            Object(NonMatching, "revolution/kpad/KPAD.c"),
+        ],
+        extra_cflags=["-O4,s"]
     ),
     RevolutionLib(
         "euart",
         [
             Object(NonMatching, "revolution/euart/euart.c"),
+        ],
+    ),
+    RevolutionLib(
+        "usb",
+        [
+            Object(Matching, "revolution/usb/usb.c"),
+        ],
+    ),
+    RevolutionLib(
+        "tpl",
+        [
+            Object(Matching, "revolution/tpl/TPL.c"),
         ],
     ),
     RevolutionLib(
@@ -1891,7 +1964,7 @@ config.libs = [
             Object(NonMatching, "revolution/homebuttonLib/nw4hbm/ut/ut_ResFont.cpp"),
             Object(NonMatching, "revolution/homebuttonLib/nw4hbm/ut/ut_ResFontBase.cpp"),
             Object(NonMatching, "revolution/homebuttonLib/nw4hbm/ut/ut_TagProcessorBase.cpp"),
-            Object(NonMatching, "revolution/homebuttonLib/nw4hbm/ut/ut_TextWriterBase.cpp"),
+            Object(MatchingFor("RZDE01_02", "RZDP01", "RZDJ01"), "revolution/homebuttonLib/nw4hbm/ut/ut_TextWriterBase.cpp"), # RZDE01_00 func order
 
             Object(NonMatching, "revolution/homebuttonLib/HBMBase.cpp"),
             Object(NonMatching, "revolution/homebuttonLib/HBMAnmController.cpp"),
@@ -1908,7 +1981,6 @@ config.libs = [
         "progress_category": "sdk",
         "host": False,
         "objects": [
-            Object(NonMatching, "PowerPC_EABI_Support/Runtime/Src/GCN_mem_alloc.c"),
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/Runtime/Src/__mem.c"),
             Object(MatchingFor(ALL_GCN, "Shield"), "PowerPC_EABI_Support/Runtime/Src/__va_arg.c"),
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/Runtime/Src/global_destructor_chain.c"),
@@ -1918,7 +1990,7 @@ config.libs = [
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/Runtime/Src/runtime.c"),
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/Runtime/Src/__init_cpp_exceptions.cpp"),
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/Runtime/Src/Gecko_ExceptionPPC.cp"),
-            Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/Runtime/Src/GCN_Mem_Alloc.c", extra_cflags=["-str reuse,nopool,readonly"]),
+            Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/Runtime/Src/GCN_mem_alloc.c", extra_cflags=["-str reuse,nopool,readonly"]),
         ],
     },
     {
@@ -1946,7 +2018,7 @@ config.libs = [
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/mbstring.c"),
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/mem.c"),
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/mem_funcs.c"),
-            Object(NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/math_api.c"),
+            Object(MatchingFor("Shield"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/math_api.c"),
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/misc_io.c"),
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/printf.c"),
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/scanf.c"),
@@ -1954,11 +2026,15 @@ config.libs = [
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/signal.c"),
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/string.c"),
             Object(NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/strtold.c"),
-            Object(NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wctype.c"),
+            Object(MatchingFor("Shield"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wcstoul.c"),
+            Object(MatchingFor("Shield"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wctype.c"),
+            Object(MatchingFor("Shield"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wmem.c"),
+            Object(MatchingFor("Shield"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wprintf.c"),
+            Object(MatchingFor("Shield"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wscanf.c"),
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/strtoul.c"),
             Object(NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wstring.c"),
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wchar_io.c"),
-            Object(NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/secure_error.c"),
+            Object(MatchingFor("Shield"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/secure_error.c"),
             Object(NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/math_double.c"),
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/MSL/MSL_C/PPC_EABI/Src/uart_console_io_gcn.c"),
             Object(MatchingFor(ALL_GCN), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_acos.c"),
@@ -2024,7 +2100,7 @@ config.libs = [
             Object(MatchingFor(ALL_GCN), "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/targimpl.c"),
             Object(MatchingFor(ALL_GCN), "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Export/targsupp.s"),
             Object(MatchingFor(ALL_GCN), "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/mpc_7xx_603e.c"),
-            Object(MatchingFor(ALL_GCN), "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/exception.s"),
+            Object(MatchingFor(ALL_GCN, ALL_WII, ALL_DEMO), "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/exception.s"), # Shield has different symbol name for TRKInterruptHandler
             Object(MatchingFor(ALL_GCN), "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/dolphin_trk.c"),
             Object(MatchingFor(ALL_GCN), "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/main_TRK.c"),
             Object(MatchingFor(ALL_GCN), "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/dolphin_trk_glue.c"),
@@ -2038,7 +2114,7 @@ config.libs = [
             Object(MatchingFor(ALL_GCN), "TRK_MINNOW_DOLPHIN/gamedev/cust_connection/utils/common/CircleBuffer.c"),
             Object(MatchingFor(ALL_GCN), "TRK_MINNOW_DOLPHIN/gamedev/cust_connection/cc/exi2/GCN/EXI2_GDEV_GCN/main.c", extra_cflags=["-sdata 8"]),
             Object(MatchingFor(ALL_GCN), "TRK_MINNOW_DOLPHIN/gamedev/cust_connection/utils/common/MWTrace.c"),
-            Object(NonMatching, "TRK_MINNOW_DOLPHIN/gamedev/cust_connection/utils/gc/cc_gdev.c"),
+            Object(NonMatching, "TRK_MINNOW_DOLPHIN/gamedev/cust_connection/utils/gc/cc_gdev.c", extra_cflags=["-sdata 8"]),
             Object(MatchingFor(ALL_GCN), "TRK_MINNOW_DOLPHIN/gamedev/cust_connection/utils/gc/MWCriticalSection_gc.c"),
         ],
     },
@@ -2073,14 +2149,15 @@ config.libs = [
         ],
     },
     {
-        "lib": "NdevExi2AD",
+        "lib": "NdevExi2A",
+        # TODO: not sure about the compiler version + flags here
         "mw_version": MWVersion(config.version),
-        "cflags": cflags_dolphin,
+        "cflags": cflags_framework,
         "progress_category": "sdk",
         "host": False,
         "objects": [
-            Object(NonMatching, "NdevExi2AD/DebuggerDriver.c"),
-            Object(NonMatching, "NdevExi2AD/exi2.c"),
+            Object(NonMatching, "NdevExi2A/DebuggerDriver.c"),
+            Object(NonMatching, "NdevExi2A/exi2.c"),
         ],
     },
     {
@@ -2524,7 +2601,7 @@ config.libs = [
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_bombf"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_boumato"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_brg"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_bsGate"),
+    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_bsGate"), # debug weak func order
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_bubblePilar"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_catdoor"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_cb"),
@@ -2626,12 +2703,12 @@ config.libs = [
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lp"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv1Candle00"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv1Candle01"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv3Candle"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv3Water"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv3Water2"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv3WaterB"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv3saka00"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv3waterEff"),
+    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv3Candle"),    # debug weak func order
+    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv3Water"),     # debug weak func order
+    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv3Water2"),    # debug weak func order
+    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv3WaterB"),    # debug weak func order
+    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv3saka00"),    # debug weak func order
+    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv3waterEff"),  # debug weak func order
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv4CandleDemoTag"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv4CandleTag"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_lv4EdShutter"),
@@ -2757,7 +2834,7 @@ config.libs = [
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_swpush2"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_swspinner"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_swturn"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_syRock"),
+    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_syRock"), # debug weak func order
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_szbridge"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_taFence"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_table"),
@@ -2789,8 +2866,8 @@ config.libs = [
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_warp_kbrg"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_warp_obrg"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_waterGate"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_waterPillar"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_waterfall"),
+    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_waterPillar"),  # debug weak func order
+    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_waterfall"),    # debug weak func order
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_wchain"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_wdStick"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_web0"),
