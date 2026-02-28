@@ -898,7 +898,7 @@ int daObj_GrA_c::rollAttack(void* param_1) {
                 cXyz sp54(current.pos);
                 sp54.y += 100.0f;
                 field_0x1f4c.Set(&sp54, &player->eyePos, this);
-                field_0x1f4c.SetActorPid(base.base.id);
+                field_0x1f4c.SetActorPid(fopAcM_GetID(this));
 
                 s16 sVar1 = cLib_targetAngleX(&sp54, &player->eyePos);
                 if (isFirstGra() || !dComIfG_Bgsp().LineCross(&field_0x1f4c)) {
@@ -923,7 +923,7 @@ int daObj_GrA_c::rollAttack(void* param_1) {
                 cXyz sp60(current.pos);
                 sp60.y += 100.0f;
                 field_0x1f4c.Set(&sp60, &player->eyePos, this);
-                field_0x1f4c.SetActorPid(base.base.id);
+                field_0x1f4c.SetActorPid(fopAcM_GetID(this));
 
                 if (player->checkPlayerFly() == 0 && (player->current.pos.y - current.pos.y) > 50.0f) {
                     player->offGoronSideMove();

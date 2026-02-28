@@ -421,7 +421,7 @@ int daObjPDtile_c::Execute(Mtx** param_1) {
                                   -1.0f, 0);
         }
         dBgS_ObjGndChk adStack_e4;
-        adStack_e4.SetActorPid(base.base.id);
+        adStack_e4.SetActorPid(fopAcM_GetID(this));
         adStack_e4.SetPos(&current.pos);
         dComIfG_Bgsp().GroundCross(&adStack_e4);
         if (home.pos.y - current.pos.y < -3000.0f) {

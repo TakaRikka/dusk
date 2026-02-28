@@ -3297,7 +3297,7 @@ static void lure_main(dmg_rod_class* i_this) {
                         actor->speed.y = 0.0f;
                     }
 
-                    dKy_Sound_set(actor->current.pos, 5, fopAcM_GetID(i_this), 5);
+                    dKy_Sound_set(actor->current.pos, 5, fopAcM_GetID(actor), 5);
                     if (actor->speedF > 5.0f) {
                         actor->speedF = 5.0f;
                     }
