@@ -37,7 +37,9 @@ void JMAQuatLerp(__REGISTER const Quaternion* p, __REGISTER const Quaternion* q,
         
         ps_sum0     dp, dp, dp, dp
     }
-#endif // clang-format on
+#else // clang-format on
+    dp = p->x * q->x + p->y * q->y + p->z * q->z + p->w * q->w;
+#endif
     f32 local_78 = dp;
     if (local_78 < 0.0) {
         int unused;
