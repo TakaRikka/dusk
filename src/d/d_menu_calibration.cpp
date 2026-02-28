@@ -21,7 +21,11 @@ public:
     virtual void virt_func_0() = 0;
 };
 class dummy_child_class : dummy_abstract_class {
+#ifdef TARGET_PC
+    virtual void virt_func_0() {}
+#else
     virtual void virt_func_0();
+#endif
 };
 static dummy_child_class dummy() {
     dummy_child_class temp;

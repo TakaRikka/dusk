@@ -1864,3 +1864,9 @@ u32 JHICommBufReader::Header::getReadableSize() const {
     puts("JHICommBufReader::Header::getReadableSize is a stub");
     return 0;
 }
+
+#pragma mark Decomp artifacts
+void stripFloat(f32) {}
+void stripDouble(f64) {}
+int getStripInt() { return 0; }
+void F(f32*) {}

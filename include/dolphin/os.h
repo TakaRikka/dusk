@@ -2,6 +2,7 @@
 #define _DOLPHIN_OS_H_
 
 #include <cstdio>
+#include <cstdint>
 
 #ifdef __REVOLUTION_SDK__
 #include <revolution/os.h>
