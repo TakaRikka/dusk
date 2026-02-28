@@ -10842,15 +10842,15 @@ static void store(camera_process_class* i_camera) {
         error = true;
         OS_REPORT("camera: ERROR: bad direction !!\n");
     }
-    if (fovy < 0.0f || isnan(fovy)) {
+    if (fovy < 0.0f || std::isnan(fovy)) {
         error = true;
         OS_REPORT("camera: ERROR: bad fovy !!\n");
     }
-    if (isnan(eye.x) || isnan(eye.y) || isnan(eye.z)) {
+    if (std::isnan(eye.x) || std::isnan(eye.y) || std::isnan(eye.z)) {
         error = true;
         OS_REPORT("camera: ERROR: bad eye !!\n");
     }
-    if (isnan(center.x) || isnan(center.y) || isnan(center.z)) {
+    if (std::isnan(center.x) || std::isnan(center.y) || std::isnan(center.z)) {
         error = true;
         OS_REPORT("camera: ERROR: bad eye !!\n");
     }

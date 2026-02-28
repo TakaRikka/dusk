@@ -292,7 +292,11 @@ static int bmd[2] = {
     0x11, 0x12,
 };
 
+#ifdef TARGET_PC
+static int brk_res[2] = {
+#else
 static int brk[2] = {
+#endif
     0x17, 0x18,
 };
 
@@ -337,7 +341,11 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     if (tp->mBrk == NULL) {
         return 0;
     }
+#ifdef TARGET_PC
+    J3DAnmTevRegKey* regKey = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Obj_tp", brk_res[tp->field_0x594]);
+#else
     J3DAnmTevRegKey* regKey = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Obj_tp", brk[tp->field_0x594]);
+#endif
     J3DModelData* modelData = tp->mMorf->getModel()->getModelData();
     if (!tp->mBrk->init(
             modelData,

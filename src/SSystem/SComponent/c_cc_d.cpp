@@ -5,6 +5,7 @@
 
 #include "SSystem/SComponent/c_cc_d.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include <cmath>
 
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
 

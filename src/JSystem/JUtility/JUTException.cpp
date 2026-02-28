@@ -209,9 +209,9 @@ void JUTException::setFPException(u32 fpscr_enable_bits) {
 #define __signbit(x) ((*(unsigned char*)&(x)) & 0x80)
 
 void JUTException::showFloatSub(int index, f32 value) {
-    if (isnan(value)) {
+    if (std::isnan(value)) {
         sConsole->print_f("F%02d: Nan      ", index);
-    } else if (isinf(value)) {
+    } else if (std::isinf(value)) {
         if (__signbit(value)) {
             sConsole->print_f("F%02d:+Inf     ", index);
         } else {
