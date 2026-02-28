@@ -19,9 +19,9 @@
 // we'll just save & restore that data.
 #define fopAcM_ct_placement(ptr, ClassName) \
     fopAc_ac_c copy;                        \
-    memcpy(&copy, ptr, sizeof(fopAc_ac_c)); \
+    memcpy(&copy, &(ptr)->base, sizeof(fopAc_ac_c)); \
     new (ptr) ClassName() ;                 \
-    memcpy(ptr, &copy, sizeof(fopAc_ac_c));
+    memcpy(&(ptr)->base, &copy, sizeof(fopAc_ac_c));
 #else
 #define fopAcM_ct_placement(ptr, ClassName) new (ptr) ClassName()
 #endif
