@@ -31,7 +31,7 @@
 #include "d/d_cursor_mng.h"
 #endif
 
-static void dScnPly_Create(scene_class*);
+static int dScnPly_Create(scene_class*);
 static int dScnPly_Delete(dScnPly_c*);
 static int dScnPly_IsDelete(dScnPly_c);
 static int dScnPly_Execute(dScnPly_c*);
@@ -717,7 +717,7 @@ static int phase_compleate(void* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-static void dScnPly_Create(scene_class* i_this) {
+static int dScnPly_Create(scene_class* i_this) {
     static request_of_phase_process_fn l_method[] = {
         (request_of_phase_process_fn)phase_00,        (request_of_phase_process_fn)phase_1,
         (request_of_phase_process_fn)phase_1_0,       (request_of_phase_process_fn)phase_01,
@@ -727,7 +727,7 @@ static void dScnPly_Create(scene_class* i_this) {
         (request_of_phase_process_fn)phase_compleate,
     };
 
-    dComLbG_PhaseHandler(&static_cast<dScnPly_c*>(i_this)->field_0x1c4, l_method, i_this);
+    return dComLbG_PhaseHandler(&static_cast<dScnPly_c*>(i_this)->field_0x1c4, l_method, i_this);
 }
 
 static scene_method_class l_dScnPly_Method = {
