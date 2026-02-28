@@ -82,7 +82,7 @@ struct cBgD_Tree_t {
 };  // Size: 0x14
 
 struct cBgD_Grp_t {
-    /* 0x00 */ char* m_name;
+    /* 0x00 */ OFFSET_PTR(char) m_name;
     /* 0x04 */ BE(cXyz) m_scale;
     /* 0x10 */ BE(csXyz) m_rotation;
     /* 0x18 */ BE(cXyz) m_translation;
