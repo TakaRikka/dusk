@@ -60,12 +60,25 @@ void cBgW::GlobalVtx() {
     if (pm_base != NULL) {
         if (!mNeedsFullTransform) {
             for (int i = 0; i < pm_bgd->m_v_num; i++) {
-                Vec* vtx = &pm_vtx_tbl[i];
+                BE(Vec)* vtx = &pm_vtx_tbl[i];
+#if TARGET_LITTLE_ENDIAN
+                Vec copy = *vtx;
+                VECAdd(&copy, &mTransVel, &copy);
+                *vtx = copy;
+#else
                 VECAdd(vtx, &mTransVel, vtx);
+#endif
             }
         } else {
             for (int i = 0; i < pm_bgd->m_v_num; i++) {
+#if TARGET_LITTLE_ENDIAN
+                Vec copy1 = pm_bgd->m_v_tbl[i];
+                Vec copy2;
+                MTXMultVec(pm_base, &copy1, &copy2);
+                *(BE(Vec)*)&pm_vtx_tbl[i] = copy2;
+#else
                 MTXMultVec(pm_base, &pm_bgd->m_v_tbl[i], &pm_vtx_tbl[i]);
+#endif
             }
         }
     }
@@ -107,9 +120,19 @@ void cBgW::CalcPlane() {
             }
         } else {
             for (int i = 0; i < pm_bgd->m_t_num; i++) {
+#if TARGET_LITTLE_ENDIAN
+                Vec copy1 = pm_vtx_tbl[tri[i].m_vtx_idx0];
+                Vec copy2 = pm_vtx_tbl[tri[i].m_vtx_idx1];
+                Vec copy3 = pm_vtx_tbl[tri[i].m_vtx_idx2];
+                pm_tri[i].m_plane.SetupFrom3Vtx(
+                    &copy1,
+                    &copy2,
+                    &copy3);
+#else
                 pm_tri[i].m_plane.SetupFrom3Vtx(&pm_vtx_tbl[tri[i].m_vtx_idx0],
                                                 &pm_vtx_tbl[tri[i].m_vtx_idx1],
                                                 &pm_vtx_tbl[tri[i].m_vtx_idx2]);
+#endif
             }
         }
     }
@@ -190,7 +213,7 @@ void cBgW::MakeBlckTransMinMax(cXyz* i_min, cXyz* i_max) {
 }
 
 void cBgW::MakeBlckMinMax(int vtx_index, cXyz* i_min, cXyz* i_max) {
-    Vec* vtx = &pm_vtx_tbl[vtx_index];
+    BE(Vec)* vtx = &pm_vtx_tbl[vtx_index];
 
     if (i_min->x > vtx->x) {
         i_min->x = vtx->x;

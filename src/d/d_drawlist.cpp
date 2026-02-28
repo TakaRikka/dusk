@@ -1002,9 +1002,18 @@ int dDlst_shadowPoly_c::set(cBgD_Vtx_t* i_vtx, u16 param_1, u16 param_2, u16 par
     b.z *= temp_f3;
     b *= 2.0f;
 
+#if TARGET_LITTLE_ENDIAN
+    Vec copy1 = vtx[param_1];
+    Vec copy2 = vtx[param_2];
+    Vec copy3 = vtx[param_3];
+    PSVECAdd(&copy1, &b, &dst->mPos[0]);
+    PSVECAdd(&copy2, &b, &dst->mPos[1]);
+    PSVECAdd(&copy3, &b, &dst->mPos[2]);
+#else
     PSVECAdd(&vtx[param_1], &b, &dst->mPos[0]);
     PSVECAdd(&vtx[param_2], &b, &dst->mPos[1]);
     PSVECAdd(&vtx[param_3], &b, &dst->mPos[2]);
+#endif
     mCount++;
     return 1;
 }
