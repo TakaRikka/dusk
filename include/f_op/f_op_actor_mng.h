@@ -13,9 +13,22 @@
 #include "m_Do/m_Do_hostIO.h"
 #include "dusk/endian_ssystem.h"
 
+#if !__MWERKS__
+// Modern compilers will zero the parent struct in default constructors.
+// So instead of adding default constructors to everything,
+// we'll just save & restore that data.
+#define fopAcM_ct_placement(ptr, ClassName) \
+    fopAc_ac_c copy;                        \
+    memcpy(&copy, ptr, sizeof(fopAc_ac_c)); \
+    new (ptr) ClassName() ;                 \
+    memcpy(ptr, &copy, sizeof(fopAc_ac_c));
+#else
+#define fopAcM_ct_placement(ptr, ClassName) new (ptr) ClassName()
+#endif
+
 #define fopAcM_ct(ptr, ClassName)                                           \
     if (!fopAcM_CheckCondition(ptr, fopAcCnd_INIT_e)) {                     \
-        new (ptr) ClassName();                                              \
+        fopAcM_ct_placement(ptr, ClassName);                                \
         fopAcM_OnCondition(ptr, fopAcCnd_INIT_e);                           \
     }
 
