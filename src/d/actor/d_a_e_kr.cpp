@@ -398,7 +398,7 @@ static BOOL coach_path_check(e_kr_class* i_this) {
         return FALSE;
     }
 
-    Vec* pointPos = &i_this->field_0x6e4->m_points[0].m_position;
+    BE(Vec)* pointPos = &i_this->field_0x6e4->m_points[0].m_position;
     f32 x = pointPos->x - coach->current.pos.x;
     f32 z = pointPos->z - coach->current.pos.z;
     if (JMAFastSqrt(x * x + z * z) < 500.0f + KREG_F(9)) {

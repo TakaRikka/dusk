@@ -730,7 +730,7 @@ const GXColor* renderingAmap_c::getDecoLineColor(int param_0, int param_1) {
     }
 }
 
-const Vec* dMap_c::getIconPosition(dTres_c::typeGroupData_c* i_data) const {
+const BE(Vec)* dMap_c::getIconPosition(dTres_c::typeGroupData_c* i_data) const {
 #if DEBUG
     if (dMap_HIO_prm_res_dst_s::m_other.field_0x8a && i_data) {
         u8 r29 = i_data->getTypeGroupNo();

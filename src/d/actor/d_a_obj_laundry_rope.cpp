@@ -26,8 +26,8 @@ void daObjLndRope_c::create_init() {
     dPath* roomPath = dPath_GetRoomPath(getPathId(), fopAcM_GetRoomNo(this));
 
     dPnt* pathPoints = roomPath->m_points;
-    cXyz startPoint = pathPoints[0].m_position;
-    cXyz endPoint = pathPoints[1].m_position;
+    cXyz startPoint = (Vec)pathPoints[0].m_position;
+    cXyz endPoint = (Vec)pathPoints[1].m_position;
     current.pos = (startPoint + endPoint) * 0.5f;
     mPos = endPoint - startPoint;
 

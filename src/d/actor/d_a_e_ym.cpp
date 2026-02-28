@@ -2314,7 +2314,7 @@ void daE_YM_c::executeRail() {
 void daE_YM_c::executeBackRail() {
     static f32 YM_DIG_POS_Y[] = {-15.0f, -30.0f, -70.0f};
 
-    cXyz my_vec_0 = dPath_GetPnt(mpPath, mCurrentPntNo)->m_position;
+    cXyz my_vec_0 = (Vec)dPath_GetPnt(mpPath, mCurrentPntNo)->m_position;
     switch (mMode) {
         case 0: {
             if (current.pos.abs(my_vec_0) < 150.0f) {
@@ -2774,7 +2774,7 @@ void daE_YM_c::setLockByCargo() {
 
 void daE_YM_c::executeRiver() {
     cXyz player_pos = daPy_getPlayerActorClass()->current.pos;
-    cXyz pnt_pos = dPath_GetPnt(mpPath, mCurrentPntNo)->m_position;
+    cXyz pnt_pos = (Vec)dPath_GetPnt(mpPath, mCurrentPntNo)->m_position;
     cXyz my_vec_0;
     f32 next_path;
     switch (mMode) {

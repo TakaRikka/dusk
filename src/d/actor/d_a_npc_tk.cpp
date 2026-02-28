@@ -1970,8 +1970,8 @@ void daNPC_TK_c::calcWolfDemoCam() {
 
 void daNPC_TK_c::calcWolfDemoCam2() {
     cXyz targetPos;
-    cXyz curPos = dPath_GetPnt(mWolfPathData, mPathStep2)->m_position;
-    cXyz prevPos = dPath_GetPnt(mWolfPathData, mPathStep2 - 1)->m_position;
+    cXyz curPos = (Vec)dPath_GetPnt(mWolfPathData, mPathStep2)->m_position;
+    cXyz prevPos = (Vec)dPath_GetPnt(mWolfPathData, mPathStep2 - 1)->m_position;
     cLib_addCalcPos2(&field_0x6fc, curPos, 0.2f, field_0x714);
 
     cXyz offset(0.0f, 0.0f, 400.0f);
@@ -2273,11 +2273,11 @@ void daNPC_TK_c::executeWolfPerch() {
                 field_0x6e0 = field_0x6e0 + field_0x6e4;
             }
 
-            cXyz pathPnt3 = dPath_GetPnt(mWolfPathData, mWolfPathData->m_num - 1)->m_position;
+            cXyz pathPnt3 = (Vec)dPath_GetPnt(mWolfPathData, mWolfPathData->m_num - 1)->m_position;
             if (pathPnt3.abs(current.pos) < 500.0f) {
                 cXyz cStack_8c;
-                cXyz cStack_98 = dPath_GetPnt(mWolfPathData, mWolfPathData->m_num - 2)->m_position;
-                cXyz cStack_a4 = dPath_GetPnt(mWolfPathData, mWolfPathData->m_num - 1)->m_position;
+                cXyz cStack_98 = (Vec)dPath_GetPnt(mWolfPathData, mWolfPathData->m_num - 2)->m_position;
+                cXyz cStack_a4 = (Vec)dPath_GetPnt(mWolfPathData, mWolfPathData->m_num - 1)->m_position;
                 mDoMtx_stack_c::YrotS(-cLib_targetAngleY(&cStack_98, &cStack_a4));
                 mDoMtx_stack_c::transM(-current.pos.x, -current.pos.y, -current.pos.z);
                 mDoMtx_stack_c::multVec(&cStack_98, &cStack_8c);
@@ -2368,8 +2368,14 @@ void daNPC_TK_c::executeWolfPerch() {
         pathPnt2 = dPath_GetPnt(mWolfPathData, mPathStep2)->m_position;
         cLib_addCalcPos2(&field_0x6fc, pathPnt2, 0.1f, 3.0f);
 
+#if TARGET_LITTLE_ENDIAN
+        Vec copy = dPath_GetPnt(mWolfPathData, mPathStep2 - 1)->m_position;
+        s16 angleY = cLib_targetAngleY(&current.pos,
+                                       &copy);
+#else
         s16 angleY = cLib_targetAngleY(&current.pos,
                                        &dPath_GetPnt(mWolfPathData, mPathStep2 - 1)->m_position);
+#endif
         cLib_addCalcAngleS(&shape_angle.y, angleY + 0x2000, 8, 0x100, 0x10);
 
         cLib_chaseF(&speed.y, field_0x678, 0.5f);

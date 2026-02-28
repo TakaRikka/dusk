@@ -7431,7 +7431,7 @@ bool dCamera_c::towerCamera(s32 param_0) {
         tower->field_0x54.x = mRoomMapTool.mArrowData.posX;
         tower->field_0x54.y = mRoomMapTool.mArrowData.posY;
         tower->field_0x54.z = mRoomMapTool.mArrowData.posZ;
-        tower->field_0x60 = mRoomMapTool.mArrowData.angleY;
+        tower->field_0x60 = (s16)mRoomMapTool.mArrowData.angleY;
         tower->field_0x64 = stack_454 <= cSAngle::_90 ? 1 : 0;
     }
 
@@ -8013,8 +8013,8 @@ bool dCamera_c::railCamera(s32 param_0) {
         rail->field_0x20.z = mRoomMapTool.mArrowData.posZ;
         if (mCamParam.Flag(param_0, 0x800)) {
             cXyz attnPos = attentionPos(mpPlayerActor);
-            cXyz curPointPos = roomPath->m_points->m_position;
-            cXyz prevPointPos = roomPath->m_points[roomPathLen - 1].m_position;
+            cXyz curPointPos = (Vec)roomPath->m_points->m_position;
+            cXyz prevPointPos = (Vec)roomPath->m_points[roomPathLen - 1].m_position;
             f32 horDist1 = dCamMath::xyzHorizontalDistance(curPointPos, attnPos);
             f32 horDist2 = dCamMath::xyzHorizontalDistance(prevPointPos, attnPos);
             if (horDist1 < horDist2) {
@@ -8343,8 +8343,8 @@ bool dCamera_c::paraRailCamera(s32 param_0) {
 
         if (!unkFlag2) {
             cXyz sp1F4 = attentionPos(mpPlayerActor);
-            cXyz sp1E8 = path->m_points->m_position;
-            cXyz sp1DC = path->m_points[pathLen - 1].m_position;
+            cXyz sp1E8 = (Vec)path->m_points->m_position;
+            cXyz sp1DC = (Vec)path->m_points[pathLen - 1].m_position;
             f32 horDist1 = dCamMath::xyzHorizontalDistance(sp1E8, sp1F4);
             f32 horDist2 = dCamMath::xyzHorizontalDistance(sp1DC, sp1F4);
             if (horDist1 < horDist2) {

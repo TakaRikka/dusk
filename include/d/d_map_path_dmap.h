@@ -50,9 +50,9 @@ struct dMapInfo_n {
     static bool chkGetCompass();
     static bool chkGetMap();
     static bool isVisitedRoom(int);
-    static void correctionOriginPos(s8, Vec*);
-    static void offsetPlus(dStage_FileList2_dt_c const*, Vec*);
-    static void rotAngle(dStage_FileList2_dt_c const*, Vec*);
+    static void correctionOriginPos(s8, BE(Vec)*);
+    static void offsetPlus(dStage_FileList2_dt_c const*, BE(Vec)*);
+    static void rotAngle(dStage_FileList2_dt_c const*, BE(Vec)*);
     static Vec getMapPlayerPos();
     static s16 getMapPlayerAngleY();
     static const dTres_c::typeGroupData_c* getConstRestartIconPointer();
@@ -127,7 +127,7 @@ public:
     virtual int getNextDrawLayerNo(int);
 
     virtual bool isDrawIconSingle(dTres_c::data_s const*, int, int, bool, bool,
-                                                 Vec const*) const;
+                                                 BE(Vec) const*) const;
     virtual int getIconGroupNumber(u8) const;
     virtual bool hasMap() const = 0;
     virtual bool isRendAllRoom() const = 0;
@@ -177,7 +177,7 @@ public:
     virtual ~renderingPlusDoorAndCursor_c() {}
     virtual void afterDrawPath();
     virtual f32 getIconSize(u8) const = 0;
-    virtual const Vec* getIconPosition(dTres_c::typeGroupData_c*) const;
+    virtual const BE(Vec)* getIconPosition(dTres_c::typeGroupData_c*) const;
     virtual dTres_c::typeGroupData_c* getFirstData(u8);
     virtual dTres_c::typeGroupData_c* getNextData(dTres_c::typeGroupData_c*);
     virtual f32 getPlayerCursorSize() = 0;

@@ -223,8 +223,8 @@ int daSpinner_c::posMove() {
         cXyz sp54;
 
         while (var_f31 > 0.0f) {
-            Vec* curr_path_pos = &mpPathMove->m_points[mPathNo].m_position;
-            Vec* next_path_pos = getPathNextPos();
+            BE(Vec)* curr_path_pos = &mpPathMove->m_points[mPathNo].m_position;
+            BE(Vec)* next_path_pos = getPathNextPos();
 
             cXyz sp48(current.pos.x, current.pos.y - -20.0f, current.pos.z);
             cXyz sp3C(curr_path_pos->x - next_path_pos->x, curr_path_pos->y - next_path_pos->y, curr_path_pos->z - next_path_pos->z);
@@ -420,8 +420,13 @@ void daSpinner_c::setAnm() {
             mButtonJump = true;
         }
 
-        if (mpPathMove != NULL) { 
+        if (mpPathMove != NULL) {
+#if TARGET_PC
+            Vec copy = mpPathMove->m_points[mPathNo].m_position;
+            s16 targetAngle = cLib_targetAngleY(&copy, &current.pos);
+#else
             s16 targetAngle = cLib_targetAngleY(&mpPathMove->m_points[mPathNo].m_position, &current.pos);
+#endif
             if (s16(targetAngle - current.angle.y) > 0) {
                 current.angle.y += 0x3000;
             } else {
@@ -447,7 +452,7 @@ int daSpinner_c::setNextPathNum() {
     return 0;
 }
 
-Vec* daSpinner_c::getPathNextPos() {
+BE(Vec)* daSpinner_c::getPathNextPos() {
     int next_point_no = mPathNo + mPathDirection;
     if (next_point_no < 0) {
         return &(mpPathMove->m_points + mpPathMove->m_num - 1)->m_position;

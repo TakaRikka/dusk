@@ -4,7 +4,9 @@
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include <dolphin/mtx.h>
+
 #include "JSystem/JMath/JMath.h"
+#include "dusk/endian.h"
 
 extern u8 g_printCurrentHeapDebug;
 extern u8 g_printOtherHeapDebug;
@@ -263,6 +265,12 @@ public:
      * @param b The output Vec
      */
     static void multVec(const Vec* a, Vec* b) { PSMTXMultVec(now, a, b); }
+#if TARGET_LITTLE_ENDIAN
+    static void multVec(const BE(Vec)* a, Vec* b) {
+        Vec aCopy = *a;
+        multVec(&aCopy, b);
+    }
+#endif
 
     /**
      * Multiplies a given Vec `a` by the `now` Matrix's "Scale-and-Rotate" component and places the result into Vec `b`

@@ -84,6 +84,24 @@ struct BE {
     static T swap[[nodiscard]](T val);
 };
 
+#define BIN_ASSIGN_OP(op)                          \
+                                                   \
+template<typename TA, typename TB>                 \
+constexpr BE<TA>& operator op(BE<TA>& a, TB b) {   \
+    TA aCopy = a;                                  \
+    aCopy op b;                                    \
+    a = aCopy;                                     \
+    return a;                                      \
+}
+
+
+BIN_ASSIGN_OP(&=);
+BIN_ASSIGN_OP(|=);
+BIN_ASSIGN_OP(+=);
+BIN_ASSIGN_OP(/=);
+
+#undef BIN_ASSIGN_OP
+
 template<>
 inline u16 BE<u16>::swap(u16 val) {
     return RES_U16(val);
@@ -114,6 +132,18 @@ struct BE<Vec> {
     BE<f32> x;
     BE<f32> y;
     BE<f32> z;
+
+    BE() = default;
+    BE(f32 x, f32 y, f32 z) {
+        this->x = x;
+        this->y = y;
+        this->z = z;
+    }
+    BE(const Vec& from) {
+        x = from.x;
+        y = from.y;
+        z = from.z;
+    }
 
     operator Vec() const {
         return { x, y, z };

@@ -12,17 +12,17 @@ struct dPnt {
     /* 0x1 */ u8 mArg2;
     /* 0x2 */ u8 mArg3;
     /* 0x3 */ u8 mArg0;
-    /* 0x4 */ Vec m_position;
+    /* 0x4 */ BE(Vec) m_position;
 };  // Size: 0x10
 
 struct dPath {
-    /* 0x0 */ u16 m_num;
-    /* 0x2 */ u16 m_nextID;
+    /* 0x0 */ BE(u16) m_num;
+    /* 0x2 */ BE(u16) m_nextID;
     /* 0x4 */ u8 field_0x4;
     /* 0x5 */ bool m_closed;
     /* 0x6 */ u8 field_0x6;
     /* 0x7 */ u8 field_0x7;
-    /* 0x8 */ dPnt* m_points;
+    /* 0x8 */ STAGE_OFFSET_PTR(dPnt) m_points;
 };
 
 inline BOOL dPath_ChkClose(const dPath* i_path) { return i_path->m_closed & 1; }

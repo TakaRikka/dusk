@@ -362,7 +362,11 @@ J3DFogInfo const j3dDefaultFogInfo = {
 };
 
 J3DNBTScaleInfo const j3dDefaultNBTScaleInfo = {
+#if TARGET_PC
+    0x00, {1.0f, 1.0f, 1.0f},
+#else
     0x00, 1.0f, 1.0f, 1.0f,
+#endif
 };
 
 static u8 j3dTexCoordTable[7623];

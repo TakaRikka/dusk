@@ -12,7 +12,7 @@ public:
         /* 0x01 */ s8 mRoomNo;
         /* 0x02 */ u8 mStatus;
         /* 0x03 */ u8 mArg1;
-        /* 0x04 */ Vec mPos;
+        /* 0x04 */ BE(Vec) mPos;
         /* 0x10 */ u8 mSwBit;
         /* 0x11 */ u8 mType;
         /* 0x12 */ u8 mArg2;
@@ -30,7 +30,7 @@ public:
         u8 getStatus() const { return mStatus; }
         void setStatus(u8 status) { mStatus = status; }
         void setArg1(u8 arg1) { mArg1 = arg1; }
-        const Vec* getPos() const { return &mPos; }
+        const BE(Vec)* getPos() const { return &mPos; }
         void setPos(const Vec& pos) { mPos = pos; }
         u8 getSwBit() const { return mSwBit; }
         void setSwBit(u8 swBit) { mSwBit = swBit; }
@@ -48,8 +48,8 @@ public:
     };  // Size: 0x1C
 
     struct list_class {
-        /* 0x0 */ int field_0x0;
-        /* 0x4 */ typeGroupData_c* field_0x4;
+        /* 0x0 */ BE(int) field_0x0;
+        /* 0x4 */ STAGE_OFFSET_PTR(typeGroupData_c) field_0x4;
         /* 0x8 */ u8 mNumber;
     };
 

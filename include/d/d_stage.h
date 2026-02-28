@@ -12,7 +12,8 @@ struct StageOffsetPtr {
     // Top bit is used to store "already relocated" flag as a guard thing.
     BE<s32> value;
 
-    void setBase(void* base);
+    bool setBase(void* base);
+    bool isRelocated();
 
     template<typename T>
     explicit operator T*() const {
@@ -31,6 +32,36 @@ struct StageOffsetPtr {
         return (T*)POINTER_ADD(this, realOffset);
     }
 };
+
+template<typename T>
+struct StageOffsetPtrT {
+    StageOffsetPtr value;
+
+    bool setBase(void* base) {
+        return value.setBase(base);
+    }
+    bool isRelocated() {
+        return value.isRelocated();
+    }
+
+    T* operator->() {
+        return (T*) this;
+    }
+
+    operator T*() const {
+        return (T*) value;
+    }
+
+    template<typename TOther>
+    explicit operator TOther*() const {
+        return (TOther*) value;
+    }
+};
+
+
+#define STAGE_OFFSET_PTR(T) StageOffsetPtrT<T>
+#else
+#define STAGE_OFFSET_PTR(T) T*
 #endif
 
 enum StageType {
@@ -87,8 +118,8 @@ struct stage_tresure_data_class {
 };  // Size: 0x20
 
 struct stage_tresure_class {
-    /* 0x00 */ int num;
-    /* 0x04 */ stage_tresure_data_class* m_entries;
+    /* 0x00 */ BE(int) num;
+    /* 0x04 */ STAGE_OFFSET_PTR(stage_tresure_data_class) m_entries;
 };
 
 // STAG
@@ -133,17 +164,17 @@ struct stage_scls_info_class {
 };  // Size: 0xD
 
 struct stage_scls_info_dummy_class {
-    /* 0x00 */ int num;
-    /* 0x04 */ stage_scls_info_class* m_entries;
+    /* 0x00 */ BE(int) num;
+    /* 0x04 */ STAGE_OFFSET_PTR(stage_scls_info_class) m_entries;
 };
 
 // LGT
 struct stage_pure_lightvec_info_class {
-    /* 0x00 */ Vec position;
-    /* 0x0C */ f32 radius;
-    /* 0x10 */ f32 directionX;
-    /* 0x14 */ f32 directionY;
-    /* 0x18 */ f32 spotCutoff;
+    /* 0x00 */ BE(Vec) position;
+    /* 0x0C */ BE(f32) radius;
+    /* 0x10 */ BE(f32) directionX;
+    /* 0x14 */ BE(f32) directionY;
+    /* 0x18 */ BE(f32) spotCutoff;
     /* 0x1C */ u8 spot_type;
     /* 0x1D */ u8 dist_atten_type;
     /* 0x1E */ u8 flags;
@@ -153,13 +184,13 @@ struct stage_pure_lightvec_info_class {
 // COLO
 struct stage_pselect_info_class {
     /* 0x0 */ u8 palette_id[8];
-    /* 0x8 */ f32 change_rate;
+    /* 0x8 */ BE(f32) change_rate;
 };  // Size: 0xC
 
 // LGHT
 struct stage_plight_info_class {
-    /* 0x00 */ Vec position;
-    /* 0x0C */ f32 power;
+    /* 0x00 */ BE(Vec) position;
+    /* 0x0C */ BE(f32) power;
     /* 0x10 */ u8 field_0x10[0x18 - 0x10];
     /* 0x18 */ color_RGB_class color;
     /* 0x1B */ u8 fluctuation;
@@ -171,8 +202,8 @@ struct stage_palette_info_class {
     /* 0x03 */ color_RGB_class bg_amb_col[4];
     /* 0x0F */ color_RGB_class plight_col[6];
     /* 0x21 */ color_RGB_class fog_col;
-    /* 0x24 */ f32 fog_start_z;
-    /* 0x28 */ f32 fog_end_z;
+    /* 0x24 */ BE(f32) fog_start_z;
+    /* 0x28 */ BE(f32) fog_end_z;
     /* 0x2C */ u8 vrboxcol_id;
     /* 0x2D */ u8 bg_light_influence;
     /* 0x2E */ u8 cloud_shadow_density;
@@ -190,8 +221,8 @@ struct stage_map_info_class {
 };  // Size: 0x38
 
 struct stage_map_info_dummy_class {
-    /* 0x0 */ int num;
-    /* 0x4 */ stage_map_info_class* m_entries;
+    /* 0x0 */ BE(int) num;
+    /* 0x4 */ STAGE_OFFSET_PTR(stage_map_info_class) m_entries;
 };
 
 // Env
@@ -206,29 +237,29 @@ struct stage_camera2_data_class {
     /* 0x11 */ u8 field_0x11;
     /* 0x12 */ u8 field_0x12;
     /* 0x13 */ u8 field_0x13;
-    /* 0x14 */ u16 field_0x14;
-    /* 0x16 */ u16 field_0x16;
+    /* 0x14 */ BE(u16) field_0x14;
+    /* 0x16 */ BE(u16) field_0x16;
 };  // Size: 0x18
 
 struct stage_camera_class {
-    /* 0x0 */ int num;
-    /* 0x4 */ stage_camera2_data_class* m_entries;
+    /* 0x0 */ BE(int) num;
+    /* 0x4 */ STAGE_OFFSET_PTR(stage_camera2_data_class) m_entries;
 };
 
 // AROB / RARO
 struct stage_arrow_data_class {
-    /* 0x00 */ f32 posX;
-    /* 0x04 */ f32 posY;
-    /* 0x08 */ f32 posZ;
-    /* 0x0C */ s16 angleX;
-    /* 0x0E */ s16 angleY;
-    /* 0x10 */ s16 angleZ;
-    /* 0x12 */ s16 field_0x12;
+    /* 0x00 */ BE(f32) posX;
+    /* 0x04 */ BE(f32) posY;
+    /* 0x08 */ BE(f32) posZ;
+    /* 0x0C */ BE(s16) angleX;
+    /* 0x0E */ BE(s16) angleY;
+    /* 0x10 */ BE(s16) angleZ;
+    /* 0x12 */ BE(s16) field_0x12;
 };  // Size: 0x14
 
 struct stage_arrow_class {
-    /* 0x00 */ int num;
-    /* 0x04 */ stage_arrow_data_class* m_entries;
+    /* 0x00 */ BE(int) num;
+    /* 0x04 */ STAGE_OFFSET_PTR(stage_arrow_data_class) m_entries;
 };
 
 // ACT
@@ -238,8 +269,8 @@ struct stage_actor_data_class {
 };  // Size: 0x20
 
 struct stage_actor_class {
-    /* 0x0 */ int num;
-    /* 0x4 */ stage_actor_data_class* m_entries;
+    /* 0x0 */ BE(int) num;
+    /* 0x4 */ STAGE_OFFSET_PTR(stage_actor_data_class) m_entries;
 };
 
 // TGSC / SCOB / TGDR / Door
@@ -252,14 +283,14 @@ struct stage_tgsc_data_class {
 STATIC_ASSERT(sizeof(stage_tgsc_data_class) == 0x24);
 
 struct stage_tgsc_class {
-    /* 0x00 */ int num;
-    /* 0x04 */ stage_tgsc_data_class* m_entries;
+    /* 0x00 */ BE(int) num;
+    /* 0x04 */ STAGE_OFFSET_PTR(stage_tgsc_data_class) m_entries;
 };
 
 // MPAT
 struct map_path_class {
-    /* 0x0 */ int num;
-    /* 0x4 */ void* m_entries;
+    /* 0x0 */ BE(int) num;
+    /* 0x4 */ STAGE_OFFSET_PTR(void) m_entries;
 };
 
 // RTBL
@@ -267,18 +298,18 @@ struct roomRead_data_class {
     /* 0x0 */ u8 num;
     /* 0x1 */ u8 field_0x1;
     /* 0x2 */ u8 field_0x2;
-    /* 0x4 */ u8* m_rooms;
+    /* 0x4 */ STAGE_OFFSET_PTR(u8) m_rooms;
 };  // Size: 0x8
 
 struct roomRead_class {
-    /* 0x0 */ int num;
-    /* 0x4 */ roomRead_data_class** m_entries;
+    /* 0x0 */ BE(int) num;
+    /* 0x4 */ STAGE_OFFSET_PTR(STAGE_OFFSET_PTR(roomRead_data_class)) m_entries;
 };
 
 // MEM
 struct dStage_MemoryMap_c {
-    /* 0x0 */ int m_num;
-    /* 0x4 */ u32* field_0x4;
+    /* 0x0 */ BE(int) m_num;
+    /* 0x4 */ STAGE_OFFSET_PTR(BE(u32)) field_0x4;
 };
 
 // MEC
@@ -288,41 +319,41 @@ struct dStage_MemoryConfig_data {
 };  // Size: 0x2
 
 struct dStage_MemoryConfig_c {
-    /* 0x0 */ int m_num;
-    /* 0x4 */ dStage_MemoryConfig_data* field_0x4;
+    /* 0x0 */ BE(int) m_num;
+    /* 0x4 */ STAGE_OFFSET_PTR(dStage_MemoryConfig_data) field_0x4;
 };
 
 // PATH / RPAT
 struct dPath;
 struct dStage_dPath_c {
-    /* 0x0 */ int m_num;
-    /* 0x4 */ dPath* m_path;
+    /* 0x0 */ BE(int) m_num;
+    /* 0x4 */ STAGE_OFFSET_PTR(dPath) m_path;
 };
 
 // PPNT / RPPN
 struct dStage_dPnt_c {
-    /* 0x0 */ int num;
-    /* 0x4 */ u32 m_pnt_offset;
+    /* 0x0 */ BE(int) num;
+    /* 0x4 */ STAGE_OFFSET_PTR(void) m_pnt_offset;
 };  // Size: 0x8
 
 // MULT
 struct dStage_Mult_info {
-    /* 0x0 */ f32 mTransX;
-    /* 0x4 */ f32 mTransY;
-    /* 0x8 */ s16 mAngle;
+    /* 0x0 */ BE(f32) mTransX;
+    /* 0x4 */ BE(f32) mTransY;
+    /* 0x8 */ BE(s16) mAngle;
     /* 0xA */ u8 mRoomNo;
 };  // Size: 0xC
 
 class dStage_Multi_c {
 public:
-    /* 0x0 */ int num;
-    /* 0x4 */ dStage_Mult_info* m_entries;
+    /* 0x0 */ BE(int) num;
+    /* 0x4 */ STAGE_OFFSET_PTR(dStage_Mult_info) m_entries;
 };
 
 // SOND
 struct stage_sound_data {
     /* 0x00 */ char field_0x0[8];
-    /* 0x08 */ Vec field_0x8;
+    /* 0x08 */ BE(Vec) field_0x8;
     /* 0x14 */ u8 field_0x14;
     /* 0x15 */ u8 field_0x15;
     /* 0x16 */ u8 field_0x16;
@@ -333,55 +364,55 @@ struct stage_sound_data {
 };  // Size: 0x1C
 
 struct dStage_SoundInfo_c {
-    /* 0x0 */ int num;
-    /* 0x4 */ stage_sound_data* entries;
+    /* 0x0 */ BE(int) num;
+    /* 0x4 */ STAGE_OFFSET_PTR(stage_sound_data) entries;
 };
 
 // FILI
 class dStage_FileList_dt_c {
 public:
-    /* 0x00 */ u32 mParameters;
-    /* 0x04 */ f32 mSeaLevel;
-    /* 0x08 */ f32 field_0x8;
-    /* 0x0C */ f32 field_0xc;
+    /* 0x00 */ BE(u32) mParameters;
+    /* 0x04 */ BE(f32) mSeaLevel;
+    /* 0x08 */ BE(f32) field_0x8;
+    /* 0x0C */ BE(f32) field_0xc;
     /* 0x10 */ u8 field_0x10[10];
     /* 0x1A */ u8 mDefaultCamera;
     /* 0x1B */ u8 mBitSw;
-    /* 0x1C */ u16 mMsg;
+    /* 0x1C */ BE(u16) mMsg;
 };  // Size: 0x20
 
 // FILI
 class dStage_FileList2_dt_c {
 public:
-    /* 0x00 */ f32 mLeftRmX;
-    /* 0x04 */ f32 mInnerRmZ;
-    /* 0x08 */ f32 mRightRmX;
-    /* 0x0C */ f32 mFrontRmZ;
+    /* 0x00 */ BE(f32) mLeftRmX;
+    /* 0x04 */ BE(f32) mInnerRmZ;
+    /* 0x08 */ BE(f32) mRightRmX;
+    /* 0x0C */ BE(f32) mFrontRmZ;
     /* 0x10 */ u8 mMinFloorNo;
     /* 0x11 */ u8 mMaxFloorNo;
     /* 0x12 */ u8 field_0x12;
     /* 0x13 */ u8 field_0x13;
-    /* 0x14 */ f32 field_0x14;
-    /* 0x18 */ f32 field_0x18;
-    /* 0x1C */ s16 field_0x1c;
+    /* 0x14 */ BE(f32) field_0x14;
+    /* 0x18 */ BE(f32) field_0x18;
+    /* 0x1C */ BE(s16) field_0x1c;
 };  // Size: 0x20
 
 struct dStage_FileList2_c {
-    /* 0x0 */ int num;
-    /* 0x4 */ dStage_FileList2_dt_c* entries;
+    /* 0x0 */ BE(int) num;
+    /* 0x4 */ STAGE_OFFSET_PTR(dStage_FileList2_dt_c) entries;
 };
 
 // FLOR
 struct dStage_FloorInfo_dt_c {
     // Copied from TWW, may not be right
-    /* 0x00 */ int field_0x00;
+    /* 0x00 */ BE(int) field_0x00;
     /* 0x04 */ u8 floorNo;
     /* 0x05 */ s8 field_0x05[14];
 }; // Size: 0x14
 
 struct dStage_FloorInfo_c {
-    /* 0x00 */ int num;
-    /* 0x04 */ dStage_FloorInfo_dt_c* m_entries;
+    /* 0x00 */ BE(int) num;
+    /* 0x04 */ STAGE_OFFSET_PTR(dStage_FloorInfo_dt_c) m_entries;
 };
 
 // LBNK
@@ -393,8 +424,8 @@ public:
 };
 
 struct dStage_Lbnk_c {
-    /* 0x0 */ int num;
-    /* 0x4 */ dStage_Lbnk_dt_c* entries;
+    /* 0x0 */ BE(int) num;
+    /* 0x4 */ STAGE_OFFSET_PTR(dStage_Lbnk_dt_c) entries;
 };
 
 struct dStage_Elst_dt_c {
@@ -402,22 +433,22 @@ struct dStage_Elst_dt_c {
 };  // Size: 0xF
 
 struct dStage_Elst_c {
-    /* 0x0 */ int m_entryNum;
-    /* 0x4 */ dStage_Elst_dt_c* m_entries;
+    /* 0x0 */ BE(int) m_entryNum;
+    /* 0x4 */ STAGE_OFFSET_PTR(dStage_Elst_dt_c) m_entries;
 };
 
 // DMAP
 struct dStage_DMap_dt_c {
     // Copied from TWW, may not be right
-    /* 0x00 */ int field_0x00;
-    /* 0x04 */ int field_0x04;
-    /* 0x08 */ int field_0x08;
-    /* 0x0C */ f32 offsetY;
+    /* 0x00 */ BE(int) field_0x00;
+    /* 0x04 */ BE(int) field_0x04;
+    /* 0x08 */ BE(int) field_0x08;
+    /* 0x0C */ BE(f32) offsetY;
 };  // Size: 0x10
 
 struct dStage_DMap_c {
-    /* 0x00 */ int num;
-    /* 0x04 */ dStage_DMap_dt_c* entries;
+    /* 0x00 */ BE(int) num;
+    /* 0x04 */ STAGE_OFFSET_PTR(dStage_DMap_dt_c) entries;
 };
 
 /**
@@ -449,7 +480,7 @@ struct dStage_MapEvent_dt_c {
         /* 0x0D */ char event_name[13];
         struct {
             /* 0x0D */ u8 field_0xd[0x14 - 0xD];
-            /* 0x14 */ u16 field_0x14;
+            /* 0x14 */ BE(u16) field_0x14;
             /* 0x16 */ u8 field_0x16;
             /* 0x17 */ u8 field_0x17;
             /* 0x18 */ u8 sound_type;
@@ -469,8 +500,8 @@ enum dStage_MapEvent_dt_type {
 };
 
 struct dStage_MapEventInfo_c {
-    /* 0x0 */ int num;
-    /* 0x4 */ dStage_MapEvent_dt_c* m_entries;
+    /* 0x0 */ BE(int) num;
+    /* 0x4 */ STAGE_OFFSET_PTR(dStage_MapEvent_dt_c) m_entries;
 };
 
 class dStage_dt_c {

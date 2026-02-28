@@ -235,7 +235,7 @@ void dDrawPath_c::rendering(dDrawPath_c::line_class const* p_line) {
             GXSetTevColor(GX_TEVREG0, *getLineColor(p_line->field_0x0 & 0x3F, p_line->field_0x1));
             GXBegin(GX_LINESTRIP, GX_VTXFMT0, p_line->mDataNum);
 
-            u16* tmp = p_line->mpData;
+            BE(u16)* tmp = p_line->mpData;
             for (int i = 0; i < p_line->mDataNum; i++) {
                 GXPosition1x16(*tmp);
                 tmp++;
@@ -252,7 +252,7 @@ void dDrawPath_c::rendering(dDrawPath_c::poly_class const* p_poly) {
         if (p_poly->mDataNum >= 3) {
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, p_poly->mDataNum);
 
-            u16* tmp = p_poly->mpData;
+            BE(u16)* tmp = p_poly->mpData;
             for (int i = 0; i < p_poly->mDataNum; i++) {
                 GXPosition1x16(*tmp);
                 tmp++;
@@ -457,7 +457,7 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
     GXSetNumTevStages(1);
     GXLoadTexObj(dMpath_n::m_texObjAgg.getTexObjPointer(6), GX_TEXMAP0);
 
-    u16* data_p = p_line->mpData;
+    BE(u16)* data_p = p_line->mpData;
     s32 data_num = p_line->mDataNum;
     GXSetLineWidth(width, GX_TO_ONE);
     GXSetPointSize(width, GX_TO_ONE);

@@ -24,7 +24,7 @@ bool dMapInfo_n::isVisitedRoom(int i_roomNo) {
     return g_fmapHIO.mAllRegionsUnlocked || dComIfGs_isVisitedRoom(i_roomNo);
 }
 
-void dMapInfo_n::correctionOriginPos(s8 i_roomNo, Vec* o_pos) {
+void dMapInfo_n::correctionOriginPos(s8 i_roomNo, BE(Vec)* o_pos) {
     dStage_FileList2_dt_c* filelist = dStage_roomControl_c::getFileList2(i_roomNo);
 
     if (o_pos != NULL) {
@@ -33,7 +33,7 @@ void dMapInfo_n::correctionOriginPos(s8 i_roomNo, Vec* o_pos) {
     }
 }
 
-void dMapInfo_n::offsetPlus(dStage_FileList2_dt_c const* filelist, Vec* o_pos) {
+void dMapInfo_n::offsetPlus(dStage_FileList2_dt_c const* filelist, BE(Vec)* o_pos) {
     if (filelist == NULL) {
         return;
     }
@@ -42,7 +42,7 @@ void dMapInfo_n::offsetPlus(dStage_FileList2_dt_c const* filelist, Vec* o_pos) {
     o_pos->z += filelist->field_0x18;
 }
 
-void dMapInfo_n::rotAngle(dStage_FileList2_dt_c const* filelist, Vec* o_pos) {
+void dMapInfo_n::rotAngle(dStage_FileList2_dt_c const* filelist, BE(Vec)* o_pos) {
     s16 rot = 0;
 
     if (filelist != NULL) {
@@ -57,7 +57,7 @@ void dMapInfo_n::rotAngle(dStage_FileList2_dt_c const* filelist, Vec* o_pos) {
 }
 
 Vec dMapInfo_n::getMapPlayerPos() {
-    Vec pos;
+    BE(Vec) pos;
     fopAc_ac_c* player = daPy_getPlayerActorClass();
     if (player != NULL) {
         pos = player->current.pos;
@@ -117,7 +117,7 @@ const dTres_c::typeGroupData_c* dMapInfo_n::getConstRestartIconPointer() {
 }
 
 Vec dMapInfo_n::getMapRestartPos() {
-    Vec pos;
+    BE(Vec) pos;
     const dTres_c::typeGroupData_c* icon_data = getConstRestartIconPointer();
 
     if (icon_data != NULL) {
@@ -389,8 +389,12 @@ void dMpath_c::createWork() {
 }
 
 int dMpath_c::setPointer(dDrawPath_c::room_class* i_room, s8* param_1, s8* param_2) {
-    int var_r6 = 0;
+    intptr_t var_r6 = 0;
+#if TARGET_PC
+    if (i_room->mpFloor.isRelocated()) {
+#else
     if ((uintptr_t)i_room->mpFloor >= 0x80000000) {
+#endif
         dDrawPath_c::floor_class* floor_p = i_room->mpFloor;
         for (int i = 0; i < i_room->mFloorNum; i++) {
             if (floor_p->mFloorNo < *param_1) {
@@ -415,33 +419,58 @@ int dMpath_c::setPointer(dDrawPath_c::room_class* i_room, s8* param_1, s8* param
         dDrawPath_c::line_class* line_e = &group_e->mpLine[group_e->mLineNum - 1];
         return (uintptr_t)(line_e->mpData + line_e->mDataNum) - (uintptr_t)i_room;
     }
-    
+
+#if TARGET_PC
+    i_room->mpFloor.setBase(i_room);
+    i_room->mpFloatData.setBase(i_room);
+#else
     i_room->mpFloor = (dDrawPath_c::floor_class*)((uintptr_t)i_room + (uintptr_t)i_room->mpFloor);
     i_room->mpFloatData = (f32*)((uintptr_t)i_room + (uintptr_t)i_room->mpFloatData);
+#endif
 
     dDrawPath_c::floor_class* floor_p = i_room->mpFloor;
-    int room = (intptr_t)i_room;
+    intptr_t room = (intptr_t)i_room;
     for (int i = 0; i < i_room->mFloorNum; i++) {
+#if TARGET_PC
+        floor_p->mpGroup.setBase((void*) room);
+#else
         floor_p->mpGroup = (dDrawPath_c::group_class*)(room + (uintptr_t)floor_p->mpGroup);
+#endif
 
         dDrawPath_c::group_class* group_p = floor_p->mpGroup;
         for (int j = 0; j < floor_p->mGroupNum; j++) {
-            var_r6 = (uintptr_t)group_p->mpPoly;
+            var_r6 = (intptr_t)(void*)group_p->mpPoly;
+#if TARGET_PC
+            group_p->mpLine.setBase((void*) room);
+#else
             group_p->mpLine = (dDrawPath_c::line_class*)(room + (uintptr_t)group_p->mpLine);
+#endif
 
             dDrawPath_c::line_class* line_p = group_p->mpLine;
             for (int k = 0; k < group_p->mLineNum; k++) {
                 var_r6 = (uintptr_t)(line_p->mpData + line_p->mDataNum);
+#if TARGET_PC
+                line_p->mpData.setBase((void*)room);
+#else
                 line_p->mpData = (u16*)(room + (uintptr_t)line_p->mpData);
+#endif
                 line_p++;
             }
 
+#if TARGET_PC
+            group_p->mpPoly.setBase((void*)room);
+#else
             group_p->mpPoly = (dDrawPath_c::poly_class*)(room + (uintptr_t)group_p->mpPoly);
-            
+#endif
+
             dDrawPath_c::poly_class* poly_p = group_p->mpPoly;
             for (int l = 0; l < group_p->mPolyNum; l++) {
                 var_r6 = (uintptr_t)(poly_p->mpData + poly_p->mDataNum);
+#if TARGET_PC
+                poly_p->mpData.setBase((void*)room);
+#else
                 poly_p->mpData = (u16*)(room + (uintptr_t)poly_p->mpData);
+#endif
                 poly_p++;
             }
 
@@ -874,7 +903,7 @@ void renderingPlusDoor_c::drawNormalDoorS(stage_tgsc_data_class const* i_doorDat
         GXSetTevColor(GX_TEVREG2, l_doorWhiteNoStay2);
     }
 
-    Vec spC;
+    BE(Vec) spC;
     spC.x = i_doorData->base.position.x;
     spC.y = i_doorData->base.position.y;
     spC.z = i_doorData->base.position.z;
@@ -903,7 +932,7 @@ bool renderingDAmap_c::isDrawRoomIcon(int param_0, int param_1) const {
 }
 
 bool renderingDAmap_c::isDrawIconSingle(dTres_c::data_s const* data, int param_1, int param_2,
-                                        bool param_3, bool param_4, Vec const* param_5) const {
+                                        bool param_3, bool param_4, BE(Vec) const* param_5) const {
     bool draw_room_icon = isDrawRoomIcon(data->mRoomNo, param_1);
     bool tmp = false;
 
@@ -926,7 +955,7 @@ renderingPlusDoorAndCursor_c::getNextData(dTres_c::typeGroupData_c* param_0) {
     return dTres_c::getNextData(param_0);
 }
 
-const Vec*
+const BE(Vec)*
 renderingPlusDoorAndCursor_c::getIconPosition(dTres_c::typeGroupData_c* i_typeGroupData) const {
     return i_typeGroupData->getPos();
 }
@@ -1005,7 +1034,7 @@ void renderingPlusDoorAndCursor_c::drawTreasure() {
             GXSetTevColor(GX_TEVREG2, sp18);
 
             for (int j = 0; j < group_num && typeGroupData_p != NULL; j++) {
-                const Vec* icon_pos = getIconPosition(typeGroupData_p);
+                const BE(Vec)* icon_pos = getIconPosition(typeGroupData_p);
 
                 if (tmp == 0) {
                     if (mRoomNoSingle != typeGroupData_p->getRoomNo()) {
@@ -1079,7 +1108,7 @@ void renderingPlusDoorAndCursor_c::drawTreasureAfterPlayer() {
             GXSetTevColor(GX_TEVREG2, sp18);
 
             for (int j = 0; j < group_num && typeGroupData_p != NULL; j++) {
-                const Vec* icon_pos = getIconPosition(typeGroupData_p);
+                const BE(Vec)* icon_pos = getIconPosition(typeGroupData_p);
 
                 if (tmp == 0) {
                     if (mRoomNoSingle != typeGroupData_p->getRoomNo()) {

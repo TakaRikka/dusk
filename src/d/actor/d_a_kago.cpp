@@ -1228,8 +1228,8 @@ void daKago_c::executeFly() {
 void daKago_c::executeStagger() {
     dCamera_c* camera = dCam_getBody();
 
-    cXyz cStack_94 = dPath_GetPnt(mpPath1, mPathIdx)->m_position;
-    cXyz cStack_a0 = dPath_GetPnt(mpPath1, mPathIdx - mPathIdxOffset)->m_position;
+    cXyz cStack_94 = (Vec)dPath_GetPnt(mpPath1, mPathIdx)->m_position;
+    cXyz cStack_a0 = (Vec)dPath_GetPnt(mpPath1, mPathIdx - mPathIdxOffset)->m_position;
 
     field_0x714 = cLib_targetAngleY(&cStack_a0, &cStack_94);
 
@@ -1732,14 +1732,14 @@ void daKago_c::initPerchDemo() {
             field_0x771 = 0;
         }
 
-        cXyz cStack_48 = dPath_GetPnt(mpPath2, field_0x771)->m_position;
+        cXyz cStack_48 = (Vec)dPath_GetPnt(mpPath2, field_0x771)->m_position;
         s16 sVar5 = cLib_targetAngleY(&current.pos, &cStack_48);
         int local_80 = 2;
         if (local_80 >= (int)mpPath2->m_num) {
             local_80 = mpPath2->m_num - 1;
         }
 
-        cXyz cStack_54 = dPath_GetPnt(mpPath2, local_80)->m_position;
+        cXyz cStack_54 = (Vec)dPath_GetPnt(mpPath2, local_80)->m_position;
         s16 sp08 = cLib_targetAngleY(&current.pos, &cStack_48);
         if ((s16)(sVar5 - sp08) < 0) {
             sVar5 = sVar5 - 0x1000;
@@ -1888,7 +1888,7 @@ bool daKago_c::executePerchDemo() {
         current.pos.y = current.pos.y + field_0x6fc;
 
         if (field_0x72c != 0) {
-            cXyz cStack_64 = dPath_GetPnt(mpPath2, field_0x771)->m_position;
+            cXyz cStack_64 = (Vec)dPath_GetPnt(mpPath2, field_0x771)->m_position;
             cLib_addCalcAngleS(&current.angle.y, cLib_targetAngleY(&current.pos, &cStack_64), 0x20, 0x100, 0x40);
             if (current.pos.abs(cStack_64) < 200.0f) {
                 field_0x771++;
@@ -3272,8 +3272,8 @@ void daKago_c::moveDemoFly() {
         }
     }
 
-    cXyz unkXyz1 = dPath_GetPnt(mpPath1, mPathIdx)->m_position;
-    cXyz unkXyz2 = dPath_GetPnt(mpPath1, mPathIdx - mPathIdxOffset)->m_position;
+    cXyz unkXyz1 = (Vec)dPath_GetPnt(mpPath1, mPathIdx)->m_position;
+    cXyz unkXyz2 = (Vec)dPath_GetPnt(mpPath1, mPathIdx - mPathIdxOffset)->m_position;
     s16 targetYaw = field_0x714 = cLib_targetAngleY(&unkXyz2, &unkXyz1);
 
     if (dComIfGp_getStartStagePoint() == 0) {

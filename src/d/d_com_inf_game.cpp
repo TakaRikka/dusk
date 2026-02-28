@@ -2152,12 +2152,12 @@ u32 dComIfG_getTrigA(u32 i_padNo) {
 }
 
 struct field_data_header {
-    /* 0x00 */ u32 field_0x0;
-    /* 0x04 */ u32 field_0x4;
-    /* 0x08 */ u32 field_0x8;
-    /* 0x0C */ u32 field_0xc;
-    /* 0x10 */ u32 field_0x10;
-    /* 0x14 */ u32 field_0x14;
+    /* 0x00 */ BE(u32) field_0x0;
+    /* 0x04 */ BE(u32) field_0x4;
+    /* 0x08 */ BE(u32) field_0x8;
+    /* 0x0C */ BE(u32) field_0xc;
+    /* 0x10 */ BE(u32) field_0x10;
+    /* 0x14 */ BE(u32) field_0x14;
 };
 
 struct field_data {
