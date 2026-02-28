@@ -1329,6 +1329,8 @@ set(DUSK_FILES
         src/dusk/J3DTransforms_C.cpp
         #src/dusk/m_Do_ext_dusk.cpp
         src/dusk/dvd_emu.cpp
+        src/dusk/imgui/imgui.hpp
+        src/dusk/imgui/processes.cpp
         src/dolphin/os/OSContext.cpp
         src/dolphin/os/OSThread.cpp
         src/dolphin/os/OSMutex.cpp

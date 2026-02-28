@@ -1,4 +1,5 @@
 #include "dusk/imgui.h"
+#include "imgui/imgui.hpp"
 
 #include <array>
 #include <atomic>
@@ -71,6 +72,8 @@ static std::string BytesToString(size_t bytes)
     }
     return fmt::format(FMT_STRING("{:.1f}{}"), count, suffixes[s]);
 }
+
+static void ShowProcesses();
 
 void imgui_main(const AuroraInfo *info)
 {
@@ -164,6 +167,8 @@ void imgui_main(const AuroraInfo *info)
         }
     }
     ImGui::End();
+
+    DuskImguiProcesses();
 }
 
 class Limiter
