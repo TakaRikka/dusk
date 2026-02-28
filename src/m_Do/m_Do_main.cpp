@@ -37,6 +37,9 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
 #include "m_Do/m_Do_printf.h"
+#include "m_Do/m_Do_ext2.h"
+#include "SSystem/SComponent/c_counter.h"
+#include <cstring>
 
 #include <chrono>
 #include <thread>

@@ -287,12 +287,12 @@ static void chain_control_01(obj_key_class* i_this) {
         MtxPosition(&spC4, &spB8);
     } else if (fopAcM_GetName(pparent) == PROC_E_RD) {
         e_rd_class* rd = (e_rd_class*)pparent;
-        parent_model = rd->mpModelMorf->getModel();
+        parent_model = rd->anm_p->getModel();
 
         MTXCopy(parent_model->getAnmMtx(VREG_S(0) + 12), *calc_mtx);
         spC4.set(12.0f + VREG_F(0), -5.0f + VREG_F(1), VREG_F(2));
         MtxPosition(&spC4, &spB8);
-        rd->actor.field_0x567 = 1;
+        rd->enemy.field_0x567 = 1;
     } else if (fopAcM_GetName(pparent) == PROC_E_RDB) {
         e_rdb_class* rdb = (e_rdb_class*)pparent;
         parent_model = rdb->mpModelMorf->getModel();

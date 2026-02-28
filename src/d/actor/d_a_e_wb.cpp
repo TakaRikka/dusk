@@ -398,9 +398,9 @@ static int daE_WB_Draw(e_wb_class* i_this) {
         e_rd_class* pfVar4 = (e_rd_class*)fopAcM_SearchByID(i_this->field_0x1434);
 
         if ((i_this->mStatusFlags & 1) != 0) {
-            if (pfVar4 && pfVar4->field_0x9bc == 2) {
+            if (pfVar4 && pfVar4->ride_mode == 2) {
                 if (i_this->field_0x7a2 == 0) {
-                    model = pfVar4->mpModelMorf->getModel();
+                    model = pfVar4->anm_p->getModel();
                     cVar7 = 1;
                 }
             } else {
@@ -439,7 +439,7 @@ static int daE_WB_Draw(e_wb_class* i_this) {
                 i_this->field_0x1438[0] = local_48;
                 i_this->field_0x1438[1] = local_60;
             } else {
-                if (pfVar4->mBossMode != 0) {
+                if (pfVar4->actor_set != 0) {
                     sp8 = 0xf;
                     spc = 0x14;
                 } else {
@@ -1178,7 +1178,7 @@ static void e_wb_f_run(e_wb_class* i_this) {
                     local_a4 = 0x200;
                 }
 
-                if (local_90 != NULL && local_90->mAnmID == 0x27) {
+                if (local_90 != NULL && local_90->anm == 0x27) {
                     i_this->field_0x6d6 =
                         (5000.0f + BREG_F(16)) * cM_ssin(i_this->field_0x68e * (1000 + BREG_S(7)));
                     local_a4 = 0x400;
@@ -2075,7 +2075,7 @@ static void e_wb_b_ikki2(e_wb_class* i_this) {
         if (local_a4 != -1 ) {
             int* p = dComIfGp_evmng_getMyIntegerP(local_a4, "action");
             if (p) {
-                rider->mMode = 2;
+                rider->mode = 2;
                 i_this->mActionMode = -98;
             }
         }
@@ -2808,7 +2808,7 @@ static void damage_check(e_wb_class* i_this) {
                 i_this->mZ2Ride.startCreatureSound(Z2SE_EN_BB_RUNDOWN, 0, -1);
 
                 e_rd_class* rider = (e_rd_class*)fopAcM_SearchByID(i_this->field_0x1434);
-                rider->field_0x998 = 20;
+                rider->damage_timer = 20;
             } else {
                 if (i_this->field_0x79d == 0 || i_this->mSpeedCapTimer == 0) {
                     fopAc_ac_c* hit_actor =
@@ -3103,7 +3103,7 @@ static void* s_rddel_sub(void* param_0, void* param_1) {
     UNUSED(param_1);
     if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_E_RD) {
         e_rd_class* rd = (e_rd_class*)param_0;
-        if (rd->mBossMode == 0) {
+        if (rd->actor_set == 0) {
             fopAcM_delete((fopAc_ac_c*)param_0);
         }
     }
@@ -3115,8 +3115,8 @@ static int rd_count;
 static void* s_rdcount_sub(void* i_actor, void* i_data) {
     UNUSED(i_data);
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD) {
-        if (((e_rd_class*)i_actor)->mBossMode == 0 &&
-            (((e_rd_class*)i_actor)->field_0x5b7 == 1 || ((e_rd_class*)i_actor)->field_0x5b7 == 2))
+        if (((e_rd_class*)i_actor)->actor_set == 0 &&
+            (((e_rd_class*)i_actor)->arg1 == 1 || ((e_rd_class*)i_actor)->arg1 == 2))
         {
             rd_count++;
         }
@@ -3128,7 +3128,7 @@ static void* s_rddel2_sub(void* i_actor, void* i_data) {
     UNUSED(i_data);
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD) {
         e_rd_class* rd = ((e_rd_class*)i_actor);
-        fopAc_ac_c* r28 = fopAcM_SearchByID(rd->mWbActorID);
+        fopAc_ac_c* r28 = fopAcM_SearchByID(rd->boar_id);
         if (r28 == i_data) {
             fopAcM_delete((fopAc_ac_c*)i_actor);
         }
@@ -3341,7 +3341,7 @@ static s8 e_wb_c_run(e_wb_class* i_this) {
         turn_speed = 0x200;
         i_this->mTargetFacingAngle = cM_atan2s(sp94.x, sp94.z);
 
-        if (rider && rider->mAnmID == 0x27) {
+        if (rider && rider->anm == 0x27) {
             ANGLE_ADD(i_this->mTargetFacingAngle,
                       (BREG_F(16) + 5000.0f) * cM_ssin(i_this->field_0x68e * (BREG_S(7) + 1000)));
             turn_speed = 0x400;
@@ -3681,8 +3681,8 @@ static void* s_rdArrowWait_sub(void* i_actor, void* i_data) {
     UNUSED(i_data);
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD) {
         e_rd_class* a_this = static_cast<e_rd_class*>(i_actor);
-        if (a_this->field_0x5bc == 2 || a_this->field_0x5bc == 3) {
-            a_this->field_0x990[1] = cM_rndF(20.0) + 3.0f;
+        if (a_this->weapon_type == 2 || a_this->weapon_type == 3) {
+            a_this->timer[1] = cM_rndF(20.0) + 3.0f;
         }
     }
 
@@ -3869,16 +3869,16 @@ static void demo_camera(e_wb_class* i_this) {
         i_this->field_0x16a0 = 0;
         i_this->field_0x1714 = 55.0f + KREG_F(7);
         i_this->field_0x16a0 = 0;
-        s16 sp16 = local_194->actor.shape_angle.y +
-                   (local_194->field_0xa0c.y - local_194->actor.shape_angle.y) / 2;
+        s16 sp16 = local_194->enemy.shape_angle.y +
+                   (local_194->jump_angle.y - local_194->enemy.shape_angle.y) / 2;
         mDoMtx_stack_c::YrotS(sp16);
         local_3c.x = NREG_F(0);
         local_3c.y = NREG_F(1) + 500.0f;
         local_3c.z = NREG_F(2) - 500.0f;
         mDoMtx_stack_c::multVec(&local_3c, &i_this->field_0x16a4);
-        i_this->field_0x16a4 += local_194->actor.current.pos;
+        i_this->field_0x16a4 += local_194->enemy.current.pos;
         i_this->field_0x1710 = 10.0f;
-        i_this->field_0x16bc = local_194->actor.current.pos;
+        i_this->field_0x16bc = local_194->enemy.current.pos;
         i_this->field_0x16bc.y += 200.0f + KREG_F(11);
         daPy_getPlayerActorClass()->changeOriginalDemo();
         horse->changeOriginalDemo();
@@ -3886,13 +3886,13 @@ static void demo_camera(e_wb_class* i_this) {
         // fallthrough
     case 0xb: {
         cLib_addCalc2(&i_this->field_0x1710, 1000.0f, 1.0f, 100.0f + KREG_F(10));
-        cLib_addCalc2(&i_this->field_0x16bc.x, local_194->actor.current.pos.x, 0.5f + KREG_F(8),
+        cLib_addCalc2(&i_this->field_0x16bc.x, local_194->enemy.current.pos.x, 0.5f + KREG_F(8),
                       i_this->field_0x1710);
-        cLib_addCalc2(&i_this->field_0x16bc.y, local_194->actor.current.pos.y + 200.0f + KREG_F(11),
+        cLib_addCalc2(&i_this->field_0x16bc.y, local_194->enemy.current.pos.y + 200.0f + KREG_F(11),
                       0.5f + KREG_F(8), i_this->field_0x1710);
-        cLib_addCalc2(&i_this->field_0x16bc.z, local_194->actor.current.pos.z, 0.5f + KREG_F(8),
+        cLib_addCalc2(&i_this->field_0x16bc.z, local_194->enemy.current.pos.z, 0.5f + KREG_F(8),
                       i_this->field_0x1710);
-        cLib_addCalc2(&i_this->field_0x16a4.x, local_194->actor.current.pos.x, 0.05f,
+        cLib_addCalc2(&i_this->field_0x16a4.x, local_194->enemy.current.pos.x, 0.05f,
                       12.0f + NREG_F(3));
         if (i_this->field_0x16a0 == 0x28) {
             if (a_this->shape_angle.y < 0x4000 && -0x4000 < a_this->shape_angle.y) {
@@ -4169,7 +4169,7 @@ static void demo_camera(e_wb_class* i_this) {
         MtxPosition(&i_this->field_0x16c8, &i_this->field_0x16bc);
         i_this->field_0x16bc += a_this->current.pos;
         if (i_this->field_0x16a0 == 130) {
-            local_194->mMode++;
+            local_194->mode++;
             player->changeDemoParam2(0);
         }
         if (i_this->field_0x16a0 == 220) {
@@ -4200,7 +4200,7 @@ static void demo_camera(e_wb_class* i_this) {
         MtxPosition(&i_this->field_0x16c8, &i_this->field_0x16bc);
         i_this->field_0x16bc += a_this->current.pos;
         if (i_this->field_0x16a0 == 20) {
-            local_194->mMode++;
+            local_194->mode++;
         }
         if (i_this->field_0x16a0 != (s16)(92 + KREG_S(8))) {
             break;
@@ -4257,7 +4257,7 @@ static void demo_camera(e_wb_class* i_this) {
             i_this->field_0x16bc.set(-8416.0f, 345.0f, 6.0f);
             i_this->field_0x16a4.set(-8994.0f, 326.0f, 400.0f);
             i_this->mZ2Ride.startCreatureVoice(Z2SE_EN_RDB_V_HOICK, -1);
-            local_194->field_0x990[3] = 700;
+            local_194->timer[3] = 700;
         }
     } break;
     case 0x26: {
@@ -4809,25 +4809,25 @@ static void demo_camera(e_wb_class* i_this) {
         i_this->field_0x16a4.x += 100.0f + VREG_F(8);
         i_this->field_0x16a4.y += 600.0f + VREG_F(9);
         i_this->field_0x16a4.z += -500.0f + VREG_F(10);
-        i_this->field_0x16bc = local_194->actor.current.pos;
-        i_this->field_0x16bc.y = local_194->actor.current.pos.y + 100.0f + KREG_F(11);
+        i_this->field_0x16bc = local_194->enemy.current.pos;
+        i_this->field_0x16bc.y = local_194->enemy.current.pos.y + 100.0f + KREG_F(11);
     }
         // fallthrough
     case 0x5d: {
         if (local_194 != NULL) {
             cLib_addCalc2(&i_this->field_0x1710, 1000.0f, 1.0f, 100.0f + KREG_F(10));
-            cLib_addCalc2(&i_this->field_0x16bc.x, local_194->actor.current.pos.x, 0.5f + KREG_F(8),
+            cLib_addCalc2(&i_this->field_0x16bc.x, local_194->enemy.current.pos.x, 0.5f + KREG_F(8),
                           i_this->field_0x1710);
             cLib_addCalc2(&i_this->field_0x16bc.y,
-                          local_194->actor.current.pos.y + 100.0f + KREG_F(11), 0.5f + KREG_F(8),
+                          local_194->enemy.current.pos.y + 100.0f + KREG_F(11), 0.5f + KREG_F(8),
                           i_this->field_0x1710);
-            cLib_addCalc2(&i_this->field_0x16bc.z, local_194->actor.current.pos.z, 0.5f + KREG_F(8),
+            cLib_addCalc2(&i_this->field_0x16bc.z, local_194->enemy.current.pos.z, 0.5f + KREG_F(8),
                           i_this->field_0x1710);
-            cLib_addCalc2(&i_this->field_0x16a4.x, local_194->actor.current.pos.x - 10.0f, 0.05f,
+            cLib_addCalc2(&i_this->field_0x16a4.x, local_194->enemy.current.pos.x - 10.0f, 0.05f,
                           12.0f + NREG_F(3));
             if (i_this->field_0x16a0 >= 40) {
                 if (i_this->field_0x16a0 == 40) {
-                    i_this->field_0x5c4 = local_194->actor.current.pos;
+                    i_this->field_0x5c4 = local_194->enemy.current.pos;
                 }
 
                 for (int i = 0; i < 2; i++) {
@@ -4857,7 +4857,7 @@ static void demo_camera(e_wb_class* i_this) {
                 i_this->field_0x5c4 = i_this->field_0x16bc;
                 i_this->field_0x1430 = 1;
                 a_this->current.angle.y = player->shape_angle.y;
-                fopAcM_delete(&local_194->actor);
+                fopAcM_delete(&local_194->enemy);
             }
         }
     } break;

@@ -57,7 +57,7 @@ public:
     /* 0x39 */ u8 invulnerable;             // 不死身              (Invulnerability)
     /* 0x3A */ u8 eye_polygon;              // 目ポリゴン          (Eye polygon)
     /* 0x3B */ u8 one_hit_kill;             // 一撃必殺            (One hit kill)
-    /* 0x3C */ f32 field_0x3c;              // 一騎（ダ）サイズ     (One-man army (Da) size)
+    /* 0x3C */ f32 ikki_boss_size;              // 一騎（ダ）サイズ     (One-man army (Da) size)
     /* 0x40 */ f32 jump_g;                  // 飛びＧ              (Jump G)
     /* 0x44 */ f32 jump_z;                  // 飛びＺ              (Jump Z)
     /* 0x48 */ f32 jump_z_suspended;        // 飛びＺ（騎乗停止）   (Jump Z (Stop riding))
@@ -222,7 +222,7 @@ daE_RD_HIO_c::daE_RD_HIO_c() {
     invulnerable = 0;
     eye_polygon = 1;
     one_hit_kill = 0;
-    field_0x3c = 75.0f;
+    ikki_boss_size = 75.0f;
     jump_z_suspended = 5.0f;
     jump_z = 10.0f;
     jump_y = 33.0f;
@@ -277,47 +277,47 @@ void daE_RD_HIO_c::genMessage(JORMContext* ctext) {
     // one-hit kill
     ctext->genCheckBox("一撃必殺", &one_hit_kill, 0x1);
     // ikki (da) size
-    ctext->genSlider("一騎（ダ）サイズ", &field_0x3c, 0.0f, 150.0f);
+    ctext->genSlider("一騎（ダ）サイズ", &ikki_boss_size, 0.0f, 150.0f);
 }
 #endif
 
-static fopAc_ac_c* get_pla(fopAc_ac_c* a_this) {
-    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+static fopAc_ac_c* get_pla(fopAc_ac_c* actor) {
+    fopAc_ac_c* pla = dComIfGp_getPlayer(0);
     // "coach" refers to the Ilia/Telma transport wagon:
-    fopAc_ac_c* actor = fopAcM_SearchByName(PROC_NPC_COACH);
+    fopAc_ac_c* coach = fopAcM_SearchByName(PROC_NPC_COACH);
 
-    if (actor == NULL) {
+    if (coach == NULL) {
         return dComIfGp_getPlayer(0);
     }
 
-    f32 link_rd_x_diff, coach_rd_x_diff, link_rd_z_diff, coach_rd_z_diff;
-    link_rd_x_diff = player->current.pos.x - a_this->current.pos.x;
-    link_rd_z_diff = player->current.pos.z - a_this->current.pos.z;
-    coach_rd_x_diff = actor->current.pos.x - a_this->current.pos.x;
-    coach_rd_z_diff = actor->current.pos.z - a_this->current.pos.z;
+    f32 pla_x, coach_x, pla_z, coach_z;
+    pla_x = pla->current.pos.x - actor->current.pos.x;
+    pla_z = pla->current.pos.z - actor->current.pos.z;
+    coach_x = coach->current.pos.x - actor->current.pos.x;
+    coach_z = coach->current.pos.z - actor->current.pos.z;
     // If the XZ-dist of Link is further than the coach, then focus the coach.
-    if (SQUARE(link_rd_x_diff) + SQUARE(link_rd_z_diff) > SQUARE(coach_rd_x_diff) + SQUARE(coach_rd_z_diff)) {
-        return actor;
+    if (SQUARE(pla_x) + SQUARE(pla_z) > SQUARE(coach_x) + SQUARE(coach_z)) {
+        return coach;
     }
 
     return dComIfGp_getPlayer(0);
 }
 
-static void anm_init(e_rd_class* i_this, int i_anmID, f32 i_morf, u8 i_mode, f32 i_speed) {
+static void anm_init(e_rd_class* i_this, int i_no, f32 i_morf, u8 i_mode, f32 i_speed) {
     if (i_this->field_0x680 == 0) {
-        if (i_this->mBossMode != 0) {
-            if (i_anmID < 73) {
-                i_this->mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_rdb", i_anmID),
+        if (i_this->actor_set != 0) {
+            if (i_no < 73) {
+                i_this->anm_p->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_rdb", i_no),
                                             i_mode, i_morf, i_speed, 0.0f, -1.0f);
-                i_this->mAnmID = i_anmID;
+                i_this->anm = i_no;
             }
         } else {
-            i_this->mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, i_anmID),
+            i_this->anm_p->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, i_no),
                                         i_mode, i_morf, i_speed, 0.0f, -1.0f);
-            i_this->mAnmID = i_anmID;
+            i_this->anm = i_no;
 
-            if (i_anmID == BCK_RD_KYORO2) {
-                i_this->mpModelMorf->setFrame(cM_rndF(30.0f));
+            if (i_no == BCK_RD_KYORO2) {
+                i_this->anm_p->setFrame(cM_rndF(30.0f));
             }
         }
     }
@@ -332,11 +332,11 @@ static void horn_anm_init(e_rd_class* i_this, int i_anmID, f32 i_morf, u8 i_mode
 
 static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
-        J3DJoint* my_joint = i_joint;
-        int jointNo = my_joint->getJntNo();
+        J3DJoint* joint = i_joint;
+        int jointNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         e_rd_class* i_this = (e_rd_class*)model->getUserArea();
-        fopEn_enemy_c* a_this = &i_this->actor;
+        fopEn_enemy_c* enemy = &i_this->enemy;
         if (i_this != NULL) {
             MTXCopy(model->getAnmMtx(jointNo), *calc_mtx);
             if (jointNo == JNT_KOSI) {
@@ -420,11 +420,11 @@ static int nodeCallBack(J3DJoint* i_joint, int param_2) {
 
 static int nodeCallBack_B(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
-        J3DJoint* my_joint = i_joint;
-        int jointNo = my_joint->getJntNo();
+        J3DJoint* joint = i_joint;
+        int jointNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         e_rd_class* i_this = (e_rd_class*)model->getUserArea();
-        fopEn_enemy_c* a_this = &i_this->actor;
+        fopEn_enemy_c* enemy = &i_this->enemy;
         if (i_this != NULL) {
             MTXCopy(model->getAnmMtx(jointNo), *calc_mtx);
 
@@ -448,7 +448,7 @@ static int nodeCallBack_bow(J3DJoint* i_joint, int param_2) {
         int jointNo = my_joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         e_rd_class* i_this = (e_rd_class*)model->getUserArea();
-        fopEn_enemy_c* a_this = &i_this->actor;
+        fopEn_enemy_c* enemy = &i_this->enemy;
         if (i_this != NULL && i_this->field_0x9a8 != 0) {
             MTXCopy(model->getAnmMtx(jointNo), *calc_mtx);
             cMtx_ZrotM(*calc_mtx, i_this->field_0x9a8);
@@ -461,7 +461,7 @@ static int nodeCallBack_bow(J3DJoint* i_joint, int param_2) {
 }
 
 static int daE_RD_Draw(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     J3DModel* model;
     J3DMaterial* matNode_p;
     J3DModelData* model_data;
@@ -471,11 +471,11 @@ static int daE_RD_Draw(e_rd_class* i_this) {
         return 1;
     }
 
-    model = i_this->mpModelMorf->getModel();
-    g_env_light.settingTevStruct(0, &a_this->current.pos, &a_this->tevStr);
-    g_env_light.setLightTevColorType_MAJI(model, &a_this->tevStr);
+    model = i_this->anm_p->getModel();
+    g_env_light.settingTevStruct(0, &enemy->current.pos, &enemy->tevStr);
+    g_env_light.setLightTevColorType_MAJI(model, &enemy->tevStr);
 
-    if (i_this->mBossMode == 0 && i_this->field_0x968 != 0) {
+    if (i_this->actor_set == 0 && i_this->field_0x968 != 0) {
         model_data = model->getModelData();
         for (u16 i = 0; i < model_data->getMaterialNum(); i++) {
             J3DMaterial* mat_node_p = model_data->getMaterialNodePointer(i);
@@ -485,16 +485,16 @@ static int daE_RD_Draw(e_rd_class* i_this) {
         }
     }
 
-    if (i_this->mBossMode == 3) {
+    if (i_this->actor_set == 3) {
         J3DShape* shape = model->getModelData()->getMaterialNodePointer(3)->getShape();
         if (shape != NULL) {
             shape->hide();
         }
     }
 
-    i_this->mpModelMorf->entryDL();
+    i_this->anm_p->entryDL();
 
-    if (i_this->mBossMode == 0 && i_this->field_0x968 != 0) {
+    if (i_this->actor_set == 0 && i_this->field_0x968 != 0) {
         J3DModelData* modelData = model->getModelData();
         for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
             matNode_p = modelData->getMaterialNodePointer(i);
@@ -504,37 +504,37 @@ static int daE_RD_Draw(e_rd_class* i_this) {
         }
     }
 
-    if (i_this->field_0x5bc == 1) {
-        g_env_light.setLightTevColorType_MAJI(i_this->field_0x694, &a_this->tevStr);
-        mDoExt_modelUpdateDL(i_this->field_0x694);
-    } else if (i_this->field_0x5bc >= 2) {
-        g_env_light.setLightTevColorType_MAJI(i_this->mpMorfBowAnm->getModel(), &a_this->tevStr);
-        i_this->mpMorfBowAnm->entryDL();
+    if (i_this->weapon_type == 1) {
+        g_env_light.setLightTevColorType_MAJI(i_this->arrow, &enemy->tevStr);
+        mDoExt_modelUpdateDL(i_this->arrow);
+    } else if (i_this->weapon_type >= 2) {
+        g_env_light.setLightTevColorType_MAJI(i_this->bow_anm->getModel(), &enemy->tevStr);
+        i_this->bow_anm->entryDL();
 
         if (i_this->field_0x9a2 != 0) {
-            g_env_light.setLightTevColorType_MAJI(i_this->field_0x694, &a_this->tevStr);
-            mDoExt_modelUpdateDL(i_this->field_0x694);
+            g_env_light.setLightTevColorType_MAJI(i_this->arrow, &enemy->tevStr);
+            mDoExt_modelUpdateDL(i_this->arrow);
         }
     }
 
-    if (i_this->mBossMode != 0) {
+    if (i_this->actor_set != 0) {
         for (int i = 0; i < 14; i++) {
-            if (i_this->mpBossArmorParts[i] != NULL) {
-                g_env_light.setLightTevColorType_MAJI(i_this->mpBossArmorParts[i], &a_this->tevStr);
-                mDoExt_modelUpdateDL(i_this->mpBossArmorParts[i]);
+            if (i_this->armor_boss_part[i] != NULL) {
+                g_env_light.setLightTevColorType_MAJI(i_this->armor_boss_part[i], &enemy->tevStr);
+                mDoExt_modelUpdateDL(i_this->armor_boss_part[i]);
             }
         }
 
         if (i_this->field_0x6a0 != 0) {
-            g_env_light.setLightTevColorType_MAJI(i_this->mpMorfHornAnm->getModel(), &a_this->tevStr);
+            g_env_light.setLightTevColorType_MAJI(i_this->mpMorfHornAnm->getModel(), &enemy->tevStr);
             i_this->mpMorfHornAnm->entryDL();
         }
     }
 
     if (i_this->field_0x1297 != 0) {
         for (int i = 0; i < 2; i++) {
-            g_env_light.setLightTevColorType_MAJI(i_this->mpEyeModels[i], &a_this->tevStr);
-            model_data = i_this->mpEyeModels[i]->getModelData();
+            g_env_light.setLightTevColorType_MAJI(i_this->eye_model[i], &enemy->tevStr);
+            model_data = i_this->eye_model[i]->getModelData();
             for (u16 j = 0; j < model_data->getMaterialNum(); j++) {
                 matNode_p = model_data->getMaterialNodePointer(j);
                 matNode_p->getTevColor(1)->r = 0xFF;
@@ -542,26 +542,26 @@ static int daE_RD_Draw(e_rd_class* i_this) {
                 matNode_p->getTevColor(1)->b = 0x18;
             }
 
-            mDoExt_modelUpdateDL(i_this->mpEyeModels[i]);
+            mDoExt_modelUpdateDL(i_this->eye_model[i]);
         }
     }
 
-    if (i_this->field_0x9bc != 2) {
-        cXyz sp44;
-        sp44.set(a_this->current.pos.x, a_this->current.pos.y + 100.0f, a_this->current.pos.z);
-        i_this->mShadowKey = dComIfGd_setShadow(i_this->mShadowKey, 1, model, &sp44,
-                                                1200.0f + BREG_F(19), 0.0f, a_this->current.pos.y,
-                                                i_this->mObjAcch.GetGroundH(), i_this->mObjAcch.m_gnd,
-                                                &i_this->actor.tevStr, 0, 1.0f,
+    if (i_this->ride_mode != 2) {
+        cXyz pos;
+        pos.set(enemy->current.pos.x, enemy->current.pos.y + 100.0f, enemy->current.pos.z);
+        i_this->shadow_key = dComIfGd_setShadow(i_this->shadow_key, 1, model, &pos,
+                                                1200.0f + BREG_F(19), 0.0f, enemy->current.pos.y,
+                                                i_this->ObjAcch.GetGroundH(), i_this->ObjAcch.m_gnd,
+                                                &i_this->enemy.tevStr, 0, 1.0f,
                                                 dDlst_shadowControl_c::getSimpleTex());
-        if (i_this->field_0x5bc == 1) {
-            dComIfGd_addRealShadow(i_this->mShadowKey, i_this->field_0x694);
+        if (i_this->weapon_type == 1) {
+            dComIfGd_addRealShadow(i_this->shadow_key, i_this->arrow);
         }
     }
 
-    if (i_this->field_0x5b7 == 14) {
-        if (i_this->mBlureRate > 2) {
-            mDoGph_gInf_c::setBlureRate(i_this->mBlureRate);
+    if (i_this->arg1 == 14) {
+        if (i_this->blurRate > 2) {
+            mDoGph_gInf_c::setBlureRate(i_this->blurRate);
             mDoGph_gInf_c::onBlure();
         } else {
             mDoGph_gInf_c::offBlure();
@@ -572,7 +572,7 @@ static int daE_RD_Draw(e_rd_class* i_this) {
 }
 
 static BOOL other_bg_check(e_rd_class* i_this, fopAc_ac_c* i_other) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     dBgS_LinChk lin_chk;
     cXyz unused_vec;
     cXyz start;
@@ -580,10 +580,10 @@ static BOOL other_bg_check(e_rd_class* i_this, fopAc_ac_c* i_other) {
 
     end = i_other->current.pos;
     end.y += 130.0f;
-    start = a_this->current.pos;
-    start.y = a_this->eyePos.y;
+    start = enemy->current.pos;
+    start.y = enemy->eyePos.y;
 
-    lin_chk.Set(&start, &end, a_this);
+    lin_chk.Set(&start, &end, enemy);
     if (dComIfG_Bgsp().LineCross(&lin_chk)) {
         if (i_other != dComIfG_Bgsp().GetActorPointer(lin_chk)) {
             return TRUE;
@@ -618,15 +618,15 @@ static BOOL otoCheck(fopAc_ac_c* i_actor, f32 param_2) {
 }
 
 static BOOL pl_pass_check(e_rd_class* i_this, f32 param_2) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    fopAc_ac_c* actor = get_pla(a_this);
-    cXyz sp18, sp24;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    fopAc_ac_c* actor = get_pla(enemy);
+    cXyz mae, ato;
 
-    sp18 = a_this->current.pos - actor->current.pos;
+    mae = enemy->current.pos - actor->current.pos;
     cMtx_YrotS(*calc_mtx, -(actor->shape_angle.y));
-    MtxPosition(&sp18, &sp24);
+    MtxPosition(&mae, &ato);
 
-    if (sp24.z > param_2) {
+    if (ato.z > param_2) {
         return TRUE;
     }
 
@@ -671,7 +671,7 @@ static dBomb_c* search_bomb(e_rd_class* i_this, int param_1) {
         return NULL;
     }
 
-    fopAc_ac_c* a_this = &i_this->actor;
+    fopAc_ac_c* actor = &i_this->enemy;
     dBomb_c* bomb;
 
     target_info_count = 0;
@@ -689,35 +689,35 @@ static dBomb_c* search_bomb(e_rd_class* i_this, int param_1) {
     f32 threshold = 100.0f;
     f32 compare_val_f = 1500.0f;
     if (target_info_count != 0) {
-        cXyz vec1, vec2, vec3;
+        cXyz mae, vec, ato;
         for (int i = 0; i < target_info_count;) {
             bomb = (dBomb_c*)target_info[i];
-            vec1.x = bomb->current.pos.x - a_this->eyePos.x;
-            vec1.y = 50.0f + bomb->current.pos.y - a_this->eyePos.y;
-            vec1.z = bomb->current.pos.z - a_this->eyePos.z;
-            vec2.x = bomb->current.pos.x - a_this->current.pos.x;
-            vec2.z = bomb->current.pos.z - a_this->current.pos.z;
-            f32 dist1 = JMAFastSqrt(SQUARE(vec1.x) + SQUARE(vec1.z));
-            f32 dist2 = JMAFastSqrt(SQUARE(vec2.x) + SQUARE(vec2.z));
-            if (dist1 < threshold && !(dist2 > i_this->mPlayerDistance + 30.0f)
+            mae.x = bomb->current.pos.x - actor->eyePos.x;
+            mae.y = 50.0f + bomb->current.pos.y - actor->eyePos.y;
+            mae.z = bomb->current.pos.z - actor->eyePos.z;
+            vec.x = bomb->current.pos.x - actor->current.pos.x;
+            vec.z = bomb->current.pos.z - actor->current.pos.z;
+            f32 dist1 = JMAFastSqrt(SQUARE(mae.x) + SQUARE(mae.z));
+            f32 dist2 = JMAFastSqrt(SQUARE(vec.x) + SQUARE(vec.z));
+            if (dist1 < threshold && !(dist2 > i_this->dis + 30.0f)
                 && (!other_bg_check(i_this, bomb) || !param_1))
             {
                 if (param_1) {
-                    f32 abs_res = fabsf(50.0f + bomb->current.pos.y - a_this->eyePos.y);
-                    if (abs_res <= 300.0f) {
-                        s16 ang_y = a_this->shape_angle.y - cM_atan2s(vec1.x, vec1.z);
-                        if (ang_y < 0) {
-                            ang_y = (-1 * ang_y);
+                    f32 abs_r = fabsf(50.0f + bomb->current.pos.y - actor->eyePos.y);
+                    if (abs_r <= 300.0f) {
+                        s16 angleY = actor->shape_angle.y - cM_atan2s(mae.x, mae.z);
+                        if (angleY < 0) {
+                            angleY = (-1 * angleY);
                         }
 
-                        if ((u16)ang_y < 20000) {
+                        if ((u16)angleY < 20000) {
                             return bomb;
                         }
 
-                        cMtx_YrotS(*calc_mtx, -a_this->shape_angle.y);
-                        MtxPosition(&vec1, &vec3);
-                        if (fabsf(vec3.x) < 500.0f && fabsf(vec3.y) < 300.0f
-                            && vec3.z > -125.0f && vec3.z < 500.0f)
+                        cMtx_YrotS(*calc_mtx, -actor->shape_angle.y);
+                        MtxPosition(&mae, &ato);
+                        if (fabsf(ato.x) < 500.0f && fabsf(ato.y) < 300.0f
+                            && ato.z > -125.0f && ato.z < 500.0f)
                         {
                             return bomb;
                         }
@@ -744,19 +744,19 @@ static dBomb_c* search_bomb(e_rd_class* i_this, int param_1) {
 }
 
 static BOOL way_bg_check(e_rd_class* i_this, f32 param_2) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     dBgS_LinChk lin_chk;
-    cXyz sp98, start, end;
+    cXyz mae, start, ato;
 
-    start = a_this->current.pos;
+    start = enemy->current.pos;
     start.y += 50.0f;
-    cMtx_YrotS(*calc_mtx, a_this->shape_angle.y);
-    sp98.x = 0.0f;
-    sp98.y = 50.0f;
-    sp98.z = param_2;
-    MtxPosition(&sp98, &end);
-    end += a_this->current.pos;
-    lin_chk.Set(&start, &end, a_this);
+    cMtx_YrotS(*calc_mtx, enemy->shape_angle.y);
+    mae.x = 0.0f;
+    mae.y = 50.0f;
+    mae.z = param_2;
+    MtxPosition(&mae, &ato);
+    ato += enemy->current.pos;
+    lin_chk.Set(&start, &ato, enemy);
 
     if (dComIfG_Bgsp().LineCross(&lin_chk)) {
         return TRUE;
@@ -766,58 +766,58 @@ static BOOL way_bg_check(e_rd_class* i_this, f32 param_2) {
 }
 
 static void ride_off(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    e_wb_class* bullbo = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    e_wb_class* boar = (e_wb_class*)fopAcM_SearchByID(i_this->boar_id);
 
-    if (bullbo != NULL) {
-        UNSET_FLAG(bullbo->mStatusFlags, i_this->field_0x9be, u16);
-        i_this->field_0x9be = 0;
+    if (boar != NULL) {
+        UNSET_FLAG(boar->mStatusFlags, i_this->boar_stand, u16);
+        i_this->boar_stand = 0;
 
-        if (bullbo->mActionID != 22 && bullbo->mActionID != 23 && bullbo->mActionID != 24) {
-            if (bullbo->mActionID == 1) {
-                if ((bullbo->mStatusFlags & 3) != 0) {
-                    bullbo->mActionID = 6;
+        if (boar->mActionID != 22 && boar->mActionID != 23 && boar->mActionID != 24) {
+            if (boar->mActionID == 1) {
+                if ((boar->mStatusFlags & 3) != 0) {
+                    boar->mActionID = 6;
                 } else {
-                    bullbo->mActionID = 0;
+                    boar->mActionID = 0;
                 }
 
-                bullbo->mActionMode = 0;
-            } else if (bullbo->mActionID == 21) {
-                bullbo->mActionMode = 0;
-            } else if ((bullbo->mStatusFlags & 1) == 0) {
-                if (bullbo->mActionID == 6 && (bullbo->mActionMode == 2 || bullbo->mActionMode == 3)) {
-                    bullbo->mActionMode = 1;
+                boar->mActionMode = 0;
+            } else if (boar->mActionID == 21) {
+                boar->mActionMode = 0;
+            } else if ((boar->mStatusFlags & 1) == 0) {
+                if (boar->mActionID == 6 && (boar->mActionMode == 2 || boar->mActionMode == 3)) {
+                    boar->mActionMode = 1;
                 } else {
-                    bullbo->mActionMode = 0;
+                    boar->mActionMode = 0;
                 }
 
-                bullbo->mActionID = 7;
-                bullbo->field_0x698[1] = cM_rndF(30.0f) + 80.0f;
+                boar->mActionID = 7;
+                boar->field_0x698[1] = cM_rndF(30.0f) + 80.0f;
             }
         }
 
-        a_this->current.angle.x = 0;
-        i_this->mWbActorID = -1;
+        enemy->current.angle.x = 0;
+        i_this->boar_id = -1;
     }
 
-    i_this->field_0x9bc = 0;
-    if (i_this->mpMorfBowAnm != NULL) {
-        i_this->mpMorfBowAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, 10), 0,
+    i_this->ride_mode = 0;
+    if (i_this->bow_anm != NULL) {
+        i_this->bow_anm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, 10), 0,
                                     1.0f, 1.0f, 0.0f, -1.0f);
-        i_this->mpMorfBowAnm->setFrame(10.0f);
+        i_this->bow_anm->setFrame(10.0f);
     }
 
-    a_this->home.pos = a_this->current.pos;
+    enemy->home.pos = enemy->current.pos;
 }
 
 static void* s_wb_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_WB) {
-        e_wb_class* wild_boar_p = (e_wb_class*) i_actor;
+        e_wb_class* boar = (e_wb_class*) i_actor;
         e_rd_class* i_this = (e_rd_class*)i_data;
-        if (wild_boar_p->mActionID != ACTION_DROP && wild_boar_p->mActionID != ACTION_DAMAGE
-            && wild_boar_p->mActionID != ACTION_A_DAMAGE && wild_boar_p->mActionID != ACTION_STAND) {
-            if (i_this->mBossMode == wild_boar_p->field_0x79d &&
-                (data_80519230 != 0 || (wild_boar_p->mStatusFlags & 3) != 3) && target_info_count < 10) {
+        if (boar->mActionID != ACTION_DROP && boar->mActionID != ACTION_DAMAGE
+            && boar->mActionID != ACTION_A_DAMAGE && boar->mActionID != ACTION_STAND) {
+            if (i_this->actor_set == boar->field_0x79d &&
+                (data_80519230 != 0 || (boar->mStatusFlags & 3) != 3) && target_info_count < 10) {
                 target_info[target_info_count] = (fopAc_ac_c*)i_actor;
                 target_info_count++;
             }
@@ -828,7 +828,7 @@ static void* s_wb_sub(void* i_actor, void* i_data) {
 }
 
 static fpc_ProcID search_wb(e_rd_class* i_this, s16 param_2) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
 
     target_info_count = 0;
     for (int i = 0; i < 10; i++) {
@@ -842,39 +842,39 @@ static fpc_ProcID search_wb(e_rd_class* i_this, s16 param_2) {
     }
 
     fpcM_Search(s_wb_sub, i_this);
-    f32 fVar1 = 100.0f;
+    f32 dist = 100.0f;
 
     f32 fVar2 = 1500.0f;
     // Hyrule Field - Bridge of Eldin
-    if (strcmp(dComIfGp_getStartStageName(), "F_SP121") == 0 && fopAcM_GetRoomNo(a_this) == 0) {
+    if (strcmp(dComIfGp_getStartStageName(), "F_SP121") == 0 && fopAcM_GetRoomNo(enemy) == 0) {
         fVar2 = hREG_F(0) + 5000.0f;
     }
 
     if (target_info_count != 0) {
-        cXyz sp54, sp60;
-        fopAc_ac_c* bullbo;
+        cXyz vec, sp60;
+        fopAc_ac_c* actor;
         int i = 0;
         while (i < target_info_count) {
-            bullbo = (fopAc_ac_c*)target_info[i];
-            sp54.x = bullbo->current.pos.x - a_this->eyePos.x;
-            sp54.y = (bullbo->current.pos.y + 50.0f) - a_this->eyePos.y;
-            sp54.z = bullbo->current.pos.z - a_this->eyePos.z;
-            if (JMAFastSqrt(sp54.x * sp54.x + sp54.z * sp54.z) < fVar1) {
+            actor = (fopAc_ac_c*)target_info[i];
+            vec.x = actor->current.pos.x - enemy->eyePos.x;
+            vec.y = (actor->current.pos.y + 50.0f) - enemy->eyePos.y;
+            vec.z = actor->current.pos.z - enemy->eyePos.z;
+            if (JMAFastSqrt(SQUARE(vec.x) + SQUARE(vec.z)) < dist) {
                 if (param_2 == 1) {
-                    return fopAcM_GetID(bullbo);
+                    return fopAcM_GetID(actor);
                 }
 
-                s16 sVar1 = a_this->shape_angle.y - cM_atan2s(sp54.x, sp54.z);
-                if (sVar1 < param_2 && sVar1 > (s16)-param_2 && !other_bg_check(i_this, bullbo)) {
-                    return fopAcM_GetID(bullbo);
+                s16 range = enemy->shape_angle.y - cM_atan2s(vec.x, vec.z);
+                if (range < param_2 && range > (s16)-param_2 && !other_bg_check(i_this, actor)) {
+                    return fopAcM_GetID(actor);
                 }
             }
 
             i++;
             if (i == target_info_count) {
                 i = 0;
-                fVar1 += 100.0f;
-                if (fVar1 > fVar2) {
+                dist += 100.0f;
+                if (dist > fVar2) {
                     return -1;
                 }
             }
@@ -887,54 +887,54 @@ static fpc_ProcID search_wb(e_rd_class* i_this, s16 param_2) {
 }
 
 static void wb_check(e_rd_class* i_this, s16 param_2) {
-    e_wb_class* bullbo;
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    e_wb_class* boar;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
 
-    if (desert_substage != 118 || fopAcM_GetRoomNo(a_this) != 1) {
+    if (desert_substage != 118 || fopAcM_GetRoomNo(enemy) != 1) {
         // Arbiter's Grounds Exterior - a.k.a. Bulblin camp
         // OR most other areas in the game. Except for (non-exhaustive):
         //  1. Outside Link's home
         //  2. Ordon Spring
-        i_this->mWbActorID = search_wb(i_this, param_2);
-        bullbo = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
-        if (bullbo != NULL) {
+        i_this->boar_id = search_wb(i_this, param_2);
+        boar = (e_wb_class*)fopAcM_SearchByID(i_this->boar_id);
+        if (boar != NULL) {
             if (desert_substage != 0) {
-                if (i_this->field_0x5bc != 1) {
-                    if ((bullbo->mStatusFlags & 1) == 0) {
+                if (i_this->weapon_type != 1) {
+                    if ((boar->mStatusFlags & 1) == 0) {
                         return;
                     }
-                } else if ((bullbo->mStatusFlags & 1) != 0) {
+                } else if ((boar->mStatusFlags & 1) != 0) {
                     return;
                 }
             }
 
-            i_this->mAction = ACTION_WB_SEARCH;
-            i_this->mMode = 0;
+            i_this->action = ACTION_WB_SEARCH;
+            i_this->mode = 0;
 
-            if ((bullbo->mStatusFlags & 1) == 0) {
-                bullbo->mStatusFlags |= (u16) 1;
-                i_this->field_0x9be = 1;
-            } else if ((bullbo->mStatusFlags & 2) == 0) {
-                bullbo->mStatusFlags |= (u16) 2;
-                i_this->field_0x9be = 2;
+            if ((boar->mStatusFlags & 1) == 0) {
+                boar->mStatusFlags |= (u16) 1;
+                i_this->boar_stand = 1;
+            } else if ((boar->mStatusFlags & 2) == 0) {
+                boar->mStatusFlags |= (u16) 2;
+                i_this->boar_stand = 2;
             }
         }
     }
 }
 
 static BOOL wb_init_ride(e_rd_class* i_this) {
-    i_this->mWbActorID = search_wb(i_this, 1);
-    e_wb_class* bullbo = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
+    i_this->boar_id = search_wb(i_this, 1);
+    e_wb_class* boar = (e_wb_class*)fopAcM_SearchByID(i_this->boar_id);
 
-    if (bullbo != NULL) {
-        i_this->mAction = ACTION_WB_RIDE;
-        i_this->mMode = 0;
-        i_this->field_0x9bc = 2;
-        i_this->field_0x9be = i_this->field_0x5b6;
-        bullbo->mStatusFlags |= (s8)i_this->field_0x5b6;
-        bullbo->mActionID = 1;
+    if (boar != NULL) {
+        i_this->action = ACTION_WB_RIDE;
+        i_this->mode = 0;
+        i_this->ride_mode = 2;
+        i_this->boar_stand = i_this->arg0;
+        boar->mStatusFlags |= (s8)i_this->arg0;
+        boar->mActionID = 1;
 
-        if (i_this->field_0x5bc != 0 && i_this->field_0x9be == 1) {
+        if (i_this->weapon_type != 0 && i_this->boar_stand == 1) {
             i_this->field_0x5bd = 1;
         }
 
@@ -945,9 +945,9 @@ static BOOL wb_init_ride(e_rd_class* i_this) {
     return FALSE;
 }
 
-static BOOL pl_check(e_rd_class* i_this, f32 param_2, s16 param_3) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    fopAc_ac_c* actor = get_pla(a_this);
+static BOOL pl_check(e_rd_class* i_this, f32 range, s16 angle) {
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    fopAc_ac_c* actor = get_pla(enemy);
 
     if ((desert_substage == 0 && dComIfGp_event_runCheck())) {
         return FALSE;
@@ -959,18 +959,18 @@ static BOOL pl_check(e_rd_class* i_this, f32 param_2, s16 param_3) {
     }
 
     if (S_find != 0) {
-        param_2 = 10000.0f;
+        range = 10000.0f;
     }
 
-    if (i_this->mPlayerDistance < param_2) {
-        s16 sVar1 = a_this->shape_angle.y - i_this->mPlayerAngleY;
-        if (sVar1 < param_3 && sVar1 > (s16)-param_3 && !other_bg_check(i_this, actor)) {
+    if (i_this->dis < range) {
+        s16 target = enemy->shape_angle.y - i_this->angleY;
+        if (target < angle && target > (s16)-angle && !other_bg_check(i_this, actor)) {
             return TRUE;
         }
 
         for (int i = 0; i <= 2; i++) {
-            if (i_this->field_0xd58[i].ChkCoHit()) {
-                cCcD_Obj* hit_obj = i_this->field_0xd58[i].GetCoHitObj();
+            if (i_this->cc_sph[i].ChkCoHit()) {
+                cCcD_Obj* hit_obj = i_this->cc_sph[i].GetCoHitObj();
                 if (daPy_getPlayerActorClass() == dCc_GetAc(hit_obj->GetAc())) {
                     return TRUE;
                 }
@@ -982,28 +982,28 @@ static BOOL pl_check(e_rd_class* i_this, f32 param_2, s16 param_3) {
 }
 
 static dBomb_c* bomb_view_check(e_rd_class* i_this) {
-    fopEn_enemy_c* unused_p = &i_this->actor;
+    fopEn_enemy_c* unused_p = &i_this->enemy;
     return search_bomb(i_this, 1);
 }
 
 static dBomb_c* bomb_check(e_rd_class* i_this) {
-    fopEn_enemy_c* unused_p = &i_this->actor;
+    fopEn_enemy_c* unused_p = &i_this->enemy;
     return search_bomb(i_this, 0);
 }
 
-static BOOL move_gake_check(e_rd_class* i_this, f32 param_2) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+static BOOL move_gake_check(e_rd_class* i_this, f32 gake) {
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     dBgS_GndChk gnd_chk;
-    cXyz sp74, sp80;
+    cXyz mae, ato;
 
-    cMtx_YrotS(*calc_mtx, a_this->shape_angle.y);
-    sp74.x = 0.0f;
-    sp74.y = 100.0f;
-    sp74.z = param_2;
-    MtxPosition(&sp74, &sp80);
-    sp80 += a_this->current.pos;
-    gnd_chk.SetPos(&sp80);
-    if ((a_this->current.pos.y - dComIfG_Bgsp().GroundCross(&gnd_chk)) > 300.0f) {
+    cMtx_YrotS(*calc_mtx, enemy->shape_angle.y);
+    mae.x = 0.0f;
+    mae.y = 100.0f;
+    mae.z = gake;
+    MtxPosition(&mae, &ato);
+    ato += enemy->current.pos;
+    gnd_chk.SetPos(&ato);
+    if ((enemy->current.pos.y - dComIfG_Bgsp().GroundCross(&gnd_chk)) > 300.0f) {
         return TRUE;
     }
 
@@ -1011,42 +1011,42 @@ static BOOL move_gake_check(e_rd_class* i_this, f32 param_2) {
 }
 
 static BOOL way_check(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    cXyz spac;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    cXyz mae;
 
     // Hidden Village
-    if (strcmp(dComIfGp_getStartStageName(), "F_SP128") == 0 && a_this->current.pos.z < -8400.0f) {
-        spac.x = a_this->home.pos.x - a_this->current.pos.x;
-        spac.z = a_this->home.pos.z - a_this->current.pos.z;
-        i_this->field_0x5cc = cM_atan2s(spac.x, spac.z);
+    if (strcmp(dComIfGp_getStartStageName(), "F_SP128") == 0 && enemy->current.pos.z < -8400.0f) {
+        mae.x = enemy->home.pos.x - enemy->current.pos.x;
+        mae.z = enemy->home.pos.z - enemy->current.pos.z;
+        i_this->target_ya = cM_atan2s(mae.x, mae.z);
         return TRUE;
     }
 
-    cXyz start, end;
-    s16 sVar1 = cM_rndF(65535.0f);
-    f32 fVar1 = 1000.0f;
-    start = a_this->current.pos;
+    cXyz start, ato;
+    s16 angle = cM_rndF(65535.0f);
+    f32 z = 1000.0f;
+    start = enemy->current.pos;
     start.y += 50.0f;
 
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 16; j++) {
-            cMtx_YrotS(*calc_mtx, sVar1);
-            spac.x = 0.0f;
-            spac.y = 0.0f;
-            spac.z = fVar1;
-            MtxPosition(&spac, &end);
-            end += start;
+            cMtx_YrotS(*calc_mtx, angle);
+            mae.x = 0.0f;
+            mae.y = 0.0f;
+            mae.z = z;
+            MtxPosition(&mae, &ato);
+            ato += start;
             dBgS_LinChk lin_chk;
-            lin_chk.Set(&start, &end, a_this);
+            lin_chk.Set(&start, &ato, enemy);
             if (dComIfG_Bgsp().LineCross(&lin_chk)) {
-                ANGLE_ADD(sVar1, 0x1000);
+                ANGLE_ADD(angle, 0x1000);
             } else {
-                i_this->field_0x5cc = sVar1;
+                i_this->target_ya = angle;
                 return TRUE;
             }
         }
 
-        fVar1 -= 150.0f;
+        z -= 150.0f;
     }
 
     return FALSE;
@@ -1054,20 +1054,20 @@ static BOOL way_check(e_rd_class* i_this) {
 
 static BOOL path_check(e_rd_class* i_this) {
     static u8 check_index[255];
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     dBgS_LinChk lin_chk;
     cXyz start, end;
 
-    start = a_this->current.pos;
+    start = enemy->current.pos;
     start.y += WREG_F(0) + 10.0f;
 
-    dPnt* points = i_this->mPath->m_points;
-    for (int i = 0; i < i_this->mPath->m_num; i++, points++) {
+    dPnt* points = i_this->path->m_points;
+    for (int i = 0; i < i_this->path->m_num; i++, points++) {
         if (i < 0xFF) {
             end.x = points->m_position.x;
             end.y = points->m_position.y + 10.0f + WREG_F(1);
             end.z = points->m_position.z;
-            lin_chk.Set(&start, &end, a_this);
+            lin_chk.Set(&start, &end, enemy);
             if (!dComIfG_Bgsp().LineCross(&lin_chk)) {
                 check_index[i] = 1;
             } else {
@@ -1076,114 +1076,114 @@ static BOOL path_check(e_rd_class* i_this) {
         }
     }
 
-    f32 fVar2, fVar3, fVar4;
-    f32 fVar1 = 100.0f;
-    bool bVar1 = false;
+    f32 x, y, z;
+    f32 dist = 100.0f;
+    bool found = false;
     f32 reg_f27; // unused
     for (int i = 0; i < 100;) {
-        points = i_this->mPath->m_points;
-        for (int j = 0; j < i_this->mPath->m_num; j++, points++) {
+        points = i_this->path->m_points;
+        for (int j = 0; j < i_this->path->m_num; j++, points++) {
             if (j < 0xFF && check_index[j] != 0) {
-                fVar2 = a_this->current.pos.x - points->m_position.x;
-                fVar3 = a_this->current.pos.y - points->m_position.y;
-                fVar4 = a_this->current.pos.z - points->m_position.z;
-                if (JMAFastSqrt(fVar2 * fVar2 + fVar3 * fVar3 + fVar4 * fVar4) < fVar1) {
+                x = enemy->current.pos.x - points->m_position.x;
+                y = enemy->current.pos.y - points->m_position.y;
+                z = enemy->current.pos.z - points->m_position.z;
+                if (JMAFastSqrt(x * x + y * y + z * z) < dist) {
                     i_this->field_0xb00 = j;
-                    bVar1 = true;
+                    found = true;
                     break;
                 }
             }
         }
 
-        if (bVar1) {
+        if (found) {
             break;
         }
 
         ++i;
-        reg_f27 = fVar1 += 50.0f;
+        reg_f27 = dist += 50.0f;
     }
 
-    if (!bVar1) {
+    if (!found) {
         return FALSE;
     }
 
     if (cM_rndF(1.0f) < 0.5f) {
-        i_this->field_0xb01 = 1;
+        i_this->path_dir = 1; // forward
     } else {
-        i_this->field_0xb01 = 0xFF;
+        i_this->path_dir = 0xFF; // backward
     }
 
     return TRUE;
 }
 
 static void e_rd_normal(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
 
-    if (i_this->field_0x5b6 == 1 || i_this->field_0x5b6 == 2) {
+    if (i_this->arg0 == 1 || i_this->arg0 == 2) {
         if (wb_init_ride(i_this)) {
-            i_this->field_0x5b6 = 0;
+            i_this->arg0 = 0;
         }
 
         return;
     }
 
     cXyz unused_vec_0, unused_vec_1;
-    f32 fVar1 = 0.0f;
-    s16 sVar1 = 0x4000;
+    f32 speed = 0.0f;
+    s16 angle = 0x4000;
     if (desert_substage != 0) {
-        sVar1 = 0x6000;
+        angle = 0x6000;
     }
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
             if (i_this->field_0x5bd != 0) {
                 anm_init(i_this, BCK_RD_ARMAMENT, 2.0f, 0, 1.0f);
-                i_this->mMode = 1;
+                i_this->mode = 1;
             } else {
-                i_this->mMode = 2;
+                i_this->mode = 2;
             }
             break;
 
         case 1:
-            if ((int)i_this->mpModelMorf->getFrame() == 11) {
+            if ((int)i_this->anm_p->getFrame() == 11) {
                 i_this->field_0x5bd = 0;
             }
 
-            if (i_this->mpModelMorf->isStop()) {
-                i_this->mMode = 2;
+            if (i_this->anm_p->isStop()) {
+                i_this->mode = 2;
             }
             break;
 
         case 2:
-            if (i_this->field_0x990[0] == 0) {
-                if (i_this->mPath != NULL && path_check(i_this)) {
-                    i_this->mAction = ACTION_JYUNKAI;
-                    i_this->mMode = 0;
+            if (i_this->timer[0] == 0) {
+                if (i_this->path != NULL && path_check(i_this)) {
+                    i_this->action = ACTION_JYUNKAI;
+                    i_this->mode = 0;
                     return;
                 }
 
                 if (way_check(i_this)) {
                     anm_init(i_this, BCK_RD_WALK, 10.0f, 2, 1.0f);
-                    i_this->mMode = 3;
-                    i_this->field_0x990[0] = cM_rndF(100.0f) + 100.0f;
+                    i_this->mode = 3;
+                    i_this->timer[0] = cM_rndF(100.0f) + 100.0f;
                 }
             } else if (desert_substage != 0) {
-                sVar1 = 0x7000;
+                angle = 0x7000;
             } else {
-                sVar1 = 0x6000;
+                angle = 0x6000;
             }
             break;
 
         case 3:
-            fVar1 = l_HIO.movement_speed;
-            if (a_this->speedF >= 3.0f && move_gake_check(i_this, 100.0f)) {
-                i_this->mMode = 4;
-                i_this->field_0x990[0] = cM_rndF(100.0f) + 50.0f;
+            speed = l_HIO.movement_speed;
+            if (enemy->speedF >= 3.0f && move_gake_check(i_this, 100.0f)) {
+                i_this->mode = 4;
+                i_this->timer[0] = cM_rndF(100.0f) + 50.0f;
                 anm_init(i_this, BCK_RD_KYORO2, 10.0f, 2, 1.0f);
             } else {
-                if (i_this->field_0x990[0] == 0 || (a_this->speedF >= 3.0f && way_bg_check(i_this, 200.0f))) {
-                    i_this->mMode = 2;
-                    i_this->field_0x990[0] = cM_rndF(100.0f) + 50.0f;
+                if (i_this->timer[0] == 0 || (enemy->speedF >= 3.0f && way_bg_check(i_this, 200.0f))) {
+                    i_this->mode = 2;
+                    i_this->timer[0] = cM_rndF(100.0f) + 50.0f;
                     anm_init(i_this, BCK_RD_KYORO2, 10.0f, 2, 1.0f);
                 }
             }
@@ -1191,272 +1191,272 @@ static void e_rd_normal(e_rd_class* i_this) {
 
         case 4:
             i_this->field_0x9c8 = 0xFF;
-            if (i_this->field_0x990[0] == 0) {
-                i_this->field_0x5cc = a_this->current.angle.y + 0x8000 + (s16)cM_rndFX(4000.0f);
+            if (i_this->timer[0] == 0) {
+                i_this->target_ya = enemy->current.angle.y + 0x8000 + (s16)cM_rndFX(4000.0f);
                 anm_init(i_this, BCK_RD_WALK, 10.0f, 2, 1.0f);
-                i_this->mMode = 3;
-                i_this->field_0x990[0] = cM_rndF(100.0f) + 100.0f;
+                i_this->mode = 3;
+                i_this->timer[0] = cM_rndF(100.0f) + 100.0f;
             }
     }
 
-    if (fVar1) {
-        cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->field_0x5cc, 8, 0x400);
-        s16 sVar1 = a_this->current.angle.y - i_this->field_0x5cc;
-        if (sVar1 > 0x400 || sVar1 < -0x400) {
-            fVar1 = 0.0f;
+    if (speed) {
+        cLib_addCalcAngleS2(&enemy->current.angle.y, i_this->target_ya, 8, 0x400);
+        s16 range = enemy->current.angle.y - i_this->target_ya;
+        if (range > 0x400 || range < -0x400) {
+            speed = 0.0f;
         }
     }
 
-    cLib_addCalc2(&a_this->speedF, fVar1, 1.0f, 3.0f);
-    f32 fVar2 = i_this->field_0x980;
-    BOOL bVar1 = FALSE;
-    if (i_this->field_0x9a1 == 1 || S_find != 0) {
-        if (i_this->field_0x9a1 == 1) {
-            bVar1 = TRUE;
+    cLib_addCalc2(&enemy->speedF, speed, 1.0f, 3.0f);
+    f32 range = i_this->attack_range;
+    BOOL search_check = FALSE;
+    if (i_this->look_timer == 1 || S_find != 0) {
+        if (i_this->look_timer == 1) {
+            search_check = TRUE;
         }
 
-        fVar2 = 10000.0f;
-        sVar1 = 0x7FFF;
+        range = 10000.0f;
+        angle = 0x7FFF;
     }
 
-    if (((i_this->field_0x970 & 7) == 0 || bVar1) && i_this->mMode >= 2) {
-        if ((i_this->field_0x970 & 8) != 0 && !bVar1) {
-            wb_check(i_this, sVar1);
+    if (((i_this->counter & 7) == 0 || search_check) && i_this->mode >= 2) {
+        if ((i_this->counter & 8) != 0 && !search_check) {
+            wb_check(i_this, angle);
         } else {
-            if (pl_check(i_this, fVar2, sVar1)) {
-                if (i_this->field_0x5bc == 1) {
-                    i_this->mAction = ACTION_FIGHT_RUN;
-                    i_this->mMode = 0xFFF6;
-                    i_this->field_0x990[0] = 60;
-                } else if (i_this->field_0x5bc >= 2) {
-                    i_this->mAction = ACTION_BOW_RUN;
-                    i_this->mMode = 0xFFF6;
+            if (pl_check(i_this, range, angle)) {
+                if (i_this->weapon_type == 1) {
+                    i_this->action = ACTION_FIGHT_RUN;
+                    i_this->mode = -10;
+                    i_this->timer[0] = 60;
+                } else if (i_this->weapon_type >= 2) {
+                    i_this->action = ACTION_BOW_RUN;
+                    i_this->mode = -10;
                 }
             }
 
             if (bomb_view_check(i_this) != NULL) {
-                i_this->mAction = ACTION_BOMB;
-                i_this->mMode = 0;
+                i_this->action = ACTION_BOMB;
+                i_this->mode = 0;
             }
         }
     }
 }
 
 static void e_rd_fight_run(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    fopAc_ac_c* pla = dComIfGp_getPlayer(0);
     cXyz sp64, sp70;
-    f32 fVar3 = 0.0f;
-    s8 bVar1 = true;
+    f32 speed = 0.0f;
+    s8 attack_flag = true;
 
-    if (!pl_check(i_this, i_this->field_0x980 + 50.0f, 0x7FFF) && i_this->field_0x990[0] == 0) {
-        if (i_this->field_0x99e == 0) {
-            bVar1 = false;
+    if (!pl_check(i_this, i_this->attack_range + 50.0f, 0x7FFF) && i_this->timer[0] == 0) {
+        if (i_this->attack_timer == 0) {
+            attack_flag = false;
         }
     } else {
-        i_this->field_0x99e = 35;
+        i_this->attack_timer = 35;
     }
 
-    f32 fVar1;
+    f32 dash_speed;
     if (desert_substage != 0) {
-        fVar1 = 24.0f;
+        dash_speed = 24.0f;
     } else {
-        fVar1 = l_HIO.dash_speed;
+        dash_speed = l_HIO.dash_speed;
     }
 
-    if (i_this->field_0x5bc != 1) {
-        if (i_this->field_0x5bc >= 2) {
-            i_this->mAction = ACTION_BOW_RUN;
+    if (i_this->weapon_type != 1) {
+        if (i_this->weapon_type >= 2) {
+            i_this->action = ACTION_BOW_RUN;
         } else {
-            i_this->mAction = ACTION_NORMAL;
-            i_this->field_0x990[0] = cM_rndF(50.0f) + 50.0f;
+            i_this->action = ACTION_NORMAL;
+            i_this->timer[0] = cM_rndF(50.0f) + 50.0f;
             anm_init(i_this, BCK_RD_KYORO2, 10.0f, 2, 1.0f);
         }
 
-        i_this->mMode = 0;
+        i_this->mode = 0;
     } else {
-        i_this->mPlayerDistance -= fabsf(a_this->current.pos.y - player->current.pos.y) * 0.7f;
+        i_this->dis -= fabsf(enemy->current.pos.y - pla->current.pos.y) * 0.7f;
 
-        switch (i_this->mMode) {
+        switch (i_this->mode) {
             case -20:
-                if ((int)i_this->mpModelMorf->getFrame() == 11) {
+                if ((int)i_this->anm_p->getFrame() == 11) {
                     i_this->field_0x5bd = 0;
                 }
 
-                if (i_this->mpModelMorf->isStop()) {
-                    i_this->mMode = 0;
+                if (i_this->anm_p->isStop()) {
+                    i_this->mode = 0;
                 }
                 break;
 
             case -10:
                 anm_init(i_this, BCK_RD_WAIT01, 7.0f, 2, 1.0f);
-                i_this->field_0x990[1] = cM_rndF(10.0f) + 15.0f;
-                i_this->mMode = 0xFFF7;
+                i_this->timer[1] = cM_rndF(10.0f) + 15.0f;
+                i_this->mode = 0xFFF7;
                 break;
 
             case -9:
-                if (i_this->field_0x990[1] == 0) {
-                    i_this->mMode = 0;
+                if (i_this->timer[1] == 0) {
+                    i_this->mode = 0;
                 }
                 break;
 
             case 0:
                 if (i_this->field_0x5bd != 0) {
                     anm_init(i_this, BCK_RD_ARMAMENT, 2.0f, 0, 1.0f);
-                    i_this->mMode = 0xFFEC;
-                } else if (i_this->field_0x990[1] == 0) {
+                    i_this->mode = 0xFFEC;
+                } else if (i_this->timer[1] == 0) {
                     anm_init(i_this, BCK_RD_RUN, 5.0f, 2, cM_rndFX(0.05f) + 1.0f);
-                    i_this->mMode = 1;
+                    i_this->mode = 1;
                 }
                 break;
 
             case 1:
-                fVar3 = fVar1;
-                if (i_this->mPlayerDistance < l_HIO.battle_init_range) {
+                speed = dash_speed;
+                if (i_this->dis < l_HIO.battle_init_range) {
                     anm_init(i_this, BCK_RD_KAMAE, 5.0f, 2, 1.0f);
-                    i_this->mMode = 2;
+                    i_this->mode = 2;
                 }
                 break;
 
             case 2:
-                fVar3 = l_HIO.movement_speed;
-                if (i_this->mPlayerDistance > l_HIO.battle_init_range + 50.0f) {
-                    i_this->mMode = 0;
-                } else if (i_this->mPlayerDistance < l_HIO.battle_init_range - 50.0f) {
-                    i_this->mMode = 3;
+                speed = l_HIO.movement_speed;
+                if (i_this->dis > l_HIO.battle_init_range + 50.0f) {
+                    i_this->mode = 0;
+                } else if (i_this->dis < l_HIO.battle_init_range - 50.0f) {
+                    i_this->mode = 3;
                 }
                 break;
 
             case 3:
-                fVar3 = -l_HIO.movement_speed;
-                if (i_this->mPlayerDistance > l_HIO.battle_init_range) {
-                    i_this->mMode = 2;
+                speed = -l_HIO.movement_speed;
+                if (i_this->dis > l_HIO.battle_init_range) {
+                    i_this->mode = 2;
                 }
                 break;
 
             case 5:
-                if (i_this->field_0x990[3] != 0) {
+                if (i_this->timer[3] != 0) {
                     i_this->field_0x9c8 = 0xFF;
                 }
 
-                fVar3 = 0.0f;
-                a_this->speedF = 0.0f;
+                speed = 0.0f;
+                enemy->speedF = 0.0f;
                 if (!move_gake_check(i_this, 100.0f)) {
-                    i_this->mMode = 2;
+                    i_this->mode = 2;
                 }
                 break;
         }
 
-        if (i_this->mMode < 5 && move_gake_check(i_this, 100.0f)) {
-            i_this->mMode = 5;
-            i_this->field_0x990[3] = cM_rndF(15.0f) + 30.0f;
+        if (i_this->mode < 5 && move_gake_check(i_this, 100.0f)) {
+            i_this->mode = 5;
+            i_this->timer[3] = cM_rndF(15.0f) + 30.0f;
             anm_init(i_this, BCK_RD_WAIT01, 5.0f, 2, 1.0f);
         }
 
-        if (i_this->mMode >= 0) {
-            cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mPlayerAngleY, 4, 0x800);
-            s16 sVar1 = a_this->current.angle.y - i_this->mPlayerAngleY;
-            if (sVar1 > 0x400 || sVar1 < -0x400) {
-                fVar3 = 0.0f;
+        if (i_this->mode >= 0) {
+            cLib_addCalcAngleS2(&enemy->current.angle.y, i_this->angleY, 4, 0x800);
+            s16 range = enemy->current.angle.y - i_this->angleY;
+            if (range > 0x400 || range < -0x400) {
+                speed = 0.0f;
             }
         }
 
-        cLib_addCalc2(&a_this->speedF, fVar3, 1.0f, 5.0f);
+        cLib_addCalc2(&enemy->speedF, speed, 1.0f, 5.0f);
 
-        if (!bVar1) {
-            i_this->mAction = ACTION_NORMAL;
-            if (i_this->mMode == 5) {
-                i_this->field_0x5cc = a_this->current.angle.y + 0x8000 + (s16)cM_rndFX(4000.0f);
+        if (!attack_flag) {
+            i_this->action = ACTION_NORMAL;
+            if (i_this->mode == 5) {
+                i_this->target_ya = enemy->current.angle.y + 0x8000 + (s16)cM_rndFX(4000.0f);
                 anm_init(i_this, BCK_RD_WALK, 10.0f, 2, 1.0f);
-                i_this->mMode = 3;
-                i_this->field_0x990[0] = cM_rndF(100.0f) + 100.0f;
-                i_this->field_0x990[1] = 40;
+                i_this->mode = 3;
+                i_this->timer[0] = cM_rndF(100.0f) + 100.0f;
+                i_this->timer[1] = 40;
             } else {
-                i_this->mMode = 0;
-                i_this->field_0x990[0] = cM_rndF(50.0f) + 50.0f;
+                i_this->mode = 0;
+                i_this->timer[0] = cM_rndF(50.0f) + 50.0f;
                 anm_init(i_this, BCK_RD_KYORO2, 10.0f, 2, 1.0f);
             }
         } else {
-            if (i_this->mPlayerDistance < l_HIO.battle_init_range && (i_this->field_0xa20 & cc_pl_cut_bit_get()) != 0 &&
+            if (i_this->dis < l_HIO.battle_init_range && (i_this->field_0xa20 & cc_pl_cut_bit_get()) != 0 &&
                 i_this->field_0x9f0 < 0.1f) {
-                i_this->mAction = ACTION_AVOID;
-                i_this->mMode = 0;
-                i_this->field_0x998 = 20;
-            } else if (i_this->field_0x5bd == 0 && i_this->mPlayerDistance < l_HIO.attack_init_range && i_this->field_0x990[2] == 0) {
-                i_this->field_0x990[2] = cM_rndF(20.0f) + 20.0f;
-                f32 compare_val_f = 0.5f;
-                if (cM_rndF(1.0f) < compare_val_f) {
-                    i_this->mAction = ACTION_FIGHT;
-                    i_this->mMode = 0;
+                i_this->action = ACTION_AVOID;
+                i_this->mode = 0;
+                i_this->damage_timer = 20;
+            } else if (i_this->field_0x5bd == 0 && i_this->dis < l_HIO.attack_init_range && i_this->timer[2] == 0) {
+                i_this->timer[2] = cM_rndF(20.0f) + 20.0f;
+                f32 rnd = 0.5f;
+                if (cM_rndF(1.0f) < rnd) {
+                    i_this->action = ACTION_FIGHT;
+                    i_this->mode = 0;
                 }
             }
         }
 
-        if ((i_this->field_0x970 & 15) == 0) {
+        if ((i_this->counter & 15) == 0) {
             wb_check(i_this, 0x3000);
             if (bomb_view_check(i_this) != NULL) {
-                i_this->mAction = ACTION_BOMB;
-                i_this->mMode = 0;
+                i_this->action = ACTION_BOMB;
+                i_this->mode = 0;
             }
         }
 
-        if (i_this->mAction == ACTION_FIGHT_RUN && i_this->field_0x9c8 >= 0) {
+        if (i_this->action == ACTION_FIGHT_RUN && i_this->field_0x9c8 >= 0) {
             i_this->field_0x9c8 = 1;
         }
     }
 }
 
 static fopAc_ac_c* at_hit_check(e_rd_class* i_this) {
-    fopEn_enemy_c* unused_p = &i_this->actor;
-    fopAc_ac_c* actor_p;
-    if (i_this->mMode >= 10) {
+    fopEn_enemy_c* enemy = &i_this->enemy;
+    fopAc_ac_c* actor;
+    if (i_this->mode >= 10) {
         return NULL;
     }
 
-    if (i_this->field_0x1100.ChkAtHit()) {
-        cCcD_Obj* at_hit_obj_p = i_this->field_0x1100.GetAtHitObj();
-        actor_p = dCc_GetAc(at_hit_obj_p->GetAc());
-        return actor_p;
+    if (i_this->at_sph.ChkAtHit()) {
+        cCcD_Obj* at_hit_obj_p = i_this->at_sph.GetAtHitObj();
+        actor = dCc_GetAc(at_hit_obj_p->GetAc());
+        return actor;
     }
 
     return NULL;
 }
 
 static void e_rd_fight(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     cXyz sp3c, sp48;
-    int frame = i_this->mpModelMorf->getFrame();
+    int frame = i_this->anm_p->getFrame();
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0: {
             anm_init(i_this, BCK_RD_ATTACK01, TREG_F(14) + 6.0f, 0, 1.0f);
 
             if (l_HIO.field_0x38 == 0) {
-                i_this->field_0x990[0] = 25;
+                i_this->timer[0] = 25;
             } else if (l_HIO.field_0x38 == 1) {
                 // in practice, only goes in here
-                i_this->field_0x990[0] = 15;
+                i_this->timer[0] = 15;
             } else if (l_HIO.field_0x38 == 2) {
-                i_this->field_0x990[0] = 10;
+                i_this->timer[0] = 10;
             }
 
-            i_this->mMode = 1;
-            i_this->field_0x990[1] = 5;
-            i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_WAND_ATTACK, -1);
+            i_this->mode = 1;
+            i_this->timer[1] = 5;
+            i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_WAND_ATTACK, -1);
             break;
         }
 
         case 1: {
-            if (i_this->field_0x990[1] != 0) {
-                cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mPlayerAngleY, 4, 0x800);
+            if (i_this->timer[1] != 0) {
+                cLib_addCalcAngleS2(&enemy->current.angle.y, i_this->angleY, 4, 0x800);
             }
 
             if (frame == 30) {
-                i_this->mpModelMorf->setFrame(0.0f);
-            } else if (i_this->field_0x990[0] == 0) {
+                i_this->anm_p->setFrame(0.0f);
+            } else if (i_this->timer[0] == 0) {
                 anm_init(i_this, BCK_RD_ATTACK01, 2.0f, 0, l_HIO.swing_speed);
-                i_this->mpModelMorf->setFrame(30.0f);
-                i_this->mMode = 2;
+                i_this->anm_p->setFrame(30.0f);
+                i_this->mode = 2;
             }
             break;
         }
@@ -1466,12 +1466,12 @@ static void e_rd_fight(e_rd_class* i_this) {
                 i_this->field_0x9ab = 1;
             }
 
-            if (i_this->mpModelMorf->checkFrame(44.0f)) {
-                i_this->mSound.startCreatureSound(Z2SE_EN_RD_SWING_CLUB, 0, -1);
+            if (i_this->anm_p->checkFrame(44.0f)) {
+                i_this->sound.startCreatureSound(Z2SE_EN_RD_SWING_CLUB, 0, -1);
             }
 
-            if (i_this->mpModelMorf->checkFrame(50.0f)) {
-                i_this->mpModelMorf->setPlaySpeed(1.0f);
+            if (i_this->anm_p->checkFrame(50.0f)) {
+                i_this->anm_p->setPlaySpeed(1.0f);
             }
 
             int iVar1;
@@ -1485,14 +1485,14 @@ static void e_rd_fight(e_rd_class* i_this) {
             }
 
             if (frame >= iVar1) {
-                i_this->mMode = 3;
+                i_this->mode = 3;
                 if (l_HIO.field_0x38 == 0) {
-                    i_this->field_0x990[0] = 20;
+                    i_this->timer[0] = 20;
                 } else if (l_HIO.field_0x38 == 1) {
                     // in practice, only goes in here
-                    i_this->field_0x990[0] = 15;
+                    i_this->timer[0] = 15;
                 } else if (l_HIO.field_0x38 == 2) {
-                    i_this->field_0x990[0] = 10;
+                    i_this->timer[0] = 10;
                 }
 
                 anm_init(i_this, BCK_RD_KAMAE, 5.0f, 2, 1.0f);
@@ -1504,76 +1504,76 @@ static void e_rd_fight(e_rd_class* i_this) {
 
         case 3:
         case 10: {
-            if (i_this->field_0x990[0] == 0) {
-                i_this->mAction = ACTION_FIGHT_RUN;
-                i_this->mMode = 0;
+            if (i_this->timer[0] == 0) {
+                i_this->action = ACTION_FIGHT_RUN;
+                i_this->mode = 0;
             }
         }
     }
 
-    cLib_addCalc0(&a_this->speedF, 1.0f, 3.0f);
+    cLib_addCalc0(&enemy->speedF, 1.0f, 3.0f);
     if (i_this->field_0x9ab != 0) {
         fopAc_ac_c* actor = at_hit_check(i_this);
         if (actor != NULL && fopAcM_GetName(actor) == PROC_ALINK) {
             if (daPy_getPlayerActorClass()->checkPlayerGuard()) {
-                i_this->mpModelMorf->setPlaySpeed(-1.0f);
+                i_this->anm_p->setPlaySpeed(-1.0f);
                 dComIfGp_getVibration().StartShock(4, 31, cXyz(0.0f, 1.0f, 0.0f));
-                dKy_Sound_set(a_this->current.pos, 100, fopAcM_GetID(i_this), 5);
-                i_this->mMode = 10;
-                i_this->field_0x990[0] = 10;
+                dKy_Sound_set(enemy->current.pos, 100, fopAcM_GetID(i_this), 5);
+                i_this->mode = 10;
+                i_this->timer[0] = 10;
             }
         }
     }
 }
 
 static void e_rd_bow_run(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     cXyz unused_vec_0, unused_vec_1;
-    f32 fVar1 = 0.0f;
-    f32 fVar2;
+    f32 speed = 0.0f;
+    f32 dash_speed;
     if (desert_substage != 0) {
-        fVar2 = 24.0f;
+        dash_speed = 24.0f;
     } else {
-        fVar2 = l_HIO.dash_speed;
+        dash_speed = l_HIO.dash_speed;
     }
-    s16 playerAngleY = fopAcM_searchPlayerAngleY(a_this);
+    s16 target_angle = fopAcM_searchPlayerAngleY(enemy);
     s8 bVar1 = 0;
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case -20:
-            if ((int)i_this->mpModelMorf->getFrame() == 11) {
+            if ((int)i_this->anm_p->getFrame() == 11) {
                 i_this->field_0x5bd = 0;
             }
 
-            if (i_this->mpModelMorf->isStop()) {
-                i_this->mMode = 0;
+            if (i_this->anm_p->isStop()) {
+                i_this->mode = 0;
             }
             break;
 
         case -10:
             anm_init(i_this, BCK_RD_WAIT01, 5.0f, 2, 1.0f);
-            i_this->field_0x990[0] = cM_rndF(10.0f) + 15.0f;
-            i_this->mMode = 0xFFF7;
+            i_this->timer[0] = cM_rndF(10.0f) + 15.0f;
+            i_this->mode = 0xFFF7;
             break;
 
         case -9:
             i_this->field_0x9c8 = 1;
-            if (i_this->field_0x990[0] == 0) {
-                i_this->mMode = 0;
+            if (i_this->timer[0] == 0) {
+                i_this->mode = 0;
             }
             break;
 
         case 0:
             if (i_this->field_0x5bd != 0) {
                 anm_init(i_this, BCK_RD_ARMAMENT, 2.0f, 0, 1.0f);
-                i_this->mMode = 0xFFEC;
+                i_this->mode = 0xFFEC;
             } else {
                 anm_init(i_this, BCK_RD_RUN, 5.0f, 2, 1.0f);
-                i_this->field_0x990[0] = cM_rndF(50.0f) + 20.0f;
-                if (i_this->mPlayerDistance < l_HIO.attack_range - 100.0f) {
-                    i_this->mMode = 1;
-                } else if (i_this->mPlayerDistance > l_HIO.attack_range + 100.0f) {
-                    i_this->mMode = 2;
+                i_this->timer[0] = cM_rndF(50.0f) + 20.0f;
+                if (i_this->dis < l_HIO.attack_range - 100.0f) {
+                    i_this->mode = 1;
+                } else if (i_this->dis > l_HIO.attack_range + 100.0f) {
+                    i_this->mode = 2;
                 } else {
                     bVar1 = 1;
                 }
@@ -1581,67 +1581,67 @@ static void e_rd_bow_run(e_rd_class* i_this) {
             break;
 
         case 1:
-            fVar1 = fVar2;
-            ANGLE_ADD_2(playerAngleY, 0x8000);
-            if (i_this->mPlayerDistance > l_HIO.attack_range || i_this->field_0x990[0] == 0 || i_this->mObjAcch.ChkWallHit() || move_gake_check(i_this, 100.0f)) {
+            speed = dash_speed;
+            ANGLE_ADD_2(target_angle, 0x8000);
+            if (i_this->dis > l_HIO.attack_range || i_this->timer[0] == 0 || i_this->ObjAcch.ChkWallHit() || move_gake_check(i_this, 100.0f)) {
                 bVar1 = 1;
             }
 
-            i_this->field_0x990[2] = 20;
+            i_this->timer[2] = 20;
             break;
 
         case 2:
-            fVar1 = fVar2;
-            if (i_this->mPlayerDistance < l_HIO.attack_range) {
+            speed = dash_speed;
+            if (i_this->dis < l_HIO.attack_range) {
                 bVar1 = 1;
             }
             break;
     }
 
-    cLib_addCalc2(&a_this->speedF, fVar1, 1.0f, 5.0f);
-    if (i_this->mMode >= 0) {
-        cLib_addCalcAngleS2(&a_this->current.angle.y, playerAngleY, 4, 0x1000);
+    cLib_addCalc2(&enemy->speedF, speed, 1.0f, 5.0f);
+    if (i_this->mode >= 0) {
+        cLib_addCalcAngleS2(&enemy->current.angle.y, target_angle, 4, 0x1000);
     }
 
     if (i_this->field_0x5bd == 0 && bVar1) {
-        if (i_this->field_0x5b8 == 3) {
-            i_this->mAction = ACTION_BOW2;
+        if (i_this->arg2 == 3) {
+            i_this->action = ACTION_BOW2;
         } else {
-            i_this->mAction = ACTION_BOW;
+            i_this->action = ACTION_BOW;
         }
 
-        i_this->mMode = 0;
-        i_this->field_0x990[1] = cM_rndF(150.0f);
-    } else if (i_this->field_0x990[2] == 0 && !pl_check(i_this, i_this->field_0x980 + 50.0f, 0x7FFF)) {
-        i_this->mAction = ACTION_NORMAL;
-        i_this->mMode = 0;
-        i_this->field_0x990[0] = cM_rndF(50.0f) + 50.0f;
+        i_this->mode = 0;
+        i_this->timer[1] = cM_rndF(150.0f);
+    } else if (i_this->timer[2] == 0 && !pl_check(i_this, i_this->attack_range + 50.0f, 0x7FFF)) {
+        i_this->action = ACTION_NORMAL;
+        i_this->mode = 0;
+        i_this->timer[0] = cM_rndF(50.0f) + 50.0f;
         anm_init(i_this, BCK_RD_KYORO2, 10.0f, 2, 1.0f);
-    } else if ((i_this->field_0x970 & 15) == 0) {
+    } else if ((i_this->counter & 15) == 0) {
         wb_check(i_this, 0x3000);
         if (bomb_view_check(i_this) != NULL) {
-            i_this->mAction = ACTION_BOMB;
-            i_this->mMode = 0;
+            i_this->action = ACTION_BOMB;
+            i_this->mode = 0;
         }
     }
 
-    if (i_this->mAction != ACTION_BOW_RUN) {
+    if (i_this->action != ACTION_BOW_RUN) {
         i_this->field_0x9c8 = 0;
     }
 }
 
 static void e_rd_bow(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     cXyz unused_vec_0, unused_vec_1;
-    int frame = i_this->mpModelMorf->getFrame();
+    int frame = i_this->anm_p->getFrame();
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
             anm_init(i_this, BCK_RD_SHOOT_READY, 5.0f, 0, 1.0f);
-            i_this->mpMorfBowAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, 7),
+            i_this->bow_anm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, 7),
                                          0, 5.0f, 0.9f + TREG_F(3), 0.0f, -1.0f);
-            i_this->mMode = 1;
-            a_this->speedF = 0.0f;
+            i_this->mode = 1;
+            enemy->speedF = 0.0f;
             break;
 
         case 1:
@@ -1651,26 +1651,26 @@ static void e_rd_bow(e_rd_class* i_this) {
             }
 
             if (frame == 20) {
-                i_this->mSound.startCreatureSound(Z2SE_OBJ_ARROW_DRAW_NORMAL, 0, -1);
+                i_this->sound.startCreatureSound(Z2SE_OBJ_ARROW_DRAW_NORMAL, 0, -1);
             }
 
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 anm_init(i_this, BCK_RD_SHOOT_WAIT, 4.0f, 2, 1.0f);
-                i_this->field_0x990[0] = cM_rndF(10.0f) + 10.0f;
-                i_this->mMode = 2;
+                i_this->timer[0] = cM_rndF(10.0f) + 10.0f;
+                i_this->mode = 2;
             }
             break;
 
         case 2:
             i_this->field_0x9c8 = 4;
-            if (i_this->field_0x990[0] == 0) {
+            if (i_this->timer[0] == 0) {
                 if (i_this->field_0x9a4 == 0 && !dMsgObject_isTalkNowCheck()) {
                     anm_init(i_this, BCK_RD_SHOOT, 1.0f, 0, 1.0f);
-                    i_this->mpMorfBowAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, 10), 0, 1.0f, 1.0f, 0.0f, -1.0f);
-                    i_this->mMode = 3;
+                    i_this->bow_anm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, 10), 0, 1.0f, 1.0f, 0.0f, -1.0f);
+                    i_this->mode = 3;
                 } else {
-                    i_this->mAction = ACTION_BOW_RUN;
-                    i_this->mMode = 0;
+                    i_this->action = ACTION_BOW_RUN;
+                    i_this->mode = 0;
                 }
             }
 
@@ -1684,28 +1684,28 @@ static void e_rd_bow(e_rd_class* i_this) {
             }
 
             if (frame == 2 + XREG_S(7)) {
-                i_this->field_0x9a3 = 1;
+                i_this->arrow_flag = 1;
             }
 
-            if (i_this->mpModelMorf->isStop()) {
-                if (i_this->field_0x990[1] == 0 && (i_this->mPlayerDistance < l_HIO.attack_range - 200.0f || i_this->mPlayerDistance > l_HIO.attack_range)) {
-                    if (!(i_this->mPlayerDistance < l_HIO.attack_range - 200.0f) || !way_bg_check(i_this, -100.0f)) {
-                        i_this->mAction = ACTION_BOW_RUN;
+            if (i_this->anm_p->isStop()) {
+                if (i_this->timer[1] == 0 && (i_this->dis < l_HIO.attack_range - 200.0f || i_this->dis > l_HIO.attack_range)) {
+                    if (!(i_this->dis < l_HIO.attack_range - 200.0f) || !way_bg_check(i_this, -100.0f)) {
+                        i_this->action = ACTION_BOW_RUN;
                     }
 
-                    i_this->mMode = 0;
+                    i_this->mode = 0;
                 } else {
-                    i_this->mMode = 0;
+                    i_this->mode = 0;
                 }
             }
             break;
     }
 
-    cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mPlayerAngleY, 4, 0x1000);
+    cLib_addCalcAngleS2(&enemy->current.angle.y, i_this->angleY, 4, 0x1000);
 }
 
 static void* s_command3_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && i_actor != i_data && ((e_rd_class*)i_actor)->mAction == ACTION_COMMANDER) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && i_actor != i_data && ((e_rd_class*)i_actor)->action == ACTION_COMMANDER) {
         return i_actor;
     }
 
@@ -1713,43 +1713,43 @@ static void* s_command3_sub(void* i_actor, void* i_data) {
 }
 
 static s8 e_rd_bow2(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    fopAc_ac_c* actor = get_pla(a_this);
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    fopAc_ac_c* actor = get_pla(enemy);
     cXyz unused_vec_0, unused_vec_1;
-    int frame = i_this->mpModelMorf->getFrame();
-    s8 rv = 0;
+    int frame = i_this->anm_p->getFrame();
+    s8 rt = 0;
 
-    if (i_this->mMode <= 1) {
-        if (i_this->mPlayerDistance < i_this->field_0x980 && !other_bg_check(i_this, actor)) {
-            i_this->mMode = 2;
+    if (i_this->mode <= 1) {
+        if (i_this->dis < i_this->attack_range && !other_bg_check(i_this, actor)) {
+            i_this->mode = 2;
         }
 
-        rv = 1;
+        rt = 1;
     }
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
-            if (i_this->field_0x990[0] == 0) {
+            if (i_this->timer[0] == 0) {
                 anm_init(i_this, BCK_RD_KYORO2, 10.0f, 2, 1.0f);
-                i_this->mMode = 1;
-                i_this->field_0x990[0] = cM_rndF(40.0f) + 60.0f;
+                i_this->mode = 1;
+                i_this->timer[0] = cM_rndF(40.0f) + 60.0f;
             }
             break;
 
         case 1:
-            if (i_this->field_0x990[0] == 0) {
+            if (i_this->timer[0] == 0) {
                 anm_init(i_this, BCK_RD_WAIT01, 10.0f, 2, 1.0f);
-                i_this->field_0x990[0] = cM_rndF(100.0f) + 100.0f;
-                i_this->mMode = 0;
+                i_this->timer[0] = cM_rndF(100.0f) + 100.0f;
+                i_this->mode = 0;
             }
             break;
 
         case 2:
             anm_init(i_this, BCK_RD_SHOOT_READY, 5.0f, 0, 1.0f);
-            i_this->mpMorfBowAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, 7),
+            i_this->bow_anm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, 7),
                                          0, 5.0f, 0.9f + TREG_F(3), 0.0f, -1.0f);
-            i_this->mMode = 3;
-            a_this->speedF = 0.0f;
+            i_this->mode = 3;
+            enemy->speedF = 0.0f;
             break;
 
         case 3:
@@ -1759,28 +1759,28 @@ static s8 e_rd_bow2(e_rd_class* i_this) {
             }
 
             if (frame == 20) {
-                i_this->mSound.startCreatureSound(Z2SE_OBJ_ARROW_DRAW_NORMAL, 0, -1);
+                i_this->sound.startCreatureSound(Z2SE_OBJ_ARROW_DRAW_NORMAL, 0, -1);
             }
 
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 anm_init(i_this, BCK_RD_SHOOT_WAIT, 4.0f, 2, 1.0f);
-                i_this->field_0x990[0] = cM_rndF(10.0f);
-                i_this->mMode = 4;
+                i_this->timer[0] = cM_rndF(10.0f);
+                i_this->mode = 4;
             }
             break;
 
         case 4:
             i_this->field_0x9c8 = 4;
-            if (i_this->field_0x990[0] == 0) {
-                if (i_this->mPlayerDistance > i_this->field_0x980 || other_bg_check(i_this, actor)) {
-                    i_this->mMode = 0;
-                    return rv;
+            if (i_this->timer[0] == 0) {
+                if (i_this->dis > i_this->attack_range || other_bg_check(i_this, actor)) {
+                    i_this->mode = 0;
+                    return rt;
                 }
 
                 if (!dMsgObject_isTalkNowCheck() && i_this->field_0x9a4 == 0) {
                     anm_init(i_this, BCK_RD_SHOOT, 1.0f, 0, 1.0f);
-                    i_this->mpMorfBowAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, 10), 0, 1.0f, 1.0f, 0.0f, -1.0f);
-                    i_this->mMode = 5;
+                    i_this->bow_anm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, 10), 0, 1.0f, 1.0f, 0.0f, -1.0f);
+                    i_this->mode = 5;
                 }
             }
 
@@ -1794,40 +1794,40 @@ static s8 e_rd_bow2(e_rd_class* i_this) {
             }
 
             if (frame == 2 + XREG_S(7)) {
-                i_this->field_0x9a3 = 1;
+                i_this->arrow_flag = 1;
             }
 
-            if (i_this->mpModelMorf->isStop()) {
-                if (i_this->field_0x990[1] == 0 && fabsf(a_this->current.pos.y - actor->current.pos.y) < 300.0f && i_this->mPlayerDistance < l_HIO.attack_range - 200.0f) {
+            if (i_this->anm_p->isStop()) {
+                if (i_this->timer[1] == 0 && fabsf(enemy->current.pos.y - actor->current.pos.y) < 300.0f && i_this->dis < l_HIO.attack_range - 200.0f) {
                     if (!way_bg_check(i_this, -100.0f)) {
-                        i_this->mAction = ACTION_BOW_RUN;
-                        i_this->field_0x1295 = 0;
+                        i_this->action = ACTION_BOW_RUN;
+                        i_this->one_hit_kill = 0;
                     }
 
-                    i_this->mMode = 0;
+                    i_this->mode = 0;
                 } else {
-                    i_this->mMode = 0;
+                    i_this->mode = 0;
                 }
             }
             break;
     }
 
-    cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mPlayerAngleY, 4, 0x1000);
-    return rv;
+    cLib_addCalcAngleS2(&enemy->current.angle.y, i_this->angleY, 4, 0x1000);
+    return rt;
 }
 
 static void e_rd_bow_ikki(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     cXyz vec_0x24, vec_0x18;
-    int frame = i_this->mpModelMorf->getFrame();
+    int frame = i_this->anm_p->getFrame();
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
             anm_init(i_this, BCK_RD_SHOOT_READY, 5.0f, 0, 1.0f);
-            i_this->mpMorfBowAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, 7),
+            i_this->bow_anm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, 7),
                                          0, 5.0f, 0.9f + TREG_F(3), 0.0f, -1.0f);
-            i_this->mMode = 1;
-            a_this->speedF = 0.0f;
+            i_this->mode = 1;
+            enemy->speedF = 0.0f;
             break;
 
         case 1:
@@ -1836,20 +1836,20 @@ static void e_rd_bow_ikki(e_rd_class* i_this) {
             }
 
             if (frame == 20) {
-                i_this->mSound.startCreatureSound(Z2SE_OBJ_ARROW_DRAW_NORMAL, 0, -1);
+                i_this->sound.startCreatureSound(Z2SE_OBJ_ARROW_DRAW_NORMAL, 0, -1);
             }
 
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 anm_init(i_this, BCK_RD_SHOOT_WAIT, 4.0f, 2, 1.0f);
-                i_this->mMode = 2;
+                i_this->mode = 2;
             }
             break;
 
         case 2:
-            if (i_this->field_0x990[0] == 0 && i_this->field_0x9a4 == 0) {
+            if (i_this->timer[0] == 0 && i_this->field_0x9a4 == 0) {
                 anm_init(i_this, BCK_RD_SHOOT, 1.0f, 0, 1.0f);
-                i_this->mpMorfBowAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, 10), 0, 1.0f, 1.0f, 0.0f, -1.0f);
-                i_this->mMode = 3;
+                i_this->bow_anm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, 10), 0, 1.0f, 1.0f, 0.0f, -1.0f);
+                i_this->mode = 3;
             }
 
             i_this->field_0x9a2 = 1;
@@ -1861,311 +1861,311 @@ static void e_rd_bow_ikki(e_rd_class* i_this) {
             }
 
             if (frame == 2 + XREG_S(7)) {
-                i_this->field_0x9a3 = 1;
+                i_this->arrow_flag = 1;
             }
 
-            if (i_this->mpModelMorf->isStop()) {
-                i_this->mMode = 0;
-                i_this->field_0x990[0] = 10000;
+            if (i_this->anm_p->isStop()) {
+                i_this->mode = 0;
+                i_this->timer[0] = 10000;
             }
             break;
     }
 
     i_this->field_0x9c8 = 14;
-    i_this->field_0x9d4.set(34800.0f, 100.0f, -14900.0f);
-    vec_0x24 = i_this->field_0x9d4 - a_this->current.pos;
-    a_this->current.angle.y = cM_atan2s(vec_0x24.x, vec_0x24.z);
+    i_this->eye.set(34800.0f, 100.0f, -14900.0f);
+    vec_0x24 = i_this->eye - enemy->current.pos;
+    enemy->current.angle.y = cM_atan2s(vec_0x24.x, vec_0x24.z);
 }
 
 static void e_rd_avoid(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    int frame = i_this->mpModelMorf->getFrame();
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    int frame = i_this->anm_p->getFrame();
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
             anm_init(i_this, BCK_RD_AVOID, 1.0f, 0, 1.0f);
-            i_this->mMode = 1;
-            a_this->speedF = -30.0f + XREG_F(1);
-            a_this->speed.y = 20.0f + XREG_F(2);
-            i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_DODGE, -1);
+            i_this->mode = 1;
+            enemy->speedF = -30.0f + XREG_F(1);
+            enemy->speed.y = 20.0f + XREG_F(2);
+            i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_DODGE, -1);
             break;
 
         case 1:
             if (frame == 6) {
-                i_this->mpModelMorf->setPlaySpeed(0.0f);
-                i_this->mMode = 2;
+                i_this->anm_p->setPlaySpeed(0.0f);
+                i_this->mode = 2;
             }
             break;
 
         case 2:
-            if (i_this->mObjAcch.ChkGroundHit()) {
-                i_this->mpModelMorf->setPlaySpeed(1.0f);
-                i_this->mMode = 3;
+            if (i_this->ObjAcch.ChkGroundHit()) {
+                i_this->anm_p->setPlaySpeed(1.0f);
+                i_this->mode = 3;
             }
             break;
 
         case 3:
-            cLib_addCalc0(&a_this->speedF, 1.0f, 10.0f);
-            if (i_this->mpModelMorf->isStop()) {
-                i_this->mAction = ACTION_FIGHT_RUN;
-                i_this->mMode = 0;
-                i_this->field_0x990[0] = 30;
+            cLib_addCalc0(&enemy->speedF, 1.0f, 10.0f);
+            if (i_this->anm_p->isStop()) {
+                i_this->action = ACTION_FIGHT_RUN;
+                i_this->mode = 0;
+                i_this->timer[0] = 30;
             }
     }
 }
 
 static void e_rd_wb_search(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    cXyz sp54, sp60;
-    f32 fVar1 = 0.0f;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    cXyz mae, ato;
+    f32 speed = 0.0f;
     s8 bVar1 = 0;
-    fopAc_ac_c* bullbo_actor = fopAcM_SearchByID(i_this->mWbActorID);
-    e_wb_class* bullbo = (e_wb_class*)bullbo_actor;
-    if (bullbo_actor == NULL) {
+    fopAc_ac_c* actor = fopAcM_SearchByID(i_this->boar_id);
+    e_wb_class* boar = (e_wb_class*)actor;
+    if (actor == NULL) {
         bVar1 = 1;
     } else {
-        if (bullbo->mActionID == 22 || bullbo->mActionID == 21 || bullbo->mActionID == 23 || bullbo->mActionID == 24) {
+        if (boar->mActionID == 22 || boar->mActionID == 21 || boar->mActionID == 23 || boar->mActionID == 24) {
             bVar1 = 1;
-        } else if (i_this->mMode <= 3) {
+        } else if (i_this->mode <= 3) {
             for (int i = 0; i <= 2; i++) {
-                if (i_this->field_0xd58[i].ChkCoHit()) {
-                    cCcD_Obj* co_hit_obj_p = i_this->field_0xd58[i].GetCoHitObj();
-                    fopAc_ac_c* actor_p = dCc_GetAc(co_hit_obj_p->GetAc());
-                    if (actor_p != NULL && actor_p != bullbo_actor && fopAcM_GetName(actor_p) == PROC_E_WB) {
+                if (i_this->cc_sph[i].ChkCoHit()) {
+                    cCcD_Obj* co_hit_obj_p = i_this->cc_sph[i].GetCoHitObj();
+                    fopAc_ac_c* hit_actor = dCc_GetAc(co_hit_obj_p->GetAc());
+                    if (hit_actor != NULL && hit_actor != actor && fopAcM_GetName(hit_actor) == PROC_E_WB) {
                         bVar1 = 1;
                     }
                 }
             }
 
-            if (i_this->mObjAcch.ChkWallHit()) {
+            if (i_this->ObjAcch.ChkWallHit()) {
                 bVar1 = 1;
             }
         }
     }
 
     if (bVar1) {
-        i_this->mAction = ACTION_NORMAL;
-        i_this->mMode = 0;
+        i_this->action = ACTION_NORMAL;
+        i_this->mode = 0;
         ride_off(i_this);
     } else {
-        if (i_this->mMode >= 2 && bullbo->mActionID != 1) {
-            bullbo->mActionID = 1;
-            bullbo->mActionMode = 0;
+        if (i_this->mode >= 2 && boar->mActionID != 1) {
+            boar->mActionID = 1;
+            boar->mActionMode = 0;
         }
 
-        switch (i_this->mMode) {
+        switch (i_this->mode) {
             case 0:
                 anm_init(i_this, BCK_RD_WAIT01, 10.0f, 2, 1.0f);
-                i_this->mMode = 1;
-                i_this->field_0x990[0] = cM_rndF(15.0f) + 15.0f;
+                i_this->mode = 1;
+                i_this->timer[0] = cM_rndF(15.0f) + 15.0f;
                 // fallthrough
             case 1:
                 i_this->field_0x9c8 = 11;
-                if (i_this->field_0x990[0] == 0) {
-                    i_this->mMode = 2;
-                    if (bullbo_actor->speedF > 5.0f) {
+                if (i_this->timer[0] == 0) {
+                    i_this->mode = 2;
+                    if (actor->speedF > 5.0f) {
                         anm_init(i_this, BCK_RD_SIGN, 3.0f, 2, 1.0f);
-                        i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_CALLING, -1);
-                        i_this->field_0x990[0] = cM_rndF(20.0f) + 30.0f;
+                        i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_CALLING, -1);
+                        i_this->timer[0] = cM_rndF(20.0f) + 30.0f;
                     } else {
-                        i_this->field_0x990[0] = 10;
+                        i_this->timer[0] = 10;
                     }
                 }
                 break;
 
             case 2:
-                sp54 = bullbo_actor->current.pos - a_this->current.pos;
-                cLib_addCalcAngleS2(&a_this->current.angle.y, cM_atan2s(sp54.x, sp54.z), 4, 0x800);
+                mae = actor->current.pos - enemy->current.pos;
+                cLib_addCalcAngleS2(&enemy->current.angle.y, cM_atan2s(mae.x, mae.z), 4, 0x800);
                 i_this->field_0x9c8 = 11;
 
-                if (i_this->field_0x990[0] == 0 && bullbo_actor->speedF < 1.0f) {
+                if (i_this->timer[0] == 0 && actor->speedF < 1.0f) {
                     cXyz sp6c, sp78;
-                    cMtx_YrotS(*calc_mtx, bullbo_actor->shape_angle.y);
-                    sp54.x = 100.0f;
-                    sp54.y = 0.0f;
-                    if (i_this->field_0x9be == 1) {
-                        sp54.z = TREG_F(0) + 20.0f;
+                    cMtx_YrotS(*calc_mtx, actor->shape_angle.y);
+                    mae.x = 100.0f;
+                    mae.y = 0.0f;
+                    if (i_this->boar_stand == 1) {
+                        mae.z = TREG_F(0) + 20.0f;
                     } else {
-                        sp54.z = TREG_F(10) + -120.0f;
+                        mae.z = TREG_F(10) + -120.0f;
                     }
-                    MtxPosition(&sp54, &sp60);
+                    MtxPosition(&mae, &ato);
 
-                    sp6c = (bullbo_actor->current.pos + sp60) - a_this->current.pos;
-                    sp54.x = -100.0f;
-                    MtxPosition(&sp54, &sp60);
+                    sp6c = (actor->current.pos + ato) - enemy->current.pos;
+                    mae.x = -100.0f;
+                    MtxPosition(&mae, &ato);
 
-                    sp78 = (bullbo_actor->current.pos + sp60) - a_this->current.pos;
+                    sp78 = (actor->current.pos + ato) - enemy->current.pos;
                     if (sp6c.abs() < sp78.abs()) {
                         i_this->field_0x9bd = 0;
-                        sp60 = sp6c + a_this->current.pos;
+                        ato = sp6c + enemy->current.pos;
                     } else {
                         i_this->field_0x9bd = 1;
-                        sp60 = sp78 + a_this->current.pos;
+                        ato = sp78 + enemy->current.pos;
                     }
 
-                    sp54 = sp60 - a_this->current.pos;
-                    i_this->field_0x5cc = (s16) cM_atan2s(sp54.x, sp54.z);
-                    i_this->mMode = 3;
+                    mae = ato - enemy->current.pos;
+                    i_this->target_ya = (s16) cM_atan2s(mae.x, mae.z);
+                    i_this->mode = 3;
                     anm_init(i_this, BCK_RD_RUN, 5.0f, 2, 1.5f);
                 }
                 break;
 
             case 3:
-                fVar1 = l_HIO.dash_speed * 1.5f;
-                cMtx_YrotS(*calc_mtx, bullbo_actor->shape_angle.y);
+                speed = l_HIO.dash_speed * 1.5f;
+                cMtx_YrotS(*calc_mtx, actor->shape_angle.y);
 
                 if (i_this->field_0x9bd == 0) {
-                    sp54.x = 100.0f;
+                    mae.x = 100.0f;
                 } else {
-                    sp54.x = -100.0f;
+                    mae.x = -100.0f;
                 }
-                sp54.y = 0.0f;
-                if (i_this->field_0x9be == 1) {
-                    sp54.z = TREG_F(0) + 20.0f;
+                mae.y = 0.0f;
+                if (i_this->boar_stand == 1) {
+                    mae.z = TREG_F(0) + 20.0f;
                 } else {
-                    sp54.z = TREG_F(10) + -120.0f;
+                    mae.z = TREG_F(10) + -120.0f;
                 }
-                MtxPosition(&sp54, &sp60);
+                MtxPosition(&mae, &ato);
 
-                sp60 += bullbo_actor->current.pos;
-                sp54 = sp60 - a_this->current.pos;
-                i_this->field_0x5cc = (s16) cM_atan2s(sp54.x, sp54.z);
-                cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->field_0x5cc, 2, 0x400);
-                sp54 = sp60 - a_this->current.pos;
-                sp54.y = 0.0f;
+                ato += actor->current.pos;
+                mae = ato - enemy->current.pos;
+                i_this->target_ya = (s16) cM_atan2s(mae.x, mae.z);
+                cLib_addCalcAngleS2(&enemy->current.angle.y, i_this->target_ya, 2, 0x400);
+                mae = ato - enemy->current.pos;
+                mae.y = 0.0f;
 
-                if (sp54.abs() < TREG_F(19) + 230.0f) {
-                    i_this->mMode = 4;
-                    if (i_this->field_0x9be == 1) {
+                if (mae.abs() < TREG_F(19) + 230.0f) {
+                    i_this->mode = 4;
+                    if (i_this->boar_stand == 1) {
                         anm_init(i_this, BCK_RD_ARMAMENT, 2.0f, 0, 1.0f);
                     } else {
                         anm_init(i_this, BCK_RD_WAIT01, 5.0f, 2, 1.0f);
-                        i_this->field_0x990[0] = 10;
+                        i_this->timer[0] = 10;
                     }
                 }
                 break;
 
             case 4:
-                cMtx_YrotS(*calc_mtx, bullbo_actor->shape_angle.y);
-                sp54.x = 0.0f;
-                sp54.y = 0.0f;
-                if (i_this->field_0x9be == 1) {
-                    sp54.z = 20.0f;
+                cMtx_YrotS(*calc_mtx, actor->shape_angle.y);
+                mae.x = 0.0f;
+                mae.y = 0.0f;
+                if (i_this->boar_stand == 1) {
+                    mae.z = 20.0f;
                 } else {
-                    sp54.z = -20.0f;
+                    mae.z = -20.0f;
                 }
-                MtxPosition(&sp54, &i_this->field_0x5c0);
+                MtxPosition(&mae, &i_this->field_0x5c0);
 
-                i_this->field_0x5c0 += bullbo_actor->current.pos;
-                sp54 = i_this->field_0x5c0 - a_this->current.pos;
-                cLib_addCalcAngleS2(&a_this->current.angle.y, (s16)cM_atan2s(sp54.x, sp54.z), 2, 0x1000);
+                i_this->field_0x5c0 += actor->current.pos;
+                mae = i_this->field_0x5c0 - enemy->current.pos;
+                cLib_addCalcAngleS2(&enemy->current.angle.y, (s16)cM_atan2s(mae.x, mae.z), 2, 0x1000);
 
-                if (i_this->field_0x5bc != 0 && i_this->field_0x9be == 1) {
-                    if ((int)i_this->mpModelMorf->getFrame() == 11) {
+                if (i_this->weapon_type != 0 && i_this->boar_stand == 1) {
+                    if ((int)i_this->anm_p->getFrame() == 11) {
                         i_this->field_0x5bd = 1;
                     }
 
-                    if (i_this->mpModelMorf->isStop()) {
-                        i_this->mMode = 5;
+                    if (i_this->anm_p->isStop()) {
+                        i_this->mode = 5;
                         anm_init(i_this, BCK_RD_JUMP_A, 2.0f, 0, 1.0f);
-                        i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_JUMP_RIDING, -1);
+                        i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_JUMP_RIDING, -1);
                     }
-                } else if (i_this->field_0x990[0] == 0) {
-                    i_this->mMode = 5;
+                } else if (i_this->timer[0] == 0) {
+                    i_this->mode = 5;
                     anm_init(i_this, BCK_RD_JUMP_A, 2.0f, 0, 1.0f);
-                    i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_JUMP_RIDING, -1);
+                    i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_JUMP_RIDING, -1);
                 }
                 break;
 
             case 5:
-                if (i_this->mpModelMorf->isStop()) {
-                    i_this->mMode = 6;
+                if (i_this->anm_p->isStop()) {
+                    i_this->mode = 6;
                     anm_init(i_this, BCK_RD_JUMP_B, 10.0f, 0, 1.0f);
-                    i_this->field_0x9bc = 1;
+                    i_this->ride_mode = 1;
                     i_this->field_0x9c4 = 30.0f;
-                    i_this->field_0x990[3] = 20;
+                    i_this->timer[3] = 20;
                 }
                 break;
 
             case 6:
                 if (i_this->field_0x9c0 <= 0.0f) {
-                    i_this->mAction = ACTION_WB_RIDE;
-                    i_this->mMode = 0;
-                    bullbo->mActionID = 4;
-                    bullbo->mActionMode = 0;
+                    i_this->action = ACTION_WB_RIDE;
+                    i_this->mode = 0;
+                    boar->mActionID = 4;
+                    boar->mActionMode = 0;
                 }
         }
 
-        cLib_addCalc2(&a_this->speedF, fVar1, 1.0f, 3.0f);
-        i_this->field_0x9d4 = bullbo_actor->eyePos;
+        cLib_addCalc2(&enemy->speedF, speed, 1.0f, 3.0f);
+        i_this->eye = actor->eyePos;
     }
 }
 
 static void e_rd_wb_ride(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     cXyz sp1c, sp28;
-    fopAc_ac_c* wb_actor_p = fopAcM_SearchByID(i_this->mWbActorID);
+    fopAc_ac_c* actor = fopAcM_SearchByID(i_this->boar_id);
 
-    if (wb_actor_p == NULL) {
-        i_this->mAction = ACTION_NORMAL;
-        i_this->mMode = 0;
+    if (actor == NULL) {
+        i_this->action = ACTION_NORMAL;
+        i_this->mode = 0;
         ride_off(i_this);
         return;
     }
 
-    e_wb_class* bullbo = (e_wb_class*) wb_actor_p;
-    if ((bullbo->mStatusFlags & 3) == 0) {
+    e_wb_class* boar = (e_wb_class*) actor;
+    if ((boar->mStatusFlags & 3) == 0) {
         OS_REPORT("......BOSS DL !!!!\n");
-        if (bullbo->mActionID == 1) {
-            bullbo->mActionID = 0;
+        if (boar->mActionID == 1) {
+            boar->mActionID = 0;
         }
-        fopAcM_delete(a_this);
+        fopAcM_delete(enemy);
         return;
     }
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0: {
-            i_this->mMode = 1;
-            if (i_this->mBossMode == 0) {
+            i_this->mode = 1;
+            if (i_this->actor_set == 0) {
                 anm_init(i_this, BCK_RD_JUMP_C, 1.0f, 0, 1.0f);
             }
         }
         // fallthrough
         case 1: {
-            if (i_this->mpModelMorf->isStop() || i_this->mBossMode != 0) {
-                if (i_this->mBossMode != 0) {
-                    bullbo->mActionMode = 0;
-                    i_this->mMode = 0;
+            if (i_this->anm_p->isStop() || i_this->actor_set != 0) {
+                if (i_this->actor_set != 0) {
+                    boar->mActionMode = 0;
+                    i_this->mode = 0;
 
-                    if (i_this->mBossMode == 3) {
-                        bullbo->mActionID = 17;
+                    if (i_this->actor_set == 3) {
+                        boar->mActionID = 17;
                         // Hyrule Field
                         if (strcmp(dComIfGp_getStartStageName(), "F_SP121") == 0) {
-                            bullbo->mActionMode = -100;
-                            i_this->mAction = ACTION_IKKI2_START;
+                            boar->mActionMode = -100;
+                            i_this->action = ACTION_IKKI2_START;
                         } else {
-                            i_this->mAction = ACTION_WB_RUN;
+                            i_this->action = ACTION_WB_RUN;
                         }
-                    } else if (i_this->mBossMode == 2) {
-                        bullbo->mActionID = 15;
-                        i_this->mAction = ACTION_WB_RUN;
-                    } else if (i_this->mBossMode == 4) {
-                        bullbo->mActionID = 19;
-                        i_this->mAction = ACTION_LV9_END;
+                    } else if (i_this->actor_set == 2) {
+                        boar->mActionID = 15;
+                        i_this->action = ACTION_WB_RUN;
+                    } else if (i_this->actor_set == 4) {
+                        boar->mActionID = 19;
+                        i_this->action = ACTION_LV9_END;
                     } else if (cDmr_SkipInfo == 0) {
-                        i_this->mAction = ACTION_KIBA_START;
-                        bullbo->mActionID = 30;
+                        i_this->action = ACTION_KIBA_START;
+                        boar->mActionID = 30;
                     } else {
-                        bullbo->mActionID = 8;
-                        i_this->mAction = ACTION_WB_RUN;
-                        bullbo->field_0x79c = 10;
+                        boar->mActionID = 8;
+                        i_this->action = ACTION_WB_RUN;
+                        boar->field_0x79c = 10;
                         Z2GetAudioMgr()->subBgmStart(Z2BGM_HORSE_BATTLE);
                     }
                 } else {
-                    bullbo->mActionID = 6;
-                    bullbo->mActionMode = 0;
-                    i_this->mAction = ACTION_WB_RUN;
-                    i_this->mMode = 0;
+                    boar->mActionID = 6;
+                    boar->mActionMode = 0;
+                    i_this->action = ACTION_WB_RUN;
+                    i_this->mode = 0;
                 }
             }
         }
@@ -2173,50 +2173,50 @@ static void e_rd_wb_ride(e_rd_class* i_this) {
 }
 
 static void e_rd_wb_run(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     cXyz sp3c, sp48;
-    fopAc_ac_c* base_bulb_p = (fopAc_ac_c*) fopAcM_SearchByID(i_this->mWbActorID);
+    fopAc_ac_c* actor = (fopAc_ac_c*) fopAcM_SearchByID(i_this->boar_id);
 
-    if (base_bulb_p == NULL) {
-        fopAcM_delete(a_this);
+    if (actor == NULL) {
+        fopAcM_delete(enemy);
         return;
     }
 
-    e_wb_class* bullbo = (e_wb_class*) base_bulb_p;
-    if (bullbo->field_0x17e1) {
-        fopAcM_setStageLayer(a_this);
+    e_wb_class* boar = (e_wb_class*) actor;
+    if (boar->field_0x17e1) {
+        fopAcM_setStageLayer(enemy);
     }
 
-    if ((bullbo->mStatusFlags & 3) == 0) {
-        fopAcM_delete(a_this);
+    if ((boar->mStatusFlags & 3) == 0) {
+        fopAcM_delete(enemy);
         return;
     }
 
     if (daPy_getPlayerActorClass()->checkHorseRide()) {
         dAttention_c* attention = dComIfGp_getAttention();
-        if (attention->Lockon() && a_this == attention->LockonTarget(0)) {
-            bullbo->field_0x6c0 = 1;
+        if (attention->Lockon() && enemy == attention->LockonTarget(0)) {
+            boar->field_0x6c0 = 1;
         }
     }
 
-    if ((bullbo->mStatusFlags & 1) == 0 && bullbo->mActionID == ACTION_BOW2 && i_this->mMode != 40) {
+    if ((boar->mStatusFlags & 1) == 0 && boar->mActionID == ACTION_BOW2 && i_this->mode != 40) {
         anm_init(i_this, BCK_RD_RRUN02_BACK, 5.0f, 2, 1.0f);
-        i_this->mMode = 40;
+        i_this->mode = 40;
 
-        if (i_this->mpMorfBowAnm != NULL) {
-            i_this->mpMorfBowAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, BCK_RD_BOW_SHOOT),
+        if (i_this->bow_anm != NULL) {
+            i_this->bow_anm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, BCK_RD_BOW_SHOOT),
                                          0, 1.0f, 1.0f, 0.0f, -1.0f);
         }
     }
 
-    f32 playerDistance = fopAcM_searchPlayerDistanceXZ(a_this);
-    int frame = i_this->mpModelMorf->getFrame();
+    f32 player_dist = fopAcM_searchPlayerDistanceXZ(enemy);
+    int frame = i_this->anm_p->getFrame();
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
-            if ((bullbo->mStatusFlags & 4) != 0) {
-                if (i_this->field_0x9be == 1) {
-                    if (bullbo->field_0x6d0 < 0) {
+            if ((boar->mStatusFlags & 4) != 0) {
+                if (i_this->boar_stand == 1) {
+                    if (boar->field_0x6d0 < 0) {
                         anm_init(i_this, BCK_RD_RSTEP_L, 10.0f, 2, 1.0f);
                     } else {
                         anm_init(i_this, BCK_RD_RSTEP_R, 10.0f, 2, 1.0f);
@@ -2225,24 +2225,24 @@ static void e_rd_wb_run(e_rd_class* i_this) {
                     anm_init(i_this, BCK_RD_RSTEP_BACK, 10.0f, 2, 1.0f);
                 }
             } else {
-                if ((bullbo->mStatusFlags & 8) != 0) {
-                    if (i_this->field_0x9be == 1) {
+                if ((boar->mStatusFlags & 8) != 0) {
+                    if (i_this->boar_stand == 1) {
                         anm_init(i_this, BCK_RD_RDAMAGE, 3.0f, 0, 1.0f);
                     } else {
                         anm_init(i_this, BCK_RD_RDAMAGE_BACK, 3.0f, 0, 1.0f);
                     }
 
-                    i_this->field_0x990[1] = cM_rndF(50.0f) + 50.0f;
+                    i_this->timer[1] = cM_rndF(50.0f) + 50.0f;
                 } else {
-                    if ((bullbo->mStatusFlags & 16) != 0) {
-                        if (i_this->field_0x9be == 1) {
+                    if ((boar->mStatusFlags & 16) != 0) {
+                        if (i_this->boar_stand == 1) {
                             anm_init(i_this, BCK_RD_RRUN, 5.0f, 2, 1.0f);
                         } else {
                             anm_init(i_this, BCK_RD_RRUN_BACK, 5.0f, 2, 1.0f);
                         }
                     } else {
-                        if ((bullbo->mStatusFlags & 32) != 0) {
-                            if (i_this->field_0x9be == 1) {
+                        if ((boar->mStatusFlags & 32) != 0) {
+                            if (i_this->boar_stand == 1) {
                                 anm_init(i_this, BCK_RD_RWAIT, 5.0f, 2, 1.0f);
                             } else {
                                 anm_init(i_this, BCK_RD_RWAIT_BACK, 5.0f, 2, 1.0f);
@@ -2252,31 +2252,31 @@ static void e_rd_wb_run(e_rd_class* i_this) {
                 }
             }
 
-            i_this->mpModelMorf->setPlaySpeed(bullbo->mpModelMorf->getPlaySpeed());
+            i_this->anm_p->setPlaySpeed(boar->mpModelMorf->getPlaySpeed());
 
-            if (i_this->field_0x9be == 1) {
+            if (i_this->boar_stand == 1) {
                 i_this->field_0x9c8 = 2;
             } else {
                 i_this->field_0x9c8 = 1;
-                if (i_this->field_0x5bc == 1 && base_bulb_p->speedF > 10.0f) {
-                    if (playerDistance < TREG_F(11) + 850.0f && playerDistance < TREG_F(11) + 750.0f
-                        && i_this->field_0x990[2] == 0) {
-                        s16 sVar1 = a_this->shape_angle.y - i_this->mPlayerAngleY;
-                        if (sVar1 > 0x1000 && sVar1 < 0x4000) {
-                            i_this->mMode = 10;
-                        } else if (sVar1 < -0x1000 && sVar1 > -0x4000) {
-                            i_this->mMode = 20;
+                if (i_this->weapon_type == 1 && actor->speedF > 10.0f) {
+                    if (player_dist < TREG_F(11) + 850.0f && player_dist < TREG_F(11) + 750.0f
+                        && i_this->timer[2] == 0) {
+                        s16 range = enemy->shape_angle.y - i_this->angleY;
+                        if (range > 0x1000 && range < 0x4000) {
+                            i_this->mode = 10;
+                        } else if (range < -0x1000 && range > -0x4000) {
+                            i_this->mode = 20;
                         }
 
                         if (daPy_getPlayerActorClass()->checkHorseRide() && dComIfGp_getHorseActor()->speedF >= 20.0f) {
-                            i_this->field_0x990[2] = cM_rndF(20.0f) + 20.0f;
+                            i_this->timer[2] = cM_rndF(20.0f) + 20.0f;
                         }
                     }
                 } else {
-                    if (i_this->field_0x990[1] == 0 && i_this->field_0x5bc >= 2) {
+                    if (i_this->timer[1] == 0 && i_this->weapon_type >= 2) {
                         anm_init(i_this, BCK_RD_RSHOOT_READY, 5.0f, 0, 1.0f);
-                        i_this->mpMorfBowAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, BCK_RD_BOW_RREADY), 0, 5.0f, 1.0f, 0.0f, -1.0f);
-                        i_this->mMode = 30;
+                        i_this->bow_anm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, BCK_RD_BOW_RREADY), 0, 5.0f, 1.0f, 0.0f, -1.0f);
+                        i_this->mode = 30;
                     }
                 }
             }
@@ -2284,18 +2284,18 @@ static void e_rd_wb_run(e_rd_class* i_this) {
 
         case 10:
             anm_init(i_this, BCK_RD_RATTACK01_WAIT, 10.0f, 2, 1.0f);
-            i_this->mMode = 11;
+            i_this->mode = 11;
             // fallthrough
         case 11:
-            if (playerDistance > 800.0f + TREG_F(10)) {
-                i_this->mMode = 0;
-                if (i_this->field_0x9be == 1) {
+            if (player_dist > 800.0f + TREG_F(10)) {
+                i_this->mode = 0;
+                if (i_this->boar_stand == 1) {
                     anm_init(i_this, BCK_RD_RRUN, 10.0f, 2, 1.0f);
                 } else {
                     anm_init(i_this, BCK_RD_RRUN_BACK, 10.0f, 2, 1.0f);
                 }
-            } else if (playerDistance < 550.0f && i_this->field_0x990[2] == 0) {
-                i_this->mMode = 25;
+            } else if (player_dist < 550.0f && i_this->timer[2] == 0) {
+                i_this->mode = 25;
                 if (daPy_getPlayerActorClass()->checkHorseRide()) {
                     anm_init(i_this, BCK_RD_RATTACK03, 5.0f, 0, 1.0f);
                 } else {
@@ -2306,19 +2306,19 @@ static void e_rd_wb_run(e_rd_class* i_this) {
 
         case 20:
             anm_init(i_this, BCK_RD_RATTACK02_WAIT, 10.0f, 2, 1.0f);
-            i_this->mMode = 21;
+            i_this->mode = 21;
             // fallthrough
         case 21:
             i_this->field_0x9ab = 1;
-            if (playerDistance > 800.0f + TREG_F(10)) {
-                i_this->mMode = 0;
-                if (i_this->field_0x9be == 1) {
+            if (player_dist > 800.0f + TREG_F(10)) {
+                i_this->mode = 0;
+                if (i_this->boar_stand == 1) {
                     anm_init(i_this, BCK_RD_RRUN, 10.0f, 2, 1.0f);
                 } else {
                     anm_init(i_this, BCK_RD_RRUN_BACK, 10.0f, 2, 1.0f);
                 }
-            } else if (playerDistance < 550.0f && i_this->field_0x990[2] == 0) {
-                i_this->mMode = 25;
+            } else if (player_dist < 550.0f && i_this->timer[2] == 0) {
+                i_this->mode = 25;
                 if (daPy_getPlayerActorClass()->checkHorseRide()) {
                     anm_init(i_this, BCK_RD_RATTACK04, 5.0f, 0, 1.0f);
                 } else {
@@ -2332,30 +2332,30 @@ static void e_rd_wb_run(e_rd_class* i_this) {
                 i_this->field_0x9ab = 1;
             }
 
-            if (i_this->mpModelMorf->checkFrame(15.0f)) {
-                i_this->mSound.startCreatureSound(Z2SE_EN_RD_SWING_CLUB, 0, -1);
+            if (i_this->anm_p->checkFrame(15.0f)) {
+                i_this->sound.startCreatureSound(Z2SE_EN_RD_SWING_CLUB, 0, -1);
             }
 
-            if (i_this->mpModelMorf->isStop()) {
-                if (i_this->field_0x9be == 1) {
+            if (i_this->anm_p->isStop()) {
+                if (i_this->boar_stand == 1) {
                     anm_init(i_this, BCK_RD_RRUN, 10.0f, 2, 1.0f);
                 } else {
                     anm_init(i_this, BCK_RD_RRUN_BACK, 10.0f, 2, 1.0f);
-                    i_this->field_0x990[2] = cM_rndF(20.0f) + 20.0f;
+                    i_this->timer[2] = cM_rndF(20.0f) + 20.0f;
                 }
 
-                i_this->mMode = 0;
+                i_this->mode = 0;
             }
             break;
 
         case 30:
             i_this->field_0x9c8 = 3;
             if (frame == 14) {
-                i_this->mSound.startCreatureSound(Z2SE_OBJ_ARROW_DRAW_NORMAL, 0, -1);
+                i_this->sound.startCreatureSound(Z2SE_OBJ_ARROW_DRAW_NORMAL, 0, -1);
             }
 
-            if (i_this->mpModelMorf->isStop()) {
-                i_this->mMode = 31;
+            if (i_this->anm_p->isStop()) {
+                i_this->mode = 31;
                 anm_init(i_this, BCK_RD_RSHOOT_WAIT, 4.0f, 2, 1.0f);
             }
 
@@ -2364,12 +2364,12 @@ static void e_rd_wb_run(e_rd_class* i_this) {
 
         case 31:
             i_this->field_0x9c8 = 3;
-            if (i_this->field_0x990[1] == 0 && i_this->mPlayerDistance < l_HIO.mounted_launch_distance
+            if (i_this->timer[1] == 0 && i_this->dis < l_HIO.mounted_launch_distance
                 && i_this->field_0x9a4 == 0 && !dComIfGp_event_runCheck()) {
                 anm_init(i_this, BCK_RD_RSHOOT, 1.0f, 0, 1.0f);
-                i_this->mpMorfBowAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, 10),
+                i_this->bow_anm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, 10),
                                                 0, 1.0f, 1.0f, 0.0f, -1.0f);
-                i_this->mMode = 32;
+                i_this->mode = 32;
             }
 
             i_this->field_0x9a2 = 1;
@@ -2381,55 +2381,55 @@ static void e_rd_wb_run(e_rd_class* i_this) {
             }
 
             if (frame == 2 + XREG_S(7)) {
-                i_this->field_0x9a3 = 1;
+                i_this->arrow_flag = 1;
             }
 
             i_this->field_0x9c8 = 3;
 
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 anm_init(i_this, BCK_RD_RSHOOT_READY, 5.0f, 0, 1.0f);
-                i_this->mpMorfBowAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, 8),
+                i_this->bow_anm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, 8),
                                                 0, 5.0f, 1.0f, 0.0f, -1.0f);
-                i_this->mMode = 30;
+                i_this->mode = 30;
 
-                if (i_this->field_0x9bc == 2 && i_this->field_0x5bb != 0) {
-                    i_this->field_0x990[1] = cM_rndF(30.0f) + 20.0f;
+                if (i_this->ride_mode == 2 && i_this->field_0x5bb != 0) {
+                    i_this->timer[1] = cM_rndF(30.0f) + 20.0f;
                 } else {
-                    i_this->field_0x990[1] = cM_rndF(50.0f) + 30.0f;
+                    i_this->timer[1] = cM_rndF(50.0f) + 30.0f;
                 }
             }
             break;
 
         case 40:
-            if (bullbo->mActionID != 7) {
-                i_this->mMode = 0;
+            if (boar->mActionID != 7) {
+                i_this->mode = 0;
                 anm_init(i_this, BCK_RD_RWAIT_BACK, 5.0f, 2, 1.0f);
             }
             break;
 
         case 50:
-            if (i_this->field_0x990[3] == 0) {
-                i_this->mMode = 0;
-                if (i_this->field_0x9be == 1) {
+            if (i_this->timer[3] == 0) {
+                i_this->mode = 0;
+                if (i_this->boar_stand == 1) {
                     anm_init(i_this, BCK_RD_RRUN, 10.0f, 2, 1.0f);
                 } else {
                     anm_init(i_this, BCK_RD_RRUN_BACK, 10.0f, 2, 1.0f);
-                    i_this->field_0x990[2] = cM_rndF(50.0f) + 50.0f;
+                    i_this->timer[2] = cM_rndF(50.0f) + 50.0f;
                 }
             }
     }
 
-    if (i_this->field_0x9be == 2 && i_this->mAnmID == BCK_RD_RRUN_BACK) {
-        i_this->mSound.startCreatureVoiceLevel(Z2SE_EN_RD_V_RIDING_YELL, -1);
+    if (i_this->boar_stand == 2 && i_this->anm == BCK_RD_RRUN_BACK) {
+        i_this->sound.startCreatureVoiceLevel(Z2SE_EN_RD_V_RIDING_YELL, -1);
     }
 }
 
 static void* s_wbrun_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_WB) {
-        e_wb_class* bullbo = (e_wb_class*)i_actor;
-        fopAc_ac_c* actor_p = (fopAc_ac_c*)i_data;
-        if (bullbo->field_0x79d == 0) {
-            cXyz sp24(bullbo->mEnemy.current.pos - actor_p->current.pos);
+        e_wb_class* boar = (e_wb_class*)i_actor;
+        fopAc_ac_c* actor = (fopAc_ac_c*)i_data;
+        if (boar->field_0x79d == 0) {
+            cXyz sp24(boar->mEnemy.current.pos - actor->current.pos);
             if (sp24.abs() > KREG_F(11) + 7000.0f) {
                 return i_actor;
             }
@@ -2440,276 +2440,276 @@ static void* s_wbrun_sub(void* i_actor, void* i_data) {
 }
 
 static void e_rd_wb_run_B(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     cXyz unused_vec_0, unused_vec_1;
-    fopAc_ac_c* base_bulb_p = fopAcM_SearchByID(i_this->mWbActorID);
+    fopAc_ac_c* actor = fopAcM_SearchByID(i_this->boar_id);
     dAttention_c* attention;
 
-    if (base_bulb_p != NULL) {
-        if (i_this->mBossMode == 2 || i_this->mBossMode == 3) {
-            fopAcM_OffStatus(a_this, 0);
-            a_this->attention_info.flags = 0;
+    if (actor != NULL) {
+        if (i_this->actor_set == 2 || i_this->actor_set == 3) {
+            fopAcM_OffStatus(enemy, 0);
+            enemy->attention_info.flags = 0;
         }
 
-        e_wb_class* bullbo = (e_wb_class*) base_bulb_p;
+        e_wb_class* boar = (e_wb_class*) actor;
         if (daPy_getPlayerActorClass()->checkHorseRide()) {
             attention = dComIfGp_getAttention();
-            if (attention->Lockon() && a_this == attention->LockonTarget(0)) {
-                bullbo->field_0x6c0 = 1;
+            if (attention->Lockon() && enemy == attention->LockonTarget(0)) {
+                boar->field_0x6c0 = 1;
             }
         }
 
-        switch (i_this->mMode) {
+        switch (i_this->mode) {
             case 0: {
-                if ((bullbo->mStatusFlags & 0x400) != 0) {
+                if ((boar->mStatusFlags & 0x400) != 0) {
                     anm_init(i_this, e_rdb_class::BCK_RB_RSTARTLOOP, 10.0f, 2, 1.0f);
-                } else if ((bullbo->mStatusFlags & 0x800) != 0) {
+                } else if ((boar->mStatusFlags & 0x800) != 0) {
                     anm_init(i_this, e_rdb_class::BCK_RB_RSTART, 10.0f, 2, 1.0f);
                 }
 
-                i_this->mpModelMorf->setPlaySpeed(bullbo->mpModelMorf->getPlaySpeed());
+                i_this->anm_p->setPlaySpeed(boar->mpModelMorf->getPlaySpeed());
                 break;
             }
         }
 
-        if (i_this->mAnmID == e_rdb_class::BCK_RB_RGUARD_F || i_this->mAnmID == e_rdb_class::BCK_RB_RDAMAGEB 
-            || i_this->mAnmID == e_rdb_class::BCK_RB_RGUARD_L || i_this->mAnmID == e_rdb_class::BCK_RB_RGUARD_R) {
+        if (i_this->anm == e_rdb_class::BCK_RB_RGUARD_F || i_this->anm == e_rdb_class::BCK_RB_RDAMAGEB 
+            || i_this->anm == e_rdb_class::BCK_RB_RGUARD_L || i_this->anm == e_rdb_class::BCK_RB_RGUARD_R) {
             i_this->field_0x9c8 = 0;
 
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 anm_init(i_this, e_rdb_class::BCK_RB_RRUN, 5.0f, 2, 1.0f);
             }
-        } else if (i_this->mAnmID == e_rdb_class::BCK_RB_RPLAY_RUNR || i_this->mAnmID == e_rdb_class::BCK_RB_RPLAY_RUNL 
-                   || i_this->mAnmID == e_rdb_class::BCK_RB_RPLAY_STOP) {
-            if ((int)i_this->mpModelMorf->getFrame() == 21) {
-                i_this->mSound.startCreatureVoice(Z2SE_EN_RDB_HORN, -1);
+        } else if (i_this->anm == e_rdb_class::BCK_RB_RPLAY_RUNR || i_this->anm == e_rdb_class::BCK_RB_RPLAY_RUNL 
+                   || i_this->anm == e_rdb_class::BCK_RB_RPLAY_STOP) {
+            if ((int)i_this->anm_p->getFrame() == 21) {
+                i_this->sound.startCreatureVoice(Z2SE_EN_RDB_HORN, -1);
             }
-        } else if (i_this->mAnmID == e_rdb_class::BCK_RB_RRUN) {
-            if (i_this->field_0x990[1] == 0) {
-                i_this->field_0x990[1] = cM_rndF(100.0f) + 70.0f;
-                i_this->field_0x990[2] = cM_rndF(30.0f) + 30.0f;
+        } else if (i_this->anm == e_rdb_class::BCK_RB_RRUN) {
+            if (i_this->timer[1] == 0) {
+                i_this->timer[1] = cM_rndF(100.0f) + 70.0f;
+                i_this->timer[2] = cM_rndF(30.0f) + 30.0f;
             }
 
-            if (i_this->field_0x990[2] != 0) {
+            if (i_this->timer[2] != 0) {
                 i_this->field_0x9c8 = 1;
             }
 
-            if (a_this->speedF < 5.0f) {
+            if (enemy->speedF < 5.0f) {
                 anm_init(i_this, e_rdb_class::BCK_RB_RWAIT, 5.0f, 2, 1.0f);
             }
         } else {
             i_this->field_0x9c8 = 1;
-            if (i_this->field_0x990[3] < 200) {
-                i_this->field_0x990[3] = cM_rndF(100.0f) + 200.0f;
+            if (i_this->timer[3] < 200) {
+                i_this->timer[3] = cM_rndF(100.0f) + 200.0f;
             }
 
-            if (a_this->speedF > 10.0f) {
+            if (enemy->speedF > 10.0f) {
                 anm_init(i_this, e_rdb_class::BCK_RB_RRUN, 5.0f, 2, 1.0f);
             }
         }
 
         
-        if (fpcM_Search(s_wbrun_sub, i_this) != NULL && i_this->field_0x990[3] == 0) {
-            i_this->field_0x6c2 = 1;
-            i_this->field_0x990[3] = cM_rndF(100.0f) + 200.0f;
+        if (fpcM_Search(s_wbrun_sub, i_this) != NULL && i_this->timer[3] == 0) {
+            i_this->run_flag = 1;
+            i_this->timer[3] = cM_rndF(100.0f) + 200.0f;
         }
 
         // check if we need to jump a fence
-        if ((bullbo->mStatusFlags & 0x100) != 0) {
-            i_this->mAction = ACTION_WB_BJUMP;
-            i_this->mMode = 0;
+        if ((boar->mStatusFlags & 0x100) != 0) {
+            i_this->action = ACTION_WB_BJUMP;
+            i_this->mode = 0;
         }
     }
 }
 
 static void e_rd_wb_bjump(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     cXyz unused_vec_0, unused_vec_1;
-    fopAc_ac_c* base_bulb_p = fopAcM_SearchByID(i_this->mWbActorID);
+    fopAc_ac_c* actor = fopAcM_SearchByID(i_this->boar_id);
     dAttention_c* attention;
 
-    if (base_bulb_p != NULL) {
-        e_wb_class* bullbo = (e_wb_class*) base_bulb_p;
+    if (actor != NULL) {
+        e_wb_class* boar = (e_wb_class*) actor;
         if (daPy_getPlayerActorClass()->checkHorseRide()) {
             attention = dComIfGp_getAttention();
-            if (attention->Lockon() && a_this == attention->LockonTarget(0)) {
-                bullbo->field_0x6c0 = 1;
+            if (attention->Lockon() && enemy == attention->LockonTarget(0)) {
+                boar->field_0x6c0 = 1;
             }
         }
 
-        switch (i_this->mMode) {
+        switch (i_this->mode) {
             case 0:
                 i_this->field_0x680 = 0;
                 anm_init(i_this, BCK_RD_RSTEP_RBACK, 3.0f, 0, 1.0f);
-                i_this->mMode = 1;
-                i_this->mSound.startCreatureVoice(Z2SE_EN_RDB_V_HOICK, -1);
+                i_this->mode = 1;
+                i_this->sound.startCreatureVoice(Z2SE_EN_RDB_V_HOICK, -1);
                 break;
 
             case 1:
-                if (i_this->mpModelMorf->isStop()) {
-                    i_this->mMode = 2;
+                if (i_this->anm_p->isStop()) {
+                    i_this->mode = 2;
                     anm_init(i_this, BCK_RD_RUN, 2.0f, 0, 1.0f);
                 }
                 break;
 
             case 2:
-                if ((bullbo->mStatusFlags & 0x200) != 0) {
+                if ((boar->mStatusFlags & 0x200) != 0) {
                     anm_init(i_this, BCK_RD_RUN02, 2.0f, 0, 1.0f);
-                    i_this->mMode = 3;
+                    i_this->mode = 3;
                 }
                 break;
 
             case 3:
-                if (i_this->mpModelMorf->isStop()) {
-                    i_this->mAction = ACTION_WB_RUN;
-                    i_this->mMode = 0;
+                if (i_this->anm_p->isStop()) {
+                    i_this->action = ACTION_WB_RUN;
+                    i_this->mode = 0;
                 }
         }
     }
 }
 
 static void e_rd_bomb_action(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    cXyz sp48, sp54;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    cXyz mae, ato;
     dBomb_c* bomb = bomb_check(i_this);
     if (bomb == NULL) {
         int _; // needed to force dbg stack into r31
-        i_this->mAction = ACTION_FIGHT_RUN;
-        i_this->mMode = 0;
+        i_this->action = ACTION_FIGHT_RUN;
+        i_this->mode = 0;
         return;
     }
 
-    sp48.x = bomb->current.pos.x - a_this->current.pos.x;
-    sp48.z = bomb->current.pos.z - a_this->current.pos.z;
-    s16 sVar1 = cM_atan2s(sp48.x, sp48.z);
-    f32 fVar1 = 0.0f;
-    s16 sVar2;
+    mae.x = bomb->current.pos.x - enemy->current.pos.x;
+    mae.z = bomb->current.pos.z - enemy->current.pos.z;
+    s16 angle = cM_atan2s(mae.x, mae.z);
+    f32 speed = 0.0f;
+    s16 range;
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
-            i_this->mMode = 1;
+            i_this->mode = 1;
             anm_init(i_this, BCK_RD_WAIT01, 5.0f, 2, 1.0f);
-            i_this->field_0x990[1] = cM_rndF(10.0f) + 10.0f;
+            i_this->timer[1] = cM_rndF(10.0f) + 10.0f;
             // fallthrough
         case 1:
-            if (i_this->field_0x990[1] == 0 && bomb->speedF < 0.1f) {
-                i_this->mMode = 2;
+            if (i_this->timer[1] == 0 && bomb->speedF < 0.1f) {
+                i_this->mode = 2;
                 anm_init(i_this, BCK_RD_RUN, 5.0f, 2, cM_rndFX(0.05f) + 1.0f);
             }
             break;
 
         case 2:
             if (bomb->speedF < 0.1f && !bomb->checkStateCarry()) {
-                if (JMAFastSqrt(sp48.x * sp48.x + sp48.z * sp48.z) < 250.0f) {
-                    sVar2 = i_this->mPlayerAngleY - a_this->shape_angle.y;
-                    if (sVar2 < 0x4000 && sVar2 > -0x4000) {
-                        i_this->mMode = 5;
+                if (JMAFastSqrt(mae.x * mae.x + mae.z * mae.z) < 250.0f) {
+                    range = i_this->angleY - enemy->shape_angle.y;
+                    if (range < 0x4000 && range > -0x4000) {
+                        i_this->mode = 5;
                         break;
                     }
                 }
             }
 
-            ANGLE_ADD_2(sVar1, 0x8000);
-            fVar1 = l_HIO.dash_speed;
-            if (JMAFastSqrt(sp48.x * sp48.x + sp48.z * sp48.z) > 600.0f) {
-                i_this->mMode = 3;
+            ANGLE_ADD_2(angle, 0x8000);
+            speed = l_HIO.dash_speed;
+            if (JMAFastSqrt(mae.x * mae.x + mae.z * mae.z) > 600.0f) {
+                i_this->mode = 3;
                 anm_init(i_this, BCK_RD_WAIT01, 5.0f, 2, 1.0f);
             }
             break;
 
         case 3:
-            sVar1 = i_this->mPlayerAngleY;
-            if (JMAFastSqrt(sp48.x * sp48.x + sp48.z * sp48.z) < 500.0f) {
-                i_this->mMode = 0;
+            angle = i_this->angleY;
+            if (JMAFastSqrt(mae.x * mae.x + mae.z * mae.z) < 500.0f) {
+                i_this->mode = 0;
             }
             break;
 
         case 5:
-            fVar1 = l_HIO.dash_speed;
+            speed = l_HIO.dash_speed;
             i_this->field_0x9ad = 0;
             if (bomb->speedF > 0.1f) {
-                i_this->mMode = 0;
-            } else if (JMAFastSqrt(sp48.x * sp48.x + sp48.z * sp48.z) < 100.0f) {
-                i_this->field_0x990[0] = 20;
-                i_this->mMode = 6;
+                i_this->mode = 0;
+            } else if (JMAFastSqrt(mae.x * mae.x + mae.z * mae.z) < 100.0f) {
+                i_this->timer[0] = 20;
+                i_this->mode = 6;
                 anm_init(i_this, BCK_RD_KICK, 3.0f, 0, 1.0f);
             }
             break;
 
         case 6:
             i_this->field_0x9ad = 0;
-            sVar1 = i_this->mPlayerAngleY;
-            if ((int)i_this->mpModelMorf->getFrame() <= 10) {
-                cMtx_YrotS(*calc_mtx, sVar1);
-                sp48.x = TREG_F(15) + -30.0f;
-                sp48.y = 0.0f;
-                sp48.z = TREG_F(16) + 60.0f;
-                MtxPosition(&sp48, &sp54);
-                sp54 += a_this->current.pos;
-                cLib_addCalc2(&bomb->current.pos.x, sp54.x, 1.0f, 15.0f);
-                cLib_addCalc2(&bomb->current.pos.z, sp54.z, 1.0f, 15.0f);
-                if ((int)i_this->mpModelMorf->getFrame() == 10) {
+            angle = i_this->angleY;
+            if ((int)i_this->anm_p->getFrame() <= 10) {
+                cMtx_YrotS(*calc_mtx, angle);
+                mae.x = TREG_F(15) + -30.0f;
+                mae.y = 0.0f;
+                mae.z = TREG_F(16) + 60.0f;
+                MtxPosition(&mae, &ato);
+                ato += enemy->current.pos;
+                cLib_addCalc2(&bomb->current.pos.x, ato.x, 1.0f, 15.0f);
+                cLib_addCalc2(&bomb->current.pos.z, ato.z, 1.0f, 15.0f);
+                if ((int)i_this->anm_p->getFrame() == 10) {
                     bomb->speedF = 30.0f;
                     bomb->speed.y = 30.0f;
-                    bomb->current.angle.y = a_this->shape_angle.y;
+                    bomb->current.angle.y = enemy->shape_angle.y;
                 }
             }
 
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 anm_init(i_this, BCK_RD_WAIT01, 5.0f, 2, 1.0f);
-                i_this->mMode = 3;
+                i_this->mode = 3;
             }
     }
 
-    cLib_addCalc2(&a_this->speedF, fVar1, 1.0f, 5.0f);
-    cLib_addCalcAngleS2(&a_this->current.angle.y, sVar1, 4, 0x1000);
+    cLib_addCalc2(&enemy->speedF, speed, 1.0f, 5.0f);
+    cLib_addCalcAngleS2(&enemy->current.angle.y, angle, 4, 0x1000);
     i_this->field_0x9c8 = 11;
-    i_this->field_0x9d4 = bomb->current.pos;
+    i_this->eye = bomb->current.pos;
 }
 
 static void e_rd_s_damage(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
-            i_this->mMode = 1;
-            i_this->field_0x990[0] = 10;
+            i_this->mode = 1;
+            i_this->timer[0] = 10;
             
-            if (i_this->field_0x9be != 0) {
-                e_wb_class* bullbo = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
-                if (bullbo != NULL) {
-                    UNSET_FLAG(bullbo->mStatusFlags, i_this->field_0x9be, u16);
+            if (i_this->boar_stand != 0) {
+                e_wb_class* boar = (e_wb_class*)fopAcM_SearchByID(i_this->boar_id);
+                if (boar != NULL) {
+                    UNSET_FLAG(boar->mStatusFlags, i_this->boar_stand, u16);
                 }
 
-                i_this->field_0x9be = 0;
-                i_this->mWbActorID = -1;
+                i_this->boar_stand = 0;
+                i_this->boar_id = -1;
             }
             break;
 
         case 1:
-            if (i_this->field_0x990[1] != 0) {
-                i_this->actor.onHeadLockFlg();
+            if (i_this->timer[1] != 0) {
+                i_this->enemy.onHeadLockFlg();
             }
 
-            if (i_this->mpModelMorf->isStop()) {
-                fopAc_ac_c* pla_p;
-                if (i_this->field_0x974 == 7) {
-                    i_this->mAction = ACTION_BOW2;
-                } else if (i_this->field_0x974 == 26) {
-                    i_this->mAction = ACTION_BOW3;
-                } else if (!other_bg_check(i_this, pla_p = dComIfGp_getPlayer(0))) {
-                    i_this->mAction = ACTION_FIGHT_RUN;
-                    i_this->field_0x990[0] = 40;
+            if (i_this->anm_p->isStop()) {
+                fopAc_ac_c* actor;
+                if (i_this->prev_action == 7) {
+                    i_this->action = ACTION_BOW2;
+                } else if (i_this->prev_action == 26) {
+                    i_this->action = ACTION_BOW3;
+                } else if (!other_bg_check(i_this, actor = dComIfGp_getPlayer(0))) {
+                    i_this->action = ACTION_FIGHT_RUN;
+                    i_this->timer[0] = 40;
                 } else {
-                    i_this->mAction = ACTION_NORMAL;
+                    i_this->action = ACTION_NORMAL;
                 }
 
-                i_this->mMode = 0;
+                i_this->mode = 0;
             }
             break;
     }
 
-    cLib_addCalc0(&a_this->speedF, 1.0f, 3.0f);
+    cLib_addCalc0(&enemy->speedF, 1.0f, 3.0f);
 }
 
 static int kado_check(e_rd_class* i_this) {
@@ -2721,86 +2721,86 @@ static int kado_check(e_rd_class* i_this) {
         80.0f, -80.0f,
     };
 
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     dBgS_LinChk lin_chk;
-    cXyz sp9c, spa8, spb4;
-    BOOL rv = FALSE;
+    cXyz mae, start, ato;
+    BOOL rt = FALSE;
 
-    cMtx_YrotS(*calc_mtx, i_this->field_0xa0c.y);
+    cMtx_YrotS(*calc_mtx, i_this->jump_angle.y);
     for (int i = 0; i < 2; i++) {
-        spa8 = a_this->current.pos;
-        spa8.y += 100.0f + JREG_F(0);
-        sp9c.x = JREG_F(1);
-        sp9c.y = JREG_F(2);
-        sp9c.z = 70.0f + JREG_F(3);
-        MtxPosition(&sp9c, &spb4);
-        spa8 += spb4;
-        sp9c.y = 50.0f + JREG_F(4);
-        sp9c.z = -150.0f + JREG_F(5);
-        sp9c.x = (1.0f + JREG_F(6)) * kado_check_x[i];
-        MtxPosition(&sp9c, &spb4);
-        spb4 += spa8;
-        lin_chk.Set(&spa8, &spb4, a_this);
+        start = enemy->current.pos;
+        start.y += 100.0f + JREG_F(0);
+        mae.x = JREG_F(1);
+        mae.y = JREG_F(2);
+        mae.z = 70.0f + JREG_F(3);
+        MtxPosition(&mae, &ato);
+        start += ato;
+        mae.y = 50.0f + JREG_F(4);
+        mae.z = -150.0f + JREG_F(5);
+        mae.x = (1.0f + JREG_F(6)) * kado_check_x[i];
+        MtxPosition(&mae, &ato);
+        ato += start;
+        lin_chk.Set(&start, &ato, enemy);
         if (dComIfG_Bgsp().LineCross(&lin_chk)) {
-            rv |= kado_bit[i];
+            rt |= kado_bit[i];
         }
     }
 
-    if (rv == 3) {
-        rv = FALSE;
+    if (rt == 3) {
+        rt = FALSE;
     }
 
-    return rv;
+    return rt;
 }
 
 static void rd_disappear(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    cXyz sp1c, sp28;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    cXyz mae, ato;
 
-    MTXCopy(i_this->mpModelMorf->getModel()->getAnmMtx(11), *calc_mtx);
-    sp1c.set(0.0f, 0.0f, 0.0f);
-    MtxPosition(&sp1c, &sp28);
+    MTXCopy(i_this->anm_p->getModel()->getAnmMtx(11), *calc_mtx);
+    mae.set(0.0f, 0.0f, 0.0f);
+    MtxPosition(&mae, &ato);
 
-    u8 reg_r27 = 0;
+    u8 type = 0;
     if (fopAcM_SearchByName(PROC_NPC_COACH) != NULL) {
-        fopAcM_createDisappear(a_this, &sp28, 10, reg_r27, 51);
+        fopAcM_createDisappear(enemy, &ato, 10, type, 51);
     } else {
-        fopAcM_createDisappear(a_this, &sp28, 10, reg_r27, 11);
+        fopAcM_createDisappear(enemy, &ato, 10, type, 11);
     }
 
-    fopAcM_delete(a_this);
+    fopAcM_delete(enemy);
 
-    int swBit = (fopAcM_GetParam(a_this) & 0xFF000000) >> 24;
-    if (swBit != 0xFF) {
-        dComIfGs_onSwitch(swBit, fopAcM_GetRoomNo(a_this));
+    int bitsw = (fopAcM_GetParam(enemy) & 0xFF000000) >> 24;
+    if (bitsw != 0xFF) {
+        dComIfGs_onSwitch(bitsw, fopAcM_GetRoomNo(enemy));
     }
 
-    if (i_this->field_0x9be != 0) {
-        e_wb_class* bullbo = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
-        if (bullbo != NULL) {
-            UNSET_FLAG(bullbo->mStatusFlags, i_this->field_0x9be, u16);
-            if (bullbo->mActionID == 1) {
-                bullbo->mActionID = 0;
+    if (i_this->boar_stand != 0) {
+        e_wb_class* boar = (e_wb_class*)fopAcM_SearchByID(i_this->boar_id);
+        if (boar != NULL) {
+            UNSET_FLAG(boar->mStatusFlags, i_this->boar_stand, u16);
+            if (boar->mActionID == 1) {
+                boar->mActionID = 0;
             }
         }
     }
 }
 
 static BOOL body_gake(e_rd_class* i_this) {
-    J3DModel* model = i_this->mpModelMorf->getModel();
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    cXyz sp7c, sp88;
+    J3DModel* model = i_this->anm_p->getModel();
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    cXyz mae, ato;
 
     MTXCopy(model->getAnmMtx(11), *calc_mtx);
-    sp7c.set(40.0f + BREG_F(10), BREG_F(11), BREG_F(12));
-    MtxPosition(&sp7c, &sp88);
+    mae.set(40.0f + BREG_F(10), BREG_F(11), BREG_F(12));
+    MtxPosition(&mae, &ato);
 
     dBgS_ObjGndChk gnd_chk;
-    sp88.y += 100.0f;
-    gnd_chk.SetPos(&sp88);
-    sp88.y = dComIfG_Bgsp().GroundCross(&gnd_chk);
+    ato.y += 100.0f;
+    gnd_chk.SetPos(&ato);
+    ato.y = dComIfG_Bgsp().GroundCross(&gnd_chk);
 
-    if ((a_this->current.pos.y - sp88.y) > 300.0f) {
+    if ((enemy->current.pos.y - ato.y) > 300.0f) {
         return TRUE;
     }
 
@@ -2808,58 +2808,58 @@ static BOOL body_gake(e_rd_class* i_this) {
 }
 
 static void e_rd_damage(e_rd_class* i_this) {
-    fopAc_ac_c* a_this = &i_this->actor;
-    fopEn_enemy_c* rd_enemy_p = (fopEn_enemy_c*) a_this;
-    cXyz sp34, sp40;
+    fopAc_ac_c* actor = &i_this->enemy;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*) actor;
+    cXyz mae, ato;
 
-    if (a_this->health <= 0) {
-        fopAcM_OffStatus(a_this, 0);
-        a_this->attention_info.flags = 0;
+    if (actor->health <= 0) {
+        fopAcM_OffStatus(actor, 0);
+        actor->attention_info.flags = 0;
     }
 
     i_this->field_0x6d0 = 0.0f;
 
     if (daPy_py_c::checkNowWolf() != 0) {
-        if (i_this->field_0xafa == 0 && rd_enemy_p->checkWolfDownStartFlg()) {
-            if (i_this->field_0x990[0] > 40) {
-                i_this->field_0x990[0] = 90;
+        if (i_this->field_0xafa == 0 && enemy->checkWolfDownStartFlg()) {
+            if (i_this->timer[0] > 40) {
+                i_this->timer[0] = 90;
                 OS_REPORT("      RD WOLFHIT LONG  \n");
-            } else if (i_this->field_0x990[0] > 20) {
-                i_this->field_0x990[0] = 70;
+            } else if (i_this->timer[0] > 20) {
+                i_this->timer[0] = 70;
                 OS_REPORT("      RD WOLFHIT MID  \n");
             } else {
-                i_this->field_0x990[0] = 50;
+                i_this->timer[0] = 50;
                 OS_REPORT("      RD WOLFHIT SHORT \n");
             }
 
-            i_this->mMode = 30;
-            i_this->field_0x990[1] = 16;
+            i_this->mode = 30;
+            i_this->timer[1] = 16;
             i_this->field_0xafa = 1;
         }
-    } else if (rd_enemy_p->checkCutDownHitFlg()) {
-        rd_enemy_p->offCutDownHitFlg();
-        i_this->mMode = 3;
-        i_this->field_0x990[0] = 100;
-        i_this->field_0x990[1] = 45;
-        a_this->health = 0;
-        i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_DEATH, -1);
+    } else if (enemy->checkCutDownHitFlg()) {
+        enemy->offCutDownHitFlg();
+        i_this->mode = 3;
+        i_this->timer[0] = 100;
+        i_this->timer[1] = 45;
+        actor->health = 0;
+        i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_DEATH, -1);
         i_this->field_0x968 = 1;
         daPy_getPlayerActorClass()->onEnemyDead();
         i_this->field_0xadc = 15 + TREG_S(7);
-        rd_enemy_p->offDownFlg();
+        enemy->offDownFlg();
     }
 
-    s16 sVar1;
-    switch (i_this->mMode) {
+    s16 angle;
+    switch (i_this->mode) {
         case 0:
             anm_init(i_this, BCK_RD_DIEB, 3.0f, 0, 1.0f);
-            i_this->mMode = 1;
-            a_this->speedF = 0.0f;
+            i_this->mode = 1;
+            actor->speedF = 0.0f;
             ride_off(i_this);
             i_this->field_0xab8 = 8000.0f + BREG_F(10);
 
-            if (a_this->health <= 0) {
-                i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_DEATH, -1);
+            if (actor->health <= 0) {
+                i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_DEATH, -1);
                 i_this->field_0x968 = 1;
                 daPy_getPlayerActorClass()->onEnemyDead();
 
@@ -2867,67 +2867,67 @@ static void e_rd_damage(e_rd_class* i_this) {
                     i_this->field_0x5ba = 0;
                 }
             } else {
-                i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_DAMAGE, -1);
+                i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_DAMAGE, -1);
             }
 
-            i_this->field_0x990[0] = 0;
+            i_this->timer[0] = 0;
             break;
 
         case 1:
-            if (i_this->mObjAcch.ChkWallHit() != 0 && i_this->field_0x990[0] == 0) {
+            if (i_this->ObjAcch.ChkWallHit() != 0 && i_this->timer[0] == 0) {
                 int kado_kabe;
                 if ((kado_kabe = kado_check(i_this)) != 0) {
                     OS_REPORT("              ..KADO KABE ..%x\n", kado_kabe);
                     if (kado_kabe == 2) {
                         i_this->field_0x9f6 = 0x1000;
-                        ANGLE_ADD(i_this->field_0xa0c.y, TREG_S(8) - 7000);
+                        ANGLE_ADD(i_this->jump_angle.y, TREG_S(8) - 7000);
                     } else {
                         i_this->field_0x9f6 = -0x1000;
-                        ANGLE_ADD(i_this->field_0xa0c.y, -(TREG_S(8) - 7000));
+                        ANGLE_ADD(i_this->jump_angle.y, -(TREG_S(8) - 7000));
                     }
 
                     i_this->field_0xab8 = 8000.0f + BREG_F(10);
                     i_this->field_0xa24 = 100.0f + BREG_F(4);
                     i_this->field_0xa2c = 100.0f + BREG_F(5);
-                    i_this->field_0x990[0] = 60;
+                    i_this->timer[0] = 60;
                     break;
                 }
 
-                i_this->mMode = 10;
-                a_this->speed.y = 0.0f;
-                i_this->field_0x9ec *= 0.2f;
-                ANGLE_ADD_2(i_this->field_0xa0c.y, 0x8000);
+                i_this->mode = 10;
+                actor->speed.y = 0.0f;
+                i_this->jump_z *= 0.2f;
+                ANGLE_ADD_2(i_this->jump_angle.y, 0x8000);
                 i_this->field_0xaf0 = 5 + BREG_S(7);
                 i_this->field_0xa24 = 100.0f + BREG_F(4);
                 i_this->field_0xa2c = 100.0f + BREG_F(5);
                 i_this->field_0x9f6 = 0;
             } else {
-                cLib_addCalcAngleS2(&i_this->field_0xa0c.x, -0x4000, 1, 0x300 + BREG_S(4));
-                a_this->current.angle.y += i_this->field_0x9f6;
-                a_this->shape_angle.y = a_this->current.angle.y;
+                cLib_addCalcAngleS2(&i_this->jump_angle.x, -0x4000, 1, 0x300 + BREG_S(4));
+                actor->current.angle.y += i_this->field_0x9f6;
+                actor->shape_angle.y = actor->current.angle.y;
 
-                if (i_this->field_0xa0c.x <= -0x3000 && i_this->mObjAcch.ChkGroundHit()) {
+                if (i_this->jump_angle.x <= -0x3000 && i_this->ObjAcch.ChkGroundHit()) {
                     i_this->field_0xa1e = 10;
 
                     if (i_this->field_0x1294 != 0) {
-                        i_this->mSound.startCreatureSound(Z2SE_CM_BODYFALL_ASASE_M, 0, -1);
+                        i_this->sound.startCreatureSound(Z2SE_CM_BODYFALL_ASASE_M, 0, -1);
                     } else {
-                        i_this->mSound.startCreatureSound(Z2SE_CM_BODYFALL_M, 0, -1);
+                        i_this->sound.startCreatureSound(Z2SE_CM_BODYFALL_M, 0, -1);
                     }
 
-                    i_this->mMode = 2;
+                    i_this->mode = 2;
 
                     if (i_this->field_0xa1f == 0) {
                         anm_init(i_this, BCK_RD_DIEA, 3.0f, 0, 1.0f);
-                        sVar1 = (s16) i_this->field_0xa0c.y;
+                        angle = (s16) i_this->jump_angle.y;
                     } else {
-                        sVar1 = i_this->field_0xa0c.y + 0x8000;
+                        angle = i_this->jump_angle.y + 0x8000;
                     }
 
-                    a_this->current.angle.y = sVar1;
+                    actor->current.angle.y = angle;
 
-                    if (i_this->field_0x9f8 != 0) {
-                        i_this->field_0x9ec = 0.0f;
+                    if (i_this->damage_flag != 0) {
+                        i_this->jump_z = 0.0f;
                         i_this->field_0xab8 = 2000.0f + BREG_F(12);
                     } else {
                         if (i_this->field_0xa1f == 0) {
@@ -2940,8 +2940,8 @@ static void e_rd_damage(e_rd_class* i_this) {
 
                         i_this->field_0xa28 = -0x5000;
                         i_this->field_0xa30 = -0x4000;
-                        i_this->field_0x9ec *= 0.5f;
-                        a_this->speed.y = 20.0f + TREG_F(6);
+                        i_this->jump_z *= 0.5f;
+                        actor->speed.y = 20.0f + TREG_F(6);
                         i_this->field_0x9f6 /= 2;
                         i_this->field_0xab8 = 8000.0f + BREG_F(12);
                         i_this->field_0x125d = 1;
@@ -2951,16 +2951,16 @@ static void e_rd_damage(e_rd_class* i_this) {
             break;
 
         case 2:
-            a_this->current.angle.y += i_this->field_0x9f6;
-            a_this->shape_angle.y = a_this->current.angle.y;
-            cLib_addCalcAngleS2(&i_this->field_0xa0c.x, -0x4000, 1, 0x300 + BREG_S(4));
+            actor->current.angle.y += i_this->field_0x9f6;
+            actor->shape_angle.y = actor->current.angle.y;
+            cLib_addCalcAngleS2(&i_this->jump_angle.x, -0x4000, 1, 0x300 + BREG_S(4));
 
-            if (i_this->mObjAcch.ChkGroundHit()) {
-                if (a_this->health > 0 && daPy_py_c::checkNowWolf() == 0) {
-                    rd_enemy_p->onDownFlg();
+            if (i_this->ObjAcch.ChkGroundHit()) {
+                if (actor->health > 0 && daPy_py_c::checkNowWolf() == 0) {
+                    enemy->onDownFlg();
                 }
 
-                dKy_Sound_set(a_this->current.pos, 100, fopAcM_GetID(i_this), 5);
+                dKy_Sound_set(actor->current.pos, 100, fopAcM_GetID(i_this), 5);
                 i_this->field_0xa1e = 10;
 
                 if (i_this->field_0xa1f == 0) {
@@ -2969,28 +2969,28 @@ static void e_rd_damage(e_rd_class* i_this) {
                     anm_init(i_this, BCK_RD_DIEB, 3.0f, 0, 1.0f);
                 }
 
-                i_this->field_0x9ec = 0.0f;
-                i_this->field_0xa0c.x = -0x4000;
+                i_this->jump_z = 0.0f;
+                i_this->jump_angle.x = -0x4000;
 
                 if (i_this->field_0xa1f == 0) {
-                    sVar1 = s16(i_this->field_0xa0c.y);
+                    angle = s16(i_this->jump_angle.y);
                     for (int i = 0; i < 4; i++) {
                         i_this->field_0xad2[i] = cM_rndF(10.0f);
                     }
                 } else {
-                    sVar1 = i_this->field_0xa0c.y + 0x8000;
+                    angle = i_this->jump_angle.y + 0x8000;
                 }
-                a_this->current.angle.y = sVar1;
+                actor->current.angle.y = angle;
 
                 if (daPy_py_c::checkNowWolf() != 0) {
-                    i_this->field_0x990[0] = 80;
-                    i_this->field_0x990[1] = 55;
+                    i_this->timer[0] = 80;
+                    i_this->timer[1] = 55;
                 } else {
-                    i_this->field_0x990[0] = cM_rndF(10.0f) + 60.0f;
-                    i_this->field_0x990[1] = 35;
+                    i_this->timer[0] = cM_rndF(10.0f) + 60.0f;
+                    i_this->timer[1] = 35;
                 }
 
-                i_this->mMode = 3;
+                i_this->mode = 3;
                 i_this->field_0xab8 = 1500.0f + BREG_F(13);
                 i_this->field_0x125d = 1;
             }
@@ -2998,21 +2998,21 @@ static void e_rd_damage(e_rd_class* i_this) {
 
         case 3:
             if (body_gake(i_this)) {
-                i_this->field_0x9ec = -20.0f + VREG_F(8);
-                i_this->field_0xa0c.x -= s16(0x300 + VREG_S(7));
+                i_this->jump_z = -20.0f + VREG_F(8);
+                i_this->jump_angle.x -= s16(0x300 + VREG_S(7));
             } else {
-                i_this->field_0x9ec = 0.0f;
+                i_this->jump_z = 0.0f;
             }
 
-            if (a_this->health <= 0 && i_this->field_0x990[1] == 0) {
+            if (actor->health <= 0 && i_this->timer[1] == 0) {
                 rd_disappear(i_this);
                 return;
             }
 
-            if (daPy_getPlayerActorClass()->getCutType() != daPy_py_c::CUT_TYPE_DOWN && i_this->field_0x990[0] == 0) {
-                i_this->field_0xa0c.x = -0x4000;
-                rd_enemy_p->offDownFlg();
-                i_this->mMode = 20;
+            if (daPy_getPlayerActorClass()->getCutType() != daPy_py_c::CUT_TYPE_DOWN && i_this->timer[0] == 0) {
+                i_this->jump_angle.x = -0x4000;
+                enemy->offDownFlg();
+                i_this->mode = 20;
 
                 if (i_this->field_0xa1f == 0) {
                     anm_init(i_this, BCK_RD_DIEA_UP, 3.0f, 0, 1.0f);
@@ -3024,11 +3024,11 @@ static void e_rd_damage(e_rd_class* i_this) {
 
         case 10:
             if (i_this->field_0xaf0 != 0) {
-                cLib_addCalcAngleS2(&i_this->field_0xa0c.x, 0, 1, 0x300 + BREG_S(4));
+                cLib_addCalcAngleS2(&i_this->jump_angle.x, 0, 1, 0x300 + BREG_S(4));
             } else {
-                cLib_addCalcAngleS2(&i_this->field_0xa0c.x, -0x4000, 1, 0x800 + BREG_S(5));
-                if (i_this->mObjAcch.ChkGroundHit()) {
-                    i_this->mMode = 2;
+                cLib_addCalcAngleS2(&i_this->jump_angle.x, -0x4000, 1, 0x800 + BREG_S(5));
+                if (i_this->ObjAcch.ChkGroundHit()) {
+                    i_this->mode = 2;
                     if (i_this->field_0xa1f == 0) {
                         anm_init(i_this, BCK_RD_DIEA, 3.0f, 0, 1.0f);
                         i_this->field_0xa24 = -100.0f - BREG_F(6);
@@ -3040,96 +3040,96 @@ static void e_rd_damage(e_rd_class* i_this) {
 
                     i_this->field_0xa28 = -0x5000;
                     i_this->field_0xa30 = -0x4000;
-                    i_this->field_0x9ec *= 0.5f;
-                    a_this->speed.y = 20.0f + TREG_F(6);
+                    i_this->jump_z *= 0.5f;
+                    actor->speed.y = 20.0f + TREG_F(6);
 
                     if (i_this->field_0xa1f == 0) {
-                        sVar1 = s16(i_this->field_0xa0c.y);
+                        angle = s16(i_this->jump_angle.y);
                     } else {
-                        sVar1 = i_this->field_0xa0c.y + 0x8000;
+                        angle = i_this->jump_angle.y + 0x8000;
                     }
 
-                    a_this->current.angle.y = sVar1;
+                    actor->current.angle.y = angle;
                     i_this->field_0xab8 = 8000.0f + BREG_F(12);
                 }
             }
             break;
 
         case 20:
-            if (i_this->mpModelMorf->getFrame() >= 35.0f) {
+            if (i_this->anm_p->getFrame() >= 35.0f) {
                 i_this->field_0xa18.x = i_this->field_0xa18.z = 0;
             }
 
-            if (i_this->mpModelMorf->isStop()) {
-                i_this->field_0xa0c.x = i_this->field_0xa0c.y = 0;
+            if (i_this->anm_p->isStop()) {
+                i_this->jump_angle.x = i_this->jump_angle.y = 0;
                 anm_init(i_this, BCK_RD_WAIT01, 0.0f, 2, 1.0f);
-                i_this->field_0x990[0] = 5;
-                i_this->mMode = 21;
+                i_this->timer[0] = 5;
+                i_this->mode = 21;
 
-                rd_enemy_p->offDownFlg();
+                enemy->offDownFlg();
             }
             break;
 
         case 21:
-            if (i_this->field_0x990[0] == 0) {
-                i_this->field_0x998 = 0;
+            if (i_this->timer[0] == 0) {
+                i_this->damage_timer = 0;
                 if (pl_check(i_this, 10000.0f, 0x6000)) {
-                    i_this->mAction = ACTION_NORMAL;
-                    i_this->mMode = 0;
+                    i_this->action = ACTION_NORMAL;
+                    i_this->mode = 0;
                 } else {
-                    i_this->field_0x990[0] = cM_rndF(20.0f) + 20.0f;
+                    i_this->timer[0] = cM_rndF(20.0f) + 20.0f;
                     anm_init(i_this, BCK_RD_KYORO2, 10.0f, 2, 1.0f);
-                    i_this->mMode = 22;
+                    i_this->mode = 22;
                 }
             }
             break;
 
         case 22:
-            if (i_this->field_0x990[0] == 0) {
-                i_this->mAction = ACTION_NORMAL;
-                i_this->mMode = 0;
-                i_this->field_0x990[0] = cM_rndF(50.0f) + 50.0f;
+            if (i_this->timer[0] == 0) {
+                i_this->action = ACTION_NORMAL;
+                i_this->mode = 0;
+                i_this->timer[0] = cM_rndF(50.0f) + 50.0f;
                 anm_init(i_this, BCK_RD_KYORO2, 10.0f, 2, 1.0f);
             }
             break;
 
         case 30:
-            if (!rd_enemy_p->checkWolfDownPullFlg()) {
-                i_this->field_0x990[1] = 0;
+            if (!enemy->checkWolfDownPullFlg()) {
+                i_this->timer[1] = 0;
             }
 
-            if (i_this->field_0x990[0] == 0) {
-                i_this->mMode = 31;
+            if (i_this->timer[0] == 0) {
+                i_this->mode = 31;
                 if (i_this->field_0xa1f == 0) {
                     anm_init(i_this, BCK_RD_DIEA_UP, 3.0f, 0, 1.0f);
                 } else {
                     anm_init(i_this, BCK_RD_DIEB_UP, 3.0f, 0, 1.0f);
                 }
 
-                i_this->field_0x990[0] = 10;
-            } else if (i_this->field_0x990[1] == 1) {
-                rd_enemy_p->onWolfDownPullEndFlg();
-                rd_enemy_p->offCutDownHitFlg();
-                a_this->health = 0;
-                i_this->field_0x990[0] = 1000;
-                i_this->field_0x990[1] = 35;
-                i_this->mMode = 3;
+                i_this->timer[0] = 10;
+            } else if (i_this->timer[1] == 1) {
+                enemy->onWolfDownPullEndFlg();
+                enemy->offCutDownHitFlg();
+                actor->health = 0;
+                i_this->timer[0] = 1000;
+                i_this->timer[1] = 35;
+                i_this->mode = 3;
             }
             break;
 
         case 31:
-            if (i_this->field_0x990[0] == 0) {
-                rd_enemy_p->offDownFlg();
-                i_this->mMode = 20;
+            if (i_this->timer[0] == 0) {
+                enemy->offDownFlg();
+                i_this->mode = 20;
                 i_this->field_0xafa = 0;
             }
     }
 
-    if (rd_enemy_p->checkDownFlg()) {
-        MTXCopy(i_this->mpModelMorf->getModel()->getAnmMtx(11), *calc_mtx);
-        sp34.set(BREG_F(0), BREG_F(1), BREG_F(2));
-        MtxPosition(&sp34, &sp40);
-        rd_enemy_p->setDownPos(&sp40);
+    if (enemy->checkDownFlg()) {
+        MTXCopy(i_this->anm_p->getModel()->getAnmMtx(11), *calc_mtx);
+        mae.set(BREG_F(0), BREG_F(1), BREG_F(2));
+        MtxPosition(&mae, &ato);
+        enemy->setDownPos(&ato);
         i_this->field_0x9ad = 0;
     }
 
@@ -3140,44 +3140,44 @@ static void e_rd_damage(e_rd_class* i_this) {
 }
 
 static s16 gake_check(e_rd_class* i_this, f32 param_2) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     dBgS_GndChk gnd_chk;
     dBgS_LinChk lin_chk;
-    cXyz spf8, sp104, start, end;
-    s16 sVar1 = a_this->shape_angle.y;
+    cXyz spf8, sp104, mae, ato;
+    s16 angle = enemy->shape_angle.y;
 
     for (int i = 0; i < 16; i++) {
-        cMtx_YrotS(*calc_mtx, sVar1);
-        start.x = 0.0f;
-        start.y = 100.0f;
-        start.z = param_2;
-        MtxPosition(&start, &end);
-        end += a_this->current.pos;
-        gnd_chk.SetPos(&end);
+        cMtx_YrotS(*calc_mtx, angle);
+        mae.x = 0.0f;
+        mae.y = 100.0f;
+        mae.z = param_2;
+        MtxPosition(&mae, &ato);
+        ato += enemy->current.pos;
+        gnd_chk.SetPos(&ato);
 
-        if (a_this->current.pos.y - dComIfG_Bgsp().GroundCross(&gnd_chk) > 300.0f) {
-            start = a_this->current.pos;
-            start.y += 100.0f;
-            lin_chk.Set(&start, &end, a_this);
+        if (enemy->current.pos.y - dComIfG_Bgsp().GroundCross(&gnd_chk) > 300.0f) {
+            mae = enemy->current.pos;
+            mae.y += 100.0f;
+            lin_chk.Set(&mae, &ato, enemy);
             if (!dComIfG_Bgsp().LineCross(&lin_chk)) {
-                return sVar1;
+                return angle;
             }
         }
 
-        ANGLE_ADD(sVar1, 0x1000);
+        ANGLE_ADD(angle, 0x1000);
     }
 
-    return a_this->shape_angle.y;
+    return enemy->shape_angle.y;
 }
 
 static void* s_bikkuri_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && i_actor != i_data) {
-        if (((e_rd_class*)i_actor)->mAction == ACTION_BOW3 && ((e_rd_class*)i_actor)->mMode <= 2) {
+        if (((e_rd_class*)i_actor)->action == ACTION_BOW3 && ((e_rd_class*)i_actor)->mode <= 2) {
             cXyz sp28 = ((fopAc_ac_c*)i_actor)->current.pos - ((fopAc_ac_c*)i_data)->current.pos;
             if (sp28.abs() < KREG_F(11) + 350.0f) {
                 anm_init((e_rd_class*)i_actor, 29, 5.0f, 2, 1.3f);
-                ((e_rd_class*)i_actor)->mMode = 3;
-                ((e_rd_class*)i_actor)->field_0x990[0] = cM_rndF(20.0f) + 40.0f;
+                ((e_rd_class*)i_actor)->mode = 3;
+                ((e_rd_class*)i_actor)->timer[0] = cM_rndF(20.0f) + 40.0f;
             }
         }
     }
@@ -3197,216 +3197,216 @@ static void* s_saku_sub(void* i_actor, void* i_data) {
 }
 
 static void e_rd_drop(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    f32 fVar1 = 0.0f;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    f32 speed = 0.0f;
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
-            i_this->mSound.startCreatureVoiceLevel(Z2SE_EN_RD_V_SNIPED_DAMAGE, -1);
+            i_this->sound.startCreatureVoiceLevel(Z2SE_EN_RD_V_SNIPED_DAMAGE, -1);
             anm_init(i_this, BCK_RD_DAMAGE_S, 2.0f, 0, 1.0f);
-            i_this->mMode = 1;
+            i_this->mode = 1;
 
             if (desert_substage != 0) {
-                i_this->mDemoMode = 10;
+                i_this->demo_mode = 10;
             }
             break;
 
         case 1:
-            i_this->mSound.startCreatureVoiceLevel(Z2SE_EN_RD_V_SNIPED_DAMAGE, -1);
+            i_this->sound.startCreatureVoiceLevel(Z2SE_EN_RD_V_SNIPED_DAMAGE, -1);
             
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 anm_init(i_this, BCK_RD_FURA2, 0.0f, 2, 1.0f);
-                i_this->mMode = 2;
+                i_this->mode = 2;
 
-                if (i_this->mDemoMode != 0) {
-                    i_this->field_0x5cc = i_this->mPlayerAngleY;
+                if (i_this->demo_mode != 0) {
+                    i_this->target_ya = i_this->angleY;
                 } else if (strcmp(dComIfGp_getStartStageName(), "F_SP128") == 0) {
                     // Hidden Village
-                    i_this->field_0x5cc = a_this->home.angle.y;
+                    i_this->target_ya = enemy->home.angle.y;
                 } else {
-                    i_this->field_0x5cc = gake_check(i_this, 200.0f);
+                    i_this->target_ya = gake_check(i_this, 200.0f);
                 }
 
                 fpcM_Search(s_bikkuri_sub, i_this);
-                i_this->field_0x990[0] = 60;
+                i_this->timer[0] = 60;
             }
             break;
 
         case 2:
-            i_this->mSound.startCreatureVoiceLevel(Z2SE_EN_RD_V_SNIPED_DAMAGE, -1);
-            fVar1 = 4.0f;
-            cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->field_0x5cc, 8, 0x400);
+            i_this->sound.startCreatureVoiceLevel(Z2SE_EN_RD_V_SNIPED_DAMAGE, -1);
+            speed = 4.0f;
+            cLib_addCalcAngleS2(&enemy->current.angle.y, i_this->target_ya, 8, 0x400);
 
-            if (i_this->field_0x990[0] == 0) {
-                i_this->mAction = ACTION_A_DAMAGE;
-                i_this->mMode = 0;
+            if (i_this->timer[0] == 0) {
+                i_this->action = ACTION_A_DAMAGE;
+                i_this->mode = 0;
                 return;
             }
 
             if (move_gake_check(i_this, KREG_F(6) + 30.0f)) {
-                i_this->mMode = 3;
-                i_this->field_0xa0c.y = a_this->shape_angle.y + 0x8000;
-                i_this->field_0xa0c.x = 0;
-                i_this->mpModelMorf->setPlaySpeed(0.3f);
+                i_this->mode = 3;
+                i_this->jump_angle.y = enemy->shape_angle.y + 0x8000;
+                i_this->jump_angle.x = 0;
+                i_this->anm_p->setPlaySpeed(0.3f);
                 i_this->field_0xaf8 = 0;
-                i_this->field_0x990[0] = 20;
+                i_this->timer[0] = 20;
             }
             break;
 
         case 3:
-            if (i_this->field_0x990[0] == 19) {
+            if (i_this->timer[0] == 19) {
                 daObjH_Saku_c* h_saku = (daObjH_Saku_c*)fpcM_Search(s_saku_sub, i_this);
                 if (h_saku != NULL) {
                     h_saku->BreakSet();
                 }
             }
 
-            fVar1 = 3.0f;
+            speed = 3.0f;
             
-            if (i_this->field_0xa0c.x > -0x4000) {
-                a_this->speed.y = 0.0f;
-                i_this->mSound.startCreatureVoiceLevel(Z2SE_EN_RD_V_SNIPED_DAMAGE, -1);
+            if (i_this->jump_angle.x > -0x4000) {
+                enemy->speed.y = 0.0f;
+                i_this->sound.startCreatureVoiceLevel(Z2SE_EN_RD_V_SNIPED_DAMAGE, -1);
             } else {
-                if (i_this->field_0xa0c.x > -0x6800) {
-                    a_this->speed.y = -fabsf(cM_scos(i_this->field_0xa0c.x) * (TREG_F(8) + 70.0f));
-                    i_this->mSound.startCreatureVoiceLevel(Z2SE_EN_RD_V_SNIPED_FALLING, -1);
+                if (i_this->jump_angle.x > -0x6800) {
+                    enemy->speed.y = -fabsf(cM_scos(i_this->jump_angle.x) * (TREG_F(8) + 70.0f));
+                    i_this->sound.startCreatureVoiceLevel(Z2SE_EN_RD_V_SNIPED_FALLING, -1);
                 } else {
-                    i_this->mSound.startCreatureVoiceLevel(Z2SE_EN_RD_V_SNIPED_FALLING, -1);
+                    i_this->sound.startCreatureVoiceLevel(Z2SE_EN_RD_V_SNIPED_FALLING, -1);
                 }
             }
 
-            cLib_addCalcAngleS2(&i_this->field_0xa0c.x, -0x7000, 2, i_this->field_0xaf8);
+            cLib_addCalcAngleS2(&i_this->jump_angle.x, -0x7000, 2, i_this->field_0xaf8);
             cLib_addCalcAngleS2(&i_this->field_0xaf8, 0x800, 1, 0x50);
             i_this->field_0x9ab = 2;
 
-            if (i_this->field_0x990[0] == 0 && a_this->current.pos.y <= i_this->mObjAcch.GetGroundH() + 100.0f + KREG_F(17)) {
-                if (i_this->field_0x5b7 == 13 || i_this->field_0x5b7 == 14) {
-                    i_this->mAction = ACTION_REG;
-                    i_this->mMode = 1;
+            if (i_this->timer[0] == 0 && enemy->current.pos.y <= i_this->ObjAcch.GetGroundH() + 100.0f + KREG_F(17)) {
+                if (i_this->arg1 == 13 || i_this->arg1 == 14) {
+                    i_this->action = ACTION_REG;
+                    i_this->mode = 1;
                     i_this->field_0xafb = 1;
                     i_this->field_0xaf2 = 0;
                 } else {
-                    a_this->current.pos.y = i_this->mObjAcch.GetGroundH() + 100.0f + KREG_F(17);
-                    i_this->field_0xa0c.x = -0x4000;
-                    i_this->mAction = ACTION_DAMAGE;
-                    i_this->mMode = 0;
-                    i_this->field_0x9ec = 0.0f;
-                    a_this->health = 0;
+                    enemy->current.pos.y = i_this->ObjAcch.GetGroundH() + 100.0f + KREG_F(17);
+                    i_this->jump_angle.x = -0x4000;
+                    i_this->action = ACTION_DAMAGE;
+                    i_this->mode = 0;
+                    i_this->jump_z = 0.0f;
+                    enemy->health = 0;
                 }
             }
             break;
     }
 
-    cLib_addCalc2(&a_this->speedF, fVar1, 1.0f, 3.0f);
+    cLib_addCalc2(&enemy->speedF, speed, 1.0f, 3.0f);
 }
 
 static void e_rd_a_damage(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
 
-    i_this->field_0x998 = 3;
-    fopAcM_OffStatus(a_this, 0);
-    a_this->attention_info.flags = 0;
+    i_this->damage_timer = 3;
+    fopAcM_OffStatus(enemy, 0);
+    enemy->attention_info.flags = 0;
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
-            i_this->mMode = 1;
+            i_this->mode = 1;
             anm_init(i_this, BCK_RD_DEAD_ARROW, 5.0f, 0, 1.0f);
-            i_this->field_0x990[0] = 80;
+            i_this->timer[0] = 80;
 
             if (desert_substage != 0) {
                 i_this->field_0x5ba = 0;
             }
 
-            dKy_Sound_set(a_this->current.pos, 100, fopAcM_GetID(i_this), 5);
+            dKy_Sound_set(enemy->current.pos, 100, fopAcM_GetID(i_this), 5);
             break;
 
         case 1:
-            if (i_this->field_0x990[0] == 0) {
+            if (i_this->timer[0] == 0) {
                 rd_disappear(i_this);
             }
             break;
     }
 
-    cLib_addCalc0(&a_this->speedF, 1.0f, 3.0f);
+    cLib_addCalc0(&enemy->speedF, 1.0f, 3.0f);
 }
 
 static void e_rd_stand(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
-            if (i_this->field_0x990[0] == 0) {
+            if (i_this->timer[0] == 0) {
                 anm_init(i_this, BCK_RD_KYORO2, 10.0f, 2, 1.0f);
-                i_this->mMode = 1;
-                i_this->field_0x990[0] = cM_rndF(40.0f) + 60.0f;
+                i_this->mode = 1;
+                i_this->timer[0] = cM_rndF(40.0f) + 60.0f;
             }
             break;
 
         case 1:
-            if (i_this->field_0x990[0] == 0) {
+            if (i_this->timer[0] == 0) {
                 anm_init(i_this, BCK_RD_WAIT01, 10.0f, 2, 1.0f);
-                i_this->field_0x990[0] = cM_rndF(100.0f) + 100.0f;
-                i_this->mMode = 0;
+                i_this->timer[0] = cM_rndF(100.0f) + 100.0f;
+                i_this->mode = 0;
             }
             break;
     }
 
-    f32 fVar1 = i_this->field_0x980;
-    s16 sVar1 = 0x4000;
-    BOOL bVar1 = FALSE;
+    f32 range = i_this->attack_range;
+    s16 angle = 0x4000;
+    BOOL search_check = FALSE;
 
-    if (i_this->field_0x9a1 == 1 || S_find != 0) {
-        if (i_this->field_0x9a1 == 1) {
-            bVar1 = TRUE;
+    if (i_this->look_timer == 1 || S_find != 0) {
+        if (i_this->look_timer == 1) {
+            search_check = TRUE;
         }
-        fVar1 = 10000.0f;
-        sVar1 = 0x7FFF;
+        range = 10000.0f;
+        angle = 0x7FFF;
     }
 
-    if ((i_this->field_0x970 & 7) == 0 && fopAcM_GetRoomNo(a_this) == 0) {
+    if ((i_this->counter & 7) == 0 && fopAcM_GetRoomNo(enemy) == 0) {
         if (S_find != 0) {
-            wb_check(i_this, sVar1);
-            if (i_this->field_0x9be != 0) {
+            wb_check(i_this, angle);
+            if (i_this->boar_stand != 0) {
                 return;
             }
         }
 
         if (pl_check(i_this, 500.0f, 0x4000)) {
-            i_this->mAction = ACTION_FIGHT_RUN;
-            i_this->mMode = -10;
-            i_this->field_0x990[0] = 60;
+            i_this->action = ACTION_FIGHT_RUN;
+            i_this->mode = -10;
+            i_this->timer[0] = 60;
         }
 
         return;
     }
 
-    if (((i_this->field_0x970 & 7) == 0 || bVar1) && pl_check(i_this, fVar1, sVar1) && i_this->field_0x5bc == 1) {
+    if (((i_this->counter & 7) == 0 || search_check) && pl_check(i_this, range, angle) && i_this->weapon_type == 1) {
         OS_REPORT(" <<<<<<<<<<<<<< RD RIDE 4\n");
-        i_this->mAction = ACTION_FIGHT_RUN;
-        i_this->mMode = -10;
-        i_this->field_0x990[0] = 60;
+        i_this->action = ACTION_FIGHT_RUN;
+        i_this->mode = -10;
+        i_this->timer[0] = 60;
     }
 }
 
 static s8 e_rd_bow3(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
 
-    if (i_this->field_0x998 == 0 && i_this->mMode != 5 && fpcM_Search(s_command3_sub, i_this) == NULL) {
-        i_this->mMode = 5;
-        i_this->field_0x990[1] = cM_rndF(20.0f) + 40.0f;
-        i_this->field_0x990[0] = cM_rndF(20.0f) + 80.0f;
+    if (i_this->damage_timer == 0 && i_this->mode != 5 && fpcM_Search(s_command3_sub, i_this) == NULL) {
+        i_this->mode = 5;
+        i_this->timer[1] = cM_rndF(20.0f) + 40.0f;
+        i_this->timer[0] = cM_rndF(20.0f) + 80.0f;
     }
 
     cXyz unused_vec_0, unused_vec_1;
-    int frame = i_this->mpModelMorf->getFrame();
+    int frame = i_this->anm_p->getFrame();
     s8 bVar1 = 1;
-    s8 retval = 0;
+    s8 rt = 0;
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
             bVar1 = 0;
             anm_init(i_this, BCK_RD_WAIT01, 10.0f, 2, 1.0f);
-            i_this->mMode = 1;
+            i_this->mode = 1;
             break;
 
         case 1:
@@ -3414,33 +3414,33 @@ static s8 e_rd_bow3(e_rd_class* i_this) {
             break;
 
         case 3:
-            if (i_this->field_0x990[0] == 0) {
-                i_this->mMode = 0;
+            if (i_this->timer[0] == 0) {
+                i_this->mode = 0;
             }
             break;
 
         case 5:
-            if (i_this->field_0x990[1] == 1) {
+            if (i_this->timer[1] == 1) {
                 anm_init(i_this, BCK_RD_KYORO2, 5.0f, 2, 1.3f);
             }
 
-            if (i_this->field_0x990[0] == 10) {
+            if (i_this->timer[0] == 10) {
                 anm_init(i_this, BCK_RD_WAIT01, 5.0f, 2, 1.0f);
             }
 
-            if (i_this->field_0x990[0] == 0) {
-                i_this->mAction = ACTION_BOW2;
-                i_this->mMode = 0;
+            if (i_this->timer[0] == 0) {
+                i_this->action = ACTION_BOW2;
+                i_this->mode = 0;
             }
             break;
 
         case 10:
-            if (i_this->field_0x990[0] == 0) {
+            if (i_this->timer[0] == 0) {
                 anm_init(i_this, BCK_RD_SHOOT_READY, 5.0f, 0, 1.0f);
-                i_this->mpMorfBowAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, 7),
+                i_this->bow_anm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, 7),
                 0, 5.0f, 0.9f + TREG_F(3), 0.0f, -1.0f);
-                i_this->mMode = 11;
-                a_this->speedF = 0.0f;
+                i_this->mode = 11;
+                enemy->speedF = 0.0f;
             }
             break;
 
@@ -3451,23 +3451,23 @@ static s8 e_rd_bow3(e_rd_class* i_this) {
             }
 
             if (frame == 20) {
-                i_this->mSound.startCreatureSound(Z2SE_OBJ_ARROW_DRAW_NORMAL, 0, -1);
+                i_this->sound.startCreatureSound(Z2SE_OBJ_ARROW_DRAW_NORMAL, 0, -1);
             }
 
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 anm_init(i_this, BCK_RD_SHOOT_WAIT, 4.0f, 2, 1.0f);
-                i_this->field_0x990[0] = cM_rndF(10.0f) + 10.0f;
-                i_this->mMode = 12;
+                i_this->timer[0] = cM_rndF(10.0f) + 10.0f;
+                i_this->mode = 12;
             }
             break;
 
         case 12:
             i_this->field_0x9c8 = 4;
             
-            if (i_this->field_0x990[0] == 0 && !dMsgObject_isTalkNowCheck() && i_this->field_0x9a4 == 0) {
+            if (i_this->timer[0] == 0 && !dMsgObject_isTalkNowCheck() && i_this->field_0x9a4 == 0) {
                 anm_init(i_this, BCK_RD_SHOOT, 1.0f, 0, 1.0f);
-                i_this->mpMorfBowAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, 10), 0, 1.0f, 1.0f, 0.0f, -1.0f);
-                i_this->mMode = 13;
+                i_this->bow_anm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, 10), 0, 1.0f, 1.0f, 0.0f, -1.0f);
+                i_this->mode = 13;
             }
 
             i_this->field_0x9a2 = 1;
@@ -3480,40 +3480,40 @@ static s8 e_rd_bow3(e_rd_class* i_this) {
             }
 
             if (frame == 2 + XREG_S(7)) {
-                i_this->field_0x9a3 = 1;
+                i_this->arrow_flag = 1;
             }
 
-            if (i_this->mpModelMorf->isStop()) {
-                i_this->mMode = 0;
+            if (i_this->anm_p->isStop()) {
+                i_this->mode = 0;
             }
     }
 
     if (bVar1) {
-        cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mPlayerAngleY, 4, 0x1000);
+        cLib_addCalcAngleS2(&enemy->current.angle.y, i_this->angleY, 4, 0x1000);
     }
 
-    if (i_this->mPlayerDistance < 500.0f) {
-        i_this->mAction = ACTION_BOW_RUN;
-        i_this->mMode = 0;
-        i_this->field_0x1295 = 0;
+    if (i_this->dis < 500.0f) {
+        i_this->action = ACTION_BOW_RUN;
+        i_this->mode = 0;
+        i_this->one_hit_kill = 0;
     }
 
-    return retval;
+    return rt;
 }
 
 static void* s_command2_sub(void* i_actor, void* i_data) {
     UNUSED(i_data);
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD
-        && ((e_rd_class*)i_actor)->mAction == ACTION_BOW3 && ((e_rd_class*)i_actor)->mMode < 10) {
-        ((e_rd_class*)i_actor)->field_0x990[0] = cM_rndF(10.0f) + 10.0f;
-        ((e_rd_class*)i_actor)->mMode = 10;
+        && ((e_rd_class*)i_actor)->action == ACTION_BOW3 && ((e_rd_class*)i_actor)->mode < 10) {
+        ((e_rd_class*)i_actor)->timer[0] = cM_rndF(10.0f) + 10.0f;
+        ((e_rd_class*)i_actor)->mode = 10;
     }
 
     return NULL;
 }
 
 static void* s_command4_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && i_actor != i_data && ((e_rd_class*)i_actor)->mAction == ACTION_BOW3) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && i_actor != i_data && ((e_rd_class*)i_actor)->action == ACTION_BOW3) {
         return i_actor;
     }
 
@@ -3521,78 +3521,78 @@ static void* s_command4_sub(void* i_actor, void* i_data) {
 }
 
 static void e_rd_commander(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     s8 bVar1 = 0;
     s8 bVar2 = 0;
     boss = i_this;
 
-    if (i_this->field_0x990[2] == 0 && fpcM_Search(s_command4_sub, i_this) == NULL) {
-        i_this->mAction = ACTION_BOW2;
-        i_this->mMode = 0;
+    if (i_this->timer[2] == 0 && fpcM_Search(s_command4_sub, i_this) == NULL) {
+        i_this->action = ACTION_BOW2;
+        i_this->mode = 0;
     } else {
-        switch (i_this->mMode) {
+        switch (i_this->mode) {
             case 0:
-                i_this->mMode = 1;
+                i_this->mode = 1;
                 break;
 
             case 1:
                 bVar1 = 1;
-                if (i_this->field_0x990[0] == 0) {
+                if (i_this->timer[0] == 0) {
                     anm_init(i_this, BCK_RD_KYORO2, 10.0f, 2, 1.0f);
-                    i_this->mMode = 2;
-                    i_this->field_0x990[0] = cM_rndF(40.0f) + 60.0f;
+                    i_this->mode = 2;
+                    i_this->timer[0] = cM_rndF(40.0f) + 60.0f;
                 }
                 break;
 
             case 2:
                 bVar1 = 1;
-                if (i_this->field_0x990[0] == 0) {
+                if (i_this->timer[0] == 0) {
                     anm_init(i_this, BCK_RD_WAIT01, 10.0f, 2, 1.0f);
-                    i_this->field_0x990[0] = cM_rndF(100.0f) + 100.0f;
-                    i_this->mMode = 1;
+                    i_this->timer[0] = cM_rndF(100.0f) + 100.0f;
+                    i_this->mode = 1;
                 }
                 break;
 
             case 5:
                 anm_init(i_this, BCK_RD_WAIT01, 5.0f, 2, 1.0f);
-                i_this->field_0x990[0] = 30;
-                i_this->mMode = 6;
+                i_this->timer[0] = 30;
+                i_this->mode = 6;
                 break;
 
             case 6:
                 bVar2 = 1;
-                if (i_this->field_0x990[0] == 0) {
+                if (i_this->timer[0] == 0) {
                     anm_init(i_this, BCK_RD_GOSIGN, 3.0f, 0, 1.0f);
-                    i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_COMMANDER, -1);
-                    i_this->mMode = 7;
+                    i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_COMMANDER, -1);
+                    i_this->mode = 7;
 
                     if (dComIfGp_event_runCheck()) {
-                        i_this->field_0x990[0] = l_HIO.command_to_ready_stance + 2;
+                        i_this->timer[0] = l_HIO.command_to_ready_stance + 2;
                     } else {
-                        i_this->field_0x990[0] = 10;
+                        i_this->timer[0] = 10;
                     }
                 }
                 break;
 
             case 7:
                 bVar2 = 1;
-                if (i_this->field_0x990[0] == 1) {
+                if (i_this->timer[0] == 1) {
                     fpcM_Search(s_command2_sub, i_this);
                 }
 
-                if (i_this->field_0x990[0] == 0 && i_this->mpModelMorf->isStop()) {
+                if (i_this->timer[0] == 0 && i_this->anm_p->isStop()) {
                     anm_init(i_this, BCK_RD_WAIT01, 5.0f, 2, 1.0f);
-                    if (!dComIfGp_event_runCheck() && !pl_check(i_this, i_this->field_0x980, 0x4000)) {
-                        i_this->mMode = 10;
-                        i_this->field_0x990[1] = TREG_S(8) + 350;
+                    if (!dComIfGp_event_runCheck() && !pl_check(i_this, i_this->attack_range, 0x4000)) {
+                        i_this->mode = 10;
+                        i_this->timer[1] = TREG_S(8) + 350;
                     } else {
                         if (dComIfGp_event_runCheck()) {
-                            i_this->field_0x990[0] = 80;
+                            i_this->timer[0] = 80;
                         } else {
-                            i_this->field_0x990[0] = TREG_S(3);
+                            i_this->timer[0] = TREG_S(3);
                         }
 
-                        i_this->mMode = 6;
+                        i_this->mode = 6;
                     }
                 }
                 break;
@@ -3601,137 +3601,137 @@ static void e_rd_commander(e_rd_class* i_this) {
                 anm_init(i_this, BCK_RD_GOSIGN, 3.0f, 0, 1.0f);
                 mDoAud_seStart(Z2SE_EN_RD_V_CALLING, 0, 0, 0);
                 fpcM_Search(s_command2_sub, i_this);
-                i_this->mMode = 11;
+                i_this->mode = 11;
                 break;
 
             case 11:
-                if (i_this->mpModelMorf->isStop()) {
-                    if (i_this->field_0x990[1] == 0) {
+                if (i_this->anm_p->isStop()) {
+                    if (i_this->timer[1] == 0) {
                         anm_init(i_this, BCK_RD_WAIT01, 10.0f, 2, 1.0f);
-                        i_this->field_0x990[0] = cM_rndF(30.0f) + 30.0f;
-                        i_this->mMode = 1;
+                        i_this->timer[0] = cM_rndF(30.0f) + 30.0f;
+                        i_this->mode = 1;
                     } else {
-                        i_this->mMode = 10;
+                        i_this->mode = 10;
                     }
                 }
         }
 
-        if (bVar1 && pl_check(i_this, i_this->field_0x980, 0x4000)) {
-            i_this->mMode = 5;
-            if (i_this->field_0x12a0 != 0) {
-                dComIfGs_onSwitch(i_this->field_0x12a0, fopAcM_GetRoomNo(a_this));
+        if (bVar1 && pl_check(i_this, i_this->attack_range, 0x4000)) {
+            i_this->mode = 5;
+            if (i_this->sw != 0) {
+                dComIfGs_onSwitch(i_this->sw, fopAcM_GetRoomNo(enemy));
             }
         }
 
         if (bVar2) {
-            cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mPlayerAngleY, 2, 0x800);
+            cLib_addCalcAngleS2(&enemy->current.angle.y, i_this->angleY, 2, 0x800);
         }
     }
 }
 
 static void e_rd_excite(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     cXyz sp40;
-    f32 fVar1 = 0.0f;
+    f32 speed = 0.0f;
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
             anm_init(i_this, BCK_RD_WAIT01, 4.0f, 2, 1.0f);
-            i_this->mMode = 1;
-            i_this->field_0x990[0] = cM_rndF(20.0f) + 20.0f;
-            i_this->field_0x5cc = a_this->current.angle.y;
+            i_this->mode = 1;
+            i_this->timer[0] = cM_rndF(20.0f) + 20.0f;
+            i_this->target_ya = enemy->current.angle.y;
             i_this->field_0x5c0 = S_find_pos;
             break;
 
         case 1:
             i_this->field_0x9c8 = 11;
-            i_this->field_0x9d4 = S_find_pos;
+            i_this->eye = S_find_pos;
 
-            if (i_this->field_0x990[0] == 0) {
-                if (i_this->field_0x1295 != 0) {
-                    i_this->mMode = 3;
+            if (i_this->timer[0] == 0) {
+                if (i_this->one_hit_kill != 0) {
+                    i_this->mode = 3;
                     anm_init(i_this, BCK_RD_KYORO2, 5.0f, 2, 1.3f);
-                    i_this->field_0x990[0] = cM_rndF(20.0f) + 40.0f;
+                    i_this->timer[0] = cM_rndF(20.0f) + 40.0f;
                 } else {
-                    i_this->mMode = 2;
+                    i_this->mode = 2;
                     anm_init(i_this, BCK_RD_RUN, 2.0f, 2, cM_rndFX(0.05f) + 1.0f);
-                    i_this->field_0x990[0] = cM_rndF(15.0f) + 30.0f;
+                    i_this->timer[0] = cM_rndF(15.0f) + 30.0f;
                 }
 
-                sp40 = i_this->field_0x5c0 - a_this->current.pos;
-                i_this->field_0x5cc = (s16) cM_atan2s(sp40.x, sp40.z);
+                sp40 = i_this->field_0x5c0 - enemy->current.pos;
+                i_this->target_ya = (s16) cM_atan2s(sp40.x, sp40.z);
             }
             break;
 
         case 2:
             i_this->field_0x9c8 = 11;
-            i_this->field_0x9d4 = i_this->field_0x5c0;
-            fVar1 = l_HIO.dash_speed;
-            sp40 = i_this->field_0x5c0 - a_this->current.pos;
-            if (i_this->field_0x990[0] == 0 || move_gake_check(i_this, 100.0f) || sp40.abs() < 100.0f) {
-                i_this->mMode = 3;
+            i_this->eye = i_this->field_0x5c0;
+            speed = l_HIO.dash_speed;
+            sp40 = i_this->field_0x5c0 - enemy->current.pos;
+            if (i_this->timer[0] == 0 || move_gake_check(i_this, 100.0f) || sp40.abs() < 100.0f) {
+                i_this->mode = 3;
                 anm_init(i_this, BCK_RD_KYORO2, 5.0f, 2, 1.3f);
-                i_this->field_0x990[0] = cM_rndF(20.0f) + 40.0f;
+                i_this->timer[0] = cM_rndF(20.0f) + 40.0f;
             }
             break;
 
         case 3:
-            if (i_this->field_0x990[0] == 0) {
-                i_this->mAction = i_this->field_0x974;
-                if (i_this->mAction == ACTION_STAND) {
-                    i_this->mAction = ACTION_NORMAL;
+            if (i_this->timer[0] == 0) {
+                i_this->action = i_this->prev_action;
+                if (i_this->action == ACTION_STAND) {
+                    i_this->action = ACTION_NORMAL;
                 }
 
-                i_this->mMode = 0;
+                i_this->mode = 0;
             }
             break;
     }
 
-    cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->field_0x5cc, 2, 0x800);
-    s16 sVar1 = a_this->current.angle.y - i_this->field_0x5cc;
-    if (sVar1 > 0x400 || sVar1 < -0x400) {
-        fVar1 = 0.0f;
+    cLib_addCalcAngleS2(&enemy->current.angle.y, i_this->target_ya, 2, 0x800);
+    s16 range = enemy->current.angle.y - i_this->target_ya;
+    if (range > 0x400 || range < -0x400) {
+        speed = 0.0f;
     }
 
-    cLib_addCalc2(&a_this->speedF, fVar1, 1.0f, 5.0f);
+    cLib_addCalc2(&enemy->speedF, speed, 1.0f, 5.0f);
 }
 
 static void e_rd_water(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
 
-    i_this->field_0x998 = 10;
+    i_this->damage_timer = 10;
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
         case 1: {
-            a_this->speed.y = 0.0f;
+            enemy->speed.y = 0.0f;
             if (i_this->field_0xa1f == 0) {
                 anm_init(i_this, BCK_RD_DROWNEDA, 3.0f, 2, 1.0f);
             } else {
                 anm_init(i_this, BCK_RD_DROWNEDB, 3.0f, 2, 1.0f);
             }
 
-            i_this->field_0x990[0] = 60;
-            i_this->field_0x9f0 = i_this->field_0x9ec = a_this->speedF = 0.0f;
-            cXyz sp28 = a_this->current.pos;
-            sp28.y = i_this->field_0x984;
-            if (i_this->mMode == 0) {
-                fopKyM_createWpillar(&sp28, 1.5f, 0);
+            i_this->timer[0] = 60;
+            i_this->field_0x9f0 = i_this->jump_z = enemy->speedF = 0.0f;
+            cXyz yogan = enemy->current.pos;
+            yogan.y = i_this->waterY;
+            if (i_this->mode == 0) {
+                fopKyM_createWpillar(&yogan, 1.5f, 0);
             } else {
                 OS_REPORT("      RD YOGAN  \n");
-                fopKyM_createMpillar(&sp28, 1.0f);
+                fopKyM_createMpillar(&yogan, 1.0f);
             }
 
-            i_this->mMode = 10;
+            i_this->mode = 10;
             break;
         }
 
         case 10:
-            a_this->speed.y = 0.0f;
-            cLib_addCalc2(&a_this->current.pos.y, i_this->field_0x984, 0.5f, 5.0f);
-            cLib_addCalcAngleS2(&i_this->field_0xa0c.x, -0x4000, 4, 0x400 + BREG_S(4));
+            enemy->speed.y = 0.0f;
+            cLib_addCalc2(&enemy->current.pos.y, i_this->waterY, 0.5f, 5.0f);
+            cLib_addCalcAngleS2(&i_this->jump_angle.x, -0x4000, 4, 0x400 + BREG_S(4));
 
-            if (i_this->field_0x990[0] == 0) {
+            if (i_this->timer[0] == 0) {
                 rd_disappear(i_this);
             }
             break;
@@ -3739,28 +3739,28 @@ static void e_rd_water(e_rd_class* i_this) {
 }
 
 static void e_rd_kiba_start(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
 
-    fopAcM_OffStatus(a_this, 0);
-    a_this->attention_info.flags = 0;
-    i_this->field_0x998 = 10;
+    fopAcM_OffStatus(enemy, 0);
+    enemy->attention_info.flags = 0;
+    i_this->damage_timer = 10;
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
             anm_init(i_this, e_rdb_class::BCK_RB_RWAIT02, 1.0f, 2, 1.0f);
-            i_this->mMode++;
+            i_this->mode++;
             i_this->field_0x6a0 = 0;
             break;
 
         case 2:
             anm_init(i_this, e_rdb_class::BCK_RB_RCOMEON, 10.0f, 0, 1.0f);
-            i_this->mMode++;
+            i_this->mode++;
             break;
 
         case 3:
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 anm_init(i_this, e_rdb_class::BCK_RB_RWAIT02, 5.0f, 2, 1.0f);
-                i_this->mMode++;
+                i_this->mode++;
             }
             break;
 
@@ -3768,46 +3768,46 @@ static void e_rd_kiba_start(e_rd_class* i_this) {
             i_this->field_0x6a0 = 1;
             anm_init(i_this, e_rdb_class::BCK_RB_RPLAY_STOP2, 20.0f, 0, 1.0f);
             horn_anm_init(i_this, 6, 2.0f, 0, 1.0f);
-            i_this->mMode++;
+            i_this->mode++;
             break;
 
         case 6:
-            if ((int)i_this->mpModelMorf->getFrame() == 21) {
-                i_this->mSound.startCreatureVoice(Z2SE_EN_RDB_HORN, -1);
+            if ((int)i_this->anm_p->getFrame() == 21) {
+                i_this->sound.startCreatureVoice(Z2SE_EN_RDB_HORN, -1);
             }
 
-            if (i_this->mpModelMorf->isStop()) {
-                i_this->mAction = ACTION_WB_RUN;
-                i_this->mMode = 0;
-                fopAcM_OnStatus(a_this, 0); // statement does nothing.
-                a_this->attention_info.flags = fopAc_AttnFlag_BATTLE_e;
+            if (i_this->anm_p->isStop()) {
+                i_this->action = ACTION_WB_RUN;
+                i_this->mode = 0;
+                fopAcM_OnStatus(enemy, 0); // statement does nothing.
+                enemy->attention_info.flags = fopAc_AttnFlag_BATTLE_e;
             }
     }
 }
 
 static void e_rd_ikki2_start(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
 
-    fopAcM_OffStatus(a_this, 0);
-    a_this->attention_info.flags = 0;
-    i_this->field_0x998 = 10;
+    fopAcM_OffStatus(enemy, 0);
+    enemy->attention_info.flags = 0;
+    i_this->damage_timer = 10;
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
             anm_init(i_this, e_rdb_class::BCK_RB_ROP_DEMO2_WAIT, 1.0f, 2, 1.0f);
-            i_this->mMode++;
+            i_this->mode++;
             break;
             
         case 2:
             anm_init(i_this, e_rdb_class::BCK_RB_ROP_DEMO2_EXCITE, 5.0f, 0, 1.0f);
-            i_this->mSound.startCreatureVoice(Z2SE_EN_RDB_V_DEMO_EXCITE, -1);
-            i_this->mMode++;
+            i_this->sound.startCreatureVoice(Z2SE_EN_RDB_V_DEMO_EXCITE, -1);
+            i_this->mode++;
             break;
 
         case 3:
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 anm_init(i_this, e_rdb_class::BCK_RB_ROP_DEMO2_WAIT, 10.0f, 2, 1.0f);
-                i_this->mMode = 4;
+                i_this->mode = 4;
             }
             break;
 
@@ -3817,181 +3817,181 @@ static void e_rd_ikki2_start(e_rd_class* i_this) {
 }
 
 static void e_rd_kiba_end(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
 
-    fopAcM_OffStatus(a_this, 0);
-    a_this->attention_info.flags = 0;
-    i_this->field_0x998 = 10;
-    e_wb_class* bullbo = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
+    fopAcM_OffStatus(enemy, 0);
+    enemy->attention_info.flags = 0;
+    i_this->damage_timer = 10;
+    e_wb_class* boar = (e_wb_class*)fopAcM_SearchByID(i_this->boar_id);
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
             i_this->field_0x680 = 0;
             anm_init(i_this, BCK_RD_RSHOOT_WAIT, 1.0f, 0, 1.0f);
-            i_this->mMode++;
-            i_this->field_0x990[0] = 14;
-            bullbo->field_0x7a2 = 1;
+            i_this->mode++;
+            i_this->timer[0] = 14;
+            boar->field_0x7a2 = 1;
             break;
 
         case 1:
-            if (i_this->field_0x990[0] == 1) {
-                cXyz sp28, sp34;
-                cMtx_YrotS(*calc_mtx, a_this->shape_angle.y);
-                sp28.x = BREG_F(8) + 40.0f;
-                sp28.y = BREG_F(9) + 20.0f;
-                sp28.z = BREG_F(10) + 57.0f;
-                MtxPosition(&sp28, &i_this->field_0x6b0);
-                i_this->field_0x6bc.y = a_this->shape_angle.y + BREG_S(0);
-                sp28.x = BREG_F(11) + 80.0f;
-                sp28.y = BREG_F(12);
-                sp28.z = BREG_F(13);
-                MtxPosition(&sp28, &sp34);
-                i_this->field_0x6a4 += sp34;
+            if (i_this->timer[0] == 1) {
+                cXyz mae, ato;
+                cMtx_YrotS(*calc_mtx, enemy->shape_angle.y);
+                mae.x = BREG_F(8) + 40.0f;
+                mae.y = BREG_F(9) + 20.0f;
+                mae.z = BREG_F(10) + 57.0f;
+                MtxPosition(&mae, &i_this->field_0x6b0);
+                i_this->field_0x6bc.y = enemy->shape_angle.y + BREG_S(0);
+                mae.x = BREG_F(11) + 80.0f;
+                mae.y = BREG_F(12);
+                mae.z = BREG_F(13);
+                MtxPosition(&mae, &ato);
+                i_this->field_0x6a4 += ato;
                 i_this->field_0x6a0 = 2;
             }
 
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 anm_init(i_this, BCK_RD_RSHOOT_WAIT02, 2.0f, 2, 1.0f);
-                i_this->mMode++;
-                i_this->field_0x990[0] = 110;
+                i_this->mode++;
+                i_this->timer[0] = 110;
             }
             break;
 
         case 2:
-            if (i_this->field_0x990[0] == 0) {
+            if (i_this->timer[0] == 0) {
                 anm_init(i_this, BCK_RD_RSTEP_BACK, 2.0f, 0, 1.0f);
-                i_this->mMode++;
-                i_this->mSound.startCreatureVoice(Z2SE_EN_RDB_V_AWAKE, -1);
-                i_this->field_0x990[0] = 10;
+                i_this->mode++;
+                i_this->sound.startCreatureVoice(Z2SE_EN_RDB_V_AWAKE, -1);
+                i_this->timer[0] = 10;
             }
             break;
 
         case 3:
-            if (i_this->field_0x990[0] == 0) {
-                bullbo->field_0x7a2 = 0;
+            if (i_this->timer[0] == 0) {
+                boar->field_0x7a2 = 0;
             }
 
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 anm_init(i_this, BCK_RD_SHOUT, 5.0f, 2, 1.0f);
-                i_this->mMode++;
-                i_this->field_0x990[0] = 20;
+                i_this->mode++;
+                i_this->timer[0] = 20;
             }
             break;
 
         case 4:
-            if (i_this->field_0x990[0] != 0) {
+            if (i_this->timer[0] != 0) {
                 i_this->field_0x9c8 = 1;
             }
 
-            if ((bullbo->mStatusFlags & 0x100) != 0) {
-                i_this->mAction = ACTION_WB_BJUMP;
-                i_this->mMode = 0;
-                i_this->field_0x990[1] = 2000;
-                i_this->field_0x990[2] = 1000;
+            if ((boar->mStatusFlags & 0x100) != 0) {
+                i_this->action = ACTION_WB_BJUMP;
+                i_this->mode = 0;
+                i_this->timer[1] = 2000;
+                i_this->timer[2] = 1000;
             }
             break;
     }
 }
 
 static void e_rd_ikki_end(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    e_wb_class* bullbo = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    e_wb_class* boar = (e_wb_class*)fopAcM_SearchByID(i_this->boar_id);
 
-    fopAcM_OffStatus(a_this, 0);
-    a_this->attention_info.flags = 0;
-    i_this->field_0x998 = 10;
-    bullbo->field_0x1434 = fopAcM_GetID(i_this);
+    fopAcM_OffStatus(enemy, 0);
+    enemy->attention_info.flags = 0;
+    i_this->damage_timer = 10;
+    boar->field_0x1434 = fopAcM_GetID(i_this);
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
             anm_init(i_this, BCK_RD_RRUN02_BACK, 1.0f, 0, 1.0f);
-            i_this->mMode++;
-            i_this->field_0x9bc = 0;
+            i_this->mode++;
+            i_this->ride_mode = 0;
 
-            if (daPy_getPlayerActorClass()->checkHorseRide() && bullbo != NULL) {
-                UNSET_FLAG(bullbo->mStatusFlags, i_this->field_0x9be, u16);
-                i_this->field_0x9be = 0;
-                bullbo->mActionID = 16;
-                bullbo->mActionMode = 0;
-                bullbo->field_0x169e = 10;
+            if (daPy_getPlayerActorClass()->checkHorseRide() && boar != NULL) {
+                UNSET_FLAG(boar->mStatusFlags, i_this->boar_stand, u16);
+                i_this->boar_stand = 0;
+                boar->mActionID = 16;
+                boar->mActionMode = 0;
+                boar->field_0x169e = 10;
             }
 
-            a_this->speedF = 0.0f;
-            a_this->speed.y = 40.0f + KREG_F(7);
-            i_this->field_0x9ec = 70.0f + KREG_F(8);
+            enemy->speedF = 0.0f;
+            enemy->speed.y = 40.0f + KREG_F(7);
+            i_this->jump_z = 70.0f + KREG_F(8);
 
-            if (fopAcM_searchPlayerAngleY(a_this) < 0) {
-                i_this->field_0xa0c.y = 0x4000;
+            if (fopAcM_searchPlayerAngleY(enemy) < 0) {
+                i_this->jump_angle.y = 0x4000;
             } else {
-                i_this->field_0xa0c.y = -0x4000;
+                i_this->jump_angle.y = -0x4000;
             }
 
-            i_this->mSound.startCreatureVoice(Z2SE_EN_RDB_V_DEATH, -1);
+            i_this->sound.startCreatureVoice(Z2SE_EN_RDB_V_DEATH, -1);
             break;
 
         case 1:
-            if (i_this->mAnmID == BCK_RD_RRUN02_BACK) {
-                if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm == BCK_RD_RRUN02_BACK) {
+                if (i_this->anm_p->isStop()) {
                     anm_init(i_this, BCK_RD_JUMP_A, 1.0f, 2, 1.0f);
                 }
             }
 
-            if (a_this->speed.y < 0.0f) {
-                cLib_addCalc2(&i_this->field_0x9ec, KREG_F(9), 0.1f, 1.0f);
-                a_this->current.angle.y += i_this->field_0x9f6;
+            if (enemy->speed.y < 0.0f) {
+                cLib_addCalc2(&i_this->jump_z, KREG_F(9), 0.1f, 1.0f);
+                enemy->current.angle.y += i_this->field_0x9f6;
             }
             break;
     }
 }
 
 static void e_rd_ikki2_end(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    e_wb_class* bullbo = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    e_wb_class* boar = (e_wb_class*)fopAcM_SearchByID(i_this->boar_id);
 
-    fopAcM_OffStatus(a_this, 0);
-    a_this->attention_info.flags = 0;
-    i_this->field_0x998 = 10;
-    bullbo->field_0x1434 = fopAcM_GetID(i_this);
+    fopAcM_OffStatus(enemy, 0);
+    enemy->attention_info.flags = 0;
+    i_this->damage_timer = 10;
+    boar->field_0x1434 = fopAcM_GetID(i_this);
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
             if (daPy_getPlayerActorClass()->checkHorseRide()) {
                 anm_init(i_this, BCK_RD_RRUN_BACK, 0.0f, 0, 1.0f);
-                i_this->mMode = 1;
-                bullbo->mActionID = 18;
-                bullbo->mActionMode = 0;
-                bullbo->field_0x169e = 90;
+                i_this->mode = 1;
+                boar->mActionID = 18;
+                boar->mActionMode = 0;
+                boar->field_0x169e = 90;
                 mDoAud_bgmStop(30);
             }
             break;
 
         case 1:
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 anm_init(i_this, BCK_RD_RSHOOT_READY, 3.0f, 2, 1.0f);
             }
             break;
 
         case 10:
             anm_init(i_this, BCK_RD_RSHOOT, 2.0f, 0, 1.0f);
-            i_this->mMode = 11;
-            i_this->field_0x9bc = 0;
+            i_this->mode = 11;
+            i_this->ride_mode = 0;
 
-            if (bullbo != NULL) {
-                UNSET_FLAG(bullbo->mStatusFlags, i_this->field_0x9be, u16);
-                i_this->field_0x9be = 0;
+            if (boar != NULL) {
+                UNSET_FLAG(boar->mStatusFlags, i_this->boar_stand, u16);
+                i_this->boar_stand = 0;
             }
 
-            a_this->speedF = 0.0f;
-            a_this->speed.y = 50.0f + KREG_F(7);
-            i_this->field_0x9ec = 60.0f + KREG_F(8);
-            i_this->field_0xa0c.y = 0x4000;
+            enemy->speedF = 0.0f;
+            enemy->speed.y = 50.0f + KREG_F(7);
+            i_this->jump_z = 60.0f + KREG_F(8);
+            i_this->jump_angle.y = 0x4000;
 
-            i_this->mSound.startCreatureVoice(Z2SE_EN_RDB_V_DEATH, -1);
+            i_this->sound.startCreatureVoice(Z2SE_EN_RDB_V_DEATH, -1);
             break;
 
         case 11:
-            if (a_this->speed.y < 0.0f) {
-                cLib_addCalc2(&i_this->field_0x9ec, KREG_F(9), 0.1f, 1.0f);
+            if (enemy->speed.y < 0.0f) {
+                cLib_addCalc2(&i_this->jump_z, KREG_F(9), 0.1f, 1.0f);
             }
             break;
     }
@@ -4007,51 +4007,51 @@ static void* s_rdb_sub(void* i_actor, void* i_data) {
 }
 
 static void e_rd_lv9_end(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    e_wb_class* bullbo = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    e_wb_class* boar = (e_wb_class*)fopAcM_SearchByID(i_this->boar_id);
 
-    i_this->field_0x998 = 10;
+    i_this->damage_timer = 10;
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
             anm_init(i_this, e_rdb_class::BCK_RB_RWALK, 0.0f, 2, 1.0f);
-            i_this->mMode = 1;
+            i_this->mode = 1;
             break;
 
         case 1:
-            if ((bullbo->mStatusFlags & 8) != 0) {
+            if ((boar->mStatusFlags & 8) != 0) {
                 anm_init(i_this, e_rdb_class::BCK_RB_RWAIT, 10.0f, 2, 1.0f);
-                i_this->mMode = 2;
+                i_this->mode = 2;
             }
             break;
 
         case 2:
-            if ((bullbo->mStatusFlags & 8) != 0) {
+            if ((boar->mStatusFlags & 8) != 0) {
                 anm_init(i_this, e_rdb_class::BCK_RB_LV9_END03, 5.0f, 0, 1.0f);
-                i_this->mSound.startCreatureVoice(Z2SE_EN_RDB_V_LV9_END03, -1);
-                i_this->mMode = 3;
+                i_this->sound.startCreatureVoice(Z2SE_EN_RDB_V_LV9_END03, -1);
+                i_this->mode = 3;
             }
             break;
 
         case 3:
-            if (i_this->mAnmID == e_rdb_class::BCK_RB_LV9_END03) {
-                if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm == e_rdb_class::BCK_RB_LV9_END03) {
+                if (i_this->anm_p->isStop()) {
                     anm_init(i_this, e_rdb_class::BCK_RB_RWAIT, 10.0f, 2, 1.0f);
                 }
             } else {
-                e_rdb_class* king_bulblin = (e_rdb_class*)fpcM_Search(s_rdb_sub, i_this);
-                if (king_bulblin != NULL && king_bulblin->mDemoMode == 14) {
+                e_rdb_class* rdb = (e_rdb_class*)fpcM_Search(s_rdb_sub, i_this);
+                if (rdb != NULL && rdb->mDemoMode == 14) {
                     anm_init(i_this, e_rdb_class::BCK_RB_RNEIGH, 3.0f, 0, 1.0f);
-                    bullbo->mActionMode++;
-                    i_this->mMode = 4;
+                    boar->mActionMode++;
+                    i_this->mode = 4;
                 }
             }
             break;
 
         case 4:
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 anm_init(i_this, e_rdb_class::BCK_RB_RRUN, 3.0f, 2, 1.0f);
-                i_this->mMode = 5;
+                i_this->mode = 5;
             }
             break;
 
@@ -4073,84 +4073,84 @@ static void* s_boom_sub(void* i_actor, void* i_data) {
 }
 
 static void wolfkick_damage(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    fopAc_ac_c* pla = dComIfGp_getPlayer(0);
 
-    i_this->mAction = ACTION_DAMAGE;
-    i_this->mMode = 0;
-    i_this->field_0xa0c.y = player->shape_angle.y + 0x8000;
-    a_this->speed.y = l_HIO.wolf_falling_power_y;
-    i_this->field_0x9ec = -l_HIO.wolf_falling_power_z;
-    i_this->mSound.startCollisionSE(Z2SE_HIT_WOOD_WEAPON, 31);
-    i_this->field_0x9f8 = 1;
-    i_this->field_0x998 = 1000;
+    i_this->action = ACTION_DAMAGE;
+    i_this->mode = 0;
+    i_this->jump_angle.y = pla->shape_angle.y + 0x8000;
+    enemy->speed.y = l_HIO.wolf_falling_power_y;
+    i_this->jump_z = -l_HIO.wolf_falling_power_z;
+    i_this->sound.startCollisionSE(Z2SE_HIT_WOOD_WEAPON, 31);
+    i_this->damage_flag = 1;
+    i_this->damage_timer = 1000;
 }
 
 static void big_damage(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
 
-    i_this->mAction = ACTION_DAMAGE;
-    i_this->mMode = 0;
-    a_this->speed.y = l_HIO.jump_y + 2.0f;
+    i_this->action = ACTION_DAMAGE;
+    i_this->mode = 0;
+    enemy->speed.y = l_HIO.jump_y + 2.0f;
 
-    if (i_this->field_0x9bc == 2) {
-        fopAc_ac_c* bullbo = fopAcM_SearchByID(i_this->mWbActorID);
-        if (bullbo != NULL && bullbo->speedF >= 20.0f) {
-            i_this->field_0x9ec = bullbo->speedF;
-            if (i_this->field_0x9ec > 40.0f) {
-                i_this->field_0x9ec = 40.0f;
+    if (i_this->ride_mode == 2) {
+        fopAc_ac_c* actor = fopAcM_SearchByID(i_this->boar_id);
+        if (actor != NULL && actor->speedF >= 20.0f) {
+            i_this->jump_z = actor->speedF;
+            if (i_this->jump_z > 40.0f) {
+                i_this->jump_z = 40.0f;
             }
         } else {
-            i_this->field_0x9ec = -l_HIO.jump_z_suspended;
+            i_this->jump_z = -l_HIO.jump_z_suspended;
         }
 
-        i_this->field_0xa0c.y = a_this->shape_angle.y + (s16)cM_rndFX(3000.0f);
+        i_this->jump_angle.y = enemy->shape_angle.y + (s16)cM_rndFX(3000.0f);
     } else {
-        i_this->field_0xa0c.y = i_this->mAtInfo.mHitDirection.y;
-        i_this->field_0x9ec = -l_HIO.jump_z;
+        i_this->jump_angle.y = i_this->AtInfo.mHitDirection.y;
+        i_this->jump_z = -l_HIO.jump_z;
     }
 
-    if ((i_this->mAtInfo.mHitBit & 0x80) != 0) {
+    if ((i_this->AtInfo.mHitBit & 0x80) != 0) {
         OS_REPORT("SPIN CUT HIT !!\n");
         i_this->field_0x9f6 = cM_rndFX(2000.0f) + 4000.0f;
-    } else if ((i_this->mAtInfo.mHitBit & 0x800) != 0) {
+    } else if ((i_this->AtInfo.mHitBit & 0x800) != 0) {
         OS_REPORT("SPIN CUT L HIT !!\n");
         i_this->field_0x9f6 = -(cM_rndFX(2000.0f) + 4000.0f);
     } else {
-        if (i_this->field_0x9bc != 0) {
+        if (i_this->ride_mode != 0) {
             i_this->field_0x9f6 = cM_rndFX(3000.0f);
         } else {
-            if (fopAcM_GetName(i_this->mAtInfo.mpActor) == PROC_E_WB) {
+            if (fopAcM_GetName(i_this->AtInfo.mpActor) == PROC_E_WB) {
                 i_this->field_0x9f6 = cM_rndFX(8000.0f);
-                a_this->speed.y = cM_rndF(15.0f) + (35.0f + TREG_F(17));
-                i_this->field_0x9ec = -(i_this->mAtInfo.mpActor->speedF * 0.5f);
+                enemy->speed.y = cM_rndF(15.0f) + (35.0f + TREG_F(17));
+                i_this->jump_z = -(i_this->AtInfo.mpActor->speedF * 0.5f);
             } else {
                 i_this->field_0x9f6 = cM_rndFX(1000.0f);
             }
         }
     }
 
-    i_this->field_0x9f8 = 0;
-    i_this->field_0x998 = 1000;
+    i_this->damage_flag = 0;
+    i_this->damage_timer = 1000;
 
 }
 
 static void small_damage(e_rd_class* i_this, int param_2) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
 
-    if (i_this->mAction != ACTION_S_DAMAGE) {
-        i_this->field_0x974 = i_this->mAction;
+    if (i_this->action != ACTION_S_DAMAGE) {
+        i_this->prev_action = i_this->action;
     }
 
-    i_this->mAction = ACTION_S_DAMAGE;
-    i_this->mMode = 0;
-    i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_DAMAGE, -1);
+    i_this->action = ACTION_S_DAMAGE;
+    i_this->mode = 0;
+    i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_DAMAGE, -1);
 
     if (param_2 == 0) {
-        s16 sVar1 = a_this->shape_angle.y - i_this->mPlayerAngleY;
-        if (sVar1 < -0x4000 || sVar1 > 0x4000) {
+        s16 range = enemy->shape_angle.y - i_this->angleY;
+        if (range < -0x4000 || range > 0x4000) {
                 anm_init(i_this, BCK_RD_DAMAGE_W, 2.0f, 0, 1.0f);
-            } else if (sVar1 < 0) {
+            } else if (range < 0) {
                 anm_init(i_this, BCK_RD_DAMAGE_L, 2.0f, 0, 1.0f);
             } else {
                 anm_init(i_this, BCK_RD_DAMAGE_R, 2.0f, 0, 1.0f);
@@ -4160,19 +4160,19 @@ static void small_damage(e_rd_class* i_this, int param_2) {
     }
 
     i_this->field_0x9f0 = 20.0f + TREG_F(10);
-    i_this->field_0x9f4 = i_this->mAtInfo.mHitDirection.y;
+    i_this->field_0x9f4 = i_this->AtInfo.mHitDirection.y;
 }
 
 static void part_break(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     cXyz unused_vec_0, unused_vec_1;
 
     for (int i = 0; i < 14; i++) {
         if (i_this->field_0x70c[i] == 0) {
             i_this->field_0x70c[i] = 1;
-            i_this->mSound.startCreatureSound(Z2SE_EN_RDB_BREAK_ARMOR, 0, -1);
+            i_this->sound.startCreatureSound(Z2SE_EN_RDB_BREAK_ARMOR, 0, -1);
 
-            cXyz sp54 = i_this->field_0x71c[i] - a_this->current.pos;
+            cXyz sp54 = i_this->field_0x71c[i] - enemy->current.pos;
             cMtx_YrotS(*calc_mtx, cM_atan2s(sp54.x, sp54.z));
             sp54.x = cM_rndFX(10.0f);
             sp54.y = cM_rndF(5.0f) + 20.0f;
@@ -4183,42 +4183,42 @@ static void part_break(e_rd_class* i_this) {
             i_this->field_0x86c[i].x = cM_rndF(65536.0f);
 
             u16 uVar1;
-            if (i_this->mAtInfo.mHitStatus != 0) {
+            if (i_this->AtInfo.mHitStatus != 0) {
                 uVar1 = 3;
             } else {
                 uVar1 = 1;
             }
 
-            dComIfGp_setHitMark(uVar1, a_this, &i_this->field_0x71c[i], &a_this->shape_angle, NULL, 0);
+            dComIfGp_setHitMark(uVar1, enemy, &i_this->field_0x71c[i], &enemy->shape_angle, NULL, 0);
             return;
         }
     }
 }
 
 static void damage_check(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    fopAc_ac_c* bullbo = fopAcM_SearchByID(i_this->mWbActorID);
-    e_wb_class* bullbo_p = (e_wb_class*)bullbo;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    daPy_py_c* pla = (daPy_py_c*)dComIfGp_getPlayer(0);
+    fopAc_ac_c* actor = fopAcM_SearchByID(i_this->boar_id);
+    e_wb_class* boar = (e_wb_class*)actor;
 
-    if (i_this->field_0x9bc == 2 && bullbo_p != NULL && (bullbo_p->mStatusFlags & 0xC0) != 0) {
-        if (i_this->mAction == ACTION_IKKI2_END) {
-            i_this->mMode = 10;
+    if (i_this->ride_mode == 2 && boar != NULL && (boar->mStatusFlags & 0xC0) != 0) {
+        if (i_this->action == ACTION_IKKI2_END) {
+            i_this->mode = 10;
         } else {
-            i_this->mAction = ACTION_DAMAGE;
-            i_this->mMode = 0;
-            i_this->field_0x998 = 1000;
+            i_this->action = ACTION_DAMAGE;
+            i_this->mode = 0;
+            i_this->damage_timer = 1000;
 
-            if ((bullbo_p->mStatusFlags & 0x80) != 0) {
-                i_this->field_0xa0c.y = a_this->shape_angle.y + 0x8000 + (s16)cM_rndFX(3000.0f);
+            if ((boar->mStatusFlags & 0x80) != 0) {
+                i_this->jump_angle.y = enemy->shape_angle.y + 0x8000 + (s16)cM_rndFX(3000.0f);
                 i_this->field_0x9f6 = (s16)cM_rndFX(1000.0f);
             } else {
-                i_this->field_0xa0c.y = a_this->shape_angle.y + (s16)cM_rndFX(8000.0f);
+                i_this->jump_angle.y = enemy->shape_angle.y + (s16)cM_rndFX(8000.0f);
                 i_this->field_0x9f6 = (s16)cM_rndFX(3000.0f);
             }
 
-            a_this->speed.y = cM_rndF(15.0f) + (25.0f + TREG_F(13));
-            i_this->field_0x9ec = -20.0f + TREG_F(18);
+            enemy->speed.y = cM_rndF(15.0f) + (25.0f + TREG_F(13));
+            i_this->jump_z = -20.0f + TREG_F(18);
         }
 
         return;
@@ -4226,78 +4226,78 @@ static void damage_check(e_rd_class* i_this) {
 
     i_this->mStts.Move();
 
-    if (i_this->field_0x998 == 0) {
-        if (i_this->mBossMode != 0
+    if (i_this->damage_timer == 0) {
+        if (i_this->actor_set != 0
 #if DEBUG
             || l_HIO.invulnerable
 #endif
         ) {
-            a_this->health = 100;
+            enemy->health = 100;
         }
 
         for (int i = 0; i <= 2; i++) {
-            if (i_this->field_0xd58[i].ChkTgHit() != 0) {
-                i_this->field_0x998 = 6;
-                i_this->mAtInfo.mpCollider = i_this->field_0xd58[i].GetTgHitObj();
-                if (i_this->mBossMode == 3) {
-                    s16 sVar1 = a_this->shape_angle.y - i_this->mPlayerAngleY;
-                    at_power_check(&i_this->mAtInfo);
-                    if (i_this->mAtInfo.mpCollider->ChkAtType(AT_TYPE_ARROW) || i_this->mAtInfo.mpCollider->ChkAtType(AT_TYPE_BOMB)) {
+            if (i_this->cc_sph[i].ChkTgHit() != 0) {
+                i_this->damage_timer = 6;
+                i_this->AtInfo.mpCollider = i_this->cc_sph[i].GetTgHitObj();
+                if (i_this->actor_set == 3) {
+                    s16 range = enemy->shape_angle.y - i_this->angleY;
+                    at_power_check(&i_this->AtInfo);
+                    if (i_this->AtInfo.mpCollider->ChkAtType(AT_TYPE_ARROW) || i_this->AtInfo.mpCollider->ChkAtType(AT_TYPE_BOMB)) {
                         u16 uVar1;
-                        if (dComIfGp_getHorseActor()->speedF > 20.0f || sVar1 > 0x7800 || sVar1 < -0x7800) {
-                            cc_at_check(a_this, &i_this->mAtInfo);
+                        if (dComIfGp_getHorseActor()->speedF > 20.0f || range > 0x7800 || range < -0x7800) {
+                            cc_at_check(enemy, &i_this->AtInfo);
                             dScnPly_c::setPauseTimer(0);
-                            bullbo_p->mLapCount++;
-                            if (bullbo_p->mLapCount >= 3) {
+                            boar->mLapCount++;
+                            if (boar->mLapCount >= 3) {
                                 mDoAud_bgmStop(30);
-                                i_this->mAction = ACTION_IKKI2_END;
-                                i_this->mMode = 0;
-                                i_this->mSound.startCreatureVoice(Z2SE_EN_RDB_V_DAMAGE_L, -1);
+                                i_this->action = ACTION_IKKI2_END;
+                                i_this->mode = 0;
+                                i_this->sound.startCreatureVoice(Z2SE_EN_RDB_V_DAMAGE_L, -1);
                             } else {
-                                bullbo_p->field_0x169e = 25;
+                                boar->field_0x169e = 25;
                                 anm_init(i_this, e_rdb_class::BCK_RB_RDAMAGEB, 2.0f, 0, 1.0f);
-                                i_this->mSound.startCreatureVoice(Z2SE_EN_RDB_V_DAMAGE, -1);
+                                i_this->sound.startCreatureVoice(Z2SE_EN_RDB_V_DAMAGE, -1);
                             }
 
                             uVar1 = 3;
-                            bullbo_p->field_0x698[3] = 100;
+                            boar->field_0x698[3] = 100;
                             dComIfGs_onSaveDunSwitch(7);
                         } else {
                             uVar1 = 2;
                             anm_init(i_this, e_rdb_class::BCK_RB_RGUARD_F, 2.0f, 0, 1.0f);
                         }
 
-                        cXyz sp34, sp40;
-                        cMtx_YrotS(*calc_mtx, bullbo->shape_angle.y);
-                        sp34.set(0.0f, nREG_F(9) + 150.0f, nREG_F(10) + 200.0f);
-                        MtxPosition(&sp34, &sp40);
+                        cXyz mae, ato;
+                        cMtx_YrotS(*calc_mtx, actor->shape_angle.y);
+                        mae.set(0.0f, nREG_F(9) + 150.0f, nREG_F(10) + 200.0f);
+                        MtxPosition(&mae, &ato);
 
-                        sp40 += a_this->current.pos;
-                        cXyz sp4c(2.0f, 2.0f, 2.0f);
-                        dComIfGp_setHitMark(uVar1, a_this, &sp40, NULL, &sp4c, 0);
-                    } else if (i_this->mAtInfo.mHitType == 1) {
+                        ato += enemy->current.pos;
+                        cXyz sc(2.0f, 2.0f, 2.0f);
+                        dComIfGp_setHitMark(uVar1, enemy, &ato, NULL, &sc, 0);
+                    } else if (i_this->AtInfo.mHitType == 1) {
                         anm_init(i_this, e_rdb_class::BCK_RB_RGUARD_F, 2.0f, 0, 1.0f);
-                        bullbo_p->field_0x169e = 25;
+                        boar->field_0x169e = 25;
                         dScnPly_c::setPauseTimer(0);
 
-                        cXyz sp58, sp64;
-                        cMtx_YrotS(*calc_mtx, bullbo->shape_angle.y);
+                        cXyz mae, ato;
+                        cMtx_YrotS(*calc_mtx, actor->shape_angle.y);
 
-                        s16 angle_diff = a_this->shape_angle.y - i_this->mPlayerAngleY;
+                        s16 angle_diff = enemy->shape_angle.y - i_this->angleY;
                         if (angle_diff < 0) {
-                            sp58.set(100.0f, nREG_F(9) + 150.0f, nREG_F(10) + 400.0f);
+                            mae.set(100.0f, nREG_F(9) + 150.0f, nREG_F(10) + 400.0f);
                         } else {
-                            sp58.set(-100.0f, nREG_F(9) + 150.0f, nREG_F(10) + 400.0f);
+                            mae.set(-100.0f, nREG_F(9) + 150.0f, nREG_F(10) + 400.0f);
                         }
-                        MtxPosition(&sp58, &sp64);
+                        MtxPosition(&mae, &ato);
 
-                        sp64 += a_this->current.pos;
-                        cXyz sp70(2.0f, 2.0f, 2.0f);
-                        dComIfGp_setHitMark(2, a_this, &sp64, NULL, &sp70, 0);
+                        ato += enemy->current.pos;
+                        cXyz sc(2.0f, 2.0f, 2.0f);
+                        dComIfGp_setHitMark(2, enemy, &ato, NULL, &sc, 0);
                         dComIfGp_getVibration().StartShock(8, 31, cXyz(0.0f, 1.0f, 0.0f));
-                        i_this->mSound.startCollisionSE(Z2SE_HIT_SWORD, 40);
+                        i_this->sound.startCollisionSE(Z2SE_HIT_SWORD, 40);
 
-                        i_this->field_0x998 = 30;
+                        i_this->damage_timer = 30;
                     }
 
                     return;
@@ -4305,19 +4305,19 @@ static void damage_check(e_rd_class* i_this) {
 
                 i_this->field_0x129c = 3;
 
-                if (i_this->mAtInfo.mpCollider->ChkAtType(AT_TYPE_10000000)) {
+                if (i_this->AtInfo.mpCollider->ChkAtType(AT_TYPE_10000000)) {
                     wolfkick_damage(i_this);
                     break;
                 }
 
-                    at_power_check(&i_this->mAtInfo);
-                    if (i_this->mAtInfo.mpCollider->ChkAtType(AT_TYPE_SHIELD_ATTACK)) {
-                        i_this->field_0x990[1] = 30;
+                    at_power_check(&i_this->AtInfo);
+                    if (i_this->AtInfo.mpCollider->ChkAtType(AT_TYPE_SHIELD_ATTACK)) {
+                        i_this->timer[1] = 30;
                     } else {
-                        i_this->field_0x990[1] = 1;
+                        i_this->timer[1] = 1;
                     }
 
-                    if (i_this->field_0x9bc == 2 && i_this->mAtInfo.mAttackPower <= 10) {
+                    if (i_this->ride_mode == 2 && i_this->AtInfo.mAttackPower <= 10) {
                         if (fpcM_Search(s_boom_sub, i_this) != NULL) {
                             return;
                         }
@@ -4325,75 +4325,75 @@ static void damage_check(e_rd_class* i_this) {
                         i_this->field_0x99a = 5;
                     }
 
-                    s16 cur_health = a_this->health; // unused
-                    OS_REPORT(" HIT AT  %d\n", i_this->mAtInfo.mAttackPower);
-                    if (i_this->field_0x1295 != 0 && (i_this->mAtInfo.mpCollider->ChkAtType(AT_TYPE_SLINGSHOT) || 
-                        (i_this->mAtInfo.mHitType != 1 && i_this->mAtInfo.mHitType != 16 && i_this->mAtInfo.mHitType != 2))) {
-                        i_this->field_0x998 = 1000;
-                        i_this->mAction = ACTION_DROP;
-                        i_this->mMode = 0;
-                        a_this->health = 0;
-                        cc_at_check(a_this, &i_this->mAtInfo);
+                    s16 cur_health = enemy->health; // unused
+                    OS_REPORT(" HIT AT  %d\n", i_this->AtInfo.mAttackPower);
+                    if (i_this->one_hit_kill != 0 && (i_this->AtInfo.mpCollider->ChkAtType(AT_TYPE_SLINGSHOT) || 
+                        (i_this->AtInfo.mHitType != 1 && i_this->AtInfo.mHitType != 16 && i_this->AtInfo.mHitType != 2))) {
+                        i_this->damage_timer = 1000;
+                        i_this->action = ACTION_DROP;
+                        i_this->mode = 0;
+                        enemy->health = 0;
+                        cc_at_check(enemy, &i_this->AtInfo);
                         return;
                     }
 
-                    if (i_this->mAtInfo.mHitType == 15) {
-                        a_this->health = 0;
-                        if (i_this->field_0x9bc == 0) {
-                            i_this->mAction = ACTION_A_DAMAGE;
-                            i_this->mMode = 0;
-                            i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_DAMAGE, -1);
-                            a_this->health = 0;
-                            cc_at_check(a_this, &i_this->mAtInfo);
+                    if (i_this->AtInfo.mHitType == 15) {
+                        enemy->health = 0;
+                        if (i_this->ride_mode == 0) {
+                            i_this->action = ACTION_A_DAMAGE;
+                            i_this->mode = 0;
+                            i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_DAMAGE, -1);
+                            enemy->health = 0;
+                            cc_at_check(enemy, &i_this->AtInfo);
                             return;
                         }
                     }
 
-                    cc_at_check(a_this, &i_this->mAtInfo);
+                    cc_at_check(enemy, &i_this->AtInfo);
                     if (daPy_getPlayerActorClass()->getCutType() == daPy_py_c::CUT_TYPE_HEAD_JUMP) {
-                        a_this->health = 0;
+                        enemy->health = 0;
                     }
 
-                    if (i_this->mAtInfo.mpCollider->ChkAtType(AT_TYPE_UNK)) {
-                        i_this->field_0x998 = 20;
+                    if (i_this->AtInfo.mpCollider->ChkAtType(AT_TYPE_UNK)) {
+                        i_this->damage_timer = 20;
                     } else {
-                        i_this->field_0x998 = 10;
+                        i_this->damage_timer = 10;
                     }
 
-                    if (i_this->mAtInfo.mAttackPower <= 1) {
-                        i_this->field_0x998 = 10 + KREG_S(8);
+                    if (i_this->AtInfo.mAttackPower <= 1) {
+                        i_this->damage_timer = 10 + KREG_S(8);
                     }
 
-                    i_this->field_0xa20 |= i_this->mAtInfo.mHitBit;
+                    i_this->field_0xa20 |= i_this->AtInfo.mHitBit;
 
-                    if (daPy_getPlayerActorClass()->checkHorseRide() != 0 && dComIfGp_getHorseActor()->speedF >= 20.0f && i_this->mAtInfo.mHitType == 1) {
-                        i_this->mAtInfo.mAttackPower = 20;
+                    if (daPy_getPlayerActorClass()->checkHorseRide() != 0 && dComIfGp_getHorseActor()->speedF >= 20.0f && i_this->AtInfo.mHitType == 1) {
+                        i_this->AtInfo.mAttackPower = 20;
                     }
 
-                    if (a_this->health <= 0 || i_this->mAtInfo.mHitStatus != 0 || i_this->field_0x9bc != 0) {
-                        if (player->getCutType() == daPy_py_c::CUT_TYPE_JUMP && player->checkCutJumpCancelTurn()) {
+                    if (enemy->health <= 0 || i_this->AtInfo.mHitStatus != 0 || i_this->ride_mode != 0) {
+                        if (pla->getCutType() == daPy_py_c::CUT_TYPE_JUMP && pla->checkCutJumpCancelTurn()) {
                             small_damage(i_this, i);
-                            i_this->field_0x998 = 3 + NREG_S(7);
+                            i_this->damage_timer = 3 + NREG_S(7);
                         } else {
-                            if (i_this->mBossMode != 0 && bullbo_p != NULL) {
-                                i_this->field_0x998 = 20;
-                                if (i_this->mBossMode == 2) {
-                                    bullbo_p->mLapCount++;
-                                    if (bullbo_p->mLapCount == 1) {
-                                        a_this->health = 0;
+                            if (i_this->actor_set != 0 && boar != NULL) {
+                                i_this->damage_timer = 20;
+                                if (i_this->actor_set == 2) {
+                                    boar->mLapCount++;
+                                    if (boar->mLapCount == 1) {
+                                        enemy->health = 0;
                                         /* dSv_event_flag_c::M_055 - Main Event - Did damage at least once during joust/one-on-one battle */
                                         dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[0x58]);
                                         part_break(i_this);
-                                        bullbo_p->field_0x169e = 20;
+                                        boar->field_0x169e = 20;
                                         dScnPly_c::setPauseTimer(0);
                                     }
 
-                                    if (l_HIO.one_hit_kill != 0 || bullbo_p->mLapCount >= 2) {
+                                    if (l_HIO.one_hit_kill != 0 || boar->mLapCount >= 2) {
                                         mDoAud_bgmStop(30);
-                                        i_this->mAction = ACTION_IKKI_END;
-                                        i_this->mMode = 0;
+                                        i_this->action = ACTION_IKKI_END;
+                                        i_this->mode = 0;
 
-                                        if ((i_this->mAtInfo.mHitBit & 0x80) != 0) {
+                                        if ((i_this->AtInfo.mHitBit & 0x80) != 0) {
                                             i_this->field_0x9f6 = 0x300 + YREG_S(0);
                                         } else {
                                             i_this->field_0x9f6 = cM_rndFX(100.0f);
@@ -4402,80 +4402,80 @@ static void damage_check(e_rd_class* i_this) {
                                         dScnPly_c::setPauseTimer(10);
                                     } else {
                                         if (i_this->field_0x680 == 0) {
-                                            int anm_idx = i_this->mAnmID;
+                                            int anm_idx = i_this->anm;
                                             anm_init(i_this, e_rdb_class::BCK_RB_RDOWNB, 2.0f, 0, 1.0f);
                                             i_this->field_0x680 = anm_idx;
                                         }
 
-                                        i_this->mSound.startCreatureVoice(Z2SE_EN_RDB_V_DAMAGE_L, -1);
+                                        i_this->sound.startCreatureVoice(Z2SE_EN_RDB_V_DAMAGE_L, -1);
                                     }
 
                                     return;
                                 }
 
-                                bullbo_p->mLapCount++;
-                                bullbo_p->mPathAdjustCounter++;
+                                boar->mLapCount++;
+                                boar->mPathAdjustCounter++;
                                 part_break(i_this);
-                                if (bullbo_p->mLapCount == 1 || bullbo_p->mLapCount == 2 || bullbo_p->mLapCount == 3 ||
-                                    bullbo_p->mLapCount == 4 || bullbo_p->mLapCount == 6) {
+                                if (boar->mLapCount == 1 || boar->mLapCount == 2 || boar->mLapCount == 3 ||
+                                    boar->mLapCount == 4 || boar->mLapCount == 6) {
                                     part_break(i_this);
                                 }
 
-                                s8 sVar2 = 8 - bullbo_p->mLapCount;
-                                if (sVar2 > 8) {
-                                    sVar2 = 8;
+                                s8 life = 8 - boar->mLapCount;
+                                if (life > 8) {
+                                    life = 8;
                                 }
-                                dComIfGs_BossLife_public_Set(sVar2);
+                                dComIfGs_BossLife_public_Set(life);
 
-                                if (bullbo_p->mLapCount == 5) {
+                                if (boar->mLapCount == 5) {
                                     Z2GetAudioMgr()->changeSubBgmStatus(2);
                                 }
 
-                                if (bullbo_p->mLapCount >= 8) {
-                                    i_this->mAction = ACTION_KIBA_END;
-                                    i_this->mMode = 0;
+                                if (boar->mLapCount >= 8) {
+                                    i_this->action = ACTION_KIBA_END;
+                                    i_this->mode = 0;
                                     mDoAud_seStart(Z2SE_EN_RDB_V_FAINT, 0, 0, 0);
-                                    bullbo_p->mActionID = 31;
-                                    bullbo_p->mActionMode = 0;
+                                    boar->mActionID = 31;
+                                    boar->mActionMode = 0;
                                     mDoAud_bgmStop(30);
                                     return;
                                 }
 
-                                i_this->mSound.startCreatureVoice(Z2SE_EN_RDB_V_DAMAGE, -1);
+                                i_this->sound.startCreatureVoice(Z2SE_EN_RDB_V_DAMAGE, -1);
 
-                                if (i_this->mAnmID == e_rdb_class::BCK_RB_RPLAY_RUNL || i_this->mAnmID == e_rdb_class::BCK_RB_RPLAY_RUNR 
-                                    || i_this->mAnmID == e_rdb_class::BCK_RB_RPLAY_STOP) {
-                                    i_this->mAnmID = i_this->field_0x680;
+                                if (i_this->anm == e_rdb_class::BCK_RB_RPLAY_RUNL || i_this->anm == e_rdb_class::BCK_RB_RPLAY_RUNR 
+                                    || i_this->anm == e_rdb_class::BCK_RB_RPLAY_STOP) {
+                                    i_this->anm = i_this->field_0x680;
                                     i_this->field_0x680 = 0;
                                 }
 
                                 if (i_this->field_0x680 == 0) {
-                                    i_this->field_0x990[3] = cM_rndF(100.0f) + 200.0f;
-                                    int anm_id = i_this->mAnmID;
+                                    i_this->timer[3] = cM_rndF(100.0f) + 200.0f;
+                                    int anm_no = i_this->anm;
 
-                                    s16 angle_diff = a_this->shape_angle.y - i_this->mPlayerAngleY;
+                                    s16 angle_diff = enemy->shape_angle.y - i_this->angleY;
                                     if (angle_diff < 0) {
                                         anm_init(i_this, e_rdb_class::BCK_RB_RDAMAGEL, 2.0f, 0, 1.0f);
                                     } else {
                                         anm_init(i_this, e_rdb_class::BCK_RB_RDAMAGER, 2.0f, 0, 1.0f);
                                     }
 
-                                    i_this->field_0x680 = anm_id;
+                                    i_this->field_0x680 = anm_no;
                                 }
 
-                                if (i_this->mAction != ACTION_WB_RUN) {
-                                    i_this->mAction = ACTION_WB_RUN;
-                                    i_this->mMode = 0;
+                                if (i_this->action != ACTION_WB_RUN) {
+                                    i_this->action = ACTION_WB_RUN;
+                                    i_this->mode = 0;
                                 }
                                 break;  
                             }
 
-                            if (i_this->field_0x9bc != 0 && i_this->mAtInfo.mpCollider->ChkAtType(AT_TYPE_BOOMERANG)) {
-                                i_this->field_0x998 = 20;
-                                if (i_this->mAction == ACTION_WB_RUN) {
+                            if (i_this->ride_mode != 0 && i_this->AtInfo.mpCollider->ChkAtType(AT_TYPE_BOOMERANG)) {
+                                i_this->damage_timer = 20;
+                                if (i_this->action == ACTION_WB_RUN) {
                                     anm_init(i_this, BCK_RD_RRUN02_BACK, 5.0f, 2, 1.0f);
-                                    i_this->mMode = 50;
-                                    i_this->field_0x990[3] = cM_rndF(20.0f) + 50.0f;
+                                    i_this->mode = 50;
+                                    i_this->timer[3] = cM_rndF(20.0f) + 50.0f;
                                 }
                             } else {
                                 big_damage(i_this);
@@ -4483,24 +4483,24 @@ static void damage_check(e_rd_class* i_this) {
                         }
                     } else {
                         int iVar2 = i;
-                        if (i_this->mAtInfo.mHitType == 16) {
+                        if (i_this->AtInfo.mHitType == 16) {
                             iVar2 = 0;
                         }
 
                         small_damage(i_this, iVar2);
                     }
 
-                    a_this->speedF = 0.0f;
-                    if (i_this->mpMorfBowAnm != NULL) {
-                        i_this->mpMorfBowAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, 10), 0, 1.0f, 1.0f, 0.0f, -1.0f);
+                    enemy->speedF = 0.0f;
+                    if (i_this->bow_anm != NULL) {
+                        i_this->bow_anm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, 10), 0, 1.0f, 1.0f, 0.0f, -1.0f);
                     }
                     break;
             }
         }
 
         for (int j = 0; j <= 2; j++) {
-            if (a_this->health <= 1) {
-                i_this->field_0xd58[j].SetTgHitMark(CcG_Tg_UNK_MARK_3);
+            if (enemy->health <= 1) {
+                i_this->cc_sph[j].SetTgHitMark(CcG_Tg_UNK_MARK_3);
             }
         }
     }
@@ -4508,7 +4508,7 @@ static void damage_check(e_rd_class* i_this) {
 
 static void* s_other_sub(void* i_actor, void* i_data) {
     UNUSED(i_data);
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && ((e_rd_class*)i_actor)->field_0x5b7 != 6) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && ((e_rd_class*)i_actor)->arg1 != 6) {
         return i_actor;
     }
 
@@ -4521,10 +4521,10 @@ static void* s_ep_sub(void* i_actor, void* i_data) {
     
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_Lv1Cdl00) {
         if (!fopAcM_isSwitch((fopAc_ac_c*)i_actor, fopAcM_GetParam(i_actor) & 0xFF)) {
-            f32 fVar2, fVar1;
-            fVar2 = ((fopAc_ac_c*)i_actor)->current.pos.x - player->current.pos.x;
-            fVar1 = ((fopAc_ac_c*)i_actor)->current.pos.z - player->current.pos.z;
-            if (JMAFastSqrt(fVar2 * fVar2 + fVar1 * fVar1) < NREG_F(17) + 600.0f) {
+            f32 x, z;
+            x = ((fopAc_ac_c*)i_actor)->current.pos.x - player->current.pos.x;
+            z = ((fopAc_ac_c*)i_actor)->current.pos.z - player->current.pos.z;
+            if (JMAFastSqrt(x * x + z * z) < NREG_F(17) + 600.0f) {
                 return i_actor;
             }
         }
@@ -4534,60 +4534,60 @@ static void* s_ep_sub(void* i_actor, void* i_data) {
 }
 
 static s8 e_rd_yagura(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     cXyz unused_vec_0, unused_vec_1;
-    int frame = i_this->mpModelMorf->getFrame();
-    s8 rv = 1;
+    int frame = i_this->anm_p->getFrame();
+    s8 rt = 1;
     s8 bVar1 = 0;
 
     fpcM_Search(s_b_sub, i_this);
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
-            if (i_this->field_0x99c != 0) {
-                a_this->home.pos.y = a_this->current.pos.y;
+            if (i_this->yagura_timer != 0) {
+                enemy->home.pos.y = enemy->current.pos.y;
                 return 0;
             }
 
-            rv = 0;
+            rt = 0;
             bVar1 = 1;
 
-            if (i_this->field_0x990[0] == 0) {
+            if (i_this->timer[0] == 0) {
                 anm_init(i_this, BCK_RD_KYORO2, 10.0f, 2, 1.0f);
-                i_this->mMode = 1;
-                i_this->field_0x990[0] = cM_rndF(40.0f) + 60.0f;
+                i_this->mode = 1;
+                i_this->timer[0] = cM_rndF(40.0f) + 60.0f;
             }
             break;
 
         case 1:
-            rv = 0;
+            rt = 0;
             bVar1 = 1;
 
-            if (i_this->field_0x990[0] == 0) {
+            if (i_this->timer[0] == 0) {
                 anm_init(i_this, BCK_RD_WAIT01, 10.0f, 2, 1.0f);
-                i_this->field_0x990[0] = cM_rndF(100.0f) + 100.0f;
-                i_this->mMode = 0;
+                i_this->timer[0] = cM_rndF(100.0f) + 100.0f;
+                i_this->mode = 0;
             }
             break;
 
         case 5:
             i_this->field_0x9c8 = 4;
 
-            if (i_this->field_0x990[0] == 0) {
+            if (i_this->timer[0] == 0) {
                 anm_init(i_this, BCK_RD_SHOUT, 5.0f, 0, 1.0f);
-                i_this->mMode = 10;
-                i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_FIND_LINK_YELL, -1);
-                dKy_Sound_set(a_this->current.pos, 100, fopAcM_GetID(i_this), 3);
+                i_this->mode = 10;
+                i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_FIND_LINK_YELL, -1);
+                dKy_Sound_set(enemy->current.pos, 100, fopAcM_GetID(i_this), 3);
             }
             break;
 
         case 10:
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 anm_init(i_this, BCK_RD_SHOOT_READY, 5.0f, 0, 1.0f);
-                i_this->mpMorfBowAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, 7),
+                i_this->bow_anm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, 7),
                                              0, 5.0f, 0.9f + TREG_F(3), 0.0f, -1.0f);
-                i_this->mMode = 11;
-                a_this->speedF = 0.0f;
+                i_this->mode = 11;
+                enemy->speedF = 0.0f;
             }
             break;
 
@@ -4599,23 +4599,23 @@ static s8 e_rd_yagura(e_rd_class* i_this) {
             }
 
             if (frame == 20) {
-                i_this->mSound.startCreatureSound(Z2SE_OBJ_ARROW_DRAW_NORMAL, 0, -1);
+                i_this->sound.startCreatureSound(Z2SE_OBJ_ARROW_DRAW_NORMAL, 0, -1);
             }
 
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 anm_init(i_this, BCK_RD_SHOOT_WAIT, 4.0f, 2, 1.0f);
-                i_this->field_0x990[0] = cM_rndF(10.0f) + 10.0f;
-                i_this->mMode = 12;
+                i_this->timer[0] = cM_rndF(10.0f) + 10.0f;
+                i_this->mode = 12;
             }
             break;
 
         case 12:
             i_this->field_0x9c8 = 4;
 
-            if (i_this->field_0x990[0] == 0 && i_this->field_0x9a4 == 0) {
+            if (i_this->timer[0] == 0 && i_this->field_0x9a4 == 0) {
                 anm_init(i_this, BCK_RD_SHOOT, 1.0f, 0, 1.0f);
-                i_this->mpMorfBowAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, 10), 0, 1.0f, 1.0f, 0.0f, -1.0f);
-                i_this->mMode = 13;
+                i_this->bow_anm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, 10), 0, 1.0f, 1.0f, 0.0f, -1.0f);
+                i_this->mode = 13;
             }
 
             i_this->field_0x9a2 = 1;
@@ -4628,16 +4628,16 @@ static s8 e_rd_yagura(e_rd_class* i_this) {
             }
 
             if (frame == 2 + XREG_S(7)) {
-                i_this->field_0x9a3 = 1;
+                i_this->arrow_flag = 1;
             }
 
-            if (i_this->mpModelMorf->isStop()) {
+            if (i_this->anm_p->isStop()) {
                 if (pl_check(i_this, 10000.0f, 0x7FFF)) {
-                    i_this->mMode = 10;
+                    i_this->mode = 10;
                     anm_init(i_this, BCK_RD_SHOUT, 5.0f, 0, 1.0f);
-                    dKy_Sound_set(a_this->current.pos, 100, fopAcM_GetID(i_this), 3);
+                    dKy_Sound_set(enemy->current.pos, 100, fopAcM_GetID(i_this), 3);
                 } else {
-                    i_this->mMode = 0;
+                    i_this->mode = 0;
                 }
             }
             break;
@@ -4646,48 +4646,48 @@ static s8 e_rd_yagura(e_rd_class* i_this) {
             break;
     }
 
-    if (fabsf(i_this->mObjAcch.GetGroundH() - a_this->home.pos.y) > 10.0f) {
-        i_this->mAction = ACTION_DAMAGE;
-        i_this->mMode = 0;
-        i_this->field_0xa0c.y = s16(a_this->shape_angle.y);
-        a_this->speed.y = 20.0f;
-        i_this->field_0x9ec = -20.0f;
-        i_this->field_0x998 = 1000;
-        i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_DEATH, -1);
-        a_this->health = 0;
+    if (fabsf(i_this->ObjAcch.GetGroundH() - enemy->home.pos.y) > 10.0f) {
+        i_this->action = ACTION_DAMAGE;
+        i_this->mode = 0;
+        i_this->jump_angle.y = s16(enemy->shape_angle.y);
+        enemy->speed.y = 20.0f;
+        i_this->jump_z = -20.0f;
+        i_this->damage_timer = 1000;
+        i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_DEATH, -1);
+        enemy->health = 0;
         return 0;
     }
 
-    if (bVar1 && pl_check(i_this, i_this->field_0x980, 0x4000) && (i_this->field_0x980 >= 8000.0f || fpcM_Search(s_ep_sub, i_this) != NULL)) {
+    if (bVar1 && pl_check(i_this, i_this->attack_range, 0x4000) && (i_this->attack_range >= 8000.0f || fpcM_Search(s_ep_sub, i_this) != NULL)) {
         anm_init(i_this, BCK_RD_WAIT01, 4.0f, 2, 1.0f);
-        i_this->field_0x990[0] = 30;
-        i_this->mMode = 5;
+        i_this->timer[0] = 30;
+        i_this->mode = 5;
         if (S_find == 0 && !lbl_70_bss_AE && !daPy_getPlayerActorClass()->checkBoarRide()
-            && !dComIfGp_event_runCheck() && i_this->mDemoMode == 0
+            && !dComIfGp_event_runCheck() && i_this->demo_mode == 0
             && fpcM_Search(s_other_sub, i_this) != NULL) {
-            i_this->mDemoMode = 1;
+            i_this->demo_mode = 1;
         }
     }
 
-    if (rv != 0) {
-        cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mPlayerAngleY, 4, 0x1000);
+    if (rt != 0) {
+        cLib_addCalcAngleS2(&enemy->current.angle.y, i_this->angleY, 4, 0x1000);
     }
 
-    return rv;
+    return rt;
 }
 
 static void e_rd_jyunkai(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    int frame = i_this->mpModelMorf->getFrame(); // unused
-    f32 fVar1 = 0.0f;
-    s16 sVar1 = 0x4000;
-    cXyz sp58, sp64;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    int frame = i_this->anm_p->getFrame(); // unused
+    f32 speed = 0.0f;
+    s16 angle = 0x4000;
+    cXyz vec, sp64;
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0: {
             anm_init(i_this, BCK_RD_WALK, 10.0f, 2, 1.0f);
-            i_this->mMode = 1;
-            dPnt* pnt_p = i_this->mPath->m_points;
+            i_this->mode = 1;
+            dPnt* pnt_p = i_this->path->m_points;
             pnt_p += i_this->field_0xb00;
             i_this->field_0x5c0.x = pnt_p->m_position.x;
             i_this->field_0x5c0.y = pnt_p->m_position.y;
@@ -4695,206 +4695,206 @@ static void e_rd_jyunkai(e_rd_class* i_this) {
         }
         // fallthrough
         case 1:
-            fVar1 = l_HIO.movement_speed;
-            sp58 = i_this->field_0x5c0 - a_this->current.pos;
-            i_this->field_0x5cc = cM_atan2s(sp58.x, sp58.z);
+            speed = l_HIO.movement_speed;
+            vec = i_this->field_0x5c0 - enemy->current.pos;
+            i_this->target_ya = cM_atan2s(vec.x, vec.z);
 
-            if (sp58.abs() < 50.0f) {
-                i_this->field_0xb00 += i_this->field_0xb01;
-                if (i_this->field_0xb00 >= (i_this->mPath->m_num & 0xFF)) {
-                    if (dPath_ChkClose(i_this->mPath)) {
+            if (vec.abs() < 50.0f) {
+                i_this->field_0xb00 += i_this->path_dir;
+                if (i_this->field_0xb00 >= (i_this->path->m_num & 0xFF)) {
+                    if (dPath_ChkClose(i_this->path)) {
                         i_this->field_0xb00 = 0;
                     } else {
-                        i_this->field_0xb01 = 0xFF;
-                        i_this->field_0xb00 = i_this->mPath->m_num - 2;
+                        i_this->path_dir = 0xFF;
+                        i_this->field_0xb00 = i_this->path->m_num - 2;
                     }
                 } else if (i_this->field_0xb00 < 0) {
-                    i_this->field_0xb01 = 1;
+                    i_this->path_dir = 1;
                     i_this->field_0xb00 = 1;
                 }
 
-                i_this->mMode = 2;
-                i_this->field_0x990[0] = cM_rndF(100.0f) + 100.0f;
+                i_this->mode = 2;
+                i_this->timer[0] = cM_rndF(100.0f) + 100.0f;
                 anm_init(i_this, BCK_RD_KYORO2, 10.0f, 2, 1.0f);
             }
             break;
 
         case 2:
-            sVar1 = 0x6000;
+            angle = 0x6000;
 
-            if (i_this->field_0x990[0] == 0) {
-                i_this->mMode = 0;
+            if (i_this->timer[0] == 0) {
+                i_this->mode = 0;
             }
             break;
 
         case 10:
             anm_init(i_this, BCK_RD_SHOUT, 5.0f, 0, 1.0f);
-            i_this->mMode = 11;
-            dKy_Sound_set(a_this->current.pos, 100, fopAcM_GetID(i_this), 3);
+            i_this->mode = 11;
+            dKy_Sound_set(enemy->current.pos, 100, fopAcM_GetID(i_this), 3);
             S_find = 20;
             break;
 
         case 11:
-            cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mPlayerAngleY, 2, 0x800);
-            if (i_this->mpModelMorf->isStop()) {
-                i_this->mAction = ACTION_FIGHT_RUN;
-                i_this->mMode = -10;
-                i_this->field_0x990[0] = 60;
+            cLib_addCalcAngleS2(&enemy->current.angle.y, i_this->angleY, 2, 0x800);
+            if (i_this->anm_p->isStop()) {
+                i_this->action = ACTION_FIGHT_RUN;
+                i_this->mode = -10;
+                i_this->timer[0] = 60;
                 return;
             }
     }
 
-    if (fVar1) {
-        cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->field_0x5cc, 8, 0x400);
-        s16 sVar2 = a_this->current.angle.y - i_this->field_0x5cc;
-        if (sVar2 > 0x400 || sVar2 < -0x400) {
-            fVar1 = 0.0f;
+    if (speed) {
+        cLib_addCalcAngleS2(&enemy->current.angle.y, i_this->target_ya, 8, 0x400);
+        s16 range = enemy->current.angle.y - i_this->target_ya;
+        if (range > 0x400 || range < -0x400) {
+            speed = 0.0f;
         }
     }
 
-    cLib_addCalc2(&a_this->speedF, fVar1, 1.0f, 3.0f);
+    cLib_addCalc2(&enemy->speedF, speed, 1.0f, 3.0f);
 
-    f32 fVar2 = i_this->field_0x980;
+    f32 range = i_this->attack_range;
     BOOL bVar1 = FALSE;
 
-    if (i_this->field_0x9a1 == 1|| S_find != 0) {
-        if (i_this->field_0x9a1 == 1) {
+    if (i_this->look_timer == 1|| S_find != 0) {
+        if (i_this->look_timer == 1) {
             bVar1 = TRUE;
         }
 
-        fVar2 = 10000.0f;
-        sVar1 = 0x7FFF;
+        range = 10000.0f;
+        angle = 0x7FFF;
     }
 
-    if (i_this->mMode < 10) {
+    if (i_this->mode < 10) {
         if (bVar1) {
-            i_this->mMode = 2;
-            i_this->field_0x990[0] = cM_rndF(100.0f) + 100.0f;
+            i_this->mode = 2;
+            i_this->timer[0] = cM_rndF(100.0f) + 100.0f;
             anm_init(i_this, BCK_RD_KYORO2, 10.0f, 2, 1.0f);
-        } else if ((i_this->field_0x970 & 7) == 0 && pl_check(i_this, fVar2, sVar1)) {
+        } else if ((i_this->counter & 7) == 0 && pl_check(i_this, range, angle)) {
             if (S_find == 0) {
-                i_this->mMode = 10;
+                i_this->mode = 10;
             } else {
-                i_this->mAction = ACTION_FIGHT_RUN;
-                i_this->mMode = -10;
-                i_this->field_0x990[0] = 60;
+                i_this->action = ACTION_FIGHT_RUN;
+                i_this->mode = -10;
+                i_this->timer[0] = 60;
             }
         }
     }
 }
 
 static void e_rd_sleep(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    int frame = i_this->mpModelMorf->getFrame();
-    f32 fVar1 = i_this->field_0x980;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    int frame = i_this->anm_p->getFrame();
+    f32 range = i_this->attack_range;
     s16 sVar1 = 0x4000;
-    BOOL bVar1 = FALSE;
+    BOOL look_check = FALSE;
 
-    if (i_this->field_0x9a1 == 1 || S_find != 0) {
-        if (i_this->field_0x9a1 == 1) {
-            bVar1 = TRUE;
-        } else if ((i_this->field_0x970 & 15) == 0) {
-            bVar1 = TRUE;
+    if (i_this->look_timer == 1 || S_find != 0) {
+        if (i_this->look_timer == 1) {
+            look_check = TRUE;
+        } else if ((i_this->counter & 15) == 0) {
+            look_check = TRUE;
         }
 
-        fVar1 = 5000.0f;
+        range = 5000.0f;
         sVar1 = 0x7FFF;
     }
 
-    s8 cVar1 = 0;
+    s8 find = 0;
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
-            i_this->field_0x990[0] = cM_rndF(100.0f) + 200.0f;
+            i_this->timer[0] = cM_rndF(100.0f) + 200.0f;
             anm_init(i_this, BCK_RD_SLEEP_WAIT, 10.0f, 2, 1.0f);
-            i_this->mMode = 1;
+            i_this->mode = 1;
             break;
 
         case 1:
-            if (bVar1 || i_this->field_0x990[0] == 0) {
+            if (look_check || i_this->timer[0] == 0) {
                 anm_init(i_this, BCK_RD_SLEEP_LOOKAROUND, 5.0f, 0, 1.0f);
-                i_this->mMode = 2;
+                i_this->mode = 2;
             }
             break;
 
         case 2:
-            if (i_this->mpModelMorf->isStop()) {
-                i_this->mMode = 0;
+            if (i_this->anm_p->isStop()) {
+                i_this->mode = 0;
             }
 
-            if (fopAcM_GetRoomNo(a_this) == 0) {
-                if (bVar1) {
+            if (fopAcM_GetRoomNo(enemy) == 0) {
+                if (look_check) {
                     wb_check(i_this, sVar1);
                 }
 
-                if (i_this->mPlayerDistance > 600.0f) {
+                if (i_this->dis > 600.0f) {
                     return;
                 }
             }
 
-            if (frame > 60 && frame < 200 && (((i_this->field_0x970 & 7) == 0) || bVar1) && pl_check(i_this, fVar1, sVar1)) {
-                cVar1 = 1;
+            if (frame > 60 && frame < 200 && (((i_this->counter & 7) == 0) || look_check) && pl_check(i_this, range, sVar1)) {
+                find = 1;
             }
             break;
 
         case 5:
-            if (i_this->field_0x990[0] == 0) {
-                cVar1 = 1;
+            if (i_this->timer[0] == 0) {
+                find = 1;
             }
             break;
 
         case 10:
             anm_init(i_this, BCK_RD_SHOUT, 5.0f, 0, 1.0f);
-            i_this->mMode = 11;
-            dKy_Sound_set(a_this->current.pos, 100, fopAcM_GetID(i_this), 3);
+            i_this->mode = 11;
+            dKy_Sound_set(enemy->current.pos, 100, fopAcM_GetID(i_this), 3);
             S_find = 20;
             break;
 
         case 11:
-            cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mPlayerAngleY, 2, 0x800);
+            cLib_addCalcAngleS2(&enemy->current.angle.y, i_this->angleY, 2, 0x800);
 
-            if (i_this->mpModelMorf->isStop()) {
-                i_this->mAction = ACTION_FIGHT_RUN;
-                i_this->mMode = -10;
-                i_this->field_0x990[0] = 60;
+            if (i_this->anm_p->isStop()) {
+                i_this->action = ACTION_FIGHT_RUN;
+                i_this->mode = -10;
+                i_this->timer[0] = 60;
                 return;
             }
     }
 
-    if (i_this->mMode < 5) {
+    if (i_this->mode < 5) {
         for (int i = 0; i <= 2; i++) {
-            if (i_this->field_0xd58[i].ChkCoHit()) {
-                cCcD_Obj* co_hit_obj_p = i_this->field_0xd58[i].GetCoHitObj();
+            if (i_this->cc_sph[i].ChkCoHit()) {
+                cCcD_Obj* co_hit_obj_p = i_this->cc_sph[i].GetCoHitObj();
                 if (daPy_getPlayerActorClass() == dCc_GetAc(co_hit_obj_p->GetAc())) {
-                    cVar1 = 2;
+                    find = 2;
                     break;
                 }
             }
         }
     }
 
-    if (i_this->mMode < 10) {
-        if (cVar1 == 1) {
+    if (i_this->mode < 10) {
+        if (find == 1) {
             if (S_find == 0) {
-                i_this->mMode = 10;
+                i_this->mode = 10;
             } else {
-                i_this->mAction = ACTION_FIGHT_RUN;
-                i_this->mMode = -10;
-                i_this->field_0x990[0] = 60;
+                i_this->action = ACTION_FIGHT_RUN;
+                i_this->mode = -10;
+                i_this->timer[0] = 60;
                 OS_REPORT("......RD FIND 1!!!\n");
             }
-        } else if (cVar1 == 2) {
-            i_this->mMode = 5;
+        } else if (find == 2) {
+            i_this->mode = 5;
             anm_init(i_this, BCK_RD_KYORO2, 7.0f, 2, 1.5f);
-            i_this->field_0x990[0] = cM_rndF(10.0f) + 20.0f;
+            i_this->timer[0] = cM_rndF(10.0f) + 20.0f;
             OS_REPORT("......RD FIND 2!!!\n");
         }
     }
 
-    if (i_this->field_0x980 >= 9900.0f) {
-        i_this->mAction = ACTION_STAND;
-        i_this->mMode = 0;
-        i_this->field_0x990[0] = 0;
+    if (i_this->attack_range >= 9900.0f) {
+        i_this->action = ACTION_STAND;
+        i_this->mode = 0;
+        i_this->timer[0] = 0;
     }
 }
 
@@ -4910,111 +4910,111 @@ static void* s_tag_sub(void* i_actor, void* i_data) {
 }
 
 static void e_rd_tag(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    fopAc_ac_c* pla = dComIfGp_getPlayer(0);
 
     i_this->field_0x9ad = 0;
-    i_this->field_0x998 = 10;
+    i_this->damage_timer = 10;
 
-    switch (i_this->mMode) {
+    switch (i_this->mode) {
         case 0:
             break;
     }
 
-    if (S_find != 0 && (i_this->field_0x970 & 31) == 0 && !dComIfGp_event_runCheck() && i_this->mPlayerDistance < 3000.0f && i_this->mPlayerDistance > 500.0f && 
-        i_this->field_0x5bb != 0 && !fopAcM_otherBgCheck(a_this, player)) {
+    if (S_find != 0 && (i_this->counter & 31) == 0 && !dComIfGp_event_runCheck() && i_this->dis < 3000.0f && i_this->dis > 500.0f && 
+        i_this->field_0x5bb != 0 && !fopAcM_otherBgCheck(enemy, pla)) {
         rd_count = 0;
         fpcM_Search(s_tag_sub, i_this);
 
         if (rd_count < 6) {
-            csXyz cStack_40(0, i_this->mPlayerAngleY, 0);
-            cXyz sp38;
-            sp38.x = cM_rndFX(200.0f) + a_this->home.pos.x;
-            sp38.y = a_this->home.pos.y;
-            sp38.z = cM_rndFX(200.0f) + a_this->home.pos.z;
+            csXyz angl(0, i_this->angleY, 0);
+            cXyz pos;
+            pos.x = cM_rndFX(200.0f) + enemy->home.pos.x;
+            pos.y = enemy->home.pos.y;
+            pos.z = cM_rndFX(200.0f) + enemy->home.pos.z;
 
-            fpc_ProcID i_parameters;
+            fpc_ProcID parameter;
             if ((rd_count & 3) == 3) {
-                i_parameters = 0xFF011323;
+                parameter = 0xFF011323;
             } else {
-                i_parameters = 0xFF011123;
+                parameter = 0xFF011123;
             }
-            fopAcM_createChild(PROC_E_RD, fopAcM_GetID(a_this), i_parameters, &sp38, fopAcM_GetRoomNo(a_this), &cStack_40, NULL, -1, NULL);
+            fopAcM_createChild(PROC_E_RD, fopAcM_GetID(enemy), parameter, &pos, fopAcM_GetRoomNo(enemy), &angl, NULL, -1, NULL);
         }
     }
 }
 
 static void e_rd_reg(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = &i_this->actor;
-    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    fopEn_enemy_c* enemy = &i_this->enemy;
+    fopAc_ac_c* pla = dComIfGp_getPlayer(0);
 
     i_this->field_0x9ad = 0;
-    i_this->field_0x998 = 10;
+    i_this->damage_timer = 10;
 
     if (i_this->field_0xafb == 0) {
-        i_this->mAction = ACTION_BOW2;
-        i_this->mMode = 1;
-        i_this->field_0x980 = 0.0f;
+        i_this->action = ACTION_BOW2;
+        i_this->mode = 1;
+        i_this->attack_range = 0.0f;
         return;
     }
 
-    if (i_this->mMode != 0) {
+    if (i_this->mode != 0) {
         return;
     }
 
-    if (i_this->field_0x5b7 != 14) {
+    if (i_this->arg1 != 14) {
         return;
     }
 
-    if (i_this->mDemoMode == 0) {
-        f32 fVar1, fVar2;
-        fVar1 = player->current.pos.x - -5551.0f;
-        fVar2 = player->current.pos.z - 5525.0f;
-        if (JMAFastSqrt(fVar1 * fVar1 + fVar2 * fVar2) < 600.0f) {
-            i_this->mDemoMode = 20;
+    if (i_this->demo_mode == 0) {
+        f32 x, z;
+        x = pla->current.pos.x - -5551.0f;
+        z = pla->current.pos.z - 5525.0f;
+        if (JMAFastSqrt(SQUARE(x)+ SQUARE(z)) < 600.0f) {
+            i_this->demo_mode = 20;
         }
     }
 }
 
 static void action(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    fopAc_ac_c* actor = get_pla(a_this);
-    cXyz sp25c, sp268;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    fopAc_ac_c* actor = get_pla(enemy);
+    cXyz mae, ato;
 
     i_this->field_0x9c8 = 0;
 
     if (actor == dComIfGp_getPlayer(0)) {
-        i_this->mPlayerDistance = fopAcM_searchPlayerDistance(a_this);
+        i_this->dis = fopAcM_searchPlayerDistance(enemy);
         if (daPy_getPlayerActorClass()->checkHorseRide()) {
-            i_this->mPlayerDistance -= BREG_F(17) + 100.0f;
+            i_this->dis -= BREG_F(17) + 100.0f;
         }
 
-        i_this->mPlayerAngleY = fopAcM_searchPlayerAngleY(a_this);
+        i_this->angleY = fopAcM_searchPlayerAngleY(enemy);
     } else {
-        sp25c = actor->current.pos - a_this->current.pos;
-        i_this->mPlayerDistance = sp25c.abs();
-        i_this->mPlayerAngleY = cM_atan2s(sp25c.x, sp25c.z);
-        i_this->field_0x980 = NREG_F(7) + 10000.0f;
+        mae = actor->current.pos - enemy->current.pos;
+        i_this->dis = mae.abs();
+        i_this->angleY = cM_atan2s(mae.x, mae.z);
+        i_this->attack_range = NREG_F(7) + 10000.0f;
     }
 
     if (desert_substage != 0) {
         if (i_this->field_0x9a0 == 0) {
-            dScnKy_env_light_c* env_light_p = dKy_getEnvlight();
-            int iVar1 = env_light_p->daytime / 15.0f;
-            if (iVar1 >= 6 && iVar1 <= 17) {
-                i_this->field_0x980 = 10000.0f;
+            dScnKy_env_light_c* kankyo = dKy_getEnvlight();
+            int timeH = kankyo->daytime / 15.0f;
+            if (timeH >= 6 && timeH <= 17) {
+                i_this->attack_range = 10000.0f;
             }
         } else {
             i_this->field_0x9a0--;
         }
     }
 
-    s16 sp_0x2c = i_this->mAction;
+    s16 curr_action = i_this->action;
     damage_check(i_this);
-    if (sp_0x2c == ACTION_WB_SEARCH && i_this->mAction != ACTION_WB_SEARCH) {
-        e_wb_class* bullbo_p = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
-        if (bullbo_p != NULL && bullbo_p->mActionID == 1) {
-            bullbo_p->mActionID = 0;
+    if (curr_action == ACTION_WB_SEARCH && i_this->action != ACTION_WB_SEARCH) {
+        e_wb_class* boar = (e_wb_class*)fopAcM_SearchByID(i_this->boar_id);
+        if (boar != NULL && boar->mActionID == 1) {
+            boar->mActionID = 0;
         }
     }
 
@@ -5022,9 +5022,9 @@ static void action(e_rd_class* i_this) {
     s8 cVar2 = 0;
     s8 bVar1 = 1;
     s8 cVar3 = 0;
-    i_this->actor.offHeadLockFlg();
+    i_this->enemy.offHeadLockFlg();
 
-    switch (i_this->mAction) {
+    switch (i_this->action) {
         case ACTION_NORMAL:
             e_rd_normal(i_this);
             cVar3 = 1;
@@ -5074,7 +5074,7 @@ static void action(e_rd_class* i_this) {
             break;
 
         case ACTION_WB_RUN:
-            if (i_this->mBossMode != 0) {
+            if (i_this->actor_set != 0) {
                 e_rd_wb_run_B(i_this);
             } else {
                 e_rd_wb_run(i_this);
@@ -5177,14 +5177,14 @@ static void action(e_rd_class* i_this) {
             e_rd_reg(i_this);
     }
 
-    if (cVar3 != 0 && otoCheck(a_this, 1500.0f)) {
+    if (cVar3 != 0 && otoCheck(enemy, 1500.0f)) {
         SND_INFLUENCE* sound = dKy_Sound_get();
         if (!pl_check(i_this, 500.0f, 0x7FFF)) {
-            sp25c = sound->position - a_this->current.pos;
-            if (sp25c.abs() < sound->field_0xc * 120) {
-                i_this->field_0x974 = i_this->mAction;
-                i_this->mAction = ACTION_EXCITE;
-                i_this->mMode = 0;
+            mae = sound->position - enemy->current.pos;
+            if (mae.abs() < sound->field_0xc * 120) {
+                i_this->prev_action = i_this->action;
+                i_this->action = ACTION_EXCITE;
+                i_this->mode = 0;
                 S_find_pos = sound->position;
             }
         }
@@ -5193,159 +5193,159 @@ static void action(e_rd_class* i_this) {
     if (bVar1) {
         dBgS_ObjGndChk obj_gnd_chk;
         dBgS_ObjGndChk_Spl spl_chk;
-        sp25c = a_this->current.pos;
-        sp25c.y += 150.0f;
-        spl_chk.SetPos(&sp25c);
-        obj_gnd_chk.SetPos(&sp25c);
+        mae = enemy->current.pos;
+        mae.y += 150.0f;
+        spl_chk.SetPos(&mae);
+        obj_gnd_chk.SetPos(&mae);
 
-        i_this->field_0x984 = dComIfG_Bgsp().GroundCross(&spl_chk);
+        i_this->waterY = dComIfG_Bgsp().GroundCross(&spl_chk);
 
-        f32 fVar3 = i_this->field_0x984 - dComIfG_Bgsp().GroundCross(&obj_gnd_chk);
-        if (a_this->current.pos.y < i_this->field_0x984 && fVar3 > 100.0f) {
-            i_this->mAction = ACTION_WATER;
+        f32 waterY = i_this->waterY - dComIfG_Bgsp().GroundCross(&obj_gnd_chk);
+        if (enemy->current.pos.y < i_this->waterY && waterY > 100.0f) {
+            i_this->action = ACTION_WATER;
             if (dComIfG_Bgsp().GetPolyAtt0(spl_chk) == 6) {
-                i_this->mMode = 1;
+                i_this->mode = 1;
             } else {
-                i_this->mMode = 0;
+                i_this->mode = 0;
             }
 
-            a_this->current.pos.y = i_this->field_0x984;
+            enemy->current.pos.y = i_this->waterY;
         }
     }
 
     if (cVar2 != 0) {
-        i_this->mSound.setLinkSearch(true);
-        if (desert_substage != 0 && (i_this->field_0x5b7 == 6 || i_this->field_0x5b7 == 7 || i_this->field_0x5b7 == 8)) {
+        i_this->sound.setLinkSearch(true);
+        if (desert_substage != 0 && (i_this->arg1 == 6 || i_this->arg1 == 7 || i_this->arg1 == 8)) {
             S_find = 20;
         }
     } else {
-        i_this->mSound.setLinkSearch(false);
+        i_this->sound.setLinkSearch(false);
     }
 
     if (cVar1) {
         if (desert_substage != 0) {
-            if (!dComIfGp_event_runCheck() && i_this->field_0x99c == 0 && i_this->mPlayerDistance > 700.0f && i_this->field_0x5bb != 0) {
-                fopAcM_delete(a_this);
+            if (!dComIfGp_event_runCheck() && i_this->yagura_timer == 0 && i_this->dis > 700.0f && i_this->field_0x5bb != 0) {
+                fopAcM_delete(enemy);
             }
         } else if (daPy_getPlayerActorClass()->checkHorseRide() && dComIfGp_getHorseActor()->speedF >= 30.0f && i_this->field_0x5bb != 0) {
-            fopAcM_delete(a_this);
+            fopAcM_delete(enemy);
         }
     }
 
-    cLib_addCalcAngleS2(&a_this->shape_angle.y, a_this->current.angle.y, 2, 0x1000);
-    cLib_addCalcAngleS2(&a_this->shape_angle.x, a_this->current.angle.x, 2, 0x1000);
-    cLib_addCalcAngleS2(&a_this->shape_angle.z, a_this->current.angle.z, 2, 0x1000);
+    cLib_addCalcAngleS2(&enemy->shape_angle.y, enemy->current.angle.y, 2, 0x1000);
+    cLib_addCalcAngleS2(&enemy->shape_angle.x, enemy->current.angle.x, 2, 0x1000);
+    cLib_addCalcAngleS2(&enemy->shape_angle.z, enemy->current.angle.z, 2, 0x1000);
 
 
-    if (i_this->field_0x9bc == 0) {
-        a_this->attention_info.distances[fopAc_attn_BATTLE_e] = 3;
-        if (i_this->field_0x9ec) {
-            cMtx_YrotS(*calc_mtx, i_this->field_0xa0c.y);
+    if (i_this->ride_mode == 0) {
+        enemy->attention_info.distances[fopAc_attn_BATTLE_e] = 3;
+        if (i_this->jump_z) {
+            cMtx_YrotS(*calc_mtx, i_this->jump_angle.y);
             if (i_this->field_0xaf0 == 0) {
-                sp25c.z = i_this->field_0x9ec;
+                mae.z = i_this->jump_z;
             } else {
-                sp25c.z = 0.0f;
-                a_this->speed.y = 0.0f;
+                mae.z = 0.0f;
+                enemy->speed.y = 0.0f;
             }
 
-            a_this->gravity = -(l_HIO.jump_g - 1.0f);
+            enemy->gravity = -(l_HIO.jump_g - 1.0f);
         } else {
-            cMtx_YrotS(*calc_mtx, a_this->current.angle.y);
-            sp25c.z = a_this->speedF;
-            a_this->gravity = -5.0f;
+            cMtx_YrotS(*calc_mtx, enemy->current.angle.y);
+            mae.z = enemy->speedF;
+            enemy->gravity = -5.0f;
         }
-        sp25c.x = 0.0f;
-        sp25c.y = 0.0f;
-        MtxPosition(&sp25c, &sp268);
+        mae.x = 0.0f;
+        mae.y = 0.0f;
+        MtxPosition(&mae, &ato);
 
-        a_this->speed.x = sp268.x;
-        a_this->speed.z = sp268.z;
-        a_this->current.pos += a_this->speed;
-        a_this->speed.y += a_this->gravity;
-        if (a_this->speed.y < -100.0f) {
-            a_this->speed.y = -100.0f;
+        enemy->speed.x = ato.x;
+        enemy->speed.z = ato.z;
+        enemy->current.pos += enemy->speed;
+        enemy->speed.y += enemy->gravity;
+        if (enemy->speed.y < -100.0f) {
+            enemy->speed.y = -100.0f;
         }
 
         if (i_this->field_0x9ad != 0) {
             cXyz* pcVar1 = i_this->mStts.GetCCMoveP();
             if (pcVar1 != NULL) {
-                a_this->current.pos.x += pcVar1->x;
-                a_this->current.pos.z += pcVar1->z;
+                enemy->current.pos.x += pcVar1->x;
+                enemy->current.pos.z += pcVar1->z;
             }
         }
 
         cLib_addCalc0(&i_this->field_0x9c0, 1.0f, 3.0f);
         
         if (i_this->field_0x9f0 > 0.1f) {
-            sp25c.x = 0.0f;
-            sp25c.y = 0.0f;
-            sp25c.z = -i_this->field_0x9f0;
+            mae.x = 0.0f;
+            mae.y = 0.0f;
+            mae.z = -i_this->field_0x9f0;
             cMtx_YrotS(*calc_mtx, i_this->field_0x9f4);
-            MtxPosition(&sp25c, &sp268);
-            a_this->current.pos += sp268;
+            MtxPosition(&mae, &ato);
+            enemy->current.pos += ato;
             cLib_addCalc0(&i_this->field_0x9f0, 1.0f, 7.0f + TREG_F(12));
         }
     } else {
-        a_this->attention_info.distances[fopAc_attn_BATTLE_e] = 34;
-        fopAc_ac_c* bullboActor = fopAcM_SearchByID(i_this->mWbActorID);
-        if (bullboActor == NULL) {
-            i_this->mAction = ACTION_NORMAL;
-            i_this->mMode = 0;
+        enemy->attention_info.distances[fopAc_attn_BATTLE_e] = 34;
+        fopAc_ac_c* actor = fopAcM_SearchByID(i_this->boar_id);
+        if (actor == NULL) {
+            i_this->action = ACTION_NORMAL;
+            i_this->mode = 0;
             return;
         }
 
-        a_this->speedF = bullboActor->speedF;
+        enemy->speedF = actor->speedF;
         if (daPy_getPlayerActorClass()->checkHorseRide() && dComIfGp_getHorseActor()->speedF >= 30.0f) {
-            a_this->speed = bullboActor->speed;
-            a_this->speed.y = 0.0f;
+            enemy->speed = actor->speed;
+            enemy->speed.y = 0.0f;
         } else {
-            a_this->speed.set(0.0f, 0.0f, 0.0f);
+            enemy->speed.set(0.0f, 0.0f, 0.0f);
         }
 
-        e_wb_class* bullbo = (e_wb_class*)bullboActor;
-        if (i_this->field_0x9be == 1) {
-            MTXCopy(bullbo->mpModelMorf->getModel()->getAnmMtx(bullbo->field_0x688 + 15), *calc_mtx);
+        e_wb_class* boar = (e_wb_class*)actor;
+        if (i_this->boar_stand == 1) {
+            MTXCopy(boar->mpModelMorf->getModel()->getAnmMtx(boar->field_0x688 + 15), *calc_mtx);
         } else {
-            MTXCopy(bullbo->mpModelMorf->getModel()->getAnmMtx(bullbo->field_0x688 + 16), *calc_mtx);
+            MTXCopy(boar->mpModelMorf->getModel()->getAnmMtx(boar->field_0x688 + 16), *calc_mtx);
         }
 
-        if (i_this->mBossMode != 0) {
-            sp25c.set(0.0f, BREG_F(4) + -65.0f, 0.0f);
+        if (i_this->actor_set != 0) {
+            mae.set(0.0f, BREG_F(4) + -65.0f, 0.0f);
         } else {
-            sp25c.set(0.0f, BREG_F(4) + -45.0f, 0.0f);
+            mae.set(0.0f, BREG_F(4) + -45.0f, 0.0f);
         }
-        MtxPosition(&sp25c, &i_this->field_0x9b0);
+        MtxPosition(&mae, &i_this->field_0x9b0);
 
-        if (i_this->field_0x9bc == 2) {
-            a_this->current.pos = i_this->field_0x9b0;
-            a_this->shape_angle = a_this->current.angle = bullboActor->shape_angle;
+        if (i_this->ride_mode == 2) {
+            enemy->current.pos = i_this->field_0x9b0;
+            enemy->shape_angle = enemy->current.angle = actor->shape_angle;
 
-            sp25c.x = 10.0f;
-            MtxPosition(&sp25c, &sp268);
-            sp25c = sp268 - i_this->field_0x9b0;
-            ANGLE_ADD(a_this->current.angle.x,
-                      -cM_atan2s(sp25c.y, JMAFastSqrt(sp25c.x * sp25c.x + sp25c.z * sp25c.z)));
-            a_this->shape_angle.x = a_this->current.angle.x;
+            mae.x = 10.0f;
+            MtxPosition(&mae, &ato);
+            mae = ato - i_this->field_0x9b0;
+            ANGLE_ADD(enemy->current.angle.x,
+                      -cM_atan2s(mae.y, JMAFastSqrt(mae.x * mae.x + mae.z * mae.z)));
+            enemy->shape_angle.x = enemy->current.angle.x;
 
-            if (i_this->field_0x9be == 1) {
-                bullbo->field_0x1434 = fopAcM_GetID(i_this);
+            if (i_this->boar_stand == 1) {
+                boar->field_0x1434 = fopAcM_GetID(i_this);
             }
         } else {
-            sp25c = i_this->field_0x9b0 - a_this->current.pos;
-            cMtx_YrotS(*calc_mtx, cM_atan2s(sp25c.x, sp25c.z));
-            cMtx_XrotM(*calc_mtx, -cM_atan2s(sp25c.y, JMAFastSqrt(sp25c.x * sp25c.x + sp25c.z * sp25c.z)));
-            sp25c.x = 0.0f;
-            sp25c.y = 0.0f;
-            sp25c.z = TREG_F(3) + 20.0f;
-            MtxPosition(&sp25c, &sp268);
+            mae = i_this->field_0x9b0 - enemy->current.pos;
+            cMtx_YrotS(*calc_mtx, cM_atan2s(mae.x, mae.z));
+            cMtx_XrotM(*calc_mtx, -cM_atan2s(mae.y, JMAFastSqrt(mae.x * mae.x + mae.z * mae.z)));
+            mae.x = 0.0f;
+            mae.y = 0.0f;
+            mae.z = TREG_F(3) + 20.0f;
+            MtxPosition(&mae, &ato);
 
-            a_this->current.pos += sp268;
-            sp25c = i_this->field_0x9b0 - a_this->current.pos;
-            if (sp25c.abs() < 30.0f || i_this->field_0x990[3] == 0) {
-                i_this->field_0x9bc = 2;
+            enemy->current.pos += ato;
+            mae = i_this->field_0x9b0 - enemy->current.pos;
+            if (mae.abs() < 30.0f || i_this->timer[3] == 0) {
+                i_this->ride_mode = 2;
             }
 
-            cLib_addCalcAngleS2(&a_this->current.angle.y, bullboActor->shape_angle.y, 4, 0x800);
+            cLib_addCalcAngleS2(&enemy->current.angle.y, actor->shape_angle.y, 4, 0x800);
         }
 
         i_this->field_0x9c0 += i_this->field_0x9c4;
@@ -5361,35 +5361,35 @@ static void action(e_rd_class* i_this) {
     s16 sp_0x28 = 0;
     s16 sp_0x26 = 16000;
     i_this->field_0x9a4 = 0;
-    cXyz sp274;
+    cXyz ato2;
     s16 sp_0x24 = 0x1000;
 
     if (i_this->field_0x9c8 == -1) {
-        cMtx_YrotS(*calc_mtx, a_this->shape_angle.y);
-        sp25c.x = 0.0f;
-        sp25c.y = KREG_F(8) + 70.0f;
-        sp25c.z = 50.0f;
-        MtxPosition(&sp25c, &sp274);
+        cMtx_YrotS(*calc_mtx, enemy->shape_angle.y);
+        mae.x = 0.0f;
+        mae.y = KREG_F(8) + 70.0f;
+        mae.z = 50.0f;
+        MtxPosition(&mae, &ato2);
 
-        sp274 += a_this->current.pos;
+        ato2 += enemy->current.pos;
         i_this->field_0x9c8 = 2;
         sp_0x24 = KREG_S(7) + 0x800;
     } else if (i_this->field_0x9c8 >= 11) {
         i_this->field_0x9c8 -= (s8) 10;
-        sp274 = i_this->field_0x9d4;
+        ato2 = i_this->eye;
     } else {
-        sp274 = actor->eyePos;
+        ato2 = actor->eyePos;
     }
 
-    if (i_this->field_0x9bc == 2) {
+    if (i_this->ride_mode == 2) {
         sp_0x24 = 0x1000;
     }
 
     if (i_this->field_0x9c8 != 0) {
-        sp25c = sp274 - a_this->current.pos;
-        sp25c.y += TREG_F(2) + -150.0f;
-        sp_0x2a = cM_atan2s(sp25c.x, sp25c.z) - a_this->shape_angle.y;
-        sp_0x28 = a_this->shape_angle.x + cM_atan2s(sp25c.y, JMAFastSqrt(sp25c.x * sp25c.x + sp25c.z * sp25c.z));
+        mae = ato2 - enemy->current.pos;
+        mae.y += TREG_F(2) + -150.0f;
+        sp_0x2a = cM_atan2s(mae.x, mae.z) - enemy->shape_angle.y;
+        sp_0x28 = enemy->shape_angle.x + cM_atan2s(mae.y, JMAFastSqrt(mae.x * mae.x + mae.z * mae.z));
         if (i_this->field_0x9c8 <= 2) {
             if (sp_0x2a > sp_0x26) {
                 sp_0x2a = sp_0x26;
@@ -5405,7 +5405,7 @@ static void action(e_rd_class* i_this) {
 
             cLib_addCalcAngleS2(&i_this->field_0x9ca, sp_0x2a, 2, sp_0x24);
         } else if (i_this->field_0x9c8 == 5) {
-            if ((i_this->field_0x970 & 15) == 0 && cM_rndF2(1.0f) < 0.3f) {
+            if ((i_this->counter & 15) == 0 && cM_rndF2(1.0f) < 0.3f) {
                 i_this->field_0x9d0 = cM_rndFX2(2000.0f);
             }
         } else {
@@ -5420,7 +5420,7 @@ static void action(e_rd_class* i_this) {
             }
 
             cLib_addCalcAngleS2(&i_this->field_0x9ca, sp_0x2a / 2, 2, 0x1000);
-            sp_0x28 = -cM_atan2s(sp25c.y, JMAFastSqrt(sp25c.x * sp25c.x + sp25c.z * sp25c.z));
+            sp_0x28 = -cM_atan2s(mae.y, JMAFastSqrt(mae.x * mae.x + mae.z * mae.z));
             if (sp_0x28 > 0x2AF8) {
                 sp_0x28 = 11000;
                 i_this->field_0x9a4 = 1;
@@ -5450,13 +5450,13 @@ static void action(e_rd_class* i_this) {
         i_this->field_0xa28 += s16(4000 + BREG_S(1));
     }
 
-    if (a_this->speed.y < 0.0f && i_this->mObjAcch.ChkGroundHit()) {
+    if (enemy->speed.y < 0.0f && i_this->ObjAcch.ChkGroundHit()) {
         cLib_addCalc0(&i_this->field_0xa2c, 1.0f, 30.0f);
         cLib_addCalc0(&i_this->field_0xa24, 1.0f, 30.0f);
     }
 
-    if (i_this->field_0x9ec) {
-        sp_0x2a = i_this->field_0xa0c.y - a_this->shape_angle.y;
+    if (i_this->jump_z) {
+        sp_0x2a = i_this->jump_angle.y - enemy->shape_angle.y;
         i_this->field_0xa74[3].y = -sp_0x2a + 0x4000;
         if (i_this->field_0xa74[3].y > 0x1770) {
             i_this->field_0xa74[3].y = 6000;
@@ -5486,12 +5486,12 @@ static void action(e_rd_class* i_this) {
         }
 
         cMtx_YrotS(*calc_mtx, sp_0x2a);
-        sp25c.x = 0.0f;
-        sp25c.y = 0.0f;
-        sp25c.z = 12000.0f;
-        MtxPosition(&sp25c, &sp268);
-        i_this->field_0xae4.y = -sp268.x;
-        i_this->field_0xae4.x = -sp268.z * 1.3f;
+        mae.x = 0.0f;
+        mae.y = 0.0f;
+        mae.z = 12000.0f;
+        MtxPosition(&mae, &ato);
+        i_this->field_0xae4.y = -ato.x;
+        i_this->field_0xae4.x = -ato.z * 1.3f;
 
         if (i_this->field_0xae4.x > 10000) {
             i_this->field_0xae4.x = 10000;
@@ -5522,14 +5522,14 @@ static void action(e_rd_class* i_this) {
 
                 cLib_addCalcAngleS2(&i_this->field_0xa74[i].y, 0, 1, sp_0x20);
             } else {
-                --i_this->field_0xad2[i - 3];
+                i_this->field_0xad2[i - 3]--;
             }
         } else {
             i_this->field_0xa74[i].y = 0;
         }
 
         if (i >= 3) {
-            i_this->field_0xabc[i] = i_this->field_0xab8 * cM_scos(i_this->field_0x970 * (BREG_S(0) + 4000) + i * (BREG_S(1) + 20000));
+            i_this->field_0xabc[i] = i_this->field_0xab8 * cM_scos(i_this->counter * (BREG_S(0) + 4000) + i * (BREG_S(1) + 20000));
         }
     }
 
@@ -5542,15 +5542,15 @@ static void action(e_rd_class* i_this) {
 
     if (i_this->field_0xa1e != 0) {
         i_this->field_0xa1e--;
-        if (i_this->field_0xa0c.x != 0) {
+        if (i_this->jump_angle.x != 0) {
             Vec sp280;
             cXyz sp28c, sp298;
             dBgS_GndChk gnd_chk;
             f32 fVar2 = 75.0f;
 
-            MTXCopy(i_this->mpModelMorf->getModel()->getAnmMtx(1), *calc_mtx);
-            sp25c.set(0.0f, 0.0f, 0.0f);
-            MtxPosition(&sp25c, &sp28c);
+            MTXCopy(i_this->anm_p->getModel()->getAnmMtx(1), *calc_mtx);
+            mae.set(0.0f, 0.0f, 0.0f);
+            MtxPosition(&mae, &sp28c);
             sp28c.y += 100.0f;
             sp28c.y += 100.0f;
             gnd_chk.SetPos(&sp28c);
@@ -5563,11 +5563,11 @@ static void action(e_rd_class* i_this) {
                 gnd_chk.SetPos(&sp280);
                 sp280.y = dComIfG_Bgsp().GroundCross(&gnd_chk);
 
-                f32 x_diff, y_diff, z_diff;
+                f32 x, y, z;
                 if (sp280.y != -G_CM3D_F_INF) {
-                    y_diff = sp280.y - sp28c.y;
-                    z_diff = sp280.z - sp28c.z;
-                    sVar5 = -cM_atan2s(y_diff, z_diff);
+                    y = sp280.y - sp28c.y;
+                    z = sp280.z - sp28c.z;
+                    sVar5 = -cM_atan2s(y, z);
                     if (sVar5 > 0x3000 || sVar5 < -0x3000) {
                         sVar5 = 0;
                     }
@@ -5580,9 +5580,9 @@ static void action(e_rd_class* i_this) {
                 sp280.y = dComIfG_Bgsp().GroundCross(&gnd_chk);
 
                 if (sp280.y != -G_CM3D_F_INF) {
-                    y_diff = sp280.y - sp28c.y;
-                    x_diff = sp280.x - sp28c.x;
-                    sVar4 = (s16) cM_atan2s(y_diff, x_diff);
+                    y = sp280.y - sp28c.y;
+                    x = sp280.x - sp28c.x;
+                    sVar4 = (s16) cM_atan2s(y, x);
                     if (sVar4 > 0x3000 || sVar4 < -0x3000) {
                         sVar4 = 0;
                     }
@@ -5592,23 +5592,23 @@ static void action(e_rd_class* i_this) {
             dBgS_LinChk lin_chk;
             cXyz sp2a4, start, end;
 
-            start = a_this->current.pos;
+            start = enemy->current.pos;
             start.y += JREG_F(5) + 30.0f;
-            J3DModel* model = i_this->mpModelMorf->getModel();
+            J3DModel* model = i_this->anm_p->getModel();
             sp2a4.set(0.0f, 0.0f, 0.0f);
             MTXCopy(model->getAnmMtx(BREG_S(8) + 13), *calc_mtx);
             MtxPosition(&sp2a4, &end);
             end.y += JREG_F(6) + 30.0f;
 
-            lin_chk.Set(&start, &end, a_this);
+            lin_chk.Set(&start, &end, enemy);
             if (dComIfG_Bgsp().LineCross(&lin_chk)) {
                 sp2a4 = start - end;
                 cMtx_YrotS(*calc_mtx, cM_atan2s(sp2a4.x, sp2a4.z));
                 sp2a4.x = 0.0f;
                 sp2a4.y = 0.0f;
                 sp2a4.z = TREG_F(11) + 50.0f;
-                MtxPosition(&sp2a4, &sp268);
-                a_this->current.pos += sp268;
+                MtxPosition(&sp2a4, &ato);
+                enemy->current.pos += ato;
             }
 
             i_this->field_0xa18.x = sVar5;
@@ -5622,82 +5622,82 @@ static void action(e_rd_class* i_this) {
     if (i_this->field_0x129c != 0) {
         i_this->field_0x129c--;
         if (i_this->field_0x129c == 0) {
-            dComIfGp_particle_set(0x15E, &a_this->eyePos, &a_this->shape_angle, NULL);
+            dComIfGp_particle_set(ID_ZI_J_TUBA00, &enemy->eyePos, &enemy->shape_angle, NULL);
         }
     }
 
     if (i_this->field_0x125d != 0) {
-        J3DModel* model_p = i_this->mpModelMorf->getModel();
+        J3DModel* model_p = i_this->anm_p->getModel();
         MTXCopy(model_p->getAnmMtx(11), *calc_mtx);
-        sp25c.set(0.0f, 0.0f, 0.0f);
-        MtxPosition(&sp25c, &sp268);
+        mae.set(0.0f, 0.0f, 0.0f);
+        MtxPosition(&mae, &ato);
 
         dBgS_ObjGndChk_Spl spl_chk_2;
-        sp25c = sp268;
-        sp25c.y += 100.0f;
-        spl_chk_2.SetPos(&sp25c);
-        if (fabsf(dComIfG_Bgsp().GroundCross(&spl_chk_2) - sp268.y) < 50.0f) {
+        mae = ato;
+        mae.y += 100.0f;
+        spl_chk_2.SetPos(&mae);
+        if (fabsf(dComIfG_Bgsp().GroundCross(&spl_chk_2) - ato.y) < 50.0f) {
             static u16 w_eff_name[3] = {
-                0x8258,
-                0x8259,
-                0x825A,
+                dPa_RM(ID_ZI_S_ENEMY_DOWNWTRA_A),
+                dPa_RM(ID_ZI_S_ENEMY_DOWNWTRA_B),
+                dPa_RM(ID_ZI_S_ENEMY_DOWNWTRA_C),
             };
 
-            f32 reg_f30 = 1.0f;
-            cXyz prtcl_scale(reg_f30, reg_f30, reg_f30);
-            csXyz cStack_330(0, 0, 0);
+            f32 scale = 1.0f;
+            cXyz sc(scale, scale, scale);
+            csXyz rot(0, 0, 0);
             for (int i = 0; i < 3; i++) {
-                i_this->field_0x1268[i] = dComIfGp_particle_set(i_this->field_0x1268[i], w_eff_name[i], &sp268, &a_this->tevStr, 
-                                                                &cStack_330, &prtcl_scale, 0xFF, 0, -1, NULL, NULL, NULL);
+                i_this->enemy_downWtrA[i] = dComIfGp_particle_set(i_this->enemy_downWtrA[i], w_eff_name[i], &ato, &enemy->tevStr, 
+                                                                &rot, &sc, 0xFF, 0, -1, NULL, NULL, NULL);
             }
         } else {
-            fopAcM_effSmokeSet1(&i_this->field_0x1260, &i_this->field_0x1264, &sp268, NULL, 1.3f, &a_this->tevStr, 1);
+            fopAcM_effSmokeSet1(&i_this->field_0x1260, &i_this->field_0x1264, &ato, NULL, 1.3f, &enemy->tevStr, 1);
         }
 
         i_this->field_0x125d = 0;
     }
 
-    cXyz sp2d4(1.3f, 1.3f, 1.3f);
-    setMidnaBindEffect(a_this, &i_this->mSound, &a_this->eyePos, &sp2d4);
+    cXyz size(1.3f, 1.3f, 1.3f);
+    setMidnaBindEffect(enemy, &i_this->sound, &enemy->eyePos, &size);
 }
 
 static void fire_eff_set(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    cXyz sp48, sp54;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    cXyz mae, ato;
     int iVar1;
     u16 uVar1[2];
-    f32 fVar1;
+    f32 scale;
 
-    if (i_this->field_0x5bc == 4) {
+    if (i_this->weapon_type == 4) {
         iVar1 = 2;
         uVar1[0] = 0x1DF;
         uVar1[1] = 0x1DE;
-        i_this->mSound.startCreatureSoundLevel(Z2SE_OBJ_BOMB_IGNITION, 0, -1);
-        fVar1 = NREG_F(18) + 2.0f;
-        sp48.x = NREG_F(0) + 62.0f;
-        sp48.y = NREG_F(1) + 22.0f;
-        sp48.z = NREG_F(2) + -50.0f;
+        i_this->sound.startCreatureSoundLevel(Z2SE_OBJ_BOMB_IGNITION, 0, -1);
+        scale = NREG_F(18) + 2.0f;
+        mae.x = NREG_F(0) + 62.0f;
+        mae.y = NREG_F(1) + 22.0f;
+        mae.z = NREG_F(2) + -50.0f;
     } else {
         iVar1 = 1;
         uVar1[0] = 0x8113;
-        i_this->mSound.startCreatureSoundLevel(Z2SE_OBJ_ARROW_FIRE_READY, 0, -1);
-        fVar1 = 1.0f;
-        sp48.x = NREG_F(0) + 90.0f;
-        sp48.y = NREG_F(1) + 10.0f;
-        sp48.z = NREG_F(2) + -60.0f;
+        i_this->sound.startCreatureSoundLevel(Z2SE_OBJ_ARROW_FIRE_READY, 0, -1);
+        scale = 1.0f;
+        mae.x = NREG_F(0) + 90.0f;
+        mae.y = NREG_F(1) + 10.0f;
+        mae.z = NREG_F(2) + -60.0f;
     }
 
-    MtxPosition(&sp48, &sp54);
-    i_this->field_0x1288 = sp54 - i_this->field_0x127c;
+    MtxPosition(&mae, &ato);
+    i_this->field_0x1288 = ato - i_this->field_0x127c;
     i_this->field_0x1288 *= 0.9f;
-    i_this->field_0x127c = sp54;
+    i_this->field_0x127c = ato;
 
-    cXyz sp60(fVar1, fVar1, fVar1);
+    cXyz sc(scale, scale, scale);
     for (int i = 0 ; i < iVar1; i++) {
-        i_this->field_0x1274[i] = dComIfGp_particle_set(i_this->field_0x1274[i], uVar1[i], &sp54, &a_this->shape_angle, &sp60);
+        i_this->fire_eff[i] = dComIfGp_particle_set(i_this->fire_eff[i], uVar1[i], &ato, &enemy->shape_angle, &sc);
 
         if (i == 0) {
-            JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(i_this->field_0x1274[i]);
+            JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(i_this->fire_eff[i]);
             if (emitter != NULL) {
                 emitter->setParticleCallBackPtr(dPa_control_c::getParticleTracePCB());
                 emitter->setUserWork((uintptr_t)&i_this->field_0x1288);
@@ -5708,8 +5708,8 @@ static void fire_eff_set(e_rd_class* i_this) {
 
 static void* s_wb_sub2(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_WB) {
-        e_wb_class* unused_wb_p = (e_wb_class*) i_actor;
-        fopAc_ac_c* unused_actor_p = (fopAc_ac_c*) i_data;
+        e_wb_class* boar = (e_wb_class*) i_actor;
+        fopAc_ac_c* actor = (fopAc_ac_c*) i_data;
         if (target_info_count < 2) {
             target_info[target_info_count] = (fopAc_ac_c*) i_actor;
             target_info_count++;
@@ -5762,14 +5762,14 @@ static u8 data_80519338;
 static void* s_lv9rd_sub2(void* i_actor, void* i_data) {
     UNUSED(i_data);
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD
-        && ((e_rd_class*)i_actor)->field_0x5b7 == data_80519338 && ((e_rd_class*)i_actor)->mAction != ACTION_DROP) {
-        ((e_rd_class*)i_actor)->mAction = ACTION_DROP;
-        ((e_rd_class*)i_actor)->mMode = 2;
+        && ((e_rd_class*)i_actor)->arg1 == data_80519338 && ((e_rd_class*)i_actor)->action != ACTION_DROP) {
+        ((e_rd_class*)i_actor)->action = ACTION_DROP;
+        ((e_rd_class*)i_actor)->mode = 2;
         anm_init((e_rd_class*)i_actor, BCK_RD_FURA2, 2.0f, 2, 1.0f);
-        ((e_rd_class*)i_actor)->field_0x990[0] = 1000;
-        ((e_rd_class*)i_actor)->field_0x5cc = ((fopEn_enemy_c*)i_actor)->home.angle.y;
+        ((e_rd_class*)i_actor)->timer[0] = 1000;
+        ((e_rd_class*)i_actor)->target_ya = ((fopEn_enemy_c*)i_actor)->home.angle.y;
         dComIfGp_setHitMark(1, ((fopEn_enemy_c*)i_actor), &((fopEn_enemy_c*)i_actor)->eyePos, NULL, NULL, 0);
-        ((e_rd_class*)i_actor)->mSound.startCollisionSE(Z2SE_HIT_WOOD_WEAPON, 31);
+        ((e_rd_class*)i_actor)->sound.startCollisionSE(Z2SE_HIT_WOOD_WEAPON, 31);
         return i_actor;
     }
 
@@ -5779,9 +5779,9 @@ static void* s_lv9rd_sub2(void* i_actor, void* i_data) {
 static void* s_lv9rd_sub3(void* i_actor, void* i_data) {
     UNUSED(i_data);
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD
-        && (((e_rd_class*)i_actor)->field_0x5b7 == 13 || ((e_rd_class*)i_actor)->field_0x5b7 == 14)) {
+        && (((e_rd_class*)i_actor)->arg1 == 13 || ((e_rd_class*)i_actor)->arg1 == 14)) {
         ((e_rd_class*)i_actor)->field_0x9a4 = 1;
-        ((e_rd_class*)i_actor)->field_0x980 = 50000.0f;
+        ((e_rd_class*)i_actor)->attack_range = 50000.0f;
     }
 
     return NULL;
@@ -5808,65 +5808,65 @@ static void* s_lv9arrow_sub2(void* i_actor, void* i_data) {
 }
 
 static void cam_3d_morf(e_rd_class* i_this, f32 param_2) {
-    cLib_addCalc2(&i_this->mDemoCamCenter.x, i_this->field_0x12cc.x, param_2, i_this->field_0x12e4.x * i_this->field_0x130c);
-    cLib_addCalc2(&i_this->mDemoCamCenter.y, i_this->field_0x12cc.y, param_2, i_this->field_0x12e4.y * i_this->field_0x130c);
-    cLib_addCalc2(&i_this->mDemoCamCenter.z, i_this->field_0x12cc.z, param_2, i_this->field_0x12e4.z * i_this->field_0x130c);
-    cLib_addCalc2(&i_this->mDemoCamEye.x, i_this->field_0x12c0.x, param_2, i_this->field_0x12d8.x * i_this->field_0x130c);
-    cLib_addCalc2(&i_this->mDemoCamEye.y, i_this->field_0x12c0.y, param_2, i_this->field_0x12d8.y * i_this->field_0x130c);
-    cLib_addCalc2(&i_this->mDemoCamEye.z, i_this->field_0x12c0.z, param_2, i_this->field_0x12d8.z * i_this->field_0x130c);
+    cLib_addCalc2(&i_this->demo_cam_center.x, i_this->field_0x12cc.x, param_2, i_this->field_0x12e4.x * i_this->field_0x130c);
+    cLib_addCalc2(&i_this->demo_cam_center.y, i_this->field_0x12cc.y, param_2, i_this->field_0x12e4.y * i_this->field_0x130c);
+    cLib_addCalc2(&i_this->demo_cam_center.z, i_this->field_0x12cc.z, param_2, i_this->field_0x12e4.z * i_this->field_0x130c);
+    cLib_addCalc2(&i_this->demo_cam_eye.x, i_this->field_0x12c0.x, param_2, i_this->field_0x12d8.x * i_this->field_0x130c);
+    cLib_addCalc2(&i_this->demo_cam_eye.y, i_this->field_0x12c0.y, param_2, i_this->field_0x12d8.y * i_this->field_0x130c);
+    cLib_addCalc2(&i_this->demo_cam_eye.z, i_this->field_0x12c0.z, param_2, i_this->field_0x12d8.z * i_this->field_0x130c);
 }
 
 static void cam_spd_set(e_rd_class* i_this) {
-    i_this->field_0x12d8.x = fabsf(i_this->field_0x12c0.x - i_this->mDemoCamEye.x);
-    i_this->field_0x12d8.y = fabsf(i_this->field_0x12c0.y - i_this->mDemoCamEye.y);
-    i_this->field_0x12d8.z = fabsf(i_this->field_0x12c0.z - i_this->mDemoCamEye.z);
-    i_this->field_0x12e4.x = fabsf(i_this->field_0x12cc.x - i_this->mDemoCamCenter.x);
-    i_this->field_0x12e4.y = fabsf(i_this->field_0x12cc.y - i_this->mDemoCamCenter.y);
-    i_this->field_0x12e4.z = fabsf(i_this->field_0x12cc.z - i_this->mDemoCamCenter.z);
+    i_this->field_0x12d8.x = fabsf(i_this->field_0x12c0.x - i_this->demo_cam_eye.x);
+    i_this->field_0x12d8.y = fabsf(i_this->field_0x12c0.y - i_this->demo_cam_eye.y);
+    i_this->field_0x12d8.z = fabsf(i_this->field_0x12c0.z - i_this->demo_cam_eye.z);
+    i_this->field_0x12e4.x = fabsf(i_this->field_0x12cc.x - i_this->demo_cam_center.x);
+    i_this->field_0x12e4.y = fabsf(i_this->field_0x12cc.y - i_this->demo_cam_center.y);
+    i_this->field_0x12e4.z = fabsf(i_this->field_0x12cc.z - i_this->demo_cam_center.z);
     i_this->field_0x130c = 0.0f;
 }
 
 static void demo_camera(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    daPy_py_c* pla = (daPy_py_c*)dComIfGp_getPlayer(0);
     camera_class* camera = (camera_class*) dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* camera_2 = (camera_class*) dComIfGp_getCamera(0);
-    daNPC_TK_c* hawk_p = (daNPC_TK_c*) fopAcM_SearchByName(PROC_NPC_TK);
-    fopAc_ac_c* a_hwk = hawk_p;
-    cXyz sp38, sp44, sp50, sp5c;
+    camera_class* camera0 = (camera_class*) dComIfGp_getCamera(0);
+    daNPC_TK_c* taka = (daNPC_TK_c*) fopAcM_SearchByName(PROC_NPC_TK);
+    fopAc_ac_c* actor = taka;
+    cXyz mae, ato, sp50, target;
     bool sp_0x9 = true; // unused
     s8 bVar1 = false;
     s16 sVar1 = 0;
 
-    switch (i_this->mDemoMode + 1) {
+    switch (i_this->demo_mode + 1) {
         case 2:
-            if (!a_this->eventInfo.checkCommandDemoAccrpt()) {
-                fopAcM_orderPotentialEvent(a_this, 2, 0xFFFF, 0);
-                a_this->eventInfo.onCondition(dEvtCnd_CANDEMO_e);
+            if (!enemy->eventInfo.checkCommandDemoAccrpt()) {
+                fopAcM_orderPotentialEvent(enemy, 2, 0xFFFF, 0);
+                enemy->eventInfo.onCondition(dEvtCnd_CANDEMO_e);
                 return;
             }
 
             camera->mCamera.Stop();
-            i_this->mDemoMode = 2;
-            i_this->field_0x12a6 = 0;
-            i_this->mDemoCamFovy = 55.0f;
+            i_this->demo_mode = 2;
+            i_this->demo_timer = 0;
+            i_this->demo_cam_zoom = 55.0f;
             camera->mCamera.SetTrimSize(3);
 
-            i_this->mDemoCamCenter = a_this->current.pos;
-            i_this->mDemoCamCenter.y = a_this->eyePos.y - 80.0f + 60.0f + TREG_F(5);
+            i_this->demo_cam_center = enemy->current.pos;
+            i_this->demo_cam_center.y = enemy->eyePos.y - 80.0f + 60.0f + TREG_F(5);
             i_this->field_0x1300 = 2000.0f;
-            a_this->current.angle.y = i_this->mPlayerAngleY;
+            enemy->current.angle.y = i_this->angleY;
             // fallthrough
         case 3:
-            if (i_this->field_0x12a6 < 85) {
-                mDoMtx_stack_c::YrotS(s16(a_this->current.angle.y));
+            if (i_this->demo_timer < 85) {
+                mDoMtx_stack_c::YrotS(s16(enemy->current.angle.y));
                 mDoMtx_stack_c::XrotM(0x640);
-                sp38.x = 0.0f;
-                sp38.y = TREG_F(3);
-                sp38.z = i_this->field_0x1300;
-                mDoMtx_stack_c::multVec(&sp38, &i_this->mDemoCamEye);
-                i_this->mDemoCamEye += a_this->current.pos;
-                cLib_addCalc2(&i_this->mDemoCamCenter.y, a_this->eyePos.y - 80.0f + 60.0f + TREG_F(5), 0.1f, 20.0f);
+                mae.x = 0.0f;
+                mae.y = TREG_F(3);
+                mae.z = i_this->field_0x1300;
+                mDoMtx_stack_c::multVec(&mae, &i_this->demo_cam_eye);
+                i_this->demo_cam_eye += enemy->current.pos;
+                cLib_addCalc2(&i_this->demo_cam_center.y, enemy->eyePos.y - 80.0f + 60.0f + TREG_F(5), 0.1f, 20.0f);
                 cLib_addCalc2(&i_this->field_0x1300, 400.0f, 0.5f, 150.0f);
             } else if (desert_substage == 124) {
                 // main Gerudo Desert
@@ -5879,117 +5879,117 @@ static void demo_camera(e_rd_class* i_this) {
                 fpcM_Search(s_wb_sub2, i_this);
 
                 if (target_info[0] != NULL && target_info[1] != NULL) {
-                    i_this->mDemoCamCenter = target_info[0]->current.pos + ((target_info[1]->current.pos - target_info[0]->current.pos) * 0.5f);
-                    i_this->mDemoCamCenter.y += 200.0f + BREG_F(7);
+                    i_this->demo_cam_center = target_info[0]->current.pos + ((target_info[1]->current.pos - target_info[0]->current.pos) * 0.5f);
+                    i_this->demo_cam_center.y += 200.0f + BREG_F(7);
 
-                    if (i_this->field_0x12a6 == 85) {
-                        i_this->mDemoCamEye = i_this->mDemoCamCenter;
-                        i_this->mDemoCamEye.y += 100.0f + VREG_F(8);
-                        i_this->mDemoCamEye.z += 900.0f + VREG_F(9);
+                    if (i_this->demo_timer == 85) {
+                        i_this->demo_cam_eye = i_this->demo_cam_center;
+                        i_this->demo_cam_eye.y += 100.0f + VREG_F(8);
+                        i_this->demo_cam_eye.z += 900.0f + VREG_F(9);
                     } else {
-                        cLib_addCalc2(&i_this->mDemoCamEye.x, i_this->mDemoCamCenter.x, 0.2f, 100.0f);
-                        cLib_addCalc2(&i_this->mDemoCamEye.y, i_this->mDemoCamCenter.y + 100.0f + VREG_F(8), 0.2f, 100.0f);
-                        cLib_addCalc2(&i_this->mDemoCamEye.z, i_this->mDemoCamCenter.z + 900.0f + VREG_F(9), 0.2f, 100.0f);
+                        cLib_addCalc2(&i_this->demo_cam_eye.x, i_this->demo_cam_center.x, 0.2f, 100.0f);
+                        cLib_addCalc2(&i_this->demo_cam_eye.y, i_this->demo_cam_center.y + 100.0f + VREG_F(8), 0.2f, 100.0f);
+                        cLib_addCalc2(&i_this->demo_cam_eye.z, i_this->demo_cam_center.z + 900.0f + VREG_F(9), 0.2f, 100.0f);
                     }
                 }
 
-                if (i_this->field_0x12a6 == 220) {
+                if (i_this->demo_timer == 220) {
                     bVar1 = true;
                 }
-            } else if (i_this->field_0x12a6 == 140) {
+            } else if (i_this->demo_timer == 140) {
                 bVar1 = true;
             }
             break;
 
         case 11:
-            if (!a_this->eventInfo.checkCommandDemoAccrpt()) {
-                fopAcM_orderPotentialEvent(a_this, 2, 0xFFFF, 0);
-                a_this->eventInfo.onCondition(dEvtCnd_CANDEMO_e);
+            if (!enemy->eventInfo.checkCommandDemoAccrpt()) {
+                fopAcM_orderPotentialEvent(enemy, 2, 0xFFFF, 0);
+                enemy->eventInfo.onCondition(dEvtCnd_CANDEMO_e);
                 return;
             }
 
             camera->mCamera.Stop();
-            i_this->mDemoMode = 11;
-            i_this->field_0x12a6 = 0;
-            i_this->mDemoCamFovy = 55.0f;
+            i_this->demo_mode = 11;
+            i_this->demo_timer = 0;
+            i_this->demo_cam_zoom = 55.0f;
             dComIfGp_offCameraAttentionStatus(0, 8);
             camera->mCamera.SetTrimSize(3);
 
-            i_this->mDemoCamCenter = a_this->current.pos;
-            i_this->mDemoCamCenter.y = (a_this->eyePos.y - 80.0f) + 60.0f + TREG_F(5);
-            i_this->mDemoCamEye = camera_2->lookat.eye;
-            a_this->current.angle.y = i_this->mPlayerAngleY;
+            i_this->demo_cam_center = enemy->current.pos;
+            i_this->demo_cam_center.y = (enemy->eyePos.y - 80.0f) + 60.0f + TREG_F(5);
+            i_this->demo_cam_eye = camera0->lookat.eye;
+            enemy->current.angle.y = i_this->angleY;
             i_this->field_0x1300 = 2000.0f;
             // fallthrough
         case 12:
-            mDoMtx_stack_c::YrotS(s16(a_this->current.angle.y));
+            mDoMtx_stack_c::YrotS(s16(enemy->current.angle.y));
             mDoMtx_stack_c::XrotM(0x640);
-            sp38.x = 0.0f;
-            sp38.y = TREG_F(3);
-            sp38.z = i_this->field_0x1300;
-            mDoMtx_stack_c::multVec(&sp38, &sp44);
-            sp44.x += a_this->current.pos.x;
-            sp44.z += a_this->current.pos.z;
-            sp44.y += a_this->home.pos.y;
+            mae.x = 0.0f;
+            mae.y = TREG_F(3);
+            mae.z = i_this->field_0x1300;
+            mDoMtx_stack_c::multVec(&mae, &ato);
+            ato.x += enemy->current.pos.x;
+            ato.z += enemy->current.pos.z;
+            ato.y += enemy->home.pos.y;
 
             cLib_addCalc2(&i_this->field_0x1300, 400.0f, 0.5f, 150.0f);
 
-            if (i_this->field_0x12a6 < 20) {
-                i_this->mDemoCamEye = sp44;
+            if (i_this->demo_timer < 20) {
+                i_this->demo_cam_eye = ato;
             } else {
-                cLib_addCalc2(&i_this->mDemoCamEye.x, sp44.x, 0.1f, 10.0f);
-                cLib_addCalc2(&i_this->mDemoCamEye.z, sp44.z, 0.1f, 10.0f);
+                cLib_addCalc2(&i_this->demo_cam_eye.x, ato.x, 0.1f, 10.0f);
+                cLib_addCalc2(&i_this->demo_cam_eye.z, ato.z, 0.1f, 10.0f);
             }
 
-            cLib_addCalc2(&i_this->mDemoCamCenter.x, a_this->eyePos.x, 0.1f, 10.0f);
-            cLib_addCalc2(&i_this->mDemoCamCenter.z, a_this->eyePos.z, 0.1f, 10.0f);
-            cLib_addCalc2(&i_this->mDemoCamCenter.y, a_this->eyePos.y - 80.0f + 60.0f + TREG_F(5), 0.1f, 100.0f);
+            cLib_addCalc2(&i_this->demo_cam_center.x, enemy->eyePos.x, 0.1f, 10.0f);
+            cLib_addCalc2(&i_this->demo_cam_center.z, enemy->eyePos.z, 0.1f, 10.0f);
+            cLib_addCalc2(&i_this->demo_cam_center.y, enemy->eyePos.y - 80.0f + 60.0f + TREG_F(5), 0.1f, 100.0f);
 
-            if (i_this->field_0x12a6 == s16(100 + KREG_S(8))) {
+            if (i_this->demo_timer == s16(100 + KREG_S(8))) {
                 bVar1 = true;
             }
             break;
 
         case 20:
-            if (player->getClothesChangeWaitTimer() == 0) {
-                i_this->mDemoMode = 21;
-                i_this->field_0x12a6 = 0;
+            if (pla->getClothesChangeWaitTimer() == 0) {
+                i_this->demo_mode = 21;
+                i_this->demo_timer = 0;
             }
             break;
 
         case 21:
-            if (!a_this->eventInfo.checkCommandDemoAccrpt()) {
-                fopAcM_orderPotentialEvent(a_this, 2, 0xFFFF, 0);
-                a_this->eventInfo.onCondition(dEvtCnd_CANDEMO_e);
+            if (!enemy->eventInfo.checkCommandDemoAccrpt()) {
+                fopAcM_orderPotentialEvent(enemy, 2, 0xFFFF, 0);
+                enemy->eventInfo.onCondition(dEvtCnd_CANDEMO_e);
                 return;
             }
 
             camera->mCamera.Stop();
-            i_this->mDemoMode = 21;
-            i_this->field_0x12a6 = 0;
-            i_this->mDemoCamFovy = 55.0f;
+            i_this->demo_mode = 21;
+            i_this->demo_timer = 0;
+            i_this->demo_cam_zoom = 55.0f;
             camera->mCamera.SetTrimSize(3);
 
-            i_this->mDemoCamCenter = camera_2->lookat.center;
-            i_this->mDemoCamEye = camera_2->lookat.eye;
+            i_this->demo_cam_center = camera0->lookat.center;
+            i_this->demo_cam_eye = camera0->lookat.eye;
             i_this->field_0x12cc.set(-7875.0f, 2125.0f, 7895.0f);
             i_this->field_0x12c0.set(-7527.0f, 2084.0f, 7552.0f);
             cam_spd_set(i_this);
             i_this->field_0x12e4 *= 2.0f;
-            i_this->field_0x12f0 = player->current.pos;
+            i_this->field_0x12f0 = pla->current.pos;
             i_this->field_0x12f0.y = 2000.0f;
 
             daPy_getPlayerActorClass()->changeOriginalDemo();
             if (daPy_py_c::checkNowWolf()) {
                 daPy_getPlayerActorClass()->changeDemoMode(71, 0, 0, 0);
-                i_this->mDemoMode = 19;
+                i_this->demo_mode = 19;
             }
             // fallthrough
         case 22:
-            daPy_getPlayerActorClass()->setPlayerPosAndAngle(&i_this->field_0x12f0, player->shape_angle.y, 0);
+            daPy_getPlayerActorClass()->setPlayerPosAndAngle(&i_this->field_0x12f0, pla->shape_angle.y, 0);
 
-            if (i_this->mDemoMode != 19) {
-                if (i_this->field_0x12a6 == 1) {
+            if (i_this->demo_mode != 19) {
+                if (i_this->demo_timer == 1) {
                     Z2GetAudioMgr()->bgmStreamPrepare(0x2000055);
                     Z2GetAudioMgr()->bgmStreamPlay();
                 }
@@ -5997,32 +5997,32 @@ static void demo_camera(e_rd_class* i_this) {
                 cam_3d_morf(i_this, BREG_F(17) + 0.2f);
                 cLib_addCalc2(&i_this->field_0x130c, BREG_F(16) + 0.1f, 1.0f, BREG_F(17) + 0.002f);
 
-                if (i_this->field_0x12a6 == 70) {
-                    dComIfGs_onSwitch(75, fopAcM_GetRoomNo(a_this));
+                if (i_this->demo_timer == 70) {
+                    dComIfGs_onSwitch(75, fopAcM_GetRoomNo(enemy));
                 }
 
-                if (i_this->field_0x12a6 >= 70) {
-                    sp44.set(-5182.0f, 2000.0f, 5237.0f);
-                    daPy_getPlayerActorClass()->setPlayerPosAndAngle(&sp44, -8111, 0);
+                if (i_this->demo_timer >= 70) {
+                    ato.set(-5182.0f, 2000.0f, 5237.0f);
+                    daPy_getPlayerActorClass()->setPlayerPosAndAngle(&ato, -8111, 0);
                 }
 
-                if (i_this->field_0x12a6 == 120 || i_this->field_0x12a6 == 130
-                    || i_this->field_0x12a6 == 140 || i_this->field_0x12a6 == 150) {
+                if (i_this->demo_timer == 120 || i_this->demo_timer == 130
+                    || i_this->demo_timer == 140 || i_this->demo_timer == 150) {
                     fpcM_Search(s_lv9dn_sub, i_this);
                 }
 
-                if (i_this->field_0x12a6 > 160) {
-                    cLib_addCalc2(&i_this->mDemoCamFovy, 55.0f, 0.05f, 0.5f);
+                if (i_this->demo_timer > 160) {
+                    cLib_addCalc2(&i_this->demo_cam_zoom, 55.0f, 0.05f, 0.5f);
                 } else {
-                    cLib_addCalc2(&i_this->mDemoCamFovy, 45.0f, 0.05f, 0.5f);
+                    cLib_addCalc2(&i_this->demo_cam_zoom, 45.0f, 0.05f, 0.5f);
                 }
 
-                if (i_this->field_0x12a6 == 180) {
+                if (i_this->demo_timer == 180) {
                     i_this->field_0x12cc.set(-7241.0f, 4310.0f, 7269.0f);
                     i_this->field_0x12c0.set(-6913.0f, 4139.0f, 6948.0f);
                     cam_spd_set(i_this);
-                    i_this->mDemoMode = 22;
-                    i_this->field_0x12a6 = 0;
+                    i_this->demo_mode = 22;
+                    i_this->demo_timer = 0;
                     fpcM_Search(s_lv9rd_sub, i_this);
                     daPy_getPlayerActorClass()->changeDemoMode(23, 0, 0, 0);
                 }
@@ -6032,49 +6032,49 @@ static void demo_camera(e_rd_class* i_this) {
         case 23:
             cam_3d_morf(i_this, BREG_F(17) + 0.2f);
             cLib_addCalc2(&i_this->field_0x130c, BREG_F(16) + 0.15f, 1.0f, BREG_F(17) + 0.005f);
-            cLib_addCalc2(&i_this->mDemoCamFovy, 55.0f, 0.1f, 0.5f);
+            cLib_addCalc2(&i_this->demo_cam_zoom, 55.0f, 0.1f, 0.5f);
 
-            if (i_this->field_0x12a6 == 13) {
+            if (i_this->demo_timer == 13) {
                 fpcM_Search(s_lv9dn_sub2,i_this);
             }
 
-            if (i_this->field_0x12a6 == 17 || i_this->field_0x12a6 == 27 || i_this->field_0x12a6 == 37 || i_this->field_0x12a6 == 47) {
+            if (i_this->demo_timer == 17 || i_this->demo_timer == 27 || i_this->demo_timer == 37 || i_this->demo_timer == 47) {
                 fpcM_Search(s_lv9dn_sub, i_this);
             }
 
-            if (i_this->field_0x12a6 == 55) {
-                i_this->mDemoCamCenter.set(-8330.0f, 4359.0f, 8449.0f);
-                i_this->mDemoCamEye.set(-8183.0f, 4264.0f, 7991.0f);
-                i_this->mDemoCamFovy = 55.0f;
-                i_this->mDemoMode = 23;
-                i_this->field_0x12a6 = 0;
+            if (i_this->demo_timer == 55) {
+                i_this->demo_cam_center.set(-8330.0f, 4359.0f, 8449.0f);
+                i_this->demo_cam_eye.set(-8183.0f, 4264.0f, 7991.0f);
+                i_this->demo_cam_zoom = 55.0f;
+                i_this->demo_mode = 23;
+                i_this->demo_timer = 0;
             }
             break;
 
         case 24:
             i_this->field_0x9a4 = 1;
 
-            if (i_this->field_0x12a6 == 20) {
-                i_this->field_0x980 = 50000.0f;
+            if (i_this->demo_timer == 20) {
+                i_this->attack_range = 50000.0f;
             }
 
-            if (i_this->field_0x12a6 < 40) {
-                i_this->mDemoCamEye.y += 2.0f;
+            if (i_this->demo_timer < 40) {
+                i_this->demo_cam_eye.y += 2.0f;
             }
 
-            if (i_this->field_0x12a6 == 40) {
-                i_this->mDemoCamCenter.set(-8033.0f, 4259.0f, 8143.0f);
-                i_this->mDemoCamEye.set(-8337.0f, 4488.0f, 8451.0f);
+            if (i_this->demo_timer == 40) {
+                i_this->demo_cam_center.set(-8033.0f, 4259.0f, 8143.0f);
+                i_this->demo_cam_eye.set(-8337.0f, 4488.0f, 8451.0f);
             }
 
-            if (i_this->field_0x12a6 >= 40) {
-                cLib_addCalc2(&i_this->mDemoCamFovy, 30.0f, 0.05f, 0.5f);
+            if (i_this->demo_timer >= 40) {
+                cLib_addCalc2(&i_this->demo_cam_zoom, 30.0f, 0.05f, 0.5f);
             }
 
-            if (i_this->field_0x12a6 == 110) {
+            if (i_this->demo_timer == 110) {
                 i_this->field_0x9a4 = 0;
-                i_this->mDemoMode = 24;
-                i_this->field_0x12a6 = 0;
+                i_this->demo_mode = 24;
+                i_this->demo_timer = 0;
                 i_this->field_0x12cc.set(-4910.0f, 2012.0f, 4976.0f);
                 i_this->field_0x12c0.set(-5235.0f, 2179.0f, 5302.0f);
                 cam_spd_set(i_this);
@@ -6083,55 +6083,55 @@ static void demo_camera(e_rd_class* i_this) {
 
         case 25:
             i_this->field_0x9a4 = 1;
-            i_this->field_0x980 = 0.0f;
+            i_this->attack_range = 0.0f;
 
-            if (i_this->field_0x12a6 >= 4) {
-                i_this->mBlureRate = 200 + VREG_S(7);
-                sVar1 = cM_scos(i_this->field_0x12a6 * 0x500) * 2500.0f;
+            if (i_this->demo_timer >= 4) {
+                i_this->blurRate = 200 + VREG_S(7);
+                sVar1 = cM_scos(i_this->demo_timer * 0x500) * 2500.0f;
                 i_this->field_0x130c = 0.03f + BREG_F(16);
                 cam_3d_morf(i_this, 0.5f + BREG_F(17));
 
-                if (i_this->field_0x12a6 == 4) {
+                if (i_this->demo_timer == 4) {
                     fpcM_Search(s_lv9arrow_sub, i_this);
                 }
 
-                if (i_this->field_0x12a6 == 10) {
+                if (i_this->demo_timer == 10) {
                     fpcM_Search(s_lv9dn_sub2, i_this);
                 }
 
-                if (i_this->field_0x12a6 == 20) {
+                if (i_this->demo_timer == 20) {
                     daPy_getPlayerActorClass()->changeDemoMode(20, 1, 0, 0);
-                    hawk_p->mSound.startCreatureVoice(Z2SE_HAWK_V_REGI_DEMO_1, -1);
+                    taka->mSound.startCreatureVoice(Z2SE_HAWK_V_REGI_DEMO_1, -1);
                 }
 
-                if (i_this->field_0x12a6 == 41) {
+                if (i_this->demo_timer == 41) {
                     mDoGph_gInf_c::fadeOut(0.5f, g_blackColor);
                 }
 
-                if (i_this->field_0x12a6 == 43) {
-                    i_this->mDemoMode = 25;
-                    i_this->field_0x12a6 = 0;
+                if (i_this->demo_timer == 43) {
+                    i_this->demo_mode = 25;
+                    i_this->demo_timer = 0;
                     Z2GetAudioMgr()->seStart(Z2SE_AL_FISHING_HIT, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
-                    i_this->mBlureRate = 0;
+                    i_this->blurRate = 0;
                 }
             }
             break;
 
         case 26:
-            if (i_this->field_0x12a6 == 40) {
+            if (i_this->demo_timer == 40) {
                 mDoGph_gInf_c::fadeIn(0.5f, g_blackColor);
-                i_this->mDemoCamFovy = 55.0f;
-                i_this->mDemoCamCenter.set(-5197.0f, 1712.0f, 5039.0f);
-                i_this->mDemoCamEye.set(-5215.0f, 2108.0f, 5327.0f);
+                i_this->demo_cam_zoom = 55.0f;
+                i_this->demo_cam_center.set(-5197.0f, 1712.0f, 5039.0f);
+                i_this->demo_cam_eye.set(-5215.0f, 2108.0f, 5327.0f);
                 i_this->field_0x12cc.set(-5025.0f, 2270.0f, 4909.0f);
                 i_this->field_0x12c0.set(-5215.0f, 2108.0f, 5327.0f);
                 cam_spd_set(i_this);
                 fpcM_Search(s_lv9arrow_sub2, i_this);
             }
 
-            if (i_this->field_0x12a6 == 80) {
-                i_this->mDemoMode = 26;
-                i_this->field_0x12a6 = 0;
+            if (i_this->demo_timer == 80) {
+                i_this->demo_mode = 26;
+                i_this->demo_timer = 0;
                 daPy_getPlayerActorClass()->changeDemoMode(72, 3, 0, 0);
             }
             break;
@@ -6140,123 +6140,123 @@ static void demo_camera(e_rd_class* i_this) {
             cam_3d_morf(i_this, BREG_F(17) + 0.2f);
             cLib_addCalc2(&i_this->field_0x130c, BREG_F(16) + 0.5f, 1.0f, BREG_F(17) + 0.01f);
 
-            if (i_this->field_0x12a6 == 55) {
-                i_this->mDemoCamCenter.set(-5529.0f, 2457.0f, 5589.0f);
-                i_this->mDemoCamEye.set(-5232.0f, 2201.0f, 5295.0f);
+            if (i_this->demo_timer == 55) {
+                i_this->demo_cam_center.set(-5529.0f, 2457.0f, 5589.0f);
+                i_this->demo_cam_eye.set(-5232.0f, 2201.0f, 5295.0f);
                 i_this->field_0x12cc.set(-5580.0f, 2188.0f, 5640.0f);
                 i_this->field_0x12c0.set(-5232.0f, 2201.0f, 5295.0f);
                 cam_spd_set(i_this);
-                i_this->mDemoMode = 27;
-                i_this->field_0x12a6 = 0;
+                i_this->demo_mode = 27;
+                i_this->demo_timer = 0;
             }
             break;
 
         case 28:
             fpcM_Search(s_lv9rd_sub3, i_this);
 
-            if (i_this->field_0x12a6 == 40) {
+            if (i_this->demo_timer == 40) {
                 data_80519338 = 14;
                 fpcM_Search(s_lv9rd_sub2, i_this);
-            } else if (i_this->field_0x12a6 == 60) {
+            } else if (i_this->demo_timer == 60) {
                 data_80519338 = 13;
                 fpcM_Search(s_lv9rd_sub2, i_this);
             }
 
-            if (i_this->field_0x12a6 == 10 || i_this->field_0x12a6 == 20 || i_this->field_0x12a6 == 30 || i_this->field_0x12a6 == 40) {
+            if (i_this->demo_timer == 10 || i_this->demo_timer == 20 || i_this->demo_timer == 30 || i_this->demo_timer == 40) {
                 fpcM_Search(s_lv9dn_sub, i_this);
             }
 
-            if (i_this->field_0x12a6 < 100) {
-                cLib_addCalc2(&i_this->mDemoCamFovy, 25.0f, 0.2f, 1.0f);
-            } else if (i_this->field_0x12a6 >= 120) {
-                cLib_addCalc2(&i_this->mDemoCamFovy, 55.0f, 0.05f, 0.4f);
+            if (i_this->demo_timer < 100) {
+                cLib_addCalc2(&i_this->demo_cam_zoom, 25.0f, 0.2f, 1.0f);
+            } else if (i_this->demo_timer >= 120) {
+                cLib_addCalc2(&i_this->demo_cam_zoom, 55.0f, 0.05f, 0.4f);
                 cam_3d_morf(i_this, BREG_F(17) + 0.2f);
                 cLib_addCalc2(&i_this->field_0x130c, BREG_F(16) + 0.1f, 1.0f, BREG_F(17) + 0.01f);
 
-                if (i_this->field_0x12a6 == 177) {
-                    sp44.set(-5821.0f, 2000.0f, 5850.0f);
-                    dBomb_c::createNormalBombExplode(&sp44);
+                if (i_this->demo_timer == 177) {
+                    ato.set(-5821.0f, 2000.0f, 5850.0f);
+                    dBomb_c::createNormalBombExplode(&ato);
                     dComIfGs_onTmpBit((u16) dSv_event_tmp_flag_c::tempBitLabels[0x76]);
                 }
 
-                if (i_this->field_0x12a6 == 180) {
+                if (i_this->demo_timer == 180) {
                     dComIfGp_getVibration().StartShock(8, 79, cXyz(0.0f, 1.0f, 0.0f));
                     fpcM_Search(s_lv9dn_sub3, i_this);
                 }
             }
 
-            if (i_this->field_0x12a6 != 230) {
+            if (i_this->demo_timer != 230) {
                 break;
             }
 
-            i_this->mDemoMode = 28;
-            i_this->field_0x12a6 = 0;
+            i_this->demo_mode = 28;
+            i_this->demo_timer = 0;
             i_this->field_0x12cc.set(-5406.0f, 2168.0f, 5468.0f);
             i_this->field_0x12c0.set(-5058.0f, 2181.0f, 5124.0f);
             cam_spd_set(i_this);
             // fallthrough
         case 29:
-            if (i_this->field_0x12a6 == 1) {
-                player->changeDemoMode(20, 0, 0, 0);
+            if (i_this->demo_timer == 1) {
+                pla->changeDemoMode(20, 0, 0, 0);
             }
 
-            if (i_this->field_0x12a6 < 25) {
+            if (i_this->demo_timer < 25) {
                 cam_3d_morf(i_this, BREG_F(17) + 0.2f);
                 cLib_addCalc2(&i_this->field_0x130c, BREG_F(16) + 0.2f, 1.0f, BREG_F(17) + 0.01f);
 
-                if (i_this->field_0x12a6 == 23) {
-                    hawk_p->setResistanceDemo();
+                if (i_this->demo_timer == 23) {
+                    taka->setResistanceDemo();
                 }
             } else {
-                if (i_this->field_0x12a6 == 25) {
+                if (i_this->demo_timer == 25) {
                     i_this->field_0x130c = 0.0f;
                 }
 
-                sp5c = a_hwk->current.pos;
-                cLib_addCalc2(&i_this->mDemoCamCenter.x, sp5c.x, 0.2f, i_this->field_0x130c * 100.0f);
-                cLib_addCalc2(&i_this->mDemoCamCenter.y, sp5c.y + BREG_F(13), 0.2f, i_this->field_0x130c * 100.0f);
-                cLib_addCalc2(&i_this->mDemoCamCenter.z, sp5c.z, 0.2f, i_this->field_0x130c * 100.0f);
+                target = actor->current.pos;
+                cLib_addCalc2(&i_this->demo_cam_center.x, target.x, 0.2f, i_this->field_0x130c * 100.0f);
+                cLib_addCalc2(&i_this->demo_cam_center.y, target.y + BREG_F(13), 0.2f, i_this->field_0x130c * 100.0f);
+                cLib_addCalc2(&i_this->demo_cam_center.z, target.z, 0.2f, i_this->field_0x130c * 100.0f);
 
                 cLib_addCalc2(&i_this->field_0x130c, 1.0f, 1.0f, 0.03f);
 
-                if (i_this->field_0x12a6 >= 55) {
-                    if (i_this->field_0x12a6 == 110) {
-                        hawk_p->mSound.startCreatureVoice(Z2SE_HAWK_V_REGI_DEMO_2, -1);
+                if (i_this->demo_timer >= 55) {
+                    if (i_this->demo_timer == 110) {
+                        taka->mSound.startCreatureVoice(Z2SE_HAWK_V_REGI_DEMO_2, -1);
                     }
 
-                    if (i_this->field_0x12a6 < 135) {
-                        cLib_addCalc2(&i_this->mDemoCamFovy, 20.0f, 0.2f, 1.0f);
+                    if (i_this->demo_timer < 135) {
+                        cLib_addCalc2(&i_this->demo_cam_zoom, 20.0f, 0.2f, 1.0f);
                     } else {
-                        cLib_addCalc2(&i_this->mDemoCamFovy, 55.0f, 0.1f, 0.5f);
+                        cLib_addCalc2(&i_this->demo_cam_zoom, 55.0f, 0.1f, 0.5f);
                     }
                 }
 
-                if (i_this->field_0x12a6 == 205) {
-                    i_this->mDemoMode = 29;
-                    i_this->field_0x12a6 = 0;
+                if (i_this->demo_timer == 205) {
+                    i_this->demo_mode = 29;
+                    i_this->demo_timer = 0;
                     daPy_getPlayerActorClass()->changeDemoMode(1, 0, 0, 0);
                 }
             }
             break;
 
         case 30:
-            i_this->mDemoCamFovy = 55.0f;
-            i_this->mDemoCamEye.set(-3963.0f, 147.0f, 8094.0f);
-            sp5c = a_hwk->current.pos;
+            i_this->demo_cam_zoom = 55.0f;
+            i_this->demo_cam_eye.set(-3963.0f, 147.0f, 8094.0f);
+            target = actor->current.pos;
 
-            if (i_this->field_0x12a6 == 0) {
-                i_this->mDemoCamCenter = sp5c;
+            if (i_this->demo_timer == 0) {
+                i_this->demo_cam_center = target;
             } else {
-                cLib_addCalc2(&i_this->mDemoCamCenter.x, sp5c.x, 0.2f, 100.0f);
-                cLib_addCalc2(&i_this->mDemoCamCenter.y, sp5c.y, 0.2f, 100.0f);
-                cLib_addCalc2(&i_this->mDemoCamCenter.z, sp5c.z, 0.2f, 100.0f);
+                cLib_addCalc2(&i_this->demo_cam_center.x, target.x, 0.2f, 100.0f);
+                cLib_addCalc2(&i_this->demo_cam_center.y, target.y, 0.2f, 100.0f);
+                cLib_addCalc2(&i_this->demo_cam_center.z, target.z, 0.2f, 100.0f);
 
-                if (i_this->field_0x12a6 == 140) {
+                if (i_this->demo_timer == 140) {
                     i_this->field_0x12cc.set(-4080.0f, 134.0f, 8190.0f);
-                    i_this->field_0x12c0 = i_this->mDemoCamEye;
+                    i_this->field_0x12c0 = i_this->demo_cam_eye;
                     cam_spd_set(i_this);
-                    i_this->mDemoMode = 30;
-                    i_this->field_0x12a6 = 0;
+                    i_this->demo_mode = 30;
+                    i_this->demo_timer = 0;
                 }
             }
             break;
@@ -6265,16 +6265,16 @@ static void demo_camera(e_rd_class* i_this) {
             cam_3d_morf(i_this, BREG_F(17) + 0.1f);
             cLib_addCalc2(&i_this->field_0x130c, BREG_F(16) + 0.1f, 1.0f, BREG_F(17) + 0.002f);
 
-            if (i_this->field_0x12a6 == 70) {
-                i_this->mDemoCamCenter.set(-4527.0f, 143.0f, 8305.0f);
-                i_this->mDemoCamEye.set(-4676.0f, 161.0f, 8282.0f);
+            if (i_this->demo_timer == 70) {
+                i_this->demo_cam_center.set(-4527.0f, 143.0f, 8305.0f);
+                i_this->demo_cam_eye.set(-4676.0f, 161.0f, 8282.0f);
                 i_this->field_0x12cc.set(-4552.0f, 143.0f, 8461.0f);
                 i_this->field_0x12c0.set(-4701.0f, 161.0f, 8438.0f);
                 cam_spd_set(i_this);
-                i_this->mDemoMode = 31;
-                i_this->field_0x12a6 = 0;
-                sp44.set(-5397.0f, 2000.0f, 5921.0f);
-                daPy_getPlayerActorClass()->setPlayerPosAndAngle(&sp44, 0x213F, 0);
+                i_this->demo_mode = 31;
+                i_this->demo_timer = 0;
+                ato.set(-5397.0f, 2000.0f, 5921.0f);
+                daPy_getPlayerActorClass()->setPlayerPosAndAngle(&ato, 0x213F, 0);
             }
             break;
 
@@ -6282,57 +6282,58 @@ static void demo_camera(e_rd_class* i_this) {
             cam_3d_morf(i_this, BREG_F(17) + 0.05f);
             cLib_addCalc2(&i_this->field_0x130c, BREG_F(16) + 0.05f, 1.0f, BREG_F(17) + 0.001f);
 
-            if (i_this->field_0x12a6 == 70) {
-                i_this->mDemoMode = 32;
-                i_this->field_0x12a6 = 0;
-                i_this->mDemoCamCenter.set(-5275.0f, 2327.0f, 5812.0f);
-                i_this->mDemoCamEye.set(-5367.0f, 2689.0f, 5495.0f);
-                i_this->mDemoCamFovy = 30.0f;
+            if (i_this->demo_timer == 70) {
+                i_this->demo_mode = 32;
+                i_this->demo_timer = 0;
+                i_this->demo_cam_center.set(-5275.0f, 2327.0f, 5812.0f);
+                i_this->demo_cam_eye.set(-5367.0f, 2689.0f, 5495.0f);
+                i_this->demo_cam_zoom = 30.0f;
             }
             break;
 
         case 33:
-            if (i_this->field_0x12a6 == 60) {
-                i_this->mDemoCamCenter.set(-3906.0f, 42.0f, 8198.0f);
-                i_this->mDemoCamEye.set(-4274.0f, 272.0f, 7969.0f);
-                i_this->mDemoMode = 33;
-                i_this->field_0x12a6 = 0;
+            if (i_this->demo_timer == 60) {
+                i_this->demo_cam_center.set(-3906.0f, 42.0f, 8198.0f);
+                i_this->demo_cam_eye.set(-4274.0f, 272.0f, 7969.0f);
+                i_this->demo_mode = 33;
+                i_this->demo_timer = 0;
                 dComIfGs_onTmpBit((u16) dSv_event_tmp_flag_c::tempBitLabels[0x75]);
             }
             break;
 
         case 34:
-            if (i_this->field_0x12a6 == 65) {
+            if (i_this->demo_timer == 65) {
                 daPy_getPlayerActorClass()->changeDemoMode(60, 1, 0, 0);
             }
 
-            if (i_this->field_0x12a6 == 70) {
-                i_this->mDemoCamCenter.set(-5712.0f, 2308.0f, 5828.0f);
-                i_this->mDemoCamEye.set(-5286.0f, 2104.0f, 5957.0f);
-                i_this->mDemoCamFovy = 45.0f;
-                i_this->mDemoMode = 34;
-                i_this->field_0x12a6 = 0;
+            if (i_this->demo_timer == 70) {
+                i_this->demo_cam_center.set(-5712.0f, 2308.0f, 5828.0f);
+                i_this->demo_cam_eye.set(-5286.0f, 2104.0f, 5957.0f);
+                i_this->demo_cam_zoom = 45.0f;
+                i_this->demo_mode = 34;
+                i_this->demo_timer = 0;
             }
             break;
 
         case 35:
-            cLib_addCalc2(&i_this->mDemoCamFovy, 40.0f, 0.05f, 0.02f);
-            if (i_this->field_0x12a6 == 80) {
-                i_this->mDemoCamCenter.set(-4712.0f, 870.0f, 7432.0f);
-                i_this->mDemoCamEye.set(-4852.0f, 1171.0f, 7072.0f);
-                i_this->mDemoCamFovy = 55.0f;
-                i_this->mDemoMode = 35;
-                i_this->field_0x12a6 = 0;
+            cLib_addCalc2(&i_this->demo_cam_zoom, 40.0f, 0.05f, 0.02f);
+            if (i_this->demo_timer == 80) {
+                i_this->demo_cam_center.set(-4712.0f, 870.0f, 7432.0f);
+                i_this->demo_cam_eye.set(-4852.0f, 1171.0f, 7072.0f);
+                i_this->demo_cam_zoom = 55.0f;
+                i_this->demo_mode = 35;
+                i_this->demo_timer = 0;
+                /* Hyrule Castle - Resistance leaves Flag*/
                 dComIfGs_onTmpBit((u16) dSv_event_tmp_flag_c::tempBitLabels[0x74]);
             }
             break;
 
         case 36:
-            if (i_this->field_0x12a6 == 120) {
+            if (i_this->demo_timer == 120) {
                 bVar1 = true;
-                int swBit = (fopAcM_GetParam(a_this) & 0xFF000000) >> 24;
-                if (swBit != 0xFF) {
-                    dComIfGs_onSwitch(swBit, fopAcM_GetRoomNo(a_this));
+                int bitsw = (fopAcM_GetParam(enemy) & 0xFF000000) >> 24;
+                if (bitsw != 0xFF) {
+                    dComIfGs_onSwitch(bitsw, fopAcM_GetRoomNo(enemy));
                 }
             }
             break;
@@ -6343,15 +6344,15 @@ static void demo_camera(e_rd_class* i_this) {
         camera->mCamera.SetTrimSize(0);
         dComIfGp_event_reset();
         daPy_getPlayerActorClass()->cancelOriginalDemo();
-        i_this->mDemoMode = -1;
+        i_this->demo_mode = -1;
     }
 
-    if (i_this->mDemoMode > 0) {
-        cXyz sp68, sp74;
-        sp68 = i_this->mDemoCamCenter;
-        sp74 = i_this->mDemoCamEye;
-        camera->mCamera.Set(sp68, sp74, sVar1, i_this->mDemoCamFovy);
-        i_this->field_0x12a6++;
+    if (i_this->demo_mode > 0) {
+        cXyz center, eye;
+        center = i_this->demo_cam_center;
+        eye = i_this->demo_cam_eye;
+        camera->mCamera.Set(center, eye, sVar1, i_this->demo_cam_zoom);
+        i_this->demo_timer++;
     }
 }
 
@@ -6368,11 +6369,11 @@ static int daE_RD_Execute(e_rd_class* i_this) {
         }
     }
 
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    cXyz sp98, spa4, spb0;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    cXyz mae, ato, ato2;
 
-    if (i_this->field_0x5b8 == 11) {
-        fopAcM_delete(a_this);
+    if (i_this->arg2 == 11) {
+        fopAcM_delete(enemy);
         return 1;
     }
 
@@ -6380,15 +6381,15 @@ static int daE_RD_Execute(e_rd_class* i_this) {
         S_find--;
     }
 
-    i_this->field_0x970++;
+    i_this->counter++;
 
-    if (i_this->mBossMode == 0) {
+    if (i_this->actor_set == 0) {
         i_this->field_0x1297 = i_this->field_0x1298;
     } else {
-        fopAc_ac_c* player = dComIfGp_getPlayer(0);
+        fopAc_ac_c* pla = dComIfGp_getPlayer(0);
 
         // Bridge of Eldin Battle
-        if (strcmp(dComIfGp_getStartStageName(), "F_SP102") == 0 && player->current.pos.y < -2000.0f) {
+        if (strcmp(dComIfGp_getStartStageName(), "F_SP102") == 0 && pla->current.pos.y < -2000.0f) {
             cDmr_SkipInfo = 50;
         }
 
@@ -6398,13 +6399,13 @@ static int daE_RD_Execute(e_rd_class* i_this) {
     }
 
     for (int i = 0; i < 4; i++) {
-        if (i_this->field_0x990[i] != 0) {
-            i_this->field_0x990[i]--;
+        if (i_this->timer[i] != 0) {
+            i_this->timer[i]--;
         }
     }
 
-    if (i_this->field_0x998 != 0) {
-        i_this->field_0x998--;
+    if (i_this->damage_timer != 0) {
+        i_this->damage_timer--;
     }
 
     if (i_this->field_0xaf0 != 0) {
@@ -6415,69 +6416,69 @@ static int daE_RD_Execute(e_rd_class* i_this) {
         i_this->field_0x99a--;
     }
 
-    if (i_this->field_0x99e != 0) {
-        i_this->field_0x99e--;
+    if (i_this->attack_timer != 0) {
+        i_this->attack_timer--;
     }
 
-    if (i_this->field_0x99c != 0) {
-        i_this->field_0x99c--;
+    if (i_this->yagura_timer != 0) {
+        i_this->yagura_timer--;
     }
 
-    if (otoCheck(a_this, 1000.0f) || daPy_getPlayerActorClass()->checkWolfBark()) {
-        i_this->field_0x9a1 = cM_rndF(10.0f) + 10.0f;
+    if (otoCheck(enemy, 1000.0f) || daPy_getPlayerActorClass()->checkWolfBark()) {
+        i_this->look_timer = cM_rndF(10.0f) + 10.0f;
     }
 
-    if (i_this->field_0x9a1 != 0) {
-        i_this->field_0x9a1--;
+    if (i_this->look_timer != 0) {
+        i_this->look_timer--;
     }
 
     i_this->field_0x9a2 = 0;
     i_this->field_0x9ad = 1;
     action(i_this);
 
-    if (i_this->field_0x9bc != 0) {
+    if (i_this->ride_mode != 0) {
         i_this->field_0x9ad = 0;
     }
 
-    if (i_this->field_0x9bc != 2 && i_this->field_0xaf0 == 0 && i_this->mAction != ACTION_IKKI_END) {
-        spa4.set(0.0f, 0.0f, 0.0f);
-        if (i_this->field_0x9ec) {
-            cMtx_YrotS(*calc_mtx, i_this->field_0xa0c.y);
-            sp98.x = 0.0f;
-            sp98.y = TREG_F(8);
-            sp98.z = i_this->field_0xaec;
-            MtxPosition(&sp98, &spa4);
-            cLib_addCalc2(&i_this->field_0xaec, i_this->field_0x9ec * (TREG_F(9) + 2.0f), 1.0f, TREG_F(17) + 5.0f);
+    if (i_this->ride_mode != 2 && i_this->field_0xaf0 == 0 && i_this->action != ACTION_IKKI_END) {
+        ato.set(0.0f, 0.0f, 0.0f);
+        if (i_this->jump_z) {
+            cMtx_YrotS(*calc_mtx, i_this->jump_angle.y);
+            mae.x = 0.0f;
+            mae.y = TREG_F(8);
+            mae.z = i_this->field_0xaec;
+            MtxPosition(&mae, &ato);
+            cLib_addCalc2(&i_this->field_0xaec, i_this->jump_z * (TREG_F(9) + 2.0f), 1.0f, TREG_F(17) + 5.0f);
         } else {
             cLib_addCalc0(&i_this->field_0xaec, 1.0f, TREG_F(17) + 5.0f);
         }
 
-        if (i_this->mAnmID == BCK_RD_DIEB && i_this->field_0xa0c.x != 0 && i_this->field_0xa1f == 0) {
-            spa4.y += KREG_F(0) + -20.0f;
+        if (i_this->anm == BCK_RD_DIEB && i_this->jump_angle.x != 0 && i_this->field_0xa1f == 0) {
+            ato.y += KREG_F(0) + -20.0f;
         }
 
-        a_this->current.pos += spa4;
-        a_this->old.pos += spa4;
-        i_this->mObjAcch.CrrPos(dComIfG_Bgsp());
-        a_this->current.pos -= spa4;
-        a_this->old.pos -= spa4;
+        enemy->current.pos += ato;
+        enemy->old.pos += ato;
+        i_this->ObjAcch.CrrPos(dComIfG_Bgsp());
+        enemy->current.pos -= ato;
+        enemy->old.pos -= ato;
 
-        if (!i_this->mObjAcch.ChkGroundHit()) {
-            if (a_this->speed.y < -10.0f) {
+        if (!i_this->ObjAcch.ChkGroundHit()) {
+            if (enemy->speed.y < -10.0f) {
                 i_this->field_0xaf2++;
-                if (i_this->field_0xaf2 == 20 && i_this->mBossMode == 0) {
-                    i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_DEATH, -1);
+                if (i_this->field_0xaf2 == 20 && i_this->actor_set == 0) {
+                    i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_DEATH, -1);
                 }
             }
         } else {
-            if (i_this->field_0xaf2 >= ZREG_S(8) + 20 && i_this->field_0x5b7 != 13 && i_this->field_0x5b7 != 14) {
-                i_this->mAction = ACTION_DAMAGE;
-                i_this->mMode = 0;
-                a_this->speed.y = 0.0f;
-                i_this->field_0x9ec = -1.0f;
-                i_this->field_0xa0c.x = -0x3000;
-                i_this->field_0x998 = 1000;
-                a_this->health = 0;
+            if (i_this->field_0xaf2 >= ZREG_S(8) + 20 && i_this->arg1 != 13 && i_this->arg1 != 14) {
+                i_this->action = ACTION_DAMAGE;
+                i_this->mode = 0;
+                enemy->speed.y = 0.0f;
+                i_this->jump_z = -1.0f;
+                i_this->jump_angle.x = -0x3000;
+                i_this->damage_timer = 1000;
+                enemy->health = 0;
             }
 
             i_this->field_0xaf2 = 0;
@@ -6485,83 +6486,83 @@ static int daE_RD_Execute(e_rd_class* i_this) {
 
         i_this->field_0x1294 = 0;
 
-        if (i_this->mObjAcch.GetGroundH() != -G_CM3D_F_INF && i_this->mObjAcch.ChkWaterHit() && i_this->mObjAcch.m_wtr.GetHeight() > a_this->current.pos.y) {
+        if (i_this->ObjAcch.GetGroundH() != -G_CM3D_F_INF && i_this->ObjAcch.ChkWaterHit() && i_this->ObjAcch.m_wtr.GetHeight() > enemy->current.pos.y) {
             i_this->field_0x1294 = 1;
         }
     }
 
     if (i_this->field_0xafb == 0) {
-        mDoMtx_stack_c::transS(a_this->current.pos.x, a_this->current.pos.y + i_this->field_0x9c0, a_this->current.pos.z);
+        mDoMtx_stack_c::transS(enemy->current.pos.x, enemy->current.pos.y + i_this->field_0x9c0, enemy->current.pos.z);
         mDoMtx_stack_c::XrotM((s16) i_this->field_0xa12.x);
         mDoMtx_stack_c::ZrotM((s16) i_this->field_0xa12.z);
-        mDoMtx_stack_c::YrotM((s16) i_this->field_0xa0c.y);
-        mDoMtx_stack_c::XrotM((s16) i_this->field_0xa0c.x);
-        mDoMtx_stack_c::YrotM(-i_this->field_0xa0c.y);
-        mDoMtx_stack_c::YrotM((s16) a_this->shape_angle.y);
-        mDoMtx_stack_c::XrotM((s16) a_this->shape_angle.x);
-        mDoMtx_stack_c::ZrotM(a_this->shape_angle.z);
+        mDoMtx_stack_c::YrotM((s16) i_this->jump_angle.y);
+        mDoMtx_stack_c::XrotM((s16) i_this->jump_angle.x);
+        mDoMtx_stack_c::YrotM(-i_this->jump_angle.y);
+        mDoMtx_stack_c::YrotM((s16) enemy->shape_angle.y);
+        mDoMtx_stack_c::XrotM((s16) enemy->shape_angle.x);
+        mDoMtx_stack_c::ZrotM(enemy->shape_angle.z);
 
-        f32 fVar1 = l_HIO.model_size * a_this->scale.x;
-        if (i_this->mBossMode != 0) {
-            fVar1 *= l_HIO.leader_size_ratio;
+        f32 scale = l_HIO.model_size * enemy->scale.x;
+        if (i_this->actor_set != 0) {
+            scale *= l_HIO.leader_size_ratio;
         }
-        mDoMtx_stack_c::scaleM(fVar1, fVar1, fVar1);
+        mDoMtx_stack_c::scaleM(scale, scale, scale);
 
-        J3DModel* my_model_p = i_this->mpModelMorf->getModel();
+        J3DModel* my_model_p = i_this->anm_p->getModel();
         my_model_p->setBaseTRMtx(mDoMtx_stack_c::get());
-        i_this->mpModelMorf->play(0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
-        int frame = i_this->mpModelMorf->getFrame();
+        i_this->anm_p->play(0, dComIfGp_getReverb(fopAcM_GetRoomNo(enemy)));
+        int frame = i_this->anm_p->getFrame();
 
-        if (i_this->mAnmID == BCK_RD_RUN && (frame == 1 || frame == 10)) {
-            i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_RUNNING_BREATH, -1);
+        if (i_this->anm == BCK_RD_RUN && (frame == 1 || frame == 10)) {
+            i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_RUNNING_BREATH, -1);
         }
 
-        if (i_this->mAnmID == BCK_RD_KYORO2 && (frame == 5 || frame == 26)) {
-            i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_RUNNING_BREATH, -1);
+        if (i_this->anm == BCK_RD_KYORO2 && (frame == 5 || frame == 26)) {
+            i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_RUNNING_BREATH, -1);
         }
 
-        if ((i_this->mAnmID == BCK_RD_SHOOT_READY && frame == 10) || (i_this->mAnmID == BCK_RD_RSHOOT_READY && frame == 5) || (i_this->mAnmID == BCK_RD_ARMAMENT && frame == 10)) {
-            i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_READY_WEAPON, -1);
+        if ((i_this->anm == BCK_RD_SHOOT_READY && frame == 10) || (i_this->anm == BCK_RD_RSHOOT_READY && frame == 5) || (i_this->anm == BCK_RD_ARMAMENT && frame == 10)) {
+            i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_READY_WEAPON, -1);
         }
 
-        if ((i_this->mAnmID == BCK_RD_WALK && (i_this->mpModelMorf->checkFrame(1.0f) || i_this->mpModelMorf->checkFrame(15.0f))) ||
-            ((i_this->mAnmID == BCK_RD_RUN || i_this->mAnmID == BCK_RD_RUN02) && (i_this->mpModelMorf->checkFrame(1.0f) || i_this->mpModelMorf->checkFrame(7.0f)))) {
+        if ((i_this->anm == BCK_RD_WALK && (i_this->anm_p->checkFrame(1.0f) || i_this->anm_p->checkFrame(15.0f))) ||
+            ((i_this->anm == BCK_RD_RUN || i_this->anm == BCK_RD_RUN02) && (i_this->anm_p->checkFrame(1.0f) || i_this->anm_p->checkFrame(7.0f)))) {
             if (i_this->field_0x1294 != 0) {
-                i_this->mSound.startCreatureSound(Z2SE_RIDER_FOOTNOTE_WATER, 0, -1);
+                i_this->sound.startCreatureSound(Z2SE_RIDER_FOOTNOTE_WATER, 0, -1);
             } else {
-                i_this->mSound.startCreatureSound(Z2SE_RIDER_FOOTNOTE, 0, -1);
+                i_this->sound.startCreatureSound(Z2SE_RIDER_FOOTNOTE, 0, -1);
             }
         }
 
-        if (i_this->mBossMode != 0) {
-            if (i_this->mAnmID == e_rdb_class::BCK_RB_RCOMEON) {
-                if (i_this->mpModelMorf->checkFrame(30.0f)) {
-                    i_this->mSound.startCreatureVoice(Z2SE_EN_RDB_V_LAUGH, -1);
+        if (i_this->actor_set != 0) {
+            if (i_this->anm == e_rdb_class::BCK_RB_RCOMEON) {
+                if (i_this->anm_p->checkFrame(30.0f)) {
+                    i_this->sound.startCreatureVoice(Z2SE_EN_RDB_V_LAUGH, -1);
                 }
-            } else if (i_this->mAnmID == e_rdb_class::BCK_RB_RJUMP_C && i_this->mpModelMorf->checkFrame(21.0f)) {
-                i_this->mSound.startCreatureVoice(Z2SE_EN_RDB_V_HOICK2, -1);
+            } else if (i_this->anm == e_rdb_class::BCK_RB_RJUMP_C && i_this->anm_p->checkFrame(21.0f)) {
+                i_this->sound.startCreatureVoice(Z2SE_EN_RDB_V_HOICK2, -1);
             }
         }
 
-        if (i_this->field_0x680 != 0 && i_this->mpModelMorf->isStop()) {
-            int i_anmID;
-            if (a_this->speedF >= 10.0f) {
-                i_anmID = BCK_RD_SHOUT;
+        if (i_this->field_0x680 != 0 && i_this->anm_p->isStop()) {
+            int anm;
+            if (enemy->speedF >= 10.0f) {
+                anm = BCK_RD_SHOUT;
             } else {
-                i_anmID = BCK_RD_WALK;
+                anm = BCK_RD_WALK;
             }
             i_this->field_0x680 = 0;
-            anm_init(i_this, i_anmID, 10.0f, 2, 1.0f);
+            anm_init(i_this, anm, 10.0f, 2, 1.0f);
         }
 
-        i_this->mpModelMorf->modelCalc();
+        i_this->anm_p->modelCalc();
         
-        if (i_this->mAnmID == BCK_RD_SLEEP_WAIT || dComIfGp_checkPlayerStatus0(0, 0x200000)) {
+        if (i_this->anm == BCK_RD_SLEEP_WAIT || dComIfGp_checkPlayerStatus0(0, 0x200000)) {
             i_this->field_0x1297 = 0;
         }
 
         if (i_this->field_0x1297 != 0) {
-            J3DModel* model = i_this->mpModelMorf->getModel();
+            J3DModel* model = i_this->anm_p->getModel();
             cLib_addCalc2(&i_this->field_0x6cc, i_this->field_0x6d0, 1.0f, 0.02f);
             i_this->field_0x6d0 = 1.0f;
             MTXCopy(model->getAnmMtx(13), *calc_mtx);
@@ -6579,212 +6580,212 @@ static int daE_RD_Execute(e_rd_class* i_this) {
 
             for (int i = 0; i < 2; i++) {
                 MtxPush();
-                s16 sVar2, sVar1;
+                s16 x, y;
                 if (i == 0) {
-                    sp98.set(38.0f, 0.0f, 0.0f);
-                    MtxPosition(&sp98, &spa4);
-                    sp98 = camera->lookat.eye - spa4;
+                    mae.set(38.0f, 0.0f, 0.0f);
+                    MtxPosition(&mae, &ato);
+                    mae = camera->lookat.eye - ato;
 
-                    sVar1 = cM_atan2s(sp98.x, sp98.z);
-                    sVar2 = -cM_atan2s(sp98.y, JMAFastSqrt(sp98.x * sp98.x + sp98.z * sp98.z));
-                    fVar1 = sp98.abs() * (0.001f + JREG_F(8));
-                    if (fVar1 > 2.0f + JREG_F(17)) {
-                        fVar1 = 2.0f + JREG_F(17);
+                    y = cM_atan2s(mae.x, mae.z);
+                    x = -cM_atan2s(mae.y, JMAFastSqrt(mae.x * mae.x + mae.z * mae.z));
+                    scale = mae.abs() * (0.001f + JREG_F(8));
+                    if (scale > 2.0f + JREG_F(17)) {
+                        scale = 2.0f + JREG_F(17);
                     }
 
-                    dScnKy_env_light_c* env_light = dKy_getEnvlight();
-                    int my_scale = env_light->daytime / 15.0f;
-                    fVar1 *= i_this->field_0x6cc * time_scale[my_scale];
-                    sp98.set(38.0f, 0.0f, 6.0f);
+                    dScnKy_env_light_c* kankyo = dKy_getEnvlight();
+                    int timeH = kankyo->daytime / 15.0f;
+                    scale *= i_this->field_0x6cc * time_scale[timeH];
+                    mae.set(38.0f, 0.0f, 6.0f);
                 } else {
-                    sp98.set(38.0f, 0.0f, -6.0f);
+                    mae.set(38.0f, 0.0f, -6.0f);
                 }
 
-                MtxPosition(&sp98, &spa4);
-                MtxTrans(spa4.x, spa4.y, spa4.z, 0);
-                cMtx_YrotM(*calc_mtx, sVar1);
-                cMtx_XrotM(*calc_mtx, sVar2);
-                MtxScale(fVar1, fVar1, fVar1, 1);
+                MtxPosition(&mae, &ato);
+                MtxTrans(ato.x, ato.y, ato.z, 0);
+                cMtx_YrotM(*calc_mtx, y);
+                cMtx_XrotM(*calc_mtx, x);
+                MtxScale(scale, scale, scale, 1);
 
-                i_this->mpEyeModels[i]->setBaseTRMtx(*calc_mtx);
+                i_this->eye_model[i]->setBaseTRMtx(*calc_mtx);
                 MtxPull();
             }
         }
     }
 
     if (i_this->field_0xafb == 0) {
-        J3DModel* model = i_this->mpModelMorf->getModel();
+        J3DModel* model = i_this->anm_p->getModel();
         MTXCopy(model->getAnmMtx(11), *calc_mtx);
-        sp98.set(0.0f, 0.0f, 0.0f);
-        MtxPosition(&sp98, &spa4);
-        sp98.set(YREG_F(1), YREG_F(2) + 100.0f, YREG_F(3));
-        MtxPosition(&sp98, &spb0);
+        mae.set(0.0f, 0.0f, 0.0f);
+        MtxPosition(&mae, &ato);
+        mae.set(YREG_F(1), YREG_F(2) + 100.0f, YREG_F(3));
+        MtxPosition(&mae, &ato2);
 
-        if (spa4.y < spb0.y) {
+        if (ato.y < ato2.y) {
             i_this->field_0xa1f = 0;
         } else {
             i_this->field_0xa1f = 1;
         }
 
-        cXyz spbc(0.0f, 0.0f, 0.0f);
+        cXyz cr(0.0f, 0.0f, 0.0f);
         
-        if (i_this->field_0x998 != 0) {
-            spbc.set(-20000.0f, 200000.0f, 30000.0f);
+        if (i_this->damage_timer != 0) {
+            cr.set(-20000.0f, 200000.0f, 30000.0f);
         }
 
-        if (i_this->mBossMode != 0) {
+        if (i_this->actor_set != 0) {
             MTXCopy(model->getAnmMtx(AREG_S(9) + 6), *calc_mtx);
         } else {
             MTXCopy(model->getAnmMtx(13), *calc_mtx);
         }
 
-        sp98.set(20.0f, 0.0f, 0.0f);
-        MtxPosition(&sp98, &a_this->eyePos);
+        mae.set(20.0f, 0.0f, 0.0f);
+        MtxPosition(&mae, &enemy->eyePos);
 
         if (daPy_py_c::checkNowWolf()) {
-            spbc.y += 30.0f;
-            i_this->field_0xd58[0].SetC(a_this->eyePos + spbc);
-            i_this->field_0xd58[0].SetR(50.0f);
+            cr.y += 30.0f;
+            i_this->cc_sph[0].SetC(enemy->eyePos + cr);
+            i_this->cc_sph[0].SetR(50.0f);
         } else {
-            i_this->field_0xd58[0].SetC(a_this->eyePos + spbc);
-            i_this->field_0xd58[0].SetR(35.0f);
+            i_this->cc_sph[0].SetC(enemy->eyePos + cr);
+            i_this->cc_sph[0].SetR(35.0f);
         }
 
-        if (i_this->field_0x9bc == 2) {
-            a_this->attention_info.position = a_this->current.pos;
-            a_this->attention_info.position.y += 190.0f + JREG_F(8);
+        if (i_this->ride_mode == 2) {
+            enemy->attention_info.position = enemy->current.pos;
+            enemy->attention_info.position.y += 190.0f + JREG_F(8);
 
-            if (i_this->mBossMode != 0) {
-                a_this->attention_info.position.y += 120.0f + JREG_F(9);
+            if (i_this->actor_set != 0) {
+                enemy->attention_info.position.y += 120.0f + JREG_F(9);
             }
         } else {
-            a_this->attention_info.position = a_this->eyePos;
-            a_this->attention_info.position.y += 30.0f;
+            enemy->attention_info.position = enemy->eyePos;
+            enemy->attention_info.position.y += 30.0f;
         }
 
-        if (i_this->mBossMode != 0) {
-            f32 fVar2 = 60.0f;
-            f32 fVar1 = 0.0f;
-            if (i_this->mBossMode == 2) {
-                fVar2 = 90.0f;
-                fVar1 = l_HIO.field_0x3c;
+        if (i_this->actor_set != 0) {
+            f32 rad = 60.0f;
+            f32 size = 0.0f;
+            if (i_this->actor_set == 2) {
+                rad = 90.0f;
+                size = l_HIO.ikki_boss_size;
             }
 
-            sp98.set(ZREG_F(0), ZREG_F(1), ZREG_F(2));
+            mae.set(ZREG_F(0), ZREG_F(1), ZREG_F(2));
             MTXCopy(model->getAnmMtx(2), *calc_mtx);
-            MtxPosition(&sp98, &spa4);
-            i_this->field_0xd58[2].SetC(spa4 + spbc);
-            i_this->field_0xd58[2].SetR((fVar2 + ZREG_F(3)) + fVar1);
+            MtxPosition(&mae, &ato);
+            i_this->cc_sph[2].SetC(ato + cr);
+            i_this->cc_sph[2].SetR((rad + ZREG_F(3)) + size);
 
-            sp98.set(ZREG_F(4), ZREG_F(5), ZREG_F(6));
+            mae.set(ZREG_F(4), ZREG_F(5), ZREG_F(6));
             MTXCopy(model->getAnmMtx(22), *calc_mtx);
-            MtxPosition(&sp98, &spa4);
-            i_this->field_0xd58[1].SetC(spa4 + spbc);
-            i_this->field_0xd58[1].SetR(fVar2 + ZREG_F(7));
+            MtxPosition(&mae, &ato);
+            i_this->cc_sph[1].SetC(ato + cr);
+            i_this->cc_sph[1].SetR(rad + ZREG_F(7));
         } else {
-            sp98.set(BREG_F(14), BREG_F(15), BREG_F(16));
+            mae.set(BREG_F(14), BREG_F(15), BREG_F(16));
             MTXCopy(model->getAnmMtx(12), *calc_mtx);
-            MtxPosition(&sp98, &spa4);
-            i_this->field_0xd58[2].SetC(spa4 + spbc);
-            i_this->field_0xd58[2].SetR(35.0f);
+            MtxPosition(&mae, &ato);
+            i_this->cc_sph[2].SetC(ato + cr);
+            i_this->cc_sph[2].SetR(35.0f);
 
-            sp98.set(BREG_F(11) + -10.0f, BREG_F(12), BREG_F(13));
+            mae.set(BREG_F(11) + -10.0f, BREG_F(12), BREG_F(13));
             MTXCopy(model->getAnmMtx(10), *calc_mtx);
-            MtxPosition(&sp98, &spa4);
-            i_this->field_0xd58[1].SetC(spa4 + spbc);
-            i_this->field_0xd58[1].SetR(35.0f);
+            MtxPosition(&mae, &ato);
+            i_this->cc_sph[1].SetC(ato + cr);
+            i_this->cc_sph[1].SetR(35.0f);
         }
 
         for (int i = 0; i <= 2; i++) {
             if (i_this->field_0x9ad != 0) {
-                i_this->field_0xd58[i].OnCoSetBit();
+                i_this->cc_sph[i].OnCoSetBit();
             } else {
-                i_this->field_0xd58[i].OffCoSetBit();
+                i_this->cc_sph[i].OffCoSetBit();
             }
 
-            dComIfG_Ccsp()->Set(&i_this->field_0xd58[i]);
+            dComIfG_Ccsp()->Set(&i_this->cc_sph[i]);
 
-            if (i_this->mBossMode == 1 && i_this->field_0x9bc == 2) {
-                i_this->field_0xd58[i].OnTgNoHitMark();
+            if (i_this->actor_set == 1 && i_this->ride_mode == 2) {
+                i_this->cc_sph[i].OnTgNoHitMark();
             } else {
-                i_this->field_0xd58[i].OffTgNoHitMark();
+                i_this->cc_sph[i].OffTgNoHitMark();
             }
 
-            if (i_this->mBossMode == 3) {
+            if (i_this->actor_set == 3) {
                 for (int j = 0; j <= 2; j++) {
-                    i_this->field_0xd58[j].SetTgType(0x2022);
-                    i_this->field_0xd58[j].OnTgNoHitMark();
+                    i_this->cc_sph[j].SetTgType(0x2022);
+                    i_this->cc_sph[j].OnTgNoHitMark();
                 }
             }
         }
     }
 
     if (i_this->field_0x9ab == 2) {
-        MTXCopy(i_this->mpModelMorf->getModel()->getAnmMtx(11), *calc_mtx);
-        sp98.set(0.0f, 0.0f, 0.0f);
-        MtxPosition(&sp98, &spa4);
-        i_this->field_0x1100.SetR(l_HIO.model_size * 50.0f);
-        i_this->field_0x1100.SetC(spa4);
-        dComIfG_Ccsp()->Set(&i_this->field_0x1100);
+        MTXCopy(i_this->anm_p->getModel()->getAnmMtx(11), *calc_mtx);
+        mae.set(0.0f, 0.0f, 0.0f);
+        MtxPosition(&mae, &ato);
+        i_this->at_sph.SetR(l_HIO.model_size * 50.0f);
+        i_this->at_sph.SetC(ato);
+        dComIfG_Ccsp()->Set(&i_this->at_sph);
         i_this->field_0x9ab = 0;
     }
 
-    if (i_this->field_0x5bc == 1) {
+    if (i_this->weapon_type == 1) {
         if (i_this->field_0x5bd == 0) {
-            MTXCopy(i_this->mpModelMorf->getModel()->getAnmMtx(24), *calc_mtx);
+            MTXCopy(i_this->anm_p->getModel()->getAnmMtx(24), *calc_mtx);
         } else {
-            MTXCopy(i_this->mpModelMorf->getModel()->getAnmMtx(11), *calc_mtx);
+            MTXCopy(i_this->anm_p->getModel()->getAnmMtx(11), *calc_mtx);
             cMtx_YrotM(*calc_mtx, 6000);
             cMtx_XrotM(*calc_mtx, 10000);
             cMtx_ZrotM(*calc_mtx, 18000);
             MtxTrans(-30.0f, -50.0f, 20.0f, 1);
         }
 
-        i_this->field_0x694->setBaseTRMtx(*calc_mtx);
+        i_this->arrow->setBaseTRMtx(*calc_mtx);
 
         if (i_this->field_0x9ab != 0) {
             if (daPy_getPlayerActorClass()->checkHorseRide() || daPy_getPlayerActorClass()->checkBoarRide()) {
-                sp98.set(0.0f, nREG_F(15) + 50.0f, 0.0f);
-                i_this->field_0x1100.SetR((nREG_F(16) + 60.0f) * l_HIO.model_size);
+                mae.set(0.0f, nREG_F(15) + 50.0f, 0.0f);
+                i_this->at_sph.SetR((nREG_F(16) + 60.0f) * l_HIO.model_size);
             } else {
-                sp98.set(0.0f, 30.0f, 0.0f);
-                i_this->field_0x1100.SetR(l_HIO.model_size * 50.0f);
+                mae.set(0.0f, 30.0f, 0.0f);
+                i_this->at_sph.SetR(l_HIO.model_size * 50.0f);
             }
 
-            MtxPosition(&sp98, &spa4);
+            MtxPosition(&mae, &ato);
 
             if (i_this->field_0x9ac == 0) {
                 i_this->field_0x9ac = 1;
-                i_this->field_0x1100.StartCAt(spa4);
+                i_this->at_sph.StartCAt(ato);
             } else {
-                i_this->field_0x1100.MoveCAt(spa4);
+                i_this->at_sph.MoveCAt(ato);
             }
 
             i_this->field_0x9ab = 0;
         } else {
-            cXyz spc8(-200000.0f, -200000.0f, -200000.0f);
-            i_this->field_0x1100.SetC(spc8);
-            i_this->field_0x1100.SetR(-200.0f);
+            cXyz cr(-200000.0f, -200000.0f, -200000.0f);
+            i_this->at_sph.SetC(cr);
+            i_this->at_sph.SetR(-200.0f);
             i_this->field_0x9ac = 0;
         }
 
-        dComIfG_Ccsp()->Set(&i_this->field_0x1100);
+        dComIfG_Ccsp()->Set(&i_this->at_sph);
     }
 
-    if (i_this->field_0x5bc >= 2) {
-        J3DModel* model = i_this->mpModelMorf->getModel();
+    if (i_this->weapon_type >= 2) {
+        J3DModel* model = i_this->anm_p->getModel();
 
-        if (i_this->field_0x9a6 != 0) {
-            i_this->field_0x9a6--;
+        if (i_this->bow_shake_timer != 0) {
+            i_this->bow_shake_timer--;
         }
 
-        i_this->field_0x9a8 = i_this->field_0x9a6 * cM_ssin(i_this->field_0x9a6 * (TREG_S(9) + 0x7800)) * (TREG_F(5) + 100.0f);
+        i_this->field_0x9a8 = i_this->bow_shake_timer * cM_ssin(i_this->bow_shake_timer * (TREG_S(9) + 0x7800)) * (TREG_F(5) + 100.0f);
 
-        model = i_this->mpMorfBowAnm->getModel();
+        model = i_this->bow_anm->getModel();
         if (i_this->field_0x5bd == 0) {
-            model->setBaseTRMtx(i_this->mpModelMorf->getModel()->getAnmMtx(19));
+            model->setBaseTRMtx(i_this->anm_p->getModel()->getAnmMtx(19));
         } else {
-            MTXCopy(i_this->mpModelMorf->getModel()->getAnmMtx(11), *calc_mtx);
+            MTXCopy(i_this->anm_p->getModel()->getAnmMtx(11), *calc_mtx);
             cMtx_YrotM(*calc_mtx, 6000);
             cMtx_XrotM(*calc_mtx, 10000);
             cMtx_ZrotM(*calc_mtx, 18000);
@@ -6792,15 +6793,15 @@ static int daE_RD_Execute(e_rd_class* i_this) {
             model->setBaseTRMtx(*calc_mtx);
         }
 
-        i_this->mpMorfBowAnm->play(0, 0);
-        i_this->mpMorfBowAnm->modelCalc();
+        i_this->bow_anm->play(0, 0);
+        i_this->bow_anm->modelCalc();
 
         if (i_this->field_0x9a2 != 0) {
-            MTXCopy(i_this->mpModelMorf->getModel()->getAnmMtx(24), *calc_mtx);
-            i_this->field_0x694->setBaseTRMtx(*calc_mtx);
+            MTXCopy(i_this->anm_p->getModel()->getAnmMtx(24), *calc_mtx);
+            i_this->arrow->setBaseTRMtx(*calc_mtx);
 
-            if (i_this->field_0x5bc >= 3) {
-                if (i_this->field_0x9bc != 2 || i_this->field_0x990[1] <= 18) {
+            if (i_this->weapon_type >= 3) {
+                if (i_this->ride_mode != 2 || i_this->timer[1] <= 18) {
                     fire_eff_set(i_this);
                 }
             } else {
@@ -6808,76 +6809,76 @@ static int daE_RD_Execute(e_rd_class* i_this) {
             }
         }
 
-        if (i_this->field_0x9a3 != 0) {
-            if (i_this->field_0x5bc == 3) {
-                i_this->mSound.startCreatureSound(Z2SE_OBJ_ARROW_SHOT_FIRE, 0, -1);
+        if (i_this->arrow_flag) {
+            if (i_this->weapon_type == 3) {
+                i_this->sound.startCreatureSound(Z2SE_OBJ_ARROW_SHOT_FIRE, 0, -1);
             } else {
-                i_this->mSound.startCreatureSound(Z2SE_OBJ_ARROW_SHOT_NORMAL, 0, -1);
+                i_this->sound.startCreatureSound(Z2SE_OBJ_ARROW_SHOT_NORMAL, 0, -1);
             }
 
-            i_this->mSound.startCreatureVoice(Z2SE_EN_RD_V_SHOT_ARROW, -1);
+            i_this->sound.startCreatureVoice(Z2SE_EN_RD_V_SHOT_ARROW, -1);
 
-            sp98.set(0.0f, 0.0f, 0.0f);
-            MTXCopy(i_this->mpModelMorf->getModel()->getAnmMtx(24), *calc_mtx);
-            MtxPosition(&sp98, &spa4);
+            mae.set(0.0f, 0.0f, 0.0f);
+            MTXCopy(i_this->anm_p->getModel()->getAnmMtx(24), *calc_mtx);
+            MtxPosition(&mae, &ato);
 
-            csXyz local_148;
-            int iVar1 = 0;
+            csXyz angl;
+            int parameter = 0;
 
-            if (i_this->mAction == ACTION_BOW_IKKI) {
-                sp98 = i_this->field_0x9d4 - spa4;
-                local_148.y = cM_atan2s(sp98.x, sp98.z);
-                local_148.x = -cM_atan2s(sp98.y, JMAFastSqrt(sp98.x * sp98.x + sp98.z * sp98.z));
+            if (i_this->action == ACTION_BOW_IKKI) {
+                mae = i_this->eye - ato;
+                angl.y = cM_atan2s(mae.x, mae.z);
+                angl.x = -cM_atan2s(mae.y, JMAFastSqrt(mae.x * mae.x + mae.z * mae.z));
             } else {
-                fopAc_ac_c* actor = get_pla(a_this);
+                fopAc_ac_c* actor = get_pla(enemy);
                 if (actor != dComIfGp_getPlayer(0)) {
-                    iVar1 |= 32;
+                    parameter |= 32;
                 }
 
-                sp98 = actor->eyePos;
+                mae = actor->eyePos;
 
                 if (i_this->field_0x1296 != 0) {
                     f32 mult_fact = TREG_F(7) + 15.0f;
-                    sp98.x += actor->speed.x * mult_fact;
-                    sp98.z += actor->speed.z * mult_fact;
+                    mae.x += actor->speed.x * mult_fact;
+                    mae.z += actor->speed.z * mult_fact;
                 }
 
-                sp98 -= spa4;
-                sp98.y -= 30.0f;
-                local_148.y = cM_atan2s(sp98.x, sp98.z);
+                mae -= ato;
+                mae.y -= 30.0f;
+                angl.y = cM_atan2s(mae.x, mae.z);
 
-                if (i_this->field_0x9bc == 2 && !pl_pass_check(i_this, YREG_F(18))) {
+                if (i_this->ride_mode == 2 && !pl_pass_check(i_this, YREG_F(18))) {
                     s16 sVar3 = cM_rndF(1000.0f) + 2000.0f;
                     if (cM_rndF(1.0f) < 0.5f) {
                         sVar3 *= -1;
                     }
 
-                    local_148.y += sVar3;
+                    angl.y += sVar3;
                 }
 
-                local_148.x = -cM_atan2s(sp98.y, JMAFastSqrt(sp98.x * sp98.x + sp98.z * sp98.z));
+                angl.x = -cM_atan2s(mae.y, JMAFastSqrt(mae.x * mae.x + mae.z * mae.z));
 
                 // NOT Hyrule Field
                 if (strcmp(dComIfGp_getStartStageName(), "F_SP121") != 0 && i_this->field_0x1296 == 0) {
-                    ANGLE_ADD(local_148.x, cM_rndFX(200.0f) + -500.0f);
-                    ANGLE_ADD(local_148.y, cM_rndFX(100.0f));
+                    ANGLE_ADD(angl.x, cM_rndFX(200.0f) + -500.0f);
+                    ANGLE_ADD(angl.y, cM_rndFX(100.0f));
                 }
             }
 
-            local_148.z = 0;
-            if (i_this->field_0x5bc == 3) {
-                iVar1 |= 1;
-            } else if (i_this->field_0x5bc == 4) {
-                iVar1 |= 2;
+            angl.z = 0;
+            if (i_this->weapon_type == 3) {
+                parameter |= 1;
+            } else if (i_this->weapon_type == 4) {
+                parameter |= 2;
             }
 
-            if (i_this->field_0x5b8 == 11) {
-                iVar1 |= 16;
+            if (i_this->arg2 == 11) {
+                parameter |= 16;
             }
 
-            fopAcM_createChild(PROC_E_ARROW, fopAcM_GetID(a_this), iVar1, &spa4, fopAcM_GetRoomNo(a_this), &local_148, NULL, -1, NULL);
-            i_this->field_0x9a3 = 0;
-            i_this->field_0x9a6 = TREG_S(8) + 15;
+            fopAcM_createChild(PROC_E_ARROW, fopAcM_GetID(enemy), parameter, &ato, fopAcM_GetRoomNo(enemy), &angl, NULL, -1, NULL);
+            i_this->arrow_flag = 0;
+            i_this->bow_shake_timer = TREG_S(8) + 15;
         }
     }
 
@@ -6893,24 +6894,24 @@ static int daE_RD_Execute(e_rd_class* i_this) {
         14, 19,
     };
     static u16 eno[3] = {
-        0x828C,
-        0x828D,
-        0x828E,
+        dPa_RM(ID_ZM_S_RB_BREAKARMOR00),
+        dPa_RM(ID_ZM_S_RB_BREAKARMOR01),
+        dPa_RM(ID_ZM_S_RB_BREAKARMOR02),
     };
 
-    if (i_this->mBossMode != 0) {
+    if (i_this->actor_set != 0) {
         for (int i = 0; i < 14; i++) {
-            if (i_this->mpBossArmorParts[i] != NULL) {
+            if (i_this->armor_boss_part[i] != NULL) {
                 if (i_this->field_0x70c[i] == 0) {
-                    if (i_this->mBossMode == 3) {
-                        MTXCopy(i_this->mpModelMorf->getModel()->getAnmMtx(ikki2_boss_part_idx[i]), *calc_mtx);
+                    if (i_this->actor_set == 3) {
+                        MTXCopy(i_this->anm_p->getModel()->getAnmMtx(ikki2_boss_part_idx[i]), *calc_mtx);
                     } else {
-                        MTXCopy(i_this->mpModelMorf->getModel()->getAnmMtx(boss_part_idx[i]), *calc_mtx);
+                        MTXCopy(i_this->anm_p->getModel()->getAnmMtx(boss_part_idx[i]), *calc_mtx);
                     }
 
-                    i_this->mpBossArmorParts[i]->setBaseTRMtx(*calc_mtx);
-                    sp98.set(0.0f, 0.0f, 0.0f);
-                    MtxPosition(&sp98, &i_this->field_0x71c[i]);
+                    i_this->armor_boss_part[i]->setBaseTRMtx(*calc_mtx);
+                    mae.set(0.0f, 0.0f, 0.0f);
+                    MtxPosition(&mae, &i_this->field_0x71c[i]);
                 } else {
                     i_this->field_0x71c[i] += i_this->field_0x7c4[i];
                     i_this->field_0x7c4[i].y -= 3.0f;
@@ -6920,18 +6921,18 @@ static int daE_RD_Execute(e_rd_class* i_this) {
                     mDoMtx_stack_c::transS(i_this->field_0x71c[i].x, i_this->field_0x71c[i].y, i_this->field_0x71c[i].z);
                     mDoMtx_stack_c::YrotM(i_this->field_0x86c[i].y);
                     mDoMtx_stack_c::XrotM(i_this->field_0x86c[i].x);
-                    f32 my_scale = l_HIO.leader_size_ratio * (l_HIO.model_size * a_this->scale.x);
+                    f32 my_scale = l_HIO.leader_size_ratio * (l_HIO.model_size * enemy->scale.x);
                     mDoMtx_stack_c::scaleM(my_scale, my_scale, my_scale);
 
-                    i_this->mpBossArmorParts[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+                    i_this->armor_boss_part[i]->setBaseTRMtx(mDoMtx_stack_c::get());
 
                     for (int j = 0; j < 3; j++) {
-                        i_this->field_0x8c0[i][j] = dComIfGp_particle_set(i_this->field_0x8c0[i][j], eno[j],
+                        i_this->armor_break_eff[i][j] = dComIfGp_particle_set(i_this->armor_break_eff[i][j], eno[j],
                                                                           &i_this->field_0x71c[i], NULL, NULL);
                     }
 
-                    if (i_this->field_0x71c[i].y < a_this->current.pos.y - 200.0f) {
-                        i_this->mpBossArmorParts[i] = NULL;
+                    if (i_this->field_0x71c[i].y < enemy->current.pos.y - 200.0f) {
+                        i_this->armor_boss_part[i] = NULL;
                     }
                 }
             }
@@ -6939,15 +6940,15 @@ static int daE_RD_Execute(e_rd_class* i_this) {
 
         if (i_this->field_0x6a0 != 0) {
             if (i_this->field_0x6a0 == 1) {
-                MTXCopy(i_this->mpModelMorf->getModel()->getAnmMtx(YREG_S(3) + 15), *calc_mtx);
-                sp98.set(0.0f, 0.0f, 0.0f);
-                MtxPosition(&sp98, &i_this->field_0x6a4);
+                MTXCopy(i_this->anm_p->getModel()->getAnmMtx(YREG_S(3) + 15), *calc_mtx);
+                mae.set(0.0f, 0.0f, 0.0f);
+                MtxPosition(&mae, &i_this->field_0x6a4);
             } else {
                 i_this->field_0x6a4 += i_this->field_0x6b0;
                 i_this->field_0x6b0.y -= 5.0f;
                 MtxTrans(i_this->field_0x6a4.x, i_this->field_0x6a4.y, i_this->field_0x6a4.z, 0);
-                f32 fVar4 = l_HIO.leader_size_ratio * ( l_HIO.model_size * a_this->scale.x);
-                MtxScale(fVar4, fVar4, fVar4, 1);
+                f32 scale = l_HIO.leader_size_ratio * ( l_HIO.model_size * enemy->scale.x);
+                MtxScale(scale, scale, scale, 1);
                 MtxTrans(BREG_F(5) + 80.0f, BREG_F(6) + 50.0f, BREG_F(7), 1);
                 cMtx_YrotM(*calc_mtx, i_this->field_0x6bc.y);
                 cMtx_XrotM(*calc_mtx, 0x7FFF);
@@ -6960,13 +6961,13 @@ static int daE_RD_Execute(e_rd_class* i_this) {
             i_this->mpMorfHornAnm->getModel()->setBaseTRMtx(*calc_mtx);
         }
 
-        if (i_this->field_0x6c2 != 0) {
-            i_this->field_0x6c2 = 0;
+        if (i_this->run_flag) {
+            i_this->run_flag = 0;
             if (i_this->field_0x680 == 0) {
-                int iVar2 = i_this->mAnmID;
-                if (iVar2 == e_rdb_class::BCK_RB_RRUN) {
-                    s16 angle_diff = a_this->shape_angle.y - i_this->mPlayerAngleY;
-                    if (angle_diff < 0) {
+                int anm_no = i_this->anm;
+                if (anm_no == e_rdb_class::BCK_RB_RRUN) {
+                    s16 run_range = enemy->shape_angle.y - i_this->angleY;
+                    if (run_range < 0) {
                         anm_init(i_this, e_rdb_class::BCK_RB_RPLAY_RUNR, 2.0f, 0, 1.0f);
                     } else {
                         anm_init(i_this, e_rdb_class::BCK_RB_RPLAY_RUNL, 2.0f, 0, 1.0f);
@@ -6978,7 +6979,7 @@ static int daE_RD_Execute(e_rd_class* i_this) {
                     horn_anm_init(i_this, e_rdb_class::BCK_HORN_RPLAY_STOP, 2.0f, 0, 1.0f);
                 }
 
-                i_this->field_0x680 = iVar2;
+                i_this->field_0x680 = anm_no;
             }
         }
 
@@ -6988,27 +6989,27 @@ static int daE_RD_Execute(e_rd_class* i_this) {
         }
     }
 
-    if (i_this->mBossMode == 0 && i_this->field_0x9bc == 0) {
+    if (i_this->actor_set == 0 && i_this->ride_mode == 0) {
         fopAc_ac_c* player = dComIfGp_getPlayer(0);
-        MTXCopy(i_this->mpModelMorf->getModel()->getAnmMtx(11), mDoMtx_stack_c::get());
-        mDoMtx_stack_c::multVecZero(&spa4);
-        sp98 = player->current.pos - spa4;
-        s16 atan_val = cM_atan2s(sp98.x, sp98.z);
+        MTXCopy(i_this->anm_p->getModel()->getAnmMtx(11), mDoMtx_stack_c::get());
+        mDoMtx_stack_c::multVecZero(&ato);
+        mae = player->current.pos - ato;
+        s16 atan_val = cM_atan2s(mae.x, mae.z);
         cMtx_YrotS(*calc_mtx, atan_val);
-        sp98.x = 0.0f;
-        sp98.y = 0.0f;
-        sp98.z = (BREG_F(12) + 40.0f) - 30.0f;
-        MtxPosition(&sp98, &spb0);
-        spb0 += spa4;
-        i_this->actor.setDownPos(&spb0);
+        mae.x = 0.0f;
+        mae.y = 0.0f;
+        mae.z = (BREG_F(12) + 40.0f) - 30.0f;
+        MtxPosition(&mae, &ato2);
+        ato2 += ato;
+        i_this->enemy.setDownPos(&ato2);
     }
 
-    cXyz spd4(a_this->eyePos);
+    cXyz spd4(enemy->eyePos);
     spd4.y += NREG_F(7) + 130.0f;
-    i_this->actor.setHeadLockPos(&spd4);
+    i_this->enemy.setHeadLockPos(&spd4);
     demo_camera(i_this);
     i_this->field_0x5bb = 1;
-    a_this->attention_info.flags |= fopAc_AttnFlag_UNK_0x200000;
+    enemy->attention_info.flags |= fopAc_AttnFlag_UNK_0x200000;
 
     return 1;
 }
@@ -7022,29 +7023,29 @@ static int daE_RD_IsDelete(e_rd_class*) {
 }
 
 static int daE_RD_Delete(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     fopAcM_RegisterDeleteID(i_this, "E_RD");
 
-    dComIfG_resDelete(&i_this->mPhase, i_this->mResName);
-    if (i_this->field_0x125c != 0) {
+    dComIfG_resDelete(&i_this->phase, i_this->resName);
+    if (i_this->hio_set != 0) {
         hio_set = 0;
         mDoHIO_DELETE_CHILD(l_HIO.field_0x4);
     }
 
-    if (a_this->heap != NULL) {
-        i_this->mpModelMorf->stopZelAnime();
+    if (enemy->heap != NULL) {
+        i_this->anm_p->stopZelAnime();
     }
 
     return 1;
 }
 
 static void ride_game_actor_set(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    cXyz sp70, i_pos;
-    csXyz i_angle;
+    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->enemy;
+    fopAc_ac_c* pla = dComIfGp_getPlayer(0);
+    cXyz mae, ato;
+    csXyz angl;
 
-    OS_REPORT("E3 2005 ACTOR SET %d\n", i_this->mBossMode);
+    OS_REPORT("E3 2005 ACTOR SET %d\n", i_this->actor_set);
     static cXyz set_pos[6] = {
         cXyz(0.0f, 1500.0f, 2500.0f),
         cXyz(800.0f, 1500.0f, -4800.0f),
@@ -7055,60 +7056,60 @@ static void ride_game_actor_set(e_rd_class* i_this) {
     };
 
     dBgS_GndChk gnd_chk;
-    u32 i_parameters;
-    int iVar1 = 6;
-    if (i_this->mBossMode >= 2) {
-        iVar1 = 1;
+    u32 parameter;
+    int num = 6;
+    if (i_this->actor_set >= 2) {
+        num = 1;
     }
 
-    for (int i = 0; i < iVar1; i++) {
-        if (i_this->mBossMode == 1) {
-            cMtx_YrotS(*calc_mtx, player->shape_angle.y);
-            sp70 = set_pos[i];
+    for (int i = 0; i < num; i++) {
+        if (i_this->actor_set == 1) {
+            cMtx_YrotS(*calc_mtx, pla->shape_angle.y);
+            mae = set_pos[i];
 
             if (i > 0 && cDmr_SkipInfo == 0) {
-                sp70.z -= 4000.0f;
+                mae.z -= 4000.0f;
             }
 
-            MtxPosition(&sp70, &i_pos);
-            i_pos += player->current.pos;
-            gnd_chk.SetPos(&i_pos);
-            i_pos.y = dComIfG_Bgsp().GroundCross(&gnd_chk);
-            i_angle = player->shape_angle;
-            ANGLE_ADD(i_angle.y, 0x4000);
-            i_parameters = 0x80000005;
-        } else if (i_this->mBossMode == 2) {
-            i_pos.set(34789.0f, -290.0f, -36177.0f);
-            i_angle.set(0, 0, 0);
-            i_parameters = 0x80000007;
-        } else if (i_this->mBossMode == 3) {
-            i_pos.set(-93620.0f, -5750.0f, 49650.0f);
-            i_angle.set(0, -0x8000, 0);
-            i_parameters = 0x80000008;
-        } else if (i_this->mBossMode == 4) {
-            i_pos = a_this->home.pos;
-            i_angle = a_this->home.angle;
-            i_parameters = 0x80000009;
+            MtxPosition(&mae, &ato);
+            ato += pla->current.pos;
+            gnd_chk.SetPos(&ato);
+            ato.y = dComIfG_Bgsp().GroundCross(&gnd_chk);
+            angl = pla->shape_angle;
+            ANGLE_ADD(angl.y, 0x4000);
+            parameter = 0x80000005;
+        } else if (i_this->actor_set == 2) {
+            ato.set(34789.0f, -290.0f, -36177.0f);
+            angl.set(0, 0, 0);
+            parameter = 0x80000007;
+        } else if (i_this->actor_set == 3) {
+            ato.set(-93620.0f, -5750.0f, 49650.0f);
+            angl.set(0, -0x8000, 0);
+            parameter = 0x80000008;
+        } else if (i_this->actor_set == 4) {
+            ato = a_this->home.pos;
+            angl = a_this->home.angle;
+            parameter = 0x80000009;
         }
 
         if (i == 0) {
-            a_this->home.pos = i_pos;
+            a_this->home.pos = ato;
             a_this->current.pos = a_this->home.pos;
             a_this->old.pos = a_this->home.pos;
         } else {
-            i_angle = player->shape_angle;
-            i_parameters = (i << 8 | 0x80000006);
+            angl = pla->shape_angle;
+            parameter = (i << 8 | 0x80000006);
         }
 
-        fopAcM_create(PROC_E_WB, i_parameters, &i_pos, fopAcM_GetRoomNo(a_this), &i_angle, NULL, -1);
+        fopAcM_create(PROC_E_WB, parameter, &ato, fopAcM_GetRoomNo(a_this), &angl, NULL, -1);
     }
 }
 
 static void coach_game_actor_set(e_rd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    fopAc_ac_c* pla = dComIfGp_getPlayer(0);
     cXyz ununsed_vec_0, ununsed_vec_1;
-    csXyz i_angle;
+    csXyz angl;
 
     OS_REPORT("COATH GAME ACTOR SET \n");
 
@@ -7119,11 +7120,11 @@ static void coach_game_actor_set(e_rd_class* i_this) {
     };
 
     dBgS_GndChk gnd_chk;
-    i_angle.set(0, 0, 0);
-    i_angle.y = player->shape_angle.y;
+    angl.set(0, 0, 0);
+    angl.y = pla->shape_angle.y;
 
     for (int i = 0; i < NREG_S(7) + 3; i++) {
-        fopAcM_create(PROC_E_WB, (i + 1) * 0x100 | 0x8000000a, &set_pos[i], fopAcM_GetRoomNo(a_this), &i_angle, NULL, -1);
+        fopAcM_create(PROC_E_WB, (i + 1) * 0x100 | 0x8000000a, &set_pos[i], fopAcM_GetRoomNo(enemy), &angl, NULL, -1);
     }
 }
 
@@ -7134,22 +7135,22 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     J3DModelData* modelData;
     J3DModel* model;
 
-    if (i_this->mBossMode != 0) {
-        i_this->mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_rdb", e_rdb_class::BMDR_RB), NULL, NULL,
+    if (i_this->actor_set != 0) {
+        i_this->anm_p = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_rdb", e_rdb_class::BMDR_RB), NULL, NULL,
                                                    (J3DAnmTransform*)dComIfG_getObjectRes("E_rdb", e_rdb_class::BCK_RB_RWAIT), 2, 1.0f,
-                                                   0, -1, &i_this->mSound, 0x80000, 0x11000084);
-        if (i_this->mpModelMorf == NULL || i_this->mpModelMorf->getModel() == NULL) {
+                                                   0, -1, &i_this->sound, 0x80000, 0x11000084);
+        if (i_this->anm_p == NULL || i_this->anm_p->getModel() == NULL) {
             return 0;
         }
 
-        model = i_this->mpModelMorf->getModel();
+        model = i_this->anm_p->getModel();
         model->setUserArea((uintptr_t)i_this);
 
         for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
             model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_B);
         }
 
-        if (i_this->mBossMode == 1) {
+        if (i_this->actor_set == 1) {
             i_this->mpMorfHornAnm = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_rdb", e_rdb_class::BMDR_RB_HORN), 
                                                        NULL, NULL, NULL, 2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000084);
             if (i_this->mpMorfHornAnm == NULL || i_this->mpMorfHornAnm->getModel() == NULL) {
@@ -7173,22 +7174,22 @@ static int useHeapInit(fopAc_ac_c* a_this) {
         };
 
         for (int i = 0; i < 14; i++) {
-            if (i_this->mBossMode == 3) {
+            if (i_this->actor_set == 3) {
                 if (i < 2) {
                     modelData = (J3DModelData*)dComIfG_getObjectRes("E_rdb", ikki2_boss_part_bmd[i]);
                     JUT_ASSERT(10672, modelData != NULL);
-                    i_this->mpBossArmorParts[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
-                    if (i_this->mpBossArmorParts[i] == NULL) {
+                    i_this->armor_boss_part[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
+                    if (i_this->armor_boss_part[i] == NULL) {
                         return 0;
                     }
                 } else {
                     i_this->field_0x70c[i] = 1;
                 }
-            } else if (i_this->mBossMode == 1 || i == 13) {
+            } else if (i_this->actor_set == 1 || i == 13) {
                 modelData = (J3DModelData*)dComIfG_getObjectRes("E_rdb", boss_part_bmd[i]);
                 JUT_ASSERT(10687, modelData != NULL);
-                i_this->mpBossArmorParts[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
-                if (i_this->mpBossArmorParts[i] == NULL) {
+                i_this->armor_boss_part[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
+                if (i_this->armor_boss_part[i] == NULL) {
                     return 0;
                 }
             } else {
@@ -7196,116 +7197,116 @@ static int useHeapInit(fopAc_ac_c* a_this) {
             }
         }
     } else {
-        i_this->mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(i_this->mResName, BMDR_RD), NULL, NULL,
-                                                   (J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, BCK_RD_WAIT01), 0, 1.0f,
-                                                   0, -1, &i_this->mSound, 0x80000, 0x11000084);
-        if (i_this->mpModelMorf == NULL || i_this->mpModelMorf->getModel() == NULL) {
+        i_this->anm_p = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(i_this->resName, BMDR_RD), NULL, NULL,
+                                                   (J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, BCK_RD_WAIT01), 0, 1.0f,
+                                                   0, -1, &i_this->sound, 0x80000, 0x11000084);
+        if (i_this->anm_p == NULL || i_this->anm_p->getModel() == NULL) {
             return 0;
         }
 
-        J3DModel* model_2 = i_this->mpModelMorf->getModel();
-        model_2->setUserArea((uintptr_t)i_this);
+        J3DModel* model2 = i_this->anm_p->getModel();
+        model2->setUserArea((uintptr_t)i_this);
         mDoMtx_stack_c::scaleS(0.0f, 0.0f, 0.0f);
-        model_2->setBaseTRMtx(mDoMtx_stack_c::get());
+        model2->setBaseTRMtx(mDoMtx_stack_c::get());
 
-        for (u16 i = 0; i < model_2->getModelData()->getJointNum(); i++) {
-            model_2->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+        for (u16 i = 0; i < model2->getModelData()->getJointNum(); i++) {
+            model2->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
         }
 
-        if (i_this->field_0x5bc == 1) {
+        if (i_this->weapon_type == 1) {
             if (boss != NULL) {
-                modelData = (J3DModelData*)dComIfG_getObjectRes(i_this->mResName, BMDR_RD_CLUBB);
+                modelData = (J3DModelData*)dComIfG_getObjectRes(i_this->resName, BMDR_RD_CLUBB);
             } else {
-                modelData = (J3DModelData*)dComIfG_getObjectRes(i_this->mResName, BMDR_RD_CLUB);
+                modelData = (J3DModelData*)dComIfG_getObjectRes(i_this->resName, BMDR_RD_CLUB);
             }
 
             JUT_ASSERT(10762, modelData != NULL);
 
-            i_this->field_0x694 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
-            if (i_this->field_0x694 == NULL) {
+            i_this->arrow = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
+            if (i_this->arrow == NULL) {
                 return 0;
             }
 
-            i_this->field_0x694->setBaseTRMtx(mDoMtx_stack_c::get());
-        } else if (i_this->field_0x5bc >= 2) {
-            i_this->mpMorfBowAnm = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(i_this->mResName, BMDR_RD_BOW), NULL, NULL,
-                                                       (J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, BCK_RD_BOW_SHOOT), 0, 1.0f,
+            i_this->arrow->setBaseTRMtx(mDoMtx_stack_c::get());
+        } else if (i_this->weapon_type >= 2) {
+            i_this->bow_anm = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(i_this->resName, BMDR_RD_BOW), NULL, NULL,
+                                                       (J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, BCK_RD_BOW_SHOOT), 0, 1.0f,
                                                        0, -1, NULL, 0x80000, 0x11000084);
-            if (i_this->mpMorfBowAnm == NULL || i_this->mpMorfBowAnm->getModel() == NULL) {
+            if (i_this->bow_anm == NULL || i_this->bow_anm->getModel() == NULL) {
                 return 0;
             }
 
-            model_2 = i_this->mpMorfBowAnm->getModel();
-            model_2->setUserArea((uintptr_t)i_this);
-            model_2->setBaseTRMtx(mDoMtx_stack_c::get());
+            model2 = i_this->bow_anm->getModel();
+            model2->setUserArea((uintptr_t)i_this);
+            model2->setBaseTRMtx(mDoMtx_stack_c::get());
 
-            for (u16 i = 0; i < model_2->getModelData()->getJointNum(); i++) {
+            for (u16 i = 0; i < model2->getModelData()->getJointNum(); i++) {
                 if (i == 2 || i == 3) {
-                    model_2->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_bow);
+                    model2->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_bow);
                 }
             }
 
-            if (i_this->field_0x5bc == 4) {
-                modelData = (J3DModelData*)dComIfG_getObjectRes(i_this->mResName, BMDR_RD_BARROW);
+            if (i_this->weapon_type == 4) {
+                modelData = (J3DModelData*)dComIfG_getObjectRes(i_this->resName, BMDR_RD_BARROW);
             } else {
-                modelData = (J3DModelData*)dComIfG_getObjectRes(i_this->mResName, BMDR_RD_ARROW);
+                modelData = (J3DModelData*)dComIfG_getObjectRes(i_this->resName, BMDR_RD_ARROW);
             }
 
             JUT_ASSERT(10810, modelData != NULL);
 
-            i_this->field_0x694 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
-            if (i_this->field_0x694 == NULL) {
+            i_this->arrow = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
+            if (i_this->arrow == NULL) {
                 return 0;
             }
 
-            i_this->field_0x694->setBaseTRMtx(mDoMtx_stack_c::get());
+            i_this->arrow->setBaseTRMtx(mDoMtx_stack_c::get());
         }
 
-        modelData = (J3DModelData*)dComIfG_getObjectRes(i_this->mResName, BMDR_RD_EYE);
+        modelData = (J3DModelData*)dComIfG_getObjectRes(i_this->resName, BMDR_RD_EYE);
         JUT_ASSERT(10823, modelData != NULL);
 
         for (u16 i = 0; i < 2; i++) {
-            i_this->mpEyeModels[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
-            if (i_this->mpEyeModels[i] == NULL) {
+            i_this->eye_model[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
+            if (i_this->eye_model[i] == NULL) {
                 return 0;
             }
-            i_this->mpEyeModels[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+            i_this->eye_model[i]->setBaseTRMtx(mDoMtx_stack_c::get());
         }
     }
 
     return 1;
 }
 
-static cPhs_Step daE_RD_Create(fopAc_ac_c* a_this) {
-    e_rd_class* i_this = (e_rd_class*)a_this;
+static cPhs_Step daE_RD_Create(fopAc_ac_c* actor) {
+    e_rd_class* i_this = (e_rd_class*)actor;
 
-    fopAcM_ct(&i_this->actor, e_rd_class);
+    fopAcM_ct(&i_this->enemy, e_rd_class);
 
-    i_this->field_0x5b6 = fopAcM_GetParam(a_this);
-    i_this->field_0x5b7 = i_this->field_0x5b6;
-    i_this->field_0x5b8 = (fopAcM_GetParam(a_this) & 0xF000) >> 12;
-    if (i_this->field_0x5b8 == 15) {
-        i_this->field_0x5b8 = 0;
+    i_this->arg0 = fopAcM_GetParam(actor);
+    i_this->arg1 = i_this->arg0;
+    i_this->arg2 = (fopAcM_GetParam(actor) & 0xF000) >> 12;
+    if (i_this->arg2 == 15) {
+        i_this->arg2 = 0;
     }
 
-    if (((i_this->field_0x5b6 == 4 || i_this->field_0x5b6 == 5) || i_this->field_0x5b6 == 11) || i_this->field_0x5b6 == 12) {
-        if (i_this->field_0x5b6 == 4) {
-            i_this->mBossMode = 1;
-        } else if (i_this->field_0x5b6 == 5) {
-            i_this->mBossMode = 2;
-        } else if (i_this->field_0x5b6 == 11) {
-            i_this->mBossMode = 3;
-        } else if (i_this->field_0x5b6 == 12) {
-            i_this->mBossMode = 4;
+    if (((i_this->arg0 == 4 || i_this->arg0 == 5) || i_this->arg0 == 11) || i_this->arg0 == 12) {
+        if (i_this->arg0 == 4) {
+            i_this->actor_set = 1;
+        } else if (i_this->arg0 == 5) {
+            i_this->actor_set = 2;
+        } else if (i_this->arg0 == 11) {
+            i_this->actor_set = 3;
+        } else if (i_this->arg0 == 12) {
+            i_this->actor_set = 4;
         }
 
-        i_this->mResName = "E_rdb";
+        i_this->resName = "E_rdb";
     } else {
-        i_this->mResName = "E_RD";
+        i_this->resName = "E_RD";
     }
 
-    cPhs_Step phase = dComIfG_resLoad(&i_this->mPhase, i_this->mResName);
-    if (phase == cPhs_COMPLEATE_e) {
+    cPhs_Step phase_state = dComIfG_resLoad(&i_this->phase, i_this->resName);
+    if (phase_state == cPhs_COMPLEATE_e) {
         if (strcmp(dComIfGp_getStartStageName(), "F_SP124") == 0) {
             // Gerudo Desert
             desert_substage = 124;
@@ -7318,184 +7319,184 @@ static cPhs_Step daE_RD_Create(fopAc_ac_c* a_this) {
             }
         }
 
-        int swBit = (fopAcM_GetParam(a_this) & 0xFF000000) >> 24;
+        int swBit = (fopAcM_GetParam(actor) & 0xFF000000) >> 24;
         if (swBit != 0xFF) {
-            if (dComIfGs_isSwitch(swBit, fopAcM_GetRoomNo(a_this))) {
+            if (dComIfGs_isSwitch(swBit, fopAcM_GetRoomNo(actor))) {
                 return cPhs_ERROR_e;
             }
         }
 
-        if (i_this->field_0x5b6 == 10) {
+        if (i_this->arg0 == 10) {
             coach_game_actor_set(i_this);
             return cPhs_ERROR_e;
         }
 
-        if (i_this->mBossMode != 0) {
+        if (i_this->actor_set != 0) {
             boss = i_this;
-            i_this->field_0x5b6 = 1;
+            i_this->arg0 = 1;
         }
 
-        i_this->field_0x5bc = (fopAcM_GetParam(a_this) & 0xF00) >> 8;
-        if (i_this->field_0x5bc == 15) {
-            i_this->field_0x5bc = 0;
+        i_this->weapon_type = (fopAcM_GetParam(actor) & 0xF00) >> 8;
+        if (i_this->weapon_type == 15) {
+            i_this->weapon_type = 0;
         }
 
-        if (i_this->field_0x5bc >= 4) {
+        if (i_this->weapon_type >= 4) {
             return cPhs_ERROR_e;
         }
 
-        i_this->field_0x5ba = (fopAcM_GetParam(a_this) & 0xFF0000) >> 16;
+        i_this->field_0x5ba = (fopAcM_GetParam(actor) & 0xFF0000) >> 16;
         if (i_this->field_0x5ba == 0xFF) {
             i_this->field_0x5ba = 0;
         }
 
         if (i_this->field_0x5ba == 2) {
-            fopAcM_setStageLayer(a_this);
+            fopAcM_setStageLayer(actor);
         }
 
-        i_this->field_0x5b9 = (fopAcM_GetParam(a_this) & 0xFF000000) >> 24;
-        if (i_this->field_0x5b8 == 3 || i_this->field_0x5b8 == 4 || i_this->field_0x5b8 == 5 || i_this->field_0x5b8 == 6 || i_this->field_0x5b8 == 7) {
-            if (i_this->field_0x5b8 != 5) {
-                i_this->field_0x1295 = 1;
+        i_this->field_0x5b9 = (fopAcM_GetParam(actor) & 0xFF000000) >> 24;
+        if (i_this->arg2 == 3 || i_this->arg2 == 4 || i_this->arg2 == 5 || i_this->arg2 == 6 || i_this->arg2 == 7) {
+            if (i_this->arg2 != 5) {
+                i_this->one_hit_kill = 1;
             }
 
-            if (i_this->field_0x5b8 == 4) {
+            if (i_this->arg2 == 4) {
                 i_this->field_0x1296 = 1;
             }
 
-            if (i_this->field_0x5b8 == 6) {
+            if (i_this->arg2 == 6) {
                 i_this->field_0x1299 = 1;
-                i_this->mAction = ACTION_COMMANDER;
-                i_this->mMode = 0;
-                i_this->field_0x990[2] = 20;
+                i_this->action = ACTION_COMMANDER;
+                i_this->mode = 0;
+                i_this->timer[2] = 20;
                 i_this->field_0x1296 = 1;
-            } else if (i_this->field_0x5b8 == 7) {
-                i_this->mAction = ACTION_BOW3;
+            } else if (i_this->arg2 == 7) {
+                i_this->action = ACTION_BOW3;
                 i_this->field_0x1296 = 1;
-                i_this->field_0x998 = 20;
+                i_this->damage_timer = 20;
             } else {
-                i_this->mAction = ACTION_BOW2;
+                i_this->action = ACTION_BOW2;
             }
 
-            fopAcM_setCullSizeFar(a_this, 30000.0f);
-            i_this->field_0x5b8 = 3;
-        } else if (i_this->field_0x5b8 == 10) {
-            i_this->mAction = ACTION_BOW_IKKI;
-            i_this->field_0x990[0] = 142 + XREG_S(2);
-        } else if (i_this->field_0x5b8 == 11) {
-            fopAcM_create(PROC_E_RDY, fopAcM_GetParam(a_this), &a_this->home.pos, 
-                          fopAcM_GetRoomNo(a_this), &a_this->home.angle, NULL, -1);
+            fopAcM_setCullSizeFar(actor, 30000.0f);
+            i_this->arg2 = 3;
+        } else if (i_this->arg2 == 10) {
+            i_this->action = ACTION_BOW_IKKI;
+            i_this->timer[0] = 142 + XREG_S(2);
+        } else if (i_this->arg2 == 11) {
+            fopAcM_create(PROC_E_RDY, fopAcM_GetParam(actor), &actor->home.pos, 
+                          fopAcM_GetRoomNo(actor), &actor->home.angle, NULL, -1);
         }
 
-        if ((a_this->home.angle.z & 0xFF) == 0 || (a_this->home.angle.z & 0xFF) == 0xFF) {
-            i_this->field_0x980 = 100000.0f;
+        if ((actor->home.angle.z & 0xFF) == 0 || (actor->home.angle.z & 0xFF) == 0xFF) {
+            i_this->attack_range = 100000.0f;
         } else {
-            i_this->field_0x980 = (a_this->home.angle.z & 0xFF) * 100.0f;
+            i_this->attack_range = (actor->home.angle.z & 0xFF) * 100.0f;
         }
 
-        i_this->field_0x12a0 = a_this->home.angle.z >> 8 & 0xFF;
+        i_this->sw = actor->home.angle.z >> 8 & 0xFF;
 
-        if (i_this->field_0x12a0 == 0xFF) {
-            i_this->field_0x12a0 = 0;
+        if (i_this->sw == 0xFF) {
+            i_this->sw = 0;
         }
 
-        fopAcM_OnStatus(a_this, fopAcM_STATUS_UNK_0x100);
-        a_this->attention_info.flags = fopAc_AttnFlag_BATTLE_e;
+        fopAcM_OnStatus(actor, fopAcM_STATUS_UNK_0x100);
+        actor->attention_info.flags = fopAc_AttnFlag_BATTLE_e;
 
-        if (i_this->field_0x5b6 == 6) {
-            i_this->mAction = ACTION_YAGURA;
-            i_this->field_0x99c = 30;
+        if (i_this->arg0 == 6) {
+            i_this->action = ACTION_YAGURA;
+            i_this->yagura_timer = 30;
             S_find = 0;
             lbl_70_bss_AE = false;
 
-            if (fopAcM_GetRoomNo(a_this) == 0) {
-                fopAcM_setCullSizeFar(a_this, 30000.0f);
+            if (fopAcM_GetRoomNo(actor) == 0) {
+                fopAcM_setCullSizeFar(actor, 30000.0f);
             }
-        } else if (i_this->field_0x5b6 == 7) {
-            i_this->mAction = ACTION_NORMAL;
-            u8 path_idx = a_this->home.angle.x & 0xFF;
-            if ((u32)(path_idx) != 0xFF) {
-                i_this->mPath = dPath_GetRoomPath(path_idx, fopAcM_GetRoomNo(a_this));
-                OS_REPORT("//////////////E_RD PPD %x!!\n", i_this->mPath);
-                if (i_this->mPath == NULL) {
+        } else if (i_this->arg0 == 7) {
+            i_this->action = ACTION_NORMAL;
+            u8 path_no = actor->home.angle.x & 0xFF;
+            if ((u32)(path_no) != 0xFF) {
+                i_this->path = dPath_GetRoomPath(path_no, fopAcM_GetRoomNo(actor));
+                OS_REPORT("//////////////E_RD PPD %x!!\n", i_this->path);
+                if (i_this->path == NULL) {
                     OS_REPORT("......RD   NONONONONONO PATH !!!!\n");
                     return cPhs_ERROR_e;
                 }
 
-                dPnt* pnt_p = i_this->mPath->m_points;
+                dPnt* pnt_p = i_this->path->m_points;
                 OS_REPORT("//////////////E_RD P0.y %f\n", pnt_p->m_position.y);
             }
-        } else if (i_this->field_0x5b6 == 8) {
-            i_this->mAction = ACTION_SLEEP;
-            if (fopAcM_GetRoomNo(a_this) == 0) {
-                fopAcM_setCullSizeFar(a_this, 30000.0f);
+        } else if (i_this->arg0 == 8) {
+            i_this->action = ACTION_SLEEP;
+            if (fopAcM_GetRoomNo(actor) == 0) {
+                fopAcM_setCullSizeFar(actor, 30000.0f);
             }
-        } else if (i_this->field_0x5b6 == 9) {
-            i_this->mAction = ACTION_TAG;
-            fopAcM_OffStatus(a_this, 0);
-            a_this->attention_info.flags = 0;
-        } else if (i_this->field_0x5b6 == 35) {
-            i_this->mAction = ACTION_FIGHT_RUN;
-            i_this->mMode = 0;
-            i_this->field_0x99c = 200;
+        } else if (i_this->arg0 == 9) {
+            i_this->action = ACTION_TAG;
+            fopAcM_OffStatus(actor, 0);
+            actor->attention_info.flags = 0;
+        } else if (i_this->arg0 == 35) {
+            i_this->action = ACTION_FIGHT_RUN;
+            i_this->mode = 0;
+            i_this->yagura_timer = 200;
         }
 
-        if (i_this->field_0x5bc == 1 && i_this->field_0x5b6 == 0) {
-            i_this->mAction = ACTION_STAND;
-            i_this->mMode = 0;
+        if (i_this->weapon_type == 1 && i_this->arg0 == 0) {
+            i_this->action = ACTION_STAND;
+            i_this->mode = 0;
         }
 
-        if (i_this->field_0x5b6 == 13 || i_this->field_0x5b6 == 14) {
-            i_this->mAction = ACTION_REG;
-            i_this->mMode = 0;
+        if (i_this->arg0 == 13 || i_this->arg0 == 14) {
+            i_this->action = ACTION_REG;
+            i_this->mode = 0;
             i_this->field_0xafb = 1;
-            fopAcM_OffStatus(a_this, fopAcM_STATUS_UNK_0x100);
+            fopAcM_OffStatus(actor, fopAcM_STATUS_UNK_0x100);
         }
 
-        if (i_this->field_0x5b6 > 2) {
-            i_this->field_0x5b6 = 0;
+        if (i_this->arg0 > 2) {
+            i_this->arg0 = 0;
         }
 
-        a_this->home.angle.z = a_this->current.angle.z = a_this->shape_angle.z
-        = a_this->home.angle.x = a_this->current.angle.x = a_this->shape_angle.x = 0;
+        actor->home.angle.z = actor->current.angle.z = actor->shape_angle.z
+        = actor->home.angle.x = actor->current.angle.x = actor->shape_angle.x = 0;
 
-        u32 i_size;
-        if (i_this->mBossMode == 1) {
-            i_size = 0xAD60;
-        } else if (i_this->mBossMode == 2) {
-            i_size = 0x3C00;
-        } else if (i_this->mBossMode == 3) {
-            i_size = 0x4400;
+        u32 size;
+        if (i_this->actor_set == 1) {
+            size = 0xAD60;
+        } else if (i_this->actor_set == 2) {
+            size = 0x3C00;
+        } else if (i_this->actor_set == 3) {
+            size = 0x4400;
         } else {
-            i_size = 0x4FF0;
+            size = 0x4FF0;
         }
 
-        if (!fopAcM_entrySolidHeap(a_this, useHeapInit, i_size)) {
+        if (!fopAcM_entrySolidHeap(actor, useHeapInit, size)) {
             OS_REPORT("//////////////E_RD SET NON !!\n");
             return cPhs_ERROR_e;
         }
 
-        if (i_this->mBossMode != 0) {
+        if (i_this->actor_set != 0) {
             ride_game_actor_set(i_this);
         }
 
         if (hio_set == 0) {
-            i_this->field_0x125c = 1;
+            i_this->hio_set = 1;
             hio_set = 1;
             // "rider"
             l_HIO.field_0x4 = mDoHIO_CREATE_CHILD("ライダー", &l_HIO);
         }
 
-        fopAcM_SetMtx(a_this, i_this->mpModelMorf->getModel()->getBaseTRMtx());
-        fopAcM_SetMin(a_this, -200.0f, -200.0f, -200.0f);
-        fopAcM_SetMax(a_this, 200.0f, 200.0f, 200.0f);
-        i_this->mObjAcch.Set(fopAcM_GetPosition_p(a_this), fopAcM_GetOldPosition_p(a_this), a_this, 1,
-                             &i_this->mAcchCir, fopAcM_GetSpeed_p(a_this), NULL, NULL);
-        i_this->mAcchCir.SetWall(50.0f, 50.0f);
+        fopAcM_SetMtx(actor, i_this->anm_p->getModel()->getBaseTRMtx());
+        fopAcM_SetMin(actor, -200.0f, -200.0f, -200.0f);
+        fopAcM_SetMax(actor, 200.0f, 200.0f, 200.0f);
+        i_this->ObjAcch.Set(fopAcM_GetPosition_p(actor), fopAcM_GetOldPosition_p(actor), actor, 1,
+                             &i_this->AcchCir, fopAcM_GetSpeed_p(actor), NULL, NULL);
+        i_this->AcchCir.SetWall(50.0f, 50.0f);
 
-        a_this->field_0x560 = a_this->health = 40;
+        actor->field_0x560 = actor->health = 40;
 
-        i_this->mStts.Init(150, 0, a_this);
+        i_this->mStts.Init(150, 0, actor);
 
         static dCcD_SrcSph cc_sph_src = {
             {
@@ -7509,11 +7510,11 @@ static cPhs_Step daE_RD_Create(fopAc_ac_c* a_this) {
             } // mSphAttr
         };
         for (int i = 0; i <= 2; i++) {
-            i_this->field_0xd58[i].Set(cc_sph_src);
-            i_this->field_0xd58[i].SetStts(&i_this->mStts);
+            i_this->cc_sph[i].Set(cc_sph_src);
+            i_this->cc_sph[i].SetStts(&i_this->mStts);
 
-            if (i_this->mBossMode != 0) {
-                i_this->field_0xd58[i].SetTgType(0xD8FAFD3F);
+            if (i_this->actor_set != 0) {
+                i_this->cc_sph[i].SetTgType(0xD8FAFD3F);
             }
         }
 
@@ -7528,25 +7529,25 @@ static cPhs_Step daE_RD_Create(fopAc_ac_c* a_this) {
                 {{0.0f, 0.0f, 0.0f}, 35.0f} // mSph
             } // mSphAttr
         };
-        i_this->field_0x1100.Set(at_sph_src);
-        i_this->field_0x1100.SetStts(&i_this->mStts);
+        i_this->at_sph.Set(at_sph_src);
+        i_this->at_sph.SetStts(&i_this->mStts);
 
-        i_this->field_0x970 = instanceCount | (u16(cM_rndF(65535.0f)) & 0xFF00);
+        i_this->counter = instanceCount | (u16(cM_rndF(65535.0f)) & 0xFF00);
         instanceCount++;
 
-        i_this->mSound.init(&a_this->current.pos, &a_this->eyePos, 3, 1);
+        i_this->sound.init(&actor->current.pos, &actor->eyePos, 3, 1);
 
-        if (i_this->mBossMode != 0) {
-            i_this->mSound.setEnemyName("E_rdb");
+        if (i_this->actor_set != 0) {
+            i_this->sound.setEnemyName("E_rdb");
         } else {
-            i_this->mSound.setEnemyName("E_rd");
+            i_this->sound.setEnemyName("E_rd");
         }
 
-        i_this->mAtInfo.mPowerType = 2;
-        i_this->mAtInfo.mpSound = &i_this->mSound;
+        i_this->AtInfo.mPowerType = 2;
+        i_this->AtInfo.mpSound = &i_this->sound;
 
         if (boss != NULL) {
-            fopAcM_setCullSizeFar(a_this, 30000.0f);
+            fopAcM_setCullSizeFar(actor, 30000.0f);
         }
 
         i_this->field_0x9a0 = 5;
@@ -7556,15 +7557,15 @@ static cPhs_Step daE_RD_Create(fopAc_ac_c* a_this) {
             i_this->field_0x1298 = l_HIO.eye_polygon;
 
             if (desert_substage != 0 || strcmp(dComIfGp_getStartStageName(), "F_SP115") == 0 ||
-                (strcmp(dComIfGp_getStartStageName(), "F_SP121") == 0 && fopAcM_GetRoomNo(a_this) == 0)) {
+                (strcmp(dComIfGp_getStartStageName(), "F_SP121") == 0 && fopAcM_GetRoomNo(actor) == 0)) {
                 // Lake Hylia or Hyrule Field
-                fopAcM_OffStatus(a_this, fopAcM_STATUS_UNK_0x4000);
+                fopAcM_OffStatus(actor, fopAcM_STATUS_UNK_0x4000);
             }
-        } else if (i_this->mBossMode != 4) {
-            fopAcM_OffStatus(a_this, fopAcM_STATUS_UNK_0x4000);
+        } else if (i_this->actor_set != 4) {
+            fopAcM_OffStatus(actor, fopAcM_STATUS_UNK_0x4000);
         }
 
-        if (strcmp(dComIfGp_getStartStageName(), "F_SP121") == 0 && fopAcM_GetRoomNo(a_this) == 0) {
+        if (strcmp(dComIfGp_getStartStageName(), "F_SP121") == 0 && fopAcM_GetRoomNo(actor) == 0) {
             // Hyrule Field - Bridge of Eldin
             data_80519201 = 1;
         } else {
@@ -7575,13 +7576,13 @@ static cPhs_Step daE_RD_Create(fopAc_ac_c* a_this) {
         daE_RD_Execute(i_this);
         c_start = 0;
 
-        if (i_this->mAction == ACTION_TAG) {
+        if (i_this->action == ACTION_TAG) {
             i_this->field_0xafb = 1;
-            i_this->mSound.setEnemyName(NULL);
+            i_this->sound.setEnemyName(NULL);
         }
     }
 
-    return phase;
+    return phase_state;
 }
 
 e_rd_class::e_rd_class() {}

@@ -1297,8 +1297,8 @@ static void demo_camera(e_rdb_class* i_this) {
         if (i_this->field_0x10aa >= 40) {
             e_rd_class* bulblin_p = (e_rd_class*)fopAcM_SearchByName(PROC_E_RD);
             if (bulblin_p != NULL) {
-                a_this->current.pos = bulblin_p->actor.current.pos;
-                a_this->eyePos = bulblin_p->actor.eyePos;
+                a_this->current.pos = bulblin_p->enemy.current.pos;
+                a_this->eyePos = bulblin_p->enemy.eyePos;
             }
         }
 
