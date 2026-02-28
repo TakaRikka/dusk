@@ -31,7 +31,7 @@ public:
 namespace {
 static dCcD_SrcCyl cc_hp_src = {
     {
-        {0, {{0x0, 0x0, 0x0}, {(s32)0xd8000000, 0x3}, 0x0}},
+        {0, {{0x0, 0x0, 0x0}, {0xd8000000, 0x3}, 0x0}},
         {dCcD_SE_13, 0, 0, 0, {0}},
         {dCcD_SE_NONE, 0, 0, 0, {6}},
         {0},
@@ -47,7 +47,7 @@ static dCcD_SrcCyl cc_hp_src = {
 
 static dCcD_SrcSph cc_lamp_src = {
     {
-        {0x0, {{0x0, 0x0, 0x0}, {(s32)0xD8FBFDFF, 0x43}, 0x75}},  // mObj
+        {0x0, {{0x0, 0x0, 0x0}, {0xD8FBFDFF, 0x43}, 0x75}},  // mObj
         {dCcD_SE_13, 0x0, 0x0, 0x0, 0x0},                         // mGObjAt
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x6},                       // mGObjTg
         {0x0},                                                    // mGObjCo

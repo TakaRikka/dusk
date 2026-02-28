@@ -5,7 +5,7 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include <string>
+#include <cstring>
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DPicture.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"

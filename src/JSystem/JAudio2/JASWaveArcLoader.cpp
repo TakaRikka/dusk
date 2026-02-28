@@ -5,7 +5,7 @@
 #include "JSystem/JAudio2/JASTaskThread.h"
 #include "JSystem/JAudio2/JASMutex.h"
 #include "JSystem/JKernel/JKRDvdAramRipper.h"
-#include <string>
+#include <cstring>
 #include <dolphin/os.h>
 #include <stdint.h>
 

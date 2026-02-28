@@ -3,7 +3,7 @@
 #include "JSystem/JUtility/JUTResource.h"
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JSupport/JSUInputStream.h"
-#include <string>
+#include <cstring>
 
 void* JUTResReference::getResource(JSUInputStream* stream, u32 resType, JKRArchive* archive) {
     stream->read(mType);

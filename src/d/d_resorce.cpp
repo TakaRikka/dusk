@@ -20,7 +20,7 @@
 #include <cstring>
 
 #ifndef __MWERKS__
-#include <string>
+#include <cstring>
 #include "dusk/extras.h"
 #endif
 

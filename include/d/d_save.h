@@ -1,7 +1,7 @@
 #ifndef D_SAVE_D_SAVE_H
 #define D_SAVE_D_SAVE_H
 
-#include <string>
+#include <cstring>
 #include "SSystem/SComponent/c_xyz.h"
 #include <dolphin/os.h>
 #include "global.h"

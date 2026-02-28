@@ -2,6 +2,7 @@
 #define JASGADGET_H
 
 #include "JSystem/JUtility/JUTAssert.h"
+#include <cstring>
 #include <string>
 
 #ifdef __MWERKS__

@@ -195,4 +195,9 @@ static const float INF = 2000000000.0f;
 #define FABSF std::fabsf
 #endif
 
+#ifndef __MWERKS__
+#include <cmath>
+using std::isnan;
+#endif
+
 #endif

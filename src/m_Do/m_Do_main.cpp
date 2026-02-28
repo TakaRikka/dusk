@@ -6,9 +6,10 @@
 
 #include "m_Do/m_Do_main.h"
 #include <dolphin/vi.h>
-#include <string>
+#include <cstring>
 #include "DynamicLink.h"
 #include "JSystem/JAudio2/JASAudioThread.h"
+#include "JSystem/JAudio2/JAUSectionHeap.h"
 #include "JSystem/JAudio2/JAUSoundTable.h"
 #include "JSystem/JFramework/JFWSystem.h"
 #include "JSystem/JHostIO/JORServer.h"
@@ -256,6 +257,7 @@ JHIComPortManager<T>* JHIComPortManager<T>::instance = nullptr;
 template <>
 JHIComPortManager<JHICmnMem>* JHIComPortManager<JHICmnMem>::instance = nullptr;
 
+#ifdef __MWERKS__
 template<>
 Z2WolfHowlMgr* JASGlobalInstance<Z2WolfHowlMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
@@ -324,8 +326,4 @@ JASAudioThread* JASGlobalInstance<JASAudioThread>::sInstance JAS_GLOBAL_INSTANCE
 
 template<>
 JASDefaultBankTable* JASGlobalInstance<JASDefaultBankTable>::sInstance JAS_GLOBAL_INSTANCE_INIT;
-
-#ifndef __MWERKS__
-template<>
-JAUSectionHeap* JASGlobalInstance<JAUSectionHeap>::sInstance JAS_GLOBAL_INSTANCE_INIT;
-#endif
+#endif // __MWERKS__

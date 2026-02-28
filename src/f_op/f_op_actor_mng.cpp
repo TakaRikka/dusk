@@ -776,7 +776,7 @@ bool fopAcM_addAngleY(fopAc_ac_c* i_actor, s16 i_target, s16 i_step) {
     return cLib_chaseAngleS(&angle->y, i_target, i_step);
 }
 
-void dummy(fopAc_ac_c* i_actor) {
+static void dummy(fopAc_ac_c* i_actor) {
     fopAcM_SetSpeedF(i_actor, 10.0f);
 }
 

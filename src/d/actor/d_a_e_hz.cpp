@@ -2016,7 +2016,7 @@ int daE_HZ_c::create() {
 
     static dCcD_SrcSph cc_sph_src2 = {
         {
-            {0x0, {{AT_TYPE_CSTATUE_SWING, 0x1, 0x0}, {(s32)0xd8fafdff, 0x3}, 0x75}},   // mObj
+            {0x0, {{AT_TYPE_CSTATUE_SWING, 0x1, 0x0}, {0xd8fafdff, 0x3}, 0x75}},   // mObj
             {dCcD_SE_METAL, 0x0, 0x0, 0x0, 0x0},                                        // mGObjAt
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x2},                                         // mGObjTg
             {0x0},                                                                      // mGObjCo

@@ -1038,10 +1038,6 @@ extern GXColor g_clearColor;
 extern GXColor g_whiteColor;
 extern GXColor g_saftyWhiteColor;
 
-inline void dComIfG_ct() {
-    g_dComIfG_gameInfo.ct();
-}
-
 int dComLbG_PhaseHandler(request_of_phase_process_class*, request_of_phase_process_fn*,
                          void*);
 BOOL dComIfG_resetToOpening(scene_class* scene);
@@ -1064,144 +1060,6 @@ int dComIfG_TimerReStart(int);
 int dComIfG_TimerEnd(int i_mode, int param_1);
 void dComIfGs_onStageBossEnemy(int i_stageNo);
 
-inline void dComIfG_setBrightness(u8 brightness) {
-    g_dComIfG_gameInfo.mFadeBrightness = brightness;
-}
-
-inline int dComIfG_getTimerMode() {
-    return g_dComIfG_gameInfo.play.getTimerMode();
-}
-
-inline void dComIfG_setTimerMode(int mode) {
-    return g_dComIfG_gameInfo.play.setTimerMode(mode);
-}
-
-inline dTimer_c* dComIfG_getTimerPtr() {
-    return g_dComIfG_gameInfo.play.getTimerPtr();
-}
-
-inline void dComIfG_setTimerPtr(dTimer_c* i_ptr) {
-    g_dComIfG_gameInfo.play.setTimerPtr(i_ptr);
-}
-
-inline void dComIfG_setTimerType(u8 i_type) {
-    g_dComIfG_gameInfo.play.setTimerType(i_type);
-}
-
-inline u8 dComIfG_getTimerType() {
-    return g_dComIfG_gameInfo.play.getTimerType();
-}
-
-inline int dComIfG_getTimerLimitTimeMs() {
-    return g_dComIfG_gameInfo.play.getTimerLimitTimeMs();
-}
-
-inline void dComIfG_setTimerLimitTimeMs(int i_time) {
-    g_dComIfG_gameInfo.play.setTimerLimitTimeMs(i_time);
-}
-
-inline BOOL dComIfG_isDebugMode() {
-    return g_dComIfG_gameInfo.mIsDebugMode;
-}
-
-/**
- * Attempts to add a new Object Resource Archive (*.arc) into the Resource Control.
- * @param i_arcName Name of archive to be added
- * @param i_mountDirection The direction to mount the archive. mDoDvd_MOUNT_DIRECTION_HEAD or
- * mDoDvd_MOUNT_DIRECTION_TAIL
- * @param i_heap Pointer to heap to load resources into
- * @return TRUE if successful, FALSE otherwise
- */
-inline int dComIfG_setObjectRes(const char* i_arcName, u8 i_mountDirection, JKRHeap* i_heap) {
-    return g_dComIfG_gameInfo.mResControl.setObjectRes(i_arcName, i_mountDirection, i_heap);
-}
-
-inline int dComIfG_setObjectRes(const char* i_arcName, void* i_archiveRes, u32 i_bufferSize) {
-    return g_dComIfG_gameInfo.mResControl.setObjectRes(i_arcName, i_archiveRes, i_bufferSize, NULL);
-}
-
-/**
- * Attempts to add a new Stage Resource Archive (*.arc) into the Resource Control.
- * @param i_arcName Name of archive to be added
- * @param i_heap Pointer to heap to load resources into
- * @return TRUE if successful, FALSE otherwise
- */
-inline int dComIfG_setStageRes(const char* i_arcName, JKRHeap* i_heap) {
-    return g_dComIfG_gameInfo.mResControl.setStageRes(i_arcName, i_heap);
-}
-
-inline int dComIfG_syncObjectRes(const char* i_arcName) {
-    return g_dComIfG_gameInfo.mResControl.syncObjectRes(i_arcName);
-}
-
-inline int dComIfG_syncStageRes(const char* i_arcName) {
-    return g_dComIfG_gameInfo.mResControl.syncStageRes(i_arcName);
-}
-
-inline int dComIfG_deleteObjectResMain(const char* i_arcName) {
-    return g_dComIfG_gameInfo.mResControl.deleteObjectRes(i_arcName);
-}
-
-inline int dComIfG_deleteStageRes(const char* i_arcName) {
-    return g_dComIfG_gameInfo.mResControl.deleteStageRes(i_arcName);
-}
-
-inline void* dComIfG_getStageRes(const char* i_arcName, const char* i_resName) {
-    return g_dComIfG_gameInfo.mResControl.getStageRes(i_arcName, i_resName);
-}
-
-inline void* dComIfG_getObjectRes(const char* i_arcName, const char* i_resName) {
-    return g_dComIfG_gameInfo.mResControl.getObjectRes(i_arcName, i_resName);
-}
-
-inline void* dComIfG_getObjectRes(const char* i_arcName, int i_index) {
-    return g_dComIfG_gameInfo.mResControl.getObjectRes(i_arcName, i_index);
-}
-
-inline void dComIfG_dumpResControl() {
-    g_dComIfG_gameInfo.mResControl.dump();
-}
-
-inline dBgS& dComIfG_Bgsp() {
-    return g_dComIfG_gameInfo.play.mBgs;
-}
-
-inline dCcS* dComIfG_Ccsp() {
-    return &g_dComIfG_gameInfo.play.mCcs;
-}
-
-inline dCcS& dComIfG_Ccsp2() {
-    return g_dComIfG_gameInfo.play.mCcs;
-}
-
-inline dRes_info_c* dComIfG_getObjectResInfo(const char* i_arcName) {
-    return g_dComIfG_gameInfo.mResControl.getObjectResInfo(i_arcName);
-}
-
-inline dRes_info_c* dComIfG_getStageResInfo(const char* i_arcName) {
-    return g_dComIfG_gameInfo.mResControl.getStageResInfo(i_arcName);
-}
-
-inline int dComIfG_syncAllObjectRes() {
-    return g_dComIfG_gameInfo.mResControl.syncAllObjectRes();
-}
-
-inline void* dComIfG_getObjectIDRes(const char* i_arcName, u16 i_resID) {
-    return g_dComIfG_gameInfo.mResControl.getObjectIDRes(i_arcName, i_resID);
-}
-
-inline u8 dComIfG_getBrightness() {
-    return g_dComIfG_gameInfo.mFadeBrightness;
-}
-
-inline int dComIfG_getObjctResName2Index(const char* i_arcName, const char* i_resName) {
-    return g_dComIfG_gameInfo.mResControl.getObjectResName2Index(i_arcName, i_resName);
-}
-
-inline u32 dComIfG_getTrigB(u32 i_padNo) {
-    return mDoCPd_c::getTrig(i_padNo) & PAD_BUTTON_B;
-}
-
 u8 dComIfGs_getMixItemIndex(int i_no);
 void dComIfGs_setSelectItemIndex(int i_no, u8 item_index);
 void dComIfGs_setMixItemIndex(int i_no, u8 item_index);
@@ -1217,7 +1075,7 @@ cXyz& dComIfGs_getWarpPlayerPos();
 const char* dComIfGs_getWarpStageName();
 s16 dComIfGs_getWarpPlayerAngleY();
 s8 dComIfGs_getWarpRoomNo();
-bool dComIfGs_getWarpMarkFlag();
+// dComIfGs_getWarpMarkFlag declared below
 BOOL dComIfGs_isOneZoneSwitch(int i_swBit, int i_roomNo);
 BOOL dComIfGs_isOneZoneItem(int i_swBit, int i_roomNo);
 BOOL dComIfGs_isZoneSwitch(int, int);
@@ -2833,11 +2691,6 @@ inline u8 dComIfGp_event_getGtItm() {
 
 inline void dComIfGp_event_setGtItm(u8 i_itemNo) {
     g_dComIfG_gameInfo.play.getEvent()->setGtItm(i_itemNo);
-}
-
-inline int dComIfGp_evmng_getMyActIdx(int i_staffId, char** i_actions, int i_actionNum,
-                                      BOOL param_3, BOOL param_4) {
-    return dComIfGp_getPEvtManager()->getMyActIdx(i_staffId, i_actions, i_actionNum, param_3, param_4);
 }
 
 inline dEvent_manager_c& dComIfGp_getEventManager() {

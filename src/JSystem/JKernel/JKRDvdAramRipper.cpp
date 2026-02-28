@@ -11,7 +11,7 @@
 #include <dolphin/os.h>
 #include <dolphin/vi.h>
 #include "global.h"
-#include <string>
+#include <cstring>
 
 static int JKRDecompressFromDVDToAram(JKRDvdFile*, u32, u32, u32, u32, u32, u32*);
 static int decompSZS_subroutine(u8*, u32);

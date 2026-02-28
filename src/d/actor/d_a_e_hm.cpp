@@ -94,7 +94,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 void daE_HM_c::initCcCylinder() {
     static const dCcD_SrcSph ccShpSrc = {
         {
-            {0x0, {{0x2, 0x1, 0xd}, {(s32)0xD8FBFDFF, 0x43}, 0x75}},  // mObj
+            {0x0, {{0x2, 0x1, 0xd}, {0xD8FBFDFF, 0x43}, 0x75}},  // mObj
             {dCcD_SE_STONE, 0x0, 0x0, 0x0, 0x0},                  // mGObjAt
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},                   // mGObjTg
             {0x0},                                                // mGObjCo

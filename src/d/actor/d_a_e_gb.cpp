@@ -394,7 +394,7 @@ static void e_gb_damage(e_gb_class* i_this) {
 
     i_this->invulnerabilityTimer = 35;
     switch (i_this->mode) {
-    case 0:
+    case 0: {
         i_this->mode = 1;
         s16 angleDiff = i_this->angleYTarget - actor->current.angle.y;
         if (angleDiff < 0) {
@@ -413,6 +413,7 @@ static void e_gb_damage(e_gb_class* i_this) {
         actor->speed.y = fabsf(actor->current.pos.y - i_this->currentPosTarget.y) * 0.2f;
         actor->speed.z = fabsf(actor->current.pos.z - i_this->currentPosTarget.z) * 0.2f;
         i_this->timer[0] = KREG_S(7) + 15;
+    }
         // fallthrough
     case 1:
         if (i_this->timer[0] == 0) {

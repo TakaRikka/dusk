@@ -2,7 +2,7 @@
 #define JUTFONT_H
 
 #include "JSystem/JUtility/TColor.h"
-#include <string>
+#include <cstring>
 #include "dusk/endian.h"
 
 /**

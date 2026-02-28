@@ -2,7 +2,7 @@
 
 #include "JSystem/JStudio/JStudio/fvb.h"
 #include "JSystem/JUtility/JUTException.h"
-#include <string>
+#include <cstring>
 
 namespace JStudio {
 namespace fvb {

@@ -13,7 +13,7 @@
 #include "d/d_demo.h"
 #include "d/d_s_play.h"
 #include "SSystem/SComponent/c_counter.h"
-#include <string>
+#include <cstring>
 
 #if DEBUG
 static dEvM_HIO_c l_HIO;

@@ -84,7 +84,7 @@ int daObjHBarrel_c::execute() {
 
 dCcD_SrcCyl const daObjHBarrel_c::s_CcDCyl = {
     {
-        {0x0, {{0x0, 0x0, 0xd}, {(s32)0xd8fafdff, 0x11}, 0x79}},  // mObj
+        {0x0, {{0x0, 0x0, 0xd}, {0xd8fafdff, 0x11}, 0x79}},  // mObj
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},                  // mGObjAt
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x5},                  // mGObjTg
         {0x0},                                               // mGObjCo

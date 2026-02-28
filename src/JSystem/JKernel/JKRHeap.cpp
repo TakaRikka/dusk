@@ -15,7 +15,7 @@
 #include <cstdio>
 #include <cstdlib>
 #endif
-#include <string>
+#include <cstring>
 #include <dolphin/os.h>
 
 #if DEBUG

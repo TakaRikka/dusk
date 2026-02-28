@@ -692,7 +692,10 @@ void DSPSendMailToDSP(u32 mail) {
 }
 
 #pragma mark Z2Audio
-#include <Z2AudioLib/Z2AudioCS.h>
+class Z2AudioCS {
+public:
+    void extensionProcess(s32, s32);
+};
 void Z2AudioCS::extensionProcess(s32, s32) {
     puts("Z2AudioMgr::play is a stub");
 }
