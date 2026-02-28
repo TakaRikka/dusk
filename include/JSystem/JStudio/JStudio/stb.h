@@ -118,7 +118,11 @@ public: // private: // public for the fakematch in JStudio_JStage::TAdaptor_acto
     /* 0x28 */ const void* pSequence_next;
     /* 0x2C */ u32 u32Wait_;
     /* 0x30 */ TEStatus mStatus;
+
+    static const int NodeOffset;
 };
+
+inline const int TObject::NodeOffset = -(int)offsetof(TObject, ocObject_);
 
 class TFactory {
 public:
@@ -163,7 +167,7 @@ private:
     /* 0x04 */ u32 _4;
     /* 0x08 */ u32 _8;
     /* 0x0C */ TFactory* pFactory;
-    /* 0x10 */ JGadget::TLinkList<TObject, -12> ocObject_;
+    /* 0x10 */ JGadget::TLinkList<TObject, TObject::NodeOffset> ocObject_;
     /* 0x1C */ u32 mStatus;
     /* 0x20 */ TObject_control mObject_control;
     /* 0x54 */ s32 _54;

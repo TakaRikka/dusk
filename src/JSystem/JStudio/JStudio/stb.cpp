@@ -331,9 +331,9 @@ void TControl::destroyObject_all() {
 
 // NONMATCHING - TPRObject_ID_equal copy issue
 TObject* TControl::getObject(void const* param_0, u32 param_1) {
-    JGadget::TLinkList<TObject, -12>::iterator begin = ocObject_.begin();
-    JGadget::TLinkList<TObject, -12>::iterator end = ocObject_.end();
-    JGadget::TLinkList<TObject, -12>::iterator local_50 = std::find_if(begin, end, object::TPRObject_ID_equal(param_0, param_1));
+    JGadget::TLinkList<TObject, TObject::NodeOffset>::iterator begin = ocObject_.begin();
+    JGadget::TLinkList<TObject, TObject::NodeOffset>::iterator end = ocObject_.end();
+    JGadget::TLinkList<TObject, TObject::NodeOffset>::iterator local_50 = std::find_if(begin, end, object::TPRObject_ID_equal(param_0, param_1));
     if ((local_50 != end) != false) {
         return &*local_50;
     }
@@ -343,7 +343,7 @@ TObject* TControl::getObject(void const* param_0, u32 param_1) {
 void TControl::reset() {
     resetStatus_();
     mObject_control.reset();
-    JGadget::TContainerEnumerator<JGadget::TLinkList<JStudio::stb::TObject, -12> > aTStack_18(ocObject_);
+    JGadget::TContainerEnumerator<JGadget::TLinkList<JStudio::stb::TObject, TObject::NodeOffset> > aTStack_18(ocObject_);
     while (aTStack_18) {
         (*aTStack_18).reset();
     }
@@ -354,7 +354,7 @@ bool TControl::forward(u32 param_0) {
     bool rv = mObject_control.forward(param_0);
     int uVar7 = 0xf;
     int uVar6 = 0;
-    JGadget::TContainerEnumerator<JGadget::TLinkList<JStudio::stb::TObject, -12> > aTStack_38(ocObject_);
+    JGadget::TContainerEnumerator<JGadget::TLinkList<JStudio::stb::TObject, TObject::NodeOffset> > aTStack_38(ocObject_);
     while (aTStack_38) {
         JStudio::stb::TObject& this_00 = *aTStack_38;
         rv = this_00.forward(param_0) || rv;

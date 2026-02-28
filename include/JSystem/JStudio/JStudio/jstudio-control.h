@@ -25,7 +25,11 @@ struct TCreateObject {
     }
 
     /* 0x4 */ JGadget::TLinkListNode mNode;
+
+    static const int NodeOffset;
 };  // Size: 0xC
+
+inline const int TCreateObject::NodeOffset = -(int)offsetof(TCreateObject, mNode);
 
 struct TFactory : public stb::TFactory {
     TFactory() {}
@@ -35,7 +39,7 @@ struct TFactory : public stb::TFactory {
 
     void appendCreateObject(JStudio::TCreateObject*);
 
-    /* 0x04 */ JGadget::TLinkList<TCreateObject, -4> mList;
+    /* 0x04 */ JGadget::TLinkList<TCreateObject, TCreateObject::NodeOffset> mList;
     /* 0x10 */ fvb::TFactory fvb_Factory;
     /* 0x14 */ ctb::TFactory ctb_Factory;
 };

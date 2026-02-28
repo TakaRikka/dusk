@@ -41,10 +41,14 @@ public:
 
     TFunctionValue* const referFunctionValue() { return pfv_; }
 
+    static const int NodeOffset;
+
 protected:
     /* 0x0C */ JGadget::TLinkListNode mNode;
     /* 0x14 */ TFunctionValue* pfv_;
 };
+
+inline const int TObject::NodeOffset = -(int)offsetof(TObject, mNode);
 
 class TFactory {
 public:
@@ -72,7 +76,7 @@ public:
 
 private:
     /* 0x4 */ TFactory* pFactory;
-    /* 0x8 */ JGadget::TLinkList<TObject, -12> ocObject_;
+    /* 0x8 */ JGadget::TLinkList<TObject, TObject::NodeOffset> ocObject_;
 };  // Size: 0x14
 
 class TObject_composite : public TObject {

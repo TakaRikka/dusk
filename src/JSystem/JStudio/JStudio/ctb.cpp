@@ -45,9 +45,9 @@ void JStudio::ctb::TControl::destroyObject_all() {
 
 // NONMATCHING - TPRObject_ID_equal issues
 JStudio::ctb::TObject* JStudio::ctb::TControl::getObject(void const* param_0, u32 param_1) {
-    JGadget::TLinkList<TObject, -12>::iterator begin = ocObject_.begin();
-    JGadget::TLinkList<TObject, -12>::iterator end = ocObject_.end();
-    JGadget::TLinkList<TObject, -12>::iterator local_50 = std::find_if(begin, end, object::TPRObject_ID_equal(param_0, param_1));
+    JGadget::TLinkList<TObject, TObject::NodeOffset>::iterator begin = ocObject_.begin();
+    JGadget::TLinkList<TObject, TObject::NodeOffset>::iterator end = ocObject_.end();
+    JGadget::TLinkList<TObject, TObject::NodeOffset>::iterator local_50 = std::find_if(begin, end, object::TPRObject_ID_equal(param_0, param_1));
     if ((local_50 != end) != false) {
         return &*local_50;
     }
@@ -58,7 +58,7 @@ JStudio::ctb::TObject* JStudio::ctb::TControl::getObject_index(u32 param_0) {
     if (param_0 >= ocObject_.size()) {
         return 0;
     }
-    JGadget::TLinkList<TObject, -12>::iterator aiStack_14 = ocObject_.begin();
+    JGadget::TLinkList<TObject, TObject::NodeOffset>::iterator aiStack_14 = ocObject_.begin();
     std::advance(aiStack_14, param_0);
     return &*aiStack_14;
 }

@@ -20,7 +20,11 @@ struct TObject : public object::TObject_ID {
     /* 0x08 vtable */
     /* 0x0C */ JGadget::TLinkListNode ocObject_;
     /* 0x14 */ const void* pData_;
+
+    static const int NodeOffset;
 };
+
+inline const int TObject::NodeOffset = -(int)offsetof(TObject, ocObject_);
 
 struct data {
     struct THeaderData {
@@ -137,7 +141,7 @@ struct TControl {
     void setFactory(TFactory* factory) { pFactory_ = factory; }
 
     /* 0x4 */ TFactory* pFactory_;
-    /* 0x8 */ JGadget::TLinkList<TObject, -12> ocObject_;
+    /* 0x8 */ JGadget::TLinkList<TObject, TObject::NodeOffset> ocObject_;
 };
 
 struct TParse : public JGadget::binary::TParse_header_block {

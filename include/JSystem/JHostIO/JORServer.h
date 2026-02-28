@@ -29,7 +29,11 @@ struct JOREventCallbackListNode {
     /* 0x04 */ JGadget::TLinkListNode m_node;
     /* 0x0C */ u32 field_0xc;
     /* 0x10 */ u32 field_0x10;
+
+    static const int NodeOffset;
 };
+
+inline const int JOREventCallbackListNode::NodeOffset = -(int)offsetof(JOREventCallbackListNode, m_node);
 
 class JORFile;
 class JORDir;
@@ -39,7 +43,7 @@ class JORHostInfo_CalendarTime;
 class JORServer : public JHITag<JHICmnMem> {
 public:
     typedef void (*EventFunc)(u32,char *);
-    typedef JGadget::TLinkList<JOREventCallbackListNode, -4> CallbackLinkList;
+    typedef JGadget::TLinkList<JOREventCallbackListNode, JOREventCallbackListNode::NodeOffset> CallbackLinkList;
 
     enum ECommand {
         ECommand_GetRootObj    = 1,

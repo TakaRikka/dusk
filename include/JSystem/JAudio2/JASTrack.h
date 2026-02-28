@@ -17,6 +17,12 @@ namespace JASDsp {
     extern const u32 FILTER_MODE_IIR;
 };
 
+#if !BIT_64
+const int JASTrackNodeOffset = 0x240;
+#else
+const int JASTrackNodeOffset = 0x310;
+#endif
+
 /**
  * @ingroup jsystem-jaudio
  * 
@@ -48,7 +54,7 @@ struct JASTrack : public JASPoolAllocObject_MultiThreaded<JASTrack> {
         /* 0x4c */ JASTrack* mTrack;
     };
 
-    struct TList : JGadget::TLinkList<JASTrack, -0x240> {
+    struct TList : JGadget::TLinkList<JASTrack, JASTrackNodeOffset> {
         TList() : mCallbackRegistered(false) {}
         void append(JASTrack*);
         void seqMain();
@@ -264,5 +270,9 @@ struct JASTrack : public JASPoolAllocObject_MultiThreaded<JASTrack> {
     /* 0x234 */ u16 mMixConfig[6];
     /* 0x240 */ JGadget::TLinkListNode field_0x240;
 };
+
+#if TARGET_PC
+static_assert(offsetof(JASTrack, field_0x240) == JASTrackNodeOffset);
+#endif
 
 #endif /* JASTRACK_H */

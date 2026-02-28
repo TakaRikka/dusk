@@ -329,7 +329,7 @@ void TControl::destroyObject_all() {
 }
 
 TObject* TControl::getObject(void const* id, u32 idSize) {
-    typedef JGadget::TLinkList<TObject, -12>::iterator iterator;
+    typedef JGadget::TLinkList<TObject, TObject::NodeOffset>::iterator iterator;
     iterator begin = ocObject_.begin();
     iterator end = ocObject_.end();
     iterator it = std::find_if(begin, end, object::TPRObject_ID_equal(id, idSize));
@@ -341,7 +341,7 @@ TObject* TControl::getObject_index(u32 index) {
         return NULL;
     }
 
-    JGadget::TLinkList<TObject, -12>::iterator it = ocObject_.begin();
+    JGadget::TLinkList<TObject, TObject::NodeOffset>::iterator it = ocObject_.begin();
     std::advance(it, index);
     return &*it;
 }
