@@ -50,7 +50,12 @@ public:
 
     struct list_class {
         /* 0x0 */ BE(int) field_0x0;
-        /* 0x4 */ OFFSET_PTR(typeGroupData_c) field_0x4;
+#if TARGET_PC
+        // idk why but MSVC refused to compile this when using the macro ???
+        /* 0x4 */ OffsetPtrT<typeGroupData_c> field_0x4;
+#else
+        /* 0x4 */ typeGroupData_c* field_0x4;
+#endif
         /* 0x8 */ u8 mNumber;
     };
 
