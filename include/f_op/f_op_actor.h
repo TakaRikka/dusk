@@ -240,9 +240,8 @@ struct cull_box {
     /* 0xC */ Vec max;
 };
 
-class fopAc_ac_c {
+class fopAc_ac_c : public leafdraw_class {
 public:
-    /* 0x000 */ leafdraw_class base;
     /* 0x0C0 */ int actor_type;
     /* 0x0C4 */ create_tag_class actor_tag;
     /* 0x0D8 */ create_tag_class draw_tag;
