@@ -277,7 +277,7 @@ static void message_shop(npc_henna_class* i_this) {
         i_this->field_0x750 = 1;
     }
     if (i_this->field_0x750 != 0) {
-        fopAcM_OffStatus(actor, NULL);
+        fopAcM_OffStatus(actor, 0);
         cLib_offBit<u32>(actor->attention_info.flags, fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
     } else {
         fopAcM_OnStatus(actor, 0);

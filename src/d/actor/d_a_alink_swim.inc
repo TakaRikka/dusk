@@ -346,7 +346,7 @@ int daAlink_c::checkNextActionSwim() {
 int daAlink_c::checkSwimAction(int param_0) {
     f32 var_f31;
     if (checkWolf()) {
-        if (getMoveBGActorName(mLinkAcch.m_gnd, NULL) == PROC_Obj_ITA) {
+        if (getMoveBGActorName(mLinkAcch.m_gnd, 0) == PROC_Obj_ITA) {
             var_f31 = 200.0f;
         } else {
             var_f31 = mpHIO->mWolf.mWlSwim.m.mStartHeight;

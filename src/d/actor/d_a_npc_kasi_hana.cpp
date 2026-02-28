@@ -853,7 +853,7 @@ BOOL daNpcKasiHana_c::main() {
     }
 
     if (mAction) {
-        (this->*mAction)(NULL);
+        (this->*mAction)(0);
     }
 
     mKasiMng.sendInfo();
@@ -1072,14 +1072,14 @@ BOOL daNpcKasiHana_c::setAction(actionFunc action) {
     mMode = -1;
 
     if (mAction) {
-        (this->*mAction)(NULL);
+        (this->*mAction)(0);
     }
 
     mMode = 0;
     mAction = action;
 
     if (mAction) {
-        (this->*mAction)(NULL);
+        (this->*mAction)(0);
     }
 
     return TRUE;

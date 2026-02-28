@@ -127,7 +127,7 @@ int daLv6ChangeGate_c::Execute(Mtx** param_0) {
 
     for (int i = 0; i < 12; i++) {
         cXyz spC(cyl_x_offset + mMoveTransX, 0.0f, 0.0f);
-        mDoMtx_stack_c::ZXYrotS(NULL, shape_angle.y, shape_angle.z);
+        mDoMtx_stack_c::ZXYrotS(0, shape_angle.y, shape_angle.z);
         mDoMtx_stack_c::multVec(&spC, &spC);
         spC += current.pos;
 
@@ -251,7 +251,7 @@ void daLv6ChangeGate_c::init_modeBreak() {
 
 void daLv6ChangeGate_c::modeBreak() {
     cXyz effpos(mMoveTransX, 0.0f, 0.0f);
-    mDoMtx_stack_c::ZXYrotS(NULL, shape_angle.y, shape_angle.z);
+    mDoMtx_stack_c::ZXYrotS(0, shape_angle.y, shape_angle.z);
     mDoMtx_stack_c::multVec(&effpos, &effpos);
     effpos += current.pos;
 

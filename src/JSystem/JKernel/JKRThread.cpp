@@ -73,7 +73,7 @@ void JKRThread::setCommon_mesgQueue(JKRHeap* heap, int message_count) {
     sThreadList.append(&mThreadListLink);
 
     mCurrentHeap = NULL;
-    mCurrentHeapError = NULL;
+    mCurrentHeapError = 0;
 }
 
 void JKRThread::setCommon_heapSpecified(JKRHeap* heap, u32 stack_size, int param_3) {

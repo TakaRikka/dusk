@@ -74,9 +74,9 @@ int daObjDigholl_c::execute() {
     }
 
     if (player->current.pos.abs(current.pos) < 1000.0f) {
-        dComIfGp_particle_setSimple(0x70f, &current.pos, 0xff, g_whiteColor, g_whiteColor, NULL,
+        dComIfGp_particle_setSimple(0x70f, &current.pos, 0xff, g_whiteColor, g_whiteColor, 0,
                                     0.0f);
-        dComIfGp_particle_setSimple(0x73d, &current.pos, 0xff, g_whiteColor, g_whiteColor, NULL,
+        dComIfGp_particle_setSimple(0x73d, &current.pos, 0xff, g_whiteColor, g_whiteColor, 0,
                                     0.0f);
     }
 

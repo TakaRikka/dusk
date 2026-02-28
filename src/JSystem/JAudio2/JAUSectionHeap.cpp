@@ -40,7 +40,7 @@ namespace {
             field_0x4 = stack_14.getNumFiles();
             field_0x8 = new s32[field_0x4];
             if (!field_0x8) {
-                field_0x4 = NULL;
+                field_0x4 = 0;
                 return;
             }
             for (u32 i = 0; i < field_0x4; i++) {

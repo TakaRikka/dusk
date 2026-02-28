@@ -2456,10 +2456,10 @@ static int dStage_elstInfoInit(dStage_dt_c* i_stage, void* i_data, int param_2, 
 }
 
 static void dKankyo_create() {
-    fopKyM_fastCreate(PROC_KANKYO, NULL, NULL, NULL, NULL);
-    fopKyM_fastCreate(PROC_KYEFF, NULL, NULL, NULL, NULL);
-    fopKyM_fastCreate(PROC_KYEFF2, NULL, NULL, NULL, NULL);
-    fopKyM_fastCreate(PROC_ENVSE, NULL, NULL, NULL, NULL);
+    fopKyM_fastCreate(PROC_KANKYO, 0, NULL, NULL, NULL);
+    fopKyM_fastCreate(PROC_KYEFF, 0, NULL, NULL, NULL);
+    fopKyM_fastCreate(PROC_KYEFF2, 0, NULL, NULL, NULL);
+    fopKyM_fastCreate(PROC_ENVSE, 0, NULL, NULL, NULL);
 }
 
 static void layerMemoryInfoLoader(void* i_data, dStage_dt_c* i_stage, int param_2) {
@@ -2710,7 +2710,7 @@ void dStage_Create() {
         JUT_ASSERT(4517, status);
     }
 
-    *dStage_roomControl_c::getDemoArcName() = NULL;
+    *dStage_roomControl_c::getDemoArcName() = 0;
     dKankyo_create();
 
     if (dComIfG_getStageRes("vrbox_sora.bmd")) {

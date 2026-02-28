@@ -69,7 +69,7 @@ JKRAram::JKRAram(u32 audio_buffer_size, u32 audio_graph_size, s32 priority)
     if (mAramMemorySize) {
         mAramMemoryPtr = ARAlloc(mAramMemorySize);
     } else {
-        mAramMemoryPtr = NULL;
+        mAramMemoryPtr = 0;
     }
 
     OS_REPORT("ARAM audio area %08x: %08x\n", mAudioMemoryPtr, mAudioMemorySize);

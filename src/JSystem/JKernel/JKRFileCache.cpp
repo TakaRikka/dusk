@@ -192,7 +192,7 @@ u32 JKRFileCache::readResource(void* dst, u32 dstLength, u32, const char* path) 
     if (findFile(finalPath, path)) {
         return readResource(dst, dstLength, filePath);
     }
-    return NULL;
+    return 0;
 }
 
 void JKRFileCache::removeResourceAll(void) {

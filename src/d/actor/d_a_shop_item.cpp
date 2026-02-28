@@ -128,7 +128,7 @@ void daShopItem_c::CreateInit() {
 
     home.pos = current.pos;
     set_mtx();
-    mpModel->setUserArea(NULL);
+    mpModel->setUserArea(0);
 }
 
 void daShopItem_c::set_mtx() {

@@ -31,7 +31,7 @@ public:
 };
 
 daLv3Water_HIO_c::daLv3Water_HIO_c() {
-    mLevelControlWaitFrames = NULL;
+    mLevelControlWaitFrames = 0;
 }
 
 #if DEBUG

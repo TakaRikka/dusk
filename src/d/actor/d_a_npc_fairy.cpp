@@ -883,7 +883,7 @@ void daNpc_Fairy_c::srchActors() {
 
 BOOL daNpc_Fairy_c::evtTalk() {
     if (chkAction(&daNpc_Fairy_c::talk)) {
-        (this->*mAction)(NULL);
+        (this->*mAction)(0);
     } else {
         mPreItemNo = 0;
 
@@ -952,7 +952,7 @@ void daNpc_Fairy_c::action() {
     }
 
     if (mAction) {
-        (this->*mAction)(NULL);
+        (this->*mAction)(0);
     }
 }
 
@@ -1124,7 +1124,7 @@ BOOL daNpc_Fairy_c::setAction(actionFunc action, int param_2) {
     mMode = 0xFFFF;
 
     if (mAction) {
-        (this->*mAction)(NULL);
+        (this->*mAction)(0);
     }
 
     mMode = 0;

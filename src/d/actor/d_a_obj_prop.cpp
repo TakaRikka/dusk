@@ -53,7 +53,7 @@ int daObjProp_c::Delete() {
 }
 
 int daObjProp_c::draw() {
-    g_env_light.settingTevStruct(NULL, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
     mDoExt_modelUpdate(mpModel);
     return 1;

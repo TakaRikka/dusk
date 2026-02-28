@@ -1822,7 +1822,7 @@ BOOL daNpc_ykW_c::cutLv5DungeonClear(int param_0) {
             itemPos.y += 50.0f;
 
             unkActor1 = fopAcM_fastCreateItem(&itemPos, 0, fopAcM_GetRoomNo(this), &unkSxyz,
-                                             &unkXyz1, &unkFloat2, &unkFloat3, -1, NULL, NULL);
+                                             &unkXyz1, &unkFloat2, &unkFloat3, -1, 0, NULL);
             if (unkActor1 != NULL) {
                 mDoAud_seStart(Z2SE_OBJ_YO_HEART_S, &itemPos, 0, 0);
                 fopAcM_OnStatus(unkActor1, fopAcM_STATUS_UNK_0x4000);

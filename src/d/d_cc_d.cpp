@@ -255,7 +255,7 @@ dCcD_GObjInf* dCcD_GObjInf::GetTgHitGObj() {
 u8 dCcD_GObjInf::GetTgHitObjSe() {
     dCcD_GObjInf* objInf = GetTgHitGObj();
     if (objInf == NULL) {
-        return NULL;
+        return 0;
     } else {
         return objInf->GetAtSe();
     }

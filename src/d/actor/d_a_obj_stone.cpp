@@ -807,7 +807,7 @@ void daObjStone_c::init_modeBreak() {
         JPABaseEmitter* emitter = dComIfGp_particle_set(
             0x15c, &current.pos, 0, &acStack_40, 0xff, &dPa_modelEcallBack::getEcallback(), fopAcM_GetRoomNo(this), 0, 0, 0);
         dPa_modelEcallBack::setModel(emitter, stone_bmd, tevStr,
-                                     3, 0, NULL, 0);
+                                     3, 0, 0, 0);
         for (int i = 0; i < 3; i = i + 1) {
             dComIfGp_particle_set(
                 l_eff_id[i],

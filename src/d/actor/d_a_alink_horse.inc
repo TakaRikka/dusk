@@ -339,7 +339,7 @@ void daAlink_c::setHorseStirrup() {
     if (field_0x2fab & 1) {
         mDoMtx_stack_c::copy(mpLinkModel->getAnmMtx(field_0x30bc));
         mDoMtx_stack_c::transM(-2.0f, -11.0f, 1.5f);       
-        mDoMtx_stack_c::ZXYrotM(NULL, -0x8000, 0x4000);
+        mDoMtx_stack_c::ZXYrotM(0, -0x8000, 0x4000);
         mDoMtx_copy(mDoMtx_stack_c::get(), horse->getLeftStirrupMtx());
     }
 

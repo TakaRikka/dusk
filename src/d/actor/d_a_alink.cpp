@@ -12223,7 +12223,7 @@ BOOL daAlink_c::checkGroundSpecialMode() {
         return procScreamWaitInit();
     }
 
-    return NULL;
+    return 0;
 }
 
 int daAlink_c::commonCheckNextAction(int param_0) {

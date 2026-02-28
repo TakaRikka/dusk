@@ -3147,7 +3147,7 @@ void daE_YM_c::action() {
     cXyz unused_vec(field_0x68c, field_0x68c, field_0x68c);
     cXyz my_pos = current.pos;
     setMidnaBindEffect(this, &mSound, &my_pos, &scale);
-    mpMorf->play(NULL, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+    mpMorf->play(0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
     mpBrk->play();
 }
 

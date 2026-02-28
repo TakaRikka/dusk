@@ -1728,7 +1728,7 @@ void dMenu_Dmap_c::_create() {
 
     screenInit();
 
-    mpDrawBg->getMapPane()->changeTexture(mMapCtrl->getResTIMGPointer(0), NULL);
+    mpDrawBg->getMapPane()->changeTexture(mMapCtrl->getResTIMGPointer(0), 0);
 
     if (mpDrawBg->getMapPane()->append(mMapCtrl->getResTIMGPointer(1), 1.0f)) {
         mpDrawBg->getMapPane()->setBlendRatio(1.0f, 0.0f);

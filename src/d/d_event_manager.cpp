@@ -1245,7 +1245,7 @@ void* dEvent_manager_c::getMySubstanceP(int staffId, const char* dataname, int d
 int dEvent_manager_c::getMySubstanceNum(int staffId, const char* dataname) {
     dEvDtData_c* data = getMyDataP(staffId, dataname, FALSE);
     if (data == NULL) {
-        return NULL;
+        return 0;
     } else {
         return data->getNumber();
     }

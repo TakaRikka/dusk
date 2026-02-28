@@ -59,7 +59,7 @@ public:
     J2DAnmVtxColor() {
         mKind = KIND_VTX_COLOR;
         for (int i = 0; i < ARRAY_SIZE(mAnmTableNum); i++) {
-            mAnmTableNum[i] = NULL;
+            mAnmTableNum[i] = 0;
         }
         for (int i = 0; i < ARRAY_SIZE(mVtxColorIndexData); i++) {
             mVtxColorIndexData[i] = NULL;

@@ -1485,7 +1485,7 @@ bool daNpcShad_c::talk(void* param_1) {
             if (strcmp(dComIfGp_getStartStageName(), "R_SP116") == 0 || mCurAngle.y == fopAcM_searchPlayerAngleY(this)) {
                 if (talkProc(NULL, TRUE, NULL)) {
                     mActorMngr[0].entry(daPy_getPlayerActorClass());
-                    itemNo = NULL;
+                    itemNo = 0;
                     eventID = mFlow.getEventId(&itemNo);
                     OS_REPORT("会話終了時 イベントID=%d アイテムNo=%d\n", eventID, itemNo); // At the end of the conversation, Event ID=%d Item No=%d
 

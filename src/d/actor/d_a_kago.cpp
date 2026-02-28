@@ -511,7 +511,7 @@ void daKago_c::demo_skip(int param_0) {
     switch (param_0) {
     case 0:
         field_0x748 = 2;
-        field_0x74c = NULL;
+        field_0x74c = 0;
         break;
     case 1:
         field_0x728 = 0;
@@ -525,7 +525,7 @@ void daKago_c::demo_skip(int param_0) {
         /* dSv_event_flag_c::M_051 - Main Event - Shadow Kargorok (?) (Large) event complete (Horse grass appears in various places) */
         dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[84]);
         field_0x748 = 7;
-        field_0x74c = NULL;
+        field_0x74c = 0;
         break;
     case 4:
         setSceneChange(0);
