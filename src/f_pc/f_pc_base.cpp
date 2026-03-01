@@ -171,3 +171,9 @@ int fpcBs_SubCreate(base_process_class* i_proc) {
         return cPhs_ERROR_e;
     }
 }
+
+#if !__MWERKS__
+base_process_class::~base_process_class() {
+    // Nada. Only exists to ensure the base class has a vtable.
+}
+#endif

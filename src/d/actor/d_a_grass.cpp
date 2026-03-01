@@ -350,7 +350,7 @@ int daGrass_c::create() {
     }
 
     m_myObj = this;
-    fopAcM_setStageLayer(&base);
+    fopAcM_setStageLayer(&LEAFDRAW_BASE(this));
     return cPhs_COMPLEATE_e;
 }
 

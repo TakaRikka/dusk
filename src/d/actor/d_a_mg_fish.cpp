@@ -119,7 +119,7 @@ static void* s_hitfish_sub(void* a, void* b) {
     if (fopAc_IsActor(a)) {
         mg_fish_class* fish = (mg_fish_class*)a;
         if (fopAcM_GetName(fish) == PROC_MG_FISH && fish->mCurAction == ACTION_MG_FISH_MF_HIT) {
-            return &fish->actor.base;
+            return &LEAFDRAW_BASE(&fish->actor);
         }
     }
     return NULL;

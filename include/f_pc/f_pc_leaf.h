@@ -13,8 +13,16 @@ typedef struct leafdraw_method_class {
     /* 0x10 */ process_method_func draw_method;
 } leafdraw_method_class;
 
+#if __MWERKS__
+#define LEAFDRAW_BASE(val) (val)->base
+
 typedef struct leafdraw_class {
     /* 0x00 */ base_process_class base;
+#else
+#define LEAFDRAW_BASE(val) (*(base_process_class*)val)
+
+typedef struct leafdraw_class : base_process_class {
+#endif
     /* 0xB8 */ leafdraw_method_class* leaf_methods;
     /* 0xBC */ s8 unk_0xBC;
     /* 0xBD */ u8 unk_0xBD;

@@ -20,7 +20,7 @@ typedef struct state_class {
 } state_class;
 
 typedef struct base_process_class {
-    /* 0x00 */ int type;
+    /* 0x00 */ int type; // DUSK NOTE: fopAcM_ct_placement relies on this being the *very* first field!
     /* 0x04 */ fpc_ProcID id;
     /* 0x08 */ s16 name;
     /* 0x0A */ s8 unk_0xA;
@@ -37,6 +37,14 @@ typedef struct base_process_class {
     /* 0xAC */ void* append;
     /* 0xB0 */ u32 parameters;
     /* 0xB4 */ int subtype;
+#if !__MWERKS__
+    // MSVC places vtables at the start of a class, *even* if that class inherits from something
+    // without vtable. This breaks everything.
+    // TO avoid issues with pointer casting, we make base_process_class also have a vtable and
+    // ensure we're using inheritance on it.
+
+    virtual ~base_process_class();
+#endif
 } base_process_class;  // Size: 0xB8
 
 BOOL fpcBs_Is_JustOfType(int i_typeA, int i_typeB);

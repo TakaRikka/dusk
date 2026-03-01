@@ -17,20 +17,25 @@
 // Modern compilers will zero the parent struct in default constructors.
 // So instead of adding default constructors to everything,
 // we'll just save & restore that data.
+#define fopAcM_ct_placement_copy_length offsetof(fopAc_ac_c, actor_last_base_field) - offsetof(fopAc_ac_c, type)
+
 #define fopAcM_ct_placement(ptr, ClassName) \
     fopAc_ac_c copy;                        \
-    memcpy(&copy, &(ptr)->base, sizeof(fopAc_ac_c)); \
+    memcpy(&copy.type, &(ptr)->type, fopAcM_ct_placement_copy_length); \
     new (ptr) ClassName() ;                 \
-    memcpy(&(ptr)->base, &copy, sizeof(fopAc_ac_c));
+    memcpy(&(ptr)->type, &copy.type, fopAcM_ct_placement_copy_length);
 #else
 #define fopAcM_ct_placement(ptr, ClassName) new (ptr) ClassName()
 #endif
 
 #define fopAcM_ct(ptr, ClassName)                                           \
+    if ((ptr)->layer_tag.layer == NULL) { OSPanic(__FILE__, __LINE__, "UH OH"); } \
     if (!fopAcM_CheckCondition(ptr, fopAcCnd_INIT_e)) {                     \
         fopAcM_ct_placement(ptr, ClassName);                                \
         fopAcM_OnCondition(ptr, fopAcCnd_INIT_e);                           \
-    }
+    } \
+    if ((ptr)->layer_tag.layer == NULL) { OSPanic(__FILE__, __LINE__, "Oh come on"); }
+
 
 #define fopAcM_RegisterDeleteID(i_this, actor_name_str)                     \
     ("Delete -> " actor_name_str "(id=%d)\n", fopAcM_GetID(i_this))

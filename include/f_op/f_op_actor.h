@@ -240,8 +240,14 @@ struct cull_box {
     /* 0xC */ Vec max;
 };
 
+#if __MWERKS__
+class fopAc_ac_c {
+public:
+    /* 0x000 */ leafdraw_class base;
+#else
 class fopAc_ac_c : public leafdraw_class {
 public:
+#endif
     /* 0x0C0 */ int actor_type;
     /* 0x0C4 */ create_tag_class actor_tag;
     /* 0x0D8 */ create_tag_class draw_tag;
@@ -284,8 +290,16 @@ public:
     /* 0x566 */ s8 field_0x566;
     /* 0x567 */ s8 field_0x567;
 
+#if !__MWERKS__
+    s8 actor_last_base_field;
+#endif
+
     fopAc_ac_c();
+#if !__MWERKS__
+    ~fopAc_ac_c() override;
+#else
     ~fopAc_ac_c();
+#endif
 
     static u32 getStopStatus() { return stopStatus; }
     static void setStopStatus(u32 status) { stopStatus = status; }
