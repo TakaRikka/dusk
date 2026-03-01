@@ -670,6 +670,7 @@ static JKRExpHeap* DbPrintHeap;
 JKRExpHeap* mDoExt_createDbPrintHeap(u32 heapSize, JKRHeap* parentHeap) {
     JUT_ASSERT(1693, DbPrintHeap == NULL || heapSize == 0);
     DbPrintHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    JKRHEAP_NAME(DbPrintHeap, "DbPrintHeap");
     return DbPrintHeap;
 }
 
@@ -683,6 +684,7 @@ static intptr_t safeGameHeapSize = -1;
 JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* parentHeap) {
     JUT_ASSERT(1739, gameHeap == NULL || heapSize == 0);
     gameHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    JKRHEAP_NAME(gameHeap, "gameHeap");
     gameHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     return gameHeap;
 }
@@ -715,6 +717,7 @@ intptr_t safeZeldaHeapSize = -1;
 JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* parentHeap) {
     JUT_ASSERT(1815, zeldaHeap == NULL || heapSize == 0);
     zeldaHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    JKRHEAP_NAME(zeldaHeap, "zeldaHeap");
     return zeldaHeap;
 }
 
@@ -748,6 +751,7 @@ intptr_t safeCommandHeapSize = -1;
 JKRExpHeap* mDoExt_createCommandHeap(u32 heapSize, JKRHeap* parentHeap) {
     JUT_ASSERT(1894, commandHeap == 0 || heapSize == 0);
     commandHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    JKRHEAP_NAME(commandHeap, "commandHeap");
     return commandHeap;
 }
 
@@ -774,6 +778,7 @@ intptr_t safeArchiveHeapSize = -1;
 JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* parentHeap) {
     JUT_ASSERT(1966, archiveHeap == 0 || heapSize == 0);
     archiveHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    JKRHEAP_NAME(archiveHeap, "archiveHeap");
     archiveHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     return archiveHeap;
 }
@@ -811,6 +816,7 @@ intptr_t safeJ2dHeapSize = -1;
 JKRExpHeap* mDoExt_createJ2dHeap(u32 heapSize, JKRHeap* parentHeap) {
     JUT_ASSERT(2059, j2dHeap == 0 || heapSize == 0);
     j2dHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    JKRHEAP_NAME(j2dHeap, "j2dHeap");
     j2dHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     return j2dHeap;
 }
@@ -843,6 +849,7 @@ static JKRExpHeap* HostIOHeap;
 JKRHeap* mDoExt_createHostIOHeap(u32 heapSize, JKRHeap* parentHeap) {
     JUT_ASSERT(2142, HostIOHeap == 0 || heapSize == 0);
     HostIOHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    JKRHEAP_NAME(HostIOHeap, "HostIOHeap");
     return HostIOHeap;
 }
 

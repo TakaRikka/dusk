@@ -164,6 +164,7 @@ void main01(void) {
     cDyl_InitAsync();
 
     g_mDoAud_audioHeap = JKRCreateSolidHeap(audioHeapSize, JKRGetCurrentHeap(), false);
+    JKRHEAP_NAME(g_mDoAud_audioHeap, "g_mDoAud_audioHeap");
 
     if (DUSK_AUDIO_DISABLED) {
         // Pretend the audio engine initialized already. This is a lie, but needed to boot.

@@ -31,6 +31,7 @@ void imgui_main(const AuroraInfo *info)
 
         DuskImguiDebugOverlay(info);
         DuskImguiProcesses();
+        DuskImguiHeaps();
 
         ImGui::EndMainMenuBar();
     }

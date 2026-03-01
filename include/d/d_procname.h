@@ -819,10 +819,20 @@ struct ProcName {
 };
 
 #define X(name) { name, #name },
-inline ProcName procNames[] = {
+inline const ProcName procNames[] = {
     ALL_PROCS
 };
-#undef name
+#undef X
+
+inline const char* GetProcName(unsigned int id) {
+    for (auto procName : procNames) {
+        if (procName.id == id) {
+            return procName.name;
+        }
+    }
+
+    return nullptr;
+}
 
 #endif
 

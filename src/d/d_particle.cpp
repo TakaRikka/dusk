@@ -1201,6 +1201,7 @@ void dPa_control_c::createCommon(void const* param_0) {
     OS_REPORT("常駐パーティクルリソースサイズ<%d>\n", heapSize);
 #endif
     mHeap = mDoExt_createSolidHeapFromSystem(0, 0);
+    JKRHEAP_NAME(mHeap, "dPa_control_c::mHeap");
     JUT_ASSERT(2518, mHeap != NULL);
     mCommonResMng = new (mHeap, 0) JPAResourceManager(param_0, mHeap);
     JUT_ASSERT(2521, mCommonResMng != NULL);
@@ -1226,6 +1227,7 @@ void dPa_control_c::createCommon(void const* param_0) {
 
 void dPa_control_c::createRoomScene() {
     mSceneHeap = mDoExt_createSolidHeapFromGame(0, 0);
+    JKRHEAP_NAME(mSceneHeap, "dPa_control_c::mSceneHeap");
     JUT_ASSERT(2573, mSceneHeap != NULL);
     mSceneResMng = new (mSceneHeap, 0) JPAResourceManager(m_sceneRes, mSceneHeap);
     JUT_ASSERT(2576, mSceneResMng != NULL);

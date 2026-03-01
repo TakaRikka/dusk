@@ -141,6 +141,10 @@ protected:
     /* 0x68 */ bool mErrorFlag;
     /* 0x69 */ bool mInitFlag;
 
+#if TARGET_PC
+    char mName[32];
+#endif
+
 public:
     static bool initArena(char** memory, u32* size, int maxHeaps);
     static bool initArena2(char** memory, u32* size, int maxHeaps);
@@ -209,6 +213,15 @@ public:
 #endif
 
     static JKRErrorHandler mErrorHandler;
+
+#if TARGET_PC
+    void setName(const char* name);
+    const char* getName() const;
+
+#define JKRHEAP_NAME(heap, name) (heap)->setName(name)
+#else
+#define JKRHEAP_NAME(heap, name)
+#endif
 };
 
 #ifndef TARGET_PC

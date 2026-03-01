@@ -13,16 +13,6 @@
 #include "imgui.hpp"
 #include "imgui_internal.h"
 
-static const char* getProcName(s16 id) {
-    for (auto procName : procNames) {
-        if (procName.id == id) {
-            return procName.name;
-        }
-    }
-
-    return nullptr;
-}
-
 bool showTreeRecursive;
 
 static int ShowProcess(void* p, void*) {
@@ -35,7 +25,7 @@ static int ShowProcess(void* p, void*) {
 
     ImVec2 vec = {avail.x, 0};
     if (ImGui::BeginChild(buf, vec, ImGuiChildFlags_Border | ImGuiChildFlags_AutoResizeY)) {
-        ImGui::Text("[%d] %s", proc->id, getProcName(proc->profname));
+        ImGui::Text("[%d] %s", proc->id, GetProcName(proc->profname));
         ImGui::Text("init_state: %d, create_phase: %d", proc->state.init_state, proc->state.create_phase);
 
         const char* ofTypeName = "unknown";

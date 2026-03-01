@@ -3,6 +3,11 @@
  * Actor Manager
  */
 
+#if TARGET_PC
+#define PROCS_DUMP_NAMES 1
+#include "d/d_procname.h"
+#endif
+
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
@@ -727,6 +732,18 @@ u8 var_r30 = fopAcM::HeapAdjustEntry;
 #endif
     fopAcM::HeapAdjustUnk = var_r31;
     fopAcM::HeapAdjustEntry = var_r30;
+
+#if TARGET_PC
+    char buf[32];
+    snprintf(
+        buf,
+        sizeof(buf),
+        "Actor %d (%s)",
+        i_actor->id,
+        GetProcName(i_actor->profname));
+    JKRHEAP_NAME(i_actor->heap, buf);
+#endif
+
     return result;
 }
 

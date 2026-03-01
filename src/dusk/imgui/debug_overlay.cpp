@@ -49,7 +49,7 @@ static void ImGuiStringViewText(std::string_view text)
     ImGui::TextUnformatted(text.data(), text.data() + text.size());
 }
 
-static std::string BytesToString(size_t bytes)
+std::string BytesToString(size_t bytes)
 {
     constexpr std::array suffixes{"B"sv, "KB"sv, "MB"sv, "GB"sv, "TB"sv, "PB"sv, "EB"sv};
     uint32_t s = 0;
@@ -66,20 +66,20 @@ static std::string BytesToString(size_t bytes)
     return fmt::format(FMT_STRING("{:.1f}{}"), count, suffixes[s]);
 }
 
-static bool DebugOverlayActive = false;
+static bool Active = false;
 
 void DuskImguiDebugOverlay(const AuroraInfo *info) {
     if (ImGui::BeginMenu(MenuView)) {
-        ImGui::MenuItem("Debug overlay", "F3", &DebugOverlayActive);
+        ImGui::MenuItem("Debug overlay", "F3", &Active);
 
         ImGui::EndMenu();
     }
 
     if (ImGui::IsKeyPressed(ImGuiKey_F3)) {
-        DebugOverlayActive = !DebugOverlayActive;
+        Active = !Active;
     }
 
-    if (!DebugOverlayActive) {
+    if (!Active) {
         return;
     }
 

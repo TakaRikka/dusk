@@ -6,6 +6,11 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JKernel/JKRHeap.h"
+
+#if TARGET_PC
+#include <algorithm>
+#endif
+
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
 #ifdef __MWERKS__
@@ -83,6 +88,10 @@ JKRHeap::JKRHeap(void* data, u32 size, JKRHeap* parent, bool errorFlag)
     mDebugFill = sDefaultFillFlag;
     mCheckMemoryFilled = data_80451380;
     mInitFlag = false;
+
+#if TARGET_PC
+    memset(mName, 0, sizeof(mName));
+#endif
 }
 
 JKRHeap::~JKRHeap() {
@@ -667,5 +676,13 @@ void JKRHeap::setCurrentHeap(JKRHeap* heap) {
 
 JKRHeap* JKRHeap::getCurrentHeap() {
     return sCurrentHeap;
+}
+
+void JKRHeap::setName(const char* name) {
+    size_t len = strlen(name);
+    memcpy(mName, name, std::max(len, sizeof(mName)-1));
+}
+const char* JKRHeap::getName() const {
+    return mName;
 }
 #endif

@@ -45,7 +45,9 @@ void JFWSystem::firstInit() {
     OSInit();
     DVDInit();
     rootHeap = JKRExpHeap::createRoot(CSetUpParam::maxStdHeaps, false);
+    JKRHEAP_NAME(rootHeap, "Root");
     systemHeap = JKRExpHeap::create(CSetUpParam::sysHeapSize, rootHeap, false);
+    JKRHEAP_NAME(systemHeap, "System");
 }
 
 JKRThread* JFWSystem::mainThread;
