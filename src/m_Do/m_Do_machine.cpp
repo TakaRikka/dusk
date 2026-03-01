@@ -586,7 +586,7 @@ static void fault_callback_scroll(u16, OSContext* p_context, u32, u32) {
     JUTException* manager = JUTException::getManager();
     JUTConsole* exConsole = manager->getConsole();
 
-    u32 srr0 = p_context->srr0 & -4;
+    uintptr_t srr0 = p_context->srr0 & -4;
     if (srr0 >= 0x8000000C && srr0 < 0x82FFFFFF) {
         exConsole->print_f("(SRR0-3):%08X %08X %08X %08X\n", *(u32*)(srr0 - 0xC),
                            *(u32*)(srr0 - 0x8), *(u32*)(srr0 - 0x4), *(u32*)srr0);

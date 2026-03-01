@@ -112,7 +112,7 @@ namespace JASDsp {
     void invalChannelAll();
     void initBuffer();
     int setFXLine(u8, s16*, JASDsp::FxlineConfig_*);
-    BOOL changeFXLineParam(u8, u8, u32);
+    BOOL changeFXLineParam(u8, u8, uintptr_t);
 
     extern u8 const DSPADPCM_FILTER[64];
     extern u32 const DSPRES_FILTER[320];

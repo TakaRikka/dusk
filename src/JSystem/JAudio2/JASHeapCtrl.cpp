@@ -285,7 +285,7 @@ void JASGenericMemPool::free(void* ptr, u32 param_1) {
     freeMemCount++;
 }
 
-u32 JASKernel::sAramBase;
+uintptr_t JASKernel::sAramBase;
 
 JKRHeap* JASKernel::sSystemHeap;
 
@@ -310,7 +310,7 @@ JASMemChunkPool<1024, JASThreadingModel::ObjectLevelLockable>* JASKernel::getCom
 
 JASHeap JASKernel::audioAramHeap;
 
-void JASKernel::setupAramHeap(u32 param_0, u32 param_1) {
+void JASKernel::setupAramHeap(uintptr_t param_0, u32 param_1) {
 #if !PLATFORM_GCN
     OSReport("setupAramHeap %x, %x, %x\n", param_0, ARGetBaseAddress(), param_1);
     param_0 = ARGetBaseAddress();

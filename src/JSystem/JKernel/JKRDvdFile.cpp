@@ -125,7 +125,7 @@ s32 JKRDvdFile::sync(void) {
 void JKRDvdFile::doneProcess(s32 id, DVDFileInfo* fileInfo) {
     // fileInfo->field_0x3c looks like some kind of user pointer?
     JKRDvdFile* dvdFile = *(JKRDvdFile**)((u8*)fileInfo + (offsetof(JKRDvdFile, mDvdFile) - offsetof(JKRDvdFile, mFileInfo)));
-    OSSendMessage(&dvdFile->mMessageQueue2, (OSMessage)id, OS_MESSAGE_NOBLOCK);
+    OSSendMessage(&dvdFile->mMessageQueue2, (OSMessage)(intptr_t)id, OS_MESSAGE_NOBLOCK);
 }
 
 s32 JKRDvdFile::getFileSize(void) const {

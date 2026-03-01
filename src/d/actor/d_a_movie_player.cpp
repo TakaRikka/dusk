@@ -3719,7 +3719,7 @@ BOOL daMP_WaitUntilPrepare() {
 }
 
 void daMP_PrepareReady(BOOL msg) {
-    OSSendMessage(&daMP_PrepareReadyQueue, (OSMessage)msg, 1);
+    OSSendMessage(&daMP_PrepareReadyQueue, (OSMessage)(uintptr_t)msg, 1);
 }
 
 static BOOL daMP_THPPlayerPrepare(s32 frame, s32 flag, s32 audioTrack) {
