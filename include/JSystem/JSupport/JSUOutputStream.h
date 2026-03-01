@@ -2,6 +2,7 @@
 #define JSUOUTPUTSTREAM_H
 
 #include "JSystem/JSupport/JSUIosBase.h"
+#include <cstdint>
 
 /**
 * @ingroup jsystem-jsupport
@@ -18,15 +19,12 @@ public:
     s32 write(const void*, s32);
 	void write(const char*);
 
-    JSUOutputStream& operator<<(u64 param_0) {
-        write(&param_0, sizeof(u64));
+#if INTPTR_MAX > INT32_MAX
+    JSUOutputStream& operator<<(uintptr_t param_0) {
+        write(&param_0, sizeof(uintptr_t));
         return *this;
     }
-
-    JSUOutputStream& operator<<(s64 param_0) {
-        write(&param_0, sizeof(s64));
-        return *this;
-    }
+#endif
 
 	JSUOutputStream& operator<<(u32 param_0) {
         write(&param_0, sizeof(u32));
