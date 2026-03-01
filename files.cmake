@@ -1330,6 +1330,7 @@ set(DUSK_FILES
         src/dusk/dvd_emu.cpp
         src/dusk/imgui/imgui.hpp
         src/dusk/imgui/processes.cpp
+        src/dusk/imgui/debug_overlay.cpp
         src/dusk/offset_ptr.cpp
         src/dolphin/os/OSContext.cpp
         src/dolphin/os/OSThread.cpp
