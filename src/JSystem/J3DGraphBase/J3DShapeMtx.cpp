@@ -192,7 +192,7 @@ void J3DDifferedTexMtx::loadExecute(f32 const (*param_0)[4]) {
                     mtx = &tex_mtx_obj->getMtx(i);
                 }
                 }
-                GXLoadTexMtxImm(*mtx, i * 3 + 0x40, GX_MTX3x4);
+                GXLoadTexMtxImm(*mtx, i * 3 + GX_PTTEXMTX0, GX_MTX3x4);
             }
         }
     } else {
@@ -282,7 +282,7 @@ void J3DDifferedTexMtx::loadExecute(f32 const (*param_0)[4]) {
                     break;
                 }
                 }
-                GXLoadTexMtxImm(*mtx, i * 3 + 30, (GXTexMtxType)tex_mtx_info_1->mProjection);
+                GXLoadTexMtxImm(*mtx, i * 3 + GX_TEXMTX0, (GXTexMtxType)tex_mtx_info_1->mProjection);
             }
         }
     }
@@ -362,31 +362,31 @@ void J3DShapeMtxConcatView::load() const {
 void J3DShapeMtxConcatView::loadNrmMtx(int param_0, u16 param_1, MtxP param_2) const {
     if (sCurrentScaleFlag[param_1] == 1) {
         if (sTexMtxLoadType == 0x2000) {
-            J3DFifoLoadNrmMtxToTexMtx(param_2, 0x1e);
+            J3DFifoLoadNrmMtxToTexMtx(param_2, GX_TEXMTX0);
         }
 
         if (!sNBTFlag) {
-            J3DFifoLoadNrmMtxImm(param_2, 0);
+            J3DFifoLoadNrmMtxImm(param_2, GX_PNMTX0);
         } else {
             Mtx33 mtx;
             BE(Vec)* scale = j3dSys.getNBTScale();
             J3DPSMtx33CopyFrom34(param_2, mtx);
             J3DScaleNrmMtx33(mtx, *scale);
-            J3DFifoLoadNrmMtxImm3x3(mtx, 0);
+            J3DFifoLoadNrmMtxImm3x3(mtx, GX_PNMTX0);
         }
     } else {
         Mtx33 mtx;
         J3DPSCalcInverseTranspose(param_2, mtx);
         if (sTexMtxLoadType == 0x2000) {
-            J3DFifoLoadNrmMtxToTexMtx3x3(mtx, 0x1e);
+            J3DFifoLoadNrmMtxToTexMtx3x3(mtx, GX_TEXMTX0);
         }
 
         if (!sNBTFlag) {
-            J3DFifoLoadNrmMtxImm3x3(mtx, 0);
+            J3DFifoLoadNrmMtxImm3x3(mtx, GX_PNMTX0);
         } else {
             BE(Vec)* scale = j3dSys.getNBTScale();
             J3DScaleNrmMtx33(mtx, *scale);
-            J3DFifoLoadNrmMtxImm3x3(mtx, 0);
+            J3DFifoLoadNrmMtxImm3x3(mtx, GX_PNMTX0);
         }
     }
 }
@@ -458,27 +458,27 @@ void J3DShapeMtxMultiConcatView::loadNrmMtx(int param_0, u16 param_1, MtxP param
     Mtx33 mtx1, mtx2;
     if (sCurrentScaleFlag[param_1] == 1) {
         if (sTexMtxLoadType == 0x2000) {
-            J3DFifoLoadNrmMtxToTexMtx(param_2, param_0 * 3 + 0x1e);
+            J3DFifoLoadNrmMtxToTexMtx(param_2, param_0 * 3 + GX_TEXMTX0);
         }
         if (!sNBTFlag) {
-            J3DFifoLoadNrmMtxImm(param_2, param_0 * 3);
+            J3DFifoLoadNrmMtxImm(param_2, param_0 * 3 + GX_PNMTX0);
         } else {
             BE(Vec)* nbt_scale = j3dSys.getNBTScale();
             J3DPSMtx33CopyFrom34(param_2, mtx1);
             J3DScaleNrmMtx33(mtx1, *nbt_scale);
-            J3DFifoLoadNrmMtxImm3x3(mtx1, 0);
+            J3DFifoLoadNrmMtxImm3x3(mtx1, GX_PNMTX0);
         }
     } else {
         J3DPSCalcInverseTranspose(param_2, mtx2);
         if (sTexMtxLoadType == 0x2000) {
-            J3DFifoLoadNrmMtxToTexMtx3x3(mtx2, param_0 * 3 + 0x1e);
+            J3DFifoLoadNrmMtxToTexMtx3x3(mtx2, param_0 * 3 + GX_TEXMTX0);
         }
         if (!sNBTFlag) {
-            J3DFifoLoadNrmMtxImm3x3(mtx2, param_0 * 3);
+            J3DFifoLoadNrmMtxImm3x3(mtx2, param_0 * 3 + GX_PNMTX0);
         } else {
             BE(Vec)* nbt_scale = j3dSys.getNBTScale();
             J3DScaleNrmMtx33(mtx2, *nbt_scale);
-            J3DFifoLoadNrmMtxImm3x3(mtx2, param_0 * 3);
+            J3DFifoLoadNrmMtxImm3x3(mtx2, param_0 * 3 + GX_PNMTX0);
         }
     }
 }
@@ -494,7 +494,7 @@ void J3DShapeMtxBBoardConcatView::load() const {
     }
 
     J3DCalcBBoardMtx(mtx);
-    J3DFifoLoadPosMtxImm(mtx, 0);
+    J3DFifoLoadPosMtxImm(mtx, GX_PNMTX0);
 
     mtx[0][0] = 1.0f / mtx[0][0];
     mtx[1][1] = 1.0f / mtx[1][1];
@@ -505,11 +505,11 @@ void J3DShapeMtxBBoardConcatView::load() const {
 
     
     if (!sNBTFlag) {
-        J3DFifoLoadNrmMtxImm(mtx, 0);
+        J3DFifoLoadNrmMtxImm(mtx, GX_PNMTX0);
     } else {
         BE(Vec)* nbt_scale = j3dSys.getNBTScale();
         J3DScaleNrmMtx(mtx, *nbt_scale);
-        J3DFifoLoadNrmMtxImm(mtx, 0);
+        J3DFifoLoadNrmMtxImm(mtx, GX_PNMTX0);
     }
 }
 
@@ -525,24 +525,24 @@ void J3DShapeMtxYBBoardConcatView::load() const {
     }
 
     J3DCalcYBBoardMtx(mtx1);
-    J3DFifoLoadPosMtxImm(mtx1, 0);
+    J3DFifoLoadPosMtxImm(mtx1, GX_PNMTX0);
 
     if (sCurrentScaleFlag[mUseMtxIndex] == 1) {
         if (!sNBTFlag) {
-            J3DFifoLoadNrmMtxImm(mtx1, 0);
+            J3DFifoLoadNrmMtxImm(mtx1, GX_PNMTX0);
         } else {
             BE(Vec)* nbt_scale = j3dSys.getNBTScale();
             J3DScaleNrmMtx(mtx1, *nbt_scale);
-            J3DFifoLoadNrmMtxImm(mtx1, 0);
+            J3DFifoLoadNrmMtxImm(mtx1, GX_PNMTX0);
         }
     } else {
         J3DPSCalcInverseTranspose(mtx1, mtx2);
         if (!sNBTFlag) {
-            J3DFifoLoadNrmMtxImm3x3(mtx2, 0);
+            J3DFifoLoadNrmMtxImm3x3(mtx2, GX_PNMTX0);
         } else {
             BE(Vec)* nbt_scale = j3dSys.getNBTScale();
             J3DScaleNrmMtx33(mtx2, *nbt_scale);
-            J3DFifoLoadNrmMtxImm3x3(mtx2, 0);
+            J3DFifoLoadNrmMtxImm3x3(mtx2, GX_PNMTX0);
         }
     }
 }

@@ -2276,45 +2276,48 @@ int mDoExt_3Dline_c::init(u16 param_0, int param_1, BOOL param_2) {
 
     int sp20 = param_0 * 2;
 
-    field_0x8 = new cXyz[sp20];
+    field_0x8[0] = new cXyz[sp20];
     if (field_0x8 == NULL) {
         return 0;
     }
 
-    field_0xc = new cXyz[sp20];
-    if (field_0xc == NULL) {
+    field_0x8[1] = new cXyz[sp20];
+    if (field_0x8[1] == NULL) {
         return 0;
     }
 
-    field_0x10 = new mDoExt_3Dline_field_0x10_c[sp20];
+    field_0x10[0] = new mDoExt_3Dline_field_0x10_c[sp20];
     if (field_0x10 == NULL) {
         return 0;
     }
 
-    field_0x14 = new mDoExt_3Dline_field_0x10_c[sp20];
-    if (field_0x14 == NULL) {
+    field_0x10[1] = new mDoExt_3Dline_field_0x10_c[sp20];
+    if (field_0x10[1] == NULL) {
         return 0;
     }
 
     if (param_2) {
-        field_0x18 = new mDoExt_3Dline_field_0x18_c[sp20];
-        if (field_0x18 == NULL) {
+        field_0x18[0] = new cXy[sp20];
+        if (field_0x18[0] == NULL) {
             return 0;
         }
 
-        field_0x1c = new mDoExt_3Dline_field_0x18_c[sp20];
-        if (field_0x1c == NULL) {
+        field_0x18[1] = new cXy[sp20];
+        if (field_0x18[1] == NULL) {
             return 0;
         }
 
-        mDoExt_3Dline_field_0x18_c* var_r28 = field_0x18;
-        mDoExt_3Dline_field_0x18_c* var_r27 = field_0x1c;
+        cXy* tex0 = field_0x18[0];
+        cXy* tex1 = field_0x18[1];
         for (s32 i = 0; i < param_0; i++) {
-            var_r28++->field_0x0 = 0.0f;
-            var_r27++->field_0x0 = 0.0f;
+            tex0[0].x = 0.0f;
+            tex1[0].x = 0.0f;
 
-            var_r28++->field_0x0 = 1.0f;
-            var_r27++->field_0x0 = 1.0f;
+            tex0[1].x = 1.0f;
+            tex1[1].x = 1.0f;
+
+            tex0 += 2;
+            tex1 += 2;
         }
     }
 
@@ -2379,8 +2382,8 @@ void mDoExt_3DlineMat0_c::draw() {
     int var_r26 = (field_0x14 << 1) & 0xFFFF;
 
     for (int i = 0; i < field_0x10; i++) {
-        GXSetArray(GX_VA_POS, ((mDoExt_3Dline_c*)((intptr_t)var_r28 + field_0x16 * 4))->field_0x8, sizeof(cXyz));
-        GXSetArray(GX_VA_NRM, ((mDoExt_3Dline_c*)((intptr_t)var_r28 + field_0x16 * 4))->field_0x10, 3);
+        GXSetArray(GX_VA_POS, field_0x18->field_0x8[field_0x16], sizeof(cXyz));
+        GXSetArray(GX_VA_NRM, field_0x18->field_0x10[field_0x16], 3);
 
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, var_r26);
         for (u16 j = 0; j < (u16)var_r26; j++) {
@@ -2435,9 +2438,9 @@ void mDoExt_3DlineMat0_c::update(int param_0, f32 param_1, GXColor& param_2, u16
     for (s32 sp_14 = 0; sp_14 < field_0x10; sp_14++) {
         local_r27 = sp_28->field_0x0;
 
-        sp_1c = ((mDoExt_3Dline_c*)((intptr_t)sp_28 + (field_0x16 << 2)))->field_0x8;
+        sp_1c = sp_28->field_0x8[field_0x16];
         local_r26 = sp_1c;
-        sp_18 = ((mDoExt_3Dline_c*)((intptr_t)sp_28 + (field_0x16 << 2)))->field_0x10;
+        sp_18 = sp_28->field_0x10[field_0x16];
         local_r30 = sp_18;
 
         local_r29 = local_r30 + 1;
@@ -2556,9 +2559,9 @@ void mDoExt_3DlineMat0_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
 
         JUT_ASSERT(5445, size_p != NULL);
 
-        sp_20 = ((mDoExt_3Dline_c*)((intptr_t)sp_30 + (field_0x16 << 2)))->field_0x8;
+        sp_20 = sp_30->field_0x8[field_0x16];
         sp_24 = sp_20;
-        sp_1c = ((mDoExt_3Dline_c*)((intptr_t)sp_30 + (field_0x16 << 2)))->field_0x10;
+        sp_1c = sp_30->field_0x10[field_0x16];
         local_r30 = sp_1c;
 
         local_r29 = local_r30 + 1;
@@ -2749,29 +2752,28 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, _GXColor& param_2, u1
     mDoExt_3Dline_field_0x10_c* local_r28;
     mDoExt_3Dline_field_0x10_c* sp_20;
 
-    mDoExt_3Dline_field_0x18_c* sp_1c;
-
-    mDoExt_3Dline_field_0x18_c* sp_18;
+    cXy* sp_1c;
+    cXy* sp_18;
 
     f32 local_f29;
     f32 local_f31 = 0.0f;
 
     for (s32 sp_14 = 0; sp_14 < mNumLines; sp_14++) {
         local_r27 = sp_38[0].field_0x0;
-        sp_24 = ((mDoExt_3Dline_c*)((intptr_t)sp_38 + (mIsDrawn << 2)))->field_0x8;
+        sp_24 = sp_38->field_0x8[mIsDrawn];
         sp_28 = sp_24;
 
-        sp_20 = ((mDoExt_3Dline_c*)((intptr_t)sp_38 + (mIsDrawn << 2)))->field_0x10;
+        sp_20 = sp_38->field_0x10[mIsDrawn];
         local_r30 = sp_20;
         local_r28 = local_r30 + 1;
 
-        sp_18 = ((mDoExt_3Dline_c*)((intptr_t)sp_38 + (mIsDrawn << 2)))->field_0x18;
+        sp_18 = sp_38->field_0x18[mIsDrawn];
         sp_1c = sp_18;
 
         local_f29 = param_1;
 
-        sp_1c++->field_0x4 = local_f31;
-        sp_1c++->field_0x4 = local_f31;
+        sp_1c++->y = local_f31;
+        sp_1c++->y = local_f31;
 
         sp_130 = local_r27[1] - local_r27[0];
         f32 local_f30 = sp_130.abs();
@@ -2805,8 +2807,8 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, _GXColor& param_2, u1
                 local_f29 -= local_f27;
             }
 
-            sp_1c++->field_0x4 = local_f31;
-            sp_1c++->field_0x4 = local_f31;
+            sp_1c++->y = local_f31;
+            sp_1c++->y = local_f31;
 
             sp_130 = local_r27[1] - local_r27[0];
             local_f30 = sp_130.abs();
@@ -2842,8 +2844,8 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, _GXColor& param_2, u1
             sp_118 = local_r27[0] - sp_130;
         }
 
-        sp_1c++->field_0x4 = local_f31;
-        sp_1c->field_0x4 = local_f31;
+        sp_1c++->y = local_f31;
+        sp_1c->y = local_f31;
 
         local_r28 += 1;
         local_r28->x = local_r30->x;
@@ -2914,23 +2916,23 @@ void mDoExt_3DlineMat1_c::update(int param_0, _GXColor& param_2, dKy_tevstr_c* p
     mDoExt_3Dline_field_0x10_c* local_r30;
     mDoExt_3Dline_field_0x10_c* local_r28;
     mDoExt_3Dline_field_0x10_c* sp_20;
-    mDoExt_3Dline_field_0x18_c* sp_1c;
-    mDoExt_3Dline_field_0x18_c* sp_18;
+    cXy* sp_1c;
+    cXy* sp_18;
     f32 local_f31 = 0.0f;
     f32* size_p;
     for (s32 sp_14 = 0; sp_14 < mNumLines; sp_14++) {
         local_r27 = sp_38[0].field_0x0;
         size_p = sp_38->field_0x4;
         JUT_ASSERT(5875, size_p != NULL);
-        sp_24 = ((mDoExt_3Dline_c*)((intptr_t)sp_38 + (mIsDrawn << 2)))->field_0x8;
+        sp_24 = sp_38->field_0x8[mIsDrawn];
         sp_28 = sp_24;
-        sp_20 = ((mDoExt_3Dline_c*)((intptr_t)sp_38 + (mIsDrawn << 2)))->field_0x10;
+        sp_20 = sp_38->field_0x10[mIsDrawn];
         local_r30 = sp_20;
         local_r28 = local_r30 + 1;
-        sp_18 = ((mDoExt_3Dline_c*)((intptr_t)sp_38 + (mIsDrawn << 2)))->field_0x18;
+        sp_18 = sp_38->field_0x18[mIsDrawn];
         sp_1c = sp_18;
-        sp_1c++->field_0x4 = local_f31;
-        sp_1c++->field_0x4 = local_f31;
+        sp_1c++->y = local_f31;
+        sp_1c++->y = local_f31;
         sp_130 = local_r27[1] - local_r27[0];
         local_f30 = sp_130.abs();
         local_f31 += local_f30 * 0.1f;
@@ -2951,8 +2953,8 @@ void mDoExt_3DlineMat1_c::update(int param_0, _GXColor& param_2, dKy_tevstr_c* p
         sp_124 = local_r27[0] + sp_130;
         sp_118 = local_r27[0] - sp_130;
         for (s32 sp_10 = field_0x34 - 2; sp_10 > 0; sp_10--) {
-            sp_1c++->field_0x4 = local_f31;
-            sp_1c++->field_0x4 = local_f31;
+            sp_1c++->y = local_f31;
+            sp_1c++->y = local_f31;
             sp_130 = local_r27[1] - local_r27[0];
             local_f30 = sp_130.abs();
             local_f31 += local_f30 * 0.1f;
@@ -2978,8 +2980,8 @@ void mDoExt_3DlineMat1_c::update(int param_0, _GXColor& param_2, dKy_tevstr_c* p
             sp_118 = local_r27[0] - sp_130;
         }
 
-        sp_1c++->field_0x4 = local_f31;
-        sp_1c->field_0x4 = local_f31;
+        sp_1c++->y = local_f31;
+        sp_1c->y = local_f31;
 
         local_r28 += 1;
         local_r28->x = local_r30->x;
