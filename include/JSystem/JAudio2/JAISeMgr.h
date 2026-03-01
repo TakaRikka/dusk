@@ -15,7 +15,7 @@ struct JASNonCopyable {
     JASNonCopyable() {}
     ~JASNonCopyable() {}
 
-    /* 0x0 */ int field_0x0;
+    /* 0x0 */ void* field_0x0;
 };  // Size: 0x4
 
 /**
@@ -56,7 +56,7 @@ public:
         mParams.init();
         mMaxActiveSe = 0;
         mMaxInactiveSe = 0;
-        field_0x0 = 0;
+        field_0x0 = NULL;
     }
 
     virtual bool isUsingSeqData(const JAISeqDataRegion& seqDataRegion);
