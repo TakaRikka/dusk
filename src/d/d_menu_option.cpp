@@ -1484,12 +1484,12 @@ void dMenu_Option_c::screenSet() {
         }
     }
     for (int i = 0; i < 6; i++) {
-        if (let2_n[i] != NULL) {
+        if (let2_n[i] != 0) {
             mpMenuPane3[i] = new CPaneMgr(mpClipScreen, let2_n[i], 0, NULL);
         } else {
             mpMenuPane3[i] = NULL;
         }
-        if (menu3_n[i] != NULL) {
+        if (menu3_n[i] != 0) {
             mpMenuPane32[i] = new CPaneMgr(mpClipScreen, menu3_n[i], 0, NULL);
         } else {
             mpMenuPane32[i] = NULL;
@@ -1720,7 +1720,7 @@ void dMenu_Option_c::screenSet() {
         field_0x1c0[i] = 0;
     }
     for (int i = 0; i < 3; i++) {
-        if (z_tx[i] != NULL) {
+        if (z_tx[i] != 0) {
             mpZButtonText[i] = new CPaneMgr(mpBackScreen, z_tx[i], 2, NULL);
         } else {
             mpZButtonText[i] = NULL;

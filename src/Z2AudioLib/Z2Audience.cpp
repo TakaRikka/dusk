@@ -454,7 +454,7 @@ f32 Z2SpotMic::calcMicVolume(f32 param_0, int camID, f32 param_2) {
     JUT_ASSERT(687, camID >= 0);
     JUT_ASSERT(688, camID < 1);
 
-    if (mMicOn == NULL) {
+    if (mMicOn == false) {
         return param_2;
     }
 

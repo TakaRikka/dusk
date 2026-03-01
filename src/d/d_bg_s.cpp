@@ -712,7 +712,7 @@ void dBgS::MoveBgMatrixCrrPos(cBgS_PolyInfo const& i_poly, bool param_1, cXyz* i
 void dBgS_MoveBGProc_Typical(dBgW* i_bgw, void* i_actor_ptr, cBgS_PolyInfo const& i_poly,
                              bool param_3, cXyz* i_pos, csXyz* i_angle, csXyz* i_shapeAngle) {
     Mtx m;
-    if (i_bgw->GetOldInvMtx(m) != NULL) {
+    if (i_bgw->GetOldInvMtx(m) != 0) {
         cXyz move_old;
         MTXMultVec(m, i_pos, &move_old);
 

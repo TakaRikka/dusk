@@ -3134,7 +3134,7 @@ bool dCamera_c::useItem1EvCamera() {
 
             if (item_p->field_0x20 < item_p->field_0x4) break;
 
-            if (data_list[item_p->mType][1].field_0x08 != NULL && item_p->field_0x1c == 0) {
+            if (data_list[item_p->mType][1].field_0x08 != 0 && item_p->field_0x1c == 0) {
                 item_p->field_0x1c = 1;
                 item_p->field_0x0 = 1;
                 break;

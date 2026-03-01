@@ -3713,7 +3713,7 @@ J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u3
             bool hasSharedDlistObj =
                 i_modelData->getMaterialNodePointer(0)->getSharedDisplayListObj() != NULL;
             // Update the modelFlag if the model data passed in has a shared dlist object
-            if (hasSharedDlistObj != NULL) {
+            if (hasSharedDlistObj != false) {
                 if (i_modelData->isLocked()) {
                     i_modelFlag = J3DMdlFlag_UseSharedDL;
                 } else if (i_modelFlag == J3DMdlFlag_UseSharedDL) {

@@ -916,7 +916,7 @@ BOOL cCc_Check() {
     BOOL rt = TRUE;
     for (int i = 0; i < ARRAY_SIZEU(DynamicNameTable); i++) {
         uintptr_t ptr = (uintptr_t)DMC[i];
-        if (ptr != NULL) {
+        if (ptr != 0) {
             u32 ptr_hi_byte = ptr >> 0x18;
             if (ptr_hi_byte < 0x80 || ptr_hi_byte > 0x83) {
                 // "cCc_Check invalid pointer detected"

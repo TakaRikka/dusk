@@ -1380,7 +1380,7 @@ int daDoor20_c::createKey() {
             }
             field_0x5ec =
                 fopAcM_createChildFromOffset(PROC_Obj_Lv5Key, fopAcM_GetID(this), 0xffffffff,
-                                             &cStack_28, roomNo, &cStack_30, &scale, 0xffffffff, 0);
+                                             &cStack_28, roomNo, &cStack_30, &scale, -1, 0);
             break;
         default:
             OSReport_Error("シャッタードア：鍵タイプが不明です\n"); // Shutter door: key type unknown
@@ -1399,7 +1399,7 @@ int daDoor20_c::createKey() {
             }
             field_0x5ec =
                 fopAcM_createChildFromOffset(PROC_OBJ_KEYHOLE, fopAcM_GetID(this), 0xffffffff,
-                                             &cStack_28, roomNo, &cStack_30, &scale, 0xffffffff, 0);
+                                             &cStack_28, roomNo, &cStack_30, &scale, -1, 0);
         }
 
         current.pos = prevPos;

@@ -462,7 +462,7 @@ int daNpc_ykW_c::createHeapCallBack(fopAc_ac_c* i_this) {
 }
 
 int daNpc_ykW_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
-    if (param_1 == NULL) {
+    if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
         daNpc_ykW_c* ykw = (daNpc_ykW_c*)model->getUserArea();
         if (ykw != 0) {

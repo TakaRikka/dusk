@@ -330,7 +330,7 @@ static void e_arrow_spin(e_arrow_class* i_this) {
 }
 
 static void* s_limit_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) != NULL && i_actor != i_data &&
+    if (fopAcM_IsActor(i_actor) != FALSE && i_actor != i_data &&
         fopAcM_GetName(i_actor) == PROC_E_ARROW &&
         static_cast<e_arrow_class*>(i_actor)->mAction == ACTION_ARROW_FIRE &&
         fabsf(static_cast<e_arrow_class*>(i_actor)->field_0xa00.z -

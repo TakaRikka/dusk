@@ -2725,7 +2725,7 @@ void dStage_Delete() {
     OS_REPORT("dStage_Delete\n");
 
     char* demoArcName = dStage_roomControl_c::getDemoArcName();
-    if (*demoArcName != NULL) {
+    if (*demoArcName != '\0') {
         dComIfG_deleteObjectResMain(demoArcName);
     }
 

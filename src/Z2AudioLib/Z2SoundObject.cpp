@@ -164,7 +164,7 @@ Z2SoundHandlePool* Z2SoundObjBase::startLevelSound(JAISoundID soundID, u32 mapin
         if (handle != NULL) {
             soundStarter_->startSound(soundID, handle, pos_, mapinfo, fxMix,
                                       1.0f, 1.0f, -1.0f, -1.0f, 0);
-            if (handle != NULL && (*handle) != NULL) {
+            if (handle != NULL && (*handle) != false) {
                 (*handle)->setLifeTime(1, false);
 
                 #if PLATFORM_WII || PLATFORM_SHIELD
@@ -210,7 +210,7 @@ Z2SoundHandlePool* Z2SoundObjBase::startCollisionSE(u32 hitID, u32 mapinfo, Z2So
     }
 
     Z2SoundHandlePool* handle = Z2SoundObjBase::startSound(JAISoundID(hitID), mapinfo, -1);
-    if (handle != NULL && (*handle) != NULL) {
+    if (handle != NULL && (*handle) != false) {
         (*handle)->setUserData(mapinfo);
         if (30 <= mapinfo && mapinfo <= 52) {
             Z2Audible* audible = (Z2Audible*)(*handle)->getAudible();
@@ -251,7 +251,7 @@ Z2SoundHandlePool* Z2DopplerSoundObjBase::startSound(JAISoundID soundID, u32 map
     pos_ = NULL;
 
     Z2SoundHandlePool* handle = Z2SoundObjBase::startSound(soundID, mapinfo, reverb);
-    if (pos != NULL && handle != NULL && (*handle) != NULL) {
+    if (pos != NULL && handle != NULL && (*handle) != false) {
         if ((*handle)->acceptsNewAudible()) {
             (*handle)->newAudible(*pos, &field_0x20, 0, NULL);
         }
@@ -266,7 +266,7 @@ Z2SoundHandlePool* Z2DopplerSoundObjBase::startLevelSound(JAISoundID soundID, u3
     pos_ = NULL;
 
     Z2SoundHandlePool* handle = Z2SoundObjBase::startLevelSound(soundID, mapinfo, reverb);
-    if (pos != NULL && handle != NULL && (*handle) != NULL) {
+    if (pos != NULL && handle != NULL && (*handle) != false) {
         if ((*handle)->acceptsNewAudible()) {
             (*handle)->newAudible(*pos, &field_0x20, 0, NULL);
         }
@@ -285,7 +285,7 @@ void Z2SoundObjSimple::init(Vec* posPtr, u8 handleNum) {
 Z2SoundHandlePool* Z2SoundObjSimple::startSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
     Z2SoundHandlePool* handle = Z2SoundObjBase::startSound(soundID, mapinfo, reverb);
 
-    if (soundID == Z2SE_AL_UKI_POKOPOKO && handle != NULL && (*handle) != NULL) {
+    if (soundID == Z2SE_AL_UKI_POKOPOKO && handle != NULL && (*handle) != false) {
         f32 volume = Z2Calc::getParamByExp((f32)mapinfo, 0.0f, 127.0f, 0.2f, 0.4f, 1.0f, Z2Calc::CURVE_POSITIVE);
         f32 pitch = Z2Calc::getParamByExp((f32)mapinfo, 0.0f, 127.0f, 0.2f, 0.6f, 1.2f, Z2Calc::CURVE_POSITIVE);
         (*handle)->getAuxiliary().movePitch(pitch, 0);
@@ -298,7 +298,7 @@ Z2SoundHandlePool* Z2SoundObjSimple::startSound(JAISoundID soundID, u32 mapinfo,
 Z2SoundHandlePool* Z2SoundObjSimple::startLevelSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
     Z2SoundHandlePool* handle = Z2SoundObjBase::startLevelSound(soundID, mapinfo, reverb);
 
-    if (handle != NULL && (*handle) != NULL) {
+    if (handle != NULL && (*handle) != false) {
         f32 pitch = 1.0f;
         f32 volume = 1.0f;
         switch (soundID) {
@@ -502,7 +502,7 @@ void Z2SoundObjAnime::startSoundInner(const JGeometry::TVec3<f32>& pos, f32 para
         u32 id = getSoundID(animationSound, pos, param_1);
         if (!Z2GetSeMgr()->isSoundCulling(id)) {
             JAISoundHandle* handle = getHandleUserData(user_data);
-            if (handle != NULL && (*handle) != NULL && (*handle)->getAnimationState() != 1) {
+            if (handle != NULL && (*handle) != false && (*handle)->getAnimationState() != 1) {
                 handle = NULL;
             }
 
@@ -514,7 +514,7 @@ void Z2SoundObjAnime::startSoundInner(const JGeometry::TVec3<f32>& pos, f32 para
                 bool result = soundStarter->startSound(id, handle, &pos, mapinfo, (f32)reverb / 127.0f,
                                                        animationSound->field_0x0c, (f32)animationSound->field_0x14 / 127.0f,
                                                        -1.0f, -1.0f, 0);
-                if ((*handle) != NULL) {
+                if ((*handle) != false) {
                     (*handle)->setAnimationState(1);
                     (*handle)->setUserData(user_data);
                     if (animationSound->setsLifeTime()) {

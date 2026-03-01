@@ -904,12 +904,12 @@ int daNpc_Uri_c::selectAction() {
 
     switch (mType) {
     case TYPE_1:
-        if (field_0x100d != NULL) {
+        if (field_0x100d != 0) {
             field_0xfc0[0] = &daNpc_Uri_c::sitWait;
         } else {
-            if (field_0x100e != NULL) {
+            if (field_0x100e != 0) {
                 /* T_0007 - Ordon Village - During Uli's pick-up tutorial */
-                if (daNpcT_chkTmpBit(7) && field_0x100f == NULL) {
+                if (daNpcT_chkTmpBit(7) && field_0x100f == 0) {
                     field_0xfc0[0] = &daNpc_Uri_c::walk;
                 } else {
                     field_0xfc0[0] = &daNpc_Uri_c::wait;
@@ -981,7 +981,7 @@ int daNpc_Uri_c::getTutorialCond(cXyz param_1) {
             field_0x1000 = mpHIO->m.field_0xa8 - 100.0f;
             return 5;
         }
-        if (field_0x1009 != NULL) {
+        if (field_0x1009 != 0) {
             return 8;
         }
     }

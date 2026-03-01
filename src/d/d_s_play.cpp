@@ -554,7 +554,7 @@ static int phase_3(dScnPly_c* i_this) {
         return cPhs_INIT_e;
     }
 
-    if (!i_this->field_0x1d0 == NULL && !i_this->field_0x1d0->sync()) {
+    if (i_this->field_0x1d0 != NULL && !i_this->field_0x1d0->sync()) {
         return cPhs_INIT_e;
     }
 

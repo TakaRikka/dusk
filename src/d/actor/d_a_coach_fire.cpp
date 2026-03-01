@@ -113,11 +113,11 @@ int daCoachFire_c::execute() {
         dAttention_c* attn = dComIfGp_getAttention();
         if (attn->LockonTruth()) {
             if (attn->LockonTarget(0) != this) {
-                if (coach->deleteFireArrowFromList(fopAcM_GetID(this)) != NULL) {
+                if (coach->deleteFireArrowFromList(fopAcM_GetID(this)) != false) {
                     fopAcM_delete(this);
                 }
             }
-        } else if (coach->deleteFireArrowFromList(fopAcM_GetID(this)) != NULL) {
+        } else if (coach->deleteFireArrowFromList(fopAcM_GetID(this)) != false) {
             fopAcM_delete(this);
         }
     }

@@ -421,7 +421,7 @@ int daNpcRafrel_c::createHeapCallBack(fopAc_ac_c* i_this) {
 }
 
 int daNpcRafrel_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
-    if (param_1 == NULL) {
+    if (param_1 == 0) {
         J3DModel* mdl_p = j3dSys.getModel();
         daNpcRafrel_c* i_this = (daNpcRafrel_c*)mdl_p->getUserArea();
 
