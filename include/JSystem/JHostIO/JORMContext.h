@@ -249,7 +249,7 @@ public:
      */
     DEFINE_GEN_SLIDER(u8, 0x100 | jhostio::EKind_8B)
     DEFINE_GEN_SLIDER(s16, jhostio::EKind_16B)
-    DEFINE_GEN_SLIDER(f32, JORPropertyEvent::EKind_FloatValue | jhostio::EKind_32B)
+    DEFINE_GEN_SLIDER(f32, (u32)JORPropertyEvent::EKind_FloatValue | (u32)jhostio::EKind_32B)
     DEFINE_GEN_SLIDER(s32, jhostio::EKind_32B)
 
     DEFINE_GEN_SLIDER_ID(f64, JORPropertyEvent::EKind_ValueID | JORPropertyEvent::EKind_FloatValue)

@@ -4083,7 +4083,7 @@ int daB_DR_c::create() {
                 gravity = -3.0f;
 
                 mSound.init(&current.pos, &eyePos, 3, 1);
-                mColliderStts.Init(0x19, NULL, this);
+                mColliderStts.Init(0x19, 0, this);
 
                 fopAcM_OnStatus(this, 0x4000);
 

@@ -509,7 +509,7 @@ int daObjBATTA_c::execute() {
     action();
     mBrk->play();
     mBtk->play();
-    mpMorf->play(NULL, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+    mpMorf->play(0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
     mtx_set();
     if (field_0x9f0 == 0) {
         mSph.SetC(current.pos);

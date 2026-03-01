@@ -831,7 +831,7 @@ static void demo_camera(obj_so_class* i_this) {
             // fallthrough
         case 2:
             sp3c.set(12459.0f, 3152.0f, 4628.0f);
-            daPy_getPlayerActorClass()->setPlayerPosAndAngle(&sp3c, 0xfffffaee, 0);
+            daPy_getPlayerActorClass()->setPlayerPosAndAngle(&sp3c, -1298, 0);
             i_this->mDemoCamCenter.x = a_this->current.pos.x;
             i_this->mDemoCamCenter.z = a_this->current.pos.z;
             sp3c.y = (a_this->current.pos.y + 150.0f) - 50.0f;

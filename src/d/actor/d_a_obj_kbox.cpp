@@ -62,7 +62,7 @@ static void break_eff(obj_kbox_class* i_this) {
                                                              fopAcM_GetRoomNo(&i_this->mActor), NULL, NULL, &particleScale);
     dPa_modelEcallBack::setModel(pEmitter, kibako_bmd, i_this->mActor.tevStr, 3, NULL, 0, 0);
     for (int i = 0; i < 3; i++) {
-        dComIfGp_particle_set(particle_id[i], &emitterPos, 0, &particleScale, 0xff, 0, 0xffffffff,
+        dComIfGp_particle_set(particle_id[i], &emitterPos, 0, &particleScale, 0xff, 0, -1,
                               0, 0, 0);
     }
 }
@@ -213,7 +213,7 @@ static void kbox_float(obj_kbox_class* i_this) {
             i_this->field_0x5a4 + i_this->field_0x590 + i_this->field_0x58c + i_this->field_0x5ac;
         i_this->field_0x9e8 = dComIfGp_particle_set(i_this->field_0x9e8, 0x86c3,
                                                   &cStack_88, &a_this->tevStr, &a_this->shape_angle,
-                                                  &cStack_7c, 0xff, 0, 0xffffffff, 0, 0, 0);
+                                                  &cStack_7c, 0xff, 0, -1, 0, 0, 0);
         if (i_this->field_0x5ac <= -50.0f) {
             fopAcM_delete(a_this);
             dComIfGp_particle_set(0x86c4, &cStack_88, &a_this->tevStr, &a_this->shape_angle,

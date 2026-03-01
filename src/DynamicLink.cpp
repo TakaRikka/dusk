@@ -224,7 +224,7 @@ bool DynamicModuleControl::do_load() {
             if (mModule == NULL) {
                 snprintf(buffer, 64, "/rel/Final/Release/%s.rel", mName);
                 mModule = (OSModuleHeader*)JKRDvdToMainRam(
-                    buffer, NULL, EXPAND_SWITCH_UNKNOWN1, NULL, heap,
+                    buffer, NULL, EXPAND_SWITCH_UNKNOWN1, 0, heap,
                     JKRDvdRipper::ALLOC_DIRECTION_FORWARD, 0, NULL, NULL);
                 if (mModule != NULL) {
                     mSize = 0;

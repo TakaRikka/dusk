@@ -386,7 +386,7 @@ int daNpc_Maro_c::Execute() {
         setSellItemMax(getMaxNumItem());
         field_0xf60 = -1;
         setMasterType(2);
-        mShopCamAction.setCamDataIdx(NULL);
+        mShopCamAction.setCamDataIdx(0);
         mShopCamAction.setCamAction(NULL);
         field_0x1131 = 1;
     }

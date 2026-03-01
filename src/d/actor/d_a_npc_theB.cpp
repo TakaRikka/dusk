@@ -1177,10 +1177,10 @@ int daNpcTheB_c::EvCut_PersonalCombatIntro(int i_staffId) {
 
     if (eventManager.getIsAddvance(i_staffId)) {
         switch (*cutName) {
-            case MULTI_CHAR('0001'):
+            case '0001':
                 break;
                 
-            case MULTI_CHAR('0002'):
+            case '0002':
                 initTalk(0x16, NULL);
                 setLookMode(LOOK_PLAYER);
                 mActorMngrs[0].entry(daPy_getPlayerActorClass());
@@ -1205,10 +1205,10 @@ int daNpcTheB_c::EvCut_PersonalCombatIntro(int i_staffId) {
     }
 
     switch (*cutName) {
-        case MULTI_CHAR('0001'):
+        case '0001':
             return 1;
         
-        case MULTI_CHAR('0002'):
+        case '0002':
             if (talkProc(NULL, TRUE, NULL)) {
                 dComIfGs_onSaveDunSwitch(52);
                 dComIfGs_onSaveDunSwitch(53);
@@ -1230,7 +1230,7 @@ int daNpcTheB_c::EvCut_PersonalCombatRevenge(int i_staffId) {
 
     if (eventManager.getIsAddvance(i_staffId)) {
         switch (*cutName) {
-            case MULTI_CHAR('0001'): {
+            case '0001': {
                 fopAc_ac_c* actor_p = getEvtAreaTagP(5, 0);
                 cXyz* pos = dComIfGp_evmng_getMyXyzP(i_staffId, "pos");
                 int* angle = dComIfGp_evmng_getMyIntegerP(i_staffId, "angle");
@@ -1249,13 +1249,13 @@ int daNpcTheB_c::EvCut_PersonalCombatRevenge(int i_staffId) {
                 break;
             }
             
-            case MULTI_CHAR('0002'):
+            case '0002':
                 initTalk(0x17, NULL);
                 setLookMode(LOOK_PLAYER);
                 mActorMngrs[0].entry(daPy_getPlayerActorClass());
                 break;
 
-            case MULTI_CHAR('0003'):
+            case '0003':
                 break;
 
             default:
@@ -1283,19 +1283,19 @@ int daNpcTheB_c::EvCut_PersonalCombatRevenge(int i_staffId) {
     }
 
     switch (*cutName) {
-        case MULTI_CHAR('0001'):
+        case '0001':
             if (getCoachSpeed() == 0.0f) {
                 return 1;
             }
             break;
         
-        case MULTI_CHAR('0002'):
+        case '0002':
             if (talkProc(NULL, TRUE, NULL)) {
                 return 1;
             }
             break;
 
-        case MULTI_CHAR('0003'):
+        case '0003':
             return 1;
 
         default:
@@ -1412,7 +1412,7 @@ int daNpcTheB_c::EvCut_AnnulationFieldRace(int i_staffId) {
 
     if (eventManager.getIsAddvance(i_staffId)) {
         switch (*cutName) {
-            case MULTI_CHAR('0001'):
+            case '0001':
                 if (startAndGoal_p != NULL) {
                     startAndGoal_p->readyStartTimer();
                 }
@@ -1425,7 +1425,7 @@ int daNpcTheB_c::EvCut_AnnulationFieldRace(int i_staffId) {
     }
 
     switch (*cutName) {
-        case MULTI_CHAR('0001'):
+        case '0001':
             if (startAndGoal_p != NULL && startAndGoal_p->isStartCheck()) {
                 return 1;
             }
@@ -1445,15 +1445,15 @@ int daNpcTheB_c::EvCut_TheBHint(int i_staffId) {
 
     if (eventManager.getIsAddvance(i_staffId)) {
         switch (*cutName) {
-            case MULTI_CHAR('0001'):
+            case '0001':
                 setMotionAnm(ANM_SIT, 0.0f);
                 break;
             
-            case MULTI_CHAR('0002'):
+            case '0002':
                 initTalk(mHintMsgNo, NULL);
                 break;
 
-            case MULTI_CHAR('0003'): {
+            case '0003': {
                 cXyz pos;
                 csXyz angle;
                 daNpcF_getPlayerInfoFromPlayerList(field_0xe04, mRoomNo, pos, angle);
@@ -1480,11 +1480,11 @@ int daNpcTheB_c::EvCut_TheBHint(int i_staffId) {
     }
 
     switch (*cutName) {
-        case MULTI_CHAR('0001'):
-        case MULTI_CHAR('0003'):
+        case '0001':
+        case '0003':
             return 1;
         
-        case MULTI_CHAR('0002'):
+        case '0002':
             if (talkProc(NULL, TRUE, NULL)) {
                 mHintEvtFlag = 0;
                 return 1;
@@ -1505,22 +1505,22 @@ int daNpcTheB_c::EvCut_CoachGuardGameOver(int i_staffId) {
 
     if (eventManager.getIsAddvance(i_staffId)) {
         switch (*cutName) {
-            case MULTI_CHAR('0001'):
+            case '0001':
                 Z2GetAudioMgr()->bgmStart(Z2BGM_GAME_OVER, 0, 0);
                 break;
 
-            case MULTI_CHAR('0002'): {
+            case '0002': {
                 daNpcCoach_c* coach_p = (daNpcCoach_c*)fopAcM_SearchByID(parentActorID);
                 cXyz pos(0.0f, -30000.0f, 0.0f);
                 coach_p->setPosAngle(pos, shape_angle);
                 break;
             }
             
-            case MULTI_CHAR('0003'):
+            case '0003':
                 ((daCoach2D_c*)fpcM_SearchByName(PROC_COACH2D))->hide();
                 break;
 
-            case MULTI_CHAR('0004'):
+            case '0004':
                 break;
 
             default:
@@ -1530,12 +1530,12 @@ int daNpcTheB_c::EvCut_CoachGuardGameOver(int i_staffId) {
     }
 
     switch (*cutName) {
-        case MULTI_CHAR('0001'):
-        case MULTI_CHAR('0002'):
-        case MULTI_CHAR('0003'):
+        case '0001':
+        case '0002':
+        case '0003':
             return 1;
         
-        case MULTI_CHAR('0004'):
+        case '0004':
             daPy_getPlayerActorClass()->onForceGameOver();
             return 1;
 

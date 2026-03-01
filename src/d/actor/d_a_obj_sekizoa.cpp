@@ -255,7 +255,7 @@ int daObj_Sekizoa_c::CreateHeap() {
     }
     if (mType == TYPE_6) {
         int success_create = mInvModel.create(mpMorf[0]->getModel(), 1);
-        if (success_create == NULL) {
+        if (success_create == 0) {
             return 0;
         }
 
@@ -736,7 +736,7 @@ void daObj_Sekizoa_c::setAttnPos() {
         mpMorf[1]->modelCalc();
     }
     if (mpMcaMorf != NULL) {
-        ((mDoExt_McaMorfSO*)mpMcaMorf)->play(NULL, 0);
+        ((mDoExt_McaMorfSO*)mpMcaMorf)->play(0, 0);
         if (mType == TYPE_1 || mType == TYPE_3 || mType == TYPE_5) {
             mDoMtx_stack_c::copy(mpMorf[0]->getModel()->getAnmMtx(7));
         } else {

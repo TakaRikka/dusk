@@ -492,7 +492,7 @@ void dMenu_Letter_c::read_open_init() {
         }
         J2DTextBox* text2 = (J2DTextBox*)field_0x2ec[i]->getPanePtr();
         mpString->getStringPage(dMenu_Letter::getLetterText(idx), field_0x3e3 - 1, LINE_MAX, text2, text1,
-                                NULL, NULL, NULL);
+                                NULL, NULL, 0);
     }
     field_0x3e2 = mpString->getPageMax(LINE_MAX);
     if (field_0x3e2 > 1) {
@@ -642,7 +642,7 @@ void dMenu_Letter_c::read_next_fadein_init() {
             text1 = (J2DTextBox*)field_0x2f4[i]->getPanePtr();
         }
         J2DTextBox* text2 = (J2DTextBox*)field_0x2ec[i]->getPanePtr();
-        mpString->getStringPage(dMenu_Letter::getLetterText(idx), field_0x3e3 - 1, LINE_MAX, text2, text1, NULL, NULL, NULL);
+        mpString->getStringPage(dMenu_Letter::getLetterText(idx), field_0x3e3 - 1, LINE_MAX, text2, text1, NULL, NULL, 0);
     }
     char acStack_30[10];
     sprintf(acStack_30, "%d/%d", field_0x3e3, field_0x3e2);

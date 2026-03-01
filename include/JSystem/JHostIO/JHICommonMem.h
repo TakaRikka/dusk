@@ -2,17 +2,14 @@
 #define JHICOMMONMEM_H
 
 #include <dolphin/types.h>
+#include "dusk/endian.h"
 
 inline u32 JHIhtonl(u32 v) {
-#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-    return v;
-#else
-    // todo
-#endif
+    return BSWAP32(v);
 }
 
 inline u32 JHIntohl(u32 v) {
-    return v;
+    return BSWAP32(v);
 }
 
 template<typename T> class JHIComPortManager;

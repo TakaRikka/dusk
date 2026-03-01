@@ -14,7 +14,7 @@ extern const char ga4cSignature[4];
 
 const int PARAGRAPH_DATA = 1;
 
-typedef enum TEComposite {
+enum TEComposite {
     /* 0x0 */ COMPOSITE_NONE,
     /* 0x1 */ COMPOSITE_RAW,
     /* 0x2 */ COMPOSITE_IDX,

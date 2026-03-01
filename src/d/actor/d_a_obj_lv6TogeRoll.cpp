@@ -206,7 +206,7 @@ void daTogeRoll_c::moveTogeRoll() {
             &daTogeRoll_c::modeBound, &daTogeRoll_c::modeBound2,   &daTogeRoll_c::modeBoundWait,
         };
 
-        if (field_0x5dc == NULL) {
+        if (field_0x5dc == 0) {
             for (int i = 0; i < 8; i++) {
                 if (mSph[i].ChkCoHit()) {
                     fopAc_ac_c* hit_actor = dCc_GetAc(mSph[i].GetCoHitObj()->GetAc());
@@ -264,7 +264,7 @@ void daTogeRoll_c::init_modeBoundWait() {
 }
 
 void daTogeRoll_c::modeBoundWait() {
-    if (field_0x5db != NULL) {
+    if (field_0x5db != 0) {
         field_0x5db -= 1;
     } else {
         field_0x5dc = 0;

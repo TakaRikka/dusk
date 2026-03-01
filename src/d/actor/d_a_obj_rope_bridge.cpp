@@ -16,7 +16,7 @@ static char* l_ropeArcName = "L_Ropest";
 
 void daObjRBridge_c::initBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(NULL, current.angle.y, 0);
+    mDoMtx_stack_c::ZXYrotM(0, current.angle.y, 0);
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
 
     mpBrgModel->setBaseScale(scale);

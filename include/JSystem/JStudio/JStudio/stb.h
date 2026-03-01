@@ -86,7 +86,7 @@ public:
     const void* getSequence() const { return pSequence; }
     void setSequence_(const void* arg1) { pSequence = arg1; }
     const void* getSequence_offset(s32 i_no) const {
-        int s32Val = (intptr_t)getSequence();
+        intptr_t s32Val = (intptr_t)getSequence();
         return (const void*)(s32Val + i_no);
     }
     const void* getSequence_next() const { return pSequence_next; }

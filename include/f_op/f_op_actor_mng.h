@@ -423,7 +423,14 @@ inline BOOL fopAcM_CULLSIZE_IS_BOX(int i_culltype) {
            i_culltype == fopAc_CULLBOX_CUSTOM_e;
 }
 
-inline const cXyz& fopAcM_getCullSizeSphereCenter(const fopAc_ac_c* i_actor) {
+inline
+#ifdef __MWERKS__
+// In the original code, this constructs a temporary and returns a reference to it
+const cXyz&
+#else
+const Vec&
+#endif
+fopAcM_getCullSizeSphereCenter(const fopAc_ac_c* i_actor) {
     return i_actor->cull.sphere.center;
 }
 

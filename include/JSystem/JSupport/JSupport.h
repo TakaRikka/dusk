@@ -24,7 +24,7 @@ T* JSUConvertOffsetToPtr(const void* ptr, u32 offset) {
 T* JSUConvertOffsetToPtr(const void* ptr, const void* offset) {
 #endif
     T* ret;
-    if (offset == NULL) {
+    if (offset == 0) {
         ret = NULL;
     } else {
         ret = (T*)((intptr_t)ptr + (intptr_t)offset);

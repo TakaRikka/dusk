@@ -279,7 +279,7 @@ int daObjTks_c::createHeapCallBack(fopAc_ac_c* i_this) {
 }
 
 int daObjTks_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
-    if (param_1 == NULL) {
+    if (param_1 == 0) {
         J3DModel* mdl_p = j3dSys.getModel();
         daObjTks_c* a_this = (daObjTks_c*)mdl_p->getUserArea();
 

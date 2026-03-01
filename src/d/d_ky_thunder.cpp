@@ -228,6 +228,8 @@ int dThunder_c::create() {
         #ifdef __MWERKS__
         f32 tmp = __frsqrtes(var_f29_2);
         var_f29_2 = tmp * var_f29_2;
+        #else
+        var_f29_2 = sqrtf(var_f29_2);
         #endif
     }
 

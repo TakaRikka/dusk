@@ -306,7 +306,7 @@ int daDoor20_c::checkOpenMsgDoor(int* param_1) {
         *param_1 = 0;
         return 1;
     }
-    field_0x624.init(NULL, msgNo, NULL, NULL);
+    field_0x624.init(NULL, msgNo, 0, NULL);
     int rv = field_0x624.checkOpenDoor(this, param_1);
     dMsgObject_endFlowGroup();
     return rv;

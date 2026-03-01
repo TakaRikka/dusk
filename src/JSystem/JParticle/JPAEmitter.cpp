@@ -39,7 +39,7 @@ void JPABaseEmitter::init(JPAEmitterManager* param_0, JPAResource* param_1) {
     mGlobalPrmClr.r = mGlobalPrmClr.g = mGlobalPrmClr.b = mGlobalPrmClr.a = mGlobalEnvClr.r = mGlobalEnvClr.g = mGlobalEnvClr.b = mGlobalEnvClr.a = 0xff;
     param_1->getBsp()->getPrmClr(&mPrmClr);
     param_1->getBsp()->getEnvClr(&mEnvClr);
-    mpUserWork = NULL;
+    mpUserWork = 0;
     mScaleOut = 1.0f;
     mEmitCount = 0.0f;
     initStatus(0x30);

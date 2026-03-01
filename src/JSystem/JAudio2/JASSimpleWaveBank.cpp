@@ -42,7 +42,7 @@ JASWaveArc* JASSimpleWaveBank::getWaveArc(u32 no) {
 int JASSimpleWaveBank::TWaveHandle::getWavePtr() const {
     void* base = mHeap->getBase();
     if (base == NULL) {
-        return NULL;
+        return 0;
     }
     return (intptr_t)base + mWaveInfo.field_0x08;
 }

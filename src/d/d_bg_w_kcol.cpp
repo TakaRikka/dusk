@@ -689,9 +689,9 @@ void dBgWKCol::ShdwDraw(cBgS_ShdwDraw* param_0) {
 
                     do {
                         stepY_sp78 = 1000000;
-                        best1_sp70 = NULL;
-                        best2_sp6C = NULL;
-                        best3_sp68 = NULL;
+                        best1_sp70 = 0;
+                        best2_sp6C = 0;
+                        best3_sp68 = 0;
 
                         int x_sp44 = minX_spA0;
                         do {

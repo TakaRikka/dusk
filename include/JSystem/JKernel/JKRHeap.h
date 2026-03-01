@@ -210,16 +210,22 @@ public:
     static JKRErrorHandler mErrorHandler;
 };
 
+#ifndef TARGET_PC
 void* operator new(size_t size);
+#endif
 void* operator new(size_t size, int alignment);
 void* operator new(size_t size, JKRHeap* heap, int alignment);
 
+#ifndef TARGET_PC
 void* operator new[](size_t size);
+#endif
 void* operator new[](size_t size, int alignment);
 void* operator new[](size_t size, JKRHeap* heap, int alignment);
 
+#ifndef TARGET_PC
 void operator delete(void* ptr);
 void operator delete[](void* ptr);
+#endif
 
 void JKRDefaultMemoryErrorRoutine(void* heap, u32 size, int alignment);
 

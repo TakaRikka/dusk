@@ -517,7 +517,7 @@ int daTag_AllMato_c::checkCrsMato2() {
             }
 
             fopAc_ac_c* sp18 = NULL;
-            int sp14 = NULL;
+            int sp14 = 0;
 
             for (int i = 0; i < 499; i++) {
                 for (int j = 0; j < mBouMatoActorNum; j++) {

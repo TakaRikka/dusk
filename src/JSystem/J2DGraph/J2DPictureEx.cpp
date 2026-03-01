@@ -917,7 +917,7 @@ JUTTexture* J2DPictureEx::getTexture(u8 param_0) const {
 
 u8 J2DPictureEx::getTextureCount() const {
     if (mMaterial == NULL) {
-        return NULL;
+        return 0;
     }
 
     return mMaterial->getTexGenBlock()->getTexGenNum();

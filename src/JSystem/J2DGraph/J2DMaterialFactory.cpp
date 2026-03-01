@@ -248,7 +248,7 @@ u16 J2DMaterialFactory::newTexNo(int param_0, int param_1) const {
     if (iVar2->field_0x38[param_1] != 0xffff) {
         return field_0x28[iVar2->field_0x38[param_1]];
     }
-    return 0x1FFFF;
+    return 0xFFFF;
 }
 
 u16 J2DMaterialFactory::newFontNo(int param_0) const {
@@ -256,7 +256,7 @@ u16 J2DMaterialFactory::newFontNo(int param_0) const {
     if (iVar2->field_0x48 != 0xffff) {
         return field_0x2c[iVar2->field_0x48];
     }
-    return 0x1FFFF;
+    return 0xFFFF;
 }
 
 J2DTevOrder J2DMaterialFactory::newTevOrder(int param_0, int param_1) const {

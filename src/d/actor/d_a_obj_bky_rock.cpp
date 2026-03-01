@@ -68,7 +68,7 @@ int daBkyRock_c::draw() {
         
         mModels[mMode], &tevStr);
     if (field_0x57a) {
-       dMdl_c* dMdl = dMdl_mng_c::entry(mModels[2]->getModelData(), NULL, current.roomNo);
+       dMdl_c* dMdl = dMdl_mng_c::entry(mModels[2]->getModelData(), 0, current.roomNo);
         if (dMdl != NULL) {
             _pieceData* piece = mPieces;
             for (int i = 0; i < 20; i++, piece++) {
