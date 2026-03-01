@@ -66,7 +66,23 @@ static std::string BytesToString(size_t bytes)
     return fmt::format(FMT_STRING("{:.1f}{}"), count, suffixes[s]);
 }
 
+static bool DebugOverlayActive = false;
+
 void DuskImguiDebugOverlay(const AuroraInfo *info) {
+    if (ImGui::BeginMenu(MenuView)) {
+        ImGui::MenuItem("Debug overlay", "F3", &DebugOverlayActive);
+
+        ImGui::EndMenu();
+    }
+
+    if (ImGui::IsKeyPressed(ImGuiKey_F3)) {
+        DebugOverlayActive = !DebugOverlayActive;
+    }
+
+    if (!DebugOverlayActive) {
+        return;
+    }
+
     ImGuiIO &io = ImGui::GetIO();
     ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDecoration |
                                    ImGuiWindowFlags_AlwaysAutoResize |

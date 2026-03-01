@@ -2,10 +2,7 @@
 #include "imgui/imgui.hpp"
 
 #include <array>
-#include <atomic>
 #include <chrono>
-#include <cmath>
-#include <fmt/format.h>
 #include <imgui.h>
 #include <numeric>
 #include <thread>
@@ -14,10 +11,30 @@
 #include "Windows.h"
 #endif
 
+static bool ImguiHidden = false;
+
 void imgui_main(const AuroraInfo *info)
 {
-    DuskImguiDebugOverlay(info);
-    DuskImguiProcesses();
+    if (ImGui::IsKeyPressed(ImGuiKey_F1)) {
+        ImguiHidden = !ImguiHidden;
+    }
+
+    if (ImguiHidden) {
+        return;
+    }
+
+    if (ImGui::BeginMainMenuBar()) {
+        if (ImGui::BeginMenu(MenuView)) {
+            ImGui::MenuItem("Hide UI", "F1", &ImguiHidden);
+            ImGui::EndMenu();
+        }
+
+        DuskImguiDebugOverlay(info);
+        DuskImguiProcesses();
+
+        ImGui::EndMainMenuBar();
+    }
+
 }
 
 class Limiter

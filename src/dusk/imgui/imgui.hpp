@@ -3,6 +3,8 @@
 
 #include <aurora/aurora.h>
 
+inline const char* MenuView = "View";
+
 void DuskImguiDebugOverlay(const AuroraInfo *info);
 void DuskImguiProcesses();
 

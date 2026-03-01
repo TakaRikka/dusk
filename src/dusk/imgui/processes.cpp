@@ -76,7 +76,22 @@ static int ShowCreateRequest(void* p, void*) {
     return 1;
 }
 
+static bool Visible = false;
+
 void DuskImguiProcesses() {
+    if (ImGui::BeginMenu(MenuView)) {
+        ImGui::MenuItem("Process management", "F2", &Visible);
+        ImGui::EndMenu();
+    }
+
+    if (ImGui::IsKeyPressed(ImGuiKey_F2)) {
+        Visible = !Visible;
+    }
+
+    if (!Visible) {
+        return;
+    }
+
     if (ImGui::Begin("Processes")) {
         if (ImGui::BeginTabBar("Tabs")) {
             showTreeRecursive = true;
@@ -102,9 +117,4 @@ void DuskImguiProcesses() {
     }
 
     ImGui::End();
-
-    /*
-     bool open = true;
-    ImGui::ShowDemoWindow(&open);
-    */
 }
