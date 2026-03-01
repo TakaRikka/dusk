@@ -226,7 +226,7 @@ bool DynamicModuleControl::do_load() {
                 mModule = (OSModuleHeader*)JKRDvdToMainRam(
                     buffer, NULL, EXPAND_SWITCH_UNKNOWN1, 0, heap,
                     JKRDvdRipper::ALLOC_DIRECTION_FORWARD, 0, NULL, NULL);
-                if (mModule != NULL) {
+                if (mModule != 0) {
                     mSize = 0;
                     mResourceType = 7;
                 }

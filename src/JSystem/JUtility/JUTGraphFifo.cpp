@@ -18,7 +18,7 @@ JUTGraphFifo::JUTGraphFifo(u32 size) {
         GXInitFifoPtrs(mFifo, mBase, mBase);
     } else {
         mBase = JKRAllocFromSysHeap(mSize + 0xA0, 32);
-        mBase = (void*)ALIGN_NEXT((intptr_t)mBase, 0x20);
+        mBase = (void*)ALIGN_NEXT((uintptr_t)mBase, 0x20);
         mFifo = GXInit(mBase, mSize);
         GXSetColorUpdate(GX_ENABLE);
         data_804514B8 = true;

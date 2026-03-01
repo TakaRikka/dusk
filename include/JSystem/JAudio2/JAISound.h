@@ -5,6 +5,7 @@
 #include "JSystem/JAudio2/JAIAudible.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "global.h"
+#include <cstdint>
 
 class JAISound;
 

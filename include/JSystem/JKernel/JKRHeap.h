@@ -5,6 +5,7 @@
 #include <dolphin/os.h>
 #include "global.h"
 #include <new>
+#include <cstdint>
 
 class JKRHeap;
 typedef void (*JKRErrorHandler)(void*, u32, int);

@@ -35,6 +35,8 @@ public:
     JSU_OUTPUTSTREAM_OPERATOR(signed long long)
     JSU_OUTPUTSTREAM_OPERATOR(unsigned long long)
 
+#undef JSU_OUTPUTSTREAM_OPERATOR
+
     JSUOutputStream& operator<<(const char* param_0) {
         write(param_0);
         return *this;
