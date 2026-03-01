@@ -63,7 +63,7 @@ int fpcSCtRq_phase_SubCreateProcess(standard_create_request_class* i_request) {
     int ret = fpcBs_SubCreate(i_request->base.process);
     static int sSubCreateLogCount = 0;
     if (sSubCreateLogCount < 20) {
-        printf("[DIAG] fpcSCtRq_phase_SubCreateProcess: procName=%d ret=%d\n", i_request->process_name, ret); fflush(stdout);
+        printf("[DIAG] fpcSCtRq_phase_SubCreateProcess: pid=%d procName=%04x ret=%d\n", i_request->base.id, i_request->process_name, ret); fflush(stdout);
         sSubCreateLogCount++;
     }
 
