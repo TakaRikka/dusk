@@ -28,13 +28,17 @@ public:
     JStage::TObject* appendActor(fopAc_ac_c*);
     dDemo_actor_c* getActor(u8);
     dDemo_camera_c* createCamera();
+#if DEBUG
     dDemo_camera_c* createEditorCamera();
+#endif
     dDemo_camera_c* getActiveCamera();
     JStage::TObject* createAmbient();
     JStage::TObject* appendLight();
     JStage::TObject* createFog();
     void remove();
+#if DEBUG
     void removeEditorCamera();
+#endif
 
     dDemo_camera_c* getCamera() { return mpCamera; }
 
