@@ -18,12 +18,15 @@ public:
     s32 write(const void*, s32);
 	void write(const char*);
 
-#ifdef TARGET_PC
-    JSUOutputStream& operator<<(uintptr_t param_0) {
-        write(&param_0, sizeof(uintptr_t));
+    JSUOutputStream& operator<<(u64 param_0) {
+        write(&param_0, sizeof(u64));
         return *this;
     }
-#endif
+
+    JSUOutputStream& operator<<(s64 param_0) {
+        write(&param_0, sizeof(s64));
+        return *this;
+    }
 
 	JSUOutputStream& operator<<(u32 param_0) {
         write(&param_0, sizeof(u32));
