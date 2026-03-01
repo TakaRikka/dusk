@@ -3,21 +3,22 @@
 #include "JSystem/J2DGraph/J2DWindowEx.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"
+#include "dusk/endian.h"
 
 struct J2DWindowExDef {
-    u32 field_0x0[4];
-    u16 field_0x10[4];
+    BE(u32) field_0x0[4];
+    BE(u16) field_0x10[4];
     u8 field_0x18;
     u8 field_0x19;
-    u16 field_0x1A;
-    u16 field_0x1C;
-    u16 field_0x1E;
-    u16 field_0x20;
-    u16 field_0x22;
-    u16 field_0x24;
-    u16 field_0x26;
-    u16 field_0x28[4];
-    u32 field_0x30[4];
+    BE(u16) field_0x1A;
+    BE(u16) field_0x1C;
+    BE(u16) field_0x1E;
+    BE(u16) field_0x20;
+    BE(u16) field_0x22;
+    BE(u16) field_0x24;
+    BE(u16) field_0x26;
+    BE(u16) field_0x28[4];
+    BE(u32) field_0x30[4];
 };
 
 STATIC_ASSERT(sizeof(J2DWindowExDef) == 0x40);

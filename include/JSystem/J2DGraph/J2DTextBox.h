@@ -3,6 +3,7 @@
 
 #include "JSystem/J2DGraph/J2DMaterial.h"
 #include "JSystem/J2DGraph/J2DPane.h"
+#include "dusk/endian.h"
 
 class J2DMaterial;
 class JUTFont;
@@ -24,8 +25,8 @@ enum J2DTextBoxHBinding {
  * 
  */
 struct J2DTbxBlockHeader {
-    /* 0x00 */ u32 mTag;
-    /* 0x04 */ s32 mSize;
+    /* 0x00 */ BE(u32) mTag;
+    /* 0x04 */ BE(s32) mSize;
 };
 
 /**
@@ -33,17 +34,17 @@ struct J2DTbxBlockHeader {
  * 
  */
 struct J2DTextBoxInfo {
-    /* 0x00 */ u16 field_0x0;
-    /* 0x02 */ u16 field_0x2;
-    /* 0x04 */ u16 mMaterialNum;
-    /* 0x06 */ s16 mCharSpace;
-    /* 0x08 */ s16 mLineSpace;
-    /* 0x0A */ u16 mFontSizeX;
-    /* 0x0C */ u16 mFontSizeY;
+    /* 0x00 */ BE(u16) field_0x0;
+    /* 0x02 */ BE(u16) field_0x2;
+    /* 0x04 */ BE(u16) mMaterialNum;
+    /* 0x06 */ BE(s16) mCharSpace;
+    /* 0x08 */ BE(s16) mLineSpace;
+    /* 0x0A */ BE(u16) mFontSizeX;
+    /* 0x0C */ BE(u16) mFontSizeY;
     /* 0x0E */ u8 mHBind;
     /* 0x0F */ u8 mVBind;
-    /* 0x10 */ u32 mCharColor;
-    /* 0x14 */ u32 mGradColor;
+    /* 0x10 */ BE(u32) mCharColor;
+    /* 0x14 */ BE(u32) mGradColor;
     /* 0x18 */ u8 mConnected;
     /* 0x19 */ char field_0x19[3];
     /* 0x1C */ u16 field_0x1c;

@@ -584,7 +584,7 @@ actor_process_profile_definition g_profile_CSTAF = {
     fpcPi_CURRENT_e,        // mListPrio
     PROC_CSTAF,             // mProcName
     &g_fpcLf_Method.base,  // sub_method
-    0x00000B38,             // mSize
+    sizeof(daCstaF_c),      // mSize
     0,                      // mSizeOther
     0,                      // mParameters
     &g_fopAc_Method.base,   // sub_method

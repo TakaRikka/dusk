@@ -4,6 +4,7 @@
 #include "JSystem/J2DGraph/J2DPane.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include "JSystem/JUtility/TColor.h"
+#include "dusk/endian.h"
 
 class J2DMaterial;
 class JUTPalette;
@@ -31,8 +32,8 @@ enum J2DBinding {
  * 
  */
 struct J2DPicHeader {
-    /* 0x0 */ u32 mTag;
-    /* 0x4 */ u32 mSize;
+    /* 0x0 */ BE(u32) mTag;
+    /* 0x4 */ BE(u32) mSize;
 };
 
 /**
@@ -40,12 +41,12 @@ struct J2DPicHeader {
  * 
  */
 struct J2DScrnBlockPictureParameter {
-    /* 0x00 */ u16 field_0x0;
-    /* 0x02 */ u16 mMaterialNum;
-    /* 0x04 */ u16 field_0x4;
-    /* 0x06 */ u16 field_0x6;
-    /* 0x08 */ u16 field_0x8[4];
-    /* 0x10 */ JGeometry::TVec2<s16> field_0x10[4];
+    /* 0x00 */ BE(u16) field_0x0;
+    /* 0x02 */ BE(u16) mMaterialNum;
+    /* 0x04 */ BE(u16) field_0x4;
+    /* 0x06 */ BE(u16) field_0x6;
+    /* 0x08 */ BE(u16) field_0x8[4];
+    /* 0x10 */ JGeometry::TVec2<BE(s16)> field_0x10[4];
     /* 0x20 */ u32 mCornerColor[4];
 };  // Size: 0x30
 

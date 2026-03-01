@@ -118,8 +118,8 @@ J2DTexCoordInfo const j2dDefaultTexCoordInfo[8] = {
     {GX_TG_MTX2x4, GX_TG_TEX6, GX_IDENTITY, 0}, {GX_TG_MTX2x4, GX_TG_TEX7, GX_IDENTITY, 0},
 };
 
-J2DTexMtxInfo const j2dDefaultTexMtxInfo = {1,    1,    255,  255,  0.5f, 0.5f,
-                                            0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f};
+J2DTexMtxInfo const j2dDefaultTexMtxInfo = {1,    1,    255,  255,  {0.5f, 0.5f,
+                                            0.0f}, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f};
 
 J2DIndTexMtxInfo const j2dDefaultIndTexMtxInfo = {{0.5f, 0.0f, 0.0f, 0.0f, 0.5f, 0.0f}, 1};
 

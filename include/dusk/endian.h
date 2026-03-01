@@ -18,9 +18,11 @@
         #include <stdlib.h>
         #define BSWAP16(x) _byteswap_ushort(x)
         #define BSWAP32(x) _byteswap_ulong(x)
+        #define BSWAP64(x) _byteswap_uint64(x)
     #else
         #define BSWAP16(x) __builtin_bswap16(x)
         #define BSWAP32(x) __builtin_bswap32(x)
+        #define BSWAP64(x) __builtin_bswap64(x)
     #endif
 #else
     #define BSWAP16(x) (x)
@@ -31,8 +33,9 @@
 inline u16 be16(u16 val) { return BSWAP16(val); }
 inline s16 be16s(s16 val) { return (s16)BSWAP16((u16)val); }
 inline u32 be32(u32 val) { return BSWAP32(val); }
-
 inline s32 be32s(s32 val) { return (s32)BSWAP32((u32)val); }
+inline u64 be64(u64 val) { return BSWAP64(val); }
+inline s64 be64s(s64 val) { return (s64)BSWAP64((u64)val); }
 
 #ifdef TARGET_PC
 // Helper wrappers so code below reads nicely:
@@ -47,6 +50,12 @@ static inline u32 RES_U32(u32 v) {
 }
 static inline s32 RES_S32(s32 v) {
     return be32s(v);
+}
+static inline u64 RES_U64(u64 v) {
+    return be64(v);
+}
+static inline s64 RES_S64(s64 v) {
+    return be64s(v);
 }
 static inline f32 RES_F32(f32 v) {
     return std::bit_cast<f32, s32>(RES_S32(std::bit_cast<s32, f32>(v)));
@@ -73,6 +82,16 @@ struct BE {
         inner = swap(from);
     }
 
+    T operator--(int dec) {
+        inner -= dec;
+        return swap(inner);
+    }
+
+    T operator++(int inc) {
+        inner += inc;
+        return swap(inner);
+    }
+
     operator T() const {
         return swap(inner);
     }
@@ -94,13 +113,13 @@ constexpr BE<TA>& operator op(BE<TA>& a, TB b) {   \
     return a;                                      \
 }
 
-
 BIN_ASSIGN_OP(&=);
 BIN_ASSIGN_OP(|=);
 BIN_ASSIGN_OP(+=);
 BIN_ASSIGN_OP(/=);
 
 #undef BIN_ASSIGN_OP
+
 
 template<>
 inline u16 BE<u16>::swap(u16 val) {
@@ -120,6 +139,16 @@ inline u32 BE<u32>::swap(u32 val) {
 template<>
 inline s32 BE<s32>::swap(s32 val) {
     return RES_S32(val);
+}
+
+template<>
+inline s64 BE<s64>::swap(s64 val) {
+    return RES_S64(val);
+}
+
+template<>
+inline u64 BE<u64>::swap(u64 val) {
+    return RES_U64(val);
 }
 
 template<>

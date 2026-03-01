@@ -361,6 +361,8 @@ inline s16 __OSf32tos16(__REGISTER f32 inF) {
         psq_st inF, 0(tmpPtr), 0x1, 5
         lha out, 0(tmpPtr)
     }
+#else
+    return (s16)inF; // this is wrong i believe
 #endif
     // clang-format on
 
@@ -381,6 +383,8 @@ inline u8 __OSf32tou8(__REGISTER f32 inF) {
         psq_st inF, 0(tmpPtr), 0x1, 2
         lbz out, 0(tmpPtr)
     }
+#else
+    return (u8)inF; // this is also wrong i believe
 #endif
     // clang-format on
 

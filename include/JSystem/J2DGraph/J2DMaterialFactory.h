@@ -136,38 +136,38 @@ public:
     u8 newDither(int) const;
 
     u8 getMaterialMode(int idx) const {
-        return field_0x4[field_0x8[idx]].field_0x0;
+        return mpMaterialInitData[mpMaterialID[idx]].field_0x0;
     }
 
     u8 getMaterialAlphaCalc(int idx) const {
-        return field_0x4[field_0x8[idx]].field_0x6;
+        return mpMaterialInitData[mpMaterialID[idx]].field_0x6;
     }
 
 private:
-    /* 0x00 */ u16 field_0x0;
+    /* 0x00 */ u16 mMaterialNum;
     /* 0x02 */ u16 field_0x2;
-    /* 0x04 */ J2DMaterialInitData* field_0x4;
-    /* 0x08 */ u16* field_0x8;
-    /* 0x0C */ J2DIndInitData* field_0xc;
-    /* 0x10 */ GXColor* field_0x10;
-    /* 0x14 */ u8* field_0x14;
-    /* 0x18 */ J2DColorChanInfo* field_0x18;
-    /* 0x1C */ u8* field_0x1c;
-    /* 0x20 */ J2DTexCoordInfo* field_0x20;
-    /* 0x24 */ J2DTexMtxInfo* field_0x24;
-    /* 0x28 */ u16* field_0x28;
-    /* 0x2C */ u16* field_0x2c;
-    /* 0x30 */ BE(GXCullMode)* field_0x30;
-    /* 0x34 */ J2DTevOrderInfo* field_0x34;
-    /* 0x38 */ BE(GXColorS10)* field_0x38;
-    /* 0x3C */ GXColor* field_0x3c;
-    /* 0x40 */ u8* field_0x40;
-    /* 0x44 */ J2DTevStageInfo* field_0x44;
-    /* 0x48 */ J2DTevSwapModeInfo* field_0x48;
-    /* 0x4C */ J2DTevSwapModeTableInfo* field_0x4c;
-    /* 0x50 */ J2DAlphaCompInfo* field_0x50;
-    /* 0x54 */ J2DBlendInfo* field_0x54;
-    /* 0x58 */ u8* field_0x58;
+    /* 0x04 */ J2DMaterialInitData* mpMaterialInitData;
+    /* 0x08 */ BE(u16)* mpMaterialID;
+    /* 0x0C */ J2DIndInitData* mpIndInitData;
+    /* 0x10 */ GXColor* mpMatColor;
+    /* 0x14 */ u8* mpColorChanNum;
+    /* 0x18 */ J2DColorChanInfo* mpColorChanInfo;
+    /* 0x1C */ u8* mpTexGenNum;
+    /* 0x20 */ J2DTexCoordInfo* mpTexCoordInfo;
+    /* 0x24 */ J2DTexMtxInfo* mpTexMtxInfo;
+    /* 0x28 */ BE(u16)* mpTexNo;
+    /* 0x2C */ BE(u16)* mpFontNo;
+    /* 0x30 */ BE(GXCullMode)* mpCullMode;
+    /* 0x34 */ J2DTevOrderInfo* mpTevOrderInfo;
+    /* 0x38 */ BE(GXColorS10)* mpTevColor;
+    /* 0x3C */ GXColor* mpTevKColor;
+    /* 0x40 */ u8* mpTevStageNum;
+    /* 0x44 */ J2DTevStageInfo* mpTevStageInfo;
+    /* 0x48 */ J2DTevSwapModeInfo* mpTevSwapModeInfo;
+    /* 0x4C */ J2DTevSwapModeTableInfo* mpTevSwapModeTableInfo;
+    /* 0x50 */ J2DAlphaCompInfo* mpAlphaCompInfo;
+    /* 0x54 */ J2DBlendInfo* mpBlendInfo;
+    /* 0x58 */ u8* mpDither;
 };
 
 #endif /* J2DMATERIALFACTORY_H */

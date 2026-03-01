@@ -5,6 +5,7 @@
 #include "JSystem/JSupport/JSUList.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "dusk/endian.h"
 
 class J2DAnmBase;
 class J2DAnmColor;
@@ -40,8 +41,8 @@ enum J2DBasePosition {
  * 
  */
 struct J2DPaneHeader {
-    /* 0x0 */ u32 mKind;
-    /* 0x4 */ u32 mSize;
+    /* 0x0 */ BE(u32) mKind;
+    /* 0x4 */ BE(u32) mSize;
 };
 
 /**

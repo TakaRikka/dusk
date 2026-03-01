@@ -24,17 +24,17 @@ J2DWindow::J2DWindow(J2DPane* param_0, JSURandomInputStream* param_1, JKRArchive
 
 struct J2DWindowData {
     u8 field_0x0[0x10];
-    u16 field_0x10[4];
+    BE(u16) field_0x10[4];
     u8 field_0x18;
     u8 field_0x19;
-    u16 field_0x1a;
-    u16 field_0x1c;
-    u16 field_0x1e;
-    u16 field_0x20;
-    u16 field_0x22;
-    u16 field_0x24;
+    BE(u16) field_0x1a;
+    BE(u16) field_0x1c;
+    BE(u16) field_0x1e;
+    BE(u16) field_0x20;
+    BE(u16) field_0x22;
+    BE(u16) field_0x24;
     u8 field_0x26[0xa];
-    u32 field_0x30[4];
+    BE(u32) field_0x30[4];
 };
 
 J2DWindow::J2DWindow(J2DPane* param_0, JSURandomInputStream* param_1, J2DMaterial* param_2) : 

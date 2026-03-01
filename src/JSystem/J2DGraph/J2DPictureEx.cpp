@@ -21,11 +21,11 @@ J2DPictureEx::J2DPictureEx(J2DPane* param_0, JSURandomInputStream* param_1, u32 
     field_0x194 = 0;
     field_0x198 = 0;
     s32 origPosition = param_1->getPosition();
-    u32 local_68[2];
+    BE(u32) local_68[2];
     param_1->read(local_68, 8);
     mKind = local_68[0];
     s32 iVar2 = param_1->getPosition();
-    u32 auStack_70[2];
+    BE(u32) auStack_70[2];
     param_1->peek(auStack_70, 8);
     makePaneExStream(param_0, param_1);
     param_1->seek(iVar2 + auStack_70[1], JSUStreamSeekFrom_SET);
@@ -36,7 +36,8 @@ J2DPictureEx::J2DPictureEx(J2DPane* param_0, JSURandomInputStream* param_1, u32 
 
     for (int i = 0; i < 4; i++) {
         field_0x158[i] = aJStack_60.field_0x8[i];
-        field_0x10a[i] = aJStack_60.field_0x10[i];
+        field_0x10a[i].x = aJStack_60.field_0x10[i].x;
+        field_0x10a[i].y = aJStack_60.field_0x10[i].y;
         mCornerColor[i] = JUtility::TColor(aJStack_60.mCornerColor[i]);
     }
 

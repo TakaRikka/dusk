@@ -2,6 +2,7 @@
 #define JSUINPUTSTREAM_H
 
 #include "JSystem/JSupport/JSUIosBase.h"
+#include "dusk/endian.h"
 
 /**
 * @ingroup jsystem-jsupport
@@ -17,31 +18,31 @@ public:
     /* vt[5] */ virtual u32 readData(void*, s32) = 0;
 
     u32 readU32() {
-        u32 val;
+        BE<u32> val;
         this->read(&val, sizeof(val));
         return val;
     }
 
     u32 read32b() {
-        u32 val;
+        BE<u32> val;
         this->read(&val, sizeof(val));
         return val;
     }
 
     s32 readS32() {
-        s32 val;
+        BE<s32> val;
         this->read(&val, sizeof(val));
         return val;
     }
 
     s16 readS16() {
-        s16 val;
+        BE<s16> val;
         this->read(&val, sizeof(val));
         return val;
     }
 
     u16 readU16() {
-        u16 val;
+        BE<u16> val;
         this->read(&val, sizeof(val));
         return val;
     }
@@ -59,18 +60,20 @@ public:
     }
 
     u16 read16b() {
-        u16 val;
+        BE<u16> val;
         this->read(&val, sizeof(val));
         return val;
     }
 
     JSUInputStream& operator>>(u32& dest) {
         read(&dest, 4);
+        be_swap(dest);
         return *this;
     }
 
     JSUInputStream& operator>>(u16& dest) {
         read(&dest, 2);
+        be_swap(dest);
         return *this;
     }
 
@@ -81,6 +84,7 @@ public:
 
     JSUInputStream& operator>>(s16& dest) {
         read(&dest, 2);
+        be_swap(dest);
         return *this;
     }
 
@@ -98,7 +102,9 @@ public:
     }
 
     s32 read(u32& param_0) {
-        return read(&param_0, 4);
+        auto ret = read(&param_0, 4);
+        be_swap(param_0);
+        return ret;
     }
 
     // TODO: return value probably wrong

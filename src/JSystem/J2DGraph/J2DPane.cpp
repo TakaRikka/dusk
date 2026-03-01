@@ -630,23 +630,23 @@ J2DPane* J2DPane::getParentPane() {
 
 /* name unknown */
 struct J2DPaneInfo {
-    /* 0x00 */ u32 mKind;
-    /* 0x04 */ u32 mSize;
-    /* 0x08 */ u16 field_0x8;
-    /* 0x0A */ u16 field_0xa;
+    /* 0x00 */ BE(u32) mKind;
+    /* 0x04 */ BE(u32) mSize;
+    /* 0x08 */ BE(u16) field_0x8;
+    /* 0x0A */ BE(u16) field_0xa;
     /* 0x0B */ u8 mVisible;
     /* 0x0C */ u8 mBasePosition;
-    /* 0x10 */ u64 mInfoTag;
-    /* 0x18 */ u64 mUserInfoTag;
-    /* 0x20 */ f32 mRotOffsetX;
-    /* 0x24 */ f32 mRotOffsetY;
-    /* 0x28 */ f32 mScaleX;
-    /* 0x2C */ f32 mScaleY;
-    /* 0x30 */ f32 mRotateX;
-    /* 0x34 */ f32 mRotateY;
-    /* 0x38 */ f32 mRotateZ;
-    /* 0x3C */ f32 mTranslateX;
-    /* 0x40 */ f32 mTranslateY;
+    /* 0x10 */ BE(u64) mInfoTag;
+    /* 0x18 */ BE(u64) mUserInfoTag;
+    /* 0x20 */ BE(f32) mRotOffsetX;
+    /* 0x24 */ BE(f32) mRotOffsetY;
+    /* 0x28 */ BE(f32) mScaleX;
+    /* 0x2C */ BE(f32) mScaleY;
+    /* 0x30 */ BE(f32) mRotateX;
+    /* 0x34 */ BE(f32) mRotateY;
+    /* 0x38 */ BE(f32) mRotateZ;
+    /* 0x3C */ BE(f32) mTranslateX;
+    /* 0x40 */ BE(f32) mTranslateY;
 };  // Size: 0x48
 
 void J2DPane::makePaneExStream(J2DPane* p_parent, JSURandomInputStream* p_stream) {

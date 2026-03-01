@@ -273,18 +273,18 @@ static actor_method_class daObjHBombkoya_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_HBombkoya = {
-  fpcLy_CURRENT_e,         // mLayerID
-  3,                       // mListID
-  fpcPi_CURRENT_e,         // mListPrio
-  PROC_Obj_HBombkoya,      // mProcName
-  &g_fpcLf_Method.base,   // sub_method
-  0x000007C0,              // mSize
-  0,                       // mSizeOther
-  0,                       // mParameters
-  &g_fopAc_Method.base,    // sub_method
-  675,                     // mPriority
-  &daObjHBombkoya_METHODS, // sub_method
-  0x00040100,              // mStatus
-  fopAc_ACTOR_e,           // mActorType
-  fopAc_CULLBOX_CUSTOM_e,  // cullType
+  fpcLy_CURRENT_e,          // mLayerID
+  3,                        // mListID
+  fpcPi_CURRENT_e,          // mListPrio
+  PROC_Obj_HBombkoya,       // mProcName
+  &g_fpcLf_Method.base,     // sub_method
+  sizeof(daObjHBombkoya_c), // mSize
+  0,                        // mSizeOther
+  0,                        // mParameters
+  &g_fopAc_Method.base,     // sub_method
+  675,                      // mPriority
+  &daObjHBombkoya_METHODS,  // sub_method
+  0x00040100,               // mStatus
+  fopAc_ACTOR_e,            // mActorType
+  fopAc_CULLBOX_CUSTOM_e,   // cullType
 };

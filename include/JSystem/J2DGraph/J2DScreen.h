@@ -4,6 +4,7 @@
 #include "JSystem/J2DGraph/J2DManage.h"
 #include "JSystem/J2DGraph/J2DPane.h"
 #include "JSystem/JUtility/TColor.h"
+#include "dusk/endian.h"
 
 class J2DMaterial;
 class JUTNameTab;
@@ -13,10 +14,10 @@ class JUTNameTab;
  * 
  */
 struct J2DScrnHeader {
-    /* 0x00 */ u32 mTag;
-    /* 0x04 */ u32 mType;
-    /* 0x08 */ u32 mFileSize;
-    /* 0x0C */ u32 mBlockNum;
+    /* 0x00 */ BE(u32) mTag;
+    /* 0x04 */ BE(u32) mType;
+    /* 0x08 */ BE(u32) mFileSize;
+    /* 0x0C */ BE(u32) mBlockNum;
     /* 0x10 */ u8 padding[0x10];
 };
 
@@ -25,10 +26,10 @@ struct J2DScrnHeader {
  * 
  */
 struct J2DScrnInfoHeader {
-    /* 0x0 */ u32 mTag;
-    /* 0x4 */ u32 mSize;
-    /* 0x8 */ u16 mWidth;
-    /* 0xA */ u16 mHeight;
+    /* 0x0 */ BE(u32) mTag;
+    /* 0x4 */ BE(u32) mSize;
+    /* 0x8 */ BE(u16) mWidth;
+    /* 0xA */ BE(u16) mHeight;
     /* 0xC */ u32 mColor;
 };
 
@@ -37,8 +38,8 @@ struct J2DScrnInfoHeader {
  * 
  */
 struct J2DScrnBlockHeader {
-    /* 0x00 */ u32 mTag;
-    /* 0x04 */ s32 mSize;
+    /* 0x00 */ BE(u32) mTag;
+    /* 0x04 */ BE(s32) mSize;
 };
 
 /**

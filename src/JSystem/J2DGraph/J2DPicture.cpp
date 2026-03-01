@@ -45,7 +45,8 @@ J2DPicture::J2DPicture(J2DPane* p_pane, JSURandomInputStream* p_stream, J2DMater
     u16 matNum = picInfo.field_0x4;
 
     for (int i = 0; i < 4; i++) {
-        field_0x10a[i] = picInfo.field_0x10[i];
+        field_0x10a[i].x = picInfo.field_0x10[i].x;
+        field_0x10a[i].y = picInfo.field_0x10[i].y;
         mCornerColor[i] = picInfo.mCornerColor[i];
     }
 

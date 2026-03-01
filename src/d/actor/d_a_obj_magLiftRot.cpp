@@ -367,8 +367,8 @@ actor_process_profile_definition g_profile_Obj_MagLiftRot = {
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio
   PROC_Obj_MagLiftRot,    // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  0x00000634,             // mSize
+  &g_fpcLf_Method.base,   // sub_method
+  sizeof(daMagLiftRot_c), // mSize
   0,                      // mSizeOther
   0,                      // mParameters
   &g_fopAc_Method.base,   // sub_method

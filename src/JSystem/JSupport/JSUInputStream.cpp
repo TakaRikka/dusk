@@ -25,6 +25,7 @@ char* JSUInputStream::read(char* str) {
         setState(IOS_STATE_1);
         return 0;
     }
+    be_swap(sp8);
 
     s32 len = readData(str, sp8);
     str[len] = 0;

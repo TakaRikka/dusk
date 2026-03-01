@@ -9,42 +9,42 @@
 #include <dolphin/types.h>
 
 J2DMaterialFactory::J2DMaterialFactory(J2DMaterialBlock const& param_0) {
-    field_0x0 = param_0.field_0x8;
-    field_0x4 = JSUConvertOffsetToPtr<J2DMaterialInitData>(&param_0, param_0.field_0xc);
-    field_0x8 = JSUConvertOffsetToPtr<u16>(&param_0, param_0.field_0x10);
+    mMaterialNum = param_0.field_0x8;
+    mpMaterialInitData = JSUConvertOffsetToPtr<J2DMaterialInitData>(&param_0, param_0.field_0xc);
+    mpMaterialID = JSUConvertOffsetToPtr<BE(u16)>(&param_0, param_0.field_0x10);
     if (param_0.field_0x18 && param_0.field_0x18 - param_0.field_0x14 > 4) {
-        field_0xc = JSUConvertOffsetToPtr<J2DIndInitData>(&param_0, param_0.field_0x18);
+        mpIndInitData = JSUConvertOffsetToPtr<J2DIndInitData>(&param_0, param_0.field_0x18);
     }
     else {
-        field_0xc = NULL;
+        mpIndInitData = NULL;
     }
-    field_0x30 = JSUConvertOffsetToPtr<BE(GXCullMode)>(&param_0, param_0.field_0x1c);
-    field_0x10 = JSUConvertOffsetToPtr<GXColor>(&param_0, param_0.field_0x20);
-    field_0x14 = JSUConvertOffsetToPtr<u8>(&param_0, param_0.field_0x24);
-    field_0x18 = JSUConvertOffsetToPtr<J2DColorChanInfo>(&param_0, param_0.field_0x28);
-    field_0x1c = JSUConvertOffsetToPtr<u8>(&param_0, param_0.field_0x2c);
-    field_0x20 = JSUConvertOffsetToPtr<J2DTexCoordInfo>(&param_0, param_0.field_0x30);
-    field_0x24 = JSUConvertOffsetToPtr<J2DTexMtxInfo>(&param_0, param_0.field_0x34);
-    field_0x28 = JSUConvertOffsetToPtr<u16>(&param_0, param_0.field_0x38);
-    field_0x2c = JSUConvertOffsetToPtr<u16>(&param_0, param_0.field_0x3c);
-    field_0x34 = JSUConvertOffsetToPtr<J2DTevOrderInfo>(&param_0, param_0.field_0x40);
-    field_0x38 = JSUConvertOffsetToPtr<BE(GXColorS10)>(&param_0, param_0.field_0x44);
-    field_0x3c = JSUConvertOffsetToPtr<GXColor>(&param_0, param_0.field_0x48);
-    field_0x40 = JSUConvertOffsetToPtr<u8>(&param_0, param_0.field_0x4c);
-    field_0x44 = JSUConvertOffsetToPtr<J2DTevStageInfo>(&param_0, param_0.field_0x50);
-    field_0x48 = JSUConvertOffsetToPtr<J2DTevSwapModeInfo>(&param_0, param_0.field_0x54);
-    field_0x4c = JSUConvertOffsetToPtr<J2DTevSwapModeTableInfo>(&param_0, param_0.field_0x58);
-    field_0x50 = JSUConvertOffsetToPtr<J2DAlphaCompInfo>(&param_0, param_0.field_0x5c);
-    field_0x54 = JSUConvertOffsetToPtr<J2DBlendInfo>(&param_0, param_0.field_0x60);
-    field_0x58 = JSUConvertOffsetToPtr<u8>(&param_0, param_0.field_0x64);
+    mpCullMode = JSUConvertOffsetToPtr<BE(GXCullMode)>(&param_0, param_0.field_0x1c);
+    mpMatColor = JSUConvertOffsetToPtr<GXColor>(&param_0, param_0.field_0x20);
+    mpColorChanNum = JSUConvertOffsetToPtr<u8>(&param_0, param_0.field_0x24);
+    mpColorChanInfo = JSUConvertOffsetToPtr<J2DColorChanInfo>(&param_0, param_0.field_0x28);
+    mpTexGenNum = JSUConvertOffsetToPtr<u8>(&param_0, param_0.field_0x2c);
+    mpTexCoordInfo = JSUConvertOffsetToPtr<J2DTexCoordInfo>(&param_0, param_0.field_0x30);
+    mpTexMtxInfo = JSUConvertOffsetToPtr<J2DTexMtxInfo>(&param_0, param_0.field_0x34);
+    mpTexNo = JSUConvertOffsetToPtr<BE(u16)>(&param_0, param_0.field_0x38);
+    mpFontNo = JSUConvertOffsetToPtr<BE(u16)>(&param_0, param_0.field_0x3c);
+    mpTevOrderInfo = JSUConvertOffsetToPtr<J2DTevOrderInfo>(&param_0, param_0.field_0x40);
+    mpTevColor = JSUConvertOffsetToPtr<BE(GXColorS10)>(&param_0, param_0.field_0x44);
+    mpTevKColor = JSUConvertOffsetToPtr<GXColor>(&param_0, param_0.field_0x48);
+    mpTevStageNum = JSUConvertOffsetToPtr<u8>(&param_0, param_0.field_0x4c);
+    mpTevStageInfo = JSUConvertOffsetToPtr<J2DTevStageInfo>(&param_0, param_0.field_0x50);
+    mpTevSwapModeInfo = JSUConvertOffsetToPtr<J2DTevSwapModeInfo>(&param_0, param_0.field_0x54);
+    mpTevSwapModeTableInfo = JSUConvertOffsetToPtr<J2DTevSwapModeTableInfo>(&param_0, param_0.field_0x58);
+    mpAlphaCompInfo = JSUConvertOffsetToPtr<J2DAlphaCompInfo>(&param_0, param_0.field_0x5c);
+    mpBlendInfo = JSUConvertOffsetToPtr<J2DBlendInfo>(&param_0, param_0.field_0x60);
+    mpDither = JSUConvertOffsetToPtr<u8>(&param_0, param_0.field_0x64);
 }
 
 u32 J2DMaterialFactory::countStages(int param_0) const {
-    J2DMaterialInitData* iVar5 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar5 = &mpMaterialInitData[mpMaterialID[param_0]];
     u32 uVar4 = 0;
     u32 uVar3 = 0;
     if (iVar5->field_0x4 != 0xff) {
-        uVar3 = field_0x40[iVar5->field_0x4];
+        uVar3 = mpTevStageNum[iVar5->field_0x4];
     }
     for (int i = 0; i < 8; i++) {
         if (iVar5->field_0x38[i] != 0xffff) {
@@ -121,11 +121,11 @@ J2DMaterial* J2DMaterialFactory::create(J2DMaterial* param_0, int index, u32 par
         param_0->getTevBlock()->setTevOrder(i, newTevOrder(index, i));
     }
     for (u8 i = 0; i < local_370; i++) {
-        J2DMaterialInitData* local_38c = &field_0x4[field_0x8[index]];
+        J2DMaterialInitData* local_38c = &mpMaterialInitData[mpMaterialID[index]];
         param_0->getTevBlock()->setTevStage(i, newTevStage(index, i));
         if (local_38c->field_0xba[i] != 0xffff) {
-            param_0->getTevBlock()->getTevStage(i)->setTexSel(field_0x48[local_38c->field_0xba[i]].mTexSel);
-            param_0->getTevBlock()->getTevStage(i)->setRasSel(field_0x48[local_38c->field_0xba[i]].mRasSel);
+            param_0->getTevBlock()->getTevStage(i)->setTexSel(mpTevSwapModeInfo[local_38c->field_0xba[i]].mTexSel);
+            param_0->getTevBlock()->getTevStage(i)->setRasSel(mpTevSwapModeInfo[local_38c->field_0xba[i]].mRasSel);
         }
     }
     for (u8 i = 0; i < 4; i++) {
@@ -151,14 +151,14 @@ J2DMaterial* J2DMaterialFactory::create(J2DMaterial* param_0, int index, u32 par
     for (u8 i = 0; i < 8; i++) {
         param_0->getTexGenBlock()->setTexMtx(i, newTexMtx(index, i));
     }
-    J2DMaterialInitData* local_394 = &field_0x4[field_0x8[index]];
+    J2DMaterialInitData* local_394 = &mpMaterialInitData[mpMaterialID[index]];
     for (u8 i = 0; i < local_370; i++) {
         param_0->getTevBlock()->setTevKColorSel(i, local_394->field_0x52[i]);
     }
     for (u8 i = 0; i < local_370; i++) {
         param_0->getTevBlock()->setTevKAlphaSel(i, local_394->field_0x62[i]);
     }
-    if (field_0xc != NULL || local_378 != 0) {
+    if (mpIndInitData != NULL || local_378 != 0) {
         u8 local_410 = newIndTexStageNum(index);
         param_0->mIndBlock->setIndTexStageNum(local_410);
         for (u8 i = 0; i < local_410; i++) {
@@ -183,52 +183,52 @@ JUtility::TColor J2DMaterialFactory::newMatColor(int param_0, int param_1) const
 #else
     JUtility::TColor local_20 = GXColor{0xff,0xff,0xff,0xff};
 #endif
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0x8[param_1] != 0xffff) {
-        return field_0x10[iVar2->field_0x8[param_1]];
+        return mpMatColor[iVar2->field_0x8[param_1]];
     }
     return local_20;
 }
 
 u8 J2DMaterialFactory::newColorChanNum(int param_0) const {
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0x2 != 0xff) {
-        return field_0x14[iVar2->field_0x2];
+        return mpColorChanNum[iVar2->field_0x2];
     }
     return 0;
 }
 
 J2DColorChan J2DMaterialFactory::newColorChan(int param_0, int param_1) const {
     int r29 = 0;
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0xc[param_1] != 0xffff) {
-        return J2DColorChan(field_0x18[iVar2->field_0xc[param_1]]);
+        return J2DColorChan(mpColorChanInfo[iVar2->field_0xc[param_1]]);
     }
     return J2DColorChan();
 }
 
 u32 J2DMaterialFactory::newTexGenNum(int param_0) const {
     int r30 = 0;
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0x3 != 0xff) {
-        return field_0x1c[iVar2->field_0x3];
+        return mpTexGenNum[iVar2->field_0x3];
     }
     return 0;
 }
 
 J2DTexCoord J2DMaterialFactory::newTexCoord(int param_0, int param_1) const {
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0x14[param_1] != 0xffff) {
-        return J2DTexCoord(field_0x20[iVar2->field_0x14[param_1]]);
+        return J2DTexCoord(mpTexCoordInfo[iVar2->field_0x14[param_1]]);
     }
     return J2DTexCoord();
 }
 
 J2DTexMtx* J2DMaterialFactory::newTexMtx(int param_0, int param_1) const {
     J2DTexMtx* rv = NULL;
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0x24[param_1] != 0xffff) {
-        rv = new J2DTexMtx(field_0x24[iVar2->field_0x24[param_1]]);
+        rv = new J2DTexMtx(mpTexMtxInfo[iVar2->field_0x24[param_1]]);
         rv->calc();
     }
     return rv;
@@ -236,33 +236,33 @@ J2DTexMtx* J2DMaterialFactory::newTexMtx(int param_0, int param_1) const {
 
 u8 J2DMaterialFactory::newCullMode(int param_0) const {
     int r30 = 0;
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0x1 != 0xff) {
-        return field_0x30[iVar2->field_0x1];
+        return mpCullMode[iVar2->field_0x1];
     }
     return 0xff;
 }
 
 u16 J2DMaterialFactory::newTexNo(int param_0, int param_1) const {
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0x38[param_1] != 0xffff) {
-        return field_0x28[iVar2->field_0x38[param_1]];
+        return mpTexNo[iVar2->field_0x38[param_1]];
     }
     return 0x1FFFF;
 }
 
 u16 J2DMaterialFactory::newFontNo(int param_0) const {
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0x48 != 0xffff) {
-        return field_0x2c[iVar2->field_0x48];
+        return mpFontNo[iVar2->field_0x48];
     }
     return 0x1FFFF;
 }
 
 J2DTevOrder J2DMaterialFactory::newTevOrder(int param_0, int param_1) const {
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0x72[param_1] != 0xffff) {
-        return J2DTevOrder(field_0x34[iVar2->field_0x72[param_1]]);
+        return J2DTevOrder(mpTevOrderInfo[iVar2->field_0x72[param_1]]);
     }
     return J2DTevOrder();
 }
@@ -270,10 +270,10 @@ J2DTevOrder J2DMaterialFactory::newTevOrder(int param_0, int param_1) const {
 J2DGXColorS10 J2DMaterialFactory::newTevColor(int param_0, int param_1) const {
     GXColorS10 color = {0, 0, 0, 0};
     J2DGXColorS10 rv = color;
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
 
     if (iVar2->field_0x92[param_1] != 0xffff) {
-        return (GXColorS10) field_0x38[iVar2->field_0x92[param_1]];
+        return (GXColorS10) mpTevColor[iVar2->field_0x92[param_1]];
     }
     
     return rv;
@@ -281,42 +281,42 @@ J2DGXColorS10 J2DMaterialFactory::newTevColor(int param_0, int param_1) const {
 
 JUtility::TColor J2DMaterialFactory::newTevKColor(int param_0, int param_1) const {
     JUtility::TColor local_20 = COMPOUND_LITERAL(GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0x4a[param_1] != 0xffff) {
-        return field_0x3c[iVar2->field_0x4a[param_1]];
+        return mpTevKColor[iVar2->field_0x4a[param_1]];
     }
     return local_20;
 }
 
 u8 J2DMaterialFactory::newTevStageNum(int param_0) const {
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0x4 != 0xff) {
-        return field_0x40[iVar2->field_0x4];
+        return mpTevStageNum[iVar2->field_0x4];
     }
     return 0xFF;
 }
 
 J2DTevStage J2DMaterialFactory::newTevStage(int param_0, int param_1) const {
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0x9a[param_1] != 0xffff) {
-        return J2DTevStage(field_0x44[iVar2->field_0x9a[param_1]]);
+        return J2DTevStage(mpTevStageInfo[iVar2->field_0x9a[param_1]]);
     }
     return J2DTevStage();
 }
 
 J2DTevSwapModeTable J2DMaterialFactory::newTevSwapModeTable(int param_0, int param_1) const {
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0xda[param_1] != 0xffff) {
-        return J2DTevSwapModeTable(field_0x4c[iVar2->field_0xda[param_1]]);
+        return J2DTevSwapModeTable(mpTevSwapModeTableInfo[iVar2->field_0xda[param_1]]);
     }
     return J2DTevSwapModeTable(j2dDefaultTevSwapModeTable);
 }
 
 u8 J2DMaterialFactory::newIndTexStageNum(int param_0) const {
     u8 r31 = 0;
-    if (field_0xc != NULL) {
-        if (field_0xc[param_0].field_0x0 == 1) {
-            return field_0xc[param_0].field_0x1;
+    if (mpIndInitData != NULL) {
+        if (mpIndInitData[param_0].field_0x0 == 1) {
+            return mpIndInitData[param_0].field_0x1;
         }
     }
     return r31;
@@ -324,9 +324,9 @@ u8 J2DMaterialFactory::newIndTexStageNum(int param_0) const {
 
 J2DIndTexOrder J2DMaterialFactory::newIndTexOrder(int param_0, int param_1) const {
     J2DIndTexOrder rv;
-    if (field_0xc != NULL) {
-        if (field_0xc[param_0].field_0x0 == 1) {
-            return J2DIndTexOrder(field_0xc[param_0].field_0x4[param_1]);
+    if (mpIndInitData != NULL) {
+        if (mpIndInitData[param_0].field_0x0 == 1) {
+            return J2DIndTexOrder(mpIndInitData[param_0].field_0x4[param_1]);
         }
     }
     return rv;
@@ -334,9 +334,9 @@ J2DIndTexOrder J2DMaterialFactory::newIndTexOrder(int param_0, int param_1) cons
 
 J2DIndTexMtx J2DMaterialFactory::newIndTexMtx(int param_0, int param_1) const {
     J2DIndTexMtx rv;
-    if (field_0xc != NULL) {
-        if (field_0xc[param_0].field_0x0 == 1) {
-            return J2DIndTexMtx(field_0xc[param_0].field_0xc[param_1]);
+    if (mpIndInitData != NULL) {
+        if (mpIndInitData[param_0].field_0x0 == 1) {
+            return J2DIndTexMtx(mpIndInitData[param_0].field_0xc[param_1]);
         }
     }
     return rv;
@@ -344,9 +344,9 @@ J2DIndTexMtx J2DMaterialFactory::newIndTexMtx(int param_0, int param_1) const {
 
 J2DIndTevStage J2DMaterialFactory::newIndTevStage(int param_0, int param_1) const {
     J2DIndTevStage rv;
-    if (field_0xc != NULL) {
-        if (field_0xc[param_0].field_0x0 == 1) {
-            return J2DIndTevStage(field_0xc[param_0].field_0x68[param_1]);
+    if (mpIndInitData != NULL) {
+        if (mpIndInitData[param_0].field_0x0 == 1) {
+            return J2DIndTevStage(mpIndInitData[param_0].field_0x68[param_1]);
         }
     }
     return rv;
@@ -354,34 +354,34 @@ J2DIndTevStage J2DMaterialFactory::newIndTevStage(int param_0, int param_1) cons
 
 J2DIndTexCoordScale J2DMaterialFactory::newIndTexCoordScale(int param_0, int param_1) const {
     J2DIndTexCoordScale rv;
-    if (field_0xc != NULL) {
-        if (field_0xc[param_0].field_0x0 == 1) {
-            return J2DIndTexCoordScale(field_0xc[param_0].field_0x60[param_1]);
+    if (mpIndInitData != NULL) {
+        if (mpIndInitData[param_0].field_0x0 == 1) {
+            return J2DIndTexCoordScale(mpIndInitData[param_0].field_0x60[param_1]);
         }
     }
     return rv;
 }
 
 J2DAlphaComp J2DMaterialFactory::newAlphaComp(int param_0) const {
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0xe2 != 0xffff) {
-        return J2DAlphaComp(field_0x50[iVar2->field_0xe2]);
+        return J2DAlphaComp(mpAlphaCompInfo[iVar2->field_0xe2]);
     }
     return J2DAlphaComp();
 }
 
 J2DBlend J2DMaterialFactory::newBlend(int param_0) const {
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0xe4 != 0xffff) {
-        return J2DBlend(field_0x54[iVar2->field_0xe4]);
+        return J2DBlend(mpBlendInfo[iVar2->field_0xe4]);
     }
     return J2DBlend(j2dDefaultBlendInfo);
 }
 
 u8 J2DMaterialFactory::newDither(int param_0) const {
-    J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
+    J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0x5 != 0xff) {
-        return field_0x58[iVar2->field_0x5];
+        return mpDither[iVar2->field_0x5];
     }
     return 0;
 }

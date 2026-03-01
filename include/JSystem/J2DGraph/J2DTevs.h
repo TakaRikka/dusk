@@ -4,17 +4,18 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "global.h"
+#include "dusk/endian.h"
 
 /**
  * @ingroup jsystem-j2d
  * 
  */
 struct J2DTextureSRTInfo {
-    /* 0x00 */ f32 mScaleX;
-    /* 0x04 */ f32 mScaleY;
-    /* 0x08 */ f32 mRotationDeg;
-    /* 0x0C */ f32 mTranslationX;
-    /* 0x10 */ f32 mTranslationY;
+    /* 0x00 */ BE(f32) mScaleX;
+    /* 0x04 */ BE(f32) mScaleY;
+    /* 0x08 */ BE(f32) mRotationDeg;
+    /* 0x0C */ BE(f32) mTranslationX;
+    /* 0x10 */ BE(f32) mTranslationY;
 };  // Size: 0x14
 
 /**
@@ -31,7 +32,7 @@ struct J2DTexMtxInfo {
     /* 0x01 */ u8 mTexMtxDCC;
     /* 0x02 */ u8 field_0x2;  // padding ?
     /* 0x03 */ u8 field_0x3;  // padding ?
-    /* 0x04 */ Vec mCenter;
+    /* 0x04 */ BE(Vec) mCenter;
     /* 0x10 */ J2DTextureSRTInfo mTexSRTInfo;
 
     GXTexMtxType getTexMtxType() const { return (GXTexMtxType)mTexMtxType; }

@@ -368,9 +368,9 @@ bool J2DScreen::createMaterial(JSURandomInputStream* p_stream, u32 param_1, JKRA
             char* ptr = (char*)sec_s;
             u16 size = lastOffset;
             while (ptr[size] != 0) {
-                size++;  
+                size++;
             }
-            size++; 
+            size++;
 
             u8* nametab = new u8[size];
             if (nametab == NULL) {
