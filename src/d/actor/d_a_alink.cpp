@@ -3082,7 +3082,7 @@ cXyz* daAlink_c::getNeckAimPos(cXyz* param_0, int* param_1, int param_2) {
             }
         } else if (field_0x35c4.abs2XZ() > 1.0f && checkModeFlg(1)) {
             f32 var_f31;
-            if (checkWolf() != NULL) {
+            if (checkWolf() != 0) {
                 var_f31 = 80.0f;
             } else {
                 var_f31 = 150.0f;

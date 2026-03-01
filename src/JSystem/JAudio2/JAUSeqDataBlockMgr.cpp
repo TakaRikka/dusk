@@ -111,10 +111,10 @@ bool JAUDynamicSeqDataBlocks::appendDynamicSeqDataBlock(JAUSeqDataBlock* seqData
     return 1;
 }
 
-static void JAUDynamicSeqDataBlocks_receiveLoaded_(u32 param_0, u32 param_1) {
+static void JAUDynamicSeqDataBlocks_receiveLoaded_(u32 param_0, uintptr_t param_1) {
     JSULink<JAUSeqDataBlock>* link = (JSULink<JAUSeqDataBlock>*)param_1;
     JAUSeqDataBlock* seqDataBlock = link->getObject();
-    if (param_0 != NULL) {
+    if (param_0 != 0) {
         seqDataBlock->field_0x1c = 2;
     } else {
         seqDataBlock->field_0x1c = 0;

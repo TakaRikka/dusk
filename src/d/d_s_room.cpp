@@ -329,7 +329,7 @@ static int phase_1(room_of_scene_class* i_this) {
         } else {
             stage_stag_info_class* stagInfo = dComIfGp_getStage()->getStagInfo();
 
-            if (dStage_staginfo_GetArchiveHeap(stagInfo) != NULL) {
+            if (dStage_staginfo_GetArchiveHeap(stagInfo) != FALSE) {
                 heap = mDoExt_getArchiveHeap();
             }
         }

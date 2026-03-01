@@ -290,7 +290,7 @@ void dMenu_ItemExplain_c::move() {
     if (status != mStatus) {
         (this->*init_process[mStatus])();
     }
-    if (mStatus != NULL) {
+    if (mStatus != 0) {
         mpInfoScreen->animation();
     }
     if (g_ringHIO.mItemDescAlpha != mDescAlpha) {

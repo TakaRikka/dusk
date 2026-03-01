@@ -178,7 +178,7 @@ void JUTVideo::postRetraceProc(u32 retrace_count) {
         sManager->mPostCallback(retrace_count);
     }
 
-    OSSendMessage(&sManager->mMessageQueue, (OSMessage)VIGetRetraceCount(), OS_MESSAGE_NOBLOCK);
+    OSSendMessage(&sManager->mMessageQueue, (OSMessage)(uintptr_t)VIGetRetraceCount(), OS_MESSAGE_NOBLOCK);
 }
 
 void JUTVideo::setRenderMode(GXRenderModeObj const* pObj) {

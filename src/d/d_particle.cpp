@@ -1602,7 +1602,7 @@ s32 dPa_control_c::getPolyColor(cBgS_PolyInfo& param_0, int param_1, _GXColor* p
         return 0;
     }
 
-    if (param_1 == NULL) {
+    if (param_1 == 0) {
         dKy_pol_eff_prim_get(&param_0, param_2);
         dKy_pol_eff_env_get(&param_0, param_3);
         *param_4 = dKy_pol_eff_alpha_get(&param_0);

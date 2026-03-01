@@ -186,8 +186,8 @@ int daObjMarm_c::Create() {
         mIsYRotForward = 0;
     }
 
-    if (dComIfG_Bgsp().Regist((dBgW_Base*)mpBgW1, this) != NULL ||
-        dComIfG_Bgsp().Regist((dBgW_Base*)mpBgW2, this) != NULL)
+    if (dComIfG_Bgsp().Regist((dBgW_Base*)mpBgW1, this) != false ||
+        dComIfG_Bgsp().Regist((dBgW_Base*)mpBgW2, this) != false)
     {
         return FALSE;
     }
@@ -1060,11 +1060,11 @@ void daObjMarm_c::debugDraw() {
 }
 
 int daObjMarm_c::Delete() {
-    if (mpBgW1 != NULL && mpBgW1->ChkUsed() != NULL) {
+    if (mpBgW1 != NULL && mpBgW1->ChkUsed() != false) {
         dComIfG_Bgsp().Release(mpBgW1);
     }
 
-    if (mpBgW2 != NULL && mpBgW2->ChkUsed() != NULL) {
+    if (mpBgW2 != NULL && mpBgW2->ChkUsed() != false) {
         dComIfG_Bgsp().Release(mpBgW2);
     }
     endMagneHoleEffect();

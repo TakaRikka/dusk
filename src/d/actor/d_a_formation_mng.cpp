@@ -382,7 +382,7 @@ void daFmtMng_c::create_init() {
     for (int i = 0; i < mFormationLine * mFormationRow; i++, member++) {
         member->mNpcId = fopAcM_createChild(0x294, fopAcM_GetID(this), (inTime << 0x10) | 0x200,
                                                 &member->field_0x04, fopAcM_GetRoomNo(this),
-                                                &home.angle, NULL, 0xffffffff, NULL);
+                                                &home.angle, NULL, -1, NULL);
     }
 }
 

@@ -472,7 +472,7 @@ int JASDsp::setFXLine(u8 param_0, s16* buffer, JASDsp::FxlineConfig_* param_2) {
     return 1;
 }
 
-BOOL JASDsp::changeFXLineParam(u8 param_0, u8 param_1, u32 param_2) {
+BOOL JASDsp::changeFXLineParam(u8 param_0, u8 param_1, uintptr_t param_2) {
     JUT_ASSERT(450, dspMutex);
     FxBuf* buf = &FX_BUF[param_0];
     switch (param_1) {

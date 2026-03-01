@@ -97,7 +97,7 @@ int daNbomb_c::searchEnemy(fopAc_ac_c* i_enemy) {
 
 static void* daNbomb_searchEnemy(fopAc_ac_c* i_actor, void* i_data) {
     if (fopAcM_GetGroup(i_actor) == fopAc_ENEMY_e &&
-        ((daNbomb_c*)i_data)->searchEnemy(i_actor) != NULL)
+        ((daNbomb_c*)i_data)->searchEnemy(i_actor) != 0)
     {
         return i_actor;
     }

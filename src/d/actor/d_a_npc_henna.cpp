@@ -2498,7 +2498,7 @@ static int daNpc_Henna_Execute(npc_henna_class* i_this) {
                     mDoMtx_stack_c::transS(-460.0f + AREG_F(0), 51.0f + AREG_F(1),
                                            -240.0f + AREG_F(2));
                     mDoMtx_stack_c::YrotM(-17729 + AREG_S(0));
-                    mDoMtx_stack_c::XrotM(AREG_S(1) - 0x8107);
+                    mDoMtx_stack_c::XrotM((s16)(AREG_S(1) - 0x8107));
                     mDoMtx_stack_c::ZrotM(AREG_S(2) + 2000 + sp_0xe);
                 } else {
                     mDoMtx_stack_c::transS(-790.0f + AREG_F(0), 153.0f + AREG_F(1),

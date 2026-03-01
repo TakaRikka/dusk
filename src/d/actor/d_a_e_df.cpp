@@ -659,7 +659,7 @@ int daE_DF_c::Create() {
             return cPhs_ERROR_e;
         }
 
-        if (fopAcM_entrySolidHeap(this, useHeapInit, 0x1a40) == NULL) {
+        if (fopAcM_entrySolidHeap(this, useHeapInit, 0x1a40) == false) {
             return cPhs_ERROR_e;
         }
 

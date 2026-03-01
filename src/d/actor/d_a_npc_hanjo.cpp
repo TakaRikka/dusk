@@ -1791,7 +1791,7 @@ int daNpc_Hanjo_c::takayose(void* param_0) {
                 }
             }
         }
-        if (daPy_py_c::checkNowWolf() && mCyl2.ChkCoHit() != NULL) {
+        if (daPy_py_c::checkNowWolf() && mCyl2.ChkCoHit() != 0) {
             if (!daPy_getPlayerActorClass()->checkPlayerFly() ||
                 daPy_getPlayerActorClass()->checkAutoJump() ||
                 daPy_getPlayerActorClass()->checkWolfTriggerJump())

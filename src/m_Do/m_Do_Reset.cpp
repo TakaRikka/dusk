@@ -99,7 +99,7 @@ void mDoRst_reset(int reset, u32 resetCode, int forceMenu) {
 }
 
 void checkDiskCallback(s32 result, DVDCommandBlock* block) {
-    block->userData = (void*)result;
+    block->userData = (void*)(intptr_t)result;
 }
 
 void mDoRst_resetCallBack(int port, void*) {
