@@ -82,14 +82,17 @@ struct BE {
         inner = swap(from);
     }
 
-    T operator--(int dec) {
-        inner -= dec;
-        return swap(inner);
+    // post-ops
+    T operator--(int) {
+        T orig = inner;
+        this -= 1;
+        return swap(orig);
     }
 
-    T operator++(int inc) {
-        inner += inc;
-        return swap(inner);
+    T operator++(int) {
+        T orig = inner;
+        this += 1;
+        return swap(orig);
     }
 
     operator T() const {
