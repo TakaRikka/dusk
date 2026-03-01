@@ -71,6 +71,8 @@ void JMAFastVECNormalize(__REGISTER const Vec* src, __REGISTER Vec* dst) {
 		stfs vz, dst->z
 	}
 #endif  // clang-format on
+
+    OSPanic(__FILE__, __LINE__, "UNIMPLEMENTED");
 }
 
 void JMAVECScaleAdd(__REGISTER const Vec* vec1, __REGISTER const Vec* vec2, __REGISTER Vec* dst,
@@ -91,6 +93,8 @@ void JMAVECScaleAdd(__REGISTER const Vec* vec1, __REGISTER const Vec* vec2, __RE
         psq_st rz, 8(dst), 1, 0
 	}
 #endif  // clang-format on
+
+    OSPanic(__FILE__, __LINE__, "UNIMPLEMENTED");
 }
 
 void JMAMTXApplyScale(__REGISTER const Mtx src, __REGISTER Mtx dst, __REGISTER f32 xScale,
@@ -124,5 +128,7 @@ void JMAMTXApplyScale(__REGISTER const Mtx src, __REGISTER Mtx dst, __REGISTER f
         psq_st y, 24(dst), 0, 0
         psq_st z, 40(dst), 0, 0
     }
-#endif  // clang-format on
+#else  // clang-format on
+    MTXScaleApply(src, dst, xScale, yScale, zScale);
+#endif
 }
