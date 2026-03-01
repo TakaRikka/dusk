@@ -114,7 +114,7 @@ int daObj_Maki_Execute(obj_maki_class* i_this) {
             cxyz.y += 20000.0f;
             i_this->field_0x6f8[0] = dComIfGp_particle_set(
                 i_this->field_0x6f8[0], 0x820b, &i_this->current.pos, &i_this->tevStr,
-                &i_this->shape_angle, 0, 0xff, 0, 0xffffffff, 0, 0, 0);
+                &i_this->shape_angle, 0, 0xff, 0, -1, 0, 0, 0);
             fopAcM_seStartLevel(i_this, 0x800a6, 0);
         }
     }

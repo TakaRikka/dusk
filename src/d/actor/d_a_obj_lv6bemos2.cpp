@@ -494,7 +494,7 @@ void daObjLv6Bm_c::calcBeam() {
 
     if (field_0xa19 > 0) {
         cXyz sp84(field_0x9f8);
-        if (fopAcM_lc_c::lineCheck(&field_0x9e4, &field_0x9f8, this) != NULL && fopAcM_lc_c::checkGroundHit()) {
+        if (fopAcM_lc_c::lineCheck(&field_0x9e4, &field_0x9f8, this) != false && fopAcM_lc_c::checkGroundHit()) {
             sp84 = fopAcM_lc_c::getCross();
         }
 

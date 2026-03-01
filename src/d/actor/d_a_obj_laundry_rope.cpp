@@ -113,7 +113,7 @@ cXyz* daObjLndRope_c::getRopeStartPos() {
 }
 
 f32 daObjLndRope_c::getStartRate(cXyz* i_ropeSegmentPos) {
-    if (mFlag != NULL) {
+    if (mFlag != 0) {
         return mScale * (i_ropeSegmentPos->x - getRopeStartPos()->x);
     } else {
         return mScale * (i_ropeSegmentPos->z - getRopeStartPos()->z);

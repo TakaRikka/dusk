@@ -80,7 +80,7 @@ void daObjFlag_c::calcJointAngle() {
             joint->mJoint3 = joint->mJoint1 - joint->mJoint2;
         }
 
-        if(attr().field_0x25 != NULL) {
+        if(attr().field_0x25 != 0) {
             if(i == 1) {
                 calcAngleSwingX(joint, power);
             }

@@ -157,7 +157,7 @@ void daRfHole_c::setBreakEffect() {
     mDoMtx_stack_c::multVec(&acStack_24, &acStack_24);
     cXyz cStack_30 = current.pos + acStack_24;
     for (int i = 0; i < 5; i++) {
-        dComIfGp_particle_set(particle_id[i], &cStack_30, NULL, &scale, 0xff, 0, 0xffffffff, NULL,
+        dComIfGp_particle_set(particle_id[i], &cStack_30, NULL, &scale, 0xff, 0, -1, NULL,
                               NULL, NULL);
     }
 }

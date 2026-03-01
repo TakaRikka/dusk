@@ -23,7 +23,7 @@ int daPasserMng_c::execute() {
             csXyz cStack_20(field_0x596 != 0 ? 0xff : endTime, current.angle.y, 0);
             childProcIds[currentChildIndex] =
                 fopAcM_createChild(npcId, fopAcM_GetID(this), getPasserParam(), &current.pos,
-                                   fopAcM_GetRoomNo(this), &cStack_20, 0, 0xffffffff, 0);
+                                   fopAcM_GetRoomNo(this), &cStack_20, 0, -1, 0);
             currentChildIndex = (currentChildIndex + 1) % getMaxNum();
         }
         mTime = time + intervalTime;

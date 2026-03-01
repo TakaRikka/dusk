@@ -255,7 +255,7 @@ int daObj_Sekizoa_c::CreateHeap() {
     }
     if (mType == TYPE_6) {
         int success_create = mInvModel.create(mpMorf[0]->getModel(), 1);
-        if (success_create == NULL) {
+        if (success_create == 0) {
             return 0;
         }
 
