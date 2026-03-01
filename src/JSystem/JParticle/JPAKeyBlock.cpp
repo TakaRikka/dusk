@@ -5,7 +5,7 @@
 
 JPAKeyBlock::JPAKeyBlock(const u8* data)
     : mDataStart(data)
-    , field_0x4(reinterpret_cast<const float*>(&data[0xC]))
+    , field_0x4(reinterpret_cast<const BE(float)*>(&data[0xC]))
 {
 }
 

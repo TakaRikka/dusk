@@ -18,7 +18,7 @@ static void dummy1() {
 }
 
 JPAResourceLoader::JPAResourceLoader(u8 const* data, JPAResourceManager* mgr) {
-    if (*(u32*)(data + 4) == '2-10') {
+    if (*(BE(u32)*)(data + 4) == '2-10') {
         load_jpc(data, mgr);
     } else {
         JUT_WARN(48, "JPA : wrong version file\n");
@@ -42,8 +42,8 @@ static void dummy2() {
 }
 
 struct JPAResourceHeader {
-    /* 0x0 */ u16 mUsrIdx;
-    /* 0x2 */ u16 mBlockNum;
+    /* 0x0 */ BE(u16) mUsrIdx;
+    /* 0x2 */ BE(u16) mBlockNum;
     /* 0x4 */ u8 mFieldBlockNum;
     /* 0x5 */ u8 mKeyBlockNum;
     /* 0x6 */ u8 mTDB1Num;
@@ -51,14 +51,14 @@ struct JPAResourceHeader {
 
 void JPAResourceLoader::load_jpc(u8 const* data, JPAResourceManager* p_res_mgr) {
     JKRHeap* heap = p_res_mgr->mpHeap;
-    p_res_mgr->resMaxNum = *(u16*)(data + 8);
-    p_res_mgr->texMaxNum = *(u16*)(data + 0xA);
+    p_res_mgr->resMaxNum = *(BE(u16)*)(data + 8);
+    p_res_mgr->texMaxNum = *(BE(u16)*)(data + 0xA);
     p_res_mgr->pResAry = new (heap, 0) JPAResource*[p_res_mgr->resMaxNum];
     p_res_mgr->pTexAry = new (heap, 0) JPATexture*[p_res_mgr->texMaxNum];
     JUT_ASSERT(199, (p_res_mgr->pResAry != NULL) && (p_res_mgr->pTexAry != 0));
 
     u32 offset = 0x10;
-    for (int i = 0; i < *(u16*)(data + 8); i++) {
+    for (int i = 0; i < *(BE(u16)*)(data + 8); i++) {
         JPAResourceHeader* header = (JPAResourceHeader*)(data + offset);
         JPAResource* p_res = new (heap, 0) JPAResource();
         JUT_ASSERT(211, p_res != NULL);
@@ -79,8 +79,8 @@ void JPAResourceLoader::load_jpc(u8 const* data, JPAResourceManager* p_res_mgr) 
         u32 key_no = 0;
 
         for (int j = 0; j < header->mBlockNum; j++) {
-            u32 magic = *(u32*)(data + offset);
-            u32 size = *(u32*)(data + offset + 4);
+            u32 magic = *(BE(u32)*)(data + offset);
+            u32 size = *(BE(u32)*)(data + offset + 4);
             switch (magic) {
             case 'FLD1':
                 p_res->ppFld[fld_no] = new (heap, 0) JPAFieldBlock(data + offset, heap);
@@ -113,7 +113,7 @@ void JPAResourceLoader::load_jpc(u8 const* data, JPAResourceManager* p_res_mgr) 
                 JUT_ASSERT(270, p_res->pEts != NULL);
                 break;
             case 'TDB1':
-                p_res->mpTDB1 = (const u16*)(data + offset + 8);
+                p_res->mpTDB1 = (const BE(u16)*)(data + offset + 8);
                 break;
             default:
                 JUT_WARN(275, "JPA : wrong type block in jpc file %d %x\n", header->mBlockNum, offset);
@@ -126,9 +126,9 @@ void JPAResourceLoader::load_jpc(u8 const* data, JPAResourceManager* p_res_mgr) 
         p_res_mgr->registRes(p_res);
     }
 
-    offset = *(u32*)(data + 0xC);
-    for (int i = 0; i < *(u16*)(data + 0xA); i++) {
-        u32 size = *(u32*)(data + offset + 4);
+    offset = *(BE(u32)*)(data + 0xC);
+    for (int i = 0; i < *(BE(u16)*)(data + 0xA); i++) {
+        u32 size = *(BE(u32)*)(data + offset + 4);
         JPATexture* p_tex = new (heap, 0) JPATexture(data + offset);
         JUT_ASSERT(298, p_tex != NULL);
         p_res_mgr->registTex(p_tex);

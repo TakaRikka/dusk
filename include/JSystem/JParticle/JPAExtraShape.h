@@ -13,31 +13,31 @@ class JPABaseParticle;
 struct JPAExtraShapeData {
     // Common header.
     /* 0x00 */ u8 mMagic[4];
-    /* 0x04 */ u32 mSize;
+    /* 0x04 */ BE(u32) mSize;
 
-    /* 0x08 */ u32 mFlags;
-    /* 0x0C */ f32 mScaleInTiming;
-    /* 0x10 */ f32 mScaleOutTiming;
-    /* 0x14 */ f32 mScaleInValueX;
-    /* 0x18 */ f32 mScaleOutValueX;
-    /* 0x1C */ f32 mScaleInValueY;
-    /* 0x20 */ f32 mScaleOutValueY;
-    /* 0x24 */ f32 mScaleOutRandom;
-    /* 0x28 */ s16 mScaleAnmCycleX;
-    /* 0x2A */ s16 mScaleAnmCycleY;
-    /* 0x2C */ f32 mAlphaInTiming;
-    /* 0x30 */ f32 mAlphaOutTiming;
-    /* 0x34 */ f32 mAlphaInValue;
-    /* 0x38 */ f32 mAlphaBaseValue;
-    /* 0x3C */ f32 mAlphaOutValue;
-    /* 0x40 */ f32 mAlphaWaveFrequency;
-    /* 0x44 */ f32 mAlphaWaveRandom;
-    /* 0x48 */ f32 mAlphaWaveAmplitude;
-    /* 0x4C */ f32 mRotateAngle;
-    /* 0x50 */ f32 mRotateAngleRandom;
-    /* 0x54 */ f32 mRotateSpeed;
-    /* 0x58 */ f32 mRotateSpeedRandom;
-    /* 0x5C */ f32 mRotateDirection;
+    /* 0x08 */ BE(u32) mFlags;
+    /* 0x0C */ BE(f32) mScaleInTiming;
+    /* 0x10 */ BE(f32) mScaleOutTiming;
+    /* 0x14 */ BE(f32) mScaleInValueX;
+    /* 0x18 */ BE(f32) mScaleOutValueX;
+    /* 0x1C */ BE(f32) mScaleInValueY;
+    /* 0x20 */ BE(f32) mScaleOutValueY;
+    /* 0x24 */ BE(f32) mScaleOutRandom;
+    /* 0x28 */ BE(s16) mScaleAnmCycleX;
+    /* 0x2A */ BE(s16) mScaleAnmCycleY;
+    /* 0x2C */ BE(f32) mAlphaInTiming;
+    /* 0x30 */ BE(f32) mAlphaOutTiming;
+    /* 0x34 */ BE(f32) mAlphaInValue;
+    /* 0x38 */ BE(f32) mAlphaBaseValue;
+    /* 0x3C */ BE(f32) mAlphaOutValue;
+    /* 0x40 */ BE(f32) mAlphaWaveFrequency;
+    /* 0x44 */ BE(f32) mAlphaWaveRandom;
+    /* 0x48 */ BE(f32) mAlphaWaveAmplitude;
+    /* 0x4C */ BE(f32) mRotateAngle;
+    /* 0x50 */ BE(f32) mRotateAngleRandom;
+    /* 0x54 */ BE(f32) mRotateSpeed;
+    /* 0x58 */ BE(f32) mRotateSpeedRandom;
+    /* 0x5C */ BE(f32) mRotateDirection;
 };  // Size: 0x60
 
 /**

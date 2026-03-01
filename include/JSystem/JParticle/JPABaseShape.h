@@ -14,14 +14,14 @@ class JKRHeap;
 struct JPABaseShapeData {
     // Common header.
     /* 0x00 */ u8 mMagic[4];
-    /* 0x04 */ u32 mSize;
+    /* 0x04 */ BE(u32) mSize;
 
-    /* 0x08 */ u32 mFlags;
-    /* 0x0C */ s16 mClrPrmAnmOffset;
-    /* 0x0E */ s16 mClrEnvAnmOffset;
-    /* 0x10 */ f32 mBaseSizeX;
-    /* 0x14 */ f32 mBaseSizeY;
-    /* 0x18 */ u16 mBlendModeCfg;
+    /* 0x08 */ BE(u32) mFlags;
+    /* 0x0C */ BE(s16) mClrPrmAnmOffset;
+    /* 0x0E */ BE(s16) mClrEnvAnmOffset;
+    /* 0x10 */ BE(f32) mBaseSizeX;
+    /* 0x14 */ BE(f32) mBaseSizeY;
+    /* 0x18 */ BE(u16) mBlendModeCfg;
     /* 0x1A */ u8 mAlphaCompareCfg;
     /* 0x1B */ u8 mAlphaRef0;
     /* 0x1C */ u8 mAlphaRef1;
@@ -32,7 +32,7 @@ struct JPABaseShapeData {
     /* 0x21 */ u8 mClrFlg;
     /* 0x22 */ u8 prmAnmKeyNum;
     /* 0x23 */ u8 envAnmKeyNum;
-    /* 0x24 */ s16 mClrAnmFrmMax;
+    /* 0x24 */ BE(s16) mClrAnmFrmMax;
     /* 0x26 */ GXColor mClrPrm;
     /* 0x2A */ GXColor mClrEnv;
     /* 0x2E */ u8 mAnmRndm;
@@ -114,16 +114,16 @@ public:
     s32 getTexLoopOfst(u8 param_1) const { return getTexLoopOfstMask() & param_1; }
     u8 getLoopOfstValue() const { return pBsd->mAnmRndm; }
 
-    f32 getIncTransX() const { return ((f32*)mpTexCrdMtxAnmTbl)[5]; }
-    f32 getInitTransX() const { return ((f32*)mpTexCrdMtxAnmTbl)[0]; }
-    f32 getIncTransY() const { return ((f32*)mpTexCrdMtxAnmTbl)[6]; }
-    f32 getInitTransY() const { return ((f32*)mpTexCrdMtxAnmTbl)[1]; }
-    f32 getIncScaleX() const { return ((f32*)mpTexCrdMtxAnmTbl)[7]; }
-    f32 getInitScaleX() const { return ((f32*)mpTexCrdMtxAnmTbl)[2]; }
-    f32 getIncScaleY() const { return ((f32*)mpTexCrdMtxAnmTbl)[8]; }
-    f32 getInitScaleY() const { return ((f32*)mpTexCrdMtxAnmTbl)[3]; }
-    f32 getIncRot() const { return ((f32*)mpTexCrdMtxAnmTbl)[9]; }
-    f32 getInitRot() const { return ((f32*)mpTexCrdMtxAnmTbl)[4]; }
+    f32 getIncTransX() const { return ((BE(f32)*)mpTexCrdMtxAnmTbl)[5]; }
+    f32 getInitTransX() const { return ((BE(f32)*)mpTexCrdMtxAnmTbl)[0]; }
+    f32 getIncTransY() const { return ((BE(f32)*)mpTexCrdMtxAnmTbl)[6]; }
+    f32 getInitTransY() const { return ((BE(f32)*)mpTexCrdMtxAnmTbl)[1]; }
+    f32 getIncScaleX() const { return ((BE(f32)*)mpTexCrdMtxAnmTbl)[7]; }
+    f32 getInitScaleX() const { return ((BE(f32)*)mpTexCrdMtxAnmTbl)[2]; }
+    f32 getIncScaleY() const { return ((BE(f32)*)mpTexCrdMtxAnmTbl)[8]; }
+    f32 getInitScaleY() const { return ((BE(f32)*)mpTexCrdMtxAnmTbl)[3]; }
+    f32 getIncRot() const { return ((BE(f32)*)mpTexCrdMtxAnmTbl)[9]; }
+    f32 getInitRot() const { return ((BE(f32)*)mpTexCrdMtxAnmTbl)[4]; }
     u8 getTexAnmKeyNum() const { return pBsd->texAnmKeyNum; }
 
 public:
@@ -139,7 +139,7 @@ public:
  * 
  */
 struct JPAClrAnmKeyData {
-    /* 0x0 */ s16 index;
+    /* 0x0 */ BE(s16) index;
     /* 0x2 */ GXColor color;
 };
 

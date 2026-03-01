@@ -112,7 +112,7 @@ void JPASetRMtxSTVecfromMtx(f32 const (*param_0)[4], f32 (*param_1)[4],
     param_3->set(param_0[0][3], param_0[1][3], param_0[2][3]);
 }
 
-f32 JPACalcKeyAnmValue(f32 param_0, u16 param_1, f32 const* param_2) {
+f32 JPACalcKeyAnmValue(f32 param_0, u16 param_1, BE(f32) const* param_2) {
     if (param_0 < param_2[0]) {
         return param_2[1];
     }

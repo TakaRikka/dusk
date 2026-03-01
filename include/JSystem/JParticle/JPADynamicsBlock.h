@@ -4,6 +4,7 @@
 #include "JSystem/JGeometry.h"
 
 #include <dolphin/types.h>
+#include "dusk/endian.h"
 
 struct JPAEmitterWorkData;
 
@@ -14,32 +15,32 @@ struct JPAEmitterWorkData;
 struct JPADynamicsBlockData {
     // Common header.
     /* 0x00 */ u8 mMagic[4];
-    /* 0x04 */ u32 mSize;
+    /* 0x04 */ BE(u32) mSize;
 
-    /* 0x08 */ u32 mFlags;
-    /* 0x0C */ u32 mResUserWork;
-    /* 0x10 */ JGeometry::TVec3<f32> mEmitterScl;
-    /* 0x1C */ JGeometry::TVec3<f32> mEmitterTrs;
-    /* 0x28 */ JGeometry::TVec3<f32> mEmitterDir;
-    /* 0x34 */ f32 mInitialVelOmni;
-    /* 0x38 */ f32 mInitialVelAxis;
-    /* 0x3C */ f32 mInitialVelRndm;
-    /* 0x40 */ f32 mInitialVelDir;
-    /* 0x44 */ f32 mSpread;
-    /* 0x48 */ f32 mInitialVelRatio;
-    /* 0x4C */ f32 mRate;
-    /* 0x50 */ f32 mRateRndm;
-    /* 0x54 */ f32 mLifeTimeRndm;
-    /* 0x58 */ f32 mVolumeSweep;
-    /* 0x5C */ f32 mVolumeMinRad;
-    /* 0x60 */ f32 mAirResist;
-    /* 0x64 */ f32 mMoment;
-    /* 0x68 */ JGeometry::TVec3<s16> mEmitterRot;
-    /* 0x6E */ s16 mMaxFrame;
-    /* 0x70 */ s16 mStartFrame;
-    /* 0x72 */ s16 mLifeTime;
-    /* 0x74 */ u16 mVolumeSize;
-    /* 0x76 */ u16 mDivNumber;
+    /* 0x08 */ BE(u32) mFlags;
+    /* 0x0C */ BE(u32) mResUserWork;
+    /* 0x10 */ JGeometry::TVec3<BE(f32)> mEmitterScl;
+    /* 0x1C */ JGeometry::TVec3<BE(f32)> mEmitterTrs;
+    /* 0x28 */ JGeometry::TVec3<BE(f32)> mEmitterDir;
+    /* 0x34 */ BE(f32) mInitialVelOmni;
+    /* 0x38 */ BE(f32) mInitialVelAxis;
+    /* 0x3C */ BE(f32) mInitialVelRndm;
+    /* 0x40 */ BE(f32) mInitialVelDir;
+    /* 0x44 */ BE(f32) mSpread;
+    /* 0x48 */ BE(f32) mInitialVelRatio;
+    /* 0x4C */ BE(f32) mRate;
+    /* 0x50 */ BE(f32) mRateRndm;
+    /* 0x54 */ BE(f32) mLifeTimeRndm;
+    /* 0x58 */ BE(f32) mVolumeSweep;
+    /* 0x5C */ BE(f32) mVolumeMinRad;
+    /* 0x60 */ BE(f32) mAirResist;
+    /* 0x64 */ BE(f32) mMoment;
+    /* 0x68 */ JGeometry::TVec3<BE(s16)> mEmitterRot;
+    /* 0x6E */ BE(s16) mMaxFrame;
+    /* 0x70 */ BE(s16) mStartFrame;
+    /* 0x72 */ BE(s16) mLifeTime;
+    /* 0x74 */ BE(u16) mVolumeSize;
+    /* 0x76 */ BE(u16) mDivNumber;
     /* 0x78 */ u8 mRateStep;
 };  // Size: 0x7C
 

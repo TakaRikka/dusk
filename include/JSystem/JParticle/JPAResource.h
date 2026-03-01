@@ -2,6 +2,7 @@
 #define JPARESOURCE_H
 
 #include <dolphin/types.h>
+#include "dusk/endian.h"
 
 class JKRHeap;
 struct JPAEmitterWorkData;
@@ -64,7 +65,7 @@ public:
     /* 0x2C */ JPADynamicsBlock* pDyn;
     /* 0x30 */ JPAFieldBlock** ppFld;
     /* 0x34 */ JPAKeyBlock** ppKey;
-    /* 0x38 */ u16 const* mpTDB1;
+    /* 0x38 */ BE(u16) const* mpTDB1;
     /* 0x3C */ u16 mUsrIdx;
     /* 0x3E */ u8 fldNum;
     /* 0x3F */ u8 keyNum;

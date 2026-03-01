@@ -13,27 +13,27 @@ class JPABaseParticle;
 struct JPAChildShapeData {
     // Common header.
     /* 0x00 */ u8 mMagic[4];
-    /* 0x04 */ u32 mSize;
+    /* 0x04 */ BE(u32) mSize;
 
-    /* 0x08 */ u32 mFlags;
-    /* 0x0C */ f32 mPosRndm;
-    /* 0x10 */ f32 mBaseVel;
-    /* 0x14 */ f32 mBaseVelRndm;
-    /* 0x18 */ f32 mVelInfRate;
-    /* 0x1C */ f32 mGravity;
-    /* 0x20 */ f32 mScaleX;
-    /* 0x24 */ f32 mScaleY;
-    /* 0x28 */ f32 mInheritScale;
-    /* 0x2C */ f32 mInheritAlpha;
-    /* 0x30 */ f32 mInheritRGB;
+    /* 0x08 */ BE(u32) mFlags;
+    /* 0x0C */ BE(f32) mPosRndm;
+    /* 0x10 */ BE(f32) mBaseVel;
+    /* 0x14 */ BE(f32) mBaseVelRndm;
+    /* 0x18 */ BE(f32) mVelInfRate;
+    /* 0x1C */ BE(f32) mGravity;
+    /* 0x20 */ BE(f32) mScaleX;
+    /* 0x24 */ BE(f32) mScaleY;
+    /* 0x28 */ BE(f32) mInheritScale;
+    /* 0x2C */ BE(f32) mInheritAlpha;
+    /* 0x30 */ BE(f32) mInheritRGB;
     /* 0x34 */ GXColor mPrmClr;
     /* 0x38 */ GXColor mEnvClr;
-    /* 0x3C */ f32 mTiming;
-    /* 0x40 */ s16 mLife;
-    /* 0x42 */ s16 mRate;
+    /* 0x3C */ BE(f32) mTiming;
+    /* 0x40 */ BE(s16) mLife;
+    /* 0x42 */ BE(s16) mRate;
     /* 0x44 */ u8 mStep;
     /* 0x45 */ u8 mTexIdx;
-    /* 0x46 */ s16 mRotSpeed;
+    /* 0x46 */ BE(s16) mRotSpeed;
 };  // Size: 0x48
 
 /**
