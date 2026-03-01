@@ -15,11 +15,13 @@ add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
 option(DUSK_BUILD_WARNINGS "If off, compiler warnings will be suppressed")
 
 if (CMAKE_SYSTEM_NAME STREQUAL Linux)
-    # Multi-character constants ('ABCD') are implementation-defined but all compilers
-    # (CW, GCC, Clang, MSVC) encode them identically in big-endian order.
-    # For >4-char literals (which GCC/Clang truncate to int), use the MULTI_CHAR() macro.
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-multichar -Wno-unused-variable -Wno-unused-parameter")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-multichar")
+    # -Wno-multichar: Multi-character constants ('ABCD') are implementation-defined but all compilers
+    #   (CW, GCC, Clang, MSVC) encode them identically in big-endian order.
+    #   For >4-char literals (which GCC/Clang truncate to int), use the MULTI_CHAR() macro.
+    # -Wwrite-strings: Game code relies on implicit const char* -> char* conversions
+    # -Wdeprecated-declarations: JSystem uses std::iterator, deprecated in C++17
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-multichar -Wno-write-strings")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-multichar -Wno-write-strings -Wno-trigraphs -Wno-deprecated-declarations")
     set(CMAKE_INSTALL_RPATH "$ORIGIN")
     set(CMAKE_BUILD_RPATH "$ORIGIN")
 elseif (APPLE)
