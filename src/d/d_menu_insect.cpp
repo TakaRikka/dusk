@@ -20,6 +20,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include <cstdio>
+#include <cstring>
 
 typedef void (dMenu_Insect_c::*initFunc)();
 static initFunc map_init_process[] = {

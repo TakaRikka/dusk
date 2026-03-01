@@ -1,0 +1,32 @@
+#ifndef RES_INS1_H
+#define RES_INS1_H
+
+enum dRes_INDEX_INS1 {
+    /* BCK  */
+    dRes_INDEX_INS1_BCK_INS_HI_e=0x4,
+    dRes_INDEX_INS1_BCK_INS_SNIFF_e=0x5,
+    dRes_INDEX_INS1_BCK_INS_STEP_e=0x6,
+    dRes_INDEX_INS1_BCK_INS_SURPRISED_e=0x7,
+    dRes_INDEX_INS1_BCK_INS_SURPRISED_WAIT_e=0x8,
+    dRes_INDEX_INS1_BCK_INS_TALK_A_e=0x9,
+    dRes_INDEX_INS1_BCK_INS_TALK_A_WAIT_e=0xA,
+    dRes_INDEX_INS1_BCK_INS_WAIT_A_e=0xB,
+    /* BTK  */
+    dRes_INDEX_INS1_BTK_INS_SNIFF_e=0xE,
+};
+
+enum dRes_ID_INS1 {
+    /* BCK  */
+    dRes_ID_INS1_BCK_INS_HI_e=0x4,
+    dRes_ID_INS1_BCK_INS_SNIFF_e=0x5,
+    dRes_ID_INS1_BCK_INS_STEP_e=0x6,
+    dRes_ID_INS1_BCK_INS_SURPRISED_e=0x7,
+    dRes_ID_INS1_BCK_INS_SURPRISED_WAIT_e=0x8,
+    dRes_ID_INS1_BCK_INS_TALK_A_e=0x9,
+    dRes_ID_INS1_BCK_INS_TALK_A_WAIT_e=0xA,
+    dRes_ID_INS1_BCK_INS_WAIT_A_e=0xB,
+    /* BTK  */
+    dRes_ID_INS1_BTK_INS_SNIFF_e=0xE,
+};
+
+#endif /* !RES_INS1_H */

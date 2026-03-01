@@ -1,0 +1,20 @@
+#ifndef RES_GRA_SDEMO_H
+#define RES_GRA_SDEMO_H
+
+enum dRes_INDEX_GRA_SDEMO {
+    /* BCK  */
+    dRes_INDEX_GRA_SDEMO_BCK_GRA_BOW_e=0x3,
+    dRes_INDEX_GRA_SDEMO_BCK_GRA_WAIT_B_e=0x4,
+    dRes_INDEX_GRA_SDEMO_BCK_GRA_WAIT_B_STEP_L_e=0x5,
+    dRes_INDEX_GRA_SDEMO_BCK_GRA_WAIT_B_STEP_R_e=0x6,
+};
+
+enum dRes_ID_GRA_SDEMO {
+    /* BCK  */
+    dRes_ID_GRA_SDEMO_BCK_GRA_BOW_e=0x3,
+    dRes_ID_GRA_SDEMO_BCK_GRA_WAIT_B_e=0x4,
+    dRes_ID_GRA_SDEMO_BCK_GRA_WAIT_B_STEP_L_e=0x5,
+    dRes_ID_GRA_SDEMO_BCK_GRA_WAIT_B_STEP_R_e=0x6,
+};
+
+#endif /* !RES_GRA_SDEMO_H */

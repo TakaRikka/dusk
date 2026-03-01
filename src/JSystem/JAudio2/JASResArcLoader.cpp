@@ -55,7 +55,7 @@ static void JASResArcLoader::loadResourceCallback(void* args) {
 }
 
 
-int JASResArcLoader::loadResourceAsync(JKRArchive* archive, u16 id, u8* buffer, u32 size, LoadCallback callback, u32 cbArg)
+int JASResArcLoader::loadResourceAsync(JKRArchive* archive, u16 id, u8* buffer, u32 size, LoadCallback callback, uintptr_t cbArg)
 {
 	TLoadResInfo args(archive, id, buffer, size);
 	args.mCallback    = callback;

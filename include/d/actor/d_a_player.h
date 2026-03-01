@@ -7,6 +7,29 @@
 
 struct ResTIMG;
 
+class daPy_frameCtrl_c : public J3DFrameCtrl {
+public:
+    virtual ~daPy_frameCtrl_c() {}
+    daPy_frameCtrl_c() {}
+    bool checkAnmEnd();
+    void updateFrame();
+    void setFrameCtrl(u8 i_attribute, s16 i_start, s16 i_end, f32 i_rate, f32 i_frame);
+
+    u16 getEndFlg() const { return mEndFlg; }
+    u16 getNowSetFlg() const { return mNowSetFlg; }
+    void onEndFlg() { mEndFlg = 1; }
+    void onNowSetFlg() { mNowSetFlg = 1; }
+    void offNowSetFlg() { mNowSetFlg = 0; }
+    void offEndFlg() {
+        mEndFlg = 0;
+        mNowSetFlg = 0;
+    }
+
+private:
+    /* 0x14 */ u16 mEndFlg;
+    /* 0x16 */ u16 mNowSetFlg;
+};
+
 class daPy_sightPacket_c : public dDlst_base_c {
 public:
     daPy_sightPacket_c() {}
@@ -110,29 +133,6 @@ private:
     /* 0x0 */ fpc_ProcID mID;
     /* 0x4 */ fopAc_ac_c* mActor;
 };  // Size: 0x8
-
-class daPy_frameCtrl_c : public J3DFrameCtrl {
-public:
-    virtual ~daPy_frameCtrl_c() {}
-    daPy_frameCtrl_c() {}
-    bool checkAnmEnd();
-    void updateFrame();
-    void setFrameCtrl(u8 i_attribute, s16 i_start, s16 i_end, f32 i_rate, f32 i_frame);
-
-    u16 getEndFlg() const { return mEndFlg; }
-    u16 getNowSetFlg() const { return mNowSetFlg; }
-    void onEndFlg() { mEndFlg = 1; }
-    void onNowSetFlg() { mNowSetFlg = 1; }
-    void offNowSetFlg() { mNowSetFlg = 0; }
-    void offEndFlg() {
-        mEndFlg = 0;
-        mNowSetFlg = 0;
-    }
-
-private:
-    /* 0x14 */ u16 mEndFlg;
-    /* 0x16 */ u16 mNowSetFlg;
-};
 
 class Z2WolfHowlMgr;
 class daBoomerang_c;

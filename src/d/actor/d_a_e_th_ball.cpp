@@ -35,7 +35,7 @@ static void chain_draw(e_th_ball_class* i_this) {
 
         rot_z = var_r28 * 3000;
         if (var_r28 & 1) {
-            rot_z += (s16)0x4000;
+            ANGLE_ADD(rot_z, 0x4000);
         }
         cMtx_ZrotM(*calc_mtx, rot_z);
         MtxScale(size, size, size, 1);
@@ -57,7 +57,7 @@ static void chain_draw(e_th_ball_class* i_this) {
 
             rot_z = var_r28 * 3000;
             if (var_r28 & 1) {
-                rot_z += (s16)0x4000;
+                ANGLE_ADD(rot_z, 0x4000);
             }
             cMtx_ZrotM(*calc_mtx, rot_z);
             MtxScale(size, size, size, 1);
@@ -78,7 +78,7 @@ static void chain_draw(e_th_ball_class* i_this) {
 
             rot_z = var_r28 * 3000;
             if (var_r28 & 1) {
-                rot_z += (s16)0x4000;
+                ANGLE_ADD(rot_z, 0x4000);
             }
             cMtx_ZrotM(*calc_mtx, rot_z);
             MtxScale(size, size, size, 1);
@@ -462,7 +462,7 @@ static void normal_move(e_th_ball_class* i_this, s8 param_1) {
 
     a_this->speed.y -= 5.0f;
     if (param_1 != 0) {
-        a_this->current.angle.x += (s16)(200.0f * a_this->speedF);
+        ANGLE_ADD(a_this->current.angle.x, 200.0f * a_this->speedF);
     }
 
     f32 y_speed = a_this->speed.y;
@@ -655,7 +655,7 @@ static void e_th_ball_shot(e_th_ball_class* i_this) {
             cLib_addCalcAngleS2(&i_this->shape_angle.y, spE, 1, 0x4000);
             cLib_addCalcAngleS2(&i_this->shape_angle.x, 0, 1, 0x4000);
         } else if (temp_f31 > 0.0f) {
-            i_this->current.angle.y += (s16)cM_rndFX(4000.0f);
+            ANGLE_ADD(i_this->current.angle.y, cM_rndFX(4000.0f));
             i_this->speed.y = 20.0f + AREG_F(5);
         }
     
@@ -674,7 +674,7 @@ static void e_th_ball_shot(e_th_ball_class* i_this) {
 
         if (wall_angle != 35) {
             s16 spA = i_this->current.angle.y - wall_angle;
-            i_this->current.angle.y += (s16)(0x8000 - (spA * 2));
+            ANGLE_ADD(i_this->current.angle.y, 0x8000 - (spA * 2));
             i_this->speedF *= 0.3f + AREG_F(14);
         } else {
             i_this->current.angle.y -= 0x8000;
@@ -738,7 +738,7 @@ static void e_th_ball_return(e_th_ball_class* i_this) {
             i_this->speed.y = 0.0f;
             i_this->speedF = 10.0f;
             i_this->mMode = 3;
-            i_this->current.angle.y += (s16)cM_rndFX(6000.0f);
+            ANGLE_ADD(i_this->current.angle.y, cM_rndFX(6000.0f));
         } else if (fabsf(i_this->speedF) < 0.1f) {
             i_this->mMode = 3;
         }

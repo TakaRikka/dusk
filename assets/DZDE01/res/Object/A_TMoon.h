@@ -1,0 +1,20 @@
+#ifndef RES_A_TMOON_H
+#define RES_A_TMOON_H
+
+enum dRes_INDEX_A_TMOON {
+    /* BMDR */
+    dRes_INDEX_A_TMOON_BMD_A_TOUBOEMOON_e=0x3,
+};
+
+enum dRes_ID_A_TMOON {
+    /* BMDR */
+    dRes_ID_A_TMOON_BMD_A_TOUBOEMOON_e=0x3,
+};
+
+enum A_TOUBOEMOON_JNT {
+    A_TOUBOEMOON_JNT_OBJ_A_TOUBOEMOON_e=0x0,
+    A_TOUBOEMOON_JNT_DIS_A_TOUBOEMOON_e=0x1,
+    A_TOUBOEMOON_JNT_PPLANE8_e=0x2,
+};
+
+#endif /* !RES_A_TMOON_H */

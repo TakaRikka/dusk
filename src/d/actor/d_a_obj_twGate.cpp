@@ -8,6 +8,27 @@
 #include "d/actor/d_a_obj_twGate.h"
 #include "d/d_com_inf_game.h"
 
+class daTwGate_HIO_c : public fOpAcm_HIO_entry_c {
+public:
+    daTwGate_HIO_c();
+    ~daTwGate_HIO_c() {}
+
+    void genMessage(JORMContext* ctx);
+
+    /* 0x4 */ f32 mRange;
+};
+
+daTwGate_HIO_c::daTwGate_HIO_c() {
+    mRange = 1900.0f;
+}
+
+#if DEBUG
+void daTwGate_HIO_c::genMessage(JORMContext* ctx) {
+    // Range
+    ctx->genSlider("範囲", &mRange, 0.0f, 500000.0f);
+}
+#endif
+
 static char* l_resNameIdx[13] = {
     "twGtFiro",
     "twGtK0102",
@@ -23,17 +44,6 @@ static char* l_resNameIdx[13] = {
     "twGnK0616",
     "",
 };
-
-daTwGate_HIO_c::daTwGate_HIO_c() {
-    mRange = 1900.0f;
-}
-
-#if DEBUG
-void daTwGate_HIO_c::genMessage(JORMContext* ctx) {
-    // Range
-    ctx->genSlider("範囲", &mRange, 0.0f, 500000.0f);
-}
-#endif
 
 void daTwGate_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);

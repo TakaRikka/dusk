@@ -12,6 +12,7 @@
 #include "d/d_procname.h"
 #include "f_op/f_op_camera_mng.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 static void dice_wether_init(u8 i_weatherMode, f32 i_weatherTime, f32 i_currentTime) {
     dScnKy_env_light_c* env_light = dKy_getEnvlight();

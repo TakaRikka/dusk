@@ -43,7 +43,10 @@ public:
     virtual void init(const Vec& param_0, const Mtx&) = 0;
     virtual void calc() = 0;
 
-    static J3DMtxBuffer* getMtxBuffer() { return mMtxBuffer; }
+    static J3DMtxBuffer* getMtxBuffer() {
+        J3D_ASSERT_NULLPTR(174, mMtxBuffer != NULL)
+        return mMtxBuffer;
+    }
     static J3DJoint* getJoint() {
         J3D_ASSERT_NULLPTR(185, mJoint != NULL)
         return mJoint;
@@ -233,5 +236,13 @@ struct J3DMtxCalcCalcTransformMaya {
 struct J3DMtxCalcCalcTransformBasic {
     static void calcTransform(J3DTransformInfo const&);
 };
+
+inline s32 checkScaleOne(const Vec& param_0) {
+    if (param_0.x == 1.0f && param_0.y == 1.0f && param_0.z == 1.0f) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 #endif /* J3DJOINT_H */

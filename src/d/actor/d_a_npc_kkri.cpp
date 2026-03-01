@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_npc_kkri.h"
 #include "d/actor/d_a_e_ym.h"
+#include <cstring>
 
 static int l_bmdData[2][2] = {
     {35, 1},

@@ -383,7 +383,7 @@ int daAlink_c::procCanoeRide() {
     if (checkAnmEnd(frameCtrl)) {
         procCanoeWaitInit(1);
     } else if (frameCtrl->getFrame() < 9.0f) {
-        mProcVar3.field_0x300e += (s16)0x180;
+        ANGLE_ADD(mProcVar3.field_0x300e, 0x180);
 
         if (mProcVar0.field_0x3008 == 0) {
             canoe->incShapeAngleZ(-mProcVar3.field_0x300e);
@@ -483,11 +483,11 @@ int daAlink_c::procCanoeGetOffInit() {
     }
 
     if (var_r27) {
-        shape_angle.y -= (s16)0x4000;
+        ANGLE_SUB(shape_angle.y, 0x4000);
         setOldRootQuaternion(0, 0x4000, 0);
         var_r28->mTranslate.x -= 100.0f;
     } else {
-        shape_angle.y += (s16)0x4000;
+        ANGLE_ADD(shape_angle.y, 0x4000);
         setOldRootQuaternion(0, -0x4000, 0);
         var_r28->mTranslate.x += 100.0f;
     }

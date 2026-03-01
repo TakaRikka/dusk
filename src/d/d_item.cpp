@@ -8,6 +8,7 @@
 #include "d/d_item.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_meter2_info.h"
+#include <cstring>
 
 static void (*item_func_ptr[256])() = {
     item_func_HEART,
@@ -1071,15 +1072,15 @@ void item_func_CHUCHU_BLACK() {
 void item_func_LIGHT_DROP() {}
 
 void item_func_DROP_CONTAINER() {
-    dComIfGs_onLightDropFlag(FARON_VESSEL);
+    dComIfGs_onLightDropGetFlag(FARON_VESSEL);
 }
 
 void item_func_DROP_CONTAINER02() {
-    dComIfGs_onLightDropFlag(ELDIN_VESSEL);
+    dComIfGs_onLightDropGetFlag(ELDIN_VESSEL);
 }
 
 void item_func_DROP_CONTAINER03() {
-    dComIfGs_onLightDropFlag(LANAYRU_VESSEL);
+    dComIfGs_onLightDropGetFlag(LANAYRU_VESSEL);
 }
 
 void item_func_FILLED_CONTAINER() {}

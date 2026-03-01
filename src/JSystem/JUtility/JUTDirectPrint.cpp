@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <dolphin/os.h>
 #include "global.h"
+#include "angle_utils.h"
 
 JUTDirectPrint* JUTDirectPrint::sDirectPrint;
 
@@ -160,7 +161,7 @@ void JUTDirectPrint::printSub(u16 position_x, u16 position_y, char const* format
         for (; 0 < buffer_length; buffer_length--, ptr++) {
             int codepoint = sAsciiTable[*ptr & 0x7f];
             if (codepoint == 0xfe) {
-                position_y += 7;
+                U16_ADD_2(position_y, 7);
                 position_x = x;
             } else if (codepoint == 0xfd) {
                 position_x = position_x + 0x30 - ((position_x - x + 0x2f) % 0x30);
@@ -168,7 +169,7 @@ void JUTDirectPrint::printSub(u16 position_x, u16 position_y, char const* format
                 if (codepoint != 0xff) {
                     drawChar(position_x, position_y, codepoint);
                 }
-                position_x += 6;
+                U16_ADD_2(position_x, 6);
             }
         }
     }
@@ -177,6 +178,8 @@ void JUTDirectPrint::printSub(u16 position_x, u16 position_y, char const* format
 }
 
 void JUTDirectPrint::print(u16 position_x, u16 position_y, char const* format, ...) {
+    UNUSED(format);
+
     if (mFrameBuffer) {
         va_list args;
         va_start(args, format);
@@ -190,6 +193,8 @@ void JUTDirectPrint::drawString(u16 position_x, u16 position_y, char* text) {
 }
 
 void JUTDirectPrint::drawString_f(u16 position_x, u16 position_y, char const* format, ...) {
+    UNUSED(format);
+
     if (mFrameBuffer) {
         va_list args;
         va_start(args, format);
@@ -204,17 +209,15 @@ void JUTDirectPrint::setCharColor(JUtility::TColor color) {
 
 void JUTDirectPrint::setCharColor(u8 r, u8 g, u8 b) {
     mCharColor = JUtility::TColor(r, g, b, 0xFF);
-
-    int Cb = -0.148 * (int)r - 0.291 * (int)g + 0.439 * (int)b + 128;
-    int Cr = 0.439 * (int)r - 0.368 * (int)g - 0.071 * (int)b + 128;
-    int Y = 0.257 * (int)r + 0.504 * (int)g + 0.098 * (int)b + 16;
-
-    mCharColor_Y = Y << 8;
-
+    int Y = 0.257 * (int)r + 0.504 * (int)g + 0.098 * (int)b + 16.0f;
+    int Cb = -0.148 * (int)r - 0.291 * (int)g + 0.439 * (int)b + 128.0f;
+    int Cr = 0.439 * (int)r - 0.368 * (int)g - 0.071 * (int)b + 128.0f;
+    
+    mCharColor_Y = (u16)Y * 256;
     mCharColor_Cb = Cb;
-    mCharColor_Cb2 = (Cb >> 1) & 0x7fff;
-    mCharColor_Cb4 = (Cb >> 2) & 0x3fff;
+    mCharColor_Cb2 = (u16)Cb / 2;
+    mCharColor_Cb4 = (u16)Cb / 4;
     mCharColor_Cr = Cr;
-    mCharColor_Cr2 = (Cr >> 1) & 0x7fff;
-    mCharColor_Cr4 = (Cr >> 2) & 0x3fff;
+    mCharColor_Cr2 = (u16)Cr / 2;
+    mCharColor_Cr4 = (u16)Cr / 4;
 }

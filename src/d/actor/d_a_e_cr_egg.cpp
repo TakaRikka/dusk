@@ -29,7 +29,7 @@ static void e_cr_egg_move(e_cr_egg_class* a_this) {
         a_this->mode = 1;
         a_this->timers[0] = 150;
         actor->speedF = 5.0f + cM_rndF(3.0f);
-        actor->current.angle.y += (int)cM_rndFX(10000.0f);
+        actor->current.angle.y += (s16)cM_rndFX(10000.0f);
     case 1:
     case 2:
     case 3:
@@ -43,7 +43,7 @@ static void e_cr_egg_move(e_cr_egg_class* a_this) {
             if (a_this->mode < 4) {
                 static f32 spy[] = {17.0f, 8.0f, 5.0f};
                 actor->speed.y = spy[a_this->mode - 1];
-                actor->current.angle.y += (int)cM_rndFX(8000.0f);
+                actor->current.angle.y += (s16)cM_rndFX(8000.0f);
 
                 int sp28[3] = {40, 20, 10};
                 Z2GetAudioMgr()->seStart(Z2SE_EN_CR_EGG_BOUND, &actor->current.pos, sp28[a_this->mode], 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
@@ -79,7 +79,7 @@ static void action(e_cr_egg_class* a_this) {
         break;
     }
 
-    actor->current.angle.x += (int)(actor->speedF * (700.0f + TREG_F(9)));
+    actor->current.angle.x += (s16)(actor->speedF * (700.0f + TREG_F(9)));
 
     cMtx_YrotS(*calc_mtx, actor->current.angle.y);
     mae.x = 0.0f;
@@ -140,7 +140,7 @@ static int daE_CR_EGG_IsDelete(e_cr_egg_class* a_this) {
 static int daE_CR_EGG_Delete(e_cr_egg_class* a_this) {
     fopAc_ac_c* actor = &a_this->enemy;
 
-    fopAcM_RegisterDeleteID(actor, "E_CR_EGG");
+    fopAcM_RegisterDeleteID(a_this, "E_CR_EGG");
     dComIfG_resDelete(&a_this->phase, "E_CR");
     a_this->sound.stopAnime();
     return 1;

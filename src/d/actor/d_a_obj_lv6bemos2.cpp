@@ -11,6 +11,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_camera.h"
 #include "d/d_s_play.h"
+#include <cstring>
 
 enum E_bm6_RES_File_ID {
     /* BCK */
@@ -493,7 +494,7 @@ void daObjLv6Bm_c::calcBeam() {
 
     if (field_0xa19 > 0) {
         cXyz sp84(field_0x9f8);
-        if (fopAcM_lc_c::lineCheck(&field_0x9e4, &field_0x9f8, this) != NULL && fopAcM_lc_c::checkGroundHit()) {
+        if (fopAcM_lc_c::lineCheck(&field_0x9e4, &field_0x9f8, this) != false && fopAcM_lc_c::checkGroundHit()) {
             sp84 = fopAcM_lc_c::getCross();
         }
 

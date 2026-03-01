@@ -11,6 +11,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
+#include <cstring>
 
 const static dCcD_SrcSph ccSphSrc = {
     {

@@ -27,6 +27,7 @@ struct TCreateObject : public JStudio::TCreateObject {
     JAISoundStarter* get_pJAISoundStarter_() { return pJAISoundStarter_; }
     const JStage::TSystem* get_pJSGSystem_() { return pJSGSystem_; }
     bool isPermit_onExit_notEnd() { return mPermit_onExit_notEnd; }
+    void setPermit_onExit_notEnd(bool value) { mPermit_onExit_notEnd = value; }
 
     /* 0x0C */ JAISoundStarter* pJAISoundStarter_;
     /* 0x10 */ const JStage::TSystem* pJSGSystem_;

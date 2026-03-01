@@ -23,6 +23,7 @@
 #include "d/d_menu_window.h"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_graphic.h"
+#include <cstring>
 
 #if (PLATFORM_WII || PLATFORM_SHIELD)
 #define POINTER_OPT dComIfGs_getOptPointer()
@@ -1144,9 +1145,9 @@ void dMenu_Dmap_c::screenInit() {
     field_0x88[0] = new CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('map000'), 3, NULL);
     field_0x88[1] = new CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('con000'), 3, NULL);
     
-    if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 0x11) {
+    if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dStage_SaveTbl_LV2) {
         field_0x88[2] = new CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('i_key_n'), 3, NULL);
-    } else if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 0x14) {
+    } else if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dStage_SaveTbl_LV5) {
         field_0x88[2] = new CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('lv5_k_n'), 3, NULL);
     } else {
         field_0x88[2] = new CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('nor_k_n'), 3, NULL);
@@ -1156,7 +1157,7 @@ void dMenu_Dmap_c::screenInit() {
         field_0x88[i]->scale(0.9f, 0.9f);
     }
 
-    if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 0x11) {
+    if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dStage_SaveTbl_LV2) {
         mpDrawBg->mBaseScreen->search(MULTI_CHAR('lv5_k_n'))->hide();
         mpDrawBg->mBaseScreen->search(MULTI_CHAR('nor_k_n'))->hide();
 
@@ -1195,7 +1196,7 @@ void dMenu_Dmap_c::screenInit() {
             ((J2DPicture*)mpDrawBg->mBaseScreen->search(MULTI_CHAR('c_n_1_s')))->changeTexture(tex, 0);
             ((J2DPicture*)mpDrawBg->mBaseScreen->search(MULTI_CHAR('c_n_1')))->changeTexture(tex, 0);
         }
-    } else if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 0x14) {
+    } else if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dStage_SaveTbl_LV5) {
         mpDrawBg->mBaseScreen->search(MULTI_CHAR('i_key_n'))->hide();
         mpDrawBg->mBaseScreen->search(MULTI_CHAR('nor_k_n'))->hide();
         mpDrawBg->mBaseScreen->search(MULTI_CHAR('key_n_n'))->hide();
@@ -1727,7 +1728,7 @@ void dMenu_Dmap_c::_create() {
 
     screenInit();
 
-    mpDrawBg->getMapPane()->changeTexture(mMapCtrl->getResTIMGPointer(0), NULL);
+    mpDrawBg->getMapPane()->changeTexture(mMapCtrl->getResTIMGPointer(0), 0);
 
     if (mpDrawBg->getMapPane()->append(mMapCtrl->getResTIMGPointer(1), 1.0f)) {
         mpDrawBg->getMapPane()->setBlendRatio(1.0f, 0.0f);

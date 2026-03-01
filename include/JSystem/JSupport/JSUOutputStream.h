@@ -18,37 +18,24 @@ public:
     s32 write(const void*, s32);
 	void write(const char*);
 
-#ifdef TARGET_PC
-    JSUOutputStream& operator<<(uintptr_t param_0) {
-        write(&param_0, sizeof(uintptr_t));
-        return *this;
-    }
-#endif
-
-	JSUOutputStream& operator<<(u32 param_0) {
-        write(&param_0, sizeof(u32));
-        return *this;
+#define JSU_OUTPUTSTREAM_OPERATOR(T) \
+    JSUOutputStream& operator<<(T val) { \
+        write(&val, sizeof(T)); \
+        return *this; \
     }
 
-    JSUOutputStream& operator<<(s32 param_0) {
-        write(&param_0, sizeof(s32));
-        return *this;
-    }
+    JSU_OUTPUTSTREAM_OPERATOR(signed char)
+    JSU_OUTPUTSTREAM_OPERATOR(unsigned char)
+    JSU_OUTPUTSTREAM_OPERATOR(signed short)
+    JSU_OUTPUTSTREAM_OPERATOR(unsigned short)
+    JSU_OUTPUTSTREAM_OPERATOR(int)
+    JSU_OUTPUTSTREAM_OPERATOR(unsigned int)
+    JSU_OUTPUTSTREAM_OPERATOR(signed long)
+    JSU_OUTPUTSTREAM_OPERATOR(unsigned long)
+    JSU_OUTPUTSTREAM_OPERATOR(signed long long)
+    JSU_OUTPUTSTREAM_OPERATOR(unsigned long long)
 
-    JSUOutputStream& operator<<(s16 param_0) {
-        write(&param_0, sizeof(s16));
-        return *this;
-    }
-
-    JSUOutputStream& operator<<(u16 param_0) {
-        write(&param_0, sizeof(u16));
-        return *this;
-    }
-
-    JSUOutputStream& operator<<(u8 param_0) {
-        write(&param_0, sizeof(u8));
-        return *this;
-    }
+#undef JSU_OUTPUTSTREAM_OPERATOR
 
     JSUOutputStream& operator<<(const char* param_0) {
         write(param_0);

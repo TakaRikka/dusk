@@ -8,12 +8,31 @@
 #include "d/actor/d_a_obj_lv3Candle.h"
 
 #include "d/d_com_inf_game.h"
+#include "d/d_s_play.h"
+#include "d/d_cc_uty.h"
+
+class daLv3Candle_HIO_c : public mDoHIO_entry_c {
+public:
+    daLv3Candle_HIO_c();
+    virtual ~daLv3Candle_HIO_c() {}
+
+    void genMessage(JORMContext*);
+
+    /* 0x00 vtable */
+    /* 0x04 */ u8 mTimer; // Written to, but never read
+};
 
 static daLv3Candle_HIO_c l_HIO;
 
 daLv3Candle_HIO_c::daLv3Candle_HIO_c() {
-    field_0x04 = 0x1e;
+    mTimer = 0x1e;
 }
+
+#if DEBUG
+void daLv3Candle_HIO_c::genMessage(JORMContext* mctx) {
+    mctx->genSlider("timer", &mTimer, 0, 0xFF);
+}
+#endif
 
 dCcD_SrcGObjInf const daLv3Candle_c::mCcDObjInfo = {
     {0, {{0x200, 0, 0x13}, {0xd8fbfdff, 0x1f}, {0x79}}},
@@ -36,9 +55,12 @@ void daLv3Candle_c::setBaseMtx() {
 static u32 const l_bmdIdx[] = {0x03, 0x03};
 
 int daLv3Candle_c::CreateHeap() {
-    J3DModelData* model_data =
+    J3DModelData* modelData =
         (J3DModelData*)dComIfG_getObjectRes(l_resNameIdx[mType], l_bmdIdx[mType]);
-    mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000084);
+
+    JUT_ASSERT(226, modelData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
 
     if (mpModel == NULL) {
         return FALSE;
@@ -95,7 +117,8 @@ cPhs_Step daLv3Candle_c::create() {
 }
 
 int daLv3Candle_c::createHeapCallBack(fopAc_ac_c* i_this) {
-    return static_cast<daLv3Candle_c*>(i_this)->CreateHeap();
+    daLv3Candle_c* actor = static_cast<daLv3Candle_c*>(i_this);
+    return actor->CreateHeap();
 }
 
 void daLv3Candle_c::lightInit() {
@@ -116,14 +139,14 @@ void daLv3Candle_c::lightInit() {
 }
 
 void daLv3Candle_c::pointLightProc() {
-    if (!mIsLit) {
-        GXColor color = {188, 102, 66, 255};
-        cLib_addCalc(&mIntensity, 1.0f, 0.5f, 0.1f, 0.0001f);
+    if (mIsLit)
+        return;
 
-        if (mIntensity >= 0.000001f) {
-            dKy_BossLight_set(&mLightPos, &color, mIntensity, 0);
-        }
-    }
+    GXColor color = {188, 102, 66, 255};
+    cLib_addCalc(&mIntensity, 1.0f, 0.5f, 0.1f, 0.0001f);
+
+    if (mIntensity >= 0.000001f)
+        dKy_BossLight_set(&mLightPos, &color, mIntensity, 0);
 }
 
 int daLv3Candle_c::Execute() {
@@ -137,8 +160,8 @@ int daLv3Candle_c::Execute() {
     if (mSph.ChkTgHit()) {
         cCcD_Obj* obj = mSph.GetTgHitObj();
         if (obj != NULL) {
-            bool play_sound = true;
-            fopAc_ac_c* actor = obj->GetAc();
+            u8 play_sound = true;
+            fopAc_ac_c* actor = dCc_GetAc(obj->GetAc());
             if (fopAcM_GetName(actor) == PROC_ALINK) {
                 dCcD_GObjInf* gobj = mSph.GetTgHitGObj();
                 if (gobj->GetAtType() & AT_TYPE_NORMAL_SWORD && mTgHit != 0) {
@@ -160,11 +183,11 @@ int daLv3Candle_c::Execute() {
 
     cXyz pos = current.pos;
     if (mType == 0) {
-        mSph.SetR(90.0f);
-        pos.z += 70.0f;
+        mSph.SetR(90.0f + oREG_F(0));
+        pos.z += 70.0f + oREG_F(1);
     } else {
-        mSph.SetR(60.0f);
-        pos.y -= 200.0f;
+        mSph.SetR(60.0f + oREG_F(3));
+        pos.y -= 200.0f + oREG_F(2);
     }
 
     mSph.SetC(pos);
@@ -205,11 +228,14 @@ static int daLv3Candle_Execute(daLv3Candle_c* i_this) {
 }
 
 static int daLv3Candle_Delete(daLv3Candle_c* i_this) {
+    fopAcM_RegisterDeleteID(i_this, "daLv3Candle");
     return static_cast<daLv3Candle_c*>(i_this)->Delete();
 }
 
 static int daLv3Candle_Create(fopAc_ac_c* i_this) {
-    return static_cast<daLv3Candle_c*>(i_this)->create();
+    daLv3Candle_c* const actor = static_cast<daLv3Candle_c*>(i_this);
+    fopAcM_RegisterCreateID(i_this, "daLv3Candle");
+    return actor->create();
 }
 
 static actor_method_class l_daLv3Candle_Method = {

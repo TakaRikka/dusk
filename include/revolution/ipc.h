@@ -10,7 +10,9 @@ extern "C" {
 #endif
 
 void IPCInit(void);
+#if SDK_AUG2010
 void IPCReInit(void);
+#endif
 u32 IPCReadReg(u32 regIdx);
 void IPCWriteReg(u32 regIdx, u32 data);
 void* IPCGetBufferHi(void);

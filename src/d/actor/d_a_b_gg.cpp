@@ -12,6 +12,7 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include "f_op/f_op_actor_enemy.h"
 #include "f_op/f_op_camera_mng.h"
+#include <cstring>
 
 class daB_GG_HIO_c : public JORReflexible {
 public:
@@ -2905,7 +2906,7 @@ void daB_GG_c::G_DamageAction() {
             speedF = 0.0f;
         }
 
-        s_TargetAngle += (s16) 0x4000;
+        ANGLE_ADD(s_TargetAngle, 0x4000);
         break;
     case 2:
         cXyz* tg_hit_pos;
@@ -3789,7 +3790,7 @@ void daB_GG_c::At_Check() {
                 mAtInfo.mAttackPower = 80;
             }
 
-            health -= (s16)mAtInfo.mAttackPower;
+            S16_SUB(health, mAtInfo.mAttackPower);
         }
 
         int pause_time;

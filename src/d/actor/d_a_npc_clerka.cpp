@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_npc_clerka.h"
 #include "d/d_msg_object.h"
+#include <cstring>
 
 const daNpc_clerkA_HIOParam daNpc_clerkA_Param_c::m = {
     220.0f,  // attention_offset

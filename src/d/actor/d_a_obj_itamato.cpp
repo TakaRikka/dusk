@@ -9,38 +9,7 @@
 #include "d/d_cc_d.h"
 #include "d/actor/d_a_npc.h"
 #include "JSystem/JHostIO/JORFile.h"
-
-struct daObj_ItaMato_HIOParam {
-    /* 0x00 */ f32 attn_offset;
-    /* 0x04 */ f32 gravity;
-    /* 0x08 */ f32 scale;
-    /* 0x0C */ f32 real_shadow_size;
-    /* 0x10 */ f32 shake_pow;
-};
-
-class daObj_ItaMato_Param_c {
-public:
-    virtual ~daObj_ItaMato_Param_c() {}
-
-    static daObj_ItaMato_HIOParam const m;
-};
-
-#if DEBUG
-#define PARAM mHIO->mAttr
-#define PARAM_CLASS daObj_ItaMato_HIO_c
-
-class daObj_ItaMato_HIO_c : public mDoHIO_entry_c {
-public:
-    daObj_ItaMato_HIO_c();
-    void genMessage(JORMContext* ctx);
-    void listenPropertyEvent(const JORPropertyEvent*);
-
-    /* 0x8 */ daObj_ItaMato_HIOParam mAttr;
-};
-#else
-#define PARAM daObj_ItaMato_Param_c::m
-#define PARAM_CLASS daObj_ItaMato_Param_c
-#endif
+#include <cstring>
 
 daObj_ItaMato_HIOParam const daObj_ItaMato_Param_c::m = {
     110.0f,
@@ -52,7 +21,7 @@ daObj_ItaMato_HIOParam const daObj_ItaMato_Param_c::m = {
 
 #if DEBUG
 daObj_ItaMato_HIO_c::daObj_ItaMato_HIO_c() {
-    mAttr = daObj_ItaMato_Param_c::m;
+    m = daObj_ItaMato_Param_c::m;
 }
 
 void daObj_ItaMato_HIO_c::listenPropertyEvent(const JORPropertyEvent* i_event) {
@@ -63,18 +32,18 @@ void daObj_ItaMato_HIO_c::listenPropertyEvent(const JORPropertyEvent* i_event) {
 
     switch ((u32)i_event->id) {
         case 0x40000002:
-            if (jorFile.open(6, "すべてのファイル(*.*)", NULL, NULL, NULL)) {
+            if (jorFile.open(6, "すべてのファイル(*.*)\0*.*", NULL, NULL, NULL)) {
                 memset(buffer, 0, sizeof(buffer));
                 len = 0;
-                sprintf(buffer + len, "%.3ff,\t//  注目オフセット\n", mAttr.attn_offset);
+                sprintf(buffer + len, "%.3ff,\t//  注目オフセット\n", m.attn_offset);
                 len = strlen(buffer);
-                sprintf(buffer + len, "%.3ff,\t//  重力\n", mAttr.gravity);
+                sprintf(buffer + len, "%.3ff,\t//  重力\n", m.gravity);
                 len = strlen(buffer);
-                sprintf(buffer + len, "%.3ff,\t//  スケ−ル\n", mAttr.scale);
+                sprintf(buffer + len, "%.3ff,\t//  スケ−ル\n", m.scale);
                 len = strlen(buffer);
-                sprintf(buffer + len, "%.3ff,\t//  リアル影サイズ\n", mAttr.real_shadow_size);
+                sprintf(buffer + len, "%.3ff,\t//  リアル影サイズ\n", m.real_shadow_size);
                 len = strlen(buffer);
-                sprintf(buffer + len, "%.3ff,\t//  揺れパワ−\n", mAttr.shake_pow);
+                sprintf(buffer + len, "%.3ff,\t//  揺れパワ−\n", m.shake_pow);
                 len = strlen(buffer);
                 jorFile.writeData(buffer, len);
                 jorFile.close();
@@ -87,11 +56,11 @@ void daObj_ItaMato_HIO_c::listenPropertyEvent(const JORPropertyEvent* i_event) {
 }
 
 void daObj_ItaMato_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genSlider("注目オフセット　", &mAttr.attn_offset, 0.0f, 1000.0f);
-    ctx->genSlider("重力　　　　　　", &mAttr.gravity, -100.0f, 100.0f);
-    ctx->genSlider("スケ−ル　　　　", &mAttr.scale, 0.0f, 100.0f);
-    ctx->genSlider("リアル影サイズ　", &mAttr.real_shadow_size, 0.0f, 10000.0f);
-    ctx->genSlider("揺れパワ−　　　", &mAttr.shake_pow, 0.0f, 90.0f);
+    ctx->genSlider("注目オフセット　", &m.attn_offset, 0.0f, 1000.0f);
+    ctx->genSlider("重力　　　　　　", &m.gravity, -100.0f, 100.0f);
+    ctx->genSlider("スケ−ル　　　　", &m.scale, 0.0f, 100.0f);
+    ctx->genSlider("リアル影サイズ　", &m.real_shadow_size, 0.0f, 10000.0f);
+    ctx->genSlider("揺れパワ−　　　", &m.shake_pow, 0.0f, 90.0f);
     ctx->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
@@ -110,7 +79,7 @@ static dCcD_SrcSph l_ccDSph = {
     } // mSphAttr
 };
 
-static PARAM_CLASS l_HIO;
+static OBJ_ITAMATO_HIO_CLASS l_HIO;
 
 static char* l_resName = "H_ItaMato";
 
@@ -254,7 +223,9 @@ int daObj_ItaMato_c::Execute() {
                             }
                         }
 
-                        dComIfGs_setTmpReg(0xF4FF, dComIfGs_getTmpReg(0xF4FF) + 1);
+                        u8 curRegVal = dComIfGs_getTmpReg(0xF4FF);
+                        curRegVal++;
+                        dComIfGs_setTmpReg(0xF4FF, curRegVal);
                         if (dComIfGp_getAttention()->GetLockonList(0) != NULL) {
                             if (dComIfGp_getAttention()->LockonTruth()) {
                                 if (this == dComIfGp_getAttention()->GetLockonList(0)->getActor()) {
@@ -310,7 +281,7 @@ int daObj_ItaMato_c::Execute() {
     cLib_addCalc2(&field_0x9f0[2], 0.0f, 0.125f, 125.0f);
     setMtx();
     attention_info.position = current.pos;
-    attention_info.position.y += PARAM.attn_offset;
+    attention_info.position.y += mHIO->m.attn_offset;
     eyePos = attention_info.position;
 
     if (field_0xa16 == 0) {
@@ -398,7 +369,7 @@ const char* daObj_ItaMato_c::getResName() {
 
 void daObj_ItaMato_c::setSwayParam(fopAc_ac_c* i_actor) {
     f32 fVar1 = 1.0f;
-    f32 fVar2[3] = {0.0f, 0.0f, PARAM.shake_pow};
+    f32 fVar2[3] = {0.0f, 0.0f, mHIO->m.shake_pow};
 
     field_0xa02 = fopAcM_searchActorAngleY(this, i_actor) - shape_angle.y + 0x8000;
     field_0x9e8 = 8;
@@ -411,11 +382,11 @@ void daObj_ItaMato_c::setSwayParam(fopAc_ac_c* i_actor) {
             case 6:
             case 7:
                 if (mCutType == 3) {
-                    field_0xa02 -= (s16)0x4000;
+                    ANGLE_SUB(field_0xa02, 0x4000);
                 }
-
+                
                 if (mCutType == 4) {
-                    field_0xa02 += (s16)0x4000;
+                    ANGLE_ADD(field_0xa02, 0x4000);
                 }
 
                 fVar1 = 0.6f;

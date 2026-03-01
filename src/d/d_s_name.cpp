@@ -339,7 +339,7 @@ scene_process_profile_definition g_profile_NAME_SCENE = {
     0,
     &g_fopScn_Method.base,
     &l_dScnName_Method,
-    NULL,
+    0,
 };
 
 scene_process_profile_definition g_profile_NAMEEX_SCENE = {
@@ -353,5 +353,5 @@ scene_process_profile_definition g_profile_NAMEEX_SCENE = {
     0,
     &g_fopScn_Method.base,
     &l_dScnName_Method,
-    NULL,
+    0,
 };

@@ -26,14 +26,6 @@ J3DMtxBuffer* J3DMtxCalc::mMtxBuffer;
 
 J3DJoint* J3DMtxCalc::mJoint;
 
-inline s32 checkScaleOne(const Vec& param_0) {
-    if (param_0.x == 1.0f && param_0.y == 1.0f && param_0.z == 1.0f) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 void J3DMtxCalcCalcTransformBasic::calcTransform(J3DTransformInfo const& transInfo) {
     J3DJoint* joint = J3DMtxCalc::getJoint();
     J3DMtxBuffer* mtxBuf = J3DMtxCalc::getMtxBuffer();

@@ -1,0 +1,123 @@
+#ifndef RES_E_PO_H
+#define RES_E_PO_H
+
+enum dRes_INDEX_E_PO {
+    /* BCK  */
+    dRes_INDEX_E_PO_BCK_EF_GLOW_e=0x4,
+    dRes_INDEX_E_PO_BCK_PO_ATTACK_e=0x5,
+    dRes_INDEX_E_PO_BCK_PO_AWAKE_e=0x6,
+    dRes_INDEX_E_PO_BCK_PO_DAMAGE_e=0x7,
+    dRes_INDEX_E_PO_BCK_PO_DOWN_e=0x8,
+    dRes_INDEX_E_PO_BCK_PO_DOWN_DAMAGE_e=0x9,
+    dRes_INDEX_E_PO_BCK_PO_DOWN_DEAD_e=0xA,
+    dRes_INDEX_E_PO_BCK_PO_DOWN_WAIT_e=0xB,
+    dRes_INDEX_E_PO_BCK_PO_FIRECATCH_e=0xC,
+    dRes_INDEX_E_PO_BCK_PO_HANGED_e=0xD,
+    dRes_INDEX_E_PO_BCK_PO_HANGED_BRUSH_e=0xE,
+    dRes_INDEX_E_PO_BCK_PO_HANGED_DAMAGE_e=0xF,
+    dRes_INDEX_E_PO_BCK_PO_HANGED_WAIT_e=0x10,
+    dRes_INDEX_E_PO_BCK_PO_POSSESS_e=0x11,
+    dRes_INDEX_E_PO_BCK_PO_RUNAFTER_e=0x12,
+    dRes_INDEX_E_PO_BCK_PO_RUNAFTER2_e=0x13,
+    dRes_INDEX_E_PO_BCK_PO_SWAYBACK_e=0x14,
+    dRes_INDEX_E_PO_BCK_PO_WAIT_e=0x15,
+    dRes_INDEX_E_PO_BCK_PO_WAIT02_e=0x16,
+    dRes_INDEX_E_PO_BCK_PW_DEATH_e=0x17,
+    /* BMDR */
+    dRes_INDEX_E_PO_BMD_EF_GLOW_e=0x1A,
+    dRes_INDEX_E_PO_BMD_PO_e=0x1B,
+    dRes_INDEX_E_PO_BMD_PO_LAMP_e=0x1C,
+    dRes_INDEX_E_PO_BMD_PW_e=0x1D,
+};
+
+enum dRes_ID_E_PO {
+    /* BCK  */
+    dRes_ID_E_PO_BCK_EF_GLOW_e=0x4,
+    dRes_ID_E_PO_BCK_PO_ATTACK_e=0x5,
+    dRes_ID_E_PO_BCK_PO_AWAKE_e=0x6,
+    dRes_ID_E_PO_BCK_PO_DAMAGE_e=0x7,
+    dRes_ID_E_PO_BCK_PO_DOWN_e=0x8,
+    dRes_ID_E_PO_BCK_PO_DOWN_DAMAGE_e=0x9,
+    dRes_ID_E_PO_BCK_PO_DOWN_DEAD_e=0xA,
+    dRes_ID_E_PO_BCK_PO_DOWN_WAIT_e=0xB,
+    dRes_ID_E_PO_BCK_PO_FIRECATCH_e=0xC,
+    dRes_ID_E_PO_BCK_PO_HANGED_e=0xD,
+    dRes_ID_E_PO_BCK_PO_HANGED_BRUSH_e=0xE,
+    dRes_ID_E_PO_BCK_PO_HANGED_DAMAGE_e=0xF,
+    dRes_ID_E_PO_BCK_PO_HANGED_WAIT_e=0x10,
+    dRes_ID_E_PO_BCK_PO_POSSESS_e=0x11,
+    dRes_ID_E_PO_BCK_PO_RUNAFTER_e=0x12,
+    dRes_ID_E_PO_BCK_PO_RUNAFTER2_e=0x13,
+    dRes_ID_E_PO_BCK_PO_SWAYBACK_e=0x14,
+    dRes_ID_E_PO_BCK_PO_WAIT_e=0x15,
+    dRes_ID_E_PO_BCK_PO_WAIT02_e=0x16,
+    dRes_ID_E_PO_BCK_PW_DEATH_e=0x17,
+    /* BMDR */
+    dRes_ID_E_PO_BMD_EF_GLOW_e=0x1A,
+    dRes_ID_E_PO_BMD_PO_e=0x1B,
+    dRes_ID_E_PO_BMD_PO_LAMP_e=0x1C,
+    dRes_ID_E_PO_BMD_PW_e=0x1D,
+};
+
+enum EF_GLOW_JNT {
+    EF_GLOW_JNT_EF_GLOW_e=0x0,
+};
+
+enum PO_JNT {
+    PO_JNT_WORLD_ROOT_e=0x0,
+    PO_JNT_BACKBONE_e=0x1,
+    PO_JNT_HEAD_e=0x2,
+    PO_JNT_FOOD_e=0x3,
+    PO_JNT_FBONE1_e=0x4,
+    PO_JNT_FBONE2_e=0x5,
+    PO_JNT_MOUTH_e=0x6,
+    PO_JNT_LBONE_e=0x7,
+    PO_JNT_RBONE_e=0x8,
+    PO_JNT_SHOULDEL_e=0x9,
+    PO_JNT_ARML1_e=0xA,
+    PO_JNT_ARML2_e=0xB,
+    PO_JNT_HANDL_e=0xC,
+    PO_JNT_SHOULDER_e=0xD,
+    PO_JNT_ARMR1_e=0xE,
+    PO_JNT_ARMR2_e=0xF,
+    PO_JNT_HANDR_e=0x10,
+    PO_JNT_WAIST1_e=0x11,
+    PO_JNT_WAIST2_e=0x12,
+    PO_JNT_SKIRTF1_e=0x13,
+    PO_JNT_SKIRTF2_e=0x14,
+    PO_JNT_SKIRTR1_e=0x15,
+    PO_JNT_SKIRTR2_e=0x16,
+};
+
+enum PO_LAMP_JNT {
+    PO_LAMP_JNT_LAMP_LOC_e=0x0,
+    PO_LAMP_JNT_HANDLE_e=0x1,
+    PO_LAMP_JNT_LAMP1_e=0x2,
+};
+
+enum PW_JNT {
+    PW_JNT_WORLD_ROOT_e=0x0,
+    PW_JNT_BACKBONE01_e=0x1,
+    PW_JNT_WAIST01_e=0x2,
+    PW_JNT_WAIST02_e=0x3,
+    PW_JNT_SKIRTF01_e=0x4,
+    PW_JNT_SKIRTF02_e=0x5,
+    PW_JNT_SKIRTR01_e=0x6,
+    PW_JNT_SKIRTR02_e=0x7,
+    PW_JNT_BACKBONE02_e=0x8,
+    PW_JNT_DOKURO_e=0x9,
+    PW_JNT_HEAD_e=0xA,
+    PW_JNT_FOOD_e=0xB,
+    PW_JNT_SHOULDEL_e=0xC,
+    PW_JNT_ARML01_e=0xD,
+    PW_JNT_ARML02_e=0xE,
+    PW_JNT_ARML03_e=0xF,
+    PW_JNT_ARML04_e=0x10,
+    PW_JNT_SHOULDER_e=0x11,
+    PW_JNT_ARMR01_e=0x12,
+    PW_JNT_ARMR02_e=0x13,
+    PW_JNT_ARMR03_e=0x14,
+    PW_JNT_ARMR04_e=0x15,
+};
+
+#endif /* !RES_E_PO_H */

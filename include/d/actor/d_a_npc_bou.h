@@ -2,6 +2,7 @@
 #define D_A_NPC_BOU_H
 
 #include "d/actor/d_a_npc.h"
+#include <cstring>
 
 struct daNpc_Bou_HIOParam {
     /* 0x00 */ daNpcT_HIOParam common;

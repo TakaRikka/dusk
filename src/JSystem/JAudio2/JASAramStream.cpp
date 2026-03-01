@@ -143,7 +143,7 @@ bool JASAramStream::start() {
 }
 
 bool JASAramStream::stop(u16 param_0) {
-    if (!OSSendMessage(&field_0x000, (OSMessage)(param_0 << 0x10 | 1), OS_MESSAGE_NOBLOCK)) {
+    if (!OSSendMessage(&field_0x000, (OSMessage)(uintptr_t)(param_0 << 0x10 | 1), OS_MESSAGE_NOBLOCK)) {
         JUT_WARN(290, "%s", "OSSendMessage Failed");
         return false;
     }

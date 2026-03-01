@@ -1,0 +1,32 @@
+#ifndef RES_H_ZRAROCK_H
+#define RES_H_ZRAROCK_H
+
+enum dRes_INDEX_H_ZRAROCK {
+    /* BMDR */
+    dRes_INDEX_H_ZRAROCK_BMD_H_ZORAROCK_e=0x5,
+    dRes_INDEX_H_ZRAROCK_BMD_H_ZORAROCK_FUTOUMEI_e=0x6,
+    /* BRK  */
+    dRes_INDEX_H_ZRAROCK_BRK_H_ZORAROCK_e=0x9,
+    /* DZB  */
+    dRes_INDEX_H_ZRAROCK_DZB_H_ZORAROCK_e=0xC,
+};
+
+enum dRes_ID_H_ZRAROCK {
+    /* BMDR */
+    dRes_ID_H_ZRAROCK_BMD_H_ZORAROCK_e=0x5,
+    dRes_ID_H_ZRAROCK_BMD_H_ZORAROCK_FUTOUMEI_e=0x6,
+    /* BRK  */
+    dRes_ID_H_ZRAROCK_BRK_H_ZORAROCK_e=0x9,
+    /* DZB  */
+    dRes_ID_H_ZRAROCK_DZB_H_ZORAROCK_e=0xC,
+};
+
+enum H_ZORAROCK_JNT {
+    H_ZORAROCK_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum H_ZORAROCK_FUTOUMEI_JNT {
+    H_ZORAROCK_FUTOUMEI_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_H_ZRAROCK_H */

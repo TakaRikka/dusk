@@ -14,6 +14,7 @@
 #if DEBUG
 #include "SSystem/SComponent/c_counter.h"
 #include "JSystem/JHostIO/JORFile.h"
+#include <cstring>
 #endif
 
 const daObj_Pumpkin_HIOParam daObj_Pumpkin_Param_c::m = {
@@ -450,7 +451,7 @@ int daObj_Pumpkin_c::Execute() {
                                     current.angle.y = cM_atan2s(sp_0x4C.x, sp_0x4C.z);
                                 }
 
-                                MULT_ANGLE_2(sp_0x10, streamPower);
+                                ANGLE_MULT_2(sp_0x10, streamPower);
                                 cLib_chaseAngleS(&field_0xB38.y, (field_0xB38.y < 0) ? sp_0x10*-1 : sp_0x10, 0x10);
                                 if (field_0xBAB) {
                                     cLib_addCalc2(&speedF, streamPower * 1.55f, 0.15f, 1.0f);

@@ -81,8 +81,9 @@ void JUTProcBar::adjustMeterLength(u32 param_0, f32* param_1, f32 param_2, f32 p
                                    int* param_4) {
     BOOL var2 = false;
     float var1 = *param_1;
+    u32 frameDuration = 16666;
     while (var1 > param_2) {
-        if (param_0 * var1 * 20.0f / 16666.0f <= mParams.mWidth - 30.0f)
+        if (param_0 * var1 * 20.0f / frameDuration <= mParams.mWidth - 30.0f)
             break;
 
         var1 -= (1.0f / 10.0f);
@@ -98,7 +99,7 @@ void JUTProcBar::adjustMeterLength(u32 param_0, f32* param_1, f32 param_2, f32 p
         (*param_4)++;
         if (*param_4 < 0x1e)
             break;
-        if ((param_0 * var1 * 20.0f / 16666.0f) < (mParams.mWidth - 60.0f))
+        if ((param_0 * var1 * 20.0f / frameDuration) < (mParams.mWidth - 60.0f))
             var1 += (1.0f / 5.0f);
         break;
     }
@@ -113,10 +114,13 @@ void JUTProcBar::draw() {
 void JUTProcBar::drawProcessBar() {
     if (mVisible) {
         int frameDuration = 16666;  // duration in miliseconds? for how long a frame takes,
-        if (JUTVideo::getManager() && ((JUTVideo::getManager()->getRenderMode()->viTVmode >> 2) &
-                                       0x0f) == 1)  // possibly a define
-            frameDuration = 20000;                  // duration for PAL
-
+        if (JUTVideo::getManager()) {
+            int viMode = JUTVideo::getManager()->getRenderMode()->viTVmode;
+            int viMode2 = ((viMode >> 2) & 0x0f);
+            if (viMode2 == 1) { // possibly a define
+                frameDuration = 20000;  // duration for PAL
+            }
+        }
         static int cnt = 0;
         adjustMeterLength(mWholeLoop.mCost, &oneFrameRate, 1.0f, 10.0f, &cnt);
         int r28 = oneFrameRate * 20.0f;
@@ -168,14 +172,15 @@ void JUTProcBar::drawProcessBar() {
             int r21 = mParams.mPosX + 1;
             bar_subroutine(r21, r22, r26, r28, frameDuration, gpuTime, -1,
                            JUtility::TColor(80, 255, 80, 255), JUtility::TColor(80, 255, 80, 255));
-            int thingy1 = gpuTime * r28 / frameDuration + r21;  // inline or define?
-            J2DFillBox(thingy1, r22, mGpWait.calcBarSize(r28, frameDuration), r26,
+            J2DFillBox((int)(gpuTime * r28 / frameDuration + r21), r22,
+                       (int)(mGpWait.mCost * r28 / frameDuration), r26,
                        JUtility::TColor(0, 255, 0, 255));
-            int r30 = mGp.calcBarSize(r28, frameDuration) + r21;
+            int r30 = mGp.mCost * r28 / frameDuration + r21;
             r21 += totalTime * r28 / frameDuration;
             r22 += mParams.mBarWidth * 2;
             bar_subroutine(r21, r22, r26, r28, frameDuration, mCpu.mCost, -1,
                            JUtility::TColor(255, 80, 80, 255), JUtility::TColor(255, 80, 80, 255));
+            r21 += mCpu.mCost * r28 / frameDuration;
             r22 += mParams.mBarWidth * 2;
             bar_subroutine(r30, r22, r26, r28, frameDuration, mIdle.mCost, -1,
                            JUtility::TColor(180, 180, 160, 255),
@@ -192,6 +197,7 @@ void JUTProcBar::drawProcessBar() {
         u32 temp3 = 0;
         for (int i = 0; i < 8; i++) {
             CTime* time = &mUsers[i];
+            u32 sp17c = time->mCost;
             if (++time->field_0xc >= 0x10 || time->mCost > time->field_0x8) {
                 time->field_0x8 = time->mCost;
                 time->field_0xc = 0;
@@ -199,7 +205,8 @@ void JUTProcBar::drawProcessBar() {
             if (time->field_0x8 > temp3)
                 temp3 = time->field_0x8;
         }
-        if ((bool)temp3 == true) {
+        bool sp11 = temp3 ? true : false;
+        if (sp11 == true) {
             static int cntUser = 0;
             adjustMeterLength(temp3, &oneFrameRateUser, 1.0f, 10.0f, &cntUser);
             int r21 = oneFrameRateUser * 20.0f;
@@ -209,6 +216,7 @@ void JUTProcBar::drawProcessBar() {
                          JUtility::TColor(50, 50, 150, 255), 6);
             for (int i = 0; i < 8; i++) {
                 CTime* time = &mUsers[i];
+                int unsued = time->mCost;
                 if (++time->field_0xc >= 0x10 || time->mCost > time->field_0x8) {
                     time->field_0x8 = time->mCost;
                     time->field_0xc = 0;

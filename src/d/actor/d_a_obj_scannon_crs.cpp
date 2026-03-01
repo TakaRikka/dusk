@@ -8,6 +8,7 @@
 #include "d/actor/d_a_obj_scannon_crs.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_meter2_info.h"
+#include <cstring>
 
 static int daSCannonCrs_c_createHeap(fopAc_ac_c* i_this) {
     return ((daSCannonCrs_c*)i_this)->createHeap();

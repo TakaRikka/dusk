@@ -18,7 +18,8 @@ static fopAc_ac_c* daAlink_searchIceLeaf(fopAc_ac_c* i_actor, void* i_data) {
 }
 
 bool daAlink_c::checkSnowCode() const {
-    return mGndPolySpecialCode == dBgW_SPCODE_HEAVY_SNOW || mGndPolySpecialCode == dBgW_SPCODE_LIGHT_SNOW;
+    return mGndPolySpecialCode == dBgW_SPCODE_HEAVY_SNOW ||
+           mGndPolySpecialCode == dBgW_SPCODE_LIGHT_SNOW;
 }
 
 bool daAlink_c::checkSnowCodePolygon(cBgS_PolyInfo& i_polyinfo) {
@@ -27,7 +28,8 @@ bool daAlink_c::checkSnowCodePolygon(cBgS_PolyInfo& i_polyinfo) {
 }
 
 bool daAlink_c::checkBoardRestart() {
-    return (mRideStatus == 0 && mRideAcKeep.getActor() != NULL) && fopAcM_GetName(mRideAcKeep.getActor()) == PROC_Obj_IceLeaf;
+    return (mRideStatus == 0 && mRideAcKeep.getActor() != NULL) &&
+           fopAcM_GetName(mRideAcKeep.getActor()) == PROC_Obj_IceLeaf;
 }
 
 int daAlink_c::boardCommon(BOOL i_canMove) {
@@ -47,7 +49,9 @@ int daAlink_c::boardCommon(BOOL i_canMove) {
         s16 sp8 = current.angle.y + 0x8000;
 
         for (int i = 0; i < 3; i++) {
-            if (mAcchCir[i].ChkWallHit() && cLib_distanceAngleS(sp8, mAcchCir[i].GetWallAngleY()) <= 0x2000 && mNormalSpeed > 30.0f) {
+            if (mAcchCir[i].ChkWallHit() &&
+                cLib_distanceAngleS(sp8, mAcchCir[i].GetWallAngleY()) <= 0x2000 &&
+                mNormalSpeed > 30.0f) {
                 setJumpMode();
                 return procCoLargeDamageInit(-4, TRUE, 0, 0, NULL, 0);
             }
@@ -110,12 +114,22 @@ int daAlink_c::boardCommon(BOOL i_canMove) {
                 var_f30 = (temp_f29 * mNormalSpeed) / 5.0f;
             }
 
-            if (checkZeroSpeedF() && temp_r26 > 0x7000 && mProcID == PROC_BOARD_WAIT && !checkModeFlg(2)) {
-                if (mProcVar3.field_0x300e <= 910.0f && checkUnderMove0BckNoArc(ANM_RIDE_WAIT) && mLinkAcch.ChkGroundHit()) {      
+            if (checkZeroSpeedF() &&
+                temp_r26 > 0x7000 &&
+                mProcID == PROC_BOARD_WAIT &&
+                !checkModeFlg(2)) {
+                if (mProcVar3.field_0x300e <= l_boardSlopeAngleMin &&
+                    checkUnderMove0BckNoArc(ANM_RIDE_WAIT) &&
+                    mLinkAcch.ChkGroundHit()) {
                     return procBoardTurnInit();
                 }
             }
-        } else if (temp_r26 < 0x2000 && field_0x2f8c == 0xB && mProcID == PROC_BOARD_WAIT && !checkModeFlg(2) && mLinkAcch.ChkGroundHit() && (mProcVar3.field_0x300e < field_0x3122) && (checkUnderMove0BckNoArc(ANM_RIDE_WAIT) || checkUnderMove0BckNoArc(ANM_RIDE_FRONT))) {
+        } else if (temp_r26 < 0x2000 &&
+            field_0x2f8c == 0xB &&
+            mProcID == PROC_BOARD_WAIT &&
+            !checkModeFlg(2) && mLinkAcch.ChkGroundHit() &&
+            (mProcVar3.field_0x300e < field_0x3122) &&
+            (checkUnderMove0BckNoArc(ANM_RIDE_WAIT) || checkUnderMove0BckNoArc(ANM_RIDE_FRONT))) {
             if (mNormalSpeed <= mpHIO->mItem.mBoard.m.mMaxPushSpeed) {
                 return procBoardRowInit();
             }
@@ -160,7 +174,10 @@ int daAlink_c::boardCommon(BOOL i_canMove) {
             offModeFlg(2);
             speed.y = 0.0f;
         } else {
-            if (mProcVar3.field_0x300e > 910.0f && (mProcID != PROC_BOARD_ROW || !(mProcVar3.field_0x300e < 2000.0f))) {
+            if (mProcVar3.field_0x300e > l_boardSlopeAngleMin &&
+                (mProcID != PROC_BOARD_ROW || !(mProcVar3.field_0x300e < l_boardSlopeRowAngleMin))) {
+                f32 temp_f27;
+                f32 temp_f26;
                 f32 var_f25 = (f32)mProcVar3.field_0x300e / (f32)field_0x3122;
                 if (var_f25 > 1.0f) {
                     var_f25 = 1.0f;
@@ -176,8 +193,8 @@ int daAlink_c::boardCommon(BOOL i_canMove) {
 
                 var_f31 *= cM_fsin(1.5707964f * var_f25);
                 if (var_f31 > 0.1f) {
-                    f32 temp_f27 = (var_f31 * cM_ssin(var_r27)) + (mNormalSpeed * cM_ssin(shape_angle.y));
-                    f32 temp_f26 = (var_f31 * cM_scos(var_r27)) + (mNormalSpeed * cM_scos(shape_angle.y));
+                    temp_f27 = (var_f31 * cM_ssin(var_r27)) + (mNormalSpeed * cM_ssin(shape_angle.y));
+                    temp_f26 = (var_f31 * cM_scos(var_r27)) + (mNormalSpeed * cM_scos(shape_angle.y));
 
                     mNormalSpeed = JMAFastSqrt((temp_f27 * temp_f27) + (temp_f26 * temp_f26));
                     if (mNormalSpeed > mMaxSpeed) {

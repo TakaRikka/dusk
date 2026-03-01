@@ -1,0 +1,34 @@
+#ifndef RES_KOLIN2_H
+#define RES_KOLIN2_H
+
+enum dRes_INDEX_KOLIN2 {
+    /* BCK  */
+    dRes_INDEX_KOLIN2_BCK_KOLIN_CLOTH_TRY_e=0x6,
+    dRes_INDEX_KOLIN2_BCK_KOLIN_CLOTH_WAIT_e=0x7,
+    dRes_INDEX_KOLIN2_BCK_KOLIN_F_CLOTH_TRY_e=0x8,
+    /* BMDR */
+    dRes_INDEX_KOLIN2_BMD_KOLIN_CLOTH_e=0xB,
+    /* BTK  */
+    dRes_INDEX_KOLIN2_BTK_KOLIN_CLOTH_TRY_e=0xE,
+    /* BTP  */
+    dRes_INDEX_KOLIN2_BTP_KOLIN_F_CLOTH_TRY_e=0x11,
+};
+
+enum dRes_ID_KOLIN2 {
+    /* BCK  */
+    dRes_ID_KOLIN2_BCK_KOLIN_CLOTH_TRY_e=0x6,
+    dRes_ID_KOLIN2_BCK_KOLIN_CLOTH_WAIT_e=0x7,
+    dRes_ID_KOLIN2_BCK_KOLIN_F_CLOTH_TRY_e=0x8,
+    /* BMDR */
+    dRes_ID_KOLIN2_BMD_KOLIN_CLOTH_e=0xB,
+    /* BTK  */
+    dRes_ID_KOLIN2_BTK_KOLIN_CLOTH_TRY_e=0xE,
+    /* BTP  */
+    dRes_ID_KOLIN2_BTP_KOLIN_F_CLOTH_TRY_e=0x11,
+};
+
+enum KOLIN_CLOTH_JNT {
+    KOLIN_CLOTH_JNT_KOLIN_CLOTH_e=0x0,
+};
+
+#endif /* !RES_KOLIN2_H */

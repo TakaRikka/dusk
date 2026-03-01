@@ -63,11 +63,11 @@ void JPAVolumeCube(JPAEmitterWorkData* work) {
 }
 
 static void JPAVolumeSphere(JPAEmitterWorkData* work) {
-    s16 phi, theta;
+    s16 phi, r28;
     if (work->mpEmtr->checkFlag(JPADynFlag_FixedInterval)) {
-        phi = (u16)(work->mVolumeX * 0x8000 / (work->mDivNumber - 1) + 0x4000);
-        f32 tmp = (u16)(work->mVolumeAngleNum * 0x10000 / (work->mVolumeAngleMax - 1));
-        theta = tmp * work->mVolumeSweep + 0x8000;
+        phi = u16(work->mVolumeX * 0x8000 / (work->mDivNumber - 1) + 0x4000);
+        u16 r26 = u16(work->mVolumeAngleNum * 0x10000 / (work->mVolumeAngleMax - 1));
+        r28 = f32(r26) * work->mVolumeSweep + 0x8000;
         work->mVolumeAngleNum++;
         if (work->mVolumeAngleNum == work->mVolumeAngleMax) {
             work->mVolumeAngleNum = 0;
@@ -81,30 +81,30 @@ static void JPAVolumeSphere(JPAEmitterWorkData* work) {
         }
     } else {
         phi = work->mpEmtr->get_r_ss() >> 1;
-        theta = work->mVolumeSweep * work->mpEmtr->get_r_ss();
+        r28 = work->mVolumeSweep * work->mpEmtr->get_r_ss();
     }
 
-    f32 rnd = work->mpEmtr->get_r_f();
+    f32 f31 = work->mpEmtr->get_r_f();
     if (work->mpEmtr->checkFlag(JPADynFlag_FixedDensity)) {
-        rnd = 1.0f - rnd * rnd * rnd;
+        f31 = 1.0f - f31 * f31 * f31;
     }
-    f32 rad = work->mVolumeSize * (work->mVolumeMinRad + rnd * (1.0f - work->mVolumeMinRad));
-    work->mVolumeCalcData.mVolumePos.set(rad * JMASCos(phi) * JMASSin(theta), -rad * JMASSin(phi),
-                                         rad * JMASCos(phi) * JMASCos(theta));
+    f31 = work->mVolumeSize * (work->mVolumeMinRad + f31 * (1.0f - work->mVolumeMinRad));
+    work->mVolumeCalcData.mVolumePos.set(f31 * JMASCos(phi) * JMASSin(r28), -f31 * JMASSin(phi),
+                                         f31 * JMASCos(phi) * JMASCos(r28));
     work->mVolumeCalcData.mVelOmni.mul(work->mVolumeCalcData.mVolumePos, work->mGlobalScl);
     work->mVolumeCalcData.mVelAxis.set(work->mVolumeCalcData.mVolumePos.x, 0.0f,
                                        work->mVolumeCalcData.mVolumePos.z);
 }
 
 static void JPAVolumeCylinder(JPAEmitterWorkData* work) {
-    s16 theta = work->mVolumeSweep * work->mpEmtr->get_r_ss();
-    f32 rnd = work->mpEmtr->get_r_f();
+    s16 r30 = work->mVolumeSweep * work->mpEmtr->get_r_ss();
+    f32 f31 = work->mpEmtr->get_r_f();
     if (work->mpEmtr->checkFlag(JPADynFlag_FixedDensity)) {
-        rnd = 1.0f - rnd * rnd;
+        f31 = 1.0f - f31 * f31;
     }
-    f32 rad = work->mVolumeSize * (work->mVolumeMinRad + rnd * (1.0f - work->mVolumeMinRad));
+    f31 = work->mVolumeSize * (work->mVolumeMinRad + f31 * (1.0f - work->mVolumeMinRad));
     work->mVolumeCalcData.mVolumePos.set(
-        rad * JMASSin(theta), work->mVolumeSize * work->mpEmtr->get_r_zp(), rad * JMASCos(theta));
+        f31 * JMASSin(r30), work->mVolumeSize * work->mpEmtr->get_r_zp(), f31 * JMASCos(r30));
     work->mVolumeCalcData.mVelOmni.mul(work->mVolumeCalcData.mVolumePos, work->mGlobalScl);
     work->mVolumeCalcData.mVelAxis.set(work->mVolumeCalcData.mVolumePos.x, 0.0f,
                                        work->mVolumeCalcData.mVolumePos.z);
@@ -166,26 +166,16 @@ void JPADynamicsBlock::init() {
 
 void JPADynamicsBlock::create(JPAEmitterWorkData* work) {
     if (work->mpEmtr->checkStatus(JPAEmtrStts_RateStepEmit)) {
-        s32 emitCount;
-        s32 createCount;
+        s32 emitCount = 0;
 
-        // Probably an inlined function.
         if (work->mpEmtr->checkFlag(JPADynFlag_FixedInterval)) {
-            s32 count;
-            if (getVolumeType() == VOL_Sphere) {
-                count = 4 * getDivNumber() * getDivNumber() + 2;
-            } else {
-                count = getDivNumber();
-            }
-            emitCount = count;
+            emitCount = getVolumeType() == VOL_Sphere ? 4 * getDivNumber() * getDivNumber() + 2 : getDivNumber();
 
             work->mVolumeEmitIdx = 0;
         } else {
             f32 newPtclCount =
                 work->mpEmtr->mRate * (getRateRndm() * work->mpEmtr->get_r_zp() + 1.0f);
-            f32 newEmitCount = work->mpEmtr->mEmitCount + newPtclCount;
-            work->mpEmtr->mEmitCount = newEmitCount;
-            emitCount = (s32)newEmitCount;
+            emitCount = work->mpEmtr->mEmitCount += newPtclCount;
             work->mpEmtr->mEmitCount -= emitCount;
 
             if (work->mpEmtr->checkStatus(JPAEmtrStts_FirstEmit) && 0.0f < newPtclCount &&
@@ -198,10 +188,10 @@ void JPADynamicsBlock::create(JPAEmitterWorkData* work) {
             emitCount = 0;
         }
 
-        // Probably an inlined function.
-        createCount = emitCount;
+        JPABaseParticle* ptcl = NULL;
+        s32 createCount = emitCount;
         while (createCount > 0) {
-            JPABaseParticle* ptcl = work->mpEmtr->createParticle();
+            ptcl = work->mpEmtr->createParticle();
             if (ptcl == NULL)
                 break;
             createCount--;
@@ -209,7 +199,7 @@ void JPADynamicsBlock::create(JPAEmitterWorkData* work) {
     }
 
     if (++work->mpEmtr->mRateStepTimer >= (work->mpEmtr->mRateStep + 1)) {
-        work->mpEmtr->mRateStepTimer -= (work->mpEmtr->mRateStep + 1);
+        work->mpEmtr->mRateStepTimer -= work->mpEmtr->mRateStep + 1;
         work->mpEmtr->setStatus(JPAEmtrStts_RateStepEmit);
     } else {
         work->mpEmtr->clearStatus(JPAEmtrStts_RateStepEmit);

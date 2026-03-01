@@ -23,6 +23,7 @@
 #include "SSystem/SComponent/c_counter.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include <cmath>
+#include <cstring>
 
 class dmg_rod_HIO_c : public JORReflexible {
 public:
@@ -1318,13 +1319,13 @@ static void lure_cast(dmg_rod_class* i_this) {
         actor->speedF *= 0.95f + VREG_F(11);
         sp40.x = 50.0f + VREG_F(12);
         sp40.y = (0.0105f + TREG_F(10)) * sp4C.abs();
-        i_this->field_0x75c += (s16)0x1100;
-        i_this->field_0x75e += (s16)0x880;
+        ANGLE_ADD(i_this->field_0x75c, 0x1100);
+        ANGLE_ADD(i_this->field_0x75e, 0x880);
     } else {
         sp40.x = 0.0f;
         sp40.y = (0.011f + TREG_F(11)) * sp4C.abs();
-        i_this->field_0x75c += (s16)0x2200;
-        i_this->field_0x75e += (s16)0x1100;
+        ANGLE_ADD(i_this->field_0x75c, 0x2200);
+        ANGLE_ADD(i_this->field_0x75e, 0x1100);
     }
 
     cLib_addCalc2(&i_this->field_0x6f8, sp40.x, 0.1f, 5.0f);
@@ -1677,7 +1678,7 @@ static void po_action(dmg_rod_class* i_this, f32 param_1) {
     }
 
     if (i_this->timers[0] == 1) {
-        i_this->lure_yaw_target += (s16)cM_rndFX(5000.0f);
+        ANGLE_ADD(i_this->lure_yaw_target, cM_rndFX(5000.0f));
     }
 
     cLib_addCalcAngleS2(&i_this->lure_yaw_offset, i_this->lure_yaw_target, 4, var_r26);
@@ -1891,8 +1892,8 @@ static void ground_action(dmg_rod_class* i_this) {
             }
         }
     } else if (i_this->field_0x10a8 == 1) {
-        i_this->lure_yaw_offset += (s16)3200;
-        i_this->lure_pitch_offset += (s16)4000;
+        ANGLE_ADD(i_this->lure_yaw_offset, 3200);
+        ANGLE_ADD(i_this->lure_pitch_offset, 4000);
     }
 
     cLib_addCalc2(&actor->speedF, reelSpeed, 1.0f, 5.0f + BREG_F(12));
@@ -1972,9 +1973,9 @@ static void wd_action(dmg_rod_class* i_this, f32 param_1, wd_ss* i_wd_s) {
             sp8 -= actor->shape_angle.y;
 
             if (sp8 < 0) {
-                i_wd_s->field_0x38 += (s16)200;
+                ANGLE_ADD(i_wd_s->field_0x38, 200);
             } else {
-                i_wd_s->field_0x38 -= (s16)200;
+                ANGLE_SUB(i_wd_s->field_0x38, 200);
             }
         }
     }
@@ -2525,7 +2526,7 @@ static void lure_catch(dmg_rod_class* i_this) {
     if (mgfish->mActionPhase < 2 && i_this->play_cam_timer > 25) {
         s16 target = DREG_S(6) + 2000;
         if (mgfish->mJointScale > 0.5f) {
-            target += (s16)((mgfish->mJointScale - 0.5f) * (20000.0f + DREG_F(19)));
+            ANGLE_ADD(target, (mgfish->mJointScale - 0.5f) * (20000.0f + DREG_F(19)));
         }
 
         if (target > 6000) {
@@ -3634,15 +3635,15 @@ static void uki_pl_arm_calc(dmg_rod_class* i_this) {
     sp10.y = WREG_S(4) - 5000;
     sp10.z = WREG_S(5) + 2000;
 
-    sp8.y += (s16)(-15000.0f * i_this->field_0x1508);
-    sp8.z += (s16)(3500.0f * i_this->field_0x1508);
+    ANGLE_ADD(sp8.y, -15000.0f * i_this->field_0x1508);
+    ANGLE_ADD(sp8.z,   3500.0f * i_this->field_0x1508);
 
-    sp10.y += (s16)(-4000.0f * i_this->field_0x1508);
-    sp10.z += (s16)((3500.0f * i_this->field_0x1508) + ((-11000.0f + WREG_F(8)) * (i_this->field_0x150c * i_this->field_0x1508)));
+    ANGLE_ADD(sp10.y, -4000.0f * i_this->field_0x1508);
+    ANGLE_ADD(sp10.z, (3500.0f * i_this->field_0x1508) + ((-11000.0f + WREG_F(8)) * (i_this->field_0x150c * i_this->field_0x1508)));
 
     if (i_this->action == ACTION_UKI_HIT && i_this->field_0xf60 > 140.0f + JREG_F(14)) {
-        sp8.y += (s16)((50.0f + nREG_F(0)) * cM_ssin(i_this->counter * 0x6200));
-        sp8.z += (s16)((50.0f + nREG_F(0)) * cM_ssin(i_this->counter * 0x6500));
+        ANGLE_ADD(sp8.y, (50.0f + nREG_F(0)) * cM_ssin(i_this->counter * 0x6200));
+        ANGLE_ADD(sp8.z, (50.0f + nREG_F(0)) * cM_ssin(i_this->counter * 0x6500));
         daAlink_getAlinkActorClass()->seStartOnlyReverbLevel(Z2SE_AL_ROD_BEND);
     }
 
@@ -3668,7 +3669,7 @@ static void uki_standby(dmg_rod_class* i_this) {
     cLib_addCalc2(&i_this->field_0x150c, substickX, 0.5f, 0.2f);
 
     if (i_this->field_0x1508 > 0.3f && i_this->play_cam_mode < 5) {
-        i_this->field_0x1418 += (s16)((-500.0f + VREG_F(3)) * mDoCPd_c::getStickX3D(PAD_1));
+        ANGLE_ADD(i_this->field_0x1418, (-500.0f + VREG_F(3)) * mDoCPd_c::getStickX3D(PAD_1));
     }
 
     cMtx_YrotS(*calc_mtx, i_this->field_0x1418);
@@ -4638,7 +4639,7 @@ static void play_camera(dmg_rod_class* i_this) {
         f32 sp40 = i_this->field_0x13ac;
         sp40 *= 1000.0f + BREG_F(3);
 
-        i_this->field_0x141a += (s16)sp40;
+        ANGLE_ADD(i_this->field_0x141a, sp40);
         if (i_this->field_0x141a > 0x1000) {
             i_this->field_0x141a = 0x1000;
         } else if (i_this->field_0x141a < -0x1000) {
@@ -6012,7 +6013,7 @@ static int dmg_rod_Execute(dmg_rod_class* i_this) {
 
                     s16 sp8 = 500.0f * cM_ssin(i_this->counter * 1100);
                     if (i_this->reel_btn_flags != 0) {
-                        sp8 += (s16)0x2000;
+                        ANGLE_ADD(sp8, 0x2000);
                     }
 
                     cLib_addCalcAngleS2(&obj_life->shape_angle.x, sp8, 15, 0x200);

@@ -1083,7 +1083,7 @@ void daObjMovebox::Act_c::mode_afl() {
         var_f31 = -var_f30 * attr().field_0x6c;
     }
 
-    field_0x8b8 += (s16)(attr().mWaterOscillationAngleSpeed * (cM_rnd() + 1.0f));
+    S16_ADD(field_0x8b8, attr().mWaterOscillationAngleSpeed * (cM_rnd() + 1.0f));
     newGravity = var_f31 * attr().mBuoyancy + attr().mGravity +
                  attr().mWaterOscillationAccel * cM_ssin(field_0x8b8) + field_0x8bc;
     fopAcM_SetGravity(this, newGravity);

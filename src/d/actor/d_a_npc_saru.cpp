@@ -9,6 +9,7 @@
 #include "d/actor/d_a_npc_ks.h"
 #include "d/actor/d_a_obj_so.h"
 #include "d/actor/d_a_e_ym.h"
+#include <cstring>
 
 enum saru_TW_RES_File_ID {
     /* BMDR */

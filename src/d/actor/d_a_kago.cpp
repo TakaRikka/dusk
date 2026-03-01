@@ -11,6 +11,7 @@
 #include "d/d_msg_object.h"
 
 #include <cmath>
+#include <cstring>
 
 #include "d/actor/d_a_balloon_2D.h"
 #include "d/actor/d_a_e_ym.h"
@@ -187,7 +188,7 @@ bool daKago_c::checkBck(int param_0) {
 }
 
 int daKago_c::draw() {
-    if (field_0x6de == NULL) {
+    if (field_0x6de == 0) {
         return 1;
     }
 
@@ -510,7 +511,7 @@ void daKago_c::demo_skip(int param_0) {
     switch (param_0) {
     case 0:
         field_0x748 = 2;
-        field_0x74c = NULL;
+        field_0x74c = 0;
         break;
     case 1:
         field_0x728 = 0;
@@ -524,7 +525,7 @@ void daKago_c::demo_skip(int param_0) {
         /* dSv_event_flag_c::M_051 - Main Event - Shadow Kargorok (?) (Large) event complete (Horse grass appears in various places) */
         dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[84]);
         field_0x748 = 7;
-        field_0x74c = NULL;
+        field_0x74c = 0;
         break;
     case 4:
         setSceneChange(0);
@@ -691,7 +692,7 @@ int daKago_c::setSceneChange(int param_0) {
 
 void daKago_c::createBalloonScore() {
     if (field_0x6e7 != 0 && mBalloon2DId == fpcM_ERROR_PROCESS_ID_e) {
-        mBalloon2DId = fopAcM_create(PROC_BALLOON2D, 0, 0, 0xffffffff, 0, 0, 0xffffffff);
+        mBalloon2DId = fopAcM_create(PROC_BALLOON2D, 0, 0, 0xffffffff, 0, 0, -1);
         field_0x6e9 = 1;
     }
 }
@@ -1198,7 +1199,7 @@ void daKago_c::executeFly() {
         }
         if (field_0x744 == 3) {
             cLib_chaseUC(&field_0x6de, 0, 4);
-            cLib_addCalcAngleS(&current.angle.x, 0xffffe000, 8, 0x100, 0x10);
+            cLib_addCalcAngleS(&current.angle.x, -8192, 8, 0x100, 0x10);
         } else {
             cLib_addCalcAngleS(&current.angle.x, unkInt2, 8, 0x100, 0x10);
         }
@@ -1290,13 +1291,13 @@ void daKago_c::executeStagger() {
 
         if (field_0x744 == 1) {
             shape_angle.z = 0x3000;
-            current.angle.y += (s16)-0x2000;
+            ANGLE_ADD(current.angle.y, -0x2000);
             if (abs((s16)(current.angle.y - field_0x714)) > 0x2000) {
                 current.angle.y = field_0x714 + -0x2000;
             }
         } else {
             shape_angle.z = -0x3000;
-            current.angle.y += (s16)0x2000;
+            ANGLE_ADD(current.angle.y, 0x2000);
             if (abs((s16)(current.angle.y - field_0x714)) > 0x2000) {
                 current.angle.y = field_0x714 + 0x2000;
             }
@@ -2229,7 +2230,7 @@ bool daKago_c::PerchDemoAwayForward() {
         if (field_0x728 < 30) {
             cLib_addCalcAngleS(&current.angle.x, 0, 8, 0x100, 0x40);
         } else {
-            cLib_addCalcAngleS(&current.angle.x, 0xffffe000, 8, 0x100, 0x40);
+            cLib_addCalcAngleS(&current.angle.x, -8192, 8, 0x100, 0x40);
         }
 
         shape_angle.x = current.angle.x;
@@ -2276,7 +2277,7 @@ bool daKago_c::PerchDemoAwayForward() {
 
         cLib_chaseF(&field_0x6f8, 30.0f, 1.0f);
 
-        cLib_addCalcAngleS(&current.angle.x, 0xffffe000, 8, 0x100, 0x40);
+        cLib_addCalcAngleS(&current.angle.x, -8192, 8, 0x100, 0x40);
         shape_angle.x = current.angle.x;
         shape_angle.y = current.angle.y;
 
@@ -2546,7 +2547,7 @@ bool daKago_c::executeFirstDemo() {
 
         if (field_0x728 > 30) {
             cLib_chaseF(&field_0x6cc, 350.0f, 4.0f);
-            cLib_addCalcAngleS(&field_0x718, 0xfffff800, 8, 0x100, 0x10);
+            cLib_addCalcAngleS(&field_0x718, -2048, 8, 0x100, 0x10);
         } else {
             cLib_chaseF(&field_0x6cc, 350.0f, 6.0f);
             cLib_addCalcAngleS(&field_0x718, 0x400, 8, 0x200, 0x10);
@@ -2698,7 +2699,7 @@ bool daKago_c::executeFirstDemo() {
     case 6:
         dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 2);
 
-        cLib_addCalcAngleS(&current.angle.x, 0xffffe000, 8, 0x100, 0x40);
+        cLib_addCalcAngleS(&current.angle.x, -8192, 8, 0x100, 0x40);
         shape_angle.x = current.angle.x;
         shape_angle.y = current.angle.y;
 
@@ -2943,7 +2944,7 @@ void daKago_c::executeLandingLakeHairia() {
         speedF = field_0x6f8 * std::abs(cM_scos(current.angle.x));
         speed.y = -field_0x6f8 * cM_ssin(current.angle.x);
 
-        cLib_chaseAngleS(&shape_angle.x, 0xffffe000, 0x100);
+        cLib_chaseAngleS(&shape_angle.x, -8192, 0x100);
         current.angle.x = shape_angle.x;
 
         if (field_0x728 == 90) {
@@ -3077,7 +3078,7 @@ void daKago_c::executeLandingBoartHouse() {
         speedF = field_0x6f8 * std::abs(cM_scos(current.angle.x));
         speed.y = -field_0x6f8 * cM_ssin(current.angle.x);
 
-        cLib_chaseAngleS(&shape_angle.x, 0xffffe000, 0x100);
+        cLib_chaseAngleS(&shape_angle.x, -8192, 0x100);
         current.angle.x = shape_angle.x;
 
         if (field_0x728 == 0x50) {
@@ -3390,7 +3391,7 @@ void daKago_c::setDashBlurEffect(int param_0) {
         field_0x6be.y = shape_angle.y;
         field_0x6be.z = 0;
     }
-    field_0xb40 = dComIfGp_particle_set(field_0xb40, 0x860f, &cameraEyeOffset, &tevStr, &field_0x6be, 0, 0xff, 0, 0xffffffff, 0, 0, 0);
+    field_0xb40 = dComIfGp_particle_set(field_0xb40, 0x860f, &cameraEyeOffset, &tevStr, &field_0x6be, 0, 0xff, 0, -1, 0, 0, 0);
 }
 
 void daKago_c::setWallHitEffect(cXyz param_0, int param_1) {
@@ -3421,7 +3422,7 @@ void daKago_c::setSibukiEffect() {
     for (int i = 0; i < 3; i++) {
         field_0xb44[i] =
             dComIfGp_particle_set(field_0xb44[i], kago_wave_id[i], &acStack_28, &tevStr, &cStack_30,
-                                  0, 0xff, 0, 0xffffffff, 0, 0, 0);
+                                  0, 0xff, 0, -1, 0, 0, 0);
     }
 
     if (field_0x6e7 == 0) {
@@ -3435,7 +3436,7 @@ void daKago_c::setDashSibukiEffect() {
     cXyz acStack_20(current.pos.x, field_0x70c + l_HIO.mYOffsetFromWaterSurface, current.pos.z);
     csXyz cStack_28(0, shape_angle.y, 0);
     field_0xb50 = dComIfGp_particle_set(field_0xb50, 0x86fe, &acStack_20, &tevStr, &cStack_28, 0,
-                                        0xff, 0, 0xffffffff, 0, 0, 0);
+                                        0xff, 0, -1, 0, 0, 0);
 }
 
 void daKago_c::setWaterFallEffect() {
@@ -3449,7 +3450,7 @@ void daKago_c::setWaterFallEffect() {
     for (int i = 0; i < 2; i++) {
         field_0xb44[i] =
             dComIfGp_particle_set(field_0xb44[i], kago_wave_id[i], &acStack_28, &tevStr, &cStack_30,
-                                  0, 0xff, 0, 0xffffffff, 0, 0, 0);
+                                  0, 0xff, 0, -1, 0, 0, 0);
     }
     if (field_0x6e7 == 0) {
         mSound.startCreatureSoundLevel(Z2SE_EN_YC_SPLASH, 0, -1);
@@ -3733,7 +3734,7 @@ int daKago_c::ctrlJoint(J3DJoint* param_0, J3DModel* param_1) {
 }
 
 int daKago_c::JointCallBack(J3DJoint* param_0, int param_1) {
-    if (param_1 == NULL) {
+    if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
         daKago_c* kago = (daKago_c*)model->getUserArea();
         if (kago != NULL) {

@@ -2,7 +2,14 @@
 #define JASGADGET_H
 
 #include "JSystem/JUtility/JUTAssert.h"
+#include <cstring>
 #include <string>
+
+#ifdef __MWERKS__
+#define JAS_GLOBAL_INSTANCE_INIT
+#else
+#define JAS_GLOBAL_INSTANCE_INIT {}
+#endif
 
 /**
  * @ingroup jsystem-jaudio

@@ -1,0 +1,18 @@
+#ifndef RES_M_DROCKHN_H
+#define RES_M_DROCKHN_H
+
+enum dRes_INDEX_M_DROCKHN {
+    /* BMDR */
+    dRes_INDEX_M_DROCKHN_BMD_M_DROPROCK_HAHEN_e=0x3,
+};
+
+enum dRes_ID_M_DROCKHN {
+    /* BMDR */
+    dRes_ID_M_DROCKHN_BMD_M_DROPROCK_HAHEN_e=0x3,
+};
+
+enum M_DROPROCK_HAHEN_JNT {
+    M_DROPROCK_HAHEN_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_M_DROCKHN_H */

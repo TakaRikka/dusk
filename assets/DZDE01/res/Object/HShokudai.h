@@ -1,0 +1,18 @@
+#ifndef RES_HSHOKUDAI_H
+#define RES_HSHOKUDAI_H
+
+enum dRes_INDEX_HSHOKUDAI {
+    /* BMDR */
+    dRes_INDEX_HSHOKUDAI_BMD_H_SHOKUDAI_e=0x3,
+};
+
+enum dRes_ID_HSHOKUDAI {
+    /* BMDR */
+    dRes_ID_HSHOKUDAI_BMD_H_SHOKUDAI_e=0x3,
+};
+
+enum H_SHOKUDAI_JNT {
+    H_SHOKUDAI_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_HSHOKUDAI_H */

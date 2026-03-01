@@ -218,7 +218,7 @@ int daObj_Mie_c::Execute() {
                     {
                         field_0x9f4 = 10;
                         s16 local_b4 = current.angle.y - local_b6;
-                        current.angle.y += (s16)(0x8000 - (local_b4 << 1) + (s16)cM_rndFX(2000.0f));
+                        ANGLE_ADD(current.angle.y, 0x8000 - (local_b4 << 1) + (s16)cM_rndFX(2000.0f));
                         field_0x9ec.y = -field_0x9ec.y / 2;
                         speedF *= 0.3f;
                     }
@@ -233,7 +233,7 @@ int daObj_Mie_c::Execute() {
                             getWallAngle(current.angle.y, &local_b6) != 0)
                         {
                             s16 local_b4 = current.angle.y - local_b6;
-                            current.angle.y += (s16)(0x8000 - (local_b4 << 1) + (s16)cM_rndFX(1000.0f));
+                            ANGLE_ADD(current.angle.y, 0x8000 - (local_b4 << 1) + (s16)cM_rndFX(1000.0f));
                             speedF *= 0.5f;
                         }
                         if (mAcch.ChkGroundLanding()) {

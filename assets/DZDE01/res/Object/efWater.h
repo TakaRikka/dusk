@@ -1,0 +1,26 @@
+#ifndef RES_EFWATER_H
+#define RES_EFWATER_H
+
+enum dRes_INDEX_EFWATER {
+    /* BCK  */
+    dRes_INDEX_EFWATER_BCK_EF_WATERCLMN_e=0x5,
+    /* BMDR */
+    dRes_INDEX_EFWATER_BMD_EF_WATERCLMN_e=0x8,
+    /* BTK  */
+    dRes_INDEX_EFWATER_BTK_EF_WATERCLMN_e=0xB,
+};
+
+enum dRes_ID_EFWATER {
+    /* BCK  */
+    dRes_ID_EFWATER_BCK_EF_WATERCLMN_e=0x5,
+    /* BMDR */
+    dRes_ID_EFWATER_BMD_EF_WATERCLMN_e=0x8,
+    /* BTK  */
+    dRes_ID_EFWATER_BTK_EF_WATERCLMN_e=0xB,
+};
+
+enum EF_WATERCLMN_JNT {
+    EF_WATERCLMN_JNT_WATERCLMN1_e=0x0,
+};
+
+#endif /* !RES_EFWATER_H */

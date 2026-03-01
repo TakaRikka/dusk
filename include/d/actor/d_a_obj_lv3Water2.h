@@ -32,21 +32,21 @@ public:
 private:
     /* 0x5B8 */ request_of_phase_process_class mPhase;
     /* 0x5C0 */ J3DModel* mpModel;
-    /* 0x5C4 */ mDoExt_btkAnm mWaterSurfaceRefractionAnm;
+    /* 0x5C4 */ mDoExt_btkAnm mRefractionAnm; // Applied to water surface
     /* 0x5DC */ u8 mMode;
-    /* 0x5DD */ u8 mResourceIndex;
-    /* 0x5E0 */ f32 mWaterLv;
-    /* 0x5E4 */ u8 mCurrentWaterLvFrame;
-    /* 0x5E5 */ u8 mWaterLvFrame;
-    /* 0x5E6 */ u8 mFullRatio;
-    /* 0x5E7 */ u8 mEastSwInitialStatus;    // East SW is the lever in the east-most room on 2F, which can only be pulled after raising the water level in that room by pulling the lever in 4F 
-    /* 0x5E8 */ u8 mWestSwInitialStatus;    // West SW is the lever in the west-most room on 2F, which can only be pulled after raising the water level in that room by pulling the lever in 4F 
-    /* 0x5E9 */ u8 mEastSwCurrentStatus;
-    /* 0x5EA */ u8 mWestSwCurrentStatus;
-    /* 0x5EB */ u8 mLevelControlWaitFrames;
+    /* 0x5DD */ u8 mResIdx;
+    /* 0x5E0 */ f32 mWaterLv;              // Amount that the water's y coodinate should increase
+    /* 0x5E4 */ u8 mCurrentWaterLvFrame;   // Number of frames that the water level has been changing
+    /* 0x5E5 */ u8 mWaterLvFrame;          // Number of frames that should be taken for the water level to change
+    /* 0x5E6 */ u8 mEvActivatorSwState;
+    /* 0x5E7 */ u8 mEastSwInitialState;    // East SW is the lever in the east-most room on 2F, which can only be pulled after raising the water level in that room by pulling the lever in 4F
+    /* 0x5E8 */ u8 mWestSwInitialState;    // West SW is the lever in the west-most room on 2F, which can only be pulled after raising the water level in that room by pulling the lever in 4F
+    /* 0x5E9 */ u8 mEastSwCurrentState;
+    /* 0x5EA */ u8 mWestSwCurrentState;
+    /* 0x5EB */ u8 mLvControlWaitFrames;
     /* 0x5EC */ f32 mBaseYPos;
-    /* 0x5F0 */ u32 mEastWaterParticles[4]; // If the central staircase isn't rotated to allow water from the east to flow down it, the water falls into the basin; these are the splash particles where the basin water and falling water meet
-    /* 0x600 */ u32 mWestWaterParticles[4]; // If the central staircase isn't rotated to allow water from the west to flow down it, the water falls into the basin; these are the splash particles where the basin water and falling water meet
+    /* 0x5F0 */ u32 mEastParticles[4]; // If the central staircase isn't rotated to allow water from the east to flow down it, the water falls into the basin; these are the splash particles where the basin water and falling water meet
+    /* 0x600 */ u32 mWestParticles[4]; // If the central staircase isn't rotated to allow water from the west to flow down it, the water falls into the basin; these are the splash particles where the basin water and falling water meet
 
     enum Mode_e {
         WAIT, LEVEL_CTRL

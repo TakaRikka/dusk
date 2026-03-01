@@ -1,0 +1,12 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+daNpc_Mk_Create__FPv = .text:0x0000005C; // type:function size:0x8 scope:global align:4
+daNpc_Mk_Delete__FPv = .text:0x00000064; // type:function size:0x8 scope:global align:4
+daNpc_Mk_Execute__FPv = .text:0x0000006C; // type:function size:0x8 scope:global align:4
+daNpc_Mk_Draw__FPv = .text:0x00000074; // type:function size:0x8 scope:global align:4
+daNpc_Mk_IsDelete__FPv = .text:0x0000007C; // type:function size:0x8 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+daNpc_Mk_MethodTable = .data:0x00000000; // type:object size:0x20 scope:global align:4
+g_profile_NPC_MK = .data:0x00000020; // type:object size:0x30 scope:global align:4

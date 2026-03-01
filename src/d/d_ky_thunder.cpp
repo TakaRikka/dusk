@@ -13,6 +13,7 @@
 #include "d/d_kankyo_rain.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
+#include <cstring>
 
 #define EF_THUNDER01_BMD 0x1E
 #define EF_THUNDER02_BMD 0x1F
@@ -227,6 +228,8 @@ int dThunder_c::create() {
         #ifdef __MWERKS__
         f32 tmp = __frsqrtes(var_f29_2);
         var_f29_2 = tmp * var_f29_2;
+        #else
+        var_f29_2 = sqrtf(var_f29_2);
         #endif
     }
 

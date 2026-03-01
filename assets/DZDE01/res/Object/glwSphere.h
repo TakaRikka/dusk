@@ -1,0 +1,26 @@
+#ifndef RES_GLWSPHERE_H
+#define RES_GLWSPHERE_H
+
+enum dRes_INDEX_GLWSPHERE {
+    /* BMDR */
+    dRes_INDEX_GLWSPHERE_BMD_EF_GLOWSPHERE_e=0x5,
+    /* BRK  */
+    dRes_INDEX_GLWSPHERE_BRK_EF_GLOWSPHERE_e=0x8,
+    /* BTK  */
+    dRes_INDEX_GLWSPHERE_BTK_EF_GLOWSPHERE_e=0xB,
+};
+
+enum dRes_ID_GLWSPHERE {
+    /* BMDR */
+    dRes_ID_GLWSPHERE_BMD_EF_GLOWSPHERE_e=0x5,
+    /* BRK  */
+    dRes_ID_GLWSPHERE_BRK_EF_GLOWSPHERE_e=0x8,
+    /* BTK  */
+    dRes_ID_GLWSPHERE_BTK_EF_GLOWSPHERE_e=0xB,
+};
+
+enum EF_GLOWSPHERE_JNT {
+    EF_GLOWSPHERE_JNT_PCYLINDER1_e=0x0,
+};
+
+#endif /* !RES_GLWSPHERE_H */

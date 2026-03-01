@@ -1,0 +1,62 @@
+#ifndef RES_LUD_TW_H
+#define RES_LUD_TW_H
+
+enum dRes_INDEX_LUD_TW {
+    /* BCK  */
+    dRes_INDEX_LUD_TW_BCK_LUD_DEMO_FEAR_e=0x5,
+    dRes_INDEX_LUD_TW_BCK_LUD_DEMO_WAIT_e=0x6,
+    dRes_INDEX_LUD_TW_BCK_LUD_F_DEMO_FEAR_e=0x7,
+    dRes_INDEX_LUD_TW_BCK_LUD_F_DEMO_WAIT_e=0x8,
+    /* BMDR */
+    dRes_INDEX_LUD_TW_BMD_LUD_TW_e=0xB,
+    /* BTP  */
+    dRes_INDEX_LUD_TW_BTP_LUD_F_DEMO_FEAR_e=0xE,
+    dRes_INDEX_LUD_TW_BTP_LUD_F_DEMO_WAIT_e=0xF,
+};
+
+enum dRes_ID_LUD_TW {
+    /* BCK  */
+    dRes_ID_LUD_TW_BCK_LUD_DEMO_FEAR_e=0x5,
+    dRes_ID_LUD_TW_BCK_LUD_DEMO_WAIT_e=0x6,
+    dRes_ID_LUD_TW_BCK_LUD_F_DEMO_FEAR_e=0x7,
+    dRes_ID_LUD_TW_BCK_LUD_F_DEMO_WAIT_e=0x8,
+    /* BMDR */
+    dRes_ID_LUD_TW_BMD_LUD_TW_e=0xB,
+    /* BTP  */
+    dRes_ID_LUD_TW_BTP_LUD_F_DEMO_FEAR_e=0xE,
+    dRes_ID_LUD_TW_BTP_LUD_F_DEMO_WAIT_e=0xF,
+};
+
+enum LUD_TW_JNT {
+    LUD_TW_JNT_CENTER_e=0x0,
+    LUD_TW_JNT_BACKBONE1_e=0x1,
+    LUD_TW_JNT_BACKBONE2_e=0x2,
+    LUD_TW_JNT_NECK_e=0x3,
+    LUD_TW_JNT_HEAD_e=0x4,
+    LUD_TW_JNT_CHIN_e=0x5,
+    LUD_TW_JNT_HAIRL_e=0x6,
+    LUD_TW_JNT_HAIRR_e=0x7,
+    LUD_TW_JNT_MAYUL_e=0x8,
+    LUD_TW_JNT_MAYUR_e=0x9,
+    LUD_TW_JNT_MOUTH_e=0xA,
+    LUD_TW_JNT_SHOULDERL_e=0xB,
+    LUD_TW_JNT_ARML1_e=0xC,
+    LUD_TW_JNT_ARML2_e=0xD,
+    LUD_TW_JNT_HANDL_e=0xE,
+    LUD_TW_JNT_FINGERL_e=0xF,
+    LUD_TW_JNT_SHOULDERR_e=0x10,
+    LUD_TW_JNT_ARMR1_e=0x11,
+    LUD_TW_JNT_ARMR2_e=0x12,
+    LUD_TW_JNT_HANDR_e=0x13,
+    LUD_TW_JNT_FINGERR_e=0x14,
+    LUD_TW_JNT_MANTLE_e=0x15,
+    LUD_TW_JNT_WAIST_e=0x16,
+    LUD_TW_JNT_LEGL1_e=0x17,
+    LUD_TW_JNT_LEGL2_e=0x18,
+    LUD_TW_JNT_FOOTL_e=0x19,
+    LUD_TW_JNT_LEGR1_e=0x1A,
+    LUD_TW_JNT_LEGR2_e=0x1B,
+    LUD_TW_JNT_FOOTR_e=0x1C,
+};
+
+#endif /* !RES_LUD_TW_H */

@@ -5,13 +5,13 @@
 
 struct ResourceData {
     const char* get_arcName() const { return mArcName; }
-    s16 get_bmdName() const { return mBmdName; }
-    s16 get_btk1Name() const { return mBtkName; }
-    s16 get_bpk1Name() const { return mBpkName; }
-    s16 get_bck1Name() const { return mBckName; }
-    s16 get_bxa1Name() const { return mBxaName; }
-    s16 get_brk1Name() const { return mBrkName; }
-    s16 get_btp1Name() const { return mBtpName; }
+    const s16 get_bmdName() const { return mBmdName; }
+    const s16 get_btk1Name() const { return mBtkName; }
+    const s16 get_bpk1Name() const { return mBpkName; }
+    const s16 get_bck1Name() const { return mBckName; }
+    const s16 get_bxa1Name() const { return mBxaName; }
+    const s16 get_brk1Name() const { return mBrkName; }
+    const s16 get_btp1Name() const { return mBtpName; }
     f32 get_scale() const { return mScale; }
     f32 get_offsetY() const { return mOffsetY; }
     s16 get_angleX() const { return mAngle.x; }

@@ -9,6 +9,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_s_play.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 enum Kbota_00_RES_File_ID {
     /* BMDR */

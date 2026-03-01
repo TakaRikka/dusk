@@ -126,43 +126,43 @@ namespace homebutton {
             u32 t = con->kpad->ex_status.cl.trig;
             u32 r = con->kpad->ex_status.cl.release;
 
-            if (h & WPAD_BUTTON_CL_A) {
+            if (h & WPAD_CL_BUTTON_A) {
                 mHBController.hold |= WPAD_BUTTON_A;
             }
-            if (t & WPAD_BUTTON_CL_A) {
+            if (t & WPAD_CL_BUTTON_A) {
                 mHBController.trig |= WPAD_BUTTON_A;
             }
-            if (r & WPAD_BUTTON_CL_A) {
+            if (r & WPAD_CL_BUTTON_A) {
                 mHBController.release |= WPAD_BUTTON_A;
             }
 
-            if (h & WPAD_BUTTON_CL_PLUS) {
+            if (h & WPAD_CL_BUTTON_PLUS) {
                 mHBController.hold |= WPAD_BUTTON_PLUS;
             }
-            if (t & WPAD_BUTTON_CL_PLUS) {
+            if (t & WPAD_CL_BUTTON_PLUS) {
                 mHBController.trig |= WPAD_BUTTON_PLUS;
             }
-            if (r & WPAD_BUTTON_CL_PLUS) {
+            if (r & WPAD_CL_BUTTON_PLUS) {
                 mHBController.release |= WPAD_BUTTON_PLUS;
             }
 
-            if (h & WPAD_BUTTON_CL_MINUS) {
+            if (h & WPAD_CL_BUTTON_MINUS) {
                 mHBController.hold |= WPAD_BUTTON_MINUS;
             }
-            if (t & WPAD_BUTTON_CL_MINUS) {
+            if (t & WPAD_CL_BUTTON_MINUS) {
                 mHBController.trig |= WPAD_BUTTON_MINUS;
             }
-            if (r & WPAD_BUTTON_CL_MINUS) {
+            if (r & WPAD_CL_BUTTON_MINUS) {
                 mHBController.release |= WPAD_BUTTON_MINUS;
             }
 
-            if (h & WPAD_BUTTON_CL_HOME) {
+            if (h & WPAD_CL_BUTTON_HOME) {
                 mHBController.hold |= WPAD_BUTTON_HOME;
             }
-            if (t & WPAD_BUTTON_CL_HOME) {
+            if (t & WPAD_CL_BUTTON_HOME) {
                 mHBController.trig |= WPAD_BUTTON_HOME;
             }
-            if (r & WPAD_BUTTON_CL_HOME) {
+            if (r & WPAD_CL_BUTTON_HOME) {
                 mHBController.release |= WPAD_BUTTON_HOME;
             }
         }

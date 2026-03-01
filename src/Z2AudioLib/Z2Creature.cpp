@@ -718,11 +718,11 @@ void Z2SoundObjBeeGroup::playBeeGroupSound(JAISoundID soundID, u8 param_1) {
     Z2SoundHandlePool* handle1 = startLevelSound((u32)soundID, 0, -1);
     Z2SoundHandlePool* handle2 = startLevelSound(sound_id2, 0, -1);
 
-    if (handle1 != NULL && *handle1 != NULL) {
+    if (handle1 != NULL && *handle1 != false) {
         f32 volume = Z2Calc::linearTransform(param_1, 1.0f, 5.0f, 0.5f, 1.0f, false);
         (*handle1)->getAuxiliary().moveVolume(volume, 0);
     }
-    if (handle2 != NULL && *handle2 != NULL) {
+    if (handle2 != NULL && *handle2 != false) {
         f32 volume = Z2Calc::linearTransform(param_1, 1.0f, 20.0f, 0.1f, 1.0f, false);
         (*handle2)->getAuxiliary().moveVolume(volume, 0);
     }
@@ -924,28 +924,28 @@ Z2SoundHandlePool* Z2CreatureOI::startCreatureSoundLevel(JAISoundID soundID, u32
         f32 pitch = Z2Calc::getParamByExp(mapinfo, 0.0f, 42.0f, 0.4f, 0.9f, 1.1f,
                                           Z2Calc::CURVE_POSITIVE);
         
-        if (handle1 != NULL && *handle1 != NULL) {
+        if (handle1 != NULL && *handle1 != false) {
             (*handle1)->getAuxiliary().moveVolume(volume, 0);
             (*handle1)->getAuxiliary().movePitch(pitch, 0);
         } else {
             return NULL;
         }
 
-        if (handle2 != NULL && *handle2 != NULL) {
+        if (handle2 != NULL && *handle2 != false) {
             (*handle2)->getAuxiliary().moveVolume(volume, 0);
             (*handle2)->getAuxiliary().movePitch(pitch, 0);
         } else {
             return NULL;
         }
 
-        if (handle3 != NULL && *handle3 != NULL) {
+        if (handle3 != NULL && *handle3 != false) {
             (*handle3)->getAuxiliary().moveVolume(volume, 0);
             (*handle3)->getAuxiliary().movePitch(pitch, 0);
         } else {
             return NULL;
         }
 
-        if (handle4 != NULL && *handle4 != NULL) {
+        if (handle4 != NULL && *handle4 != false) {
             (*handle4)->getAuxiliary().moveVolume(volume, 0);
             (*handle4)->getAuxiliary().movePitch(pitch, 0);
             return handle4;
@@ -979,7 +979,7 @@ Z2SoundHandlePool* Z2CreatureOI::startTentacleSoundLevel(JAISoundID soundID, u8 
 }
 
 static void Z2_E_sw_modPitch(Z2SoundHandlePool* handle, u32 mapinfo) {
-    if (handle != NULL && *handle != NULL) {
+    if (handle != NULL && *handle != false) {
         f32 pitch = 1.0f;
         switch (mapinfo) {
         case 1:
@@ -994,7 +994,7 @@ static void Z2_E_sw_modPitch(Z2SoundHandlePool* handle, u32 mapinfo) {
 }
 
 static void Z2_E_ms_modVol(Z2SoundHandlePool* handle, u32 mapinfo) {
-    if (handle != NULL && *handle != NULL) {
+    if (handle != NULL && *handle != false) {
         f32 var_f31 = 0.2f;
         if (mapinfo == 1) {
             (*handle)->getAuxiliary().moveVolume(var_f31, 0);
@@ -1003,7 +1003,7 @@ static void Z2_E_ms_modVol(Z2SoundHandlePool* handle, u32 mapinfo) {
 }
 
 static void Z2_E_mm_modPitch(Z2SoundHandlePool* handle, u32 mapinfo) {
-    if (handle != NULL && *handle != NULL) {
+    if (handle != NULL && *handle != false) {
         f32 var_f31 = 0.7f;
         if (mapinfo == 3) {
             (*handle)->getAuxiliary().movePitch(var_f31, 0);
@@ -1012,7 +1012,7 @@ static void Z2_E_mm_modPitch(Z2SoundHandlePool* handle, u32 mapinfo) {
 }
 
 static void Z2_B_zan_modPitch(Z2SoundHandlePool* handle, u32 mapinfo) {
-    if (handle != NULL && *handle != NULL) {
+    if (handle != NULL && *handle != false) {
         f32 pitch = 1.0f;
         f32 volume = 1.0f;
         if (mapinfo > 400) {

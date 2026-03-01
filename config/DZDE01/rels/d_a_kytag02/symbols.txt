@@ -1,0 +1,17 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+daKytag02_Draw__FP13kytag02_class = .text:0x0000005C; // type:function size:0x8 scope:global align:4
+daKytag02_Execute__FP13kytag02_class = .text:0x00000064; // type:function size:0x1F8 scope:global align:4
+daKytag02_IsDelete__FP13kytag02_class = .text:0x0000025C; // type:function size:0x8 scope:global align:4
+daKytag02_Delete__FP13kytag02_class = .text:0x00000264; // type:function size:0x20 scope:global align:4
+daKytag02_Create__FP10fopAc_ac_c = .text:0x00000284; // type:function size:0x108 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+...rodata.0 = .rodata:0x00000000; // type:label scope:local align:4
+@89509 = .rodata:0x00000000; // type:object size:0x4 scope:local align:4
+@89510 = .rodata:0x00000004; // type:object size:0x4 scope:local align:4
+@89511 = .rodata:0x00000008; // type:object size:0x4 scope:local align:4 data:float
+@89512 = .rodata:0x0000000C; // type:object size:0x4 scope:local align:4
+l_daKytag02_Method = .data:0x00000000; // type:object size:0x20 scope:global align:4
+g_profile_KYTAG02 = .data:0x00000020; // type:object size:0x30 scope:global align:4

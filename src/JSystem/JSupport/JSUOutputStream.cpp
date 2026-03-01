@@ -3,7 +3,7 @@
 #include "JSystem/JSupport/JSUOutputStream.h"
 #include "JSystem/JSupport/JSURandomOutputStream.h"
 #include <dolphin/dolphin.h>
-#include <string>
+#include <cstring>
 
 JSUOutputStream::~JSUOutputStream() {
     if (!isGood()) {

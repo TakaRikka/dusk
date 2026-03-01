@@ -1,0 +1,42 @@
+#ifndef RES_OBJ_GM_H
+#define RES_OBJ_GM_H
+
+enum dRes_INDEX_OBJ_GM {
+    /* BMDR */
+    dRes_INDEX_OBJ_GM_BMD_K_KUMO_HASI00_e=0x3,
+    dRes_INDEX_OBJ_GM_BMD_K_KUMO_IWA00_e=0x4,
+    dRes_INDEX_OBJ_GM_BMD_K_KUMO_IWA01_e=0x5,
+    dRes_INDEX_OBJ_GM_BMD_K_KUMO_TUBO00_e=0x6,
+    dRes_INDEX_OBJ_GM_BMD_K_KUMO_TUBO01_e=0x7,
+};
+
+enum dRes_ID_OBJ_GM {
+    /* BMDR */
+    dRes_ID_OBJ_GM_BMD_K_KUMO_HASI00_e=0x3,
+    dRes_ID_OBJ_GM_BMD_K_KUMO_IWA00_e=0x4,
+    dRes_ID_OBJ_GM_BMD_K_KUMO_IWA01_e=0x5,
+    dRes_ID_OBJ_GM_BMD_K_KUMO_TUBO00_e=0x6,
+    dRes_ID_OBJ_GM_BMD_K_KUMO_TUBO01_e=0x7,
+};
+
+enum K_KUMO_HASI00_JNT {
+    K_KUMO_HASI00_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum K_KUMO_IWA00_JNT {
+    K_KUMO_IWA00_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum K_KUMO_IWA01_JNT {
+    K_KUMO_IWA01_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum K_KUMO_TUBO00_JNT {
+    K_KUMO_TUBO00_JNT_K_KUMO_TUB00_e=0x0,
+};
+
+enum K_KUMO_TUBO01_JNT {
+    K_KUMO_TUBO01_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_OBJ_GM_H */

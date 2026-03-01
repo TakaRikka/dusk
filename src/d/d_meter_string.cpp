@@ -16,6 +16,7 @@
 #include "d/d_meter2_info.h"
 #include "d/d_meter_HIO.h"
 #include "d/d_pane_class.h"
+#include <cstring>
 
 dMeterString_c::dMeterString_c(int i_stringID) {
     mpMapArchive = dComIfGp_getAllMapArchive();

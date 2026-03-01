@@ -1,0 +1,49 @@
+#ifndef RES_SARU_TW_H
+#define RES_SARU_TW_H
+
+enum dRes_INDEX_SARU_TW {
+    /* BMDR */
+    dRes_INDEX_SARU_TW_BMD_SARU_BARA_TW_e=0x4,
+    dRes_INDEX_SARU_TW_BMD_SARU_TW_e=0x5,
+    /* EVT  */
+    dRes_INDEX_SARU_TW_DAT_EVENT_LIST_e=0x8,
+};
+
+enum dRes_ID_SARU_TW {
+    /* BMDR */
+    dRes_ID_SARU_TW_BMD_SARU_BARA_TW_e=0x4,
+    dRes_ID_SARU_TW_BMD_SARU_TW_e=0x5,
+    /* EVT  */
+    dRes_ID_SARU_TW_DAT_EVENT_LIST_e=0x8,
+};
+
+enum SARU_BARA_TW_JNT {
+    SARU_BARA_TW_JNT_SARU_BARA_e=0x0,
+};
+
+enum SARU_TW_JNT {
+    SARU_TW_JNT_CENTER_e=0x0,
+    SARU_TW_JNT_BACKBONE_1_e=0x1,
+    SARU_TW_JNT_BACKBONE_2_e=0x2,
+    SARU_TW_JNT_NECK_e=0x3,
+    SARU_TW_JNT_HEAD_e=0x4,
+    SARU_TW_JNT_CHIN_e=0x5,
+    SARU_TW_JNT_MOUTH_e=0x6,
+    SARU_TW_JNT_SHOULDER_L_e=0x7,
+    SARU_TW_JNT_ARM_L_1_e=0x8,
+    SARU_TW_JNT_ARM_L_2_e=0x9,
+    SARU_TW_JNT_HAND_L_e=0xA,
+    SARU_TW_JNT_SHOULDER_R_e=0xB,
+    SARU_TW_JNT_ARM_R_1_e=0xC,
+    SARU_TW_JNT_ARM_R_2_e=0xD,
+    SARU_TW_JNT_HAND_R_e=0xE,
+    SARU_TW_JNT_WAIST_e=0xF,
+    SARU_TW_JNT_LEG_L_1_e=0x10,
+    SARU_TW_JNT_LEG_L_2_e=0x11,
+    SARU_TW_JNT_FOOT_L_e=0x12,
+    SARU_TW_JNT_LEG_R_1_e=0x13,
+    SARU_TW_JNT_LEG_R_2_e=0x14,
+    SARU_TW_JNT_FOOT_R_e=0x15,
+};
+
+#endif /* !RES_SARU_TW_H */

@@ -14,7 +14,12 @@ struct TLinkListNode {
         pPrev_ = NULL;
     }
 
-    ~TLinkListNode() {}
+    ~TLinkListNode() {
+#if DEBUG
+        JGADGET_ASSERTWARN(77, pNext_==NULL);
+        JGADGET_ASSERTWARN(78, pPrev_==NULL);
+#endif
+    }
 
     TLinkListNode* getNext() const { return pNext_; }
     TLinkListNode* getPrev() const { return pPrev_; }

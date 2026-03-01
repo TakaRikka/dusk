@@ -199,7 +199,7 @@ public:
     BOOL chkCondition(u16 condition) { return (mCondition & condition) == condition; }
 
     void suspendProc(void* actor) {
-        if (field_0x10 != NULL) {
+        if (field_0x10 != 0) {
             field_0x14(actor);
         }
     }

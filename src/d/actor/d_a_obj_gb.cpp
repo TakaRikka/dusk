@@ -10,6 +10,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
+#include <cstring>
 
 static int daObj_Gb_Draw(obj_gb_class* i_this) {
     g_env_light.settingTevStruct(0x10, &i_this->current.pos, &i_this->tevStr);
@@ -110,7 +111,11 @@ static int bmd[2] = {
     6, 7,
 };
 
+#ifdef TARGET_PC
+static int brk_res[2] = {
+#else
 static int brk[2] = {
+#endif
     10, 11,
 };
 
@@ -144,7 +149,11 @@ static int useHeapInit(fopAc_ac_c* actor) {
         return 0;
     }
     J3DAnmTevRegKey* anmTevKey = (J3DAnmTevRegKey*)dComIfG_getObjectRes(
+#ifdef TARGET_PC
+        "Obj_gb", brk_res[i_this->field_0x57c]);
+#else
         "Obj_gb", brk[i_this->field_0x57c]);
+#endif
     if (i_this->mBrk->init(i_this->mModel->getModelData(), anmTevKey, 1, 2, 0.0f, 0, -1) == 0) {
         return 0;
     }

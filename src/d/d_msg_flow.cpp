@@ -13,6 +13,7 @@
 #include "d/actor/d_a_myna.h"
 #include "d/actor/d_a_obj_ss_base.h"
 #include "SSystem/SComponent/c_math.h"
+#include <cstring>
 
 dMsgFlow_c::dMsgFlow_c() {
     mNonStopJunpFlowFlag = 0;

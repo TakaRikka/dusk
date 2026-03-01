@@ -1,0 +1,94 @@
+#ifndef RES_E_SF_H
+#define RES_E_SF_H
+
+enum dRes_INDEX_E_SF {
+    /* BCK  */
+    dRes_INDEX_E_SF_BCK_SF_ATTACK01_e=0x4,
+    dRes_INDEX_E_SF_BCK_SF_ATTACK02_e=0x5,
+    dRes_INDEX_E_SF_BCK_SF_DAMAGE_e=0x6,
+    dRes_INDEX_E_SF_BCK_SF_DIE_e=0x7,
+    dRes_INDEX_E_SF_BCK_SF_DRAWBACK_e=0x8,
+    dRes_INDEX_E_SF_BCK_SF_GETUP_e=0x9,
+    dRes_INDEX_E_SF_BCK_SF_GUARD_e=0xA,
+    dRes_INDEX_E_SF_BCK_SF_OPDEMO_e=0xB,
+    dRes_INDEX_E_SF_BCK_SF_WAIT01_e=0xC,
+    dRes_INDEX_E_SF_BCK_SF_WAIT02_e=0xD,
+    dRes_INDEX_E_SF_BCK_SF_WALK01_e=0xE,
+    dRes_INDEX_E_SF_BCK_SF_WALK02_e=0xF,
+    dRes_INDEX_E_SF_BCK_SF_WALK03_e=0x10,
+    /* BMDR */
+    dRes_INDEX_E_SF_BMD_SF_e=0x13,
+    dRes_INDEX_E_SF_BMD_SF_SHIELDA_e=0x14,
+    dRes_INDEX_E_SF_BMD_SF_SHIELDB_e=0x15,
+    dRes_INDEX_E_SF_BMD_SF_SWORDA_e=0x16,
+    dRes_INDEX_E_SF_BMD_SF_SWORDB_e=0x17,
+};
+
+enum dRes_ID_E_SF {
+    /* BCK  */
+    dRes_ID_E_SF_BCK_SF_ATTACK01_e=0x4,
+    dRes_ID_E_SF_BCK_SF_ATTACK02_e=0x5,
+    dRes_ID_E_SF_BCK_SF_DAMAGE_e=0x6,
+    dRes_ID_E_SF_BCK_SF_DIE_e=0x7,
+    dRes_ID_E_SF_BCK_SF_DRAWBACK_e=0x8,
+    dRes_ID_E_SF_BCK_SF_GETUP_e=0x9,
+    dRes_ID_E_SF_BCK_SF_GUARD_e=0xA,
+    dRes_ID_E_SF_BCK_SF_OPDEMO_e=0xB,
+    dRes_ID_E_SF_BCK_SF_WAIT01_e=0xC,
+    dRes_ID_E_SF_BCK_SF_WAIT02_e=0xD,
+    dRes_ID_E_SF_BCK_SF_WALK01_e=0xE,
+    dRes_ID_E_SF_BCK_SF_WALK02_e=0xF,
+    dRes_ID_E_SF_BCK_SF_WALK03_e=0x10,
+    /* BMDR */
+    dRes_ID_E_SF_BMD_SF_e=0x13,
+    dRes_ID_E_SF_BMD_SF_SHIELDA_e=0x14,
+    dRes_ID_E_SF_BMD_SF_SHIELDB_e=0x15,
+    dRes_ID_E_SF_BMD_SF_SWORDA_e=0x16,
+    dRes_ID_E_SF_BMD_SF_SWORDB_e=0x17,
+};
+
+enum SF_JNT {
+    SF_JNT_WORLD_ROOT_e=0x0,
+    SF_JNT_BACKBONE1_e=0x1,
+    SF_JNT_BACKBONE2_e=0x2,
+    SF_JNT_NECK_e=0x3,
+    SF_JNT_HEAD_e=0x4,
+    SF_JNT_CHIN_e=0x5,
+    SF_JNT_SHOULDERL_e=0x6,
+    SF_JNT_ARML1_e=0x7,
+    SF_JNT_HANDL1_e=0x8,
+    SF_JNT_HANDL2_e=0x9,
+    SF_JNT_SHOULDERPADL_e=0xA,
+    SF_JNT_SHOULDERR_e=0xB,
+    SF_JNT_ARMR1_e=0xC,
+    SF_JNT_HANDR1_e=0xD,
+    SF_JNT_HANDR2_e=0xE,
+    SF_JNT_SHOULDERPADR_e=0xF,
+    SF_JNT_WAIST_e=0x10,
+    SF_JNT_LEGL1_e=0x11,
+    SF_JNT_LEGL2_e=0x12,
+    SF_JNT_FOOTL1_e=0x13,
+    SF_JNT_FOOTL2_e=0x14,
+    SF_JNT_LEGR1_e=0x15,
+    SF_JNT_LEGR2_e=0x16,
+    SF_JNT_FOOTR1_e=0x17,
+    SF_JNT_FOOTR2_e=0x18,
+};
+
+enum SF_SHIELDA_JNT {
+    SF_SHIELDA_JNT_SF_TATEA_SKIN_e=0x0,
+};
+
+enum SF_SHIELDB_JNT {
+    SF_SHIELDB_JNT_SF_TATEB_e=0x0,
+};
+
+enum SF_SWORDA_JNT {
+    SF_SWORDA_JNT_SF_KENA_e=0x0,
+};
+
+enum SF_SWORDB_JNT {
+    SF_SWORDB_JNT_SF_KENB_SKIN_e=0x0,
+};
+
+#endif /* !RES_E_SF_H */

@@ -2,7 +2,7 @@
 #define JUTFONT_H
 
 #include "JSystem/JUtility/TColor.h"
-#include <string>
+#include <cstring>
 #include "dusk/endian.h"
 
 /**
@@ -124,9 +124,9 @@ public:
         return drawString_size_scale(posX, posY, getWidth(), getHeight(), str, len, visible);
     }
 
-    void drawString_scale(f32 posX, f32 posY, f32 width, f32 height, const char* str,
+    f32 drawString_scale(f32 posX, f32 posY, f32 width, f32 height, const char* str,
                           bool visible) {
-        drawString_size_scale(posX, posY, width, height, str, strlen(str), visible);
+        return (int)drawString_size_scale(posX, posY, width, height, str, strlen(str), visible);
     }
 
     int getWidth(int i_no) const {

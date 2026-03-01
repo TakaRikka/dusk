@@ -6,9 +6,10 @@
 
 #include "m_Do/m_Do_main.h"
 #include <dolphin/vi.h>
-#include <string>
+#include <cstring>
 #include "DynamicLink.h"
 #include "JSystem/JAudio2/JASAudioThread.h"
+#include "JSystem/JAudio2/JAUSectionHeap.h"
 #include "JSystem/JAudio2/JAUSoundTable.h"
 #include "JSystem/JFramework/JFWSystem.h"
 #include "JSystem/JHostIO/JORServer.h"
@@ -36,6 +37,9 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
 #include "m_Do/m_Do_printf.h"
+#include "m_Do/m_Do_ext2.h"
+#include "SSystem/SComponent/c_counter.h"
+#include <cstring>
 
 #include <chrono>
 #include <thread>
@@ -268,71 +272,73 @@ JHIComPortManager<T>* JHIComPortManager<T>::instance = nullptr;
 template <>
 JHIComPortManager<JHICmnMem>* JHIComPortManager<JHICmnMem>::instance = nullptr;
 
-template <>
-Z2WolfHowlMgr* JASGlobalInstance<Z2WolfHowlMgr>::sInstance;
+#ifdef __MWERKS__
+template<>
+Z2WolfHowlMgr* JASGlobalInstance<Z2WolfHowlMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2EnvSeMgr* JASGlobalInstance<Z2EnvSeMgr>::sInstance;
+template<>
+Z2EnvSeMgr* JASGlobalInstance<Z2EnvSeMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2FxLineMgr* JASGlobalInstance<Z2FxLineMgr>::sInstance;
+template<>
+Z2FxLineMgr* JASGlobalInstance<Z2FxLineMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2Audience* JASGlobalInstance<Z2Audience>::sInstance;
+template<>
+Z2Audience* JASGlobalInstance<Z2Audience>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2SoundObjMgr* JASGlobalInstance<Z2SoundObjMgr>::sInstance;
+template<>
+Z2SoundObjMgr* JASGlobalInstance<Z2SoundObjMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2SoundInfo* JASGlobalInstance<Z2SoundInfo>::sInstance;
+template<>
+Z2SoundInfo* JASGlobalInstance<Z2SoundInfo>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JAUSoundInfo* JASGlobalInstance<JAUSoundInfo>::sInstance;
+template<>
+JAUSoundInfo* JASGlobalInstance<JAUSoundInfo>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JAUSoundNameTable* JASGlobalInstance<JAUSoundNameTable>::sInstance;
+template<>
+JAUSoundNameTable* JASGlobalInstance<JAUSoundNameTable>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JAUSoundTable* JASGlobalInstance<JAUSoundTable>::sInstance;
+template<>
+JAUSoundTable* JASGlobalInstance<JAUSoundTable>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JAISoundInfo* JASGlobalInstance<JAISoundInfo>::sInstance;
+template<>
+JAISoundInfo* JASGlobalInstance<JAISoundInfo>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2SoundMgr* JASGlobalInstance<Z2SoundMgr>::sInstance;
+template<>
+Z2SoundMgr* JASGlobalInstance<Z2SoundMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JAIStreamMgr* JASGlobalInstance<JAIStreamMgr>::sInstance;
+template<>
+JAIStreamMgr* JASGlobalInstance<JAIStreamMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JAISeqMgr* JASGlobalInstance<JAISeqMgr>::sInstance;
+template<>
+JAISeqMgr* JASGlobalInstance<JAISeqMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JAISeMgr* JASGlobalInstance<JAISeMgr>::sInstance;
+template<>
+JAISeMgr* JASGlobalInstance<JAISeMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2SpeechMgr2* JASGlobalInstance<Z2SpeechMgr2>::sInstance;
+template<>
+Z2SpeechMgr2* JASGlobalInstance<Z2SpeechMgr2>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2SoundStarter* JASGlobalInstance<Z2SoundStarter>::sInstance;
+template<>
+Z2SoundStarter* JASGlobalInstance<Z2SoundStarter>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JAISoundStarter* JASGlobalInstance<JAISoundStarter>::sInstance;
+template<>
+JAISoundStarter* JASGlobalInstance<JAISoundStarter>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2StatusMgr* JASGlobalInstance<Z2StatusMgr>::sInstance;
+template<>
+Z2StatusMgr* JASGlobalInstance<Z2StatusMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2SceneMgr* JASGlobalInstance<Z2SceneMgr>::sInstance;
+template<>
+Z2SceneMgr* JASGlobalInstance<Z2SceneMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2SeqMgr* JASGlobalInstance<Z2SeqMgr>::sInstance;
+template<>
+Z2SeqMgr* JASGlobalInstance<Z2SeqMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2SeMgr* JASGlobalInstance<Z2SeMgr>::sInstance;
+template<>
+Z2SeMgr* JASGlobalInstance<Z2SeMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JASAudioThread* JASGlobalInstance<JASAudioThread>::sInstance;
+template<>
+JASAudioThread* JASGlobalInstance<JASAudioThread>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JASDefaultBankTable* JASGlobalInstance<JASDefaultBankTable>::sInstance;
+template<>
+JASDefaultBankTable* JASGlobalInstance<JASDefaultBankTable>::sInstance JAS_GLOBAL_INSTANCE_INIT;
+#endif // __MWERKS__

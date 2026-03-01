@@ -36,7 +36,7 @@ int fopScnM_CreateReq(s16 i_procName, s16 param_2, u16 param_3, uintptr_t i_data
     return result != fpcM_ERROR_PROCESS_ID_e;
 }
 
-u32 fopScnM_ReRequest(s16 i_procName, u32 i_data) {
+u32 fopScnM_ReRequest(s16 i_procName, uintptr_t i_data) {
     if (l_scnRqID == fpcM_ERROR_PROCESS_ID_e) {
         return 0;
     }

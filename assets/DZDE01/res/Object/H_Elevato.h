@@ -1,0 +1,28 @@
+#ifndef RES_H_ELEVATO_H
+#define RES_H_ELEVATO_H
+
+enum dRes_INDEX_H_ELEVATO {
+    /* BMDR */
+    dRes_INDEX_H_ELEVATO_BMD_H_ELEVATER_e=0x5,
+    /* DZB  */
+    dRes_INDEX_H_ELEVATO_DZB_H_ELEVETER_e=0x8,
+    /* EVT  */
+    dRes_INDEX_H_ELEVATO_DAT_EVENT_LIST_e=0xB,
+};
+
+enum dRes_ID_H_ELEVATO {
+    /* BMDR */
+    dRes_ID_H_ELEVATO_BMD_H_ELEVATER_e=0x5,
+    /* DZB  */
+    dRes_ID_H_ELEVATO_DZB_H_ELEVETER_e=0x8,
+    /* EVT  */
+    dRes_ID_H_ELEVATO_DAT_EVENT_LIST_e=0xB,
+};
+
+enum H_ELEVATER_JNT {
+    H_ELEVATER_JNT_H_ELEVATER_e=0x0,
+    H_ELEVATER_JNT_ELEVATER_e=0x1,
+    H_ELEVATER_JNT_JOINT1_e=0x2,
+};
+
+#endif /* !RES_H_ELEVATO_H */

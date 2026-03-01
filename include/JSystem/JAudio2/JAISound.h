@@ -5,6 +5,7 @@
 #include "JSystem/JAudio2/JAIAudible.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "global.h"
+#include <cstdint>
 
 class JAISound;
 
@@ -134,7 +135,7 @@ struct JAISoundStatus_ {
             u8 flag8 : 1;
         } flags;
     } state;
-    /* 0x4 */ u32 userdata_;
+    /* 0x4 */ uintptr_t userdata_;
 };  // Size: 0x8
 
 /**
@@ -253,7 +254,7 @@ class JAIAudible;
 struct JAIAudience;
 class JAISe;
 class JAISeq;
-class JAISoundChild;
+struct JAISoundChild;
 class JAIStream;
 class JAITempoMgr;
 
@@ -294,8 +295,8 @@ public:
     void setAnimationState(u32 state) {
         status_.state.flags.animationState = state;
     }
-    u32 getUserData() const { return status_.userdata_; }
-    void setUserData(u32 userData) { status_.userdata_ = userData; }
+    uintptr_t getUserData() const { return status_.userdata_; }
+    void setUserData(uintptr_t userData) { status_.userdata_ = userData; }
     JAIAudible* getAudible() { return audible_; }
     bool isHandleAttached() const { return handle_ != NULL; }
     bool hasLifeTime() const { return status_.field_0x1.flags.flag2; }

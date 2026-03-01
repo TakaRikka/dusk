@@ -8,22 +8,24 @@ endif ()
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
 
 option(DUSK_BUILD_WARNINGS "If off, compiler warnings will be suppressed")
 
 if (CMAKE_SYSTEM_NAME STREQUAL Linux)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unknown-pragmas -Wno-unused-variable -Wno-unused-parameter")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -stdlib=libc++ -Wno-register -fPIC")
-    set(CMAKE_PREFIX_PATH /usr)
-    set(CMAKE_LIBRARY_ARCHITECTURE x86_64-linux-gnu)
-    set(CMAKE_LIBRARY_PATH "/usr/lib64" "/usr/lib/x86_64-linux-gnu" CACHE PATH "")
-    set(CMAKE_FIND_LIBRARY_CUSTOM_LIB_SUFFIX 64)
+    # -Wno-multichar: Multi-character constants ('ABCD') are implementation-defined but all compilers
+    #   (CW, GCC, Clang, MSVC) encode them identically in big-endian order.
+    #   For >4-char literals (which GCC/Clang truncate to int), use the MULTI_CHAR() macro.
+    # -Wwrite-strings: Game code relies on implicit const char* -> char* conversions
+    # -Wdeprecated-declarations: JSystem uses std::iterator, deprecated in C++17
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-multichar -Wno-write-strings")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-multichar -Wno-write-strings -Wno-trigraphs -Wno-deprecated-declarations")
     set(CMAKE_INSTALL_RPATH "$ORIGIN")
     set(CMAKE_BUILD_RPATH "$ORIGIN")
 elseif (APPLE)
-	add_compile_options(-Wno-declaration-after-statement)
+    add_compile_options(-Wno-declaration-after-statement -Wno-non-pod-varargs)
     set(CMAKE_INSTALL_RPATH "$ORIGIN")
     set(CMAKE_BUILD_RPATH "$ORIGIN")
 elseif (MSVC)
@@ -41,10 +43,7 @@ elseif (MSVC)
     endif ()
     add_compile_options(/utf-8)
 endif ()
-if (NOT MSVC)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error -Wno-c++11-narrowing")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error -Wno-c++11-narrowing")
-endif ()
+
 
 include(files.cmake)
 

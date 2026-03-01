@@ -1,0 +1,61 @@
+#ifndef RES_YAMID_H
+#define RES_YAMID_H
+
+enum dRes_INDEX_YAMID {
+    /* BCK  */
+    dRes_INDEX_YAMID_BCK_YAMID_F_TALK_A_e=0x7,
+    dRes_INDEX_YAMID_BCK_YAMID_STEP_e=0x8,
+    dRes_INDEX_YAMID_BCK_YAMID_WAIT_A_e=0x9,
+    /* BMDR */
+    dRes_INDEX_YAMID_BMD_YAMID_e=0xC,
+    /* BTK  */
+    dRes_INDEX_YAMID_BTK_YAMID_e=0xF,
+    /* BTP  */
+    dRes_INDEX_YAMID_BTP_YAMID_e=0x12,
+    /* EVT  */
+    dRes_INDEX_YAMID_DAT_EVENT_LIST_e=0x15,
+};
+
+enum dRes_ID_YAMID {
+    /* BCK  */
+    dRes_ID_YAMID_BCK_YAMID_F_TALK_A_e=0x7,
+    dRes_ID_YAMID_BCK_YAMID_STEP_e=0x8,
+    dRes_ID_YAMID_BCK_YAMID_WAIT_A_e=0x9,
+    /* BMDR */
+    dRes_ID_YAMID_BMD_YAMID_e=0xC,
+    /* BTK  */
+    dRes_ID_YAMID_BTK_YAMID_e=0xF,
+    /* BTP  */
+    dRes_ID_YAMID_BTP_YAMID_e=0x12,
+    /* EVT  */
+    dRes_ID_YAMID_DAT_EVENT_LIST_e=0x15,
+};
+
+enum YAMID_JNT {
+    YAMID_JNT_CENTER_e=0x0,
+    YAMID_JNT_BACKBONE1_e=0x1,
+    YAMID_JNT_BACKBONE2_e=0x2,
+    YAMID_JNT_NECK_e=0x3,
+    YAMID_JNT_HEAD_e=0x4,
+    YAMID_JNT_CHIN_e=0x5,
+    YAMID_JNT_MOUTH_e=0x6,
+    YAMID_JNT_SHOULDERL_e=0x7,
+    YAMID_JNT_ARML1_e=0x8,
+    YAMID_JNT_ARML2_e=0x9,
+    YAMID_JNT_HANDL_e=0xA,
+    YAMID_JNT_FINGERL_e=0xB,
+    YAMID_JNT_SHOULDERR_e=0xC,
+    YAMID_JNT_ARMR1_e=0xD,
+    YAMID_JNT_ARMR2_e=0xE,
+    YAMID_JNT_HANDR_e=0xF,
+    YAMID_JNT_FINGERR_e=0x10,
+    YAMID_JNT_WAIST_e=0x11,
+    YAMID_JNT_LEGL1_e=0x12,
+    YAMID_JNT_LEGL2_e=0x13,
+    YAMID_JNT_FOOTL_e=0x14,
+    YAMID_JNT_LEGR1_e=0x15,
+    YAMID_JNT_LEGR2_e=0x16,
+    YAMID_JNT_FOOTR_e=0x17,
+};
+
+#endif /* !RES_YAMID_H */

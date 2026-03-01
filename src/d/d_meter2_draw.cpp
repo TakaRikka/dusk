@@ -20,7 +20,7 @@
 #include "d/d_msg_class.h"
 #include "d/d_msg_object.h"
 #include "d/d_pane_class.h"
-#include <string>
+#include <cstring>
 
 dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap* mp_heap) {
     OS_REPORT("enter dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap *mp_heap)\n");
@@ -1173,7 +1173,7 @@ void dMeter2Draw_c::initButton() {
 
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
-            field_0x524[i][j] = NULL;
+            field_0x524[i][j] = 0;
         }
     }
 

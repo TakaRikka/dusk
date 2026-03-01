@@ -1,0 +1,22 @@
+#ifndef RES_CRVSTEEL_H
+#define RES_CRVSTEEL_H
+
+enum dRes_INDEX_CRVSTEEL {
+    /* BMDR */
+    dRes_INDEX_CRVSTEEL_BMD_U_CRVSTEELGATE_e=0x4,
+    /* DZB  */
+    dRes_INDEX_CRVSTEEL_DZB_U_CRVSTEELGATE_e=0x7,
+};
+
+enum dRes_ID_CRVSTEEL {
+    /* BMDR */
+    dRes_ID_CRVSTEEL_BMD_U_CRVSTEELGATE_e=0x4,
+    /* DZB  */
+    dRes_ID_CRVSTEEL_DZB_U_CRVSTEELGATE_e=0x7,
+};
+
+enum U_CRVSTEELGATE_JNT {
+    U_CRVSTEELGATE_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_CRVSTEEL_H */

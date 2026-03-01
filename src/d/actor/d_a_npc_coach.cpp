@@ -13,6 +13,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_meter2_info.h"
 #include "d/d_tresure.h"
+#include <cstring>
 
 enum Coach_RES_File_ID {
     /* BCK */

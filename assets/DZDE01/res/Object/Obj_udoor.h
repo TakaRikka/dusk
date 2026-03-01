@@ -1,0 +1,30 @@
+#ifndef RES_OBJ_UDOOR_H
+#define RES_OBJ_UDOOR_H
+
+enum dRes_INDEX_OBJ_UDOOR {
+    /* BMDR */
+    dRes_INDEX_OBJ_UDOOR_BMD_A_UHDOORL_e=0x4,
+    dRes_INDEX_OBJ_UDOOR_BMD_A_UHDOORR_e=0x5,
+    /* DZB  */
+    dRes_INDEX_OBJ_UDOOR_DZB_A_UHDOORL_e=0x8,
+    dRes_INDEX_OBJ_UDOOR_DZB_A_UHDOORR_e=0x9,
+};
+
+enum dRes_ID_OBJ_UDOOR {
+    /* BMDR */
+    dRes_ID_OBJ_UDOOR_BMD_A_UHDOORL_e=0x4,
+    dRes_ID_OBJ_UDOOR_BMD_A_UHDOORR_e=0x5,
+    /* DZB  */
+    dRes_ID_OBJ_UDOOR_DZB_A_UHDOORL_e=0x8,
+    dRes_ID_OBJ_UDOOR_DZB_A_UHDOORR_e=0x9,
+};
+
+enum A_UHDOORL_JNT {
+    A_UHDOORL_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum A_UHDOORR_JNT {
+    A_UHDOORR_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_OBJ_UDOOR_H */

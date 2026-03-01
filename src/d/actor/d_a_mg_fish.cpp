@@ -22,6 +22,7 @@
 #include "d/d_s_play.h"
 #include "d/d_vibration.h"
 #include "f_op/f_op_kankyo_mng.h"
+#include <cstring>
 
 #define ANM_MG_FISH_MOUTH_CLOSE     4
 #define ANM_MG_FISH_MOUTH_OPEN      5
@@ -2308,7 +2309,7 @@ static void mf_esa_search(mg_fish_class* i_this) {
                     i_this->field_0x5ec > 10000.0f) {
                     i_this->mActionPhase = 3;
                     i_this->mMovementPitch = i_this->mMovementPitch + 0x2000;
-                    i_this->mMovementYaw += (s16)cM_rndFX(32768.0f);
+                    ANGLE_ADD(i_this->mMovementYaw, cM_rndFX(32768.0f));
                     rod->field_0x10a5 = fVar10 * (cM_rndF(20.0f) + 15.0f);
                     i_this->field_0x659 = rod->field_0x10a5;
                 } else {
@@ -3007,7 +3008,7 @@ static void action(mg_fish_class* i_this) {
         }
     } else {
         f32 unkFloat0 = -1000.0f * i_this->field_0x5d4 * i_this->field_0x660;
-        i_this->jointYaws2[1] += (s16)(i_this->field_0x5d4 * 2500.0f / i_this->mJointScale);
+        ANGLE_ADD(i_this->jointYaws2[1], i_this->field_0x5d4 * 2500.0f / i_this->mJointScale);
         if (i_this->mGedouKind >= GEDOU_KIND_BG) {
             i_this->jointYaws2[1] += 2000;
         }

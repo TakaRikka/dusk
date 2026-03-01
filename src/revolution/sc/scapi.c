@@ -121,3 +121,27 @@ u32 SCGetCounterBias(void) {
 
     return bias;
 }
+
+u8 SCGetWpadSensorBarPosition(void) {
+    // NONMATCHING
+}
+
+u8 SCGetWpadMotorMode(void) {
+    // NONMATCHING
+}
+
+u8 SCGetWpadSpeakerVolume(void) {
+    // NONMATCHING
+}
+
+u8 SCGetBtDpdSensibility(void) {
+    // NONMATCHING
+}
+
+BOOL SCSetWpadSpeakerVolume(u8 volume) {
+    // NONMATCHING
+}
+
+BOOL SCSetWpadMotorMode(u8 mode) {
+    // NONMATCHING
+}

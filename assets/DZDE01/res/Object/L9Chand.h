@@ -1,0 +1,22 @@
+#ifndef RES_L9CHAND_H
+#define RES_L9CHAND_H
+
+enum dRes_INDEX_L9CHAND {
+    /* BMDR */
+    dRes_INDEX_L9CHAND_BMD_LV9_CHANDELIER_e=0x4,
+    /* DZB  */
+    dRes_INDEX_L9CHAND_DZB_LV9_CHANDELIER_e=0x7,
+};
+
+enum dRes_ID_L9CHAND {
+    /* BMDR */
+    dRes_ID_L9CHAND_BMD_LV9_CHANDELIER_e=0x4,
+    /* DZB  */
+    dRes_ID_L9CHAND_DZB_LV9_CHANDELIER_e=0x7,
+};
+
+enum LV9_CHANDELIER_JNT {
+    LV9_CHANDELIER_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_L9CHAND_H */

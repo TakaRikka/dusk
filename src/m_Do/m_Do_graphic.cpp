@@ -33,6 +33,7 @@
 #include "d/d_meter2_info.h"
 #include "d/d_s_play.h"
 #include "DynamicLink.h"
+#include <cstring>
 #include "dusk/endian.h"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
@@ -679,6 +680,14 @@ void mDoGph_gInf_c::entryBaseCsr(mDoGph_gInf_c::csr_c* i_entry) {
     JUT_ASSERT(876, m_baseCsr == NULL);
     m_baseCsr = i_entry;
     m_csr = i_entry;
+}
+
+void mDoGph_gInf_c::entryCsr(mDoGph_gInf_c::csr_c* i_csr) {
+    m_csr = i_csr;
+}
+
+void mDoGph_gInf_c::releaseCsr(void) {
+    m_csr = m_baseCsr;
 }
 #endif
 

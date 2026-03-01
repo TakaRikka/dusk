@@ -1,0 +1,22 @@
+#ifndef RES_KYTAG15_H
+#define RES_KYTAG15_H
+
+enum dRes_INDEX_KYTAG15 {
+    /* BMDR */
+    dRes_INDEX_KYTAG15_BMD_EF_SCREEN_SABAKU_e=0x4,
+    /* BTK  */
+    dRes_INDEX_KYTAG15_BTK_EF_SCREEN_SABAKU_e=0x7,
+};
+
+enum dRes_ID_KYTAG15 {
+    /* BMDR */
+    dRes_ID_KYTAG15_BMD_EF_SCREEN_SABAKU_e=0x4,
+    /* BTK  */
+    dRes_ID_KYTAG15_BTK_EF_SCREEN_SABAKU_e=0x7,
+};
+
+enum EF_SCREEN_SABAKU_JNT {
+    EF_SCREEN_SABAKU_JNT_EF_SCREEN_e=0x0,
+};
+
+#endif /* !RES_KYTAG15_H */

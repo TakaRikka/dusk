@@ -47,7 +47,7 @@ int daObjVGnd_c::CreateHeap() {
         J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 0xb);
         JUT_ASSERT(198, pbtk != NULL);
         mpBtk = new mDoExt_btkAnm();
-        if ((!mpBtk) || (!mpBtk->init(modelData, pbtk, 1, NULL, 1.0f, NULL, -1))) {
+        if ((!mpBtk) || (!mpBtk->init(modelData, pbtk, 1, 0, 1.0f, 0, -1))) {
             return 0;
         }
     }
@@ -56,7 +56,7 @@ int daObjVGnd_c::CreateHeap() {
         J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, 0x8);
         JUT_ASSERT(212, pbrk != NULL);
         mpBrk = new mDoExt_brkAnm();
-        if ((!mpBrk) || (!mpBrk->init(modelData, pbrk, 1, NULL, 1.0f, NULL, -1))) {
+        if ((!mpBrk) || (!mpBrk->init(modelData, pbrk, 1, 0, 1.0f, 0, -1))) {
             return 0;
         }
     }

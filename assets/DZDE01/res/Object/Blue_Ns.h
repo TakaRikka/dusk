@@ -1,0 +1,69 @@
+#ifndef RES_BLUE_NS_H
+#define RES_BLUE_NS_H
+
+enum dRes_INDEX_BLUE_NS {
+    /* BCK  */
+    dRes_INDEX_BLUE_NS_BCK_NS_APPEAR_A_e=0x5,
+    dRes_INDEX_BLUE_NS_BCK_NS_APPEAR_B_e=0x6,
+    dRes_INDEX_BLUE_NS_BCK_NS_APPEAR_C_e=0x7,
+    dRes_INDEX_BLUE_NS_BCK_NS_DAMAGE_A_e=0x8,
+    dRes_INDEX_BLUE_NS_BCK_NS_DAMAGE_B_e=0x9,
+    dRes_INDEX_BLUE_NS_BCK_NS_DAMAGE_C_e=0xA,
+    dRes_INDEX_BLUE_NS_BCK_NS_WAIT_A_e=0xB,
+    dRes_INDEX_BLUE_NS_BCK_NS_WAIT_B_e=0xC,
+    dRes_INDEX_BLUE_NS_BCK_NS_WAIT_C_e=0xD,
+    /* BMDR */
+    dRes_INDEX_BLUE_NS_BMD_NS_e=0x10,
+    /* EVT  */
+    dRes_INDEX_BLUE_NS_DAT_EVENT_LIST_e=0x13,
+};
+
+enum dRes_ID_BLUE_NS {
+    /* BCK  */
+    dRes_ID_BLUE_NS_BCK_NS_APPEAR_A_e=0x5,
+    dRes_ID_BLUE_NS_BCK_NS_APPEAR_B_e=0x6,
+    dRes_ID_BLUE_NS_BCK_NS_APPEAR_C_e=0x7,
+    dRes_ID_BLUE_NS_BCK_NS_DAMAGE_A_e=0x8,
+    dRes_ID_BLUE_NS_BCK_NS_DAMAGE_B_e=0x9,
+    dRes_ID_BLUE_NS_BCK_NS_DAMAGE_C_e=0xA,
+    dRes_ID_BLUE_NS_BCK_NS_WAIT_A_e=0xB,
+    dRes_ID_BLUE_NS_BCK_NS_WAIT_B_e=0xC,
+    dRes_ID_BLUE_NS_BCK_NS_WAIT_C_e=0xD,
+    /* BMDR */
+    dRes_ID_BLUE_NS_BMD_NS_e=0x10,
+    /* EVT  */
+    dRes_ID_BLUE_NS_DAT_EVENT_LIST_e=0x13,
+};
+
+enum NS_JNT {
+    NS_JNT_CENTER_e=0x0,
+    NS_JNT_BACKBONE1_e=0x1,
+    NS_JNT_BACKBONE2_e=0x2,
+    NS_JNT_NECK_e=0x3,
+    NS_JNT_HEAD_e=0x4,
+    NS_JNT_SHOULDERL_e=0x5,
+    NS_JNT_ARML1_e=0x6,
+    NS_JNT_ARML2_e=0x7,
+    NS_JNT_HANDL_e=0x8,
+    NS_JNT_FINGERL1_e=0x9,
+    NS_JNT_FINGERL2_e=0xA,
+    NS_JNT_FINGERL3_e=0xB,
+    NS_JNT_SHOULDERR_e=0xC,
+    NS_JNT_ARMR1_e=0xD,
+    NS_JNT_ARMR2_e=0xE,
+    NS_JNT_HANDR_e=0xF,
+    NS_JNT_FINGERR1_e=0x10,
+    NS_JNT_FINGERR2_e=0x11,
+    NS_JNT_FINGERR3_e=0x12,
+    NS_JNT_WAIST_e=0x13,
+    NS_JNT_LEGL1_e=0x14,
+    NS_JNT_LEGL2_e=0x15,
+    NS_JNT_FOOTL1_e=0x16,
+    NS_JNT_FOOTL2_e=0x17,
+    NS_JNT_LEGR1_e=0x18,
+    NS_JNT_LEGR2_e=0x19,
+    NS_JNT_FOOTR1_e=0x1A,
+    NS_JNT_FOOTR2_e=0x1B,
+};
+
+#endif /* !RES_BLUE_NS_H */

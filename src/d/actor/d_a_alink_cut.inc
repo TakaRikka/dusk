@@ -1233,6 +1233,7 @@ int daAlink_c::procCutFinishInit(int i_type) {
     field_0x3588 = l_halfAtnWaitBaseAnime;
 
     if (mCutType == CUT_TYPE_MORTAL_DRAW_A || mCutType == CUT_TYPE_FINISH_STAB) {
+        int dummy; // dummy decl to force stack pointer into r31 for debug
         field_0x2f99 = 13;
     }
 
@@ -1586,7 +1587,7 @@ int daAlink_c::procCutJump() {
     daPy_frameCtrl_c* framectrl = mUnderFrameCtrl;
 
     if (current.angle.y == shape_angle.y && changeCutReverseProc(ANM_CUT_JUMP)) {
-        current.angle.y += 0x8000;
+        ANGLE_ADD_2(current.angle.y, 0x8000);
         mNormalSpeed = 27.0f;
         dComIfGp_getVibration().StartShock(VIBMODE_S_POWER5, 31, cXyz(0.0f, 1.0f, 0.0f));
     } else if (current.angle.y != shape_angle.y) {

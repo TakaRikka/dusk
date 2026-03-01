@@ -2008,7 +2008,7 @@ static int daE_YH_Execute(e_yh_class* i_this) {
     J3DModel* model = i_this->mpMorf->getModel();
     model->setBaseTRMtx(mDoMtx_stack_c::get());
     
-    i_this->mpMorf->play(NULL, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
+    i_this->mpMorf->play(0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
     i_this->mBrk->play();
     i_this->mpMorf->modelCalc();
     

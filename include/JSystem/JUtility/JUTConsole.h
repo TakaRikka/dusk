@@ -103,9 +103,7 @@ public:
         return --index < 0 ? index = mMaxLines - 1 : index;
     }
 
-    int nextIndex(int index) const {
-        return ++index >= mMaxLines ? 0 : index;
-    }
+    int nextIndex(int index) const { return (++index >= mMaxLines) ? index = 0 : index; }
 
     void scrollToLastLine() { scroll(mMaxLines); }
     void scrollToFirstLine() { scroll(-mMaxLines); }

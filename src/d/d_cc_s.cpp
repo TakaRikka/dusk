@@ -536,6 +536,48 @@ bool dCcS::ChkCamera(cXyz& param_0, cXyz& param_1, f32 param_2, fopAc_ac_c* para
     return false;
 }
 
+#if PLATFORM_WII
+BOOL dCcS::ChkLine(cXyz& i_p_start, cXyz& i_p_end, f32 i_radius, fopAc_ac_c** o_actor) {
+    u16 obj_co_count = mObjCoCount;
+    if (obj_co_count == 0) {
+        return 0;
+    }
+    cCcD_Obj** max_obj_pp = &mpObjCo[mObjCoCount];
+    cCcD_CpsAttr cps_attr;
+    cps_attr.Set(i_p_start, i_p_end, i_radius);
+    cps_attr.CalcAabBox();
+    *o_actor = NULL;
+    f32 z_max = -FLT_MAX;
+    cCcD_DivideInfo sp18;
+    mDivideArea.CalcDivideInfoOverArea(&sp18, cps_attr.mAab);
+    cCcD_Obj** obj_pp = mpObjCo;
+    while (obj_pp < max_obj_pp) {
+        cCcD_Obj* obj_p = *obj_pp;
+        if (obj_p->GetObjCo().getSPrm() & 1) {
+            fopAc_ac_c* temp_r31 = dComIfGp_getPlayer(0);
+            if (obj_p->GetAc() != temp_r31 && (*obj_pp)->GetDivideInfo().Chk(sp18) != 0) {
+                f32 sp8;
+                if ((*obj_pp)->GetShapeAttr()->CrossCo(cps_attr, &sp8) != 0) {
+                    fopAc_ac_c* actor = (*obj_pp)->GetAc();
+                    if (actor != NULL &&
+                        actor->attention_info.flags & (fopAc_AttnFlag_LOCK_e | fopAc_AttnFlag_BATTLE_e)) {
+                        Vec spC;
+                        PSMTXMultVec(dComIfGd_getViewMtx(), &actor->current.pos, &spC);
+                        if (spC.z < 0.0f && spC.z > z_max) {
+                            *o_actor = actor;
+                            z_max = spC.z;
+                        }
+                    }
+                }
+            }
+        }
+        obj_pp++;
+    }
+
+    return *o_actor != NULL;
+}
+#endif
+
 bool dCcS::chkCameraPoint(cXyz const& param_0, cCcD_ShapeAttr::Shape* param_1, fopAc_ac_c* param_2,
                           fopAc_ac_c* param_3) {
     if (mObjCoCount == 0) {

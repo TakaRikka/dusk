@@ -1,0 +1,53 @@
+#ifndef RES_ZANT_H
+#define RES_ZANT_H
+
+enum dRes_INDEX_ZANT {
+    /* BCK  */
+    dRes_INDEX_ZANT_BCK_ZANT_WAIT_A_e=0x4,
+    /* BMDR */
+    dRes_INDEX_ZANT_BMD_ZANT_e=0x7,
+};
+
+enum dRes_ID_ZANT {
+    /* BCK  */
+    dRes_ID_ZANT_BCK_ZANT_WAIT_A_e=0x4,
+    /* BMDR */
+    dRes_ID_ZANT_BMD_ZANT_e=0x7,
+};
+
+enum ZANT_JNT {
+    ZANT_JNT_CENTER_e=0x0,
+    ZANT_JNT_BACKBONE1_e=0x1,
+    ZANT_JNT_BACKBONE2_e=0x2,
+    ZANT_JNT_SHOULDERL_e=0x3,
+    ZANT_JNT_ARML1_e=0x4,
+    ZANT_JNT_ARML2_e=0x5,
+    ZANT_JNT_ARML3_e=0x6,
+    ZANT_JNT_ARML4_e=0x7,
+    ZANT_JNT_HIRALB1_e=0x8,
+    ZANT_JNT_HIRALB2_e=0x9,
+    ZANT_JNT_HIRALF1_e=0xA,
+    ZANT_JNT_HIRALF2_e=0xB,
+    ZANT_JNT_SHOULDERR_e=0xC,
+    ZANT_JNT_ARMR1_e=0xD,
+    ZANT_JNT_ARMR2_e=0xE,
+    ZANT_JNT_ARMR3_e=0xF,
+    ZANT_JNT_ARMR4_e=0x10,
+    ZANT_JNT_HIRARB1_e=0x11,
+    ZANT_JNT_HIRARB2_e=0x12,
+    ZANT_JNT_HIRARF1_e=0x13,
+    ZANT_JNT_HIRARF2_e=0x14,
+    ZANT_JNT_WAIST_e=0x15,
+    ZANT_JNT_LEGL1_e=0x16,
+    ZANT_JNT_LEGL2_e=0x17,
+    ZANT_JNT_FOOTL_e=0x18,
+    ZANT_JNT_LEGR1_e=0x19,
+    ZANT_JNT_LEGR2_e=0x1A,
+    ZANT_JNT_FOOTR_e=0x1B,
+    ZANT_JNT_TAREB1_e=0x1C,
+    ZANT_JNT_TAREB2_e=0x1D,
+    ZANT_JNT_TAREF1_e=0x1E,
+    ZANT_JNT_TAREF2_e=0x1F,
+};
+
+#endif /* !RES_ZANT_H */

@@ -1,0 +1,87 @@
+#ifndef RES_SAMPLE_H
+#define RES_SAMPLE_H
+
+enum dRes_INDEX_SAMPLE {
+    /* DIR  */
+    dRes_INDEX_SAMPLE_TXT_FILE0_e=0x8,
+    dRes_INDEX_SAMPLE_TXT_FILE1_e=0x9,
+    dRes_INDEX_SAMPLE_TXT_FILE2_e=0xA,
+    /* BMDR */
+    dRes_INDEX_SAMPLE_BMD_FILE1_e=0xD,
+    dRes_INDEX_SAMPLE_BMD_FILE2_e=0xE,
+    /* EVT  */
+    dRes_INDEX_SAMPLE_DAT_EVENT_LIST_e=0x11,
+    /* DIR5 */
+    dRes_INDEX_SAMPLE__A_e=0x14,
+    /* DZB  */
+    dRes_INDEX_SAMPLE_DZB_FILE2_e=0x17,
+    dRes_INDEX_SAMPLE_DZB_FILE_e=0x18,
+    /* BCK  */
+    dRes_INDEX_SAMPLE_BCK_TEST_e=0x1B,
+};
+
+enum dRes_ID_SAMPLE {
+    /* DIR  */
+    dRes_ID_SAMPLE_TXT_FILE0_e=0x17,
+    dRes_ID_SAMPLE_TXT_FILE1_e=0x18,
+    dRes_ID_SAMPLE_TXT_FILE2_e=0x23,
+    /* BMDR */
+    dRes_ID_SAMPLE_BMD_FILE1_e=0x19,
+    dRes_ID_SAMPLE_BMD_FILE2_e=0x1A,
+    /* EVT  */
+    dRes_ID_SAMPLE_DAT_EVENT_LIST_e=0x1B,
+    /* DIR5 */
+    dRes_ID_SAMPLE__A_e=0x1F,
+    /* DZB  */
+    dRes_ID_SAMPLE_DZB_FILE2_e=0x21,
+    dRes_ID_SAMPLE_DZB_FILE_e=0x24,
+    /* BCK  */
+    dRes_ID_SAMPLE_BCK_TEST_e=0x22,
+};
+
+enum FILE1_JNT {
+    FILE1_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum FILE2_JNT {
+    FILE2_JNT_CENTER_e=0x0,
+    FILE2_JNT_BACKBONE2_e=0x1,
+    FILE2_JNT_BACKBONE1_e=0x2,
+    FILE2_JNT_F_L_LEG1_e=0x3,
+    FILE2_JNT_F_L_LEG2_e=0x4,
+    FILE2_JNT_F_L_LEG3_e=0x5,
+    FILE2_JNT_F_L_LEG4_e=0x6,
+    FILE2_JNT_F_R_LEG1_e=0x7,
+    FILE2_JNT_F_R_LEG2_e=0x8,
+    FILE2_JNT_F_R_LEG3_e=0x9,
+    FILE2_JNT_F_R_LEG4_e=0xA,
+    FILE2_JNT_NECK1_e=0xB,
+    FILE2_JNT_NECK2_e=0xC,
+    FILE2_JNT_HAIR_L_e=0xD,
+    FILE2_JNT_HAIR_R_e=0xE,
+    FILE2_JNT_HEAD_e=0xF,
+    FILE2_JNT_EAR_L_e=0x10,
+    FILE2_JNT_EAR_R_e=0x11,
+    FILE2_JNT_HAIR_F_e=0x12,
+    FILE2_JNT_MOUTH1_e=0x13,
+    FILE2_JNT_MOUTH2_e=0x14,
+    FILE2_JNT_KURA1_e=0x15,
+    FILE2_JNT_BELT_L_e=0x16,
+    FILE2_JNT_ABUMI_L_e=0x17,
+    FILE2_JNT_BELT_R_e=0x18,
+    FILE2_JNT_ABUMI_R_e=0x19,
+    FILE2_JNT_WAIST_e=0x1A,
+    FILE2_JNT_B_L_LEG1_e=0x1B,
+    FILE2_JNT_B_L_LEG2_e=0x1C,
+    FILE2_JNT_B_L_LEG3_e=0x1D,
+    FILE2_JNT_B_L_LEG4_e=0x1E,
+    FILE2_JNT_B_R_LEG1_e=0x1F,
+    FILE2_JNT_B_R_LEG2_e=0x20,
+    FILE2_JNT_B_R_LEG3_e=0x21,
+    FILE2_JNT_B_R_LEG4_e=0x22,
+    FILE2_JNT_TAIL1_e=0x23,
+    FILE2_JNT_TAIL2_e=0x24,
+    FILE2_JNT_TAIL3_e=0x25,
+};
+
+#endif /* !RES_SAMPLE_H */

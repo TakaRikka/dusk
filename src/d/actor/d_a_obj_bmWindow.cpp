@@ -288,7 +288,7 @@ void daBmWindow_c::setBreakEffect(int param_1) {
     }
     int temp = param_1 * 3;
     for (int i = temp; i < temp + 3; i++) {
-        dComIfGp_particle_set(particle_id[i], &cStack_2c, &cStack_40, &scale, 0xff, 0, 0xffffffff,
+        dComIfGp_particle_set(particle_id[i], &cStack_2c, &cStack_40, &scale, 0xff, 0, -1,
                               NULL, NULL, NULL);
     }
 }

@@ -1,0 +1,41 @@
+#ifndef RES_INS2_H
+#define RES_INS2_H
+
+enum dRes_INDEX_INS2 {
+    /* BCK  */
+    dRes_INDEX_INS2_BCK_INS_K_LOOKING_e=0x5,
+    dRes_INDEX_INS2_BCK_INS_K_SEARCHING_A_e=0x6,
+    dRes_INDEX_INS2_BCK_INS_K_SEARCHING_B_e=0x7,
+    dRes_INDEX_INS2_BCK_INS_K_STEP_e=0x8,
+    dRes_INDEX_INS2_BCK_INS_K_WAIT_e=0x9,
+    dRes_INDEX_INS2_BCK_INS_K_WALK_e=0xA,
+    /* BMDE */
+    dRes_INDEX_INS2_BMD_INS_KAGO_e=0xD,
+    /* BMDR */
+    dRes_INDEX_INS2_BMD_INS_UMBRELLA_e=0x10,
+};
+
+enum dRes_ID_INS2 {
+    /* BCK  */
+    dRes_ID_INS2_BCK_INS_K_LOOKING_e=0x5,
+    dRes_ID_INS2_BCK_INS_K_SEARCHING_A_e=0x6,
+    dRes_ID_INS2_BCK_INS_K_SEARCHING_B_e=0x7,
+    dRes_ID_INS2_BCK_INS_K_STEP_e=0x8,
+    dRes_ID_INS2_BCK_INS_K_WAIT_e=0x9,
+    dRes_ID_INS2_BCK_INS_K_WALK_e=0xA,
+    /* BMDE */
+    dRes_ID_INS2_BMD_INS_KAGO_e=0xD,
+    /* BMDR */
+    dRes_ID_INS2_BMD_INS_UMBRELLA_e=0x10,
+};
+
+enum INS_KAGO_JNT {
+    INS_KAGO_JNT_INS_KAGO_MODEL_e=0x0,
+};
+
+enum INS_UMBRELLA_JNT {
+    INS_UMBRELLA_JNT_CENTER_e=0x0,
+    INS_UMBRELLA_JNT_SPIDER_e=0x1,
+};
+
+#endif /* !RES_INS2_H */

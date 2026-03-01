@@ -21,8 +21,9 @@ typedef struct {
 
 void MEMInitList(MEMList*, u16);
 void MEMAppendListObject(MEMList*, void*);
-void MEMRemoveListObject(MEMList*, void*);
 void* MEMGetNextListObject(MEMList*, void*);
+
+#define MEM_INIT_LIST(list, structName, linkName) MEMInitList(list, offsetof(structName, linkName))
 
 #ifdef __cplusplus
 }

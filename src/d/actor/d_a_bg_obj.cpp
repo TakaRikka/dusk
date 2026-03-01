@@ -9,6 +9,7 @@
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include <cstdio>
 #include <dolphin/os.h>
+#include <cstring>
 #include "d/actor/d_a_set_bgobj.h"
 #include "d/d_s_play.h"
 #include "SSystem/SComponent/c_math.h"

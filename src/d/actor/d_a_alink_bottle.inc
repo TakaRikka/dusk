@@ -23,6 +23,7 @@ int daAlink_c::bottleModelCallBack() {
 
 static int daAlink_bottleModelCallBack(J3DJoint* i_joint, int param_1) {
     UNUSED(i_joint);
+    UNUSED(param_1);
 
     daAlink_c* player_p = (daAlink_c*)j3dSys.getModel()->getUserArea();
 
@@ -568,7 +569,7 @@ int daAlink_c::procBottleSwingInit(fopAc_ac_c* i_catchActor, int param_1) {
         catchActorName = PROC_ALINK;
     }
 
-    if (catchActorName == PROC_OBJ_OILTUBO || catchActorName == PROC_TAG_SSDRINK ||
+    if (catchActorName == PROC_TAG_SSDRINK || catchActorName == PROC_OBJ_OILTUBO ||
         catchActorName == PROC_TAG_BTLITM || mEquipItem == fpcNm_ITEM_KANTERA)
     {
         setSingleAnimeParam(ANM_BOTTLE_SCOOP, &mpHIO->mItem.mBottle.m.mScoopAnm);

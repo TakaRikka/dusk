@@ -11,6 +11,7 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_actor_enemy.h"
+#include <cstring>
 
 class daE_MS_HIO_c : public JORReflexible {
 public:

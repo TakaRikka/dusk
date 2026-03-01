@@ -1,0 +1,61 @@
+#ifndef RES_KOLIN_H
+#define RES_KOLIN_H
+
+enum dRes_INDEX_KOLIN {
+    /* BCK  */
+    dRes_INDEX_KOLIN_BCK_KOLIN_F_TALK_A_e=0x6,
+    dRes_INDEX_KOLIN_BCK_KOLIN_STEP_e=0x7,
+    dRes_INDEX_KOLIN_BCK_KOLIN_WAIT_A_e=0x8,
+    /* BMDR */
+    dRes_INDEX_KOLIN_BMD_KOLIN_e=0xB,
+    /* BTK  */
+    dRes_INDEX_KOLIN_BTK_KOLIN_e=0xE,
+    /* BTP  */
+    dRes_INDEX_KOLIN_BTP_KOLIN_e=0x11,
+    dRes_INDEX_KOLIN_BTP_KOLIN_F_TALK_A_e=0x12,
+};
+
+enum dRes_ID_KOLIN {
+    /* BCK  */
+    dRes_ID_KOLIN_BCK_KOLIN_F_TALK_A_e=0x6,
+    dRes_ID_KOLIN_BCK_KOLIN_STEP_e=0x7,
+    dRes_ID_KOLIN_BCK_KOLIN_WAIT_A_e=0x8,
+    /* BMDR */
+    dRes_ID_KOLIN_BMD_KOLIN_e=0xB,
+    /* BTK  */
+    dRes_ID_KOLIN_BTK_KOLIN_e=0xE,
+    /* BTP  */
+    dRes_ID_KOLIN_BTP_KOLIN_e=0x11,
+    dRes_ID_KOLIN_BTP_KOLIN_F_TALK_A_e=0x12,
+};
+
+enum KOLIN_JNT {
+    KOLIN_JNT_CENTER_e=0x0,
+    KOLIN_JNT_BACKBONE1_e=0x1,
+    KOLIN_JNT_BACKBONE2_e=0x2,
+    KOLIN_JNT_NECK_e=0x3,
+    KOLIN_JNT_HEAD_e=0x4,
+    KOLIN_JNT_CHIN_e=0x5,
+    KOLIN_JNT_MAYUL_e=0x6,
+    KOLIN_JNT_MAYUR_e=0x7,
+    KOLIN_JNT_MOUTH_e=0x8,
+    KOLIN_JNT_SHOULDERL_e=0x9,
+    KOLIN_JNT_ARML1_e=0xA,
+    KOLIN_JNT_ARML2_e=0xB,
+    KOLIN_JNT_HANDL_e=0xC,
+    KOLIN_JNT_FINGERL_e=0xD,
+    KOLIN_JNT_SHOULDERR_e=0xE,
+    KOLIN_JNT_ARMR1_e=0xF,
+    KOLIN_JNT_ARMR2_e=0x10,
+    KOLIN_JNT_HANDR_e=0x11,
+    KOLIN_JNT_FINGERR_e=0x12,
+    KOLIN_JNT_WAIST_e=0x13,
+    KOLIN_JNT_LEGL1_e=0x14,
+    KOLIN_JNT_LEGL2_e=0x15,
+    KOLIN_JNT_FOOTL_e=0x16,
+    KOLIN_JNT_LEGR1_e=0x17,
+    KOLIN_JNT_LEGR2_e=0x18,
+    KOLIN_JNT_FOOTR_e=0x19,
+};
+
+#endif /* !RES_KOLIN_H */

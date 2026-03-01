@@ -692,7 +692,10 @@ void DSPSendMailToDSP(u32 mail) {
 }
 
 #pragma mark Z2Audio
-#include <Z2AudioLib/Z2AudioCS.h>
+class Z2AudioCS {
+public:
+    void extensionProcess(s32, s32);
+};
 void Z2AudioCS::extensionProcess(s32, s32) {
     puts("Z2AudioMgr::play is a stub");
 }
@@ -1864,3 +1867,9 @@ u32 JHICommBufReader::Header::getReadableSize() const {
     puts("JHICommBufReader::Header::getReadableSize is a stub");
     return 0;
 }
+
+#pragma mark Decomp artifacts
+void stripFloat(f32) {}
+void stripDouble(f64) {}
+int getStripInt() { return 0; }
+void F(f32*) {}

@@ -12,6 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_menu_insect.h"
 #include "f_pc/f_pc_name.h"
+#include <cstring>
 
 class daObj_BattaHIO_c : public JORReflexible {
 public:
@@ -508,7 +509,7 @@ int daObjBATTA_c::execute() {
     action();
     mBrk->play();
     mBtk->play();
-    mpMorf->play(NULL, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+    mpMorf->play(0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
     mtx_set();
     if (field_0x9f0 == 0) {
         mSph.SetC(current.pos);

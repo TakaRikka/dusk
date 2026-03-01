@@ -16,6 +16,7 @@
 #include "d/d_msg_out_font.h"
 #include "d/d_msg_string.h"
 #include "d/d_pane_class.h"
+#include <cstring>
 
 #if VERSION == VERSION_GCN_JPN
 #define STR_BUF_LEN 528

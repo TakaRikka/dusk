@@ -18,6 +18,8 @@ Diagnostics:
   Suppress:
     - "warn_char_constant_too_large"
     - "illegal_union_or_anon_struct_member"
+Documentation:
+  CommentFormat: Doxygen
 ---
 If:
   PathMatch: .*/*.inc

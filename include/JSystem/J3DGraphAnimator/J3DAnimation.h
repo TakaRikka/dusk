@@ -1,9 +1,9 @@
 #ifndef J3DANIMATION_H
 #define J3DANIMATION_H
 
-#include "JSystem/J3DGraphAnimator/J3DModelData.h"
-#include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/J3DAssert.h"
 #include "JSystem/JUtility/JUTNameTab.h"
+#include <dolphin/mtx.h>
 #include "global.h"
 
 #include "dusk/endian.h"
@@ -13,6 +13,8 @@
 #else
 #define OFFSET_PTR void*
 #endif
+
+struct J3DTransformInfo;
 
 struct JUTDataBlockHeader {
     /* 0x0 */ BE(u32) mType;
@@ -542,7 +544,7 @@ public:
     virtual ~J3DAnmTransformKey() {}
     virtual s32 getKind() const { return 8; }
     virtual void getTransform(u16 jointNo, J3DTransformInfo* pTransform) const {
-        calcTransform(mFrame, jointNo, pTransform);
+        calcTransform(getFrame(), jointNo, pTransform);
     }
 
     /* 0x20 */ int mDecShift;

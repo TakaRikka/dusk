@@ -11,6 +11,7 @@
 #include "d/actor/d_a_obj_carry.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_bg_w.h"
+#include <cstring>
 
 #define ACTION_WAIT 0
 #define ACTION_SWON 1
@@ -428,7 +429,7 @@ int daPillar_c::Execute(Mtx** param_0) {
     }
 
     if (shape_angle.x != 0) {
-        mRotY += (s16)(mShakeData.mSpeedY + (0x300 / shape_angle.x));
+        ANGLE_ADD(mRotY, mShakeData.mSpeedY + (0x300 / shape_angle.x));
     }
 
     *param_0 = &mBgMtx;

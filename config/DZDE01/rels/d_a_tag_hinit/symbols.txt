@@ -1,0 +1,13 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+create__12daTagHinit_cFv = .text:0x0000005C; // type:function size:0xA4 scope:global align:4
+daTagHinit_Create__FP10fopAc_ac_c = .text:0x00000100; // type:function size:0x4 scope:global align:4
+daTagHinit_Delete__FP12daTagHinit_c = .text:0x00000104; // type:function size:0x30 scope:global align:4
+execute__12daTagHinit_cFv = .text:0x00000134; // type:function size:0x11C scope:global align:4
+daTagHinit_Execute__FP12daTagHinit_c = .text:0x00000250; // type:function size:0x4 scope:global align:4
+daTagHinit_Draw__FP12daTagHinit_c = .text:0x00000254; // type:function size:0x8 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+l_daTagHinit_Method = .data:0x00000000; // type:object size:0x20 scope:global align:4
+g_profile_Tag_Hinit = .data:0x00000020; // type:object size:0x30 scope:global align:4

@@ -5,6 +5,7 @@
 #include "JSystem/JUtility/JUTFont.h"
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 
 char* J2DPrint::mStrBuff;
 

@@ -15,6 +15,7 @@
 #include "JSystem/JAudio2/JAUStreamFileTable.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include <dolphin/dvd.h>
+#include <cstring>
 
 namespace {
     class TPushCurrentHeap {
@@ -39,7 +40,7 @@ namespace {
             mNumStreamFiles = stack_14.getNumFiles();
             mStreamFileDVDEntryNums = new s32[mNumStreamFiles];
             if (!mStreamFileDVDEntryNums) {
-                mNumStreamFiles = NULL;
+                mNumStreamFiles = 0;
                 return;
             }
             for (u32 i = 0; i < mNumStreamFiles; i++) {

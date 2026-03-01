@@ -14,4 +14,4 @@ d/actor/d_a_b_mgn.cpp:
 	.ctors      start:0x00000000 end:0x00000004
 	.rodata     start:0x00000000 end:0x000002AC
 	.data       start:0x00000000 end:0x00000734
-	.bss        start:0x00000004 end:0x00000028
+	.bss        start:0x00000000 end:0x00000028

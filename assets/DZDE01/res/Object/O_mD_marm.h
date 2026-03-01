@@ -1,0 +1,24 @@
+#ifndef RES_O_MD_MARM_H
+#define RES_O_MD_MARM_H
+
+enum dRes_INDEX_O_MD_MARM {
+    /* BMDR */
+    dRes_INDEX_O_MD_MARM_BMD_O_MD_MARMOR_e=0x3,
+    dRes_INDEX_O_MD_MARM_BMD_O_MD_MARMOR_SOLDOUT_e=0x4,
+};
+
+enum dRes_ID_O_MD_MARM {
+    /* BMDR */
+    dRes_ID_O_MD_MARM_BMD_O_MD_MARMOR_e=0x3,
+    dRes_ID_O_MD_MARM_BMD_O_MD_MARMOR_SOLDOUT_e=0x4,
+};
+
+enum O_MD_MARMOR_JNT {
+    O_MD_MARMOR_JNT_O_MD_MARMOR_e=0x0,
+};
+
+enum O_MD_MARMOR_SOLDOUT_JNT {
+    O_MD_MARMOR_SOLDOUT_JNT_O_MD_MARMOR_SOLDOUT_e=0x0,
+};
+
+#endif /* !RES_O_MD_MARM_H */

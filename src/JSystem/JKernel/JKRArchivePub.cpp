@@ -337,10 +337,10 @@ JKRFileFinder* JKRArchive::getFirstFile(const char* path) const {
     return NULL;
 }
 
-u32 JKRArchive::getFileAttribute(u32 index) const {
+u8 JKRArchive::getFileAttribute(u32 index) const {
     SDIFileEntry* fileEntry = findIdxResource(index);
     if (fileEntry) {
-        return u8(fileEntry->type_flags_and_name_offset >> 24);
+        return fileEntry->type_flags_and_name_offset >> 24;
     }
 
     return 0;

@@ -13,6 +13,7 @@
 #include "d/actor/d_a_tag_evtarea.h"
 #include "d/d_cc_uty.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 static int l_bmdData[4][2] = {
     {14, 1}, {26, 2},
@@ -1790,7 +1791,7 @@ int daNpc_Hanjo_c::takayose(void* param_0) {
                 }
             }
         }
-        if (daPy_py_c::checkNowWolf() && mCyl2.ChkCoHit() != NULL) {
+        if (daPy_py_c::checkNowWolf() && mCyl2.ChkCoHit() != 0) {
             if (!daPy_getPlayerActorClass()->checkPlayerFly() ||
                 daPy_getPlayerActorClass()->checkAutoJump() ||
                 daPy_getPlayerActorClass()->checkWolfTriggerJump())

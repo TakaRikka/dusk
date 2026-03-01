@@ -13,6 +13,7 @@
 #include "d/d_msg_object.h"
 #include "m_Do/m_Do_graphic.h"
 #include "SSystem/SComponent/c_counter.h"
+#include <cstring>
 
 inline BOOL dEvDtFlagCheck(int i_flag) {
     return dComIfGp_getEventManager().getFlags().flagCheck(i_flag);
@@ -1077,7 +1078,7 @@ void dEvDtStaff_c::specialProcDirector() {
                 }
 
                 #if DEBUG
-                data->unk2 += (s16)event_debug_evdt_sound_adjust();
+                S16_ADD(data->unk2, event_debug_evdt_sound_adjust());
                 #endif
             } else {
                 data->unk2 = 0;

@@ -8,6 +8,7 @@
 #include "d/actor/d_a_npc_tkj2.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
+#include <cstring>
 
 enum Tkj2_RES_File_ID {
     /* BCK */
@@ -175,7 +176,7 @@ static void Wind_effect(npc_tkj2_class* i_this) {
                     if ((s16)(sVar1 - i_this->field_0x5c4) < 0) {
                         cLib_addCalcAngleS(&a_this->shape_angle.z, 0x2000, 0x10, 0x1000, 0);
                     } else {
-                        cLib_addCalcAngleS(&a_this->shape_angle.z, 0xFFFFE000, 2, 0x1000, 0);
+                        cLib_addCalcAngleS(&a_this->shape_angle.z, -8192, 2, 0x1000, 0);
                     }
                 }
 

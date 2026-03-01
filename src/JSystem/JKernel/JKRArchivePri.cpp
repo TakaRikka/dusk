@@ -3,7 +3,7 @@
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include <cctype>
-#include <string>
+#include <cstring>
 
 #if TARGET_PC
 #include <cassert>

@@ -118,6 +118,26 @@ void mDoLib_pos2camera(Vec* src, Vec* dst) {
     cMtx_multVec(dComIfGd_getView()->viewMtx, src, dst);
 }
 
+#if PLATFORM_WII
+void mDoLib_2Dto3D(f32 i_x, f32 i_y, f32 i_z, Vec* o_dst) {
+    if (dComIfGd_getView() == NULL) {
+        o_dst->x = 0.0f;
+        o_dst->y = 0.0f;
+        o_dst->z = 0.0f;
+        return;
+    }
+
+    f32 fovy = dComIfGd_getView()->fovy;
+    f32 aspect = dComIfGd_getView()->aspect;
+    f32 temp_f3 = tan(DEG_TO_RAD(0.5f * fovy));
+    Vec sp8;
+    sp8.x = (-i_x * i_z) * (temp_f3 * aspect);
+    sp8.y = (i_y * -i_z) * temp_f3;
+    sp8.z = -i_z;
+    PSMTXMultVec(dComIfGd_getInvViewMtx(), &sp8, o_dst);
+}
+#endif
+
 static void dummy() {
     std::tan(0.0f);
     J3DAlphaComp* alphaComp = NULL;

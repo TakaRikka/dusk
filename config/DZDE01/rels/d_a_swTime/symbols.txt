@@ -1,0 +1,13 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+Create__10daSwTime_cFv = .text:0x0000005C; // type:function size:0x20 scope:global align:4
+create__10daSwTime_cFv = .text:0x0000007C; // type:function size:0x68 scope:global align:4
+execute__10daSwTime_cFv = .text:0x000000E4; // type:function size:0x90 scope:global align:4
+daSwTime_Execute__FP10daSwTime_c = .text:0x00000174; // type:function size:0x4 scope:global align:4
+daSwTime_Delete__FP10daSwTime_c = .text:0x00000178; // type:function size:0x8 scope:global align:4
+daSwTime_Create__FP10daSwTime_c = .text:0x00000180; // type:function size:0x4 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+l_daSwTime_Method = .data:0x00000000; // type:object size:0x20 scope:global align:4
+g_profile_SwTime = .data:0x00000020; // type:object size:0x30 scope:global align:4

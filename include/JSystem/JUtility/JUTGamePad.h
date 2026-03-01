@@ -286,6 +286,8 @@ struct JUTGamePadLongPress {
     /* 0x50 */ s32 field_0x50;
 };
 
-inline void JUTReadGamePad() { JUTGamePad::read(); }
+inline u32 JUTReadGamePad() {
+    return JUTGamePad::read();
+}
 
 #endif /* JUTGAMEPAD_H */

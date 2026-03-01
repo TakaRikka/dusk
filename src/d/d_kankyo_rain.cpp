@@ -11,6 +11,7 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
+#include <cstring>
 
 static void vectle_calc(DOUBLE_POS* i_pos, cXyz* o_out) {
     double s = sqrt(i_pos->x * i_pos->x + i_pos->y * i_pos->y + i_pos->z * i_pos->z);
@@ -2539,9 +2540,9 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* ppos, GXColor& unused, u8** tex) {
                 color_reg0.b = 0;
 
                 f32 size = 8000.0f;
-                if (strcmp(dComIfGp_getStartStageName(), "F_SP127") == NULL) {
+                if (strcmp(dComIfGp_getStartStageName(), "F_SP127") == 0) {
                     size = 11000.0f;
-                } else if (strcmp(dComIfGp_getStartStageName(), "F_SP200") == NULL) {
+                } else if (strcmp(dComIfGp_getStartStageName(), "F_SP200") == 0) {
                     size = 10000.0f;
                 }
 

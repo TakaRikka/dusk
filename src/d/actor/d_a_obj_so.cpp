@@ -15,6 +15,7 @@
 #include "d/d_cc_uty.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera_mng.h"
+#include <cstring>
 
 daObj_So_HIO_c::daObj_So_HIO_c() {
     field_0x4 = -1;
@@ -502,8 +503,8 @@ static void part_move(obj_so_class* i_this) {
                         i_this->field_0x8f0[i].z *= 0.5f;
 
                         if (i >= 2) {
-                            i_this->field_0xa28[i].x += (s16)cM_rndFX(i_this->field_0x8f0[i].y * 400.0f);
-                            i_this->field_0xbc8[i] += (s16)cM_rndFX(i_this->field_0x8f0[i].y * 200.0f);
+                            ANGLE_ADD(i_this->field_0xa28[i].x, cM_rndFX(i_this->field_0x8f0[i].y * 400.0f));
+                            ANGLE_ADD(i_this->field_0xbc8[i], cM_rndFX(i_this->field_0x8f0[i].y * 200.0f));
                         }
                     } else {
                         i_this->field_0x8f0[i].y = -10.0f;
@@ -830,7 +831,7 @@ static void demo_camera(obj_so_class* i_this) {
             // fallthrough
         case 2:
             sp3c.set(12459.0f, 3152.0f, 4628.0f);
-            daPy_getPlayerActorClass()->setPlayerPosAndAngle(&sp3c, 0xfffffaee, 0);
+            daPy_getPlayerActorClass()->setPlayerPosAndAngle(&sp3c, -1298, 0);
             i_this->mDemoCamCenter.x = a_this->current.pos.x;
             i_this->mDemoCamCenter.z = a_this->current.pos.z;
             sp3c.y = (a_this->current.pos.y + 150.0f) - 50.0f;

@@ -1,0 +1,30 @@
+#ifndef RES_CANOEB_H
+#define RES_CANOEB_H
+
+enum dRes_INDEX_CANOEB {
+    /* BMDR */
+    dRes_INDEX_CANOEB_BMD_AL_PADDLEB_e=0x3,
+    dRes_INDEX_CANOEB_BMD_CANOEB_e=0x4,
+    dRes_INDEX_CANOEB_BMD_CANOEB_MUSK_e=0x5,
+};
+
+enum dRes_ID_CANOEB {
+    /* BMDR */
+    dRes_ID_CANOEB_BMD_AL_PADDLEB_e=0x3,
+    dRes_ID_CANOEB_BMD_CANOEB_e=0x4,
+    dRes_ID_CANOEB_BMD_CANOEB_MUSK_e=0x5,
+};
+
+enum AL_PADDLEB_JNT {
+    AL_PADDLEB_JNT_PADDLEB_MODEL_e=0x0,
+};
+
+enum CANOEB_JNT {
+    CANOEB_JNT_CANOEB_MODEL_e=0x0,
+};
+
+enum CANOEB_MUSK_JNT {
+    CANOEB_MUSK_JNT_MUSKB_MODEL_e=0x0,
+};
+
+#endif /* !RES_CANOEB_H */

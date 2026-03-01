@@ -1,0 +1,36 @@
+#ifndef RES_L_HHASHI_H
+#define RES_L_HHASHI_H
+
+enum dRes_INDEX_L_HHASHI {
+    /* BMDG */
+    dRes_INDEX_L_HHASHI_BMD_L_HHASHI02_e=0x5,
+    /* BMDR */
+    dRes_INDEX_L_HHASHI_BMD_L_HHASHI00_e=0x8,
+    dRes_INDEX_L_HHASHI_BMD_L_HHASHI02_1_e=0x9,
+    /* DZB  */
+    dRes_INDEX_L_HHASHI_DZB_L_HHASHI00_e=0xC,
+};
+
+enum dRes_ID_L_HHASHI {
+    /* BMDG */
+    dRes_ID_L_HHASHI_BMD_L_HHASHI02_e=0x5,
+    /* BMDR */
+    dRes_ID_L_HHASHI_BMD_L_HHASHI00_e=0x8,
+    dRes_ID_L_HHASHI_BMD_L_HHASHI02_1_e=0x9,
+    /* DZB  */
+    dRes_ID_L_HHASHI_DZB_L_HHASHI00_e=0xC,
+};
+
+enum L_HHASHI02_JNT {
+    L_HHASHI02_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum L_HHASHI00_JNT {
+    L_HHASHI00_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum L_HHASHI02_JNT {
+    L_HHASHI02_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_L_HHASHI_H */

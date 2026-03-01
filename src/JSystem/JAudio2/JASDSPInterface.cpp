@@ -456,7 +456,7 @@ int JASDsp::setFXLine(u8 param_0, s16* buffer, JASDsp::FxlineConfig_* param_2) {
         u32 bufsize = param_2->field_0xc * 0xa0;
         puVar3->field_0x4 = buffer;
         JASCalc::bzero(buffer, bufsize);
-        JUT_ASSERT(420, (reinterpret_cast<u32>(buffer) & 0x1f) == 0);
+        JUT_ASSERT(420, ((u32)((uintptr_t)buffer) & 0x1f) == 0);
         JUT_ASSERT(421, (bufsize & 0x1f) == 0);
         DCFlushRange(buffer, bufsize);
     } else if (param_2 == NULL || buffer != NULL) {
@@ -472,7 +472,7 @@ int JASDsp::setFXLine(u8 param_0, s16* buffer, JASDsp::FxlineConfig_* param_2) {
     return 1;
 }
 
-BOOL JASDsp::changeFXLineParam(u8 param_0, u8 param_1, u32 param_2) {
+BOOL JASDsp::changeFXLineParam(u8 param_0, u8 param_1, uintptr_t param_2) {
     JUT_ASSERT(450, dspMutex);
     FxBuf* buf = &FX_BUF[param_0];
     switch (param_1) {

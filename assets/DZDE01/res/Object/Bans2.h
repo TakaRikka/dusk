@@ -1,0 +1,45 @@
+#ifndef RES_BANS2_H
+#define RES_BANS2_H
+
+enum dRes_INDEX_BANS2 {
+    /* BCK  */
+    dRes_INDEX_BANS2_BCK_BANS_ANGRY_C_e=0x5,
+    dRes_INDEX_BANS2_BCK_BANS_FAINT_e=0x6,
+    dRes_INDEX_BANS2_BCK_BANS_REST_e=0x7,
+    dRes_INDEX_BANS2_BCK_BANS_SAD_e=0x8,
+    dRes_INDEX_BANS2_BCK_BANS_SCOOP_A_e=0x9,
+    dRes_INDEX_BANS2_BCK_BANS_SCOOP_B_e=0xA,
+    dRes_INDEX_BANS2_BCK_BANS_WORK_e=0xB,
+    /* BMDR */
+    dRes_INDEX_BANS2_BMD_BANS_SCOOP_e=0xE,
+    dRes_INDEX_BANS2_BMD_BANS_TUB_e=0xF,
+    /* EVT  */
+    dRes_INDEX_BANS2_DAT_EVENT_LIST_e=0x12,
+};
+
+enum dRes_ID_BANS2 {
+    /* BCK  */
+    dRes_ID_BANS2_BCK_BANS_ANGRY_C_e=0x5,
+    dRes_ID_BANS2_BCK_BANS_FAINT_e=0x6,
+    dRes_ID_BANS2_BCK_BANS_REST_e=0x7,
+    dRes_ID_BANS2_BCK_BANS_SAD_e=0x8,
+    dRes_ID_BANS2_BCK_BANS_SCOOP_A_e=0x9,
+    dRes_ID_BANS2_BCK_BANS_SCOOP_B_e=0xA,
+    dRes_ID_BANS2_BCK_BANS_WORK_e=0xB,
+    /* BMDR */
+    dRes_ID_BANS2_BMD_BANS_SCOOP_e=0xE,
+    dRes_ID_BANS2_BMD_BANS_TUB_e=0xF,
+    /* EVT  */
+    dRes_ID_BANS2_DAT_EVENT_LIST_e=0x12,
+};
+
+enum BANS_SCOOP_JNT {
+    BANS_SCOOP_JNT_SCOOP01_e=0x0,
+    BANS_SCOOP_JNT_SCOOP02_e=0x1,
+};
+
+enum BANS_TUB_JNT {
+    BANS_TUB_JNT_TUB_MODEL_e=0x0,
+};
+
+#endif /* !RES_BANS2_H */

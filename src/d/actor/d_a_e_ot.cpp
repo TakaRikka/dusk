@@ -280,9 +280,9 @@ void daE_OT_c::executeEgg() {
             speed.y = 50.0f + cM_rndFX(10.0f);
             current.angle.y = mpToadActor->shape_angle.y;
             if (mChildNo < 5 || (mChildNo >= 10 && mChildNo < 15)) {
-                current.angle.y += (s16)(0x4000 + cM_rndFX(0x1000));
+                ANGLE_ADD(current.angle.y, 0x4000 + cM_rndFX(0x1000));
             } else {
-                current.angle.y += (s16)(-0x4000 + cM_rndFX(0x1000));
+                ANGLE_ADD(current.angle.y, -0x4000 + cM_rndFX(0x1000));
             }
         }
 

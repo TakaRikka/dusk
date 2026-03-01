@@ -1,0 +1,16 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+daTagWatchGe_Draw__FP14daTagWatchGe_c = .text:0x0000005C; // type:function size:0x8 scope:global align:4
+s_watchge__FPvPv = .text:0x00000064; // type:function size:0x34 scope:global align:4
+execute__14daTagWatchGe_cFv = .text:0x00000098; // type:function size:0x94 scope:global align:4
+daTagWatchGe_Execute__FP14daTagWatchGe_c = .text:0x0000012C; // type:function size:0x4 scope:global align:4
+daTagWatchGe_IsDelete__FP14daTagWatchGe_c = .text:0x00000130; // type:function size:0x8 scope:global align:4
+daTagWatchGe_Delete__FP14daTagWatchGe_c = .text:0x00000138; // type:function size:0x8 scope:global align:4
+create__14daTagWatchGe_cFv = .text:0x00000140; // type:function size:0xB0 scope:global align:4
+daTagWatchGe_Create__FP14daTagWatchGe_c = .text:0x000001F0; // type:function size:0x4 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+l_daTagWatchGe_Method = .data:0x00000000; // type:object size:0x20 scope:global align:4
+g_profile_Tag_WatchGe = .data:0x00000020; // type:object size:0x30 scope:global align:4
+m_group_count = .bss:0x00000000; // type:object size:0x4 scope:global align:4

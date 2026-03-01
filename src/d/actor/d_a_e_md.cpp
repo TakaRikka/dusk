@@ -57,13 +57,13 @@ void daE_MD_c::setCcCylinder(f32 i_height) {
 }
 
 int daE_MD_c::CreateHeap() {
-    void* modelData;
+    J3DModelData* modelData;
     if (mType != TYPE_LV9) {
-        modelData = dComIfG_getObjectRes("E_MD", 0xB);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("E_MD", 0xB);
     } else if (mType == TYPE_LV9) {
-        modelData = dComIfG_getObjectRes("E_MD", 9);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("E_MD", 9);
     } else {
-        modelData = dComIfG_getObjectRes("E_MD", 9);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("E_MD", 9);
     }
 
     JUT_ASSERT(180, modelData != NULL);
@@ -74,19 +74,20 @@ int daE_MD_c::CreateHeap() {
     }
 
     if (mType == TYPE_DUMMY) {
-        modelData = dComIfG_getObjectRes("E_MD", 0xD);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("E_MD", 0xD);
         mpYariModelMorf = new mDoExt_McaMorfSO((J3DModelData*)modelData, NULL, NULL, NULL, 2, 1.0f, 0, -1, NULL, 0x80000, 0x11000084);
         if (mpYariModelMorf == NULL || mpYariModelMorf->getModel() == NULL) {
             return 0;
         }
     } else if (mType == TYPE_LV9) {
-        modelData = dComIfG_getObjectRes("E_MD", 0xA);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("E_MD", 0xA);
         mpYariModelMorf = new mDoExt_McaMorfSO((J3DModelData*)modelData, NULL, NULL, NULL, 2, 1.0f, 0, -1, NULL, 0x80000, 0x11000084);
         if (mpYariModelMorf == NULL || mpYariModelMorf->getModel() == NULL) {
             return 0;
         }
     } else {
-        mpTbModel = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("E_MD", 0xC), 0x80000, 0x11000084);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("E_MD", 0xC);
+        mpTbModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
         if (mpTbModel == NULL) {
             return 0;
         }
@@ -126,8 +127,9 @@ void daE_MD_c::At_Check() {
         if (mAtInfo.mpCollider->ChkAtType(AT_TYPE_HOOKSHOT)) {
             mAtInfo.mAttackPower = 0;
         }
-        
-        u8 at_se = ((dCcD_GObjInf*)mAtInfo.mpCollider)->GetAtSe();
+
+        dCcD_GObjInf* collider = (dCcD_GObjInf*)mAtInfo.mpCollider;
+        int at_se = collider->GetAtSe();
         if (mAtInfo.mpSound != NULL && mAtInfo.field_0x18 != 0) {
             mAtInfo.mpSound->startCollisionSE(dCcD_GObjInf::getHitSeID(at_se, 0), mAtInfo.field_0x18);
         }
@@ -148,6 +150,10 @@ void daE_MD_c::CheckHit() {
 
         cCcD_Obj* hit_obj = mCyl.GetTgHitObj();
         fopAc_ac_c* hit_actor = dCc_GetAc(hit_obj->GetAc());
+        //TODO: probably a fakematch (debug)
+        UNUSED(hit_obj);
+        UNUSED(hit_actor);
+
         if ((hit_obj->ChkAtType(AT_TYPE_IRON_BALL) || fopAcM_GetName(hit_actor) == PROC_E_TH_BALL || fopAcM_GetName(hit_actor) == PROC_B_TN) && (mType == TYPE_DUMMY || mType == TYPE_LV9)) {
             if (mAction == ACTION_WAIT) {
                 mCyl.OffTgIronBallRebound();
@@ -164,8 +170,8 @@ void daE_MD_c::CheckHit() {
 
                 mBreakTimer = 10;
                 Z2GetAudioMgr()->seStart(Z2SE_OBJ_ARMOR_HIT, &current.pos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
-                
-                u32 bu_params = (mSwbit << 0x18) | 0xFF0000 | 0x2FFF;
+
+                u32 bu_params = (mSwbit << 0x18) | 0xFF2FFF;
                 if (mCanCreateBu && mType == TYPE_DUMMY) {
                     fopAcM_create(PROC_E_BU, bu_params, &current.pos, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1);
                 }
@@ -223,7 +229,7 @@ void daE_MD_c::HalfBreakAction() {
     }
 }
 
-bool daE_MD_c::VibAction() {
+u8 daE_MD_c::VibAction() {
     shape_angle.x = field_0x5ca * cM_ssin(field_0x5ce);
     cLib_addCalcAngleS(&field_0x5cc, 0x10, 3.0f + nREG_F(3), 0x100, 0);
     field_0x5ce += field_0x5cc;
@@ -313,7 +319,7 @@ int daE_MD_c::Execute() {
     return 1;
 }
 
-int daE_MD_c::Delete() {
+inline int daE_MD_c::Delete() {
     dComIfG_resDelete(&mPhase, "E_MD");
     if (heap != NULL) {
         mpModelMorf->stopZelAnime();
@@ -384,7 +390,7 @@ static int daE_MD_Execute(daE_MD_c* i_this) {
     return i_this->Execute();
 }
 
-int daE_MD_c::create() {
+inline int daE_MD_c::create() {
     fopAcM_ct(this, daE_MD_c);
 
     int phase_state = dComIfG_resLoad(&mPhase, "E_MD");
@@ -396,7 +402,7 @@ int daE_MD_c::create() {
 
         mSwbit = (fopAcM_GetParam(this) & 0xFF00) >> 8;
 
-        u8 type = fopAcM_GetParam(this) & 0xFF;
+        u8 type = fopAcM_GetParam(this) & 0x0FFFFFFF;
         if (type == 1) {
             mType = TYPE_DUMMY;
             mCanCreateBu = TRUE;
@@ -428,7 +434,7 @@ int daE_MD_c::create() {
         mAcchCir.SetWall(100.0f, 10.0f);
         fopAcM_setCullSizeBox(this, -1500.0f, 0.0f, -1500.0f, 1000.0f, 1500.0f, 1500.0f);
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), NULL, NULL);
-        
+
         cXyz sp1C(current.pos.x, 100.0f + current.pos.y, current.pos.z);
         if (fopAcM_gc_c::gndCheck(&sp1C)) {
             field_0x5bc = fopAcM_gc_c::getGroundY();
@@ -458,18 +464,18 @@ static actor_method_class l_daE_MD_Method = {
 };
 
 actor_process_profile_definition g_profile_E_MD = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_MD,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daE_MD_c),       // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  132,                    // mPriority
-  &l_daE_MD_Method,       // sub_method
-  0x00044100,             // mStatus
-  fopAc_ENV_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
-};
+    fpcLy_CURRENT_e,        // mLayerID
+    7,                      // mListID
+    fpcPi_CURRENT_e,        // mListPrio
+    PROC_E_MD,              // mProcName
+    &g_fpcLf_Method.base,  // sub_method
+    sizeof(daE_MD_c),       // mSize
+    0,                      // mSizeOther
+    0,                      // mParameters
+    &g_fopAc_Method.base,   // sub_method
+    132,                    // mPriority
+    &l_daE_MD_Method,       // sub_method
+    0x00044100,             // mStatus
+    fopAc_ENV_e,            // mActorType
+    fopAc_CULLBOX_CUSTOM_e, // cullType
+  };

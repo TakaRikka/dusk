@@ -70,6 +70,12 @@ void JMAFastVECNormalize(__REGISTER const Vec* src, __REGISTER Vec* dst) {
 		fmuls vz, vz, length
 		stfs vz, dst->z
 	}
+#else
+    f32 mag = src->x * src->x + src->y * src->y + src->z * src->z;
+    length = 1.0f / sqrtf(mag);
+    dst->x = src->x * length;
+    dst->y = src->y * length;
+    dst->z = src->z * length;
 #endif  // clang-format on
 
     OSPanic(__FILE__, __LINE__, "UNIMPLEMENTED");
@@ -92,6 +98,10 @@ void JMAVECScaleAdd(__REGISTER const Vec* vec1, __REGISTER const Vec* vec2, __RE
         ps_madds0 rz, v1z,  scale, v2z
         psq_st rz, 8(dst), 1, 0
 	}
+#else
+    dst->x = vec1->x * scale + vec2->x;
+    dst->y = vec1->y * scale + vec2->y;
+    dst->z = vec1->z * scale + vec2->z;
 #endif  // clang-format on
 
     OSPanic(__FILE__, __LINE__, "UNIMPLEMENTED");
@@ -128,7 +138,18 @@ void JMAMTXApplyScale(__REGISTER const Mtx src, __REGISTER Mtx dst, __REGISTER f
         psq_st y, 24(dst), 0, 0
         psq_st z, 40(dst), 0, 0
     }
-#else  // clang-format on
-    MTXScaleApply(src, dst, xScale, yScale, zScale);
-#endif
+#else
+    dst[0][0] = src[0][0] * xScale;
+    dst[0][1] = src[0][1] * yScale;
+    dst[0][2] = src[0][2] * zScale;
+    dst[0][3] = src[0][3];
+    dst[1][0] = src[1][0] * xScale;
+    dst[1][1] = src[1][1] * yScale;
+    dst[1][2] = src[1][2] * zScale;
+    dst[1][3] = src[1][3];
+    dst[2][0] = src[2][0] * xScale;
+    dst[2][1] = src[2][1] * yScale;
+    dst[2][2] = src[2][2] * zScale;
+    dst[2][3] = src[2][3];
+#endif  // clang-format on
 }

@@ -13,6 +13,7 @@
 #include "d/actor/d_a_player.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 static cXyz l_player_offset = cXyz(0.0f, 115.0f, 54.0f);
 

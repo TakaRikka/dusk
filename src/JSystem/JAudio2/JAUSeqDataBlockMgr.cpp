@@ -99,7 +99,7 @@ s32 JAUDynamicSeqDataBlocks::getSeqData(JAISoundID param_0, JAISeqDataUser* para
 }
 
 bool JAUDynamicSeqDataBlocks::appendDynamicSeqDataBlock(JAUSeqDataBlock* seqDataBlock) {
-    JUT_ASSERT(135, ( reinterpret_cast < u32 > ( seqDataBlock->region.addr ) & 0x1f ) == 0);
+    JUT_ASSERT(135, (( (u32)(uintptr_t)seqDataBlock->region.addr ) & 0x1f ) == 0);
     rearrangeLoadingSeqs_();
     bool result;
     if (seqDataBlock->field_0x10.isAnonymous()) {
@@ -111,10 +111,10 @@ bool JAUDynamicSeqDataBlocks::appendDynamicSeqDataBlock(JAUSeqDataBlock* seqData
     return 1;
 }
 
-static void JAUDynamicSeqDataBlocks_receiveLoaded_(u32 param_0, u32 param_1) {
+static void JAUDynamicSeqDataBlocks_receiveLoaded_(u32 param_0, uintptr_t param_1) {
     JSULink<JAUSeqDataBlock>* link = (JSULink<JAUSeqDataBlock>*)param_1;
     JAUSeqDataBlock* seqDataBlock = link->getObject();
-    if (param_0 != NULL) {
+    if (param_0 != 0) {
         seqDataBlock->field_0x1c = 2;
     } else {
         seqDataBlock->field_0x1c = 0;

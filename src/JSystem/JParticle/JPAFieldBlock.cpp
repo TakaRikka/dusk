@@ -57,7 +57,7 @@ void JPAFieldAir::prepare(JPAEmitterWorkData* work, JPAFieldBlock* block) {
     if (block->checkStatus(2)) {
         mAccel.scale(block->getMag(), vec);
     } else {
-        MTXMultVecSR(work->mRotationMtx, vec, mAccel);
+        MTXMultVecSR(work->mRotationMtx, &vec, &mAccel);
         mAccel.scale(block->getMag());
     }
 }
@@ -129,7 +129,7 @@ void JPAFieldConvection::prepare(JPAEmitterWorkData* work, JPAFieldBlock* block)
     vec2.cross(block->getPos(), block->getDir());
     vec1.cross(block->getDir(), vec2);
     MTXMultVecSR(work->mGlobalRot, &vec1, &field_0x10);
-    MTXMultVecSR(work->mGlobalRot, &block->getDir(), field_0x1c);
+    MTXMultVecSR(work->mGlobalRot, &block->getDir(), &field_0x1c);
     MTXMultVecSR(work->mGlobalRot, &vec2, &field_0x28);
     field_0x10.normalize();
     field_0x1c.normalize();
@@ -224,34 +224,36 @@ void JPAFieldBlock::init(JKRHeap* heap) {
 
     switch (getType()) {
     case FIELD_GRAVITY:
-        mpField = new (heap, 0) JPAFieldGravity();
+        pFld = new (heap, 0) JPAFieldGravity();
         break;
     case FIELD_AIR:
-        mpField = new (heap, 0) JPAFieldAir();
+        pFld = new (heap, 0) JPAFieldAir();
         break;
     case FIELD_MAGNET:
-        mpField = new (heap, 0) JPAFieldMagnet();
+        pFld = new (heap, 0) JPAFieldMagnet();
         break;
     case FIELD_NEWTON:
-        mpField = new (heap, 0) JPAFieldNewton();
+        pFld = new (heap, 0) JPAFieldNewton();
         break;
     case FIELD_VORTEX:
-        mpField = new (heap, 0) JPAFieldVortex();
+        pFld = new (heap, 0) JPAFieldVortex();
         break;
     case FIELD_RANDOM:
-        mpField = new (heap, 0) JPAFieldRandom();
+        pFld = new (heap, 0) JPAFieldRandom();
         break;
     case FIELD_DRAG:
-        mpField = new (heap, 0) JPAFieldDrag();
+        pFld = new (heap, 0) JPAFieldDrag();
         break;
     case FIELD_CONVECTION:
-        mpField = new (heap, 0) JPAFieldConvection();
+        pFld = new (heap, 0) JPAFieldConvection();
         break;
     case FIELD_SPIN:
-        mpField = new (heap, 0) JPAFieldSpin();
+        pFld = new (heap, 0) JPAFieldSpin();
         break;
     default:
-        mpField = NULL;
+        pFld = NULL;
+        JUT_WARN(483, "JPA : WRONG ID (%d) in field data\n", getType());
         break;
     }
+    JUT_ASSERT(485, pFld != 0);
 }

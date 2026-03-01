@@ -1,0 +1,78 @@
+#ifndef RES_ZRZ_GT_H
+#define RES_ZRZ_GT_H
+
+enum dRes_INDEX_ZRZ_GT {
+    /* BCK  */
+    dRes_INDEX_ZRZ_GT_BCK_ZRZ_COMEON_e=0x7,
+    dRes_INDEX_ZRZ_GT_BCK_ZRZ_F_TALK_A_e=0x8,
+    dRes_INDEX_ZRZ_GT_BCK_ZRZ_LEAD_e=0x9,
+    dRes_INDEX_ZRZ_GT_BCK_ZRZ_WAIT_GT_A_e=0xA,
+    /* BMDR */
+    dRes_INDEX_ZRZ_GT_BMD_ZRZ_GT_e=0xD,
+    /* BTK  */
+    dRes_INDEX_ZRZ_GT_BTK_ZRZ_GT_e=0x10,
+    /* BTP  */
+    dRes_INDEX_ZRZ_GT_BTP_ZRZ_GT_e=0x13,
+    /* EVT  */
+    dRes_INDEX_ZRZ_GT_DAT_EVENT_LIST_e=0x16,
+};
+
+enum dRes_ID_ZRZ_GT {
+    /* BCK  */
+    dRes_ID_ZRZ_GT_BCK_ZRZ_COMEON_e=0x7,
+    dRes_ID_ZRZ_GT_BCK_ZRZ_F_TALK_A_e=0x8,
+    dRes_ID_ZRZ_GT_BCK_ZRZ_LEAD_e=0x9,
+    dRes_ID_ZRZ_GT_BCK_ZRZ_WAIT_GT_A_e=0xA,
+    /* BMDR */
+    dRes_ID_ZRZ_GT_BMD_ZRZ_GT_e=0xD,
+    /* BTK  */
+    dRes_ID_ZRZ_GT_BTK_ZRZ_GT_e=0x10,
+    /* BTP  */
+    dRes_ID_ZRZ_GT_BTP_ZRZ_GT_e=0x13,
+    /* EVT  */
+    dRes_ID_ZRZ_GT_DAT_EVENT_LIST_e=0x16,
+};
+
+enum ZRZ_GT_JNT {
+    ZRZ_GT_JNT_CENTER_e=0x0,
+    ZRZ_GT_JNT_BACKBONE1_e=0x1,
+    ZRZ_GT_JNT_BACKBONE2_e=0x2,
+    ZRZ_GT_JNT_NECK_e=0x3,
+    ZRZ_GT_JNT_HEAD_e=0x4,
+    ZRZ_GT_JNT_CHIN_e=0x5,
+    ZRZ_GT_JNT_EAR_L_e=0x6,
+    ZRZ_GT_JNT_EAR_R_e=0x7,
+    ZRZ_GT_JNT_H_TAIL1_e=0x8,
+    ZRZ_GT_JNT_H_TAIL2_e=0x9,
+    ZRZ_GT_JNT_H_TAIL3_e=0xA,
+    ZRZ_GT_JNT_H_TAIL4_e=0xB,
+    ZRZ_GT_JNT_MOUTH_e=0xC,
+    ZRZ_GT_JNT_SHOULDERL_e=0xD,
+    ZRZ_GT_JNT_ARML1_e=0xE,
+    ZRZ_GT_JNT_ARML2_e=0xF,
+    ZRZ_GT_JNT_HANDL_e=0x10,
+    ZRZ_GT_JNT_FINGERL1_e=0x11,
+    ZRZ_GT_JNT_THUMBL_e=0x12,
+    ZRZ_GT_JNT_FIN_L1_e=0x13,
+    ZRZ_GT_JNT_FIN_L2_e=0x14,
+    ZRZ_GT_JNT_SHOULDERR_e=0x15,
+    ZRZ_GT_JNT_ARMR1_e=0x16,
+    ZRZ_GT_JNT_ARMR2_e=0x17,
+    ZRZ_GT_JNT_HANDR_e=0x18,
+    ZRZ_GT_JNT_FINGERR1_e=0x19,
+    ZRZ_GT_JNT_THUMBR_e=0x1A,
+    ZRZ_GT_JNT_FIN_R1_e=0x1B,
+    ZRZ_GT_JNT_FIN_R2_e=0x1C,
+    ZRZ_GT_JNT_WAIST_e=0x1D,
+    ZRZ_GT_JNT_SKIRT1_e=0x1E,
+    ZRZ_GT_JNT_SKIRT2_e=0x1F,
+    ZRZ_GT_JNT_SKIRT_IN_e=0x20,
+    ZRZ_GT_JNT_SKIRT_OUT1_e=0x21,
+    ZRZ_GT_JNT_SKIRT_OUT2_e=0x22,
+    ZRZ_GT_JNT_SKIRT_OUT3_e=0x23,
+    ZRZ_GT_JNT_SKIRT_OUT4_e=0x24,
+    ZRZ_GT_JNT_SKIRT_OUT5_e=0x25,
+    ZRZ_GT_JNT_SKIRT_OUT6_e=0x26,
+};
+
+#endif /* !RES_ZRZ_GT_H */

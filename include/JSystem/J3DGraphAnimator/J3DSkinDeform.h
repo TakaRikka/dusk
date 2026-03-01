@@ -4,6 +4,7 @@
 #include "JSystem/J3DGraphAnimator/J3DCluster.h"
 #include "JSystem/J3DGraphAnimator/J3DMtxBuffer.h"
 #include <dolphin/types.h>
+#include <cstring>
 
 class J3DModel;
 class J3DAnmCluster;
@@ -115,6 +116,8 @@ inline void J3DFillZero32B(__REGISTER void* param_0, __REGISTER u32 param_1) {
     	addi param_0, param_0, 0x20
     	bdnz lbl_8032D948
     }
+#else
+    memset(param_0, 0, param_1);
 #endif
 }
 

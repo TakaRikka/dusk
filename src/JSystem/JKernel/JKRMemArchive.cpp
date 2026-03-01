@@ -5,7 +5,7 @@
 #include "JSystem/JKernel/JKRDvdRipper.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
-#include <string>
+#include <cstring>
 #include "global.h"
 #include <stdint.h>
 

@@ -8,6 +8,7 @@
 #include "d/actor/d_a_tbox2.h"
 #include "d/d_bg_w.h"
 #include "d/actor/d_a_midna.h"
+#include <cstring>
 
 void daTbox2_c::initBaseMtx() {
     mpModel->setBaseScale(scale);

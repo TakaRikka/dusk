@@ -1,0 +1,28 @@
+#ifndef RES_SCANPTL_H
+#define RES_SCANPTL_H
+
+enum dRes_INDEX_SCANPTL {
+    /* BMDR */
+    dRes_INDEX_SCANPTL_BMD_EF_PORTAL_e=0x5,
+    /* BRK  */
+    dRes_INDEX_SCANPTL_BRK_EF_PORTAL_BLUE_APP_e=0x8,
+    dRes_INDEX_SCANPTL_BRK_EF_PORTAL_BLUE_DISAPP_e=0x9,
+    /* BTK  */
+    dRes_INDEX_SCANPTL_BTK_EF_PORTAL_e=0xC,
+};
+
+enum dRes_ID_SCANPTL {
+    /* BMDR */
+    dRes_ID_SCANPTL_BMD_EF_PORTAL_e=0x5,
+    /* BRK  */
+    dRes_ID_SCANPTL_BRK_EF_PORTAL_BLUE_APP_e=0x8,
+    dRes_ID_SCANPTL_BRK_EF_PORTAL_BLUE_DISAPP_e=0x9,
+    /* BTK  */
+    dRes_ID_SCANPTL_BTK_EF_PORTAL_e=0xC,
+};
+
+enum EF_PORTAL_JNT {
+    EF_PORTAL_JNT_EF_WARPHOLE_e=0x0,
+};
+
+#endif /* !RES_SCANPTL_H */

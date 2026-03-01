@@ -18,6 +18,7 @@
 #include "d/d_pane_class.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
+#include <cstring>
 
 class daBalloon2D_HIO_c : public mDoHIO_entry_c {
 public:

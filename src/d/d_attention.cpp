@@ -10,6 +10,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "SSystem/SComponent/c_counter.h"
+#include <cstring>
 
 #define DRAW_TYPE_YELLOW 0
 #define DRAW_TYPE_RED    1

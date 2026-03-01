@@ -1,0 +1,62 @@
+#ifndef RES_E_TK2_H
+#define RES_E_TK2_H
+
+enum dRes_INDEX_E_TK2 {
+    /* BCK  */
+    dRes_INDEX_E_TK2_BCK_TK2_APPEAR_e=0x4,
+    dRes_INDEX_E_TK2_BCK_TK2_ATTACK_e=0x5,
+    dRes_INDEX_E_TK2_BCK_TK2_DAMAGE_e=0x6,
+    dRes_INDEX_E_TK2_BCK_TK2_HIDE_e=0x7,
+    dRes_INDEX_E_TK2_BCK_TK2_KYORO2_e=0x8,
+    dRes_INDEX_E_TK2_BCK_TK2_SWIM_e=0x9,
+    dRes_INDEX_E_TK2_BCK_TK2_WAIT01_e=0xA,
+    /* BMDR */
+    dRes_INDEX_E_TK2_BMD_EF_TK2BALL_e=0xD,
+    dRes_INDEX_E_TK2_BMD_TK2_e=0xE,
+};
+
+enum dRes_ID_E_TK2 {
+    /* BCK  */
+    dRes_ID_E_TK2_BCK_TK2_APPEAR_e=0x4,
+    dRes_ID_E_TK2_BCK_TK2_ATTACK_e=0x5,
+    dRes_ID_E_TK2_BCK_TK2_DAMAGE_e=0x6,
+    dRes_ID_E_TK2_BCK_TK2_HIDE_e=0x7,
+    dRes_ID_E_TK2_BCK_TK2_KYORO2_e=0x8,
+    dRes_ID_E_TK2_BCK_TK2_SWIM_e=0x9,
+    dRes_ID_E_TK2_BCK_TK2_WAIT01_e=0xA,
+    /* BMDR */
+    dRes_ID_E_TK2_BMD_EF_TK2BALL_e=0xD,
+    dRes_ID_E_TK2_BMD_TK2_e=0xE,
+};
+
+enum EF_TK2BALL_JNT {
+    EF_TK2BALL_JNT_EF_YOUGANDAMA_e=0x0,
+    EF_TK2BALL_JNT_KARA_e=0x1,
+};
+
+enum TK2_JNT {
+    TK2_JNT_WORLD_ROOT_e=0x0,
+    TK2_JNT_BACKBONE_e=0x1,
+    TK2_JNT_HEAD_e=0x2,
+    TK2_JNT_AGO_e=0x3,
+    TK2_JNT_AGO2_e=0x4,
+    TK2_JNT_EARL1_e=0x5,
+    TK2_JNT_EARL2_e=0x6,
+    TK2_JNT_EARR1_e=0x7,
+    TK2_JNT_EARR2_e=0x8,
+    TK2_JNT_WAIST_e=0x9,
+    TK2_JNT_LEGL1_e=0xA,
+    TK2_JNT_LEGL2_e=0xB,
+    TK2_JNT_FOOTL1_e=0xC,
+    TK2_JNT_FOOTL2_e=0xD,
+    TK2_JNT_LEGR1_e=0xE,
+    TK2_JNT_LEGR2_e=0xF,
+    TK2_JNT_FOOTR1_e=0x10,
+    TK2_JNT_FOOTR2_e=0x11,
+    TK2_JNT_TAIL1_e=0x12,
+    TK2_JNT_TAIL2_e=0x13,
+    TK2_JNT_TAIL3_e=0x14,
+    TK2_JNT_TAIL4_e=0x15,
+};
+
+#endif /* !RES_E_TK2_H */

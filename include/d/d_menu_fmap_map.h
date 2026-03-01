@@ -3,6 +3,7 @@
 
 #include "SSystem/SComponent/c_counter.h"
 #include <dolphin/types.h>
+#include <cstring>
 #include "d/d_menu_fmap.h"
 #include "d/d_map.h"
 #include "d/d_map_path.h"

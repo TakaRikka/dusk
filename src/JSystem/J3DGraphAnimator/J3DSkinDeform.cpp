@@ -4,7 +4,7 @@
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/JKernel/JKRHeap.h"
-#include <string>
+#include <cstring>
 
 J3DSkinNList::J3DSkinNList() {
     field_0x0 = NULL;

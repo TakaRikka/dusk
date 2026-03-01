@@ -1,0 +1,91 @@
+#ifndef RES_GWOLF_H
+#define RES_GWOLF_H
+
+enum dRes_INDEX_GWOLF {
+    /* BCK  */
+    dRes_INDEX_GWOLF_BCK_WL_AT_e=0x7,
+    dRes_INDEX_GWOLF_BCK_WL_ATTACKA_e=0x8,
+    dRes_INDEX_GWOLF_BCK_WL_ATTACKAED_e=0x9,
+    dRes_INDEX_GWOLF_BCK_WL_ATTACKAST_e=0xA,
+    dRes_INDEX_GWOLF_BCK_WL_DASHA_e=0xB,
+    dRes_INDEX_GWOLF_BCK_WL_HOWLB_e=0xC,
+    dRes_INDEX_GWOLF_BCK_WL_HOWLC_e=0xD,
+    dRes_INDEX_GWOLF_BCK_WL_JUMPA_e=0xE,
+    dRes_INDEX_GWOLF_BCK_WL_JUMPAST_e=0xF,
+    dRes_INDEX_GWOLF_BCK_WL_WAITSIT_e=0x10,
+    /* BMDR */
+    dRes_INDEX_GWOLF_BMD_GW_e=0x13,
+    /* BRK  */
+    dRes_INDEX_GWOLF_BRK_GW_e=0x16,
+    /* BTK  */
+    dRes_INDEX_GWOLF_BTK_GW_e=0x19,
+    /* EVT  */
+    dRes_INDEX_GWOLF_DAT_EVENT_LIST_e=0x1C,
+};
+
+enum dRes_ID_GWOLF {
+    /* BCK  */
+    dRes_ID_GWOLF_BCK_WL_AT_e=0x7,
+    dRes_ID_GWOLF_BCK_WL_ATTACKA_e=0x8,
+    dRes_ID_GWOLF_BCK_WL_ATTACKAED_e=0x9,
+    dRes_ID_GWOLF_BCK_WL_ATTACKAST_e=0xA,
+    dRes_ID_GWOLF_BCK_WL_DASHA_e=0xB,
+    dRes_ID_GWOLF_BCK_WL_HOWLB_e=0xC,
+    dRes_ID_GWOLF_BCK_WL_HOWLC_e=0xD,
+    dRes_ID_GWOLF_BCK_WL_JUMPA_e=0xE,
+    dRes_ID_GWOLF_BCK_WL_JUMPAST_e=0xF,
+    dRes_ID_GWOLF_BCK_WL_WAITSIT_e=0x10,
+    /* BMDR */
+    dRes_ID_GWOLF_BMD_GW_e=0x13,
+    /* BRK  */
+    dRes_ID_GWOLF_BRK_GW_e=0x16,
+    /* BTK  */
+    dRes_ID_GWOLF_BTK_GW_e=0x19,
+    /* EVT  */
+    dRes_ID_GWOLF_DAT_EVENT_LIST_e=0x1C,
+};
+
+enum GW_JNT {
+    GW_JNT_CENTER_e=0x0,
+    GW_JNT_BACKBONE1_e=0x1,
+    GW_JNT_BACKBONE2_e=0x2,
+    GW_JNT_NECK_e=0x3,
+    GW_JNT_HEAD_e=0x4,
+    GW_JNT_CHIN_e=0x5,
+    GW_JNT_TONGUE1_e=0x6,
+    GW_JNT_TONGUE2_e=0x7,
+    GW_JNT_EARL_e=0x8,
+    GW_JNT_EARR_e=0x9,
+    GW_JNT_MANE_e=0xA,
+    GW_JNT_MAYUL_e=0xB,
+    GW_JNT_MAYUR_e=0xC,
+    GW_JNT_MOUTH_e=0xD,
+    GW_JNT_NOSE_e=0xE,
+    GW_JNT_SHOULDERL_e=0xF,
+    GW_JNT_FLEGL1_e=0x10,
+    GW_JNT_FLEGL2_e=0x11,
+    GW_JNT_FLEGL3_e=0x12,
+    GW_JNT_FLEGL4_e=0x13,
+    GW_JNT_SHOULDERR_e=0x14,
+    GW_JNT_FLEGR1_e=0x15,
+    GW_JNT_FLEGR2_e=0x16,
+    GW_JNT_FLEGR3_e=0x17,
+    GW_JNT_FLEGR4_e=0x18,
+    GW_JNT_MD_e=0x19,
+    GW_JNT_WAIST_e=0x1A,
+    GW_JNT_HIPL_e=0x1B,
+    GW_JNT_BLEGL1_e=0x1C,
+    GW_JNT_BLEGL2_e=0x1D,
+    GW_JNT_BLEGL3_e=0x1E,
+    GW_JNT_BLEGL4_e=0x1F,
+    GW_JNT_HIPR_e=0x20,
+    GW_JNT_BLEGR1_e=0x21,
+    GW_JNT_BLEGR2_e=0x22,
+    GW_JNT_BLEGR3_e=0x23,
+    GW_JNT_BLEGR4_e=0x24,
+    GW_JNT_TAIL1_e=0x25,
+    GW_JNT_TAIL2_e=0x26,
+    GW_JNT_TAIL3_e=0x27,
+};
+
+#endif /* !RES_GWOLF_H */

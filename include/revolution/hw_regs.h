@@ -12,6 +12,7 @@ volatile u32 __DIRegs[]       AT_ADDRESS(0xCD006000);
 volatile u32 __SIRegs[0x100]  AT_ADDRESS(0xCD006400);
 volatile u32 __EXIRegs[0x40]  AT_ADDRESS(0xCD006800);
 volatile u32 __AIRegs[8]      AT_ADDRESS(0xCD006C00);
+volatile u32 __ACRRegs[89]    AT_ADDRESS(0xCD000000);
 volatile u32 __IPCRegs[4]     AT_ADDRESS(0xCD000000);
 #else
 #define __VIRegs         ((volatile u16 *)0xCC002000)
@@ -22,6 +23,7 @@ volatile u32 __IPCRegs[4]     AT_ADDRESS(0xCD000000);
 #define __SIRegs         ((volatile u32 *)0xCD006400)
 #define __EXIRegs        ((volatile u32 *)0xCD006800)
 #define __AIRegs         ((volatile u32 *)0xCD006C00)
+#define __ACRRegs        ((volatile u32 *)0xCD000000)
 #define __IPCRegs        ((volatile u32 *)0xCD000000)
 #endif
 
@@ -114,5 +116,13 @@ volatile u32 __IPCRegs[4]     AT_ADDRESS(0xCD000000);
 #define DSP_DMA_BYTES_LEFT  (29)
 
 #define DSP_DMA_START_FLAG (0x8000) // set to start DSP
+
+inline void ACRWriteReg(u32 offset, u32 val) {
+    __ACRRegs[offset >> 2] = val;
+}
+
+inline u32 ACRReadReg(u32 offset) {
+    return __ACRRegs[offset >> 2];
+}
 
 #endif

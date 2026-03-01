@@ -151,6 +151,10 @@ inline void setTVec3f(const __REGISTER f32* vec_a, __REGISTER f32* vec_b) {
         psq_st a_x, 0(vec_b), 0, 0
         stfs b_x, 8(vec_b)
     };
+#else
+    vec_b[0] = vec_a[0];
+    vec_b[1] = vec_a[1];
+    vec_b[2] = vec_a[2];
 #endif
 }
 
@@ -163,6 +167,8 @@ inline float fsqrt_step(float mag) {
     #ifdef __MWERKS__
     f32 root = __frsqrte(mag);
     return 0.5f * root * (3.0f - mag * (root * root));
+    #else
+    return 1.0f / sqrtf(mag);
     #endif
 }
 
@@ -181,6 +187,10 @@ inline void mulInternal(__REGISTER const f32* a, __REGISTER const f32* b, __REGI
         ps_mul x_y, a_x_y, b_x_y
         psq_st x_y, 0(dst), 0, 0
     };
+    dst[2] = a[2] * b[2];
+#else
+    dst[0] = a[0] * b[0];
+    dst[1] = a[1] * b[1];
     dst[2] = a[2] * b[2];
 #endif
 }
@@ -296,12 +306,7 @@ struct TVec3<f32> : public Vec {
     }
 
     void scale(__REGISTER f32 sc) {
-#if DEBUG
-        x *= sc;
-        y *= sc;
-        z *= sc;
-#else
-#ifdef __MWERKS__
+#if PLATFORM_GCN && defined(__MWERKS__)
         __REGISTER f32 z;
         __REGISTER f32 x_y;
         __REGISTER f32* dst = &x;
@@ -315,12 +320,15 @@ struct TVec3<f32> : public Vec {
             ps_muls0 zres,       z, sc
             psq_st   zres,  8(dst),  1, 0
         };
-#endif
+#else
+        x *= sc;
+        y *= sc;
+        z *= sc;
 #endif
     }
 
     void scale(__REGISTER f32 sc, const TVec3<f32>& other) {
-#ifdef __MWERKS__
+#if PLATFORM_GCN && defined(__MWERKS__)
         __REGISTER const f32* src = &other.x;
         __REGISTER f32 z;
         __REGISTER f32 x_y;
@@ -335,6 +343,10 @@ struct TVec3<f32> : public Vec {
             ps_muls0 zres,       z, sc
             psq_st   zres,  8(dst),  1, 0
         };
+#else
+        x = other.x * sc;
+        y = other.y * sc;
+        z = other.z * sc;
 #endif
     }
 
@@ -357,6 +369,10 @@ struct TVec3<f32> : public Vec {
             fneg   z,   z
             stfs   z,   8(rdst)
         };
+#else
+        dst->x = -x;
+        dst->y = -y;
+        dst->z = -z;
 #endif
     }
 

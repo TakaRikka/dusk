@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h"  // IWYU pragma: keep
 
 #include "d/actor/d_a_npc_kyury.h"
+#include <cstring>
 
 const daNpc_Kyury_HIOParam daNpc_Kyury_Param_c::m = {
     200.0f,  // attention_offset

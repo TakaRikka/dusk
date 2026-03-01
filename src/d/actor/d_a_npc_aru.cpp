@@ -17,6 +17,7 @@
 #if DEBUG
 #include "JSystem/JHostIO/JORFile.h"
 #include "d/d_debug_viewer.h"
+#include <cstring>
 #endif
 
 enum Aru_RES_File_ID {
@@ -1402,19 +1403,19 @@ int daNpc_Aru_c::duck(int param_1) {
 
             switch (field_0xfca) {
                 case 1:
-                    sVar1 -= (s16) 0x1000;
+                    ANGLE_SUB(sVar1, 0x1000);
                     break;
 
                 case 7:
-                    sVar1 += (s16) 0x1000;
+                    ANGLE_ADD(sVar1, 0x1000);
                     break;
 
                 case 2:
-                    sVar1 -= (s16) 0x4000;
+                    ANGLE_SUB(sVar1, 0x4000);
                     break;
 
                 case 6:
-                    sVar1 += (s16) 0x4000;
+                    ANGLE_ADD(sVar1, 0x4000);
                     break;
             }
 

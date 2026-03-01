@@ -6,7 +6,7 @@
 #include "JSystem/JSupport/JSUList.h"
 
 class JAISeqMgr;
-class JAISoundChild;
+struct JAISoundChild;
 
 /**
  * @ingroup jsystem-jaudio

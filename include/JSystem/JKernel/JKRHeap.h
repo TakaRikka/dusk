@@ -5,6 +5,7 @@
 #include <dolphin/os.h>
 #include "global.h"
 #include <new>
+#include <cstdint>
 
 class JKRHeap;
 typedef void (*JKRErrorHandler)(void*, u32, int);
@@ -72,7 +73,7 @@ public:
     JKRHeap* find(void* ptr) const;
     JKRHeap* findAllHeap(void* ptr) const;
 
-    void dispose_subroutine(u32 start, u32 end);
+    void dispose_subroutine(uintptr_t start, uintptr_t end);
     bool dispose(void* ptr, u32 size);
     void dispose(void* begin, void* end);
     void dispose();
@@ -210,16 +211,22 @@ public:
     static JKRErrorHandler mErrorHandler;
 };
 
+#ifndef TARGET_PC
 void* operator new(size_t size);
+#endif
 void* operator new(size_t size, int alignment);
 void* operator new(size_t size, JKRHeap* heap, int alignment);
 
+#ifndef TARGET_PC
 void* operator new[](size_t size);
+#endif
 void* operator new[](size_t size, int alignment);
 void* operator new[](size_t size, JKRHeap* heap, int alignment);
 
+#ifndef TARGET_PC
 void operator delete(void* ptr);
 void operator delete[](void* ptr);
+#endif
 
 void JKRDefaultMemoryErrorRoutine(void* heap, u32 size, int alignment);
 
@@ -273,6 +280,10 @@ inline void* JKRAlloc(u32 size, int alignment) {
 
 inline s32 JKRResizeMemBlock(JKRHeap* heap, void* ptr, u32 size) {
     return JKRHeap::resize(ptr, size, heap);
+}
+
+inline JKRHeap* JKRFindHeap(void* ptr) {
+    return JKRHeap::findFromRoot(ptr);
 }
 
 inline JKRHeap* JKRGetRootHeap() {

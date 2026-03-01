@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_tag_smk_emt.h"
 #include "d/d_procname.h"
+#include <cstring>
 
 daTagSmkEmt_c::daTagSmkEmt_c() {
     memset(&mParticles,0,0xc);

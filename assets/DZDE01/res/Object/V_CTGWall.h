@@ -1,0 +1,26 @@
+#ifndef RES_V_CTGWALL_H
+#define RES_V_CTGWALL_H
+
+enum dRes_INDEX_V_CTGWALL {
+    /* BMDE */
+    dRes_INDEX_V_CTGWALL_BMD_V_CTGANONWALL_e=0x5,
+    /* BTK  */
+    dRes_INDEX_V_CTGWALL_BTK_V_CTGANONWALL_e=0x8,
+    /* DZB  */
+    dRes_INDEX_V_CTGWALL_DZB_V_CTGANONWALL_e=0xB,
+};
+
+enum dRes_ID_V_CTGWALL {
+    /* BMDE */
+    dRes_ID_V_CTGWALL_BMD_V_CTGANONWALL_e=0x5,
+    /* BTK  */
+    dRes_ID_V_CTGWALL_BTK_V_CTGANONWALL_e=0x8,
+    /* DZB  */
+    dRes_ID_V_CTGWALL_DZB_V_CTGANONWALL_e=0xB,
+};
+
+enum V_CTGANONWALL_JNT {
+    V_CTGANONWALL_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_V_CTGWALL_H */

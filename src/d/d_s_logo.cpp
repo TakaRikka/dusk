@@ -19,6 +19,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
+#include <cstring>
 
 #if PLATFORM_WII
 #include "d/d_cursor_mng.h"
@@ -973,5 +974,5 @@ scene_process_profile_definition g_profile_LOGO_SCENE = {
     0,
     &g_fopScn_Method.base,
     &l_dScnLogo_Method,
-    NULL,
+    0,
 };

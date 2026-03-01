@@ -1,0 +1,29 @@
+#ifndef RES_MAS_A_L_H
+#define RES_MAS_A_L_H
+
+enum dRes_INDEX_MAS_A_L {
+    /* BMDR */
+    dRes_INDEX_MAS_A_L_BMD_MAS_A_L_e=0x3,
+};
+
+enum dRes_ID_MAS_A_L {
+    /* BMDR */
+    dRes_ID_MAS_A_L_BMD_MAS_A_L_e=0x3,
+};
+
+enum MAS_A_L_JNT {
+    MAS_A_L_JNT_WORLD_ROOT_e=0x0,
+    MAS_A_L_JNT_BACKBONE_e=0x1,
+    MAS_A_L_JNT_ARML1_e=0x2,
+    MAS_A_L_JNT_ARML2_e=0x3,
+    MAS_A_L_JNT_ARMR1_e=0x4,
+    MAS_A_L_JNT_ARMR2_e=0x5,
+    MAS_A_L_JNT_HEAD_e=0x6,
+    MAS_A_L_JNT_WAIST_e=0x7,
+    MAS_A_L_JNT_LEGL1_e=0x8,
+    MAS_A_L_JNT_LEGL2_e=0x9,
+    MAS_A_L_JNT_LEGR1_e=0xA,
+    MAS_A_L_JNT_LEGR2_e=0xB,
+};
+
+#endif /* !RES_MAS_A_L_H */

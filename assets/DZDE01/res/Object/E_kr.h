@@ -1,0 +1,89 @@
+#ifndef RES_E_KR_H
+#define RES_E_KR_H
+
+enum dRes_INDEX_E_KR {
+    /* BCK  */
+    dRes_INDEX_E_KR_BCK_KR_ATTACK_e=0x4,
+    dRes_INDEX_E_KR_BCK_KR_CHANCE_e=0x5,
+    dRes_INDEX_E_KR_BCK_KR_DAMAGE_e=0x6,
+    dRes_INDEX_E_KR_BCK_KR_FIND_e=0x7,
+    dRes_INDEX_E_KR_BCK_KR_FLY_e=0x8,
+    dRes_INDEX_E_KR_BCK_KR_FLY_ATTACK_e=0x9,
+    dRes_INDEX_E_KR_BCK_KR_FLY_ATTACK_GLIDE_e=0xA,
+    dRes_INDEX_E_KR_BCK_KR_FLY_BRAKE_e=0xB,
+    dRes_INDEX_E_KR_BCK_KR_FLY_CARRY_e=0xC,
+    dRes_INDEX_E_KR_BCK_KR_FLY_GLIDE_e=0xD,
+    dRes_INDEX_E_KR_BCK_KR_FLY_GLIDE_CARRY_e=0xE,
+    dRes_INDEX_E_KR_BCK_KR_FLY_LAND_e=0xF,
+    dRes_INDEX_E_KR_BCK_KR_GUARD_e=0x10,
+    dRes_INDEX_E_KR_BCK_KR_HOVERING_e=0x11,
+    dRes_INDEX_E_KR_BCK_KR_HOVERING_CARRY_e=0x12,
+    dRes_INDEX_E_KR_BCK_KR_LAND_e=0x13,
+    dRes_INDEX_E_KR_BCK_KR_LOOKAROUND_e=0x14,
+    dRes_INDEX_E_KR_BCK_KR_WAIT_e=0x15,
+    /* BMDR */
+    dRes_INDEX_E_KR_BMD_KR_e=0x18,
+};
+
+enum dRes_ID_E_KR {
+    /* BCK  */
+    dRes_ID_E_KR_BCK_KR_ATTACK_e=0x4,
+    dRes_ID_E_KR_BCK_KR_CHANCE_e=0x5,
+    dRes_ID_E_KR_BCK_KR_DAMAGE_e=0x6,
+    dRes_ID_E_KR_BCK_KR_FIND_e=0x7,
+    dRes_ID_E_KR_BCK_KR_FLY_e=0x8,
+    dRes_ID_E_KR_BCK_KR_FLY_ATTACK_e=0x9,
+    dRes_ID_E_KR_BCK_KR_FLY_ATTACK_GLIDE_e=0xA,
+    dRes_ID_E_KR_BCK_KR_FLY_BRAKE_e=0xB,
+    dRes_ID_E_KR_BCK_KR_FLY_CARRY_e=0xC,
+    dRes_ID_E_KR_BCK_KR_FLY_GLIDE_e=0xD,
+    dRes_ID_E_KR_BCK_KR_FLY_GLIDE_CARRY_e=0xE,
+    dRes_ID_E_KR_BCK_KR_FLY_LAND_e=0xF,
+    dRes_ID_E_KR_BCK_KR_GUARD_e=0x10,
+    dRes_ID_E_KR_BCK_KR_HOVERING_e=0x11,
+    dRes_ID_E_KR_BCK_KR_HOVERING_CARRY_e=0x12,
+    dRes_ID_E_KR_BCK_KR_LAND_e=0x13,
+    dRes_ID_E_KR_BCK_KR_LOOKAROUND_e=0x14,
+    dRes_ID_E_KR_BCK_KR_WAIT_e=0x15,
+    /* BMDR */
+    dRes_ID_E_KR_BMD_KR_e=0x18,
+};
+
+enum KR_JNT {
+    KR_JNT_WORLD_ROOT_e=0x0,
+    KR_JNT_BACKBONE1_e=0x1,
+    KR_JNT_BACKBONE2_e=0x2,
+    KR_JNT_NECK1_e=0x3,
+    KR_JNT_NECK2_e=0x4,
+    KR_JNT_HEAD_e=0x5,
+    KR_JNT_MOUTH1_e=0x6,
+    KR_JNT_MOUTH2_e=0x7,
+    KR_JNT_THROAT_e=0x8,
+    KR_JNT_SHOULDERL_1_e=0x9,
+    KR_JNT_SHOULDERL_2_e=0xA,
+    KR_JNT_HANDL_1_e=0xB,
+    KR_JNT_HANDL_2_e=0xC,
+    KR_JNT_HANDL_3_e=0xD,
+    KR_JNT_SHOULDERR_1_e=0xE,
+    KR_JNT_SHOULDERR_2_e=0xF,
+    KR_JNT_HANDR_1_e=0x10,
+    KR_JNT_HANDR_2_e=0x11,
+    KR_JNT_HANDR_3_e=0x12,
+    KR_JNT_WAIST_e=0x13,
+    KR_JNT_LEGL_1_e=0x14,
+    KR_JNT_LEGL_2_e=0x15,
+    KR_JNT_LEGL_3_e=0x16,
+    KR_JNT_TUMEL_B_e=0x17,
+    KR_JNT_TUMEL_F_e=0x18,
+    KR_JNT_LEGR_1_e=0x19,
+    KR_JNT_LEGR_2_e=0x1A,
+    KR_JNT_LEGR_3_e=0x1B,
+    KR_JNT_TUMER_B_e=0x1C,
+    KR_JNT_TUMER_F_e=0x1D,
+    KR_JNT_TAIL1_e=0x1E,
+    KR_JNT_TAIL2_e=0x1F,
+    KR_JNT_TAIL3_e=0x20,
+    KR_JNT_TAIL4_e=0x21,
+};
+
+#endif /* !RES_E_KR_H */

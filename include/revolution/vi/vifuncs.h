@@ -35,6 +35,9 @@ void VISetGamma(VIGamma);
 void VISetRGBModeImm(void);
 BOOL VIEnableDVDStopMotor(BOOL enable);
 
+BOOL VIResetDimmingCount(void);
+BOOL VIResetRFIdle(void);
+
 #ifdef __cplusplus
 }
 #endif

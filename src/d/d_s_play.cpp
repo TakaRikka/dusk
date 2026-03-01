@@ -26,6 +26,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include "d/actor/d_a_suspend.h"
 #include "d/actor/d_a_ykgr.h"
+#include <cstring>
 
 #if PLATFORM_WII
 #include "d/d_cursor_mng.h"
@@ -553,7 +554,7 @@ static int phase_3(dScnPly_c* i_this) {
         return cPhs_INIT_e;
     }
 
-    if (!i_this->field_0x1d0 == NULL && !i_this->field_0x1d0->sync()) {
+    if (i_this->field_0x1d0 != NULL && !i_this->field_0x1d0->sync()) {
         return cPhs_INIT_e;
     }
 

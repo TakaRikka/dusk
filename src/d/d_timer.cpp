@@ -21,6 +21,7 @@
 #include "d/d_pane_class.h"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_lib.h"
+#include <cstring>
 
 static int dTimer_createStart2D(s32 param_0, u16 param_1);
 

@@ -4663,3 +4663,7 @@ extract:
 - symbol: font_data
   binary: assets/font_data.bin
   header: assets/font_data.h
+
+- symbol: l_sightDL!.data:0x803B4220
+  binary: assets/l_sightDL__d_a_player.bin
+  header: assets/l_sightDL__d_a_player.h

@@ -150,7 +150,7 @@ void dOvlpFd2_c::execFadeOut() {
         cLib_calcTimer<s8>(&mTimer);
     }
 
-    field_0x114 += (s16)(TREG_S(0) + 0x800);
+    ANGLE_ADD(field_0x114, TREG_S(0) + 0x800);
     cLib_addCalc2(&field_0x118, TREG_F(1) + 1.0f, 1.0f, TREG_F(2) + 0.05f);
 }
 

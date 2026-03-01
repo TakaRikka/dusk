@@ -9,6 +9,7 @@
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_crod.h"
 #include "d/d_bg_w.h"
+#include <cstring>
 
 enum daCstaF_Action {
     ACTION_WAIT,

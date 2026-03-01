@@ -1,0 +1,28 @@
+#ifndef RES_K_MBHASI0_H
+#define RES_K_MBHASI0_H
+
+enum dRes_INDEX_K_MBHASI0 {
+    /* BMDR */
+    dRes_INDEX_K_MBHASI0_BMD_K_HASIKAGE00_e=0x4,
+    dRes_INDEX_K_MBHASI0_BMD_K_MBHASI00_e=0x5,
+    /* DZB  */
+    dRes_INDEX_K_MBHASI0_DZB_K_MBHASI00_e=0x8,
+};
+
+enum dRes_ID_K_MBHASI0 {
+    /* BMDR */
+    dRes_ID_K_MBHASI0_BMD_K_HASIKAGE00_e=0x4,
+    dRes_ID_K_MBHASI0_BMD_K_MBHASI00_e=0x5,
+    /* DZB  */
+    dRes_ID_K_MBHASI0_DZB_K_MBHASI00_e=0x8,
+};
+
+enum K_HASIKAGE00_JNT {
+    K_HASIKAGE00_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum K_MBHASI00_JNT {
+    K_MBHASI00_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_K_MBHASI0_H */

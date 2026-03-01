@@ -17,6 +17,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_lib.h"
 #include "d/actor/d_a_tag_shop_item.h"
+#include <cstring>
 
 
 static daTag_ShopItem_c* dShopSystem_itemActor[7] = {

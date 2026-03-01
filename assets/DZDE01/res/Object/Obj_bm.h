@@ -1,0 +1,81 @@
+#ifndef RES_OBJ_BM_H
+#define RES_OBJ_BM_H
+
+enum dRes_INDEX_OBJ_BM {
+    /* BCK  */
+    dRes_INDEX_OBJ_BM_BCK_BM_UP_e=0x7,
+    dRes_INDEX_OBJ_BM_BCK_BMF_OFF_e=0x8,
+    dRes_INDEX_OBJ_BM_BCK_EF_BIMOBEAM_e=0x9,
+    dRes_INDEX_OBJ_BM_BCK_OC_DOWN_e=0xA,
+    /* BMDR */
+    dRes_INDEX_OBJ_BM_BMD_BM_e=0xD,
+    dRes_INDEX_OBJ_BM_BMD_EF_BIMOBEAM_e=0xE,
+    dRes_INDEX_OBJ_BM_BMD_P_BMF_e=0xF,
+    /* BRK  */
+    dRes_INDEX_OBJ_BM_BRK_LOOK_e=0x12,
+    dRes_INDEX_OBJ_BM_BRK_SERCH_e=0x13,
+    dRes_INDEX_OBJ_BM_BRK_TURN_e=0x14,
+    dRes_INDEX_OBJ_BM_BRK_UP_e=0x15,
+    /* BTK  */
+    dRes_INDEX_OBJ_BM_BTK_EF_BIMOBEAM_e=0x18,
+    dRes_INDEX_OBJ_BM_BTK_EF_BIMOBEAM_ON_e=0x19,
+    dRes_INDEX_OBJ_BM_BTK_EF_BIMOBEAMB_OFF_e=0x1A,
+    /* DZB  */
+    dRes_INDEX_OBJ_BM_DZB_BM_A_e=0x1D,
+    dRes_INDEX_OBJ_BM_DZB_BM_B_e=0x1E,
+};
+
+enum dRes_ID_OBJ_BM {
+    /* BCK  */
+    dRes_ID_OBJ_BM_BCK_BM_UP_e=0x7,
+    dRes_ID_OBJ_BM_BCK_BMF_OFF_e=0x8,
+    dRes_ID_OBJ_BM_BCK_EF_BIMOBEAM_e=0x9,
+    dRes_ID_OBJ_BM_BCK_OC_DOWN_e=0xA,
+    /* BMDR */
+    dRes_ID_OBJ_BM_BMD_BM_e=0xD,
+    dRes_ID_OBJ_BM_BMD_EF_BIMOBEAM_e=0xE,
+    dRes_ID_OBJ_BM_BMD_P_BMF_e=0xF,
+    /* BRK  */
+    dRes_ID_OBJ_BM_BRK_LOOK_e=0x12,
+    dRes_ID_OBJ_BM_BRK_SERCH_e=0x13,
+    dRes_ID_OBJ_BM_BRK_TURN_e=0x14,
+    dRes_ID_OBJ_BM_BRK_UP_e=0x15,
+    /* BTK  */
+    dRes_ID_OBJ_BM_BTK_EF_BIMOBEAM_e=0x18,
+    dRes_ID_OBJ_BM_BTK_EF_BIMOBEAM_ON_e=0x19,
+    dRes_ID_OBJ_BM_BTK_EF_BIMOBEAMB_OFF_e=0x1A,
+    /* DZB  */
+    dRes_ID_OBJ_BM_DZB_BM_A_e=0x1D,
+    dRes_ID_OBJ_BM_DZB_BM_B_e=0x1E,
+};
+
+enum BM_JNT {
+    BM_JNT_CENTER_e=0x0,
+    BM_JNT_COGRED_e=0x1,
+    BM_JNT_HEAD_e=0x2,
+    BM_JNT_COGBLUE_e=0x3,
+    BM_JNT_COGGREEN_e=0x4,
+    BM_JNT_COGYELLOW_e=0x5,
+};
+
+enum EF_BIMOBEAM_JNT {
+    EF_BIMOBEAM_JNT_WORLD_ROOT_e=0x0,
+    EF_BIMOBEAM_JNT__01CROSS_e=0x1,
+    EF_BIMOBEAM_JNT__02TWISTEDPLANE_A_e=0x2,
+    EF_BIMOBEAM_JNT__03TWISTEDCYLINDER_e=0x3,
+};
+
+enum P_BMF_JNT {
+    P_BMF_JNT_CENTER_e=0x0,
+    P_BMF_JNT_BACK_F_e=0x1,
+    P_BMF_JNT_BACK_END_e=0x2,
+    P_BMF_JNT_CENTER_END_e=0x3,
+    P_BMF_JNT_FRONT_F_e=0x4,
+    P_BMF_JNT_FRONT_END_e=0x5,
+    P_BMF_JNT_LEFT_F_e=0x6,
+    P_BMF_JNT_LEFT_END_e=0x7,
+    P_BMF_JNT_RIGHT_F_e=0x8,
+    P_BMF_JNT_RIGHT_END_e=0x9,
+};
+
+#endif /* !RES_OBJ_BM_H */

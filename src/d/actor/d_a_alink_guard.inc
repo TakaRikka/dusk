@@ -92,14 +92,13 @@ void daAlink_c::setArrowShieldActor(fopAc_ac_c* i_actor, int param_1) {
             fopAcM_delete(first_arrow);
         }
 
-        int i = 0;
-        for (; i < 15; i++) {
-            mShieldArrowIDs[i] = mShieldArrowIDs[i + 1];
-            field_0x2f7c[i] = field_0x2f7c[i + 1];
+        for (arrow_num = 0; arrow_num < 15; arrow_num++) {
+            mShieldArrowIDs[arrow_num] = mShieldArrowIDs[arrow_num + 1];
+            field_0x2f7c[arrow_num] = field_0x2f7c[arrow_num + 1];
         }
 
-        mShieldArrowIDs[i] = new_arrow_id;
-        field_0x2f7c[i] = 10;
+        mShieldArrowIDs[arrow_num] = new_arrow_id;
+        field_0x2f7c[arrow_num] = 10;
 
         dComIfGp_setItemArrowNumCount(1);
         fopAcM_createItemForSimpleDemo(&current.pos, fpcNm_ITEM_ARROW_10, -1, NULL, NULL, 0.0f, 0.0f);
@@ -201,6 +200,7 @@ void daAlink_c::setShieldGuard() {
 
 void daAlink_c::setGuardSe(dCcD_GObjInf* i_objinf) {
     int var_r31;
+    u32 hit_se;
     BOOL isRebound;
 
     if (checkWoodShieldEquipNotIronBall() && !checkMagicArmorNoDamage()) {
@@ -211,7 +211,6 @@ void daAlink_c::setGuardSe(dCcD_GObjInf* i_objinf) {
         isRebound = TRUE;
     }
 
-    u32 hit_se;
     if (i_objinf->GetTgHitGObj() != NULL && i_objinf->GetTgHitGObj()->GetAtType() == AT_TYPE_BOMB) {
         hit_se = Z2SE_HIT_METAL_WEAPON;
     } else {
@@ -330,7 +329,7 @@ int daAlink_c::procGuardSlip() {
     setShapeAngleToAtnActor(0);
 
     if (mProcVar1.field_0x300a != 0) {
-        mProcVar1.field_0x300a -= (s16)1;
+        S16_SUB(mProcVar1.field_0x300a, 1);
         mBodyAngle.y += mProcVar2.field_0x300c;
         mBodyAngle.x += mProcVar3.field_0x300e;
     }

@@ -12,6 +12,7 @@
 #include "d/actor/d_a_npc_wrestler.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include "d/d_camera.h"
+#include <cstring>
 
 enum Bou_RES_File_ID {
     /* BCK */
@@ -1360,22 +1361,22 @@ int daNpcBouS_c::EvCut_BousIntroSumo1(int i_staffId) {
 
     if (eventManager.getIsAddvance(i_staffId)) {
         switch (*cutName) {
-            case MULTI_CHAR('0x0001'):
+            case '0001':
                 setLookMode(LOOK_PLAYER_TALK);
                 mActorMngrs[0].entry(daPy_getPlayerActorClass());
                 break;
 
-            case MULTI_CHAR('0x0002'):
-            case MULTI_CHAR('0x0003'):
-            case MULTI_CHAR('0x0005'):
-            case MULTI_CHAR('0x0006'):
-            case MULTI_CHAR('0x0007'):
-            case MULTI_CHAR('0x0008'):
-            case MULTI_CHAR('0x0009'):
+            case '0002':
+            case '0003':
+            case '0005':
+            case '0006':
+            case '0007':
+            case '0008':
+            case '0009':
                 initTalk(9, NULL);
                 break;
             
-            case MULTI_CHAR('0x0004'):
+            case '0004':
                 setExpressionAnm(ANM_FH_TALK_B, true);
                 break;
 
@@ -1396,17 +1397,17 @@ int daNpcBouS_c::EvCut_BousIntroSumo1(int i_staffId) {
     }
 
     switch (*cutName) {
-        case MULTI_CHAR('0x0001'):
-        case MULTI_CHAR('0x0004'):
+        case '0001':
+        case '0004':
             return 1;
 
-        case MULTI_CHAR('0x0002'):
-        case MULTI_CHAR('0x0003'):
-        case MULTI_CHAR('0x0005'):
-        case MULTI_CHAR('0x0006'):
-        case MULTI_CHAR('0x0007'):
-        case MULTI_CHAR('0x0008'):
-        case MULTI_CHAR('0x0009'):
+        case '0002':
+        case '0003':
+        case '0005':
+        case '0006':
+        case '0007':
+        case '0008':
+        case '0009':
             if (talkProc(NULL, TRUE, NULL)) {
                 s32 choiceNo = mFlow.getChoiceNo();
                 OS_REPORT("二択分岐 %s\n", choiceNo == 0 ? "はい" : "いいえ");
@@ -1434,7 +1435,7 @@ int daNpcBouS_c::EvCut_BousIntroSumo2(int i_staffId) {
 
     if (eventManager.getIsAddvance(i_staffId)) {
         switch (*cutName) {
-            case MULTI_CHAR('0x0001'):
+            case '0001':
                 initTalk(9, NULL);
                 setLookMode(LOOK_PLAYER_TALK);
                 mActorMngrs[0].entry(daPy_getPlayerActorClass());
@@ -1456,7 +1457,7 @@ int daNpcBouS_c::EvCut_BousIntroSumo2(int i_staffId) {
     }
 
     switch (*cutName) {
-        case MULTI_CHAR('0x0001'):
+        case '0001':
             if (mCurAngle.y == fopAcM_searchPlayerAngleY(this)) {
                 if (talkProc(NULL, TRUE, NULL)) {
                     int choiceNo = mFlow.getChoiceNo();
@@ -1489,15 +1490,15 @@ int daNpcBouS_c::EvCut_BousIntroSumo3(int i_staffId) {
 
     if (eventManager.getIsAddvance(i_staffId)) {
         switch (*cutName) {
-            case MULTI_CHAR('0x0001'):
+            case '0001':
                 setLookMode(LOOK_PLAYER_TALK);
                 mActorMngrs[0].entry(daPy_getPlayerActorClass());
                 break;
 
-            case MULTI_CHAR('0x0003'):
+            case '0003':
                 setMotion(MOT_WALK, -1.0f, 0);
                 // fallthrough
-            case MULTI_CHAR('0x0002'):
+            case '0002':
                 setAngle(-0x2AAA);
                 initTalk(9, NULL);
                 break;
@@ -1521,16 +1522,16 @@ int daNpcBouS_c::EvCut_BousIntroSumo3(int i_staffId) {
     }
 
     switch (*cutName) {
-        case MULTI_CHAR('0x0001'):
+        case '0001':
             return 1;
         
-        case MULTI_CHAR('0x0002'):
+        case '0002':
             if (talkProc(NULL, TRUE, NULL)) {
                 return 1;
             }
             break;
 
-        case MULTI_CHAR('0x0003'): {
+        case '0003': {
             cXyz* pos = dComIfGp_evmng_getMyXyzP(i_staffId, "pos");
             if (pos != NULL) {
                 if (cLib_chaseAngleS(&shape_angle.y, cLib_targetAngleY(&current.pos, pos), 0x100)) {

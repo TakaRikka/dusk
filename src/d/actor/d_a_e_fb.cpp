@@ -22,10 +22,10 @@ daE_FB_HIO_c::daE_FB_HIO_c() {
     maximum_rotation_width = 0x300;
     minimum_turning_range = 0x10;
     rotation_width_stairs = 120;
-    color_register_1r = 0x87;
-    color_register_1g = 0x96;
-    color_register_1b = 0x91;
-    color_register_1a = 0xB6;
+    color_register_1r = 135;
+    color_register_1g = 150;
+    color_register_1b = 145;
+    color_register_1a = 182;
     maximum_rotation_width_2 = 120;
 }
 
@@ -159,18 +159,18 @@ int daE_FB_c::draw() {
         cStack_44.set(player->current.pos);
         cStack_44.y += 100.0f;
         GXColor local_48;
-        local_48.r = 0x82;
-        local_48.g = 0xff;
-        local_48.b = 0x82;
-        local_48.a = 0xfa;
+        local_48.r = 130;
+        local_48.g = 255;
+        local_48.b = 130;
+        local_48.a = 250;
         dDbVw_drawLineXlu(attention_info.position, cStack_44, local_48, 1, 0xc);
     }
     #endif
 
-    GXTexObj* tex_obj = dDlst_shadowControl_c::getSimpleTex();
     mShadowKey =
         dComIfGd_setShadow(mShadowKey, 1, model, &my_vec, BREG_F(19) + 1300.0f, 0.0f, current.pos.y,
-                           mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr, 0, 1.0f, tex_obj);
+                           mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr, 0, 1.0f,
+                           dDlst_shadowControl_c::getSimpleTex());
     return 1;
 }
 
@@ -293,14 +293,14 @@ bool daE_FB_c::search_check() {
     if (fopAcM_searchPlayerDistance(this) <= l_HIO.player_detection_range) {
         if (!field_0x69c) {
             mRotation = fopAcM_searchPlayerAngleY(this);
-            field_0x69c = 0x1E;
+            field_0x69c = 30;
             field_0x696 = 0;
         }
 
         retval = true;
     } else if (mActionMode != 1 && !field_0x69c) {
         mRotation = home.angle.y;
-        field_0x69c = 0x1E;
+        field_0x69c = 30;
         field_0x696 = 0;
     }
 

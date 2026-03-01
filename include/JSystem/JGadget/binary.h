@@ -100,6 +100,8 @@ struct TValueIterator
 
     TValueIterator(const void* begin) {
         mBegin = reinterpret_cast<const char*>(begin);
+        bool unused = false;
+        (void)&unused;
     }
 
     const void* get() const { return mBegin; }

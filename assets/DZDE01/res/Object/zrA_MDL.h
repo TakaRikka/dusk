@@ -1,0 +1,55 @@
+#ifndef RES_ZRA_MDL_H
+#define RES_ZRA_MDL_H
+
+enum dRes_INDEX_ZRA_MDL {
+    /* BMDV */
+    dRes_INDEX_ZRA_MDL_BMD_ZRA_e=0x3,
+};
+
+enum dRes_ID_ZRA_MDL {
+    /* BMDV */
+    dRes_ID_ZRA_MDL_BMD_ZRA_e=0x3,
+};
+
+enum ZRA_JNT {
+    ZRA_JNT_CENTER_e=0x0,
+    ZRA_JNT_BACKBONE1_e=0x1,
+    ZRA_JNT_BACKBONE2_e=0x2,
+    ZRA_JNT_NECK_e=0x3,
+    ZRA_JNT_HEAD_e=0x4,
+    ZRA_JNT_CHIN_e=0x5,
+    ZRA_JNT_EAR_L1_e=0x6,
+    ZRA_JNT_EAR_L2_e=0x7,
+    ZRA_JNT_EAR_R1_e=0x8,
+    ZRA_JNT_EAR_R2_e=0x9,
+    ZRA_JNT_H_TAIL1_e=0xA,
+    ZRA_JNT_H_TAIL2_e=0xB,
+    ZRA_JNT_H_TAIL3_e=0xC,
+    ZRA_JNT_H_TAIL4_e=0xD,
+    ZRA_JNT_MOUTH_e=0xE,
+    ZRA_JNT_SHOULDERL_e=0xF,
+    ZRA_JNT_ARML1_e=0x10,
+    ZRA_JNT_ARML2_e=0x11,
+    ZRA_JNT_HANDL_e=0x12,
+    ZRA_JNT_FINGERL1_e=0x13,
+    ZRA_JNT_FIN_L1_e=0x14,
+    ZRA_JNT_FIN_L2_e=0x15,
+    ZRA_JNT_SHOULDERR_e=0x16,
+    ZRA_JNT_ARMR1_e=0x17,
+    ZRA_JNT_ARMR2_e=0x18,
+    ZRA_JNT_HANDR_e=0x19,
+    ZRA_JNT_FINGERR1_e=0x1A,
+    ZRA_JNT_FIN_R1_e=0x1B,
+    ZRA_JNT_FIN_R2_e=0x1C,
+    ZRA_JNT_WAIST_e=0x1D,
+    ZRA_JNT_LEGL1_e=0x1E,
+    ZRA_JNT_LEGL2_e=0x1F,
+    ZRA_JNT_FOOT_L1_e=0x20,
+    ZRA_JNT_FOOT_L2_e=0x21,
+    ZRA_JNT_LEGR1_e=0x22,
+    ZRA_JNT_LEGR2_e=0x23,
+    ZRA_JNT_FOOT_R1_e=0x24,
+    ZRA_JNT_FOOT_R2_e=0x25,
+};
+
+#endif /* !RES_ZRA_MDL_H */

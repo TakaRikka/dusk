@@ -60,13 +60,13 @@ JUTAssertion::showAssert_f(JUTAssertion::getSDevice(), __FILE__, __LINE__, MSG, 
     OSPanic(__FILE__, __LINE__, "Halt");
 
 #define JUT_WARN_DEVICE(LINE, DEVICE, ...)                                                                        \
-    JUTAssertion::setWarningMessage_f(DEVICE, __FILE__, __LINE__, __VA_ARGS__);    \
+    JUTAssertion::setWarningMessage_f(DEVICE, const_cast<char*>(__FILE__), __LINE__, __VA_ARGS__);    \
 
 #define JUT_LOG(LINE, ...)                                                                         \
-    JUTAssertion::setLogMessage_f(JUTAssertion::getSDevice(), __FILE__, __LINE__, __VA_ARGS__)
+    JUTAssertion::setLogMessage_f(JUTAssertion::getSDevice(), const_cast<char*>(__FILE__), __LINE__, __VA_ARGS__)
 
 #define JUT_SET_CONFIRM(LINE, COND)                                                                \
-    JUTAssertion::setConfirmMessage(JUTAssertion::getSDevice(), __FILE__, __LINE__, COND, #COND)
+    JUTAssertion::setConfirmMessage(JUTAssertion::getSDevice(), const_cast<char*>(__FILE__), __LINE__, COND, #COND)
 
 #endif
 #define JUT_WARN(LINE, ...)                                                                        \

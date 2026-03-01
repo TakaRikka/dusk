@@ -7,7 +7,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 
 #include <cctype>
-#include <string>
+#include <cstring>
 #include "global.h"
 
 JKRFileCache* JKRFileCache::mount(const char* path, JKRHeap* heap, const char* param_3) {
@@ -192,7 +192,7 @@ u32 JKRFileCache::readResource(void* dst, u32 dstLength, u32, const char* path) 
     if (findFile(finalPath, path)) {
         return readResource(dst, dstLength, filePath);
     }
-    return NULL;
+    return 0;
 }
 
 void JKRFileCache::removeResourceAll(void) {

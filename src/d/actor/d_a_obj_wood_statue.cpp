@@ -12,49 +12,50 @@
 #include "d/d_item_data.h"
 #include "d/d_s_play.h"
 
-#if DEBUG
-
-class daObjWStatue_HIO_c : public fOpAcm_HIO_entry_c {
-public:
-    daObjWStatue_HIO_c() {
-        mRespawnTimer = 30;
-    }
-
-    void genMessage(JORMContext* context) {
-        // Wooden Statue
-        context->genLabel("木彫りの像", 0);
-
-        // Respawn timer
-        context->genSlider("全滅後の出現タイマー", &mRespawnTimer, 0, 200);
-    }
-
-    u8 mRespawnTimer;
-};
-
-daObjWStatue_HIO_c l_HIO;
-
-#endif
-
-
 const static dCcD_SrcCyl l_cyl_src = {
     {
-        {0x0, {{0x0, 0x0, 0x0}, {0xffffffff, 0x11}, 0x59}}, // mObj
+        {0x0, {{0x0, 0x0, 0x0}, {0xFFFFFFFF, 0x11}, 0x59}}, // mObj
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x4}, // mGObjTg
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {
-            {0.0f, 0.0f, 0.0f}, // mCenter
-            20.0f, // mRadius
-            40.0f // mHeight
-        } // mCyl
+            {
+                {0.0f, 0.0f, 0.0f}, // mCenter
+                20.0f, // mRadius
+                40.0f // mHeight
+            } // mCyl
     }
 };
 
 static char* l_arcName = "O_wood";
 
 static char* l_eventName = "GET_WOOD_STATUE";
+
+class daObjWStatue_HIO_c : public fOpAcm_HIO_entry_c {
+public:
+    daObjWStatue_HIO_c();
+
+    void genMessage(JORMContext* context);
+
+    u8 mRespawnTimer;
+};
+
+#if DEBUG
+daObjWStatue_HIO_c l_HIO;
+
+daObjWStatue_HIO_c::daObjWStatue_HIO_c() {
+    mRespawnTimer = 30;
+}
+
+void daObjWStatue_HIO_c::genMessage(JORMContext* context) {
+    // Wooden Statue
+    context->genLabel("木彫りの像", 0);
+
+    // Respawn timer
+    context->genSlider("全滅後の出現タイマー", &mRespawnTimer, 0, 200);
+}
+#endif
 
 static f32 Reflect(cXyz* param_1, cBgS_PolyInfo const& param_2, f32 param_3) {
     cM3dGPla acStack_3c;
@@ -72,24 +73,36 @@ static f32 Reflect(cXyz* param_1, cBgS_PolyInfo const& param_2, f32 param_3) {
 
 static void lifeGetTgCallBack(fopAc_ac_c* i_this, dCcD_GObjInf* param_2, fopAc_ac_c* param_3,
                               dCcD_GObjInf* param_4) {
-    if (i_this != NULL &&
+    UNUSED(param_2);
+    UNUSED(param_3);
+
+    daObjWStatue_c* statue = static_cast<daObjWStatue_c*>(i_this);
+
+    if (statue != NULL &&
         (param_4->ChkAtType(AT_TYPE_40) || param_4->ChkAtType(AT_TYPE_BOOMERANG)) &&
         !dComIfGp_event_runCheck() &&
-        !((daObjWStatue_c*)i_this)->chkStatus(daObjWStatue_c::STATUS_BOOMERANG_CARRY))
+        !statue->chkStatus(daObjWStatue_c::STATUS_BOOMERANG_CARRY))
     {
-        ((daObjWStatue_c*)i_this)->actionInitBoomerangCarry();
+        statue->actionInitBoomerangCarry();
     }
     return;
 }
 
 static void lifeGetCoCallBack(fopAc_ac_c* i_this, dCcD_GObjInf* param_2, fopAc_ac_c* param_3,
                               dCcD_GObjInf* param_4) {
-    if (i_this != NULL && param_3 != NULL && param_3 == dComIfGp_getLinkPlayer()) {
-        ((daObjWStatue_c*)i_this)->initActionOrderGetDemo();
+    UNUSED(param_2);
+    UNUSED(param_4);
+
+    daObjWStatue_c* statue = static_cast<daObjWStatue_c*>(i_this);
+
+    if (statue != NULL && param_3 != NULL && param_3 == dComIfGp_getLinkPlayer()) {
+        statue->initActionOrderGetDemo();
     }
 }
 
 static void* s_sh_sub(void* param_1, void* param_2) {
+    UNUSED(param_2);
+
     if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_E_SH) {
         return param_1;
     }
@@ -409,7 +422,7 @@ void daObjWStatue_c::effectStop() {
 }
 
 int daObjWStatue_c::execute() {
-    static daObjWStatue_c::demoFunc l_demoFunc[5] = {
+    static const daObjWStatue_c::demoFunc l_demoFunc[5] = {
         &daObjWStatue_c::actionWait,           &daObjWStatue_c::actionOrderGetDemo,
         &daObjWStatue_c::actionGetDemo,        &daObjWStatue_c::actionSwOnWait,
         &daObjWStatue_c::actionBoomerangCarry,

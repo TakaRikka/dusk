@@ -8,7 +8,7 @@
 #include "global.h"
 
 #if PLATFORM_WII
-#include "m_Do/m_Re_controller_pad.h"
+#include "m_Re/m_Re_controller_pad.h"
 #endif
 
 void cAPICPad_recalibrate() {
@@ -113,7 +113,7 @@ f32 cAPICPad_X_STICK(u32 i_padNo) {
 }
 
 f32 cAPICPad_X_STICK_3D(u32 i_padNo) {
-    return mReCPd::getPad(i_padNo).m_stick3D;
+    return mReCPd::getPad(i_padNo).m_stick3D.x;
 }
 
 f32 cAPICPad_Y_STICK(u32 i_padNo) {

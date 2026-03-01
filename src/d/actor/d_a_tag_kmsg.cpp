@@ -4,7 +4,7 @@
 #include "d/actor/d_a_npc.h"
 #include "d/actor/d_a_player.h"
 #include "SSystem/SComponent/c_counter.h"
-#include <string>
+#include <cstring>
 
 struct EventListItem {
     char* mEventName;

@@ -12,6 +12,7 @@
 #include "d/actor/d_a_player.h"
 #include "f_op/f_op_camera_mng.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 static int daObj_Lp_Draw(obj_lp_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
@@ -52,14 +53,14 @@ static int tandem;
 
 static int demo_f;
 
-static int target_info[10];
+static void* target_info[10];
 
 static int target_info_count;
 
 static void* s_ks_sub(void* param_1, void* param_2) {
     if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == 0x60) {
         if (target_info_count < 10) {
-            target_info[target_info_count] = (intptr_t)param_1;
+            target_info[target_info_count] = param_1;
             target_info_count++;
         }
         return param_1;
@@ -76,7 +77,7 @@ static int hit_check(obj_lp_class* i_this, wd_ss* WdSs) {
 
     fVar1 = 50.0f;
     for (int i = 0; i < target_info_count; i++) {
-        sp6c = WdSs->field_0x10 - *(cXyz *)(target_info[i] + 0x4d0);
+        sp6c = WdSs->field_0x10 - *(cXyz *)((u8 *)target_info[i] + 0x4d0);
         if (sp6c.y >= -3.0f) {
             f32 dist = JMAFastSqrt(sp6c.x * sp6c.x + sp6c.z * sp6c.z);
             if (dist <= fVar1 * WdSs->field_0x3c) {
@@ -125,7 +126,7 @@ static int hit_check(obj_lp_class* i_this, wd_ss* WdSs) {
             cLib_addCalc2(&WdSs->field_0x10.y, WdSs->field_0x4.y + fVar8 * -0.5f, 0.5f, 3.0f);
             cLib_addCalc2(&WdSs->field_0x28.x, fVar8, 0.1f, fVar8 * 0.5f);
             cLib_addCalcAngleS2(&WdSs->field_0x34, cM_atan2s(sp6c.x, sp6c.z), 0x20, 0x400);
-            cLib_addCalcAngleS2(&WdSs->field_0x36, 0xfffff060, 0x20, 0x400);
+            cLib_addCalcAngleS2(&WdSs->field_0x36, -4000, 0x20, 0x400);
             rv = 1;
         }
     }
@@ -220,7 +221,7 @@ static int daObj_Lp_Execute(obj_lp_class* i_this) {
         target_info[i] = 0;
     }
 
-    target_info[0] = (intptr_t)dComIfGp_getPlayer(0);
+    target_info[0] = dComIfGp_getPlayer(0);
     target_info_count = 1;
 
     if (strcmp(dComIfGp_getStartStageName(), "D_MN05") == 0) {

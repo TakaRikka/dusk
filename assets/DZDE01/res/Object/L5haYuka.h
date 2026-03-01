@@ -1,0 +1,22 @@
+#ifndef RES_L5HAYUKA_H
+#define RES_L5HAYUKA_H
+
+enum dRes_INDEX_L5HAYUKA {
+    /* BMDR */
+    dRes_INDEX_L5HAYUKA_BMD_YHAKAIYUKA_e=0x4,
+    /* DZB  */
+    dRes_INDEX_L5HAYUKA_DZB_YHAKAIYUKA_e=0x7,
+};
+
+enum dRes_ID_L5HAYUKA {
+    /* BMDR */
+    dRes_ID_L5HAYUKA_BMD_YHAKAIYUKA_e=0x4,
+    /* DZB  */
+    dRes_ID_L5HAYUKA_DZB_YHAKAIYUKA_e=0x7,
+};
+
+enum YHAKAIYUKA_JNT {
+    YHAKAIYUKA_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_L5HAYUKA_H */

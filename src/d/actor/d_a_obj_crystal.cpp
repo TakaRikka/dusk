@@ -8,6 +8,7 @@
 #include "d/actor/d_a_obj_crystal.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include <cstring>
 
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjCrystal_c*>(i_this)->CreateHeap();

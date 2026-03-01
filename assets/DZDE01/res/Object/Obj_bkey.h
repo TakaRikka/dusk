@@ -1,0 +1,34 @@
+#ifndef RES_OBJ_BKEY_H
+#define RES_OBJ_BKEY_H
+
+enum dRes_INDEX_OBJ_BKEY {
+    /* BCK  */
+    dRes_INDEX_OBJ_BKEY_BCK_O_BKEY_LOCK_e=0x5,
+    /* BMDG */
+    dRes_INDEX_OBJ_BKEY_BMD_O_BK_LOCK_KUASRI_e=0x8,
+    /* BMDV */
+    dRes_INDEX_OBJ_BKEY_BMD_O_BKEY_LOCK_e=0xB,
+};
+
+enum dRes_ID_OBJ_BKEY {
+    /* BCK  */
+    dRes_ID_OBJ_BKEY_BCK_O_BKEY_LOCK_e=0x5,
+    /* BMDG */
+    dRes_ID_OBJ_BKEY_BMD_O_BK_LOCK_KUASRI_e=0x8,
+    /* BMDV */
+    dRes_ID_OBJ_BKEY_BMD_O_BKEY_LOCK_e=0xB,
+};
+
+enum O_BK_LOCK_KUASRI_JNT {
+    O_BK_LOCK_KUASRI_JNT_LOCK_KUSARI_e=0x0,
+};
+
+enum O_BKEY_LOCK_JNT {
+    O_BKEY_LOCK_JNT_ROOT_e=0x0,
+    O_BKEY_LOCK_JNT_SWITCH_01_e=0x1,
+    O_BKEY_LOCK_JNT_SWITCH_02_e=0x2,
+    O_BKEY_LOCK_JNT_SWITCH_03_e=0x3,
+    O_BKEY_LOCK_JNT_SWITCH_04_e=0x4,
+};
+
+#endif /* !RES_OBJ_BKEY_H */

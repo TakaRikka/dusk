@@ -172,9 +172,9 @@ int daObjLv6ElevtA_c::Execute(Mtx** i_pMtx) {
 
     if (mMode == 2) {
 #if DEBUG
-        mAngle += (s16)((f32)0x3fff / l_HIO.mRightAngleTurnFrameCount);
+        ANGLE_ADD(mAngle, (f32)0x3fff / l_HIO.mRightAngleTurnFrameCount);
 #else
-        mAngle += (s16)((f32)0x3fff / 150);
+        ANGLE_ADD(mAngle, (f32)0x3fff / 150);
 #endif
         if (mAngle > 0x3fff) {
             mAngle = 0x3fff;
@@ -183,9 +183,9 @@ int daObjLv6ElevtA_c::Execute(Mtx** i_pMtx) {
         moveAngle(found);
     } else if (mMode == 3) {
 #if DEBUG
-        mAngle -= (s16)((f32)0x3fff / l_HIO.mRightAngleTurnFrameCount);
+        ANGLE_SUB(mAngle, (f32)0x3fff / l_HIO.mRightAngleTurnFrameCount);
 #else
-        mAngle -= (s16)((f32)0x3fff / 150);
+        ANGLE_SUB(mAngle, (f32)0x3fff / 150);
 #endif
         if (mAngle < -0x3fff) {
             mAngle = -0x3fff;
@@ -195,9 +195,9 @@ int daObjLv6ElevtA_c::Execute(Mtx** i_pMtx) {
     } else if (mMode == 1) {
         if (mAngle > 0) {
 #if DEBUG
-            mAngle -= (s16)((f32)0x3fff / l_HIO.mRightAngleTurnFrameCount);
+            ANGLE_SUB(mAngle, (f32)0x3fff / l_HIO.mRightAngleTurnFrameCount);
 #else
-            mAngle -= (s16)((f32)0x3fff / 150);
+            ANGLE_SUB(mAngle, (f32)0x3fff / 150);
 #endif
             if (mAngle < 0) {
                 mAngle = 0;
@@ -207,9 +207,9 @@ int daObjLv6ElevtA_c::Execute(Mtx** i_pMtx) {
 
         } else if (mAngle < 0) {
 #if DEBUG
-            mAngle += (s16)((f32)0x3fff / l_HIO.mRightAngleTurnFrameCount);
+            ANGLE_ADD(mAngle, (f32)0x3fff / l_HIO.mRightAngleTurnFrameCount);
 #else
-            mAngle += (s16)((f32)0x3fff / 150);
+            ANGLE_ADD(mAngle, (f32)0x3fff / 150);
 #endif
             if (mAngle > 0) {
                 mAngle = 0;

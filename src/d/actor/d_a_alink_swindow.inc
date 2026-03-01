@@ -272,6 +272,7 @@ void daAlink_c::initStatusWindow() {
     JUT_ASSERT(437, tmpBuffer);
 
     JKRReadIdxResource(tmpBuffer, 0x400, btpResIdx, dComIfGp_getAnmArchive());
+    // this should call J3DAnmLoaderDataBase::load(const void*) but it breaks retail
     J3DAnmTexPattern* btp = (J3DAnmTexPattern*)J3DAnmLoaderDataBase::load(tmpBuffer, J3DLOADER_UNK_FLAG0);
     btp->setFrame(0.0f);
     btp->searchUpdateMaterialID(field_0x06c0);
@@ -281,6 +282,7 @@ void daAlink_c::initStatusWindow() {
     JUT_ASSERT(449, tmpBuffer);
 
     JKRReadIdxResource(tmpBuffer, 0x400, btkResIdx, dComIfGp_getAnmArchive());
+    // this should call J3DAnmLoaderDataBase::load(const void*) but it breaks retail
     J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)J3DAnmLoaderDataBase::load(tmpBuffer, J3DLOADER_UNK_FLAG0);
     btk->setFrame(0.0f);
     btk->searchUpdateMaterialID(field_0x06c0);

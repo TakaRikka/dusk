@@ -9,7 +9,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_path.h"
 #include "f_op/f_op_camera_mng.h"
-#include <string>
+#include <cstring>
 
 static int dEnvSe_Draw(dEnvSe_c* i_this) {
     return 1;

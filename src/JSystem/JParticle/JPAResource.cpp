@@ -15,32 +15,17 @@
 #include "global.h"
 
 JPAResource::JPAResource() {
-    mpDrawEmitterChildFuncList = NULL;
-    mpDrawEmitterFuncList = NULL;
-    mpCalcEmitterFuncList = NULL;
-    mpDrawParticleChildFuncList = NULL;
-    mpCalcParticleChildFuncList = NULL;
-    mpDrawParticleFuncList = NULL;
-    mpCalcParticleFuncList = NULL;
-    mpBaseShape = NULL;
-    mpExtraShape = NULL;
-    mpChildShape = NULL;
-    mpExTexShape = NULL;
-    mpDynamicsBlock = NULL;
-    mpFieldBlocks = NULL;
-    mpKeyBlocks = NULL;
+    mpCalcEmitterFuncList = mpDrawEmitterFuncList = mpDrawEmitterChildFuncList = NULL;
+    mpCalcParticleFuncList = mpDrawParticleFuncList = mpCalcParticleChildFuncList = mpDrawParticleChildFuncList = NULL;
+    pBsp = NULL;
+    pEsp = NULL;
+    pCsp = NULL;
+    pEts = NULL;
+    pDyn = NULL;
+    ppFld = NULL;
+    ppKey = NULL;
     mpTDB1 = NULL;
-    mpDrawParticleChildFuncListNum = 0;
-    mpCalcParticleChildFuncListNum = 0;
-    mpDrawParticleFuncListNum = 0;
-    mpCalcParticleFuncListNum = 0;
-    mpDrawEmitterChildFuncListNum = 0;
-    mpDrawEmitterFuncListNum = 0;
-    mpCalcEmitterFuncListNum = 0;
-    mTDB1Num = 0;
-    mKeyBlockNum = 0;
-    mFieldBlockNum = 0;
-    mUsrIdx = 0;
+    mUsrIdx = fldNum = keyNum = texNum = mpCalcEmitterFuncListNum = mpDrawEmitterFuncListNum = mpDrawEmitterChildFuncListNum = mpCalcParticleFuncListNum = mpDrawParticleFuncListNum = mpCalcParticleChildFuncListNum = mpDrawParticleChildFuncListNum = 0;
 }
 
 static u8 jpa_pos[324] ATTRIBUTE_ALIGN(32) = {
@@ -73,30 +58,31 @@ static u8 jpa_crd[32] ATTRIBUTE_ALIGN(32) = {
 };
 
 void JPAResource::init(JKRHeap* heap) {
-    BOOL is_glbl_clr_anm = mpBaseShape->isGlblClrAnm();
-    BOOL is_glbl_tex_anm = mpBaseShape->isGlblTexAnm();
-    BOOL is_prm_anm = mpBaseShape->isPrmAnm();
-    BOOL is_env_anm = mpBaseShape->isEnvAnm();
-    BOOL is_tex_anm = mpBaseShape->isTexAnm();
-    BOOL is_tex_crd_anm = mpBaseShape->isTexCrdAnm();
-    BOOL is_prj_tex = mpBaseShape->isPrjTex();
-    BOOL is_enable_scale_anm = mpExtraShape != NULL && mpExtraShape->isEnableScaleAnm();
-    BOOL is_enable_alpha_anm = mpExtraShape != NULL && mpExtraShape->isEnableAlphaAnm();
-    BOOL is_enable_alpha_flick = mpExtraShape != NULL && mpExtraShape->isEnableAlphaAnm()
-                                                      && mpExtraShape->isEnableAlphaFlick();
-    BOOL is_enable_rotate_anm = mpExtraShape != NULL && mpExtraShape->isEnableRotateAnm();
+    BOOL is_glbl_clr_anm = pBsp->isGlblClrAnm();
+    BOOL is_glbl_tex_anm = pBsp->isGlblTexAnm();
+    BOOL is_prm_anm = pBsp->isPrmAnm();
+    BOOL is_env_anm = pBsp->isEnvAnm();
+    BOOL is_tex_anm = pBsp->isTexAnm();
+    BOOL is_tex_crd_anm = pBsp->isTexCrdAnm();
+    BOOL is_prj_tex = pBsp->isPrjTex();
+    BOOL is_enable_scale_anm = pEsp != NULL && pEsp->isEnableScaleAnm();
+    BOOL is_enable_alpha_anm = pEsp != NULL && pEsp->isEnableAlphaAnm();
+    BOOL is_enable_alpha_flick = pEsp != NULL && pEsp->isEnableAlphaAnm()
+                                                      && pEsp->isEnableAlphaFlick();
+    BOOL is_enable_rotate_anm = pEsp != NULL && pEsp->isEnableRotateAnm();
     BOOL is_rotate_on = is_enable_rotate_anm
-                        || (mpChildShape != NULL && mpChildShape->isRotateOn());
-    BOOL base_type_5_6 = mpBaseShape->getType() == 5 || mpBaseShape->getType() == 6;
-    BOOL base_type_0 = mpBaseShape->getType() == 0;
-    BOOL base_type_0_1 = mpBaseShape->getType() == 0 || mpBaseShape->getType() == 1;
-    BOOL child_type_5_6 = mpChildShape != NULL
-                          && (mpChildShape->getType() == 5 || mpChildShape->getType() == 6);
-    BOOL child_type_0 = mpChildShape != NULL && mpChildShape->getType() == 0;
-    BOOL child_type_0_1 = mpChildShape != NULL
-                          && (mpChildShape->getType() == 0 || mpChildShape->getType() == 1);
-    BOOL is_draw_parent = !mpBaseShape->isNoDrawParent();
-    BOOL is_draw_child = !mpBaseShape->isNoDrawChild();
+                        || (pCsp != NULL && pCsp->isRotateOn());
+    BOOL base_type_5_6 = pBsp->getType() == 5 || pBsp->getType() == 6;
+    BOOL base_type_0 = pBsp->getType() == 0;
+    BOOL base_type_0_1 = pBsp->getType() == 0 || pBsp->getType() == 1;
+    BOOL child_type_5_6 = pCsp != NULL
+                          && (pCsp->getType() == 5 || pCsp->getType() == 6);
+    BOOL child_type_0 = pCsp != NULL && pCsp->getType() == 0;
+    BOOL child_type_0_1 = pCsp != NULL
+                          && (pCsp->getType() == 0 || pCsp->getType() == 1);
+    BOOL is_draw_parent = !pBsp->isNoDrawParent();
+    BOOL is_draw_child = !pBsp->isNoDrawChild();
+    int func_no = 0;
 
     if (is_glbl_tex_anm && is_tex_anm) {
         mpCalcEmitterFuncListNum++;
@@ -119,10 +105,10 @@ void JPAResource::init(JKRHeap* heap) {
             (EmitterFunc*)JKRAllocFromHeap(heap, mpCalcEmitterFuncListNum * 4, 4);
     }
 
-    int func_no = 0;
+    func_no = 0;
 
     if (is_glbl_tex_anm && is_tex_anm) {
-        switch (mpBaseShape->getTexAnmType()) {
+        switch (pBsp->getTexAnmType()) {
         case 0:
             mpCalcEmitterFuncList[func_no] = &JPACalcTexIdxNormal;
             break;
@@ -152,7 +138,7 @@ void JPAResource::init(JKRHeap* heap) {
             func_no++;
         }
         if (is_prm_anm || is_env_anm) {
-            switch (mpBaseShape->getClrAnmType()) {
+            switch (pBsp->getClrAnmType()) {
             case 0:
                 mpCalcEmitterFuncList[func_no] = &JPACalcClrIdxNormal;
                 break;
@@ -169,6 +155,7 @@ void JPAResource::init(JKRHeap* heap) {
                 mpCalcEmitterFuncList[func_no] = &JPACalcClrIdxRandom;
                 break;
             }
+            func_no++;
         }
     }
 
@@ -195,9 +182,9 @@ void JPAResource::init(JKRHeap* heap) {
     }
 
     if (is_enable_scale_anm) {
-        if (mpBaseShape->getType() != 0) {
-            if (mpExtraShape->isScaleXYDiff()) {
-                if (mpExtraShape->getScaleAnmTypeX() == 0 && mpExtraShape->getScaleAnmTypeY() == 0) {
+        if (pBsp->getType() != 0) {
+            if (pEsp->isScaleXYDiff()) {
+                if (pEsp->getScaleAnmTypeX() == 0 && pEsp->getScaleAnmTypeY() == 0) {
                     mpCalcParticleFuncListNum++;
                 } else {
                     mpCalcParticleFuncListNum++;
@@ -219,7 +206,7 @@ void JPAResource::init(JKRHeap* heap) {
     func_no = 0;
 
     if (!is_glbl_tex_anm && is_tex_anm) {
-        switch (mpBaseShape->getTexAnmType()) {
+        switch (pBsp->getTexAnmType()) {
         case 0:
             mpCalcParticleFuncList[func_no] = &JPACalcTexIdxNormal;
             break;
@@ -259,7 +246,7 @@ void JPAResource::init(JKRHeap* heap) {
             func_no++;
         }
         if (is_prm_anm || is_env_anm) {
-            switch (mpBaseShape->getClrAnmType()) {
+            switch (pBsp->getClrAnmType()) {
             case 0:
                 mpCalcParticleFuncList[func_no] = &JPACalcClrIdxNormal;
                 break;
@@ -284,12 +271,12 @@ void JPAResource::init(JKRHeap* heap) {
     }
 
     if (is_enable_scale_anm) {
-        if (mpBaseShape->getType() != 0) {
-            if (mpExtraShape->isScaleXYDiff()) {
+        if (pBsp->getType() != 0) {
+            if (pEsp->isScaleXYDiff()) {
                 mpCalcParticleFuncList[func_no] = &JPACalcScaleY;
                 func_no++;
-                if (mpExtraShape->getScaleAnmTypeY() != 0 || mpExtraShape->getScaleAnmTypeX() != 0) {
-                    switch (mpExtraShape->getScaleAnmTypeY()) {
+                if (pEsp->getScaleAnmTypeY() != 0 || pEsp->getScaleAnmTypeX() != 0) {
+                    switch (pEsp->getScaleAnmTypeY()) {
                     case 0:
                         mpCalcParticleFuncList[func_no] = &JPACalcScaleAnmNormal;
                         break;
@@ -309,7 +296,7 @@ void JPAResource::init(JKRHeap* heap) {
         }
         mpCalcParticleFuncList[func_no] = &JPACalcScaleX;
         func_no++;
-        switch (mpExtraShape->getScaleAnmTypeX()) {
+        switch (pEsp->getScaleAnmTypeX()) {
         case 0:
             mpCalcParticleFuncList[func_no] = &JPACalcScaleAnmNormal;
             break;
@@ -320,13 +307,14 @@ void JPAResource::init(JKRHeap* heap) {
             mpCalcParticleFuncList[func_no] = &JPACalcScaleAnmReverseX;
             break;
         }
+        func_no++;
     }
 
-    if (mpChildShape != NULL && mpChildShape->isScaleOutOn()) {
+    if (pCsp != NULL && pCsp->isScaleOutOn()) {
         mpCalcParticleChildFuncListNum++;
     }
 
-    if (mpChildShape != NULL && mpChildShape->isAlphaOutOn()) {
+    if (pCsp != NULL && pCsp->isAlphaOutOn()) {
         mpCalcParticleChildFuncListNum++;
     }
 
@@ -337,13 +325,14 @@ void JPAResource::init(JKRHeap* heap) {
 
     func_no = 0;
 
-    if (mpChildShape != NULL && mpChildShape->isScaleOutOn()) {
+    if (pCsp != NULL && pCsp->isScaleOutOn()) {
         mpCalcParticleChildFuncList[func_no] = &JPACalcChildScaleOut;
         func_no++;
     }
 
-    if (mpChildShape != NULL && mpChildShape->isAlphaOutOn()) {
+    if (pCsp != NULL && pCsp->isAlphaOutOn()) {
         mpCalcParticleChildFuncList[func_no] = &JPACalcChildAlphaOut;
+        func_no++;
     }
 
     if (is_draw_parent && base_type_5_6) {
@@ -352,7 +341,7 @@ void JPAResource::init(JKRHeap* heap) {
 
     mpDrawEmitterFuncListNum++;
 
-    if (mpExTexShape != NULL) {
+    if (pEts != NULL) {
         mpDrawEmitterFuncListNum++;
     }
 
@@ -382,7 +371,7 @@ void JPAResource::init(JKRHeap* heap) {
     func_no = 0;
 
     if (is_draw_parent && base_type_5_6) {
-        if (mpBaseShape->getType() == 5) {
+        if (pBsp->getType() == 5) {
             mpDrawEmitterFuncList[func_no] = &JPADrawStripe;
             func_no++;
         } else {
@@ -394,7 +383,7 @@ void JPAResource::init(JKRHeap* heap) {
     mpDrawEmitterFuncList[func_no] = &JPADrawEmitterCallBackB;
     func_no++;
 
-    if (mpExTexShape != NULL) {
+    if (pEts != NULL) {
         mpDrawEmitterFuncList[func_no] = &JPALoadExTex;
         func_no++;
     }
@@ -444,17 +433,22 @@ void JPAResource::init(JKRHeap* heap) {
     if (is_glbl_clr_anm) {
         if (base_type_5_6 || !is_enable_alpha_anm) {
             mpDrawEmitterFuncList[func_no] = &JPARegistPrmEnv;
+            func_no++;
         } else if (is_enable_alpha_anm) {
             mpDrawEmitterFuncList[func_no] = &JPARegistEnv;
+            func_no++;
         }
     } else if (!is_prm_anm && !is_enable_alpha_anm) {
         if (!is_env_anm) {
             mpDrawEmitterFuncList[func_no] = &JPARegistPrmEnv;
+            func_no++;
         } else {
             mpDrawEmitterFuncList[func_no] = &JPARegistPrm;
+            func_no++;
         }
     } else if (!is_env_anm) {
         mpDrawEmitterFuncList[func_no] = &JPARegistEnv;
+        func_no++;
     }
 
     if (is_draw_child && child_type_5_6) {
@@ -467,8 +461,8 @@ void JPAResource::init(JKRHeap* heap) {
         mpDrawEmitterChildFuncListNum++;
     }
 
-    if (mpChildShape != NULL && !mpChildShape->isAlphaOutOn() && !mpChildShape->isAlphaInherited()
-                             && !mpChildShape->isColorInherited()) {
+    if (pCsp != NULL && !pCsp->isAlphaOutOn() && !pCsp->isAlphaInherited()
+                             && !pCsp->isColorInherited()) {
         mpDrawEmitterChildFuncListNum++;
     }
 
@@ -480,7 +474,7 @@ void JPAResource::init(JKRHeap* heap) {
     func_no = 0;
 
     if (is_draw_child && child_type_5_6) {
-        if (mpChildShape->getType() == 5) {
+        if (pCsp->getType() == 5) {
             mpDrawEmitterChildFuncList[func_no] = &JPADrawStripe;
             func_no++;
         } else {
@@ -497,9 +491,10 @@ void JPAResource::init(JKRHeap* heap) {
         func_no++;
     }
 
-    if (mpChildShape != NULL && !mpChildShape->isAlphaOutOn() && !mpChildShape->isAlphaInherited()
-                             && !mpChildShape->isColorInherited()) {
+    if (pCsp != NULL && !pCsp->isAlphaOutOn() && !pCsp->isAlphaInherited()
+                             && !pCsp->isColorInherited()) {
         mpDrawEmitterChildFuncList[func_no] = &JPARegistChildPrmEnv;
+        func_no++;
     }
 
     if (is_draw_parent && !base_type_5_6) {
@@ -529,7 +524,7 @@ void JPAResource::init(JKRHeap* heap) {
     func_no = 0;
 
     if (is_draw_parent && !base_type_5_6) {
-        switch (mpBaseShape->getType()) {
+        switch (pBsp->getType()) {
         case 2:
             if (is_enable_rotate_anm) {
                 mpDrawParticleFuncList[func_no] = &JPADrawRotBillboard;
@@ -594,23 +589,29 @@ void JPAResource::init(JKRHeap* heap) {
         if (is_prm_anm) {
             if (is_env_anm) {
                 mpDrawParticleFuncList[func_no] = &JPARegistPrmAlphaEnv;
+                func_no++;
             } else {
                 mpDrawParticleFuncList[func_no] = &JPARegistPrmAlpha;
+                func_no++;
             }
         } else if (is_enable_alpha_anm) {
             if (is_env_anm) {
                 mpDrawParticleFuncList[func_no] = &JPARegistAlphaEnv;
+                func_no++;
             } else {
                 mpDrawParticleFuncList[func_no] = &JPARegistAlpha;
+                func_no++;
             }
         } else if (is_env_anm) {
             mpDrawParticleFuncList[func_no] = &JPARegistEnv;
+            func_no++;
         }
     } else if (is_enable_alpha_anm && !base_type_5_6) {
         mpDrawParticleFuncList[func_no] = &JPARegistAlpha;
+        func_no++;
     }
 
-    if (is_draw_child && mpChildShape != NULL && !child_type_5_6) {
+    if (is_draw_child && pCsp != NULL && !child_type_5_6) {
         mpDrawParticleChildFuncListNum++;
     }
 
@@ -620,8 +621,8 @@ void JPAResource::init(JKRHeap* heap) {
         mpDrawParticleChildFuncListNum++;
     }
 
-    if (mpChildShape != NULL && (mpChildShape->isAlphaOutOn() || mpChildShape->isAlphaInherited()
-                                || mpChildShape->isColorInherited())) {
+    if (pCsp != NULL && (pCsp->isAlphaOutOn() || pCsp->isAlphaInherited()
+                                || pCsp->isColorInherited())) {
         mpDrawParticleChildFuncListNum++;
     }
 
@@ -632,8 +633,8 @@ void JPAResource::init(JKRHeap* heap) {
 
     func_no = 0;
 
-    if (is_draw_child && mpChildShape != NULL && !child_type_5_6) {
-        switch (mpChildShape->getType()) {
+    if (is_draw_child && pCsp != NULL && !child_type_5_6) {
+        switch (pCsp->getType()) {
         case 2:
             if (is_rotate_on) {
                 mpDrawParticleChildFuncList[func_no] = &JPADrawRotBillboard;
@@ -686,9 +687,10 @@ void JPAResource::init(JKRHeap* heap) {
         }
     }
 
-    if (mpChildShape != NULL && (mpChildShape->isAlphaOutOn() || mpChildShape->isAlphaInherited()
-                                || mpChildShape->isColorInherited())) {
+    if (pCsp != NULL && (pCsp->isAlphaOutOn() || pCsp->isAlphaInherited()
+                                || pCsp->isColorInherited())) {
         mpDrawParticleChildFuncList[func_no] = &JPARegistPrmAlphaEnv;
+        func_no++;
     }
 }
 
@@ -720,8 +722,8 @@ bool JPAResource::calc(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
     } else {
         calcKey(work);
 
-        for (int i = mFieldBlockNum - 1; i >= 0; i--) {
-            mpFieldBlocks[i]->initOpParam();
+        for (int i = fldNum - 1; i >= 0; i--) {
+            ppFld[i]->initOpParam();
         }
 
         if (emtr->mpEmtrCallBack != NULL) {
@@ -737,12 +739,12 @@ bool JPAResource::calc(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
             (*mpCalcEmitterFuncList[i])(work);
         }
 
-        for (int i = mFieldBlockNum - 1; i >= 0; i--) {
-            mpFieldBlocks[i]->prepare(work);
+        for (int i = fldNum - 1; i >= 0; i--) {
+            ppFld[i]->prepare(work);
         }
 
         if (!emtr->checkStatus(8)) {
-            mpDynamicsBlock->create(work);
+            pDyn->create(work);
         }
 
         if (emtr->mpEmtrCallBack != NULL) {
@@ -752,23 +754,19 @@ bool JPAResource::calc(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
             }
         }
 
-        JPANode<JPABaseParticle>* node = emtr->mAlivePtclBase.getFirst();
-        JPANode<JPABaseParticle>* next;
-        while (node != emtr->mAlivePtclBase.getEnd()) {
+        JPANode<JPABaseParticle>* next = NULL;
+        for (JPANode<JPABaseParticle>* node = emtr->mAlivePtclBase.getFirst(); node != emtr->mAlivePtclBase.getEnd(); node = next) {
             next = node->getNext();
             if (node->getObject()->calc_p(work)) {
                 emtr->mpPtclPool->push_front(emtr->mAlivePtclBase.erase(node));
             }
-            node = next;
         }
 
-        node = emtr->mAlivePtclChld.getFirst();
-        while (node != emtr->mAlivePtclChld.getEnd()) {
+        for (JPANode<JPABaseParticle>* node = emtr->mAlivePtclChld.getFirst(); node != emtr->mAlivePtclChld.getEnd(); node = next) {
             next = node->getNext();
             if (node->getObject()->calc_c(work)) {
                 emtr->mpPtclPool->push_front(emtr->mAlivePtclChld.erase(node));
             }
-            node = next;
         }
 
         emtr->mTick++;
@@ -782,13 +780,13 @@ void JPAResource::draw(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
     work->mpRes = this;
     work->mDrawCount = 0;
     calcWorkData_d(work);
-    mpBaseShape->setGX(work);
+    pBsp->setGX(work);
     for (s32 i = 1; i <= emtr->getDrawTimes(); i++) {
         work->mDrawCount++;
-        if (mpBaseShape->isDrawPrntAhead() && mpChildShape != NULL)
+        if (pBsp->isDrawPrntAhead() && pCsp != NULL)
             drawC(work);
         drawP(work);
-        if (!mpBaseShape->isDrawPrntAhead() && mpChildShape != NULL)
+        if (!pBsp->isDrawPrntAhead() && pCsp != NULL)
             drawC(work);
     }
 }
@@ -796,28 +794,28 @@ void JPAResource::draw(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
 void JPAResource::drawP(JPAEmitterWorkData* work) {
     work->mpEmtr->clearStatus(0x80);
 
-    work->mGlobalPtclScl.x = work->mpEmtr->mGlobalPScl.x * mpBaseShape->getBaseSizeX();
-    work->mGlobalPtclScl.y = work->mpEmtr->mGlobalPScl.y * mpBaseShape->getBaseSizeY();
+    work->mGlobalPtclScl.x = work->mpEmtr->mGlobalPScl.x * pBsp->getBaseSizeX();
+    work->mGlobalPtclScl.y = work->mpEmtr->mGlobalPScl.y * pBsp->getBaseSizeY();
 
-    if (mpBaseShape->getType() == 0) {
+    if (pBsp->getType() == 0) {
         work->mGlobalPtclScl.x *= 1.02f;
-    } else if (mpBaseShape->getType() == 1) {
+    } else if (pBsp->getType() == 1) {
         work->mGlobalPtclScl.x *= 1.02f;
         work->mGlobalPtclScl.y *= 0.4f;
     }
 
-    if (mpExtraShape != NULL && mpExtraShape->isEnableScaleAnm()) {
-        work->mPivot.x = mpExtraShape->getScaleCenterX() - 1.0f;
-        work->mPivot.y = mpExtraShape->getScaleCenterY() - 1.0f;
+    if (pEsp != NULL && pEsp->isEnableScaleAnm()) {
+        work->mPivot.x = pEsp->getScaleCenterX() - 1.0f;
+        work->mPivot.y = pEsp->getScaleCenterY() - 1.0f;
     } else {
         work->mPivot.x = work->mPivot.y = 0.0f;
     }
 
-    work->mDirType = mpBaseShape->getDirType();
-    work->mRotType = mpBaseShape->getRotType();
-    work->mDLType = mpBaseShape->getType() == 4 || mpBaseShape->getType() == 8;
-    work->mPlaneType = work->mDLType ? 2 : mpBaseShape->getBasePlaneType();
-    work->mPrjType = mpBaseShape->isPrjTex() ? (mpBaseShape->isTexCrdAnm() ? 2 : 1) : 0;
+    work->mDirType = pBsp->getDirType();
+    work->mRotType = pBsp->getRotType();
+    work->mDLType = pBsp->getType() == 4 || pBsp->getType() == 8;
+    work->mPlaneType = work->mDLType ? 2 : pBsp->getBasePlaneType();
+    work->mPrjType = pBsp->isPrjTex() ? (pBsp->isTexCrdAnm() ? 2 : 1) : 0;
     
     work->mpAlivePtcl = &work->mpEmtr->mAlivePtclBase;
     setPTev();
@@ -826,7 +824,7 @@ void JPAResource::drawP(JPAEmitterWorkData* work) {
         (*mpDrawEmitterFuncList[i])(work);
     }
 
-    if (mpBaseShape->isDrawFwdAhead()) {
+    if (pBsp->isDrawFwdAhead()) {
         JPANode<JPABaseParticle>* node = work->mpEmtr->mAlivePtclBase.getLast();
         for (; node != work->mpEmtr->mAlivePtclBase.getEnd(); node = node->getPrev()) {
             work->mpCurNode = node;
@@ -858,27 +856,27 @@ void JPAResource::drawP(JPAEmitterWorkData* work) {
 void JPAResource::drawC(JPAEmitterWorkData* work) {
     work->mpEmtr->setStatus(0x80);
 
-    if (mpChildShape->isScaleInherited()) {
-        work->mGlobalPtclScl.x = work->mpEmtr->mGlobalPScl.x * mpBaseShape->getBaseSizeX();
-        work->mGlobalPtclScl.y = work->mpEmtr->mGlobalPScl.y * mpBaseShape->getBaseSizeY();
+    if (pCsp->isScaleInherited()) {
+        work->mGlobalPtclScl.x = work->mpEmtr->mGlobalPScl.x * pBsp->getBaseSizeX();
+        work->mGlobalPtclScl.y = work->mpEmtr->mGlobalPScl.y * pBsp->getBaseSizeY();
     } else {
-        work->mGlobalPtclScl.x = work->mpEmtr->mGlobalPScl.x * mpChildShape->getScaleX();
-        work->mGlobalPtclScl.y = work->mpEmtr->mGlobalPScl.y * mpChildShape->getScaleY();
+        work->mGlobalPtclScl.x = work->mpEmtr->mGlobalPScl.x * pCsp->getScaleX();
+        work->mGlobalPtclScl.y = work->mpEmtr->mGlobalPScl.y * pCsp->getScaleY();
     }
 
-    if (mpChildShape->getType() == 0) {
+    if (pCsp->getType() == 0) {
         work->mGlobalPtclScl.x *= 1.02f;
-    } else if (mpChildShape->getType() == 1) {
+    } else if (pCsp->getType() == 1) {
         work->mGlobalPtclScl.x *= 1.02f;
         work->mGlobalPtclScl.y *= 0.4f;
     }
 
     work->mPivot.x = work->mPivot.y = 0.0f;
 
-    work->mDirType = mpChildShape->getDirType();
-    work->mRotType = mpChildShape->getRotType();
-    work->mDLType = mpChildShape->getType() == 4 || mpChildShape->getType() == 8;
-    work->mPlaneType = work->mDLType ? 2 : mpChildShape->getBasePlaneType();
+    work->mDirType = pCsp->getDirType();
+    work->mRotType = pCsp->getRotType();
+    work->mDLType = pCsp->getType() == 4 || pCsp->getType() == 8;
+    work->mPlaneType = work->mDLType ? 2 : pCsp->getBasePlaneType();
     work->mPrjType = 0;
     
     work->mpAlivePtcl = &work->mpEmtr->mAlivePtclChld;
@@ -888,7 +886,7 @@ void JPAResource::drawC(JPAEmitterWorkData* work) {
         (*mpDrawEmitterChildFuncList[i])(work);
     }
 
-    if (mpBaseShape->isDrawFwdAhead()) {
+    if (pBsp->isDrawFwdAhead()) {
         JPANode<JPABaseParticle>* node = work->mpEmtr->mAlivePtclChld.getLast();
         for (; node != work->mpEmtr->mAlivePtclChld.getEnd(); node = node->getPrev()) {
             work->mpCurNode = node;
@@ -923,33 +921,27 @@ void JPAResource::setPTev() {
     u8 tex_gens = 1;
     u8 ind_stages = 0;
 
-    int base_plane_type = (mpBaseShape->getType() == 3 || mpBaseShape->getType() == 7) ?
-        mpBaseShape->getBasePlaneType() : 0;
-    int center_offset;
-    if (mpExtraShape != NULL) {
-        center_offset =
-            (mpExtraShape->getScaleCenterX() + 3 * mpExtraShape->getScaleCenterY()) * 0xC;
-    } else {
-        center_offset = 0x30;
-    }
+    int base_plane_type = (pBsp->getType() == 3 || pBsp->getType() == 7) ?
+        pBsp->getBasePlaneType() : 0;
+    int center_offset = pEsp != NULL ? (pEsp->getScaleCenterX() + 3 * pEsp->getScaleCenterY()) * 0xC : 0x30;
     int pos_offset = center_offset + base_plane_type * 0x6C;
-    int crd_offset = (mpBaseShape->getTilingS() + 2 * mpBaseShape->getTilingT()) * 8;
+    int crd_offset = (pBsp->getTilingS() + 2 * pBsp->getTilingT()) * 8;
     GXSetArray(GX_VA_POS, jpa_pos + pos_offset, 3);
     GXSetArray(GX_VA_TEX0, jpa_crd + crd_offset, 2);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
 
-    if (mpExTexShape != NULL) {
-        if (mpExTexShape->isUseIndirect()) {
-            GXSetIndTexOrder(GX_INDTEXSTAGE0, GX_TEXCOORD1, GX_TEXMAP2);
+    if (pEts != NULL) {
+        if (pEts->isUseIndirect()) {
+            GXSetIndTexOrder(GX_INDTEXSTAGE0, tex_coord, GX_TEXMAP2);
             GXSetIndTexCoordScale(GX_INDTEXSTAGE0, GX_ITS_1, GX_ITS_1);
-            GXSetIndTexMtx(GX_ITM_0, (f32(*)[3])mpExTexShape->getIndTexMtx(), mpExTexShape->getExpScale());
+            GXSetIndTexMtx(GX_ITM_0, (f32(*)[3])pEts->getIndTexMtx(), pEts->getExpScale());
             GXSetTevIndirect(GX_TEVSTAGE0, GX_INDTEXSTAGE0, GX_ITF_8, GX_ITB_STU, GX_ITM_0,
                              GX_ITW_OFF, GX_ITW_OFF, 0, 0, GX_ITBA_OFF);
             ind_stages++;
             tex_gens++;
             tex_coord = GX_TEXCOORD2;
         }
-        if (mpExTexShape->isUseSecTex()) {
+        if (pEts->isUseSecTex()) {
             GXSetTevOrder(GX_TEVSTAGE1, tex_coord, GX_TEXMAP3, GX_COLOR_NULL);
             GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
             GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_TEXA, GX_CA_APREV, GX_CA_ZERO);
@@ -964,7 +956,7 @@ void JPAResource::setPTev() {
 
     GXSetNumTevStages(tev_stages);
     GXSetNumIndStages(ind_stages);
-    if (mpBaseShape->isClipOn()) {
+    if (pBsp->isClipOn()) {
         GXSetMisc(GX_MT_XF_FLUSH, 8);
         GXSetClipMode(GX_CLIP_ENABLE);
     } else {
@@ -974,8 +966,8 @@ void JPAResource::setPTev() {
 }
 
 void JPAResource::setCTev(JPAEmitterWorkData* work) {
-    int base_plane_type = (mpChildShape->getType() == 3 || mpChildShape->getType() == 7) ?
-        mpChildShape->getBasePlaneType() : 0;
+    int base_plane_type = (pCsp->getType() == 3 || pCsp->getType() == 7) ?
+        pCsp->getBasePlaneType() : 0;
     int pos_offset = 0x30 + base_plane_type * 0x6C;
     GXSetArray(GX_VA_POS, jpa_pos + pos_offset, 3);
     GXSetArray(GX_VA_TEX0, jpa_crd, 2);
@@ -984,14 +976,14 @@ void JPAResource::setCTev(JPAEmitterWorkData* work) {
     GXSetTevDirect(GX_TEVSTAGE0);
     GXSetNumTevStages(1);
     GXSetNumIndStages(0);
-    if (mpChildShape->isClipOn()) {
+    if (pCsp->isClipOn()) {
         GXSetMisc(GX_MT_XF_FLUSH, 8);
         GXSetClipMode(GX_CLIP_ENABLE);
     } else {
         GXSetClipMode(GX_CLIP_DISABLE);
     }
     GXSetNumTexGens(1);
-    work->mpResMgr->load(work->mpRes->getTexIdx(mpChildShape->getTexIdx()), GX_TEXMAP1);
+    work->mpResMgr->load(work->mpRes->getTexIdx(pCsp->getTexIdx()), GX_TEXMAP1);
 }
 
 void JPAResource::calc_p(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
@@ -1011,15 +1003,15 @@ void JPAResource::calc_c(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
 }
 
 void JPAResource::calcField(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
-    for (int i = mFieldBlockNum - 1; i >= 0; i--) {
-        mpFieldBlocks[i]->calc(work, ptcl);
+    for (int i = fldNum - 1; i >= 0; i--) {
+        ppFld[i]->calc(work, ptcl);
     }
 }
 
 void JPAResource::calcKey(JPAEmitterWorkData* work) {
-    for (int i = mKeyBlockNum - 1; i >= 0; i--) {
-        f32 val = mpKeyBlocks[i]->calc(work->mpEmtr->mTick);
-        switch (mpKeyBlocks[i]->getID()) {
+    for (int i = keyNum - 1; i >= 0; i--) {
+        f32 val = ppKey[i]->calc(work->mpEmtr->mTick);
+        switch (ppKey[i]->getID()) {
         case 0:
             work->mpEmtr->mRate = val;
             break;
@@ -1047,6 +1039,9 @@ void JPAResource::calcKey(JPAEmitterWorkData* work) {
         case 10:
             work->mpEmtr->mScaleOut = val;
             break;
+        default:
+            JUT_WARN(917, "%s", "JPA : WRONG ID in key data\n");
+            break;
         }
     }
 }
@@ -1055,10 +1050,9 @@ void JPAResource::calcWorkData_c(JPAEmitterWorkData* work) {
     work->mVolumeSize = work->mpEmtr->mVolumeSize;
     work->mVolumeMinRad = work->mpEmtr->mVolumeMinRad;
     work->mVolumeSweep = work->mpEmtr->mVolumeSweep;
-    work->mVolumeX = 0;
-    work->mVolumeAngleNum = 0;
+    work->mVolumeAngleNum = work->mVolumeX = 0;
     work->mVolumeAngleMax = 1;
-    work->mDivNumber = mpDynamicsBlock->getDivNumber() * 2 + 1;
+    work->mDivNumber = pDyn->getDivNumber() * 2 + 1;
     Mtx local_scl_mtx, local_rot_mtx, global_mtx;
     MTXScale(local_scl_mtx, work->mpEmtr->mLocalScl.x, work->mpEmtr->mLocalScl.y,
              work->mpEmtr->mLocalScl.z);

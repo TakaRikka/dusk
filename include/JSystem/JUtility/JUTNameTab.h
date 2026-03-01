@@ -2,6 +2,7 @@
 #define JUTNAMETAB_H
 
 #include <dolphin/types.h>
+#include "dusk/endian.h"
 
 /**
 * @ingroup jsystem-jutility

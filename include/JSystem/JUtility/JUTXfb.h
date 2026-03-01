@@ -75,7 +75,7 @@ private:
     static JUTXfb* sManager;
 
 private:
-    /* 0x00 */ void* mBuffer[3];
+    /* 0x00 */ u8* mBuffer[3];
     /* 0x0C */ bool mXfbAllocated[3];
     /* 0x10 */ s32 mBufferNum;
     /* 0x14 */ s16 mDrawingXfbIndex;

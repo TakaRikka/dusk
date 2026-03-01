@@ -9,8 +9,8 @@
 
 class cBgS_GrpPassChk;
 class cBgS_PolyPassChk;
-struct dBgPc;
-struct dBgS_CaptPoly;
+class dBgPc;
+class dBgS_CaptPoly;
 
 struct KC_PrismData {
     /* 0x0 */ f32 height;

@@ -1,0 +1,17 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+Create__17daTagChgRestart_cFv = .text:0x0000005C; // type:function size:0x64 scope:global align:4
+create__17daTagChgRestart_cFv = .text:0x000000C0; // type:function size:0x88 scope:global align:4
+execute__17daTagChgRestart_cFv = .text:0x00000148; // type:function size:0x1A0 scope:global align:4
+daTagChgRestart_Execute__FP17daTagChgRestart_c = .text:0x000002E8; // type:function size:0x4 scope:global align:4
+daTagChgRestart_Delete__FP17daTagChgRestart_c = .text:0x000002EC; // type:function size:0x8 scope:global align:4
+daTagChgRestart_Create__FP10fopAc_ac_c = .text:0x000002F4; // type:function size:0x4 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+...rodata.0 = .rodata:0x00000000; // type:label scope:local align:4
+@92352 = .rodata:0x00000000; // type:object size:0x4 scope:local align:4
+@92353 = .rodata:0x00000004; // type:object size:0x4 scope:local align:4
+@92354 = .rodata:0x00000008; // type:object size:0x4 scope:local align:4
+l_daTagChgRestart_Method = .data:0x00000000; // type:object size:0x20 scope:global align:4
+g_profile_Tag_ChgRestart = .data:0x00000020; // type:object size:0x30 scope:global align:4

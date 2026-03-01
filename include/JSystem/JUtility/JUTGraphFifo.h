@@ -24,7 +24,11 @@ public:
         return mGpStatus[2] == false;
     }
 
-    void save() { GXSaveCPUFifo(this->mFifo); }
+    void save() {
+#if !PLATFORM_SHIELD
+        GXSaveCPUFifo(this->mFifo);
+#endif
+    }
 
     static JUTGraphFifo* sCurrentFifo;
     static bool mGpStatus[5];

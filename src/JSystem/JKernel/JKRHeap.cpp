@@ -15,7 +15,7 @@
 #include <cstdio>
 #include <cstdlib>
 #endif
-#include <string>
+#include <cstring>
 #include <dolphin/os.h>
 
 #if DEBUG
@@ -31,7 +31,14 @@ JKRHeap* JKRHeap::sSystemHeap;
 #if TARGET_PC
 // JSystem normally has a thread switch callback to track the correct heap.
 // We can't do this as we're (currently) using true OS threads. So use a true thread local.
-static thread_local JKRHeap* sCurrentHeap;
+// On Linux/GCC, thread_local in a shared library requires global-dynamic TLS model
+// (the default local-exec is incompatible with -fPIC). MSVC and macOS/Clang handle this automatically.
+#if defined(__GNUC__) && !defined(__clang__) && !defined(_MSC_VER)
+#define TLS_GLOBAL_DYNAMIC __attribute__((tls_model("global-dynamic")))
+#else
+#define TLS_GLOBAL_DYNAMIC
+#endif
+static thread_local TLS_GLOBAL_DYNAMIC JKRHeap* sCurrentHeap;
 #else
 JKRHeap* JKRHeap::sCurrentHeap;
 #endif
@@ -379,7 +386,7 @@ JKRHeap* JKRHeap::findAllHeap(void* ptr) const {
     return NULL;
 }
 
-void JKRHeap::dispose_subroutine(u32 begin, u32 end) {
+void JKRHeap::dispose_subroutine(uintptr_t begin, uintptr_t end) {
     JSUListIterator<JKRDisposer> next_iterator((JSULink<JKRDisposer>*)NULL);
     JSUListIterator<JKRDisposer> it = mDisposerList.getFirst();
     while (it != mDisposerList.getEnd()) {

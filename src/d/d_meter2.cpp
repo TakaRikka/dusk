@@ -22,6 +22,7 @@
 #include "d/d_meter_string.h"
 #include "f_op/f_op_msg_mng.h"
 #include "d/actor/d_a_horse.h"
+#include <cstring>
 
 int dMeter2_c::_create() {
     stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();

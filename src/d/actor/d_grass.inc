@@ -1,4 +1,4 @@
-#include "d/actor/d_a_grass.h"
+#include "d/actor/d_grass.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_s_play.h"
@@ -6,6 +6,7 @@
 #include "SSystem/SComponent/c_lib.h"
 #include "f_op/f_op_overlap_mng.h"
 #include <dolphin/gf.h>
+#include <cstring>
 
 #include "d/d_camera.h"
 #include "f_op/f_op_camera_mng.h"

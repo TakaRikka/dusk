@@ -56,6 +56,7 @@ public:
     class csr_c {
     public:
         virtual ~csr_c() {}
+        virtual void draw(f32, f32) = 0;
         virtual bool isPointer();
 
         static void particleExecute();
@@ -68,6 +69,8 @@ public:
     };
 
     static void entryBaseCsr(csr_c*);
+    static void releaseCsr(void);
+    static void entryCsr(csr_c*);
     #endif
 
     static void create();

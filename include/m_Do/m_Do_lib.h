@@ -42,4 +42,8 @@ u32 mDoLib_setResTimgObj(ResTIMG const* res, GXTexObj* o_texObj, u32 tlut_name,
                           GXTlutObj* o_tlutObj);
 void mDoLib_pos2camera(Vec* src, Vec* dst);
 
+#if PLATFORM_WII
+void mDoLib_2Dto3D(f32, f32, f32, Vec*);
+#endif
+
 #endif /* M_DO_M_DO_LIB_H */

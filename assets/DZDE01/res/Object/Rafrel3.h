@@ -1,0 +1,26 @@
+#ifndef RES_RAFREL3_H
+#define RES_RAFREL3_H
+
+enum dRes_INDEX_RAFREL3 {
+    /* BCK  */
+    dRes_INDEX_RAFREL3_BCK_RAF_BAZ_GETUP_e=0x4,
+    dRes_INDEX_RAFREL3_BCK_RAF_BAZ_RUN_e=0x5,
+    dRes_INDEX_RAFREL3_BCK_RAF_BAZ_WAIT_e=0x6,
+    /* BMDR */
+    dRes_INDEX_RAFREL3_BMD_RAF_BAZ_e=0x9,
+};
+
+enum dRes_ID_RAFREL3 {
+    /* BCK  */
+    dRes_ID_RAFREL3_BCK_RAF_BAZ_GETUP_e=0x4,
+    dRes_ID_RAFREL3_BCK_RAF_BAZ_RUN_e=0x5,
+    dRes_ID_RAFREL3_BCK_RAF_BAZ_WAIT_e=0x6,
+    /* BMDR */
+    dRes_ID_RAFREL3_BMD_RAF_BAZ_e=0x9,
+};
+
+enum RAF_BAZ_JNT {
+    RAF_BAZ_JNT_RAF_BAZ_MODEL_e=0x0,
+};
+
+#endif /* !RES_RAFREL3_H */

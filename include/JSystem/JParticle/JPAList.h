@@ -12,8 +12,8 @@ struct JPANode {
     JPANode() : mpPrev(NULL), mpNext(NULL) {
     }
     ~JPANode() {}
-    JPANode<T>* getPrev() { return mpPrev; }
-    JPANode<T>* getNext() { return mpNext; }
+    JPANode<T>* getPrev() const { return mpPrev; }
+    JPANode<T>* getNext() const { return mpNext; }
     T* getObject() { return &mData; }
 
     /* 0x00 */ JPANode<T>* mpPrev;
@@ -48,8 +48,7 @@ struct JPAList {
         } else {
             mpLast = node;
             mpFirst = node;
-            node->mpPrev = NULL;
-            node->mpNext = NULL;
+            node->mpNext = node->mpPrev = NULL;
         }
 
         mNum++;
@@ -75,8 +74,7 @@ struct JPAList {
 
         if (mNum == 1) {
             ret = mpFirst;
-            mpLast = NULL;
-            mpFirst = NULL;
+            mpFirst = mpLast = NULL;
             mNum--;
         } else if (mNum) {
             ret = mpFirst;
@@ -93,8 +91,7 @@ struct JPAList {
 
         if (mNum == 1) {
             ret = mpLast;
-            mpLast = NULL;
-            mpFirst = NULL;
+            mpFirst = mpLast = NULL;
             mNum--;
         } else if (mNum) {
             ret = mpLast;
@@ -120,8 +117,7 @@ struct JPAList {
             mpLast = node->mpPrev;
             mNum--;
         } else {
-            mpLast = NULL;
-            mpFirst = NULL;
+            mpFirst = mpLast = NULL;
             mNum--;
         }
         return node;

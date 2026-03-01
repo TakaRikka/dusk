@@ -42,10 +42,6 @@ inline void cMtx_concat(const Mtx a, const Mtx b, Mtx ab) {
     mDoMtx_concat(a, b, ab);
 }
 
-inline void cMtx_scale(Mtx m, f32 x, f32 y, f32 z) {
-    MTXScale(m, x, y, z);
-}
-
 inline void mDoMtx_multVec(CMtxP m, const Vec* src, Vec* dst) {
     PSMTXMultVec(m, src, dst);
 }
@@ -146,6 +142,10 @@ inline void mDoMtx_inverse(const Mtx a, Mtx b) {
 
 inline void mDoMtx_scale(Mtx m, f32 x, f32 y, f32 z) {
     MTXScale(m, x, y, z);
+}
+
+inline void cMtx_scale(Mtx m, f32 x, f32 y, f32 z) {
+    mDoMtx_scale(m, x, y, z);
 }
 
 inline void mDoMtx_quat(Mtx m, const Quaternion* q) {

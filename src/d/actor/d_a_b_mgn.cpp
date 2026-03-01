@@ -251,8 +251,8 @@ static u8 body_front_sph[15] = {
 }  // namespace
 
 int daB_MGN_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
-    u16 jntNo = i_joint->getJntNo();
-    int jointNo = jntNo;
+    J3DJoint* joint = i_joint;
+    int jointNo = joint->getJntNo();
     mDoMtx_stack_c::copy(i_model->getAnmMtx(jointNo));
 
     if (jointNo == JNT_BACKBONE1) {
@@ -840,9 +840,9 @@ void daB_MGN_c::checkDownBeforeBG() {
         s16 var_r28 = (s16)cM_atan2s(var_r29->x, var_r29->z);
         if (abs((s16)(var_r28 - shape_angle.y)) > 0x5000) {
             if ((s16)(var_r28 - shape_angle.y) != 0) {
-                field_0xa92 -= (s16)0x300;
+                ANGLE_SUB(field_0xa92, 0x300);
             } else {
-                field_0xa92 += (s16)0x300;
+                ANGLE_ADD(field_0xa92, 0x300);
             }
         }
     }
@@ -1546,9 +1546,9 @@ void daB_MGN_c::executeDash() {
                         }
     
                         if ((s16)(mAcchCir.GetWallAngleY() - shape_angle.y) < 0) {
-                            shape_angle.y += (s16) 0x100;
+                            ANGLE_ADD(shape_angle.y, 0x100);
                         } else {
-                            shape_angle.y += (s16) -0x100;
+                            ANGLE_ADD(shape_angle.y, -0x100);
                         }
     
                         current.angle.y = shape_angle.y;
@@ -2488,6 +2488,7 @@ void daB_MGN_c::executeFall() {
 }
 
 void daB_MGN_c::demo_skip(int param_1) {
+    UNUSED(param_1);
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daPy_py_c* player = daPy_getPlayerActorClass();
     mBlurRate = 0.0f;

@@ -1,0 +1,22 @@
+#ifndef RES_L6CHBLK_H
+#define RES_L6CHBLK_H
+
+enum dRes_INDEX_L6CHBLK {
+    /* BMDR */
+    dRes_INDEX_L6CHBLK_BMD_LV6_OBJ_KIRIKAE_e=0x4,
+    /* DZB  */
+    dRes_INDEX_L6CHBLK_DZB_LV6_OBJ_KIRIKAE_e=0x7,
+};
+
+enum dRes_ID_L6CHBLK {
+    /* BMDR */
+    dRes_ID_L6CHBLK_BMD_LV6_OBJ_KIRIKAE_e=0x4,
+    /* DZB  */
+    dRes_ID_L6CHBLK_DZB_LV6_OBJ_KIRIKAE_e=0x7,
+};
+
+enum LV6_OBJ_KIRIKAE_JNT {
+    LV6_OBJ_KIRIKAE_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_L6CHBLK_H */

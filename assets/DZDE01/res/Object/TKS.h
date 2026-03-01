@@ -1,0 +1,93 @@
+#ifndef RES_TKS_H
+#define RES_TKS_H
+
+enum dRes_INDEX_TKS {
+    /* BCK  */
+    dRes_INDEX_TKS_BCK_TKS_F_TALK_A_e=0x7,
+    dRes_INDEX_TKS_BCK_TKS_FALL_e=0x8,
+    dRes_INDEX_TKS_BCK_TKS_FLY_e=0x9,
+    dRes_INDEX_TKS_BCK_TKS_HIDE_e=0xA,
+    dRes_INDEX_TKS_BCK_TKS_IN_e=0xB,
+    dRes_INDEX_TKS_BCK_TKS_JUMP_E_e=0xC,
+    dRes_INDEX_TKS_BCK_TKS_JUMP_S_e=0xD,
+    dRes_INDEX_TKS_BCK_TKS_LAND_e=0xE,
+    dRes_INDEX_TKS_BCK_TKS_LOOKAROUND_A_e=0xF,
+    dRes_INDEX_TKS_BCK_TKS_LOOKAROUND_B_e=0x10,
+    dRes_INDEX_TKS_BCK_TKS_RUN_e=0x11,
+    dRes_INDEX_TKS_BCK_TKS_SHAKE_e=0x12,
+    dRes_INDEX_TKS_BCK_TKS_SHOW_UP_e=0x13,
+    dRes_INDEX_TKS_BCK_TKS_SHOW_UP_WAIT_e=0x14,
+    dRes_INDEX_TKS_BCK_TKS_SWIM_e=0x15,
+    dRes_INDEX_TKS_BCK_TKS_TUBO_HIDE_e=0x16,
+    dRes_INDEX_TKS_BCK_TKS_TUBO_IN_e=0x17,
+    dRes_INDEX_TKS_BCK_TKS_TUBO_SHAKE_e=0x18,
+    dRes_INDEX_TKS_BCK_TKS_TUBO_SHOW_UP_e=0x19,
+    dRes_INDEX_TKS_BCK_TKS_WAIT_A_e=0x1A,
+    dRes_INDEX_TKS_BCK_TKS_WALK_A_e=0x1B,
+    /* BMDR */
+    dRes_INDEX_TKS_BMD_TKS_e=0x1E,
+    /* BTK  */
+    dRes_INDEX_TKS_BTK_TKS_e=0x21,
+    /* BTP  */
+    dRes_INDEX_TKS_BTP_TKS_e=0x24,
+    /* EVT  */
+    dRes_INDEX_TKS_DAT_EVENT_LIST_e=0x27,
+};
+
+enum dRes_ID_TKS {
+    /* BCK  */
+    dRes_ID_TKS_BCK_TKS_F_TALK_A_e=0x7,
+    dRes_ID_TKS_BCK_TKS_FALL_e=0x8,
+    dRes_ID_TKS_BCK_TKS_FLY_e=0x9,
+    dRes_ID_TKS_BCK_TKS_HIDE_e=0xA,
+    dRes_ID_TKS_BCK_TKS_IN_e=0xB,
+    dRes_ID_TKS_BCK_TKS_JUMP_E_e=0xC,
+    dRes_ID_TKS_BCK_TKS_JUMP_S_e=0xD,
+    dRes_ID_TKS_BCK_TKS_LAND_e=0xE,
+    dRes_ID_TKS_BCK_TKS_LOOKAROUND_A_e=0xF,
+    dRes_ID_TKS_BCK_TKS_LOOKAROUND_B_e=0x10,
+    dRes_ID_TKS_BCK_TKS_RUN_e=0x11,
+    dRes_ID_TKS_BCK_TKS_SHAKE_e=0x12,
+    dRes_ID_TKS_BCK_TKS_SHOW_UP_e=0x13,
+    dRes_ID_TKS_BCK_TKS_SHOW_UP_WAIT_e=0x14,
+    dRes_ID_TKS_BCK_TKS_SWIM_e=0x15,
+    dRes_ID_TKS_BCK_TKS_TUBO_HIDE_e=0x16,
+    dRes_ID_TKS_BCK_TKS_TUBO_IN_e=0x17,
+    dRes_ID_TKS_BCK_TKS_TUBO_SHAKE_e=0x18,
+    dRes_ID_TKS_BCK_TKS_TUBO_SHOW_UP_e=0x19,
+    dRes_ID_TKS_BCK_TKS_WAIT_A_e=0x1A,
+    dRes_ID_TKS_BCK_TKS_WALK_A_e=0x1B,
+    /* BMDR */
+    dRes_ID_TKS_BMD_TKS_e=0x1E,
+    /* BTK  */
+    dRes_ID_TKS_BTK_TKS_e=0x21,
+    /* BTP  */
+    dRes_ID_TKS_BTP_TKS_e=0x24,
+    /* EVT  */
+    dRes_ID_TKS_DAT_EVENT_LIST_e=0x27,
+};
+
+enum TKS_JNT {
+    TKS_JNT_CENTER_e=0x0,
+    TKS_JNT_ARML1_e=0x1,
+    TKS_JNT_ARML2_e=0x2,
+    TKS_JNT_HANDL_e=0x3,
+    TKS_JNT_TUBASAL_e=0x4,
+    TKS_JNT_ARMR1_e=0x5,
+    TKS_JNT_ARMR2_e=0x6,
+    TKS_JNT_HANDR_e=0x7,
+    TKS_JNT_TUBASAR_e=0x8,
+    TKS_JNT_LEGL_e=0x9,
+    TKS_JNT_FOOTL1_e=0xA,
+    TKS_JNT_FOOTL2_e=0xB,
+    TKS_JNT_LEGR_e=0xC,
+    TKS_JNT_FOOTR1_e=0xD,
+    TKS_JNT_FOOTR2_e=0xE,
+    TKS_JNT_NECK1_e=0xF,
+    TKS_JNT_NECK2_e=0x10,
+    TKS_JNT_HEAD_e=0x11,
+    TKS_JNT_CHIN_e=0x12,
+    TKS_JNT_MOUTH_e=0x13,
+};
+
+#endif /* !RES_TKS_H */

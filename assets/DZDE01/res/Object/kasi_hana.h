@@ -1,0 +1,46 @@
+#ifndef RES_KASI_HANA_H
+#define RES_KASI_HANA_H
+
+enum dRes_INDEX_KASI_HANA {
+    /* BMDR */
+    dRes_INDEX_KASI_HANA_BMD_HANA_e=0x5,
+    /* BTP  */
+    dRes_INDEX_KASI_HANA_BTP_HANA_e=0x8,
+    /* EVT  */
+    dRes_INDEX_KASI_HANA_DAT_EVENT_LIST_e=0xB,
+};
+
+enum dRes_ID_KASI_HANA {
+    /* BMDR */
+    dRes_ID_KASI_HANA_BMD_HANA_e=0x5,
+    /* BTP  */
+    dRes_ID_KASI_HANA_BTP_HANA_e=0x8,
+    /* EVT  */
+    dRes_ID_KASI_HANA_DAT_EVENT_LIST_e=0xB,
+};
+
+enum HANA_JNT {
+    HANA_JNT_CENTER_e=0x0,
+    HANA_JNT_BACKBONE_e=0x1,
+    HANA_JNT_NECK_e=0x2,
+    HANA_JNT_HEAD_e=0x3,
+    HANA_JNT_SHOULDERL_e=0x4,
+    HANA_JNT_ARML1_e=0x5,
+    HANA_JNT_ARML2_e=0x6,
+    HANA_JNT_HANDL_e=0x7,
+    HANA_JNT_SHOULDERR_e=0x8,
+    HANA_JNT_ARMR1_e=0x9,
+    HANA_JNT_ARMR2_e=0xA,
+    HANA_JNT_HANDR_e=0xB,
+    HANA_JNT_WAIST_e=0xC,
+    HANA_JNT_LEGL1_e=0xD,
+    HANA_JNT_LEGL2_e=0xE,
+    HANA_JNT_FOOTL_e=0xF,
+    HANA_JNT_SKIRTL_e=0x10,
+    HANA_JNT_LEGR1_e=0x11,
+    HANA_JNT_LEGR2_e=0x12,
+    HANA_JNT_FOOTR_e=0x13,
+    HANA_JNT_SKIRTR_e=0x14,
+};
+
+#endif /* !RES_KASI_HANA_H */

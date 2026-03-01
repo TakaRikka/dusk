@@ -8,10 +8,10 @@ namespace JASResArcLoader {
     size_t getResSize(JKRArchive const*, u16);
     size_t getResMaxSize(JKRArchive const*);
     static void loadResourceCallback(void*);
-    int loadResourceAsync(JKRArchive*, u16, u8*, u32, void (*)(u32, u32), u32);
+    int loadResourceAsync(JKRArchive*, u16, u8*, u32, void (*)(u32, uintptr_t), uintptr_t);
 
     // from pikmin2
-    typedef void (*LoadCallback)(u32, u32);
+    typedef void (*LoadCallback)(u32, uintptr_t);
 
     struct TLoadResInfo {
         inline TLoadResInfo(JKRArchive* archive, u16 id, void* buf, u32 size)
@@ -30,7 +30,7 @@ namespace JASResArcLoader {
         void* mBuffer;          // _08
         u32 mBufferSize;        // _0C
         LoadCallback mCallback; // _10
-        u32 mCallbackArg;       // _14, arg to pass to mCallback along with readResource result
+        uintptr_t mCallbackArg; // _14, arg to pass to mCallback along with readResource result
         OSMessageQueue* mQueue; // _18
     };
 };

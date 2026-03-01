@@ -210,10 +210,6 @@ s32 __OSUnRegisterStateEvent(void) {
     return ret;
 }
 
-void ACRWriteReg(u32 param_0, u32 param_1) {
-    __IPCRegs[param_0 >> 2] = param_1;
-}
-
 // NONMATCHING - extra branch
 static int AccessVIDimRegs(void) {
     int res;

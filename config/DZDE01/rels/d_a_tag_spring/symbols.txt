@@ -1,0 +1,17 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+setBaseMtx__13daTagSpring_cFv = .text:0x0000005C; // type:function size:0x5C scope:global align:4
+create__13daTagSpring_cFv = .text:0x000000B8; // type:function size:0x58 scope:global align:4
+execute__13daTagSpring_cFv = .text:0x00000110; // type:function size:0x120 scope:global align:4
+checkArea__13daTagSpring_cFv = .text:0x00000230; // type:function size:0x98 scope:global align:4
+daTagSpring_Execute__FP13daTagSpring_c = .text:0x000002C8; // type:function size:0x4 scope:global align:4
+daTagSpring_Delete__FP13daTagSpring_c = .text:0x000002CC; // type:function size:0x8 scope:global align:4
+daTagSpring_Create__FP13daTagSpring_c = .text:0x000002D4; // type:function size:0x4 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+@92448 = .rodata:0x00000000; // type:object size:0x4 scope:local align:4
+@92460 = .rodata:0x00000004; // type:object size:0x4 scope:local align:4 data:float
+@92461 = .rodata:0x00000008; // type:object size:0x4 scope:local align:4 data:float
+l_daTagSpring_Method = .data:0x00000000; // type:object size:0x20 scope:global align:4
+g_profile_Tag_Spring = .data:0x00000020; // type:object size:0x30 scope:global align:4

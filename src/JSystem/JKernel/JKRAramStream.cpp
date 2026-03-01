@@ -128,7 +128,7 @@ s32 JKRAramStream::writeToAram(JKRAramStreamCommand* command) {
         }
     }
 
-    OSSendMessage(&command->mMessageQueue, (OSMessage)writtenLength, OS_MESSAGE_NOBLOCK);
+    OSSendMessage(&command->mMessageQueue, (OSMessage)(uintptr_t)writtenLength, OS_MESSAGE_NOBLOCK);
     return writtenLength;
 }
 

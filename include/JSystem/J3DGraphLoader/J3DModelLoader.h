@@ -8,7 +8,7 @@
 
 class J3DModelData;
 class J3DMaterialTable;
-class J3DModelHierarchy;
+struct J3DModelHierarchy;
 
 #if TARGET_PC
 #define OFFSET_PTR_V0 BE(u32)
@@ -34,7 +34,8 @@ struct J3DModelFileData {
     /* 0x04 */ BE(u32) mMagic2;
     /* 0x08 */ u8 field_0x08[4];
     /* 0x0C */ BE(u32) mBlockNum;
-    /* 0x10 */ u8 field_0x10[0x10];
+    /* 0x10 */ u8 field_0x10[0x1C - 0x10];
+    /* 0x1C */ int field_0x1c;
     /* 0x20 */ J3DModelBlock mBlocks[1];
 };
 

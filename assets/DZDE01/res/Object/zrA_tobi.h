@@ -1,0 +1,18 @@
+#ifndef RES_ZRA_TOBI_H
+#define RES_ZRA_TOBI_H
+
+enum dRes_INDEX_ZRA_TOBI {
+    /* BCK  */
+    dRes_INDEX_ZRA_TOBI_BCK_ZRA_TOBIKOMI_E_e=0x3,
+    dRes_INDEX_ZRA_TOBI_BCK_ZRA_TOBIKOMI_S_e=0x4,
+    dRes_INDEX_ZRA_TOBI_BCK_ZRA_TOBIKOMI_T_e=0x5,
+};
+
+enum dRes_ID_ZRA_TOBI {
+    /* BCK  */
+    dRes_ID_ZRA_TOBI_BCK_ZRA_TOBIKOMI_E_e=0x3,
+    dRes_ID_ZRA_TOBI_BCK_ZRA_TOBIKOMI_S_e=0x4,
+    dRes_ID_ZRA_TOBI_BCK_ZRA_TOBIKOMI_T_e=0x5,
+};
+
+#endif /* !RES_ZRA_TOBI_H */

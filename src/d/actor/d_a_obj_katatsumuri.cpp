@@ -13,6 +13,19 @@
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_lib.h"
+#include <cstring>
+
+class daObj_KatHIO_c : public JORReflexible {
+public:
+    daObj_KatHIO_c();
+    virtual ~daObj_KatHIO_c() {}
+
+    void genMessage(JORMContext* ctx);
+
+    s8 field_0x4;
+    f32 mScaleFemale;
+    f32 mScaleMale;
+};
 
 static u8 hio_set;
 
@@ -23,6 +36,17 @@ daObj_KatHIO_c::daObj_KatHIO_c() {
     mScaleMale = 1.0f;
     mScaleFemale = 1.0f;
 }
+
+#if DEBUG
+void daObj_KatHIO_c::genMessage(JORMContext* ctx) {
+    // Golden Snail
+    ctx->genLabel("黄金蟲(カタツムリ)", 0x80000001);
+    // Model scale (male)
+    ctx->genSlider("モデルスケール(オス)", &mScaleMale, 0.1f, 4.0f);
+    // Model scale (female)
+    ctx->genSlider("モデルスケール(メス)", &mScaleFemale, 0.1f, 4.0f);
+}
+#endif
 
 static u8 const l_kat_itemno[2] = {
     fpcNm_ITEM_M_SNAIL,
@@ -83,7 +107,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return kat->CreateHeap();
 }
 
-int daObjKAT_c::CreateHeap() {
+inline int daObjKAT_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kat", 9);
     JUT_ASSERT(0x136, modelData != NULL);
     mpMorfSO =
@@ -139,12 +163,12 @@ int daObjKAT_c::CreateHeap() {
 
 static int daObjKAT_Create(fopAc_ac_c* i_this) {
     daObjKAT_c* kat = (daObjKAT_c*)i_this;
-    fpc_ProcID unused = fopAcM_GetID(i_this);
+    fopAcM_RegisterCreateID(i_this, "Obj_KAT");
     return kat->create();
 }
 
 static int daObjKAT_Delete(daObjKAT_c* i_this) {
-    fpc_ProcID unused = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "Obj_KAT");
     i_this->Delete();
     return 1;
 }
@@ -233,7 +257,7 @@ void daObjKAT_c::WallWalk() {
             field_0x7c2.x = cM_atan2s(unkXyzP2->z, unkXyzP2->y);
             field_0x7f6 = cM_atan2s(unkXyzP2->x, unkXyzP2->z);
         } else {
-            field_0x7e0 += (s16)0x100;
+            ANGLE_ADD(field_0x7e0, 0x100);
         }
     }
 
@@ -622,7 +646,7 @@ void daObjKAT_c::Z_BufferChk() {
     field_0x800 = ((near_ + far_ * near_ / projected.z) / (far_ - near_) + 1.0f) * 16777215.0f;
 }
 
-int daObjKAT_c::Delete() {
+inline int daObjKAT_c::Delete() {
     dComIfG_resDelete(&mPhase, "Kat");
     if (field_0xa70 != 0) {
         hio_set = 0;
@@ -693,16 +717,16 @@ bool daObjKAT_c::CreateChk() {
     return true;
 }
 
-int daObjKAT_c::create() {
+inline int daObjKAT_c::create() {
     fopAcM_ct(this, daObjKAT_c);
 
     s32 loadResult = dComIfG_resLoad(&mPhase, "Kat");
     if (loadResult == cPhs_COMPLEATE_e) {
-        OS_REPORT("KAT PARAM: %x", fopAcM_GetParam(this));
+        OS_REPORT("KAT PARAM %x\n", fopAcM_GetParam(this));
         field_0x808 = fopAcM_GetParam(this) & 0xf;
         if (field_0x808 == 2) {
             field_0x56c = 0;
-            shape_angle.x += (s16)-0x2000;
+            ANGLE_ADD(shape_angle.x, -0x2000);
             fopAcM_OnStatus(this, 0x4000);
         } else {
             mDraw = true;

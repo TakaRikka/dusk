@@ -34,14 +34,4 @@ private:
 
 STATIC_ASSERT(sizeof(daTwGate_c) == 0x5fc);
 
-class daTwGate_HIO_c : public fOpAcm_HIO_entry_c {
-public:
-    daTwGate_HIO_c();
-    ~daTwGate_HIO_c() {}
-
-    void genMessage(JORMContext* ctx);
-
-    /* 0x4 */ f32 mRange;
-};
-
 #endif /* D_A_OBJ_TWGATE_H */

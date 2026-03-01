@@ -7,7 +7,14 @@
 
 #include "d/actor/d_a_obj_pdwall.h"
 
+// these are arrays to force them to not be inlined, not sure if this is fake
 static const int l_dzbidx = 7;
+static const int l_bmdidx = 4;
+
+static const cull_box l_cull_box = {
+    {-100.0f, -800.0f, -300.0f},
+    {750.0f, 500.0f, 300.0f},
+};
 
 static char* l_arcName = "P_Dwall";
 
@@ -15,7 +22,7 @@ int daObjPDwall_c::create1st() {
     int phase_state = dComIfG_resLoad(this, l_arcName);
     if (phase_state == cPhs_COMPLEATE_e) {
         setMtx();
-        
+
         phase_state = MoveBGCreate(l_arcName, l_dzbidx, dBgS_MoveBGProc_TypicalRotY, 0xB1C0, &field_0x5a8);
         if (phase_state == cPhs_ERROR_e) {
             return phase_state;
@@ -30,11 +37,6 @@ int daObjPDwall_c::create1st() {
 
     return phase_state;
 }
-
-static const cull_box l_cull_box = {
-    {-100.0f, -800.0f, -300.0f},
-    {750.0f, 500.0f, 300.0f},
-};
 
 void daObjPDwall_c::setMtx() {
     for (int i = 0; i < 10; i++) {
@@ -54,7 +56,7 @@ void daObjPDwall_c::setMtx() {
 }
 
 int daObjPDwall_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, l_bmdidx);
     JUT_ASSERT(175, model_data != NULL);
 
     for (int i = 0; i < 10; i++) {

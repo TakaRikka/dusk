@@ -10,6 +10,7 @@
 #include "d/actor/d_a_npc_bou.h"
 #include "d/d_meter2_info.h"
 #include "d/actor/d_a_tag_push.h"
+#include <cstring>
 
 enum Jagar_RES_File_ID {
     /* BCK */

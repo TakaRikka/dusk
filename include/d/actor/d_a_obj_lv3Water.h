@@ -40,10 +40,9 @@ public:
     virtual ~daLv3Water_c() {}
     virtual bool eventStart();
 
-    int getParam() { return fpcM_GetParam(this) >> 0xC & 0x0FFF; }
-    int getParamSw() { return fpcM_GetParam(this) & 0xFF; }
+    int getParam(int shift, int bit) { return fopAcM_GetParamBit(this, shift, bit); }
     int getParamEvent() { return shape_angle.x & 0xFF; }
-    u8 getParamType() { return (shape_angle.x >> 8) & 0xFF; }
+    int getParamType() { return (shape_angle.x & 0xFF00) >> 8; }
     u8 getType() { return mType; }
 
 private:
@@ -54,13 +53,13 @@ private:
     /* 0x5E0 */ mDoExt_btkAnm mBtk2;
     /* 0x5F8 */ u8 mMode;
     /* 0x5F9 */ u8 mType;
-    /* 0x5FC */ f32 field_0x5fc;
-    /* 0x600 */ u8 field_0x600;
-    /* 0x601 */ u8 field_0x601;
-    /* 0x602 */ u8 mSwitch1;
-    /* 0x603 */ u8 mSwitch2;
-    /* 0x604 */ u8 field_0x604;
-    /* 0x605 */ u8 field_0x605;
+    /* 0x5FC */ f32 mWaterLv;               // Amount that the water's y coodinate should increase
+    /* 0x600 */ u8 mCurrentWaterLvFrame;    // Number of frames that the water level has been changing
+    /* 0x601 */ u8 mWaterLvFrame;           // Number of frames that should be taken for the water level to change
+    /* 0x602 */ u8 mSwInitialState;
+    /* 0x603 */ u8 mSwCurrentState;
+    /* 0x604 */ u8 mLvControlWaitFrames;
+    /* 0x605 */ u8 mSwStatePostEvent;       // Only when true (i.e event initiated water raising instead of lowering) should anything be drawn
     /* 0x608 */ u32 mEmitterIDs[8];
 };
 

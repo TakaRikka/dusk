@@ -9,6 +9,7 @@
 #include "d/actor/d_a_obj_scannon.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_s_play.h"
+#include <cstring>
 
 char* l_arcName_Comp = "SkyCannon";
 
