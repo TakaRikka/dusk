@@ -3,11 +3,11 @@
 
 #include "JSystem/JMath/JMath.h"
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
+#include "JSystem/JUtility/JUTPalette.h"
 
 typedef struct _GXColor GXColor;
 typedef struct _GXColorS10 GXColorS10;
 class J2DScreen;
-class JUTPalette;
 struct ResTIMG;
 
 enum J2DAnmKind {
