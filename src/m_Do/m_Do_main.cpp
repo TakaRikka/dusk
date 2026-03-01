@@ -176,8 +176,18 @@ void main01(void) {
     do {
         // 1. Update Window Events
         const AuroraEvent* event = aurora_update();
-        if (event && event->type == AURORA_EXIT)
-            break;
+        while (true) {
+            switch (event->type) {
+            case AURORA_NONE:
+                goto eventsDone;
+            case AURORA_EXIT:
+                goto exit;
+            }
+
+            event++;
+        }
+
+        eventsDone:;
 
         static u32 frame = 0;
         frame++;
@@ -202,6 +212,8 @@ void main01(void) {
         std::this_thread::sleep_for(std::chrono::milliseconds(16));
 
     } while (true);
+
+    exit:;
 }
 
 // =========================================================================
