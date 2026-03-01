@@ -8,7 +8,7 @@ class dBgS_CaptPoly;
 
 typedef void (*CaptPolyCallback)(dBgS_CaptPoly&, cBgD_Vtx_t*, u16, u16, u16, cM3dGPla*);
 
-struct dBgS_CaptPoly : public cBgS_Chk, public dBgS_Chk {
+class dBgS_CaptPoly : public cBgS_Chk, public dBgS_Chk {
 public:
     cM3dGAab* GetBndP() { return &m_pos;}
 
