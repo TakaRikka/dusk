@@ -1728,6 +1728,10 @@ void mDoExt_McaMorfSO::setAnm(J3DAnmTransform* i_anm, int i_attr, f32 i_morf, f3
     setLoopFrame(getFrame());
     setMorf(i_morf);
 
+#if TARGET_PC
+    puts("We don't know why, but initAnime doesn't work");
+    return;
+#endif
     if (mpSound != NULL) {
         if (i_anm != NULL) {
             mpBas = static_cast<mDoExt_transAnmBas*>(i_anm)->getBas();
