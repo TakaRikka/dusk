@@ -159,6 +159,14 @@ lbl_8005F118:
 	li       r3, 1
 	psq_st   f8, 32(r4), 1, 0
 	blr
+#else
+    Mtx invX;
+
+    if (C_MTXInvXpose(src, invX) == 0) {
+        return;
+    }
+
+    J3DPSMtx33CopyFrom34(invX, dst);
 #endif // clang-format on
 }
 
@@ -327,6 +335,22 @@ ASM void J3DScaleNrmMtx(__REGISTER Mtx mtx, const __REGISTER Vec& scl) {
 	fmuls  f4, fp1, fp3
 	stfs   f4, 40(mtx)
 	blr
+#else
+    f32 sx = scl.x;
+    f32 sy = scl.y;
+    f32 sz = scl.z;
+
+    mtx[0][0] *= sx;
+    mtx[0][1] *= sy;
+    mtx[0][2] *= sz;
+
+    mtx[1][0] *= sx;
+    mtx[1][1] *= sy;
+    mtx[1][2] *= sz;
+
+    mtx[2][0] *= sx;
+    mtx[2][1] *= sy;
+    mtx[2][2] *= sz;
 #endif // clang-format on
 }
 
@@ -353,6 +377,22 @@ ASM void J3DScaleNrmMtx33(__REGISTER Mtx33 mtx, const __REGISTER Vec& scale) {
 	psq_st   f4, 24(mtx), 0, 0
 	stfs     f5, 0x20(mtx)
 	blr
+#else
+    f32 sx = scale.x;
+    f32 sy = scale.y;
+    f32 sz = scale.z;
+
+    mtx[0][0] *= sx;
+    mtx[0][1] *= sy;
+    mtx[0][2] *= sz;
+
+    mtx[1][0] *= sx;
+    mtx[1][1] *= sy;
+    mtx[1][2] *= sz;
+
+    mtx[2][0] *= sx;
+    mtx[2][1] *= sy;
+    mtx[2][2] *= sz;
 #endif // clang-format on
 }
 
@@ -431,6 +471,22 @@ ASM void J3DMtxProjConcat(__REGISTER Mtx mtx1, __REGISTER Mtx mtx2, __REGISTER M
 	ps_madd  f0, f9, f13, f0
 	psq_st   f0, 40(dst), 0, 0
 	blr
+#else
+    Mtx tmp;
+
+    for (int i = 0; i < 3; i++) {
+        f32 a0 = mtx1[i][0];
+        f32 a1 = mtx1[i][1];
+        f32 a2 = mtx1[i][2];
+        f32 a3 = mtx1[i][3];
+
+        tmp[i][0] = a0 * mtx2[0][0] + a1 * mtx2[1][0] + a2 * mtx2[2][0] + a3 * mtx2[3][0];
+        tmp[i][1] = a0 * mtx2[0][1] + a1 * mtx2[1][1] + a2 * mtx2[2][1] + a3 * mtx2[3][1];
+        tmp[i][2] = a0 * mtx2[0][2] + a1 * mtx2[1][2] + a2 * mtx2[2][2] + a3 * mtx2[3][2];
+        tmp[i][3] = a0 * mtx2[0][3] + a1 * mtx2[1][3] + a2 * mtx2[2][3] + a3 * mtx2[3][3];
+    }
+
+    JMath::gekko_ps_copy12(dst, tmp);
 #endif // clang-format on
 }
 
@@ -542,6 +598,15 @@ loop:
 #undef FP15
 #undef FP31
 #undef UNIT_R
+}
+#else
+void J3DPSMtxArrayConcat(Mtx mA, Mtx mB, Mtx mAB, u32 count) {
+    Mtx* src = (Mtx*)mB;
+    Mtx* dst = (Mtx*)mAB;
+
+    for (u32 i = 0; i < count; i++) {
+        C_MTXConcat(mA, src[i], dst[i]);
+    }
 }
 #endif // clang-format on
 

@@ -39,8 +39,8 @@ struct J3DTextureSRTInfo {
     /* 0x10 */ f32 mTranslationY;
 
     bool operator==(J3DTextureSRTInfo&) const;
-    inline void operator=(J3DTextureSRTInfo const& other) {
 #ifdef __MWERKS__
+    inline void operator=(J3DTextureSRTInfo const& other) {
         __REGISTER const f32* src = &other.mScaleX;
         __REGISTER f32* dst = &mScaleX;
         __REGISTER f32 xy;
@@ -58,8 +58,8 @@ struct J3DTextureSRTInfo {
             psq_l xy, 0(src), 0, 0
             psq_st xy, 0(dst), 0, 0
         };
-#endif
     }
+#endif
 };  // Size: 0x14
 
 enum J3DTexMtxMode {
