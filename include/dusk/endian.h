@@ -85,13 +85,13 @@ struct BE {
     // post-ops
     T operator--(int) {
         T orig = inner;
-        this -= 1;
+        *this -= 1;
         return swap(orig);
     }
 
     T operator++(int) {
         T orig = inner;
-        this += 1;
+        *this += 1;
         return swap(orig);
     }
 
@@ -119,6 +119,7 @@ constexpr BE<TA>& operator op(BE<TA>& a, TB b) {   \
 BIN_ASSIGN_OP(&=);
 BIN_ASSIGN_OP(|=);
 BIN_ASSIGN_OP(+=);
+BIN_ASSIGN_OP(-=);
 BIN_ASSIGN_OP(/=);
 
 #undef BIN_ASSIGN_OP
