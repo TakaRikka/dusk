@@ -476,22 +476,44 @@ void J3DAnmKeyLoader_v15::readAnmTransform(const J3DAnmTransformKeyData* param_1
     setAnmTransform(anm, param_1);
 }
 
+#if TARGET_LITTLE_ENDIAN
+static void ByteSwapTransformKeyData(
+    J3DAnmTransformKey& target,
+    const J3DAnmTransformKeyData& source) {
+
+    for (int i = 0; i < source.mSCount; i += 1) {
+        be_swap(target.mScaleData[i]);
+    }
+
+    for (int i = 0; i < source.mRCount; i += 1) {
+        be_swap(target.mRotData[i]);
+    }
+
+    for (int i = 0; i < source.mTCount; i += 1) {
+        be_swap(target.mTransData[i]);
+    }
+}
+#endif
+
 void J3DAnmKeyLoader_v15::setAnmTransform(J3DAnmTransformKey* param_1,
                                           const J3DAnmTransformKeyData* param_2) {
     J3D_ASSERT_NULLPTR(944, param_1);
     J3D_ASSERT_NULLPTR(945, param_2);
-    param_1->field_0x1e = param_2->field_0xc;
+    param_1->field_0x1e = param_2->mJointAnimationTableCount;
     param_1->mFrameMax = param_2->mFrameMax;
-    param_1->mAttribute = param_2->field_0x8;
-    param_1->mDecShift = param_2->field_0x9;
+    param_1->mAttribute = param_2->mLoopMode;
+    param_1->mDecShift = param_2->mRotationDecimal;
     param_1->mFrame = 0.0f;
     param_1->mAnmTable =
-        JSUConvertOffsetToPtr<J3DAnmTransformKeyTable>(param_2, param_2->mTableOffset);
-    param_1->mScaleData = JSUConvertOffsetToPtr<f32>(param_2, param_2->field_0x18);
-    param_1->mRotData = JSUConvertOffsetToPtr<s16>(param_2, param_2->field_0x1c);
-    param_1->mTransData = JSUConvertOffsetToPtr<f32>(param_2, param_2->field_0x20);
-}
+        JSUConvertOffsetToPtr<J3DAnmTransformKeyTable>(param_2, param_2->mJointAnimationTableOffs);
+    param_1->mScaleData = JSUConvertOffsetToPtr<f32>(param_2, param_2->mSTableOffs);
+    param_1->mRotData = JSUConvertOffsetToPtr<s16>(param_2, param_2->mRTableOffs);
+    param_1->mTransData = JSUConvertOffsetToPtr<f32>(param_2, param_2->mTTableOffs);
 
+#if TARGET_LITTLE_ENDIAN
+    ByteSwapTransformKeyData(*param_1, *param_2);
+#endif
+}
 
 void J3DAnmKeyLoader_v15::readAnmTextureSRT(const J3DAnmTextureSRTKeyData* param_1) {
     J3DAnmTextureSRTKey* anm = (J3DAnmTextureSRTKey*)mAnm;

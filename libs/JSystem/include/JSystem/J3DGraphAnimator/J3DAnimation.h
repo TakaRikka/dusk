@@ -424,15 +424,17 @@ struct J3DAnmClusterKeyTable {
  */
 struct J3DAnmTransformKeyData {
     /* 0x00 */ JUTDataBlockHeader mHeader;
-    /* 0x08 */ u8 field_0x8;
-    /* 0x09 */ u8 field_0x9;
+    /* 0x08 */ u8 mLoopMode;
+    /* 0x09 */ u8 mRotationDecimal;
     /* 0x0A */ BE(s16) mFrameMax;
-    /* 0x0C */ BE(u16) field_0xc;
-    /* 0x10 */ int field_0x10;
-    /* 0x14 */ OFFSET_PTR mTableOffset;
-    /* 0x18 */ OFFSET_PTR field_0x18;
-    /* 0x1c */ OFFSET_PTR field_0x1c;
-    /* 0x20 */ OFFSET_PTR field_0x20;
+    /* 0x0C */ BE(u16) mJointAnimationTableCount;
+    /* 0x0E */ BE(u16) mSCount;
+    /* 0x10 */ BE(u16) mRCount;
+    /* 0x12 */ BE(u16) mTCount;
+    /* 0x14 */ OFFSET_PTR mJointAnimationTableOffs;
+    /* 0x18 */ OFFSET_PTR mSTableOffs;
+    /* 0x1c */ OFFSET_PTR mRTableOffs;
+    /* 0x20 */ OFFSET_PTR mTTableOffs;
 };
 
 /**
