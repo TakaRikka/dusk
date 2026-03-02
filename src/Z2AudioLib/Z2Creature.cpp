@@ -209,6 +209,11 @@ Z2SoundHandlePool* Z2Creature::startCreatureSoundLevel(JAISoundID soundID, u32 m
 }
 
 Z2SoundHandlePool* Z2Creature::startCreatureVoice(JAISoundID soundID, s8 reverb) {
+    #if TARGET_PC
+        // stubbed
+        return nullptr;
+    #endif
+
     switch (soundID) {
     case Z2SE_MDN_V_FLY_OUT:
     case Z2SE_MDN_V_MGN_TAME:
