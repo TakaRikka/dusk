@@ -1482,48 +1482,6 @@ void GDSetVtxDescv(const GXVtxDescList* attrPtr) {
 #pragma mark GX
 #include <dolphin/gx.h>
 
-// GXCmd/GXParam/GXMatrixIndex: low-level command FIFO functions used by J3D.
-// Route through Aurora's software FIFO so display list data is actually recorded.
-//
-// We forward-declare Aurora's FIFO functions with explicit stdint types instead of
-// including fifo.hpp, because the game's u32 (unsigned long) differs from Aurora's
-// u32 (uint32_t = unsigned int on MSVC). Including fifo.hpp would resolve its u32
-// parameter types to the game's unsigned long (since game headers are included first
-// and set the include guards), causing MSVC name mangling mismatches at link time.
-namespace aurora::gfx::fifo {
-    void write_u8(uint8_t val);
-    void write_u16(uint16_t val);
-    void write_u32(uint32_t val);
-    void write_f32(float val);
-}
-
-// Cast to stdint types: game headers define u32=unsigned long, but Aurora uses
-// uint32_t=unsigned int. Both are 32-bit on Win32 but have different MSVC name mangling.
-void GXCmd1u8(const u8 x) { aurora::gfx::fifo::write_u8(static_cast<uint8_t>(x)); }
-void GXCmd1u16(const u16 x) { aurora::gfx::fifo::write_u16(static_cast<uint16_t>(x)); }
-void GXCmd1u32(const u32 x) { aurora::gfx::fifo::write_u32(static_cast<uint32_t>(x)); }
-
-void GXParam1u8(const u8 x) { aurora::gfx::fifo::write_u8(static_cast<uint8_t>(x)); }
-void GXParam1u16(const u16 x) { aurora::gfx::fifo::write_u16(static_cast<uint16_t>(x)); }
-void GXParam1u32(const u32 x) { aurora::gfx::fifo::write_u32(static_cast<uint32_t>(x)); }
-void GXParam1s8(const s8 x) { aurora::gfx::fifo::write_u8(static_cast<uint8_t>(x)); }
-void GXParam1s16(const s16 x) { aurora::gfx::fifo::write_u16(static_cast<uint16_t>(x)); }
-void GXParam1s32(const s32 x) { aurora::gfx::fifo::write_u32(static_cast<uint32_t>(x)); }
-void GXParam1f32(const f32 x) { aurora::gfx::fifo::write_f32(x); }
-void GXParam3f32(const f32 x, const f32 y, const f32 z) {
-    aurora::gfx::fifo::write_f32(x);
-    aurora::gfx::fifo::write_f32(y);
-    aurora::gfx::fifo::write_f32(z);
-}
-void GXParam4f32(const f32 x, const f32 y, const f32 z, const f32 w) {
-    aurora::gfx::fifo::write_f32(x);
-    aurora::gfx::fifo::write_f32(y);
-    aurora::gfx::fifo::write_f32(z);
-    aurora::gfx::fifo::write_f32(w);
-}
-
-void GXMatrixIndex1u8(const u8 x) { aurora::gfx::fifo::write_u8(static_cast<uint8_t>(x)); }
-
 // Moved-in GX helpers and helpers for metrics/project
 void __GXSetSUTexSize() {
     STUB_LOG("__GXSetSUTexSize is a stub");
@@ -1585,32 +1543,6 @@ void GXResetWriteGatherPipe(void) {
     // STUB_LOG("GXResetWriteGatherPipe is a stub");
 }
 
-void GXProject(f32 x, f32 y, f32 z, const f32 mtx[3][4], const f32* pm, const f32* vp, f32* sx,
-               f32* sy, f32* sz) {
-    Vec peye;
-    f32 xc;
-    f32 yc;
-    f32 zc;
-    f32 wc;
-
-    peye.x = mtx[0][3] + ((mtx[0][2] * z) + ((mtx[0][0] * x) + (mtx[0][1] * y)));
-    peye.y = mtx[1][3] + ((mtx[1][2] * z) + ((mtx[1][0] * x) + (mtx[1][1] * y)));
-    peye.z = mtx[2][3] + ((mtx[2][2] * z) + ((mtx[2][0] * x) + (mtx[2][1] * y)));
-    if (pm[0] == 0.0f) {
-        xc = (peye.x * pm[1]) + (peye.z * pm[2]);
-        yc = (peye.y * pm[3]) + (peye.z * pm[4]);
-        zc = pm[6] + (peye.z * pm[5]);
-        wc = 1.0f / -peye.z;
-    } else {
-        xc = pm[2] + (peye.x * pm[1]);
-        yc = pm[4] + (peye.y * pm[3]);
-        zc = pm[6] + (peye.z * pm[5]);
-        wc = 1.0f;
-    }
-    *sx = (vp[2] / 2.0f) + (vp[0] + (wc * (xc * vp[2] / 2.0f)));
-    *sy = (vp[3] / 2.0f) + (vp[1] + (wc * (-yc * vp[3] / 2.0f)));
-    *sz = vp[5] + (wc * (zc * (vp[5] - vp[4])));
-}
 void GXAbortFrame(void) {
     STUB_LOG("GXAbortFrame is a stub");
 }
