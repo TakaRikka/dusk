@@ -6,6 +6,7 @@
 #include "Z2AudioLib/Z2SoundMgr.h"
 #include "Z2AudioLib/Z2Audience.h"
 #include "d/d_demo.h"
+#include "os_report.h"
 
 static f32 cPitchDown = 0.8909f;
 

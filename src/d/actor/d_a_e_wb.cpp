@@ -352,7 +352,7 @@ static int e_wb_lr_wall_check(e_wb_class* i_this) {
 }
 
 static int daE_WB_Draw(e_wb_class* i_this) {
-    static _GXColor l_color = {
+    static GXColor l_color = {
         0x14,
         0x0F,
         0x00,

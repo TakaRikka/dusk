@@ -19,7 +19,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-#include <dolphin/types.h>
+#include <types.h>
 #include <cstring>
 
 daObj_Maki_HIO_c::daObj_Maki_HIO_c() {

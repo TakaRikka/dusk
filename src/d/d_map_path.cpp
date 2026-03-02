@@ -37,7 +37,7 @@ void dMpath_n::dTexObjAggregate_c::remove() {
     }
 }
 
-void dMpath_ColorCnv_n::convertRGB5A3_To_GXColor(_GXColor& color32, const dMpath_RGB5A3_s& color16) {
+void dMpath_ColorCnv_n::convertRGB5A3_To_GXColor(GXColor& color32, const dMpath_RGB5A3_s& color16) {
     int r, g, b, a;
     u16 color = color16.color;
     if (color & 0x8000) {
@@ -238,7 +238,7 @@ void dDrawPath_c::rendering(dDrawPath_c::line_class const* p_line) {
             GXSetTevColor(GX_TEVREG0, *getLineColor(p_line->field_0x0 & 0x3F, p_line->field_0x1));
             GXBegin(GX_LINESTRIP, GX_VTXFMT0, p_line->mDataNum);
 
-            u16* tmp = p_line->mpData;
+            BE(u16)* tmp = p_line->mpData;
             for (int i = 0; i < p_line->mDataNum; i++) {
                 GXPosition1x16(*tmp);
                 tmp++;
@@ -255,7 +255,7 @@ void dDrawPath_c::rendering(dDrawPath_c::poly_class const* p_poly) {
         if (p_poly->mDataNum >= 3) {
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, p_poly->mDataNum);
 
-            u16* tmp = p_poly->mpData;
+            BE(u16)* tmp = p_poly->mpData;
             for (int i = 0; i < p_poly->mDataNum; i++) {
                 GXPosition1x16(*tmp);
                 tmp++;
@@ -295,7 +295,8 @@ void dDrawPath_c::rendering(dDrawPath_c::floor_class const* p_floor) {
 void dDrawPath_c::rendering(dDrawPath_c::room_class const* room) {
     JUT_ASSERT(1043, room != NULL);
     if (room != NULL) {
-        GXSetArray(GX_VA_POS, room->mpFloatData, 8);
+        // TODO: FILL IN SIZE.
+        GXSETARRAY(GX_VA_POS, room->mpFloatData, 0, 8);
         floor_class* floor = room->mpFloor;
 
         if (floor != NULL) {
@@ -460,7 +461,7 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
     GXSetNumTevStages(1);
     GXLoadTexObj(dMpath_n::m_texObjAgg.getTexObjPointer(6), GX_TEXMAP0);
 
-    u16* data_p = p_line->mpData;
+    BE(u16)* data_p = p_line->mpData;
     s32 data_num = p_line->mDataNum;
     GXSetLineWidth(width, GX_TO_ONE);
     GXSetPointSize(width, GX_TO_ONE);

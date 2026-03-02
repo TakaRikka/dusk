@@ -3,7 +3,7 @@
 
 #include "Z2AudioCS/SpkTable.h"
 #include "Z2AudioCS/SpkSound.h"
-#include <dolphin/types.h>
+#include <types.h>
 
 class JKRHeap;
 class JKRArchive;

@@ -657,7 +657,7 @@ public:
     int loadRes(s8 const*, char const**);
     void deleteRes(s8 const*, char const**);
     int execute();
-    int draw(BOOL, BOOL, f32, _GXColorS10*, f32, BOOL, BOOL, BOOL);
+    int draw(BOOL, BOOL, f32, GXColorS10*, f32, BOOL, BOOL, BOOL);
     void setEnvTevColor();
     void setRoomNo();
     int checkEndAnm(f32);

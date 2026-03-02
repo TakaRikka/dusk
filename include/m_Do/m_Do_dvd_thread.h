@@ -2,8 +2,8 @@
 #define M_DO_M_DO_DVD_THREAD_H
 
 #include "JSystem/JKernel/JKRArchive.h"
-#include <dolphin/os.h>
-#include <dolphin/os.h>
+#include <os.h>
+#include <os.h>
 #include "f_pc/f_pc_node.h"
 
 #define mDoDvd_MOUNT_DIRECTION_HEAD 0
@@ -149,9 +149,9 @@ struct mDoDvdThd {
 
 namespace mDoDvdHack {
     typedef struct FSTEntry {
-        /* 0x00 */ uint isDirAndStringOff;
-        /* 0x04 */ uint parentOrPosition;
-        /* 0x08 */ uint nextEntryOrLength;
+        /* 0x00 */ u32 isDirAndStringOff;
+        /* 0x04 */ u32 parentOrPosition;
+        /* 0x08 */ u32 nextEntryOrLength;
     } FSTEntry;
 
     extern OSBootInfo* BootInfo;

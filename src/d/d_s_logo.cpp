@@ -20,12 +20,32 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
 #include <cstring>
+#include "m_Do/m_Do_main.h"
+#include "JSystem/JUtility/JUTConsole.h"
 
-#if PLATFORM_WII
-#include "d/d_cursor_mng.h"
+#if !PLATFORM_GCN
+#include <revolution/os.h>
+#include <revolution/sc.h>
+#include "m_Do/m_Do_Reset.h"
+
+#include "res/Object/LogoUsWii.h"
 #endif
 
-#if VERSION == VERSION_GCN_JPN
+#if PLATFORM_WII || VERSION == VERSION_SHIELD
+#include "m_Re/m_Re_controller_pad.h"
+#include "d/d_cursor_mng.h"
+#include "d/d_home_button.h"
+
+struct homeBtnData {
+    /* 0x0 */ int region;
+    /* 0x4 */ const char* path;
+};
+#endif
+
+#if VERSION == VERSION_SHIELD
+#define LOGO_ARC "LogoUs"
+#define MSG_PATH  "/res/Msgcn/bmgres.arc"
+#elif VERSION == VERSION_GCN_JPN
 #define LOGO_ARC  "Logo"
 #define MSG_PATH  "/res/Msgjp/bmgres.arc"
 #elif VERSION == VERSION_GCN_PAL
@@ -44,22 +64,70 @@
 #define PROGRESSIVE_MODE_ON  OS_PROGRESSIVE_MODE_ON
 #endif
 
-static dLog_HIO_c g_LogHIO;
+#if PLATFORM_WII || VERSION == VERSION_SHIELD_DEBUG
+#define FMAP_RES_PATH "/res/LayoutRevo/fmapresR.arc"
+#define DMAP_RES_PATH "/res/LayoutRevo/dmapresR.arc"
+#define COLLECT_RES_PATH "/res/LayoutRevo/clctresR.arc"
 
-typedef void (dScnLogo_c::*execFunc)();
-static execFunc l_execFunc[16] = {
-    &dScnLogo_c::warningInDraw,   &dScnLogo_c::warningDispDraw, &dScnLogo_c::warningOutDraw,
-    &dScnLogo_c::nintendoInDraw,  &dScnLogo_c::nintendoOutDraw, &dScnLogo_c::dolbyInDraw,
-    &dScnLogo_c::dolbyOutDraw,    &dScnLogo_c::dolbyOutDraw2,   &dScnLogo_c::progInDraw,
-    &dScnLogo_c::progSelDraw,     &dScnLogo_c::progOutDraw,     &dScnLogo_c::progSetDraw,
-    &dScnLogo_c::progSet2Draw,    &dScnLogo_c::progChangeDraw,  &dScnLogo_c::dvdWaitDraw,
-    &dScnLogo_c::nextSceneChange,
-};
+#define MSG_COM_PATH "/res/LayoutRevo/msgcomR.arc"
+#define MSG_RES0_PATH "/res/LayoutRevo/msgres00R.arc"
+#define MSG_RES1_PATH "/res/LayoutRevo/msgres01R.arc"
+#define MSG_RES2_PATH "/res/LayoutRevo/msgres02R.arc"
+#define MSG_RES3_PATH "/res/LayoutRevo/msgres03R.arc"
+#else
+#define FMAP_RES_PATH "/res/Layout/fmapres.arc"
+#define DMAP_RES_PATH "/res/Layout/dmapres.arc"
+#define COLLECT_RES_PATH "/res/Layout/clctres.arc"
+
+#define MSG_COM_PATH "/res/Layout/msgcom.arc"
+#define MSG_RES0_PATH "/res/Layout/msgres00.arc"
+#define MSG_RES1_PATH "/res/Layout/msgres01.arc"
+#define MSG_RES2_PATH "/res/Layout/msgres02.arc"
+#define MSG_RES3_PATH "/res/Layout/msgres03.arc"
+#endif
+
+#if PLATFORM_WII || PLATFORM_SHIELD
+#define ICON_RES_PATH "/res/WiiBannerIcon/bannerIcon.arc"
+#define PARTICLE_COM_PATH "/res/Particle/common-r.jpc"
+#else
+#define ICON_RES_PATH "/res/CardIcon/cardicon.arc"
+#define PARTICLE_COM_PATH "/res/Particle/common.jpc"
+#endif
+
+#if PLATFORM_WII
+#define RING_RES_PATH "/res/LayoutRevo/ringresR.arc"
+#define ITEM_INF_RES_PATH "/res/LayoutRevo/itmInfResR.arc"
+#define BUTTON_RES_PATH "/res/LayoutRevo/buttonR.arc"
+#define MAIN2D_PATH "/res/LayoutRevo/main2DR.arc"
+#else
+#define RING_RES_PATH "/res/Layout/ringres.arc"
+#define ITEM_INF_RES_PATH "/res/Layout/itmInfRes.arc"
+#define BUTTON_RES_PATH "/res/Layout/button.arc"
+#define MAIN2D_PATH "/res/Layout/main2D.arc"
+#endif
+
+class dLog_HIO_c : public JORReflexible {
+public:
+    dLog_HIO_c();
+    virtual ~dLog_HIO_c() {}
+
+    void genMessage(JORMContext*);
+
+    u8 field_0x4[0x8 - 0x4];
+};  // Size: 0x8
+
+static dLog_HIO_c g_LogHIO;
 
 dLog_HIO_c::dLog_HIO_c() {}
 
+#if DEBUG
+void dLog_HIO_c::genMessage(JORMContext*) {}
+#endif
+
 void dScnLogo_c::preLoad_dyl_create() {
     m_preLoad_dylPhase = new request_of_phase_process_class[14];
+    JUT_ASSERT(194, m_preLoad_dylPhase != NULL);
+
     memset(m_preLoad_dylPhase, 0, sizeof(request_of_phase_process_class) * 14);
 }
 
@@ -67,15 +135,54 @@ void dScnLogo_c::preLoad_dyl_remove() {
     delete[] m_preLoad_dylPhase;
 }
 
+typedef void (dScnLogo_c::*execFunc)();
+static execFunc l_execFunc[] = {
+    &dScnLogo_c::warningInDraw,   &dScnLogo_c::warningDispDraw, &dScnLogo_c::warningOutDraw,
+    &dScnLogo_c::nintendoInDraw,  &dScnLogo_c::nintendoOutDraw, &dScnLogo_c::dolbyInDraw,
+    &dScnLogo_c::dolbyOutDraw,    &dScnLogo_c::dolbyOutDraw2,   &dScnLogo_c::progInDraw,
+    &dScnLogo_c::progSelDraw,     &dScnLogo_c::progOutDraw,     &dScnLogo_c::progSetDraw,
+    &dScnLogo_c::progSet2Draw,    &dScnLogo_c::progChangeDraw,  &dScnLogo_c::dvdWaitDraw,
+    &dScnLogo_c::nextSceneChange,
+
+    #if PLATFORM_WII || PLATFORM_SHIELD
+    &dScnLogo_c::strapInDraw,
+    &dScnLogo_c::strapDispDraw,
+    &dScnLogo_c::strapOutDraw,
+    &dScnLogo_c::strapOut2Draw,
+    #endif
+
+    #if VERSION == VERSION_SHIELD
+    &dScnLogo_c::mocInDraw,
+    &dScnLogo_c::mocDispDraw,
+    &dScnLogo_c::mocOutDraw,
+    &dScnLogo_c::nvLogoInDraw,
+    &dScnLogo_c::nvLogoDispDraw,
+    &dScnLogo_c::nvLogoOutDraw,
+    #endif
+};
+
 static s16 const l_preLoad_dylKeyTbl[14] = {
-    0x02DC, 0x02CE, 0x0221, 0x00F2, 0x021B, 0x02F4, 0x0139,
-    0x015A, 0x02E4, 0x00FE, 0x0308, 0x030F, 0x00FF, 0x013F,
+    PROC_BG,
+    PROC_DEMO00,
+    PROC_NBOMB,
+    PROC_SPINNER,
+    PROC_Obj_LifeContainer,
+    PROC_CROD,
+    PROC_DISAPPEAR,
+    PROC_Tag_Attp,
+    PROC_MG_ROD,
+    PROC_BOOMERANG,
+    PROC_ARROW,
+    PROC_SUSPEND,
+    PROC_MIDNA,
+    PROC_Obj_Yousei,
 };
 
 bool dScnLogo_c::preLoad_dyl() {
     bool ret = true;
+    int var_r28 = 14;
 
-    for (int i = 0; i < 14; i++) {
+    for (int i = 0; i < var_r28; i++) {
         int phase_state = cDylPhs::Link(&m_preLoad_dylPhase[i], l_preLoad_dylKeyTbl[i]);
 
         if (phase_state != cPhs_COMPLEATE_e) {
@@ -85,6 +192,10 @@ bool dScnLogo_c::preLoad_dyl() {
 
     return ret;
 }
+
+#if DEBUG
+u8 dScnLogo_c::mOpeningCut;
+#endif
 
 void dScnLogo_c::checkProgSelect() {
     #if VERSION == VERSION_GCN_PAL
@@ -141,16 +252,34 @@ void dScnLogo_c::progSelDraw() {
 
     if (field_0x20b == 0) {
         if (field_0x209 == 0) {
-            if (mDoCPd_c::getHoldRight(PAD_1) || mDoCPd_c::getStickX(PAD_1) > 0.5f) {
+            #if PLATFORM_WII
+            if (mReCPd::getTrigRight(PAD_1) || mReCPd::getStickX(PAD_1) > 0.5f)
+            #else
+            if (mDoCPd_c::getHoldRight(PAD_1) || mDoCPd_c::getStickX(PAD_1) > 0.5f)
+            #endif
+            {
+                #if PLATFORM_WII || PLATFORM_SHIELD
+                mDoAud_seStart(Z2SE_SY_CURSOR_OPTION, NULL, 0, 0);
+                #else
                 mDoAud_seStart(Z2SE_SY_MENU_CURSOR_COMMON, NULL, 0, 0);
+                #endif
                 field_0x209 = 1;
                 field_0x20e = 30;
                 field_0x210 = field_0x20e;
                 field_0x212 = 0;
             }
         } else {
-            if (mDoCPd_c::getHoldLeft(PAD_1) || mDoCPd_c::getStickX(PAD_1) < -0.5f) {
+            #if PLATFORM_WII
+            if (mReCPd::getTrigLeft(PAD_1) || mReCPd::getStickX(PAD_1) < -0.5f)
+            #else
+            if (mDoCPd_c::getHoldLeft(PAD_1) || mDoCPd_c::getStickX(PAD_1) < -0.5f)
+            #endif
+            {
+                #if PLATFORM_WII || PLATFORM_SHIELD
+                mDoAud_seStart(Z2SE_SY_CURSOR_OPTION, NULL, 0, 0);
+                #else
                 mDoAud_seStart(Z2SE_SY_MENU_CURSOR_COMMON, NULL, 0, 0);
+                #endif
                 field_0x209 = 0;
                 field_0x20e = 30;
                 field_0x210 = field_0x20e;
@@ -158,16 +287,40 @@ void dScnLogo_c::progSelDraw() {
             }
         }
 
-        if (mDoCPd_c::getTrigA(PAD_1) || mTimer == 0) {
+        #if PLATFORM_WII
+        if (cAPICPad_A_TRIGGER(PAD_1) || mTimer == 0)
+        #else
+        if (mDoCPd_c::getTrigA(PAD_1) || mTimer == 0)
+        #endif
+        {
             if (field_0x209 == 0) {
-                mProgressiveSel->getPicture()->changeTexture(mProgressivePro, 0);
+                J2DPicture* pic = mProgressiveSel->getPicture();
+                pic->changeTexture(mProgressivePro, 0);
+
+                #if VERSION != VERSION_SHIELD
                 setProgressiveMode(PROGRESSIVE_MODE_ON);
+                #endif
+
                 mDoRst::setProgChgFlag(1);
+
+                #if PLATFORM_WII || PLATFORM_SHIELD
+                mDoAud_seStart(Z2SE_SY_TALK_WIN_CLOSE, NULL, 0, 0);
+                #else
                 mDoAud_seStart(Z2SE_SY_CURSOR_OK, NULL, 0, 0);
+                #endif
             } else {
-                mProgressiveSel->getPicture()->changeTexture(mProgressiveInter, 0);
+                J2DPicture* pic = mProgressiveSel->getPicture();
+                pic->changeTexture(mProgressiveInter, 0);
+
+                #if VERSION != VERSION_SHIELD
                 setProgressiveMode(PROGRESSIVE_MODE_OFF);
+                #endif
+
+                #if PLATFORM_WII || PLATFORM_SHIELD
+                mDoAud_seStart(Z2SE_SY_CURSOR_CANCEL, NULL, 0, 0);
+                #else
                 mDoAud_seStart(Z2SE_SY_CURSOR_OK, NULL, 0, 0);
+                #endif
             }
 
             if (mTimer > 540) {
@@ -181,7 +334,12 @@ void dScnLogo_c::progSelDraw() {
                 field_0x210 = field_0x20e;
                 field_0x212 = 0;
             }
+
+            #if PLATFORM_WII || PLATFORM_SHIELD
+            mDoRst::setProgSeqFlag(0);
+            #else
             mDoRst::setProgSeqFlag(1);
+            #endif
         }
     } else {
         if (field_0x214 == 0) {
@@ -232,13 +390,18 @@ void dScnLogo_c::progOutDraw() {
 
     if (mTimer == 0) {
         #if VERSION == VERSION_GCN_PAL
-        if (field_0x218 == 1 && field_0x209 == 0) {
+        if (field_0x218 == 1 && field_0x209 == 0)
         #else
-        if (field_0x218 != 0 && field_0x209 == 0) {
+        if (field_0x218 != 0 && field_0x209 == 0)
         #endif
+        {
             mExecCommand = EXEC_PROG_CHANGE;
             mTimer = 150;
         } else if (field_0x218 == 0 && field_0x209 != 0) {
+            #if PLATFORM_WII || PLATFORM_SHIELD
+            mTimer = 90;
+            mExecCommand = EXEC_NINTENDO_IN;
+            #else
             if (mDoRst::getWarningDispFlag() != 0) {
                 mTimer = 90;
                 mExecCommand = EXEC_NINTENDO_IN;
@@ -246,12 +409,13 @@ void dScnLogo_c::progOutDraw() {
                 mTimer = 120;
                 mExecCommand = EXEC_WARNING_IN;
             }
+            #endif
 
-            mDoGph_gInf_c::startFadeIn(30);
+            mDoGph_gInf_c::startFadeIn(1);
         } else {
             mExecCommand = EXEC_PROG_SET;
             mTimer = 150;
-            mDoGph_gInf_c::startFadeIn(30);
+            mDoGph_gInf_c::startFadeIn(1);
         }
     }
 }
@@ -262,7 +426,7 @@ void dScnLogo_c::progSetDraw() {
     if (mTimer == 0) {
         mExecCommand = EXEC_PROG_SET2;
         mTimer = 30;
-        mDoGph_gInf_c::startFadeOut(30);
+        mDoGph_gInf_c::startFadeOut(1);
     }
 }
 
@@ -281,20 +445,32 @@ void dScnLogo_c::progSet2Draw() {
 }
 
 void dScnLogo_c::progChangeDraw() {
+    #if PLATFORM_SHIELD
+    OSReport("progChangeDraw");
+    #endif
+
     if (getProgressiveMode() != 0 && mTimer == 90 && field_0x209 == 0) {
         setRenderMode();
     }
 
     if (mTimer == 0) {
+        #if VERSION == VERSION_SHIELD_DEBUG
+        mExecCommand = EXEC_STRAP_IN;
+        mTimer = 0;
+        #elif PLATFORM_WII || PLATFORM_SHIELD
+        mExecCommand = EXEC_STRAP_IN;
+        mTimer = 90;
+        #else
         if (mDoRst::getWarningDispFlag() != 0) {
-            mTimer = 90;
+            mTimer = 1;
             mExecCommand = EXEC_NINTENDO_IN;
         } else {
-            mTimer = 120;
+            mTimer = 1;
             mExecCommand = EXEC_WARNING_IN;
         }
+        #endif
 
-        mDoGph_gInf_c::startFadeIn(30);
+        mDoGph_gInf_c::startFadeIn(1);
     }
 }
 
@@ -303,7 +479,7 @@ void dScnLogo_c::warningInDraw() {
 
     if (mTimer == 0) {
         mExecCommand = EXEC_WARNING_DISP;
-        mTimer = 3510;
+        mTimer = 30;
         field_0x20e = 30;
         field_0x210 = field_0x20e;
         field_0x212 = 1;
@@ -314,12 +490,14 @@ void dScnLogo_c::warningDispDraw() {
     dComIfGd_set2DOpa(mWarning);
     dComIfGd_set2DOpa(mWarningStart);
 
-    f32 alpha = (f32)field_0x210 / (f32)field_0x20e;
+    f32 alphaf = (f32)field_0x210 / (f32)field_0x20e;
     if (field_0x212 != 0) {
-        alpha = 1.0f - alpha;
+        alphaf = 1.0f - alphaf;
     }
 
-    mWarningStart->setAlpha(255.0f * alpha);
+    u8 alpha = 255.0f * alphaf;
+    mWarningStart->setAlpha(alpha);
+
     if (field_0x210 == 0) {
         field_0x210 = field_0x20e;
         field_0x212 ^= 1;
@@ -327,14 +505,18 @@ void dScnLogo_c::warningDispDraw() {
         field_0x210--;
     }
 
+    #if PLATFORM_WII
+    if (mTimer == 0 || cAPICPad_A_TRIGGER(PAD_1) || cAPICPad_B_TRIGGER(PAD_1) || cAPICPad_START_TRIGGER(PAD_1))
+    #else
     if (mTimer == 0 || mDoCPd_c::getTrig(PAD_1) &
                            (PAD_BUTTON_A | PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_Y | PAD_BUTTON_START |
                             PAD_TRIGGER_Z | PAD_TRIGGER_L | PAD_TRIGGER_R | PAD_BUTTON_LEFT |
                             PAD_BUTTON_RIGHT | PAD_BUTTON_DOWN | PAD_BUTTON_UP))
+    #endif
     {
         mExecCommand = EXEC_WARNING_OUT;
-        mTimer = 30;
-        mDoGph_gInf_c::startFadeOut(30);
+        mTimer = 1;
+        mDoGph_gInf_c::startFadeOut(1);
         mDoRst::setWarningDispFlag(1);
     }
 }
@@ -343,9 +525,9 @@ void dScnLogo_c::warningOutDraw() {
     dComIfGd_set2DOpa(mWarning);
 
     if (mTimer == 0) {
-        mTimer = 90;
+        mTimer = 1;
         mExecCommand = EXEC_NINTENDO_IN;
-        mDoGph_gInf_c::startFadeIn(30);
+        mDoGph_gInf_c::startFadeIn(1);
     }
 }
 
@@ -354,8 +536,8 @@ void dScnLogo_c::nintendoInDraw() {
 
     if (mTimer == 0) {
         mExecCommand = EXEC_NINTENDO_OUT;
-        mTimer = 30;
-        mDoGph_gInf_c::startFadeOut(30);
+        mTimer = 1;
+        mDoGph_gInf_c::startFadeOut(1);
     }
 }
 
@@ -364,8 +546,8 @@ void dScnLogo_c::nintendoOutDraw() {
 
     if (mTimer == 0) {
         mExecCommand = EXEC_DOLBY_IN;
-        mTimer = 90;
-        mDoGph_gInf_c::startFadeIn(30);
+        mTimer = 1;
+        mDoGph_gInf_c::startFadeIn(1);
     }
 }
 
@@ -374,8 +556,8 @@ void dScnLogo_c::dolbyInDraw() {
 
     if (mTimer == 0) {
         mExecCommand = EXEC_DOLBY_OUT;
-        mTimer = 30;
-        mDoGph_gInf_c::startFadeOut(30);
+        mTimer = 1;
+        mDoGph_gInf_c::startFadeOut(1);
     }
 }
 
@@ -384,8 +566,8 @@ void dScnLogo_c::dolbyOutDraw() {
 
     if (mTimer == 0) {
         mExecCommand = EXEC_DOLBY_OUT2;
-        mTimer = 30;
-        mDoGph_gInf_c::startFadeIn(30);
+        mTimer = 1;
+        mDoGph_gInf_c::startFadeIn(1);
     }
 }
 
@@ -395,40 +577,208 @@ void dScnLogo_c::dolbyOutDraw2() {
     }
 }
 
+#if PLATFORM_WII || PLATFORM_SHIELD
+void dScnLogo_c::strapInDraw() {
+    dComIfGd_set2DOpa(mStrapImg);
+    if (mTimer == 0) {
+        mExecCommand = EXEC_STRAP_DISP;
+
+        #if VERSION == VERSION_SHIELD_DEBUG
+        mTimer = 0;
+        #elif VERSION == VERSION_SHIELD
+        mTimer = 60;
+        #else
+        mTimer = 840;
+        #endif
+    }
+}
+
+void dScnLogo_c::strapDispDraw() {
+    dComIfGd_set2DOpa(mStrapImg);
+
+    #if VERSION == VERSION_SHIELD_DEBUG
+    if (mTimer == 0)
+    #elif VERSION == VERSION_SHIELD
+    if (mTimer == 0 || cAPICPad_ANY_BUTTON(PAD_1))
+    #else
+    if (mTimer == 0 || mReCPd::getTrig(PAD_1) & ~WPAD_BUTTON_HOME)
+    #endif
+    {
+        mExecCommand = EXEC_DVD_WAIT;
+    }
+}
+
+void dScnLogo_c::strapOutDraw() {
+    dComIfGd_set2DOpa(mStrapImg);
+    if (mTimer == 0) {
+        #if VERSION == VERSION_SHIELD
+        mExecCommand = EXEC_NVLOGO_IN;
+        #else
+        mExecCommand = EXEC_STRAP_OUT2;
+        #endif
+
+        mTimer = 30;
+        mDoGph_gInf_c::startFadeIn(30);
+    }
+}
+
+void dScnLogo_c::strapOut2Draw() {
+    if (mTimer == 0) {
+        mExecCommand = EXEC_SCENE_CHANGE;
+    }
+}
+#endif
+
+#if VERSION == VERSION_SHIELD
+void dScnLogo_c::mocInDraw() {
+    dComIfGd_set2DOpa(mMocImg);
+
+    if (mTimer == 0) {
+        mExecCommand = EXEC_MOC_DISP;
+        mTimer = 120;
+    }
+}
+
+void dScnLogo_c::mocDispDraw() {
+    dComIfGd_set2DOpa(mMocImg);
+
+    if (mTimer == 0 || cAPICPad_ANY_BUTTON(PAD_1)) {
+        mExecCommand = EXEC_MOC_OUT;
+        mTimer = 30;
+        mDoGph_gInf_c::startFadeOut(30);
+    }
+}
+
+void dScnLogo_c::mocOutDraw() {
+    dComIfGd_set2DOpa(mMocImg);
+
+    if (mTimer == 0) {
+        mExecCommand = EXEC_STRAP_IN;
+        mTimer = 90;
+        mDoGph_gInf_c::startFadeIn(30);
+    }
+}
+
+void dScnLogo_c::nvLogoInDraw() {
+    dComIfGd_set2DOpa(mNvLogo);
+
+    if (mTimer == 0) {
+        mExecCommand = EXEC_NVLOGO_DISP;
+        mTimer = 120;
+    }
+}
+
+void dScnLogo_c::nvLogoDispDraw() {
+    dComIfGd_set2DOpa(mNvLogo);
+
+    if (mTimer == 0 || cAPICPad_ANY_BUTTON(PAD_1)) {
+        mExecCommand = EXEC_NVLOGO_OUT;
+        mTimer = 30;
+        mDoGph_gInf_c::startFadeOut(30);
+    }
+}
+
+void dScnLogo_c::nvLogoOutDraw() {
+    dComIfGd_set2DOpa(mNvLogo);
+
+    if (mTimer == 0) {
+        mExecCommand = EXEC_STRAP_OUT2;
+        mTimer = 30;
+        mDoGph_gInf_c::startFadeIn(30);
+    }
+}
+#endif
+
 void dScnLogo_c::dvdWaitDraw() {
+    #if PLATFORM_WII || PLATFORM_SHIELD
+    dComIfGd_set2DOpa(mStrapImg);
+    #endif
+
     if (!dComIfG_syncAllObjectRes()) {
-        if (mpField0Command->sync() && mpAlAnmCommand->sync() && mpFmapResCommand->sync() &&
-            mpDmapResCommand->sync() && mpCollectResCommand->sync() && mpItemIconCommand->sync() &&
-            mpRingResCommand->sync() && mpPlayerNameCommand->sync() &&
-            mpItemInfResCommand->sync() && mpButtonCommand->sync() && mpCardIconCommand->sync() &&
-            mpBmgResCommand->sync() && mpMsgComCommand->sync() && mpMsgResCommand[0]->sync() &&
-            mpMsgResCommand[1]->sync() && mpMsgResCommand[2]->sync() &&
-            mpMsgResCommand[3]->sync() && mpMsgResCommand[4]->sync() &&
-            mpMsgResCommand[5]->sync() && mpMsgResCommand[6]->sync() && mpFontResCommand->sync() &&
-            mpMain2DCommand->sync() && mpRubyResCommand->sync() && mParticleCommand->sync() &&
-            mItemTableCommand->sync() && mEnemyItemCommand->sync() && preLoad_dyl())
+        if (
+            #if PLATFORM_WII || VERSION == VERSION_SHIELD
+            mpHomeBtnCommand->sync() &&
+            #endif
+            mpField0Command->sync()
+            && mpAlAnmCommand->sync()
+            && mpFmapResCommand->sync()
+            && mpDmapResCommand->sync()
+            && mpCollectResCommand->sync()
+            && mpItemIconCommand->sync()
+            && mpRingResCommand->sync()
+            && mpPlayerNameCommand->sync()
+            && mpItemInfResCommand->sync()
+            && mpButtonCommand->sync()
+            && mpCardIconCommand->sync()
+            && mpBmgResCommand->sync()
+            && mpMsgComCommand->sync()
+            && mpMsgResCommand[0]->sync()
+            && mpMsgResCommand[1]->sync()
+            && mpMsgResCommand[2]->sync()
+            && mpMsgResCommand[3]->sync()
+            && mpMsgResCommand[4]->sync()
+            && mpMsgResCommand[5]->sync()
+            && mpMsgResCommand[6]->sync()
+            && mpFontResCommand->sync()
+            && mpMain2DCommand->sync()
+            && mpRubyResCommand->sync()
+            && mParticleCommand->sync()
+            && mItemTableCommand->sync()
+            && mEnemyItemCommand->sync()
+            && preLoad_dyl())
         {
             mDoRst::setLogoScnFlag(0);
+
+            #if PLATFORM_WII || PLATFORM_SHIELD
+            mDoRst::setProgSeqFlag(0);
+            #endif
+
             mDoRst::setProgChgFlag(0);
+
+            #if PLATFORM_WII || PLATFORM_SHIELD
+            mExecCommand = EXEC_STRAP_OUT;
+            mTimer = 30;
+            mDoGph_gInf_c::startFadeOut(30);
+            #else
             mExecCommand = EXEC_SCENE_CHANGE;
+            #endif
         }
     }
 }
 
 void dScnLogo_c::nextSceneChange() {
     if (!mDoRst::isReset()) {
-        dComIfG_changeOpeningScene(this, PROC_OPENING_SCENE);
+        if (!isOpeningCut())
+        {
+            dComIfG_changeOpeningScene(this, PROC_OPENING_SCENE);
+        } else {
+            #if DEBUG
+            fopScnM_ChangeReq(this, PROC_MENU_SCENE, 0, 30);
+            dComIfGs_init();
+            dComIfG_playerStatusD();
+            return;
+            #endif
+        }
     }
 }
 
 dScnLogo_c::~dScnLogo_c() {
     if (mDoRst::isReset()) {
-        if (mDoAud_zelAudio_c::isInitFlag()) {
+        #if !(PLATFORM_WII || PLATFORM_SHIELD)
+        if (mDoAud_zelAudio_c::isInitFlag())
+        #endif
+        {
             Z2AudioMgr::getInterface()->resetProcess(5, true);
         }
+
         mDoRst_reset(0, 0x80000000, 0);
     }
 
+    #if PLATFORM_WII || PLATFORM_SHIELD
+    delete mStrapImg;
+    #endif
+
+    #if !(PLATFORM_WII || PLATFORM_SHIELD)
     delete mNintendoLogo;
     delete mWarning;
     delete mWarningStart;
@@ -443,13 +793,40 @@ dScnLogo_c::~dScnLogo_c() {
     mpPalLogoResCommand->getArchive()->unmount();
     mpPalLogoResCommand->destroy();
     #endif
+    #endif
+
+    #if VERSION == VERSION_SHIELD
+    delete mNvLogo;
+    delete mMocImg;
+    #endif
 
     preLoad_dyl_remove();
-    dComIfG_deleteObjectResMain(LOGO_ARC);
 
-    field_0x1d4->destroy();
-    field_0x1d0->destroy();
+    #if PLATFORM_WII || PLATFORM_SHIELD
+    switch (getPalLanguage()) {
+    case 2:
+        dComIfG_deleteObjectResMain("LogoFrWii");
+        break;
+    case 3:
+        dComIfG_deleteObjectResMain("LogoSpWii");
+        break;
+    case 0:
+    default:
+        dComIfG_deleteObjectResMain("LogoUsWii");
+        break;
+    }
+    #else
+    dComIfG_deleteObjectResMain(LOGO_ARC);
+    #endif
+
+    mLogo01Heap->destroy();
+    mLogoHeap->destroy();
     JKRFree(dummyGameAlloc);
+
+    #if PLATFORM_WII || VERSION == VERSION_SHIELD
+    dHomeButton_c::create(mHomeBtnRegion, mpHomeBtnCommand->getMemAddress());
+    mpHomeBtnCommand->destroy();
+    #endif
 
     dComIfGp_particle_createCommon(mParticleCommand->getMemAddress());
     dComIfGp_setFieldMapArchive2(mpField0Command->getArchive());
@@ -462,7 +839,17 @@ dScnLogo_c::~dScnLogo_c() {
     dComIfGp_setRingResArchive(mpRingResCommand->getArchive());
     dComIfGp_setNameResArchive(mpPlayerNameCommand->getArchive());
     dComIfGp_setDemoMsgArchive(mpItemInfResCommand->getArchive());
+
     dComIfGp_setMeterButtonArchive(mpButtonCommand->getArchive());
+    #if DEBUG
+    JKRArchive* button = mpButtonCommand->getArchive();
+    if (button != NULL) {
+        OS_REPORT("button not nullptr\n");
+    } else {
+        OS_REPORT("button nullptr\n");
+    }
+    #endif
+
     dComIfGp_setErrorResArchive(NULL);
     dComIfGp_setCardIconResArchive(mpCardIconCommand->getArchive());
     dComIfGp_setMsgDtArchive(0, mpBmgResCommand->getArchive());
@@ -493,7 +880,12 @@ dScnLogo_c::~dScnLogo_c() {
     mpFontResCommand->destroy();
     mpMain2DCommand->destroy();
     mpRubyResCommand->destroy();
+
+    #if !PLATFORM_SHIELD
     mParticleCommand->destroy();
+    #else
+    delete mParticleCommand;
+    #endif
 
     JKRAramHeap* aram_heap = JKRAram::getAramHeap();
     u32 free_size = aram_heap->getTotalFreeSize();
@@ -510,14 +902,29 @@ dScnLogo_c::~dScnLogo_c() {
 #endif
 
     dComIfGp_setItemTable(mItemTableCommand->getMemAddress());
+    #if !PLATFORM_SHIELD
     mItemTableCommand->destroy();
+    #else
+    delete mItemTableCommand;
+    #endif
 
     dEnemyItem_c::setItemData((u8*)mEnemyItemCommand->getMemAddress());
+    #if !PLATFORM_SHIELD
     mEnemyItemCommand->destroy();
+    #else
+    delete mEnemyItemCommand;
+    #endif
 
     dDlst_shadowControl_c::setSimpleTex((ResTIMG*)dComIfG_getObjectRes("Always", 0x4A));
+
+    #if PLATFORM_WII || PLATFORM_SHIELD
+    dComIfG_inf_c::createBaseCsr();
+    #endif
+
     dTres_c::createWork();
     dMpath_c::createWork();
+
+    OS_REPORT("\x1b[31m%d gameHeap->getFreeSize %08x(%d)\n\x1b[m", 1479, mDoExt_getGameHeap()->getFreeSize(), mDoExt_getGameHeap()->getFreeSize());
 
     #if PLATFORM_WII
     data_8053a730 = 0;
@@ -528,10 +935,18 @@ static int phase_0(dScnLogo_c* i_this) {
     mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor);
     dComIfGp_particle_create();
 
-    i_this->dummyGameAlloc = mDoExt_getGameHeap()->alloc(0x340000, -0x10);
+    OS_REPORT("\x1b[31m%d gameHeap->getFreeSize %08x(%d)\n\x1b[m", 1497, mDoExt_getGameHeap()->getFreeSize(), mDoExt_getGameHeap()->getFreeSize());
+    u32 var_r29 = 0x340000;
+    u32 var_r28 = 0x130000;
+
+    i_this->dummyGameAlloc = mDoExt_getGameHeap()->alloc(var_r29, -0x10);
     JUT_ASSERT(1523, i_this->dummyGameAlloc != NULL);
-    i_this->field_0x1d0 = JKRExpHeap::create(i_this->dummyGameAlloc, 0x340000, NULL, false);
-    i_this->field_0x1d4 = JKRExpHeap::create(0x130000, i_this->field_0x1d0, false);
+
+    i_this->mLogoHeap = JKRExpHeap::create(i_this->dummyGameAlloc, var_r29, NULL, false);
+    JUT_ASSERT(1525, i_this->mLogoHeap != NULL);
+
+    i_this->mLogo01Heap = JKRCreateExpHeap(var_r28, i_this->mLogoHeap, false);
+    JUT_ASSERT(1528, i_this->mLogo01Heap != NULL);
 
     #if VERSION == VERSION_GCN_PAL
     switch (i_this->getPalLanguage()) {
@@ -554,6 +969,10 @@ static int phase_0(dScnLogo_c* i_this) {
     }
     #endif
 
+    #if PLATFORM_WII || PLATFORM_SHIELD
+    OSSetPowerCallback(mDoRst_shutdownCallBack);
+    #endif
+
     return cPhs_NEXT_e;
 }
 
@@ -562,9 +981,11 @@ static int phase_1(dScnLogo_c* i_this) {
         return cPhs_INIT_e;
     }
 
+    #if !(PLATFORM_WII || PLATFORM_SHIELD)
     if (!mDoAud_zelAudio_c::isInitFlag() || Z2AudioMgr::getInterface()->checkFirstWaves()) {
         return cPhs_INIT_e;
     }
+    #endif
 
     #if VERSION == VERSION_GCN_PAL
     if (!mDoDvdThd::SyncWidthSound) {
@@ -576,8 +997,29 @@ static int phase_1(dScnLogo_c* i_this) {
     }
     #endif
 
-    dComIfG_setObjectRes(LOGO_ARC, (u8)0, i_this->field_0x1d0);
+    int rt;
+    #if PLATFORM_WII || PLATFORM_SHIELD
+    switch (i_this->getPalLanguage()) {
+    case 0:
+    default:
+        rt = dComIfG_setObjectRes("LogoUsWii", (u8)0, i_this->mLogoHeap);
+        break;
+    case 2:
+        rt = dComIfG_setObjectRes("LogoFrWii", (u8)0, i_this->mLogoHeap);
+        break;
+    case 3:
+        rt = dComIfG_setObjectRes("LogoSpWii", (u8)0, i_this->mLogoHeap);
+        break;
+    }
+    #else
+    rt = dComIfG_setObjectRes(LOGO_ARC, (u8)0, i_this->mLogoHeap);
+    #endif
+
+    JUT_ASSERT(1652, rt == 1);
+
     mDoRst::setLogoScnFlag(1);
+
+    OS_REPORT("\x1b[32m%d archiveHeap->getTotalFreeSize %08x\n\x1b[m", 1667, archiveHeap->getTotalFreeSize());
     archiveHeap->dump_sort();
     return cPhs_NEXT_e;
 }
@@ -617,28 +1059,56 @@ int dScnLogo_c::create() {
     data_8053a730 = 1;
     #endif
 
-    mpHeap = mDoExt_setCurrentHeap(field_0x1d4);
+    mpHeap = mDoExt_setCurrentHeap(mLogo01Heap);
+
+    #if PLATFORM_WII || PLATFORM_SHIELD
+    logoInitWii();
+    #else
     logoInitGC();
-    mpHeap->becomeCurrentHeap();
+    #endif
+
+    JKRSetCurrentHeap(mpHeap);
+
+    OS_REPORT("\x1b[31m%d gameHeap->getFreeSize %08x(%d)\n\x1b[m", 1732, mDoExt_getGameHeap()->getFreeSize(), mDoExt_getGameHeap()->getFreeSize());
 
     dvdDataLoad();
-    Z2AudioMgr::getInterface()->loadStaticWaves();
-    mDoGph_gInf_c::setTickRate((OS_BUS_CLOCK / 4) / 60);
-    mDoGph_gInf_c::waitBlanking(0);
-    field_0x20a = 0;
-    mDoGph_gInf_c::startFadeIn(30);
 
+    OS_REPORT("\x1b[31m%d gameHeap->getFreeSize %08x(%d)\n\x1b[m", 1738, mDoExt_getGameHeap()->getFreeSize(), mDoExt_getGameHeap()->getFreeSize());
+
+    #if !(PLATFORM_WII || PLATFORM_SHIELD)
+    Z2AudioMgr::getInterface()->loadStaticWaves();
+    #endif
+
+    mDoGph_gInf_c::setTickRate(OS_TIMER_CLOCK / 60);
+    mDoGph_gInf_c::waitBlanking(0);
+
+    field_0x20a = 0;
+
+    #if VERSION == VERSION_SHIELD_DEBUG
+    mExecCommand = EXEC_STRAP_IN;
+    mTimer = 0;
+    #elif VERSION == VERSION_SHIELD
+    mExecCommand = EXEC_MOC_IN;
+    mTimer = 30;
+    #elif PLATFORM_WII
+    mExecCommand = EXEC_STRAP_IN;
+    mTimer = 90;
+    #endif
+
+    mDoGph_gInf_c::startFadeIn(1);
+
+    #if !(PLATFORM_WII || PLATFORM_SHIELD)
     checkProgSelect();
     if (field_0x20a != 0) {
         mExecCommand = EXEC_PROG_IN;
-        mTimer = 30;
+        mTimer = 1;
         field_0x218 = getProgressiveMode();
     } else {
         if (mDoRst::getWarningDispFlag()) {
-            mTimer = 90;
+            mTimer = 1; // 90;
             mExecCommand = EXEC_NINTENDO_IN;
         } else {
-            mTimer = 120;
+            mTimer = 1;
             mExecCommand = EXEC_WARNING_IN;
         }
         mDoRst::setProgSeqFlag(1);
@@ -646,12 +1116,92 @@ int dScnLogo_c::create() {
 
     JUTGamePad::clearResetOccurred();
     JUTGamePad::setResetCallback(mDoRst_resetCallBack, NULL);
+    #endif
+
     mDoRst::offReset();
     mDoRst::offResetPrepare();
+
+    #if PLATFORM_WII || VERSION == VERSION_SHIELD
+    dHomeButton_c::lbl_8053A724 = 0;
+    #endif
 
     return phase_state;
 }
 
+#if PLATFORM_WII || PLATFORM_SHIELD
+void dScnLogo_c::logoInitWii() {
+    u8 language = getPalLanguage();
+    if (language > 5) {
+        language = 0;
+    }
+
+    ResTIMG* timg;
+    s16 width;
+    s16 height;
+    if (mDoGph_gInf_c::isWide()) {
+        switch (language) {
+        case 0:
+        default:
+            timg = (ResTIMG*)dComIfG_getObjectRes("LogoUsWii", dRes_ID_LOGOUSWII_BTI_STRAP_16_9_832X456_US_e);
+            break;
+        case 2:
+            timg = (ResTIMG*)dComIfG_getObjectRes("LogoFrWii", 3);
+            break;
+        case 3:
+            timg = (ResTIMG*)dComIfG_getObjectRes("LogoSpWii", 3);
+            break;
+        }
+
+        width = 832;
+        height = 456;
+    } else {
+        switch (language) {
+        case 0:
+        default:
+            timg = (ResTIMG*)dComIfG_getObjectRes("LogoUsWii", dRes_ID_LOGOUSWII_BTI_STRAP_608X456_US_e);
+            break;
+        case 2:
+            timg = (ResTIMG*)dComIfG_getObjectRes("LogoFrWii", 4);
+            break;
+        case 3:
+            timg = (ResTIMG*)dComIfG_getObjectRes("LogoSpWii", 4);
+            break;
+        }
+
+        width = 608;
+        height = 456;
+    }
+
+    JUT_ASSERT(2309, timg != NULL);
+    mStrapImg = new dDlst_2D_c(timg, 304 - (width / 2), 224 - (height / 2), width, height, 255);
+
+    #if VERSION == VERSION_SHIELD
+    timg = (ResTIMG*)dComIfG_getObjectRes("LogoUsWii", 5);
+    mNvLogo = new dDlst_2D_c(timg, 304 - (width / 2), 224 - (height / 2), width, height, 255);
+
+    timg = (ResTIMG*)dComIfG_getObjectRes("LogoUsWii", 4);
+    mMocImg = new dDlst_2D_c(timg, 304 - (width / 2), 224 - (height / 2), width, height, 255);
+    #endif
+
+    OS_REPORT("\x1b[32m%d archiveHeap->getTotalFreeSize %08x\n\x1b[m", 2316, archiveHeap->getTotalFreeSize());
+
+    JUT_ASSERT(2319, mStrapImg != NULL);
+
+    mNintendoLogo = NULL;
+    mDolbyLogo = NULL;
+    mWarning = NULL;
+    mWarningStart = NULL;
+    mProgressiveChoice = NULL;
+    mProgressiveYes = NULL;
+    mProgressiveNo = NULL;
+    mProgressivePro = NULL;
+    mProgressiveInter = NULL;
+    mProgressiveSel = NULL;
+
+    OS_REPORT("\x1b[32m%d archiveHeap->getTotalFreeSize %08x\n\x1b[m", 2341, archiveHeap->getTotalFreeSize());
+    OS_REPORT("%d mLogo01Heap->getTotalFreeSize %08x\n\x1b[m", 2344, mLogo01Heap->getTotalFreeSize());
+}
+#else
 void dScnLogo_c::logoInitGC() {
     ResTIMG* nintendoImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 4);
     mNintendoLogo = new dDlst_2D_c(nintendoImg, 117, 154, 376, 104, 255);
@@ -769,103 +1319,133 @@ void dScnLogo_c::logoInitGC() {
     mProgressiveSel = new dDlst_2D_c(mProgressivePro, 153, 309, 336, 88, 255);
 #endif
 }
+#endif
 
 void dScnLogo_c::dvdDataLoad() {
-    dComIfG_setObjectRes("Always", (u8)0, NULL);
+    int rt;
+
+    #if PLATFORM_WII || VERSION == VERSION_SHIELD
+    rt = dComIfG_setObjectRes("HomeBtn", (u8)0, NULL);
+    JUT_ASSERT(__LINE__, rt == 1);
+
+    static const homeBtnData l_homeBtnData[] = {
+        {SC_LANG_ENGLISH, "/res/HomeBtn/homeBtn_ENG.arc"},
+        {SC_LANG_ENGLISH, "/res/HomeBtn/homeBtn_ENG.arc"},
+        {SC_LANG_FRENCH, "/res/HomeBtn/homeBtn_FRA.arc"},
+        {SC_LANG_SPANISH, "/res/HomeBtn/homeBtn_SPA.arc"},
+        {SC_LANG_ENGLISH, "/res/HomeBtn/homeBtn_ENG.arc"},
+        {SC_LANG_ENGLISH, "/res/HomeBtn/homeBtn_ENG.arc"},
+        {SC_LANG_ENGLISH, "/res/HomeBtn/homeBtn_ENG.arc"},
+    };
+
+    u8 language = getPalLanguage();
+    const homeBtnData* data = &l_homeBtnData[language];
+    mpHomeBtnCommand = mDoDvdThd_toMainRam_c::create(data->path, 0, NULL);
+    mHomeBtnRegion = data->region;
+    #endif
+
+    rt = dComIfG_setObjectRes("Always", (u8)0, NULL);
+    JUT_ASSERT(2420, rt == 1);
+
+    OS_REPORT("\x1b[32m%d archiveHeap->getTotalFreeSize %08x\n\x1b[m", 2421, archiveHeap->getTotalFreeSize());
     archiveHeap->dump_sort();
 
-    dComIfG_setObjectRes("Alink", (u8)0, NULL);
+    rt = dComIfG_setObjectRes("Alink", (u8)0, NULL);
+    JUT_ASSERT(2429, rt == 1);
 
-    mpField0Command = mDoDvdThd_mountXArchive_c::create(
-        "/res/FieldMap/Field0.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
-    mpAlAnmCommand =
-        mDoDvdThd_mountXArchive_c::create("/res/Object/AlAnm.arc", 0, JKRArchive::MOUNT_ARAM, NULL);
-    mpFmapResCommand = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/fmapres.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
-    mpDmapResCommand = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/dmapres.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
-    mpCollectResCommand = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/clctres.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
-    mpItemIconCommand = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/itemicon.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
-    mpRingResCommand = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/ringres.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
-    mpPlayerNameCommand = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/playerName.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
-    mpItemInfResCommand = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/itmInfRes.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
-    mpButtonCommand = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/button.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
-    mpCardIconCommand = mDoDvdThd_mountXArchive_c::create(
-        "/res/CardIcon/cardicon.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
+    #if PLATFORM_WII || PLATFORM_SHIELD
+    rt = dComIfG_setObjectRes("NNGC", (u8)0, NULL);
+    JUT_ASSERT(2433, rt == 1);
+    #endif
+
+    OS_REPORT("\x1b[32m%d archiveHeap->getTotalFreeSize %08x\n\x1b[m", 2436, archiveHeap->getTotalFreeSize());
+
+    mpField0Command = aramMount("/res/FieldMap/Field0.arc", mDoExt_getJ2dHeap());
+    mpAlAnmCommand = aramMount("/res/Object/AlAnm.arc", NULL);
+    mpFmapResCommand = aramMount(FMAP_RES_PATH, mDoExt_getJ2dHeap());
+    mpDmapResCommand = aramMount(DMAP_RES_PATH, mDoExt_getJ2dHeap());
+    mpCollectResCommand = aramMount(COLLECT_RES_PATH, mDoExt_getJ2dHeap());
+    mpItemIconCommand = aramMount("/res/Layout/itemicon.arc", mDoExt_getJ2dHeap());
+    mpRingResCommand = aramMount(RING_RES_PATH, mDoExt_getJ2dHeap());
+    mpPlayerNameCommand = aramMount("/res/Layout/playerName.arc", mDoExt_getJ2dHeap());
+    mpItemInfResCommand = aramMount(ITEM_INF_RES_PATH, mDoExt_getJ2dHeap());
+    mpButtonCommand = aramMount(BUTTON_RES_PATH, mDoExt_getJ2dHeap());
+    mpCardIconCommand = aramMount(ICON_RES_PATH, mDoExt_getJ2dHeap());
 
     #if VERSION == VERSION_GCN_PAL
     switch (getPalLanguage()) {
     case 1:
-        mpBmgResCommand = mDoDvdThd_mountXArchive_c::create("/res/Msgde/bmgres.arc", 0, JKRArchive::MOUNT_MEM, NULL);
+        mpBmgResCommand = onMemMount("/res/Msgde/bmgres.arc");
         break;
     case 2:
-        mpBmgResCommand = mDoDvdThd_mountXArchive_c::create("/res/Msgfr/bmgres.arc", 0, JKRArchive::MOUNT_MEM, NULL);
+        mpBmgResCommand = onMemMount("/res/Msgfr/bmgres.arc");
         break;
     case 3:
-        mpBmgResCommand = mDoDvdThd_mountXArchive_c::create("/res/Msgsp/bmgres.arc", 0, JKRArchive::MOUNT_MEM, NULL);
+        mpBmgResCommand = onMemMount("/res/Msgsp/bmgres.arc");
         break;
     case 4:
-        mpBmgResCommand = mDoDvdThd_mountXArchive_c::create("/res/Msgit/bmgres.arc", 0, JKRArchive::MOUNT_MEM, NULL);
+        mpBmgResCommand = onMemMount("/res/Msgit/bmgres.arc");
         break;
     case 0:
     default:
-        mpBmgResCommand = mDoDvdThd_mountXArchive_c::create("/res/Msguk/bmgres.arc", 0, JKRArchive::MOUNT_MEM, NULL);
+        mpBmgResCommand = onMemMount("/res/Msguk/bmgres.arc");
+        break;
+    }
+    #elif VERSION == VERSION_SHIELD_DEBUG
+    switch (getPalLanguage()) {
+    case 2:
+        mpBmgResCommand = onMemMount("/res/Msgfr/bmgres.arc");
+        break;
+    case 3:
+        mpBmgResCommand = onMemMount("/res/Msgsp/bmgres.arc");
+        break;
+    default:
+        mpBmgResCommand = onMemMount("/res/Msgus/bmgres.arc");
         break;
     }
     #else
-    mpBmgResCommand = mDoDvdThd_mountXArchive_c::create(MSG_PATH, 0, JKRArchive::MOUNT_MEM, NULL);
+    mpBmgResCommand = onMemMount(MSG_PATH);
     #endif
 
-    mpMsgComCommand = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/msgcom.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
-    mpMsgResCommand[0] = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/msgres00.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
-    mpMsgResCommand[1] = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/msgres01.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
-    mpMsgResCommand[2] = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/msgres02.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
-    mpMsgResCommand[3] = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/msgres03.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
+    mpMsgComCommand = aramMount(MSG_COM_PATH, mDoExt_getJ2dHeap());
+    mpMsgResCommand[0] = aramMount(MSG_RES0_PATH, mDoExt_getJ2dHeap());
+    mpMsgResCommand[1] = aramMount(MSG_RES1_PATH, mDoExt_getJ2dHeap());
+    mpMsgResCommand[2] = aramMount(MSG_RES2_PATH, mDoExt_getJ2dHeap());
+    mpMsgResCommand[3] = aramMount(MSG_RES3_PATH, mDoExt_getJ2dHeap());
 #if VERSION == VERSION_GCN_JPN
-    mpMsgResCommand[4] = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/msgres04.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
+    mpMsgResCommand[4] = aramMount("/res/Layout/msgres04.arc", mDoExt_getJ2dHeap());
 #else
-    mpMsgResCommand[4] = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/msgres04F.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
+    mpMsgResCommand[4] = aramMount("/res/Layout/msgres04F.arc", mDoExt_getJ2dHeap());
 #endif
-    mpMsgResCommand[5] = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/msgres05.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
-    mpMsgResCommand[6] = mDoDvdThd_mountXArchive_c::create(
-        "/res/Layout/msgres06.arc", 0, JKRArchive::MOUNT_ARAM, mDoExt_getJ2dHeap());
-    mpMain2DCommand =
-        mDoDvdThd_mountXArchive_c::create("/res/Layout/main2D.arc", 0, JKRArchive::MOUNT_MEM, NULL);
+    mpMsgResCommand[5] = aramMount("/res/Layout/msgres05.arc", mDoExt_getJ2dHeap());
+    mpMsgResCommand[6] = aramMount("/res/Layout/msgres06.arc", mDoExt_getJ2dHeap());
+
+    mpMain2DCommand = onMemMount(MAIN2D_PATH);
 
 #if VERSION == VERSION_GCN_JPN
-    mpFontResCommand = mDoDvdThd_mountXArchive_c::create("/res/Fontjp/fontres.arc", 1,
-                                                         JKRArchive::MOUNT_MEM, NULL);
-    mpRubyResCommand = mDoDvdThd_mountXArchive_c::create("/res/Fontjp/rubyres.arc", 0,
-                                                         JKRArchive::MOUNT_MEM, NULL);
+    mpFontResCommand = mDoDvdThd_mountXArchive_c::create("/res/Fontjp/fontres.arc", 1, JKRArchive::MOUNT_MEM, NULL);
+    mpRubyResCommand = onMemMount("/res/Fontjp/rubyres.arc");
 #elif VERSION == VERSION_GCN_PAL
-    mpFontResCommand = mDoDvdThd_mountXArchive_c::create("/res/Fonteu/fontres.arc", 0,
-                                                         JKRArchive::MOUNT_MEM, NULL);
-    mpRubyResCommand = mDoDvdThd_mountXArchive_c::create("/res/Fonteu/rubyres.arc", 0,
-                                                         JKRArchive::MOUNT_MEM, NULL);
+    mpFontResCommand = onMemMount("/res/Fonteu/fontres.arc");
+    mpRubyResCommand = onMemMount("/res/Fonteu/rubyres.arc");
+#elif VERSION == VERSION_SHIELD_DEBUG
+    mpFontResCommand = onMemMount("/res/Fonteu/fontres.arc");
+    mpRubyResCommand = onMemMount("/res/Fontus/rubyres.arc");
+#elif VERSION == VERSION_SHIELD
+    mpFontResCommand = onMemMount("/res/Fontcn/fontres.arc");
+    mpRubyResCommand = onMemMount("/res/Fontcn/rubyres.arc");
 #else
-    mpFontResCommand = mDoDvdThd_mountXArchive_c::create("/res/Fontus/fontres.arc", 0,
-                                                         JKRArchive::MOUNT_MEM, NULL);
-    mpRubyResCommand = mDoDvdThd_mountXArchive_c::create("/res/Fontus/rubyres.arc", 0,
-                                                         JKRArchive::MOUNT_MEM, NULL);
+    mpFontResCommand = onMemMount("/res/Fontus/fontres.arc");
+    mpRubyResCommand = onMemMount("/res/Fontus/rubyres.arc");
 #endif
-    mParticleCommand = mDoDvdThd_toMainRam_c::create("/res/Particle/common.jpc", 0,
-                                                     dComIfGp_particle_getResHeap());
+
+    mParticleCommand = mDoDvdThd_toMainRam_c::create(PARTICLE_COM_PATH, 0, dComIfGp_particle_getResHeap());
+
     mItemTableCommand = mDoDvdThd_toMainRam_c::create("/res/ItemTable/item_table.bin", 0, NULL);
+    JUT_ASSERT(2620, mItemTableCommand != NULL);
+
     mEnemyItemCommand = mDoDvdThd_toMainRam_c::create("/res/ItemTable/enemy_table.bin", 0, NULL);
+    JUT_ASSERT(2624, mEnemyItemCommand != NULL);
 
     preLoad_dyl_create();
     preLoad_dyl();
@@ -877,13 +1457,58 @@ static int dScnLogo_Create(scene_class* i_this) {
 }
 
 static int dScnLogo_Execute(dScnLogo_c* i_this) {
+    fpc_ProcID id = fpcM_GetID(i_this);
+
     if (mDoRst::isReset()) {
         fopScnM_ChangeReq(i_this, PROC_LOGO_SCENE, 0, 5);
     }
+
     return 1;
 }
 
+#if DEBUG
+static u8 lbl_8074CA49;
+#endif
+
 static int dScnLogo_Draw(dScnLogo_c* i_this) {
+    #if DEBUG
+    int x = 36;
+    int y = 40;
+
+    y += 12;
+    JUTReport(x, y, "COPYDATE %s", mDoMain::COPYDATE_STRING);
+
+    y += 12;
+    JUTReport(x, y, "Build by %s", "Authorized User");
+
+    y += 12;
+    JUTReport(x, y, "_DEBUG/Debug version");
+
+    if (!lbl_8074CA49) {
+        lbl_8074CA49 = 1;
+        JUTReportConsole_f("COPYDATE %s\n", mDoMain::COPYDATE_STRING);
+        JUTReportConsole_f("Build by %s\n", "Authorized User");
+        JUTReportConsole_f("_DEBUG/Debug version\n");
+        JUTReportConsole_f("SDKVersion %s\n", "11Dec2009Patch02");
+
+        #if PLATFORM_WII || PLATFORM_SHIELD
+        JUTReportConsole_f("ConsoleSimMem  %08x\n", OSGetConsoleSimulatedMem1Size());
+        JUTReportConsole_f("PhysicalMemory %08x\n", OSGetPhysicalMem1Size());
+        JUTReportConsole_f("ConsoleType    %08x\n", OSGetConsoleType());
+        JUTReportConsole_f("Language(PAL) %1x\n", SCGetLanguage());
+        JUTReportConsole_f("Progressive   %1x\n", SCGetProgressiveMode());
+        JUTReportConsole_f("SoundMode     %1x\n", SCGetSoundMode());
+        #else
+        JUTReportConsole_f("ConsoleSimMem  %08x\n", OSGetConsoleSimulatedMemSize());
+        JUTReportConsole_f("PhysicalMemory %08x\n", OSGetPhysicalMemSize());
+        JUTReportConsole_f("ConsoleType    %08x\n", OSGetConsoleType());
+        JUTReportConsole_f("Language(PAL) %1x\n", OSGetLanguage());
+        JUTReportConsole_f("Progressive   %1x\n", OSGetProgressiveMode());
+        JUTReportConsole_f("SoundMode     %1x\n", OSGetSoundMode());
+        #endif
+    }
+    #endif
+
     i_this->draw();
     return 1;
 }
@@ -897,9 +1522,35 @@ static int dScnLogo_IsDelete(dScnLogo_c* i_this) {
     return 1;
 }
 
-#if VERSION == VERSION_GCN_PAL
+#if VERSION == VERSION_GCN_PAL || PLATFORM_WII || PLATFORM_SHIELD
 u8 dScnLogo_c::getPalLanguage() {
     u8 language;
+
+    #if PLATFORM_WII || PLATFORM_SHIELD
+    switch (SCGetLanguage()) {
+    case SC_LANG_JAPANESE:
+        language = 6;
+        break;
+    case SC_LANG_ENGLISH:
+        language = 0;
+        break;
+    case SC_LANG_GERMAN:
+        language = 1;
+        break;
+    case SC_LANG_FRENCH:
+        language = 2;
+        break;
+    case SC_LANG_SPANISH:
+        language = 3;
+        break;
+    case SC_LANG_ITALIAN:
+        language = 4;
+        break;
+    case SC_LANG_DUTCH:
+        language = 5;
+        break;
+    }
+    #else
     switch (OSGetLanguage()) {
     case OS_LANGUAGE_ENGLISH:
         language = 0;
@@ -920,13 +1571,20 @@ u8 dScnLogo_c::getPalLanguage() {
         language = 5;
         break;
     }
+    #endif
 
     return language;
 }
 #endif
 
 void dScnLogo_c::setProgressiveMode(u8 mode) {
-    #if VERSION == VERSION_GCN_PAL
+    #if VERSION == VERSION_SHIELD_DEBUG
+    return;
+    #endif
+
+    #if PLATFORM_WII
+    SCSetProgressiveMode(mode);
+    #elif VERSION == VERSION_GCN_PAL
     OSSetEuRgb60Mode(mode);
     #else
     OSSetProgressiveMode(mode);
@@ -934,6 +1592,10 @@ void dScnLogo_c::setProgressiveMode(u8 mode) {
 }
 
 u8 dScnLogo_c::getProgressiveMode() {
+    #if PLATFORM_WII || PLATFORM_SHIELD
+    return SCGetProgressiveMode();
+    #endif
+
     #if VERSION == VERSION_GCN_PAL
     return OSGetEuRgb60Mode();
     #else
@@ -952,8 +1614,6 @@ bool dScnLogo_c::isProgressiveMode() {
 void dScnLogo_c::setRenderMode() {
     mDoMch_render_c::setProgressiveMode();
 }
-
-dLog_HIO_c::~dLog_HIO_c() {}
 
 static scene_method_class l_dScnLogo_Method = {
     (process_method_func)dScnLogo_Create,

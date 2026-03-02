@@ -1025,7 +1025,12 @@ void PathTrace_c::setAvoidPoint() {
     JUT_ASSERT(1604, mObstacle != NULL);
     cXyz& selfPos = fopAcM_GetPosition(mMyself);
     s16 obstacleAngle = cLib_targetAngleY(&selfPos, &fopAcM_GetPosition(mObstacle));
+#if TARGET_LITTLE_ENDIAN
+    Vec copy = dPath_GetPnt(mPath, field_0x20)->m_position;
+    s16 diff = (s16)obstacleAngle - cLib_targetAngleY(&selfPos, &copy);
+#else
     s16 diff = (s16)obstacleAngle - cLib_targetAngleY(&selfPos, &dPath_GetPnt(mPath, field_0x20)->m_position);
+#endif
     s16 rot;
     if (diff > 0) {
         rot = (s16)obstacleAngle + 0x4000;

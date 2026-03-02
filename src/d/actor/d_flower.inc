@@ -527,10 +527,10 @@ void dFlower_packet_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXSetArray(GX_VA_POS, &l_flowerPos, 0xC);
-    GXSetArray(GX_VA_NRM, &l_flowerNormal, 0xC);
-    GXSetArray(GX_VA_CLR0, &l_flowerColor, 4);
-    GXSetArray(GX_VA_TEX0, &l_flowerTexCoord, 8);
+    GXSETARRAY(GX_VA_POS, &l_flowerPos, sizeof(l_flowerPos), 0xC);
+    GXSETARRAY(GX_VA_NRM, &l_flowerNormal, sizeof(l_flowerNormal), 0xC);
+    GXSETARRAY(GX_VA_CLR0, &l_flowerColor, sizeof(l_flowerColor), 4);
+    GXSETARRAY(GX_VA_TEX0, &l_flowerTexCoord, sizeof(l_flowerTexCoord), 8);
 
     GXColor sp64;
     dFlower_room_c* sp5C = m_room;
@@ -622,10 +622,10 @@ void dFlower_packet_c::draw() {
         sp5C++;
     }
 
-    GXSetArray(GX_VA_POS, mp_pos, 0xC);
-    GXSetArray(GX_VA_NRM, &l_flowerNormal2, 0xC);
-    GXSetArray(GX_VA_CLR0, mp_colors, 4);
-    GXSetArray(GX_VA_TEX0, mp_texCoords, 8);
+    GXSETARRAY(GX_VA_POS, mp_pos, sizeof(l_flowerPos2), 0xC);
+    GXSETARRAY(GX_VA_NRM, &l_flowerNormal2, sizeof(l_flowerNormal2), 0xC);
+    GXSETARRAY(GX_VA_CLR0, mp_colors, sizeof(l_flowerColor2), 4);
+    GXSETARRAY(GX_VA_TEX0, mp_texCoords, sizeof(l_flowerTexCoord2), 8);
 
     sp5C = m_room;
 

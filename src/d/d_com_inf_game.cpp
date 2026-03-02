@@ -1287,7 +1287,7 @@ int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* i_arcNa
     static int (*l_method[3])(void*) = {(int (*)(void*))phase_1, (int (*)(void*))phase_2,
                                         (int (*)(void*))phase_3};
 
-    if (i_phase->id == cPhs_NEXT_e) {
+    if (i_phase->id == 2) {
         return cPhs_COMPLEATE_e;
     }
 
@@ -1335,7 +1335,7 @@ int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* i_resNa
     static int (*l_method[3])(void*) = {(int (*)(void*))phase_01, (int (*)(void*))phase_02,
                                         (int (*)(void*))phase_03};
 
-    if (i_phase->id == cPhs_NEXT_e) {
+    if (i_phase->id == 2) {
         return cPhs_COMPLEATE_e;
     }
 
@@ -1352,12 +1352,12 @@ int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* i_resNa
  */
 int dComIfG_resDelete(request_of_phase_process_class* i_phase, char const* i_resName) {
     JUT_ASSERT(1889, i_phase->id != 1);
-    if (i_phase->id != cPhs_NEXT_e) {
+    if (i_phase->id != 2) {
         return 0;
     }
 
     int r30 = dComIfG_deleteObjectResMain(i_resName);
-    i_phase->id = cPhs_INIT_e;
+    i_phase->id = 0;
     return 1;
 }
 
@@ -2256,7 +2256,7 @@ void dComIfGp_addSelectItemNum(int i_selItemIdx, s16 i_num) {
 
 int dComIfGd_setShadow(u32 param_0, s8 param_1, J3DModel* param_2, cXyz* param_3, f32 param_4,
                        f32 param_5, f32 param_6, f32 param_7, cBgS_PolyInfo& param_8,
-                       dKy_tevstr_c* param_9, s16 param_10, f32 param_11, _GXTexObj* param_12) {
+                       dKy_tevstr_c* param_9, s16 param_10, f32 param_11, GXTexObj* param_12) {
     if (param_7 <= -G_CM3D_F_INF) {
         return 0;
     } else {
@@ -2433,12 +2433,12 @@ u32 dComIfG_getTrigA(u32 i_padNo) {
 }
 
 struct field_data_header {
-    /* 0x00 */ u32 field_0x0;
-    /* 0x04 */ u32 field_0x4;
-    /* 0x08 */ u32 field_0x8;
-    /* 0x0C */ u32 field_0xc;
-    /* 0x10 */ u32 field_0x10;
-    /* 0x14 */ u32 field_0x14;
+    /* 0x00 */ BE(u32) field_0x0;
+    /* 0x04 */ BE(u32) field_0x4;
+    /* 0x08 */ BE(u32) field_0x8;
+    /* 0x0C */ BE(u32) field_0xc;
+    /* 0x10 */ BE(u32) field_0x10;
+    /* 0x14 */ BE(u32) field_0x14;
 };
 
 struct field_data {

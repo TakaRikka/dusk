@@ -18,7 +18,7 @@ static int daObj_Lp_Draw(obj_lp_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     wd_ss* mWdSs = i_this->mWdSs;
     int roomNo = fopAcM_GetRoomNo(a_this);
-    static _GXColor l_color = {
+    static GXColor l_color = {
         0x14,
         0x0A,
         0x0A,

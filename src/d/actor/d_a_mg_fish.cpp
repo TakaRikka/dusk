@@ -120,7 +120,7 @@ static void* s_hitfish_sub(void* a, void* b) {
     if (fopAc_IsActor(a)) {
         mg_fish_class* fish = (mg_fish_class*)a;
         if (fopAcM_GetName(fish) == PROC_MG_FISH && fish->mCurAction == ACTION_MG_FISH_MF_HIT) {
-            return &fish->actor.base;
+            return &LEAFDRAW_BASE(&fish->actor);
         }
     }
     return NULL;
@@ -678,7 +678,7 @@ s32 daMg_Fish_Draw(mg_fish_class* i_this) {
                 &i_this->actor.tevStr, 0, 1.0f, &dDlst_shadowControl_c::mSimpleTexObj);
         }
         if (i_this->mKind2 == 3) {
-            _GXColor color;
+            GXColor color;
             color.r = 0x32;
             color.g = 0x2d;
             color.b = 0x14;
@@ -4061,7 +4061,7 @@ static actor_method_class l_daMg_Fish_Method = {
 };
 
 actor_process_profile_definition g_profile_MG_FISH = {
-    (uint)fpcLy_CURRENT_e,  // mLayerID
+    (u32)fpcLy_CURRENT_e,  // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio
     PROC_MG_FISH,           // mProcName

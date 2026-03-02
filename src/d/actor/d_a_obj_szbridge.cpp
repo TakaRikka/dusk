@@ -62,7 +62,7 @@ void daObjSZbridge_c::chkBg() {
     chk_pos.y += 700.0f;
 
     gnd_chk.SetPos(&chk_pos);
-    gnd_chk.SetActorPid(base.base.id);
+    gnd_chk.SetActorPid(fopAcM_GetID(this));
     mGroundY = dComIfG_Bgsp().GroundCross(&gnd_chk);
     chk_pos.y = mGroundY;
 

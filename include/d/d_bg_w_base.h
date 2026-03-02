@@ -4,14 +4,14 @@
 #include "SSystem/SComponent/c_bg_s_poly_info.h"
 #include "SSystem/SComponent/c_bg_w.h"
 #include "SSystem/SComponent/c_m3d_g_pla.h"
-#include <dolphin/gx.h>
+#include <gx.h>
 #include "f_pc/f_pc_base.h"
 
 class cBgS_GndChk;
 class cBgS_LinChk;
 class cBgS_ShdwDraw;
 class dBgS_Acch;
-class dBgS_CaptPoly;
+struct dBgS_CaptPoly;
 class dBgS_RoofChk;
 class dBgS_SphChk;
 class dBgS_SplGrpChk;

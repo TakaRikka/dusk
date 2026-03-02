@@ -2,8 +2,8 @@
 #define D_D_LIB_H
 
 #include "SSystem/SComponent/c_xyz.h"
-#include <dolphin/mtx.h>
-#include <dolphin/os.h>
+#include <mtx.h>
+#include <os.h>
 
 class fopAc_ac_c;
 

@@ -2,7 +2,7 @@
 #ifndef F_PC_DELETOR_H_
 #define F_PC_DELETOR_H_
 
-#include <dolphin/types.h>
+#include <types.h>
 
 typedef struct base_process_class base_process_class;
 

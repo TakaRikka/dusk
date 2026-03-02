@@ -8,7 +8,7 @@
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "JSystem/JUtility/JUTXfb.h"
 #include "SSystem/SComponent/c_API_controller_pad.h"
-#include <dolphin/gx.h>
+#include <gx.h>
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_DVDError.h"
 #include "m_Do/m_Do_ext.h"
@@ -17,6 +17,7 @@
 #if !PLATFORM_GCN
 #include <revolution/os.h>
 #endif
+#include "os_report.h"
 
 static void my_OSCancelAlarmAll() {}
 

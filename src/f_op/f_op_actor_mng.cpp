@@ -3,6 +3,11 @@
  * Actor Manager
  */
 
+#if TARGET_PC
+#define PROCS_DUMP_NAMES 1
+#include "d/d_procname.h"
+#endif
+
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
@@ -727,6 +732,18 @@ u8 var_r30 = fopAcM::HeapAdjustEntry;
 #endif
     fopAcM::HeapAdjustUnk = var_r31;
     fopAcM::HeapAdjustEntry = var_r30;
+
+#if TARGET_PC
+    char buf[32];
+    snprintf(
+        buf,
+        sizeof(buf),
+        "Actor %d (%s)",
+        i_actor->id,
+        GetProcName(i_actor->profname));
+    JKRHEAP_NAME(i_actor->heap, buf);
+#endif
+
     return result;
 }
 
@@ -895,7 +912,7 @@ bool fopAcM_checkCullingBox(Mtx m, f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z
         return false;
 }
 
-static cull_box l_cullSizeBox[] = {
+cull_box l_cullSizeBox[fopAc_CULLBOX_MAX_e] = {
     {
         {-40.0f, 0.0f, -40.0f},
         {40.0f, 125.0f, 40.0f},
@@ -960,7 +977,7 @@ static cull_box l_cullSizeBox[] = {
 #endif
 };
 
-static cull_sphere l_cullSizeSphere[] = {
+cull_sphere l_cullSizeSphere[fopAc_CULLSPHERE_MAX_e] = {
     {
         {0.0f, 0.0f, 0.0f},
         80.0f,

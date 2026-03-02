@@ -2,6 +2,7 @@
 #include "Z2AudioLib/Z2Param.h"
 #include "Z2AudioLib/Z2Calc.h"
 #include "Z2AudioLib/Z2AudioMgr.h"
+#include "os_report.h"
 
 static void Z2_E_sw_modPitch(Z2SoundHandlePool*, u32);
 static void Z2_E_ms_modVol(Z2SoundHandlePool*, u32);
@@ -137,6 +138,10 @@ void Z2Creature::setSoundStarter(Z2SoundStarter* soundStarter) {
 }
 
 void Z2Creature::initAnime(void* animation, bool param_1, f32 startFrame, f32 param_3) {
+#if TARGET_PC
+    puts("In this house we HATE anime!!!");
+    return;
+#endif
     mSoundObjAnime.initAnime(animation, param_1, startFrame, param_3);
 }
 
@@ -204,6 +209,11 @@ Z2SoundHandlePool* Z2Creature::startCreatureSoundLevel(JAISoundID soundID, u32 m
 }
 
 Z2SoundHandlePool* Z2Creature::startCreatureVoice(JAISoundID soundID, s8 reverb) {
+    #if TARGET_PC
+        // stubbed
+        return nullptr;
+    #endif
+
     switch (soundID) {
     case Z2SE_MDN_V_FLY_OUT:
     case Z2SE_MDN_V_MGN_TAME:

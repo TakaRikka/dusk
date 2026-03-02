@@ -1,8 +1,12 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "d/d_kankyo.h"
-#include <dolphin/dolphin.h>
-#include <dolphin/gf/GFPixel.h>
+#ifdef __REVOLUTION_SDK__
+#include <revolution.h>
+#else
+#include <dolphin.h>
+#endif
+#include <gf/GFPixel.h>
 
 #include "JSystem/JHostIO/JORFile.h"
 #include "JSystem/JHostIO/JORServer.h"
@@ -24,6 +28,7 @@
 #include "f_op/f_op_kankyo.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
 #include <cstdlib>
 #include <cstring>
 
@@ -1168,6 +1173,7 @@ static void undwater_init() {
     JUT_ASSERT(1867, modelData2 != NULL);
 
     g_env_light.undwater_ef_heap = mDoExt_createSolidHeapFromGameToCurrent(0x600, 0x20);
+    JKRHEAP_NAME(g_env_light.undwater_ef_heap, "g_env_light.undwater_ef_heap");
 
     if (g_env_light.undwater_ef_heap != NULL) {
         g_env_light.undwater_ef_model = mDoExt_J3DModel__create(modelData2, 0x80000, 0x11020202);

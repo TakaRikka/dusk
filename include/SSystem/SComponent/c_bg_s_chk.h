@@ -1,12 +1,17 @@
 #ifndef C_BG_S_CHK_H
 #define C_BG_S_CHK_H
 
-#include <dolphin/mtx.h>
+#include <mtx.h>
 #include "f_pc/f_pc_base.h"
 #include "SSystem/SComponent/c_bg_s_grp_pass_chk.h"
 #include "SSystem/SComponent/c_bg_s_poly_pass_chk.h"
+#include "dusk/endian.h"
 
+#if TARGET_LITTLE_ENDIAN
+struct cBgD_Vtx_t : public BE(Vec) {};
+#else
 struct cBgD_Vtx_t : public Vec {};
+#endif
 
 class cBgS_Chk {
 public:

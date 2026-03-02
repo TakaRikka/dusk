@@ -1,7 +1,7 @@
 #ifndef NDEVEXI2A_DEBUGGERDRIVER_H
 #define NDEVEXI2A_DEBUGGERDRIVER_H
 
-#include <dolphin/os.h>
+#include <os.h>
 #include "types.h"
 
 typedef void (*MtrCallback)(s32, OSContext*);

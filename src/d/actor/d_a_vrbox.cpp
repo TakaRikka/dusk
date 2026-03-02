@@ -43,6 +43,9 @@ static int daVrbox_Draw(vrbox_class* i_this) {
     soraModel_p->setBaseTRMtx(mDoMtx_stack_c::get());
     dKy_GxFog_set();
 
+#if !TARGET_PC
+    // This code is broken but happens to not do anything on the real game.
+
     // these casts look like fake matches, but this ptr is used as both J3DModel and J3DModelData?
     for (int i = ((J3DModelData*)soraModel_p)->getMaterialNum() - 1; i >= 0; i--) {
         J3DMaterial* material_p = ((J3DModelData*)soraModel_p)->getMaterialNodePointer(i);
@@ -54,6 +57,7 @@ static int daVrbox_Draw(vrbox_class* i_this) {
 
         fogInfo_p->mType = 2;
     }
+#endif
 
     dComIfGd_setListSky();
     mDoExt_modelUpdateDL(soraModel_p);

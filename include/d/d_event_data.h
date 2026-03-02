@@ -3,24 +3,25 @@
 
 #include "global.h"
 #include "f_pc/f_pc_base.h"
+#include "dusk/endian.h"
 
 struct msg_class;
 
 struct event_binary_data_header {
-    /* 0x00 */ u32 eventTop;  // offset to Event chunk
-    /* 0x04 */ s32 eventNum;
-    /* 0x08 */ u32 staffTop;  // offset to Staff chunk
-    /* 0x0C */ s32 staffNum;
-    /* 0x10 */ u32 cutTop;  // offset to Cut chunk
-    /* 0x14 */ s32 cutNum;
-    /* 0x18 */ u32 dataTop;  // offset to Data chunk
-    /* 0x1C */ s32 dataNum;
-    /* 0x20 */ u32 fDataTop;  // offset to FData chunk
-    /* 0x24 */ s32 fDataNum;
-    /* 0x28 */ u32 iDataTop;  // offset to IData chunk
-    /* 0x2C */ s32 iDataNum;
-    /* 0x30 */ u32 sDataTop;  // offset to SData chunk
-    /* 0x34 */ s32 sDataNum;
+    /* 0x00 */ BE(u32) eventTop;  // offset to Event chunk
+    /* 0x04 */ BE(s32) eventNum;
+    /* 0x08 */ BE(u32) staffTop;  // offset to Staff chunk
+    /* 0x0C */ BE(s32) staffNum;
+    /* 0x10 */ BE(u32) cutTop;  // offset to Cut chunk
+    /* 0x14 */ BE(s32) cutNum;
+    /* 0x18 */ BE(u32) dataTop;  // offset to Data chunk
+    /* 0x1C */ BE(s32) dataNum;
+    /* 0x20 */ BE(u32) fDataTop;  // offset to FData chunk
+    /* 0x24 */ BE(s32) fDataNum;
+    /* 0x28 */ BE(u32) iDataTop;  // offset to IData chunk
+    /* 0x2C */ BE(s32) iDataNum;
+    /* 0x30 */ BE(u32) sDataTop;  // offset to SData chunk
+    /* 0x34 */ BE(s32) sDataNum;
     /* 0x38 */ u8 unk[8];
 };  // Size: 0x40
 
@@ -45,11 +46,11 @@ public:
     char* getName() { return mName; }
 
     /* 0x00 */ char mName[32];
-    /* 0x20 */ u32 mIndex;
-    /* 0x24 */ int mType;
-    /* 0x28 */ int mDataIndex;
-    /* 0x2C */ int mNumber;
-    /* 0x30 */ int mNext;
+    /* 0x20 */ BE(u32) mIndex;
+    /* 0x24 */ BE(int) mType;
+    /* 0x28 */ BE(int) mDataIndex;
+    /* 0x2C */ BE(int) mNumber;
+    /* 0x30 */ BE(int) mNext;
     /* 0x34 */ u8 field_0x34[12];
 };  // Size: 0x40
 
@@ -79,12 +80,12 @@ public:
     u32 getTagId() { return mTagID; }
 
     /* 0x00 */ char mName[32];
-    /* 0x20 */ u32 mTagID;
-    /* 0x24 */ u32 mIndex;
-    /* 0x28 */ int mFlags[3];
-    /* 0x34 */ u32 mFlagId;
-    /* 0x38 */ int mDataTop;
-    /* 0x3C */ int mNext;
+    /* 0x20 */ BE(u32) mTagID;
+    /* 0x24 */ BE(u32) mIndex;
+    /* 0x28 */ BE(int) mFlags[3];
+    /* 0x34 */ BE(u32) mFlagId;
+    /* 0x38 */ BE(int) mDataTop;
+    /* 0x3C */ BE(int) mNext;
     /* 0x40 */ u8 field_0x40[0x10];
 };  // Size: 0x50
 
@@ -136,26 +137,26 @@ public:
     };
 
     struct MessageData {
-        s16 unk;
+        BE(s16) unk;
     };
 
     struct SoundData {
-        s16 unk;
-        s16 timer;
+        BE(s16) unk;
+        BE(s16) timer;
     };
 
     struct TimerKeeperData {
-        s32 timer;
+        BE(s32) timer;
     };
 
     struct DirectorData {
-        s16 unk;
-        s16 unk2;
+        BE(s16) unk;
+        BE(s16) unk2;
     };
 
     struct EffectData {
         u8 pad[8];
-        s32 unk;
+        BE(s32) unk;
     };
 
     void specialProc_WaitStart(int index);
@@ -180,16 +181,16 @@ public:
 
     // private:
     /* 0x00 */ char mName[8];
-    /* 0x08 */ u8 mWork[0x18];
-    /* 0x20 */ s32 mTagID;
-    /* 0x24 */ u32 mIndex;
-    /* 0x28 */ u32 mFlagID;
-    /* 0x2C */ int mType;
-    /* 0x30 */ int mStartCut;
-    /* 0x34 */ s16 field_0x34;
-    /* 0x36 */ s16 mWaitTimer;
-    /* 0x38 */ int mCurrentCut;
-    /* 0x3C */ s32 field_0x3c;
+    /* 0x08 */ u8 mWork[0x18]; // PROBLEM: this buffer is now too small for StaffWork to fit in
+    /* 0x20 */ BE(s32) mTagID;
+    /* 0x24 */ BE(u32) mIndex;
+    /* 0x28 */ BE(u32) mFlagID;
+    /* 0x2C */ BE(int) mType;
+    /* 0x30 */ BE(int) mStartCut;
+    /* 0x34 */ BE(s16) field_0x34;
+    /* 0x36 */ BE(s16) mWaitTimer;
+    /* 0x38 */ BE(int) mCurrentCut;
+    /* 0x3C */ BE(s32) field_0x3c;
     /* 0x40 */ bool field_0x40;
     /* 0x41 */ bool field_0x41;
     /* 0x42 */ u8 mData[0x50 - 0x42];
@@ -223,21 +224,21 @@ public:
     int getPriority() { return mPriority; }
 
     /* 0x00 */ char mName[32];
-    /* 0x20 */ u32 mIndex;
-    /* 0x24 */ int field_0x24;
-    /* 0x28 */ int mPriority;
-    /* 0x2C */ int mStaff[20];
-    /* 0x7C */ int mNStaff;
-    /* 0x80 */ int field_0x80;
-    /* 0x84 */ int field_0x84;
-    /* 0x88 */ int mFlags[3];
+    /* 0x20 */ BE(u32) mIndex;
+    /* 0x24 */ BE(int) field_0x24;
+    /* 0x28 */ BE(int) mPriority;
+    /* 0x2C */ BE(int) mStaff[20];
+    /* 0x7C */ BE(int) mNStaff;
+    /* 0x80 */ BE(int) field_0x80;
+    /* 0x84 */ BE(int) field_0x84;
+    /* 0x88 */ BE(int) mFlags[3];
     /* 0x94 */ bool mPlaySound;
-    /* 0x96 */ s16 field_0x96;
-    /* 0x98 */ f32 field_0x98;
-    /* 0x9C */ f32 field_0x9c;
-    /* 0xA0 */ f32 field_0xa0;
-    /* 0xA4 */ int mEventState;
-    /* 0xA8 */ int field_0xa8;
+    /* 0x96 */ BE(s16) field_0x96;
+    /* 0x98 */ BE(f32) field_0x98;
+    /* 0x9C */ BE(f32) field_0x9c;
+    /* 0xA0 */ BE(f32) field_0xa0;
+    /* 0xA4 */ BE(int) mEventState;
+    /* 0xA8 */ BE(int) field_0xa8;
     /* 0xAC */ u8 field_0xac[4];
 };  // Size: 0xB0
 

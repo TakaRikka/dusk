@@ -20,10 +20,40 @@ dBgWKCol::dBgWKCol() {
 dBgWKCol::~dBgWKCol() {}
 
 void* dBgWKCol::initKCollision(void* i_kclData) {
+#if TARGET_PC
+    KC_Header* kcl = (KC_Header*)i_kclData;
+    kcl->m_pos_data.setBase(kcl);
+    kcl->m_nrm_data.setBase(kcl);
+    kcl->m_prism_data.setBase(kcl);
+    kcl->m_block_data.setBase(kcl);
+
+    be_swap(kcl->m_prism_thickness);
+    be_swap(kcl->m_area_min_pos);
+    be_swap(kcl->m_area_x_width_mask);
+    be_swap(kcl->m_area_y_width_mask);
+    be_swap(kcl->m_area_z_width_mask);
+    be_swap(kcl->m_block_width_shift);
+    be_swap(kcl->m_area_x_blocks_shift);
+    be_swap(kcl->m_area_xy_blocks_shift);
+
+    Vec* p_pos = kcl->m_pos_data;
+    Vec* p_nrm = kcl->m_nrm_data;
+    KC_PrismData* p_prism = kcl->m_prism_data;
+    BE(u32)* p_block = kcl->m_block_data;
+    int np = 0, nn = 0;
+    for (Vec* pw = p_pos; pw < p_nrm; pw++, np++)
+        be_swap(*pw);
+    for (Vec* pw = p_nrm; (uintptr_t)pw < (uintptr_t)p_prism; pw++, nn++)
+        be_swap(*pw);
+    // for (KC_PrismData* pw = p_prism; (uintptr_t)pw < (uintptr_t)p_block; pw++)
+    //     be_swap(*pw);
+
+#else
     ((KC_Header*)i_kclData)->m_pos_data = (Vec*)((uintptr_t)((KC_Header*)i_kclData) + (uintptr_t)((KC_Header*)i_kclData)->m_pos_data);
     ((KC_Header*)i_kclData)->m_nrm_data = (Vec*)((uintptr_t)((KC_Header*)i_kclData) + (uintptr_t)((KC_Header*)i_kclData)->m_nrm_data);
     ((KC_Header*)i_kclData)->m_prism_data = (KC_PrismData*)((uintptr_t)((KC_Header*)i_kclData) + (uintptr_t)((KC_Header*)i_kclData)->m_prism_data);
-    ((KC_Header*)i_kclData)->m_block_data = (KC_PrismData*)((uintptr_t)((KC_Header*)i_kclData) + (uintptr_t)((KC_Header*)i_kclData)->m_block_data);
+    ((KC_Header*)i_kclData)->m_block_data = (u16*)((uintptr_t)((KC_Header*)i_kclData) + (uintptr_t)((KC_Header*)i_kclData)->m_block_data);
+#endif
 
     return i_kclData;
 }
@@ -35,7 +65,7 @@ void dBgWKCol::create(void* pprism, void* plc) {
     ClrDBgWBase();
     m_pkc_head = (KC_Header*)pprism;
 
-    u32 poly_num = ((uintptr_t)m_pkc_head->m_block_data - (uintptr_t)m_pkc_head->m_prism_data) / 0xC;
+    u32 poly_num = ((uintptr_t)(u16*)m_pkc_head->m_block_data - (uintptr_t)(u16*)m_pkc_head->m_prism_data) / 0xC;
     poly_num++;
     JUT_ASSERT(0x50, poly_num <= 0x4000);
 
@@ -339,12 +369,12 @@ bool dBgWKCol::LineCheck(cBgS_LinChk* plinchk) {
                     int sp64;
                     int sp60;
                     int sp5C;
-                    u16* sp58 = NULL;
-                    u16* sp54 = NULL;
-                    u16* sp50 = NULL;
-                    u16* sp4C = NULL;
-                    u16* sp48 = NULL;
-                    u16* sp44 = NULL;
+                    BE(u16)* sp58 = NULL;
+                    BE(u16)* sp54 = NULL;
+                    BE(u16)* sp50 = NULL;
+                    BE(u16)* sp4C = NULL;
+                    BE(u16)* sp48 = NULL;
+                    BE(u16)* sp44 = NULL;
                     int z_sp40 = sp88;
 
                     do {
@@ -358,21 +388,21 @@ bool dBgWKCol::LineCheck(cBgS_LinChk* plinchk) {
                             int x_sp38 = sp90;
 
                             do {
-                                u16* block = (u16*)m_pkc_head->m_block_data;
+                                BE(u16)* block = (BE(u16)*)m_pkc_head->m_block_data;
                                 u32 shift = m_pkc_head->m_block_width_shift;
                                 int offset = (((u32)z_sp40 >> shift) << m_pkc_head->m_area_xy_blocks_shift |
                                               ((u32)y_sp3C >> shift) << m_pkc_head->m_area_x_blocks_shift |
                                                (u32)x_sp38 >> shift) << 2;
 
-                                while ((offset = *(int*)((intptr_t)block + offset)) >= 0) {
-                                    block = (u16*)((intptr_t)block + offset);
+                                while ((offset = *(BE(u32)*)((intptr_t)block + offset)) >= 0) {
+                                    block = (BE(u16)*)((intptr_t)block + offset);
                                     shift--;
                                     offset = (((u32)z_sp40 >> shift & 1) << 2 |
                                               ((u32)y_sp3C >> shift & 1) << 1 |
                                               ((u32)x_sp38 >> shift & 1) << 0) << 2;
                                 }
 
-                                u16* sp28 = (u16*)((intptr_t)block + (offset & 0x7FFFFFFF));
+                                BE(u16)* sp28 = (BE(u16)*)((intptr_t)block + (offset & 0x7FFFFFFF));
 
                                 shift = 1 << shift;
                                 int cellSize = shift - 1;
@@ -548,20 +578,21 @@ bool dBgWKCol::GroundCross(cBgS_GndChk* i_chk) {
     cXyz sp4C;
     int sp2C = 0;
     do {
-        uintptr_t block = (uintptr_t)m_pkc_head->m_block_data;
+        uintptr_t block = (uintptr_t)(BE(u32)*)m_pkc_head->m_block_data;
         u32 shift = m_pkc_head->m_block_width_shift;
-        int sp20 = 4 * (((u32)sp34 >> shift) << m_pkc_head->m_area_xy_blocks_shift |
+        int idx = 4 * (((u32)sp34 >> shift) << m_pkc_head->m_area_xy_blocks_shift |
                         ((u32)sp30 >> shift) << m_pkc_head->m_area_x_blocks_shift |
                          (u32)sp38 >> shift);
-        while ((sp20 = (*(int*)((int)block + sp20))) >= 0) {
-            block = (int)block + sp20;
+
+        while ((idx = (*(BE(u32)*)(block + idx))) >= 0) {
+            block += idx;
             shift--;
-            sp20 = (((u32)sp34 >> shift & 1) << 2 |
+            idx = (((u32)sp34 >> shift & 1) << 2 |
                     ((u32)sp30 >> shift & 1) << 1 |
                     ((u32)sp38 >> shift & 1) << 0) << 2;
         }
 
-        u16* sp1C = (u16*)(block + (sp20 & 0x7FFFFFFF));
+        BE(u16)* sp1C = (BE(u16)*)(block + (idx & 0x7FFFFFFF));
 
         while (*++sp1C != 0) {
             KC_PrismData* sp18 = getPrismData(sp1C[0]);
@@ -657,10 +688,7 @@ void dBgWKCol::ShdwDraw(cBgS_ShdwDraw* param_0) {
             }
 
             if (minZ_sp90 < maxZ_sp8C) {
-                u32 drawBits_sp140[512];
-                for (u32* el_sp88 = drawBits_sp140; el_sp88 < drawBits_sp140 + 512; el_sp88++) {
-                    *el_sp88 = 0;
-                }
+                u32 drawBits_sp140[512] = {};
 
                 int remX_sp84;
                 int remY_sp80;
@@ -673,13 +701,13 @@ void dBgWKCol::ShdwDraw(cBgS_ShdwDraw* param_0) {
                 int best2_sp6C;
                 int best3_sp68;
 
-                u16* topPrism1_sp64 = NULL;
-                u16* topPrism2_sp60 = NULL;
-                u16* topPrism3_sp5C = NULL;
+                BE(u16)* topPrism1_sp64 = NULL;
+                BE(u16)* topPrism2_sp60 = NULL;
+                BE(u16)* topPrism3_sp5C = NULL;
 
-                u16* prev1_sp58 = NULL;
-                u16* prev2_sp54 = NULL;
-                u16* prev3_sp50;
+                BE(u16)* prev1_sp58 = NULL;
+                BE(u16)* prev2_sp54 = NULL;
+                BE(u16)* prev3_sp50;
 
                 prev3_sp50 = NULL;
                 int z_sp4C = minZ_sp90;
@@ -695,28 +723,28 @@ void dBgWKCol::ShdwDraw(cBgS_ShdwDraw* param_0) {
 
                         int x_sp44 = minX_spA0;
                         do {
-                            u32 block_sp40 = (uintptr_t) m_pkc_head->m_block_data;
-                            u32 shift_sp3C = m_pkc_head->m_block_width_shift;
-                            int offset_sp38 =
-                                4 * (((u32)z_sp4C >> shift_sp3C) << m_pkc_head->m_area_xy_blocks_shift |
-                                     ((u32)y_sp48 >> shift_sp3C) << m_pkc_head->m_area_x_blocks_shift |
-                                      (u32)x_sp44 >> shift_sp3C);
+                            uintptr_t block = (uintptr_t)(BE(u32)*)m_pkc_head->m_block_data;
+                            u32 shift = m_pkc_head->m_block_width_shift;
+                            int idx =
+                                4 * (((u32)z_sp4C >> shift) << m_pkc_head->m_area_xy_blocks_shift |
+                                     ((u32)y_sp48 >> shift) << m_pkc_head->m_area_x_blocks_shift |
+                                      (u32)x_sp44 >> shift);
 
-                            while ((offset_sp38 = *(u32*)((int)block_sp40 + offset_sp38)) >= 0) {
-                                block_sp40 = (int)block_sp40 + offset_sp38;
-                                shift_sp3C--;
-                                offset_sp38 = (((u32)z_sp4C >> shift_sp3C & 1) << 2 |
-                                               ((u32)y_sp48 >> shift_sp3C & 1) << 1 |
-                                               ((u32)x_sp44 >> shift_sp3C & 1) << 0) << 2;
+                            while ((idx = (*(BE(u32)*)(block + idx))) >= 0) {
+                                block += idx;
+                                shift--;
+                                idx = (((u32)z_sp4C >> shift & 1) << 2 |
+                                               ((u32)y_sp48 >> shift & 1) << 1 |
+                                               ((u32)x_sp44 >> shift & 1) << 0) << 2;
                             }
 
-                            u16* prism_sp34 = (u16*)(block_sp40 + (offset_sp38 & 0x7fffffff));
+                            BE(u16) * p_prismList = (BE(u16)*)(block + (idx & 0x7fffffff));
 
-                            shift_sp3C = 1 << shift_sp3C;
-                            u32 mask_sp30 = shift_sp3C - 1;
-                            remX_sp84 = shift_sp3C - (x_sp44 & mask_sp30);
-                            remY_sp80 = shift_sp3C - (y_sp48 & mask_sp30);
-                            remZ_sp7C = shift_sp3C - (z_sp4C & mask_sp30);
+                            shift = 1 << shift;
+                            u32 mask_sp30 = shift - 1;
+                            remX_sp84 = shift - (x_sp44 & mask_sp30);
+                            remY_sp80 = shift - (y_sp48 & mask_sp30);
+                            remZ_sp7C = shift - (z_sp4C & mask_sp30);
 
                             if (remZ_sp7C < stepZ_sp74) {
                                 stepZ_sp74 = remZ_sp7C;
@@ -725,7 +753,7 @@ void dBgWKCol::ShdwDraw(cBgS_ShdwDraw* param_0) {
                                 stepY_sp78 = remY_sp80;
                             }
 
-                            if (prism_sp34[1] != 0 && remY_sp80 > best3_sp68) {
+                            if (p_prismList[1] != 0 && remY_sp80 > best3_sp68) {
                                 if (remY_sp80 > best2_sp6C) {
                                     if (remY_sp80 > best1_sp70) {
                                         best3_sp68 = best2_sp6C;
@@ -733,30 +761,32 @@ void dBgWKCol::ShdwDraw(cBgS_ShdwDraw* param_0) {
                                         best1_sp70 = remY_sp80;
                                         topPrism3_sp5C = topPrism2_sp60;
                                         topPrism2_sp60 = topPrism1_sp64;
-                                        topPrism1_sp64 = prism_sp34;
+                                        topPrism1_sp64 = p_prismList;
                                     } else {
                                         best3_sp68 = best2_sp6C;
                                         best2_sp6C = remY_sp80;
                                         topPrism3_sp5C = topPrism2_sp60;
-                                        topPrism2_sp60 = prism_sp34;
+                                        topPrism2_sp60 = p_prismList;
                                     }
                                 } else {
                                     best3_sp68 = remY_sp80;
-                                    topPrism3_sp5C = prism_sp34;
+                                    topPrism3_sp5C = p_prismList;
                                 }
                             }
 
-                            if (prism_sp34 == prev1_sp58 || prism_sp34 == prev2_sp54 || prism_sp34 == prev3_sp50) {
+                            if (p_prismList == prev1_sp58 || p_prismList == prev2_sp54 ||
+                                p_prismList == prev3_sp50)
+                            {
                             } else {
-                                while (*++prism_sp34 != 0) {
+                                while (*++p_prismList != 0) {
 #if PLATFORM_GCN
-                                    u32 bitMask_sp28 = 1 << (prism_sp34[0] & 0x1f);
-                                    s32 sp2c = *(prism_sp34) >> 5;
+                                    u32 bitMask_sp28 = 1 << (p_prismList[0] & 0x1f);
+                                    s32 sp2c = *(p_prismList) >> 5;
 #else
-                                    s32 sp2c = *(prism_sp34) >> 5;
-                                    u32 bitMask_sp28 = 1 << (prism_sp34[0] & 0x1f);
+                                    s32 sp2c = *(p_prismList) >> 5;
+                                    u32 bitMask_sp28 = 1 << (p_prismList[0] & 0x1f);
 #endif
-                                    void* unk_sp24;
+                                    u32* unk_sp24;
 
                                     KC_PrismData* prismData_sp20;
                                     Vec* nrm1_sp1C;
@@ -778,16 +808,16 @@ void dBgWKCol::ShdwDraw(cBgS_ShdwDraw* param_0) {
                                     }
 
                                     unk_sp24 = drawBits_sp140 + sp2c;
-                                    if ((*(u32*)((uintptr_t)unk_sp24 + 0) & bitMask_sp28) == 0) {
-                                        *(u32*)((uintptr_t)unk_sp24 + 0) |= bitMask_sp28;
+                                    if ((unk_sp24[0] & bitMask_sp28) == 0) {
+                                        unk_sp24[0] |= bitMask_sp28;
 
-                                        getPolyCode(prism_sp34[0], &polyCode_sp108);
+                                        getPolyCode(p_prismList[0], &polyCode_sp108);
 
                                         Vec cross1_spBC;
                                         Vec cross2_spB0;
 
                                         if (!ChkShdwDrawThrough(&polyCode_sp108)) {
-                                            prismData_sp20 = getPrismData(prism_sp34[0]);
+                                            prismData_sp20 = getPrismData(p_prismList[0]);
 
                                             sp11C[0] =
                                                 m_pkc_head->m_pos_data[prismData_sp20->pos_i];
@@ -822,7 +852,7 @@ void dBgWKCol::ShdwDraw(cBgS_ShdwDraw* param_0) {
                                                              &sp11C[1]);
 
                                                     cM3dGPla pla_spF4;
-                                                    pla_spF4 = GetTriPla(prism_sp34[0]);
+                                                    pla_spF4 = GetTriPla(p_prismList[0]);
                                                     (param_0->mCallbackFun)(
                                                         param_0, (cBgD_Vtx_t*)&sp11C,
                                                         0, 1, 2, &pla_spF4);
@@ -1064,12 +1094,12 @@ bool dBgWKCol::WallCorrectSort(dBgS_Acch* pwi) {
         return false;
     }
 
-    u16* sp_120 = NULL;
-    u16* sp_11c = NULL;
-    u16* sp_118 = NULL;
-    u16* sp_114 = NULL;
-    u16* sp_110 = NULL;
-    u16* sp_10c = NULL;
+    BE(u16)* sp_120 = NULL;
+    BE(u16)* sp_11c = NULL;
+    BE(u16)* sp_118 = NULL;
+    BE(u16)* sp_114 = NULL;
+    BE(u16)* sp_110 = NULL;
+    BE(u16)* sp_10c = NULL;
     int sp_108;
     int sp_104;
     int sp_100;
@@ -1092,14 +1122,14 @@ bool dBgWKCol::WallCorrectSort(dBgS_Acch* pwi) {
             sp_ec = 0;
             int sp_d8 = sp_138;
             do {
-                u16* block_d4 = (u16*)m_pkc_head->m_block_data;
+                BE(u16)* block_d4 = (BE(u16)*)m_pkc_head->m_block_data;
                 int shift_d0 = m_pkc_head->m_block_width_shift;
                 int sp_cc = 4 * (
                     ((u32)sp_e0 >> shift_d0) << m_pkc_head->m_area_xy_blocks_shift |
                     ((u32)sp_dc >> shift_d0) << m_pkc_head->m_area_x_blocks_shift |
                     ((u32)sp_d8 >> shift_d0));
-                while ((sp_cc = *(int*)((intptr_t)block_d4 + sp_cc)) >= 0) {
-                    block_d4 = (u16*)((intptr_t)block_d4 + sp_cc);
+                while ((sp_cc = *(BE(int)*)((intptr_t)block_d4 + sp_cc)) >= 0) {
+                    block_d4 = (BE(u16)*)((intptr_t)block_d4 + sp_cc);
                     shift_d0--;
                     sp_cc = 4 * (
                         ((((u32)sp_e0 >> shift_d0) & 1) << 2) |
@@ -1107,7 +1137,7 @@ bool dBgWKCol::WallCorrectSort(dBgS_Acch* pwi) {
                         ((((u32)sp_d8 >> shift_d0) & 1) << 0)
                     );
                 }
-                u16* sp_c8 = (u16*)((intptr_t)block_d4 + (sp_cc & 0x7fffffff));
+                BE(u16)* sp_c8 = (BE(u16)*)((intptr_t)block_d4 + (sp_cc & 0x7fffffff));
                 shift_d0 = 1 << shift_d0;
                 int sp_c4 = shift_d0 - 1;
                 sp_108 = shift_d0 - (sp_d8 & sp_c4);
@@ -1461,7 +1491,6 @@ bool dBgWKCol::WallCorrectSort(dBgS_Acch* pwi) {
 
 bool dBgWKCol::WallCorrect(dBgS_Acch* pwi) {
     bool sp10 = false;
-
     cM3dGCyl* sp114 = pwi->GetWallBmdCylP();
     cXyz sp16C;
     cXyz sp160;
@@ -1518,12 +1547,12 @@ bool dBgWKCol::WallCorrect(dBgS_Acch* pwi) {
         return false;
     }
 
-    u16* spF4 = NULL;
-    u16* spF0 = NULL;
-    u16* spEC = NULL;
-    u16* spE8 = NULL;
-    u16* spE4 = NULL;
-    u16* spE0 = NULL;
+    BE(u16)* spF4 = NULL;
+    BE(u16)* spF0 = NULL;
+    BE(u16)* spEC = NULL;
+    BE(u16)* spE8 = NULL;
+    BE(u16)* spE4 = NULL;
+    BE(u16)* spE0 = NULL;
 
     Vec sp154;
     sp154.y = 0.0f;
@@ -1549,27 +1578,27 @@ bool dBgWKCol::WallCorrect(dBgS_Acch* pwi) {
             int spB4 = sp10C;
 
             do {
-                u16* spB0 = (u16*)m_pkc_head->m_block_data;
-                int spAC = m_pkc_head->m_block_width_shift;
-                int spA8 =
-                    4 * (((u32)spBC >> spAC) << m_pkc_head->m_area_xy_blocks_shift |
-                         ((u32)spB8 >> spAC) << m_pkc_head->m_area_x_blocks_shift |
-                          (u32)spB4 >> spAC);
+                uintptr_t block = (uintptr_t)(BE(u32)*)m_pkc_head->m_block_data;
+                int shift = m_pkc_head->m_block_width_shift;
+                int idx =
+                    4 * (((u32)spBC >> shift) << m_pkc_head->m_area_xy_blocks_shift |
+                         ((u32)spB8 >> shift) << m_pkc_head->m_area_x_blocks_shift |
+                          (u32)spB4 >> shift);
 
-                while ((spA8 = *(int*)((intptr_t)spB0 + spA8)) >= 0) {
-                    spB0 = (u16*)((intptr_t)spB0 + spA8);
-                    spAC--;
-                    spA8 = ((((u32)spBC >> spAC) & 1) << 2 |
-                            (((u32)spB8 >> spAC) & 1) << 1 |
-                            (((u32)spB4 >> spAC) & 1) << 0) * 4;
+                while ((idx = *(BE(u32)*)(block + idx)) >= 0) {
+                    block += idx;
+                    shift--;
+                    idx = ((((u32)spBC >> idx) & 1) << 2 |
+                            (((u32)spB8 >> idx) & 1) << 1 |
+                            (((u32)spB4 >> idx) & 1) << 0) * 4;
                 }
 
-                u16* spA4 = (u16*)((intptr_t)spB0 + (spA8 & 0x7FFFFFFF));
-                spAC = 1 << spAC;
-                u32 spA0 = spAC - 1;
-                spDC = spAC - (spB4 & spA0);
-                spD8 = spAC - (spB8 & spA0);
-                spD4 = spAC - (spBC & spA0);
+                BE(u16)* p_prismlist = (BE(u16)*)(block + (idx & 0x7FFFFFFF));
+                shift = 1 << shift; // mask
+                u32 spA0 = shift - 1;
+                spDC = shift - (spB4 & spA0);
+                spD8 = shift - (spB8 & spA0);
+                spD4 = shift - (spBC & spA0);
 
                 if (spD4 < spCC) {
                     spCC = spD4;
@@ -1579,7 +1608,7 @@ bool dBgWKCol::WallCorrect(dBgS_Acch* pwi) {
                     spD0 = spD8;
                 }
 
-                if (spA4[1] != 0 && spD8 > spC0) {
+                if (p_prismlist[1] != 0 && spD8 > spC0) {
                     if (spD8 > spC4) {
                         if (spD8 > spC8) {
                             spC0 = spC4;
@@ -1587,26 +1616,25 @@ bool dBgWKCol::WallCorrect(dBgS_Acch* pwi) {
                             spC8 = spD8;
                             spE0 = spE4;
                             spE4 = spE8;
-                            spE8 = spA4;
-                        }
-                        else {
+                            spE8 = p_prismlist;
+                        } else {
                             spC0 = spC4;
                             spC4 = spD8;
                             spE0 = spE4;
-                            spE4 = spA4;
+                            spE4 = p_prismlist;
                         }
                     } else {
                         spC0 = spD8;
-                        spE0 = spA4;
+                        spE0 = p_prismlist;
                     }
                 }
 
-                if (spA4 == spF4 || spA4 == spF0 || spA4 == spEC) {
+                if (p_prismlist == spF4 || p_prismlist == spF0 || p_prismlist == spEC) {
                     continue;
                 }
 
-                while (*++spA4 != 0) {
-                    KC_PrismData* sp9C = (KC_PrismData*)getPrismData(*spA4);
+                while (*++p_prismlist != 0) {
+                    KC_PrismData* sp9C = (KC_PrismData*)getPrismData(*p_prismlist);
                     Vec* sp98 = m_pkc_head->m_nrm_data + sp9C->fnrm_i;
                     if (cBgW_CheckBGround(sp98->y)) {
                         continue;
@@ -1618,7 +1646,7 @@ bool dBgWKCol::WallCorrect(dBgS_Acch* pwi) {
                     }
 
                     dBgPc adStack_58;
-                    getPolyCode(*spA4, &adStack_58);
+                    getPolyCode(*p_prismlist, &adStack_58);
                     cXyz cStack_88 = *sp98;
                     if (chkPolyThrough(&adStack_58, pwi->GetPolyPassChk(),
                                         pwi->GetGrpPassChk(), cStack_88)) {
@@ -1760,8 +1788,7 @@ bool dBgWKCol::WallCorrect(dBgS_Acch* pwi) {
                             JUT_ASSERT(0x98f, -INF < pwi->GetPos()->z && pwi->GetPos()->z < INF);
                             pwi->CalcMovePosWork();
                             pwi->SetWallCirHit(cir_index);
-                            pwi->SetWallPolyIndex(cir_index,
-                                                  *spA4);
+                            pwi->SetWallPolyIndex(cir_index, *p_prismlist);
                             s16 sp16 = cM_atan2s(sp98->x, sp98->z);
                             pwi->SetWallAngleY(cir_index, sp16);
                             sp10 = true;
@@ -1799,7 +1826,7 @@ bool dBgWKCol::WallCorrect(dBgS_Acch* pwi) {
 
                                 pwi->CalcMovePosWork();
                                 pwi->SetWallCirHit(cir_index);
-                                pwi->SetWallPolyIndex(cir_index, *spA4);
+                                pwi->SetWallPolyIndex(cir_index, *p_prismlist);
                                 s16 sp14 = cM_atan2s(sp98->x, sp98->z);
                                 pwi->SetWallAngleY(cir_index, sp14);
                                 sp10 = true;
@@ -1825,7 +1852,7 @@ bool dBgWKCol::WallCorrect(dBgS_Acch* pwi) {
 
                                 pwi->CalcMovePosWork();
                                 pwi->SetWallCirHit(cir_index);
-                                pwi->SetWallPolyIndex(cir_index, *spA4);
+                                pwi->SetWallPolyIndex(cir_index, *p_prismlist);
                                 s16 sp12 = cM_atan2s(sp98->x, sp98->z);
                                 pwi->SetWallAngleY(cir_index, sp12);
                                 sp10 = true;
@@ -1853,49 +1880,50 @@ bool dBgWKCol::RoofChk(dBgS_RoofChk* param_0) {
     cXyz sp74;
     PSVECSubtract(sp40, &m_pkc_head->m_area_min_pos, &sp74);
 
-    u32 sp3C = sp74.x;
-    if ((int)sp3C < 0) {
+    u32 x = sp74.x;
+    if ((int)x < 0) {
         return false;
     }
 
-    if ((int)sp3C > (int)~m_pkc_head->m_area_x_width_mask) {
+    if ((int)x > (int)~m_pkc_head->m_area_x_width_mask) {
         return false;
     }
 
-    u32 sp38 = sp74.z;
-    if ((int)sp38 < 0) {
+    u32 z = sp74.z;
+    if ((int)z < 0) {
         return false;
     }
 
-    if ((int)sp38 > (int)~m_pkc_head->m_area_z_width_mask) {
+    if ((int)z > (int)~m_pkc_head->m_area_z_width_mask) {
         return false;
     }
 
-    u32 sp34 = sp74.y;
-    if ((int)sp34 < 0) {
-        sp34 = 0;
+    u32 y = sp74.y;
+    if ((int)y < 0) {
+        y = 0;
     }
-    if ((int)sp34 > (int)~m_pkc_head->m_area_y_width_mask) {
+    if ((int)y > (int)~m_pkc_head->m_area_y_width_mask) {
         return false;
     }
 
     bool sp0A = false;
     u32 sp30 = ~m_pkc_head->m_area_y_width_mask;
     do {
-        uintptr_t sp2C = (uintptr_t)m_pkc_head->m_block_data;
-        u32 sp28 = m_pkc_head->m_block_width_shift;
-        int sp24 = 4 * (((u32)sp38 >> sp28) << m_pkc_head->m_area_xy_blocks_shift |
-                       ((u32)sp34 >> sp28) << m_pkc_head->m_area_x_blocks_shift |
-                       (u32)sp3C >> sp28);
-        while ((sp24 = (*(int*)(sp2C + (sp24 & 0x7fffffff)))) >= 0) {
-            sp2C += sp24;
-            sp28--;
-            sp24 = (((u32)sp38 >> sp28 & 1) << 2 |
-                    ((u32)sp34 >> sp28 & 1) << 1 |
-                    ((u32)sp3C >> sp28 & 1) << 0) << 2;
+        uintptr_t block = (uintptr_t)(BE(u32)*)m_pkc_head->m_block_data;
+        u32 shift = m_pkc_head->m_block_width_shift;
+        int idx = 4 * (((u32)z >> shift) << m_pkc_head->m_area_xy_blocks_shift |
+                       ((u32)y >> shift) << m_pkc_head->m_area_x_blocks_shift |
+                       (u32)x >> shift);
+
+        while ((idx = (*(BE(u32)*)(block + (idx & 0x7fffffff)))) >= 0) {
+            block += idx;
+            shift--;
+            idx = (((u32)z >> shift & 1) << 2 | ((u32)y >> shift & 1) << 1 |
+                   ((u32)z >> shift & 1) << 0)
+                  << 2;
         }
 
-        u16* sp20 = (u16*)(sp2C + (sp24 & 0x7fffffff));
+        BE(u16)* p_prismlist = (BE(u16)*)(block + (idx & 0x7fffffff));
 
         KC_PrismData* sp1C;
         Vec* sp18;
@@ -1903,8 +1931,8 @@ bool dBgWKCol::RoofChk(dBgS_RoofChk* param_0) {
         int sp10;
         int sp0C;
 
-        while (*++sp20 != 0) {
-            sp1C = getPrismData(*sp20);
+        while (*++p_prismlist != 0) {
+            sp1C = getPrismData(p_prismlist[0]);
             sp18 = m_pkc_head->m_nrm_data + sp1C->fnrm_i;
             if (cBgW_CheckBRoof(sp18->y)) {
                 sp14 = m_pkc_head->m_pos_data + sp1C->pos_i;
@@ -1937,12 +1965,12 @@ bool dBgWKCol::RoofChk(dBgS_RoofChk* param_0) {
                     continue;
                 }
 
-                getPolyCode(*sp20, &adStack_4c);
+                getPolyCode(p_prismlist[0], &adStack_4c);
                 cXyz sp44 = *sp18;
                 if (!chkPolyThrough(&adStack_4c, param_0->GetPolyPassChk(), param_0->GetGrpPassChk(), sp44)) {
                     f32 tmp_height_kcw = sp5C.y + sp14->y;
                     if (param_0->GetNowY() > tmp_height_kcw && sp40->y < tmp_height_kcw) {
-                        param_0->SetPolyIndex(*sp20);
+                        param_0->SetPolyIndex(p_prismlist[0]);
                         param_0->SetNowY(tmp_height_kcw);
                         sp0A = true;
                         JUT_ASSERT(0xac8, !isnan(tmp_height_kcw));
@@ -1961,10 +1989,10 @@ bool dBgWKCol::RoofChk(dBgS_RoofChk* param_0) {
             }
         }
 
-        sp28 = 1 << sp28;
-        sp10 = sp28 - 1;
-        sp34 += sp28 - (sp34 & sp10);
-    } while ((int)sp34 <= (int)sp30);
+        shift = 1 << shift;
+        sp10 = shift - 1;
+        y += shift - (y & sp10);
+    } while ((int)y <= (int)sp30);
 
     return sp0A;
 }
@@ -1974,60 +2002,59 @@ bool dBgWKCol::SplGrpChk(dBgS_SplGrpChk* param_0) {
     cXyz sp54;
     PSVECSubtract(sp3C, &m_pkc_head->m_area_min_pos, &sp54);
 
-    u32 sp38 = sp54.x;
-    if ((int)sp38 < 0) {
+    u32 x = sp54.x;
+    if ((int)x < 0) {
         return false;
     }
 
-    if ((int)sp38 > (int)~m_pkc_head->m_area_x_width_mask) {
+    if ((int)x > (int)~m_pkc_head->m_area_x_width_mask) {
         return false;
     }
 
-    u32 sp34 = sp54.z;
-    if ((int)sp34 < 0) {
+    u32 z = sp54.z;
+    if ((int)z < 0) {
         return false;
     }
 
-    if ((int)sp34 > (int)~m_pkc_head->m_area_z_width_mask) {
+    if ((int)z > (int)~m_pkc_head->m_area_z_width_mask) {
         return false;
     }
 
-    u32 sp30 = sp54.y;
-    if ((int)sp30 < 0) {
-        sp30 = 0;
+    u32 y = sp54.y;
+    if ((int)y < 0) {
+        y = 0;
     }
 
-    u32 sp2C = param_0->GetRoof() - m_pkc_head->m_area_min_pos.y;
-    if ((int)sp2C > (int)~m_pkc_head->m_area_y_width_mask) {
-        sp2C = ~m_pkc_head->m_area_y_width_mask;
+    u32 ymin = param_0->GetRoof() - m_pkc_head->m_area_min_pos.y;
+    if ((int)ymin > (int)~m_pkc_head->m_area_y_width_mask) {
+        ymin = ~m_pkc_head->m_area_y_width_mask;
     }
-    if ((int)sp30 >= (int)sp2C) {
+    if ((int)y >= (int)ymin) {
         return false;
     }
 
     bool sp09 = false;
     do {
-        u32 sp28 = (uintptr_t) m_pkc_head->m_block_data;
-        u32 sp24 = m_pkc_head->m_block_width_shift;
-        int sp20 = 4 * (((u32)sp34 >> sp24) << m_pkc_head->m_area_xy_blocks_shift |
-                        ((u32)sp2C >> sp24) << m_pkc_head->m_area_x_blocks_shift |
-                         (u32)sp38 >> sp24);
-        while ((sp20 = *(int*)((intptr_t)sp28 + sp20)) >= 0) {
-            sp28 = ((intptr_t)sp28 + sp20);
-            sp24--;
-            sp20 = 4 *
-                (((u32)sp34 >> sp24 & 1) << 2 |
-                 ((u32)sp2C >> sp24 & 1) << 1 |
-                 ((u32)sp38 >> sp24 & 1) << 0);
+        uintptr_t block = (uintptr_t)(BE(u32)*)m_pkc_head->m_block_data;
+        u32 shift = m_pkc_head->m_block_width_shift;
+        int idx = 4 * (((u32)z >> shift) << m_pkc_head->m_area_xy_blocks_shift |
+                       ((u32)ymin >> shift) << m_pkc_head->m_area_x_blocks_shift | (u32)x >> shift);
+
+        while ((idx = (*(BE(u32)*)(block + (idx & 0x7fffffff)))) >= 0) {
+            block += idx;
+            shift--;
+            idx = (((u32)z >> shift & 1) << 2 | ((u32)ymin >> shift & 1) << 1 |
+                   ((u32)x >> shift & 1) << 0)
+                  << 2;
         }
 
-        u16* sp1C = (u16*)(sp28 + (sp20 & 0x7fffffff));
-        while (*++sp1C != 0) {
-            KC_PrismData* sp18 = getPrismData(*sp1C);
+        BE(u16)* p_prismlist = (BE(u16)*)(block + (idx & 0x7fffffff));
+        while (*++p_prismlist != 0) {
+            KC_PrismData* sp18 = getPrismData(*p_prismlist);
             Vec* sp14 = m_pkc_head->m_nrm_data + sp18->fnrm_i;
             if (!(sp14->y <= 0.0f) && !cM3d_IsZero(sp14->y)) {
                 dBgPc sp64;
-                getPolyCode(*sp1C, &sp64);
+                getPolyCode(*p_prismlist, &sp64);
                 cXyz sp4C = *sp14;
                 if (!chkPolyThrough(&sp64, param_0->GetPolyPassChk(),
                                     param_0->GetGrpPassChk(), sp4C))
@@ -2059,7 +2086,7 @@ bool dBgWKCol::SplGrpChk(dBgS_SplGrpChk* param_0) {
                         param_0->GetRoof() > tmp_height_kcw)
                     {
                         param_0->SetHeight(tmp_height_kcw);
-                        param_0->SetPolyIndex(*sp1C);
+                        param_0->SetPolyIndex(*p_prismlist);
 
                         sp09 = true;
 
@@ -2073,11 +2100,11 @@ bool dBgWKCol::SplGrpChk(dBgS_SplGrpChk* param_0) {
         //sp28 = 1 << sp28;
         //sp10 = sp28 - 1;
         //sp34 += sp28 - (sp34 & sp10);
-        sp24 = 1 << sp24;
-        u32 sp0C = sp24 - 1;
-        sp2C = sp2C & ~sp0C;
-        sp2C--;
-    } while ((int)sp2C >= (int)sp30);
+        shift = 1 << shift;
+        u32 sp0C = shift - 1;
+        ymin = ymin & ~sp0C;
+        ymin--;
+    } while ((int)ymin >= (int)y);
 
     return sp09;
 }
@@ -2155,8 +2182,8 @@ bool dBgWKCol::SphChk(dBgS_SphChk* param_0, void* param_1) {
     int sp40;
     int sp3C;
     int sp38;
-    u16* sp34 = NULL;
-    u16* sp30 = NULL;
+    BE(u16)* sp34 = NULL;
+    BE(u16)* sp30 = NULL;
     bool sp0C = false;
     int sp2C = sp5C;
     do {
@@ -2167,20 +2194,20 @@ bool dBgWKCol::SphChk(dBgS_SphChk* param_0, void* param_1) {
             sp38 = 0;
             int sp24 = sp64;
             do {
-                u16* sp20 = (u16*)m_pkc_head->m_block_data;
+                BE(u16)* sp20 = (BE(u16)*)m_pkc_head->m_block_data;
                 u32 var_r29 = m_pkc_head->m_block_width_shift;
                 int sp1C = (((u32)sp2C >> var_r29 << m_pkc_head->m_area_xy_blocks_shift) |
                             ((u32)sp28 >> var_r29 << m_pkc_head->m_area_x_blocks_shift) |
                             ((u32)sp24 >> var_r29)) * 4;
-                while ((sp1C = *(int*)((intptr_t)sp20 + sp1C)) >= 0) {
-                    sp20 = (u16*)((intptr_t)sp20 + sp1C);
+                while ((sp1C = *(BE(int)*)((intptr_t)sp20 + sp1C)) >= 0) {
+                    sp20 = (BE(u16)*)((intptr_t)sp20 + sp1C);
                     var_r29--;
                     sp1C = (((u32)sp2C >> var_r29 & 1) << 2 |
                             ((u32)sp28 >> var_r29 & 1) << 1 |
                             ((u32)sp24 >> var_r29 & 1)) * 4;
                 }
 
-                u16* var_r28 = (u16*)((intptr_t)sp20 + (sp1C & 0x7fffffff));
+                BE(u16)* var_r28 = (BE(u16)*)((intptr_t)sp20 + (sp1C & 0x7fffffff));
                 var_r29 = 1 << var_r29;
                 int sp18 = var_r29 - 1;
                 sp4C = var_r29 - (sp24 & sp18);

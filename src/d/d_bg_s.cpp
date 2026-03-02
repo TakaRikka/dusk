@@ -10,6 +10,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
+#include "dusk/offset_ptr.h"
 
 void cBgS_ChkElm::Init() {
     m_bgw_base_ptr = NULL;
@@ -141,34 +142,34 @@ f32 cBgS::GroundCross(cBgS_GndChk* p_gnd) {
 // u32 is needed to match in ConvDzb ?
 struct cBgD_t_ {
     // Vertex Info
-    /* 0x00 */ int m_v_num;
-    /* 0x04 */ u32 m_v_tbl;
+    /* 0x00 */ BE(int) m_v_num;
+    /* 0x04 */ OFFSET_PTR_RAW m_v_tbl;
 
     // Triangle Info
-    /* 0x08 */ int m_t_num;
-    /* 0x0C */ u32 m_t_tbl;
+    /* 0x08 */ BE(int) m_t_num;
+    /* 0x0C */ OFFSET_PTR_RAW m_t_tbl;
 
     // Spatial List Info
-    /* 0x10 */ int m_b_num;
-    /* 0x14 */ u32 m_b_tbl;
+    /* 0x10 */ BE(int) m_b_num;
+    /* 0x14 */ OFFSET_PTR_RAW m_b_tbl;
 
     // Face Group Data Info
-    /* 0x18 */ int m_tree_num;
-    /* 0x1C */ u32 m_tree_tbl;
+    /* 0x18 */ BE(int) m_tree_num;
+    /* 0x1C */ OFFSET_PTR_RAW m_tree_tbl;
 
     // String Group Info
-    /* 0x20 */ int m_g_num;
-    /* 0x24 */ u32 m_g_tbl;
+    /* 0x20 */ BE(int) m_g_num;
+    /* 0x24 */ OFFSET_PTR_RAW m_g_tbl;
 
     // Surface Property Info
-    /* 0x28 */ int m_ti_num;
-    /* 0x2C */ u32 m_ti_tbl;
+    /* 0x28 */ BE(int) m_ti_num;
+    /* 0x2C */ OFFSET_PTR_RAW m_ti_tbl;
 
     /* 0x30 */ u32 m_flags;
 };  // Size: 0x34
 
 struct cBgD_Grp_t_ {
-    u32 strOffset;
+    OFFSET_PTR_RAW strOffset;
     u8 data[0x30];
 };
 
@@ -181,6 +182,18 @@ void* cBgS::ConvDzb(void* p_dzb) {
         return p_dzb;
     }
 
+#if TARGET_PC
+    pbgd->m_v_tbl.setBase(p_dzb);
+    pbgd->m_t_tbl.setBase(p_dzb);
+    pbgd->m_b_tbl.setBase(p_dzb);
+    pbgd->m_tree_tbl.setBase(p_dzb);
+    pbgd->m_g_tbl.setBase(p_dzb);
+    pbgd->m_ti_tbl.setBase(p_dzb);
+
+    for (int i = 0; i < pbgd->m_g_num; i++) {
+        ((cBgD_Grp_t_*)pbgd->m_g_tbl)[i].strOffset.setBase(p_dzb);
+    }
+#else
     if (pbgd->m_v_tbl != 0) {
         pbgd->m_v_tbl += (uintptr_t)p_dzb;
     }
@@ -195,6 +208,7 @@ void* cBgS::ConvDzb(void* p_dzb) {
         ((cBgD_Grp_t_*)pbgd->m_g_tbl)[i].strOffset =
             (uintptr_t)p_dzb + ((cBgD_Grp_t_*)pbgd->m_g_tbl)[i].strOffset;
     }
+#endif
 
     return p_dzb;
 }

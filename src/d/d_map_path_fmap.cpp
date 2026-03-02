@@ -131,12 +131,12 @@ dMenu_Fmap_stage_data_c* dMenu_Fmap_region_data_c::getMenuFmapStageData(int para
 int dMenu_Fmap_region_data_c::getPointStagePathInnerNo(f32 i_pointX, f32 i_pointZ, int i_stageNo,
                                                        int* o_stageNo, int* o_roomNo) {
     int line_num, group_num, floor_num;
-    f32* point;
-    u16* point_index;
+    BE(f32)* point;
+    BE(u16)* point_index;
     dDrawPath_c::line_class* line;
     dDrawPath_c::group_class* group;
     dDrawPath_c::floor_class* floor;
-    f32* points;
+    BE(f32)* points;
     dMenu_Fmap_room_data_c* room;
     dMenu_Fmap_stage_data_c* stage;
     int point_num, point_no;
@@ -192,7 +192,7 @@ int dMenu_Fmap_region_data_c::getPointStagePathInnerNo(f32 i_pointX, f32 i_point
 
                         outside = false;
                         point_index = line->mpData;
-                        f32* prev_point = &points[point_index[0] * 2];
+                        BE(f32)* prev_point = &points[point_index[0] * 2];
                         point = &points[point_index[1] * 2];
                         point_no = 2;
                         point_index += 2;

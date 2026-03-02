@@ -640,6 +640,12 @@ int dRes_info_c::setRes() {
 
         u32 heapSize = mDataHeap->getHeapSize();
         DCStoreRangeNoSync(mDataHeap->getStartAddr(), heapSize);
+
+#if TARGET_PC
+        char buf[32];
+        snprintf(buf, sizeof(buf), "Arc %s", mArchiveName);
+        JKRHEAP_NAME(mDataHeap, buf);
+#endif
     }
 
     return 0;

@@ -16,6 +16,7 @@ class JKRHeap;
 class JKRSolidHeap;
 struct ResTIMG;
 class Z2Creature;
+struct cXy;
 
 namespace mDoExt {
     extern u8 CurrentHeapAdjustVerbose;
@@ -483,11 +484,6 @@ struct mDoExt_3Dline_field_0x10_c {
     s8 z;
 };
 
-struct mDoExt_3Dline_field_0x18_c {
-    f32 field_0x0;
-    f32 field_0x4;
-};
-
 class mDoExt_3Dline_c {
 public:
     int init(u16, int, BOOL);
@@ -495,12 +491,9 @@ public:
 
     /* 0x00 */ cXyz* field_0x0;
     /* 0x04 */ f32* field_0x4;
-    /* 0x08 */ cXyz* field_0x8;
-    /* 0x0C */ cXyz* field_0xc;
-    /* 0x10 */ mDoExt_3Dline_field_0x10_c* field_0x10;
-    /* 0x14 */ mDoExt_3Dline_field_0x10_c* field_0x14;
-    /* 0x18 */ mDoExt_3Dline_field_0x18_c* field_0x18;
-    /* 0x1C */ mDoExt_3Dline_field_0x18_c* field_0x1c;
+    /* 0x08 */ cXyz* field_0x8[2];
+    /* 0x10 */ mDoExt_3Dline_field_0x10_c* field_0x10[2];
+    /* 0x18 */ cXy* field_0x18[2];
 };
 
 class mDoExt_offCupOnAupPacket : public J3DPacket {
@@ -555,8 +548,8 @@ public:
 class mDoExt_3DlineMat0_c : public mDoExt_3DlineMat_c {
 public:
     int init(u16, u16, int);
-    void update(int, f32, _GXColor&, u16, dKy_tevstr_c*);
-    void update(int, _GXColor&, dKy_tevstr_c*);
+    void update(int, f32, GXColor&, u16, dKy_tevstr_c*);
+    void update(int, GXColor&, dKy_tevstr_c*);
 
     virtual int getMaterialID() { return 0; }
     virtual void setMaterial();
@@ -774,6 +767,12 @@ void mDoExt_restoreCurrentHeap();
 JKRExpHeap* mDoExt_getGameHeap();
 void mDoExt_setSafeGameHeapSize();
 size_t mDoExt_getSafeGameHeapSize();
+intptr_t mDoExt_getSafeArchiveHeapSize();
+intptr_t mDoExt_getSafeJ2dHeapSize();
+intptr_t mDoExt_getSafeCommandHeapSize();
+void mDoExt_setSafeCommandHeapSize();
+void mDoExt_setSafeArchiveHeapSize();
+void mDoExt_setSafeJ2dHeapSize();
 void mDoExt_destroySolidHeap(JKRSolidHeap* i_heap);
 JKRHeap* mDoExt_setCurrentHeap(JKRHeap* i_heap);
 JKRExpHeap* mDoExt_getArchiveHeap();

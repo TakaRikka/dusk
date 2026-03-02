@@ -59,8 +59,15 @@ add_library(game_debug STATIC ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES})
 target_compile_definitions(game_debug PRIVATE TARGET_PC VERSION=0 $<$<CONFIG:Debug>:DEBUG=1>)
 
 # Make these properties PUBLIC so that the regular game target also sees them.
-target_include_directories(game_debug PUBLIC include src assets/${DUSK_TP_VERSION} ${CMAKE_SOURCE_DIR}/build/${DUSK_TP_VERSION}/include)
-target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::si aurora::vi aurora::pad aurora::mtx)
+target_include_directories(game_debug PUBLIC
+        include
+        src
+        assets/${DUSK_TP_VERSION}
+        libs/JSystem/include
+        extern/aurora/include/dolphin
+        ${CMAKE_SOURCE_DIR}/build/${DUSK_TP_VERSION}/include
+        build/${DUSK_TP_VERSION}/include)
+target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::si aurora::vi aurora::pad aurora::mtx aurora::os)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES})

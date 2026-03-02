@@ -54,7 +54,13 @@ void daTagGuard_c::create_init() {
     current.pos.z = pnt1->m_position.z;
 #endif
 
+#if TARGET_LITTLE_ENDIAN
+    Vec copy1 = pnt1->m_position;
+    Vec copy2 = pnt1->m_position;
+    current.angle.y = cLib_targetAngleY(&copy1, &copy2);
+#else
     current.angle.y = cLib_targetAngleY(&pnt1->m_position, &pnt2->m_position);
+#endif
 }
 
 static int daTagGuard_Create(fopAc_ac_c* i_this) {

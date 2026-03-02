@@ -366,7 +366,7 @@ bool dMenu_StageMapCtrl_c::getTreasureList(f32* o_posX, f32* o_posY, s8* param_2
     bool var_r30 = false;
 
     while (field_0xe4 != 0 && !var_r30) {
-        Vec sp10;
+        BE(Vec) sp10;
         sp10 = *field_0x8c->getPos();
 
         if (getRendPointer(0)->isDrawIconSingle(field_0x8c->getDataPointer(), (s8)dComIfGp_roomControl_getStayNo(), field_0xf7, 1, true, &sp10)) {

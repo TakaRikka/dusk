@@ -19,10 +19,9 @@
 #endif
 
 static DynamicNameTableEntry const DynamicNameTable[] = {
+#if !TARGET_PC
     {PROC_ALLDIE, "d_a_alldie"},
-#ifndef TARGET_PC
     {PROC_Obj_Swpush, "d_a_obj_swpush"},
-#endif // TARGET_PC
     {PROC_Obj_Swpush2, "d_a_obj_swpush2"},
     {PROC_Obj_Swpush5, "d_a_obj_swpush5"},
     {PROC_Tag_Gstart, "d_a_tag_gstart"},
@@ -31,9 +30,7 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     #endif
     {PROC_Obj_Lv6ElevtA, "d_a_obj_lv6elevta"},
     {PROC_OBJ_SO, "d_a_obj_so"},
-#ifndef TARGET_PC
     {PROC_Obj_Movebox, "d_a_obj_movebox"},
-#endif // TARGET_PC
     {PROC_Obj_SwTurn, "d_a_obj_swturn"},
     {PROC_Obj_Lv6SwTurn, "d_a_obj_lv6swturn"},
     {PROC_OBJ_SEKIZOA, "d_a_obj_sekizoa"},
@@ -41,9 +38,7 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_TAG_GRA, "d_a_tag_gra"},
     {PROC_TAG_YAMI, "d_a_tag_yami"},
     {PROC_Obj_Ladder, "d_a_obj_ladder"},
-#ifndef TARGET_PC
     {PROC_OBJ_BEF, "d_a_obj_brakeeff"},
-#endif // TARGET_PC
     {PROC_OBJ_FMOBJ, "d_a_obj_fmobj"},
     {PROC_OBJ_LBOX, "d_a_obj_lbox"},
     {PROC_OBJ_WEB0, "d_a_obj_web0"},
@@ -228,9 +223,7 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_Obj_SZbridge, "d_a_obj_szbridge"},
     {PROC_Obj_KakarikoBrg, "d_a_obj_warp_kbrg"},
     {PROC_Obj_OrdinBrg, "d_a_obj_warp_obrg"},
-#ifndef TARGET_PC
     {PROC_Obj_BurnBox, "d_a_obj_burnbox"},
-#endif // TARGET_PC
     {PROC_Obj_KJgjs, "d_a_obj_kjgjs"},
     {PROC_OBJ_IHASI, "d_a_obj_ihasi"},
     {PROC_Obj_IceBlock, "d_a_obj_iceblock"},
@@ -242,9 +235,7 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_NPC_ZRA, "d_a_npc_zra"},
     {PROC_Obj_Chandelier, "d_a_obj_chandelier"},
     {PROC_Obj_Stopper2, "d_a_obj_stopper2"},
-#ifndef TARGET_PC
     {PROC_DOOR20, "d_a_door_shutter"},
-#endif // TARGET_PC
     {PROC_Tag_Hinit, "d_a_tag_hinit"},
     {PROC_Tag_Hjump, "d_a_tag_hjump"},
     {PROC_Tag_AJnot, "d_a_tag_ajnot"},
@@ -252,13 +243,9 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_CANOE, "d_a_canoe"},
     {PROC_HORSE, "d_a_horse"},
     {PROC_E_WB, "d_a_e_wb"},
-#ifndef TARGET_PC
     {PROC_OBJ_ITO, "d_a_obj_ito"},
-#endif // TARGET_PC
     {PROC_OBJ_SW, "d_a_obj_sw"},
-#ifndef TARGET_PC
     {PROC_SPINNER, "d_a_spinner"},
-#endif // TARGET_PC
     {PROC_B_OB, "d_a_b_ob"},
     {PROC_KAGO, "d_a_kago"},
     {PROC_E_YC, "d_a_e_yc"},
@@ -267,20 +254,16 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_B_ZANTZ, "d_a_b_zant_mobile"},
     {PROC_B_ZANT, "d_a_b_zant"},
     {PROC_B_ZANTM, "d_a_b_zant_magic"},
-#ifndef TARGET_PC
     {PROC_TBOX, "d_a_tbox"},
     {PROC_TBOX2, "d_a_tbox2"},
     {PROC_BOOMERANG, "d_a_boomerang"},
     {PROC_MIDNA, "d_a_midna"},
-#endif // TARGET_PC
     {PROC_NPC_TK, "d_a_npc_tk"},
     {PROC_NPC_WORM, "d_a_npc_worm"},
     {PROC_PPolamp, "d_a_ppolamp"},
     {PROC_BkyRock, "d_a_obj_bky_rock"},
-#ifndef TARGET_PC
     {PROC_HITOBJ, "d_a_hitobj"},
     {PROC_EP, "d_a_ep"},
-#endif // TARGET_PC
     {PROC_COW, "d_a_cow"},
     {PROC_PERU, "d_a_peru"},
     {PROC_NI, "d_a_ni"},
@@ -332,17 +315,13 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_MG_FISH, "d_a_mg_fish"},
     {PROC_FSHOP, "d_a_mg_fshop"},
     {PROC_NPC_DU, "d_a_npc_du"},
-#ifndef TARGET_PC
     {PROC_DISAPPEAR, "d_a_disappear"},
-#endif // TARGET_PC
     {PROC_Obj_Mato, "d_a_obj_mato"},
     {PROC_Obj_Flag, "d_a_obj_flag"},
     {PROC_Obj_Flag2, "d_a_obj_flag2"},
     {PROC_Obj_Flag3, "d_a_obj_flag3"},
     {PROC_Obj_GOMIKABE, "d_a_obj_gomikabe"},
-#ifndef TARGET_PC
     {PROC_Obj_Yousei, "d_a_obj_yousei"},
-#endif // TARGET_PC
     {PROC_Obj_Kabuto, "d_a_obj_kabuto"},
     {PROC_Obj_Cho, "d_a_obj_cho"},
     {PROC_Obj_Kuw, "d_a_obj_kuwagata"},
@@ -369,9 +348,7 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_Izumi_Gate, "d_a_izumi_gate"},
     {PROC_Obj_Fchain, "d_a_obj_fchain"},
     {PROC_Obj_Wchain, "d_a_obj_wchain"},
-#ifndef TARGET_PC
     {PROC_Tag_Attp, "d_a_tag_attention"},
-#endif // TARGET_PC
     {PROC_Obj_Tornado, "d_a_obj_tornado"},
     {PROC_Obj_Tornado2, "d_a_obj_tornado2"},
     {PROC_Obj_FirePillar, "d_a_obj_firepillar"},
@@ -563,9 +540,7 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_E_WAP, "d_a_e_warpappear"},
     {PROC_Obj_SmallKey, "d_a_obj_smallkey"},
     {PROC_Obj_Kantera, "d_a_obj_kantera"},
-#ifndef TARGET_PC
     {PROC_Obj_LifeContainer, "d_a_obj_life_container"},
-#endif // TARGET_PC
     {PROC_Obj_Shield, "d_a_obj_shield"},
     {PROC_Demo_Item, "d_a_demo_item"},
     #if !PLATFORM_SHIELD
@@ -573,32 +548,24 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     #endif
     {PROC_Obj_Drop, "d_a_obj_drop"},
     {PROC_OBJ_RW, "d_a_obj_rw"},
-#ifndef TARGET_PC
     {PROC_NBOMB, "d_a_nbomb"},
-#endif // TARGET_PC
     {PROC_TAG_CSW, "d_a_tag_csw"},
     {PROC_TAG_QS, "d_a_tag_qs"},
     {PROC_HOZELDA, "d_a_hozelda"},
     #if !PLATFORM_SHIELD
     {PROC_SWC00, "d_a_swc00"},
     #endif
-#ifndef TARGET_PC
     {PROC_KNOB20, "d_a_door_knob00"},
     {PROC_DBDOOR, "d_a_door_dbdoor00"},
-#endif // TARGET_PC
     {PROC_BOSS_DOOR, "d_a_door_boss"},
     {PROC_L1BOSS_DOOR, "d_a_door_bossL1"},
     {PROC_L1MBOSS_DOOR, "d_a_door_mbossL1"},
     {PROC_L5BOSS_DOOR, "d_a_door_bossL5"},
-#ifndef TARGET_PC
     {PROC_DSHUTTER, "d_a_dshutter"},
     {PROC_SPIRAL_DOOR, "d_a_door_spiral"},
-#endif // TARGET_PC
     {PROC_Tag_ChgRestart, "d_a_tag_chgrestart"},
     {PROC_Tag_Restart, "d_a_tag_setrestart"},
-#ifndef TARGET_PC
     {PROC_ANDSW, "d_a_andsw"},
-#endif // TARGET_PC
     #if !PLATFORM_SHIELD
     {PROC_ANDSW2, "d_a_andsw2"},
     #endif
@@ -724,17 +691,13 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_NPC_MK, "d_a_npc_mk"},
     #endif
     {PROC_NPC_P2, "d_a_npc_p2"},
-#ifndef TARGET_PC
     {PROC_KYTAG00, "d_a_kytag00"},
-#endif // TARGET_PC
     #if !PLATFORM_SHIELD
     {PROC_KYTAG01, "d_a_kytag01"},
     #endif
     {PROC_KYTAG02, "d_a_kytag02"},
     {PROC_KYTAG03, "d_a_kytag03"},
-#ifndef TARGET_PC
     {PROC_KYTAG04, "d_a_kytag04"},
-#endif // TARGET_PC
     {PROC_KYTAG05, "d_a_kytag05"},
     {PROC_KYTAG06, "d_a_kytag06"},
     {PROC_KYTAG07, "d_a_kytag07"},
@@ -747,9 +710,7 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_KYTAG14, "d_a_kytag14"},
     {PROC_KYTAG15, "d_a_kytag15"},
     {PROC_KYTAG16, "d_a_kytag16"},
-#ifndef TARGET_PC
     {PROC_KYTAG17, "d_a_kytag17"},
-#endif // TARGET_PC
     {PROC_Ykgr, "d_a_ykgr"},
     {PROC_TALK, "d_a_talk"},
     {PROC_Obj_Crope, "d_a_obj_crope"},
@@ -768,15 +729,12 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_Tag_Lv8Gate, "d_a_tag_Lv8Gate"},
     {PROC_Tag_TheBHint, "d_a_tag_theB_hint"},
     {PROC_Tag_Assist, "d_a_tag_assistance"},
-#ifndef TARGET_PC
     {PROC_DEMO00, "d_a_demo00"},
-#endif
     {PROC_TAG_CAMERA, "d_a_tag_camera"},
     {PROC_TAG_CHKPOINT, "d_a_tag_chkpoint"},
     #if !PLATFORM_SHIELD
     {PROC_TAG_EVENT, "d_a_tag_event"},
     #endif
-#ifndef TARGET_PC
     {PROC_TAG_EVT, "d_a_tag_evt"},
     {PROC_TAG_TELOP, "d_a_tag_telop"},
     {PROC_TAG_HOWL, "d_a_tag_howl"},
@@ -792,7 +750,6 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_BG, "d_a_bg"},
     {PROC_SET_BG_OBJ, "d_a_set_bgobj"},
     {PROC_BG_OBJ, "d_a_bg_obj"},
-#endif
     {PROC_MIRROR, "d_a_mirror"},
     {PROC_MOVIE_PLAYER, "d_a_movie_player"},
     #if !PLATFORM_SHIELD
@@ -800,21 +757,15 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     #endif
     {PROC_FR, "d_a_fr"},
     {PROC_ECONT, "d_a_econt"},
-#ifndef TARGET_PC
     {PROC_MG_ROD, "d_a_mg_rod"},
-#endif // TARGET_PC
     {PROC_E_ARROW, "d_a_e_arrow"},
     {PROC_BULLET, "d_a_bullet"},
-#ifndef TARGET_PC
     {PROC_SWHIT0, "d_a_swhit0"},
-#endif // TARGET_PC
     {PROC_E_TH_BALL, "d_a_e_th_ball"},
-#ifndef TARGET_PC
     {PROC_TAG_EVTAREA, "d_a_tag_evtarea"},
     {PROC_TAG_EVTMSG, "d_a_tag_evtmsg"},
     {PROC_TAG_KMSG, "d_a_tag_kmsg"},
     {PROC_TAG_PUSH, "d_a_tag_push"},
-#endif // TARGET_PC
     {PROC_E_MK_BO, "d_a_e_mk_bo"},
     {PROC_E_MM_MT, "d_a_e_mm_mt"},
     {PROC_OBJ_KBOX, "d_a_obj_kbox"},
@@ -822,9 +773,7 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_B_GOS, "d_a_b_gos"},
     {PROC_OBJ_YSTONE, "d_a_obj_ystone"},
     {PROC_MANT, "d_a_mant"},
-#ifndef TARGET_PC
     {PROC_CROD, "d_a_crod"},
-#endif // TARGET_PC
     {PROC_OBJ_PLEAF, "d_a_obj_pleaf"},
     {PROC_OBJ_KBACKET, "d_a_obj_kbacket"},
     {PROC_OBJ_YBAG, "d_a_obj_yel_bag"},
@@ -832,9 +781,7 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_OBJ_AUTOMATA, "d_a_obj_automata"},
     {PROC_OBJ_GADGET, "d_a_obj_gadget"},
     {PROC_OBJ_KAGO, "d_a_obj_kago"},
-#ifndef TARGET_PC
     {PROC_Obj_Carry, "d_a_obj_carry"},
-#endif // TARGET_PC
     {PROC_Obj_Stone, "d_a_obj_stone"},
     {PROC_OBJ_HB, "d_a_obj_hb"},
     {PROC_NPC_INKO, "d_a_npc_inko"},
@@ -844,17 +791,16 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_E_BI_LEAF, "d_a_e_bi_leaf"},
     {PROC_START_AND_GOAL, "d_a_startAndGoal"},
     {PROC_NPC_DF, "d_a_npc_df"},
-#ifndef TARGET_PC
     {PROC_ARROW, "d_a_arrow"},
     {PROC_PATH_LINE, "d_a_path_line"},
     {PROC_TAG_ALLMATO, "d_a_tag_allmato"},
     {PROC_Obj_Timer, "d_a_obj_timer"},
     {PROC_SCENE_EXIT, "d_a_scene_exit"},
     {PROC_SUSPEND, "d_a_suspend"},
-#endif // TARGET_PC
     #if !PLATFORM_SHIELD
     {PROC_GRASS, "d_a_grass"},
     #endif
+#endif
     {-1, NULL},
 };
 
@@ -867,6 +813,7 @@ static BOOL cDyl_Initialized;
 int cCc_Init() {
     JUT_ASSERT(37, !DMC_initialized);
 
+#if !TARGET_PC
     #if PLATFORM_GCN
     JKRHeap* parentHeap = mDoExt_getArchiveHeap();
     #else
@@ -907,6 +854,8 @@ int cCc_Init() {
     #if DEBUG
     FixedMemoryCheck* check = FixedMemoryCheck::easyCreate(DMC, sizeof(DMC));
     #endif
+
+#endif
 
     DMC_initialized = true;
     return 1;
@@ -1013,10 +962,6 @@ static int cDyl_InitCallback(void* param_0) {
 #ifdef TARGET_PC
     // On PC, the profile list is statically linked (g_fpcPf_ProfileList_p in f_pc_profile.cpp).
     // Skip DVD-based REL loading and string table — OSLink/OSLinkFixed are stubs.
-    cDyl_Initialized = true;
-    fopScnM_CreateReq(PROC_LOGO_SCENE, 0x7FFF, 0, 0);
-    printf("[DIAG] cDyl_InitCallback: PROC_LOGO_SCENE created (PC path), DONE\n"); fflush(stdout);
-    return 1;
 #else
     #if PLATFORM_GCN
     JKRHeap* parentHeap = mDoExt_getArchiveHeap();
@@ -1048,12 +993,12 @@ static int cDyl_InitCallback(void* param_0) {
     printf("[DIAG] cDyl_InitCallback: linking f_pc_profile_lst...\n"); fflush(stdout);
     dmc.link();
     printf("[DIAG] cDyl_InitCallback: link done\n"); fflush(stdout);
+#endif
     cDyl_Initialized = true;
 
     fopScnM_CreateReq(PROC_LOGO_SCENE, 0x7FFF, 0, 0);
     printf("[DIAG] cDyl_InitCallback: PROC_LOGO_SCENE created, DONE\n"); fflush(stdout);
     return 1;
-#endif
 }
 
 static mDoDvdThd_callback_c* cDyl_DVD;
@@ -1102,7 +1047,7 @@ int cDylPhs::Link(request_of_phase_process_class* i_phase, s16 i_ProfName) {
         (request_of_phase_process_fn)cDylPhs::phase_03
     };
 
-    if (i_phase->id == cPhs_NEXT_e) {
+    if (i_phase->id == 2) {
         return cPhs_COMPLEATE_e;
     }
 
@@ -1110,11 +1055,11 @@ int cDylPhs::Link(request_of_phase_process_class* i_phase, s16 i_ProfName) {
 }
 
 int cDylPhs::Unlink(request_of_phase_process_class* i_phase, s16 i_ProfName) {
-    JUT_ASSERT(460, i_phase->id != cPhs_LOADING_e);
+    JUT_ASSERT(460, i_phase->id != 1);
 
-    if (i_phase->id == cPhs_NEXT_e) {
+    if (i_phase->id == 2) {
         int ret = cDyl_Unlink(i_ProfName);
-        i_phase->id = cPhs_INIT_e;
+        i_phase->id = 0;
         return ret;
     }
 

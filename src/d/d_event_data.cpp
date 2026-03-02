@@ -1072,7 +1072,7 @@ void dEvDtStaff_c::specialProcDirector() {
             dStage_MapEvent_dt_c* mapEvent = dEvt_control_c::searchMapEventData(data->unk);
             if (mapEvent != NULL) {
                 if (mapEvent->type == dStage_MapEvent_dt_TYPE_MAPTOOLCAMERA) {
-                    data->unk2 = mapEvent->data.maptool.field_0x14;
+                    data->unk2 = (s16)mapEvent->data.maptool.field_0x14;
                 } else {
                     data->unk2 = -1;
                 }
@@ -1554,11 +1554,28 @@ int dEvDtBase_c::init(char* i_data, int i_roomNo) {
     }
 
     if (getFDataNum() > 0) {
+#if TARGET_PC
+        auto data = (f32*)(i_data + getFDataTop());
+        int num = getFDataNum();
+        for (int i = 0; i < num; i++)
+            be_swap(data[i]);
+        setFDataP(data);
+#else
         setFDataP((f32*)(i_data + getFDataTop()));
+#endif
     }
 
     if (getIDataNum() > 0) {
+#if TARGET_PC
+        // endian swap here
+        auto data = (int*)(i_data + getIDataTop());
+        int num = getIDataNum();
+        for (int i = 0; i < num; i++)
+            be_swap(data[i]);
+        setIDataP(data);
+#else
         setIDataP((int*)(i_data + getIDataTop()));
+#endif
     }
 
     if (getSDataNum() > 0) {

@@ -4885,7 +4885,7 @@ int daAlink_c::create() {
 
         dComIfGp_setPlayer(0, this);
         dComIfGp_setLinkPlayer(this);
-        fopAcM_setStageLayer(this);
+        fopAcM_setStageLayer(&LEAFDRAW_BASE(this));
 
         if (sceneMode == 7) {
             current.pos = dComIfGs_getTurnRestartPos();

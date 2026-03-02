@@ -4,11 +4,11 @@
  */
 
 #include "m_Do/m_Do_DVDError.h"
-#include <dolphin/os.h>
 #include "JSystem/JKernel/JKRAssertHeap.h"
-#include "m_Do/m_Do_Reset.h"
+#include <os.h>
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_Reset.h"
 
 // Added for the sleep workaround
 #include <chrono>

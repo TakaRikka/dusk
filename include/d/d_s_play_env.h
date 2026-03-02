@@ -6,13 +6,17 @@ public:
     dScnPly_env_otherHIO_c();
 
     virtual ~dScnPly_env_otherHIO_c() {}
+    void listenPropertyEvent(const JORPropertyEvent*);
     void genMessage(JORMContext*);
+
     void addSetEmitterID(u16 param_0) {
         #if DEBUG
         field_0x1c[field_0x4f++] = param_0;
         field_0x4f %= 20;
         #endif
     }
+
+    void printParticle();
 
     #if DEBUG
     /* 0x04 */ s8 field_0x04;
@@ -53,6 +57,7 @@ public:
     dScnPly_env_debugHIO_c();
 
     virtual ~dScnPly_env_debugHIO_c() {}
+    void listenPropertyEvent(const JORPropertyEvent*);
     void genMessage(JORMContext*);
 
     /* 0x04 */ u8 field_0x4;

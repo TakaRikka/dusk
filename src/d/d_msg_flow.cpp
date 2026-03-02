@@ -2102,7 +2102,12 @@ int dMsgFlow_c::event020(mesg_flow_node_event* i_flowNode_p, fopAc_ac_c* i_speak
 
     for (int i = 0; i < room->getPlayerNum(); i++, actor_data++) {
         if ((u8)actor_data->base.angle.z == prm0) {
+#if TARGET_LITTLE_ENDIAN
+            cXyz copy = actor_data->base.position;
+            player->setPlayerPosAndAngle(&copy, player->current.angle.y, 0);
+#else
             player->setPlayerPosAndAngle(&actor_data->base.position, player->current.angle.y, 0);
+#endif
             break;
         }
     }

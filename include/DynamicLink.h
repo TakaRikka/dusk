@@ -1,7 +1,7 @@
 #ifndef DYNAMICLINK_H
 #define DYNAMICLINK_H
 
-#include <dolphin/os.h>
+#include <os.h>
 #include "JSystem/JKernel/JKRHeap.h"
 #include "global.h"
 

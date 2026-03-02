@@ -1,0 +1,6 @@
+#ifndef J3DMODELLOADERCALCSIZE_H
+#define J3DMODELLOADERCALCSIZE_H
+
+#include <types.h>
+
+#endif /* J3DMODELLOADERCALCSIZE_H */

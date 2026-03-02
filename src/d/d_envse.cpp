@@ -29,7 +29,12 @@ static void dEnvSe_getNearPathPos(cXyz* param_0, cXyz* param_1, dPath* i_path) {
     cM3dGLin sp14;
 
     for (i = 0; i < i_path->m_num; i++) {
+#if TARGET_PC
+        Vec posCopy = point_p->m_position;
+        sp8 = cM3d_LenSq(param_1, &posCopy);
+#else
         sp8 = cM3d_LenSq(param_1, &point_p->m_position);
+#endif
         if (var_f31 > sp8) {
             var_f31 = sp8;
             var_r31 = i;
@@ -88,9 +93,16 @@ int dEnvSe_c::execute_common(dStage_SoundInfo_c* i_soundInf, s8* param_1, u8 par
         if (memcmp(data_p->field_0x0, "sndtag", 6) == 0) {
             if (!(*param_1 & 1)) {
                 if (data_p->field_0x17 != 0) {
+#if TARGET_LITTLE_ENDIAN
+                    Vec copy = data_p->field_0x8;
+                    mDoAud_mEnvse_initStaticEnvSe(data_p->field_0x17, data_p->field_0x14,
+                                                  data_p->field_0x19, data_p->field_0x1a,
+                                                  &copy);
+#else
                     mDoAud_mEnvse_initStaticEnvSe(data_p->field_0x17, data_p->field_0x14,
                                                   data_p->field_0x19, data_p->field_0x1a,
                                                   &data_p->field_0x8);
+#endif
                 }
                 *param_1 |= 1;
             }

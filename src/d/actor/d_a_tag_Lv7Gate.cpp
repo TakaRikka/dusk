@@ -77,8 +77,8 @@ int daTagLv7Gate_c::setPath(int i_path_ID) {
         return 0;
     }
 
-    cXyz pos1 = dPath_GetPnt(mRoomPath, 0)->m_position;
-    cXyz pos2 = dPath_GetPnt(mRoomPath, 1)->m_position;
+    cXyz pos1 = (Vec)dPath_GetPnt(mRoomPath, 0)->m_position;
+    cXyz pos2 = (Vec)dPath_GetPnt(mRoomPath, 1)->m_position;
 
     mPos1.set(pos1);
 

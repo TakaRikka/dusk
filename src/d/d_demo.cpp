@@ -851,7 +851,9 @@ int dDemo_system_c::JSGFindObject(JStage::TObject** p_TObj, char const* actorNam
         *p_TObj = mpObject->appendActor(actor);
     } else if (objType == JStage::OBJECT_CAMERA) {
         if (DEBUG && !strcmp(actorName, "EditCam")) {
+#if DEBUG
             *p_TObj = mpObject->createEditorCamera();
+#endif
         } else {
             *p_TObj = mpObject->createCamera();
         }

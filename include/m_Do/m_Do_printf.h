@@ -1,8 +1,8 @@
 #ifndef M_DO_M_DO_PRINTF_H
 #define M_DO_M_DO_PRINTF_H
 
-#include <cstdarg>
-#include "dolphin/types.h"
+#include <os.h>
+#include "dusk/endian.h"
 
 void my_PutString(const char*);
 void mDoPrintf_vprintf_Interrupt(char const*, va_list);

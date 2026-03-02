@@ -1198,7 +1198,7 @@ void daObjBm_c::Bgc_c::wall_pos(fopAc_ac_c const* i_actor, daObjBm_c::BgcSrc_c c
         sp54 = sp48 + sp6C;
 
         M_wall_work[i].Set(&sp48, &sp54, i_actor);
-        M_wall_work[i].SetActorPid(i_actor->base.base.id);
+        M_wall_work[i].SetActorPid(fopAcM_GetID(i_actor));
 
         if (dComIfG_Bgsp().LineCross(&M_wall_work[i])) {
             field_0x64[i] = M_wall_work[i].GetCross();

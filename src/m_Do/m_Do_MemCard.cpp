@@ -3,12 +3,13 @@
  * Memory Card Control
  */
 
-#include <dolphin/card.h>
+#include <card.h>
 #include "m_Do/m_Do_MemCard.h"
 #include "JSystem/JKernel/JKRAssertHeap.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_MemCardRWmng.h"
 #include "m_Do/m_Do_Reset.h"
+#include "os_report.h"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/nand.h>

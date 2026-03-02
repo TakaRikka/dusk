@@ -278,7 +278,7 @@ void daObj_SMTile_c::touchPrtcls(f32 param_1) {
     for (int i = 0; i < 21; i++) {
         if ((field_0xa28[i] == 1) || (field_0xa28[i] == 2)) {
             mParticleIds[i] =
-                dComIfGp_particle_set(mParticleIds[i], id[field_0xa28[i]], &field_0x788[i], 0, 0);
+                dComIfGp_particle_set(mParticleIds[i], ::id[field_0xa28[i]], &field_0x788[i], 0, 0);
             JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(mParticleIds[i]);
             if (emitter != NULL) {
                 f32 dVar6 = mpHIO->m.field_0x4 - mParticleTimers[i];

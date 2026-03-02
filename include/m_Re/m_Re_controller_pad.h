@@ -187,6 +187,8 @@ public:
     static u32 getTrigUp(u32 i_pad) { return getTrig(i_pad) & WPAD_BUTTON_UP; }
     static u32 getTrigStart(u32 i_pad) { return getTrig(i_pad) & WPAD_BUTTON_PLUS; }
 
+    static f32 getStickX(u32 i_pad) { return getPad(i_pad).field_0x4[0].ex_status.fs.stick.x; }
+
     static WPADInfo m_pad_info[WPAD_MAX_CONTROLLERS];
     static Pad m_pad[WPAD_MAX_CONTROLLERS];
     static motorWave_t m_motorWave[WPAD_MAX_CONTROLLERS];

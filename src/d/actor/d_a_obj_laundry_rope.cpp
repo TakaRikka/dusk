@@ -26,8 +26,8 @@ void daObjLndRope_c::create_init() {
     dPath* roomPath = dPath_GetRoomPath(getPathId(), fopAcM_GetRoomNo(this));
 
     dPnt* pathPoints = roomPath->m_points;
-    cXyz startPoint = pathPoints[0].m_position;
-    cXyz endPoint = pathPoints[1].m_position;
+    cXyz startPoint = (Vec)pathPoints[0].m_position;
+    cXyz endPoint = (Vec)pathPoints[1].m_position;
     current.pos = (startPoint + endPoint) * 0.5f;
     mPos = endPoint - startPoint;
 
@@ -230,7 +230,7 @@ static int createSolidHeap(fopAc_ac_c* i_this) {
 }
 
 int daObjLndRope_c::draw() {
-    static _GXColor l_color = {20, 15, 0, 255};
+    static GXColor l_color = {20, 15, 0, 255};
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     mRopeMat.update(15, l_color, &tevStr);
     dComIfGd_set3DlineMat(&mRopeMat);

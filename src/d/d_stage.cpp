@@ -1552,7 +1552,7 @@ u8 data_8074C56A_debug;
 u8 data_8074C56B_debug;
 u8 data_8074C56C_debug;
 
-u32 dStage_roomControl_c::mProcID;
+fpc_ProcID dStage_roomControl_c::mProcID;
 
 s8 dStage_roomControl_c::mStayNo;
 
@@ -2065,15 +2065,20 @@ static int dStage_doorInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
 static int dStage_roomReadInit(dStage_dt_c* i_stage, void* i_data, int param_2, void* param_3) {
     UNUSED(param_2);
     roomRead_class* p_node = (roomRead_class*)((int*)i_data + 1);
-    roomRead_data_class** rtbl = p_node->m_entries;
+    OFFSET_PTR(roomRead_data_class)* rtbl = p_node->m_entries;
 
     i_stage->setRoom(p_node);
 
     for (int i = 0; i < p_node->num; i++) {
+#if TARGET_PC
+        rtbl[i].setBase(param_3);
+        rtbl[i]->m_rooms.setBase(param_3);
+#else
         if ((intptr_t)rtbl[i] < 0x80000000) {
             rtbl[i] = (roomRead_data_class*)((intptr_t)rtbl[i] + (intptr_t)param_3);
             rtbl[i]->m_rooms = (u8*)((intptr_t)rtbl[i]->m_rooms + (intptr_t)param_3);
         }
+#endif
     }
 
     return 1;
@@ -2105,9 +2110,13 @@ static int dStage_pathInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
     i_stage->setPathInfo(path_c);
 
     for (int i = 0; i < path_c->m_num; i++) {
+#if TARGET_PC
+        path->m_points.setBase(i_stage->getPntInf()->m_pnt_offset);
+#else
         if ((uintptr_t)path->m_points < 0x80000000) {
             path->m_points = (dPnt*)((uintptr_t)path->m_points + i_stage->getPntInf()->m_pnt_offset);
         }
+#endif
         path++;
     }
 
@@ -2130,10 +2139,14 @@ static int dStage_rpatInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, vo
 
     i_stage->setPath2Info(pStagePath);
     for (s32 i = 0; i < pStagePath->m_num; pPath++, i++, (void)0) {
+#if TARGET_PC
+        pPath->m_points.setBase(i_stage->getPnt2Inf()->m_pnt_offset);
+#else
         if ((uintptr_t)pPath->m_points >= 0x80000000) {
             continue;
         }
         pPath->m_points = (dPnt*)((uintptr_t)pPath->m_points + i_stage->getPnt2Inf()->m_pnt_offset);
+#endif
     }
     return 1;
 }
@@ -2227,7 +2240,7 @@ static int dStage_memaInfoInit(dStage_dt_c* i_stage, void* i_data, int param_2, 
 
     if (pd != NULL) {
         OS_REPORT("Memory Block Create !\n");
-        u32* entry_p = pd->field_0x4;
+        BE(u32)* entry_p = pd->field_0x4;
 
         JUT_ASSERT(3208, pd->m_num <= dStage_roomControl_c::MEMORY_BLOCK_MAX);
         for (int i = 0; i < pd->m_num; i++) {
@@ -2283,10 +2296,14 @@ static void dStage_dt_c_offsetToPtr(void* i_data) {
     dStage_nodeHeader* p_tno = file->m_nodes;
 
     for (int i = 0; i < file->m_chunkCount; i++) {
+#if TARGET_PC
+        p_tno->m_offset.setBase(i_data);
+#else
         JUT_ASSERT(3381, p_tno->m_offset != 0);
         if (p_tno->m_offset != 0 && p_tno->m_offset < 0x80000000) {
             p_tno->m_offset += (uintptr_t)i_data;
         }
+#endif
         p_tno++;
     }
 }
@@ -2485,7 +2502,7 @@ static void dStage_dt_c_stageInitLoader(void* i_data, dStage_dt_c* i_stage) {
 }
 
 #if DEBUG
-static void dStage_DebugDisp() {
+void dStage_DebugDisp() {
     if (data_8074C569_debug) {
         JUTReport(30, 270, "envLayerSet: EnvRoom None");
     }

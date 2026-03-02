@@ -16,7 +16,7 @@
 #include "m_Do/m_Do_ext.h"
 
 static int daObj_Sw_Draw(obj_sw_class* i_this) {
-    static _GXColor l_color = {
+    static GXColor l_color = {
         0x14,
         0x0F,
         0x00,

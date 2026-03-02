@@ -4,14 +4,17 @@
 #include "SSystem/SComponent/c_m3d_g_aab.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "d/d_bg_w_base.h"
-#include <dolphin/mtx.h>
-#include <dolphin/types.h>
+#include <mtx.h>
+#include <types.h>
+#include "dusk/offset_ptr.h"
+#include "dusk/endian.h"
+#include "dusk/endian_ssystem.h"
 
 class cBgS_GrpPassChk;
 class cBgS_PolyPassChk;
 class fopAc_ac_c;
 struct cBgD_Vtx_t;
-class dBgS_CaptPoly;
+struct dBgS_CaptPoly;
 
 class cBgW_TriElm {
 public:
@@ -54,58 +57,58 @@ struct cBgW_BlkElm {
 };  // Size: 0x6
 
 struct cBgD_Tri_t {
-    /* 0x0 */ u16 m_vtx_idx0;
-    /* 0x2 */ u16 m_vtx_idx1;
-    /* 0x4 */ u16 m_vtx_idx2;
-    /* 0x6 */ u16 m_id;
-    /* 0x8 */ u16 m_grp;
+    /* 0x0 */ BE(u16) m_vtx_idx0;
+    /* 0x2 */ BE(u16) m_vtx_idx1;
+    /* 0x4 */ BE(u16) m_vtx_idx2;
+    /* 0x6 */ BE(u16) m_id;
+    /* 0x8 */ BE(u16) m_grp;
 };  // Size: 0xA
 
 struct cBgD_Ti_t {
-    /* 0x0 */ u32 m_info0;
-    /* 0x4 */ u32 m_info1;
-    /* 0x8 */ u32 m_info2;
-    /* 0xC */ u32 m_passFlag;
+    /* 0x0 */ BE(u32) m_info0;
+    /* 0x4 */ BE(u32) m_info1;
+    /* 0x8 */ BE(u32) m_info2;
+    /* 0xC */ BE(u32) m_passFlag;
 };
 
 struct cBgD_Blk_t {
-    /* 0x0 */ u16 field_0x0;
+    /* 0x0 */ BE(u16) field_0x0;
 };
 
 struct cBgD_Tree_t {
-    /* 0x0 */ u16 m_flag;
-    /* 0x2 */ u16 m_parent_id;
-    /* 0x4 */ u16 m_id[8];
+    /* 0x0 */ BE(u16) m_flag;
+    /* 0x2 */ BE(u16) m_parent_id;
+    /* 0x4 */ BE(u16) m_id[8];
 };  // Size: 0x14
 
 struct cBgD_Grp_t {
-    /* 0x00 */ char* m_name;
-    /* 0x04 */ cXyz m_scale;
-    /* 0x10 */ csXyz m_rotation;
-    /* 0x18 */ cXyz m_translation;
-    /* 0x24 */ u16 m_parent;
-    /* 0x26 */ u16 m_next_sibling;
-    /* 0x28 */ u16 m_first_child;
-    /* 0x2A */ u16 m_room_id;
-    /* 0x2C */ u16 m_first_vtx_idx;
-    /* 0x2E */ u16 m_tree_idx;
-    /* 0x30 */ u32 m_info;
+    /* 0x00 */ OFFSET_PTR(char) m_name;
+    /* 0x04 */ BE(cXyz) m_scale;
+    /* 0x10 */ BE(csXyz) m_rotation;
+    /* 0x18 */ BE(cXyz) m_translation;
+    /* 0x24 */ BE(u16) m_parent;
+    /* 0x26 */ BE(u16) m_next_sibling;
+    /* 0x28 */ BE(u16) m_first_child;
+    /* 0x2A */ BE(u16) m_room_id;
+    /* 0x2C */ BE(u16) m_first_vtx_idx;
+    /* 0x2E */ BE(u16) m_tree_idx;
+    /* 0x30 */ BE(u32) m_info;
 }; // Size: 0x34
 
 struct cBgD_t {
-    /* 0x00 */ int m_v_num;                // vertex num
-    /* 0x04 */ cBgD_Vtx_t* m_v_tbl;        // vertex table
-    /* 0x08 */ int m_t_num;                // triangle num
-    /* 0x0C */ cBgD_Tri_t* m_t_tbl;        // triangle table
-    /* 0x10 */ int m_b_num;
-    /* 0x14 */ cBgD_Blk_t* m_b_tbl;
-    /* 0x18 */ int m_tree_num;
-    /* 0x1C */ cBgD_Tree_t* m_tree_tbl;
-    /* 0x20 */ int m_g_num;
-    /* 0x24 */ cBgD_Grp_t* m_g_tbl;
-    /* 0x28 */ int m_ti_num;
-    /* 0x2C */ cBgD_Ti_t* m_ti_tbl;
-    /* 0x30 */ int mFlags;
+    /* 0x00 */ BE(int) m_v_num;                // vertex num
+    /* 0x04 */ OFFSET_PTR(cBgD_Vtx_t) m_v_tbl; // vertex table
+    /* 0x08 */ BE(int) m_t_num;                // triangle num
+    /* 0x0C */ OFFSET_PTR(cBgD_Tri_t) m_t_tbl; // triangle table
+    /* 0x10 */ BE(int) m_b_num;
+    /* 0x14 */ OFFSET_PTR(cBgD_Blk_t) m_b_tbl;
+    /* 0x18 */ BE(int) m_tree_num;
+    /* 0x1C */ OFFSET_PTR(cBgD_Tree_t) m_tree_tbl;
+    /* 0x20 */ BE(int) m_g_num;
+    /* 0x24 */ OFFSET_PTR(cBgD_Grp_t) m_g_tbl;
+    /* 0x28 */ BE(int) m_ti_num;
+    /* 0x2C */ OFFSET_PTR(cBgD_Ti_t) m_ti_tbl;
+    /* 0x30 */ BE(int) mFlags;
 };
 
 class cBgW : public dBgW_Base {

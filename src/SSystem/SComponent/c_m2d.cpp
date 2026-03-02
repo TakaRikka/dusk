@@ -7,6 +7,7 @@
 #include "SSystem/SComponent/c_m3d.h"
 #include "SSystem/SComponent/c_m3d_g_cir.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "os_report.h"
 
 void cM2d_CrossCirLin(cM2dGCir& param_0, f32 param_1, f32 param_2, f32 param_3, f32 param_4,
                       f32* param_5, f32* param_6) {

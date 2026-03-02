@@ -1087,7 +1087,7 @@ int daHorse_c::checkDemoAction() {
 
 void daHorse_c::setStickRodeoMove() {
     if (m_rodeoPath != NULL) {
-        Vec* path_pnt_pos = &m_rodeoPath->m_points[m_rodeoPoint].m_position;
+        BE(Vec)* path_pnt_pos = &m_rodeoPath->m_points[m_rodeoPoint].m_position;
 
         cXyz pos_vec(path_pnt_pos->x - current.pos.x, path_pnt_pos->y - current.pos.y, path_pnt_pos->z - current.pos.z);
         f32 dist_to_pnt = pos_vec.absXZ();
@@ -3325,8 +3325,8 @@ int daHorse_c::callHorseSubstance(cXyz const* i_pos) {
 
     if (m_path != NULL && (checkStateFlg0(FLG0_NO_DRAW_WAIT) || dist_xz2 > SQUARE(2000.0f))) {
         daAlink_c* player = daAlink_getAlinkActorClass();
-        Vec* farthest_pos;
-        Vec* path_pnt_pos;
+        BE(Vec)* farthest_pos;
+        BE(Vec)* path_pnt_pos;
 
         for (int i = 0; i < m_path->m_num; i++) {
             path_pnt_pos = &m_path->m_points[i].m_position;

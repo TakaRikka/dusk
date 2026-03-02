@@ -1220,7 +1220,7 @@ actor_process_profile_definition g_profile_CSTATUE = {
     fpcPi_CURRENT_e,         // mListPrio
     PROC_CSTATUE,            // mProcName
     &g_fpcLf_Method.base,    // sub_method
-    0x00000B2C,              // mSize
+    sizeof(daCstatue_c),     // mSize
     0,                       // mSizeOther
     0,                       // mParameters
     &g_fopAc_Method.base,    // sub_method

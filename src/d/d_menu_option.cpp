@@ -4,7 +4,7 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include <dolphin/os.h>
+#include <os.h>
 #include "JSystem/J2DGraph/J2DAnmLoader.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
 #include "d/d_com_inf_game.h"
@@ -18,7 +18,7 @@
 #include "d/d_meter_haihai.h"
 #include "d/d_msg_string.h"
 #include "d/d_select_cursor.h"
-#include <dolphin/types.h>
+#include <types.h>
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"

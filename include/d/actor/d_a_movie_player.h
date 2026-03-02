@@ -1,7 +1,7 @@
 #ifndef D_A_MOVIE_PLAYER_H
 #define D_A_MOVIE_PLAYER_H
 
-#include <dolphin/thp.h>
+#include <thp.h>
 #include "f_op/f_op_actor.h"
 #include "d/d_drawlist.h"
 

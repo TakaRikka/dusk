@@ -95,7 +95,7 @@ public:
 class dDlst_effectLine_c : public dDlst_base_c {
 public:
     virtual void draw();
-    void update(cXyz&, _GXColor&, u16, u16, u16, u16, f32, f32, f32, f32);
+    void update(cXyz&, GXColor&, u16, u16, u16, u16, f32, f32, f32, f32);
 
     f32 getRndValue(f32 param_0, f32 param_1) { return mRnd.getValue(param_0, param_1); }
     f32 getRndFX(f32 param_0) { return mRnd.getFX(param_0); }
@@ -199,11 +199,11 @@ public:
 class dDlst_shadowSimple_c {
 public:
     void draw();
-    void set(cXyz*, f32, f32, cXyz*, s16, f32, _GXTexObj*);
+    void set(cXyz*, f32, f32, cXyz*, s16, f32, GXTexObj*);
     dDlst_shadowSimple_c();
 
     /* 0x00 */ u8 mAlpha;
-    /* 0x04 */ _GXTexObj* mpTexObj;
+    /* 0x04 */ GXTexObj* mpTexObj;
     /* 0x08 */ Mtx mVolumeMtx;
     /* 0x38 */ Mtx mMtx;
 };  // Size: 0x68
@@ -289,7 +289,7 @@ public:
     void draw(f32 (*)[4]);
     int setReal(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*);
     bool addReal(u32, J3DModel*);
-    int setSimple(cXyz*, f32, f32, cXyz*, s16, f32, _GXTexObj*);
+    int setSimple(cXyz*, f32, f32, cXyz*, s16, f32, GXTexObj*);
     static void setSimpleTex(ResTIMG const*);
 
     static GXTexObj* getSimpleTex() { return &mSimpleTexObj; }
@@ -305,7 +305,7 @@ private:
     /* 0x0000C */ dDlst_shadowSimple_c mSimple[128];
     /* 0x0340C */ int mNextID;
     /* 0x03410 */ dDlst_shadowReal_c mReal[8];
-    /* 0x15EB0 */ _GXTexObj field_0x15eb0[2];
+    /* 0x15EB0 */ GXTexObj field_0x15eb0[2];
     /* 0x15EF0 */ void* field_0x15ef0[2];
 };
 
@@ -442,7 +442,7 @@ public:
     }
 
     int setSimpleShadow(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3, s16 param_4,
-                        f32 param_5, _GXTexObj* param_6) {
+                        f32 param_5, GXTexObj* param_6) {
         return mShadowControl.setSimple(param_0, param_1, param_2, param_3, param_4, param_5,
                                         param_6);
     }

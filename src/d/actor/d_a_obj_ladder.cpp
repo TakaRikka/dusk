@@ -193,7 +193,7 @@ int Act_c::Create() {
     mDoMtx_stack_c::multVecZero(&gndVec);
     mDoMtx_stack_c::pop();
     mGndChk.SetPos(&gndVec);
-    mGndChk.SetActorPid(base.base.id);
+    mGndChk.SetActorPid(fopAcM_GetID(this));
     mHeight = dComIfG_Bgsp().GroundCross(&mGndChk);
     mInDemo = false;
     mEventIdx = dComIfGp_getEventManager().getEventIdx(this, prm_get_evId());
