@@ -9691,6 +9691,11 @@ void dKy_ParticleColor_get_base(cXyz* param_0, dKy_tevstr_c* param_1, GXColor* p
         #endif
 
         f32 var_f31;
+
+        #if AVOID_UB
+        var_f31 = 0;
+        #endif
+
         if (dKy_SunMoon_Light_Check() == TRUE && i <= 1) {
             if (g_env_light.daytime >= 90.0f && g_env_light.daytime <= 285.0f) {
                 if (i == 0) {
