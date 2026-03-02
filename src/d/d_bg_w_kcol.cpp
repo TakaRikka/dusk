@@ -369,12 +369,12 @@ bool dBgWKCol::LineCheck(cBgS_LinChk* plinchk) {
                     int sp64;
                     int sp60;
                     int sp5C;
-                    u16* sp58 = NULL;
-                    u16* sp54 = NULL;
-                    u16* sp50 = NULL;
-                    u16* sp4C = NULL;
-                    u16* sp48 = NULL;
-                    u16* sp44 = NULL;
+                    BE(u16)* sp58 = NULL;
+                    BE(u16)* sp54 = NULL;
+                    BE(u16)* sp50 = NULL;
+                    BE(u16)* sp4C = NULL;
+                    BE(u16)* sp48 = NULL;
+                    BE(u16)* sp44 = NULL;
                     int z_sp40 = sp88;
 
                     do {
@@ -388,21 +388,21 @@ bool dBgWKCol::LineCheck(cBgS_LinChk* plinchk) {
                             int x_sp38 = sp90;
 
                             do {
-                                u16* block = (u16*)m_pkc_head->m_block_data;
+                                BE(u16)* block = (BE(u16)*)m_pkc_head->m_block_data;
                                 u32 shift = m_pkc_head->m_block_width_shift;
                                 int offset = (((u32)z_sp40 >> shift) << m_pkc_head->m_area_xy_blocks_shift |
                                               ((u32)y_sp3C >> shift) << m_pkc_head->m_area_x_blocks_shift |
                                                (u32)x_sp38 >> shift) << 2;
 
-                                while ((offset = *(int*)((intptr_t)block + offset)) >= 0) {
-                                    block = (u16*)((intptr_t)block + offset);
+                                while ((offset = *(BE(u32)*)((intptr_t)block + offset)) >= 0) {
+                                    block = (BE(u16)*)((intptr_t)block + offset);
                                     shift--;
                                     offset = (((u32)z_sp40 >> shift & 1) << 2 |
                                               ((u32)y_sp3C >> shift & 1) << 1 |
                                               ((u32)x_sp38 >> shift & 1) << 0) << 2;
                                 }
 
-                                u16* sp28 = (u16*)((intptr_t)block + (offset & 0x7FFFFFFF));
+                                BE(u16)* sp28 = (BE(u16)*)((intptr_t)block + (offset & 0x7FFFFFFF));
 
                                 shift = 1 << shift;
                                 int cellSize = shift - 1;
@@ -1094,12 +1094,12 @@ bool dBgWKCol::WallCorrectSort(dBgS_Acch* pwi) {
         return false;
     }
 
-    u16* sp_120 = NULL;
-    u16* sp_11c = NULL;
-    u16* sp_118 = NULL;
-    u16* sp_114 = NULL;
-    u16* sp_110 = NULL;
-    u16* sp_10c = NULL;
+    BE(u16)* sp_120 = NULL;
+    BE(u16)* sp_11c = NULL;
+    BE(u16)* sp_118 = NULL;
+    BE(u16)* sp_114 = NULL;
+    BE(u16)* sp_110 = NULL;
+    BE(u16)* sp_10c = NULL;
     int sp_108;
     int sp_104;
     int sp_100;
@@ -1122,14 +1122,14 @@ bool dBgWKCol::WallCorrectSort(dBgS_Acch* pwi) {
             sp_ec = 0;
             int sp_d8 = sp_138;
             do {
-                u16* block_d4 = (u16*)m_pkc_head->m_block_data;
+                BE(u16)* block_d4 = (BE(u16)*)m_pkc_head->m_block_data;
                 int shift_d0 = m_pkc_head->m_block_width_shift;
                 int sp_cc = 4 * (
                     ((u32)sp_e0 >> shift_d0) << m_pkc_head->m_area_xy_blocks_shift |
                     ((u32)sp_dc >> shift_d0) << m_pkc_head->m_area_x_blocks_shift |
                     ((u32)sp_d8 >> shift_d0));
-                while ((sp_cc = *(int*)((intptr_t)block_d4 + sp_cc)) >= 0) {
-                    block_d4 = (u16*)((intptr_t)block_d4 + sp_cc);
+                while ((sp_cc = *(BE(int)*)((intptr_t)block_d4 + sp_cc)) >= 0) {
+                    block_d4 = (BE(u16)*)((intptr_t)block_d4 + sp_cc);
                     shift_d0--;
                     sp_cc = 4 * (
                         ((((u32)sp_e0 >> shift_d0) & 1) << 2) |
@@ -1137,7 +1137,7 @@ bool dBgWKCol::WallCorrectSort(dBgS_Acch* pwi) {
                         ((((u32)sp_d8 >> shift_d0) & 1) << 0)
                     );
                 }
-                u16* sp_c8 = (u16*)((intptr_t)block_d4 + (sp_cc & 0x7fffffff));
+                BE(u16)* sp_c8 = (BE(u16)*)((intptr_t)block_d4 + (sp_cc & 0x7fffffff));
                 shift_d0 = 1 << shift_d0;
                 int sp_c4 = shift_d0 - 1;
                 sp_108 = shift_d0 - (sp_d8 & sp_c4);
@@ -1491,9 +1491,6 @@ bool dBgWKCol::WallCorrectSort(dBgS_Acch* pwi) {
 
 bool dBgWKCol::WallCorrect(dBgS_Acch* pwi) {
     bool sp10 = false;
-    if (1)
-        return false;
-
     cM3dGCyl* sp114 = pwi->GetWallBmdCylP();
     cXyz sp16C;
     cXyz sp160;
@@ -1876,8 +1873,6 @@ bool dBgWKCol::WallCorrect(dBgS_Acch* pwi) {
 }
 
 bool dBgWKCol::RoofChk(dBgS_RoofChk* param_0) {
-    if (1)
-        return false;
     KC_PrismData* local_94;
     dBgPc adStack_4c;
 
@@ -2003,9 +1998,6 @@ bool dBgWKCol::RoofChk(dBgS_RoofChk* param_0) {
 }
 
 bool dBgWKCol::SplGrpChk(dBgS_SplGrpChk* param_0) {
-    if (1)
-        return false;
-
     Vec* sp3C = &param_0->GetPosP();
     cXyz sp54;
     PSVECSubtract(sp3C, &m_pkc_head->m_area_min_pos, &sp54);
@@ -2190,8 +2182,8 @@ bool dBgWKCol::SphChk(dBgS_SphChk* param_0, void* param_1) {
     int sp40;
     int sp3C;
     int sp38;
-    u16* sp34 = NULL;
-    u16* sp30 = NULL;
+    BE(u16)* sp34 = NULL;
+    BE(u16)* sp30 = NULL;
     bool sp0C = false;
     int sp2C = sp5C;
     do {
@@ -2202,20 +2194,20 @@ bool dBgWKCol::SphChk(dBgS_SphChk* param_0, void* param_1) {
             sp38 = 0;
             int sp24 = sp64;
             do {
-                u16* sp20 = (u16*)m_pkc_head->m_block_data;
+                BE(u16)* sp20 = (BE(u16)*)m_pkc_head->m_block_data;
                 u32 var_r29 = m_pkc_head->m_block_width_shift;
                 int sp1C = (((u32)sp2C >> var_r29 << m_pkc_head->m_area_xy_blocks_shift) |
                             ((u32)sp28 >> var_r29 << m_pkc_head->m_area_x_blocks_shift) |
                             ((u32)sp24 >> var_r29)) * 4;
-                while ((sp1C = *(int*)((intptr_t)sp20 + sp1C)) >= 0) {
-                    sp20 = (u16*)((intptr_t)sp20 + sp1C);
+                while ((sp1C = *(BE(int)*)((intptr_t)sp20 + sp1C)) >= 0) {
+                    sp20 = (BE(u16)*)((intptr_t)sp20 + sp1C);
                     var_r29--;
                     sp1C = (((u32)sp2C >> var_r29 & 1) << 2 |
                             ((u32)sp28 >> var_r29 & 1) << 1 |
                             ((u32)sp24 >> var_r29 & 1)) * 4;
                 }
 
-                u16* var_r28 = (u16*)((intptr_t)sp20 + (sp1C & 0x7fffffff));
+                BE(u16)* var_r28 = (BE(u16)*)((intptr_t)sp20 + (sp1C & 0x7fffffff));
                 var_r29 = 1 << var_r29;
                 int sp18 = var_r29 - 1;
                 sp4C = var_r29 - (sp24 & sp18);
