@@ -28,13 +28,13 @@ public:
     static u8 isResetFlag() { return mResetFlag; }
     static void onResetFlag() { mResetFlag = true; }
     static void offResetFlag() { mResetFlag = false; }
-    static bool isBgmSet() { return mBgmSet; }
+    static u8 isBgmSet() { return mBgmSet; }
     static void onBgmSet() { mBgmSet = true; }
     static void offBgmSet() { mBgmSet = false; }
 
     static u8 mInitFlag;
     static u8 mResetFlag;
-    static bool mBgmSet;
+    static u8 mBgmSet;
 };
 
 extern JKRSolidHeap* g_mDoAud_audioHeap;

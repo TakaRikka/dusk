@@ -1,8 +1,8 @@
 #ifndef M_DO_M_DO_MEMCARD_H
 #define M_DO_M_DO_MEMCARD_H
 
-#include <dolphin/card.h>
-#include <dolphin/os.h>
+#include <card.h>
+#include <os.h>
 #include "global.h"
 
 #define SAVEDATA_SIZE      0xA94    // Size of 1 Quest Log

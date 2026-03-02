@@ -1,10 +1,14 @@
 #ifndef M_DO_M_DO_RESET_H
 #define M_DO_M_DO_RESET_H
 
-#include <dolphin/types.h>
+#include <types.h>
 
 void mDoRst_reset(int, u32, int);
 void mDoRst_resetCallBack(int, void*);
+
+#if !PLATFORM_GCN
+void mDoRst_shutdownCallBack();
+#endif
 
 struct mDoRstData {
     /* 0x00 */ int mReset;

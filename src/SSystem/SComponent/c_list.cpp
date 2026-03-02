@@ -5,7 +5,7 @@
 
 #include "SSystem/SComponent/c_list.h"
 #include "SSystem/SComponent/c_node.h"
-#include <dolphin/types.h>
+#include <types.h>
 
 void cLs_Init(node_list_class* list) {
     list->mpHead = NULL;

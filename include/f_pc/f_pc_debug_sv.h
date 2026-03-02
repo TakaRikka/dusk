@@ -2,7 +2,11 @@
 #ifndef F_PC_DEBUG_SV_H_
 #define F_PC_DEBUG_SV_H_
 
-#include <dolphin/dolphin.h>
+#ifdef __REVOLUTION_SDK__
+#include <revolution.h>
+#else
+#include <dolphin.h>
+#endif
 
 #if DEBUG
 

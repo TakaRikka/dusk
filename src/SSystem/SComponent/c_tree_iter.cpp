@@ -7,7 +7,7 @@
 #include "SSystem/SComponent/c_list.h"
 #include "SSystem/SComponent/c_list_iter.h"
 #include "SSystem/SComponent/c_tree.h"
-#include <dolphin/types.h>
+#include <types.h>
 
 int cTrIt_Method(node_lists_tree_class* tree, cNdIt_MethodFunc method, void* data) {
     node_list_class* list = tree->mpLists;

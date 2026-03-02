@@ -1778,7 +1778,7 @@ actor_process_profile_definition g_profile_FSHOP = {
   fpcPi_CURRENT_e,       // mListPrio
   PROC_FSHOP,            // mProcName
   &g_fpcLf_Method.base, // sub_method
-  sizeof(fshop_class),   // mSize
+  sizeof(fshop_class),            // mSize
   0,                     // mSizeOther
   0,                     // mParameters
   &g_fopAc_Method.base,  // sub_method

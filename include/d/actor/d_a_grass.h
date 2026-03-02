@@ -44,6 +44,8 @@ public:
     static daGrass_c* m_myObj;
     static dGrass_packet_c* m_grass;
     static dFlower_packet_c* m_flower;
+
+    /* 0x568 */ u8 unk_0x568[0x570 - 0x568];
 };
 
 namespace daGrass_prm {

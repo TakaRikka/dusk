@@ -4,8 +4,8 @@
 #include "SSystem/SComponent/c_m3d_g_aab.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "d/d_bg_w_base.h"
-#include <dolphin/mtx.h>
-#include <dolphin/types.h>
+#include <mtx.h>
+#include <types.h>
 #include "dusk/offset_ptr.h"
 #include "dusk/endian.h"
 #include "dusk/endian_ssystem.h"

@@ -1,7 +1,7 @@
 #ifndef D_D_TRESURE_H
 #define D_D_TRESURE_H
 
-#include <dolphin/mtx.h>
+#include <mtx.h>
 #include "dusk/offset_ptr.h"
 
 class dTres_c {

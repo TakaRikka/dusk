@@ -1367,8 +1367,7 @@ public:
     /* 0x970 */ dCamSetup_c mCamSetup;
     /* 0xAEC */ dCamParam_c mCamParam;
     /* 0xB0C */ u8 field_0xb0c;
-    /* 0xB0D */ u8 field_0xb0d[0xd58 - 0xb0d];
-};  // Size: 0xD58
+};  // Size: 0xB10
 
 dCamera_c* dCam_getBody();
 camera_class* dCam_getCamera();

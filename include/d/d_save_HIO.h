@@ -209,11 +209,12 @@ private:
     /* 0x1A0 */ dSvBit_childItOneZoneHIO_c mOneZoneSave;
 };
 
-class dSvBit_HIO_c {
+class dSvBit_HIO_c : public JORReflexible {
 public:
     void init();
 
     virtual ~dSvBit_HIO_c() {}
+    void genMessage(JORMContext*);
 
     /* 0x004 */ s8 field_0x4;
     /* 0x008 */ dSvBit_childSwitchHIO_c mSwitch;

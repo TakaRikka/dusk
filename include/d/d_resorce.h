@@ -39,6 +39,7 @@ public:
     char* getArchiveName() { return mArchiveName; }
     mDoDvdThd_mountArchive_c* getDMCommand() { return mDMCommand; }
     JKRArchive* getArchive() { return mArchive; }
+    JKRSolidHeap* getDataHeap() { return mDataHeap; }
     u32 incCount() { return ++mCount; }
     u32 decCount() { return --mCount; }
 
@@ -136,6 +137,14 @@ public:
 
     dRes_info_c* getStageResInfo(const char* i_arcName) {
         return getResInfo(i_arcName, mStageInfo, ARRAY_SIZEU(mStageInfo));
+    }
+
+    u32 getObjectSize(const char* i_arcName) {
+        return getSize(i_arcName, mObjectInfo, ARRAY_SIZEU(mObjectInfo));
+    }
+
+    u32 getStageSize(const char* i_arcName) {
+        return getSize(i_arcName, mStageInfo, ARRAY_SIZEU(mStageInfo));
     }
 
     /* 0x0000 */ dRes_info_c mObjectInfo[128];

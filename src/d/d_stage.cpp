@@ -1552,7 +1552,7 @@ u8 data_8074C56A_debug;
 u8 data_8074C56B_debug;
 u8 data_8074C56C_debug;
 
-u32 dStage_roomControl_c::mProcID;
+fpc_ProcID dStage_roomControl_c::mProcID;
 
 s8 dStage_roomControl_c::mStayNo;
 
@@ -2502,7 +2502,7 @@ static void dStage_dt_c_stageInitLoader(void* i_data, dStage_dt_c* i_stage) {
 }
 
 #if DEBUG
-static void dStage_DebugDisp() {
+void dStage_DebugDisp() {
     if (data_8074C569_debug) {
         JUTReport(30, 270, "envLayerSet: EnvRoom None");
     }

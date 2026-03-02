@@ -2,6 +2,7 @@
 #define D_S_D_S_LOGO_H
 
 #include "f_op/f_op_scene.h"
+#include "m_Do/m_Do_dvd_thread.h"
 
 class JKRExpHeap;
 class JKRHeap;
@@ -11,33 +12,41 @@ class mDoDvdThd_mountXArchive_c;
 class mDoDvdThd_mountArchive_c;
 class mDoDvdThd_toMainRam_c;
 
-class dLog_HIO_c {
-public:
-    dLog_HIO_c();
-    virtual ~dLog_HIO_c();
-
-    u8 field_0x4[0x8 - 0x4];
-};  // Size: 0x8
-
 class dScnLogo_c : public scene_class {
 public:
     enum {
-        /* 0x0 */ EXEC_WARNING_IN,
-        /* 0x1 */ EXEC_WARNING_DISP,
-        /* 0x2 */ EXEC_WARNING_OUT,
-        /* 0x3 */ EXEC_NINTENDO_IN,
-        /* 0x4 */ EXEC_NINTENDO_OUT,
-        /* 0x5 */ EXEC_DOLBY_IN,
-        /* 0x6 */ EXEC_DOLBY_OUT,
-        /* 0x7 */ EXEC_DOLBY_OUT2,
-        /* 0x8 */ EXEC_PROG_IN,
-        /* 0x9 */ EXEC_PROG_SEL,
-        /* 0xA */ EXEC_PROG_OUT,
-        /* 0xB */ EXEC_PROG_SET,
-        /* 0xC */ EXEC_PROG_SET2,
-        /* 0xD */ EXEC_PROG_CHANGE,
-        /* 0xE */ EXEC_DVD_WAIT,
-        /* 0xF */ EXEC_SCENE_CHANGE,
+        /*  0 */ EXEC_WARNING_IN,
+        /*  1 */ EXEC_WARNING_DISP,
+        /*  2 */ EXEC_WARNING_OUT,
+        /*  3 */ EXEC_NINTENDO_IN,
+        /*  4 */ EXEC_NINTENDO_OUT,
+        /*  5 */ EXEC_DOLBY_IN,
+        /*  6 */ EXEC_DOLBY_OUT,
+        /*  7 */ EXEC_DOLBY_OUT2,
+        /*  8 */ EXEC_PROG_IN,
+        /*  9 */ EXEC_PROG_SEL,
+        /* 10 */ EXEC_PROG_OUT,
+        /* 11 */ EXEC_PROG_SET,
+        /* 12 */ EXEC_PROG_SET2,
+        /* 13 */ EXEC_PROG_CHANGE,
+        /* 14 */ EXEC_DVD_WAIT,
+        /* 15 */ EXEC_SCENE_CHANGE,
+
+        #if PLATFORM_WII || PLATFORM_SHIELD
+        /* 16 */ EXEC_STRAP_IN,
+        /* 17 */ EXEC_STRAP_DISP,
+        /* 18 */ EXEC_STRAP_OUT,
+        /* 19 */ EXEC_STRAP_OUT2,
+        #endif
+
+        #if VERSION == VERSION_SHIELD
+        /* 20 */ EXEC_MOC_IN,
+        /* 21 */ EXEC_MOC_DISP,
+        /* 22 */ EXEC_MOC_OUT,
+        /* 23 */ EXEC_NVLOGO_IN,
+        /* 24 */ EXEC_NVLOGO_DISP,
+        /* 25 */ EXEC_NVLOGO_OUT,
+        #endif
     };
 
     dScnLogo_c() {}
@@ -64,30 +73,66 @@ public:
     void nextSceneChange();
     ~dScnLogo_c();
     int create();
-    void logoInitGC();
     void dvdDataLoad();
     void setProgressiveMode(u8);
     u8 getProgressiveMode();
     bool isProgressiveMode();
     void setRenderMode();
 
-    #if VERSION == VERSION_GCN_PAL
+    #if VERSION == VERSION_GCN_PAL || PLATFORM_WII || PLATFORM_SHIELD
     u8 getPalLanguage();
     #endif
 
-    #if DEBUG
-    static void onOpeningCut() {
-        mOpeningCut = true;
+    #if PLATFORM_WII || PLATFORM_SHIELD
+    void logoInitWii();
+    void strapInDraw();
+    void strapDispDraw();
+    void strapOutDraw();
+    void strapOut2Draw();
+    #else
+    void logoInitGC();
+    #endif
+
+    #if VERSION == VERSION_SHIELD
+    void mocInDraw();
+    void mocDispDraw();
+    void mocOutDraw();
+    void nvLogoInDraw();
+    void nvLogoDispDraw();
+    void nvLogoOutDraw();
+    #endif
+
+    mDoDvdThd_mountXArchive_c* aramMount(const char* i_arcPath, JKRHeap* i_heap) {
+        return mDoDvdThd_mountXArchive_c::create(i_arcPath, 0, JKRArchive::MOUNT_ARAM, i_heap);
+    }
+
+    mDoDvdThd_mountXArchive_c* onMemMount(const char* i_arcPath) {
+        return mDoDvdThd_mountXArchive_c::create(i_arcPath, 0, JKRArchive::MOUNT_MEM, NULL);
     }
     
+    static void onOpeningCut() {
+        #if DEBUG
+        mOpeningCut = true;
+        #endif
+    }
+
+    static u8 isOpeningCut() {
+        #if DEBUG
+        return mOpeningCut;
+        #else
+        return 0;
+        #endif
+    }
+    
+    #if DEBUG
     static u8 mOpeningCut;
     #endif
 
 public:
     /* 0x1C4 */ request_of_phase_process_class field_0x1c4;
     /* 0x1CC */ mDoDvdThd_toMainRam_c* sceneCommand;
-    /* 0x1D0 */ JKRExpHeap* field_0x1d0;
-    /* 0x1D4 */ JKRExpHeap* field_0x1d4;
+    /* 0x1D0 */ JKRExpHeap* mLogoHeap;
+    /* 0x1D4 */ JKRExpHeap* mLogo01Heap;
     /* 0x1D8 */ JKRHeap* mpHeap;
     /* 0x1DC */ dDlst_2D_c* mWarning;
     /* 0x1E0 */ dDlst_2D_c* mWarningStart;
@@ -97,6 +142,13 @@ public:
     /* 0x1F0 */ dDlst_2D_c* mProgressiveYes;
     /* 0x1F4 */ dDlst_2D_c* mProgressiveNo;
     /* 0x1F8 */ dDlst_2D_c* mProgressiveSel;
+#if PLATFORM_WII || PLATFORM_SHIELD
+    /* 0x1FC */ dDlst_2D_c* mStrapImg;
+#endif
+#if VERSION == VERSION_SHIELD
+    /* 0x200 */ dDlst_2D_c* mNvLogo;
+    /* 0x204 */ dDlst_2D_c* mMocImg;
+#endif
 #if VERSION == VERSION_GCN_PAL
     /* 0x1FC */ mDoDvdThd_mountArchive_c* mpPalLogoResCommand;
 #endif
@@ -114,6 +166,10 @@ public:
     /* 0x214 */ u16 field_0x214;
     /* 0x218 */ u32 field_0x218;
     /* 0x21C */ void* dummyGameAlloc;
+#if PLATFORM_WII || VERSION == VERSION_SHIELD
+    /* 0x224 */ mDoDvdThd_toMainRam_c* mpHomeBtnCommand;
+    /* 0x228 */ int mHomeBtnRegion;
+#endif
     /* 0x220 */ mDoDvdThd_mountXArchive_c* mpField0Command;
     /* 0x224 */ mDoDvdThd_mountXArchive_c* mpAlAnmCommand;
     /* 0x228 */ u8 field_0x228[4];

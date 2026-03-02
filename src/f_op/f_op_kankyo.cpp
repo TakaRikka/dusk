@@ -12,8 +12,8 @@
 
 static int fopKy_KANKYO_TYPE;
 
-void fopKy_IsKankyo(void* i_this) {
-    fpcM_IsJustType(fopKy_KANKYO_TYPE, ((kankyo_class*)i_this)->type);
+BOOL fopKy_IsKankyo(void* i_this) {
+    return fpcM_IsJustType(fopKy_KANKYO_TYPE, ((kankyo_class*)i_this)->type);
 }
 
 static int fopKy_Draw(void* i_this) {

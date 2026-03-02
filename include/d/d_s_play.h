@@ -9,9 +9,15 @@
 class mDoDvdThd_mountXArchive_c;
 class mDoDvdThd_toMainRam_c;
 
-class dScnPly_reg_childHIO_c {
+class dScnPly_reg_childHIO_c : public JORReflexible {
 public:
-    /* 0x00 */ void* vtable;
+#if ENABLE_REGHIO
+    dScnPly_reg_childHIO_c();
+    virtual ~dScnPly_reg_childHIO_c() {}
+
+    void genMessage(JORMContext*);
+#endif
+
     /* 0x04 */ f32 mFloatReg[30];
     /* 0x7C */ s16 mShortReg[10];
 };
@@ -37,9 +43,10 @@ public:
     void genMessage(JORMContext*);
 };
 
-class dScnPly_env_HIO_c {
+class dScnPly_env_HIO_c : public JORReflexible {
 public:
     virtual ~dScnPly_env_HIO_c() {}
+    void genMessage(JORMContext*);
 
     /* 0x04 */ s8 field_0x4;
     /* 0x08 */ dScnPly_env_otherHIO_c mOther;
@@ -78,6 +85,18 @@ public:
 
     static s8 pauseTimer;
     static s8 nextPauseTimer;
+
+    #if DEBUG
+    void onDebugPause() {
+        debugPause = TRUE;
+    }
+
+    void offDebugPause() {
+        debugPause = FALSE;
+    }
+
+    static u8 debugPause;
+    #endif
 
     /* 0x1C4 */ request_of_phase_process_class field_0x1c4;
     /* 0x1CC */ mDoDvdThd_toMainRam_c* sceneCommand;

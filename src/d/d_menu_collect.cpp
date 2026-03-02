@@ -27,7 +27,7 @@
 #include "d/d_item.h"
 #include "d/d_lib.h"
 #include "d/d_meter2_info.h"
-#include <dolphin/os.h>
+#include <os.h>
 #include <cstring>
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_mtx.h"

@@ -2,8 +2,8 @@
 #define M_DO_M_DO_DVD_THREAD_H
 
 #include "JSystem/JKernel/JKRArchive.h"
-#include <dolphin/os.h>
-#include <dolphin/os.h>
+#include <os.h>
+#include <os.h>
 #include "f_pc/f_pc_node.h"
 
 #define mDoDvd_MOUNT_DIRECTION_HEAD 0

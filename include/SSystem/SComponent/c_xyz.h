@@ -1,7 +1,7 @@
 #ifndef C_XYZ_H
 #define C_XYZ_H
 
-#include <dolphin/mtx.h>
+#include <mtx.h>
 #include <cmath>
 
 #ifdef _MSVC_LANG

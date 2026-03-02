@@ -1065,7 +1065,7 @@ public:
     /* 0x3F7 */ s8 mZoneNo;
     /* 0x3F8 */ s8 mMemBlockID;
     /* 0x3F9 */ u8 mRegionNo;
-    /* 0x3FC */ int mProcID;
+    /* 0x3FC */ fpc_ProcID mProcID;
     /* 0x400 */ dBgW_Base* mpBgW;
 
     int getZoneNo() const { return mZoneNo; }
@@ -1121,8 +1121,8 @@ public:
 
     static s8 getRoomReadId() { return mRoomReadId; }
     static void setRoomReadId(s8 id) { mRoomReadId = id; }
-    static u32 getProcID() { return mProcID; }
-    static void setProcID(u32 id) { mProcID = id; }
+    static fpc_ProcID getProcID() { return mProcID; }
+    static void setProcID(fpc_ProcID id) { mProcID = id; }
     static int getStayNo() { return mStayNo; }
     static int getNextStayNo() { return mNextStayNo; }
     static BOOL GetTimePass() { return m_time_pass; }
@@ -1196,7 +1196,7 @@ public:
         JUT_ASSERT(2770, 0 <= i_roomNo && i_roomNo < 64);
         mStatus[i_roomNo].mProcID = i_id;
     }
-    static int getStatusProcID(int i_roomNo) {
+    static fpc_ProcID getStatusProcID(int i_roomNo) {
         JUT_ASSERT(2774, 0 <= i_roomNo && i_roomNo < 64);
         return mStatus[i_roomNo].mProcID;
     }
@@ -1226,7 +1226,7 @@ public:
     static char mArcBank[32][10];
     static dStage_roomStatus_c mStatus[0x40];
     static char mDemoArcName[10];
-    static u32 mProcID;
+    static fpc_ProcID mProcID;
     static nameData* mArcBankName;
     static bankData* mArcBankData;
     static roomDzs_c m_roomDzs;
@@ -1400,6 +1400,10 @@ void dStage_dt_c_roomLoader(void* i_data, dStage_dt_c* stageDt, int param_2);
 dStage_KeepDoorInfo* dStage_GetKeepDoorInfo();
 dStage_KeepDoorInfo* dStage_GetRoomKeepDoorInfo();
 void dStage_dt_c_fieldMapLoader(void* i_data, dStage_dt_c* i_stage);
+
+#if DEBUG
+void dStage_DebugDisp();
+#endif
 
 #define dStage_NAME_LENGTH 8
 const char* dStage_getName(s16 procName, s8 argument);

@@ -912,7 +912,7 @@ bool fopAcM_checkCullingBox(Mtx m, f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z
         return false;
 }
 
-static cull_box l_cullSizeBox[] = {
+cull_box l_cullSizeBox[fopAc_CULLBOX_MAX_e] = {
     {
         {-40.0f, 0.0f, -40.0f},
         {40.0f, 125.0f, 40.0f},
@@ -977,7 +977,7 @@ static cull_box l_cullSizeBox[] = {
 #endif
 };
 
-static cull_sphere l_cullSizeSphere[] = {
+cull_sphere l_cullSizeSphere[fopAc_CULLSPHERE_MAX_e] = {
     {
         {0.0f, 0.0f, 0.0f},
         80.0f,

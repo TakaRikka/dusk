@@ -5,7 +5,7 @@
 
 #include "m_Do/m_Do_printf.h"
 #include <cstdio>
-#include <dolphin/base/PPCArch.h>
+#include <base/PPCArch.h>
 #include "m_Do/m_Do_ext.h"
 
 u8 __OSReport_disable;

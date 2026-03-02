@@ -5,7 +5,7 @@
 
 #include "SSystem/SComponent/c_node_iter.h"
 #include "SSystem/SComponent/c_node.h"
-#include <dolphin/types.h>
+#include <types.h>
 
 int cNdIt_Method(node_class* node, cNdIt_MethodFunc method, void* data) {
     int ret = 1;

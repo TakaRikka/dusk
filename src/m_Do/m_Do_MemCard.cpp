@@ -3,7 +3,7 @@
  * Memory Card Control
  */
 
-#include <dolphin/card.h>
+#include <card.h>
 #include "m_Do/m_Do_MemCard.h"
 #include "JSystem/JKernel/JKRAssertHeap.h"
 #include "m_Do/m_Do_ext.h"

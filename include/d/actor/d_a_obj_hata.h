@@ -2,7 +2,7 @@
 #define D_A_OBJ_HATA_H
 
 #include "SSystem/SComponent/c_phase.h"
-#include <dolphin/types.h>
+#include <types.h>
 #include "f_op/f_op_actor.h"
 
 /**

@@ -11,8 +11,8 @@ void dummy(fpcLyIt_JudgeFunc i_createFunc, void* i_this) {
     fpcM_Search(i_createFunc, i_this);
 }
 
-void fopKyM_IsKy(void* i_this) {
-    fopKy_IsKankyo((fopKyM_prm_class*)i_this);
+BOOL fopKyM_IsKy(void* i_this) {
+    return fopKy_IsKankyo((fopKyM_prm_class*)i_this);
 }
 
 fopKyM_prm_class* fopKyM_CreateAppend() {

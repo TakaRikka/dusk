@@ -952,7 +952,7 @@ public:
     dComIfG_inf_c() { this->ct(); }
     ~dComIfG_inf_c() {}
     void ct();
-    void createBaseCsr();
+    static void createBaseCsr();
 
 #if PLATFORM_WII || VERSION == VERSION_SHIELD_DEBUG
     class baseCsr_c : public mDoGph_gInf_c::csr_c {
@@ -1022,7 +1022,9 @@ public:
     /* 0x1DE09 */ u8 field_0x1de09;
     /* 0x1DE0A */ u8 field_0x1de0a;
     /* 0x1DE0B */ u8 mIsDebugMode;
-    /* 0x1DE0C */ u8 field_0x1de0c;
+    #if DEBUG
+    /* 0x1DE0C */ OSStopwatch mStopwatch;
+    #endif
 
     static __d_timer_info_c dComIfG_mTimerInfo;
     #if PLATFORM_WII || VERSION == VERSION_SHIELD_DEBUG
@@ -1235,6 +1237,7 @@ int dComIfG_TimerEnd(int i_mode, int param_1);
 int dComIfG_TimerDeleteCheck(int);
 int dComIfG_TimerDeleteRequest(int i_mode);
 int dComLbG_PhaseHandler(request_of_phase_process_class*, request_of_phase_process_fn*, void*);
+BOOL dComIfG_isSceneResetButton();
 
 int dComIfGd_setSimpleShadow(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyInfo& param_3, s16 i_angle,
                              f32 param_5, GXTexObj* i_tex);
@@ -3323,6 +3326,22 @@ inline JPABaseEmitter* dComIfGp_particle_setColor(u16 param_0, const cXyz* i_pos
                                       NULL, NULL, NULL, -1, NULL);
 }
 
+inline u32 dComIfGp_particle_getHeapSize() {
+    return g_dComIfG_gameInfo.play.getParticle()->getHeapSize();
+}
+
+inline u32 dComIfGp_particle_getSceneHeapSize() {
+    return g_dComIfG_gameInfo.play.getParticle()->getSceneHeapSize();
+}
+
+inline int dComIfGp_particle_getEmitterNum() {
+    return g_dComIfG_gameInfo.play.getParticle()->getEmitterNum();
+}
+
+inline int dComIfGp_particle_getParticleNum() {
+    return g_dComIfG_gameInfo.play.getParticle()->getParticleNum();
+}
+
 inline dSmplMdl_draw_c* dComIfGp_getSimpleModel() {
     return g_dComIfG_gameInfo.play.getSimpleModel();
 }
@@ -4429,6 +4448,28 @@ inline BOOL dComIfG_isDebugMode() {
 inline u32 dComIfG_getTrigB(u32 i_padNo) {
     return mDoCPd_c::getTrig(i_padNo) & PAD_BUTTON_B;
 }
+
+inline u32 dComIfG_getObjectAllSize() {
+    return g_dComIfG_gameInfo.mResControl.getObjectAllSize();
+}
+
+inline u32 dComIfG_getStageAllSize() {
+    return g_dComIfG_gameInfo.mResControl.getStageAllSize();
+}
+
+inline u32 dComIfG_getObjectSize(const char* i_arcName) {
+    return g_dComIfG_gameInfo.mResControl.getObjectSize(i_arcName);
+}
+
+inline u32 dComIfG_getStageSize(const char* i_arcName) {
+    return g_dComIfG_gameInfo.mResControl.getStageSize(i_arcName);
+}
+
+#if DEBUG
+inline void dComIfG_initStopwatch() {
+    OSInitStopwatch(&g_dComIfG_gameInfo.mStopwatch, "dComIfG");
+}
+#endif
 
 inline int dComIfGd_setRealShadow(u32 param_0, s8 param_1, J3DModel* param_2, cXyz* param_3,
                                   f32 param_4, f32 param_5, dKy_tevstr_c* param_6) {

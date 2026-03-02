@@ -19,7 +19,7 @@ struct kankyo_process_profile_definition {
     /* 0x24 */ leafdraw_method_class* sub_method;
 };  // Size: 0x28
 
-void fopKy_IsKankyo(void* i_this);
+BOOL fopKy_IsKankyo(void* i_this);
 
 extern leafdraw_method_class g_fopKy_Method;
 

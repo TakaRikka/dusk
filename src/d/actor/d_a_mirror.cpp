@@ -10,8 +10,8 @@
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
-#include <dolphin/gf/GFGeometry.h>
-#include <dolphin/gf/GFLight.h>
+#include <gf/GFGeometry.h>
+#include <gf/GFLight.h>
 #include "m_Do/m_Do_lib.h"
 
 #ifndef __MWERKS__

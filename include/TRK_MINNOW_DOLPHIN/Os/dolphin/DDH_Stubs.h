@@ -1,7 +1,7 @@
 #ifndef OS_DOLPHIN_DDH_STUBS_H
 #define OS_DOLPHIN_DDH_STUBS_H
 
-#include <dolphin/amc/AmcExi2Comm.h>
+#include <amc/AmcExi2Comm.h>
 
 #ifdef __cplusplus
 extern "C" {

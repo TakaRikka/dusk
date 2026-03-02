@@ -3,7 +3,7 @@
 
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
-#include <dolphin/mtx.h>
+#include <mtx.h>
 
 #include "JSystem/JMath/JMath.h"
 #include "dusk/endian.h"

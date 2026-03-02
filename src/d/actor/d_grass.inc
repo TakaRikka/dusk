@@ -5,7 +5,7 @@
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "f_op/f_op_overlap_mng.h"
-#include <dolphin/gf.h>
+#include <gf.h>
 #include <cstring>
 
 #include "d/d_camera.h"

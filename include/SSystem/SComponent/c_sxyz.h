@@ -1,7 +1,7 @@
 #ifndef C_SXYZ_H
 #define C_SXYZ_H
 
-#include <dolphin/mtx.h>
+#include <mtx.h>
 
 struct SVec {
     s16 x, y, z;

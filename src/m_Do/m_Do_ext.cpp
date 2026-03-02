@@ -5,8 +5,8 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include <dolphin/gf/GFPixel.h>
-#include <dolphin/gx.h>
+#include <gf/GFPixel.h>
+#include <gx.h>
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"

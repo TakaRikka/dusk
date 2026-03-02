@@ -22,7 +22,7 @@ u8 mDoAud_zelAudio_c::mInitFlag;
 
 u8 mDoAud_zelAudio_c::mResetFlag;
 
-bool mDoAud_zelAudio_c::mBgmSet;
+u8 mDoAud_zelAudio_c::mBgmSet;
 
 void mDoAud_zelAudio_c::reset() {
     mBgmSet = false;

@@ -391,6 +391,7 @@ public:
     static s16 getBranchId() { return m_branchId; }
     static u16 getBranchNum() { return m_branchNum; }
     static jmessage_tControl* getMesgControl() { return m_mesgControl; }
+    static dDemo_system_c* getSystem() { return m_system; }
 
     static void setBranchNum(u16 num) {
         m_branchNum = num;

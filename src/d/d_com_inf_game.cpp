@@ -1287,7 +1287,7 @@ int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* i_arcNa
     static int (*l_method[3])(void*) = {(int (*)(void*))phase_1, (int (*)(void*))phase_2,
                                         (int (*)(void*))phase_3};
 
-    if (i_phase->id == cPhs_NEXT_e) {
+    if (i_phase->id == 2) {
         return cPhs_COMPLEATE_e;
     }
 
@@ -1335,7 +1335,7 @@ int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* i_resNa
     static int (*l_method[3])(void*) = {(int (*)(void*))phase_01, (int (*)(void*))phase_02,
                                         (int (*)(void*))phase_03};
 
-    if (i_phase->id == cPhs_NEXT_e) {
+    if (i_phase->id == 2) {
         return cPhs_COMPLEATE_e;
     }
 
@@ -1352,12 +1352,12 @@ int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* i_resNa
  */
 int dComIfG_resDelete(request_of_phase_process_class* i_phase, char const* i_resName) {
     JUT_ASSERT(1889, i_phase->id != 1);
-    if (i_phase->id != cPhs_NEXT_e) {
+    if (i_phase->id != 2) {
         return 0;
     }
 
     int r30 = dComIfG_deleteObjectResMain(i_resName);
-    i_phase->id = cPhs_INIT_e;
+    i_phase->id = 0;
     return 1;
 }
 

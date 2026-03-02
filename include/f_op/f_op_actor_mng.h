@@ -866,6 +866,9 @@ BOOL fopAcM_getNameString(const fopAc_ac_c*, char*);
 
 inline void fopAcM_SetStatusMap(fopAc_ac_c*, u32) {}
 
+extern cull_box l_cullSizeBox[fopAc_CULLBOX_MAX_e];
+extern cull_sphere l_cullSizeSphere[fopAc_CULLSPHERE_MAX_e];
+
 class fopAcM_lc_c {
 public:
     fopAcM_lc_c() { mLineCheck.ClrSttsRoofOff(); }

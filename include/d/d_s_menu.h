@@ -83,6 +83,8 @@ public:
 extern int g_playerKind;
 extern int g_debugHpMode;
 extern int g_horsePosInit;
+
+u8 dSm_read_stageset(u8* i_data);
 #else
 class dScnMenu_c {};
 #endif

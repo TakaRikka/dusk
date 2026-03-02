@@ -1,8 +1,8 @@
 #ifndef D_D_PATH_H
 #define D_D_PATH_H
 
-#include <dolphin/types.h>
-#include <dolphin/mtx.h>
+#include <types.h>
+#include <mtx.h>
 
 class cBgS_PolyInfo;
 struct cXyz;
@@ -24,6 +24,13 @@ struct dPath {
     /* 0x7 */ u8 field_0x7;
     /* 0x8 */ OFFSET_PTR(dPnt) m_points;
 };
+
+#if VERSION == VERSION_SHIELD_DEBUG
+void dPath_Move();
+void dPath_Draw();
+void dPath_Dt();
+void dPath_Ct();
+#endif
 
 inline BOOL dPath_ChkClose(const dPath* i_path) { return i_path->m_closed & 1; }
 
