@@ -371,6 +371,10 @@ void J3DGDLoadTlut(void* tlut_ptr, u32 tmem_addr, GXTlutSize size) {
 
     J3DGDWriteBPCmd(0xFEFFFF00);
     J3DGDWriteBPCmd(0xF000000);
+#if TARGET_PC
+    puts("J3DGDLoadTlut is a stub");
+    return;
+#endif
     J3DGDWriteBPCmd(BP_LOAD_TLUT0(OSCachedToPhysical(tlut_ptr) >> 5, 0x64));
     J3DGDWriteBPCmd(BP_LOAD_TLUT1((tmem_addr - 0x80000) >> 9, size, 0x65));
     J3DGDWriteBPCmd(0xFEFFFF00);
