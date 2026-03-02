@@ -138,6 +138,10 @@ void Z2Creature::setSoundStarter(Z2SoundStarter* soundStarter) {
 }
 
 void Z2Creature::initAnime(void* animation, bool param_1, f32 startFrame, f32 param_3) {
+#if TARGET_PC
+    puts("In this house we HATE anime!!!");
+    return;
+#endif
     mSoundObjAnime.initAnime(animation, param_1, startFrame, param_3);
 }
 
