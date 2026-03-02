@@ -1713,7 +1713,7 @@ void dMsgObject_c::setSelectWord(int i_no, const char* i_word) {
 
 #pragma mark HIO
 #include <dolphin/hio.h>
-#include <revolution/hio2.h>
+#include <dolphin/hio2.h>
 BOOL HIO2Close(s32 handle) {
     STUB_LOG("HIO2Close is a stub");
     return FALSE;

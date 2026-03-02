@@ -199,7 +199,7 @@ int daNpc_Hanjo_c::create() {
     mTwilight = 0;
     int rv = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (rv == cPhs_COMPLEATE_e) {
-        OS_REPORT("\t(%s:%d) flowNo:%d, PathID:%02x<%08x> ", fopAcM_getProcNameString(this), (uint)mType,
+        OS_REPORT("\t(%s:%d) flowNo:%d, PathID:%02x<%08x> ", fopAcM_getProcNameString(this), (u32)mType,
                               mFlowNodeNo, getPathID(), fopAcM_GetParam(this));
         if (isDelete()) {
             OS_REPORT("===>isDelete:TRUE\n");

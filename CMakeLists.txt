@@ -64,6 +64,7 @@ target_include_directories(game_debug PUBLIC
         src
         assets/${DUSK_TP_VERSION}
         libs/JSystem/include
+        extern/aurora/include/dolphin
         ${CMAKE_BINARY_DIR}/../${DUSK_TP_VERSION}/include
         build/${DUSK_TP_VERSION}/include)
 target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::si aurora::vi aurora::pad aurora::mtx)

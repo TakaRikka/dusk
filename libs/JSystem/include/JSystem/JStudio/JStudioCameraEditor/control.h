@@ -18,10 +18,10 @@
 namespace JStudioCameraEditor {
     struct TControl : public JORReflexible, public JOREventCallbackListNode {
         struct TSWValueWidth_ {
-            TSWValueWidth_(uint, uint);
+            TSWValueWidth_(u32, u32);
 
-            /* 0x0 */ uint field_0x0;
-            /* 0x4 */ uint field_0x4;
+            /* 0x0 */ u32 field_0x0;
+            /* 0x4 */ u32 field_0x4;
         };
 
         struct TOptionSet_ : public csb::TValueSet {

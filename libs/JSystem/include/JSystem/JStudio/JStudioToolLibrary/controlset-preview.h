@@ -14,7 +14,7 @@ namespace JStudioToolLibrary {
 
         enum TEPreview {};
 
-        TControlSet_preview(TConsole*, u32, uint, TAdaptor*);
+        TControlSet_preview(TConsole*, u32, u32, TAdaptor*);
 
         void preview_start();
         void preview_stop();

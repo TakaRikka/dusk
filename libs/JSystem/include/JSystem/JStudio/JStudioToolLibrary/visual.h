@@ -62,11 +62,11 @@ namespace JStudioToolLibrary {
         void drawAxis_color();
         void setGXState_position1x8_color1x8();
         void drawAxis_color_arrow();
-        void drawGrid_xyz(uint);
+        void drawGrid_xyz(u32);
         void setGXState_position3s16();
-        void drawGrid_xy(uint);
-        void drawGrid_xz(uint);
-        void drawGrid_yz(uint);
+        void drawGrid_xy(u32);
+        void drawGrid_xz(u32);
+        void drawGrid_yz(u32);
 
         /* 0x0 */ f32 fLineWidth_;
         /* 0x4 */ GXColor oColor_;

@@ -609,7 +609,7 @@ int daObjDmElevator_c::moveProc() {
 
     if (field_0x5e0 + (int)(char)field_0x5e1 == 1) {
         const float fVar6 = current.pos.abs(path_point);
-        uVar1 = ((uint)(char)((fVar6 < 200.0f) << 3) << 0x1c) >> 0x1f;
+        uVar1 = ((u32)(char)((fVar6 < 200.0f) << 3) << 0x1c) >> 0x1f;
     }
 
     int ret;

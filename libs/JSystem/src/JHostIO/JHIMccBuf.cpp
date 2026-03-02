@@ -3,7 +3,11 @@
 #include "JSystem/JHostIO/JHIMccBuf.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JHostIO/JHIRMcc.h"
+#if TARGET_PC
+#include <dolphin/hio2.h>
+#else
 #include <revolution/hio2.h>
+#endif
 #include <cstring>
 
 void JHIReport(const char* fmt, ...) {}

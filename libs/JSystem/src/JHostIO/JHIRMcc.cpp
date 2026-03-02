@@ -1,7 +1,11 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JHostIO/JHIMccBuf.h"
+#if TARGET_PC
+#include <dolphin/hio2.h>
+#else
 #include <revolution/hio2.h>
+#endif
 
 HIO2DeviceType gExiDevice = HIO2_DEVICE_INVALID;
 u8 data_8074bd04 = 1;

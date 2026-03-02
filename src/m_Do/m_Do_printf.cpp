@@ -7,6 +7,9 @@
 #include <cstdio>
 #include <base/PPCArch.h>
 #include "m_Do/m_Do_ext.h"
+#if TARGET_PC
+#include <cstdarg>
+#endif
 
 u8 __OSReport_disable;
 

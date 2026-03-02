@@ -31,7 +31,7 @@ namespace JStudioCameraEditor {
             void getVector_position_relativeTargetPosition(Vec*) const;
             void setVector_targetPosition_relativePosition(const Vec&);
             void addValue(data::TEValue, f32);
-            void set(const TValueSet&, uint);
+            void set(const TValueSet&, u32);
             bool isApplied(data::TEValue) const;
 
             /* 0x00 */ f32 fValue_[8];
