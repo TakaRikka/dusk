@@ -161,6 +161,15 @@ inline f32 BE<f32>::swap(f32 val) {
 }
 
 template<>
+inline S16Vec BE<S16Vec>::swap(S16Vec val) {
+    return {
+        BE<s16>::swap(val.x),
+        BE<s16>::swap(val.y),
+        BE<s16>::swap(val.z),
+    };
+}
+
+template<>
 struct BE<Vec> {
     BE<f32> x;
     BE<f32> y;
