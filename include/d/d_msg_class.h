@@ -4,6 +4,7 @@
 #include "JSystem/JMessage/control.h"
 #include "JSystem/JMessage/JMessage.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "dusk/endian.h"
 
 #if REGION_JPN
 #define D_MSG_CLASS_PAGE_CNT_MAX 30
@@ -38,8 +39,8 @@ public:
 class JMSMesgInfo_c {
 public:
     /* 0x00 */ bmg_section_t header;  // section header
-    /* 0x08 */ u16 entry_num;         // number of entries in this section
-    /* 0x0A */ u16 entry_size;        // size of an entry
+    /* 0x08 */ BE(u16) entry_num;         // number of entries in this section
+    /* 0x0A */ BE(u16) entry_size;        // size of an entry
     /* 0x0C */ u8 padding[4];         // padding
     /* 0x10 */ JMSMesgEntry_c entries[0];
 };
