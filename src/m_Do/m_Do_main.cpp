@@ -232,6 +232,7 @@ int game_main(int argc, char* argv[]) {
     config.configPath = ".";
     config.logCallback = &aurora_log_callback;
     config.mem1Size = 256 * 1024 * 1024;
+    config.mem2Size = 24 * 1024 * 1024;
 
     auroraInfo = aurora_initialize(argc, argv, &config);
 
