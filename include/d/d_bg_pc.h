@@ -4,11 +4,11 @@
 #include <types.h>
 
 struct sBgPc {
-    /* 0x00 */ u32 code0;
-    /* 0x04 */ u32 code1;
-    /* 0x08 */ u32 code2;
-    /* 0x0C */ u32 code3;
-    /* 0x10 */ u32 code4;
+    /* 0x00 */ BE(u32) code0;
+    /* 0x04 */ BE(u32) code1;
+    /* 0x08 */ BE(u32) code2;
+    /* 0x0C */ BE(u32) code3;
+    /* 0x10 */ BE(u32) code4;
 };  // Size: 0x14
 
 #define BGPC_GET_BITS(code, shift, bits) \
