@@ -40,8 +40,6 @@ struct J2DMaterialBlock {
     BE(u32) field_0x64;
 };
 
-typedef struct _GXColor GXColor;
-typedef struct _GXColorS10 GXColorS10;
 struct J2DAlphaCompInfo;
 struct J2DBlendInfo;
 struct J2DColorChanInfo;

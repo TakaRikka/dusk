@@ -8,8 +8,8 @@
 #include "SSystem/SComponent/c_m3d_g_tri.h"
 #include "SSystem/SComponent/c_m3d_g_vtx.h"
 #include "f_pc/f_pc_manager.h"
+#include <dolphin/gx/GXStruct.h>
 
-typedef struct _GXColor GXColor;
 class fopAc_ac_c;
 
 enum CcG_Tg_HitMark {
@@ -447,7 +447,7 @@ public:
     virtual cCcD_GObjInf* GetGObjInf() { return NULL; }
     virtual cCcD_ShapeAttr const* GetShapeAttr() const { return NULL; }
     virtual cCcD_ShapeAttr* GetShapeAttr() { return NULL; }
-    virtual void Draw(_GXColor const&) {}
+    virtual void Draw(GXColor const&) {}
     void ct();
     void Set(cCcD_SrcObj const&);
     fopAc_ac_c* GetAc();

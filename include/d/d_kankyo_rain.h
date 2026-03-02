@@ -4,17 +4,16 @@
 #include <dolphin/mtx.h>
 
 struct cXyz;
-struct _GXColor;
 
-void dKyr_drawSun(Mtx param_0, cXyz* param_1, _GXColor& param_2, u8** param_3);
-void dKyr_drawLenzflare(Mtx param_0, cXyz* param_1, _GXColor& param_2, u8** param_3);
+void dKyr_drawSun(Mtx param_0, cXyz* param_1, GXColor& param_2, u8** param_3);
+void dKyr_drawLenzflare(Mtx param_0, cXyz* param_1, GXColor& param_2, u8** param_3);
 void dKyr_drawSibuki(Mtx param_0, u8** param_1);
 void dKyr_drawRain(Mtx param_0, u8** param_1);
 void dKyr_drawSnow(Mtx param_0, u8** param_1);
 void dKyr_drawStar(Mtx param_0, u8** param_1);
 void drawCloudShadow(Mtx param_0, u8** param_1);
 void dKyr_drawHousi(Mtx param_0, u8** param_1);
-void drawVrkumo(Mtx param_0, _GXColor& param_1, u8** param_2);
+void drawVrkumo(Mtx param_0, GXColor& param_1, u8** param_2);
 void dKyr_odour_draw(Mtx param_0, u8** param_1);
 void dKyr_mud_draw(Mtx param_0, u8** param_1);
 void dKyr_evil_draw(Mtx param_0, u8** param_1);

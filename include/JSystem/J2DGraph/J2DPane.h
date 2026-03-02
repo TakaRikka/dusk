@@ -96,7 +96,7 @@ public:
 
         setCullBack(mode);
     }
-    /* vt 0x20 */ virtual void setCullBack(_GXCullMode cmode);
+    /* vt 0x20 */ virtual void setCullBack(GXCullMode cmode);
     /* vt 0x24 */ virtual void setAlpha(u8 alpha) {
         mAlpha = alpha;
     };

@@ -214,7 +214,7 @@ static void dPa_group_id_change(u32* param_0, u8* param_1) {
     }
 }
 
-static void initiateLighting8(_GXColor& param_0, s16 param_1) {
+static void initiateLighting8(GXColor& param_0, s16 param_1) {
     GXSetChanCtrl(GX_COLOR0, true, GX_SRC_REG, GX_SRC_VTX, 0xfe, GX_DF_CLAMP, GX_AF_SPOT);
     GXSetChanCtrl(GX_ALPHA0, false, GX_SRC_REG, GX_SRC_VTX, 0xfe, GX_DF_CLAMP, GX_AF_SPOT);
     s32 r,g,b;
@@ -246,7 +246,7 @@ static void initiateLighting8(_GXColor& param_0, s16 param_1) {
     GXSetChanMatColor(GX_COLOR0A0, g_whiteColor);
 }
 
-static void initiate_b_Lighting8(_GXColor& param_0) {
+static void initiate_b_Lighting8(GXColor& param_0) {
     GXSetChanCtrl(GX_COLOR0, true, GX_SRC_REG, GX_SRC_VTX, 0xfe, GX_DF_CLAMP, GX_AF_SPOT);
     GXSetChanCtrl(GX_ALPHA0, false, GX_SRC_REG, GX_SRC_VTX, 0xfe, GX_DF_CLAMP, GX_AF_SPOT);
     GXSetChanAmbColor(GX_COLOR0A0, param_0);
@@ -804,7 +804,7 @@ JPABaseEmitter* dPa_simpleEcallBack::createEmitter(JPAEmitterManager* param_0) {
 }
 
 u32 dPa_simpleEcallBack::set(cXyz const* i_pos, dKy_tevstr_c const* param_2, u8 param_3,
-                             _GXColor const& param_4, _GXColor const& param_5, int param_6,
+                             GXColor const& param_4, GXColor const& param_5, int param_6,
                              f32 param_7) {
     f32 fVar1;
     f32 dVar7 = param_7;
@@ -1461,7 +1461,7 @@ void dPa_control_c::setWaterRipple(u32* param_0, cBgS_PolyInfo& param_1, cXyz co
 JPABaseEmitter* dPa_control_c::set(u8 param_0, u16 param_1, cXyz const* i_pos,
                                    dKy_tevstr_c const* param_3, csXyz const* i_rotation,
                                    cXyz const* i_scale, u8 i_alpha, dPa_levelEcallBack* param_7,
-                                   s8 param_8, _GXColor const* param_9, _GXColor const* param_10,
+                                   s8 param_8, GXColor const* param_9, GXColor const* param_10,
                                    cXyz const* param_11, f32 param_12) {
     u8 local_e0 = getRM_ID(param_1);
     JPAResourceManager* local_a8 = mEmitterMng->getResourceManager(local_e0);
@@ -1598,8 +1598,8 @@ JPABaseEmitter* dPa_control_c::set(u8 param_0, u16 param_1, cXyz const* i_pos,
     return this_00;
 }
 
-s32 dPa_control_c::getPolyColor(cBgS_PolyInfo& param_0, int param_1, _GXColor* param_2,
-                                     _GXColor* param_3, u8* param_4, f32* param_5) {
+s32 dPa_control_c::getPolyColor(cBgS_PolyInfo& param_0, int param_1, GXColor* param_2,
+                                     GXColor* param_3, u8* param_4, f32* param_5) {
     if (!dComIfG_Bgsp().ChkPolySafe(param_0)) {
         return 0;
     }
@@ -1656,7 +1656,7 @@ bool dPa_control_c::newSimple(u16 param_0, u8 param_1, u32* param_2) {
 }
 
 u32 dPa_control_c::setSimple(u16 param_0, cXyz const* i_pos, dKy_tevstr_c const* param_2,
-                                  u8 param_3, _GXColor const& param_4, _GXColor const& param_5,
+                                  u8 param_3, GXColor const& param_4, GXColor const& param_5,
                                   int param_6, f32 param_7) {
     dPa_simpleEcallBack* cb = getSimple(param_0);
     if (cb == NULL) {
@@ -1681,7 +1681,7 @@ dPa_simpleEcallBack* dPa_control_c::getSimple(u16 param_0) {
 
 static void dPa_kankyocolor_set(f32 param_0, JPABaseEmitter* param_1,
                                     dKy_tevstr_c const* param_2, u32 param_3, cXyz const* param_4,
-                                    _GXColor const* param_5, _GXColor const* param_6) {
+                                    GXColor const* param_5, GXColor const* param_6) {
     f32 fVar1 = param_0;
     if ((param_3 & 0xef0000) >> 0x10 < 100) {
         fVar1 = ((param_3 & 0xef0000) >> 0x10) / 99.0f;
@@ -1725,8 +1725,8 @@ static void dPa_kankyocolor_set(f32 param_0, JPABaseEmitter* param_1,
 
 u32 dPa_control_c::set(u32 param_0, u8 param_1, u16 param_2, cXyz const* pos,
                        dKy_tevstr_c const* param_4, csXyz const* i_rotation, cXyz const* i_scale,
-                       u8 alpha, dPa_levelEcallBack* param_8, s8 param_9, _GXColor const* param_10,
-                       _GXColor const* param_11, cXyz const* param_12, f32 param_13) {
+                       u8 alpha, dPa_levelEcallBack* param_8, s8 param_9, GXColor const* param_10,
+                       GXColor const* param_11, cXyz const* param_12, f32 param_13) {
     level_c::emitter_c* this_00 = field_0x210.get(param_0);
     u8 uVar7 = getRM_ID(param_2);
     JPAResourceManager* this_01 = mEmitterMng->getResourceManager(uVar7);

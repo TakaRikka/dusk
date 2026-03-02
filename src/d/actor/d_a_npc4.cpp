@@ -614,7 +614,7 @@ BOOL daNpcF_c::execute() {
     return true;
 }
 
-int daNpcF_c::draw(BOOL i_isTest, BOOL param_1, f32 i_shadowDepth, _GXColorS10* i_fogColor,
+int daNpcF_c::draw(BOOL i_isTest, BOOL param_1, f32 i_shadowDepth, GXColorS10* i_fogColor,
                    BOOL i_hideDamage) {
     f32 damage_ratio, frame;
     J3DModel* model = mAnm_p->getModel();

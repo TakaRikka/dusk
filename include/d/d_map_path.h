@@ -9,7 +9,7 @@ struct dMpath_RGB5A3_s {
 };
 
 namespace dMpath_ColorCnv_n {
-    void convertRGB5A3_To_GXColor(_GXColor&, const dMpath_RGB5A3_s&);
+    void convertRGB5A3_To_GXColor(GXColor&, const dMpath_RGB5A3_s&);
 }
 
 struct dMpath_RGB5A3_palDt_s {

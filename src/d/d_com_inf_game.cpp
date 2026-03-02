@@ -2256,7 +2256,7 @@ void dComIfGp_addSelectItemNum(int i_selItemIdx, s16 i_num) {
 
 int dComIfGd_setShadow(u32 param_0, s8 param_1, J3DModel* param_2, cXyz* param_3, f32 param_4,
                        f32 param_5, f32 param_6, f32 param_7, cBgS_PolyInfo& param_8,
-                       dKy_tevstr_c* param_9, s16 param_10, f32 param_11, _GXTexObj* param_12) {
+                       dKy_tevstr_c* param_9, s16 param_10, f32 param_11, GXTexObj* param_12) {
     if (param_7 <= -G_CM3D_F_INF) {
         return 0;
     } else {

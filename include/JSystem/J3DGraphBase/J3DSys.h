@@ -145,13 +145,13 @@ struct J3DSys {
     void setModelDrawMtx(Mtx* pMtxArr) {
         J3D_ASSERT_NULLPTR(230, pMtxArr);
         mModelDrawMtx = pMtxArr;
-        GXSetArray(GX_POS_MTX_ARRAY, mModelDrawMtx, sizeof(*mModelDrawMtx));
+        GXSETARRAY(GX_POS_MTX_ARRAY, mModelDrawMtx, sizeof(*mModelDrawMtx), sizeof(*mModelDrawMtx));
     }
 
     void setModelNrmMtx(Mtx33* pMtxArr) {
         J3D_ASSERT_NULLPTR(241, pMtxArr);
         mModelNrmMtx = pMtxArr;
-        GXSetArray(GX_NRM_MTX_ARRAY, mModelNrmMtx, sizeof(*mModelNrmMtx));
+        GXSETARRAY(GX_POS_MTX_ARRAY, mModelNrmMtx, sizeof(*mModelNrmMtx), sizeof(*mModelNrmMtx));
     }
 
     void* getVtxPos() { return mVtxPos; }

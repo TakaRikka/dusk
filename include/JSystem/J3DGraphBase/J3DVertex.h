@@ -5,7 +5,6 @@
 #include <dolphin/mtx.h>
 #include "dusk/endian_gx.hpp"
 
-typedef struct _GXColor GXColor;
 class J3DModel;
 class J3DAnmVtxColor;
 class J3DVertexBuffer;

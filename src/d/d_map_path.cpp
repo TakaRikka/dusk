@@ -37,7 +37,7 @@ void dMpath_n::dTexObjAggregate_c::remove() {
     }
 }
 
-void dMpath_ColorCnv_n::convertRGB5A3_To_GXColor(_GXColor& color32, const dMpath_RGB5A3_s& color16) {
+void dMpath_ColorCnv_n::convertRGB5A3_To_GXColor(GXColor& color32, const dMpath_RGB5A3_s& color16) {
     int r, g, b, a;
     u16 color = color16.color;
     if (color & 0x8000) {
@@ -295,7 +295,8 @@ void dDrawPath_c::rendering(dDrawPath_c::floor_class const* p_floor) {
 void dDrawPath_c::rendering(dDrawPath_c::room_class const* room) {
     JUT_ASSERT(1043, room != NULL);
     if (room != NULL) {
-        GXSetArray(GX_VA_POS, room->mpFloatData, 8);
+        // TODO: FILL IN SIZE.
+        GXSETARRAY(GX_VA_POS, room->mpFloatData, 0, 8);
         floor_class* floor = room->mpFloor;
 
         if (floor != NULL) {

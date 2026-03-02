@@ -530,7 +530,7 @@ int daObj_KBacket_c::Draw() {
         } else {
             cM3dGPla plane;
             if (dComIfG_Bgsp().GetTriPla(mGndChk, &plane) != 0) {
-                _GXTexObj* p_Var4 = dDlst_shadowControl_c::getSimpleTex();
+                GXTexObj* p_Var4 = dDlst_shadowControl_c::getSimpleTex();
                 dComIfGd_setSimpleShadow(&current.pos, field_0xa00, 50.0f,
                     &plane.mNormal, 0, 1.0f, p_Var4);
             }

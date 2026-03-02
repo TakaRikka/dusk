@@ -130,12 +130,12 @@ public:
                 JGeometry::TBox2<f32>(param_4, param_5, param_4 + param_6, param_5 + param_7));
     }
     virtual void drawOut(JGeometry::TBox2<f32> const&, JGeometry::TBox2<f32> const&);
-    virtual void load(_GXTexMapID param_0, u8 param_1) {
+    virtual void load(GXTexMapID param_0, u8 param_1) {
         if (param_1 < mTextureNum && param_1 < 2 && mTexture[param_1] != NULL) {
             mTexture[param_1]->load(param_0);
         }
     }
-    virtual void load(u8 param_0) { load((_GXTexMapID)param_0, param_0); }
+    virtual void load(u8 param_0) { load((GXTexMapID)param_0, param_0); }
     virtual void setBlendRatio(f32 param_0, f32 param_1) {
         setBlendColorRatio(param_0, param_1);
         setBlendAlphaRatio(param_0, param_1);

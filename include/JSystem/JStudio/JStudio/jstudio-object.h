@@ -6,8 +6,6 @@
 #include <limits>
 #include <cmath>
 
-typedef struct _GXColor GXColor;
-
 namespace JStudio {
 namespace data {
     enum TEOperationData {

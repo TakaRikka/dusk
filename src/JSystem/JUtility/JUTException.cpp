@@ -1,3 +1,5 @@
+#include <dolphin/vi.h>
+
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JUtility/JUTException.h"
@@ -766,7 +768,7 @@ void JUTException::waitTime(s32 timeout_ms) {
 }
 
 void JUTException::createFB() {
-    _GXRenderModeObj* renderMode = &GXNtsc480Int;
+    GXRenderModeObj* renderMode = &GXNtsc480Int;
     void* end = (void*)OSGetArenaHi();
     u32 size = ((u16)ALIGN_NEXT((u16)renderMode->fbWidth, 16) * renderMode->xfbHeight) * 2;
 
@@ -994,7 +996,7 @@ void JUTException::createConsole(void* console_buffer, u32 console_buffer_size) 
     }
 }
 
-JUTExternalFB::JUTExternalFB(_GXRenderModeObj* renderMode, GXGamma gamma, void* buffer, u32 size) {
+JUTExternalFB::JUTExternalFB(GXRenderModeObj* renderMode, GXGamma gamma, void* buffer, u32 size) {
     mRenderMode = renderMode;
     mSize = size;
     field_0x0C = 1;

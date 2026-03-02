@@ -1,5 +1,5 @@
 #include <dolphin/dolphin.h>
-#include <dolphin/gx/GXVert.h>
+#include <dolphin/gx.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -1482,11 +1482,6 @@ void GDSetVtxDescv(const GXVtxDescList* attrPtr) {
 #pragma mark GX
 #include <dolphin/gx.h>
 
-// Dummy FIFO sink for direct GXWGFifo writes in J3D code (e.g. J3DFifo.h).
-// On GameCube these write to the GX command processor at 0xCC008000.
-// On PC, writes land here harmlessly and are discarded.
-volatile PPCWGPipe GXWGFifo;
-
 // GXCmd/GXParam/GXMatrixIndex: low-level command FIFO functions used by J3D.
 // Route through Aurora's software FIFO so display list data is actually recorded.
 //
@@ -1651,7 +1646,7 @@ f32 GXGetYScaleFactor(u16 efbHeight, u16 xfbHeight) {
     return 0.0f;
 }
 
-void GXInitTexCacheRegion(GXTexRegion* region, u8 is_32b_mipmap, u32 tmem_even,
+void GXInitTexCacheRegion(GXTexRegion* region, GXBool is_32b_mipmap, u32 tmem_even,
                           GXTexCacheSize size_even, u32 tmem_odd, GXTexCacheSize size_odd) {
     STUB_LOG("GXInitTexCacheRegion is a stub");
 } 

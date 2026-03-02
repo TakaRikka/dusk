@@ -7,8 +7,6 @@
 #include "JSystem/JUtility/JUTXfb.h"
 #include <dolphin/os.h>
 
-typedef struct _GXColor GXColor;
-typedef struct _GXRenderModeObj GXRenderModeObj;
 class JKRHeap;
 
 typedef void (*JFWDisplayUnkFunc)(void);
@@ -49,7 +47,7 @@ public:
 
     void ctor_subroutine(bool);
     JFWDisplay(JKRHeap*, JUTXfb::EXfbNumber, bool);
-    static JFWDisplay* createManager(_GXRenderModeObj const*, JKRHeap*,
+    static JFWDisplay* createManager(GXRenderModeObj const*, JKRHeap*,
                                                     JUTXfb::EXfbNumber, bool);
     void prepareCopyDisp();
     void drawendXfb_single();
@@ -61,9 +59,9 @@ public:
     void waitBlanking(int);
     void threadSleep(s64);
     void clearEfb_init();
-    void clearEfb(int, int, int, int, _GXColor);
+    void clearEfb(int, int, int, int, GXColor);
     void clearEfb();
-    void clearEfb(_GXColor);
+    void clearEfb(GXColor);
     void calcCombinationRatio();
 
     virtual void beginRender();

@@ -69,7 +69,7 @@ class J2DTevBlock {
 public:
     virtual void initialize() {}
     virtual void setGX() {}
-    virtual void loadTexture(_GXTexMapID, u32) {}
+    virtual void loadTexture(GXTexMapID, u32) {}
     virtual u32 getType() = 0;
     virtual u8 getMaxStage() = 0;
     virtual void setTexNo(u32, u16) {}
@@ -124,7 +124,7 @@ public:
 
     virtual void initialize();
     virtual void setGX();
-    virtual void loadTexture(_GXTexMapID, u32);
+    virtual void loadTexture(GXTexMapID, u32);
     virtual u32 getType() { return 'TVB1'; }
     virtual u8 getMaxStage() { return 1; }
     virtual void setTexNo(u32 index, u16 texNo) {
@@ -264,7 +264,7 @@ public:
 
     virtual void initialize();
     virtual void setGX();
-    virtual void loadTexture(_GXTexMapID, u32);
+    virtual void loadTexture(GXTexMapID, u32);
     virtual u32 getType() { return 'TVB2'; }
     virtual u8 getMaxStage() { return 2; }
     virtual void setTexNo(u32 index, u16 texNo) {
@@ -406,7 +406,7 @@ public:
 
     virtual void initialize();
     virtual void setGX();
-    virtual void loadTexture(_GXTexMapID, u32);
+    virtual void loadTexture(GXTexMapID, u32);
     virtual u32 getType() { return 'TVB4'; }
     virtual u8 getMaxStage() { return 4; }
     virtual void setTexNo(u32 index, u16 texNo) {
@@ -548,7 +548,7 @@ public:
 
     virtual void initialize();
     virtual void setGX();
-    virtual void loadTexture(_GXTexMapID, u32);
+    virtual void loadTexture(GXTexMapID, u32);
     virtual u32 getType() { return 'TVB8'; }
     virtual u8 getMaxStage() { return 8; }
     virtual void setTexNo(u32 index, u16 texNo) {
@@ -691,7 +691,7 @@ public:
 
     virtual void initialize();
     virtual void setGX();
-    virtual void loadTexture(_GXTexMapID, u32);
+    virtual void loadTexture(GXTexMapID, u32);
     virtual u32 getType() { return 'TV16'; }
     virtual u8 getMaxStage() { return 16; }
     virtual void setTexNo(u32 index, u16 texNo) {

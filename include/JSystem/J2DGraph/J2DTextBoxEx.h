@@ -26,7 +26,7 @@ public:
 
     virtual ~J2DTextBoxEx();
     virtual void setCullBack(bool);
-    virtual void setCullBack(_GXCullMode);
+    virtual void setCullBack(GXCullMode);
     virtual void setAlpha(u8);
     virtual void drawSelf(f32, f32, f32 (*)[3][4]);
     virtual bool isUsed(ResTIMG const*);

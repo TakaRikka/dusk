@@ -264,7 +264,7 @@ void J2DAnmColor::searchUpdateMaterialID(J2DScreen* pScreen) {
     }
 }
 
-void J2DAnmColorFull::getColor(u16 param_0, _GXColor* pColor) const {
+void J2DAnmColorFull::getColor(u16 param_0, GXColor* pColor) const {
     J3D_PANIC(432, param_0 < mUpdateMaterialNum, "Error : range over.");
     J3D_PANIC(433, pColor, "Error : null pointer.");
     J3DAnmColorFullTable* info = &mInfoTable[param_0];
@@ -302,7 +302,7 @@ void J2DAnmColorFull::getColor(u16 param_0, _GXColor* pColor) const {
     }
 }
 
-void J2DAnmColorKey::getColor(u16 param_0, _GXColor* pColor) const {
+void J2DAnmColorKey::getColor(u16 param_0, GXColor* pColor) const {
     J3D_PANIC(490, param_0 < mUpdateMaterialNum, "Error : range over.");
     J3D_PANIC(491, pColor, "Error : null pointer.");
     J3DAnmColorKeyTable* info = &mInfoTable[param_0];
@@ -381,7 +381,7 @@ void J2DAnmColorKey::getColor(u16 param_0, _GXColor* pColor) const {
     }
 }
 
-void J2DAnmVtxColorFull::getColor(u8 param_0, u16 param_1, _GXColor* pColor) const {
+void J2DAnmVtxColorFull::getColor(u8 param_0, u16 param_1, GXColor* pColor) const {
     J3D_PANIC(597, pColor, "Error : null pointer.");
     J3DAnmColorFullTable* info = &mInfoTable[param_0][param_1];
     u16 maxFrame = info->mRMaxFrame;
@@ -418,7 +418,7 @@ void J2DAnmVtxColorFull::getColor(u8 param_0, u16 param_1, _GXColor* pColor) con
     }
 }
 
-void J2DAnmVtxColorKey::getColor(u8 param_0, u16 param_1, _GXColor* pColor) const {
+void J2DAnmVtxColorKey::getColor(u8 param_0, u16 param_1, GXColor* pColor) const {
     J3D_PANIC(658, pColor, "Error : null pointer.");
     J3DAnmColorKeyTable* info = &mInfoTable[param_0][param_1];
     f32 val;

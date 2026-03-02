@@ -37,7 +37,7 @@ public:
     dPa_simpleEcallBack();
     JPABaseEmitter* create(JPAEmitterManager*, u16, u8);
     JPABaseEmitter* createEmitter(JPAEmitterManager*);
-    u32 set(cXyz const*, dKy_tevstr_c const*, u8, _GXColor const&, _GXColor const&,
+    u32 set(cXyz const*, dKy_tevstr_c const*, u8, GXColor const&, GXColor const&,
                             int, f32);
 
     virtual ~dPa_simpleEcallBack() {}
@@ -361,20 +361,20 @@ public:
     void setWaterRipple(u32*, cBgS_PolyInfo&, cXyz const*, f32, dKy_tevstr_c const*,
                                        cXyz const*, s8);
     JPABaseEmitter* set(u8, u16, cXyz const*, dKy_tevstr_c const*, csXyz const*, cXyz const*, u8,
-                           dPa_levelEcallBack*, s8, _GXColor const*, _GXColor const*, cXyz const*,
+                           dPa_levelEcallBack*, s8, GXColor const*, GXColor const*, cXyz const*,
                            f32);
     u32 set(u32, u8, u16, cXyz const*, dKy_tevstr_c const*, csXyz const*,
-                           cXyz const*, u8, dPa_levelEcallBack*, s8, _GXColor const*,
-                           _GXColor const*, cXyz const*, f32);
-    static s32 getPolyColor(cBgS_PolyInfo&, int, _GXColor*, _GXColor*, u8*, f32*);
+                           cXyz const*, u8, dPa_levelEcallBack*, s8, GXColor const*,
+                           GXColor const*, cXyz const*, f32);
+    static s32 getPolyColor(cBgS_PolyInfo&, int, GXColor*, GXColor*, u8*, f32*);
     u32 setPoly(u32, u16, cBgS_PolyInfo&, cXyz const*, dKy_tevstr_c const*,
                                csXyz const*, cXyz const*, int, dPa_levelEcallBack*, s8,
                                cXyz const*);
     JPABaseEmitter* setPoly(u16, cBgS_PolyInfo&, cXyz const*, dKy_tevstr_c const*, csXyz const*,
                                 cXyz const*, int, dPa_levelEcallBack*, s8, cXyz const*);
     bool newSimple(u16, u8, u32*);
-    u32 setSimple(u16, cXyz const*, dKy_tevstr_c const*, u8, _GXColor const&,
-                                  _GXColor const&, int, f32);
+    u32 setSimple(u16, cXyz const*, dKy_tevstr_c const*, u8, GXColor const&,
+                                  GXColor const&, int, f32);
     dPa_simpleEcallBack* getSimple(u16);
     u32 setStopContinue(u32);
     u32 setSimpleFoot(u32, u32*, cBgS_PolyInfo&, cXyz const*, dKy_tevstr_c const*,

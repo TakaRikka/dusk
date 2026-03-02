@@ -4,7 +4,6 @@
 #include <dolphin/types.h>
 #include "JSystem/JUtility/JUTAssert.h"
 
-typedef struct _GXRenderModeObj GXRenderModeObj;
 class JKRExpHeap;
 class JKRThread;
 class JUTConsole;

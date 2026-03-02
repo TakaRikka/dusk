@@ -281,7 +281,7 @@ void J3DModelLoader::readInformation(J3DModelInfoBlock const* i_block, u32 i_fla
     mpModelData->setHierarchy(JSUConvertOffsetToPtr<J3DModelHierarchy>(i_block, i_block->mpHierarchy));
 }
 
-static _GXCompType getFmtType(_GXVtxAttrFmtList* i_fmtList, _GXAttr i_attr) {
+static GXCompType getFmtType(GXVtxAttrFmtList* i_fmtList, GXAttr i_attr) {
     for (; i_fmtList->attr != GX_VA_NULL; i_fmtList++) {
         if (i_fmtList->attr == i_attr) {
             return i_fmtList->type;

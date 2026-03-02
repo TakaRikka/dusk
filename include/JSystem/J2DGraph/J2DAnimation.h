@@ -5,8 +5,6 @@
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/JUtility/JUTPalette.h"
 
-typedef struct _GXColor GXColor;
-typedef struct _GXColorS10 GXColorS10;
 class J2DScreen;
 struct ResTIMG;
 
@@ -66,7 +64,7 @@ public:
         }
     }
     virtual ~J2DAnmVtxColor() {}
-    virtual void getColor(u8, u16, _GXColor*) const {}
+    virtual void getColor(u8, u16, GXColor*) const {}
     u16 getAnmTableNum(u8 param_0) const {
         J3D_PANIC(342, param_0 < 2, "Error : range over.");
         return mAnmTableNum[param_0];
@@ -101,7 +99,7 @@ public:
         }
     }
     virtual ~J2DAnmVtxColorKey() {}
-    virtual void getColor(u8, u16, _GXColor*) const;
+    virtual void getColor(u8, u16, GXColor*) const;
 
     /* 0x24 */ J3DAnmColorKeyTable* mInfoTable[2];
     /* 0x2C */ s16* mRValues;
@@ -122,7 +120,7 @@ public:
         }
     }
     virtual ~J2DAnmVtxColorFull() {}
-    virtual void getColor(u8, u16, _GXColor*) const;
+    virtual void getColor(u8, u16, GXColor*) const;
 
     /* 0x24 */ J3DAnmColorFullTable* mInfoTable[2];
     /* 0x2C */ u8* mRValues;
@@ -400,7 +398,7 @@ public:
     }
     virtual ~J2DAnmColor() {}
     virtual void searchUpdateMaterialID(J2DScreen*);
-    virtual void getColor(u16, _GXColor*) const {}
+    virtual void getColor(u16, GXColor*) const {}
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
     u16 getUpdateMaterialID(u16 i) const {
         J3D_PANIC(224, i < mUpdateMaterialNum, "Error : range over.");
@@ -430,7 +428,7 @@ public:
         mInfoTable = NULL;
     }
     virtual ~J2DAnmColorKey() {}
-    virtual void getColor(u16, _GXColor*) const;
+    virtual void getColor(u16, GXColor*) const;
 
     /* 0x30 */ s16* mRValues;
     /* 0x34 */ s16* mGValues;
@@ -468,7 +466,7 @@ public:
         mInfoTable = NULL;
     }
     virtual ~J2DAnmColorFull() {}
-    virtual void getColor(u16, _GXColor*) const;
+    virtual void getColor(u16, GXColor*) const;
 
     /* 0x30 */ u8* mRValues;
     /* 0x34 */ u8* mGValues;

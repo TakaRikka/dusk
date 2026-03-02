@@ -1237,10 +1237,10 @@ int dComIfG_TimerDeleteRequest(int i_mode);
 int dComLbG_PhaseHandler(request_of_phase_process_class*, request_of_phase_process_fn*, void*);
 
 int dComIfGd_setSimpleShadow(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyInfo& param_3, s16 i_angle,
-                             f32 param_5, _GXTexObj* i_tex);
+                             f32 param_5, GXTexObj* i_tex);
 int dComIfGd_setShadow(u32 param_0, s8 param_1, J3DModel* param_2, cXyz* param_3, f32 param_4,
                        f32 param_5, f32 param_6, f32 param_7, cBgS_PolyInfo& param_8,
-                       dKy_tevstr_c* param_9, s16 param_10, f32 param_11, _GXTexObj* param_12);
+                       dKy_tevstr_c* param_9, s16 param_10, f32 param_11, GXTexObj* param_12);
 
 inline dSv_info_c* dComIfGs_getSaveInfo() {
     return &g_dComIfG_gameInfo.info;
@@ -3192,8 +3192,8 @@ inline JPABaseEmitter* dComIfGp_particle_setPolyColor(u16 param_1, cBgS_PolyInfo
         param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, param_10);
 }
 
-inline void dComIfGp_particle_setSimple(u16 param_0, cXyz* i_pos, u8 param_2, _GXColor& param_3,
-                                        _GXColor& param_4, int param_5, float param_6) {
+inline void dComIfGp_particle_setSimple(u16 param_0, cXyz* i_pos, u8 param_2, GXColor& param_3,
+                                        GXColor& param_4, int param_5, float param_6) {
     g_dComIfG_gameInfo.play.getParticle()->setSimple(param_0, i_pos, 0, param_2, param_3, param_4,
                                                      param_5, param_6);
 }
@@ -4437,7 +4437,7 @@ inline int dComIfGd_setRealShadow(u32 param_0, s8 param_1, J3DModel* param_2, cX
 }
 
 inline int dComIfGd_setSimpleShadow(cXyz* pos, f32 param_1, f32 param_2, cXyz* param_3, s16 angle,
-                                    f32 param_5, _GXTexObj* tex) {
+                                    f32 param_5, GXTexObj* tex) {
     return g_dComIfG_gameInfo.drawlist.setSimpleShadow(pos, param_1, param_2, param_3, angle,
                                                        param_5, tex);
 }

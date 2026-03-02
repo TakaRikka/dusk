@@ -268,9 +268,9 @@ void daMant_packet_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
 
-    GXSetArray(GX_VA_POS, this->getPos(), 12);
-    GXSetArray(GX_VA_NRM, this->getNrm(), 12);
-    GXSetArray(GX_VA_TEX0, &l_texCoord, 8);
+    GXSETARRAY(GX_VA_POS, this->getPos(), sizeof(mPos[0]), 12);
+    GXSETARRAY(GX_VA_NRM, this->getNrm(), sizeof(mNrm[0]), 12);
+    GXSETARRAY(GX_VA_TEX0, &l_texCoord, sizeof(l_texCoord), 8);
 
     GXSetZCompLoc(0);
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);

@@ -14,7 +14,7 @@ OSTick JUTVideo::sVideoInterval;
 
 static bool data_80451544;
 
-JUTVideo* JUTVideo::createManager(_GXRenderModeObj const* param_0) {
+JUTVideo* JUTVideo::createManager(GXRenderModeObj const* param_0) {
     if (sManager == NULL) {
         sManager = new JUTVideo(param_0);
     }

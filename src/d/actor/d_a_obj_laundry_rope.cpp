@@ -230,7 +230,7 @@ static int createSolidHeap(fopAc_ac_c* i_this) {
 }
 
 int daObjLndRope_c::draw() {
-    static _GXColor l_color = {20, 15, 0, 255};
+    static GXColor l_color = {20, 15, 0, 255};
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     mRopeMat.update(15, l_color, &tevStr);
     dComIfGd_set3DlineMat(&mRopeMat);

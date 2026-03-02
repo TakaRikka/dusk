@@ -3,7 +3,6 @@
 
 #include "JSystem/JUtility/JUTVideo.h"
 
-typedef struct _GXRenderModeObj GXRenderModeObj;
 class JKRHeap;
 
 /**
@@ -21,7 +20,7 @@ public:
 
     void clearIndex();
     void common_init(int);
-    JUTXfb(_GXRenderModeObj const*, JKRHeap*, JUTXfb::EXfbNumber);
+    JUTXfb(GXRenderModeObj const*, JKRHeap*, JUTXfb::EXfbNumber);
     ~JUTXfb();
     void delXfb(int);
     static JUTXfb* createManager(JKRHeap*, JUTXfb::EXfbNumber);

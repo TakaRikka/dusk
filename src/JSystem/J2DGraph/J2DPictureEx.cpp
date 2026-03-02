@@ -577,7 +577,7 @@ void J2DPictureEx::drawOut(JGeometry::TBox2<f32> const& param_0,
     GXSetVtxDesc(GX_VA_TEX0, GX_NONE);
 }
 
-void J2DPictureEx::load(_GXTexMapID param_0, u8 param_1) {
+void J2DPictureEx::load(GXTexMapID param_0, u8 param_1) {
     if (mMaterial == NULL) {
         return;
     }

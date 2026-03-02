@@ -93,7 +93,7 @@ static int daE_SG_Draw(e_sg_class* i_this) {
         cXyz shadow_pos(i_this->current.pos.x, i_this->current.pos.y + 100.0f,
                         i_this->current.pos.z);
 
-        _GXTexObj* tex_obj = dDlst_shadowControl_c::getSimpleTex();
+        GXTexObj* tex_obj = dDlst_shadowControl_c::getSimpleTex();
 
         i_this->mShadowKey =
             dComIfGd_setShadow(i_this->mShadowKey, 1, i_this->mpModel, &shadow_pos, 400.0f, 0.0f,

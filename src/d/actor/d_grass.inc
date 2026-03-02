@@ -511,10 +511,10 @@ void dGrass_packet_c::draw() {
 
     GXSetVtxDescv(l_vtxDescList);
     GXSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
-    GXSetArray(GX_VA_POS, mp_pos, sizeof(Vec));
-    GXSetArray(GX_VA_NRM, mp_normal, sizeof(Vec));
-    GXSetArray(GX_VA_CLR0, mp_colors, sizeof(GXColor));
-    GXSetArray(GX_VA_TEX0, mp_texCoords, 8);
+    GXSETARRAY(GX_VA_POS, mp_pos, sizeof(l_pos), sizeof(Vec));
+    GXSETARRAY(GX_VA_NRM, mp_normal, sizeof(l_normal), sizeof(Vec));
+    GXSETARRAY(GX_VA_CLR0, mp_colors, sizeof(l_color), sizeof(GXColor));
+    GXSETARRAY(GX_VA_TEX0, mp_texCoords, sizeof(l_texCoord), 8);
 
     GXColorS10 spA0 = {0, 0, 0, 0};
     GXColorS10 sp98 = {0, 0, 0, 0};

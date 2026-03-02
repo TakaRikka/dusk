@@ -548,8 +548,8 @@ public:
 class mDoExt_3DlineMat0_c : public mDoExt_3DlineMat_c {
 public:
     int init(u16, u16, int);
-    void update(int, f32, _GXColor&, u16, dKy_tevstr_c*);
-    void update(int, _GXColor&, dKy_tevstr_c*);
+    void update(int, f32, GXColor&, u16, dKy_tevstr_c*);
+    void update(int, GXColor&, dKy_tevstr_c*);
 
     virtual int getMaterialID() { return 0; }
     virtual void setMaterial();

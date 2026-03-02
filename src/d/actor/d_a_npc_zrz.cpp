@@ -330,7 +330,7 @@ int daNpc_zrZ_c::Draw() {
     }
 }
 
-int daNpc_zrZ_c::draw(int i_isTest, int param_1, f32 i_shadowDepth, _GXColorS10* i_fogColor,
+int daNpc_zrZ_c::draw(int i_isTest, int param_1, f32 i_shadowDepth, GXColorS10* i_fogColor,
                       int i_hideDamage) {
     f32 damage_ratio, frame;
     J3DModel* model = mAnm_p->getModel();

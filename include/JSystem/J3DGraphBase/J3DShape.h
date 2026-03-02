@@ -125,8 +125,8 @@ public:
     static const int kVcdVatDLSize = 0xC0;
 
     void initialize();
-    void addTexMtxIndexInDL(_GXAttr, u32);
-    void addTexMtxIndexInVcd(_GXAttr);
+    void addTexMtxIndexInDL(GXAttr, u32);
+    void addTexMtxIndexInVcd(GXAttr);
     void calcNBTScale(Vec const&, f32 (*)[3][3], f32 (*)[3][3]);
     u16 countBumpMtxNum() const;
     void loadVtxArray() const;

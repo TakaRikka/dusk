@@ -53,7 +53,7 @@ JFWDisplay::~JFWDisplay() {
 
 JFWDisplay* JFWDisplay::sManager;
 
-JFWDisplay* JFWDisplay::createManager(_GXRenderModeObj const* p_rObj, JKRHeap* p_heap,
+JFWDisplay* JFWDisplay::createManager(GXRenderModeObj const* p_rObj, JKRHeap* p_heap,
                                       JUTXfb::EXfbNumber xfb_num, bool enableAlpha) {
     JUT_CONFIRM(173, sManager == NULL);
     if (p_rObj != NULL) {

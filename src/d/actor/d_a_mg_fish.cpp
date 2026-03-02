@@ -678,7 +678,7 @@ s32 daMg_Fish_Draw(mg_fish_class* i_this) {
                 &i_this->actor.tevStr, 0, 1.0f, &dDlst_shadowControl_c::mSimpleTexObj);
         }
         if (i_this->mKind2 == 3) {
-            _GXColor color;
+            GXColor color;
             color.r = 0x32;
             color.g = 0x2d;
             color.b = 0x14;

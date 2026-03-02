@@ -364,7 +364,7 @@ void JUTCacheFont::getGlyphFromAram(JUTCacheFont::TGlyphCacheInfo* param_0,
                     GX_ANISO_1);
 }
 
-void JUTCacheFont::loadImage(int param_0, _GXTexMapID texMapId) {
+void JUTCacheFont::loadImage(int param_0, GXTexMapID texMapId) {
     TCachePage* cachePage = loadCache_char_subroutine(&param_0, false);
     if (cachePage != NULL) {
         mWidth = cachePage->field_0xc * (param_0 % (int)cachePage->field_0x16);

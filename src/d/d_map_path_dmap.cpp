@@ -848,7 +848,7 @@ void renderingPlusDoor_c::drawDoorCommon(stage_tgsc_data_class const* i_doorData
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB565, 0);
-    GXSetArray(GX_VA_TEX0, (void*)l_tex0, 2);
+    GXSETARRAY(GX_VA_TEX0, (void*)l_tex0, sizeof(l_tex0), 2);
 
     setTevSettingIntensityTextureToCI();
 
@@ -1007,7 +1007,7 @@ void renderingPlusDoorAndCursor_c::drawTreasure() {
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGB, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB565, 0);
-    GXSetArray(GX_VA_TEX0, (void*)l_iconTex0, 2);
+    GXSETARRAY(GX_VA_TEX0, (void*)l_iconTex0, sizeof(l_iconTex0), 2);
 
     setTevSettingIntensityTextureToCI();
 
@@ -1081,7 +1081,7 @@ void renderingPlusDoorAndCursor_c::drawTreasureAfterPlayer() {
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGB, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB565, 0);
-    GXSetArray(GX_VA_TEX0, (void*)l_iconTex0, 2);
+    GXSETARRAY(GX_VA_TEX0, (void*)l_iconTex0, sizeof(l_iconTex0), 2);
 
     setTevSettingIntensityTextureToCI();
 

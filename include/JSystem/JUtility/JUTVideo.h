@@ -4,6 +4,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/os.h>
 #include <dolphin/os.h>
+#include <dolphin/vi.h>
 
 typedef u8 (*Pattern)[2];
 
@@ -54,7 +55,7 @@ private:
     static OSTick sVideoInterval;
 
 private:
-    /* 0x04 */ _GXRenderModeObj* mRenderObj;
+    /* 0x04 */ GXRenderModeObj* mRenderObj;
     /* 0x08 */ u32 field_0x8;
     /* 0x0C */ u32 mRetraceCount;
     /* 0x10 */ u32 field_0x10;

@@ -964,7 +964,7 @@ void dDlst_effectLine_c::draw() {
     }
 }
 
-void dDlst_effectLine_c::update(cXyz& param_0, _GXColor& i_lineColor, u16 param_2, u16 param_3,
+void dDlst_effectLine_c::update(cXyz& param_0, GXColor& i_lineColor, u16 param_2, u16 param_3,
                                 u16 param_4, u16 param_5, f32 param_6, f32 param_7, f32 param_8,
                                 f32 param_9) {
     field_0x10 = param_0;
@@ -1339,7 +1339,7 @@ void dDlst_shadowSimple_c::draw() {
 }
 
 void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3,
-                                   s16 param_4, f32 param_5, _GXTexObj* param_6) {
+                                   s16 param_4, f32 param_5, GXTexObj* param_6) {
     if (param_5 < 0.0f) {
         mAlpha = param_5 * -255.0f;
         param_5 = 1.0f;
@@ -1500,7 +1500,7 @@ void dDlst_shadowControl_c::draw(Mtx param_0) {
     dKy_GxFog_set();
 
     GXSetChanCtrl(GX_ALPHA0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSetArray(GX_VA_POS, l_shadowVolPos, 12);
+    GXSETARRAY(GX_VA_POS, l_shadowVolPos, sizeof(l_shadowVolPos), sizeof(l_shadowVolPos[0]));
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0);
     GXSetNumTevStages(1);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
@@ -1532,7 +1532,7 @@ void dDlst_shadowControl_c::draw(Mtx param_0) {
 
     GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB8, 0);
-    GXSetArray(GX_VA_POS, l_simpleShadowPos, 12);
+    GXSETARRAY(GX_VA_POS, l_simpleShadowPos, sizeof(l_simpleShadowPos), sizeof(l_simpleShadowPos[0]));
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);

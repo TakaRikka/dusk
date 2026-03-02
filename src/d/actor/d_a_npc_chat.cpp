@@ -2809,7 +2809,7 @@ int daNpcChat_c::Draw() {
     return 1;
 }
 
-int daNpcChat_c::draw(int param_1, int param_2, f32 param_3, _GXColorS10* i_color, int param_5) {
+int daNpcChat_c::draw(int param_1, int param_2, f32 param_3, GXColorS10* i_color, int param_5) {
     J3DModel* model = mAnm_p->getModel();
     J3DModelData* a_mdlData_p = model->getModelData();
 
