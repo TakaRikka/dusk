@@ -231,19 +231,11 @@ int game_main(int argc, char* argv[]) {
     config.windowHeight = 480;
     config.configPath = ".";
     config.logCallback = &aurora_log_callback;
+    config.mem1Size = 256 * 1024 * 1024;
 
     auroraInfo = aurora_initialize(argc, argv, &config);
 
-    // 2. Setup Virtual Game RAM
-    // Simulates Gamecube RAM (24MB + Audio etc, we take 256MB)
-#define GAME_RAM_SIZE (256 * 1024 * 1024)
-    void* virtualGameRam = calloc(1, GAME_RAM_SIZE);
-    if (!virtualGameRam) {
-        printf("Fatal: Failed to allocate game RAM\n");
-        return -1;
-    }
-    OSSetArenaLo(virtualGameRam);
-    OSSetArenaHi((char*)virtualGameRam + GAME_RAM_SIZE);
+    OSInit();
 
     // 3. Init DVD Emulation
     DvdEmu::setBasePath("data");
@@ -269,7 +261,6 @@ int game_main(int argc, char* argv[]) {
     main01();
 
     aurora_shutdown();
-    free(virtualGameRam);
 
     return 0;
 }

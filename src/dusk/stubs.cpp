@@ -46,44 +46,12 @@ static bool PerfInitialized = false;
 // General OS
 // ==========================================================================
 
-
-// Credits: Super Monkey Ball
-
-static u64 GetGCTicks() {
-#if __APPLE__
-    return mach_absolute_time() * MachToDolphinNum / MachToDolphinDenom;
-#elif __linux__ || __FreeBSD__
-    struct timespec tp;
-    clock_gettime(CLOCK_MONOTONIC, &tp);
-
-    return ((tp.tv_sec * 1000000000ull) + tp.tv_nsec) * OS_CORE_CLOCK / 1000000000ull;
-#elif _WIN32
-    if (!PerfInitialized) {
-        QueryPerformanceFrequency(&PerfFrequency);
-        PerfInitialized = true;
-    }
-    LARGE_INTEGER perf;
-    QueryPerformanceCounter(&perf);
-
-    perf.QuadPart *= OS_CORE_CLOCK;
-    perf.QuadPart /= PerfFrequency.QuadPart;
-
-    return perf.QuadPart;
-#else
-    return 0;
-#endif
-} 
-
 u32 OSGetConsoleType() {
     return OS_CONSOLE_RETAIL1;
 }
 
 u32 OSGetSoundMode() {
     return 2;
-}
-
-void OSInit() {
-    // Thread system is lazy-initialized via OSGetCurrentThread()
 }
 
 // ==========================================================================
@@ -232,45 +200,6 @@ int OSJamMessage(OSMessageQueue* mq, void* msg, s32 flags) {
 // Arena Functions
 // ==========================================================================
 
-static void* sArenaLo = nullptr;
-static void* sArenaHi = nullptr;
-
-void* OSGetArenaHi(void) {
-    return sArenaHi;
-}
-
-void* OSGetArenaLo(void) {
-    return sArenaLo;
-}
-
-void OSSetArenaHi(void* newHi) {
-    sArenaHi = newHi;
-}
-
-void OSSetArenaLo(void* newLo) {
-    sArenaLo = newLo;
-}
-
-void* OSAllocFromArenaLo(u32 size, u32 align) {
-    if (!sArenaLo || !sArenaHi) return nullptr;
-
-    uintptr_t lo = (uintptr_t)sArenaLo;
-    if (align > 0) {
-        lo = (lo + align - 1) & ~((uintptr_t)align - 1);
-    }
-
-    uintptr_t hi = (uintptr_t)sArenaHi;
-    if (lo + size > hi) {
-        OSReport("[PC-Arena] OSAllocFromArenaLo: out of arena space (need %u, have %u)\n",
-                 size, (u32)(hi - lo));
-        return nullptr;
-    }
-
-    void* result = (void*)lo;
-    sArenaLo = (void*)(lo + size);
-    return result;
-}
-
 void* OSInitAlloc(void* arenaStart, void* arenaEnd, int maxHeaps) {
     return arenaStart;
 }
@@ -287,14 +216,6 @@ void OSCancelAlarm(OSAlarm* alarm) {}
 
 void OSTicksToCalendarTime(OSTime ticks, OSCalendarTime* td) {
     if (td) memset(td, 0, sizeof(OSCalendarTime));
-}
-
-OSTime OSGetTime(void) {
-    return (OSTime)GetGCTicks();
-}
-
-OSTick OSGetTick(void) {
-    return (OSTick)GetGCTicks();
 }
 
 u16 OSGetFontEncode() { return 0; }

@@ -349,7 +349,11 @@ void J3DGDSetTexImgAttr(GXTexMapID id, u16 width, u16 height, GXTexFmt format) {
 }
 
 void J3DGDSetTexImgPtr(GXTexMapID id, void* image_ptr) {
+#if TARGET_PC
+    puts("J3DGDSetTexImgPtr is a stub");
+#else
     J3DGDWriteBPCmd(BP_IMAGE_PTR(OSCachedToPhysical(image_ptr) >> 5, J3DGDTexImage3Ids[id]));
+#endif
 }
 
 void J3DGDSetTexImgPtrRaw(GXTexMapID id, u32 image_ptr_raw) {
