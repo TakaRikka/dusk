@@ -25,3 +25,13 @@ platform:
       long: Windows 64-bit (MSVC)
       settings:
         CMAKE_GENERATOR_PLATFORM: x64
+
+tp_version:
+  default: GZ2E01
+  description: TP Version
+  choices:
+    GZ2E01:
+      short: GZ2E01
+      long: GZ2E01
+      settings:
+        DUSK_TP_VERSION: GZ2E01
