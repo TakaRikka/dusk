@@ -2,6 +2,7 @@
 
 #include "JSystem/JUtility/JUTGamePad.h"
 #include <cmath>
+#include "os_report.h"
 
 u32 JUTGamePad::CRumble::sChannelMask[4] = {
     PAD_CHAN0_BIT,

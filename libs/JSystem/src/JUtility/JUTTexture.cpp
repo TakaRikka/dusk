@@ -3,6 +3,7 @@
 #include "JSystem/JUtility/JUTTexture.h"
 #include "JSystem/JUtility/JUTPalette.h"
 #include <gx.h>
+#include "os_report.h"
 
 JUTTexture::~JUTTexture() {
     if (getCaptureFlag()) {

@@ -7,4 +7,6 @@
 #include "JSystem/JSystem.pch" // IWYU pragma: export
 #endif
 
+#include "os_report.h"
+
 #endif // JSYSTEM_H

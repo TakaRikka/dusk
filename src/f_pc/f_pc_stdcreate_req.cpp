@@ -15,6 +15,7 @@
 #include <dolphin.h>
 #endif
 #include <cstdio>
+#include "os_report.h"
 
 typedef struct standard_create_request_class {
     /* 0x00 */ create_request base;

@@ -6,6 +6,7 @@
 
 #include "JSystem/J2DGraph/J2DAnmLoader.h"
 #include "JSystem/JSupport/JSupport.h"
+#include "os_report.h"
 
 J2DAnmBase* J2DAnmLoaderDataBase::load(void const* p_data) {
     const J3DAnmDataHeader* hdr = (const J3DAnmDataHeader*)p_data;

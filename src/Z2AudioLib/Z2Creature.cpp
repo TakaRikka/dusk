@@ -2,6 +2,7 @@
 #include "Z2AudioLib/Z2Param.h"
 #include "Z2AudioLib/Z2Calc.h"
 #include "Z2AudioLib/Z2AudioMgr.h"
+#include "os_report.h"
 
 static void Z2_E_sw_modPitch(Z2SoundHandlePool*, u32);
 static void Z2_E_ms_modVol(Z2SoundHandlePool*, u32);

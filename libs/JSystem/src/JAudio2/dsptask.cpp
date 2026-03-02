@@ -3,6 +3,7 @@
 #include "JSystem/JAudio2/dsptask.h"
 #include "JSystem/JAudio2/osdsp.h"
 #include "global.h"
+#include "os_report.h"
 
 static void DspInitWork();
 static void DspHandShake(void* param_0);

@@ -17,6 +17,7 @@
 #if !PLATFORM_GCN
 #include <revolution/os.h>
 #endif
+#include "os_report.h"
 
 static void my_OSCancelAlarmAll() {}
 

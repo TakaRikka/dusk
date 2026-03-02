@@ -7,6 +7,7 @@
 #else
 #include <dolphin.h>
 #endif
+#include "os_report.h"
 
 JSUInputStream::~JSUInputStream() {
     if (!isGood()) {

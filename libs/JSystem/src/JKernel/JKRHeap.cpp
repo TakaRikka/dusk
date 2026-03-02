@@ -22,6 +22,7 @@
 #endif
 #include <cstring>
 #include <dolphin/os.h>
+#include "os_report.h"
 
 #if DEBUG
 u8 JKRValue_DEBUGFILL_NOTUSE = 0xFD;

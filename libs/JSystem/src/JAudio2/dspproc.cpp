@@ -3,6 +3,7 @@
 #include "JSystem/JAudio2/dspproc.h"
 #include "JSystem/JAudio2/dsptask.h"
 #include "JSystem/JAudio2/JASDSPInterface.h"
+#include "os_report.h"
 
 void DSPReleaseHalt2(u32 msg) {
     u32 msgs[2];

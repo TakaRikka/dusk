@@ -5,6 +5,7 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTPalette.h"
 #include "JSystem/JUtility/JUTTexture.h"
+#include "os_report.h"
 
 J2DMaterial::J2DMaterial() {
     field_0x4 = 0;

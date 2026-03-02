@@ -11,6 +11,7 @@
 #include <cstdio>
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
+#include "os_report.h"
 
 DynamicModuleControlBase* DynamicModuleControlBase::mFirst;
 

@@ -8,6 +8,7 @@
 #include <dolphin.h>
 #endif
 #include <cstring>
+#include "os_report.h"
 
 JSUOutputStream::~JSUOutputStream() {
     if (!isGood()) {

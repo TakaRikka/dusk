@@ -10,6 +10,7 @@
 #include "SSystem/SComponent/c_m3d.h"
 #include "SSystem/SComponent/c_math.h"
 #include "global.h"
+#include "os_report.h"
 
 Mtx mDoMtx_stack_c::now;
 

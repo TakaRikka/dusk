@@ -4,6 +4,7 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "global.h"
 #include <climits>
+#include "os_report.h"
 
 JSUList<JKRAramBlock> JKRAramHeap::sAramList;
 

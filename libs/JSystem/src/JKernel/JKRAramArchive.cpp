@@ -9,6 +9,7 @@
 #include "JSystem/JUtility/JUTException.h"
 #include <cmath>
 #include <cstring>
+#include "os_report.h"
 
 JKRAramArchive::JKRAramArchive() {}
 

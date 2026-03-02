@@ -8,6 +8,7 @@
 #include <cstring>
 #include "global.h"
 #include <stdint.h>
+#include "os_report.h"
 
 JKRMemArchive::JKRMemArchive(s32 entryNum, JKRArchive::EMountDirection mountDirection)
     : JKRArchive(entryNum, MOUNT_MEM) {

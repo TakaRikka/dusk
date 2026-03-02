@@ -11,6 +11,7 @@
 #include "JSystem/JParticle/JPAKeyBlock.h"
 #include "JSystem/JParticle/JPAResource.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
+#include "os_report.h"
 
 static void dummy1() {
     JUT_WARN(0, "JPA : wrong version file %s\n");

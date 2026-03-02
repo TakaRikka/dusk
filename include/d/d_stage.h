@@ -7,6 +7,7 @@
 #include "dusk/offset_ptr.h"
 #include "f_op/f_op_actor_mng.h"
 #include "global.h"
+#include "os_report.h"
 
 enum StageType {
     /* 0x0 */ ST_FIELD,
