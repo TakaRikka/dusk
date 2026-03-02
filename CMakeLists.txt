@@ -59,7 +59,7 @@ add_library(game_debug STATIC ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES})
 target_compile_definitions(game_debug PRIVATE TARGET_PC VERSION=0 $<$<CONFIG:Debug>:DEBUG=1>)
 
 # Make these properties PUBLIC so that the regular game target also sees them.
-target_include_directories(game_debug PUBLIC include src assets/${DUSK_TP_VERSION} ${CMAKE_BINARY_DIR}/../${DUSK_TP_VERSION}/include)
+target_include_directories(game_debug PUBLIC include src assets/${DUSK_TP_VERSION} ${CMAKE_SOURCE_DIR}/build/${DUSK_TP_VERSION}/include)
 target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::si aurora::vi aurora::pad aurora::mtx)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
