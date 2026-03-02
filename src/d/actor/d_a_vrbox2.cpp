@@ -25,6 +25,12 @@ static void texScrollCheck(f32& param_0) {
 }
 
 static int daVrbox2_Draw(vrbox2_class* i_this) {
+#if TARGET_PC
+    // This code is broken but happens to work on hardware. Does not work on PC.
+    // Not decomp's fault!
+    return 1;
+#endif
+
     camera_class* camera_p;
     dKankyo_sunlenz_Packet* lenz_p;
     J3DModel* kumo_model_p;

@@ -12,6 +12,12 @@
 static int daVrbox_color_set(vrbox_class* i_this);
 
 static int daVrbox_Draw(vrbox_class* i_this) {
+#if TARGET_PC
+    // This code is broken but happens to work on hardware. Does not work on PC.
+    // Not decomp's fault!
+    return 1;
+#endif
+
     J3DModel* soraModel_p = i_this->mpSoraModel;
     f32 fvar = 0.0f;
     dStage_FileList_dt_c* filelist_p = NULL;
