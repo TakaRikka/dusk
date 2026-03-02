@@ -12,12 +12,6 @@
 static int daVrbox_color_set(vrbox_class* i_this);
 
 static int daVrbox_Draw(vrbox_class* i_this) {
-#if TARGET_PC
-    // This code is broken but happens to work on hardware. Does not work on PC.
-    // Not decomp's fault!
-    return 1;
-#endif
-
     J3DModel* soraModel_p = i_this->mpSoraModel;
     f32 fvar = 0.0f;
     dStage_FileList_dt_c* filelist_p = NULL;
@@ -49,6 +43,9 @@ static int daVrbox_Draw(vrbox_class* i_this) {
     soraModel_p->setBaseTRMtx(mDoMtx_stack_c::get());
     dKy_GxFog_set();
 
+#if !TARGET_PC
+    // This code is broken but happens to not do anything on the real game.
+
     // these casts look like fake matches, but this ptr is used as both J3DModel and J3DModelData?
     for (int i = ((J3DModelData*)soraModel_p)->getMaterialNum() - 1; i >= 0; i--) {
         J3DMaterial* material_p = ((J3DModelData*)soraModel_p)->getMaterialNodePointer(i);
@@ -60,6 +57,7 @@ static int daVrbox_Draw(vrbox_class* i_this) {
 
         fogInfo_p->mType = 2;
     }
+#endif
 
     dComIfGd_setListSky();
     mDoExt_modelUpdateDL(soraModel_p);

@@ -25,12 +25,6 @@ static void texScrollCheck(f32& param_0) {
 }
 
 static int daVrbox2_Draw(vrbox2_class* i_this) {
-#if TARGET_PC
-    // This code is broken but happens to work on hardware. Does not work on PC.
-    // Not decomp's fault!
-    return 1;
-#endif
-
     camera_class* camera_p;
     dKankyo_sunlenz_Packet* lenz_p;
     J3DModel* kumo_model_p;
@@ -56,6 +50,9 @@ static int daVrbox2_Draw(vrbox2_class* i_this) {
     f32 var_f31 = 0.0f;
     filelist_p = NULL;
     dKy_GxFog_set();
+
+#if !TARGET_PC
+    // Code is broken but does nothing on real hardware.
 
     // these casts look like fake matches, but this ptr is used as both J3DModel and J3DModelData?
     sp38 = (J3DModelData*)kumo_model_p;
@@ -93,6 +90,7 @@ static int daVrbox2_Draw(vrbox2_class* i_this) {
 
         fogInfo_p->mType = 2;
     }
+#endif
 
     if ((g_env_light.vrbox_kasumi_outer_col.r + g_env_light.vrbox_kasumi_outer_col.g +
          g_env_light.vrbox_kasumi_outer_col.b + g_env_light.vrbox_sky_col.r + g_env_light.vrbox_sky_col.g +
