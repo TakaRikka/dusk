@@ -8,7 +8,8 @@
             "program": "${command:cmake.launchTargetPath}",
             "MIMode": "gdb",
             "miDebuggerPath": "gdb",
-            "symbolSearchPath": "${command:cmake.launchTargetPath}"
+            "symbolSearchPath": "${command:cmake.launchTargetPath}",
+            "console": "integratedTerminal"
         }
     ]
 }
