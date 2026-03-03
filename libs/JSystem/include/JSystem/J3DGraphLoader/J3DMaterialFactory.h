@@ -67,12 +67,12 @@ struct J3DIndInitData {
  * 
  */
 struct J3DPatchingInfo {
-    /* 0x0 */ u16 mMatColorOffset;
-    /* 0x2 */ u16 mColorChanOffset;
-    /* 0x4 */ u16 mTexMtxOffset;
-    /* 0x6 */ u16 mTexNoOffset;
-    /* 0x8 */ u16 mTevRegOffset;
-    /* 0xA */ u16 mFogOffset;
+    /* 0x0 */ BE(u16) mMatColorOffset;
+    /* 0x2 */ BE(u16) mColorChanOffset;
+    /* 0x4 */ BE(u16) mTexMtxOffset;
+    /* 0x6 */ BE(u16) mTexNoOffset;
+    /* 0x8 */ BE(u16) mTevRegOffset;
+    /* 0xA */ BE(u16) mFogOffset;
     /* 0xC */ u8 field_0xc[4];
 }; // size 0x10
 
@@ -81,8 +81,8 @@ struct J3DPatchingInfo {
  * 
  */
 struct J3DDisplayListInit {
-    /* 0x0 */ u32 mOffset;
-    /* 0x4 */ u32 field_0x4;
+    /* 0x0 */ BE(u32) mOffset;
+    /* 0x4 */ BE(u32) field_0x4;
 }; // size 8
 
 struct J3DTexCoord2Info;
