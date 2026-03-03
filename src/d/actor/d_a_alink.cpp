@@ -13904,8 +13904,8 @@ void daAlink_c::setBasAnime(daAlink_c::daAlink_UNDER i_underIdx) {
             initBasAnime();
         }
     } else {
-        u8* temp_r3_2 = anmHeap->getBuffer();
-        if (*(u32*)(temp_r3_2 + 0x1C) == 0xFFFFFFFF) {
+        JUTDataFileHeader* temp_r3_2 = (JUTDataFileHeader*)anmHeap->getBuffer();
+        if (temp_r3_2->mSeAnmOffset == 0xFFFFFFFF) {
             resetBasAnime();
             return;
         }
@@ -13917,12 +13917,12 @@ void daAlink_c::setBasAnime(daAlink_c::daAlink_UNDER i_underIdx) {
             }
         }
 
-        u32 dataSize = *(u32*)(temp_r3_2 + 0x8) - *(u32*)(temp_r3_2 + 0x1C);
+        u32 dataSize = temp_r3_2->mFileSize - temp_r3_2->mSeAnmOffset;
 
         const u32 l_basAnmBufferSize = 0x800;
         JUT_ASSERT(20661, dataSize < l_basAnmBufferSize);
 
-        cLib_memCpy(field_0x2d78, anmHeap->getBuffer() + *(u32*)(temp_r3_2 + 0x1C), dataSize);
+        cLib_memCpy(field_0x2d78, anmHeap->getBuffer() + temp_r3_2->mSeAnmOffset, dataSize);
         field_0x2d7c = framectrl;
         field_0x3084 = anmHeap->getIdx();
         field_0x3086 = anmHeap->getArcNo();
