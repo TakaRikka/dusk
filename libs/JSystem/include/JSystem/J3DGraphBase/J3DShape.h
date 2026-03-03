@@ -15,8 +15,8 @@ class J3DShapeMtx;
  */
 class J3DCurrentMtxInfo {
 public:
-    u32 mMtxIdxRegA;
-    u32 mMtxIdxRegB;
+    BE(u32) mMtxIdxRegA;
+    BE(u32) mMtxIdxRegB;
 };
 
 /**

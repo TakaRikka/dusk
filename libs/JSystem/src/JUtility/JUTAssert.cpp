@@ -7,6 +7,8 @@
 #include <cstdio>
 #include <vi.h>
 
+#include "global.h"
+
 namespace JUTAssertion {
 
 void create() {}
