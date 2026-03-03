@@ -4,6 +4,8 @@
 #include "JSystem/JGadget/define.h"
 #include <stdint.h>
 
+#include "global.h"
+
 #if DEBUG
 static void dummyString() {
     // probably some stripped function that called JUT_ASSERT here

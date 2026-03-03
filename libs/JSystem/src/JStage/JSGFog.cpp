@@ -3,6 +3,8 @@
 #include "JSystem/JStage/JSGFog.h"
 #include <limits>
 
+#include "global.h"
+
 JStage::TFog::~TFog() {}
 
 s32 JStage::TFog::JSGFGetType() const {

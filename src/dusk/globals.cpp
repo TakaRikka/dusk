@@ -9,8 +9,6 @@ dDebugPad_c dDebugPad;
 
 u32 __OSFpscrEnableBits;
 
-GDLObj* __GDCurrentDL;
-
 // DSP
 #include <dolphin/dsp.h>
 DSPTaskInfo* __DSP_first_task;

@@ -1589,7 +1589,10 @@ int mDoGph_Painter() {
             fapGm_HIO_c::startCpuTimer();
             #endif
 
+#if !TARGET_PC
+            // TODO: Aurora can't handle line drawing right now.
             dComIfGd_imageDrawShadow(camera_p->viewMtx);
+#endif
 
             #if DEBUG
             // "drawing Shadow Texture (Rendering)"

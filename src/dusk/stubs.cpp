@@ -1288,36 +1288,6 @@ void DVDReset() {
     STUB_LOG("DVDReset is a stub");
 }
 
-#pragma mark GD
-#include <dolphin/gd/GDBase.h>
-#include <dolphin/gd/GDGeometry.h>
-void GDFlushCurrToMem(void) {
-    STUB_LOG("GDFlushCurrToMem is a stub");
-}
-void GDInitGDLObj(GDLObj* dl, void* start, u32 length) {
-    ASSERTMSGLINE(40, !((u32)start & 0x1F), "start must be aligned to 32 bytes");
-    ASSERTMSGLINE(41, !((u32)length & 0x1F), "length must be aligned to 32 bytes");
-    dl->start = static_cast<u8*>(start);
-    dl->ptr = static_cast<u8*>(start);
-    dl->top = (u8*)start + length;
-    dl->length = length;
-}
-void GDOverflowed(void) {
-    STUB_LOG("GDOverflowed is a stub");
-}
-void GDPadCurr32(void) {
-    STUB_LOG("GDPadCurr32 is a stub");
-}
-void GDSetArray(GXAttr attr, void* base_ptr, u8 stride) {
-    STUB_LOG("GDSetArray is a stub");
-}
-void GDSetArrayRaw(GXAttr attr, u32 base_ptr_raw, u8 stride) {
-    STUB_LOG("GDSetArrayRaw is a stub");
-}
-void GDSetVtxDescv(const GXVtxDescList* attrPtr) {
-    STUB_LOG("GDSetVtxDescv is a stub");
-}
-
 #pragma mark GX
 #include <dolphin/gx.h>
 
