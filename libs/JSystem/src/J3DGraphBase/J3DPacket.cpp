@@ -207,6 +207,9 @@ bool J3DMatPacket::isSame(J3DMatPacket* pOther) const {
 }
 
 void J3DMatPacket::draw() {
+#if TARGET_PC 
+    j3dSys.setTexture(mpTexture);
+#endif
     mpMaterial->load();
     callDL();
 

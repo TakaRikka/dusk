@@ -24,10 +24,10 @@ void daAlink_c::hsChainShape_c::draw() {
     J3DModelData* modelData = alink->getItemModelData();
     J3DMaterial* material = modelData->getMaterialNodePointer(0);
     daAlink_hsChainLight_c* chainLight = (daAlink_hsChainLight_c*)&alink->tevStr;
-
-    j3dSys.setVtxPos(modelData->getVtxPosArray());
-    j3dSys.setVtxNrm(modelData->getVtxNrmArray());
-    j3dSys.setVtxCol(modelData->getVtxColorArray(0));
+    
+    j3dSys.setVtxPos(modelData->getVtxPosArray(), modelData->getVtxNum());
+    j3dSys.setVtxNrm(modelData->getVtxNrmArray(), modelData->getNrmNum());
+    j3dSys.setVtxCol(modelData->getVtxColorArray(0), modelData->getColNum());
     J3DShape::resetVcdVatCache();
 
     material->loadSharedDL();

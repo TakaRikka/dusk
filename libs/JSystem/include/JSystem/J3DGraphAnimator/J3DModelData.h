@@ -38,6 +38,9 @@ public:
     }
     u32 getVtxNum() const { return mVertexData.getVtxNum(); }
     u32 getNrmNum() const { return mVertexData.getNrmNum(); }
+#if TARGET_PC
+    u32 getColNum() const { return mVertexData.getColNum(); }
+#endif
     u8 getDrawMtxFlag(u16 idx) const { return mJointTree.getDrawMtxFlag(idx); }
     u16 getDrawMtxIndex(u16 idx) const { return mJointTree.getDrawMtxIndex(idx); }
     J3DDrawMtxData* getDrawMtxData() { return mJointTree.getDrawMtxData(); }

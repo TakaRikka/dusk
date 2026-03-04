@@ -41,6 +41,9 @@ public:
     u32 getNrmNum() const { return mNrmNum; }
     u32 getVtxNum() const { return mVtxNum; }
     u32 getColNum() const { return mColNum; }
+#if TARGET_PC
+    u32 getTexCoordNum() const { return mTexCoordNum; }
+#endif
     GXVtxAttrFmtList* getVtxAttrFmtList() const { return mVtxAttrFmtList; }
     u8 getVtxPosFrac() const { return mVtxPosFrac; }
     u8 getVtxNrmFrac() const { return mVtxNrmFrac; }

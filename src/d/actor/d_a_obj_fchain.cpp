@@ -253,9 +253,9 @@ void daObjFchain_shape_c::draw() {
     J3DModelData* modelData = i_this->getModelData();
     J3DMaterial* material = modelData->getMaterialNodePointer(0);
     dKy_tevstr_c* tevStr = &i_this->tevStr;
-    j3dSys.setVtxPos(modelData->getVtxPosArray());
-    j3dSys.setVtxNrm(modelData->getVtxNrmArray());
-    j3dSys.setVtxCol(modelData->getVtxColorArray(0));
+    j3dSys.setVtxPos(modelData->getVtxPosArray(), modelData->getVtxNum());
+    j3dSys.setVtxNrm(modelData->getVtxNrmArray(), modelData->getNrmNum());
+    j3dSys.setVtxCol(modelData->getVtxColorArray(0), modelData->getColNum());
     J3DShape::resetVcdVatCache();
     material->loadSharedDL();
     material->getShape()->loadPreDrawSetting();

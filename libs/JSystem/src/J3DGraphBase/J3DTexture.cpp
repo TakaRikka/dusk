@@ -10,6 +10,11 @@ void J3DTexture::loadGX(u16 idx, GXTexMapID texMapID) const {
     GXTexObj texObj;
     GXTlutObj tlutObj;
 
+#if TARGET_PC
+    if (timg->width == 0 || timg->height == 0)
+        return;
+#endif
+
     if (!timg->indexTexture) {
         GXInitTexObj(&texObj, ((u8*)timg) + timg->imageOffset, timg->width, timg->height,
                      (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT,

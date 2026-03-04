@@ -217,6 +217,9 @@ void J3DMaterial::makeSharedDisplayList() {
 
 void J3DMaterial::load() {
     j3dSys.setMaterialMode(mMaterialMode);
+#if TARGET_PC
+    mTevBlock->loadTexture();
+#endif
     if (!j3dSys.checkFlag(2)) {
         loadNBTScale(*mTexGenBlock->getNBTScale());
     }
@@ -224,6 +227,9 @@ void J3DMaterial::load() {
 
 void J3DMaterial::loadSharedDL() {
     j3dSys.setMaterialMode(mMaterialMode);
+#if TARGET_PC
+    mTevBlock->loadTexture();
+#endif
     if (!j3dSys.checkFlag(2)) {
         mSharedDLObj->callDL();
         loadNBTScale(*mTexGenBlock->getNBTScale());
@@ -374,6 +380,9 @@ void J3DPatchedMaterial::makeSharedDisplayList() {}
 
 void J3DPatchedMaterial::load() {
     j3dSys.setMaterialMode(mMaterialMode);
+#if TARGET_PC
+    mTevBlock->loadTexture();
+#endif
     if (j3dSys.checkFlag(2)) {
         return;
     }
@@ -381,6 +390,9 @@ void J3DPatchedMaterial::load() {
 
 void J3DPatchedMaterial::loadSharedDL() {
     j3dSys.setMaterialMode(mMaterialMode);
+#if TARGET_PC
+    mTevBlock->loadTexture();
+#endif
     if (!j3dSys.checkFlag(0x02))
         mSharedDLObj->callDL();
 }
@@ -399,6 +411,9 @@ void J3DLockedMaterial::makeSharedDisplayList() {}
 
 void J3DLockedMaterial::load() {
     j3dSys.setMaterialMode(mMaterialMode);
+#if TARGET_PC
+    mTevBlock->loadTexture();
+#endif
     if (j3dSys.checkFlag(2)) {
         return;
     }
@@ -406,6 +421,9 @@ void J3DLockedMaterial::load() {
 
 void J3DLockedMaterial::loadSharedDL() {
     j3dSys.setMaterialMode(mMaterialMode);
+#if TARGET_PC
+    mTevBlock->loadTexture();
+#endif
     if (!j3dSys.checkFlag(0x02))
         mSharedDLObj->callDL();
 }

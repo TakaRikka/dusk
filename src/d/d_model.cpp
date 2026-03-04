@@ -6,9 +6,9 @@
 #include "d/d_com_inf_game.h"
 
 void dMdl_c::draw() {
-    j3dSys.setVtxPos(mpModelData->getVtxPosArray());
-    j3dSys.setVtxNrm(mpModelData->getVtxNrmArray());
-    j3dSys.setVtxCol(mpModelData->getVtxColorArray(0));
+    j3dSys.setVtxPos(mpModelData->getVtxPosArray(), mpModelData->getVtxNum());
+    j3dSys.setVtxNrm(mpModelData->getVtxNrmArray(), mpModelData->getNrmNum());
+    j3dSys.setVtxCol(mpModelData->getVtxColorArray(0), mpModelData->getColNum());
     J3DShape::resetVcdVatCache();
 
     J3DShape* shape = mpModelData->getMaterialNodePointer(mMaterialId)->getShape();

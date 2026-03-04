@@ -41,9 +41,9 @@ void dBgp_c::modelMaterial_c::drawSimple() {
         J3DShape* shape = modelMaterial->getMaterial()->getShape();
         J3DModelData* modelData = modelMaterial->getModelData();
 
-        j3dSys.setVtxPos(modelData->getVtxPosArray());
-        j3dSys.setVtxNrm(modelData->getVtxNrmArray());
-        j3dSys.setVtxCol(modelData->getVtxColorArray(0));
+        j3dSys.setVtxPos(modelData->getVtxPosArray(), modelData->getVtxNum());
+        j3dSys.setVtxNrm(modelData->getVtxNrmArray(), modelData->getNrmNum());
+        j3dSys.setVtxCol(modelData->getVtxColorArray(0), modelData->getColNum());
         MTXConcat(j3dSys.getViewMtx(), modelMaterial->getMtx(), m);
         GXLoadPosMtxImm(m, 0);
         GXLoadNrmMtxImm(m, 0);

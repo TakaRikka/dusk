@@ -68,9 +68,9 @@ void J3DVertexBuffer::init() {
 J3DVertexBuffer::~J3DVertexBuffer() {}
 
 void J3DVertexBuffer::setArray() const {
-    j3dSys.setVtxPos(mCurrentVtxPos);
-    j3dSys.setVtxNrm(mCurrentVtxNrm);
-    j3dSys.setVtxCol(mCurrentVtxCol);
+    j3dSys.setVtxPos(mCurrentVtxPos, mVtxData->getVtxNum());
+    j3dSys.setVtxNrm(mCurrentVtxNrm, mVtxData->getNrmNum());
+    j3dSys.setVtxCol(mCurrentVtxCol, mVtxData->getColNum());
 }
 
 s32 J3DVertexBuffer::copyLocalVtxPosArray(u32 flag) {
