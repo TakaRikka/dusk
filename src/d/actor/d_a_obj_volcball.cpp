@@ -618,7 +618,7 @@ actor_process_profile_definition g_profile_Obj_VolcanicBall = {
   fpcPi_CURRENT_e,         // mListPrio
   PROC_Obj_VolcanicBall,   // mProcName
   &g_fpcLf_Method.base,   // sub_method
-  0x00002928,              // mSize
+  sizeof(daObjVolcBall_c),              // mSize
   0,                       // mSizeOther
   0,                       // mParameters
   &g_fopAc_Method.base,    // sub_method

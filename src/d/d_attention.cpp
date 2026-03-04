@@ -10,6 +10,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "SSystem/SComponent/c_counter.h"
+#include <cstring>
 
 #define DRAW_TYPE_YELLOW 0
 #define DRAW_TYPE_RED    1
@@ -172,6 +173,7 @@ dAttention_c::dAttention_c(fopAc_ac_c* i_player, u32 i_padNo) {
     mAttnBlockTimer = 0;
 
     heap = mDoExt_createSolidHeapFromGameToCurrent(0x9000, 0);
+    JKRHEAP_NAME(heap, "dAttention_c::heap");
     JUT_ASSERT(0x198, heap != NULL);
 
     J3DModelData* modelDataR = (J3DModelData*)dComIfG_getObjectRes("Always", 0x25);

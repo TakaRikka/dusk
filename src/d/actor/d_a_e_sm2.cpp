@@ -12,6 +12,7 @@
 #include "SSystem/SComponent/c_counter.h"
 #include "f_op/f_op_actor_enemy.h"
 #include "f_op/f_op_camera_mng.h"
+#include <cstring>
 
 class daE_SM2_HIO_c : public fOpAcm_HIO_entry_c {
 public:
@@ -1276,7 +1277,8 @@ static void action(e_sm2_class* i_this) {
     static f32 asp[] = {500.0f, 400.0f, 300.0f, 200.0f, 100.0f};
     static f32 asp2[] = {3500.0f, 3000.0f, 2500.0f, 2000.0f, 1500.0f};
 
-    i_this->field_0x828 += (s16)(asp2[i_this->sizetype] + (i_this->field_0x82c * asp[i_this->sizetype]));
+    ANGLE_ADD(i_this->field_0x828,
+              asp2[i_this->sizetype] + (i_this->field_0x82c * asp[i_this->sizetype]));
 
     for (int i = 0; i < 8; i++) {
         if (i_this->action != ACTION_FAIL) {

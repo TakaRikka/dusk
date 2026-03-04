@@ -138,7 +138,7 @@ static int daObj_Web0_Execute(obj_web0_class* i_this) {
 
     var_r28 = base_p->shape_angle.y;
     if (sp08 < 0) {
-        var_r28 += (s16) -0x8000;
+        ANGLE_ADD(var_r28, -0x8000);
     }
 
     var_r28 -= player->shape_angle.y;

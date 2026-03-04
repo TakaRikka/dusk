@@ -5,6 +5,7 @@
 #include "d/d_com_inf_game.h"
 #include "JSystem/J2DGraph/J2DAnimation.h"
 #include "JSystem/J2DGraph/J2DAnmLoader.h"
+#include <cstring>
 
 dSelect_cursorHIO_c::dSelect_cursorHIO_c() {
     field_0x8 = 1.0f;

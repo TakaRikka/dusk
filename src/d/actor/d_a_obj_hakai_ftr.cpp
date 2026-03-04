@@ -27,7 +27,7 @@ static u32 const l_bmdIdx[3] = {4, 4, 4};
 static u32 const l_dzbIdx[3] = {7, 7, 7};
 
 int daObjHFtr_c::createHeap() {
-    uint nameId = getNameId();
+    u32 nameId = getNameId();
 
     J3DModelData* a_model_data_p =
         (J3DModelData*)dComIfG_getObjectRes(l_arcName[nameId], l_bmdIdx[nameId]);

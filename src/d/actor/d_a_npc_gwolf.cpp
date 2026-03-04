@@ -408,7 +408,7 @@ int daNpc_GWolf_c::Draw() {
     );
 }
 
-int daNpc_GWolf_c::draw(int param_1, int param_2, f32 param_3, _GXColorS10* i_color, int param_5) {
+int daNpc_GWolf_c::draw(int param_1, int param_2, f32 param_3, GXColorS10* i_color, int param_5) {
     J3DModel* model = mAnm_p->getModel();
     J3DModelData* mdlData_p = model->getModelData();
 

@@ -154,7 +154,7 @@ void daObjMovebox::Bgc_c::gnd_pos(const daObjMovebox::Act_c* i_actor,
 
         mDoMtx_stack_c::multVec(&sp50, &sp5C);
         M_gnd_work[i].SetPos(&sp5C);
-        M_gnd_work[i].SetActorPid(i_actor->base.base.id);
+        M_gnd_work[i].SetActorPid(fopAcM_GetID(i_actor));
         field_0x0[i] = dComIfG_Bgsp().GroundCross(&M_gnd_work[i]);
 #if DEBUG
         L_gnd_start[i_actor->mType][i].set(sp50);
@@ -234,7 +234,7 @@ void daObjMovebox::Bgc_c::wall_pos(daObjMovebox::Act_c const* i_actor,
         sp54 = sp48 + sp6C;
 
         M_wall_work[i].Set(&sp48, &sp54, i_actor);
-        M_wall_work[i].SetActorPid(i_actor->base.base.id);
+        M_wall_work[i].SetActorPid(fopAcM_GetID(i_actor));
 #if DEBUG
         L_wall_start[i_actor->mType][i].set(sp48);
         L_wall_end[i_actor->mType][i].set(sp54);
@@ -338,7 +338,7 @@ bool daObjMovebox::Bgc_c::chk_wall_touch(daObjMovebox::Act_c const* i_actor,
     sp38 += i_actor->current.pos;
     sp44 = sp38 + sp68;
 
-    touch_work.SetActorPid(i_actor->base.base.id);
+    touch_work.SetActorPid(fopAcM_GetID(i_actor));
 
 #if DEBUG
     if (field_0xA28 != g_Counter.mCounter0) {
@@ -1083,7 +1083,7 @@ void daObjMovebox::Act_c::mode_afl() {
         var_f31 = -var_f30 * attr().field_0x6c;
     }
 
-    field_0x8b8 += (s16)(attr().mWaterOscillationAngleSpeed * (cM_rnd() + 1.0f));
+    S16_ADD(field_0x8b8, attr().mWaterOscillationAngleSpeed * (cM_rnd() + 1.0f));
     newGravity = var_f31 * attr().mBuoyancy + attr().mGravity +
                  attr().mWaterOscillationAccel * cM_ssin(field_0x8b8) + field_0x8bc;
     fopAcM_SetGravity(this, newGravity);

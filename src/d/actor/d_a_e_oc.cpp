@@ -14,6 +14,7 @@
 #include "d/d_cc_uty.h"
 #include "f_op/f_op_actor_enemy.h"
 #include "f_op/f_op_camera_mng.h"
+#include <cstring>
 
 
 enum OC_ACTIONS {
@@ -139,7 +140,7 @@ int daE_OC_c::ctrlJoint(J3DJoint* i_joint, J3DModel* param_1) {
         mDoMtx_stack_c::YrotM(field_0x6d0);
     }
     param_1->setAnmMtx(jnt_no, mDoMtx_stack_c::get());
-    mDoMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+    cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
     return 1;
 }
 
@@ -714,17 +715,17 @@ void daE_OC_c::damage_check() {
     } else if (mAtInfo.mpCollider->ChkAtType(AT_TYPE_IRON_BALL)) {
         my_val = 5;
         if (dComIfGp_checkPlayerStatus0(0,0x400)) {
-            health += (s16) 140;
+            S16_ADD(health, 140);
         } else {
-            health += (s16) 80;
+            S16_ADD(health, 80);
         }
     } else if (mAtInfo.mpCollider->ChkAtType(AT_TYPE_BOOMERANG)) {
         my_val = 4;
     } else if (mAtInfo.mpCollider->ChkAtType(AT_TYPE_40)) {
-        health += (s16) 10;
+        S16_ADD(health, 10);
     } else if (mAtInfo.mpCollider->ChkAtType(AT_TYPE_SLINGSHOT)) {
         if (mName == "E_OC") {
-            health -= (s16) 5;
+            S16_SUB(health, 5);
             if (health < 0) {
                 health = 0;
                 mSound.startCollisionSE(0x40007,0x20);
@@ -1487,22 +1488,26 @@ void daE_OC_c::executeAttack() {
             current.pos.x += (my_float - field_0x6a0) * cM_ssin(shape_angle.y);
             current.pos.z += (my_float - field_0x6a0) * cM_scos(shape_angle.y);
             field_0x6a0 = my_float;
-            if (mpMorf->isStop()) {
-                setBck(0x1c, 2, 5.0f, 1.0f);
-                mSound.startCreatureVoice(Z2SE_EN_OC_V_WAIT_ST, -1);
-                if (field_0x6e3) {
-                    setActionMode(E_OC_ACTION_MOVE_OUT, 0);
-                } else {
-                    if (field_0x6ca && fopAcM_searchPlayerDistance(this) < 500.0f) {
-                        if (abs(shape_angle.y - fopAcM_searchPlayerAngleY(this)) < 0x1000) {
-                            mOcState = 0;
-                            break;
-                        }
-                    }
+            if (!mpMorf->isStop()) {
+                break;
+            }
 
-                    setActionMode(E_OC_ACTION_FIND, 0);
+            setBck(0x1c, 2, 5.0f, 1.0f);
+            mSound.startCreatureVoice(Z2SE_EN_OC_V_WAIT_ST, -1);
+            if (field_0x6e3) {
+                setActionMode(E_OC_ACTION_MOVE_OUT, 0);
+                break;
+            }
+
+            if (field_0x6ca && fopAcM_searchPlayerDistance(this) < 500.0f) {
+                if (abs(shape_angle.y - fopAcM_searchPlayerAngleY(this)) < 0x1000) {
+                    mOcState = 0;
+                    break;
                 }
             }
+
+            setActionMode(E_OC_ACTION_FIND, 0);
+            int _; // forces b in dbg asm
             break;
         }
     }

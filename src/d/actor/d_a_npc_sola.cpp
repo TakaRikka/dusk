@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h"  // IWYU pragma: keep
 
 #include "d/actor/d_a_npc_sola.h"
+#include <cstring>
 
 enum Bans_RES_File_ID {
     /* BCK */

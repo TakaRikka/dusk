@@ -1,0 +1,46 @@
+#ifndef RES_TARO_H
+#define RES_TARO_H
+
+enum dRes_INDEX_TARO {
+    /* BMDR */
+    dRes_INDEX_TARO_BMD_TARO_e=0x4,
+    /* BTP  */
+    dRes_INDEX_TARO_BTP_TARO_F_NORMAL_e=0x7,
+};
+
+enum dRes_ID_TARO {
+    /* BMDR */
+    dRes_ID_TARO_BMD_TARO_e=0x4,
+    /* BTP  */
+    dRes_ID_TARO_BTP_TARO_F_NORMAL_e=0x7,
+};
+
+enum TARO_JNT {
+    TARO_JNT_CENTER_e=0x0,
+    TARO_JNT_BACKBONE1_e=0x1,
+    TARO_JNT_BACKBONE2_e=0x2,
+    TARO_JNT_NECK_e=0x3,
+    TARO_JNT_HEAD_e=0x4,
+    TARO_JNT_CHINE_e=0x5,
+    TARO_JNT_HEADBAND_e=0x6,
+    TARO_JNT_MOUTH_e=0x7,
+    TARO_JNT_SHOULDERL_e=0x8,
+    TARO_JNT_ARML1_e=0x9,
+    TARO_JNT_ARML2_e=0xA,
+    TARO_JNT_HANDL_e=0xB,
+    TARO_JNT_SHOULDERR_e=0xC,
+    TARO_JNT_ARMR1_e=0xD,
+    TARO_JNT_ARMR2_e=0xE,
+    TARO_JNT_HANDR_e=0xF,
+    TARO_JNT_WAIST_e=0x10,
+    TARO_JNT_LEGL1_e=0x11,
+    TARO_JNT_LEGL2_e=0x12,
+    TARO_JNT_FOOTL_e=0x13,
+    TARO_JNT_LEGR1_e=0x14,
+    TARO_JNT_LEGR2_e=0x15,
+    TARO_JNT_FOOTR_e=0x16,
+    TARO_JNT_SKART1_e=0x17,
+    TARO_JNT_SKART2_e=0x18,
+};
+
+#endif /* !RES_TARO_H */

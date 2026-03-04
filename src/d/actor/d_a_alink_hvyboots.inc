@@ -378,7 +378,7 @@ int daAlink_c::procMagneBootsFly() {
 
         cLib_addCalcAngleS(&shape_angle.x, sp24.atan2sY_XZ() + -0x4000, 5, 0x1000, 0x100);
         cLib_addCalcAngleS(&shape_angle.y, sp24.atan2sX_Z(), 5, 0x1000, 0x100);
-        mProcVar2.field_0x300c += (s16)0x1C00;
+        ANGLE_ADD(mProcVar2.field_0x300c, 0x1C00);
     }
 
     return 1;

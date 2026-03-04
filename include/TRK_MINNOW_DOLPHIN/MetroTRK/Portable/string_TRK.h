@@ -1,0 +1,6 @@
+#ifndef METROTRK_PORTABLE_STRING_TRK_H
+#define METROTRK_PORTABLE_STRING_TRK_H
+
+int TRK_strlen(const char* str);
+
+#endif /* METROTRK_PORTABLE_STRING_TRK_H */

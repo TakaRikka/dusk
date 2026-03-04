@@ -1,7 +1,7 @@
 #ifndef M_DO_M_DO_MACHINE_H
 #define M_DO_M_DO_MACHINE_H
 
-#include <dolphin/gx.h>
+#include <gx.h>
 
 typedef struct OSContext OSContext;
 class JKRHeap;

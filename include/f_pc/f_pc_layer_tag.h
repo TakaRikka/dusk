@@ -4,7 +4,11 @@
 
 #include "SSystem/SComponent/c_tag.h"
 
+#if !__MWERKS__
+enum : u32 {
+#else
 enum {
+#endif
     fpcLy_ROOT_e    = 0,
     fpcLy_CURRENT_e = 0xFFFFFFFD,
     fpcLy_SPECIAL_e = 0xFFFFFFFE,

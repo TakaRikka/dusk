@@ -2420,8 +2420,8 @@ s16 daMidna_c::getNeckAimAngle(cXyz const* i_atnPos, s16* o_neckX, s16* o_neckY,
         *o_eyeY = (s16)(sVar8 - sVar2) >> 1;
         *o_neckX = *o_eyeX;
         *o_neckY = *o_eyeY;
-        *o_eyeX += (s16)(atn_angle_x - sVar7);
-        *o_eyeY += (s16)(atn_angle_y - sVar8);
+        ANGLE_ADD(*o_eyeX, atn_angle_x - sVar7);
+        ANGLE_ADD(*o_eyeY, atn_angle_y - sVar8);
     } else {
         *o_neckX = daAlink_getAlinkActorClass()->getProcNeckX();
         *o_neckY = daAlink_getAlinkActorClass()->getMidnaProcNeckY();

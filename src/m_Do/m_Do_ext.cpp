@@ -5,8 +5,8 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include <dolphin/gf/GFPixel.h>
-#include <dolphin/gx.h>
+#include <gf/GFPixel.h>
+#include <gx.h>
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
@@ -23,6 +23,7 @@
 #include "m_Do/m_Do_main.h"
 #include "m_Do/m_Do_mtx.h"
 #include <cstdio>
+#include <cstring>
 
 u8 mDoExt::CurrentHeapAdjustVerbose;
 u8 mDoExt::HeapAdjustVerbose;
@@ -669,6 +670,7 @@ static JKRExpHeap* DbPrintHeap;
 JKRExpHeap* mDoExt_createDbPrintHeap(u32 heapSize, JKRHeap* parentHeap) {
     JUT_ASSERT(1693, DbPrintHeap == NULL || heapSize == 0);
     DbPrintHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    JKRHEAP_NAME(DbPrintHeap, "DbPrintHeap");
     return DbPrintHeap;
 }
 
@@ -682,6 +684,7 @@ static intptr_t safeGameHeapSize = -1;
 JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* parentHeap) {
     JUT_ASSERT(1739, gameHeap == NULL || heapSize == 0);
     gameHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    JKRHEAP_NAME(gameHeap, "gameHeap");
     gameHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     return gameHeap;
 }
@@ -714,6 +717,7 @@ intptr_t safeZeldaHeapSize = -1;
 JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* parentHeap) {
     JUT_ASSERT(1815, zeldaHeap == NULL || heapSize == 0);
     zeldaHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    JKRHEAP_NAME(zeldaHeap, "zeldaHeap");
     return zeldaHeap;
 }
 
@@ -747,6 +751,7 @@ intptr_t safeCommandHeapSize = -1;
 JKRExpHeap* mDoExt_createCommandHeap(u32 heapSize, JKRHeap* parentHeap) {
     JUT_ASSERT(1894, commandHeap == 0 || heapSize == 0);
     commandHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    JKRHEAP_NAME(commandHeap, "commandHeap");
     return commandHeap;
 }
 
@@ -773,6 +778,7 @@ intptr_t safeArchiveHeapSize = -1;
 JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* parentHeap) {
     JUT_ASSERT(1966, archiveHeap == 0 || heapSize == 0);
     archiveHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    JKRHEAP_NAME(archiveHeap, "archiveHeap");
     archiveHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     return archiveHeap;
 }
@@ -810,6 +816,7 @@ intptr_t safeJ2dHeapSize = -1;
 JKRExpHeap* mDoExt_createJ2dHeap(u32 heapSize, JKRHeap* parentHeap) {
     JUT_ASSERT(2059, j2dHeap == 0 || heapSize == 0);
     j2dHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    JKRHEAP_NAME(j2dHeap, "j2dHeap");
     j2dHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     return j2dHeap;
 }
@@ -842,6 +849,7 @@ static JKRExpHeap* HostIOHeap;
 JKRHeap* mDoExt_createHostIOHeap(u32 heapSize, JKRHeap* parentHeap) {
     JUT_ASSERT(2142, HostIOHeap == 0 || heapSize == 0);
     HostIOHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    JKRHEAP_NAME(HostIOHeap, "HostIOHeap");
     return HostIOHeap;
 }
 
@@ -1728,6 +1736,10 @@ void mDoExt_McaMorfSO::setAnm(J3DAnmTransform* i_anm, int i_attr, f32 i_morf, f3
     setLoopFrame(getFrame());
     setMorf(i_morf);
 
+#if TARGET_PC
+    puts("We don't know why, but initAnime doesn't work");
+    return;
+#endif
     if (mpSound != NULL) {
         if (i_anm != NULL) {
             mpBas = static_cast<mDoExt_transAnmBas*>(i_anm)->getBas();
@@ -2264,45 +2276,48 @@ int mDoExt_3Dline_c::init(u16 param_0, int param_1, BOOL param_2) {
 
     int sp20 = param_0 * 2;
 
-    field_0x8 = JKR_NEW cXyz[sp20];
+    field_0x8[0] = JKR_NEW cXyz[sp20];
     if (field_0x8 == NULL) {
         return 0;
     }
 
-    field_0xc = JKR_NEW cXyz[sp20];
-    if (field_0xc == NULL) {
+    field_0x8[1] = JKR_NEW cXyz[sp20];
+    if (field_0x8[1] == NULL) {
         return 0;
     }
 
-    field_0x10 = JKR_NEW mDoExt_3Dline_field_0x10_c[sp20];
+    field_0x10[0] = JKR_NEW mDoExt_3Dline_field_0x10_c[sp20];
     if (field_0x10 == NULL) {
         return 0;
     }
 
-    field_0x14 = JKR_NEW mDoExt_3Dline_field_0x10_c[sp20];
-    if (field_0x14 == NULL) {
+    field_0x10[1] = JKR_NEW mDoExt_3Dline_field_0x10_c[sp20];
+    if (field_0x10[1] == NULL) {
         return 0;
     }
 
     if (param_2) {
-        field_0x18 = JKR_NEW mDoExt_3Dline_field_0x18_c[sp20];
-        if (field_0x18 == NULL) {
+        field_0x18[0] = JKR_NEW cXy[sp20];
+        if (field_0x18[0] == NULL) {
             return 0;
         }
 
-        field_0x1c = JKR_NEW mDoExt_3Dline_field_0x18_c[sp20];
-        if (field_0x1c == NULL) {
+        field_0x18[1] = JKR_NEW cXy[sp20];
+        if (field_0x18[1] == NULL) {
             return 0;
         }
 
-        mDoExt_3Dline_field_0x18_c* var_r28 = field_0x18;
-        mDoExt_3Dline_field_0x18_c* var_r27 = field_0x1c;
+        cXy* tex0 = field_0x18[0];
+        cXy* tex1 = field_0x18[1];
         for (s32 i = 0; i < param_0; i++) {
-            var_r28++->field_0x0 = 0.0f;
-            var_r27++->field_0x0 = 0.0f;
+            tex0[0].x = 0.0f;
+            tex1[0].x = 0.0f;
 
-            var_r28++->field_0x0 = 1.0f;
-            var_r27++->field_0x0 = 1.0f;
+            tex0[1].x = 1.0f;
+            tex1[1].x = 1.0f;
+
+            tex0 += 2;
+            tex1 += 2;
         }
     }
 
@@ -2367,8 +2382,8 @@ void mDoExt_3DlineMat0_c::draw() {
     int var_r26 = (field_0x14 << 1) & 0xFFFF;
 
     for (int i = 0; i < field_0x10; i++) {
-        GXSetArray(GX_VA_POS, ((mDoExt_3Dline_c*)((intptr_t)var_r28 + field_0x16 * 4))->field_0x8, sizeof(cXyz));
-        GXSetArray(GX_VA_NRM, ((mDoExt_3Dline_c*)((intptr_t)var_r28 + field_0x16 * 4))->field_0x10, 3);
+        GXSETARRAY(GX_VA_POS, field_0x18->field_0x8[field_0x16], sizeof(cXyz) * var_r26, sizeof(cXyz));
+        GXSETARRAY(GX_VA_NRM, field_0x18->field_0x10[field_0x16], 3 * var_r26, 3);
 
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, var_r26);
         for (u16 j = 0; j < (u16)var_r26; j++) {
@@ -2423,9 +2438,9 @@ void mDoExt_3DlineMat0_c::update(int param_0, f32 param_1, GXColor& param_2, u16
     for (s32 sp_14 = 0; sp_14 < field_0x10; sp_14++) {
         local_r27 = sp_28->field_0x0;
 
-        sp_1c = ((mDoExt_3Dline_c*)((intptr_t)sp_28 + (field_0x16 << 2)))->field_0x8;
+        sp_1c = sp_28->field_0x8[field_0x16];
         local_r26 = sp_1c;
-        sp_18 = ((mDoExt_3Dline_c*)((intptr_t)sp_28 + (field_0x16 << 2)))->field_0x10;
+        sp_18 = sp_28->field_0x10[field_0x16];
         local_r30 = sp_18;
 
         local_r29 = local_r30 + 1;
@@ -2544,9 +2559,9 @@ void mDoExt_3DlineMat0_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
 
         JUT_ASSERT(5445, size_p != NULL);
 
-        sp_20 = ((mDoExt_3Dline_c*)((intptr_t)sp_30 + (field_0x16 << 2)))->field_0x8;
+        sp_20 = sp_30->field_0x8[field_0x16];
         sp_24 = sp_20;
-        sp_1c = ((mDoExt_3Dline_c*)((intptr_t)sp_30 + (field_0x16 << 2)))->field_0x10;
+        sp_1c = sp_30->field_0x10[field_0x16];
         local_r30 = sp_1c;
 
         local_r29 = local_r30 + 1;
@@ -2683,9 +2698,9 @@ void mDoExt_3DlineMat1_c::draw() {
     mDoExt_3Dline_c* lines = mpLines;
     u16 vert_num = field_0x34 << 1;
     for (s32 i = 0; i < mNumLines; i++) {
-        GXSetArray(GX_VA_POS, ((mDoExt_3Dline_c*)((intptr_t)lines + (mIsDrawn << 2)))->field_0x8, 0xC);
-        GXSetArray(GX_VA_NRM, ((mDoExt_3Dline_c*)((intptr_t) lines + (mIsDrawn << 2)))->field_0x10, 0x3);
-        GXSetArray(GX_VA_TEX0, ((mDoExt_3Dline_c*)((intptr_t)lines + (mIsDrawn << 2)))->field_0x18, 0x8);
+        GXSETARRAY(GX_VA_POS, ((mDoExt_3Dline_c*)((intptr_t)lines + (mIsDrawn << 2)))->field_0x8, vert_num * sizeof(cXyz), sizeof(cXyz));
+        GXSETARRAY(GX_VA_NRM, ((mDoExt_3Dline_c*)((intptr_t) lines + (mIsDrawn << 2)))->field_0x10, vert_num * sizeof(mDoExt_3Dline_field_0x10_c), sizeof(mDoExt_3Dline_field_0x10_c));
+        GXSETARRAY(GX_VA_TEX0, ((mDoExt_3Dline_c*)((intptr_t)lines + (mIsDrawn << 2)))->field_0x18, vert_num * sizeof(cXy), sizeof(cXy));
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, vert_num);
 
         u16 j = 0;
@@ -2705,7 +2720,7 @@ void mDoExt_3DlineMat1_c::draw() {
     mIsDrawn ^= (u8)1;
 }
 
-void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, _GXColor& param_2, u16 param_3,
+void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, GXColor& param_2, u16 param_3,
                                      dKy_tevstr_c* param_4) {
     mColor = param_2;
     this->mpTevStr = param_4;
@@ -2737,29 +2752,28 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, _GXColor& param_2, u1
     mDoExt_3Dline_field_0x10_c* local_r28;
     mDoExt_3Dline_field_0x10_c* sp_20;
 
-    mDoExt_3Dline_field_0x18_c* sp_1c;
-
-    mDoExt_3Dline_field_0x18_c* sp_18;
+    cXy* sp_1c;
+    cXy* sp_18;
 
     f32 local_f29;
     f32 local_f31 = 0.0f;
 
     for (s32 sp_14 = 0; sp_14 < mNumLines; sp_14++) {
         local_r27 = sp_38[0].field_0x0;
-        sp_24 = ((mDoExt_3Dline_c*)((intptr_t)sp_38 + (mIsDrawn << 2)))->field_0x8;
+        sp_24 = sp_38->field_0x8[mIsDrawn];
         sp_28 = sp_24;
 
-        sp_20 = ((mDoExt_3Dline_c*)((intptr_t)sp_38 + (mIsDrawn << 2)))->field_0x10;
+        sp_20 = sp_38->field_0x10[mIsDrawn];
         local_r30 = sp_20;
         local_r28 = local_r30 + 1;
 
-        sp_18 = ((mDoExt_3Dline_c*)((intptr_t)sp_38 + (mIsDrawn << 2)))->field_0x18;
+        sp_18 = sp_38->field_0x18[mIsDrawn];
         sp_1c = sp_18;
 
         local_f29 = param_1;
 
-        sp_1c++->field_0x4 = local_f31;
-        sp_1c++->field_0x4 = local_f31;
+        sp_1c++->y = local_f31;
+        sp_1c++->y = local_f31;
 
         sp_130 = local_r27[1] - local_r27[0];
         f32 local_f30 = sp_130.abs();
@@ -2793,8 +2807,8 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, _GXColor& param_2, u1
                 local_f29 -= local_f27;
             }
 
-            sp_1c++->field_0x4 = local_f31;
-            sp_1c++->field_0x4 = local_f31;
+            sp_1c++->y = local_f31;
+            sp_1c++->y = local_f31;
 
             sp_130 = local_r27[1] - local_r27[0];
             local_f30 = sp_130.abs();
@@ -2830,8 +2844,8 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, _GXColor& param_2, u1
             sp_118 = local_r27[0] - sp_130;
         }
 
-        sp_1c++->field_0x4 = local_f31;
-        sp_1c->field_0x4 = local_f31;
+        sp_1c++->y = local_f31;
+        sp_1c->y = local_f31;
 
         local_r28 += 1;
         local_r28->x = local_r30->x;
@@ -2874,7 +2888,7 @@ void mDoExt_3DlineMat2_c::setMaterial() {
     GXLoadNrmMtxImm(cMtx_getIdentity(), 0);
 }
 
-void mDoExt_3DlineMat1_c::update(int param_0, _GXColor& param_2, dKy_tevstr_c* param_4) {
+void mDoExt_3DlineMat1_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* param_4) {
     mColor = param_2;
     this->mpTevStr = param_4;
     if (param_0 < 0) {
@@ -2902,23 +2916,23 @@ void mDoExt_3DlineMat1_c::update(int param_0, _GXColor& param_2, dKy_tevstr_c* p
     mDoExt_3Dline_field_0x10_c* local_r30;
     mDoExt_3Dline_field_0x10_c* local_r28;
     mDoExt_3Dline_field_0x10_c* sp_20;
-    mDoExt_3Dline_field_0x18_c* sp_1c;
-    mDoExt_3Dline_field_0x18_c* sp_18;
+    cXy* sp_1c;
+    cXy* sp_18;
     f32 local_f31 = 0.0f;
     f32* size_p;
     for (s32 sp_14 = 0; sp_14 < mNumLines; sp_14++) {
         local_r27 = sp_38[0].field_0x0;
         size_p = sp_38->field_0x4;
         JUT_ASSERT(5875, size_p != NULL);
-        sp_24 = ((mDoExt_3Dline_c*)((intptr_t)sp_38 + (mIsDrawn << 2)))->field_0x8;
+        sp_24 = sp_38->field_0x8[mIsDrawn];
         sp_28 = sp_24;
-        sp_20 = ((mDoExt_3Dline_c*)((intptr_t)sp_38 + (mIsDrawn << 2)))->field_0x10;
+        sp_20 = sp_38->field_0x10[mIsDrawn];
         local_r30 = sp_20;
         local_r28 = local_r30 + 1;
-        sp_18 = ((mDoExt_3Dline_c*)((intptr_t)sp_38 + (mIsDrawn << 2)))->field_0x18;
+        sp_18 = sp_38->field_0x18[mIsDrawn];
         sp_1c = sp_18;
-        sp_1c++->field_0x4 = local_f31;
-        sp_1c++->field_0x4 = local_f31;
+        sp_1c++->y = local_f31;
+        sp_1c++->y = local_f31;
         sp_130 = local_r27[1] - local_r27[0];
         local_f30 = sp_130.abs();
         local_f31 += local_f30 * 0.1f;
@@ -2939,8 +2953,8 @@ void mDoExt_3DlineMat1_c::update(int param_0, _GXColor& param_2, dKy_tevstr_c* p
         sp_124 = local_r27[0] + sp_130;
         sp_118 = local_r27[0] - sp_130;
         for (s32 sp_10 = field_0x34 - 2; sp_10 > 0; sp_10--) {
-            sp_1c++->field_0x4 = local_f31;
-            sp_1c++->field_0x4 = local_f31;
+            sp_1c++->y = local_f31;
+            sp_1c++->y = local_f31;
             sp_130 = local_r27[1] - local_r27[0];
             local_f30 = sp_130.abs();
             local_f31 += local_f30 * 0.1f;
@@ -2966,8 +2980,8 @@ void mDoExt_3DlineMat1_c::update(int param_0, _GXColor& param_2, dKy_tevstr_c* p
             sp_118 = local_r27[0] - sp_130;
         }
 
-        sp_1c++->field_0x4 = local_f31;
-        sp_1c->field_0x4 = local_f31;
+        sp_1c++->y = local_f31;
+        sp_1c->y = local_f31;
 
         local_r28 += 1;
         local_r28->x = local_r30->x;
@@ -3019,7 +3033,7 @@ mDoExt_cube8pPacket::mDoExt_cube8pPacket(cXyz* i_points, const GXColor& i_color)
 }
 
 void drawCube(MtxP mtx, cXyz* pos, const GXColor& color) {
-    GXSetArray(GX_VA_POS, pos, sizeof(cXyz));
+    GXSETARRAY(GX_VA_POS, pos, sizeof(*pos), sizeof(*pos));
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
@@ -3098,7 +3112,7 @@ mDoExt_quadPacket::mDoExt_quadPacket(cXyz* i_points, const GXColor& i_color, u8 
 }
 
 void mDoExt_quadPacket::draw() {
-    GXSetArray(GX_VA_POS, mPoints, sizeof(cXyz));
+    GXSETARRAY(GX_VA_POS, mPoints, sizeof(mPoints), sizeof(cXyz));
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
@@ -3150,7 +3164,7 @@ mDoExt_trianglePacket::mDoExt_trianglePacket(cXyz* i_points, const GXColor& i_co
 void mDoExt_trianglePacket::draw() {
     j3dSys.reinitGX();
 
-    GXSetArray(GX_VA_POS, mPoints, sizeof(cXyz));
+    GXSETARRAY(GX_VA_POS, mPoints, sizeof(mPoints), sizeof(cXyz));
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
@@ -3712,7 +3726,7 @@ J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u3
             bool hasSharedDlistObj =
                 i_modelData->getMaterialNodePointer(0)->getSharedDisplayListObj() != NULL;
             // Update the modelFlag if the model data passed in has a shared dlist object
-            if (hasSharedDlistObj != NULL) {
+            if (hasSharedDlistObj != false) {
                 if (i_modelData->isLocked()) {
                     i_modelFlag = J3DMdlFlag_UseSharedDL;
                 } else if (i_modelFlag == J3DMdlFlag_UseSharedDL) {

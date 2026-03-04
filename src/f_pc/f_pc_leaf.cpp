@@ -42,7 +42,7 @@ int fpcLf_Delete(leafdraw_class* i_leaf) {
     int ret = fpcMtd_Delete(&i_leaf->leaf_methods->base, i_leaf);
     UNUSED(ret); // possible fakematch? this line fixes debug regalloc
     if (ret == 1) {
-        i_leaf->base.subtype = 0;
+        LEAFDRAW_BASE(i_leaf).subtype = 0;
     }
     return ret;
 }
@@ -50,10 +50,10 @@ int fpcLf_Delete(leafdraw_class* i_leaf) {
 int g_fpcLf_type;
 
 int fpcLf_Create(leafdraw_class* i_leaf) {
-    if (i_leaf->base.state.init_state == 0) {
-        leaf_process_profile_definition* pprofile = (leaf_process_profile_definition*)i_leaf->base.profile;
+    if (LEAFDRAW_BASE(i_leaf).state.init_state == 0) {
+        leaf_process_profile_definition* pprofile = (leaf_process_profile_definition*)LEAFDRAW_BASE(i_leaf).profile;
         i_leaf->leaf_methods = pprofile->sub_method;
-        i_leaf->base.subtype = fpcBs_MakeOfType(&g_fpcLf_type);
+        LEAFDRAW_BASE(i_leaf).subtype = fpcBs_MakeOfType(&g_fpcLf_type);
         fpcDwPi_Init(&i_leaf->draw_priority, pprofile->priority);
         i_leaf->unk_0xBC = 0;
     }

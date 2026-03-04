@@ -93,7 +93,7 @@ int daE_GI_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
 }
 
 int daE_GI_c::JointCallBack(J3DJoint* i_joint, int param_1) {
-    if (param_1 == NULL) {
+    if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
         daE_GI_c* a_this = (daE_GI_c*)model->getUserArea();
         

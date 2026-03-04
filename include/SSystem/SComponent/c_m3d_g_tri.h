@@ -2,6 +2,7 @@
 #define C_M3D_G_TRI_H_
 
 #include "SSystem/SComponent/c_m3d_g_pla.h"
+#include "dusk/endian.h"
 
 class cM3dGCyl;
 
@@ -23,7 +24,7 @@ public:
     virtual ~cM3dGTri() {}
     bool cross(const cM3dGCyl*, Vec*) const;
     void setPos(const Vec*, const Vec*, const Vec*);
-    void setBg(const Vec*, const Vec*, const Vec*, const cM3dGPla*);
+    void setBg(const BE(Vec)*, const BE(Vec)*, const BE(Vec)*, const cM3dGPla*);
     void set(const Vec*, const Vec*, const Vec*, const Vec*);
     bool Cross(cM3dGCps const& cps, cXyz* xyz) const { return cM3d_Cross_CpsTri(cps, *this, xyz); }
     bool Cross(cM3dGCyl const& cyl, cXyz* xyz) const { return this->cross(&cyl, xyz); }

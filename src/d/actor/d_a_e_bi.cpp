@@ -11,6 +11,7 @@
 #include "d/actor/d_a_obj_fw.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include "f_op/f_op_actor_enemy.h"
+#include <cstring>
 
 class daE_BI_HIO_c : public JORReflexible {
 public:
@@ -373,13 +374,13 @@ static void e_bi_ex(e_bi_class* i_this) {
     if (i_this->ignition_time != 0) {
         i_this->ignition_time--;
         i_this->sound.startCreatureSoundLevel(Z2SE_OBJ_BOMB_IGNITION, 0, -1);
-        i_this->field_0x696 += (s16) 0x1100;
+        ANGLE_ADD(i_this->field_0x696, 0x1100);
 
         if (i_this->ignition_time < 45) {
-            i_this->field_0x696 += (s16) 0x1100;
+            ANGLE_ADD(i_this->field_0x696, 0x1100);
 
             if (i_this->ignition_time < 30) {
-                i_this->field_0x696 += (s16) 0x1100;
+                ANGLE_ADD(i_this->field_0x696, 0x1100);
             }
         }
 

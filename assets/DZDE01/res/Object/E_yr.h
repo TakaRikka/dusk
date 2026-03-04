@@ -1,0 +1,83 @@
+#ifndef RES_E_YR_H
+#define RES_E_YR_H
+
+enum dRes_INDEX_E_YR {
+    /* BCK  */
+    dRes_INDEX_E_YR_BCK_YR_ATTACK_e=0x4,
+    dRes_INDEX_E_YR_BCK_YR_CHANCE_e=0x5,
+    dRes_INDEX_E_YR_BCK_YR_DAMAGE_e=0x6,
+    dRes_INDEX_E_YR_BCK_YR_FIND_e=0x7,
+    dRes_INDEX_E_YR_BCK_YR_FLY_e=0x8,
+    dRes_INDEX_E_YR_BCK_YR_FLY_ATTACK_e=0x9,
+    dRes_INDEX_E_YR_BCK_YR_FLY_ATTACK_GLIDE_e=0xA,
+    dRes_INDEX_E_YR_BCK_YR_FLY_BRAKE_e=0xB,
+    dRes_INDEX_E_YR_BCK_YR_FLY_GLIDE_e=0xC,
+    dRes_INDEX_E_YR_BCK_YR_FLY_LAND_e=0xD,
+    dRes_INDEX_E_YR_BCK_YR_GUARD_e=0xE,
+    dRes_INDEX_E_YR_BCK_YR_HOVERING_e=0xF,
+    dRes_INDEX_E_YR_BCK_YR_LAND_e=0x10,
+    dRes_INDEX_E_YR_BCK_YR_LOOKAROUND_e=0x11,
+    dRes_INDEX_E_YR_BCK_YR_WAIT_e=0x12,
+    /* BMDR */
+    dRes_INDEX_E_YR_BMD_YR_e=0x15,
+};
+
+enum dRes_ID_E_YR {
+    /* BCK  */
+    dRes_ID_E_YR_BCK_YR_ATTACK_e=0x4,
+    dRes_ID_E_YR_BCK_YR_CHANCE_e=0x5,
+    dRes_ID_E_YR_BCK_YR_DAMAGE_e=0x6,
+    dRes_ID_E_YR_BCK_YR_FIND_e=0x7,
+    dRes_ID_E_YR_BCK_YR_FLY_e=0x8,
+    dRes_ID_E_YR_BCK_YR_FLY_ATTACK_e=0x9,
+    dRes_ID_E_YR_BCK_YR_FLY_ATTACK_GLIDE_e=0xA,
+    dRes_ID_E_YR_BCK_YR_FLY_BRAKE_e=0xB,
+    dRes_ID_E_YR_BCK_YR_FLY_GLIDE_e=0xC,
+    dRes_ID_E_YR_BCK_YR_FLY_LAND_e=0xD,
+    dRes_ID_E_YR_BCK_YR_GUARD_e=0xE,
+    dRes_ID_E_YR_BCK_YR_HOVERING_e=0xF,
+    dRes_ID_E_YR_BCK_YR_LAND_e=0x10,
+    dRes_ID_E_YR_BCK_YR_LOOKAROUND_e=0x11,
+    dRes_ID_E_YR_BCK_YR_WAIT_e=0x12,
+    /* BMDR */
+    dRes_ID_E_YR_BMD_YR_e=0x15,
+};
+
+enum YR_JNT {
+    YR_JNT_WORLD_ROOT_e=0x0,
+    YR_JNT_BACKBONE1_e=0x1,
+    YR_JNT_BACKBONE2_e=0x2,
+    YR_JNT_NECK1_e=0x3,
+    YR_JNT_NECK2_e=0x4,
+    YR_JNT_HEAD_e=0x5,
+    YR_JNT_MOUTH1_e=0x6,
+    YR_JNT_MOUTH2_e=0x7,
+    YR_JNT_THROAT_e=0x8,
+    YR_JNT_SHOULDERL_1_e=0x9,
+    YR_JNT_SHOULDERL_2_e=0xA,
+    YR_JNT_HANDL_1_e=0xB,
+    YR_JNT_HANDL_2_e=0xC,
+    YR_JNT_HANDL_3_e=0xD,
+    YR_JNT_SHOULDERR_1_e=0xE,
+    YR_JNT_SHOULDERR_2_e=0xF,
+    YR_JNT_HANDR_1_e=0x10,
+    YR_JNT_HANDR_2_e=0x11,
+    YR_JNT_HANDR_3_e=0x12,
+    YR_JNT_WAIST_e=0x13,
+    YR_JNT_LEGL_1_e=0x14,
+    YR_JNT_LEGL_2_e=0x15,
+    YR_JNT_LEGL_3_e=0x16,
+    YR_JNT_TUMEL_B_e=0x17,
+    YR_JNT_TUMEL_F_e=0x18,
+    YR_JNT_LEGR_1_e=0x19,
+    YR_JNT_LEGR_2_e=0x1A,
+    YR_JNT_LEGR_3_e=0x1B,
+    YR_JNT_TUMER_B_e=0x1C,
+    YR_JNT_TUMER_F_e=0x1D,
+    YR_JNT_TAIL1_e=0x1E,
+    YR_JNT_TAIL2_e=0x1F,
+    YR_JNT_TAIL3_e=0x20,
+    YR_JNT_TAIL4_e=0x21,
+};
+
+#endif /* !RES_E_YR_H */

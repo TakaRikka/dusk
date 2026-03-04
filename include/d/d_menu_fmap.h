@@ -25,11 +25,11 @@ class mDoDvdThd_mountArchive_c;
 // Unknown name
 class dMenu_Fmap_field_data_c {
 public:
-    /* 0x00 */ u32 field_0x0;
-    /* 0x04 */ u32 mStageDataOffset;
-    /* 0x08 */ u32 mRegionDataOffset;
-    /* 0x0C */ u32 mVirtualStageOffset;
-    /* 0x10 */ u32 mRoomDataOffset;
+    /* 0x00 */ BE(u32) field_0x0;
+    /* 0x04 */ BE(u32) mStageDataOffset;
+    /* 0x08 */ BE(u32) mRegionDataOffset;
+    /* 0x0C */ BE(u32) mVirtualStageOffset;
+    /* 0x10 */ BE(u32) mRoomDataOffset;
 };
 
 // Unknown name
@@ -38,16 +38,16 @@ public:
     struct data {
         /* 0x00 */ u8 mTextureReadNum;
         /* 0x01 */ u8 field_0x1;
-        /* 0x02 */ u16 mTitleName;
-        /* 0x04 */ f32 mOriginX;
-        /* 0x08 */ f32 mOriginZ;
-        /* 0x0C */ f32 field_0xc;
-        /* 0x10 */ f32 field_0x10;
-        /* 0x14 */ f32 field_0x14;
-        /* 0x18 */ f32 field_0x18;
-        /* 0x1C */ f32 field_0x1c;
-        /* 0x20 */ f32 field_0x20;
-        /* 0x24 */ f32 field_0x24;
+        /* 0x02 */ BE(u16) mTitleName;
+        /* 0x04 */ BE(f32) mOriginX;
+        /* 0x08 */ BE(f32) mOriginZ;
+        /* 0x0C */ BE(f32) field_0xc;
+        /* 0x10 */ BE(f32) field_0x10;
+        /* 0x14 */ BE(f32) field_0x14;
+        /* 0x18 */ BE(f32) field_0x18;
+        /* 0x1C */ BE(f32) field_0x1c;
+        /* 0x20 */ BE(f32) field_0x20;
+        /* 0x24 */ BE(f32) field_0x24;
     };
 
     /* 0x0 */ u8 mCount;
@@ -72,7 +72,7 @@ class dMenu_Fmap_field_room_data_c {
 public:
     struct data {
         /* 0x0 */ char mStageName[8];
-        /* 0x8 */ u16 mAreaName;
+        /* 0x8 */ BE(u16) mAreaName;
         /* 0xA */ u8 mCount;
 #ifdef _MSVC_LANG
         u8* __get_mRoomNos() const { return (u8*)(this + 1); }

@@ -2,7 +2,7 @@
 #define M_DO_M_DO_MEMCARDRWMNG_H
 
 #include "global.h"
-#include <dolphin/card.h>
+#include <card.h>
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/nand.h>

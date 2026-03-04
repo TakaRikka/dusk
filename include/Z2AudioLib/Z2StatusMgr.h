@@ -3,7 +3,7 @@
 
 #include <global.h>
 #include "JSystem/JAudio2/JASGadget.h"
-#include <dolphin/mtx.h>
+#include <mtx.h>
 
 struct Z2StatusMgr : public JASGlobalInstance<Z2StatusMgr> {
     Z2StatusMgr();

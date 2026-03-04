@@ -11,6 +11,7 @@
 #include "d/actor/d_a_arrow.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include "f_op/f_op_camera_mng.h"
+#include <cstring>
 
 enum E_SM_RES_File_ID {
     /* BCK */
@@ -242,7 +243,7 @@ void daE_SM_c::ArrowCheck() {
 }
 
 void daE_SM_c::E_SM_Damage() {
-    field_0x6bc += (s16)((field_0x980 + 1000.0f) / field_0x6f0);
+    ANGLE_ADD(field_0x6bc, (field_0x980 + 1000.0f) / field_0x6f0);
     mCoSm.OffAtSetBit();
 
     if (field_0x6c0[0] != 0) {
@@ -254,7 +255,7 @@ void daE_SM_c::E_SM_Damage() {
             fVar1 = field_0x978;
         }
 
-        field_0x6be += (s16)(3000.0f / field_0x6f0);
+        ANGLE_ADD(field_0x6be, 3000.0f / field_0x6f0);
         cLib_addCalc2(&field_0x6e4, field_0x974, 0.3f, 1.0f);
         cLib_addCalc2(&field_0x6e0, fVar1 + 1.0f, 0.3f, 1.0f);
         cLib_addCalc2(&field_0x6dc, field_0x97c + 0.005f, 0.05f, 0.5f);

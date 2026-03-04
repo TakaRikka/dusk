@@ -4,6 +4,7 @@
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JSupport/JSUMemoryStream.h"
+#include "os_report.h"
 
 Z2FxLineMgr::Z2FxLineMgr() : JASGlobalInstance<Z2FxLineMgr>(true) {
     mConfig = NULL;

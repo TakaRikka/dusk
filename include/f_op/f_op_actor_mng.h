@@ -11,12 +11,32 @@
 #include "f_op/f_op_draw_tag.h"
 #include "f_pc/f_pc_manager.h"
 #include "m_Do/m_Do_hostIO.h"
+#include "SSystem/SComponent/c_phase.h"
+#include "dusk/endian_ssystem.h"
+
+#if !__MWERKS__
+// Modern compilers will zero the parent struct in default constructors.
+// So instead of adding default constructors to everything,
+// we'll just save & restore that data.
+#define fopAcM_ct_placement_copy_length offsetof(fopAc_ac_c, actor_last_base_field) - offsetof(fopAc_ac_c, type)
+
+#define fopAcM_ct_placement(ptr, ClassName) \
+    fopAc_ac_c copy;                        \
+    memcpy(&copy.type, &(ptr)->type, fopAcM_ct_placement_copy_length); \
+    JKR_NEW_ARGS (ptr) ClassName() ;                 \
+    memcpy(&(ptr)->type, &copy.type, fopAcM_ct_placement_copy_length);
+#else
+#define fopAcM_ct_placement(ptr, ClassName) new (ptr) ClassName()
+#endif
 
 #define fopAcM_ct(ptr, ClassName)                                           \
+    if ((ptr)->layer_tag.layer == NULL) { OSPanic(__FILE__, __LINE__, "UH OH"); } \
     if (!fopAcM_CheckCondition(ptr, fopAcCnd_INIT_e)) {                     \
-        JKR_NEW_ARGS (ptr) ClassName();                                     \
+        fopAcM_ct_placement(ptr, ClassName);                                \
         fopAcM_OnCondition(ptr, fopAcCnd_INIT_e);                           \
-    }
+    } \
+    if ((ptr)->layer_tag.layer == NULL) { OSPanic(__FILE__, __LINE__, "Oh come on"); }
+
 
 #define fopAcM_RegisterDeleteID(i_this, actor_name_str)                     \
     ("Delete -> " actor_name_str "(id=%d)\n", fopAcM_GetID(i_this))
@@ -48,10 +68,10 @@ extern int HeapAdjustMargin;
 }  // namespace fopAcM
 
 struct fopAcM_prmBase_class {
-    /* 0x00 */ u32 parameters;
-    /* 0x04 */ cXyz position;
-    /* 0x10 */ csXyz angle;
-    /* 0x16 */ u16 setID;
+    /* 0x00 */ BE(u32) parameters;
+    /* 0x04 */ BE(cXyz) position;
+    /* 0x10 */ BE(csXyz) angle;
+    /* 0x16 */ BE(u16) setID;
 };  // Size: 0x18
 
 struct fopAcM_prmScale_class {
@@ -422,7 +442,14 @@ inline BOOL fopAcM_CULLSIZE_IS_BOX(int i_culltype) {
            i_culltype == fopAc_CULLBOX_CUSTOM_e;
 }
 
-inline const cXyz& fopAcM_getCullSizeSphereCenter(const fopAc_ac_c* i_actor) {
+inline
+#ifdef __MWERKS__
+// In the original code, this constructs a temporary and returns a reference to it
+const cXyz&
+#else
+const Vec&
+#endif
+fopAcM_getCullSizeSphereCenter(const fopAc_ac_c* i_actor) {
     return i_actor->cull.sphere.center;
 }
 
@@ -838,6 +865,9 @@ void fopAcM_setWarningMessage_f(const fopAc_ac_c* i_actor, const char* i_filenam
 BOOL fopAcM_getNameString(const fopAc_ac_c*, char*);
 
 inline void fopAcM_SetStatusMap(fopAc_ac_c*, u32) {}
+
+extern cull_box l_cullSizeBox[fopAc_CULLBOX_MAX_e];
+extern cull_sphere l_cullSizeSphere[fopAc_CULLSPHERE_MAX_e];
 
 class fopAcM_lc_c {
 public:

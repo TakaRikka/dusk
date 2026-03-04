@@ -4,7 +4,7 @@
  */
 
 #include "SSystem/SComponent/c_node.h"
-#include <dolphin/types.h>
+#include <types.h>
 
 void cNd_Join(node_class* node_a, node_class* node_b) {
     node_a->mpNextNode = node_b;

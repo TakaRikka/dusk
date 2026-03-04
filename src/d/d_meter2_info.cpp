@@ -11,6 +11,7 @@
 #include "d/d_meter_map.h"
 #include "d/d_msg_class.h"
 #include "d/d_msg_object.h"
+#include <cstring>
 
 enum ITEMICON_RES_FILE_ID {
     ITEMICON_BTI_ARI_MESU_00=0x3,
@@ -368,8 +369,8 @@ void dMeter2Info_c::getString(u32 i_stringID, char* o_string, JMSMesgEntry_c* i_
         u8* entry = ((u8*)bmg_inf + (i * sizeof(JMSMesgEntry_c)));
 
         // check if i_stringID equals the message entry "Message ID"
-        if (i_stringID == *(u16*)(entry + 0x14)) {
-            string_ptr = (char*)(bmg_data + *(u32*)(entry + 0x10));  // use entry "String Offset" to get string pointer
+        if (i_stringID == *(BE(u16)*)(entry + 0x14)) {
+            string_ptr = (char*)(bmg_data + *(BE(u32)*)(entry + 0x10));  // use entry "String Offset" to get string pointer
             strcpy(o_string, string_ptr);
 
             if (i_msgEntry != NULL) {

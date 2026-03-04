@@ -1,0 +1,66 @@
+#ifndef RES_DALWAYS_H
+#define RES_DALWAYS_H
+
+enum dRes_INDEX_DALWAYS {
+    /* BCK  */
+    dRes_INDEX_DALWAYS_BCK_K_TAKARAA_e=0x7,
+    dRes_INDEX_DALWAYS_BCK_K_TAKARAB_e=0x8,
+    dRes_INDEX_DALWAYS_BCK_K_TAKARAB_SLOW_e=0x9,
+    /* BMDR */
+    dRes_INDEX_DALWAYS_BMD_BOXA_e=0xC,
+    dRes_INDEX_DALWAYS_BMD_BOXB_e=0xD,
+    dRes_INDEX_DALWAYS_BMD_EF_BOXB_e=0xE,
+    dRes_INDEX_DALWAYS_BMD_K_TBOXN_e=0xF,
+    /* BRK  */
+    dRes_INDEX_DALWAYS_BRK_BOXA_e=0x12,
+    dRes_INDEX_DALWAYS_BRK_EF_BOXB_e=0x13,
+    /* BTK  */
+    dRes_INDEX_DALWAYS_BTK_BOXA_e=0x16,
+    /* DZB  */
+    dRes_INDEX_DALWAYS_DZB_BOXAC_e=0x19,
+    dRes_INDEX_DALWAYS_DZB_BOXAO_e=0x1A,
+    dRes_INDEX_DALWAYS_DZB_BOXBC_e=0x1B,
+    dRes_INDEX_DALWAYS_DZB_BOXBO_e=0x1C,
+};
+
+enum dRes_ID_DALWAYS {
+    /* BCK  */
+    dRes_ID_DALWAYS_BCK_K_TAKARAA_e=0x7,
+    dRes_ID_DALWAYS_BCK_K_TAKARAB_e=0x8,
+    dRes_ID_DALWAYS_BCK_K_TAKARAB_SLOW_e=0x9,
+    /* BMDR */
+    dRes_ID_DALWAYS_BMD_BOXA_e=0xC,
+    dRes_ID_DALWAYS_BMD_BOXB_e=0xD,
+    dRes_ID_DALWAYS_BMD_EF_BOXB_e=0xE,
+    dRes_ID_DALWAYS_BMD_K_TBOXN_e=0xF,
+    /* BRK  */
+    dRes_ID_DALWAYS_BRK_BOXA_e=0x12,
+    dRes_ID_DALWAYS_BRK_EF_BOXB_e=0x13,
+    /* BTK  */
+    dRes_ID_DALWAYS_BTK_BOXA_e=0x16,
+    /* DZB  */
+    dRes_ID_DALWAYS_DZB_BOXAC_e=0x19,
+    dRes_ID_DALWAYS_DZB_BOXAO_e=0x1A,
+    dRes_ID_DALWAYS_DZB_BOXBC_e=0x1B,
+    dRes_ID_DALWAYS_DZB_BOXBO_e=0x1C,
+};
+
+enum BOXA_JNT {
+    BOXA_JNT_BOXA_e=0x0,
+    BOXA_JNT_COVER_JNT1_e=0x1,
+};
+
+enum BOXB_JNT {
+    BOXB_JNT_BOXB_e=0x0,
+    BOXB_JNT_COVER_JNT_e=0x1,
+};
+
+enum EF_BOXB_JNT {
+    EF_BOXB_JNT_EF_BOXB_e=0x0,
+};
+
+enum K_TBOXN_JNT {
+    K_TBOXN_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_DALWAYS_H */

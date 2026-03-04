@@ -15,6 +15,7 @@
 #include "d/d_map_path_dmap.h"
 #include "SSystem/SComponent/c_math.h"
 #include <cstdio>
+#include <cstring>
 
 char* daDoor20_c::getStopBmdName() {
     switch (door_param2_c::getKind(this)) {
@@ -305,7 +306,7 @@ int daDoor20_c::checkOpenMsgDoor(int* param_1) {
         *param_1 = 0;
         return 1;
     }
-    field_0x624.init(NULL, msgNo, NULL, NULL);
+    field_0x624.init(NULL, msgNo, 0, NULL);
     int rv = field_0x624.checkOpenDoor(this, param_1);
     dMsgObject_endFlowGroup();
     return rv;
@@ -1379,7 +1380,7 @@ int daDoor20_c::createKey() {
             }
             field_0x5ec =
                 fopAcM_createChildFromOffset(PROC_Obj_Lv5Key, fopAcM_GetID(this), 0xffffffff,
-                                             &cStack_28, roomNo, &cStack_30, &scale, 0xffffffff, 0);
+                                             &cStack_28, roomNo, &cStack_30, &scale, -1, 0);
             break;
         default:
             OSReport_Error("シャッタードア：鍵タイプが不明です\n"); // Shutter door: key type unknown
@@ -1398,7 +1399,7 @@ int daDoor20_c::createKey() {
             }
             field_0x5ec =
                 fopAcM_createChildFromOffset(PROC_OBJ_KEYHOLE, fopAcM_GetID(this), 0xffffffff,
-                                             &cStack_28, roomNo, &cStack_30, &scale, 0xffffffff, 0);
+                                             &cStack_28, roomNo, &cStack_30, &scale, -1, 0);
         }
 
         current.pos = prevPos;

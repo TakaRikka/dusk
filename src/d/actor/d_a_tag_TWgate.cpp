@@ -229,7 +229,7 @@ void daTagTWGate_c::executeDemoFilone1() {
 
         if (event_manager.getIsAddvance(staffId)) {
             switch (*cutName) {
-            case 0x30303031:
+            case '0001':
                 dComIfGp_getEvent()->startCheckSkipEdge(this);
                 break;
             default:
@@ -238,7 +238,7 @@ void daTagTWGate_c::executeDemoFilone1() {
         }
 
         switch (*cutName) {
-        case 0x30303031:
+        case '0001':
             if (dComIfGp_getEvent()->checkSkipEdge()) {
                 dComIfGp_getEvent()->onSkipFade();
                 setAction(ACT_DEMO_FILONE_2);
@@ -340,13 +340,13 @@ void daTagTWGate_c::executeDemoFilone3() {
 
         if (eventManager.getIsAddvance(staffId)) {
             switch (*cutName) {
-            case 0x30303031:
+            case '0001':
                 break;
-            case 0x30303032:
+            case '0002':
                 dComIfGp_getEvent()->startCheckSkipEdge(this);
                 field_0x5e1 = 0;
                 break;
-            case 0x30303033:
+            case '0003':
                 initBaseMtx();
                 mpMorf->setPlaySpeed(1.0f);
                 field_0x5e0 = 1;
@@ -360,7 +360,7 @@ void daTagTWGate_c::executeDemoFilone3() {
         int modelSts;
 #endif
         switch (*cutName) {
-        case 0x30303031:
+        case '0001':
 #ifndef __MWERKS__
             modelSts = downloadModels();
 #else
@@ -373,7 +373,7 @@ void daTagTWGate_c::executeDemoFilone3() {
                                       l_zevParamTbl[mType].mRoomNo, l_zevParamTbl[mType].mLayer);
             }
             break;
-        case 0x30303032:
+        case '0002':
             if (dComIfGp_getEvent()->checkSkipEdge()) {
                 dComIfGp_getEvent()->onSkipFade();
                 dComIfGp_setNextStage(l_zevParamTbl[mType].mStage, l_zevParamTbl[mType].mPoint,
@@ -396,7 +396,7 @@ void daTagTWGate_c::executeDemoFilone3() {
                 eventManager.cutEnd(staffId);
             }
             break;
-        case 0x30303033:
+        case '0003':
             if (dComIfGp_getEvent()->checkSkipEdge()) {
                 dComIfGp_getEvent()->onSkipFade();
                 dComIfGp_setNextStage(l_zevParamTbl[mType].mStage,

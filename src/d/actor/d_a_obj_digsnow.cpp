@@ -103,7 +103,7 @@ void daObjDigSnow_c::mode_wait() {
 void daObjDigSnow_c::mode_init_dig() {
     dBgS_ObjGndChk obj_gnd_chk;
 
-    obj_gnd_chk.SetActorPid(base.base.id);
+    obj_gnd_chk.SetActorPid(fopAcM_GetID(this));
     obj_gnd_chk.SetPos(&current.pos);
 
     f32 gnd_height = dComIfG_Bgsp().GroundCross(&obj_gnd_chk);

@@ -446,7 +446,7 @@ d/d_lib.cpp:
 	.text       start:0x800665A0 end:0x80067480
 	.data       start:0x80673FB0 end:0x80674108
 	.sdata      start:0x80740980 end:0x80740998
-	.sbss       start:0x8074C620 end:0x8074C640
+	.sbss       start:0x8074C620 end:0x8074C638
 
 d/d_save.cpp:
 	.text       start:0x80067480 end:0x80070A60
@@ -472,7 +472,7 @@ d/d_a_obj.cpp:
 	.rodata     start:0x80633230 end:0x80633260
 	.data       start:0x80675380 end:0x80675818
 	.sdata      start:0x80740A88 end:0x80740AC8
-	.sbss       start:0x8074C640 end:0x8074C648
+	.sbss       start:0x8074C638 end:0x8074C648
 	.sdata2     start:0x8074DBE0 end:0x8074DBF8
 	.bss        start:0x807B28C8 end:0x807B2B78
 
@@ -503,7 +503,7 @@ d/d_demo.cpp:
 	.text       start:0x800799C0 end:0x8007EE80
 	.data       start:0x80675EB0 end:0x80676A10
 	.sdata      start:0x80740B68 end:0x80740C68
-	.sbss       start:0x8074C668 end:0x8074C6C8
+	.sbss       start:0x8074C668 end:0x8074C6C0
 	.sdata2     start:0x8074DC18 end:0x8074DC58
 	.bss        start:0x807B2B78 end:0x807B2B98
 
@@ -515,6 +515,7 @@ d/d_resorce.cpp:
 	.rodata     start:0x806336B0 end:0x80633728
 	.data       start:0x80676A10 end:0x806773B0
 	.sdata      start:0x80740C68 end:0x80740CD8
+	.sbss       start:0x8074C6C0 end:0x8074C6C8
 	.sdata2     start:0x8074DC58 end:0x8074DC70
 
 d/d_map_path.cpp:
@@ -3102,41 +3103,41 @@ Z2AudioLib/Z2TrackView.cpp:
 	.sdata      start:0x8074A770 end:0x8074A7A0
 	.sdata2     start:0x80752600 end:0x80752610
 
-Z2AudioCSD/SpkSpeakerCtrl.cpp:
+Z2AudioCS/SpkSpeakerCtrl.cpp:
 	.text       start:0x804F4030 end:0x804F4CC0
 	.ctors      start:0x8062F99C end:0x8062F9A0
 	.sbss       start:0x8074CE00 end:0x8074CE08
 	.bss        start:0x807E1D70 end:0x807E1E90
 
-Z2AudioCSD/SpkSystem.cpp:
+Z2AudioCS/SpkSystem.cpp:
 	.text       start:0x804F4CC0 end:0x804F5860
 	.ctors      start:0x8062F9A0 end:0x8062F9A4
 	.data       start:0x8070CA20 end:0x8070CAE8
 	.sdata      start:0x8074A7A0 end:0x8074A7D0
-	.sbss       start:0x8074CE08 end:0x8074CE1C
+	.sbss       start:0x8074CE08 end:0x8074CE18
 	.sdata2     start:0x80752610 end:0x80752618
 	.bss        start:0x807E1E90 end:0x807E1EB0
 
-Z2AudioCSD/SpkMixingBuffer.cpp:
+Z2AudioCS/SpkMixingBuffer.cpp:
 	.text       start:0x804F5860 end:0x804F5DB0
 	.data       start:0x8070CAE8 end:0x8070CB60
 	.sdata      start:0x8074A7D0 end:0x8074A7E8
 	.sdata2     start:0x80752618 end:0x80752620
 
-Z2AudioCSD/SpkWave.cpp:
+Z2AudioCS/SpkWave.cpp:
 	.text       start:0x804F5DB0 end:0x804F6400
 	.data       start:0x8070CB60 end:0x8070CBA0
 	.sdata      start:0x8074A7E8 end:0x8074A800
 
-Z2AudioCSD/SpkTable.cpp:
+Z2AudioCS/SpkTable.cpp:
 	.text       start:0x804F6400 end:0x804F6530
 
-Z2AudioCSD/SpkData.cpp:
+Z2AudioCS/SpkData.cpp:
 	.text       start:0x804F6530 end:0x804F68D0
 	.data       start:0x8070CBA0 end:0x8070CC00
 	.sdata      start:0x8074A800 end:0x8074A830
 
-Z2AudioCSD/SpkSound.cpp:
+Z2AudioCS/SpkSound.cpp:
 	.text       start:0x804F68D0 end:0x804F8240
 	.ctors      start:0x8062F9A4 end:0x8062F9A8
 	.data       start:0x8070CC00 end:0x8070CDF0
@@ -3144,11 +3145,11 @@ Z2AudioCSD/SpkSound.cpp:
 	.sdata2     start:0x80752620 end:0x80752648
 	.bss        start:0x807E1EB0 end:0x807E1EC0
 
-Z2AudioCSD/Z2AudioCS.cpp:
+Z2AudioCS/Z2AudioCS.cpp:
 	.text       start:0x804F8240 end:0x804F8AE0
 	.data       start:0x8070CDF0 end:0x8070CEF8
 	.sdata      start:0x8074A878 end:0x8074A8B0
-	.sbss       start:0x8074CE1C end:0x8074CE20
+	.sbss       start:0x8074CE18 end:0x8074CE20
 	.sdata2     start:0x80752648 end:0x80752650
 
 revolution/gf/GFGeometry.cpp:
@@ -3322,7 +3323,7 @@ JSystem/JKernel/JKRDecomp.cpp:
 	.text       start:0x8050E3E0 end:0x8050EE10
 	.data       start:0x8070EA60 end:0x8070EAB8
 	.sdata      start:0x8074AAE0 end:0x8074AAF0
-	.sbss       start:0x8074CF78 end:0x8074CF84
+	.sbss       start:0x8074CF78 end:0x8074CF80
 	.bss        start:0x807E2078 end:0x807E20B8
 
 JSystem/JSupport/JSUList.cpp:
@@ -3435,7 +3436,7 @@ JSystem/JUtility/JUTGraphFifo.cpp:
 	.text       start:0x8051A690 end:0x8051A8B0
 	.data       start:0x8070FB18 end:0x8070FB38
 	.sdata      start:0x8074AD88 end:0x8074AD90
-	.sbss       start:0x8074CF84 end:0x8074CF90
+	.sbss       start:0x8074CF80 end:0x8074CF90
 
 JSystem/JUtility/JUTFont.cpp:
 	.text       start:0x8051A8B0 end:0x8051AC40
@@ -4485,7 +4486,7 @@ revolution/wpad/WPAD.c:
 	.sdata2     start:0x80752E78 end:0x80752E80
 	.bss        start:0x8080DC20 end:0x8080DC40
 
-revolution/wpad/WUD.c:
+revolution/wud/WUD.c:
 	.text       start:0x80619BD0 end:0x80619DD0
 	.bss        start:0x8080DC40 end:0x8080E3D0
 
@@ -4890,12 +4891,12 @@ TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/targimpl.c:
 TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/target_options.c:
 	.text       start:0x8062ECAC end:0x8062ECBC
 
-NdevExi2AD/DebuggerDriver.c:
+NdevExi2A/DebuggerDriver.c:
 	.text       start:0x8062ECBC end:0x8062F1EC
 	.sdata      start:0x8074C248 end:0x8074C24C
 	.sbss       start:0x8074D728 end:0x8074D73C
 
-NdevExi2AD/exi2.c:
+NdevExi2A/exi2.c:
 	.text       start:0x8062F1EC end:0x8062F7C0
 
 TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/exception.s:

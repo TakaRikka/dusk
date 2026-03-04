@@ -1,0 +1,15 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+daE_YM_TAG_Draw__FP12daE_YM_TAG_c = .text:0x0000005C; // type:function size:0x8 scope:global align:4
+s_e_ym__FPvPv = .text:0x00000064; // type:function size:0x8C scope:global align:4
+execute__12daE_YM_TAG_cFv = .text:0x000000F0; // type:function size:0x6C scope:global align:4
+daE_YM_TAG_Execute__FP12daE_YM_TAG_c = .text:0x0000015C; // type:function size:0x4 scope:global align:4
+daE_YM_TAG_IsDelete__FP12daE_YM_TAG_c = .text:0x00000160; // type:function size:0x8 scope:global align:4
+daE_YM_TAG_Delete__FP12daE_YM_TAG_c = .text:0x00000168; // type:function size:0x8 scope:global align:4
+create__12daE_YM_TAG_cFv = .text:0x00000170; // type:function size:0x68 scope:global align:4
+daE_YM_TAG_Create__FP12daE_YM_TAG_c = .text:0x000001D8; // type:function size:0x4 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+l_daE_YM_TAG_Method = .data:0x00000000; // type:object size:0x20 scope:global align:4
+g_profile_E_YM_TAG = .data:0x00000020; // type:object size:0x30 scope:global align:4

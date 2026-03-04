@@ -35,6 +35,8 @@ int daAlink_c::getHangDirectionFromAngle() {
 }
 
 BOOL daAlink_c::hangMoveBgCheck(s16 param_0, cXyz* param_1) {
+    static const int dummy = 0;
+
     BOOL rt = false;
     cM3dGPla sp78;
 
@@ -902,7 +904,7 @@ int daAlink_c::setDragonHangPos() {
     cXyz sp18;
     mDoMtx_stack_c::multVecSR(&cXyz::BaseY, &sp18);
     if (sp18.y < 0.0f) {
-        shape_angle.y += 0x8000;
+        ANGLE_ADD_2(shape_angle.y, 0x8000);
         shape_angle.x = 0x8000 - shape_angle.x;
         shape_angle.z *= -1;
     }
@@ -1418,7 +1420,7 @@ int daAlink_c::procLadderDownStartInit() {
     dComIfGp_setPlayerStatus0(0, 0x2000000);
     setOldRootQuaternion(0, 0x8000, 0);
 
-    shape_angle.y += 0x8000;
+    ANGLE_ADD_2(shape_angle.y, 0x8000);
     current.angle.y = shape_angle.y;
 
     f32 var_f31 = cM_ssin(field_0x306e);
@@ -1835,8 +1837,8 @@ int daAlink_c::setMoveBGClimbCorrect() {
 
         current.pos.x = mLinkLinChk.GetCross().x;
         current.pos.z = mLinkLinChk.GetCross().z;
-        current.angle.y += (s16)(shape_angle.y - temp_r28);
-        field_0x308c += (s16)(temp_r28 - shape_angle.y);
+        ANGLE_ADD(current.angle.y, shape_angle.y - temp_r28);
+        ANGLE_ADD(field_0x308c, temp_r28 - shape_angle.y);
 
         mPolyInfo1.SetPolyInfo(mLinkLinChk);
     }
@@ -2457,7 +2459,7 @@ int daAlink_c::procClimbToRoof() {
     field_0x2f99 = 2;
 
     if (checkAnmEnd(frameCtrl)) {
-        shape_angle.y += 0x8000;
+        ANGLE_ADD_2(shape_angle.y, 0x8000);
         current.angle.y = shape_angle.y;
         mPrevAngleY = shape_angle.y;
         setOldRootQuaternion(0, 0x8000, 0);
@@ -2495,7 +2497,7 @@ void daAlink_c::setRoofHangHandOnSE(cBgS_PolyInfo* unused) {
     if (frame_ctrl->checkPass(field_0x3478)) {
         return;
     } else if (frame_ctrl->checkPass(field_0x347c)) {
-
+        (void)0;
     }
 }
 
@@ -2842,7 +2844,7 @@ int daAlink_c::procRoofHangTurnInit() {
     if ((s16)(mMoveAngle - shape_angle.y) < 0) {
         anm_speed = -mpHIO->mRoofHang.m.mInvertASpeed;
         mProcVar0.field_0x3008 = 1;
-        shape_angle.y += 0x8000;
+        ANGLE_ADD_2(shape_angle.y, 0x8000);
         setOldRootQuaternion(0, -0x8000, 0);
         field_0x2060->getOldFrameTransInfo(0)->mTranslate.z = -8.899365425109863f;
         mProcVar2.field_0x300c = mMoveAngle;
@@ -2881,7 +2883,7 @@ int daAlink_c::procRoofHangTurn() {
     daPy_frameCtrl_c* frame_ctrl = mUnderFrameCtrl;
     if (checkAnmEnd(frame_ctrl)) {
         if (mProcVar0.field_0x3008 == 0) {
-            shape_angle.y += 0x8000;
+            ANGLE_ADD_2(shape_angle.y, 0x8000);
             current.angle.y = shape_angle.y;
             setOldRootQuaternion(0, -0x8000, 0);
             field_0x2060->getOldFrameTransInfo(0)->mTranslate.z += 17.798730850219727f;

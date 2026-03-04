@@ -42,10 +42,11 @@ ResourceData const daShopItem_c::mData[23] = {
 };
 
 int CheckShopItemCreateHeap(fopAc_ac_c* i_this) {
-    daShopItem_c* a_this = static_cast<daShopItem_c*>(i_this);
+    daShopItem_c* a_this1 = static_cast<daShopItem_c*>(i_this);
+    daShopItem_c* a_this2 = static_cast<daShopItem_c*>(i_this);
 
-    u8 a_ShopItemID = a_this->getShopItemID();
-    return a_this->CreateItemHeap(daShopItem_c::mData[a_ShopItemID].get_arcName(),
+    u8 a_ShopItemID = a_this2->getShopItemID();
+    return a_this1->CreateItemHeap(daShopItem_c::mData[a_ShopItemID].get_arcName(),
                                   daShopItem_c::mData[a_ShopItemID].get_bmdName(),
                                   daShopItem_c::mData[a_ShopItemID].get_btk1Name(),
                                   daShopItem_c::mData[a_ShopItemID].get_bpk1Name(),

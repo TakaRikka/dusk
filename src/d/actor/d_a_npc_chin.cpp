@@ -362,7 +362,7 @@ int daNpcChin_c::CreateHeap() {
 
     setMotionAnm(motionAnmParam, 0.0f);
 
-    if (field_0xe24 != 0 && mSpotLight.loadModel() == NULL) {
+    if (field_0xe24 != 0 && mSpotLight.loadModel() == 0) {
         return 0;
     }
 
@@ -439,7 +439,7 @@ int daNpcChin_c::createHeapCallBack(fopAc_ac_c* i_this) {
 }
 
 int daNpcChin_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
-    if (param_1 == NULL) {
+    if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
         daNpcChin_c* chin = (daNpcChin_c*)model->getUserArea();
         if (chin != NULL) {

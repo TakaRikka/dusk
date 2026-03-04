@@ -1,5 +1,5 @@
 #include <dolphin/dolphin.h>
-#include <dolphin/gx/GXVert.h>
+#include <dolphin/gx.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -39,38 +39,12 @@ static bool PerfInitialized = false;
 #endif
 
 
+#define STUB_LOG(v) // puts(v);
+
 
 // ==========================================================================
 // General OS
 // ==========================================================================
-
-
-// Credits: Super Monkey Ball
-
-static u64 GetGCTicks() {
-#if __APPLE__
-    return mach_absolute_time() * MachToDolphinNum / MachToDolphinDenom;
-#elif __linux__ || __FreeBSD__
-    struct timespec tp;
-    clock_gettime(CLOCK_MONOTONIC, &tp);
-
-    return ((tp.tv_sec * 1000000000ull) + tp.tv_nsec) * OS_CORE_CLOCK / 1000000000ull;
-#elif _WIN32
-    if (!PerfInitialized) {
-        QueryPerformanceFrequency(&PerfFrequency);
-        PerfInitialized = true;
-    }
-    LARGE_INTEGER perf;
-    QueryPerformanceCounter(&perf);
-
-    perf.QuadPart *= OS_CORE_CLOCK;
-    perf.QuadPart /= PerfFrequency.QuadPart;
-
-    return perf.QuadPart;
-#else
-    return 0;
-#endif
-} 
 
 u32 OSGetConsoleType() {
     return OS_CONSOLE_RETAIL1;
@@ -78,10 +52,6 @@ u32 OSGetConsoleType() {
 
 u32 OSGetSoundMode() {
     return 2;
-}
-
-void OSInit() {
-    // Thread system is lazy-initialized via OSGetCurrentThread()
 }
 
 // ==========================================================================
@@ -230,45 +200,6 @@ int OSJamMessage(OSMessageQueue* mq, void* msg, s32 flags) {
 // Arena Functions
 // ==========================================================================
 
-static void* sArenaLo = nullptr;
-static void* sArenaHi = nullptr;
-
-void* OSGetArenaHi(void) {
-    return sArenaHi;
-}
-
-void* OSGetArenaLo(void) {
-    return sArenaLo;
-}
-
-void OSSetArenaHi(void* newHi) {
-    sArenaHi = newHi;
-}
-
-void OSSetArenaLo(void* newLo) {
-    sArenaLo = newLo;
-}
-
-void* OSAllocFromArenaLo(u32 size, u32 align) {
-    if (!sArenaLo || !sArenaHi) return nullptr;
-
-    uintptr_t lo = (uintptr_t)sArenaLo;
-    if (align > 0) {
-        lo = (lo + align - 1) & ~((uintptr_t)align - 1);
-    }
-
-    uintptr_t hi = (uintptr_t)sArenaHi;
-    if (lo + size > hi) {
-        OSReport("[PC-Arena] OSAllocFromArenaLo: out of arena space (need %u, have %u)\n",
-                 size, (u32)(hi - lo));
-        return nullptr;
-    }
-
-    void* result = (void*)lo;
-    sArenaLo = (void*)(lo + size);
-    return result;
-}
-
 void* OSInitAlloc(void* arenaStart, void* arenaEnd, int maxHeaps) {
     return arenaStart;
 }
@@ -285,14 +216,6 @@ void OSCancelAlarm(OSAlarm* alarm) {}
 
 void OSTicksToCalendarTime(OSTime ticks, OSCalendarTime* td) {
     if (td) memset(td, 0, sizeof(OSCalendarTime));
-}
-
-OSTime OSGetTime(void) {
-    return (OSTime)GetGCTicks();
-}
-
-OSTick OSGetTick(void) {
-    return (OSTick)GetGCTicks();
 }
 
 u16 OSGetFontEncode() { return 0; }
@@ -334,16 +257,16 @@ void OSSetAlarm(OSAlarm* alarm, OSTime tick, OSAlarmHandler handler) {}
 
 #pragma mark SOUND
 void SoundChoID(int a, int b) {
-    puts("SoundChoID is a stub");
+    STUB_LOG("SoundChoID is a stub");
 }
 void SoundPan(int a, int b, int c) {
-    puts("SoundPan is a stub");
+    STUB_LOG("SoundPan is a stub");
 }
 void SoundPitch(u16 a, int b) {
-    puts("SoundPitch is a stub");
+    STUB_LOG("SoundPitch is a stub");
 }
 void SoundRevID(int a, int b) {
-    puts("SoundRevID is a stub");
+    STUB_LOG("SoundRevID is a stub");
 }
 
 #pragma mark CARD
@@ -351,150 +274,150 @@ void SoundRevID(int a, int b) {
 #include <dolphin/card.h>
 
 extern "C" int CARDProbe(s32 chan) {
-    puts("CARDProbe is a stub");
+    STUB_LOG("CARDProbe is a stub");
     return 0;
 }
 
 s32 CARDCancel(CARDFileInfo* fileInfo) {
-    puts("CARDCancel is a stub");
+    STUB_LOG("CARDCancel is a stub");
     return 0;
 }
 
 s32 CARDCheck(s32 chan) {
-    puts("CARDCheck is a stub");
+    STUB_LOG("CARDCheck is a stub");
     return 0;
 }
 
 s32 CARDCheckAsync(s32 chan, CARDCallback callback) {
-    puts("CARDCheckAsync is a stub");
+    STUB_LOG("CARDCheckAsync is a stub");
     return 0;
 }
 
 s32 CARDClose(CARDFileInfo* fileInfo) {
-    puts("CARDClose is a stub");
+    STUB_LOG("CARDClose is a stub");
     return 0;
 }
 
 s32 CARDCreate(s32 chan, const char* fileName, u32 size, CARDFileInfo* fileInfo) {
-    puts("CARDCreate is a stub");
+    STUB_LOG("CARDCreate is a stub");
     return 0;
 }
 
 s32 CARDCreateAsync(s32 chan, const char* fileName, u32 size, CARDFileInfo* fileInfo,
                     CARDCallback callback) {
-    puts("CARDCreateAsync is a stub");
+    STUB_LOG("CARDCreateAsync is a stub");
     return 0;
 }
 
 s32 CARDDelete(s32 chan, const char* fileName) {
-    puts("CARDDelete is a stub");
+    STUB_LOG("CARDDelete is a stub");
     return 0;
 }
 
 s32 CARDDeleteAsync(s32 chan, const char* fileName, CARDCallback callback) {
-    puts("CARDDeleteAsync is a stub");
+    STUB_LOG("CARDDeleteAsync is a stub");
     return 0;
 }
 
 s32 CARDFastDeleteAsync(s32 chan, s32 fileNo, CARDCallback callback) {
-    puts("CARDFastDeleteAsync is a stub");
+    STUB_LOG("CARDFastDeleteAsync is a stub");
     return 0;
 }
 
 s32 CARDFastOpen(s32 chan, s32 fileNo, CARDFileInfo* fileInfo) {
-    puts("CARDFastOpen is a stub");
+    STUB_LOG("CARDFastOpen is a stub");
     return 0;
 }
 
 s32 CARDFormat(s32 chan) {
-    puts("CARDFormat is a stub");
+    STUB_LOG("CARDFormat is a stub");
     return 0;
 }
 
 s32 CARDFreeBlocks(s32 chan, s32* byteNotUsed, s32* filesNotUsed) {
-    puts("CARDFreeBlocks is a stub");
+    STUB_LOG("CARDFreeBlocks is a stub");
     return 0;
 }
 
 s32 CARDGetResultCode(s32 chan) {
-    puts("CARDGetResultCode is a stub");
+    STUB_LOG("CARDGetResultCode is a stub");
     return 0;
 }
 
 s32 CARDGetStatus(s32 chan, s32 fileNo, CARDStat* stat) {
-    puts("CARDGetStatus is a stub");
+    STUB_LOG("CARDGetStatus is a stub");
     return 0;
 }
 
 s32 CARDGetSectorSize(s32 chan, u32* size) {
-    puts("CARDGetSectorSize is a stub");
+    STUB_LOG("CARDGetSectorSize is a stub");
     return 0;
 }
 
 void CARDInit() {
-    puts("CARDInit is a stub");
+    STUB_LOG("CARDInit is a stub");
 }
 
 s32 CARDMount(s32 chan, void* workArea, CARDCallback detachCallback) {
-    puts("CARDMount is a stub");
+    STUB_LOG("CARDMount is a stub");
     return 0;
 }
 
 s32 CARDMountAsync(s32 chan, void* workArea, CARDCallback detachCallback,
                    CARDCallback attachCallback) {
-    puts("CARDMountAsync is a stub");
+    STUB_LOG("CARDMountAsync is a stub");
     return 0;
 }
 
 s32 CARDOpen(s32 chan, const char* fileName, CARDFileInfo* fileInfo) {
-    puts("CARDOpen is a stub");
+    STUB_LOG("CARDOpen is a stub");
     return 0;
 }
 
 s32 CARDProbeEx(s32 chan, s32* memSize, s32* sectorSize) {
-    puts("CARDProbeEx is a stub");
+    STUB_LOG("CARDProbeEx is a stub");
     return 0;
 }
 
 s32 CARDRead(CARDFileInfo* fileInfo, void* addr, s32 length, s32 offset) {
-    puts("CARDRead is a stub");
+    STUB_LOG("CARDRead is a stub");
     return 0;
 }
 
 s32 CARDReadAsync(CARDFileInfo* fileInfo, void* addr, s32 length, s32 offset,
                   CARDCallback callback) {
-    puts("CARDReadAsync is a stub");
+    STUB_LOG("CARDReadAsync is a stub");
     return 0;
 }
 
 s32 CARDRename(s32 chan, const char* oldName, const char* newName) {
-    puts("CARDRename is a stub");
+    STUB_LOG("CARDRename is a stub");
     return 0;
 }
 
 s32 CARDRenameAsync(s32 chan, const char* oldName, const char* newName, CARDCallback callback) {
-    puts("CARDRenameAsync is a stub");
+    STUB_LOG("CARDRenameAsync is a stub");
     return 0;
 }
 
 s32 CARDSetStatusAsync(s32 chan, s32 fileNo, CARDStat* stat, CARDCallback callback) {
-    puts("CARDSetStatusAsync is a stub");
+    STUB_LOG("CARDSetStatusAsync is a stub");
     return 0;
 }
 
 s32 CARDUnmount(s32 chan) {
-    puts("CARDUnmount is a stub");
+    STUB_LOG("CARDUnmount is a stub");
     return 0;
 }
 
 extern "C" s32 CARDWrite(CARDFileInfo* fileInfo, void* addr, s32 length, s32 offset) {
-    puts("CARDWrite is a stub");
+    STUB_LOG("CARDWrite is a stub");
     return 0;
 }
 
 s32 CARDWriteAsync(CARDFileInfo* fileInfo, const void* addr, s32 length, s32 offset,
                    CARDCallback callback) {
-    puts("CARDWriteAsync is a stub");
+    STUB_LOG("CARDWriteAsync is a stub");
     return 0;
 }
 
@@ -507,73 +430,73 @@ s32 CARDSetStatus(s32 chan, s32 fileNo, CARDStat* stat) {
 }
 
 s32 __CARDFormatRegionAsync(int a, int b) {
-    puts("__CARDFormatRegionAsync is a stub");
+    STUB_LOG("__CARDFormatRegionAsync is a stub");
     return 0;
 }
 
 #pragma mark DC
 
 void DCFlushRange(void* addr, u32 nBytes) {
-    // puts("DCFlushRange is a stub");
+    // STUB_LOG("DCFlushRange is a stub");
 }
 
 void DCFlushRangeNoSync(void* addr, u32 nBytes) {
-    // puts("DCFlushRangeNoSync is a stub");
+    // STUB_LOG("DCFlushRangeNoSync is a stub");
 }
 
 void DCInvalidateRange(void* addr, u32 nBytes) {
-    // puts("DCInvalidateRange is a stub");
+    // STUB_LOG("DCInvalidateRange is a stub");
 }
 
 void DCStoreRange(void* addr, u32 nBytes) {
-    // puts("DCStoreRange is a stub");
+    // STUB_LOG("DCStoreRange is a stub");
 }
 
 void DCStoreRangeNoSync(void* addr, u32 nBytes) {
-    // puts("DCStoreRangeNoSync is a stub");
+    // STUB_LOG("DCStoreRangeNoSync is a stub");
 }
 
 #pragma mark EXI
 
 BOOL EXIDeselect(int chan) {
-    puts("EXIDeselect is a stub");
+    STUB_LOG("EXIDeselect is a stub");
     return FALSE;
 }
 
 BOOL EXIDma(int chan, void* buffer, s32 size, int d, int e) {
-    puts("EXIDma is a stub");
+    STUB_LOG("EXIDma is a stub");
     return FALSE;
 }
 
 BOOL EXIImm(int chan, u32* b, int c, int d, int e) {
-    puts("EXIImm is a stub");
+    STUB_LOG("EXIImm is a stub");
     return FALSE;
 }
 
 BOOL EXILock(int chan, int b, int c) {
-    puts("EXILock is a stub");
+    STUB_LOG("EXILock is a stub");
     return FALSE;
 }
 
 BOOL EXISelect(int chan, int b, int c) {
-    puts("EXISelect is a stub");
+    STUB_LOG("EXISelect is a stub");
     return FALSE;
 }
 
 BOOL EXISync(int chan) {
-    puts("EXISync is a stub");
+    STUB_LOG("EXISync is a stub");
     return FALSE;
 }
 
 BOOL EXIUnlock(int chan) {
-    puts("EXIUnlock is a stub");
+    STUB_LOG("EXIUnlock is a stub");
     return FALSE;
 }
 
 #pragma mark LC
 
 void LCEnable() {
-    puts("LCEnable is a stub");
+    STUB_LOG("LCEnable is a stub");
 }
 
 // OS-related functions consolidated under "# pragma mark OS" further up
@@ -592,11 +515,11 @@ static VIRetraceCallback sVIPostRetraceCallback = NULL;
 extern "C" {
 
 void VIConfigure(const GXRenderModeObj* rm) {
-    // puts("VIConfigure is a stub");
+    // STUB_LOG("VIConfigure is a stub");
 }
 
 void VIConfigurePan(u16 xOrg, u16 yOrg, u16 width, u16 height) {
-    // puts("VIConfigurePan is a stub");
+    // STUB_LOG("VIConfigurePan is a stub");
 }
 
 u32 VIGetRetraceCount() {
@@ -608,11 +531,11 @@ u32 VIGetNextField() {
 }
 
 void VISetBlack(BOOL black) {
-    // puts("VISetBlack is a stub");
+    // STUB_LOG("VISetBlack is a stub");
 }
 
 void VISetNextFrameBuffer(void* fb) {
-    // puts("VISetNextFrameBuffer is a stub");
+    // STUB_LOG("VISetNextFrameBuffer is a stub");
 }
 
 void VIWaitForRetrace() {
@@ -654,47 +577,50 @@ VIRetraceCallback VISetPreRetraceCallback(VIRetraceCallback cb) {
 #pragma mark DSP
 #include <dolphin/dsp.h>
 extern "C" void __DSP_insert_task(DSPTaskInfo* task) {
-    puts("__DSP_insert_task is a stub");
+    STUB_LOG("__DSP_insert_task is a stub");
 }
 
 extern "C" void __DSP_boot_task(DSPTaskInfo*) {
-    puts("__DSP_boot_task is a stub");
+    STUB_LOG("__DSP_boot_task is a stub");
 }
 
 extern "C" void __DSP_exec_task(DSPTaskInfo*, DSPTaskInfo*) {
-    puts("__DSP_exec_task is a stub");
+    STUB_LOG("__DSP_exec_task is a stub");
 }
 
 extern "C" void __DSP_remove_task(DSPTaskInfo* task) {
-    puts("__DSP_remove_task is a stub");
+    STUB_LOG("__DSP_remove_task is a stub");
 }
 
 void DSPAssertInt(void) {
-    puts("DSPAssertInt is a stub");
+    STUB_LOG("DSPAssertInt is a stub");
 }
 u32 DSPCheckMailFromDSP(void) {
-    puts("DSPCheckMailFromDSP is a stub");
+    STUB_LOG("DSPCheckMailFromDSP is a stub");
     return 0;
 }
 u32 DSPCheckMailToDSP(void) {
-    puts("DSPCheckMailToDSP is a stub");
+    STUB_LOG("DSPCheckMailToDSP is a stub");
     return 0;
 }
 void DSPInit(void) {
-    puts("DSPInit is a stub");
+    STUB_LOG("DSPInit is a stub");
 }
 u32 DSPReadMailFromDSP(void) {
-    puts("DSPReadMailFromDSP is a stub");
+    STUB_LOG("DSPReadMailFromDSP is a stub");
     return 0;
 }
 void DSPSendMailToDSP(u32 mail) {
-    puts("DSPSendMailToDSP is a stub");
+    STUB_LOG("DSPSendMailToDSP is a stub");
 }
 
 #pragma mark Z2Audio
-#include <Z2AudioLib/Z2AudioCS.h>
+class Z2AudioCS {
+public:
+    void extensionProcess(s32, s32);
+};
 void Z2AudioCS::extensionProcess(s32, s32) {
-    puts("Z2AudioMgr::play is a stub");
+    STUB_LOG("Z2AudioMgr::play is a stub");
 }
 
 #pragma mark JORServer
@@ -729,21 +655,21 @@ JKRHeap* JKRHeap::sRootHeap2;  // XXX this is defined for WII/SHIELD, should we 
 #pragma mark mDoExt_onCupOnAupPacket
 #include <m_Do/m_Do_ext.h>
 mDoExt_offCupOnAupPacket::~mDoExt_offCupOnAupPacket() {
-    puts("mDoExt_onCupOffAupPacket_c destructor is a stub");
+    STUB_LOG("mDoExt_onCupOffAupPacket_c destructor is a stub");
 }
 #pragma mark mDoExt_onCupOffAupPacket
 mDoExt_onCupOffAupPacket::~mDoExt_onCupOffAupPacket() {
-    puts("mDoExt_onCupOffAupPacket_c destructor is a stub");
+    STUB_LOG("mDoExt_onCupOffAupPacket_c destructor is a stub");
 }
 
 #pragma mark dKankyo_vrboxHIO_c
 #include <d/d_kankyo.h>
 void dKankyo_vrboxHIO_c::dKankyo_vrboxHIOInfoUpDateF() {
-    puts("dKankyo_vrboxHIO_c::dKankyo_vrboxHIOInfoUpDateF is a stub");
+    STUB_LOG("dKankyo_vrboxHIO_c::dKankyo_vrboxHIOInfoUpDateF is a stub");
 }
 
 void dKankyo_lightHIO_c::dKankyo_lightHIOInfoUpDateF() {
-    puts("dKankyo_lightHIO_c::dKankyo_lightHIOInfoUpDateF is a stub");
+    STUB_LOG("dKankyo_lightHIO_c::dKankyo_lightHIOInfoUpDateF is a stub");
 }
 
 #pragma mark dKankyo_HIO_c
@@ -1213,144 +1139,62 @@ dKankyo_navyHIO_c::dKankyo_navyHIO_c() {
 #pragma mark AI
 #include <dolphin/ai.h>
 u32 AIGetDSPSampleRate(void) {
-    puts("AIGetDSPSampleRate is a stub");
+    STUB_LOG("AIGetDSPSampleRate is a stub");
     return 48000;  // Default sample rate?
 }
 
 void AIInit(u8* stack) {
-    puts("AIInit is a stub");
+    STUB_LOG("AIInit is a stub");
     // This function initializes the AI system, but we don't have any specific implementation here.
     // In a real scenario, it would set up the audio interface and prepare it for use.
 }
 
 void AIInitDMA(u32 start_addr, u32 length) {
-    puts("AIInitDMA is a stub");
+    STUB_LOG("AIInitDMA is a stub");
 }
 
 AIDCallback AIRegisterDMACallback(AIDCallback callback) {
-    puts("AIRegisterDMACallback is a stub");
+    STUB_LOG("AIRegisterDMACallback is a stub");
     return callback;
 }
 
 void AISetDSPSampleRate(u32 rate) {
     // Should this link with the getsamplerate? this is very TODO
-    puts("AISetDSPSampleRate is a stub");
+    STUB_LOG("AISetDSPSampleRate is a stub");
 }
 
 void AIStartDMA(void) {
-    puts("AIStartDMA is a stub");
+    STUB_LOG("AIStartDMA is a stub");
 }
 
 void AIStopDMA(void) {
-    puts("AIStopDMA is a stub");
-}
-
-#pragma mark AR
-#include <dolphin/ar.h>
-
-// ARAM emulation: allocate a large buffer to simulate the GameCube's Auxiliary RAM.
-// ARAM "addresses" are offsets into this buffer. On GameCube, ARAM is 16 MB starting
-// at a base address returned by ARInit. We emulate this by malloc'ing a 16 MB buffer
-// and using a simple bump allocator (matching ARAlloc behavior on real hardware).
-static const u32 ARAM_EMU_SIZE = 16 * 1024 * 1024; // 16 MB (GameCube ARAM size)
-static u8* sAramBuffer = nullptr;
-static u32 sAramAllocPtr = 0; // bump allocator offset into sAramBuffer
-
-// Convert an ARAM "address" (offset) to a real host pointer
-static u8* aramToHost(u32 aramAddr) {
-    if (!sAramBuffer || aramAddr >= ARAM_EMU_SIZE) {
-        return nullptr;
-    }
-    return sAramBuffer + aramAddr;
-}
-
-u32 ARAlloc(u32 length) {
-    // Simple bump allocator (matching GameCube behavior - ARAlloc never frees)
-    u32 addr = sAramAllocPtr;
-    sAramAllocPtr += (length + 31) & ~31; // 32-byte align
-    if (sAramAllocPtr > ARAM_EMU_SIZE) {
-        OSReport("[ARAM] ERROR: ARAlloc overflow! Requested %u, used %u/%u\n",
-                 length, sAramAllocPtr, ARAM_EMU_SIZE);
-        return 0;
-    }
-    OSReport("[ARAM] ARAlloc(%u) -> 0x%08X\n", length, addr);
-    return addr;
-}
-
-u32 ARGetSize(void) {
-    return ARAM_EMU_SIZE;
-}
-
-u32 ARInit(u32* stack_index_addr, u32 num_entries) {
-    if (!sAramBuffer) {
-        sAramBuffer = (u8*)malloc(ARAM_EMU_SIZE);
-        if (sAramBuffer) {
-            memset(sAramBuffer, 0, ARAM_EMU_SIZE);
-            OSReport("[ARAM] Initialized %u bytes of emulated ARAM\n", ARAM_EMU_SIZE);
-        } else {
-            OSReport("[ARAM] FATAL: Failed to allocate ARAM emulation buffer!\n");
-        }
-    }
-    // Return base address (start of usable ARAM, after stack entries)
-    sAramAllocPtr = 0;
-    return 0;
-}
-
-#pragma mark ARQ
-void ARQPostRequest(ARQRequest* request, u32 owner, u32 type, u32 priority, uintptr_t source, uintptr_t dest,
-                    u32 length, ARQCallback callback) {
-    // Emulate ARAM DMA transfers using memcpy.
-    // type 0 = MRAM -> ARAM, type 1 = ARAM -> MRAM
-    if (type == ARAM_DIR_MRAM_TO_ARAM) {
-        // Main RAM -> ARAM: source is a host pointer (cast to u32), dest is an ARAM offset
-        u8* hostSrc = (u8*)(uintptr_t)source;
-        u8* aramDst = aramToHost(dest);
-        if (aramDst && hostSrc) {
-            memcpy(aramDst, hostSrc, length);
-        }
-    } else {
-        // ARAM -> Main RAM: source is an ARAM offset, dest is a host pointer (cast to u32)
-        u8* aramSrc = aramToHost(source);
-        u8* hostDst = (u8*)(uintptr_t)dest;
-        if (aramSrc && hostDst) {
-            memcpy(hostDst, aramSrc, length);
-        }
-    }
-
-    // Immediately invoke the callback (synchronous on PC, no DMA latency)
-    if (callback) {
-        callback((uintptr_t)request);
-    }
-}
-
-void ARQInit() {
-    // Nothing to do on PC - ARAM is initialized in ARInit
+    STUB_LOG("AIStopDMA is a stub");
 }
 
 #pragma mark DVD
 #include <dolphin/dvd.h>
 s32 DVDCancel(volatile DVDCommandBlock* block) {
-    puts("DVDCancel is a stub");
+    STUB_LOG("DVDCancel is a stub");
     return 0;
 }
 s32 DVDCancel(DVDCommandBlock* block) {
-    puts("DVDCancel is a stub");
+    STUB_LOG("DVDCancel is a stub");
     return 0;
 }
 BOOL DVDChangeDir(const char* dirName) {
-    puts("DVDChangeDir is a stub");
+    STUB_LOG("DVDChangeDir is a stub");
     return TRUE;
 }
 BOOL DVDCheckDisk(void) {
-    puts("DVDCheckDisk is a stub");
+    STUB_LOG("DVDCheckDisk is a stub");
     return TRUE;
 }
 BOOL DVDClose(DVDFileInfo* fileInfo) {
-    puts("DVDClose is a stub");
+    STUB_LOG("DVDClose is a stub");
     return TRUE;
 }
 int DVDCloseDir(DVDDir* dir) {
-    puts("DVDCloseDir is a stub");
+    STUB_LOG("DVDCloseDir is a stub");
     return 0;
 }
 s32 DVDConvertPathToEntrynum(const char* pathPtr) {
@@ -1375,19 +1219,19 @@ BOOL DVDFastOpen(s32 entrynum, DVDFileInfo* fileInfo) {
     return TRUE;
 }
 s32 DVDGetCommandBlockStatus(const DVDCommandBlock* block) {
-    puts("DVDGetCommandBlockStatus is a stub");
+    STUB_LOG("DVDGetCommandBlockStatus is a stub");
     return 0;
 }
 DVDDiskID* DVDGetCurrentDiskID(void) {
-    puts("DVDGetCurrentDiskID is a stub");
+    STUB_LOG("DVDGetCurrentDiskID is a stub");
     return NULL;
 }
 s32 DVDGetDriveStatus(void) {
-    //puts("DVDGetDriveStatus is a stub");
+    //STUB_LOG("DVDGetDriveStatus is a stub");
     return 0;
 }
 void DVDInit(void) {
-    puts("DVDInit is a stub");
+    STUB_LOG("DVDInit is a stub");
 }
 BOOL DVDOpen(const char* fileName, DVDFileInfo* fileInfo) {
     s32 entryNum = DVDConvertPathToEntrynum(fileName);
@@ -1398,7 +1242,7 @@ BOOL DVDOpen(const char* fileName, DVDFileInfo* fileInfo) {
     return DVDFastOpen(entryNum, fileInfo);
 }
 int DVDOpenDir(const char* dirName, DVDDir* dir) {
-    puts("DVDOpenDir is a stub");
+    STUB_LOG("DVDOpenDir is a stub");
     return 0;
 }
 BOOL DVDReadAsyncPrio(DVDFileInfo* fileInfo, void* addr, s32 length, s32 offset,
@@ -1418,7 +1262,7 @@ BOOL DVDReadAsyncPrio(DVDFileInfo* fileInfo, void* addr, s32 length, s32 offset,
     return TRUE;
 }
 int DVDReadDir(DVDDir* dir, DVDDirEntry* dirent) {
-    puts("DVDReadDir is a stub");
+    STUB_LOG("DVDReadDir is a stub");
     return 0;
 }
 s32 DVDReadPrio(DVDFileInfo* fileInfo, void* addr, s32 length, s32 offset, s32 prio) {
@@ -1433,22 +1277,22 @@ s32 DVDReadPrio(DVDFileInfo* fileInfo, void* addr, s32 length, s32 offset, s32 p
 }
 
 void DVDReadAbsAsyncForBS(void* a, struct bb2struct* b, int c, int d, void (*e)()) {
-    puts("DVDReadAbsAsyncForBS is a stub");
+    STUB_LOG("DVDReadAbsAsyncForBS is a stub");
 }
 
 void DVDReadDiskID(void* a, DVDDiskID* b, void (*c)()) {
-    puts("DVDReadDiskID is a stub");
+    STUB_LOG("DVDReadDiskID is a stub");
 }
 
 void DVDReset() {
-    puts("DVDReset is a stub");
+    STUB_LOG("DVDReset is a stub");
 }
 
 #pragma mark GD
 #include <dolphin/gd/GDBase.h>
 #include <dolphin/gd/GDGeometry.h>
 void GDFlushCurrToMem(void) {
-    puts("GDFlushCurrToMem is a stub");
+    STUB_LOG("GDFlushCurrToMem is a stub");
 }
 void GDInitGDLObj(GDLObj* dl, void* start, u32 length) {
     ASSERTMSGLINE(40, !((u32)start & 0x1F), "start must be aligned to 32 bytes");
@@ -1459,121 +1303,74 @@ void GDInitGDLObj(GDLObj* dl, void* start, u32 length) {
     dl->length = length;
 }
 void GDOverflowed(void) {
-    puts("GDOverflowed is a stub");
+    STUB_LOG("GDOverflowed is a stub");
 }
 void GDPadCurr32(void) {
-    puts("GDPadCurr32 is a stub");
+    STUB_LOG("GDPadCurr32 is a stub");
 }
 void GDSetArray(GXAttr attr, void* base_ptr, u8 stride) {
-    puts("GDSetArray is a stub");
+    STUB_LOG("GDSetArray is a stub");
 }
 void GDSetArrayRaw(GXAttr attr, u32 base_ptr_raw, u8 stride) {
-    puts("GDSetArrayRaw is a stub");
+    STUB_LOG("GDSetArrayRaw is a stub");
 }
 void GDSetVtxDescv(const GXVtxDescList* attrPtr) {
-    puts("GDSetVtxDescv is a stub");
+    STUB_LOG("GDSetVtxDescv is a stub");
 }
 
 #pragma mark GX
 #include <dolphin/gx.h>
 
-// Dummy FIFO sink for direct GXWGFifo writes in J3D code (e.g. J3DFifo.h).
-// On GameCube these write to the GX command processor at 0xCC008000.
-// On PC, writes land here harmlessly and are discarded.
-volatile PPCWGPipe GXWGFifo;
-
-// GXCmd/GXParam/GXMatrixIndex: low-level command FIFO functions used by J3D.
-// Route through Aurora's software FIFO so display list data is actually recorded.
-//
-// We forward-declare Aurora's FIFO functions with explicit stdint types instead of
-// including fifo.hpp, because the game's u32 (unsigned long) differs from Aurora's
-// u32 (uint32_t = unsigned int on MSVC). Including fifo.hpp would resolve its u32
-// parameter types to the game's unsigned long (since game headers are included first
-// and set the include guards), causing MSVC name mangling mismatches at link time.
-namespace aurora::gfx::fifo {
-    void write_u8(uint8_t val);
-    void write_u16(uint16_t val);
-    void write_u32(uint32_t val);
-    void write_f32(float val);
-}
-
-// Cast to stdint types: game headers define u32=unsigned long, but Aurora uses
-// uint32_t=unsigned int. Both are 32-bit on Win32 but have different MSVC name mangling.
-void GXCmd1u8(const u8 x) { aurora::gfx::fifo::write_u8(static_cast<uint8_t>(x)); }
-void GXCmd1u16(const u16 x) { aurora::gfx::fifo::write_u16(static_cast<uint16_t>(x)); }
-void GXCmd1u32(const u32 x) { aurora::gfx::fifo::write_u32(static_cast<uint32_t>(x)); }
-
-void GXParam1u8(const u8 x) { aurora::gfx::fifo::write_u8(static_cast<uint8_t>(x)); }
-void GXParam1u16(const u16 x) { aurora::gfx::fifo::write_u16(static_cast<uint16_t>(x)); }
-void GXParam1u32(const u32 x) { aurora::gfx::fifo::write_u32(static_cast<uint32_t>(x)); }
-void GXParam1s8(const s8 x) { aurora::gfx::fifo::write_u8(static_cast<uint8_t>(x)); }
-void GXParam1s16(const s16 x) { aurora::gfx::fifo::write_u16(static_cast<uint16_t>(x)); }
-void GXParam1s32(const s32 x) { aurora::gfx::fifo::write_u32(static_cast<uint32_t>(x)); }
-void GXParam1f32(const f32 x) { aurora::gfx::fifo::write_f32(x); }
-void GXParam3f32(const f32 x, const f32 y, const f32 z) {
-    aurora::gfx::fifo::write_f32(x);
-    aurora::gfx::fifo::write_f32(y);
-    aurora::gfx::fifo::write_f32(z);
-}
-void GXParam4f32(const f32 x, const f32 y, const f32 z, const f32 w) {
-    aurora::gfx::fifo::write_f32(x);
-    aurora::gfx::fifo::write_f32(y);
-    aurora::gfx::fifo::write_f32(z);
-    aurora::gfx::fifo::write_f32(w);
-}
-
-void GXMatrixIndex1u8(const u8 x) { aurora::gfx::fifo::write_u8(static_cast<uint8_t>(x)); }
-
 // Moved-in GX helpers and helpers for metrics/project
 void __GXSetSUTexSize() {
-    puts("__GXSetSUTexSize is a stub");
+    STUB_LOG("__GXSetSUTexSize is a stub");
 }
 // __GXSetVAT, __GXSetVCD, __GXUpdateBPMask: now provided by Aurora's GXManage.cpp (fifo branch)
 
 void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
-    // puts("GXSetGPMetric is a stub");
+    // STUB_LOG("GXSetGPMetric is a stub");
 }
 void GXReadGPMetric(u32* cnt0, u32* cnt1) {
-    // puts("GXReadGPMetric is a stub");
+    // STUB_LOG("GXReadGPMetric is a stub");
 }
 void GXClearGPMetric(void) {
-    // puts("GXClearGPMetric is a stub");
+    // STUB_LOG("GXClearGPMetric is a stub");
 }
 void GXReadMemMetric(u32* cp_req, u32* tc_req, u32* cpu_rd_req, u32* cpu_wr_req, u32* dsp_req,
                      u32* io_req, u32* vi_req, u32* pe_req, u32* rf_req, u32* fi_req) {
-    // puts("GXReadMemMetric is a stub");
+    // STUB_LOG("GXReadMemMetric is a stub");
 }
 void GXClearMemMetric(void) {
-    // puts("GXClearMemMetric is a stub");
+    // STUB_LOG("GXClearMemMetric is a stub");
 }
 void GXClearVCacheMetric(void) {
-    // puts("GXClearVCacheMetric is a stub");
+    // STUB_LOG("GXClearVCacheMetric is a stub");
 }
 void GXReadPixMetric(u32* top_pixels_in, u32* top_pixels_out, u32* bot_pixels_in,
                      u32* bot_pixels_out, u32* clr_pixels_in, u32* copy_clks) {
-    // puts("GXReadPixMetric is a stub");
+    // STUB_LOG("GXReadPixMetric is a stub");
 }
 void GXClearPixMetric(void) {
-    // puts("GXClearPixMetric is a stub");
+    // STUB_LOG("GXClearPixMetric is a stub");
 }
 void GXSetVCacheMetric(GXVCachePerf attr) {
-    // puts("GXSetVCacheMetric is a stub");
+    // STUB_LOG("GXSetVCacheMetric is a stub");
 }
 void GXReadVCacheMetric(u32* check, u32* miss, u32* stall) {
-    // puts("GXReadVCacheMetric is a stub");
+    // STUB_LOG("GXReadVCacheMetric is a stub");
 }
 void GXSetDrawSync(u16 token) {
-    // puts("GXSetDrawSync is a stub");
+    // STUB_LOG("GXSetDrawSync is a stub");
 }
 GXDrawSyncCallback GXSetDrawSyncCallback(GXDrawSyncCallback cb) {
-    puts("GXSetDrawSyncCallback is a stub");
+    STUB_LOG("GXSetDrawSyncCallback is a stub");
     return cb;
 }
 void GXDrawCylinder(u8 numEdges) {
-    puts("GXDrawCylinder is a stub");
+    STUB_LOG("GXDrawCylinder is a stub");
 }
 void GXWaitDrawDone(void) {
-    // puts("GXWaitDrawDone is a stub");
+    // STUB_LOG("GXWaitDrawDone is a stub");
 }
 void GXSetTevIndTile(GXTevStageID tev_stage, GXIndTexStageID ind_stage, u16 tilesize_s,
                      u16 tilesize_t, u16 tilespacing_s, u16 tilespacing_t, GXIndTexFormat format,
@@ -1582,83 +1379,57 @@ void GXSetTevIndTile(GXTevStageID tev_stage, GXIndTexStageID ind_stage, u16 tile
     // TODO
 }
 void GXResetWriteGatherPipe(void) {
-    // puts("GXResetWriteGatherPipe is a stub");
+    // STUB_LOG("GXResetWriteGatherPipe is a stub");
 }
 
-void GXProject(f32 x, f32 y, f32 z, const f32 mtx[3][4], const f32* pm, const f32* vp, f32* sx,
-               f32* sy, f32* sz) {
-    Vec peye;
-    f32 xc;
-    f32 yc;
-    f32 zc;
-    f32 wc;
-
-    peye.x = mtx[0][3] + ((mtx[0][2] * z) + ((mtx[0][0] * x) + (mtx[0][1] * y)));
-    peye.y = mtx[1][3] + ((mtx[1][2] * z) + ((mtx[1][0] * x) + (mtx[1][1] * y)));
-    peye.z = mtx[2][3] + ((mtx[2][2] * z) + ((mtx[2][0] * x) + (mtx[2][1] * y)));
-    if (pm[0] == 0.0f) {
-        xc = (peye.x * pm[1]) + (peye.z * pm[2]);
-        yc = (peye.y * pm[3]) + (peye.z * pm[4]);
-        zc = pm[6] + (peye.z * pm[5]);
-        wc = 1.0f / -peye.z;
-    } else {
-        xc = pm[2] + (peye.x * pm[1]);
-        yc = pm[4] + (peye.y * pm[3]);
-        zc = pm[6] + (peye.z * pm[5]);
-        wc = 1.0f;
-    }
-    *sx = (vp[2] / 2.0f) + (vp[0] + (wc * (xc * vp[2] / 2.0f)));
-    *sy = (vp[3] / 2.0f) + (vp[1] + (wc * (-yc * vp[3] / 2.0f)));
-    *sz = vp[5] + (wc * (zc * (vp[5] - vp[4])));
-}
 void GXAbortFrame(void) {
-    puts("GXAbortFrame is a stub");
+    STUB_LOG("GXAbortFrame is a stub");
 }
 // GXEnableTexOffsets: now provided by Aurora's GXGeometry.cpp (fifo branch)
 OSThread* GXGetCurrentGXThread(void) {
-    puts("GXGetCurrentGXThread is a stub");
+    STUB_LOG("GXGetCurrentGXThread is a stub");
     return NULL;
 }
 void* GXGetFifoBase(const GXFifoObj* fifo) {
-    puts("GXGetFifoBase is a stub");
+    STUB_LOG("GXGetFifoBase is a stub");
     return NULL;
 }
 u32 GXGetFifoSize(const GXFifoObj* fifo) {
-    puts("GXGetFifoSize is a stub");
+    STUB_LOG("GXGetFifoSize is a stub");
     return 0;
 }
 u16 GXGetNumXfbLines(u16 efbHeight, f32 yScale) {
-    puts("GXGetNumXfbLines is a stub");
+    STUB_LOG("GXGetNumXfbLines is a stub");
     return 0;
 }
 void GXGetViewportv(f32* vp) {
-    puts("GXGetViewportv is a stub");
+    STUB_LOG("GXGetViewportv is a stub");
 }
 void GXGetScissor(u32* left, u32* top, u32* wd, u32* ht) {
-    puts("GXGetScissor is a stub");
+    STUB_LOG("GXGetScissor is a stub");
 }
 u32 GXGetTexObjTlut(const GXTexObj* tex_obj) {
-    puts("GXGetTexObjTlut is a stub");
+    STUB_LOG("GXGetTexObjTlut is a stub");
     return 0;
 }
 f32 GXGetYScaleFactor(u16 efbHeight, u16 xfbHeight) {
-    puts("GXGetYScaleFactor is a stub");
+    STUB_LOG("GXGetYScaleFactor is a stub");
     return 0.0f;
 }
 
-void GXInitTexCacheRegion(GXTexRegion* region, u8 is_32b_mipmap, u32 tmem_even,
+void GXInitTexCacheRegion(GXTexRegion* region, GXBool is_32b_mipmap, u32 tmem_even,
                           GXTexCacheSize size_even, u32 tmem_odd, GXTexCacheSize size_odd) {
-    puts("GXInitTexCacheRegion is a stub");
+    STUB_LOG("GXInitTexCacheRegion is a stub");
 } 
 // XXX, this should be some struct?
 // GXRenderModeObj GXNtsc480IntDf;
 //GXRenderModeObj GXNtsc480Int;
 void GXPeekZ(u16 x, u16 y, u32* z) {
-    puts("GXPeekZ is a stub");
+    STUB_LOG("GXPeekZ is a stub");
     *z = 0;
 }
 void GXReadXfRasMetric(u32* xf_wait_in, u32* xf_wait_out, u32* ras_busy, u32* clocks) {
-    puts("GXReadXfRasMetric is a stub");
+    STUB_LOG("GXReadXfRasMetric is a stub");
     *xf_wait_in = 0;
     *xf_wait_out = 0;
     *ras_busy = 0;
@@ -1666,104 +1437,104 @@ void GXReadXfRasMetric(u32* xf_wait_in, u32* xf_wait_out, u32* ras_busy, u32* cl
 }
 
 void GXSetCopyClamp(GXFBClamp clamp) {
-    puts("GXSetCopyClamp is a stub");
+    STUB_LOG("GXSetCopyClamp is a stub");
 }
 OSThread* GXSetCurrentGXThread(void) {
-    puts("GXSetCurrentGXThread is a stub");
+    STUB_LOG("GXSetCurrentGXThread is a stub");
     return NULL;
 }
 
 void GXSetMisc(GXMiscToken token, u32 val) {
-    puts("GXSetMisc is a stub");
+    STUB_LOG("GXSetMisc is a stub");
 }
 
 void GXSetProjectionv(const f32* ptr) {
-    puts("GXSetProjectionv is a stub");
+    STUB_LOG("GXSetProjectionv is a stub");
 }
 void GXSetVtxAttrFmtv(GXVtxFmt vtxfmt, const GXVtxAttrFmtList* list) {
-    puts("GXSetVtxAttrFmtv is a stub");
+    STUB_LOG("GXSetVtxAttrFmtv is a stub");
 }
 
 #pragma mark KPAD
 // is this actually used?
 extern "C" void KPADDisableDPD(s32) {
-    puts("KPADDisableDPD is a stub");
+    STUB_LOG("KPADDisableDPD is a stub");
 }
 extern "C" void KPADEnableDPD(s32) {
-    puts("KPADEnableDPD is a stub");
+    STUB_LOG("KPADEnableDPD is a stub");
 }
 
 // LC (consolidated above)
 void LCDisable(void) {
-    puts("LCDisable is a stub");
+    STUB_LOG("LCDisable is a stub");
 }
 void LCQueueWait(__REGISTER u32 len) {
-    puts("LCQueueWait is a stub");
+    STUB_LOG("LCQueueWait is a stub");
 }
 u32 LCStoreData(void* destAddr, void* srcAddr, u32 nBytes) {
-    puts("LCStoreData is a stub");
+    STUB_LOG("LCStoreData is a stub");
     return 0;
 }
 
 #pragma mark PPC Arch
 // MSR stuff?
 void PPCHalt() {
-    puts("PPCHalt is a stub");
+    STUB_LOG("PPCHalt is a stub");
 }
 
 extern "C" void PPCSync(void) {
-    // puts("PPCSync is a stub");
+    // STUB_LOG("PPCSync is a stub");
 }
 
 u32 PPCMfhid2() {
-    puts("PPCMfhid2 is a stub");
+    STUB_LOG("PPCMfhid2 is a stub");
     return 0;
 }
 
 u32 PPCMfmsr() {
-    puts("PPCMfmsr is a stub");
+    STUB_LOG("PPCMfmsr is a stub");
     return 0;
 }
 
 void PPCMtmsr(u32 newMSR) {
-    puts("PPCMtmsr is a stub");
+    STUB_LOG("PPCMtmsr is a stub");
 }
 
 #pragma mark WPAD
 // uh.. this is revolution include not dolphin?
 typedef void (*WPADExtensionCallback)(s32 chan, s32 devType);
 extern "C" WPADExtensionCallback WPADSetExtensionCallback(s32 chan, WPADExtensionCallback cb) {
-    puts("WPADSetExtensionCallback is a stub");
+    STUB_LOG("WPADSetExtensionCallback is a stub");
     return cb;
 }
 
 #pragma mark GF
 #include <dolphin/gf/GFPixel.h>
 void GFSetZMode(u8 compare_enable, GXCompare func, u8 update_enable) {
-    puts("GFSetZMode is a stub");
+    STUB_LOG("GFSetZMode is a stub");
 }
 void GFSetGenMode2(u8 nTexGens, u8 nChans, u8 nTevs, u8 nInds, GXCullMode cm) {
-    puts("GFSetGenMode2 is a stub");
+    STUB_LOG("GFSetGenMode2 is a stub");
 }
 void GFSetTevColorS10(GXTevRegID reg, GXColorS10 color) {
-    puts("GFSetTevColorS10 is a stub");
+    STUB_LOG("GFSetTevColorS10 is a stub");
 }
 void GFSetBlendModeEtc(GXBlendMode type, GXBlendFactor src_factor, GXBlendFactor dst_factor,
                        GXLogicOp logic_op, u8 color_update_enable, u8 alpha_update_enable,
                        u8 dither_enable) {
-    puts("GFSetBlendModeEtc is a stub");
+    STUB_LOG("GFSetBlendModeEtc is a stub");
 }
 void GFSetChanAmbColor(GXChannelID chan, GXColor color) {
-    puts("GFSetChanAmbColor is a stub");
+    STUB_LOG("GFSetChanAmbColor is a stub");
 }
 void GFSetFog(GXFogType type, f32 startz, f32 endz, f32 nearz, f32 farz, GXColor color) {
-    puts("GFSetFog is a stub");
+    STUB_LOG("GFSetFog is a stub");
 }
 
 #pragma mark DEBUGPAD
 #include <d/d_debug_pad.h>
 dDebugPad_c::dDebugPad_c() {
-    puts("constructing debug pad, stubbed?");
+    STUB_LOG("constructing debug pad, stubbed?");
 }
 
 #pragma mark f_ap
@@ -1773,94 +1544,100 @@ u8 fapGm_HIO_c::mCaptureScreenDivH = 1;
 #pragma mark dMsgObject
 #include <d/d_msg_object.h>
 void dMsgObject_c::setWord(const char* i_word) {
-    puts("dMsgObject_c::setWord is a stub");
+    STUB_LOG("dMsgObject_c::setWord is a stub");
 }
 void dMsgObject_c::setSelectWord(int i_no, const char* i_word) {
-    puts("dMsgObject_c::setSelectWord is a stub");
+    STUB_LOG("dMsgObject_c::setSelectWord is a stub");
 }
 
 #pragma mark HIO
 #include <dolphin/hio.h>
-#include <revolution/hio2.h>
+#include <dolphin/hio2.h>
 BOOL HIO2Close(s32 handle) {
-    puts("HIO2Close is a stub");
+    STUB_LOG("HIO2Close is a stub");
     return FALSE;
 }
 
 BOOL HIO2EnumDevices(HIO2EnumCallback callback) {
-    puts("HIO2EnumDevices is a stub");
+    STUB_LOG("HIO2EnumDevices is a stub");
     return FALSE;
 }
 
 BOOL HIO2Init(void) {
-    puts("HIO2Init is a stub");
+    STUB_LOG("HIO2Init is a stub");
     return FALSE;
 }
 
 s32 HIO2Open(HIO2DeviceType type, HIO2UnkCallback exiCb, HIO2DisconnectCallback disconnectCb) {
-    puts("HIO2Open is a stub");
+    STUB_LOG("HIO2Open is a stub");
     return 0;
 }
 
 BOOL HIO2Read(s32 handle, u32 addr, void* buffer, s32 size) {
-    puts("HIO2Read is a stub");
+    STUB_LOG("HIO2Read is a stub");
     return FALSE;
 }
 
 BOOL HIO2Write(s32 handle, u32 addr, void* buffer, s32 size) {
-    puts("HIO2Write is a stub");
+    STUB_LOG("HIO2Write is a stub");
     return FALSE;
 }
 
 BOOL HIORead(u32 addr, void* buffer, s32 size) {
-    puts("HIORead is a stub");
+    STUB_LOG("HIORead is a stub");
     return FALSE;
 }
 
 BOOL HIOWrite(u32 addr, void* buffer, s32 size) {
-    puts("HIOWrite is a stub");
+    STUB_LOG("HIOWrite is a stub");
     return FALSE;
 }
 
 #pragma mark JHICommBuf
 #include <JSystem/JHostIO/JHIComm.h>
 void JHICommBufHeader::init() {
-    puts("JHICommBufHeader::init is a stub");
+    STUB_LOG("JHICommBufHeader::init is a stub");
 }
 
 int JHICommBufHeader::load() {
-    puts("JHICommBufHeader::load is a stub");
+    STUB_LOG("JHICommBufHeader::load is a stub");
     return 0;
 }
 
 int JHICommBufReader::read(void*, int) {
-    puts("JHICommBufReader::read is a stub");
+    STUB_LOG("JHICommBufReader::read is a stub");
     return 0;
 }
 void JHICommBufReader::readEnd() {
-    puts("JHICommBufReader::readEnd is a stub");
+    STUB_LOG("JHICommBufReader::readEnd is a stub");
 }
 
 int JHICommBufReader::readBegin() {
-    puts("JHICommBufReader::readBegin is a stub");
+    STUB_LOG("JHICommBufReader::readBegin is a stub");
     return 0;
 }
 
 int JHICommBufWriter::writeBegin() {
-    puts("JHICommBufWriter::writeBegin is a stub");
+    STUB_LOG("JHICommBufWriter::writeBegin is a stub");
     return 0;
 }
 
 int JHICommBufWriter::write(void*, int) {
-    puts("JHICommBufWriter::write is a stub");
+    STUB_LOG("JHICommBufWriter::write is a stub");
     return 0;
 }
 
 void JHICommBufWriter::writeEnd() {
-    puts("JHICommBufWriter::writeEnd is a stub");
+    STUB_LOG("JHICommBufWriter::writeEnd is a stub");
 }
 
 u32 JHICommBufReader::Header::getReadableSize() const {
-    puts("JHICommBufReader::Header::getReadableSize is a stub");
+    STUB_LOG("JHICommBufReader::Header::getReadableSize is a stub");
     return 0;
 }
+
+#pragma mark Decomp artifacts
+void stripFloat(f32) {}
+void stripDouble(f64) {}
+int getStripInt() { return 0; }
+void F(f32*) {}

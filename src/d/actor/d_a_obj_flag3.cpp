@@ -233,9 +233,9 @@ inline void FlagCloth2_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
-    GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
-    GXSetArray(GX_VA_NRM, getNormal(), sizeof(cXyz));
-    GXSetArray(GX_VA_TEX0, mTexCoord, 8);
+    GXSETARRAY(GX_VA_POS, getPos(), sizeof(mPositions), sizeof(cXyz));
+    GXSETARRAY(GX_VA_NRM, getNormal(), sizeof(mNormals), sizeof(cXyz));
+    GXSETARRAY(GX_VA_TEX0, mTexCoord, sizeof(mTexCoord), 8);
     GXSetZCompLoc(GX_FALSE);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GXLoadTexObj(&mTexObj, GX_TEXMAP0);
@@ -276,7 +276,7 @@ inline void FlagCloth2_c::draw() {
         GXEnd();
     }
 
-    GXSetArray(GX_VA_NRM, getNormalBack(), sizeof(cXyz));
+    GXSETARRAY(GX_VA_NRM, getNormalBack(), sizeof(mNormalBacks), sizeof(cXyz));
     GXSetCullMode(GX_CULL_FRONT);
 
     for (int i = 0; i < 5; i++) {

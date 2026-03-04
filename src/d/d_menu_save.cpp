@@ -4,6 +4,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
 #include <cstdio>
+#include <cstring>
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
 #include "d/d_select_cursor.h"

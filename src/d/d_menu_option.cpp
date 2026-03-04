@@ -4,7 +4,7 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include <dolphin/os.h>
+#include <os.h>
 #include "JSystem/J2DGraph/J2DAnmLoader.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
 #include "d/d_com_inf_game.h"
@@ -18,11 +18,11 @@
 #include "d/d_meter_haihai.h"
 #include "d/d_msg_string.h"
 #include "d/d_select_cursor.h"
-#include <dolphin/types.h>
+#include <types.h>
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
-#include <string>
+#include <cstring>
 
 typedef void (dMenu_Option_c::*initFunc)();
 static initFunc init[] = {
@@ -1484,12 +1484,12 @@ void dMenu_Option_c::screenSet() {
         }
     }
     for (int i = 0; i < 6; i++) {
-        if (let2_n[i] != NULL) {
+        if (let2_n[i] != 0) {
             mpMenuPane3[i] = JKR_NEW CPaneMgr(mpClipScreen, let2_n[i], 0, NULL);
         } else {
             mpMenuPane3[i] = NULL;
         }
-        if (menu3_n[i] != NULL) {
+        if (menu3_n[i] != 0) {
             mpMenuPane32[i] = JKR_NEW CPaneMgr(mpClipScreen, menu3_n[i], 0, NULL);
         } else {
             mpMenuPane32[i] = NULL;
@@ -1720,7 +1720,7 @@ void dMenu_Option_c::screenSet() {
         field_0x1c0[i] = 0;
     }
     for (int i = 0; i < 3; i++) {
-        if (z_tx[i] != NULL) {
+        if (z_tx[i] != 0) {
             mpZButtonText[i] = JKR_NEW CPaneMgr(mpBackScreen, z_tx[i], 2, NULL);
         } else {
             mpZButtonText[i] = NULL;

@@ -11,6 +11,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 struct daYkgr_HIO_c : public mDoHIO_entry_c {
     daYkgr_HIO_c();

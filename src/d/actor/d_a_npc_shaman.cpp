@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_npc_shaman.h"
 #include "JSystem/JHostIO/JORFile.h"
+#include <cstring>
 
 #if DEBUG
 daNpc_Sha_HIO_c::daNpc_Sha_HIO_c() {

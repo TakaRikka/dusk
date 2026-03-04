@@ -10,6 +10,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include <cstdio>
+#include <cstring>
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
@@ -289,7 +290,7 @@ void dMenu_ItemExplain_c::move() {
     if (status != mStatus) {
         (this->*init_process[mStatus])();
     }
-    if (mStatus != NULL) {
+    if (mStatus != 0) {
         mpInfoScreen->animation();
     }
     if (g_ringHIO.mItemDescAlpha != mDescAlpha) {
@@ -784,7 +785,7 @@ void dMenu_ItemExplain_c::setNumber() {
     }
 }
 
-bool dMenu_ItemExplain_c::getWarpMarkFlag() {
+u8 dMenu_ItemExplain_c::getWarpMarkFlag() {
     if (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1) {
         return dComIfGs_getWarpMarkFlag();
     }

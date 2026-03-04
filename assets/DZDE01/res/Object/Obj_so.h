@@ -1,0 +1,40 @@
+#ifndef RES_OBJ_SO_H
+#define RES_OBJ_SO_H
+
+enum dRes_INDEX_OBJ_SO {
+    /* BMDR */
+    dRes_INDEX_OBJ_SO_BMD_K_SARUORI01_e=0x4,
+    dRes_INDEX_OBJ_SO_BMD_K_SARUORI02_e=0x5,
+    dRes_INDEX_OBJ_SO_BMD_K_SARUORI03_e=0x6,
+    dRes_INDEX_OBJ_SO_BMD_K_SARU_ORI00_e=0x7,
+    /* DZB  */
+    dRes_INDEX_OBJ_SO_DZB_K_SARUORI01_e=0xA,
+};
+
+enum dRes_ID_OBJ_SO {
+    /* BMDR */
+    dRes_ID_OBJ_SO_BMD_K_SARUORI01_e=0x4,
+    dRes_ID_OBJ_SO_BMD_K_SARUORI02_e=0x5,
+    dRes_ID_OBJ_SO_BMD_K_SARUORI03_e=0x6,
+    dRes_ID_OBJ_SO_BMD_K_SARU_ORI00_e=0x7,
+    /* DZB  */
+    dRes_ID_OBJ_SO_DZB_K_SARUORI01_e=0xA,
+};
+
+enum K_SARUORI01_JNT {
+    K_SARUORI01_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum K_SARUORI02_JNT {
+    K_SARUORI02_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum K_SARUORI03_JNT {
+    K_SARUORI03_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum K_SARU_ORI00_JNT {
+    K_SARU_ORI00_JNT_K_SARU_ORI00_e=0x0,
+};
+
+#endif /* !RES_OBJ_SO_H */

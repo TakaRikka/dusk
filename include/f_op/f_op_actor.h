@@ -71,6 +71,8 @@ enum fopAc_Cull_e {
     fopAc_CULLBOX_14_e,
 #endif
     fopAc_CULLBOX_CUSTOM_e,
+    fopAc_CULLBOX_MAX_e = fopAc_CULLBOX_CUSTOM_e,
+
     fopAc_CULLSPHERE_0_e,
     fopAc_CULLSPHERE_1_e,
     fopAc_CULLSPHERE_2_e,
@@ -83,6 +85,7 @@ enum fopAc_Cull_e {
     fopAc_CULLSPHERE_8_e,
 #endif
     fopAc_CULLSPHERE_CUSTOM_e,
+    fopAc_CULLSPHERE_MAX_e = fopAc_CULLSPHERE_CUSTOM_e - fopAc_CULLSPHERE_0_e,
 };
 
 enum fopAc_attention_type {
@@ -199,7 +202,7 @@ public:
     BOOL chkCondition(u16 condition) { return (mCondition & condition) == condition; }
 
     void suspendProc(void* actor) {
-        if (field_0x10 != NULL) {
+        if (field_0x10 != 0) {
             field_0x14(actor);
         }
     }
@@ -240,9 +243,14 @@ struct cull_box {
     /* 0xC */ Vec max;
 };
 
+#if __MWERKS__
 class fopAc_ac_c {
 public:
     /* 0x000 */ leafdraw_class base;
+#else
+class fopAc_ac_c : public leafdraw_class {
+public:
+#endif
     /* 0x0C0 */ int actor_type;
     /* 0x0C4 */ create_tag_class actor_tag;
     /* 0x0D8 */ create_tag_class draw_tag;
@@ -285,8 +293,16 @@ public:
     /* 0x566 */ s8 field_0x566;
     /* 0x567 */ s8 field_0x567;
 
+#if !__MWERKS__
+    s8 actor_last_base_field;
+#endif
+
     fopAc_ac_c();
+#if !__MWERKS__
+    ~fopAc_ac_c() override;
+#else
     ~fopAc_ac_c();
+#endif
 
     static u32 getStopStatus() { return stopStatus; }
     static void setStopStatus(u32 status) { stopStatus = status; }

@@ -159,13 +159,13 @@ void daTenbin_c::rideCallBackRight(dBgW* i_dBgW, fopAc_ac_c* i_act1, fopAc_ac_c*
     daPy_py_c* player = dComIfGp_getLinkPlayer();
     if (fopAcM_GetName(i_act2) == PROC_SPINNER) {
         if (player->checkSpinnerRide()) {
-            i_tenbin->field_0x5B2 += 2;
+            i_tenbin->field_0x5B2 += (u16)2;
         }
     }
     if (fopAcM_GetName(i_act2) == PROC_ALINK && dComIfGp_checkPlayerStatus0(0, 0x100) == 0) {
-        i_tenbin->field_0x5B2 += 2;
+        i_tenbin->field_0x5B2 += (u16)2;
         if (player->checkBootsOrArmorHeavy()) {
-            i_tenbin->field_0x5B2 += 60000;
+            i_tenbin->field_0x5B2 += (u16)60000;
         }
         if (player->getGrabActorID() != -1) {
             fopAc_ac_c* found = fopAcM_SearchByID(player->getGrabActorID());
@@ -178,7 +178,7 @@ void daTenbin_c::rideCallBackRight(dBgW* i_dBgW, fopAc_ac_c* i_act1, fopAc_ac_c*
     if (fopAcM_GetName(i_act2) == PROC_CSTATUE) {
         daCstatue_c* i_statue = (daCstatue_c*)i_act2;
         if (i_statue->checkNormalType()) {
-            i_tenbin->field_0x5B2 += 4;
+            i_tenbin->field_0x5B2 += (u16)4;
         } else if (fopAcM_GetID(i_statue) != i_tenbin->field_0x650) {
             i_tenbin->field_0x5B2++;
         }
@@ -191,13 +191,13 @@ void daTenbin_c::rideCallBackLeft(dBgW* i_dBgW, fopAc_ac_c* i_act1, fopAc_ac_c* 
     daPy_py_c* player = dComIfGp_getLinkPlayer();
     if (fopAcM_GetName(i_act2) == PROC_SPINNER) {
         if (player->checkSpinnerRide()) {
-            i_tenbin->field_0x5B4 += 2;
+            i_tenbin->field_0x5B4 += (u16)2;
         }
     }
     if (fopAcM_GetName(i_act2) == PROC_ALINK && dComIfGp_checkPlayerStatus0(0, 0x100) == 0) {
-        i_tenbin->field_0x5B4 += 2;
+        i_tenbin->field_0x5B4 += (u16)2;
         if (player->checkEquipHeavyBoots()) {
-            i_tenbin->field_0x5B4 += 60000;
+            i_tenbin->field_0x5B4 += (u16)60000;
         }
         if (player->getGrabActorID() != -1) {
             fopAc_ac_c* found = fopAcM_SearchByID(player->getGrabActorID());
@@ -210,7 +210,7 @@ void daTenbin_c::rideCallBackLeft(dBgW* i_dBgW, fopAc_ac_c* i_act1, fopAc_ac_c* 
     if (fopAcM_GetName(i_act2) == PROC_CSTATUE) {
         daCstatue_c* i_statue = (daCstatue_c*)i_act2;
         if (i_statue->checkNormalType()) {
-            i_tenbin->field_0x5B4 += 4;
+            i_tenbin->field_0x5B4 += (u16)4;
         } else if (fopAcM_GetID(i_statue) != i_tenbin->field_0x650) {
             i_tenbin->field_0x5B4++;
         }
@@ -336,13 +336,13 @@ static int daTenbin_Execute(daTenbin_c* i_this) {
 }
 
 static int daTenbin_Delete(daTenbin_c* i_this) {
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "daTenbin");
     return i_this->MoveBGDelete();
 }
 
 static int daTenbin_Create(fopAc_ac_c* i_this) {
     daTenbin_c* this_tenbin = (daTenbin_c*)i_this;
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterCreateID(i_this, "daTenbin");
     return this_tenbin->create();
 }
 

@@ -1,0 +1,25 @@
+#ifndef RES_S_BURA_7C_H
+#define RES_S_BURA_7C_H
+
+enum dRes_INDEX_S_BURA_7C {
+    /* BMDR */
+    dRes_INDEX_S_BURA_7C_BMD_S_L7BURA_SWIL_e=0x4,
+    /* DZB  */
+    dRes_INDEX_S_BURA_7C_DZB_S_L7BURA_SWIL00_e=0x7,
+    dRes_INDEX_S_BURA_7C_DZB_S_L7BURA_SWIL01_e=0x8,
+};
+
+enum dRes_ID_S_BURA_7C {
+    /* BMDR */
+    dRes_ID_S_BURA_7C_BMD_S_L7BURA_SWIL_e=0x4,
+    /* DZB  */
+    dRes_ID_S_BURA_7C_DZB_S_L7BURA_SWIL00_e=0x7,
+    dRes_ID_S_BURA_7C_DZB_S_L7BURA_SWIL01_e=0x8,
+};
+
+enum S_L7BURA_SWIL_JNT {
+    S_L7BURA_SWIL_JNT_DODAIL_e=0x0,
+    S_L7BURA_SWIL_JNT_TOTTEL_e=0x1,
+};
+
+#endif /* !RES_S_BURA_7C_H */

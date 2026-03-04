@@ -736,14 +736,14 @@ void daNpcBlueNS_c::playMotion() {
 int daNpcBlueNS_c::setAction(int (daNpcBlueNS_c::*i_action)(int)) {
     field_0xdc0 = 3;
     if (mAction != NULL) {
-        (this->*mAction)(NULL);
+        (this->*mAction)(0);
     }
 
     field_0xdc0 = 0;
     mAction = i_action;
 
     if (mAction != NULL) {
-        (this->*mAction)(NULL);
+        (this->*mAction)(0);
     }
 
     return 1;

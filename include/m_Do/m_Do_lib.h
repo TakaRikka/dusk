@@ -2,9 +2,8 @@
 #define M_DO_M_DO_LIB_H
 
 #include "JSystem/J3DU/J3DUClipper.h"
+#include <dolphin/gx/GXStruct.h>
 
-typedef struct _GXTexObj GXTexObj;
-typedef struct _GXTlutObj GXTlutObj;
 typedef struct Vec Vec;
 struct ResTIMG;
 
@@ -41,5 +40,9 @@ void mDoLib_project(Vec* src, Vec* dst);
 u32 mDoLib_setResTimgObj(ResTIMG const* res, GXTexObj* o_texObj, u32 tlut_name,
                           GXTlutObj* o_tlutObj);
 void mDoLib_pos2camera(Vec* src, Vec* dst);
+
+#if PLATFORM_WII
+void mDoLib_2Dto3D(f32, f32, f32, Vec*);
+#endif
 
 #endif /* M_DO_M_DO_LIB_H */

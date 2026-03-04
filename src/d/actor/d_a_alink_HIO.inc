@@ -6,6 +6,7 @@
 #include "JSystem/JHostIO/JORFile.h"
 #include "d/actor/d_a_alink.h"
 #include "d/d_com_inf_game.h"
+#include <cstring>
 
 #if DEBUG
 
@@ -685,15 +686,15 @@ void daAlinkHIO_cutNormal_c::genMessage(JORMContext* ctx) {
 daAlinkHIO_cutNormal_c::daAlinkHIO_cutNormal_c(int param_0, float param_1) {
     field_0x34 = param_1;
 
+    static const char plabel0[] = "const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmV_c0::m = {\n";
+    static const char plabel1[] = "const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmL_c0::m = {\n";
+    static const char plabel2[] = "const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmR_c0::m = {\n";
+    static const char plabel3[] = "const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmSL_c0::m = {\n";
+    static const char plabel4[] = "const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmSR_c0::m = {\n";
+    static const char* plabel[] = {plabel0, plabel1, plabel2, plabel3, plabel4};
     static void* baseP[5] = {(void*)&daAlinkHIO_cutNmV_c0::m, (void*)&daAlinkHIO_cutNmL_c0::m,
                              (void*)&daAlinkHIO_cutNmR_c0::m, (void*)&daAlinkHIO_cutNmSL_c0::m,
                              (void*)&daAlinkHIO_cutNmSR_c0::m};
-
-    static const char* plabel[] = {"const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmSL_c0::m = {\n",
-                                   "const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmV_c0::m = {\n",
-                                   "const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmL_c0::m = {\n",
-                                   "const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmSR_c0::m = {\n",
-                                   "const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmR_c0::m = {\n"};
 
     m_len = 32;
     mp_src_data = baseP[param_0];
@@ -734,18 +735,17 @@ void daAlinkHIO_cutFinish_c::genMessage(JORMContext* ctx) {
 daAlinkHIO_cutFinish_c::daAlinkHIO_cutFinish_c(int param_0, float param_1) {
     field_0x34 = param_1;
 
+    static const char plabel0[] = "const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnL_c0::m = {\n";
+    static const char plabel1[] = "const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnV_c0::m = {\n";
+    static const char plabel2[] = "const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnS_c0::m = {\n";
+    static const char plabel3[] = "const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnSl_c0::m = {\n";
+    static const char plabel4[] = "const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnSm_c0::m = {\n";
+    static const char plabel5[] = "const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnR_c0::m = {\n";
+    static const char* plabel[] = {plabel0, plabel1, plabel2, plabel3, plabel4, plabel5};
+
     static void* baseP[6] = {(void*)&daAlinkHIO_cutFnL_c0::m,  (void*)&daAlinkHIO_cutFnV_c0::m,
                              (void*)&daAlinkHIO_cutFnS_c0::m,  (void*)&daAlinkHIO_cutFnSl_c0::m,
                              (void*)&daAlinkHIO_cutFnSm_c0::m, (void*)&daAlinkHIO_cutFnR_c0::m};
-
-    static const char* plabel[] = {
-        "const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnL_c0::m = {\n",
-        "const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnV_c0::m = {\n",
-        "const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnS_c0::m = {\n",
-        "const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnSl_c0::m = {\n",
-        "const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnSm_c0::m = {\n",
-        "const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnR_c0::m = {\n",
-    };
 
     m_len = 44;
     mp_src_data = baseP[param_0];
@@ -826,16 +826,15 @@ void daAlinkHIO_cutDash_c::genMessage(JORMContext* ctx) {
 daAlinkHIO_cutDash_c::daAlinkHIO_cutDash_c(int param_0, float param_1) {
     field_0x34 = param_1;
 
+    static const char plabel0[] = "const daAlinkHIO_cutDash_c1 daAlinkHIO_cutDaL_c0::m = {\n";
+    static const char plabel1[] = "const daAlinkHIO_cutDash_c1 daAlinkHIO_cutDaR_c0::m = {\n";
+    static const char plabel2[] = "const daAlinkHIO_cutDash_c1 daAlinkHIO_cutDaCharge_c0::m = {\n";
+    static const char* plabel[] = {plabel0, plabel1, plabel2};
+
     static void* baseP[3] = {
         (void*)&daAlinkHIO_cutDaL_c0::m,
         (void*)&daAlinkHIO_cutDaR_c0::m,
         (void*)&daAlinkHIO_cutDaCharge_c0::m,
-    };
-
-    static const char* plabel[] = {
-        "const daAlinkHIO_cutDash_c1 daAlinkHIO_cutDaL_c0::m = {\n",
-        "const daAlinkHIO_cutDash_c1 daAlinkHIO_cutDaR_c0::m = {\n",
-        "const daAlinkHIO_cutDash_c1 daAlinkHIO_cutDaCharge_c0::m = {\n",
     };
 
     m_len = 28;
@@ -983,18 +982,17 @@ void daAlinkHIO_hoCut_c::genMessage(JORMContext* ctx) {
 daAlinkHIO_hoCut_c::daAlinkHIO_hoCut_c(int param_0, float param_1) {
     field_0x34 = param_1;
 
+    static const char plabel0[] = "const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutLA_c0::m = {\n";
+    static const char plabel1[] = "const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutLB_c0::m = {\n";
+    static const char plabel2[] = "const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutRA_c0::m = {\n";
+    static const char plabel3[] = "const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutRB_c0::m = {\n";
+    static const char* plabel[] = {plabel0, plabel1, plabel2, plabel3};
+
     static void* baseP[4] = {
         (void*)&daAlinkHIO_hoCutLA_c0::m,
         (void*)&daAlinkHIO_hoCutLB_c0::m,
         (void*)&daAlinkHIO_hoCutRA_c0::m,
         (void*)&daAlinkHIO_hoCutRB_c0::m,
-    };
-
-    static const char* plabel[] = {
-        "const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutLA_c0::m = {\n",
-        "const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutLB_c0::m = {\n",
-        "const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutRA_c0::m = {\n",
-        "const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutRB_c0::m = {\n",
     };
 
     m_len = 32;
@@ -1357,14 +1355,13 @@ void daAlinkHIO_guardAttack_c::genMessage(JORMContext* ctx) {
 daAlinkHIO_guardAttack_c::daAlinkHIO_guardAttack_c(int param_0, float param_1) {
     field_0x34 = param_1;
 
+    static const char plabel0[] = "const daAlinkHIO_guardAttack_c1 daAlinkHIO_gAtPush_c0::m = {\n";
+    static const char plabel1[] = "const daAlinkHIO_guardAttack_c1 daAlinkHIO_gAtKick_c0::m = {\n";
+    static const char* plabel[] = {plabel0, plabel1};
+
     static void* baseP[2] = {
         (void*)&daAlinkHIO_gAtPush_c0::m,
         (void*)&daAlinkHIO_gAtKick_c0::m,
-    };
-
-    static const char* plabel[] = {
-        "const daAlinkHIO_guardAttack_c1 daAlinkHIO_gAtPush_c0::m = {\n",
-        "const daAlinkHIO_guardAttack_c1 daAlinkHIO_gAtKick_c0::m = {\n",
     };
 
     m_len = 36;
@@ -1385,24 +1382,24 @@ daAlinkHIO_guardAttack_c::daAlinkHIO_guardAttack_c(int param_0, float param_1) {
 void daAlinkHIO_turnMove_c::genMessage(JORMContext* ctx) {
     // Reset
     ctx->genButton("リセット", 0x4000003);
-    //
-    daAlinkHIO_setAnmGenMessage((daAlinkHIO_anm_c*)(this + 0x34), ctx, "回込", 27.0, 1);
-    //
-    ctx->genSlider("半回転回込Ａ速度", (float*)(this + 0x50), 0.0, 10.0);
-    //
-    ctx->genSlider("斬上げＣＦ", (float*)(this + 0x54), 0.0, 28.0);
-    //
-    ctx->genSlider("回転速度率", (short*)(this + 0x48), 0, 100);
-    //
-    ctx->genSlider("回転速度最大", (short*)(this + 0x4a), 0, 0x7fff);
-    //
-    ctx->genSlider("回転速度最小", (short*)(this + 0x4c), 0, 0x7fff);
-    //
-    ctx->genSlider("半回転速度最大", (short*)(this + 0x4e), 0, 0x7fff);
-    //
-    ctx->genSlider("通常側転Ａ速度", (float*)(this + 0x58), 0.0, 10.0);
-    //
-    ctx->genSlider("通常側転速度", (float*)(this + 0x5c), 0.0, 100.0);
+    // Return
+    daAlinkHIO_setAnmGenMessage(&m.mTurnAnm, ctx, "回込", 27.0f, 1);
+    // Half-turn rotation A speed
+    ctx->genSlider("半回転回込Ａ速度", &m.mHalfTurnAnmSpeed, 0.0f, 10.0f);
+    // Slash up CF
+    ctx->genSlider("斬上げＣＦ", &m.mTwirlCutDelayF, 0.0f, 28.0f);
+    // Rotation speed
+    ctx->genSlider("回転速度率", &m.mTurnSpeedRate, 0, 100);
+    // Maximum rotation speed
+    ctx->genSlider("回転速度最大", &m.mMaxTurnSpeed, 0, 0x7fff);
+    // Minimum rotation speed
+    ctx->genSlider("回転速度最小", &m.mMinTurnSpeed, 0, 0x7fff);
+    // Half rotation speed maximum
+    ctx->genSlider("半回転速度最大", &m.mMaxHalfTurnSpeed, 0, 0x7fff);
+    // Normal side roll A speed
+    ctx->genSlider("通常側転Ａ速度", &m.mSideRollAnmSpeed, 0.0f, 10.0f);
+    // Normal side roll speed
+    ctx->genSlider("通常側転速度", &m.mSideRollSpeed, 0.0f, 100.0f);
 }
 
 daAlinkHIO_turnMove_c::daAlinkHIO_turnMove_c() {
@@ -1929,14 +1926,14 @@ void daAlinkHIO_damLaHu_c::genMessage(JORMContext* ctx) {
 }
 
 daAlinkHIO_damLaHu_c::daAlinkHIO_damLaHu_c(int param_0) {
+
+    static const char plabel0[] = "const daAlinkHIO_damLaHu_c1 daAlinkHIO_damLarge_c0::m = {\n";
+    static const char plabel1[] = "const daAlinkHIO_damLaHu_c1 daAlinkHIO_damHuge_c0::m = {\n";
+    static const char* plabel[] = {plabel0, plabel1};
+
     static void* baseP[2] = {
         (void*)&daAlinkHIO_damLarge_c0::m,
         (void*)&daAlinkHIO_damHuge_c0::m,
-    };
-
-    static const char* plabel[] = {
-        "const daAlinkHIO_guardAttack_c1 daAlinkHIO_damLarge_c0::m = {\n",
-        "const daAlinkHIO_guardAttack_c1 daAlinkHIO_damHuge_c0::m = {\n",
     };
 
     m_len = 188;
@@ -2083,8 +2080,8 @@ void daAlinkHIO_damSwim_c::genMessage(JORMContext* ctx) {
     ctx->genSlider("最高速", &m.mMaxSpeed, 0.0f, 30.0f);
     // Deceleration
     ctx->genSlider("減速", &m.mDeceleration, 0.0f, 10.0f);
-    // Sink
-    daAlinkHIO_setAnmGenMessage(&m.mSinkAnm, ctx, "下沈", 10.0f, 0);
+    // Swimming
+    daAlinkHIO_setAnmGenMessage(&m.mSinkAnm, ctx, "泳ぎ", 10.0f, 0);
     // Water surface
     daAlinkHIO_setAnmGenMessage(&m.mSurfaceAnm, ctx, "水面", 11.0f, 1);
 }
@@ -2129,8 +2126,8 @@ void daAlinkHIO_damage_c::genMessage(JORMContext* ctx) {
     ctx->genSlider("無敵時間", &m.mInvincibleTime, 0, 0x96);
     // Wolf floor invincible time
     ctx->genSlider("狼ポリゴン時無敵時間", &m.mWolfFloorInvincibleTime, 0, 0x96);
-    // Floor get up
-    daAlinkHIO_setAnmGenMessage(&m.mFloorDmgAnm, ctx, "床起き", 14.0f, 1);
+    // Floor
+    daAlinkHIO_setAnmGenMessage(&m.mFloorDmgAnm, ctx, "床", 14.0f, 1);
     // Dash
     daAlinkHIO_setAnmGenMessage(&m.mDashDmgAnm, ctx, "ダッシュ", 9.0f, 0);
     // Recover stand anm speed
@@ -2421,8 +2418,8 @@ void daAlinkHIO_bomb_c::genMessage(JORMContext* ctx) {
     ctx->genSlider("投げ水平速度", &m.mThrowSpeedH, 0.0f, 100.0f);
     // Throw vertical speed
     ctx->genSlider("投げ垂直速度", &m.mThrowSpeedV, 0.0f, 100.0f);
-    // Bound rate
-    ctx->genSlider("バウンド率", &m.mBoundRate, 0.0f, 1.0f);
+    // Bounce rate
+    ctx->genSlider("跳返率", &m.mBoundRate, 0.0f, 1.0f);
     // Vertical stop speed
     ctx->genSlider("垂直停止速度", &m.mStopSpeedY, 0.0f, 20.0f);
     // Bounce time max speed
@@ -2520,17 +2517,16 @@ void daAlinkHIO_light_c::genMessage(JORMContext* ctx) {
 }
 
 daAlinkHIO_light_c::daAlinkHIO_light_c(int param_0) {
+
+    static const char plabel0[] = "const daAlinkHIO_light_c1 daAlinkHIO_huLight_c0::m = {\n";
+    static const char plabel1[] = "const daAlinkHIO_light_c1 daAlinkHIO_wlLight_c0::m = {\n";
+    static const char plabel2[] = "const daAlinkHIO_light_c1 daAlinkHIO_zwLight_c0::m = {\n";
+    static const char* plabel[] = {plabel0, plabel1, plabel2};
+
     static void* baseP[] = {
         (void*)&daAlinkHIO_huLight_c0::m,
         (void*)&daAlinkHIO_wlLight_c0::m,
         (void*)&daAlinkHIO_zwLight_c0::m,
-
-    };
-
-    static const char* plabel[] = {
-        "const daAlinkHIO_light_c1 daAlinkHIO_huLight_c0::m = {\n",
-        "const daAlinkHIO_light_c1 daAlinkHIO_wlLight_c0::m = {\n",
-        "const daAlinkHIO_light_c1 daAlinkHIO_zwLight_c0::m = {\n",
     };
 
     m_len = 28;
@@ -2994,19 +2990,19 @@ void daAlinkHIO_bottle_c::genMessage(JORMContext* ctx) {
     // Start drink
     daAlinkHIO_setAnmGenMessage(&m.mStartDrinkAnm, ctx, "飲む始め", 56.0f, 0);
     // End drink
-    daAlinkHIO_setAnmGenMessage(&m.mEndDrinkAnm, ctx, "飲み終", 39.0f, 0);
+    daAlinkHIO_setAnmGenMessage(&m.mEndDrinkAnm, ctx, "飲終", 39.0f, 0);
     // Milk end drink
-    daAlinkHIO_setAnmGenMessage(&m.mEndDrinkAnm, ctx, "ミルク飲み終", 86.0f, 0);
+    daAlinkHIO_setAnmGenMessage(&m.mEndDrinkAnm, ctx, "まずい飲終", 86.0f, 0);
     // Open
     daAlinkHIO_setAnmGenMessage(&m.mOpenBottleAnm, ctx, "開ける", 49.0f, 0);
     // Scoop
-    daAlinkHIO_setAnmGenMessage(&m.mScoopAnm, ctx, "すくう", 54.0f, 0);
+    daAlinkHIO_setAnmGenMessage(&m.mPourAnm, ctx, "出す", 54.0f, 0);
     // Swing down
     daAlinkHIO_setAnmGenMessage(&m.mSwingDownAnm, ctx, "下振り", 24.0f, 1);
     // Swing side
     daAlinkHIO_setAnmGenMessage(&m.mSwingSideAnm, ctx, "横振り", 19.0f, 1);
     // Medicine
-    daAlinkHIO_setAnmGenMessage(&m.mDrinkNastyAnm, ctx, "くすり", 29.0f, 0);
+    daAlinkHIO_setAnmGenMessage(&m.mScoopAnm, ctx, "掬う", 29.0f, 0);
     // Get
     daAlinkHIO_setAnmGenMessage(&m.mGetAnm, ctx, "ゲット", 47.0f, 0);
 }
@@ -3238,26 +3234,26 @@ void daAlinkHIO_grab_c::genMessage(JORMContext* ctx) {
     ctx->genSlider("強制重さ指定", &m.mForceWeightSpec, 0, 3);
     // Preparation
     daAlinkHIO_setAnmGenMessage(&m.mPrepareAnm, ctx, "準備", 4.0f, 0);
-    // Lift up
-    daAlinkHIO_setAnmGenMessage(&m.mLiftAnm, ctx, "持上", 9.0f, 1);
+    // Lift
+    daAlinkHIO_setAnmGenMessage(&m.mLiftBackAnm, ctx, "持上", 9.0f, 1);
     // Throw
-    daAlinkHIO_setAnmGenMessage(&m.mThrowAnm, ctx, "投げる", 39.0f, 1);
-    // Carry
-    daAlinkHIO_setAnmGenMessage(&m.mCarryAnm, ctx, "運び", 12.0f, 1);
-    // Lift back
-    daAlinkHIO_setReverseAnmGenMessage(&m.mLiftBackAnm, ctx, "持ち上げ後", 9.0f, 0);
-    // Stand reverse
+    daAlinkHIO_setAnmGenMessage(&m.mLiftAnm, ctx, "投げる", 39.0f, 1);
+    // One-handed throw
+    daAlinkHIO_setAnmGenMessage(&m.mCarryPlaceReverseAnm, ctx, "片手投げ", 12.0f, 1);
+    // Place
+    daAlinkHIO_setReverseAnmGenMessage(&m.mThrowAnm, ctx, "置く", 9.0f, 0);
+    // Stand
     daAlinkHIO_setReverseAnmGenMessage(&m.mStandReverseAnm, ctx, "立つ", 4.0f, 1);
     // Recoil
-    daAlinkHIO_setAnmGenMessage(&m.mRecoilAnm, ctx, "反動", 19.0f, 1);
+    daAlinkHIO_setAnmGenMessage(&m.mCarryAnm, ctx, "反動", 19.0f, 1);
     // Failure
-    daAlinkHIO_setAnmGenMessage(&m.mFailAnm, ctx, "失敗", 19.0f, 1);
+    daAlinkHIO_setAnmGenMessage(&m.mRecoilAnm, ctx, "失敗", 19.0f, 1);
     // Failure stop time
     ctx->genSlider("失敗停止時間", &m.mFailStopTime, 0, 300);
-    // Carry lift
-    daAlinkHIO_setAnmGenMessage(&m.mCarryLiftAnm, ctx, "抱え上げ", 39.0f, 0);
-    // Carry place reverse
-    daAlinkHIO_setReverseAnmGenMessage(&m.mCarryPlaceReverseAnm, ctx, "抱え置き", 39.0f, 1);
+    // Lift up
+    daAlinkHIO_setAnmGenMessage(&m.mFailAnm, ctx, "抱え上げ", 39.0f, 0);
+    // Hold
+    daAlinkHIO_setReverseAnmGenMessage(&m.mCarryLiftAnm, ctx, "抱え置き", 39.0f, 1);
     // Iron ball throw
     daAlinkHIO_setAnmGenMessage(&m.mIronBallThrowAnm, ctx, "鉄玉投げ", 49.0f, 1);
 }
@@ -4010,14 +4006,13 @@ void daAlinkHIO_wlDamLaHu_c::genMessage(JORMContext* ctx) {
 }
 
 daAlinkHIO_wlDamLaHu_c::daAlinkHIO_wlDamLaHu_c(int param_0) {
+    static const char plabel0[] = "const daAlinkHIO_wlDamLaHu_c1 daAlinkHIO_wlDamLarge_c0::m = {\n";
+    static const char plabel1[] = "const daAlinkHIO_wlDamLaHu_c1 daAlinkHIO_wlDamHuge_c0::m = {\n";
+    static const char* plabel[] = {plabel0, plabel1};
+
     static void* baseP[] = {
         (void*)&daAlinkHIO_wlDamLarge_c0::m,
         (void*)&daAlinkHIO_wlDamHuge_c0::m,
-    };
-
-    static const char* plabel[] = {
-        "const daAlinkHIO_wlDamLaHu_c1 daAlinkHIO_wlDamLarge_c0::m = {\n",
-        "const daAlinkHIO_wlDamLaHu_c1 daAlinkHIO_wlDamHuge_c0::m = {\n",
     };
 
     m_len = 108;
@@ -4278,16 +4273,15 @@ void daAlinkHIO_wlAtWait_c::genMessage(JORMContext* ctx) {
 daAlinkHIO_wlAtWait_c::daAlinkHIO_wlAtWait_c(int param_0, float param_1) {
     field_0x34 = param_1;
 
+    static const char plabel0[] = "const daAlinkHIO_wlAtWait_c1 daAlinkHIO_wlAtWaLr_c0::m = {\n";
+    static const char plabel1[] = "const daAlinkHIO_wlAtWait_c1 daAlinkHIO_wlAtWaSc_c0::m = {\n";
+    static const char plabel2[] = "const daAlinkHIO_wlAtWait_c1 daAlinkHIO_wlAtWaTl_c0::m = {\n";
+    static const char* plabel[] = {plabel0, plabel1, plabel2};
+
     static void* baseP[] = {
         (void*)&daAlinkHIO_wlAtWaLr_c0::m,
-        (void*)&daAlinkHIO_wlAtWaTl_c0::m,
         (void*)&daAlinkHIO_wlAtWaSc_c0::m,
-    };
-
-    static const char* plabel[] = {
-        "const daAlinkHIO_cutNormal_c1 daAlinkHIO_wlAtWaLr_c0::m = {\n",
-        "const daAlinkHIO_cutNormal_c1 daAlinkHIO_wlAtWaTl_c0::m = {\n",
-        "const daAlinkHIO_cutNormal_c1 daAlinkHIO_wlAtWaSc_c0::m = {\n",
+        (void*)&daAlinkHIO_wlAtWaTl_c0::m,
     };
 
     m_len = 60;
@@ -5043,7 +5037,7 @@ daAlinkHIO_wlMoveNoP_c::~daAlinkHIO_wlMoveNoP_c() {}
 daAlinkHIO_wlMove_c::~daAlinkHIO_wlMove_c() {}
 
 void daAlinkHIO_c::jumpStateUpdate(const cXyz* param_0, const cXyz* param_1, f32 param_2) {
-    char buf[68];
+    char buf[64];
 
     f32 xDiff = param_0->x - param_1->x;
     f32 zDiff = param_0->z - param_1->z;

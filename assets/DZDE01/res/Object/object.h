@@ -1,0 +1,102 @@
+#ifndef RES_OBJECT_H
+#define RES_OBJECT_H
+
+enum dRes_INDEX_OBJECT {
+    /* BMDR */
+    dRes_INDEX_OBJECT_BMD_B_BROOM_e=0x3,
+    dRes_INDEX_OBJECT_BMD_B_CHAIR_M_e=0x4,
+    dRes_INDEX_OBJECT_BMD_B_CHAIR_W_e=0x5,
+    dRes_INDEX_OBJECT_BMD_B_FLUTE_e=0x6,
+    dRes_INDEX_OBJECT_BMD_B_MILKTUBO_e=0x7,
+    dRes_INDEX_OBJECT_BMD_B_SPEAR_e=0x8,
+    dRes_INDEX_OBJECT_BMD_B_TUBO_e=0x9,
+    dRes_INDEX_OBJECT_BMD_CELEB_BAG_M_e=0xA,
+    dRes_INDEX_OBJECT_BMD_CELEB_BAG_W_e=0xB,
+    dRes_INDEX_OBJECT_BMD_J_GUITAR_e=0xC,
+    dRes_INDEX_OBJECT_BMD_K_KAGOM_e=0xD,
+    dRes_INDEX_OBJECT_BMD_K_KAGOW_e=0xE,
+    dRes_INDEX_OBJECT_BMD_MARO_BAG_M_e=0xF,
+    dRes_INDEX_OBJECT_BMD_MARO_BAG_W_e=0x10,
+    dRes_INDEX_OBJECT_BMD_SOL_SHE_e=0x11,
+};
+
+enum dRes_ID_OBJECT {
+    /* BMDR */
+    dRes_ID_OBJECT_BMD_B_BROOM_e=0x3,
+    dRes_ID_OBJECT_BMD_B_CHAIR_M_e=0x4,
+    dRes_ID_OBJECT_BMD_B_CHAIR_W_e=0x5,
+    dRes_ID_OBJECT_BMD_B_FLUTE_e=0x6,
+    dRes_ID_OBJECT_BMD_B_MILKTUBO_e=0x7,
+    dRes_ID_OBJECT_BMD_B_SPEAR_e=0x8,
+    dRes_ID_OBJECT_BMD_B_TUBO_e=0x9,
+    dRes_ID_OBJECT_BMD_CELEB_BAG_M_e=0xA,
+    dRes_ID_OBJECT_BMD_CELEB_BAG_W_e=0xB,
+    dRes_ID_OBJECT_BMD_J_GUITAR_e=0xC,
+    dRes_ID_OBJECT_BMD_K_KAGOM_e=0xD,
+    dRes_ID_OBJECT_BMD_K_KAGOW_e=0xE,
+    dRes_ID_OBJECT_BMD_MARO_BAG_M_e=0xF,
+    dRes_ID_OBJECT_BMD_MARO_BAG_W_e=0x10,
+    dRes_ID_OBJECT_BMD_SOL_SHE_e=0x11,
+};
+
+enum B_BROOM_JNT {
+    B_BROOM_JNT_B_BROOM_MODEL_e=0x0,
+};
+
+enum B_CHAIR_M_JNT {
+    B_CHAIR_M_JNT_B_CHAIR_M_e=0x0,
+};
+
+enum B_CHAIR_W_JNT {
+    B_CHAIR_W_JNT_B_CHAIR_M_e=0x0,
+};
+
+enum B_FLUTE_JNT {
+    B_FLUTE_JNT_B_FLUTE_e=0x0,
+};
+
+enum B_MILKTUBO_JNT {
+    B_MILKTUBO_JNT_B_MILKTUBO_e=0x0,
+};
+
+enum B_SPEAR_JNT {
+    B_SPEAR_JNT_B_SPEAR_MODEL_e=0x0,
+};
+
+enum B_TUBO_JNT {
+    B_TUBO_JNT_B_TUBO_e=0x0,
+};
+
+enum CELEB_BAG_M_JNT {
+    CELEB_BAG_M_JNT_CELEB_BAG_e=0x0,
+};
+
+enum CELEB_BAG_W_JNT {
+    CELEB_BAG_W_JNT_CELEB_BAG_e=0x0,
+};
+
+enum J_GUITAR_JNT {
+    J_GUITAR_JNT_J_GUITAR_e=0x0,
+};
+
+enum K_KAGOM_JNT {
+    K_KAGOM_JNT_K_KAGOM_MODEL_e=0x0,
+};
+
+enum K_KAGOW_JNT {
+    K_KAGOW_JNT_K_KAGOW_MODEL_e=0x0,
+};
+
+enum MARO_BAG_M_JNT {
+    MARO_BAG_M_JNT_MARO_BAG_e=0x0,
+};
+
+enum MARO_BAG_W_JNT {
+    MARO_BAG_W_JNT_MARO_BAG_e=0x0,
+};
+
+enum SOL_SHE_JNT {
+    SOL_SHE_JNT_SOL_SHE_e=0x0,
+};
+
+#endif /* !RES_OBJECT_H */

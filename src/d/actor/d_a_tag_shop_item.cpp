@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_tag_shop_item.h"
 #include "d/d_procname.h"
+#include <cstring>
 
 int daTag_ShopItem_c::create() {
     fopAcM_ct(this, daTag_ShopItem_c);

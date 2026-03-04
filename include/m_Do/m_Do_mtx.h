@@ -3,8 +3,10 @@
 
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
-#include <dolphin/mtx.h>
+#include <mtx.h>
+
 #include "JSystem/JMath/JMath.h"
+#include "dusk/endian.h"
 
 extern u8 g_printCurrentHeapDebug;
 extern u8 g_printOtherHeapDebug;
@@ -38,10 +40,6 @@ inline void mDoMtx_concat(const Mtx a, const Mtx b, Mtx c) {
 
 inline void cMtx_concat(const Mtx a, const Mtx b, Mtx ab) {
     mDoMtx_concat(a, b, ab);
-}
-
-inline void cMtx_scale(Mtx m, f32 x, f32 y, f32 z) {
-    MTXScale(m, x, y, z);
 }
 
 inline void mDoMtx_multVec(CMtxP m, const Vec* src, Vec* dst) {
@@ -144,6 +142,10 @@ inline void mDoMtx_inverse(const Mtx a, Mtx b) {
 
 inline void mDoMtx_scale(Mtx m, f32 x, f32 y, f32 z) {
     MTXScale(m, x, y, z);
+}
+
+inline void cMtx_scale(Mtx m, f32 x, f32 y, f32 z) {
+    mDoMtx_scale(m, x, y, z);
 }
 
 inline void mDoMtx_quat(Mtx m, const Quaternion* q) {
@@ -263,6 +265,12 @@ public:
      * @param b The output Vec
      */
     static void multVec(const Vec* a, Vec* b) { PSMTXMultVec(now, a, b); }
+#if TARGET_LITTLE_ENDIAN
+    static void multVec(const BE(Vec)* a, Vec* b) {
+        Vec aCopy = *a;
+        multVec(&aCopy, b);
+    }
+#endif
 
     /**
      * Multiplies a given Vec `a` by the `now` Matrix's "Scale-and-Rotate" component and places the result into Vec `b`

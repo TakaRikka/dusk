@@ -1,0 +1,34 @@
+#ifndef RES_P_L4CWALL_H
+#define RES_P_L4CWALL_H
+
+enum dRes_INDEX_P_L4CWALL {
+    /* BMDR */
+    dRes_INDEX_P_L4CWALL_BMD_P_LV4_CHAIN_e=0x4,
+    dRes_INDEX_P_L4CWALL_BMD_P_LV4_CWALL_e=0x5,
+    dRes_INDEX_P_L4CWALL_BMD_P_LV4_HANDLE_e=0x6,
+    /* DZB  */
+    dRes_INDEX_P_L4CWALL_DZB_P_LV4_CWALL_e=0x9,
+};
+
+enum dRes_ID_P_L4CWALL {
+    /* BMDR */
+    dRes_ID_P_L4CWALL_BMD_P_LV4_CHAIN_e=0x4,
+    dRes_ID_P_L4CWALL_BMD_P_LV4_CWALL_e=0x5,
+    dRes_ID_P_L4CWALL_BMD_P_LV4_HANDLE_e=0x6,
+    /* DZB  */
+    dRes_ID_P_L4CWALL_DZB_P_LV4_CWALL_e=0x9,
+};
+
+enum P_LV4_CHAIN_JNT {
+    P_LV4_CHAIN_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum P_LV4_CWALL_JNT {
+    P_LV4_CWALL_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum P_LV4_HANDLE_JNT {
+    P_LV4_HANDLE_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_P_L4CWALL_H */

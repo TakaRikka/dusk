@@ -8,6 +8,7 @@
 #include "d/d_debug_viewer.h"
 #include "d/d_menu_fmap_map.h"
 #include "m_Do/m_Do_graphic.h"
+#include <cstring>
 
 static u8 twoValueLineInterpolation(u8 i_value1, u8 i_value2, f32 i_param) {
     return (u8)((f32)i_value1 + i_param * ((f32)i_value2 - (f32)i_value1));

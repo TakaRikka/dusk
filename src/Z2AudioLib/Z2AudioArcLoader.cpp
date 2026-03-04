@@ -5,6 +5,7 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "Z2AudioLib/Z2FxLineMgr.h"
 #include "m_Do/m_Do_ext.h"
+#include <cstring>
 
 Z2AudioArcLoader::Z2AudioArcLoader(JAUSection* section) : JAUAudioArcLoader(section) {}
 

@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_obj_picture.h"
+#include <cstring>
 
 static int daObjPicture_c_createHeap(fopAc_ac_c* i_this) {
     return ((daObjPicture_c*)i_this)->createHeap();
@@ -294,7 +295,7 @@ int daObjPicture_c::execute() {
         cXyz sp8(current.pos);
         fopAcM_gc_c::gndCheck(&sp8);
 
-        shape_angle.x += 0x400;
+        ANGLE_ADD_2(shape_angle.x, 0x400);
         if (shape_angle.x > 0x4000) {
             shape_angle.x = 0x4000;
         }
@@ -308,7 +309,6 @@ int daObjPicture_c::execute() {
         cLib_chaseF(&current.pos.x, field_0xca0.x, 1.0f);
         cLib_chaseF(&current.pos.z, field_0xca0.z, 1.0f);
         setPicAtCol();
-        break;
     }
     case 3:
         break;

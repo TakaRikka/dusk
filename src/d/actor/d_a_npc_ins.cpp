@@ -9,6 +9,7 @@
 #include "d/actor/d_a_npc.h"
 #include "d/d_meter2_info.h"
 #include "d/d_msg_object.h"
+#include <cstring>
 
 enum Ins_RES_File_ID {
     /* BCK */

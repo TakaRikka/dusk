@@ -16,6 +16,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
+#include <cstring>
 
 const char* daBg_c::setArcName() {
     static char arcName[32];

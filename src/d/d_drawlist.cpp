@@ -5,6 +5,7 @@
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
+#include "JSystem/JKernel/JKRHeap.h"
 #include "SSystem/SComponent/c_bg_s_shdw_draw.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
@@ -878,15 +879,11 @@ void dDlst_2D_c::draw() {
 }
 
 void dDlst_blo_c::draw() {
-    mScreen.draw(anm.field_0x4, anm.field_0x8, dComIfGp_getCurrentGrafPort());
+    mScreen.draw(field_0x120, field_0x124, dComIfGp_getCurrentGrafPort());
 }
 
 // stand-in for a function that pulls in a bunch of inline functions but was presumably stripped
-static void dummy_misc() {
-    J2DScreen* screen;
-    J2DPane* pane;
-    J2DPicture* picture;
-    J2DAnmBase* anmBase;
+static void dummy_misc(J2DAnmBase* anmBase, J2DPicture* picture, J2DPane* pane, J2DScreen* screen) {
     JKR_DELETE(anmBase);
     picture->setBlack(JUtility::TColor(0, 0, 0, 0));
     picture->setWhite(JUtility::TColor(0, 0, 0, 0));
@@ -968,7 +965,7 @@ void dDlst_effectLine_c::draw() {
     }
 }
 
-void dDlst_effectLine_c::update(cXyz& param_0, _GXColor& i_lineColor, u16 param_2, u16 param_3,
+void dDlst_effectLine_c::update(cXyz& param_0, GXColor& i_lineColor, u16 param_2, u16 param_3,
                                 u16 param_4, u16 param_5, f32 param_6, f32 param_7, f32 param_8,
                                 f32 param_9) {
     field_0x10 = param_0;
@@ -1002,9 +999,18 @@ int dDlst_shadowPoly_c::set(cBgD_Vtx_t* i_vtx, u16 param_1, u16 param_2, u16 par
     b.z *= temp_f3;
     b *= 2.0f;
 
+#if TARGET_LITTLE_ENDIAN
+    Vec copy1 = vtx[param_1];
+    Vec copy2 = vtx[param_2];
+    Vec copy3 = vtx[param_3];
+    PSVECAdd(&copy1, &b, &dst->mPos[0]);
+    PSVECAdd(&copy2, &b, &dst->mPos[1]);
+    PSVECAdd(&copy3, &b, &dst->mPos[2]);
+#else
     PSVECAdd(&vtx[param_1], &b, &dst->mPos[0]);
     PSVECAdd(&vtx[param_2], &b, &dst->mPos[1]);
     PSVECAdd(&vtx[param_3], &b, &dst->mPos[2]);
+#endif
     mCount++;
     return 1;
 }
@@ -1113,12 +1119,12 @@ static BOOL realPolygonCheck(cXyz* param_0, f32 param_1, f32 param_2, cXyz* para
     ShdwDrawPoly_c shdwDrawPoly;
     cXyz local_8c;
     cXyz local_98;
-    f32 tmp1 = param_1 * param_1 * 0.002f;
-    f32 tmp2 = cLib_maxLimit(tmp1, 120.0f);
-    f32 var1 = param_1 + param_2 - tmp2;
-    local_8c.y = param_0->y - var1;
+    f32 f31 = param_1 * param_1 * 0.002f;
+    f31 = cLib_maxLimit(f31, 120.0f);
+    f31 = param_1 + param_2 - f31;
+    local_8c.y = param_0->y - f31;
     local_98.y = param_0->y + param_1 * 0.15f;
-    local_98.x = param_0->x + param_3->x * var1;
+    local_98.x = param_0->x + param_3->x * f31;
     if (local_98.x < param_0->x) {
         local_8c.x = local_98.x;
         local_98.x = param_0->x;
@@ -1127,9 +1133,8 @@ static BOOL realPolygonCheck(cXyz* param_0, f32 param_1, f32 param_2, cXyz* para
     }
     local_8c.x -= param_1;
     local_98.x += param_1;
-    var1 = param_0->z + param_3->z * var1;
-    local_98.z = var1;
-    if (var1 < param_0->z) {
+    local_98.z = param_0->z + param_3->z * f31;
+    if (local_98.z < param_0->z) {
         local_8c.z = local_98.z;
         local_98.z = param_0->z;
     } else {
@@ -1335,7 +1340,7 @@ void dDlst_shadowSimple_c::draw() {
 }
 
 void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3,
-                                   s16 param_4, f32 param_5, _GXTexObj* param_6) {
+                                   s16 param_4, f32 param_5, GXTexObj* param_6) {
     if (param_5 < 0.0f) {
         mAlpha = param_5 * -255.0f;
         param_5 = 1.0f;
@@ -1496,7 +1501,7 @@ void dDlst_shadowControl_c::draw(Mtx param_0) {
     dKy_GxFog_set();
 
     GXSetChanCtrl(GX_ALPHA0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSetArray(GX_VA_POS, l_shadowVolPos, 12);
+    GXSETARRAY(GX_VA_POS, l_shadowVolPos, sizeof(l_shadowVolPos), sizeof(l_shadowVolPos[0]));
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0);
     GXSetNumTevStages(1);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
@@ -1528,7 +1533,7 @@ void dDlst_shadowControl_c::draw(Mtx param_0) {
 
     GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB8, 0);
-    GXSetArray(GX_VA_POS, l_simpleShadowPos, 12);
+    GXSETARRAY(GX_VA_POS, l_simpleShadowPos, sizeof(l_simpleShadowPos), sizeof(l_simpleShadowPos[0]));
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);

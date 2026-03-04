@@ -1,4 +1,5 @@
 {
+  "cmake.buildDirectory": "${workspaceFolder}/build/dusk/${buildType}/${variant:platform}/${variant:tp_version}",
   "[c]": {
     "files.encoding": "utf8",
     "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"

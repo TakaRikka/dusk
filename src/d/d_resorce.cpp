@@ -7,17 +7,20 @@
 #include "JSystem/J3DGraphLoader/J3DClusterLoader.h"
 #include "JSystem/J3DGraphLoader/J3DModelLoader.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
+#include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w_kcol.h"
 #include "d/d_com_inf_game.h"
+#include "f_ap/f_ap_game.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_graphic.h"
 #include <cstdio>
+#include <cstring>
 
 #ifndef __MWERKS__
-#include <string>
+#include <cstring>
 #include "dusk/extras.h"
 #endif
 
@@ -32,7 +35,7 @@ dRes_info_c::dRes_info_c() {
 
 dRes_info_c::~dRes_info_c() {
     if (mDMCommand != NULL) {
-        JKR_DELETE(mDMCommand);
+        mDMCommand->destroy();
         mDMCommand = NULL;
     } else if (mArchive != NULL) {
         deleteArchiveRes();
@@ -47,13 +50,12 @@ dRes_info_c::~dRes_info_c() {
 }
 
 int dRes_info_c::set(char const* i_arcName, char const* i_path, u8 i_mountDirection, JKRHeap* i_heap) {
-    char path[40];
-
 #ifdef __MWERKS__
     JUT_ASSERT(120, strlen(i_arcName) <= NAME_MAX);
 #endif
 
-    if (*i_path != NULL) {
+    if (*i_path != '\0') {
+        char path[40];
         snprintf(path, sizeof(path), "%s%s.arc", i_path, i_arcName);
         mDMCommand = mDoDvdThd_mountArchive_c::create(path, i_mountDirection, i_heap);
 
@@ -68,14 +70,12 @@ int dRes_info_c::set(char const* i_arcName, char const* i_path, u8 i_mountDirect
 
 static void setAlpha(J3DMaterialTable* i_matTable) {
     for (u16 i = 0; i < i_matTable->getMaterialNum(); i++) {
-        J3DMaterial* mat = i_matTable->getMaterialNodePointer(i);
-        J3DTevBlock* tevBlock = mat->getTevBlock();
+        J3DTevBlock* tevBlock = i_matTable->getMaterialNodePointer(i)->getTevBlock();
 
         if (tevBlock != NULL) {
             GXColorS10* tevColor = tevBlock->getTevColor(3);
             if (tevColor != NULL) {
-                u8 tevStageNum = tevBlock->getTevStageNum();
-                tevColor->a = tevStageNum;
+                tevColor->a = tevBlock->getTevStageNum();
             }
         }
     }
@@ -124,12 +124,12 @@ static const J3DTexMtxInfo l_texMtxInfo = {
 };
 
 static void addWarpMaterial(J3DModelData* i_modelData) {
+    static J3DTexCoordInfo l_texCoordInfo = {0x00, 0x00, 0x27};
+    static J3DTevOrderInfo l_tevOrderInfo = {0x00, 0x03, 0xFF, 0x00};
     static J3DTevStageInfo const l_tevStageInfo = {
         0x05, 0x0F, 0x08, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x01, 0x00,
         0x07, 0x04, 0x00, 0x07, 0x00, 0x00, 0x00, 0x01, 0x00,
     };
-    static J3DTexCoordInfo l_texCoordInfo = {0x00, 0x00, 0x27};
-    static J3DTevOrderInfo l_tevOrderInfo = {0x00, 0x03, 0xFF, 0x00};
     static J3DAlphaCompInfo const l_alphaCompInfo = {0x04, 0x80, 0x00, 0x03, 0xFF};
 
     ResTIMG* resTimg = (ResTIMG*)dComIfG_getObjectRes("Always", 0x5d);
@@ -140,19 +140,19 @@ static void addWarpMaterial(J3DModelData* i_modelData) {
     texture->addResTIMG(1, resTimg - textureNum);
 
     J3DTexMtx* newTexMtx = JKR_NEW J3DTexMtx(l_texMtxInfo);
-    JUT_ASSERT(0x11D, newTexMtx != NULL);
+    JUT_ASSERT(285, newTexMtx != NULL);
 
     for (u16 i = 0; i < i_modelData->getMaterialNum(); i++) {
         J3DMaterial* material = i_modelData->getMaterialNodePointer(i);
         J3DTexGenBlock* texGenBlock = material->getTexGenBlock();
         u32 texGenNum = texGenBlock->getTexGenNum();
-        JUT_ASSERT(0x122, texGenNum < 4);
+        JUT_ASSERT(290, texGenNum < 4);
 
         J3DTexCoord* coord = texGenBlock->getTexCoord(texGenNum);
         l_texCoordInfo.mTexGenMtx = texGenNum * 3 + 0x1e;
         coord->setTexCoordInfo(l_texCoordInfo);
         coord->resetTexMtxReg();
-        
+
         texGenBlock->setTexGenNum(texGenNum + 1);
         texGenBlock->setTexMtx(texGenNum, newTexMtx);
         J3DTevBlock* tevBlock = material->getTevBlock();
@@ -213,23 +213,20 @@ void dRes_info_c::setWarpSRT(J3DModelData* i_modelData, const cXyz& i_pos, f32 i
     J3DMaterial* material = i_modelData->getMaterialNodePointer(0);
     J3DTexGenBlock* texGenBlock = material->getTexGenBlock();
     u32 texGenNum = texGenBlock->getTexGenNum();
-    J3DTexMtx* texMtx = texGenBlock->getTexMtx(texGenNum - 1);
-    J3DTexMtxInfo& texMtxInfo = texMtx->getTexMtxInfo();
+    J3DTexMtxInfo& texMtxInfo = texGenBlock->getTexMtx(texGenNum - 1)->getTexMtxInfo();
     texMtxInfo.mSRT.mTranslationX = i_transX;
     texMtxInfo.mSRT.mTranslationY = i_transY;
 
     mDoMtx_stack_c::transS(-i_pos.x, -i_pos.y, -i_pos.z);
-    s16 angleY = fopCamM_GetAngleY(dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0)));
-    mDoMtx_stack_c::YrotM(angleY);
+    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    mDoMtx_stack_c::YrotM(fopCamM_GetAngleY(camera));
     cMtx_concat(l_texMtxInfo.mEffectMtx, mDoMtx_stack_c::get(), texMtxInfo.mEffectMtx);
 }
 
 J3DModelData* dRes_info_c::loaderBasicBmd(u32 i_tag, void* i_data) {
     u32 flags = 0x59020010;
     u16 i;
-    J3DMaterial* material;
-    J3DModelData* modelData;
-    u8 lightMask;
+    J3DMaterialAnm* materialAnm;
 
     if (i_tag == 'BMDE' || i_tag == 'BMDV') {
         flags |= 0x20;
@@ -242,18 +239,18 @@ J3DModelData* dRes_info_c::loaderBasicBmd(u32 i_tag, void* i_data) {
         return NULL;
     }
 
-    modelData = (J3DModelData*)i_data;
+    J3DModelData* modelData = (J3DModelData*)i_data;
 
     if (i_tag == 'BMDE' || i_tag == 'BMDV' || i_tag == 'BMWE') {
         for (i = 0; i < modelData->getShapeNum(); i++) {
-           J3DShape* shape = modelData->getShapeNodePointer(i);
+            J3DShape* shape = modelData->getShapeNodePointer(i);
             shape->setTexMtxLoadType(0x2000);
         }
     }
 
     for (i = 0; i < modelData->getMaterialNum(); i++) {
-        material = modelData->getMaterialNodePointer(i);
-        lightMask = material->getColorChan(0)->getLightMask();
+        J3DMaterial* material = modelData->getMaterialNodePointer(i);
+        u8 lightMask = material->getColorChan(0)->getLightMask();
         switch (g_env_light.light_mask_type) {
         case 1:
             lightMask &= 0x4;
@@ -280,7 +277,7 @@ J3DModelData* dRes_info_c::loaderBasicBmd(u32 i_tag, void* i_data) {
         material->getColorChan(0)->setLightMask(lightMask);
         material->change();
 
-        J3DMaterialAnm* materialAnm = JKR_NEW J3DMaterialAnm();
+        materialAnm = JKR_NEW J3DMaterialAnm();
         if (materialAnm == NULL) {
             return NULL;
         }
@@ -295,10 +292,11 @@ J3DModelData* dRes_info_c::loaderBasicBmd(u32 i_tag, void* i_data) {
     }
 
     if (i_tag == 'BMDR' || i_tag == 'BMWR') {
-        if (modelData->newSharedDisplayList(J3DMdlFlag_UseSingleDL) != kJ3DError_Success) {
+        s32 result = modelData->newSharedDisplayList(J3DMdlFlag_UseSingleDL);
+        if (result != kJ3DError_Success) {
             return NULL;
         } else {
-            modelData->simpleCalcMaterial(0, (MtxP)j3dDefaultMtx);
+            modelData->simpleCalcMaterial(const_cast<MtxP>(j3dDefaultMtx));
             modelData->makeSharedDL();
         }
     }
@@ -307,7 +305,7 @@ J3DModelData* dRes_info_c::loaderBasicBmd(u32 i_tag, void* i_data) {
 }
 
 int dRes_info_c::loadResource() {
-    JUT_ASSERT(0x2C5, mRes == NULL);
+    JUT_ASSERT(709, mRes == NULL);
 
     s32 countFile = mArchive->countFile();
     mRes = JKR_NEW void*[countFile];
@@ -324,25 +322,26 @@ int dRes_info_c::loadResource() {
     for (int i = 0; i < mArchive->countDirectory(); i++) {
         u32 nodeType = node->type;
         u32 fileIndex = node->first_file_index;
-        J3DModelData* modelData;
-        void* result;
 
         for (int j = 0; j < node->num_entries; j++) {
             if (mArchive->isFileEntry(fileIndex)) {
-                result = mArchive->getIdxResource(fileIndex);
+#if DEBUG
+                const char* tmp = mArchive->mStringTable + (mArchive->findIdxResource(fileIndex)->type_flags_and_name_offset & 0xFFFFFF);
+#endif
+                void* res = mArchive->getIdxResource(fileIndex);
 
-                if (result == NULL) {
+                if (res == NULL) {
                     OSReport_Error("<%s> res == NULL !!\n",
                         mArchive->mStringTable +
                         (mArchive->findIdxResource(fileIndex)->type_flags_and_name_offset & 0xFFFFFF));
                 } else if (nodeType == 'ARC ') {
                     JKRArchive::SDIFileEntry* entry = mArchive->findIdxResource(fileIndex);
-                    JUT_ASSERT(0x2FD, entry != NULL);
+                    JUT_ASSERT(765, entry != NULL);
 
-                    const char* name_p = mArchive->mStringTable + entry->getNameOffset();
+                    const char* name_p = mArchive->mStringTable + (entry->type_flags_and_name_offset & 0xFFFFFF);
                     size_t resNameLen = strlen(name_p) - 4;
 #ifdef __MWERKS__
-                    JUT_ASSERT(0x301, resNameLen <= NAME_MAX);
+                    JUT_ASSERT(769, resNameLen <= NAME_MAX);
 #endif
 
                     char arcName[9];
@@ -350,31 +349,27 @@ int dRes_info_c::loadResource() {
                     arcName[resNameLen] = '\0';
 
                     JKRExpHeap* parentHeap = (JKRExpHeap*)JKRHeap::findFromRoot(JKRHeap::getCurrentHeap());
-                    JUT_ASSERT(0x308, parentHeap != NULL && (parentHeap == mDoExt_getGameHeap() || parentHeap == mDoExt_getArchiveHeap()));
-#if DEBUG
-                    char* heapName;
-                    if (parentHeap == mDoExt_getGameHeap()) {
-                        heapName = "GameHeap";
-                    } else {
-                        heapName = "ArchiveHeap";
-                    }
+                    JUT_ASSERT(776, parentHeap != NULL && (parentHeap == mDoExt_getGameHeap() || parentHeap == mDoExt_getArchiveHeap()));
 
                     // ">>>>>>>>>>>>>>>>>> Pack Archive<%s> <%s>\n"
-                    OSReport(">>>>>>>>>>>>>>>>>> パックアーカイブ<%s> <%s>\n", arcName, heapName);
-#endif
+                    OS_REPORT(">>>>>>>>>>>>>>>>>> パックアーカイブ<%s> <%s>\n", arcName, parentHeap == mDoExt_getGameHeap() ? "GameHeap" : "ArchiveHeap");
+
                     if (parentHeap == (JKRExpHeap*)mDoExt_getGameHeap()) {
                         parentHeap = NULL;
                     }
 
-                    int rt = dComIfG_setObjectRes(arcName, result, entry->data_size);
-                    JUT_ASSERT(0x314, rt);
+                    int rt = dComIfG_setObjectRes(arcName, res, entry->data_size, parentHeap);
+                    JUT_ASSERT(788, rt);
                 } else if (nodeType == 'BMDP') {
-                    result = (J3DModelData*)J3DModelLoaderDataBase::load(result, 0x59020030);
-                    if (result == NULL) {
+#if DEBUG
+                    g_kankyoHIO.navy.field_0x22a |= u16(0x100);
+#endif
+                    res = (J3DModelData*)J3DModelLoaderDataBase::load(res, 0x59020030);
+                    if (res == NULL) {
                         return -1;
                     }
 
-                    modelData = (J3DModelData*)result;
+                    J3DModelData* modelData = (J3DModelData*)res;
                     for (u16 k = 0; k < modelData->getMaterialNum(); k++) {
                         J3DMaterial* material_p = modelData->getMaterialNodePointer(k);
                         material_p->change();
@@ -387,57 +382,93 @@ int dRes_info_c::loadResource() {
                         material_p->setMaterialAnm(materialAnm);
                     }
 
-                    setAlpha(modelData);
-                    if (modelData->newSharedDisplayList(J3DMdlFlag_UseSingleDL) != kJ3DError_Success) {
+                    setAlpha((J3DModelData*)res);
+                    s32 result = modelData->newSharedDisplayList(J3DMdlFlag_UseSingleDL);
+                    if (result != kJ3DError_Success) {
                         return -1;
                     }
 
-                    modelData->simpleCalcMaterial(0, (MtxP)j3dDefaultMtx);
+                    modelData->simpleCalcMaterial(const_cast<MtxP>(j3dDefaultMtx));
                     modelData->makeSharedDL();
                 } else if (nodeType == 'BMDR' || nodeType == 'BMDV' || nodeType == 'BMDE' ||
                            nodeType == 'BMWR' || nodeType == 'BMWE')
                 {
-                    result = loaderBasicBmd(nodeType, result);
-                    if (result == NULL) {
+                    res = loaderBasicBmd(nodeType, res);
+                    if (res == NULL) {
                         return -1;
                     }
                 } else if (nodeType == 'BMDG') {
-                    result = (J3DModelData*)J3DModelLoaderDataBase::load(result, 0x59020010);
-                    if (result == NULL) {
+                    res = (J3DModelData*)J3DModelLoaderDataBase::load(res, 0x59020010);
+                    if (res == NULL) {
                         return -1;
                     }
 
-                    modelData = (J3DModelData*)result;
+                    J3DModelData* modelData = (J3DModelData*)res;
 #if DEBUG
                     J3DMaterial* materialp = modelData->getMaterialNodePointer(0);
-                    if (materialp->isDrawModeOpaTexEdge()) {
+                    if (!materialp->isDrawModeOpaTexEdge()) {
                         // "BMDG:Translucent model can't be drawn!!\n"
                         OSReport_Error("BMDG:半透明モデルは描画できません！！\n");
                         return -1;
                     }
 #endif
-                    if (modelData->newSharedDisplayList(J3DMdlFlag_UseSingleDL) != kJ3DError_Success) {
+                    s32 result = modelData->newSharedDisplayList(J3DMdlFlag_UseSingleDL);
+                    if (result != kJ3DError_Success) {
                         return -1;
                     }
 
-                    modelData->simpleCalcMaterial(0, (MtxP)j3dDefaultMtx);
+                    modelData->simpleCalcMaterial(const_cast<MtxP>(j3dDefaultMtx));
                     modelData->makeSharedDL();
                 } else if (nodeType == 'BMDA') {
-                    result = (J3DModelData*)J3DModelLoaderDataBase::load(result, 0x59020010);
-                    if (result == NULL) {
+#if DEBUG
+                    g_kankyoHIO.navy.field_0x22a |= u16(0x800);
+#endif
+                    res = (J3DModelData*)J3DModelLoaderDataBase::load(res, 0x59020010);
+                    if (res == NULL) {
                         return -1;
                     }
 
-                    modelData = (J3DModelData*)result;
-                    if (modelData->newSharedDisplayList(J3DMdlFlag_UseSingleDL) != kJ3DError_Success) {
+                    J3DModelData* modelData = (J3DModelData*)res;
+
+                    s32 result = modelData->newSharedDisplayList(J3DMdlFlag_UseSingleDL);
+                    if (result != kJ3DError_Success) {
                         return -1;
                     }
 
-                    modelData->simpleCalcMaterial(0, (MtxP)j3dDefaultMtx);
+                    modelData->simpleCalcMaterial(const_cast<MtxP>(j3dDefaultMtx));
                     modelData->makeSharedDL();
+#if DEBUG
+                } else if (nodeType == 'BMDL') {
+                    J3DModelFileData* fileData = (J3DModelFileData*)res;
+                    if (fileData->mMagic2 == 'bmd3') {
+                        res = J3DModelLoaderDataBase::load(res, 0x29020030);
+                        if (res) {
+                            J3DModelData* modelData = (J3DModelData*)res;
+                            int local_8c = modelData->newSharedDisplayList(fileData->field_0x1c & 0x80000000 ? 0 : 0x40000);
+                            if (local_8c) {
+                                return -1;
+                            }
+                            modelData->simpleCalcMaterial(const_cast<MtxP>(j3dDefaultMtx));
+                            modelData->makeSharedDL();
+                            modelData->makeSharedDL();
+                        }
+                    } else {
+                        res = J3DModelLoaderDataBase::loadBinaryDisplayList(res, 0x1010);
+                        if (res) {
+                            J3DModelData* modelData = (J3DModelData*)res;
+                            for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
+                                J3DMaterial* material = modelData->getMaterialNodePointer(i);
+                                material->onInvalid();
+                            }
+                        }
+                    }
+                    if (!res) {
+                        return -1;
+                    }
+#endif
                 } else if (nodeType == 'BLS ') {
-                    result = J3DClusterLoaderDataBase::load(result);
-                    if (result == NULL) {
+                    res = J3DClusterLoaderDataBase::load(res);
+                    if (res == NULL) {
                         return -1;
                     }
                 } else if (nodeType == 'BCKS' || nodeType == 'BCK ') {
@@ -445,11 +476,11 @@ int dRes_info_c::loadResource() {
                         u8 unk_data[0x1C];
                         u32 some_data_offset;
                     };
-                    J3DUnkChunk* chunk = (J3DUnkChunk*)result;
+                    J3DUnkChunk* chunk = (J3DUnkChunk*)res;
                     void* bas;
 
                     if (chunk->some_data_offset != 0xFFFFFFFF) {
-                        bas = (void*)(chunk->some_data_offset + (uintptr_t) result);
+                        bas = (void*)(chunk->some_data_offset + (uintptr_t)res);
                     } else {
                         bas = NULL;
                     }
@@ -459,24 +490,24 @@ int dRes_info_c::loadResource() {
                         return -1;
                     }
 
-                    J3DAnmLoaderDataBase::setResource(transAnmBas, result);
-                    result = transAnmBas;
+                    J3DAnmLoaderDataBase::setResource(transAnmBas, res);
+                    res = transAnmBas;
                 } else if (nodeType == 'BTP ' || nodeType == 'BTK ' || nodeType == 'BPK ' ||
                            nodeType == 'BRK ' || nodeType == 'BLK ' || nodeType == 'BVA ' ||
                            nodeType == 'BXA ')
                 {
-                    result = J3DAnmLoaderDataBase::load(result, J3DLOADER_UNK_FLAG0);
-                    if (result == NULL) {
+                    res = J3DAnmLoaderDataBase::load(res);
+                    if (res == NULL) {
                         return -1;
                     }
                 } else if (nodeType == 'DZB ') {
-                    result = cBgS::ConvDzb(result);
+                    res = cBgS::ConvDzb(res);
                 } else if (nodeType == 'KCL ') {
-                    result = dBgWKCol::initKCollision(result);
+                    res = dBgWKCol::initKCollision(res);
                 }
 
-                JUT_ASSERT(0x444, fileIndex < countFile);
-                mRes[fileIndex] = result;
+                JUT_ASSERT(1092, fileIndex < countFile);
+                mRes[fileIndex] = res;
             }
             fileIndex++;
         }
@@ -487,40 +518,41 @@ int dRes_info_c::loadResource() {
 }
 
 void dRes_info_c::deleteArchiveRes() {
-    JUT_ASSERT(0x45E, mArchive != NULL);
+    JUT_ASSERT(1118, mArchive != NULL);
 
     JKRArchive::SDIDirEntry* nodes = mArchive->mNodes;
-    for (int i = 0; i < mArchive->countDirectory(); nodes++, i++) {
-        if (nodes->type == 'ARC ') {
+    for (int i = 0; i < mArchive->countDirectory(); i++) {
+        u32 type = nodes->type;
+        if (type == 'ARC ') {
             u32 fileIndex = nodes->first_file_index;
             for (int j = 0; j < nodes->num_entries; j++) {
                 if (mArchive->isFileEntry(fileIndex)) {
-                    JKRArchive::SDIFileEntry* fileEntry = mArchive->findIdxResource(fileIndex);
-                    u32 nameOffset = fileEntry->getNameOffset();
-                    const char* fileName = mArchive->mStringTable + nameOffset;
+                    const char* fileName = mArchive->mStringTable + (mArchive->findIdxResource(fileIndex)->type_flags_and_name_offset & 0xFFFFFF);
                     size_t resNameLen = strlen(fileName) - 4;
 #ifdef __MWERKS__
-                    JUT_ASSERT(0x46C, resNameLen <= NAME_MAX);
+                    JUT_ASSERT(1132, resNameLen <= NAME_MAX);
 #endif
 
                     char nameBuffer[12];
                     strncpy(nameBuffer, fileName, resNameLen);
                     nameBuffer[resNameLen] = '\0';
-                    
+
                     int rt = dComIfG_deleteObjectResMain(nameBuffer);
-                    JUT_ASSERT(0x470, rt);
+                    JUT_ASSERT(1136, rt);
                 }
                 fileIndex++;
             }
         }
+        nodes++;
     }
 }
 
 static SArcHeader* getArcHeader(JKRArchive* i_archive) {
     if (i_archive != NULL) {
-        switch (i_archive->getMountMode()) {
+        switch (i_archive->mMountMode) {
         case JKRArchive::MOUNT_MEM:
-            return ((JKRMemArchive*)i_archive)->getArcHeader();
+            JKRMemArchive* memArchive = (JKRMemArchive*)i_archive;
+            return memArchive->mArcHeader;
         }
     }
 
@@ -528,29 +560,31 @@ static SArcHeader* getArcHeader(JKRArchive* i_archive) {
 }
 
 int dRes_info_c::setRes(JKRArchive* i_archive, JKRHeap* i_heap) {
-    JUT_ASSERT(0x4AD, mArchive == NULL);
+    JUT_ASSERT(1197, mArchive == NULL);
     mArchive = i_archive;
     heap = i_heap;
     mDataHeap = NULL;
 
     int rt = loadResource();
-    JUT_ASSERT(0x4B4, rt >= 0);
+    JUT_ASSERT(1204, rt >= 0);
     return rt >> 0x1F;
 }
+
+bool data_8074C6C0_debug;
 
 int dRes_info_c::setRes() {
     if (mArchive == NULL) {
         if (mDMCommand == NULL) {
             return -1;
         }
-        if ((int)mDMCommand->mIsDone == 0) {
+        if (mDMCommand->sync() == 0) {
             return 1;
         }
 
         mArchive = mDMCommand->getArchive();
         heap = mDMCommand->getHeap();
 
-        JKR_DELETE(mDMCommand);
+        mDMCommand->destroy();
         mDMCommand = NULL;
 
         if (mArchive == NULL) {
@@ -558,20 +592,24 @@ int dRes_info_c::setRes() {
             return -1;
         }
 
+        u32 r28;
+
         if (heap != NULL) {
             heap->lock();
             mDataHeap = mDoExt_createSolidHeapToCurrent(0, heap, 0x20);
-            JUT_ASSERT(0x4EC, mDataHeap != NULL);
+            JUT_ASSERT(1260, mDataHeap != NULL);
 
             int rt = loadResource();
             mDoExt_restoreCurrentHeap();
-            mDoExt_adjustSolidHeap(mDataHeap);
+            r28 = mDoExt_adjustSolidHeap(mDataHeap);
             heap->unlock();
-
-            JUT_ASSERT(0x4F6, rt >= 0);
+#if DEBUG
+            JUT_ASSERT(1270, rt >= 0);
+#else
             if (rt < 0) {
                 return -1;
             }
+#endif
         } else {
             mDataHeap = mDoExt_createSolidHeapFromGameToCurrent(0, 0);
             if (mDataHeap == NULL) {
@@ -580,29 +618,44 @@ int dRes_info_c::setRes() {
             }
             int rt = loadResource();
             mDoExt_restoreCurrentHeap();
-            mDoExt_adjustSolidHeap(mDataHeap);
+            r28 = mDoExt_adjustSolidHeap(mDataHeap);
 
-            JUT_ASSERT(0x509, rt >= 0);
+#if DEBUG
+            JUT_ASSERT(1289, rt >= 0);
+#else
             if (rt < 0) {
                 return -1;
             }
+#endif
         }
 
+#if DEBUG
+        mSize = JKRGetRootHeap()->getSize(((JKRMemArchive*)mArchive)->mArcHeader) + JKRGetMemBlockSize(NULL, mDataHeap);
+        if (data_8074C6C0_debug) {
+            JKRExpHeap* zeldaHeap = mDoExt_getZeldaHeap();
+            OSReport("\e[33mdRes_info_c::setRes <使用=%08x(work:%08x) 連続空き=%08x 残り空き=%08x (%3d) %s.arc\n\e[m", mSize, r28, zeldaHeap->getFreeSize(), zeldaHeap->getTotalFreeSize(), getResNum(), this);
+            OSReport("\e[33mSolid=%08x-%08x StartAddr=%08x EndAddr=%08x HeapSize=%08x \n\e[m", mDataHeap, uintptr_t(mDataHeap) + mDataHeap->getHeapSize(), mDataHeap->getStartAddr(), mDataHeap->getEndAddr(), mDataHeap->getHeapSize());
+        }
+#endif
+
         u32 heapSize = mDataHeap->getHeapSize();
-        void* heapStartAddr = mDataHeap->getStartAddr();
-        DCStoreRangeNoSync(heapStartAddr, heapSize);
+        DCStoreRangeNoSync(mDataHeap->getStartAddr(), heapSize);
+
+#if TARGET_PC
+        char buf[32];
+        snprintf(buf, sizeof(buf), "Arc %s", mArchiveName);
+        JKRHEAP_NAME(mDataHeap, buf);
+#endif
     }
 
     return 0;
 }
 
 static s32 myGetMemBlockSize(void* i_data) {
-    JKRHeap* heap = JKRHeap::findFromRoot(i_data);
-    if (heap->getHeapType() == 'EXPH') {
-        return JKRHeap::getSize(i_data, heap);
-    }
-    
-    return -1;
+    JKRHeap* heap = JKRFindHeap(i_data);
+    u32 heapType = heap->getHeapType();
+    s32 size = heapType == 'EXPH' ? JKRGetMemBlockSize(heap, i_data) : -1;
+    return size;
 }
 
 static s32 myGetMemBlockSize0(void* i_data) {
@@ -620,29 +673,22 @@ f32 dummy(int x) {
 }
 
 void dRes_info_c::dump_long(dRes_info_c* i_resInfo, int i_infoNum) {
-    int i;
-    void* header;
-    int blockSize1;
-    int blockSize2;
-    JKRArchive* archive;
-    JKRSolidHeap* dataHeap;
-
     JUTReportConsole_f("dRes_info_c::dump_long %08x %d\n", i_resInfo, i_infoNum);
     JUTReportConsole_f("No Command Archive  ArcHeader(size) SolidHeap(size) Resource Cnt ArchiveName\n");
 
-    for (i = 0; i < i_infoNum; i++) {
+    for (int i = 0; i < i_infoNum; i++) {
         if (i_resInfo->getCount() != 0) {
-            archive = i_resInfo->getArchive();
-            header = NULL;
-            blockSize1 = 0;
+            JKRArchive* archive = i_resInfo->getArchive();
+            void* header = NULL;
+            int blockSize1 = 0;
 
             if (archive != NULL) {
                 header = getArcHeader(archive);
                 blockSize1 = myGetMemBlockSize0(header);
             }
 
-            dataHeap = i_resInfo->mDataHeap;
-            blockSize2 = 0;
+            JKRSolidHeap* dataHeap = i_resInfo->mDataHeap;
+            int blockSize2 = 0;
             if (dataHeap != NULL) {
                 blockSize2 = myGetMemBlockSize0((void*)dataHeap);
             }
@@ -668,8 +714,6 @@ void dRes_info_c::dump(dRes_info_c* i_resInfo, int i_infoNum) {
     int totalHeapSize;
     int arcHeaderSize;
     int heapSize;
-    char* archiveName;
-
     JUTReportConsole_f("dRes_info_c::dump %08x %d\n", i_resInfo, i_infoNum);
     JUTReportConsole_f("No ArchiveSize(KB) SolidHeapSize(KB) Cnt ArchiveName\n");
 
@@ -680,7 +724,6 @@ void dRes_info_c::dump(dRes_info_c* i_resInfo, int i_infoNum) {
         if (i_resInfo->getCount() != 0) {
             arcHeaderSize = JKRGetMemBlockSize(NULL, getArcHeader(i_resInfo->getArchive()));
             heapSize = JKRGetMemBlockSize(NULL, i_resInfo->mDataHeap);
-            archiveName = i_resInfo->getArchiveName();
             JUTReportConsole_f("%2d %6.1f %6x %6.1f %6x %3d %s\n",
                                i,
                                arcHeaderSize / 1024.0f,
@@ -688,7 +731,7 @@ void dRes_info_c::dump(dRes_info_c* i_resInfo, int i_infoNum) {
                                heapSize / 1024.0f,
                                heapSize,
                                i_resInfo->getCount(),
-                               archiveName);
+                               i_resInfo->getArchiveName());
             totalArcHeaderSize += arcHeaderSize;
             totalHeapSize += heapSize;
         }
@@ -701,6 +744,28 @@ void dRes_info_c::dump(dRes_info_c* i_resInfo, int i_infoNum) {
                        totalHeapSize / 1024.0f,
                        totalHeapSize);
 }
+
+#if DEBUG
+void dRes_info_c::dumpTag(dRes_info_c* info, int param_2, int param_3, int param_4) {
+    for (int i = 0; i < param_2; i++) {
+        if (info->getCount()) {
+            fapGm_dataMem::printfTag(1, param_3, 0, info->getArchiveName(), getArcHeader(info->getArchive()), 0, NULL, NULL);
+            fapGm_dataMem::printfTag(1, param_4, 0, info->getArchiveName(), info->mDataHeap, 0, NULL, NULL);
+        }
+        info++;
+    }
+}
+
+void dRes_info_c::dump(char* param_1, dRes_info_c* info, int param_3) {
+    for (int i = 0; i < param_3; i++) {
+        if (info->getCount()) {
+            char* r28 = param_1 + strlen(param_1);
+            sprintf(r28, ",%s,%d,\n", info->getArchiveName(), JKRGetMemBlockSize(NULL, getArcHeader(info->getArchive())) + JKRGetMemBlockSize(NULL, info->mDataHeap));
+        }
+        info++;
+    }
+}
+#endif
 
 dRes_control_c::~dRes_control_c() {
     for (int i = 0; i < ARRAY_SIZE(mObjectInfo); i++) {
@@ -726,8 +791,7 @@ int dRes_control_c::setRes(char const* i_arcName, dRes_info_c* i_resInfo, int i_
             return 0;
         }
 
-        int rt = resInfo->set(i_arcName, i_path, i_mountDirection, i_heap);
-        if (rt == 0) {
+        if (resInfo->set(i_arcName, i_path, i_mountDirection, i_heap) == 0) {
             OSReport_Error("<%s.arc> dRes_control_c::setRes: res info set error !!\n", i_arcName);
             resInfo->~dRes_info_c();
             return 0;
@@ -748,7 +812,7 @@ int dRes_control_c::syncRes(char const* i_arcName, dRes_info_c* i_resInfo, int i
             strncmp(i_arcName, "Pack", 4) == 0)
         {
             // "<%s.arc> syncRes: Resource not registered (No Error)\n"
-            OS_REPORT("\x1b[34m<%s.arc> syncRes: リソース未登録(問題無し)\n\x1b[m", i_arcName);
+            OS_REPORT("\e[34m<%s.arc> syncRes: リソース未登録(問題無し)\n\e[m", i_arcName);
         } else {
             // "<%s.arc> syncRes: Resource not registered!!\n"
             OS_REPORT_ERROR("<%s.arc> syncRes: リソース未登録!!\n", i_arcName);
@@ -765,9 +829,9 @@ int dRes_control_c::deleteRes(char const* i_arcName, dRes_info_c* i_resInfo, int
 
     if (resInfo == NULL) {
 #if DEBUG
-    if (strcmp(i_arcName, "Xtg_00") == 0) {
+    if (strcmp(i_arcName, "Xtg_00")) {
         // "<%s.arc> deleteRes: res nothing !!\n(Detected deleting an unregistered resource! Please fix.)\n"
-        OS_REPORT_ERROR("<%s.arc> deleteRes: res nothing !!\n(未登録のリソースを削除してるのを発見しました！修正してください。)\n", i_arcName);   
+        OS_REPORT_ERROR("<%s.arc> deleteRes: res nothing !!\n(未登録のリソースを削除してるのを発見しました！修正してください。)\n", i_arcName);
     }
 #endif
         return 0;
@@ -809,14 +873,14 @@ dRes_info_c* dRes_control_c::getResInfoLoaded(char const* i_arcName, dRes_info_c
 
     if (resInfo == NULL) {
 #if DEBUG
-    if (stricmp(i_arcName, "Xtg_00") == 0) {
-        OS_REPORT("\x1b[35m<%s.arc> getRes: res nothing !!\n\x1b[m", i_arcName);   
+    if (stricmp(i_arcName, "Xtg_00")) {
+        OS_REPORT("\e[35m<%s.arc> getRes: res nothing !!\n\e[m", i_arcName);
     }
 #endif
-        resInfo = NULL;
+        return NULL;
     } else if (resInfo->getArchive() == NULL) {
         OSReport_Warning("<%s.arc> getRes: res during reading !!\n", i_arcName);
-        resInfo = NULL;
+        return NULL;
     }
 
     return resInfo;
@@ -853,7 +917,7 @@ void* dRes_control_c::getRes(char const* i_arcName, char const* i_resName, dRes_
     if (entry != NULL) {
         return resInfo->getRes(entry - archive->mFiles);
     } else {
-        OS_REPORT("\x1b[34m%s not found in %s.arc\n\x1b[m", i_resName, i_arcName);
+        OS_REPORT("\e[34m%s not found in %s.arc\n\e[m", i_resName, i_arcName);
         return NULL;
     }
 }
@@ -884,16 +948,55 @@ int dRes_control_c::syncAllRes(dRes_info_c* i_resInfo, int i_infoNum) {
     return 0;
 }
 
+#if DEBUG
+int dRes_control_c::getSize(const char* i_arcName, dRes_info_c* i_resInfo, int i_infoNum) {
+    dRes_info_c* info = getResInfoLoaded(i_arcName, i_resInfo, i_infoNum);
+    if (!info) {
+        return 0;
+    }
+    return info->getSize();
+}
+
+int dRes_control_c::getStageAllSize() {
+    int size = 0;
+    dRes_info_c* info = mStageInfo;
+
+    for (int i = 0; i < ARRAY_SIZE(mStageInfo); i++) {
+        if (info->getCount()) {
+            size += info->getSize();
+        }
+        info++;
+    }
+
+    return size;
+}
+
+int dRes_control_c::getObjectAllSize() {
+    int size = 0;
+    dRes_info_c* info = mObjectInfo;
+
+    for (int i = 0; i < ARRAY_SIZE(mObjectInfo); i++) {
+        if (info->getCount()) {
+            size += info->getSize();
+        }
+        info++;
+    }
+
+    return size;
+}
+#endif
+
 int dRes_control_c::setObjectRes(char const* i_arcName, void* i_archiveRes, u32 i_bufferSize,
                                  JKRHeap* i_heap) {
-    JUT_ASSERT(0x7A3, i_archiveRes != NULL);
+    JUT_ASSERT(1955, i_archiveRes != NULL);
 
 #if DEBUG
     dRes_info_c* nowInfo = getResInfo(i_arcName, mObjectInfo, ARRAY_SIZEU(mObjectInfo));
-    JUT_ASSERT(0x7A6, nowInfo == NULL);
+    JUT_ASSERT(1958, nowInfo == NULL);
 #endif
 
-    if (!setRes(i_arcName, mObjectInfo, ARRAY_SIZEU(mObjectInfo), "", mDoDvd_MOUNT_DIRECTION_HEAD, NULL)) {
+    int r26 = setRes(i_arcName, mObjectInfo, ARRAY_SIZEU(mObjectInfo), "", mDoDvd_MOUNT_DIRECTION_HEAD, NULL);
+    if (!r26) {
         return 0;
     }
 
@@ -903,14 +1006,13 @@ int dRes_control_c::setObjectRes(char const* i_arcName, void* i_archiveRes, u32 
     }
 
     dRes_info_c* info = getResInfo(i_arcName, mObjectInfo, ARRAY_SIZEU(mObjectInfo));
-    JUT_ASSERT(0x7B7, info != NULL);
+    JUT_ASSERT(1975, info != NULL);
 
-    int rt = info->setRes(memArchive, i_heap);
-    if (rt == 0) {
-        return 1;
+    if (info->setRes(memArchive, i_heap)) {
+        return 0;
     }
 
-    return 0;
+    return 1;
 }
 
 int dRes_control_c::setStageRes(char const* i_arcName, JKRHeap* i_heap) {
@@ -929,6 +1031,20 @@ void dRes_control_c::dump() {
     dRes_info_c::dump(mStageInfo, ARRAY_SIZEU(mStageInfo));
     dRes_info_c::dump_long(mStageInfo, ARRAY_SIZEU(mStageInfo));
 }
+
+#if DEBUG
+void dRes_control_c::dumpTag() {
+    dRes_info_c::dumpTag(mObjectInfo, ARRAY_SIZE(mObjectInfo), 7, 8);
+    dRes_info_c::dumpTag(mStageInfo, ARRAY_SIZE(mStageInfo), 9, 10);
+}
+
+void dRes_control_c::dump(char* param_1) {
+    sprintf(param_1 + strlen(param_1), ",アーカイブ名,サイズ,\n");
+    dRes_info_c::dump(param_1, mObjectInfo, ARRAY_SIZE(mObjectInfo));
+    dRes_info_c::dump(param_1, mStageInfo, ARRAY_SIZE(mStageInfo));
+    sprintf(param_1 + strlen(param_1), ",パーティクルリソース（シーン依存）,%d,\n\n", JKRGetRootHeap()->getSize(g_dComIfG_gameInfo.play.getParticle()->getSceneRes()));
+}
+#endif
 
 int dRes_control_c::getObjectResName2Index(char const* i_arcName, char const* i_resName) {
     dRes_info_c* info = getResInfoLoaded(i_arcName, mObjectInfo, ARRAY_SIZEU(mObjectInfo));

@@ -19,6 +19,7 @@
 #include "d/d_model.h"
 #include "d/actor/d_a_grass.h"
 #include "d/d_tresure.h"
+#include <cstring>
 
 fapGm_HIO_c::fapGm_HIO_c() {
     mUsingHostIO = true;

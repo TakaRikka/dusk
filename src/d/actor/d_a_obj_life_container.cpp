@@ -10,6 +10,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_item_data.h"
 #include "SSystem/SComponent/c_math.h"
+#include <cstring>
 
 const static dCcD_SrcCyl l_cyl_src = {
     {

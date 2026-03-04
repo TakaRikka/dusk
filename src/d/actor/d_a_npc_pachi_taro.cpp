@@ -13,6 +13,7 @@
 #include "d/actor/d_a_npc_pachi_maro.h"
 #include "d/actor/d_a_npc_pachi_besu.h"
 #include "d/d_debug_viewer.h"
+#include <cstring>
 
 enum Taro_RES_File_ID {
     /* BMDR */
@@ -843,7 +844,9 @@ int daNpc_Pachi_Taro_c::CreateHeap() {
     J3DModel* model = NULL;
     
     int bmdIdx = mTwilight == true ? TARO0 : NONE;
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_resNameList[l_bmdData[bmdIdx][1]], l_bmdData[bmdIdx][0]));
+    int resNameIdx = l_bmdData[bmdIdx][1];
+    int resIdx = l_bmdData[bmdIdx][0];
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_resNameList[resNameIdx], resIdx));
     if (modelData == NULL) {
         return 1;
     }
@@ -1010,9 +1013,12 @@ void daNpc_Pachi_Taro_c::setParam() {
     s16 talk_distance = mpHIO->m.common.talk_distance;
     s16 talk_angle = mpHIO->m.common.talk_angle;
 
-    attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(mpHIO->m.common.attention_distance, mpHIO->m.common.attention_angle);
+    s16 attnDist = mpHIO->m.common.attention_distance;
+    s16 attnAngle = mpHIO->m.common.attention_angle;
+    attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(attnDist, attnAngle);
     attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
-    attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(talk_distance, talk_angle);
+    attention_info.distances[fopAc_attn_SPEAK_e] =
+        daNpcT_getDistTableIdx(talk_distance, talk_angle);
     attention_info.flags = flags;
 
     scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
@@ -1030,10 +1036,12 @@ void daNpc_Pachi_Taro_c::setParam() {
 
 BOOL daNpc_Pachi_Taro_c::checkChangeEvt() {
     switch (mType) {
-        default:
-            break;
+    case 0:
+        break;
+    default:
+        break;
     }
-    
+
     return FALSE;
 }
 
@@ -1112,21 +1120,21 @@ fopAc_ac_c* daNpc_Pachi_Taro_c::srchDistTag1() {
 }
 
 void* daNpc_Pachi_Taro_c::_srch_DistTag1_main(void* i_actor, void* i_data) {
-    daTagPati_c* actor = (daTagPati_c*)i_actor;
-    
-    if (!fopAcM_IsActor(actor)) {
-        return NULL;
-    } 
-    
-    if (fopAcM_GetName(actor) != PROC_TAG_PATI) {
-        return NULL;
-    } 
-    
-    if (!actor->isDistChkTag1()) {
+    UNUSED(i_data);
+
+    if (!fopAcM_IsActor(i_actor)) {
         return NULL;
     }
 
-    return actor;
+    if (fopAcM_GetName(i_actor) != PROC_TAG_PATI) {
+        return NULL;
+    }
+
+    if (!((daTagPati_c*)i_actor)->isDistChkTag1()) {
+        return NULL;
+    }
+
+    return i_actor;
 }
 
 fopAc_ac_c* daNpc_Pachi_Taro_c::srchDistTag2() {
@@ -1134,21 +1142,21 @@ fopAc_ac_c* daNpc_Pachi_Taro_c::srchDistTag2() {
 }
 
 void* daNpc_Pachi_Taro_c::_srch_DistTag2_main(void* i_actor, void* i_data) {
-    daTagPati_c* actor = (daTagPati_c*)i_actor;
-    
-    if (!fopAcM_IsActor(actor)) {
-        return NULL;
-    } 
-    
-    if (fopAcM_GetName(actor) != PROC_TAG_PATI) {
-        return NULL;
-    } 
-    
-    if (!actor->isDistChkTag2()) {
+    UNUSED(i_data);
+
+    if (!fopAcM_IsActor(i_actor)) {
         return NULL;
     }
 
-    return actor;
+    if (fopAcM_GetName(i_actor) != PROC_TAG_PATI) {
+        return NULL;
+    }
+
+    if (!((daTagPati_c*)i_actor)->isDistChkTag2()) {
+        return NULL;
+    }
+
+    return i_actor;
 }
 
 fopAc_ac_c* daNpc_Pachi_Taro_c::srchEscapeTag1() {
@@ -1156,21 +1164,21 @@ fopAc_ac_c* daNpc_Pachi_Taro_c::srchEscapeTag1() {
 }
 
 void* daNpc_Pachi_Taro_c::_srch_EscapeTag1_main(void* i_actor, void* i_data) {
-    daTagPati_c* actor = (daTagPati_c*)i_actor;
-    
-    if (!fopAcM_IsActor(actor)) {
-        return NULL;
-    } 
-    
-    if (fopAcM_GetName(actor) != PROC_TAG_PATI) {
-        return NULL;
-    } 
-    
-    if (!actor->isEscapeChkTag1()) {
+    UNUSED(i_data);
+
+    if (!fopAcM_IsActor(i_actor)) {
         return NULL;
     }
 
-    return actor;
+    if (fopAcM_GetName(i_actor) != PROC_TAG_PATI) {
+        return NULL;
+    }
+
+    if (!((daTagPati_c*)i_actor)->isEscapeChkTag1()) {
+        return NULL;
+    }
+
+    return i_actor;
 }
 
 fopAc_ac_c* daNpc_Pachi_Taro_c::srchEscapeTag2() {
@@ -1178,21 +1186,21 @@ fopAc_ac_c* daNpc_Pachi_Taro_c::srchEscapeTag2() {
 }
 
 void* daNpc_Pachi_Taro_c::_srch_EscapeTag2_main(void* i_actor, void* i_data) {
-    daTagPati_c* actor = (daTagPati_c*)i_actor;
-    
-    if (!fopAcM_IsActor(actor)) {
-        return NULL;
-    } 
-    
-    if (fopAcM_GetName(actor) != PROC_TAG_PATI) {
-        return NULL;
-    } 
-    
-    if (!actor->isEscapeChkTag2()) {
+    UNUSED(i_data);
+
+    if (!fopAcM_IsActor(i_actor)) {
         return NULL;
     }
 
-    return actor;
+    if (fopAcM_GetName(i_actor) != PROC_TAG_PATI) {
+        return NULL;
+    }
+
+    if (!((daTagPati_c*)i_actor)->isEscapeChkTag2()) {
+        return NULL;
+    }
+
+    return i_actor;
 }
 
 BOOL daNpc_Pachi_Taro_c::evtTalk() {
@@ -1354,7 +1362,7 @@ void daNpc_Pachi_Taro_c::drawOtherMdl() {
             g_env_light.setLightTevColorType_MAJI(mpModels[i], &tevStr);
             mDoMtx_stack_c::copy(model->getAnmMtx(jointNo[i]));
             Mtx mtx;
-            MTXCopy(mDoMtx_stack_c::get(), mtx);
+            cMtx_copy(mDoMtx_stack_c::get(), mtx);
             mpModels[i]->setBaseTRMtx(mtx);
             mDoExt_modelUpdateDL(mpModels[i]);
             dComIfGd_addRealShadow(mShadowKey, mpModels[i]);
@@ -1408,7 +1416,7 @@ BOOL daNpc_Pachi_Taro_c::setAction(actionFunc action) {
 
 int daNpc_Pachi_Taro_c::wait(void* param_1) {
     int unused = 0;
-    
+
     switch (mMode) {
         case MODE_ENTER:
         case MODE_INIT:
@@ -1453,11 +1461,10 @@ int daNpc_Pachi_Taro_c::wait(void* param_1) {
                         srchPlayerActor();
                     }
                 }
-            
-                switch (mJntAnm.getMode()) {
-                    case 0:
-                    default:
-                        break;
+
+                // ???
+                if (mJntAnm.getMode() == 0) {
+                    (int)mType;
                 }
 
                 if (field_0x1004 == 0) {
@@ -1508,7 +1515,8 @@ BOOL daNpc_Pachi_Taro_c::_turn_to_link(s16 i_step) {
 }
 
 BOOL daNpc_Pachi_Taro_c::_turn_pos(cXyz const& i_pos, s16 i_step) {
-    BOOL rv = cLib_chaseAngleS(&mCurAngle.y, cLib_targetAngleY(&current.pos, &i_pos), i_step);
+    s16 targetAngleY = cLib_targetAngleY(&current.pos, &i_pos);
+    BOOL rv = cLib_chaseAngleS(&mCurAngle.y, targetAngleY, i_step);
     current.angle.y = mCurAngle.y;
     shape_angle.y = mCurAngle.y;
     return rv;
@@ -1974,8 +1982,9 @@ BOOL daNpc_Pachi_Taro_c::cutTalk(int i_staffId) {
         setMesPat();
     }
 
+    int* piVar2 = NULL;
     int mesNo = 0;
-    int* piVar2 = dComIfGp_evmng_getMyIntegerP(i_staffId, mesNos[mMesPat]);
+    piVar2 = dComIfGp_evmng_getMyIntegerP(i_staffId, mesNos[mMesPat]);
     if (piVar2 != NULL) {
         mesNo = *piVar2;
     }
@@ -2498,23 +2507,24 @@ BOOL daNpc_Pachi_Taro_c::_cutTutrialContinue_Main(int const& i_cutId) {
     BOOL rv = FALSE;
 
     switch (i_cutId) {
-        case 10:
-            if (_turn_pos(mTagPos, 0x1000)) {
-                field_0xfe2 = 1;
-                rv = TRUE;
-            }
-            break;
-        
-        case 20:
-            BOOL chaseAngleFlag = cLib_chaseAngleS(&mCurAngle.y, (s16)home.angle.y, 0x800);
-            current.angle.y = mCurAngle.y;
-            shape_angle.y = mCurAngle.y;
+    case 10:
+        if (_turn_pos(mTagPos, 0x1000)) {
+            field_0xfe2 = 1;
+            rv = TRUE;
+        }
+        break;
 
-            if (chaseAngleFlag) {
-                daNpc_Pachi_Maro_c* maro_p = (daNpc_Pachi_Maro_c*)mActorMngrs[0].getActorP();
-                maro_p->setFMotion_LookNone();
-                rv = TRUE;
-            }
+    case 20:
+        s16 homeAngleY = home.angle.y;
+        BOOL chaseAngleFlag = cLib_chaseAngleS(&mCurAngle.y, homeAngleY, 0x800);
+        current.angle.y = mCurAngle.y;
+        shape_angle.y = mCurAngle.y;
+
+        if (chaseAngleFlag) {
+            daNpc_Pachi_Maro_c* maro_p = (daNpc_Pachi_Maro_c*)mActorMngrs[0].getActorP();
+            maro_p->setFMotion_LookNone();
+            rv = TRUE;
+        }
     }
 
     return rv;

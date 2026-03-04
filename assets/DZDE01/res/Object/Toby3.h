@@ -1,0 +1,26 @@
+#ifndef RES_TOBY3_H
+#define RES_TOBY3_H
+
+enum dRes_INDEX_TOBY3 {
+    /* BCK  */
+    dRes_INDEX_TOBY3_BCK_TOBY_HUMMER_A_e=0x4,
+    dRes_INDEX_TOBY3_BCK_TOBY_HUMMER_B_e=0x5,
+    dRes_INDEX_TOBY3_BCK_TOBY_HUMMER_C_e=0x6,
+    /* BMDR */
+    dRes_INDEX_TOBY3_BMD_TOBY_HAMMER_e=0x9,
+};
+
+enum dRes_ID_TOBY3 {
+    /* BCK  */
+    dRes_ID_TOBY3_BCK_TOBY_HUMMER_A_e=0x4,
+    dRes_ID_TOBY3_BCK_TOBY_HUMMER_B_e=0x5,
+    dRes_ID_TOBY3_BCK_TOBY_HUMMER_C_e=0x6,
+    /* BMDR */
+    dRes_ID_TOBY3_BMD_TOBY_HAMMER_e=0x9,
+};
+
+enum TOBY_HAMMER_JNT {
+    TOBY_HAMMER_JNT_TOBY_HAMMER_e=0x0,
+};
+
+#endif /* !RES_TOBY3_H */

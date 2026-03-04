@@ -13,6 +13,7 @@
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_lib.h"
+#include <cstring>
 
 static u8 hio_set;
 
@@ -273,10 +274,10 @@ void daObjKAM_c::WallWalk() {
             field_0x99a.z = -cM_atan2s(normal->x, normYzMag);
             field_0x99a.x = cM_atan2s(normal->z, normal->y);
         } else {
-            field_0x990 += (s16)0x100;
+            ANGLE_ADD(field_0x990, 0x100);
         }
     } else {
-        field_0x990 += (s16)0x100;
+        ANGLE_ADD(field_0x990, 0x100);
     }
 
     cLib_addCalcAngleS2(&current.angle.y, field_0x990, 0x10, 0x50);
@@ -773,7 +774,7 @@ int daObjKAM_c::create() {
         field_0x9c0 = fopAcM_GetParam(this) & 0xf;
         if (field_0x9c0 == 2) {
             field_0x56c = 0;
-            shape_angle.x -= (s16)0x2000;
+            ANGLE_SUB(shape_angle.x, 0x2000);
             fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x4000);
         } else {
             mDraw = true;

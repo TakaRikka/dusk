@@ -8,22 +8,24 @@ endif ()
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
 
 option(DUSK_BUILD_WARNINGS "If off, compiler warnings will be suppressed")
 
 if (CMAKE_SYSTEM_NAME STREQUAL Linux)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unknown-pragmas -Wno-unused-variable -Wno-unused-parameter")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -stdlib=libc++ -Wno-register -fPIC")
-    set(CMAKE_PREFIX_PATH /usr)
-    set(CMAKE_LIBRARY_ARCHITECTURE x86_64-linux-gnu)
-    set(CMAKE_LIBRARY_PATH "/usr/lib64" "/usr/lib/x86_64-linux-gnu" CACHE PATH "")
-    set(CMAKE_FIND_LIBRARY_CUSTOM_LIB_SUFFIX 64)
+    # -Wno-multichar: Multi-character constants ('ABCD') are implementation-defined but all compilers
+    #   (CW, GCC, Clang, MSVC) encode them identically in big-endian order.
+    #   For >4-char literals (which GCC/Clang truncate to int), use the MULTI_CHAR() macro.
+    # -Wwrite-strings: Game code relies on implicit const char* -> char* conversions
+    # -Wdeprecated-declarations: JSystem uses std::iterator, deprecated in C++17
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-multichar -Wno-write-strings")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-multichar -Wno-write-strings -Wno-trigraphs -Wno-deprecated-declarations")
     set(CMAKE_INSTALL_RPATH "$ORIGIN")
     set(CMAKE_BUILD_RPATH "$ORIGIN")
 elseif (APPLE)
-	add_compile_options(-Wno-declaration-after-statement)
+    add_compile_options(-Wno-declaration-after-statement -Wno-non-pod-varargs)
     set(CMAKE_INSTALL_RPATH "$ORIGIN")
     set(CMAKE_BUILD_RPATH "$ORIGIN")
 elseif (MSVC)
@@ -41,10 +43,7 @@ elseif (MSVC)
     endif ()
     add_compile_options(/utf-8)
 endif ()
-if (NOT MSVC)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error -Wno-c++11-narrowing")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error -Wno-c++11-narrowing")
-endif ()
+
 
 include(files.cmake)
 
@@ -60,8 +59,15 @@ add_library(game_debug STATIC ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES})
 target_compile_definitions(game_debug PRIVATE TARGET_PC VERSION=0 $<$<CONFIG:Debug>:DEBUG=1>)
 
 # Make these properties PUBLIC so that the regular game target also sees them.
-target_include_directories(game_debug PUBLIC include src assets/${DUSK_TP_VERSION} ${CMAKE_BINARY_DIR}/../${DUSK_TP_VERSION}/include)
-target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::si aurora::vi aurora::pad aurora::mtx)
+target_include_directories(game_debug PUBLIC
+        include
+        src
+        assets/${DUSK_TP_VERSION}
+        libs/JSystem/include
+        extern/aurora/include/dolphin
+        ${CMAKE_SOURCE_DIR}/build/${DUSK_TP_VERSION}/include
+        build/${DUSK_TP_VERSION}/include)
+target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::si aurora::vi aurora::pad aurora::mtx aurora::os)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES})

@@ -1,0 +1,30 @@
+#ifndef RES_P_SSWITCH_H
+#define RES_P_SSWITCH_H
+
+enum dRes_INDEX_P_SSWITCH {
+    /* BMDR */
+    dRes_INDEX_P_SSWITCH_BMD_P_SSWITCH_A_e=0x4,
+    dRes_INDEX_P_SSWITCH_BMD_P_SSWITCH_B_e=0x5,
+    /* DZB  */
+    dRes_INDEX_P_SSWITCH_DZB_P_SSWITCH_A_e=0x8,
+    dRes_INDEX_P_SSWITCH_DZB_P_SSWITCH_B_e=0x9,
+};
+
+enum dRes_ID_P_SSWITCH {
+    /* BMDR */
+    dRes_ID_P_SSWITCH_BMD_P_SSWITCH_A_e=0x4,
+    dRes_ID_P_SSWITCH_BMD_P_SSWITCH_B_e=0x5,
+    /* DZB  */
+    dRes_ID_P_SSWITCH_DZB_P_SSWITCH_A_e=0x8,
+    dRes_ID_P_SSWITCH_DZB_P_SSWITCH_B_e=0x9,
+};
+
+enum P_SSWITCH_A_JNT {
+    P_SSWITCH_A_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum P_SSWITCH_B_JNT {
+    P_SSWITCH_B_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_P_SSWITCH_H */

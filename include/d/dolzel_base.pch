@@ -4,29 +4,29 @@
 // Fixes weak .bss
 #include "weak_bss_1109_to_1009.h" // IWYU pragma: export
 
-// Fixes weak .data
-#include <cmath> // IWYU pragma: export
-#include <limits> // IWYU pragma: export
-#include "JSystem/J3DGraphBase/J3DMatBlock.h" // IWYU pragma: export
-#include "Z2AudioLib/Z2Calc.h" // IWYU pragma: export
-
-// Fixes weak function/RTTI ordering
 #include <cmath> // IWYU pragma: export
 #include <cstring> // IWYU pragma: export
+// Provides float constants from sqrt implementation
+#include <cmath> // IWYU pragma: export
+// Provides signaling NaN constants
+#include <limits> // IWYU pragma: export
 #include "Z2AudioLib/Z2AudioArcLoader.h" // IWYU pragma: export
 #include "JSystem/JAudio2/JAUStreamAramMgr.h" // IWYU pragma: export
 #include "JSystem/JKernel/JKRDisposer.h" // IWYU pragma: export
 #include "JSystem/JGadget/linklist.h" // IWYU pragma: export
-#include "JSystem/J3DGraphBase/J3DPacket.h" // IWYU pragma: export
-#include "JSystem/J3DGraphAnimator/J3DMaterialAttach.h" // IWYU pragma: export
-#include "JSystem/J3DGraphAnimator/J3DShapeTable.h" // IWYU pragma: export
-#include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h" // IWYU pragma: export
-#include "JSystem/J3DGraphAnimator/J3DAnimation.h" // IWYU pragma: export
-#include "JSystem/J3DGraphAnimator/J3DJoint.h" // IWYU pragma: export
 #include "JSystem/JUtility/JUTGamePad.h" // IWYU pragma: export
-#include "JSystem/J3DGraphBase/J3DSys.h" // IWYU pragma: export
-#include "JSystem/J3DGraphAnimator/J3DMaterialAttach.h" // IWYU pragma: export
+// Provides AttnArr (u8 array)
+#include "JSystem/J3DGraphBase/J3DMatBlock.h" // IWYU pragma: export
+// Provides Z2Calc::cNullVec
+#include "Z2AudioLib/Z2Calc.h" // IWYU pragma: export
+#include "JSystem/J3DGraphBase/J3DTexture.h" // IWYU pragma: export
+#include "JSystem/J3DGraphBase/J3DPacket.h" // IWYU pragma: export
+#include "JSystem/J3DGraphAnimator/J3DAnimation.h" // IWYU pragma: export
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h" // IWYU pragma: export
+#include "JSystem/J3DGraphAnimator/J3DShapeTable.h" // IWYU pragma: export
+#include "JSystem/J3DGraphAnimator/J3DJoint.h" // IWYU pragma: export
+#include "JSystem/J3DGraphAnimator/J3DMaterialAttach.h" // IWYU pragma: export
+#include "JSystem/J3DGraphBase/J3DSys.h" // IWYU pragma: export
 #include "JSystem/JHostIO/JHICommonMem.h" // IWYU pragma: export
 #include "JSystem/JHostIO/JORReflexible.h" // IWYU pragma: export
 #include "SSystem/SComponent/c_m3d_g_sph.h" // IWYU pragma: export
@@ -36,9 +36,13 @@
 #include "SSystem/SComponent/c_bg_s_poly_info.h" // IWYU pragma: export
 #include "SSystem/SComponent/c_bg_s_gnd_chk.h" // IWYU pragma: export
 #include "SSystem/SComponent/c_m3d_g_cyl.h" // IWYU pragma: export
+#include "SSystem/SComponent/c_phase.h" // IWYU pragma: export
 #include "m_Do/m_Do_hostIO.h" // IWYU pragma: export
 #include "f_op/f_op_actor.h" // IWYU pragma: export
+#include "JSystem/JParticle/JPAEmitter.h" // IWYU pragma: export
+#include "JSystem/JParticle/JPAParticle.h" // IWYU pragma: export
 #include "d/d_bg_s_gnd_chk.h" // IWYU pragma: export
+#include "d/d_particle.h" // IWYU pragma: export
 #include "d/d_bg_s_chk.h" // IWYU pragma: export
 #include "d/d_bg_w.h" // IWYU pragma: export
 #include "d/d_drawlist.h" // IWYU pragma: export

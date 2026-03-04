@@ -1,7 +1,7 @@
 #ifndef D_D_EYE_HL_H
 #define D_D_EYE_HL_H
 
-#include <dolphin/types.h>
+#include <types.h>
 
 class J3DModelData;
 struct ResTIMG;
@@ -12,6 +12,10 @@ public:
     static void update();
     static void entry(dEyeHL_c*);
     static void remove(dEyeHL_c*);
+
+    static void create() {
+        JUT_ASSERT(51, m_obj == NULL);
+    }
 
     static dEyeHL_c* m_obj;
 };

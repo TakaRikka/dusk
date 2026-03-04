@@ -11,6 +11,7 @@
 #include "d/actor/d_a_npc4.h"
 #include "d/actor/d_a_npc_moi.h"
 #include "d/actor/d_a_npc_uri.h"
+#include <cstring>
 
 const daNpc_Moi_HIOParam daNpc_Moi_Param_c::m = {
     200.0f,   // attention_offset

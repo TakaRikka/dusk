@@ -18,6 +18,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
+#include <cstring>
 
 dMsgScrnTalk_c::dMsgScrnTalk_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     if (param_3 != NULL) {

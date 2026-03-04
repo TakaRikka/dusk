@@ -1160,7 +1160,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 static int daE_SH_Create(fopAc_ac_c* i_this) {
     static dCcD_SrcSph cc_sph_src = {
         {
-            {0x0, {{0x0, 0x0, 0x0}, {(s32)0xd8fbfdff, 0x3}, 0x75}}, // mObj
+            {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x3}, 0x75}}, // mObj
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x2}, // mGObjTg
             {0x0}, // mGObjCo

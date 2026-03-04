@@ -15,6 +15,7 @@
 #include "d/d_a_item_static.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 static bool noFallCheck;
 static bool hio_set;

@@ -367,7 +367,7 @@ static void chain_move(obj_keyhole_class* i_this) {
             cMtx_YrotM(*calc_mtx, 0x4000);
             chain->model[j]->setBaseTRMtx(*calc_mtx);
 
-            sp8 += (s16)(TREG_S(0) + 0x3D00);
+            ANGLE_ADD(sp8, TREG_S(0) + 0x3D00);
         }
     }
 }

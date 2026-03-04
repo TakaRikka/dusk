@@ -1,11 +1,12 @@
-#include "d/actor/d_a_grass.h"
+#include "d/actor/d_grass.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_s_play.h"
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "f_op/f_op_overlap_mng.h"
-#include <dolphin/gf.h>
+#include <gf.h>
+#include <cstring>
 
 #include "d/d_camera.h"
 #include "f_op/f_op_camera_mng.h"
@@ -510,10 +511,10 @@ void dGrass_packet_c::draw() {
 
     GXSetVtxDescv(l_vtxDescList);
     GXSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
-    GXSetArray(GX_VA_POS, mp_pos, sizeof(Vec));
-    GXSetArray(GX_VA_NRM, mp_normal, sizeof(Vec));
-    GXSetArray(GX_VA_CLR0, mp_colors, sizeof(GXColor));
-    GXSetArray(GX_VA_TEX0, mp_texCoords, 8);
+    GXSETARRAY(GX_VA_POS, mp_pos, sizeof(l_pos), sizeof(Vec));
+    GXSETARRAY(GX_VA_NRM, mp_normal, sizeof(l_normal), sizeof(Vec));
+    GXSETARRAY(GX_VA_CLR0, mp_colors, sizeof(l_color), sizeof(GXColor));
+    GXSETARRAY(GX_VA_TEX0, mp_texCoords, sizeof(l_texCoord), 8);
 
     GXColorS10 spA0 = {0, 0, 0, 0};
     GXColorS10 sp98 = {0, 0, 0, 0};

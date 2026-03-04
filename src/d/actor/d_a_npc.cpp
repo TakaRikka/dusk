@@ -12,6 +12,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_lib.h"
+#include <cstring>
 
 #if DEBUG
 void daNpcT_cmnListenPropertyEvent(char* param_0, int* param_1, daNpcT_HIOParam* param_2) {
@@ -752,7 +753,7 @@ int daNpcT_Path_c::chkPassed2(cXyz i_pnt, cXyz* param_2, int i_num, int param_4)
 }
 
 #if DEBUG
-int daNpcT_Path_c::drawDbgInfo(f32 param_0, int param_1) {
+void daNpcT_Path_c::drawDbgInfo(f32 param_0, int param_1) {
     GXColor green = {0x80, 0xff, 0x80, 0xff};
     GXColor blue = {0x80, 0x80, 0xff, 0xff};
     GXColor red = {0xff, 0x80, 0x80, 0xff};
@@ -2435,7 +2436,7 @@ BOOL daNpcT_c::turn(s16 i_angle, int i_count, int i_direction) {
     }
 
     s16 turn = angle_diff * cM_ssin((s16)mTurnAmount);
-    mTurnAmount += (s16)(0x4000 / mTurnCount);
+    ANGLE_ADD(mTurnAmount, 0x4000 / mTurnCount);
 
     if ((u16)mTurnAmount < 0x4000) {
         mCurAngle.y = mStartAngle + turn;
@@ -2645,7 +2646,7 @@ void daNpcT_c::setHitodamaPrtcl() {
     field_0xe00.y = cM_ssin(field_0xe18) * 4.0f;
     field_0xe00.z = field_0xe00.x * -cM_ssin(shape_angle.y);
     field_0xe00.x = field_0xe00.x * cM_scos(shape_angle.y);
-    field_0xe1a += (s16)0x400;
+    ANGLE_ADD(field_0xe1a, 0x400);
 
     pos.x = eyePos.x + field_0xe00.x + field_0xe0c.x;
     pos.y = eyePos.y + field_0xe00.y + field_0xe0c.y;

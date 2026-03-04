@@ -12,6 +12,7 @@
 #include "d/d_bg_parts.h"
 #include "m_Do/m_Do_Reset.h"
 #include <cstdio>
+#include <cstring>
 #ifndef __MWERKS__
 #include "dusk/extras.h"
 #endif
@@ -328,7 +329,7 @@ static int phase_1(room_of_scene_class* i_this) {
         } else {
             stage_stag_info_class* stagInfo = dComIfGp_getStage()->getStagInfo();
 
-            if (dStage_staginfo_GetArchiveHeap(stagInfo) != NULL) {
+            if (dStage_staginfo_GetArchiveHeap(stagInfo) != FALSE) {
                 heap = mDoExt_getArchiveHeap();
             }
         }
@@ -407,10 +408,6 @@ static int phase_2(room_of_scene_class* i_this) {
     }
 
     return cPhs_NEXT_e;
-}
-
-void dStage_roomControl_c::setZoneNo(int i_roomNo, int i_zoneNo) {
-    mStatus[i_roomNo].mZoneNo = i_zoneNo;
 }
 
 static int phase_3(room_of_scene_class* i_this) {

@@ -492,10 +492,10 @@ void daAlink_c::setCarryArmAngle(f32 param_0, f32 param_1) {
         field_0x3136[1].set(0, 0, temp_r29 - (3500.0f * param_1));
     
         if (param_1 < 0.0f) {
-            field_0x312a[0].z += (s16)(2500.0f * param_1);
-            field_0x3136[0].y += (s16)(2000.0f * param_1);
+            ANGLE_ADD(field_0x312a[0].z, 2500.0f * param_1);
+            ANGLE_ADD(field_0x3136[0].y, 2000.0f * param_1);
         } else {
-            field_0x3136[0].y += (s16)(4000.0f * param_1);
+            ANGLE_ADD(field_0x3136[0].y, 4000.0f * param_1);
         }
     } else if (checkGrabRooster()) {
         field_0x3136[0].y = -5000.0f * param_1;
@@ -2103,7 +2103,7 @@ int daAlink_c::procGoatMove() {
     int temp_r27 = abs(mMoveAngle);
     if (checkInputOnR() && temp_r27 > 0x800 && temp_r27 < 0x7800 && (fabsf(sp8.x) < 250.0f || (sp8.x > 0.0f && mMoveAngle < 0) || (sp8.x < 0.0f && mMoveAngle > 0))) {
         if (abs((s16)(mMoveAngle - current.angle.y)) > 0x4000) {
-            current.angle.y += 0x8000;
+            ANGLE_ADD_2(current.angle.y, 0x8000);
             mNormalSpeed *= -1.0f;
 
             if (field_0x2f98 == 3) {
@@ -2294,7 +2294,7 @@ int daAlink_c::procGoatCatch() {
             if (checkAnmEnd(framectrl)) {
                 if (mProcVar5.field_0x3012 == 0) {
                     setOldRootQuaternion(0, -0x8000, 0);
-                    shape_angle.y += 0x8000;
+                    ANGLE_ADD_2(shape_angle.y, 0x8000);
                     current.angle.y = shape_angle.y;
                     field_0x2fe4 = shape_angle.y;
                 }
@@ -2537,7 +2537,7 @@ int daAlink_c::procGoronMove() {
     f32 var_f31;
     if (checkInputOnR() && temp_r28 > 0x800 && temp_r28 < 0x7800) {
         if (abs((s16)(mMoveAngle - current.angle.y)) > 0x4000) {
-            current.angle.y += 0x8000;
+            ANGLE_ADD_2(current.angle.y, 0x8000);
             mNormalSpeed *= -1.0f;
 
             if (field_0x2f98 == 3) {

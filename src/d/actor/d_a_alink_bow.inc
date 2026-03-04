@@ -352,6 +352,7 @@ BOOL daAlink_c::checkUpperItemActionBow() {
                 if (mEquipItem == fpcNm_ITEM_BOW) {
                     field_0x301e = 0;
                 }
+                (void)0;
             } else {
                 changeArrowType();
             }

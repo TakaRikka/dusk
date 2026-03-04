@@ -13,6 +13,7 @@
 #include "d/actor/d_a_tag_myna_light.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include "d/d_s_play.h"
+#include <cstring>
 
 static daMyna_c::ProcFunc init_proc[] = {
     &daMyna_c::attack_wait_init,

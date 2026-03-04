@@ -14,9 +14,11 @@
 #include "d/d_save_init.h"
 #include "f_op/f_op_scene_mng.h"
 #include <cstdio>
+#include <cstring>
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/sc.h>
+#include <revolution/wpad.h>
 #endif
 
 #if VERSION == VERSION_SHIELD
@@ -683,7 +685,7 @@ void dSv_player_get_item_c::offFirstBit(u8 i_itemno) {
 
     int index = i_itemno / 32;
     int bit = i_itemno % 32;
-    mItemFlags[index] &= ~(1 << bit);
+    mItemFlags[index] &= ~u32(1 << bit);
 }
 
 BOOL dSv_player_get_item_c::isFirstBit(u8 i_itemno) const {
@@ -1024,7 +1026,11 @@ void dSv_player_config_c::setSound(u8 i_mode) {
 }
 
 u8 dSv_player_config_c::getVibration() {
+#if PLATFORM_WII
+    return WPADIsMotorEnabled() != 0;
+#else
     return mVibration;
+#endif
 }
 
 void dSv_player_config_c::setVibration(u8 i_status) {
@@ -1103,7 +1109,7 @@ void dSv_memBit_c::onTbox(int i_no) {
 
 void dSv_memBit_c::offTbox(int i_no) {
     JUT_ASSERT(2740, 0 <= i_no && i_no < TBOX_MAX);
-    mTbox[i_no >> 5] &= ~(1 << (i_no & 0x1F));
+    mTbox[i_no >> 5] &= ~u32(1 << (i_no & 0x1F));
 }
 
 BOOL dSv_memBit_c::isTbox(int i_no) const {
@@ -1118,7 +1124,7 @@ void dSv_memBit_c::onSwitch(int i_no) {
 
 void dSv_memBit_c::offSwitch(int i_no) {
     JUT_ASSERT(2800, 0 <= i_no && i_no < 128);
-    mSwitch[i_no >> 5] &= ~(1 << (i_no & 0x1F));
+    mSwitch[i_no >> 5] &= ~u32(1 << (i_no & 0x1F));
 }
 
 BOOL dSv_memBit_c::isSwitch(int i_no) const {
@@ -1142,7 +1148,7 @@ void dSv_memBit_c::onItem(int i_no) {
 
 void dSv_memBit_c::offItem(int i_no) {
     JUT_ASSERT(2861, 0 <= i_no && i_no < 64);
-    mItem[i_no >> 5] |= ~(1 << (i_no & 0x1F));
+    mItem[i_no >> 5] &= ~u32(1 << (i_no & 0x1F));
 }
 
 BOOL dSv_memBit_c::isItem(int i_no) const {
@@ -1175,11 +1181,11 @@ void dSv_event_c::init() {
 }
 
 void dSv_event_c::onEventBit(u16 i_no) {
-    mEvent[i_no >> 8] |= (u8)i_no;
+    mEvent[i_no >> 8] |= u8(i_no);
 }
 
 void dSv_event_c::offEventBit(u16 i_no) {
-    mEvent[i_no >> 8] &= ~(u8)i_no;
+    mEvent[i_no >> 8] &= ~u8(i_no);
 }
 
 BOOL dSv_event_c::isEventBit(const u16 i_no) const {
@@ -1187,7 +1193,7 @@ BOOL dSv_event_c::isEventBit(const u16 i_no) const {
 }
 
 void dSv_event_c::setEventReg(u16 i_reg, u8 i_no) {
-    mEvent[i_reg >> 8] &= ~(u8)i_reg;
+    mEvent[i_reg >> 8] &= ~u8(i_reg);
     mEvent[i_reg >> 8] |= i_no;
 }
 
@@ -1227,7 +1233,7 @@ void dSv_memory2_c::onVisitedRoom(int i_no) {
 
 void dSv_memory2_c::offVisitedRoom(int i_no) {
     JUT_ASSERT(3293, 0 <= i_no && i_no < 64);
-    mVisitedRoom[i_no >> 5] &= ~(1 << (i_no & 0x1F));
+    mVisitedRoom[i_no >> 5] &= ~u32(1 << (i_no & 0x1F));
 }
 
 BOOL dSv_memory2_c::isVisitedRoom(int i_no) {
@@ -1269,7 +1275,7 @@ void dSv_danBit_c::onSwitch(int i_no) {
 
 void dSv_danBit_c::offSwitch(int i_no) {
     JUT_ASSERT(3398, 0 <= i_no && i_no < 64);
-    mSwitch[i_no >> 5] &= ~(1 << (i_no & 0x1F));
+    mSwitch[i_no >> 5] &= ~u32(1 << (i_no & 0x1F));
 }
 
 BOOL dSv_danBit_c::isSwitch(int i_no) const {
@@ -1292,7 +1298,7 @@ void dSv_danBit_c::onItem(int i_no) {
 
 void dSv_danBit_c::offItem(int i_no) {
     JUT_ASSERT(3458, 0 <= i_no && i_no < ITEM_MAX_DAN);
-    mItem[i_no >> 5] &= ~(1 << (i_no & 0x1F));
+    mItem[i_no >> 5] &= ~u32(1 << (i_no & 0x1F));
 }
 
 BOOL dSv_danBit_c::isItem(int i_no) const {
@@ -1417,7 +1423,7 @@ void dSv_zoneActor_c::on(int i_id) {
 
 void dSv_zoneActor_c::off(int i_id) {
     JUT_ASSERT(3870, 0 <= i_id && i_id < ACTOR_MAX);
-    mActorFlags[i_id >> 5] &= ~(1 << (i_id & 0x1F));
+    mActorFlags[i_id >> 5] &= ~u32(1 << (i_id & 0x1F));
 }
 
 BOOL dSv_zoneActor_c::is(int i_id) const {
@@ -1457,6 +1463,18 @@ void dSv_info_c::init() {
 #endif
 }
 
+static void dummy() {
+    dComIfGs_getEventReg(0);
+    dComIfGs_getClearCount();
+    const char* playerName = dComIfGs_getPlayerName();
+    const char* horseName = dComIfGs_getHorseName();
+    dComIfGs_getOptAttentionType();
+    dComIfGs_setEventReg(0, 0);
+    dComIfGs_setPlayerName(playerName);
+    dComIfGs_setHorseName(horseName);
+    dComIfGs_setOptAttentionType(0);
+}
+
 void dSv_save_c::init() {
     mPlayer.init();
     for (int i = 0; i < STAGE_MAX; i++) {
@@ -1494,11 +1512,12 @@ void dSv_info_c::initZone() {
 
 u32 dSv_info_c::createZone(int i_roomNo) {
     dSv_zone_c* zone = mZone;
-    for (int i = 0; i < 0x20; zone++, i++) {
+    for (int i = 0; i < 0x20; i++) {
         if (zone->getRoomNo() < 0) {
             zone->init(i_roomNo);
             return i;
         }
+        zone++;
     }
     return -1;
 }
@@ -1552,7 +1571,19 @@ void dSv_info_c::offSwitch(int i_no, int i_roomNo) {
 }
 
 BOOL dSv_info_c::isSwitch(int i_no, int i_roomNo) const {
-    if (!((0 <= i_no && i_no < (MEMORY_SWITCH+ DAN_SWITCH+ ZONE_SWITCH+ ONEZONE_SWITCH)) || i_no == -1 || i_no == 255)) {
+    bool r27 = true;
+    bool r26 = true;
+    bool r25 = false;
+    if (0 <= i_no && i_no < (MEMORY_SWITCH|DAN_SWITCH|ZONE_SWITCH|ONEZONE_SWITCH)) {
+        r25 = true;
+    }
+    if (!r25 && i_no != -1) {
+        r26 = false;
+    }
+    if (!r26 && i_no != 255) {
+        r27 = false;
+    }
+    if (!r27) {
         OS_REPORT("i_no = %d\n", i_no);
         JUT_ASSERT(4302, FALSE);
     }
@@ -1565,19 +1596,18 @@ BOOL dSv_info_c::isSwitch(int i_no, int i_roomNo) const {
         return mMemory.getBit().isSwitch(i_no);
     } else if (i_no < (MEMORY_SWITCH + DAN_SWITCH)) {
         return mDan.isSwitch(i_no - MEMORY_SWITCH);
-    } else {
-        JUT_ASSERT(4269, 0 <= i_roomNo && i_roomNo < 64);
-        int zoneId = dComIfGp_roomControl_getZoneNo(i_roomNo);
+    }
+    JUT_ASSERT(4324, 0 <= i_roomNo && i_roomNo < 64);
+    int zoneId = dComIfGp_roomControl_getZoneNo(i_roomNo);
 
-        if (zoneId < 0 || zoneId >= ZONE_MAX) {
-            return FALSE;
+    if (zoneId < 0 || zoneId >= ZONE_MAX) {
+        return FALSE;
+    } else {
+        if (i_no < (MEMORY_SWITCH + DAN_SWITCH + ZONE_SWITCH)) {
+            return mZone[zoneId].getBit().isSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
         } else {
-            if (i_no < (MEMORY_SWITCH + DAN_SWITCH + ZONE_SWITCH)) {
-                return mZone[zoneId].getBit().isSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
-            } else {
-                return mZone[zoneId].getBit().isOneSwitch(
-                    i_no - (MEMORY_SWITCH + DAN_SWITCH + ZONE_SWITCH));
-            }
+            return mZone[zoneId].getBit().isOneSwitch(
+                i_no - (MEMORY_SWITCH + DAN_SWITCH + ZONE_SWITCH));
         }
     }
 }
@@ -1593,17 +1623,16 @@ BOOL dSv_info_c::revSwitch(int i_no, int i_roomNo) {
         return mMemory.getBit().revSwitch(i_no);
     } else if (i_no < (MEMORY_SWITCH + DAN_SWITCH)) {
         return mDan.revSwitch(i_no - MEMORY_SWITCH);
-    } else {
-        JUT_ASSERT(4368, 0 <= i_roomNo && i_roomNo < 64);
-        int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
-        JUT_ASSERT(4370, 0 <= zoneNo && zoneNo < ZONE_MAX);
+    }
+    JUT_ASSERT(4368, 0 <= i_roomNo && i_roomNo < 64);
+    int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
+    JUT_ASSERT(4370, 0 <= zoneNo && zoneNo < ZONE_MAX);
 
-        if (i_no < (MEMORY_SWITCH + DAN_SWITCH + ZONE_SWITCH)) {
-            return mZone[zoneNo].getBit().revSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
-        } else {
-            return mZone[zoneNo].getBit().revOneSwitch(
-                i_no - (MEMORY_SWITCH + DAN_SWITCH + ZONE_SWITCH));
-        }
+    if (i_no < (MEMORY_SWITCH + DAN_SWITCH + ZONE_SWITCH)) {
+        return mZone[zoneNo].getBit().revSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
+    } else {
+        return mZone[zoneNo].getBit().revOneSwitch(
+            i_no - (MEMORY_SWITCH + DAN_SWITCH + ZONE_SWITCH));
     }
 }
 
@@ -1642,16 +1671,15 @@ BOOL dSv_info_c::isItem(int i_no, int i_roomNo) const {
         return mDan.isItem(i_no);
     } else if (i_no < (MEMORY_ITEM + DAN_ITEM)) {
         return mMemory.getBit().isItem(i_no - MEMORY_ITEM);
-    } else {
-        JUT_ASSERT(4501, 0 <= i_roomNo && i_roomNo < 64);
-        int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
-        JUT_ASSERT(4503, 0 <= zoneNo && zoneNo < ZONE_MAX);
+    }
+    JUT_ASSERT(4501, 0 <= i_roomNo && i_roomNo < 64);
+    int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
+    JUT_ASSERT(4503, 0 <= zoneNo && zoneNo < ZONE_MAX);
 
-        if (i_no < (MEMORY_ITEM + DAN_ITEM + ZONE_ITEM)) {
-            return mZone[zoneNo].getBit().isItem(i_no - (MEMORY_ITEM + DAN_ITEM));
-        } else {
-            return mZone[zoneNo].getBit().isOneItem(i_no - (MEMORY_ITEM + DAN_ITEM + ZONE_ITEM));
-        }
+    if (i_no < (MEMORY_ITEM + DAN_ITEM + ZONE_ITEM)) {
+        return mZone[zoneNo].getBit().isItem(i_no - (MEMORY_ITEM + DAN_ITEM));
+    } else {
+        return mZone[zoneNo].getBit().isOneItem(i_no - (MEMORY_ITEM + DAN_ITEM + ZONE_ITEM));
     }
 }
 
@@ -1700,7 +1728,7 @@ int dSv_info_c::memory_to_card(char* card_ptr, int dataNum) {
     OSTime start;
     OSTime time;
     OSTime play_time;
-    
+
     bool lantern_not_recovered = false;
     bool tmp_lantern_check = false;
     u16 current_lantern_oil = 0;
@@ -1793,7 +1821,8 @@ int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
     i_cardPtr = i_cardPtr + i_dataNum * QUEST_LOG_SIZE;
     char* var_r30 = i_cardPtr;
 
-    memcpy(dComIfGs_getSaveData(), i_cardPtr, sizeof(dSv_save_c));
+    dSv_save_c* pSave = dComIfGs_getSaveData();
+    memcpy(pSave, i_cardPtr, sizeof(dSv_save_c));
     i_cardPtr += sizeof(dSv_save_c);
 
 #if PLATFORM_GCN
@@ -1846,7 +1875,8 @@ int dSv_info_c::initdata_to_card(char* i_cardPtr, int i_dataNum) {
     save.init();
     save.getPlayer().getPlayerInfo().setPlayerName("");
     save.getPlayer().getPlayerInfo().setHorseName("");
-    memcpy(i_cardPtr, &save, sizeof(dSv_save_c));
+    dSv_save_c* pSave = &save;
+    memcpy(i_cardPtr, pSave, sizeof(dSv_save_c));
     i_cardPtr += sizeof(dSv_save_c);
 
     if (i_cardPtr - var_r30 > (QUEST_LOG_SIZE - 8)) {
@@ -1964,7 +1994,7 @@ void flagFile_c::listenPropertyEvent(const JORPropertyEvent* i_event) {
         OS_REPORT("write to %s\n", filename);
 
         JORFile file;
-        if (file.open(filename, 2, "", NULL, NULL, NULL)) {
+        if (file.open(filename, 2, "\0", NULL, NULL, NULL)) {
             if (check_flag(FLAG_SCENE_e)) {
                 head[0] = '_SCN';
                 head[1] = strlen(start_stage_name) + 1;
@@ -2006,10 +2036,6 @@ void flagFile_c::listenPropertyEvent(const JORPropertyEvent* i_event) {
         break;
     }
     }
-}
-
-BOOL flagFile_c::check_flag(u16 i_flag) {
-    return (m_flags & i_flag) != 0;
 }
 #endif
 

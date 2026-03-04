@@ -44,7 +44,7 @@ static void* search_spinner_sub(void* tag_0, void* tag_1) {
     daTagSpinner_c* actor2 = (daTagSpinner_c*)tag_1;
 
     if (actor != NULL &&
-        fopAcM_IsActor(actor) != NULL &&
+        fopAcM_IsActor(actor) != 0 &&
         fopAcM_GetProfName(actor) == PROC_SPINNER) {
         f32 latDist = actor->current.pos.absXZ(actor2->current.pos);
         if (latDist < actor2->GetR()) {

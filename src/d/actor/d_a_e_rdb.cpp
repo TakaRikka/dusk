@@ -14,6 +14,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include "f_op/f_op_actor_enemy.h"
 #include "f_op/f_op_camera_mng.h"
+#include <cstring>
 
 class daE_RDB_HIO_c : public JORReflexible {
 public:
@@ -251,8 +252,8 @@ static void e_rdb_fight(e_rdb_class* i_this) {
     i_this->field_0x6c8 = 1;
 }
 
-static int getPolyColor(cBgS_PolyInfo& i_polyInfo, int param_2, _GXColor* p_effPrim,
-                        _GXColor* p_effEnv, u8* p_alpha, f32* p_ratio) {
+static int getPolyColor(cBgS_PolyInfo& i_polyInfo, int param_2, GXColor* p_effPrim,
+                        GXColor* p_effEnv, u8* p_alpha, f32* p_ratio) {
     if (dComIfG_Bgsp().ChkPolySafe(i_polyInfo) == 0) {
         return 0;
     }
@@ -300,7 +301,7 @@ static void e_rdb_attack(e_rdb_class* i_this) {
         if (frame == 68) {
             u8 i_alpha;
             f32 i_ratio;
-            _GXColor i_effPrim, i_effEnv;
+            GXColor i_effPrim, i_effEnv;
             if (getPolyColor(i_this->mAcch.m_gnd, 0, &i_effPrim, &i_effEnv, &i_alpha, &i_ratio) !=
                 0)
             {
@@ -394,7 +395,7 @@ static void e_rdb_spin_attack(e_rdb_class* i_this) {
     cLib_addCalc0(&i_this->enemy.speedF, 1.0f, 3.0f);
     u8 i_alpha;
     f32 i_ratio;
-    _GXColor i_effPrim, i_effEnv;
+    GXColor i_effPrim, i_effEnv;
     if (iVar1 != 0 &&
         getPolyColor(i_this->mAcch.m_gnd, 0, &i_effPrim, &i_effEnv, &i_alpha, &i_ratio) != 0)
     {
@@ -1296,8 +1297,8 @@ static void demo_camera(e_rdb_class* i_this) {
         if (i_this->field_0x10aa >= 40) {
             e_rd_class* bulblin_p = (e_rd_class*)fopAcM_SearchByName(PROC_E_RD);
             if (bulblin_p != NULL) {
-                a_this->current.pos = bulblin_p->actor.current.pos;
-                a_this->eyePos = bulblin_p->actor.eyePos;
+                a_this->current.pos = bulblin_p->enemy.current.pos;
+                a_this->eyePos = bulblin_p->enemy.eyePos;
             }
         }
 

@@ -317,7 +317,7 @@ static void e_tk_find(e_tk_class* i_this) {
         break;
 
     case MODE_TK_SWIM:
-        ADD_ANGLE(i_this->mPlayerAngleY, 0x8000);
+        ANGLE_ADD(i_this->mPlayerAngleY, 0x8000);
         i_this->mAttentionOFF = true;
         if (i_this->mpMorf->isStop()) {
             i_this->mAnimSpeed = 4.0f;
@@ -343,7 +343,7 @@ static void e_tk_find(e_tk_class* i_this) {
             }
         }
         if (i_this->mActionTimer[1] == 0) {
-            ADD_ANGLE(i_this->mPlayerAngleY, 0x8000);
+            ANGLE_ADD(i_this->mPlayerAngleY, 0x8000);
         } else {
             i_this->mPlayerAngleY = i_this->mSomeAngle;
         }

@@ -10,6 +10,7 @@
 #include "d/actor/d_a_npc_len.h"
 #include "d/actor/d_a_horse.h"
 #include "d/actor/d_a_tag_evtarea.h"
+#include <cstring>
 
 enum Kolin_RES_File_ID {
     /* BCK */

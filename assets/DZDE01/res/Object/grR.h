@@ -1,0 +1,90 @@
+#ifndef RES_GRR_H
+#define RES_GRR_H
+
+enum dRes_INDEX_GRR {
+    /* BCK  */
+    dRes_INDEX_GRR_BCK_GRR_AGURA_GETUP_e=0x6,
+    dRes_INDEX_GRR_BCK_GRR_AGURA_TALK_e=0x7,
+    dRes_INDEX_GRR_BCK_GRR_AGURA_WAIT_e=0x8,
+    dRes_INDEX_GRR_BCK_GRR_F_KEEE_e=0x9,
+    dRes_INDEX_GRR_BCK_GRR_F_KEEETALK_e=0xA,
+    dRes_INDEX_GRR_BCK_GRR_F_LAUGH_e=0xB,
+    dRes_INDEX_GRR_BCK_GRR_F_TALK_A_e=0xC,
+    dRes_INDEX_GRR_BCK_GRR_FH_KEEE_e=0xD,
+    dRes_INDEX_GRR_BCK_GRR_FH_LAUGH_e=0xE,
+    dRes_INDEX_GRR_BCK_GRR_STEP_e=0xF,
+    dRes_INDEX_GRR_BCK_GRR_TALK_A_e=0x10,
+    dRes_INDEX_GRR_BCK_GRR_TO_AGURA_e=0x11,
+    dRes_INDEX_GRR_BCK_GRR_WAIT_A_e=0x12,
+    /* BMDR */
+    dRes_INDEX_GRR_BMD_GRR_e=0x15,
+    /* BTK  */
+    dRes_INDEX_GRR_BTK_GRR_e=0x18,
+    /* BTP  */
+    dRes_INDEX_GRR_BTP_GRR_e=0x1B,
+    dRes_INDEX_GRR_BTP_GRR_F_KEEE_e=0x1C,
+    dRes_INDEX_GRR_BTP_GRR_F_KEEETALK_e=0x1D,
+    dRes_INDEX_GRR_BTP_GRR_F_LAUGH_e=0x1E,
+    dRes_INDEX_GRR_BTP_GRR_FH_KEEE_e=0x1F,
+    dRes_INDEX_GRR_BTP_GRR_FH_LAUGH_e=0x20,
+};
+
+enum dRes_ID_GRR {
+    /* BCK  */
+    dRes_ID_GRR_BCK_GRR_AGURA_GETUP_e=0x6,
+    dRes_ID_GRR_BCK_GRR_AGURA_TALK_e=0x7,
+    dRes_ID_GRR_BCK_GRR_AGURA_WAIT_e=0x8,
+    dRes_ID_GRR_BCK_GRR_F_KEEE_e=0x9,
+    dRes_ID_GRR_BCK_GRR_F_KEEETALK_e=0xA,
+    dRes_ID_GRR_BCK_GRR_F_LAUGH_e=0xB,
+    dRes_ID_GRR_BCK_GRR_F_TALK_A_e=0xC,
+    dRes_ID_GRR_BCK_GRR_FH_KEEE_e=0xD,
+    dRes_ID_GRR_BCK_GRR_FH_LAUGH_e=0xE,
+    dRes_ID_GRR_BCK_GRR_STEP_e=0xF,
+    dRes_ID_GRR_BCK_GRR_TALK_A_e=0x10,
+    dRes_ID_GRR_BCK_GRR_TO_AGURA_e=0x11,
+    dRes_ID_GRR_BCK_GRR_WAIT_A_e=0x12,
+    /* BMDR */
+    dRes_ID_GRR_BMD_GRR_e=0x15,
+    /* BTK  */
+    dRes_ID_GRR_BTK_GRR_e=0x18,
+    /* BTP  */
+    dRes_ID_GRR_BTP_GRR_e=0x1B,
+    dRes_ID_GRR_BTP_GRR_F_KEEE_e=0x1C,
+    dRes_ID_GRR_BTP_GRR_F_KEEETALK_e=0x1D,
+    dRes_ID_GRR_BTP_GRR_F_LAUGH_e=0x1E,
+    dRes_ID_GRR_BTP_GRR_FH_KEEE_e=0x1F,
+    dRes_ID_GRR_BTP_GRR_FH_LAUGH_e=0x20,
+};
+
+enum GRR_JNT {
+    GRR_JNT_CENTER_e=0x0,
+    GRR_JNT_BACKBONE1_e=0x1,
+    GRR_JNT_BACKBONE2_e=0x2,
+    GRR_JNT_NECK_e=0x3,
+    GRR_JNT_HEAD_e=0x4,
+    GRR_JNT_CHIN_e=0x5,
+    GRR_JNT_MAYU_e=0x6,
+    GRR_JNT_MOUTH_e=0x7,
+    GRR_JNT_SHOULDERL_e=0x8,
+    GRR_JNT_ARML1_e=0x9,
+    GRR_JNT_ARML2_e=0xA,
+    GRR_JNT_HANDL_e=0xB,
+    GRR_JNT_FINGERL_e=0xC,
+    GRR_JNT_THUMBL_e=0xD,
+    GRR_JNT_SHOULDERR_e=0xE,
+    GRR_JNT_ARMR1_e=0xF,
+    GRR_JNT_ARMR2_e=0x10,
+    GRR_JNT_HANDR_e=0x11,
+    GRR_JNT_FINGER_R_e=0x12,
+    GRR_JNT_THUMBR_e=0x13,
+    GRR_JNT_WAIST_e=0x14,
+    GRR_JNT_LEGL1_e=0x15,
+    GRR_JNT_LEGL2_e=0x16,
+    GRR_JNT_FOOTL_e=0x17,
+    GRR_JNT_LEGR1_e=0x18,
+    GRR_JNT_LEGR2_e=0x19,
+    GRR_JNT_FOOTR_e=0x1A,
+};
+
+#endif /* !RES_GRR_H */

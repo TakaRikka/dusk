@@ -13,6 +13,7 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/actor/d_a_horse.h"
 #include "d/d_com_inf_game.h"
+#include <cstring>
 
 class daE_MF_HIO_c : public JORReflexible {
 public:

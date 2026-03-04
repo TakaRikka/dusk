@@ -8,6 +8,7 @@
 #include "Z2AudioLib/Z2Calc.h"
 #include "JSystem/JAudio2/JAISoundChild.h"
 #include "JSystem/JAudio2/JAISeq.h"
+#include "os_report.h"
 
 static const char* sSpotName[] = {
     "F_SP00",

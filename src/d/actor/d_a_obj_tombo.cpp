@@ -13,6 +13,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include "f_pc/f_pc_name.h"
 #include "m_Do/m_Do_lib.h"
+#include <cstring>
 
 class daObj_TomHIO_c : public JORReflexible {
 public:

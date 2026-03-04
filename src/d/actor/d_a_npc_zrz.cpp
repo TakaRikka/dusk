@@ -12,6 +12,7 @@
 #include "d/actor/d_a_obj_grave_stone.h"
 #include "d/actor/d_a_obj_zra_rock.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 static NPC_ZRZ_HIO_CLASS l_HIO;
 
@@ -329,7 +330,7 @@ int daNpc_zrZ_c::Draw() {
     }
 }
 
-int daNpc_zrZ_c::draw(int i_isTest, int param_1, f32 i_shadowDepth, _GXColorS10* i_fogColor,
+int daNpc_zrZ_c::draw(int i_isTest, int param_1, f32 i_shadowDepth, GXColorS10* i_fogColor,
                       int i_hideDamage) {
     f32 damage_ratio, frame;
     J3DModel* model = mAnm_p->getModel();

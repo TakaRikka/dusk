@@ -8,6 +8,14 @@
 #include "d/actor/d_a_npc_passer.h"
 #include "d/d_s_play.h"
 
+daNpcPasser_c::actionFunc daNpcPasser_c::ActionTable[5][2] = {
+    {&daNpcPasser_c::initPath, &daNpcPasser_c::executePath},
+    {&daNpcPasser_c::initEscape, &daNpcPasser_c::executeEscape},
+    {&daNpcPasser_c::initFear, &daNpcPasser_c::executeFear},
+    {&daNpcPasser_c::initFight, &daNpcPasser_c::executeFight},
+    {&daNpcPasser_c::initRelief, &daNpcPasser_c::executeRelief},
+};
+
 daNpcPasser_c::~daNpcPasser_c() {
     removeResrc(m_type, m_objNum);
 
@@ -473,14 +481,6 @@ void daNpcPasser_c::create_init() {
     setBaseMtx();
 }
 
-daNpcPasser_c::actionFunc daNpcPasser_c::ActionTable[5][2] = {
-    {&daNpcPasser_c::initPath, &daNpcPasser_c::executePath},
-    {&daNpcPasser_c::initEscape, &daNpcPasser_c::executeEscape},
-    {&daNpcPasser_c::initFear, &daNpcPasser_c::executeFear},
-    {&daNpcPasser_c::initFight, &daNpcPasser_c::executeFight},
-    {&daNpcPasser_c::initRelief, &daNpcPasser_c::executeRelief},
-};
-
 daNpcPasser_c::seqFunc* daNpcPasser_c::m_funcTbl[28] = {
     daNpcPasser_c::m_seq00_funcTbl, daNpcPasser_c::m_seq01_funcTbl,
     daNpcPasser_c::m_seq02_funcTbl, daNpcPasser_c::m_seq03_funcTbl,
@@ -703,29 +703,29 @@ void daNpcPasser_c::setSpeed(f32 param_1, f32 param_2, f32* i_speed, int param_4
 }
 
 void daNpcPasser_c::pathMoveF() {
-    f32 fVar1 = 0.0f;
-    f32 speed = 0.0f;
-    f32 fVar2 = 0.0f;
+    f32 maxSpeed = 0.0f;
+    f32 anmPlaySpeed = 0.0f;
+    f32 actualSpeed = 0.0f;
     cXyz* ccMoveP = mStts.GetCCMoveP();
 
     if (field_0xb1c == 2) {
-        fVar1 = Cd2_HIO_walkMaxSpeed(m_type);
-        fVar2 = Cd2_HIO_walkAnmPlaySpeed(m_type);
+        maxSpeed = Cd2_HIO_walkMaxSpeed(m_type);
+        anmPlaySpeed = Cd2_HIO_walkAnmPlaySpeed(m_type);
         cLib_chaseF(&field_0xb10, 0.8f, 0.05f);
-        setSpeed(MREG_F(0) + 0.7f, fVar1, &field_0xb14, 0);
-        setSpeed(MREG_F(0) + 0.7f, fVar1, &speedF, 1);
+        setSpeed(MREG_F(0) + 0.7f, maxSpeed, &field_0xb14, 0);
+        setSpeed(MREG_F(0) + 0.7f, maxSpeed, &speedF, 1);
     } else if (field_0xb1c == 1) {
-        fVar1 = Cd2_HIO_maxSpeed(m_type);
-        fVar2 = Cd2_HIO_anmPlaySpeed(m_type);
+        maxSpeed = Cd2_HIO_maxSpeed(m_type);
+        anmPlaySpeed = Cd2_HIO_anmPlaySpeed(m_type);
 
         if (mActionIdx == 1) {
-            fVar1 *= 1.5f;
-            fVar2 *= 1.5f;
+            maxSpeed *= 1.5f;
+            anmPlaySpeed *= 1.5f;
         }
 
         cLib_chaseF(&field_0xb10, 1.0f, 0.05f);
-        setSpeed(MREG_F(0) + 0.7f, fVar1, &field_0xb14, 0);
-        setSpeed(MREG_F(0) + 0.7f, fVar1, &speedF, 1);
+        setSpeed(MREG_F(0) + 0.7f, maxSpeed, &field_0xb14, 0);
+        setSpeed(MREG_F(0) + 0.7f, maxSpeed, &speedF, 1);
     } else if (field_0xb1c == 0) {
         cLib_chaseF(&field_0xb10, 0.0f, 0.05f);
         cLib_chaseF(&field_0xb14, 0.0f, 1.5f);
@@ -745,17 +745,17 @@ void daNpcPasser_c::pathMoveF() {
     fopAcM_posMoveF(this, ccMoveP);
 
     if (field_0xb1c != 0) {
-        fVar1 = field_0xb14 / fVar1;
-        if (fVar1 > 1.0f) {
-            fVar1 = 1.0f;
+        actualSpeed = field_0xb14 / maxSpeed;
+        if (actualSpeed > 1.0f) {
+            actualSpeed = 1.0f;
         }
 
-        speed = fVar2 * fVar1;
-        if (speed < 0.6f) {
-            speed = 0.6f;
+        actualSpeed = anmPlaySpeed * actualSpeed;
+        if (actualSpeed < 0.6f) {
+            actualSpeed = 0.6f;
         }
 
-        mpMorf->setPlaySpeed(speed);
+        mpMorf->setPlaySpeed(actualSpeed);
     }
 }
 

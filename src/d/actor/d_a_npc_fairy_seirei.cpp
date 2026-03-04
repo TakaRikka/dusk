@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_npc_fairy_seirei.h"
 #include "d/actor/d_a_npc4.h"
+#include <cstring>
 
 
 static daNpcT_evtData_c l_evtList[1] = {

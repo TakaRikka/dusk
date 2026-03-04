@@ -3,6 +3,11 @@
  * Actor Manager
  */
 
+#if TARGET_PC
+#define PROCS_DUMP_NAMES 1
+#include "d/d_procname.h"
+#endif
+
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
@@ -727,6 +732,18 @@ u8 var_r30 = fopAcM::HeapAdjustEntry;
 #endif
     fopAcM::HeapAdjustUnk = var_r31;
     fopAcM::HeapAdjustEntry = var_r30;
+
+#if TARGET_PC
+    char buf[32];
+    snprintf(
+        buf,
+        sizeof(buf),
+        "Actor %d (%s)",
+        i_actor->id,
+        GetProcName(i_actor->profname));
+    JKRHEAP_NAME(i_actor->heap, buf);
+#endif
+
     return result;
 }
 
@@ -776,7 +793,7 @@ bool fopAcM_addAngleY(fopAc_ac_c* i_actor, s16 i_target, s16 i_step) {
     return cLib_chaseAngleS(&angle->y, i_target, i_step);
 }
 
-void dummy(fopAc_ac_c* i_actor) {
+static void dummy(fopAc_ac_c* i_actor) {
     fopAcM_SetSpeedF(i_actor, 10.0f);
 }
 
@@ -895,7 +912,7 @@ bool fopAcM_checkCullingBox(Mtx m, f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z
         return false;
 }
 
-static cull_box l_cullSizeBox[] = {
+cull_box l_cullSizeBox[fopAc_CULLBOX_MAX_e] = {
     {
         {-40.0f, 0.0f, -40.0f},
         {40.0f, 125.0f, 40.0f},
@@ -960,7 +977,7 @@ static cull_box l_cullSizeBox[] = {
 #endif
 };
 
-static cull_sphere l_cullSizeSphere[] = {
+cull_sphere l_cullSizeSphere[fopAc_CULLSPHERE_MAX_e] = {
     {
         {0.0f, 0.0f, 0.0f},
         80.0f,
@@ -1783,7 +1800,7 @@ fopAc_ac_c* fopAcM_fastCreateItem(const cXyz* i_pos, int i_itemNo, int i_roomNo,
                 angle = csXyz::Zero;
             }
             angle.z = 0xFF;
-            angle.y += (s16)cM_rndFX(0x2000);
+            ANGLE_ADD(angle.y, cM_rndFX(0x2000));
 
             ret = (fopAc_ac_c*)fopAcM_fastCreate(
                 PROC_ITEM, params, i_pos, i_roomNo, &angle, i_scale, -1, i_createFunc, NULL);
@@ -1833,7 +1850,7 @@ fpc_ProcID fopAcM_createBokkuri(u16 i_setId, const cXyz* i_pos, int i_itemNo, in
     csXyz params_ex(0, 0, 0);
     if (param_6 != NULL) {
         params_ex.y = param_6->atan2sX_Z();
-        params_ex.y += (s16)(2048.0f * cM_rndFX(1.0f));
+        ANGLE_ADD(params_ex.y, (f32)0x800 * cM_rndFX(1.0f));
         param_8 = 1;
     }
 

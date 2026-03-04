@@ -3,7 +3,7 @@
  * Description:
  */
 
-#include <dolphin/amc/AmcExi2Comm.h>
+#include <amc/AmcExi2Comm.h>
 
 void EXI2_Init(vu8**, EXICallback) {}
 

@@ -807,7 +807,7 @@ void daObjStone_c::init_modeBreak() {
         JPABaseEmitter* emitter = dComIfGp_particle_set(
             0x15c, &current.pos, 0, &acStack_40, 0xff, &dPa_modelEcallBack::getEcallback(), fopAcM_GetRoomNo(this), 0, 0, 0);
         dPa_modelEcallBack::setModel(emitter, stone_bmd, tevStr,
-                                     3, 0, NULL, 0);
+                                     3, 0, 0, 0);
         for (int i = 0; i < 3; i = i + 1) {
             dComIfGp_particle_set(
                 l_eff_id[i],
@@ -947,7 +947,7 @@ void daObjStone_c::set_carry_eff() {
     if (field_0x0950 == 3) {
         for (int i = 0; i < 3; i++) {
             field_0x0964[i] =
-                dComIfGp_particle_set(l_carry_eff_id[i], &current.pos, 0, &pos, 0xFF, 0, 0xFFFFFFFF,
+                dComIfGp_particle_set(l_carry_eff_id[i], &current.pos, 0, &pos, 0xFF, 0, -1,
                                       0, 0, 0);  // float literal inline
             if (field_0x0964[i] != 0) {
                 field_0x0964[i]->becomeImmortalEmitter();

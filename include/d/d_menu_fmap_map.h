@@ -2,7 +2,8 @@
 #define D_MENU_D_MENU_FMAP_MAP_H
 
 #include "SSystem/SComponent/c_counter.h"
-#include <dolphin/types.h>
+#include <types.h>
+#include <cstring>
 #include "d/d_menu_fmap.h"
 #include "d/d_map.h"
 #include "d/d_map_path.h"

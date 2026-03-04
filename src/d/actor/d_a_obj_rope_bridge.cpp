@@ -8,6 +8,7 @@
 #include "d/actor/d_a_obj_rope_bridge.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
+#include <cstring>
 
 static char* l_arcName[2] = {"L_RopeB_S", "L_RopeB_L"};
 
@@ -15,7 +16,7 @@ static char* l_ropeArcName = "L_Ropest";
 
 void daObjRBridge_c::initBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(NULL, current.angle.y, 0);
+    mDoMtx_stack_c::ZXYrotM(0, current.angle.y, 0);
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
 
     mpBrgModel->setBaseScale(scale);

@@ -2,6 +2,7 @@
 #define D_D_NAME_H
 
 #include "d/d_select_cursor.h"
+#include <cstring>
 
 class CPaneMgr;
 class CPaneMgrAlpha;

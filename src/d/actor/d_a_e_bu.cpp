@@ -628,7 +628,7 @@ static s8 e_bu_head(e_bu_class* i_this) {
             actor->speedF *= 0.5f;
             actor->speed.y = 30.0f;
             i_this->mode = 2;
-            i_this->head_rot_y += (s16)cM_rndFX(10000.0f);
+            ANGLE_ADD(i_this->head_rot_y, cM_rndFX(10000.0f));
 
             if (cM_rndF(1.0f) < 0.5f) {
                 i_this->field_0x6bc = 0x4000;
@@ -641,7 +641,7 @@ static s8 e_bu_head(e_bu_class* i_this) {
         }
         break;
     case 2:
-        i_this->head_rot_x += (s16)(actor->speedF * (400.0f + AREG_F(1)));
+        ANGLE_ADD(i_this->head_rot_x, actor->speedF * (400.0f + AREG_F(1)));
 
         if (!i_this->acch.ChkGroundHit()) {
             break;
@@ -650,7 +650,7 @@ static s8 e_bu_head(e_bu_class* i_this) {
         i_this->mode = 3;
         actor->speed.y = 20.0f;
     case 3:
-        i_this->head_rot_x += (s16)(actor->speedF * (400.0f + AREG_F(1)));
+        ANGLE_ADD(i_this->head_rot_x, actor->speedF * (400.0f + AREG_F(1)));
         i_this->head_rot_y += i_this->field_0x6b8;
 
         cLib_addCalc2(&actor->speedF, 10.0f, 1.0f, 2.0f + TREG_F(16));
@@ -705,7 +705,7 @@ static s8 e_bu_head(e_bu_class* i_this) {
                 i_this->mode = 0;
                 anm_init(i_this, 7, 10.0f, 2, 1.0f + cM_rndF(0.1f));
             } else {
-                actor->current.angle.y += (s16)cM_rndFX(8000.0f);
+                ANGLE_ADD(actor->current.angle.y, cM_rndFX(8000.0f));
                 i_this->mode = 11;
                 actor->speed.y = JREG_F(7) + (20.0f + cM_rndF(10.0f));
                 actor->speedF = 10.0f + cM_rndF(10.0f);

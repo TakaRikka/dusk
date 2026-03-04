@@ -12,6 +12,7 @@
 #include "d/d_bomb.h"
 #include "f_op/f_op_camera_mng.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 #if DEBUG
 daObjTobyHouse_HIO_c l_HIO;

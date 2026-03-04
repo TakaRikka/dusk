@@ -1,0 +1,20 @@
+#ifndef RES_GIRLS_H
+#define RES_GIRLS_H
+
+enum dRes_INDEX_GIRLS {
+    /* BCK  */
+    dRes_INDEX_GIRLS_BCK_MICH_IYAN_WAIT_e=0x3,
+    dRes_INDEX_GIRLS_BCK_MICH_KYA_TALK_e=0x4,
+    dRes_INDEX_GIRLS_BCK_MICH_OUEN_WAIT_A_e=0x5,
+    dRes_INDEX_GIRLS_BCK_MICH_OUEN_WAIT_B_e=0x6,
+};
+
+enum dRes_ID_GIRLS {
+    /* BCK  */
+    dRes_ID_GIRLS_BCK_MICH_IYAN_WAIT_e=0x3,
+    dRes_ID_GIRLS_BCK_MICH_KYA_TALK_e=0x4,
+    dRes_ID_GIRLS_BCK_MICH_OUEN_WAIT_A_e=0x5,
+    dRes_ID_GIRLS_BCK_MICH_OUEN_WAIT_B_e=0x6,
+};
+
+#endif /* !RES_GIRLS_H */

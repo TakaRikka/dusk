@@ -14,6 +14,7 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/actor/d_a_mirror.h"
 #include "JSystem/JAudio2/JAUSectionHeap.h"
+#include <cstring>
 
 void daNbomb_c::coHitCallback(fopAc_ac_c* i_hitActor) {
     if (fopAcM_GetGroup(i_hitActor) == fopAc_ENEMY_e ||
@@ -96,7 +97,7 @@ int daNbomb_c::searchEnemy(fopAc_ac_c* i_enemy) {
 
 static void* daNbomb_searchEnemy(fopAc_ac_c* i_actor, void* i_data) {
     if (fopAcM_GetGroup(i_actor) == fopAc_ENEMY_e &&
-        ((daNbomb_c*)i_data)->searchEnemy(i_actor) != NULL)
+        ((daNbomb_c*)i_data)->searchEnemy(i_actor) != 0)
     {
         return i_actor;
     }

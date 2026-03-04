@@ -16,6 +16,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera_mng.h"
+#include <cstring>
 
 class daNPC_TK_HIO_c : public JORReflexible {
 public:
@@ -456,7 +457,7 @@ void daNPC_TK_c::initPerchDemo(int param_0) {
                 mPathStep2 = cM_rndFX(5.0f);
 
                 if (mPathStep2 < 0) {
-                    ADD_S8_2(mPathStep2, mpPath1->m_num);
+                    S8_ADD_2(mPathStep2, mpPath1->m_num);
                 }
 
                 if (mPathStep2 >= mpPath1->m_num || mPathStep2 < 0) {
@@ -1128,8 +1129,8 @@ void daNPC_TK_c::executeAway() {
 }
 
 void daNPC_TK_c::setCarryActorMtx() {
-    field_0x6a8 += (s16)0x6bc;
-    field_0x6a6 = cM_ssin(field_0x6a8) * 2048.0f + 4096.0f;
+    ANGLE_ADD(field_0x6a8, 0x6bc);
+    field_0x6a6 = cM_ssin(field_0x6a8) * (f32)0x800 + (f32)0x1000;
     if (field_0x634 == NULL) {
         return;
     }
@@ -1310,8 +1311,7 @@ void daNPC_TK_c::executeBack() {
 
             shape_angle.y += field_0x69e;
             current.angle.y = shape_angle.y;
-
-            shape_angle.x -= (s16)(0x300 + nREG_S(0));
+            ANGLE_SUB(shape_angle.x, 0x300 + nREG_S(0));
 
             if (shape_angle.x < -0x3000) {
                 shape_angle.x = -0x3000;
@@ -1340,7 +1340,7 @@ void daNPC_TK_c::executeBack() {
                 if (current.pos.y > unkXyz1.y) {
                     cLib_chaseAngleS(&shape_angle.x, 0x2000, 0x400);
                 } else {
-                    cLib_chaseAngleS(&shape_angle.x, 0xffffe000, 0x400);
+                    cLib_chaseAngleS(&shape_angle.x, -8192, 0x400);
                 }
             } else {
                 cLib_chaseAngleS(&field_0x69c, 0x200, 0x10);
@@ -1379,7 +1379,7 @@ void daNPC_TK_c::executeBack() {
                 if (current.pos.y > unkXyz1.y) {
                     cLib_chaseAngleS(&shape_angle.x, 0x2000, 0x400);
                 } else {
-                    cLib_chaseAngleS(&shape_angle.x, 0xffffe000, 0x400);
+                    cLib_chaseAngleS(&shape_angle.x, -8192, 0x400);
                 }
             } else {
                 cLib_chaseAngleS(&field_0x69c, 0x200, 0x10);
@@ -1970,8 +1970,8 @@ void daNPC_TK_c::calcWolfDemoCam() {
 
 void daNPC_TK_c::calcWolfDemoCam2() {
     cXyz targetPos;
-    cXyz curPos = dPath_GetPnt(mWolfPathData, mPathStep2)->m_position;
-    cXyz prevPos = dPath_GetPnt(mWolfPathData, mPathStep2 - 1)->m_position;
+    cXyz curPos = (Vec)dPath_GetPnt(mWolfPathData, mPathStep2)->m_position;
+    cXyz prevPos = (Vec)dPath_GetPnt(mWolfPathData, mPathStep2 - 1)->m_position;
     cLib_addCalcPos2(&field_0x6fc, curPos, 0.2f, field_0x714);
 
     cXyz offset(0.0f, 0.0f, 400.0f);
@@ -2273,11 +2273,11 @@ void daNPC_TK_c::executeWolfPerch() {
                 field_0x6e0 = field_0x6e0 + field_0x6e4;
             }
 
-            cXyz pathPnt3 = dPath_GetPnt(mWolfPathData, mWolfPathData->m_num - 1)->m_position;
+            cXyz pathPnt3 = (Vec)dPath_GetPnt(mWolfPathData, mWolfPathData->m_num - 1)->m_position;
             if (pathPnt3.abs(current.pos) < 500.0f) {
                 cXyz cStack_8c;
-                cXyz cStack_98 = dPath_GetPnt(mWolfPathData, mWolfPathData->m_num - 2)->m_position;
-                cXyz cStack_a4 = dPath_GetPnt(mWolfPathData, mWolfPathData->m_num - 1)->m_position;
+                cXyz cStack_98 = (Vec)dPath_GetPnt(mWolfPathData, mWolfPathData->m_num - 2)->m_position;
+                cXyz cStack_a4 = (Vec)dPath_GetPnt(mWolfPathData, mWolfPathData->m_num - 1)->m_position;
                 mDoMtx_stack_c::YrotS(-cLib_targetAngleY(&cStack_98, &cStack_a4));
                 mDoMtx_stack_c::transM(-current.pos.x, -current.pos.y, -current.pos.z);
                 mDoMtx_stack_c::multVec(&cStack_98, &cStack_8c);
@@ -2368,8 +2368,14 @@ void daNPC_TK_c::executeWolfPerch() {
         pathPnt2 = dPath_GetPnt(mWolfPathData, mPathStep2)->m_position;
         cLib_addCalcPos2(&field_0x6fc, pathPnt2, 0.1f, 3.0f);
 
+#if TARGET_LITTLE_ENDIAN
+        Vec copy = dPath_GetPnt(mWolfPathData, mPathStep2 - 1)->m_position;
+        s16 angleY = cLib_targetAngleY(&current.pos,
+                                       &copy);
+#else
         s16 angleY = cLib_targetAngleY(&current.pos,
                                        &dPath_GetPnt(mWolfPathData, mPathStep2 - 1)->m_position);
+#endif
         cLib_addCalcAngleS(&shape_angle.y, angleY + 0x2000, 8, 0x100, 0x10);
 
         cLib_chaseF(&speed.y, field_0x678, 0.5f);
@@ -2456,7 +2462,7 @@ void daNPC_TK_c::executeWolfPerch() {
 
 void daNPC_TK_c::executeResistanceDemo() {
     daNpcMoiR_c* npcMoiR;
-    if (fopAcM_SearchByName(PROC_NPC_MOIR, (fopAc_ac_c**)&npcMoiR) == NULL || npcMoiR == NULL) {
+    if (fopAcM_SearchByName(PROC_NPC_MOIR, (fopAc_ac_c**)&npcMoiR) == 0 || npcMoiR == NULL) {
         return;
     }
 
@@ -2623,7 +2629,7 @@ void daNPC_TK_c::executeResistanceDemo() {
     // fallthrough
 
     case 8: {
-        cLib_addCalcAngleS2(&field_0x6a2, 0xffffdc00, 8, 0x200);
+        cLib_addCalcAngleS2(&field_0x6a2, -9216, 8, 0x200);
         cLib_addCalcAngleS2(&field_0x6a0, 0x1000, 8, 0x200);
         cLib_addCalcAngleS2(&field_0x6aa, 0x2000, 8, 0x200);
 

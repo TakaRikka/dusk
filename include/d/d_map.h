@@ -3,6 +3,7 @@
 
 #include "d/d_map_path_dmap.h"
 #include "JSystem/JHostIO/JORReflexible.h"
+#include <cstring>
 
 struct dMap_HIO_prm_other_s {
     /* 0x00 */ u8 field_0x0;
@@ -169,7 +170,7 @@ public:
     virtual int getRoomNoSingle();
     virtual bool isDrawRoom(int, int) const;
     virtual bool isDrawRoomIcon(int, int) const;
-    virtual const Vec* getIconPosition(dTres_c::typeGroupData_c*) const;
+    virtual const BE(Vec)* getIconPosition(dTres_c::typeGroupData_c*) const;
     virtual dTres_c::typeGroupData_c* getFirstData(u8);
     virtual dTres_c::typeGroupData_c* getNextData(dTres_c::typeGroupData_c*);
     virtual void setAmapPaletteColor(int, u8, u8, u8, u8);

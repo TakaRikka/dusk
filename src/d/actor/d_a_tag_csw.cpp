@@ -376,9 +376,9 @@ int daTagCsw_c::execute() {
             s16 sp0A = current.angle.y - statue->current.angle.y;
             sp0A /= field_0x8e2;
             if (sp0A > 0x800) {
-                statue->current.angle.y += (s16)0x800;
+                ANGLE_ADD(statue->current.angle.y, 0x800);
             } else if (sp0A < -0x800) {
-                statue->current.angle.y -= (s16)0x800;
+                ANGLE_SUB(statue->current.angle.y, 0x800);
             } else {
                 statue->current.angle.y += sp0A;
             }

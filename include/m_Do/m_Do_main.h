@@ -2,7 +2,7 @@
 #define M_DO_M_DO_MAIN_H
 
 #include "JSystem/JKernel/JKRExpHeap.h"
-#include <dolphin/os.h>
+#include <os.h>
 
 class JKRExpHeap;
 

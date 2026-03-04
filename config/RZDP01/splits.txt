@@ -47,19 +47,19 @@ m_Do/m_Do_audio.cpp:
 	.data       start:0x803E1B90 end:0x803E1E08
 	.bss        start:0x804325A0 end:0x80433958
 	.sdata      start:0x8051DF60 end:0x8051DFCC
-	.sbss       start:0x80520F40 end:0x80520F94
+	.sbss       start:0x80520F40 end:0x80520F90
 
 m_Do/m_Do_controller_pad.cpp:
 	.text       start:0x8000A0A8 end:0x8000A4B8
 	.bss        start:0x80433958 end:0x80433A68
 	.sdata2     start:0x805221E8 end:0x80522200
 
-m_Do/m_Re_controller_pad.cpp:
+m_Re/m_Re_controller_pad.cpp:
 	.text       start:0x8000A4B8 end:0x8000DED4
 	.rodata     start:0x803B92C0 end:0x803B9310
 	.data       start:0x803E1E08 end:0x803E1E20
 	.bss        start:0x80433A68 end:0x8043B318
-	.sbss       start:0x80520F94 end:0x80520FA0
+	.sbss       start:0x80520F90 end:0x80520FA0
 	.sdata2     start:0x80522200 end:0x805222A8
 
 m_Do/m_Do_graphic.cpp:
@@ -417,14 +417,16 @@ d/d_bomb.cpp:
 
 d/d_lib.cpp:
 	.text       start:0x80036A84 end:0x80037354
-	.data       start:0x803EA418 end:0x803EA4E0
-	.sdata      start:0x8051E4B8 end:0x8051E4D8
-	.sbss       start:0x805211E8 end:0x80521208
+	.data       start:0x803EA418 end:0x803EA470
+	.sdata      start:0x8051E4B8 end:0x8051E4C8
+	.sbss       start:0x805211E8 end:0x80521200
 	.sdata2     start:0x805225D8 end:0x805225E0
 
 d/d_save.cpp:
 	.text       start:0x80037354 end:0x8003A3C8
 	.rodata     start:0x803BABD0 end:0x803BB3B0
+	.data       start:0x803EA470 end:0x803EA4E0
+	.sdata      start:0x8051E4C8 end:0x8051E4D8
 	.sdata2     start:0x805225E0 end:0x805225E8
 
 d/d_save_init.cpp:
@@ -432,14 +434,16 @@ d/d_save_init.cpp:
 
 d/d_jnt_col.cpp:
 	.text       start:0x8003A3CC end:0x8003B1D8
-	.data       start:0x803EA4E0 end:0x803EA5F8
-	.sdata      start:0x8051E4D8 end:0x8051E508
+	.data       start:0x803EA4E0 end:0x803EA528
+	.sdata      start:0x8051E4D8 end:0x8051E4F0
 	.sdata2     start:0x805225E8 end:0x80522608
 
 d/d_a_obj.cpp:
 	.text       start:0x8003B1D8 end:0x8003BA7C
 	.rodata     start:0x803BB3B0 end:0x803BB3C0
 	.bss        start:0x80498C60 end:0x80498CC0
+	.sdata      start:0x8051E4F0 end:0x8051E4F8
+	.sbss       start:0x80521200 end:0x80521208
 	.sdata2     start:0x80522608 end:0x80522620
 
 d/d_a_itembase_static.cpp:
@@ -452,6 +456,8 @@ d/d_a_item_static.cpp:
 d/d_a_shop_item_static.cpp:
 	.text       start:0x8003BC08 end:0x8003BC70
 	.rodata     start:0x803BB3F8 end:0x803BB848
+	.data       start:0x803EA528 end:0x803EA5F8
+	.sdata      start:0x8051E4F8 end:0x8051E508
 
 d/d_a_horse_static.cpp:
 	.text       start:0x8003BC70 end:0x8003BDC8
@@ -1623,7 +1629,7 @@ JSystem/JParticle/JPAResource.cpp:
 JSystem/JParticle/JPABaseShape.cpp:
 	.text       start:0x8025F128 end:0x80262534
 	.data       start:0x80409080 end:0x80409228
-	.sdata      start:0x80520310 end:0x80520320
+	.sdata      start:0x80520310 end:0x80520318
 	.sdata2     start:0x805258C8 end:0x80525900
 
 JSystem/JParticle/JPAExtraShape.cpp:
@@ -1870,6 +1876,7 @@ JSystem/JAudio2/JASSeqParser.cpp:
 	.text       start:0x80279A98 end:0x8027B794
 	.ctors      start:0x803B91E8 end:0x803B91EC
 	.data       start:0x8040A5B0 end:0x8040BEE0
+	.sdata      start:0x80520318 end:0x80520320
 	.sbss       start:0x805216F8 end:0x80521708
 	.sdata2     start:0x80525BD8 end:0x80525C10
 
@@ -2300,40 +2307,40 @@ Z2AudioLib/Z2AudioMgr.cpp:
 	.sbss       start:0x80521848 end:0x80521850
 	.sdata2     start:0x805264B8 end:0x805264C0
 
-Z2AudioLib/SpkSpeakerCtrl.cpp:
+Z2AudioCS/SpkSpeakerCtrl.cpp:
 	.text       start:0x802AFF78 end:0x802B090C
 	.ctors      start:0x803B923C end:0x803B9240
 	.bss        start:0x804A9338 end:0x804A9458
 	.sbss       start:0x80521850 end:0x80521858
 
-Z2AudioLib/SpkSystem.cpp:
+Z2AudioCS/SpkSystem.cpp:
 	.text       start:0x802B090C end:0x802B0BDC
 	.ctors      start:0x803B9240 end:0x803B9244
 	.bss        start:0x804A9458 end:0x804A9478
-	.sbss       start:0x80521858 end:0x8052186C
+	.sbss       start:0x80521858 end:0x80521868
 
-Z2AudioLib/SpkMixingBuffer.cpp:
+Z2AudioCS/SpkMixingBuffer.cpp:
 	.text       start:0x802B0BDC end:0x802B0D28
 	.sdata2     start:0x805264C0 end:0x805264C8
 
-Z2AudioLib/SpkWave.cpp:
+Z2AudioCS/SpkWave.cpp:
 	.text       start:0x802B0D28 end:0x802B0E6C
 
-Z2AudioLib/SpkTable.cpp:
+Z2AudioCS/SpkTable.cpp:
 	.text       start:0x802B0E6C end:0x802B0EF0
 
-Z2AudioLib/SpkData.cpp:
+Z2AudioCS/SpkData.cpp:
 	.text       start:0x802B0EF0 end:0x802B0FD8
 
-Z2AudioLib/SpkSound.cpp:
+Z2AudioCS/SpkSound.cpp:
 	.text       start:0x802B0FD8 end:0x802B1BE4
 	.ctors      start:0x803B9244 end:0x803B9248
 	.bss        start:0x804A9478 end:0x804A9488
 	.sdata2     start:0x805264C8 end:0x805264F0
 
-Z2AudioLib/Z2AudioCS.cpp:
+Z2AudioCS/Z2AudioCS.cpp:
 	.text       start:0x802B1BE4 end:0x802B1EA4
-	.sbss       start:0x8052186C end:0x80521870
+	.sbss       start:0x80521868 end:0x80521870
 	.sdata2     start:0x805264F0 end:0x805264F8
 
 revolution/gf/GFGeometry.cpp:
@@ -3395,16 +3402,16 @@ revolution/ax/AXCL.c:
 	.text       start:0x80353F7C end:0x80353FAC
 	.sbss       start:0x80521F68 end:0x80521F70
 
-revolution/ax/AXFXReverbHi.c:
+revolution/axfx/AXFXReverbHi.c:
 	.text       start:0x80353FAC end:0x80354038
 	.sdata2     start:0x80526DB0 end:0x80526DB8
 
-revolution/ax/AXFXReverbHiExp.c:
+revolution/axfx/AXFXReverbHiExp.c:
 	.text       start:0x80354038 end:0x80354E10
 	.data       start:0x80427B40 end:0x80427CE0
 	.sdata2     start:0x80526DB8 end:0x80526DF8
 
-revolution/ax/AXFXHooks.c:
+revolution/axfx/AXFXHooks.c:
 	.text       start:0x80354E10 end:0x80354E48
 	.sdata      start:0x80520BD0 end:0x80520BD8
 
@@ -3515,7 +3522,7 @@ revolution/sc/scsystem.c:
 	.data       start:0x804282A0 end:0x80428420
 	.bss        start:0x804D84C0 end:0x804E0660
 	.sdata      start:0x80520C38 end:0x80520D10
-	.sbss       start:0x80521FAC end:0x80521FC4
+	.sbss       start:0x80521FAC end:0x80521FC0
 
 revolution/sc/scapi.c:
 	.text       start:0x8035FF9C end:0x803603D0
@@ -3537,7 +3544,7 @@ revolution/arc/arc.c:
 
 revolution/ipc/ipcMain.c:
 	.text       start:0x80360DA4 end:0x80360E28
-	.sbss       start:0x80521FC4 end:0x80521FD8
+	.sbss       start:0x80521FC0 end:0x80521FD8
 
 revolution/ipc/ipcclt.c:
 	.text       start:0x80360E28 end:0x80362528
@@ -3584,7 +3591,7 @@ revolution/wpad/WPADHIDParser.c:
 	.text       start:0x8036C9A0 end:0x8037123C
 	.data       start:0x80428768 end:0x80428BC8
 	.bss        start:0x804E3CE8 end:0x804E3D00
-	.sbss       start:0x80522060 end:0x80522070
+	.sbss       start:0x80522060 end:0x80522068
 	.sdata2     start:0x80526E18 end:0x80526E40
 
 revolution/wpad/WPADMem.c:
@@ -3592,10 +3599,12 @@ revolution/wpad/WPADMem.c:
 
 revolution/wpad/WPADEncrypt.c:
 	.text       start:0x8037123C end:0x80371AD4
-	.data       start:0x80428BC8 end:0x80429548
+	.data       start:0x80428BC8 end:0x804294F8
+	.sbss       start:0x80522068 end:0x80522070
 
 revolution/kpad/KPAD.c:
 	.text       start:0x80371B24 end:0x80374858
+	.data       start:0x804294F8 end:0x80429548
 	.bss        start:0x804E3D50 end:0x804E4D60
 	.sdata      start:0x80520D68 end:0x80520DD8
 	.sbss       start:0x80522070 end:0x805220A8
@@ -3611,12 +3620,12 @@ revolution/usb/usb.c:
 	.sdata      start:0x80520DD8 end:0x80520DE8
 	.sbss       start:0x805220B8 end:0x805220C8
 
-revolution/wpad/WUD.c:
+revolution/wud/WUD.c:
 	.text       start:0x80375C68 end:0x80379994
 	.data       start:0x80429B00 end:0x8042A8C8
 	.bss        start:0x804E4D60 end:0x804E6AC0
 	.sdata      start:0x80520DE8 end:0x80520DF0
-	.sbss       start:0x805220C8 end:0x805220EC
+	.sbss       start:0x805220C8 end:0x805220E8
 	.sdata2     start:0x80526E98 end:0x80526EA0
 
 revolution/wud/WUDHidHost.c:
@@ -3649,7 +3658,7 @@ revolution/bte/uusb_ppc.c:
 	.data       start:0x8042AD00 end:0x8042BA48
 	.bss        start:0x8050F5E0 end:0x80511640
 	.sdata      start:0x80520DF0 end:0x80520E10
-	.sbss       start:0x805220EC end:0x80522100
+	.sbss       start:0x805220E8 end:0x80522100
 
 revolution/bte/bta_dm_cfg.c:
 	.rodata     start:0x803DFFD0 end:0x803E0060
@@ -3976,7 +3985,7 @@ PowerPC_EABI_Support/Runtime/Src/Gecko_ExceptionPPC.cp:
 	.text       start:0x803A9888 end:0x803A98EC
 	.bss        start:0x8051B678 end:0x8051B688
 
-PowerPC_EABI_Support/Runtime/Src/GCN_Mem_Alloc.c:
+PowerPC_EABI_Support/Runtime/Src/GCN_mem_alloc.c:
 	.text       start:0x803A98EC end:0x803A99A4
 	.rodata     start:0x803E0458 end:0x803E04C8
 
@@ -4113,7 +4122,7 @@ PowerPC_EABI_Support/MSL/MSL_C/PPC_EABI/Src/abort_exit_ppc_eabi.c:
 	.text       start:0x803AEE38 end:0x803AEE6C
 	.sbss       start:0x80522148 end:0x80522150
 
-PowerPC_EABI_Support/MSL/MSL_C/PPC_EABI/Src/math_sun.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Src/math_sun.c:
 	extab       start:0x80006680 end:0x80006688
 	extabindex  start:0x800068E0 end:0x800068EC
 	.text       start:0x803AEE6C end:0x803AEEAC
@@ -4331,7 +4340,7 @@ TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/target_options.c:
 TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/UDP_Stubs.c:
 	.text       start:0x803B8078 end:0x803B80C0
 
-TRK_MINNOW_DOLPHIN/gamedev/cust_connection/cc/exi2/GCN/EXI2_DDH_GCN/main.c:
+TRK_MINNOW_DOLPHIN/gamedev/cust_connection/cc/exi2/GCN/EXI2_GDEV_GCN/main.c:
 	.text       start:0x803B80C0 end:0x803B8380
 	.bss        start:0x8051D980 end:0x8051DE9C
 	.sbss       start:0x80522158 end:0x80522160

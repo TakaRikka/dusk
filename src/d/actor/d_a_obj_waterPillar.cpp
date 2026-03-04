@@ -1,40 +1,42 @@
 /**
  * @file d_a_obj_waterPillar.cpp
- * 
+ *
 */
+
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_obj_waterPillar.h"
-#include "d/d_com_inf_game.h"
-#include "SSystem/SComponent/c_math.h"
+#if DEBUG
+#include "d/d_debug_viewer.h"
+#endif
 
 struct daWtPillar_HIO_c : public mDoHIO_entry_c {
     daWtPillar_HIO_c();
-    virtual ~daWtPillar_HIO_c() {}
+    ~daWtPillar_HIO_c() {}
 
     void genMessage(JORMContext*);
 
-    /* 0x04 */ cXyz field_0x04;
-    /* 0x10 */ csXyz field_0x10;
-    /* 0x16 */ s8 mForTesting;                      // "----------- テスト用 ----------" "----------- For Testing ----------" | Checkbox
-    /* 0x17 */ s8 mDisableDrawing;                  // "モデル描画ＯＦＦ" "Model Drawing OFF" | Checkbox
-    /* 0x18 */ s8 mStopTime;                        // "停止時間" "Stop time" | Slider
-    /* 0x19 */ u8 mUpFirstWaitFrames;               // "待ち時間" "Waiting time" | Slider
-    /* 0x1A */ u8 field_0x1A[6];
-    /* 0x20 */ f32 field_0x20;                      // "速度" "Velocity" | Slider
-    /* 0x24 */ u8 field_0x24[4];
-    /* 0x28 */ f32 field_0x28;                      // mColliderUpdateScaleFactor?
-    /* 0x2C */ u8 mUpWaitFrames;                    // "待ち時間" "Waiting time" | Slider
-    /* 0x2D */ u8 field_0x2D[4];
-    /* 0x34 */ f32 field_0x34;                      // "速度" "Velocity" | Slider
-    /* 0x38 */ u8 field_0x38[8];
-    /* 0x40 */ f32 mDownwardSpeedUnitsPerSecond;    // "速度" "Velocity" | Slider
-    /* 0x44 */ f32 mEffectOscillationAngle;         // "振幅Ｙ" "Y Amplitude" | Slider
-    /* 0x48 */ f32 mEffectOscillationAmplitude;     // "移動強さ" "Moving strength" | Slider
-    /* 0x4C */ f32 mEffectOscillationDampingScale;  // "揺れ減衰" "Sway damping" | Slider
-    /* 0x50 */ f32 mEffectOscillationMaxDecay;      // "最大減衰量" "Maximum decay" | Slider
-    /* 0x54 */ f32 mEffectOscillationMinDecay;      // "最小減衰量" "Minimum decay" | Slider
+    /* 0x04 */ cXyz mDbgDrawScale;
+    /* 0x10 */ csXyz mDbgDrawAngle;
+    /* 0x16 */ bool mTesting;
+    /* 0x17 */ u8 mDbgDrawingOn;
+    /* 0x18 */ u8 mStopTime;
+    /* 0x19 */ u8 mUpFirstWaitFrames;
+    /* 0x1A */ u8 pad_0[6];
+    /* 0x20 */ f32 mUpFirstTargetSpeed;             // Maximum speed for preliminary upward movement
+    /* 0x24 */ u8 pad_1[4];
+    /* 0x28 */ f32 mColScaleFactor;
+    /* 0x2C */ u8 mUpWaitFrames;
+    /* 0x2D */ u8 pad_2[4];
+    /* 0x34 */ f32 mUpTargetSpeed;               // Maximum speed for final upward movement
+    /* 0x38 */ u8 pad_3[8];
+    /* 0x40 */ f32 mDownTargetSpeed;                // In units per second
+    /* 0x44 */ f32 mVOscAngleQuantum;
+    /* 0x48 */ f32 mVOscAmplitude;
+    /* 0x4C */ f32 mVOscDampingScale;
+    /* 0x50 */ f32 mVOscMaxDecay;
+    /* 0x54 */ f32 mVOscMinDecay;
 };
 
 typedef void (daWtPillar_c::*actionFunc)();
@@ -45,57 +47,88 @@ int daWtPillar_Delete(daWtPillar_c* i_this);
 int daWtPillar_Create(fopAc_ac_c* i_this);
 
 daWtPillar_HIO_c::daWtPillar_HIO_c() {
-    field_0x04.setall(1.0f);
-    field_0x10.setall(0);
-    mDisableDrawing = mForTesting = false;
+    mDbgDrawScale.set(1.0f, 1.0f, 1.0f);
+    mDbgDrawAngle.set(0, 0, 0);
+    mTesting = false;
+    mDbgDrawingOn = false;
     mStopTime = 30;
-    field_0x20 = 2000.0f;
+    mUpFirstTargetSpeed = 2000.0f;
     mUpFirstWaitFrames = 30;
-    field_0x34 = 5000.0f;
+    mUpTargetSpeed = 5000.0f;
     mUpWaitFrames = 60;
-    mDownwardSpeedUnitsPerSecond = 1000.0f;
-    mEffectOscillationAngle = 20.0f;
-    mEffectOscillationAmplitude = 25.0f;
-    mEffectOscillationDampingScale = 1.0f / 100.0f;
-    mEffectOscillationMaxDecay = 1.0f / 20.0f; 
-    mEffectOscillationMinDecay = 1.0f / 100.0f;
+    mDownTargetSpeed = 1000.0f;
+    mVOscAngleQuantum = 20.0f;
+    mVOscAmplitude = 25.0f;
+    mVOscDampingScale = 1.0f / 100.0f;
+    mVOscMaxDecay = 1.0f / 20.0f;
+    mVOscMinDecay = 1.0f / 100.0f;
 }
+
+#if DEBUG
+void daWtPillar_HIO_c::genMessage(JORMContext* mctx) {
+    /* === During Preparatory Movements === */
+    mctx->genLabel("\n=== 予備動作時 ===", 0);
+    // Waiting time
+    mctx->genSlider("待ち時間", &mUpFirstWaitFrames, 0, 0xFF);
+
+    /* === During Upward Movements === */
+    mctx->genLabel("\n=== 上昇動作時 ===", 0);
+    // Waiting time
+    mctx->genSlider("待ち時間", &mUpWaitFrames, 0, 0xFF);
+
+    /* ----------- For Testing ---------- */
+    mctx->genCheckBox("----------- テスト用 ----------", (u8*) &mTesting, 0x1);
+
+    /* === When Stopped === */
+    mctx->genLabel("\n=== 停止時 ===", 0);
+    // Stop time
+    mctx->genSlider("停止時間", &mStopTime, 0, 0xFF);
+
+    /* === During Preparatory Movements === */
+    mctx->genLabel("\n=== 予備動作時 ===", 0);
+    // Velocity
+    mctx->genSlider("速度", &mUpFirstTargetSpeed, 0.0f, 30000.0f);
+
+    /* === During Upward Movements === */
+    mctx->genLabel("\n=== 上昇動作時 ===", 0);
+    // Velocity
+    mctx->genSlider("速度", &mUpTargetSpeed, 0.0f, 30000.0f);
+
+    /* === During Descending Movements === */
+    mctx->genLabel("\n=== 下降動作時 ===", 0);
+    // Velocity
+    mctx->genSlider("速度", &mDownTargetSpeed, 0.0f, 30000.0f);
+
+    /* ====Shaking==== */
+    mctx->genLabel("\n====揺れ====", 0);
+    // Y amplitude
+    mctx->genSlider("振幅Ｙ", &mVOscAngleQuantum, 0.0f, 180.0f);
+    // Shake strength
+    mctx->genSlider("移動強さ", &mVOscAmplitude, 0.0f, 10000.0f);
+    // Shake damping
+    mctx->genSlider("揺れ減衰", &mVOscDampingScale, 0.0f, 1.0f);
+    // Maximum damping amount
+    mctx->genSlider("最大減衰量", &mVOscMaxDecay, 0.0f, 100.0f);
+    // Minimum damping amount
+    mctx->genSlider("最小減衰量", &mVOscMinDecay, 0.0f, 100.0f);
+
+    /* Model Drawing OFF */  // (Actually turns on debug cylinder drawing)
+    mctx->genCheckBox("モデル描画ＯＦＦ", &mDbgDrawingOn, 0x1);
+}
+#endif
 
 void daWtPillar_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y + mCurrentHeight, current.pos.z);
-    mDoMtx_stack_c::transM(mEffectOscillationVerticalOffset.x, mEffectOscillationVerticalOffset.y, mEffectOscillationVerticalOffset.z);
+    mDoMtx_stack_c::transM(mVOscVOffset.x, mVOscVOffset.y, mVOscVOffset.z);
 
     mpModel->setBaseScale(scale);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 int daWtPillar_c::createHeapCallBack(fopAc_ac_c* i_this) {
-    return static_cast<daWtPillar_c*>(i_this)->CreateHeap();
+    daWtPillar_c* actor = static_cast<daWtPillar_c*>(i_this);
+    return actor->CreateHeap();
 }
-
-int daWtPillar_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("efWater", 8));
-    JUT_ASSERT(369, modelData != NULL);
-    mpModel = mDoExt_J3DModel__create(modelData, J3DMdlFlag_DifferedDLBuffer, 0x11000284);
-
-    if(!mpModel)
-        return 0;
-
-    J3DAnmTransform* anmTransform = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("efWater", 5));
-    int res = mModelRotationAnimation.init(anmTransform, 1, 2, 1.0f, 0, -1, false);
-    JUT_ASSERT(385, res == 1)
-
-    J3DAnmTextureSRTKey* anmSRTKey = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("efWater", 11));
-    res = mVerticalTextureScrollAnimation.init(modelData, anmSRTKey, 1, 2, 1.0f, 0, -1);
-    JUT_ASSERT(395, res == 1)
-
-    return 1;
-}
-
-cull_box l_cull_box = {
-    {-30.0f, -10.0f, -30.0f},
-    {30.0f, 60.0f, 30.0f}
-};
 
 const dCcD_SrcGObjInf daWtPillar_c::mCcDObjInfo = {
     {0x0, {{AT_TYPE_100, 0x0, 0x1D}, {AT_TYPE_0, 0x0}, 0x0}},    // mObj
@@ -112,12 +145,37 @@ const dCcD_SrcGObjInf daWtPillar_c::mCcDObjCoInfo = {
 
 static daWtPillar_HIO_c l_HIO;
 
+cull_box l_cull_box = {
+    {-30.0f, -10.0f, -30.0f},
+    {30.0f, 60.0f, 30.0f}
+};
+
 dCcD_SrcCps daWtPillar_c::mCcDCps = {
     daWtPillar_c::mCcDObjInfo,
     { { {0.0f, 0.0f, 0.0f}, {0.0f,1100.0f, 0.0f}, 150.0f }}
 };
 
 dCcD_SrcCyl daWtPillar_c::mCcDCyl = {daWtPillar_c::mCcDObjCoInfo};
+
+int daWtPillar_c::CreateHeap() {
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("efWater", 8));
+    JUT_ASSERT(369, modelData != NULL);
+    mpModel = mDoExt_J3DModel__create(modelData, J3DMdlFlag_DifferedDLBuffer, 0x11000284);
+
+    if(!mpModel)
+        return 0;
+
+    int res = mModelRotAnm.init(static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("efWater", 5)),
+                                           1, 2, 1.0f, 0, -1, false);
+    JUT_ASSERT(385, res == 1)
+
+    res = mVTexScrollAnm.init(modelData,
+                                               static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("efWater", 11)),
+                                               1, 2, 1.0f, 0, -1);
+    JUT_ASSERT(394, res == 1)
+
+    return 1;
+}
 
 cPhs_Step daWtPillar_c::create() {
     fopAcM_ct(this, daWtPillar_c);
@@ -126,21 +184,24 @@ cPhs_Step daWtPillar_c::create() {
     if(phase == cPhs_COMPLEATE_e) {
         if(!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x2000))
             return cPhs_ERROR_e;
-        
+
         mStts.Init(0xFE, 0xFF, this);
         mCylinderCollider.Set(mCcDCyl);
         mCylinderCollider.SetStts(&mStts);
         mCapsuleCollider.Set(mCcDCps);
         mCapsuleCollider.SetStts(&mStts);
 
-        //! @bug maxY is used as maxZ for setting cull size box, making it larger than intended
-        const f32 minX = l_cull_box.min.x * scale.x;
-        const f32 minY = l_cull_box.min.y * scale.y;
-        const f32 minZ = l_cull_box.min.z * scale.x;
-        const f32 maxX = l_cull_box.max.x * scale.x;
-        const f32 maxY = l_cull_box.max.y * scale.y;
-        const f32 maxZ = l_cull_box.max.z * scale.x;
-        fopAcM_setCullSizeBox(this, minX, minY, minZ, maxX, maxY, maxY);
+        //! @bug l_cull_box.min is used to set actor cull.box.max, and vice-versa
+        //! @note Scaling is symmetric with respect to X and Z
+        cull_box cullBounds;
+        cullBounds.max.x = l_cull_box.min.x * scale.x;
+        cullBounds.max.y = l_cull_box.min.y * scale.y;
+        cullBounds.max.z = l_cull_box.min.z * scale.x;
+        cullBounds.min.x = l_cull_box.max.x * scale.x;
+        cullBounds.min.y = l_cull_box.max.y * scale.y;
+        cullBounds.min.z = l_cull_box.max.z * scale.x;
+        //! @bug cullBounds.min.y is passed as max Z for setting cull size box, making it larger than intended
+        fopAcM_setCullSizeBox(this, cullBounds.max.x, cullBounds.max.y, cullBounds.max.z, cullBounds.min.x, cullBounds.min.y, cullBounds.min.y);
 
         mAcchCir.SetWall(150.0f, 5.0f);
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), 0, 0);
@@ -148,8 +209,8 @@ cPhs_Step daWtPillar_c::create() {
         mAcch.SetWaterCheckOffset(10000.0f);
         mAcch.OnLineCheckNone();
 
-        mIsCarryingStalactite = false;
-        mStalactiteShouldStartShaking = 0;
+        mCarryingStalactite = false;
+        mStartStalactiteShake = 0;
 
         mSwitchNo = getParam(0, 8);
         mType = getParam(8, 4);
@@ -161,15 +222,15 @@ cPhs_Step daWtPillar_c::create() {
 
         mAcch.CrrPos(dComIfG_Bgsp());
 
-        /** 
+        /**
          * @bug Adjustments to the water pillar's target height are only made when the object
          * is created, leading to inconsistent behavior if the water height is changed
          * after the object is created.
          *
-         * See the east room in B1 of the Lakebed Temple as an example: 
+         * See the east room in B1 of the Lakebed Temple as an example:
          * When first entering entering the room after redirecting water towards it, a
-         * cutscene plays showing the water level rising; 
-         * the bottom of the oscillating water pillar in this room starts above water, 
+         * cutscene plays showing the water level rising;
+         * the bottom of the oscillating water pillar in this room starts above water,
          * but ends up below water after the cutscene, resulting in its target height never being modified.
          * However, exiting and re-entering the room does not result in the cutscene playing again,
          * so its target height is modified upon subsequent entries to the room
@@ -183,17 +244,17 @@ cPhs_Step daWtPillar_c::create() {
         }
 
         field_0xB44 = 0;
-        mStartedRisingOrDoesNotRiseAndFall = 0;
-        mPillarIsPreparingToRise = 0;
-        mEffectOscillationAngleStep = 0;
-        mEffectOscillationVerticalOffset.x = 0.0f;
-        mEffectOscillationVerticalOffset.y = 0.0f;
-        mEffectOscillationVerticalOffset.z = 0.0f;
-        mEffectOscillationAmplitude = 0.0f;
-        mEffectOscillationAngle = 0.0f;
-        mEffectOscillationDampingScale = 0.0f;
-        mEffectOscillationMaxDecay = 0.0f;
-        mEffectOscillationMinDecay = 0.0f;
+        mIsUpOrStatic = 0;
+        mIsUpFirst = 0;
+        mVOscAngleStep = 0;
+        mVOscVOffset.x = 0.0f;
+        mVOscVOffset.y = 0.0f;
+        mVOscVOffset.z = 0.0f;
+        mVOscAmplitude = 0.0f;
+        mVOscAngleQuantum = 0.0f;
+        mVOscDampingScale = 0.0f;
+        mVOscMaxDecay = 0.0f;
+        mVOscMinDecay = 0.0f;
         mCurrentHeight = 0.0f;
 
         if(mSwitchNo != 0xFF) {
@@ -202,7 +263,7 @@ cPhs_Step daWtPillar_c::create() {
         else if(mType == STATIC) {
             mCurrentHeight = mMaxHeight;
             field_0xB44 = true;
-            mStartedRisingOrDoesNotRiseAndFall = true;
+            mIsUpOrStatic = true;
             actionRockWaitInit();
         }
         else {
@@ -210,18 +271,19 @@ cPhs_Step daWtPillar_c::create() {
         }
 
         setBaseMtx();
-        
-        // TODO:
+
+        #if DEBUG
         // "Water column"
-        // entryHIO(&l_HIO, "水柱");
+        l_HIO.entryHIO("水柱");
+        #endif
     }
 
     return phase;
 }
 
 int daWtPillar_c::execute() {
-    mModelRotationAnimation.play();
-    mVerticalTextureScrollAnimation.play();
+    mModelRotAnm.play();
+    mVTexScrollAnm.play();
 
     eventUpdate();
     actionMain();
@@ -230,8 +292,8 @@ int daWtPillar_c::execute() {
     effectSet();
     effectSet2();
 
-    mScale.x = scale.x;
-    mScale.z = scale.z;
+    mDbgDrawScale.x = scale.x;
+    mDbgDrawScale.z = scale.z;
 
     cXyz currentHeightVector(0.0f, 1.0f, 0.0f);
     currentHeightVector.y *= mCurrentHeight;
@@ -249,9 +311,9 @@ int daWtPillar_c::execute() {
     mCapsuleSource.mEnd = currentHeightVector + currentPos;
     mCapsuleSource.mRadius = scale.x * 140.0f;
 
-    if(mCurrentHeight / 100.0f > scale.y * l_HIO.field_0x28) {
-        cM3dGCps& cps = mCapsuleCollider;
-        cps.Set(mCapsuleSource);
+    //! @bug l_HIO.mColliderUpdateScaleFactor is read, but never written to after default initialization. This therefore evaluates to mCurrentHeight / 100.0f > 0.0f
+    if(mCurrentHeight / 100.0f > scale.y * l_HIO.mColScaleFactor) {
+        mCapsuleCollider.cM3dGCps::Set(mCapsuleSource);
         dComIfG_Ccsp()->Set(&mCapsuleCollider);
     }
 
@@ -260,11 +322,11 @@ int daWtPillar_c::execute() {
     mCylinderCollider.SetC(current.pos);
     dComIfG_Ccsp()->Set(&mCylinderCollider);
 
-    mEffectOscillationVerticalOffset.y = mEffectOscillationAmplitude * cM_ssin(mEffectOscillationAngleStep * cM_deg2s(mEffectOscillationAngle));
+    mVOscVOffset.y = mVOscAmplitude * cM_ssin(mVOscAngleStep * cM_deg2s(mVOscAngleQuantum));
 
-    cLib_addCalc(&mEffectOscillationAmplitude, 0.0f, mEffectOscillationDampingScale, mEffectOscillationMaxDecay, mEffectOscillationMinDecay);
+    cLib_addCalc(&mVOscAmplitude, 0.0f, mVOscDampingScale, mVOscMaxDecay, mVOscMinDecay);
 
-    mEffectOscillationAngleStep++;
+    mVOscAngleStep++;
 
     setBaseMtx();
 
@@ -283,7 +345,8 @@ void daWtPillar_c::actionMain() {
     (this->*l_func[mAction])();
 }
 
-static u16 l_eff[7] = {
+void daWtPillar_c::effectSet() {
+    static u16 l_eff[7] = {
     0x86E3, // Smoke-like water foam particles, placed at pillar top
     0x86E4, // Large paint splatter-type water foam particles, placed at pillar top
     0x86E7, // Small paint splash-type water foam particles, placed at pillar top
@@ -291,14 +354,12 @@ static u16 l_eff[7] = {
     0x86E5, // Large paint splash-type water foam particles, placed at pillar bottom
     0x86EB, // Water splash particles, placed at pillar bottom
     0x86EA  // Water splash particles, placed at pillar top
-};
+    };
 
-void daWtPillar_c::effectSet() {
     // Create foam particles at the bottom and top of the pillar
-    cXyz effectOscillationOffset;
-    effectOscillationOffset.setall(0.0f);
+    cXyz effectOscillationOffset(0.0f, 0.0f, 0.0f);
 
-    mDoMtx_stack_c::transS(mEffectOscillationVerticalOffset.x, mEffectOscillationVerticalOffset.y, mEffectOscillationVerticalOffset.z);
+    mDoMtx_stack_c::transS(mVOscVOffset.x, mVOscVOffset.y, mVOscVOffset.z);
     mDoMtx_stack_c::multVec(&effectOscillationOffset, &effectOscillationOffset);
 
     cXyz currentPosWithOscillationOffset = current.pos + effectOscillationOffset;
@@ -307,45 +368,44 @@ void daWtPillar_c::effectSet() {
     mTopPos.y += mCurrentHeight;
 
     for(int i = 0; i < 3; i++)
-        mBottomAndTopParticleEmmitters[i] = dComIfGp_particle_set(mBottomAndTopParticleEmmitters[i],l_eff[i], &mTopPos, NULL, NULL);
-    
-    if(!mIsCarryingStalactite)
-        mBottomAndTopParticleEmmitters[3] = dComIfGp_particle_set(mBottomAndTopParticleEmmitters[3],l_eff[3], &mTopPos, NULL, NULL);
-    
-    if(mStartedRisingOrDoesNotRiseAndFall)
-        mBottomAndTopParticleEmmitters[4] = dComIfGp_particle_set(mBottomAndTopParticleEmmitters[4],l_eff[4], &current.pos, NULL, NULL);
-    
-    if(mPillarIsPreparingToRise) { 
-        mBottomAndTopParticleEmmitters[5] = dComIfGp_particle_set(mBottomAndTopParticleEmmitters[5],l_eff[5], &current.pos, NULL, NULL);
+        mBotAndTopEmmitters[i] = dComIfGp_particle_set(mBotAndTopEmmitters[i],l_eff[i], &mTopPos, NULL, NULL);
+
+    if(!mCarryingStalactite)
+        mBotAndTopEmmitters[3] = dComIfGp_particle_set(mBotAndTopEmmitters[3],l_eff[3], &mTopPos, NULL, NULL);
+
+    if(mIsUpOrStatic)
+        mBotAndTopEmmitters[4] = dComIfGp_particle_set(mBotAndTopEmmitters[4],l_eff[4], &current.pos, NULL, NULL);
+
+    if(mIsUpFirst) {
+        mBotAndTopEmmitters[5] = dComIfGp_particle_set(mBotAndTopEmmitters[5],l_eff[5], &current.pos, NULL, NULL);
     }
 
-    if(mIsCarryingStalactite)
-        mBottomAndTopParticleEmmitters[6] = dComIfGp_particle_set(mBottomAndTopParticleEmmitters[6],l_eff[6], &mTopPos, NULL, NULL);
+    if(mCarryingStalactite)
+        mBotAndTopEmmitters[6] = dComIfGp_particle_set(mBotAndTopEmmitters[6],l_eff[6], &mTopPos, NULL, NULL);
 }
 
 void daWtPillar_c::effectSet2() {
-      
+
     /* If the bottom of the pillar is at least 500.0 units underwater and the
         current height of the pillar makes the top be above water,
-        create foam particles at the horizontal position of the pillar, but at 
+        create foam particles at the horizontal position of the pillar, but at
         the water surface
     */
 
     // Can be observed in Lakebed Temple, when water level is raised in certain rooms
-    if(mAcch.m_wtr.GetHeight() - current.pos.y >= 500.0f && 
+    if(mAcch.m_wtr.GetHeight() - current.pos.y >= 500.0f &&
     current.pos.y + mCurrentHeight >= mAcch.m_wtr.GetHeight())
     {
-        cXyz effectOscillationOffset;
-        effectOscillationOffset.setall(0.0f);
+        cXyz effectOscillationOffset(0.0f, 0.0f, 0.0f);
 
-        mDoMtx_stack_c::transS(mEffectOscillationVerticalOffset.x, mEffectOscillationVerticalOffset.y, mEffectOscillationVerticalOffset.z);
+        mDoMtx_stack_c::transS(mVOscVOffset.x, mVOscVOffset.y, mVOscVOffset.z);
         mDoMtx_stack_c::multVec(&effectOscillationOffset, &effectOscillationOffset);
 
         cXyz currentPosWithVerticalOffset = current.pos + effectOscillationOffset;
         currentPosWithVerticalOffset.y = mAcch.m_wtr.GetHeight();
 
-        mWaterSurfaceParticleEmitters[0] = dComIfGp_particle_set(mWaterSurfaceParticleEmitters[0], 0x888F, &currentPosWithVerticalOffset, NULL, NULL);
-        mWaterSurfaceParticleEmitters[1] = dComIfGp_particle_set(mWaterSurfaceParticleEmitters[1], 0x8890, &currentPosWithVerticalOffset, NULL, NULL);
+        mWaterSurfaceEmitters[0] = dComIfGp_particle_set(mWaterSurfaceEmitters[0], 0x888F, &currentPosWithVerticalOffset, NULL, NULL);
+        mWaterSurfaceEmitters[1] = dComIfGp_particle_set(mWaterSurfaceEmitters[1], 0x8890, &currentPosWithVerticalOffset, NULL, NULL);
     }
 }
 
@@ -354,7 +414,7 @@ void daWtPillar_c::actionSwWaitInit() {
 }
 
 void daWtPillar_c::actionSwWait() {
-    if(dComIfGs_isSwitch(mSwitchNo, fopAcM_GetHomeRoomNo(this))) { 
+    if(fopAcM_isSwitch(this, mSwitchNo)) {
         if(getEventID() != 0xFF)
             orderEvent(getEventID(), 0xFF, 1);
         else
@@ -368,75 +428,97 @@ bool daWtPillar_c::eventStart() {
 }
 
 void daWtPillar_c::actionWaitInit() {
-    mWaitFrameDelay = getParam(12, 5) * 0.5f * 30.0f;
-    mStartedRisingOrDoesNotRiseAndFall = field_0xB44 = false;
+    mWaitFrames = getParam(12, 5) * 0.5f * 30.0f;
 
-    fopAcM_seStartCurrent(this, Z2SE_OBJ_WTR_CLMN_WAIT, 0);
+    #if DEBUG
+    if(l_HIO.mTesting)
+        mWaitFrames = l_HIO.mStopTime;
+    #endif
+
+    field_0xB44 = false;
+    mIsUpOrStatic = false;
+
+    mDoAud_seStart(Z2SE_OBJ_WTR_CLMN_WAIT, &current.pos, 0,
+                   dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 
     mAction = ACTION_WAIT;
 }
 
 void daWtPillar_c::actionWait() {
-    if(mWaitFrameDelay)
-        mWaitFrameDelay--;
+    if(mWaitFrames)
+        mWaitFrames--;
     else
         actionUpFirstInit();
 }
 
 void daWtPillar_c::actionUpFirstInit() {
-    mTargetMaxSpeed = (getParam(17, 5) * 100.0f * 5.0f) / 30.0f;
+    mTargetSpeed = (getParam(17, 5) * 100.0f * 5.0f) / 30.0f;
 
-    if(mIsCarryingStalactite)
-        mFirstTargetHeight = 50.0f;
+    #if DEBUG
+    if(l_HIO.mTesting)
+        mTargetSpeed = l_HIO.mUpFirstTargetSpeed / 30.0f;
+    #endif
+
+    if(mCarryingStalactite)
+        mUpFirstTargetHeight = 50.0f;
     else
-        mFirstTargetHeight = 300.0f;
+        mUpFirstTargetHeight = 300.0f;
 
     speedF = 0.0f;
 
-    mStalactiteShouldStartShaking = mPillarIsPreparingToRise = field_0xB44 = TRUE;
-    
-    fopAcM_seStartCurrent(this, Z2SE_OBJ_WTR_CLMN_READY, 0);
+    field_0xB44 = true;
+    mIsUpFirst = true;
+    mStartStalactiteShake = true;
+
+    mDoAud_seStart(Z2SE_OBJ_WTR_CLMN_READY, &current.pos, 0,
+                   dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 
     mAction = ACTION_UP_FIRST;
 }
 
 void daWtPillar_c::actionUpFirst() {
-    cLib_chaseF(&speedF, mTargetMaxSpeed, mTargetMaxSpeed / 30.0f);
+    const BOOL maxSpeedReached = cLib_chaseF(&speedF, mTargetSpeed, mTargetSpeed / 30.0f);
 
-    const f32 differenceBetweenCurrentAndFirstTargetHeight = cLib_addCalc(&mCurrentHeight, mFirstTargetHeight, 1.0f, speedF, 1.0f / 10.0f);
+    const f32 differenceBetweenCurrentAndFirstTargetHeight = cLib_addCalc(&mCurrentHeight, mUpFirstTargetHeight, 1.0f, speedF, 1.0f / 10.0f);
 
     if(differenceBetweenCurrentAndFirstTargetHeight == 0.0f)
         actionUpFirstWaitInit();
 }
 
 void daWtPillar_c::actionUpFirstWaitInit() {
-    mWaitFrameDelay = l_HIO.mUpFirstWaitFrames;
-    mEffectOscillationAmplitude = l_HIO.mEffectOscillationAmplitude;
-    mEffectOscillationAngle = l_HIO.mEffectOscillationAngle;
-    mEffectOscillationDampingScale = l_HIO.mEffectOscillationDampingScale;
-    mEffectOscillationMaxDecay = l_HIO.mEffectOscillationMaxDecay;
-    mEffectOscillationMinDecay = l_HIO.mEffectOscillationMinDecay;
+    mWaitFrames = l_HIO.mUpFirstWaitFrames;
+    mVOscAmplitude = l_HIO.mVOscAmplitude;
+    mVOscAngleQuantum = l_HIO.mVOscAngleQuantum;
+    mVOscDampingScale = l_HIO.mVOscDampingScale;
+    mVOscMaxDecay = l_HIO.mVOscMaxDecay;
+    mVOscMinDecay = l_HIO.mVOscMinDecay;
     mAction = ACTION_UP_FIRST_WAIT;
 }
 
 void daWtPillar_c::actionUpFirstWait() {
-    if(mWaitFrameDelay)
-        mWaitFrameDelay--;
+    if(mWaitFrames)
+        mWaitFrames--;
     else
         actionUpInit();
 }
 
 void daWtPillar_c::actionUpInit() {
-    mTargetMaxSpeed = getParam(22, 5) * 100.0f * 5.0f / 30.0f;
+    mTargetSpeed = getParam(22, 5) * 100.0f * 5.0f / 30.0f;
 
-    if(mIsCarryingStalactite)
+    #if DEBUG
+    if(l_HIO.mTesting)
+        mTargetSpeed = l_HIO.mUpTargetSpeed / 30.0f;
+    #endif
+
+    if(mCarryingStalactite)
         mTargetHeightStalactiteOffset = -250.0f;
     else
         mTargetHeightStalactiteOffset = 0.0f;
 
-    mPillarIsPreparingToRise = false;
+    mIsUpFirst = false;
 
-    mStalactiteShouldStartShaking = mStartedRisingOrDoesNotRiseAndFall = true;
+    mIsUpOrStatic = true;
+    mStartStalactiteShake = true;
 
     speedF = 0.0f;
 
@@ -444,7 +526,7 @@ void daWtPillar_c::actionUpInit() {
 }
 
 void daWtPillar_c::actionUp() {
-    cLib_chaseF(&speedF, mTargetMaxSpeed, mTargetMaxSpeed / 30.0f);
+    const BOOL maxSpeedReached = cLib_chaseF(&speedF, mTargetSpeed, mTargetSpeed / 30.0f);
 
     const f32 differenceBetweenCurrentAndMaxHeightWithStalactiteWeight = cLib_addCalc(&mCurrentHeight, mMaxHeight + mTargetHeightStalactiteOffset, 1.0f, speedF, 1.0f / 10.0f);
 
@@ -460,32 +542,32 @@ void daWtPillar_c::actionUp() {
 }
 
 void daWtPillar_c::actionUpWaitInit() {
-    mWaitFrameDelay = l_HIO.mUpWaitFrames;
-    mEffectOscillationAmplitude = l_HIO.mEffectOscillationAmplitude;
-    mEffectOscillationAngle = l_HIO.mEffectOscillationAngle;
-    mEffectOscillationDampingScale = l_HIO.mEffectOscillationDampingScale;
-    mEffectOscillationMaxDecay = l_HIO.mEffectOscillationMaxDecay;
-    mEffectOscillationMinDecay = l_HIO.mEffectOscillationMinDecay;
+    mWaitFrames = l_HIO.mUpWaitFrames;
+    mVOscAmplitude = l_HIO.mVOscAmplitude;
+    mVOscAngleQuantum = l_HIO.mVOscAngleQuantum;
+    mVOscDampingScale = l_HIO.mVOscDampingScale;
+    mVOscMaxDecay = l_HIO.mVOscMaxDecay;
+    mVOscMinDecay = l_HIO.mVOscMinDecay;
     mAction = ACTION_UP_WAIT;
 }
 
 void daWtPillar_c::actionUpWait() {
     mDoAud_seStartLevel(Z2SE_OBJ_WTR_CLMN_UP, &mTopPos, mMaxHeight + mTargetHeightStalactiteOffset, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 
-    if(mWaitFrameDelay)
-        mWaitFrameDelay--;
+    if(mWaitFrames)
+        mWaitFrames--;
     else
         actionDownInit();
 }
 
 void daWtPillar_c::actionDownInit() {
     speedF = 0.0f;
-    mStalactiteShouldStartShaking = true;
+    mStartStalactiteShake = true;
     mAction = ACTION_DOWN;
 }
 
 void daWtPillar_c::actionDown() {
-    cLib_chaseF(&speedF, l_HIO.mDownwardSpeedUnitsPerSecond / 30.0f, (l_HIO.mDownwardSpeedUnitsPerSecond / 30.0f) / 30.0f);
+    const BOOL maxDownwardSpeedReached = cLib_chaseF(&speedF, l_HIO.mDownTargetSpeed / 30.0f, (l_HIO.mDownTargetSpeed / 30.0f) / 30.0f);
 
     const f32 diff = cLib_addCalc(&mCurrentHeight, 0.0f, 1.0f, speedF, 0.1f);
 
@@ -502,7 +584,7 @@ void daWtPillar_c::actionRockWaitInit() {
 void daWtPillar_c::actionRockWait() {
     mDoAud_seStartLevel(Z2SE_OBJ_WTR_CLMN_UP, &mTopPos, mMaxHeight + mTargetHeightStalactiteOffset, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 
-    if(mIsCarryingStalactite)
+    if(mCarryingStalactite)
         actionRockOnInit();
 }
 
@@ -531,23 +613,65 @@ f32 daWtPillar_c::getPillarHeight() {
     return mCurrentHeight;
 }
 
+#if DEBUG
+void drawCylinder(cXyz* pos, cXyz* scale, csXyz* angle) {
+    UNUSED(angle);
+    Mtx finalMtx;
+
+    // fakematch?
+    GXColor cylinderColor;
+    GXColor baseColor = {0x00, 0x00, 0xFF, 0xE6};
+    GXColor cylinderColorRedundant;
+    *(u32*) &cylinderColorRedundant = *(u32*) &baseColor;
+    *(u32*) &cylinderColor = *(u32*) &cylinderColorRedundant;
+
+    mDoMtx_stack_c::transS(pos->x, pos->y, pos->z);
+    //! @note Scaling is symmetric with respect to X and Z
+    mDoMtx_stack_c::scaleM(150.0f * scale->x, 50.0f * scale->y, 150.0f * scale->x);
+    mDoMtx_stack_c::transM(0.0f, 1.0f, 0.0f);
+    mDoMtx_stack_c::XrotM(0x4000);
+    MTXCopy(mDoMtx_stack_c::get(), finalMtx);
+
+    dDbVw_drawCylinderMXlu(finalMtx, cylinderColor, 1);
+}
+#endif
+
 int daWtPillar_c::draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
 
-    J3DModelData* const modelData = mpModel->getModelData(); 
-    mModelRotationAnimation.entry(modelData);
-    mVerticalTextureScrollAnimation.entry(modelData);
+    J3DModelData* const modelData = mpModel->getModelData();
+    mModelRotAnm.entry(modelData);
+    mVTexScrollAnm.entry(modelData);
 
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
-    
+
+
+    #if DEBUG
+    u8 draw = false;
+    if(l_HIO.mTesting) {
+        current.angle = l_HIO.mDbgDrawAngle;
+        scale = l_HIO.mDbgDrawScale;
+    }
+
+    //! @bug mDbgDrawScale is always <scale.x, 0, scale.z>
+    if((draw = l_HIO.mDbgDrawingOn)) {
+        drawCylinder(&current.pos, &mDbgDrawScale, &current.angle);
+    }
+    #endif
+
     return 1;
 }
 
 int daWtPillar_c::_delete() {
     dComIfG_resDelete(&mPhase, "efWater");
+
+    #if DEBUG
+    l_HIO.removeHIO();
+    #endif
+
     return 1;
 }
 
@@ -560,11 +684,14 @@ int daWtPillar_Execute(daWtPillar_c* i_this) {
 }
 
 int daWtPillar_Delete(daWtPillar_c* i_this) {
+    fopAcM_RegisterDeleteID(i_this, "daWtPillar");
     return i_this->_delete();
 }
 
 int daWtPillar_Create(fopAc_ac_c* i_this) {
-    return static_cast<daWtPillar_c*>(i_this)->create();
+    daWtPillar_c* const actor = static_cast<daWtPillar_c*>(i_this);
+    fopAcM_RegisterCreateID(i_this, "daWtPillar");
+    return actor->create();
 }
 
 actor_method_class l_daWtPillar_Method = {

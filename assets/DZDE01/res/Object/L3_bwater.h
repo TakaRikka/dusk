@@ -1,0 +1,26 @@
+#ifndef RES_L3_BWATER_H
+#define RES_L3_BWATER_H
+
+enum dRes_INDEX_L3_BWATER {
+    /* BMDR */
+    dRes_INDEX_L3_BWATER_BMD_LV3BOSS_WATER_e=0x5,
+    /* BTK  */
+    dRes_INDEX_L3_BWATER_BTK_LV3BOSS_WATER_e=0x8,
+    /* DZB  */
+    dRes_INDEX_L3_BWATER_DZB_LV3BOSS_WATER_e=0xB,
+};
+
+enum dRes_ID_L3_BWATER {
+    /* BMDR */
+    dRes_ID_L3_BWATER_BMD_LV3BOSS_WATER_e=0x5,
+    /* BTK  */
+    dRes_ID_L3_BWATER_BTK_LV3BOSS_WATER_e=0x8,
+    /* DZB  */
+    dRes_ID_L3_BWATER_DZB_LV3BOSS_WATER_e=0xB,
+};
+
+enum LV3BOSS_WATER_JNT {
+    LV3BOSS_WATER_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_L3_BWATER_H */

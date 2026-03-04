@@ -30,7 +30,7 @@ void daObj_Bed_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-daObj_Bed_HIOParam const daObj_Bed_Param_c::m = {NULL, -3.0f, 1.0f, 600.0f};
+daObj_Bed_HIOParam const daObj_Bed_Param_c::m = {0, -3.0f, 1.0f, 600.0f};
 
 daObj_Bed_c::~daObj_Bed_c() {
     if (mpCollider != NULL) {

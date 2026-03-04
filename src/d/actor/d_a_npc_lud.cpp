@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_npc_len.h"
 #include "d/actor/d_a_npc_lud.h"
+#include <cstring>
 
 const daNpc_Lud_HIOParam daNpc_Lud_Param_c::m = {
     160.0f,  // attention_offset

@@ -9,6 +9,7 @@
 #include "JSystem/J3DGraphBase/J3DTexture.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
+#include <cstring>
 
 void dEyeHL_c::entry(J3DModelData* p_mData, char const* name) {
     J3DTexture* tex = p_mData->getTexture();

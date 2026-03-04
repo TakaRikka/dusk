@@ -1,0 +1,22 @@
+#ifndef RES_L2BDOOR_H
+#define RES_L2BDOOR_H
+
+enum dRes_INDEX_L2BDOOR {
+    /* BMDR */
+    dRes_INDEX_L2BDOOR_BMD_DOOR_SHUTTERBOSS_e=0x4,
+    /* EVT  */
+    dRes_INDEX_L2BDOOR_DAT_EVENT_LIST_e=0x7,
+};
+
+enum dRes_ID_L2BDOOR {
+    /* BMDR */
+    dRes_ID_L2BDOOR_BMD_DOOR_SHUTTERBOSS_e=0x4,
+    /* EVT  */
+    dRes_ID_L2BDOOR_DAT_EVENT_LIST_e=0x7,
+};
+
+enum DOOR_SHUTTERBOSS_JNT {
+    DOOR_SHUTTERBOSS_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_L2BDOOR_H */

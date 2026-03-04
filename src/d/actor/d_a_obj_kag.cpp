@@ -9,6 +9,7 @@
 #include "d/d_menu_insect.h"
 #include "d/d_s_play.h"
 #include "d/d_cc_uty.h"
+#include <cstring>
 
 enum I_Kag_RES_File_ID {
     /* BCK */

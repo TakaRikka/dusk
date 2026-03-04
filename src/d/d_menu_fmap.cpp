@@ -6,6 +6,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
 #include <cstdio>
+#include <cstring>
 #include "f_op/f_op_msg_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
@@ -2269,7 +2270,7 @@ bool dMenu_Fmap_c::readFieldMapData(void** o_data, char const* i_path, bool para
 }
 
 void dMenu_Fmap_c::decodeFieldMapData() {
-    int field_data = (intptr_t)mpFieldDat;
+    intptr_t field_data = (intptr_t)mpFieldDat;
     dMenu_Fmap_field_region_data_c* region_data
         = (dMenu_Fmap_field_region_data_c*)(field_data + mpFieldDat->mRegionDataOffset);
     dMenuMapCommon_c::Stage_c* stage_data

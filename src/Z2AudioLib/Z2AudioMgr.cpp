@@ -1,21 +1,22 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include "Z2AudioLib/Z2AudioMgr.h"
 #include "JSystem/JAudio2/JASAiCtrl.h"
+#include "JSystem/JAudio2/JASAudioThread.h"
 #include "JSystem/JAudio2/JASDriverIF.h"
 #include "JSystem/JAudio2/JASResArcLoader.h"
 #include "JSystem/JAudio2/JASSeqParser.h"
 #include "JSystem/JAudio2/JAUInitializer.h"
 #include "JSystem/JAudio2/JAUSectionHeap.h"
-#include "JSystem/JAudio2/JAUStreamAramMgr.h"
 #include "JSystem/JAudio2/JAUSeqCollection.h"
+#include "JSystem/JAudio2/JAUStreamAramMgr.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "Z2AudioLib/Z2AudioArcLoader.h"
+#include "Z2AudioLib/Z2AudioMgr.h"
 #include "Z2AudioLib/Z2Param.h"
 #include "Z2AudioLib/Z2SoundHandles.h"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
-#include "Z2AudioLib/Z2AudioCS.h"
+#include "Z2AudioCS/Z2AudioCS.h"
 #endif
 
 Z2AudioMgr* Z2AudioMgr::mAudioMgrPtr;
@@ -104,6 +105,19 @@ void Z2AudioMgr::init(JKRSolidHeap* heap, u32 memSize, void* baaData, JKRArchive
 
     JASPoolAllocObject<Z2SoundHandlePool>::newMemPool(0x4e);
     OS_REPORT("[Z2AudioMgr::init]before Create Section: %d\n", heap->getFreeSize());
+
+#if TARGET_PC
+    // Fix a race condition with OS threading where JAUNewSectionHeap will use all the remaining
+    // space in the JASDram heap before JASAudioThread has finished initializing.
+
+    OSLockMutex(&JASAudioThread::sThreadInitCompleteMutex);
+    while (!JASAudioThread::sThreadInitComplete) {
+        OSWaitCond(
+            &JASAudioThread::sThreadInitCompleteCond,
+            &JASAudioThread::sThreadInitCompleteMutex);
+    }
+    OSUnlockMutex(&JASAudioThread::sThreadInitCompleteMutex);
+#endif
 
     JAUSectionHeap* sectionHeap = JAUNewSectionHeap(true);
     sectionHeap->setSeqDataArchive(seqArc);

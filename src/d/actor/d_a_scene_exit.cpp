@@ -110,7 +110,7 @@ actor_process_profile_definition2 g_profile_SCENE_EXIT = {
   fpcPi_CURRENT_e,       // mListPrio
   PROC_SCENE_EXIT,       // mProcName
   &g_fpcLf_Method.base, // sub_method
-  0x0000059C,            // mSize
+  sizeof(daScex_c),      // mSize
   0,                     // mSizeOther
   0,                     // mParameters
   &g_fopAc_Method.base,  // sub_method

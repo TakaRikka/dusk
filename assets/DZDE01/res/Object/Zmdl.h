@@ -1,0 +1,121 @@
+#ifndef RES_ZMDL_H
+#define RES_ZMDL_H
+
+enum dRes_INDEX_ZMDL {
+    /* BMDE */
+    dRes_INDEX_ZMDL_BMD_AL_KANTERA_e=0x6,
+    /* BMDR */
+    dRes_INDEX_ZMDL_BMD_EF_KTGLOW_e=0x9,
+    /* BMWR */
+    dRes_INDEX_ZMDL_BMD_AL_BOOTSH_e=0xC,
+    dRes_INDEX_ZMDL_BMD_AL_HANDS_e=0xD,
+    dRes_INDEX_ZMDL_BMD_AL_SWB_e=0xE,
+    dRes_INDEX_ZMDL_BMD_ZL_e=0xF,
+    dRes_INDEX_ZMDL_BMD_ZL_FACE_e=0x10,
+    dRes_INDEX_ZMDL_BMD_ZL_HEAD_e=0x11,
+    /* BTK  */
+    dRes_INDEX_ZMDL_BTK_EF_KTGLOW_e=0x14,
+};
+
+enum dRes_ID_ZMDL {
+    /* BMDE */
+    dRes_ID_ZMDL_BMD_AL_KANTERA_e=0x6,
+    /* BMDR */
+    dRes_ID_ZMDL_BMD_EF_KTGLOW_e=0x9,
+    /* BMWR */
+    dRes_ID_ZMDL_BMD_AL_BOOTSH_e=0xC,
+    dRes_ID_ZMDL_BMD_AL_HANDS_e=0xD,
+    dRes_ID_ZMDL_BMD_AL_SWB_e=0xE,
+    dRes_ID_ZMDL_BMD_ZL_e=0xF,
+    dRes_ID_ZMDL_BMD_ZL_FACE_e=0x10,
+    dRes_ID_ZMDL_BMD_ZL_HEAD_e=0x11,
+    /* BTK  */
+    dRes_ID_ZMDL_BTK_EF_KTGLOW_e=0x14,
+};
+
+enum AL_KANTERA_JNT {
+    AL_KANTERA_JNT_TOTTE_e=0x0,
+    AL_KANTERA_JNT_KANTERA_e=0x1,
+};
+
+enum EF_KTGLOW_JNT {
+    EF_KTGLOW_JNT_PPLANE1_e=0x0,
+};
+
+enum AL_BOOTSH_JNT {
+    AL_BOOTSH_JNT_WORLD_ROOT_e=0x0,
+    AL_BOOTSH_JNT_AL_BOOTSHA_e=0x1,
+    AL_BOOTSH_JNT_AL_BOOTSHB_e=0x2,
+    AL_BOOTSH_JNT_AL_BOOTSHC_e=0x3,
+};
+
+enum AL_HANDS_JNT {
+    AL_HANDS_JNT_WORLD_ROOT_e=0x0,
+    AL_HANDS_JNT_AL_HANDSL_e=0x1,
+    AL_HANDS_JNT_AL_HANDSR_e=0x2,
+};
+
+enum AL_SWB_JNT {
+    AL_SWB_JNT_AL_SWB_e=0x0,
+};
+
+enum ZL_JNT {
+    ZL_JNT_CENTER_e=0x0,
+    ZL_JNT_BACKBONE1_e=0x1,
+    ZL_JNT_BACKBONE2_e=0x2,
+    ZL_JNT_NECK_e=0x3,
+    ZL_JNT_HEAD_e=0x4,
+    ZL_JNT_POD_e=0x5,
+    ZL_JNT_SHOULDERL_e=0x6,
+    ZL_JNT_ARML1_e=0x7,
+    ZL_JNT_ARML2_e=0x8,
+    ZL_JNT_HANDL_e=0x9,
+    ZL_JNT_WEAPONL_e=0xA,
+    ZL_JNT_SHOULDERR_e=0xB,
+    ZL_JNT_ARMR1_e=0xC,
+    ZL_JNT_ARMR2_e=0xD,
+    ZL_JNT_HANDR_e=0xE,
+    ZL_JNT_WEAPONR_e=0xF,
+    ZL_JNT_WAIST_e=0x10,
+    ZL_JNT_CLOTCHL_e=0x11,
+    ZL_JNT_LEGL1_e=0x12,
+    ZL_JNT_LEGL2_e=0x13,
+    ZL_JNT_FOOTL_e=0x14,
+    ZL_JNT_TOEL_e=0x15,
+    ZL_JNT_CLOTCHR_e=0x16,
+    ZL_JNT_LEGR1_e=0x17,
+    ZL_JNT_LEGR2_e=0x18,
+    ZL_JNT_FOOTR_e=0x19,
+    ZL_JNT_TOER_e=0x1A,
+    ZL_JNT_FSKIRTL1_e=0x1B,
+    ZL_JNT_FSKIRTL2_e=0x1C,
+    ZL_JNT_FSKIRTR1_e=0x1D,
+    ZL_JNT_FSKIRTR2_e=0x1E,
+    ZL_JNT_RSKIRTL1_e=0x1F,
+    ZL_JNT_RSKIRTL2_e=0x20,
+    ZL_JNT_RSKIRTR1_e=0x21,
+    ZL_JNT_RSKIRTR2_e=0x22,
+};
+
+enum ZL_FACE_JNT {
+    ZL_FACE_JNT_FACE_ROOT_e=0x0,
+    ZL_FACE_JNT_CHIN_e=0x1,
+    ZL_FACE_JNT_MAYUL_e=0x2,
+    ZL_FACE_JNT_MAYUR_e=0x3,
+    ZL_FACE_JNT_MOUTH_e=0x4,
+};
+
+enum ZL_HEAD_JNT {
+    ZL_HEAD_JNT_HEAD_ROOT_e=0x0,
+    ZL_HEAD_JNT_HAIRL1_e=0x1,
+    ZL_HEAD_JNT_HAIRL2_e=0x2,
+    ZL_HEAD_JNT_HAIRR_e=0x3,
+    ZL_HEAD_JNT_MOMIL_e=0x4,
+    ZL_HEAD_JNT_MOMIR_e=0x5,
+    ZL_HEAD_JNT_Z_CAP1_e=0x6,
+    ZL_HEAD_JNT_Z_CAP2_e=0x7,
+    ZL_HEAD_JNT_Z_CAP3_e=0x8,
+    ZL_HEAD_JNT_Z_CAP4_e=0x9,
+};
+
+#endif /* !RES_ZMDL_H */

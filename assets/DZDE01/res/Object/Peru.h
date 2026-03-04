@@ -1,0 +1,88 @@
+#ifndef RES_PERU_H
+#define RES_PERU_H
+
+enum dRes_INDEX_PERU {
+    /* BCK  */
+    dRes_INDEX_PERU_BCK_GZ_NE_F_KIZUKU_e=0x7,
+    dRes_INDEX_PERU_BCK_GZ_NE_F_NAKU_e=0x8,
+    dRes_INDEX_PERU_BCK_GZ_NE_F_SNIFF_e=0x9,
+    dRes_INDEX_PERU_BCK_GZ_NE_F_TALK_A_e=0xA,
+    dRes_INDEX_PERU_BCK_GZ_NE_JUMP_DOWN_E_e=0xB,
+    dRes_INDEX_PERU_BCK_GZ_NE_JUMP_DOWN_S_e=0xC,
+    dRes_INDEX_PERU_BCK_GZ_NE_KIZUKU_e=0xD,
+    dRes_INDEX_PERU_BCK_GZ_NE_KIZUKU_WAIT_e=0xE,
+    dRes_INDEX_PERU_BCK_GZ_NE_NAKU_e=0xF,
+    dRes_INDEX_PERU_BCK_GZ_NE_RUN_A_e=0x10,
+    dRes_INDEX_PERU_BCK_GZ_NE_SIT_A_e=0x11,
+    dRes_INDEX_PERU_BCK_GZ_NE_SIT_B_e=0x12,
+    dRes_INDEX_PERU_BCK_GZ_NE_SNIFF_e=0x13,
+    dRes_INDEX_PERU_BCK_GZ_NE_WAIT_A_e=0x14,
+    dRes_INDEX_PERU_BCK_GZ_NE_WALK_A_e=0x15,
+    /* BMDR */
+    dRes_INDEX_PERU_BMD_GZ_NE_e=0x18,
+    /* BTK  */
+    dRes_INDEX_PERU_BTK_GZ_NE_e=0x1B,
+    /* BTP  */
+    dRes_INDEX_PERU_BTP_GZ_NE_e=0x1E,
+    dRes_INDEX_PERU_BTP_GZ_NE_F_KIZUKU_e=0x1F,
+    dRes_INDEX_PERU_BTP_GZ_NE_F_NAKU_e=0x20,
+    dRes_INDEX_PERU_BTP_GZ_NE_F_SNIFF_e=0x21,
+    /* EVT  */
+    dRes_INDEX_PERU_DAT_EVENT_LIST_e=0x24,
+};
+
+enum dRes_ID_PERU {
+    /* BCK  */
+    dRes_ID_PERU_BCK_GZ_NE_F_KIZUKU_e=0x7,
+    dRes_ID_PERU_BCK_GZ_NE_F_NAKU_e=0x8,
+    dRes_ID_PERU_BCK_GZ_NE_F_SNIFF_e=0x9,
+    dRes_ID_PERU_BCK_GZ_NE_F_TALK_A_e=0xA,
+    dRes_ID_PERU_BCK_GZ_NE_JUMP_DOWN_E_e=0xB,
+    dRes_ID_PERU_BCK_GZ_NE_JUMP_DOWN_S_e=0xC,
+    dRes_ID_PERU_BCK_GZ_NE_KIZUKU_e=0xD,
+    dRes_ID_PERU_BCK_GZ_NE_KIZUKU_WAIT_e=0xE,
+    dRes_ID_PERU_BCK_GZ_NE_NAKU_e=0xF,
+    dRes_ID_PERU_BCK_GZ_NE_RUN_A_e=0x10,
+    dRes_ID_PERU_BCK_GZ_NE_SIT_A_e=0x11,
+    dRes_ID_PERU_BCK_GZ_NE_SIT_B_e=0x12,
+    dRes_ID_PERU_BCK_GZ_NE_SNIFF_e=0x13,
+    dRes_ID_PERU_BCK_GZ_NE_WAIT_A_e=0x14,
+    dRes_ID_PERU_BCK_GZ_NE_WALK_A_e=0x15,
+    /* BMDR */
+    dRes_ID_PERU_BMD_GZ_NE_e=0x18,
+    /* BTK  */
+    dRes_ID_PERU_BTK_GZ_NE_e=0x1B,
+    /* BTP  */
+    dRes_ID_PERU_BTP_GZ_NE_e=0x1E,
+    dRes_ID_PERU_BTP_GZ_NE_F_KIZUKU_e=0x1F,
+    dRes_ID_PERU_BTP_GZ_NE_F_NAKU_e=0x20,
+    dRes_ID_PERU_BTP_GZ_NE_F_SNIFF_e=0x21,
+    /* EVT  */
+    dRes_ID_PERU_DAT_EVENT_LIST_e=0x24,
+};
+
+enum GZ_NE_JNT {
+    GZ_NE_JNT_CENTER_e=0x0,
+    GZ_NE_JNT_BACKBONE1_e=0x1,
+    GZ_NE_JNT_BACKBONE2_e=0x2,
+    GZ_NE_JNT_NECK_e=0x3,
+    GZ_NE_JNT_HEAD_e=0x4,
+    GZ_NE_JNT_CHIN_e=0x5,
+    GZ_NE_JNT_SHOULDERL_e=0x6,
+    GZ_NE_JNT_ARML1_e=0x7,
+    GZ_NE_JNT_HANDL_e=0x8,
+    GZ_NE_JNT_SHOULDERR1_e=0x9,
+    GZ_NE_JNT_ARMR1_e=0xA,
+    GZ_NE_JNT_HANDR_e=0xB,
+    GZ_NE_JNT_WAIST_e=0xC,
+    GZ_NE_JNT_LEGL1_e=0xD,
+    GZ_NE_JNT_LEGL2_e=0xE,
+    GZ_NE_JNT_FOOTL_e=0xF,
+    GZ_NE_JNT_LEGR1_e=0x10,
+    GZ_NE_JNT_LEGR2_e=0x11,
+    GZ_NE_JNT_FOOTR_e=0x12,
+    GZ_NE_JNT_TAIL1_e=0x13,
+    GZ_NE_JNT_TAIL2_e=0x14,
+};
+
+#endif /* !RES_PERU_H */

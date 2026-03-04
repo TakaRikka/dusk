@@ -256,7 +256,7 @@ static void attack(b_oh_class* i_this) {
             cLib_addCalcAngleS2(&i_this->field_0xca4, var3, 1, 500);
 
             if (i_this->mTimers[1] == 0 || i_this->mTimers[1] > 10) {
-                i_this->current.angle.y += (s16)(i_this->field_0xc88 * 300);
+                ANGLE_ADD(i_this->current.angle.y, i_this->field_0xc88 * 300);
             }
 
             if (i_this->mActionPhase == 2) {
@@ -511,10 +511,10 @@ static void action(b_oh_class* i_this) {
         (-a_this->field_0x614 - a_this->field_0x60c) + cM_ssin(a_this->field_0x5cc * 200) * 100.0f;
     a_this->field_0x604 = ((100.0f - a_this->field_0x614) - a_this->field_0x60c) +
                           cM_ssin(a_this->field_0x5cc * 200) * 100.0f;
-    a_this->field_0x5f8 += (s16)a_this->field_0x600;
-    a_this->field_0x5fa += (s16)a_this->field_0x604;
+    ANGLE_ADD(a_this->field_0x5f8, a_this->field_0x600);
+    ANGLE_ADD(a_this->field_0x5fa, a_this->field_0x604);
     a_this->field_0x5fc = a_this->field_0x60c + 2000.0f;
-    a_this->field_0x5f6 += (s16)a_this->field_0x5fc;
+    ANGLE_ADD(a_this->field_0x5f6, a_this->field_0x5fc);
 
     cLib_addCalc0(&a_this->field_0x60c, 0.1f, 50.0f);
     cLib_addCalc2(&a_this->field_0x610, 0.2f, 0.1f, 0.01f);

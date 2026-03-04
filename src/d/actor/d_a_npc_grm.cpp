@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h"  // IWYU pragma: keep
 
 #include "d/actor/d_a_npc_grm.h"
+#include <cstring>
 
 enum grA_Base_RES_File_ID {
     /* BCK */
@@ -447,8 +448,8 @@ BOOL daNpc_grM_c::evtProc() {
         int face_motion, motion;
         if (ctrlMsgAnm(&face_motion, &motion, this, field_0xe2d)) {
             if (field_0xe26) {
-                mFaceMotionSeqMngr.setNo(face_motion, -1.0f, TRUE, NULL);
-                mMotionSeqMngr.setNo(motion, -1.0f, TRUE, NULL);
+                mFaceMotionSeqMngr.setNo(face_motion, -1.0f, TRUE, 0);
+                mMotionSeqMngr.setNo(motion, -1.0f, TRUE, 0);
             }
         } else if (tmp != 0 && field_0xe26) {
             setAfterTalkMotion();

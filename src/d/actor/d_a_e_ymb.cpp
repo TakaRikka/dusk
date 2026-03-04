@@ -902,16 +902,16 @@ void daE_YMB_c::executeFly() {
                         if (fVar1 > 1800.0f) {
                             adj_angle = playerAngleY + 0x8000 + cM_rndFX(2048.0f);
                             if ((s16)(cLib_targetAngleY(&current.pos, &field_0x69c) - playerAngleY) > 0) {
-                                adj_angle -= (s16) 0x1800;
+                                ANGLE_SUB(adj_angle, 0x1800);
                             } else {
-                                adj_angle += (s16) 0x1800;
+                                ANGLE_ADD(adj_angle, 0x1800);
                             }
                         } else {
                             adj_angle = playerAngleY + 0x8000 + cM_rndFX(2048.0f);
                             if (cM_rnd() < 0.5f) {
-                                adj_angle += (s16) 0x1800;
+                                ANGLE_ADD(adj_angle, 0x1800);
                             } else {
-                                adj_angle -= (s16) 0x1800;
+                                ANGLE_SUB(adj_angle, 0x1800);
                             }
                         }
                     }

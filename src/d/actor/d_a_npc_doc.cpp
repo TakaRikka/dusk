@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_npc_doc.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 static int l_bmdData[1][2] = {
     {14, 1},

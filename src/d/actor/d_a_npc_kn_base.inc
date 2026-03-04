@@ -1,6 +1,7 @@
 #include "d/actor/d_a_npc_kn.h"
 #include "d/d_msg_object.h"
 #include "d/d_k_wmark.h"
+#include <cstring>
 
 void daNpc_Kn_c::tgHitCallBack(fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf,
                                fopAc_ac_c* i_atActor, dCcD_GObjInf* i_atObjInf) {
@@ -1033,7 +1034,7 @@ BOOL daNpc_Kn_c::turn(s16 i_angle, int i_count, int i_direction) {
     }
 
     int offset = angle_diff * cM_ssin((s16)mTurnAmount);
-    mTurnAmount += (s16)(16384.0f / mTurnCount);
+    ANGLE_ADD(mTurnAmount, 16384.0f / mTurnCount);
 
     if ((u16)mTurnAmount < 0x4000) {
         mCurAngle.y = mStartAngle + offset;

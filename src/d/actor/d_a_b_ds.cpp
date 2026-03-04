@@ -590,7 +590,7 @@ void daB_DS_c::mZsMoveChk() {
         }
 
         angle_y = fopAcM_searchPlayerAngleY(this);
-        angle_y += (s16)cM_rndFX(0x2000);
+        ANGLE_ADD(angle_y, cM_rndFX(0x2000));
     }
 
     if (!daPy_getPlayerActorClass()->checkSpinnerRide() || mAction == ACT_DAMAGE ||
@@ -1044,7 +1044,7 @@ void daB_DS_c::neck_set() {
         angl.x = -mae.atan2sY_XZ() * 2.0f;
         if (mAction == ACT_BREATH_ATTACK) {
             angl.x = mBh2AttackAngleF;
-            angl.x += (s16)(mBackboneLevel * 200);
+            ANGLE_ADD(angl.x, mBackboneLevel * 200);
         }
 
         if (angl.x > 0x2000) {
@@ -5156,7 +5156,7 @@ int daB_DS_c::execute() {
 
     if (!mIsOpeningDemo) {
         s16 hand_x_ang_target = -6000;
-        hand_x_ang_target += (s16)(mBackboneLevel * 1000);
+        ANGLE_ADD(hand_x_ang_target, mBackboneLevel * 1000);
         if (handX_ang > -4000) {
             handX_ang = -4000;
         }
@@ -5178,7 +5178,7 @@ int daB_DS_c::execute() {
             }
 
             if (jnt_pos.y < chk_pos.y) {
-                handL_ang += (s16)(fabsf(jnt_pos.y - chk_pos.y) * 10.0f);
+                ANGLE_ADD(handL_ang, fabsf(jnt_pos.y - chk_pos.y) * 10.0f);
                 var_r25 = true;
 
                 if (field_0x84d & 1) {
@@ -5201,7 +5201,7 @@ int daB_DS_c::execute() {
             }
 
             if (jnt_pos.y < chk_pos.y) {
-                handR_ang += (s16)(fabsf(jnt_pos.y - chk_pos.y) * 10.0f);
+                ANGLE_ADD(handR_ang, fabsf(jnt_pos.y - chk_pos.y) * 10.0f);
                 var_r25 = true;
                 if (field_0x84d & 2) {
                     if ((int)mpMorf->getFrame() >= 34 && (int)mpMorf->getFrame() < 41) {

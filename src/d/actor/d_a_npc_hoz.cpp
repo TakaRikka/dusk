@@ -9,6 +9,7 @@
 #include "d/actor/d_a_arrow.h"
 #include "d/actor/d_a_canoe.h"
 #include "d/d_meter2_info.h"
+#include <cstring>
 
 static int l_bmdData[2][2] = {
     {13, 1},

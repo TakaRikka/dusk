@@ -11,6 +11,7 @@
 #include "d/actor/d_a_tag_evtarea.h"
 #include "d/actor/d_a_tag_kmsg.h"
 #include "d/actor/d_a_npc_len.h"
+#include <cstring>
 
 enum Bans_RES_File_ID {
     /* BCK */

@@ -9,6 +9,7 @@
 #include "d/d_com_static.h"
 #include "d/d_s_play.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 static int l_bmdData[3][2] = {
     {10, 1},

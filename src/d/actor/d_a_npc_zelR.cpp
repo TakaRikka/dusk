@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_npc_zelR.h"
+#include <cstring>
 
 enum RES_Name {
     /* 0x0 */ NONE,

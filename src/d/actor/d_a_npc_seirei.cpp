@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_npc_seirei.h"
 #include "d/d_meter2_info.h"
+#include <cstring>
 
 enum Seirei_RES_File_ID {
     /* BCK */

@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_npc_kolinb.h"
+#include <cstring>
 
 enum Kolinb_RES_File_ID {
     /* BCK */

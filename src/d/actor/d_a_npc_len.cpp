@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_npc_len.h"
 #include "d/actor/d_a_tag_push.h"
+#include <cstring>
 
 enum Type {
     /* 0x0 */ TYPE_0,

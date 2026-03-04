@@ -16,6 +16,7 @@
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/d_camera.h"
+#include <cstring>
 
 #if (PLATFORM_WII || PLATFORM_SHIELD)
 dMeter_map_HIO_c g_meter_mapHIO;

@@ -1,0 +1,96 @@
+#ifndef RES_MIDNA_H
+#define RES_MIDNA_H
+
+enum dRes_INDEX_MIDNA {
+    /* BMDE */
+    dRes_INDEX_MIDNA_BMD_S_MD_HANDS_e=0x7,
+    dRes_INDEX_MIDNA_BMD_S_MD_MASK_e=0x8,
+    /* BMDR */
+    dRes_INDEX_MIDNA_BMD_S_MD_GOKOU_e=0xB,
+    /* BMDV */
+    dRes_INDEX_MIDNA_BMD_S_MD_e=0xE,
+    dRes_INDEX_MIDNA_BMD_S_MD_HAIR_HAND_e=0xF,
+    /* BRK  */
+    dRes_INDEX_MIDNA_BRK_S_MD_APPEAR_e=0x12,
+    dRes_INDEX_MIDNA_BRK_S_MD_GOKOU_APPEAR_e=0x13,
+    dRes_INDEX_MIDNA_BRK_S_MD_HAIR_HAND_APPEAR_e=0x14,
+    dRes_INDEX_MIDNA_BRK_S_MD_MASK_APPEAR_e=0x15,
+    /* BTK  */
+    dRes_INDEX_MIDNA_BTK_S_MD_HAIR_HAND_MOYA_e=0x18,
+    dRes_INDEX_MIDNA_BTK_S_MD_HANDS_MOYA_e=0x19,
+    dRes_INDEX_MIDNA_BTK_S_MD_MASK_MOYA_e=0x1A,
+    dRes_INDEX_MIDNA_BTK_S_MD_MOYA_e=0x1B,
+};
+
+enum dRes_ID_MIDNA {
+    /* BMDE */
+    dRes_ID_MIDNA_BMD_S_MD_HANDS_e=0x7,
+    dRes_ID_MIDNA_BMD_S_MD_MASK_e=0x8,
+    /* BMDR */
+    dRes_ID_MIDNA_BMD_S_MD_GOKOU_e=0xB,
+    /* BMDV */
+    dRes_ID_MIDNA_BMD_S_MD_e=0xE,
+    dRes_ID_MIDNA_BMD_S_MD_HAIR_HAND_e=0xF,
+    /* BRK  */
+    dRes_ID_MIDNA_BRK_S_MD_APPEAR_e=0x12,
+    dRes_ID_MIDNA_BRK_S_MD_GOKOU_APPEAR_e=0x13,
+    dRes_ID_MIDNA_BRK_S_MD_HAIR_HAND_APPEAR_e=0x14,
+    dRes_ID_MIDNA_BRK_S_MD_MASK_APPEAR_e=0x15,
+    /* BTK  */
+    dRes_ID_MIDNA_BTK_S_MD_HAIR_HAND_MOYA_e=0x18,
+    dRes_ID_MIDNA_BTK_S_MD_HANDS_MOYA_e=0x19,
+    dRes_ID_MIDNA_BTK_S_MD_MASK_MOYA_e=0x1A,
+    dRes_ID_MIDNA_BTK_S_MD_MOYA_e=0x1B,
+};
+
+enum S_MD_HANDS_JNT {
+    S_MD_HANDS_JNT_WORLD_ROOT_e=0x0,
+    S_MD_HANDS_JNT_MD_HANDSL_e=0x1,
+    S_MD_HANDS_JNT_MD_HANDSR_e=0x2,
+};
+
+enum S_MD_MASK_JNT {
+    S_MD_MASK_JNT_MD_MASK_e=0x0,
+};
+
+enum S_MD_GOKOU_JNT {
+    S_MD_GOKOU_JNT_S_MD_GOKOU_e=0x0,
+};
+
+enum S_MD_JNT {
+    S_MD_JNT_WORLD_ROOT_e=0x0,
+    S_MD_JNT_BACKBONE1_e=0x1,
+    S_MD_JNT_BACKBONE2_e=0x2,
+    S_MD_JNT_NECK_e=0x3,
+    S_MD_JNT_HEAD_e=0x4,
+    S_MD_JNT_CHIN_e=0x5,
+    S_MD_JNT_HAIR_1_e=0x6,
+    S_MD_JNT_HAIR_2_e=0x7,
+    S_MD_JNT_HAIR_3_e=0x8,
+    S_MD_JNT_HAIR_4_e=0x9,
+    S_MD_JNT_HAIR_5_e=0xA,
+    S_MD_JNT_MOUTH_e=0xB,
+    S_MD_JNT_SHOULDER_L_e=0xC,
+    S_MD_JNT_ARM_L1_e=0xD,
+    S_MD_JNT_ARM_L2_e=0xE,
+    S_MD_JNT_HAND_L_e=0xF,
+    S_MD_JNT_SHOULDER_R_e=0x10,
+    S_MD_JNT_ARM_R1_e=0x11,
+    S_MD_JNT_ARM_R2_e=0x12,
+    S_MD_JNT_HAND_R_e=0x13,
+    S_MD_JNT_WAIST_e=0x14,
+    S_MD_JNT_CLOTCHL_e=0x15,
+    S_MD_JNT_LEG_L1_e=0x16,
+    S_MD_JNT_LEG_L2_e=0x17,
+    S_MD_JNT_FOOT_L_e=0x18,
+    S_MD_JNT_CLOTCHR_e=0x19,
+    S_MD_JNT_LEG_R1_e=0x1A,
+    S_MD_JNT_LEG_R2_e=0x1B,
+    S_MD_JNT_FOOT_R_e=0x1C,
+};
+
+enum S_MD_HAIR_HAND_JNT {
+    S_MD_HAIR_HAND_JNT_MD_HAIR_HANDS_e=0x0,
+};
+
+#endif /* !RES_MIDNA_H */

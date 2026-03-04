@@ -93,23 +93,4 @@ private:
 
 STATIC_ASSERT(sizeof(daObjKAT_c) == 0xa74);
 
-class daObj_KatHIO_c : public JORReflexible {
-public:
-    daObj_KatHIO_c();
-    virtual ~daObj_KatHIO_c() {}
-
-    void genMessage(JORMContext* ctx) {
-        // Golden Snail
-        ctx->genLabel("黄金蟲(カタツムリ)", 0x80000001);
-        // Model scale (male)
-        ctx->genSlider("モデルスケール(オス)", &this->mScaleMale, 0.1f, 4.0f);
-        // Model scale (female)
-        ctx->genSlider("モデルスケール(メス)", &this->mScaleFemale, 0.1f, 4.0f);
-    }
-
-    s8 field_0x4;
-    f32 mScaleFemale;
-    f32 mScaleMale;
-};
-
 #endif /* D_A_OBJ_KATATSUMURI_H */

@@ -374,7 +374,7 @@ int daAlink_c::procSumouSideMove() {
     f32 var_f1;
     if (checkInputOnR() && temp_r30_2 > 0x800 && temp_r30_2 < 0x7800) {
         if (abs((s16)(mMoveAngle - current.angle.y)) > 0x4000) {
-            current.angle.y += 0x8000;
+            ANGLE_ADD_2(current.angle.y, 0x8000);
             mNormalSpeed *= -1.0f;
 
             if (field_0x2f98 == 3) {

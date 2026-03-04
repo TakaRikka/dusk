@@ -24,14 +24,79 @@ T PrmAbstract(const fopAc_ac_c* i_actor, T i_nbits, T i_shift) {
 
 class HioVarious_c : public JORReflexible {
 public:
+    HioVarious_c();
+    virtual void genMessage(JORMContext*);
+
     static void init(JORReflexible* node_ptr, const char* node_name);
     static void clean(JORReflexible* node_ptr);
 
-    void genMessage(JORMContext*);
+    static HioVarious_c M_hio;
 
     /* 0x04 */ JORReflexible* node_ptrs[16];
     /* 0x44 */ const char* node_names[16];
-    /* 0x84 */ u8 field_0x84;
+    /* 0x84 */ s8 field_0x84;
+};
+
+class HioThrow_c : public JORReflexible {
+public:
+    HioThrow_c();
+#if DEBUG
+    virtual void listen(u32 command, const JOREvent* event) { JORReflexible::listen(command, event); }
+    virtual void genObjectInfo(const JORGenEvent* event) { JORReflexible::genObjectInfo(event); }
+    virtual void listenNodeEvent(const JORNodeEvent* event) { JORReflexible::listenNodeEvent(event); }
+    virtual void listenPropertyEvent(const JORPropertyEvent* event) { JORReflexible::listenPropertyEvent(event); }
+#endif
+    virtual void genMessage(JORMContext*);
+
+    static void init(JORReflexible* node_ptr, const char* node_name);
+    static void clean(JORReflexible* node_ptr);
+
+    static HioThrow_c M_hio;
+    static cXyz M_throw_pos_st;
+    static cXyz M_throw_pos_now;
+
+    /* 0x04 */ JORReflexible* node_ptrs[20];
+    /* 0x54 */ const char* node_names[20];
+    /* 0xA4 */ s8 field_0xa4;
+};
+
+class HioField_c : public JORReflexible {
+public:
+    HioField_c();
+    virtual void genMessage(JORMContext*);
+
+    static HioField_c M_hio;
+
+    /* 0x04 */ JORReflexible* node_ptrs[16];
+    /* 0x44 */ const char* node_names[16];
+    /* 0x84 */ s8 field_0x84;
+};
+
+class HioSpot_c : public JORReflexible {
+public:
+    HioSpot_c();
+    virtual void genMessage(JORMContext*);
+
+    static HioSpot_c M_hio;
+
+    /* 0x04 */ JORReflexible* node_ptrs[16];
+    /* 0x44 */ const char* node_names[16];
+    /* 0x84 */ s8 field_0x84;
+};
+
+class HioObj_c : public JORReflexible {
+public:
+    HioObj_c();
+    virtual void genMessage(JORMContext*);
+
+    static void init();
+    static void clean();
+
+    static HioObj_c M_hio;
+    static const char* const M_node_name[];
+    static JORReflexible* const M_node_ptr[];
+
+    /* 0x04 */ s8 M_no;
 };
 
 };  // namespace daObj

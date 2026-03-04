@@ -564,7 +564,7 @@ void dMenuMapCommon_c::setBlendRatio(u8 i_iconNo, f32 param_2, f32 param_3) {
 void dMenuMapCommon_c::blinkMove(s16 param_1) {
     mBlinkTimer++;
     if (mBlinkTimer >= param_1) {
-        mBlinkTimer -= (s16)(param_1 + 15);
+        S16_SUB(mBlinkTimer, param_1 + 15);
     }
 
     if (mBlinkTimer < 0) {

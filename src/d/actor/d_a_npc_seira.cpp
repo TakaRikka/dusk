@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_npc_seira.h"
 #include "d/d_meter_HIO.h"
+#include <cstring>
 
 
 static int l_bmdData[2][2] = {

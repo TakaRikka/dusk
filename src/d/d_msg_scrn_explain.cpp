@@ -12,6 +12,7 @@
 #include "d/d_pane_class.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include <cstdio>
+#include <cstring>
 
 #if VERSION == VERSION_GCN_JPN
 #define STR_BUF_LEN 528
@@ -82,6 +83,8 @@ dMsgScrnExplain_c::dMsgScrnExplain_c(STControl* i_stick, u8 param_1, bool i_isUs
         dPaneClass_showNullPane(mpTxScreen);
 
         mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3line'), 0, NULL);
+        JUT_ASSERT(124, mpTm_c[0] != NULL);
+
         mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, 't3_s', 0, NULL);
         JUT_ASSERT(127, mpTm_c[1] != NULL);
 
@@ -113,8 +116,8 @@ dMsgScrnExplain_c::dMsgScrnExplain_c(STControl* i_stick, u8 param_1, bool i_isUs
             mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3flin'), 0, NULL);
             mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s'), 0, NULL);
 
-            field_0x10[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f'), 0, NULL);
-            field_0x10[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_s'), 0, NULL);
+            mpTmr_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f'), 0, NULL);
+            mpTmr_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_s'), 0, NULL);
 
             mpTxScreen->search(MULTI_CHAR('n_3line'))->hide();
             mpTxScreen->search(MULTI_CHAR('n_3fline'))->show();
@@ -134,6 +137,8 @@ dMsgScrnExplain_c::dMsgScrnExplain_c(STControl* i_stick, u8 param_1, bool i_isUs
         field_0x50 = -10.0f;
 
         mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_e4lin'), 0, NULL);
+        JUT_ASSERT(162, mpTm_c[0] != NULL);
+
         mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, 't4_s', 0, NULL);
         JUT_ASSERT(165, mpTm_c[1] != NULL);
 
@@ -176,6 +181,15 @@ dMsgScrnExplain_c::dMsgScrnExplain_c(STControl* i_stick, u8 param_1, bool i_isUs
     mpScreen->search(MULTI_CHAR('mg_null'))->move(
         g_MsgObject_HIO_c.mTextPosX + mpScreen->search(MULTI_CHAR('mg_null'))->getBounds().i.x,
         g_MsgObject_HIO_c.mTextPosY + mpScreen->search(MULTI_CHAR('mg_null'))->getBounds().i.y);
+
+    mpArw_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('set_ya_n'), 0, NULL);
+    JUT_ASSERT(241, mpArw_c != NULL);
+
+    mpMg_c[0] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('mg_null'), 0, NULL);
+    JUT_ASSERT(244, mpMg_c[0] != NULL);
+
+    mpMg_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_null'), 0, NULL);
+    JUT_ASSERT(247, mpMg_c[1] != NULL);
 
     mpArw_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('set_ya_n'), 0, NULL);
     mpMg_c[0] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('mg_null'), 0, NULL);

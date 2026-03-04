@@ -30,7 +30,7 @@ dMsgScrnStaff_c::dMsgScrnStaff_c(u8 unused) {
     mpScreen->search(MULTI_CHAR('right_n'))->hide();
 
     for (int i = 0; i < 6; i++) {
-        mpTm_c[i] = JKR_NEW CPaneMgr(mpScreen, t_tag[i], NULL, NULL);
+        mpTm_c[i] = JKR_NEW CPaneMgr(mpScreen, t_tag[i], 0, NULL);
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setFont(mDoExt_getMesgFont());
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setString(0x200, "");
     }

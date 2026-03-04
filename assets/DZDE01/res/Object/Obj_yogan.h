@@ -1,0 +1,26 @@
+#ifndef RES_OBJ_YOGAN_H
+#define RES_OBJ_YOGAN_H
+
+enum dRes_INDEX_OBJ_YOGAN {
+    /* BCK  */
+    dRes_INDEX_OBJ_YOGAN_BCK_EF_YOGANBASHIRA_e=0x5,
+    /* BMDR */
+    dRes_INDEX_OBJ_YOGAN_BMD_EF_YOGANBASHIRA_e=0x8,
+    /* BTK  */
+    dRes_INDEX_OBJ_YOGAN_BTK_EF_YOGANBASHIRA_e=0xB,
+};
+
+enum dRes_ID_OBJ_YOGAN {
+    /* BCK  */
+    dRes_ID_OBJ_YOGAN_BCK_EF_YOGANBASHIRA_e=0x5,
+    /* BMDR */
+    dRes_ID_OBJ_YOGAN_BMD_EF_YOGANBASHIRA_e=0x8,
+    /* BTK  */
+    dRes_ID_OBJ_YOGAN_BTK_EF_YOGANBASHIRA_e=0xB,
+};
+
+enum EF_YOGANBASHIRA_JNT {
+    EF_YOGANBASHIRA_JNT_EF_YOGANBASHIRA_e=0x0,
+};
+
+#endif /* !RES_OBJ_YOGAN_H */

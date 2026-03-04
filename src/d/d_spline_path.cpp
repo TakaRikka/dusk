@@ -99,7 +99,7 @@ cXyz dPathCurve::bSpline2(f32 param_0) {
     cXyz local_7c;
     int uVar12 = mpPath->m_num;
     if (uVar12 <= 1) {
-        return mpPath->m_points[0].m_position;
+        return (Vec)mpPath->m_points[0].m_position;
     } else if (uVar12 == 2) {
         local_7c.x = param_0 * (mpPath->m_points[1].m_position.x -
                                                mpPath->m_points[0].m_position.x);
@@ -134,9 +134,9 @@ cXyz dPathCurve::bSpline2(f32 param_0) {
             uVar9 = uVar4;
             iVar8 = uVar4 + 1;
         }
-        Vec* point11 = &mpPath->m_points[iVar10].m_position;
-        Vec* point10 = &mpPath->m_points[uVar9].m_position;
-        Vec* point8 = &mpPath->m_points[iVar8].m_position;
+        BE(Vec)* point11 = &mpPath->m_points[iVar10].m_position;
+        BE(Vec)* point10 = &mpPath->m_points[uVar9].m_position;
+        BE(Vec)* point8 = &mpPath->m_points[iVar8].m_position;
         local_7c.x = point11->x * fVar7 + point10->x * fVar6 + point8->x * fVar5;
         local_7c.y = point11->y * fVar7 + point10->y * fVar6 + point8->y * fVar5;
         local_7c.z = point11->z * fVar7 + point10->z * fVar6 + point8->z * fVar5;

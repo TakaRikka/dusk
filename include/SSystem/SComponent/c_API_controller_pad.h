@@ -1,7 +1,7 @@
 #ifndef C_API_CONTROLLER_PAD_
 #define C_API_CONTROLLER_PAD_
 
-#include <dolphin/types.h>
+#include <types.h>
 
 struct interface_of_controller_pad {
     /* 0x00 */ f32 mMainStickPosX;
@@ -34,5 +34,43 @@ struct interface_of_controller_pad {
 
 void cAPICPad_recalibrate(void);
 u32 cAPICPad_ANY_BUTTON(u32 param_0);
+
+#if PLATFORM_WII
+u32 cAPICPad_BUTTON(u32 i_padNo);
+u32 cAPICPad_Z_BUTTON(u32 i_padNo);
+u32 cAPICPad_R_BUTTON(u32 i_padNo);
+u32 cAPICPad_L_BUTTON(u32 i_padNo);
+u32 cAPICPad_A_BUTTON(u32 i_padNo);
+u32 cAPICPad_B_BUTTON(u32 i_padNo);
+u32 cAPICPad_X_BUTTON(u32 i_padNo);
+u32 cAPICPad_Y_BUTTON(u32 i_padNo);
+
+u32 cAPICPad_TRIGGER(u32 i_padNo);
+u32 cAPICPad_Z_TRIGGER(u32 i_padNo);
+u32 cAPICPad_R_TRIGGER(u32 i_padNo);
+u32 cAPICPad_UP_TRIGGER(u32 i_padNo);
+u32 cAPICPad_DOWN_TRIGGER(u32 i_padNo);
+u32 cAPICPad_LEFT_TRIGGER(u32 i_padNo);
+u32 cAPICPad_RIGHT_TRIGGER(u32 i_padNo);
+u32 cAPICPad_L_TRIGGER(u32 i_padNo);
+u32 cAPICPad_A_TRIGGER(u32 i_padNo);
+u32 cAPICPad_B_TRIGGER(u32 i_padNo);
+u32 cAPICPad_X_TRIGGER(u32 i_padNo);
+u32 cAPICPad_Y_TRIGGER(u32 i_padNo);
+u32 cAPICPad_START_TRIGGER(u32 i_padNo);
+
+f32 cAPICPad_X_STICK(u32 i_padNo);
+f32 cAPICPad_X_STICK_3D(u32 i_padNo);
+f32 cAPICPad_Y_STICK(u32 i_padNo);
+f32 cAPICPad_VALUE_STICK(u32 i_padNo);
+s16 cAPICPad_ANGLE_STICK(u32 i_padNo);
+s16 cAPICPad_ANGLE_STICK_3D(u32 i_padNo);
+f32 cAPICPad_X_SUBSTICK(u32 i_padNo);
+f32 cAPICPad_Y_SUBSTICK(u32 i_padNo);
+f32 cAPICPad_VALUE_SUBSTICK(u32 i_padNo);
+s16 cAPICPad_ANGLE_SUBSTICK(u32 i_padNo);
+f32 cAPICPad_L_ANALOG(u32 i_padNo);
+f32 cAPICPad_R_ANALOG(u32 i_padNo);
+#endif
 
 #endif

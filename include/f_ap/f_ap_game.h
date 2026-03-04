@@ -6,7 +6,7 @@
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "CaptureScreen.h"
-#include <string>
+#include <cstring>
 
 #include "JSystem/JKernel/JKRHeap.h"
 

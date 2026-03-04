@@ -1,0 +1,30 @@
+#ifndef RES_L6SZGATE_H
+#define RES_L6SZGATE_H
+
+enum dRes_INDEX_L6SZGATE {
+    /* BMDR */
+    dRes_INDEX_L6SZGATE_BMD_LV6_OBJ_SKZOGATE_e=0x6,
+    /* BRK  */
+    dRes_INDEX_L6SZGATE_BRK_LV6_OBJ_SKZOGATE_e=0x9,
+    /* BTK  */
+    dRes_INDEX_L6SZGATE_BTK_LV6_OBJ_SKZOGATE_e=0xC,
+    /* DZB  */
+    dRes_INDEX_L6SZGATE_DZB_LV6_OBJ_SKZOGATE_e=0xF,
+};
+
+enum dRes_ID_L6SZGATE {
+    /* BMDR */
+    dRes_ID_L6SZGATE_BMD_LV6_OBJ_SKZOGATE_e=0x6,
+    /* BRK  */
+    dRes_ID_L6SZGATE_BRK_LV6_OBJ_SKZOGATE_e=0x9,
+    /* BTK  */
+    dRes_ID_L6SZGATE_BTK_LV6_OBJ_SKZOGATE_e=0xC,
+    /* DZB  */
+    dRes_ID_L6SZGATE_DZB_LV6_OBJ_SKZOGATE_e=0xF,
+};
+
+enum LV6_OBJ_SKZOGATE_JNT {
+    LV6_OBJ_SKZOGATE_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_L6SZGATE_H */

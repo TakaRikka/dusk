@@ -1,0 +1,16 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+daVrbox_Draw__FP11vrbox_class = .text:0x0000005C; // type:function size:0x2F4 scope:global align:4
+daVrbox_Execute__FP11vrbox_class = .text:0x00000350; // type:function size:0x8 scope:global align:4
+daVrbox_IsDelete__FP11vrbox_class = .text:0x00000358; // type:function size:0x8 scope:global align:4
+daVrbox_Delete__FP11vrbox_class = .text:0x00000360; // type:function size:0x8 scope:global align:4
+daVrbox_Create__FP10fopAc_ac_c = .text:0x00000368; // type:function size:0xA8 scope:global align:4
+daVrbox_solidHeapCB__FP10fopAc_ac_c = .text:0x00000410; // type:function size:0x70 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+@89857 = .rodata:0x00000000; // type:object size:0x4 scope:local align:4
+@89858 = .rodata:0x00000004; // type:object size:0x4 scope:local align:4 data:float
+lbl_44_data_0 = .data:0x00000000; // type:object size:0xF data:string
+l_daVrbox_Method = .data:0x00000010; // type:object size:0x20 scope:global align:4
+g_profile_VRBOX = .data:0x00000030; // type:object size:0x30 scope:global align:4

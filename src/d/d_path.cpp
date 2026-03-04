@@ -111,3 +111,22 @@ u8 dPath_GetPolyRoomPathVec(cBgS_PolyInfo const& poly, cXyz* p_pathVec, int* par
 
     return 1;
 }
+
+#if VERSION == VERSION_SHIELD_DEBUG
+void dPath_Ct() {
+    #if DEBUG
+    #endif
+}
+
+void dPath_Dt() {
+    #if DEBUG
+    #endif
+}
+
+void dPath_Move() {}
+
+void dPath_Draw() {
+    #if DEBUG
+    #endif
+}
+#endif

@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) Launch Dusk MSVC",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${command:cmake.launchTargetPath}",
+            "MIMode": "gdb",
+            "miDebuggerPath": "gdb",
+            "symbolSearchPath": "${command:cmake.launchTargetPath}",
+            "console": "integratedTerminal"
+        }
+    ]
+}

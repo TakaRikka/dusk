@@ -35,7 +35,7 @@ public:
     void setWallHit(s16, u32);
     void setAnm();
     int setNextPathNum();
-    Vec* getPathNextPos();
+    BE(Vec)* getPathNextPos();
     int checkLineWallHit(cXyz*, cXyz*);
     int checkPathMove();
     void setSpreadEffect();

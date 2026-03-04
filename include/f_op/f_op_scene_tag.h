@@ -2,7 +2,6 @@
 #define F_F_OP_SCENE_TAG_H_
 
 #include "f_pc/f_pc_node.h"
-#include "SSystem/SComponent/c_phase.h"
 
 class scene_tag_class {
 public:

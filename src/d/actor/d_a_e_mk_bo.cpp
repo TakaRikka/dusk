@@ -516,7 +516,7 @@ static void action(e_mk_bo_class* i_this) {
             sound = Z2SE_EN_MK_BOOM_FLY;
         }
 
-        actor->shape_angle.y += (s16) 0x2000;
+        ANGLE_ADD(actor->shape_angle.y, 0x2000);
 
         if ((i_this->counter & 7) == 0) {
             i_this->sound.startSound(sound, 0, -1);

@@ -18,6 +18,7 @@
 #include "d/d_tresure.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_ext.h"
+#include <cstring>
 
 #if DEBUG
 class daNpc_ykW_HIO_c : public mDoHIO_entry_c {
@@ -461,7 +462,7 @@ int daNpc_ykW_c::createHeapCallBack(fopAc_ac_c* i_this) {
 }
 
 int daNpc_ykW_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
-    if (param_1 == NULL) {
+    if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
         daNpc_ykW_c* ykw = (daNpc_ykW_c*)model->getUserArea();
         if (ykw != 0) {
@@ -1821,7 +1822,7 @@ BOOL daNpc_ykW_c::cutLv5DungeonClear(int param_0) {
             itemPos.y += 50.0f;
 
             unkActor1 = fopAcM_fastCreateItem(&itemPos, 0, fopAcM_GetRoomNo(this), &unkSxyz,
-                                             &unkXyz1, &unkFloat2, &unkFloat3, -1, NULL, NULL);
+                                             &unkXyz1, &unkFloat2, &unkFloat3, -1, 0, NULL);
             if (unkActor1 != NULL) {
                 mDoAud_seStart(Z2SE_OBJ_YO_HEART_S, &itemPos, 0, 0);
                 fopAcM_OnStatus(unkActor1, fopAcM_STATUS_UNK_0x4000);

@@ -23,6 +23,7 @@
 #include "d/actor/d_a_midna.h"
 #include "f_op/f_op_msg_mng.h"
 #include <cstdio>
+#include <cstring>
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_lib.h"
 #include "JSystem/JKernel/JKRExpHeap.h"

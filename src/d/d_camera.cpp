@@ -21,6 +21,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
 #include <cmath>
+#include <cstring>
 
 #if DEBUG
 #include "d/d_debug_pad.h"
@@ -7431,7 +7432,7 @@ bool dCamera_c::towerCamera(s32 param_0) {
         tower->field_0x54.x = mRoomMapTool.mArrowData.posX;
         tower->field_0x54.y = mRoomMapTool.mArrowData.posY;
         tower->field_0x54.z = mRoomMapTool.mArrowData.posZ;
-        tower->field_0x60 = mRoomMapTool.mArrowData.angleY;
+        tower->field_0x60 = (s16)mRoomMapTool.mArrowData.angleY;
         tower->field_0x64 = stack_454 <= cSAngle::_90 ? 1 : 0;
     }
 
@@ -8013,8 +8014,8 @@ bool dCamera_c::railCamera(s32 param_0) {
         rail->field_0x20.z = mRoomMapTool.mArrowData.posZ;
         if (mCamParam.Flag(param_0, 0x800)) {
             cXyz attnPos = attentionPos(mpPlayerActor);
-            cXyz curPointPos = roomPath->m_points->m_position;
-            cXyz prevPointPos = roomPath->m_points[roomPathLen - 1].m_position;
+            cXyz curPointPos = (Vec)roomPath->m_points->m_position;
+            cXyz prevPointPos = (Vec)roomPath->m_points[roomPathLen - 1].m_position;
             f32 horDist1 = dCamMath::xyzHorizontalDistance(curPointPos, attnPos);
             f32 horDist2 = dCamMath::xyzHorizontalDistance(prevPointPos, attnPos);
             if (horDist1 < horDist2) {
@@ -8343,8 +8344,8 @@ bool dCamera_c::paraRailCamera(s32 param_0) {
 
         if (!unkFlag2) {
             cXyz sp1F4 = attentionPos(mpPlayerActor);
-            cXyz sp1E8 = path->m_points->m_position;
-            cXyz sp1DC = path->m_points[pathLen - 1].m_position;
+            cXyz sp1E8 = (Vec)path->m_points->m_position;
+            cXyz sp1DC = (Vec)path->m_points[pathLen - 1].m_position;
             f32 horDist1 = dCamMath::xyzHorizontalDistance(sp1E8, sp1F4);
             f32 horDist2 = dCamMath::xyzHorizontalDistance(sp1DC, sp1F4);
             if (horDist1 < horDist2) {
@@ -10130,7 +10131,7 @@ bool dCamera_c::eventCamera(s32 param_0) {
         }
 
         int* sp90_i;
-        if (getEvStringData(sp90, "Trim", "DEFAULT") != NULL) {
+        if (getEvStringData(sp90, "Trim", "DEFAULT") != false) {
             sp90_i = (int*)sp90;
             if (*sp90_i == 'STAN') {
                 mEventData.field_0x1c = 0;
@@ -10842,15 +10843,15 @@ static void store(camera_process_class* i_camera) {
         error = true;
         OS_REPORT("camera: ERROR: bad direction !!\n");
     }
-    if (fovy < 0.0f || isnan(fovy)) {
+    if (fovy < 0.0f || std::isnan(fovy)) {
         error = true;
         OS_REPORT("camera: ERROR: bad fovy !!\n");
     }
-    if (isnan(eye.x) || isnan(eye.y) || isnan(eye.z)) {
+    if (std::isnan(eye.x) || std::isnan(eye.y) || std::isnan(eye.z)) {
         error = true;
         OS_REPORT("camera: ERROR: bad eye !!\n");
     }
-    if (isnan(center.x) || isnan(center.y) || isnan(center.z)) {
+    if (std::isnan(center.x) || std::isnan(center.y) || std::isnan(center.z)) {
         error = true;
         OS_REPORT("camera: ERROR: bad eye !!\n");
     }
@@ -11211,7 +11212,7 @@ camera_process_profile_definition g_profile_CAMERA = {
     fpcPi_CURRENT_e,
     PROC_CAMERA,
     &g_fpcLf_Method.base,
-    sizeof(dCamera_c),
+    sizeof(camera_class),
     0,
     0,
     &g_fopVw_Method,
@@ -11232,7 +11233,7 @@ camera_process_profile_definition g_profile_CAMERA2 = {
     fpcPi_CURRENT_e,
     PROC_CAMERA2,
     &g_fpcLf_Method.base,
-    sizeof(dCamera_c),
+    sizeof(camera_class),
     0,
     0,
     &g_fopVw_Method,

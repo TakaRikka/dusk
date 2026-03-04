@@ -1,0 +1,14 @@
+Sections:
+	.text       type:code align:4
+	.ctors      type:rodata align:4
+	.dtors      type:rodata align:4
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+
+REL/executor.c:
+	.text       start:0x00000000 end:0x0000005C
+
+d/actor/d_a_kytag13.cpp:
+	.text       start:0x0000005C end:0x000010AC
+	.rodata     start:0x00000000 end:0x000000B8
+	.data       start:0x00000000 end:0x00000058

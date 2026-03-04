@@ -14,6 +14,7 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "JSystem/JAudio2/JAUSectionHeap.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 #if DEBUG
 static BOOL l_debugMode; 

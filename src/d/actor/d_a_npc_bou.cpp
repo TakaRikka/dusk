@@ -11,6 +11,7 @@
 #include "d/actor/d_a_npc_jagar.h"
 #include "d/actor/d_a_tag_push.h"
 #include "d/d_meter2_info.h"
+#include <cstring>
 
 static int l_bmdData[1][2] = {
     {11, 1},

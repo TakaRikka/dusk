@@ -304,7 +304,7 @@ public:
         initialize();
     }
     BOOL execute();
-    int draw(BOOL, BOOL, f32, _GXColorS10*, BOOL);
+    int draw(BOOL, BOOL, f32, GXColorS10*, BOOL);
     static void tgHitCallBack(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*,
                                              dCcD_GObjInf*);
     static void* srchAttnActor1(void*, void*);

@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_npc_yamit.h"
 #include "d/actor/d_a_tag_yami.h"
+#include <cstring>
 
 enum RES_Name {
     /* 0x0 */ NONE,

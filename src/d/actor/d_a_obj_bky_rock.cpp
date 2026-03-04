@@ -10,6 +10,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_model.h"
 #include "d/d_com_inf_game.h"
+#include <cstring>
 
 static int daBkyRock_c_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daBkyRock_c*>(i_this)->createHeap();
@@ -67,7 +68,7 @@ int daBkyRock_c::draw() {
         
         mModels[mMode], &tevStr);
     if (field_0x57a) {
-       dMdl_c* dMdl = dMdl_mng_c::entry(mModels[2]->getModelData(), NULL, current.roomNo);
+       dMdl_c* dMdl = dMdl_mng_c::entry(mModels[2]->getModelData(), 0, current.roomNo);
         if (dMdl != NULL) {
             _pieceData* piece = mPieces;
             for (int i = 0; i < 20; i++, piece++) {

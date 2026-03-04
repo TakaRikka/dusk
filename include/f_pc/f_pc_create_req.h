@@ -2,7 +2,6 @@
 #ifndef F_PC_CREATE_REQ_H_
 #define F_PC_CREATE_REQ_H_
 
-#include "SSystem/SComponent/c_phase.h"
 #include "f_pc/f_pc_create_tag.h"
 #include "f_pc/f_pc_method.h"
 #include "f_pc/f_pc_method_tag.h"
@@ -11,8 +10,12 @@
 typedef struct base_process_class base_process_class;
 typedef struct layer_class layer_class;
 
+// declare our own typedef instead of cPhs__Handler to avoid pulling in c_phase.h
+// (which causes RTTI ordering issues in relation to cM3dGCyl)
+typedef int (*fpcCtRq_phase_handler)(void*);
+
 typedef struct create_request_method_class {
-    /* 0x0 */ cPhs__Handler phase_handler;
+    /* 0x0 */ fpcCtRq_phase_handler phase_handler;
     /* 0x4 */ process_method_func cancel_method;
     /* 0x8 */ process_method_func delete_method;
 } create_request_method_class;

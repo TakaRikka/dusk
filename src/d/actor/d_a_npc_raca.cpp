@@ -8,6 +8,7 @@
 #include "d/actor/d_a_npc_raca.h"
 #include "d/actor/d_a_tag_evtarea.h"
 #include "d/d_s_play.h"
+#include <cstring>
 
 enum Raca_RES_File_ID {
     /* BCK */

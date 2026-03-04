@@ -253,7 +253,7 @@ int daObjAvalanche_c::demoProc() {
 void daObjAvalanche_c::setEffect() {
     cXyz acStack_18(0.0f, 0.0f, 0.0f);
     csXyz cStack_20(0, 0, 0);
-    dComIfGp_particle_set(0x8c51, &acStack_18, &cStack_20, NULL, 0xff, NULL, 0xffffffff, NULL, NULL,
+    dComIfGp_particle_set(0x8c51, &acStack_18, &cStack_20, NULL, 0xff, NULL, -1, NULL, NULL,
                           NULL);
 }
 

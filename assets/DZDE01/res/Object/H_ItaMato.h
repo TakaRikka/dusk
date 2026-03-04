@@ -1,0 +1,30 @@
+#ifndef RES_H_ITAMATO_H
+#define RES_H_ITAMATO_H
+
+enum dRes_INDEX_H_ITAMATO {
+    /* BMDR */
+    dRes_INDEX_H_ITAMATO_BMD_H_ITAMATO00_e=0x4,
+    dRes_INDEX_H_ITAMATO_BMD_H_ITAMATO01_e=0x5,
+    /* DZB  */
+    dRes_INDEX_H_ITAMATO_DZB_H_ITAMATO00_e=0x8,
+    dRes_INDEX_H_ITAMATO_DZB_H_ITAMATO01_e=0x9,
+};
+
+enum dRes_ID_H_ITAMATO {
+    /* BMDR */
+    dRes_ID_H_ITAMATO_BMD_H_ITAMATO00_e=0x4,
+    dRes_ID_H_ITAMATO_BMD_H_ITAMATO01_e=0x5,
+    /* DZB  */
+    dRes_ID_H_ITAMATO_DZB_H_ITAMATO00_e=0x8,
+    dRes_ID_H_ITAMATO_DZB_H_ITAMATO01_e=0x9,
+};
+
+enum H_ITAMATO00_JNT {
+    H_ITAMATO00_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum H_ITAMATO01_JNT {
+    H_ITAMATO01_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_H_ITAMATO_H */

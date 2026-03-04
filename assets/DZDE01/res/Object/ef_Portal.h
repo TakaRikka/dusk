@@ -1,0 +1,32 @@
+#ifndef RES_EF_PORTAL_H
+#define RES_EF_PORTAL_H
+
+enum dRes_INDEX_EF_PORTAL {
+    /* BMDR */
+    dRes_INDEX_EF_PORTAL_BMD_EF_BRPORTAL_e=0x6,
+    /* BRK  */
+    dRes_INDEX_EF_PORTAL_BRK_EF_BRPORTAL_e=0x9,
+    /* BTK  */
+    dRes_INDEX_EF_PORTAL_BTK_EF_BRPORTAL_e=0xC,
+    dRes_INDEX_EF_PORTAL_BTK_EF_BRPORTAL_02_e=0xD,
+    /* EVT  */
+    dRes_INDEX_EF_PORTAL_DAT_EVENT_LIST_e=0x10,
+};
+
+enum dRes_ID_EF_PORTAL {
+    /* BMDR */
+    dRes_ID_EF_PORTAL_BMD_EF_BRPORTAL_e=0x6,
+    /* BRK  */
+    dRes_ID_EF_PORTAL_BRK_EF_BRPORTAL_e=0x9,
+    /* BTK  */
+    dRes_ID_EF_PORTAL_BTK_EF_BRPORTAL_e=0xC,
+    dRes_ID_EF_PORTAL_BTK_EF_BRPORTAL_02_e=0xD,
+    /* EVT  */
+    dRes_ID_EF_PORTAL_DAT_EVENT_LIST_e=0x10,
+};
+
+enum EF_BRPORTAL_JNT {
+    EF_BRPORTAL_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_EF_PORTAL_H */

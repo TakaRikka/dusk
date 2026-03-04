@@ -22,7 +22,7 @@
 #include "d/d_menu_collect.h"
 #include "d/d_jcam_editor.h"
 #include "d/d_jpreviewer.h"
-#include <dolphin/base/PPCArch.h>
+#include <base/PPCArch.h>
 #include "f_ap/f_ap_game.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -33,6 +33,7 @@
 #include "d/d_meter2_info.h"
 #include "d/d_s_play.h"
 #include "DynamicLink.h"
+#include <cstring>
 #include "dusk/endian.h"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
@@ -41,6 +42,11 @@
 
 #if PLATFORM_WII
 #include "d/d_cursor_mng.h"
+#endif
+
+#if TARGET_PC
+#include "dusk/imgui.h"
+#include "dusk/dusk.h"
 #endif
 
 class mDoGph_HIO_c : public JORReflexible {
@@ -240,12 +246,12 @@ static ResTIMG* createTimg(u16 width, u16 height, u32 format) {
     cLib_memSet(timg, 0, bufferSize);
     timg->format = format;
     timg->alphaEnabled = false;
-    timg->width = RES_U16(width);
-    timg->height = RES_U16(height);
+    timg->width = width;
+    timg->height = height;
     timg->minFilter = GX_LINEAR;
     timg->magFilter = GX_LINEAR;
     timg->mipmapCount = 1;
-    timg->imageOffset = RES_U32(0x20);
+    timg->imageOffset = 0x20;
     return timg;
 }
 
@@ -674,6 +680,14 @@ void mDoGph_gInf_c::entryBaseCsr(mDoGph_gInf_c::csr_c* i_entry) {
     JUT_ASSERT(876, m_baseCsr == NULL);
     m_baseCsr = i_entry;
     m_csr = i_entry;
+}
+
+void mDoGph_gInf_c::entryCsr(mDoGph_gInf_c::csr_c* i_csr) {
+    m_csr = i_csr;
+}
+
+void mDoGph_gInf_c::releaseCsr(void) {
+    m_csr = m_baseCsr;
 }
 #endif
 
@@ -2118,6 +2132,10 @@ int mDoGph_Painter() {
     fapGm_HIO_c::stopCpuTimer("２Ｄ前（？）パーティクル描画まで（レンダリング）");
     JAWExtSystem::draw();
     #endif
+
+#if TARGET_PC
+    imgui_main(&auroraInfo);
+#endif
 
     mDoGph_gInf_c::endRender();
 

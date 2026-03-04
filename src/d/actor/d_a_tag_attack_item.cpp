@@ -147,7 +147,7 @@ void daTagAtkItem_c::createItem() {
 
     int item_bit = getItemBit();
     for (int i = 0; i < create_num; i++) {
-        angle.y += (s16)cM_rndFX(0x7FFF);
+        ANGLE_ADD(angle.y, cM_rndFX(0x7FFF));
 
         fopAcM_createItemFromTable(&home.pos, getItemNo(), item_bit, fopAcM_GetHomeRoomNo(this),
                                    &angle, 0, NULL, NULL, NULL, false);

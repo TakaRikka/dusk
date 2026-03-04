@@ -13,6 +13,7 @@
 #include "d/actor/d_a_obj_smallkey.h"
 #include "f_op/f_op_actor_enemy.h"
 #include "f_op/f_op_camera_mng.h"
+#include <cstring>
 
 enum Head_Action {
     /* 0x0 */ HEAD_ACTION_WAIT,
@@ -393,35 +394,38 @@ static void e_gb_damage(e_gb_class* i_this) {
 
     i_this->invulnerabilityTimer = 35;
     switch (i_this->mode) {
-        case 0:
-            i_this->mode = 1;
-            if ((s16)(i_this->angleYTarget - actor->current.angle.y) < 0) {
-                actor->current.angle.y += (s16)(KREG_S(6) + 0x2000);
-            } else {
-                actor->current.angle.y -= (s16)(KREG_S(6) + 0x2000);
-            }
+    case 0: {
+        i_this->mode = 1;
+        s16 angleDiff = i_this->angleYTarget - actor->current.angle.y;
+        if (angleDiff < 0) {
+            ANGLE_ADD(actor->current.angle.y, KREG_S(6) + 0x2000);
+        } else {
+            ANGLE_SUB(actor->current.angle.y, KREG_S(6) + 0x2000);
+        }
 
-            cMtx_YrotS(*calc_mtx, actor->current.angle.y);
-            work.x = 0.0f;
-            work.y = AREG_F(2) + 50.0f;
-            work.z = AREG_F(1) + 800.0f;
-            MtxPosition(&work, &i_this->currentPosTarget);
-            i_this->currentPosTarget += actor->home.pos;
-            actor->speed.x = fabsf(actor->current.pos.x - i_this->currentPosTarget.x) * 0.2f;
-            actor->speed.y = fabsf(actor->current.pos.y - i_this->currentPosTarget.y) * 0.2f;
-            actor->speed.z = fabsf(actor->current.pos.z - i_this->currentPosTarget.z) * 0.2f;
-            i_this->timer[0] = KREG_S(7) + 15;
-            // fallthrough
-        case 1:
-            if (i_this->timer[0] == 0) {
-                if (actor->health <= 0) {
-                    i_this->headAction = HEAD_ACTION_END;
-                    i_this->mode = 0;
-                } else {
-                    i_this->headAction = HEAD_ACTION_WAIT;
-                    i_this->mode = -2;
-                }
+        cMtx_YrotS(*calc_mtx, actor->current.angle.y);
+        work.x = 0.0f;
+        work.y = AREG_F(2) + 50.0f;
+        work.z = AREG_F(1) + 800.0f;
+        MtxPosition(&work, &i_this->currentPosTarget);
+        i_this->currentPosTarget += actor->home.pos;
+        actor->speed.x = fabsf(actor->current.pos.x - i_this->currentPosTarget.x) * 0.2f;
+        actor->speed.y = fabsf(actor->current.pos.y - i_this->currentPosTarget.y) * 0.2f;
+        actor->speed.z = fabsf(actor->current.pos.z - i_this->currentPosTarget.z) * 0.2f;
+        i_this->timer[0] = KREG_S(7) + 15;
+    }
+        // fallthrough
+    case 1:
+        if (i_this->timer[0] == 0) {
+            if (actor->health <= 0) {
+                i_this->headAction = HEAD_ACTION_END;
+                i_this->mode = 0;
+            } else {
+                i_this->headAction = HEAD_ACTION_WAIT;
+                i_this->mode = -2;
             }
+        }
+        break;
     }
 
     cLib_addCalc2(&actor->current.pos.x, i_this->currentPosTarget.x, 0.1f, actor->speed.x);
@@ -871,7 +875,7 @@ static void action(e_gb_class* i_this) {
             i_this->xRot = i_this->field_0x94c * cM_scos((s16)i_this->field_0x94a);
         }
 
-        i_this->field_0x94a += (s16)(10000 + VREG_S(2));
+        ANGLE_ADD(i_this->field_0x94a, 10000 + VREG_S(2));
         cLib_addCalc0(&i_this->field_0x94c, 1.0f, VREG_F(2) + 150.0f);
     } else {
         i_this->xRot = 0;
@@ -1106,183 +1110,183 @@ static void demo_camera(e_gb_class* i_this) {
     camera_class* camera2 = dComIfGp_getCamera(0);
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     cXyz work, pos, sp34, sp40;
-    int swBit;
 
     switch (i_this->demoMode) {
-        case 1:
-            if (!actor->eventInfo.checkCommandDemoAccrpt()) {
-                fopAcM_orderPotentialEvent(actor, 2, 0xFFFF, 0);
-                actor->eventInfo.onCondition(dEvtCnd_CANDEMO_e);
-                return;
-            }
+    case 1: {
+        if (!actor->eventInfo.checkCommandDemoAccrpt()) {
+            fopAcM_orderPotentialEvent(actor, 2, 0xFFFF, 0);
+            actor->eventInfo.onCondition(dEvtCnd_CANDEMO_e);
+            return;
+        }
 
-            camera->mCamera.Stop();
-            i_this->demoMode = 2;
-            i_this->demoCamFovy = 55.0f;
-            i_this->demoCounter = 0;
-            camera->mCamera.SetTrimSize(3);
-            daPy_getPlayerActorClass()->changeOriginalDemo();
-            i_this->keyPos.set(-5750.0f, 4410.0f, 10684.0f);
-            i_this->keyYRot = KREG_S(4) + 0x5000;
-            i_this->demoCamCenter.set(-5689.0f, 4747.0f, 15000.0f);
-            i_this->demoCamEye.set(-5700.0f, 4740.0f, 14644.0f);
-            i_this->demoCamCenterTarget.set(-5689.0f, 4740.0f, 14643.0f);
-            i_this->demoCamEyeTarget.set(-5723.0f, 4733.0f, 14293.0f);
-            i_this->demoCamEyeTargetDist.x = fabsf(i_this->demoCamEyeTarget.x - i_this->demoCamEye.x);
-            i_this->demoCamEyeTargetDist.y = fabsf(i_this->demoCamEyeTarget.y - i_this->demoCamEye.y);
-            i_this->demoCamEyeTargetDist.z = fabsf(i_this->demoCamEyeTarget.z - i_this->demoCamEye.z);
-            i_this->demoCamCenterTargetDist.x = fabsf(i_this->demoCamCenterTarget.x - i_this->demoCamCenter.x);
-            i_this->demoCamCenterTargetDist.y = fabsf(i_this->demoCamCenterTarget.y - i_this->demoCamCenter.y);
-            i_this->demoCamCenterTargetDist.z = fabsf(i_this->demoCamCenterTarget.z - i_this->demoCamCenter.z);
-            i_this->demoCamStepScale = 0.0;
+        camera->mCamera.Stop();
+        i_this->demoMode = 2;
+        i_this->demoCamFovy = 55.0f;
+        i_this->demoCounter = 0;
+        camera->mCamera.SetTrimSize(3);
+        daPy_getPlayerActorClass()->changeOriginalDemo();
+        i_this->keyPos.set(-5750.0f, 4410.0f, 10684.0f);
+        i_this->keyYRot = KREG_S(4) + 0x5000;
+        i_this->demoCamCenter.set(-5689.0f, 4747.0f, 15000.0f);
+        i_this->demoCamEye.set(-5700.0f, 4740.0f, 14644.0f);
+        i_this->demoCamCenterTarget.set(-5689.0f, 4740.0f, 14643.0f);
+        i_this->demoCamEyeTarget.set(-5723.0f, 4733.0f, 14293.0f);
+        i_this->demoCamEyeTargetDist.x = fabsf(i_this->demoCamEyeTarget.x - i_this->demoCamEye.x);
+        i_this->demoCamEyeTargetDist.y = fabsf(i_this->demoCamEyeTarget.y - i_this->demoCamEye.y);
+        i_this->demoCamEyeTargetDist.z = fabsf(i_this->demoCamEyeTarget.z - i_this->demoCamEye.z);
+        i_this->demoCamCenterTargetDist.x = fabsf(i_this->demoCamCenterTarget.x - i_this->demoCamCenter.x);
+        i_this->demoCamCenterTargetDist.y = fabsf(i_this->demoCamCenterTarget.y - i_this->demoCamCenter.y);
+        i_this->demoCamCenterTargetDist.z = fabsf(i_this->demoCamCenterTarget.z - i_this->demoCamCenter.z);
+        i_this->demoCamStepScale = 0.0;
 
-            Z2GetAudioMgr()->setBattleBgmOff(true);
-            dComIfGp_getEvent()->startCheckSkipEdge(actor);
-            swBit = (fopAcM_GetParam(actor) & 0xFF00) >> 8;
-            dComIfGs_onSwitch(swBit, fopAcM_GetRoomNo(actor));
-            // fallthrough
-        case 2:
-            pos.set(-5700.0f, 4350.0f, 9670.0f);
-            daPy_getPlayerActorClass()->setPlayerPosAndAngle(&pos, 0, 0);
-            if (i_this->demoCounter > 50) {
-                cam_3d_morf(i_this, 0.1f);
-                cLib_addCalc2(&i_this->demoCamStepScale, 0.02f, 1.0f, 0.0005f);
-            }
+        Z2GetAudioMgr()->setBattleBgmOff(true);
+        dComIfGp_getEvent()->startCheckSkipEdge(actor);
+        int swBit = (fopAcM_GetParam(actor) & 0xFF00) >> 8;
+        dComIfGs_onSwitch(swBit, fopAcM_GetRoomNo(actor));
+        // fallthrough
+    }
+    case 2:
+        pos.set(-5700.0f, 4350.0f, 9670.0f);
+        daPy_getPlayerActorClass()->setPlayerPosAndAngle(&pos, 0, 0);
+        if (i_this->demoCounter > 50) {
+            cam_3d_morf(i_this, 0.1f);
+            cLib_addCalc2(&i_this->demoCamStepScale, 0.02f, 1.0f, 0.0005f);
+        }
 
-            if (i_this->demoCounter != 170) break;
-            i_this->demoCamCenter.set(-5690.0f, 4432.0f, 9610.0f);
-            i_this->demoCamEye.set(-5709.0f, 4445.0f, 9961.0f);
-            i_this->demoCamCenterTarget.set(-5741.0f, 4432.0f, 10530.0f);
-            i_this->demoCamEyeTarget.set(-5760.0f, 4496.0f, 10896.0f);
-            i_this->demoCamEyeTargetDist.x = fabsf(i_this->demoCamEyeTarget.x - i_this->demoCamEye.x);
-            i_this->demoCamEyeTargetDist.y = fabsf(i_this->demoCamEyeTarget.y - i_this->demoCamEye.y);
-            i_this->demoCamEyeTargetDist.z = fabsf(i_this->demoCamEyeTarget.z - i_this->demoCamEye.z);
-            i_this->demoCamCenterTargetDist.x = fabsf(i_this->demoCamCenterTarget.x - i_this->demoCamCenter.x);
-            i_this->demoCamCenterTargetDist.y = fabsf(i_this->demoCamCenterTarget.y - i_this->demoCamCenter.y);
-            i_this->demoCamCenterTargetDist.z = fabsf(i_this->demoCamCenterTarget.z - i_this->demoCamCenter.z);
-            i_this->demoCamStepScale = 0.0f;
-            i_this->demoMode = 3;
-            i_this->demoCamFovy = 55.0f;
-            i_this->demoCounter = 0;
-            // fallthrough
-        case 3:
-            if (i_this->demoCounter > 30) {
-                cam_3d_morf(i_this, 0.1f);
-                cLib_addCalc2(&i_this->demoCamStepScale, 0.02f, 1.0f, 0.0005f);
-            }
+        if (i_this->demoCounter != 170) break;
+        i_this->demoCamCenter.set(-5690.0f, 4432.0f, 9610.0f);
+        i_this->demoCamEye.set(-5709.0f, 4445.0f, 9961.0f);
+        i_this->demoCamCenterTarget.set(-5741.0f, 4432.0f, 10530.0f);
+        i_this->demoCamEyeTarget.set(-5760.0f, 4496.0f, 10896.0f);
+        i_this->demoCamEyeTargetDist.x = fabsf(i_this->demoCamEyeTarget.x - i_this->demoCamEye.x);
+        i_this->demoCamEyeTargetDist.y = fabsf(i_this->demoCamEyeTarget.y - i_this->demoCamEye.y);
+        i_this->demoCamEyeTargetDist.z = fabsf(i_this->demoCamEyeTarget.z - i_this->demoCamEye.z);
+        i_this->demoCamCenterTargetDist.x = fabsf(i_this->demoCamCenterTarget.x - i_this->demoCamCenter.x);
+        i_this->demoCamCenterTargetDist.y = fabsf(i_this->demoCamCenterTarget.y - i_this->demoCamCenter.y);
+        i_this->demoCamCenterTargetDist.z = fabsf(i_this->demoCamCenterTarget.z - i_this->demoCamCenter.z);
+        i_this->demoCamStepScale = 0.0f;
+        i_this->demoMode = 3;
+        i_this->demoCamFovy = 55.0f;
+        i_this->demoCounter = 0;
+        // fallthrough
+    case 3:
+        if (i_this->demoCounter > 30) {
+            cam_3d_morf(i_this, 0.1f);
+            cLib_addCalc2(&i_this->demoCamStepScale, 0.02f, 1.0f, 0.0005f);
+        }
 
-            if (i_this->demoCounter == 130) {
-                i_this->mode++;
-            }
-
-            if (i_this->demoCounter == 135) {
-                i_this->sound.startCreatureSound(Z2SE_EN_GB_SWINGHEAD, 0, -1);
-            }
-
-            if (i_this->demoCounter == 143) {
-                i_this->field_0x670 = 2;
-            }
-
-            if (i_this->demoCounter == 162) {
-                daPy_getPlayerActorClass()->changeDemoMode(23, 1, 2, 0);
-            }
-
-            if (i_this->demoCounter != 190) break;
+        if (i_this->demoCounter == 130) {
             i_this->mode++;
-            i_this->demoMode = 4;
-            i_this->demoCounter = 0;
-            body_anm_init(i_this, dRes_ID_E_GB_BCK_GF_OPEN_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
-            mDoAud_seStart(Z2SE_EN_GF_OPEN, &actor->home.pos, 0, 0);
-            i_this->demoCamCenter.set(-5706.0f, 4526.0f, 11379.0f);
-            i_this->demoCamEye.set(-5687.0f, 4505.0f, 11008.0f);
-            i_this->demoCamCenterTarget.set(-5624.0f, 4439.0f, 9818.0f);
-            i_this->demoCamEyeTarget.set(-5604.0f, 4418.0f, 9447.0f);
-            i_this->demoCamEyeTargetDist.x = fabsf(i_this->demoCamEyeTarget.x - i_this->demoCamEye.x);
-            i_this->demoCamEyeTargetDist.y = fabsf(i_this->demoCamEyeTarget.y - i_this->demoCamEye.y);
-            i_this->demoCamEyeTargetDist.z = fabsf(i_this->demoCamEyeTarget.z - i_this->demoCamEye.z);
-            i_this->demoCamCenterTargetDist.x = fabsf(i_this->demoCamCenterTarget.x - i_this->demoCamCenter.x);
-            i_this->demoCamCenterTargetDist.y = fabsf(i_this->demoCamCenterTarget.y - i_this->demoCamCenter.y);
-            i_this->demoCamCenterTargetDist.z = fabsf(i_this->demoCamCenterTarget.z - i_this->demoCamCenter.z);
-            i_this->demoCamStepScale = 0.0f;
-            i_this->demoCamCenter.y = 4584.0f;
-            // fallthrough
-        case 4:
-            if (i_this->demoCounter == (s16)(NREG_S(5) + 48)) {
-                head_anm_init(i_this, dRes_ID_E_GB_BCK_GB_DEMO_DROPKEY_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
-                i_this->sound.startCreatureSound(Z2SE_EN_GB_DROPKEY, 0, -1);
-            }
+        }
 
-            if (i_this->demoCounter == (s16)(NREG_S(6) + 54)) {
-                head_anm_init(i_this, dRes_ID_E_GB_BCK_GB_DEMO_DROPKEY_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
-                i_this->keyPos = actor->home.pos;
-                i_this->keyPos.y += NREG_F(9) + 400.0f;
-                i_this->field_0x670 = 1;
-            }
+        if (i_this->demoCounter == 135) {
+            i_this->sound.startCreatureSound(Z2SE_EN_GB_SWINGHEAD, 0, -1);
+        }
 
-            if (i_this->demoCounter == (s16)(NREG_S(7) + 68)) {
-                body_anm_init(i_this, dRes_ID_E_GB_BCK_GF_CLOSE_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
-                mDoAud_seStart(Z2SE_EN_GF_CLOSE, &actor->home.pos, 0, 0);
-                i_this->keyStatus = 0;
-            }
+        if (i_this->demoCounter == 143) {
+            i_this->field_0x670 = 2;
+        }
 
-            if (i_this->demoCounter > 150) {
-                cam_3d_morf(i_this, 0.2f);
-                cLib_addCalc2(&i_this->demoCamStepScale, 0.04f, 1.0f, 0.002f);
-            } else if (i_this->demoCounter >= 80) {
-                cLib_addCalc2(&i_this->demoCamCenter.y, 4526.0f, 0.05f, 1.0f);
-            }
+        if (i_this->demoCounter == 162) {
+            daPy_getPlayerActorClass()->changeDemoMode(23, 1, 2, 0);
+        }
 
-            if (i_this->bodyAnmNo == dRes_ID_E_GB_BCK_GF_CLOSE_e && i_this->flowerAnmP->isStop()) {
-                body_anm_init(i_this, dRes_ID_E_GB_BCK_GF_WAIT_CLOSE_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
-            }
+        if (i_this->demoCounter != 190) break;
+        i_this->mode++;
+        i_this->demoMode = 4;
+        i_this->demoCounter = 0;
+        body_anm_init(i_this, dRes_ID_E_GB_BCK_GF_OPEN_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+        mDoAud_seStart(Z2SE_EN_GF_OPEN, &actor->home.pos, 0, 0);
+        i_this->demoCamCenter.set(-5706.0f, 4526.0f, 11379.0f);
+        i_this->demoCamEye.set(-5687.0f, 4505.0f, 11008.0f);
+        i_this->demoCamCenterTarget.set(-5624.0f, 4439.0f, 9818.0f);
+        i_this->demoCamEyeTarget.set(-5604.0f, 4418.0f, 9447.0f);
+        i_this->demoCamEyeTargetDist.x = fabsf(i_this->demoCamEyeTarget.x - i_this->demoCamEye.x);
+        i_this->demoCamEyeTargetDist.y = fabsf(i_this->demoCamEyeTarget.y - i_this->demoCamEye.y);
+        i_this->demoCamEyeTargetDist.z = fabsf(i_this->demoCamEyeTarget.z - i_this->demoCamEye.z);
+        i_this->demoCamCenterTargetDist.x = fabsf(i_this->demoCamCenterTarget.x - i_this->demoCamCenter.x);
+        i_this->demoCamCenterTargetDist.y = fabsf(i_this->demoCamCenterTarget.y - i_this->demoCamCenter.y);
+        i_this->demoCamCenterTargetDist.z = fabsf(i_this->demoCamCenterTarget.z - i_this->demoCamCenter.z);
+        i_this->demoCamStepScale = 0.0f;
+        i_this->demoCamCenter.y = 4584.0f;
+        // fallthrough
+    case 4:
+        if (i_this->demoCounter == (s16)(NREG_S(5) + 48)) {
+            head_anm_init(i_this, dRes_ID_E_GB_BCK_GB_DEMO_DROPKEY_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+            i_this->sound.startCreatureSound(Z2SE_EN_GB_DROPKEY, 0, -1);
+        }
 
-            if (i_this->demoCounter == 220) {
-                i_this->demoMode = 100;
-                i_this->headAction = HEAD_ACTION_WAIT;
-                i_this->mode = 0;
-                i_this->flowerAction = FLOWER_ACTION_WAIT;
-                i_this->flowerMode = 0;
-                Z2GetAudioMgr()->setBattleBgmOff(false);
-            }
-            break;
+        if (i_this->demoCounter == (s16)(NREG_S(6) + 54)) {
+            head_anm_init(i_this, dRes_ID_E_GB_BCK_GB_DEMO_DROPKEY_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+            i_this->keyPos = actor->home.pos;
+            i_this->keyPos.y += NREG_F(9) + 400.0f;
+            i_this->field_0x670 = 1;
+        }
 
-        case 10:
-            if (!actor->eventInfo.checkCommandDemoAccrpt()) {
-                fopAcM_orderPotentialEvent(actor, 2, 0xFFFF, 0);
-                actor->eventInfo.onCondition(dEvtCnd_CANDEMO_e);
-                return;
-            }
+        if (i_this->demoCounter == (s16)(NREG_S(7) + 68)) {
+            body_anm_init(i_this, dRes_ID_E_GB_BCK_GF_CLOSE_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+            mDoAud_seStart(Z2SE_EN_GF_CLOSE, &actor->home.pos, 0, 0);
+            i_this->keyStatus = 0;
+        }
 
-            camera->mCamera.Stop();
-            i_this->demoMode = 11;
-            i_this->demoCamFovy = 55.0;
-            i_this->demoCounter = 0;
-            camera->mCamera.SetTrimSize(3);
-            // fallthrough
-        case 11:
-            i_this->demoCamCenter = actor->home.pos;
-            i_this->demoCamCenter.y += YREG_F(12) + 100.0f;
-            i_this->demoCamEye = actor->home.pos;
-            i_this->demoCamEye.x += YREG_F(13);
-            i_this->demoCamEye.y += YREG_F(14) + 300.0f;
-            i_this->demoCamEye.z += YREG_F(15) + -600.0f;
+        if (i_this->demoCounter > 150) {
+            cam_3d_morf(i_this, 0.2f);
+            cLib_addCalc2(&i_this->demoCamStepScale, 0.04f, 1.0f, 0.002f);
+        } else if (i_this->demoCounter >= 80) {
+            cLib_addCalc2(&i_this->demoCamCenter.y, 4526.0f, 0.05f, 1.0f);
+        }
 
-            if (i_this->demoCounter == 100) {
-                i_this->demoMode = 100;
-            }
-            break;
+        if (i_this->bodyAnmNo == dRes_ID_E_GB_BCK_GF_CLOSE_e && i_this->flowerAnmP->isStop()) {
+            body_anm_init(i_this, dRes_ID_E_GB_BCK_GF_WAIT_CLOSE_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
+        }
 
-        case 100:
-            camera->mCamera.Reset(i_this->demoCamCenter, i_this->demoCamEye);
-            camera->mCamera.Start();
-            camera->mCamera.SetTrimSize(0);
-            dComIfGp_event_reset();
-            daPy_getPlayerActorClass()->cancelOriginalDemo();
-            i_this->demoMode = 0;
-            break;
+        if (i_this->demoCounter == 220) {
+            i_this->demoMode = 100;
+            i_this->headAction = HEAD_ACTION_WAIT;
+            i_this->mode = 0;
+            i_this->flowerAction = FLOWER_ACTION_WAIT;
+            i_this->flowerMode = 0;
+            Z2GetAudioMgr()->setBattleBgmOff(false);
+        }
+        break;
 
-        case 0:
-            break;
+    case 10:
+        if (!actor->eventInfo.checkCommandDemoAccrpt()) {
+            fopAcM_orderPotentialEvent(actor, 2, 0xFFFF, 0);
+            actor->eventInfo.onCondition(dEvtCnd_CANDEMO_e);
+            return;
+        }
+
+        camera->mCamera.Stop();
+        i_this->demoMode = 11;
+        i_this->demoCamFovy = 55.0;
+        i_this->demoCounter = 0;
+        camera->mCamera.SetTrimSize(3);
+        // fallthrough
+    case 11:
+        i_this->demoCamCenter = actor->home.pos;
+        i_this->demoCamCenter.y += YREG_F(12) + 100.0f;
+        i_this->demoCamEye = actor->home.pos;
+        i_this->demoCamEye.x += YREG_F(13);
+        i_this->demoCamEye.y += YREG_F(14) + 300.0f;
+        i_this->demoCamEye.z += YREG_F(15) + -600.0f;
+
+        if (i_this->demoCounter == 100) {
+            i_this->demoMode = 100;
+        }
+        break;
+
+    case 100:
+        camera->mCamera.Reset(i_this->demoCamCenter, i_this->demoCamEye);
+        camera->mCamera.Start();
+        camera->mCamera.SetTrimSize(0);
+        dComIfGp_event_reset();
+        daPy_getPlayerActorClass()->cancelOriginalDemo();
+        i_this->demoMode = 0;
+        break;
+
+    case 0:
+        break;
     }
 
     if (i_this->demoMode != 0) {
@@ -1290,7 +1294,7 @@ static void demo_camera(e_gb_class* i_this) {
         i_this->demoCounter++;
 
         if (i_this->demoMode < 10) {
-            dComIfGp_getEvent()->setSkipProc(i_this, dEv_defaultSkipProc, 0);
+            dComIfGp_getEvent()->setSkipProc(actor, dEv_defaultSkipProc, 0);
             if (dComIfGp_getEvent()->checkSkipEdge()) {
                 i_this->demoMode = 100;
                 cMtx_YrotS(*calc_mtx, player->shape_angle.y);
@@ -1323,6 +1327,7 @@ static int daE_GB_Execute(e_gb_class* i_this) {
 
     fopEn_enemy_c* actor = &i_this->actor;
     cXyz work, pos;
+    J3DModel* model;
 
     i_this->frameCounter++;
 
@@ -1357,7 +1362,7 @@ static int daE_GB_Execute(e_gb_class* i_this) {
     f32 scale = l_HIO.face_size;
     mDoMtx_stack_c::scaleM(scale, scale, scale);
 
-    J3DModel* model = i_this->anmP->getModel();
+    model = i_this->anmP->getModel();
     model->setBaseTRMtx(mDoMtx_stack_c::get());
     i_this->anmP->play(NULL, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)), 0);
     i_this->anmP->modelCalc();
@@ -1449,7 +1454,7 @@ static int daE_GB_Execute(e_gb_class* i_this) {
         if (i_this->field_0x670 == 1) {
             i_this->keyPos.y += i_this->field_0x680;
             i_this->field_0x680 -= 3.0f;
-            i_this->keyXRot += (s16)-0xC00;
+            ANGLE_ADD(i_this->keyXRot, -0xC00);
 
             if (i_this->keyPos.y < actor->home.pos.y) {
                 i_this->keyXRot = 0;

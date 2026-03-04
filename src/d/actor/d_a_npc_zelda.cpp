@@ -10,6 +10,7 @@
 #include "SSystem/SComponent/c_counter.h"
 #include "d/actor/d_a_hozelda.h"
 #include "d/d_debug_viewer.h"
+#include <cstring>
 
 static u32 l_bmdData[2] = { 11, 1 };
 

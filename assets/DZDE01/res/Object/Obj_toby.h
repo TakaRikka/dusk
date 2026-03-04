@@ -1,0 +1,34 @@
+#ifndef RES_OBJ_TOBY_H
+#define RES_OBJ_TOBY_H
+
+enum dRes_INDEX_OBJ_TOBY {
+    /* BMDG */
+    dRes_INDEX_OBJ_TOBY_BMD_K_TOBIY00_e=0x4,
+    dRes_INDEX_OBJ_TOBY_BMD_K_TOBIY01_e=0x5,
+    dRes_INDEX_OBJ_TOBY_BMD_S_PANEL_LEAF_e=0x6,
+    /* DZB  */
+    dRes_INDEX_OBJ_TOBY_DZB_K_TOBIY00_e=0x9,
+};
+
+enum dRes_ID_OBJ_TOBY {
+    /* BMDG */
+    dRes_ID_OBJ_TOBY_BMD_K_TOBIY00_e=0x4,
+    dRes_ID_OBJ_TOBY_BMD_K_TOBIY01_e=0x5,
+    dRes_ID_OBJ_TOBY_BMD_S_PANEL_LEAF_e=0x6,
+    /* DZB  */
+    dRes_ID_OBJ_TOBY_DZB_K_TOBIY00_e=0x9,
+};
+
+enum K_TOBIY00_JNT {
+    K_TOBIY00_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum K_TOBIY01_JNT {
+    K_TOBIY01_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum S_PANEL_LEAF_JNT {
+    S_PANEL_LEAF_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_OBJ_TOBY_H */

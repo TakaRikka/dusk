@@ -2,6 +2,7 @@
  * f_pc_base.cpp
  * Framework - Process Base
  */
+#define PROCS_DUMP_NAMES 1
 
 #include "f_pc/f_pc_base.h"
 #include "SSystem/SComponent/c_malloc.h"
@@ -15,6 +16,21 @@
 #include "f_pc/f_pc_debug_sv.h"
 #include "Z2AudioLib/Z2AudioMgr.h"
 #include <cstdio>
+
+#if TARGET_PC
+#include "d/d_procname.h"
+
+static const char* getProcName(s16 id) {
+    for (auto procName : procNames) {
+        if (procName.id == id) {
+            return procName.name;
+        }
+    }
+
+    return nullptr;
+}
+
+#endif
 
 BOOL fpcBs_Is_JustOfType(int i_typeA, int i_typeB) {
     if (i_typeB == i_typeA) {
@@ -119,8 +135,8 @@ base_process_class* fpcBs_Create(s16 i_profname, fpc_ProcID i_procID, void* i_ap
     u32 size;
 
     pprofile = (process_profile_definition*)fpcPf_Get(i_profname);
-    printf("[DIAG] fpcBs_Create: profname=%d profile=%p procSize=%d unkSize=%d\n",
-           i_profname, pprofile, pprofile->process_size, pprofile->unk_size); fflush(stdout);
+    printf("[DIAG] fpcBs_Create: pid=%d profname=%s (%d) profile=%p procSize=%d unkSize=%d\n",
+           i_procID, getProcName(i_profname), i_profname, pprofile, pprofile->process_size, pprofile->unk_size); fflush(stdout);
     size = pprofile->process_size + pprofile->unk_size;
 
     pprocess = (base_process_class*)cMl::memalignB(-4, size);
@@ -171,3 +187,9 @@ int fpcBs_SubCreate(base_process_class* i_proc) {
         return cPhs_ERROR_e;
     }
 }
+
+#if !__MWERKS__
+base_process_class::~base_process_class() {
+    // Nada. Only exists to ensure the base class has a vtable.
+}
+#endif

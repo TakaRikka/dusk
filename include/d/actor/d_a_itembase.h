@@ -6,6 +6,7 @@
 #include "d/d_a_itembase_static.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
+#include "SSystem/SComponent/c_phase.h"
 
 struct daItemBase_data {
     /* 0x00 */ f32 mGravity;

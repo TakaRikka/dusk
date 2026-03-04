@@ -1,0 +1,48 @@
+#ifndef RES_OBJ_BRG_H
+#define RES_OBJ_BRG_H
+
+enum dRes_INDEX_OBJ_BRG {
+    /* BMDR */
+    dRes_INDEX_OBJ_BRG_BMD_K_BRIDGE00_e=0x5,
+    dRes_INDEX_OBJ_BRG_BMD_K_BRIDGE01_e=0x6,
+    dRes_INDEX_OBJ_BRG_BMD_M_BRIDGE00_e=0x7,
+    dRes_INDEX_OBJ_BRG_BMD_M_KNOT00_e=0x8,
+    /* DZB  */
+    dRes_INDEX_OBJ_BRG_DZB_MBRDG_e=0xB,
+    dRes_INDEX_OBJ_BRG_DZB_MBRDG2_e=0xC,
+    /* TEX  */
+    dRes_INDEX_OBJ_BRG_BTI_BRG_ROPE_e=0xF,
+    dRes_INDEX_OBJ_BRG_BTI_M_WIRE00_e=0x10,
+};
+
+enum dRes_ID_OBJ_BRG {
+    /* BMDR */
+    dRes_ID_OBJ_BRG_BMD_K_BRIDGE00_e=0x5,
+    dRes_ID_OBJ_BRG_BMD_K_BRIDGE01_e=0x6,
+    dRes_ID_OBJ_BRG_BMD_M_BRIDGE00_e=0x7,
+    dRes_ID_OBJ_BRG_BMD_M_KNOT00_e=0x8,
+    /* DZB  */
+    dRes_ID_OBJ_BRG_DZB_MBRDG_e=0xB,
+    dRes_ID_OBJ_BRG_DZB_MBRDG2_e=0xC,
+    /* TEX  */
+    dRes_ID_OBJ_BRG_BTI_BRG_ROPE_e=0xF,
+    dRes_ID_OBJ_BRG_BTI_M_WIRE00_e=0x10,
+};
+
+enum K_BRIDGE00_JNT {
+    K_BRIDGE00_JNT_K_BRIDGE00_e=0x0,
+};
+
+enum K_BRIDGE01_JNT {
+    K_BRIDGE01_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum M_BRIDGE00_JNT {
+    M_BRIDGE00_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum M_KNOT00_JNT {
+    M_KNOT00_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_OBJ_BRG_H */

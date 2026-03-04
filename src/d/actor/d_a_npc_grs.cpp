@@ -9,6 +9,7 @@
 #include "d/d_debug_viewer.h"
 #include "d/actor/d_a_tag_push.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 enum Event_Cut_Nums {
     NUM_EVT_CUTS_e = 2,

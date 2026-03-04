@@ -1,0 +1,37 @@
+buildType:
+  default: Debug
+  choices:
+    debug:
+      short: Debug
+      long: Unoptimized with debug symbols
+      buildType: Debug
+    release:
+      short: Release
+      long: Optimized, no debug symbols
+      buildType: Release
+
+platform:
+  default: win64
+  description: Target platform
+  choices:
+    win32:
+      short: Win32
+      long: Windows 32-bit (MSVC)
+      settings:
+        CMAKE_GENERATOR_PLATFORM: Win32
+
+    win64:
+      short: Win64
+      long: Windows 64-bit (MSVC)
+      settings:
+        CMAKE_GENERATOR_PLATFORM: x64
+
+tp_version:
+  default: GZ2E01
+  description: TP Version
+  choices:
+    GZ2E01:
+      short: GZ2E01
+      long: GZ2E01
+      settings:
+        DUSK_TP_VERSION: GZ2E01

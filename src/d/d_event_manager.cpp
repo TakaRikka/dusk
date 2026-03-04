@@ -13,7 +13,7 @@
 #include "d/d_demo.h"
 #include "d/d_s_play.h"
 #include "SSystem/SComponent/c_counter.h"
-#include <string>
+#include <cstring>
 
 #if DEBUG
 static dEvM_HIO_c l_HIO;
@@ -1245,7 +1245,7 @@ void* dEvent_manager_c::getMySubstanceP(int staffId, const char* dataname, int d
 int dEvent_manager_c::getMySubstanceNum(int staffId, const char* dataname) {
     dEvDtData_c* data = getMyDataP(staffId, dataname, FALSE);
     if (data == NULL) {
-        return NULL;
+        return 0;
     } else {
         return data->getNumber();
     }

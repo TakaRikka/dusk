@@ -12,6 +12,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "SSystem/SComponent/c_math.h"
+#include <cstring>
 
 static int daVrbox2_color_set(vrbox2_class* param_0);
 
@@ -50,6 +51,9 @@ static int daVrbox2_Draw(vrbox2_class* i_this) {
     filelist_p = NULL;
     dKy_GxFog_set();
 
+#if !TARGET_PC
+    // Code is broken but does nothing on real hardware.
+
     // these casts look like fake matches, but this ptr is used as both J3DModel and J3DModelData?
     sp38 = (J3DModelData*)kumo_model_p;
     sp34 = (J3DModelData*)sun_model_p;
@@ -86,6 +90,7 @@ static int daVrbox2_Draw(vrbox2_class* i_this) {
 
         fogInfo_p->mType = 2;
     }
+#endif
 
     if ((g_env_light.vrbox_kasumi_outer_col.r + g_env_light.vrbox_kasumi_outer_col.g +
          g_env_light.vrbox_kasumi_outer_col.b + g_env_light.vrbox_sky_col.r + g_env_light.vrbox_sky_col.g +
@@ -195,7 +200,7 @@ static int daVrbox2_Draw(vrbox2_class* i_this) {
             mDoMtx_stack_c::ZrotM(-mangZ);
             sun2_model_p->setBaseTRMtx(mDoMtx_stack_c::get());
             mDoExt_modelUpdateDL(sun2_model_p);
-            mangZ += (s16)(483.0f + cM_rndF(100.0f));
+            ANGLE_ADD(mangZ, 483.0f + cM_rndF(100.0f));
         }
     }
 

@@ -9,6 +9,7 @@
 #include "d/actor/d_a_npc4.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
+#include <cstring>
 
 static int daKytag04_Draw(kytag04_class* i_this) {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();

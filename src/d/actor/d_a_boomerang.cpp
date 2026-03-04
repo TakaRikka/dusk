@@ -918,8 +918,8 @@ int daBoomerang_c::procWait() {
         } else {
             offStateFlg0(FLG0_10);
         }
-    
-        current.angle.y += (s16)0x1830;
+
+        ANGLE_ADD(current.angle.y, 0x1830);
         shape_angle.x = current.angle.x;
         shape_angle.y = current.angle.y;
         shape_angle.z = 0x1000;

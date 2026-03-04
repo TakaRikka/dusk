@@ -2,33 +2,8 @@
 #define C_ANGLE_H
 
 #include "SSystem/SComponent/c_xyz.h"
+#include "angle_utils.h"
 
-#define ADD_VAR(x, y)  ((x) += (y))
-#define SUB_VAR(x, y)  ((x) -= (y))
-#define MULT_VAR(x, y) ((x) *= (y))
-
-#define ADD_VAR_CAST(x, y, t)  ((x) += (t)(y))
-#define SUB_VAR_CAST(x, y, t)  ((x) -= (t)(y))
-#define MULT_VAR_CAST(x, y, t) ((x) *= (t)(y))
-
-#define ADD_ANGLE(x, y)  ADD_VAR_CAST(x, y, s16)
-#define SUB_ANGLE(x, y)  SUB_VAR_CAST(x, y, s16)
-#define MULT_ANGLE(x, y) MULT_VAR_CAST(x, y, s16)
-
-// There are some angles that weren't sign-extended until the shield version
-#if !PLATFORM_SHIELD
-    #define ADD_ANGLE_2    ADD_VAR
-    #define SUB_ANGLE_2    SUB_VAR
-    #define MULT_ANGLE_2   MULT_VAR
-
-    #define ADD_S8_2       ADD_VAR
-#else
-    #define ADD_ANGLE_2    ADD_ANGLE
-    #define SUB_ANGLE_2    SUB_ANGLE
-    #define MULT_ANGLE_2   MULT_ANGLE
-    
-    #define ADD_S8_2(x, y) ADD_VAR_CAST(x, y, s8)
-#endif
 
 #define DEG2S_CONSTANT (0x8000 / 180.0f)
 #define S2DEG_CONSTANT (180.0f / 0x8000)

@@ -11,6 +11,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_midna.h"
 #include "d/d_bg_w.h"
+#include <cstring>
 
 static char* l_arcName = "Obj_obrg";
 

@@ -240,55 +240,51 @@ public:
     fopAc_ac_c* CheckObjectTarget(s32);
     bool LockonTruth();
     int checkDistance(cXyz*, s16, cXyz*, f32, f32, f32, f32);
-    bool LockEdge() { return chkFlag(8) || chkFlag(0x20); }
-    int GetCheckObjectCount() { return mCheckObjectCount; }
-    void keepLock(int timer) { mAttnBlockTimer = timer; }
+
     static dist_entry& getDistTable(int i_no) { return dist_table[i_no]; }
 
 #if DEBUG
     void runDebugDisp0();
 #endif
 
-    JKRSolidHeap* getHeap() { return heap; }
-    fopAc_ac_c* getCatghTarget() { return mCatghTarget.getCatghTarget(); }
-    fopAc_ac_c* getZHintTarget() { return mZHintTarget.getZHintTarget(); }
-    u8 getCatchChgItem() { return mCatghTarget.getChangeItem(); }
-    BOOL chkFlag(u32 flag) { return (mFlags & flag) ? TRUE : FALSE; }
-    void setFlag(u32 flag) { mFlags |= flag; }
-    void clrFlag(u32 flag) { mFlags &= ~flag; }
-    int GetActionCount() { return mActionCount; }
-    int GetLockonCount() { return mLockonCount; }
-    void LockSoundOn() { clrFlag(0x400000); }
-    void LockSoundOff() { setFlag(0x400000); }
-    bool Lockon() { return LockonTruth() || chkFlag(0x20000000); }  // only matches with -O2?
-    int ZHintRequest(fopAc_ac_c* param_1, int param_2) {
-        return mZHintTarget.request(param_1, param_2);
-    }
-
-    void LookRequest(fopAc_ac_c* param_0, f32 i_horizontalDist, f32 i_upDist, f32 i_downDist,
-                     s16 i_angle, int param_5) {
-        mLookTarget.request(param_0, i_horizontalDist, i_upDist, i_downDist, i_angle, param_5);
-    }
-
-    void CatchRequest(fopAc_ac_c* param_0, u8 param_1, f32 i_horizontalDist, f32 i_upDist,
-                      f32 i_downDist, s16 i_angle, int param_5) {
-        mCatghTarget.request(param_0, param_1, i_horizontalDist, i_upDist, i_downDist, i_angle,
-                             param_5);
-    }
-
-    fopAc_ac_c* getLookTarget() {
-        return mLookTarget.getLookTarget();
-    }
-
     void Init(fopAc_ac_c* param_0, u32 i_padNo) {
         mpPlayer = param_0;
         mPadNo = i_padNo;
     }
-
+    JKRSolidHeap* getHeap() { return heap; }
     void offAttnDraw() {
         draw[0].field_0x173 = 3;
         draw[1].field_0x173 = 3;
     }
+    BOOL chkFlag(u32 flag) { return (mFlags & flag) ? TRUE : FALSE; }
+    void setFlag(u32 flag) { mFlags |= flag; }
+    void clrFlag(u32 flag) { mFlags &= ~flag; }
+    bool LockEdge() { return chkFlag(8) || chkFlag(0x20); }
+    void LockSoundOn() { clrFlag(0x400000); }
+    void LockSoundOff() { setFlag(0x400000); }
+    int GetLockonCount() { return mLockonCount; }
+    int GetActionCount() { return mActionCount; }
+    int GetCheckObjectCount() { return mCheckObjectCount; }
+    fopAc_ac_c* getZHintTarget() { return mZHintTarget.getZHintTarget(); }
+    int ZHintRequest(fopAc_ac_c* param_1, int param_2) {
+        return mZHintTarget.request(param_1, param_2);
+    }
+    fopAc_ac_c* getCatghTarget() { return mCatghTarget.getCatghTarget(); }
+    u8 getCatchChgItem() { return mCatghTarget.getChangeItem(); }
+    int CatchRequest(fopAc_ac_c* param_0, u8 param_1, f32 i_horizontalDist, f32 i_upDist,
+                      f32 i_downDist, s16 i_angle, int param_5) {
+        return mCatghTarget.request(param_0, param_1, i_horizontalDist, i_upDist, i_downDist,
+                                    i_angle, param_5);
+    }
+    fopAc_ac_c* getLookTarget() {
+        return mLookTarget.getLookTarget();
+    }
+    void LookRequest(fopAc_ac_c* param_0, f32 i_horizontalDist, f32 i_upDist, f32 i_downDist,
+                     s16 i_angle, int param_5) {
+        mLookTarget.request(param_0, i_horizontalDist, i_upDist, i_downDist, i_angle, param_5);
+    }
+    void keepLock(int timer) { mAttnBlockTimer = timer; }
+    bool Lockon() { return LockonTruth() || chkFlag(0x20000000); }  // only matches with -O2?
 
     static type_tbl_entry loc_type_tbl[3];
     static type_tbl_entry act_type_tbl[5];

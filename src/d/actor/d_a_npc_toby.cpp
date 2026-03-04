@@ -14,6 +14,7 @@
 #include "d/actor/d_a_obj_automata.h"
 #include "d/d_msg_object.h"
 #include "d/actor/d_a_obj_scannon.h"
+#include <cstring>
 
 const daNpc_Toby_HIOParam daNpc_Toby_Param_c::m = {
     160.0f,

@@ -10,6 +10,8 @@
 #include "d/actor/d_a_obj_lv6swturn.h"
 #include "d/actor/d_a_player.h"
 
+static char* l_arcName = "Obj_l6tsw";
+
 #if DEBUG
 daObjLv6SwTurn_HIO_c::daObjLv6SwTurn_HIO_c() {
     mWaitTime = 0x2f;
@@ -30,6 +32,7 @@ void daObjLv6SwTurn_HIO_c::genMessage(JORMContext* context) {
 
 static fopAc_ac_c* PPCallBack(fopAc_ac_c* actor1, fopAc_ac_c* actor2, s16 param_2,
                               dBgW_Base::PushPullLabel pushPull) {
+    static const int pp_field = 3;
     UNUSED(param_2);
     dBgW_Base::PushPullLabel pushPull_3 = cLib_checkBit(pushPull, dBgW_Base::PPLABEL_3);
     daObjLv6SwTurn_c* swTurnActor1 = (daObjLv6SwTurn_c*)actor1;
@@ -56,8 +59,6 @@ static fopAc_ac_c* PPCallBack(fopAc_ac_c* actor1, fopAc_ac_c* actor2, s16 param_
     }
     return actor1;
 }
-
-static char* l_arcName = "Obj_l6tsw";
 
 void daObjLv6SwTurn_c::initBaseMtx() {
     unk5A8->setBaseScale(scale);
@@ -135,20 +136,11 @@ enum daObjLv6SwTurn_c_mode{
 
 void daObjLv6SwTurn_c::mode_proc_call() {
     typedef void (daObjLv6SwTurn_c::*func_type)();
-    // naming difference between debug and release
-#if DEBUG
-    static func_type mode_proc_call[] = {
-        &daObjLv6SwTurn_c::modeWait,
-        &daObjLv6SwTurn_c::modeRotate
-    };
-    (this->*mode_proc_call[mMode])();
-#else
     static func_type l_func[] = {
         &daObjLv6SwTurn_c::modeWait,
         &daObjLv6SwTurn_c::modeRotate
     };
     (this->*l_func[mMode])();
-#endif
 }
 
 void daObjLv6SwTurn_c::init_modeWait() {
@@ -312,7 +304,7 @@ int daObjLv6SwTurn_c::Draw() {
     dComIfGd_setList();
 #if DEBUG
     if (l_HIO.mDrawFlag) {
-        mpBgW->GetAttackThrough(0);
+        mpBgW->DebugDraw();
     }
 #endif
     return TRUE;

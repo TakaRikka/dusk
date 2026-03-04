@@ -1,0 +1,196 @@
+#ifndef RES_FSHOP_H
+#define RES_FSHOP_H
+
+enum dRes_INDEX_FSHOP {
+    /* BMDG */
+    dRes_INDEX_FSHOP_BMD_FOOK_e=0x5,
+    dRes_INDEX_FSHOP_BMD_RING_e=0x6,
+    /* BMDR */
+    dRes_INDEX_FSHOP_BMD_A_CRBALL_e=0x9,
+    dRes_INDEX_FSHOP_BMD_A_CRBOX_e=0xA,
+    dRes_INDEX_FSHOP_BMD_A_CRCURVE_A_e=0xB,
+    dRes_INDEX_FSHOP_BMD_A_CRCURVE_B_e=0xC,
+    dRes_INDEX_FSHOP_BMD_A_CRGOAL_e=0xD,
+    dRes_INDEX_FSHOP_BMD_A_CRSAKA_e=0xE,
+    dRes_INDEX_FSHOP_BMD_A_CRSTART_e=0xF,
+    dRes_INDEX_FSHOP_BMD_A_CRWAKU_e=0x10,
+    dRes_INDEX_FSHOP_BMD_A_LINKPHOTO_e=0x11,
+    dRes_INDEX_FSHOP_BMD_CANOE_e=0x12,
+    dRes_INDEX_FSHOP_BMD_DM_e=0x13,
+    dRes_INDEX_FSHOP_BMD_FROG_e=0x14,
+    dRes_INDEX_FSHOP_BMD_HENNA_HAT_e=0x15,
+    dRes_INDEX_FSHOP_BMD_PENCIL_e=0x16,
+    dRes_INDEX_FSHOP_BMD_POPPER_e=0x17,
+    dRes_INDEX_FSHOP_BMD_ROD_e=0x18,
+    dRes_INDEX_FSHOP_BMD_ROD2_e=0x19,
+    dRes_INDEX_FSHOP_BMD_TUBO_01_e=0x1A,
+    dRes_INDEX_FSHOP_BMD_TUBO_02_e=0x1B,
+    dRes_INDEX_FSHOP_BMD_WS_e=0x1C,
+    /* DZB  */
+    dRes_INDEX_FSHOP_DZB_A_CRBOX_e=0x1F,
+    dRes_INDEX_FSHOP_DZB_A_CRCURVE_A_e=0x20,
+    dRes_INDEX_FSHOP_DZB_A_CRCURVE_B_e=0x21,
+    dRes_INDEX_FSHOP_DZB_A_CRGOAL_e=0x22,
+    dRes_INDEX_FSHOP_DZB_A_CRSAKA_e=0x23,
+    dRes_INDEX_FSHOP_DZB_A_CRSTART_e=0x24,
+    dRes_INDEX_FSHOP_DZB_A_CRWAKU_e=0x25,
+    dRes_INDEX_FSHOP_DZB_TABLE_e=0x26,
+};
+
+enum dRes_ID_FSHOP {
+    /* BMDG */
+    dRes_ID_FSHOP_BMD_FOOK_e=0x5,
+    dRes_ID_FSHOP_BMD_RING_e=0x6,
+    /* BMDR */
+    dRes_ID_FSHOP_BMD_A_CRBALL_e=0x9,
+    dRes_ID_FSHOP_BMD_A_CRBOX_e=0xA,
+    dRes_ID_FSHOP_BMD_A_CRCURVE_A_e=0xB,
+    dRes_ID_FSHOP_BMD_A_CRCURVE_B_e=0xC,
+    dRes_ID_FSHOP_BMD_A_CRGOAL_e=0xD,
+    dRes_ID_FSHOP_BMD_A_CRSAKA_e=0xE,
+    dRes_ID_FSHOP_BMD_A_CRSTART_e=0xF,
+    dRes_ID_FSHOP_BMD_A_CRWAKU_e=0x10,
+    dRes_ID_FSHOP_BMD_A_LINKPHOTO_e=0x11,
+    dRes_ID_FSHOP_BMD_CANOE_e=0x12,
+    dRes_ID_FSHOP_BMD_DM_e=0x13,
+    dRes_ID_FSHOP_BMD_FROG_e=0x14,
+    dRes_ID_FSHOP_BMD_HENNA_HAT_e=0x15,
+    dRes_ID_FSHOP_BMD_PENCIL_e=0x16,
+    dRes_ID_FSHOP_BMD_POPPER_e=0x17,
+    dRes_ID_FSHOP_BMD_ROD_e=0x18,
+    dRes_ID_FSHOP_BMD_ROD2_e=0x19,
+    dRes_ID_FSHOP_BMD_TUBO_01_e=0x1A,
+    dRes_ID_FSHOP_BMD_TUBO_02_e=0x1B,
+    dRes_ID_FSHOP_BMD_WS_e=0x1C,
+    /* DZB  */
+    dRes_ID_FSHOP_DZB_A_CRBOX_e=0x1F,
+    dRes_ID_FSHOP_DZB_A_CRCURVE_A_e=0x20,
+    dRes_ID_FSHOP_DZB_A_CRCURVE_B_e=0x21,
+    dRes_ID_FSHOP_DZB_A_CRGOAL_e=0x22,
+    dRes_ID_FSHOP_DZB_A_CRSAKA_e=0x23,
+    dRes_ID_FSHOP_DZB_A_CRSTART_e=0x24,
+    dRes_ID_FSHOP_DZB_A_CRWAKU_e=0x25,
+    dRes_ID_FSHOP_DZB_TABLE_e=0x26,
+};
+
+enum FOOK_JNT {
+    FOOK_JNT_FOOK_MODEL_e=0x0,
+};
+
+enum RING_JNT {
+    RING_JNT_RING_MODEL_e=0x0,
+};
+
+enum A_CRBALL_JNT {
+    A_CRBALL_JNT_EF_SYABONDAMA_e=0x0,
+};
+
+enum A_CRBOX_JNT {
+    A_CRBOX_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum A_CRCURVE_A_JNT {
+    A_CRCURVE_A_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum A_CRCURVE_B_JNT {
+    A_CRCURVE_B_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum A_CRGOAL_JNT {
+    A_CRGOAL_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum A_CRSAKA_JNT {
+    A_CRSAKA_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum A_CRSTART_JNT {
+    A_CRSTART_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum A_CRWAKU_JNT {
+    A_CRWAKU_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum A_LINKPHOTO_JNT {
+    A_LINKPHOTO_JNT_WORLD_ROOT_e=0x0,
+};
+
+enum CANOE_JNT {
+    CANOE_JNT_E3CANOE_MODEL_e=0x0,
+};
+
+enum DM_JNT {
+    DM_JNT_CENTER_e=0x0,
+    DM_JNT_KOSI_J_e=0x1,
+    DM_JNT_KOKANR_J_e=0x2,
+    DM_JNT_LEGRA_J_e=0x3,
+    DM_JNT_LEGRB_J_e=0x4,
+    DM_JNT_ASIR_J_e=0x5,
+    DM_JNT_KOKANL_J_e=0x6,
+    DM_JNT_LEGLA_J_e=0x7,
+    DM_JNT_LEGLB_J_e=0x8,
+    DM_JNT_ASIL_J_e=0x9,
+    DM_JNT_HARA_J_e=0xA,
+    DM_JNT_MUNE_J_e=0xB,
+    DM_JNT_KUBI_J_e=0xC,
+    DM_JNT_ATAMA_J_e=0xD,
+    DM_JNT_MEGANE_J_e=0xE,
+    DM_JNT_DM_MEGANE_e=0xF,
+    DM_JNT_KATAR_J_e=0x10,
+    DM_JNT_UDERA_J_e=0x11,
+    DM_JNT_UDERB_J_e=0x12,
+    DM_JNT_TER_J_e=0x13,
+    DM_JNT_KATAL_J_e=0x14,
+    DM_JNT_UDELA_J_e=0x15,
+    DM_JNT_UDELB_J_e=0x16,
+    DM_JNT_TEL_J_e=0x17,
+};
+
+enum FROG_JNT {
+    FROG_JNT_CENTER_e=0x0,
+    FROG_JNT_LEG_e=0x1,
+};
+
+enum HENNA_HAT_JNT {
+    HENNA_HAT_JNT_HENNA_HAT_e=0x0,
+};
+
+enum PENCIL_JNT {
+    PENCIL_JNT_PENCIL_MODEL_e=0x0,
+};
+
+enum POPPER_JNT {
+    POPPER_JNT_POPPER_MODEL_e=0x0,
+};
+
+enum ROD_JNT {
+    ROD_JNT_CENTER_e=0x0,
+    ROD_JNT_HANDLE_e=0x1,
+    ROD_JNT_ROD_NECK_e=0x2,
+    ROD_JNT_SPOOL_e=0x3,
+};
+
+enum ROD2_JNT {
+    ROD2_JNT_CENTER_e=0x0,
+    ROD2_JNT_HANDLE_e=0x1,
+    ROD2_JNT_ROD_NECK_e=0x2,
+    ROD2_JNT_SPOOL_e=0x3,
+};
+
+enum TUBO_01_JNT {
+    TUBO_01_JNT_J_TUBO_01_e=0x0,
+};
+
+enum TUBO_02_JNT {
+    TUBO_02_JNT_J_TUBO_00_e=0x0,
+};
+
+enum WS_JNT {
+    WS_JNT_CENTER_e=0x0,
+    WS_JNT_FRONT_e=0x1,
+    WS_JNT_REAR_e=0x2,
+};
+
+#endif /* !RES_FSHOP_H */

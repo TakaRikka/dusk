@@ -7,6 +7,7 @@
 
 #include "d/actor/d_a_npc_yamid.h"
 #include "JSystem/JHostIO/JORFile.h"
+#include <cstring>
 
 enum yamiD_RES_File_ID {
     /* BCK */

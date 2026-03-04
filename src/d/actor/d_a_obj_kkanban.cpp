@@ -8,6 +8,7 @@
 #include "d/actor/d_a_obj_kkanban.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_procname.h"
+#include <cstring>
 
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {

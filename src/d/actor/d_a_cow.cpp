@@ -15,7 +15,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_meter2_info.h"
 #include "d/d_timer.h"
-#include <dolphin/types.h>
+#include <types.h>
+#include <cstring>
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_ext.h"
@@ -1237,16 +1238,16 @@ void daCow_c::action_run() {
 
             switch (mAction) {
             case daCow_c::Action_NadeNade:
-                SUB_ANGLE_2(targetAngle, 0x1000);
+                ANGLE_SUB_2(targetAngle, 0x1000);
                 break;
             case daCow_c::Action_Cry:
-                ADD_ANGLE_2(targetAngle, 0x1000);
+                ANGLE_ADD_2(targetAngle, 0x1000);
                 break;
             case daCow_c::Action_3:
-                SUB_ANGLE_2(targetAngle, 0x4000);
+                ANGLE_SUB_2(targetAngle, 0x4000);
                 break;
             case daCow_c::Action_4:
-                ADD_ANGLE_2(targetAngle, 0x4000);
+                ANGLE_ADD_2(targetAngle, 0x4000);
                 break;
             case daCow_c::Action_Wait:
                 s16 cowshedAngle = getCowshedAngle();
@@ -2174,11 +2175,11 @@ void daCow_c::executeCrazyThrow() {
 
             if (mAction != daCow_c::Action_Wait) {
                 setBck(daCow_c::Animation_DownR, J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f);
-                mSavedAngle.y -= (s16)0x7000;
+                ANGLE_SUB(mSavedAngle.y, 0x7000);
                 mThrowIntensity = -1000;
             } else {
                 setBck(daCow_c::Animation_DownL, J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f);
-                mSavedAngle.y += (s16)0x7000;
+                ANGLE_ADD(mSavedAngle.y, 0x7000);
                 mThrowIntensity = 1000;
             }
         }

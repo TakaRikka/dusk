@@ -44,7 +44,7 @@ void daE_BG_HIO_c::genMessage(JORMContext* ctx) {
 namespace {
 dCcD_SrcSph cc_bg_src = {
     {
-        {0x0, {{0x0, 0x0, 0x0}, {(s32)0xD8FBFDFF, 0x03}, 0x75}}, // mObj
+        {0x0, {{0x0, 0x0, 0x0}, {0xD8FBFDFF, 0x03}, 0x75}}, // mObj
         {dCcD_SE_METAL, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x2}, // mGObjTg
         {0x0}, // mGObjCo
@@ -93,7 +93,7 @@ int daE_BG_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
 }
 
 int daE_BG_c::JointCallBack(J3DJoint* i_joint, int param_1) {
-    if (param_1 == NULL) {
+    if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
         daE_BG_c* bg = (daE_BG_c*)model->getUserArea();
         if (bg != NULL) {
@@ -1227,11 +1227,11 @@ int daE_BG_c::execute() {
         mIsBomb = true;
 
         if (field_0x694 < 30) {
-            field_0x698 += (s16)0x1000;
+            ANGLE_ADD(field_0x698, 0x1000);
         } else if (field_0x694 < 45) {
-            field_0x698 += (s16)0x800;
+            ANGLE_ADD(field_0x698, 0x800);
         } else {
-            field_0x698 += (s16)0x300;
+            ANGLE_ADD(field_0x698, 0x300);
         }
 
         if (field_0x694 == 0) {

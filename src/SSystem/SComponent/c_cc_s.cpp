@@ -5,8 +5,10 @@
 
 #include "SSystem/SComponent/c_cc_s.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include <cmath>
+#include "os_report.h"
 
-#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !isnan(x));
+#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !std::isnan(x));
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
 
 cCcS::cCcS() {}

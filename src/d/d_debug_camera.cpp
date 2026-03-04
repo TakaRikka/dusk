@@ -8,6 +8,7 @@
 #include "JSystem/JHostIO/JORServer.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTReport.h"
+#include <cstring>
 
 namespace zevwork {
     const int CutMaxNum = 32;

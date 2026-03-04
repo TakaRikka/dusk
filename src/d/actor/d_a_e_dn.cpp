@@ -13,6 +13,7 @@
 #include "d/actor/d_a_horse.h"
 #include "f_op/f_op_actor_enemy.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 class daE_DN_HIO_c : public JORReflexible {
 public:
@@ -874,7 +875,7 @@ static void e_dn_normal(e_dn_class* i_this) {
             /* Calculate how much the actor turned */
             angle -= actor->current.angle.y;
             /* Scale turn strength */
-            angle *= (s16)(YREG_S(5) + 2);
+            ANGLE_MULT(angle, YREG_S(5) + 2);
 
             /* Ensure the targeted angle is no more than ±22.5° */
             s16 max_turn = YREG_S(6) + 0x1000;
@@ -957,7 +958,7 @@ static void e_dn_wolfbite(e_dn_class* i_this) {
             anm_init(i_this, ANM_HANGED, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
             i_this->mode = 1;
             i_this->sound.startCreatureVoice(Z2SE_EN_DN_V_DRAWBACK, -1);
-            actor->health -= (s16)10;
+            S16_SUB(actor->health, 10);
             break;
 
         case 1:
@@ -977,7 +978,7 @@ static void e_dn_wolfbite(e_dn_class* i_this) {
             if (actor->health <= 0 || actor->checkWolfBiteDamage()) {
                 actor->offWolfBiteDamage();
                 anm_init(i_this, ANM_HANGED_DAMAGE, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
-                actor->health -= (s16)10;
+                S16_SUB(actor->health, 10);
                 if (actor->health <= 0) {
                     player->offWolfEnemyHangBite();
                     i_this->field_0x750 = (actor->shape_angle.y - 0x8000) - player->shape_angle.y;
@@ -1167,7 +1168,7 @@ static void e_dn_fight_run(e_dn_class* i_this) {
             sVar1 -= actor->shape_angle.y;
         }
 
-        sVar1 *= (s16)(YREG_S(5) + 2);
+        ANGLE_MULT(sVar1, YREG_S(5) + 2);
         s16 sVar4 = YREG_S(6) + 0x1000;
         if (sVar1 > sVar4) {
             sVar1 = sVar4;
@@ -1505,7 +1506,7 @@ static void e_dn_attack(e_dn_class* i_this) {
                 sVar1 = actor->current.angle.y;
                 cLib_addCalcAngleS2(&actor->current.angle.y, i_this->search_angle_y, 2, 0x800);
                 sVar1 -= actor->current.angle.y;
-                sVar1 *= (s16)(YREG_S(5) + 2);
+                ANGLE_MULT(sVar1, YREG_S(5) + 2);
                 s16 sVar3 = YREG_S(6) + 0x1000;
                 if (sVar1 > sVar3) {
                     sVar1 = sVar3;
@@ -1950,7 +1951,7 @@ static void e_dn_damage(e_dn_class* i_this) {
         case 3:
             if (body_gake(i_this)) {
                 i_this->field_0x704 = VREG_F(8) + -20.0f;
-                i_this->field_0x724.x -= (s16)(VREG_S(7) + 0x300);
+                ANGLE_SUB(i_this->field_0x724.x, VREG_S(7) + 0x300);
             }
 
             if (actor->health <= 0 && i_this->timer[1] == 0) {

@@ -13,6 +13,7 @@
 #include "d/d_msg_object.h"
 #include "d/d_msg_scrn_light.h"
 #include "d/d_pane_class.h"
+#include <cstring>
 
 dMsgScrnJimaku_c::dMsgScrnJimaku_c(u8 param_0, JKRExpHeap* i_heap) {
     if (i_heap != NULL) {

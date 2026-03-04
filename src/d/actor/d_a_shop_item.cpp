@@ -9,6 +9,7 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_lib.h"
+#include <cstring>
 
 const char* daShopItem_c::getShopArcname() {
     switch (m_itemNo) {
@@ -127,7 +128,7 @@ void daShopItem_c::CreateInit() {
 
     home.pos = current.pos;
     set_mtx();
-    mpModel->setUserArea(NULL);
+    mpModel->setUserArea(0);
 }
 
 void daShopItem_c::set_mtx() {

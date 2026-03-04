@@ -1,0 +1,22 @@
+#ifndef RES_DOORT00_H
+#define RES_DOORT00_H
+
+enum dRes_INDEX_DOORT00 {
+    /* BCK  */
+    dRes_INDEX_DOORT00_BCK_MD_OJ_DOOROPD_e=0x4,
+    dRes_INDEX_DOORT00_BCK_OJ_DOORCLOSED_e=0x5,
+    dRes_INDEX_DOORT00_BCK_OJ_DOOROPD_e=0x6,
+    /* EVT  */
+    dRes_INDEX_DOORT00_DAT_EVENT_LIST_e=0x9,
+};
+
+enum dRes_ID_DOORT00 {
+    /* BCK  */
+    dRes_ID_DOORT00_BCK_MD_OJ_DOOROPD_e=0x4,
+    dRes_ID_DOORT00_BCK_OJ_DOORCLOSED_e=0x5,
+    dRes_ID_DOORT00_BCK_OJ_DOOROPD_e=0x6,
+    /* EVT  */
+    dRes_ID_DOORT00_DAT_EVENT_LIST_e=0x9,
+};
+
+#endif /* !RES_DOORT00_H */

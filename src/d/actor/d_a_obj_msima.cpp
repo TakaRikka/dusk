@@ -265,7 +265,7 @@ static void chain_move(obj_msima_class* i_this, ms_chain_s* param_2, int param_3
     mDoMtx_stack_c::YrotM(a_this->shape_angle.y + (param_3 << 14));
     s16 zRot = 0;
     for (int i = 0; i < 35; i++) {
-        zRot += (s16)((s16)cM_rndFX2(3000.0f) + 0x4000);
+        ANGLE_ADD(zRot, (s16)cM_rndFX2(3000.0f) + 0x4000);
         mDoMtx_stack_c::push();
         mDoMtx_stack_c::scaleM(scale, scale, scale);
         mDoMtx_stack_c::XrotM(0x4000);
@@ -298,7 +298,7 @@ static void chain_move2(obj_msima_class* i_this, ms_chain_s* param_2, int param_
     mDoMtx_stack_c::transS(local_5c.x, local_5c.y, local_5c.z);
     f32 dVar10 = 1.0f;
     for (int i = 0; i < 35; i++) {
-        zRot += (s16)((s16)cM_rndFX2(3000.0f) + 0x4000);
+        ANGLE_ADD(zRot, (s16)cM_rndFX2(3000.0f) + 0x4000);
         if (i > 5) {
             dVar10 = 0.8f * (i - 5) + 1.0f;
         }

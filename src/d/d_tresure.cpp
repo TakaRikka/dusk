@@ -213,7 +213,7 @@ void dTres_c::setPosition(int dataNo, u8 listIdx, Vec const* i_pos, int i_roomNo
 
     for (int i = getTypeGroupNumber(listIdx); i > 0; i--) {
         if (dataNo == groupData->getNo()) {
-            Vec pos;
+            BE(Vec) pos;
             pos.x = i_pos->x;
             pos.y = i_pos->y;
             pos.z = i_pos->z;

@@ -1,0 +1,14 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x4 scope:global align:4
+create__13daTag_Telop_cFv = .text:0x0000005C; // type:function size:0xA0 scope:global align:4
+execute__13daTag_Telop_cFv = .text:0x000000FC; // type:function size:0x64 scope:global align:4
+daTag_Telop_Draw__FP13daTag_Telop_c = .text:0x00000160; // type:function size:0x8 scope:global align:4
+daTag_Telop_Execute__FP13daTag_Telop_c = .text:0x00000168; // type:function size:0x24 scope:global align:4
+daTag_Telop_IsDelete__FP13daTag_Telop_c = .text:0x0000018C; // type:function size:0x8 scope:global align:4
+daTag_Telop_Delete__FP13daTag_Telop_c = .text:0x00000194; // type:function size:0x30 scope:global align:4
+daTag_Telop_Create__FP10fopAc_ac_c = .text:0x000001C4; // type:function size:0x4 scope:global align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+l_daTag_Telop_Method = .data:0x00000000; // type:object size:0x20 scope:global align:4
+g_profile_TAG_TELOP = .data:0x00000020; // type:object size:0x30 scope:global align:4

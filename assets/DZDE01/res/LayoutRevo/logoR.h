@@ -1,0 +1,20 @@
+#ifndef RES_LOGOR_H
+#define RES_LOGOR_H
+
+enum dRes_INDEX_LOGOR {
+    /* SCRN */
+    dRes_INDEX_LOGOR_BLO_ZELDA_WII_CONTROLLER_INFO_e=0x4,
+    /* TIMG */
+    dRes_INDEX_LOGOR_BTI_TT_BLOCK8X8_e=0x7,
+    dRes_INDEX_LOGOR_BTI_ZELDA_WII_CONTOROLLER_INFO_00_e=0x8,
+};
+
+enum dRes_ID_LOGOR {
+    /* SCRN */
+    dRes_ID_LOGOR_BLO_ZELDA_WII_CONTROLLER_INFO_e=0x4,
+    /* TIMG */
+    dRes_ID_LOGOR_BTI_TT_BLOCK8X8_e=0x7,
+    dRes_ID_LOGOR_BTI_ZELDA_WII_CONTOROLLER_INFO_00_e=0x8,
+};
+
+#endif /* !RES_LOGOR_H */

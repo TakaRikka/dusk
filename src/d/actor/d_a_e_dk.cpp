@@ -46,7 +46,7 @@ enum E_DK_RES_FILE_ID {
 namespace {
 static dCcD_SrcSph cc_dk_src = {
     { // mObjInf
-        { 0x0, { { 0, 0, { 0 } }, { (s32)0xd8fbbddf, { 3 } }, { { 0x75 } } } }, // mObj
+        { 0x0, { { 0, 0, { 0 } }, { 0xd8fbbddf, { 3 } }, { { 0x75 } } } }, // mObj
         { 0x09, 0, 0, 0, { 0 } }, // mGObjAt
         { 0x00, 0x00, 0x00, 0x00, { 5 } }, // mGObjTg
         { { 0 } }, // mGObjCo

@@ -8,6 +8,7 @@
 #include "d/actor/d_a_npc_pachi_besu.h"
 #include "d/actor/d_a_npc_pachi_taro.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 enum Besu_RES_File_ID {
     /* BMDR */

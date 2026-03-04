@@ -1,0 +1,20 @@
+#ifndef RES_RAFREL2_H
+#define RES_RAFREL2_H
+
+enum dRes_INDEX_RAFREL2 {
+    /* BCK  */
+    dRes_INDEX_RAFREL2_BCK_RAF_SIT_A_e=0x3,
+    dRes_INDEX_RAFREL2_BCK_RAF_SIT_TALK_A_e=0x4,
+    dRes_INDEX_RAFREL2_BCK_RAF_SIT_TALK_B_e=0x5,
+    dRes_INDEX_RAFREL2_BCK_RAF_SIT_TALK_B_WAIT_e=0x6,
+};
+
+enum dRes_ID_RAFREL2 {
+    /* BCK  */
+    dRes_ID_RAFREL2_BCK_RAF_SIT_A_e=0x3,
+    dRes_ID_RAFREL2_BCK_RAF_SIT_TALK_A_e=0x4,
+    dRes_ID_RAFREL2_BCK_RAF_SIT_TALK_B_e=0x5,
+    dRes_ID_RAFREL2_BCK_RAF_SIT_TALK_B_WAIT_e=0x6,
+};
+
+#endif /* !RES_RAFREL2_H */

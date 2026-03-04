@@ -6,7 +6,8 @@
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "d/d_particle_name.h"
-#include "d/d_kankyo.h"
+#include "d/d_kankyo_tev_str.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
 
 void dPa_cleanupGX();
 
@@ -37,7 +38,7 @@ public:
     dPa_simpleEcallBack();
     JPABaseEmitter* create(JPAEmitterManager*, u16, u8);
     JPABaseEmitter* createEmitter(JPAEmitterManager*);
-    u32 set(cXyz const*, dKy_tevstr_c const*, u8, _GXColor const&, _GXColor const&,
+    u32 set(cXyz const*, dKy_tevstr_c const*, u8, GXColor const&, GXColor const&,
                             int, f32);
 
     virtual ~dPa_simpleEcallBack() {}
@@ -361,20 +362,20 @@ public:
     void setWaterRipple(u32*, cBgS_PolyInfo&, cXyz const*, f32, dKy_tevstr_c const*,
                                        cXyz const*, s8);
     JPABaseEmitter* set(u8, u16, cXyz const*, dKy_tevstr_c const*, csXyz const*, cXyz const*, u8,
-                           dPa_levelEcallBack*, s8, _GXColor const*, _GXColor const*, cXyz const*,
+                           dPa_levelEcallBack*, s8, GXColor const*, GXColor const*, cXyz const*,
                            f32);
     u32 set(u32, u8, u16, cXyz const*, dKy_tevstr_c const*, csXyz const*,
-                           cXyz const*, u8, dPa_levelEcallBack*, s8, _GXColor const*,
-                           _GXColor const*, cXyz const*, f32);
-    static s32 getPolyColor(cBgS_PolyInfo&, int, _GXColor*, _GXColor*, u8*, f32*);
+                           cXyz const*, u8, dPa_levelEcallBack*, s8, GXColor const*,
+                           GXColor const*, cXyz const*, f32);
+    static s32 getPolyColor(cBgS_PolyInfo&, int, GXColor*, GXColor*, u8*, f32*);
     u32 setPoly(u32, u16, cBgS_PolyInfo&, cXyz const*, dKy_tevstr_c const*,
                                csXyz const*, cXyz const*, int, dPa_levelEcallBack*, s8,
                                cXyz const*);
     JPABaseEmitter* setPoly(u16, cBgS_PolyInfo&, cXyz const*, dKy_tevstr_c const*, csXyz const*,
                                 cXyz const*, int, dPa_levelEcallBack*, s8, cXyz const*);
     bool newSimple(u16, u8, u32*);
-    u32 setSimple(u16, cXyz const*, dKy_tevstr_c const*, u8, _GXColor const&,
-                                  _GXColor const&, int, f32);
+    u32 setSimple(u16, cXyz const*, dKy_tevstr_c const*, u8, GXColor const&,
+                                  GXColor const&, int, f32);
     dPa_simpleEcallBack* getSimple(u16);
     u32 setStopContinue(u32);
     u32 setSimpleFoot(u32, u32*, cBgS_PolyInfo&, cXyz const*, dKy_tevstr_c const*,
@@ -402,18 +403,18 @@ public:
                    param_9, param_10, param_11, param_12);
     }
 
-    void drawFogPri0_B(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 7); }
+    void drawNormal(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 0); }
+    void drawNormalFog(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 1); }
+    void drawNormalP1(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 2); }
+    void drawProjection(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 3); }
+    void drawNormalPri0_A(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 4); }
     void drawNormalPri0_B(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 5); }
     void drawFogPri0_A(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 6); }
-    void drawNormalPri0_A(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 4); }
-    void drawFogPri4(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 11); }
-    void drawProjection(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 3); }
+    void drawFogPri0_B(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 7); }
     void drawFogPri1(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 8); }
-    void drawNormal(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 0); }
     void drawFogPri2(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 9); }
-    void drawNormalFog(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 1); }
     void drawFogPri3(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 10); }
-    void drawNormalP1(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 2); }
+    void drawFogPri4(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 11); }
     void drawDarkworld(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 12); }
     void drawFogScreen(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 13); }
     void draw2Dgame(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 14); }
@@ -423,8 +424,12 @@ public:
     void draw2DmenuBack(JPADrawInfo* i_drawInfo) { draw(i_drawInfo, 18); }
 
     JKRSolidHeap* getHeap() { return mHeap; }
-    JKRSolidHeap* getSceneHeap() { return mSceneHeap; }
     JKRExpHeap* getResHeap() { return m_resHeap; }
+    JKRSolidHeap* getSceneHeap() { return mSceneHeap; }
+    void* getSceneRes() { return m_sceneRes; }
+
+    u32 getHeapSize() { return mHeap->getTotalFreeSize(); }
+    u32 getSceneHeapSize() { return mSceneHeap->getTotalFreeSize(); }
 
     void levelAllForceOnEventMove() { field_0x210.allForceOnEventMove(); }
 
@@ -452,6 +457,7 @@ public:
 
     static JPAEmitterManager* getEmitterManager() { return mEmitterMng; }
     int getEmitterNum() { return mEmitterMng->getEmitterNumber(); };
+    int getParticleNum() { return mEmitterMng->getParticleNumber(); }
 
     static dPa_light8PcallBack* getLight8PcallBack() { 
         return &mLight8PcallBack; 

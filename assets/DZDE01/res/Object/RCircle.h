@@ -1,0 +1,26 @@
+#ifndef RES_RCIRCLE_H
+#define RES_RCIRCLE_H
+
+enum dRes_INDEX_RCIRCLE {
+    /* BMDR */
+    dRes_INDEX_RCIRCLE_BMD_M_ZRIVER_CIRCLE_e=0x5,
+    /* BRK  */
+    dRes_INDEX_RCIRCLE_BRK_M_ZRIVER_CIRCLE_e=0x8,
+    /* BTK  */
+    dRes_INDEX_RCIRCLE_BTK_M_ZRIVER_CIRCLE_e=0xB,
+};
+
+enum dRes_ID_RCIRCLE {
+    /* BMDR */
+    dRes_ID_RCIRCLE_BMD_M_ZRIVER_CIRCLE_e=0x5,
+    /* BRK  */
+    dRes_ID_RCIRCLE_BRK_M_ZRIVER_CIRCLE_e=0x8,
+    /* BTK  */
+    dRes_ID_RCIRCLE_BTK_M_ZRIVER_CIRCLE_e=0xB,
+};
+
+enum M_ZRIVER_CIRCLE_JNT {
+    M_ZRIVER_CIRCLE_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_RCIRCLE_H */

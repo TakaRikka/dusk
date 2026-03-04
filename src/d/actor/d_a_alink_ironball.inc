@@ -213,6 +213,11 @@ void daAlink_c::setIronBallChainPos() {
     int sp38;
     int sp34;
 
+    f32 var_f30;
+    f32 var_f31;
+    f32 var_f29;
+    f32 var_f28;
+    f32 var_f27;
     if (mItemVar0.field_0x3018 == 2) {
         var_r29 = mIronBallChainPos + 1;
         var_r27 = var_r29 - 1;
@@ -293,20 +298,20 @@ void daAlink_c::setIronBallChainPos() {
         daPy_frameCtrl_c* framectrl = &mUnderFrameCtrl[0];
 
         if (mItemVar0.field_0x3018 == 1) {
-            f32 temp_f25 = framectrl->getEnd() - 13.0f;
-            f32 temp_f29 = (framectrl->getFrame() - 13.0f) / temp_f25;
-            s16 sp12 = -16384.0f - (14336.0f * temp_f29);
+            var_f29 = (framectrl->getFrame() - 13.0f) / (framectrl->getEnd() - 13.0f);
+            s16 sp12 = -16384.0f - (14336.0f * var_f29);
 
             mDoMtx_stack_c::ZXYrotS(mBodyAngle.x, shape_angle.y, 0);
             mDoMtx_stack_c::YrotM(sp12);
             mDoMtx_stack_c::multVec(&cXyz::BaseZ, &sp298);
 
-            sp298 *= 15.0f * (1.0f + temp_f29);
+            sp298 *= 15.0f * (1.0f + var_f29);
             sp38 = 1000;
         } else if (mItemVar0.field_0x3018 == 4) {
             Vec sp268 = {0.0f, 0.0f, 0.0f};
             sp268.y = mpHIO->mItem.mIronBall.m.mThrowChainAccelY;
-            sp268.z = mpHIO->mItem.mIronBall.m.mThrowChainAccelZ;
+            f32 throwAccelZ = mpHIO->mItem.mIronBall.m.mThrowChainAccelZ;
+            sp268.z = throwAccelZ;
 
             mDoMtx_stack_c::ZXYrotS(mBodyAngle.x, shape_angle.y, 0);
             mDoMtx_stack_c::multVec(&sp268, &sp298);
@@ -355,10 +360,8 @@ void daAlink_c::setIronBallChainPos() {
             sp2A4 += sp298;
         }
 
-        s16 temp_r25 = sp2A4.atan2sX_Z();
-        mIronBallChainAngle->set(sp2A4.atan2sY_XZ(), temp_r25, 0);
+        mIronBallChainAngle->set(sp2A4.atan2sY_XZ(), sp2A4.atan2sX_Z(), 0);
     } else {
-        f32 var_f30;
         if (mItemVar0.field_0x3018 == 4 || mItemVar0.field_0x3018 == 5) {
             var_f30 = mpHIO->mItem.mIronBall.m.mThrowChainGravity;
         } else {
@@ -384,9 +387,9 @@ void daAlink_c::setIronBallChainPos() {
 
         BOOL sp2C = ((mItemVar0.field_0x3018 == 0 && checkUnderMove1BckNoArc(ANM_IRONBALL_WALK)) && mNowAnmPackUnder[1].getRatio() > 0.8f) && (mUnderFrameCtrl[1].getFrame() >= 24.0f || mUnderFrameCtrl[1].getFrame() <= 3.0f);
 
-        f32 temp_f31 = 5.0f * (5.0f * (mNowAnmPackUnder[1].getRatio() - 0.8f));
-        f32 temp_f28 = temp_f31 * cM_scos(shape_angle.y);
-        temp_f31 *= cM_ssin(shape_angle.y);
+        var_f31 = 5.0f * (5.0f * (mNowAnmPackUnder[1].getRatio() - 0.8f));
+        var_f28 = var_f31 * cM_scos(shape_angle.y);
+        var_f31 *= cM_ssin(shape_angle.y);
 
         for (i = mItemMode; i > 0; i--, var_r29--, var_r26--) {
             sp28C = *var_r29;
@@ -396,8 +399,8 @@ void daAlink_c::setIronBallChainPos() {
             } else {
                 sp2A4 = (*var_r29 - *var_r27) + *var_r26;
                 if (sp2C) {
-                    sp2A4.x += temp_f31;
-                    sp2A4.z += temp_f28;
+                    sp2A4.x += var_f31;
+                    sp2A4.z += var_f28;
                 }
                 sp2A4.y += var_f30;
 
@@ -421,10 +424,10 @@ void daAlink_c::setIronBallChainPos() {
     s16 sp10;
     s16 spE = mIronBallChainAngle->z + 0x3000;
 
-    for (i = 0; i < mItemMode; i++, sp3C++, var_r29++, spE += 0x3000) {
+    for (i = 0; i < mItemMode; i++, sp3C++, var_r29++, ANGLE_ADD_2(spE, 0x3000)) {
         sp2A4 = (*var_r27 - *var_r29);
 
-        f32 var_f27 = sp2A4.absXZ();
+        var_f27 = sp2A4.absXZ();
         if (var_f27 < 1.0f) {
             sp10 = sp3C[-1].y;
         } else {
@@ -721,7 +724,7 @@ void daAlink_c::setIronBallPos() {
                 }
 
                 if (mItemMode > 6) {
-                    mItemMode -= var_r22;
+                    ANGLE_SUB_2(mItemMode, var_r22);
                     if (mItemMode <= 6) {
                         mItemVar0.field_0x3018 = 8;
                     }
@@ -749,7 +752,7 @@ void daAlink_c::setIronBallPos() {
                 mDoMtx_stack_c::multVec(&ironBallPosVec, mIronBallChainPos);
                 
                 if (mItemMode > 6) {
-                    mItemMode -= 10;
+                    mItemMode -= (s16)10;
                     if (mItemMode < 6) {
                         mItemMode = 6;
                     }

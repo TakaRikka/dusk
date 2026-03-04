@@ -19,6 +19,7 @@
 #include "d/d_camera.h"
 #include "f_op/f_op_camera_mng.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 class daE_MK_HIO_c : public JORReflexible {
 public:

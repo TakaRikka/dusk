@@ -1,0 +1,22 @@
+#ifndef RES_SDGATE_H
+#define RES_SDGATE_H
+
+enum dRes_INDEX_SDGATE {
+    /* BMDR */
+    dRes_INDEX_SDGATE_BMD_M_SDGATE_DOOR_STOP_e=0x4,
+    /* DZB  */
+    dRes_INDEX_SDGATE_DZB_M_SDGATE_DOOR_STOP_e=0x7,
+};
+
+enum dRes_ID_SDGATE {
+    /* BMDR */
+    dRes_ID_SDGATE_BMD_M_SDGATE_DOOR_STOP_e=0x4,
+    /* DZB  */
+    dRes_ID_SDGATE_DZB_M_SDGATE_DOOR_STOP_e=0x7,
+};
+
+enum M_SDGATE_DOOR_STOP_JNT {
+    M_SDGATE_DOOR_STOP_JNT_WORLD_ROOT_e=0x0,
+};
+
+#endif /* !RES_SDGATE_H */

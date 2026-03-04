@@ -2,6 +2,7 @@
 #define D_A_NPC_KOLIN_H
 
 #include "d/actor/d_a_npc.h"
+#include <cstring>
 
 struct daNpc_Kolin_HIOParam {
     /* 0x00 */ daNpcT_HIOParam common;

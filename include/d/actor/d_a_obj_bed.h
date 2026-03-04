@@ -4,7 +4,7 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_bg_s_acch.h"
 #include "f_op/f_op_actor.h"
-#include <dolphin/types.h>
+#include <types.h>
 
 class dBgW;
 

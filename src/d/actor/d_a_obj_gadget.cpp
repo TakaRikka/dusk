@@ -13,6 +13,7 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "JSystem/JHostIO/JORFile.h"
+#include <cstring>
 
 #if DEBUG
 #define PARAM field_0x568->mAttr
@@ -305,7 +306,8 @@ int daObj_Gadget_c::Execute() {
                         if (getWallAngle(current.angle.y, &wallAngle)) {
                             field_0x9f4 = 10;
                             s16 angleDiff = current.angle.y - wallAngle;
-                            current.angle.y += (s16)((0x8000 - (angleDiff * 2)) + (s16)cM_rndFX(2000.0f));
+                            ANGLE_ADD(current.angle.y,
+                                      (0x8000 - (angleDiff * 2)) + (s16)cM_rndFX(2000.0f));
                             field_0x9ec.y = -field_0x9ec.y / 2;
                             speedF *= 0.3f;
                         }
@@ -318,7 +320,8 @@ int daObj_Gadget_c::Execute() {
                 if (mAcch.ChkWallHit()) {
                     if (getWallAngle(current.angle.y, &wallAngle)) {
                         s16 angleDiff = current.angle.y - wallAngle;
-                        current.angle.y += (s16)((0x8000 - (angleDiff << 1)) + (s16)cM_rndFX(1000.0f));
+                        ANGLE_ADD(current.angle.y,
+                                  (0x8000 - (angleDiff << 1)) + (s16)cM_rndFX(1000.0f));
                         speedF *= 0.5f;
                     }
                 }

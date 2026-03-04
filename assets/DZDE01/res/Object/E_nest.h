@@ -1,0 +1,24 @@
+#ifndef RES_E_NEST_H
+#define RES_E_NEST_H
+
+enum dRes_INDEX_E_NEST {
+    /* BMDR */
+    dRes_INDEX_E_NEST_BMD_O_HACHINOSU_01_e=0x3,
+    dRes_INDEX_E_NEST_BMD_O_HACHINOSU_02_e=0x4,
+};
+
+enum dRes_ID_E_NEST {
+    /* BMDR */
+    dRes_ID_E_NEST_BMD_O_HACHINOSU_01_e=0x3,
+    dRes_ID_E_NEST_BMD_O_HACHINOSU_02_e=0x4,
+};
+
+enum O_HACHINOSU_01_JNT {
+    O_HACHINOSU_01_JNT_O_HACHINOSU_01_e=0x0,
+};
+
+enum O_HACHINOSU_02_JNT {
+    O_HACHINOSU_02_JNT_O_HACHINOSU_02_e=0x0,
+};
+
+#endif /* !RES_E_NEST_H */

@@ -6,9 +6,10 @@
 
 #include "m_Do/m_Do_main.h"
 #include <dolphin/vi.h>
-#include <string>
+#include <cstring>
 #include "DynamicLink.h"
 #include "JSystem/JAudio2/JASAudioThread.h"
+#include "JSystem/JAudio2/JAUSectionHeap.h"
 #include "JSystem/JAudio2/JAUSoundTable.h"
 #include "JSystem/JFramework/JFWSystem.h"
 #include "JSystem/JHostIO/JORServer.h"
@@ -36,11 +37,15 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
 #include "m_Do/m_Do_printf.h"
+#include "m_Do/m_Do_ext2.h"
+#include "SSystem/SComponent/c_counter.h"
+#include <cstring>
 
 #include <chrono>
 #include <thread>
 #include "SSystem/SComponent/c_API.h"
 #include "dusk/dvd_emu.h"
+#include "dusk/dusk.h"
 
 #include <aurora/aurora.h>
 #include <aurora/event.h>
@@ -52,7 +57,11 @@ OSTime mDoMain::sPowerOnTime;
 OSTime mDoMain::sHungUpTime;
 u32 mDoMain::memMargin = 0xFFFFFFFF;
 char mDoMain::COPYDATE_STRING[18] = "??/??/?? ??:??:??";
+#if TARGET_PC
+const int audioHeapSize = 0x14D800 * 2;
+#else
 const int audioHeapSize = 0x14D800;
+#endif
 
 // --- PC LOGGING CALLBACK ---
 void aurora_log_callback(AuroraLogLevel level, const char* module, const char* message,
@@ -124,6 +133,8 @@ s32 LOAD_COPYDATE(void*) {
     return 1;
 }
 
+AuroraInfo auroraInfo;
+
 void main01(void) {
     OS_REPORT("\x1b[m");
     GXSetColorUpdate(GX_ENABLE);
@@ -152,7 +163,13 @@ void main01(void) {
     OSReport("Calling cDyl_InitAsync()...\n");
     cDyl_InitAsync();
 
-    mDoAud_zelAudio_c::onInitFlag();
+    g_mDoAud_audioHeap = JKRCreateSolidHeap(audioHeapSize, JKRGetCurrentHeap(), false);
+    JKRHEAP_NAME(g_mDoAud_audioHeap, "g_mDoAud_audioHeap");
+
+    if (DUSK_AUDIO_DISABLED) {
+        // Pretend the audio engine initialized already. This is a lie, but needed to boot.
+        mDoAud_zelAudio_c::onInitFlag();
+    }
 
     OSReport("Entering Main Loop (main01)...\n");
 
@@ -160,8 +177,18 @@ void main01(void) {
     do {
         // 1. Update Window Events
         const AuroraEvent* event = aurora_update();
-        if (event && event->type == AURORA_EXIT)
-            break;
+        while (true) {
+            switch (event->type) {
+            case AURORA_NONE:
+                goto eventsDone;
+            case AURORA_EXIT:
+                goto exit;
+            }
+
+            event++;
+        }
+
+        eventsDone:;
 
         static u32 frame = 0;
         frame++;
@@ -186,6 +213,8 @@ void main01(void) {
         std::this_thread::sleep_for(std::chrono::milliseconds(16));
 
     } while (true);
+
+    exit:;
 }
 
 // =========================================================================
@@ -202,19 +231,12 @@ int game_main(int argc, char* argv[]) {
     config.windowHeight = 480;
     config.configPath = ".";
     config.logCallback = &aurora_log_callback;
+    config.mem1Size = 256 * 1024 * 1024;
+    config.mem2Size = 24 * 1024 * 1024;
 
-    aurora_initialize(argc, argv, &config);
+    auroraInfo = aurora_initialize(argc, argv, &config);
 
-    // 2. Setup Virtual Game RAM
-    // Simulates Gamecube RAM (24MB + Audio etc, we take 256MB)
-#define GAME_RAM_SIZE (256 * 1024 * 1024)
-    void* virtualGameRam = calloc(1, GAME_RAM_SIZE);
-    if (!virtualGameRam) {
-        printf("Fatal: Failed to allocate game RAM\n");
-        return -1;
-    }
-    OSSetArenaLo(virtualGameRam);
-    OSSetArenaHi((char*)virtualGameRam + GAME_RAM_SIZE);
+    OSInit();
 
     // 3. Init DVD Emulation
     DvdEmu::setBasePath("data");
@@ -240,7 +262,6 @@ int game_main(int argc, char* argv[]) {
     main01();
 
     aurora_shutdown();
-    free(virtualGameRam);
 
     return 0;
 }
@@ -256,71 +277,73 @@ JHIComPortManager<T>* JHIComPortManager<T>::instance = nullptr;
 template <>
 JHIComPortManager<JHICmnMem>* JHIComPortManager<JHICmnMem>::instance = nullptr;
 
-template <>
-Z2WolfHowlMgr* JASGlobalInstance<Z2WolfHowlMgr>::sInstance;
+#ifdef __MWERKS__
+template<>
+Z2WolfHowlMgr* JASGlobalInstance<Z2WolfHowlMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2EnvSeMgr* JASGlobalInstance<Z2EnvSeMgr>::sInstance;
+template<>
+Z2EnvSeMgr* JASGlobalInstance<Z2EnvSeMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2FxLineMgr* JASGlobalInstance<Z2FxLineMgr>::sInstance;
+template<>
+Z2FxLineMgr* JASGlobalInstance<Z2FxLineMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2Audience* JASGlobalInstance<Z2Audience>::sInstance;
+template<>
+Z2Audience* JASGlobalInstance<Z2Audience>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2SoundObjMgr* JASGlobalInstance<Z2SoundObjMgr>::sInstance;
+template<>
+Z2SoundObjMgr* JASGlobalInstance<Z2SoundObjMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2SoundInfo* JASGlobalInstance<Z2SoundInfo>::sInstance;
+template<>
+Z2SoundInfo* JASGlobalInstance<Z2SoundInfo>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JAUSoundInfo* JASGlobalInstance<JAUSoundInfo>::sInstance;
+template<>
+JAUSoundInfo* JASGlobalInstance<JAUSoundInfo>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JAUSoundNameTable* JASGlobalInstance<JAUSoundNameTable>::sInstance;
+template<>
+JAUSoundNameTable* JASGlobalInstance<JAUSoundNameTable>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JAUSoundTable* JASGlobalInstance<JAUSoundTable>::sInstance;
+template<>
+JAUSoundTable* JASGlobalInstance<JAUSoundTable>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JAISoundInfo* JASGlobalInstance<JAISoundInfo>::sInstance;
+template<>
+JAISoundInfo* JASGlobalInstance<JAISoundInfo>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2SoundMgr* JASGlobalInstance<Z2SoundMgr>::sInstance;
+template<>
+Z2SoundMgr* JASGlobalInstance<Z2SoundMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JAIStreamMgr* JASGlobalInstance<JAIStreamMgr>::sInstance;
+template<>
+JAIStreamMgr* JASGlobalInstance<JAIStreamMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JAISeqMgr* JASGlobalInstance<JAISeqMgr>::sInstance;
+template<>
+JAISeqMgr* JASGlobalInstance<JAISeqMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JAISeMgr* JASGlobalInstance<JAISeMgr>::sInstance;
+template<>
+JAISeMgr* JASGlobalInstance<JAISeMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2SpeechMgr2* JASGlobalInstance<Z2SpeechMgr2>::sInstance;
+template<>
+Z2SpeechMgr2* JASGlobalInstance<Z2SpeechMgr2>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2SoundStarter* JASGlobalInstance<Z2SoundStarter>::sInstance;
+template<>
+Z2SoundStarter* JASGlobalInstance<Z2SoundStarter>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JAISoundStarter* JASGlobalInstance<JAISoundStarter>::sInstance;
+template<>
+JAISoundStarter* JASGlobalInstance<JAISoundStarter>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2StatusMgr* JASGlobalInstance<Z2StatusMgr>::sInstance;
+template<>
+Z2StatusMgr* JASGlobalInstance<Z2StatusMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2SceneMgr* JASGlobalInstance<Z2SceneMgr>::sInstance;
+template<>
+Z2SceneMgr* JASGlobalInstance<Z2SceneMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2SeqMgr* JASGlobalInstance<Z2SeqMgr>::sInstance;
+template<>
+Z2SeqMgr* JASGlobalInstance<Z2SeqMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-Z2SeMgr* JASGlobalInstance<Z2SeMgr>::sInstance;
+template<>
+Z2SeMgr* JASGlobalInstance<Z2SeMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JASAudioThread* JASGlobalInstance<JASAudioThread>::sInstance;
+template<>
+JASAudioThread* JASGlobalInstance<JASAudioThread>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 
-template <>
-JASDefaultBankTable* JASGlobalInstance<JASDefaultBankTable>::sInstance;
+template<>
+JASDefaultBankTable* JASGlobalInstance<JASDefaultBankTable>::sInstance JAS_GLOBAL_INSTANCE_INIT;
+#endif // __MWERKS__

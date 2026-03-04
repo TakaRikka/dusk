@@ -1,12 +1,17 @@
 #ifndef C_XYZ_H
 #define C_XYZ_H
 
-#include <dolphin/mtx.h>
+#include <mtx.h>
 #include <cmath>
 
 #ifdef _MSVC_LANG
 #define M_PI 3.14159265358979323846f
 #endif
+
+struct cXy {
+    f32 x;
+    f32 y;
+};
 
 struct cXyz : Vec {
     static const cXyz Zero;

@@ -561,8 +561,10 @@ int daPeru_c::wait(int param_0) {
             _AppearDemoTag_delete();
         }
         break;
+#ifdef __MWERKS__
     case MODE_INVALID:
         break;
+#endif
     }
     return 1;
 }
@@ -632,8 +634,10 @@ int daPeru_c::talk(int param_0) {
             }
         }
         break;
+#ifdef __MWERKS__
     case MODE_INVALID:
         break;
+#endif
     }
     
     return 0;
@@ -674,7 +678,11 @@ int daPeru_c::jump_st(int param_1) {
             setAction(&daPeru_c::jump_ed, actionArg);
         }
         break;
+#ifdef __MWERKS__
     case MODE_INVALID:
+#else
+    case (u16)MODE_INVALID:
+#endif
         field_0xe58 = 0;
         break;
     }
@@ -712,7 +720,11 @@ int daPeru_c::jump_ed(int param_1) {
             return 1;
         }
         break;
+#ifdef __MWERKS__
     case MODE_INVALID:
+#else
+    case (u16)MODE_INVALID:
+#endif
         field_0xe58 = 0;
         break;
     }
@@ -739,8 +751,10 @@ int daPeru_c::sniff(int param_0) {
             mSound.startCreatureVoice(Z2SE_GZ_NE_KNKN, -1);
         }
         break;
+#ifdef __MWERKS__
     case MODE_INVALID:
         break;
+#endif
     }
 
     return 0;
@@ -769,8 +783,10 @@ int daPeru_c::demo_appear(int param_0) {
             return 1;
         }
         break;
+#ifdef __MWERKS__
     case MODE_INVALID:
         break;
+#endif
     }
 
     return 0;
@@ -809,8 +825,10 @@ int daPeru_c::demo_walk_to_link(int param_0) {
         }
         break;
     }
+#ifdef __MWERKS__
     case MODE_INVALID:
         break;
+#endif
     }
     return 0;
 }
@@ -838,8 +856,10 @@ int daPeru_c::demo_walk_circle(int param_0) {
         field_0xe6e -= 0x155;
         break;
     }
+#ifdef __MWERKS__
     case MODE_INVALID:
         break;
+#endif
     }
 
     return 0;
@@ -880,8 +900,10 @@ int daPeru_c::demo_walk_to_window(int param_0) {
         }
         break;
     }
+#ifdef __MWERKS__
     case MODE_INVALID:
         break;
+#endif
     }
 
     return 0;
@@ -912,8 +934,10 @@ int daPeru_c::demo_walk_to_window(int param_0) {
         }
         break;
     }
+#ifdef __MWERKS__
     case MODE_INVALID:
         break;
+#endif
     }
 
      return 0;

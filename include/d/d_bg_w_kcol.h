@@ -6,27 +6,28 @@
 #include "d/d_bg_plc.h"
 #include "d/d_bg_s_sph_chk.h"
 #include "d/d_bg_w_base.h"
+#include "dusk/offset_ptr.h"
 
 class cBgS_GrpPassChk;
 class cBgS_PolyPassChk;
-struct dBgPc;
+class dBgPc;
 struct dBgS_CaptPoly;
 
 struct KC_PrismData {
-    /* 0x0 */ f32 height;
-    /* 0x4 */ u16 pos_i;
-    /* 0x6 */ u16 fnrm_i;
-    /* 0x8 */ u16 enrm1_i;
-    /* 0xA */ u16 enrm2_i;
-    /* 0xC */ u16 enrm3_i;
-    /* 0xE */ u16 attribute;
+    /* 0x0 */ BE(f32) height;
+    /* 0x4 */ BE(u16) pos_i;
+    /* 0x6 */ BE(u16) fnrm_i;
+    /* 0x8 */ BE(u16) enrm1_i;
+    /* 0xA */ BE(u16) enrm2_i;
+    /* 0xC */ BE(u16) enrm3_i;
+    /* 0xE */ BE(u16) attribute;
 };  // Size: 0x10
 
 struct KC_Header {
-    /* 0x00 */ Vec* m_pos_data;
-    /* 0x04 */ Vec* m_nrm_data;
-    /* 0x08 */ KC_PrismData* m_prism_data;
-    /* 0x0C */ KC_PrismData* m_block_data;
+    /* 0x00 */ OFFSET_PTR(Vec) m_pos_data;
+    /* 0x04 */ OFFSET_PTR(Vec) m_nrm_data;
+    /* 0x08 */ OFFSET_PTR(KC_PrismData) m_prism_data;
+    /* 0x0C */ OFFSET_PTR(BE(u32)) m_block_data;
     /* 0x10 */ f32 m_prism_thickness;
     /* 0x14 */ Vec m_area_min_pos;
     /* 0x20 */ u32 m_area_x_width_mask;

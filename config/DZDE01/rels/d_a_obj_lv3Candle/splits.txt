@@ -1,0 +1,22 @@
+Sections:
+	.text       type:code align:4
+	.ctors      type:rodata align:4
+	.dtors      type:rodata align:4
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+	.bss        type:bss align:8
+
+REL/executor.c:
+	.text       start:0x00000000 end:0x0000005C
+
+REL/global_destructor_chain.c:
+	.text       start:0x0000005C end:0x000000CC
+	.dtors      start:0x00000000 end:0x00000004 rename:.dtors$10
+	.bss        start:0x00000000 end:0x00000008
+
+d/actor/d_a_obj_lv3Candle.cpp:
+	.text       start:0x000000CC end:0x0000098C
+	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x00000078
+	.data       start:0x00000000 end:0x000000A8
+	.bss        start:0x00000008 end:0x0000005C

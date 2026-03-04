@@ -12,6 +12,7 @@
 #include "d/d_pane_class.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/J2DGraph/J2DGrafContext.h"
+#include <cstring>
 
 class dGov_HIO_c : public mDoHIO_entry_c {
 public:

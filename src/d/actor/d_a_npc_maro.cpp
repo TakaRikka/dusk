@@ -19,6 +19,7 @@
 #include "d/d_timer.h"
 #if DEBUG
 #include "d/d_debug_viewer.h"
+#include <cstring>
 #endif
 
 const daNpc_Maro_HIOParam daNpc_Maro_Param_c::m = {
@@ -385,7 +386,7 @@ int daNpc_Maro_c::Execute() {
         setSellItemMax(getMaxNumItem());
         field_0xf60 = -1;
         setMasterType(2);
-        mShopCamAction.setCamDataIdx(NULL);
+        mShopCamAction.setCamDataIdx(0);
         mShopCamAction.setCamAction(NULL);
         field_0x1131 = 1;
     }

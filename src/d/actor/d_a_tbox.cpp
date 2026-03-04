@@ -10,6 +10,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include <cmath>
+#include <cstring>
 
 static const f32 l_cull_size_box[6] = { -150.0f, -10.0f, -150.0f, 150.0f, 300.0f, 100.0f };
 
@@ -642,7 +643,7 @@ void daTbox_c::dropProcInit() {
     JUT_ASSERT(0x56A, path_p != NULL);
 
     cXyz pos = current.pos;
-    cXyz pnt1 = path_p->m_points[1].m_position;
+    cXyz pnt1 = (Vec)path_p->m_points[1].m_position;
 
     f32 var_f30;
     if (path_p->m_num == 2) {
@@ -681,7 +682,7 @@ int daTbox_c::calcJumpGoalAndAngle(cXyz* i_pos, s16* i_angle) {
     dPath* path_p = dPath_GetRoomPath(getPathId(), -1);
     if (path_p != NULL) {
         cXyz home_pos = home.pos;
-        cXyz vec2 = path_p->m_points[1].m_position;
+        cXyz vec2 = (Vec)path_p->m_points[1].m_position;
         f32 dist_xz = home_pos.absXZ(vec2);
 
         s16 angle;
@@ -748,7 +749,7 @@ void daTbox_c::dropProcInit2() {
     f32 temp;
     if (path_p->m_num == 2) {
         cXyz vec1 = current.pos;
-        cXyz vec2 = path_p->m_points[1].m_position;
+        cXyz vec2 = (Vec)path_p->m_points[1].m_position;
         field_0x97c = false;
         f32 delta_y = vec1.y - vec2.y;
         f32 abs_gravity = fabsf(fopAcM_GetGravity(this));
@@ -794,7 +795,7 @@ void daTbox_c::dropProc() {
 
         dBgS_ObjGndChk gnd_chk;
         gnd_chk.SetPos(&chkpos);
-        gnd_chk.SetActorPid(base.base.id);
+        gnd_chk.SetActorPid(fopAcM_GetID(this));
         dComIfG_Bgsp().GroundCross(&gnd_chk);
 
         int bg_index = gnd_chk.GetBgIndex();

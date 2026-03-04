@@ -1013,7 +1013,7 @@ void daE_GE_c::executeWind() {
         }
 
         cXyz boomerangPos2(daPy_py_c::getThrowBoomerangActor()->current.pos);
-        field_0xb8c += (s16)0x800;
+        ANGLE_ADD(field_0xb8c, 0x800);
         current.pos.x = boomerangPos2.x + field_0xb58 * cM_ssin(field_0xb8c);
         current.pos.z = boomerangPos2.z + field_0xb58 * cM_scos(field_0xb8c);
         cLib_chaseF(&field_0xb58, field_0xb60, 2.0f);

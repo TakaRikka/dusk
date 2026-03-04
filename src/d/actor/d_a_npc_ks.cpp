@@ -21,6 +21,7 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera_mng.h"
+#include <cstring>
 
 class daNpc_Ks_HIO_c : public JORReflexible {
 public:
@@ -326,13 +327,6 @@ static void* s_b_sub(void* i_actor, void* i_data) {
 
 static int target_bgc[10];
 
-// FIXME: possible fakematch?
-#if DEBUG
-#define NPC_KS_FABSF fabsf
-#else
-#define NPC_KS_FABSF std::fabsf
-#endif
-
 static fopAc_ac_c* search_bomb(npc_ks_class* i_this, int param_2) {
     fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* actor_p;
@@ -362,7 +356,7 @@ static fopAc_ac_c* search_bomb(npc_ks_class* i_this, int param_2) {
 
                 if (target_bgc[i] != 0 || fopAcM_otherBgCheck(actor, actor_p)) {
                     target_bgc[i] = 1;
-                } else if (NPC_KS_FABSF(sp4c.y) <= 300.0f) {
+                } else if (FABSF(sp4c.y) <= 300.0f) {
                     s16 sVar1 = actor->shape_angle.y - cM_atan2s(sp4c.x, sp4c.z);
                     if (sVar1 < 0) {
                         sVar1 = -1 * sVar1;
@@ -448,7 +442,7 @@ static fopAc_ac_c* search_enemy(npc_ks_class* i_this, int param_2, f32 param_3) 
 
                 if (target_bgc[i] != 0 || fopAcM_otherBgCheck(actor, enemy_p)) {
                     target_bgc[i] = 1;
-                } else if (NPC_KS_FABSF(mae.y) <= fVar2) {
+                } else if (FABSF(mae.y) <= fVar2) {
                     s16 sVar1 = actor->shape_angle.y - cM_atan2s(mae.x, mae.z);
                     if (sVar1 < 0) {
                         sVar1 = -1 * sVar1;
@@ -688,7 +682,7 @@ static int npc_ks_ori(npc_ks_class* i_this) {
             if (i_this->timer[0] == 1) {
                 anm_init(i_this, 32, 2.0f, 0, 1.0f);
                 if (fopAcM_GetRoomNo(actor) == 11) {
-                    ADD_ANGLE_2(actor->current.angle.y, 0x1600);
+                    ANGLE_ADD_2(actor->current.angle.y, 0x1600);
                 }
             }
 
@@ -836,7 +830,7 @@ static int npc_ks_ori2(npc_ks_class* i_this) {
             break;
 
         case 2:
-            ADD_ANGLE_2(sVar1, -0x8000);
+            ANGLE_ADD_2(sVar1, -0x8000);
             if (i_this->timer[0] == 0) {
                 if (cage_p->partBreak()) {
                     anm_init(i_this, 22, 5.0f, 2, 1.0f);
@@ -908,7 +902,7 @@ static int npc_ks_ori2(npc_ks_class* i_this) {
         case 6:
             i_this->field_0x5fc = 0;
             fVar1 = -20.0f;
-            ADD_ANGLE_2(sVar1, 0x2000);
+            ANGLE_ADD_2(sVar1, 0x2000);
             if (i_this->model->isStop()) {
                 anm_init(i_this, 33, 1.0f, 0, 1.0f);
                 actor->speedF = 40.0f;
@@ -923,7 +917,7 @@ static int npc_ks_ori2(npc_ks_class* i_this) {
 
         case 7:
             i_this->field_0x5fc = 0;
-            ADD_ANGLE_2(sVar1, 0x4000);
+            ANGLE_ADD_2(sVar1, 0x4000);
             actor->gravity = -5.0f;
             break;
 
@@ -1241,7 +1235,7 @@ static int npc_ks_demo_02(npc_ks_class* i_this) {
             cLib_addCalc2(&actor->current.pos.z, ato.z, 1.0f, 10.0f);
             cLib_addCalc2(&actor->current.pos.y, i_this->ObjAcch.GetGroundH(), 1.0f, l_HIO.demo_speed);
             
-            if (NPC_KS_FABSF(actor->current.pos.y - i_this->ObjAcch.GetGroundH()) < 1.0f) {
+            if (FABSF(actor->current.pos.y - i_this->ObjAcch.GetGroundH()) < 1.0f) {
                 anm_init(i_this, 26, 5.0f, 2, 1.0f);
                 actor->speedF = 0.0f;
                 i_this->timer[0] = 20;
@@ -1881,7 +1875,6 @@ static void npc_ks_hang(npc_ks_class* i_this) {
         start_pya = i_this->target_angle;
     }
 
-    s16 sVar1;
     switch (i_this->mode) {
         case 0:
             i_this->timer[0] = 0;
@@ -1932,11 +1925,13 @@ static void npc_ks_hang(npc_ks_class* i_this) {
                 anm_init(i_this, 24, 3.0f, 2, 1.0f);
             }
 
-            sVar1 = start_pya - sw_p->actor.current.angle.y;
-            if (sVar1 < 0x4000 && sVar1 > -0x4000) {
-                actor->home.angle.y = sw_p->actor.current.angle.y + 0x8000;
-            } else {
-                actor->home.angle.y = sw_p->actor.current.angle.y;
+            {
+                s16 sVar1 = start_pya - sw_p->actor.current.angle.y;
+                if (sVar1 < 0x4000 && sVar1 > -0x4000) {
+                    actor->home.angle.y = sw_p->actor.current.angle.y + 0x8000;
+                } else {
+                    actor->home.angle.y = sw_p->actor.current.angle.y;
+                }
             }
             break;
 
@@ -2025,7 +2020,7 @@ static void npc_ks_hang(npc_ks_class* i_this) {
     s16 sVar2 = i_this->field_0x602;
     cLib_addCalcAngleS2(&i_this->field_0x602, i_this->field_0x60c * cM_ssin(i_this->field_0x5fa), 4, 0x1000);
     i_this->field_0x604 = i_this->field_0x602 - sVar2;
-    i_this->field_0x5fa += (s16) 0x800;
+    ANGLE_ADD(i_this->field_0x5fa, 0x800);
     actor->current.angle.z = -(i_this->field_0x602 / 4);
 
     if (i_this->mode != 4) {
@@ -2066,7 +2061,6 @@ static void npc_ks_hang_s(npc_ks_class* i_this) {
     cXyz mae, ato;
     cLib_addCalcAngleS2(&actor->current.angle.y, actor->home.angle.y + 0x4000, 2, 0x800);
 
-    s16 sVar1;
     switch (i_this->mode) {
         case 0:
             int asdf;
@@ -2115,11 +2109,13 @@ static void npc_ks_hang_s(npc_ks_class* i_this) {
                 anm_init(i_this, 24, 3.0f, 2, 1.0f);
             }
 
-            sVar1 = i_this->target_angle - sw_p->actor.current.angle.y;
-            if (sVar1 < 0x4000 && sVar1 > -0x4000) {
-                actor->home.angle.y = sw_p->actor.current.angle.y + 0x8000;
-            } else {
-                actor->home.angle.y = sw_p->actor.current.angle.y;
+            {
+                s16 sVar1 = i_this->target_angle - sw_p->actor.current.angle.y;
+                if (sVar1 < 0x4000 && sVar1 > -0x4000) {
+                    actor->home.angle.y = sw_p->actor.current.angle.y + 0x8000;
+                } else {
+                    actor->home.angle.y = sw_p->actor.current.angle.y;
+                }
             }
             break;
 
@@ -2169,7 +2165,7 @@ static void npc_ks_hang_s(npc_ks_class* i_this) {
     s16 sVar2 = i_this->field_0x602;
     cLib_addCalcAngleS2(&i_this->field_0x602, i_this->field_0x60c * cM_ssin(i_this->field_0x5fa), 4, 0x1000);
     i_this->field_0x604 = i_this->field_0x602 - sVar2;
-    ADD_ANGLE_2(i_this->field_0x5fa, 0x800);
+    ANGLE_ADD_2(i_this->field_0x5fa, 0x800);
     actor->current.angle.z = -(i_this->field_0x602 / 4);
 
     if (i_this->field_0x620 != 2) {
@@ -2218,7 +2214,7 @@ static void npc_ks_e_hang(npc_ks_class* i_this) {
             break;
 
         case 3:
-            if (i_this->field_0x5fa == s16(YREG_S(7) - 0x3800)) {
+            if (i_this->field_0x5fa == s16(YREG_S(7) + 0xC800)) {
                 actor->health = 10;
                 i_this->mode = 20;
                 i_this->timer[0] = 0;
@@ -2249,7 +2245,7 @@ static void npc_ks_e_hang(npc_ks_class* i_this) {
 
     actor->current.pos = sw_p->field_0x920[i_this->field_0x630];
     cLib_addCalcAngleS2(&i_this->field_0x602, i_this->field_0x60c * cM_ssin(i_this->field_0x5fa), 4, 0x1000);
-    ADD_ANGLE_2(i_this->field_0x5fa, 0x800);
+    ANGLE_ADD_2(i_this->field_0x5fa, 0x800);
     actor->current.angle.z = -(i_this->field_0x602 / 4);
     cLib_addCalc0(&i_this->field_0x60c, 0.5f, 100.0f + TREG_F(3));
 }
@@ -2709,9 +2705,9 @@ static void demo_camera(npc_ks_class* i_this) {
                         i_this->field_0xb6c.y = i_this->field_0xb6c.y - 150.0f;
                         i_this->field_0xb6c.z = saru_p[sw_p->field_0x91c - 2]->actor.current.pos.z;
                         
-                        i_this->field_0xb84.x = NPC_KS_FABSF(i_this->field_0xb6c.x - i_this->demo_eye.x);
-                        i_this->field_0xb84.y = NPC_KS_FABSF(i_this->field_0xb6c.y - i_this->demo_eye.y);
-                        i_this->field_0xb84.z = NPC_KS_FABSF(i_this->field_0xb6c.z - i_this->demo_eye.z);
+                        i_this->field_0xb84.x = FABSF(i_this->field_0xb6c.x - i_this->demo_eye.x);
+                        i_this->field_0xb84.y = FABSF(i_this->field_0xb6c.y - i_this->demo_eye.y);
+                        i_this->field_0xb84.z = FABSF(i_this->field_0xb6c.z - i_this->demo_eye.z);
                         i_this->field_0xbc4 = 0.0f;
                         i_this->demo_camera_no = 5;
                     } else {
@@ -3032,12 +3028,12 @@ static void demo_camera(npc_ks_class* i_this) {
             i_this->field_0xb6c.set(12772.0f, 3940.0f, 3565.0f);
             i_this->field_0xb54.set(13003.0f, 4022.0f, 3613.0f);
 
-            i_this->field_0xb78.x = NPC_KS_FABSF(i_this->field_0xb54.x - i_this->demo_way.x);
-            i_this->field_0xb78.y = NPC_KS_FABSF(i_this->field_0xb54.y - i_this->demo_way.y);
-            i_this->field_0xb78.z = NPC_KS_FABSF(i_this->field_0xb54.z - i_this->demo_way.z);
-            i_this->field_0xb84.x = NPC_KS_FABSF(i_this->field_0xb6c.x - i_this->demo_eye.x);
-            i_this->field_0xb84.y = NPC_KS_FABSF(i_this->field_0xb6c.y - i_this->demo_eye.y);
-            i_this->field_0xb84.z = NPC_KS_FABSF(i_this->field_0xb6c.z - i_this->demo_eye.z);
+            i_this->field_0xb78.x = FABSF(i_this->field_0xb54.x - i_this->demo_way.x);
+            i_this->field_0xb78.y = FABSF(i_this->field_0xb54.y - i_this->demo_way.y);
+            i_this->field_0xb78.z = FABSF(i_this->field_0xb54.z - i_this->demo_way.z);
+            i_this->field_0xb84.x = FABSF(i_this->field_0xb6c.x - i_this->demo_eye.x);
+            i_this->field_0xb84.y = FABSF(i_this->field_0xb6c.y - i_this->demo_eye.y);
+            i_this->field_0xb84.z = FABSF(i_this->field_0xb6c.z - i_this->demo_eye.z);
             i_this->field_0xbc4 = 0.0f;
             // fallthrough
         case 111:
@@ -3104,9 +3100,9 @@ static void demo_camera(npc_ks_class* i_this) {
             i_this->demo_way.set(-22672.0f, 311.0f, -15080.0f);
             i_this->field_0xb6c.set(-22343.0f, 273.0f, -15017.0f);
             i_this->field_0xb78.set(0.0f, 0.0f, 0.0f);
-            i_this->field_0xb84.x = NPC_KS_FABSF(i_this->field_0xb6c.x - i_this->demo_eye.x);
-            i_this->field_0xb84.y = NPC_KS_FABSF(i_this->field_0xb6c.y - i_this->demo_eye.y);
-            i_this->field_0xb84.z = NPC_KS_FABSF(i_this->field_0xb6c.z - i_this->demo_eye.z);
+            i_this->field_0xb84.x = FABSF(i_this->field_0xb6c.x - i_this->demo_eye.x);
+            i_this->field_0xb84.y = FABSF(i_this->field_0xb6c.y - i_this->demo_eye.y);
+            i_this->field_0xb84.z = FABSF(i_this->field_0xb6c.z - i_this->demo_eye.z);
             i_this->field_0xbc4 = 0.0f;
             /* dSv_event_flag_c::F_0224 - Faron Woods - Flag for lantern guide monkey cutscene */
             dComIfGs_onEventBit(u16(dSv_event_flag_c::saveBitLabels[0xE0]));
@@ -3314,12 +3310,12 @@ static void demo_camera(npc_ks_class* i_this) {
                 i_this->field_0xb6c.set(-36574.0f, 421.0f, -21554.0f);
                 i_this->field_0xb54.set(-36397.0f, 374.0f, -20263.0f);
 
-                i_this->field_0xb78.x = NPC_KS_FABSF(i_this->field_0xb54.x - i_this->demo_way.x);
-                i_this->field_0xb78.y = NPC_KS_FABSF(i_this->field_0xb54.y - i_this->demo_way.y);
-                i_this->field_0xb78.z = NPC_KS_FABSF(i_this->field_0xb54.z - i_this->demo_way.z);
-                i_this->field_0xb84.x = NPC_KS_FABSF(i_this->field_0xb6c.x - i_this->demo_eye.x);
-                i_this->field_0xb84.y = NPC_KS_FABSF(i_this->field_0xb6c.y - i_this->demo_eye.y);
-                i_this->field_0xb84.z = NPC_KS_FABSF(i_this->field_0xb6c.z - i_this->demo_eye.z);
+                i_this->field_0xb78.x = FABSF(i_this->field_0xb54.x - i_this->demo_way.x);
+                i_this->field_0xb78.y = FABSF(i_this->field_0xb54.y - i_this->demo_way.y);
+                i_this->field_0xb78.z = FABSF(i_this->field_0xb54.z - i_this->demo_way.z);
+                i_this->field_0xb84.x = FABSF(i_this->field_0xb6c.x - i_this->demo_eye.x);
+                i_this->field_0xb84.y = FABSF(i_this->field_0xb6c.y - i_this->demo_eye.y);
+                i_this->field_0xb84.z = FABSF(i_this->field_0xb6c.z - i_this->demo_eye.z);
                 i_this->field_0xbc4 = 0.0f;
                 i_this->demo_mode = 352;
                 i_this->demo_camera_no = 0;
@@ -3370,12 +3366,12 @@ static void demo_camera(npc_ks_class* i_this) {
             i_this->field_0xb6c.set(-38113.0f, 1234.0f, -22897.0f);
             i_this->field_0xb54.set(-37882.0f, 1182.0f, -22713.0f);
 
-            i_this->field_0xb78.x = NPC_KS_FABSF(i_this->field_0xb54.x - i_this->demo_way.x);
-            i_this->field_0xb78.y = NPC_KS_FABSF(i_this->field_0xb54.y - i_this->demo_way.y);
-            i_this->field_0xb78.z = NPC_KS_FABSF(i_this->field_0xb54.z - i_this->demo_way.z);
-            i_this->field_0xb84.x = NPC_KS_FABSF(i_this->field_0xb6c.x - i_this->demo_eye.x);
-            i_this->field_0xb84.y = NPC_KS_FABSF(i_this->field_0xb6c.y - i_this->demo_eye.y);
-            i_this->field_0xb84.z = NPC_KS_FABSF(i_this->field_0xb6c.z - i_this->demo_eye.z);
+            i_this->field_0xb78.x = FABSF(i_this->field_0xb54.x - i_this->demo_way.x);
+            i_this->field_0xb78.y = FABSF(i_this->field_0xb54.y - i_this->demo_way.y);
+            i_this->field_0xb78.z = FABSF(i_this->field_0xb54.z - i_this->demo_way.z);
+            i_this->field_0xb84.x = FABSF(i_this->field_0xb6c.x - i_this->demo_eye.x);
+            i_this->field_0xb84.y = FABSF(i_this->field_0xb6c.y - i_this->demo_eye.y);
+            i_this->field_0xb84.z = FABSF(i_this->field_0xb6c.z - i_this->demo_eye.z);
             i_this->field_0xbc4 = 0.0f;
             anm_init(i_this, 39, 5.0f, 2, 1.0f);
             i_this->mode = 41;
@@ -3412,12 +3408,12 @@ static void demo_camera(npc_ks_class* i_this) {
                 i_this->field_0xb6c.set(-36467.0f, 426.0f, -20914.0f);
                 i_this->field_0xb54.set(-36244.0f, 409.0f, -20714.0f);
 
-                i_this->field_0xb78.x = NPC_KS_FABSF(i_this->field_0xb54.x - i_this->demo_way.x);
-                i_this->field_0xb78.y = NPC_KS_FABSF(i_this->field_0xb54.y - i_this->demo_way.y);
-                i_this->field_0xb78.z = NPC_KS_FABSF(i_this->field_0xb54.z - i_this->demo_way.z);
-                i_this->field_0xb84.x = NPC_KS_FABSF(i_this->field_0xb6c.x - i_this->demo_eye.x);
-                i_this->field_0xb84.y = NPC_KS_FABSF(i_this->field_0xb6c.y - i_this->demo_eye.y);
-                i_this->field_0xb84.z = NPC_KS_FABSF(i_this->field_0xb6c.z - i_this->demo_eye.z);
+                i_this->field_0xb78.x = FABSF(i_this->field_0xb54.x - i_this->demo_way.x);
+                i_this->field_0xb78.y = FABSF(i_this->field_0xb54.y - i_this->demo_way.y);
+                i_this->field_0xb78.z = FABSF(i_this->field_0xb54.z - i_this->demo_way.z);
+                i_this->field_0xb84.x = FABSF(i_this->field_0xb6c.x - i_this->demo_eye.x);
+                i_this->field_0xb84.y = FABSF(i_this->field_0xb6c.y - i_this->demo_eye.y);
+                i_this->field_0xb84.z = FABSF(i_this->field_0xb6c.z - i_this->demo_eye.z);
                 i_this->field_0xbc4 = 0.0f;
             }
             i_this->msg_flow.doFlow(actor, NULL, 0);
@@ -3884,7 +3880,7 @@ static int npc_ks_option(npc_ks_class* i_this) {
 
         case 30:
             target_speed = l_HIO.holding_speed_h;
-            ADD_ANGLE_2(i_this->current_angle.y, 0x8000);
+            ANGLE_ADD_2(i_this->current_angle.y, 0x8000);
             if (fVar2 > 400.0f) {
                 i_this->mode = 31;
                 anm_init(i_this, 51, 5.0f, 2, 1.0f);
@@ -3905,7 +3901,7 @@ static int npc_ks_option(npc_ks_class* i_this) {
             anm_init(i_this, 39, 5.0f, 2, 1.0f);
             i_this->mode = 41;
             i_this->timer[0] = cM_rndF(80.0f) + 100.0f;
-            ADD_ANGLE_2(i_this->current_angle.y, 0x8000);
+            ANGLE_ADD_2(i_this->current_angle.y, 0x8000);
             break;
 
         case 41:
@@ -3943,7 +3939,7 @@ static int npc_ks_option(npc_ks_class* i_this) {
                     gnd_chk.SetPos(&ato);
                     ato.y = dComIfG_Bgsp().GroundCross(&gnd_chk);
                     yuka_jump_x *= -1.0f;
-                    if (NPC_KS_FABSF(ato.y - player->current.pos.y) < 20.0f) {
+                    if (FABSF(ato.y - player->current.pos.y) < 20.0f) {
                         i_this->mode = 51;
                         i_this->guide_path = ato;
                         i_this->field_0x910 = actor->current.pos;
@@ -4048,7 +4044,7 @@ static int npc_ks_option(npc_ks_class* i_this) {
 
     fopAc_ac_c* player3 = (fopAc_ac_c*) dComIfGp_getPlayer(0);
     if (iVar2 != 0) {
-        if (NPC_KS_FABSF(player3->current.pos.y - actor->current.pos.y) > 3000.0f ||
+        if (FABSF(player3->current.pos.y - actor->current.pos.y) > 3000.0f ||
             (fopAcM_CheckCondition(actor, 4) != 0 && fopAcM_otherBgCheck(actor, dComIfGp_getPlayer(0)))) {
             if (iVar1 != 0 && player3->speedF > 2.0f) {
                 camera_class* camera = (camera_class*) dComIfGp_getCamera(0);
@@ -4063,7 +4059,7 @@ static int npc_ks_option(npc_ks_class* i_this) {
                 
                 dBgS_GndChk gnd_chk;
                 gnd_chk.SetPos(&ato);
-                if (NPC_KS_FABSF(ato.y - dComIfG_Bgsp().GroundCross(&gnd_chk)) < 500.0f) {
+                if (FABSF(ato.y - dComIfG_Bgsp().GroundCross(&gnd_chk)) < 500.0f) {
                     actor->current.pos = ato;
                     actor->old = actor->current;
                     OS_REPORT("////////KS OP RESET \n");
@@ -5872,7 +5868,7 @@ static int npc_ks_fsdemo(npc_ks_class* i_this) {
                 if (i_this->path_no == 0) {
                     anm_init(i_this, 45, 3.0f, 0, 1.0f);
                     i_this->mode = 3;
-                    ADD_ANGLE_2(i_this->current_angle.y, 0x8000);
+                    ANGLE_ADD_2(i_this->current_angle.y, 0x8000);
                     actor->speedF = 0.0f;
                 } else {
                     i_this->mode = 1;
@@ -5885,7 +5881,7 @@ static int npc_ks_fsdemo(npc_ks_class* i_this) {
 
         case 3:
             if (i_this->model->isStop()) {
-                ADD_ANGLE_2(i_this->current_angle.y, 0x8000);
+                ANGLE_ADD_2(i_this->current_angle.y, 0x8000);
                 i_this->mode = 1;
             }
             break;
@@ -5923,7 +5919,7 @@ static int npc_ks_fsdemo(npc_ks_class* i_this) {
             if (i_this->timer[2] != 0) {
                 i_this->search_time = 10;
                 i_this->find_pos.set(-37799.0f, 815.0f, -22323.0f);
-                i_this->current_angle.y -= (s16) 0x3000;
+                ANGLE_SUB(i_this->current_angle.y, 0x3000);
                 sVar1 = 0x800;
             }
 
@@ -6441,7 +6437,7 @@ static void action(npc_ks_class* i_this) {
         }
     }
 
-    if (int_0x2c && i_this->dis < 500.0f + KREG_F(15) && NPC_KS_FABSF(actor->current.pos.y - player->current.pos.y) < 1000.0f) {
+    if (int_0x2c && i_this->dis < 500.0f + KREG_F(15) && FABSF(actor->current.pos.y - player->current.pos.y) < 1000.0f) {
         daPy_py_c::setLookPos(&actor->eyePos);
     }
 
@@ -6787,9 +6783,9 @@ static int daNpc_Ks_Execute(npc_ks_class* i_this) {
 
     if (i_this->field_0x620 != 0) {
         if (i_this->field_0x620 == 1) {
-            cLib_addCalc2(&obj_pos.x, i_this->field_0x614.x, 1.0f, NPC_KS_FABSF(i_this->field_0x624.x) + 4.0f);
-            cLib_addCalc2(&obj_pos.y, i_this->field_0x614.y, 1.0f, NPC_KS_FABSF(i_this->field_0x624.y) + 4.0f);
-            cLib_addCalc2(&obj_pos.z, i_this->field_0x614.z, 1.0f, NPC_KS_FABSF(i_this->field_0x624.z) + 4.0f);
+            cLib_addCalc2(&obj_pos.x, i_this->field_0x614.x, 1.0f, FABSF(i_this->field_0x624.x) + 4.0f);
+            cLib_addCalc2(&obj_pos.y, i_this->field_0x614.y, 1.0f, FABSF(i_this->field_0x624.y) + 4.0f);
+            cLib_addCalc2(&obj_pos.z, i_this->field_0x614.z, 1.0f, FABSF(i_this->field_0x624.z) + 4.0f);
             mae.x = obj_pos.x - i_this->field_0x614.x;
             mae.z = obj_pos.z - i_this->field_0x614.z;
             if ((mae.x * mae.x + mae.z * mae.z) <= 15.0f) {

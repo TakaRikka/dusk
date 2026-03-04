@@ -10,6 +10,7 @@
 #include "d/actor/d_a_tag_evtarea.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "SSystem/SComponent/c_math.h"
+#include <cstring>
 
 const daNpcAsh_HIOParam daNpcAsh_Param_c::m = {
     35.0f,    // attention_offset

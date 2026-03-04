@@ -18,6 +18,7 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "c/c_damagereaction.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 static home_path_pnt home_path[38] = {
     {0, {561.0f, 87.0f, -1110.0f}},
@@ -615,7 +616,7 @@ static void npc_ne_away(npc_ne_class* i_this) {
             way_check(i_this, i_this->mTargetAngleY);
         }
         if (i_this->mTimers[0] == 0) {
-            i_this->mTargetAngleY += (s16)cM_rndFX(4000.0f);
+            ANGLE_ADD(i_this->mTargetAngleY, cM_rndFX(4000.0f));
             i_this->mTimers[0] = cM_rndF(25.0f) + 20.0f;
         }
         if (i_this->mDistToTarget > 400.0f && i_this->mTimers[2] == 0) {

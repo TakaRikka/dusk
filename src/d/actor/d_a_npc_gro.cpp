@@ -11,6 +11,7 @@
 #include "d/d_debug_viewer.h"
 #include "d/actor/d_a_tag_push.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 enum grO_RES_File_ID {
     /* BCK */
@@ -408,6 +409,8 @@ cPhs_Step daNpc_grO_c::create() {
     cPhs_Step phase;
     int res = 0;
     int i = 0;
+    J3DModelData* mdlData_p;
+    int sp10 = i;
     for (; l_loadRes_list[mType][i] >= 0; i++) {
         phase = dComIfG_resLoad(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
         if (phase == cPhs_ERROR_e || phase == cPhs_UNK3_e) {
@@ -428,7 +431,7 @@ cPhs_Step daNpc_grO_c::create() {
             return cPhs_ERROR_e;
         }
 
-        J3DModelData* mdlData_p = mAnm_p->getModel()->getModelData();
+        mdlData_p = mAnm_p->getModel()->getModelData();
         fopAcM_SetMtx(this, mAnm_p->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -300.0f, -50.0f, -300.0f, 300.0f, 450.0f, 300.0f);
         mSound.init(&current.pos, &eyePos, 3, 1);
@@ -534,7 +537,8 @@ int daNpc_grO_c::Draw() {
 }
 
 int daNpc_grO_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
-    int jntNo = i_joint->getJntNo();
+    J3DJoint* joint = i_joint;
+    int jntNo = joint->getJntNo();
     int i_jointList[3] = {JNT_BACKBONE1, JNT_NECK, JNT_HEAD};
 
     if (jntNo == JNT_CENTER) {
@@ -565,7 +569,7 @@ int daNpc_grO_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     }
 
     i_model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
-    MTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+    cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
 
     if ((jntNo == JNT_HEAD || jntNo == JNT_MOUTH) && (mAnmFlags & ANM_PLAY_BCK) != 0) {
         J3DAnmTransform* anm = mBckAnm.getBckAnm();
@@ -631,6 +635,8 @@ void daNpc_grO_c::setParam() {
 }
 
 BOOL daNpc_grO_c::main() {
+    u16 mapToolId = 0xFFFF;
+
     if (!doEvent()) {
         doNormalAction(1);
     }
@@ -639,12 +645,14 @@ BOOL daNpc_grO_c::main() {
         attention_info.flags = 0;
     }
 
-    if (!mpHIO->m.common.debug_mode_ON && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK()))) {
+    if (!mpHIO->m.common.debug_mode_ON &&
+        (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK()))) {
         if (mOrderEvtNo != EVT_NONE) {
             eventInfo.setArchiveName(l_resNames[l_evtGetParamList[mOrderEvtNo].arcIdx]);
         }
 
-        orderEvent(mUnkFlag, l_evtNames[l_evtGetParamList[mOrderEvtNo].fileIdx], 0xFFFF, 40, 0xFF, 1);
+        orderEvent(mUnkFlag, l_evtNames[l_evtGetParamList[mOrderEvtNo].fileIdx], mapToolId, 40,
+                   0xFF, 1);
     }
 
     if (field_0x9ee) {
@@ -1286,11 +1294,12 @@ void daNpc_grO_c::doNormalAction(int param_1) {
 }
 
 BOOL daNpc_grO_c::doEvent() {
-    int evtCutNo = 0;
+    dEvent_manager_c* eventManager = NULL;
+    int evtCutNo;
     BOOL rv = FALSE;
 
     if (dComIfGp_event_runCheck()) {
-        dEvent_manager_c& eventManager = dComIfGp_getEventManager();
+        eventManager = &dComIfGp_getEventManager();
 
         if ((eventInfo.checkCommandTalk() || eventInfo.checkCommandDemoAccrpt()) && !mUnkFlag) {
             mOrderNewEvt = false;
@@ -1310,22 +1319,22 @@ BOOL daNpc_grO_c::doEvent() {
                 mItemID = fpcM_ERROR_PROCESS_ID_e;
             }
 
-            int staffId = eventManager.getMyStaffId(l_myName, NULL, 0);
+            int staffId = eventManager->getMyStaffId(l_myName, NULL, 0);
             if (staffId != -1) {
                 mStaffID = staffId;
-                evtCutNo = eventManager.getMyActIdx(staffId, mEvtCutNameList, 3, 0, 0);
+                evtCutNo = eventManager->getMyActIdx(staffId, mEvtCutNameList, 3, 0, 0);
 
                 JUT_ASSERT(1844, (0 <= evtCutNo) && (evtCutNo < NUM_EVT_CUTS_e));
                 JUT_ASSERT(1845, NULL != mEvtCutList[evtCutNo]);
 
                 if ((this->*mEvtCutList[evtCutNo])(staffId)) {
-                    eventManager.cutEnd(staffId);
+                    eventManager->cutEnd(staffId);
                 }
 
                 rv = TRUE;
             }
 
-            if (eventInfo.checkCommandDemoAccrpt() && mEventIdx != -1 && eventManager.endCheck(mEventIdx) != 0) {
+            if (eventInfo.checkCommandDemoAccrpt() && mEventIdx != -1 && eventManager->endCheck(mEventIdx) != 0) {
                 switch (mOrderEvtNo) {
                     default:
                         break;

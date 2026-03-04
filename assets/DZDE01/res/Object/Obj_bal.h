@@ -1,0 +1,30 @@
+#ifndef RES_OBJ_BAL_H
+#define RES_OBJ_BAL_H
+
+enum dRes_INDEX_OBJ_BAL {
+    /* BMDE */
+    dRes_INDEX_OBJ_BAL_BMD_BALLOONA_e=0x3,
+    dRes_INDEX_OBJ_BAL_BMD_BALLOONB_e=0x4,
+    dRes_INDEX_OBJ_BAL_BMD_BALLOONC_e=0x5,
+};
+
+enum dRes_ID_OBJ_BAL {
+    /* BMDE */
+    dRes_ID_OBJ_BAL_BMD_BALLOONA_e=0x3,
+    dRes_ID_OBJ_BAL_BMD_BALLOONB_e=0x4,
+    dRes_ID_OBJ_BAL_BMD_BALLOONC_e=0x5,
+};
+
+enum BALLOONA_JNT {
+    BALLOONA_JNT_BALL_SUIKA_MODEL_e=0x0,
+};
+
+enum BALLOONB_JNT {
+    BALLOONB_JNT_BALL_ORANGE_MODEL_e=0x0,
+};
+
+enum BALLOONC_JNT {
+    BALLOONC_JNT_BALL_ICHIGO_MODEL_e=0x0,
+};
+
+#endif /* !RES_OBJ_BAL_H */

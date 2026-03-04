@@ -11,6 +11,7 @@
 #include "m_Do/m_Do_lib.h"
 #include "d/d_drawlist.h"
 #include "d/actor/d_a_alink.h"
+#include <cstring>
 
 #ifdef __MWERKS__
 #define LOAD_4BYTE_STRING_LITERAL(x) (*(u32*)(x))
@@ -3133,7 +3134,7 @@ bool dCamera_c::useItem1EvCamera() {
 
             if (item_p->field_0x20 < item_p->field_0x4) break;
 
-            if (data_list[item_p->mType][1].field_0x08 != NULL && item_p->field_0x1c == 0) {
+            if (data_list[item_p->mType][1].field_0x08 != 0 && item_p->field_0x1c == 0) {
                 item_p->field_0x1c = 1;
                 item_p->field_0x0 = 1;
                 break;

@@ -9,6 +9,7 @@
 #include "d/actor/d_a_npc.h"
 #include "d/actor/d_a_obj_grz_rock.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 enum grZ_RES_File_ID {
     /* BCK */

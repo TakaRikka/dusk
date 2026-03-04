@@ -13,6 +13,7 @@
 #include "d/actor/d_a_tag_evtarea.h"
 #include "d/d_cc_uty.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 static int l_bmdData[4][2] = {
     {14, 1}, {26, 2},
@@ -198,7 +199,7 @@ int daNpc_Hanjo_c::create() {
     mTwilight = 0;
     int rv = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (rv == cPhs_COMPLEATE_e) {
-        OS_REPORT("\t(%s:%d) flowNo:%d, PathID:%02x<%08x> ", fopAcM_getProcNameString(this), (uint)mType,
+        OS_REPORT("\t(%s:%d) flowNo:%d, PathID:%02x<%08x> ", fopAcM_getProcNameString(this), (u32)mType,
                               mFlowNodeNo, getPathID(), fopAcM_GetParam(this));
         if (isDelete()) {
             OS_REPORT("===>isDelete:TRUE\n");
@@ -1790,7 +1791,7 @@ int daNpc_Hanjo_c::takayose(void* param_0) {
                 }
             }
         }
-        if (daPy_py_c::checkNowWolf() && mCyl2.ChkCoHit() != NULL) {
+        if (daPy_py_c::checkNowWolf() && mCyl2.ChkCoHit() != 0) {
             if (!daPy_getPlayerActorClass()->checkPlayerFly() ||
                 daPy_getPlayerActorClass()->checkAutoJump() ||
                 daPy_getPlayerActorClass()->checkWolfTriggerJump())

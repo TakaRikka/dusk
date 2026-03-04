@@ -1,0 +1,96 @@
+#ifndef RES_NPC_NET_H
+#define RES_NPC_NET_H
+
+enum dRes_INDEX_NPC_NET {
+    /* BCK  */
+    dRes_INDEX_NPC_NET_BCK_NE_CARRY_A_e=0x6,
+    dRes_INDEX_NPC_NET_BCK_NE_CARRY_B_e=0x7,
+    dRes_INDEX_NPC_NET_BCK_NE_DRINK_DISH_e=0x8,
+    dRes_INDEX_NPC_NET_BCK_NE_EMPTY_DISH_e=0x9,
+    dRes_INDEX_NPC_NET_BCK_NE_FAWNL_e=0xA,
+    dRes_INDEX_NPC_NET_BCK_NE_FAWN_R_e=0xB,
+    dRes_INDEX_NPC_NET_BCK_NE_JUMPEND_e=0xC,
+    dRes_INDEX_NPC_NET_BCK_NE_JUMPLOOP_e=0xD,
+    dRes_INDEX_NPC_NET_BCK_NE_JUMPSTART_e=0xE,
+    dRes_INDEX_NPC_NET_BCK_NE_JUMPUP_e=0xF,
+    dRes_INDEX_NPC_NET_BCK_NE_MILK_e=0x10,
+    dRes_INDEX_NPC_NET_BCK_NE_RUN_e=0x11,
+    dRes_INDEX_NPC_NET_BCK_NE_SIT_A_e=0x12,
+    dRes_INDEX_NPC_NET_BCK_NE_SIT_B_e=0x13,
+    dRes_INDEX_NPC_NET_BCK_NE_SWIM_e=0x14,
+    dRes_INDEX_NPC_NET_BCK_NE_TOJUMP_e=0x15,
+    dRes_INDEX_NPC_NET_BCK_NE_TOWAIT_e=0x16,
+    dRes_INDEX_NPC_NET_BCK_NE_TO_CARRY_B_e=0x17,
+    dRes_INDEX_NPC_NET_BCK_NE_WAIT_e=0x18,
+    dRes_INDEX_NPC_NET_BCK_NE_WALK_e=0x19,
+    /* BMDR */
+    dRes_INDEX_NPC_NET_BMD_NE_e=0x1C,
+    dRes_INDEX_NPC_NET_BMD_NE_DISH_e=0x1D,
+    /* BTK  */
+    dRes_INDEX_NPC_NET_BTK_NE_e=0x20,
+    /* BTP  */
+    dRes_INDEX_NPC_NET_BTP_NE_e=0x23,
+};
+
+enum dRes_ID_NPC_NET {
+    /* BCK  */
+    dRes_ID_NPC_NET_BCK_NE_CARRY_A_e=0x6,
+    dRes_ID_NPC_NET_BCK_NE_CARRY_B_e=0x7,
+    dRes_ID_NPC_NET_BCK_NE_DRINK_DISH_e=0x8,
+    dRes_ID_NPC_NET_BCK_NE_EMPTY_DISH_e=0x9,
+    dRes_ID_NPC_NET_BCK_NE_FAWNL_e=0xA,
+    dRes_ID_NPC_NET_BCK_NE_FAWN_R_e=0xB,
+    dRes_ID_NPC_NET_BCK_NE_JUMPEND_e=0xC,
+    dRes_ID_NPC_NET_BCK_NE_JUMPLOOP_e=0xD,
+    dRes_ID_NPC_NET_BCK_NE_JUMPSTART_e=0xE,
+    dRes_ID_NPC_NET_BCK_NE_JUMPUP_e=0xF,
+    dRes_ID_NPC_NET_BCK_NE_MILK_e=0x10,
+    dRes_ID_NPC_NET_BCK_NE_RUN_e=0x11,
+    dRes_ID_NPC_NET_BCK_NE_SIT_A_e=0x12,
+    dRes_ID_NPC_NET_BCK_NE_SIT_B_e=0x13,
+    dRes_ID_NPC_NET_BCK_NE_SWIM_e=0x14,
+    dRes_ID_NPC_NET_BCK_NE_TOJUMP_e=0x15,
+    dRes_ID_NPC_NET_BCK_NE_TOWAIT_e=0x16,
+    dRes_ID_NPC_NET_BCK_NE_TO_CARRY_B_e=0x17,
+    dRes_ID_NPC_NET_BCK_NE_WAIT_e=0x18,
+    dRes_ID_NPC_NET_BCK_NE_WALK_e=0x19,
+    /* BMDR */
+    dRes_ID_NPC_NET_BMD_NE_e=0x1C,
+    dRes_ID_NPC_NET_BMD_NE_DISH_e=0x1D,
+    /* BTK  */
+    dRes_ID_NPC_NET_BTK_NE_e=0x20,
+    /* BTP  */
+    dRes_ID_NPC_NET_BTP_NE_e=0x23,
+};
+
+enum NE_JNT {
+    NE_JNT_CENTER_e=0x0,
+    NE_JNT_BACKBONE1_e=0x1,
+    NE_JNT_BACKBONE2_e=0x2,
+    NE_JNT_NECK_e=0x3,
+    NE_JNT_HEAD_e=0x4,
+    NE_JNT_SHOULDERL1_e=0x5,
+    NE_JNT_ARML_e=0x6,
+    NE_JNT_HANDL_e=0x7,
+    NE_JNT_SHOULDERR_e=0x8,
+    NE_JNT_ARMR_e=0x9,
+    NE_JNT_HANDR_e=0xA,
+    NE_JNT_WAIST_e=0xB,
+    NE_JNT_LEGL1_e=0xC,
+    NE_JNT_LEGL2_e=0xD,
+    NE_JNT_LEGL3_e=0xE,
+    NE_JNT_FOOTL_e=0xF,
+    NE_JNT_LEGR1_e=0x10,
+    NE_JNT_LEGR2_e=0x11,
+    NE_JNT_LEGR3_e=0x12,
+    NE_JNT_FOOTR_e=0x13,
+    NE_JNT_TAIL1_e=0x14,
+    NE_JNT_TAIL2_e=0x15,
+};
+
+enum NE_DISH_JNT {
+    NE_DISH_JNT_ROOT_e=0x0,
+    NE_DISH_JNT_MILK_e=0x1,
+};
+
+#endif /* !RES_NPC_NET_H */

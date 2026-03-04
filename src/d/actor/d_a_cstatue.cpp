@@ -1043,7 +1043,7 @@ void daCstatue_c::initStartBrkBtk() {
     for (int iParticle = 0; iParticle < 2; iParticle++) {
         dComIfGp_particle_set(0x88bb, &mBallPos, &angle, NULL);
         dComIfGp_particle_set(0x88bc, &mBallPos, &angle, NULL);
-        ADD_ANGLE_2(angle.y, 0x8000);
+        ANGLE_ADD_2(angle.y, 0x8000);
     }
 }
 
@@ -1220,7 +1220,7 @@ actor_process_profile_definition g_profile_CSTATUE = {
     fpcPi_CURRENT_e,         // mListPrio
     PROC_CSTATUE,            // mProcName
     &g_fpcLf_Method.base,    // sub_method
-    0x00000B2C,              // mSize
+    sizeof(daCstatue_c),     // mSize
     0,                       // mSizeOther
     0,                       // mParameters
     &g_fopAc_Method.base,    // sub_method

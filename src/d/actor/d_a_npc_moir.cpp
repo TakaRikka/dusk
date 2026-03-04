@@ -8,6 +8,7 @@
 #include "d/actor/d_a_npc_moir.h"
 #include "d/actor/d_a_ni.h"
 #include "d/actor/d_a_npc_tk.h"
+#include <cstring>
 
 enum MoiR_RES_File_ID {
     /* BCK */

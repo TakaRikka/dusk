@@ -77,8 +77,8 @@ int daTagLv7Gate_c::setPath(int i_path_ID) {
         return 0;
     }
 
-    cXyz pos1 = dPath_GetPnt(mRoomPath, 0)->m_position;
-    cXyz pos2 = dPath_GetPnt(mRoomPath, 1)->m_position;
+    cXyz pos1 = (Vec)dPath_GetPnt(mRoomPath, 0)->m_position;
+    cXyz pos2 = (Vec)dPath_GetPnt(mRoomPath, 1)->m_position;
 
     mPos1.set(pos1);
 
@@ -184,7 +184,7 @@ void daTagLv7Gate_c::flyAnime() {
 
     if (bck_anm == bck_anm_3) {
         if (field_0x5ac < 150) {
-            field_0x5ac += (u16)1;
+            U16_ADD(field_0x5ac, 1);
             if (field_0x5ac >= 150) {
                 bck = bck_anm_4;
                 attribute = J3DFrameCtrl::EMode_NONE;

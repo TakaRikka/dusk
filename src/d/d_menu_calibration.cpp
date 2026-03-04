@@ -12,6 +12,7 @@
 #include "d/d_meter_HIO.h"
 #include "d/d_msg_string.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include <cstring>
 
 // Need 0xC bytes of padding with no symbol between dMenu_Calibration_c::__vtable and the end of .data
 // This is likely caused by the vtable of an abstract base class getting put there and then stripped out.
@@ -21,7 +22,11 @@ public:
     virtual void virt_func_0() = 0;
 };
 class dummy_child_class : dummy_abstract_class {
+#ifdef TARGET_PC
+    virtual void virt_func_0() {}
+#else
     virtual void virt_func_0();
+#endif
 };
 static dummy_child_class dummy() {
     dummy_child_class temp;

@@ -1,0 +1,90 @@
+#ifndef RES_E_YC_H
+#define RES_E_YC_H
+
+enum dRes_INDEX_E_YC {
+    /* BCK  */
+    dRes_INDEX_E_YC_BCK_YC_CATCH_END_e=0x4,
+    dRes_INDEX_E_YC_BCK_YC_CATCH_MIDDLE_e=0x5,
+    dRes_INDEX_E_YC_BCK_YC_CATCH_START_e=0x6,
+    dRes_INDEX_E_YC_BCK_YC_CRASH_e=0x7,
+    dRes_INDEX_E_YC_BCK_YC_CRASH2_e=0x8,
+    dRes_INDEX_E_YC_BCK_YC_FLY_e=0x9,
+    dRes_INDEX_E_YC_BCK_YC_FLY_BRAKE_e=0xA,
+    dRes_INDEX_E_YC_BCK_YC_FLY_DASH_WL_e=0xB,
+    dRes_INDEX_E_YC_BCK_YC_FLY_GLIDE_e=0xC,
+    dRes_INDEX_E_YC_BCK_YC_FLY_GLIDE_WL_e=0xD,
+    dRes_INDEX_E_YC_BCK_YC_FLY_LIMIT_WL_e=0xE,
+    dRes_INDEX_E_YC_BCK_YC_FLY_WL_e=0xF,
+    dRes_INDEX_E_YC_BCK_YC_HANGED_e=0x10,
+    dRes_INDEX_E_YC_BCK_YC_HANGED_BRUSH_e=0x11,
+    dRes_INDEX_E_YC_BCK_YC_HANGED_BRUSH2_e=0x12,
+    dRes_INDEX_E_YC_BCK_YC_HANGED_DAMAGE_e=0x13,
+    dRes_INDEX_E_YC_BCK_YC_HANGED_WAIT_e=0x14,
+    dRes_INDEX_E_YC_BCK_YC_HOVERING_e=0x15,
+    /* BMDR */
+    dRes_INDEX_E_YC_BMD_YC_e=0x18,
+};
+
+enum dRes_ID_E_YC {
+    /* BCK  */
+    dRes_ID_E_YC_BCK_YC_CATCH_END_e=0x4,
+    dRes_ID_E_YC_BCK_YC_CATCH_MIDDLE_e=0x5,
+    dRes_ID_E_YC_BCK_YC_CATCH_START_e=0x6,
+    dRes_ID_E_YC_BCK_YC_CRASH_e=0x7,
+    dRes_ID_E_YC_BCK_YC_CRASH2_e=0x8,
+    dRes_ID_E_YC_BCK_YC_FLY_e=0x9,
+    dRes_ID_E_YC_BCK_YC_FLY_BRAKE_e=0xA,
+    dRes_ID_E_YC_BCK_YC_FLY_DASH_WL_e=0xB,
+    dRes_ID_E_YC_BCK_YC_FLY_GLIDE_e=0xC,
+    dRes_ID_E_YC_BCK_YC_FLY_GLIDE_WL_e=0xD,
+    dRes_ID_E_YC_BCK_YC_FLY_LIMIT_WL_e=0xE,
+    dRes_ID_E_YC_BCK_YC_FLY_WL_e=0xF,
+    dRes_ID_E_YC_BCK_YC_HANGED_e=0x10,
+    dRes_ID_E_YC_BCK_YC_HANGED_BRUSH_e=0x11,
+    dRes_ID_E_YC_BCK_YC_HANGED_BRUSH2_e=0x12,
+    dRes_ID_E_YC_BCK_YC_HANGED_DAMAGE_e=0x13,
+    dRes_ID_E_YC_BCK_YC_HANGED_WAIT_e=0x14,
+    dRes_ID_E_YC_BCK_YC_HOVERING_e=0x15,
+    /* BMDR */
+    dRes_ID_E_YC_BMD_YC_e=0x18,
+};
+
+enum YC_JNT {
+    YC_JNT_WORLD_ROOT_e=0x0,
+    YC_JNT_BACKBONE1_e=0x1,
+    YC_JNT_BACKBONE2_e=0x2,
+    YC_JNT_NECK1_e=0x3,
+    YC_JNT_MIDONA_LOC_e=0x4,
+    YC_JNT_NECK2_e=0x5,
+    YC_JNT_HEAD_e=0x6,
+    YC_JNT_MOUTH1_e=0x7,
+    YC_JNT_MOUTH2_e=0x8,
+    YC_JNT_RIDER_LOC_e=0x9,
+    YC_JNT_SHOULDERL_1_e=0xA,
+    YC_JNT_SHOULDERL_2_e=0xB,
+    YC_JNT_HANDL_1_e=0xC,
+    YC_JNT_HANDL_2_e=0xD,
+    YC_JNT_HANDL_3_e=0xE,
+    YC_JNT_SHOULDERR_1_e=0xF,
+    YC_JNT_SHOULDERR_2_e=0x10,
+    YC_JNT_HANDR_1_e=0x11,
+    YC_JNT_HANDR_2_e=0x12,
+    YC_JNT_HANDR_3_e=0x13,
+    YC_JNT_WAIST_e=0x14,
+    YC_JNT_LEGL_1_e=0x15,
+    YC_JNT_LEGL_2_e=0x16,
+    YC_JNT_LEGL_3_e=0x17,
+    YC_JNT_TUMEL_B_e=0x18,
+    YC_JNT_TUMEL_F_e=0x19,
+    YC_JNT_LEGR_1_e=0x1A,
+    YC_JNT_LEGR_2_e=0x1B,
+    YC_JNT_LEGR_3_e=0x1C,
+    YC_JNT_TUMER_B_e=0x1D,
+    YC_JNT_TUMER_F_e=0x1E,
+    YC_JNT_TAIL1_e=0x1F,
+    YC_JNT_TAIL2_e=0x20,
+    YC_JNT_TAIL3_e=0x21,
+    YC_JNT_TAIL4_e=0x22,
+};
+
+#endif /* !RES_E_YC_H */

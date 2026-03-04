@@ -62,7 +62,7 @@ public:
     int Delete();
     int Execute();
     int Draw();
-    int draw(BOOL, BOOL, f32, _GXColorS10*, BOOL);
+    int draw(BOOL, BOOL, f32, GXColorS10*, BOOL);
     int ctrlJoint(J3DJoint*, J3DModel*);
     static int createHeapCallBack(fopAc_ac_c*);
     static int ctrlJointCallBack(J3DJoint*, int);

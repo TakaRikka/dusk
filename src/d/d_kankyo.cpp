@@ -1,8 +1,12 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "d/d_kankyo.h"
-#include <dolphin/dolphin.h>
-#include <dolphin/gf/GFPixel.h>
+#ifdef __REVOLUTION_SDK__
+#include <revolution.h>
+#else
+#include <dolphin.h>
+#endif
+#include <gf/GFPixel.h>
 
 #include "JSystem/JHostIO/JORFile.h"
 #include "JSystem/JHostIO/JORServer.h"
@@ -24,7 +28,9 @@
 #include "f_op/f_op_kankyo.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
 #include <cstdlib>
+#include <cstring>
 
 static void GxXFog_set();
 
@@ -540,7 +546,7 @@ void dKy_twi_wolflight_set(int light_id) {
     }
     #endif
 
-    angle_x += (s16)6000;
+    ANGLE_ADD(angle_x, 6000);
     kankyo->field_0x0c18[light_id].mAngleX = cM_sht2d(-angle_x);
     kankyo->field_0x0c18[light_id].mAngleY = cM_sht2d(-angle_y) + 90.0f;
 }
@@ -1167,6 +1173,7 @@ static void undwater_init() {
     JUT_ASSERT(1867, modelData2 != NULL);
 
     g_env_light.undwater_ef_heap = mDoExt_createSolidHeapFromGameToCurrent(0x600, 0x20);
+    JKRHEAP_NAME(g_env_light.undwater_ef_heap, "g_env_light.undwater_ef_heap");
 
     if (g_env_light.undwater_ef_heap != NULL) {
         g_env_light.undwater_ef_model = mDoExt_J3DModel__create(modelData2, 0x80000, 0x11020202);
@@ -9820,9 +9827,9 @@ void dKy_ParticleColor_get_base(cXyz* param_0, dKy_tevstr_c* param_1, GXColor* p
     for (i = 1; i < 3; i++) {
         if (sp58[i] < 100000000.0f) {
             temp_f28 = parcent_tabel[spD][i];
-            sp48.r += (s16)(sp70[i].r * temp_f28);
-            sp48.g += (s16)(sp70[i].g * temp_f28);
-            sp48.b += (s16)(sp70[i].b * temp_f28);
+            S16_ADD(sp48.r, sp70[i].r * temp_f28);
+            S16_ADD(sp48.g, sp70[i].g * temp_f28);
+            S16_ADD(sp48.b, sp70[i].b * temp_f28);
         }
     }
 
@@ -11370,7 +11377,7 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                                                       camera_p->aspect, 0.49f, -0.49f, 0.5f, 0.5f);
                             }
 
-                            #if !PLATFORM_GCN
+                            #if WIDESCREEN_SUPPORT
                             mDoGph_gInf_c::setWideZoomLightProjection(sp1D8);
                             #endif
                             tex_mtx_inf->setEffectMtx(sp1D8);
@@ -11493,7 +11500,7 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                                     Mtx sp178;
                                     C_MTXLightPerspective(sp1A8, var_f28 * 2.8f, 1.0f, 0.5f, 0.5f,
                                                           0.0f, 0.0f);
-                                    #if !PLATFORM_GCN
+                                    #if WIDESCREEN_SUPPORT
                                     mDoGph_gInf_c::setWideZoomLightProjection(sp1A8);
                                     #endif
                                     spFC.x = spF0.x;
@@ -11533,7 +11540,7 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                                 Mtx sp148;
                                 Mtx sp118;
                                 C_MTXLightPerspective(sp148, 170.0f, 1.0f, 1.5f, 1.5f, 0.0f, 0.0f);
-                                #if !PLATFORM_GCN
+                                #if WIDESCREEN_SUPPORT
                                 mDoGph_gInf_c::setWideZoomLightProjection(sp148);
                                 #endif
                                 spD8.x = player_p->current.pos.x;

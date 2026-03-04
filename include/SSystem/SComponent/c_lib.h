@@ -2,7 +2,7 @@
 #define C_LIB_H_
 
 #include "SSystem/SComponent/c_xyz.h"
-#include <dolphin/mtx.h>
+#include <mtx.h>
 #include "SSystem/SComponent/c_math.h"
 
 inline bool cLib_IsZero(f32 value) {
@@ -59,15 +59,13 @@ inline T cLib_minMaxLimit(T val, T min, T max) {
 template <typename T>
 inline T cLib_maxLimit(T val, T max) {
     T ret;
-    T var_r30;
 
     if (val > max) {
-        var_r30 = max;
+        ret = max;
     } else {
-        var_r30 = val;
+        ret = val;
     }
 
-    ret = var_r30;
     return (T)ret;
 }
 

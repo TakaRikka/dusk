@@ -56,6 +56,7 @@ public:
     class csr_c {
     public:
         virtual ~csr_c() {}
+        virtual void draw(f32, f32) = 0;
         virtual bool isPointer();
 
         static void particleExecute();
@@ -68,16 +69,18 @@ public:
     };
 
     static void entryBaseCsr(csr_c*);
+    static void releaseCsr(void);
+    static void entryCsr(csr_c*);
     #endif
 
     static void create();
     static void beginRender();
     static void fadeOut(f32);
-    static void fadeOut(f32, _GXColor&);
-    static void fadeIn(f32 fadeSpeed, _GXColor& fadeColor) {
+    static void fadeOut(f32, GXColor&);
+    static void fadeIn(f32 fadeSpeed, GXColor& fadeColor) {
         fadeOut(-fadeSpeed, fadeColor);
     }
-    static void fadeOut_f(f32, _GXColor&);
+    static void fadeOut_f(f32, GXColor&);
     static void onBlure(const Mtx);
     static void onBlure();
     static void calcFade();
@@ -103,7 +106,7 @@ public:
     static void endFrame() { JFWDisplay::getManager()->endFrame(); }
     static void offFade() { mFade = 0; }
     static u8 isFade() { return mFade; }
-    static void fadeIn_f(f32 i_fadeSpeed, _GXColor& i_fadeColor) { fadeOut_f(-i_fadeSpeed, i_fadeColor); }
+    static void fadeIn_f(f32 i_fadeSpeed, GXColor& i_fadeColor) { fadeOut_f(-i_fadeSpeed, i_fadeColor); }
     static void offBlure() { mBlureFlag = false; }
     static u8 isBlure() { return mBlureFlag; }
     static void setBlureRate(u8 i_rate) { mBlureRate = i_rate; }

@@ -1,3 +1,3 @@
 [submodule "extern/aurora"]
 	path = extern/aurora
-	url = git@github.com:encounter/aurora.git
+	url = https://github.com/encounter/aurora.git

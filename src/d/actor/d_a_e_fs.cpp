@@ -16,6 +16,7 @@
 #include "d/d_s_play.h"
 #include "f_op/f_op_actor_enemy.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
 
 class daE_Fs_HIO_c {
 public:

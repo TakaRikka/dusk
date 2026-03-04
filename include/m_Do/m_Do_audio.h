@@ -4,6 +4,7 @@
 #include "Z2AudioLib/Z2AudioMgr.h"
 #include "Z2AudioLib/Z2EnvSeMgr.h"
 #include "Z2AudioLib/Z2LinkMgr.h"
+#include "dusk/audio.h"
 
 class mDoAud_zelAudio_c : public Z2AudioMgr {
 public:
@@ -27,13 +28,13 @@ public:
     static u8 isResetFlag() { return mResetFlag; }
     static void onResetFlag() { mResetFlag = true; }
     static void offResetFlag() { mResetFlag = false; }
-    static bool isBgmSet() { return mBgmSet; }
+    static u8 isBgmSet() { return mBgmSet; }
     static void onBgmSet() { mBgmSet = true; }
     static void offBgmSet() { mBgmSet = false; }
 
     static u8 mInitFlag;
     static u8 mResetFlag;
-    static bool mBgmSet;
+    static u8 mBgmSet;
 };
 
 extern JKRSolidHeap* g_mDoAud_audioHeap;
@@ -47,273 +48,338 @@ void mDoAud_setFadeInStart(u8 param_0);
 void mDoAud_setFadeOutStart(u8 param_0);
 
 inline void mDoAud_setLinkGroupInfo(u8 param_0) {
+    DUSK_AUDIO_SKIP()
     if (Z2GetLink() != NULL) {
         Z2GetLink()->setLinkGroupInfo(param_0);
     }
 }
 
 inline void mDoAud_setLinkHp(s32 param_0, s32 param_1) {
+    DUSK_AUDIO_SKIP()
     if (Z2GetLink() != NULL) {
         Z2GetLink()->setLinkHp(param_0, param_1);
     }
 }
 
 inline void mDoAud_bgmSetSwordUsing(s32 id) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->bgmSetSwordUsing(id);
 }
 
 inline void mDoAud_bgmStart(u32 i_bgmID) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->bgmStart(i_bgmID, 0, 0);
 }
 
 inline void mDoAud_bgmAllMute(u32 i_count) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->bgmAllMute(i_count, 0.0f);
 }
 
 inline void mDoAud_subBgmStart(u32 i_bgmID) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->subBgmStart(i_bgmID);
 }
 
 inline void mDoAud_subBgmStop() {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->subBgmStop();
 }
 
 inline u32 mDoAud_checkPlayingSubBgmFlag() {
+    DUSK_AUDIO_SKIP(0)
     return Z2AudioMgr::getInterface()->checkPlayingSubBgmFlag();
 }
 
 inline void mDoAud_bgmNowBattle(f32 param_0) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->bgmNowBattle(param_0);
 }
 
 inline void mDoAud_bgmStreamPrepare(u32 param_0) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->bgmStreamPrepare(param_0);
 }
 
 inline void mDoAud_bgmStreamPlay() {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->bgmStreamPlay();
 }
 
 inline void mDoAud_setHour(s32 hour) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->setHour(hour);
 }
 
 inline void mDoAud_setMinute(s32 min) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->setMinute(min);
 }
 
 inline void mDoAud_setWeekday(s32 day) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->setWeekday(day);
 }
 
 inline void mDoAud_setInDarkness(bool state) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->setInDarkness(state);
 }
 
 inline void mDoAud_seStart(u32 i_sfxID, const Vec* i_sePos, u32 param_2, s8 i_reverb) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->seStart(i_sfxID, i_sePos, param_2, i_reverb, 1.0f, 1.0f,
                                                -1.0f, -1.0f, 0);
 }
 
 inline void mDoAud_seStartLevel(u32 i_sfxID, const Vec* i_sePos, u32 param_2, s8 i_reverb) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->seStartLevel(i_sfxID, i_sePos, param_2, i_reverb, 1.0f, 1.0f,
                                                     -1.0f, -1.0f, 0);
 }
 
 inline void mDoAud_seStop(u32 i_sfxID, u32 param_1) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->seStop(i_sfxID, param_1);
 }
 
 inline void mDoAud_messageSePlay(u16 param_0, Vec* position, s8 param_2) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->messageSePlay(param_0, position, param_2);
 }
 
 inline void mDoAud_sceneBgmStart() {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->sceneBgmStart();
 }
 
 inline void mDoAud_seDeleteObject(Vec*) {}
 
 inline void mDoAud_load2ndDynamicWave() {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->load2ndDynamicWave();
 }
 
 inline bool mDoAud_check1stDynamicWave() {
+    DUSK_AUDIO_SKIP(false)
     return Z2AudioMgr::getInterface()->check1stDynamicWave();
 }
 
 inline void mDoAud_bgmStop(u32 param_0) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->bgmStop(param_0, 0);
 }
 
 inline void mDoAud_rainPlay(s32 enable) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.startRainSe(enable, 0);
 }
 
 inline void mDoAud_heartGaugeOn() {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->heartGaugeOn();
 }
 
 inline void mDoAud_setSnowPower(s8 i_power) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.setSnowPower(i_power);
 }
 
 inline void mDoAud_setFogWipeWidth(f32 i_width) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.setFogWipeWidth(i_width);
 }
 
 inline void mDoAud_startFogWipeTrigger(const Vec* param_0) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.startFogWipeTrigger((Vec*)param_0);
 }
 
 inline void mDoAud_changeSubBgmStatus(s32 param_0) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->changeSubBgmStatus(param_0);
 }
 
 inline void mDoAud_taktModeMute() {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->taktModeMute();
 }
 
 inline void mDoAud_taktModeMuteOff() {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->taktModeMuteOff();
 }
 
 inline void mDoAud_getCameraMapInfo(u32 param_0) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->getCameraMapInfo(param_0);
 }
 
 inline void mDoAud_setCameraGroupInfo(u8 param_0) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->setCameraGroupInfo(param_0);
 }
 
 inline void mDoAud_setLinkShieldType(s32 param_0, s32 param_1) {
+    DUSK_AUDIO_SKIP()
     if (Z2GetLink() != NULL) {
         Z2GetLink()->setLinkShieldType(param_0, param_1);
     }
 }
 
 inline void mDoAud_mEnvse_framework() {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.framework();
 }
 
 inline void mDoAud_mEnvse_resetScene() {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.resetScene();
 }
 
 inline void mDoAud_mEnvSe_startFarThunderSe(const Vec* param_0) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.startFarThunderSe((Vec*)param_0, 0);
 }
 
 inline void mDoAud_mEnvSe_startNearThunderSe() {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.startNearThunderSe(0);
 }
 
 inline void mDoAud_mEnvse_initStrongWind() {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.initStrongWindSe();
 }
 
 inline void mDoAud_mEnvse_setWindDirection(Vec* i_direction) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.setWindDirection(i_direction);
 }
 
 inline void mDoAud_mEnvse_startStrongWindSe(s8 i_reverb) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.startStrongWindSe(i_reverb);
 }
 
 inline void mDoAud_mEnvse_setWindType(u8 i_type) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.setWindType(i_type);
 }
 
 inline void mDoAud_mEnvse_initStaticEnvSe(u8 param_0, u8 param_1, u8 param_2, u8 param_3, const Vec* param_4) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.initStaticEnvSe(param_0, param_1, param_2, param_3, (Vec*)param_4);
 }
 
 inline void mDoAud_mEnvse_startStaticEnvSe(s8 i_reverb) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.startStaticEnvSe(i_reverb);
 }
 
 inline void mDoAud_mEnvse_initRiverSe(u8 param_0, u8 param_1, u8 param_2, u8 param_3) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.initRiverSe(param_0, param_1, param_2, param_3);
 }
 
 inline void mDoAud_mEnvse_registRiverSePos(const Vec* i_pos) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.registRiverSePos((Vec*)i_pos);
 }
 
 inline void mDoAud_mEnvse_startRiverSe(s8 i_reverb) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.startRiverSe(i_reverb);
 }
 
 inline void mDoAud_mEnvse_initFallSe(u8 param_0, u8 param_1, u8 param_2, u8 param_3) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.initFallSe(param_0, param_1, param_2, param_3);
 }
 
 inline void mDoAud_mEnvse_registFallSePos(const Vec* i_pos) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.registFallSePos((Vec*)i_pos);
 }
 
 inline void mDoAud_mEnvse_startFallSe(s8 i_reverb) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.startFallSe(i_reverb);
 }
 
 inline void mDoAud_mEnvse_initSmellSe(u8 param_0, u8 param_1, u8 param_2, u8 param_3) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.initSmellSe(param_0, param_1, param_2, param_3);
 }
 
 inline void mDoAud_mEnvse_registSmellSePos(const Vec* i_pos) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.registSmellSePos((Vec*)i_pos);
 }
 
 inline void mDoAud_mEnvse_startSmellSe(s8 i_reverb) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.startSmellSe(i_reverb);
 }
 
 inline void mDoAud_mEnvse_registWindowPos(const Vec* i_pos) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.registWindowPos((Vec*)i_pos);
 }
 
 inline void mDoAud_mEnvse_registWolfSmellSePos(const Vec* i_pos) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.registWolfSmellSePos((Vec*)i_pos);
 }
 
 inline void mDoAud_initLv3WaterSe(u8 param_0, u8 param_1, u8 param_2, u8 param_3) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.initLv3WaterSe(param_0, param_1, param_2, param_3);
 }
 
 inline void mDoAud_registLv3WaterSePos(u8 param_0, const Vec* i_pos) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.registLv3WaterSePos(param_0, (Vec*)i_pos);
 }
 
 inline void mDoAud_startLv3WaterSe(s8 i_reverb) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.startLv3WaterSe(i_reverb);
 }
 
 inline void mDoAud_setHyrulSewerOpen(bool i_close) {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.setHyrulSewerOpen(i_close);
 }
 
 inline void mDoAud_startFogSe() {
+    DUSK_AUDIO_SKIP()
     g_mEnvSeMgr.startFogSe();
 }
 
 inline void mDoAud_talkOut() {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->talkOut();
 }
 
 inline void mDoAud_talkIn() {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->talkIn();
 }
 
 inline void mDoAud_setOutputMode(u32 mode) {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->setOutputMode(mode);
 }
 
 inline void mDoAud_loadStaticWaves() {
+    DUSK_AUDIO_SKIP()
     Z2AudioMgr::getInterface()->loadStaticWaves();
 }
 
 inline int mDoAud_monsSeStart(u32 i_soundId, const Vec* i_pos, u32 i_actorId, u32 param_3,
                                s8 i_reverb) {
+    DUSK_AUDIO_SKIP(0)
     UNUSED(i_actorId);
     return Z2GetAudioMgr()->seStart(i_soundId, i_pos, param_3, i_reverb, 1.0f, 1.0f, -1.0f, -1.0f,
                                     0);

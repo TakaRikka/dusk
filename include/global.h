@@ -169,23 +169,35 @@ static const float INF = 2000000000.0f;
     #define UNSET_FLAG(var, flag, type) (var) &= ~(flag)
 #endif
 
-#ifdef TARGET_PC
+// Macro for multi-character literals that exceed 4 bytes (e.g. 'ari_os').
+// CW encodes all characters in big-endian order into the full integer, but GCC/Clang
+// truncate multi-char constants to int (4 bytes). This macro produces matching u64
+// values on all compilers. For <=4-char literals, raw constants like 'ABCD' are fine.
+#ifdef __MWERKS__
+    #define MULTI_CHAR(x) (x)
+#else
     template <int N>
-    inline constexpr auto MultiCharLiteral(const char (&buf)[N]) {
-        // static_assert(buf[0] == '\'' && buf[N - 2] == '\'');  // can't constexpr strings, just pray
-        constexpr int len = N - 1;
-        static_assert(len >= 2 && len <= 10);
-
+    inline constexpr unsigned long long MultiCharLiteral(const char (&buf)[N]) {
+        static_assert(N - 1 >= 3 && N - 1 <= 10, "MULTI_CHAR literal must be 1-8 characters");
         unsigned long long out = 0;
-        for (int i = 1; i < len - 1; i++) {
-            out = (out << 8) | ((unsigned long long)buf[i]);
+        for (int i = 1; i < N - 2; i++) {
+            out = (out << 8) | static_cast<unsigned char>(buf[i]);
         }
         return out;
     }
+    #define MULTI_CHAR(x) MultiCharLiteral(#x)
+#endif
 
-    #define MULTI_CHAR(x) MultiCharLiteral(#x)
-#else 
-    #define MULTI_CHAR(x) MultiCharLiteral(#x)
+// potential fakematch?
+#if DEBUG
+#define FABSF fabsf
+#else
+#define FABSF std::fabsf
+#endif
+
+#ifndef __MWERKS__
+#include <cmath>
+using std::isnan;
 #endif
 
 #endif

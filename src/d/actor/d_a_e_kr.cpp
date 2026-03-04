@@ -398,7 +398,7 @@ static BOOL coach_path_check(e_kr_class* i_this) {
         return FALSE;
     }
 
-    Vec* pointPos = &i_this->field_0x6e4->m_points[0].m_position;
+    BE(Vec)* pointPos = &i_this->field_0x6e4->m_points[0].m_position;
     f32 x = pointPos->x - coach->current.pos.x;
     f32 z = pointPos->z - coach->current.pos.z;
     if (JMAFastSqrt(x * x + z * z) < 500.0f + KREG_F(9)) {
@@ -2258,7 +2258,7 @@ static int daE_Kr_Create(fopAc_ac_c* i_this) {
     };
     static dCcD_SrcSph head_tg_sph_src = {
         {
-            {0x0, {{0x0, 0x1, 0x0}, {(s32)0xd8fbfdff, 0x3}, 0x0}},  // mObj
+            {0x0, {{0x0, 0x1, 0x0}, {0xd8fbfdff, 0x3}, 0x0}},  // mObj
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},                     // mGObjAt
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x2},                     // mGObjTg
             {0x0},                                                  // mGObjCo
@@ -2270,7 +2270,7 @@ static int daE_Kr_Create(fopAc_ac_c* i_this) {
 
     static dCcD_SrcSph body_tg_sph_src = {
         {
-            {0x0, {{0x0, 0x1, 0x0}, {(s32)0xd8fbfdff, 0x3}, 0x0}},  // mObj
+            {0x0, {{0x0, 0x1, 0x0}, {0xd8fbfdff, 0x3}, 0x0}},  // mObj
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},                // mGObjAt
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x2},                // mGObjTg
             {0x0},                                             // mGObjCo

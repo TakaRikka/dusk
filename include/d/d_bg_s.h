@@ -3,7 +3,7 @@
 
 #include "d/d_bg_w_base.h"
 #include "JSystem/JHostIO/JORReflexible.h"
-#include <dolphin/os.h>
+#include <os.h>
 #include "global.h"
 
 class dBgW;
@@ -194,6 +194,8 @@ public:
     }
 
     void ChkDeleteActorRegist(fopAc_ac_c*);
+
+    void Draw();
 
 #if DEBUG
     /* 0x1404 */ u8 field_0x1404[0x1408 - 0x1404];

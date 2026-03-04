@@ -13,6 +13,7 @@
 #if DEBUG
 #include "JSystem/JHostIO/JORFile.h"
 #include "d/d_debug_viewer.h"
+#include <cstring>
 #endif
 
 enum Besu_RES_File_ID {

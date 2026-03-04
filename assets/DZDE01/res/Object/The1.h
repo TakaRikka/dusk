@@ -1,0 +1,28 @@
+#ifndef RES_THE1_H
+#define RES_THE1_H
+
+enum dRes_INDEX_THE1 {
+    /* BCK  */
+    dRes_INDEX_THE1_BCK_THE_LOOK_e=0x3,
+    dRes_INDEX_THE1_BCK_THE_LOOK_A_e=0x4,
+    dRes_INDEX_THE1_BCK_THE_TALK_R_e=0x5,
+    dRes_INDEX_THE1_BCK_THE_TALKING_R_e=0x6,
+    dRes_INDEX_THE1_BCK_THE_TO_WAIT_B_e=0x7,
+    dRes_INDEX_THE1_BCK_THE_WAIT_B_e=0x8,
+    dRes_INDEX_THE1_BCK_THE_WAIT_LOOKING_e=0x9,
+    dRes_INDEX_THE1_BCK_THE_WAIT_LOOKUP_e=0xA,
+};
+
+enum dRes_ID_THE1 {
+    /* BCK  */
+    dRes_ID_THE1_BCK_THE_LOOK_e=0x3,
+    dRes_ID_THE1_BCK_THE_LOOK_A_e=0x4,
+    dRes_ID_THE1_BCK_THE_TALK_R_e=0x5,
+    dRes_ID_THE1_BCK_THE_TALKING_R_e=0x6,
+    dRes_ID_THE1_BCK_THE_TO_WAIT_B_e=0x7,
+    dRes_ID_THE1_BCK_THE_WAIT_B_e=0x8,
+    dRes_ID_THE1_BCK_THE_WAIT_LOOKING_e=0x9,
+    dRes_ID_THE1_BCK_THE_WAIT_LOOKUP_e=0xA,
+};
+
+#endif /* !RES_THE1_H */

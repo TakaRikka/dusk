@@ -5,7 +5,7 @@
 #include "d/d_kankyo.h"
 #include "f_op/f_op_actor_mng.h"
 
-class dPath;
+struct dPath;
 
 /**
  * @ingroup actors-unsorted

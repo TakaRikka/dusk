@@ -20,6 +20,7 @@
 #include "JSystem/JUtility/JUTReport.h"
 
 #include <cstdlib>
+#include <cstring>
  
 #if DEBUG
 void dScnMenu_setItem(int i_slotNo, u8 i_itemNo);

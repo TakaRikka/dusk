@@ -373,8 +373,8 @@ static void e_nz_damage(e_nz_class* i_this) {
     }
 }
 
-static BOOL getPolyColor(cBgS_PolyInfo& param_1, int param_2, _GXColor* param_3,
-                             _GXColor* param_4, u8* param_5, f32* param_6) {
+static BOOL getPolyColor(cBgS_PolyInfo& param_1, int param_2, GXColor* param_3,
+                             GXColor* param_4, u8* param_5, f32* param_6) {
     if (!dComIfG_Bgsp().ChkPolySafe(param_1)) {
         return FALSE;
     }

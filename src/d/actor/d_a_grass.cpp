@@ -10,7 +10,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
 #include "Z2AudioLib/Z2Instances.h"
-#include <string>
+#include <cstring>
 
 #include "d/actor/d_grass.inc" // IWYU pragma: keep
 #include "d/actor/d_flower.inc"
@@ -350,7 +350,7 @@ int daGrass_c::create() {
     }
 
     m_myObj = this;
-    fopAcM_setStageLayer(this);
+    fopAcM_setStageLayer(&LEAFDRAW_BASE(this));
     return cPhs_COMPLEATE_e;
 }
 
@@ -406,7 +406,7 @@ actor_process_profile_definition g_profile_GRASS = {
   fpcPi_CURRENT_e,       // mListPrio
   PROC_GRASS,            // mProcName
   &g_fpcLf_Method.base, // sub_method
-  0x00000570,            // mSize
+  sizeof(daGrass_c),            // mSize
   0,                     // mSizeOther
   0,                     // mParameters
   &g_fopAc_Method.base,  // sub_method
