@@ -476,19 +476,19 @@ auto StrideForData(GXAttr attr, GXCompType type, GXCompCnt cnt) -> std::pair<u32
             return 1;
     };
 
-    auto CompTypeStrideColor = [&] {
+    auto HandleColor = [&]() -> std::pair<u32, u32> {
         if (type == GX_RGB565)
-            return 2;
+            return {1, 2}; // u16[1]
         else if (type == GX_RGB8)
-            return 3;
+            return {3, 1}; // u8[3]
         else if (type == GX_RGBX8)
-            return 4;
+            return {4, 1}; // u8[4]
         else if (type == GX_RGBA4)
-            return 2;
+            return {1, 2}; // u16[1]
         else if (type == GX_RGBA6)
-            return 3;
+            return {3, 1};  // u8[3]
         else if (type == GX_RGBA8)
-            return 4;
+            return {4, 1};  // u8[4]
     };
 
     auto CompCnt = [&] {
@@ -506,7 +506,7 @@ auto StrideForData(GXAttr attr, GXCompType type, GXCompCnt cnt) -> std::pair<u32
     };
 
     if (attr >= GX_VA_CLR0 && attr <= GX_VA_CLR1) {
-        return {1, CompTypeStrideColor()};
+        return HandleColor();
     } else {
         int compCnt = CompCnt();
         int compStride = CompTypeStrideRaw();
