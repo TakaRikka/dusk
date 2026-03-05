@@ -13,6 +13,7 @@
 #include <vi.h>
 #include "global.h"
 #include "aurora/aurora.h"
+#include "JSystem/JKernel/JKRHeap.h"
 
 void JFWDisplay::ctor_subroutine(bool enableAlpha) {
     mEnableAlpha = enableAlpha;
@@ -224,7 +225,17 @@ void JFWDisplay::endGX() {
 }
 
 void JFWDisplay::beginRender() {
+    #if TARGET_PC
+    // Temporarily clear the current JKRHeap so that Aurora/Dawn/ImGui allocations
+    // use malloc instead of JKRHeap. Without this, Dawn's internal std::string
+    // allocations would go through JKRHeap and then crash when freed via standard delete.
+    JKRHeap* savedHeap = JKRHeap::getCurrentHeap();
+    JKRHeap::setCurrentHeap(nullptr);
+#endif
     aurora_begin_frame();
+#if TARGET_PC
+    JKRHeap::setCurrentHeap(savedHeap);
+#endif
     if (field_0x40) {
         JUTProcBar::getManager()->wholeLoopEnd();
     }
@@ -302,7 +313,16 @@ void JFWDisplay::endRender() {
 
     JUTProcBar::getManager()->cpuStart();
     calcCombinationRatio();
+    #if TARGET_PC
+    {
+        JKRHeap* savedHeap = JKRHeap::getCurrentHeap();
+        JKRHeap::setCurrentHeap(nullptr);
+        aurora_end_frame();
+        JKRHeap::setCurrentHeap(savedHeap);
+    }
+#else
     aurora_end_frame();
+#endif
 }
 
 void JFWDisplay::endFrame() {

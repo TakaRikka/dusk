@@ -74,6 +74,22 @@ add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${J
 target_link_libraries(game PRIVATE game_debug)
 target_compile_definitions(game PRIVATE TARGET_PC AVOID_UB VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0)
 
+# Hide global operator new/delete overrides from the dynamic symbol table.
+# Without this, other dylibs (e.g. Apple's AGX GPU driver) resolve these symbols
+# from libgame and crash when they encounter JKRHeap-managed memory.
+if (APPLE)
+    target_link_options(game PRIVATE
+        "LINKER:-unexported_symbol,__ZdlPv"   # operator delete(void*)
+        "LINKER:-unexported_symbol,__ZdaPv"   # operator delete[](void*)
+        "LINKER:-unexported_symbol,__Znwm"    # operator new(size_t)
+        "LINKER:-unexported_symbol,__Znam"    # operator new[](size_t)
+    )
+elseif (CMAKE_SYSTEM_NAME STREQUAL Linux)
+    target_link_options(game PRIVATE
+        "LINKER:--version-script,${CMAKE_SOURCE_DIR}/hide_new_delete.lds"
+    )
+endif ()
+
 add_executable(dusk src/dusk/main.cpp)
 target_compile_definitions(dusk PRIVATE TARGET_PC AVOID_UB VERSION=0)
 target_include_directories(dusk PRIVATE include)
