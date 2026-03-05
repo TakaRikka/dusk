@@ -310,9 +310,9 @@ public:
     /* 0x19 */ u8 field_0x19;
     /* 0x1A */ u16 mEnvelopeSize;
 
-#if TARGET_LITTLE_ENDIAN
+#if TARGET_PC
 private:
-    static void FixEndian(const J3DVertexBlock& block, const J3DVertexData& data);
+    static void readVertexData(const J3DVertexBlock& block, J3DVertexData& data);
 #endif
 };
 

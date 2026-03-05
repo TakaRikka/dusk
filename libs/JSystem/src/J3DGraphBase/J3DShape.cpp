@@ -139,14 +139,20 @@ static void J3DLoadArrayBasePtr(GXAttr attr, void* data) {
 
 void J3DShape::loadVtxArray() const {
 #if TARGET_PC
+    // TODO: these can very easily overcount if the data isn't in F32 format
     GXSetArray(GX_VA_POS, j3dSys.getVtxPos(), j3dSys.mVtxPosNum * sizeof(Vec), sizeof(Vec));
     if (!mHasNBT)
         GXSetArray(GX_VA_NRM, j3dSys.getVtxNrm(), j3dSys.mVtxNrmNum * sizeof(Vec), sizeof(Vec));
     GXSetArray(GX_VA_CLR0, j3dSys.getVtxCol(), j3dSys.mVtxColNum * sizeof(GXColor), sizeof(GXColor));
+
     GXSetArray(GX_VA_CLR1, mVertexData->getVtxColorArray(1),
-               mVertexData->getColNum() * sizeof(GXColor) * sizeof(GXColor), sizeof(GXColor));
+               mVertexData->getVtxArrByteSize(GX_VA_CLR1),
+               mVertexData->getVtxArrStride(GX_VA_CLR1));
     for (int i = 0; i < 8; i++) {
-        GXSetArray(GXAttr(GX_VA_TEX0 + i), mVertexData->getVtxTexCoordArray(i), mVertexData->getTexCoordNum() * 8, 8);
+        GXAttr attr = GXAttr(GX_VA_TEX0 + i);
+        GXSetArray(attr, mVertexData->getVtxTexCoordArray(i),
+                   mVertexData->getVtxArrByteSize(attr),
+                   mVertexData->getVtxArrStride(attr));
     }
 #else
     J3DLoadArrayBasePtr(GX_VA_POS, j3dSys.getVtxPos());
@@ -273,6 +279,9 @@ void J3DShape::loadPreDrawSetting() const {
     if (sOldVcdVatCmd != mVcdVatCmd) {
         GXCallDisplayList(mVcdVatCmd, kVcdVatDLSize);
         sOldVcdVatCmd = mVcdVatCmd;
+#if TARGET_PC
+        loadVtxArray();
+#endif
     }
 
     mCurrentMtx.load();
@@ -347,6 +356,9 @@ void J3DShape::simpleDrawCache() const {
     if (sOldVcdVatCmd != mVcdVatCmd) {
         GXCallDisplayList(mVcdVatCmd, kVcdVatDLSize);
         sOldVcdVatCmd = mVcdVatCmd;
+#if TARGET_PC
+        loadVtxArray();
+#endif
     }
 
     if (sEnvelopeFlag && !mHasPNMTXIdx)

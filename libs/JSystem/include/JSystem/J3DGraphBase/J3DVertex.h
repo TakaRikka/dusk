@@ -41,9 +41,6 @@ public:
     u32 getNrmNum() const { return mNrmNum; }
     u32 getVtxNum() const { return mVtxNum; }
     u32 getColNum() const { return mColNum; }
-#if TARGET_PC
-    u32 getTexCoordNum() const { return mTexCoordNum; }
-#endif
     GXVtxAttrFmtList* getVtxAttrFmtList() const { return mVtxAttrFmtList; }
     u8 getVtxPosFrac() const { return mVtxPosFrac; }
     u8 getVtxNrmFrac() const { return mVtxNrmFrac; }
@@ -54,6 +51,22 @@ public:
     void setVtxPosType(GXCompType type) { mVtxPosType = type; }
     void setVtxNrmFrac(u8 frac) { mVtxNrmFrac = frac; }
     void setVtxNrmType(GXCompType type) { mVtxNrmType = type; }
+
+#if TARGET_PC
+    u32 getVtxArrNum(GXAttr attr) const {
+        JUT_ASSERT(1234, attr >= GX_VA_POS && attr <= GX_VA_TEX7);
+        return mVtxArrNum[attr - GX_VA_POS];
+    }
+
+    u32 getVtxArrStride(GXAttr attr) const {
+        JUT_ASSERT(1234, attr >= GX_VA_POS && attr <= GX_VA_TEX7);
+        return mVtxArrStride[attr - GX_VA_POS];
+    }
+
+    u32 getVtxArrByteSize(GXAttr attr) const {
+        return getVtxArrNum(attr) * getVtxArrStride(attr);
+    }
+#endif
 
 private:
     friend class J3DModelLoader;
@@ -76,6 +89,8 @@ private:
 
 #if TARGET_PC
     bool mHasReadInformation = false;
+    u32 mVtxArrStride[12]{};
+    u32 mVtxArrNum[12]{};
 #endif
 };
 

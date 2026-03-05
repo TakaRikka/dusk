@@ -15,6 +15,7 @@
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JUtility/JUTNameTab.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include <utility>
 
 J3DModelLoader::J3DModelLoader() :
                 mpModelData(NULL),
@@ -393,36 +394,44 @@ void J3DModelLoader::readVertex(J3DVertexBlock const* i_block) {
             (i_block->mBlockSize - (uintptr_t)i_block->mpVtxTexCoordArray[0]) / 8 + 1;
     }
 
-#if TARGET_LITTLE_ENDIAN
-    FixEndian(*i_block, vertex_data);
+#if TARGET_PC
+    readVertexData(*i_block, vertex_data);
 #endif
 }
 
-#if TARGET_LITTLE_ENDIAN
+#if TARGET_PC
 
 // Approach taken from here:
 // https://github.com/zeldaret/tp/blob/6c72b91f8e477ee94ccdc56b94605140e9f2abd6/libs/JSystem/src/J3DGraphBase/J3DShape.cpp#L156-L211
 
 template <typename T>
 static void FixArrayEndian(void* arrayStart, void* arrayEnd) {
+#if TARGET_LITTLE_ENDIAN
     u32 itemCount = ((u8*)arrayEnd - (u8*)arrayStart) / sizeof(T);
     be_swap((T*)arrayStart, itemCount);
+#endif
 }
 
-static void FixArrayEndian(void* arrayStart, void* arrayEnd, GXCompType type) {
-    switch (type) {
-    case GX_U8:
-    case GX_S8:
+static void FixArrayEndian_24(void* arrayStart, void* arrayEnd) {
+#if TARGET_LITTLE_ENDIAN
+    for (u8* work = (u8*)arrayStart; work != (u8*)arrayEnd; work += 3)
+        std::swap(work[0], work[2]);
+#endif
+}
+
+static void FixArrayEndian(void* arrayStart, void* arrayEnd, u32 stride) {
+    switch (stride) {
+    case 1:
         // Nothing needs to happen here!
         break;
-    case GX_U16:
+    case 2:
         FixArrayEndian<u16>(arrayStart, arrayEnd);
         break;
-    case GX_S16:
-        FixArrayEndian<s16>(arrayStart, arrayEnd);
+    case 3:
+        FixArrayEndian_24(arrayStart, arrayEnd);
         break;
-    case GX_F32:
-        FixArrayEndian<f32>(arrayStart, arrayEnd);
+    case 4:
+        FixArrayEndian<u32>(arrayStart, arrayEnd);
         break;
     default:
         OSPanic(__FILE__, __LINE__, "Unknown component type?");
@@ -457,7 +466,55 @@ static void* GetDataEnd(const J3DVertexBlock& block, int start) {
     return JSUConvertOffsetToPtr<void>(&block, block.mBlockSize);
 }
 
-void J3DModelLoader::FixEndian(const J3DVertexBlock& block, const J3DVertexData& data) {
+auto StrideForData(GXAttr attr, GXCompType type, GXCompCnt cnt) -> std::pair<u32, u32> {
+    auto CompTypeStrideRaw = [&] {
+        if (type == GX_F32)
+            return 4;
+        else if (type == GX_U16 || type == GX_S16)
+            return 2;
+        else
+            return 1;
+    };
+
+    auto CompTypeStrideColor = [&] {
+        if (type == GX_RGB565)
+            return 2;
+        else if (type == GX_RGB8)
+            return 3;
+        else if (type == GX_RGBX8)
+            return 4;
+        else if (type == GX_RGBA4)
+            return 2;
+        else if (type == GX_RGBA6)
+            return 3;
+        else if (type == GX_RGBA8)
+            return 4;
+    };
+
+    auto CompCnt = [&] {
+        if (attr == GX_VA_POS) {
+            return cnt == GX_POS_XY ? 2 : 3;
+        } else if (attr == GX_VA_NRM) {
+            return cnt == GX_NRM_XYZ ? 3 : 9;  // NBT3 is lies
+        } else if (attr >= GX_VA_CLR0 && attr <= GX_VA_CLR1) {
+            return cnt == GX_CLR_RGB ? 3 : 4; // clr is special anyway
+        } else if (attr >= GX_VA_TEX0 && attr <= GX_VA_TEX7) {
+            return cnt == GX_TEX_S ? 1 : 2;
+        } else {
+            JUT_ASSERT(1234, false);
+        }
+    };
+
+    if (attr >= GX_VA_CLR0 && attr <= GX_VA_CLR1) {
+        return {1, CompTypeStrideColor()};
+    } else {
+        int compCnt = CompCnt();
+        int compStride = CompTypeStrideRaw();
+        return {compCnt, compStride};
+    }
+}
+
+void J3DModelLoader::readVertexData(const J3DVertexBlock& block, J3DVertexData& data) {
     if (!data.mHasReadInformation) {
         OSPanic(__FILE__, __LINE__, "Model has VTX1 before INF1?");
     }
@@ -474,11 +531,25 @@ void J3DModelLoader::FixEndian(const J3DVertexBlock& block, const J3DVertexData&
 
         void* startAddr = JSUConvertOffsetToPtr<void>(&block, attrPtrBase[i]);
         void* endAddr = GetDataEnd(block, i);
+        auto [compCnt, compStride] = StrideForData(attr, fmt.type, fmt.cnt);
+        u32 vertStride = compStride * compCnt;
+        data.mVtxArrStride[attr - GX_VA_POS] = vertStride;
 
-        if (fmt.attr == GX_VA_CLR0 || fmt.attr == GX_VA_CLR1) {
-            // TODO: COLOR DATA.
-        } else {
-            FixArrayEndian(startAddr, endAddr, fmt.type);
+        u32 addrDiff = u32((u8*)endAddr - (u8*)startAddr);
+        u32 num = addrDiff / vertStride;
+        data.mVtxArrNum[attr - GX_VA_POS] = num;
+        FixArrayEndian(startAddr, endAddr, compStride);
+
+        if (attr == GX_VA_POS) {
+            // can be a little off due to 0x20 alignment, account for that
+            u32 expect = ((data.mVtxNum * vertStride) + 0x1F) & ~0x1F;
+            JUT_ASSERT(1234, expect == addrDiff);
+        } else if (attr == GX_VA_NRM) {
+            data.mNrmNum = num;
+        } else if (attr == GX_VA_CLR0) {
+            data.mColNum = num;
+        } else if (attr == GX_VA_TEX0) {
+            data.mTexCoordNum = num;
         }
     }
 }

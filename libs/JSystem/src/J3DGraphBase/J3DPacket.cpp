@@ -214,6 +214,9 @@ void J3DMatPacket::draw() {
     callDL();
 
     J3DShapePacket* packet = getShapePacket();
+#if TARGET_PC
+    packet->mpModel->getVertexBuffer()->setArray();
+#endif
     packet->getShape()->loadPreDrawSetting();
 
     while (packet != NULL) {
