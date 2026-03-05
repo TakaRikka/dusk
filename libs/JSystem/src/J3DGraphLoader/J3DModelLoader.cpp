@@ -1,19 +1,20 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
-#include "JSystem/J3DGraphLoader/J3DModelLoader.h"
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
-#include "JSystem/J3DGraphAnimator/J3DShapeTable.h"
-#include "JSystem/J3DGraphAnimator/J3DJointTree.h"
 #include "JSystem/J3DGraphAnimator/J3DJoint.h"
+#include "JSystem/J3DGraphAnimator/J3DJointTree.h"
+#include "JSystem/J3DGraphAnimator/J3DModelData.h"
+#include "JSystem/J3DGraphAnimator/J3DShapeTable.h"
+#include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "JSystem/J3DGraphLoader/J3DJointFactory.h"
 #include "JSystem/J3DGraphLoader/J3DMaterialFactory.h"
 #include "JSystem/J3DGraphLoader/J3DMaterialFactory_v21.h"
+#include "JSystem/J3DGraphLoader/J3DModelLoader.h"
 #include "JSystem/J3DGraphLoader/J3DShapeFactory.h"
-#include "JSystem/J3DGraphAnimator/J3DModelData.h"
-#include "JSystem/J3DGraphBase/J3DMaterial.h"
-#include "JSystem/JUtility/JUTNameTab.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JSupport/JSupport.h"
+#include "JSystem/JUtility/JUTNameTab.h"
+#include "SSystem/SComponent/c_xyz.h"
 
 J3DModelLoader::J3DModelLoader() :
                 mpModelData(NULL),
@@ -279,7 +280,23 @@ void J3DModelLoader::readInformation(J3DModelInfoBlock const* i_block, u32 i_fla
     mpModelData->getVertexData().mPacketNum = i_block->mPacketNum;
     mpModelData->getVertexData().mVtxNum = i_block->mVtxNum;
     mpModelData->setHierarchy(JSUConvertOffsetToPtr<J3DModelHierarchy>(i_block, i_block->mpHierarchy));
+
+#if TARGET_PC
+    mpModelData->getVertexData().mHasReadInformation = true;
+#endif
 }
+
+#if TARGET_PC
+static GXVtxAttrFmtList getFmt(GXVtxAttrFmtList* i_fmtList, GXAttr i_attr) {
+    for (; i_fmtList->attr != GX_VA_NULL; i_fmtList++) {
+        if (i_fmtList->attr == i_attr) {
+            return *i_fmtList;
+        }
+    }
+
+    OSPanic(__FILE__, __LINE__, "Unable to find vertex attribute format!");
+}
+#endif
 
 static GXCompType getFmtType(GXVtxAttrFmtList* i_fmtList, GXAttr i_attr) {
     for (; i_fmtList->attr != GX_VA_NULL; i_fmtList++) {
@@ -375,7 +392,97 @@ void J3DModelLoader::readVertex(J3DVertexBlock const* i_block) {
         vertex_data.mTexCoordNum =
             (i_block->mBlockSize - (uintptr_t)i_block->mpVtxTexCoordArray[0]) / 8 + 1;
     }
+
+#if TARGET_LITTLE_ENDIAN
+    FixEndian(*i_block, vertex_data);
+#endif
 }
+
+#if TARGET_LITTLE_ENDIAN
+
+// Approach taken from here:
+// https://github.com/zeldaret/tp/blob/6c72b91f8e477ee94ccdc56b94605140e9f2abd6/libs/JSystem/src/J3DGraphBase/J3DShape.cpp#L156-L211
+
+template <typename T>
+static void FixArrayEndian(void* arrayStart, void* arrayEnd) {
+    u32 itemCount = ((u8*)arrayEnd - (u8*)arrayStart) / sizeof(T);
+    be_swap((T*)arrayStart, itemCount);
+}
+
+static void FixArrayEndian(void* arrayStart, void* arrayEnd, GXCompType type) {
+    switch (type) {
+    case GX_U8:
+    case GX_S8:
+        // Nothing needs to happen here!
+        break;
+    case GX_U16:
+        FixArrayEndian<u16>(arrayStart, arrayEnd);
+        break;
+    case GX_S16:
+        FixArrayEndian<s16>(arrayStart, arrayEnd);
+        break;
+    case GX_F32:
+        FixArrayEndian<f32>(arrayStart, arrayEnd);
+        break;
+    default:
+        OSPanic(__FILE__, __LINE__, "Unknown component type?");
+    }
+}
+
+static GXAttr VertexBlockAttrOrder[13] = {
+    GX_VA_POS,
+    GX_VA_NRM,
+    GX_VA_NBT,
+    GX_VA_CLR0,
+    GX_VA_CLR1,
+    GX_VA_TEX0,
+    GX_VA_TEX1,
+    GX_VA_TEX2,
+    GX_VA_TEX3,
+    GX_VA_TEX4,
+    GX_VA_TEX5,
+    GX_VA_TEX6,
+    GX_VA_TEX7,
+};
+
+static void* GetDataEnd(const J3DVertexBlock& block, int start) {
+    const BE(u32)* attrPtrBase = &block.mpVtxPosArray;
+
+    for (int i = start + 1; i < ARRAY_SIZEU(VertexBlockAttrOrder); i++) {
+        if (attrPtrBase[i] != 0) {
+            return JSUConvertOffsetToPtr<void>(&block, attrPtrBase[i]);
+        }
+    }
+
+    return JSUConvertOffsetToPtr<void>(&block, block.mBlockSize);
+}
+
+void J3DModelLoader::FixEndian(const J3DVertexBlock& block, const J3DVertexData& data) {
+    if (!data.mHasReadInformation) {
+        OSPanic(__FILE__, __LINE__, "Model has VTX1 before INF1?");
+    }
+
+    const BE(u32)* attrPtrBase = &block.mpVtxPosArray;
+    for (int i = 0; i < ARRAY_SIZEU(VertexBlockAttrOrder); i++) {
+        GXAttr attr = VertexBlockAttrOrder[i];
+
+        if (attrPtrBase[i] == 0) {
+            continue;
+        }
+
+        GXVtxAttrFmtList fmt = getFmt(data.mVtxAttrFmtList, attr);
+
+        void* startAddr = JSUConvertOffsetToPtr<void>(&block, attrPtrBase[i]);
+        void* endAddr = GetDataEnd(block, i);
+
+        if (fmt.attr == GX_VA_CLR0 || fmt.attr == GX_VA_CLR1) {
+            // TODO: COLOR DATA.
+        } else {
+            FixArrayEndian(startAddr, endAddr, fmt.type);
+        }
+    }
+}
+#endif
 
 void J3DModelLoader::readEnvelop(J3DEnvelopeBlock const* i_block) {
     J3D_ASSERT_NULLPTR(724, i_block);

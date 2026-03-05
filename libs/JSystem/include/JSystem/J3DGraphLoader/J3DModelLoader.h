@@ -309,6 +309,11 @@ public:
     /* 0x18 */ u8 field_0x18;
     /* 0x19 */ u8 field_0x19;
     /* 0x1A */ u16 mEnvelopeSize;
+
+#if TARGET_LITTLE_ENDIAN
+private:
+    static void FixEndian(const J3DVertexBlock& block, const J3DVertexData& data);
+#endif
 };
 
 /**

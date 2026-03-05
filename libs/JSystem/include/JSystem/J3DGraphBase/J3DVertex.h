@@ -73,6 +73,10 @@ private:
     /* 0x50 */ GXCompType mVtxPosType;
     /* 0x54 */ u8 mVtxNrmFrac;
     /* 0x58 */ GXCompType mVtxNrmType;
+
+#if TARGET_PC
+    bool mHasReadInformation = false;
+#endif
 };
 
 /**
