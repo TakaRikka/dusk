@@ -2836,7 +2836,7 @@ void daMidna_c::setDemoData() {
                 mDemoType = 2;
             }
 
-            char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutName(mStaffID);
+            char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutNameStr(mStaffID);
             if (cut_name != NULL) {
                 mDemoMode = (cut_name[0] - 0x30) * 10 + (cut_name[1] - 0x30);
 

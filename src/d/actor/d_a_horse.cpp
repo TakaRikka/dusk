@@ -1295,7 +1295,7 @@ void daHorse_c::setDemoData() {
             }
 
             if (m_demoStaffId != -1) {
-                char* cutname = dComIfGp_getPEvtManager()->getMyNowCutName(m_demoStaffId);
+                char* cutname = dComIfGp_getPEvtManager()->getMyNowCutNameStr(m_demoStaffId);
                 if (cutname != NULL) {
                     mode = ((cutname[0] - '0') * 100) + ((cutname[1] - '0') * 10) + (cutname[2] - '0');
 

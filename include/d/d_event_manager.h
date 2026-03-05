@@ -79,6 +79,7 @@ public:
     int getIsAddvance(int staffId);
     int getMyActIdx(int staffId, const char* const* action, int n_action, BOOL param_3, BOOL param_4);
     char* getMyNowCutName(int staffId);
+    char* getMyNowCutNameStr(int staffId);
     dEvDtData_c* getMyDataP(int staffId, const char* dataname, BOOL isSeekStart);
     void* getMySubstanceP(int staffId, const char* dataname, int datatype);
     int getMySubstanceNum(int staffId, const char* dataname);
