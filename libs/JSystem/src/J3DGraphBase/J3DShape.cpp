@@ -132,28 +132,31 @@ void J3DLoadCPCmd(u8 addr, u32 val) {
     GXCmd1u32(val);
 }
 
+#if TARGET_PC
+static void J3DLoadArrayBasePtr(GXAttr attr, void* data, u32 size) {
+    u32 idx = (attr == GX_VA_NBT) ? 1 : (attr - GX_VA_POS);
+    GXCmd1u8(GX_LOAD_AURORA);
+    GXCmd1u16(GX_LOAD_AURORA_ARRAYBASE | idx);
+    GXCmd1u64((u64)data);
+    GXCmd1u64((u64)size);
+}
+#else
 static void J3DLoadArrayBasePtr(GXAttr attr, void* data) {
     u32 idx = (attr == GX_VA_NBT) ? 1 : (attr - GX_VA_POS);
     J3DLoadCPCmd(0xA0 + idx, ((uintptr_t)data & 0x7FFFFFFF));
 }
+#endif
 
 void J3DShape::loadVtxArray() const {
 #if TARGET_PC
     // TODO: these can very easily overcount if the data isn't in F32 format
-    GXSetArray(GX_VA_POS, j3dSys.getVtxPos(), j3dSys.mVtxPosNum * sizeof(Vec), sizeof(Vec));
-    if (!mHasNBT)
-        GXSetArray(GX_VA_NRM, j3dSys.getVtxNrm(), j3dSys.mVtxNrmNum * sizeof(Vec), sizeof(Vec));
-    GXSetArray(GX_VA_CLR0, j3dSys.getVtxCol(), j3dSys.mVtxColNum * sizeof(GXColor), sizeof(GXColor));
+    J3DLoadArrayBasePtr(GX_VA_POS, j3dSys.getVtxPos(), j3dSys.mVtxPosNum * sizeof(Vec));
 
-    GXSetArray(GX_VA_CLR1, mVertexData->getVtxColorArray(1),
-               mVertexData->getVtxArrByteSize(GX_VA_CLR1),
-               mVertexData->getVtxArrStride(GX_VA_CLR1));
-    for (int i = 0; i < 8; i++) {
-        GXAttr attr = GXAttr(GX_VA_TEX0 + i);
-        GXSetArray(attr, mVertexData->getVtxTexCoordArray(i),
-                   mVertexData->getVtxArrByteSize(attr),
-                   mVertexData->getVtxArrStride(attr));
+    if (!mHasNBT) {
+        J3DLoadArrayBasePtr(GX_VA_NRM, j3dSys.getVtxNrm(), j3dSys.mVtxNrmNum * sizeof(Vec));
     }
+
+    J3DLoadArrayBasePtr(GX_VA_CLR0, j3dSys.getVtxCol(), j3dSys.mVtxColNum * sizeof(GXColor));
 #else
     J3DLoadArrayBasePtr(GX_VA_POS, j3dSys.getVtxPos());
 
@@ -180,6 +183,9 @@ void J3DShape::makeVtxArrayCmd() {
 
     u8 stride[12];
     void* array[12];
+#if TARGET_PC
+    u32 size[12] = {};
+#endif
     for (u32 i = 0; i < 12; i++) {
         stride[i] = 0;
         array[i] = 0;
@@ -194,6 +200,9 @@ void J3DShape::makeVtxArrayCmd() {
                 stride[vtxAttr->attr - GX_VA_POS] = 6;
 
             array[vtxAttr->attr - GX_VA_POS] = mVertexData->getVtxPosArray();
+#if TARGET_PC
+            size[vtxAttr->attr - GX_VA_POS] = mVertexData->getVtxNum() * stride[vtxAttr->attr - GX_VA_POS];
+#endif
             mVertexData->setVtxPosFrac((u8)vtxAttr->frac);
             mVertexData->setVtxPosType((GXCompType)vtxAttr->type);
         } break;
@@ -204,6 +213,9 @@ void J3DShape::makeVtxArrayCmd() {
                 stride[vtxAttr->attr - GX_VA_POS] = 6;
 
             array[vtxAttr->attr - GX_VA_POS] = mVertexData->getVtxNrmArray();
+#if TARGET_PC
+            size[vtxAttr->attr - GX_VA_POS] = mVertexData->getNrmNum() * stride[vtxAttr->attr - GX_VA_POS];
+#endif
             mVertexData->setVtxNrmFrac((u8)vtxAttr->frac);
             mVertexData->setVtxNrmType((GXCompType)vtxAttr->type);
         } break;
@@ -211,6 +223,13 @@ void J3DShape::makeVtxArrayCmd() {
         case GX_VA_CLR1: {
             stride[vtxAttr->attr - GX_VA_POS] = 4;
             array[vtxAttr->attr - GX_VA_POS] = mVertexData->getVtxColorArray(vtxAttr->attr - GX_VA_CLR0);
+#if TARGET_PC
+            if (vtxAttr->attr == GX_VA_CLR0) {
+                size[vtxAttr->attr - GX_VA_POS] = mVertexData->getColNum() * stride[vtxAttr->attr - GX_VA_POS];
+            } else {
+                size[vtxAttr->attr - GX_VA_POS] = mVertexData->getVtxArrByteSize(vtxAttr->attr);
+            }
+#endif
         } break;
         case GX_VA_TEX0:
         case GX_VA_TEX1:
@@ -226,6 +245,9 @@ void J3DShape::makeVtxArrayCmd() {
                 stride[vtxAttr->attr - GX_VA_POS] = 4;
 
             array[vtxAttr->attr - GX_VA_POS] = mVertexData->getVtxTexCoordArray(vtxAttr->attr - GX_VA_TEX0);
+#if TARGET_PC
+            size[vtxAttr->attr - GX_VA_POS] = mVertexData->getVtxArrByteSize(vtxAttr->attr);
+#endif
         } break;
         default:
             break;
@@ -239,17 +261,27 @@ void J3DShape::makeVtxArrayCmd() {
             mHasNBT = true;
             stride[GX_VA_NRM - GX_VA_POS] *= 3;
             array[GX_VA_NRM - GX_VA_POS] = mVertexData->getVtxNBTArray();
+            // TODO: How set array size here?
         } else if (vtxDesc->attr == GX_VA_PNMTXIDX && vtxDesc->type != GX_NONE) {
             mHasPNMTXIdx = true;
         }
     }
 
+#if TARGET_PC
+    for (u32 i = 0; i < 12; i++) {
+        if (array[i] != nullptr)
+            GDSetArraySized((GXAttr)(i + GX_VA_POS), array[i], size[i], stride[i]);
+        else
+            GDSetArraySized((GXAttr)(i + GX_VA_POS), nullptr, 0, stride[i]);
+    }
+#else
     for (u32 i = 0; i < 12; i++) {
         if (array[i] != 0)
             GDSetArray((GXAttr)(i + GX_VA_POS), array[i], stride[i]);
         else
             GDSetArrayRaw((GXAttr)(i + GX_VA_POS), 0, stride[i]);
     }
+#endif
 }
 
 void J3DShape::makeVcdVatCmd() {
@@ -291,9 +323,7 @@ bool J3DShape::sEnvelopeFlag;
 
 void J3DShape::setArrayAndBindPipeline() const {
     J3DShapeMtx::setCurrentPipeline((mFlags & 0x1C) >> 2);
-#if !TARGET_PC
     loadVtxArray();
-#endif
     j3dSys.setModelDrawMtx(mDrawMtx[*mCurrentViewNo]);
     j3dSys.setModelNrmMtx(mNrmMtx[*mCurrentViewNo]);
     J3DShapeMtx::sCurrentScaleFlag = mScaleFlagArray;
@@ -306,9 +336,6 @@ void J3DShape::drawFast() const {
     if (sOldVcdVatCmd != mVcdVatCmd) {
         GXCallDisplayList(mVcdVatCmd, kVcdVatDLSize);
         sOldVcdVatCmd = mVcdVatCmd;
-#if TARGET_PC
-        loadVtxArray();
-#endif
     }
 
     if (sEnvelopeFlag != 0 && !mHasPNMTXIdx)

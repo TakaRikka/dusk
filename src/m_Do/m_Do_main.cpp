@@ -224,7 +224,6 @@ int game_main(int argc, char* argv[]) {
     // 1. Aurora Init
     AuroraConfig config{};
     config.appName = "Zelda: Twilight Princess";
-    config.desiredBackend = BACKEND_VULKAN;
     config.windowPosX = -1;
     config.windowPosY = -1;
     config.windowWidth = 640 * 2;
