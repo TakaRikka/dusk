@@ -32,7 +32,7 @@ namespace nw4hbm {
                 const res::Material* pResMaterial = detail::ConvertOffsToPtr<res::Material>(
                     resBlockSet.pMaterialList, matOffsTbl[pResPic->materialIdx]);
 
-                mpMaterial = JKR_NEW_ARGS (pMemMaterial) Material(pResMaterial, resBlockSet);
+                mpMaterial = new (pMemMaterial) Material(pResMaterial, resBlockSet);
             }
         }
 

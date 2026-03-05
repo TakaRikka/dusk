@@ -38,7 +38,7 @@ namespace nw4hbm {
                         return NULL;
                     }
 
-                    return JKR_NEW_ARGS (ptr) T;
+                    return new (ptr) T;
                 }
 
                 void Free(T* obj) {

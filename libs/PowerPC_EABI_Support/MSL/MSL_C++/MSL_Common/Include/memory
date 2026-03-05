@@ -9,7 +9,7 @@ template<class ForwardIt, class Size, class T>
 inline void uninitialized_fill_n(ForwardIt first, Size count, const T& value) {
     ForwardIt r29 = first;
     for (; count--; ++first) {
-        JKR_NEW_ARGS (first) T(value);
+        new (first) T(value);
     }
 }
 

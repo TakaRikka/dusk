@@ -45,7 +45,7 @@ namespace nw4hbm {
 
         void Group::AppendPane(Pane* pPane) {
             if (void* pMem = Layout::AllocMemory(sizeof(detail::PaneLink))) {
-                detail::PaneLink* pPaneLink = JKR_NEW_ARGS (pMem) detail::PaneLink();
+                detail::PaneLink* pPaneLink = new (pMem) detail::PaneLink();
 
                 pPaneLink->mTarget = pPane;
                 mPaneLinkList.PushBack(pPaneLink);

@@ -39,7 +39,7 @@ namespace nw4hbm {
                     void* ptr = mPool.Alloc();
 
                     if (ptr != NULL) {
-                        sound = JKR_NEW_ARGS (ptr) T(this);
+                        sound = new (ptr) T(this);
                     } else {
                         if (mPriorityList.IsEmpty()) {
                             return NULL;
@@ -57,7 +57,7 @@ namespace nw4hbm {
 
                         ptr = mPool.Alloc();
                         NW4HBM_ASSERT_CHECK_NULL(114, ptr);
-                        sound = JKR_NEW_ARGS (ptr) T(this);
+                        sound = new (ptr) T(this);
                     }
 
                     InsertPriorityList(sound, priority);
