@@ -107,8 +107,10 @@ void JUTProcBar::adjustMeterLength(u32 param_0, f32* param_1, f32 param_2, f32 p
 }
 
 void JUTProcBar::draw() {
+#if !TARGET_PC
     drawProcessBar();
     drawHeapBar();
+#endif
 }
 
 void JUTProcBar::drawProcessBar() {
