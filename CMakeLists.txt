@@ -75,6 +75,10 @@ target_link_libraries(game PRIVATE game_debug)
 target_compile_definitions(game PRIVATE TARGET_PC VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0)
 
 add_executable(dusk src/dusk/main.cpp)
-target_compile_definitions(dusk PRIVATE TARGET_PC VERSION=0)
+if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    target_sources(dusk PRIVATE src/dusk/res.rc)
+endif ()
+
+target_compile_definitions(dusk PRIVATE TARGET_PC AVOID_UB VERSION=0)
 target_include_directories(dusk PRIVATE include)
 target_link_libraries(dusk PRIVATE game aurora::main)
