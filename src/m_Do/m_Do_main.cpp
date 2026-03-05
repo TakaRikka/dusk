@@ -261,6 +261,8 @@ int game_main(int argc, char* argv[]) {
 
     main01();
 
+    exit(0);
+
     aurora_shutdown();
 
     return 0;
