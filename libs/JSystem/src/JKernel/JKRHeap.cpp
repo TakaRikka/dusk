@@ -681,7 +681,8 @@ JKRHeap* JKRHeap::getCurrentHeap() {
 
 void JKRHeap::setName(const char* name) {
     size_t len = strlen(name);
-    memcpy(mName, name, std::max(len, sizeof(mName)-1));
+    strncpy(mName, name, sizeof(mName) - 1);
+    mName[sizeof(mName) - 1] = '\0';
 }
 const char* JKRHeap::getName() const {
     return mName;
