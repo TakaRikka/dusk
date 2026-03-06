@@ -79,17 +79,17 @@ J3DSkinDeform::J3DSkinDeform() {
     mSkinNList = NULL;
 }
 
-u16* J3DSkinDeform::sWorkArea_WEvlpMixMtx[1024];
+BE(u16)* J3DSkinDeform::sWorkArea_WEvlpMixMtx[1024];
 
-f32* J3DSkinDeform::sWorkArea_WEvlpMixWeight[1024];
+BE(f32)* J3DSkinDeform::sWorkArea_WEvlpMixWeight[1024];
 
 void J3DSkinDeform::initSkinInfo(J3DModelData* pModelData) {
     J3D_ASSERT_NULLPTR(322, pModelData != NULL);
 
     int vtxNum = pModelData->getVtxNum();
     int wevlpMtxNum = pModelData->getWEvlpMtxNum();
-    u16* wevlpMtxIndex = pModelData->getWEvlpMixMtxIndex();
-    f32* wevlpMixWeights = pModelData->getWEvlpMixWeight();
+    BE(u16)* wevlpMtxIndex = pModelData->getWEvlpMixMtxIndex();
+    BE(f32)* wevlpMixWeights = pModelData->getWEvlpMixWeight();
     int currentOffset = 0;
 
     for (int i = 0; i < wevlpMtxNum; i++) {
@@ -111,7 +111,7 @@ void J3DSkinDeform::initSkinInfo(J3DModelData* pModelData) {
             } else {
                 u16 drawMtxIndex = pModelData->getDrawMtxIndex(uVar8);
                 int wevlpMtxNum = pModelData->getWEvlpMixMtxNum(drawMtxIndex);
-                u16* indices = sWorkArea_WEvlpMixMtx[drawMtxIndex];
+                BE(u16)* indices = sWorkArea_WEvlpMixMtx[drawMtxIndex];
                 for (int j = 0; j < wevlpMtxNum; j++) {
                     mSkinNList[indices[j]].field_0x10++;
                 }
@@ -128,7 +128,7 @@ void J3DSkinDeform::initSkinInfo(J3DModelData* pModelData) {
             } else {
                 u16 drawMtxIndex = pModelData->getDrawMtxIndex(uVar8);
                 int wevlpMtxNum = pModelData->getWEvlpMixMtxNum(drawMtxIndex);
-                u16* indices = sWorkArea_WEvlpMixMtx[drawMtxIndex];
+                BE(u16)* indices = sWorkArea_WEvlpMixMtx[drawMtxIndex];
                 for (int j = 0; j < wevlpMtxNum; j++) {
                     mSkinNList[indices[j]].field_0x12++;
                 }
@@ -160,8 +160,8 @@ void J3DSkinDeform::initSkinInfo(J3DModelData* pModelData) {
             } else {
                 u16 drawMtxIndex = pModelData->getDrawMtxIndex(uVar8);
                 int wevlpMtxNum = pModelData->getWEvlpMixMtxNum(drawMtxIndex);
-                u16* indices = sWorkArea_WEvlpMixMtx[drawMtxIndex];
-                f32* weights = sWorkArea_WEvlpMixWeight[drawMtxIndex];
+                BE(u16)* indices = sWorkArea_WEvlpMixMtx[drawMtxIndex];
+                BE(f32)* weights = sWorkArea_WEvlpMixWeight[drawMtxIndex];
                 for (int j = 0; j < wevlpMtxNum; j++) {
                     int uVar9 = mSkinNList[indices[j]].field_0x10++;
                     mSkinNList[indices[j]].field_0x0[uVar9] = i;
@@ -182,8 +182,8 @@ void J3DSkinDeform::initSkinInfo(J3DModelData* pModelData) {
             } else {
                 u16 drawMtxIndex = pModelData->getDrawMtxIndex(uVar8);
                 int wevlpMtxNum = pModelData->getWEvlpMixMtxNum(drawMtxIndex);
-                u16* indices = sWorkArea_WEvlpMixMtx[drawMtxIndex];
-                f32* weights = sWorkArea_WEvlpMixWeight[drawMtxIndex];
+                BE(u16)* indices = sWorkArea_WEvlpMixMtx[drawMtxIndex];
+                BE(f32)* weights = sWorkArea_WEvlpMixWeight[drawMtxIndex];
                 for (int j = 0; j < wevlpMtxNum; j++) {
                     int uVar9 = mSkinNList[indices[j]].field_0x12++;
                     mSkinNList[indices[j]].field_0x4[uVar9] = i;
@@ -448,7 +448,9 @@ void J3DSkinDeform::transformVtxPosNrm(J3DModelData* pModelData) {
                 u16 drawMtxIndex = pModelData->getDrawMtxIndex(posIndex);
                 Vec* pos = ((Vec*)pModelData->getVtxPosArray()) + i;
                 Mtx invMtx;
-                MTXInverse(pModelData->getInvJointMtx(drawMtxIndex), invMtx);
+                Mtx copy;
+                pModelData->getInvJointMtx(drawMtxIndex).to_host(copy);
+                MTXInverse(copy, invMtx);
                 MTXMultVec(invMtx, pos, pos);
             }
         }
@@ -459,7 +461,9 @@ void J3DSkinDeform::transformVtxPosNrm(J3DModelData* pModelData) {
                 u16 drawMtxIndex = pModelData->getDrawMtxIndex(nrmIndex);
                 Vec* nrm = ((Vec*)pModelData->getVtxNrmArray()) + i;
                 Mtx invMtx;
-                MTXInverse(pModelData->getInvJointMtx(drawMtxIndex), invMtx);
+                Mtx copy;
+                pModelData->getInvJointMtx(drawMtxIndex).to_host(copy);
+                MTXInverse(copy, invMtx);
                 MTXMultVecSR(invMtx, nrm, nrm);
             }
         }
@@ -474,10 +478,12 @@ void J3DSkinDeform::calcAnmInvJointMtx(J3DMtxBuffer* pMtxBuffer) {
     if (pMtxBuffer->getJointTree()->getWEvlpMtxNum() != 0) {
         int jointNum = pMtxBuffer->getJointTree()->getJointNum();
         Mtx* anmMtx = (Mtx*)pMtxBuffer->getAnmMtx(0);
-        Mtx* invJointMtx = &pMtxBuffer->getJointTree()->getInvJointMtx(0);
+        BE(Mtx)* invJointMtx = &pMtxBuffer->getJointTree()->getInvJointMtx(0);
         Mtx* posMtx = mPosMtx;
         for (int i = 0; i < jointNum; i++) {
-            MTXConcat(anmMtx[i], invJointMtx[i], posMtx[i]);
+            Mtx copy;
+            invJointMtx[i].to_host(copy);
+            MTXConcat(anmMtx[i], copy, posMtx[i]);
         }
     }
 }
