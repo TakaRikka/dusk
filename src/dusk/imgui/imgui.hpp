@@ -9,6 +9,10 @@ inline const char* MenuView = "View";
 void DuskImguiDebugOverlay(const AuroraInfo *info);
 void DuskImguiProcesses();
 void DuskImguiHeaps();
+void DuskCameraDebug();
+
+void SetOverlayWindowLocation(int corner);
+bool ShowCornerContextMenu(int& corner, int avoidCorner);
 
 std::string BytesToString(size_t bytes);
 

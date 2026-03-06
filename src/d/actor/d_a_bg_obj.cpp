@@ -72,16 +72,16 @@ static const char* dummy() {
 
 u8* daBgObj_c::spec_data_c::initParticleBlock(u8* i_dataPtr) {
     mpParticleBlock = i_dataPtr;
-    mParticleNum = *(u32*)mpParticleBlock >> 4 & 0xFFFFF;
+    mParticleNum = BSWAP32(*(u32*)mpParticleBlock) >> 4 & 0xFFFFF;
 
-    return i_dataPtr + ((*(u32*)mpParticleBlock & 0xFFFFFF) + 4);
+    return i_dataPtr + ((BSWAP32(*(u32*)mpParticleBlock) & 0xFFFFFF) + 4);
 }
 
 u8* daBgObj_c::spec_data_c::initSoundBlock(u8* i_dataPtr) {
     mpSoundBlock = i_dataPtr;
-    mSoundNum = *(u32*)mpSoundBlock >> 2 & 0x3FFFFF;
+    mSoundNum = BSWAP32(*(u32*)mpSoundBlock) >> 2 & 0x3FFFFF;
 
-    return i_dataPtr + ((*(u32*)mpSoundBlock & 0xFFFFFF) + 4);
+    return i_dataPtr + ((BSWAP32(*(u32*)mpSoundBlock) & 0xFFFFFF) + 4);
 }
 
 u8* daBgObj_c::spec_data_c::initTexShareBlock(u8* i_dataPtr) {
@@ -111,7 +111,7 @@ u8* daBgObj_c::spec_data_c::initTexShareBlock(u8* i_dataPtr) {
 }
 
 u8* daBgObj_c::spec_data_c::initFarInfoBlock(u8* i_dataPtr) {
-    mpFarInfoBlock = *(f32*)(i_dataPtr + 4);
+    mpFarInfoBlock = RES_F32(*(f32*)(i_dataPtr + 4));
     return i_dataPtr + 8;
 }
 
@@ -120,7 +120,7 @@ bool daBgObj_c::spec_data_c::Set(void* i_ptr) {
 
     u8* data = (u8*)i_ptr;
 
-    mSpecType = *(u16*)i_ptr;
+    mSpecType = BSWAP16(*(u16*)i_ptr);
 
     u8 block_type;
     u16 temp_r3;
@@ -155,7 +155,7 @@ bool daBgObj_c::spec_data_c::Set(void* i_ptr) {
         break;
     }
     case 1: {
-        temp_r3 = *(u16*)(data + 2);
+        temp_r3 = BSWAP16(*(u16*)(data + 2));
         field_0x02 = temp_r3 & 0xF;
         field_0x03 = (temp_r3 >> 0xE) & 3;
         field_0x15 = (temp_r3 >> 0xC) & 3;
@@ -196,7 +196,7 @@ bool daBgObj_c::spec_data_c::Set(void* i_ptr) {
         break;
     }
     case 2: {
-        temp_r3 = *(u16*)(data + 2);
+        temp_r3 = BSWAP16(*(u16*)(data + 2));
         field_0x02 = temp_r3 & 0xF;
         field_0x03 = (temp_r3 >> 0xE) & 3;
         field_0x15 = (temp_r3 >> 0xC) & 3;
@@ -326,7 +326,7 @@ void daBgObj_c::initAtt() {
         // Failed to generate focus actor
         OS_REPORT_ERROR("「注目点」生成失敗！！！\n");
     }
-    
+
     mAttnActorID = fopAcM_GetID(actor);
     const Vec* box = fopAcM_getCullSizeBoxMax(this);
     eyePos.y += 0.5f * box->y;

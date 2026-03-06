@@ -1330,6 +1330,7 @@ set(DUSK_FILES
         src/dusk/dvd_emu.cpp
         src/dusk/imgui/imgui.hpp
         src/dusk/imgui/processes.cpp
+        src/dusk/imgui/camera.cpp
         src/dusk/imgui/debug_overlay.cpp
         src/dusk/imgui/heaps.cpp
         src/dusk/offset_ptr.cpp

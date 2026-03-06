@@ -215,6 +215,7 @@ int dDemo_actor_c::getDemoIDData(int* o_arg0, int* o_arg1, int* o_arg2, u16* o_r
     }
 
     u32 var_r31 = *it;
+    be_swap(var_r31);
     *o_arg0 = var_r31 >> 0x1E;
     *o_arg1 = (var_r31 >> 0x18) & 0xF;
     *o_arg2 = (var_r31 >> 0x10) & 0xF;
