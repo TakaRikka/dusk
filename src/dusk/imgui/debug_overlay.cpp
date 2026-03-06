@@ -4,6 +4,7 @@
 
 #include "fmt/format.h"
 #include "imgui.h"
+#include "aurora/gfx.h"
 
 #include "aurora/gfx.h"
 #include "imgui.hpp"
@@ -12,12 +13,6 @@ static bool m_frameRate = true;
 static bool m_pipelineInfo = true;
 static bool m_graphicsBackend = true;
 static int m_debugOverlayCorner = 0; // top-left
-
-namespace aurora::gfx
-{
-    extern std::atomic_uint32_t queuedPipelines;
-    extern std::atomic_uint32_t createdPipelines;
-} // namespace aurora::gfx
 
 using namespace std::string_literals;
 using namespace std::string_view_literals;
@@ -148,27 +143,29 @@ void DuskImguiDebugOverlay(const AuroraInfo *info) {
                 ImGui::Separator();
             }
             hasPrevious = true;
-            const AuroraStats* auroraStats = aurora_get_stats();
+
+            AuroraStats const* stats = aurora_get_stats();
+
             ImGuiStringViewText(
-                fmt::format(FMT_STRING("Queued pipelines:  {}\n"), aurora::gfx::queuedPipelines.load()));
+                fmt::format(FMT_STRING("Queued pipelines:  {}\n"), stats->queuedPipelines));
             ImGuiStringViewText(
-                fmt::format(FMT_STRING("Done pipelines:    {}\n"), aurora::gfx::createdPipelines.load()));
+                fmt::format(FMT_STRING("Done pipelines:    {}\n"), stats->createdPipelines));
             ImGuiStringViewText(
-                fmt::format(FMT_STRING("Draw call count:   {}\n"), auroraStats->drawCallCount));
+                fmt::format(FMT_STRING("Draw call count:   {}\n"), stats->drawCallCount));
             ImGuiStringViewText(fmt::format(FMT_STRING("Merged draw calls: {}\n"),
-                                            auroraStats->mergedDrawCallCount));
+                                            stats->mergedDrawCallCount));
             ImGuiStringViewText(fmt::format(FMT_STRING("Vertex size:       {}\n"),
-                                            BytesToString(auroraStats->lastVertSize)));
+                                            BytesToString(stats->lastVertSize)));
             ImGuiStringViewText(fmt::format(FMT_STRING("Uniform size:      {}\n"),
-                                            BytesToString(auroraStats->lastUniformSize)));
+                                            BytesToString(stats->lastUniformSize)));
             ImGuiStringViewText(fmt::format(FMT_STRING("Index size:        {}\n"),
-                                            BytesToString(auroraStats->lastIndexSize)));
+                                            BytesToString(stats->lastIndexSize)));
             ImGuiStringViewText(fmt::format(FMT_STRING("Storage size:      {}\n"),
-                                            BytesToString(auroraStats->lastStorageSize)));
+                                            BytesToString(stats->lastStorageSize)));
             ImGuiStringViewText(fmt::format(
                 FMT_STRING("Total:             {}\n"),
-                BytesToString(auroraStats->lastVertSize + auroraStats->lastUniformSize +
-                    auroraStats->lastIndexSize + auroraStats->lastStorageSize)));
+                BytesToString(stats->lastVertSize + stats->lastUniformSize +
+                              stats->lastIndexSize + stats->lastStorageSize)));
         }
     }
     ImGui::End();
