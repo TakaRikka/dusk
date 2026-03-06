@@ -15,6 +15,8 @@
 #include "aurora/aurora.h"
 #include "JSystem/JKernel/JKRHeap.h"
 
+#include "dusk/logging.h"
+
 void JFWDisplay::ctor_subroutine(bool enableAlpha) {
     mEnableAlpha = enableAlpha;
     mClamp = GX_CLAMP_TOP | GX_CLAMP_BOTTOM;
@@ -450,7 +452,7 @@ void JFWDisplay::clearEfb(GXColor color) {
 
 void JFWDisplay::clearEfb(int param_0, int param_1, int param_2, int param_3, GXColor color) {
 #if TARGET_PC
-    //puts("clearEfb not implemented");
+    STUB_LOG();
     return;
 #endif
     u16 width;
