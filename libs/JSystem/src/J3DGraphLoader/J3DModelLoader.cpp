@@ -573,7 +573,7 @@ void J3DModelLoader::readDraw(J3DDrawBlock const* i_block) {
     J3DDrawMtxData* drawMtxData = mpModelData->getDrawMtxData();
     drawMtxData->mEntryNum = i_block->mMtxNum - mpModelData->getWEvlpMtxNum();
     drawMtxData->mDrawMtxFlag = JSUConvertOffsetToPtr<u8>(i_block, i_block->mpDrawMtxFlag);
-    drawMtxData->mDrawMtxIndex = JSUConvertOffsetToPtr<u16>(i_block, i_block->mpDrawMtxIndex);
+    drawMtxData->mDrawMtxIndex = JSUConvertOffsetToPtr<BE(u16)>(i_block, i_block->mpDrawMtxIndex);
     u16 i;
     for (i = 0; i < drawMtxData->mEntryNum; i++) {
         if (drawMtxData->mDrawMtxFlag[i] == 1) {

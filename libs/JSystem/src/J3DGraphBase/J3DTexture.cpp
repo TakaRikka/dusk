@@ -13,6 +13,10 @@ void J3DTexture::loadGX(u16 idx, GXTexMapID texMapID) const {
 #if TARGET_PC
     if (timg->width == 0 || timg->height == 0)
         return;
+    if (idx >= mNum) {
+        OSReport("J3DTexture::loadGX: idx %d out of bounds (mNum=%d)!\n", idx, mNum);
+        return;
+    }
     GXLoadTexObj(&mpTexObj[idx], texMapID);
 #else
     if (!timg->indexTexture) {
@@ -80,9 +84,9 @@ void J3DTexture::entryNum(u16 num) {
     delete[] mpTexObj;
     delete[] mpImgDataPtr;
     delete[] mpTlutDataPtr;
-    mpTexObj = new GXTexObj[num];
-    mpImgDataPtr = new u8*[num];
-    mpTlutDataPtr = new u8*[num];
+    mpTexObj = new GXTexObj[num]();
+    mpImgDataPtr = new u8*[num]();
+    mpTlutDataPtr = new u8*[num]();
 
     for (int i = 0; i < mNum; i++) {
         mpRes[i].paletteOffset = 0;

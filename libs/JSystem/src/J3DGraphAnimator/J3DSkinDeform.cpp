@@ -298,7 +298,7 @@ int J3DSkinDeform::initMtxIndexArray(J3DModelData* pModelData) {
 #if PLATFORM_GCN
                 uVar13 = *(u16*)(pDListPos + 1);
 #else
-                uVar13 = *(u16*)pDListPos;
+                uVar13 = be16(*(u16*)pDListPos);
                 pDListPos += 2;
 #endif
                 for (int local_60 = 0; local_60 < uVar13; local_60++) {
@@ -308,9 +308,9 @@ int J3DSkinDeform::initMtxIndexArray(J3DModelData* pModelData) {
                     u8* iVar5 = ((u8*)pDListPos + r23 * local_60);
 #endif
                     u8 bVar3 = *(u8*)(iVar5 + pnmtx_num) / 3U;
-                    u16 vtx_idx = *(u16*)(iVar5 + vtx_num);
-                    u16 nrm_idx = *(u16*)(iVar5 + nrm_num);
-                    u16 uVar3 = *(u16*)(iVar5 + tex_num);
+                    u16 vtx_idx = be16(*(u16*)(iVar5 + vtx_num));
+                    u16 nrm_idx = be16(*(u16*)(iVar5 + nrm_num));
+                    u16 uVar3 = be16(*(u16*)(iVar5 + tex_num));
                     u16 local_76 = pShapeMtx->getUseMtxIndex(bVar3);
                     if (local_76 == 0xffff) {
                         local_76 = sWorkArea_MtxReg[bVar3];
@@ -376,9 +376,10 @@ void J3DSkinDeform::changeFastSkinDL(J3DModelData* pModelData) {
                     if (cmd != GX_TRIANGLEFAN && cmd != GX_TRIANGLESTRIP)
                         break;
 
-                    int vtxCount = *(u16*)dl;
+                    u16 vtxCountBE = *(u16*)dl;
+                    int vtxCount = be16(vtxCountBE);
                     dl += 2;
-                    *(u16*)dst = vtxCount;
+                    *(u16*)dst = vtxCountBE;
                     dst += 2;
 
                     for (int k = 0; k < vtxCount; k++) {

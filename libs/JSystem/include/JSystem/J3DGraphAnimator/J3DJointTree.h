@@ -32,7 +32,7 @@ struct J3DDrawMtxData {
     /* 0x0 */ u16 mEntryNum;
     /* 0x2 */ u16 mDrawFullWgtMtxNum;
     /* 0x4 */ u8* mDrawMtxFlag;
-    /* 0x8 */ u16* mDrawMtxIndex;
+    /* 0x8 */ BE(u16)* mDrawMtxIndex;
 };  // Size: 0xC
 
 class J3DShapeTable;
