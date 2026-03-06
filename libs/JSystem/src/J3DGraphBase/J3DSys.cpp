@@ -264,7 +264,7 @@ void J3DSys::reinitTransform() {
 }
 
 void J3DSys::reinitTexture() {
-    GXTexObj texObj;
+    static GXTexObj texObj;
     GXInitTexObj(&texObj, NullTexData, 4, 4, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     GXLoadTexObj(&texObj, GX_TEXMAP1);
