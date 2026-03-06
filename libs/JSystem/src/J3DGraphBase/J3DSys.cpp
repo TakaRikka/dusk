@@ -264,7 +264,7 @@ void J3DSys::reinitTransform() {
 }
 
 void J3DSys::reinitTexture() {
-    static GXTexObj texObj;
+    GXTexObj texObj;
     GXInitTexObj(&texObj, NullTexData, 4, 4, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     GXLoadTexObj(&texObj, GX_TEXMAP1);
@@ -274,6 +274,9 @@ void J3DSys::reinitTexture() {
     GXLoadTexObj(&texObj, GX_TEXMAP5);
     GXLoadTexObj(&texObj, GX_TEXMAP6);
     GXLoadTexObj(&texObj, GX_TEXMAP7);
+#if TARGET_PC
+    GXDestroyTexObj(&texObj);
+#endif
 }
 
 void J3DSys::reinitTevStages() {

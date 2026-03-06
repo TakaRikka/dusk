@@ -732,9 +732,7 @@ void fapGm_Execute() {
     JUTDbPrint::getManager()->setCharColor(g_HIO.mColor);
     #endif
 
-    printf("[DIAG] fapGm_Execute: entering fpcM_Management...\n"); fflush(stdout);
-         fpcM_Management(NULL, fapGm_After);
-    printf("[DIAG] fapGm_Execute: fpcM_Management returned\n"); fflush(stdout);
+    fpcM_Management(NULL, fapGm_After);
     cCt_Counter(0);
 }
 
