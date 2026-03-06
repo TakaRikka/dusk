@@ -309,6 +309,9 @@ void dDlst_2DT_c::draw() {
     GXEnd();
     GXSetClipMode(GX_CLIP_ENABLE);
     dComIfGp_getCurrentGrafPort()->setup2D();
+#if TARGET_PC
+    GXDestroyTexObj(&tex);
+#endif
 }
 
 void dDlst_2DT2_c::draw() {
@@ -710,6 +713,10 @@ void dDlst_2DM_c::draw() {
     GXTexCoord2s16(r27, r24);
     GXEnd();
     dComIfGp_getCurrentGrafPort()->setup2D();
+#if TARGET_PC
+    GXDestroyTexObj(&tex[0]);
+    GXDestroyTexObj(&tex[1]);
+#endif
 }
 
 

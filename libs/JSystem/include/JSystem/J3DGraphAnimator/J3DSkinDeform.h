@@ -59,8 +59,8 @@ public:
     virtual void deform(J3DVertexBuffer*, J3DMtxBuffer*);
     virtual ~J3DSkinDeform();
 
-    static u16* sWorkArea_WEvlpMixMtx[1024];
-    static f32* sWorkArea_WEvlpMixWeight[1024];
+    static BE(u16)* sWorkArea_WEvlpMixMtx[1024];
+    static BE(f32)* sWorkArea_WEvlpMixWeight[1024];
     static u16 sWorkArea_MtxReg[1024];
 
 private:

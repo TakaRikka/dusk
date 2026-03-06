@@ -350,7 +350,7 @@ void dCamera_c::initialize(camera_class* i_camera, fopAc_ac_c* i_player, u32 i_c
     void* objRes = dComIfG_getObjectRes(fileName, "camtype.dat");
     char* typeData = (char*)objRes;
     mCamTypeData = (dCamera_type_data*)(typeData + 8);
-    mCamTypeNum = *(int*)(typeData + 4);
+    mCamTypeNum = BSWAP32(*(int*)(typeData + 4));
 
     field_0x0 = i_camera;
     field_0x20 = 1;

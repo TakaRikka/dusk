@@ -240,15 +240,15 @@ static f32 J3DUnit01[] = { 0.0f, 1.0f };
 void J3DMtxBuffer::calcWeightEnvelopeMtx() {
     __REGISTER MtxP weightAnmMtx;
     __REGISTER Mtx* worldMtx;
-    __REGISTER Mtx* invMtx;
+    __REGISTER Mtx invMtx;
     __REGISTER f32 weight;
     int idx;
     int j;
     int mixNum;
     int i;
     int max;
-    u16* indices;
-    f32* weights;
+    BE(u16)* indices;
+    BE(f32)* weights;
     u8* pScale;
 
     #if DEBUG || !__MWERKS__
@@ -311,11 +311,13 @@ void J3DMtxBuffer::calcWeightEnvelopeMtx() {
         do {
             idx = *++indices;
             worldMtx = &mpAnmMtx[idx];
-            invMtx = &mJointTree->getInvJointMtx((u16)idx);
+
 
             #if DEBUG || !__MWERKS__
-            MTXConcat(*worldMtx, *invMtx, mtx);
+            mJointTree->getInvJointMtx((u16)idx).to_host(invMtx);
+            MTXConcat(*worldMtx, invMtx, mtx);
             #else
+            invMtx = &mJointTree->getInvJointMtx((u16)idx);
             // Fakematch? Doesn't match if worldMtx and invMtx are used directly.
             __REGISTER void* var_r5 = worldMtx;
             __REGISTER void* var_r6 = invMtx;

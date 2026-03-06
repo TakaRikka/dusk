@@ -244,13 +244,12 @@ int game_main(int argc, char* argv[]) {
       exit(0);
     }
 
-    // 1. Aurora Init
     duskConfig = {};
     duskConfig.appName = "Zelda: Twilight Princess";
     duskConfig.windowPosX = -1;
     duskConfig.windowPosY = -1;
-    duskConfig.windowWidth = 640 * 2;
-    duskConfig.windowHeight = 480 * 2;
+    duskConfig.windowWidth = 608 * 2;
+    duskConfig.windowHeight = 448 * 2;
     duskConfig.configPath = ".";
     duskConfig.logCallback = &aurora_log_callback;
     duskConfig.logLevel = (AuroraLogLevel)parsed_arg_options["log-level"].as<uint8_t>();
