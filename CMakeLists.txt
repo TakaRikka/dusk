@@ -45,6 +45,18 @@ elseif (MSVC)
 endif ()
 
 
+include(FetchContent)
+
+message(STATUS "dusk: Fetching cxxopts")
+FetchContent_Declare(
+  cxxopts
+  GIT_REPOSITORY https://github.com/jarro2783/cxxopts.git
+  GIT_TAG v3.3.1
+)
+
+FetchContent_MakeAvailable(cxxopts)
+
+
 include(files.cmake)
 
 # TODO: version handling for res includes
@@ -71,7 +83,7 @@ target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::si auror
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES})
-target_link_libraries(game PRIVATE game_debug)
+target_link_libraries(game PRIVATE game_debug cxxopts::cxxopts)
 target_compile_definitions(game PRIVATE TARGET_PC AVOID_UB VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0)
 
 # Hide global operator new/delete overrides from the dynamic symbol table.
