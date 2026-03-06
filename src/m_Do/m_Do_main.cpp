@@ -226,8 +226,8 @@ int game_main(int argc, char* argv[]) {
     config.appName = "Zelda: Twilight Princess";
     config.windowPosX = -1;
     config.windowPosY = -1;
-    config.windowWidth = 640 * 2;
-    config.windowHeight = 480 * 2;
+    config.windowWidth = 608 * 2;
+    config.windowHeight = 448 * 2;
     config.configPath = ".";
     config.logCallback = &aurora_log_callback;
     config.mem1Size = 256 * 1024 * 1024;

@@ -1122,7 +1122,11 @@ void mDoGph_gInf_c::bloom_c::remove() {
 }
 
 void mDoGph_gInf_c::bloom_c::draw() {
+#if TARGET_PC // TODO: fix bloom
+    bool enabled = false;
+#else
     bool enabled = mEnable && m_buffer != NULL;
+#endif
     if (mMonoColor.a != 0 || enabled) {
         GXSetViewport(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f);
         GXSetScissor(0, 0, FB_WIDTH, FB_HEIGHT);
