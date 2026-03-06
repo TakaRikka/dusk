@@ -9,14 +9,14 @@
 
 inline void loadMatColors(const J3DGXColor* color) {
     J3DGDWriteXFCmdHdr(0x100C, 2);
-    J3DGDWrite_u32(*(u32*)color);
-    J3DGDWrite_u32(*(u32*)(color + 1));
+    J3DGDWrite_u32(*(BE(u32)*)color);
+    J3DGDWrite_u32(*(BE(u32)*)(color + 1));
 }
 
 inline void loadAmbColors(const J3DGXColor* color) {
     J3DGDWriteXFCmdHdr(0x100A, 2);
-    J3DGDWrite_u32(*(u32*)color);
-    J3DGDWrite_u32(*(u32*)(color + 1));
+    J3DGDWrite_u32(*(BE(u32)*)color);
+    J3DGDWrite_u32(*(BE(u32)*)(color + 1));
 }
 
 inline void loadTexCoordScale(GXTexCoordID coord, const J3DTexCoordScaleInfo& info) {
