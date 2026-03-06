@@ -783,9 +783,9 @@ void JKRExpHeap::recycleFreeBlock(JKRExpHeap::CMemBlock* block) {
 }
 
 void JKRExpHeap::joinTwoBlocks(CMemBlock* block) {
-    u32 endAddr = (uintptr_t)(block + 1) + block->size;
+    uintptr_t endAddr = (uintptr_t)(block + 1) + block->size;
     CMemBlock* next = block->mNext;
-    u32 nextAddr = (uintptr_t)next - (next->mFlags & 0x7f);
+    uintptr_t nextAddr = (uintptr_t)next - (next->mFlags & 0x7f);
     if (endAddr > nextAddr) {
         JUTWarningConsole_f(":::Heap may be broken. (block = %x)", block);
         OS_REPORT(":::block = %x\n", block);
@@ -1005,6 +1005,10 @@ JKRExpHeap::CMemBlock* JKRExpHeap::CMemBlock::allocFore(u32 size1, u8 groupId1, 
     mGroupId = groupId1;
     mFlags = alignment1;
     if (size >= size1 + sizeof(CMemBlock)) {
+#if TARGET_PC
+        if ((size - size1) <= sizeof(CMemBlock))
+            return NULL;
+#endif
         block = (CMemBlock*)(size1 + (uintptr_t)this);
         block[1].mGroupId = groupId2;
         block[1].mFlags = alignment2;
