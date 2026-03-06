@@ -150,13 +150,17 @@ static void J3DLoadArrayBasePtr(GXAttr attr, void* data) {
 void J3DShape::loadVtxArray() const {
 #if TARGET_PC
     // TODO: these can very easily overcount if the data isn't in F32 format
-    J3DLoadArrayBasePtr(GX_VA_POS, j3dSys.getVtxPos(), j3dSys.mVtxPosNum * sizeof(Vec));
+    if (j3dSys.getVtxPos() != mVertexData->getVtxPosArray()) {
+        J3DLoadArrayBasePtr(GX_VA_POS, j3dSys.getVtxPos(), j3dSys.mVtxPosNum * sizeof(Vec));
+    }
 
-    if (!mHasNBT) {
+    if (!mHasNBT && j3dSys.getVtxNrm() != mVertexData->getVtxNrmArray()) {
         J3DLoadArrayBasePtr(GX_VA_NRM, j3dSys.getVtxNrm(), j3dSys.mVtxNrmNum * sizeof(Vec));
     }
 
-    J3DLoadArrayBasePtr(GX_VA_CLR0, j3dSys.getVtxCol(), j3dSys.mVtxColNum * sizeof(GXColor));
+    if (j3dSys.getVtxCol() != mVertexData->getVtxColorArray(0)) {
+        J3DLoadArrayBasePtr(GX_VA_CLR0, j3dSys.getVtxCol(), j3dSys.mVtxColNum * sizeof(GXColor));
+    }
 #else
     J3DLoadArrayBasePtr(GX_VA_POS, j3dSys.getVtxPos());
 
