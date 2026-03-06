@@ -46,10 +46,13 @@
 #include "SSystem/SComponent/c_API.h"
 #include "dusk/dvd_emu.h"
 #include "dusk/dusk.h"
+#include "dusk/config.h"
 
 #include <aurora/aurora.h>
 #include <aurora/event.h>
 #include <aurora/main.h>
+
+#include "cxxopts.hpp"
 
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
@@ -63,9 +66,13 @@ const int audioHeapSize = 0x14D800 * 2;
 const int audioHeapSize = 0x14D800;
 #endif
 
+DuskConfig duskConfig{};
+
 // --- PC LOGGING CALLBACK ---
 void aurora_log_callback(AuroraLogLevel level, const char* module, const char* message,
                          unsigned int len) {
+    if (level < duskConfig.logLevel) return;
+
     const char* levelStr = "??";
     FILE* out = stdout;
     switch (level) {
@@ -221,19 +228,35 @@ void main01(void) {
 // PC ENTRY POINT
 // =========================================================================
 int game_main(int argc, char* argv[]) {
-    // 1. Aurora Init
-    AuroraConfig config{};
-    config.appName = "Zelda: Twilight Princess";
-    config.windowPosX = -1;
-    config.windowPosY = -1;
-    config.windowWidth = 608 * 2;
-    config.windowHeight = 448 * 2;
-    config.configPath = ".";
-    config.logCallback = &aurora_log_callback;
-    config.mem1Size = 256 * 1024 * 1024;
-    config.mem2Size = 24 * 1024 * 1024;
+    cxxopts::Options arg_options("Dusk", "PC Port of The Legend of Zelda: Twilight Princess");
 
-    auroraInfo = aurora_initialize(argc, argv, &config);
+    arg_options.add_options()
+        ("l,log-level", "Log level from " + std::to_string(AuroraLogLevel::LOG_DEBUG) + " to " + std::to_string(AuroraLogLevel::LOG_FATAL), cxxopts::value<uint8_t>()->default_value("0"))
+        ("h,help", "Print usage");
+    
+    arg_options.allow_unrecognised_options();
+
+    auto parsed_arg_options = arg_options.parse(argc, argv);
+
+    if (parsed_arg_options.count("help"))
+    {
+      printf((arg_options.help() + "\n").c_str());
+      exit(0);
+    }
+
+    duskConfig = {};
+    duskConfig.appName = "Zelda: Twilight Princess";
+    duskConfig.windowPosX = -1;
+    duskConfig.windowPosY = -1;
+    duskConfig.windowWidth = 608 * 2;
+    duskConfig.windowHeight = 448 * 2;
+    duskConfig.configPath = ".";
+    duskConfig.logCallback = &aurora_log_callback;
+    duskConfig.logLevel = (AuroraLogLevel)parsed_arg_options["log-level"].as<uint8_t>();
+    duskConfig.mem1Size = 256 * 1024 * 1024;
+    duskConfig.mem2Size = 24 * 1024 * 1024;
+
+    auroraInfo = aurora_initialize(argc, argv, &duskConfig);
 
     OSInit();
 

@@ -5,5 +5,7 @@
 JAISoundInfo::JAISoundInfo(bool setInstance) : JASGlobalInstance<JAISoundInfo>(setInstance) {}
 
 JAISoundInfo::~JAISoundInfo() {
+    #if !TARGET_PC
     JUT_ASSERT(14, false);
+    #endif
 }
