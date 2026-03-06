@@ -5,8 +5,10 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JStudio/JStudio_JAudio2/object-sound.h"
+
 #include "JSystem/JStudio/JStudio_JAudio2/control.h"
 #include "JSystem/JStudio/JStudio_JStage/control.h"
+#include "dusk/audio.h"
 
 namespace JStudio_JAudio2 {
 namespace {
@@ -146,6 +148,7 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_update(u32 param_1) {
 
 void JStudio_JAudio2::TAdaptor_sound::adaptor_do_SOUND(JStudio::data::TEOperationData param_1,
                                                            void const* pContent, u32 uSize) {
+    DUSK_AUDIO_SKIP()
     switch(param_1) {
     case JStudio::data::UNK_0x19:
         JUT_ASSERT(283, pContent!=NULL);
