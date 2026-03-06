@@ -228,20 +228,28 @@ void main01(void) {
 // PC ENTRY POINT
 // =========================================================================
 int game_main(int argc, char* argv[]) {
-    cxxopts::Options arg_options("Dusk", "PC Port of The Legend of Zelda: Twilight Princess");
+    cxxopts::ParseResult parsed_arg_options;
 
-    arg_options.add_options()
-        ("l,log-level", "Log level from " + std::to_string(AuroraLogLevel::LOG_DEBUG) + " to " + std::to_string(AuroraLogLevel::LOG_FATAL), cxxopts::value<uint8_t>()->default_value("0"))
-        ("h,help", "Print usage");
-    
-    arg_options.allow_unrecognised_options();
+    try {
+        cxxopts::Options arg_options("Dusk", "PC Port of The Legend of Zelda: Twilight Princess");
 
-    auto parsed_arg_options = arg_options.parse(argc, argv);
+        arg_options.add_options()
+            ("l,log-level", "Log level from " + std::to_string(AuroraLogLevel::LOG_DEBUG) + " to " + std::to_string(AuroraLogLevel::LOG_FATAL), cxxopts::value<uint8_t>()->default_value("0"))
+            ("h,help", "Print usage");
+        
+        arg_options.allow_unrecognised_options();
 
-    if (parsed_arg_options.count("help"))
-    {
-      printf((arg_options.help() + "\n").c_str());
-      exit(0);
+        parsed_arg_options = arg_options.parse(argc, argv);
+
+        if (parsed_arg_options.count("help"))
+        {
+        printf((arg_options.help() + "\n").c_str());
+        exit(0);
+        }
+    }
+    catch (const cxxopts::exceptions::exception& e) {
+        fprintf(stderr, "Argument Error: %s\n", e.what());
+        exit(1);
     }
 
     duskConfig = {};
