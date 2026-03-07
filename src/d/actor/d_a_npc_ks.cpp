@@ -6882,7 +6882,7 @@ static int daNpc_Ks_Delete(npc_ks_class* i_this) {
 static int useHeapInit(fopAc_ac_c* actor) {
     npc_ks_class* i_this = (npc_ks_class*)actor;
 
-    i_this->model = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(i_this->res_name, npc_ks_class::BMDR_SARU), NULL, NULL, 
+    i_this->model = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(i_this->res_name, npc_ks_class::BMDR_SARU), NULL, NULL,
                                                (J3DAnmTransform*)dComIfG_getObjectRes(i_this->res_name, npc_ks_class::BCK_SARU_WAIT_A), 0, 1.0f, 0, -1, 
                                                &i_this->sound, 0x80000, 0x11020084);
     if (i_this->model == NULL || i_this->model->getModel() == NULL) {
@@ -6895,7 +6895,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
         model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
     }
 
-    i_this->btp = new mDoExt_btpAnm();
+    i_this->btp = JKR_NEW mDoExt_btpAnm();
     if (i_this->btp == NULL) {
         return 0;
     }
@@ -6904,7 +6904,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
         return 0;
     }
 
-    i_this->btp2 = new mDoExt_btpAnm();
+    i_this->btp2 = JKR_NEW mDoExt_btpAnm();
     if (i_this->btp2 == NULL) {
         return 0;
     }

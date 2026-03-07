@@ -23,23 +23,23 @@ dFile_info_c::dFile_info_c(JKRArchive* i_archive, u8 param_1) {
 }
 
 dFile_info_c::~dFile_info_c() {
-    delete mFileInfo.Scr;
-    delete mDatBase;
-    delete mNoDatBase;
+    JKR_DELETE(mFileInfo.Scr);
+    JKR_DELETE(mDatBase);
+    JKR_DELETE(mNoDatBase);
 
     mDoExt_removeMesgFont();
 }
 
 void dFile_info_c::screenSet() {
-    mFileInfo.Scr = new J2DScreen();
+    mFileInfo.Scr = JKR_NEW J2DScreen();
     JUT_ASSERT(0, mFileInfo.Scr != NULL);
 
     mFileInfo.Scr->setPriority("zelda_file_select_info_text.blo", 0x1100000, mArchive);
     mFileInfo.mFont = mDoExt_getMesgFont();
     mFileInfo.Scr->search(MULTI_CHAR('w_cp_ef1'))->hide();
     mFileInfo.field_0x10 = mFileInfo.Scr->search(MULTI_CHAR('w_dat_i1'));
-    mDatBase = new CPaneMgrAlpha(mFileInfo.Scr, MULTI_CHAR('w_dat_i1'), 2, NULL);
-    mNoDatBase = new CPaneMgrAlpha(mFileInfo.Scr, MULTI_CHAR('w_nda_i1'), 2, NULL);
+    mDatBase = JKR_NEW CPaneMgrAlpha(mFileInfo.Scr, MULTI_CHAR('w_dat_i1'), 2, NULL);
+    mNoDatBase = JKR_NEW CPaneMgrAlpha(mFileInfo.Scr, MULTI_CHAR('w_nda_i1'), 2, NULL);
 
     J2DTextBox* info_text[4];
     

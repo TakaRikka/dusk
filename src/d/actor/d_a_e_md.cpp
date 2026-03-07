@@ -68,20 +68,20 @@ int daE_MD_c::CreateHeap() {
 
     JUT_ASSERT(180, modelData != NULL);
 
-    mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)modelData, NULL, NULL, NULL, 2, 1.0f, 0, -1, &mSound, 0x80000, 0x11000084);
+    mpModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)modelData, NULL, NULL, NULL, 2, 1.0f, 0, -1, &mSound, 0x80000, 0x11000084);
     if (mpModelMorf == NULL || mpModelMorf->getModel() == NULL) {
         return 0;
     }
 
     if (mType == TYPE_DUMMY) {
         modelData = (J3DModelData*)dComIfG_getObjectRes("E_MD", 0xD);
-        mpYariModelMorf = new mDoExt_McaMorfSO((J3DModelData*)modelData, NULL, NULL, NULL, 2, 1.0f, 0, -1, NULL, 0x80000, 0x11000084);
+        mpYariModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)modelData, NULL, NULL, NULL, 2, 1.0f, 0, -1, NULL, 0x80000, 0x11000084);
         if (mpYariModelMorf == NULL || mpYariModelMorf->getModel() == NULL) {
             return 0;
         }
     } else if (mType == TYPE_LV9) {
         modelData = (J3DModelData*)dComIfG_getObjectRes("E_MD", 0xA);
-        mpYariModelMorf = new mDoExt_McaMorfSO((J3DModelData*)modelData, NULL, NULL, NULL, 2, 1.0f, 0, -1, NULL, 0x80000, 0x11000084);
+        mpYariModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)modelData, NULL, NULL, NULL, 2, 1.0f, 0, -1, NULL, 0x80000, 0x11000084);
         if (mpYariModelMorf == NULL || mpYariModelMorf->getModel() == NULL) {
             return 0;
         }

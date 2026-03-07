@@ -962,7 +962,7 @@ static int daE_MS_Delete(e_ms_class* i_this) {
 static int useHeapInit(fopAc_ac_c* actor) {
     e_ms_class* i_this = (e_ms_class*)actor;
     mDoExt_McaMorfSO* mMorf =
-        new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_MS", 20), NULL, NULL,
+        JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_MS", 20), NULL, NULL,
                              (J3DAnmTransform*)dComIfG_getObjectRes("E_MS", 16), 2, 1.0f, 0, -1,
                              &i_this->mSound, 0x80000, 0x11000084);
     i_this->mpModelMorf = mMorf;

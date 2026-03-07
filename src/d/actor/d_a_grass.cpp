@@ -65,7 +65,7 @@ bool daGrass_c::createGrass() {
         return 1;
     }
 
-    m_grass = new dGrass_packet_c();
+    m_grass = JKR_NEW dGrass_packet_c();
     if (m_grass == NULL) {
         return 0;
     }
@@ -75,7 +75,7 @@ bool daGrass_c::createGrass() {
 
 void daGrass_c::deleteGrass() {
     if (m_grass != NULL) {
-        delete m_grass;
+        JKR_DELETE(m_grass);
         m_grass = NULL;
     }
 }
@@ -105,7 +105,7 @@ bool daGrass_c::createFlower() {
         return 1;
     }
 
-    m_flower = new dFlower_packet_c();
+    m_flower = JKR_NEW dFlower_packet_c();
     if (m_flower == NULL) {
         return 0;
     }
@@ -115,7 +115,7 @@ bool daGrass_c::createFlower() {
 
 void daGrass_c::deleteFlower() {
     if (m_flower != NULL) {
-        delete m_flower;
+        JKR_DELETE(m_flower);
         m_flower = NULL;
     }
 }

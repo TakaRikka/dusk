@@ -1848,7 +1848,7 @@ int daE_SM_c::CreateHeap() {
         return 0;
     }
 
-    mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_SM", BMDR_SC), NULL, NULL,
+    mpModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_SM", BMDR_SC), NULL, NULL,
                                        (J3DAnmTransform*)dComIfG_getObjectRes("E_SM", BCK_SC_WAIT), 2, 1.0f, 0, -1, &mSound, 0x80000, 0x11000084);
     if (mpModelMorf == NULL || mpModelMorf->getModel() == NULL) {
         return 0;

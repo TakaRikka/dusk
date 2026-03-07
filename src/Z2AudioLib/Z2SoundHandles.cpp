@@ -20,7 +20,7 @@ void Z2SoundHandles::deleteHandlesPool() {
         JUT_ASSERT(48, handle->getSupervisor() == this);
 
         remove(handle);
-        delete handle;
+        JKR_DELETE(handle);
     }
 
     handleNum_ = 0;
@@ -64,7 +64,7 @@ Z2SoundHandlePool* Z2SoundHandles::getFreeHandle() {
     }
 
     if (getNumHandles() < handleNum_) {
-        Z2SoundHandlePool* handle = new Z2SoundHandlePool();
+        Z2SoundHandlePool* handle = JKR_NEW Z2SoundHandlePool();
         if (handle != NULL) {
             append(handle);
             JUT_ASSERT(113, handle->getSupervisor() == this);
@@ -141,7 +141,7 @@ void Z2SoundHandles::setPos(const JGeometry::TVec3<f32>& pos) {
         }
         else {
             remove(handle);
-            delete handle;
+            JKR_DELETE(handle);
         }
     }
 }

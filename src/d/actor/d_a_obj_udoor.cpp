@@ -92,7 +92,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->mpBgW = new dBgW();
+    a_this->mpBgW = JKR_NEW dBgW();
     if (a_this->mpBgW == NULL) {
         return 0;
     }

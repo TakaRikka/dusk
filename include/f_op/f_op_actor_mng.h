@@ -17,7 +17,7 @@
 #if !__MWERKS__
 // mwerks compiler makes value initialization act like default initialization so we need
 // to be explicit about default initialization in modern compilers
-#define fopAcM_ct_placement(ptr, ClassName) new (ptr) ClassName
+#define fopAcM_ct_placement(ptr, ClassName) JKR_NEW_ARGS (ptr) ClassName
 #else
 #define fopAcM_ct_placement(ptr, ClassName) new (ptr) ClassName()
 #endif

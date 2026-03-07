@@ -95,7 +95,7 @@ dMenu_DmapBg_c::dMenu_DmapBg_c(JKRExpHeap* i_heap, STControl* i_stick) {
     field_0xdd7 = 0;
     field_0xdd8 = 1;
 
-    mString = new dMsgString_c();
+    mString = JKR_NEW dMsgString_c();
     JUT_ASSERT(621, mString != NULL);
 
     mpTalkHeap = JKRCreateExpHeap(0x32000, mpHeap, false);
@@ -103,7 +103,7 @@ dMenu_DmapBg_c::dMenu_DmapBg_c(JKRExpHeap* i_heap, STControl* i_stick) {
 
     mpItemExplain = NULL;
 
-    mpMeterHaihai = new dMeterHaihai_c(2);
+    mpMeterHaihai = JKR_NEW dMeterHaihai_c(2);
     JUT_ASSERT(630, mpMeterHaihai != NULL);
 
     field_0xdda = 0;
@@ -137,7 +137,7 @@ dMenu_DmapBg_c::dMenu_DmapBg_c(JKRExpHeap* i_heap, STControl* i_stick) {
 
 void dMenu_DmapBg_c::mapScreenInit() {
     for (int i = 0; i < 2; i++) {
-        mMapScreen[i] = new J2DScreen();
+        mMapScreen[i] = JKR_NEW J2DScreen();
         JUT_ASSERT(689, mMapScreen[i] != NULL);
 
         bool fg = mMapScreen[i]->setPriority("zelda_dungeon_map_map.blo", 0x20000, dComIfGp_getDmapResArchive());
@@ -147,7 +147,7 @@ void dMenu_DmapBg_c::mapScreenInit() {
     }
     
     #if (PLATFORM_WII || PLATFORM_SHIELD)
-    mpBlack = new CPaneMgrAlpha(mMapScreen[0], MULTI_CHAR('m_black'), 2, NULL);
+    mpBlack = JKR_NEW CPaneMgrAlpha(mMapScreen[0], MULTI_CHAR('m_black'), 2, NULL);
     JUT_ASSERT(699, mpBlack != NULL);
     mpBlack->setAlphaRate(0.0f);
     #else
@@ -178,7 +178,7 @@ void dMenu_DmapBg_c::mapScreenInit() {
     }
 
     for (int i = 0; i < 2; i++) {
-        mpMapRoot[i] = new CPaneMgrAlphaMorf(mMapScreen[i], 'ROOT', 2, NULL);
+        mpMapRoot[i] = JKR_NEW CPaneMgrAlphaMorf(mMapScreen[i], 'ROOT', 2, NULL);
         JUT_ASSERT(751, mpMapRoot[i] != NULL);
     }
 
@@ -212,7 +212,7 @@ void dMenu_DmapBg_c::mapScreenInit() {
     initiate(dComIfGp_getDmapResArchive());
 
     for (int i = 0; i < 2; i++) {
-        mpMapSpace[i] = new CPaneMgr(mMapScreen[i], MULTI_CHAR('mapspace'), 0, NULL);
+        mpMapSpace[i] = JKR_NEW CPaneMgr(mMapScreen[i], MULTI_CHAR('mapspace'), 0, NULL);
         JUT_ASSERT(817, mpMapSpace[i] != NULL);
 
         mpMapSpace[i]->paneTrans(0.0f, -15.0f);
@@ -294,7 +294,7 @@ void dMenu_DmapBg_c::buttonIconScreenInit() {
         #endif
     };
 
-    mButtonScreen = new J2DScreen();
+    mButtonScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(916, mButtonScreen != NULL);
 
     bool fg = mButtonScreen->setPriority("zelda_dungeon_map_spot_button.blo", 0x20000, dComIfGp_getDmapResArchive());
@@ -302,14 +302,14 @@ void dMenu_DmapBg_c::buttonIconScreenInit() {
     dPaneClass_showNullPane(mButtonScreen);
 
     #if (PLATFORM_WII || PLATFORM_SHIELD)
-    mDecorateScreen = new J2DScreen();
+    mDecorateScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(926, mDecorateScreen != NULL);
 
     fg = mDecorateScreen->setPriority("zelda_dungeon_map_decoration_revo.blo", 0x20000, dComIfGp_getDmapResArchive());
     JUT_ASSERT(930, fg != false);
     dPaneClass_showNullPane(mDecorateScreen);
 
-    mpDecorateRoot = new CPaneMgrAlphaMorf(mDecorateScreen, 'ROOT', 2, NULL);
+    mpDecorateRoot = JKR_NEW CPaneMgrAlphaMorf(mDecorateScreen, 'ROOT', 2, NULL);
     JUT_ASSERT(934, mpDecorateRoot != NULL);
     #else
     mDecorateScreen = NULL;
@@ -319,7 +319,7 @@ void dMenu_DmapBg_c::buttonIconScreenInit() {
     mButtonScreen->search(MULTI_CHAR('spot01'))->hide();
     #endif
 
-    mpButtonRoot = new CPaneMgrAlphaMorf(mButtonScreen, 'ROOT', 2, NULL);
+    mpButtonRoot = JKR_NEW CPaneMgrAlphaMorf(mButtonScreen, 'ROOT', 2, NULL);
     JUT_ASSERT(952, mpButtonRoot != NULL);
 
     for (int i = 0; i < 2; i++) {
@@ -327,7 +327,7 @@ void dMenu_DmapBg_c::buttonIconScreenInit() {
         mpButtonText[i] = NULL;
     }
 
-    mpCButton = new CPaneMgrAlpha(mButtonScreen, MULTI_CHAR('c_btn'), 2, NULL);
+    mpCButton = JKR_NEW CPaneMgrAlpha(mButtonScreen, MULTI_CHAR('c_btn'), 2, NULL);
     JUT_ASSERT(978, mpCButton != NULL);
     mpJButton = NULL;
 
@@ -349,7 +349,7 @@ void dMenu_DmapBg_c::buttonIconScreenInit() {
         #endif
     }
 
-    field_0xcf4 = new CPaneMgr(mButtonScreen, 'c_n', 2, NULL);
+    field_0xcf4 = JKR_NEW CPaneMgr(mButtonScreen, 'c_n', 2, NULL);
     field_0xcf8 = NULL;
 
     J2DTextBox* textBox;
@@ -447,7 +447,7 @@ void dMenu_DmapBg_c::setJButtonString(u32 i_msgNo) {
 void dMenu_DmapBg_c::createExplain() {
     if (mpItemExplain == NULL) {
         JKRHeap* prevHeap = mDoExt_setCurrentHeap(mpTalkHeap);
-        mpItemExplain = new dMenu_ItemExplain_c(mpTalkHeap, dComIfGp_getDmapResArchive(), mpStick, true);
+        mpItemExplain = JKR_NEW dMenu_ItemExplain_c(mpTalkHeap, dComIfGp_getDmapResArchive(), mpStick, true);
         JUT_ASSERT(1308, mpItemExplain != NULL);
 
         mDoExt_setCurrentHeap(prevHeap);
@@ -457,21 +457,21 @@ void dMenu_DmapBg_c::createExplain() {
 void dMenu_DmapBg_c::deleteExplain() {
     if (mpItemExplain != NULL) {
         JKRHeap* prevHeap = mDoExt_setCurrentHeap(mpTalkHeap);
-        delete mpItemExplain;
+        JKR_DELETE(mpItemExplain);
         mpItemExplain = NULL;
         mDoExt_setCurrentHeap(prevHeap);
     }
 }
 
 void dMenu_DmapBg_c::baseScreenInit() {
-    mBaseScreen = new J2DScreen();
+    mBaseScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(1336, mBaseScreen != NULL);
 
     bool fg = mBaseScreen->setPriority("zelda_dungeon_map_base.blo", 0x20000, dComIfGp_getDmapResArchive());
     JUT_ASSERT(1347, fg != false);
     dPaneClass_showNullPane(mBaseScreen);
 
-    mFloorScreen = new J2DScreen();
+    mFloorScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(1351, mFloorScreen != NULL);
 
     fg = mFloorScreen->setPriority("zelda_dungeon_map_floor_parts.blo", 0x20000,
@@ -481,13 +481,13 @@ void dMenu_DmapBg_c::baseScreenInit() {
 
     mBaseScreen->search(MULTI_CHAR('w_btn_n'))->hide();
 
-    mpBaseRoot = new CPaneMgrAlphaMorf(mBaseScreen, 'ROOT', 2, NULL);
+    mpBaseRoot = JKR_NEW CPaneMgrAlphaMorf(mBaseScreen, 'ROOT', 2, NULL);
     JUT_ASSERT(1396, mpBaseRoot != NULL);
 
-    mpFloorRoot = new CPaneMgrAlphaMorf(mFloorScreen, 'ROOT', 2, NULL);
+    mpFloorRoot = JKR_NEW CPaneMgrAlphaMorf(mFloorScreen, 'ROOT', 2, NULL);
     JUT_ASSERT(1399, mpFloorRoot != NULL);
 
-    mpDrawCursor = new dSelect_cursor_c(2, 1.0f, NULL);
+    mpDrawCursor = JKR_NEW dSelect_cursor_c(2, 1.0f, NULL);
     JUT_ASSERT(1403, mpDrawCursor != NULL);
 
     mpDrawCursor->setAlphaRate(1.0f);
@@ -642,60 +642,60 @@ bool dMenu_DmapBg_c::dpdMove(s8 param_0, s8 param_1, s8 param_2, u8* param_3, u8
 
 dMenu_DmapBg_c::~dMenu_DmapBg_c() {
     dComIfGp_getDmapResArchive()->removeResourceAll();
-    delete mString;
+    JKR_DELETE(mString);
 
     if (mpMeterHaihai != NULL) {
-        delete mpMeterHaihai;
+        JKR_DELETE(mpMeterHaihai);
         mpMeterHaihai = NULL;
     }
 
-    delete mBaseScreen;
+    JKR_DELETE(mBaseScreen);
     mBaseScreen = NULL;
 
-    delete mFloorScreen;
+    JKR_DELETE(mFloorScreen);
     mFloorScreen = NULL;
 
-    delete mpBaseRoot;
+    JKR_DELETE(mpBaseRoot);
     mpBaseRoot = NULL;
 
-    delete mpFloorRoot;
+    JKR_DELETE(mpFloorRoot);
     mpFloorRoot = NULL;
 
-    delete mpDrawCursor;
+    JKR_DELETE(mpDrawCursor);
     mpDrawCursor = NULL;
 
     for (int i = 0; i < 2; i++) {
-        delete mMapScreen[i];
+        JKR_DELETE(mMapScreen[i]);
         mMapScreen[i] = NULL;
 
-        delete mpMapSpace[i];
+        JKR_DELETE(mpMapSpace[i]);
         mpMapSpace[i] = NULL;
 
-        delete mpMapRoot[i];
+        JKR_DELETE(mpMapRoot[i]);
         mpMapRoot[i] = NULL;
     }
 
     if (mpBlack != NULL) {
-        delete mpBlack;
+        JKR_DELETE(mpBlack);
         mpBlack = NULL;
     }
 
     for (int i = 0; i < 1; i++) {
-        delete field_0xd28[i];
+        JKR_DELETE(field_0xd28[i]);
     }
 
     for (int i = 0; i < 2; i++) {
-        delete mpMapSpace[i];
+        JKR_DELETE(mpMapSpace[i]);
         mpMapSpace[i] = NULL;
     }
 
     if (field_0xcf4 != NULL) {
-        delete field_0xcf4;
+        JKR_DELETE(field_0xcf4);
         field_0xcf4 = NULL;
     }
 
     if (field_0xcf8 != NULL) {
-        delete field_0xcf8;
+        JKR_DELETE(field_0xcf8);
         field_0xcf8 = NULL;
     }
 
@@ -713,43 +713,43 @@ dMenu_DmapBg_c::~dMenu_DmapBg_c() {
     }
 
     if (mpBackTexture != NULL) {
-        delete mpBackTexture;
+        JKR_DELETE(mpBackTexture);
         mpBackTexture = NULL;
     }
 
-    delete mButtonScreen;
+    JKR_DELETE(mButtonScreen);
     mButtonScreen = NULL;
 
     if (mDecorateScreen != NULL) {
-        delete mDecorateScreen;
+        JKR_DELETE(mDecorateScreen);
         mDecorateScreen = NULL;
     }
 
     if (mpDecorateRoot != NULL) {
-        delete mpDecorateRoot;
+        JKR_DELETE(mpDecorateRoot);
         mpDecorateRoot = NULL;
     }
 
-    delete mpButtonRoot;
+    JKR_DELETE(mpButtonRoot);
     mpButtonRoot = NULL;
 
     for (int i = 0; i < 2; i++) {
         if (mpButtonAB[i] != NULL) {
-            delete mpButtonAB[i];
+            JKR_DELETE(mpButtonAB[i]);
             mpButtonAB[i] = NULL;
         }
 
         if (mpButtonText[i] != NULL) {
-            delete mpButtonText[i];
+            JKR_DELETE(mpButtonText[i]);
             mpButtonText[i] = NULL;
         }
     }
 
-    delete mpCButton;
+    JKR_DELETE(mpCButton);
     mpCButton = NULL;
 
     if (mpJButton != NULL) {
-        delete mpJButton;
+        JKR_DELETE(mpJButton);
         mpJButton = NULL;
     }
 
@@ -965,7 +965,7 @@ void dMenu_DmapBg_c::update() {
             ResTIMG* mp_image = (ResTIMG*)mpArchive->getResource("tex/bg.bti");
             JUT_ASSERT(2321, mp_image != NULL);
 
-            mpBackTexture = new J2DPicture(mp_image);
+            mpBackTexture = JKR_NEW J2DPicture(mp_image);
             JUT_ASSERT(2323, mpBackTexture != NULL);
 
             void* spec = mpArchive->getResource("spec/spec.dat");
@@ -1072,20 +1072,20 @@ void dMenu_Dmap_c::screenInit() {
     static u64 const key_tag[3] = {MULTI_CHAR('key_00'), MULTI_CHAR('key_01'), MULTI_CHAR('key_02')};
     static u64 const item_tag[3] = {MULTI_CHAR('map000'), MULTI_CHAR('con000'), MULTI_CHAR('i_key_n')};
 
-    field_0x10 = new CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('floo_s_n'), 0, NULL);
+    field_0x10 = JKR_NEW CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('floo_s_n'), 0, NULL);
 
     for (int i = 0; i < 8; i++) {
         field_0x114[i] = 0.0f;
-        mSelFloor[i] = new CPaneMgr(mpDrawBg->mFloorScreen, floor_tag[i], 3, NULL);
+        mSelFloor[i] = JKR_NEW CPaneMgr(mpDrawBg->mFloorScreen, floor_tag[i], 3, NULL);
         JUT_ASSERT(2654, mSelFloor[i] != NULL);
-        mIconLinkPos[i] = new CPaneMgr(mpDrawBg->mFloorScreen, icon_tag[i], 0, NULL);
+        mIconLinkPos[i] = JKR_NEW CPaneMgr(mpDrawBg->mFloorScreen, icon_tag[i], 0, NULL);
         JUT_ASSERT(2657, mIconLinkPos[i] != NULL);
-        mIconBossPos[i] = new CPaneMgr(mpDrawBg->mFloorScreen, boss_tag[i], 0, NULL);
+        mIconBossPos[i] = JKR_NEW CPaneMgr(mpDrawBg->mFloorScreen, boss_tag[i], 0, NULL);
         JUT_ASSERT(2660, mIconBossPos[i] != NULL);
     }
 
     for (int i = 0; i < 2; i++) {
-        mStayIcon[i] = new CPaneMgr(mpDrawBg->mFloorScreen, stay_tag[i], 0, NULL);
+        mStayIcon[i] = JKR_NEW CPaneMgr(mpDrawBg->mFloorScreen, stay_tag[i], 0, NULL);
         JUT_ASSERT(2665, mStayIcon[i] != NULL);
         mStayIcon[i]->hide();
 
@@ -1138,19 +1138,19 @@ void dMenu_Dmap_c::screenInit() {
     iconMoveCalc();
     Vec local_b0 = mSelFloor[getDefaultCurFloorPos()]->getGlobalVtxCenter(false, 0);
     mpDrawBg->mpDrawCursor->setPos(local_b0.x + field_0x104, local_b0.y, mSelFloor[getDefaultCurFloorPos()]->getPanePtr(), true);
-    field_0x94 = new CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('item_s_n'), 0, NULL);
-    field_0x7c[0] = new CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('map_n'), 3, NULL);
-    field_0x7c[1] = new CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('con_n'), 3, NULL);
-    field_0x7c[2] = new CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('key_n'), 3, NULL);
-    field_0x88[0] = new CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('map000'), 3, NULL);
-    field_0x88[1] = new CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('con000'), 3, NULL);
+    field_0x94 = JKR_NEW CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('item_s_n'), 0, NULL);
+    field_0x7c[0] = JKR_NEW CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('map_n'), 3, NULL);
+    field_0x7c[1] = JKR_NEW CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('con_n'), 3, NULL);
+    field_0x7c[2] = JKR_NEW CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('key_n'), 3, NULL);
+    field_0x88[0] = JKR_NEW CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('map000'), 3, NULL);
+    field_0x88[1] = JKR_NEW CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('con000'), 3, NULL);
     
     if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dStage_SaveTbl_LV2) {
-        field_0x88[2] = new CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('i_key_n'), 3, NULL);
+        field_0x88[2] = JKR_NEW CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('i_key_n'), 3, NULL);
     } else if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dStage_SaveTbl_LV5) {
-        field_0x88[2] = new CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('lv5_k_n'), 3, NULL);
+        field_0x88[2] = JKR_NEW CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('lv5_k_n'), 3, NULL);
     } else {
-        field_0x88[2] = new CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('nor_k_n'), 3, NULL);
+        field_0x88[2] = JKR_NEW CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('nor_k_n'), 3, NULL);
     }
 
     for (int i = 0; i < 3; i++) {
@@ -1270,7 +1270,7 @@ void dMenu_Dmap_c::screenInit() {
     }
 
     field_0x94->hide();
-    field_0x98 = new CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('so_s_n'), 0, NULL);
+    field_0x98 = JKR_NEW CPaneMgr(mpDrawBg->mBaseScreen, MULTI_CHAR('so_s_n'), 0, NULL);
     field_0x98->hide();
 }
 
@@ -1408,7 +1408,7 @@ dMenu_Dmap_c::~dMenu_Dmap_c() {
     s32 iVar4 = field_0xe8->getTotalFreeSize();
 
     if (mpDrawBg != NULL) {
-        delete mpDrawBg;
+        JKR_DELETE(mpDrawBg);
         mpDrawBg = NULL;
     }
 
@@ -1421,57 +1421,57 @@ dMenu_Dmap_c::~dMenu_Dmap_c() {
               field_0xe8->getTotalFreeSize() - iVar4, field_0xe8->getTotalFreeSize());
 
     if (mSelStick != NULL) {
-        delete mSelStick;
+        JKR_DELETE(mSelStick);
     }
 
     if (field_0x94 != NULL) {
-        delete field_0x94;
+        JKR_DELETE(field_0x94);
     }
 
     for (int i = 0; i < 8; i++) {
         if (mSelFloor[i] != NULL) {
-            delete mSelFloor[i];
+            JKR_DELETE(mSelFloor[i]);
             mSelFloor[i] = NULL;
         }
         if (mIconLinkPos[i] != NULL) {
-            delete mIconLinkPos[i];
+            JKR_DELETE(mIconLinkPos[i]);
             mIconLinkPos[i] = NULL;
         }
         if (mIconBossPos[i] != NULL) {
-            delete mIconBossPos[i];
+            JKR_DELETE(mIconBossPos[i]);
             mIconBossPos[i] = NULL;
         }
     }
 
     for (int i = 0; i < 2; i++) {
         if (mStayIcon[i] != NULL) {
-            delete mStayIcon[i];
+            JKR_DELETE(mStayIcon[i]);
             mStayIcon[i] = NULL;
         }
     }
 
     if (field_0x10 != NULL) {
-        delete field_0x10;
+        JKR_DELETE(field_0x10);
     }
 
     for (int i = 0; i < 3; i++) {
         if (field_0x7c[i] != NULL) {
-            delete field_0x7c[i];
+            JKR_DELETE(field_0x7c[i]);
             field_0x7c[i] = NULL;
         }
         if (field_0x88[i] != NULL) {
-            delete field_0x88[i];
+            JKR_DELETE(field_0x88[i]);
             field_0x88[i] = NULL;
         }
     }
 
     if (field_0x98 != NULL) {
-        delete field_0x98;
+        JKR_DELETE(field_0x98);
     }
 
     if (mMapCtrl != NULL) {
         mMapCtrl->_delete();
-        delete mMapCtrl;
+        JKR_DELETE(mMapCtrl);
     }
 
     if (mpDresArchiveMount != NULL) {
@@ -1632,7 +1632,7 @@ void dMenu_Dmap_c::_create() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mDmapHeap);
     u32 sp28 = mDmapHeap->getTotalFreeSize();
     
-    mMapCtrl = new dMenu_DmapMapCtrl_c();
+    mMapCtrl = JKR_NEW dMenu_DmapMapCtrl_c();
     JUT_ASSERT(3739, mMapCtrl != NULL);
 
     mCMessageNum = 0;
@@ -1643,12 +1643,12 @@ void dMenu_Dmap_c::_create() {
         field_0x184 = false;
     }
 
-    mSelStick = new STControl(5, 2, 1, 1, 0.9f, 0.5f, 0, 0x800);
+    mSelStick = JKR_NEW STControl(5, 2, 1, 1, 0.9f, 0.5f, 0, 0x800);
     JUT_ASSERT(3753, mSelStick != NULL);
     mSelStick->setFirstWaitTime(8);
 
     u32 sp24 = field_0xe8->getTotalFreeSize();
-    mpDrawBg = new dMenu_DmapBg_c(mDmapHeap, mpStick);
+    mpDrawBg = JKR_NEW dMenu_DmapBg_c(mDmapHeap, mpStick);
     JUT_ASSERT(3763, mpDrawBg != NULL);
 
     mItemTexBuf = (u8*)mDmapHeap->alloc(0xC00, 0x20);

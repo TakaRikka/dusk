@@ -175,7 +175,7 @@ BOOL daNpcShoe_c::CreateHeap() {
 
     JUT_ASSERT(292, NULL != mdlData_p)
 
-    mAnm_p = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mCreature, 0x80000,
+    mAnm_p = JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mCreature, 0x80000,
                                   0x11020084);
 
     if (mAnm_p != NULL && mAnm_p->mpModel == NULL) {

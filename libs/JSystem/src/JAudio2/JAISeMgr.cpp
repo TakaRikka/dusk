@@ -49,7 +49,7 @@ void JAISeCategoryMgr::JAISeMgr_freeDeadSe_() {
         if (i->getObject()->status_.isDead()) {
             JUT_ASSERT(71, ! i->getObject() ->isHandleAttached());
             mSeList.remove(i);
-            delete i->getObject();
+            JKR_DELETE(i->getObject());
         }
         i = link_next;
     }
@@ -258,7 +258,7 @@ JAISe* JAISeMgr::newSe_(int category, u32 priority) {
         return NULL;
     }
 
-    JAISe* se = new JAISe(this, mStrategyMgr, priority);
+    JAISe* se = JKR_NEW JAISe(this, mStrategyMgr, priority);
     if (se == NULL) {
         JUT_WARN(410, "%s", "JASPoolAllocObject::<JAISe>::operator new failed .\n")
         return NULL;

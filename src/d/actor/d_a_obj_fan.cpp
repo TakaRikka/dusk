@@ -124,7 +124,7 @@ int daObjFan_c::CreateHeap() {
     if (mModel == NULL) {
         return 0;
     }
-    field_0x5ac = new dBgW();
+    field_0x5ac = JKR_NEW dBgW();
     if (field_0x5ac == NULL ||
         field_0x5ac->Set((cBgD_t*)dComIfG_getObjectRes(l_arcName[field_0xad4], l_dzb3[field_0xad4]),
                          1, &mBgMtx))

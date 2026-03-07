@@ -247,7 +247,7 @@ int daObj_Sekizoa_c::CreateHeap() {
     if (modelData == NULL) {
         return 0;
     }
-    mpMorf[0] = new mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound,
+    mpMorf[0] = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound,
                                         0x80000, 0x11000284);
 
     if (mpMorf[0] == NULL || mpMorf[0]->getModel() == NULL) {
@@ -259,7 +259,7 @@ int daObj_Sekizoa_c::CreateHeap() {
             return 0;
         }
 
-        mpMorf[1] = new mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1,
+        mpMorf[1] = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1,
                                             &mSound, 0x80000, 0x11000284);
         if (mpMorf[1] == NULL || mpMorf[1]->getModel() == NULL) {
             return 0;
@@ -294,7 +294,7 @@ int daObj_Sekizoa_c::CreateHeap() {
         if (modelData == NULL) {
             return 0;
         }
-        mpMcaMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, NULL,
+        mpMcaMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, NULL,
                                             0x80000, 0x11000284);
         if (mpMcaMorf == NULL || mpMcaMorf->getModel() == NULL) {
             return 0;

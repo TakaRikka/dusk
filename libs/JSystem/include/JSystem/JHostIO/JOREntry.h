@@ -4,7 +4,9 @@
 #include "JSystem/JHostIO/JHIComm.h"
 #include <os.h>
 
-template<typename T, int I>
+#include "JSystem/JKernel/JKRHeap.h"
+
+template <typename T, int I>
 class JHIpvector {
 public:
     JHIpvector() { m_size = 0; }
@@ -89,7 +91,7 @@ public:
 
     static JHIComPortManager<T>* create() {
         if (instance == NULL) {
-            instance = new JHIComPortManager<T>();
+            instance = JKR_NEW JHIComPortManager<T>();
         }
 
         return instance;

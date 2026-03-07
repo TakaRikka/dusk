@@ -427,7 +427,7 @@ bool dStage_roomControl_c::resetArchiveBank(int i_bank) {
 
 void dStage_roomControl_c::roomDzs_c::create(u8 i_num) {
     JUT_ASSERT(1112, !m_num && 0 < i_num && i_num < 64);
-    m_dzs = new (mDoExt_getArchiveHeap(), -4) void*[i_num];
+    m_dzs = JKR_NEW_ARGS (mDoExt_getArchiveHeap(), -4) void*[i_num];
     JUT_ASSERT(1114, m_dzs != NULL);
 
     if (m_dzs != NULL) {
@@ -449,7 +449,7 @@ void dStage_roomControl_c::roomDzs_c::remove() {
             }
             dzs++;
         }
-        delete[] m_dzs;
+        JKR_DELETE_ARRAY(m_dzs);
         m_num = 0;
     }
 }

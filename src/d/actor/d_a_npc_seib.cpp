@@ -183,7 +183,7 @@ int daNpc_seiB_c::CreateHeap() {
     JUT_ASSERT(466, NULL != mdlData_p);
 
     mpMorf[0] =
-        new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0, 0x11020284);
+        JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0, 0x11020284);
     if (mpMorf[0] && mpMorf[0]->getModel() == NULL) {
         mpMorf[0]->stopZelAnime();
         mpMorf[0] = NULL;

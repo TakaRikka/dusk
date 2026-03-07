@@ -403,12 +403,12 @@ int daB_ZANTZ_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("B_zan", daB_ZANT_c::BMDR_ZZ);
     JUT_ASSERT(0, modelData != NULL);
 
-    mpMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_zan", daB_ZANT_c::BCK_ZZ_OPEN), 0, 0.0f, 0, -1, &mSound, 0, 0x11000084);
+    mpMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_zan", daB_ZANT_c::BCK_ZZ_OPEN), 0, 0.0f, 0, -1, &mSound, 0, 0x11000084);
     if (mpMorf == NULL) {
         return 0;
     }
 
-    mpBrk = new mDoExt_brkAnm();
+    mpBrk = JKR_NEW mDoExt_brkAnm();
     if (mpBrk == NULL) {
         return 0;
     }
@@ -417,7 +417,7 @@ int daB_ZANTZ_c::CreateHeap() {
         return 0;
     }
 
-    mpBgW = new dBgW();
+    mpBgW = JKR_NEW dBgW();
     if (mpBgW == NULL) {
         return 0;
     }

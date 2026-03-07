@@ -20,7 +20,7 @@ void dMpath_n::dTexObjAggregate_c::create() {
     };
 
     for (int lp1 = 0; lp1 < 7; lp1++) {
-        mp_texObj[lp1] = new GXTexObj();
+        mp_texObj[lp1] = JKR_NEW GXTexObj();
         JUT_ASSERT(70, mp_texObj[lp1] != NULL);
         ResTIMG* image = (ResTIMG*)dComIfG_getObjectRes("Always", data[lp1]);
         JUT_ASSERT(72, image != NULL);
@@ -32,7 +32,7 @@ void dMpath_n::dTexObjAggregate_c::create() {
 
 void dMpath_n::dTexObjAggregate_c::remove() {
     for (int i = 0; i < 7; i++) {
-        delete mp_texObj[i];
+        JKR_DELETE(mp_texObj[i]);
         mp_texObj[i] = NULL;
     }
 }
@@ -212,13 +212,13 @@ bool dMpath_HIO_file_base_c::readBinaryFile(const char* param_1)  {
     }
     if (file.open(JORFile::EFlags_READ, r26, NULL, NULL, NULL)) {
         s32 r28 = file.getFileSize();
-        char* buf = new char[r28];
+        char* buf = JKR_NEW char[r28];
         JUT_ASSERT(855, buf != NULL);
         file.readData(buf, r28);
         copyReadBufToData(buf, r28);
         OSReport("write read success!::%6d\n", r28);
         result = true;
-        delete[] buf;
+        JKR_DELETE_ARRAY(buf);
         buf = NULL;
         file.close();
     } else {

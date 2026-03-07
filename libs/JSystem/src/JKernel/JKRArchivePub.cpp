@@ -45,7 +45,7 @@ JKRArchive* JKRArchive::mount(void* ptr, JKRHeap* heap,
 
     int alignment = mountDirection == MOUNT_DIRECTION_HEAD ? 4 : -4;
 
-    JKRArchive* newArchive = new (heap, alignment) JKRMemArchive(ptr, 0xFFFF, JKRMEMBREAK_FLAG_UNKNOWN0);
+    JKRArchive* newArchive = JKR_NEW_ARGS (heap, alignment) JKRMemArchive(ptr, 0xFFFF, JKRMEMBREAK_FLAG_UNKNOWN0);
     return newArchive;
 }
 
@@ -60,21 +60,21 @@ JKRArchive* JKRArchive::mount(s32 entryNum, JKRArchive::EMountMode mountMode, JK
     JKRArchive* newArchive;
     switch (mountMode) {
     case JKRArchive::MOUNT_MEM:
-        newArchive = new (heap, alignment) JKRMemArchive(entryNum, mountDirection);
+        newArchive = JKR_NEW_ARGS (heap, alignment) JKRMemArchive(entryNum, mountDirection);
         break;
     case JKRArchive::MOUNT_ARAM:
-        newArchive = new (heap, alignment) JKRAramArchive(entryNum, mountDirection);
+        newArchive = JKR_NEW_ARGS (heap, alignment) JKRAramArchive(entryNum, mountDirection);
         break;
     case JKRArchive::MOUNT_DVD:
-        newArchive = new (heap, alignment) JKRDvdArchive(entryNum, mountDirection);
+        newArchive = JKR_NEW_ARGS (heap, alignment) JKRDvdArchive(entryNum, mountDirection);
         break;
     case JKRArchive::MOUNT_COMP:
-        newArchive = new (heap, alignment) JKRCompArchive(entryNum, mountDirection);
+        newArchive = JKR_NEW_ARGS (heap, alignment) JKRCompArchive(entryNum, mountDirection);
         break;
     }
 
     if (newArchive && newArchive->mMountMode == JKRArchive::UNKNOWN_MOUNT_MODE) {
-        delete newArchive;
+        JKR_DELETE(newArchive);
         newArchive = NULL;
     }
 
@@ -330,7 +330,7 @@ JKRFileFinder* JKRArchive::getFirstFile(const char* path) const {
 
     if (dirEntry) {
         // don't know what is correct here... for now we're casting away const
-        return new (JKRGetSystemHeap(), 0)
+        return JKR_NEW_ARGS (JKRGetSystemHeap(), 0)
             JKRArcFinder((JKRArchive*)this, dirEntry->first_file_index, (u32)dirEntry->num_entries);
     }
 

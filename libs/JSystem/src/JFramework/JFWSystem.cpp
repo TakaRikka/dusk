@@ -73,7 +73,7 @@ void JFWSystem::init() {
     JKRAram::create(CSetUpParam::aramAudioBufSize, CSetUpParam::aramGraphBufSize,
                     CSetUpParam::streamPriority, CSetUpParam::decompPriority,
                     CSetUpParam::aPiecePriority);
-    mainThread = new JKRThread(OSGetCurrentThread(), 4);
+    mainThread = JKR_NEW JKRThread(OSGetCurrentThread(), 4);
 
     JUTVideo::createManager(CSetUpParam::renderMode);
     JUTCreateFifo(CSetUpParam::fifoBufSize);
@@ -86,7 +86,7 @@ void JFWSystem::init() {
 
     JUTException::create(dbPrint);
 
-    systemFont = new JUTResFont(CSetUpParam::systemFontRes, NULL);
+    systemFont = JKR_NEW JUTResFont(CSetUpParam::systemFontRes, NULL);
 
     debugPrint = JUTDbPrint::start(NULL, NULL);
     debugPrint->changeFont(systemFont);

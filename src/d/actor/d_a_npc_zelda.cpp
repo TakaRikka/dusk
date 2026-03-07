@@ -258,7 +258,7 @@ int daNpc_Zelda_c::CreateHeap() {
     }
 
     s32 temp4 = 0x11020284;
-    mpMorf[0] = new mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0, temp4);
+    mpMorf[0] = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0, temp4);
     if (mpMorf[0] == NULL || mpMorf[0]->getModel() == NULL) {
         return 0;
     }
@@ -271,7 +271,7 @@ int daNpc_Zelda_c::CreateHeap() {
     model->setUserArea((uintptr_t)this);
 
     for (s32 i = 0; i < 2; i++) {
-        mpMatAnm[i] = new daNpcT_MatAnm_c();
+        mpMatAnm[i] = JKR_NEW daNpcT_MatAnm_c();
         if (mpMatAnm[i] == NULL) {
             return 0;
         }

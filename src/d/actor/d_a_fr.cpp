@@ -659,7 +659,7 @@ static int daFr_Delete(fr_class* i_this) {
 static BOOL useHeapIfrt(fopAc_ac_c* a_this) {
     fr_class* i_this = (fr_class*)a_this;
 
-    i_this->mMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Fr", 14), NULL, NULL,
+    i_this->mMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Fr", 14), NULL, NULL,
         (J3DAnmTransform*)dComIfG_getObjectRes("Fr", 11), 2, 
         1.0f, 0, -1, 1, NULL, 0x80000, 0x11000084);
 
@@ -667,7 +667,7 @@ static BOOL useHeapIfrt(fopAc_ac_c* a_this) {
         return 0;
     }
 
-    i_this->mBtkAnm = new mDoExt_btkAnm();
+    i_this->mBtkAnm = JKR_NEW mDoExt_btkAnm();
     if (i_this->mBtkAnm == 0) {
         return 0;
     }

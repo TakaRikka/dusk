@@ -161,7 +161,7 @@ int daTagStatue_c::CreateHeap() {
 
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 12);
     JUT_ASSERT(291, pbtk != NULL);
-    mpPlatformCircleBtk = new mDoExt_btkAnm();
+    mpPlatformCircleBtk = JKR_NEW mDoExt_btkAnm();
 
 
     if (!mpPlatformCircleBtk || !mpPlatformCircleBtk->init(modelData, pbtk, 1, 0, 1.0f, 0, -1)) {
@@ -170,7 +170,7 @@ int daTagStatue_c::CreateHeap() {
 
     J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, 9);
     JUT_ASSERT(303, pbrk != NULL);
-    mpGlowingSkyCharacterBrk = new mDoExt_brkAnm();
+    mpGlowingSkyCharacterBrk = JKR_NEW mDoExt_brkAnm();
 
     if (!mpGlowingSkyCharacterBrk ||
        !mpGlowingSkyCharacterBrk->init(modelData, pbrk, 1, 0, 1.0f, 0, -1)) {

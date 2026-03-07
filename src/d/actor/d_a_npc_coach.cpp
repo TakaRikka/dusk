@@ -706,7 +706,7 @@ int daNpcCoach_c::createHeap() {
 
     JUT_ASSERT(2702, modelData != NULL);
 
-    mChHorse.mpModelMorf = new mDoExt_McaMorf2(modelData, NULL, NULL,
+    mChHorse.mpModelMorf = JKR_NEW mDoExt_McaMorf2(modelData, NULL, NULL,
                                                (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, BCK_HU_WAIT_01), NULL,
                                                2, 1.0f, 0, -1, &mChHorse.mSound, 0x80000, 0x11020084);
     if (mChHorse.mpModelMorf != NULL && mChHorse.mpModelMorf->getModel() == NULL) {
@@ -724,14 +724,14 @@ int daNpcCoach_c::createHeap() {
     }
     mChHorse.mpModelMorf->getModel()->setUserArea((uintptr_t)this);
 
-    mChHorse.mpBtpAnm = new mDoExt_btpAnm();
+    mChHorse.mpBtpAnm = JKR_NEW mDoExt_btpAnm();
     J3DAnmTexPattern* i_btk = (J3DAnmTexPattern*)dComIfG_getObjectRes(l_arcName, BTP_HU_EYE);
     if (mChHorse.mpBtpAnm == NULL || mChHorse.mpBtpAnm->init(modelData, i_btk, 1, 0,
                                                              1.0f, 0, -1) == 0) {
         return 0;
     }
 
-    mChHorse.mpBckAnm = new mDoExt_bckAnm();
+    mChHorse.mpBckAnm = JKR_NEW mDoExt_bckAnm();
     J3DAnmTransform* i_bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, BCK_HU_LASH);
     if (mChHorse.mpBckAnm == NULL || mChHorse.mpBckAnm->init(i_bck, 1, 0, 1.0f, 0, -1, false) == 0) {
         return 0;
@@ -765,7 +765,7 @@ int daNpcCoach_c::createHeap() {
     }
     mChHarness.mHarnessModel->setUserArea((uintptr_t)this);
 
-    mChHarness.field_0x6a0 = new dBgW();
+    mChHarness.field_0x6a0 = JKR_NEW dBgW();
     if (mChHarness.field_0x6a0 == NULL) {
         return 0;
     }
@@ -795,7 +795,7 @@ int daNpcCoach_c::createHeap() {
     }
     mChCoach.mCoachModel->setUserArea((uintptr_t)this);
 
-    mChCoach.field_0x564 = new dBgW();
+    mChCoach.field_0x564 = JKR_NEW dBgW();
     if (mChCoach.field_0x564 == NULL) {
         return 0;
     }
@@ -810,7 +810,7 @@ int daNpcCoach_c::createHeap() {
     
     JUT_ASSERT(2816, modelData != NULL);
 
-    mChYelia.mpModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, BCK_YELIA_WAIT),
+    mChYelia.mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, BCK_YELIA_WAIT),
                                                 -1, 1.0f, 0, -1, &mChYelia.mSound, 0x80000, 0x11000084);
     if (mChYelia.mpModelMorf != NULL && mChYelia.mpModelMorf->getModel() == NULL) {
         mChYelia.mpModelMorf->stopZelAnime();

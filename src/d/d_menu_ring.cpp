@@ -247,7 +247,7 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
             setSelectItem(i, 0x43);
         }
         for (int j = 0; j < 3; j++) {
-            mpSelectItemTex[i][j] = new J2DPicture(mpSelectItemTexBuf[i][field_0x6be[i]][0]);
+            mpSelectItemTex[i][j] = JKR_NEW J2DPicture(mpSelectItemTexBuf[i][field_0x6be[i]][0]);
             mpSelectItemTex[i][j]->setBasePosition(J2DBasePosition_4);
         }
         field_0x548[i] = 0.0f;
@@ -256,21 +256,21 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     ResTIMG* timg = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource(
         'TIMG', dMeter2Info_getNumberTextureName(0));
     for (int i = 0; i < 3; i++) {
-        mpItemNumTex[i] = new J2DPicture(timg);
+        mpItemNumTex[i] = JKR_NEW J2DPicture(timg);
     }
-    mpKanteraMeter = new dKantera_icon_c();
-    mpScreen = new J2DScreen();
+    mpKanteraMeter = JKR_NEW dKantera_icon_c();
+    mpScreen = JKR_NEW J2DScreen();
     dPaneClass_setPriority(&mpResData[0], mpHeap, mpScreen,
                            "SCRN/zelda_item_select_icon_message_ver2.blo", 0x20000,
                            dComIfGp_getRingResArchive());
     dPaneClass_showNullPane(mpScreen);
-    mpMessageParent = new CPaneMgrAlpha(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
-    mpTextParent[0] = new CPaneMgr(mpScreen, 'r_n', 0, NULL);
-    mpTextParent[1] = new CPaneMgr(mpScreen, 'c_n', 2, NULL);
+    mpMessageParent = JKR_NEW CPaneMgrAlpha(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpTextParent[0] = JKR_NEW CPaneMgr(mpScreen, 'r_n', 0, NULL);
+    mpTextParent[1] = JKR_NEW CPaneMgr(mpScreen, 'c_n', 2, NULL);
     mpTextParent[1]->setAlphaRate(1.0f);
     mpTextParent[2] = NULL;
-    mpTextParent[3] = new CPaneMgr(mpScreen, MULTI_CHAR('c_sen_n'), 2, NULL);
-    mpTextParent[4] = new CPaneMgr(mpScreen, 'gr_n', 2, NULL);
+    mpTextParent[3] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('c_sen_n'), 2, NULL);
+    mpTextParent[4] = JKR_NEW CPaneMgr(mpScreen, 'gr_n', 2, NULL);
     mpTextParent[4]->hide();
     for (int i = 5; i < 10; i++) {
         mpTextParent[i] = NULL;
@@ -289,7 +289,7 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
                 dMeter2Info_readItemTexture(item, mpItemBuf[i][0], NULL, mpItemBuf[i][1], NULL,
                                             mpItemBuf[i][2], NULL, NULL, NULL, -1);
             for (int k = 0; k < i_textureNum; k++) {
-                mpItemTex[i][k] = new J2DPicture(mpItemBuf[i][k]);
+                mpItemTex[i][k] = JKR_NEW J2DPicture(mpItemBuf[i][k]);
                 mpItemTex[i][k]->setBasePosition(J2DBasePosition_4);
             }
             dMeter2Info_setItemColor(item, mpItemTex[i][0], mpItemTex[i][1], mpItemTex[i][2], NULL);
@@ -316,7 +316,7 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
         mpScreen->search(MULTI_CHAR('x_btn_n'))->hide();
         mpScreen->search(MULTI_CHAR('y_btn_n'))->hide();
     }
-    mpString = new dMsgString_c();
+    mpString = JKR_NEW dMsgString_c();
     for (i = 0; i < 5; i++) {
 #if VERSION == VERSION_GCN_JPN
         J2DTextBox* fxy_TextBox = (J2DTextBox*)mpScreen->search(xy_text[i]);
@@ -379,23 +379,23 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     }
     mpHeap->getTotalFreeSize();
     timg = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "tt_block8x8.bti");
-    mpBlackTex = new J2DPicture(timg);
+    mpBlackTex = JKR_NEW J2DPicture(timg);
     mpBlackTex->setBlackWhite(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(0, 0, 0, 0xff));
     mpBlackTex->setAlpha(0);
-    mpSpotScreen = new J2DScreen();
+    mpSpotScreen = JKR_NEW J2DScreen();
     dPaneClass_setPriority(&mpResData[1], mpHeap, mpSpotScreen,
                            "SCRN/zelda_item_select_icon3_spot.blo", 0x20000,
                            dComIfGp_getRingResArchive());
     dPaneClass_showNullPane(mpSpotScreen);
-    mpSpotParent = new CPaneMgrAlpha(mpSpotScreen, MULTI_CHAR('n_all'), 2, NULL);
-    mpCenterScreen = new J2DScreen();
+    mpSpotParent = JKR_NEW CPaneMgrAlpha(mpSpotScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpCenterScreen = JKR_NEW J2DScreen();
     dPaneClass_setPriority(&mpResData[2], mpHeap, mpCenterScreen,
                            "SCRN/zelda_item_select_icon3_center_parts.blo", 0x20000,
                            dComIfGp_getRingResArchive());
     dPaneClass_showNullPane(mpCenterScreen);
-    mpCenterParent = new CPaneMgrAlpha(mpCenterScreen, MULTI_CHAR('center_n'), 2, NULL);
-    mpNameParent = new CPaneMgr(mpCenterScreen, MULTI_CHAR('label_n'), 1, NULL);
-    mpCircle = new CPaneMgr(mpCenterScreen, MULTI_CHAR('circle_n'), 2, NULL);
+    mpCenterParent = JKR_NEW CPaneMgrAlpha(mpCenterScreen, MULTI_CHAR('center_n'), 2, NULL);
+    mpNameParent = JKR_NEW CPaneMgr(mpCenterScreen, MULTI_CHAR('label_n'), 1, NULL);
+    mpCircle = JKR_NEW CPaneMgr(mpCenterScreen, MULTI_CHAR('circle_n'), 2, NULL);
     J2DTextBox* textBox[4];
 #if VERSION == VERSION_GCN_JPN
     textBox[0] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('item_n04'));
@@ -425,9 +425,9 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
         textBox[i]->setString(0x40, "");
     }
     textCentering();
-    mpDrawCursor = new dSelect_cursor_c(2, g_ringHIO.mCursorScale, dComIfGp_getMain2DArchive());
+    mpDrawCursor = JKR_NEW dSelect_cursor_c(2, g_ringHIO.mCursorScale, dComIfGp_getMain2DArchive());
     mpDrawCursor->setAlphaRate(1.0f);
-    mpItemExplain = new dMenu_ItemExplain_c(mpHeap, dComIfGp_getRingResArchive(), i_stick, true);
+    mpItemExplain = JKR_NEW dMenu_ItemExplain_c(mpHeap, dComIfGp_getRingResArchive(), i_stick, true);
     setRotate();
     mpDrawCursor->setPos(mItemSlotPosX[0] + mCenterPosX, mItemSlotPosY[0] + mCenterPosY);
     if (dComIfGs_getItem(mItemSlots[0], false) != fpcNm_ITEM_NONE) {
@@ -447,7 +447,7 @@ dMenu_Ring_c::~dMenu_Ring_c() {
                 mpSelectItemTexBuf[i][j][k] = NULL;
             }
             if (mpSelectItemTex[i][j] != NULL) {
-                delete mpSelectItemTex[i][j];
+                JKR_DELETE(mpSelectItemTex[i][j]);
                 mpSelectItemTex[i][j] = NULL;
             }
         }
@@ -455,23 +455,23 @@ dMenu_Ring_c::~dMenu_Ring_c() {
 
     for (int i = 0; i < 3; i++) {
         if (mpItemNumTex[i] != NULL) {
-            delete mpItemNumTex[i];
+            JKR_DELETE(mpItemNumTex[i]);
             mpItemNumTex[i] = NULL;
         }
     }
 
-    delete mpKanteraMeter;
+    JKR_DELETE(mpKanteraMeter);
     mpKanteraMeter = NULL;
 
-    delete mpScreen;
+    JKR_DELETE(mpScreen);
     mpScreen = NULL;
 
-    delete mpMessageParent;
+    JKR_DELETE(mpMessageParent);
     mpMessageParent = NULL;
 
     for (int i = 0; i < 10; i++) {
         if (mpTextParent[i] != NULL) {
-            delete mpTextParent[i];
+            JKR_DELETE(mpTextParent[i]);
             mpTextParent[i] = NULL;
         }
     }
@@ -479,7 +479,7 @@ dMenu_Ring_c::~dMenu_Ring_c() {
     for (int i = 0; i < MAX_ITEM_SLOTS; i++) {
         for (int j = 0; j < 3; j++) {
             if (mpItemTex[i][j] != NULL) {
-                delete mpItemTex[i][j];
+                JKR_DELETE(mpItemTex[i][j]);
                 mpItemTex[i][j] = NULL;
             }
 
@@ -490,21 +490,21 @@ dMenu_Ring_c::~dMenu_Ring_c() {
         }
     }
 
-    delete mpString;
+    JKR_DELETE(mpString);
     mpString = NULL;
 
     mpHeap->getTotalFreeSize();
 
-    delete mpBlackTex;
+    JKR_DELETE(mpBlackTex);
     mpBlackTex = NULL;
 
-    delete mpSpotScreen;
+    JKR_DELETE(mpSpotScreen);
     mpSpotScreen = NULL;
 
-    delete mpSpotParent;
+    JKR_DELETE(mpSpotParent);
     mpSpotParent = NULL;
 
-    delete mpCenterScreen;
+    JKR_DELETE(mpCenterScreen);
     mpCenterScreen = NULL;
 
     for (int i = 0; i < 3; i++) {
@@ -514,19 +514,19 @@ dMenu_Ring_c::~dMenu_Ring_c() {
         }
     }
 
-    delete mpCenterParent;
+    JKR_DELETE(mpCenterParent);
     mpCenterParent = NULL;
 
-    delete mpNameParent;
+    JKR_DELETE(mpNameParent);
     mpNameParent = NULL;
 
-    delete mpCircle;
+    JKR_DELETE(mpCircle);
     mpCircle = NULL;
 
-    delete mpDrawCursor;
+    JKR_DELETE(mpDrawCursor);
     mpDrawCursor = NULL;
 
-    delete mpItemExplain;
+    JKR_DELETE(mpItemExplain);
     mpItemExplain = NULL;
 
     dComIfGp_getRingResArchive()->removeResourceAll();

@@ -294,7 +294,7 @@ int daNpcTheB_c::CreateHeap() {
     mdlData_p = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 0x26);
     JUT_ASSERT(383, NULL != mdlData_p);
 
-    mAnm_p = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 0x1B),
+    mAnm_p = JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 0x1B),
                                   2, 1.0f, 0, -1, &mSound, J3DMdlFlag_DifferedDLBuffer, 0x11020284);
     if (mAnm_p != NULL && mAnm_p->getModel() == NULL) {
         mAnm_p->stopZelAnime();
@@ -312,7 +312,7 @@ int daNpcTheB_c::CreateHeap() {
     mdlData_p->getJointNodePointer(JNT_MOUTH)->setCallBack(ctrlJointCallBack);
     mAnm_p->getModel()->setUserArea((uintptr_t)this);
 
-    mpMatAnm = new daNpcF_MatAnm_c();
+    mpMatAnm = JKR_NEW daNpcF_MatAnm_c();
     if (mpMatAnm == NULL) {
         return 0;
     }

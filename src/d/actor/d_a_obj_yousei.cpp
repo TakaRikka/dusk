@@ -41,7 +41,7 @@ int daObjYOUSEI_c::CreateHeap() {
     void* modelData = dComIfG_getObjectRes("Always", 0x21);
     JUT_ASSERT(177, modelData != NULL);
 
-    mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("Always", 0xF), 2, 0.4f, 0, -1, &mSound, 0x80000, 0x11000084);
+    mpModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("Always", 0xF), 2, 0.4f, 0, -1, &mSound, 0x80000, 0x11000084);
     if (mpModelMorf == NULL) {
         return 0;
     }

@@ -85,7 +85,7 @@ int daRotTrap_c::CreateHeap() {
         return 0;
     }
 
-    mpBgW2 = new dBgW();
+    mpBgW2 = JKR_NEW dBgW();
     if (mpBgW2 == NULL || mpBgW2->Set((cBgD_t*)dComIfG_getObjectRes("P_kama", 8), 1, &mBgMtx)) {
         mpBgW2 = NULL;
         return 0;

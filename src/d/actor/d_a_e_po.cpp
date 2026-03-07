@@ -2842,7 +2842,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     e_po_class* a_this = (e_po_class*)i_this;
 
     a_this->mpMorf =
-        new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_PO", 0x1B), NULL, NULL,
+        JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_PO", 0x1B), NULL, NULL,
                              (J3DAnmTransform*)dComIfG_getObjectRes("E_PO", 0x15), 2, 1.0f, 0, -1,
                              &a_this->mSound1, 0x80000, 0x11000084);
     if (a_this->mpMorf == NULL || a_this->mpMorf->getModel() == NULL) {
@@ -2867,7 +2867,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     }
 
     a_this->mpMorf3 =
-        new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_PO", 0x1D), NULL, NULL,
+        JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_PO", 0x1D), NULL, NULL,
                              (J3DAnmTransform*)dComIfG_getObjectRes("E_PO", 0x17), 0, 1.0f, 0, -1,
                              &a_this->mSound1, 0x80000, 0x11000084);
     if (a_this->mpMorf3 == NULL || a_this->mpMorf3->getModel() == NULL) {
@@ -2879,7 +2879,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->mpMorf2 = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_PO", 0x1A), NULL,
+    a_this->mpMorf2 = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_PO", 0x1A), NULL,
                                          NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_PO", 0x4),
                                          2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000084);
     if (a_this->mpMorf2 == NULL || a_this->mpMorf2->getModel() == NULL) {

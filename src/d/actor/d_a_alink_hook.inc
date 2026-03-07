@@ -399,10 +399,10 @@ void daAlink_c::setHookshotModel() {
     field_0x0714 = initModel(mpHookTipModel->getModelData(), 0);
 
     mpItemModelData = loadAramBmd(dRes_ID_ALANM_BMD_AL_HS_KUSARI_e, 0x1000);
-    mpHookChain = new hsChainShape_c();
-    mpHookSound = new Z2SoundObjSimple();
+    mpHookChain = JKR_NEW hsChainShape_c();
+    mpHookSound = JKR_NEW Z2SoundObjSimple();
 
-    mpHookshotLinChk = new dBgS_ObjLinChk();
+    mpHookshotLinChk = JKR_NEW dBgS_ObjLinChk();
     mpHookshotLinChk->OffFullGrp();
     mpHookshotLinChk->OnWaterGrp();
 

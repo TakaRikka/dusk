@@ -26,7 +26,7 @@ JUTResFont::~JUTResFont() {
 }
 
 void JUTResFont::deleteMemBlocks_ResFont() {
-    delete[] mMemBlocks;
+    JKR_DELETE_ARRAY(mMemBlocks);
 }
 
 void JUTResFont::initialize_state() {
@@ -62,22 +62,22 @@ bool JUTResFont::protected_initiate(const ResFONT* pFont, JKRHeap* pHeap) {
     mValid = true;
 
     countBlock();
-    mMemBlocks = new (pHeap, 0) void*[mWid1BlockNum + mGly1BlockNum + mMap1BlockNum];
+    mMemBlocks = JKR_NEW_ARGS (pHeap, 0) void*[mWid1BlockNum + mGly1BlockNum + mMap1BlockNum];
 
     if (!mMemBlocks) {
         return false;
     }
     p = mMemBlocks;
     if (mWid1BlockNum != 0) {
-        mpWidthBlocks = new (p) ResFONT::WID1*[mWid1BlockNum];
+        mpWidthBlocks = JKR_NEW_ARGS (p) ResFONT::WID1*[mWid1BlockNum];
         p += mWid1BlockNum;
     }
     if (mGly1BlockNum != 0) {
-        mpGlyphBlocks = new (p) ResFONT::GLY1*[mGly1BlockNum];
+        mpGlyphBlocks = JKR_NEW_ARGS (p) ResFONT::GLY1*[mGly1BlockNum];
         p += mGly1BlockNum;
     }
     if (mMap1BlockNum != 0) {
-        mpMapBlocks = new (p) ResFONT::MAP1*[mMap1BlockNum];
+        mpMapBlocks = JKR_NEW_ARGS (p) ResFONT::MAP1*[mMap1BlockNum];
     }
     setBlock();
     return true;

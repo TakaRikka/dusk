@@ -45,7 +45,7 @@ int daObjMirrorTable_c::createHeap() {
 
     J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 10);
     JUT_ASSERT(123, bck != NULL);
-    mpTableUpBckAnm = new mDoExt_bckAnm();
+    mpTableUpBckAnm = JKR_NEW mDoExt_bckAnm();
     f32 rate = isSwitch() ? 1.0f : 0.0f;
     if (mpTableUpBckAnm == NULL || !mpTableUpBckAnm->init(bck, 1, 0, rate, 0, -1, false)) {
         return 0;
@@ -85,7 +85,7 @@ int daObjMirrorTable_c::createHeap() {
 
         J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, 25);
         JUT_ASSERT(160, brk != NULL);
-        mpStairBrkAnm = new mDoExt_brkAnm();
+        mpStairBrkAnm = JKR_NEW mDoExt_brkAnm();
         if (mpStairBrkAnm == NULL ||
             !mpStairBrkAnm->init(modelData, brk, 1, 0, 1.0f, 0, -1))
         {
@@ -106,7 +106,7 @@ int daObjMirrorTable_c::createHeap() {
 
         J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 28);
         JUT_ASSERT(187, btk != NULL);
-        mpLightBtkAnm = new mDoExt_btkAnm();
+        mpLightBtkAnm = JKR_NEW mDoExt_btkAnm();
         if (mpLightBtkAnm == NULL ||
             !mpLightBtkAnm->init(modelData, btk, 1, 0, 1.0f, 0, -1))
         {
@@ -119,7 +119,7 @@ int daObjMirrorTable_c::createHeap() {
 
         brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, 24);
         JUT_ASSERT(202, brk != NULL);
-        mpMSquareBrkAnm = new mDoExt_brkAnm();
+        mpMSquareBrkAnm = JKR_NEW mDoExt_brkAnm();
         if (mpMSquareBrkAnm == NULL ||
             !mpMSquareBrkAnm->init(modelData, brk, 1, 0, 1.0f, 0, -1))
         {
@@ -128,7 +128,7 @@ int daObjMirrorTable_c::createHeap() {
 
         bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 9);
         JUT_ASSERT(210, bck != NULL);
-        mpMSquareBckAnm = new mDoExt_bckAnm();
+        mpMSquareBckAnm = JKR_NEW mDoExt_bckAnm();
         if (mpMSquareBckAnm == NULL ||
             !mpMSquareBckAnm->init(bck, 1, 0, 1.0f, 0, -1, false))
         {

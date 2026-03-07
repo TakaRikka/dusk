@@ -25,7 +25,7 @@ dMsgScrnTree_c::dMsgScrnTree_c(JUTFont* param_0, JKRExpHeap* param_1) {
         field_0x54 = param_0;
     }
 
-    mpScreen = new J2DScreen();
+    mpScreen = JKR_NEW J2DScreen();
     mpScreen->setPriority("zelda_kanban_wood_a.blo", 0x1020000, dComIfGp_getMsgArchive(2));
     dPaneClass_showNullPane(mpScreen);
 
@@ -44,15 +44,15 @@ dMsgScrnTree_c::dMsgScrnTree_c(JUTFont* param_0, JKRExpHeap* param_1) {
     field_0xd4->searchUpdateMaterialID(mpScreen);
     field_0xe0 = 0.0f;
 
-    mpPmP_c = new CPaneMgr(mpScreen, MULTI_CHAR('n_size'), 2, NULL);
+    mpPmP_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('n_size'), 2, NULL);
     mpPmP_c->getPanePtr()->setAnimation(field_0xcc);
     field_0xcc->setFrame(1.0f);
     mpPmP_c->getPanePtr()->animationTransform();
     mpPmP_c->getPanePtr()->setAnimation((J2DAnmTransform*)NULL);
     mpPmP_c->scale(g_MsgObject_HIO_c.mBoxWoodScaleX, g_MsgObject_HIO_c.mBoxWoodScaleY);
 
-    field_0xc4 = new CPaneMgr(mpScreen, MULTI_CHAR('back_b'), 0, NULL);
-    field_0xc8 = new CPaneMgr(mpScreen, MULTI_CHAR('spot00'), 0, NULL);
+    field_0xc4 = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('back_b'), 0, NULL);
+    field_0xc8 = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('spot00'), 0, NULL);
     field_0xc8->getPanePtr()->setAnimation(field_0xd0);
 
     mpScreen->search(MULTI_CHAR('white_m'))->setAnimation(field_0xd4);
@@ -62,7 +62,7 @@ dMsgScrnTree_c::dMsgScrnTree_c(JUTFont* param_0, JKRExpHeap* param_1) {
         for (int i = 0; i < 3; i++) {
             static u64 const t_tag[3] = {MULTI_CHAR('mg_3line'), 't3_w', 't3_s'};
 
-            mpTm_c[i] = new CPaneMgr(mpScreen, t_tag[i], 0, NULL);
+            mpTm_c[i] = JKR_NEW CPaneMgr(mpScreen, t_tag[i], 0, NULL);
             ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setFont(field_0x54);
             ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setString(0x210, "");
         }
@@ -75,11 +75,11 @@ dMsgScrnTree_c::dMsgScrnTree_c(JUTFont* param_0, JKRExpHeap* param_1) {
             static u64 const t_tag[3] = {MULTI_CHAR('t3fline'), MULTI_CHAR('t3f_w'), MULTI_CHAR('t3f_s')};
             static u64 const tr_tag[3] = {MULTI_CHAR('mg_3f'), MULTI_CHAR('mg_3f_w'), MULTI_CHAR('mg_3f_s')};
 
-            mpTm_c[i] = new CPaneMgr(mpScreen, t_tag[i], 0, NULL);
+            mpTm_c[i] = JKR_NEW CPaneMgr(mpScreen, t_tag[i], 0, NULL);
             ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setFont(field_0x54);
             ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setString(0x210, "");
 
-            mpTmr_c[i] = new CPaneMgr(mpScreen, tr_tag[i], 0, NULL);
+            mpTmr_c[i] = JKR_NEW CPaneMgr(mpScreen, tr_tag[i], 0, NULL);
             ((J2DTextBox*)mpTmr_c[i]->getPanePtr())->setFont(field_0x54);
             ((J2DTextBox*)mpTmr_c[i]->getPanePtr())->setString(0x210, "");
         }
@@ -92,7 +92,7 @@ dMsgScrnTree_c::dMsgScrnTree_c(JUTFont* param_0, JKRExpHeap* param_1) {
     for (int i = 0; i < 3; i++) {
         static u64 const t_tag[3] = {MULTI_CHAR('mg_e4lin'), 'f4_w', 't4_s'};
 
-        mpTm_c[i] = new CPaneMgr(mpScreen, t_tag[i], 0, NULL);
+        mpTm_c[i] = JKR_NEW CPaneMgr(mpScreen, t_tag[i], 0, NULL);
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setFont(field_0x54);
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setString(0x200, "");
     }
@@ -132,33 +132,33 @@ dMsgScrnTree_c::dMsgScrnTree_c(JUTFont* param_0, JKRExpHeap* param_1) {
 }
 
 dMsgScrnTree_c::~dMsgScrnTree_c() {
-    delete mpScreen;
+    JKR_DELETE(mpScreen);
     mpScreen = NULL;
 
-    delete field_0xcc;
+    JKR_DELETE(field_0xcc);
     field_0xcc = NULL;
 
-    delete field_0xd0;
+    JKR_DELETE(field_0xd0);
     field_0xd0 = NULL;
 
-    delete field_0xd4;
+    JKR_DELETE(field_0xd4);
     field_0xd4 = NULL;
 
-    delete mpPmP_c;
+    JKR_DELETE(mpPmP_c);
     mpPmP_c = NULL;
 
-    delete field_0xc4;
+    JKR_DELETE(field_0xc4);
     field_0xc4 = NULL;
 
-    delete field_0xc8;
+    JKR_DELETE(field_0xc8);
     field_0xc8 = NULL;
 
     for (int i = 0; i < 3; i++) {
-        delete mpTm_c[i];
+        JKR_DELETE(mpTm_c[i]);
         mpTm_c[i] = NULL;
 
         if (mpTmr_c[i]) {
-            delete mpTmr_c[i];
+            JKR_DELETE(mpTmr_c[i]);
             mpTmr_c[i] = NULL;
         }
     }

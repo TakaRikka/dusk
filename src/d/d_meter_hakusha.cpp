@@ -30,14 +30,14 @@ int dMeterHakusha_c::_create() {
     };
 
     for (int i = 0; i < 6; i++) {
-        mpHakushaPos[i] = new CPaneMgr(field_0x004, haku_tag[i], 0, NULL);
+        mpHakushaPos[i] = JKR_NEW CPaneMgr(field_0x004, haku_tag[i], 0, NULL);
         JUT_ASSERT(0, mpHakushaPos[i] != NULL);
     }
 
-    mpHakushaParent = new CPaneMgr(field_0x004, MULTI_CHAR('hakunall'), 0, NULL);
+    mpHakushaParent = JKR_NEW CPaneMgr(field_0x004, MULTI_CHAR('hakunall'), 0, NULL);
     JUT_ASSERT(0, mpHakushaParent != NULL);
 
-    mpHakushaScreen = new J2DScreen();
+    mpHakushaScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(0, mpHakushaScreen != NULL);
 
     bool fg = mpHakushaScreen->setPriority("zelda_game_image_hakusha_parts.blo", 0x20000,
@@ -45,10 +45,10 @@ int dMeterHakusha_c::_create() {
     JUT_ASSERT(0, fg != false);
     dPaneClass_showNullPane(mpHakushaScreen);
 
-    mpHakushaOn = new CPaneMgr(mpHakushaScreen, MULTI_CHAR('haku_n'), 2, NULL);
+    mpHakushaOn = JKR_NEW CPaneMgr(mpHakushaScreen, MULTI_CHAR('haku_n'), 2, NULL);
     JUT_ASSERT(0, mpHakushaOn != NULL);
 
-    mpHakushaOff = new CPaneMgr(mpHakushaScreen, MULTI_CHAR('haku_b_n'), 2, NULL);
+    mpHakushaOff = JKR_NEW CPaneMgr(mpHakushaScreen, MULTI_CHAR('haku_b_n'), 2, NULL);
     JUT_ASSERT(0, mpHakushaOff != NULL);
 
     mpHakushaOn->setAlphaRate(0.0f);
@@ -66,7 +66,7 @@ int dMeterHakusha_c::_create() {
 
     mHakushaNum = dMeter2Info_getHorseLifeCount();
 
-    mpButtonScreen = new J2DScreen();
+    mpButtonScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(0, mpButtonScreen != NULL);
 
     fg = mpButtonScreen->setPriority("zelda_game_image_hakusha_a_btn.blo", 0x20000,
@@ -74,7 +74,7 @@ int dMeterHakusha_c::_create() {
     JUT_ASSERT(0, fg != false);
     dPaneClass_showNullPane(mpButtonScreen);
 
-    mpButtonA = new CPaneMgr(mpButtonScreen, MULTI_CHAR('abtn_n'), 2, NULL);
+    mpButtonA = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('abtn_n'), 2, NULL);
     JUT_ASSERT(0, mpButtonA != NULL);
     mpButtonA->show();
     mpButtonA->setAlphaRate(0.0f);
@@ -154,28 +154,28 @@ void dMeterHakusha_c::draw() {
 
 int dMeterHakusha_c::_delete() {
     for (int i = 0; i < 6; i++) {
-        delete mpHakushaPos[i];
+        JKR_DELETE(mpHakushaPos[i]);
         mpHakushaPos[i] = NULL;
     }
 
     mpHakushaParent->paneTrans(0.0f, 0.0f);
     mpHakushaParent->scale(1.0f, 1.0f);
-    delete mpHakushaParent;
+    JKR_DELETE(mpHakushaParent);
     mpHakushaParent = NULL;
 
-    delete mpHakushaScreen;
+    JKR_DELETE(mpHakushaScreen);
     mpHakushaScreen = NULL;
 
-    delete mpHakushaOn;
+    JKR_DELETE(mpHakushaOn);
     mpHakushaOn = NULL;
 
-    delete mpHakushaOff;
+    JKR_DELETE(mpHakushaOff);
     mpHakushaOff = NULL;
 
-    delete mpButtonScreen;
+    JKR_DELETE(mpButtonScreen);
     mpButtonScreen = NULL;
 
-    delete mpButtonA;
+    JKR_DELETE(mpButtonA);
     mpButtonA = NULL;
     return 1;
 }

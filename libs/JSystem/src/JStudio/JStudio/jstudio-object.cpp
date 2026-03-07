@@ -271,7 +271,7 @@ void JStudio::TAdaptor::adaptor_setVariableValue_FVR_INDEX_(JStudio::TAdaptor* p
 }
 
 JStudio::TObject::~TObject() {
-    delete mpAdaptor;
+    JKR_DELETE(mpAdaptor);
 }
 
 void JStudio::TObject::forward_value(u32 param_0) {

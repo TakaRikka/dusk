@@ -1226,7 +1226,7 @@ void dKyr_housi_move() {
 
 void dKyr_snow_init() {
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
-    g_env_light.mpSnowPacket = new (32) dKankyo_snow_Packet();
+    g_env_light.mpSnowPacket = JKR_NEW_ARGS (32) dKankyo_snow_Packet();
 
     if (g_env_light.mpSnowPacket == NULL) {
         return;
@@ -1520,7 +1520,7 @@ void dKyr_snow_move() {
 
 void dKyr_star_init() {
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
-    g_env_light.mpStarPacket = new (32) dKankyo_star_Packet();
+    g_env_light.mpStarPacket = JKR_NEW_ARGS (32) dKankyo_star_Packet();
 
     if (g_env_light.mpStarPacket == NULL) {
         return;

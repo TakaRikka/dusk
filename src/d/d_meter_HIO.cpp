@@ -3499,11 +3499,11 @@ BOOL subJOREventCallbackListNode::JORAct(u32 param_1, const char* param_2) {
         file.close();
         if (g_fmapHIO.mpArcData) {
             JKRUnmountArchive(g_fmapHIO.mpArcData);
-            delete g_fmapHIO.mpArcData;
+            JKR_DELETE(g_fmapHIO.mpArcData);
             g_fmapHIO.mpArcData = NULL;
         }
         JKRDecompress((u8*)g_fmapHIO.mpArcFile, (u8*)g_fmapHIO.mpDecompBuf, 0x46000, 0);
-        g_fmapHIO.mpArcData = new(mDoExt_getArchiveHeap(), 0) JKRMemArchive(g_fmapHIO.mpDecompBuf, 0x46000, JKRMEMBREAK_FLAG_UNKNOWN0);
+        g_fmapHIO.mpArcData = JKR_NEW_ARGS(mDoExt_getArchiveHeap(), 0) JKRMemArchive(g_fmapHIO.mpDecompBuf, 0x46000, JKRMEMBREAK_FLAG_UNKNOWN0);
         JUT_ASSERT(6413, g_fmapHIO.mpArcData != NULL);
         if (dComIfGp_isHeapLockFlag() == 2) {
             g_fmapHIO.field_0x2f9 = true;
@@ -3952,13 +3952,13 @@ dMeter_fmapHIO_c::~dMeter_fmapHIO_c() {
 
     if (mpArcData != NULL) {
         JKRUnmountArchive(mpArcData);
-        delete mpArcData;
+        JKR_DELETE(mpArcData);
         mpArcData = NULL;
     }
 
     #if DEBUG
     if (mpEvtCallBack != NULL) {
-        delete mpEvtCallBack;
+        JKR_DELETE(mpEvtCallBack);
         mpEvtCallBack = NULL;
     }
     #endif
@@ -4195,11 +4195,11 @@ void dMeter_fmapHIO_c::listenPropertyEvent(const JORPropertyEvent* property) {
             file.close();
             if (mpArcData) {
                 JKRUnmountArchive(mpArcData);
-                delete mpArcData;
+                JKR_DELETE(mpArcData);
                 mpArcData = NULL;
             }
             JKRDecompress((u8*)mpArcFile, (u8*)mpDecompBuf, 0x46000, 0);
-            mpArcData = new(mDoExt_getArchiveHeap(), 0) JKRMemArchive(mpDecompBuf, 0x46000, JKRMEMBREAK_FLAG_UNKNOWN0);
+            mpArcData = JKR_NEW_ARGS(mDoExt_getArchiveHeap(), 0) JKRMemArchive(mpDecompBuf, 0x46000, JKRMEMBREAK_FLAG_UNKNOWN0);
             JUT_ASSERT(7429, mpArcData != NULL);
             if (dComIfGp_isHeapLockFlag() == 2) {
                 field_0x2f9 = true;
@@ -4222,13 +4222,13 @@ void dMeter_fmapHIO_c::createEvtCallBackObject() {
     if (mpEvtCallBack) {
         return;
     }
-    mpEvtCallBack = new subJOREventCallbackListNode();
+    mpEvtCallBack = JKR_NEW subJOREventCallbackListNode();
     JUT_ASSERT(7460, mpEvtCallBack != NULL)
 }
 
 void dMeter_fmapHIO_c::deleteEvtCallBackObject() {
     if (mpEvtCallBack) {
-        delete mpEvtCallBack;
+        JKR_DELETE(mpEvtCallBack);
         mpEvtCallBack = NULL;
     }
 }

@@ -150,7 +150,7 @@ int daB_ZANTS_c::CreateHeap() {
         return FALSE;
     }
 
-    mpBtkAnm = new mDoExt_btkAnm();
+    mpBtkAnm = JKR_NEW mDoExt_btkAnm();
     if (mpBtkAnm == NULL) {
         return FALSE;
     }
@@ -162,7 +162,7 @@ int daB_ZANTS_c::CreateHeap() {
         return FALSE;
     }
 
-    mpBrkAnm = new mDoExt_brkAnm();
+    mpBrkAnm = JKR_NEW mDoExt_brkAnm();
     if (mpBrkAnm == NULL) {
         return FALSE;
     }
@@ -174,7 +174,7 @@ int daB_ZANTS_c::CreateHeap() {
         return FALSE;
     }
 
-    mpBgW = new dBgW();
+    mpBgW = JKR_NEW dBgW();
     if (mpBgW == NULL) {
         return FALSE;
     }

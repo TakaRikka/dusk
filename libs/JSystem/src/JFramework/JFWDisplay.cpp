@@ -14,8 +14,8 @@
 #include <vi.h>
 #include "global.h"
 #include "aurora/aurora.h"
+#include "global.h"
 #include "JSystem/JKernel/JKRHeap.h"
-
 #include "dusk/logging.h"
 
 void JFWDisplay::ctor_subroutine(bool enableAlpha) {
@@ -67,7 +67,7 @@ JFWDisplay* JFWDisplay::createManager(GXRenderModeObj const* p_rObj, JKRHeap* p_
     }
 
     if (sManager == NULL) {
-        sManager = new JFWDisplay(p_heap, xfb_num, enableAlpha);
+        sManager = JKR_NEW JFWDisplay(p_heap, xfb_num, enableAlpha);
     }
 
     return sManager;

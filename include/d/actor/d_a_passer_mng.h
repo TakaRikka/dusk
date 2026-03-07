@@ -22,7 +22,7 @@ public:
     int getLuggageParamHigh(u32);
     int create();
     void create_init();
-    ~daPasserMng_c() { delete [] childProcIds; }
+    ~daPasserMng_c() { JKR_DELETE_ARRAY(childProcIds); }
 
     u8 getDetailLevel() { return argument; }
     u8 getPathID() { return fopAcM_GetParam(this); }

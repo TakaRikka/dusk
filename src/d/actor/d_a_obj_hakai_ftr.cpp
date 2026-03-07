@@ -38,7 +38,7 @@ int daObjHFtr_c::createHeap() {
         return 0;
     }
 
-    field_0x5a4 = new dBgW();
+    field_0x5a4 = JKR_NEW dBgW();
     if (field_0x5a4 == NULL) {
         return 0;
     }

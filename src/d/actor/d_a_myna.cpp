@@ -443,7 +443,7 @@ int daMyna_c::createHeap() {
     J3DModelData* aMdlData_p = NULL;
     aMdlData_p = static_cast<J3DModelData*>(dComIfG_getObjectRes("Npc_myna", "MYNA.bmd"));
     JUT_ASSERT(803, NULL != aMdlData_p);
-    mpMorf = new mDoExt_McaMorfSO(aMdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mCreature, 0x80000,
+    mpMorf = JKR_NEW mDoExt_McaMorfSO(aMdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mCreature, 0x80000,
                                   0x11020084);
     if (mpMorf != NULL && mpMorf->getModel() == NULL) {
         mpMorf->stopZelAnime();

@@ -76,7 +76,7 @@ s32 dScnName_c::create() {
         dRes_info_c* resInfo = dComIfG_getObjectResInfo("fileSel");
         JUT_ASSERT(293, resInfo != NULL);
 
-        dFs_c = new dFile_select_c(resInfo->getArchive());
+        dFs_c = JKR_NEW dFile_select_c(resInfo->getArchive());
         JUT_ASSERT(297, dFs_c != NULL);
 
 
@@ -94,7 +94,7 @@ s32 dScnName_c::create() {
             #endif
         }
 
-        mBrightCheck = new dBrightCheck_c(resInfo->getArchive());
+        mBrightCheck = JKR_NEW dBrightCheck_c(resInfo->getArchive());
 
         field_0x420 = 0;
         g_snHIO.id = mDoHIO_CREATE_CHILD("名前登録シーン", &g_snHIO);
@@ -251,8 +251,8 @@ s32 dScnName_c::draw() {
 dScnName_c::~dScnName_c() {
     mDoHIO_DELETE_CHILD(g_snHIO.id);
 
-    delete dFs_c;
-    delete mBrightCheck;
+    JKR_DELETE(dFs_c);
+    JKR_DELETE(mBrightCheck);
     dComIfG_deleteObjectResMain("fileSel");
     mHeap->destroy();
 
@@ -407,7 +407,7 @@ static int dScnName_Delete(dScnName_c* i_this) {
 }
 
 static int dScnName_Create(scene_class* i_this) {
-    new (i_this) dScnName_c();
+    JKR_NEW_ARGS (i_this) dScnName_c();
     return static_cast<dScnName_c*>(i_this)->create();
 }
 

@@ -216,7 +216,7 @@ void daTitle_c::loadWait_proc() {
 
         mpFont = mDoExt_getMesgFont();
 
-        mTitle.Scr = new J2DScreen();
+        mTitle.Scr = JKR_NEW J2DScreen();
         JUT_ASSERT(529, mTitle.Scr != NULL);
 
         mTitle.Scr->setPriority("zelda_press_start.blo", 0x100000, mpMount->getArchive());
@@ -238,7 +238,7 @@ void daTitle_c::loadWait_proc() {
             fopMsgM_messageGet(msg, 100);
         }
 
-        field_0x600 = new CPaneMgrAlpha(mTitle.Scr, MULTI_CHAR('n_all'), 2, NULL);
+        field_0x600 = JKR_NEW CPaneMgrAlpha(mTitle.Scr, MULTI_CHAR('n_all'), 2, NULL);
         field_0x600->setAlpha(0);
         J2DPane* pane = mTitle.Scr->search(MULTI_CHAR('n_all'));
         pane->translate(g_daTitHIO.mPSPosX, g_daTitHIO.mPSPosY);
@@ -387,8 +387,8 @@ int daTitle_c::Delete() {
     mDoHIO_DELETE_CHILD(g_daTitHIO.id);
 
     dComIfG_resDelete(&mPhaseReq, l_arcName);
-    delete mTitle.Scr;
-    delete field_0x600;
+    JKR_DELETE(mTitle.Scr);
+    JKR_DELETE(field_0x600);
     
     mpMount->getArchive()->removeResourceAll();
     JKRUnmountArchive(mpMount->getArchive());

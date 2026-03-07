@@ -1376,7 +1376,7 @@ static int phase_4(dScnPly_c* i_this) {
     if (i_this->sceneCommand) {
         JUT_ASSERT(2610, i_this->sceneCommand->getMemAddress() != NULL);
         dComIfGp_particle_createScene(i_this->sceneCommand->getMemAddress());
-        delete i_this->sceneCommand;
+        JKR_DELETE(i_this->sceneCommand);
     } else {
         dComIfGp_particle_createScene(NULL);
     }
@@ -1459,7 +1459,7 @@ static int phase_4(dScnPly_c* i_this) {
     #endif
 
     dAttention_c* attention = dComIfGp_getAttention();
-    new (attention) dAttention_c(dComIfGp_getPlayer(0), 0);
+    JKR_NEW_ARGS (attention) dAttention_c(dComIfGp_getPlayer(0), 0);
     dComIfGp_getVibration().Init();
     daYkgr_c::init();
 

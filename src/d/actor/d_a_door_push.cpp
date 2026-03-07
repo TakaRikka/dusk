@@ -111,7 +111,7 @@ int daDoorPush_c::CreateHeap() {
             return 0;
         }
     }
-    mpDoorBgW = new dBgW();
+    mpDoorBgW = JKR_NEW dBgW();
     if (mpDoorBgW == NULL ||
         mpDoorBgW->Set((cBgD_t*)dComIfG_getObjectRes(l_arcName, 8), 1, &mDoorMtx))
     {

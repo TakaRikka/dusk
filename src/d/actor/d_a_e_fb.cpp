@@ -870,7 +870,7 @@ static int daE_FB_Delete(daE_FB_c* i_this) {
 int daE_FB_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes("E_FL", 0xB);
     JUT_ASSERT(1516, modelData != NULL);
-    mpMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
                                   (J3DAnmTransform*)dComIfG_getObjectRes("E_FL", 0x8),
                                   0, 1.0f, 0, -1, &mCreatureSound, 0, 0x31000084);
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
@@ -889,7 +889,7 @@ int daE_FB_c::CreateHeap() {
         }
     }
 
-    mpBrkAnm = new mDoExt_brkAnm();
+    mpBrkAnm = JKR_NEW mDoExt_brkAnm();
     if (mpBrkAnm == NULL) {
         return 0;
     }

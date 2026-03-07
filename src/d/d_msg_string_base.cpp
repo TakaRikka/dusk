@@ -15,17 +15,17 @@
 dMsgStringBase_c::dMsgStringBase_c() {
     field_0x20 = 0;
     getResource();
-    mpResCont = new JMessage::TResourceContainer();
+    mpResCont = JKR_NEW JMessage::TResourceContainer();
     JUT_ASSERT(33, mpResCont != NULL);
-    mpCtrl = new jmessage_string_tControl();
+    mpCtrl = JKR_NEW jmessage_string_tControl();
     JUT_ASSERT(36, mpCtrl != NULL);
-    mpRefer = new jmessage_string_tReference();
+    mpRefer = JKR_NEW jmessage_string_tReference();
     JUT_ASSERT(39, mpRefer != NULL);
-    mpSeqProc = new jmessage_string_tSequenceProcessor(mpRefer, mpCtrl);
+    mpSeqProc = JKR_NEW jmessage_string_tSequenceProcessor(mpRefer, mpCtrl);
     JUT_ASSERT(42, mpSeqProc != NULL);
-    mpRenProc = new jmessage_string_tRenderingProcessor(mpRefer);
+    mpRenProc = JKR_NEW jmessage_string_tRenderingProcessor(mpRefer);
     JUT_ASSERT(45, mpRenProc != NULL);
-    mpParse = new JMessage::TParse(mpResCont);
+    mpParse = JKR_NEW JMessage::TParse(mpResCont);
     JUT_ASSERT(48, mpParse != NULL);
     mpRefer->setResourceContainer(mpResCont);
     mpCtrl->setSequenceProcessor(mpSeqProc);
@@ -37,17 +37,17 @@ dMsgStringBase_c::dMsgStringBase_c() {
 
 dMsgStringBase_c::~dMsgStringBase_c() {
     mpResCont->destroyResource_all();
-    delete mpResCont;
+    JKR_DELETE(mpResCont);
     mpResCont = NULL;
-    delete mpCtrl;
+    JKR_DELETE(mpCtrl);
     mpCtrl = NULL;
-    delete mpRefer;
+    JKR_DELETE(mpRefer);
     mpRefer = NULL;
-    delete mpSeqProc;
+    JKR_DELETE(mpSeqProc);
     mpSeqProc = NULL;
-    delete mpRenProc;
+    JKR_DELETE(mpRenProc);
     mpRenProc = NULL;
-    delete mpParse;
+    JKR_DELETE(mpParse);
     mpParse = NULL;
    
     void* iVar1 = dMeter2Info_getMsgResource();

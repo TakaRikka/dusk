@@ -44,7 +44,7 @@ int dTimer_c::_create() {
         if (mp_heap != NULL) {
             mp_heap->getTotalFreeSize();
 
-            mp_tm_scrn = new dDlst_TimerScrnDraw_c();
+            mp_tm_scrn = JKR_NEW dDlst_TimerScrnDraw_c();
             JUT_ASSERT(0, mp_tm_scrn != NULL);
 
             if (appen->timer_mode == 10) {
@@ -299,7 +299,7 @@ int dTimer_c::_delete() {
         mp_heap->getTotalFreeSize();
 
         mp_tm_scrn->deleteScreen();
-        delete mp_tm_scrn;
+        JKR_DELETE(mp_tm_scrn);
         mp_tm_scrn = NULL;
 
         fopMsgM_destroyExpHeap(mp_heap);
@@ -592,7 +592,7 @@ void dDlst_TimerScrnDraw_c::setScreen(s32 param_0, JKRArchive* i_archive) {
 
     setShowType(3);
 
-    mpGetInScreen = new J2DScreen();
+    mpGetInScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(0, mpGetInScreen != NULL);
 
     bool fg = mpGetInScreen->setPriority("zelda_game_image_cow_get_in.blo", 0x20000, mpArchive);
@@ -603,13 +603,13 @@ void dDlst_TimerScrnDraw_c::setScreen(s32 param_0, JKRArchive* i_archive) {
     mpGetInBck = (J2DAnmTransform*)J2DAnmLoaderDataBase::load(
         JKRGetNameResource("zelda_game_image_cow_get_in.bck", mpArchive));
 
-    mpGetInParent = new CPaneMgr(mpGetInScreen, MULTI_CHAR('get_in_n'), 2, NULL);
+    mpGetInParent = JKR_NEW CPaneMgr(mpGetInScreen, MULTI_CHAR('get_in_n'), 2, NULL);
     JUT_ASSERT(0, mpGetInParent != NULL);
 
-    mpGetInRoot = new CPaneMgr(mpGetInScreen, MULTI_CHAR('n_all'), 0, NULL);
+    mpGetInRoot = JKR_NEW CPaneMgr(mpGetInScreen, MULTI_CHAR('n_all'), 0, NULL);
     JUT_ASSERT(0, mpGetInRoot != NULL);
 
-    mpGetInText = new CPaneMgr(mpGetInScreen, MULTI_CHAR('get_in'), 0, NULL);
+    mpGetInText = JKR_NEW CPaneMgr(mpGetInScreen, MULTI_CHAR('get_in'), 0, NULL);
     JUT_ASSERT(0, mpGetInText != NULL);
 
     static_cast<J2DTextBox*>(mpGetInScreen->search(MULTI_CHAR('get_in_s')))->setFont(mDoExt_getMesgFont());
@@ -631,7 +631,7 @@ void dDlst_TimerScrnDraw_c::setScreen(s32 param_0, JKRArchive* i_archive) {
 }
 
 void dDlst_TimerScrnDraw_c::setScreenBase() {
-    mpScreen = new J2DScreen();
+    mpScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(0, mpScreen != NULL);
 
     bool fg = mpScreen->setPriority("zelda_game_image_cow_game.blo", 0x20000, mpArchive);
@@ -640,15 +640,15 @@ void dDlst_TimerScrnDraw_c::setScreenBase() {
 
     mpParent = NULL;
 
-    mpCowParent = new CPaneMgr(mpScreen, MULTI_CHAR('cow_n'), 2, NULL);
+    mpCowParent = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('cow_n'), 2, NULL);
     JUT_ASSERT(0, mpCowParent != NULL);
     mpCowParent->setAlphaRate(0.0f);
 
-    mpTimeParent = new CPaneMgr(mpScreen, MULTI_CHAR('time_n'), 2, NULL);
+    mpTimeParent = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('time_n'), 2, NULL);
     JUT_ASSERT(0, mpTimeParent != NULL);
     mpTimeParent->setAlphaRate(0.0f);
 
-    mpImageParent = new CPaneMgr(mpScreen, MULTI_CHAR('cow_i_n'), 2, NULL);
+    mpImageParent = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('cow_i_n'), 2, NULL);
     JUT_ASSERT(0, mpImageParent != NULL);
     mpImageParent->setAlphaRate(0.0f);
 
@@ -677,23 +677,23 @@ void dDlst_TimerScrnDraw_c::setScreenBase() {
 }
 
 void dDlst_TimerScrnDraw_c::setScreenBoatRace() {
-    mpScreen = new J2DScreen();
+    mpScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(0, mpScreen != NULL);
 
     bool fg = mpScreen->setPriority("zelda_game_image_zora_kawakudari.blo", 0x20000, mpArchive);
     JUT_ASSERT(0, fg != false);
     dPaneClass_showNullPane(mpScreen);
 
-    mpParent = new CPaneMgr(mpScreen, MULTI_CHAR('ta_co_n'), 2, NULL);
+    mpParent = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('ta_co_n'), 2, NULL);
     JUT_ASSERT(0, mpParent != NULL);
 
-    mpCowParent = new CPaneMgr(mpScreen, MULTI_CHAR('num_n'), 2, NULL);
+    mpCowParent = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('num_n'), 2, NULL);
     JUT_ASSERT(0, mpCowParent != NULL);
     mpCowParent->setAlphaRate(0.0f);
 
     mpTimeParent = NULL;
 
-    mpImageParent = new CPaneMgr(mpScreen, MULTI_CHAR('target_n'), 2, NULL);
+    mpImageParent = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('target_n'), 2, NULL);
     JUT_ASSERT(0, mpImageParent != NULL);
     mpImageParent->setAlphaRate(0.0f);
 
@@ -719,7 +719,7 @@ void dDlst_TimerScrnDraw_c::setScreenBoatRace() {
 }
 
 void dDlst_TimerScrnDraw_c::setScreenRider() {
-    mpScreen = new J2DScreen();
+    mpScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(0, mpScreen != NULL);
 
     bool fg = mpScreen->setPriority("zelda_game_image_rider.blo", 0x20000, mpArchive);
@@ -728,13 +728,13 @@ void dDlst_TimerScrnDraw_c::setScreenRider() {
 
     mpParent = NULL;
 
-    mpCowParent = new CPaneMgr(mpScreen, MULTI_CHAR('num_n'), 2, NULL);
+    mpCowParent = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('num_n'), 2, NULL);
     JUT_ASSERT(0, mpCowParent != NULL);
     mpCowParent->setAlphaRate(0.0f);
 
     mpTimeParent = NULL;
 
-    mpImageParent = new CPaneMgr(mpScreen, MULTI_CHAR('rid_i_n'), 2, NULL);
+    mpImageParent = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('rid_i_n'), 2, NULL);
     JUT_ASSERT(0, mpImageParent != NULL);
     mpImageParent->setAlphaRate(0.0f);
 
@@ -782,42 +782,42 @@ void dDlst_TimerScrnDraw_c::hideDenominator() {
 }
 
 void dDlst_TimerScrnDraw_c::deleteScreen() {
-    delete mpScreen;
+    JKR_DELETE(mpScreen);
     mpScreen = NULL;
 
     if (mpParent != NULL) {
-        delete mpParent;
+        JKR_DELETE(mpParent);
         mpParent = NULL;
     }
 
     if (mpTimeParent != NULL) {
-        delete mpTimeParent;
+        JKR_DELETE(mpTimeParent);
         mpTimeParent = NULL;
     }
 
     if (mpCowParent != NULL) {
-        delete mpCowParent;
+        JKR_DELETE(mpCowParent);
         mpCowParent = NULL;
     }
 
     if (mpImageParent != NULL) {
-        delete mpImageParent;
+        JKR_DELETE(mpImageParent);
         mpImageParent = NULL;
     }
 
-    delete mpGetInScreen;
+    JKR_DELETE(mpGetInScreen);
     mpGetInScreen = NULL;
 
-    delete mpGetInBck;
+    JKR_DELETE(mpGetInBck);
     mpGetInBck = NULL;
 
-    delete mpGetInParent;
+    JKR_DELETE(mpGetInParent);
     mpGetInParent = NULL;
 
-    delete mpGetInRoot;
+    JKR_DELETE(mpGetInRoot);
     mpGetInRoot = NULL;
 
-    delete mpGetInText;
+    JKR_DELETE(mpGetInText);
     mpGetInText = NULL;
 }
 

@@ -156,7 +156,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->mBrk = new mDoExt_brkAnm();
+    a_this->mBrk = JKR_NEW mDoExt_brkAnm();
     if (a_this->mBrk == NULL) {
         return 0;
     }

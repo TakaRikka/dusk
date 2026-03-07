@@ -67,7 +67,7 @@ int daObjPDwall_c::CreateHeap() {
     }
 
     for (int i = 0; i < 9; i++) {
-        mpBgw[i] = new dBgW();
+        mpBgw[i] = JKR_NEW dBgW();
         if (mpBgw[i] == NULL) {
             return 0;
         }
