@@ -1358,15 +1358,15 @@ static int daE_SM2_Execute(e_sm2_class* i_this) {
 
     if (i_this->field_0x83e != 0) {
         fopAc_ac_c* player = dComIfGp_getPlayer(0);
-        camera_class* camera = dComIfGp_getCamera(0);
+        camera_process_class* camera = dComIfGp_getCamera(0);
         cXyz start;
         cXyz end;
 
         i_this->field_0x83e--;
 
-        start.x = camera->lookat.eye.x;
-        start.y = camera->lookat.eye.y;
-        start.z = camera->lookat.eye.z;
+        start.x = camera->view.lookat.eye.x;
+        start.y = camera->view.lookat.eye.y;
+        start.z = camera->view.lookat.eye.z;
 
         end = actor->current.pos;
         end.y += 20.0f;

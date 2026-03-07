@@ -16,12 +16,12 @@ static cXyz get_check_pos(kytag00_class* i_this) {
     cXyz pos;
 
     if (player_p != NULL) {
-        f32 dist_to_cameye = a_this->current.pos.abs(camera_p->lookat.eye);
+        f32 dist_to_cameye = a_this->current.pos.abs(camera_p->view.lookat.eye);
         f32 dist_to_player = a_this->current.pos.abs(player_p->current.pos);
 
         pos = player_p->current.pos;
         if (dComIfGp_event_runCheck() && dist_to_cameye < dist_to_player) {
-            pos = camera_p->lookat.eye;
+            pos = camera_p->view.lookat.eye;
         }
     } else {
         pos.set(0.0f, 0.0f, 0.0f);

@@ -117,7 +117,7 @@ static int dKyeff_Create(kankyo_class* i_this) {
     dKyw_wether_init();
 
     if (strcmp(dComIfGp_getStartStageName(), "Name") == 0) {
-        camera_class* camera = dComIfGp_getCamera(0);
+        camera_process_class* camera = dComIfGp_getCamera(0);
         OSTime time = OSGetTime();
         OSTicksToCalendarTime(time, &calendar);
 

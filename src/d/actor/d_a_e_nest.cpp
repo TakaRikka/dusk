@@ -785,7 +785,7 @@ static void* shot_b_sub(void* i_actor, void* i_data) {
 }
 
 static void demo_camera(e_nest_class* i_this) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     s8 end_demo = false;
     
     switch (i_this->mDemoStage) {

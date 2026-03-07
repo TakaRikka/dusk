@@ -13962,7 +13962,7 @@ void daAlink_c::resetBasAnime() {
 }
 
 BOOL daAlink_c::checkSightLine(f32 i_maxDist, cXyz* o_sightPos) {
-    camera_class* camera = dComIfGp_getCamera(field_0x317c);
+    camera_process_class* camera = dComIfGp_getCamera(field_0x317c);
     cXyz* line_start_pos = fopCamM_GetEye_p(camera);
     cXyz sp3C;
     cXyz sp30(mHeldItemRootPos);

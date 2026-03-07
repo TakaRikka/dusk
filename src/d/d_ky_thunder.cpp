@@ -43,7 +43,7 @@ int dThunder_c::draw() {
     static cXyz l_offsetPos(0.0f, 40.0f, -250.0f);
     static cXyz l_scale(1.0f, 1.0f, 1.0f);
 
-    camera_class* camera_p = dComIfGp_getCamera(0);
+    camera_process_class* camera_p = dComIfGp_getCamera(0);
 
     mDoMtx_stack_c::transS(mThunderPos.x, mThunderPos.y, mThunderPos.z);
     mDoMtx_stack_c::YrotM(field_0x168);
@@ -141,7 +141,7 @@ static int dThunder_Create(kankyo_class* i_this) {
 
 int dThunder_c::create() {
     dScnKy_env_light_c* env_light = dKy_getEnvlight();
-    camera_class* camera_p = dComIfGp_getCamera(0);
+    camera_process_class* camera_p = dComIfGp_getCamera(0);
     cXyz spB8;
     cXyz spC4;
     cXyz spD0;
@@ -180,7 +180,7 @@ int dThunder_c::create() {
         var_f29 = 0.25f;
     }
 
-    field_0x168 = cLib_targetAngleY(&camera_p->lookat.eye, &camera_p->lookat.center);
+    field_0x168 = cLib_targetAngleY(&camera_p->view.lookat.eye, &camera_p->view.lookat.center);
 
     if (!(g_Counter.mCounter0 & 1)) {
         field_0x168 += 0x7FFF;
@@ -217,7 +217,7 @@ int dThunder_c::create() {
     field_0x138.y = var_f29 * (var_f31 + cM_rndF(var_f30 - var_f31));
     field_0x138.z = 1.0f;
 
-    dKyr_get_vectle_calc(&camera_p->lookat.eye, &camera_p->lookat.center, &spB8);
+    dKyr_get_vectle_calc(&camera_p->view.lookat.eye, &camera_p->view.lookat.center, &spB8);
 
     // JMAFastSqrt doesn't match here when it should, probably needs to be fixed
     // var_f29_2 = JMAFastSqrt(spB8.x * spB8.x + spB8.z * spB8.z);
@@ -246,9 +246,9 @@ int dThunder_c::create() {
     spD0.z = cM_scos(temp_r31) * cM_scos(temp_r28);
 
     f32 temp_f1_3 = cM_rndF(spC4.x);
-    mThunderPos.x = camera_p->lookat.eye.x + (spB8.x * 100000.0f) + (spD0.x * temp_f1_3);
-    mThunderPos.y = camera_p->lookat.eye.y + 2000.0f + cM_rndF(spC4.y);
-    mThunderPos.z = camera_p->lookat.eye.z + (spB8.z * 100000.0f) + (spD0.z * temp_f1_3);
+    mThunderPos.x = camera_p->view.lookat.eye.x + (spB8.x * 100000.0f) + (spD0.x * temp_f1_3);
+    mThunderPos.y = camera_p->view.lookat.eye.y + 2000.0f + cM_rndF(spC4.y);
+    mThunderPos.z = camera_p->view.lookat.eye.z + (spB8.z * 100000.0f) + (spD0.z * temp_f1_3);
 
     if (!strcmp(dComIfGp_getStartStageName(), "R_SP30") && dComIfGp_roomControl_getStayNo() == 4) {
         mThunderPos.x = cM_rndFX(260.0f) + 19635.0f;

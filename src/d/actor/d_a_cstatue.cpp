@@ -799,7 +799,7 @@ void daCstatue_c::setDemo() {
     cXyz eyePos;
     cXyz centerPos;
     if (eventInfo.checkCommandDemoAccrpt()) {
-        camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+        camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
         fopAcM_onSwitch(this, mParam1);
         if (mDemoMode == daCstatue_DemoMode_0) {
             camera->mCamera.Stop();

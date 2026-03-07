@@ -10709,15 +10709,15 @@ int dCamera_c::ForceLockOff(fopAc_ac_c* i_actor) {
 }
 
 s16 dCam_getAngleY(camera_class* i_cam) {
-    return i_cam->mCamera.U();
+    return ((camera_process_class*)i_cam)->mCamera.U();
 }
 
 s16 dCam_getAngleX(camera_class* i_cam) {
-    return i_cam->mCamera.V();
+    return ((camera_process_class*)i_cam)->mCamera.V();
 }
 
 s16 dCam_getControledAngleY(camera_class* i_cam) {
-    return i_cam->mCamera.U2();
+    return ((camera_process_class*)i_cam)->mCamera.U2();
 }
 
 camera_class* dCam_getCamera() {
@@ -10725,14 +10725,14 @@ camera_class* dCam_getCamera() {
 }
 
 dCamera_c* dCam_getBody() {
-    camera_class* camera = dCam_getCamera();
+    camera_process_class* camera = (camera_process_class*)dCam_getCamera();
     return &camera->mCamera;
 }
 
 static void preparation(camera_process_class* i_this) {
     camera_process_class* process = i_this;
     camera_class* a_this = (camera_class*)i_this;
-    dCamera_c* camera = &((camera_class*)i_this)->mCamera;
+    dCamera_c* camera = &i_this->mCamera;
 
     int camera_id = get_camera_id(a_this);
     dDlst_window_c* window = get_window(camera_id);
@@ -10786,7 +10786,7 @@ static void view_setup(camera_process_class* i_this) {
 static void store(camera_process_class* i_camera) {
     camera_process_class* process = (camera_process_class*)i_camera;
     camera_class* camera = (camera_class*)i_camera;
-    dCamera_c* dCamera = &((camera_class*)i_camera)->mCamera;
+    dCamera_c* dCamera = &i_camera->mCamera;
     int camera_id = get_camera_id(camera);
     dDlst_window_c* window = get_window(camera_id);
     view_port_class* viewport = window->getViewPort();
@@ -10913,33 +10913,30 @@ cXyz dCamera_c::Center() {
 }
 
 static int camera_execute(camera_process_class* i_this) {
-    // this variable is likely fake as it doesn't exist in debug,
-    // but directly casting the parameter on each use breaks retail
-    camera_class* camera = (camera_class*)i_this;
-    preparation(camera);
+    preparation(i_this);
 
     if (dDemo_c::getCamera() != NULL) {
-        camera->mCamera.ResetView();
+        i_this->mCamera.ResetView();
     }
 
     dComIfGp_offCameraAttentionStatus(0, 0x40);
 
-    if (camera->mCamera.Active()) {
-        camera->mCamera.Run();
+    if (i_this->mCamera.Active()) {
+        i_this->mCamera.Run();
     } else {
-        camera->mCamera.NotRun();
+        i_this->mCamera.NotRun();
     }
 
-    camera->mCamera.CalcTrimSize();
+    i_this->mCamera.CalcTrimSize();
 
-    store(camera);
-    view_setup(camera);
+    store(i_this);
+    view_setup(i_this);
     return 1;
 }
 
 static int camera_draw(camera_process_class* i_this) {
     camera_class* a_this = (camera_class*)i_this;
-    dCamera_c* body = &((camera_class*)i_this)->mCamera;
+    dCamera_c* body = &i_this->mCamera;
     dDlst_window_c* window = get_window(a_this);
     view_port_class* viewport = window->getViewPort();
     camera_process_class* process = i_this;
@@ -10991,24 +10988,24 @@ static int camera_draw(camera_process_class* i_this) {
 
     int trim_height = body->TrimHeight();
     window->setScissor(0.0f, trim_height, FB_WIDTH, FB_HEIGHT - trim_height * 2.0f);
-    C_MTXPerspective(process->projMtx, process->fovy, process->aspect, process->near_, process->far_);
-    mDoMtx_lookAt(process->viewMtx, &process->lookat.eye, &process->lookat.center,
-                  &process->lookat.up, process->bank);
+    C_MTXPerspective(process->view.projMtx, process->view.fovy, process->view.aspect, process->view.near_, process->view.far_);
+    mDoMtx_lookAt(process->view.viewMtx, &process->view.lookat.eye, &process->view.lookat.center,
+                  &process->view.lookat.up, process->view.bank);
 
 #if WIDESCREEN_SUPPORT
-    mDoGph_gInf_c::setWideZoomProjection(process->projMtx);
+    mDoGph_gInf_c::setWideZoomProjection(process->view.projMtx);
 #endif
 
-    j3dSys.setViewMtx(process->viewMtx);
-    cMtx_inverse(process->viewMtx, process->invViewMtx);
+    j3dSys.setViewMtx(process->view.viewMtx);
+    cMtx_inverse(process->view.viewMtx, process->view.invViewMtx);
 
-    Z2GetAudience()->setAudioCamera(process->viewMtx, process->lookat.eye, process->lookat.center,
-                                    process->fovy, process->aspect, getComStat(0x80), camera_id,
+    Z2GetAudience()->setAudioCamera(process->view.viewMtx, process->view.lookat.eye, process->view.lookat.center,
+                                    process->view.fovy, process->view.aspect, getComStat(0x80), camera_id,
                                     false);
 
     dBgS_GndChk gndchk;
     gndchk.OnWaterGrp();
-    gndchk.SetPos(&process->lookat.eye);
+    gndchk.SetPos(&process->view.lookat.eye);
 
     f32 cross = dComIfG_Bgsp().GroundCross(&gndchk);
     if (cross != -G_CM3D_F_INF) {
@@ -11020,27 +11017,27 @@ static int camera_draw(camera_process_class* i_this) {
 
         mDoAud_setCameraGroupInfo(dComIfG_Bgsp().GetGrpSoundId(gndchk));
         Vec spDC;
-        spDC.x = process->lookat.eye.x;
+        spDC.x = process->view.lookat.eye.x;
         spDC.y = cross;
-        spDC.z = process->lookat.eye.z;
+        spDC.z = process->view.lookat.eye.z;
 
         Z2AudioMgr::getInterface()->setCameraPolygonPos(&spDC);
     } else {
         Z2AudioMgr::getInterface()->setCameraPolygonPos(NULL);
     }
 
-    MTXCopy(process->viewMtx, process->viewMtxNoTrans);
-    process->viewMtxNoTrans[0][3] = 0.0f;
-    process->viewMtxNoTrans[1][3] = 0.0f;
-    process->viewMtxNoTrans[2][3] = 0.0f;
-    cMtx_concatProjView(process->projMtx, process->viewMtx, process->projViewMtx);
+    MTXCopy(process->view.viewMtx, process->view.viewMtxNoTrans);
+    process->view.viewMtxNoTrans[0][3] = 0.0f;
+    process->view.viewMtxNoTrans[1][3] = 0.0f;
+    process->view.viewMtxNoTrans[2][3] = 0.0f;
+    cMtx_concatProjView(process->view.projMtx, process->view.viewMtx, process->view.projViewMtx);
 
     body->Draw();
     return 1;
 }
 
 static int init_phase1(camera_class* i_this) {
-    camera_class* camera = i_this;
+    camera_process_class* camera = (camera_process_class*)i_this;
     int camera_id = get_camera_id(i_this);
 
     dComIfGp_setCamera(camera_id, i_this);
@@ -11056,7 +11053,7 @@ static int init_phase1(camera_class* i_this) {
 }
 
 static int init_phase2(camera_class* i_this) {
-    camera_class* camera = (camera_class*)i_this;
+    camera_process_class* camera = (camera_process_class*)i_this;
     dCamera_c* body = &camera->mCamera;
     int camera_id = get_camera_id(i_this);
     i_this->field_0x238++;
@@ -11138,12 +11135,12 @@ static int camera_create(camera_class* i_this) {
         (request_of_phase_process_fn)NULL,
     };
 
-    camera_class* camera = i_this;
+    camera_process_class* camera = (camera_process_class*)i_this;
     return dComLbG_PhaseHandler(&camera->phase_request, l_method, i_this);
 }
 
 static int camera_delete(camera_process_class* i_this) {
-    dCamera_c* camera = &((camera_class*)i_this)->mCamera;
+    dCamera_c* camera = &i_this->mCamera;
 
     if (camera->CameraID() == 0) {
 #if DEBUG
@@ -11212,7 +11209,7 @@ camera_process_profile_definition g_profile_CAMERA = {
     fpcPi_CURRENT_e,
     PROC_CAMERA,
     &g_fpcLf_Method.base,
-    sizeof(camera_class),
+    sizeof(camera_process_class),
     0,
     0,
     &g_fopVw_Method,
@@ -11233,7 +11230,7 @@ camera_process_profile_definition g_profile_CAMERA2 = {
     fpcPi_CURRENT_e,
     PROC_CAMERA2,
     &g_fpcLf_Method.base,
-    sizeof(camera_class),
+    sizeof(camera_process_class),
     0,
     0,
     &g_fopVw_Method,

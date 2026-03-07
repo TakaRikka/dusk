@@ -69,8 +69,8 @@ void daDr_c::wait() {
         current.angle.y = 0;
         field_0x654++;
     } else if (field_0x654 != -1) {
-        camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-        camera_class* camera0 = dComIfGp_getCamera(0);
+        camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+        camera_process_class* camera0 = dComIfGp_getCamera(0);
 
         if (eventInfo.checkCommandDemoAccrpt()) {
             camera->mCamera.Stop();
@@ -86,15 +86,15 @@ void daDr_c::wait() {
             fopAcM_orderPotentialEvent(this, 2, 0xFFFF, 0);
             eventInfo.onCondition(2);
 
-            mDemoCamEye = camera0->lookat.eye;
-            mDemoCamCenter = camera0->lookat.center;
+            mDemoCamEye = camera0->view.lookat.eye;
+            mDemoCamCenter = camera0->view.lookat.center;
         }
     }
 }
 
 void daDr_c::pl_walk() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* camera0 = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera0 = dComIfGp_getCamera(0);
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz sp4C;
 
@@ -167,8 +167,8 @@ void daDr_c::pl_turn() {
 }
 
 void daDr_c::bridge_destroy() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* camera0 = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera0 = dComIfGp_getCamera(0);
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     if (field_0x654 == 0) {
@@ -216,7 +216,7 @@ void daDr_c::bridge_destroy() {
 }
 
 void daDr_c::bridge_destroy2() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     dComIfGp_getCamera(0);
     daPy_getPlayerActorClass();
 

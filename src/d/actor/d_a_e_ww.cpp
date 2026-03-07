@@ -650,7 +650,7 @@ static cXyz create_pos[15] = {
 };
 
 void daE_WW_c::executeMaster() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz sp48 = daPy_getPlayerActorClass()->current.pos;
     f32 temp_f30 = sp48.absXZ(current.pos);
     cXyz sp3C;
@@ -1055,7 +1055,7 @@ void daE_WW_c::executeAttack() {
 
 bool daE_WW_c::checkAttackStart() {
     if (field_0x734 == 0) {
-        camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+        camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
         s16 temp_r28 = (fopCamM_GetAngleY(camera) + 0x8000) - fopAcM_searchPlayerAngleY(this);
         cXyz sp14 = daPy_getPlayerActorClass()->current.pos;
 
@@ -1880,7 +1880,7 @@ void daE_WW_c::action() {
 
     if (field_0x75d) {
         dBgS_LinChk lin_chk;
-        lin_chk.Set(&dComIfGp_getCamera(0)->lookat.eye, &attention_info.position, this);
+        lin_chk.Set(&dComIfGp_getCamera(0)->view.lookat.eye, &attention_info.position, this);
 
         if (dComIfG_Bgsp().LineCross(&lin_chk)) {
             attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;

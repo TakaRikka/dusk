@@ -191,8 +191,8 @@ void dStage_roomControl_c::init() {
         status++;
     }
 
-    mArcBankName = (dStage_roomControl_c::nameData*)dComIfG_getStageRes("name.bin");
-    mArcBankData = (dStage_roomControl_c::bankData*)dComIfG_getStageRes("bank.bin");
+    mArcBankName = (dStage_roomControl_c::dStage_bankName*)dComIfG_getStageRes("name.bin");
+    mArcBankData = (dStage_roomControl_c::dStage_bankData*)dComIfG_getStageRes("bank.bin");
 
     if (mArcBankName == NULL) {
         JUT_ASSERT(449, mArcBankData == NULL);
@@ -1564,9 +1564,9 @@ u8 dStage_roomControl_c::m_time_pass;
 
 u8 dStage_roomControl_c::mNoChangeRoom;
 
-dStage_roomControl_c::nameData* dStage_roomControl_c::mArcBankName;
+dStage_roomControl_c::dStage_bankName* dStage_roomControl_c::mArcBankName;
 
-dStage_roomControl_c::bankData* dStage_roomControl_c::mArcBankData;
+dStage_roomControl_c::dStage_bankData* dStage_roomControl_c::mArcBankData;
 
 dStage_roomControl_c::roomDzs_c dStage_roomControl_c::m_roomDzs;
 #if DEBUG

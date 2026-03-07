@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include "aurora/gfx.h"
 
+#include "aurora/gfx.h"
 #include "imgui.hpp"
 
 static bool m_frameRate = true;
@@ -133,6 +134,12 @@ void DuskImguiDebugOverlay(const AuroraInfo *info) {
             std::string_view backendString = "Unknown"sv;
             switch (info->backend)
             {
+            case BACKEND_AUTO:
+                backendString = "Auto"sv;
+                break;
+            case BACKEND_D3D11:
+                backendString = "D3D11"sv;
+                break;
             case BACKEND_D3D12:
                 backendString = "D3D12"sv;
                 break;

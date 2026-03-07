@@ -1106,8 +1106,8 @@ static void cam_3d_morf(e_gb_class* i_this, f32 param_2) {
 
 static void demo_camera(e_gb_class* i_this) {
     fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* camera2 = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera2 = dComIfGp_getCamera(0);
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     cXyz work, pos, sp34, sp40;
 

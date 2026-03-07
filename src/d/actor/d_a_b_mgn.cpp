@@ -2489,7 +2489,7 @@ void daB_MGN_c::executeFall() {
 
 void daB_MGN_c::demo_skip(int param_1) {
     UNUSED(param_1);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daPy_py_c* player = daPy_getPlayerActorClass();
     mBlurRate = 0.0f;
 
@@ -2529,7 +2529,7 @@ int daB_MGN_c::DemoSkipCallBack(void* i_this, int param_1) {
 }
 
 void daB_MGN_c::executeOpening() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daPy_py_c* player = daPy_getPlayerActorClass();
     J3DModelData* modelData = mpMgnModelMorf->getModel()->getModelData();
 
@@ -2821,7 +2821,7 @@ void daB_MGN_c::executeOpening() {
 }
 
 void daB_MGN_c::executeDeath() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz sp60;
     cXyz sp54;

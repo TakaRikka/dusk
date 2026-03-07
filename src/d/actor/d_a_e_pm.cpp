@@ -392,7 +392,7 @@ void daE_PM_c::SetGakkiEffect() {
 }
 
 bool daE_PM_c::CameraSet() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     dCamera_c* camera_body = dCam_getBody();
 
     if (!eventInfo.checkCommandDemoAccrpt()) {
@@ -414,12 +414,12 @@ bool daE_PM_c::CameraSet() {
 }
 
 void daE_PM_c::SetStopingCam() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Set(mCamCenter, mCamEye, mCamFovY, 0);
 }
 
 void daE_PM_c::SetStopCam(cXyz i_center, f32 i_offsetXZ, f32 i_offsetY, s16 i_angle) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz offset(0.0f, i_offsetY, i_offsetXZ);
     cXyz eye(0.0f, 0.0f, 0.0f);
     mCamCenter.set(i_center.x, i_center.y, i_center.z);
@@ -433,7 +433,7 @@ void daE_PM_c::SetStopCam(cXyz i_center, f32 i_offsetXZ, f32 i_offsetY, s16 i_an
 }
 
 void daE_PM_c::SetMoveCam2(f32 i_scale, f32 i_step) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cLib_addCalcPos(&mCamCenterTarget2, mCamCenterTarget, i_scale * 2.0f, i_step * 2.0f, 0.0f);
     cLib_addCalcPos(&mCamCenter, mCamCenterTarget2, i_scale, i_step, 0.0f);
     cLib_addCalcPos(&mCamEyeTarget2, mCamEyeTarget, i_scale * 2.0f, 160.0f, 0.0f);
@@ -442,14 +442,14 @@ void daE_PM_c::SetMoveCam2(f32 i_scale, f32 i_step) {
 }
 
 void daE_PM_c::SetMoveCam(f32 i_scale, f32 i_step) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cLib_addCalcPos(&mCamCenter, mCamCenterTarget, i_scale, i_step, 0.0f);
     cLib_addCalcPos(&mCamEye, mCamEyeTarget, i_scale, 100.0f, 0.0f);
     camera->mCamera.Set(mCamCenter, mCamEye, mCamFovY, 0);
 }
 
 void daE_PM_c::SetReleaseCam() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Reset(mCamCenter, mCamEye);
     camera->mCamera.Start();
     camera->mCamera.SetTrimSize(0);
@@ -458,7 +458,7 @@ void daE_PM_c::SetReleaseCam() {
 
 void daE_PM_c::Ap_StartAction() {
     cXyz offset;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz player_pos(-10728.0f, s_LinkPos->y, 17052.0f);
     cXyz player_offset(0.0f, 0.0f, 0.0f);
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -2671,7 +2671,7 @@ void daE_PM_c::setLampBaseMtx() {
     }
 
     mDoMtx_stack_c::transS(vec2.x, vec2.y, vec2.z);
-    vec1 = dComIfGp_getCamera(0)->lookat.eye - vec2;
+    vec1 = dComIfGp_getCamera(0)->view.lookat.eye - vec2;
     mDoMtx_stack_c::YrotM(cM_atan2s(vec1.x, vec1.z));
     mDoMtx_stack_c::XrotM(-cM_atan2s(vec1.y, JMAFastSqrt(vec1.x * vec1.x + vec1.z * vec1.z)));
     mDoMtx_stack_c::scaleM(l_HIO.mGlowEffectScale, l_HIO.mGlowEffectScale, l_HIO.mGlowEffectScale);

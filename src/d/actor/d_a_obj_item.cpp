@@ -445,7 +445,7 @@ void daItem_c::procMainSimpleGetDemo() {
         current.pos.y = item_pos.y;
     }
 
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     shape_angle.x = fopCamM_GetAngleX(camera);
     shape_angle.y = fopCamM_GetAngleY(camera);
     shape_angle.z = fopCamM_GetAngleZ(camera);

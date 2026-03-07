@@ -613,7 +613,7 @@ void daObjKAT_c::Z_BufferChk() {
     curWithOff.y += 20.0f;
     mDoLib_project(&curWithOff, &projected);
 
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     f32 unkFloat1;
     if (camera != NULL) {
         unkFloat1 = camera->mCamera.TrimHeight();

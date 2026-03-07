@@ -316,14 +316,14 @@ static void* s_BallSearch_Tag(void* i_actor, void* i_data) {
 }
 
 bool daE_ZH_c::startDemoCheck() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* camera2 = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera2 = dComIfGp_getCamera(0);
 
     if (!eventInfo.checkCommandDemoAccrpt()) {
         fopAcM_orderPotentialEvent(this, 2, 0xFFFF, 0);
         eventInfo.onCondition(dEvtCnd_CANDEMO_e);
-        mDemoCamEye = camera2->lookat.eye;
-        mDemoCamCenter = camera2->lookat.center;
+        mDemoCamEye = camera2->view.lookat.eye;
+        mDemoCamCenter = camera2->view.lookat.center;
         return false;
     }
 
@@ -745,7 +745,7 @@ void daE_ZH_c::damage_check() {
 }
 
 void daE_ZH_c::executeStartDemo() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz sp48;
     f32 fVar1, fVar2;
 
@@ -832,7 +832,7 @@ void daE_ZH_c::executeWait() {
 
 void daE_ZH_c::executeBallWait() {
     dBgS_LinChk lin_chk;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz spa4, spb0;
 
     switch (mMoveMode) {
@@ -963,7 +963,7 @@ void daE_ZH_c::executeBallWait() {
 }
 
 void daE_ZH_c::executeOpenStart() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz sp28, sp34;
 
     field_0xb40.OnCoSPrmBit(0x40);
@@ -1563,7 +1563,7 @@ void daE_ZH_c::executeCatchFlyMove() {
 }
 
 void daE_ZH_c::executeReturnDemo() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz sp1c, sp28;
     s16 sVar1;
 

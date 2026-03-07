@@ -1370,6 +1370,7 @@ u16 GXGetNumXfbLines(u16 efbHeight, f32 yScale) {
     STUB_LOG();
     return 0;
 }
+
 void GXGetScissor(u32* left, u32* top, u32* wd, u32* ht) {
     STUB_LOG();
 }

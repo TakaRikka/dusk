@@ -433,7 +433,7 @@ void daKey_c::effectStop() {
 
 void daKey_c::effectCtrl() {
     cXyz eff_scale;
-    f32 cam_dist = current.pos.abs(dComIfGp_getCamera(0)->lookat.eye);
+    f32 cam_dist = current.pos.abs(dComIfGp_getCamera(0)->view.lookat.eye);
     f32 var_f29 = 1000.0f;
     f32 max_size = 3.0f;
     f32 size = 1.0f;

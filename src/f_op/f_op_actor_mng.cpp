@@ -2179,7 +2179,7 @@ static void get_vectle_calc(const cXyz* pXyzA, const cXyz* pXyzB, cXyz* pOut) {
 void fopAcM_setEffectMtx(const fopAc_ac_c* i_actor, const J3DModelData* modelData) {
     const cXyz* pEyePos = &i_actor->eyePos;
     camera_class* camera = dCam_getCamera();
-    cXyz v1 = *pEyePos - camera->lookat.eye;
+    cXyz v1 = *pEyePos - camera->view.lookat.eye;
     cXyz v2;
     get_vectle_calc(&i_actor->tevStr.field_0x32c, pEyePos, &v2);
     cXyz half;

@@ -592,7 +592,7 @@ int daB_GG_c::DemoSkipCallBack(void* i_process, int param_1) {
 }
 
 bool daB_GG_c::CameraSet() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     dCamera_c* cam_body = dCam_getBody();
 
     if (!eventInfo.checkCommandDemoAccrpt()) {
@@ -612,12 +612,12 @@ bool daB_GG_c::CameraSet() {
 }
 
 void daB_GG_c::SetStopingCam() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Set(mCamCenter, mCamEye, mCamFovy, 0);
 }
 
 void daB_GG_c::SetStopCam(cXyz param_0, f32 param_1, f32 param_2, s16 param_3) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     cXyz sp38(0.0f, param_2, param_1);
     cXyz sp2C(0.0f, 0.0f, 0.0f);
@@ -635,7 +635,7 @@ void daB_GG_c::SetStopCam(cXyz param_0, f32 param_1, f32 param_2, s16 param_3) {
 
 void daB_GG_c::SetMoveCam(cXyz param_0, f32 param_1, f32 param_2, s16 param_3, f32 param_4,
                           f32 param_5) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz sp38(0.0f, param_2, param_1);
     cXyz sp2C(0.0f, 0.0f, 0.0f);
     field_0x60c = param_0;
@@ -652,7 +652,7 @@ void daB_GG_c::SetMoveCam(cXyz param_0, f32 param_1, f32 param_2, s16 param_3, f
 }
 
 void daB_GG_c::SetMoveCam1(f32 i_scale, f32 i_step) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     cLib_addCalcPos(&mCamCenterTarget, field_0x60c, i_scale, i_step, 0.0f);
     cLib_addCalcPos(&mCamEyeTarget, field_0x618, i_scale, i_step, 0.0f);
@@ -663,7 +663,7 @@ void daB_GG_c::SetMoveCam1(f32 i_scale, f32 i_step) {
 }
 
 void daB_GG_c::SetReleaseCam() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Reset(mCamCenter, mCamEye);
     camera->mCamera.Start();
     camera->mCamera.SetTrimSize(0);
@@ -689,7 +689,7 @@ void daB_GG_c::St_CamAction() {
     cXyz sp4C(0.0f, 0.0f, -300.0f);
     cXyz sp40;
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     switch (mCamMode) {
     case 0:

@@ -524,18 +524,31 @@ def RevolutionLib(lib_name: str, objects: List[Object], extra_cflags=[]) -> Dict
         }
 
 # Helper function for REL script objects
-def Rel(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
-    return {
-        "lib": lib_name,
-        "mw_version": MWVersion(config.version),
-        "cflags": [*cflags_rel],
-        "progress_category": "game",
-        "objects": objects,
-    }
+def Rel(lib_name: str, objects: List[Object], isInDol=False) -> Dict[str, Any]:
+    if (config.version == "ShieldD") and isInDol:
+        # For Shield Debug version, some RELs were moved into the DOL
+        return {
+            "lib": lib_name,
+            "mw_version": MWVersion(config.version),
+            "cflags": [*cflags_framework, "-D__FORCE_REL_IN_DOL__=1"],
+            "progress_category": "game",
+            "objects": objects,
+        }
+    else:
+        return {
+            "lib": lib_name,
+            "mw_version": MWVersion(config.version),
+            "cflags": [*cflags_rel],
+            "progress_category": "game",
+            "objects": objects,
+        }
 
 # Helper function for actor RELs
-def ActorRel(status: bool, rel_name: str, extra_cflags: List[str]=[]) -> Dict[str, Any]:
-    return Rel(rel_name, [Object(status, f"d/actor/{rel_name}.cpp", extra_cflags=extra_cflags, scratch_preset_id=70)])
+def ActorRel(status: bool, rel_name: str, extra_cflags: List[str]=[], isInDol=False) -> Dict[str, Any]:
+    if isInDol:
+        return Rel(rel_name, [Object(status, f"d/actor/{rel_name}.cpp", extra_cflags=extra_cflags, scratch_preset_id=70)], True)
+    else:
+        return Rel(rel_name, [Object(status, f"d/actor/{rel_name}.cpp", extra_cflags=extra_cflags, scratch_preset_id=70)])
 
 
 # Helper function for JSystem libraries
@@ -2228,7 +2241,7 @@ config.libs = [
     ActorRel(MatchingFor(ALL_GCN), "d_a_tag_allmato"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_tag_camera"), # debug extra weak fns
     ActorRel(MatchingFor(ALL_GCN), "d_a_tag_chkpoint"), # debug weak func order
-    ActorRel(MatchingFor(ALL_GCN), "d_a_tag_event"), # TODO: this is part of Rframework in ShieldD
+    ActorRel(MatchingFor(ALL_GCN), "d_a_tag_event", [], True), # TODO: this is part of Rframework in ShieldD
     ActorRel(MatchingFor(ALL_GCN), "d_a_tag_evt"), # debug extra weak fns
     ActorRel(MatchingFor(ALL_GCN), "d_a_tag_evtarea"), # debug weak func order
     ActorRel(MatchingFor(ALL_GCN), "d_a_tag_evtmsg"), # debug weak func order
@@ -2236,7 +2249,7 @@ config.libs = [
     ActorRel(MatchingFor(ALL_GCN), "d_a_tag_kmsg"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_tag_lantern"), # debug weak func order
     ActorRel(MatchingFor(ALL_GCN), "d_a_tag_mist"), # debug weak func order
-    ActorRel(MatchingFor(ALL_GCN), "d_a_tag_msg"), # TODO: this is part of Rframework in ShieldD
+    ActorRel(MatchingFor(ALL_GCN), "d_a_tag_msg", [], True), # TODO: this is part of Rframework in ShieldD
     ActorRel(MatchingFor(ALL_GCN), "d_a_tag_push"), # debug weak func order
     ActorRel(MatchingFor(ALL_GCN, "Shield"), "d_a_tag_telop"), # debug weak func order
     ActorRel(MatchingFor(ALL_GCN), "d_a_tbox"),
@@ -2257,7 +2270,7 @@ config.libs = [
     ActorRel(MatchingFor(ALL_GCN), "d_a_suspend"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_tag_attention"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_alldie"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_andsw2"),
+    ActorRel(MatchingFor(ALL_GCN), "d_a_andsw2", [], True),
     ActorRel(MatchingFor(ALL_GCN), "d_a_bd"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_canoe"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_cstaF"),
@@ -2271,7 +2284,7 @@ config.libs = [
     ActorRel(MatchingFor(ALL_GCN), "d_a_e_rd"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_econt"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_fr"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_grass"),
+    ActorRel(MatchingFor(ALL_GCN), "d_a_grass", [], True),
     ActorRel(MatchingFor(ALL_GCN, "Shield"), "d_a_kytag05"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_kytag10"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_kytag11"),
@@ -2316,9 +2329,9 @@ config.libs = [
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_swpush5"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_yobikusa"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_scene_exit2"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_shop_item"),
+    ActorRel(MatchingFor(ALL_GCN), "d_a_shop_item", [], True),
     ActorRel(MatchingFor(ALL_GCN), "d_a_sq"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_swc00"),
+    ActorRel(MatchingFor(ALL_GCN), "d_a_swc00", [], True),
     ActorRel(MatchingFor(ALL_GCN), "d_a_tag_CstaSw"), # debug weak func order
     ActorRel(MatchingFor(ALL_GCN), "d_a_tag_ajnot"), # debug weak func order
     ActorRel(MatchingFor(ALL_GCN), "d_a_tag_attack_item"), # debug weak func order
@@ -2464,7 +2477,7 @@ config.libs = [
     ActorRel(Equivalent, "d_a_hozelda"), # weak func order (J3DMtxCalcNoAnm)
     ActorRel(MatchingFor(ALL_GCN), "d_a_izumi_gate"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_kago"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_kytag01"),
+    ActorRel(MatchingFor(ALL_GCN), "d_a_kytag01", [], True),
     ActorRel(MatchingFor(ALL_GCN), "d_a_kytag02"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_kytag03"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_kytag06"),
@@ -2534,7 +2547,7 @@ config.libs = [
     ActorRel(MatchingFor(ALL_GCN), "d_a_npc_lf"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_npc_lud"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_npc_midp"),
-    ActorRel(MatchingFor(ALL_GCN, ALL_SHIELD), "d_a_npc_mk"),
+    ActorRel(MatchingFor(ALL_GCN, ALL_SHIELD), "d_a_npc_mk", [], True),
     ActorRel(MatchingFor(ALL_GCN), "d_a_npc_moi"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_npc_moir"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_npc_myna2"),
@@ -2682,7 +2695,7 @@ config.libs = [
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_iceblock"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_iceleaf"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_ihasi"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_ikada"),
+    ActorRel(MatchingFor(ALL_GCN), "d_a_obj_ikada", [], True),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_inobone"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_ita"),
     ActorRel(MatchingFor(ALL_GCN), "d_a_obj_itamato"),
@@ -2954,7 +2967,7 @@ config.libs = [
     ActorRel(MatchingFor(ALL_GCN), "d_a_tag_yami"), # debug weak func order
     ActorRel(MatchingFor(ALL_GCN), "d_a_talk"),
     ActorRel(MatchingFor(ALL_GCN, "Shield"), "d_a_tboxSw"),
-    ActorRel(MatchingFor(ALL_GCN), "d_a_title"),
+    ActorRel(MatchingFor(ALL_GCN), "d_a_title", [], True),
     ActorRel(MatchingFor(ALL_GCN), "d_a_warp_bug"),
 ]
 

@@ -110,7 +110,7 @@ static dPath* set_path_info(fopAc_ac_c* i_actor) {
 }
 
 static void getSound_pos(fopAc_ac_c* i_actor) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz eye = camera->mCamera.Eye();
     cXyz sp28;
 
@@ -166,8 +166,8 @@ static void odour_move(kytag03_class* i_this) {
         if (path != NULL) {
             int sp40;
             int sp38;
-            var_r27 = get_Extent_pos_start_get(i_this, path, &camera->lookat.eye, 1000.0f, &sp40);
-            var_r25 = get_Extent_pos_end_get(i_this, path, &camera->lookat.eye, 1000.0f, &sp38);
+            var_r27 = get_Extent_pos_start_get(i_this, path, &camera->view.lookat.eye, 1000.0f, &sp40);
+            var_r25 = get_Extent_pos_end_get(i_this, path, &camera->view.lookat.eye, 1000.0f, &sp38);
 
             s16 spA;
             s16 sp8;
@@ -219,7 +219,7 @@ static void odour_move(kytag03_class* i_this) {
                         temp_f22 *= temp_f22;
                         var_f23 *= i_this->field_0x57c;
 
-                        f32 var_f1_4 = camera->lookat.eye.abs(sp94);
+                        f32 var_f1_4 = camera->view.lookat.eye.abs(sp94);
                         if (var_f23 > 0.0f && var_f1_4 < 4000.0f) {
                             csXyz spFC;
                             cXyz spB8;

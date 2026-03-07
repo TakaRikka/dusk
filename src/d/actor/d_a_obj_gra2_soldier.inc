@@ -1440,7 +1440,7 @@ void daObj_GrA_c::demo_camera() {
     f32 fVar1;
     int prm_short;
     daPy_py_c* player = daPy_getPlayerActorClass();
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     dCamera_c* camBody = dCam_getBody();
 
     switch (mDemoCamMode) {
@@ -1581,7 +1581,7 @@ void daObj_GrA_c::rollAttackedDemo() {
 
     daPy_py_c* player = daPy_getPlayerActorClass();
     int cmp_val;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     dCamera_c* camBody = dCam_getBody();
 
     switch (mDemoCamMode) {
@@ -1701,7 +1701,7 @@ void daObj_GrA_c::rollAttackedDemo() {
 void daObj_GrA_c::graThrowDemo() {
     cXyz sp2c;
     daPy_py_c* player = daPy_getPlayerActorClass();
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     dCamera_c* camBody = dCam_getBody();
 
     switch (mDemoCamMode) {
@@ -2021,7 +2021,7 @@ void daObj_GrA_c::executeCrazyThrow() {
 }
 
 void daObj_GrA_c::initCrazyAttack() {
-    camera_class* camera;
+    camera_process_class* camera;
 
     if (field_0x1ff0 == 3 && field_0x1ff8 == 0) {
         field_0x1ff0 = 4;

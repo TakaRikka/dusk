@@ -430,7 +430,7 @@ void daE_BG_c::executeAttack() {
     s16 unkShort1;
     cXyz unkXyz1;
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     cXyz playerPos = daPy_getPlayerActorClass()->current.pos;
 
@@ -1099,7 +1099,7 @@ void daE_BG_c::action() {
     mCreatureSound.setLinkSearch(isAttacking);
     if (mActionMode != 0 && mActionMode != 3) {
         dBgS_LinChk linChk;
-        linChk.Set(&dComIfGp_getCamera(0)->lookat.eye, &attention_info.position, this);
+        linChk.Set(&dComIfGp_getCamera(0)->view.lookat.eye, &attention_info.position, this);
         if (dComIfG_Bgsp().LineCross(&linChk)) {
             attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;
         } else {

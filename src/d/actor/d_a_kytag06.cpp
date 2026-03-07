@@ -513,7 +513,7 @@ static void daKytag06_type_07_Execute(kytag06_class* i_this) {
     cXyz spX;
     f32 current_time = dComIfGs_getTime();
     dScnKy_env_light_c* env_light = dKy_getEnvlight();
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
 
     if (i_this->field_0x574 == 0) {
         if (current_time > 285.0f || current_time < 82.5f) {
@@ -573,7 +573,7 @@ static void daKytag06_type_07_Execute(kytag06_class* i_this) {
     daKytag06_type_07_wether_Execute(i_this);
 
     if (camera != NULL) {
-        if (camera->lookat.eye.y > 0.0f) {
+        if (camera->view.lookat.eye.y > 0.0f) {
             dKy_BossLight_set(&spX, &color, i_this->mWindPower * 2.0f, 0);
             g_env_light.bg_amb_col[3].r = (u8)(i_this->mWindPower * 230.0f + 25.0f);
             g_env_light.bg_amb_col[3].g = (u8)(i_this->mWindPower * 215.0f + 30.0f);
@@ -711,9 +711,9 @@ static void daKytag06_type_10_Execute(kytag06_class* i_this) {
         }
 
         dKyw_evt_wind_set_go();
-        camera_class* camera = dComIfGp_getCamera(0);
+        camera_process_class* camera = dComIfGp_getCamera(0);
 
-        cXyz eye(camera->lookat.eye);
+        cXyz eye(camera->view.lookat.eye);
 
         if (camera != NULL) {
             if (((eye.x > 2079.0f && eye.x < 3013.0f && eye.y < 864.0f && eye.z > -6000.0f &&
@@ -865,12 +865,12 @@ static int daKytag06_Execute(kytag06_class* i_this) {
 
     switch (i_this->mType) {
     case 1: {
-        camera_class* camera = dComIfGp_getCamera(0);
+        camera_process_class* camera = dComIfGp_getCamera(0);
 
         if (i_this->mpPath != NULL) {
             int target1 = 0;
             int target2 = 0;
-            dPnt* pnt = near_rail_get(i_this, &camera->lookat.eye);
+            dPnt* pnt = near_rail_get(i_this, &camera->view.lookat.eye);
 
             if (pnt != NULL && pnt->mArg0 != 0xFF) {
                 dKy_change_colpat(pnt->mArg0);

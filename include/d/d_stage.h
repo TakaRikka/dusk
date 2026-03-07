@@ -1088,20 +1088,32 @@ public:
         /* 0x04 */ void** m_dzs;
     };
 
-    struct nameData {
-        /* 0x0 */ s8 m_num;
-        /* 0x1 */ char m_names[32][10];  // ?
+    /**
+     * dStage_bankName (made up name)
+     * - Represent's Stage resource "name.bin"
+     */ 
+    struct dStage_bankName {
+        /* 0x0 */ u8 m_num;             // number of name entries
+        /* 0x1 */ char m_names[1][10];  // variable number of name entries (up to 32 max), each 10 characters long
     };
 
-    struct bankDataEntry {
-        u8 field_0x0;
-        u8 mLayerNo;
-        u8 field_0x2[0x20];
+    /**
+     * dStage_bankDataEntry (made up name)
+     * - Entry that goes into dStage_bankData
+     */ 
+    struct dStage_bankDataEntry {
+        u8 roomNo;       // required room ID for the bank
+        u8 layerNo;      // required layer for the bank
+        u8 nameIDs[32];  // indexes into dStage_bankName m_names list. 0xFF used for unused entries
     };
 
-    struct bankData {
+    /**
+     * dStage_bankData (made up name)
+     * - Represent's Stage resource "bank.bin"
+     */ 
+    struct dStage_bankData {
         /* 0x0 */ u8 m_num;
-        /* 0x1 */ bankDataEntry m_entries[32];  // ?
+        /* 0x1 */ dStage_bankDataEntry m_entries[1];  // variable number of entries
     };
 
     dStage_roomControl_c() {}
@@ -1128,8 +1140,8 @@ public:
     static int getNextStayNo() { return mNextStayNo; }
     static BOOL GetTimePass() { return m_time_pass; }
     static void SetTimePass(int i_TimePass) { m_time_pass = i_TimePass; }
-    static nameData* getArcBankName() { return mArcBankName; }
-    static bankData* getArcBankData() { return mArcBankData; }
+    static dStage_bankName* getArcBankName() { return mArcBankName; }
+    static dStage_bankData* getArcBankData() { return mArcBankData; }
     static void createRoomDzs(u8 i_num) { m_roomDzs.create(i_num); }
     static void removeRoomDzs() { m_roomDzs.remove(); }
     static void* addRoomDzs(u8 i_num, u8 roomNo) { return m_roomDzs.add(i_num, roomNo); }
@@ -1218,7 +1230,9 @@ public:
     static void onNoChangeRoom() { mNoChangeRoom = true; }
 
     #if DEBUG
-    static void setBgp(int, void*);
+    static void setBgp(int i_roomNo, void* i_bgp) {
+        mBgp[i_roomNo] = i_bgp;
+    }
     #endif
 
     static const int MEMORY_BLOCK_MAX = 19;
@@ -1228,8 +1242,8 @@ public:
     static dStage_roomStatus_c mStatus[0x40];
     static char mDemoArcName[10];
     static fpc_ProcID mProcID;
-    static nameData* mArcBankName;
-    static bankData* mArcBankData;
+    static dStage_bankName* mArcBankName;
+    static dStage_bankData* mArcBankData;
     static roomDzs_c m_roomDzs;
     static s8 mStayNo;
     static s8 mOldStayNo;

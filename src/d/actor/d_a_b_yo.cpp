@@ -757,7 +757,7 @@ int daB_YO_c::doYoMessage() {
 }
 
 void daB_YO_c::executeOpening() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz cam_pos, player_pos, ystone_pos;
     daPy_py_c* player = daPy_getPlayerActorClass();
     obj_ystone_class* ystone;
@@ -1509,7 +1509,7 @@ void daB_YO_c::executeChase() {
 }
 
 void daB_YO_c::executeSeriousDemo() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz pos;
 
     switch (mMode) {
@@ -2104,7 +2104,7 @@ void daB_YO_c::executeAttackBody() {
 }
 
 void daB_YO_c::executeDemoRevival() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     switch (mMode) {
     case 0:
@@ -2277,7 +2277,7 @@ void daB_YO_c::executeDamage() {
 
 void daB_YO_c::executeDeath() {
     daPy_py_c* player = daPy_getPlayerActorClass();
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz pos1;
     cXyz pos2 = current.pos;
     pos2.y += 300.0f;

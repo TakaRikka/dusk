@@ -1,6 +1,8 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_title.h"
+#include "d/d_s_logo.h"
+#include "d/d_s_play.h"
 #include "d/d_demo.h"
 #include "d/d_pane_class_alpha.h"
 #include "d/d_menu_collect.h"
@@ -16,17 +18,21 @@
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "m_Do/m_Do_graphic.h"
 
-class daTit_HIO_c {
+class daTit_HIO_c : public JORReflexible {
 public:
     daTit_HIO_c();
 
     virtual ~daTit_HIO_c() {}
+    void genMessage(JORMContext*);
 
-    /* 0x04 */ s8 field_0x4;
+    /* 0x04 */ s8 id;
     /* 0x08 */ f32 mPSScaleX;
     /* 0x0C */ f32 mPSScaleY;
     /* 0x10 */ f32 mPSPosX;
     /* 0x14 */ f32 mPSPosY;
+    #if DEBUG
+    /* 0x18 */ u8 unk_0x18[0x48 - 0x18];
+    #endif
     /* 0x18 */ u8 mAppear;
     /* 0x19 */ u8 mArrow;
     /* 0x1A */ u8 field_0x1a;
@@ -44,17 +50,11 @@ static char const l_arcName[] = "TitlePal";
 static char const l_arcName[] = "Title";
 #endif
 
-static procFunc daTitleProc[6] = {
-    &daTitle_c::loadWait_proc, &daTitle_c::logoDispWait, &daTitle_c::logoDispAnm,
-    &daTitle_c::keyWait, &daTitle_c::nextScene_proc, &daTitle_c::fastLogoDisp,
-};
-
 daTit_HIO_c::daTit_HIO_c() {
     mPSScaleX = 1.0f;
     mPSScaleY = 1.0f;
 
     #if VERSION == VERSION_GCN_PAL
-
     switch (OSGetLanguage()) {
     case OS_LANGUAGE_ENGLISH:
     case OS_LANGUAGE_GERMAN:
@@ -77,28 +77,48 @@ daTit_HIO_c::daTit_HIO_c() {
     field_0x1a = 15;
 }
 
+#if DEBUG
+void daTit_HIO_c::genMessage(JORMContext* mctx) {
+    mctx->genLabel("\n======= PRESS START ========", 0);
+    mctx->genSlider("Scale Ｘ", &mPSScaleX, 0.1f, 100.0f);
+    mctx->genSlider("Scale Ｙ", &mPSScaleY, 0.1f, 100.0f);
+    mctx->genSlider("Pos Ｘ", &mPSPosX, 0.0f, 1000.0f);
+    mctx->genSlider("Pos Ｙ", &mPSPosY, 0.0f, 1000.0f);
+
+    mctx->genLabel("\n======= ", 0);
+    mctx->genSlider("出現", &mAppear, 0, 255);
+    mctx->genSlider("矢印", &mArrow, 0, 255);
+}
+#endif
+
 int daTitle_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 10);
+    JUT_ASSERT(258, modelData);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000285);
 
     if (mpModel == NULL) {
         return 0;
     }
 
-    void* res = dComIfG_getObjectRes(l_arcName, 7);
-    mBck.init((J3DAnmTransform*)res, 1, 0, 2.0f, 0, -1, false);
+    int res = mBck.init((J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 7), 1, 0, 2.0f, 0, -1, false);
+    JUT_ASSERT(276, res == 1);
 
-    res = dComIfG_getObjectRes(l_arcName, 13);
-    mBpk.init(modelData, (J3DAnmColor*)res, 1, 0, 2.0f, 0, -1);
+    res = mBpk.init(modelData, (J3DAnmColor*)dComIfG_getObjectRes(l_arcName, 13), 1, 0, 2.0f, 0, -1);
+    JUT_ASSERT(283, res == 1);
 
-    res = dComIfG_getObjectRes(l_arcName, 16);
-    mBrk.init(modelData, (J3DAnmTevRegKey*)res, 1, 0, 2.0f, 0, -1);
+    res = mBrk.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, 16), 1, 0, 2.0f, 0, -1);
+    JUT_ASSERT(290, res == 1);
 
-    res = dComIfG_getObjectRes(l_arcName, 19);
-    mBtk.init(modelData, (J3DAnmTextureSRTKey*)res, 1, 0, 2.0f, 0, -1);
+    res = mBtk.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 19), 1, 0, 2.0f, 0, -1);
+    JUT_ASSERT(297, res == 1);
 
     return 1;
 }
+
+static procFunc daTitleProc[6] = {
+    &daTitle_c::loadWait_proc, &daTitle_c::logoDispWait, &daTitle_c::logoDispAnm,
+    &daTitle_c::keyWait, &daTitle_c::nextScene_proc, &daTitle_c::fastLogoDisp,
+};
 
 int daTitle_c::create() {
     fopAcM_ct(this, daTitle_c);
@@ -113,27 +133,33 @@ int daTitle_c::create() {
     }
 
     mpMount = mDoDvdThd_mountArchive_c::create("/res/Layout/Title2D.arc", 0, NULL);
-    field_0x5f8 = 0;
+    mIsDispLogo = 0;
     field_0x5f9 = 0;
 
-    m2DHeap = JKRExpHeap::create(0x8000, mDoExt_getGameHeap(), false);
+    m2DHeap = JKRCreateExpHeap(0x8000, mDoExt_getGameHeap(), false);
     JUT_ASSERT(345, m2DHeap != NULL);
     loadWait_init();
-    g_daTitHIO.field_0x4 = -1;
+
+    g_daTitHIO.id = mDoHIO_CREATE_CHILD("タイトルロゴ", &g_daTitHIO);
 
     return phase_state;
 }
 
-int daTitle_c::createHeapCallBack(fopAc_ac_c* title) {
-    return ((daTitle_c*)title)->CreateHeap();
+int daTitle_c::createHeapCallBack(fopAc_ac_c* actor) {
+    daTitle_c* i_this = (daTitle_c*)actor;
+    return i_this->CreateHeap();
 }
 
 int daTitle_c::Execute() {
+    #if PLATFORM_WII || PLATFORM_SHIELD
+    mDoGph_gInf_c::resetDimming();
+    #endif
+
     if (fopOvlpM_IsPeek()) {
         return 1;
     }
 
-    dMenu_Collect3D_c::mViewOffsetY = 0.0f;
+    dMenu_Collect3D_c::setViewPortOffsetY(0.0f);
 
     if (mDoRst::isReset()) {
         return 1;
@@ -141,6 +167,11 @@ int daTitle_c::Execute() {
 
     (this->*daTitleProc[mProcID])();
     KeyWaitAnm();
+
+    #if VERSION == VERSION_SHIELD_DEBUG
+    KeyWaitPosMove();
+    #endif
+
     return 1;
 }
 
@@ -167,17 +198,26 @@ void daTitle_c::KeyWaitAnm() {
     }
 }
 
+#if VERSION == VERSION_SHIELD_DEBUG
+void daTitle_c::KeyWaitPosMove() {
+    J2DPane* pane = mTitle.Scr->search(MULTI_CHAR('n_all'));
+    pane->translate(g_daTitHIO.mPSPosX, g_daTitHIO.mPSPosY);
+    pane->scale(g_daTitHIO.mPSScaleX, g_daTitHIO.mPSScaleY);
+}
+#endif
+
 void daTitle_c::loadWait_init() {
     mProcID = 0;
 }
 
 void daTitle_c::loadWait_proc() {
     if (mpMount->sync()) {
-        JKRHeap* heap = mDoExt_setCurrentHeap(m2DHeap);
-        mpHeap = heap;
+        mpHeap = mDoExt_setCurrentHeap(m2DHeap);
 
         mpFont = mDoExt_getMesgFont();
+
         mTitle.Scr = new J2DScreen();
+        JUT_ASSERT(529, mTitle.Scr != NULL);
 
         mTitle.Scr->setPriority("zelda_press_start.blo", 0x100000, mpMount->getArchive());
 
@@ -193,7 +233,9 @@ void daTitle_c::loadWait_proc() {
         for (int i = 0; i < 7; i++) {
             text[i]->setFont(mpFont);
             text[i]->setString(0x80, "");
-            fopMsgM_messageGet(text[i]->getStringPtr(), 100);
+
+            char* msg = text[i]->getStringPtr();
+            fopMsgM_messageGet(msg, 100);
         }
 
         field_0x600 = new CPaneMgrAlpha(mTitle.Scr, MULTI_CHAR('n_all'), 2, NULL);
@@ -201,7 +243,7 @@ void daTitle_c::loadWait_proc() {
         J2DPane* pane = mTitle.Scr->search(MULTI_CHAR('n_all'));
         pane->translate(g_daTitHIO.mPSPosX, g_daTitHIO.mPSPosY);
         pane->scale(g_daTitHIO.mPSScaleX, g_daTitHIO.mPSScaleY);
-        mpHeap->becomeCurrentHeap();
+        JKRSetCurrentHeap(mpHeap);
         logoDispWaitInit();
     }
 }
@@ -223,7 +265,7 @@ void daTitle_c::logoDispAnmInit() {
     mBpk.setPlaySpeed(1.0f);
     mBrk.setPlaySpeed(1.0f);
     mBtk.setPlaySpeed(1.0f);
-    field_0x5f8 = 1;
+    mIsDispLogo = 1;
     mProcID = 2;
 }
 
@@ -258,13 +300,29 @@ void daTitle_c::nextScene_init() {
 }
 
 void daTitle_c::nextScene_proc() {
+    scene_class* playScene;
+
     if (!fopOvlpM_IsPeek() && !mDoRst::isReset()) {
-        scene_class* playScene = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
+        playScene = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
         JUT_ASSERT(706, playScene != NULL);
-        fopScnM_ChangeReq(playScene, 13, 0, 5);
-#if VERSION != VERSION_SHIELD_DEBUG
+
+        #if DEBUG
+        if (!dScnLogo_c::isOpeningCut())
+        #endif
+        {
+            fopScnM_ChangeReq(playScene, PROC_NAME_SCENE, 0, 5);
+        }
+        #if DEBUG
+        else {
+            fopScnM_ChangeReq(playScene, PROC_MENU_SCENE, 0, 5);
+            dComIfGs_init();
+            dComIfG_playerStatusD();
+        }
+        #endif
+
+        #if VERSION != VERSION_SHIELD_DEBUG
         mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor);
-#endif
+        #endif
     }
 }
 
@@ -276,39 +334,37 @@ void daTitle_c::fastLogoDispInit() {
 
     field_0x600->alphaAnimeStart(0);
     field_0x604 = 0;
-    field_0x5fc = 30;
+    mWaitTimer = 30;
     mProcID = 5;
 }
 
 void daTitle_c::fastLogoDisp() {
-    if (field_0x5fc != 0) {
-        field_0x5fc--;
+    if (mWaitTimer != 0) {
+        mWaitTimer--;
         return;
     }
 
     field_0x5f9 = 1;
     field_0x5fa = 1;
-    field_0x5f8 = 1;
+    mIsDispLogo = 1;
     keyWaitInit();
 }
 
 int daTitle_c::getDemoPrm() {
     dDemo_actor_c* demoActor = dDemo_c::getActor(demoActorID);
     dDemo_prm_c* prm;
-    if (demoActor != NULL && demoActor->checkEnable(1) &&
-        (prm = demoActor->getPrm()))
-    {
-        void* data = (void*)prm->getData();
-        JStudio::stb::TParseData_fixed<49> aTStack_30(data);
-        TValueIterator_raw<u8> iter = aTStack_30.begin();
-        return *iter & 0xff;
+    if (demoActor != NULL && demoActor->checkEnable(1) && (prm = demoActor->getPrm())) {
+        JStudio::stb::TParseData_fixed<49> parser(prm->getData());
+        TValueIterator_raw<u8> iter = parser.begin();
+        return *iter;
     }
+
     return -1;
 }
 
 int daTitle_c::Draw() {
     J3DModelData* modelData = mpModel->getModelData();
-    MTXTrans(mpModel->getBaseTRMtx(), 0.0f, 0.0f, -430.0f);
+    cMtx_trans(mpModel->getBaseTRMtx(), IREG_F(7), IREG_F(8), IREG_F(9) + -430.0f);
     mpModel->getBaseScale()->x = -1.0f;
 
     mBck.entry(modelData);
@@ -320,7 +376,7 @@ int daTitle_c::Draw() {
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
 
-    if (field_0x5f8) {
+    if (mIsDispLogo) {
         dComIfGd_set2DOpaTop(&mTitle);
     }
 
@@ -328,13 +384,15 @@ int daTitle_c::Draw() {
 }
 
 int daTitle_c::Delete() {
+    mDoHIO_DELETE_CHILD(g_daTitHIO.id);
+
     dComIfG_resDelete(&mPhaseReq, l_arcName);
     delete mTitle.Scr;
     delete field_0x600;
     
     mpMount->getArchive()->removeResourceAll();
-    mpMount->getArchive()->unmount();
-    delete mpMount;
+    JKRUnmountArchive(mpMount->getArchive());
+    mpMount->destroy();
 
     if (m2DHeap != NULL) {
         m2DHeap->destroy();
@@ -352,11 +410,14 @@ static int daTitle_Execute(daTitle_c* i_this) {
 }
 
 static int daTitle_Delete(daTitle_c* i_this) {
+    fpc_ProcID id = fopAcM_GetID(i_this);
     return i_this->Delete();
 }
 
 static int daTitle_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTitle_c*>(i_this)->create();
+    daTitle_c* a_this = (daTitle_c*)i_this;
+    fpc_ProcID id = fopAcM_GetID(i_this);
+    return a_this->create();
 }
 
 void dDlst_daTitle_c::draw() {

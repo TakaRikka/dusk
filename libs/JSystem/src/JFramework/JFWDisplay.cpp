@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JFramework/JFWDisplay.h"
+#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
@@ -227,7 +228,7 @@ void JFWDisplay::endGX() {
 }
 
 void JFWDisplay::beginRender() {
-    #if TARGET_PC
+#if TARGET_PC
     // Temporarily clear the current JKRHeap so that Aurora/Dawn/ImGui allocations
     // use malloc instead of JKRHeap. Without this, Dawn's internal std::string
     // allocations would go through JKRHeap and then crash when freed via standard delete.
@@ -315,7 +316,7 @@ void JFWDisplay::endRender() {
 
     JUTProcBar::getManager()->cpuStart();
     calcCombinationRatio();
-    #if TARGET_PC
+#if TARGET_PC
     {
         JKRHeap* savedHeap = JKRHeap::getCurrentHeap();
         JKRHeap::setCurrentHeap(nullptr);

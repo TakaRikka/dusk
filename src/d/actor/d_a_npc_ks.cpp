@@ -1033,9 +1033,9 @@ static void npc_ks_home(npc_ks_class* i_this) {
             i_this->path_no = 0;
             i_this->field_0xaec = 1;
             if (fopAcM_CheckCondition(actor, 4) != 0) {
-                camera_class* camera = dComIfGp_getCamera(0);
-                mae.x = camera->lookat.eye.x - camera->lookat.center.x;
-                mae.z = camera->lookat.eye.z - camera->lookat.center.z;
+                camera_process_class* camera = dComIfGp_getCamera(0);
+                mae.x = camera->view.lookat.eye.x - camera->view.lookat.center.x;
+                mae.z = camera->view.lookat.eye.z - camera->view.lookat.center.z;
                 cMtx_YrotS(*calc_mtx, cM_atan2s(mae.x, mae.z));
                 if ((i_this->set_id & 1) != 0) {
                     mae.x = 100.0f;
@@ -1045,7 +1045,7 @@ static void npc_ks_home(npc_ks_class* i_this) {
                 mae.y = -50.0f;
                 mae.z = 200.0f;
                 MtxPosition(&mae, &ato);
-                actor->current.pos = camera->lookat.eye + ato;
+                actor->current.pos = camera->view.lookat.eye + ato;
                 actor->old = actor->current;
             }
         }
@@ -1802,12 +1802,12 @@ static void hang_end_check(npc_ks_class* i_this) {
             i_this->field_0xaec = 1;
             actor->current.angle.x = 0;
             if (fopAcM_CheckCondition(actor, 4) != 0) {
-                camera_class* camera = dComIfGp_getCamera(0);
+                camera_process_class* camera = dComIfGp_getCamera(0);
                 if (checkDoorDemo()) {
                     cMtx_YrotS(*calc_mtx, player->shape_angle.y + 0x8000);
                 } else {
-                    mae.x = camera->lookat.eye.x - camera->lookat.center.x;
-                    mae.z = camera->lookat.eye.z - camera->lookat.center.z;
+                    mae.x = camera->view.lookat.eye.x - camera->view.lookat.center.x;
+                    mae.z = camera->view.lookat.eye.z - camera->view.lookat.center.z;
                     cMtx_YrotS(*calc_mtx, cM_atan2s(mae.x, mae.z));
                 }
 
@@ -1819,7 +1819,7 @@ static void hang_end_check(npc_ks_class* i_this) {
                 mae.y = -50.0f;
                 mae.z = 100.0f;
                 MtxPosition(&mae, &ato);
-                actor->current.pos = camera->lookat.eye + ato;
+                actor->current.pos = camera->view.lookat.eye + ato;
                 actor->old = actor->current;
             }
         }
@@ -2537,8 +2537,8 @@ static void* s_fsdown_sub(void* i_actor, void* i_data) {
 static void demo_camera(npc_ks_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* unused_cam_p = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* unused_cam_p = dComIfGp_getCamera(0);
     obj_sw_class* sw_p = i_this->child_no;
     fopAc_ac_c* base_sw_p = &sw_p->actor;
     cXyz mae, ato;
@@ -4048,14 +4048,14 @@ static int npc_ks_option(npc_ks_class* i_this) {
             (fopAcM_CheckCondition(actor, 4) != 0 && fopAcM_otherBgCheck(actor, dComIfGp_getPlayer(0)))) {
             if (iVar1 != 0 && player3->speedF > 2.0f) {
                 camera_class* camera = (camera_class*) dComIfGp_getCamera(0);
-                mae.x = camera->lookat.eye.x - camera->lookat.center.x;
-                mae.z = camera->lookat.eye.z - camera->lookat.center.z;
+                mae.x = camera->view.lookat.eye.x - camera->view.lookat.center.x;
+                mae.z = camera->view.lookat.eye.z - camera->view.lookat.center.z;
                 cMtx_YrotS(*calc_mtx, cM_atan2s(mae.x, mae.z));
                 mae.x = 0.0f;
                 mae.y = -50.0f;
                 mae.z = 100.0f;
                 MtxPosition(&mae, &ato);
-                ato += camera->lookat.eye;
+                ato += camera->view.lookat.eye;
                 
                 dBgS_GndChk gnd_chk;
                 gnd_chk.SetPos(&ato);

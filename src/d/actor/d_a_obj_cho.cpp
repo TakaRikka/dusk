@@ -291,7 +291,7 @@ void daObjCHO_c::Z_BufferChk() {
     vec1.y += 20.0f;
     mDoLib_project(&vec1, &vec2);
     f32 trim_height;
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     if (camera != NULL) {
         trim_height = camera->mCamera.TrimHeight();
     } else {

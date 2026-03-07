@@ -70,7 +70,7 @@ static int daB_DRE_Delete(daB_DRE_c* i_this) {
 }
 
 bool daB_DRE_c::CameraSet() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     dCamera_c* cam_body = dCam_getBody();
 
     if (!eventInfo.checkCommandDemoAccrpt()) {
@@ -92,12 +92,12 @@ bool daB_DRE_c::CameraSet() {
 }
 
 void daB_DRE_c::SetStopingCam() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Set(mCamCenter, mCamEye, mCamFovy, 0);
 }
 
 void daB_DRE_c::SetStopCam(cXyz i_center, f32 param_1, f32 i_eyeY, s16 i_offsetAngle) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     cXyz eye_pos(0.0f, i_eyeY, param_1);
     mCamCenter.set(i_center.x, i_center.y, i_center.z);
@@ -127,7 +127,7 @@ void daB_DRE_c::SetCMoveCam(cXyz i_target, f32 i_scale, f32 i_step) {
 
 void daB_DRE_c::SetEyeMoveCam(cXyz param_0, f32 param_1, f32 param_2, s16 i_offsetAngle,
                               f32 i_step) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     cXyz offset(0.0f, param_2, param_1);
     cXyz target(0.0f, 0.0f, 0.0f);
@@ -140,7 +140,7 @@ void daB_DRE_c::SetEyeMoveCam(cXyz param_0, f32 param_1, f32 param_2, s16 i_offs
 
 void daB_DRE_c::SetEyeMoveCam(cXyz param_0, f32 param_1, f32 param_2, s16 i_offsetAngle,
                               f32 i_scale, f32 i_step) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     cXyz target(0.0f, param_2, param_1);
     cLib_offsetPos(&target, &param_0, i_offsetAngle, &target);
@@ -151,7 +151,7 @@ void daB_DRE_c::SetEyeMoveCam(cXyz param_0, f32 param_1, f32 param_2, s16 i_offs
 }
 
 void daB_DRE_c::SetMoveCam(f32 i_scale, f32 i_step) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     cLib_addCalcPos(&mCamCenter, mCamCenterTarget, i_scale, i_step, 0.0f);
     cLib_addCalcPos(&mCamEye, mCamEyeTarget, i_scale, i_step, 0.0f);
@@ -160,7 +160,7 @@ void daB_DRE_c::SetMoveCam(f32 i_scale, f32 i_step) {
 }
 
 void daB_DRE_c::SetReleaseCam() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     camera->mCamera.Reset(mCamCenter, mCamEye);
     camera->mCamera.Start();

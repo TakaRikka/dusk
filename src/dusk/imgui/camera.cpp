@@ -18,7 +18,7 @@ void DuskCameraDebug() {
         Active = !Active;
     }
 
-    camera_class* cam = dCam_getCamera();
+    auto* cam = (camera_process_class*)dCam_getCamera();
 
     if (!Active || cam == nullptr)
         return;

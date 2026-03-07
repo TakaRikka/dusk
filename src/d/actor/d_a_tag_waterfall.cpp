@@ -187,7 +187,7 @@ bool daTagWaterFall_c::checkHitWaterFall(cXyz objPos) {
 }
 
 bool daTagWaterFall_c::checkHitWaterFallCamera() {
-    return checkHitWaterFall(dComIfGp_getCamera(0)->lookat.eye);
+    return checkHitWaterFall(dComIfGp_getCamera(0)->view.lookat.eye);
 }
 
 int daTagWaterFall_c::execute() {

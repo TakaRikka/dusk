@@ -463,7 +463,7 @@ int daObjDrop_c::actionCompleteWait() {
 }
 
 int daObjDrop_c::actionOrderCompleteDemo() {
-    camera_class* pcamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* pcamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     if (eventInfo.checkCommandDemoAccrpt()) {
         pcamera->mCamera.SetTrimTypeForce(1);
@@ -480,7 +480,7 @@ int daObjDrop_c::actionOrderCompleteDemo() {
 }
 
 int daObjDrop_c::actionCompleateDemo() {
-    camera_class* pcamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* pcamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     pcamera->mCamera.SetTrimTypeForce(1);
 
     if (eventInfo.checkCommandDemoAccrpt()) {

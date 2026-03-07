@@ -230,7 +230,7 @@ int daE_HP_c::draw() {
     mDoMtx_stack_c::multVec(&unkXyz1, &field_0x75c);
     mDoMtx_stack_c::transS(field_0x75c);
 
-    unkXyz1 = dComIfGp_getCamera(0)->lookat.eye - field_0x75c;
+    unkXyz1 = dComIfGp_getCamera(0)->view.lookat.eye - field_0x75c;
     mDoMtx_stack_c::YrotM(unkXyz1.atan2sX_Z());
     mDoMtx_stack_c::XrotM((s16)unkXyz1.atan2sY_XZ());
     mDoMtx_stack_c::scaleM(l_HIO.modelSize, l_HIO.modelSize, l_HIO.modelSize);

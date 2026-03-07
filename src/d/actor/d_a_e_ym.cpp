@@ -3137,7 +3137,7 @@ void daE_YM_c::action() {
         offWolfNoLock();
         if (mType == 1 && fopAcM_CheckCondition(this, 4) == 0) {
             dBgS_LinChk lin_chk;
-            lin_chk.Set(&dComIfGp_getCamera(0)->lookat.eye, &attention_info.position, this);
+            lin_chk.Set(&dComIfGp_getCamera(0)->view.lookat.eye, &attention_info.position, this);
             if (dComIfG_Bgsp().LineCross(&lin_chk)) {
                 onWolfNoLock();
             }

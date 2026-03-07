@@ -31,6 +31,12 @@ public:
     void modeMove();
     void _draw();
 
+    void draw() {
+        _draw();
+    }
+
+    u8 isEnd() { return mCompleteCheck; }
+
     /* 0x04 */ JKRArchive* mArchive;
     /* 0x08 */ dDlst_BrightCheck_c mBrightCheck;
     /* 0x18 */ u8 mMode;

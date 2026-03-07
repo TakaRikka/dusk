@@ -993,7 +993,7 @@ int daBoomerang_c::procWait() {
             field_0x6d8 = lock_line_actor;
         }
     
-        camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+        camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
         f32 cps_size;
         if (field_0x6d8 != NULL) {
             cps_size = 30.0f;
@@ -1261,7 +1261,7 @@ int daBoomerang_c::execute() {
         field_0x962--;
     }
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     s16 cam_angleY = fopCamM_GetAngleY(camera);
     s16 cam_angleX = fopCamM_GetAngleX(camera);
 

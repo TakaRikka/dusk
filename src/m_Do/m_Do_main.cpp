@@ -201,7 +201,7 @@ int game_main(int argc, char* argv[]) {
         arg_options.add_options()
             ("l,log-level", "Log level from " + std::to_string(AuroraLogLevel::LOG_DEBUG) + " to " + std::to_string(AuroraLogLevel::LOG_FATAL), cxxopts::value<uint8_t>()->default_value("0"))
             ("h,help", "Print usage");
-        
+
         arg_options.allow_unrecognised_options();
 
         parsed_arg_options = arg_options.parse(argc, argv);
@@ -218,7 +218,7 @@ int game_main(int argc, char* argv[]) {
     }
 
     AuroraConfig config{};
-    config.appName = "Zelda: Twilight Princess";
+    config.appName = "Dusk";
     config.windowPosX = -1;
     config.windowPosY = -1;
     config.windowWidth = 608 * 2;

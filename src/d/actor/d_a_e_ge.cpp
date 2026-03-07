@@ -488,7 +488,7 @@ void daE_GE_c::executeAttack() {
     mDoMtx_stack_c::copy(daPy_getLinkPlayerActorClass()->getModelJointMtx(0));
     mDoMtx_stack_c::multVecZero(&position);
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     s16 distAngleS =
         cLib_distanceAngleS(fopCamM_GetAngleY(camera), fopAcM_searchPlayerAngleY(this));
 

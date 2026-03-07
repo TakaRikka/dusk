@@ -89,7 +89,7 @@ int daObj_GrA_c::waitDemo(void* param_1) {
 }
 
 int daObj_GrA_c::skipDemoGra() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daObj_GrA_c* gra_p = (daObj_GrA_c*)field_0x204c.getActor();
     camera->mCamera.Start();
     camera->mCamera.SetTrimSize(0);
@@ -110,7 +110,7 @@ static int skipCallBack(void* param_1, int param_2) {
 int daObj_GrA_c::startDemo(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     daObj_GrA_c* gra_p = (daObj_GrA_c *)field_0x204c.getActor();
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     dCamera_c* camBody = dCam_getBody();
 
     switch (field_0xa7c) {

@@ -325,7 +325,7 @@ static void yuka_control(obj_toby_class* i_this) {
 
 static void demo_camera(obj_toby_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz acStack_2c;
     cXyz cStack_38;
     cXyz cStack_44;

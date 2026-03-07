@@ -1596,8 +1596,8 @@ static void ke_set(e_s1_class* i_this) {
 static void demo_camera(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* spC = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* spC = dComIfGp_getCamera(0);
 
     cXyz spC4;
     cXyz spD0;

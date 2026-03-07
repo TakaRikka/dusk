@@ -103,7 +103,7 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_Obj_BkDoor, "d_a_obj_bkdoor"},
     {PROC_Obj_Cboard, "d_a_obj_cboard"},
     {PROC_Obj_MGate, "d_a_obj_mgate"},
-    #if !PLATFORM_SHIELD
+    #if VERSION != VERSION_SHIELD_DEBUG
     {PROC_Obj_Ikada, "d_a_obj_ikada"},
     #endif
     {PROC_Obj_Ice_l, "d_a_obj_ice_l"},
@@ -544,7 +544,7 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_Obj_LifeContainer, "d_a_obj_life_container"},
     {PROC_Obj_Shield, "d_a_obj_shield"},
     {PROC_Demo_Item, "d_a_demo_item"},
-    #if !PLATFORM_SHIELD
+    #if VERSION != VERSION_SHIELD_DEBUG
     {PROC_ShopItem, "d_a_shop_item"},
     #endif
     {PROC_Obj_Drop, "d_a_obj_drop"},
@@ -553,7 +553,7 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_TAG_CSW, "d_a_tag_csw"},
     {PROC_TAG_QS, "d_a_tag_qs"},
     {PROC_HOZELDA, "d_a_hozelda"},
-    #if !PLATFORM_SHIELD
+    #if VERSION != VERSION_SHIELD_DEBUG
     {PROC_SWC00, "d_a_swc00"},
     #endif
     {PROC_KNOB20, "d_a_door_knob00"},
@@ -567,7 +567,7 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_Tag_ChgRestart, "d_a_tag_chgrestart"},
     {PROC_Tag_Restart, "d_a_tag_setrestart"},
     {PROC_ANDSW, "d_a_andsw"},
-    #if !PLATFORM_SHIELD
+    #if VERSION != VERSION_SHIELD_DEBUG
     {PROC_ANDSW2, "d_a_andsw2"},
     #endif
     {PROC_MYNA, "d_a_myna"},
@@ -688,12 +688,12 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_NPC_CHIN, "d_a_npc_chin"},
     {PROC_NPC_INS, "d_a_npc_ins"},
     {PROC_NPC_SHOP0, "d_a_npc_shop0"},
-    #if !PLATFORM_SHIELD
+    #if VERSION != VERSION_SHIELD_DEBUG
     {PROC_NPC_MK, "d_a_npc_mk"},
     #endif
     {PROC_NPC_P2, "d_a_npc_p2"},
     {PROC_KYTAG00, "d_a_kytag00"},
-    #if !PLATFORM_SHIELD
+    #if VERSION != VERSION_SHIELD_DEBUG
     {PROC_KYTAG01, "d_a_kytag01"},
     #endif
     {PROC_KYTAG02, "d_a_kytag02"},
@@ -733,13 +733,13 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_DEMO00, "d_a_demo00"},
     {PROC_TAG_CAMERA, "d_a_tag_camera"},
     {PROC_TAG_CHKPOINT, "d_a_tag_chkpoint"},
-    #if !PLATFORM_SHIELD
+    #if VERSION != VERSION_SHIELD_DEBUG
     {PROC_TAG_EVENT, "d_a_tag_event"},
     #endif
     {PROC_TAG_EVT, "d_a_tag_evt"},
     {PROC_TAG_TELOP, "d_a_tag_telop"},
     {PROC_TAG_HOWL, "d_a_tag_howl"},
-    #if !PLATFORM_SHIELD
+    #if VERSION != VERSION_SHIELD_DEBUG
     {PROC_TAG_MSG, "d_a_tag_msg"},
 
     #endif
@@ -753,7 +753,7 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_BG_OBJ, "d_a_bg_obj"},
     {PROC_MIRROR, "d_a_mirror"},
     {PROC_MOVIE_PLAYER, "d_a_movie_player"},
-    #if !PLATFORM_SHIELD
+    #if VERSION != VERSION_SHIELD_DEBUG
     {PROC_TITLE, "d_a_title"},
     #endif
     {PROC_FR, "d_a_fr"},
@@ -798,7 +798,7 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_Obj_Timer, "d_a_obj_timer"},
     {PROC_SCENE_EXIT, "d_a_scene_exit"},
     {PROC_SUSPEND, "d_a_suspend"},
-    #if !PLATFORM_SHIELD
+    #if VERSION != VERSION_SHIELD_DEBUG
     {PROC_GRASS, "d_a_grass"},
     #endif
 #endif

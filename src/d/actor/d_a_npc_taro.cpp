@@ -2363,7 +2363,7 @@ int daNpc_Taro_c::cutArrowTutorial(int param_1) {
             mMotionSeqMngr.setNo(0, 0.0f, 0, 0);
             mEventTimer = timer;
             if (!daNpcT_chkEvtBit(0x4c)) {
-                camera_class* pCamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+                camera_process_class* pCamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
                 mJntAnm.lookCamera(0);
                 mPlayerAngle = cLib_targetAngleY(fopAcM_GetPosition_p(this), fopCamM_GetEye_p(pCamera));
             } else {
@@ -2433,7 +2433,7 @@ int daNpc_Taro_c::cutArrowTutorial(int param_1) {
     case 7:
         if (cLib_calcTimer(&mEventTimer) == 0) {
             if (!daNpcT_chkEvtBit(0x4c)) {
-                camera_class* pCamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+                camera_process_class* pCamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
                 mJntAnm.lookCamera(0);
                 cStack_48.y = cLib_targetAngleY(fopAcM_GetPosition_p(this), fopCamM_GetEye_p(pCamera));
             } else {

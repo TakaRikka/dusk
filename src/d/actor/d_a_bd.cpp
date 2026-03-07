@@ -213,9 +213,9 @@ static int land_check(bd_class* i_this) {
     }
 
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     cXyz sp30;
-    sp30 = camera->lookat.center - camera->lookat.eye;
+    sp30 = camera->view.lookat.center - camera->view.lookat.eye;
     s16 spA = cM_atan2s(sp30.x, sp30.z);
 
     if (strcmp(dComIfGp_getStartStageName(), "F_SP103") == 0) {
@@ -238,15 +238,15 @@ static int land_check(bd_class* i_this) {
             if (temp_r1[j] != 0) {
                 continue;
             }
-            sp30.x = land_pos[j].x - camera->lookat.eye.x;
-            sp30.z = land_pos[j].z - camera->lookat.eye.z;
+            sp30.x = land_pos[j].x - camera->view.lookat.eye.x;
+            sp30.z = land_pos[j].z - camera->view.lookat.eye.z;
             s16 sVar2 = cM_atan2s(sp30.x, sp30.z) - spA;
             if (sVar2 >= 0x2000 || sVar2 <= -0x2000) {
                 continue;
             }
 
-            sp30.x = camera->lookat.eye.x - land_pos[j].x;
-            sp30.z = camera->lookat.eye.z - land_pos[j].z;
+            sp30.x = camera->view.lookat.eye.x - land_pos[j].x;
+            sp30.z = camera->view.lookat.eye.z - land_pos[j].z;
 
             f32 temp_f1 = JMAFastSqrt((sp30.x * sp30.x) + (sp30.z * sp30.z));
             if (!(temp_f1 >= 600.0f) || !(temp_f1 < var_f31)) {

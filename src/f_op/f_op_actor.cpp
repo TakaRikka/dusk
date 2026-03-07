@@ -493,7 +493,7 @@ static int fopAc_Create(void* i_this) {
         dKy_tevstr_init(&actor->tevStr, actor->home.roomNo, -1);
 
         dStage_FileList_dt_c* sp14 = NULL;
-        camera_class* sp10 = dComIfGp_getCamera(0);
+        camera_process_class* sp10 = dComIfGp_getCamera(0);
 
         if (dComIfGp_roomControl_getStayNo() >= 0) {
             sp14 = dComIfGp_roomControl_getStatusRoomDt(dComIfGp_roomControl_getStayNo())->getFileListInfo();
