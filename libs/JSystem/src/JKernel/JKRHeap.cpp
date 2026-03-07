@@ -600,20 +600,18 @@ void* operator new[](size_t size, int alignment) {
 }
 #else
 void* operator new[](size_t size, int alignment) {
-    alignment = std::abs(alignment);
-
     if (sCurrentHeap == nullptr)
 #if !_WIN32
-        return aligned_alloc(alignment, size);
+        return aligned_alloc(std::abs(alignment), size);
 #else
-        return _aligned_malloc(size, alignment);
+        return _aligned_malloc(size, std::abs(alignment));
 #endif
     void* mem = JKRHeap::alloc(size, alignment, nullptr);
     if (mem == nullptr)
 #if !_WIN32
-        return aligned_alloc(alignment, size);
+        return aligned_alloc(std::abs(alignment), size);
 #else
-        return _aligned_malloc(size, alignment);
+        return _aligned_malloc(size, std::abs(alignment));
 #endif
     return mem;
 }
