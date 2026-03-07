@@ -632,7 +632,7 @@ void operator delete(void* ptr) {
     JKRHeap* heap = JKRHeap::findFromRoot(ptr);
     if (heap == NULL) {
 #if !_WIN32
-        aligned_free(ptr);
+        free(ptr);
 #else
         _aligned_free(ptr);
 #endif
