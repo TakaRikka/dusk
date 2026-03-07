@@ -522,12 +522,20 @@ void* operator new(size_t size) {
 #else
 void* operator new(size_t size) {
     if (sCurrentHeap == NULL) {
-        return malloc(size);
+#if !_WIN32
+        return aligned_alloc(4, size);
+#else
+        return _aligned_malloc(size, 4);
+#endif
     }
     void* mem = JKRHeap::alloc(size, alignof(max_align_t), NULL);
     if (mem == NULL) {
         OSReport("[NEW] JKRHeap FULL! Fallback to malloc for size %u\n", (unsigned)size);
-        mem = malloc(size);
+#if !_WIN32
+        mem = aligned_alloc(4, size);
+#else
+        mem = _aligned_malloc(size, 4);
+#endif
     }
     return mem;
 }
@@ -549,9 +557,9 @@ void* operator new(size_t size, int alignment) {
     if (mem == nullptr) {
         OSReport("[NEW] JKRHeap FULL! Fallback to aligned_malloc size %u\n", (unsigned)size);
 #if !_WIN32
-        return aligned_alloc(alignment, size);
+        mem = aligned_alloc(alignment, size);
 #else
-        return _aligned_malloc(size, alignment);
+        mem = _aligned_malloc(size, alignment);
 #endif
     }
     return mem;
@@ -569,10 +577,18 @@ void* operator new[](size_t size) {
 #else
 void* operator new[](size_t size) {
     if (sCurrentHeap == NULL)
-        return malloc(size);
+#if !_WIN32
+        return aligned_alloc(4, size);
+#else
+        return _aligned_malloc(size, 4);
+#endif
     void* mem = JKRHeap::alloc(size, alignof(max_align_t), NULL);
     if (mem == NULL) {
-        mem = malloc(size);
+#if !_WIN32
+        mem = aligned_alloc(4, size);
+#else
+        mem = _aligned_malloc(size, 4);
+#endif
     }
     return mem;
 }
@@ -584,6 +600,8 @@ void* operator new[](size_t size, int alignment) {
 }
 #else
 void* operator new[](size_t size, int alignment) {
+    alignment = std::abs(alignment);
+    
     if (sCurrentHeap == nullptr)
 #if !_WIN32
         return aligned_alloc(alignment, size);
@@ -615,7 +633,11 @@ void operator delete(void* ptr) {
         return;
     JKRHeap* heap = JKRHeap::findFromRoot(ptr);
     if (heap == NULL) {
-        free(ptr);
+#if !_WIN32
+        aligned_free(ptr);
+#else
+        _aligned_free(ptr);
+#endif
         return;
     }
     JKRHeap::free(ptr, NULL);
@@ -632,7 +654,11 @@ void operator delete[](void* ptr) {
         return;
     JKRHeap* heap = JKRHeap::findFromRoot(ptr);
     if (heap == NULL) {
-        free(ptr);
+#if !_WIN32
+        aligned_free(ptr);
+#else
+        _aligned_free(ptr);
+#endif
         return;
     }
     JKRHeap::free(ptr, NULL);
