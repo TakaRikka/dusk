@@ -233,10 +233,8 @@ inline void* operator new(size_t, JKRHeapToken, void* where) {
     return where;
 }
 
-template<typename T>
-void jkrDelete(T* ptr) {
-    ptr->~T();
-    operator delete(ptr, JKRHeapToken::Dummy);
+inline void* operator new[](size_t, JKRHeapToken, void* where) {
+    return where;
 }
 
 #define JKR_NEW new (JKRHeapToken::Dummy)
@@ -264,6 +262,19 @@ void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM, JKRHeap* heap, int alignm
 
 void operator delete(void* ptr JKR_HEAP_TOKEN_PARAM);
 void operator delete[](void* ptr);
+
+#if TARGET_PC
+template<typename T>
+void jkrDelete(T* ptr) {
+    ptr->~T();
+    operator delete(ptr, JKRHeapToken::Dummy);
+}
+
+template<>
+inline void jkrDelete(void* ptr) {
+    operator delete(ptr, JKRHeapToken::Dummy);
+}
+#endif
 
 void JKRDefaultMemoryErrorRoutine(void* heap, u32 size, int alignment);
 
