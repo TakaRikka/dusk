@@ -2,6 +2,7 @@
 
 #include "JSystem/JGadget/binary.h"
 #include "JSystem/JGadget/define.h"
+#include "global.h"
 #include <stdint.h>
 
 #if DEBUG

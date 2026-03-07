@@ -9,7 +9,7 @@ s32 JStage::TAmbientLight::JSGFGetType() const {
 }
 
 GXColor JStage::TAmbientLight::JSGGetColor() const {
-    return COMPOUND_LITERAL(GXColor){255, 255, 255, 255};
+    return GXColor{255, 255, 255, 255};
 }
 
 void JStage::TAmbientLight::JSGSetColor(GXColor) {}

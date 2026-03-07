@@ -2,6 +2,7 @@
 
 #include "JSystem/J3DU/J3DUClipper.h"
 #include <cmath>
+#include "global.h"
 
 void J3DUClipper::init() {
     mNear = 1.0f;
