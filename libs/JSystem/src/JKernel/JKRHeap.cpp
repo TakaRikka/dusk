@@ -625,7 +625,7 @@ void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM, JKRHeap* heap, int alignm
 }
 
 #if !TARGET_PC
-void operator JKR_DELETE(void* ptr) {
+void operator delete(void* ptr) {
     JKRHeap::free(ptr, NULL);
 }
 #else
@@ -646,7 +646,7 @@ void operator delete(void* ptr JKR_HEAP_TOKEN_PARAM) {
 #endif
 
 #if !TARGET_PC
-void operator JKR_DELETE[](void* ptr) {
+void operator delete[](void* ptr) {
     JKRHeap::free(ptr, NULL);
 }
 #else
