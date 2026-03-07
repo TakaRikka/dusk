@@ -105,14 +105,15 @@ inline f32 JMAHermiteInterpolation(__REGISTER f32 p1, __REGISTER f32 p2, __REGIS
     // clang-format on
     return ff25;
 #else
-    f32 t = (p1 - p2) / (p5 - p2);
-    f32 t2 = t * t;
-    f32 t3 = t2 * t;
-    f32 h1 = 2.0f * t3 - 3.0f * t2 + 1.0f;
-    f32 h2 = -2.0f * t3 + 3.0f * t2;
-    f32 h3 = t3 - 2.0f * t2 + t;
-    f32 h4 = t3 - t2;
-    return h1 * p4 + h2 * p7 + h3 * (p3 - p4) + h4 * (p6 - p3);
+    f32 a = p1 - p2;
+    f32 b = a * (1.0 / (p5 - p2));
+    f32 c = b - 1.0;
+    f32 d = (3.0 + -2.0 * b) * (b * b);
+    f32 cab = (c * a * b);
+    f32 coeffx3 = cab * p7;
+    f32 cca = (c * c * a);
+    f32 coeffc2 = cca * p4;
+    return ((1.0 - d) * p3 + (d * p6)) + coeffc2 + coeffx3;
 #endif
 }
 
