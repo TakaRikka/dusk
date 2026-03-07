@@ -65,7 +65,7 @@ J2DTextBoxEx::J2DTextBoxEx(J2DPane* p_pane, JSURandomInputStream* p_stream, u32 
     mStringPtr = NULL;
 
     if (strLength != 0) {
-        mStringPtr = new char[strLength];
+        mStringPtr = JKR_NEW char[strLength];
     }
 
     if (mStringPtr != NULL) {
@@ -88,7 +88,7 @@ J2DTextBoxEx::J2DTextBoxEx(J2DPane* p_pane, JSURandomInputStream* p_stream, u32 
 
 J2DTextBoxEx::~J2DTextBoxEx() {
     if (field_0x140 != 0) {
-        delete mMaterial;
+        JKR_DELETE(mMaterial);
     }
 }
 

@@ -373,7 +373,7 @@ JStudio::TObject* TFactory::create(data::TParse_TBlock_object const& param_0) {
 }
 
 void TFactory::destroy(TObject* p) {
-    delete p;
+    JKR_DELETE(p);
 }
 
 TParse::TParse(TControl* pControl) : pControl(pControl) {}

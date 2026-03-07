@@ -2392,7 +2392,7 @@ int daE_PZ_c::CreateHeap() {
             return 0;
         }
 
-        mpPortalBtk = new mDoExt_btkAnm();
+        mpPortalBtk = JKR_NEW mDoExt_btkAnm();
         if (mpPortalBtk == NULL) {
             return 0;
         }
@@ -2402,7 +2402,7 @@ int daE_PZ_c::CreateHeap() {
         }
 
         for (int i = 0; i < 2; i++) {
-            mpPortalBrk[i] = new mDoExt_brkAnm();
+            mpPortalBrk[i] = JKR_NEW mDoExt_brkAnm();
             if (mpPortalBrk[i] == NULL) {
                 return 0;
             }
@@ -2415,13 +2415,13 @@ int daE_PZ_c::CreateHeap() {
 
         modelData = (J3DModelData*)dComIfG_getObjectRes("E_PZ", 0x19);
         JUT_ASSERT(3920, modelData != NULL);
-        mpBallModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_PZ", 7), 2, 1.0f, 0, -1, NULL, 0, 0x11000084);
+        mpBallModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_PZ", 7), 2, 1.0f, 0, -1, NULL, 0, 0x11000084);
         if (mpBallModelMorf == NULL) {
             return 0;
         }
 
         for (int i = 0; i < 2; i++) {
-            mpBallBrk = new mDoExt_brkAnm();
+            mpBallBrk = JKR_NEW mDoExt_brkAnm();
             if (mpBallBrk == NULL) {
                 return 0;
             }
@@ -2436,12 +2436,12 @@ int daE_PZ_c::CreateHeap() {
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_PZ", 0x1C);
     JUT_ASSERT(3959, modelData != NULL);
-    mpModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_PZ", 8), 2, 1.0f, 0, -1, &field_0x5dc, 0, 0x11000284);
+    mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_PZ", 8), 2, 1.0f, 0, -1, &field_0x5dc, 0, 0x11000284);
     if (mpModelMorf == NULL || mpModelMorf->getModel() == NULL) {
         return 0;
     }
 
-    mpPzBrk = new mDoExt_brkAnm();
+    mpPzBrk = JKR_NEW mDoExt_brkAnm();
     if (mpPzBrk == NULL) {
         return 0;
     }
@@ -2450,7 +2450,7 @@ int daE_PZ_c::CreateHeap() {
         return 0;
     }
 
-    mpPzBtk = new mDoExt_btkAnm();
+    mpPzBtk = JKR_NEW mDoExt_btkAnm();
     if (mpPzBtk == NULL) {
         return 0;
     }

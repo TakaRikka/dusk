@@ -5,12 +5,14 @@
 #include <gx.h>
 #include "os_report.h"
 
+#include "JSystem/JKernel/JKRHeap.h"
+
 JUTTexture::~JUTTexture() {
     if (getCaptureFlag()) {
-        delete[] field_0x3c;
+        JKR_DELETE_ARRAY(field_0x3c);
     }
     if (getEmbPaletteDelFlag()) {
-        delete mEmbPalette;
+        JKR_DELETE(mEmbPalette);
     }
 }
 
@@ -49,7 +51,7 @@ void JUTTexture::storeTIMG(ResTIMG const* param_0, u8 param_1) {
             u32 palOffset = mTexInfo->paletteOffset;
 
             if (mEmbPalette == NULL || !getEmbPaletteDelFlag()) {
-                mEmbPalette = new JUTPalette(tlut, (GXTlutFmt)mTexInfo->colorFormat,
+                mEmbPalette = JKR_NEW JUTPalette(tlut, (GXTlutFmt)mTexInfo->colorFormat,
                                              (JUTTransparency)mTexInfo->alphaEnabled,
                                              numColors,
                                              (void*)((intptr_t)mTexInfo + palOffset));
@@ -88,7 +90,7 @@ void JUTTexture::storeTIMG(ResTIMG const* param_0, JUTPalette* param_1, GXTlut p
         mTexData = ((u8*)mTexInfo) + sizeof(ResTIMG);
     }
     if (getEmbPaletteDelFlag()) {
-            delete mEmbPalette;
+            JKR_DELETE(mEmbPalette);
     }
     mEmbPalette = param_1;
     setEmbPaletteDelFlag(false);

@@ -312,7 +312,7 @@ int daObjIceBlk_c::CreateHeap() {
             return 0;
         }
 
-        mpIceBgW = new dBgW();
+        mpIceBgW = JKR_NEW dBgW();
         if (mpIceBgW != NULL &&
             !mpIceBgW->Set((cBgD_t*)dComIfG_getObjectRes(l_arcName, 11), dBgW::MOVE_BG_e, &mBgMtx))
         {

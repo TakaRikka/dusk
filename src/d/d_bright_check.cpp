@@ -13,7 +13,7 @@
 
 dBrightCheck_c::dBrightCheck_c(JKRArchive* i_archive) {
     mArchive = i_archive;
-    mBrightCheck.mMsgString = new dMsgString_c();
+    mBrightCheck.mMsgString = JKR_NEW dMsgString_c();
     JUT_ASSERT(0, mBrightCheck.mMsgString != NULL);
 
     screenSet();
@@ -22,8 +22,8 @@ dBrightCheck_c::dBrightCheck_c(JKRArchive* i_archive) {
 }
 
 dBrightCheck_c::~dBrightCheck_c() {
-    delete mBrightCheck.Scr;
-    delete mBrightCheck.mMsgString;
+    JKR_DELETE(mBrightCheck.Scr);
+    JKR_DELETE(mBrightCheck.mMsgString);
 }
 
 void dBrightCheck_c::screenSet() {
@@ -57,7 +57,7 @@ void dBrightCheck_c::screenSet() {
     };
     #endif
 
-    mBrightCheck.Scr = new J2DScreen();
+    mBrightCheck.Scr = JKR_NEW J2DScreen();
     JUT_ASSERT(0, mBrightCheck.Scr != NULL);
     mBrightCheck.Scr->setPriority("zelda_option_check.blo", 0x1100000, mArchive);
 

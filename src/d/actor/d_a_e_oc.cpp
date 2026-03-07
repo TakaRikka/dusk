@@ -2643,7 +2643,7 @@ static void daE_OC_Delete(daE_OC_c* i_this) {
 int daE_OC_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(mName, 0x3);
     JUT_ASSERT(3443, modelData != NULL);
-    mpMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
                                   (J3DAnmTransform*)dComIfG_getObjectRes("E_ocb", 0x1b),
                                   0, 1.0f, 0, -1,
                                   &mSound, 0x80000, 0x11000084);

@@ -65,14 +65,14 @@ int daObjKAM_c::CreateHeap() {
         modelData = (J3DModelData*)dComIfG_getObjectRes("I_Kam", 10);
         JUT_ASSERT(0x103, modelData != NULL);
     }
-    mpMorfSO = new mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpMorfSO = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
                                     (J3DAnmTransform*)dComIfG_getObjectRes("I_Kam", 7), 2, 1.0f, 0,
                                     -1, &mCreatureSound, 0, 0x11000284);
     if (mpMorfSO == NULL || mpMorfSO->getModel() == NULL) {
         return 0;
     }
     J3DModel* model = mpMorfSO->getModel();
-    mpBrkAnm = new mDoExt_brkAnm();
+    mpBrkAnm = JKR_NEW mDoExt_brkAnm();
     if (mpBrkAnm == NULL) {
         return 0;
     }
@@ -92,7 +92,7 @@ int daObjKAM_c::CreateHeap() {
         }
     }
 
-    mpBtkAnm = new mDoExt_btkAnm();
+    mpBtkAnm = JKR_NEW mDoExt_btkAnm();
     if (mpBtkAnm == NULL) {
         return 0;
     }

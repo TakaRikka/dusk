@@ -179,7 +179,7 @@ int daObjL6Bm_c::CreateHeap() {
 
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, BTK_EF_BIMOBEAM_ON);
     JUT_ASSERT(648, pbtk != NULL);
-    mpBtkAnm = new mDoExt_btkAnm();
+    mpBtkAnm = JKR_NEW mDoExt_btkAnm();
     if (mpBtkAnm == NULL || mpBtkAnm->init(modelData, pbtk, 1, 0, 1.0f, 0, -1) == 0) {
         return 0;
     }
@@ -191,14 +191,14 @@ int daObjL6Bm_c::CreateHeap() {
 
     pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, BTK_EF_BIMOBEAM);
     JUT_ASSERT(666, pbtk != NULL);
-    mpBtkAnm2 = new mDoExt_btkAnm();
+    mpBtkAnm2 = JKR_NEW mDoExt_btkAnm();
     if (mpBtkAnm2 == NULL || mpBtkAnm2->init(modelData, pbtk, 1, 2, 1.0f, 0, -1) == 0) {
         return 0;
     }
 
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, BCK_EF_BIMOBEAM);
     JUT_ASSERT(678, pbck != NULL);
-    mBeamBck = new mDoExt_bckAnm();
+    mBeamBck = JKR_NEW mDoExt_bckAnm();
     if (mBeamBck == NULL || mBeamBck->init(pbck, 1, 2, 1.0f, 0, -1, false) == 0) {
         return 0;
     }

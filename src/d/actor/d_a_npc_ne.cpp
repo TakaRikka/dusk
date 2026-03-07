@@ -3036,7 +3036,7 @@ static int daNpc_Ne_Delete(npc_ne_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     npc_ne_class* _this = static_cast<npc_ne_class*>(i_this);
     _this->mpMorf =
-        new mDoExt_McaMorf(static_cast<J3DModelData*>(dComIfG_getObjectRes(_this->mResName, 28)),
+        JKR_NEW mDoExt_McaMorf(static_cast<J3DModelData*>(dComIfG_getObjectRes(_this->mResName, 28)),
                            NULL, NULL,
                            static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(_this->mResName, 24)),
                            2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11020284);
@@ -3054,7 +3054,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         }
     }
 
-    _this->mpBtkAnm = new mDoExt_btkAnm();
+    _this->mpBtkAnm = JKR_NEW mDoExt_btkAnm();
     if (_this->mpBtkAnm == NULL) {
         return 0;
     }
@@ -3063,7 +3063,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    _this->mpBtpAnm = new mDoExt_btpAnm();
+    _this->mpBtpAnm = JKR_NEW mDoExt_btpAnm();
     if (_this->mpBtpAnm == NULL) {
         return 0;
     }
@@ -3083,7 +3083,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         } else {
             dish_flag = 0;
         }
-        _this->mpDishMorf = new mDoExt_McaMorf(
+        _this->mpDishMorf = JKR_NEW mDoExt_McaMorf(
             static_cast<J3DModelData*>(dComIfG_getObjectRes(_this->mResName, 29)), NULL, NULL,
             static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(_this->mResName,
                                                                dish_bck[dish_flag])),

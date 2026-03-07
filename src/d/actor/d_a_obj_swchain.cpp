@@ -197,7 +197,7 @@ int daObjSwChain_c::Create() {
 }
 
 int daObjSwChain_c::CreateHeap() {
-    mChains = new chain_s[mChainNum + 1];
+    mChains = JKR_NEW chain_s[mChainNum + 1];
 
     if (mChains == NULL) {
         return 0;

@@ -35,14 +35,14 @@ JUTProcBar::~JUTProcBar() {
 
 JUTProcBar* JUTProcBar::create() {
     if (!sManager) {
-        sManager = new JUTProcBar();
+        sManager = JKR_NEW JUTProcBar();
     }
     return sManager;
 }
 
 void JUTProcBar::destroy() {
     if (sManager) {
-        delete sManager;
+        JKR_DELETE(sManager);
     }
     sManager = NULL;
 }

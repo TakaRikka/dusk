@@ -4796,7 +4796,7 @@ static dJntColData_c jc_data[11] = {
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_rdy_class* _this = (e_rdy_class*)i_this;
     
-    _this->mpMorf = new mDoExt_McaMorfSO(
+    _this->mpMorf = JKR_NEW mDoExt_McaMorfSO(
         (J3DModelData*)dComIfG_getObjectRes(_this->mpArcName, 81), NULL, NULL,
         (J3DAnmTransform*)dComIfG_getObjectRes(_this->mpArcName, 76),
         J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, &_this->mSound, 0x80000, 0x11000084);
@@ -4821,7 +4821,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
             return 0;
         }
     } else if (_this->mWeaponType >= WEAPON_BOW) {
-        _this->mpBowMorf = new mDoExt_McaMorfSO(
+        _this->mpBowMorf = JKR_NEW mDoExt_McaMorfSO(
             (J3DModelData*)dComIfG_getObjectRes(_this->mpArcName, 84), NULL, NULL,
             (J3DAnmTransform*)dComIfG_getObjectRes(_this->mpArcName, 11),
             J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, NULL, 0x80000, 0x11000084);

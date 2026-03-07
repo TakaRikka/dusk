@@ -194,7 +194,7 @@ int daObjLdy_c::createHeap() {
     J3DAnmTextureSRTKey* key =
         (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, "J_Sentaku.btk");
 
-    mpBtkAnm = new mDoExt_btkAnm();
+    mpBtkAnm = JKR_NEW mDoExt_btkAnm();
     int initResult = mpBtkAnm->init(modelData, key, 1, 2, 1.0f, 0, -1);
     if (initResult == 0) {
         return 0;

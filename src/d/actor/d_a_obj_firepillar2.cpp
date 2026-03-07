@@ -115,13 +115,13 @@ int daObjFPillar2_c::CreateHeap() {
     }
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 11);
     JUT_ASSERT(377, pbtk != NULL);
-    mBtk = new mDoExt_btkAnm();
+    mBtk = JKR_NEW mDoExt_btkAnm();
     if (mBtk == NULL || !mBtk->init(modelData, pbtk, 1, 2, 1.0f, 0, -1)) {
         return 0;
     }
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 5);
     JUT_ASSERT(389, pbck != NULL);
-    mBck = new mDoExt_bckAnm();
+    mBck = JKR_NEW mDoExt_bckAnm();
     if (mBck == NULL || !mBck->init(pbck, 1, 0, 1.0f, 0, -1, false)) {
         return 0;
     }

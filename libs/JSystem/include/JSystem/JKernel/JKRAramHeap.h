@@ -5,9 +5,11 @@
 #include "JSystem/JKernel/JKRDisposer.h"
 #include <os.h>
 
+#include "JKRHeap.h"
+
 /**
  * @ingroup jsystem-jkernel
- * 
+ *
  */
 class JKRAramHeap : public JKRDisposer {
 public:
@@ -30,7 +32,7 @@ public:
     u32 getUsedSize(u8);
     void dump();
     void free(JKRAramBlock *block) {
-        delete block;
+        JKR_DELETE(block);
     }
 
     u8 getCurrentGroupID() const { return mGroupId; }

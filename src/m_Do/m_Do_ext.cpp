@@ -211,7 +211,7 @@ int mDoExt_bckAnm::init(J3DAnmTransform* i_bck, int i_play, int i_attr, f32 i_ra
     JUT_ASSERT(614, (i_modify || isCurrentSolidHeap()) && i_bck != NULL);
     mAnmTransform = i_bck;
     if (!i_modify) {
-        mAnm = new J3DMtxCalcAnimation<J3DMtxCalcAnimationAdaptorDefault<J3DMtxCalcCalcTransformMaya>, J3DMtxCalcJ3DSysInitMaya>(mAnmTransform);
+        mAnm = JKR_NEW J3DMtxCalcAnimation<J3DMtxCalcAnimationAdaptorDefault<J3DMtxCalcCalcTransformMaya>, J3DMtxCalcJ3DSysInitMaya>(mAnmTransform);
         if (!mAnm) {
             return 0;
         }
@@ -423,8 +423,8 @@ static void dummy2() {
     J3DTevSwapModeTable tevSwapModeTable;
     J3DIndTexOrder indTexOrder;
 
-    J3DIndTexMtx* indTexMtx = new J3DIndTexMtx();
-    J3DIndTexCoordScale* indTexCoordScale = new J3DIndTexCoordScale();
+    J3DIndTexMtx* indTexMtx = JKR_NEW J3DIndTexMtx();
+    J3DIndTexCoordScale* indTexCoordScale = JKR_NEW J3DIndTexCoordScale();
     J3DColorBlock* colorBlock = NULL;
     colorBlock->setColorChanNum((u8)NULL);
     colorBlock->setMatColor(0, gxColor);
@@ -504,7 +504,7 @@ static void dummy2() {
 int mDoExt_invisibleModel::create(J3DModel* i_model, u8 param_1) {
     J3DModelData* model_data = i_model->getModelData();
 
-    mpPackets = new mDoExt_invJntPacket[model_data->getJointNum()];
+    mpPackets = JKR_NEW mDoExt_invJntPacket[model_data->getJointNum()];
     if (mpPackets == NULL) {
         return 0;
     }
@@ -1319,18 +1319,18 @@ int mDoExt_McaMorf::create(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* c
         }
     }
     if (param_8) {
-        mpSound = new mDoExt_zelAnime();
+        mpSound = JKR_NEW mDoExt_zelAnime();
         if (!mpSound) {
             goto cleanup;
         }
     }
     setAnm(anmTransform, param_4, 0.0f, param_5, param_6, param_7, param_9);
     mPrevMorf = -1.0f;
-    mpTransformInfo = new J3DTransformInfo[modelData->getJointNum()];
+    mpTransformInfo = JKR_NEW J3DTransformInfo[modelData->getJointNum()];
     if (!mpTransformInfo) {
         goto cleanup;
     }
-    mpQuat = new Quaternion[modelData->getJointNum()];
+    mpQuat = JKR_NEW Quaternion[modelData->getJointNum()];
     if (mpQuat) {
         J3DTransformInfo* info = mpTransformInfo;
         Quaternion* quat = mpQuat;
@@ -1577,9 +1577,9 @@ int mDoExt_McaMorfSO::create(J3DModelData* i_modelData, mDoExt_McaMorfCallBack1_
     setAnm(param_3, param_4, 0.0f, param_5, param_6, param_7);
     mPrevMorf = -1.0f;
 
-    mpTransformInfo = new J3DTransformInfo[i_modelData->getJointNum()];
+    mpTransformInfo = JKR_NEW J3DTransformInfo[i_modelData->getJointNum()];
     if (mpTransformInfo != NULL) {
-        mpQuat = new Quaternion[i_modelData->getJointNum()];
+        mpQuat = JKR_NEW Quaternion[i_modelData->getJointNum()];
 
         if (mpQuat != NULL) {
             J3DTransformInfo* transInfo_p = mpTransformInfo;
@@ -1865,13 +1865,13 @@ mDoExt_McaMorf2::~mDoExt_McaMorf2() {
     setAnm(param_3, param_4, 0.0f, param_5, 0.0f, param_6, param_7, param_8);
     mPrevMorf = -1.0f;
 
-    mpTransformInfo = new J3DTransformInfo[param_0->getJointNum()];
+    mpTransformInfo = JKR_NEW J3DTransformInfo[param_0->getJointNum()];
     if (mpTransformInfo == NULL) {
         ERROR_EXIT();
         return 0;
     }
 
-    mpQuat = new Quaternion[param_0->getJointNum()];
+    mpQuat = JKR_NEW Quaternion[param_0->getJointNum()];
     if (mpQuat == NULL) {
         ERROR_EXIT();
         return 0;
@@ -2260,13 +2260,13 @@ void mDoExt_invJntPacket::draw() {
 }
 
 int mDoExt_3Dline_c::init(u16 param_0, int param_1, BOOL param_2) {
-    field_0x0 = new cXyz[param_0];
+    field_0x0 = JKR_NEW cXyz[param_0];
     if (field_0x0 == NULL) {
         return 0;
     }
 
     if (param_1 != 0) {
-        field_0x4 = new f32[param_0];
+        field_0x4 = JKR_NEW f32[param_0];
         if (field_0x4 == NULL) {
             return 0;
         }
@@ -2276,33 +2276,33 @@ int mDoExt_3Dline_c::init(u16 param_0, int param_1, BOOL param_2) {
 
     int sp20 = param_0 * 2;
 
-    field_0x8[0] = new cXyz[sp20];
+    field_0x8[0] = JKR_NEW cXyz[sp20];
     if (field_0x8 == NULL) {
         return 0;
     }
 
-    field_0x8[1] = new cXyz[sp20];
+    field_0x8[1] = JKR_NEW cXyz[sp20];
     if (field_0x8[1] == NULL) {
         return 0;
     }
 
-    field_0x10[0] = new mDoExt_3Dline_field_0x10_c[sp20];
+    field_0x10[0] = JKR_NEW mDoExt_3Dline_field_0x10_c[sp20];
     if (field_0x10 == NULL) {
         return 0;
     }
 
-    field_0x10[1] = new mDoExt_3Dline_field_0x10_c[sp20];
+    field_0x10[1] = JKR_NEW mDoExt_3Dline_field_0x10_c[sp20];
     if (field_0x10[1] == NULL) {
         return 0;
     }
 
     if (param_2) {
-        field_0x18[0] = new cXy[sp20];
+        field_0x18[0] = JKR_NEW cXy[sp20];
         if (field_0x18[0] == NULL) {
             return 0;
         }
 
-        field_0x18[1] = new cXy[sp20];
+        field_0x18[1] = JKR_NEW cXy[sp20];
         if (field_0x18[1] == NULL) {
             return 0;
         }
@@ -2328,7 +2328,7 @@ int mDoExt_3DlineMat0_c::init(u16 param_0, u16 param_1, int param_2) {
     field_0x10 = param_0;
     field_0x12 = param_1;
 
-    field_0x18 = new mDoExt_3Dline_c[param_0];
+    field_0x18 = JKR_NEW mDoExt_3Dline_c[param_0];
     if (field_0x18 == NULL) {
         return 0;
     }
@@ -2634,7 +2634,7 @@ void mDoExt_3DlineMat0_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
 int mDoExt_3DlineMat1_c::init(u16 param_0, u16 param_1, ResTIMG* param_2, int param_3) {
     mNumLines = param_0;
     field_0x32 = param_1;
-    mpLines = new mDoExt_3Dline_c[param_0];
+    mpLines = JKR_NEW mDoExt_3Dline_c[param_0];
     if (mpLines == NULL) {
         return 0;
     }
@@ -3575,7 +3575,7 @@ static void mDoExt_initFontCommon(JUTFont** mDoExt_font_p, ResFONT** mDoExt_resf
     JUT_ASSERT_MSG(7144, *mDoExt_resfont != NULL, "mDoExt_resfont != 0");
     if (param_5 == 0) {
         u32 cacheSize = JUTCacheFont::calcCacheSize(param_7, param_6);
-        JUTCacheFont* cacheFont = new (param_2, 0) JUTCacheFont(*mDoExt_resfont, cacheSize, param_2);
+        JUTCacheFont* cacheFont = JKR_NEW_ARGS (param_2, 0) JUTCacheFont(*mDoExt_resfont, cacheSize, param_2);
         if (cacheFont->isValid()) {
             // "Allocated %d bytes for font cache buffer size"
             OS_REPORT("\nキャッシュフォントバッファサイズとして %d バイト確保しました\n", cacheSize);
@@ -3591,7 +3591,7 @@ static void mDoExt_initFontCommon(JUTFont** mDoExt_font_p, ResFONT** mDoExt_resf
         JKRRemoveResource(*mDoExt_resfont, NULL);
         *mDoExt_resfont = NULL;
     } else {
-        *mDoExt_font = new JUTResFont(*mDoExt_resfont, param_2);
+        *mDoExt_font = JKR_NEW JUTResFont(*mDoExt_resfont, param_2);
         // "Allocated %d bytes for the font buffer size"
         OS_REPORT("\nフォントバッファサイズとして %d バイト確保しました\n",
                   JKRGetMemBlockSize(param_2, *mDoExt_font));
@@ -3601,7 +3601,7 @@ static void mDoExt_initFontCommon(JUTFont** mDoExt_font_p, ResFONT** mDoExt_resf
     if (*mDoExt_font != NULL && !(*mDoExt_font)->isValid()) {
         // "Failed to create cache font class"
         OSReport_FatalError("\nキャッシュフォントクラス作成に失敗しました\n");
-        delete *mDoExt_font;
+        JKR_DELETE(*mDoExt_font);
         *mDoExt_font = NULL;
     }
     JUT_ASSERT_MSG(7183, *mDoExt_font != NULL, "mDoExt_font != 0");
@@ -3639,7 +3639,7 @@ void mDoExt_removeMesgFont() {
         mDoExt_font0_getCount--;
         JUT_ASSERT(7241, mDoExt_font0_getCount > 0);
         if (mDoExt_font0_getCount == 0) {
-            delete mDoExt_font0;
+            JKR_DELETE(mDoExt_font0);
             mDoExt_font0 = NULL;
             if (mDoExt_resfont0 != NULL) {
 #if REGION_JPN
@@ -3705,7 +3705,7 @@ void mDoExt_removeSubFont() {
         mDoExt_font2_getCount--;
         JUT_ASSERT(7357, mDoExt_font2_getCount > 0);
         if (mDoExt_font2_getCount == 0) {
-            delete mDoExt_font2;
+            JKR_DELETE(mDoExt_font2);
             mDoExt_font2 = NULL;
             if (mDoExt_resfont2 != NULL) {
                 JKRFree(mDoExt_resfont2);
@@ -3717,7 +3717,7 @@ void mDoExt_removeSubFont() {
 
 J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u32 i_differedDlistFlag) {
     if (i_modelData != NULL) {
-        J3DModel* model = new J3DModel();
+        J3DModel* model = JKR_NEW J3DModel();
 
         if (model != NULL) {
 #if DEBUG
@@ -3812,7 +3812,7 @@ void DummyCheckHeap::setHeap(JKRHeap* heap) {
 
 int DummyCheckHeap_init() {
     JUT_ASSERT(7634, dch == NULL);
-    dch = new((JKRHeap*)mDoExt_getZeldaHeap(), 0) DummyCheckHeap();
+    dch = JKR_NEW_ARGS((JKRHeap*)mDoExt_getZeldaHeap(), 0) DummyCheckHeap();
     if (dch == NULL) {
         return false;
     }

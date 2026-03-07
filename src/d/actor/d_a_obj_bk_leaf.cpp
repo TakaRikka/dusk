@@ -63,7 +63,7 @@ int daBkLeaf_c::CreateHeap() {
     } else {
         J3DAnmTransform* transform =
             static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcName, l_bckName));
-        mpBckAnm = new mDoExt_bckAnm;
+        mpBckAnm = JKR_NEW mDoExt_bckAnm;
         if (mpBckAnm == NULL || mpBckAnm->init(transform, 1, 0, 1.0f, 0, -1, false) == 0) {
             retVal = 0;
         } else {

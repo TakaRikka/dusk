@@ -30,7 +30,7 @@ JKRExpHeap* JKRExpHeap::createRoot(int maxHeaps, bool errorFlag) {
             }
         }
 #endif
-        JKRExpHeap* heap2 = new (mem2) JKRExpHeap(local_20, local_24, NULL, errorFlag);
+        JKRExpHeap* heap2 = JKR_NEW_ARGS (mem2) JKRExpHeap(local_20, local_24, NULL, errorFlag);
         sRootHeap2 = heap2;
         heap2->field_0x6e = true;
 #endif
@@ -49,7 +49,7 @@ JKRExpHeap* JKRExpHeap::createRoot(int maxHeaps, bool errorFlag) {
             }
         }
 #endif
-        heap = new (mem1) JKRExpHeap(start1, alignedSize, NULL, errorFlag);
+        heap = JKR_NEW_ARGS (mem1) JKRExpHeap(start1, alignedSize, NULL, errorFlag);
         sRootHeap = heap;
     }
     heap->field_0x6e = true;
@@ -79,7 +79,7 @@ JKRExpHeap* JKRExpHeap::create(u32 size, JKRHeap* parent, bool errorFlag) {
         return NULL;
     }
 
-    newHeap = new (memory) JKRExpHeap(dataPtr, alignedSize - expHeapSize, parent, errorFlag);
+    newHeap = JKR_NEW_ARGS (memory) JKRExpHeap(dataPtr, alignedSize - expHeapSize, parent, errorFlag);
 
     if (newHeap == NULL) {
         JKRFree(memory);
@@ -117,7 +117,7 @@ JKRExpHeap* JKRExpHeap::create(void* ptr, u32 size, JKRHeap* parent, bool errorF
     u8* dataPtr = r28 + expHeapSize;
     u32 alignedSize = ALIGN_PREV((uintptr_t)ptr + size - (uintptr_t)dataPtr, 0x10);
     if (r28) {
-        newHeap = new (r28) JKRExpHeap(dataPtr, alignedSize, parent2, errorFlag);
+        newHeap = JKR_NEW_ARGS (r28) JKRExpHeap(dataPtr, alignedSize, parent2, errorFlag);
     }
 #if DEBUG
     if (newHeap) {

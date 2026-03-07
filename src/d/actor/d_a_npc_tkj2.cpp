@@ -1043,7 +1043,7 @@ static int daNpc_Tkj2_Delete(npc_tkj2_class* i_this) {
 static int useHeapInit(fopAc_ac_c* a_this) {
     npc_tkj2_class* i_this = (npc_tkj2_class*)a_this;
 
-    i_this->mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("Tkj2", BMDR_TKJ), NULL, NULL,
+    i_this->mpModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("Tkj2", BMDR_TKJ), NULL, NULL,
                                                (J3DAnmTransform*)dComIfG_getObjectRes("Tkj2", BCK_TKJ_WAIT_A), 0, 1.0f, 0, -1, &i_this->mSound, 0x80000, 0x11020284);
     if (i_this->mpModelMorf == NULL || i_this->mpModelMorf->getModel() == NULL) {
         return 0;
@@ -1056,7 +1056,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
         model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
     }
 
-    i_this->mpBtkAnm = new mDoExt_btkAnm();
+    i_this->mpBtkAnm = JKR_NEW mDoExt_btkAnm();
     if (i_this->mpBtkAnm == NULL) {
         return 0;
     }
@@ -1065,7 +1065,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
         return 0;
     }
 
-    i_this->mpBtpAnm = new mDoExt_btpAnm();
+    i_this->mpBtpAnm = JKR_NEW mDoExt_btpAnm();
     if (i_this->mpBtpAnm == NULL) {
         return 0;
     }

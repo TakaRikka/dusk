@@ -135,7 +135,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
     if (i_this->mModel == NULL) {
         return 0;
     }
-    i_this->mBtk = new mDoExt_btkAnm();
+    i_this->mBtk = JKR_NEW mDoExt_btkAnm();
     if (i_this->mBtk == NULL) {
         return 0;
     }
@@ -144,7 +144,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
     if (i_this->mBtk->init(i_this->mModel->getModelData(), anmTexture, 1, 2, 1.0f, 0, -1) == 0) {
         return 0;
     }
-    i_this->mBrk = new mDoExt_brkAnm();
+    i_this->mBrk = JKR_NEW mDoExt_brkAnm();
     if (i_this->mBrk== NULL) {
         return 0;
     }
@@ -157,7 +157,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
     if (i_this->mBrk->init(i_this->mModel->getModelData(), anmTevKey, 1, 2, 0.0f, 0, -1) == 0) {
         return 0;
     }
-    i_this->mpBgW = new dBgW();
+    i_this->mpBgW = JKR_NEW dBgW();
     if (i_this->mpBgW == NULL) {
         return 0;
     }

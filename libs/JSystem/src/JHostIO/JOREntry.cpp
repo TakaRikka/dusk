@@ -7,12 +7,12 @@
 void JORInit() {
     JHIInit(TRUE);
 
-    JHICommBufWriter* pComWriter = new JHICommBufWriter(0x10000, 0x10000, 4);
-    JHICommBufReader* pComReader = new JHICommBufReader(0, 0x10000, 4);
+    JHICommBufWriter* pComWriter = JKR_NEW JHICommBufWriter(0x10000, 0x10000, 4);
+    JHICommBufReader* pComReader = JKR_NEW JHICommBufReader(0, 0x10000, 4);
 
     JHIContext ctx;
-    ctx.mp_reader = new JHICommBufReader(0x10000, 0x10000, 4);
-    ctx.mp_writer = new JHICommBufWriter(0, 0x10000, 4);
+    ctx.mp_reader = JKR_NEW JHICommBufReader(0x10000, 0x10000, 4);
+    ctx.mp_writer = JKR_NEW JHICommBufWriter(0, 0x10000, 4);
 
     JHIComPortManager<JHICmnMem>* pPortMng = JHIComPortManager<JHICmnMem>::create();
     pPortMng->getRefPort().setBuf(pComReader, pComWriter);

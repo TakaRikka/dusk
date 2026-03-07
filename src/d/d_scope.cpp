@@ -42,13 +42,13 @@ dScope_c::dScope_c(u8 param_0) : field_0x58(-1), field_0x5c(-1) {
         }
     }
 
-    mpWipeTex = new J2DPicture(mp_image);
+    mpWipeTex = JKR_NEW J2DPicture(mp_image);
     mpWipeTex->setBlackWhite(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(0, 0, 0, 255));
     mWidth = mp_image->width;
     mHeight = mp_image->height;
 
     mp_image = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "tt_block8x8.bti");
-    mpBlackTex = new J2DPicture(mp_image);
+    mpBlackTex = JKR_NEW J2DPicture(mp_image);
     mpBlackTex->setBlackWhite(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(0, 0, 0, 255));
     mScale = 3.0f;
     mAlpha = 0.0f;
@@ -61,45 +61,45 @@ dScope_c::dScope_c(u8 param_0) : field_0x58(-1), field_0x5c(-1) {
 
 dScope_c::~dScope_c() {
     if (mHawkEyeScrn != NULL) {
-        delete mHawkEyeScrn;
+        JKR_DELETE(mHawkEyeScrn);
         mHawkEyeScrn = NULL;
     }
 
     if (mHawkEyeRootPane != NULL) {
-        delete mHawkEyeRootPane;
+        JKR_DELETE(mHawkEyeRootPane);
         mHawkEyeRootPane = NULL;
     }
 
     for (int i = 0; i < 3; i++) {
         if (mHawkEyePanes[i] != NULL) {
-            delete mHawkEyePanes[i];
+            JKR_DELETE(mHawkEyePanes[i]);
             mHawkEyePanes[i] = NULL;
         }
     }
 
     if (mZoomInOutScrn != NULL) {
-        delete mZoomInOutScrn;
+        JKR_DELETE(mZoomInOutScrn);
         mZoomInOutScrn = NULL;
     }
 
     if (mZoomInOutRootPane != NULL) {
-        delete mZoomInOutRootPane;
+        JKR_DELETE(mZoomInOutRootPane);
         mZoomInOutRootPane = NULL;
     }
 
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 2; j++) {
             if (mZoomInOutPanes[i][j] != NULL) {
-                delete mZoomInOutPanes[i][j];
+                JKR_DELETE(mZoomInOutPanes[i][j]);
                 mZoomInOutPanes[i][j] = NULL;
             }
         }
     }
 
-    delete mpWipeTex;
+    JKR_DELETE(mpWipeTex);
     mpWipeTex = NULL;
 
-    delete mpBlackTex;
+    JKR_DELETE(mpBlackTex);
     mpBlackTex = NULL;
 
     dMeter2Info_setScopeZoomPointer(0);

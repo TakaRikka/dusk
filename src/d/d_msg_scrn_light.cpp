@@ -126,7 +126,7 @@ dMsgScrnLight_c::dMsgScrnLight_c(u8 i_colorType, u8 param_1) {
 
     g_MsgScrnLight_HIO_c.updateColor(i_colorType);
 
-    mpScreen = new J2DScreen();
+    mpScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(0, mpScreen != NULL);
     bool fg = mpScreen->setPriority("zelda_message_window_text_light.blo", 0x20000,
                                     dComIfGp_getMain2DArchive());
@@ -143,7 +143,7 @@ dMsgScrnLight_c::dMsgScrnLight_c(u8 i_colorType, u8 param_1) {
     mpBpk->searchUpdateMaterialID(mpScreen);
     mBpkFrame = 0.0f;
 
-    mpParent_c = new CPaneMgr(mpScreen, MULTI_CHAR('moya00'), 0, NULL);
+    mpParent_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('moya00'), 0, NULL);
     JUT_ASSERT(0, mpParent_c != NULL);
 
     mpParent_c->getPanePtr()->setAnimation(mpBck);
@@ -155,16 +155,16 @@ dMsgScrnLight_c::dMsgScrnLight_c(u8 i_colorType, u8 param_1) {
 dMsgScrnLight_c::~dMsgScrnLight_c() {
     l_lightCount--;
 
-    delete mpScreen;
+    JKR_DELETE(mpScreen);
     mpScreen = NULL;
 
-    delete mpBck;
+    JKR_DELETE(mpBck);
     mpBck = NULL;
 
-    delete mpBpk;
+    JKR_DELETE(mpBpk);
     mpBpk = NULL;
 
-    delete mpParent_c;
+    JKR_DELETE(mpParent_c);
     mpParent_c = NULL;
 }
 

@@ -23,7 +23,7 @@
 #define fopAcM_ct_placement(ptr, ClassName) \
     fopAc_ac_c copy;                        \
     memcpy(&copy.type, &(ptr)->type, fopAcM_ct_placement_copy_length); \
-    new (ptr) ClassName() ;                 \
+    JKR_NEW_ARGS (ptr) ClassName() ;                 \
     memcpy(&(ptr)->type, &copy.type, fopAcM_ct_placement_copy_length);
 #else
 #define fopAcM_ct_placement(ptr, ClassName) new (ptr) ClassName()

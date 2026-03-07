@@ -253,7 +253,7 @@ dAttention_c::dAttention_c(fopAc_ac_c* i_player, u32 i_padNo) {
     mZHintTarget.init();
     mCatghTarget.init();
     mLookTarget.init();
-    new (&mAttParam) dAttParam_c(0);
+    JKR_NEW_ARGS (&mAttParam) dAttParam_c(0);
 
     g_AttDwHIO.field_0x4 = mDoHIO_CREATE_CHILD("注目カーソル", &g_AttDwHIO);
 }

@@ -307,7 +307,7 @@ cPhs_Step daNpcAsh_c::Create() {
 
 BOOL daNpcAsh_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcNames[0], 11));
-    mAnm_p = new mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mCreatureSound,
+    mAnm_p = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mCreatureSound,
                                   0x80000, 0x11020284);
     if (mAnm_p != NULL && mAnm_p->mpModel == NULL) {
         mAnm_p->stopZelAnime();
@@ -323,7 +323,7 @@ BOOL daNpcAsh_c::CreateHeap() {
     }
     model->setUserArea((uintptr_t)this);
 
-    mpMatAnm = new daNpcF_MatAnm_c();
+    mpMatAnm = JKR_NEW daNpcF_MatAnm_c();
     if (mpMatAnm == NULL) {
         return false;
     }

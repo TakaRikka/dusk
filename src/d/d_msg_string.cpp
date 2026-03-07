@@ -6,20 +6,20 @@
 
 dMsgString_c::dMsgString_c() {
     field_0x28 = 0;
-    mpOutFont = new COutFont_c(field_0x28);
+    mpOutFont = JKR_NEW COutFont_c(field_0x28);
     mpOutFont->createPane();
     getResource();
 }
 
 dMsgString_c::dMsgString_c(u8 param_0) {
     field_0x28 = param_0;
-    mpOutFont = new COutFont_c(field_0x28);
+    mpOutFont = JKR_NEW COutFont_c(field_0x28);
     mpOutFont->createPane();
     getResource();
 }
 
 dMsgString_c::~dMsgString_c() {
-    delete mpOutFont;
+    JKR_DELETE(mpOutFont);
     mpOutFont = NULL;
 }
 

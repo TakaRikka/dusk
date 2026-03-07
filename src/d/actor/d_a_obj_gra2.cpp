@@ -378,7 +378,7 @@ int daObj_GrA_c::CreateHeap() {
     aMdlData_p = (J3DModelData*)dComIfG_getObjectRes(l_resNames[l_bmdGetParamList[1]], l_bmdGetParamList[0]);
     JUT_ASSERT(854, NULL != aMdlData_p);
     u32 reg_r25 = 0x11020284;
-    mpModelMorf = new mDoExt_McaMorfSO(aMdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, reg_r25);
+    mpModelMorf = JKR_NEW mDoExt_McaMorfSO(aMdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, reg_r25);
     if (mpModelMorf != NULL && mpModelMorf->getModel() == NULL) {
         mpModelMorf->stopZelAnime();
         mpModelMorf = NULL;

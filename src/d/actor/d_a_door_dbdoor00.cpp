@@ -90,7 +90,7 @@ int daDbDoor00_c::CreateHeap() {
     nodePointerR->setCallBack(nodeCallBack);
     mpModel2->setUserArea((uintptr_t)this);
 
-    mpBgW = new dBgW();
+    mpBgW = JKR_NEW dBgW();
     cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(getAlwaysArcName(), getDzb());
     if (dzb == NULL) {
         return 0;

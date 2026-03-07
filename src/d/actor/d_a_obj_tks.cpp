@@ -174,7 +174,7 @@ int daObjTks_c::CreateHeap() {
     J3DModelData* mdlData_p = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 0xE);
     JUT_ASSERT(314, NULL != mdlData_p);
 
-    mAnm_p = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, 0x11020284);
+    mAnm_p = JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, 0x11020284);
     if (mAnm_p != NULL && mAnm_p->getModel() == NULL) {
         mAnm_p->stopZelAnime();
         mAnm_p = NULL;
@@ -192,7 +192,7 @@ int daObjTks_c::CreateHeap() {
     mdl_p->setUserArea((uintptr_t)this);
 
 
-    mpMatAnm = new daNpcF_MatAnm_c();
+    mpMatAnm = JKR_NEW daNpcF_MatAnm_c();
     if (mpMatAnm == NULL) {
         return 0;
     }

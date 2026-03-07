@@ -2911,7 +2911,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
         i_index = BMDR_ST2;
     }
 
-    i_this->mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_st", i_index), NULL, NULL,
+    i_this->mpModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_st", i_index), NULL, NULL,
                                                (J3DAnmTransform*)dComIfG_getObjectRes("E_st", BCK_ST_WAIT), 0, 1.0f, 0, -1,
                                                &i_this->mSound, 0x80000, 0x11000084);
     if (i_this->mpModelMorf == NULL || i_this->mpModelMorf->getModel() == NULL) {

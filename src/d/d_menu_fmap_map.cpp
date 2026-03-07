@@ -490,11 +490,11 @@ void dMenu_FmapMap_c::_create(u16 i_texWidth, u16 i_texHeight, u16 param_2, u16 
 
 void dMenu_FmapMap_c::_delete() {
     if (mResTIMG != NULL) {
-        delete mResTIMG;
+        JKR_DELETE(mResTIMG);
         mResTIMG = NULL;
     }
     if (mMapImage_p != NULL) {
-        delete[] mMapImage_p;
+        JKR_DELETE_ARRAY(mMapImage_p);
         mMapImage_p = NULL;
     }
 }
@@ -660,9 +660,9 @@ void dMenu_FmapMap_c::setTexture(u16 i_width, u16 i_height, u16 param_2, u16 par
     mMapImage_p = NULL;
     mResTIMG = NULL;
     int size = GXGetTexBufferSize(i_width, i_height, GX_TF_C8, 0, 0);
-    mMapImage_p = new (0x20) u8[size];
+    mMapImage_p = JKR_NEW_ARGS (0x20) u8[size];
     init(mMapImage_p, i_width, i_height, param_2, param_3);
-    mResTIMG = new (0x20) ResTIMG();
+    mResTIMG = JKR_NEW_ARGS (0x20) ResTIMG();
     makeResTIMG(mResTIMG, i_width, i_height, mMapImage_p, (u8*)m_palette, 0x1b);
 }
 

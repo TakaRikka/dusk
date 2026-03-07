@@ -208,12 +208,12 @@ void J2DPicture::private_readStream(J2DPane* parent, JSURandomInputStream* strea
     field_0x109 = 1;
 
     if (img != NULL) {
-        mTexture[0] = new JUTTexture(img, 0);
+        mTexture[0] = JKR_NEW JUTTexture(img, 0);
         mTextureNum++;
     }
 
     if (lut != NULL) {
-        mPalette = new JUTPalette(GX_TLUT0, lut);
+        mPalette = JKR_NEW JUTPalette(GX_TLUT0, lut);
         mTexture[0]->attachPalette(mPalette);
     }
 
@@ -237,7 +237,7 @@ void J2DPicture::private_initiate(const ResTIMG* timg, const ResTLUT* tlut) {
 
     if (timg != NULL) {
         if (mTexture[0] == NULL) {
-            mTexture[0] = new JUTTexture(timg, 0);
+            mTexture[0] = JKR_NEW JUTTexture(timg, 0);
             if (mTexture[0] != NULL) {
                 mTextureNum++;
                 field_0x109 = (field_0x109 & 2) | 1;
@@ -251,7 +251,7 @@ void J2DPicture::private_initiate(const ResTIMG* timg, const ResTLUT* tlut) {
 
     mPalette = NULL;
     if (tlut && mPalette == NULL) {
-        mPalette = new JUTPalette(GX_TLUT0, const_cast<ResTLUT*>(tlut));
+        mPalette = JKR_NEW JUTPalette(GX_TLUT0, const_cast<ResTLUT*>(tlut));
         if (mTexture[0] != NULL) {
             mTexture[0]->attachPalette(mPalette);
         }
@@ -272,11 +272,11 @@ void J2DPicture::initinfo() {
 J2DPicture::~J2DPicture() {
     for (int i = 0; i < 2; i++) {
         if ((int)(field_0x109 & 1 << i) != 0) {
-            delete mTexture[i];
+            JKR_DELETE(mTexture[i]);
         }
     }
 
-    delete mPalette;
+    JKR_DELETE(mPalette);
 }
 
 bool J2DPicture::prepareTexture(u8 param_0) {
@@ -286,7 +286,7 @@ bool J2DPicture::prepareTexture(u8 param_0) {
         }
 
         if (mTexture[i] == NULL) {
-            mTexture[i] = new JUTTexture();
+            mTexture[i] = JKR_NEW JUTTexture();
 
             if (mTexture[i] == NULL) {
                 return 0;
@@ -309,7 +309,7 @@ bool J2DPicture::insert(ResTIMG const* img, JUTPalette* palette, u8 param_2, f32
 
     JUTTexture* var_r31;
     if (mTexture[mTextureNum] == NULL) {
-        var_r31 = new JUTTexture(img, var_r26);
+        var_r31 = JKR_NEW JUTTexture(img, var_r26);
 
         if (palette != NULL) {
             var_r31->storeTIMG(img, palette);
@@ -381,7 +381,7 @@ bool J2DPicture::insert(JUTTexture* texture, u8 param_1, f32 param_2) {
     }
 
     if (mTexture[1] != NULL && field_0x109 & 2) {
-        delete mTexture[1];
+        JKR_DELETE(mTexture[1]);
         field_0x109 &= 1;
     }
 
@@ -417,7 +417,7 @@ bool J2DPicture::remove(u8 param_0) {
     }
 
     if (field_0x109 & (1 << param_0)) {
-        delete mTexture[param_0];
+        JKR_DELETE(mTexture[param_0]);
     }
 
     for (u8 i = param_0; i < mTextureNum - 1; i++) {

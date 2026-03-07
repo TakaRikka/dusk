@@ -1318,7 +1318,7 @@ static int daE_YG_Delete(e_yg_class* i_this) {
 static int useHeapInit(fopAc_ac_c* a_this) {
     e_yg_class* i_this = (e_yg_class*)a_this;
 
-    i_this->mpMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_YG", 0x13), NULL, NULL,
+    i_this->mpMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_YG", 0x13), NULL, NULL,
                                           (J3DAnmTransform*)dComIfG_getObjectRes("E_YG", 0xF), 2, 1.0f, 0, -1,
                                           &i_this->mSound, J3DMdlFlag_DifferedDLBuffer, 0x11000084);
     if (i_this->mpMorf == NULL || i_this->mpMorf->getModel() == NULL) {

@@ -7,7 +7,7 @@
 #include "d/d_pane_class.h"
 
 dMsgScrnArrow_c::dMsgScrnArrow_c() {
-    mpScreen = new J2DScreen();
+    mpScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(0, mpScreen != NULL);
     bool fg =
         mpScreen->setPriority("zelda_window_yajirushi.blo", 0x20000, dComIfGp_getMsgArchive(0));
@@ -25,10 +25,10 @@ dMsgScrnArrow_c::dMsgScrnArrow_c() {
     mpBpk->searchUpdateMaterialID(mpScreen);
     mBpkFrame = 0.0f;
 
-    mpParent_c = new CPaneMgr(mpScreen, MULTI_CHAR('set_ya_n'), 0, NULL);
+    mpParent_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('set_ya_n'), 0, NULL);
     JUT_ASSERT(0, mpParent_c != NULL);
 
-    mpArw_c = new CPaneMgr(mpScreen, MULTI_CHAR('ya_next'), 0, NULL);
+    mpArw_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('ya_next'), 0, NULL);
     JUT_ASSERT(0, mpArw_c != NULL);
 
     mpArw_c->hide();
@@ -36,7 +36,7 @@ dMsgScrnArrow_c::dMsgScrnArrow_c() {
     mpScreen->search(MULTI_CHAR('yajnext'))->setAnimation(mpBpk);
     mpScreen->search(MULTI_CHAR('yajinexl'))->setAnimation(mpBpk);
 
-    mpDot_c = new CPaneMgr(mpScreen, MULTI_CHAR('ya_end'), 0, NULL);
+    mpDot_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('ya_end'), 0, NULL);
     JUT_ASSERT(0, mpDot_c != NULL);
 
     mpDot_c->hide();
@@ -45,22 +45,22 @@ dMsgScrnArrow_c::dMsgScrnArrow_c() {
 }
 
 dMsgScrnArrow_c::~dMsgScrnArrow_c() {
-    delete mpScreen;
+    JKR_DELETE(mpScreen);
     mpScreen = NULL;
 
-    delete mpBck;
+    JKR_DELETE(mpBck);
     mpBck = NULL;
 
-    delete mpBpk;
+    JKR_DELETE(mpBpk);
     mpBpk = NULL;
 
-    delete mpParent_c;
+    JKR_DELETE(mpParent_c);
     mpParent_c = NULL;
 
-    delete mpArw_c;
+    JKR_DELETE(mpArw_c);
     mpArw_c = NULL;
 
-    delete mpDot_c;
+    JKR_DELETE(mpDot_c);
     mpDot_c = NULL;
 }
 

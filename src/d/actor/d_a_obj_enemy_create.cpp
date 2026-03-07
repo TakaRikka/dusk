@@ -135,7 +135,7 @@ int daObjE_CREATE_c::Execute() {
 
 int daObjE_CREATE_c::Delete() {
     if (mActorList != NULL) {
-        delete[] mActorList;
+        JKR_DELETE_ARRAY(mActorList);
     }
 
     return 1;
@@ -234,7 +234,7 @@ int daObjE_CREATE_c::create() {
 
     mActivateSw = fopAcM_GetParam(this) >> 8;
     mDeactivateSw = fopAcM_GetParam(this) >> 0x10;
-    mActorList = new u32[mEnemyNum];
+    mActorList = JKR_NEW u32[mEnemyNum];
 
     if (mActorList == NULL) {
         return cPhs_ERROR_e;

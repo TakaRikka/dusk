@@ -56,7 +56,7 @@ void Z2AudioArcLoader::readBSTN(const void* addr, u32 param_1) {
 
         u8* bstnDst = (u8*)addr;
         if (param_1 != 0) {
-            bstnDst = new (gameHeap, 4) u8[param_1];
+            bstnDst = JKR_NEW_ARGS (gameHeap, 4) u8[param_1];
             if (bstnDst != NULL) {
                 memcpy(bstnDst, addr, param_1);
             }
@@ -64,7 +64,7 @@ void Z2AudioArcLoader::readBSTN(const void* addr, u32 param_1) {
             JUT_ASSERT(122, bstnDst);
         }
 
-        JAUSoundNameTable* soundNameTable = new (gameHeap, 0) JAUSoundNameTable(true);
+        JAUSoundNameTable* soundNameTable = JKR_NEW_ARGS (gameHeap, 0) JAUSoundNameTable(true);
         JUT_ASSERT(125, soundNameTable);
 
         soundNameTable->init(bstnDst);

@@ -48,7 +48,7 @@ jstudio_tCreateObject_message::create(JStudio::TObject** ppObject,
     switch (type) {
     case 'JMSG': 
         {
-            jstudio_tAdaptor_message* adaptor = new jstudio_tAdaptor_message();
+            jstudio_tAdaptor_message* adaptor = JKR_NEW jstudio_tAdaptor_message();
             if (adaptor == NULL) {
                 return false;
             }
@@ -676,7 +676,7 @@ JStage::TObject* dDemo_object_c::appendActor(fopAc_ac_c* p_actor) {
         return NULL;
     }
 
-    demoActor = new dDemo_actor_c();
+    demoActor = JKR_NEW dDemo_actor_c();
     if (demoActor == NULL) {
         // "Failed to get Demo Actor!!\n"
         OS_REPORT("デモアクター確保失敗！！\n");
@@ -709,7 +709,7 @@ dDemo_camera_c* dDemo_object_c::createCamera() {
         return mpCamera;
     }
 
-    mpCamera = new dDemo_camera_c();
+    mpCamera = JKR_NEW dDemo_camera_c();
     return mpCamera;
 }
 
@@ -720,7 +720,7 @@ dDemo_camera_c* dDemo_object_c::createEditorCamera() {
         return mpEditorCamera;
     }
 
-    mpEditorCamera = new dDemo_camera_c();
+    mpEditorCamera = JKR_NEW dDemo_camera_c();
     return mpEditorCamera;
 }
 #endif
@@ -740,7 +740,7 @@ JStage::TObject* dDemo_object_c::createAmbient() {
         return mpAmbient;
     }
 
-    mpAmbient = new dDemo_ambient_c();
+    mpAmbient = JKR_NEW dDemo_ambient_c();
     return mpAmbient;
 }
 
@@ -751,7 +751,7 @@ JStage::TObject* dDemo_object_c::appendLight() {
         return NULL;
     }
 
-    dDemo_light_c* demoLight = new dDemo_light_c();
+    dDemo_light_c* demoLight = JKR_NEW dDemo_light_c();
     if (demoLight == NULL) {
         // "Failed to get Demo Light!!\n"
         OS_REPORT("デモライト確保失敗！！\n");
@@ -770,31 +770,31 @@ JStage::TObject* dDemo_object_c::createFog() {
         return mpFog;
     }
 
-    mpFog = new dDemo_fog_c();
+    mpFog = JKR_NEW dDemo_fog_c();
     return mpFog;
 }
 
 void dDemo_object_c::remove() {
     while (mActorNum != 0) {
-        delete mpActors[--mActorNum];
+        JKR_DELETE(mpActors[--mActorNum]);
     }
 
     if (mpCamera != NULL) {
-        delete mpCamera;
+        JKR_DELETE(mpCamera);
         mpCamera = NULL;
     }
 
     if (mpAmbient != NULL) {
-        delete mpAmbient;
+        JKR_DELETE(mpAmbient);
         mpAmbient = NULL;
     }
 
     while (mLightNum != 0) {
-        delete mpLights[--mLightNum];
+        JKR_DELETE(mpLights[--mLightNum]);
     }
 
     if (mpFog != NULL) {
-        delete mpFog;
+        JKR_DELETE(mpFog);
         mpFog = NULL;
     }
 }
@@ -802,7 +802,7 @@ void dDemo_object_c::remove() {
 #if DEBUG
 void dDemo_object_c::removeEditorCamera() {
     if (mpEditorCamera) {
-        delete mpEditorCamera;
+        JKR_DELETE(mpEditorCamera);
         mpEditorCamera = NULL;
     }
 }
@@ -877,33 +877,33 @@ int dDemo_system_c::JSGFindObject(JStage::TObject** p_TObj, char const* actorNam
 }
 
 void dDemo_c::create() {
-    m_system = new dDemo_system_c();
+    m_system = JKR_NEW dDemo_system_c();
     JUT_ASSERT(1774, m_system != NULL);
 
-    m_control = new JStudio::TControl();
+    m_control = JKR_NEW JStudio::TControl();
     JUT_ASSERT(1776, m_control != NULL);
 
-    m_mesgControl = new jmessage_tControl();
+    m_mesgControl = JKR_NEW jmessage_tControl();
     JUT_ASSERT(1778, m_mesgControl != NULL);
 
-    m_stage = new JStudio_JStage::TCreateObject(m_system);
+    m_stage = JKR_NEW JStudio_JStage::TCreateObject(m_system);
     JUT_ASSERT(1781, m_stage != NULL);
 
-    JStudio_JAudio2::TCreateObject* p_audio = new JStudio_JAudio2::TCreateObject(Z2GetSoundStarter(), m_system);
+    JStudio_JAudio2::TCreateObject* p_audio = JKR_NEW JStudio_JAudio2::TCreateObject(Z2GetSoundStarter(), m_system);
     m_audio = p_audio;
     JUT_ASSERT(1787, m_audio != NULL);
     p_audio->setPermit_onExit_notEnd(true);
 
-    m_particle = new dDemo_particle_c(dPa_control_c::getEmitterManager(), m_system);
+    m_particle = JKR_NEW dDemo_particle_c(dPa_control_c::getEmitterManager(), m_system);
     JUT_ASSERT(1794, m_particle != NULL);
 
-    m_message = new jstudio_tCreateObject_message();
+    m_message = JKR_NEW jstudio_tCreateObject_message();
     JUT_ASSERT(1797, m_message != NULL);
 
-    m_factory = new JStudio::TFactory();
+    m_factory = JKR_NEW JStudio::TFactory();
     JUT_ASSERT(1800, m_factory != NULL);
 
-    m_object = new dDemo_object_c();
+    m_object = JKR_NEW dDemo_object_c();
     JUT_ASSERT(1802, m_object != NULL);
 
     m_control->setSecondPerFrame(1.0f / 30.0f);
@@ -923,47 +923,47 @@ void dDemo_c::remove() {
     end();
 
     if (m_object != NULL) {
-        delete m_object;
+        JKR_DELETE(m_object);
         m_object = NULL;
     }
 
     if (m_factory != NULL) {
-        delete m_factory;
+        JKR_DELETE(m_factory);
         m_factory = NULL;
     }
 
     if (m_message != NULL) {
-        delete m_message;
+        JKR_DELETE(m_message);
         m_message = NULL;
     }
 
     if (m_particle != NULL) {
-        delete m_particle;
+        JKR_DELETE(m_particle);
         m_particle = NULL;
     }
 
     if (m_audio != NULL) {
-        delete m_audio;
+        JKR_DELETE(m_audio);
         m_audio = NULL;
     }
 
     if (m_stage != NULL) {
-        delete m_stage;
+        JKR_DELETE(m_stage);
         m_stage = NULL;
     }
 
     if (m_mesgControl != NULL) {
-        delete m_mesgControl;
+        JKR_DELETE(m_mesgControl);
         m_mesgControl = NULL;
     }
 
     if (m_control != NULL) {
-        delete m_control;
+        JKR_DELETE(m_control);
         m_control = NULL;
     }
 
     if (m_system != NULL) {
-        delete m_system;
+        JKR_DELETE(m_system);
         m_system = NULL;
     }
 }

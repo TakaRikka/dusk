@@ -8,7 +8,7 @@
 static const char l_arcName[] = "Always";
 
 int dkWpillar_c::create() {
-    new (this) dkWpillar_c();
+    JKR_NEW_ARGS (this) dkWpillar_c();
 
     int roomNo;
     u8 envrOverride;

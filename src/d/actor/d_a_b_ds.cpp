@@ -5308,7 +5308,7 @@ int daB_DS_c::CreateHeap() {
 
     JUT_ASSERT(0, modelData != NULL);
 
-    mpMorf = new mDoExt_McaMorfSO(
+    mpMorf = JKR_NEW mDoExt_McaMorfSO(
         modelData, NULL, NULL, static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("B_DS", anm_res)),
         0, 1.0f, 0, -1, &mSound, 0, 0x11000084);
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
@@ -5326,14 +5326,14 @@ int daB_DS_c::CreateHeap() {
     modelData = (J3DModelData*)dComIfG_getObjectRes("B_DS", 74);
     JUT_ASSERT(0, modelData != NULL);
 
-    mpSwordMorf = new mDoExt_McaMorfSO(
+    mpSwordMorf = JKR_NEW mDoExt_McaMorfSO(
         modelData, NULL, NULL, static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("B_DS", 63)), 0,
         1.0f, 0, -1, NULL, 0, 0x11000084);
     if (mpSwordMorf == NULL || mpSwordMorf->getModel() == NULL) {
         return 0;
     }
 
-    mpSwordBrkAnm = new mDoExt_brkAnm();
+    mpSwordBrkAnm = JKR_NEW mDoExt_brkAnm();
     if (mpSwordBrkAnm == NULL) {
         return 0;
     }
@@ -5348,7 +5348,7 @@ int daB_DS_c::CreateHeap() {
     modelData = (J3DModelData*)dComIfG_getObjectRes("B_DS", 75);
     JUT_ASSERT(0, modelData != NULL);
 
-    mpZantMorf = new mDoExt_McaMorfSO(
+    mpZantMorf = JKR_NEW mDoExt_McaMorfSO(
         modelData, NULL, NULL, static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("B_DS", 66)), 2,
         1.0f, 0, -1, NULL, 0, 0x11000084);
     if (mpZantMorf == NULL || mpZantMorf->getModel() == NULL) {
@@ -5363,7 +5363,7 @@ int daB_DS_c::CreateHeap() {
         return 0;
     }
 
-    mpOpPatternBrkAnm = new mDoExt_brkAnm();
+    mpOpPatternBrkAnm = JKR_NEW mDoExt_brkAnm();
     if (mpOpPatternBrkAnm == NULL) {
         return 0;
     }
@@ -5375,7 +5375,7 @@ int daB_DS_c::CreateHeap() {
         return 0;
     }
 
-    mpOpPatternBtkAnm = new mDoExt_btkAnm();
+    mpOpPatternBtkAnm = JKR_NEW mDoExt_btkAnm();
     if (mpOpPatternBtkAnm == NULL) {
         return 0;
     }
@@ -5395,7 +5395,7 @@ int daB_DS_c::CreateHeap() {
         return 0;
     }
 
-    mpPatternBrkAnm = new mDoExt_brkAnm();
+    mpPatternBrkAnm = JKR_NEW mDoExt_brkAnm();
     if (mpPatternBrkAnm == NULL) {
         return 0;
     }
@@ -5407,7 +5407,7 @@ int daB_DS_c::CreateHeap() {
         return 0;
     }
 
-    mpPatternBtkAnm = new mDoExt_btkAnm();
+    mpPatternBtkAnm = JKR_NEW mDoExt_btkAnm();
     if (mpPatternBtkAnm == NULL) {
         return 0;
     }

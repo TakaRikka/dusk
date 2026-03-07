@@ -43,7 +43,7 @@ void JAISeqMgr::freeDeadSeq_() {
         JSULink<JAISeq>* next = i->getNext();
         if (seq->status_.isDead()) {
             mSeqList.remove(i);
-            delete seq;
+            JKR_DELETE(seq);
         }
         i = next;
     }
@@ -120,7 +120,7 @@ void JAISeqMgr::mixOut() {
 }
 
 JAISeq* JAISeqMgr::beginStartSeq_() {
-    JAISeq* seq = new JAISeq(this, field_0x10);
+    JAISeq* seq = JKR_NEW JAISeq(this, field_0x10);
     if (seq == NULL) {
         JUT_WARN(273, "%s", "JASPoolAllocObject::<JAISeq>::operator new failed .\n");
     }
@@ -137,7 +137,7 @@ bool JAISeqMgr::endStartSeq_(JAISeq* seq, JAISoundHandle* handle) {
             }
             return true;
         }
-        delete sound;
+        JKR_DELETE(sound);
     }
     return false;
 }

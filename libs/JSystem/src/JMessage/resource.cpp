@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <cstring>
 
+#include "JSystem/JKernel/JKRHeap.h"
+
 u16 JMessage::TResource::toMessageIndex_messageID(u32 uMsgID, u32 upperHalf, bool* pbValid) const {
     if (!oParse_TBlock_messageID_.getRaw()) {
         return 0xFFFF;
@@ -112,12 +114,12 @@ JMessage::TResource* JMessage::TResourceContainer::TCResource::Get_groupID(u16 u
 }
 
 JMessage::TResource* JMessage::TResourceContainer::TCResource::Do_create() {
-    return new TResource();
+    return JKR_NEW TResource();
 }
 
 void JMessage::TResourceContainer::TCResource::Do_destroy(JMessage::TResource* pResource) {
 #if DEBUG
-    delete pResource;
+    JKR_DELETE(pResource);
 #else
     operator delete(pResource);
 #endif

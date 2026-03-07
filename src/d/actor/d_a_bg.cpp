@@ -30,7 +30,7 @@ static int createMatAnm(J3DModelData* i_modelData, u16 i_materialID) {
         J3DMaterial* material = i_modelData->getMaterialNodePointer(i_materialID);
         
         if (material->getMaterialAnm() == NULL) {
-            J3DMaterialAnm* anm = new J3DMaterialAnm();
+            J3DMaterialAnm* anm = JKR_NEW J3DMaterialAnm();
             if (anm == NULL) {
                 return 0;
             }
@@ -47,7 +47,7 @@ static u8 const lit_3756[12] = {
 };
 
 int daBg_btkAnm_c::create(J3DModelData* i_modelData, J3DAnmTextureSRTKey* i_btk, int i_anmPlay) {
-    mpBtk = new mDoExt_btkAnm();
+    mpBtk = JKR_NEW mDoExt_btkAnm();
     if (mpBtk == NULL) {
         return 0;
     }
@@ -76,7 +76,7 @@ void daBg_btkAnm_c::play() {
 }
 
 int daBg_brkAnm_c::create(J3DModelData* i_modelData, J3DAnmTevRegKey* i_brk, int i_anmPlay) {
-    mpBrk = new mDoExt_brkAnm();
+    mpBrk = JKR_NEW mDoExt_brkAnm();
 
     if (mpBrk == NULL) {
         return 0;
@@ -144,7 +144,7 @@ int daBg_c::createHeap() {
             J3DAnmTextureSRTKey* btk =
                 (J3DAnmTextureSRTKey*)dComIfG_getStageRes(arcName, l_btkName[i]);
             if (btk != NULL) {
-                bgPart->btk = new daBg_btkAnm_c();
+                bgPart->btk = JKR_NEW daBg_btkAnm_c();
                 if (bgPart->btk == NULL) {
                     return 0;
                 }
@@ -161,7 +161,7 @@ int daBg_c::createHeap() {
 
             J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getStageRes(arcName, l_brkName[i]);
             if (brk != NULL) {
-                bgPart->brk = new daBg_brkAnm_c();
+                bgPart->brk = JKR_NEW daBg_brkAnm_c();
                 if (bgPart->brk == NULL) {
                     return 0;
                 }
@@ -196,7 +196,7 @@ int daBg_c::createHeap() {
                 return 0;
             }
 
-            bgPart->tevstr = new dKy_tevstr_c();
+            bgPart->tevstr = JKR_NEW dKy_tevstr_c();
             if (bgPart->tevstr == NULL) {
                 return 0;
             }
@@ -210,7 +210,7 @@ int daBg_c::createHeap() {
     cBgD_t* dzb = (cBgD_t*)dComIfG_getStageRes(arcName, "room.dzb");
     if (dzb != NULL) {
         mpKCol = NULL;
-        mpBgW = new dBgW();
+        mpBgW = JKR_NEW dBgW();
         if (mpBgW == NULL) {
             return 0;
         }
@@ -227,7 +227,7 @@ int daBg_c::createHeap() {
 
         if (kcl != NULL && plc != NULL) {
             mpBgW = NULL;
-            mpKCol = new dBgWKCol();
+            mpKCol = JKR_NEW dBgWKCol();
             if (mpKCol == NULL) {
                 return 0;
             }

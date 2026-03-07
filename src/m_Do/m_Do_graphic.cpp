@@ -301,7 +301,7 @@ void mDoGph_gInf_c::create() {
 
     JFWDisplay::getManager()->setDrawDoneMethod(JFWDisplay::UNK_METHOD_1);
 
-    JUTFader* faderPtr = new JUTFader(0, 0, JUTVideo::getManager()->getRenderMode()->fbWidth,
+    JUTFader* faderPtr = JKR_NEW JUTFader(0, 0, JUTVideo::getManager()->getRenderMode()->fbWidth,
                                       JUTVideo::getManager()->getRenderMode()->efbHeight,
                                       JUtility::TColor(0, 0, 0, 0));
     JUT_ASSERT(352, faderPtr != NULL);

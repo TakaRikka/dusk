@@ -3387,7 +3387,7 @@ static int daB_MGN_Delete(daB_MGN_c* i_this) {
 int daB_MGN_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("B_mgn", BMDR_MGN);
     JUT_ASSERT(4010, modelData != NULL);
-    mpMgnModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpMgnModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
                                        (J3DAnmTransform*)dComIfG_getObjectRes("B_mgn", BCK_MGN_WAIT),2,
                                        1.0f, 0, -1, &mSound, J3DMdlFlag_DifferedDLBuffer, 0x11000284);
     if (mpMgnModelMorf == NULL || mpMgnModelMorf->getModel() == NULL) {
@@ -3403,7 +3403,7 @@ int daB_MGN_c::CreateHeap() {
         }
     }
 
-    mpMgnCoreBrk = new mDoExt_brkAnm();
+    mpMgnCoreBrk = JKR_NEW mDoExt_brkAnm();
     if (mpMgnCoreBrk == NULL) {
         return 0;
     }
@@ -3414,7 +3414,7 @@ int daB_MGN_c::CreateHeap() {
         return 0;
     }
 
-    mpMgnBtk = new mDoExt_btkAnm();
+    mpMgnBtk = JKR_NEW mDoExt_btkAnm();
     if (mpMgnBtk == NULL) {
         return 0;
     }
@@ -3440,14 +3440,14 @@ int daB_MGN_c::CreateHeap() {
     JUT_ASSERT(4084, modelData != NULL);
 
     for (int i = 0; i < 4; i++) {
-        mpGdgateModelMorf[i] = new mDoExt_McaMorfSO(modelData, NULL, NULL,
+        mpGdgateModelMorf[i] = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
                                                (J3DAnmTransform*)dComIfG_getObjectRes("B_mgne", BCK_EF_GDGATE_START),
                                                0, 0.0f, 0, -1, &mSound, J3DMdlFlag_DifferedDLBuffer, 0x11000284);
         if (mpGdgateModelMorf[i] == NULL || mpGdgateModelMorf[i]->getModel() == NULL) {
             return 0;
         }
 
-        mpGdgateStartBrk[i] = new mDoExt_brkAnm();
+        mpGdgateStartBrk[i] = JKR_NEW mDoExt_brkAnm();
         if (mpGdgateStartBrk[i] == NULL) {
             return 0;
         }
@@ -3459,7 +3459,7 @@ int daB_MGN_c::CreateHeap() {
             return 0;
         }
 
-        mpGdgateAppearBrk[i] = new mDoExt_brkAnm();
+        mpGdgateAppearBrk[i] = JKR_NEW mDoExt_brkAnm();
         if (mpGdgateAppearBrk[i] == NULL) {
             return 0;
         }
@@ -3471,7 +3471,7 @@ int daB_MGN_c::CreateHeap() {
             return 0;
         }
 
-        mpGdgateBtk[i] = new mDoExt_btkAnm();
+        mpGdgateBtk[i] = JKR_NEW mDoExt_btkAnm();
         if (mpGdgateBtk[i] == NULL) {
             return 0;
         }

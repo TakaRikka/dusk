@@ -18,9 +18,9 @@ JAWGraphContext::JAWGraphContext() :
     field_0x16 = 6;
     field_0x18 = 0;
     if (!sFont) {
-        sFont = new JUTResFont((ResFONT*)JUTResFONT_Ascfont_fix12, NULL);
+        sFont = JKR_NEW JUTResFont((ResFONT*)JUTResFONT_Ascfont_fix12, NULL);
     }
-    field_0x0 = new J2DPrint(sFont, JUtility::TColor(255, 255, 255, 255), JUtility::TColor(255, 255, 255, 255));
+    field_0x0 = JKR_NEW J2DPrint(sFont, JUtility::TColor(255, 255, 255, 255), JUtility::TColor(255, 255, 255, 255));
     field_0x0->initiate();
     locate(0, 0);
 }

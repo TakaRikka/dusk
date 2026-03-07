@@ -3114,7 +3114,7 @@ static int daE_YMB_Delete(daE_YMB_c* i_this) {
 int daE_YMB_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_YB", BMDR_YB_TW);
     JUT_ASSERT(4196, modelData != NULL);
-    mpModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_YB", BCK_YB_FLY_WAIT),
+    mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_YB", BCK_YB_FLY_WAIT),
                                   2, 1.0f, 0, -1, &mSound, 0x80000, 0x31000084);
     if (mpModelMorf == NULL || mpModelMorf->getModel() == NULL) {
         return 0;
@@ -3130,7 +3130,7 @@ int daE_YMB_c::CreateHeap() {
         model->getModelData()->getJointNodePointer(i)->setCallBack(JointCallBack);
     }
 
-    mpBrkAnm = new mDoExt_brkAnm();
+    mpBrkAnm = JKR_NEW mDoExt_brkAnm();
     if (mpBrkAnm == NULL) {
         return 0;
     }
@@ -3139,7 +3139,7 @@ int daE_YMB_c::CreateHeap() {
         return 0;
     }
 
-    mpBgW = new dBgW();
+    mpBgW = JKR_NEW dBgW();
     if (mpBgW == NULL) {
         return 0;
     }

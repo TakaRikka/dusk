@@ -99,7 +99,7 @@ void J3DSkinDeform::initSkinInfo(J3DModelData* pModelData) {
     }
 
     if (pModelData->getJointNum() != 0) {
-        mSkinNList = new J3DSkinNList[pModelData->getJointNum()];
+        mSkinNList = JKR_NEW J3DSkinNList[pModelData->getJointNum()];
     }
 
     for (int i = 0; i < pModelData->getVtxNum(); i++) {
@@ -138,13 +138,13 @@ void J3DSkinDeform::initSkinInfo(J3DModelData* pModelData) {
 
     for (u16 i = 0; i < pModelData->getJointNum(); i++) {
         if (mSkinNList[i].field_0x10) {
-            mSkinNList[i].field_0x0 = new u16[mSkinNList[i].field_0x10];
-            mSkinNList[i].field_0x8 = new f32[mSkinNList[i].field_0x10];
+            mSkinNList[i].field_0x0 = JKR_NEW u16[mSkinNList[i].field_0x10];
+            mSkinNList[i].field_0x8 = JKR_NEW f32[mSkinNList[i].field_0x10];
             mSkinNList[i].field_0x10 = 0;
         }
         if (mSkinNList[i].field_0x12) {
-            mSkinNList[i].field_0x4 = new u16[mSkinNList[i].field_0x12];
-            mSkinNList[i].field_0xc = new f32[mSkinNList[i].field_0x12];
+            mSkinNList[i].field_0x4 = JKR_NEW u16[mSkinNList[i].field_0x12];
+            mSkinNList[i].field_0xc = JKR_NEW f32[mSkinNList[i].field_0x12];
             mSkinNList[i].field_0x12 = 0;
         }
     }
@@ -202,7 +202,7 @@ int J3DSkinDeform::initMtxIndexArray(J3DModelData* pModelData) {
         return kJ3DError_Success;
     }
 
-    mPosData = new u16[pModelData->getVtxNum()];
+    mPosData = JKR_NEW u16[pModelData->getVtxNum()];
     if (mPosData == NULL) {
         return kJ3DError_Alloc;
     }
@@ -212,7 +212,7 @@ int J3DSkinDeform::initMtxIndexArray(J3DModelData* pModelData) {
     }
 
     if (pModelData->getNrmNum()) {
-        mNrmData = new u16[pModelData->getNrmNum()];
+        mNrmData = JKR_NEW u16[pModelData->getNrmNum()];
         if (mNrmData == NULL) {
             return kJ3DError_Alloc;
         }
@@ -223,8 +223,8 @@ int J3DSkinDeform::initMtxIndexArray(J3DModelData* pModelData) {
         mNrmData = NULL;
     }
 
-    mPosMtx = new Mtx[pModelData->getJointNum()];
-    mNrmMtx = new (32) Mtx33[pModelData->getDrawMtxNum()];
+    mPosMtx = JKR_NEW Mtx[pModelData->getJointNum()];
+    mNrmMtx = JKR_NEW_ARGS (32) Mtx33[pModelData->getDrawMtxNum()];
     if (mPosMtx == NULL) {
         return kJ3DError_Alloc;
     }

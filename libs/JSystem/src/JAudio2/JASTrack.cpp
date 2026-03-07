@@ -23,7 +23,7 @@ JASTrack::TList JASTrack::sTrackList;
 JASTrack::~JASTrack() {
     JUT_ASSERT(70, mStatus != STATUS_RUN);
     for (int i = 1; i < 4; i++) {
-        delete mChannelMgrs[i];
+        JKR_DELETE(mChannelMgrs[i]);
     }
 }
 
@@ -34,7 +34,7 @@ void JASTrack::setChannelMgrCount(u32 count) {
     mChannelMgrCount = 1;
     for (int i = 1; i < count; i++) {
         if (mChannelMgrs[i] == NULL) {
-            mChannelMgrs[i] = new TChannelMgr(this);
+            mChannelMgrs[i] = JKR_NEW TChannelMgr(this);
             if (mChannelMgrs[i] == NULL) {
                 JUT_WARN(87, "%s", "Not enough JASTrackChannelMgr\n");
                 return;
@@ -44,7 +44,7 @@ void JASTrack::setChannelMgrCount(u32 count) {
     }
     for (u32 i = mChannelMgrCount; i < 4; i++) {
         if (mChannelMgrs[i] != NULL) {
-            delete mChannelMgrs[i];
+            JKR_DELETE(mChannelMgrs[i]);
             mChannelMgrs[i] = NULL;
         }
     }
@@ -81,7 +81,7 @@ void JASTrack::init() {
     mChannelMgrCount = 1;
     for (int i = 1; i < 4; i++) {
         if (mChannelMgrs[i] != NULL) {
-            delete mChannelMgrs[i];
+            JKR_DELETE(mChannelMgrs[i]);
             mChannelMgrs[i] = NULL;
         }
     }
@@ -201,7 +201,7 @@ void JASTrack::close() {
         if (child != NULL) {
             child->close();
             if (child->mFlags.autoDelete) {
-                delete child;
+                JKR_DELETE(child);
                 mChildren[i] = NULL;
             }
         }
@@ -232,7 +232,7 @@ void JASTrack::closeChild(u32 track_no) {
         getRootTrack()->updateSeq(false, 1.0f);
         child->close();
         if (child->mFlags.autoDelete) {
-            delete child;
+            JKR_DELETE(child);
             mChildren[track_no] = NULL;
         }
     }
@@ -259,7 +259,7 @@ JASTrack* JASTrack::openChild(u32 trk_no) {
             break;
         }
     } else {
-        child = new JASTrack();
+        child = JKR_NEW JASTrack();
         if (child == NULL) {
             JUT_WARN(388, "%s", "Not enough JASTrack\n");
             return NULL;
@@ -736,7 +736,7 @@ int JASTrack::tickProc() {
                 getRootTrack()->updateSeq(false, 1.0f);
                 child->close();
                 if (child->mFlags.autoDelete) {
-                    delete child;
+                    JKR_DELETE(child);
                     mChildren[i] = NULL;
                 }
             }
@@ -794,7 +794,7 @@ void JASTrack::TList::seqMain() {
         if (seqMainRes < 0) {
             Remove(&*it);
             if (it->mFlags.autoDelete) {
-                delete &*it;
+                JKR_DELETE(&*it);
             }
         }
     }
@@ -811,7 +811,7 @@ void JASTrack::TList::seqMain() {
         if (seqMainRes < 0) {
             Remove(&*it);
             if (it->mFlags.autoDelete) {
-                delete &*it;
+                JKR_DELETE(&*it);
             }
         }
         it = it2;

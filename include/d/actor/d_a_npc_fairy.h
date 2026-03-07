@@ -51,7 +51,7 @@ public:
     }
     ~_Fairy_Feather_c() {
         if (mpMorf != NULL) {
-            delete mpMorf;
+            JKR_DELETE(mpMorf);
             mpMorf = NULL;
         }
     }

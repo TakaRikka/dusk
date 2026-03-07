@@ -54,22 +54,22 @@ void JPAResourceLoader::load_jpc(u8 const* data, JPAResourceManager* p_res_mgr) 
     JKRHeap* heap = p_res_mgr->mpHeap;
     p_res_mgr->resMaxNum = *(BE(u16)*)(data + 8);
     p_res_mgr->texMaxNum = *(BE(u16)*)(data + 0xA);
-    p_res_mgr->pResAry = new (heap, 0) JPAResource*[p_res_mgr->resMaxNum];
-    p_res_mgr->pTexAry = new (heap, 0) JPATexture*[p_res_mgr->texMaxNum];
+    p_res_mgr->pResAry = JKR_NEW_ARGS (heap, 0) JPAResource*[p_res_mgr->resMaxNum];
+    p_res_mgr->pTexAry = JKR_NEW_ARGS (heap, 0) JPATexture*[p_res_mgr->texMaxNum];
     JUT_ASSERT(199, (p_res_mgr->pResAry != NULL) && (p_res_mgr->pTexAry != 0));
 
     u32 offset = 0x10;
     for (int i = 0; i < *(BE(u16)*)(data + 8); i++) {
         JPAResourceHeader* header = (JPAResourceHeader*)(data + offset);
-        JPAResource* p_res = new (heap, 0) JPAResource();
+        JPAResource* p_res = JKR_NEW_ARGS (heap, 0) JPAResource();
         JUT_ASSERT(211, p_res != NULL);
         p_res->fldNum = header->mFieldBlockNum;
         p_res->ppFld = p_res->fldNum != 0 ?
-            new (heap, 0) JPAFieldBlock*[p_res->fldNum] : NULL;
+            JKR_NEW_ARGS (heap, 0) JPAFieldBlock*[p_res->fldNum] : NULL;
         JUT_ASSERT(216, (p_res->ppFld != NULL) || (p_res->fldNum == 0));
         p_res->keyNum = header->mKeyBlockNum;
         p_res->ppKey = p_res->keyNum != 0 ?
-            new (heap, 0) JPAKeyBlock*[p_res->keyNum] : NULL;
+            JKR_NEW_ARGS (heap, 0) JPAKeyBlock*[p_res->keyNum] : NULL;
         JUT_ASSERT(221, (p_res->ppKey != NULL) || (p_res->keyNum == 0));
         p_res->texNum = header->mTDB1Num;
         p_res->mpTDB1 = NULL;
@@ -84,33 +84,33 @@ void JPAResourceLoader::load_jpc(u8 const* data, JPAResourceManager* p_res_mgr) 
             u32 size = *(BE(u32)*)(data + offset + 4);
             switch (magic) {
             case 'FLD1':
-                p_res->ppFld[fld_no] = new (heap, 0) JPAFieldBlock(data + offset, heap);
+                p_res->ppFld[fld_no] = JKR_NEW_ARGS (heap, 0) JPAFieldBlock(data + offset, heap);
                 JUT_ASSERT(244, p_res->ppFld[fld_no] != NULL);
                 fld_no++;
                 break;
             case 'KFA1':
-                p_res->ppKey[key_no] = new (heap, 0) JPAKeyBlock(data + offset);
+                p_res->ppKey[key_no] = JKR_NEW_ARGS (heap, 0) JPAKeyBlock(data + offset);
                 JUT_ASSERT(249, p_res->ppKey[key_no] != NULL);
                 key_no++;
                 break;
             case 'BEM1':
-                p_res->pDyn = new (heap, 0) JPADynamicsBlock(data + offset);
+                p_res->pDyn = JKR_NEW_ARGS (heap, 0) JPADynamicsBlock(data + offset);
                 JUT_ASSERT(254, p_res->pDyn != NULL);
                 break;
             case 'BSP1':
-                p_res->pBsp = new (heap, 0) JPABaseShape(data + offset, heap);
+                p_res->pBsp = JKR_NEW_ARGS (heap, 0) JPABaseShape(data + offset, heap);
                 JUT_ASSERT(258, p_res->pBsp != NULL);
                 break;
             case 'ESP1':
-                p_res->pEsp = new (heap, 0) JPAExtraShape(data + offset);
+                p_res->pEsp = JKR_NEW_ARGS (heap, 0) JPAExtraShape(data + offset);
                 JUT_ASSERT(262, p_res->pEsp != NULL);
                 break;
             case 'SSP1':
-                p_res->pCsp = new (heap, 0) JPAChildShape(data + offset);
+                p_res->pCsp = JKR_NEW_ARGS (heap, 0) JPAChildShape(data + offset);
                 JUT_ASSERT(266, p_res->pCsp != NULL);
                 break;
             case 'ETX1':
-                p_res->pEts = new (heap, 0) JPAExTexShape(data + offset);
+                p_res->pEts = JKR_NEW_ARGS (heap, 0) JPAExTexShape(data + offset);
                 JUT_ASSERT(270, p_res->pEts != NULL);
                 break;
             case 'TDB1':
@@ -130,7 +130,7 @@ void JPAResourceLoader::load_jpc(u8 const* data, JPAResourceManager* p_res_mgr) 
     offset = *(BE(u32)*)(data + 0xC);
     for (int i = 0; i < *(BE(u16)*)(data + 0xA); i++) {
         u32 size = *(BE(u32)*)(data + offset + 4);
-        JPATexture* p_tex = new (heap, 0) JPATexture(data + offset);
+        JPATexture* p_tex = JKR_NEW_ARGS (heap, 0) JPATexture(data + offset);
         JUT_ASSERT(298, p_tex != NULL);
         p_res_mgr->registTex(p_tex);
         offset += size;

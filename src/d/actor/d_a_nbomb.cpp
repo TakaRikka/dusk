@@ -146,7 +146,7 @@ int daNbomb_c::createHeap() {
     }
 
     if (trans != NULL) {
-        mpBck = new mDoExt_bckAnm();
+        mpBck = JKR_NEW mDoExt_bckAnm();
         if (mpBck == NULL) {
             return 0;
         }

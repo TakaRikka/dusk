@@ -27,7 +27,7 @@ dMsgScrnPlace_c::dMsgScrnPlace_c() {
         mScaleX = 0.0f;
     }
 
-    mpScreen = new J2DScreen();
+    mpScreen = JKR_NEW J2DScreen();
 #if VERSION == VERSION_GCN_JPN
     mpScreen->setPriority("zelda_stage_title.blo", 0x20000, dComIfGp_getMsgArchive(4));
 #else
@@ -35,23 +35,23 @@ dMsgScrnPlace_c::dMsgScrnPlace_c() {
 #endif
     dPaneClass_showNullPane(mpScreen);
 
-    mpPmP_c = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpPmP_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
     mpPmP_c->scale(g_MsgObject_HIO_c.mStageTitleScaleX, g_MsgObject_HIO_c.mStageTitleScaleY);
 
-    mpFontParent = new CPaneMgr(mpScreen, MULTI_CHAR('s_font_n'), 0, NULL);
+    mpFontParent = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('s_font_n'), 0, NULL);
     mpFontParent->scale(g_MsgObject_HIO_c.mStageTitleCharSizeX,
                         g_MsgObject_HIO_c.mStageTitleCharSizeY);
     mpFontParent->paneTrans(g_MsgObject_HIO_c.mStageTitleCharPosX,
                             g_MsgObject_HIO_c.mStageTitleCharPosY - mScaleX);
 
-    mpBaseParent = new CPaneMgr(mpScreen, MULTI_CHAR('base_n'), 2, NULL);
+    mpBaseParent = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('base_n'), 2, NULL);
     mpBaseParent->scale(g_MsgObject_HIO_c.mStageTitleBaseSizeX,
                         g_MsgObject_HIO_c.mStageTitleBaseSizeY);
     mpBaseParent->paneTrans(g_MsgObject_HIO_c.mStageTitleBasePosX,
                             g_MsgObject_HIO_c.mStageTitleBasePosY - mScaleY);
 
     for (int i = 0; i < 7; i++) {
-        mpTm_c[i] = new CPaneMgr(mpScreen, t_tag[i], 0, NULL);
+        mpTm_c[i] = JKR_NEW CPaneMgr(mpScreen, t_tag[i], 0, NULL);
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setFont(mDoExt_getRubyFont());
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setString(0x80, "");
 #if VERSION != VERSION_GCN_JPN
@@ -76,20 +76,20 @@ dMsgScrnPlace_c::dMsgScrnPlace_c() {
 }
 
 dMsgScrnPlace_c::~dMsgScrnPlace_c() {
-    delete mpScreen;
+    JKR_DELETE(mpScreen);
     mpScreen = NULL;
 
-    delete mpPmP_c;
+    JKR_DELETE(mpPmP_c);
     mpPmP_c = NULL;
 
-    delete mpFontParent;
+    JKR_DELETE(mpFontParent);
     mpFontParent = NULL;
 
-    delete mpBaseParent;
+    JKR_DELETE(mpBaseParent);
     mpBaseParent = NULL;
 
     for (int i = 0; i < 7; i++) {
-        delete mpTm_c[i];
+        JKR_DELETE(mpTm_c[i]);
         mpTm_c[i] = NULL;
     }
 

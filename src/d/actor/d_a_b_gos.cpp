@@ -328,7 +328,7 @@ static int daB_GOS_Delete(b_gos_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     b_gos_class* a_this = (b_gos_class*)i_this;
 
-    a_this->mpMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("B_gos", 9), NULL,
+    a_this->mpMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("B_gos", 9), NULL,
                                           NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_gos", 6),
                                           J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, &a_this->mSound,
                                           0x80000, 0x11000084);

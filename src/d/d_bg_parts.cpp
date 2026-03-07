@@ -114,7 +114,7 @@ void dBgp_c::model_c::create(J3DModelData* i_modelData, Mtx i_mtx) {
     JUT_ASSERT(205, i_modelData->getJointNum() == 1);
     JUT_ASSERT(206, i_modelData->getMaterialNum() != 0);
 
-    mMaterial = new modelMaterial_c[i_modelData->getMaterialNum()];
+    mMaterial = JKR_NEW modelMaterial_c[i_modelData->getMaterialNum()];
     JUT_ASSERT(212, mMaterial != NULL);
 
     J3DJoint* joint = i_modelData->getJointNodePointer(0);    
@@ -242,11 +242,11 @@ void dBgp_c::share_c::reset() {
         for (u16 i = 0; i < mModelData->getMaterialNum(); i++) {
             J3DMaterial* material = mModelData->getMaterialNodePointer(i);
             if (material->getMaterialAnm() != NULL) {
-                delete material->getMaterialAnm();
+                JKR_DELETE(material->getMaterialAnm());
             }
         }
 
-        delete[] mMaterial;
+        JKR_DELETE_ARRAY(mMaterial);
 
         dComIfG_deleteObjectResMain(getArcName());
         mStatus = -1;
@@ -263,7 +263,7 @@ static BOOL createMatAnm(J3DModelData* i_modelData, u16 i_materialId) {
     if (i_materialId != 0xFFFF) {
         J3DMaterial* material = i_modelData->getMaterialNodePointer(i_materialId);
         if (material->getMaterialAnm() == NULL) {
-            J3DMaterialAnm* anm = new J3DMaterialAnm();
+            J3DMaterialAnm* anm = JKR_NEW J3DMaterialAnm();
             if (anm == NULL) {
                 return FALSE;
             }
@@ -288,7 +288,7 @@ int dBgp_c::share_c::execute() {
 
         JUT_ASSERT(544, mModelData->getMaterialNum() != 0);
 
-        mMaterial = new modelMaterial_c[mModelData->getMaterialNum()];
+        mMaterial = JKR_NEW modelMaterial_c[mModelData->getMaterialNum()];
         JUT_ASSERT(546, mMaterial != NULL);
 
         for (u16 i = 0; i < mModelData->getMaterialNum(); i++) {
@@ -446,11 +446,11 @@ void dBgp_c::create(s8 i_roomNo, void* i_data) {
 
         JKRHeap* prevHeap = mDoExt_setCurrentHeap(mHeap);
 
-        mModel = new model_c[((stage_map_unit_class*)mPointer)->num];
+        mModel = JKR_NEW model_c[((stage_map_unit_class*)mPointer)->num];
         JUT_ASSERT(886, mModel != NULL);
 
         unit_class* mapUnit = (unit_class*)((stage_map_unit_class*)mPointer)->entries;
-        mBgWork = new dBgW[mapUnit->num];
+        mBgWork = JKR_NEW dBgW[mapUnit->num];
         JUT_ASSERT(890, mBgWork != NULL);
 
         dBgW* bgw = mBgWork;
@@ -758,7 +758,7 @@ void dBgp_c::createShare() {
         mShareHeap = mDoExt_createSolidHeapFromGameToCurrent(0, 0x20);
         JUT_ASSERT(1409, mShareHeap != NULL);
 
-        mShare = new share_c[16];
+        mShare = JKR_NEW share_c[16];
         JUT_ASSERT(1411, mShare != NULL);
 
         u32 heapSize = mDoExt_adjustSolidHeapToSystem(mShareHeap);

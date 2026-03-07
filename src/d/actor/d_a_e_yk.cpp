@@ -1411,7 +1411,7 @@ static int daE_YK_Delete(e_yk_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_yk_class* yk = (e_yk_class*)i_this;
 
-    yk->mpMorfSO = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_YK", 12), 
+    yk->mpMorfSO = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_YK", 12),
         NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_YK",9), 2, 1.0f, 0, -1, &yk->mCreature, 0x80000,0x11000084);
     if (!yk->mpMorfSO || !yk->mpMorfSO->mpModel) {
         return 0;

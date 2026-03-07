@@ -17,7 +17,7 @@ JASBasicInst::JASBasicInst() {
 }
 
 JASBasicInst::~JASBasicInst() {
-    delete[] mKeymap;
+    JKR_DELETE_ARRAY(mKeymap);
 }
 
 bool JASBasicInst::getParam(int param_0, int param_1, JASInstParam* param_2) const {
@@ -48,8 +48,8 @@ bool JASBasicInst::getParam(int param_0, int param_1, JASInstParam* param_2) con
 }
 
 void JASBasicInst::setKeyRegionCount(u32 count, JKRHeap* param_1) {
-    delete [] mKeymap;
-    mKeymap = new (param_1, 0) TKeymap[count];
+    JKR_DELETE_ARRAY(mKeymap);
+    mKeymap = JKR_NEW_ARGS (param_1, 0) TKeymap[count];
     JUT_ASSERT(114, mKeymap != NULL);
 	mKeymapCount = count;
 }

@@ -963,7 +963,7 @@ int mDoMch_Create() {
     JKRSetAramTransferBuffer(NULL, 0x2000, JKRGetSystemHeap());
     JKRThreadSwitch::createManager(NULL);
     { // Fakematch to fix stack on debug, unsure where this block is supposed to go
-    JKRThread* thread = new JKRThread(OSGetCurrentThread(), 0);
+    JKRThread* thread = JKR_NEW JKRThread(OSGetCurrentThread(), 0);
     }
 
     JUTConsole* sysConsole = JFWSystem::getSystemConsole();
