@@ -156,7 +156,7 @@ struct J3DSys {
     void setModelNrmMtx(Mtx33* pMtxArr) {
         J3D_ASSERT_NULLPTR(241, pMtxArr);
         mModelNrmMtx = pMtxArr;
-        GXSETARRAY(GX_POS_MTX_ARRAY, mModelNrmMtx, sizeof(*mModelNrmMtx), sizeof(*mModelNrmMtx));
+        GXSETARRAY(GX_NRM_MTX_ARRAY, mModelNrmMtx, sizeof(*mModelNrmMtx), sizeof(*mModelNrmMtx));
     }
 
     void* getVtxPos() { return mVtxPos; }
