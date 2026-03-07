@@ -266,12 +266,19 @@ void operator delete[](void* ptr);
 #if TARGET_PC
 template<typename T>
 void jkrDelete(T* ptr) {
+    if (ptr == nullptr) {
+        return;
+    }
     ptr->~T();
     operator delete(ptr, JKRHeapToken::Dummy);
 }
 
 template<>
 inline void jkrDelete(void* ptr) {
+    if (ptr == nullptr) {
+        return;
+    }
+
     operator delete(ptr, JKRHeapToken::Dummy);
 }
 #endif
