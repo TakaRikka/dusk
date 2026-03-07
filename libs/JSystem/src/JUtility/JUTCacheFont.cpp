@@ -227,7 +227,7 @@ bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
 }
 
 bool JUTCacheFont::allocArray(JKRHeap* param_0) {
-    mMemBlocks = (void**)JKR_NEW_ARGS (param_0, 0) u32[mWid1BlockNum + mGly1BlockNum + mMap1BlockNum];
+    mMemBlocks = (void**)JKR_NEW_ARGS (param_0, 0) uintptr_t[mWid1BlockNum + mGly1BlockNum + mMap1BlockNum];
     if (mMemBlocks == NULL) {
         return false;
     }
