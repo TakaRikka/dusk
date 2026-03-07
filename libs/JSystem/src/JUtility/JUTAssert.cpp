@@ -6,6 +6,7 @@
 #include "JSystem/JUtility/JUTDirectPrint.h"
 #include <cstdio>
 #include <vi.h>
+#include "global.h"
 
 namespace JUTAssertion {
 

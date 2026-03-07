@@ -28,7 +28,7 @@ f32 JStage::TFog::JSGGetEndZ() const {
 void JStage::TFog::JSGSetEndZ(f32) {}
 
 GXColor JStage::TFog::JSGGetColor() const {
-    return COMPOUND_LITERAL(GXColor){255, 255, 255, 255};
+    return GXColor{255, 255, 255, 255};
 }
 
 void JStage::TFog::JSGSetColor(GXColor) {}

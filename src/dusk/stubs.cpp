@@ -1402,9 +1402,7 @@ u16 GXGetNumXfbLines(u16 efbHeight, f32 yScale) {
     STUB_LOG("GXGetNumXfbLines is a stub");
     return 0;
 }
-void GXGetViewportv(f32* vp) {
-    STUB_LOG("GXGetViewportv is a stub");
-}
+
 void GXGetScissor(u32* left, u32* top, u32* wd, u32* ht) {
     STUB_LOG("GXGetScissor is a stub");
 }

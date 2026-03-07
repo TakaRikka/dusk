@@ -15,7 +15,7 @@ bool JStage::TLight::JSGGetLightType() const {
 void JStage::TLight::JSGSetLightType(JStage::TELight) {}
 
 GXColor JStage::TLight::JSGGetColor() const {
-    return COMPOUND_LITERAL(GXColor){255, 255, 255, 255};
+    return GXColor{255, 255, 255, 255};
 }
 
 void JStage::TLight::JSGSetColor(GXColor) {}
