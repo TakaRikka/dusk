@@ -30,7 +30,7 @@ struct J2DScrnInfoHeader {
     /* 0x4 */ BE(u32) mSize;
     /* 0x8 */ BE(u16) mWidth;
     /* 0xA */ BE(u16) mHeight;
-    /* 0xC */ u32 mColor;
+    /* 0xC */ BE(u32) mColor;
 };
 
 /**

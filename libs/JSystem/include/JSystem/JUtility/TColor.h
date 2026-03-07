@@ -15,6 +15,10 @@ struct TColor : public GXColor {
     TColor() { set(0xffffffff); }
     TColor(u32 u32Color) { set(u32Color); }
     TColor(GXColor color) { set(color); }
+#if TARGET_PC
+    TColor(BE(u32) u32Color) { set(u32Color); }
+#endif
+
 
     // TColor(const TColor& other) { set(other.toUInt32()); }
 
