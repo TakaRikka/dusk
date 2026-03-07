@@ -594,7 +594,19 @@ void* operator new[](size_t size) {
 }
 #else
 void* operator new[](size_t size) {
-    return malloc(size);
+#if !_WIN32
+    return aligned_alloc(sizeof(void*), size);
+#else
+    return _aligned_malloc(size, sizeof(void*));
+#endif
+}
+
+void* operator new[](std::size_t size, const std::nothrow_t&) noexcept {
+#if !_WIN32
+    return aligned_alloc(sizeof(void*), size);
+#else
+    return _aligned_malloc(size, sizeof(void*));
+#endif
 }
 
 void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM) {
@@ -655,7 +667,11 @@ void operator delete[](void* ptr) {
         return;
     JKRHeap* heap = JKRHeap::findFromRoot(ptr);
     if (heap == NULL) {
+#if !_WIN32
         free(ptr);
+#else
+        _aligned_free(ptr);
+#endif
         return;
     }
     JKRHeap::free(ptr, heap);
