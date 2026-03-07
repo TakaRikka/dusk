@@ -554,7 +554,7 @@ inline f32 J3DHermiteInterpolation(__REGISTER f32 pp1, __REGISTER s16 const* pp2
     }
     // clang-format on
     return fout;
-#else 
+#else
     f32 time1 = (f32)*pp2;
     f32 value1 = (f32)*pp3;
     f32 tangent1 = (f32)*pp4;
@@ -581,6 +581,18 @@ inline f32 J3DHermiteInterpolation(__REGISTER f32 pp1, __REGISTER s16 const* pp2
 
     return fout;
 #endif
+}
+
+inline f32 J3DHermiteInterpolation(f32 p1, BE(f32) const* p2, BE(f32) const* p3, BE(f32) const* p4,
+                                   BE(f32) const* p5, BE(f32) const* p6, BE(f32) const* p7) {
+    return JMAHermiteInterpolation(p1, *p2, *p3, *p4, *p5, *p6, *p7);
+}
+
+inline f32 J3DHermiteInterpolation(f32 pp1, BE(s16) const* pp2,
+                                   BE(s16) const* pp3, BE(s16) const* pp4,
+                                   BE(s16) const* pp5, BE(s16) const* pp6,
+                                   BE(s16) const* pp7) {
+    return JMAHermiteInterpolation(pp1, *pp2, *pp3, *pp4, *pp5, *pp6, *pp7);
 }
 
 template<typename T>

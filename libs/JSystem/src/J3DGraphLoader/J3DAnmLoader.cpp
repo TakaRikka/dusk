@@ -291,7 +291,7 @@ void J3DAnmFullLoader_v15::setAnmColor(J3DAnmColorFull* param_1,
     param_1->mColorB = JSUConvertOffsetToPtr<u8>(param_2, param_2->mBValuesOffset);
     param_1->mColorA = JSUConvertOffsetToPtr<u8>(param_2, param_2->mAValuesOffset);
     param_1->mUpdateMaterialID =
-        JSUConvertOffsetToPtr<u16>(param_2, param_2->mUpdateMaterialIDOffset);
+        JSUConvertOffsetToPtr<BE(u16)>(param_2, param_2->mUpdateMaterialIDOffset);
     param_1->mUpdateMaterialName.setResource(
         JSUConvertOffsetToPtr<ResNTAB>(param_2, param_2->mNameTabOffset));
 }
@@ -312,9 +312,9 @@ void J3DAnmFullLoader_v15::setAnmTexPattern(J3DAnmTexPattern* param_1,
     param_1->field_0x14 = param_2->field_0xe;
     param_1->mAnmTable =
         JSUConvertOffsetToPtr<J3DAnmTexPatternFullTable>(param_2, param_2->mTableOffset);
-    param_1->mTextureIndex = JSUConvertOffsetToPtr<u16>(param_2, param_2->mValuesOffset);
+    param_1->mTextureIndex = JSUConvertOffsetToPtr<BE(u16)>(param_2, param_2->mValuesOffset);
     param_1->mUpdateMaterialID =
-        JSUConvertOffsetToPtr<u16>(param_2, param_2->mUpdateMaterialIDOffset);
+        JSUConvertOffsetToPtr<BE(u16)>(param_2, param_2->mUpdateMaterialIDOffset);
     param_1->mUpdateMaterialName.setResource(
         JSUConvertOffsetToPtr<ResNTAB>(param_2, param_2->mNameTabOffset));
 }
@@ -536,15 +536,15 @@ void J3DAnmKeyLoader_v15::setAnmTextureSRT(J3DAnmTextureSRTKey* param_1,
     param_1->mAnmTable =
         JSUConvertOffsetToPtr<J3DAnmTransformKeyTable>(param_2, param_2->mTableOffset);
     param_1->mUpdateMaterialID =
-        JSUConvertOffsetToPtr<u16>(param_2, param_2->mUpdateMatIDOffset);
+        JSUConvertOffsetToPtr<BE(u16)>(param_2, param_2->mUpdateMatIDOffset);
     param_1->mUpdateMaterialName.setResource(
         JSUConvertOffsetToPtr<ResNTAB>(param_2, param_2->mNameTab1Offset));
     param_1->mUpdateTexMtxID =
         JSUConvertOffsetToPtr<u8>(param_2, param_2->mUpdateTexMtxIDOffset);
-    param_1->mSRTCenter = JSUConvertOffsetToPtr<Vec>(param_2, param_2->unkOffset);
-    param_1->mScaleData = JSUConvertOffsetToPtr<f32>(param_2, param_2->mScaleValOffset);
-    param_1->mRotData = JSUConvertOffsetToPtr<s16>(param_2, param_2->mRotValOffset);
-    param_1->mTransData = JSUConvertOffsetToPtr<f32>(param_2, param_2->mTransValOffset);
+    param_1->mSRTCenter = JSUConvertOffsetToPtr<BE(Vec)>(param_2, param_2->unkOffset);
+    param_1->mScaleData = JSUConvertOffsetToPtr<BE(f32)>(param_2, param_2->mScaleValOffset);
+    param_1->mRotData = JSUConvertOffsetToPtr<BE(s16)>(param_2, param_2->mRotValOffset);
+    param_1->mTransData = JSUConvertOffsetToPtr<BE(f32)>(param_2, param_2->mTransValOffset);
     if (param_2->mNameTab2Offset) {
         param_1->mPostUpdateMaterialName.setResource(
             JSUConvertOffsetToPtr<ResNTAB>(param_2, param_2->mNameTab2Offset));
@@ -555,12 +555,12 @@ void J3DAnmKeyLoader_v15::setAnmTextureSRT(J3DAnmTextureSRTKey* param_1,
     param_1->field_0x48 = param_2->field_0x3a;
     param_1->field_0x58 =
         JSUConvertOffsetToPtr<J3DAnmTransformKeyTable>(param_2, param_2->mInfoTable2Offset);
-    param_1->mPostUpdateMaterialID = JSUConvertOffsetToPtr<u16>(param_2, param_2->field_0x40);
+    param_1->mPostUpdateMaterialID = JSUConvertOffsetToPtr<BE(u16)>(param_2, param_2->field_0x40);
     param_1->mPostUpdateTexMtxID = JSUConvertOffsetToPtr<u8>(param_2, param_2->field_0x48);
-    param_1->mPostSRTCenter = JSUConvertOffsetToPtr<Vec>(param_2, param_2->field_0x4c);
-    param_1->field_0x4c = JSUConvertOffsetToPtr<f32>(param_2, param_2->field_0x50);
-    param_1->field_0x50 = JSUConvertOffsetToPtr<s16>(param_2, param_2->field_0x54);
-    param_1->field_0x54 = JSUConvertOffsetToPtr<f32>(param_2, param_2->field_0x58);
+    param_1->mPostSRTCenter = JSUConvertOffsetToPtr<BE(Vec)>(param_2, param_2->field_0x4c);
+    param_1->field_0x4c = JSUConvertOffsetToPtr<BE(f32)>(param_2, param_2->field_0x50);
+    param_1->field_0x50 = JSUConvertOffsetToPtr<BE(s16)>(param_2, param_2->field_0x54);
+    param_1->field_0x54 = JSUConvertOffsetToPtr<BE(f32)>(param_2, param_2->field_0x58);
     switch (param_2->field_0x5c) {
     case 0:
     case 1:
@@ -596,7 +596,7 @@ void J3DAnmKeyLoader_v15::setAnmColor(J3DAnmColorKey* param_1, const J3DAnmColor
     param_1->mColorB = JSUConvertOffsetToPtr<s16>(param_2, param_2->mBValOffset);
     param_1->mColorA = JSUConvertOffsetToPtr<s16>(param_2, param_2->mAValOffset);
     param_1->mUpdateMaterialID =
-        JSUConvertOffsetToPtr<u16>(param_2, param_2->mUpdateMaterialIDOffset);
+        JSUConvertOffsetToPtr<BE(u16)>(param_2, param_2->mUpdateMaterialIDOffset);
     param_1->mUpdateMaterialName.setResource(
         JSUConvertOffsetToPtr<ResNTAB>(param_2, param_2->mNameTabOffset));
 }
