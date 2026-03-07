@@ -510,10 +510,6 @@ extern "C" void JUTReportConsole_f_va(const char* fmt, va_list args) {
         len = vsnprintf(buf, sizeof(buf), fmt, args);
         JUTGetReportConsole()->print(buf);
     }
-
-    #if TARGET_PC
-    DuskLog.info("{}", buf);
-    #endif
 }
 
 extern "C" void JUTReportConsole_f(const char* fmt, ...) {
