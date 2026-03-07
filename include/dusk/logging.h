@@ -2,10 +2,12 @@
 #define DUSK_LOGGING_H
 
 #include <aurora/aurora.h>
-
-#define STUB_LOG(v) puts(__FUNCTION__ " is a stub")
+#include <aurora/lib/logging.hpp>
 
 void aurora_log_callback(AuroraLogLevel level, const char* module, const char* message, unsigned int len);
 
-#define DUSK_DEBUG()
+extern aurora::Module DuskLog;
+
+#define STUB_LOG(v) DuskLog.debug(__FUNCTION__ " is a stub")
+
 #endif

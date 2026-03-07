@@ -9,6 +9,7 @@
 #include "f_pc/f_pc_node.h"
 #include "f_pc/f_pc_pause.h"
 #include <cstdio>
+#include "dusk/logging.h"
 
 int fpcDw_Execute(base_process_class* i_proc) {
     if (!fpcPause_IsEnable(i_proc, 2)) {
@@ -35,13 +36,13 @@ int fpcDw_Execute(base_process_class* i_proc) {
 int fpcDw_Handler(fpcDw_HandlerFuncFunc i_iterHandler, fpcDw_HandlerFunc i_func) {
     static int sDwLogCount = 0;
     int ret;
-    if (sDwLogCount < 5) { printf("[DIAG] fpcDw_Handler: before BeforeOfDraw\n"); fflush(stdout); }
+    if (sDwLogCount < 5) { DuskLog.debug("fpcDw_Handler: before BeforeOfDraw"); }
     cAPIGph_BeforeOfDraw();
-    if (sDwLogCount < 5) { printf("[DIAG] fpcDw_Handler: before draw iteration\n"); fflush(stdout); }
+    if (sDwLogCount < 5) { DuskLog.debug("fpcDw_Handler: before draw iteration"); }
     ret = i_iterHandler(i_func);
-    if (sDwLogCount < 5) { printf("[DIAG] fpcDw_Handler: before AfterOfDraw\n"); fflush(stdout); }
+    if (sDwLogCount < 5) { DuskLog.debug("fpcDw_Handler: before AfterOfDraw"); }
     cAPIGph_AfterOfDraw();
-    if (sDwLogCount < 5) { printf("[DIAG] fpcDw_Handler: done\n"); fflush(stdout); }
+    if (sDwLogCount < 5) { DuskLog.debug("fpcDw_Handler: done"); }
     sDwLogCount++;
     return ret;
 }

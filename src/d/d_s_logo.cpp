@@ -23,6 +23,8 @@
 #include "m_Do/m_Do_main.h"
 #include "JSystem/JUtility/JUTConsole.h"
 
+#include "dusk/logging.h"
+
 #if !PLATFORM_GCN
 #include <revolution/os.h>
 #include <revolution/sc.h>
@@ -221,8 +223,7 @@ void dScnLogo_c::checkProgSelect() {
 int dScnLogo_c::draw() {
     static int sDrawLogCount = 0;
     if (sDrawLogCount < 10) {
-        printf("[DIAG] dScnLogo_c::draw: mExecCommand=%d mTimer=%d\n", mExecCommand, mTimer);
-        fflush(stdout);
+        DuskLog.debug("dScnLogo_c::draw: mExecCommand={} mTimer={}", mExecCommand, mTimer);
     }
     cLib_calcTimer<u16>(&mTimer);
     (this->*l_execFunc[mExecCommand])();
@@ -1042,18 +1043,18 @@ static int resLoad(request_of_phase_process_class* i_phase, dScnLogo_c* i_this) 
 int dScnLogo_c::create() {
     static bool sDiagLogged = false;
     if (!sDiagLogged) {
-        printf("[DIAG] dScnLogo_c::create START\n"); fflush(stdout);
+        DuskLog.debug("dScnLogo_c::create START");
     }
     int phase_state = resLoad(&field_0x1c4, this);
     if (!sDiagLogged) {
-        printf("[DIAG] dScnLogo_c::create resLoad=%d (need %d for complete)\n", phase_state, cPhs_COMPLEATE_e); fflush(stdout);
+        DuskLog.debug("dScnLogo_c::create resLoad={} (need {} for complete)", phase_state, fmt::underlying(cPhs_COMPLEATE_e));
         sDiagLogged = true;
     }
     if (phase_state != cPhs_COMPLEATE_e) {
         return phase_state;
     }
 
-    printf("[DIAG] dScnLogo_c::create resLoad COMPLETE, continuing init...\n"); fflush(stdout);
+    DuskLog.debug("dScnLogo_c::create resLoad COMPLETE, continuing init...");
 
     #if PLATFORM_WII
     data_8053a730 = 1;
@@ -1452,7 +1453,7 @@ void dScnLogo_c::dvdDataLoad() {
 }
 
 static int dScnLogo_Create(scene_class* i_this) {
-    printf("[DIAG] dScnLogo_Create: entry i_this=%p\n", i_this); fflush(stdout);
+    DuskLog.debug("[DIAG] dScnLogo_Create: entry i_this={}", (void*)i_this);
     return (new (i_this) dScnLogo_c())->create();
 }
 

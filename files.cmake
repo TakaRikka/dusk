@@ -1321,6 +1321,7 @@ set(DUSK_FILES
         include/dusk/endian_gx.hpp
         src/dusk/asserts.cpp
         src/dusk/imgui.cpp
+        src/dusk/logging.cpp
         src/dusk/stubs.cpp
         src/dusk/endian.cpp
         src/dusk/extras.c

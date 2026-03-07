@@ -10,6 +10,7 @@
 #include "f_pc/f_pc_executor.h"
 #include "f_pc/f_pc_manager.h"
 #include <cstdio>
+#include "dusk/logging.h"
 
 static cPhs_Step fopScnRq_phase_ClearOverlap(scene_request_class* i_sceneReq) {
     return fopOvlpM_ClearOfReq() == 1 ? cPhs_NEXT_e : cPhs_INIT_e;
@@ -20,7 +21,7 @@ static cPhs_Step fopScnRq_phase_Execute(scene_request_class* i_sceneReq) {
     static int sExecLogCount = 0;
     cPhs_Step ret = (cPhs_Step)fpcNdRq_Execute(&i_sceneReq->create_request);
     if (sExecLogCount < 30) {
-        printf("[DIAG] fopScnRq_phase_Execute: ret=%d name=%d\n", ret, i_sceneReq->create_request.name); fflush(stdout);
+        DuskLog.debug("fopScnRq_phase_Execute: ret={} name={}", ret, i_sceneReq->create_request.name);
         sExecLogCount++;
     }
     return ret;

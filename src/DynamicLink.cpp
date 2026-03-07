@@ -12,6 +12,7 @@
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
 #include "os_report.h"
+#include "dusk/logging.h"
 
 DynamicModuleControlBase* DynamicModuleControlBase::mFirst;
 
@@ -185,10 +186,10 @@ static u32 calcSum2(u16 const* data, u32 size) {
 
 bool DynamicModuleControl::do_load() {
     if (mModule != NULL) {
-        printf("[DIAG] DynamicModuleControl::do_load(%s) already loaded\n", mName); fflush(stdout);
+        DuskLog.debug("DynamicModuleControl::do_load({}) already loaded", mName);
         return true;
     }
-    printf("[DIAG] DynamicModuleControl::do_load(%s) loading... sArchive=%p sFileCache=%p\n", mName, sArchive, sFileCache); fflush(stdout);
+    DuskLog.debug("DynamicModuleControl::do_load({}) loading... sArchive={} sFileCache={}", mName, (void*)sArchive, (void*)sFileCache);
     JKRExpHeap* heap = mDoExt_getArchiveHeap();
     s32 i = 0;
     while (true) {
@@ -281,7 +282,7 @@ bool DynamicModuleControl::do_load() {
             break;
         }
     }
-    printf("[DIAG] DynamicModuleControl::do_load(%s) SUCCESS mModule=%p type=%d size=%d\n", mName, mModule, mResourceType, mSize); fflush(stdout);
+    DuskLog.debug("DynamicModuleControl::do_load({}) SUCCESS mModule={} type={} size={}", mName, (void*)mModule, mResourceType, mSize);
     return true;
 }
 

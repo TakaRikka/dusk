@@ -16,6 +16,7 @@
 #endif
 #include <cstdio>
 #include "os_report.h"
+#include "dusk/logging.h"
 
 typedef struct standard_create_request_class {
     /* 0x00 */ create_request base;
@@ -31,7 +32,7 @@ typedef struct standard_create_request_class {
 
 int fpcSCtRq_phase_Load(standard_create_request_class* i_request) {
     int ret = fpcLd_Load(i_request->process_name);
-    printf("[DIAG] fpcSCtRq_phase_Load: procName=%d ret=%d\n", i_request->process_name, ret); fflush(stdout);
+    DuskLog.debug("[DIAG] fpcSCtRq_phase_Load: procName={} ret={}", i_request->process_name, ret);
 
     switch (ret) {
     case cPhs_INIT_e:
@@ -46,18 +47,18 @@ int fpcSCtRq_phase_Load(standard_create_request_class* i_request) {
 }
 
 int fpcSCtRq_phase_CreateProcess(standard_create_request_class* i_request) {
-    printf("[DIAG] fpcSCtRq_phase_CreateProcess: procName=%d\n", i_request->process_name); fflush(stdout);
+    DuskLog.debug("fpcSCtRq_phase_CreateProcess: procName={}", i_request->process_name);
     fpcLy_SetCurrentLayer(i_request->base.layer);
     i_request->base.process =
         fpcBs_Create(i_request->process_name, i_request->base.id, i_request->process_append);
 
     if (i_request->base.process == NULL) {
-        printf("[DIAG] fpcSCtRq_phase_CreateProcess: fpcBs_Create FAILED for procName=%d\n", i_request->process_name); fflush(stdout);
+        DuskLog.debug("fpcSCtRq_phase_CreateProcess: fpcBs_Create FAILED for procName={}", i_request->process_name);
         OS_REPORT("fpcSCtRq_phase_CreateProcess %d\n", i_request->process_name);
         fpcLd_Free(i_request->process_name);
         return cPhs_ERROR_e;
     } else {
-        printf("[DIAG] fpcSCtRq_phase_CreateProcess: fpcBs_Create OK proc=%p\n", i_request->base.process); fflush(stdout);
+        DuskLog.debug("fpcSCtRq_phase_CreateProcess: fpcBs_Create OK proc={}", (void*)i_request->base.process);
         i_request->base.process->create_req = &i_request->base;
         return cPhs_NEXT_e;
     }
@@ -68,7 +69,7 @@ int fpcSCtRq_phase_SubCreateProcess(standard_create_request_class* i_request) {
     int ret = fpcBs_SubCreate(i_request->base.process);
     static int sSubCreateLogCount = 0;
     if (sSubCreateLogCount < 20) {
-        printf("[DIAG] fpcSCtRq_phase_SubCreateProcess: pid=%d procName=%04x ret=%d\n", i_request->base.id, i_request->process_name, ret); fflush(stdout);
+        DuskLog.debug("fpcSCtRq_phase_SubCreateProcess: pid={} procName={:04x} ret={}", i_request->base.id, i_request->process_name, ret);
         sSubCreateLogCount++;
     }
 

@@ -4,6 +4,7 @@
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "m_Do/m_Do_mtx.h"
 #include "global.h"
+#include "dusk/logging.h"
 
 #if WIDESCREEN_SUPPORT
 #define FB_WIDTH  (640)
@@ -97,8 +98,7 @@ public:
 
     static int startFadeOut(int param_0) { return JFWDisplay::getManager()->startFadeOut(param_0); }
     static int startFadeIn(int param_0) { 
-        printf("[DIAG] mDoGph_gInf_c::startFadeIn START\n");
-        fflush(stdout);
+        DuskLog.debug("mDoGph_gInf_c::startFadeIn START");
         return JFWDisplay::getManager()->startFadeIn(param_0); }
     static void setFadeColor(JUtility::TColor& color) { mFader->setColor(color); }
     static void setClearColor(JUtility::TColor color) { JFWDisplay::getManager()->setClearColor(color); }

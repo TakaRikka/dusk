@@ -20,6 +20,7 @@
 #include "d/actor/d_a_grass.h"
 #include "d/d_tresure.h"
 #include <cstring>
+#include "dusk/logging.h"
 
 fapGm_HIO_c::fapGm_HIO_c() {
     mUsingHostIO = true;
@@ -723,8 +724,7 @@ void fapGm_After() {
 void fapGm_Execute() {
     static u32 sExecCount = 0;
     if (sExecCount < 10 || (sExecCount % 300 == 0)) {
-        printf("[DIAG] fapGm_Execute frame=%d\n", sExecCount);
-        fflush(stdout);
+        DuskLog.debug("fapGm_Execute frame={}", sExecCount);
     }
     sExecCount++;
 

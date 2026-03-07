@@ -13,6 +13,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_mtx.h"
+#include "dusk/logging.h"
 
 class dDlst_2Dm_c {
 public:
@@ -875,9 +876,8 @@ dDlst_2D_c::dDlst_2D_c(ResTIMG* i_timg, s16 i_posX, s16 i_posY, s16 i_sizeX, s16
 void dDlst_2D_c::draw() {
     static int s2DDrawLogCount = 0;
     if (s2DDrawLogCount < 10) {
-        printf("[DIAG] dDlst_2D_c::draw: pos=(%d,%d) size=(%d,%d) alpha=%d\n",
+        DuskLog.debug("dDlst_2D_c::draw: pos=({},{}) size=({},{}) alpha={}",
                mPosX, mPosY, mSizeX, mSizeY, mAlpha);
-        fflush(stdout);
         s2DDrawLogCount++;
     }
     mpPicture.setAlpha(mAlpha);

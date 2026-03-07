@@ -46,7 +46,6 @@
 #include "SSystem/SComponent/c_API.h"
 #include "dusk/dvd_emu.h"
 #include "dusk/dusk.h"
-#include "dusk/config.h"
 #include "dusk/logging.h"
 
 #include <aurora/aurora.h>
@@ -66,8 +65,6 @@ const int audioHeapSize = 0x14D800 * 2;
 #else
 const int audioHeapSize = 0x14D800;
 #endif
-
-DuskConfig duskConfig{};
 
 // =========================================================================
 // LOAD_COPYDATE - PC Version using DvdEmu
@@ -220,19 +217,19 @@ int game_main(int argc, char* argv[]) {
         exit(1);
     }
 
-    duskConfig = {};
-    duskConfig.appName = "Zelda: Twilight Princess";
-    duskConfig.windowPosX = -1;
-    duskConfig.windowPosY = -1;
-    duskConfig.windowWidth = 608 * 2;
-    duskConfig.windowHeight = 448 * 2;
-    duskConfig.configPath = ".";
-    duskConfig.logCallback = &aurora_log_callback;
-    duskConfig.logLevel = (AuroraLogLevel)parsed_arg_options["log-level"].as<uint8_t>();
-    duskConfig.mem1Size = 256 * 1024 * 1024;
-    duskConfig.mem2Size = 24 * 1024 * 1024;
+    AuroraConfig config{};
+    config.appName = "Zelda: Twilight Princess";
+    config.windowPosX = -1;
+    config.windowPosY = -1;
+    config.windowWidth = 608 * 2;
+    config.windowHeight = 448 * 2;
+    config.configPath = ".";
+    config.logCallback = &aurora_log_callback;
+    config.logLevel = (AuroraLogLevel)parsed_arg_options["log-level"].as<uint8_t>();
+    config.mem1Size = 256 * 1024 * 1024;
+    config.mem2Size = 24 * 1024 * 1024;
 
-    auroraInfo = aurora_initialize(argc, argv, &duskConfig);
+    auroraInfo = aurora_initialize(argc, argv, &config);
 
     OSInit();
 

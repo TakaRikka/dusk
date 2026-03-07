@@ -4,6 +4,7 @@
 #include "JSystem/JUtility/JUTPalette.h"
 #include <gx.h>
 #include "os_report.h"
+#include "dusk/logging.h"
 
 JUTTexture::~JUTTexture() {
     if (getCaptureFlag()) {
@@ -157,9 +158,9 @@ void JUTTexture::initTexObj(GXTlut param_0) {
     mTlutName = param_0;
     u8* image = ((u8*)mTexInfo);
     u32 imgOffset = mTexInfo->imageOffset;
-    printf("[DIAG] initTexObj: Offset=%u, W=%u, H=%u, Ptr=%p\n", imgOffset, mTexInfo->width,
-           mTexInfo->height,
-           mTexInfo);
+    DuskLog.debug("initTexObj: Offset={}, W={}, H={}, Ptr={}", imgOffset, (u16)mTexInfo->width,
+           (u16)mTexInfo->height,
+           (void*)mTexInfo);
     image += (imgOffset ? imgOffset : 0x20);
     GXInitTexObjCI(&mTexObj, image, mTexInfo->width, mTexInfo->height,
                  (GXCITexFmt)mTexInfo->format, (GXTexWrapMode)mWrapS,

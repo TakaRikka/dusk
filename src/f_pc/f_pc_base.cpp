@@ -16,6 +16,7 @@
 #include "f_pc/f_pc_debug_sv.h"
 #include "Z2AudioLib/Z2AudioMgr.h"
 #include <cstdio>
+#include "dusk/logging.h"
 
 #if TARGET_PC
 #include "d/d_procname.h"
@@ -135,13 +136,13 @@ base_process_class* fpcBs_Create(s16 i_profname, fpc_ProcID i_procID, void* i_ap
     u32 size;
 
     pprofile = (process_profile_definition*)fpcPf_Get(i_profname);
-    printf("[DIAG] fpcBs_Create: pid=%d profname=%s (%d) profile=%p procSize=%d unkSize=%d\n",
-           i_procID, getProcName(i_profname), i_profname, pprofile, pprofile->process_size, pprofile->unk_size); fflush(stdout);
+    DuskLog.debug("fpcBs_Create: pid={} profname={} ({}) profile={} procSize={} unkSize={}",
+           i_procID, getProcName(i_profname), i_profname, (void*)pprofile, pprofile->process_size, pprofile->unk_size);
     size = pprofile->process_size + pprofile->unk_size;
 
     pprocess = (base_process_class*)cMl::memalignB(-4, size);
     if (pprocess == NULL) {
-        printf("[DIAG] fpcBs_Create: memalignB FAILED for size=%u\n", size); fflush(stdout);
+        DuskLog.debug("fpcBs_Create: memalignB FAILED for size={}", size);
         return NULL;
     }
 

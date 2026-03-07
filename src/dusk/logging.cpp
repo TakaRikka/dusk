@@ -1,12 +1,9 @@
 #include "dusk/logging.h"
-#include "dusk/config.h"
 #include <cstdio>
 #include <cstdlib>
 
 void aurora_log_callback(AuroraLogLevel level, const char* module, const char* message,
                          unsigned int len) {
-    if (level < duskConfig.logLevel) return;
-
     const char* levelStr = "??";
     FILE* out = stdout;
     switch (level) {
@@ -34,3 +31,5 @@ void aurora_log_callback(AuroraLogLevel level, const char* module, const char* m
         abort();
     }
 }
+
+aurora::Module DuskLog("dusk");

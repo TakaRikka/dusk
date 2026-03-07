@@ -35,6 +35,7 @@
 #include "DynamicLink.h"
 #include <cstring>
 #include "dusk/endian.h"
+#include "dusk/logging.h"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/sc.h>
@@ -1538,7 +1539,7 @@ int mDoGph_Painter() {
     static bool sDiagLoggedWindow = false;
     if (!sDiagLoggedWindow) {
         int wn = dComIfGp_getWindowNum();
-        printf("[DIAG] mDoGph_Painter: windowNum=%d\n", wn); fflush(stdout);
+        DuskLog.debug("mDoGph_Painter: windowNum={}", wn);
         if (wn != 0) sDiagLoggedWindow = true;
     }
 
@@ -2118,8 +2119,7 @@ int mDoGph_Painter() {
         // (needed for logo scene, which has no 3D camera)
         static int sElseLogCount = 0;
         if (sElseLogCount < 10) {
-            printf("[DIAG] mDoGph_Painter else: drawing 2D lists (frame %d)\n", sElseLogCount);
-            fflush(stdout);
+            DuskLog.debug("mDoGph_Painter else: drawing 2D lists (frame {})", sElseLogCount);
             sElseLogCount++;
         }
         ortho.setPort();
