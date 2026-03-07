@@ -824,7 +824,7 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
 
             if (dCam_getBody()->Mode() != 4 && dCam_getBody()->Mode() != 7) {
                 int cam_id = dComIfGp_getPlayerCameraID(0);
-                camera_class* temp_r4 = dComIfGp_getCamera(cam_id);
+                camera_process_class* temp_r4 = dComIfGp_getCamera(cam_id);
                 dAttention_c* attention = dComIfGp_getAttention();
 
                 f32 var_f30;
@@ -842,11 +842,11 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
                     if (atn_actor != NULL) {
                         cXyz sp28;
                         sp28 = atn_actor->eyePos;
-                        if (std::fabs(sp28.y - camera_p->lookat.eye.y) < 400.0f) {
-                            sp28.y = camera_p->lookat.eye.y;
+                        if (std::fabs(sp28.y - camera_p->view.lookat.eye.y) < 400.0f) {
+                            sp28.y = camera_p->view.lookat.eye.y;
                         }
 
-                        var_f29 = atn_actor->current.pos.abs(camera_p->lookat.eye);
+                        var_f29 = atn_actor->current.pos.abs(camera_p->view.lookat.eye);
                         var_f31 = var_f29 / ((SREG_F(2) + 280.0f) * var_f30);
                         var_f31 -= 0.8f;
                         if (var_f31 < 0.0f) {
@@ -1582,14 +1582,14 @@ int mDoGph_Painter() {
     if (dComIfGp_getWindowNum() != 0) {
         dDlst_window_c* window_p = dComIfGp_getWindow(0);
         int camera_id = window_p->getCameraID();
-        camera_class* camera_p = dComIfGp_getCamera(camera_id);
+        camera_process_class* camera_p = dComIfGp_getCamera(camera_id);
 
         if (camera_p != NULL) {
             #if DEBUG
             fapGm_HIO_c::startCpuTimer();
             #endif
 
-            dComIfGd_imageDrawShadow(camera_p->viewMtx);
+            dComIfGd_imageDrawShadow(camera_p->view.viewMtx);
 
             #if DEBUG
             // "drawing Shadow Texture (Rendering)"
@@ -1622,7 +1622,7 @@ int mDoGph_Painter() {
             GXSetScissor(view_port->x_orig, view_port->y_orig, view_port->width,
                          view_port->height);
 
-            JPADrawInfo draw_info(camera_p->viewMtx, camera_p->fovy, camera_p->aspect);
+            JPADrawInfo draw_info(camera_p->view.viewMtx, camera_p->view.fovy, camera_p->view.aspect);
 
             #if WIDESCREEN_SUPPORT
             if (mDoGph_gInf_c::isWideZoom()) {
@@ -1650,17 +1650,17 @@ int mDoGph_Painter() {
             #endif
 
             dComIfGp_setCurrentWindow(window_p);
-            dComIfGp_setCurrentView(camera_p);
+            dComIfGp_setCurrentView(&camera_p->view);
             dComIfGp_setCurrentViewport(view_port);
-            GXSetProjection(camera_p->projMtx, GX_PERSPECTIVE);
+            GXSetProjection(camera_p->view.projMtx, GX_PERSPECTIVE);
             
             #if DEBUG
-            captureScreenSetProjection(camera_p->projMtx);
+            captureScreenSetProjection(camera_p->view.projMtx);
             #endif
 
             PPCSync();
 
-            j3dSys.setViewMtx(camera_p->viewMtx);
+            j3dSys.setViewMtx(camera_p->view.viewMtx);
             dKy_setLight();
             dComIfGd_drawOpaListSky();
             dComIfGd_drawXluListSky();
@@ -1693,7 +1693,7 @@ int mDoGph_Painter() {
             fapGm_HIO_c::startCpuTimer();
             #endif
 
-            dComIfGd_drawShadow(camera_p->viewMtx);
+            dComIfGd_drawShadow(camera_p->view.viewMtx);
 
             #if DEBUG
             // "shadow drawing (Rendering)"
@@ -1756,10 +1756,10 @@ int mDoGph_Painter() {
 
 #if DEBUG
             if (dJcame_c::get()) {
-                dJcame_c::get()->show3D(camera_p->viewMtx);
+                dJcame_c::get()->show3D(camera_p->view.viewMtx);
             }
             if (dJprev_c::get()) {
-                dJprev_c::get()->show3D(camera_p->viewMtx);
+                dJprev_c::get()->show3D(camera_p->view.viewMtx);
             }
 #endif
 
@@ -1768,7 +1768,7 @@ int mDoGph_Painter() {
                 fapGm_HIO_c::startCpuTimer();
                 #endif
 
-                motionBlure(camera_p);
+                motionBlure(&camera_p->view);
 
                 #if DEBUG
                 // "blur filter (Rendering)"
@@ -1777,7 +1777,7 @@ int mDoGph_Painter() {
                 fapGm_HIO_c::startCpuTimer();
                 #endif
 
-                drawDepth2(camera_p, view_port, dComIfGp_getCameraZoomForcus(camera_id));
+                drawDepth2(&camera_p->view, view_port, dComIfGp_getCameraZoomForcus(camera_id));
                 GXInvalidateTexAll();
                 GXSetClipMode(GX_CLIP_ENABLE);
 
@@ -1861,7 +1861,7 @@ int mDoGph_Painter() {
                 fapGm_HIO_c::startCpuTimer();
                 #endif
 
-                retry_captue_frame(camera_p, view_port, dComIfGp_getCameraZoomForcus(camera_id));
+                retry_captue_frame(&camera_p->view, view_port, dComIfGp_getCameraZoomForcus(camera_id));
 
                 #if DEBUG
                 // "Frame Buffer capture 2nd time (Rendering)"
@@ -1896,7 +1896,7 @@ int mDoGph_Painter() {
                 dComIfGd_drawIndScreen();
 
                 if (strcmp(dComIfGp_getStartStageName(), "F_SP124") == 0) {
-                    retry_captue_frame(camera_p, view_port,
+                    retry_captue_frame(&camera_p->view, view_port,
                                        dComIfGp_getCameraZoomForcus(camera_id));
                 }
 
@@ -1913,8 +1913,8 @@ int mDoGph_Painter() {
                 j3dSys.setViewMtx(m2);
                 dComIfGd_drawXluList2DScreen();
 
-                j3dSys.setViewMtx(camera_p->viewMtx);
-                GXSetProjection(camera_p->projMtx, GX_PERSPECTIVE);
+                j3dSys.setViewMtx(camera_p->view.viewMtx);
+                GXSetProjection(camera_p->view.projMtx, GX_PERSPECTIVE);
 
                 #if DEBUG
                 // "drawing up to full projection screen (Rendering)"
@@ -1930,7 +1930,7 @@ int mDoGph_Painter() {
                     u8 enable = mDoGph_gInf_c::getBloom()->getEnable();
                     GXColor color = *mDoGph_gInf_c::getBloom()->getMonoColor();
                     if (color.a != 0 || enable) {
-                        retry_captue_frame(camera_p, view_port,
+                        retry_captue_frame(&camera_p->view, view_port,
                                            dComIfGp_getCameraZoomForcus(camera_id));
                     }
                 }
@@ -1943,14 +1943,14 @@ int mDoGph_Painter() {
                 #endif
 
                 mDoGph_gInf_c::getBloom()->draw();
-                j3dSys.setViewMtx(camera_p->viewMtx);
-                GXSetProjection(camera_p->projMtx, GX_PERSPECTIVE);
+                j3dSys.setViewMtx(camera_p->view.viewMtx);
+                GXSetProjection(camera_p->view.projMtx, GX_PERSPECTIVE);
 
                 #if DEBUG
                 if (g_kankyoHIO.navy.field_0x30d != 0 && dKy_darkworld_check() == TRUE) {
                     dComIfGd_drawOpaListDark();
                     dComIfGd_drawXluListDark();
-                    retry_captue_frame(camera_p, view_port,
+                    retry_captue_frame(&camera_p->view, view_port,
                                        dComIfGp_getCameraZoomForcus(camera_id));
                     dComIfGd_drawOpaListInvisible();
                     dComIfGd_drawXluListInvisible();
@@ -1986,7 +1986,7 @@ int mDoGph_Painter() {
                     dComIfGp_particle_draw2Dgame(&draw_info2);
                 }
 
-                trimming(camera_p, view_port);
+                trimming(&camera_p->view, view_port);
 
                 if (strcmp(dComIfGp_getStartStageName(), "F_SP127") != 0 &&
                     (mDoGph_gInf_c::isFade() & 0x80) == 0)

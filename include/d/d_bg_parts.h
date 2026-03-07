@@ -189,7 +189,7 @@ public:
     };
 
     dBgp_c();
-    ~dBgp_c();
+    ~dBgp_c() {}
 
     void create(s8, void*);
     int remove();

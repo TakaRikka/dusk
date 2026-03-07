@@ -2345,13 +2345,13 @@ static void action(npc_ne_class* i_this) {
         } else if (!i_this->mNoFollow) {
             if (i_this->mDistToTarget > 700.0f && fopAcM_CheckCondition(_this, 4)
                                              && player->speedF > 2.0f) {
-                camera_class* camera = dComIfGp_getCamera(0);
-                vec1.x = camera->lookat.eye.x - camera->lookat.center.x;
-                vec1.z = camera->lookat.eye.z - camera->lookat.center.z;
+                camera_process_class* camera = dComIfGp_getCamera(0);
+                vec1.x = camera->view.lookat.eye.x - camera->view.lookat.center.x;
+                vec1.z = camera->view.lookat.eye.z - camera->view.lookat.center.z;
                 mDoMtx_YrotS(*calc_mtx, cM_atan2s(vec1.x, vec1.z));
                 vec1.set(0.0f, -50.0f, 100.0f);
                 MtxPosition(&vec1, &vec2);
-                vec2 += camera->lookat.eye;
+                vec2 += camera->view.lookat.eye;
                 dBgS_ObjGndChk_Spl gnd_chk_spl;
                 gnd_chk_spl.SetPos(&vec2);
                 f32 cross = dComIfG_Bgsp().GroundCross(&gnd_chk_spl);
@@ -2603,7 +2603,7 @@ static void action(npc_ne_class* i_this) {
 static void demo_camera(npc_ne_class* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     if (i_this->mDemoTimer != 0) {
         i_this->mDemoTimer--;

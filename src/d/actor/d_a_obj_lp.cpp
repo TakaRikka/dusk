@@ -197,10 +197,10 @@ static int set_out_check(obj_lp_class* i_this, cXyz* param_2) {
         return 1;
     }
 
-    camera_class* camera = dComIfGp_getCamera(0);
-    sp3c = camera->lookat.center - camera->lookat.eye;
+    camera_process_class* camera = dComIfGp_getCamera(0);
+    sp3c = camera->view.lookat.center - camera->view.lookat.eye;
     s16 sVar1 = cM_atan2s(sp3c.x, sp3c.z);
-    sp3c = *param_2 - camera->lookat.eye;
+    sp3c = *param_2 - camera->view.lookat.eye;
     s16 sVar2 = cM_atan2s(sp3c.x, sp3c.z);
     s16 diff = sVar1 - sVar2;
 
@@ -242,12 +242,12 @@ static int daObj_Lp_Execute(obj_lp_class* i_this) {
         }
     }
 
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     wd_ss* WdSs = i_this->mWdSs;
     for (int i = 0; i < i_this->field_0xad98; i++, WdSs++) {
         if ((i_this->field_0x574 + i & 0x1f) == 0) {
-            f32 fVar1 = WdSs->field_0x10.x - camera->lookat.eye.x;
-            f32 fVar2 = WdSs->field_0x10.z - camera->lookat.eye.z;
+            f32 fVar1 = WdSs->field_0x10.x - camera->view.lookat.eye.x;
+            f32 fVar2 = WdSs->field_0x10.z - camera->view.lookat.eye.z;
             fVar1 = JMAFastSqrt(fVar1 * fVar1 + fVar2 * fVar2);
             if (fVar1 < 5000.0f) {
                 WdSs->field_0x4f = 0;

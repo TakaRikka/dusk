@@ -2869,8 +2869,8 @@ static void cam_spd_set(b_gnd_class* i_this) {
 static void demo_camera(b_gnd_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     daPy_py_c* player = (daPy_py_c *)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* camera0 = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera0 = dComIfGp_getCamera(0);
     mant_class* mant_p = (mant_class*)fopAcM_SearchByID(i_this->mMantChildID);
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
 

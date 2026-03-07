@@ -1116,7 +1116,7 @@ bool daB_DS_c::mCutTypeCheck() {
 }
 
 bool daB_DS_c::startDemoCheck() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     if (daPy_py_c::checkNowWolf()) {
         return false;
@@ -1159,7 +1159,7 @@ bool daB_DS_c::doYoMessage() {
 }
 
 void daB_DS_c::executeOpeningDemo() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daPy_py_c* pla = daPy_getPlayerActorClass();
 
     dBgS_GndChk gnd_chk;
@@ -1856,7 +1856,7 @@ void daB_DS_c::damageSet() {
 }
 
 void daB_DS_c::damageHitCamera() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz offset, pos;
 
     mDoMtx_YrotS(*calc_mtx, field_0x7d0);
@@ -1947,7 +1947,7 @@ void daB_DS_c::executeDamage() {
     static u16 eff_spHit_id[2] = {0x8BD9, 0x8BDA};
     static u16 eff_LastSmoke_id[4] = {0x8C25, 0x8C26, 0x8C27, 0x8C28};
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daPy_py_c* pla = daPy_getPlayerActorClass();
     csXyz angle = shape_angle;
     cXyz sp1BC, sp1B0;
@@ -2547,7 +2547,7 @@ void daB_DS_c::executeBreathSearch() {
 }
 
 void daB_DS_c::executeBattle2OpeningDemo() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daPy_py_c* pla = daPy_getPlayerActorClass();
     cXyz vec, center, eye, unused;
     center.zero();
@@ -2958,11 +2958,11 @@ void daB_DS_c::mSetFirstPos() {
 }
 
 bool daB_DS_c::mChkScreenIn() {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     cXyz vec1, vec2;
 
-    vec2 = camera->lookat.eye - camera->lookat.center;
-    vec1 = camera->lookat.eye - current.pos;
+    vec2 = camera->view.lookat.eye - camera->view.lookat.center;
+    vec1 = camera->view.lookat.eye - current.pos;
     return abs((s16)(vec1.atan2sX_Z() - vec2.atan2sX_Z())) < 0x3000;
 }
 
@@ -3253,7 +3253,7 @@ void daB_DS_c::executeBattle2Tired() {
 }
 
 void daB_DS_c::executeBattle2Damage() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daPy_py_c* pla = daPy_getPlayerActorClass();
 
     JPABaseEmitter* emitter;
@@ -3633,7 +3633,7 @@ void daB_DS_c::executeBattle2Dead() {
     };
     static u16 eff_Demo_sasi_id[2] = {0x8BF8, 0x8BF9};
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     csXyz particle_angle = shape_angle;
     cXyz mae, ato;
     cXyz particle_scale(1.5f, 1.5f, 1.5f);

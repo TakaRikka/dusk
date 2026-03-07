@@ -25,7 +25,6 @@ class CPaneMgrAlpha;
  */
 class daTitle_c : public fopAc_ac_c {
 public:
-    //daTitle_c() {}
     int CreateHeap();
     int create();
     static int createHeapCallBack(fopAc_ac_c*);
@@ -47,6 +46,10 @@ public:
     int Draw();
     int Delete();
 
+    #if VERSION == VERSION_SHIELD_DEBUG
+    void KeyWaitPosMove();
+    #endif
+
 private:
     /* 0x568 */ request_of_phase_process_class mPhaseReq;
     /* 0x570 */ JKRHeap* mpHeap;
@@ -60,11 +63,11 @@ private:
     /* 0x5E4 */ dDlst_daTitle_c mTitle;
     /* 0x5EC */ JUTFont* mpFont;
     /* 0x5F0 */ u8 field_0x5f0[8];
-    /* 0x5F8 */ u8 field_0x5f8;
+    /* 0x5F8 */ u8 mIsDispLogo;
     /* 0x5F9 */ u8 field_0x5f9;
     /* 0x5FA */ u8 field_0x5fa;
     /* 0x5FB */ u8 mProcID;
-    /* 0x5FC */ u8 field_0x5fc;
+    /* 0x5FC */ u8 mWaitTimer;
     /* 0x600 */ CPaneMgrAlpha* field_0x600;
     /* 0x604 */ u8 field_0x604;
 };  // Size: 0x608

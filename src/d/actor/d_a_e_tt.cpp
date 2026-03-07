@@ -1078,7 +1078,7 @@ void daE_TT_c::action() {
     mSound.setLinkSearch(linkSearch);
     if (mAction != ACTION_DEATH && !fopAcM_CheckCondition(this, fopAcCnd_NODRAW_e)) {
         dBgS_LinChk linChk;
-        linChk.Set(&dComIfGp_getCamera(0)->lookat.eye, &attention_info.position, this);
+        linChk.Set(&dComIfGp_getCamera(0)->view.lookat.eye, &attention_info.position, this);
         if (dComIfG_Bgsp().LineCross(&linChk)) {
             attention_info.flags = 0;
         } else {

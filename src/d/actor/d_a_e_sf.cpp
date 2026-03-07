@@ -1364,7 +1364,7 @@ static void anm_se_set(e_sf_class* i_this) {
 static void demo_camera(e_sf_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     dComIfGp_getCamera(0);
     cXyz sp30, sp3c, sp48, sp54;
     s8 sVar1 = 0;

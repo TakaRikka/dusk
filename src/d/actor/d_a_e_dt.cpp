@@ -1417,7 +1417,7 @@ void daE_DT_c::executeBombDamage() {
 
 void daE_DT_c::executeDeath() {
     cXyz player_pos(0.0f, 0.0f, 450.0f);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz offset, disappear_pos;
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -1941,7 +1941,7 @@ void daE_DT_c::calcCamera() {
     dBgS_LinChk lin_chk;
     cXyz start, end, offset_pos, offset;
     cXyz player_pos = daPy_getPlayerActorClass()->current.pos;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz cam_center, vec, cam_eye;
     s16 angle;
 

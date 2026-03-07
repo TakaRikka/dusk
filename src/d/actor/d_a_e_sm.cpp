@@ -1373,7 +1373,7 @@ bool daE_SM_c::CheckViewArea() {
 }
 
 bool daE_SM_c::CameraSet() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     dCamera_c* camBody = dCam_getBody();
     bool rv;
 
@@ -1396,7 +1396,7 @@ bool daE_SM_c::CameraSet() {
 }
 
 void daE_SM_c::SetStopCam(cXyz param_1, f32 param_2, f32 param_3, s16 param_4) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz sp28(0.0f, param_3, param_2);
     cXyz eye(0.0f, 0.0f, 0.0f);
 
@@ -1414,12 +1414,12 @@ void daE_SM_c::SetCMoveCam(cXyz param_1, f32 i_scale, f32 i_maxStep) {
 }
 
 void daE_SM_c::SetStopingCam() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Set(mDemoCamCenter, mDemoCamEye, mFovy, 0);
 }
 
 void daE_SM_c::SetReleaseCam() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     camera->mCamera.Reset(mDemoCamCenter, mDemoCamEye);
     camera->mCamera.Start();

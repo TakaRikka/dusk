@@ -1158,7 +1158,7 @@ static void* s_child_sub(void* i_actor, void* i_data) {
 }
 
 void daE_SW_c::executeMaster() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x100);
     attention_info.flags = 0;
@@ -2106,7 +2106,7 @@ bool daE_SW_c::d_chaseCheck() {
         }
     }
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     
     s16 sVar1 = cLib_distanceAngleS(fopCamM_GetAngleY(camera), field_0x6cc);
     if (bVar1 || (sVar1 > 0x6000 && (abs((s16)(current.angle.y - field_0x6cc)) < 0x2000 || 

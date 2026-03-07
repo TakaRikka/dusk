@@ -1944,7 +1944,7 @@ void daE_OC_c::executeDemoMaster() {
     cXyz my_vec_1(16200.0f, 2850.0f, 7000.0f);
     my_vec_1 += my_vec_0;
     mPrevShapeAngle = shape_angle.y;
-    camera_class* p_camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* p_camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     switch (mOcState) {
         case 0:
             mHide = false;
@@ -2585,7 +2585,7 @@ int daE_OC_c::execute() {
     if (field_0x6c8) {
         --field_0x6c8;
         if (field_0x6c8 == 0) {
-            camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+            camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
             mPlayerPos = daPy_getPlayerActorClass()->current.pos;
             mPlayerPos.y += 500.0f;
             field_0x704 = 55.0f;

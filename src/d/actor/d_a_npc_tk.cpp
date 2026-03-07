@@ -2854,7 +2854,7 @@ void daNPC_TK_c::checkActionSet() {
     }
 
     if (mFlags & 0x1) {
-        camera_class* cam = dComIfGp_getCamera(0);
+        camera_process_class* cam = dComIfGp_getCamera(0);
         field_0x69e = -fopCamM_GetAngleX(cam);
         setActionMode(3);
         mFlags ^= (u16)0x1;

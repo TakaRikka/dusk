@@ -3346,7 +3346,7 @@ void daKago_c::setDamageEffect() {
 void daKago_c::setDashBlurEffect(int param_0) {
     UNUSED(param_0);
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz cameraEye = dCam_getBody()->Eye();
     cXyz cameraEyeOffset;
     cXyz local_78;

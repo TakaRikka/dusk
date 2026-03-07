@@ -67,7 +67,7 @@ int ShopCam_action_c::shop_cam_action_init() {
 }
 
 int ShopCam_action_c::shop_cam_action() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Stay();
     camera->mCamera.SetTrimSize(1);
 
@@ -131,7 +131,7 @@ int ShopCam_action_c::shop_cam_action() {
 }
 
 void ShopCam_action_c::Save() {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     if (camera != NULL) {
         field_0x98 = *fopCamM_GetCenter_p(camera);
         field_0xa4 = *fopCamM_GetEye_p(camera);
@@ -150,7 +150,7 @@ void ShopCam_action_c::Reset() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     player->offPlayerNoDraw();
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Set(field_0x98, field_0xa4, field_0xbc, 0);
     camera->mCamera.Stay();
     camera->mCamera.Reset(field_0x98, field_0xa4, field_0xbc, 0);

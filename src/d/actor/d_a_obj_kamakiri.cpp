@@ -518,7 +518,7 @@ void daObjKAM_c::Z_BufferChk() {
     currentOffset = current.pos;
     currentOffset.y += 20.0f;
     mDoLib_project(&currentOffset, &currentProj);
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     f32 cameraHeight;
     if (camera != NULL) {
         cameraHeight = camera->mCamera.TrimHeight();

@@ -746,7 +746,7 @@ void daObjIceBlk_c::actionWait() {
 }
 
 void daObjIceBlk_c::actionOrderEvent() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     if (eventInfo.checkCommandDemoAccrpt()) {
         setAction(ACTION_EVENT_e);
@@ -761,7 +761,7 @@ void daObjIceBlk_c::actionOrderEvent() {
 }
 
 void daObjIceBlk_c::actionEvent() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     if (mMode != MODE_PROC_WALK_e) {
         camera->mCamera.Start();

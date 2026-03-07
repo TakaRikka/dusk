@@ -708,13 +708,13 @@ BOOL daNbomb_c::procExplodeInit() {
 }
 
 BOOL daNbomb_c::procExplode() {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     f32 dist_scale = 0.0f;
 
     mLightInfluence.mPow = mExplosionStrength * 1500.0f;
     mWindInfluence.mStrength = mExplosionStrength;
 
-    f32 dist_to_cam = current.pos.abs(camera->lookat.eye);
+    f32 dist_to_cam = current.pos.abs(camera->view.lookat.eye);
     if (dist_to_cam < 1500.0f) {
         dist_scale = dist_to_cam / 1500.0f;
         dist_scale *= dist_scale * dist_scale;

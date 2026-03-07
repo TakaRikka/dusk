@@ -182,7 +182,7 @@ void daAlink_c::preKandelaarDraw() {
     cXyz proj;
     mDoLib_project(&mKandelaarFlamePos, &proj);
 
-    camera_class* camera_p = dComIfGp_getCamera(0);
+    camera_process_class* camera_p = dComIfGp_getCamera(0);
     f32 trimHeight;
     if (camera_p != NULL) {
         trimHeight = camera_p->mCamera.TrimHeight();

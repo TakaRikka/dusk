@@ -2201,7 +2201,7 @@ void daHorse_c::setMatrix() {
 }
 
 void daHorse_c::setDashEffect(u32* i_emitterID) {
-    camera_class* camera_p = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera_p = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz* eye_p = fopCamM_GetEye_p(camera_p);
 
     if (eye_p->abs(current.pos) > 1200.0f) {

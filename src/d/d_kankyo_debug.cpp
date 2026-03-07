@@ -495,7 +495,7 @@ void dKydb_HIO_debug_TVdsp(f32 param_0, f32 param_1, int param_2, int param_3, u
 
 void dKydb_HIO_debug_Wind() {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
 
     f32 substick_x = mDoCPd_c::getSubStickX(PAD_3);
     f32 substick_y = mDoCPd_c::getSubStickY(PAD_3);
@@ -539,7 +539,7 @@ void dKydb_HIO_debug_draw() {
     cXyz pos;
     cXyz size;
 
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     dKy_set_eyevect_calc2(camera, &pos, 200.0f, 200.0f);
 
     s16 var_r30 = g_kankyoHIO.light.field_0x5c;
@@ -561,7 +561,7 @@ void dKydb_HIO_debug_draw() {
 void dKydb_HIO_winddebug_draw() {
     cXyz size;
     csXyz rot;
-    camera_class* temp_r31 = dComIfGp_getCamera(0);
+    camera_process_class* temp_r31 = dComIfGp_getCamera(0);
     cXyz pos;
 
     if (!mDoCPd_c::getHoldB(PAD_3)) {
@@ -591,7 +591,7 @@ void dKydb_winddisp_draw() {
     csXyz rot;
     cXyz pos;
 
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     dKy_set_eyevect_calc2(camera, &pos, 200.0f, 200.0f);
 
     if (g_kankyoHIO.wind.display_wind_dir == TRUE) {
@@ -787,7 +787,7 @@ void dKydb_plight_monitor() {
 
 void dKydb_dungeonlight_draw() {
     cXyz proj;
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     int i;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
@@ -946,7 +946,7 @@ void dKydb_dungeonlight_draw() {
             if ((g_kankyoHIO.dungeonLight.field_0x8 - 1) == i) {
                 g_env_light.dungeonlight[i].mPosition = player->current.pos;
             } else if (g_kankyoHIO.dungeonLight.field_0x8 == i + 160) {
-                g_env_light.dungeonlight[i].mPosition = camera->lookat.center;
+                g_env_light.dungeonlight[i].mPosition = camera->view.lookat.center;
             }
         }
     }

@@ -100,7 +100,7 @@ int daObjCRVGATE_c::checkOpen() {
 }
 
 void daObjCRVGATE_c::actionStartEvent() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     dCamera_c* camera_body = dCam_getBody();
 
     if (!eventInfo.checkCommandDemoAccrpt()) {
@@ -173,7 +173,7 @@ void daObjCRVGATE_c::actionDemoEvent() {
         ANGLE_ADD(mMoveAngle.z, 0x300);
         if (mDoorOpenAngle.x == 0x4000) {
             mEventID = 3;
-            camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+            camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
             camera->mCamera.Reset(mCamCenter, mCamEye);
             camera->mCamera.Start();

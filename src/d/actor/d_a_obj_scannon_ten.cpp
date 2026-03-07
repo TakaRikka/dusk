@@ -410,7 +410,7 @@ void daObjSCannonTen_c::initEmtLine() {
     cXyz pos;
     csXyz rot;
 
-    camera_class* camera_p = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera_p = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     if (camera_p != NULL) {
         pos = *fopCamM_GetEye_p(camera_p);
         rot.set(dCam_getAngleX(camera_p), dCam_getAngleY(camera_p), 0);
@@ -423,7 +423,7 @@ void daObjSCannonTen_c::exeEmtLine() {
     cXyz pos;
     JGeometry::TVec3<s16> rot;
     if (mpEmtLine != NULL) {
-        camera_class* camera_p = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+        camera_process_class* camera_p = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
         if (camera_p != NULL) {
             pos = *fopCamM_GetEye_p(camera_p);
             rot.x = dCam_getAngleX(camera_p);

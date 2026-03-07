@@ -218,7 +218,7 @@ void dRes_info_c::setWarpSRT(J3DModelData* i_modelData, const cXyz& i_pos, f32 i
     texMtxInfo.mSRT.mTranslationY = i_transY;
 
     mDoMtx_stack_c::transS(-i_pos.x, -i_pos.y, -i_pos.z);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     mDoMtx_stack_c::YrotM(fopCamM_GetAngleY(camera));
     cMtx_concat(l_texMtxInfo.mEffectMtx, mDoMtx_stack_c::get(), texMtxInfo.mEffectMtx);
 }

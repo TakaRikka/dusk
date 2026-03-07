@@ -1088,7 +1088,7 @@ static void cam_spd_set(e_rdb_class* i_this) {
 static void demo_camera(e_rdb_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->enemy;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz sp28, sp34, sp40, sp4c;
     s8 sVar1 = 0;
 

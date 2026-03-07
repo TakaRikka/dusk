@@ -277,8 +277,8 @@ static void sc_move(obj_sw_class* i_this) {
 static void demo_camera(obj_sw_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* zero_camera_p = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* zero_camera_p = dComIfGp_getCamera(0);
     cXyz sp24, sp30;
 
     switch (i_this->mDemoMode) {

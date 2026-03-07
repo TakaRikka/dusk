@@ -1384,7 +1384,7 @@ void daB_DR_c::executeFlyWait() {
 
 void daB_DR_c::executeTailHit() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz mae;
     cXyz ato;
 
@@ -3025,14 +3025,14 @@ void daB_DR_c::executePillarWait() {
 }
 
 bool daB_DR_c::startDemoCheck() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* camera0 = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera0 = dComIfGp_getCamera(0);
 
     if (!eventInfo.checkCommandDemoAccrpt()) {
         fopAcM_orderPotentialEvent(this, 2, 0xFFFF, 0);
         eventInfo.onCondition(2);
-        mDemoCamEye = camera0->lookat.eye;
-        mDemoCamCenter = camera0->lookat.center;
+        mDemoCamEye = camera0->view.lookat.eye;
+        mDemoCamCenter = camera0->view.lookat.center;
         return false;
     } else {
         camera->mCamera.Stop();
@@ -3043,7 +3043,7 @@ bool daB_DR_c::startDemoCheck() {
 }
 
 void daB_DR_c::executeDamageDemo() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz unused;
     cXyz unused2;
@@ -3238,7 +3238,7 @@ void daB_DR_c::executeDamageDemo() {
 }
 
 void daB_DR_c::executeMiddleDemo() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz unused;
     cXyz unused2;
@@ -3269,7 +3269,7 @@ void daB_DR_c::executeMiddleDemo() {
 }
 
 void daB_DR_c::executeDead() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz unused;
     cXyz unused2;
@@ -3351,7 +3351,7 @@ void daB_DR_c::executeBullet() {
 }
 
 void daB_DR_c::executeParts() {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     cXyz mae;
     cXyz ato;
 
@@ -3399,7 +3399,7 @@ void daB_DR_c::executeParts() {
         mTimer[0] = 50;
         ANGLE_ADD(current.angle.x, cM_rndFX(16384.0f));
 
-        mae = camera->lookat.center - current.pos;
+        mae = camera->view.lookat.center - current.pos;
         current.angle.y = mae.atan2sX_Z();
         ANGLE_ADD(current.angle.y, cM_rndFX(16384.0f));
 
@@ -3813,7 +3813,7 @@ void daB_DR_c::down_cc_set() {
 void daB_DR_c::demo_skip(int) {
     fopAc_ac_c* parent;
     if (cDmr_SkipInfo == 0 && fopAcM_SearchByID(parentActorID, &parent) && parent != NULL) {
-        camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+        camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
         dStage_changeScene(1, 0.0f, 0, fopAcM_GetRoomNo(this), 0, -1);
         Z2GetAudioMgr()->subBgmStop();
         dKy_getEnvlight()->wether = 1;

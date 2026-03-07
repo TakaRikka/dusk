@@ -1324,7 +1324,7 @@ void daB_ZANT_c::executeConfuse() {
 }
 
 void daB_ZANT_c::executeOpening() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     cXyz sp34(0.0f, 0.0f, 0.0f);

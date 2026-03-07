@@ -1195,8 +1195,8 @@ static void fish_set(b_bq_class* i_this) {
 
 static void demo_camera(b_bq_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* camera0 = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera0 = dComIfGp_getCamera(0);
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     fopAc_ac_c* tentacle = fopAcM_SearchByID(i_this->mTentacleIDs[i_this->field_0x123c]);
     e_mb_class* monkeybomb = (e_mb_class*)fopAcM_SearchByID(i_this->mMonkeyBombID);
@@ -1420,8 +1420,8 @@ static void demo_camera(b_bq_class* i_this) {
 
         daPy_getPlayerActorClass()->changeOriginalDemo();
 
-        i_this->mDemoCamEye = camera0->lookat.eye;
-        i_this->mDemoCamCenter = camera0->lookat.center;
+        i_this->mDemoCamEye = camera0->view.lookat.eye;
+        i_this->mDemoCamCenter = camera0->view.lookat.center;
 
         dComIfGp_getEvent()->startCheckSkipEdge(a_this);
         // fallthrough

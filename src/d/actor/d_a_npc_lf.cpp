@@ -202,15 +202,15 @@ static void action(fopAc_ac_c* param_0, lf_s* pFish) {
 
 static int daNPC_LF_Execute(npc_lf_class* i_this2) {
     npc_lf_class* i_this = (npc_lf_class*) i_this2;
-    view_class* camera;
+    camera_class* camera;
     lf_s* fish;
     cXyz pos;
     cXyz pos2;
     camera = dComIfGp_getCamera(0);
     fish = i_this->mFish;
     for (int i = 0; i < i_this->mIter; i++, fish++) {
-        pos.x = fish->mPos.x - camera->lookat.eye.x;
-        pos.z = fish->mPos.z - camera->lookat.eye.z;
+        pos.x = fish->mPos.x - camera->view.lookat.eye.x;
+        pos.z = fish->mPos.z - camera->view.lookat.eye.z;
 
         if (JMAFastSqrt((pos.x * pos.x) + (pos.z * pos.z)) < 1500.0f) {
             fish->field_0x17 = 0;

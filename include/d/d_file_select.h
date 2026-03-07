@@ -452,10 +452,14 @@ public:
     void errorMsgCheck();
     #endif
 
-    bool getFadeFlag() { return mFadeFlag; }
+    void draw() {
+        _draw();
+    }
+
+    u8 getFadeFlag() { return mFadeFlag; }
     int isDataNew(u8 i) { return mIsDataNew[i]; }
     int isSelectEnd() { return mIsSelectEnd; }
-    u8 getSelectNum() { return mSelectNum; }
+    int getSelectNum() { return mSelectNum; }
     void setUseType(u8 type) { mUseType = type; }
 
     /* 0x0004 */ u8 field_0x04[4];
@@ -663,7 +667,7 @@ public:
     /* 0x03B2 */ u16 field_0x03b2;
     /* 0x03B4 */ s32 field_0x03b4;
     /* 0x03B8 */ SaveDataBuf mSaveData[SAVEDATA_NUM];
-    /* 0x2374 */ bool mFadeFlag;
+    /* 0x2374 */ u8 mFadeFlag;
     /* 0x2375 */ bool mHasDrawn;
 
     #if PLATFORM_GCN

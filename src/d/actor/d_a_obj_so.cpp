@@ -805,7 +805,7 @@ static void part_move(obj_so_class* i_this) {
 
 static void demo_camera(obj_so_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz sp30, sp3c;
 
     switch (i_this->mDemoMode) {

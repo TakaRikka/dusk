@@ -221,9 +221,9 @@ static int dmg_rod_Draw(dmg_rod_class* i_this) {
     } else {
         if (dComIfGp_checkPlayerStatus0(0, 0x2000)) {
             fopAc_ac_c* player = dComIfGp_getPlayer(0);
-            camera_class* camera = dComIfGp_getCamera(0);
-            f32 dx = player->current.pos.x - camera->lookat.eye.x;
-            f32 dz = player->current.pos.z - camera->lookat.eye.z;
+            camera_process_class* camera = dComIfGp_getCamera(0);
+            f32 dx = player->current.pos.x - camera->view.lookat.eye.x;
+            f32 dz = player->current.pos.z - camera->view.lookat.eye.z;
 
             if ((SQUARE(dx) + SQUARE(dz)) < 5000.0f) {
                 return 1;
@@ -1085,9 +1085,9 @@ static void lure_onboat(dmg_rod_class* i_this) {
         i_this->timers[1] = 10;
         i_this->field_0x14f8 = 0;
 
-        camera_class* camera = dComIfGp_getCamera(0);
-        f32 x_delta = camera->lookat.center.x - camera->lookat.eye.x;
-        f32 z_delta = camera->lookat.center.z - camera->lookat.eye.z;
+        camera_process_class* camera = dComIfGp_getCamera(0);
+        f32 x_delta = camera->view.lookat.center.x - camera->view.lookat.eye.x;
+        f32 z_delta = camera->view.lookat.center.z - camera->view.lookat.eye.z;
         i_this->field_0x1418 = cM_atan2s(x_delta, z_delta);
 
         daAlink_getAlinkActorClass()->setCanoeFishingWaitAngle(i_this->field_0x1418);
@@ -1267,7 +1267,7 @@ static int lure_standby(dmg_rod_class* i_this) {
         i_this->action = ACTION_LURE_ONBOAT;
         i_this->play_cam_mode = 0;
 
-        camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+        camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
         camera->mCamera.Reset(i_this->play_cam_center, i_this->play_cam_eye, i_this->play_cam_fovy, 0);
         camera->mCamera.Start();
         camera->mCamera.SetTrimSize(0);
@@ -1301,7 +1301,7 @@ static void lure_cast(dmg_rod_class* i_this) {
         i_this->action = ACTION_LURE_ONBOAT;
         i_this->play_cam_mode = 0;
 
-        camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+        camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
         camera->mCamera.Reset(i_this->play_cam_center, i_this->play_cam_eye, i_this->play_cam_fovy, 0);
         camera->mCamera.Start();
         camera->mCamera.SetTrimSize(0);
@@ -2301,7 +2301,7 @@ static void lure_action(dmg_rod_class* i_this) {
             i_this->play_cam_mode = 20;
             i_this->play_cam_timer = 0;
 
-            camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+            camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
             camera->mCamera.SetTrimSize(1);
 
             i_this->action = ACTION_LURE_BARE;
@@ -2690,7 +2690,7 @@ static void lure_catch(dmg_rod_class* i_this) {
                     i_this->field_0x1418 = daAlink_getAlinkActorClass()->shape_angle.y;
                     i_this->camera_morf_rate = 0.0f;
 
-                    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+                    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
                     camera->mCamera.SetTrimSize(1);
                     daAlink_getAlinkActorClass()->onFishingKeep();
                     data_80450C9B = 2;
@@ -2778,7 +2778,7 @@ static void lure_bare(dmg_rod_class* i_this) {
             i_this->play_cam_mode = 5;
             i_this->camera_morf_rate = 1.0f;
             i_this->field_0x1407 = 110;
-            camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+            camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
             camera->mCamera.SetTrimSize(1);
             i_this->action = ACTION_LURE_ACTION;
             i_this->field_0x1006 = 0;
@@ -2884,7 +2884,7 @@ static void lure_heart(dmg_rod_class* i_this) {
             i_this->field_0x1418 = daAlink_getAlinkActorClass()->shape_angle.y;
             i_this->camera_morf_rate = 0.0f;
 
-            camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+            camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
             camera->mCamera.SetTrimSize(1);
             daAlink_getAlinkActorClass()->onFishingKeep();
 
@@ -4470,8 +4470,8 @@ static void play_camera(dmg_rod_class* i_this) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     fopAc_ac_c* mgfish_a = fopAcM_SearchByID(i_this->mg_fish_id);
     mg_fish_class* mgfish = (mg_fish_class*)mgfish_a;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* camera0 = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera0 = dComIfGp_getCamera(0);
 
     dBgS_GndChk gndChk;
     dBgS_ObjGndChk_Spl sp1F0;
@@ -4531,8 +4531,8 @@ static void play_camera(dmg_rod_class* i_this) {
         i_this->field_0x1428 = 100.0f + WREG_F(1);
 
         sp58 = (camera_class*)dComIfGp_getCamera(0);
-        i_this->field_0x144c = sp58->lookat.eye;
-        i_this->field_0x1458 = sp58->lookat.center;
+        i_this->field_0x144c = sp58->view.lookat.eye;
+        i_this->field_0x1458 = sp58->view.lookat.center;
         i_this->play_cam_eye = i_this->field_0x144c;
         i_this->play_cam_center = i_this->field_0x1458;
 
@@ -4778,8 +4778,8 @@ static void play_camera(dmg_rod_class* i_this) {
         f32 sp2C = -20.0f + (20.0f * cM_ssin(i_this->counter * 700));
         actor->eyePos.y = actor->current.pos.y + sp2C;
         if (TREG_S(7) != 0) {
-            camera_class* sp28 = dComIfGp_getCamera(0);
-            actor->eyePos = sp28->lookat.eye;
+            camera_process_class* sp28 = dComIfGp_getCamera(0);
+            actor->eyePos = sp28->view.lookat.eye;
         }
         i_this->field_0xf78 = 0.05f;
         break;
@@ -4909,9 +4909,9 @@ static void play_camera(dmg_rod_class* i_this) {
         player->changeOriginalDemo();
         player->changeDemoMode(1, 1, 0, 0);
 
-        sp174.x = camera0->lookat.eye.x - camera0->lookat.center.x;
-        sp174.y = camera0->lookat.eye.y - camera0->lookat.center.y;
-        sp174.z = camera0->lookat.eye.z - camera0->lookat.center.z;
+        sp174.x = camera0->view.lookat.eye.x - camera0->view.lookat.center.x;
+        sp174.y = camera0->view.lookat.eye.y - camera0->view.lookat.center.y;
+        sp174.z = camera0->view.lookat.eye.z - camera0->view.lookat.center.z;
 
         i_this->field_0x1400 = cM_atan2s(sp174.x, sp174.z) - player->shape_angle.y;
         if (i_this->field_0x1400 >= 0) {
@@ -4922,7 +4922,7 @@ static void play_camera(dmg_rod_class* i_this) {
 
         i_this->field_0x1404 = -cM_atan2s(sp174.y, JMAFastSqrt(SQUARE(sp174.x) + SQUARE(sp174.z)));
         i_this->field_0x1464 = sp174.abs();
-        i_this->play_cam_center_target = camera0->lookat.center;
+        i_this->play_cam_center_target = camera0->view.lookat.center;
     case 901:
         if (daAlink_getAlinkActorClass()->checkCanoeRide()) {
             fopAc_ac_c* sp24 = fopAcM_SearchByID(i_this->boat_actor_id);
@@ -5300,7 +5300,7 @@ static void play_camera_u(dmg_rod_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     fopAc_ac_c* mgfish_a = fopAcM_SearchByID(i_this->mg_fish_id);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     i_this->field_0x13b0 = i_this->rod_substick_y;
     i_this->field_0x13ac = i_this->rod_substick_x;
@@ -5327,8 +5327,8 @@ static void play_camera_u(dmg_rod_class* i_this) {
         camera_class* sp10 = (camera_class*)dComIfGp_getCamera(0);
         camera->mCamera.SetTrimSize(1);
 
-        i_this->play_cam_eye = sp10->lookat.eye;
-        i_this->play_cam_center = sp10->lookat.center;
+        i_this->play_cam_eye = sp10->view.lookat.eye;
+        i_this->play_cam_center = sp10->view.lookat.center;
         i_this->camera_morf_rate = 1000.0f;
     }
         /* fallthrough */
@@ -6048,7 +6048,7 @@ static int dmg_rod_Execute(dmg_rod_class* i_this) {
 
 static int dmg_rod_IsDelete(dmg_rod_class* i_this) {
     if (i_this->play_cam_mode != 0) {
-        camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+        camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
         camera->mCamera.Reset(i_this->play_cam_center, i_this->play_cam_eye, i_this->play_cam_fovy, 0);
         camera->mCamera.Start();
         camera->mCamera.SetTrimSize(0);

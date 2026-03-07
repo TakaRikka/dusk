@@ -1318,7 +1318,7 @@ void daE_YMB_c::executeGuard() {
 }
 
 void daE_YMB_c::executeSwim() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     s16 camAngleY = (s16) fopCamM_GetAngleY(camera);
     s16 cam_ply_ang_diff = camAngleY - fopAcM_searchPlayerAngleY(this);
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -2064,7 +2064,7 @@ void daE_YMB_c::setCreateDrop() {
 }
 
 void daE_YMB_c::executeDeath() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz sp24, pos;
 
@@ -2209,7 +2209,7 @@ void daE_YMB_c::demo_skip(int param_1) {
             break;
     }
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Reset(mDemoCamCenter, mDemoCamEye);
     camera->mCamera.Start();
     camera->mCamera.SetTrimSize(0);
@@ -2232,7 +2232,7 @@ void daE_YMB_c::calcLakeDemoPlayerPos() {
 }
 
 void daE_YMB_c::executeLakeDemo() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz sp24;
 
@@ -2393,7 +2393,7 @@ void daE_YMB_c::executeLakeDemo() {
 }
 
 void daE_YMB_c::executeStartDemo() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz sp28, sp34;
 
@@ -2593,7 +2593,7 @@ bool daE_YMB_c::checkStartBattleDemo() {
 }
 
 void daE_YMB_c::executeBattleDemo() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz sp1c(player->current.pos);
     cXyz sp28, sp34;

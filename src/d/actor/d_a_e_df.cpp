@@ -90,7 +90,7 @@ void daE_DF_c::SetAnm(int i_index, int i_attr, f32 i_morf, f32 i_rate) {
 }
 
 void daE_DF_c::CameraSet(f32 i_posz) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz center = current.pos;
     center.y += 100.0f;
 
@@ -121,7 +121,7 @@ void daE_DF_c::CameraSet(f32 i_posz) {
 }
 
 bool daE_DF_c::DemoStart() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     dCamera_c* body = dCam_getBody();
 
     if (eventInfo.checkCommandDemoAccrpt() == 0) {
@@ -140,7 +140,7 @@ bool daE_DF_c::DemoStart() {
 }
 
 void daE_DF_c::SetReleaseCam() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Reset(mCenterPos, mEyePos);
     camera->mCamera.Start();
     camera->mCamera.SetTrimSize(0);

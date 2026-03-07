@@ -14,6 +14,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
 #include "m_Do/m_Do_mtx.h"
+#include "m_Do/m_Do_main.h"
 #include "f_op/f_op_overlap_mng.h"
 
 static dSn_HIO_c g_snHIO;
@@ -22,33 +23,33 @@ static dSn_HIO_c g_snHIO;
 static int mBmgStatus;
 #endif
 
-typedef void (dScnName_c::*mainProcFunc)(void);
-static mainProcFunc MainProc[6] = {
-    &dScnName_c::FileSelectOpen,  &dScnName_c::FileSelectMain, &dScnName_c::FileSelectClose,
-    &dScnName_c::brightCheckOpen, &dScnName_c::brightCheck,    &dScnName_c::changeGameScene,
-};
-
 dSn_HIO_c::dSn_HIO_c() {
     mFileSelWaitTime = 15;
 }
 
-static s32 phase_1(char* resName) {
+#if DEBUG
+void dSn_HIO_c::genMessage(JORMContext* mctx) {
+    mctx->genLabel("\n*****表示調整用*****", 0);
+    mctx->genSlider("ファイル選択開始WaitTime", &mFileSelWaitTime, 0, 120);
+}
+#endif
+
+static s32 phase_1(char* i_resName) {
     mDoAud_bgmStart(-1);
-    if (dComIfG_setObjectRes(resName, (u8)0, NULL) == 0) {
+    if (dComIfG_setObjectRes(i_resName, (u8)0, NULL) == 0) {
         return cPhs_ERROR_e;
     }
 
     return cPhs_NEXT_e;
 }
 
-static s32 phase_2(char* resName) {
-    int syncStatus = dComIfG_syncObjectRes(resName);
-
-    if (syncStatus < 0) {
+static s32 phase_2(char* i_resName) {
+    int rt = dComIfG_syncObjectRes(i_resName);
+    if (rt < 0) {
         return cPhs_ERROR_e;
     }
 
-    if (syncStatus > 0) {
+    if (rt > 0) {
         return cPhs_INIT_e;
     } else {
         return cPhs_COMPLEATE_e;
@@ -65,13 +66,19 @@ static s32 resLoad(request_of_phase_process_class* i_phase, char* i_resName) {
 }
 
 s32 dScnName_c::create() {
-    int phase_state = resLoad(&field_0x1c4, "fileSel");
+    int phase_state = resLoad(&phase, "fileSel");
     if (phase_state == cPhs_COMPLEATE_e) {
-        mHeap = JKRExpHeap::create(0x180000, mDoExt_getGameHeap(), false);
+        mHeap = JKRCreateExpHeap(0x180000, mDoExt_getGameHeap(), false);
+        JUT_ASSERT(289, mHeap != NULL);
+
         field_0x1d0 = (JKRExpHeap*)mDoExt_setCurrentHeap(mHeap);
 
-        dRes_info_c* res = dComIfG_getObjectResInfo("fileSel");
-        dFs_c = new dFile_select_c(res->getArchive());
+        dRes_info_c* resInfo = dComIfG_getObjectResInfo("fileSel");
+        JUT_ASSERT(293, resInfo != NULL);
+
+        dFs_c = new dFile_select_c(resInfo->getArchive());
+        JUT_ASSERT(297, dFs_c != NULL);
+
 
         #if VERSION == VERSION_GCN_PAL
         for (int i = 0; i < 5; i++);
@@ -81,41 +88,46 @@ s32 dScnName_c::create() {
 
         if (fpcM_GetName(this) == PROC_NAME_SCENE) {
             dFs_c->setUseType(0);
+
+            #if !PLATFORM_SHIELD
             dComIfGs_setNoFile(0);
+            #endif
         }
 
-        mBrightCheck = new dBrightCheck_c(res->getArchive());
+        mBrightCheck = new dBrightCheck_c(resInfo->getArchive());
 
         field_0x420 = 0;
-        g_snHIO.field_0x4 = -1;
-        field_0x1d0->becomeCurrentHeap();
+        g_snHIO.id = mDoHIO_CREATE_CHILD("名前登録シーン", &g_snHIO);
+        JKRSetCurrentHeap(field_0x1d0);
 
         dComIfGp_setWindowNum(1);
         dComIfGp_setWindow(0, 0.0f, 0.0f, mDoMch_render_c::getFbWidth(),
                            mDoMch_render_c::getEfbHeight(), 0.0f, 1.0f, 0, 2);
-        dDlst_window_c* window = dComIfGp_getWindow(0);
-        dComIfGp_setCamera(0, (camera_class*)&mCamera);
+        dComIfGp_setCamera(0, &mCamera);
 
-        mCamera.near_ = 1.0f;
-        mCamera.far_ = 100000.0f;
-        mCamera.fovy = 45.0f;
-        mCamera.aspect = mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getHeightF();
-        mCamera.lookat.eye.set(0.0f, 0.0f, -1000.0f);
-        mCamera.lookat.center.set(0.0f, 0.0f, 0.0f);
-        mCamera.bank = 0;
+        dDlst_window_c* window = dComIfGp_getWindow(0);
+        view_port_class* viewport = window->getViewPort();
+
+        fopCamM_SetNear(&mCamera, 1.0f);
+        fopCamM_SetFar(&mCamera, 100000.0f);
+        fopCamM_SetFovy(&mCamera, 45.0f);
+        fopCamM_SetAspect(&mCamera, mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getHeightF());
+        fopCamM_SetEye(&mCamera, 0.0f, 0.0f, -1000.0f);
+        fopCamM_SetCenter(&mCamera, 0.0f, 0.0f, 0.0f);
+        fopCamM_SetBank(&mCamera, 0);
 
         dComIfGp_setPlayer(0, NULL);
         dComIfGd_setWindow(window);
-        dComIfGd_setViewport(window->getViewPort());
-        dComIfGd_setView(&mCamera);
+        dComIfGd_setViewport(viewport);
+        dComIfGd_setView(&mCamera.view);
         mDoGph_gInf_c::offAutoForcus();
         setView();
 
         dKy_setLight_init();
-        field_0x41e = g_snHIO.mFileSelWaitTime;
-        field_0x41c = 0;
-        field_0x41d = 0;
-        mDoGph_gInf_c::setTickRate((OS_BUS_CLOCK / 4) / 30);
+        mWaitTimer = g_snHIO.mFileSelWaitTime;
+        mDrawProc = 0;
+        mProc = dScnName_PROC_FileSelectOpen;
+        mDoGph_gInf_c::setTickRate(OS_TIMER_CLOCK / 30);
 
         #if VERSION == VERSION_GCN_PAL
         mBmgStatus = 0;
@@ -139,21 +151,48 @@ static const char* dummyString(int i) {
 #endif
 
 void dScnName_c::setView() {
-    C_MTXPerspective(mCamera.projMtx, mCamera.fovy, mCamera.aspect, mCamera.near_,
-                     mCamera.far_);
-    mDoMtx_lookAt(mCamera.viewMtx, &mCamera.lookat.eye, &mCamera.lookat.center,
-                  mCamera.bank);
-    MTXInverse(mCamera.viewMtx, mCamera.invViewMtx);
-    MTXCopy(mCamera.viewMtx, mCamera.viewMtxNoTrans);
-    mCamera.viewMtxNoTrans[0][3] = 0.0f;
-    mCamera.viewMtxNoTrans[1][3] = 0.0f;
-    mCamera.viewMtxNoTrans[2][3] = 0.0f;
-    MTXCopy(mCamera.viewMtx, j3dSys.mViewMtx);
-    mDoMtx_concatProjView(mCamera.projMtx, mCamera.viewMtx, mCamera.projViewMtx);
+    dDlst_window_c* window = dComIfGp_getWindow(0);
+    view_port_class* viewport = window->getViewPort();
+    camera_class* camera = &mCamera;
+
+    C_MTXPerspective(camera->view.projMtx, camera->view.fovy, camera->view.aspect, camera->view.near_,
+                     camera->view.far_);
+    mDoMtx_lookAt(camera->view.viewMtx, &camera->view.lookat.eye, &camera->view.lookat.center,
+                  camera->view.bank);
+    cMtx_inverse(camera->view.viewMtx, camera->view.invViewMtx);
+    MTXCopy(camera->view.viewMtx, camera->view.viewMtxNoTrans);
+    camera->view.viewMtxNoTrans[0][3] = 0.0f;
+    camera->view.viewMtxNoTrans[1][3] = 0.0f;
+    camera->view.viewMtxNoTrans[2][3] = 0.0f;
+    j3dSys.setViewMtx(camera->view.viewMtx);
+    cMtx_concatProjView(camera->view.projMtx, camera->view.viewMtx, camera->view.projViewMtx);
 }
 
+#if PLATFORM_WII || PLATFORM_SHIELD
+static void setBaseCsrColor(int i_no) {
+    static const GXColor l_csrColor[] = {
+        {255, 0, 0 , 0},
+        {255, 0, 255 , 0},
+        {0, 182, 255 , 0},
+        {0, 255, 0 , 0},
+        {255, 255, 0 , 0},
+    };
+
+    JUT_ASSERT(656, 0 <= i_no && i_no < (sizeof(l_csrColor)/sizeof(GXColor)));
+
+    dComIfG_inf_c::baseCsr_c* baseCsr = dComIfG_inf_c::getBaseCsr();
+    JUT_ASSERT(658, baseCsr != NULL);
+
+    dDlst_blo_c* baseCsrBlo = baseCsr->getCsr();
+    JUT_ASSERT(660, baseCsrBlo != NULL);
+
+    const JUtility::TColor& color = l_csrColor[i_no];
+    baseCsrBlo->setBlackColor('cursor00', color);
+}
+#endif
+
 #if VERSION == VERSION_GCN_PAL
-void dScnName_c::bmg_data_set(){
+void dScnName_c::bmg_data_set() {
     if (fopAcM_GetName(this) == PROC_NAMEEX_SCENE) {
         mBmgStatus = 10;
     }
@@ -162,8 +201,14 @@ void dScnName_c::bmg_data_set(){
 void dScnName_c::tex_data_set() {}
 #endif
 
+typedef void (dScnName_c::*mainProcFunc)(void);
+static mainProcFunc MainProc[6] = {
+    &dScnName_c::FileSelectOpen,  &dScnName_c::FileSelectMain, &dScnName_c::FileSelectClose,
+    &dScnName_c::brightCheckOpen, &dScnName_c::brightCheck,    &dScnName_c::changeGameScene,
+};
+
 s32 dScnName_c::execute() {
-    if (fopOvlpM_IsPeek() == 0) {
+    if (!fopOvlpM_IsPeek()) {
         dComIfG_resetToOpening(this);
     }
 
@@ -171,31 +216,54 @@ s32 dScnName_c::execute() {
         return 1;
     }
 
-    (this->*MainProc[field_0x41d])();
+    (this->*MainProc[mProc])();
+
+    #if DEBUG
+    if (!fopOvlpM_IsPeek() && dComIfG_isSceneResetButton()) {
+        fopScnM_ChangeReq(this, PROC_MENU_SCENE, 0, 5);
+        dComIfGs_init();
+        dComIfG_playerStatusD();
+    }
+    #endif
+
     return 1;
 }
 
 s32 dScnName_c::draw() {
     dComIfGp_getVibration().Run();
 
-    switch (field_0x41c) {
+    switch (mDrawProc) {
     case 0:
-        dFs_c->_draw();
+        dFs_c->draw();
         break;
     case 1:
-        mBrightCheck->_draw();
+        mBrightCheck->draw();
         break;
     }
 
+    #if VERSION == VERSION_SHIELD_DEBUG
+    dComIfGp_particle_calc3D();
+    dComIfGp_particle_calc2D();
+    #endif
     return 1;
 }
 
 dScnName_c::~dScnName_c() {
+    mDoHIO_DELETE_CHILD(g_snHIO.id);
+
     delete dFs_c;
     delete mBrightCheck;
     dComIfG_deleteObjectResMain("fileSel");
     mHeap->destroy();
 
+    #if PLATFORM_WII || PLATFORM_SHIELD
+    dComIfG_inf_c::baseCsr_c* baseCsr = dComIfG_inf_c::getBaseCsr();
+    JUT_ASSERT(870, baseCsr != NULL);
+    baseCsr->onNavi();
+    setBaseCsrColor(2);
+    #endif
+
+    // Reset Hotspring Water bottles to normal water
     for (int i = 0; i < 4; i++) {
         dMeter2Info_changeWater(i + SLOT_11);
     }
@@ -205,12 +273,12 @@ dScnName_c::~dScnName_c() {
 }
 
 void dScnName_c::FileSelectOpen() {
-    if (field_0x41e != 0) {
-        field_0x41e--;
+    if (mWaitTimer != 0) {
+        mWaitTimer--;
     } else {
         mDoAud_bgmStreamPrepare(0x2000000);
         mDoAud_bgmStreamPlay();
-        field_0x41d = 1;
+        mProc = dScnName_PROC_FileSelectMain;
     }
 }
 
@@ -225,22 +293,22 @@ void dScnName_c::FileSelectMain() {
 void dScnName_c::FileSelectMainNormal() {
     switch(dFs_c->isSelectEnd()) {
     case 1:
-        field_0x41e = 15;
+        mWaitTimer = 15;
         mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor);
         mDoGph_gInf_c::startFadeOut(15);
-        field_0x41d = 2;
+        mProc = dScnName_PROC_FileSelectClose;
         field_0x420 = 1;
         break;
     }
 }
 
 void dScnName_c::FileSelectClose() {
-    field_0x41e--;
+    mWaitTimer--;
 
-    if (field_0x41e == 0) {
-        field_0x41d = 3;
-        field_0x41e = 15;
-        field_0x41c = 1;
+    if (mWaitTimer == 0) {
+        mProc = dScnName_PROC_BrightCheckOpen;
+        mWaitTimer = 15;
+        mDrawProc = 1;
         mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor);
         mDoGph_gInf_c::startFadeIn(15);
         field_0x420 = 0;
@@ -249,9 +317,9 @@ void dScnName_c::FileSelectClose() {
 
 void dScnName_c::brightCheckOpen() {
     if (!mDoRst::isReset()) {
-        field_0x41e--;
-        if (field_0x41e == 0) {
-            field_0x41d = 4;
+        mWaitTimer--;
+        if (mWaitTimer == 0) {
+            mProc = dScnName_PROC_BrightCheck;
         }
     }
 }
@@ -262,11 +330,12 @@ void dScnName_c::brightCheck() {
     if (mBrightCheck->isEnd()) {
         dComIfGs_setSaveTotalTime(dComIfGs_getTotalTime());
         dComIfGs_setSaveStartTime(OSGetTime());
-        mDoAud_bgmStop(0x2D);
+        mDoAud_bgmStop(45);
 
         field_0x41f = 0;
-        field_0x41d = 5;
+        mProc = dScnName_PROC_ChangeGameScene;
 
+        // Reset rupee "first-time collection" flags so the collection cutscene will play again
         dComIfGs_offItemFirstBit(fpcNm_ITEM_GREEN_RUPEE);
         dComIfGs_offItemFirstBit(fpcNm_ITEM_BLUE_RUPEE);
         dComIfGs_offItemFirstBit(fpcNm_ITEM_YELLOW_RUPEE);
@@ -280,7 +349,22 @@ void dScnName_c::brightCheck() {
 void dScnName_c::changeGameScene() {
     if (!mDoRst::isReset() && !fopOvlpM_IsPeek()) {
         dComIfGs_gameStart();
+
+        #if DEBUG
+        // Goto Map Select debug menu if opening File 1 with development mode on
+        if (dFs_c->getSelectNum() == 0 && mDoMain::developmentMode) {
+            fopScnM_ChangeReq(this, PROC_MENU_SCENE, 0, 5);
+            dComIfGs_init();
+            dComIfG_playerStatusD();
+            return;
+        }
+        #endif
+
+        #if VERSION == VERSION_SHIELD_DEBUG
+        fopScnM_ChangeReq(this, PROC_PLAY_SCENE, 0, 5);
+        #else
         fopScnM_ChangeReq(this, field_0x41f == 0 ? PROC_PLAY_SCENE : PROC_PLAY_SCENE, 0, 5);
+        #endif
         dComIfGp_offEnableNextStage();
 
         if (dFs_c->isDataNew(dFs_c->getSelectNum())) {
@@ -314,6 +398,11 @@ static int dScnName_Delete(dScnName_c* i_this) {
     #endif
 
     i_this->~dScnName_c();
+
+    #if VERSION == VERSION_SHIELD_DEBUG
+    dComIfGp_particle_removeScene(true);
+    #endif
+
     return 1;
 }
 

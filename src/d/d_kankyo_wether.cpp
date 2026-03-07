@@ -530,12 +530,12 @@ static void wether_move_rain() {
         }
         break;
     case TRUE:
-        camera_class* cam = dComIfGp_getCamera(0);
+        camera_process_class* cam = dComIfGp_getCamera(0);
         dKyr_rain_move();
 
         if (g_env_light.mSnowCount == 0 && cam != NULL) {
             // Stage is not Fishing Pond
-            if (strcmp(dComIfGp_getStartStageName(), "R_SP127") || cam->lookat.eye.y > 0.0f) {
+            if (strcmp(dComIfGp_getStartStageName(), "R_SP127") || cam->view.lookat.eye.y > 0.0f) {
                 if (g_env_light.raincnt < 125.0f) {
                     mDoAud_rainPlay(FALSE);
                 } else {

@@ -454,8 +454,8 @@ void daE_PZ_c::executeOpeningDemo() {
         cXyz(15.0f, 285.0f, -760.0f),
     };
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* camera0 = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera0 = dComIfGp_getCamera(0);
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     cXyz sp120;
@@ -479,8 +479,8 @@ void daE_PZ_c::executeOpeningDemo() {
         if (!eventInfo.checkCommandDemoAccrpt()) {
             fopAcM_orderPotentialEvent(this, 2, 0xFFFF, 0);
             eventInfo.onCondition(2);
-            mDemoCameraEye = camera0->lookat.eye;
-            mDemoCameraCenter = camera0->lookat.center;
+            mDemoCameraEye = camera0->view.lookat.eye;
+            mDemoCameraCenter = camera0->view.lookat.center;
             break;
         }
 
@@ -1550,8 +1550,8 @@ void daE_PZ_c::executeDamage() {
 }
 
 void daE_PZ_c::executeDead() {
-    camera_class* sp1C = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* sp18 = dComIfGp_getCamera(0);
+    camera_process_class* sp1C = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* sp18 = dComIfGp_getCamera(0);
     fopAc_ac_c* sp14 = dComIfGp_getPlayer(0);
     cXyz sp68;
     cXyz sp5C;
@@ -1577,8 +1577,8 @@ void daE_PZ_c::executeDead() {
         if (!eventInfo.checkCommandDemoAccrpt()) {
             fopAcM_orderPotentialEvent(this, 2, 0xFFFF, 0);
             eventInfo.onCondition(2);
-            mDemoCameraEye = sp18->lookat.eye;
-            mDemoCameraCenter = sp18->lookat.center;
+            mDemoCameraEye = sp18->view.lookat.eye;
+            mDemoCameraCenter = sp18->view.lookat.center;
 
             speedF = 0.0f;
             mCylCollider.ClrTgHit();

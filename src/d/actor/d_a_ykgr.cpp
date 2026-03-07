@@ -220,11 +220,11 @@ static int daYkgrExecute(void* i_this) {
 }
 
 void daYkgr_c::set_mtx() {
-    camera_class* iVar1 = dComIfGp_getCamera(0);
+    camera_process_class* iVar1 = dComIfGp_getCamera(0);
     cXyz local_28;
     cXyz* r29 = fopCamM_GetEye_p(iVar1);
     current.pos = *r29;
-    dKyr_get_vectle_calc(&iVar1->lookat.eye, &iVar1->lookat.center, &local_28);
+    dKyr_get_vectle_calc(&iVar1->view.lookat.eye, &iVar1->view.lookat.center, &local_28);
     current.angle.y = (s16)cM_atan2s(local_28.x, local_28.z);
     current.angle.x = -cM_atan2s(
         local_28.y, JMAFastSqrt((local_28.x * local_28.x + local_28.z * local_28.z)));

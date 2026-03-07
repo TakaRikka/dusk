@@ -3793,8 +3793,8 @@ static void* s_adel_sub(void* i_proc, void* i_this) {
 static void demo_camera(e_rdy_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* player_camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* player_camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(0);
     cXyz vec1, vec2, vec3, vec4, vec5;
     u8 unused_u8 = 1;
     (void) unused_u8;
@@ -3817,8 +3817,8 @@ static void demo_camera(e_rdy_class* i_this) {
         player_camera->mCamera.SetTrimSize(3);
         daPy_getPlayerActorClass()->changeOriginalDemo();
         daPy_getPlayerActorClass()->changeDemoMode(0x38, 0, 0, 0);
-        i_this->mCamEye = camera->lookat.eye;
-        i_this->mCamCenter = camera->lookat.center;
+        i_this->mCamEye = camera->view.lookat.eye;
+        i_this->mCamCenter = camera->view.lookat.center;
         s16 sang_y_diff = a_karg->shape_angle.y - player->shape_angle.y;
         if (sang_y_diff > 0) {
             i_this->field_0x13d4 = -0x4000;
@@ -4504,7 +4504,7 @@ static int daE_RDY_Execute(e_rdy_class* i_this) {
             if (i == 0) {
                 vec1.set(38.0f, 0.0f, 0.0f);
                 MtxPosition(&vec1, &vec2);
-                vec1 = camera->lookat.eye - vec2;
+                vec1 = camera->view.lookat.eye - vec2;
                 ang_y = cM_atan2s(vec1.x, vec1.z);
                 ang_x = -cM_atan2s(vec1.y, JMAFastSqrt(vec1.x * vec1.x + vec1.z * vec1.z));
                 scale = vec1.abs() * (0.001f + JREG_F(8));

@@ -84,13 +84,13 @@ static BOOL other_bg_check(daE_PH_c* i_this, fopAc_ac_c* i_other) {
 }
 
 void daE_PH_c::SetStopingCam() {
-    camera_class* camera_p = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera_p = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     camera_p->mCamera.Set(mCamCenter, mCamEye, mCamFovY, 0);
 }
 
 void daE_PH_c::SetStopCam(cXyz i_center, f32 i_offsetZ, f32 i_offsetY, s16 i_offsetAngle) {
-    camera_class* camera_p = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera_p = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz offset(0.0f, i_offsetY, i_offsetZ);
     cXyz eye_offset(0.0f, 0.0f, 0.0f);
 
@@ -110,7 +110,7 @@ void daE_PH_c::SetCMoveCam(cXyz i_target, f32 i_scale, f32 i_maxStep) {
 }
 
 void daE_PH_c::SetReleaseCam() {
-    camera_class* camera_p = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera_p = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     camera_p->mCamera.Reset(mCamCenter, mCamEye);
     camera_p->mCamera.Start();

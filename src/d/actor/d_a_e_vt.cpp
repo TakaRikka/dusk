@@ -1441,7 +1441,7 @@ void daE_VA_c::executeDemoOpWait() {
 }
 
 void daE_VA_c::executeDemoOp() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz sp2C;
     cXyz sp38;
     f32 old;
@@ -2917,7 +2917,7 @@ void daE_VA_c::executeOpaciFadeAway() {
 }
 
 void daE_VA_c::executeOpaciDeath() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz sp24;
     cXyz sp30;

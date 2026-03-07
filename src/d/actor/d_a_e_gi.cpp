@@ -816,7 +816,7 @@ void daE_GI_c::action() {
 
     if (attention_info.flags & fopAc_AttnFlag_BATTLE_e) {
         dBgS_LinChk linecheck;
-        linecheck.Set(&dComIfGp_getCamera(0)->lookat.eye, &attention_info.position, this);
+        linecheck.Set(&dComIfGp_getCamera(0)->view.lookat.eye, &attention_info.position, this);
         if (dComIfG_Bgsp().LineCross(&linecheck)) {
             attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;
         }

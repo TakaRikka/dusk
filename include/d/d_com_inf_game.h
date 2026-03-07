@@ -213,6 +213,7 @@ public:
 };
 
 class camera_class;
+class camera_process_class;
 class dComIfG_camera_info_class {
 public:
     dComIfG_camera_info_class() {}
@@ -949,12 +950,7 @@ public:
 
 class dComIfG_inf_c {
 public:
-    dComIfG_inf_c() { this->ct(); }
-    ~dComIfG_inf_c() {}
-    void ct();
-    static void createBaseCsr();
-
-#if PLATFORM_WII || VERSION == VERSION_SHIELD_DEBUG
+#if PLATFORM_WII || PLATFORM_SHIELD
     class baseCsr_c : public mDoGph_gInf_c::csr_c {
     public:
         class navi_c {
@@ -987,6 +983,9 @@ public:
         static void particleExecute();
         static navi_c* getNavi() { return m_navi; }
 
+        dDlst_blo_c* getCsr() { return &field_0x8; }
+        void onNavi() { field_0x13d = 1; }
+
         /* 0x008 */ dDlst_blo_c field_0x8;
         /* 0x130 */ dDlst_blo_c::anm_c anm;
         /* 0x13C */ u8 field_0x13c;
@@ -1005,6 +1004,18 @@ public:
 
         dDlst_blo_c field_0x8;
     };
+#endif
+
+    dComIfG_inf_c() { this->ct(); }
+    ~dComIfG_inf_c() {}
+    void ct();
+
+#if PLATFORM_WII || PLATFORM_SHIELD
+    static void createBaseCsr();
+
+    static baseCsr_c* getBaseCsr() {
+        return m_baseCsr;
+    }
 #endif
 
     /* 0x00000 */ dSv_info_c info;
@@ -1027,7 +1038,7 @@ public:
     #endif
 
     static __d_timer_info_c dComIfG_mTimerInfo;
-    #if PLATFORM_WII || VERSION == VERSION_SHIELD_DEBUG
+    #if PLATFORM_WII || PLATFORM_SHIELD
     static baseCsr_c* m_baseCsr;
     #endif
 };  // Size: 0x1DE10
@@ -3380,8 +3391,8 @@ inline void dComIfGp_setWindow(u8 i, f32 param_1, f32 param_2, f32 param_3, f32 
                                       camID, mode);
 }
 
-inline camera_class* dComIfGp_getCamera(int idx) {
-    return g_dComIfG_gameInfo.play.getCamera(idx);
+inline camera_process_class* dComIfGp_getCamera(int idx) {
+    return (camera_process_class*)g_dComIfG_gameInfo.play.getCamera(idx);
 }
 
 inline void dComIfGp_setCamera(int i, camera_class* cam) {

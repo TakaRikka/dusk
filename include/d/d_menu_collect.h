@@ -209,6 +209,10 @@ public:
 
     virtual ~dMenu_Collect3D_c();
 
+    static void setViewPortOffsetY(f32 i_offset) {
+        mViewOffsetY = i_offset;
+    }
+
     static f32 mViewOffsetY;
 
 private:

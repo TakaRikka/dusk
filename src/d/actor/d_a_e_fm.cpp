@@ -1152,8 +1152,8 @@ static int demo_stop;
 static void demo_camera(e_fm_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* camera0 = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera0 = dComIfGp_getCamera(0);
 
     cXyz spEC;
     cXyz spE0;
@@ -1280,8 +1280,8 @@ static void demo_camera(e_fm_class* i_this) {
         daPy_getPlayerActorClass()->changeOriginalDemo();
 
         i_this->mDemoCamFovy = 50.0f;
-        i_this->mDemoCamEye = camera0->lookat.eye;
-        i_this->mDemoCamCenter = camera0->lookat.center;
+        i_this->mDemoCamEye = camera0->view.lookat.eye;
+        i_this->mDemoCamCenter = camera0->view.lookat.center;
         i_this->field_0x778 = 0.0f;
         camera->mCamera.SetTrimSize(3);
         dComIfGp_getEvent()->startCheckSkipEdge(actor);

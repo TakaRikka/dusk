@@ -341,9 +341,9 @@ int daObjHHASHI_c::Execute(f32 (**param_1)[3][4]) {
 
 int daObjHHASHI_c::Draw() {
     if (dComIfGp_event_runCheck()) {
-        camera_class* pCamera = dComIfGp_getCamera(0);
-        f32 xdiff = current.pos.x - pCamera->lookat.eye.x;
-        f32 zdiff = current.pos.z - pCamera->lookat.eye.z;
+        camera_process_class* pCamera = dComIfGp_getCamera(0);
+        f32 xdiff = current.pos.x - pCamera->view.lookat.eye.x;
+        f32 zdiff = current.pos.z - pCamera->view.lookat.eye.z;
         if (JMAFastSqrt(xdiff * xdiff + zdiff * zdiff) < 200.0f) {
             return 1;
         }

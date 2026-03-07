@@ -1194,7 +1194,7 @@ void dComIfG_inf_c::ct() {
     field_0x1de0a = 0xFF;
 }
 
-#if PLATFORM_WII || VERSION == VERSION_SHIELD_DEBUG
+#if PLATFORM_WII || PLATFORM_SHIELD
 void dComIfG_inf_c::createBaseCsr() {
     JUT_ASSERT(1622, m_baseCsr == NULL);
     m_baseCsr = new baseCsr_c(1);

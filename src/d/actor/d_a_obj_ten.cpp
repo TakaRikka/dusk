@@ -594,7 +594,7 @@ void daObjTEN_c::Z_BufferChk() {
     cStack_68 = current.pos;
     cStack_68.y += 20.0f;
     mDoLib_project(&cStack_68, &local_5c);
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     f32 trimHeight;
     if (camera != NULL) {
         trimHeight = camera->mCamera.TrimHeight();

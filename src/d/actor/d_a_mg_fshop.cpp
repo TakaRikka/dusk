@@ -321,8 +321,8 @@ static int daFshop_Draw(fshop_class* i_this) {
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
     
     for (int i = 0; i < 48; i++) {
-        f32 fVar4 = i_this->mLure[i].field_0x00.x - camera->lookat.eye.x;
-        f32 fVar5 = i_this->mLure[i].field_0x00.z - camera->lookat.eye.z;
+        f32 fVar4 = i_this->mLure[i].field_0x00.x - camera->view.lookat.eye.x;
+        f32 fVar5 = i_this->mLure[i].field_0x00.z - camera->view.lookat.eye.z;
         if (SQUARE(fVar4) + SQUARE(fVar5) > KREG_F(11) + 1200.0f) {
             g_env_light.setLightTevColorType_MAJI(i_this->mLure[i].model, &actor->tevStr);
             mDoExt_modelUpdateDL(i_this->mLure[i].model);
@@ -1037,7 +1037,7 @@ static int daFshop_Execute(fshop_class* i_this) {
         mDoMtx_stack_c::scaleM(actor->scale.x, actor->scale.x,
                                actor->scale.x);
         mDoMtx_stack_c::transM(0.0f, (190.0f + hREG_F(11)) * actor->scale.x, 0.0f);
-        local_cc = pmVar11->lookat.eye - actor->current.pos;
+        local_cc = pmVar11->view.lookat.eye - actor->current.pos;
         mDoMtx_stack_c::YrotM(cM_atan2s(local_cc.x, local_cc.z));
         mDoMtx_stack_c::XrotM(-cM_atan2s(local_cc.y, JMAFastSqrt((local_cc.x * local_cc.x + local_cc.z * local_cc.z))));
         i_this->ballModel->setBaseTRMtx(mDoMtx_stack_c::get());

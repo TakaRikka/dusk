@@ -543,8 +543,8 @@ static void bee_control(e_bee_class* i_this) {
             bee->mNoDraw = false;
             
             if (dComIfGp_checkPlayerStatus0(0, 0x200000)) {
-                vec3.x = bee->mPos.x - camera->lookat.eye.x;
-                vec3.z = bee->mPos.z - camera->lookat.eye.z;
+                vec3.x = bee->mPos.x - camera->view.lookat.eye.x;
+                vec3.z = bee->mPos.z - camera->view.lookat.eye.z;
                 if (JMAFastSqrt(vec3.x * vec3.x + vec3.z * vec3.z) > NREG_F(0) + 2500.0f) {
                     bee->mNoDraw = true;
                 }

@@ -1639,8 +1639,8 @@ static void cam_3d_morf(e_gob_class* i_this, f32 param_1) {
 static void demo_camera(e_gob_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    camera_class* camera0 = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera0 = dComIfGp_getCamera(0);
     cXyz sp94;
     cXyz sp88;
     cXyz cam_eye;

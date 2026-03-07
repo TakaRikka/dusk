@@ -328,7 +328,7 @@ void daObjTobyHouse_c::demoProc() {
     csXyz cStack_98;
     fopAcM_SearchByName(PROC_NPC_TOBY);
     cXyz cStack_30(-600.0f, 70.0f, 380.0f);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz* pCamEye = fopCamM_GetEye_p(camera);
     csXyz local_a0(dCam_getAngleX(camera), dCam_getAngleY(camera), 0);
     int actIdx = dComIfGp_evmng_getMyActIdx(mStaffId, (char**)action_table, 7, 0, 0);
@@ -534,7 +534,7 @@ BOOL daObjTobyHouse_c::checkLODModel() {
         return FALSE;
     }
     
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     if (camera != NULL && fopCamM_GetEye_p(camera)->abs(current.pos) > 20000.0f) {
         return TRUE;
     }

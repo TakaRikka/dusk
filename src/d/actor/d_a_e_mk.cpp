@@ -1254,7 +1254,7 @@ static void demo_camera_start(e_mk_class* i_this) {
     fopAc_ac_c* deku_baba_p[2];
     fopAc_ac_c* boomerang_p;
     boomerang_p = fopAcM_SearchByID(i_this->boomerangId);
-    camera_class* camera1 = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera1 = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera_class* camera2 = (camera_class*)dComIfGp_getCamera(0);
     cXyz work, offset, offset_2, unused;
 
@@ -1279,8 +1279,8 @@ static void demo_camera_start(e_mk_class* i_this) {
             daPy_getPlayerActorClass()->changeOriginalDemo();
             Z2GetAudioMgr()->bgmStreamPrepare(0x200000D);
 
-            i_this->camEye = camera2->lookat.eye;
-            i_this->camCenter = camera2->lookat.center;
+            i_this->camEye = camera2->view.lookat.eye;
+            i_this->camCenter = camera2->view.lookat.center;
             i_this->camEyeTarget.set(-271.0f, 4559.0f, -7241.0f);
             i_this->camCenterTarget.set(-70.0f, 4378.0f, -6233.0f);
 
@@ -1551,7 +1551,7 @@ static void demo_camera_end(e_mk_class* i_this) {
     fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     fopAc_ac_c* boomerang_p = (fopAc_ac_c*)fopAcM_SearchByID(i_this->boomerangId);
-    camera_class* camera = (camera_class*)dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz work, pos, unused_1, unused_2;
 
     switch (i_this->demoSubMode) {
@@ -1973,7 +1973,7 @@ static void demo_camera_r04(e_mk_class* i_this) {
     fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
     daPy_py_c* player = (daPy_py_c *)dComIfGp_getPlayer(0);
     fopAc_ac_c* boomerang_p = fopAcM_SearchByID(i_this->boomerangId);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz work, pos, unused, unused2;
 
     npc_ks_class* monkey_p = (npc_ks_class*)fpcM_Search(s_ks_sub, i_this);
@@ -2239,7 +2239,7 @@ static void demo_camera_r04(e_mk_class* i_this) {
 static void demo_camera_bohit(e_mk_class* i_this) {
     fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
     daPy_py_c* player = (daPy_py_c *)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz work, unused_1, unused_2, unused_3;
 
     switch (i_this->demoSubMode) {
@@ -2292,7 +2292,7 @@ static void demo_camera_bohit(e_mk_class* i_this) {
 
 static void demo_camera(e_mk_class* i_this) {
     fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz unused_1, unused_2;
 
     switch (i_this->demoMode) {
