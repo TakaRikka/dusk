@@ -68,7 +68,7 @@ source_group("dusk" FILES ${DUSK_FILES})
 # game_debug is for game code files that we know work when compiled with DEBUG=1
 # Of course, if building a release build, this distinction is irrelevant
 add_library(game_debug STATIC ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES})
-target_compile_definitions(game_debug PRIVATE TARGET_PC AVOID_UB VERSION=0 $<$<CONFIG:Debug>:DEBUG=1>)
+target_compile_definitions(game_debug PRIVATE TARGET_PC AVOID_UB=1 VERSION=0 $<$<CONFIG:Debug>:DEBUG=1>)
 
 # Make these properties PUBLIC so that the regular game target also sees them.
 target_include_directories(game_debug PUBLIC
@@ -102,9 +102,9 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL Linux)
 endif ()
 
 target_link_libraries(game PRIVATE game_debug cxxopts::cxxopts)
-target_compile_definitions(game PRIVATE TARGET_PC VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0)
+target_compile_definitions(game PRIVATE TARGET_PC AVOID_UB=1 VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0)
 
 add_executable(dusk src/dusk/main.cpp)
-target_compile_definitions(dusk PRIVATE TARGET_PC AVOID_UB VERSION=0)
+target_compile_definitions(dusk PRIVATE TARGET_PC AVOID_UB=1 VERSION=0)
 target_include_directories(dusk PRIVATE include)
 target_link_libraries(dusk PRIVATE game aurora::main)
