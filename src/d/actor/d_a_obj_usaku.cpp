@@ -59,7 +59,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     }
     OS_REPORT("//////////////OBJ_USAKU SET 5 !!\n");
 
-    a_this->mpBgW = JKR_NEW dBgW();
+    a_this->mpBgW = new dBgW();
     if (a_this->mpBgW == NULL) {
         return 0;
     }

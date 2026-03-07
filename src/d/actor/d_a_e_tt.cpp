@@ -1206,7 +1206,7 @@ int daE_TT_c::CreateHeap() {
 
     JUT_ASSERT(1881, modelData != NULL);
 
-    mpMorfSO = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpMorfSO = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                     (J3DAnmTransform*)dComIfG_getObjectRes("E_TT", 0xE), 0, 1.0f, 0,
                                     -1, &mSound, 0x80000, 0x11000084);
     if (mpMorfSO == NULL || mpMorfSO->getModel() == NULL) {

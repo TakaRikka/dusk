@@ -1,20 +1,19 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
-#include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
-#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/J3DGraphBase/J3DGD.h"
 
 J3DColorBlock* J3DMaterial::createColorBlock(u32 flags) {
     J3DColorBlock* rv = NULL;
     switch (flags) {
     case 0:
-        rv = JKR_NEW J3DColorBlockLightOff();
+        rv = new J3DColorBlockLightOff();
         break;
     case 0x40000000:
-        rv = JKR_NEW J3DColorBlockLightOn();
+        rv = new J3DColorBlockLightOn();
         break;
     case 0x80000000:
-        rv = JKR_NEW J3DColorBlockAmbientOn();
+        rv = new J3DColorBlockAmbientOn();
         break;
     }
 
@@ -26,11 +25,11 @@ J3DTexGenBlock* J3DMaterial::createTexGenBlock(u32 flags) {
     J3DTexGenBlock* rv = NULL;
     switch (flags) {
     case 0x8000000:
-        rv = JKR_NEW J3DTexGenBlock4();
+        rv = new J3DTexGenBlock4();
         break;
     case 0:
     default:
-        rv = JKR_NEW J3DTexGenBlockBasic();
+        rv = new J3DTexGenBlockBasic();
     }
 
     J3D_ASSERT_ALLOCMEM(83, rv != NULL);
@@ -40,13 +39,13 @@ J3DTexGenBlock* J3DMaterial::createTexGenBlock(u32 flags) {
 J3DTevBlock* J3DMaterial::createTevBlock(int tevStageNum) {
     J3DTevBlock* rv = NULL;
     if (tevStageNum <= 1) {
-        rv = JKR_NEW J3DTevBlock1();
+        rv = new J3DTevBlock1();
     } else if (tevStageNum == 2) {
-        rv = JKR_NEW J3DTevBlock2();
+        rv = new J3DTevBlock2();
     } else if (tevStageNum <= 4) {
-        rv = JKR_NEW J3DTevBlock4();
+        rv = new J3DTevBlock4();
     } else if (tevStageNum <= 16) {
-        rv = JKR_NEW J3DTevBlock16();
+        rv = new J3DTevBlock16();
     }
 
     J3D_ASSERT_ALLOCMEM(116, rv != NULL);
@@ -56,9 +55,9 @@ J3DTevBlock* J3DMaterial::createTevBlock(int tevStageNum) {
 J3DIndBlock* J3DMaterial::createIndBlock(int flags) {
     J3DIndBlock* rv = NULL;
     if (flags != 0) {
-        rv = JKR_NEW J3DIndBlockFull();
+        rv = new J3DIndBlockFull();
     } else {
-        rv = JKR_NEW J3DIndBlockNull();
+        rv = new J3DIndBlockNull();
     }
 
     J3D_ASSERT_ALLOCMEM(139, rv != NULL);
@@ -69,24 +68,24 @@ J3DPEBlock* J3DMaterial::createPEBlock(u32 flags, u32 materialMode) {
     J3DPEBlock* rv = NULL;
     if (flags == 0) {
         if (materialMode & 1) {
-            rv = JKR_NEW J3DPEBlockOpa();
+            rv = new J3DPEBlockOpa();
             J3D_ASSERT_ALLOCMEM(166, rv != NULL);
             return rv;
         } else if (materialMode & 2) {
-            rv = JKR_NEW J3DPEBlockTexEdge();
+            rv = new J3DPEBlockTexEdge();
             J3D_ASSERT_ALLOCMEM(172, rv != NULL);
             return rv;
         } else if (materialMode & 4) {
-            rv = JKR_NEW J3DPEBlockXlu();
+            rv = new J3DPEBlockXlu();
             J3D_ASSERT_ALLOCMEM(178, rv != NULL);
             return rv;
         }
     }
 
     if (flags == 0x10000000) {
-        rv = JKR_NEW J3DPEBlockFull();
+        rv = new J3DPEBlockFull();
     } else if (flags == 0x20000000) {
-        rv = JKR_NEW J3DPEBlockFogOff();
+        rv = new J3DPEBlockFogOff();
     }
 
     J3D_ASSERT_ALLOCMEM(188, rv != NULL);
@@ -335,7 +334,7 @@ void J3DMaterial::change() {
 
 s32 J3DMaterial::newSharedDisplayList(u32 dlSize) {
     if (mSharedDLObj == NULL) {
-        mSharedDLObj = JKR_NEW J3DDisplayListObj();
+        mSharedDLObj = new J3DDisplayListObj();
         if (mSharedDLObj == NULL) {
             return kJ3DError_Alloc;
         }
@@ -351,7 +350,7 @@ s32 J3DMaterial::newSharedDisplayList(u32 dlSize) {
 
 s32 J3DMaterial::newSingleSharedDisplayList(u32 dlSize) {
     if (mSharedDLObj == NULL) {
-        mSharedDLObj = JKR_NEW J3DDisplayListObj();
+        mSharedDLObj = new J3DDisplayListObj();
         if (mSharedDLObj == NULL) {
             return kJ3DError_Alloc;
         }

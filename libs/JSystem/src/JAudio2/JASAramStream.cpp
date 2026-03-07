@@ -33,7 +33,7 @@ void JASAramStream::initSystem(u32 block_size, u32 channel_max) {
         if (sLoadThread == NULL) {
             sLoadThread = JASDvd::getThreadPointer();
         }
-        sReadBuffer = JKR_NEW_ARGS (JASDram, 0x20) u8[(block_size + 0x20) * channel_max];
+        sReadBuffer = new (JASDram, 0x20) u8[(block_size + 0x20) * channel_max];
         JUT_ASSERT(79, sReadBuffer);
         sBlockSize = block_size;
         sChannelMax = channel_max;
@@ -667,7 +667,7 @@ void JASAramStream::channelStart() {
         // probably a fake match, this should be set in the JASWaveInfo constructor
         static u32 const one = 1;
         wave_info.field_0x20 = &one;
-        JASChannel* jc = JKR_NEW JASChannel(channelCallback, this);
+        JASChannel* jc = new JASChannel(channelCallback, this);
         JUT_ASSERT(963, jc);
         jc->setPriority(0x7f7f);
         for (u32 j = 0; j < 6; j++) {

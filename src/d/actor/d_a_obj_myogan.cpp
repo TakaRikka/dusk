@@ -90,7 +90,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->mpBrk = JKR_NEW mDoExt_brkAnm();
+    a_this->mpBrk = new mDoExt_brkAnm();
     if (a_this->mpBrk == NULL) {
         return 0;
     }
@@ -102,7 +102,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->mpBtk = JKR_NEW mDoExt_btkAnm();
+    a_this->mpBtk = new mDoExt_btkAnm();
     if (a_this->mpBtk == NULL) {
         return 0;
     }
@@ -114,7 +114,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->mpBgW = JKR_NEW dBgW();
+    a_this->mpBgW = new dBgW();
     if (a_this->mpBgW == NULL) {
         return 0;
     }

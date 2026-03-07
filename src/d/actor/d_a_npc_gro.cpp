@@ -472,7 +472,7 @@ int daNpc_grO_c::CreateHeap() {
     JUT_ASSERT(480, NULL != mdlData_p);
 
     u32 uVar1 = 0x11020284;
-    mAnm_p = JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, J3DMdlFlag_DifferedDLBuffer, uVar1);
+    mAnm_p = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, J3DMdlFlag_DifferedDLBuffer, uVar1);
     if (mAnm_p != NULL && mAnm_p->getModel() == NULL) {
         mAnm_p->stopZelAnime();
         mAnm_p = NULL;
@@ -488,7 +488,7 @@ int daNpc_grO_c::CreateHeap() {
     }
     mdl_p->setUserArea((uintptr_t)this);
 
-    mpMatAnm = JKR_NEW daNpcF_MatAnm_c();
+    mpMatAnm = new daNpcF_MatAnm_c();
     if (mpMatAnm == NULL) {
         return 0;
     }

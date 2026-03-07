@@ -82,28 +82,28 @@ BOOL daHoZelda_c::createHeap() {
     }
 
     for (int i = 0; i < 2; i++) {
-        mpMatAnm[i] = JKR_NEW daHoZelda_matAnm_c();
+        mpMatAnm[i] = new daHoZelda_matAnm_c();
         if (mpMatAnm[i] == NULL) {
             return FALSE;
         }
     }
 
-    J3DTransformInfo* transinfo_buf = JKR_NEW J3DTransformInfo[47];
+    J3DTransformInfo* transinfo_buf = new J3DTransformInfo[47];
     if (transinfo_buf == NULL) {
         return FALSE;
     }
 
-    Quaternion* quat_buf = JKR_NEW Quaternion[47];
+    Quaternion* quat_buf = new Quaternion[47];
     if (quat_buf == NULL) {
         return FALSE;
     }
 
-    field_0x5c4 = JKR_NEW mDoExt_MtxCalcOldFrame(transinfo_buf, quat_buf);
+    field_0x5c4 = new mDoExt_MtxCalcOldFrame(transinfo_buf, quat_buf);
     if (field_0x5c4 == NULL) {
         return FALSE;
     }
 
-    field_0x5a8 = JKR_NEW mDoExt_MtxCalcAnmBlendTblOld(field_0x5c4, 3, mAnmRatioPack);
+    field_0x5a8 = new mDoExt_MtxCalcAnmBlendTblOld(field_0x5c4, 3, mAnmRatioPack);
     if (field_0x5a8 == NULL) {
         return FALSE;
     }
@@ -125,7 +125,7 @@ BOOL daHoZelda_c::createHeap() {
         return FALSE;
     }
 
-    mpHIO = JKR_NEW HOZELDA_HIO_CLASS();
+    mpHIO = new HOZELDA_HIO_CLASS();
     if (mpHIO == NULL) {
         return FALSE;
     }

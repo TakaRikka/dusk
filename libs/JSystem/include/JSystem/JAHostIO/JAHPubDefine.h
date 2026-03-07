@@ -1,7 +1,6 @@
 #ifndef JAHPUBDEFINE_H
 #define JAHPUBDEFINE_H
 
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
 template<class T>
@@ -13,7 +12,7 @@ public:
     static T* newInstance() {
         JUT_ASSERT(82, sInstance==NULL);
         if (!sInstance) {
-            sInstance = JKR_NEW T();
+            sInstance = new T();
         }
         JUT_ASSERT(85, sInstance!=NULL);
         return sInstance;

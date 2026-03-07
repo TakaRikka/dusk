@@ -177,7 +177,7 @@ void daTitle_c::loadWait_proc() {
         mpHeap = heap;
 
         mpFont = mDoExt_getMesgFont();
-        mTitle.Scr = JKR_NEW J2DScreen();
+        mTitle.Scr = new J2DScreen();
 
         mTitle.Scr->setPriority("zelda_press_start.blo", 0x100000, mpMount->getArchive());
 
@@ -196,7 +196,7 @@ void daTitle_c::loadWait_proc() {
             fopMsgM_messageGet(text[i]->getStringPtr(), 100);
         }
 
-        field_0x600 = JKR_NEW CPaneMgrAlpha(mTitle.Scr, MULTI_CHAR('n_all'), 2, NULL);
+        field_0x600 = new CPaneMgrAlpha(mTitle.Scr, MULTI_CHAR('n_all'), 2, NULL);
         field_0x600->setAlpha(0);
         J2DPane* pane = mTitle.Scr->search(MULTI_CHAR('n_all'));
         pane->translate(g_daTitHIO.mPSPosX, g_daTitHIO.mPSPosY);
@@ -329,12 +329,12 @@ int daTitle_c::Draw() {
 
 int daTitle_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, l_arcName);
-    JKR_DELETE(mTitle.Scr);
-    JKR_DELETE(field_0x600);
+    delete mTitle.Scr;
+    delete field_0x600;
     
     mpMount->getArchive()->removeResourceAll();
     mpMount->getArchive()->unmount();
-    JKR_DELETE(mpMount);
+    delete mpMount;
 
     if (m2DHeap != NULL) {
         m2DHeap->destroy();

@@ -28,7 +28,7 @@ void JASReportInit(JKRHeap* heap, int lineMax) {
     JUT_ASSERT(35, heap != NULL);
     OSInitMutex(&sMutex);
     sLineMax = lineMax;
-    sBuffer = JKR_NEW_ARGS (heap, 0) char[sLineMax * 64];
+    sBuffer = new (heap, 0) char[sLineMax * 64];
     JUT_ASSERT(41, sBuffer);
 }
 

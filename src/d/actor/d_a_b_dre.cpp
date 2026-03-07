@@ -21,18 +21,18 @@ int daB_DRE_c::CreateHeap() {
     JUT_ASSERT(0xB4, modelData != NULL);
 
     if (mAction == 0) {
-        mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+        mpModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                            (J3DAnmTransform*)dComIfG_getObjectRes("B_DR", 0x1D), 0,
                                            1.0f, 0, -1, &mSound, 0, 0x11000084);
     } else {
-        mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+        mpModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                            (J3DAnmTransform*)dComIfG_getObjectRes("B_DR", 0x1F), 2,
                                            1.0f, 0, -1, &mSound, 0, 0x11000084);
         if (mpModelMorf == NULL || mpModelMorf->getModel() == NULL) {
             return 0;
         }
 
-        mpCoreBrk = JKR_NEW mDoExt_brkAnm();
+        mpCoreBrk = new mDoExt_brkAnm();
         if (mpCoreBrk == NULL) {
             return 0;
         }

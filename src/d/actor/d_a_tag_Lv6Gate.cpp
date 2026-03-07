@@ -33,7 +33,7 @@ inline int daTagLv6Gate_c::createHeap() {
 
     btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 19);
     JUT_ASSERT(100, btk != NULL);
-    mpBtk[0] = JKR_NEW mDoExt_btkAnm();
+    mpBtk[0] = new mDoExt_btkAnm();
     if (mpBtk[0] == NULL ||
         !mpBtk[0]->init(modelData, btk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1))
     {
@@ -46,7 +46,7 @@ inline int daTagLv6Gate_c::createHeap() {
 
     btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 20);
     JUT_ASSERT(108, btk != NULL);
-    mpBtk[1] = JKR_NEW mDoExt_btkAnm();
+    mpBtk[1] = new mDoExt_btkAnm();
     if (mpBtk[1] == NULL ||
         !mpBtk[1]->init(modelData, btk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1))
     {

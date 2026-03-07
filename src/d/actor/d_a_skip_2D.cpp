@@ -14,7 +14,7 @@ static int daSkip2D_createHeap(fopAc_ac_c* i_this) {
 }
 
 int daSkip2D_c::createHeap() {
-    mpButton = JKR_NEW dMeterButton_c();
+    mpButton = new dMeterButton_c();
 
     if (mpButton == NULL) {
         return 0;

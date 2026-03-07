@@ -1568,14 +1568,14 @@ static int daE_GB_Delete(e_gb_class* i_this) {
 static int useHeapInit(fopAc_ac_c* actor) {
     e_gb_class* i_this = (e_gb_class*)actor;
 
-    i_this->anmP = JKR_NEW mDoExt_McaMorf(static_cast<J3DModelData*>(dComIfG_getObjectRes("E_gb", dRes_INDEX_E_GB_BMD_GB_e)), NULL, NULL,
+    i_this->anmP = new mDoExt_McaMorf(static_cast<J3DModelData*>(dComIfG_getObjectRes("E_gb", dRes_INDEX_E_GB_BMD_GB_e)), NULL, NULL,
                                               static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("E_gb", dRes_INDEX_E_GB_BCK_GB_WAIT_e)), 2, 1.0f, 
                                               0, -1, 1, NULL, J3DMdlFlag_DifferedDLBuffer, 0x11000084);
     if (i_this->anmP == NULL || i_this->anmP->getModel() == NULL) {
         return 0;
     }
 
-    i_this->flowerAnmP = JKR_NEW mDoExt_McaMorf(static_cast<J3DModelData*>(dComIfG_getObjectRes("E_gb", dRes_INDEX_E_GB_BMD_GF_e)), NULL, NULL,
+    i_this->flowerAnmP = new mDoExt_McaMorf(static_cast<J3DModelData*>(dComIfG_getObjectRes("E_gb", dRes_INDEX_E_GB_BMD_GF_e)), NULL, NULL,
                                               static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("E_gb", dRes_INDEX_E_GB_BCK_GF_WAIT_CLOSE_e)), 2, 1.0f,
                                               0, -1, 1, NULL, J3DMdlFlag_DifferedDLBuffer, 0x11000084);
     i_this->bodyAnmNo = dRes_ID_E_GB_BCK_GF_WAIT_CLOSE_e;
@@ -1583,7 +1583,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
         return 0;
     }
 
-    i_this->brkAnmP = JKR_NEW mDoExt_brkAnm();
+    i_this->brkAnmP = new mDoExt_brkAnm();
     if (i_this->brkAnmP == NULL) {
         return 0;
     }

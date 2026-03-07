@@ -220,7 +220,7 @@ int daNpc_grS_c::CreateHeap() {
     }
     JUT_ASSERT(420, NULL != mdlData_p);
     u32 differedDlistFlag = 0x11020284;
-    mAnm_p = JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000,
+    mAnm_p = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000,
                                   differedDlistFlag);
 
     if (mAnm_p != NULL && mAnm_p->getModel() == NULL) {
@@ -237,7 +237,7 @@ int daNpc_grS_c::CreateHeap() {
     }
 
     model->setUserArea((uintptr_t)this);
-    mpMatAnm = JKR_NEW daNpcF_MatAnm_c();
+    mpMatAnm = new daNpcF_MatAnm_c();
 
     if (mpMatAnm == NULL) {
         return 0;

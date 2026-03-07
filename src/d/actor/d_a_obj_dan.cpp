@@ -56,7 +56,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 
 int daObjDAN_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes("I_Dan", 11);
-    mpMorf = JKR_NEW mDoExt_McaMorfSO(model_data, NULL, NULL,
+    mpMorf = new mDoExt_McaMorfSO(model_data, NULL, NULL,
                                   static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("I_Dan", 8)),
                                   J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1,
                                   &mCreatureSound, 0, 0x11000284);
@@ -65,7 +65,7 @@ int daObjDAN_c::CreateHeap() {
     }
     J3DModel* model = mpMorf->getModel();
 
-    mpBrkAnm = JKR_NEW mDoExt_brkAnm();
+    mpBrkAnm = new mDoExt_brkAnm();
     if (mpBrkAnm == NULL) {
         return 0;
     }
@@ -83,7 +83,7 @@ int daObjDAN_c::CreateHeap() {
         }
     }
 
-    mpBtkAnm = JKR_NEW mDoExt_btkAnm();
+    mpBtkAnm = new mDoExt_btkAnm();
     if (mpBtkAnm == NULL) {
         return 0;
     }
@@ -95,7 +95,7 @@ int daObjDAN_c::CreateHeap() {
             return 0;
         }
     } else {
-        mpBtkAnm = JKR_NEW mDoExt_btkAnm();
+        mpBtkAnm = new mDoExt_btkAnm();
         J3DAnmTextureSRTKey* tex_anm =
             static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("I_Dan", 19));
         if (!mpBtkAnm->init(model->getModelData(), tex_anm, TRUE,

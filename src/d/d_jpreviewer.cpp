@@ -32,15 +32,15 @@ public:
 };
 
 dJprev_c::dJprev_c(JStudio::TControl* param_1, const JUTGamePad& param_2) {
-    mOrthoGraph = JKR_NEW J2DOrthoGraph(0.0f, 0.0f, 640.0f, 480.0f, -1.0f, 1.0f);
+    mOrthoGraph = new J2DOrthoGraph(0.0f, 0.0f, 640.0f, 480.0f, -1.0f, 1.0f);
     JUT_ASSERT(72, mOrthoGraph != NULL)
-    mFont = JKR_NEW JUTResFont((ResFONT*)JUTResFONT_Ascfont_fix12, NULL);
+    mFont = new JUTResFont((ResFONT*)JUTResFONT_Ascfont_fix12, NULL);
     JUT_ASSERT(74, mFont != NULL)
-    m_parse = JKR_NEW tParse_();
+    m_parse = new tParse_();
     JUT_ASSERT(76, m_parse != NULL)
     mHeap = JKRExpHeap::create(0x100000, JKRHeap::getRootHeap2(), NULL);
     JUT_ASSERT(82, mHeap != NULL)
-    mControl = JKR_NEW dJprevCtrl_c();
+    mControl = new dJprevCtrl_c();
     JUT_ASSERT(86, mControl != NULL)
     mHIOId = mDoHIO_createChild("JStudioPreviewer", mControl);
     mControl->interface_setPad(&param_2);
@@ -53,23 +53,23 @@ dJprev_c::dJprev_c(JStudio::TControl* param_1, const JUTGamePad& param_2) {
 
 dJprev_c::~dJprev_c() {
     mDoHIO_deleteChild(mHIOId);
-    JKR_DELETE(mControl);
+    delete mControl;
     mHeap->destroy();
-    JKR_DELETE(m_parse);
-    JKR_DELETE(mFont);
-    JKR_DELETE(mOrthoGraph);
+    delete m_parse;
+    delete mFont;
+    delete mOrthoGraph;
     m_myObj = NULL;
 }
 
 void dJprev_c::create(JStudio::TControl* pControl, const JUTGamePad& pad) {
     JUT_ASSERT(130, m_myObj == NULL);
-    JKR_NEW dJprev_c(pControl, pad);
+    new dJprev_c(pControl, pad);
     JUT_ASSERT(132, m_myObj != NULL);
 }
 
 void dJprev_c::remove() {
     JUT_ASSERT(147, m_myObj != NULL);
-    JKR_DELETE(m_myObj);
+    delete m_myObj;
 }
 
 void dJprev_c::update() {

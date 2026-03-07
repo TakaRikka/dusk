@@ -56,7 +56,7 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
         heap = JASDram;
     }
 
-    JASBasicBank* bank = JKR_NEW_ARGS (heap, 0) JASBasicBank();
+    JASBasicBank* bank = new (heap, 0) JASBasicBank();
     if (bank == NULL) {
         return NULL;
     }
@@ -68,12 +68,12 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
     TListChunk* list_chunk = (TListChunk*)findChunk(stream, 'LIST');
     JUT_ASSERT(145, list_chunk);
 
-    u8* envt = JKR_NEW_ARGS (heap, 2) u8[envt_chunk->mSize];
+    u8* envt = new (heap, 2) u8[envt_chunk->mSize];
     JASCalc::bcopy(envt_chunk->mData, envt, envt_chunk->mSize);
 
     BE(u32)* ptr = &osc_chunk->mCount;
     u32 count = *ptr++;
-    JASOscillator::Data* osc_data = JKR_NEW_ARGS (heap, 0) JASOscillator::Data[count];
+    JASOscillator::Data* osc_data = new (heap, 0) JASOscillator::Data[count];
     for (int i = 0; i < count; i++, ptr += sizeof(TOsc) >> 2) {
         TOsc* op = (TOsc*)ptr;
         JUT_ASSERT(155, op->id == 'Osci');
@@ -94,7 +94,7 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
             BE(u32)* data = (BE(u32)*)((intptr_t)stream + list_chunk->mOffsets[i]);
             switch (*data++) {
             case 'Inst': {
-                JASBasicInst* instp = JKR_NEW_ARGS (heap, 0) JASBasicInst();
+                JASBasicInst* instp = new (heap, 0) JASBasicInst();
                 JUT_ASSERT(187, instp != NULL);
                 u32 count = *data++;
                 for (int j = 0; j < count; j++) {
@@ -126,7 +126,7 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
             }
 
             case 'Perc': {
-                JASDrumSet* drump = JKR_NEW_ARGS (heap, 0) JASDrumSet();
+                JASDrumSet* drump = new (heap, 0) JASDrumSet();
                 JUT_ASSERT(264, drump != NULL);
                 u32 pmap_count = data[1];
                 JUT_ASSERT(268, pmap_count <= 128);
@@ -135,7 +135,7 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
                 for (int j = 0; j < count; j++) {
                     u32 offset = *data++;
                     if (offset != 0) {
-                        JASDrumSet::TPerc* percp = JKR_NEW_ARGS (heap, 0) JASDrumSet::TPerc();
+                        JASDrumSet::TPerc* percp = new (heap, 0) JASDrumSet::TPerc();
                         JUT_ASSERT(277, percp);
                         u32 type = data[0];
                         JUT_ASSERT(282, type == 'Pmap');
@@ -177,7 +177,7 @@ JASBasicBank* JASBNKParser::Ver0::createBasicBank(void const* stream, JKRHeap* h
     }
     
     THeader const* header = (THeader*)stream;
-    JASBasicBank* bank = JKR_NEW_ARGS (heap, 0) JASBasicBank();
+    JASBasicBank* bank = new (heap, 0) JASBasicBank();
     if (bank == NULL) {
         return NULL;
     }
@@ -187,7 +187,7 @@ JASBasicBank* JASBNKParser::Ver0::createBasicBank(void const* stream, JKRHeap* h
     for (int i = 0; i < 0x80; i++) {
         TInst* tinst = header->mOffsets.mInstOffset[i].ptr(header);
         if (tinst != NULL) {
-            JASBasicInst* instp = JKR_NEW_ARGS (heap, 0) JASBasicInst();
+            JASBasicInst* instp = new (heap, 0) JASBasicInst();
             JUT_ASSERT(368, instp != NULL);
             instp->setVolume(tinst->mVolume);
             instp->setPitch(tinst->mPitch);
@@ -200,7 +200,7 @@ JASBasicBank* JASBNKParser::Ver0::createBasicBank(void const* stream, JKRHeap* h
                     if (osc != NULL) {
                         instp->setOsc(osc_idx, osc);
                     } else {
-                        osc = JKR_NEW_ARGS (heap, 0) JASOscillator::Data();
+                        osc = new (heap, 0) JASOscillator::Data();
                         JUT_ASSERT(386, osc != NULL);
                         osc->mTarget = tosc->mTarget;
                         osc->_04 = tosc->field_0x4;
@@ -209,7 +209,7 @@ JASBasicBank* JASBNKParser::Ver0::createBasicBank(void const* stream, JKRHeap* h
                         if (points != NULL) {
                             const JASOscillator::Point* endPtr = getOscTableEndPtr(points);
                             int size = endPtr - points;
-                            JASOscillator::Point* table = JKR_NEW_ARGS (heap, 0) JASOscillator::Point[size];
+                            JASOscillator::Point* table = new (heap, 0) JASOscillator::Point[size];
                             JUT_ASSERT(396, table != NULL);
                             JASCalc::bcopy(points, table, size * sizeof(JASOscillator::Point));
                             osc->mTable = table;
@@ -221,7 +221,7 @@ JASBasicBank* JASBNKParser::Ver0::createBasicBank(void const* stream, JKRHeap* h
                         if (points != NULL) {
                             const JASOscillator::Point* endPtr = getOscTableEndPtr(points);
                             int size = endPtr - points;
-                            JASOscillator::Point* table = JKR_NEW_ARGS (heap, 0) JASOscillator::Point[size];
+                            JASOscillator::Point* table = new (heap, 0) JASOscillator::Point[size];
                             JUT_ASSERT(409, table != NULL);
                             JASCalc::bcopy(points, table, size * sizeof(JASOscillator::Point));
                             osc->rel_table = table;
@@ -256,14 +256,14 @@ JASBasicBank* JASBNKParser::Ver0::createBasicBank(void const* stream, JKRHeap* h
     for (int i = 0; i < 12; i++) {
         TPerc* tperc = header->mOffsets.mPercOffset[i].ptr(header);
         if (tperc != NULL) {
-            JASDrumSet* setp = JKR_NEW_ARGS (heap, 0) JASDrumSet();
+            JASDrumSet* setp = new (heap, 0) JASDrumSet();
             JUT_ASSERT(509, setp != NULL);
             setp->newPercArray(0x80, heap);
 
             for (int j = 0; j < 0x80; j++) {
                 TPmap* tpmap = tperc->mPmapOffset[j].ptr(header);
                 if (tpmap != NULL) {
-                    JASDrumSet::TPerc* percp = JKR_NEW_ARGS (heap, 0) JASDrumSet::TPerc();
+                    JASDrumSet::TPerc* percp = new (heap, 0) JASDrumSet::TPerc();
                     JUT_ASSERT(519, percp);
                     percp->setVolume(tpmap->mVolume);
                     percp->setPitch(tpmap->mPitch);

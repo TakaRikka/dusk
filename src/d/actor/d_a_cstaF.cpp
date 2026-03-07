@@ -54,7 +54,7 @@ int daCstaF_c::CreateHeap() {
     const data* data_p = &dataTbl[m_type];
 
     void* pbck = dComIfG_getObjectRes(m_arcName, data_p->bck_idx);
-    mp_modelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(m_arcName, data_p->bmd_idx), NULL, NULL, (J3DAnmTransform*)pbck, 0, 0.0f, 0, -1, &m_sound, 0x80000, 0x11000284);
+    mp_modelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(m_arcName, data_p->bmd_idx), NULL, NULL, (J3DAnmTransform*)pbck, 0, 0.0f, 0, -1, &m_sound, 0x80000, 0x11000284);
     if (mp_modelMorf == NULL || mp_modelMorf->getModel() == NULL) {
         return 0;
     }

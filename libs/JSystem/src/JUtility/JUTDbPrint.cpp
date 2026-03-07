@@ -23,7 +23,7 @@ JUTDbPrint* JUTDbPrint::start(JUTFont* pFont, JKRHeap* pHeap) {
         if (pHeap == NULL) {
             pHeap = JKRGetCurrentHeap();
         }
-        sDebugPrint = JKR_NEW JUTDbPrint(pFont, pHeap);
+        sDebugPrint = new JUTDbPrint(pFont, pHeap);
     }
 
     return sDebugPrint;

@@ -2976,7 +2976,7 @@ int daCow_c::CreateHeap() {
     JUT_ASSERT(3826, NULL != modelData);
     int r24 = 0x11020084;
     mpMorf =
-        JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, r24);
+        new mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, r24);
 
     if (!mpMorf || !mpMorf->getModel()) {
         return cPhs_INIT_e;
@@ -2991,7 +2991,7 @@ int daCow_c::CreateHeap() {
     }
     setBck(daCow_c::Animation_WaitA, J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f);
 
-    mpBtp = JKR_NEW mDoExt_btpAnm();
+    mpBtp = new mDoExt_btpAnm();
 
     if (mpBtp == NULL) {
         return cPhs_ERROR_e;

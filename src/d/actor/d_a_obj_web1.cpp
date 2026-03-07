@@ -208,7 +208,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    _this->mpBrk = JKR_NEW mDoExt_brkAnm();
+    _this->mpBrk = new mDoExt_brkAnm();
     if (_this->mpBrk == NULL) {
         return 0;
     }
@@ -220,7 +220,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 
     _this->mpBrk->setPlaySpeed(0.0f);
 
-    _this->mpBgW = JKR_NEW dBgW();
+    _this->mpBgW = new dBgW();
     if (_this->mpBgW == NULL) {
         return 0;
     }

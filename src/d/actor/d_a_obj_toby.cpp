@@ -445,7 +445,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
                 return 0;
             }
 
-            pYuka->mBgW = JKR_NEW dBgW();
+            pYuka->mBgW = new dBgW();
             if (pYuka->mBgW == NULL) {
                 return 0;
             }

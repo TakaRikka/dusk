@@ -252,7 +252,7 @@ int daNpcCd2_c::NpcCreate(int param_1) {
     } else {
         uVar5 = 0x11000084;
     }
-    mpMorf = JKR_NEW mDoExt_McaMorfSO(a_mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mCitizen,
+    mpMorf = new mDoExt_McaMorfSO(a_mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mCitizen,
                                   0x80000, uVar5);
     if (mpMorf != NULL && mpMorf->getModel() == NULL) {
         mpMorf->stopZelAnime();
@@ -264,7 +264,7 @@ int daNpcCd2_c::NpcCreate(int param_1) {
     mCitizen.init(&current.pos, &eyePos, 3, 1);
     mCitizen.setMdlType(param_1, false, mIsDarkWorld != 0 ? 1 : 0);
     if (anmTex != NULL) {
-        mpBtpAnm = JKR_NEW mDoExt_btpAnm();
+        mpBtpAnm = new mDoExt_btpAnm();
         JUT_ASSERT(622, NULL != mpBtpAnm);
         if (mpBtpAnm == NULL || !mpBtpAnm->init(a_mdlData_p, anmTex, 1, 2, 1.0f, 0, -1)) {
             return 0;

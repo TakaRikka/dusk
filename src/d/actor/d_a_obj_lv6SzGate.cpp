@@ -56,7 +56,7 @@ int daLv6SzGate_c::CreateHeap() {
         return 0;
     }
 
-    field_0x5e8 = JKR_NEW dBgW();
+    field_0x5e8 = new dBgW();
 
     if (field_0x5e8 != NULL &&
         !field_0x5e8->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("L6SzGate", 15)), 1, &mMtx))

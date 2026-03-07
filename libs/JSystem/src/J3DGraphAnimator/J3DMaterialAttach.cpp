@@ -1,9 +1,8 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
-#include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 #include "JSystem/J3DGraphAnimator/J3DMaterialAttach.h"
+#include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
 void J3DMaterialTable::clear() {
@@ -154,7 +153,7 @@ int J3DMaterialTable::createTexMtxForAnimator(J3DAnmTextureSRTKey* pTexSRTKey) {
                 rv = 1;
             } else {
                 if (texMtx != 0xff && material->getTexMtx(texMtx) == NULL) {
-                    J3DTexMtx* mtx = JKR_NEW J3DTexMtx();
+                    J3DTexMtx* mtx = new J3DTexMtx();
                     rv = 4;
                     material->setTexMtx(texMtx, mtx);
                     JUT_WARN(420, "matNo<%d> : texMtx%d nothing !\n", matNo, texMtx);

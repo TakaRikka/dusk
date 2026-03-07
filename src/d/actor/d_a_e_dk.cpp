@@ -939,7 +939,7 @@ static int daE_DK_Delete(daE_DK_c* i_this) {
 int daE_DK_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_DK", BMDR_DK);
     JUT_ASSERT(1488, modelData != NULL);
-    mpMorfSO = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpMorfSO = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                     (J3DAnmTransform*)dComIfG_getObjectRes("E_DK", BCK_DK_WAIT), 0, 1.0f, 0,
                                     -1, &mCreatureSound, 0x80000, 0x31000284);
 
@@ -948,7 +948,7 @@ int daE_DK_c::CreateHeap() {
     }
 
     for (s32 i = 0; i < 2; i++) {
-        mpBrkAnm[i] = JKR_NEW mDoExt_brkAnm();
+        mpBrkAnm[i] = new mDoExt_brkAnm();
         if (mpBrkAnm[i] == 0) {
             return 0;
         }
@@ -960,7 +960,7 @@ int daE_DK_c::CreateHeap() {
             return 0;
         }
 
-        mpBtkAnm[i] = JKR_NEW mDoExt_btkAnm();
+        mpBtkAnm[i] = new mDoExt_btkAnm();
         if (mpBtkAnm[i] == 0) {
             return 0;
         }
@@ -975,7 +975,7 @@ int daE_DK_c::CreateHeap() {
 
     modelData = (J3DModelData*)dComIfG_getObjectRes("E_DK", BMDR_DK_CORE);
     JUT_ASSERT(1537, modelData != NULL);
-    mpCoreMorfSO = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpCoreMorfSO = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                         (J3DAnmTransform*)dComIfG_getObjectRes("E_DK", BCK_DK_C_WAIT), 0,
                                         1.0f, 0, -1, &mCreatureSound, 0x80000, 0x11000084);
 

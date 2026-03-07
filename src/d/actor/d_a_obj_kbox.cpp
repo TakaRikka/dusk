@@ -451,7 +451,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     }
 
     a_this->model = i_this->mModel;
-    i_this->mBgw = JKR_NEW dBgW();
+    i_this->mBgw = new dBgW();
     if (i_this->mBgw == NULL) {
         return 0;
     }

@@ -95,7 +95,7 @@ int daTurara_c::CreateHeap() {
     if (mpModel[1] == NULL) {
         return 0;
     }
-    field_0x980 = JKR_NEW dBgW;
+    field_0x980 = new dBgW;
     if (field_0x980 == NULL || field_0x980->Set((cBgD_t *)dComIfG_getObjectRes("M_Turara", 0xd),
                                                 1, &mBgMtx) != 0) {
         field_0x980 = NULL;

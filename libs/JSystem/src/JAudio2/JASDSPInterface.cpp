@@ -426,9 +426,9 @@ u32 const ATTRIBUTE_ALIGN(32) JASDsp::DSPRES_FILTER[320] = {
 };
 
 void JASDsp::initBuffer() {
-    CH_BUF = JKR_NEW_ARGS(JASDram, 0x20) TChannel[64];
+    CH_BUF = new(JASDram, 0x20) TChannel[64];
     JUT_ASSERT(354, CH_BUF);
-    FX_BUF = JKR_NEW_ARGS(JASDram, 0x20) FxBuf[4];
+    FX_BUF = new(JASDram, 0x20) FxBuf[4];
     JUT_ASSERT(356, FX_BUF);
     JASCalc::bzero(CH_BUF, 0x6000);
     JASCalc::bzero(FX_BUF, sizeof(FxBuf) * 4);

@@ -855,7 +855,7 @@ static int daE_BI_Delete(e_bi_class* i_this) {
 static int useHeapInit(fopAc_ac_c* actor) {
     e_bi_class* i_this = (e_bi_class*)actor;
 
-    i_this->anm_p = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_BI", BMDR_BI), NULL, NULL,
+    i_this->anm_p = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_BI", BMDR_BI), NULL, NULL,
                                                (J3DAnmTransform*)dComIfG_getObjectRes("E_BI", BCK_BI_WAIT01), 2, 1.0f, 0, -1,
                                                &i_this->sound, 0x80000, 0x11000084);
     if (i_this->anm_p == NULL || i_this->anm_p->getModel() == NULL) {

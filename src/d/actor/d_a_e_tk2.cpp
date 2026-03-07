@@ -533,7 +533,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
     e_tk2_class* i_this = static_cast<e_tk2_class*>(actor);
 
     i_this->mpMorf =
-        JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_tk2", 0xE), NULL, NULL,
+        new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_tk2", 0xE), NULL, NULL,
                              (J3DAnmTransform*)dComIfG_getObjectRes("E_tk2", 0x9), 2, 1.0f, 0, -1,
                              &i_this->mSound, 0x80000, 0x11000084);
 

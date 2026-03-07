@@ -63,7 +63,7 @@ void JAIStreamMgr::freeDeadStream_() {
                 JUT_ASSERT(105, result);
             }
             
-            JKR_DELETE(stream);
+            delete stream;
         }
         i = next;
     }
@@ -114,7 +114,7 @@ JAIStream* JAIStreamMgr::newStream_() {
         return NULL;
     } 
 
-    JAIStream* stream = JKR_NEW JAIStream(this, field_0x6c);
+    JAIStream* stream = new JAIStream(this, field_0x6c);
     if (stream == NULL) {
         JUT_WARN(235, "%s", "JASPoolAllocObject::<JAIStream>::operator new failed .\n");
         return NULL;

@@ -379,7 +379,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
         return 0;
     }
 
-    i_this->mpBgW = JKR_NEW dBgW();
+    i_this->mpBgW = new dBgW();
     if (i_this->mpBgW == NULL) {
         return 0;
     }
@@ -392,7 +392,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     i_this->mpBgW->SetCrrFunc(dBgS_MoveBGProc_Typical);
     i_this->mpBgW->SetRideCallback(ride_call_back);
 
-    i_this->mpBtk = JKR_NEW mDoExt_btkAnm();
+    i_this->mpBtk = new mDoExt_btkAnm();
     if (i_this->mpBtk == NULL) {
         return 0;
     }
@@ -401,7 +401,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
         return 0;
     }
 
-    i_this->mpBrk = JKR_NEW mDoExt_brkAnm();
+    i_this->mpBrk = new mDoExt_brkAnm();
     if (i_this->mpBrk == NULL) {
         return 0;
     }

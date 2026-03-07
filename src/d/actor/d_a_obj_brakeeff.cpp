@@ -155,7 +155,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->mpBrk = JKR_NEW mDoExt_brkAnm();
+    a_this->mpBrk = new mDoExt_brkAnm();
     if (!a_this->mpBrk) {
         return 0;
     }
@@ -168,7 +168,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->mpDBgW = JKR_NEW dBgW();
+    a_this->mpDBgW = new dBgW();
     if (!a_this->mpDBgW) {
         return 0;
     }

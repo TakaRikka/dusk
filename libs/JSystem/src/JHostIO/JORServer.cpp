@@ -117,7 +117,7 @@ JORServer* JORServer::instance;
 
 JORServer* JORServer::create() {
     if (instance == NULL) {
-        instance = JKR_NEW JORServer();
+        instance = new JORServer();
     }
 
     return instance;

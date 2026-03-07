@@ -18,7 +18,7 @@ int daObjMirrorSand_c::createHeap() {
     }
 
     J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 5);
-    mpBck = JKR_NEW mDoExt_bckAnm();
+    mpBck = new mDoExt_bckAnm();
 
     f32 speed;
     if (isSwitch()) {

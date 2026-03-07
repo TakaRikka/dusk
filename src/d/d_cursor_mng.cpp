@@ -1,10 +1,7 @@
-#include "JSystem/JKernel/JKRHeap.h"
-
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "d/d_cursor_mng.h"
 
-#include "../../libs/JSystem/include/JSystem/JKernel/JKRHeap.h"
 #include "d/d_com_inf_game.h"
 
 dCsr_mng_c* dCsr_mng_c::m_myObj;
@@ -103,7 +100,7 @@ void dCsr_mng_c::insideObjReleaseCheck_(void) {
 }
 
 void dCsr_mng_c::create(void) {
-    dCsr_mng_c* mng = JKR_NEW dCsr_mng_c();
+    dCsr_mng_c* mng = new dCsr_mng_c();
     m_myObj = mng;
 }
 
@@ -245,7 +242,7 @@ BOOL dCsr_mng_c::list_c::isEntry(const node_c* i_node) const {
 
 dCsr_mng_c::bloObj_c::~bloObj_c() {
     if (m_panes != NULL) {
-        JKR_DELETE_ARRAY(m_panes);
+        delete[] m_panes;
         m_panes = NULL;
     }
     m_screen = NULL;
@@ -277,7 +274,7 @@ BOOL dCsr_mng_c::bloObj_c::create(J2DScreen* i_screen, u16 i_mask, u8 i_priority
     m_screen = i_screen;
     m_pane_num = 0;
     calcPaneObjNum(i_screen);
-    m_panes = JKR_NEW paneObj_c[m_pane_num];
+    m_panes = new paneObj_c[m_pane_num];
     paneObj_c* sp08 = m_panes + m_pane_num;
     createPaneObj(&sp08, m_screen);
     return TRUE;

@@ -188,7 +188,7 @@ mDoDvdThd_callback_c::mDoDvdThd_callback_c(mDoDvdThd_callback_func pFunc, void* 
 
 mDoDvdThd_callback_c* mDoDvdThd_callback_c::create(mDoDvdThd_callback_func pFunc, void* pData) {
     mDoDvdThd_callback_c* callCmd =
-        JKR_NEW_ARGS (mDoExt_getCommandHeap(), -4) mDoDvdThd_callback_c(pFunc, pData);
+        new (mDoExt_getCommandHeap(), -4) mDoDvdThd_callback_c(pFunc, pData);
     if (callCmd != NULL) {
         mDoDvdThd::l_param.addition(callCmd);
         if (mDoDvdThd::DVDLogoMode) {
@@ -219,12 +219,12 @@ mDoDvdThd_mountArchive_c::mDoDvdThd_mountArchive_c(u8 param_0) {
 mDoDvdThd_mountArchive_c* mDoDvdThd_mountArchive_c::create(char const* pArchivePath,
                                                            u8 mountDirection, JKRHeap* pHeap) {
     mDoDvdThd_mountArchive_c* mountArcCmd =
-        JKR_NEW_ARGS (mDoExt_getCommandHeap(), -4) mDoDvdThd_mountArchive_c(mountDirection);
+        new (mDoExt_getCommandHeap(), -4) mDoDvdThd_mountArchive_c(mountDirection);
     if (mountArcCmd != NULL) {
         mountArcCmd->mEntryNumber = my_DVDConvertPathToEntrynum(pArchivePath);
         if (mountArcCmd->mEntryNumber == -1) {
             mountArcCmd->mIsDone = true;
-            JKR_DELETE(mountArcCmd);
+            delete mountArcCmd;
             mountArcCmd = NULL;
         } else {
             mountArcCmd->mHeap = pHeap;
@@ -263,10 +263,10 @@ s32 mDoDvdThd_mountArchive_c::execute() {
 #endif
         if (mMountDirection == 0) {
             memArchive =
-                JKR_NEW_ARGS (heap, 0) JKRMemArchive(mEntryNumber, JKRArchive::MOUNT_DIRECTION_HEAD);
+                new (heap, 0) JKRMemArchive(mEntryNumber, JKRArchive::MOUNT_DIRECTION_HEAD);
         } else {
             memArchive =
-                JKR_NEW_ARGS (heap, -4) JKRMemArchive(mEntryNumber, JKRArchive::MOUNT_DIRECTION_TAIL);
+                new (heap, -4) JKRMemArchive(mEntryNumber, JKRArchive::MOUNT_DIRECTION_TAIL);
         }
         if (memArchive != NULL && memArchive->isMounted()) {
             mArchive = memArchive;
@@ -282,7 +282,7 @@ s32 mDoDvdThd_mountArchive_c::execute() {
         OSReport_Error("mDoDvdThd_mountArchive_c::execute マウント失敗\n");
         OS_REPORT_ERROR("Name = %s\n", mDoDvdHack::ConvertEntrynumToName(mEntryNumber));
         if (memArchive) {
-            JKR_DELETE(memArchive);
+            delete memArchive;
         }
         memArchive = NULL;
 #if PLATFORM_GCN
@@ -327,9 +327,9 @@ s32 mDoDvdThd_mountAramArchive_c::execute() {
     BOOL result = FALSE;
     if (!mArchive) {
         if (mMountDirection == 0) {
-            mArchive = JKR_NEW_ARGS (heap, 0x20) JKRAramArchive();
+            mArchive = new (heap, 0x20) JKRAramArchive();
         } else {
-            mArchive = JKR_NEW_ARGS (heap, -0x20) JKRAramArchive();
+            mArchive = new (heap, -0x20) JKRAramArchive();
         }
 #if DEBUG
         if (mDoDvdThd::verbose) {
@@ -374,12 +374,12 @@ mDoDvdThd_mountXArchive_c* mDoDvdThd_mountXArchive_c::create(char const* pArchiv
                                                              JKRArchive::EMountMode mountMode,
                                                              JKRHeap* pHeap) {
     mDoDvdThd_mountXArchive_c* mountXArcCmd =
-        JKR_NEW_ARGS (mDoExt_getCommandHeap(), -4) mDoDvdThd_mountXArchive_c(mountDirection, mountMode);
+        new (mDoExt_getCommandHeap(), -4) mDoDvdThd_mountXArchive_c(mountDirection, mountMode);
     if (mountXArcCmd != NULL) {
         mountXArcCmd->mEntryNum = my_DVDConvertPathToEntrynum(pArchivePath);
         if (mountXArcCmd->mEntryNum == -1) {
             mountXArcCmd->mIsDone = true;
-            JKR_DELETE(mountXArcCmd);
+            delete mountXArcCmd;
             mountXArcCmd = NULL;
         } else {
             mountXArcCmd->mHeap = pHeap;
@@ -458,12 +458,12 @@ mDoDvdThd_toMainRam_c::mDoDvdThd_toMainRam_c(u8 param_0) {
 mDoDvdThd_toMainRam_c* mDoDvdThd_toMainRam_c::create(char const* pArchivePath, u8 mountDirection,
                                                      JKRHeap* pHeap) {
     mDoDvdThd_toMainRam_c* toMainRAMCmd =
-        JKR_NEW_ARGS (mDoExt_getCommandHeap(), -4) mDoDvdThd_toMainRam_c(mountDirection);
+        new (mDoExt_getCommandHeap(), -4) mDoDvdThd_toMainRam_c(mountDirection);
     if (toMainRAMCmd != NULL) {
         toMainRAMCmd->mEntryNum = my_DVDConvertPathToEntrynum(pArchivePath);
         if (toMainRAMCmd->mEntryNum == -1) {
             toMainRAMCmd->mIsDone = true;
-            JKR_DELETE(toMainRAMCmd);
+            delete toMainRAMCmd;
             toMainRAMCmd = NULL;
         } else {
             toMainRAMCmd->mHeap = pHeap;

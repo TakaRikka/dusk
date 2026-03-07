@@ -110,7 +110,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     obj_ki_class* _this = static_cast<obj_ki_class*>(i_this);
 
     _this->mpMorf =
-        JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Obj_Ki", ki_bmd[_this->mBmdIdx]),
+        new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Obj_Ki", ki_bmd[_this->mBmdIdx]),
                            NULL, NULL, NULL, 0, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000084);
     if (_this->mpMorf == NULL || _this->mpMorf->getModel() == NULL) {
         return 0;
@@ -125,7 +125,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
     }
 
-    _this->mpBgW = JKR_NEW dBgW();
+    _this->mpBgW = new dBgW();
     if (_this->mpBgW == NULL) {
         return 0;
     }

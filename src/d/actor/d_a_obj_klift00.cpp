@@ -110,8 +110,8 @@ static const int l_dzbidx[] = {9};
 
 // force dCcD_Sph::~dCcD_Sph to be emitted earlier than it otherwise would
 static void dummy() {
-    JKR_DELETE((dCcD_Sph*)NULL);
-    JKR_DELETE((dCcD_Cyl*)NULL);
+    delete (dCcD_Sph*)NULL;
+    delete (dCcD_Cyl*)NULL;
 }
 
 cPhs_Step daObjKLift00_c::create1st() {
@@ -251,14 +251,14 @@ int daObjKLift00_c::CreateHeap() {
         mpChainBase = NULL;
     }
 
-    mChainPositions = JKR_NEW ChainPos[mNumChains];
+    mChainPositions = new ChainPos[mNumChains];
     if(!mChainPositions)
         return 0;
 
     mChainModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, l_bmdidx[1]));
     JUT_ASSERT(334, mChainModelData != NULL);
 
-    mChainMdlObjs = JKR_NEW dMdl_obj_c[mNumChainModels];
+    mChainMdlObjs = new dMdl_obj_c[mNumChainModels];
 
     return mChainMdlObjs ? TRUE : FALSE;
 }

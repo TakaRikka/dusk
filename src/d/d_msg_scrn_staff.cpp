@@ -21,16 +21,16 @@ dMsgScrnStaff_c::dMsgScrnStaff_c(u8 unused) {
     field_0xd0 = 0.0f;
     field_0xcc = 0.0f;
 
-    mpScreen = JKR_NEW J2DScreen();
+    mpScreen = new J2DScreen();
     mpScreen->setPriority("zelda_staff_roll.blo", 0x20000, dComIfGp_getMsgArchive(6));
     dPaneClass_showNullPane(mpScreen);
 
-    mpPmP_c = JKR_NEW CPaneMgr(mpScreen, 'ROOT', 2, NULL);
+    mpPmP_c = new CPaneMgr(mpScreen, 'ROOT', 2, NULL);
     mpScreen->search(MULTI_CHAR('left_n'))->hide();
     mpScreen->search(MULTI_CHAR('right_n'))->hide();
 
     for (int i = 0; i < 6; i++) {
-        mpTm_c[i] = JKR_NEW CPaneMgr(mpScreen, t_tag[i], 0, NULL);
+        mpTm_c[i] = new CPaneMgr(mpScreen, t_tag[i], 0, NULL);
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setFont(mDoExt_getMesgFont());
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setString(0x200, "");
     }
@@ -52,14 +52,14 @@ dMsgScrnStaff_c::dMsgScrnStaff_c(u8 unused) {
 }
 
 dMsgScrnStaff_c::~dMsgScrnStaff_c() {
-    JKR_DELETE(mpScreen);
+    delete mpScreen;
     mpScreen = NULL;
 
-    JKR_DELETE(mpPmP_c);
+    delete mpPmP_c;
     mpPmP_c = NULL;
 
     for (int i = 0; i < 6; i++) {
-        JKR_DELETE(mpTm_c[i]);
+        delete mpTm_c[i];
         mpTm_c[i] = 0;
     }
 

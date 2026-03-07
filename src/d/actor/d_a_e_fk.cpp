@@ -37,7 +37,7 @@ daE_FK_HIO_c::daE_FK_HIO_c() {
 int daE_FK_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_fk", 15);
     JUT_ASSERT(189, modelData != NULL);
-    mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_fk", 12), 2, 1.0f, 0, -1, &mSound, 0x80000, 0x11000084);
+    mpModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_fk", 12), 2, 1.0f, 0, -1, &mSound, 0x80000, 0x11000084);
     if (mpModelMorf == NULL || mpModelMorf->getModel() == NULL) {
         return 0;
     }

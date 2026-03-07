@@ -1624,7 +1624,7 @@ static int daE_SW_Delete(daE_SW_c* i_this) {
 }
 
 int daE_SW_c::CreateHeap() {
-    mpModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_SW", BMDR_SW), NULL, NULL,
+    mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_SW", BMDR_SW), NULL, NULL,
                                        (J3DAnmTransform*)dComIfG_getObjectRes("E_SW", BCK_SW_WAIT), 0, 1.0f, 0, -1, &mSound, 0x80000, 0x11000084);
     if (mpModelMorf == NULL || mpModelMorf->getModel() == NULL) {
         return 0;

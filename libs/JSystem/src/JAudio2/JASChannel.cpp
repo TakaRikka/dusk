@@ -57,7 +57,7 @@ JASChannel::~JASChannel() {
 int JASChannel::play() {
     JASDSPChannel* channel = JASDSPChannel::alloc(JSULoByte(mPriority), dspUpdateCallback, this);
     if (channel == NULL) {
-        JKR_DELETE(this);
+        delete this;
         return 0;
     }
     mDspCh = channel;
@@ -70,7 +70,7 @@ int JASChannel::playForce() {
     JASDSPChannel* channel = JASDSPChannel::allocForce(JSULoByte(mPriority),
                                                        dspUpdateCallback, this);
     if (channel == NULL) {
-        JKR_DELETE(this);
+        delete this;
         return 0;
     }
     mDspCh = channel;
@@ -212,7 +212,7 @@ s32 JASChannel::dspUpdateCallback(u32 i_type, JASDsp::TChannel* i_channel, void*
     case JASDSPChannel::CB_DROP:
         _this->mDspCh->free();
         _this->mDspCh = NULL;
-        JKR_DELETE(_this);
+        delete _this;
         return -1;
     default:
         JUT_WARN(323, "Unexpected JASDSPChannel::UpdateStatus %d", i_type);
@@ -233,7 +233,7 @@ s32 JASChannel::initialUpdateDSPChannel(JASDsp::TChannel* i_channel) {
         JUT_WARN_DEVICE(346, 2, "%s", "Lost wave data while playing");
         mDspCh->free();
         mDspCh = NULL;
-        JKR_DELETE(this);
+        delete this;
         return -1;
     }
     
@@ -241,7 +241,7 @@ s32 JASChannel::initialUpdateDSPChannel(JASDsp::TChannel* i_channel) {
         JUT_WARN_DEVICE(357, 2, "%s","Lost bank data while playing");
         mDspCh->free();
         mDspCh = NULL;
-        JKR_DELETE(this);
+        delete this;
         return -1;
     }
 
@@ -311,7 +311,7 @@ s32 JASChannel::updateDSPChannel(JASDsp::TChannel* i_channel) {
         JUT_WARN_DEVICE(456, 2, "%s","Lost wave data while playing");
         mDspCh->free();
         mDspCh = NULL;
-        JKR_DELETE(this);
+        delete this;
         return -1;
     }
     
@@ -319,7 +319,7 @@ s32 JASChannel::updateDSPChannel(JASDsp::TChannel* i_channel) {
         JUT_WARN_DEVICE(467, 2, "%s", "Lost bank data while playing");
         mDspCh->free();
         mDspCh = NULL;
-        JKR_DELETE(this);
+        delete this;
         return -1;
     }
 
@@ -329,7 +329,7 @@ s32 JASChannel::updateDSPChannel(JASDsp::TChannel* i_channel) {
         if (mOscillators[0].isRelease()) {
             mDspCh->free();
             mDspCh = NULL;
-            JKR_DELETE(this);
+            delete this;
             return -1;
         }
     } else {
@@ -350,7 +350,7 @@ s32 JASChannel::updateDSPChannel(JASDsp::TChannel* i_channel) {
                 if (i == 0 && mOscillators[i].isStop()) {
                     mDspCh->free();
                     mDspCh = NULL;
-                    JKR_DELETE(this);
+                    delete this;
                     return -1;
                 }
             }

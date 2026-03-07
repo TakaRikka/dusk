@@ -155,7 +155,7 @@ int daB_GG_c::CreateHeap() {
     modelData = (J3DModelData*)dComIfG_getObjectRes("B_gg", 0x23);
     JUT_ASSERT(207, modelData != NULL);
 
-    mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_gg", 0xE), 2, 1.0f, 0, -1, &mSound, 0x80000, 0x11000084);
+    mpModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_gg", 0xE), 2, 1.0f, 0, -1, &mSound, 0x80000, 0x11000084);
     if (mpModelMorf == NULL || mpModelMorf->getModel() == NULL) {
         return 0;
     }

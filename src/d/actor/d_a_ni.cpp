@@ -1852,7 +1852,7 @@ static int daNi_Delete(ni_class* i_this) {
 static BOOL useHeapInit(fopAc_ac_c* i_this) {
     ni_class* a_this = (ni_class*)i_this;
 
-    a_this->mpMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Ni", 16), NULL, NULL,
+    a_this->mpMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Ni", 16), NULL, NULL,
                                         (J3DAnmTransform*)dComIfG_getObjectRes("Ni", 11), 0, 1.0f,
                                         0, -1, 1, NULL, 0x80000, 0x11000284);
 
@@ -1868,7 +1868,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
         model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
     }
 
-    a_this->mpBtk = JKR_NEW mDoExt_btkAnm();
+    a_this->mpBtk = new mDoExt_btkAnm();
     if (a_this->mpBtk == NULL) {
         return false;
     }

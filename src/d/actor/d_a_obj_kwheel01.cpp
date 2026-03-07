@@ -149,7 +149,7 @@ int daObjKWheel01_c::CreateHeap() {
         if (!CHECK_KLIFT_EXISTS(i)) {
             mKLiftCollisions[i] = NULL;
         } else {
-            mKLiftCollisions[i] = JKR_NEW (dBgW);
+            mKLiftCollisions[i] = new (dBgW);
 
             if (!mKLiftCollisions[i]) {
                 return 0;

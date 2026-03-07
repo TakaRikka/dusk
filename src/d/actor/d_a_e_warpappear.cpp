@@ -838,7 +838,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
         return 0;
     }
 
-    i_this->btk = JKR_NEW mDoExt_btkAnm();
+    i_this->btk = new mDoExt_btkAnm();
     if (i_this->btk == NULL) {
         return 0;
     }
@@ -847,7 +847,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
         return 0;
     }
 
-    i_this->anm_p[0] = JKR_NEW mDoExt_brkAnm();
+    i_this->anm_p[0] = new mDoExt_brkAnm();
     if (i_this->anm_p[0] == NULL) {
         return 0;
     }
@@ -857,7 +857,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
     }
     i_this->anm_p[0]->setPlaySpeed(0.0f);
 
-    i_this->anm_p[1] = JKR_NEW mDoExt_brkAnm();
+    i_this->anm_p[1] = new mDoExt_brkAnm();
     if (i_this->anm_p[1] == NULL) {
         return 0;
     }

@@ -321,7 +321,7 @@ template <class AdaptorT, class ObjectT>
 JStudio::TObject* createObject_JSG_(const JStudio::stb::data::TParse_TBlock_object& param_1,
                                     JStage::TObject* param_2, const JStage::TSystem* param_3) {
     ObjectT* objt = (ObjectT*)param_2;                                        
-    AdaptorT* pAdaptor = JKR_NEW AdaptorT(param_3, objt);
+    AdaptorT* pAdaptor = new AdaptorT(param_3, objt);
     if (pAdaptor == NULL) {
         return NULL;
     }

@@ -217,7 +217,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     b_oh2_class* _this = static_cast<b_oh2_class*>(i_this);
 
     _this->mpMorf =
-        JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("B_oh", 0x29), NULL, NULL, NULL, 2,
+        new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("B_oh", 0x29), NULL, NULL, NULL, 2,
                              1.0f, 0, -1, &_this->mZ2Enemy, 0, 0x11000284);
 
     if (_this->mpMorf == NULL || _this->mpMorf->getModel() == NULL) {
@@ -235,7 +235,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
             nodeCallBack);
     }
 
-    _this->mpBtk = JKR_NEW mDoExt_btkAnm();
+    _this->mpBtk = new mDoExt_btkAnm();
     if (_this->mpBtk == NULL) {
         return 0;
     }
@@ -248,7 +248,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     _this->mpBtk->setFrame(cM_rndF(39.0f));
     _this->mpBtk->setPlaySpeed(cM_rndFX(0.1f) + 1.0f);
 
-    _this->mpBrk = JKR_NEW mDoExt_brkAnm();
+    _this->mpBrk = new mDoExt_brkAnm();
     if (_this->mpBrk == NULL) {
         return 0;
     }

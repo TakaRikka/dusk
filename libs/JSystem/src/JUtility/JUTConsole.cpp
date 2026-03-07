@@ -18,7 +18,7 @@ JUTConsole* JUTConsole::create(unsigned int param_0, unsigned int maxLines, JKRH
 
     u8* buffer = (u8*)JKRAllocFromHeap(pHeap, getObjectSizeFromBufferSize(param_0, maxLines), 0);
 
-    JUTConsole* console = JKR_NEW_ARGS (buffer) JUTConsole(param_0, maxLines, true);
+    JUTConsole* console = new (buffer) JUTConsole(param_0, maxLines, true);
     console->mBuf = buffer + sizeof(JUTConsole);
     console->clear();
 
@@ -34,7 +34,7 @@ JUTConsole* JUTConsole::create(unsigned int param_0, void* buffer, u32 bufferSiz
 
     u32 maxLines = getLineFromObjectSize(bufferSize, param_0);
 
-    JUTConsole* console = JKR_NEW_ARGS (buffer) JUTConsole(param_0, maxLines, false);
+    JUTConsole* console = new (buffer) JUTConsole(param_0, maxLines, false);
     console->mBuf = (u8*)buffer + sizeof(JUTConsole);
     console->clear();
 
@@ -401,7 +401,7 @@ JUTConsoleManager* JUTConsoleManager::createManager(JKRHeap* pHeap) {
         pHeap = JKRGetCurrentHeap();
     }
 
-    sManager = JKR_NEW_ARGS (pHeap, 0) JUTConsoleManager();
+    sManager = new (pHeap, 0) JUTConsoleManager();
     return sManager;
 }
 

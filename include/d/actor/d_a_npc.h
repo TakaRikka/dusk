@@ -815,7 +815,7 @@ STATIC_ASSERT(sizeof(daNpcT_c) == 0xE40);
 
 #define daNpcT_ct(ptr, ClassName, faceMotionAnmData, motionAnmData, faceMotionSequenceData, faceMotionStepNum, motionSequenceData, motionStepNum, evtData, arcNames) \
     if (!fopAcM_CheckCondition(ptr, fopAcCnd_INIT_e)) { \
-        JKR_NEW_ARGS (ptr) ClassName(faceMotionAnmData, motionAnmData, faceMotionSequenceData, faceMotionStepNum, motionSequenceData, motionStepNum, evtData, arcNames); \
+        new (ptr) ClassName(faceMotionAnmData, motionAnmData, faceMotionSequenceData, faceMotionStepNum, motionSequenceData, motionStepNum, evtData, arcNames); \
         fopAcM_OnCondition(ptr, fopAcCnd_INIT_e); \
     }
 

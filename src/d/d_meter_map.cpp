@@ -444,10 +444,10 @@ void dMeterMap_c::_create(J2DScreen* unused) {
     mSizeW = (s16)sizeX;
     mSizeH = (s16)sizeY;
 
-    mMap = JKR_NEW dMap_c(sizeX, sizeY, dispSizeW, dispSizeH);
+    mMap = new dMap_c(sizeX, sizeY, dispSizeW, dispSizeH);
     JUT_ASSERT(999, mMap != NULL);
 
-    mMapJ2DPicture = JKR_NEW J2DPicture(mMap->getResTIMGPointer());
+    mMapJ2DPicture = new J2DPicture(mMap->getResTIMGPointer());
     JUT_ASSERT(1002, mMapJ2DPicture != NULL);
 
     mIsCompass = dComIfGs_isDungeonItemCompass();
@@ -498,11 +498,11 @@ void dMeterMap_c::setDispPosInSide() {
 
 void dMeterMap_c::_delete() {
     if (mMapJ2DPicture != NULL) {
-        JKR_DELETE(mMapJ2DPicture);
+        delete mMapJ2DPicture;
     }
 
     if (mMap != NULL) {
-        JKR_DELETE(mMap);
+        delete mMap;
     }
 
     if (isEnableDispMapAndMapDispSizeTypeNo()) {

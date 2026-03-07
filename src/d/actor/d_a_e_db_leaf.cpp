@@ -33,7 +33,7 @@ static int daE_DB_LEAF_Delete(e_db_leaf_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_db_leaf_class* leaf = static_cast<e_db_leaf_class*>(i_this);
 
-    leaf->mpMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_DB", 0x18), NULL, NULL,
+    leaf->mpMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_DB", 0x18), NULL, NULL,
         (J3DAnmTransform*)dComIfG_getObjectRes("E_DB", 0x13), 2, 1.0, 0, -1, 1, NULL, 0x80000, 0x11000084);    
 
     if (leaf->mpMorf == NULL || leaf->mpMorf->getModel() == NULL) {

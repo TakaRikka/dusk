@@ -156,7 +156,7 @@ static int daBalloon2D_createHeap(fopAc_ac_c* i_this) {
 static char* l_arcName = "Balloon2D";
 
 int daBalloon2D_c::createHeap() {
-    mScreen = JKR_NEW J2DScreen();
+    mScreen = new J2DScreen();
     if (mScreen == NULL) {
         return  0;
     }
@@ -165,26 +165,26 @@ int daBalloon2D_c::createHeap() {
     JKRArchive* arc = resInfo->getArchive();
     mScreen->setPriority("zelda_balloon_game.blo", 0x20000, arc);
     dPaneClass_showNullPane(mScreen);
-    field_0x578 = JKR_NEW CPaneMgr(mScreen, MULTI_CHAR('n_all'), 2, NULL);
-    field_0x57c = JKR_NEW CPaneMgr(mScreen, MULTI_CHAR('score_tn'), 0, NULL);
-    field_0x580 = JKR_NEW CPaneMgr(mScreen, MULTI_CHAR('suji_n'), 2, NULL);
-    field_0x584 = JKR_NEW CPaneMgr(mScreen, MULTI_CHAR('s_set_n'), 0, NULL);
-    field_0x588 = JKR_NEW CPaneMgr(mScreen, MULTI_CHAR('tas_n'), 0, NULL);
-    field_0x58c = JKR_NEW CPaneMgr(mScreen, MULTI_CHAR('combo_tn'), 0, NULL);
-    field_0x590 = JKR_NEW CPaneMgr(mScreen, MULTI_CHAR('num_n'), 0, NULL);
-    field_0x594 = JKR_NEW CPaneMgr(mScreen, MULTI_CHAR('co_set_n'), 2, NULL);
-    field_0x598 = JKR_NEW CPaneMgr(mScreen, MULTI_CHAR('bal_3_n'), 2, NULL);
-    field_0x59c = JKR_NEW CPaneMgr(mScreen, MULTI_CHAR('bal_2_n'), 2, NULL);
-    field_0x5a0 = JKR_NEW CPaneMgr(mScreen, MULTI_CHAR('bal_1_n'), 2, NULL);
-    field_0x5a4 = JKR_NEW CPaneMgr(mScreen, MULTI_CHAR('ba_com_n'), 2, NULL);
+    field_0x578 = new CPaneMgr(mScreen, MULTI_CHAR('n_all'), 2, NULL);
+    field_0x57c = new CPaneMgr(mScreen, MULTI_CHAR('score_tn'), 0, NULL);
+    field_0x580 = new CPaneMgr(mScreen, MULTI_CHAR('suji_n'), 2, NULL);
+    field_0x584 = new CPaneMgr(mScreen, MULTI_CHAR('s_set_n'), 0, NULL);
+    field_0x588 = new CPaneMgr(mScreen, MULTI_CHAR('tas_n'), 0, NULL);
+    field_0x58c = new CPaneMgr(mScreen, MULTI_CHAR('combo_tn'), 0, NULL);
+    field_0x590 = new CPaneMgr(mScreen, MULTI_CHAR('num_n'), 0, NULL);
+    field_0x594 = new CPaneMgr(mScreen, MULTI_CHAR('co_set_n'), 2, NULL);
+    field_0x598 = new CPaneMgr(mScreen, MULTI_CHAR('bal_3_n'), 2, NULL);
+    field_0x59c = new CPaneMgr(mScreen, MULTI_CHAR('bal_2_n'), 2, NULL);
+    field_0x5a0 = new CPaneMgr(mScreen, MULTI_CHAR('bal_1_n'), 2, NULL);
+    field_0x5a4 = new CPaneMgr(mScreen, MULTI_CHAR('ba_com_n'), 2, NULL);
     field_0x578->setAlphaRate(0.0f);
     field_0x5a4->setAlphaRate(0.0f);
     for (s32 i = 0; i < 10; i++) {
         ResTIMG* resTimg = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', dMeter2Info_getNumberTextureName(i));
-        field_0x5c4[i] = JKR_NEW J2DPicture(resTimg);
+        field_0x5c4[i] = new J2DPicture(resTimg);
     }
     ResTIMG* resTimg = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', dMeter2Info_getPlusTextureName());
-    field_0x5ec = JKR_NEW J2DPicture(resTimg);
+    field_0x5ec = new J2DPicture(resTimg);
     if (field_0x578 == NULL || field_0x57c == NULL || field_0x580 == NULL ||
         field_0x584 == NULL ||field_0x588 == NULL || field_0x58c == NULL ||
         field_0x590 == NULL || field_0x594 == NULL || field_0x598 == NULL ||

@@ -100,7 +100,7 @@ int daObjWarpOBrg_c::CreateHeap() {
 
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, l_bck_idx[getNameArg()]);
     JUT_ASSERT(263, pbck != NULL);
-    mpBck = JKR_NEW mDoExt_bckAnm();
+    mpBck = new mDoExt_bckAnm();
     if (mpBck == NULL || !mpBck->init(pbck, TRUE, 0, 0.0f, 0, -1, false)) {
         return 0;
     }
@@ -112,7 +112,7 @@ int daObjWarpOBrg_c::CreateHeap() {
 
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, l_btk_idx[getNameArg()]);
     JUT_ASSERT(271, pbtk != NULL);
-    mpBtk = JKR_NEW mDoExt_btkAnm();
+    mpBtk = new mDoExt_btkAnm();
     if (mpBtk == NULL || !mpBtk->init(modelData, pbtk, TRUE, 0, 0.0f, 0, -1)) {
         return 0;
     }

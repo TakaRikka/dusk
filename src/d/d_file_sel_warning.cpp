@@ -25,10 +25,10 @@ dFile_warning_c::dFile_warning_c(JKRArchive* i_archive, u8 param_1) {
 }
 
 dFile_warning_c::~dFile_warning_c() {
-    JKR_DELETE(mFileWarn.mMsgString);
-    JKR_DELETE(mFileWarn.Scr);
-    JKR_DELETE(field_0x24);
-    JKR_DELETE(mpRootPane);
+    delete mFileWarn.mMsgString;
+    delete mFileWarn.Scr;
+    delete field_0x24;
+    delete mpRootPane;
 
     mDoExt_removeMesgFont();
 }
@@ -44,10 +44,10 @@ void dFile_warning_c::screenSet() {
         "zelda_option_set_up_window.bck",
     };
 
-    mFileWarn.Scr = JKR_NEW J2DScreen();
+    mFileWarn.Scr = new J2DScreen();
     JUT_ASSERT(0, mFileWarn.Scr != NULL);
 
-    mFileWarn.mMsgString = JKR_NEW dMsgString_c();
+    mFileWarn.mMsgString = new dMsgString_c();
     JUT_ASSERT(0, mFileWarn.mMsgString != NULL);
 
     mFileWarn.Scr->setPriority(blo_name[field_0x3e], 0x100000, mpArchive);
@@ -59,7 +59,7 @@ void dFile_warning_c::screenSet() {
     mFileWarn.Scr->animation();
 
     mFileWarn.mFont = mDoExt_getMesgFont();
-    mpRootPane = JKR_NEW CPaneMgr(mFileWarn.Scr, MULTI_CHAR('Nm_02'), 0, NULL);
+    mpRootPane = new CPaneMgr(mFileWarn.Scr, MULTI_CHAR('Nm_02'), 0, NULL);
     JUT_ASSERT(0, mpRootPane != NULL);
     field_0x34 = mpRootPane->getTranslateY();
 

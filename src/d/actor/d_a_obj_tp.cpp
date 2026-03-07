@@ -331,13 +331,13 @@ static dCcD_SrcCyl cc_cyl_src = {
 static int useHeapInit(fopAc_ac_c* i_this) {
     obj_tp_class* tp = static_cast<obj_tp_class*>(i_this);
     tp->mMorf =
-        JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Obj_tp", bmd[tp->field_0x594]),
+        new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Obj_tp", bmd[tp->field_0x594]),
                            NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("Obj_tp", 7), 0, 1.0f,
                            0, -1, 1, NULL, 0x80000, 0x11000084);
     if (tp->mMorf == NULL || tp->mMorf->getModel() == NULL) {
         return 0;
     }
-    tp->mBrk = JKR_NEW mDoExt_brkAnm();
+    tp->mBrk = new mDoExt_brkAnm();
     if (tp->mBrk == NULL) {
         return 0;
     }
@@ -362,7 +362,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
             if (tp->mModels[i] == NULL) {
                 return 0;
             }
-            tp->mBtks[i] = JKR_NEW mDoExt_btkAnm();
+            tp->mBtks[i] = new mDoExt_btkAnm();
             if (tp->mBtks[i] == NULL) {
                 return 0;
             };
@@ -375,7 +375,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
             {
                 return 0;
             }
-            tp->mBrks[i] = JKR_NEW mDoExt_brkAnm();
+            tp->mBrks[i] = new mDoExt_brkAnm();
             if (tp->mBrks[i] == NULL) {
                 return 0;
             }
@@ -388,7 +388,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
                 return 0;
             }
         }
-        tp->mBgw = JKR_NEW dBgW();
+        tp->mBgw = new dBgW();
         if (tp->mBgw == NULL) {
             return 0;
         }

@@ -174,7 +174,7 @@ int daE_PM_c::DemoSkipCallBack(void* i_this, int param_1) {
 
 int daE_PM_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes("E_PM", 0x1d);
-    mpMorf = JKR_NEW mDoExt_McaMorfSO(model_data, NULL, NULL,
+    mpMorf = new mDoExt_McaMorfSO(model_data, NULL, NULL,
                                   (J3DAnmTransform*)dComIfG_getObjectRes("E_PM", 0x10),
                                   J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1,
                                   &mCreatureSound, 0x80000, 0x11020084);
@@ -182,7 +182,7 @@ int daE_PM_c::CreateHeap() {
         return 0;
     }
 
-    mpEyeAnm = JKR_NEW mDoExt_btpAnm();
+    mpEyeAnm = new mDoExt_btpAnm();
     if (mpEyeAnm == NULL) {
         return 5;
     }
@@ -198,7 +198,7 @@ int daE_PM_c::CreateHeap() {
         return 0;
     }
 
-    mpTrumpetMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_PM", 0x1f), NULL,
+    mpTrumpetMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_PM", 0x1f), NULL,
                                        NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_PM", 0x19),
                                        J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, 1, NULL,
                                        0x80000, 0x11000084);
@@ -206,7 +206,7 @@ int daE_PM_c::CreateHeap() {
         return 0;
     }
 
-    mpGlowEffectMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_PM", 0x1c), NULL,
+    mpGlowEffectMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_PM", 0x1c), NULL,
                                           NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_PM", 5),
                                           J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL,
                                           0x80000, 0x11000084);
@@ -293,7 +293,7 @@ void daE_PM_c::SetAnm(int i_anm, int i_attr, f32 i_morf, f32 i_rate) {
 }
 
 static void dummy() {
-    JKR_DELETE((cM3dGPla*)NULL);
+    delete (cM3dGPla*)NULL;
 }
 
 static BOOL way_bg_check2(daE_PM_c* i_this, cXyz i_start, cXyz i_end) {

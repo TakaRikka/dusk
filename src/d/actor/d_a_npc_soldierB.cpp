@@ -237,7 +237,7 @@ int daNpc_SoldierB_c::CreateHeap() {
     }
 
     u32 uVar1 = 0x11020284;
-    mAnm_p = JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound,
+    mAnm_p = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound,
                                   J3DMdlFlag_DifferedDLBuffer, uVar1);
     if (mAnm_p != NULL && mAnm_p->getModel() == NULL) {
         mAnm_p->stopZelAnime();

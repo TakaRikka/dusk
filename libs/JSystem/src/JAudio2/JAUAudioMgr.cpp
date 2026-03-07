@@ -14,7 +14,7 @@ void dummyDefCtor() {
     //TODO: ShieldD needs the weak functions this pulls in, but in retail it breaks weak function
     //      placement
 #if VERSION == VERSION_SHIELD_DEBUG
-    JAUStreamStaticAramMgr_<1>* streamStaticAramMgr = JKR_NEW_ARGS(NULL, 0) JAUStreamStaticAramMgr_<1>();
+    JAUStreamStaticAramMgr_<1>* streamStaticAramMgr = new(NULL, 0) JAUStreamStaticAramMgr_<1>();
     streamStaticAramMgr->reserveAram(NULL, 0, 0x14);
 #endif
 }

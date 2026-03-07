@@ -944,14 +944,14 @@ static int daBd_Delete(bd_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     bd_class* a_this = (bd_class*)i_this;
 
-    a_this->mpMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Bd", 0xE), NULL, NULL,
+    a_this->mpMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Bd", 0xE), NULL, NULL,
                                         (J3DAnmTransform*)dComIfG_getObjectRes("Bd", 8), 0, 1.0f, 0,
                                         -1, 1, NULL, 0x80000, 0x11000284);
     if (a_this->mpMorf == NULL || a_this->mpMorf->getModel() == NULL) {
         return 0;
     }
 
-    a_this->mpBtk = JKR_NEW mDoExt_btkAnm();
+    a_this->mpBtk = new mDoExt_btkAnm();
     if (a_this->mpBtk == NULL) {
         return 0;
     }

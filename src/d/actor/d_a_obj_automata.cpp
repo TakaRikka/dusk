@@ -126,7 +126,7 @@ int daObj_AutoMata_c::CreateHeap() {
     if (modelData == NULL) {
         return 0;
     }
-    mpMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mCreature, 0x80000,
+    mpMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mCreature, 0x80000,
                                   0x11000284);
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return 0;

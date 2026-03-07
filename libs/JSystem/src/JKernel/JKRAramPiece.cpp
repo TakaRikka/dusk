@@ -9,7 +9,7 @@
 JKRAMCommand* JKRAramPiece::prepareCommand(int direction, uintptr_t src, uintptr_t dst, u32 length,
                                            JKRAramBlock* block,
                                            JKRAMCommand::AsyncCallback callback) {
-    JKRAMCommand* command = JKR_NEW_ARGS (JKRGetSystemHeap(), -4) JKRAMCommand();
+    JKRAMCommand* command = new (JKRGetSystemHeap(), -4) JKRAMCommand();
     command->mTransferDirection = direction;
     command->mSrc = src;
     command->mDst = dst;
@@ -38,7 +38,7 @@ JKRAMCommand* JKRAramPiece::orderAsync(int direction, uintptr_t source, uintptr_
         JUTException::panic(__FILE__, 108, "illegal address. abort.");
     }
 
-    JKRAramCommand* message = JKR_NEW_ARGS (JKRGetSystemHeap(), -4) JKRAramCommand();
+    JKRAramCommand* message = new (JKRGetSystemHeap(), -4) JKRAramCommand();
     JKRAMCommand* command =
         JKRAramPiece::prepareCommand(direction, source, destination, length, block, callback);
     message->setting(1, command);
@@ -80,7 +80,7 @@ BOOL JKRAramPiece::orderSync(int direction, uintptr_t source, uintptr_t destinat
     JKRAMCommand* command =
         JKRAramPiece::orderAsync(direction, source, destination, length, block, NULL);
     BOOL result = JKRAramPiece::sync(command, 0);
-    JKR_DELETE(command);
+    delete command;
 
     unlock();
     return result;
@@ -132,9 +132,9 @@ JKRAMCommand::JKRAMCommand() : mPieceLink(this), field_0x30(this) {
 
 JKRAMCommand::~JKRAMCommand() {
     if (field_0x8C)
-        JKR_DELETE(field_0x8C);
+        delete field_0x8C;
     if (field_0x90)
-        JKR_DELETE(field_0x90);
+        delete field_0x90;
 
     if (field_0x94)
         JKRFree(field_0x94);

@@ -224,31 +224,31 @@ void JPAFieldBlock::init(JKRHeap* heap) {
 
     switch (getType()) {
     case FIELD_GRAVITY:
-        pFld = JKR_NEW_ARGS (heap, 0) JPAFieldGravity();
+        pFld = new (heap, 0) JPAFieldGravity();
         break;
     case FIELD_AIR:
-        pFld = JKR_NEW_ARGS (heap, 0) JPAFieldAir();
+        pFld = new (heap, 0) JPAFieldAir();
         break;
     case FIELD_MAGNET:
-        pFld = JKR_NEW_ARGS (heap, 0) JPAFieldMagnet();
+        pFld = new (heap, 0) JPAFieldMagnet();
         break;
     case FIELD_NEWTON:
-        pFld = JKR_NEW_ARGS (heap, 0) JPAFieldNewton();
+        pFld = new (heap, 0) JPAFieldNewton();
         break;
     case FIELD_VORTEX:
-        pFld = JKR_NEW_ARGS (heap, 0) JPAFieldVortex();
+        pFld = new (heap, 0) JPAFieldVortex();
         break;
     case FIELD_RANDOM:
-        pFld = JKR_NEW_ARGS (heap, 0) JPAFieldRandom();
+        pFld = new (heap, 0) JPAFieldRandom();
         break;
     case FIELD_DRAG:
-        pFld = JKR_NEW_ARGS (heap, 0) JPAFieldDrag();
+        pFld = new (heap, 0) JPAFieldDrag();
         break;
     case FIELD_CONVECTION:
-        pFld = JKR_NEW_ARGS (heap, 0) JPAFieldConvection();
+        pFld = new (heap, 0) JPAFieldConvection();
         break;
     case FIELD_SPIN:
-        pFld = JKR_NEW_ARGS (heap, 0) JPAFieldSpin();
+        pFld = new (heap, 0) JPAFieldSpin();
         break;
     default:
         pFld = NULL;

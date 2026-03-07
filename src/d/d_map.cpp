@@ -1132,7 +1132,7 @@ dMap_c::dMap_c(int param_0, int param_1, int param_2, int param_3) {
     m_mySelfPointer = this;
 #endif
 
-    m_res = JKR_NEW_ARGS (0x20) dMap_prm_res_s;
+    m_res = new (0x20) dMap_prm_res_s;
     JUT_ASSERT(2559, m_res != NULL);
 
     dMap_HIO_prm_res_dst_s::m_res = m_res;
@@ -1177,12 +1177,12 @@ dMap_c::dMap_c(int param_0, int param_1, int param_2, int param_3) {
     }
 
     int buffer_size = GXGetTexBufferSize(param_2, param_3, 9, GX_FALSE, 0);
-    mImage_p = JKR_NEW_ARGS (0x20) u8[buffer_size];
+    mImage_p = new (0x20) u8[buffer_size];
     JUT_ASSERT(2638, mImage_p != NULL);
 
     renderingDAmap_c::init(mImage_p, mTexSizeX, mTexSizeY, mTexSizeX, mTexSizeY);
 
-    mResTIMG = JKR_NEW_ARGS (0x20) ResTIMG;
+    mResTIMG = new (0x20) ResTIMG;
     JUT_ASSERT(2647, mResTIMG != NULL);
 
     makeResTIMG(mResTIMG, mTexSizeX, mTexSizeY, mImage_p, (u8*)m_res, 0x33);
@@ -1208,17 +1208,17 @@ void dMap_c::changeTextureSize(int param_1, int param_2, int param_3) {
 
 void dMap_c::_remove() {
     if (mImage_p != NULL) {
-        JKR_DELETE_ARRAY(mImage_p);
+        delete[] mImage_p;
         mImage_p = NULL;
     }
 
     if (mResTIMG != NULL) {
-        JKR_DELETE(mResTIMG);
+        delete mResTIMG;
         mResTIMG = NULL;
     }
 
     if (m_res != NULL) {
-        JKR_DELETE(m_res);
+        delete m_res;
         m_res = NULL;
     }
 }

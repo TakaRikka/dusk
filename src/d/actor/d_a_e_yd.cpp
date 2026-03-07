@@ -1313,7 +1313,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 
     e_yd_class* a_this = (e_yd_class*)i_this;
 
-    a_this->mpMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_yd", 24),
+    a_this->mpMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_yd", 24),
         NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_yd", 19), 2, 1.0f, 0, -1,
         &a_this->mCreatureSound, 0x80000, 0x11000084);
     if (a_this->mpMorf == NULL || a_this->mpMorf->getModel() == NULL) {
@@ -1322,7 +1322,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 
     J3DModel* model = a_this->mpMorf->getModel();
 
-    a_this->mBrkAnm = JKR_NEW mDoExt_brkAnm();
+    a_this->mBrkAnm = new mDoExt_brkAnm();
     if (a_this->mBrkAnm == NULL) {
         return 0;
     }

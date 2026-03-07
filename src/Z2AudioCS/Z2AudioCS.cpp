@@ -18,10 +18,10 @@ void Z2AudioCS::newSpkSoundMemPool() {
 int Z2AudioCS::init(JKRHeap* heap, JKRArchive* res, s32 param_2, s32 param_3) {
     JUT_ASSERT(59, heap);
     JUT_ASSERT(60, res);
-    SpkSystem* spkSys = JKR_NEW_ARGS(heap, 0) SpkSystem(heap);
+    SpkSystem* spkSys = new(heap, 0) SpkSystem(heap);
     JUT_ASSERT(67, spkSys);
 
-    sSpkHandles = JKR_NEW_ARGS (heap, 0) SpkSoundHandle[HANDLES_MAX];
+    sSpkHandles = new (heap, 0) SpkSoundHandle[HANDLES_MAX];
     JUT_ASSERT(71, sSpkHandles);
 
     spkSys->setResource(res, 2, 3);

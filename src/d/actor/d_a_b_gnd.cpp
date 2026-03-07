@@ -4592,7 +4592,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     static int const blur_model[2] = {0x66, 0x65};
     static int btk_d[6] = {0x77, 0x76, 0x73, 0x74, 0x75, 0x72};
 
-    i_this->mpModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("B_gnd", 0x69),
+    i_this->mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("B_gnd", 0x69), 
         NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_gnd", 0x4b),
         2, 1.0f, 0, -1, &i_this->mGndSound, 0, 0x11020284);
 
@@ -4610,7 +4610,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     mDoMtx_stack_c::scaleS(0.0f, 0.0f, 0.0f);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
 
-    i_this->mpGndCoreBrk = JKR_NEW mDoExt_brkAnm();
+    i_this->mpGndCoreBrk = new mDoExt_brkAnm();
     if (i_this->mpGndCoreBrk == NULL) {
         return 0;
     }
@@ -4622,7 +4622,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     }
 
     for (int i = 0; i < 6; i++) {
-        i_this->mpGndEyeBtk[i] = JKR_NEW mDoExt_btkAnm();
+        i_this->mpGndEyeBtk[i] = new mDoExt_btkAnm();
         if (i_this->mpGndEyeBtk[i] == NULL) {
             return 0;
         }
@@ -4634,7 +4634,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
         }
     }
 
-    i_this->mpGndEyeBtp = JKR_NEW mDoExt_btpAnm();
+    i_this->mpGndEyeBtp = new mDoExt_btpAnm();
     if (i_this->mpGndEyeBtp == NULL) {
         return 0;
     }
@@ -4690,7 +4690,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
         i_this->mpMantShadowModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
     }
 
-    i_this->mpHorseMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("B_hg", 19),
+    i_this->mpHorseMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("B_hg", 19),
          NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_hg", 15), 
          2, 1.0f, 0, -1, &i_this->mHorseSound, 0x80000, 0x11000084);
     if (i_this->mpHorseMorf == NULL || i_this->mpHorseMorf->getModel() == NULL) {
@@ -4728,14 +4728,14 @@ static int useHeapInit(fopAc_ac_c* a_this) {
         size++;
     }
 
-    i_this->mpZeldaModel = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("B_gnd", 0x6a),
+    i_this->mpZeldaModel = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("B_gnd", 0x6a),
         NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_gnd", 0x5e), 
         0, 1.0f, 0, -1, 1, NULL, 0, 0x11020284);
     if (i_this->mpZeldaModel == NULL || i_this->mpZeldaModel->getModel() == NULL) {
         return 0;
     }
 
-    i_this->mpZeldaBtk = JKR_NEW mDoExt_btkAnm();
+    i_this->mpZeldaBtk = new mDoExt_btkAnm();
     if (i_this->mpZeldaBtk == NULL) {
         return 0;
     }
@@ -4746,7 +4746,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
             return 0;
     }
 
-    i_this->mpZeldaBtp = JKR_NEW mDoExt_btpAnm();
+    i_this->mpZeldaBtp = new mDoExt_btpAnm();
     if (i_this->mpZeldaBtp == NULL) {
         return 0;
     }

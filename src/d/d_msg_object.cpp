@@ -348,22 +348,22 @@ int dMsgObject_c::_create(msg_class* param_1) {
     changeGroup(0);
     mpOutFont = NULL;
     mpScrnDraw = NULL;
-    mpResCont = JKR_NEW JMessage::TResourceContainer();
+    mpResCont = new JMessage::TResourceContainer();
     JUT_ASSERT(1299, mpResCont != NULL);
     mpCtrl = dDemo_c::getMesgControl();
     JUT_ASSERT(1302, mpCtrl != NULL);
-    mpRefer = JKR_NEW jmessage_tReference();
+    mpRefer = new jmessage_tReference();
     JUT_ASSERT(1305, mpRefer != NULL);
     mpRefer->setpStatus(&param_1->mode);
-    mpSeqProc = JKR_NEW jmessage_tSequenceProcessor(mpRefer, mpCtrl);
+    mpSeqProc = new jmessage_tSequenceProcessor(mpRefer, mpCtrl);
     JUT_ASSERT(1310, mpSeqProc != NULL);
-    mpRenProc = JKR_NEW jmessage_tRenderingProcessor(mpRefer);
+    mpRenProc = new jmessage_tRenderingProcessor(mpRefer);
     JUT_ASSERT(1313, mpRenProc != NULL);
     mpRefer->setResourceContainer(mpResCont);
     mpCtrl->setSequenceProcessor(mpSeqProc);
     mpCtrl->setRenderingProcessor(mpRenProc);
     mpRefer->setObjectPtr(this);
-    field_0x124 = JKR_NEW JMessage::TParse(mpResCont);
+    field_0x124 = new JMessage::TParse(mpResCont);
     field_0x124->parse(mpMsgDt, 0);
     mpCtrl->reset();
     mpCtrl->resetResourceCache();
@@ -396,7 +396,7 @@ int dMsgObject_c::_create(msg_class* param_1) {
     field_0x15c = 0;
     field_0x172 = 0;
     setStatusLocal(1);
-    mpMsgString = JKR_NEW dMsgString_c();
+    mpMsgString = new dMsgString_c();
     JUT_ASSERT(1366, mpMsgString != NULL);
     return 4;
 }
@@ -551,27 +551,27 @@ int dMsgObject_c::_draw() {
 int dMsgObject_c::_delete() {
     mpResCont->destroyResource_all();
     if (mpScrnDraw != NULL) {
-        JKR_DELETE(mpScrnDraw);
+        delete mpScrnDraw;
         mpScrnDraw = 0;
     }
     mpMsgDt = 0;
     mpMsgRes = 0;
     field_0x12c = 0;
     if (mpOutFont != NULL) {
-        JKR_DELETE(mpOutFont);
+        delete mpOutFont;
         mpOutFont = NULL;
     }
-    JKR_DELETE(mpResCont);
+    delete mpResCont;
     mpResCont = NULL;
-    JKR_DELETE(mpRefer);
+    delete mpRefer;
     mpRefer = NULL;
-    JKR_DELETE(mpSeqProc);
+    delete mpSeqProc;
     mpSeqProc = NULL;
-    JKR_DELETE(mpRenProc);
+    delete mpRenProc;
     mpRenProc = NULL;
-    JKR_DELETE(field_0x124);
+    delete field_0x124;
     field_0x124 = NULL;
-    JKR_DELETE(mpMsgString);
+    delete mpMsgString;
     mpMsgString = NULL;
     if (mpTalkHeap != NULL) {
         mpTalkHeap = NULL;
@@ -1336,7 +1336,7 @@ void dMsgObject_c::talkStartInit() {
         bool local_98 = false;
         if (mpOutFont == NULL) {
             OS_REPORT("free size (0x%x)=====> %d\n", mDoExt_getCurrentHeap(), mDoExt_getCurrentHeap()->getTotalFreeSize());
-            mpOutFont = JKR_NEW COutFont_c(0);
+            mpOutFont = new COutFont_c(0);
             JUT_ASSERT(3035, mpOutFont != NULL);
             mpOutFont->createPane();
             mpRenProc->setOutFont(mpOutFont);
@@ -1346,7 +1346,7 @@ void dMsgObject_c::talkStartInit() {
         switch (mFukiKind) {
         case 9:
             pRef = (jmessage_tReference*)mpRenProc->getReference();
-            pData = JKR_NEW dMsgScrnItem_c(pRef->getFukiPosType(), pRef->getForm(), mpTalkHeap);
+            pData = new dMsgScrnItem_c(pRef->getFukiPosType(), pRef->getForm(), mpTalkHeap);
             JUT_ASSERT(3049, pData != NULL);
             mpScrnDraw = pData;
             break;
@@ -1354,32 +1354,32 @@ void dMsgObject_c::talkStartInit() {
             if (mFukiKind == 15) {
                 local_30 = mDoExt_getRubyFont();
             }
-            pData = JKR_NEW dMsgScrnTree_c(local_30, mpTalkHeap);
+            pData = new dMsgScrnTree_c(local_30, mpTalkHeap);
             JUT_ASSERT(3061, pData != NULL);
             mpScrnDraw = pData;
             break;
         case 6:
-            pData = JKR_NEW dMsgScrnKanban_c(mpTalkHeap);
+            pData = new dMsgScrnKanban_c(mpTalkHeap);
             JUT_ASSERT(3069, pData != NULL);
             mpScrnDraw = pData;
             break;
         case 7:
-            pData = JKR_NEW dMsgScrnStaff_c(((jmessage_tReference*)mpRenProc->getReference())->getArrange());
+            pData = new dMsgScrnStaff_c(((jmessage_tReference*)mpRenProc->getReference())->getArrange());
             JUT_ASSERT(3083, pData != NULL);
             mpScrnDraw = pData;
             break;
         case 12:
-            pData = JKR_NEW dMsgScrnPlace_c();
+            pData = new dMsgScrnPlace_c();
             JUT_ASSERT(3092, pData != NULL);
             mpScrnDraw = pData;
             break;
         case 19:
-            pData = JKR_NEW dMsgScrnBoss_c();
+            pData = new dMsgScrnBoss_c();
             JUT_ASSERT(3100, pData != NULL);
             mpScrnDraw = pData;
             break;
         case 17:
-            pData = JKR_NEW dMsgScrnHowl_c();
+            pData = new dMsgScrnHowl_c();
             JUT_ASSERT(3108, pData != NULL);
             mpScrnDraw = pData;
             local_98 = true;
@@ -1387,7 +1387,7 @@ void dMsgObject_c::talkStartInit() {
         case 1:
         case 5:
             pRef = (jmessage_tReference*)mpRenProc->getReference();
-            pData = JKR_NEW dMsgScrnJimaku_c(pRef->getForm(), mpTalkHeap);
+            pData = new dMsgScrnJimaku_c(pRef->getForm(), mpTalkHeap);
             JUT_ASSERT(3119, pData != NULL);
             mpScrnDraw = pData;
             break;
@@ -1396,11 +1396,11 @@ void dMsgObject_c::talkStartInit() {
         default:
             pRef = (jmessage_tReference*)mpRenProc->getReference();
             if (mpRefer->getMsgID() == 0x2a5) {
-                pData = JKR_NEW dMsgScrnItem_c(0, pRef->getForm(), mpTalkHeap);
+                pData = new dMsgScrnItem_c(0, pRef->getForm(), mpTalkHeap);
                 JUT_ASSERT(3131, pData != NULL);
                 mpScrnDraw = pData;
             } else {
-                pData = JKR_NEW dMsgScrnTalk_c(pRef->getFukiPosType(), pRef->getForm(), mpTalkHeap);
+                pData = new dMsgScrnTalk_c(pRef->getFukiPosType(), pRef->getForm(), mpTalkHeap);
                 JUT_ASSERT(3138, pData != NULL);
                 mpScrnDraw = pData;
                 local_98 = true;
@@ -1509,11 +1509,11 @@ u16 dMsgObject_c::getStatusLocal() {
 
 void dMsgObject_c::delete_screen(bool param_1) {
     if (mpOutFont != NULL) {
-        JKR_DELETE(mpOutFont);
+        delete mpOutFont;
         mpOutFont = NULL;
     }
     if (mpScrnDraw != NULL) {
-        JKR_DELETE(mpScrnDraw);
+        delete mpScrnDraw;
         mpScrnDraw = NULL;
         if (param_1 && dComIfGp_isHeapLockFlag() == 5)
         {

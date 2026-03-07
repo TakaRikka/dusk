@@ -144,8 +144,8 @@ inline daObjItaRope_c::~daObjItaRope_c() {
 #if DEBUG
     M_hio.dt();
 #endif
-    JKR_DELETE_ARRAY(mRopes);
-    JKR_DELETE_ARRAY(mSakuitas);
+    delete [] mRopes;
+    delete [] mSakuitas;
 
     if (field_0x636 != 0) {
         J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(l_arcName, "A_Sakuita.bmd");
@@ -267,13 +267,13 @@ void daObjItaRope_c::setNormalRopePos() {
 
 inline int daObjItaRope_c::createHeap() {
     mRopes = NULL;
-    mRopes = JKR_NEW RopeWork_c[field_0x635 - 2];
+    mRopes = new RopeWork_c[field_0x635 - 2];
     if (mRopes == NULL) {
         return 0;
     }
 
     mSakuitas = NULL;
-    mSakuitas = JKR_NEW Sakuita_c[field_0x635 - 2];
+    mSakuitas = new Sakuita_c[field_0x635 - 2];
     if (mSakuitas == NULL) {
         return 0;
     }

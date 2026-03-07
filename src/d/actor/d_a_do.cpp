@@ -2357,7 +2357,7 @@ static int daDo_Delete(do_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     do_class* _this = (do_class*)i_this;
 
-    _this->mpMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Do", 25), NULL, NULL,
+    _this->mpMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Do", 25), NULL, NULL,
                                        (J3DAnmTransform*)dComIfG_getObjectRes("Do", 14), 2,
                                        1.0f, 0, -1, 1, NULL, 0x80000, 0x11020284);
 
@@ -2375,7 +2375,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         }
     }
 
-    _this->mpBtk = JKR_NEW mDoExt_btkAnm();
+    _this->mpBtk = new mDoExt_btkAnm();
     if (_this->mpBtk == NULL) {
         return 0;
     }
@@ -2387,7 +2387,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    _this->mpBtp = JKR_NEW mDoExt_btpAnm();
+    _this->mpBtp = new mDoExt_btpAnm();
     if (_this->mpBtp == NULL) {
         return 0;
     }

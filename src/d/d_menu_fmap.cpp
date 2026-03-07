@@ -296,16 +296,16 @@ dMenu_Fmap_c::~dMenu_Fmap_c() {
     removeAreaData();
 
     if (mpDraw2DBack != NULL) {
-        JKR_DELETE(mpDraw2DBack);
+        delete mpDraw2DBack;
         mpDraw2DBack = NULL;
     }
     if (mpDraw2DTop != NULL) {
-        JKR_DELETE(mpDraw2DTop);
+        delete mpDraw2DTop;
         mpDraw2DTop = NULL;
     }
     if (mpMenuFmapMap != NULL) {
         mpMenuFmapMap->_delete();
-        JKR_DELETE(mpMenuFmapMap);
+        delete mpMenuFmapMap;
         mpMenuFmapMap = NULL;
     }
 
@@ -338,12 +338,12 @@ dMenu_Fmap_c::~dMenu_Fmap_c() {
 
 void dMenu_Fmap_c::_create() {
     mpHeap->getTotalFreeSize();
-    mpDraw2DBack = JKR_NEW dMenu_Fmap2DBack_c();
+    mpDraw2DBack = new dMenu_Fmap2DBack_c();
     JUT_ASSERT(594, mpDraw2DBack != NULL);
     mpDraw2DBack->setRegionCursor(dComIfGp_getNowLevel() - 1);
-    mpDraw2DTop = JKR_NEW dMenu_Fmap2DTop_c(mpHeap, mpStick);
+    mpDraw2DTop = new dMenu_Fmap2DTop_c(mpHeap, mpStick);
     JUT_ASSERT(599, mpDraw2DTop != NULL);
-    mpMenuFmapMap = JKR_NEW dMenu_FmapMap_c();
+    mpMenuFmapMap = new dMenu_FmapMap_c();
     JUT_ASSERT(603, mpMenuFmapMap != NULL);
     mpMenuFmapMap->_create(dMeter2Info_get2DWidth(), dMeter2Info_get2DHeight(),
                            dMeter2Info_get2DWidth(), dMeter2Info_get2DHeight(), mpFmapMapRes);
@@ -1999,7 +1999,7 @@ bool dMenu_Fmap_c::readWorldData(u8 i_regionNo) {
     }
 
     if (head != -1 && mpWorldData == NULL) {
-        mpWorldData = JKR_NEW dMenu_Fmap_world_data_c(mpRegionData[head]);
+        mpWorldData = new dMenu_Fmap_world_data_c(mpRegionData[head]);
         mpDraw2DBack->setWorldPosMinMax(mpWorldData->getWorldMinX(), mpWorldData->getWorldMinZ(),
                                         mpWorldData->getWorldMaxX(), mpWorldData->getWorldMaxZ());
     }
@@ -2099,7 +2099,7 @@ bool dMenu_Fmap_c::readAreaData(u8 i_regionNo, bool i_isSelectedRegion) {
         }
 
         if (bVar2) {
-            dMenu_Fmap_stage_data_c* stage_data = JKR_NEW dMenu_Fmap_stage_data_c();
+            dMenu_Fmap_stage_data_c* stage_data = new dMenu_Fmap_stage_data_c();
             if (mpStageData[i_regionNo - 1] == NULL) {
                 mpStageData[i_regionNo - 1] = stage_data;
             } else {
@@ -2140,7 +2140,7 @@ bool dMenu_Fmap_c::readAreaData(u8 i_regionNo, bool i_isSelectedRegion) {
                 mSpotNum++;
             }
 
-            dMenuMapCommon_c::RoomData_c* room_data = JKR_NEW dMenuMapCommon_c::RoomData_c();
+            dMenuMapCommon_c::RoomData_c* room_data = new dMenuMapCommon_c::RoomData_c();
             if (mpRoomData[i_regionNo - 1] == NULL) {
                 mpRoomData[i_regionNo - 1] = room_data;
             } else {
@@ -2160,7 +2160,7 @@ bool dMenu_Fmap_c::readAreaData(u8 i_regionNo, bool i_isSelectedRegion) {
     }
 
     if (mpRegionData[i_regionNo - 1] == NULL) {
-        mpRegionData[i_regionNo - 1] = JKR_NEW dMenu_Fmap_region_data_c(i_regionNo,
+        mpRegionData[i_regionNo - 1] = new dMenu_Fmap_region_data_c(i_regionNo,
                                                                     mpStageData[i_regionNo - 1],
                                                                     mRegionOffsetX[i_regionNo - 1],
                                                                     mRegionOffsetZ[i_regionNo - 1]);
@@ -2201,9 +2201,9 @@ bool dMenu_Fmap_c::readRoomData(char const* i_stageName, dMenu_Fmap_stage_data_c
             sprintf(room_path, "%s/room%d.dzs", i_stageName, room_nos[i]);
 
             if (readRoomDzsData(&dzs_data, 0x1500, room_path)) {
-                dMenu_Fmap_data_c* map_data = JKR_NEW dMenu_Fmap_data_c();
+                dMenu_Fmap_data_c* map_data = new dMenu_Fmap_data_c();
                 dMenu_Fmap_room_data_c* room_data
-                    = JKR_NEW dMenu_Fmap_room_data_c(room_nos[i], i_stageData, map_data);
+                    = new dMenu_Fmap_room_data_c(room_nos[i], i_stageData, map_data);
                 if (prev_room_data == NULL) {
                     i_stageData->setFmapRoomDataTop(room_data);
                 } else {
@@ -2362,7 +2362,7 @@ bool dMenu_Fmap_c::removeAreaData() {
 
     if (mpWorldData != NULL) {
         if (mpWorldData != NULL) {
-            JKR_DELETE(mpWorldData);
+            delete mpWorldData;
         }
         mpWorldData = NULL;
     }
@@ -2370,7 +2370,7 @@ bool dMenu_Fmap_c::removeAreaData() {
     for (int i = 0; i < 8; i++) {
         if (mpRegionData[i] != NULL) {
             if (mpRegionData[i] != NULL) {
-                JKR_DELETE(mpRegionData[i]);
+                delete mpRegionData[i];
             }
             mpRegionData[i] = NULL;
         }
@@ -2382,7 +2382,7 @@ bool dMenu_Fmap_c::removeAreaData() {
             dMenu_Fmap_stage_data_c* next_data = stage_data->getNextData();
             removeRoomData(stage_data);
             if (stage_data != NULL) {
-                JKR_DELETE(stage_data);
+                delete stage_data;
             }
             stage_data = next_data;
         }
@@ -2394,7 +2394,7 @@ bool dMenu_Fmap_c::removeAreaData() {
             if (data != NULL) {
                 mpHeap->free(data);
             }
-            JKR_DELETE(room_data);
+            delete room_data;
             room_data = next_data;
         }
     }
@@ -2426,9 +2426,9 @@ bool dMenu_Fmap_c::removeRoomData(dMenu_Fmap_stage_data_c* i_stageData) {
             mpHeap->free(dzs_data);
         }
         if (fmap_data != NULL) {
-            JKR_DELETE(fmap_data);
+            delete fmap_data;
         }
-        JKR_DELETE(room_data);
+        delete room_data;
         room_data = next_data;
     }
     return true;

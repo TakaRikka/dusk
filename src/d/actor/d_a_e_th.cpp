@@ -1175,7 +1175,7 @@ static int daE_TH_Delete(e_th_class* i_this) {
 static int useHeapInit(fopAc_ac_c* a_this) {
     e_th_class* i_this = (e_th_class*)a_this;
 
-    i_this->mpModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_th", 0x1F), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_th", 0x1B), 0, 1.0f, 0, -1, &i_this->mSound, 0, 0x11000084);
+    i_this->mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_th", 0x1F), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_th", 0x1B), 0, 1.0f, 0, -1, &i_this->mSound, 0, 0x11000084);
     if (i_this->mpModelMorf == NULL || i_this->mpModelMorf->getModel() == NULL) {
         return 0;
     }

@@ -193,7 +193,7 @@ int daObjTobyHouse_c::CreateHeap() {
             J3DAnmTransform* pbck =
                 (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName[mType], l_bck[i]);
             JUT_ASSERT(447, pbck != NULL);
-            mBcks[i] = JKR_NEW mDoExt_bckAnm();
+            mBcks[i] = new mDoExt_bckAnm();
             if (mBcks[i] == NULL || !mBcks[i]->init(pbck, 1, 0, 1.0, 0, -1, false)) {
                 return 0;
             }

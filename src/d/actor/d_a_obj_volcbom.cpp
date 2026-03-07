@@ -149,21 +149,21 @@ int daObjVolcBom_c::CreateHeap() {
 
     J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, 16);
     JUT_ASSERT(403, pbrk != NULL);
-    mBrk1 = JKR_NEW mDoExt_brkAnm();
+    mBrk1 = new mDoExt_brkAnm();
     if (mBrk1 == NULL || !mBrk1->init(modelData, pbrk, 1, 2, 1.0f, 0, -1)) {
         return 0;
     }
 
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 21);
     JUT_ASSERT(416, pbtk != NULL);
-    mBtk1 = JKR_NEW mDoExt_btkAnm();
+    mBtk1 = new mDoExt_btkAnm();
     if (mBtk1 == NULL || !mBtk1->init(modelData, pbtk, 1, 2, 1.0f, 0, -1)) {
         return 0;
     }
 
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 8);
     JUT_ASSERT(428, pbck != NULL);
-    mBck1 = JKR_NEW mDoExt_bckAnm();
+    mBck1 = new mDoExt_bckAnm();
     if (mBck1 == NULL || !mBck1->init(pbck, 1, 0, 1.0f, 0, -1, false)) {
         return 0;
     }
@@ -178,7 +178,7 @@ int daObjVolcBom_c::CreateHeap() {
 
     pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, 15);
     JUT_ASSERT(457, pbrk != NULL);
-    mBrk2 = JKR_NEW mDoExt_brkAnm();
+    mBrk2 = new mDoExt_brkAnm();
     if (mBrk2 == NULL || !mBrk2->init(modelData, pbrk, 1, 0, 1.0f, 0, -1)) {
         return 0;
     }
@@ -186,7 +186,7 @@ int daObjVolcBom_c::CreateHeap() {
     mBrk2->setPlaySpeed(0.0f);
     pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 19);
     JUT_ASSERT(471, pbtk != NULL);
-    mBtk2 = JKR_NEW mDoExt_btkAnm();
+    mBtk2 = new mDoExt_btkAnm();
     if (mBtk2 == NULL || !mBtk2->init(modelData, pbtk, 1, 2, 1.0f, 0, -1)) {
         return 0;
     }

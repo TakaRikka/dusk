@@ -3322,13 +3322,13 @@ int daE_YM_c::CreateHeap() {
     if (mFlyType == 1) {
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_TM", 0x11);
         JUT_ASSERT(0x1094, modelData != NULL);
-        mpMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_TM", 10),
+        mpMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_TM", 10),
                                       0, 1.0f, 0, -1, &mSound, 0x80000,0x11000084);
         if (mpMorf == NULL || mpMorf->getModel() == NULL) {
             return 0;
         }
 
-        mpBrk = JKR_NEW mDoExt_brkAnm();
+        mpBrk = new mDoExt_brkAnm();
         if (mpBrk == NULL) {
             return 0;
         }
@@ -3341,13 +3341,13 @@ int daE_YM_c::CreateHeap() {
     } else {
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_YM", 0x13);
         JUT_ASSERT(0x10bb, modelData != NULL);
-        mpMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_YM", 0x10),
+        mpMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_YM", 0x10),
                                       0, 1.0f, 0, -1, &mSound, 0x80000,0x11000084);
         if (mpMorf == NULL || mpMorf->getModel() == NULL) {
             return 0;
         }
 
-        mpBrk = JKR_NEW mDoExt_brkAnm();
+        mpBrk = new mDoExt_brkAnm();
         if (mpBrk == NULL) {
             return 0;
         }
@@ -3360,7 +3360,7 @@ int daE_YM_c::CreateHeap() {
     }
 
     if (mType == 6) {
-        field_0x6d0 = JKR_NEW cXyz[45];
+        field_0x6d0 = new cXyz[45];
     }
 
     return 1;

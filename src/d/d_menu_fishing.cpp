@@ -38,43 +38,43 @@ dMenu_Fishing_c::dMenu_Fishing_c(JKRExpHeap* i_heap, STControl* i_stick, CSTCont
 }
 
 dMenu_Fishing_c::~dMenu_Fishing_c() {
-    JKR_DELETE(mpString);
+    delete mpString;
     mpString = NULL;
 
-    JKR_DELETE(mpBlackTex);
+    delete mpBlackTex;
     mpBlackTex = NULL;
 
-    JKR_DELETE(mpScreen);
+    delete mpScreen;
     mpScreen = NULL;
 
-    JKR_DELETE(mpParent);
+    delete mpParent;
     mpParent = NULL;
 
     for (int i = 0; i < MAX_FINDABLE_FISHES; i++) {
-        JKR_DELETE(mpFishParent[i]);
+        delete mpFishParent[i];
         mpFishParent[i] = NULL;
 
         for (int j = 0; j < MAX_FINDABLE_FISHES; j++) {
-            JKR_DELETE(mpFishParts[j][i]);
+            delete mpFishParts[j][i];
             mpFishParts[j][i] = NULL;
         }
     }
 
     for (int i = 0; i < 2; i++) {
-        JKR_DELETE(mpFishInfoParent[i]);
+        delete mpFishInfoParent[i];
         mpFishInfoParent[i] = NULL;
     }
 
-    JKR_DELETE(mpIconScreen);
+    delete mpIconScreen;
     mpIconScreen = NULL;
 
     for (int i = 0; i < 2; i++) {
         if (mpButtonAB[i]) {
-            JKR_DELETE(mpButtonAB[i]);
+            delete mpButtonAB[i];
             mpButtonAB[i] = NULL;
         }
         if (mpButtonText[i]) {
-            JKR_DELETE(mpButtonText[i]);
+            delete mpButtonText[i];
             mpButtonText[i] = NULL;
         }
     }
@@ -92,7 +92,7 @@ dMenu_Fishing_c::~dMenu_Fishing_c() {
 }
 
 void dMenu_Fishing_c::_create() {
-    mpString = JKR_NEW dMsgString_c();
+    mpString = new dMsgString_c();
     screenSetBase();
     screenSetDoIcon();
     setHIO(true);
@@ -164,7 +164,7 @@ int dMenu_Fishing_c::_open() {
         if (mpMount->sync()) {
             if (mpArchive == NULL) {
                 mpArchive = (JKRArchive*)mpMount->getArchive();
-                JKR_DELETE(mpMount);
+                delete mpMount;
                 mpMount = NULL;
                 _create();
             }
@@ -275,25 +275,25 @@ void dMenu_Fishing_c::screenSetBase() {
     };
 
     ResTIMG* TIMG = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "tt_block8x8.bti");
-    mpBlackTex = JKR_NEW J2DPicture(TIMG);
+    mpBlackTex = new J2DPicture(TIMG);
 
     mpBlackTex->setBlackWhite(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(0, 0, 0, 0xFF));
-    mpScreen = JKR_NEW J2DScreen();
+    mpScreen = new J2DScreen();
     mpScreen->setPriority("zelda_fish_window.blo", 0x20000, mpArchive);
     dPaneClass_showNullPane(mpScreen);
-    mpParent = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpParent = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
     mpParent->setAlphaRate(0.0f);
     for (int i = 0; i < MAX_FINDABLE_FISHES; i++) {
-        mpFishParent[i] = JKR_NEW CPaneMgr(mpScreen, fish_n[i], 0, NULL);
-        mpFishParts[0][i] = JKR_NEW CPaneMgr(mpScreen, fish_p0[i], 0, NULL);
-        mpFishParts[1][i] = JKR_NEW CPaneMgr(mpScreen, fish_p1[i], 0, NULL);
-        mpFishParts[2][i] = JKR_NEW CPaneMgr(mpScreen, fish_p2[i], 0, NULL);
-        mpFishParts[3][i] = JKR_NEW CPaneMgr(mpScreen, fish_p3[i], 0, NULL);
-        mpFishParts[4][i] = JKR_NEW CPaneMgr(mpScreen, fish_p4[i], 0, NULL);
-        mpFishParts[5][i] = JKR_NEW CPaneMgr(mpScreen, fish_p5[i], 0, NULL);
+        mpFishParent[i] = new CPaneMgr(mpScreen, fish_n[i], 0, NULL);
+        mpFishParts[0][i] = new CPaneMgr(mpScreen, fish_p0[i], 0, NULL);
+        mpFishParts[1][i] = new CPaneMgr(mpScreen, fish_p1[i], 0, NULL);
+        mpFishParts[2][i] = new CPaneMgr(mpScreen, fish_p2[i], 0, NULL);
+        mpFishParts[3][i] = new CPaneMgr(mpScreen, fish_p3[i], 0, NULL);
+        mpFishParts[4][i] = new CPaneMgr(mpScreen, fish_p4[i], 0, NULL);
+        mpFishParts[5][i] = new CPaneMgr(mpScreen, fish_p5[i], 0, NULL);
     }
-    mpFishInfoParent[0] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('info_blu'), 0, NULL);
-    mpFishInfoParent[1] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('info_red'), 0, NULL);
+    mpFishInfoParent[0] = new CPaneMgr(mpScreen, MULTI_CHAR('info_blu'), 0, NULL);
+    mpFishInfoParent[1] = new CPaneMgr(mpScreen, MULTI_CHAR('info_red'), 0, NULL);
 
     #if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
     J2DTextBox* textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('t_t00'));
@@ -343,7 +343,7 @@ void dMenu_Fishing_c::screenSetDoIcon() {
     static const u64 text_a_tag[5] = {MULTI_CHAR('atext1_1'), MULTI_CHAR('atext1_2'), MULTI_CHAR('atext1_3'), MULTI_CHAR('atext1_4'), MULTI_CHAR('atext1_5')};
     static const u64 text_b_tag[5] = {MULTI_CHAR('btext1_1'), MULTI_CHAR('btext1_2'), MULTI_CHAR('btext1_3'), MULTI_CHAR('btext1_4'), MULTI_CHAR('btext1_5')};
 
-    mpIconScreen = JKR_NEW J2DScreen();
+    mpIconScreen = new J2DScreen();
     mpIconScreen->setPriority("zelda_collect_soubi_do_icon_parts.blo", 0x20000, mpArchive);
     for (int i = 0; i < 2; i++) {
         mpButtonAB[i] = NULL;

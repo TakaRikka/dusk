@@ -27,13 +27,13 @@ dMsgScrnTalk_c::dMsgScrnTalk_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
         field_0xe4 = dComIfGp_getSubHeap2D(7);
     }
     init();
-    mpScreen = JKR_NEW J2DScreen();
+    mpScreen = new J2DScreen();
     JUT_ASSERT(70, mpScreen != NULL);
     bool fg = mpScreen->setPriority("zelda_message_window_new.blo", 0x20000,
                                     dComIfGp_getMsgArchive(1));
     JUT_ASSERT(77, fg != false);
     dPaneClass_showNullPane(mpScreen);
-    mpTxScreen = JKR_NEW J2DScreen();
+    mpTxScreen = new J2DScreen();
     JUT_ASSERT(81, mpTxScreen != NULL);
     if (dMsgObject_getMsgObjectClass()->getFukiKind() == 8) {
         fg = mpTxScreen->setPriority("zelda_message_window_text_seirei.blo", 0x20000,
@@ -44,10 +44,10 @@ dMsgScrnTalk_c::dMsgScrnTalk_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     }
     JUT_ASSERT(90, fg != false);
     dPaneClass_showNullPane(mpTxScreen);
-    mpArrow_c = JKR_NEW dMsgScrnArrow_c();
+    mpArrow_c = new dMsgScrnArrow_c();
     JUT_ASSERT(95, mpArrow_c != NULL);
     if (dComIfGp_isHeapLockFlag() != 3) {
-        mpSelect_c = JKR_NEW dMsgScrn3Select_c();
+        mpSelect_c = new dMsgScrn3Select_c();
         JUT_ASSERT(100, mpSelect_c != NULL);
     } else {
         mpSelect_c = NULL;
@@ -68,7 +68,7 @@ dMsgScrnTalk_c::dMsgScrnTalk_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
         break;
     }
 
-    mpLight_c = JKR_NEW dMsgScrnLight_c(uVar22, param_2);
+    mpLight_c = new dMsgScrnLight_c(uVar22, param_2);
     JUT_ASSERT(123, mpLight_c != NULL);
     void* mpBuf = field_0xe4->alloc(0x106a, 0x20);
     JUT_ASSERT(126, mpBuf != NULL);
@@ -88,11 +88,11 @@ dMsgScrnTalk_c::dMsgScrnTalk_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     mpScreen->search(MULTI_CHAR('mg_null'))->move(
         mpScreen->search(MULTI_CHAR('mg_null'))->getBounds().i.x + g_MsgObject_HIO_c.mTextPosX, 
         mpScreen->search(MULTI_CHAR('mg_null'))->getBounds().i.y + g_MsgObject_HIO_c.mTextPosY);
-    mpArw_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('set_ya_n'), 0, NULL);
+    mpArw_c = new CPaneMgr(mpScreen, MULTI_CHAR('set_ya_n'), 0, NULL);
     JUT_ASSERT(147, mpArw_c != NULL);
-    mpMg_c[0] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('mg_null'), 0, NULL);
+    mpMg_c[0] = new CPaneMgr(mpScreen, MULTI_CHAR('mg_null'), 0, NULL);
     JUT_ASSERT(150, mpMg_c[0] != NULL);
-    mpMg_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_null'), 0, NULL);
+    mpMg_c[1] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_null'), 0, NULL);
     JUT_ASSERT(153, mpMg_c[1] != NULL);
     OSInitFastCast();
 
@@ -102,42 +102,42 @@ dMsgScrnTalk_c::dMsgScrnTalk_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     field_0xf4 = -10.0f;
 #endif
     fukiPosCalc(param_1);
-    mpPmP_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 3, NULL);
+    mpPmP_c = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 3, NULL);
     JUT_ASSERT(176, mpPmP_c != NULL);
     mpPmP_c->scale(g_MsgObject_HIO_c.mBoxTalkScaleX, g_MsgObject_HIO_c.mBoxTalkScaleY);
 
 #if VERSION == VERSION_GCN_JPN
     if (dComIfGs_getOptRuby() == 0) {
-        mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3flin'), 0, NULL);
-        mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s'), 0, NULL);
+        mpTm_c[0] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3flin'), 0, NULL);
+        mpTm_c[1] = new CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s'), 0, NULL);
 
-        mpTmr_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f'), 0, NULL);
+        mpTmr_c[0] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f'), 0, NULL);
         if (dMsgObject_getMsgObjectClass()->getFukiKind() == 8) {
-            mpTm_c[2] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s1'), 0, NULL);
-            mpTm_c[3] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s2'), 0, NULL);
-            mpTm_c[4] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s3'), 0, NULL);
-            mpTm_c[5] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s4'), 0, NULL);
-            mpTmr_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_s1'), 0, NULL);
-            mpTmr_c[2] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_s2'), 0, NULL);
+            mpTm_c[2] = new CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s1'), 0, NULL);
+            mpTm_c[3] = new CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s2'), 0, NULL);
+            mpTm_c[4] = new CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s3'), 0, NULL);
+            mpTm_c[5] = new CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s4'), 0, NULL);
+            mpTmr_c[1] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_s1'), 0, NULL);
+            mpTmr_c[2] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_s2'), 0, NULL);
         } else {
-            mpTmr_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_s'), 0, NULL);
+            mpTmr_c[1] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_s'), 0, NULL);
         }
 
         mpTxScreen->search(MULTI_CHAR('n_3line'))->hide();
         mpTxScreen->search(MULTI_CHAR('n_3fline'))->show();
         mpTxScreen->search(MULTI_CHAR('n_e4line'))->hide();
     } else {
-        mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3line'), 0, NULL);
-        mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, 't3_s', 0, NULL);
+        mpTm_c[0] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3line'), 0, NULL);
+        mpTm_c[1] = new CPaneMgr(mpTxScreen, 't3_s', 0, NULL);
 
         if (dMsgObject_getMsgObjectClass()->getFukiKind() == 8) {
-            mpTm_c[2] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3_s1'), 0, NULL);
+            mpTm_c[2] = new CPaneMgr(mpTxScreen, MULTI_CHAR('t3_s1'), 0, NULL);
             JUT_ASSERT(189, mpTm_c[2] != NULL);
-            mpTm_c[3] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3_s2'), 0, NULL);
+            mpTm_c[3] = new CPaneMgr(mpTxScreen, MULTI_CHAR('t3_s2'), 0, NULL);
             JUT_ASSERT(191, mpTm_c[3] != NULL);
-            mpTm_c[4] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3_s3'), 0, NULL);
+            mpTm_c[4] = new CPaneMgr(mpTxScreen, MULTI_CHAR('t3_s3'), 0, NULL);
             JUT_ASSERT(193, mpTm_c[4] != NULL);
-            mpTm_c[5] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3_s4'), 0, NULL);
+            mpTm_c[5] = new CPaneMgr(mpTxScreen, MULTI_CHAR('t3_s4'), 0, NULL);
             JUT_ASSERT(193, mpTm_c[5] != NULL);
         }
 
@@ -146,19 +146,19 @@ dMsgScrnTalk_c::dMsgScrnTalk_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
         mpTxScreen->search(MULTI_CHAR('n_e4line'))->hide();
     }
 #else
-    mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_e4lin'), 0, NULL);
+    mpTm_c[0] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_e4lin'), 0, NULL);
     JUT_ASSERT(182, mpTm_c[0] != NULL);
-    mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, 't4_s', 0, NULL);
+    mpTm_c[1] = new CPaneMgr(mpTxScreen, 't4_s', 0, NULL);
     JUT_ASSERT(185, mpTm_c[1] != NULL);
 
     if (dMsgObject_getMsgObjectClass()->getFukiKind() == 8) {
-        mpTm_c[2] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t4_s1'), 0, NULL);
+        mpTm_c[2] = new CPaneMgr(mpTxScreen, MULTI_CHAR('t4_s1'), 0, NULL);
         JUT_ASSERT(189, mpTm_c[2] != NULL);
-        mpTm_c[3] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t4_s2'), 0, NULL);
+        mpTm_c[3] = new CPaneMgr(mpTxScreen, MULTI_CHAR('t4_s2'), 0, NULL);
         JUT_ASSERT(191, mpTm_c[3] != NULL);
-        mpTm_c[4] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t4_s3'), 0, NULL);
+        mpTm_c[4] = new CPaneMgr(mpTxScreen, MULTI_CHAR('t4_s3'), 0, NULL);
         JUT_ASSERT(193, mpTm_c[4] != NULL);
-        mpTm_c[5] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t4_s4'), 0, NULL);
+        mpTm_c[5] = new CPaneMgr(mpTxScreen, MULTI_CHAR('t4_s4'), 0, NULL);
         JUT_ASSERT(193, mpTm_c[5] != NULL);
     }
 
@@ -245,37 +245,37 @@ dMsgScrnTalk_c::dMsgScrnTalk_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
 }
 
 dMsgScrnTalk_c::~dMsgScrnTalk_c() {
-    JKR_DELETE(mpScreen);
+    delete mpScreen;
     mpScreen = NULL;
-    JKR_DELETE(mpTxScreen);
+    delete mpTxScreen;
     mpTxScreen = NULL;
-    JKR_DELETE(mpArrow_c);
+    delete mpArrow_c;
     mpArrow_c = NULL;
     if (mpSelect_c != NULL) {
-        JKR_DELETE(mpSelect_c);
+        delete mpSelect_c;
         mpSelect_c = NULL;
     }
-    JKR_DELETE(mpLight_c);
+    delete mpLight_c;
     mpLight_c = NULL;
     if (mCharInfoPtr != NULL) {
         field_0xe4->free(mCharInfoPtr);
         mCharInfoPtr = NULL;
     }
-    JKR_DELETE(mpArw_c);
+    delete mpArw_c;
     mpArw_c = NULL;
     for (int i = 0; i < 2; i++) {
-        JKR_DELETE(mpMg_c[i]);
+        delete mpMg_c[i];
         mpMg_c[i] = NULL;
     }
-    JKR_DELETE(mpPmP_c);
+    delete mpPmP_c;
     mpPmP_c = NULL;
     for (int i = 0; i < 6; i++) {
         if (mpTm_c[i] != NULL) {
-            JKR_DELETE(mpTm_c[i]);
+            delete mpTm_c[i];
             mpTm_c[i] = NULL;
         }
         if (mpTmr_c[i] != NULL) {
-            JKR_DELETE(mpTmr_c[i]);
+            delete mpTmr_c[i];
             mpTmr_c[i] = NULL;
         }
     }

@@ -41,7 +41,7 @@ void JStudio_JParticle::TCreateObject::emitter_destroy(JPABaseEmitter* pEmitter)
 JStudio::TObject* JStudio_JParticle::TCreateObject::createObject_JPA_PARTICLE_(
     JStudio::stb::data::TParse_TBlock_object const& param_1,
     JStudio_JParticle::TCreateObject* param_2) {
-    JStudio_JParticle::TAdaptor_particle* adaptor = JKR_NEW JStudio_JParticle::TAdaptor_particle(param_2);
+    JStudio_JParticle::TAdaptor_particle* adaptor = new JStudio_JParticle::TAdaptor_particle(param_2);
     if (adaptor == NULL) {
         return NULL;
     }

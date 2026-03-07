@@ -2,7 +2,6 @@
 #define STD_MEMORY_H
 
 #include "JSystem/JUtility/JUTAssert.h"
-#include "JSystem/JKernel/JKRHeap.h"
 
 namespace JGadget {
 template <typename T>
@@ -20,12 +19,12 @@ struct TAllocator {
     }
 
     void DeallocateRaw(void* mem) {
-        JKR_DELETE(mem);
+        delete mem;
     }
 
     void construct(T* p, const T& other) {
         JUT_ASSERT(67, p!=NULL);
-        JKR_NEW_ARGS(p) T(other);
+        new(p) T(other);
     }
 
     void destroy(T* p) {

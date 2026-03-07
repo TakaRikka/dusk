@@ -55,77 +55,77 @@ dMenu_Insect_c::dMenu_Insect_c(JKRExpHeap* i_heap, STControl* i_stick, CSTContro
     field_0xfb = 0xff;
     field_0xf7 = 1;
     ResTIMG* image = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "tt_block8x8.bti");
-    mpBlackTex = JKR_NEW J2DPicture(image);
+    mpBlackTex = new J2DPicture(image);
     mpBlackTex->setBlackWhite(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(0, 0, 0, 0xff));
     field_0xfc = 0;
-    mpDrawCursor = JKR_NEW dSelect_cursor_c(2, 1.0f, NULL);
+    mpDrawCursor = new dSelect_cursor_c(2, 1.0f, NULL);
     mpDrawCursor->setParam(1.0f, 1.0f, 0.1f, 0.7f, 0.7f);
     mpDrawCursor->setAlphaRate(0.0f);
     mpDrawCursor->setScale(0.0f);
     mpDrawCursor->offPlayAnime(0);
-    mpSelect_c = JKR_NEW dMsgScrn3Select_c();
+    mpSelect_c = new dMsgScrn3Select_c();
     mpExpItemTex = (ResTIMG*)mpHeap->alloc(0xc00, 0x20);
 }
 
 dMenu_Insect_c::~dMenu_Insect_c() {
-    JKR_DELETE(mpBlackTex);
+    delete mpBlackTex;
     mpBlackTex = NULL;
 
-    JKR_DELETE(mpDrawCursor);
+    delete mpDrawCursor;
     mpDrawCursor = NULL;
 
-    JKR_DELETE(mpSelect_c);
+    delete mpSelect_c;
     mpSelect_c = NULL;
 
     mpHeap->free(mpExpItemTex);
     mpExpItemTex = NULL;
 
-    JKR_DELETE(mpString);
+    delete mpString;
     mpString = NULL;
 
-    JKR_DELETE(mpScreen);
+    delete mpScreen;
     mpScreen = NULL;
 
-    JKR_DELETE(mpParent);
+    delete mpParent;
     mpParent = NULL;
 
     for (int i = 0; i < MAX_INSECT_NUM; i++) {
-        JKR_DELETE(mpINSParent[i]);
+        delete mpINSParent[i];
         mpINSParent[i] = NULL;
     }
 
-    JKR_DELETE(mpExpScreen);
+    delete mpExpScreen;
     mpExpScreen = NULL;
 
-    JKR_DELETE(mpExpParent);
+    delete mpExpParent;
     mpExpParent = NULL;
 
     for (int i = 0; i < 2; i++) {
-        JKR_DELETE(mpExpSubWin[i]);
+        delete mpExpSubWin[i];
         mpExpSubWin[i] = NULL;
     }
 
-    JKR_DELETE(mpInfoText);
+    delete mpInfoText;
     mpInfoText = NULL;
 
-    JKR_DELETE(mpIconScreen);
+    delete mpIconScreen;
     mpIconScreen = NULL;
 
     for (int i = 0; i < 2; i++) {
         if (mpButtonAB[i] != NULL) {
-            JKR_DELETE(mpButtonAB[i]);
+            delete mpButtonAB[i];
             mpButtonAB[i] = NULL;
         }
 
         if (mpButtonText[i] != NULL) {
-            JKR_DELETE(mpButtonText[i]);
+            delete mpButtonText[i];
             mpButtonText[i] = NULL;
         }
     }
 
     if (mpMount != NULL) {
         mpMount->getArchive()->unmount();
-        JKR_DELETE(mpMount);
+        delete mpMount;
         mpMount = NULL;
     }
 
@@ -138,7 +138,7 @@ dMenu_Insect_c::~dMenu_Insect_c() {
 }
 
 void dMenu_Insect_c::_create() {
-    mpString = JKR_NEW dMsgString_c();
+    mpString = new dMsgString_c();
     screenSetBase();
     screenSetExplain();
     screenSetDoIcon();
@@ -195,7 +195,7 @@ int dMenu_Insect_c::_open() {
         if (mpMount->sync() != 0) {
             if (mpArchive == NULL) {
                 mpArchive = (JKRArchive*)mpMount->getArchive();
-                JKR_DELETE(mpMount);
+                delete mpMount;
                 mpMount = NULL;
                 _create();
             }
@@ -451,13 +451,13 @@ void dMenu_Insect_c::screenSetBase() {
         MULTI_CHAR('ageha16'), MULTI_CHAR('ageha17'), MULTI_CHAR('ageha18'), MULTI_CHAR('ageha19'), MULTI_CHAR('ageha20'), MULTI_CHAR('ageha21'), MULTI_CHAR('ageha22'), MULTI_CHAR('ageha23'),
     };
 
-    mpScreen = JKR_NEW J2DScreen();
+    mpScreen = new J2DScreen();
     mpScreen->setPriority("zelda_gold_insects.blo", 0x20000, mpArchive);
     dPaneClass_showNullPane(mpScreen);
-    mpParent = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpParent = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
     mpParent->setAlphaRate(0.0f);
     for (int i = 0; i < MAX_INSECT_NUM; i++) {
-        mpINSParent[i] = JKR_NEW CPaneMgr(mpScreen, insect_tag[i], 0, NULL);
+        mpINSParent[i] = new CPaneMgr(mpScreen, insect_tag[i], 0, NULL);
     }
     for (int i = 0; i < 6; i++) {
         for (int j = 0; j < 4; j++) {
@@ -487,23 +487,23 @@ void dMenu_Insect_c::screenSetBase() {
 }
 
 void dMenu_Insect_c::screenSetExplain() {
-    mpExpScreen = JKR_NEW J2DScreen();
+    mpExpScreen = new J2DScreen();
     mpExpScreen->setPriority("zelda_gold_insects_info.blo", 0x20000, mpArchive);
     dPaneClass_showNullPane(mpExpScreen);
-    mpExpParent = JKR_NEW CPaneMgr(mpExpScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpExpParent = new CPaneMgr(mpExpScreen, MULTI_CHAR('n_all'), 2, NULL);
     mpExpParent->setAlphaRate(0.0f);
-    mpExpSubWin[0] = JKR_NEW CPaneMgr(mpExpScreen, MULTI_CHAR('in_win_n'), 0, NULL);
-    mpExpSubWin[1] = JKR_NEW CPaneMgr(mpExpScreen, MULTI_CHAR('w_d_mo_n'), 0, NULL);
+    mpExpSubWin[0] = new CPaneMgr(mpExpScreen, MULTI_CHAR('in_win_n'), 0, NULL);
+    mpExpSubWin[1] = new CPaneMgr(mpExpScreen, MULTI_CHAR('w_d_mo_n'), 0, NULL);
     if (field_0xf6 == 0) {
         mpExpSubWin[1]->hide();
     }
 #if VERSION == VERSION_GCN_JPN
-    mpInfoText = JKR_NEW CPaneMgr(mpExpScreen, MULTI_CHAR('mg_3line'), 0, NULL);
+    mpInfoText = new CPaneMgr(mpExpScreen, MULTI_CHAR('mg_3line'), 0, NULL);
     mpExpScreen->search(MULTI_CHAR('n_e4line'))->hide();
     field_0x5c = (J2DTextBox*)mpExpScreen->search(MULTI_CHAR('w_msg_jp'));
     mpExpScreen->search(MULTI_CHAR('ms_for_2'))->hide();
 #else
-    mpInfoText = JKR_NEW CPaneMgr(mpExpScreen, MULTI_CHAR('mg_e4lin'), 0, NULL);
+    mpInfoText = new CPaneMgr(mpExpScreen, MULTI_CHAR('mg_e4lin'), 0, NULL);
     mpExpScreen->search(MULTI_CHAR('n_3line'))->hide();
     field_0x5c = (J2DTextBox*)mpExpScreen->search(MULTI_CHAR('ms_for_2'));
     mpExpScreen->search(MULTI_CHAR('w_msg_jp'))->hide();
@@ -527,7 +527,7 @@ void dMenu_Insect_c::screenSetDoIcon() {
         MULTI_CHAR('btext1_1'), MULTI_CHAR('btext1_2'), MULTI_CHAR('btext1_3'), MULTI_CHAR('btext1_4'), MULTI_CHAR('btext1_5'),
     };
 
-    mpIconScreen = JKR_NEW J2DScreen();
+    mpIconScreen = new J2DScreen();
     mpIconScreen->setPriority("zelda_collect_soubi_do_icon_parts.blo", 0x20000, mpArchive);
     for (int i = 0; i < 2; i++) {
         mpButtonAB[i] = 0;

@@ -38,7 +38,7 @@ namespace {
                 return;
             }
             mNumStreamFiles = stack_14.getNumFiles();
-            mStreamFileDVDEntryNums = JKR_NEW s32[mNumStreamFiles];
+            mStreamFileDVDEntryNums = new s32[mNumStreamFiles];
             if (!mStreamFileDVDEntryNums) {
                 mNumStreamFiles = 0;
                 return;
@@ -139,7 +139,7 @@ JAUSoundTable* JAUSection::newSoundTable(void const* bst, u32 param_1, bool para
             bstDst = newCopy(bst, param_1, 4);
             JUT_ASSERT(296, bstDst);
         }
-        JAUSoundTable* soundTable = JKR_NEW JAUSoundTable(param_2);
+        JAUSoundTable* soundTable = new JAUSoundTable(param_2);
         JUT_ASSERT(299, soundTable);
         soundTable->init(bstDst);
         sectionHeap_->sectionHeapData_.soundTable = soundTable;
@@ -161,7 +161,7 @@ JAUSoundNameTable* JAUSection::newSoundNameTable(void const* bstn, u32 param_1, 
             bstnDst = newCopy(bstn, param_1, 4);
             JUT_ASSERT(326, bstnDst);
         }
-        JAUSoundNameTable* soundNameTable = JKR_NEW JAUSoundNameTable(param_2);
+        JAUSoundNameTable* soundNameTable = new JAUSoundNameTable(param_2);
         JUT_ASSERT(329, soundNameTable);
         soundNameTable->init(bstnDst);
         sectionHeap_->sectionHeapData_.soundNameTable = soundNameTable;
@@ -179,12 +179,12 @@ JAIStreamDataMgr* JAUSection::newStreamFileTable(void const* param_0, bool param
         TPushCurrentHeap push(getHeap_());
         JAIStreamDataMgr* r28 = NULL;
         if (param_1) {
-            TStreamDataMgr* r26 = JKR_NEW TStreamDataMgr(param_0);
+            TStreamDataMgr* r26 = new TStreamDataMgr(param_0);
             if (r26->isValid()) {
                 r28 = r26;
             }
         } else {
-            JAUStreamDataMgr_StreamFileTable* r25 = JKR_NEW JAUStreamDataMgr_StreamFileTable();
+            JAUStreamDataMgr_StreamFileTable* r25 = new JAUStreamDataMgr_StreamFileTable();
             r25->init(param_0);
             if (r25->isValid()) {
                 r28 = r25;
@@ -204,7 +204,7 @@ JAISeqDataMgr* JAUSection::newSeSeqCollection(void const* bsc, u32 param_1) {
     JUT_ASSERT(405, bsc);
     {
         TPushCurrentHeap push(getHeap_());
-        JAUSeqDataMgr_SeqCollection* seSeqDataMgr = JKR_NEW JAUSeqDataMgr_SeqCollection();
+        JAUSeqDataMgr_SeqCollection* seSeqDataMgr = new JAUSeqDataMgr_SeqCollection();
         JUT_ASSERT(409, seSeqDataMgr);
         seSeqDataMgr->init(bsc);
         sectionHeap_->sectionHeapData_.seSeqDataMgr_ = seSeqDataMgr;
@@ -219,16 +219,16 @@ u8* JAUSection::newStaticSeqDataBlock_(JAISoundID param_0, u32 size) {
     JUT_ASSERT(421, size);
     {
         TPushCurrentHeap push(getHeap_());
-        JAUSeqDataBlock* seqDataBlock = JKR_NEW JAUSeqDataBlock();
+        JAUSeqDataBlock* seqDataBlock = new JAUSeqDataBlock();
         if (!seqDataBlock) {
             return NULL;
         }
-        JSULink<JAUSeqDataBlock>* link = JKR_NEW JSULink<JAUSeqDataBlock>(seqDataBlock);
+        JSULink<JAUSeqDataBlock>* link = new JSULink<JAUSeqDataBlock>(seqDataBlock);
         if (!link) {
             JUT_WARN(432, "%s", "created UNUSED object in Heap\n");
             return NULL;
         }
-        u8* r28 = JKR_NEW_ARGS(0x20) u8[size];
+        u8* r28 = new(0x20) u8[size];
         if (!r28) {
             JUT_WARN(438, "%s", "created UNUSED object in Heap\n");
             return NULL;
@@ -277,7 +277,7 @@ bool JAUSection::newStaticSeqData(JAISoundID param_0) {
 void* JAUSection::newCopy(void const* param_0, u32 param_1, s32 param_2) {
     JUT_ASSERT(516, isOpen());
     JUT_ASSERT(517, isBuilding());
-    u8* r31 = JKR_NEW_ARGS(getHeap_(), param_2) u8[param_1];
+    u8* r31 = new(getHeap_(), param_2) u8[param_1];
     if (r31) {
         memcpy(r31, param_0, param_1);
     }
@@ -358,7 +358,7 @@ JASVoiceBank* JAUSection::newVoiceBank(u32 bank_no, u32 param_1) {
         JASWaveBank* waveBank = sectionHeap_->getWaveBankTable().getWaveBank(param_1);
         JUT_ASSERT(688, waveBank != NULL);
         TPushCurrentHeap push(getHeap_()); 
-        JASBank* voiceBank = JKR_NEW JASVoiceBank();
+        JASBank* voiceBank = new JASVoiceBank();
         if (voiceBank) {
             if (buildingBankTable_) {
                 JUT_ASSERT(696, buildingBankTable_->getBank( bank_no ) == NULL);
@@ -382,9 +382,9 @@ bool JAUSection::beginNewBankTable(u32 param_0, u32 param_1) {
     JAUBankTableLink* bankTableLink = NULL;
     {
         TPushCurrentHeap push(getHeap_());
-        JASBank** r26 = JKR_NEW JASBank*[param_1];
+        JASBank** r26 = new JASBank*[param_1];
         if (r26) {
-            bankTableLink = JKR_NEW JAUBankTableLink(param_0, r26, param_1);
+            bankTableLink = new JAUBankTableLink(param_0, r26, param_1);
             if (bankTableLink) {
                 buildingBankTable_ = bankTableLink;
             } else {
@@ -435,7 +435,7 @@ static JAUSectionHeap* JAUNewSectionHeap(JKRSolidHeap* heap, bool param_1) {
     JUT_ASSERT(809, JKRSolidHeap_isEmpty( heap ));
     TPushCurrentHeap push(heap);
     s32 r29 = heap->getFreeSize();
-    JAUSectionHeap* sectionHeap = JKR_NEW JAUSectionHeap(heap, param_1, r29);
+    JAUSectionHeap* sectionHeap = new JAUSectionHeap(heap, param_1, r29);
     return sectionHeap;
 }
 
@@ -480,16 +480,16 @@ bool JAUSectionHeap::newDynamicSeqBlock(u32 size) {
     JUT_ASSERT(939, sectionHeap_ == this);
     {
         TPushCurrentHeap push(getHeap_());
-        JAUSeqDataBlock * seqDataBlock = JKR_NEW JAUSeqDataBlock();
+        JAUSeqDataBlock * seqDataBlock = new JAUSeqDataBlock();
         if (!seqDataBlock) {
             return false;
         }
-        JSULink<JAUSeqDataBlock> * link = JKR_NEW JSULink<JAUSeqDataBlock>(seqDataBlock);
+        JSULink<JAUSeqDataBlock> * link = new JSULink<JAUSeqDataBlock>(seqDataBlock);
         if (!link) {
             JUT_WARN(950, "%s", "created UNUSED object in Heap\n");
             return false;
         }
-        u8* r25 = JKR_NEW_ARGS(0x20) u8[size];
+        u8* r25 = new(0x20) u8[size];
         if (!r25) {
             JUT_WARN(956, "%s", "created UNUSED object in Heap\n");
             return false;

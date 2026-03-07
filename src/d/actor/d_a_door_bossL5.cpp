@@ -81,7 +81,7 @@ int daBdoorL5_c::CreateHeap() {
 
     J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes(getAnmArcName(), getOpenAnm());
     JUT_ASSERT(354, anm != NULL);
-    field_0x584 = JKR_NEW mDoExt_bckAnm();
+    field_0x584 = new mDoExt_bckAnm();
     if (field_0x584 == NULL || !field_0x584->init(anm, 1, 0, 1.0f, 0, -1, false)) {
         return 0;
     }
@@ -89,7 +89,7 @@ int daBdoorL5_c::CreateHeap() {
     field_0x584->entry(field_0x580->getModelData());
     field_0x580->calc();
     calcMtx();
-    field_0x588 = JKR_NEW dBgW();
+    field_0x588 = new dBgW();
     if (field_0x588 == NULL || field_0x588->Set((cBgD_t*)dComIfG_getObjectRes(getAlwaysArcName(), getDzb()), 1, &field_0x580->getBaseTRMtx())) {
         return 0;
     }

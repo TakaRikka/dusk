@@ -85,7 +85,7 @@ int daObjARI_c::CreateHeap() {
     } else {
         model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes("I_Ari", 10));
     }
-    mpMorf = JKR_NEW mDoExt_McaMorfSO(model_data, NULL, NULL,
+    mpMorf = new mDoExt_McaMorfSO(model_data, NULL, NULL,
                                   static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("I_Ari", 6)),
                                   2, 0.5f, 0, -1, &mCreatureSound, 0, 0x11000284);
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
@@ -93,7 +93,7 @@ int daObjARI_c::CreateHeap() {
     }
     J3DModel* model = mpMorf->getModel();
 
-    mpBrkAnm = JKR_NEW mDoExt_brkAnm();
+    mpBrkAnm = new mDoExt_brkAnm();
     if (mpBrkAnm == NULL) {
         return 0;
     }
@@ -109,7 +109,7 @@ int daObjARI_c::CreateHeap() {
         }
     }
 
-    mpBtkAnm = JKR_NEW mDoExt_btkAnm();
+    mpBtkAnm = new mDoExt_btkAnm();
     if (mpBtkAnm == NULL) {
         return 0;
     }

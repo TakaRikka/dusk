@@ -3290,7 +3290,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     b_ob_class* a_this = (b_ob_class*)i_this;
 
     a_this->mpCoreMorf =
-        JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("B_oh", BMDV_OH_CORE), NULL, NULL,
+        new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("B_oh", BMDV_OH_CORE), NULL, NULL,
                              (J3DAnmTransform*)dComIfG_getObjectRes("B_oh", BCK_OH_CORE_OPEN), 2, 1.0f, 0, -1,
                              &a_this->mSound, 0, 0x11000084);
 
@@ -3304,7 +3304,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         }
 
         a_this->mBodyParts[i].mpMorf =
-            JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("B_oh", p_bmd[i]), NULL, NULL,
+            new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("B_oh", p_bmd[i]), NULL, NULL,
                                NULL, 2, 1.0f, 0, -1, 1, NULL, var_r31, 0x11000084);
 
         if (a_this->mBodyParts[i].mpMorf == NULL ||
@@ -3335,7 +3335,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 
         if (i >= 4 && i <= 17) {
             a_this->mBodyParts[i].mpFinMorf =
-                JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("B_oh", BMDR_OI_FINA), NULL, NULL,
+                new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("B_oh", BMDR_OI_FINA), NULL, NULL,
                                    NULL, 2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000084);
 
             if (a_this->mBodyParts[i].mpFinMorf == NULL ||
@@ -3366,7 +3366,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 
         if (i >= 7 && i <= 15) {
             a_this->mBodyParts[i].mpFinUnkMorf =
-                JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("B_oh", BMDR_OI_FINA), NULL, NULL,
+                new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("B_oh", BMDR_OI_FINA), NULL, NULL,
                                    NULL, 2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000084);
 
             if (a_this->mBodyParts[i].mpFinUnkMorf == NULL ||
@@ -3391,7 +3391,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 
         if (i == 8) {
             a_this->mBodyParts[i].mpFinBMorf =
-                JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("B_oh", BMDR_OI_FINB), NULL, NULL,
+                new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("B_oh", BMDR_OI_FINB), NULL, NULL,
                                    NULL, 2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000084);
 
             if (a_this->mBodyParts[i].mpFinBMorf == NULL ||
@@ -3416,7 +3416,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 
         if (i == 17) {
             a_this->mBodyParts[i].mpFinCMorf =
-                JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("B_oh", BMDR_OI_FINC), NULL, NULL,
+                new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("B_oh", BMDR_OI_FINC), NULL, NULL,
                                    NULL, 2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000084);
 
             if (a_this->mBodyParts[i].mpFinCMorf == NULL ||
@@ -3454,7 +3454,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         modelData->getJointNodePointer(j)->setCallBack(sui_nodeCallBack);
     }
 
-    a_this->mpSuiBrk = JKR_NEW mDoExt_brkAnm();
+    a_this->mpSuiBrk = new mDoExt_brkAnm();
     if (a_this->mpSuiBrk == NULL) {
         return 0;
     }
@@ -3463,7 +3463,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->mpSuiBtk = JKR_NEW mDoExt_btkAnm();
+    a_this->mpSuiBtk = new mDoExt_btkAnm();
     if (a_this->mpSuiBtk == NULL) {
         return 0;
     }

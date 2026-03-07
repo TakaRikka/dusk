@@ -129,7 +129,7 @@ int daObjBossWarp_c::CreateHeap() {
     }
 
     J3DAnmTevRegKey* brk_anm = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, 9);
-    mpBrkAnm = JKR_NEW mDoExt_brkAnm();
+    mpBrkAnm = new mDoExt_brkAnm();
     if (mpBrkAnm == NULL || !mpBrkAnm->init(model_data, brk_anm, 1, 0, 1.0f, 0, -1)) {
         return 0;
     }
@@ -140,7 +140,7 @@ int daObjBossWarp_c::CreateHeap() {
     for (int i = 0; i < 2; i++) {
         J3DAnmTextureSRTKey* btk_anm =
             (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, l_btk_idx[i]);
-        mpBtkAnm[i] = JKR_NEW mDoExt_btkAnm();
+        mpBtkAnm[i] = new mDoExt_btkAnm();
         if (mpBtkAnm[i] == NULL ||
             !mpBtkAnm[i]->init(model_data, btk_anm, 1, l_play_mode[i], 1.0f, 0, -1))
         {

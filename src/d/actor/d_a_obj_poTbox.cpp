@@ -90,7 +90,7 @@ int daPoTbox_c::CreateHeap() {
         res = mBrk.init(modelData2, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_type[mStat], 0xF), 1, 0, 1.0f, 0, -1);
         JUT_ASSERT(244, res == TRUE);
 
-        mpBgw2 = JKR_NEW dBgW();
+        mpBgw2 = new dBgW();
         if (mpBgw2 == NULL || mpBgw2->Set((cBgD_t*)dComIfG_getObjectRes(l_type[mStat], 0x16), 1, &mBgMtx)) {
             mpBgw2 = NULL;
             return 0;

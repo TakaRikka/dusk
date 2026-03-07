@@ -54,25 +54,25 @@ dMsgScrnHowl_c::dMsgScrnHowl_c() {
     };
 
     init();
-    mpScreen = JKR_NEW J2DScreen();
+    mpScreen = new J2DScreen();
     JUT_ASSERT(61, mpScreen != NULL);
     bool fg = mpScreen->setPriority("zelda_wolf_howl.blo", 0x20000, dComIfGp_getMsgArchive(5));
     JUT_ASSERT(73, fg != false);
     dPaneClass_showNullPane(mpScreen);
     mpScreen->search(MULTI_CHAR('line00'))->hide();
-    mpPmP_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 3, NULL);
+    mpPmP_c = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 3, NULL);
     JUT_ASSERT(79, mpPmP_c != NULL);
     mpScreen->search('ag_n')->hide();
     field_0x1994 = 0.0f;
     field_0x1998 = 0.0f;
     mpScreen->search(MULTI_CHAR('wi_btn_n'))->hide();
-    mpButtonIcon[0] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('cbtn_n'), 2, NULL);
+    mpButtonIcon[0] = new CPaneMgr(mpScreen, MULTI_CHAR('cbtn_n'), 2, NULL);
     JUT_ASSERT(91, mpButtonIcon[0] != NULL);
-    mpButtonText[0] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('g_ltxt_n'), 2, NULL);
+    mpButtonText[0] = new CPaneMgr(mpScreen, MULTI_CHAR('g_ltxt_n'), 2, NULL);
     JUT_ASSERT(93, mpButtonText[0] != NULL);
-    mpButtonIcon[1] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('abt_n'), 2, NULL);
+    mpButtonIcon[1] = new CPaneMgr(mpScreen, MULTI_CHAR('abt_n'), 2, NULL);
     JUT_ASSERT(96, mpButtonIcon[1] != NULL);
-    mpButtonText[1] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('gr_txt_n'), 2, NULL);
+    mpButtonText[1] = new CPaneMgr(mpScreen, MULTI_CHAR('gr_txt_n'), 2, NULL);
     JUT_ASSERT(98, mpButtonText[1] != NULL);
 #if VERSION == VERSION_GCN_JPN
     J2DTextBox* piStack_19c = (J2DTextBox*)mpScreen->search(MULTI_CHAR('g_l_info'));
@@ -138,9 +138,9 @@ dMsgScrnHowl_c::dMsgScrnHowl_c() {
     field_0x2136 = (350.0f / field_0x1980);
     field_0x2138 = 0;
     field_0x1984 = 255.0f / field_0x2136;
-    mpABase = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('a_base'), 0, NULL);
+    mpABase = new CPaneMgr(mpScreen, MULTI_CHAR('a_base'), 0, NULL);
     JUT_ASSERT(218, mpABase != NULL);
-    mpLineAll = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('line_all'), 0, NULL);
+    mpLineAll = new CPaneMgr(mpScreen, MULTI_CHAR('line_all'), 0, NULL);
     JUT_ASSERT(221, mpLineAll != NULL);
     f32 in_f31;
     for (int i = 0; i < 7; i++) {
@@ -158,11 +158,11 @@ dMsgScrnHowl_c::dMsgScrnHowl_c() {
                           f29);
     }
     for (int i = 0; i < 3; i++) {
-        mpLineH[i] = JKR_NEW CPaneMgr(mpScreen, ylinen_tag[i], 0, NULL);
+        mpLineH[i] = new CPaneMgr(mpScreen, ylinen_tag[i], 0, NULL);
         JUT_ASSERT(242, mpLineH[i] != NULL);
     }
     for (int i = 0; i < 7; i++) {
-        mpLineV[i] = JKR_NEW CPaneMgr(mpScreen, tlinen_tag[i], 2, NULL);
+        mpLineV[i] = new CPaneMgr(mpScreen, tlinen_tag[i], 2, NULL);
         JUT_ASSERT(247, mpLineV[i] != NULL);
     }
     Mtx mtx2;
@@ -178,21 +178,21 @@ dMsgScrnHowl_c::dMsgScrnHowl_c() {
     field_0x27a4 = 1.0f;
     field_0x27a8 = 0.0f;
     ResTIMG const* res = (ResTIMG const*) dComIfGp_getMsgArchive(5)->getResource('TIMG', "tt_ginnouroko_s3tc.bti");
-    mpDot = JKR_NEW J2DPicture(res);
+    mpDot = new J2DPicture(res);
     JUT_ASSERT(275, mpDot != NULL);
     mpDot->setWhite(JUtility::TColor(0xff, 0xff, 0x71, 0xff));
     res = (ResTIMG const*)dComIfGp_getMsgArchive(5)->getResource('TIMG', "tt_black_32.bti");
-    mpGuideDot = JKR_NEW J2DPicture(res);
+    mpGuideDot = new J2DPicture(res);
     JUT_ASSERT(280, mpGuideDot != NULL);
     mpGuideDot->setBlackWhite(((J2DPicture*)mpScreen->search(MULTI_CHAR('line00')))->getBlack(), ((J2DPicture*)mpScreen->search(MULTI_CHAR('line00')))->getWhite());
     res = (ResTIMG const*)dComIfGp_getMain2DArchive()->getResource('TIMG', "tt_iastarRR.bti");
-    mpTopBall = JKR_NEW J2DPicture(res);
+    mpTopBall = new J2DPicture(res);
     JUT_ASSERT(287, mpTopBall != NULL);
     mpTopBall->setBlackWhite(g_MsgObject_HIO_c.mHowlHIO.mDotBlack, g_MsgObject_HIO_c.mHowlHIO.mDotWhite);
     
     ;
     for (int i = 0; i < 5; i++) {
-        mpTopBallTail[i] = JKR_NEW J2DPicture(res);
+        mpTopBallTail[i] = new J2DPicture(res);
         JUT_ASSERT(292, mpTopBallTail[i] != NULL);
         mpTopBallTail[i]->setBlackWhite(g_MsgObject_HIO_c.mHowlHIO.mDotBlack, g_MsgObject_HIO_c.mHowlHIO.mDotWhite);
     }
@@ -203,7 +203,7 @@ dMsgScrnHowl_c::dMsgScrnHowl_c() {
     mCorrectLineMax = 0;
     field_0x2197 = 0;
     res = (ResTIMG const*)dComIfGp_getMain2DArchive()->getResource('TIMG', "tt_block8x8.bti");
-    mpWaveTex = JKR_NEW J2DPicture(res);
+    mpWaveTex = new J2DPicture(res);
     JUT_ASSERT(307, mpWaveTex != NULL);
     mpWaveTex->setBlackWhite(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(255, 200, 0, 255));
     mpWaveTex->setCornerColor(
@@ -220,41 +220,41 @@ dMsgScrnHowl_c::dMsgScrnHowl_c() {
 }
 
 dMsgScrnHowl_c::~dMsgScrnHowl_c() {
-    JKR_DELETE(mpScreen);
+    delete mpScreen;
     mpScreen = NULL;
 
-    JKR_DELETE(mpPmP_c);
+    delete mpPmP_c;
     mpPmP_c = NULL;
 
     for (int i = 0; i < 2; i++) {
-        JKR_DELETE(mpButtonIcon[i]);
+        delete mpButtonIcon[i];
         mpButtonIcon[i] = NULL;
-        JKR_DELETE(mpButtonText[i]);
+        delete mpButtonText[i];
         mpButtonText[i] = NULL;
     }
     for (int i = 0; i < 3; i++) {
-        JKR_DELETE(mpLineH[i]);
+        delete mpLineH[i];
         mpLineH[i] = NULL;
     }
     for (int i = 0; i < 7; i++) {
-        JKR_DELETE(mpLineV[i]);
+        delete mpLineV[i];
         mpLineV[i] = NULL;
     }
-    JKR_DELETE(mpABase);
+    delete mpABase;
     mpABase = NULL;
-    JKR_DELETE(mpLineAll);
+    delete mpLineAll;
     mpLineAll = NULL;
-    JKR_DELETE(mpDot);
+    delete mpDot;
     mpDot = NULL;
-    JKR_DELETE(mpGuideDot);
+    delete mpGuideDot;
     mpGuideDot = NULL;
-    JKR_DELETE(mpTopBall);
+    delete mpTopBall;
     mpTopBall = NULL;
     for (int i = 0; i < 5; i++) {
-        JKR_DELETE(mpTopBallTail[i]);
+        delete mpTopBallTail[i];
         mpTopBallTail[i] = NULL;
     }
-    JKR_DELETE(mpWaveTex);
+    delete mpWaveTex;
     mpWaveTex = NULL;
     dComIfGp_getMsgArchive(5)->removeResourceAll();;
 }

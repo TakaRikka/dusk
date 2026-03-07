@@ -938,7 +938,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     }
 
     for (int i = 0; i < 2; i++) {
-        i_this->mBgW[i] = JKR_NEW dBgW();
+        i_this->mBgW[i] = new dBgW();
         if (i_this->mBgW[i] == NULL) {
             return 0;
         }

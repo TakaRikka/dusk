@@ -3474,7 +3474,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     J3DModelData* modelData;
     e_fm_class* a_this = (e_fm_class*)i_this;
 
-    a_this->mpFmModelMorf = JKR_NEW mDoExt_McaMorf(static_cast<J3DModelData*>(dComIfG_getObjectRes("E_fm", BMDR_FM)), NULL, NULL,
+    a_this->mpFmModelMorf = new mDoExt_McaMorf(static_cast<J3DModelData*>(dComIfG_getObjectRes("E_fm", BMDR_FM)), NULL, NULL,
                                                static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("E_fm", BCK_FM_WAIT01)), 0, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000284);
     if (a_this->mpFmModelMorf == NULL || a_this->mpFmModelMorf->getModel() == NULL) {
         return 0;
@@ -3491,7 +3491,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 
     int anm_mode;
     for (int i = 0; i < 9; i++) {
-        a_this->mpFmBrk[i] = JKR_NEW mDoExt_brkAnm();
+        a_this->mpFmBrk[i] = new mDoExt_brkAnm();
         if (a_this->mpFmBrk[i] == NULL) {
             return 0;
         }
@@ -3512,7 +3512,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
             return 0;
         }
 
-        a_this->mpFmBtk[i] = JKR_NEW mDoExt_btkAnm();
+        a_this->mpFmBtk[i] = new mDoExt_btkAnm();
         if (a_this->mpFmBtk[i] == NULL) {
             return 0;
         }
@@ -3528,13 +3528,13 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         }
     }
 
-    a_this->mpDemoFmModelMorf = JKR_NEW mDoExt_McaMorf(static_cast<J3DModelData*>(dComIfG_getObjectRes("E_fm", BMDR_FM)), NULL, NULL,
+    a_this->mpDemoFmModelMorf = new mDoExt_McaMorf(static_cast<J3DModelData*>(dComIfG_getObjectRes("E_fm", BMDR_FM)), NULL, NULL,
                                                    static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("E_fm", BCK_FM_DEMOEND03)), 0, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000284);
     if (a_this->mpDemoFmModelMorf == NULL || a_this->mpDemoFmModelMorf->getModel() == NULL) {
         return 0;
     }
 
-    a_this->mpDemoFmBrk = JKR_NEW mDoExt_brkAnm();
+    a_this->mpDemoFmBrk = new mDoExt_brkAnm();
     if (a_this->mpDemoFmBrk == NULL) {
         return 0;
     }
@@ -3552,7 +3552,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->mpCoreBrk = JKR_NEW mDoExt_brkAnm();
+    a_this->mpCoreBrk = new mDoExt_brkAnm();
     if (a_this->mpCoreBrk == NULL) {
         return 0;
     }
@@ -3563,7 +3563,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->mpCoreBtk = JKR_NEW mDoExt_btkAnm();
+    a_this->mpCoreBtk = new mDoExt_btkAnm();
     if (a_this->mpCoreBtk == NULL) {
         return 0;
     }
@@ -3578,13 +3578,13 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 
     for (int i = 0; i < 2; i++) {
         static int eff_bmd[] = {BMDR_EF_FMATTACK_A, BMDR_EF_FMATTACK_B};
-        a_this->mpAttackEfModelMorf[i] = JKR_NEW mDoExt_McaMorf(static_cast<J3DModelData*>(dComIfG_getObjectRes("E_fm", eff_bmd[i])), NULL, NULL, NULL, 0, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000284);
+        a_this->mpAttackEfModelMorf[i] = new mDoExt_McaMorf(static_cast<J3DModelData*>(dComIfG_getObjectRes("E_fm", eff_bmd[i])), NULL, NULL, NULL, 0, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000284);
         if (a_this->mpAttackEfModelMorf[i] == NULL || a_this->mpAttackEfModelMorf[i]->getModel() == NULL) {
             return 0;
         }
 
         if (i != 0) {
-            a_this->mpAttackEfBrk = JKR_NEW mDoExt_brkAnm();
+            a_this->mpAttackEfBrk = new mDoExt_brkAnm();
             if (a_this->mpAttackEfBrk == NULL) {
                 return 0;
             }
@@ -3596,7 +3596,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
             }
         }
 
-        a_this->mpAttackEfBtk[i] = JKR_NEW mDoExt_btkAnm();
+        a_this->mpAttackEfBtk[i] = new mDoExt_btkAnm();
         if (a_this->mpAttackEfBtk[i] == NULL) {
             return 0;
         }

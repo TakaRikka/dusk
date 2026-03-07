@@ -108,7 +108,7 @@ static char* l_arcName = "Coach2D";
 static daCoach2D_HIO_c l_HOSTIO;
 
 int daCoach2D_c::createHeap() {
-    mpScrn = JKR_NEW J2DScreen();
+    mpScrn = new J2DScreen();
     if (mpScrn == NULL) {
         return 0;
     }
@@ -125,15 +125,15 @@ int daCoach2D_c::createHeap() {
     mpFireIconBrk->searchUpdateMaterialID(mpScrn);
     setBrkAnime(true);
 
-    mpPaneAll = JKR_NEW CPaneMgr(mpScrn, MULTI_CHAR('n_all'), 2, NULL);
-    mpPaneBasha = JKR_NEW CPaneMgr(mpScrn, MULTI_CHAR('basha_n'), 2, NULL);
-    mpPaneFire = JKR_NEW CPaneMgr(mpScrn, MULTI_CHAR('fire_n'), 2, NULL);
+    mpPaneAll = new CPaneMgr(mpScrn, MULTI_CHAR('n_all'), 2, NULL);
+    mpPaneBasha = new CPaneMgr(mpScrn, MULTI_CHAR('basha_n'), 2, NULL);
+    mpPaneFire = new CPaneMgr(mpScrn, MULTI_CHAR('fire_n'), 2, NULL);
 
     mpScrn->search(MULTI_CHAR('fire_b_n'))->move(mpPaneFire->getPosX(), mpPaneFire->getPosY());
 
-    mpPaneFireB = JKR_NEW CPaneMgr(mpScrn, MULTI_CHAR('fire_b_n'), 2, NULL);
+    mpPaneFireB = new CPaneMgr(mpScrn, MULTI_CHAR('fire_b_n'), 2, NULL);
 
-    mMsgLight = JKR_NEW dMsgScrnLight_c(6, 0xFF);
+    mMsgLight = new dMsgScrnLight_c(6, 0xFF);
 
     if (mpPaneAll == NULL || mpPaneBasha == NULL || mpPaneFire == NULL || mpPaneFireB == NULL || mMsgLight == NULL) {
         return 0;

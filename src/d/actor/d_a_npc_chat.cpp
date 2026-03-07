@@ -2288,7 +2288,7 @@ BOOL daNpcChat_c::NpcCreate(int type) {
     J3DAnmTexPattern* texAnmP = getTexAnmP(type);
     u32 uVar1 = texAnmP != NULL ? 0x11020084 : 0x11000084;
 
-    mAnm_p = JKR_NEW mDoExt_McaMorfSO(a_mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, uVar1);
+    mAnm_p = new mDoExt_McaMorfSO(a_mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, uVar1);
     if (mAnm_p != NULL && mAnm_p->getModel() == NULL) {
         mAnm_p->stopZelAnime();
         mAnm_p = NULL;

@@ -1698,7 +1698,7 @@ static int daE_SF_Delete(e_sf_class* i_this) {
 static int useHeapInit(fopAc_ac_c* a_this) {
     e_sf_class* i_this = (e_sf_class*)a_this;
 
-    i_this->mpModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_sf", BMDR_SF), NULL, NULL,
+    i_this->mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_sf", BMDR_SF), NULL, NULL,
                                                (J3DAnmTransform*)dComIfG_getObjectRes("E_sf", BCK_SF_WAIT01), 0, 1.0f, 0, -1,
                                                &i_this->mSound, 0x80000, 0x11000084);
     if (i_this->mpModelMorf == NULL || i_this->mpModelMorf->getModel() == NULL) {

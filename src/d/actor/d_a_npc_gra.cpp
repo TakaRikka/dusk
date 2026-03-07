@@ -420,7 +420,7 @@ BOOL daNpc_grA_c::CreateHeap() {
     }
     JUT_ASSERT(774, NULL != mdlData_p);
     int v = 0x11020284;
-    mAnm_p = JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mCreature, 0x80000, v);
+    mAnm_p = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mCreature, 0x80000, v);
     if (mAnm_p != NULL && mAnm_p->getModel() == NULL) {
         mAnm_p->stopZelAnime();
         mAnm_p = NULL;

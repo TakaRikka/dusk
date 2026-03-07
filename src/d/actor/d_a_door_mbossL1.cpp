@@ -303,7 +303,7 @@ int daMBdoorL1_c::CreateHeap() {
             J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes(
                 getAlwaysArcName(), "FDoorA.bck");
             JUT_ASSERT(597, anm != NULL);
-            mBckAnms[i] = JKR_NEW mDoExt_bckAnm();
+            mBckAnms[i] = new mDoExt_bckAnm();
             if (mBckAnms[i] == NULL || !mBckAnms[i]->init(anm, 1, 0, 1.0f, 0, -1, false)) {
                 return 0;
             }
@@ -324,7 +324,7 @@ int daMBdoorL1_c::CreateHeap() {
         J3DAnmTransform* anm =
             (J3DAnmTransform*)dComIfG_getObjectRes(getAnmArcName(), getOpenAnm());
         JUT_ASSERT(628, anm != NULL);
-        mBckAnms[0] = JKR_NEW mDoExt_bckAnm();
+        mBckAnms[0] = new mDoExt_bckAnm();
         if (mBckAnms[0] == NULL || !mBckAnms[0]->init(anm, 1, 0, 1.0f, 0, -1, false)) {
             return 0;
         }
@@ -334,7 +334,7 @@ int daMBdoorL1_c::CreateHeap() {
     if (level == 8) {
         J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getStageRes(getBtk());
         JUT_ASSERT(646, pbtk != NULL);
-        field_0x594 = JKR_NEW mDoExt_btkAnm();
+        field_0x594 = new mDoExt_btkAnm();
         if (field_0x594 == NULL ||
             !field_0x594->init(mModels[0]->getModelData(), pbtk, 1, 0, 1.0f, 0, -1))
         {
@@ -361,7 +361,7 @@ int daMBdoorL1_c::CreateHeap() {
         mDoMtx_stack_c::scaleM(1.0f, 1.4f, 1.0f);
     }
     MTXCopy(mDoMtx_stack_c::get(), field_0x59c);
-    field_0x598 = JKR_NEW dBgW();
+    field_0x598 = new dBgW();
     if (field_0x598 == NULL || field_0x598->Set((cBgD_t*)dComIfG_getObjectRes(getAlwaysArcName(), getDzb()), 1, &field_0x59c)) {
         return 0;
     }

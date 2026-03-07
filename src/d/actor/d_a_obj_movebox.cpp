@@ -1109,7 +1109,7 @@ void daObjMovebox::Act_c::mode_afl() {
 }
 
 static void dummy() {
-    JKR_DELETE((dBgS_ObjGndChk*)NULL);
+    delete (dBgS_ObjGndChk*)NULL;
 }
 
 void daObjMovebox::Act_c::mode_proc_call() {

@@ -11,7 +11,7 @@ static bool data_80450680 = true;
 dTres_c::typeGroupData_c* dTres_c::mTypeGroupData;
 
 int dTres_c::createWork() {
-    mTypeGroupData = JKR_NEW dTres_c::typeGroupData_c[0x40];
+    mTypeGroupData = new dTres_c::typeGroupData_c[0x40];
     return 1;
 }
 

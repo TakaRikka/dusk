@@ -256,7 +256,7 @@ int daNpc_Hanjo_c::CreateHeap() {
     if (modelData == NULL) {
         return 0;
     }
-    mpMorf[0] = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound,
+    mpMorf[0] = new mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound,
                                      0x80000, 0x11020284);
     if (mpMorf[0] == NULL || mpMorf[0]->getModel() == NULL) {
         return 0;
@@ -266,7 +266,7 @@ int daNpc_Hanjo_c::CreateHeap() {
         modelData->getJointNodePointer(i)->setCallBack(ctrlJointCallBack);
     }
     model->setUserArea((uintptr_t)this);
-    mpMatAnm[0] = JKR_NEW daNpcT_MatAnm_c();
+    mpMatAnm[0] = new daNpcT_MatAnm_c();
     if (mpMatAnm[0] == NULL) {
         return 0;
     }

@@ -162,7 +162,7 @@ int daObjSwHang_c::CreateHeap() {
     if (mpModel == NULL) {
         return 0;
     }
-    mpBgW = JKR_NEW dBgW();
+    mpBgW = new dBgW();
     if (mpBgW == NULL ||
         mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(l_arcName[mType], l_dzbIdx[mType]), 1,
                    &field_0x738) != 0)
@@ -490,7 +490,7 @@ static int daObjSwHang_MoveBGDraw(daObjSwHang_c* i_this) {
 
 static void dummy() {
     ((dEvLib_callback_c*)NULL)->eventStart();
-    JKR_DELETE((cCcD_GStts*)NULL);
+    delete (cCcD_GStts*)NULL;
 }
 
 static actor_method_class daObjSwHang_METHODS = {

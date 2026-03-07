@@ -520,7 +520,7 @@ void* operator new(size_t size) {
     return JKRHeap::alloc(size, 4, NULL);
 }
 #else
-void* operator new(size_t size JKR_HEAP_TOKEN_PARAM) {
+void* operator new(size_t size) {
     if (sCurrentHeap == NULL) {
         return malloc(size);
     }
@@ -538,7 +538,7 @@ void* operator new(size_t size, int alignment) {
     return JKRHeap::alloc(size, alignment, NULL);
 }
 #else
-void* operator new(size_t size JKR_HEAP_TOKEN_PARAM, int alignment) {
+void* operator new(size_t size, int alignment) {
     if (sCurrentHeap == nullptr)
 #if !_WIN32
         return aligned_alloc(alignment, size);
@@ -558,7 +558,7 @@ void* operator new(size_t size JKR_HEAP_TOKEN_PARAM, int alignment) {
 }
 #endif
 
-void* operator new(size_t size JKR_HEAP_TOKEN_PARAM, JKRHeap* heap, int alignment) {
+void* operator new(size_t size, JKRHeap* heap, int alignment) {
     return JKRHeap::alloc(size, alignment, heap);
 }
 
@@ -568,13 +568,8 @@ void* operator new[](size_t size) {
 }
 #else
 void* operator new[](size_t size) {
-    return malloc(size);
-}
-
-void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM) {
     if (sCurrentHeap == NULL)
         return malloc(size);
-
     void* mem = JKRHeap::alloc(size, alignof(max_align_t), NULL);
     if (mem == NULL) {
         mem = malloc(size);
@@ -588,7 +583,7 @@ void* operator new[](size_t size, int alignment) {
     return JKRHeap::alloc(size, alignment, NULL);
 }
 #else
-void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM, int alignment) {
+void* operator new[](size_t size, int alignment) {
     if (sCurrentHeap == nullptr)
 #if !_WIN32
         return aligned_alloc(alignment, size);
@@ -606,16 +601,16 @@ void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM, int alignment) {
 }
 #endif
 
-void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM, JKRHeap* heap, int alignment) {
+void* operator new[](size_t size, JKRHeap* heap, int alignment) {
     return JKRHeap::alloc(size, alignment, heap);
 }
 
 #if !TARGET_PC
-void operator JKR_DELETE(void* ptr) {
+void operator delete(void* ptr) {
     JKRHeap::free(ptr, NULL);
 }
 #else
-void operator delete(void* ptr JKR_HEAP_TOKEN_PARAM) {
+void operator delete(void* ptr) {
     if (ptr == NULL)
         return;
     JKRHeap* heap = JKRHeap::findFromRoot(ptr);
@@ -623,12 +618,12 @@ void operator delete(void* ptr JKR_HEAP_TOKEN_PARAM) {
         free(ptr);
         return;
     }
-    JKRHeap::free(ptr, heap);
+    JKRHeap::free(ptr, NULL);
 }
 #endif
 
 #if !TARGET_PC
-void operator JKR_DELETE[](void* ptr) {
+void operator delete[](void* ptr) {
     JKRHeap::free(ptr, NULL);
 }
 #else
@@ -640,7 +635,7 @@ void operator delete[](void* ptr) {
         free(ptr);
         return;
     }
-    JKRHeap::free(ptr, heap);
+    JKRHeap::free(ptr, NULL);
 }
 #endif
 

@@ -2092,7 +2092,7 @@ BOOL daAlink_lockCursor_c::create() {
     field_0x4 = false;
     field_0x30 = 0.0f;
 
-    mScrn = JKR_NEW J2DScreen();
+    mScrn = new J2DScreen();
     if (mScrn == NULL) {
         return false;
     }

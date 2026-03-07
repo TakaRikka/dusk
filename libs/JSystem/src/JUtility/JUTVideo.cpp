@@ -6,8 +6,6 @@
 #include <gx.h>
 #include <vi.h>
 
-#include "JSystem/JKernel/JKRHeap.h"
-
 JUTVideo* JUTVideo::sManager;
 
 OSTick JUTVideo::sVideoLastTick;
@@ -18,14 +16,14 @@ static bool data_80451544;
 
 JUTVideo* JUTVideo::createManager(GXRenderModeObj const* param_0) {
     if (sManager == NULL) {
-        sManager = JKR_NEW JUTVideo(param_0);
+        sManager = new JUTVideo(param_0);
     }
     return sManager;
 }
 
 void JUTVideo::destroyManager() {
     if (sManager != NULL) {
-        JKR_DELETE(sManager);
+        delete sManager;
         sManager = NULL;
     }
 }

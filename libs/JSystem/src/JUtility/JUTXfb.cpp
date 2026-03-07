@@ -44,21 +44,21 @@ JUTXfb::~JUTXfb() {
 
 void JUTXfb::delXfb(int xfbIdx) {
     if (mXfbAllocated[xfbIdx] && mBuffer[xfbIdx]) {
-        JKR_DELETE(mBuffer[xfbIdx]);
+        delete mBuffer[xfbIdx];
     }
 }
 
 JUTXfb* JUTXfb::createManager(JKRHeap* pHeap, JUTXfb::EXfbNumber xfbNum) {
     JUT_CONFIRM(273, sManager == NULL);
     if (sManager == NULL) {
-        sManager = JKR_NEW JUTXfb(NULL, pHeap, xfbNum);
+        sManager = new JUTXfb(NULL, pHeap, xfbNum);
     }
     return sManager;
 }
 
 void JUTXfb::destroyManager() {
     JUT_CONFIRM(344, sManager);
-    JKR_DELETE(sManager);
+    delete sManager;
     sManager = NULL;
 }
 
@@ -69,11 +69,11 @@ void JUTXfb::initiate(u16 width, u16 height, JKRHeap* pHeap, JUTXfb::EXfbNumber 
 
     int size = (u16)((u16)width + 0xf & ~0xf) * height * 2;
 
-    mBuffer[0] = JKR_NEW_ARGS (pHeap, 0x20) u8[size];
+    mBuffer[0] = new (pHeap, 0x20) u8[size];
     mXfbAllocated[0] = true;
 
     if (xfbNum >= 2) {
-        mBuffer[1] = JKR_NEW_ARGS (pHeap, 0x20) u8[size];
+        mBuffer[1] = new (pHeap, 0x20) u8[size];
         mXfbAllocated[1] = true;
     } else {
         mBuffer[1] = NULL;
@@ -81,7 +81,7 @@ void JUTXfb::initiate(u16 width, u16 height, JKRHeap* pHeap, JUTXfb::EXfbNumber 
     }
 
     if (xfbNum >= 3) {
-        mBuffer[2] = JKR_NEW_ARGS (pHeap, 0x20) u8[size];
+        mBuffer[2] = new (pHeap, 0x20) u8[size];
         mXfbAllocated[2] = true;
     } else {
         mBuffer[2] = NULL;
