@@ -523,18 +523,18 @@ void* operator new(size_t size) {
 void* operator new(size_t size) {
     if (sCurrentHeap == NULL) {
 #if !_WIN32
-        return aligned_alloc(4, size);
+        return aligned_alloc(sizeof(void*), size);
 #else
-        return _aligned_malloc(size, 4);
+        return _aligned_malloc(size, sizeof(void*));
 #endif
     }
     void* mem = JKRHeap::alloc(size, alignof(max_align_t), NULL);
     if (mem == NULL) {
         OSReport("[NEW] JKRHeap FULL! Fallback to malloc for size %u\n", (unsigned)size);
 #if !_WIN32
-        mem = aligned_alloc(4, size);
+        mem = aligned_alloc(sizeof(void*), size);
 #else
-        mem = _aligned_malloc(size, 4);
+        mem = _aligned_malloc(size, sizeof(void*));
 #endif
     }
     return mem;
@@ -578,16 +578,16 @@ void* operator new[](size_t size) {
 void* operator new[](size_t size) {
     if (sCurrentHeap == NULL)
 #if !_WIN32
-        return aligned_alloc(4, size);
+        return aligned_alloc(sizeof(void*), size);
 #else
-        return _aligned_malloc(size, 4);
+        return _aligned_malloc(size, sizeof(void*));
 #endif
     void* mem = JKRHeap::alloc(size, alignof(max_align_t), NULL);
     if (mem == NULL) {
 #if !_WIN32
-        mem = aligned_alloc(4, size);
+        mem = aligned_alloc(sizeof(void*), size);
 #else
-        mem = _aligned_malloc(size, 4);
+        mem = _aligned_malloc(size, sizeof(void*));
 #endif
     }
     return mem;
@@ -601,7 +601,7 @@ void* operator new[](size_t size, int alignment) {
 #else
 void* operator new[](size_t size, int alignment) {
     alignment = std::abs(alignment);
-    
+
     if (sCurrentHeap == nullptr)
 #if !_WIN32
         return aligned_alloc(alignment, size);
