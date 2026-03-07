@@ -655,11 +655,7 @@ void operator delete[](void* ptr) {
         return;
     JKRHeap* heap = JKRHeap::findFromRoot(ptr);
     if (heap == NULL) {
-#if !_WIN32
         free(ptr);
-#else
-        _aligned_free(ptr);
-#endif
         return;
     }
     JKRHeap::free(ptr, heap);
