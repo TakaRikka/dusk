@@ -435,23 +435,23 @@ s32 __CARDFormatRegionAsync(int a, int b) {
 #pragma mark DC
 
 void DCFlushRange(void* addr, u32 nBytes) {
-    STUB_LOG();
+    // Not needed on PC.
 }
 
 void DCFlushRangeNoSync(void* addr, u32 nBytes) {
-    STUB_LOG();
+    // Not needed on PC.
 }
 
 void DCInvalidateRange(void* addr, u32 nBytes) {
-    STUB_LOG();
+    // Not needed on PC.
 }
 
 void DCStoreRange(void* addr, u32 nBytes) {
-    STUB_LOG();
+    // Not needed on PC.
 }
 
 void DCStoreRangeNoSync(void* addr, u32 nBytes) {
-    STUB_LOG();
+    // Not needed on PC.
 }
 
 #pragma mark EXI
