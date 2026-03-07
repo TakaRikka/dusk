@@ -88,7 +88,7 @@ int daTenbin_c::CreateHeap() {
     if (mModel2 == NULL) {
         return FALSE;
     }
-    mdBgW = JKR_NEW dBgW();
+    mdBgW = new dBgW();
     if (mdBgW != NULL && !mdBgW->Set((cBgD_t*)dComIfG_getObjectRes("L6Tenbin", 8), 1, &field_0x620)) {
         mdBgW->SetCrrFunc(dBgS_MoveBGProc_Typical);
     } else {

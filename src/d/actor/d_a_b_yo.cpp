@@ -3110,7 +3110,7 @@ int daB_YO_c::CreateHeap() {
     }
 
     model_data = (J3DModelData*)dComIfG_getObjectRes("B_YO", BMDE_YKW_B);
-    mpYetaMorf = JKR_NEW mDoExt_McaMorfSO(
+    mpYetaMorf = new mDoExt_McaMorfSO(
         model_data, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_YO", BCK_YKW_B_WAITA),
         J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, &mCreatureSound, 0, 0x11020284
     );
@@ -3118,7 +3118,7 @@ int daB_YO_c::CreateHeap() {
         return 0;
     }
 
-    mpBtkAnm = JKR_NEW mDoExt_btkAnm();
+    mpBtkAnm = new mDoExt_btkAnm();
     if (mpBtkAnm == NULL) {
         return 0;
     }
@@ -3129,7 +3129,7 @@ int daB_YO_c::CreateHeap() {
     }
 
     model_data = mpYetaMorf->getModel()->getModelData();
-    mpYetaBtkAnm = JKR_NEW mDoExt_btkAnm();
+    mpYetaBtkAnm = new mDoExt_btkAnm();
     if (mpYetaBtkAnm == NULL) {
         return 0;
     }
@@ -3138,7 +3138,7 @@ int daB_YO_c::CreateHeap() {
         return 0;
     }
 
-    mpYetaBtpAnm = JKR_NEW mDoExt_btpAnm();
+    mpYetaBtpAnm = new mDoExt_btpAnm();
     if (mpYetaBtpAnm == NULL) {
         return 5;
     }
@@ -3147,7 +3147,7 @@ int daB_YO_c::CreateHeap() {
         return 5;
     }
 
-    mpYetaBrkAnm = JKR_NEW mDoExt_brkAnm();
+    mpYetaBrkAnm = new mDoExt_brkAnm();
     if (mpYetaBrkAnm == NULL) {
         return 0;
     }
@@ -3156,7 +3156,7 @@ int daB_YO_c::CreateHeap() {
         return 0;
     }
 
-    mpYetaWhiteBrkAnm = JKR_NEW mDoExt_brkAnm();
+    mpYetaWhiteBrkAnm = new mDoExt_brkAnm();
     if (mpYetaWhiteBrkAnm == NULL) {
         return 0;
     }
@@ -3165,7 +3165,7 @@ int daB_YO_c::CreateHeap() {
         return 0;
     }
 
-    mpRoomNormalBgW = JKR_NEW dBgW();
+    mpRoomNormalBgW = new dBgW();
     if (mpRoomNormalBgW == NULL) {
         return 0;
     }
@@ -3181,7 +3181,7 @@ int daB_YO_c::CreateHeap() {
         return 0;
     }
 
-    mpRoomArenaBgW = JKR_NEW dBgW();
+    mpRoomArenaBgW = new dBgW();
     if (mpRoomArenaBgW == NULL) {
         return 0;
     }
@@ -3204,7 +3204,7 @@ int daB_YO_c::CreateHeap() {
     }
 
     model_data = (J3DModelData*)dComIfG_getObjectRes("ykW", 0xb);
-    mpYetaRevertedMorf = JKR_NEW mDoExt_McaMorfSO(
+    mpYetaRevertedMorf = new mDoExt_McaMorfSO(
         model_data, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("ykW1", 0x1a),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, &mCreatureSound, 0, 0x11000084
     );
@@ -3220,7 +3220,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 }
 
 int daB_YO_c::CreateHeap2() {
-    mpRoomNormalBgW = JKR_NEW dBgW();
+    mpRoomNormalBgW = new dBgW();
     if (mpRoomNormalBgW == NULL) {
         return 0;
     }

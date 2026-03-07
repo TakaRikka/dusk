@@ -2013,7 +2013,7 @@ static int daB_GM_Delete(b_gm_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     b_gm_class* a_this = (b_gm_class*)i_this;
 
-    a_this->mpModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("B_gm", 0x25), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_gm", 30), 2, 0.6f, 0, -1, &a_this->mCreatureSound, 0, 0x11000284);
+    a_this->mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("B_gm", 0x25), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_gm", 30), 2, 0.6f, 0, -1, &a_this->mCreatureSound, 0, 0x11000284);
     if (a_this->mpModelMorf == NULL || a_this->mpModelMorf->getModel() == NULL) {
         return 0;
     }
@@ -2025,7 +2025,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
     }
 
-    a_this->mpZoomBtk = JKR_NEW mDoExt_btkAnm();
+    a_this->mpZoomBtk = new mDoExt_btkAnm();
     if (a_this->mpZoomBtk == NULL) {
         return 0;
     }
@@ -2035,12 +2035,12 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->mpBeamModelMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("B_gm", 0x21), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_gm", 7), 2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000284);
+    a_this->mpBeamModelMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("B_gm", 0x21), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_gm", 7), 2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000284);
     if (a_this->mpBeamModelMorf == NULL || a_this->mpBeamModelMorf->getModel() == NULL) {
         return 0;
     }
 
-    a_this->mpBeamBtk = JKR_NEW mDoExt_btkAnm();
+    a_this->mpBeamBtk = new mDoExt_btkAnm();
     if (a_this->mpBeamBtk == NULL) {
         return 0;
     }
@@ -2061,7 +2061,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         a_this->mSpotLightSize[i] = 1.0f;
     }
 
-    a_this->mpSpotLightBtk = JKR_NEW mDoExt_btkAnm();
+    a_this->mpSpotLightBtk = new mDoExt_btkAnm();
     if (a_this->mpSpotLightBtk == NULL) {
         return 0;
     }

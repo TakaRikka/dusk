@@ -1,10 +1,9 @@
 #ifndef J2DANIMATION_H
 #define J2DANIMATION_H
 
+#include "JSystem/JMath/JMath.h"
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/JUtility/JUTPalette.h"
-#include "JSystem/JKernel/JKRHeap.h"
-#include "JSystem/JMath/JMath.h"
 
 class J2DScreen;
 struct ResTIMG;
@@ -285,7 +284,7 @@ public:
             mPalette = NULL;
         }
         ~J2DAnmTexPatternTIMGPointer() {
-            JKR_DELETE(mPalette);
+            delete mPalette;
         }
 
         /* 0x0 */ ResTIMG* mRes;
@@ -305,7 +304,7 @@ public:
     ResTIMG* getResTIMG(u16) const;
     JUTPalette* getPalette(u16) const;
 
-    virtual ~J2DAnmTexPattern() { JKR_DELETE_ARRAY(mTIMGPtrArray); }
+    virtual ~J2DAnmTexPattern() { delete[] mTIMGPtrArray; }
     virtual void searchUpdateMaterialID(J2DScreen*);
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
     u16 getUpdateMaterialID(u16 i) const {

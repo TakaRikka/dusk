@@ -102,8 +102,8 @@ static int daObjTHASHI_Delete(daObjTHASHI_c* i_this) {
 
 // stripped function to move dtor weak ordering
 static void strippedFunc3(cXyz* a, csXyz* b) {
-    JKR_DELETE_ARRAY(b);
-    JKR_DELETE_ARRAY(a);
+    delete[] b;
+    delete[] a;
 }
 
 void daObjTHASHI_c::setBaseMtx() {
@@ -194,7 +194,7 @@ int daObjTHASHI_c::CreateHeap() {
         return FALSE;
     }
     u32 ind = dComIfG_getObjctResName2Index(l_arcName, "S_thashi01.dzb");
-    unk5A0 = JKR_NEW dBgW();
+    unk5A0 = new dBgW();
 
     if (unk5A0 != NULL && !unk5A0->Set((cBgD_t*)dComIfG_getObjectRes(l_arcName, ind), 1, &mBgMtx)) {
         if (m_set_func != NULL) {

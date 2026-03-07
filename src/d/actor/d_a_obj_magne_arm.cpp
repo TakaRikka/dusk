@@ -261,7 +261,7 @@ int daObjMarm_c::CreateHeap() {
         return FALSE;
     }
 
-    mpBgW1 = JKR_NEW dBgW();
+    mpBgW1 = new dBgW();
     if (mpBgW1 == NULL || mpBgW1->Set((cBgD_t*)dComIfG_getObjectRes(l_arcName, 22),
                                                 cBgW::MOVE_BG_e, &mBgMtx1))
     {
@@ -287,7 +287,7 @@ int daObjMarm_c::CreateHeap() {
     }
 
     J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, 15);
-    mpBrkAnm = JKR_NEW mDoExt_brkAnm();
+    mpBrkAnm = new mDoExt_brkAnm();
     if (mpBrkAnm == NULL ||
         !mpBrkAnm->init(model_data, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1))
     {
@@ -296,7 +296,7 @@ int daObjMarm_c::CreateHeap() {
     mpBrkAnm->setPlaySpeed(1.0f);
 
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 18);
-    mpBtkAnm = JKR_NEW mDoExt_btkAnm();
+    mpBtkAnm = new mDoExt_btkAnm();
     if (mpBtkAnm == NULL ||
         !mpBtkAnm->init(model_data, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1))
     {
@@ -304,7 +304,7 @@ int daObjMarm_c::CreateHeap() {
     }
     mpBtkAnm->setPlaySpeed(1.0f);
 
-    mpBgW2 = JKR_NEW dBgW();
+    mpBgW2 = new dBgW();
     if (mpBgW2 == NULL || mpBgW2->Set((cBgD_t*)dComIfG_getObjectRes(l_arcName, 23),
                                                 cBgW::MOVE_BG_e, &mBgMtx3))
     {
@@ -315,8 +315,8 @@ int daObjMarm_c::CreateHeap() {
     field_0xA28 = 2;
     field_0xA29 = 5;
 
-    mpRope1 = JKR_NEW mDoExt_3DlineMat1_c();
-    mpRope2 = JKR_NEW mDoExt_3DlineMat1_c();
+    mpRope1 = new mDoExt_3DlineMat1_c();
+    mpRope2 = new mDoExt_3DlineMat1_c();
     if (mpRope1 == NULL || mpRope2 == NULL) {
         return FALSE;
     }

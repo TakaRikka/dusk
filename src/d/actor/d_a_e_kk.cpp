@@ -1329,7 +1329,7 @@ int daE_KK_c::CreateHeap() {
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_KK", 0x22);
         JUT_ASSERT(2212, modelData != NULL);
 
-        mpMorfSO = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+        mpMorfSO = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                         (J3DAnmTransform*)dComIfG_getObjectRes("E_KK", 0x19), 0,
                                         1.0f, 0, -1, &mCreatureSound, 0, 0x31000084);
         if (mpMorfSO == NULL || mpMorfSO->getModel() == NULL) {
@@ -1347,7 +1347,7 @@ int daE_KK_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_KK", 0x23);
     JUT_ASSERT(2247, modelData != NULL);
 
-    mpWeaponMorfSO = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpWeaponMorfSO = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                           (J3DAnmTransform*)dComIfG_getObjectRes("E_KK", 0x1D), 0,
                                           1.0f, 0, -1, &mCreatureSound, 0, 0x31000084);
     if (mpWeaponMorfSO == NULL || mpWeaponMorfSO->getModel() == NULL) {

@@ -3651,7 +3651,7 @@ int daE_VA_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_VA", 0x33);
     JUT_ASSERT(0, modelData != NULL);
 
-    mpMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                   (J3DAnmTransform*)dComIfG_getObjectRes("E_VA", 15), 0, 1.0f, 0,
                                   -1, &mSound, 0x80000, 0x31000084);
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
@@ -3679,7 +3679,7 @@ int daE_VA_c::CreateHeap() {
         return 0;
     }
 
-    mpWeaponBrk = JKR_NEW mDoExt_brkAnm();
+    mpWeaponBrk = new mDoExt_brkAnm();
     if (mpWeaponBrk == NULL) {
         return 0;
     }
@@ -3694,7 +3694,7 @@ int daE_VA_c::CreateHeap() {
     modelData = (J3DModelData*)dComIfG_getObjectRes("E_VA", 0x37);
     JUT_ASSERT(0, modelData != NULL);
 
-    mpEndEfMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpEndEfMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                        (J3DAnmTransform*)dComIfG_getObjectRes("E_VA", 7), 0, 1.0f,
                                        0, -1, &mSound, 0x80000, 0x31000084);
     if (mpEndEfMorf == NULL || mpEndEfMorf->getModel() == NULL) {
@@ -3710,7 +3710,7 @@ int daE_VA_c::CreateHeap() {
         }
     }
 
-    mpEndEfBrk = JKR_NEW mDoExt_brkAnm();
+    mpEndEfBrk = new mDoExt_brkAnm();
     if (mpEndEfBrk == NULL) {
         return 0;
     }

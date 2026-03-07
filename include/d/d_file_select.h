@@ -15,8 +15,8 @@ class dDlst_FileSel_c : public dDlst_base_c {
 public:
     void draw();
     virtual ~dDlst_FileSel_c() {
-        JKR_DELETE(Scr);
-        JKR_DELETE(mMessageString);
+        delete Scr;
+        delete mMessageString;
     }
 
     dDlst_FileSel_c() {
@@ -26,7 +26,7 @@ public:
         font[1] = mDoExt_getSubFont();
         JUT_ASSERT(107, font[1] != NULL);
 
-        mMessageString = JKR_NEW dMsgString_c();
+        mMessageString = new dMsgString_c();
         JUT_ASSERT(110, mMessageString != NULL);
     }
 
@@ -78,7 +78,7 @@ public:
 class dDlst_FileSelYn_c : public dDlst_base_c {
 public:
     void draw();
-    virtual ~dDlst_FileSelYn_c() { JKR_DELETE(ScrYn); }
+    virtual ~dDlst_FileSelYn_c() { delete ScrYn; }
 
     /* 0x04 */ J2DScreen* ScrYn;
     /* 0x08 */ u8 field_0x08[4];
@@ -87,7 +87,7 @@ public:
 class dDlst_FileSelDt_c : public dDlst_base_c {
 public:
     void draw();
-    virtual ~dDlst_FileSelDt_c() { JKR_DELETE(ScrDt); }
+    virtual ~dDlst_FileSelDt_c() { delete ScrDt; }
 
     /* 0x04 */ J2DScreen* ScrDt;
     /* 0x08 */ J2DPane* mpPane;
@@ -97,7 +97,7 @@ public:
 class dDlst_FileSelCp_c : public dDlst_base_c {
 public:
     void draw();
-    virtual ~dDlst_FileSelCp_c() { JKR_DELETE(Scr); }
+    virtual ~dDlst_FileSelCp_c() { delete Scr; }
 
     /* 0x04 */ J2DScreen* Scr;
     /* 0x08 */ bool isShow;
@@ -108,7 +108,7 @@ public:
 class dDlst_FileSel3m_c : public dDlst_base_c {
 public:
     void draw();
-    virtual ~dDlst_FileSel3m_c() { JKR_DELETE(Scr3m); }
+    virtual ~dDlst_FileSel3m_c() { delete Scr3m; }
 
     /* 0x04 */ J2DScreen* Scr3m;
 };

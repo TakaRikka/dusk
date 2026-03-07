@@ -656,7 +656,7 @@ int daNpc_ykM_c::CreateHeap() {
     }
 
     int sp34 = 0x11020284;
-    mpMorf[0] = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, sp34);
+    mpMorf[0] = new mDoExt_McaMorfSO((J3DModelData*)mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, sp34);
     if (mpMorf[0] == NULL || mpMorf[0]->getModel() == NULL) {
         return 0;
     }
@@ -667,7 +667,7 @@ int daNpc_ykM_c::CreateHeap() {
     }
     model->setUserArea((uintptr_t)this);
 
-    mpMatAnm[0] = JKR_NEW daNpcT_MatAnm_c();
+    mpMatAnm[0] = new daNpcT_MatAnm_c();
     if (mpMatAnm[0] == NULL) {
         return 0;
     }
@@ -700,7 +700,7 @@ int daNpc_ykM_c::CreateHeap() {
         JUT_ASSERT(1595, NULL != mdlData_p);
 
         sp34 = 0x11000084;
-        mFishModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1,
+        mFishModelMorf = new mDoExt_McaMorfSO((J3DModelData*)mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1,
                                            NULL, 0x80000, sp34);
         if (mFishModelMorf == NULL || mFishModelMorf->getModel() == NULL) {
             return 0;
@@ -714,7 +714,7 @@ int daNpc_ykM_c::CreateHeap() {
         JUT_ASSERT(1622, NULL != mdlData_p);
 
         sp34 = 0x11000084;
-        mLeafModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1,
+        mLeafModelMorf = new mDoExt_McaMorfSO((J3DModelData*)mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1,
                                            NULL, 0x80000, sp34);
         if (mLeafModelMorf == NULL || mLeafModelMorf->getModel() == NULL) {
             return 0;

@@ -3660,7 +3660,7 @@ static int useHeapInit2(fopAc_ac_c* i_actor) {
         if (i_this->mpModel[0] == NULL) {
             return 0;
         }
-        i_this->mpBtpAnm = JKR_NEW mDoExt_btpAnm();
+        i_this->mpBtpAnm = new mDoExt_btpAnm();
         if (i_this->mpBtpAnm == 0) {
             return 0;
         }
@@ -3724,7 +3724,7 @@ static int useHeapImg_fisht(fopAc_ac_c* i_actor) {
     } else {
         i_this->mAnmTransform = 0;
     }
-    i_this->mpMorf = JKR_NEW mDoExt_McaMorf(
+    i_this->mpMorf = new mDoExt_McaMorf(
         (J3DModelData*)dComIfG_getObjectRes(i_this->mResName, fish_bmd[i_this->mGedouKind]),
             NULL, NULL, i_this->mAnmTransform, 0, 1.0f, 0, -1, 1, NULL,
             0x80000, 0x11000084);
@@ -3743,7 +3743,7 @@ static int useHeapImg_fisht(fopAc_ac_c* i_actor) {
     }
 
     if (i_this->mKind2 == 4) {
-        i_this->mpBrkAnm = JKR_NEW mDoExt_brkAnm();
+        i_this->mpBrkAnm = new mDoExt_brkAnm();
         if (i_this->mpBrkAnm == NULL) {
             return 0;
         }

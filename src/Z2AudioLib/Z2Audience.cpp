@@ -526,7 +526,7 @@ JAIAudible* Z2Audience::newAudible(const JGeometry::TVec3<f32>& pos, JAISoundID 
     JAUAudibleParam params = Z2GetSoundInfo()->getAudibleSwFull(soundID);
     bool x = params.field_0x0.bytes.b0_0 != 0;
 
-    Z2Audible* audible = JKR_NEW Z2Audible(pos, param_2, channelNum, x);
+    Z2Audible* audible = new Z2Audible(pos, param_2, channelNum, x);
     if (audible == NULL) {
         return NULL;
     }
@@ -552,7 +552,7 @@ JAIAudible* Z2Audience::newAudible(const JGeometry::TVec3<f32>& pos, JAISoundID 
 }
 
 void Z2Audience::deleteAudible(JAIAudible* audible) {
-    JKR_DELETE(audible);
+    delete audible;
 }
 
 Z2Audible::~Z2Audible() {}

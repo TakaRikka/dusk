@@ -59,7 +59,7 @@ int daTkraDai_c::CreateHeap() {
         return 0;
     }
 
-    mpBgW = JKR_NEW dBgW();
+    mpBgW = new dBgW();
     if (mpBgW != NULL &&
         !mpBgW->Set((cBgD_t*)dComIfG_getObjectRes("M_TakaraD", 9), 1, &field_0x62c))
     {

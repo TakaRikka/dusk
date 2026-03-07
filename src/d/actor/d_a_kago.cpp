@@ -3744,7 +3744,7 @@ int daKago_c::CreateHeap() {
     }
     JUT_ASSERT(5023, modelData != NULL);
 
-    mAnm_p = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mAnm_p = new mDoExt_McaMorfSO(modelData, NULL, NULL,
         (J3DAnmTransform*)dComIfG_getObjectRes(mArcName, getBckName(dRes_ID_E_YC_BCK_YC_FLY_e)), 2, 1.0f, 0, -1, &mSound, 0x80000, 0x11000084);
     if (mAnm_p == NULL || mAnm_p->getModel() == NULL) {
         return 0;

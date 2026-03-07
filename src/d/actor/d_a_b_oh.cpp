@@ -705,7 +705,7 @@ static int daB_OH_Delete(b_oh_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     b_oh_class* this_ = (b_oh_class*)i_this;
 
-    this_->mpMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("B_oh", BMDV_OH), NULL,
+    this_->mpMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("B_oh", BMDV_OH), NULL,
                                        NULL, NULL, 2, 1.0f, 0, -1, 1, NULL, 0, 0x11000284);
     if (this_->mpMorf == NULL || this_->mpMorf->getModel() == NULL) {
         return 0;
@@ -722,7 +722,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
             nodeCallBack);
     }
 
-    this_->mpBtk = JKR_NEW mDoExt_btkAnm();
+    this_->mpBtk = new mDoExt_btkAnm();
     if (this_->mpBtk == NULL) {
         return 0;
     }
@@ -735,7 +735,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     this_->mpBtk->setFrame(cM_rndF(39.0f));
     this_->mpBtk->setPlaySpeed(cM_rndFX(0.1f) + 1.0f);
 
-    this_->mpBrk = JKR_NEW mDoExt_brkAnm();
+    this_->mpBrk = new mDoExt_brkAnm();
     if (this_->mpBrk == NULL) {
         return 0;
     }

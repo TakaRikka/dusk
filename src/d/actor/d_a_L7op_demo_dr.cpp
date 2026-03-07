@@ -756,7 +756,7 @@ static int daL7ODR_Delete(daL7ODR_c* i_this) {
 int daL7ODR_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("B_dr", 0x49);
     JUT_ASSERT(1146, modelData != NULL);
-    mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_dr", 0x2F), 2, 1.0f, 0, -1, &mSound, 0, 0x11000084);
+    mpModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("B_dr", 0x2F), 2, 1.0f, 0, -1, &mSound, 0, 0x11000084);
     field_0x890 = 0x2F;
     if (mpModelMorf == NULL || mpModelMorf->getModel() == NULL) {
         return 0;

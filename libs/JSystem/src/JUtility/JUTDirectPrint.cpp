@@ -1,9 +1,8 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
+#include "JSystem/JUtility/JUTDirectPrint.h"
 #include <cstdio>
 #include <os.h>
-#include "JSystem/JKernel/JKRHeap.h"
-#include "JSystem/JUtility/JUTDirectPrint.h"
 #include "global.h"
 #include "angle_utils.h"
 
@@ -16,7 +15,7 @@ JUTDirectPrint::JUTDirectPrint() {
 
 JUTDirectPrint* JUTDirectPrint::start() {
     if (!sDirectPrint) {
-        sDirectPrint = JKR_NEW JUTDirectPrint();
+        sDirectPrint = new JUTDirectPrint();
     }
 
     return sDirectPrint;
@@ -213,7 +212,7 @@ void JUTDirectPrint::setCharColor(u8 r, u8 g, u8 b) {
     int Y = 0.257 * (int)r + 0.504 * (int)g + 0.098 * (int)b + 16.0f;
     int Cb = -0.148 * (int)r - 0.291 * (int)g + 0.439 * (int)b + 128.0f;
     int Cr = 0.439 * (int)r - 0.368 * (int)g - 0.071 * (int)b + 128.0f;
-
+    
     mCharColor_Y = (u16)Y * 256;
     mCharColor_Cb = Cb;
     mCharColor_Cb2 = (u16)Cb / 2;

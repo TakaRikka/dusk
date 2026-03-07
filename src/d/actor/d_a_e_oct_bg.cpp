@@ -764,7 +764,7 @@ int daE_OctBg_c::JointCallBack(J3DJoint* param_0, int param_1) {
 int daE_OctBg_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_bg", 10);
     JUT_ASSERT(1341, modelData != NULL);
-    field_0x5b4 = JKR_NEW mDoExt_McaMorfSO(
+    field_0x5b4 = new mDoExt_McaMorfSO(
             modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_bg", 7), 0, 1.0f, 0, -1, &field_0x5bc,
             0x80000, 0x11000084);
     if (field_0x5b4 == NULL || field_0x5b4->getModel() == NULL) {
@@ -775,7 +775,7 @@ int daE_OctBg_c::CreateHeap() {
     for (u16 i = 1; i <  model->getModelData()->getJointNum(); i++) {
         model->getModelData()->getJointNodePointer(i)->setCallBack(JointCallBack);
     }
-    field_0x5b8 = JKR_NEW mDoExt_brkAnm();
+    field_0x5b8 = new mDoExt_brkAnm();
     if (field_0x5b8 == NULL) {
         return 0;
     }

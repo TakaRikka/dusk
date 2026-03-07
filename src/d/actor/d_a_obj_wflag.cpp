@@ -152,11 +152,11 @@ static int useHeapInit(fopAc_ac_c* i_actor) {
     if (i_this->mpModel == NULL) {
         return 0;
     } 
-    i_this->mMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Obj_wflag", 11), NULL, NULL, ( J3DAnmTransform*)dComIfG_getObjectRes("Obj_wflag", 6), 2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11020284);
+    i_this->mMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Obj_wflag", 11), NULL, NULL, ( J3DAnmTransform*)dComIfG_getObjectRes("Obj_wflag", 6), 2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11020284);
     if (i_this->mMorf == NULL || i_this->mMorf->getModel() == NULL) {
         return 0;
     } 
-    i_this->field_0x578 = JKR_NEW mDoExt_btkAnm();
+    i_this->field_0x578 = new mDoExt_btkAnm();
     if (i_this->field_0x578 == NULL) {
         return 0;
     }
@@ -165,7 +165,7 @@ static int useHeapInit(fopAc_ac_c* i_actor) {
         return 0;
     }
 
-    i_this->field_0x57c = JKR_NEW mDoExt_btpAnm();
+    i_this->field_0x57c = new mDoExt_btpAnm();
     if (i_this->field_0x57c == NULL) {
         return cPhs_ERROR_e;
     } 

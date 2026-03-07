@@ -112,12 +112,12 @@ void J2DWindowEx::setMinSize() {
 J2DWindowEx::~J2DWindowEx() {
     for (u8 i = 0; i < 4; i++) {
         if (field_0x170 & (1 << i)) {
-            JKR_DELETE(mFrameMaterial[i]);
+            delete mFrameMaterial[i];
         }
     }
 
     if (field_0x170 & 0x10) {
-        JKR_DELETE(mContentsMaterial);
+        delete mContentsMaterial;
     }
 }
 

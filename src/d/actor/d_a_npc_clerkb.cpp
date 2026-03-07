@@ -187,7 +187,7 @@ int daNpc_clerkB_c::CreateHeap() {
         static_cast<J3DModelData*>(dComIfG_getObjectRes(l_resNameList[res_idx], bmd_idx));
 
     mpMorf[0] =
-        JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0, 0x11020285);
+        new mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0, 0x11020285);
     if (mpMorf[0] != NULL && mpMorf[0]->getModel() == NULL) {
         mpMorf[0]->stopZelAnime();
         mpMorf[0] = NULL;
@@ -202,7 +202,7 @@ int daNpc_clerkB_c::CreateHeap() {
     }
     model->setUserArea((uintptr_t)this);
 
-    mpMatAnm[0] = JKR_NEW daNpcT_MatAnm_c();
+    mpMatAnm[0] = new daNpcT_MatAnm_c();
     if (mpMatAnm[0] == NULL) {
         return 0;
     }

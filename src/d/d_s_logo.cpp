@@ -125,14 +125,14 @@ void dLog_HIO_c::genMessage(JORMContext*) {}
 #endif
 
 void dScnLogo_c::preLoad_dyl_create() {
-    m_preLoad_dylPhase = JKR_NEW request_of_phase_process_class[14];
+    m_preLoad_dylPhase = new request_of_phase_process_class[14];
     JUT_ASSERT(194, m_preLoad_dylPhase != NULL);
 
     memset(m_preLoad_dylPhase, 0, sizeof(request_of_phase_process_class) * 14);
 }
 
 void dScnLogo_c::preLoad_dyl_remove() {
-    JKR_DELETE_ARRAY(m_preLoad_dylPhase);
+    delete[] m_preLoad_dylPhase;
 }
 
 typedef void (dScnLogo_c::*execFunc)();
@@ -775,18 +775,18 @@ dScnLogo_c::~dScnLogo_c() {
     }
 
     #if PLATFORM_WII || PLATFORM_SHIELD
-    JKR_DELETE(mStrapImg);
+    delete mStrapImg;
     #endif
 
     #if !(PLATFORM_WII || PLATFORM_SHIELD)
-    JKR_DELETE(mNintendoLogo);
-    JKR_DELETE(mWarning);
-    JKR_DELETE(mWarningStart);
-    JKR_DELETE(mDolbyLogo);
-    JKR_DELETE(mProgressiveChoice);
-    JKR_DELETE(mProgressiveYes);
-    JKR_DELETE(mProgressiveNo);
-    JKR_DELETE(mProgressiveSel);
+    delete mNintendoLogo;
+    delete mWarning;
+    delete mWarningStart;
+    delete mDolbyLogo;
+    delete mProgressiveChoice;
+    delete mProgressiveYes;
+    delete mProgressiveNo;
+    delete mProgressiveSel;
 
     #if VERSION == VERSION_GCN_PAL
     mpPalLogoResCommand->getArchive()->removeResourceAll();
@@ -796,8 +796,8 @@ dScnLogo_c::~dScnLogo_c() {
     #endif
 
     #if VERSION == VERSION_SHIELD
-    JKR_DELETE(mNvLogo);
-    JKR_DELETE(mMocImg);
+    delete mNvLogo;
+    delete mMocImg;
     #endif
 
     preLoad_dyl_remove();
@@ -884,7 +884,7 @@ dScnLogo_c::~dScnLogo_c() {
     #if !PLATFORM_SHIELD
     mParticleCommand->destroy();
     #else
-    JKR_DELETE(mParticleCommand);
+    delete mParticleCommand;
     #endif
 
     JKRAramHeap* aram_heap = JKRAram::getAramHeap();
@@ -905,14 +905,14 @@ dScnLogo_c::~dScnLogo_c() {
     #if !PLATFORM_SHIELD
     mItemTableCommand->destroy();
     #else
-    JKR_DELETE(mItemTableCommand);
+    delete mItemTableCommand;
     #endif
 
     dEnemyItem_c::setItemData((u8*)mEnemyItemCommand->getMemAddress());
     #if !PLATFORM_SHIELD
     mEnemyItemCommand->destroy();
     #else
-    JKR_DELETE(mEnemyItemCommand);
+    delete mEnemyItemCommand;
     #endif
 
     dDlst_shadowControl_c::setSimpleTex((ResTIMG*)dComIfG_getObjectRes("Always", 0x4A));
@@ -1173,14 +1173,14 @@ void dScnLogo_c::logoInitWii() {
     }
 
     JUT_ASSERT(2309, timg != NULL);
-    mStrapImg = JKR_NEW dDlst_2D_c(timg, 304 - (width / 2), 224 - (height / 2), width, height, 255);
+    mStrapImg = new dDlst_2D_c(timg, 304 - (width / 2), 224 - (height / 2), width, height, 255);
 
     #if VERSION == VERSION_SHIELD
     timg = (ResTIMG*)dComIfG_getObjectRes("LogoUsWii", 5);
-    mNvLogo = JKR_NEW dDlst_2D_c(timg, 304 - (width / 2), 224 - (height / 2), width, height, 255);
+    mNvLogo = new dDlst_2D_c(timg, 304 - (width / 2), 224 - (height / 2), width, height, 255);
 
     timg = (ResTIMG*)dComIfG_getObjectRes("LogoUsWii", 4);
-    mMocImg = JKR_NEW dDlst_2D_c(timg, 304 - (width / 2), 224 - (height / 2), width, height, 255);
+    mMocImg = new dDlst_2D_c(timg, 304 - (width / 2), 224 - (height / 2), width, height, 255);
     #endif
 
     OS_REPORT("\x1b[32m%d archiveHeap->getTotalFreeSize %08x\n\x1b[m", 2316, archiveHeap->getTotalFreeSize());
@@ -1204,7 +1204,7 @@ void dScnLogo_c::logoInitWii() {
 #else
 void dScnLogo_c::logoInitGC() {
     ResTIMG* nintendoImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 4);
-    mNintendoLogo = JKR_NEW dDlst_2D_c(nintendoImg, 117, 154, 376, 104, 255);
+    mNintendoLogo = new dDlst_2D_c(nintendoImg, 117, 154, 376, 104, 255);
 #if VERSION == VERSION_GCN_JPN
     mNintendoLogo->getPicture()->setWhite(JUtility::TColor(0, 70, 255, 255));
 #else
@@ -1212,7 +1212,7 @@ void dScnLogo_c::logoInitGC() {
 #endif
 
     ResTIMG* dolbyImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 3);
-    mDolbyLogo = JKR_NEW dDlst_2D_c(dolbyImg, 189, 150, 232, 112, 255);
+    mDolbyLogo = new dDlst_2D_c(dolbyImg, 189, 150, 232, 112, 255);
 
 #if VERSION == VERSION_GCN_PAL
     u8 language = getPalLanguage();
@@ -1277,46 +1277,46 @@ void dScnLogo_c::logoInitGC() {
     };
 
     ResTIMG* warningImg = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', warning[language]);
-    mWarning = JKR_NEW dDlst_2D_c(warningImg, 0, 0, FB_WIDTH, FB_HEIGHT, 255);
+    mWarning = new dDlst_2D_c(warningImg, 0, 0, FB_WIDTH, FB_HEIGHT, 255);
 
     ResTIMG* warnStartImg = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', warningPs[language]);
-    mWarningStart = JKR_NEW dDlst_2D_c(warnStartImg, 0, 359, FB_WIDTH, 48, 255);
+    mWarningStart = new dDlst_2D_c(warnStartImg, 0, 359, FB_WIDTH, 48, 255);
 
     ResTIMG* progChoiceImg = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', choice[language]);
-    mProgressiveChoice = JKR_NEW dDlst_2D_c(progChoiceImg, 113, 143, 416, 210, 255);
+    mProgressiveChoice = new dDlst_2D_c(progChoiceImg, 113, 143, 416, 210, 255);
 
     ResTIMG* progYesImg = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', yes[language]);
-    mProgressiveYes = JKR_NEW dDlst_2D_c(progYesImg, 121, 352, 200, 72, 255);
+    mProgressiveYes = new dDlst_2D_c(progYesImg, 121, 352, 200, 72, 255);
     mProgressiveYes->getPicture()->setWhite(JUtility::TColor(160, 160, 160, 255));
 
     ResTIMG* progNoImg = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', no[language]);
-    mProgressiveNo = JKR_NEW dDlst_2D_c(progNoImg, 320, 352, 200, 72, 255);
+    mProgressiveNo = new dDlst_2D_c(progNoImg, 320, 352, 200, 72, 255);
     mProgressiveNo->getPicture()->setWhite(JUtility::TColor(160, 160, 160, 255));
 
     mProgressivePro = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', prog[language]);
     mProgressiveInter = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', intr[language]);
-    mProgressiveSel = JKR_NEW dDlst_2D_c(mProgressivePro, 153, 309, 336, 88, 255);
+    mProgressiveSel = new dDlst_2D_c(mProgressivePro, 153, 309, 336, 88, 255);
 #else
     ResTIMG* warningImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 10);
-    mWarning = JKR_NEW dDlst_2D_c(warningImg, 0, 0, FB_WIDTH, FB_HEIGHT, 255);
+    mWarning = new dDlst_2D_c(warningImg, 0, 0, FB_WIDTH, FB_HEIGHT, 255);
 
     ResTIMG* warnStartImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 11);
-    mWarningStart = JKR_NEW dDlst_2D_c(warnStartImg, 0, 359, FB_WIDTH, 48, 255);
+    mWarningStart = new dDlst_2D_c(warnStartImg, 0, 359, FB_WIDTH, 48, 255);
 
     ResTIMG* progChoiceImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 5);
-    mProgressiveChoice = JKR_NEW dDlst_2D_c(progChoiceImg, 113, 281, 416, 72, 255);
+    mProgressiveChoice = new dDlst_2D_c(progChoiceImg, 113, 281, 416, 72, 255);
 
     ResTIMG* progYesImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 9);
-    mProgressiveYes = JKR_NEW dDlst_2D_c(progYesImg, 211, 372, 80, 32, 255);
+    mProgressiveYes = new dDlst_2D_c(progYesImg, 211, 372, 80, 32, 255);
     mProgressiveYes->getPicture()->setWhite(JUtility::TColor(160, 160, 160, 255));
 
     ResTIMG* progNoImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 7);
-    mProgressiveNo = JKR_NEW dDlst_2D_c(progNoImg, 350, 372, 80, 32, 255);
+    mProgressiveNo = new dDlst_2D_c(progNoImg, 350, 372, 80, 32, 255);
     mProgressiveNo->getPicture()->setWhite(JUtility::TColor(160, 160, 160, 255));
 
     mProgressivePro = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 8);
     mProgressiveInter = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 6);
-    mProgressiveSel = JKR_NEW dDlst_2D_c(mProgressivePro, 153, 309, 336, 88, 255);
+    mProgressiveSel = new dDlst_2D_c(mProgressivePro, 153, 309, 336, 88, 255);
 #endif
 }
 #endif
@@ -1453,7 +1453,7 @@ void dScnLogo_c::dvdDataLoad() {
 
 static int dScnLogo_Create(scene_class* i_this) {
     printf("[DIAG] dScnLogo_Create: entry i_this=%p\n", i_this); fflush(stdout);
-    return (JKR_NEW_ARGS (i_this) dScnLogo_c())->create();
+    return (new (i_this) dScnLogo_c())->create();
 }
 
 static int dScnLogo_Execute(dScnLogo_c* i_this) {

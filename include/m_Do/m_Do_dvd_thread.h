@@ -4,7 +4,6 @@
 #include "JSystem/JKernel/JKRArchive.h"
 #include <os.h>
 #include <os.h>
-#include "JSystem/JKernel/JKRHeap.h"
 #include "f_pc/f_pc_node.h"
 
 #define mDoDvd_MOUNT_DIRECTION_HEAD 0
@@ -24,7 +23,7 @@ public:
     virtual ~mDoDvdThd_command_c();
     mDoDvdThd_command_c();
     inline s32 sync() { return mIsDone; }
-    inline void destroy() { JKR_DELETE(this); }
+    inline void destroy() { delete this; }
     virtual s32 execute() = 0;
 };  // Size = 0x14
 

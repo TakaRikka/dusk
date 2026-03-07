@@ -189,7 +189,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
             return 0;
         }
 
-        i_this->mKitas[i].mBgW = JKR_NEW dBgW();
+        i_this->mKitas[i].mBgW = new dBgW();
         if (i_this->mKitas[i].mBgW == NULL) {
             return 0;
         }

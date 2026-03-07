@@ -331,7 +331,7 @@ bool SpkSoundHolder::startSound(s32 chan, s32 soundNum, SpkSoundHandle* handle) 
         }
     }
 
-    SpkSound* new_sound_p = JKR_NEW SpkSound();
+    SpkSound* new_sound_p = new SpkSound();
     if (new_sound_p == NULL) {
         JUT_WARN(520, "%s", "cannot new SpkSound\n");
         return false;
@@ -344,7 +344,7 @@ bool SpkSoundHolder::startSound(s32 chan, s32 soundNum, SpkSoundHandle* handle) 
     bool startResult = new_sound_p->start(chan, soundNum);
     if (!startResult) {
         JUT_WARN(532, "%s", "cannot start SpkSound\n");
-        JKR_DELETE(new_sound_p);
+        delete new_sound_p;
         return false;
     }
 
@@ -421,7 +421,7 @@ void SpkSoundHolder::freeDeadSound(s32 chan) {
         JSULink<SpkSound>* next = it->getNext();
         if (it->getObject()->isDead()) {
             mSoundList[chan].remove(it);
-            JKR_DELETE(it->getObject());
+            delete it->getObject();
         }
         it = next;
     }

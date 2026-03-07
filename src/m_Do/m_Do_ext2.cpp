@@ -22,9 +22,9 @@ FixedMemoryCheck::FixedMemoryCheck(u32* param_1, u32 size, JKRHeap* heap) {
 
 FixedMemoryCheck* FixedMemoryCheck::easyCreate(void* param_1, u32 size) {
     JKRHeap* heap = JKRGetRootHeap2();
-    FixedMemoryCheck* memCheck = JKR_NEW_ARGS (heap, 0) FixedMemoryCheck((u32*)param_1, size, heap);
+    FixedMemoryCheck* memCheck = new (heap, 0) FixedMemoryCheck((u32*)param_1, size, heap);
     if (!memCheck) {
-        memCheck = JKR_NEW_ARGS (JKRGetSystemHeap(), 0) FixedMemoryCheck((u32*)param_1, size, NULL);
+        memCheck = new (JKRGetSystemHeap(), 0) FixedMemoryCheck((u32*)param_1, size, NULL);
     }
     if (memCheck) {
         memCheck->alloc();

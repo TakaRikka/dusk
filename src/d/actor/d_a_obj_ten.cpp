@@ -58,13 +58,13 @@ static int useHeapInit(fopAc_ac_c* actor) {
     daObjTEN_c* i_this = static_cast<daObjTEN_c*>(actor);
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("I_Ten", 10);
     JUT_ASSERT(246, modelData != NULL);
-    i_this->mMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, 2, 1.0f, 0, -1,
+    i_this->mMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, 2, 1.0f, 0, -1,
                                          &i_this->mCreature, 0, 0x11000284);
     if (i_this->mMorf == NULL || i_this->mMorf->getModel() == NULL) {
         return 0;
     }
     J3DModel* model = i_this->mMorf->getModel();
-    i_this->mBrk = JKR_NEW mDoExt_brkAnm();
+    i_this->mBrk = new mDoExt_brkAnm();
     if (i_this->mBrk == NULL) {
         return 0;
     }
@@ -80,7 +80,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
             return 0;
         }
     }
-    i_this->mBtk = JKR_NEW mDoExt_btkAnm();
+    i_this->mBtk = new mDoExt_btkAnm();
     if (i_this->mBtk == NULL) {
         return 0;
     }

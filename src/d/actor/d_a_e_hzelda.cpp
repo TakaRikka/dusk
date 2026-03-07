@@ -1311,7 +1311,7 @@ static int daE_HZELDA_Delete(e_hzelda_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_hzelda_class* a_this = (e_hzelda_class*)i_this;
 
-    a_this->mpModelMorf = JKR_NEW mDoExt_McaMorfSO(static_cast<J3DModelData*>(dComIfG_getObjectRes("Hzelda", 0x1B)), NULL, NULL,
+    a_this->mpModelMorf = new mDoExt_McaMorfSO(static_cast<J3DModelData*>(dComIfG_getObjectRes("Hzelda", 0x1B)), NULL, NULL,
                                                static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Hzelda", 0x15)),
                                                J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, &a_this->mSound, 0x80000, 0x11000284);
     if (a_this->mpModelMorf == NULL || a_this->mpModelMorf->getModel() == NULL) {
@@ -1339,7 +1339,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->mpTriangleAtBrk = JKR_NEW mDoExt_brkAnm();
+    a_this->mpTriangleAtBrk = new mDoExt_brkAnm();
     if (a_this->mpTriangleAtBrk == NULL) {
         return 0;
     }
@@ -1349,7 +1349,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->mpTriangleAtBtk = JKR_NEW mDoExt_btkAnm();
+    a_this->mpTriangleAtBtk = new mDoExt_btkAnm();
     if (a_this->mpTriangleAtBtk == NULL) {
         return 0;
     }

@@ -49,7 +49,7 @@ int daObjLv4Sand_c::CreateHeap() {
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 8);
     JUT_ASSERT(181, pbtk != NULL);
 
-    mpBtk = JKR_NEW mDoExt_btkAnm();
+    mpBtk = new mDoExt_btkAnm();
     if (mpBtk == NULL || !mpBtk->init(modelData, pbtk, TRUE, 2, 1.0f, 0, -1)) {
         return 0;
     }

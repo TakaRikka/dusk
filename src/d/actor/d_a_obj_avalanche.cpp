@@ -88,12 +88,12 @@ int daObjAvalanche_c::CreateHeap() {
     J3DAnmTransform* anm =
         (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 6);
     JUT_ASSERT(247, anm != NULL);
-    mBckAnm = JKR_NEW mDoExt_bckAnm();
+    mBckAnm = new mDoExt_bckAnm();
     if (mBckAnm == NULL || !mBckAnm->init(anm, 1, 0, 1.0, 0, -1, false)) {
         return 0;
     }
     mBckAnm->setPlaySpeed(0.0f);
-    mpBgW2 = JKR_NEW dBgW();
+    mpBgW2 = new dBgW();
     if (mpBgW2 != NULL && !mpBgW2->Set((cBgD_t*)dComIfG_getObjectRes(l_arcName, l_dzb[1]), 1, &mMtx2)) {
         mpBgW2->SetCrrFunc(dBgS_MoveBGProc_Trans);
     } else {

@@ -33,7 +33,7 @@ JKRFileCache* JKRFileCache::mount(const char* path, JKRHeap* heap, const char* p
     }
 
 
-    JKRFileCache* fileCache = JKR_NEW_ARGS (heap, 0) JKRFileCache(path, param_3);
+    JKRFileCache* fileCache = new (heap, 0) JKRFileCache(path, param_3);
     return fileCache;
 }
 
@@ -123,7 +123,7 @@ void* JKRFileCache::getResource(const char* path) {
             if (buffer) {
                 dvdFile.read(buffer, alignedSize, 0);
 
-                cacheBlock = JKR_NEW_ARGS (JKRGetSystemHeap(), 0)
+                cacheBlock = new (JKRGetSystemHeap(), 0)
                     CCacheBlock(dvdFile.getFileID(), dvdFile.getFileInfo()->length, buffer);
                 mCacheBlockList.append(&cacheBlock->mCacheBlockLink);
             }
@@ -202,7 +202,7 @@ void JKRFileCache::removeResourceAll(void) {
     while (iterator != mCacheBlockList.getEnd()) {
         JKRFreeToHeap(mParentHeap, iterator->mMemoryPtr);
         mCacheBlockList.remove(&iterator.getObject()->mCacheBlockLink);
-        JKR_DELETE((iterator++).getObject());
+        delete (iterator++).getObject();
     }
 }
 
@@ -216,7 +216,7 @@ bool JKRFileCache::removeResource(void* resource) {
     if (--cacheBlock->mReferenceCount == 0) {
         JKRFreeToHeap(mParentHeap, resource);
         mCacheBlockList.remove(&cacheBlock->mCacheBlockLink);
-        JKR_DELETE(cacheBlock);
+        delete cacheBlock;
     }
 
     return true;
@@ -230,7 +230,7 @@ bool JKRFileCache::detachResource(void* resource) {
         return false;
 
     mCacheBlockList.remove(&cacheBlock->mCacheBlockLink);
-    JKR_DELETE(cacheBlock);
+    delete cacheBlock;
     return true;
 }
 
@@ -262,11 +262,11 @@ u32 JKRFileCache::countFile(const char* path) const {
 
 JKRFileFinder* JKRFileCache::getFirstFile(const char* path) const {
     char* name = getDvdPathName(path);
-    JKRDvdFinder* finder = JKR_NEW_ARGS (JKRGetSystemHeap(), 0) JKRDvdFinder(name);
+    JKRDvdFinder* finder = new (JKRGetSystemHeap(), 0) JKRDvdFinder(name);
     JKRFreeToSysHeap(name);
 
     if (finder->isAvailable() != true) {
-        JKR_DELETE(finder);
+        delete finder;
         return NULL;
     }
 

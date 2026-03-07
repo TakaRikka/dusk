@@ -264,7 +264,7 @@ int daObjKshtr_c::CreateHeap() {
 
         JUT_ASSERT(446, anm != NULL);
 
-        mpBckAnm = JKR_NEW mDoExt_bckAnm();
+        mpBckAnm = new mDoExt_bckAnm();
         if (mpBckAnm == NULL || mpBckAnm->init(anm, 1, 0, 1.0f, 0, -1, false) == 0) {
             return 0;
         }

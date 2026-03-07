@@ -3313,7 +3313,7 @@ static dJntColData_c jc_data[12] = {
 static int useHeapInit(fopAc_ac_c* actor) {
     e_dn_class* i_this = (e_dn_class*)actor;
 
-    i_this->anm_p = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_dn", 38), NULL, NULL,
+    i_this->anm_p = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_dn", 38), NULL, NULL,
                                                (J3DAnmTransform*)dComIfG_getObjectRes("E_dn", 31), 0, 1.0f,
                                                0, -1, &i_this->sound, 0x80000, 0x11000084);
     if (i_this->anm_p == NULL || i_this->anm_p->getModel() == NULL) {

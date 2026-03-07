@@ -39,7 +39,7 @@ int daE_DF_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_DF", 0xD);
     JUT_ASSERT(161, modelData != NULL);
 
-    mpMorfSO = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpMorfSO = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                     (J3DAnmTransform*)dComIfG_getObjectRes("E_DF", 10), 2, 1.0f, 0,
                                     -1, &mCreatureSound, 0x80000, 0x11000084);
     if (mpMorfSO == NULL || mpMorfSO->getModel() == NULL) {

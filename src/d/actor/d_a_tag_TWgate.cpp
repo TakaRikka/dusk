@@ -1080,7 +1080,7 @@ int daTagTWGate_c::CreateHeap() {
     mdlData_p = static_cast<J3DModelData*>(dComIfG_getObjectRes("TWGate_Md", 7));
     JUT_ASSERT(1685, NULL != mdlData_p);
     mpMorf =
-        JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL,
+        new mDoExt_McaMorfSO(mdlData_p, NULL, NULL,
                              static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("TWGate_Md", 4)),
                              0, 0.0f, 0, -1, NULL, 0, 0x11000084);
 

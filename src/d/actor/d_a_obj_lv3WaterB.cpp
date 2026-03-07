@@ -129,7 +129,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    actor->mpBWaterBtk = JKR_NEW mDoExt_btkAnm();
+    actor->mpBWaterBtk = new mDoExt_btkAnm();
     if (actor->mpBWaterBtk == NULL) {
         return 0;
     }
@@ -141,7 +141,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    actor->mpBWaterBgW = JKR_NEW dBgW();
+    actor->mpBWaterBgW = new dBgW();
     if (actor->mpBWaterBgW == NULL) {
         return 0;
     }
@@ -159,7 +159,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    actor->mpOctHibiBgW = JKR_NEW dBgW();
+    actor->mpOctHibiBgW = new dBgW();
     if (actor->mpOctHibiBgW == NULL) {
         return 0;
     }

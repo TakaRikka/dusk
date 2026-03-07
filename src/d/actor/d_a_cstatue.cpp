@@ -158,7 +158,7 @@ int daCstatue_c::createHeap() {
         resource_index = data->modelIndex;
     }
 
-    mpMorf = JKR_NEW mDoExt_McaMorfSO(
+    mpMorf = new mDoExt_McaMorfSO(
         static_cast<J3DModelData*>(dComIfG_getObjectRes(mResName, (u16)resource_index)), NULL, NULL,
         animation, 0, 0.0f, animation->getFrameMax(), -1, &mSound,
         mType == daCstatueType_Normal2 ? J3DMdlFlag_None : J3DMdlFlag_DifferedDLBuffer, data->morfIndex);
@@ -180,20 +180,20 @@ int daCstatue_c::createHeap() {
     }
 
     if (checkBossType()) {
-        mSph = JKR_NEW dCcD_Sph[9]();
+        mSph = new dCcD_Sph[9]();
         if (!mSph) {
             return cPhs_INIT_e;
         }
     } else if (mType == daCstatueType_Normal) {
-        mCps1 = JKR_NEW dCcD_Cps();
+        mCps1 = new dCcD_Cps();
         if (!mCps1) {
             return cPhs_INIT_e;
         }
-        mCps2 = JKR_NEW dCcD_Cps();
+        mCps2 = new dCcD_Cps();
         if (!mCps2) {
             return cPhs_INIT_e;
         }
-        mCyl2 = JKR_NEW dCcD_Cyl();
+        mCyl2 = new dCcD_Cyl();
         if (!mCyl2) {
             return cPhs_INIT_e;
         }

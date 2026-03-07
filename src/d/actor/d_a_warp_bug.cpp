@@ -22,7 +22,7 @@ int daWarpBug_c::createHeap() {
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, "kisei.btk");
 
     if (pbrk != NULL) {
-        mpBrk = JKR_NEW mDoExt_brkAnm();
+        mpBrk = new mDoExt_brkAnm();
 
         if (!mpBrk->init(modelData, pbrk, TRUE, 2, 1.0f, 0, -1)) {
             return 0;
@@ -30,7 +30,7 @@ int daWarpBug_c::createHeap() {
     }
 
     if (pbtk != NULL) {
-        mpBtk = JKR_NEW mDoExt_btkAnm();
+        mpBtk = new mDoExt_btkAnm();
 
         if (!mpBtk->init(modelData, pbtk, TRUE, 2, 1.0f, 0, -1)) {
             return 0;

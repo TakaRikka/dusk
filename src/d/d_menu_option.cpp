@@ -102,15 +102,15 @@ void dMenu_Option_c::_create() {
     static const u8 l_msgNum2[2] = {8, 7};
 
     mpFont = mDoExt_getMesgFont();
-    mpString = JKR_NEW dMsgString_c();
+    mpString = new dMsgString_c();
     JUT_ASSERT(197, mpString != NULL);
 
 
-    mpMeterHaihai = JKR_NEW dMeterHaihai_c(3);
+    mpMeterHaihai = new dMeterHaihai_c(3);
     JUT_ASSERT(201, mpMeterHaihai);
 
     field_0x3f6 = 0;
-    mpScreen = JKR_NEW J2DScreen();
+    mpScreen = new J2DScreen();
     JUT_ASSERT(205, mpScreen != NULL);
 
     bool fg = mpScreen->setPriority("zelda_option_select_menu.blo", 0x20000, mpArchive);
@@ -128,41 +128,41 @@ void dMenu_Option_c::_create() {
         field_0x254[i]->setFont(mDoExt_getMesgFont());
         field_0x254[i]->setString(0x20, "");
     }
-    mpBackScreen = JKR_NEW J2DScreen();
+    mpBackScreen = new J2DScreen();
     JUT_ASSERT(246, mpBackScreen != NULL);
     fg = mpBackScreen->setPriority("zelda_option_base.blo", 0x20000, mpArchive);
     JUT_ASSERT(251, fg != false);
     mpBackScreen->search(MULTI_CHAR('wi_btn_n'))->hide();
     field_0x27c = mpBackScreen->search(MULTI_CHAR('let_area'));
 
-    mpClipScreen = JKR_NEW J2DScreen();
+    mpClipScreen = new J2DScreen();
     JUT_ASSERT(265, mpClipScreen != NULL);
     fg = mpClipScreen->setPriority("zelda_option_menu_text.blo", 0x20000, mpArchive);
     JUT_ASSERT(269, fg != false);
     dPaneClass_showNullPane(mpClipScreen);
 
     mpClipScreen->setScissor(true);
-    mpShadowScreen = JKR_NEW J2DScreen();
+    mpShadowScreen = new J2DScreen();
     JUT_ASSERT(274, mpShadowScreen != NULL);
     fg = mpShadowScreen->setPriority("zelda_option_menu_shadow.blo", 0x20000, mpArchive);
     JUT_ASSERT(278, fg != false);
     dPaneClass_showNullPane(mpShadowScreen);
     mpShadowScreen->search(MULTI_CHAR('mw_n_5'))->hide();
 
-    mpTVScreen = JKR_NEW J2DScreen();
+    mpTVScreen = new J2DScreen();
     JUT_ASSERT(287, mpTVScreen != NULL);
     fg = mpTVScreen->setPriority("zelda_option_check.blo", 0x20000, mpArchive);
     JUT_ASSERT(291, fg != false);
     dPaneClass_showNullPane(mpTVScreen);
 
-    mpTVButtonAB = JKR_NEW CPaneMgr(mpTVScreen, MULTI_CHAR('g_abtn_n'), 0, NULL);
+    mpTVButtonAB = new CPaneMgr(mpTVScreen, MULTI_CHAR('g_abtn_n'), 0, NULL);
     JUT_ASSERT(295, mpTVButtonAB != NULL);
     
-    mpTVButtonText = JKR_NEW CPaneMgr(mpTVScreen, MULTI_CHAR('a_text_n'), 0, NULL);
+    mpTVButtonText = new CPaneMgr(mpTVScreen, MULTI_CHAR('a_text_n'), 0, NULL);
     JUT_ASSERT(298, mpTVButtonText != NULL);
     mpTVScreen->search(MULTI_CHAR('g_abtn_n'))->hide();
 
-    mpScreenIcon = JKR_NEW J2DScreen();
+    mpScreenIcon = new J2DScreen();
     JUT_ASSERT(325, mpScreenIcon != NULL);
     mpScreenIcon->setPriority("zelda_collect_soubi_do_icon_parts.blo", 0x20000, mpArchive);
     for (int i = 0; i < 2; i++) {
@@ -182,15 +182,15 @@ void dMenu_Option_c::_create() {
     setAButtonString(0x40C);
     setBButtonString(0x3F9);
     ResTIMG* timg = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "tt_block8x8.bti");
-    mpBlackTex = JKR_NEW J2DPicture(timg);
+    mpBlackTex = new J2DPicture(timg);
     JUT_ASSERT(402, mpBlackTex != NULL);
     mpBlackTex->setBlackWhite(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(0, 0, 0, 0xff));
     mpBlackTex->setAlpha(0);
     field_0x374 = 0.0f;
-    mpWarning = JKR_NEW dFile_warning_c(mpArchive, 1);
+    mpWarning = new dFile_warning_c(mpArchive, 1);
     JUT_ASSERT(408, mpWarning != NULL);
     mpWarning->setFontColor(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(0xc8, 0xc8, 0xc8, 0xff));
-    mpSelectScreen = JKR_NEW J2DScreen();
+    mpSelectScreen = new J2DScreen();
     JUT_ASSERT(412, mpSelectScreen != NULL);
     fg = mpSelectScreen->setPriority("zelda_file_select_yes_no_window.blo", 0x1100000, mpArchive);
     JUT_ASSERT(416, fg != false);
@@ -204,9 +204,9 @@ void dMenu_Option_c::_create() {
     field_0x28->searchUpdateMaterialID(mpSelectScreen);
     field_0x20->searchUpdateMaterialID(mpSelectScreen);
     for (int i = 0; i < 2; i++) {
-        mpYesNoSelBase_c[i] = JKR_NEW CPaneMgr(mpSelectScreen, l_tagName012[i], 0, NULL);
+        mpYesNoSelBase_c[i] = new CPaneMgr(mpSelectScreen, l_tagName012[i], 0, NULL);
         JUT_ASSERT(439, mpYesNoSelBase_c[i] != NULL);
-        mpYesNoTxt_c[i] = JKR_NEW CPaneMgr(mpSelectScreen, l_tagName013[i], 0, NULL);
+        mpYesNoTxt_c[i] = new CPaneMgr(mpSelectScreen, l_tagName013[i], 0, NULL);
         JUT_ASSERT(441, mpYesNoTxt_c[i] != NULL);
         J2DTextBox* yesNoTxt = (J2DTextBox*)mpYesNoTxt_c[i]->getPanePtr();
         yesNoTxt->setFont(mDoExt_getMesgFont());
@@ -229,11 +229,11 @@ void dMenu_Option_c::_create() {
     field_0x3c4 = 0;
 
     for (int i = 0; i < 2; i++) {
-        mpYesNoCurWaku_c[i] = JKR_NEW CPaneMgr(mpSelectScreen, l_tagName9[i], 0, NULL);
+        mpYesNoCurWaku_c[i] = new CPaneMgr(mpSelectScreen, l_tagName9[i], 0, NULL);
         JUT_ASSERT(482, mpYesNoCurWaku_c[i] != NULL);
-        mpYesNoCurWakuG0_c[i] = JKR_NEW CPaneMgr(mpSelectScreen, l_tagName10[i], 0, NULL);
+        mpYesNoCurWakuG0_c[i] = new CPaneMgr(mpSelectScreen, l_tagName10[i], 0, NULL);
         JUT_ASSERT(484, mpYesNoCurWakuG0_c[i] != NULL);
-        mpYesNoCurWakuG1_c[i] = JKR_NEW CPaneMgr(mpSelectScreen, l_tagName11[i], 0, NULL);
+        mpYesNoCurWakuG1_c[i] = new CPaneMgr(mpSelectScreen, l_tagName11[i], 0, NULL);
         JUT_ASSERT(486, mpYesNoCurWakuG1_c[i] != NULL);
         mpYesNoCurWaku_c[i]->getPanePtr()->setAnimation(field_0x2c);
         mpYesNoCurWakuG0_c[i]->getPanePtr()->setAnimation(field_0x2c);
@@ -291,91 +291,91 @@ void dMenu_Option_c::_create() {
 }
 
 void dMenu_Option_c::_delete() {
-    JKR_DELETE(mpString);
+    delete mpString;
     mpString = NULL;
 
-    JKR_DELETE(mpScreen);
+    delete mpScreen;
     mpScreen = NULL;
 
-    JKR_DELETE(mpMeterHaihai);
+    delete mpMeterHaihai;
     mpMeterHaihai = NULL;
 
-    JKR_DELETE(mpBackScreen);
+    delete mpBackScreen;
     mpBackScreen = NULL;
 
-    JKR_DELETE(mpClipScreen);
+    delete mpClipScreen;
     mpClipScreen = NULL;
 
-    JKR_DELETE(mpShadowScreen);
+    delete mpShadowScreen;
     mpShadowScreen = NULL;
 
-    JKR_DELETE(mpTVScreen);
+    delete mpTVScreen;
     mpTVScreen = NULL;
 
     if (mpTVButtonAB != NULL) {
-        JKR_DELETE(mpTVButtonAB);
+        delete mpTVButtonAB;
         mpTVButtonAB = NULL;
     }
 
     if (mpTVButtonText != NULL) {
-        JKR_DELETE(mpTVButtonText);
+        delete mpTVButtonText;
         mpTVButtonText = NULL;
     }
 
-    JKR_DELETE(mpScreenIcon);
+    delete mpScreenIcon;
     mpScreenIcon = NULL;
 
     for (int i = 0; i < 2; i++) {
         if (mpButtonAB[i] != NULL) {
-            JKR_DELETE(mpButtonAB[i]);
+            delete mpButtonAB[i];
             mpButtonAB[i] = NULL;
         }
 
         if (mpButtonText[i] != NULL) {
-            JKR_DELETE(mpButtonText[i]);
+            delete mpButtonText[i];
             mpButtonText[i] = NULL;
         }
     }
 
-    JKR_DELETE(mpBlackTex);
+    delete mpBlackTex;
     mpBlackTex = NULL;
 
-    JKR_DELETE(mpWarning);
+    delete mpWarning;
     mpWarning = NULL;
 
-    JKR_DELETE(mpSelectScreen);
+    delete mpSelectScreen;
     mpSelectScreen = NULL;
 
-    JKR_DELETE(field_0x24);
+    delete field_0x24;
     field_0x24 = NULL;
 
-    JKR_DELETE(field_0x28);
+    delete field_0x28;
     field_0x28 = NULL;
 
-    JKR_DELETE(field_0x20);
+    delete field_0x20;
     field_0x20 = NULL;
 
     for (int i = 0; i < 2; i++) {
-        JKR_DELETE(mpYesNoSelBase_c[i]);
+        delete mpYesNoSelBase_c[i];
         mpYesNoSelBase_c[i] = NULL;
 
-        JKR_DELETE(mpYesNoTxt_c[i]);
+        delete mpYesNoTxt_c[i];
         mpYesNoTxt_c[i] = NULL;
 
-        JKR_DELETE(mpYesNoCurWaku_c[i]);
+        delete mpYesNoCurWaku_c[i];
         mpYesNoCurWaku_c[i] = NULL;
 
-        JKR_DELETE(mpYesNoCurWakuG0_c[i]);
+        delete mpYesNoCurWakuG0_c[i];
         mpYesNoCurWakuG0_c[i] = NULL;
 
-        JKR_DELETE(mpYesNoCurWakuG1_c[i]);
+        delete mpYesNoCurWakuG1_c[i];
         mpYesNoCurWakuG1_c[i] = NULL;
     }
 
-    JKR_DELETE(field_0x2c);
+    delete field_0x2c;
     field_0x2c = NULL;
 
-    JKR_DELETE(field_0x30);
+    delete field_0x30;
     field_0x30 = NULL;
 
     if (
@@ -387,53 +387,53 @@ void dMenu_Option_c::_delete() {
             #endif
         )
     ) {
-        JKR_DELETE(mpStick);
+        delete mpStick;
         mpStick = NULL;
     }
 
-    JKR_DELETE(mpTitle);
+    delete mpTitle;
     mpTitle = NULL;
 
-    JKR_DELETE(mpDrawCursor);
+    delete mpDrawCursor;
     mpDrawCursor = NULL;
 
     for (int i = 0; i < 5; i++) {
-        JKR_DELETE(mpParent[i]);
+        delete mpParent[i];
         mpParent[i] = NULL;
     }
 
     for (int i = 0; i < 5; i++) {
-        JKR_DELETE(mpHaihaiPosL[i]);
+        delete mpHaihaiPosL[i];
         mpHaihaiPosL[i] = NULL;
 
-        JKR_DELETE(mpHaihaiPosR[i]);
+        delete mpHaihaiPosR[i];
         mpHaihaiPosR[i] = NULL;
     }
 
     for (int i = 0; i < 6; i++) {
-        JKR_DELETE(mpMenuNull[i]);
+        delete mpMenuNull[i];
         mpMenuNull[i] = NULL;
 
-        JKR_DELETE(mpMenuPane[i]);
+        delete mpMenuPane[i];
         mpMenuPane[i] = NULL;
 
         if (mpMenuPaneC[i] != NULL) {
-            JKR_DELETE(mpMenuPaneC[i]);
+            delete mpMenuPaneC[i];
             mpMenuPaneC[i] = NULL;
         }
 
         if (mpMenuPane2[i] != NULL) {
-            JKR_DELETE(mpMenuPane2[i]);
+            delete mpMenuPane2[i];
             mpMenuPane2[i] = NULL;
         }
 
         if (mpMenuPane3[i] != NULL) {
-            JKR_DELETE(mpMenuPane3[i]);
+            delete mpMenuPane3[i];
             mpMenuPane3[i] = NULL;
         }
 
         if (mpMenuPane32[i] != NULL) {
-            JKR_DELETE(mpMenuPane32[i]);
+            delete mpMenuPane32[i];
             mpMenuPane32[i] = NULL;
         }
     }
@@ -441,7 +441,7 @@ void dMenu_Option_c::_delete() {
     for (int i = 0; i < 6; i++) {
         for (int j = 0; j < 6; j++) {
             if (mpMenuText[i][j] != NULL) {
-                JKR_DELETE(mpMenuText[i][j]);
+                delete mpMenuText[i][j];
                 mpMenuText[i][j] = NULL;
             }
         }
@@ -449,14 +449,14 @@ void dMenu_Option_c::_delete() {
 
     for (int i = 0; i < 4; i++) {
         if (field_0x1c0[i] != NULL) {
-            JKR_DELETE(field_0x1c0[i]);
+            delete field_0x1c0[i];
             field_0x1c0[i] = NULL;
         }
     }
 
     for (int i = 0; i < 3; i++) {
         if (mpZButtonText[i] != NULL) {
-            JKR_DELETE(mpZButtonText[i]);
+            delete mpZButtonText[i];
             mpZButtonText[i] = NULL;
         }
     }
@@ -642,7 +642,7 @@ bool dMenu_Option_c::_open() {
         if (!dComIfGp_getOptionResArchive()) {
             dComIfGp_setOptionResArchive(mpMount->getArchive());
             mpArchive = dComIfGp_getOptionResArchive();
-            JKR_DELETE(mpMount);
+            delete mpMount;
             mpMount = NULL;
             _create();
         }
@@ -1423,7 +1423,7 @@ void dMenu_Option_c::screenSet() {
     };
 #endif
 
-    mpTitle = JKR_NEW CPaneMgr(mpBackScreen, MULTI_CHAR('title_n'), 0, NULL);
+    mpTitle = new CPaneMgr(mpBackScreen, MULTI_CHAR('title_n'), 0, NULL);
     Vec pos = mpTitle->getGlobalVtxCenter(mpTitle->mPane, false, 0);
     mpWarning->mPosY = pos.y + g_drawHIO.mOptionScreen.mBackgroundPosY;
     for (int i = 0; i < 6; i++) {
@@ -1440,21 +1440,21 @@ void dMenu_Option_c::screenSet() {
     field_0x2c8[1] = field_0x298[0]->getWhite();
     field_0x2b8[0].a = 0xff;
     field_0x2b0[0].a = 0xff;
-    mpDrawCursor = JKR_NEW dSelect_cursor_c(2, 1.0f, NULL);
+    mpDrawCursor = new dSelect_cursor_c(2, 1.0f, NULL);
     mpDrawCursor->setAlphaRate(0.0f);
     mpDrawCursor->setScale(0.0f);
     mpDrawCursor->setParam(1.01f, 0.85f, 0.02f, 0.5f, 0.5f);
     mpDrawCursor->offPlayAnime(0);
-    mpParent[0] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
-    mpParent[1] = JKR_NEW CPaneMgr(mpClipScreen, MULTI_CHAR('n_all'), 2, NULL);
-    mpParent[2] = JKR_NEW CPaneMgr(mpShadowScreen, 'nall', 2, NULL);
-    mpParent[3] = JKR_NEW CPaneMgr(mpTVScreen, MULTI_CHAR('n_all'), 2, NULL);
-    mpParent[4] = JKR_NEW CPaneMgr(mpBackScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpParent[0] = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpParent[1] = new CPaneMgr(mpClipScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpParent[2] = new CPaneMgr(mpShadowScreen, 'nall', 2, NULL);
+    mpParent[3] = new CPaneMgr(mpTVScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpParent[4] = new CPaneMgr(mpBackScreen, MULTI_CHAR('n_all'), 2, NULL);
     for (int i = 0; i < 6; i++) {
-        mpMenuNull[i] = JKR_NEW CPaneMgr(mpScreen, let_n[i], 0, NULL);
-        mpMenuPane[i] = JKR_NEW CPaneMgr(mpScreen, menu_n[i], 0, NULL);
+        mpMenuNull[i] = new CPaneMgr(mpScreen, let_n[i], 0, NULL);
+        mpMenuPane[i] = new CPaneMgr(mpScreen, menu_n[i], 0, NULL);
         if (menu2_n[i] != 0) {
-            mpMenuPaneC[i] = JKR_NEW CPaneMgr(mpScreen, menu2_n[i], 0, NULL);
+            mpMenuPaneC[i] = new CPaneMgr(mpScreen, menu2_n[i], 0, NULL);
             Vec pos = mpMenuPaneC[i]->getGlobalVtxCenter(mpMenuPaneC[i]->mPane, false, 0);
             field_0x344[i] = pos.x;
             field_0x35c[i] = pos.y;
@@ -1473,24 +1473,24 @@ void dMenu_Option_c::screenSet() {
         field_0x408[i] = field_0x2d0[0][i]->getAlpha();
     }
     for (int i = 0; i < 5; i++) {
-        mpHaihaiPosL[i] = JKR_NEW CPaneMgr(mpScreen, haihail_n[i], 0, NULL);
-        mpHaihaiPosR[i] = JKR_NEW CPaneMgr(mpScreen, haihair_n[i], 0, NULL);
+        mpHaihaiPosL[i] = new CPaneMgr(mpScreen, haihail_n[i], 0, NULL);
+        mpHaihaiPosR[i] = new CPaneMgr(mpScreen, haihair_n[i], 0, NULL);
     }
     for (int i = 0; i < 6; i++) {
         if (let2_n[i] != 0) {
-            mpMenuPane2[i] = JKR_NEW CPaneMgr(mpShadowScreen, let2_n[i], 0, NULL);
+            mpMenuPane2[i] = new CPaneMgr(mpShadowScreen, let2_n[i], 0, NULL);
         } else {
             mpMenuPane2[i] = NULL;
         }
     }
     for (int i = 0; i < 6; i++) {
         if (let2_n[i] != 0) {
-            mpMenuPane3[i] = JKR_NEW CPaneMgr(mpClipScreen, let2_n[i], 0, NULL);
+            mpMenuPane3[i] = new CPaneMgr(mpClipScreen, let2_n[i], 0, NULL);
         } else {
             mpMenuPane3[i] = NULL;
         }
         if (menu3_n[i] != 0) {
-            mpMenuPane32[i] = JKR_NEW CPaneMgr(mpClipScreen, menu3_n[i], 0, NULL);
+            mpMenuPane32[i] = new CPaneMgr(mpClipScreen, menu3_n[i], 0, NULL);
         } else {
             mpMenuPane32[i] = NULL;
         }
@@ -1613,11 +1613,11 @@ void dMenu_Option_c::screenSet() {
     for (int i = 0; i < 6; i++) {
 #if VERSION == VERSION_GCN_JPN
         paneResize(menut_0[i]);
-        mpMenuText[0][i] = JKR_NEW CPaneMgr(mpClipScreen, menut_0[i], 0, NULL);
+        mpMenuText[0][i] = new CPaneMgr(mpClipScreen, menut_0[i], 0, NULL);
         mpClipScreen->search(fenut_0[i])->hide();
 #else
         paneResize(fenut_0[i]);
-        mpMenuText[0][i] = JKR_NEW CPaneMgr(mpClipScreen, fenut_0[i], 0, NULL);
+        mpMenuText[0][i] = new CPaneMgr(mpClipScreen, fenut_0[i], 0, NULL);
         mpClipScreen->search(menut_0[i])->hide();
 #endif
         ((J2DTextBox*)(mpMenuText[0][i]->getPanePtr()))->setFont(mpFont);
@@ -1627,11 +1627,11 @@ void dMenu_Option_c::screenSet() {
     for (int i = 0; i < 6; i++) {
 #if VERSION == VERSION_GCN_JPN
         paneResize(menut_1[i]);
-        mpMenuText[1][i] = JKR_NEW CPaneMgr(mpClipScreen, menut_1[i], 0, NULL);
+        mpMenuText[1][i] = new CPaneMgr(mpClipScreen, menut_1[i], 0, NULL);
         mpClipScreen->search(fenut_1[i])->hide();
 #else
         paneResize(fenut_1[i]);
-        mpMenuText[1][i] = JKR_NEW CPaneMgr(mpClipScreen, fenut_1[i], 0, NULL);
+        mpMenuText[1][i] = new CPaneMgr(mpClipScreen, fenut_1[i], 0, NULL);
         mpClipScreen->search(menut_1[i])->hide();
 #endif
         mpMenuText[1][i]->show();
@@ -1642,11 +1642,11 @@ void dMenu_Option_c::screenSet() {
     for (int i = 0; i < 6; i++) {
 #if VERSION == VERSION_GCN_JPN
         paneResize(menut_2[i]);
-        mpMenuText[2][i] = JKR_NEW CPaneMgr(mpClipScreen, menut_2[i], 0, NULL);
+        mpMenuText[2][i] = new CPaneMgr(mpClipScreen, menut_2[i], 0, NULL);
         mpClipScreen->search(fenut_2[i])->hide();
 #else
         paneResize(fenut_2[i]);
-        mpMenuText[2][i] = JKR_NEW CPaneMgr(mpClipScreen, fenut_2[i], 0, NULL);
+        mpMenuText[2][i] = new CPaneMgr(mpClipScreen, fenut_2[i], 0, NULL);
         mpClipScreen->search(menut_2[i])->hide();
 #endif
         mpMenuText[2][i]->show();
@@ -1657,11 +1657,11 @@ void dMenu_Option_c::screenSet() {
     for (int i = 0; i < 6; i++) {
 #if VERSION == VERSION_GCN_JPN
         paneResize(menut_3[i]);
-        mpMenuText[3][i] = JKR_NEW CPaneMgr(mpClipScreen, menut_3[i], 0, NULL);
+        mpMenuText[3][i] = new CPaneMgr(mpClipScreen, menut_3[i], 0, NULL);
         mpClipScreen->search(fenut_3[i])->hide();
 #else
         paneResize(fenut_3[i]);
-        mpMenuText[3][i] = JKR_NEW CPaneMgr(mpClipScreen, fenut_3[i], 0, NULL);
+        mpMenuText[3][i] = new CPaneMgr(mpClipScreen, fenut_3[i], 0, NULL);
         mpClipScreen->search(menut_3[i])->hide();
 #endif
         mpMenuText[3][i]->show();
@@ -1672,11 +1672,11 @@ void dMenu_Option_c::screenSet() {
     for (int i = 0; i < 6; i++) {
 #if VERSION == VERSION_GCN_JPN
         paneResize(menut_4[i]);
-        mpMenuText[4][i] = JKR_NEW CPaneMgr(mpClipScreen, menut_4[i], 0, NULL);
+        mpMenuText[4][i] = new CPaneMgr(mpClipScreen, menut_4[i], 0, NULL);
         mpClipScreen->search(fenut_4[i])->hide();
 #else
         paneResize(fenut_4[i]);
-        mpMenuText[4][i] = JKR_NEW CPaneMgr(mpClipScreen, fenut_4[i], 0, NULL);
+        mpMenuText[4][i] = new CPaneMgr(mpClipScreen, fenut_4[i], 0, NULL);
         mpClipScreen->search(menut_4[i])->hide();
 #endif
         mpMenuText[4][i]->show();
@@ -1721,7 +1721,7 @@ void dMenu_Option_c::screenSet() {
     }
     for (int i = 0; i < 3; i++) {
         if (z_tx[i] != 0) {
-            mpZButtonText[i] = JKR_NEW CPaneMgr(mpBackScreen, z_tx[i], 2, NULL);
+            mpZButtonText[i] = new CPaneMgr(mpBackScreen, z_tx[i], 2, NULL);
         } else {
             mpZButtonText[i] = NULL;
         }

@@ -130,7 +130,7 @@ int daSmWStone_c::createHeap() {
         return 0;
     }
 
-    mpBgW = JKR_NEW dBgW();
+    mpBgW = new dBgW();
     if (mpBgW == NULL) {
         return 0;
     }

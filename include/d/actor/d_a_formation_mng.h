@@ -146,8 +146,8 @@ struct daFmtMng_c : public fopAc_ac_c {
         for (int i = 0; i < mFormationLine * mFormationRow; i++, member++) {
             fopAcM_delete(member->mNpcId);
         }
-        JKR_DELETE_ARRAY(mPos);
-        JKR_DELETE_ARRAY(mMember);
+        delete [] mPos;
+        delete [] mMember;
     }
 
     int getTimeHour() {

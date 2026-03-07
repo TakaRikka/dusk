@@ -12,28 +12,28 @@ dKantera_icon_c::dKantera_icon_c() {
 }
 
 dKantera_icon_c::~dKantera_icon_c() {
-    JKR_DELETE(mpKanteraIcon->getScreen());
-    JKR_DELETE(mpKanteraIcon);
+    delete mpKanteraIcon->getScreen();
+    delete mpKanteraIcon;
     mpKanteraIcon = NULL;
 
-    JKR_DELETE(mpParent);
+    delete mpParent;
     mpParent = NULL;
 
-    JKR_DELETE(mpGauge);
+    delete mpGauge;
     mpGauge = NULL;
 }
 
 void dKantera_icon_c::initiate() {
-    mpKanteraIcon = JKR_NEW dDlst_KanteraIcon_c();
+    mpKanteraIcon = new dDlst_KanteraIcon_c();
 
-    J2DScreen* scrn = JKR_NEW J2DScreen();
+    J2DScreen* scrn = new J2DScreen();
     scrn->setPriority("zelda_kantera_icon_mater.blo", 0x20000, dComIfGp_getMain2DArchive());
     dPaneClass_showNullPane(scrn);
     mpKanteraIcon->setScreen(scrn);
 
-    mpParent = JKR_NEW CPaneMgr(scrn, MULTI_CHAR('kan_m_n'), 2, NULL);
+    mpParent = new CPaneMgr(scrn, MULTI_CHAR('kan_m_n'), 2, NULL);
 
-    mpGauge = JKR_NEW CPaneMgr(scrn, MULTI_CHAR('yellow_m'), 0, NULL);
+    mpGauge = new CPaneMgr(scrn, MULTI_CHAR('yellow_m'), 0, NULL);
 }
 
 void dKantera_icon_c::setAlphaRate(f32 alphaRate) {

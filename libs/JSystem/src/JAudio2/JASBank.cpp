@@ -37,7 +37,7 @@ JASChannel* JASBank::noteOn(JASBank const* param_0, int param_1, u8 param_2, u8 
         return NULL;
     }
 
-    JASChannel* channel = JKR_NEW JASChannel(param_5, param_6);
+    JASChannel* channel = new JASChannel(param_5, param_6);
     if (!channel) {
         return NULL;
     }
@@ -74,7 +74,7 @@ JASChannel* JASBank::noteOnOsc(int param_0, u8 param_1, u8 param_2, u16 param_3,
         {0x000F, 0x0000, 0x0000},
     };
     static const JASOscillator::Data OSC_ENV = {0, 1.0f, NULL, OSC_RELEASE_TABLE, 1.0f, 0.0f};
-    JASChannel* channel = JKR_NEW JASChannel(param_4, param_5);
+    JASChannel* channel = new JASChannel(param_4, param_5);
     if (!channel) {
         return NULL;
     }

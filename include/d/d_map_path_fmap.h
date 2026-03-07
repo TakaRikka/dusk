@@ -14,7 +14,7 @@ public:
 
     ~fmpTresTypeGroupData_c() {
         if (mpNext != NULL) {
-            JKR_DELETE(mpNext);
+            delete mpNext;
         }
     }
 
@@ -34,7 +34,7 @@ public:
     void addTypeGroupData(u8, dTres_c::data_s const*);
     ~fmpTresTypeGroupDataList_c() {
         if (mpTypeGroupDataHead != NULL) {
-            JKR_DELETE(mpTypeGroupDataHead);
+            delete mpTypeGroupDataHead;
         }
     }
     fmpTresTypeGroupDataList_c() {
@@ -106,7 +106,7 @@ public:
 
     ~dMenu_Fmap_room_data_c() {
         if (mp_fmpTresTypeGroupDataListAll != NULL) {
-            JKR_DELETE(mp_fmpTresTypeGroupDataListAll);
+            delete mp_fmpTresTypeGroupDataListAll;
         }
     }
 

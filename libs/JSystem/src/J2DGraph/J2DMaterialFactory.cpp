@@ -228,7 +228,7 @@ J2DTexMtx* J2DMaterialFactory::newTexMtx(int param_0, int param_1) const {
     J2DTexMtx* rv = NULL;
     J2DMaterialInitData* iVar2 = &mpMaterialInitData[mpMaterialID[param_0]];
     if (iVar2->field_0x24[param_1] != 0xffff) {
-        rv = JKR_NEW J2DTexMtx(mpTexMtxInfo[iVar2->field_0x24[param_1]]);
+        rv = new J2DTexMtx(mpTexMtxInfo[iVar2->field_0x24[param_1]]);
         rv->calc();
     }
     return rv;

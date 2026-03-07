@@ -66,7 +66,7 @@ int dBgS_MoveBgActor::MoveBGCreateHeap() {
         return 1;
     }
 
-    mpBgW = JKR_NEW dBgW();
+    mpBgW = new dBgW();
     if (mpBgW != NULL) {
         cBgD_t* res = (cBgD_t*)dComIfG_getObjectRes(m_name, m_dzb_id);
         if (!mpBgW->Set(res, cBgW::MOVE_BG_e, &mBgMtx)) {

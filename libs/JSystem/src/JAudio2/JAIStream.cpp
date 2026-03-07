@@ -188,7 +188,7 @@ void JAIStream::die_JAIStream_() {
 
     for (int i = 0; i < NUM_CHILDREN; i++) {
         if (children_[i] != NULL) {
-            JKR_DELETE(children_[i]);
+            delete children_[i];
             children_[i] = NULL;
         }
     }
@@ -249,7 +249,7 @@ s32 JAIStream::getNumChild() const {
 
 JAISoundChild* JAIStream::getChild(int index) {
     if (children_[index] == NULL) {
-         children_[index] = JKR_NEW JAISoundChild();
+         children_[index] = new JAISoundChild();
         if (children_[index] == NULL) {
             JUT_WARN(370, "%s", "JASPoolAllocObject::<JAISoundChild>::operator new failed .\n")
         }
@@ -259,7 +259,7 @@ JAISoundChild* JAIStream::getChild(int index) {
 
 void JAIStream::releaseChild(int index) {
     if (children_[index] != NULL) {
-        JKR_DELETE(children_[index]);
+        delete children_[index];
         children_[index] = NULL;
     }
 }

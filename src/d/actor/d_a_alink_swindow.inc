@@ -239,7 +239,7 @@ void daAlink_c::changeModelDataDirectWolf(int param_0) {
 void daAlink_c::initStatusWindow() {
     onNoResetFlg2(FLG2_STATUS_WINDOW_DRAW);
     
-    void* tmpBuffer = JKR_NEW_ARGS (0x20) void*[0x500];
+    void* tmpBuffer = new (0x20) void*[0x500];
     JUT_ASSERT(394, tmpBuffer);
 
     u16 bckResIdx, btpResIdx, btkResIdx;
@@ -261,14 +261,14 @@ void daAlink_c::initStatusWindow() {
     }
 
     JKRReadIdxResource(tmpBuffer, 0x1400, bckResIdx, dComIfGp_getAnmArchive());
-    m_sWindowBck = JKR_NEW mDoExt_bckAnm();
+    m_sWindowBck = new mDoExt_bckAnm();
     JUT_ASSERT(428, m_sWindowBck);
 
     if (!m_sWindowBck->init((J3DAnmTransform*)J3DAnmLoaderDataBase::load(tmpBuffer), TRUE, 2, 1.0f, 0, -1, false)) {
         JUT_ASSERT(433, FALSE);
     }
 
-    tmpBuffer = JKR_NEW_ARGS (0x20) void*[0x100];
+    tmpBuffer = new (0x20) void*[0x100];
     JUT_ASSERT(437, tmpBuffer);
 
     JKRReadIdxResource(tmpBuffer, 0x400, btpResIdx, dComIfGp_getAnmArchive());
@@ -278,7 +278,7 @@ void daAlink_c::initStatusWindow() {
     btp->searchUpdateMaterialID(field_0x06c0);
     field_0x06c0->entryTexNoAnimator(btp);
 
-    tmpBuffer = JKR_NEW_ARGS (0x20) void*[0x100];
+    tmpBuffer = new (0x20) void*[0x100];
     JUT_ASSERT(449, tmpBuffer);
 
     JKRReadIdxResource(tmpBuffer, 0x400, btkResIdx, dComIfGp_getAnmArchive());

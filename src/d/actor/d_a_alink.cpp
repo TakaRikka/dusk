@@ -4151,7 +4151,7 @@ int daAlink_c::initDemoModel(J3DModel** i_ppmodel, char const* i_resName, u32 i_
 int daAlink_c::initDemoBck(mDoExt_bckAnm** i_ppbck, char const* i_resName) {
     J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(dStage_roomControl_c::getDemoArcName(), i_resName);
     if (bck != NULL) {
-        *i_ppbck = JKR_NEW mDoExt_bckAnm();
+        *i_ppbck = new mDoExt_bckAnm();
 
         if (*i_ppbck == NULL) {
             return 0;
@@ -4216,7 +4216,7 @@ int daAlink_c::createHeap() {
         return 0;
     }
 
-    mpHIO = JKR_NEW daAlinkHIO_c();
+    mpHIO = new daAlinkHIO_c();
     if (mpHIO == NULL) {
         return 0;
     }
@@ -4242,33 +4242,33 @@ int daAlink_c::createHeap() {
     }
 
     int sp38 = 40;
-    J3DTransformInfo* sp1C = JKR_NEW J3DTransformInfo[sp38];
+    J3DTransformInfo* sp1C = new J3DTransformInfo[sp38];
     if (sp1C == NULL) {
         return 0;
     }
 
-    Quaternion* sp30 = JKR_NEW Quaternion[sp38];
+    Quaternion* sp30 = new Quaternion[sp38];
     if (sp30 == NULL) {
         return 0;
     }
 
-    field_0x2060 = JKR_NEW mDoExt_MtxCalcOldFrame(sp1C, sp30);
+    field_0x2060 = new mDoExt_MtxCalcOldFrame(sp1C, sp30);
     if (field_0x2060 == NULL) {
         return 0;
     }
 
-    field_0x1f20 = JKR_NEW mDoExt_MtxCalcAnmBlendTblOld(field_0x2060, 3, mNowAnmPackUnder);
+    field_0x1f20 = new mDoExt_MtxCalcAnmBlendTblOld(field_0x2060, 3, mNowAnmPackUnder);
     if (field_0x1f20 == NULL) {
         return 0;
     }
 
-    field_0x1f24 = JKR_NEW mDoExt_MtxCalcAnmBlendTblOld(field_0x2060, 3, mNowAnmPackUpper);
+    field_0x1f24 = new mDoExt_MtxCalcAnmBlendTblOld(field_0x2060, 3, mNowAnmPackUpper);
     if (field_0x1f24 == NULL) {
         return 0;
     }
 
     for (int i = 0; i < 2; i++) {
-        field_0x2180[i] = JKR_NEW daAlink_matAnm_c();
+        field_0x2180[i] = new daAlink_matAnm_c();
         if (field_0x2180[i] == NULL) {
             return 0;
         }
@@ -4279,7 +4279,7 @@ int daAlink_c::createHeap() {
         return 0;
     }
 
-    field_0x2d78 = JKR_NEW_ARGS (0x20) u8[0x800];
+    field_0x2d78 = new (0x20) u8[0x800];
     if (field_0x2d78 == NULL) {
         return 0;
     }
@@ -4307,7 +4307,7 @@ int daAlink_c::createHeap() {
     }
 
     if (mpDemoFCBlendModel != NULL) {
-        field_0x069c = JKR_NEW mDoExt_blkAnm();
+        field_0x069c = new mDoExt_blkAnm();
         if (field_0x069c == NULL) {
             return 0;
         }
@@ -14215,7 +14215,7 @@ BOOL daAlink_c::checkMagicArmorWearAbility() const {
 
 J3DModelData* daAlink_c::loadAramBmd(u16 i_resIdx, u32 i_bufSize) {
     JKRArchive* anmArchive = dComIfGp_getAnmArchive();
-    u8* tmpBuffer = JKR_NEW_ARGS (0x20) u8[i_bufSize];
+    u8* tmpBuffer = new (0x20) u8[i_bufSize];
 
     JKRReadIdxResource(tmpBuffer, i_bufSize, i_resIdx, anmArchive);
     #if DEBUG
@@ -14236,7 +14236,7 @@ J3DModelData* daAlink_c::loadAramBmd(u16 i_resIdx, u32 i_bufSize) {
 }
 
 void* daAlink_c::loadAram(u16 i_resIdx, u32 i_bufSize) {
-    u8* tmpBuffer = JKR_NEW_ARGS (0x20) u8[i_bufSize];
+    u8* tmpBuffer = new (0x20) u8[i_bufSize];
     JKRReadIdxResource(tmpBuffer, i_bufSize, i_resIdx, dComIfGp_getAnmArchive());
     #if DEBUG
     daPy_aramBufferCheck(tmpBuffer, i_bufSize);

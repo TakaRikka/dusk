@@ -18,7 +18,7 @@ u8 dBgWSv::Set(cBgD_t* pbgd, u32 param_1) {
         return 0;
     }
 
-    field_0xc0 = JKR_NEW Vec[pm_bgd->m_v_num];
+    field_0xc0 = new Vec[pm_bgd->m_v_num];
     return field_0xc0 == NULL;
 }
 

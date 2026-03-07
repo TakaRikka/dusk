@@ -5,7 +5,6 @@
 #include <stdint.h>
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JFramework/JFWDisplay.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
@@ -14,7 +13,6 @@
 #include <vi.h>
 #include "global.h"
 #include "aurora/aurora.h"
-#include "global.h"
 
 void JFWDisplay::ctor_subroutine(bool enableAlpha) {
     mEnableAlpha = enableAlpha;
@@ -65,7 +63,7 @@ JFWDisplay* JFWDisplay::createManager(GXRenderModeObj const* p_rObj, JKRHeap* p_
     }
 
     if (sManager == NULL) {
-        sManager = JKR_NEW JFWDisplay(p_heap, xfb_num, enableAlpha);
+        sManager = new JFWDisplay(p_heap, xfb_num, enableAlpha);
     }
 
     return sManager;

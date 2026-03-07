@@ -2414,7 +2414,7 @@ static int daE_DT_Delete(daE_DT_c* i_this) {
 
 int daE_DT_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes("E_DT", 28);
-    mpMorf = JKR_NEW mDoExt_McaMorfSO(model_data, NULL, NULL,
+    mpMorf = new mDoExt_McaMorfSO(model_data, NULL, NULL,
                                   (J3DAnmTransform*)dComIfG_getObjectRes("E_DT", 23),
                                   J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1,
                                   &mSound, 0, 0x11000084);

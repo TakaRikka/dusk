@@ -1926,7 +1926,7 @@ int daE_HZ_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_HZ", dRes_INDEX_E_HZ_BMD_HZ_e);
     JUT_ASSERT(2479, modelData != NULL);
 
-    mpMorfSO = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpMorfSO = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                     (J3DAnmTransform*)dComIfG_getObjectRes("E_HZ", dRes_INDEX_E_HZ_BCK_HZ_WAIT_e), 0, 1.0f,
                                     0, -1, &mSound, J3DMdlFlag_DifferedDLBuffer, 0x11000084);
 
@@ -1947,7 +1947,7 @@ int daE_HZ_c::CreateHeap() {
         return 0;
     }
 
-    mpBgW = JKR_NEW dBgW();
+    mpBgW = new dBgW();
     if (mpBgW == NULL) {
         return 0;
     }

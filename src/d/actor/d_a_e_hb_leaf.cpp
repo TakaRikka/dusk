@@ -48,7 +48,7 @@ static int daE_HB_LEAF_Delete(e_hb_leaf_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_hb_leaf_class* a_this = static_cast<e_hb_leaf_class*>(i_this);
 
-    a_this->mpMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_HB", 0x18), NULL,
+    a_this->mpMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_HB", 0x18), NULL,
                                         NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_HB", 0x13),
                                         2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000084);
     if (a_this->mpMorf == NULL || a_this->mpMorf->getModel() == NULL) {

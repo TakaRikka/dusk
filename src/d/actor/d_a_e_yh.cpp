@@ -2072,7 +2072,7 @@ static int daE_YH_Delete(e_yh_class* i_this) {
 
 static int useHeapInit(fopAc_ac_c* a_this) {
     e_yh_class* i_this = (e_yh_class*)a_this;
-    i_this->mpMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_yd", 0x18), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_yd", 0x13), 2, 1.0, 0, -1, &i_this->mSound,
+    i_this->mpMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_yd", 0x18), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_yd", 0x13), 2, 1.0, 0, -1, &i_this->mSound,
             0x80000, 0x11000084);
 
     if (i_this->mpMorf == NULL || i_this->mpMorf->getModel() == NULL) {
@@ -2080,7 +2080,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     }
 
     J3DModel* model = i_this->mpMorf->getModel();
-    i_this->mBrk = JKR_NEW mDoExt_brkAnm();
+    i_this->mBrk = new mDoExt_brkAnm();
     if (i_this->mBrk == NULL) {
         return 0;
     }

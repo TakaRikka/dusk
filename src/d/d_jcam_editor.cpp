@@ -5,13 +5,13 @@
 dJcame_c* dJcame_c::m_myObj;
 
 dJcame_c::dJcame_c(const JStage::TSystem* i_system, f32 param_1, JUTGamePad& i_pad) {
-    mOrthoGraph = JKR_NEW J2DOrthoGraph(0.0f, 0.0f, 608.0f, 448.0f, -1.0f, 1.0f);
-    mFont = JKR_NEW JUTResFont((ResFONT*)JUTResFONT_Ascfont_fix12, NULL);
+    mOrthoGraph = new J2DOrthoGraph(0.0f, 0.0f, 608.0f, 448.0f, -1.0f, 1.0f);
+    mFont = new JUTResFont((ResFONT*)JUTResFONT_Ascfont_fix12, NULL);
     
     mHeap = JKRExpHeap::create(0x100000, JKRHeap::getRootHeap2(), false);
     JUT_ASSERT(54, mHeap != NULL);
 
-    mControl = JKR_NEW JStudioCameraEditor::TControl();
+    mControl = new JStudioCameraEditor::TControl();
     mHioId = mDoHIO_createChild("JStudioCameraEditor", mControl);
     JUT_ASSERT(57, mControl != NULL);
 
@@ -29,29 +29,29 @@ dJcame_c::dJcame_c(const JStage::TSystem* i_system, f32 param_1, JUTGamePad& i_p
 
 dJcame_c::~dJcame_c() {
     if (mAdaptor != NULL) {
-        JKR_DELETE(mAdaptor);
+        delete mAdaptor;
     }
 
     mControl->jstudio_setAdaptor(NULL);
     mDoHIO_deleteChild(mHioId);
 
-    JKR_DELETE(mControl);
+    delete mControl;
     mHeap->destroy();
-    JKR_DELETE(mFont);
-    JKR_DELETE(mOrthoGraph);
+    delete mFont;
+    delete mOrthoGraph;
 
     m_myObj = NULL;
 }
 
 void dJcame_c::create(const JStage::TSystem* i_system, f32 param_1, JUTGamePad& i_pad) {
     JUT_ASSERT(109, m_myObj == NULL);
-    JKR_NEW dJcame_c(i_system, param_1, i_pad);
+    new dJcame_c(i_system, param_1, i_pad);
     JUT_ASSERT(111, m_myObj != NULL);
 }
 
 void dJcame_c::remove() {
     JUT_ASSERT(126, m_myObj != NULL);
-    JKR_DELETE(m_myObj);
+    delete m_myObj;
 }
 
 void dJcame_c::update() {
@@ -63,7 +63,7 @@ void dJcame_c::update() {
                 return;
             }
 
-            mAdaptor = JKR_NEW JStudio_JStage::TAdaptor_camera(mSystem, (JStage::TCamera*)object);
+            mAdaptor = new JStudio_JStage::TAdaptor_camera(mSystem, (JStage::TCamera*)object);
             JUT_ASSERT(155, mAdaptor != NULL);
 
             mControl->jstudio_setAdaptor(mAdaptor);

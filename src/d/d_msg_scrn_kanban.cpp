@@ -23,7 +23,7 @@ dMsgScrnKanban_c::dMsgScrnKanban_c(JKRExpHeap* param_0) {
     s32 uVar14 = field_0xd4->getTotalFreeSize();
     init();
 
-    mpScreen = JKR_NEW J2DScreen();
+    mpScreen = new J2DScreen();
     JUT_ASSERT(43, mpScreen != NULL);
     bool fg =
         mpScreen->setPriority("zelda_kanban_stone_a.blo", 0x1020000, dComIfGp_getMsgArchive(2));
@@ -39,7 +39,7 @@ dMsgScrnKanban_c::dMsgScrnKanban_c(JKRExpHeap* param_0) {
     field_0xd0->searchUpdateMaterialID(mpScreen);
     field_0xd8 = 0.0f;
 
-    mpPmP_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('n_size'), 2, NULL);
+    mpPmP_c = new CPaneMgr(mpScreen, MULTI_CHAR('n_size'), 2, NULL);
     JUT_ASSERT(60, mpPmP_c != NULL);
     mpPmP_c->getPanePtr()->setAnimation(field_0xcc);
 
@@ -48,10 +48,10 @@ dMsgScrnKanban_c::dMsgScrnKanban_c(JKRExpHeap* param_0) {
     mpPmP_c->getPanePtr()->setAnimation((J2DAnmTransform*)NULL);
     mpPmP_c->scale(g_MsgObject_HIO_c.mBoxStoneScaleX, g_MsgObject_HIO_c.mBoxStoneScaleY);
 
-    mpBack_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('back_b'), 0, NULL);
+    mpBack_c = new CPaneMgr(mpScreen, MULTI_CHAR('back_b'), 0, NULL);
     JUT_ASSERT(68, mpBack_c != NULL);
 
-    mpSpot_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('spot00'), 0, NULL);
+    mpSpot_c = new CPaneMgr(mpScreen, MULTI_CHAR('spot00'), 0, NULL);
     JUT_ASSERT(72, mpSpot_c != NULL);
 
     mpSpot_c->getPanePtr()->setAnimation(field_0xd0);
@@ -61,7 +61,7 @@ dMsgScrnKanban_c::dMsgScrnKanban_c(JKRExpHeap* param_0) {
     if (dComIfGs_getOptRuby() != 0) {
         static u64 const t_tag[3] = {MULTI_CHAR('mg_3line'), 't3_w', 't3_s'};
         for (int i = 0; i < 3; i++) {
-            mpTm_c[i] = JKR_NEW CPaneMgr(mpScreen, t_tag[i], 0, NULL);
+            mpTm_c[i] = new CPaneMgr(mpScreen, t_tag[i], 0, NULL);
             ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setFont(mDoExt_getMesgFont());
         }
 
@@ -73,10 +73,10 @@ dMsgScrnKanban_c::dMsgScrnKanban_c(JKRExpHeap* param_0) {
         static u64 const tr_tag[3] = {MULTI_CHAR('mg_3f'), MULTI_CHAR('mg_3f_w'), MULTI_CHAR('mg_3f_s')};
 
         for (int i = 0; i < 3; i++) {
-            mpTm_c[i] = JKR_NEW CPaneMgr(mpScreen, t_tag_2[i], 0, NULL);
+            mpTm_c[i] = new CPaneMgr(mpScreen, t_tag_2[i], 0, NULL);
             ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setFont(mDoExt_getMesgFont());
 
-            mpTmr_c[i] = JKR_NEW CPaneMgr(mpScreen, tr_tag[i], 0, NULL);
+            mpTmr_c[i] = new CPaneMgr(mpScreen, tr_tag[i], 0, NULL);
             ((J2DTextBox*)mpTmr_c[i]->getPanePtr())->setFont(mDoExt_getMesgFont());
         }
 
@@ -88,7 +88,7 @@ dMsgScrnKanban_c::dMsgScrnKanban_c(JKRExpHeap* param_0) {
     static u64 const t_tag[3] = {MULTI_CHAR('mg_e4lin'), 'f4_w', 't4_s'};
 
     for (int i = 0; i < 3; i++) {
-        mpTm_c[i] = JKR_NEW CPaneMgr(mpScreen, t_tag[i], 0, NULL);
+        mpTm_c[i] = new CPaneMgr(mpScreen, t_tag[i], 0, NULL);
         JUT_ASSERT(81, mpTm_c[i] != NULL);
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setFont(mDoExt_getMesgFont());
     }
@@ -129,29 +129,29 @@ dMsgScrnKanban_c::dMsgScrnKanban_c(JKRExpHeap* param_0) {
 }
 
 dMsgScrnKanban_c::~dMsgScrnKanban_c() {
-    JKR_DELETE(mpScreen);
+    delete mpScreen;
     mpScreen = NULL;
 
-    JKR_DELETE(field_0xcc);
+    delete field_0xcc;
     field_0xcc = NULL;
 
-    JKR_DELETE(field_0xd0);
+    delete field_0xd0;
     field_0xd0 = NULL;
 
-    JKR_DELETE(mpPmP_c);
+    delete mpPmP_c;
     mpPmP_c = NULL;
 
-    JKR_DELETE(mpBack_c);
+    delete mpBack_c;
     mpBack_c = NULL;
 
-    JKR_DELETE(mpSpot_c);
+    delete mpSpot_c;
     mpSpot_c = NULL;
 
     for (int i = 0; i < 3; i++) {
-        JKR_DELETE(mpTm_c[i]);
+        delete mpTm_c[i];
         mpTm_c[i] = NULL;
         if (mpTmr_c[i] != NULL) {
-            JKR_DELETE(mpTmr_c[i]);
+            delete mpTmr_c[i];
             mpTmr_c[i] = NULL;
         }
     }

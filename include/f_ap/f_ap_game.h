@@ -8,8 +8,6 @@
 #include "CaptureScreen.h"
 #include <cstring>
 
-#include "JSystem/JKernel/JKRHeap.h"
-
 void fapGm_After();
 void fapGm_Create();
 void fapGm_Execute();
@@ -30,7 +28,7 @@ public:
     static void executeCaptureScreen() {}
 
     static void createCaptureScreen() {
-        mCaptureScreen = JKR_NEW CaptureScreen(JFWDisplay::getManager());
+        mCaptureScreen = new CaptureScreen(JFWDisplay::getManager());
         JUT_ASSERT(46, mCaptureScreen != NULL);
     }
 

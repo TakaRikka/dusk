@@ -1,9 +1,8 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
-#include "JSystem/J3DGraphAnimator/J3DJoint.h"
 #include "JSystem/J3DGraphLoader/J3DJointFactory.h"
 #include "JSystem/J3DGraphLoader/J3DModelLoader.h"
-#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/J3DGraphAnimator/J3DJoint.h"
 #include "JSystem/JSupport/JSupport.h"
 
 J3DJointFactory::J3DJointFactory(J3DJointBlock const& block) {
@@ -28,7 +27,7 @@ J3DJointFactory::J3DJointFactory(J3DJointBlock const& block) {
 }
 
 J3DJoint* J3DJointFactory::create(int no) {
-    J3DJoint* joint = JKR_NEW J3DJoint();
+    J3DJoint* joint = new J3DJoint();
     J3D_ASSERT_ALLOCMEM(50, joint);
     joint->mJntNo = no;
     joint->mKind = getKind(no);

@@ -371,7 +371,7 @@ int daNpcTks_c::CreateHeap() {
 
     JUT_ASSERT(410, NULL != mdlData_p);
 
-    mAnm_p = JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, 0x11020284);
+    mAnm_p = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, 0x11020284);
     if (mAnm_p != NULL && mAnm_p->getModel() == NULL) {
         mAnm_p->stopZelAnime();
         mAnm_p = NULL;
@@ -387,7 +387,7 @@ int daNpcTks_c::CreateHeap() {
     }
     model->setUserArea((uintptr_t)this);
 
-    mpMatAnm = JKR_NEW daNpcF_MatAnm_c();
+    mpMatAnm = new daNpcF_MatAnm_c();
     if (mpMatAnm == NULL) {
         return 0;
     }
@@ -405,7 +405,7 @@ int daNpcTks_c::CreateHeap() {
 
         JUT_ASSERT(453, NULL != mdlData_p);
         
-        mTksTsubo.mpModelMorf = JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, getTrnsfrmKeyAnmP(l_arcName, BCK_TKS_TUBO_HIDE), -1, 1.0f, 0, -1, &mTksTsubo.mSound, 0x80000, 0x11000084);
+        mTksTsubo.mpModelMorf = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, getTrnsfrmKeyAnmP(l_arcName, BCK_TKS_TUBO_HIDE), -1, 1.0f, 0, -1, &mTksTsubo.mSound, 0x80000, 0x11000084);
         if (mTksTsubo.mpModelMorf == NULL) {
             return 0;
         }

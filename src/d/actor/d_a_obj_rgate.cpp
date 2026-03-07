@@ -290,7 +290,7 @@ int daObjRgate_c::CreateHeap() {
         }
     }
 
-    mpBgW = JKR_NEW dBgW();
+    mpBgW = new dBgW();
     if (mpBgW == NULL ||
         mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(l_arcName, 10), cBgW::MOVE_BG_e, &field_0xae4))
     {

@@ -25,8 +25,8 @@ dMenu_Quit_c::dMenu_Quit_c() {
 }
 
 dMenu_Quit_c::~dMenu_Quit_c() {
-    JKR_DELETE(mStick);
-    JKR_DELETE(mpScrnExplain);
+    delete mStick;
+    delete mpScrnExplain;
     mpScrnExplain = NULL;
 }
 

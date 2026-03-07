@@ -2064,7 +2064,7 @@ static dJntColData_c jc_data[] = {
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_s1_class* a_this = (e_s1_class*)i_this;
 
-    a_this->mpMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_S2", 0x22), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_S2", 0x1D), 0, 1.0f, 0, -1, &a_this->mSound, 0x80000, 0x11000084);
+    a_this->mpMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_S2", 0x22), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_S2", 0x1D), 0, 1.0f, 0, -1, &a_this->mSound, 0x80000, 0x11000084);
     if (a_this->mpMorf == NULL || a_this->mpMorf->getModel() == NULL) {
         return 0;
     }

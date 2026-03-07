@@ -39,7 +39,7 @@ COutFont_c::COutFont_c(u8 param_0) {
     field_0x242 = param_0;
 
     for (int i = 0; i < 35; i++) {
-        mpOfs[i] = JKR_NEW COutFontSet_c();
+        mpOfs[i] = new COutFontSet_c();
     }
 
     for (int i = 0; i < 70; i++) {
@@ -56,7 +56,7 @@ COutFont_c::COutFont_c(u8 param_0) {
 
 COutFont_c::~COutFont_c() {
     for (int i = 0; i < 35; i++) {
-        JKR_DELETE(mpOfs[i]);
+        delete mpOfs[i];
         mpOfs[i] = NULL;
     }
 
@@ -65,7 +65,7 @@ COutFont_c::~COutFont_c() {
 
         for (int i = 0; i < 70; i++) {
             if (mpPane[i] != NULL) {
-                JKR_DELETE(mpPane[i]);
+                delete mpPane[i];
                 mpPane[i] = NULL;
             }
         }
@@ -95,7 +95,7 @@ void COutFont_c::createPane() {
             img = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', getBtiName(i));
         }
 
-        mpPane[i] = JKR_NEW J2DPicture(img);
+        mpPane[i] = new J2DPicture(img);
         switch (i) {
         case 0:
             mpPane[i]->setBlackWhite(JUtility::TColor(255, 255, 255, 0),

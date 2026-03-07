@@ -717,7 +717,7 @@ int daBaseNpc_moveBgActor_c::MoveBGCreateHeap() {
         return 1;
     }
 
-    mpBgw = JKR_NEW dBgW();
+    mpBgw = new dBgW();
 
     if (mpBgw != NULL && !mpBgw->Set((cBgD_t*)dComIfG_getObjectRes(m_name, m_dzb_id), 1, &mBgMtx)) {
         if (m_set_func != NULL) {

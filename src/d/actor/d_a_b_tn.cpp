@@ -4938,7 +4938,7 @@ int daB_TN_c::CreateHeap() {
         modelData = (J3DModelData*)dComIfG_getObjectRes("B_tnp2", BMDR_TN2);
     }
 
-    mpModelMorf2 = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpModelMorf2 = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                         (J3DAnmTransform*)dComIfG_getObjectRes("B_tn", BCK_TNA_WAIT), 0, 1.0f,
                                         0, -1, &mSound, 0x80000, 0x11000084);
     if (mpModelMorf2 == NULL || mpModelMorf2->getModel() == NULL) {
@@ -4946,7 +4946,7 @@ int daB_TN_c::CreateHeap() {
     }
 
     if (mType == 1) {
-        mpBrkAnm = JKR_NEW mDoExt_brkAnm();
+        mpBrkAnm = new mDoExt_brkAnm();
         if (mpBrkAnm == NULL) {
             return 0;
         }
@@ -4986,7 +4986,7 @@ int daB_TN_c::CreateHeap() {
             }
 
             if (sVar1 != -1) {
-                mpBrkAnms[i] = JKR_NEW mDoExt_brkAnm();
+                mpBrkAnms[i] = new mDoExt_brkAnm();
                 mDoExt_brkAnm* myanm = mpBrkAnms[i];
 
                 if (myanm == NULL) {
@@ -5006,7 +5006,7 @@ int daB_TN_c::CreateHeap() {
 
     modelData = (J3DModelData*)dComIfG_getObjectRes(mArcName, tn_part_model_id[mType * 0x10 + 0xf]);
 
-    mpModelMorf1 = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpModelMorf1 = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                         (J3DAnmTransform*)dComIfG_getObjectRes("B_tn", BCK_TNB_SWORD_B_PULL_A), 0, 1.0f,
                                         0, -1, &mSound, 0x80000, 0x11000084);
     if (mpModelMorf1 == NULL || mpModelMorf1->getModel() == NULL) {

@@ -48,14 +48,14 @@ dMsgScrnExplain_c::dMsgScrnExplain_c(STControl* i_stick, u8 param_1, bool i_isUs
     mKeyWaitTimer = 0;
     field_0x67 = param_3;
 
-    mpString_c = JKR_NEW dMsgString_c();
+    mpString_c = new dMsgString_c();
     JUT_ASSERT(79, mpString_c != NULL);
 
-    mpOutFont = JKR_NEW COutFont_c(0);
+    mpOutFont = new COutFont_c(0);
     JUT_ASSERT(83, mpOutFont != NULL);
     mpOutFont->createPane();
 
-    mpScreen = JKR_NEW J2DScreen();
+    mpScreen = new J2DScreen();
     JUT_ASSERT(88, mpScreen != NULL);
 
     #if PLATFORM_GCN
@@ -68,7 +68,7 @@ dMsgScrnExplain_c::dMsgScrnExplain_c(STControl* i_stick, u8 param_1, bool i_isUs
     JUT_ASSERT(98, fg != false);
     dPaneClass_showNullPane(mpScreen);
 
-    mpTxScreen = JKR_NEW J2DScreen();
+    mpTxScreen = new J2DScreen();
     JUT_ASSERT(102, mpTxScreen != NULL);
     field_0x48 = 608.0f;
 
@@ -82,10 +82,10 @@ dMsgScrnExplain_c::dMsgScrnExplain_c(STControl* i_stick, u8 param_1, bool i_isUs
         JUT_ASSERT(119, fg != false);
         dPaneClass_showNullPane(mpTxScreen);
 
-        mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3line'), 0, NULL);
+        mpTm_c[0] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3line'), 0, NULL);
         JUT_ASSERT(124, mpTm_c[0] != NULL);
 
-        mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, 't3_s', 0, NULL);
+        mpTm_c[1] = new CPaneMgr(mpTxScreen, 't3_s', 0, NULL);
         JUT_ASSERT(127, mpTm_c[1] != NULL);
 
         mpTmr_c[0] = NULL;
@@ -113,18 +113,18 @@ dMsgScrnExplain_c::dMsgScrnExplain_c(STControl* i_stick, u8 param_1, bool i_isUs
         field_0x50 = 0.0f;
 
         if (dComIfGs_getOptRuby() == 0) {
-            mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3flin'), 0, NULL);
-            mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s'), 0, NULL);
+            mpTm_c[0] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3flin'), 0, NULL);
+            mpTm_c[1] = new CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s'), 0, NULL);
 
-            mpTmr_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f'), 0, NULL);
-            mpTmr_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_s'), 0, NULL);
+            mpTmr_c[0] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f'), 0, NULL);
+            mpTmr_c[1] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_s'), 0, NULL);
 
             mpTxScreen->search(MULTI_CHAR('n_3line'))->hide();
             mpTxScreen->search(MULTI_CHAR('n_3fline'))->show();
             mpTxScreen->search(MULTI_CHAR('n_e4line'))->hide();
         } else {
-            mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3line'), 0, NULL);
-            mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, 't3_s', 0, NULL);
+            mpTm_c[0] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3line'), 0, NULL);
+            mpTm_c[1] = new CPaneMgr(mpTxScreen, 't3_s', 0, NULL);
 
             mpTmr_c[0] = NULL;
             mpTmr_c[1] = NULL;
@@ -136,10 +136,10 @@ dMsgScrnExplain_c::dMsgScrnExplain_c(STControl* i_stick, u8 param_1, bool i_isUs
 #else
         field_0x50 = -10.0f;
 
-        mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_e4lin'), 0, NULL);
+        mpTm_c[0] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_e4lin'), 0, NULL);
         JUT_ASSERT(162, mpTm_c[0] != NULL);
 
-        mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, 't4_s', 0, NULL);
+        mpTm_c[1] = new CPaneMgr(mpTxScreen, 't4_s', 0, NULL);
         JUT_ASSERT(165, mpTm_c[1] != NULL);
 
         mpTmr_c[0] = NULL;
@@ -182,27 +182,27 @@ dMsgScrnExplain_c::dMsgScrnExplain_c(STControl* i_stick, u8 param_1, bool i_isUs
         g_MsgObject_HIO_c.mTextPosX + mpScreen->search(MULTI_CHAR('mg_null'))->getBounds().i.x,
         g_MsgObject_HIO_c.mTextPosY + mpScreen->search(MULTI_CHAR('mg_null'))->getBounds().i.y);
 
-    mpArw_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('set_ya_n'), 0, NULL);
+    mpArw_c = new CPaneMgr(mpScreen, MULTI_CHAR('set_ya_n'), 0, NULL);
     JUT_ASSERT(241, mpArw_c != NULL);
 
-    mpMg_c[0] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('mg_null'), 0, NULL);
+    mpMg_c[0] = new CPaneMgr(mpScreen, MULTI_CHAR('mg_null'), 0, NULL);
     JUT_ASSERT(244, mpMg_c[0] != NULL);
 
-    mpMg_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_null'), 0, NULL);
+    mpMg_c[1] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_null'), 0, NULL);
     JUT_ASSERT(247, mpMg_c[1] != NULL);
 
-    mpArw_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('set_ya_n'), 0, NULL);
-    mpMg_c[0] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('mg_null'), 0, NULL);
-    mpMg_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_null'), 0, NULL);
-    mpRoot_c[0] = JKR_NEW CPaneMgr(mpScreen, 'ROOT', 2, NULL);
+    mpArw_c = new CPaneMgr(mpScreen, MULTI_CHAR('set_ya_n'), 0, NULL);
+    mpMg_c[0] = new CPaneMgr(mpScreen, MULTI_CHAR('mg_null'), 0, NULL);
+    mpMg_c[1] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_null'), 0, NULL);
+    mpRoot_c[0] = new CPaneMgr(mpScreen, 'ROOT', 2, NULL);
     JUT_ASSERT(250, mpRoot_c[0] != NULL);
 
-    mpRoot_c[1] = JKR_NEW CPaneMgr(mpTxScreen, 'ROOT', 2, NULL);
+    mpRoot_c[1] = new CPaneMgr(mpTxScreen, 'ROOT', 2, NULL);
     JUT_ASSERT(253, mpRoot_c[1] != NULL);
 
     if (i_isUseBackTex == true) {
         ResTIMG* texResource = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "tt_block8x8.bti");
-        mpBackTex = JKR_NEW J2DPicture(texResource);
+        mpBackTex = new J2DPicture(texResource);
         JUT_ASSERT(259, mpBackTex != NULL);
         mpBackTex->setBlackWhite(JUtility::TColor(0, 0, 0, 0),
                                  JUtility::TColor(0, 0, 0, 0xff));
@@ -211,11 +211,11 @@ dMsgScrnExplain_c::dMsgScrnExplain_c(STControl* i_stick, u8 param_1, bool i_isUs
         mpBackTex = NULL;
     }
 
-    mpArrow_c = JKR_NEW dMsgScrnArrow_c();
+    mpArrow_c = new dMsgScrnArrow_c();
     JUT_ASSERT(269, mpArrow_c != NULL);
 
     if (i_stick != NULL) {
-        mpSelect_c = JKR_NEW dMsgScrn3Select_c();
+        mpSelect_c = new dMsgScrn3Select_c();
         JUT_ASSERT(274, mpSelect_c != NULL);
     } else {
         mpSelect_c = NULL;
@@ -229,49 +229,49 @@ dMsgScrnExplain_c::dMsgScrnExplain_c(STControl* i_stick, u8 param_1, bool i_isUs
 }
 
 dMsgScrnExplain_c::~dMsgScrnExplain_c() {
-    JKR_DELETE(mpString_c);
+    delete mpString_c;
     mpString_c = NULL;
 
-    JKR_DELETE(mpOutFont);
+    delete mpOutFont;
     mpOutFont = NULL;
 
-    JKR_DELETE(mpScreen);
+    delete mpScreen;
     mpScreen = NULL;
 
-    JKR_DELETE(mpTxScreen);
+    delete mpTxScreen;
     mpTxScreen = NULL;
 
-    JKR_DELETE(mpArw_c);
+    delete mpArw_c;
     mpArw_c = NULL;
 
     for (int i = 0; i < 2; i++) {
-        JKR_DELETE(mpTm_c[i]);
+        delete mpTm_c[i];
         mpTm_c[i] = NULL;
 
         if (mpTmr_c[i] != NULL) {
-            JKR_DELETE(mpTmr_c[i]);
+            delete mpTmr_c[i];
             mpTmr_c[i] = NULL;
         }
 
-        JKR_DELETE(mpMg_c[i]);
+        delete mpMg_c[i];
         mpMg_c[i] = NULL;
 
-        JKR_DELETE(mpRoot_c[i]);
+        delete mpRoot_c[i];
         mpRoot_c[i] = NULL;
     }
 
     if (mpBackTex != NULL) {
-        JKR_DELETE(mpBackTex);
+        delete mpBackTex;
         mpBackTex = NULL;
     }
 
     if (mpArrow_c != NULL) {
-        JKR_DELETE(mpArrow_c);
+        delete mpArrow_c;
         mpArrow_c = NULL;
     }
 
     if (mpSelect_c) {
-        JKR_DELETE(mpSelect_c);
+        delete mpSelect_c;
         mpSelect_c = NULL;
     }
 

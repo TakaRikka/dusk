@@ -157,7 +157,7 @@ int daObjIceLeaf_c::CreateHeap() {
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 4);
     JUT_ASSERT(0x196, pbck != NULL);
 
-    mpBck = JKR_NEW mDoExt_bckAnm();
+    mpBck = new mDoExt_bckAnm();
     if (mpBck == NULL || !mpBck->init(pbck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
         return 0;
     }

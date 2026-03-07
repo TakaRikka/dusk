@@ -605,7 +605,7 @@ int daNpc_zrA_c::CreateHeap() {
         }
         model_flag = 0;
     }
-    mAnm_p = JKR_NEW mDoExt_McaMorfSO(model_data, NULL, NULL, NULL, -1, 1.0f, 0, -1,
+    mAnm_p = new mDoExt_McaMorfSO(model_data, NULL, NULL, NULL, -1, 1.0f, 0, -1,
                                   &mCreatureSound, model_flag, 0x11020285);
     if (mAnm_p != NULL && mAnm_p->getModel() == NULL) {
         mAnm_p->stopZelAnime();
@@ -633,7 +633,7 @@ int daNpc_zrA_c::CreateHeap() {
     }
     model->setUserArea((uintptr_t)this);
 
-    mpMatAnm = JKR_NEW daNpcF_MatAnm_c();
+    mpMatAnm = new daNpcF_MatAnm_c();
     if (mpMatAnm == NULL) {
         return 0;
     }

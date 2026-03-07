@@ -487,7 +487,7 @@ static int daE_ZS_Delete(daE_ZS_c* i_this) {
 int daE_ZS_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes("E_ZS", 0xC);
     JUT_ASSERT(0x3e9, modelData != NULL);
-    mpMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_ZS", 4),
+    mpMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_ZS", 4),
                                   1, 1.0f, 0, -1, &mSound, 0,0x11000084);
     if (mpMorf == NULL) {
         return 0;

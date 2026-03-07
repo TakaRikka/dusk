@@ -91,7 +91,7 @@ JUTException::JUTException(JUTDirectPrint* directPrint)
 
 JUTException* JUTException::create(JUTDirectPrint* directPrint) {
     if (!sErrorManager) {
-        sErrorManager = JKR_NEW_ARGS (JKRGetSystemHeap(), 0) JUTException(directPrint);
+        sErrorManager = new (JKRGetSystemHeap(), 0) JUTException(directPrint);
         sErrorManager->resume();
     }
 
@@ -778,7 +778,7 @@ void JUTException::createFB() {
 
     void* begin = (void*)ALIGN_PREV((uintptr_t)end - size, 32);
     void* object = (void*)ALIGN_PREV((intptr_t)begin - sizeof(JUTExternalFB), 32);
-    JKR_NEW_ARGS (object) JUTExternalFB(renderMode, GX_GM_1_7, begin, size);
+    new (object) JUTExternalFB(renderMode, GX_GM_1_7, begin, size);
 
     mDirectPrint->changeFrameBuffer(begin, renderMode->fbWidth, renderMode->efbHeight);
     VIConfigure(renderMode);
@@ -820,7 +820,7 @@ void JUTException::appendMapFile(char const* path) {
         }
     }
 
-    JUTExMapFile* mapFile = JKR_NEW JUTExMapFile((char*)path);
+    JUTExMapFile* mapFile = new JUTExMapFile((char*)path);
     sMapFileList.append(&mapFile->mLink);
 }
 

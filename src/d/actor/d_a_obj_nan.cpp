@@ -62,14 +62,14 @@ static int const l_nan_btk_index[2] = {
 inline int daObjNAN_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("I_Nan", 9);
     JUT_ASSERT(254, modelData != NULL);
-    mMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                        (J3DAnmTransform*)dComIfG_getObjectRes("I_Nan", 6), 2, 1.0f,
                                        0, -1, &mCreatureSound, 0, 0x11000284);
     if (mMorf == NULL || mMorf->getModel() == NULL) {
         return 0;
     }
     J3DModel* model = mMorf->getModel();
-    mBrk = JKR_NEW mDoExt_brkAnm();
+    mBrk = new mDoExt_brkAnm();
     if (mBrk == NULL) {
         return 0;
     }
@@ -78,7 +78,7 @@ inline int daObjNAN_c::CreateHeap() {
     if (mBrk->init(model->getModelData(), anmRegKey, 1, 2, 1.0f, 0, -1) == 0) {
         return 0;
     }
-    mBtk = JKR_NEW mDoExt_btkAnm();
+    mBtk = new mDoExt_btkAnm();
     if (mBtk == NULL) {
         return 0;
     }

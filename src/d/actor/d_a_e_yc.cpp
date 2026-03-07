@@ -742,7 +742,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     e_yc_class* _this = static_cast<e_yc_class*>(i_this);
 
     _this->mpMorf =
-        JKR_NEW mDoExt_McaMorfSO(static_cast<J3DModelData*>(dComIfG_getObjectRes("E_yc", 24)), NULL,
+        new mDoExt_McaMorfSO(static_cast<J3DModelData*>(dComIfG_getObjectRes("E_yc", 24)), NULL,
                              NULL, static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("E_yc", 21)),
                              2, 1.0f, 0, -1, &_this->mCreatureSound, 0x80000, 0x11000084);
     if (_this->mpMorf == NULL || _this->mpMorf->getModel() == NULL) {

@@ -197,7 +197,7 @@ daObjIsuChild_c::daObjIsuChild_c() {
 daObjIsuChild_c::~daObjIsuChild_c() {}
 
 int daObjIsuChild_c::createHeap() {
-    mpBgW = JKR_NEW dBgW();
+    mpBgW = new dBgW();
     if (mpBgW == NULL) {
         return 0;
     }

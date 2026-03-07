@@ -141,7 +141,7 @@ int daSyRock_c::CreateHeap() {
         return 0;
     }
 
-    mpBrokenCollision = JKR_NEW dBgW;
+    mpBrokenCollision = new dBgW;
 
     if (!mpBrokenCollision || mpBrokenCollision->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("syourock", 9)), 1, &mBgMtx)) {
         mpBrokenCollision = NULL;

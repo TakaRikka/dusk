@@ -174,7 +174,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
         return 0;
     }
     if (i_this->home.angle.x == 0) {
-        i_this->mBgW = JKR_NEW dBgW();
+        i_this->mBgW = new dBgW();
         if (i_this->mBgW == NULL) {
             return 0;
         }

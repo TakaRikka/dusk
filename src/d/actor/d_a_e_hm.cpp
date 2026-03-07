@@ -56,7 +56,7 @@ void daE_HM_HIO_c::genMessage(JORMContext* ctx) {
 int daE_HM_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_HM", 17);
     JUT_ASSERT(0xbf, modelData != NULL);
-    mAnm_p = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mAnm_p = new mDoExt_McaMorfSO(modelData, NULL, NULL,
         (J3DAnmTransform*)dComIfG_getObjectRes("E_HM", 13), 2, 1.0f, 0, -1, &mSound,
         0x80000, 0x11000284);
     if (mAnm_p == NULL || mAnm_p->getModel() == NULL) {
@@ -65,7 +65,7 @@ int daE_HM_c::CreateHeap() {
 
     J3DModel* model = mAnm_p->getModel();
 
-    mpBrkAnm = JKR_NEW mDoExt_brkAnm();
+    mpBrkAnm = new mDoExt_brkAnm();
     if (mpBrkAnm == NULL) {
         return 0;
     }
@@ -74,7 +74,7 @@ int daE_HM_c::CreateHeap() {
         return 0;
     }
 
-    mpBtkAnm = JKR_NEW mDoExt_btkAnm();
+    mpBtkAnm = new mDoExt_btkAnm();
     if (mpBtkAnm == NULL) {
         return 0;
     }

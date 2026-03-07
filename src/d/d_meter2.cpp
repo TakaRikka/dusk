@@ -183,7 +183,7 @@ int dMeter2_c::_create() {
     field_0x1ac = dMeter2Info_isUseButton(16);
     field_0x19a = 0;
 
-    mpMeterDraw = JKR_NEW dMeter2Draw_c(mpHeap);
+    mpMeterDraw = new dMeter2Draw_c(mpHeap);
 
     field_0x130 = mpMeterDraw->getNowLightDropRateCalc();
     mpHeap->getTotalFreeSize();
@@ -222,7 +222,7 @@ int dMeter2_c::_create() {
 
     mpMap = NULL;
     if (dMeterMap_c::isEnableDispMapAndMapDispSizeTypeNo()) {
-        mpMap = JKR_NEW dMeterMap_c(mpMeterDraw->getMainScreenPtr());
+        mpMap = new dMeterMap_c(mpMeterDraw->getMainScreenPtr());
     } else {
         if (g_meter2_info.mMapStatus == 2) {
             g_meter2_info.mMapStatus = 0;
@@ -361,30 +361,30 @@ int dMeter2_c::_delete() {
 
     mpHeap->getTotalFreeSize();
     if (mpMap != NULL) {
-        JKR_DELETE(mpMap);
+        delete mpMap;
         mpMap = NULL;
     }
 
     mpHeap->getTotalFreeSize();
     mDoExt_setCurrentHeap(mpSubHeap);
     if (mpSubContents != NULL) {
-        JKR_DELETE(mpSubContents);
+        delete mpSubContents;
         mpSubContents = NULL;
     }
 
     if (mpSubSubContents != NULL) {
-        JKR_DELETE(mpSubSubContents);
+        delete mpSubSubContents;
         mpSubSubContents = NULL;
     }
 
     mpHeap->getTotalFreeSize();
     if (field_0x11c != NULL) {
-        JKR_DELETE(field_0x11c);
+        delete field_0x11c;
         field_0x11c = NULL;
     }
 
     mDoExt_setCurrentHeap(heap);
-    JKR_DELETE(mpMeterDraw);
+    delete mpMeterDraw;
     mpMeterDraw = NULL;
 
     fopMsgM_destroyExpHeap(mpSubHeap);
@@ -399,7 +399,7 @@ int dMeter2_c::emphasisButtonDelete() {
         mpEmpButton->hideAll();
 
         if (heap != NULL) {
-            JKR_DELETE(mpEmpButton);
+            delete mpEmpButton;
             mpEmpButton = NULL;
             heap->freeAll();
             dComIfGp_offHeapLockFlag(8);
@@ -2335,7 +2335,7 @@ void dMeter2_c::checkSubContents() {
         killSubContents(4);
 
         if (mSubContentType == 0) {
-            mpSubContents = JKR_NEW dScope_c(0);
+            mpSubContents = new dScope_c(0);
             mSubContentType = 4;
         }
         return;
@@ -2347,7 +2347,7 @@ void dMeter2_c::checkSubContents() {
 
             if (mSubContentType == 0) {
                 mpSubHeap->getTotalFreeSize();
-                mpSubContents = JKR_NEW dMeterHakusha_c(mpMeterDraw->getMainScreenPtr());
+                mpSubContents = new dMeterHakusha_c(mpMeterDraw->getMainScreenPtr());
                 mSubContentType = 1;
             }
             return;
@@ -2358,8 +2358,8 @@ void dMeter2_c::checkSubContents() {
         killSubContents(5);
 
         if (mSubContentType == 0) {
-            mpSubContents = JKR_NEW dMeterHaihai_c(0);
-            mpSubSubContents = JKR_NEW dMeterString_c(dMeter2Info_getMeterStringType());
+            mpSubContents = new dMeterHaihai_c(0);
+            mpSubSubContents = new dMeterString_c(dMeter2Info_getMeterStringType());
             mSubContentType = 5;
             mSubContentsStringType = dMeter2Info_getMeterStringType();
         }
@@ -2367,14 +2367,14 @@ void dMeter2_c::checkSubContents() {
         killSubContents(2);
 
         if (mSubContentType == 0) {
-            mpSubContents = JKR_NEW dMeterHaihai_c(0);
+            mpSubContents = new dMeterHaihai_c(0);
             mSubContentType = 2;
         }
     } else if (dMeter2Info_getMeterStringType() != 0) {
         killSubContents(3);
 
         if (mSubContentType == 0) {
-            mpSubContents = JKR_NEW dMeterString_c(dMeter2Info_getMeterStringType());
+            mpSubContents = new dMeterString_c(dMeter2Info_getMeterStringType());
             mSubContentType = 3;
         }
     } else if (mSubContentType == 4) {
@@ -2382,13 +2382,13 @@ void dMeter2_c::checkSubContents() {
             bool free_heap = false;
 
             if (mpSubContents != NULL && mpSubContents->isDead()) {
-                JKR_DELETE(mpSubContents);
+                delete mpSubContents;
                 mpSubContents = NULL;
                 free_heap = true;
             }
 
             if (mpSubSubContents != NULL && mpSubSubContents->isDead()) {
-                JKR_DELETE(mpSubSubContents);
+                delete mpSubSubContents;
                 mpSubSubContents = NULL;
                 free_heap = true;
             }
@@ -2405,13 +2405,13 @@ void dMeter2_c::checkSubContents() {
         bool free_heap = false;
 
         if (mpSubContents != NULL) {
-            JKR_DELETE(mpSubContents);
+            delete mpSubContents;
             mpSubContents = NULL;
             free_heap = true;
         }
 
         if (mpSubSubContents != NULL) {
-            JKR_DELETE(mpSubSubContents);
+            delete mpSubSubContents;
             mpSubSubContents = NULL;
             free_heap = true;
         }
@@ -2441,7 +2441,7 @@ void dMeter2_c::check2DContents() {
                 field_0x108 = mDoExt_setCurrentHeap(dComIfGp_getSubHeap2D(8));
             }
 
-            mpEmpButton = JKR_NEW dMeterButton_c();
+            mpEmpButton = new dMeterButton_c();
         }
     } else if (dComIfGp_isHeapLockFlag() == 5 && !dMeter2Info_isFloatingMessageVisible()) {
         if (!mpMeterDraw->isEmphasisA() && !mpMeterDraw->isEmphasisB() &&
@@ -2450,7 +2450,7 @@ void dMeter2_c::check2DContents() {
             !mpMeterDraw->isEmphasisS() && !mpMeterDraw->isEmphasisX() &&
             !mpMeterDraw->isEmphasisY() && !mpMeterDraw->isEmphasisBin() && mpEmpButton->isClose())
         {
-            JKR_DELETE(mpEmpButton);
+            delete mpEmpButton;
             mpEmpButton = NULL;
             dComIfGp_getSubHeap2D(8)->freeAll();
 
@@ -2988,13 +2988,13 @@ void dMeter2_c::killSubContents(u8 param_0) {
         bool free = false;
 
         if (mpSubContents != NULL) {
-            JKR_DELETE(mpSubContents);
+            delete mpSubContents;
             mpSubContents = NULL;
             free = true;
         }
 
         if (mpSubSubContents != NULL) {
-            JKR_DELETE(mpSubSubContents);
+            delete mpSubSubContents;
             mpSubSubContents = NULL;
             free = true;
         }

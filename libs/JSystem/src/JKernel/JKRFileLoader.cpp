@@ -6,8 +6,6 @@
 
 #include <cstring>
 #include <cctype>
-#include <string>
-#include "JSystem/JKernel/JKRHeap.h"
 #include "global.h"
 
 JKRFileLoader* JKRFileLoader::sCurrentVolume;
@@ -25,7 +23,7 @@ JKRFileLoader::~JKRFileLoader() {
 void JKRFileLoader::unmount(void) {
     if (mMountCount != 0) {
         if (--mMountCount == 0) {
-            JKR_DELETE(this);
+            delete this;
         }
     }
 }

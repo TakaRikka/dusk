@@ -93,7 +93,7 @@ int daObj_Bed_c::CreateHeap() {
     if (mpModel == NULL) {
         return 0;
     }
-    mpCollider = JKR_NEW dBgW();
+    mpCollider = new dBgW();
     if (mpCollider == NULL) {
         return 0;
     }

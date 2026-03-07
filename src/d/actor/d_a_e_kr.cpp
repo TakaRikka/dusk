@@ -2225,7 +2225,7 @@ static int daE_Kr_Delete(e_kr_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_kr_class* kr = (e_kr_class*)i_this;
 
-    kr->mpMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_kr", 24), NULL, NULL,
+    kr->mpMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_kr", 24), NULL, NULL,
                                       (J3DAnmTransform*)dComIfG_getObjectRes("E_kr", 13), 2, 1.0f,
                                       0, -1, &((e_kr_class*)i_this)->mSound, 0x80000, 0x11000084);
     if (kr->mpMorf == NULL || kr->mpMorf->getModel() == NULL) {

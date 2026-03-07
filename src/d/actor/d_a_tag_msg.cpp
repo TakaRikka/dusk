@@ -63,7 +63,7 @@ int daTag_Msg_c::create() {
 }
 
 int daTag_Msg_c::createHeap() {
-    mpHIO = JKR_NEW TAG_MSG_HIO_CLASS();
+    mpHIO = new TAG_MSG_HIO_CLASS();
     if (mpHIO == NULL) {
         return 0;
     }

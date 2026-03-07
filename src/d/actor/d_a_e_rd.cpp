@@ -2472,14 +2472,14 @@ static void e_rd_wb_run_B(e_rd_class* i_this) {
             }
         }
 
-        if (i_this->anm == e_rdb_class::BCK_RB_RGUARD_F || i_this->anm == e_rdb_class::BCK_RB_RDAMAGEB
+        if (i_this->anm == e_rdb_class::BCK_RB_RGUARD_F || i_this->anm == e_rdb_class::BCK_RB_RDAMAGEB 
             || i_this->anm == e_rdb_class::BCK_RB_RGUARD_L || i_this->anm == e_rdb_class::BCK_RB_RGUARD_R) {
             i_this->field_0x9c8 = 0;
 
             if (i_this->anm_p->isStop()) {
                 anm_init(i_this, e_rdb_class::BCK_RB_RRUN, 5.0f, 2, 1.0f);
             }
-        } else if (i_this->anm == e_rdb_class::BCK_RB_RPLAY_RUNR || i_this->anm == e_rdb_class::BCK_RB_RPLAY_RUNL
+        } else if (i_this->anm == e_rdb_class::BCK_RB_RPLAY_RUNR || i_this->anm == e_rdb_class::BCK_RB_RPLAY_RUNL 
                    || i_this->anm == e_rdb_class::BCK_RB_RPLAY_STOP) {
             if ((int)i_this->anm_p->getFrame() == 21) {
                 i_this->sound.startCreatureVoice(Z2SE_EN_RDB_HORN, -1);
@@ -4327,7 +4327,7 @@ static void damage_check(e_rd_class* i_this) {
 
                     s16 cur_health = enemy->health; // unused
                     OS_REPORT(" HIT AT  %d\n", i_this->AtInfo.mAttackPower);
-                    if (i_this->one_hit_kill != 0 && (i_this->AtInfo.mpCollider->ChkAtType(AT_TYPE_SLINGSHOT) ||
+                    if (i_this->one_hit_kill != 0 && (i_this->AtInfo.mpCollider->ChkAtType(AT_TYPE_SLINGSHOT) || 
                         (i_this->AtInfo.mHitType != 1 && i_this->AtInfo.mHitType != 16 && i_this->AtInfo.mHitType != 2))) {
                         i_this->damage_timer = 1000;
                         i_this->action = ACTION_DROP;
@@ -4443,7 +4443,7 @@ static void damage_check(e_rd_class* i_this) {
 
                                 i_this->sound.startCreatureVoice(Z2SE_EN_RDB_V_DAMAGE, -1);
 
-                                if (i_this->anm == e_rdb_class::BCK_RB_RPLAY_RUNL || i_this->anm == e_rdb_class::BCK_RB_RPLAY_RUNR
+                                if (i_this->anm == e_rdb_class::BCK_RB_RPLAY_RUNL || i_this->anm == e_rdb_class::BCK_RB_RPLAY_RUNR 
                                     || i_this->anm == e_rdb_class::BCK_RB_RPLAY_STOP) {
                                     i_this->anm = i_this->field_0x680;
                                     i_this->field_0x680 = 0;
@@ -4921,7 +4921,7 @@ static void e_rd_tag(e_rd_class* i_this) {
             break;
     }
 
-    if (S_find != 0 && (i_this->counter & 31) == 0 && !dComIfGp_event_runCheck() && i_this->dis < 3000.0f && i_this->dis > 500.0f &&
+    if (S_find != 0 && (i_this->counter & 31) == 0 && !dComIfGp_event_runCheck() && i_this->dis < 3000.0f && i_this->dis > 500.0f && 
         i_this->field_0x5bb != 0 && !fopAcM_otherBgCheck(enemy, pla)) {
         rd_count = 0;
         fpcM_Search(s_tag_sub, i_this);
@@ -5647,7 +5647,7 @@ static void action(e_rd_class* i_this) {
             cXyz sc(scale, scale, scale);
             csXyz rot(0, 0, 0);
             for (int i = 0; i < 3; i++) {
-                i_this->enemy_downWtrA[i] = dComIfGp_particle_set(i_this->enemy_downWtrA[i], w_eff_name[i], &ato, &enemy->tevStr,
+                i_this->enemy_downWtrA[i] = dComIfGp_particle_set(i_this->enemy_downWtrA[i], w_eff_name[i], &ato, &enemy->tevStr, 
                                                                 &rot, &sc, 0xFF, 0, -1, NULL, NULL, NULL);
             }
         } else {
@@ -7136,7 +7136,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     J3DModel* model;
 
     if (i_this->actor_set != 0) {
-        i_this->anm_p = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_rdb", e_rdb_class::BMDR_RB), NULL, NULL,
+        i_this->anm_p = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_rdb", e_rdb_class::BMDR_RB), NULL, NULL,
                                                    (J3DAnmTransform*)dComIfG_getObjectRes("E_rdb", e_rdb_class::BCK_RB_RWAIT), 2, 1.0f,
                                                    0, -1, &i_this->sound, 0x80000, 0x11000084);
         if (i_this->anm_p == NULL || i_this->anm_p->getModel() == NULL) {
@@ -7151,7 +7151,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
         }
 
         if (i_this->actor_set == 1) {
-            i_this->mpMorfHornAnm = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_rdb", e_rdb_class::BMDR_RB_HORN),
+            i_this->mpMorfHornAnm = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_rdb", e_rdb_class::BMDR_RB_HORN), 
                                                        NULL, NULL, NULL, 2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000084);
             if (i_this->mpMorfHornAnm == NULL || i_this->mpMorfHornAnm->getModel() == NULL) {
                 return 0;
@@ -7197,7 +7197,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
             }
         }
     } else {
-        i_this->anm_p = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(i_this->resName, BMDR_RD), NULL, NULL,
+        i_this->anm_p = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(i_this->resName, BMDR_RD), NULL, NULL,
                                                    (J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, BCK_RD_WAIT01), 0, 1.0f,
                                                    0, -1, &i_this->sound, 0x80000, 0x11000084);
         if (i_this->anm_p == NULL || i_this->anm_p->getModel() == NULL) {
@@ -7229,7 +7229,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
 
             i_this->arrow->setBaseTRMtx(mDoMtx_stack_c::get());
         } else if (i_this->weapon_type >= 2) {
-            i_this->bow_anm = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(i_this->resName, BMDR_RD_BOW), NULL, NULL,
+            i_this->bow_anm = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(i_this->resName, BMDR_RD_BOW), NULL, NULL,
                                                        (J3DAnmTransform*)dComIfG_getObjectRes(i_this->resName, BCK_RD_BOW_SHOOT), 0, 1.0f,
                                                        0, -1, NULL, 0x80000, 0x11000084);
             if (i_this->bow_anm == NULL || i_this->bow_anm->getModel() == NULL) {
@@ -7384,7 +7384,7 @@ static cPhs_Step daE_RD_Create(fopAc_ac_c* actor) {
             i_this->action = ACTION_BOW_IKKI;
             i_this->timer[0] = 142 + XREG_S(2);
         } else if (i_this->arg2 == 11) {
-            fopAcM_create(PROC_E_RDY, fopAcM_GetParam(actor), &actor->home.pos,
+            fopAcM_create(PROC_E_RDY, fopAcM_GetParam(actor), &actor->home.pos, 
                           fopAcM_GetRoomNo(actor), &actor->home.angle, NULL, -1);
         }
 

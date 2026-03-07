@@ -83,7 +83,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 int daObjTOMBO_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Tombo", 9);
     JUT_ASSERT(259, modelData != NULL);
-    mpMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                   (J3DAnmTransform*)dComIfG_getObjectRes("Tombo", 6), 2, 1.0, 0, -1,
                                   &mCreature, 0, 0x11000284);
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
@@ -91,7 +91,7 @@ int daObjTOMBO_c::CreateHeap() {
     }
 
     J3DModel* morfModel = mpMorf->getModel();
-    mBrk = JKR_NEW mDoExt_brkAnm();
+    mBrk = new mDoExt_brkAnm();
     if (mBrk == NULL) {
         return 0;
     }
@@ -105,7 +105,7 @@ int daObjTOMBO_c::CreateHeap() {
             return 0;
         }
     }
-    mBtk = JKR_NEW mDoExt_btkAnm();
+    mBtk = new mDoExt_btkAnm();
     if (mBtk == NULL) {
         return 0;
     }

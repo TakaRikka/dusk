@@ -92,12 +92,12 @@ int daObjRotStair_c::CreateHeap() {
         }
         J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, l_wtr_btk[i]);
         JUT_ASSERT(245, pbtk != NULL);
-        mBtks[i] = JKR_NEW mDoExt_btkAnm();
+        mBtks[i] = new mDoExt_btkAnm();
         if (mBtks[i] == NULL || mBtks[i]->init(modelData, pbtk, 1, 2, 1.0f, 0, -1) == 0) {
             return 0;
         }
     }
-    mWaterBgw = JKR_NEW dBgW();
+    mWaterBgw = new dBgW();
     if (mWaterBgw == NULL || mWaterBgw->Set((cBgD_t*)dComIfG_getObjectRes(l_arcName, 0xf), 1, &mBgMtx) != 0) {
         mWaterBgw = NULL;
         return 0;

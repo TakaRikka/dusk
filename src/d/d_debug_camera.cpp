@@ -727,7 +727,7 @@ int dDbgCamera_c::makeZevData() {
     field_0xb14 = 0;
 
     if (zevwork::WorkBuffer == NULL) {
-        zevwork::WorkBuffer = JKR_NEW u8[zevwork::WorkSize];
+        zevwork::WorkBuffer = new u8[zevwork::WorkSize];
         if (zevwork::WorkBuffer == NULL) {
             OSReport("debug camera: memory allocate error!! %d byte\n", zevwork::WorkSize);
             return 0;

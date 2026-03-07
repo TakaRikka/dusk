@@ -72,7 +72,7 @@ int daObjWindow_c::CreateHeap() {
         J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, l_bck[mType]);
         JUT_ASSERT(266, pbck != NULL);
 
-        mpBckAnm = JKR_NEW mDoExt_bckAnm();
+        mpBckAnm = new mDoExt_bckAnm();
         if (mpBckAnm == NULL || !mpBckAnm->init(pbck, 1, 2, 1.0f, 0, -1, false)) {
             return 0;
         }

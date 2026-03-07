@@ -1,13 +1,12 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphAnimator/J3DJoint.h"
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
-#include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphAnimator/J3DShapeTable.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "JSystem/J3DGraphBase/J3DShapeMtx.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
-#include "JSystem/JKernel/JKRHeap.h"
 
 #define J3D_ASSERTMSG(LINE, COND, MSG) JUT_ASSERT_MSG(LINE, (COND) != 0, MSG)
 #define J3D_WARN1(LINE, MSG, ARG1) JUT_WARN(LINE, MSG, ARG1)
@@ -42,7 +41,7 @@ s32 J3DModel::entryModelData(J3DModelData* pModelData, u32 mdlFlags, u32 mtxNum)
     int ret = kJ3DError_Success;
 
     mModelData = pModelData;
-    mMtxBuffer = JKR_NEW J3DMtxBuffer();
+    mMtxBuffer = new J3DMtxBuffer();
 
     if (mMtxBuffer == NULL) {
         return kJ3DError_Alloc;
@@ -100,7 +99,7 @@ s32 J3DModel::createShapePacket(J3DModelData* pModelData) {
     J3D_ASSERTMSG(173, pModelData != NULL, "Error : null pointer.");
 
     if (pModelData->getShapeNum() != 0) {
-        mShapePacket = JKR_NEW J3DShapePacket[pModelData->getShapeNum()];
+        mShapePacket = new J3DShapePacket[pModelData->getShapeNum()];
 
         if (mShapePacket == NULL) {
             return kJ3DError_Alloc;
@@ -120,7 +119,7 @@ s32 J3DModel::createMatPacket(J3DModelData* pModelData, u32 mdlFlags) {
     s32 ret = 0;
 
     if (pModelData->getMaterialNum() != 0) {
-        mMatPacket = JKR_NEW J3DMatPacket[pModelData->getMaterialNum()];
+        mMatPacket = new J3DMatPacket[pModelData->getMaterialNum()];
 
         if (mMatPacket == NULL) {
             return kJ3DError_Alloc;

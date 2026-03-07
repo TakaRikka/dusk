@@ -1130,7 +1130,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 
     e_sh_class* sh = (e_sh_class*)i_this;
 
-    sh->mAnm_p = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_sh", 22), NULL, NULL,
+    sh->mAnm_p = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_sh", 22), NULL, NULL,
                                       (J3DAnmTransform*)dComIfG_getObjectRes("E_sh", 14), 2, 1.0f,
                                       0, -1, &sh->mSound, 0x80000, 0x11000084);
 

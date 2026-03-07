@@ -638,12 +638,12 @@ static int daE_MB_Delete(e_mb_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_mb_class* a_this = (e_mb_class*)i_this;
 
-    a_this->mpModelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_mb", 0x19), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_mb", 10), 0, 1.0f, 0, -1, &a_this->mSound, 0x80000, 0x11020084);
+    a_this->mpModelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_mb", 0x19), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_mb", 10), 0, 1.0f, 0, -1, &a_this->mSound, 0x80000, 0x11020084);
     if (a_this->mpModelMorf == NULL || a_this->mpModelMorf->getModel() == NULL) {
         return 0;
     }
 
-    a_this->mpBtp = JKR_NEW mDoExt_btpAnm();
+    a_this->mpBtp = new mDoExt_btpAnm();
     if (a_this->mpBtp == NULL) {
         return cPhs_ERROR_e;
     }
@@ -653,12 +653,12 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return cPhs_ERROR_e;
     }
 
-    a_this->mpBombModelMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_mb", 0x1B), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_mb", 0x15), 0, 1.0f, 0, 1, 0, &a_this->mSound, 0x80000, 0x11000084);
+    a_this->mpBombModelMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_mb", 0x1B), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_mb", 0x15), 0, 1.0f, 0, 1, 0, &a_this->mSound, 0x80000, 0x11000084);
     if (a_this->mpBombModelMorf == NULL || a_this->mpBombModelMorf->getModel() == NULL) {
         return 0;
     }
 
-    a_this->mpBombModel2Morf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_mb", 0x1A), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_mb", 0x14), 0, 1.0f, 0, 1, 0, &a_this->mSound, 0x80000, 0x11000084);
+    a_this->mpBombModel2Morf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("E_mb", 0x1A), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_mb", 0x14), 0, 1.0f, 0, 1, 0, &a_this->mSound, 0x80000, 0x11000084);
     if (a_this->mpBombModel2Morf == NULL || a_this->mpBombModel2Morf->getModel() == NULL) {
         return 0;
     }

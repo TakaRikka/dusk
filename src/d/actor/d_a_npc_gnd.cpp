@@ -180,7 +180,7 @@ int daNpc_Gnd_c::CreateHeap() {
     JUT_ASSERT(433, NULL != mdlData_p);
 
     u32 sp_0x24 = 0x11020285;
-    mpMorf[0] = JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, sp_0x24);
+    mpMorf[0] = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, sp_0x24);
     if (mpMorf[0] != NULL && mpMorf[0]->getModel() == NULL) {
         mpMorf[0]->stopZelAnime();
         mpMorf[0] = NULL;
@@ -197,7 +197,7 @@ int daNpc_Gnd_c::CreateHeap() {
 
     model->setUserArea((uintptr_t)this);
     for (int idx = 0; idx < 2; ++idx) {
-        mpMatAnm[idx] = JKR_NEW daNpcT_MatAnm_c();
+        mpMatAnm[idx] = new daNpcT_MatAnm_c();
         if (mpMatAnm[idx] == NULL) {
             return 0;
         }

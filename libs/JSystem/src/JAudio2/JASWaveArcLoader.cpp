@@ -168,13 +168,13 @@ void JASWaveArc::setFileName(char const* fileName) {
     char* currentDir = JASWaveArcLoader::getCurrentDir();
     size_t length = strlen(currentDir);
     length = length + strlen(fileName);
-    char* path = JKR_NEW_ARGS (JASKernel::getSystemHeap(), -4) char[length + 1];
+    char* path = new (JASKernel::getSystemHeap(), -4) char[length + 1];
     JUT_ASSERT(322, path);
     strcpy(path, currentDir);
     strcat(path, fileName);
     path[length] = '\0';
     int entryNum = DVDConvertPathToEntrynum(path);
-    JKR_DELETE_ARRAY(path);
+    delete[] path;
     if (entryNum < 0) {
         return;
     }

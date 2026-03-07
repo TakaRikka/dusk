@@ -47,7 +47,7 @@ int dMeterString_c::_create() {
         mpMapArchive = dComIfGp_getAllMapArchive();
     }
 
-    mpScreen = JKR_NEW J2DScreen();
+    mpScreen = new J2DScreen();
     JUT_ASSERT(0, mpScreen != NULL);
 
     bool fg = mpScreen->setPriority("zelda_game_image_cow_get_in.blo", 0x20000, mpMapArchive);
@@ -58,13 +58,13 @@ int dMeterString_c::_create() {
     mpGetInBck = (J2DAnmTransformKey*)J2DAnmLoaderDataBase::load(
         JKRGetNameResource("zelda_game_image_cow_get_in.bck", mpMapArchive));
 
-    mpParentPane = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('get_in_n'), 2, NULL);
+    mpParentPane = new CPaneMgr(mpScreen, MULTI_CHAR('get_in_n'), 2, NULL);
     JUT_ASSERT(0, mpParentPane != NULL);
 
-    mpRootPane = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 0, NULL);
+    mpRootPane = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 0, NULL);
     JUT_ASSERT(0, mpRootPane != NULL);
 
-    mpTextPane = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('get_in'), 0, NULL);
+    mpTextPane = new CPaneMgr(mpScreen, MULTI_CHAR('get_in'), 0, NULL);
     JUT_ASSERT(0, mpTextPane != NULL);
 
     static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('get_in_s')))->setFont(mDoExt_getMesgFont());
@@ -141,19 +141,19 @@ void dMeterString_c::draw() {
 }
 
 int dMeterString_c::_delete() {
-    JKR_DELETE(mpScreen);
+    delete mpScreen;
     mpScreen = NULL;
 
-    JKR_DELETE(mpGetInBck);
+    delete mpGetInBck;
     mpGetInBck = NULL;
 
-    JKR_DELETE(mpParentPane);
+    delete mpParentPane;
     mpParentPane = NULL;
 
-    JKR_DELETE(mpRootPane);
+    delete mpRootPane;
     mpRootPane = NULL;
 
-    JKR_DELETE(mpTextPane);
+    delete mpTextPane;
     mpTextPane = NULL;
 
     if (field_0x28 != 0) {

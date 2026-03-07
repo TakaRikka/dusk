@@ -5475,7 +5475,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     e_wb_class* i_this = (e_wb_class*)a_this;
 
     i_this->mpModelMorf =
-        JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(i_this->mResName, 0x2e), NULL,
+        new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes(i_this->mResName, 0x2e), NULL,
                              NULL, (J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, 0x28),
                              0, 1.0f, 0, -1, &i_this->mZ2Ride, 0x80000, 0x11000084);
 

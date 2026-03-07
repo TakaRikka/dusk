@@ -22,7 +22,7 @@ dMeterHaihai_c::~dMeterHaihai_c() {
 }
 
 int dMeterHaihai_c::_create() {
-    mpHaihaiScreen = JKR_NEW J2DScreen();
+    mpHaihaiScreen = new J2DScreen();
     JUT_ASSERT(0, mpHaihaiScreen != NULL);
 
     bool fg =
@@ -30,7 +30,7 @@ int dMeterHaihai_c::_create() {
     JUT_ASSERT(0, fg != false);
     dPaneClass_showNullPane(mpHaihaiScreen);
 
-    mpParent = JKR_NEW CPaneMgr(mpHaihaiScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpParent = new CPaneMgr(mpHaihaiScreen, MULTI_CHAR('n_all'), 2, NULL);
     JUT_ASSERT(0, mpParent != NULL);
 
     OSInitFastCast();
@@ -256,19 +256,19 @@ void dMeterHaihai_c::setScale(f32 i_scaleFactor) {
 }
 
 int dMeterHaihai_c::_delete() {
-    JKR_DELETE(mpHaihaiScreen);
+    delete mpHaihaiScreen;
     mpHaihaiScreen = NULL;
 
-    JKR_DELETE(mpParent);
+    delete mpParent;
     mpParent = NULL;
 
-    JKR_DELETE(mpCursorBck);
+    delete mpCursorBck;
     mpCursorBck = NULL;
 
-    JKR_DELETE(mpCursorBtk);
+    delete mpCursorBtk;
     mpCursorBtk = NULL;
 
-    JKR_DELETE(mpCursorBpk);
+    delete mpCursorBpk;
     mpCursorBpk = NULL;
     return 1;
 }

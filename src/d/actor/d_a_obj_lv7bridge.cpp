@@ -196,13 +196,13 @@ int daObjLv7Brg_c::CreateHeap() {
             J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName[mKind], l_bck[i]);
             JUT_ASSERT(411, pbck != NULL);
 
-            mpBck[i] = JKR_NEW mDoExt_bckAnm();
+            mpBck[i] = new mDoExt_bckAnm();
             if (mpBck[i] == NULL || !mpBck[i]->init(pbck, 1, 0, 1.0f, 0, -1, 0)) {
                 return 0;
             }
         }
 
-        mpBgw2 = JKR_NEW dBgW();
+        mpBgw2 = new dBgW();
         if (mpBgw2 != NULL && !mpBgw2->Set((cBgD_t*)dComIfG_getObjectRes(l_arcName[mKind], 0xE), 1, &mBgMtx)) {
             mpBgw2->SetCrrFunc(dBgS_MoveBGProc_Typical);
         } else {

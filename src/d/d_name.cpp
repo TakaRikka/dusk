@@ -104,32 +104,32 @@ dName_c::dName_c(J2DPane* pane) {
 }
 
 dName_c::~dName_c() {
-    JKR_DELETE(stick);
-    JKR_DELETE(nameIn.NameInScr);
+    delete stick;
+    delete nameIn.NameInScr;
     mDoExt_removeMesgFont();
 
     for (int i = 0; i < 8; i++) {
-        JKR_DELETE(mNameCursor[i]);
+        delete mNameCursor[i];
     }
 
     for (int i = 0; i < 65; i++) {
-        JKR_DELETE(mMojiIcon[i]);
+        delete mMojiIcon[i];
     }
 
     for (int i = 0; i < 4; i++) {
         if (mMenuIcon[i] != NULL) {
-            JKR_DELETE(mMenuIcon[i]);
+            delete mMenuIcon[i];
         }
     }
 
-    JKR_DELETE(mCursorColorKey);
-    JKR_DELETE(mCursorTexKey);
-    JKR_DELETE(mSelIcon);
+    delete mCursorColorKey;
+    delete mCursorTexKey;
+    delete mSelIcon;
     archive->removeResourceAll();
 }
 
 void dName_c::_create() {
-    stick = JKR_NEW STControl(5, 2, 2, 1, 0.9f, 0.5f, 0, 0x800);
+    stick = new STControl(5, 2, 2, 1, 0.9f, 0.5f, 0, 0x800);
     stick->setFirstWaitTime(5);
     nameIn.font = mDoExt_getMesgFont();
     g_nmHIO.field_0x4 = -1;
@@ -1345,7 +1345,7 @@ void dName_c::screenSet() {
         MULTI_CHAR('s__n_00'), MULTI_CHAR('s__n_01'), MULTI_CHAR('s__n_02'), MULTI_CHAR('s__n_03'), MULTI_CHAR('s__n_04'), MULTI_CHAR('s__n_05'), MULTI_CHAR('s__n_06'), MULTI_CHAR('s__n_07'),
     };
 
-    nameIn.NameInScr = JKR_NEW J2DScreen();
+    nameIn.NameInScr = new J2DScreen();
     JUT_ASSERT(0, nameIn.NameInScr != NULL);
 
     archive = dComIfGp_getNameResArchive();
@@ -1402,7 +1402,7 @@ void dName_c::screenSet() {
             mMenuText[i] = NULL;
         } else {
         #endif
-            mMenuIcon[i] = JKR_NEW CPaneMgr(nameIn.NameInScr, l_menu_icon_tag[i], 1, NULL);
+            mMenuIcon[i] = new CPaneMgr(nameIn.NameInScr, l_menu_icon_tag[i], 1, NULL);
 
             char buf[16];
             fopMsgM_messageGet(buf, l_menu_msg[i]);
@@ -1429,7 +1429,7 @@ void dName_c::screenSet() {
     mMojiPane = nameIn.NameInScr->search(MULTI_CHAR('moji_n'));
 
     for (u32 i = 0; i < 65; i++) {
-        mMojiIcon[i] = JKR_NEW CPaneMgr(nameIn.NameInScr, l_tagName[i], 2, NULL);
+        mMojiIcon[i] = new CPaneMgr(nameIn.NameInScr, l_tagName[i], 2, NULL);
         ((J2DTextBox*)mMojiIcon[i]->getPanePtr())->setFont(nameIn.font);
         ((J2DTextBox*)mMojiIcon[i]->getPanePtr())->setString(72, "");
         mMojiText[i] = ((J2DTextBox*)mMojiIcon[i]->getPanePtr())->getStringPtr();
@@ -1437,7 +1437,7 @@ void dName_c::screenSet() {
 
     J2DPane* nameTagPane[8];
     for (int i = 0; i < 8; i++) {
-        mNameCursor[i] = JKR_NEW CPaneMgrAlpha(nameIn.NameInScr, l_nameCurTagName[i], 2, NULL);
+        mNameCursor[i] = new CPaneMgrAlpha(nameIn.NameInScr, l_nameCurTagName[i], 2, NULL);
         nameTagPane[i] = nameIn.NameInScr->search(l_nameTagName[i]);
         ((J2DTextBox*)nameTagPane[i])->setFont(nameIn.font);
         ((J2DTextBox*)nameTagPane[i])->setString(72, "");
@@ -1482,7 +1482,7 @@ void dName_c::screenSet() {
     mCharColumn = 0;
     mCharRow = 0;
 
-    mSelIcon = JKR_NEW dSelect_cursor_c(0, 1.0f, NULL);
+    mSelIcon = new dSelect_cursor_c(0, 1.0f, NULL);
     JUT_ASSERT(0, mSelIcon != NULL);
     mSelIcon->setParam(0.82f, 0.77f, 0.05f, 0.4f, 0.4f);
 

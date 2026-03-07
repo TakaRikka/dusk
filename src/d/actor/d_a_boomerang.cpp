@@ -18,7 +18,7 @@ int daBoomerang_sight_c::createHeap() {
     void* tmpData;
     JKRArchive* archive = dComIfG_getObjectResInfo(daAlink_c::getAlinkArcName())->getArchive();
 
-    m_cursorYellowScrn = JKR_NEW J2DScreen();
+    m_cursorYellowScrn = new J2DScreen();
     if (m_cursorYellowScrn == NULL) {
         return 0;
     }
@@ -54,7 +54,7 @@ int daBoomerang_sight_c::createHeap() {
         return 0;
     }
 
-    m_cursorRedScrn = JKR_NEW J2DScreen();
+    m_cursorRedScrn = new J2DScreen();
     if (m_cursorRedScrn == NULL) {
         return 0;
     }
@@ -76,7 +76,7 @@ int daBoomerang_sight_c::createHeap() {
         return 0;
     }
 
-    m_cursorOrangeScrn = JKR_NEW J2DScreen();
+    m_cursorOrangeScrn = new J2DScreen();
     if (m_cursorOrangeScrn == NULL) {
         return 0;
     }

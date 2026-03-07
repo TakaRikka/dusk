@@ -15,8 +15,8 @@ JASBasicWaveBank::JASBasicWaveBank() {
 }
 
 JASBasicWaveBank::~JASBasicWaveBank() {
-    JKR_DELETE_ARRAY(mWaveTable);
-    JKR_DELETE_ARRAY(mWaveGroupArray);
+    delete[] mWaveTable;
+    delete[] mWaveGroupArray;
 }
 
 JASBasicWaveBank::TWaveGroup* JASBasicWaveBank::getWaveGroup(u32 param_0) {
@@ -27,9 +27,9 @@ JASBasicWaveBank::TWaveGroup* JASBasicWaveBank::getWaveGroup(u32 param_0) {
 }
 
 void JASBasicWaveBank::setGroupCount(u32 param_0, JKRHeap* param_1) {
-    JKR_DELETE_ARRAY(mWaveGroupArray);
+    delete[] mWaveGroupArray;
     mGroupCount = param_0;
-    mWaveGroupArray = JKR_NEW_ARGS(param_1, 0) TWaveGroup[param_0];
+    mWaveGroupArray = new(param_1, 0) TWaveGroup[param_0];
     JUT_ASSERT(62, mWaveGroupArray != NULL);
     for (int i = 0; i < mGroupCount; i++) {
         mWaveGroupArray[i].mBank = this;
@@ -37,8 +37,8 @@ void JASBasicWaveBank::setGroupCount(u32 param_0, JKRHeap* param_1) {
 }
 
 void JASBasicWaveBank::setWaveTableSize(u32 param_0, JKRHeap* param_1) {
-    JKR_DELETE_ARRAY(mWaveTable);
-    mWaveTable = JKR_NEW_ARGS(param_1, 0) TWaveHandle[param_0];
+    delete[] mWaveTable;
+    mWaveTable = new(param_1, 0) TWaveHandle[param_0];
     JUT_ASSERT(92, mWaveTable != NULL);
     mHandleCount = param_0;
 }
@@ -98,13 +98,13 @@ JASBasicWaveBank::TWaveGroup::TWaveGroup() {
 }
 
 JASBasicWaveBank::TWaveGroup::~TWaveGroup() {
-    JKR_DELETE_ARRAY(mCtrlWaveArray);
+    delete[] mCtrlWaveArray;
 }
 
 void JASBasicWaveBank::TWaveGroup::setWaveCount(u32 param_0, JKRHeap* param_1) {
-    JKR_DELETE_ARRAY(mCtrlWaveArray);
+    delete[] mCtrlWaveArray;
     mWaveCount = param_0;
-    mCtrlWaveArray = JKR_NEW_ARGS(param_1, 0) TGroupWaveInfo[param_0];
+    mCtrlWaveArray = new(param_1, 0) TGroupWaveInfo[param_0];
     JUT_ASSERT(255, mCtrlWaveArray != NULL);
 }
 

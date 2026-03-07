@@ -1660,7 +1660,7 @@ int daE_GM_c::CreateHeap() {
 
         JUT_ASSERT(2683, modelData != NULL);
 
-        mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_mg", 9),
+        mpModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_mg", 9),
                                            0, 1.0f, 0, -1, &mSound, 0, 0x11000084);
     } else {
         if (mType != TYPE_NORMAL) {
@@ -1678,7 +1678,7 @@ int daE_GM_c::CreateHeap() {
 
         JUT_ASSERT(2714, modelData != NULL);
 
-        mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_gm", BCK_GB_APPEAR),
+        mpModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_gm", BCK_GB_APPEAR),
                                            0, 1.0f, 0, -1, &mSound, 0, 0x11000084);
     }
 

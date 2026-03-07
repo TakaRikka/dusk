@@ -18,7 +18,7 @@ int dkWmark_c::m_nowID;
 int dkWmark_c::create() {
     static cXyz wolfFootScale(1.1f, 1.0f, 0.6f);
 
-    JKR_NEW_ARGS (this) dkWmark_c();
+    new (this) dkWmark_c();
 
     field_0x48a = this->parameters >> 0x10;
     this->parameters &= 0xFFFF;

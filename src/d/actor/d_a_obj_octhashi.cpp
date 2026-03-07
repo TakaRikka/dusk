@@ -341,7 +341,7 @@ static int daObjOCTHASHI_IsDelete(daObjOCTHASHI_c* param_0) {
 }
 
 static void dummy() {
-    JKR_DELETE((cCcD_GStts*)NULL);
+    delete (cCcD_GStts*)NULL;
 }
 
 int daObjOCTHASHI_c::Create() {
