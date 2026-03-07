@@ -11,6 +11,8 @@
 #include <algorithm>
 #endif
 
+#include <cassert>
+
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
 #ifdef __MWERKS__
@@ -515,6 +517,42 @@ bool JKRHeap::isSubHeap(JKRHeap* heap) const {
     return false;
 }
 
+#if TARGET_PC
+[[nodiscard]]
+static void* fallback_alloc(size_t size, size_t align, bool log=true) {
+    if (log) {
+        auto curHeap = JKRHeap::getCurrentHeap();
+        const char* name = "<null>";
+        if (curHeap != nullptr) {
+            name = curHeap->getName();
+        }
+
+        OSReport(
+            "[NEW] JKRHeap (%s) FULL! Fallback to malloc for size %u\n",
+            name, (unsigned)size);
+    }
+
+    if (align == 0) {
+        align = alignof(max_align_t);
+    }
+
+    assert((align & (align - 1)) == 0 && "Alignment must be a power of two");
+
+#if _WIN32
+    // aligned_alloc() is not available on Windows.
+    // NOTE: We always use _aligned_malloc(), even for allocs <= max_align_t,
+    // because otherwise we can't tell in operator delete() whether a pointer needs to be freed with
+    // _aligned_free() or regular free().
+    return _aligned_malloc(size, align);
+#else
+    // aligned_alloc() requires size be a multiple of align. So ensure it is.
+    size = ALIGN_NEXT(size, align);
+    return aligned_alloc(align, size);
+#endif
+
+}
+#endif
+
 #if !TARGET_PC
 void* operator new(size_t size) {
     return JKRHeap::alloc(size, 4, NULL);
@@ -522,20 +560,11 @@ void* operator new(size_t size) {
 #else
 void* operator new(size_t size) {
     if (sCurrentHeap == NULL) {
-#if !_WIN32
-        return aligned_alloc(sizeof(void*), size);
-#else
-        return _aligned_malloc(size, sizeof(void*));
-#endif
+        return fallback_alloc(size, 0, false);
     }
     void* mem = JKRHeap::alloc(size, alignof(max_align_t), NULL);
-    if (mem == NULL) {
-        OSReport("[NEW] JKRHeap FULL! Fallback to malloc for size %u\n", (unsigned)size);
-#if !_WIN32
-        mem = aligned_alloc(sizeof(void*), size);
-#else
-        mem = _aligned_malloc(size, sizeof(void*));
-#endif
+    if (mem == nullptr) {
+        return fallback_alloc(size, 0, true);
     }
     return mem;
 }
@@ -547,20 +576,9 @@ void* operator new(size_t size, int alignment) {
 }
 #else
 void* operator new(size_t size, int alignment) {
-    if (sCurrentHeap == nullptr)
-#if !_WIN32
-        return aligned_alloc(alignment, size);
-#else
-        return _aligned_malloc(size, alignment);
-#endif
     void* mem = JKRHeap::alloc(size, alignment, nullptr);
     if (mem == nullptr) {
-        OSReport("[NEW] JKRHeap FULL! Fallback to aligned_malloc size %u\n", (unsigned)size);
-#if !_WIN32
-        mem = aligned_alloc(alignment, size);
-#else
-        mem = _aligned_malloc(size, alignment);
-#endif
+        return fallback_alloc(size, abs(alignment), true);
     }
     return mem;
 }
@@ -576,19 +594,12 @@ void* operator new[](size_t size) {
 }
 #else
 void* operator new[](size_t size) {
-    if (sCurrentHeap == NULL)
-#if !_WIN32
-        return aligned_alloc(sizeof(void*), size);
-#else
-        return _aligned_malloc(size, sizeof(void*));
-#endif
+    if (sCurrentHeap == NULL) {
+        return fallback_alloc(size, 0, false);
+    }
     void* mem = JKRHeap::alloc(size, alignof(max_align_t), NULL);
     if (mem == NULL) {
-#if !_WIN32
-        mem = aligned_alloc(sizeof(void*), size);
-#else
-        mem = _aligned_malloc(size, sizeof(void*));
-#endif
+        return fallback_alloc(size, 0, true);
     }
     return mem;
 }
@@ -600,19 +611,10 @@ void* operator new[](size_t size, int alignment) {
 }
 #else
 void* operator new[](size_t size, int alignment) {
-    if (sCurrentHeap == nullptr)
-#if !_WIN32
-        return aligned_alloc(std::abs(alignment), size);
-#else
-        return _aligned_malloc(size, std::abs(alignment));
-#endif
     void* mem = JKRHeap::alloc(size, alignment, nullptr);
-    if (mem == nullptr)
-#if !_WIN32
-        return aligned_alloc(std::abs(alignment), size);
-#else
-        return _aligned_malloc(size, std::abs(alignment));
-#endif
+    if (mem == nullptr) {
+        return fallback_alloc(size, 0, true);
+    }
     return mem;
 }
 #endif
