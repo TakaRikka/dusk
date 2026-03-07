@@ -9,6 +9,7 @@
 #include <vi.h>
 #include <cstdio>
 #include "global.h"
+#include "dusk/logging.h"
 
 JUTConsoleManager* JUTConsoleManager::sManager;
 
@@ -509,6 +510,10 @@ extern "C" void JUTReportConsole_f_va(const char* fmt, va_list args) {
         len = vsnprintf(buf, sizeof(buf), fmt, args);
         JUTGetReportConsole()->print(buf);
     }
+
+    #if TARGET_PC
+    DuskLog.info("{}", buf);
+    #endif
 }
 
 extern "C" void JUTReportConsole_f(const char* fmt, ...) {
@@ -542,6 +547,10 @@ void JUTWarningConsole_f_va(const char* fmt, va_list args) {
         len = vsnprintf(buf, sizeof(buf), fmt, args);
         JUTGetWarningConsole()->print(buf);
     }
+
+    #if TARGET_PC
+    DuskLog.warn("{}", buf);
+    #endif
 }
 
 void JUTWarningConsole_f(const char* fmt, ...) {
