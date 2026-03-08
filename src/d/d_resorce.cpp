@@ -331,6 +331,12 @@ int dRes_info_c::loadResource() {
                 const char* tmp = mArchive->mStringTable + (mArchive->findIdxResource(fileIndex)->type_flags_and_name_offset & 0xFFFFFF);
 #endif
                 void* res = mArchive->getIdxResource(fileIndex);
+#if TARGET_PC
+                u32 size = mArchive->findIdxResource(fileIndex)->data_size;
+                std::string fileName = mArchive->mStringTable +
+                        (mArchive->findIdxResource(fileIndex)->type_flags_and_name_offset & 0xFFFFFF);
+                DuskLog.debug("Loading Resource: {} (Size: {})", fileName, size);
+#endif
 
                 if (res == NULL) {
                     OSReport_Error("<%s> res == NULL !!\n",
@@ -476,7 +482,7 @@ int dRes_info_c::loadResource() {
                 } else if (nodeType == 'BCKS' || nodeType == 'BCK ') {
                     struct J3DUnkChunk {
                         u8 unk_data[0x1C];
-                        u32 some_data_offset;
+                        BE(u32) some_data_offset;
                     };
                     J3DUnkChunk* chunk = (J3DUnkChunk*)res;
                     void* bas;

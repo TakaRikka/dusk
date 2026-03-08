@@ -593,10 +593,10 @@ void J3DAnmKeyLoader_v15::setAnmColor(J3DAnmColorKey* param_1, const J3DAnmColor
     param_1->field_0x12 = param_2->field_0x16;
     param_1->mAnmTable =
         JSUConvertOffsetToPtr<J3DAnmColorKeyTable>(param_2, param_2->mTableOffset);
-    param_1->mColorR = JSUConvertOffsetToPtr<s16>(param_2, param_2->mRValOffset);
-    param_1->mColorG = JSUConvertOffsetToPtr<s16>(param_2, param_2->mGValOffset);
-    param_1->mColorB = JSUConvertOffsetToPtr<s16>(param_2, param_2->mBValOffset);
-    param_1->mColorA = JSUConvertOffsetToPtr<s16>(param_2, param_2->mAValOffset);
+    param_1->mColorR = JSUConvertOffsetToPtr<BE(s16)>(param_2, param_2->mRValOffset);
+    param_1->mColorG = JSUConvertOffsetToPtr<BE(s16)>(param_2, param_2->mGValOffset);
+    param_1->mColorB = JSUConvertOffsetToPtr<BE(s16)>(param_2, param_2->mBValOffset);
+    param_1->mColorA = JSUConvertOffsetToPtr<BE(s16)>(param_2, param_2->mAValOffset);
     param_1->mUpdateMaterialID =
         JSUConvertOffsetToPtr<BE(u16)>(param_2, param_2->mUpdateMaterialIDOffset);
     param_1->mUpdateMaterialName.setResource(
@@ -638,32 +638,32 @@ void J3DAnmKeyLoader_v15::setAnmTevReg(J3DAnmTevRegKey* param_1,
     param_1->mAnmCRegKeyTable =
         JSUConvertOffsetToPtr<J3DAnmCRegKeyTable>(param_2, param_2->mCRegTableOffset);
     param_1->mCRegUpdateMaterialID =
-        JSUConvertOffsetToPtr<u16>(param_2, param_2->mCRegUpdateMaterialIDOffset);
+        JSUConvertOffsetToPtr<BE(u16)>(param_2, param_2->mCRegUpdateMaterialIDOffset);
     param_1->mCRegUpdateMaterialName.setResource(
         JSUConvertOffsetToPtr<ResNTAB>(param_2, param_2->mCRegNameTabOffset));
     param_1->mKRegUpdateMaterialNum = param_2->mKRegUpdateMaterialNum;
     param_1->mAnmKRegKeyTable =
         JSUConvertOffsetToPtr<J3DAnmKRegKeyTable>(param_2, param_2->mKRegTableOffset);
     param_1->mKRegUpdateMaterialID =
-        JSUConvertOffsetToPtr<u16>(param_2, param_2->mKRegUpdateMaterialIDOffset);
+        JSUConvertOffsetToPtr<BE(u16)>(param_2, param_2->mKRegUpdateMaterialIDOffset);
     param_1->mKRegUpdateMaterialName.setResource(
         JSUConvertOffsetToPtr<ResNTAB>(param_2, param_2->mKRegNameTabOffset));
     param_1->mCRegDataCountR = param_2->field_0x10;
     param_1->mCRegDataCountG = param_2->field_0x12;
     param_1->mCRegDataCountB = param_2->field_0x14;
     param_1->mCRegDataCountA = param_2->field_0x16;
-    param_1->mAnmCRegDataR = JSUConvertOffsetToPtr<s16>(param_2, param_2->mCRValuesOffset);
-    param_1->mAnmCRegDataG = JSUConvertOffsetToPtr<s16>(param_2, param_2->mCGValuesOffset);
-    param_1->mAnmCRegDataB = JSUConvertOffsetToPtr<s16>(param_2, param_2->mCBValuesOffset);
-    param_1->mAnmCRegDataA = JSUConvertOffsetToPtr<s16>(param_2, param_2->mCAValuesOffset);
+    param_1->mAnmCRegDataR = JSUConvertOffsetToPtr<BE(s16)>(param_2, param_2->mCRValuesOffset);
+    param_1->mAnmCRegDataG = JSUConvertOffsetToPtr<BE(s16)>(param_2, param_2->mCGValuesOffset);
+    param_1->mAnmCRegDataB = JSUConvertOffsetToPtr<BE(s16)>(param_2, param_2->mCBValuesOffset);
+    param_1->mAnmCRegDataA = JSUConvertOffsetToPtr<BE(s16)>(param_2, param_2->mCAValuesOffset);
     param_1->mKRegDataCountR = param_2->field_0x18;
     param_1->mKRegDataCountG = param_2->field_0x1a;
     param_1->mKRegDataCountB = param_2->field_0x1c;
     param_1->mKRegDataCountA = param_2->field_0x1e;
-    param_1->mAnmKRegDataR = JSUConvertOffsetToPtr<s16>(param_2, param_2->mKRValuesOffset);
-    param_1->mAnmKRegDataG = JSUConvertOffsetToPtr<s16>(param_2, param_2->mKGValuesOffset);
-    param_1->mAnmKRegDataB = JSUConvertOffsetToPtr<s16>(param_2, param_2->mKBValuesOffset);
-    param_1->mAnmKRegDataA = JSUConvertOffsetToPtr<s16>(param_2, param_2->mKAValuesOffset);
+    param_1->mAnmKRegDataR = JSUConvertOffsetToPtr<BE(s16)>(param_2, param_2->mKRValuesOffset);
+    param_1->mAnmKRegDataG = JSUConvertOffsetToPtr<BE(s16)>(param_2, param_2->mKGValuesOffset);
+    param_1->mAnmKRegDataB = JSUConvertOffsetToPtr<BE(s16)>(param_2, param_2->mKBValuesOffset);
+    param_1->mAnmKRegDataA = JSUConvertOffsetToPtr<BE(s16)>(param_2, param_2->mKAValuesOffset);
 }
 
 

@@ -822,10 +822,10 @@ public:
     virtual s32 getKind() const { return 11; }
     virtual void getColor(u16, GXColor*) const;
 
-    /* 0x2C */ s16* mColorR;
-    /* 0x30 */ s16* mColorG;
-    /* 0x34 */ s16* mColorB;
-    /* 0x38 */ s16* mColorA;
+    /* 0x2C */ BE(s16)* mColorR;
+    /* 0x30 */ BE(s16)* mColorG;
+    /* 0x34 */ BE(s16)* mColorB;
+    /* 0x38 */ BE(s16)* mColorA;
     /* 0x3C */ J3DAnmColorKeyTable* mAnmTable;
 };
 
@@ -872,20 +872,20 @@ public:
     /* 0x1A */ u16 mKRegDataCountG;
     /* 0x1C */ u16 mKRegDataCountB;
     /* 0x1E */ u16 mKRegDataCountA;
-    /* 0x20 */ u16* mCRegUpdateMaterialID;
+    /* 0x20 */ BE(u16)* mCRegUpdateMaterialID;
     /* 0x24 */ JUTNameTab mCRegUpdateMaterialName;
-    /* 0x34 */ u16* mKRegUpdateMaterialID;
+    /* 0x34 */ BE(u16)* mKRegUpdateMaterialID;
     /* 0x38 */ JUTNameTab mKRegUpdateMaterialName;
     /* 0x48 */ J3DAnmCRegKeyTable* mAnmCRegKeyTable;
     /* 0x4C */ J3DAnmKRegKeyTable* mAnmKRegKeyTable;
-    /* 0x50 */ s16* mAnmCRegDataR;
-    /* 0x54 */ s16* mAnmCRegDataG;
-    /* 0x58 */ s16* mAnmCRegDataB;
-    /* 0x5C */ s16* mAnmCRegDataA;
-    /* 0x60 */ s16* mAnmKRegDataR;
-    /* 0x64 */ s16* mAnmKRegDataG;
-    /* 0x68 */ s16* mAnmKRegDataB;
-    /* 0x6C */ s16* mAnmKRegDataA;
+    /* 0x50 */ BE(s16)* mAnmCRegDataR;
+    /* 0x54 */ BE(s16)* mAnmCRegDataG;
+    /* 0x58 */ BE(s16)* mAnmCRegDataB;
+    /* 0x5C */ BE(s16)* mAnmCRegDataA;
+    /* 0x60 */ BE(s16)* mAnmKRegDataR;
+    /* 0x64 */ BE(s16)* mAnmKRegDataG;
+    /* 0x68 */ BE(s16)* mAnmKRegDataB;
+    /* 0x6C */ BE(s16)* mAnmKRegDataA;
 };  // Size: 0x70
 
 /**
