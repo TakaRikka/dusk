@@ -587,6 +587,9 @@ public:
     virtual void patchTexNoAndTexCoordScale() {}
     virtual void ptrToIndex() = 0;
     virtual void indexToPtr() = 0;
+#if TARGET_PC
+    virtual void loadTexture() = 0;
+#endif
     virtual u32 getType() = 0;
     virtual s32 countDLSize() { return 0; }
     virtual void setTexNo(u32, u16 const*) {}
@@ -644,6 +647,7 @@ public:
     virtual void reset(J3DTevBlock*) {}
     virtual void ptrToIndex() {}
     virtual void indexToPtr() { indexToPtr_private(mTexNoOffset); }
+    virtual void loadTexture() {}
     virtual u32 getType() { return 'TVNL'; }
     virtual ~J3DTevBlockNull() {}
 };
@@ -671,6 +675,9 @@ public:
     virtual void patchTevReg();
     virtual void patchTexNoAndTexCoordScale();
     virtual void ptrToIndex();
+#if TARGET_PC
+    virtual void loadTexture();
+#endif
     virtual void indexToPtr() { indexToPtr_private(mTexNoOffset); }
     virtual u32 getType() { return 'TVPT'; }
     virtual void setTevStageNum(u8 const* num) {
@@ -814,6 +821,9 @@ public:
     virtual void patchTexNoAndTexCoordScale();
     virtual void ptrToIndex() {}
     virtual void indexToPtr() { indexToPtr_private(mTexNoOffset); }
+#if TARGET_PC
+    virtual void loadTexture();
+#endif
     virtual u32 getType() { return 'TVB1'; }
     virtual s32 countDLSize();
     virtual void setTexNo(u32 idx, u16 const* no) {
@@ -904,6 +914,9 @@ public:
     virtual void patchTexNoAndTexCoordScale();
     virtual void ptrToIndex() {}
     virtual void indexToPtr() { indexToPtr_private(mTexNoOffset); }
+#if TARGET_PC
+    virtual void loadTexture();
+#endif
     virtual u32 getType() { return 'TVB2'; }
     virtual s32 countDLSize();
     virtual void setTexNo(u32 idx, u16 const* texNo) {
@@ -1080,6 +1093,9 @@ public:
     virtual void patchTexNoAndTexCoordScale();
     virtual void ptrToIndex() {}
     virtual void indexToPtr() { indexToPtr_private(mTexNoOffset); }
+#if TARGET_PC
+    virtual void loadTexture();
+#endif
     virtual u32 getType() { return 'TVB4'; }
     virtual s32 countDLSize();
     virtual void setTexNo(u32 idx, u16 const* texNo) {
@@ -1256,6 +1272,9 @@ public:
     virtual void patchTexNoAndTexCoordScale();
     virtual void ptrToIndex();
     virtual void indexToPtr() { indexToPtr_private(mTexNoOffset); }
+#if TARGET_PC
+    virtual void loadTexture();
+#endif
     virtual u32 getType() { return 'TV16'; }
     virtual s32 countDLSize();
     virtual void setTexNo(u32 idx, u16 const* texNo) {

@@ -1,11 +1,12 @@
 #include "Z2AudioCS/SpkSystem.h"
 
-#include "Z2AudioCS/SpkMixingBuffer.h"
-#include "Z2AudioCS/SpkSound.h"
-#include "Z2AudioCS/SpkSpeakerCtrl.h"
+#include "../../libs/JSystem/include/JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JAudio2/JASGadget.h"
 #include "JSystem/JAudio2/JASHeapCtrl.h"
 #include "JSystem/JKernel/JKRHeap.h"
+#include "Z2AudioCS/SpkMixingBuffer.h"
+#include "Z2AudioCS/SpkSound.h"
+#include "Z2AudioCS/SpkSpeakerCtrl.h"
 
 template<> SpkSystem* JASGlobalInstance<SpkSystem>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 template<> SpkSoundHolder* JASGlobalInstance<SpkSoundHolder>::sInstance JAS_GLOBAL_INSTANCE_INIT;
@@ -20,9 +21,9 @@ SpkSystem::SpkSystem(JKRHeap* heap) : JASGlobalInstance(true) {
     }
 
     mHeap = heap;
-    mMixingBuffer = new (heap, 0) SpkMixingBuffer(heap);
+    mMixingBuffer = JKR_NEW_ARGS (heap, 0) SpkMixingBuffer(heap);
     JUT_ASSERT(35, mMixingBuffer);
-    mSoundHolder = new (heap, 0) SpkSoundHolder();
+    mSoundHolder = JKR_NEW_ARGS (heap, 0) SpkSoundHolder();
     JUT_ASSERT(38, mSoundHolder);
     SpkSpeakerCtrl::setup();
     SpkSpeakerCtrl::setMixingBuffer(mMixingBuffer);
@@ -31,7 +32,7 @@ SpkSystem::SpkSystem(JKRHeap* heap) : JASGlobalInstance(true) {
 void SpkSystem::setResource(JKRArchive* resArc, u16 param_1, u16 param_2) {
     JUT_ASSERT(71, mHeap);
     JUT_ASSERT(72, resArc);
-    mData = new (mHeap, 0) SpkData(resArc);
+    mData = JKR_NEW_ARGS (mHeap, 0) SpkData(resArc);
     JUT_ASSERT(75, mData);
     mData->loadTable(param_1);
     mData->loadWave(param_2);

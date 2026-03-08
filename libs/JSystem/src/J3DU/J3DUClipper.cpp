@@ -1,6 +1,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/J3DU/J3DUClipper.h"
+#include "global.h"
 #include <cmath>
 #include "global.h"
 

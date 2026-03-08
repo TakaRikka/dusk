@@ -56,7 +56,11 @@ public:
     J3DIndBlock* getIndBlock() { return mIndBlock; }
     J3DJoint* getJoint() { return mJoint; }
     J3DMaterialAnm* getMaterialAnm() {
+#if TARGET_PC
+        return mMaterialAnm;
+#else
         return (uintptr_t)mMaterialAnm < 0xC0000000 ? mMaterialAnm : NULL;
+#endif
     }
     u32 getMaterialMode() { return mMaterialMode; }
     J3DNBTScale* getNBTScale() { return mTexGenBlock->getNBTScale(); }

@@ -17,7 +17,7 @@ J3DPacket* dDbVw_setDrawPacketList(J3DPacket* i_packet, int i_bufferType) {
     }
 
     if (l_drawPacketListNum >= 1000) {
-        delete (void*)i_packet;
+        JKR_DELETE((void*)i_packet);
         return NULL;
     }
 
@@ -28,29 +28,29 @@ J3DPacket* dDbVw_setDrawPacketList(J3DPacket* i_packet, int i_bufferType) {
 
 void dDbVw_deleteDrawPacketList() {
     for (int i = 0; i < l_drawPacketListNum; i++) {
-        delete (void*)l_drawPacketList[i];
+        JKR_DELETE((void*)l_drawPacketList[i]);
     }
 
     l_drawPacketListNum = 0;
 }
 
 void dDbVw_drawCube8p(int i_bufferType, cXyz* i_points, const GXColor& i_color) {
-    mDoExt_cube8pPacket* packet = new mDoExt_cube8pPacket(i_points, i_color);
+    mDoExt_cube8pPacket* packet = JKR_NEW mDoExt_cube8pPacket(i_points, i_color);
     dDbVw_setDrawPacketList(packet, i_bufferType);
 }
 
 void dDbVw_drawCube(int i_bufferType, cXyz& i_pos, cXyz& i_size, csXyz& i_angle, const GXColor& i_color) {
-    mDoExt_cubePacket* packet = new mDoExt_cubePacket(i_pos, i_size, i_angle, i_color);
+    mDoExt_cubePacket* packet = JKR_NEW mDoExt_cubePacket(i_pos, i_size, i_angle, i_color);
     dDbVw_setDrawPacketList(packet, i_bufferType);
 }
 
 void dDbVw_drawTriangle(int i_bufferType, cXyz* i_points, const GXColor& i_color, u8 i_clipZ) {
-    mDoExt_trianglePacket* packet = new mDoExt_trianglePacket(i_points, i_color, i_clipZ);
+    mDoExt_trianglePacket* packet = JKR_NEW mDoExt_trianglePacket(i_points, i_color, i_clipZ);
     dDbVw_setDrawPacketList(packet, i_bufferType);
 }
 
 void dDbVw_drawQuad(int i_bufferType, cXyz* i_points, const GXColor& i_color, u8 i_clipZ) {
-    mDoExt_quadPacket* packet = new mDoExt_quadPacket(i_points, i_color, i_clipZ);
+    mDoExt_quadPacket* packet = JKR_NEW mDoExt_quadPacket(i_points, i_color, i_clipZ);
     dDbVw_setDrawPacketList(packet, i_bufferType);
 }
 
@@ -75,42 +75,42 @@ void dDbVw_drawQuad(int i_bufferType, cXyz* param_1, cXyz* param_2, cXyz* i_pos,
         mDoMtx_stack_c::multVec(&points[i], &points[i]);
     }
 
-    mDoExt_quadPacket* packet = new mDoExt_quadPacket(points, i_color, i_clipZ);
+    mDoExt_quadPacket* packet = JKR_NEW mDoExt_quadPacket(points, i_color, i_clipZ);
     dDbVw_setDrawPacketList(packet, i_bufferType);
 }
 
 void dDbVw_drawLine(int i_bufferType, cXyz& i_start, cXyz& i_end, const GXColor& i_color, u8 i_clipZ, u8 i_width) {
-    mDoExt_linePacket* packet = new mDoExt_linePacket(i_start, i_end, i_color, i_clipZ, i_width);
+    mDoExt_linePacket* packet = JKR_NEW mDoExt_linePacket(i_start, i_end, i_color, i_clipZ, i_width);
     dDbVw_setDrawPacketList(packet, i_bufferType);
 }
 
 void dDbVw_drawArrow(int i_bufferType, cXyz& i_pos, cXyz& param_2, const GXColor& i_color, u8 i_clipZ, u8 i_width) {
-    mDoExt_ArrowPacket* packet = new mDoExt_ArrowPacket(i_pos, param_2, i_color, i_clipZ, i_width);
+    mDoExt_ArrowPacket* packet = JKR_NEW mDoExt_ArrowPacket(i_pos, param_2, i_color, i_clipZ, i_width);
     dDbVw_setDrawPacketList(packet, i_bufferType);
 }
 
 void dDbVw_drawPoint(int i_bufferType, cXyz& i_pos, const GXColor& i_color, u8 i_clipZ, u8 i_width) {
-    mDoExt_pointPacket* packet = new mDoExt_pointPacket(i_pos, i_color, i_clipZ, i_width);
+    mDoExt_pointPacket* packet = JKR_NEW mDoExt_pointPacket(i_pos, i_color, i_clipZ, i_width);
     dDbVw_setDrawPacketList(packet, i_bufferType);
 }
 
 void dDbVw_drawCircle(int i_bufferType, cXyz& i_pos, f32 i_radius, const GXColor& i_color, u8 i_clipZ, u8 i_width) {
-    mDoExt_circlePacket* packet = new mDoExt_circlePacket(i_pos, i_radius, i_color, i_clipZ, i_width);
+    mDoExt_circlePacket* packet = JKR_NEW mDoExt_circlePacket(i_pos, i_radius, i_color, i_clipZ, i_width);
     dDbVw_setDrawPacketList(packet, i_bufferType);
 }
 
 void dDbVw_drawSphere(int i_bufferType, cXyz& i_pos, f32 i_size, const GXColor& i_color, u8 i_clipZ) {
-    mDoExt_spherePacket* packet = new mDoExt_spherePacket(i_pos, i_size, i_color, i_clipZ);
+    mDoExt_spherePacket* packet = JKR_NEW mDoExt_spherePacket(i_pos, i_size, i_color, i_clipZ);
     dDbVw_setDrawPacketList(packet, i_bufferType);
 }
 
 void dDbVw_drawCylinder(int i_bufferType, cXyz& i_pos, f32 i_radius, f32 i_height, const GXColor& i_color, u8 i_clipZ) {
-    mDoExt_cylinderPacket* packet = new mDoExt_cylinderPacket(i_pos, i_radius, i_height, i_color, i_clipZ);
+    mDoExt_cylinderPacket* packet = JKR_NEW mDoExt_cylinderPacket(i_pos, i_radius, i_height, i_color, i_clipZ);
     dDbVw_setDrawPacketList(packet, i_bufferType);
 }
 
 void dDbVw_drawCylinderM(int i_bufferType, Mtx i_mtx, const GXColor& i_color, u8 i_clipZ) {
-    mDoExt_cylinderMPacket* packet = new mDoExt_cylinderMPacket(i_mtx, i_color, i_clipZ);
+    mDoExt_cylinderMPacket* packet = JKR_NEW mDoExt_cylinderMPacket(i_mtx, i_color, i_clipZ);
     dDbVw_setDrawPacketList(packet, i_bufferType);
 }
 

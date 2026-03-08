@@ -52,6 +52,22 @@ public:
     void setVtxNrmFrac(u8 frac) { mVtxNrmFrac = frac; }
     void setVtxNrmType(GXCompType type) { mVtxNrmType = type; }
 
+#if TARGET_PC
+    u32 getVtxArrNum(GXAttr attr) const {
+        JUT_ASSERT(1234, attr >= GX_VA_POS && attr <= GX_VA_TEX7);
+        return mVtxArrNum[attr - GX_VA_POS];
+    }
+
+    u32 getVtxArrStride(GXAttr attr) const {
+        JUT_ASSERT(1234, attr >= GX_VA_POS && attr <= GX_VA_TEX7);
+        return mVtxArrStride[attr - GX_VA_POS];
+    }
+
+    u32 getVtxArrByteSize(GXAttr attr) const {
+        return getVtxArrNum(attr) * getVtxArrStride(attr);
+    }
+#endif
+
 private:
     friend class J3DModelLoader;
     
@@ -70,6 +86,12 @@ private:
     /* 0x50 */ GXCompType mVtxPosType;
     /* 0x54 */ u8 mVtxNrmFrac;
     /* 0x58 */ GXCompType mVtxNrmType;
+
+#if TARGET_PC
+    bool mHasReadInformation = false;
+    u32 mVtxArrStride[12]{};
+    u32 mVtxArrNum[12]{};
+#endif
 };
 
 /**

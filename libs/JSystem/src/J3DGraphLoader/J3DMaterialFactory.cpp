@@ -5,6 +5,7 @@
 #include <algorithm>
 
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
+#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JMath/JMath.h"
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -135,7 +136,7 @@ J3DMaterial* J3DMaterialFactory::createNormalMaterial(J3DMaterial* i_material, i
     u32 pe_flag = getMdlDataFlag_PEFlag(i_flags);
     BOOL ind_flag = (i_flags & 0x1000000) ? TRUE : FALSE;
     if (i_material == NULL) {
-        i_material = new J3DMaterial();
+        i_material = JKR_NEW J3DMaterial();
         J3D_ASSERT_ALLOCMEM(269, i_material);
     }
     i_material->mColorBlock = J3DMaterial::createColorBlock(color_flag);
@@ -235,14 +236,14 @@ J3DMaterial* J3DMaterialFactory::createNormalMaterial(J3DMaterial* i_material, i
 J3DMaterial* J3DMaterialFactory::createPatchedMaterial(J3DMaterial* i_material, int i_idx,
                                                        u32 i_flags) const {
     if (i_material == NULL) {
-        i_material = new J3DPatchedMaterial();
+        i_material = JKR_NEW J3DPatchedMaterial();
         J3D_ASSERT_ALLOCMEM(430, i_material);
     }
     bool bVar1 = i_flags & 0x3000000 ? true : false;
     i_material->mColorBlock = J3DMaterial::createColorBlock(0x40000000);
-    i_material->mTexGenBlock = new J3DTexGenBlockPatched();
+    i_material->mTexGenBlock = JKR_NEW J3DTexGenBlockPatched();
     J3D_ASSERT_ALLOCMEM(440, i_material->mTexGenBlock);
-    i_material->mTevBlock = new J3DTevBlockPatched();
+    i_material->mTevBlock = JKR_NEW J3DTevBlockPatched();
     J3D_ASSERT_ALLOCMEM(442, i_material->mTevBlock);
     i_material->mIndBlock = J3DMaterial::createIndBlock(bVar1);
     i_material->mPEBlock = J3DMaterial::createPEBlock(0x10000000, getMaterialMode(i_idx));
@@ -346,17 +347,17 @@ void J3DMaterialFactory::modifyPatchedCurrentMtx(J3DMaterial* i_material, int i_
 J3DMaterial* J3DMaterialFactory::createLockedMaterial(J3DMaterial* i_material, int i_idx,
                                                       u32 i_flags) const {
     if (i_material == NULL) {
-        i_material = new J3DLockedMaterial();
+        i_material = JKR_NEW J3DLockedMaterial();
         J3D_ASSERT_ALLOCMEM(629, i_material);
-        i_material->mColorBlock = new J3DColorBlockNull();
+        i_material->mColorBlock = JKR_NEW J3DColorBlockNull();
         J3D_ASSERT_ALLOCMEM(634, i_material->mColorBlock);
-        i_material->mTexGenBlock = new J3DTexGenBlockNull();
+        i_material->mTexGenBlock = JKR_NEW J3DTexGenBlockNull();
         J3D_ASSERT_ALLOCMEM(636, i_material->mTexGenBlock);
-        i_material->mTevBlock = new J3DTevBlockNull();
+        i_material->mTevBlock = JKR_NEW J3DTevBlockNull();
         J3D_ASSERT_ALLOCMEM(638, i_material->mTevBlock);
-        i_material->mIndBlock = new J3DIndBlockNull();
+        i_material->mIndBlock = JKR_NEW J3DIndBlockNull();
         J3D_ASSERT_ALLOCMEM(640, i_material->mIndBlock);
-        i_material->mPEBlock = new J3DPEBlockNull();
+        i_material->mPEBlock = JKR_NEW J3DPEBlockNull();
         J3D_ASSERT_ALLOCMEM(642, i_material->mPEBlock);
         i_material->mIndex = i_idx;
         i_material->mMaterialMode = mpMaterialMode[i_idx];
@@ -370,7 +371,7 @@ J3DMaterial* J3DMaterialFactory::createLockedMaterial(J3DMaterial* i_material, i
     i_material->getTevBlock()->setTevRegOffset(mpPatchingInfo[i_idx].mTevRegOffset);
     i_material->getPEBlock()->setFogOffset(mpPatchingInfo[i_idx].mFogOffset);
     if (i_material->mSharedDLObj == NULL) {
-        i_material->mSharedDLObj = new J3DDisplayListObj();
+        i_material->mSharedDLObj = JKR_NEW J3DDisplayListObj();
         J3D_ASSERT_ALLOCMEM(673, i_material->mSharedDLObj);
         i_material->mSharedDLObj->setSingleDisplayList((void*)(
             mpDisplayListInit[i_idx].mOffset + (uintptr_t)&mpDisplayListInit[i_idx]),
@@ -544,9 +545,9 @@ J3DTexMtx* J3DMaterialFactory::newTexMtx(int i_idx, int i_no) const {
         be_swap(tex_mtx_info.mSRT.mRotation);
         be_swap(tex_mtx_info.mSRT.mTranslationX);
         be_swap(tex_mtx_info.mSRT.mTranslationY);
-        tex_mtx = new J3DTexMtx(tex_mtx_info);
+        tex_mtx = JKR_NEW J3DTexMtx(tex_mtx_info);
 #else
-        tex_mtx = new J3DTexMtx(mpTexMtxInfo[mtl_init_data->mTexMtxIdx[i_no]]);
+        tex_mtx = JKR_NEW J3DTexMtx(mpTexMtxInfo[mtl_init_data->mTexMtxIdx[i_no]]);
 #endif
     }
     return tex_mtx;

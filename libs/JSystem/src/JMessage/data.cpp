@@ -2,6 +2,6 @@
 
 #include "JSystem/JMessage/data.h"
 
-const u32 JMessage::data::ga4cSignature = 'MESG';
+const BE(u32) JMessage::data::ga4cSignature = 'MESG';
 
-const u32 JMessage::data::ga4cSignature_color = 'MGCL';
+const BE(u32) JMessage::data::ga4cSignature_color = 'MGCL';

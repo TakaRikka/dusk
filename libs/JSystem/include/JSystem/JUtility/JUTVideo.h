@@ -4,6 +4,9 @@
 #include <gx.h>
 #include <os.h>
 #include <vi.h>
+#if TARGET_PC
+#include <aurora/aurora.h>
+#endif
 
 typedef u8 (*Pattern)[2];
 
@@ -30,8 +33,20 @@ public:
     static void postRetraceProc(u32);
     static void drawDoneCallback();
 
-    u16 getFbWidth() const { return mRenderObj->fbWidth; }
-    u16 getEfbHeight() const { return mRenderObj->efbHeight; }
+    u16 getFbWidth() const {
+        #if TARGET_PC
+        return m_WindowSize.fb_width;
+        #else
+        return mRenderObj->fbWidth;
+        #endif
+    }
+    u16 getEfbHeight() const {
+        #if TARGET_PC
+        return m_WindowSize.fb_height;
+        #else
+        return mRenderObj->efbHeight;
+        #endif
+    }
     void getBounds(u16& width, u16& height) const {
         width = (u16)getFbWidth();
         height = (u16)getEfbHeight();
@@ -47,6 +62,9 @@ public:
     static OSTick getVideoLastTick() { return sVideoLastTick; }
 
     GXRenderModeObj* getRenderMode() const { return mRenderObj; }
+#if TARGET_PC
+    void setWindowSize(AuroraWindowSize const& size);
+#endif
 
 private:
     static JUTVideo* sManager;
@@ -68,6 +86,11 @@ private:
     /* 0x30 */ s32 mSetBlackFrameCount;
     /* 0x34 */ OSMessage mMessage;
     /* 0x38 */ OSMessageQueue mMessageQueue;
+
+#if TARGET_PC
+public:
+    AuroraWindowSize m_WindowSize;
+#endif
 };
 
 inline JUTVideo* JUTGetVideoManager() {

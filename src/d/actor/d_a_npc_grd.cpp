@@ -233,7 +233,7 @@ int daNpc_Grd_c::CreateHeap() {
                                                         l_bmdGetParamList[0].fileIdx);
     }
 
-    mAnm_p = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000,
+    mAnm_p = JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000,
                                   0x11020284);
     if (mAnm_p != NULL && mAnm_p->getModel() == NULL) {
         mAnm_p->stopZelAnime();
@@ -250,7 +250,7 @@ int daNpc_Grd_c::CreateHeap() {
     }
     model->setUserArea((uintptr_t)this);
 
-    mpMatAnm = new daNpcF_MatAnm_c();
+    mpMatAnm = JKR_NEW daNpcF_MatAnm_c();
     if (mpMatAnm == NULL) {
         return false;
     }

@@ -9,14 +9,14 @@
 
 inline void loadMatColors(const J3DGXColor* color) {
     J3DGDWriteXFCmdHdr(0x100C, 2);
-    J3DGDWrite_u32(*(u32*)color);
-    J3DGDWrite_u32(*(u32*)(color + 1));
+    J3DGDWrite_u32(*(BE(u32)*)color);
+    J3DGDWrite_u32(*(BE(u32)*)(color + 1));
 }
 
 inline void loadAmbColors(const J3DGXColor* color) {
     J3DGDWriteXFCmdHdr(0x100A, 2);
-    J3DGDWrite_u32(*(u32*)color);
-    J3DGDWrite_u32(*(u32*)(color + 1));
+    J3DGDWrite_u32(*(BE(u32)*)color);
+    J3DGDWrite_u32(*(BE(u32)*)(color + 1));
 }
 
 inline void loadTexCoordScale(GXTexCoordID coord, const J3DTexCoordScaleInfo& info) {
@@ -1366,6 +1366,14 @@ void J3DTevBlock16::ptrToIndex() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
+void J3DTevBlock16::loadTexture() {
+    for (u32 i = 0; i < 8; i++) {
+        if (mTexNo[i] != 0xFFFF) {
+            j3dSys.getTexture()->loadGX(mTexNo[i], GXTexMapID(GX_TEXMAP0 + i));
+        }
+    }
+}
+
 void J3DTevBlockPatched::ptrToIndex() {
     GDSetCurrOffset(mTexNoOffset);
     void* start = GDGetCurrPointer();
@@ -1388,6 +1396,14 @@ void J3DTevBlockPatched::ptrToIndex() {
 
     void* end = GDGetCurrPointer();
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
+}
+
+void J3DTevBlockPatched::loadTexture() {
+    for (u32 i = 0; i < 8; i++) {
+        if (mTexNo[i] != 0xFFFF) {
+            j3dSys.getTexture()->loadGX(mTexNo[i], GXTexMapID(GX_TEXMAP0 + i));
+        }
+    }
 }
 
 void J3DTevBlock::indexToPtr_private(u32 offs) {
@@ -1679,6 +1695,30 @@ void J3DTevBlockPatched::reset(J3DTevBlock* pBlock) {
     for (u32 i = 0; i < 8; i++) {
         mTevStage[i] = *pBlock->getTevStage(i);
         mIndTevStage[i] = *pBlock->getIndTevStage(i);
+    }
+}
+
+void J3DTevBlock1::loadTexture() {
+    for (u32 i = 0; i < 1; i++) {
+        if (mTexNo[i] != 0xFFFF) {
+            j3dSys.getTexture()->loadGX(mTexNo[i], GXTexMapID(GX_TEXMAP0 + i));
+        }
+    }
+}
+
+void J3DTevBlock2::loadTexture() {
+    for (u32 i = 0; i < 2; i++) {
+        if (mTexNo[i] != 0xFFFF) {
+            j3dSys.getTexture()->loadGX(mTexNo[i], GXTexMapID(GX_TEXMAP0 + i));
+        }
+    }
+}
+
+void J3DTevBlock4::loadTexture() {
+    for (u32 i = 0; i < 4; i++) {
+        if (mTexNo[i] != 0xFFFF) {
+            j3dSys.getTexture()->loadGX(mTexNo[i], GXTexMapID(GX_TEXMAP0 + i));
+        }
     }
 }
 

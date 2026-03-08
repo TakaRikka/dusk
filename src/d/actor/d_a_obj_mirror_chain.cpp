@@ -204,7 +204,7 @@ int daObjMirrorChain_c::createHeap() {
 
         J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, 21);
         JUT_ASSERT(316, brk != NULL);
-        mpBrkAnm = new mDoExt_brkAnm();
+        mpBrkAnm = JKR_NEW mDoExt_brkAnm();
         if (mpBrkAnm == NULL || !mpBrkAnm->init(modelData, brk, 1, 2, 1.0f, 0, -1)) {
             return 0;
         }
@@ -230,7 +230,7 @@ int daObjMirrorChain_c::createHeap() {
 
         J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 9);
         JUT_ASSERT(344, bck != NULL);
-        mpBckAnm = new mDoExt_bckAnm();
+        mpBckAnm = JKR_NEW mDoExt_bckAnm();
         if (mpBckAnm == NULL || !mpBckAnm->init(bck, 1, 2, 1.0f, 0, -1, false)) {
             return 0;
         }
@@ -238,7 +238,7 @@ int daObjMirrorChain_c::createHeap() {
 
         J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, 20);
         JUT_ASSERT(353, brk != NULL);
-        mpPortalBrkAnm = new mDoExt_brkAnm();
+        mpPortalBrkAnm = JKR_NEW mDoExt_brkAnm();
         if (mpPortalBrkAnm == NULL || !mpPortalBrkAnm->init(modelData, brk, 1, 0, 1.0f, 0, -1))
         {
             return 0;
@@ -254,7 +254,7 @@ int daObjMirrorChain_c::createHeap() {
     } else {
         J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 8);
         JUT_ASSERT(367, bck != NULL);
-        mpBckAnm = new mDoExt_bckAnm();
+        mpBckAnm = JKR_NEW mDoExt_bckAnm();
 
         /* dSv_event_flag_c::F_0361 - Arbiter's Grounds - Spun the spinning pillars */
         f32 rate = (fopAcM_isSwitch(this, getSwitchNo()) || dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[361])) ? 1.0f : 0.0f;
@@ -270,7 +270,7 @@ int daObjMirrorChain_c::createHeap() {
 
         J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, 19);
         JUT_ASSERT(381, brk != NULL);
-        mpBrkAnm = new mDoExt_brkAnm();
+        mpBrkAnm = JKR_NEW mDoExt_brkAnm();
         if (mpBrkAnm == NULL || !mpBrkAnm->init(modelData, brk, 1, 0, 0.0f, 0, -1))
         {
             return 0;

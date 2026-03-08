@@ -439,171 +439,171 @@ int dMeterButton_c::_delete() {
     mpHeap->free(mpFishingTex);
     mpFishingTex = NULL;
 
-    delete mpButtonScreen;
+    JKR_DELETE(mpButtonScreen);
     mpButtonScreen = NULL;
 
     if (field_0x00c != NULL) {
-        delete field_0x00c;
+        JKR_DELETE(field_0x00c);
         field_0x00c = NULL;
     }
 
-    delete mpParent;
+    JKR_DELETE(mpParent);
     mpParent = NULL;
 
-    delete mpButtonA;
+    JKR_DELETE(mpButtonA);
     mpButtonA = NULL;
 
-    delete mpButtonB;
+    JKR_DELETE(mpButtonB);
     mpButtonB = NULL;
 
     if (mpButtonR != NULL) {
-        delete mpButtonR;
+        JKR_DELETE(mpButtonR);
         mpButtonR = NULL;
     }
 
     if (mpButtonZ != NULL) {
-        delete mpButtonZ;
+        JKR_DELETE(mpButtonZ);
         mpButtonZ = NULL;
     }
 
     if (mpMidona != NULL) {
-        delete mpMidona;
+        JKR_DELETE(mpMidona);
         mpMidona = NULL;
     }
 
     for (int i = 0; i < 4; i++) {
         if (field_0x0fc[i] != NULL) {
-            delete field_0x0fc[i];
+            JKR_DELETE(field_0x0fc[i]);
             field_0x0fc[i] = NULL;
         }
     }
 
-    delete mpButton3D;
+    JKR_DELETE(mpButton3D);
     mpButton3D = NULL;
 
-    delete mpButtonC;
+    JKR_DELETE(mpButtonC);
     mpButtonC = NULL;
 
-    delete mpButtonS;
+    JKR_DELETE(mpButtonS);
     mpButtonS = NULL;
 
     if (mpButtonX != NULL) {
-        delete mpButtonX;
+        JKR_DELETE(mpButtonX);
         mpButtonX = NULL;
     }
 
     if (mpButtonY != NULL) {
-        delete mpButtonY;
+        JKR_DELETE(mpButtonY);
         mpButtonY = NULL;
     }
 
     if (mpButtonNun != NULL) {
-        delete mpButtonNun;
+        JKR_DELETE(mpButtonNun);
         mpButtonNun = NULL;
     }
 
     if (mpButtonRemo != NULL) {
-        delete mpButtonRemo;
+        JKR_DELETE(mpButtonRemo);
         mpButtonRemo = NULL;
     }
 
     if (mpButtonRemo2 != NULL) {
-        delete mpButtonRemo2;
+        JKR_DELETE(mpButtonRemo2);
         mpButtonRemo2 = NULL;
     }
 
     if (mpButtonAR != NULL) {
-        delete mpButtonAR;
+        JKR_DELETE(mpButtonAR);
         mpButtonAR = NULL;
     }
 
     if (mpButton3DB != NULL) {
-        delete mpButton3DB;
+        JKR_DELETE(mpButton3DB);
         mpButton3DB = NULL;
     }
 
     if (mpButtonNURE != NULL) {
-        delete mpButtonNURE;
+        JKR_DELETE(mpButtonNURE);
         mpButtonNURE = NULL;
     }
 
     if (mpButtonReel != NULL) {
-        delete mpButtonReel;
+        JKR_DELETE(mpButtonReel);
         mpButtonReel = NULL;
     }
 
     if (mpButtonReel2 != NULL) {
-        delete mpButtonReel2;
+        JKR_DELETE(mpButtonReel2);
         mpButtonReel2 = NULL;
     }
 
     if (mpButtonAB != NULL) {
-        delete mpButtonAB;
+        JKR_DELETE(mpButtonAB);
         mpButtonAB = NULL;
     }
 
     if (mpButtonTate != NULL) {
-        delete mpButtonTate;
+        JKR_DELETE(mpButtonTate);
         mpButtonTate = NULL;
     }
 
     if (mpButtonNunZ != NULL) {
-        delete mpButtonNunZ;
+        JKR_DELETE(mpButtonNunZ);
         mpButtonNunZ = NULL;
     }
 
     if (mpButtonNunC != NULL) {
-        delete mpButtonNunC;
+        JKR_DELETE(mpButtonNunC);
         mpButtonNunC = NULL;
     }
 
     if (mpButtonBin != NULL) {
-        delete mpButtonBin;
+        JKR_DELETE(mpButtonBin);
         mpButtonBin = NULL;
     }
 
     for (int i = 0; i < 2; i++) {
-        delete mpText[i];
+        JKR_DELETE(mpText[i]);
         mpText[i] = NULL;
     }
 
-    delete mpItem_c;
+    JKR_DELETE(mpItem_c);
     mpItem_c = NULL;
 
     if (field_0x080 != NULL) {
-        delete field_0x080;
+        JKR_DELETE(field_0x080);
         field_0x080 = NULL;
     }
 
-    delete mpScreen;
+    JKR_DELETE(mpScreen);
     mpScreen = NULL;
 
-    delete mpFkAll_c;
+    JKR_DELETE(mpFkAll_c);
     mpFkAll_c = NULL;
 
-    delete mpFkRoot_c;
+    JKR_DELETE(mpFkRoot_c);
     mpFkRoot_c = NULL;
 
-    delete mpTextScreen;
+    JKR_DELETE(mpTextScreen);
     mpTextScreen = NULL;
 
-    delete mpTmRoot_c;
+    JKR_DELETE(mpTmRoot_c);
     mpTmRoot_c = NULL;
 
     for (int i = 0; i < 2; i++) {
-        delete mpTm_c[i];
+        JKR_DELETE(mpTm_c[i]);
         mpTm_c[i] = NULL;
 
         if (field_0x0ec[i] != NULL) {
-            delete field_0x0ec[i];
+            JKR_DELETE(field_0x0ec[i]);
             field_0x0ec[i] = NULL;
         }
     }
 
-    delete mpString_c;
+    JKR_DELETE(mpString_c);
     mpString_c = NULL;
 
-    delete mpOutFont;
+    JKR_DELETE(mpOutFont);
     mpOutFont = NULL;
 
     dComIfGp_getMeterButtonArchive()->removeResourceAll();
@@ -998,7 +998,7 @@ void dMeterButton_c::screenInitButton() {
 
     OS_REPORT("enter dMeterButton_c::screenInitButton\n");
 
-    mpButtonScreen = new J2DScreen();
+    mpButtonScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(1830, mpButtonScreen != NULL);
 
     OS_REPORT("load zelda_game_image_button_info.blo");
@@ -1013,7 +1013,7 @@ void dMeterButton_c::screenInitButton() {
     dPaneClass_showNullPane(mpButtonScreen);
     field_0x00c = NULL;
 
-    mpParent = new CPaneMgr(mpButtonScreen, MULTI_CHAR('info_n'), 0, NULL);
+    mpParent = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('info_n'), 0, NULL);
     if (mpParent == NULL)
         OS_REPORT("[%s] %d\n", __FILE__, 1867);
     JUT_ASSERT(1868, mpParent != NULL);
@@ -1038,7 +1038,7 @@ void dMeterButton_c::screenInitButton() {
     mParentCenterX = (608.0f / 2) - mpParent->getInitCenterPosX();
     paneTrans(mpParent, mParentCenterX, 0.0f, 0xFF);
 
-    mpButtonA = new CPaneMgr(mpButtonScreen, MULTI_CHAR('abtn_n'), 2, NULL);
+    mpButtonA = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('abtn_n'), 2, NULL);
     if (mpButtonA == NULL) {
         OS_REPORT("[%s] %d\n", __FILE__, 1902);
     }
@@ -1046,7 +1046,7 @@ void dMeterButton_c::screenInitButton() {
     mpButtonA->setAlphaRate(0.0f);
     mpButtonA->show();
 
-    mpButtonB = new CPaneMgr(mpButtonScreen, MULTI_CHAR('bbtn_n'), 2, NULL);
+    mpButtonB = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('bbtn_n'), 2, NULL);
     if (mpButtonB == NULL) {
         OS_REPORT("[%s] %d\n", __FILE__, 1914);
     }
@@ -1054,7 +1054,7 @@ void dMeterButton_c::screenInitButton() {
     mpButtonB->setAlphaRate(0.0f);
     mpButtonB->show();
 
-    mpButtonR = new CPaneMgr(mpButtonScreen, MULTI_CHAR('rbtn_n'), 2, NULL);
+    mpButtonR = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('rbtn_n'), 2, NULL);
     if (mpButtonR == NULL) {
         OS_REPORT("[%s] %d\n", __FILE__, 1932);
     }
@@ -1062,7 +1062,7 @@ void dMeterButton_c::screenInitButton() {
     mpButtonR->setAlphaRate(0.0f);
     mpButtonR->show();
 
-    mpMidona = new CPaneMgr(mpButtonScreen, MULTI_CHAR('midona'), 0, NULL);
+    mpMidona = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('midona'), 0, NULL);
     JUT_ASSERT(1939, mpMidona != NULL);
     if (mpMidona == NULL) {
         OS_REPORT("[%s] %d\n", __FILE__, 1941);
@@ -1079,7 +1079,7 @@ void dMeterButton_c::screenInitButton() {
     mpButtonScreen->search('zbtn')->show();
     mpButtonScreen->search(MULTI_CHAR('z_btnl'))->show();
 
-    mpButtonZ = new CPaneMgr(mpButtonScreen, MULTI_CHAR('zbtn_n'), 2, NULL);
+    mpButtonZ = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('zbtn_n'), 2, NULL);
     if (mpButtonZ == NULL) {
         OS_REPORT("[%s] %d\n", __FILE__, 1954);
     }
@@ -1087,7 +1087,7 @@ void dMeterButton_c::screenInitButton() {
     mpButtonZ->setAlphaRate(0.0f);
     mpButtonZ->show();
 
-    mpButton3D = new CPaneMgr(mpButtonScreen, MULTI_CHAR('asbtn_n'), 2, NULL);
+    mpButton3D = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('asbtn_n'), 2, NULL);
     JUT_ASSERT(1964, mpButton3D != NULL);
     mpButton3D->setAlphaRate(0.0f);
     mpButton3D->show();
@@ -1097,7 +1097,7 @@ void dMeterButton_c::screenInitButton() {
     mpButtonScreen->search(MULTI_CHAR('yaji_d_n'))->hide();
     mpButtonScreen->search(MULTI_CHAR('yaji_r_n'))->hide();
 
-    mpButtonC = new CPaneMgr(mpButtonScreen, MULTI_CHAR('cbtn_n'), 2, NULL);
+    mpButtonC = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('cbtn_n'), 2, NULL);
     JUT_ASSERT(1992, mpButtonC != NULL);
     mpButtonC->setAlphaRate(0.0f);
     mpButtonC->show();
@@ -1107,15 +1107,15 @@ void dMeterButton_c::screenInitButton() {
     mpButtonScreen->search(MULTI_CHAR('yaji_dn'))->hide();
     mpButtonScreen->search(MULTI_CHAR('yaji_rn'))->hide();
 
-    mpButtonS = new CPaneMgr(mpButtonScreen, MULTI_CHAR('sbtn_n'), 2, NULL);
+    mpButtonS = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('sbtn_n'), 2, NULL);
     JUT_ASSERT(2002, mpButtonS != NULL);
     mpButtonS->setAlphaRate(0.0f);
 
-    mpButtonX = new CPaneMgr(mpButtonScreen, MULTI_CHAR('xbtn_n'), 2, NULL);
+    mpButtonX = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('xbtn_n'), 2, NULL);
     JUT_ASSERT(2048, mpButtonX != NULL);
     mpButtonX->setAlphaRate(0.0f);
 
-    mpButtonY = new CPaneMgr(mpButtonScreen, MULTI_CHAR('ybtn_n'), 2, NULL);
+    mpButtonY = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('ybtn_n'), 2, NULL);
     JUT_ASSERT(2052, mpButtonY != NULL);
     mpButtonY->setAlphaRate(0.0f);
 
@@ -1124,7 +1124,7 @@ void dMeterButton_c::screenInitButton() {
     mpButtonRemo2 = NULL;
     mpButtonAR = NULL;
 
-    mpButton3DB = new CPaneMgr(mpButtonScreen, MULTI_CHAR('as_b_n'), 2, NULL);
+    mpButton3DB = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('as_b_n'), 2, NULL);
     JUT_ASSERT(2060, mpButton3DB != NULL);
     mpButton3DB->setAlphaRate(0.0f);
 
@@ -1136,19 +1136,19 @@ void dMeterButton_c::screenInitButton() {
     mpButtonNunZ = NULL;
     mpButtonNunC = NULL;
 
-    mpButtonBin = new CPaneMgr(mpButtonScreen, MULTI_CHAR('bottl_n'), 2, NULL);
+    mpButtonBin = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('bottl_n'), 2, NULL);
     JUT_ASSERT(2071, mpButtonBin != NULL);
     mpButtonBin->setAlphaRate(0.0f);
 
-    mpText[0] = new CPaneMgr(mpButtonScreen, MULTI_CHAR('text_n'), 2, NULL);
+    mpText[0] = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('text_n'), 2, NULL);
     JUT_ASSERT(2075, mpText[0] != NULL);
     mpText[0]->setAlphaRate(0.0f);
 
-    mpText[1] = new CPaneMgr(mpButtonScreen, MULTI_CHAR('text2_n'), 2, NULL);
+    mpText[1] = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('text2_n'), 2, NULL);
     JUT_ASSERT(2079, mpText[1] != NULL);
     mpText[1]->setAlphaRate(0.0f);
 
-    mpItem_c = new CPaneMgr(mpButtonScreen, MULTI_CHAR('fishing'), 0, NULL);
+    mpItem_c = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('fishing'), 0, NULL);
     JUT_ASSERT(2083, mpItem_c != NULL);
     mpItem_c->setAlphaRate(0.0f);
 
@@ -1395,7 +1395,7 @@ void dMeterButton_c::screenInitButton() {
 }
 
 void dMeterButton_c::screenInitText() {
-    mpScreen = new J2DScreen();
+    mpScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(2442, mpScreen != NULL);
 
     OS_REPORT("enter dMeterButton_c::screenInitText(void)\n");
@@ -1412,7 +1412,7 @@ void dMeterButton_c::screenInitText() {
     JUT_ASSERT(2457, fg != false);
     dPaneClass_showNullPane(mpScreen);
 
-    mpFkAll_c = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpFkAll_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
     OS_REPORT("[%s] %d\n", __FILE__, 2461);
     JUT_ASSERT(2462, mpFkAll_c != NULL);
     mpFkAll_c->setAlphaRate(0.0f);
@@ -1423,11 +1423,11 @@ void dMeterButton_c::screenInitText() {
         g_MsgObject_HIO_c.mTextPosY + mpScreen->search(MULTI_CHAR('mg_null'))->getBounds().i.y);
     OS_REPORT("[%s] %d\n", __FILE__, 2469);
 
-    mpFkRoot_c = new CPaneMgr(mpScreen, MULTI_CHAR('mg_null'), 0, NULL);
+    mpFkRoot_c = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('mg_null'), 0, NULL);
     JUT_ASSERT(2472, mpFkRoot_c != NULL);
     OS_REPORT("[%s] %d\n", __FILE__, 2474);
 
-    mpTextScreen = new J2DScreen();
+    mpTextScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(2478, mpTextScreen != NULL);
 
     OS_REPORT("[%s] %d\n", __FILE__, 2480);
@@ -1441,26 +1441,26 @@ void dMeterButton_c::screenInitText() {
     dPaneClass_showNullPane(mpTextScreen);
     OS_REPORT("[%s] %d\n", __FILE__, 2496);
 
-    mpTmRoot_c = new CPaneMgr(mpTextScreen, MULTI_CHAR('mg_null'), 0, NULL);
+    mpTmRoot_c = JKR_NEW CPaneMgr(mpTextScreen, MULTI_CHAR('mg_null'), 0, NULL);
     JUT_ASSERT(2499, mpTmRoot_c != NULL);
 
 #if VERSION == VERSION_GCN_JPN
     if (dComIfGs_getOptRuby() == 0) {
-        mpTm_c[0] = new CPaneMgr(mpTextScreen, MULTI_CHAR('mg_3flin'), 0, NULL);
+        mpTm_c[0] = JKR_NEW CPaneMgr(mpTextScreen, MULTI_CHAR('mg_3flin'), 0, NULL);
 
-        mpTm_c[1] = new CPaneMgr(mpTextScreen, MULTI_CHAR('t3f_s'), 0, NULL);
+        mpTm_c[1] = JKR_NEW CPaneMgr(mpTextScreen, MULTI_CHAR('t3f_s'), 0, NULL);
 
-        field_0x0ec[0] = new CPaneMgr(mpTextScreen, MULTI_CHAR('mg_3f'), 0, NULL);
+        field_0x0ec[0] = JKR_NEW CPaneMgr(mpTextScreen, MULTI_CHAR('mg_3f'), 0, NULL);
 
-        field_0x0ec[1] = new CPaneMgr(mpTextScreen, MULTI_CHAR('mg_3f_s'), 0, NULL);
+        field_0x0ec[1] = JKR_NEW CPaneMgr(mpTextScreen, MULTI_CHAR('mg_3f_s'), 0, NULL);
 
         mpTextScreen->search(MULTI_CHAR('n_3line'))->hide();
         mpTextScreen->search(MULTI_CHAR('n_3fline'))->show();
         mpTextScreen->search(MULTI_CHAR('n_e4line'))->hide();
     } else {
-        mpTm_c[0] = new CPaneMgr(mpTextScreen, MULTI_CHAR('mg_3line'), 0, NULL);
+        mpTm_c[0] = JKR_NEW CPaneMgr(mpTextScreen, MULTI_CHAR('mg_3line'), 0, NULL);
 
-        mpTm_c[1] = new CPaneMgr(mpTextScreen, 't3_s', 0, NULL);
+        mpTm_c[1] = JKR_NEW CPaneMgr(mpTextScreen, 't3_s', 0, NULL);
 
         field_0x0ec[0] = NULL;
         field_0x0ec[1] = NULL;
@@ -1471,10 +1471,10 @@ void dMeterButton_c::screenInitText() {
         mpTextScreen->search(MULTI_CHAR('n_e4line'))->hide();
     }
 #else
-    mpTm_c[0] = new CPaneMgr(mpTextScreen, MULTI_CHAR('mg_e4lin'), 0, NULL);
+    mpTm_c[0] = JKR_NEW CPaneMgr(mpTextScreen, MULTI_CHAR('mg_e4lin'), 0, NULL);
     JUT_ASSERT(2504, mpTm_c[0] != NULL);
 
-    mpTm_c[1] = new CPaneMgr(mpTextScreen, 't4_s', 0, NULL);
+    mpTm_c[1] = JKR_NEW CPaneMgr(mpTextScreen, 't4_s', 0, NULL);
     JUT_ASSERT(2507, mpTm_c[1] != NULL);
 
     field_0x0ec[0] = NULL;
@@ -1513,12 +1513,12 @@ void dMeterButton_c::screenInitText() {
     field_0x4b6 = 0;
     field_0x4b4 = 0;
 
-    mpString_c = new dMsgString_c();
+    mpString_c = JKR_NEW dMsgString_c();
     JUT_ASSERT(2572, mpString_c != NULL);
 
     OS_REPORT("[%s] %d\n", __FILE__, 2574);
 
-    mpOutFont = new COutFont_c(0);
+    mpOutFont = JKR_NEW COutFont_c(0);
     JUT_ASSERT(2577, mpOutFont != NULL);
     mpOutFont->createPane();
 

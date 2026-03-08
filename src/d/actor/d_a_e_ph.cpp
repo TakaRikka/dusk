@@ -160,7 +160,7 @@ int daE_PH_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_PH", PH_BMD);
     JUT_ASSERT(0, modelData != NULL);
 
-    mpMorf = new mDoExt_McaMorfSO(
+    mpMorf = JKR_NEW mDoExt_McaMorfSO(
         modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_PH", ANM_WAIT),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, &mSound, 0x80000, 0x11000084);
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {

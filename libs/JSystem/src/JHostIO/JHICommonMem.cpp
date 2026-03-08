@@ -6,7 +6,7 @@ JHIMemBuf* JHICommonMem::instance;
 
 JHIMemBuf* JHICommonMem::Instance() {
     if (instance == NULL) {
-        instance = new JHIMemBuf();
+        instance = JKR_NEW JHIMemBuf();
     }
 
     return instance;

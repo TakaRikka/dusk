@@ -56,7 +56,7 @@ void JAISeq::reserveChildTracks_(int param_0) {
     JUT_ASSERT(92, inner_.outputTrack.getStatus() == JASTrack::STATUS_FREE);
 
     for (int i = 0; i < 2; i++) {
-        JASTrack* track = new JASTrack();
+        JASTrack* track = JKR_NEW JASTrack();
         if (track) {
             track->setAutoDelete(true);
             inner_.outputTrack.connectChild(i, track);
@@ -67,7 +67,7 @@ void JAISeq::reserveChildTracks_(int param_0) {
                     continue;
                 }
 
-                JASTrack* track2 = new JASTrack();
+                JASTrack* track2 = JKR_NEW JASTrack();
                 if (track2) {
                     track2->setAutoDelete(true);
                     track->connectChild(j, track2);
@@ -90,10 +90,10 @@ void JAISeq::releaseChildTracks_() {
             for (u32 j = 0; j < 16; j++) {
                 JASTrack* track2 = track->getChild(j);
                 if (track2) {
-                    delete track2;
+                    JKR_DELETE(track2);
                 }
             }
-            delete track;
+            JKR_DELETE(track);
         }
     }
 }
@@ -176,7 +176,7 @@ void JAISeq::die_() {
 
     for (int i = 0; i < 32; i++) {
         if (inner_.mSoundChild[i]) {
-            delete inner_.mSoundChild[i];
+            JKR_DELETE(inner_.mSoundChild[i]);
             inner_.mSoundChild[i] = NULL;
         }
     }
@@ -257,7 +257,7 @@ JAISoundChild* JAISeq::getChild(int index) {
         return inner_.mSoundChild[index];
     }
 
-    inner_.mSoundChild[index] = new JAISoundChild();
+    inner_.mSoundChild[index] = JKR_NEW JAISoundChild();
     if (!inner_.mSoundChild[index]) {
         JUT_WARN(379, "%s", "JASPoolAllocObject::<JAISoundChild>::operator new failed .\n");
         return NULL;
@@ -273,7 +273,7 @@ void JAISeq::releaseChild(int index) {
         if (track) {
             track->assignExtBuffer(0, NULL);
         }
-        delete inner_.mSoundChild[index];
+        JKR_DELETE(inner_.mSoundChild[index]);
         inner_.mSoundChild[index] = NULL;
     }
 }

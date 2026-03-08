@@ -63,8 +63,8 @@ static int daObj_Udoor_Execute(obj_udoor_class* i_this) {
     return 1;
 }
 
-static bool daObj_Udoor_IsDelete(obj_udoor_class* param_0) {
-    return true;
+static BOOL daObj_Udoor_IsDelete(obj_udoor_class* param_0) {
+    return TRUE;
 }
 
 static int daObj_Udoor_Delete(obj_udoor_class* i_this) {
@@ -92,7 +92,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         return 0;
     }
 
-    a_this->mpBgW = new dBgW();
+    a_this->mpBgW = JKR_NEW dBgW();
     if (a_this->mpBgW == NULL) {
         return 0;
     }

@@ -184,7 +184,7 @@ BOOL daNpcAshB_c::CreateHeap() {
     mdlData_p = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcNames[0], 28));
     JUT_ASSERT(332, NULL != mdlData_p);
     u32 sp_0x18 = 0x11020284;
-    mAnm_p = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mCreatureSound,
+    mAnm_p = JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mCreatureSound,
                                   0x80000, sp_0x18);
     if (mAnm_p != NULL && mAnm_p->getModel() == NULL) {
         mAnm_p->stopZelAnime();
@@ -200,7 +200,7 @@ BOOL daNpcAshB_c::CreateHeap() {
     }
     model->setUserArea((uintptr_t)this);
 
-    mpMatAnm = new daNpcF_MatAnm_c();
+    mpMatAnm = JKR_NEW daNpcF_MatAnm_c();
     if (mpMatAnm == NULL) {
         return false;
     } else {
@@ -1083,8 +1083,8 @@ static int daNpcAshB_Draw(void* i_this) {
     return static_cast<daNpcAshB_c*>(i_this)->Draw();
 }
 
-static bool daNpcAshB_IsDelete(void* param_0) {
-    return true;
+static BOOL daNpcAshB_IsDelete(void* param_0) {
+    return TRUE;
 }
 
 void daNpcAshB_c::setParam() {

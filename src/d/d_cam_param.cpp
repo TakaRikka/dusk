@@ -247,7 +247,7 @@ dCamParam_c::dCamParam_c(s32 i_styleID) {
     void* objRes = dComIfG_getObjectRes(fileName, "camstyle.dat");
     u8* cam_data = (u8*)objRes;
 
-    mCamStyleData = (dCamStyleData::StyleData*)(cam_data + 8);
+    mCamStyleData = ((dCamStyleData*)cam_data)->mStyleData;
     mStyleNum = ((dCamStyleData*)cam_data)->mStyleNum;
 
 #if DEBUG

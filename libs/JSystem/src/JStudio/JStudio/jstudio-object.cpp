@@ -246,14 +246,14 @@ void JStudio::TAdaptor::adaptor_setVariableValue_IMMEDIATE_(JStudio::TAdaptor* p
                                                             JStudio::TControl* param_2, u32 param_3,
                                                             void const* param_4, u32 param_5) {
     TVariableValue* value = &param_1->pValue_[param_3];
-    value->setValue_immediate(*(f32*)param_4);
+    value->setValue_immediate(*(BE(f32)*)param_4);
 }
 
 void JStudio::TAdaptor::adaptor_setVariableValue_TIME_(JStudio::TAdaptor* param_1,
                                                        JStudio::TControl* param_2, u32 param_3,
                                                        void const* param_4, u32 param_5) {
     TVariableValue* value = &param_1->pValue_[param_3];
-    value->setValue_time(*(f32*)param_4);
+    value->setValue_time(*(BE(f32)*)param_4);
 }
 
 void JStudio::TAdaptor::adaptor_setVariableValue_FVR_NAME_(JStudio::TAdaptor* param_1,
@@ -267,11 +267,11 @@ void JStudio::TAdaptor::adaptor_setVariableValue_FVR_INDEX_(JStudio::TAdaptor* p
                                                             JStudio::TControl* param_2, u32 param_3,
                                                             void const* param_4, u32 param_5) {
     TVariableValue* value = &param_1->pValue_[param_3];
-    value->setValue_functionValue(param_2->getFunctionValue_index(*(u32*)param_4));
+    value->setValue_functionValue(param_2->getFunctionValue_index(*(BE(u32)*)param_4));
 }
 
 JStudio::TObject::~TObject() {
-    delete mpAdaptor;
+    JKR_DELETE(mpAdaptor);
 }
 
 void JStudio::TObject::forward_value(u32 param_0) {

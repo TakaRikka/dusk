@@ -2131,13 +2131,13 @@ int daE_ZH_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_ZH", BMDV_ZH);
     JUT_ASSERT(3305, modelData != NULL);
 
-    mpModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_ZH", BCK_ZH_WAIT01), 
+    mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_ZH", BCK_ZH_WAIT01),
                                        2, 1.0f, 0, -1, &mSound, 0, 0x31000284);
     if (mpModelMorf == NULL || mpModelMorf->getModel() == NULL) {
         return 0;
     }
 
-    mpBtkAnm = new mDoExt_btkAnm();
+    mpBtkAnm = JKR_NEW mDoExt_btkAnm();
     if (mpBtkAnm == NULL) {
         return 0;
     }

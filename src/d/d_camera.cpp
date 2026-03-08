@@ -350,7 +350,7 @@ void dCamera_c::initialize(camera_class* i_camera, fopAc_ac_c* i_player, u32 i_c
     void* objRes = dComIfG_getObjectRes(fileName, "camtype.dat");
     char* typeData = (char*)objRes;
     mCamTypeData = (dCamera_type_data*)(typeData + 8);
-    mCamTypeNum = *(int*)(typeData + 4);
+    mCamTypeNum = BSWAP32(*(int*)(typeData + 4));
 
     field_0x0 = i_camera;
     field_0x20 = 1;
@@ -2674,6 +2674,12 @@ void dCamera_c::setView(f32 i_xOrig, f32 i_yOrig, f32 i_width, f32 i_height) {
     window->setViewPort(i_xOrig, i_yOrig, i_width, i_height, view_port->near_z, view_port->far_z);
     window->setScissor(i_xOrig, i_yOrig, i_width, i_height);
 }
+
+#if TARGET_PC
+void dCamera_c::ResetView() {
+    setView(0.0f, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
+}
+#endif
 
 cSAngle dCamera_c::forwardCheckAngle() {
     dBgS_CamLinChk lin_chk;
@@ -11087,7 +11093,7 @@ static int init_phase2(camera_class* i_this) {
     fopAcM_setStageLayer(player);
     dComIfGp_setWindowNum(1);
 
-    new (body) dCamera_c(i_this);
+    JKR_NEW_ARGS (body) dCamera_c(i_this);
 
     f32 var_f31 = 0.0f;
     f32 var_f30 = 160000.0f;

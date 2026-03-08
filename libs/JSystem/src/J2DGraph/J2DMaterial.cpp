@@ -18,9 +18,9 @@ J2DMaterial::J2DMaterial() {
 }
 
 J2DMaterial::~J2DMaterial() {
-    delete mTevBlock;
-    delete mIndBlock;
-    delete mAnmPointer;
+    JKR_DELETE(mTevBlock);
+    JKR_DELETE(mIndBlock);
+    JKR_DELETE(mAnmPointer);
 }
 
 void J2DMaterial::setGX() {
@@ -45,27 +45,27 @@ J2DTevBlock* J2DMaterial::createTevBlock(int block_type, bool noAlign) {
 
     if (noAlign) {
         if (block_type <= 1) {
-            block = new J2DTevBlock1();
+            block = JKR_NEW J2DTevBlock1();
         } else if (block_type == 2) {
-            block = new J2DTevBlock2();
+            block = JKR_NEW J2DTevBlock2();
         } else if (block_type <= 4) {
-            block = new J2DTevBlock4();
+            block = JKR_NEW J2DTevBlock4();
         } else if (block_type <= 8) {
-            block = new J2DTevBlock8();
+            block = JKR_NEW J2DTevBlock8();
         } else {
-            block = new J2DTevBlock16();
+            block = JKR_NEW J2DTevBlock16();
         }
     } else {
         if (block_type <= 1) {
-            block = new (-4) J2DTevBlock1();
+            block = JKR_NEW_ARGS (-4) J2DTevBlock1();
         } else if (block_type == 2) {
-            block = new (-4) J2DTevBlock2();
+            block = JKR_NEW_ARGS (-4) J2DTevBlock2();
         } else if (block_type <= 4) {
-            block = new (-4) J2DTevBlock4();
+            block = JKR_NEW_ARGS (-4) J2DTevBlock4();
         } else if (block_type <= 8) {
-            block = new (-4) J2DTevBlock8();
+            block = JKR_NEW_ARGS (-4) J2DTevBlock8();
         } else {
-            block = new (-4) J2DTevBlock16();
+            block = JKR_NEW_ARGS (-4) J2DTevBlock16();
         }
     }
     ASSERTMSGLINE(101, block, "Error : allocate memory.");
@@ -78,15 +78,15 @@ J2DIndBlock* J2DMaterial::createIndBlock(int block_type, bool noAlign) {
 
     if (noAlign) {
         if (block_type != 0) {
-            block = new J2DIndBlockFull();
+            block = JKR_NEW J2DIndBlockFull();
         } else {
-            block = new J2DIndBlockNull();
+            block = JKR_NEW J2DIndBlockNull();
         }
     } else {
         if (block_type != 0) {
-            block = new (-4) J2DIndBlockFull();
+            block = JKR_NEW_ARGS (-4) J2DIndBlockFull();
         } else {
-            block = new (-4) J2DIndBlockNull();
+            block = JKR_NEW_ARGS (-4) J2DIndBlockNull();
         }
     }
     ASSERTMSGLINE(133, block, "Error : allocate memory.");
@@ -122,7 +122,7 @@ void J2DMaterial::makeAnmPointer() {
     int r29;
     int r28;
     if (mAnmPointer == NULL) {
-        mAnmPointer = new J2DMaterialAnmPointer();
+        mAnmPointer = JKR_NEW J2DMaterialAnmPointer();
         r29 = 1;
         if (mAnmPointer == NULL) {
             OS_PANIC(171, "Error : allocate memory.");

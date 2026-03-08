@@ -17,7 +17,7 @@ void JASDrumSet::newPercArray(u8 num, JKRHeap* heap) {
     if (num) {
         JUT_ASSERT(39, num <= 128);
         mPercNumMax = num;
-        mPercArray = new (heap, 0) TPerc*[mPercNumMax];
+        mPercArray = JKR_NEW_ARGS (heap, 0) TPerc*[mPercNumMax];
         JASCalc::bzero(mPercArray, mPercNumMax * sizeof(TPerc*));
     }
 }

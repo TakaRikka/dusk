@@ -6,6 +6,7 @@
 
 #include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DFifo.h"
+#include <dusk/logging.h>
 
 void J3DGDSetGenMode(u8 nTexGens, u8 nChans, u8 nTevs, u8 nInds,
                      GXCullMode cm) {
@@ -350,7 +351,7 @@ void J3DGDSetTexImgAttr(GXTexMapID id, u16 width, u16 height, GXTexFmt format) {
 
 void J3DGDSetTexImgPtr(GXTexMapID id, void* image_ptr) {
 #if TARGET_PC
-    puts("J3DGDSetTexImgPtr is a stub");
+    STUB_LOG();
 #else
     J3DGDWriteBPCmd(BP_IMAGE_PTR(OSCachedToPhysical(image_ptr) >> 5, J3DGDTexImage3Ids[id]));
 #endif
@@ -372,7 +373,7 @@ void J3DGDLoadTlut(void* tlut_ptr, u32 tmem_addr, GXTlutSize size) {
     J3DGDWriteBPCmd(0xFEFFFF00);
     J3DGDWriteBPCmd(0xF000000);
 #if TARGET_PC
-    puts("J3DGDLoadTlut is a stub");
+    STUB_LOG();
     return;
 #endif
     J3DGDWriteBPCmd(BP_LOAD_TLUT0(OSCachedToPhysical(tlut_ptr) >> 5, 0x64));

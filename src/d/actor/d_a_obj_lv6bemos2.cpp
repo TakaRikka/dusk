@@ -246,7 +246,7 @@ int daObjLv6Bm_c::CreateHeap() {
 
     J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, BRK_BM6_SERCH);
     JUT_ASSERT(633, pbrk != NULL);
-    mpBrkAnm = new mDoExt_brkAnm();
+    mpBrkAnm = JKR_NEW mDoExt_brkAnm();
     if (mpBrkAnm == NULL || mpBrkAnm->init(modelData, pbrk, 1, 0, 1.0f, 0, -1) == 0) {
         return 0;
     }
@@ -258,7 +258,7 @@ int daObjLv6Bm_c::CreateHeap() {
     
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, BCK_BM6_UP);
     JUT_ASSERT(651, pbck != NULL);
-    mpBckAnm = new mDoExt_bckAnm();
+    mpBckAnm = JKR_NEW mDoExt_bckAnm();
     if (mpBckAnm == NULL || mpBckAnm->init(pbck, 1, 0, 1.0f, 0, -1, false) == 0) {
         return 0;
     }
@@ -272,7 +272,7 @@ int daObjLv6Bm_c::CreateHeap() {
 
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, BTK_EF_BIMOL6_OFF);
     JUT_ASSERT(680, pbtk != NULL);
-    mpBtkAnm = new mDoExt_btkAnm();
+    mpBtkAnm = JKR_NEW mDoExt_btkAnm();
     if (mpBtkAnm == NULL || mpBtkAnm->init(modelData, pbtk, 1, 0, 1.0f, 0, -1) == 0) {
         return 0;
     }
@@ -285,14 +285,14 @@ int daObjLv6Bm_c::CreateHeap() {
 
     pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, BTK_EF_BIMOL6);
     JUT_ASSERT(699, pbtk != NULL);
-    mpBtkAnm2 = new mDoExt_btkAnm();
+    mpBtkAnm2 = JKR_NEW mDoExt_btkAnm();
     if (mpBtkAnm2 == NULL || mpBtkAnm2->init(modelData, pbtk, 1, 2, 1.0f, 0, -1) == 0) {
         return 0;
     }
 
     J3DAnmTransform* pbck2 = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, BCK_EF_BIMOL6);
     JUT_ASSERT(711, pbck != NULL);
-    mpBckAnm2 = new mDoExt_bckAnm();
+    mpBckAnm2 = JKR_NEW mDoExt_bckAnm();
     if (mpBckAnm2 == NULL || mpBckAnm2->init(pbck2, 1, 2, 1.0f, 0, -1, false) == 0) {
         return 0;
     }

@@ -50,8 +50,8 @@ static int daObj_Rock_Execute(obj_rock_class* i_this) {
     return TRUE;
 }
 
-static bool daObj_Rock_IsDelete(obj_rock_class* i_this) {
-    return true;
+static BOOL daObj_Rock_IsDelete(obj_rock_class* i_this) {
+    return TRUE;
 }
 
 static int daObj_Rock_Delete(obj_rock_class* i_this) {

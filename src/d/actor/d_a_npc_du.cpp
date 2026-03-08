@@ -603,7 +603,7 @@ static int daNpc_Du_Delete(npc_du_class* i_this) {
 static int useHeapInit(fopAc_ac_c* actor) {
     npc_du_class* i_this = (npc_du_class*)actor;
 
-    i_this->mpMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Npc_Du", 0xA), NULL, NULL,
+    i_this->mpMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Npc_Du", 0xA), NULL, NULL,
                                         (J3DAnmTransform*)dComIfG_getObjectRes("Npc_Du", 6), 0, 1.0f, 0, -1, 1, NULL,
                                         J3DMdlFlag_DifferedDLBuffer, 0x11020084);
     if (i_this->mpMorf == NULL || i_this->mpMorf->getModel() == NULL) {
@@ -616,7 +616,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
         model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
     }
 
-    i_this->mpBtpAnm = new mDoExt_btpAnm();
+    i_this->mpBtpAnm = JKR_NEW mDoExt_btpAnm();
     if (i_this->mpBtpAnm == NULL) {
         return 0;
     }

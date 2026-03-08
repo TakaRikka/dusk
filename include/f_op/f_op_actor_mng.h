@@ -15,16 +15,9 @@
 #include "dusk/endian_ssystem.h"
 
 #if !__MWERKS__
-// Modern compilers will zero the parent struct in default constructors.
-// So instead of adding default constructors to everything,
-// we'll just save & restore that data.
-#define fopAcM_ct_placement_copy_length offsetof(fopAc_ac_c, actor_last_base_field) - offsetof(fopAc_ac_c, type)
-
-#define fopAcM_ct_placement(ptr, ClassName) \
-    fopAc_ac_c copy;                        \
-    memcpy(&copy.type, &(ptr)->type, fopAcM_ct_placement_copy_length); \
-    new (ptr) ClassName() ;                 \
-    memcpy(&(ptr)->type, &copy.type, fopAcM_ct_placement_copy_length);
+// mwerks compiler makes value initialization act like default initialization so we need
+// to be explicit about default initialization in modern compilers
+#define fopAcM_ct_placement(ptr, ClassName) JKR_NEW_ARGS (ptr) ClassName
 #else
 #define fopAcM_ct_placement(ptr, ClassName) new (ptr) ClassName()
 #endif

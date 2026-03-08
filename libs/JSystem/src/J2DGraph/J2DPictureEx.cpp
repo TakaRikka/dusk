@@ -62,7 +62,7 @@ J2DPictureEx::J2DPictureEx(J2DPane* param_0, JSURandomInputStream* param_1, u32 
 
 J2DPictureEx::~J2DPictureEx() {
     if (field_0x190) {
-        delete mMaterial;
+        JKR_DELETE(mMaterial);
     }
 }
 
@@ -1136,11 +1136,11 @@ void J2DPictureEx::setAnimation(J2DAnmVtxColor* anm) {
                 for (u16 j = 0; j < anm_table_num; j++) {
                     #if DEBUG
                     J3DAnmVtxColorIndexData* data = anm->getAnmVtxColorIndexData(0, j);
-                    u16* index2 = anm->getVtxColorIndexPointer(0) + (uintptr_t)data->mpData;
+                    BE(u16)* index2 = anm->getVtxColorIndexPointer(0) + (uintptr_t)data->mpData;
                     #else
                     J3DAnmVtxColorIndexData* data = anm->getAnmVtxColorIndexData(0, j);
-                    u16* index = anm->getVtxColorIndexPointer(0);
-                    u16* index2 = index + (uintptr_t)data->mpData;
+                    BE(u16)* index = anm->getVtxColorIndexPointer(0);
+                    BE(u16)* index2 = index + (uintptr_t)data->mpData;
                     #endif
                     for (u16 k = 0; k < data->mNum; k++) {
                         if (index2[k] == field_0x158[i]) {
@@ -1177,7 +1177,7 @@ const J2DAnmTransform* J2DPictureEx::animationPane(J2DAnmTransform const* anm) {
             if (field_0x19c & (1 << i)) {
                 for (u16 j = 0; j < anm_table_num; j++) {
                     J3DAnmVtxColorIndexData* data = field_0x198->getAnmVtxColorIndexData(0, j);
-                    u16* index = field_0x198->getVtxColorIndexPointer(0) + (uintptr_t)data->mpData;
+                    BE(u16)* index = field_0x198->getVtxColorIndexPointer(0) + (uintptr_t)data->mpData;
                     for (u16 k = 0; k < data->mNum; k++) {
                         if (index[k] == field_0x158[i]) {
                             field_0x198->getColor(0, j, &mCornerColor[i]);

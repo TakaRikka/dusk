@@ -35,6 +35,7 @@
 #include "DynamicLink.h"
 #include <cstring>
 #include "dusk/endian.h"
+#include "dusk/logging.h"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/sc.h>
@@ -301,7 +302,7 @@ void mDoGph_gInf_c::create() {
 
     JFWDisplay::getManager()->setDrawDoneMethod(JFWDisplay::UNK_METHOD_1);
 
-    JUTFader* faderPtr = new JUTFader(0, 0, JUTVideo::getManager()->getRenderMode()->fbWidth,
+    JUTFader* faderPtr = JKR_NEW JUTFader(0, 0, JUTVideo::getManager()->getRenderMode()->fbWidth,
                                       JUTVideo::getManager()->getRenderMode()->efbHeight,
                                       JUtility::TColor(0, 0, 0, 0));
     JUT_ASSERT(352, faderPtr != NULL);
@@ -672,6 +673,13 @@ void mDoGph_gInf_c::setWideZoomLightProjection(Mtx& m) {
     m[2][1] = 0.0f;
     m[2][2] = -1.0f;
     m[2][3] = 0.0f;
+}
+#endif
+
+#if TARGET_PC
+void mDoGph_gInf_c::setWindowSize(AuroraWindowSize const& size) {
+    JUTVideo::getManager()->setWindowSize(size);
+    mFader->mBox.set(0, 0, getWidth(), getHeight());
 }
 #endif
 
@@ -1122,7 +1130,11 @@ void mDoGph_gInf_c::bloom_c::remove() {
 }
 
 void mDoGph_gInf_c::bloom_c::draw() {
+#if TARGET_PC // TODO: fix bloom
+    bool enabled = false;
+#else
     bool enabled = mEnable && m_buffer != NULL;
+#endif
     if (mMonoColor.a != 0 || enabled) {
         GXSetViewport(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f);
         GXSetScissor(0, 0, FB_WIDTH, FB_HEIGHT);
@@ -1534,7 +1546,7 @@ int mDoGph_Painter() {
     static bool sDiagLoggedWindow = false;
     if (!sDiagLoggedWindow) {
         int wn = dComIfGp_getWindowNum();
-        printf("[DIAG] mDoGph_Painter: windowNum=%d\n", wn); fflush(stdout);
+        DuskLog.debug("mDoGph_Painter: windowNum={}", wn);
         if (wn != 0) sDiagLoggedWindow = true;
     }
 
@@ -1558,7 +1570,8 @@ int mDoGph_Painter() {
     j3dSys.drawInit();
     GXSetDither(GX_ENABLE);
 
-    J2DOrthoGraph ortho(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, -1.0f, 1.0f);
+    J2DOrthoGraph ortho(0.0f, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), -1.0f,
+                        1.0f);
     ortho.setOrtho(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
                    mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(),
                    -1.0f, 1.0f);
@@ -2111,8 +2124,7 @@ int mDoGph_Painter() {
         // (needed for logo scene, which has no 3D camera)
         static int sElseLogCount = 0;
         if (sElseLogCount < 10) {
-            printf("[DIAG] mDoGph_Painter else: drawing 2D lists (frame %d)\n", sElseLogCount);
-            fflush(stdout);
+            DuskLog.debug("mDoGph_Painter else: drawing 2D lists (frame {})", sElseLogCount);
             sElseLogCount++;
         }
         ortho.setPort();

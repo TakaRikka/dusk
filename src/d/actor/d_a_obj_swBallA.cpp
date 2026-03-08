@@ -139,7 +139,7 @@ int daObjSwBallA_c::CreateHeap() {
     }
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 7);
     JUT_ASSERT(381, pbtk != NULL);
-    field_0x588 = new mDoExt_btkAnm();
+    field_0x588 = JKR_NEW mDoExt_btkAnm();
     if (field_0x588 == NULL || field_0x588->init(modelData, pbtk, 1, 0, 1.0f, 0, -1) == 0) {
         return 0;
     }

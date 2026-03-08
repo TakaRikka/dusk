@@ -1288,7 +1288,7 @@ int daE_BG_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_BG", 10);
     JUT_ASSERT(0, modelData != NULL);
 
-    mpMorfSO = new mDoExt_McaMorfSO(modelData, NULL, NULL,
+    mpMorfSO = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
                                     (J3DAnmTransform*)dComIfG_getObjectRes("E_BG", 7), 0, 1.0f, 0,
                                     -1, &mCreatureSound, 0x80000, 0x11000084);
     if (mpMorfSO == NULL || mpMorfSO->getModel() == NULL) {
@@ -1303,7 +1303,7 @@ int daE_BG_c::CreateHeap() {
         model->getModelData()->getJointNodePointer(i)->setCallBack(JointCallBack);
     }
 
-    mpBrkAnm = new mDoExt_brkAnm();
+    mpBrkAnm = JKR_NEW mDoExt_brkAnm();
     if (mpBrkAnm == NULL) {
         return 0;
     }

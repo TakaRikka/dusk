@@ -131,101 +131,101 @@ static dFs_HIO_c g_fsHIO;
 
 dFile_select_c::dFile_select_c(JKRArchive* i_archiveP) {
     mpArchive = i_archiveP;
-    mpFileSelect3d = new dFile_select3D_c();
+    mpFileSelect3d = JKR_NEW dFile_select3D_c();
 }
 
 dFile_select_c::~dFile_select_c() {
     int i;
 
     for (i = 0; i < 3; i++) {
-        delete mSelFileMoyoPane[i];
-        delete mSelFileGoldPane[i];
-        delete mSelFileGold2Pane[i];
-        delete m3mSelPane_mo[i];
-        delete m3mSelPane_g[i];
-        delete m3mSelPane_gr[i];
-        delete m3mSelTextPane[i];
-        delete mSelFilePane_Book_l[i];
-        delete mDeleteEfPane[i];
-        delete mCopyEfPane[i];
-        delete mSelFilePanes[i];
-        delete m3mSelPane[i];
-        delete mFileInfo[i];
+        JKR_DELETE(mSelFileMoyoPane[i]);
+        JKR_DELETE(mSelFileGoldPane[i]);
+        JKR_DELETE(mSelFileGold2Pane[i]);
+        JKR_DELETE(m3mSelPane_mo[i]);
+        JKR_DELETE(m3mSelPane_g[i]);
+        JKR_DELETE(m3mSelPane_gr[i]);
+        JKR_DELETE(m3mSelTextPane[i]);
+        JKR_DELETE(mSelFilePane_Book_l[i]);
+        JKR_DELETE(mDeleteEfPane[i]);
+        JKR_DELETE(mCopyEfPane[i]);
+        JKR_DELETE(mSelFilePanes[i]);
+        JKR_DELETE(m3mSelPane[i]);
+        JKR_DELETE(mFileInfo[i]);
     }
 
-    delete mBaseMovePane;
+    JKR_DELETE(mBaseMovePane);
 
     for (i = 0; i < 2; i++) {
-        delete mYnSelPane[i];
-        delete mYnSelPane_m[i];
-        delete mYnSelPane_g[i];
-        delete mYnSelPane_gr[i];
-        delete mHeaderTxtPane[i];
-        delete mErrorMsgTxtPane[i];
-        delete mYnSelTxtPane[i];
-        delete mCpFileInfo[i];
-        delete mCpSelPane[i];
-        delete mCpSelPane_moyo[i];
-        delete mCpSelPane_gold[i];
-        delete mCpSelPane_gold2[i];
-        delete mCpSelPane_book[i];
+        JKR_DELETE(mYnSelPane[i]);
+        JKR_DELETE(mYnSelPane_m[i]);
+        JKR_DELETE(mYnSelPane_g[i]);
+        JKR_DELETE(mYnSelPane_gr[i]);
+        JKR_DELETE(mHeaderTxtPane[i]);
+        JKR_DELETE(mErrorMsgTxtPane[i]);
+        JKR_DELETE(mYnSelTxtPane[i]);
+        JKR_DELETE(mCpFileInfo[i]);
+        JKR_DELETE(mCpSelPane[i]);
+        JKR_DELETE(mCpSelPane_moyo[i]);
+        JKR_DELETE(mCpSelPane_gold[i]);
+        JKR_DELETE(mCpSelPane_gold2[i]);
+        JKR_DELETE(mCpSelPane_book[i]);
     }
 
-    delete mBbtnPane;
-    delete mModoruTxtPane;
-    delete mAbtnPane;
-    delete mKetteiTxtPane;
-    delete mBaseMoveAnm;
-    delete field_0x0088;
-    delete mYnSelBck3;
-    delete mFileSelBpk;
-    delete mFileSel05Btk;
-    delete mSelFileBookBpk;
-    delete mSelFileBookBtk;
-    delete mSelFileBookBrk;
-    delete mDtEffBtk;
-    delete mCpEffBtk;
-    delete mCpDtEffBrk;
-    delete field_0x0090;
-    delete field_0x0094;
-    delete field_0x0098;
-    delete field_0x009c;
+    JKR_DELETE(mBbtnPane);
+    JKR_DELETE(mModoruTxtPane);
+    JKR_DELETE(mAbtnPane);
+    JKR_DELETE(mKetteiTxtPane);
+    JKR_DELETE(mBaseMoveAnm);
+    JKR_DELETE(field_0x0088);
+    JKR_DELETE(mYnSelBck3);
+    JKR_DELETE(mFileSelBpk);
+    JKR_DELETE(mFileSel05Btk);
+    JKR_DELETE(mSelFileBookBpk);
+    JKR_DELETE(mSelFileBookBtk);
+    JKR_DELETE(mSelFileBookBrk);
+    JKR_DELETE(mDtEffBtk);
+    JKR_DELETE(mCpEffBtk);
+    JKR_DELETE(mCpDtEffBrk);
+    JKR_DELETE(field_0x0090);
+    JKR_DELETE(field_0x0094);
+    JKR_DELETE(field_0x0098);
+    JKR_DELETE(field_0x009c);
 
     mDoExt_removeMesgFont();
     mDoExt_removeSubFont();
 
-    delete stick;
-    delete mSelIcon;
-    delete mSelIcon2;
-    delete mpName;
-    delete mpFileWarning;
+    JKR_DELETE(stick);
+    JKR_DELETE(mSelIcon);
+    JKR_DELETE(mSelIcon2);
+    JKR_DELETE(mpName);
+    JKR_DELETE(mpFileWarning);
 
-    delete mCpSelBck;
-    delete mCpSelBck2;
-    delete mCpSelBpk;
-    delete mCpSel03Btk;
-    delete mCpSelBookBpk;
-    delete mCpSelBookBtk;
-    delete mCpSelBookBrk;
+    JKR_DELETE(mCpSelBck);
+    JKR_DELETE(mCpSelBck2);
+    JKR_DELETE(mCpSelBpk);
+    JKR_DELETE(mCpSel03Btk);
+    JKR_DELETE(mCpSelBookBpk);
+    JKR_DELETE(mCpSelBookBtk);
+    JKR_DELETE(mCpSelBookBrk);
 
-    delete mYnSelBck;
-    delete mYnSelBck2;
-    delete mYnSelBpk;
-    delete mYnSelBtk;
+    JKR_DELETE(mYnSelBck);
+    JKR_DELETE(mYnSelBck2);
+    JKR_DELETE(mYnSelBpk);
+    JKR_DELETE(mYnSelBtk);
 
-    delete m3mBck;
-    delete m3mBck2;
-    delete m3mBpk;
-    delete m3mBtk;
+    JKR_DELETE(m3mBck);
+    JKR_DELETE(m3mBck2);
+    JKR_DELETE(m3mBpk);
+    JKR_DELETE(m3mBtk);
 
-    delete mSelDtBtk;
-    delete mSelDtPane_mset;
+    JKR_DELETE(mSelDtBtk);
+    JKR_DELETE(mSelDtPane_mset);
 
     mpFileSelect3d->_delete();
-    delete mpFileSelect3d;
+    JKR_DELETE(mpFileSelect3d);
     
     #if PLATFORM_GCN
-    delete mpFadePict;
+    JKR_DELETE(mpFadePict);
     dComIfGp_getMain2DArchive()->removeResourceAll();
     #endif
 
@@ -239,7 +239,7 @@ void dFile_select_c::_create() {
 
     mDoGph_gInf_c::setFadeColor(static_cast<JUtility::TColor&>(g_blackColor));
     
-    stick = new STControl(2, 2, 1, 1, 0.9f, 0.5f, 0, 0x2000);
+    stick = JKR_NEW STControl(2, 2, 1, 1, 0.9f, 0.5f, 0, 0x2000);
     JUT_ASSERT(355, stick != NULL);
 
     g_fsHIO.no = mDoHIO_CREATE_CHILD("ファイルセレクト画面", &g_fsHIO);
@@ -2927,7 +2927,7 @@ void dFile_select_c::screenSet() {
 
     static u64 l_tagName131[3] = {MULTI_CHAR('N_sel_00'), MULTI_CHAR('N_sel_01'), MULTI_CHAR('N_sel_02')};
 
-    fileSel.Scr = new J2DScreen();
+    fileSel.Scr = JKR_NEW J2DScreen();
     JUT_ASSERT(4917, fileSel.Scr != NULL);
     fileSel.Scr->setPriority("zelda_file_select.blo", 0x1100000, mpArchive);
     dPaneClass_showNullPane(fileSel.Scr);
@@ -2944,25 +2944,25 @@ void dFile_select_c::screenSet() {
     field_0x0090->searchUpdateMaterialID(fileSel.Scr);
     field_0x009c->searchUpdateMaterialID(fileSel.Scr);
 
-    mBaseMovePane = new CPaneMgr(fileSel.Scr, MULTI_CHAR('w_move_n'), 0, NULL);
+    mBaseMovePane = JKR_NEW CPaneMgr(fileSel.Scr, MULTI_CHAR('w_move_n'), 0, NULL);
     mBaseSubPane = fileSel.Scr->search(MULTI_CHAR('w_sub_n'));
 
     for (int i = 0; i < 3; i++) {
-        mSelFilePanes[i] = new CPaneMgr(fileSel.Scr, l_tagName0[i], 1, NULL);
+        mSelFilePanes[i] = JKR_NEW CPaneMgr(fileSel.Scr, l_tagName0[i], 1, NULL);
     }
 
     fileSel.Scr->search(MULTI_CHAR('Wi_btn_n'))->hide();
-    mBbtnPane = new CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_n_bbtn'), 2, NULL);
-    mAbtnPane = new CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_n_abtn'), 2, NULL);
+    mBbtnPane = JKR_NEW CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_n_bbtn'), 2, NULL);
+    mAbtnPane = JKR_NEW CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_n_abtn'), 2, NULL);
 
 #if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
-    mModoruTxtPane = new CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_modo'), 2, NULL);
-    mKetteiTxtPane = new CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_kete'), 2, NULL);
+    mModoruTxtPane = JKR_NEW CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_modo'), 2, NULL);
+    mKetteiTxtPane = JKR_NEW CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_kete'), 2, NULL);
     fileSel.Scr->search(MULTI_CHAR('f_modo'))->hide();
     fileSel.Scr->search(MULTI_CHAR('f_kete'))->hide();
 #else
-    mModoruTxtPane = new CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('f_modo'), 2, NULL);
-    mKetteiTxtPane = new CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('f_kete'), 2, NULL);
+    mModoruTxtPane = JKR_NEW CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('f_modo'), 2, NULL);
+    mKetteiTxtPane = JKR_NEW CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('f_kete'), 2, NULL);
     fileSel.Scr->search(MULTI_CHAR('w_modo'))->hide();
     fileSel.Scr->search(MULTI_CHAR('w_kete'))->hide();
 #endif
@@ -2992,9 +2992,9 @@ void dFile_select_c::screenSet() {
     mSelFileBtk05Frame = 0;
 
     for (int i = 0; i < 3; i++) {
-        mSelFileMoyoPane[i] = new CPaneMgr(fileSel.Scr, l_tagName3[i], 0, NULL);
-        mSelFileGoldPane[i] = new CPaneMgr(fileSel.Scr, l_tagName4[i], 0, NULL);
-        mSelFileGold2Pane[i] = new CPaneMgr(fileSel.Scr, l_tagName5[i], 0, NULL);
+        mSelFileMoyoPane[i] = JKR_NEW CPaneMgr(fileSel.Scr, l_tagName3[i], 0, NULL);
+        mSelFileGoldPane[i] = JKR_NEW CPaneMgr(fileSel.Scr, l_tagName4[i], 0, NULL);
+        mSelFileGold2Pane[i] = JKR_NEW CPaneMgr(fileSel.Scr, l_tagName5[i], 0, NULL);
         mSelFileMoyoPane[i]->getPanePtr()->setAnimation(mFileSelBpk);
         mSelFileGoldPane[i]->getPanePtr()->setAnimation(mFileSelBpk);
         mSelFileGold2Pane[i]->getPanePtr()->setAnimation(mFileSelBpk);
@@ -3021,7 +3021,7 @@ void dFile_select_c::screenSet() {
     mSelFileBookBtkFrame = 0;
     mSelFileBookBrkFrame = 0;
     for (int i = 0; i < 3; i++) {
-        mSelFilePane_Book_l[i] = new CPaneMgr(fileSel.Scr, l_tagName12[i], 0, NULL);
+        mSelFilePane_Book_l[i] = JKR_NEW CPaneMgr(fileSel.Scr, l_tagName12[i], 0, NULL);
         mSelFilePane_Book_l[i]->getPanePtr()->setAnimation(mSelFileBookBpk);
         mSelFilePane_Book_l[i]->getPanePtr()->setAnimation(mSelFileBookBtk);
         mSelFilePane_Book_l[i]->getPanePtr()->setAnimation(mSelFileBookBrk);
@@ -3042,7 +3042,7 @@ void dFile_select_c::screenSet() {
 #endif
 
     for (int i = 0; i < 2; i++) {
-        mHeaderTxtPane[i] = new CPaneMgrAlpha(fileSel.Scr, l_tagName21[i], 0, NULL);
+        mHeaderTxtPane[i] = JKR_NEW CPaneMgrAlpha(fileSel.Scr, l_tagName21[i], 0, NULL);
         ((J2DTextBox*)mHeaderTxtPane[i]->getPanePtr())->setFont(fileSel.font[0]);
         ((J2DTextBox*)mHeaderTxtPane[i]->getPanePtr())->setString(512, "");
 #if VERSION == VERSION_GCN_JPN
@@ -3075,8 +3075,8 @@ void dFile_select_c::screenSet() {
     mCpEffBtkFrame = 0;
     mCpDtEffBrkFrame = 0;
     for (int i = 0; i < 3; i++) {
-        mDeleteEfPane[i] = new CPaneMgrAlpha(fileSel.Scr, l_tagName18[i], 0, NULL);
-        mCopyEfPane[i] = new CPaneMgrAlpha(fileSel.Scr, l_tagName19[i], 0, NULL);
+        mDeleteEfPane[i] = JKR_NEW CPaneMgrAlpha(fileSel.Scr, l_tagName18[i], 0, NULL);
+        mCopyEfPane[i] = JKR_NEW CPaneMgrAlpha(fileSel.Scr, l_tagName19[i], 0, NULL);
         mDeleteEfPane[i]->getPanePtr()->setAnimation(mDtEffBtk);
         mDeleteEfPane[i]->getPanePtr()->setAnimation(mCpDtEffBrk);
         mCopyEfPane[i]->getPanePtr()->setAnimation(mCpEffBtk);
@@ -3098,7 +3098,7 @@ void dFile_select_c::screenSet() {
     fileSel.Scr->search(MULTI_CHAR('w_er_msE'))->hide();
 
     for (int i = 0; i < 2; i++) {
-        mErrorMsgTxtPane[i] = new CPaneMgrAlpha(fileSel.Scr, l_tagName20[i], 0, NULL);
+        mErrorMsgTxtPane[i] = JKR_NEW CPaneMgrAlpha(fileSel.Scr, l_tagName20[i], 0, NULL);
         ((J2DTextBox*)mErrorMsgTxtPane[i]->getPanePtr())->setFont(fileSel.font[0]);
         ((J2DTextBox*)mErrorMsgTxtPane[i]->getPanePtr())->setString(512, "");
 
@@ -3124,7 +3124,7 @@ void dFile_select_c::screenSet() {
     mErrorMsgTxtPane[mErrorTxtDispIdx]->setAlpha(0xff);
     mErrorMsgTxtPane[mErrorTxtDispIdx ^ 1]->setAlpha(0);
 
-    mSelIcon = new dSelect_cursor_c(0, 1.0f, NULL);
+    mSelIcon = JKR_NEW dSelect_cursor_c(0, 1.0f, NULL);
     JUT_ASSERT(5209, mSelIcon != NULL);
     mSelIcon->setParam(0.96f, 0.94f, 0.03f, 0.7f, 0.7f);
     Vec vtxCenter;
@@ -3148,23 +3148,23 @@ void dFile_select_c::screenSet() {
 
     J2DPane* selChildPanes[3];
     for (int i = 0; i < 3; i++) {
-        selChildPanes[i] = new J2DPane(l_tagName13[i], JGeometry::TBox2<f32>(238.0f, 43.0f, 712.0f, 130.0f));
+        selChildPanes[i] = JKR_NEW J2DPane(l_tagName13[i], JGeometry::TBox2<f32>(238.0f, 43.0f, 712.0f, 130.0f));
         selChildPanes[i]->setUserInfo('n_43');
         mSelFilePanes[i]->getPanePtr()->insertChild(fileSel.Scr->search(l_tagName131[i]),
                                                    selChildPanes[i]);
     }
 
     for (int i = 0; i < 3; i++) {
-        mFileInfo[i] = new dFile_info_c(mpArchive, 0);
+        mFileInfo[i] = JKR_NEW dFile_info_c(mpArchive, 0);
         mFileInfo[i]->setBasePane(selChildPanes[i]);
         mFileInfoDatBasePane[i] = mFileInfo[i]->getDatBase();
         mFileInfoNoDatBasePane[i] = mFileInfo[i]->getNoDatBase();
     }
 
     mNameBasePane = fileSel.Scr->search(MULTI_CHAR('name_n'));
-    mpName = new dName_c(mNameBasePane);
+    mpName = JKR_NEW dName_c(mNameBasePane);
     field_0x0128 = false;
-    mpFileWarning = new dFile_warning_c(mpArchive, 0);
+    mpFileWarning = JKR_NEW dFile_warning_c(mpArchive, 0);
     mSelDt.mpPane = fileSel.Scr->search(MULTI_CHAR('w_moyo03'));
 
     #if PLATFORM_GCN
@@ -3174,7 +3174,7 @@ void dFile_select_c::screenSet() {
     white.a = 0xff;
 
     ResTIMG* timg = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "tt_block8x8.bti");
-    mpFadePict = new J2DPicture(MULTI_CHAR('PICT01'), JGeometry::TBox2<f32>(0.0f, FB_WIDTH, 0.0f, FB_HEIGHT),
+    mpFadePict = JKR_NEW J2DPicture(MULTI_CHAR('PICT01'), JGeometry::TBox2<f32>(0.0f, FB_WIDTH, 0.0f, FB_HEIGHT),
                                 timg, NULL);
     mpFadePict->setBlackWhite(black, white);
     mpFadePict->setAlpha(0);
@@ -3189,7 +3189,7 @@ void dFile_select_c::screenSetCopySel() {
     static u64 l_tagName004[2] = {MULTI_CHAR('w_bk_l01'), MULTI_CHAR('w_bk_l02')};
     static u64 l_tagName005[2] = {MULTI_CHAR('w_cp_ef1'), MULTI_CHAR('w_cp_ef2')};
 
-    mCpSel.Scr = new J2DScreen();
+    mCpSel.Scr = JKR_NEW J2DScreen();
 
     JUT_ASSERT(5286, mCpSel.Scr != NULL);
     mCpSel.Scr->setPriority("zelda_file_select_copy_select.blo", 0x1100000, mpArchive);
@@ -3231,11 +3231,11 @@ void dFile_select_c::screenSetCopySel() {
     mCpSelBookBrkFrame = 0;
 
     for (int i = 0; i < 2; i++) {
-        mCpSelPane[i] = new CPaneMgr(mCpSel.Scr, l_tagName000[i], 0, NULL);
-        mCpSelPane_moyo[i] = new CPaneMgr(mCpSel.Scr, l_tagName001[i], 0, NULL);
-        mCpSelPane_gold[i] = new CPaneMgr(mCpSel.Scr, l_tagName002[i], 0, NULL);
-        mCpSelPane_gold2[i] = new CPaneMgr(mCpSel.Scr, l_tagName003[i], 0, NULL);
-        mCpSelPane_book[i] = new CPaneMgr(mCpSel.Scr, l_tagName004[i], 0, NULL);
+        mCpSelPane[i] = JKR_NEW CPaneMgr(mCpSel.Scr, l_tagName000[i], 0, NULL);
+        mCpSelPane_moyo[i] = JKR_NEW CPaneMgr(mCpSel.Scr, l_tagName001[i], 0, NULL);
+        mCpSelPane_gold[i] = JKR_NEW CPaneMgr(mCpSel.Scr, l_tagName002[i], 0, NULL);
+        mCpSelPane_gold2[i] = JKR_NEW CPaneMgr(mCpSel.Scr, l_tagName003[i], 0, NULL);
+        mCpSelPane_book[i] = JKR_NEW CPaneMgr(mCpSel.Scr, l_tagName004[i], 0, NULL);
 
         mCpSelPane_moyo[i]->getPanePtr()->setAnimation(mCpSelBpk);
         mCpSelPane_gold[i]->getPanePtr()->setAnimation(mCpSelBpk);
@@ -3255,7 +3255,7 @@ void dFile_select_c::screenSetCopySel() {
     namePane->animationTransform();
     namePane->setAnimation((J2DAnmTransform*)NULL);
 
-    mSelIcon2 = new dSelect_cursor_c(0, 1.0f, NULL);
+    mSelIcon2 = JKR_NEW dSelect_cursor_c(0, 1.0f, NULL);
     JUT_ASSERT(5406, mSelIcon2 != NULL);
     mSelIcon2->setParam(0.96f, 0.94f, 0.03f, 0.7f, 0.7f);
     Vec center = mCpSelPane[0]->getGlobalVtxCenter(false, 0);
@@ -3263,7 +3263,7 @@ void dFile_select_c::screenSetCopySel() {
     mSelIcon2->setAlphaRate(0.0f);
 
     for (int i = 0; i < 2; i++) {
-        mCpFileInfo[i] = new dFile_info_c(mpArchive, 0);
+        mCpFileInfo[i] = JKR_NEW dFile_info_c(mpArchive, 0);
         mCpFileInfo[i]->setBasePane(mCpSel.Scr->search(l_tagName13[i + 1]));
     }
 
@@ -3282,7 +3282,7 @@ void dFile_select_c::screenSetYesNo() {
     static u64 l_tagName11[2] = {MULTI_CHAR('w_no_gr'), MULTI_CHAR('w_yes_gr')};
     static u8 l_msgNum2[2] = {0x08, 0x07};
 
-    mYnSel.ScrYn = new J2DScreen();
+    mYnSel.ScrYn = JKR_NEW J2DScreen();
     JUT_ASSERT(5435, mYnSel.ScrYn != NULL);
     mYnSel.ScrYn->setPriority("zelda_file_select_yes_no_window.blo", 0x1100000, mpArchive);
     dPaneClass_showNullPane(mYnSel.ScrYn);
@@ -3296,12 +3296,12 @@ void dFile_select_c::screenSetYesNo() {
     mYnSelBck3->searchUpdateMaterialID(mYnSel.ScrYn);
 
     for (int i = 0; i < 2; i++) {
-        mYnSelPane[i] = new CPaneMgr(mYnSel.ScrYn, l_tagName012[i], 0, NULL);
+        mYnSelPane[i] = JKR_NEW CPaneMgr(mYnSel.ScrYn, l_tagName012[i], 0, NULL);
 #if VERSION == VERSION_GCN_JPN
-        mYnSelTxtPane[i] = new CPaneMgr(mYnSel.ScrYn, l_tagName013[i], 0, NULL);
+        mYnSelTxtPane[i] = JKR_NEW CPaneMgr(mYnSel.ScrYn, l_tagName013[i], 0, NULL);
         mYnSel.ScrYn->search(l_tagName013U[i])->hide();
 #else
-        mYnSelTxtPane[i] = new CPaneMgr(mYnSel.ScrYn, l_tagName013U[i], 0, NULL);
+        mYnSelTxtPane[i] = JKR_NEW CPaneMgr(mYnSel.ScrYn, l_tagName013U[i], 0, NULL);
         mYnSel.ScrYn->search(l_tagName013[i])->hide();
 #endif
         ((J2DTextBox*)mYnSelTxtPane[i]->getPanePtr())->setFont(mDoExt_getMesgFont());
@@ -3324,9 +3324,9 @@ void dFile_select_c::screenSetYesNo() {
     mYnSelBtkFrame = 0;
 
     for (int i = 0; i < 2; i++) {
-        mYnSelPane_m[i] = new CPaneMgr(mYnSel.ScrYn, l_tagName9[i], 0, NULL);
-        mYnSelPane_g[i] = new CPaneMgr(mYnSel.ScrYn, l_tagName10[i], 0, NULL);
-        mYnSelPane_gr[i] = new CPaneMgr(mYnSel.ScrYn, l_tagName11[i], 0, NULL);
+        mYnSelPane_m[i] = JKR_NEW CPaneMgr(mYnSel.ScrYn, l_tagName9[i], 0, NULL);
+        mYnSelPane_g[i] = JKR_NEW CPaneMgr(mYnSel.ScrYn, l_tagName10[i], 0, NULL);
+        mYnSelPane_gr[i] = JKR_NEW CPaneMgr(mYnSel.ScrYn, l_tagName11[i], 0, NULL);
 
         mYnSelPane_m[i]->getPanePtr()->setAnimation(mYnSelBpk);
         mYnSelPane_g[i]->getPanePtr()->setAnimation(mYnSelBpk);
@@ -3345,7 +3345,7 @@ void dFile_select_c::screenSet3Menu() {
     static u64 l_tagName011U[3] = {MULTI_CHAR('f_sta'), MULTI_CHAR('f_del'), MULTI_CHAR('f_cop_t')};
     static u8 l_msgNum[3] = {0x57, 0x58, 0x56};
 
-    m3mSel.Scr3m = new J2DScreen();
+    m3mSel.Scr3m = JKR_NEW J2DScreen();
     JUT_ASSERT(5530, m3mSel.Scr3m != NULL);
     m3mSel.Scr3m->setPriority("zelda_file_select_3menu_window.blo", 0x1100000, mpArchive);
     dPaneClass_showNullPane(m3mSel.Scr3m);
@@ -3374,12 +3374,12 @@ void dFile_select_c::screenSet3Menu() {
     m3mMenuPane->animationTransform();
 
     for (int i = 0; i < 3; i++) {
-        m3mSelPane[i] = new CPaneMgr(m3mSel.Scr3m, l_tagName1[i], 0, NULL);
+        m3mSelPane[i] = JKR_NEW CPaneMgr(m3mSel.Scr3m, l_tagName1[i], 0, NULL);
 #if VERSION == VERSION_GCN_JPN
-        m3mSelTextPane[i] = new CPaneMgr(m3mSel.Scr3m, l_tagName011[i], 0, NULL);
+        m3mSelTextPane[i] = JKR_NEW CPaneMgr(m3mSel.Scr3m, l_tagName011[i], 0, NULL);
         m3mSel.Scr3m->search(l_tagName011U[i])->hide();
 #else
-        m3mSelTextPane[i] = new CPaneMgr(m3mSel.Scr3m, l_tagName011U[i], 0, NULL);
+        m3mSelTextPane[i] = JKR_NEW CPaneMgr(m3mSel.Scr3m, l_tagName011U[i], 0, NULL);
         m3mSel.Scr3m->search(l_tagName011[i])->hide();
 #endif
 
@@ -3388,9 +3388,9 @@ void dFile_select_c::screenSet3Menu() {
         fopMsgM_messageGet(textbuf, l_msgNum[i]);
         ((J2DTextBox*)m3mSelTextPane[i]->getPanePtr())->setString(textbuf);
 
-        m3mSelPane_mo[i] = new CPaneMgr(m3mSel.Scr3m, l_tagName6[i], 0, NULL);
-        m3mSelPane_g[i] = new CPaneMgr(m3mSel.Scr3m, l_tagName7[i], 0, NULL);
-        m3mSelPane_gr[i] = new CPaneMgr(m3mSel.Scr3m, l_tagName8[i], 0, NULL);
+        m3mSelPane_mo[i] = JKR_NEW CPaneMgr(m3mSel.Scr3m, l_tagName6[i], 0, NULL);
+        m3mSelPane_g[i] = JKR_NEW CPaneMgr(m3mSel.Scr3m, l_tagName7[i], 0, NULL);
+        m3mSelPane_gr[i] = JKR_NEW CPaneMgr(m3mSel.Scr3m, l_tagName8[i], 0, NULL);
 
         m3mSelPane_mo[i]->getPanePtr()->setAnimation(m3mBpk);
         m3mSelPane_g[i]->getPanePtr()->setAnimation(m3mBpk);
@@ -3402,7 +3402,7 @@ void dFile_select_c::screenSet3Menu() {
 }
 
 void dFile_select_c::screenSetDetail() {
-    mSelDt.ScrDt = new J2DScreen();
+    mSelDt.ScrDt = JKR_NEW J2DScreen();
     JUT_ASSERT(5622, mSelDt.ScrDt != NULL);
     mSelDt.ScrDt->setPriority("zelda_file_select_details.blo", 0x1100000, mpArchive);
 
@@ -3413,7 +3413,7 @@ void dFile_select_c::screenSetDetail() {
     mSelDtBtkFrame = 0;
 
     mSelDt.mpPane2 = mSelDt.ScrDt->search(MULTI_CHAR('n_all'));
-    mSelDtPane_mset = new CPaneMgr(mSelDt.ScrDt, MULTI_CHAR('mset_p_n'), 0, NULL);
+    mSelDtPane_mset = JKR_NEW CPaneMgr(mSelDt.ScrDt, MULTI_CHAR('mset_p_n'), 0, NULL);
 
     mpFileSelect3d->setBasePane(mSelDtPane_mset);
     mpFileSelect3d->setBase2Pane(fileSel.Scr->search(MULTI_CHAR('w_sub_n')));
@@ -5263,12 +5263,12 @@ void dFile_select3D_c::setJ3D(char const* param_0, char const* param_1, char con
     JUT_ASSERT(8823, modelData != NULL);
 
     for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
-        material = new J3DMaterialAnm();
+        material = JKR_NEW J3DMaterialAnm();
         modelData->getMaterialNodePointer(i)->change();
         modelData->getMaterialNodePointer(i)->setMaterialAnm(material);
     }
 
-    mpModel = new J3DModel(modelData, 0, 1);
+    mpModel = JKR_NEW J3DModel(modelData, 0, 1);
     JUT_ASSERT(8836, mpModel != NULL);
 
     if (param_1) {
@@ -5276,7 +5276,7 @@ void dFile_select3D_c::setJ3D(char const* param_0, char const* param_1, char con
         anmBase = (J3DAnmTransform*)J3DAnmLoaderDataBase::load(bckRes);
         JUT_ASSERT(8846, anmBase != NULL);
 
-        mBckAnm = new mDoExt_bckAnm();
+        mBckAnm = JKR_NEW mDoExt_bckAnm();
         if (mBckAnm == NULL || !mBckAnm->init((J3DAnmTransform*)anmBase, 1, 2, 1.0f, 0, -1, false))
         {
             return;
@@ -5289,7 +5289,7 @@ void dFile_select3D_c::setJ3D(char const* param_0, char const* param_1, char con
         JUT_ASSERT(8859, anmBase != NULL);
         ((J3DAnmTevRegKey*)anmBase)->searchUpdateMaterialID(modelData);
 
-        mBrkAnm = new mDoExt_brkAnm();
+        mBrkAnm = JKR_NEW mDoExt_brkAnm();
         if (mBrkAnm == NULL ||
             !mBrkAnm->init(modelData, (J3DAnmTevRegKey*)anmBase, -1, 2, 1.0f, 0, -1))
         {

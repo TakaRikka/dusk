@@ -7,7 +7,9 @@
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "JSystem/J3DGraphBase/J3DVertex.h"
 #include "JSystem/J3DGraphBase/J3DFifo.h"
+#include <gx.h>
 #include <gd.h>
+#include "JSystem/JKernel/JKRHeap.h"
 
 void J3DGDSetVtxAttrFmtv(GXVtxFmt, GXVtxAttrFmtList const*, bool);
 void J3DFifoLoadPosMtxImm(Mtx, u32);
@@ -85,7 +87,7 @@ void J3DShape::addTexMtxIndexInVcd(GXAttr attr) {
     if (attrIdx == -1)
         return;
 
-    GXVtxDescList* newVtxDesc = new GXVtxDescList[attrCount + 2];
+    GXVtxDescList* newVtxDesc = JKR_NEW GXVtxDescList[attrCount + 2];
     bool inserted = false;
 
     vtxDesc = getVtxDesc();
@@ -131,12 +133,36 @@ void J3DLoadCPCmd(u8 addr, u32 val) {
     GXCmd1u32(val);
 }
 
+#if TARGET_PC
+static void J3DLoadArrayBasePtr(GXAttr attr, void* data, u32 size) {
+    u32 idx = (attr == GX_VA_NBT) ? 1 : (attr - GX_VA_POS);
+    GXCmd1u8(GX_LOAD_AURORA);
+    GXCmd1u16(GX_LOAD_AURORA_ARRAYBASE | idx);
+    GXCmd1u64((u64)data);
+    GXCmd1u64((u64)size);
+}
+#else
 static void J3DLoadArrayBasePtr(GXAttr attr, void* data) {
     u32 idx = (attr == GX_VA_NBT) ? 1 : (attr - GX_VA_POS);
     J3DLoadCPCmd(0xA0 + idx, ((uintptr_t)data & 0x7FFFFFFF));
 }
+#endif
 
 void J3DShape::loadVtxArray() const {
+#if TARGET_PC
+    // TODO: these can very easily overcount if the data isn't in F32 format
+    if (j3dSys.getVtxPos() != mVertexData->getVtxPosArray()) {
+        J3DLoadArrayBasePtr(GX_VA_POS, j3dSys.getVtxPos(), j3dSys.mVtxPosNum * sizeof(Vec));
+    }
+
+    if (!mHasNBT && j3dSys.getVtxNrm() != mVertexData->getVtxNrmArray()) {
+        J3DLoadArrayBasePtr(GX_VA_NRM, j3dSys.getVtxNrm(), j3dSys.mVtxNrmNum * sizeof(Vec));
+    }
+
+    if (j3dSys.getVtxCol() != mVertexData->getVtxColorArray(0)) {
+        J3DLoadArrayBasePtr(GX_VA_CLR0, j3dSys.getVtxCol(), j3dSys.mVtxColNum * sizeof(GXColor));
+    }
+#else
     J3DLoadArrayBasePtr(GX_VA_POS, j3dSys.getVtxPos());
 
     if (!mHasNBT) {
@@ -144,6 +170,7 @@ void J3DShape::loadVtxArray() const {
     }
 
     J3DLoadArrayBasePtr(GX_VA_CLR0, j3dSys.getVtxCol());
+#endif
 }
 
 bool J3DShape::isSameVcdVatCmd(J3DShape* other) {
@@ -220,17 +247,28 @@ void J3DShape::makeVtxArrayCmd() {
             mHasNBT = true;
             stride[GX_VA_NRM - GX_VA_POS] *= 3;
             array[GX_VA_NRM - GX_VA_POS] = mVertexData->getVtxNBTArray();
+            // TODO: How set array size here?
         } else if (vtxDesc->attr == GX_VA_PNMTXIDX && vtxDesc->type != GX_NONE) {
             mHasPNMTXIdx = true;
         }
     }
 
+#if TARGET_PC
+    for (u32 i = 0; i < 12; i++) {
+        GXAttr attr = GXAttr(i + GX_VA_POS);
+        if (array[i] != nullptr)
+            GDSetArraySized(attr, array[i], mVertexData->getVtxArrByteSize(attr), mVertexData->getVtxArrStride(attr));
+        else
+            GDSetArraySized(attr, nullptr, 0, mVertexData->getVtxArrStride(attr));
+    }
+#else
     for (u32 i = 0; i < 12; i++) {
         if (array[i] != 0)
             GDSetArray((GXAttr)(i + GX_VA_POS), array[i], stride[i]);
         else
             GDSetArrayRaw((GXAttr)(i + GX_VA_POS), 0, stride[i]);
     }
+#endif
 }
 
 void J3DShape::makeVcdVatCmd() {

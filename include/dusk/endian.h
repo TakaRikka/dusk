@@ -209,6 +209,23 @@ struct BE<Mtx44> {
     }
 };
 
+template <>
+struct BE<Mtx> {
+    BE<f32> contents[3][4];
+
+    auto& operator[](int x) const {
+        return contents[x];
+    }
+
+    void to_host(Mtx& mtx) const {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 4; j++) {
+                mtx[i][j] = contents[i][j];
+            }
+        }
+    }
+};
+
 template<typename T>
 void be_swap(T& val) {
     val = BE<T>::swap(val);
@@ -222,8 +239,24 @@ void be_swap(T (& val)[N]) {
     val = BE<T>::swap(val);
 }
 
+template<typename T>
+void be_swap(T array[], const u32 size) {
+    for (u32 i = 0; i < size; i++) {
+        be_swap(array[i]);
+    }
+}
+
 template<>
 inline void be_swap(Mtx44& val) {
+    for (auto & x : val) {
+        for (float & y : x) {
+            be_swap(y);
+        }
+    }
+}
+
+template<>
+inline void be_swap(Mtx& val) {
     for (auto & x : val) {
         for (float & y : x) {
             be_swap(y);

@@ -474,14 +474,14 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     sq_class* _this = static_cast<sq_class*>(i_this);
     
     _this->mpMorf =
-        new mDoExt_McaMorf(static_cast<J3DModelData*>(dComIfG_getObjectRes("Sq", 17)), NULL, NULL,
+        JKR_NEW mDoExt_McaMorf(static_cast<J3DModelData*>(dComIfG_getObjectRes("Sq", 17)), NULL, NULL,
                            static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Sq", 9)),
                            0, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000284);
     if (_this->mpMorf == NULL || _this->mpMorf->getModel() == NULL) {
         return 0;
     }
 
-    _this->mpBtkAnm = new mDoExt_btkAnm();
+    _this->mpBtkAnm = JKR_NEW mDoExt_btkAnm();
     if (_this->mpBtkAnm == NULL) {
         return 0;
     }

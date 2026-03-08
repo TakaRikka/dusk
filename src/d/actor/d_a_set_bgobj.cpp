@@ -16,7 +16,7 @@ int daSetBgObj_c::CreateInit() {
         PROC_BG_OBJ, PROC_BG_OBJ, PROC_BG_OBJ, PROC_Obj_Flag2, PROC_Obj_Flag3,
     };
 
-    u16* spec_data_p = (u16*)dComIfG_getObjectRes(mArcName, l_specName);
+    BE(u16)* spec_data_p = (BE(u16)*)dComIfG_getObjectRes(mArcName, l_specName);
     fopAcM_create(l_bg_profName[*spec_data_p], fopAcM_GetParam(this), &current.pos,
                   fopAcM_GetRoomNo(this), &current.angle, &scale, -1);
 

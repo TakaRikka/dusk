@@ -6810,7 +6810,7 @@ void daAlink_c::setWolfBallModel() {
     field_0x0718 = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcName, 0x49));
     field_0x0718->searchUpdateMaterialID(mHeldItemModel->getModelData());
 
-    mpHookSound = new Z2SoundObjSimple();
+    mpHookSound = JKR_NEW Z2SoundObjSimple();
     mDoExt_setCurrentHeap(prev_heap);
 
     mEquipItem = 0x10A;

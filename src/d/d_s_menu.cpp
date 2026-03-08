@@ -1473,7 +1473,7 @@ int dScnMenu_Delete(dScnMenu_c* i_this) {
     "dScnMenu_Delete():\n";
 
     JUTDbPrint::getManager()->changeFont(JFWSystem::getSystemFont());
-    delete i_this->font;
+    JKR_DELETE(i_this->font);
 
     JKRFree(i_this->info);
     JKRFree(i_this->fontRes);
@@ -1583,7 +1583,7 @@ int phase_2(dScnMenu_c* i_this) {
     }
 
     if (l_groupPoint == NULL) {
-        l_groupPoint = new s8[menu_info->num];
+        l_groupPoint = JKR_NEW s8[menu_info->num];
         JUT_ASSERT(3252, l_groupPoint != NULL);
 
         if (mDoExt_getSafeZeldaHeapSize() >= 0) {
@@ -1611,15 +1611,15 @@ int phase_2(dScnMenu_c* i_this) {
     category_info->data = (menu_category_data_class*)((uintptr_t)category_info->data + (uintptr_t)menu_info);
     i_this->current_category = menu_info->stage_data[l_cursolID].field_0x43;
 
-    delete i_this->command;
+    JKR_DELETE(i_this->command);
 
     u8 sp8 = search(menu_info);
 
     i_this->fontRes = (ResFONT*)i_this->fontCommand->getMemAddress();
-    delete i_this->fontCommand;
+    JKR_DELETE(i_this->fontCommand);
 
     if (i_this->fontRes != NULL) {
-        i_this->font = new myFontClass(i_this->fontRes, NULL);
+        i_this->font = JKR_NEW myFontClass(i_this->fontRes, NULL);
         if (i_this->font != NULL) {
             JUTDbPrint::getManager()->changeFont(i_this->font);
         }

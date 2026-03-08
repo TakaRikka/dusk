@@ -1,5 +1,6 @@
-#include <dolphin/gx.h>
 #include "dusk/endian.h"
+#include <dolphin/gx.h>
+#include "SSystem/SComponent/c_xyz.h"
 #include "dusk/endian_gx.hpp"
 
 #define IMPL_ENUM(type) \
@@ -37,5 +38,13 @@ GXVtxAttrFmtList BE<GXVtxAttrFmtList>::swap(GXVtxAttrFmtList val) {
         BE<GXCompCnt>::swap(val.cnt),
         BE<GXCompType>::swap(val.type),
         val.frac
+    };
+}
+
+template<>
+cXy BE<cXy>::swap(cXy val) {
+    return {
+        BE<f32>::swap(val.x),
+        BE<f32>::swap(val.y),
     };
 }

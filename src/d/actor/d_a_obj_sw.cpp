@@ -661,7 +661,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     if (i_this->field_0x570 == 8) {
         for (int i = 0; i < 8; i++) {
             i_this->field_0x5a8[i].mpModelMorf =
-                new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Npc_ksw", 17), NULL, NULL,
+                JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Npc_ksw", 17), NULL, NULL,
                                    (J3DAnmTransform*)dComIfG_getObjectRes("Npc_ksw", 13), 2, 1.0f,
                                    0, -1, 1, NULL, 0x80000, 0x11000084);
 

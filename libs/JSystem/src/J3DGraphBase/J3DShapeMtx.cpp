@@ -332,7 +332,9 @@ void J3DShapeMtxConcatView::loadMtxConcatView_PNCPU(int slot, u16 drw) const {
 void J3DShapeMtxConcatView::loadMtxConcatView_PNGP_LOD(int slot, u16 drw) const {
     Mtx m;
     MTXConcat(*j3dSys.getShapePacket()->getBaseMtxPtr(), j3dSys.getModelDrawMtx(drw), m);
-    MTXConcat(m, j3dSys.getModel()->getModelData()->getInvJointMtx(drw), m);
+    Mtx copy;
+    j3dSys.getModel()->getModelData()->getInvJointMtx(drw).to_host(copy);
+    MTXConcat(m, copy, m);
     J3DDifferedTexMtx::load(m);
     J3DFifoLoadPosMtxImm(m, slot * 3);
     loadNrmMtx(slot, drw, m);

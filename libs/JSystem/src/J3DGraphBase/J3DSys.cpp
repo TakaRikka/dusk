@@ -264,8 +264,17 @@ void J3DSys::reinitTransform() {
 }
 
 void J3DSys::reinitTexture() {
+#if TARGET_PC
+    static GXTexObj texObj;
+    static bool initialized = false;
+    if (!initialized) {
+        GXInitTexObj(&texObj, NullTexData, 4, 4, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+        initialized = true;
+    }
+#else
     GXTexObj texObj;
     GXInitTexObj(&texObj, NullTexData, 4, 4, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+#endif
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     GXLoadTexObj(&texObj, GX_TEXMAP1);
     GXLoadTexObj(&texObj, GX_TEXMAP2);

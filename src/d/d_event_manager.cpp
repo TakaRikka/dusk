@@ -1146,7 +1146,7 @@ int dEvent_manager_c::getMyActIdx(int staffId, const char* const* action, int n_
     }
 
     int i;
-    char* nowCutName = getMyNowCutName(staffId);
+    char* nowCutName = getMyNowCutNameStr(staffId);
     if (nowCutName == NULL) {
         staff->field_0x3c = -1;
         // "event: getMyActIdx(): staff %s is not an active participant."
@@ -1181,6 +1181,18 @@ int dEvent_manager_c::getMyActIdx(int staffId, const char* const* action, int n_
 }
 
 char* dEvent_manager_c::getMyNowCutName(int staffId) {
+#if TARGET_LITTLE_ENDIAN
+    static char buf[4] = {};
+    memcpy(buf, getMyNowCutNameStr(staffId), 4);
+    std::swap(buf[0], buf[3]);
+    std::swap(buf[1], buf[2]);
+    return buf;
+#else
+    return getMyNowCutNameStr(staffId);
+#endif
+}
+
+char* dEvent_manager_c::getMyNowCutNameStr(int staffId) {
     dEvDtCut_c* cut;
     if (dComIfGp_getEvent()->getMode() == dEvt_mode_WAIT_e) {
         if (OREG_F(8)) {

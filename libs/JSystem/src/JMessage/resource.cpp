@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <cstring>
 
+#include "JSystem/JKernel/JKRHeap.h"
+
 u16 JMessage::TResource::toMessageIndex_messageID(u32 uMsgID, u32 upperHalf, bool* pbValid) const {
     if (!oParse_TBlock_messageID_.getRaw()) {
         return 0xFFFF;
@@ -63,7 +65,7 @@ u16 JMessage::TResource::toMessageIndex_messageID(u32 uMsgID, u32 upperHalf, boo
 
     int nMsgNumber = oParse_TBlock_messageID_.get_number();
 
-    const u32* pContent = oParse_TBlock_messageID_.getContent();
+    const u32* pContent = (u32*)oParse_TBlock_messageID_.getContent();
     JUT_ASSERT(131, pContent!=NULL);
 
     const u32* pFirst = pContent;
@@ -112,12 +114,12 @@ JMessage::TResource* JMessage::TResourceContainer::TCResource::Get_groupID(u16 u
 }
 
 JMessage::TResource* JMessage::TResourceContainer::TCResource::Do_create() {
-    return new TResource();
+    return JKR_NEW TResource();
 }
 
 void JMessage::TResourceContainer::TCResource::Do_destroy(JMessage::TResource* pResource) {
 #if DEBUG
-    delete pResource;
+    JKR_DELETE(pResource);
 #else
     operator delete(pResource);
 #endif
@@ -166,7 +168,7 @@ bool JMessage::TParse::parseHeader_next(const void** ppData_inout, u32* puBlock_
 
     JUT_ASSERT(350, pContainer_!=NULL);
 
-    if (memcmp(oHeader.get_signature(), &data::ga4cSignature, sizeof(data::ga4cSignature)) != 0) {
+    if (memcmp((u32*)oHeader.get_signature(), &data::ga4cSignature, sizeof(data::ga4cSignature)) != 0) {
         JGADGET_WARNMSG(355, "unknown signature");
         return false;
     }

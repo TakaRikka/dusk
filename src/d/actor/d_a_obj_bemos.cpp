@@ -421,7 +421,7 @@ int daObjBm_c::CreateHeap() {
     {
         J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BRK_SERCH_e);
         JUT_ASSERT(780, pbrk != NULL);
-        mSerchBrk = new mDoExt_brkAnm();
+        mSerchBrk = JKR_NEW mDoExt_brkAnm();
         if (mSerchBrk == NULL || mSerchBrk->init(modelData, pbrk, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1) == 0) {
             return 0;
         }
@@ -436,7 +436,7 @@ int daObjBm_c::CreateHeap() {
     {
         J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BCK_BM_UP_e);
         JUT_ASSERT(798, pbck != NULL);
-        mBeamosBck = new mDoExt_bckAnm();
+        mBeamosBck = JKR_NEW mDoExt_bckAnm();
         if (mBeamosBck == NULL || mBeamosBck->init(pbck, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
             return 0;
         }
@@ -454,7 +454,7 @@ int daObjBm_c::CreateHeap() {
     {
         J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BTK_EF_BIMOBEAMB_OFF_e);
         JUT_ASSERT(827, pbtk != NULL);
-        mBeamBtk = new mDoExt_btkAnm();
+        mBeamBtk = JKR_NEW mDoExt_btkAnm();
         if (mBeamBtk == NULL || mBeamBtk->init(modelData, pbtk, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1) == 0) {
             return 0;
         }
@@ -468,7 +468,7 @@ int daObjBm_c::CreateHeap() {
         pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(
             l_arcName, dRes_INDEX_OBJ_BM_BTK_EF_BIMOBEAM_e);
         JUT_ASSERT(846, pbtk != NULL);
-        mBeamEffBtk = new mDoExt_btkAnm();
+        mBeamEffBtk = JKR_NEW mDoExt_btkAnm();
         if (mBeamEffBtk == NULL || mBeamEffBtk->init(modelData, pbtk, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1) == 0) {
             return 0;
         }
@@ -477,7 +477,7 @@ int daObjBm_c::CreateHeap() {
     {
         J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BCK_EF_BIMOBEAM_e);
         JUT_ASSERT(858, pbck != NULL);
-        mBeamEffBck = new mDoExt_bckAnm();
+        mBeamEffBck = JKR_NEW mDoExt_bckAnm();
         if (mBeamEffBck == NULL || mBeamEffBck->init(pbck, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false) == 0) {
             return 0;
         }
@@ -495,7 +495,7 @@ int daObjBm_c::CreateHeap() {
     {
         J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_OBJ_BM_BCK_BMF_OFF_e);
         JUT_ASSERT(885, pbck != NULL);
-        mBmfOffBck = new mDoExt_bckAnm();
+        mBmfOffBck = JKR_NEW mDoExt_bckAnm();
         if (mBmfOffBck == NULL || mBmfOffBck->init(pbck, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
             return 0;
         }

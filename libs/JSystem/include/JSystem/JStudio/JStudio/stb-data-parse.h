@@ -49,7 +49,7 @@ public:
     void getData(TData*) const;
 
     const void* get() const { return getRaw(); }
-    u32 get_head() const { return *(u32*)get(); }
+    u32 get_head() const { return BSWAP32(*(u32*)get()); }
 };
 
 class TParse_TParagraph : public TParseData_aligned<4> {

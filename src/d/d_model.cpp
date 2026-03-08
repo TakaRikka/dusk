@@ -6,9 +6,9 @@
 #include "d/d_com_inf_game.h"
 
 void dMdl_c::draw() {
-    j3dSys.setVtxPos(mpModelData->getVtxPosArray());
-    j3dSys.setVtxNrm(mpModelData->getVtxNrmArray());
-    j3dSys.setVtxCol(mpModelData->getVtxColorArray(0));
+    j3dSys.setVtxPos(mpModelData->getVtxPosArray(), mpModelData->getVtxNum());
+    j3dSys.setVtxNrm(mpModelData->getVtxNrmArray(), mpModelData->getNrmNum());
+    j3dSys.setVtxCol(mpModelData->getVtxColorArray(0), mpModelData->getColNum());
     J3DShape::resetVcdVatCache();
 
     J3DShape* shape = mpModelData->getMaterialNodePointer(mMaterialId)->getShape();
@@ -83,14 +83,14 @@ dMdl_c* dMdl_mng_c::entry(J3DModelData* i_modelData, u16 i_materialId, dKy_tevst
 dMdl_mng_c* dMdl_mng_c::m_myObj;
 
 void dMdl_mng_c::create() {
-    m_myObj = new dMdl_mng_c();
+    m_myObj = JKR_NEW dMdl_mng_c();
 }
 
 dMdl_c::~dMdl_c() {}
 
 void dMdl_mng_c::remove() {
     if (m_myObj != NULL) {
-        delete m_myObj;
+        JKR_DELETE(m_myObj);
         m_myObj = NULL;
     }
 }

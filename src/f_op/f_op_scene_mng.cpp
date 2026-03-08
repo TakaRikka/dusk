@@ -8,6 +8,7 @@
 #include "f_op/f_op_scene_iter.h"
 #include "f_op/f_op_scene_req.h"
 #include <cstdio>
+#include "dusk/logging.h"
 
 scene_class* fopScnM_SearchByID(fpc_ProcID id) {
     return (scene_class*)fopScnIt_Judge((fop_ScnItFunc)fpcSch_JudgeByID, &id);
@@ -30,9 +31,9 @@ fpc_ProcID fopScnM_DeleteReq(scene_class* i_scene) {
 }
 
 int fopScnM_CreateReq(s16 i_procName, s16 param_2, u16 param_3, uintptr_t i_data) {
-    printf("[DIAG] fopScnM_CreateReq: procName=%d fade=%d\n", i_procName, param_2); fflush(stdout);
+    DuskLog.debug("fopScnM_CreateReq: procName={} fade={}", i_procName, param_2);
     fpc_ProcID result = fopScnRq_Request(0, 0, i_procName, (void*)i_data, param_2, param_3);
-    printf("[DIAG] fopScnM_CreateReq: result=%d (error=%d)\n", result, fpcM_ERROR_PROCESS_ID_e); fflush(stdout);
+    DuskLog.debug("fopScnM_CreateReq: result={} (error={})", result, fmt::underlying(fpcM_ERROR_PROCESS_ID_e));
     return result != fpcM_ERROR_PROCESS_ID_e;
 }
 

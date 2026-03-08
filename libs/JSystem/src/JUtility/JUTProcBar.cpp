@@ -35,14 +35,14 @@ JUTProcBar::~JUTProcBar() {
 
 JUTProcBar* JUTProcBar::create() {
     if (!sManager) {
-        sManager = new JUTProcBar();
+        sManager = JKR_NEW JUTProcBar();
     }
     return sManager;
 }
 
 void JUTProcBar::destroy() {
     if (sManager) {
-        delete sManager;
+        JKR_DELETE(sManager);
     }
     sManager = NULL;
 }
@@ -107,8 +107,10 @@ void JUTProcBar::adjustMeterLength(u32 param_0, f32* param_1, f32 param_2, f32 p
 }
 
 void JUTProcBar::draw() {
+#if !TARGET_PC
     drawProcessBar();
     drawHeapBar();
+#endif
 }
 
 void JUTProcBar::drawProcessBar() {

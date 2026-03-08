@@ -1,9 +1,10 @@
 #ifndef J2DANIMATION_H
 #define J2DANIMATION_H
 
-#include "JSystem/JMath/JMath.h"
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/JUtility/JUTPalette.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JMath/JMath.h"
 
 class J2DScreen;
 struct ResTIMG;
@@ -74,14 +75,14 @@ public:
         J3D_PANIC(345, param_2 < mAnmTableNum[param_1], "Error : range over.");
         return &mVtxColorIndexData[param_1][param_2];
     }
-    u16* getVtxColorIndexPointer(u8 param_0) const {
+    BE(u16)* getVtxColorIndexPointer(u8 param_0) const {
         J3D_PANIC(351, param_0 < 2, "Error : range over.");
         return mVtxColorIndexPointer[param_0];
     }
 
     /* 0x10 */ u16 mAnmTableNum[2];
     /* 0x14 */ J3DAnmVtxColorIndexData* mVtxColorIndexData[2];
-    /* 0x1C */ u16* mVtxColorIndexPointer[2];
+    /* 0x1C */ BE(u16)* mVtxColorIndexPointer[2];
 };  // Size: 0x24
 
 struct J3DTransformInfo;
@@ -102,10 +103,10 @@ public:
     virtual void getColor(u8, u16, GXColor*) const;
 
     /* 0x24 */ J3DAnmColorKeyTable* mInfoTable[2];
-    /* 0x2C */ s16* mRValues;
-    /* 0x30 */ s16* mGValues;
-    /* 0x34 */ s16* mBValues;
-    /* 0x38 */ s16* mAValues;
+    /* 0x2C */ BE(s16)* mRValues;
+    /* 0x30 */ BE(s16)* mGValues;
+    /* 0x34 */ BE(s16)* mBValues;
+    /* 0x38 */ BE(s16)* mAValues;
 };  // Size: 0x3C
 
 /**
@@ -157,7 +158,7 @@ public:
  */
 class J2DAnmTransform : public J2DAnmBase {
 public:
-    J2DAnmTransform(s16 frameMax, f32* pScaleValues, s16* pRotationValues, f32* pTranslateValues) : J2DAnmBase(frameMax) {
+    J2DAnmTransform(s16 frameMax, BE(f32)* pScaleValues, BE(s16)* pRotationValues, BE(f32)* pTranslateValues) : J2DAnmBase(frameMax) {
         mScaleValues = pScaleValues;
         mRotationValues = pRotationValues;
         mTranslateValues = pTranslateValues;
@@ -166,9 +167,9 @@ public:
     virtual ~J2DAnmTransform() {}
     virtual void getTransform(u16, J3DTransformInfo*) const {}
 
-    /* 0x10 */ f32* mScaleValues;
-    /* 0x14 */ s16* mRotationValues;
-    /* 0x18 */ f32* mTranslateValues;
+    /* 0x10 */ BE(f32)* mScaleValues;
+    /* 0x14 */ BE(s16)* mRotationValues;
+    /* 0x18 */ BE(f32)* mTranslateValues;
 };  // Size: 0x1C
 
 /**
@@ -250,25 +251,25 @@ public:
     /* 0x1A */ u16 field_0x1a;
     /* 0x1C */ u16 field_0x1c;
     /* 0x1E */ u16 field_0x1e;
-    /* 0x20 */ f32* mScaleValues;
-    /* 0x24 */ s16* mRotationValues;
-    /* 0x28 */ f32* mTranslationValues;
+    /* 0x20 */ BE(f32)* mScaleValues;
+    /* 0x24 */ BE(s16)* mRotationValues;
+    /* 0x28 */ BE(f32)* mTranslationValues;
     /* 0x2C */ u8* mUpdateTexMtxID;
-    /* 0x30 */ u16* mUpdateMaterialID;
+    /* 0x30 */ BE(u16)* mUpdateMaterialID;
     /* 0x34 */ JUTNameTab field_0x34;
-    /* 0x44 */ Vec* field_0x44;
+    /* 0x44 */ BE(Vec)* field_0x44;
     /* 0x48 */ u16 field_0x48;
     /* 0x4A */ u16 field_0x4a;
     /* 0x4C */ u16 field_0x4c;
     /* 0x4E */ u16 field_0x4e;
-    /* 0x50 */ f32* field_0x50;
-    /* 0x54 */ s16* field_0x54;
-    /* 0x58 */ f32* field_0x58;
+    /* 0x50 */ BE(f32)* field_0x50;
+    /* 0x54 */ BE(s16)* field_0x54;
+    /* 0x58 */ BE(f32)* field_0x58;
     /* 0x5C */ J3DAnmTransformKeyTable* field_0x5c;
     /* 0x60 */ u8* field_0x60;
-    /* 0x64 */ u16* field_0x64;
+    /* 0x64 */ BE(u16)* field_0x64;
     /* 0x68 */ JUTNameTab field_0x68;
-    /* 0x78 */ Vec* field_0x78;
+    /* 0x78 */ BE(Vec)* field_0x78;
     /* 0x7C */ int field_0x7c;
 };
 
@@ -284,7 +285,7 @@ public:
             mPalette = NULL;
         }
         ~J2DAnmTexPatternTIMGPointer() {
-            delete mPalette;
+            JKR_DELETE(mPalette);
         }
 
         /* 0x0 */ ResTIMG* mRes;
@@ -304,7 +305,7 @@ public:
     ResTIMG* getResTIMG(u16) const;
     JUTPalette* getPalette(u16) const;
 
-    virtual ~J2DAnmTexPattern() { delete[] mTIMGPtrArray; }
+    virtual ~J2DAnmTexPattern() { JKR_DELETE_ARRAY(mTIMGPtrArray); }
     virtual void searchUpdateMaterialID(J2DScreen*);
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
     u16 getUpdateMaterialID(u16 i) const {
@@ -313,11 +314,11 @@ public:
     }
     J3DAnmTexPatternFullTable* getAnmTable() const { return mAnmTable; }
 
-    /* 0x10 */ u16* mValues;
+    /* 0x10 */ BE(u16)* mValues;
     /* 0x14 */ J3DAnmTexPatternFullTable* mAnmTable;
     /* 0x18 */ u16 field_0x18;
     /* 0x1A */ u16 mUpdateMaterialNum;
-    /* 0x1C */ u16* mUpdateMaterialID;
+    /* 0x1C */ BE(u16)* mUpdateMaterialID;
     /* 0x20 */ JUTNameTab field_0x20;
     /* 0x30 */ J2DAnmTexPatternTIMGPointer* mTIMGPtrArray;
 };
@@ -368,20 +369,20 @@ public:
     /* 0x1E */ u16 field_0x1e;
     /* 0x20 */ u16 field_0x20;
     /* 0x22 */ u16 field_0x22;
-    /* 0x24 */ u16* mCRegUpdateMaterialID;
+    /* 0x24 */ BE(u16)* mCRegUpdateMaterialID;
     /* 0x28 */ JUTNameTab mCRegNameTab;
-    /* 0x38 */ u16* mKRegUpdateMaterialID;
+    /* 0x38 */ BE(u16)* mKRegUpdateMaterialID;
     /* 0x3C */ JUTNameTab mKRegNameTab;
     /* 0x4C */ J3DAnmCRegKeyTable* mAnmCRegKeyTable;
     /* 0x50 */ J3DAnmKRegKeyTable* mAnmKRegKeyTable;
-    /* 0x54 */ s16* mCRValues;
-    /* 0x58 */ s16* mCGValues;
-    /* 0x5C */ s16* mCBValues;
-    /* 0x60 */ s16* mCAValues;
-    /* 0x64 */ s16* mKRValues;
-    /* 0x68 */ s16* mKGValues;
-    /* 0x6C */ s16* mKBValues;
-    /* 0x70 */ s16* mKAValues;
+    /* 0x54 */ BE(s16)* mCRValues;
+    /* 0x58 */ BE(s16)* mCGValues;
+    /* 0x5C */ BE(s16)* mCBValues;
+    /* 0x60 */ BE(s16)* mCAValues;
+    /* 0x64 */ BE(s16)* mKRValues;
+    /* 0x68 */ BE(s16)* mKGValues;
+    /* 0x6C */ BE(s16)* mKBValues;
+    /* 0x70 */ BE(s16)* mKAValues;
 };
 
 /**
@@ -410,7 +411,7 @@ public:
     /* 0x14 */ u16 field_0x14;
     /* 0x16 */ u16 field_0x16;
     /* 0x18 */ u16 mUpdateMaterialNum;
-    /* 0x1C */ u16* mUpdateMaterialID;
+    /* 0x1C */ BE(u16)* mUpdateMaterialID;
     /* 0x20 */ JUTNameTab field_0x20;
 };  // Size: 0x30
 
@@ -430,10 +431,10 @@ public:
     virtual ~J2DAnmColorKey() {}
     virtual void getColor(u16, GXColor*) const;
 
-    /* 0x30 */ s16* mRValues;
-    /* 0x34 */ s16* mGValues;
-    /* 0x38 */ s16* mBValues;
-    /* 0x3C */ s16* mAValues;
+    /* 0x30 */ BE(s16)* mRValues;
+    /* 0x34 */ BE(s16)* mGValues;
+    /* 0x38 */ BE(s16)* mBValues;
+    /* 0x3C */ BE(s16)* mAValues;
     /* 0x40 */ J3DAnmColorKeyTable* mInfoTable;
 };
 
@@ -475,14 +476,14 @@ public:
     /* 0x40 */ J3DAnmColorFullTable* mInfoTable;
 };
 
-inline f32 J2DHermiteInterpolation(f32 f1, const f32* f2, const f32* f3, const f32* f4, const f32* f5, const f32* f6,
-                                        const f32* f7) {
+inline f32 J2DHermiteInterpolation(f32 f1, const BE(f32)* f2, const BE(f32)* f3, const BE(f32)* f4,
+                                   const BE(f32)* f5, const BE(f32)* f6, const BE(f32)* f7) {
     return JMAHermiteInterpolation(f1, *f2, *f3, *f4, *f5, *f6, *f7);
 }
 
-inline f32 J2DHermiteInterpolation(__REGISTER f32 pp1, __REGISTER s16* pp2, __REGISTER s16* pp3,
-                                        __REGISTER s16* pp4, __REGISTER s16* pp5, __REGISTER s16* pp6,
-                                        __REGISTER s16* pp7) {
+inline f32 J2DHermiteInterpolation(__REGISTER f32 pp1, __REGISTER BE(s16)* pp2, __REGISTER BE(s16)* pp3,
+                                        __REGISTER BE(s16)* pp4, __REGISTER BE(s16)* pp5, __REGISTER BE(s16)* pp6,
+                                        __REGISTER BE(s16)* pp7) {
 #ifdef __MWERKS__
     __REGISTER f32 p1 = pp1;
     __REGISTER f32 ff8;

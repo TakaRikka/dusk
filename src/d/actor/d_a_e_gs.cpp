@@ -172,7 +172,7 @@ static int daE_GS_Delete(e_gs_class* a_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_gs_class* a_this = (e_gs_class*)i_this;
 
-    a_this->model_morf = new mDoExt_McaMorfSO((J3DModelData* )dComIfG_getObjectRes("E_gs", 9), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_gs", 6), 2, 1.0f, 0, -1, &a_this->sound, 0x80000, 0x11000084);
+    a_this->model_morf = JKR_NEW mDoExt_McaMorfSO((J3DModelData* )dComIfG_getObjectRes("E_gs", 9), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_gs", 6), 2, 1.0f, 0, -1, &a_this->sound, 0x80000, 0x11000084);
     if (a_this->model_morf == NULL || a_this->model_morf->getModel() == NULL) {
         return 0;
     }

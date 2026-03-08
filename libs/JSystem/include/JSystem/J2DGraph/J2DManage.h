@@ -10,8 +10,8 @@ class JSUInputStream;
  * 
  */
 struct J2DResReference {
-    /* 0x00 */ u16 mCount;
-    /* 0x02 */ u16 mOffsets[1];
+    /* 0x00 */ BE(u16) mCount;
+    /* 0x02 */ BE(u16) mOffsets[1];
 
     char* getResReference(u16) const;
     char* getName(u16) const;

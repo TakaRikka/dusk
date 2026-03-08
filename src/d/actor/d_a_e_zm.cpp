@@ -893,7 +893,7 @@ int daE_ZM_c::CreateHeap() {
 
     JUT_ASSERT(1558, modelData != NULL);
 
-    mpModelMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_ZM", BCK_ZM_MOUTHOPEN), 2, 1.0f, 0, -1, &mSound, 0, 0x11000084);
+    mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_ZM", BCK_ZM_MOUTHOPEN), 2, 1.0f, 0, -1, &mSound, 0, 0x11000084);
     if (mpModelMorf == NULL || mpModelMorf->getModel() == NULL) {
         return 0;
     }

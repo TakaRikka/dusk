@@ -16,11 +16,11 @@
 #include "f_ap/f_ap_game.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_graphic.h"
+#include "res/Object/Always.h"
 #include <cstdio>
 #include <cstring>
 
 #ifndef __MWERKS__
-#include <cstring>
 #include "dusk/extras.h"
 #endif
 
@@ -100,9 +100,11 @@ static void setIndirectTex(J3DModelData* i_modelData) {
         if (memcmp(textureName, "dummy", 6) == 0) {
             texture->setResTIMG(i, *mDoGph_gInf_c::getFrameBufferTimg());
         }
+#if !TARGET_PC
         if (memcmp(textureName, "Zbuffer", 8) == 0) {
             texture->setResTIMG(i, *mDoGph_gInf_c::getZbufferTimg());
         }
+#endif
     }
 }
 
@@ -132,14 +134,14 @@ static void addWarpMaterial(J3DModelData* i_modelData) {
     };
     static J3DAlphaCompInfo const l_alphaCompInfo = {0x04, 0x80, 0x00, 0x03, 0xFF};
 
-    ResTIMG* resTimg = (ResTIMG*)dComIfG_getObjectRes("Always", 0x5d);
+    ResTIMG* resTimg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_ID_ALWAYS_BTI_WARP_TEX_e);
     JUT_ASSERT(279, resTimg != NULL);
 
     J3DTexture* texture = i_modelData->getTexture();
     u16 textureNum = texture->getNum();
     texture->addResTIMG(1, resTimg - textureNum);
 
-    J3DTexMtx* newTexMtx = new J3DTexMtx(l_texMtxInfo);
+    J3DTexMtx* newTexMtx = JKR_NEW J3DTexMtx(l_texMtxInfo);
     JUT_ASSERT(285, newTexMtx != NULL);
 
     for (u16 i = 0; i < i_modelData->getMaterialNum(); i++) {
@@ -149,7 +151,7 @@ static void addWarpMaterial(J3DModelData* i_modelData) {
         JUT_ASSERT(290, texGenNum < 4);
 
         J3DTexCoord* coord = texGenBlock->getTexCoord(texGenNum);
-        l_texCoordInfo.mTexGenMtx = texGenNum * 3 + 0x1e;
+        l_texCoordInfo.mTexGenMtx = texGenNum * 3 + GX_TEXMTX0;
         coord->setTexCoordInfo(l_texCoordInfo);
         coord->resetTexMtxReg();
 
@@ -166,7 +168,7 @@ static void addWarpMaterial(J3DModelData* i_modelData) {
         tevBlock->setTevStageNum(tevStageNum + 1);
 
         J3DShape* shape = material->getShape();
-        GXAttr attr = (GXAttr)(texGenNum + 1);
+        GXAttr attr = (GXAttr)(texGenNum + GX_VA_TEX0MTXIDX);
         shape->addTexMtxIndexInDL(attr, 0);
         shape->addTexMtxIndexInVcd(attr);
 
@@ -277,7 +279,7 @@ J3DModelData* dRes_info_c::loaderBasicBmd(u32 i_tag, void* i_data) {
         material->getColorChan(0)->setLightMask(lightMask);
         material->change();
 
-        materialAnm = new J3DMaterialAnm();
+        materialAnm = JKR_NEW J3DMaterialAnm();
         if (materialAnm == NULL) {
             return NULL;
         }
@@ -308,7 +310,7 @@ int dRes_info_c::loadResource() {
     JUT_ASSERT(709, mRes == NULL);
 
     s32 countFile = mArchive->countFile();
-    mRes = new void*[countFile];
+    mRes = JKR_NEW void*[countFile];
     if (mRes == NULL) {
         OSReport_Error("<%s.arc> setRes: res pointer buffer nothing !!\n", mArchiveName);
         return -1;
@@ -329,6 +331,12 @@ int dRes_info_c::loadResource() {
                 const char* tmp = mArchive->mStringTable + (mArchive->findIdxResource(fileIndex)->type_flags_and_name_offset & 0xFFFFFF);
 #endif
                 void* res = mArchive->getIdxResource(fileIndex);
+#if TARGET_PC
+                u32 size = mArchive->findIdxResource(fileIndex)->data_size;
+                std::string fileName = mArchive->mStringTable +
+                        (mArchive->findIdxResource(fileIndex)->type_flags_and_name_offset & 0xFFFFFF);
+                DuskLog.debug("Loading Resource: {} (Size: {})", fileName, size);
+#endif
 
                 if (res == NULL) {
                     OSReport_Error("<%s> res == NULL !!\n",
@@ -374,7 +382,7 @@ int dRes_info_c::loadResource() {
                         J3DMaterial* material_p = modelData->getMaterialNodePointer(k);
                         material_p->change();
 
-                        J3DMaterialAnm* materialAnm = new J3DMaterialAnm();
+                        J3DMaterialAnm* materialAnm = JKR_NEW J3DMaterialAnm();
                         if (materialAnm == NULL) {
                             return -1;
                         }
@@ -474,7 +482,7 @@ int dRes_info_c::loadResource() {
                 } else if (nodeType == 'BCKS' || nodeType == 'BCK ') {
                     struct J3DUnkChunk {
                         u8 unk_data[0x1C];
-                        u32 some_data_offset;
+                        BE(u32) some_data_offset;
                     };
                     J3DUnkChunk* chunk = (J3DUnkChunk*)res;
                     void* bas;
@@ -485,7 +493,7 @@ int dRes_info_c::loadResource() {
                         bas = NULL;
                     }
 
-                    mDoExt_transAnmBas* transAnmBas = new mDoExt_transAnmBas(bas);
+                    mDoExt_transAnmBas* transAnmBas = JKR_NEW mDoExt_transAnmBas(bas);
                     if (transAnmBas == NULL) {
                         return -1;
                     }
@@ -1000,7 +1008,7 @@ int dRes_control_c::setObjectRes(char const* i_arcName, void* i_archiveRes, u32 
         return 0;
     }
 
-    JKRMemArchive* memArchive = new JKRMemArchive(i_archiveRes, i_bufferSize, JKRMEMBREAK_FLAG_UNKNOWN0);
+    JKRMemArchive* memArchive = JKR_NEW JKRMemArchive(i_archiveRes, i_bufferSize, JKRMEMBREAK_FLAG_UNKNOWN0);
     if (memArchive == NULL || !memArchive->isMounted()) {
         return 0;
     }

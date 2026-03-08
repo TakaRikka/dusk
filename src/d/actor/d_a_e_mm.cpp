@@ -1017,7 +1017,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         bmd_index = 0x12;
     }
 
-    a_this->modelMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_MM", bmd_index), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_MM", 0xD), 2, 1.0f, 0, -1, &a_this->sound, 0x80000, 0x11000084);
+    a_this->modelMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_MM", bmd_index), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_MM", 0xD), 2, 1.0f, 0, -1, &a_this->sound, 0x80000, 0x11000084);
     if (a_this->modelMorf == NULL || a_this->modelMorf->getModel() == NULL) {
         return 0;
     }

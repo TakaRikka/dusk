@@ -112,12 +112,12 @@ void J2DWindowEx::setMinSize() {
 J2DWindowEx::~J2DWindowEx() {
     for (u8 i = 0; i < 4; i++) {
         if (field_0x170 & (1 << i)) {
-            delete mFrameMaterial[i];
+            JKR_DELETE(mFrameMaterial[i]);
         }
     }
 
     if (field_0x170 & 0x10) {
-        delete mContentsMaterial;
+        JKR_DELETE(mContentsMaterial);
     }
 }
 
@@ -759,7 +759,7 @@ void J2DWindowEx::setAnimation(J2DAnmVtxColor* param_0) {
             if (field_0x168[i] != 0xffff) {
                 for (u16 j = 0; j < uVar3; j++) {
                     J3DAnmVtxColorIndexData* puVar1 = param_0->getAnmVtxColorIndexData(0, j);
-                    u16* indexPointer2 =
+                    BE(u16)* indexPointer2 =
                         param_0->getVtxColorIndexPointer(0) + (uintptr_t)puVar1->mpData;
                     for (u16 k = 0; k < puVar1->mNum; k++) {
                         if (indexPointer2[k] == field_0x168[i]) {
@@ -803,7 +803,7 @@ const J2DAnmTransform* J2DWindowEx::animationPane(J2DAnmTransform const* param_0
             if ((field_0x17c & (1 << i))) {
                 for (u16 j = 0; j < uVar3; j++) {
                     J3DAnmVtxColorIndexData* puVar1 = mAnmVtxColor->getAnmVtxColorIndexData(0, j);
-                    u16* indexPointer2 =
+                    BE(u16)* indexPointer2 =
                         mAnmVtxColor->getVtxColorIndexPointer(0) + (uintptr_t)puVar1->mpData;
                     for (u16 k = 0; k < puVar1->mNum; k++) {
                         if (indexPointer2[k] == field_0x168[i]) {

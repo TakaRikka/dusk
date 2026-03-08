@@ -3,10 +3,12 @@
 
 #include <gx.h>
 
+#include "JSystem/JKernel/JKRHeap.h"
+
 /**
-* @ingroup jsystem-jutility
-* 
-*/
+ * @ingroup jsystem-jutility
+ *
+ */
 class JUTGraphFifo {
 public:
     JUTGraphFifo(u32);
@@ -40,6 +42,6 @@ private:
     /* 0x10 */ u8 field_0x10[0xC];
 };
 
-inline JUTGraphFifo* JUTCreateFifo(u32 bufSize) { return new JUTGraphFifo(bufSize); }
+inline JUTGraphFifo* JUTCreateFifo(u32 bufSize) { return JKR_NEW JUTGraphFifo(bufSize); }
 
 #endif /* JUTGRAPHFIFO_H */

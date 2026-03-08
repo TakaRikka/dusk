@@ -45,6 +45,18 @@ elseif (MSVC)
 endif ()
 
 
+include(FetchContent)
+
+message(STATUS "dusk: Fetching cxxopts")
+FetchContent_Declare(
+  cxxopts
+  GIT_REPOSITORY https://github.com/jarro2783/cxxopts.git
+  GIT_TAG v3.3.1
+)
+
+FetchContent_MakeAvailable(cxxopts)
+
+
 include(files.cmake)
 
 # TODO: version handling for res includes
@@ -56,7 +68,7 @@ source_group("dusk" FILES ${DUSK_FILES})
 # game_debug is for game code files that we know work when compiled with DEBUG=1
 # Of course, if building a release build, this distinction is irrelevant
 add_library(game_debug STATIC ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES})
-target_compile_definitions(game_debug PRIVATE TARGET_PC VERSION=0 $<$<CONFIG:Debug>:DEBUG=1>)
+target_compile_definitions(game_debug PRIVATE TARGET_PC AVOID_UB=1 VERSION=0 $<$<CONFIG:Debug>:DEBUG=1>)
 
 # Make these properties PUBLIC so that the regular game target also sees them.
 target_include_directories(game_debug PUBLIC
@@ -65,12 +77,13 @@ target_include_directories(game_debug PUBLIC
         assets/${DUSK_TP_VERSION}
         libs/JSystem/include
         extern/aurora/include/dolphin
+        extern
         ${CMAKE_SOURCE_DIR}/build/${DUSK_TP_VERSION}/include
         build/${DUSK_TP_VERSION}/include)
 target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES})
+add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES})
 
 # Hide global operator new/delete overrides from the dynamic symbol table.
 # Without this, other dylibs (e.g. Apple's AGX GPU driver) resolve these symbols
@@ -88,10 +101,10 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL Linux)
     )
 endif ()
 
-target_link_libraries(game PRIVATE game_debug)
-target_compile_definitions(game PRIVATE TARGET_PC VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0)
+target_link_libraries(game PRIVATE game_debug cxxopts::cxxopts)
+target_compile_definitions(game PRIVATE TARGET_PC AVOID_UB=1 VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0)
 
 add_executable(dusk src/dusk/main.cpp)
-target_compile_definitions(dusk PRIVATE TARGET_PC VERSION=0)
+target_compile_definitions(dusk PRIVATE TARGET_PC AVOID_UB=1 VERSION=0)
 target_include_directories(dusk PRIVATE include)
 target_link_libraries(dusk PRIVATE game aurora::main)

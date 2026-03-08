@@ -5,6 +5,8 @@
 #include "global.h"
 #include <stdint.h>
 
+#include "global.h"
+
 #if DEBUG
 static void dummyString() {
     // probably some stripped function that called JUT_ASSERT here
@@ -24,14 +26,21 @@ const void* JGadget::binary::parseVariableUInt_16_32_following(const void* pBuff
         pTEBit = &spC;
     }
 
+#if TARGET_PC
+    u32 var_r30 = BSWAP16(*pu16);
+#elif
     u32 var_r30 = *pu16;
+#endif
     if ((var_r30 & 0x8000) == 0) {
         pTEBit->value = 0x10;
 
         *pu32First = var_r30;
         pu16++;
+#if TARGET_PC
+        *pu32Second =  BSWAP16(*pu16);
+#elif
         *pu32Second =  *pu16;
-
+#endif
         return pu16 + 1;
     } else {
         pTEBit->value = 0x20;
@@ -39,11 +48,19 @@ const void* JGadget::binary::parseVariableUInt_16_32_following(const void* pBuff
         var_r30 &= 0x7FFF;
         var_r30 <<= 16;
         pu16++;
+#if TARGET_PC
+        var_r30 |= BSWAP16(*pu16);
+#else
         var_r30 |= *pu16;
+#endif
 
         *pu32First = var_r30;
         pu16++;
+#if TARGET_PC
+        *pu32Second = BSWAP32(*(u32*)pu16);
+#else
         *pu32Second = *(u32*)pu16;
+#endif
 
         return pu16 + 2;
     }

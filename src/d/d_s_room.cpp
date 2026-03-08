@@ -66,7 +66,7 @@ static int getResetArchiveBank(int i_roomNo, const u8** o_bankIDList) {
             return i;
         }
     }
-    
+
     return bankNum;
 }
 
@@ -133,7 +133,7 @@ static int objectDeleteJugge(void* i_process, void* i_data) {
             if (!fopAcM_CheckCondition((fopAc_ac_c*)i_process, fopAcCnd_NODRAW_e)) {
                 return 0;
             }
-            
+
             OS_REPORT("削除！<%s>\n", namebuf);
         }
 
@@ -280,7 +280,7 @@ static int dScnRoom_Execute(room_of_scene_class* i_this) {
                     dScnPly_c::setPauseTimer(2);
                 } else {
                     i_this->field_0x1d5 = 0;
-                } 
+                }
             }
         }
     }
@@ -456,7 +456,7 @@ static int phase_2(room_of_scene_class* i_this) {
     #if DEBUG
     void* unit = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getUnit();
     if (unit != NULL) {
-        dBgp_c* bgp = new dBgp_c();
+        dBgp_c* bgp = JKR_NEW dBgp_c();
         JUT_ASSERT(786, bgp != NULL);
         
         bgp->create(roomNo, unit);

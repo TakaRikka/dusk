@@ -86,9 +86,9 @@ void J3DModelData::simpleCalcMaterial(u16 idx, Mtx param_1) {
 
 void J3DModelData::syncJ3DSysPointers() const {
     j3dSys.setTexture(getTexture());
-    j3dSys.setVtxPos(getVtxPosArray());
-    j3dSys.setVtxNrm(getVtxNrmArray());
-    j3dSys.setVtxCol(getVtxColorArray(0));
+    j3dSys.setVtxPos(getVtxPosArray(), getVtxNum());
+    j3dSys.setVtxNrm(getVtxNrmArray(), getNrmNum());
+    j3dSys.setVtxCol(getVtxColorArray(0), getColNum());
 }
 
 void J3DModelData::syncJ3DSysFlags() const {

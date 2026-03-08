@@ -309,6 +309,11 @@ public:
     /* 0x18 */ u8 field_0x18;
     /* 0x19 */ u8 field_0x19;
     /* 0x1A */ u16 mEnvelopeSize;
+
+#if TARGET_PC
+private:
+    static void readVertexData(const J3DVertexBlock& block, J3DVertexData& data);
+#endif
 };
 
 /**

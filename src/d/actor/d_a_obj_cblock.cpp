@@ -162,7 +162,7 @@ int daObjCBlk_c::CreateHeap() {
     if (model1 == NULL) {
         return 0;
     }
-    chains = new chain_s[6];
+    chains = JKR_NEW chain_s[6];
     if (chains == NULL) {
         return 0;
     }

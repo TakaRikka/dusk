@@ -28,15 +28,15 @@ JUTCacheFont::~JUTCacheFont() {
 
 void JUTCacheFont::deleteMemBlocks_CacheFont() {
     if (field_0xb0 != 0) {
-        delete[] mCacheBuffer;
+        JKR_DELETE_ARRAY(mCacheBuffer);
     }
 
     JKRFreeToAram(field_0xac);
-    delete mInf1Ptr;
-    delete mMemBlocks;
-    delete field_0x7c;
-    delete field_0x80;
-    delete field_0x84;
+    JKR_DELETE(mInf1Ptr);
+    JKR_DELETE(mMemBlocks);
+    JKR_DELETE(field_0x7c);
+    JKR_DELETE(field_0x80);
+    JKR_DELETE(field_0x84);
 }
 
 void JUTCacheFont::initialize_state() {
@@ -172,20 +172,20 @@ bool JUTCacheFont::internal_initiate(ResFONT const* p_fontRes, void* param_1, u3
 }
 
 bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
-    mInf1Ptr = (ResFONT::INF1*)new (heap, 0) ResFONT();
+    mInf1Ptr = (ResFONT::INF1*)JKR_NEW_ARGS (heap, 0) ResFONT();
     if (mInf1Ptr == NULL) {
         return false;
     }
 
     if (mTotalWidSize != 0) {
-        field_0x7c = new (heap, 0) u8[mTotalWidSize];
+        field_0x7c = JKR_NEW_ARGS (heap, 0) u8[mTotalWidSize];
         if (field_0x7c == NULL) {
             return false;
         }
     }
 
     if (mGly1BlockNum != 0) {
-        field_0x80 = new (heap, 0) u8[mGly1BlockNum * sizeof(ResFONT::GLY1)];
+        field_0x80 = JKR_NEW_ARGS (heap, 0) u8[mGly1BlockNum * sizeof(ResFONT::GLY1)];
         if (field_0x80 == NULL) {
             return false;
         }
@@ -197,7 +197,7 @@ bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
     }
 
     if (mTotalMapSize != 0) {
-        field_0x84 = new (heap, 0) u8[mTotalMapSize];
+        field_0x84 = JKR_NEW_ARGS (heap, 0) u8[mTotalMapSize];
         if (field_0x84 == NULL) {
             return false;
         }
@@ -215,7 +215,7 @@ bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
         mCacheBuffer = cacheBuffer;
         field_0xb0 = 0;
     } else {
-        mCacheBuffer = new (heap, 0x20) u8[v1];
+        mCacheBuffer = JKR_NEW_ARGS (heap, 0x20) u8[v1];
         if (mCacheBuffer == NULL) {
             return false;
         }
@@ -227,25 +227,25 @@ bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
 }
 
 bool JUTCacheFont::allocArray(JKRHeap* param_0) {
-    mMemBlocks = (void**)new (param_0, 0) u32[mWid1BlockNum + mGly1BlockNum + mMap1BlockNum];
+    mMemBlocks = (void**)JKR_NEW_ARGS (param_0, 0) uintptr_t[mWid1BlockNum + mGly1BlockNum + mMap1BlockNum];
     if (mMemBlocks == NULL) {
         return false;
     }
 
     void** blocks = mMemBlocks;
     if (mWid1BlockNum) {
-        mpWidthBlocks = new (blocks) ResFONT::WID1*[mWid1BlockNum];
+        mpWidthBlocks = JKR_NEW_ARGS (blocks) ResFONT::WID1*[mWid1BlockNum];
         blocks = blocks + mWid1BlockNum;
     }
     if (mGly1BlockNum) {
-        mpGlyphBlocks = new (blocks) ResFONT::GLY1*[mGly1BlockNum];
+        mpGlyphBlocks = JKR_NEW_ARGS (blocks) ResFONT::GLY1*[mGly1BlockNum];
         blocks = blocks + mGly1BlockNum;
         for (int i = 0; i < mGly1BlockNum; i++) {
             mpGlyphBlocks[i] = (ResFONT::GLY1*)((u8*)mCacheBuffer + (field_0x94 * i));
         }
     }
     if (mMap1BlockNum) {
-        mpMapBlocks = new (blocks) ResFONT::MAP1*[mMap1BlockNum];
+        mpMapBlocks = JKR_NEW_ARGS (blocks) ResFONT::MAP1*[mMap1BlockNum];
     }
     return true;
 }

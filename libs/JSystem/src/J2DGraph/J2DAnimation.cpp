@@ -152,7 +152,7 @@ void J2DAnmTransformKey::calcTransform(f32 param_0, u16 param_1,
         transformInfo->mScale.x = mScaleValues[xInf->mScaleInfo.mOffset];
         break;
     default:
-        transformInfo->mScale.x = J2DGetKeyFrameInterpolation<f32>(
+        transformInfo->mScale.x = J2DGetKeyFrameInterpolation<BE(f32)>(
             param_0, &xInf->mScaleInfo, &mScaleValues[xInf->mScaleInfo.mOffset]);
     }
     switch (yInf->mScaleInfo.mMaxFrame) {
@@ -163,7 +163,7 @@ void J2DAnmTransformKey::calcTransform(f32 param_0, u16 param_1,
         transformInfo->mScale.y = mScaleValues[yInf->mScaleInfo.mOffset];
         break;
     default:
-        transformInfo->mScale.y = J2DGetKeyFrameInterpolation<f32>(
+        transformInfo->mScale.y = J2DGetKeyFrameInterpolation<BE(f32)>(
             param_0, &yInf->mScaleInfo, &mScaleValues[yInf->mScaleInfo.mOffset]);
     }
     switch (zInf->mScaleInfo.mMaxFrame) {
@@ -174,7 +174,7 @@ void J2DAnmTransformKey::calcTransform(f32 param_0, u16 param_1,
         transformInfo->mScale.z = mScaleValues[zInf->mScaleInfo.mOffset];
         break;
     default:
-        transformInfo->mScale.z = J2DGetKeyFrameInterpolation<f32>(
+        transformInfo->mScale.z = J2DGetKeyFrameInterpolation<BE(f32)>(
             param_0, &zInf->mScaleInfo, &mScaleValues[zInf->mScaleInfo.mOffset]);
     }
     switch (xInf->mRotationInfo.mMaxFrame) {
@@ -186,7 +186,7 @@ void J2DAnmTransformKey::calcTransform(f32 param_0, u16 param_1,
         break;
     default:
         transformInfo->mRotation.x =
-            static_cast<s32>(J2DGetKeyFrameInterpolation<s16>(
+            static_cast<s32>(J2DGetKeyFrameInterpolation<BE(s16)>(
                 param_0, &xInf->mRotationInfo, &mRotationValues[xInf->mRotationInfo.mOffset]))
             << field_0x24;
     }
@@ -199,7 +199,7 @@ void J2DAnmTransformKey::calcTransform(f32 param_0, u16 param_1,
         break;
     default:
         transformInfo->mRotation.y =
-            static_cast<s32>(J2DGetKeyFrameInterpolation<s16>(
+            static_cast<s32>(J2DGetKeyFrameInterpolation<BE(s16)>(
                 param_0, &yInf->mRotationInfo, &mRotationValues[yInf->mRotationInfo.mOffset]))
             << field_0x24;
     }
@@ -212,7 +212,7 @@ void J2DAnmTransformKey::calcTransform(f32 param_0, u16 param_1,
         break;
     default:
         transformInfo->mRotation.z =
-            static_cast<s32>(J2DGetKeyFrameInterpolation<s16>(
+            static_cast<s32>(J2DGetKeyFrameInterpolation<BE(s16)>(
                 param_0, &zInf->mRotationInfo, &mRotationValues[zInf->mRotationInfo.mOffset]))
             << field_0x24;
     }
@@ -224,7 +224,7 @@ void J2DAnmTransformKey::calcTransform(f32 param_0, u16 param_1,
         transformInfo->mTranslate.x = mTranslateValues[xInf->mTranslateInfo.mOffset];
         break;
     default:
-        transformInfo->mTranslate.x = J2DGetKeyFrameInterpolation<f32>(
+        transformInfo->mTranslate.x = J2DGetKeyFrameInterpolation<BE(f32)>(
             param_0, &xInf->mTranslateInfo, &mTranslateValues[xInf->mTranslateInfo.mOffset]);
     }
     switch (yInf->mTranslateInfo.mMaxFrame) {
@@ -235,7 +235,7 @@ void J2DAnmTransformKey::calcTransform(f32 param_0, u16 param_1,
         transformInfo->mTranslate.y = mTranslateValues[yInf->mTranslateInfo.mOffset];
         break;
     default:
-        transformInfo->mTranslate.y = J2DGetKeyFrameInterpolation<f32>(
+        transformInfo->mTranslate.y = J2DGetKeyFrameInterpolation<BE(f32)>(
             param_0, &yInf->mTranslateInfo, &mTranslateValues[yInf->mTranslateInfo.mOffset]);
     }
     switch (zInf->mTranslateInfo.mMaxFrame) {
@@ -246,7 +246,7 @@ void J2DAnmTransformKey::calcTransform(f32 param_0, u16 param_1,
         transformInfo->mTranslate.z = mTranslateValues[zInf->mTranslateInfo.mOffset];
         break;
     default:
-        transformInfo->mTranslate.z = J2DGetKeyFrameInterpolation<f32>(
+        transformInfo->mTranslate.z = J2DGetKeyFrameInterpolation<BE(f32)>(
             param_0, &zInf->mTranslateInfo, &mTranslateValues[zInf->mTranslateInfo.mOffset]);
     }
 }
@@ -315,7 +315,7 @@ void J2DAnmColorKey::getColor(u16 param_0, GXColor* pColor) const {
         pColor->r = mRValues[info->mRInfo.mOffset];
         break;
     default:
-        val = J2DGetKeyFrameInterpolation<s16>(mFrame, &info->mRInfo,
+        val = J2DGetKeyFrameInterpolation<BE(s16)>(mFrame, &info->mRInfo,
                                            &mRValues[info->mRInfo.mOffset]);
         if (val < 0) {
             pColor->r = 0;
@@ -333,7 +333,7 @@ void J2DAnmColorKey::getColor(u16 param_0, GXColor* pColor) const {
         pColor->g = mGValues[info->mGInfo.mOffset];
         break;
     default:
-        val = J2DGetKeyFrameInterpolation<s16>(mFrame, &info->mGInfo,
+        val = J2DGetKeyFrameInterpolation<BE(s16)>(mFrame, &info->mGInfo,
                                            &mGValues[info->mGInfo.mOffset]);
         if (val < 0) {
             pColor->g = 0;
@@ -351,7 +351,7 @@ void J2DAnmColorKey::getColor(u16 param_0, GXColor* pColor) const {
         pColor->b = mBValues[info->mBInfo.mOffset];
         break;
     default:
-        val = J2DGetKeyFrameInterpolation<s16>(mFrame, &info->mBInfo,
+        val = J2DGetKeyFrameInterpolation<BE(s16)>(mFrame, &info->mBInfo,
                                            &mBValues[info->mBInfo.mOffset]);
         if (val < 0) {
             pColor->b = 0;
@@ -369,7 +369,7 @@ void J2DAnmColorKey::getColor(u16 param_0, GXColor* pColor) const {
         pColor->a = mAValues[info->mAInfo.mOffset];
         break;
     default:
-        val = J2DGetKeyFrameInterpolation<s16>(mFrame, &info->mAInfo,
+        val = J2DGetKeyFrameInterpolation<BE(s16)>(mFrame, &info->mAInfo,
                                            &mAValues[info->mAInfo.mOffset]);
         if (val < 0) {
             pColor->a = 0;
@@ -430,7 +430,7 @@ void J2DAnmVtxColorKey::getColor(u8 param_0, u16 param_1, GXColor* pColor) const
         pColor->r = mRValues[info->mRInfo.mOffset];
         break;
     default:
-        val = J2DGetKeyFrameInterpolation<s16>(mFrame, &info->mRInfo,
+        val = J2DGetKeyFrameInterpolation<BE(s16)>(mFrame, &info->mRInfo,
                                            &mRValues[info->mRInfo.mOffset]);
         if ((val <= 0)) {
             pColor->r = 0;
@@ -448,7 +448,7 @@ void J2DAnmVtxColorKey::getColor(u8 param_0, u16 param_1, GXColor* pColor) const
         pColor->g = mGValues[info->mGInfo.mOffset];
         break;
     default:
-        val = J2DGetKeyFrameInterpolation<s16>(mFrame, &info->mGInfo,
+        val = J2DGetKeyFrameInterpolation<BE(s16)>(mFrame, &info->mGInfo,
                                            &mGValues[info->mGInfo.mOffset]);
         if (val <= 0) {
             pColor->g = 0;
@@ -466,7 +466,7 @@ void J2DAnmVtxColorKey::getColor(u8 param_0, u16 param_1, GXColor* pColor) const
         pColor->b = mBValues[info->mBInfo.mOffset];
         break;
     default:
-        val = J2DGetKeyFrameInterpolation<s16>(mFrame, &info->mBInfo,
+        val = J2DGetKeyFrameInterpolation<BE(s16)>(mFrame, &info->mBInfo,
                                            &mBValues[info->mBInfo.mOffset]);
         if (val <= 0) {
             pColor->b = 0;
@@ -484,7 +484,7 @@ void J2DAnmVtxColorKey::getColor(u8 param_0, u16 param_1, GXColor* pColor) const
         pColor->a = mAValues[info->mAInfo.mOffset];
         break;
     default:
-        val = J2DGetKeyFrameInterpolation<s16>(mFrame, &info->mAInfo,
+        val = J2DGetKeyFrameInterpolation<BE(s16)>(mFrame, &info->mAInfo,
                                            &mAValues[info->mAInfo.mOffset]);
         if (val <= 0) {
             pColor->a = 0;
@@ -511,7 +511,7 @@ void J2DAnmTextureSRTKey::calcTransform(f32 param_0, u16 param_1, J3DTextureSRTI
         pInfo->mScaleX = mScaleValues[xInf->mScaleInfo.mOffset];
         break;
     default:
-        pInfo->mScaleX = J2DGetKeyFrameInterpolation<f32>(param_0, &xInf->mScaleInfo,
+        pInfo->mScaleX = J2DGetKeyFrameInterpolation<BE(f32)>(param_0, &xInf->mScaleInfo,
                                                       &mScaleValues[xInf->mScaleInfo.mOffset]);
     }
     switch (yInf->mScaleInfo.mMaxFrame) {
@@ -522,7 +522,7 @@ void J2DAnmTextureSRTKey::calcTransform(f32 param_0, u16 param_1, J3DTextureSRTI
         pInfo->mScaleY = mScaleValues[yInf->mScaleInfo.mOffset];
         break;
     default:
-        pInfo->mScaleY = J2DGetKeyFrameInterpolation<f32>(param_0, &yInf->mScaleInfo,
+        pInfo->mScaleY = J2DGetKeyFrameInterpolation<BE(f32)>(param_0, &yInf->mScaleInfo,
                                                       &mScaleValues[yInf->mScaleInfo.mOffset]);
     }
     switch (zInf->mRotationInfo.mMaxFrame) {
@@ -534,7 +534,7 @@ void J2DAnmTextureSRTKey::calcTransform(f32 param_0, u16 param_1, J3DTextureSRTI
         break;
     default:
         pInfo->mRotation =
-            static_cast<s32>(J2DGetKeyFrameInterpolation<s16>(
+            static_cast<s32>(J2DGetKeyFrameInterpolation<BE(s16)>(
                 param_0, &zInf->mRotationInfo, &mRotationValues[zInf->mRotationInfo.mOffset]))
             << field_0x10;
     }
@@ -546,7 +546,7 @@ void J2DAnmTextureSRTKey::calcTransform(f32 param_0, u16 param_1, J3DTextureSRTI
         pInfo->mTranslationX = mTranslationValues[xInf->mTranslateInfo.mOffset];
         break;
     default:
-        pInfo->mTranslationX = J2DGetKeyFrameInterpolation<f32>(
+        pInfo->mTranslationX = J2DGetKeyFrameInterpolation<BE(f32)>(
             param_0, &xInf->mTranslateInfo, &mTranslationValues[xInf->mTranslateInfo.mOffset]);
     }
     switch (yInf->mTranslateInfo.mMaxFrame) {
@@ -557,7 +557,7 @@ void J2DAnmTextureSRTKey::calcTransform(f32 param_0, u16 param_1, J3DTextureSRTI
         pInfo->mTranslationY = mTranslationValues[yInf->mTranslateInfo.mOffset];
         break;
     default:
-        pInfo->mTranslationY = J2DGetKeyFrameInterpolation<f32>(
+        pInfo->mTranslationY = J2DGetKeyFrameInterpolation<BE(f32)>(
             param_0, &yInf->mTranslateInfo, &mTranslationValues[yInf->mTranslateInfo.mOffset]);
     }
 }
@@ -585,8 +585,8 @@ void J2DAnmTexPattern::searchUpdateMaterialID(J2DScreen* pScreen) {
                 mUpdateMaterialID[entry] = 0xFFFF;
             }
         }
-        delete[] mTIMGPtrArray;
-        mTIMGPtrArray = new J2DAnmTexPatternTIMGPointer[pScreen->mTexRes->mCount];
+        JKR_DELETE_ARRAY(mTIMGPtrArray);
+        mTIMGPtrArray = JKR_NEW J2DAnmTexPatternTIMGPointer[pScreen->mTexRes->mCount];
         if (mTIMGPtrArray != NULL) {
             JUTResReference resRef;
             for (u16 i = 0; i < pScreen->mTexRes->mCount; i++) {
@@ -601,7 +601,7 @@ void J2DAnmTexPattern::searchUpdateMaterialID(J2DScreen* pScreen) {
                 }
                 mTIMGPtrArray[i].mRes = var2;
                 if (var2 != NULL && var2->indexTexture) {
-                    mTIMGPtrArray[i].mPalette = new JUTPalette(
+                    mTIMGPtrArray[i].mPalette = JKR_NEW JUTPalette(
                         GX_TLUT0,
                         GXTlutFmt(var2->colorFormat),
                         JUTTransparency(var2->alphaEnabled),
@@ -676,7 +676,7 @@ void J2DAnmTevRegKey::getTevColorReg(u16 param_0, GXColorS10* pColor) const {
         pColor->r = mCRValues[info->mRTable.mOffset];
         break;
     default:
-        val = J2DGetKeyFrameInterpolation<s16>(mFrame, &info->mRTable,
+        val = J2DGetKeyFrameInterpolation<BE(s16)>(mFrame, &info->mRTable,
                                            &mCRValues[info->mRTable.mOffset]);
         if (val < -0x400) {
             pColor->r = -0x400;
@@ -694,7 +694,7 @@ void J2DAnmTevRegKey::getTevColorReg(u16 param_0, GXColorS10* pColor) const {
         pColor->g = mCGValues[info->mGTable.mOffset];
         break;
     default:
-        val = J2DGetKeyFrameInterpolation<s16>(mFrame, &info->mGTable,
+        val = J2DGetKeyFrameInterpolation<BE(s16)>(mFrame, &info->mGTable,
                                            &mCGValues[info->mGTable.mOffset]);
         if (val < -0x400) {
             pColor->g = -0x400;
@@ -712,7 +712,7 @@ void J2DAnmTevRegKey::getTevColorReg(u16 param_0, GXColorS10* pColor) const {
         pColor->b = mCBValues[info->mBTable.mOffset];
         break;
     default:
-        val = J2DGetKeyFrameInterpolation<s16>(mFrame, &info->mBTable,
+        val = J2DGetKeyFrameInterpolation<BE(s16)>(mFrame, &info->mBTable,
                                            &mCBValues[info->mBTable.mOffset]);
         if (val < -0x400) {
             pColor->b = -0x400;
@@ -730,7 +730,7 @@ void J2DAnmTevRegKey::getTevColorReg(u16 param_0, GXColorS10* pColor) const {
         pColor->a = mCAValues[info->mATable.mOffset];
         break;
     default:
-        val = J2DGetKeyFrameInterpolation<s16>(mFrame, &info->mATable,
+        val = J2DGetKeyFrameInterpolation<BE(s16)>(mFrame, &info->mATable,
                                            &mCAValues[info->mATable.mOffset]);
         if (val < -0x400) {
             pColor->a = -0x400;
@@ -755,7 +755,7 @@ void J2DAnmTevRegKey::getTevKonstReg(u16 param_0, GXColor* pColor) const {
         pColor->r = mKRValues[info->mRTable.mOffset];
         break;
     default:
-        val = J2DGetKeyFrameInterpolation<s16>(mFrame, &info->mRTable,
+        val = J2DGetKeyFrameInterpolation<BE(s16)>(mFrame, &info->mRTable,
                                            &mKRValues[info->mRTable.mOffset]);
         if (val < 0) {
             pColor->r = 0;
@@ -773,7 +773,7 @@ void J2DAnmTevRegKey::getTevKonstReg(u16 param_0, GXColor* pColor) const {
         pColor->g = mKGValues[info->mGTable.mOffset];
         break;
     default:
-        val = J2DGetKeyFrameInterpolation<s16>(mFrame, &info->mGTable,
+        val = J2DGetKeyFrameInterpolation<BE(s16)>(mFrame, &info->mGTable,
                                            &mKGValues[info->mGTable.mOffset]);
         if (val < 0) {
             pColor->g = 0;
@@ -791,7 +791,7 @@ void J2DAnmTevRegKey::getTevKonstReg(u16 param_0, GXColor* pColor) const {
         pColor->b = mKBValues[info->mBTable.mOffset];
         break;
     default:
-        val = J2DGetKeyFrameInterpolation<s16>(mFrame, &info->mBTable,
+        val = J2DGetKeyFrameInterpolation<BE(s16)>(mFrame, &info->mBTable,
                                            &mKBValues[info->mBTable.mOffset]);
         if (val < 0) {
             pColor->b = 0;
@@ -809,7 +809,7 @@ void J2DAnmTevRegKey::getTevKonstReg(u16 param_0, GXColor* pColor) const {
         pColor->a = mKAValues[info->mATable.mOffset];
         break;
     default:
-        val = J2DGetKeyFrameInterpolation<s16>(mFrame, &info->mATable,
+        val = J2DGetKeyFrameInterpolation<BE(s16)>(mFrame, &info->mATable,
                                            &mKAValues[info->mATable.mOffset]);
         if (val < 0) {
             pColor->a = 0;

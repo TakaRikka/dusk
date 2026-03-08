@@ -2,6 +2,8 @@
 
 #include "JSystem/JStage/JSGLight.h"
 
+#include "global.h"
+
 JStage::TLight::~TLight() {}
 
 s32 JStage::TLight::JSGFGetType() const {

@@ -206,7 +206,7 @@ void JStudio_JStage::TAdaptor_actor::adaptor_do_RELATION_NODE(
     case JStudio::data::UNK_0x19:
         JUT_ASSERT(358, uSize==4);
         JUT_ASSERT(359, pContent!=NULL);
-        field_0x14c = *(u32*)pContent;
+        field_0x14c = *(BE(u32)*)pContent;
         break;
     }
 }
@@ -217,7 +217,7 @@ void JStudio_JStage::TAdaptor_actor::adaptor_do_RELATION_ENABLE(
     case JStudio::data::UNK_0x2:
         JUT_ASSERT(378, uSize==4);
         JUT_ASSERT(379, pContent!=NULL);
-        pJSGObject_->JSGSetRelation(*(u32*)pContent, field_0x148, field_0x14c);
+        pJSGObject_->JSGSetRelation(*(BE(u32)*)pContent, field_0x148, field_0x14c);
         break;
     }
 }
@@ -227,7 +227,7 @@ void JStudio_JStage::TAdaptor_actor::setJSG_ID_(void (JStage::TActor::*function)
                                                     void const* pContent, u32 uSize) {
     switch (operation) {
     case JStudio::data::UNK_0x19:
-        (((JStage::TActor*)pJSGObject_)->*function)(*(u32*)pContent);
+        (((JStage::TActor*)pJSGObject_)->*function)(*(BE(u32)*)pContent);
         break;
     }
 }

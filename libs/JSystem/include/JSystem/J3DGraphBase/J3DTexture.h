@@ -17,15 +17,45 @@ private:
     /* 0x2 */ u16 unk_0x2;
     /* 0x4 */ ResTIMG* mpRes;
 
+#if TARGET_PC
+    GXTlutObj* mpTlutObj;
+    GXTexObj* mpTexObj;
+    u8** mpImgDataPtr;
+    u8** mpTlutDataPtr;
+#endif
+
 public:
     J3DTexture(u16 num, ResTIMG* res) : mNum(num), unk_0x2(0), mpRes(res) {
         J3D_ASSERT_NULLPTR(52, res != NULL || num == 0);
+#if TARGET_PC
+        mpTexObj = new GXTexObj[num];
+        mpTlutObj = new GXTlutObj[num];
+        mpImgDataPtr = new u8*[num];
+        mpTlutDataPtr = new u8*[num];
+        for (u16 i = 0; i < num; i++) {
+            mpImgDataPtr[i] = (u8*)(&mpRes[i]) + mpRes[i].imageOffset;
+            mpTlutDataPtr[i] = (u8*)(&mpRes[i]) + mpRes[i].paletteOffset;
+            loadGXTexObj(i);
+        }
+#endif
     }
 
     void loadGX(u16, GXTexMapID) const;
+#if TARGET_PC
+    void loadGXTexObj(u16);
+#endif
     void entryNum(u16);
     void addResTIMG(u16, ResTIMG const*);
-    virtual ~J3DTexture() {}
+    virtual ~J3DTexture(){
+#if TARGET_PC
+        for (int i = 0; i < mNum; i++)
+            GXDestroyTexObj(&mpTexObj[i]);
+        delete[] mpTexObj;
+        delete[] mpTlutObj;
+        delete[] mpImgDataPtr;
+        delete[] mpTlutDataPtr;
+#endif
+    }
 
     u16 getNum() const { return mNum; }
 
@@ -34,11 +64,24 @@ public:
         return &mpRes[index];
     }
 
+#if TARGET_PC
+    u8* getImgDataPtr(u16 index) const {
+        return mpImgDataPtr[index];
+    }
+#endif
+
     void setResTIMG(u16 index, const ResTIMG& timg) {
         J3D_ASSERT_RANGE(81, index < mNum);
         mpRes[index] = timg;
+
+#if TARGET_PC
+        mpImgDataPtr[index] = ((u8*)&timg) + timg.imageOffset;
+        mpTlutDataPtr[index] = ((u8*)&timg) + timg.paletteOffset;
+        loadGXTexObj(index);
+#else
         mpRes[index].imageOffset = ((mpRes[index].imageOffset + (uintptr_t)&timg - (uintptr_t)(mpRes + index)));
         mpRes[index].paletteOffset = ((mpRes[index].paletteOffset + (uintptr_t)&timg - (uintptr_t)(mpRes + index)));
+#endif
     }
 };
 

@@ -17,7 +17,7 @@ static int m_debugOverlayCorner = 0; // top-left
 using namespace std::string_literals;
 using namespace std::string_view_literals;
 
-static void SetOverlayWindowLocation(int corner)
+void SetOverlayWindowLocation(int corner)
 {
     const ImGuiViewport *viewport = ImGui::GetMainViewport();
     ImVec2 workPos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
@@ -30,6 +30,34 @@ static void SetOverlayWindowLocation(int corner)
     windowPosPivot.x = (corner & 1) != 0 ? 1.0f : 0.0f;
     windowPosPivot.y = (corner & 2) != 0 ? 1.0f : 0.0f;
     ImGui::SetNextWindowPos(windowPos, ImGuiCond_Always, windowPosPivot);
+}
+
+bool ShowCornerContextMenu(int& corner, int avoidCorner) {
+    bool result = false;
+    if (ImGui::BeginPopupContextWindow()) {
+        if (ImGui::MenuItem("Custom", nullptr, corner == -1)) {
+            corner = -1;
+            result = true;
+        }
+        if (ImGui::MenuItem("Top-left", nullptr, corner == 0, avoidCorner != 0)) {
+            corner = 0;
+            result = true;
+        }
+        if (ImGui::MenuItem("Top-right", nullptr, corner == 1, avoidCorner != 1)) {
+            corner = 1;
+            result = true;
+        }
+        if (ImGui::MenuItem("Bottom-left", nullptr, corner == 2, avoidCorner != 2)) {
+            corner = 2;
+            result = true;
+        }
+        if (ImGui::MenuItem("Bottom-right", nullptr, corner == 3, avoidCorner != 3)) {
+            corner = 3;
+            result = true;
+        }
+        ImGui::EndPopup();
+    }
+    return result;
 }
 
 static void ImGuiStringViewText(std::string_view text)

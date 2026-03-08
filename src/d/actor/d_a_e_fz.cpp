@@ -887,8 +887,8 @@ void daE_FZ_c::demoDelete() {
     fopAcM_delete(this);
 }
 
-static bool daE_FZ_IsDelete(daE_FZ_c* i_this) {
-    return true;
+static BOOL daE_FZ_IsDelete(daE_FZ_c* i_this) {
+    return TRUE;
 }
 
 s32 daE_FZ_c::_delete() {

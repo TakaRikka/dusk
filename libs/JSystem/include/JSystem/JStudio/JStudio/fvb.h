@@ -115,8 +115,8 @@ private:
 class TObject_list : public TObject {
 public:
     struct ListData {
-        /* 0x0 */ f32 _0;
-        /* 0x4 */ u32 _4;
+        /* 0x0 */ BE(f32) _0;
+        /* 0x4 */ BE(u32) _4;
         /* 0x8 */ f32 _8[0];
     };
     TObject_list(data::TParse_TBlock const&);
@@ -131,7 +131,7 @@ private:
 class TObject_list_parameter : public TObject {
 public:
     struct ListData {
-        u32 _0;
+        BE(u32) _0;
         f32 _4[0];
     };
     TObject_list_parameter(data::TParse_TBlock const&);
@@ -146,7 +146,7 @@ private:
 struct TObject_hermite : public TObject {
 public:
     struct ListData {
-        u32 _0;  // u : 28, uSize : 4
+        BE(u32) _0;  // u : 28, uSize : 4
         f32 _4[0];
     };
     TObject_hermite(data::TParse_TBlock const&);

@@ -218,7 +218,7 @@ int daObjOnCloth_c::createHeap() {
 
     JUT_ASSERT(420, pbtk != NULL);
 
-    mBtkAnm = new mDoExt_btkAnm();
+    mBtkAnm = JKR_NEW mDoExt_btkAnm();
 
     JUT_ASSERT(424, mBtkAnm);
 

@@ -2,6 +2,8 @@
 
 #include "JSystem/JStage/JSGAmbientLight.h"
 
+#include "global.h"
+
 JStage::TAmbientLight::~TAmbientLight() {}
 
 s32 JStage::TAmbientLight::JSGFGetType() const {

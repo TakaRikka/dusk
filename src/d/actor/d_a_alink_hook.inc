@@ -24,10 +24,10 @@ void daAlink_c::hsChainShape_c::draw() {
     J3DModelData* modelData = alink->getItemModelData();
     J3DMaterial* material = modelData->getMaterialNodePointer(0);
     daAlink_hsChainLight_c* chainLight = (daAlink_hsChainLight_c*)&alink->tevStr;
-
-    j3dSys.setVtxPos(modelData->getVtxPosArray());
-    j3dSys.setVtxNrm(modelData->getVtxNrmArray());
-    j3dSys.setVtxCol(modelData->getVtxColorArray(0));
+    
+    j3dSys.setVtxPos(modelData->getVtxPosArray(), modelData->getVtxNum());
+    j3dSys.setVtxNrm(modelData->getVtxNrmArray(), modelData->getNrmNum());
+    j3dSys.setVtxCol(modelData->getVtxColorArray(0), modelData->getColNum());
     J3DShape::resetVcdVatCache();
 
     material->loadSharedDL();
@@ -399,10 +399,10 @@ void daAlink_c::setHookshotModel() {
     field_0x0714 = initModel(mpHookTipModel->getModelData(), 0);
 
     mpItemModelData = loadAramBmd(dRes_ID_ALANM_BMD_AL_HS_KUSARI_e, 0x1000);
-    mpHookChain = new hsChainShape_c();
-    mpHookSound = new Z2SoundObjSimple();
+    mpHookChain = JKR_NEW hsChainShape_c();
+    mpHookSound = JKR_NEW Z2SoundObjSimple();
 
-    mpHookshotLinChk = new dBgS_ObjLinChk();
+    mpHookshotLinChk = JKR_NEW dBgS_ObjLinChk();
     mpHookshotLinChk->OffFullGrp();
     mpHookshotLinChk->OnWaterGrp();
 

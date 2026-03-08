@@ -312,9 +312,9 @@ void daObjWchain_shape_c::draw() {
     J3DModelData* model_data = chain->getChainModelData();
     J3DMaterial* material = model_data->getMaterialNodePointer(0);
     dKy_tevstr_c& tevstr = chain->tevStr;
-    j3dSys.setVtxPos(model_data->getVtxPosArray());
-    j3dSys.setVtxNrm(model_data->getVtxNrmArray());
-    j3dSys.setVtxCol(model_data->getVtxColorArray(0));
+    j3dSys.setVtxPos(model_data->getVtxPosArray(), model_data->getVtxNum());
+    j3dSys.setVtxNrm(model_data->getVtxNrmArray(), model_data->getNrmNum());
+    j3dSys.setVtxCol(model_data->getVtxColorArray(0), model_data->getColNum());
     J3DShape::resetVcdVatCache();
     material->loadSharedDL();
     material->getShape()->loadPreDrawSetting();

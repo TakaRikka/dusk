@@ -56,7 +56,7 @@ int daObjSCannonTen_c::createHeap() {
         return 0;
     }
 
-    mpBgW = new dBgW();
+    mpBgW = JKR_NEW dBgW();
     if (mpBgW == NULL) {
         return 0;
     }

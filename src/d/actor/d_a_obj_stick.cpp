@@ -214,8 +214,8 @@ static void daObj_Stick_Draw(void* param_0) {
     static_cast<daObj_Stick_c*>(param_0)->Draw();
 }
 
-static bool daObj_Stick_IsDelete(void* param_0) {
-    return true;
+static BOOL daObj_Stick_IsDelete(void* param_0) {
+    return TRUE;
 }
 
 static actor_method_class daObj_Stick_MethodTable = {

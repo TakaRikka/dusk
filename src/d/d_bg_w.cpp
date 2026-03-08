@@ -88,7 +88,7 @@ bool cBgW::SetVtx() {
     if (mFlags & NO_VTX_TBL_e) {
         pm_vtx_tbl = NULL;
     } else if (mFlags & MOVE_BG_e) {
-        pm_vtx_tbl = (cBgD_Vtx_t*)new Vec[pm_bgd->m_v_num];
+        pm_vtx_tbl = (cBgD_Vtx_t*)JKR_NEW Vec[pm_bgd->m_v_num];
 
         if (pm_vtx_tbl == NULL) {
             return true;
@@ -139,7 +139,7 @@ void cBgW::CalcPlane() {
 }
 
 bool cBgW::SetTri() {
-    pm_tri = new cBgW_TriElm[pm_bgd->m_t_num];
+    pm_tri = JKR_NEW cBgW_TriElm[pm_bgd->m_t_num];
 
     if (pm_tri == NULL) {
         return true;
@@ -387,25 +387,25 @@ bool cBgW::Set(cBgD_t* pbgd, u32 flags, Mtx* pbase_mtx) {
         return true;
     }
 
-    pm_rwg = new cBgW_RwgElm[pm_bgd->m_t_num];
+    pm_rwg = JKR_NEW cBgW_RwgElm[pm_bgd->m_t_num];
     if (pm_rwg == NULL) {
         FreeArea();
         return true;
     }
 
-    pm_blk = new cBgW_BlkElm[pm_bgd->m_b_num];
+    pm_blk = JKR_NEW cBgW_BlkElm[pm_bgd->m_b_num];
     if (pm_blk == NULL) {
         FreeArea();
         return true;
     }
 
-    pm_node_tree = new cBgW_NodeTree[pm_bgd->m_tree_num];
+    pm_node_tree = JKR_NEW cBgW_NodeTree[pm_bgd->m_tree_num];
     if (pm_node_tree == NULL) {
         FreeArea();
         return true;
     }
 
-    pm_grp = new cBgW_GrpElm[pm_bgd->m_g_num];
+    pm_grp = JKR_NEW cBgW_GrpElm[pm_bgd->m_g_num];
     if (pm_grp == NULL) {
         FreeArea();
         return true;
@@ -2154,7 +2154,7 @@ u32 dBgW::ChkMoveFlag() const {
 }
 
 dBgW* dBgW_NewSet(cBgD_t* pbgd, u32 flags, Mtx* pbase_mtx) {
-    dBgW* nw = new dBgW();
+    dBgW* nw = JKR_NEW dBgW();
 
     if (nw == NULL) {
         return NULL;

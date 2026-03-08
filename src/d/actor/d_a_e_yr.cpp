@@ -2379,7 +2379,7 @@ static int daE_Yr_Delete(e_yr_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_yr_class* yr = (e_yr_class*)i_this;
 
-    yr->mpMorfSO = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_Yr", 21), NULL, NULL,
+    yr->mpMorfSO = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_Yr", 21), NULL, NULL,
                                         (J3DAnmTransform*)dComIfG_getObjectRes("E_Yr", 12), 2, 1.0f,
                                         0, -1, &yr->mSound, 0x80000, 0x11000084);
 

@@ -611,7 +611,7 @@ public:
     }
     bool isValidUpdateMaterialID(u16 idx) const { return mUpdateMaterialID[idx] != 0xffff; }
     u32 getTexMtxCalcType() { return mTexMtxCalcType; }
-    Vec* getSRTCenter(u16 idx) {
+    BE(Vec)* getSRTCenter(u16 idx) {
         J3D_ASSERT_RANGE(1047, idx < mTrackNum / 3);
         return &mSRTCenter[idx];
     }
@@ -622,13 +622,13 @@ public:
     /* 0x16 */ u16 mScaleNum;
     /* 0x18 */ u16 mRotNum;
     /* 0x1A */ u16 mTransNum;
-    /* 0x1C */ f32* mScaleData;
-    /* 0x20 */ s16* mRotData;
-    /* 0x24 */ f32* mTransData;
+    /* 0x1C */ BE(f32)* mScaleData;
+    /* 0x20 */ BE(s16)* mRotData;
+    /* 0x24 */ BE(f32)* mTransData;
     /* 0x28 */ u8* mUpdateTexMtxID;
-    /* 0x2C */ u16* mUpdateMaterialID;
+    /* 0x2C */ BE(u16)* mUpdateMaterialID;
     /* 0x30 */ JUTNameTab mUpdateMaterialName;
-    /* 0x40 */ Vec* mSRTCenter;
+    /* 0x40 */ BE(Vec)* mSRTCenter;
     /* 0x44 */ u16 field_0x44;
     /* 0x46 */ u16 field_0x46;
     /* 0x48 */ u16 field_0x48;
@@ -638,9 +638,9 @@ public:
     /* 0x54 */ void* field_0x54;
     /* 0x58 */ void* field_0x58;
     /* 0x5C */ u8* mPostUpdateTexMtxID;
-    /* 0x60 */ u16* mPostUpdateMaterialID;
+    /* 0x60 */ BE(u16)* mPostUpdateMaterialID;
     /* 0x64 */ JUTNameTab mPostUpdateMaterialName;
-    /* 0x74 */ Vec* mPostSRTCenter;
+    /* 0x74 */ BE(Vec)* mPostSRTCenter;
     /* 0x78 */ u32 mTexMtxCalcType;
 };  // Size: 0x7C
 
@@ -787,7 +787,7 @@ public:
     /* 0x10 */ u16 field_0x10;
     /* 0x12 */ u16 field_0x12;
     /* 0x14 */ u16 mUpdateMaterialNum;
-    /* 0x18 */ u16* mUpdateMaterialID;
+    /* 0x18 */ BE(u16)* mUpdateMaterialID;
     /* 0x1C */ JUTNameTab mUpdateMaterialName;
 };  // Size: 0x2C
 
@@ -822,10 +822,10 @@ public:
     virtual s32 getKind() const { return 11; }
     virtual void getColor(u16, GXColor*) const;
 
-    /* 0x2C */ s16* mColorR;
-    /* 0x30 */ s16* mColorG;
-    /* 0x34 */ s16* mColorB;
-    /* 0x38 */ s16* mColorA;
+    /* 0x2C */ BE(s16)* mColorR;
+    /* 0x30 */ BE(s16)* mColorG;
+    /* 0x34 */ BE(s16)* mColorB;
+    /* 0x38 */ BE(s16)* mColorA;
     /* 0x3C */ J3DAnmColorKeyTable* mAnmTable;
 };
 
@@ -872,20 +872,20 @@ public:
     /* 0x1A */ u16 mKRegDataCountG;
     /* 0x1C */ u16 mKRegDataCountB;
     /* 0x1E */ u16 mKRegDataCountA;
-    /* 0x20 */ u16* mCRegUpdateMaterialID;
+    /* 0x20 */ BE(u16)* mCRegUpdateMaterialID;
     /* 0x24 */ JUTNameTab mCRegUpdateMaterialName;
-    /* 0x34 */ u16* mKRegUpdateMaterialID;
+    /* 0x34 */ BE(u16)* mKRegUpdateMaterialID;
     /* 0x38 */ JUTNameTab mKRegUpdateMaterialName;
     /* 0x48 */ J3DAnmCRegKeyTable* mAnmCRegKeyTable;
     /* 0x4C */ J3DAnmKRegKeyTable* mAnmKRegKeyTable;
-    /* 0x50 */ s16* mAnmCRegDataR;
-    /* 0x54 */ s16* mAnmCRegDataG;
-    /* 0x58 */ s16* mAnmCRegDataB;
-    /* 0x5C */ s16* mAnmCRegDataA;
-    /* 0x60 */ s16* mAnmKRegDataR;
-    /* 0x64 */ s16* mAnmKRegDataG;
-    /* 0x68 */ s16* mAnmKRegDataB;
-    /* 0x6C */ s16* mAnmKRegDataA;
+    /* 0x50 */ BE(s16)* mAnmCRegDataR;
+    /* 0x54 */ BE(s16)* mAnmCRegDataG;
+    /* 0x58 */ BE(s16)* mAnmCRegDataB;
+    /* 0x5C */ BE(s16)* mAnmCRegDataA;
+    /* 0x60 */ BE(s16)* mAnmKRegDataR;
+    /* 0x64 */ BE(s16)* mAnmKRegDataG;
+    /* 0x68 */ BE(s16)* mAnmKRegDataB;
+    /* 0x6C */ BE(s16)* mAnmKRegDataA;
 };  // Size: 0x70
 
 /**
@@ -910,11 +910,11 @@ public:
     bool isValidUpdateMaterialID(u16 id) const { return mUpdateMaterialID[id] != 0xFFFF; }
     J3DAnmTexPatternFullTable* getAnmTable() { return mAnmTable; }
 
-    /* 0x0C */ u16* mTextureIndex;
+    /* 0x0C */ BE(u16)* mTextureIndex;
     /* 0x10 */ J3DAnmTexPatternFullTable* mAnmTable;
     /* 0x14 */ u16 field_0x14;
     /* 0x16 */ u16 mUpdateMaterialNum;
-    /* 0x18 */ u16* mUpdateMaterialID;
+    /* 0x18 */ BE(u16)* mUpdateMaterialID;
     /* 0x1C */ JUTNameTab mUpdateMaterialName;
 };  // Size: 0x2C
 

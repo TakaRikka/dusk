@@ -24,8 +24,8 @@ static bool daNpc_shopMaro_Draw(void* i_this) {
     return false;
 }
 
-static bool daNpc_shopMaro_IsDelete(void* i_this) {
-    return true;
+static BOOL daNpc_shopMaro_IsDelete(void* i_this) {
+    return TRUE;
 }
 
 int daNpc_shopMaro_c::create() {

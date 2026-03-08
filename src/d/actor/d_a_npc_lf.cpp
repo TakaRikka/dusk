@@ -223,8 +223,8 @@ static int daNPC_LF_Execute(npc_lf_class* i_this2) {
     return 1;
 }
 
-static bool daNPC_LF_IsDelete(npc_lf_class* param_0) {
-    return true;
+static BOOL daNPC_LF_IsDelete(npc_lf_class* param_0) {
+    return TRUE;
 }
 
 static int daNPC_LF_Delete(npc_lf_class* i_this) {

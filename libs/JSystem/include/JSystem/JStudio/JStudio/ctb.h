@@ -28,11 +28,11 @@ inline const int TObject::NodeOffset = -(int)offsetof(TObject, ocObject_);
 
 struct data {
     struct THeaderData {
-        u32 signature;
-        u16 byteOrder;
-        u16 version;
+        BE(u32) signature;
+        BE(u16) byteOrder;
+        BE(u16) version;
         u8 field_0x0[4];
-        u32 blockNumber;
+        BE(u32) blockNumber;
         u8 content[0];
     };
 

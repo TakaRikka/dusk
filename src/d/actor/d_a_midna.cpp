@@ -374,7 +374,7 @@ int daMidna_c::createHeap() {
     }
 
     for (int i = 0; i < 2; i++) {
-        mpEyeMatAnm[i] = new daMidna_matAnm_c();
+        mpEyeMatAnm[i] = JKR_NEW daMidna_matAnm_c();
         if (mpEyeMatAnm[i] == NULL) {
             return 0;
         }
@@ -463,7 +463,7 @@ int daMidna_c::createHeap() {
     J3DAnmTransform* md_anm = (J3DAnmTransform*)J3DAnmLoaderDataBase::load(mBckHeap[0].getBuffer());
     modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 14);
     JUT_ASSERT(852, modelData != NULL);
-    mpMorf = new mDoExt_McaMorfSO(modelData, &mMorfCB, NULL, md_anm, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, NULL, 0, 0x11000284);
+    mpMorf = JKR_NEW mDoExt_McaMorfSO(modelData, &mMorfCB, NULL, md_anm, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, NULL, 0, 0x11000284);
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return 0;
     }
@@ -508,13 +508,13 @@ int daMidna_c::createHeap() {
         return 0;
     }
 
-    mpHIO = new NPC_MIDNA_HIO_CLASS();
+    mpHIO = JKR_NEW NPC_MIDNA_HIO_CLASS();
     if (mpHIO == NULL) {
         return 0;
     }
 
     if (mpDemoFCBlendBmd != NULL) {
-        mpDemoFCTmpBlk = new mDoExt_blkAnm();
+        mpDemoFCTmpBlk = JKR_NEW mDoExt_blkAnm();
         if (mpDemoFCTmpBlk == NULL) {
             return 0;
         }
@@ -2836,7 +2836,7 @@ void daMidna_c::setDemoData() {
                 mDemoType = 2;
             }
 
-            char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutName(mStaffID);
+            char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutNameStr(mStaffID);
             if (cut_name != NULL) {
                 mDemoMode = (cut_name[0] - 0x30) * 10 + (cut_name[1] - 0x30);
 

@@ -9,7 +9,7 @@
 JKRAMCommand* JKRAramPiece::prepareCommand(int direction, uintptr_t src, uintptr_t dst, u32 length,
                                            JKRAramBlock* block,
                                            JKRAMCommand::AsyncCallback callback) {
-    JKRAMCommand* command = new (JKRGetSystemHeap(), -4) JKRAMCommand();
+    JKRAMCommand* command = JKR_NEW_ARGS (JKRGetSystemHeap(), -4) JKRAMCommand();
     command->mTransferDirection = direction;
     command->mSrc = src;
     command->mDst = dst;
@@ -30,6 +30,7 @@ OSMutex JKRAramPiece::mMutex;
 JKRAMCommand* JKRAramPiece::orderAsync(int direction, uintptr_t source, uintptr_t destination, u32 length,
                                        JKRAramBlock* block, JKRAMCommand::AsyncCallback callback) {
     lock();
+#if !TARGET_PC
     if ((source & 0x1f) != 0 || (destination & 0x1f) != 0) {
         OSReport("direction = %x\n", direction);
         OSReport("source = %x\n", source);
@@ -37,8 +38,9 @@ JKRAMCommand* JKRAramPiece::orderAsync(int direction, uintptr_t source, uintptr_
         OSReport("length = %x\n", length);
         JUTException::panic(__FILE__, 108, "illegal address. abort.");
     }
+#endif
 
-    JKRAramCommand* message = new (JKRGetSystemHeap(), -4) JKRAramCommand();
+    JKRAramCommand* message = JKR_NEW_ARGS (JKRGetSystemHeap(), -4) JKRAramCommand();
     JKRAMCommand* command =
         JKRAramPiece::prepareCommand(direction, source, destination, length, block, callback);
     message->setting(1, command);
@@ -80,7 +82,7 @@ BOOL JKRAramPiece::orderSync(int direction, uintptr_t source, uintptr_t destinat
     JKRAMCommand* command =
         JKRAramPiece::orderAsync(direction, source, destination, length, block, NULL);
     BOOL result = JKRAramPiece::sync(command, 0);
-    delete command;
+    JKR_DELETE(command);
 
     unlock();
     return result;
@@ -132,9 +134,9 @@ JKRAMCommand::JKRAMCommand() : mPieceLink(this), field_0x30(this) {
 
 JKRAMCommand::~JKRAMCommand() {
     if (field_0x8C)
-        delete field_0x8C;
+        JKR_DELETE(field_0x8C);
     if (field_0x90)
-        delete field_0x90;
+        JKR_DELETE(field_0x90);
 
     if (field_0x94)
         JKRFree(field_0x94);

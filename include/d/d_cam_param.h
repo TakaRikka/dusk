@@ -92,15 +92,15 @@ public:
 
 struct dCamStyleData {
     struct StyleData {
-        /* 0x0 */ s32 field_0x0;
-        /* 0x4 */ u16 field_0x4;
-        /* 0x6 */ u16 mFlags;
-        /* 0x8 */ f32 mParams[28];
+        /* 0x0 */ BE(s32) field_0x0;
+        /* 0x4 */ BE(u16) field_0x4;
+        /* 0x6 */ BE(u16) mFlags;
+        /* 0x8 */ BE(f32) mParams[28];
     };  // Size: 0x78
 
     /* 0x0 */ u8 field_0x0[4];
-    /* 0x4 */ int mStyleNum;
-    /* 0x8 */ StyleData* mStyleData;
+    /* 0x4 */ BE(int) mStyleNum;
+    /* 0x8 */ StyleData mStyleData[1];
 };
 
 class dCamParam_c

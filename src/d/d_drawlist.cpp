@@ -5,6 +5,7 @@
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
+#include "JSystem/JKernel/JKRHeap.h"
 #include "SSystem/SComponent/c_bg_s_shdw_draw.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
@@ -13,6 +14,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_mtx.h"
+#include "dusk/logging.h"
 
 class dDlst_2Dm_c {
 public:
@@ -309,6 +311,9 @@ void dDlst_2DT_c::draw() {
     GXEnd();
     GXSetClipMode(GX_CLIP_ENABLE);
     dComIfGp_getCurrentGrafPort()->setup2D();
+#if TARGET_PC
+    GXDestroyTexObj(&tex);
+#endif
 }
 
 void dDlst_2DT2_c::draw() {
@@ -710,6 +715,10 @@ void dDlst_2DM_c::draw() {
     GXTexCoord2s16(r27, r24);
     GXEnd();
     dComIfGp_getCurrentGrafPort()->setup2D();
+#if TARGET_PC
+    GXDestroyTexObj(&tex[0]);
+    GXDestroyTexObj(&tex[1]);
+#endif
 }
 
 
@@ -868,9 +877,8 @@ dDlst_2D_c::dDlst_2D_c(ResTIMG* i_timg, s16 i_posX, s16 i_posY, s16 i_sizeX, s16
 void dDlst_2D_c::draw() {
     static int s2DDrawLogCount = 0;
     if (s2DDrawLogCount < 10) {
-        printf("[DIAG] dDlst_2D_c::draw: pos=(%d,%d) size=(%d,%d) alpha=%d\n",
+        DuskLog.debug("dDlst_2D_c::draw: pos=({},{}) size=({},{}) alpha={}",
                mPosX, mPosY, mSizeX, mSizeY, mAlpha);
-        fflush(stdout);
         s2DDrawLogCount++;
     }
     mpPicture.setAlpha(mAlpha);
@@ -883,7 +891,7 @@ void dDlst_blo_c::draw() {
 
 // stand-in for a function that pulls in a bunch of inline functions but was presumably stripped
 static void dummy_misc(J2DAnmBase* anmBase, J2DPicture* picture, J2DPane* pane, J2DScreen* screen) {
-    delete anmBase;
+    JKR_DELETE(anmBase);
     picture->setBlack(JUtility::TColor(0, 0, 0, 0));
     picture->setWhite(JUtility::TColor(0, 0, 0, 0));
     pane->getTypeID();
@@ -1030,14 +1038,14 @@ void dDlst_shadowPoly_c::draw() {
 }
 
 static J3DDrawBuffer* J3DDrawBuffer__create(u32 size) {
-    J3DDrawBuffer* buffer = new J3DDrawBuffer();
+    J3DDrawBuffer* buffer = JKR_NEW J3DDrawBuffer();
 
     if (buffer) {
         int error = buffer->allocBuffer(size);
         if (error == kJ3DError_Success) {
             return buffer;
         }
-        delete buffer;
+        JKR_DELETE(buffer);
     }
     return NULL;
 }
@@ -1396,7 +1404,7 @@ void dDlst_shadowControl_c::init() {
         u16 size = l_realImageSize[i];
 
         u32 buffer_size = GXGetTexBufferSize(size, size, 5, GX_DISABLE, 0);
-        field_0x15ef0[i] = new (0x20) u8[buffer_size];
+        field_0x15ef0[i] = JKR_NEW_ARGS (0x20) u8[buffer_size];
         GXInitTexObj(&field_0x15eb0[i], field_0x15ef0[i], size, size, GX_TF_RGB5A3, GX_CLAMP,
                      GX_CLAMP, GX_DISABLE);
         GXInitTexObjLOD(&field_0x15eb0[i], GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE,
@@ -1442,7 +1450,11 @@ void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
     GXCallDisplayList(l_matDL, 0x60);
     GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
     GXSetZCompLoc(GX_TRUE);
+#if TARGET_PC
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_LO_CLEAR);
+#else
     GXSetBlendMode(GX_BM_LOGIC, GX_BL_ONE, GX_BL_ONE, GX_LO_OR);
+#endif
     GXSetClipMode(GX_CLIP_DISABLE);
     j3dSys.setDrawModeOpaTexEdge();
     J3DShape::resetVcdVatCache();
@@ -1762,7 +1774,7 @@ dDlst_list_c::~dDlst_list_c() {
         J3DDrawBuffer* tmp = *buffer;
         buffer++;
 
-        delete tmp;
+        JKR_DELETE(tmp);
     }
 }
 

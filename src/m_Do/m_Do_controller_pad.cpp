@@ -18,17 +18,17 @@ interface_of_controller_pad mDoCPd_c::m_debugCpadInfo[4];
 
 void mDoCPd_c::create() {
     #if PLATFORM_GCN || PLATFORM_SHIELD
-    m_gamePad[0] = new JUTGamePad(JUTGamePad::EPort1);
+    m_gamePad[0] = JKR_NEW JUTGamePad(JUTGamePad::EPort1);
     #endif
 
     if (DEBUG || mDoMain::developmentMode != 0) {
         #if PLATFORM_WII
-        m_gamePad[0] = new JUTGamePad(JUTGamePad::EPort1);
+        m_gamePad[0] = JKR_NEW JUTGamePad(JUTGamePad::EPort1);
         #endif
 
-        m_gamePad[1] = new JUTGamePad(JUTGamePad::EPort2);
-        m_gamePad[2] = new JUTGamePad(JUTGamePad::EPort3);
-        m_gamePad[3] = new JUTGamePad(JUTGamePad::EPort4);
+        m_gamePad[1] = JKR_NEW JUTGamePad(JUTGamePad::EPort2);
+        m_gamePad[2] = JKR_NEW JUTGamePad(JUTGamePad::EPort3);
+        m_gamePad[3] = JKR_NEW JUTGamePad(JUTGamePad::EPort4);
     } else {
         #if PLATFORM_WII
         m_gamePad[0] = NULL;

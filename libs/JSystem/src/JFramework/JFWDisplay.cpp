@@ -14,6 +14,9 @@
 #include <vi.h>
 #include "global.h"
 #include "aurora/aurora.h"
+#include "global.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "dusk/logging.h"
 
 void JFWDisplay::ctor_subroutine(bool enableAlpha) {
     mEnableAlpha = enableAlpha;
@@ -64,7 +67,7 @@ JFWDisplay* JFWDisplay::createManager(GXRenderModeObj const* p_rObj, JKRHeap* p_
     }
 
     if (sManager == NULL) {
-        sManager = new JFWDisplay(p_heap, xfb_num, enableAlpha);
+        sManager = JKR_NEW JFWDisplay(p_heap, xfb_num, enableAlpha);
     }
 
     return sManager;
@@ -226,16 +229,9 @@ void JFWDisplay::endGX() {
 
 void JFWDisplay::beginRender() {
 #if TARGET_PC
-    // Temporarily clear the current JKRHeap so that Aurora/Dawn/ImGui allocations
-    // use malloc instead of JKRHeap. Without this, Dawn's internal std::string
-    // allocations would go through JKRHeap and then crash when freed via standard delete.
-    JKRHeap* savedHeap = JKRHeap::getCurrentHeap();
-    JKRHeap::setCurrentHeap(nullptr);
-#endif
     aurora_begin_frame();
-#if TARGET_PC
-    JKRHeap::setCurrentHeap(savedHeap);
 #endif
+
     if (field_0x40) {
         JUTProcBar::getManager()->wholeLoopEnd();
     }
@@ -313,16 +309,6 @@ void JFWDisplay::endRender() {
 
     JUTProcBar::getManager()->cpuStart();
     calcCombinationRatio();
-#if TARGET_PC
-    {
-        JKRHeap* savedHeap = JKRHeap::getCurrentHeap();
-        JKRHeap::setCurrentHeap(nullptr);
-        aurora_end_frame();
-        JKRHeap::setCurrentHeap(savedHeap);
-    }
-#else
-    aurora_end_frame();
-#endif
 }
 
 void JFWDisplay::endFrame() {
@@ -357,6 +343,10 @@ void JFWDisplay::endFrame() {
         JUTProcBar::getManager()->setCostFrame(retrace_cnt - prevFrame);
         prevFrame = retrace_cnt;
     }
+
+#if TARGET_PC
+    aurora_end_frame();
+#endif
 }
 
 void JFWDisplay::waitBlanking(int param_0) {
@@ -450,7 +440,7 @@ void JFWDisplay::clearEfb(GXColor color) {
 
 void JFWDisplay::clearEfb(int param_0, int param_1, int param_2, int param_3, GXColor color) {
 #if TARGET_PC
-    puts("clearEfb not implemented");
+    STUB_LOG();
     return;
 #endif
     u16 width;

@@ -234,7 +234,7 @@ int daNpc_grM_c::CreateHeap() {
 
     JUT_ASSERT(701, NULL != mdlData_p);
 
-    mpMorf[0] = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000,
+    mpMorf[0] = JKR_NEW mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000,
                                      0x11020284);
     if (mpMorf[0] != NULL && mpMorf[0]->getModel() == NULL) {
         mpMorf[0]->stopZelAnime();

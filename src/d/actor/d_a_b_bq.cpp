@@ -2427,7 +2427,7 @@ static int daB_BQ_Delete(b_bq_class* i_this) {
 static int useHeapInit(fopAc_ac_c* i_this) {
     b_bq_class* a_this = (b_bq_class*)i_this;
 
-    a_this->mpMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("B_bq", BMDV_BQ), NULL,
+    a_this->mpMorf = JKR_NEW mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("B_bq", BMDV_BQ), NULL,
                                           NULL, NULL, J3DFrameCtrl::EMode_LOOP, 0.6f, 0, -1,
                                           &a_this->mSound, 0, 0x11000284);
     if (a_this->mpMorf == NULL || a_this->mpMorf->getModel() == NULL) {
@@ -2441,7 +2441,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
     }
 
-    a_this->mpDeadBrk = new mDoExt_brkAnm();
+    a_this->mpDeadBrk = JKR_NEW mDoExt_brkAnm();
     if (a_this->mpDeadBrk == NULL) {
         return false;
     }
@@ -2455,7 +2455,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 
     a_this->mpDeadBrk->setPlaySpeed(0.0f);
 
-    a_this->mpTodomeBtk = new mDoExt_btkAnm();
+    a_this->mpTodomeBtk = JKR_NEW mDoExt_btkAnm();
     if (a_this->mpTodomeBtk == NULL) {
         return false;
     }

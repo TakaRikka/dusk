@@ -87,7 +87,7 @@ struct dCamera_event_param {
 
 struct dCamera_type_data {
     /* 0x00 */ char name[24];
-    /* 0x18 */ s16 field_0x18[2][11];
+    /* 0x18 */ BE(s16) field_0x18[2][11];
 };  // Size: 0x44
 
 struct camSphChkdata {
@@ -1086,7 +1086,11 @@ public:
 
     bool CheckFlag(u32 i_flag) { return (mEventFlags & i_flag) != 0 ? true : false; }
 
+#if TARGET_PC
+    void ResetView();
+#else
     void ResetView() { setView(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT); }
+#endif
 
     void clearInfo(dCamInfo_c* i_info, s16 param_1) {
         i_info->field_0x1e = param_1;

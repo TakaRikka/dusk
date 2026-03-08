@@ -13,6 +13,7 @@
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_debug_sv.h"
 #include <cstdio>
+#include "dusk/logging.h"
 
 void fpcNdRq_RequestQTo(node_create_request* i_request) {
     fpcLy_CreatedMesg(i_request->layer);
@@ -48,12 +49,12 @@ int fpcNdRq_phase_IsCreated(node_create_request* i_request) {
 }
 
 int fpcNdRq_phase_Create(node_create_request* i_request) {
-    printf("[DIAG] fpcNdRq_phase_Create: name=%d layer=%p\n", i_request->name, i_request->layer); fflush(stdout);
+    DuskLog.debug("fpcNdRq_phase_Create: name={} layer={}", i_request->name, (void*)i_request->layer);
     i_request->creating_id =
         fpcSCtRq_Request(i_request->layer, i_request->name,
                          (stdCreateFunc)i_request->create_req_methods->post_method, i_request,
                          i_request->data);
-    printf("[DIAG] fpcNdRq_phase_Create: creating_id=%d (error=%d)\n", i_request->creating_id, fpcM_ERROR_PROCESS_ID_e); fflush(stdout);
+    DuskLog.debug("fpcNdRq_phase_Create: creating_id={} (error={})", i_request->creating_id, fmt::underlying(fpcM_ERROR_PROCESS_ID_e));
     if (i_request->creating_id == fpcM_ERROR_PROCESS_ID_e) {
         return cPhs_UNK3_e;
     }
@@ -145,7 +146,7 @@ int fpcNdRq_Handler() {
 
     static int sNdRqLogCount = 0;
     if (l_fpcNdRq_Queue.mSize > 0 && sNdRqLogCount < 30) {
-        printf("[DIAG] fpcNdRq_Handler: queue size=%d\n", l_fpcNdRq_Queue.mSize); fflush(stdout);
+        DuskLog.debug("fpcNdRq_Handler: queue size={}", l_fpcNdRq_Queue.mSize);
         sNdRqLogCount++;
     }
 

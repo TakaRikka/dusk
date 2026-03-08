@@ -65,6 +65,11 @@ struct J3DSys {
     /* 0x10C */ void* mVtxPos;
     /* 0x110 */ void* mVtxNrm;
     /* 0x114 */ GXColor* mVtxCol;
+#if TARGET_PC
+    int mVtxPosNum = 0;
+    int mVtxNrmNum = 0;
+    int mVtxColNum = 0;
+#endif
     /* 0x118 */ BE(Vec)* mNBTScale;
 
     J3DSys();
@@ -151,21 +156,34 @@ struct J3DSys {
     void setModelNrmMtx(Mtx33* pMtxArr) {
         J3D_ASSERT_NULLPTR(241, pMtxArr);
         mModelNrmMtx = pMtxArr;
-        GXSETARRAY(GX_POS_MTX_ARRAY, mModelNrmMtx, sizeof(*mModelNrmMtx), sizeof(*mModelNrmMtx));
+        GXSETARRAY(GX_NRM_MTX_ARRAY, mModelNrmMtx, sizeof(*mModelNrmMtx), sizeof(*mModelNrmMtx));
     }
 
     void* getVtxPos() { return mVtxPos; }
 
-    void setVtxPos(void* pVtxPos) {
+    void setVtxPos(void* pVtxPos, int num) {
         J3D_ASSERT_NULLPTR(252, pVtxPos != NULL);
         mVtxPos = pVtxPos;
+#if TARGET_PC
+        mVtxPosNum = num;
+#endif
     }
 
     void* getVtxNrm() { return mVtxNrm; }
-    void setVtxNrm(void* pVtxNrm) { mVtxNrm = pVtxNrm; }
+    void setVtxNrm(void* pVtxNrm, int num) {
+        mVtxNrm = pVtxNrm;
+#if TARGET_PC
+        mVtxNrmNum = num;
+#endif
+    }
 
     void* getVtxCol() { return mVtxCol; }
-    void setVtxCol(GXColor* pVtxCol) { mVtxCol = pVtxCol; }
+    void setVtxCol(GXColor* pVtxCol, int num) {
+        mVtxCol = pVtxCol;
+#if TARGET_PC
+        mVtxColNum = num;
+#endif
+    }
 
     Mtx& getModelDrawMtx(u16 no) { return mModelDrawMtx[no]; }
     J3DShapePacket* getShapePacket() { return mShapePacket; }

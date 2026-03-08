@@ -4,6 +4,10 @@
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "m_Do/m_Do_mtx.h"
 #include "global.h"
+#include "dusk/logging.h"
+#if TARGET_PC
+#include <aurora/aurora.h>
+#endif
 
 #if WIDESCREEN_SUPPORT
 #define FB_WIDTH  (640)
@@ -97,8 +101,7 @@ public:
 
     static int startFadeOut(int param_0) { return JFWDisplay::getManager()->startFadeOut(param_0); }
     static int startFadeIn(int param_0) { 
-        printf("[DIAG] mDoGph_gInf_c::startFadeIn START\n");
-        fflush(stdout);
+        DuskLog.debug("mDoGph_gInf_c::startFadeIn START");
         return JFWDisplay::getManager()->startFadeIn(param_0); }
     static void setFadeColor(JUtility::TColor& color) { mFader->setColor(color); }
     static void setClearColor(JUtility::TColor color) { JFWDisplay::getManager()->setClearColor(color); }
@@ -137,8 +140,20 @@ public:
         #endif
     }
 
-    static f32 getWidth() { return FB_WIDTH; }
-    static f32 getHeight() { return FB_HEIGHT; }
+    static f32 getWidth() {
+        #if TARGET_PC
+        return JUTVideo::getManager()->getFbWidth();
+        #else
+        return FB_WIDTH;
+        #endif
+    }
+    static f32 getHeight() {
+        #if TARGET_PC
+        return JUTVideo::getManager()->getEfbHeight();
+        #else
+        return FB_HEIGHT;
+        #endif
+    }
 
     static f32 getMinYF() {
         #if WIDESCREEN_SUPPORT
@@ -264,6 +279,10 @@ public:
 
     static void setWideZoomProjection(Mtx44& m);
     static void setWideZoomLightProjection(Mtx& m);
+    #endif
+
+    #if TARGET_PC
+    static void setWindowSize(AuroraWindowSize const& size);
     #endif
 
     static GXTexObj mFrameBufferTexObj;

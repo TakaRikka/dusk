@@ -28,7 +28,7 @@ int daWindStone_c::createHeap() {
     if (mpModel == NULL) {
         return 0;
     }
-    mpBgW = new dBgW();
+    mpBgW = JKR_NEW dBgW();
     if (mpBgW == NULL) {
         return 0;
     }

@@ -30,7 +30,7 @@ JKRExpHeap* JKRExpHeap::createRoot(int maxHeaps, bool errorFlag) {
             }
         }
 #endif
-        JKRExpHeap* heap2 = new (mem2) JKRExpHeap(local_20, local_24, NULL, errorFlag);
+        JKRExpHeap* heap2 = JKR_NEW_ARGS (mem2) JKRExpHeap(local_20, local_24, NULL, errorFlag);
         sRootHeap2 = heap2;
         heap2->field_0x6e = true;
 #endif
@@ -49,7 +49,7 @@ JKRExpHeap* JKRExpHeap::createRoot(int maxHeaps, bool errorFlag) {
             }
         }
 #endif
-        heap = new (mem1) JKRExpHeap(start1, alignedSize, NULL, errorFlag);
+        heap = JKR_NEW_ARGS (mem1) JKRExpHeap(start1, alignedSize, NULL, errorFlag);
         sRootHeap = heap;
     }
     heap->field_0x6e = true;
@@ -79,7 +79,7 @@ JKRExpHeap* JKRExpHeap::create(u32 size, JKRHeap* parent, bool errorFlag) {
         return NULL;
     }
 
-    newHeap = new (memory) JKRExpHeap(dataPtr, alignedSize - expHeapSize, parent, errorFlag);
+    newHeap = JKR_NEW_ARGS (memory) JKRExpHeap(dataPtr, alignedSize - expHeapSize, parent, errorFlag);
 
     if (newHeap == NULL) {
         JKRFree(memory);
@@ -117,7 +117,7 @@ JKRExpHeap* JKRExpHeap::create(void* ptr, u32 size, JKRHeap* parent, bool errorF
     u8* dataPtr = r28 + expHeapSize;
     u32 alignedSize = ALIGN_PREV((uintptr_t)ptr + size - (uintptr_t)dataPtr, 0x10);
     if (r28) {
-        newHeap = new (r28) JKRExpHeap(dataPtr, alignedSize, parent2, errorFlag);
+        newHeap = JKR_NEW_ARGS (r28) JKRExpHeap(dataPtr, alignedSize, parent2, errorFlag);
     }
 #if DEBUG
     if (newHeap) {
@@ -212,12 +212,17 @@ void* JKRExpHeap::do_alloc(u32 size, int alignment) {
     }
 #endif
 
+#if TARGET_PC
+    JUT_ASSERT_MSG_F(__LINE__, ptr != nullptr, "failed to alloc memory! (0x%x byte).\n", size);
+#else
     if (ptr == NULL) {
         JUTWarningConsole_f(":::cannot alloc memory (0x%x byte).\n", size);
         if (getErrorFlag() == true) {
             callErrorHandler(this, size, alignment);
         }
     }
+#endif
+
     unlock();
 
     return ptr;
@@ -783,9 +788,9 @@ void JKRExpHeap::recycleFreeBlock(JKRExpHeap::CMemBlock* block) {
 }
 
 void JKRExpHeap::joinTwoBlocks(CMemBlock* block) {
-    u32 endAddr = (uintptr_t)(block + 1) + block->size;
+    uintptr_t endAddr = (uintptr_t)(block + 1) + block->size;
     CMemBlock* next = block->mNext;
-    u32 nextAddr = (uintptr_t)next - (next->mFlags & 0x7f);
+    uintptr_t nextAddr = (uintptr_t)next - (next->mFlags & 0x7f);
     if (endAddr > nextAddr) {
         JUTWarningConsole_f(":::Heap may be broken. (block = %x)", block);
         OS_REPORT(":::block = %x\n", block);
@@ -1005,6 +1010,10 @@ JKRExpHeap::CMemBlock* JKRExpHeap::CMemBlock::allocFore(u32 size1, u8 groupId1, 
     mGroupId = groupId1;
     mFlags = alignment1;
     if (size >= size1 + sizeof(CMemBlock)) {
+#if TARGET_PC
+        if ((size - size1) <= sizeof(CMemBlock))
+            return NULL;
+#endif
         block = (CMemBlock*)(size1 + (uintptr_t)this);
         block[1].mGroupId = groupId2;
         block[1].mFlags = alignment2;

@@ -78,73 +78,73 @@ dMenu_Letter_c::dMenu_Letter_c(JKRExpHeap* i_heap, STControl* i_stick, CSTContro
 
 
 dMenu_Letter_c::~dMenu_Letter_c() {
-    delete mpDrawCursor;
+    JKR_DELETE(mpDrawCursor);
     mpDrawCursor = NULL;
 
-    delete mpArrow;
+    JKR_DELETE(mpArrow);
     mpArrow = NULL;
 
-    delete mpString;
+    JKR_DELETE(mpString);
     mpString = NULL;
 
-    delete mpMenuScreen;
+    JKR_DELETE(mpMenuScreen);
     mpMenuScreen = NULL;
 
-    delete mpMenuDMYScreen;
+    JKR_DELETE(mpMenuDMYScreen);
     mpMenuDMYScreen = NULL;
 
-    delete mpBaseScreen;
+    JKR_DELETE(mpBaseScreen);
     mpBaseScreen = NULL;
 
-    delete mpSdwScreen;
+    JKR_DELETE(mpSdwScreen);
     mpSdwScreen = NULL;
 
     for (int i = 0; i < 2; i++) {
-        delete mpLetterScreen[i];
+        JKR_DELETE(mpLetterScreen[i]);
         mpLetterScreen[i] = NULL;
 
-        delete field_0x2ec[i];
+        JKR_DELETE(field_0x2ec[i]);
         field_0x2ec[i] = NULL;
 
         if (field_0x2f4[i] != NULL) {
-            delete field_0x2f4[i];
+            JKR_DELETE(field_0x2f4[i]);
             field_0x2f4[i] = NULL;
         }
 
-        delete mpTextParent[i];
+        JKR_DELETE(mpTextParent[i]);
         mpTextParent[i] = NULL;
     }
 
-    delete mpLineParent;
+    JKR_DELETE(mpLineParent);
     mpLineParent = NULL;
 
-    delete mpBlackTex;
+    JKR_DELETE(mpBlackTex);
     mpBlackTex = NULL;
 
     for (int i = 0; i < 3; i++) {
-        delete mpParent[i];
+        JKR_DELETE(mpParent[i]);
         mpParent[i] = NULL;
     }
 
     for (int i = 0; i < 6; i++) {
-        delete mpLetterParent[i];
+        JKR_DELETE(mpLetterParent[i]);
         mpLetterParent[i] = NULL;
     }
 
-    delete mpDMYParent;
+    JKR_DELETE(mpDMYParent);
     mpDMYParent = NULL;
 
-    delete mpIconScreen;
+    JKR_DELETE(mpIconScreen);
     mpIconScreen = NULL;
 
     for (int i = 0; i < 2; i++) {
         if (mpButtonAB[i] != NULL) {
-            delete mpButtonAB[i];
+            JKR_DELETE(mpButtonAB[i]);
             mpButtonAB[i] = NULL;
         }
 
         if (mpButtonText[i] != NULL) {
-            delete mpButtonText[i];
+            JKR_DELETE(mpButtonText[i]);
             mpButtonText[i] = NULL;
         }
     }
@@ -163,7 +163,7 @@ dMenu_Letter_c::~dMenu_Letter_c() {
 }
 
 void dMenu_Letter_c::_create() {
-    mpDrawCursor = new dSelect_cursor_c(2, 1.0f, NULL);
+    mpDrawCursor = JKR_NEW dSelect_cursor_c(2, 1.0f, NULL);
     JUT_ASSERT(231, mpDrawCursor != NULL);
     // shield prod uses same values as GCN?
     #if PLATFORM_WII || VERSION == VERSION_SHIELD_DEBUG
@@ -175,10 +175,10 @@ void dMenu_Letter_c::_create() {
     mpDrawCursor->setScale(0.0f);
     mpDrawCursor->offPlayAnime(0);
 
-    mpString = new dMsgString_c();
+    mpString = JKR_NEW dMsgString_c();
     JUT_ASSERT(245, mpString != NULL);
     
-    mpArrow = new dMsgScrnArrow_c();
+    mpArrow = JKR_NEW dMsgScrnArrow_c();
     JUT_ASSERT(249, mpArrow != NULL);
 
     screenSetMenu();
@@ -311,7 +311,7 @@ int dMenu_Letter_c::_open() {
         if (mpMount->sync() != 0) {
             if (!mpArchive) {
                 mpArchive = (JKRArchive*)mpMount->getArchive();
-                delete mpMount;
+                JKR_DELETE(mpMount);
                 mpMount = NULL;
                 _create();
             }
@@ -752,12 +752,12 @@ void dMenu_Letter_c::screenSetMenu() {
         MULTI_CHAR('midoku_0'), MULTI_CHAR('midoku_1'), MULTI_CHAR('midoku_2'), MULTI_CHAR('midoku_3'), MULTI_CHAR('midoku_4'), MULTI_CHAR('midoku_5'),
     };
 
-    mpMenuScreen = new J2DScreen();
+    mpMenuScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(1146, mpMenuScreen != NULL);
     bool fg = mpMenuScreen->setPriority("zelda_letter_select_6menu.blo", 0x20000, mpArchive);
     JUT_ASSERT(1156, fg != false);
     dPaneClass_showNullPane(mpMenuScreen);
-    mpParent[0] = new CPaneMgr(mpMenuScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpParent[0] = JKR_NEW CPaneMgr(mpMenuScreen, MULTI_CHAR('n_all'), 2, NULL);
     JUT_ASSERT(1161, mpParent[0] != NULL);
     mpParent[0]->setAlphaRate(0.0f);
     for (int i = 0; i < 6; i++) {
@@ -786,7 +786,7 @@ void dMenu_Letter_c::screenSetMenu() {
         }
     }
     for (int i = 0; i < 6; i++) {
-        mpLetterParent[i] = new CPaneMgr(mpMenuScreen, tag_letter[i], 0, NULL);
+        mpLetterParent[i] = JKR_NEW CPaneMgr(mpMenuScreen, tag_letter[i], 0, NULL);
         JUT_ASSERT(1212, mpLetterParent[i] != NULL);
     }
     for (int i = 0; i < 6; i++) {
@@ -824,12 +824,12 @@ void dMenu_Letter_c::screenSetMenu() {
             field_0x338[i] = ((J2DTextBox*)field_0x34[1][i])->getWhite();
         }
     }
-    mpMenuDMYScreen = new J2DScreen();
+    mpMenuDMYScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(1270, mpMenuDMYScreen != NULL);
     fg = mpMenuDMYScreen->setPriority("zelda_letter_select_6menu.blo", 0x20000, mpArchive);
     JUT_ASSERT(1280, fg != false);
     dPaneClass_showNullPane(mpMenuDMYScreen);
-    mpDMYParent = new CPaneMgr(mpMenuDMYScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpDMYParent = JKR_NEW CPaneMgr(mpMenuDMYScreen, MULTI_CHAR('n_all'), 2, NULL);
     JUT_ASSERT(1285, mpDMYParent != NULL);
     for (int i = 0; i < 6; i++) {
 #if VERSION == VERSION_GCN_JPN
@@ -878,13 +878,13 @@ void dMenu_Letter_c::screenSetBase() {
         MULTI_CHAR('pi_00'), MULTI_CHAR('pi_01'), MULTI_CHAR('pi_02'), MULTI_CHAR('pi_03'), MULTI_CHAR('pi_04'), MULTI_CHAR('pi_05'), MULTI_CHAR('pi_06'), MULTI_CHAR('pi_07'), MULTI_CHAR('pi_08'),
     };
 
-    mpBaseScreen = new J2DScreen();
+    mpBaseScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(1357, mpBaseScreen != NULL);
     bool fg = mpBaseScreen->setPriority("zelda_letter_select_base.blo", 0x20000, mpArchive);
     JUT_ASSERT(1361, fg != false);
     dPaneClass_showNullPane(mpBaseScreen);
     mpBaseScreen->search(MULTI_CHAR('wi_btn_n'))->hide();
-    mpParent[1] = new CPaneMgr(mpBaseScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpParent[1] = JKR_NEW CPaneMgr(mpBaseScreen, MULTI_CHAR('n_all'), 2, NULL);
     JUT_ASSERT(1372, mpParent[1] != NULL);
     mpParent[1]->setAlphaRate(0.0f);
 #if VERSION == VERSION_GCN_JPN
@@ -967,15 +967,15 @@ void dMenu_Letter_c::screenSetBase() {
 }
 
 void dMenu_Letter_c::screenSetShadow() {
-    mpSdwScreen = new J2DScreen();
+    mpSdwScreen = JKR_NEW J2DScreen();
     mpSdwScreen->setPriority("zelda_letter_select_shadow.blo", 0x20000, mpArchive);
     dPaneClass_showNullPane(mpSdwScreen);
-    mpParent[2] = new CPaneMgr(mpSdwScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpParent[2] = JKR_NEW CPaneMgr(mpSdwScreen, MULTI_CHAR('n_all'), 2, NULL);
     mpParent[2]->setAlphaRate(0.0f);
 }
 
 void dMenu_Letter_c::screenSetLetter() {
-    mpLetterScreen[0] = new J2DScreen();
+    mpLetterScreen[0] = JKR_NEW J2DScreen();
     JUT_ASSERT(1507, mpLetterScreen[0] != NULL);
     bool fg = mpLetterScreen[0]->setPriority("zelda_letter_window_base.blo", 0x20000, mpArchive);
     JUT_ASSERT(1511, fg != false);
@@ -983,15 +983,15 @@ void dMenu_Letter_c::screenSetLetter() {
 
 #if VERSION == VERSION_GCN_JPN
     if (dComIfGs_getOptRuby() == 0) {
-        field_0x2ec[0] = new CPaneMgr(mpLetterScreen[0], MULTI_CHAR('t3f_s'), 0, NULL);
-        field_0x2ec[1] = new CPaneMgr(mpLetterScreen[0], MULTI_CHAR('mg_3flin'), 0, NULL);
-        field_0x2f4[0] = new CPaneMgr(mpLetterScreen[0], MULTI_CHAR('mg_3f_s'), 0, NULL);
-        field_0x2f4[1] = new CPaneMgr(mpLetterScreen[0], MULTI_CHAR('mg_3f'), 0, NULL);
+        field_0x2ec[0] = JKR_NEW CPaneMgr(mpLetterScreen[0], MULTI_CHAR('t3f_s'), 0, NULL);
+        field_0x2ec[1] = JKR_NEW CPaneMgr(mpLetterScreen[0], MULTI_CHAR('mg_3flin'), 0, NULL);
+        field_0x2f4[0] = JKR_NEW CPaneMgr(mpLetterScreen[0], MULTI_CHAR('mg_3f_s'), 0, NULL);
+        field_0x2f4[1] = JKR_NEW CPaneMgr(mpLetterScreen[0], MULTI_CHAR('mg_3f'), 0, NULL);
         mpLetterScreen[0]->search('t4_s')->hide();
         mpLetterScreen[0]->search(MULTI_CHAR('mg_e4lin'))->hide();
         mpLetterScreen[0]->search('t3_s')->hide();
         mpLetterScreen[0]->search(MULTI_CHAR('mg_3line'))->hide();
-        mpLineParent = new CPaneMgr(mpLetterScreen[0], MULTI_CHAR('jp_fri_n'), 0, NULL);
+        mpLineParent = JKR_NEW CPaneMgr(mpLetterScreen[0], MULTI_CHAR('jp_fri_n'), 0, NULL);
         JUT_ASSERT(1530, mpLineParent != NULL);
         for (int i = 0; i < 12; i++) {
             static u64 const line_tag[12] = {
@@ -1011,8 +1011,8 @@ void dMenu_Letter_c::screenSetLetter() {
         ((J2DTextBox*)field_0x2f4[0]->getPanePtr())->setLineSpace(((J2DTextBox*)field_0x2ec[0]->getPanePtr())->getLineSpace());
         ((J2DTextBox*)field_0x2f4[1]->getPanePtr())->setLineSpace(((J2DTextBox*)field_0x2ec[1]->getPanePtr())->getLineSpace());
     } else {
-        field_0x2ec[0] = new CPaneMgr(mpLetterScreen[0], 't3_s', 0, NULL);
-        field_0x2ec[1] = new CPaneMgr(mpLetterScreen[0], MULTI_CHAR('mg_3line'), 0, NULL);
+        field_0x2ec[0] = JKR_NEW CPaneMgr(mpLetterScreen[0], 't3_s', 0, NULL);
+        field_0x2ec[1] = JKR_NEW CPaneMgr(mpLetterScreen[0], MULTI_CHAR('mg_3line'), 0, NULL);
         for (int i = 0; i < 2; i++) {
             field_0x2f4[i] = NULL;
         }
@@ -1022,7 +1022,7 @@ void dMenu_Letter_c::screenSetLetter() {
         mpLetterScreen[0]->search(MULTI_CHAR('mg_3flin'))->hide();
         mpLetterScreen[0]->search(MULTI_CHAR('mg_3f_s'))->hide();
         mpLetterScreen[0]->search(MULTI_CHAR('mg_3f'))->hide();
-        mpLineParent = new CPaneMgr(mpLetterScreen[0], 'jp_n', 0, NULL);
+        mpLineParent = JKR_NEW CPaneMgr(mpLetterScreen[0], 'jp_n', 0, NULL);
         JUT_ASSERT(1530, mpLineParent != NULL);
         for (int i = 0; i < 12; i++) {
             static u64 const line_tag[12] = {
@@ -1046,8 +1046,8 @@ void dMenu_Letter_c::screenSetLetter() {
         MULTI_CHAR('line15'), MULTI_CHAR('line16'), MULTI_CHAR('line17'), MULTI_CHAR('line18'), MULTI_CHAR('line19'), MULTI_CHAR('line20'),
     };
 
-    field_0x2ec[0] = new CPaneMgr(mpLetterScreen[0], 't4_s', 0, NULL);
-    field_0x2ec[1] = new CPaneMgr(mpLetterScreen[0], MULTI_CHAR('mg_e4lin'), 0, NULL);
+    field_0x2ec[0] = JKR_NEW CPaneMgr(mpLetterScreen[0], 't4_s', 0, NULL);
+    field_0x2ec[1] = JKR_NEW CPaneMgr(mpLetterScreen[0], MULTI_CHAR('mg_e4lin'), 0, NULL);
     for (int i = 0; i < 2; i++) {
         field_0x2f4[i] = NULL;
     }
@@ -1057,7 +1057,7 @@ void dMenu_Letter_c::screenSetLetter() {
     mpLetterScreen[0]->search(MULTI_CHAR('mg_3f'))->hide();
     mpLetterScreen[0]->search('t3_s')->hide();
     mpLetterScreen[0]->search(MULTI_CHAR('mg_3line'))->hide();
-    mpLineParent = new CPaneMgr(mpLetterScreen[0], 'us_n', 0, NULL);
+    mpLineParent = JKR_NEW CPaneMgr(mpLetterScreen[0], 'us_n', 0, NULL);
     JUT_ASSERT(1530, mpLineParent != NULL);
     for (int i = 0; i < 12; i++) {
         if (line_tag[i] != 0) {
@@ -1092,19 +1092,19 @@ void dMenu_Letter_c::screenSetLetter() {
         field_0x1e4[i]->setFont(mDoExt_getSubFont());
         field_0x1e4[i]->setString(0x10, "");
     }
-    mpLetterScreen[1] = new J2DScreen();
+    mpLetterScreen[1] = JKR_NEW J2DScreen();
     JUT_ASSERT(1627, mpLetterScreen[1] != NULL);
     fg = mpLetterScreen[1]->setPriority("zelda_letter_window_spot.blo", 0x20000, mpArchive);
     JUT_ASSERT(1631, fg != false);
     dPaneClass_showNullPane(mpLetterScreen[1]);
     for (int i = 0; i < 2; i++) {
-        mpTextParent[i] = new CPaneMgr(mpLetterScreen[i], MULTI_CHAR('n_all'), 2, NULL);
+        mpTextParent[i] = JKR_NEW CPaneMgr(mpLetterScreen[i], MULTI_CHAR('n_all'), 2, NULL);
         JUT_ASSERT(1636, mpTextParent[i] != NULL);
         mpTextParent[i]->scale(0.0f, 0.0f);
         mpTextParent[i]->setAlphaRate(0.0f);
     }
     ResTIMG* local_30 = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "tt_block8x8.bti");
-    mpBlackTex = new J2DPicture(local_30);
+    mpBlackTex = JKR_NEW J2DPicture(local_30);
     JUT_ASSERT(1644, mpBlackTex != NULL);
     mpBlackTex->setBlackWhite(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(0, 0, 0, 255));
     mpBlackTex->setAlpha(0);
@@ -1118,7 +1118,7 @@ void dMenu_Letter_c::screenSetDoIcon() {
         MULTI_CHAR('btext1_1'), MULTI_CHAR('btext1_2'), MULTI_CHAR('btext1_3'), MULTI_CHAR('btext1_4'), MULTI_CHAR('btext1_5'),
     };
 
-    mpIconScreen = new J2DScreen();
+    mpIconScreen = JKR_NEW J2DScreen();
     mpIconScreen->setPriority("zelda_collect_soubi_do_icon_parts.blo", 0x20000, mpArchive);
     for (int i = 0; i < 2; i++) {
         mpButtonAB[i] = NULL;

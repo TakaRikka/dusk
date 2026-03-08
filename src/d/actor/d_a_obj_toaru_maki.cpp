@@ -35,7 +35,7 @@ int daObjToaruMaki_c::createHeap() {
         return 0;
     }
     if (nameArg == 0) {
-        mpBgW = new dBgW();
+        mpBgW = JKR_NEW dBgW();
         if (mpBgW == NULL) {
             return 0;
         }

@@ -1317,10 +1317,18 @@ set(REL_FILES
         src/d/actor/d_a_warp_bug.cpp
 )
 
+set(DOLPHIN_FILES
+    libs/dolphin/src/gf/GFGeometry.cpp
+    libs/dolphin/src/gf/GFLight.cpp
+    libs/dolphin/src/gf/GFPixel.cpp
+    libs/dolphin/src/gf/GFTev.cpp
+)
+
 set(DUSK_FILES
         include/dusk/endian_gx.hpp
         src/dusk/asserts.cpp
         src/dusk/imgui.cpp
+        src/dusk/logging.cpp
         src/dusk/stubs.cpp
         src/dusk/endian.cpp
         src/dusk/extras.c
@@ -1330,8 +1338,10 @@ set(DUSK_FILES
         src/dusk/dvd_emu.cpp
         src/dusk/imgui/imgui.hpp
         src/dusk/imgui/processes.cpp
+        src/dusk/imgui/camera.cpp
         src/dusk/imgui/debug_overlay.cpp
         src/dusk/imgui/heaps.cpp
+        src/dusk/imgui/kb_pad.cpp
         src/dusk/offset_ptr.cpp
         src/dusk/OSContext.cpp
         src/dusk/OSThread.cpp

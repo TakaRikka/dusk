@@ -47,8 +47,8 @@ struct J2DTextBoxInfo {
     /* 0x14 */ BE(u32) mGradColor;
     /* 0x18 */ u8 mConnected;
     /* 0x19 */ char field_0x19[3];
-    /* 0x1C */ u16 field_0x1c;
-    /* 0x1E */ u16 field_0x1e;
+    /* 0x1C */ BE(u16) field_0x1c;
+    /* 0x1E */ BE(u16) field_0x1e;
 };  // Size: 0x20
 
 /**
