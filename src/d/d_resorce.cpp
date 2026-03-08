@@ -16,11 +16,11 @@
 #include "f_ap/f_ap_game.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_graphic.h"
+#include "res/Object/Always.h"
 #include <cstdio>
 #include <cstring>
 
 #ifndef __MWERKS__
-#include <cstring>
 #include "dusk/extras.h"
 #endif
 
@@ -134,7 +134,7 @@ static void addWarpMaterial(J3DModelData* i_modelData) {
     };
     static J3DAlphaCompInfo const l_alphaCompInfo = {0x04, 0x80, 0x00, 0x03, 0xFF};
 
-    ResTIMG* resTimg = (ResTIMG*)dComIfG_getObjectRes("Always", 0x5d);
+    ResTIMG* resTimg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_ID_ALWAYS_BTI_WARP_TEX_e);
     JUT_ASSERT(279, resTimg != NULL);
 
     J3DTexture* texture = i_modelData->getTexture();
@@ -151,7 +151,7 @@ static void addWarpMaterial(J3DModelData* i_modelData) {
         JUT_ASSERT(290, texGenNum < 4);
 
         J3DTexCoord* coord = texGenBlock->getTexCoord(texGenNum);
-        l_texCoordInfo.mTexGenMtx = texGenNum * 3 + 0x1e;
+        l_texCoordInfo.mTexGenMtx = texGenNum * 3 + GX_TEXMTX0;
         coord->setTexCoordInfo(l_texCoordInfo);
         coord->resetTexMtxReg();
 
@@ -168,7 +168,7 @@ static void addWarpMaterial(J3DModelData* i_modelData) {
         tevBlock->setTevStageNum(tevStageNum + 1);
 
         J3DShape* shape = material->getShape();
-        GXAttr attr = (GXAttr)(texGenNum + 1);
+        GXAttr attr = (GXAttr)(texGenNum + GX_VA_TEX0MTXIDX);
         shape->addTexMtxIndexInDL(attr, 0);
         shape->addTexMtxIndexInVcd(attr);
 

@@ -4105,11 +4105,16 @@ J3DModel* daAlink_c::initModel(J3DModelData* i_modelData, u32 i_mdlFlags, u32 i_
 
     int warpMaterial = false;
     if (texNo >= 0) {
+#if TARGET_PC
+        u8* imgData = tex->getImgDataPtr(texNo);
+        if (mpWarpTexData == imgData)
+            warpMaterial = true;
+#else
         ResTIMG* timg = tex->getResTIMG(texNo);
-
         if (mpWarpTexData == (void*)((uintptr_t)timg + timg->imageOffset)) {
             warpMaterial = true;
         }
+#endif
     }
 
     if (warpMaterial) {

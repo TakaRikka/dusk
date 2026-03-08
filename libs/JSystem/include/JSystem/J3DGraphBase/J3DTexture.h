@@ -61,6 +61,12 @@ public:
         return &mpRes[index];
     }
 
+#if TARGET_PC
+    u8* getImgDataPtr(u16 index) const {
+        return mpImgDataPtr[index];
+    }
+#endif
+
     void setResTIMG(u16 index, const ResTIMG& timg) {
         J3D_ASSERT_RANGE(81, index < mNum);
         mpRes[index] = timg;
