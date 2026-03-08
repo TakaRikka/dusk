@@ -1334,6 +1334,7 @@ set(DUSK_FILES
         src/dusk/imgui/camera.cpp
         src/dusk/imgui/debug_overlay.cpp
         src/dusk/imgui/heaps.cpp
+        src/dusk/imgui/kb_pad.cpp
         src/dusk/offset_ptr.cpp
         src/dusk/OSContext.cpp
         src/dusk/OSThread.cpp
