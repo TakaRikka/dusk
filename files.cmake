@@ -1317,6 +1317,13 @@ set(REL_FILES
         src/d/actor/d_a_warp_bug.cpp
 )
 
+set(DOLPHIN_FILES
+    libs/dolphin/src/gf/GFGeometry.cpp
+    libs/dolphin/src/gf/GFLight.cpp
+    libs/dolphin/src/gf/GFPixel.cpp
+    libs/dolphin/src/gf/GFTev.cpp
+)
+
 set(DUSK_FILES
         include/dusk/endian_gx.hpp
         src/dusk/asserts.cpp
