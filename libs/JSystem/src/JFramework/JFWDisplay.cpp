@@ -316,16 +316,6 @@ void JFWDisplay::endRender() {
 
     JUTProcBar::getManager()->cpuStart();
     calcCombinationRatio();
-#if TARGET_PC
-    {
-        JKRHeap* savedHeap = JKRHeap::getCurrentHeap();
-        JKRHeap::setCurrentHeap(nullptr);
-        aurora_end_frame();
-        JKRHeap::setCurrentHeap(savedHeap);
-    }
-#else
-    aurora_end_frame();
-#endif
 }
 
 void JFWDisplay::endFrame() {
@@ -360,6 +350,17 @@ void JFWDisplay::endFrame() {
         JUTProcBar::getManager()->setCostFrame(retrace_cnt - prevFrame);
         prevFrame = retrace_cnt;
     }
+
+#if TARGET_PC
+    {
+        JKRHeap* savedHeap = JKRHeap::getCurrentHeap();
+        JKRHeap::setCurrentHeap(nullptr);
+        aurora_end_frame();
+        JKRHeap::setCurrentHeap(savedHeap);
+    }
+#else
+    aurora_end_frame();
+#endif
 }
 
 void JFWDisplay::waitBlanking(int param_0) {
