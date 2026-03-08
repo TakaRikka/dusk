@@ -258,7 +258,6 @@ int game_main(int argc, char* argv[]) {
 
     fflush(stdout);
     fflush(stderr);
-    _Exit(0);
 
     aurora_shutdown();
 
