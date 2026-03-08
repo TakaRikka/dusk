@@ -58,7 +58,7 @@ void J3DShapeDraw::addTexMtxIndexInDL(u32 stride, u32 attrOffs, u32 valueBase) {
             newDL += (stride - attrOffs);
         }
 
-        oldDL = (u8*)oldDL + stride * vtxNum;
+        oldDL = (u8*)oldDL + stride * be16(vtxNum);
     }
 
     u32 realSize = ALIGN_NEXT((uintptr_t)newDL - (uintptr_t)newDLStart, 0x20);
