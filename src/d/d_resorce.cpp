@@ -94,13 +94,13 @@ static void setIndirectTex(J3DModelData* i_modelData) {
 
     for (u16 i = 0; i < texture->getNum(); i++) {
         textureName = nameTab->getName(i);
-#if !TARGET_PC
         if (memcmp(textureName, "fbtex_dummy", 0xc) == 0) {
             texture->setResTIMG(i, *mDoGph_gInf_c::getFrameBufferTimg());
         }
         if (memcmp(textureName, "dummy", 6) == 0) {
             texture->setResTIMG(i, *mDoGph_gInf_c::getFrameBufferTimg());
         }
+#if !TARGET_PC
         if (memcmp(textureName, "Zbuffer", 8) == 0) {
             texture->setResTIMG(i, *mDoGph_gInf_c::getZbufferTimg());
         }
