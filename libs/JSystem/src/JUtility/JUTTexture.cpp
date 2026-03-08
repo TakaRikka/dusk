@@ -15,6 +15,7 @@ JUTTexture::~JUTTexture() {
     if (getEmbPaletteDelFlag()) {
         JKR_DELETE(mEmbPalette);
     }
+    GXDestroyTexObj(&mTexObj);
 }
 
 void JUTTexture::storeTIMG(ResTIMG const* param_0, u8 param_1) {
