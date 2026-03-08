@@ -71,7 +71,7 @@ J2DTextBoxEx::J2DTextBoxEx(J2DPane* p_pane, JSURandomInputStream* p_stream, u32 
     if (mStringPtr != NULL) {
         mStringLength = strLength;
 
-        u16 var_r26_2 = strLength - 1 < info.field_0x1e ? u16(strLength - 1) : info.field_0x1e;
+        u16 var_r26_2 = strLength - 1 < info.field_0x1e ? u16(strLength - 1) : (u16)info.field_0x1e;
 
         p_stream->peek(mStringPtr, var_r26_2);
         mStringPtr[var_r26_2] = 0;

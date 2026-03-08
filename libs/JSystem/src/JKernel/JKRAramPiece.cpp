@@ -30,6 +30,7 @@ OSMutex JKRAramPiece::mMutex;
 JKRAMCommand* JKRAramPiece::orderAsync(int direction, uintptr_t source, uintptr_t destination, u32 length,
                                        JKRAramBlock* block, JKRAMCommand::AsyncCallback callback) {
     lock();
+#if !TARGET_PC
     if ((source & 0x1f) != 0 || (destination & 0x1f) != 0) {
         OSReport("direction = %x\n", direction);
         OSReport("source = %x\n", source);
@@ -37,6 +38,7 @@ JKRAMCommand* JKRAramPiece::orderAsync(int direction, uintptr_t source, uintptr_
         OSReport("length = %x\n", length);
         JUTException::panic(__FILE__, 108, "illegal address. abort.");
     }
+#endif
 
     JKRAramCommand* message = JKR_NEW_ARGS (JKRGetSystemHeap(), -4) JKRAramCommand();
     JKRAMCommand* command =

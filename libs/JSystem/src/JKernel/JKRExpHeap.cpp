@@ -212,12 +212,17 @@ void* JKRExpHeap::do_alloc(u32 size, int alignment) {
     }
 #endif
 
+#if TARGET_PC
+    JUT_ASSERT_MSG_F(__LINE__, ptr != nullptr, "failed to alloc memory! (0x%x byte).\n", size);
+#else
     if (ptr == NULL) {
         JUTWarningConsole_f(":::cannot alloc memory (0x%x byte).\n", size);
         if (getErrorFlag() == true) {
             callErrorHandler(this, size, alignment);
         }
     }
+#endif
+
     unlock();
 
     return ptr;

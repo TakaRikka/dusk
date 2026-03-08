@@ -47,7 +47,7 @@ struct J2DScrnBlockPictureParameter {
     /* 0x06 */ BE(u16) field_0x6;
     /* 0x08 */ BE(u16) field_0x8[4];
     /* 0x10 */ JGeometry::TVec2<BE(s16)> field_0x10[4];
-    /* 0x20 */ u32 mCornerColor[4];
+    /* 0x20 */ BE(u32) mCornerColor[4];
 };  // Size: 0x30
 
 /**
