@@ -1450,7 +1450,11 @@ void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
     GXCallDisplayList(l_matDL, 0x60);
     GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
     GXSetZCompLoc(GX_TRUE);
+#if TARGET_PC
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_LO_CLEAR);
+#else
     GXSetBlendMode(GX_BM_LOGIC, GX_BL_ONE, GX_BL_ONE, GX_LO_OR);
+#endif
     GXSetClipMode(GX_CLIP_DISABLE);
     j3dSys.setDrawModeOpaTexEdge();
     J3DShape::resetVcdVatCache();
