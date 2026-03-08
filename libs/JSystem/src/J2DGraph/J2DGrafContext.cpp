@@ -64,6 +64,10 @@ void J2DGrafContext::setup2D() {
 }
 
 void J2DGrafContext::setScissor() {
+#if TARGET_PC
+    GXSetScissor(mScissorBounds.i.x, mScissorBounds.i.y, mScissorBounds.getWidth(),
+                 mScissorBounds.getHeight());
+#else
     JGeometry::TBox2<f32> bounds(0, 0, 1024, 1024);
     JGeometry::TBox2<f32> curBounds(mScissorBounds);
     mScissorBounds.intersect(bounds);
@@ -77,6 +81,7 @@ void J2DGrafContext::setScissor() {
     } else {
         GXSetScissor(0, 0, 0, 0);
     }
+#endif
 }
 
 void J2DGrafContext::scissor(JGeometry::TBox2<f32> const& bounds) {
