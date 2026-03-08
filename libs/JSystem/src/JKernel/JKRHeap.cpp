@@ -594,19 +594,11 @@ void* operator new[](size_t size) {
 }
 #else
 void* operator new[](size_t size) {
-#if !_WIN32
-    return aligned_alloc(sizeof(void*), size);
-#else
-    return _aligned_malloc(size, sizeof(void*));
-#endif
+    return fallback_alloc(size, 0, false);
 }
 
 void* operator new[](std::size_t size, const std::nothrow_t&) noexcept {
-#if !_WIN32
-    return aligned_alloc(sizeof(void*), size);
-#else
-    return _aligned_malloc(size, sizeof(void*));
-#endif
+    return fallback_alloc(size, 0, false);
 }
 
 void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM) {
