@@ -8,8 +8,6 @@ void J3DTexture::loadGX(u16 idx, GXTexMapID texMapID) const {
     J3D_ASSERT_RANGE(29, idx < mNum);
 
     ResTIMG* timg = getResTIMG(idx);
-    GXTexObj texObj;
-    GXTlutObj tlutObj;
 
 #if TARGET_PC
     if (timg->width == 0 || timg->height == 0)
@@ -18,8 +16,15 @@ void J3DTexture::loadGX(u16 idx, GXTexMapID texMapID) const {
         OSReport("J3DTexture::loadGX: idx %d out of bounds (mNum=%d)!\n", idx, mNum);
         return;
     }
+    if (timg->indexTexture) {
+        GXLoadTlut(&mpTlutObj[idx], (GXTlut)texMapID);
+        GXInitTexObjTlut(&mpTexObj[idx], (GXTlut)texMapID);
+    }
     GXLoadTexObj(&mpTexObj[idx], texMapID);
 #else
+    GXTexObj texObj;
+    GXTlutObj tlutObj;
+
     if (!timg->indexTexture) {
         GXInitTexObj(&texObj, ((u8*)timg) + timg->imageOffset, timg->width, timg->height,
                      (GXTexFmt)timg->format, (GXTexWrapMode)timg->wrapS, (GXTexWrapMode)timg->wrapT,
@@ -48,7 +53,7 @@ void J3DTexture::loadGXTexObj(u16 idx) {
     J3D_ASSERT_RANGE(29, idx < mNum);
     ResTIMG* timg = getResTIMG(idx);
 
-    GXTlutObj tlutObj{};
+    GXTlutObj& tlutObj = mpTlutObj[idx];
     GXTexObj& texObj = mpTexObj[idx];
 
     if (!timg->indexTexture) {
@@ -61,7 +66,6 @@ void J3DTexture::loadGXTexObj(u16 idx) {
                        (GXTexWrapMode)timg->wrapT, timg->mipmapEnabled, GX_TLUT0);
         GXInitTlutObj(&tlutObj, mpTlutDataPtr[idx], (GXTlutFmt)timg->colorFormat,
                       timg->numColors);
-        GXLoadTlut(&tlutObj, GX_TLUT0);
     }
 
     const f32 kLODClampScale = 1.0f / 8.0f;
@@ -70,8 +74,6 @@ void J3DTexture::loadGXTexObj(u16 idx) {
                     timg->minLOD * kLODClampScale, timg->maxLOD * kLODClampScale,
                     timg->LODBias * kLODBiasScale, timg->biasClamp, timg->doEdgeLOD,
                     (GXAnisotropy)timg->maxAnisotropy);
-    GXLoadTexObj(&texObj, GX_TEXMAP0); // HACK: Force the texture to be loaded
-    GXDestroyTlutObj(&tlutObj);
 }
 #endif
 
@@ -83,9 +85,11 @@ void J3DTexture::entryNum(u16 num) {
     J3D_ASSERT_ALLOCMEM(83, mpRes != NULL);
     
     delete[] mpTexObj;
+    delete[] mpTlutObj;
     delete[] mpImgDataPtr;
     delete[] mpTlutDataPtr;
     mpTexObj = new GXTexObj[num]();
+    mpTlutObj = new GXTlutObj[num]();
     mpImgDataPtr = new u8*[num]();
     mpTlutDataPtr = new u8*[num]();
 

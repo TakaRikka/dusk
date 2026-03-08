@@ -18,6 +18,7 @@ private:
     /* 0x4 */ ResTIMG* mpRes;
 
 #if TARGET_PC
+    GXTlutObj* mpTlutObj;
     GXTexObj* mpTexObj;
     u8** mpImgDataPtr;
     u8** mpTlutDataPtr;
@@ -28,6 +29,7 @@ public:
         J3D_ASSERT_NULLPTR(52, res != NULL || num == 0);
 #if TARGET_PC
         mpTexObj = new GXTexObj[num];
+        mpTlutObj = new GXTlutObj[num];
         mpImgDataPtr = new u8*[num];
         mpTlutDataPtr = new u8*[num];
         for (u16 i = 0; i < num; i++) {
@@ -49,6 +51,7 @@ public:
         for (int i = 0; i < mNum; i++)
             GXDestroyTexObj(&mpTexObj[i]);
         delete[] mpTexObj;
+        delete[] mpTlutObj;
         delete[] mpImgDataPtr;
         delete[] mpTlutDataPtr;
 #endif
