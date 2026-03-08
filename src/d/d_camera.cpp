@@ -2675,6 +2675,12 @@ void dCamera_c::setView(f32 i_xOrig, f32 i_yOrig, f32 i_width, f32 i_height) {
     window->setScissor(i_xOrig, i_yOrig, i_width, i_height);
 }
 
+#if TARGET_PC
+void dCamera_c::ResetView() {
+    setView(0.0f, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
+}
+#endif
+
 cSAngle dCamera_c::forwardCheckAngle() {
     dBgS_CamLinChk lin_chk;
     cSAngle ret = cSAngle::_0;

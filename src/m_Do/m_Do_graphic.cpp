@@ -676,6 +676,13 @@ void mDoGph_gInf_c::setWideZoomLightProjection(Mtx& m) {
 }
 #endif
 
+#if TARGET_PC
+void mDoGph_gInf_c::setWindowSize(AuroraWindowSize const& size) {
+    JUTVideo::getManager()->setWindowSize(size);
+    mFader->mBox.set(0, 0, getWidth(), getHeight());
+}
+#endif
+
 #if PLATFORM_WII || PLATFORM_SHIELD
 void mDoGph_gInf_c::entryBaseCsr(mDoGph_gInf_c::csr_c* i_entry) {
     JUT_ASSERT(876, m_baseCsr == NULL);
@@ -1563,7 +1570,8 @@ int mDoGph_Painter() {
     j3dSys.drawInit();
     GXSetDither(GX_ENABLE);
 
-    J2DOrthoGraph ortho(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, -1.0f, 1.0f);
+    J2DOrthoGraph ortho(0.0f, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), -1.0f,
+                        1.0f);
     ortho.setOrtho(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
                    mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(),
                    -1.0f, 1.0f);

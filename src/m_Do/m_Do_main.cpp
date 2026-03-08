@@ -153,6 +153,9 @@ void main01(void) {
             switch (event->type) {
             case AURORA_NONE:
                 goto eventsDone;
+            case AURORA_WINDOW_RESIZED:
+                mDoGph_gInf_c::setWindowSize(event->windowSize);
+                break;
             case AURORA_EXIT:
                 goto exit;
             }
