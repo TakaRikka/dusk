@@ -2699,9 +2699,11 @@ void mDoExt_3DlineMat1_c::draw() {
     mDoExt_3Dline_c* lines = mpLines;
     u16 vert_num = field_0x34 << 1;
     for (s32 i = 0; i < mNumLines; i++) {
-        GXSETARRAY(GX_VA_POS, ((mDoExt_3Dline_c*)((intptr_t)lines + (mIsDrawn << 2)))->field_0x8, vert_num * sizeof(cXyz), sizeof(cXyz));
-        GXSETARRAY(GX_VA_NRM, ((mDoExt_3Dline_c*)((intptr_t) lines + (mIsDrawn << 2)))->field_0x10, vert_num * sizeof(mDoExt_3Dline_field_0x10_c), sizeof(mDoExt_3Dline_field_0x10_c));
-        GXSETARRAY(GX_VA_TEX0, ((mDoExt_3Dline_c*)((intptr_t)lines + (mIsDrawn << 2)))->field_0x18, vert_num * sizeof(cXy), sizeof(cXy));
+        GXSETARRAY(GX_VA_POS, lines->field_0x8[mIsDrawn], vert_num * sizeof(cXyz), sizeof(cXyz));
+        GXSETARRAY(GX_VA_NRM, lines->field_0x10[mIsDrawn],
+                   vert_num * sizeof(mDoExt_3Dline_field_0x10_c),
+                   sizeof(mDoExt_3Dline_field_0x10_c));
+        GXSETARRAY(GX_VA_TEX0, lines->field_0x18[mIsDrawn], vert_num * sizeof(cXy), sizeof(cXy));
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, vert_num);
 
         u16 j = 0;
