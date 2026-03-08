@@ -10,6 +10,7 @@ void DuskImguiDebugOverlay(const AuroraInfo *info);
 void DuskImguiProcesses();
 void DuskImguiHeaps();
 void DuskCameraDebug();
+void DuskDebugPad();
 
 void SetOverlayWindowLocation(int corner);
 bool ShowCornerContextMenu(int& corner, int avoidCorner);
