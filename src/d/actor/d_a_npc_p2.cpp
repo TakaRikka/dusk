@@ -23,8 +23,8 @@ static bool daNpc_P2Draw(void* param_0) {
     return true;
 }
 
-static bool daNpc_P2IsDelete(void* param_0) {
-    return true;
+static BOOL daNpc_P2IsDelete(void* param_0) {
+    return TRUE;
 }
 
 static actor_method_class daNpc_P2MethodTable = {

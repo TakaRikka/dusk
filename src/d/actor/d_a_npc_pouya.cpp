@@ -1186,8 +1186,8 @@ static int daNpc_Pouya_Draw(void* i_this) {
     return static_cast<daNpc_Pouya_c*>(i_this)->Draw();
 }
 
-static bool daNpc_Pouya_IsDelete(void* i_this) {
-    return 1;
+static BOOL daNpc_Pouya_IsDelete(void* i_this) {
+    return TRUE;
 }
 
 static NPC_POUYA_HIO_CLASS l_HIO;

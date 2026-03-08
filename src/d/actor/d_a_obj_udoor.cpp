@@ -63,8 +63,8 @@ static int daObj_Udoor_Execute(obj_udoor_class* i_this) {
     return 1;
 }
 
-static bool daObj_Udoor_IsDelete(obj_udoor_class* param_0) {
-    return true;
+static BOOL daObj_Udoor_IsDelete(obj_udoor_class* param_0) {
+    return TRUE;
 }
 
 static int daObj_Udoor_Delete(obj_udoor_class* i_this) {

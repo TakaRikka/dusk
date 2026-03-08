@@ -23,8 +23,8 @@ static bool daNpc_Mk_Draw(void* param_0) {
     return true;
 }
 
-static bool daNpc_Mk_IsDelete(void* param_0) {
-    return true;
+static BOOL daNpc_Mk_IsDelete(void* param_0) {
+    return TRUE;
 }
 
 static actor_method_class daNpc_Mk_MethodTable = {

@@ -894,8 +894,8 @@ int daObjKAM_c::create() {
     return loadResult;
 }
 
-static bool daObjKAM_IsDelete(daObjKAM_c* param_0) {
-    return true;
+static BOOL daObjKAM_IsDelete(daObjKAM_c* param_0) {
+    return TRUE;
 }
 
 static actor_method_class l_daObjKAM_Method = {

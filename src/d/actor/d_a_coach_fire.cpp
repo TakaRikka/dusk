@@ -136,8 +136,8 @@ static int daCoachFire_Execute(daCoachFire_c* i_this) {
     return i_this->execute();
 }
 
-static bool daCoachFire_IsDelete(daCoachFire_c* i_this) {
-    return true;
+static BOOL daCoachFire_IsDelete(daCoachFire_c* i_this) {
+    return TRUE;
 }
 
 daCoachFire_c::~daCoachFire_c() {

@@ -159,8 +159,8 @@ static int daObjCatDoor_Execute(daObjCatDoor_c* i_this) {
     return static_cast<daObjCatDoor_c*>(i_this)->execute();
 }
 
-static bool daObjCatDoor_IsDelete(daObjCatDoor_c* i_this) {
-    return true;
+static BOOL daObjCatDoor_IsDelete(daObjCatDoor_c* i_this) {
+    return TRUE;
 }
 
 static int daObjCatDoor_Delete(daObjCatDoor_c* i_this) {

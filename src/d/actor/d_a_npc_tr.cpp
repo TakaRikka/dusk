@@ -186,8 +186,8 @@ static int daNPC_TR_Execute(npc_tr_class* npc_tr) {
     return 1;
 }
 
-static bool daNPC_TR_IsDelete(npc_tr_class* param_0) {
-    return true;
+static BOOL daNPC_TR_IsDelete(npc_tr_class* param_0) {
+    return TRUE;
 }
 
 static int daNPC_TR_Delete(npc_tr_class* npc_tr) {

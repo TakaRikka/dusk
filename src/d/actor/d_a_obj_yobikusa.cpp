@@ -367,8 +367,8 @@ int daObjYobikusa_c::execute() {
     return TRUE;
 }
 
-static bool daObjYobikusa_IsDelete(daObjYobikusa_c* i_this) {
-    return true;
+static BOOL daObjYobikusa_IsDelete(daObjYobikusa_c* i_this) {
+    return TRUE;
 }
 
 daObjYobikusa_c::~daObjYobikusa_c() {

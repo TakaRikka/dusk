@@ -1083,8 +1083,8 @@ static int daNpcAshB_Draw(void* i_this) {
     return static_cast<daNpcAshB_c*>(i_this)->Draw();
 }
 
-static bool daNpcAshB_IsDelete(void* param_0) {
-    return true;
+static BOOL daNpcAshB_IsDelete(void* param_0) {
+    return TRUE;
 }
 
 void daNpcAshB_c::setParam() {

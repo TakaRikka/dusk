@@ -650,8 +650,8 @@ static int daNpcShoe_Draw(void* i_this) {
     return static_cast<daNpcShoe_c*>(i_this)->Draw();
 }
 
-static bool daNpcShoe_IsDelete(void* param_0) {
-    return true;
+static BOOL daNpcShoe_IsDelete(void* param_0) {
+    return TRUE;
 }
 
 void daNpcShoe_c::setParam() {

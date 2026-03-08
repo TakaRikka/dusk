@@ -2616,8 +2616,8 @@ static void daE_OC_Execute(daE_OC_c* i_this) {
     i_this->execute();
 }
 
-static bool daE_OC_IsDelete(daE_OC_c* param_0) {
-    return true;
+static BOOL daE_OC_IsDelete(daE_OC_c* param_0) {
+    return TRUE;
 }
 
 int daE_OC_c::_delete() {

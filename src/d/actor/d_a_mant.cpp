@@ -754,8 +754,8 @@ static int daMant_Execute(mant_class* i_this) {
     return 1;
 }
 
-static bool daMant_IsDelete(mant_class* i_this) {
-    return true;
+static BOOL daMant_IsDelete(mant_class* i_this) {
+    return TRUE;
 }
 
 static int daMant_Delete(mant_class* i_this) {
