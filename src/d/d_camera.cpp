@@ -1017,6 +1017,10 @@ void dCamera_c::debugDrawInit() {
 }
 
 bool dCamera_c::Run() {
+#if TARGET_PC
+    ResetView();
+#endif
+
     daAlink_c* link = daAlink_getAlinkActorClass();
     daMidna_c* midna = daPy_py_c::getMidnaActor();
     mMidnaRidingAndVisible = link->checkMidnaRide() && !midna->checkNoDraw();
