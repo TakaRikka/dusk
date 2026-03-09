@@ -29,6 +29,9 @@ static s32 fopCam_Draw(camera_class* i_this) {
 
 static int fopCam_Execute(camera_class* i_this) {
     int ret;
+#if AVOID_UB
+    ret = 0;
+#endif
     #if DEBUG
     fapGm_HIO_c::startCpuTimer();
     #endif

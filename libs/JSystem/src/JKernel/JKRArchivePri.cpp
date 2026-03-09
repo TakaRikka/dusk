@@ -14,6 +14,9 @@ u32 JKRArchive::sCurrentDirID;
 JKRArchive::JKRArchive() {
     mIsMounted = false;
     mMountDirection = MOUNT_DIRECTION_HEAD;
+#if TARGET_PC
+    mFileData = nullptr;
+#endif
 }
 
 JKRArchive::JKRArchive(s32 entryNumber, JKRArchive::EMountMode mountMode) {
@@ -21,6 +24,9 @@ JKRArchive::JKRArchive(s32 entryNumber, JKRArchive::EMountMode mountMode) {
     mMountMode = mountMode;
     mMountCount = 1;
     field_0x58 = 1;
+#if TARGET_PC
+    mFileData = nullptr;
+#endif
 
     mHeap = JKRHeap::findFromRoot(this);
     if (mHeap == NULL) {
