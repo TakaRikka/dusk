@@ -212,10 +212,6 @@ void OSCreateAlarm(OSAlarm* alarm) {}
 
 void OSCancelAlarm(OSAlarm* alarm) {}
 
-void OSTicksToCalendarTime(OSTime ticks, OSCalendarTime* td) {
-    if (td) memset(td, 0, sizeof(OSCalendarTime));
-}
-
 u16 OSGetFontEncode() { return 0; }
 
 char* OSGetFontTexture(char* string, void** image, s32* x, s32* y, s32* width) { return 0; }
@@ -377,9 +373,25 @@ s32 CARDProbeEx(s32 chan, s32* memSize, s32* sectorSize) {
     return 0;
 }
 
+#include <fstream>
+#include <filesystem>
+
 s32 CARDRead(CARDFileInfo* fileInfo, void* addr, s32 length, s32 offset) {
     STUB_LOG();
-    return 0;
+    printf("%s\n", std::filesystem::current_path().string().c_str());
+    std::ifstream file("test.gci", std::ios::binary | std::ios::ate);
+    if (!file) {
+        DuskLog.fatal("Failed to open test.gci");
+    }
+
+    std::streamsize size = file.tellg();
+    file.seekg(offset + 0x40, std::ios::beg);
+
+    if (!file.read(reinterpret_cast<char*>(addr), length)) {
+        DuskLog.fatal("Failed to read test.gci");
+    }
+
+    return CARD_RESULT_READY;
 }
 
 s32 CARDReadAsync(CARDFileInfo* fileInfo, void* addr, s32 length, s32 offset,

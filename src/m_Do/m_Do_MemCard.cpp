@@ -81,6 +81,11 @@ void mDoMemCd_Ctrl_c::ThdInit() {
     mCopyToPos = 0;
     mProbeStat = 2;
     mCardState = CARD_STATE_NO_CARD_e;
+
+    #if TARGET_PC
+    mCardState = CARD_STATE_READY_e;
+    #endif
+
     mCardCommand = COMM_NONE_e;
     mChannel = SLOT_A;
 
