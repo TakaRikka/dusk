@@ -593,14 +593,6 @@ void* operator new[](size_t size) {
     return JKRHeap::alloc(size, 4, NULL);
 }
 #else
-// void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM) {
-//     return fallback_alloc(size, 0, false);
-// }
-
-// void* operator new[](std::size_t size, const std::nothrow_t&) noexcept {
-//     return fallback_alloc(size, 0, false);
-// }
-
 void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM) {
     void* mem = JKRHeap::alloc(size, alignof(max_align_t), NULL);
     if (mem == NULL) {
