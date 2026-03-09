@@ -593,6 +593,21 @@ void* operator new[](size_t size) {
     return JKRHeap::alloc(size, 4, NULL);
 }
 #else
+
+// We replace the stock operator new[] because array allocations in C++ have
+// implementation-dependent behavior for handling destructors.
+// That means that while we *can* placement new[], we would not be able to delete those arrays
+// ourselves without overriding global operator delete[].
+// So, we have to replace global new[] too so that we can guarantee the backing allocator.
+
+void* operator new[](size_t size) {
+    return fallback_alloc(size, 0, false);
+}
+
+void* operator new[](std::size_t size, const std::nothrow_t&) noexcept {
+    return fallback_alloc(size, 0, false);
+}
+
 void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM) {
     void* mem = JKRHeap::alloc(size, alignof(max_align_t), NULL);
     if (mem == NULL) {
@@ -646,7 +661,7 @@ void operator delete[](void* ptr) {
     JKRHeap::free(ptr, NULL);
 }
 #else
-void operator delete[](void* ptr JKR_HEAP_TOKEN_PARAM) {
+void operator delete[](void* ptr) {
     if (ptr == NULL)
         return;
     JKRHeap* heap = JKRHeap::findFromRoot(ptr);
