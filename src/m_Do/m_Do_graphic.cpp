@@ -36,6 +36,7 @@
 #include <cstring>
 #include "dusk/endian.h"
 #include "dusk/logging.h"
+#include "dusk/gx_helper.h"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/sc.h>
@@ -1602,7 +1603,7 @@ int mDoGph_Painter() {
             fapGm_HIO_c::startCpuTimer();
             #endif
 
-            dComIfGd_imageDrawShadow(camera_p->view.viewMtx);
+            GX_DEBUG_GROUP(dComIfGd_imageDrawShadow, camera_p->view.viewMtx);
 
             #if DEBUG
             // "drawing Shadow Texture (Rendering)"
@@ -1675,8 +1676,8 @@ int mDoGph_Painter() {
 
             j3dSys.setViewMtx(camera_p->view.viewMtx);
             dKy_setLight();
-            dComIfGd_drawOpaListSky();
-            dComIfGd_drawXluListSky();
+            GX_DEBUG_GROUP(dComIfGd_drawOpaListSky);
+            GX_DEBUG_GROUP(dComIfGd_drawXluListSky);
 
             GXSetClipMode(GX_CLIP_ENABLE);
 
@@ -1687,16 +1688,16 @@ int mDoGph_Painter() {
             fapGm_HIO_c::startCpuTimer();
             #endif
 
-            dComIfGd_drawOpaListBG();
-            dComIfGd_drawOpaListDarkBG();
-            dComIfGd_drawOpaListMiddle();
+            GX_DEBUG_GROUP(dComIfGd_drawOpaListBG);
+            GX_DEBUG_GROUP(dComIfGd_drawOpaListDarkBG);
+            GX_DEBUG_GROUP(dComIfGd_drawOpaListMiddle);
 
             if (fapGmHIO_getParticle()) {
-                dComIfGp_particle_drawFogPri0_B(&draw_info);
+                GX_DEBUG_GROUP(dComIfGp_particle_drawFogPri0_B, &draw_info);
             }
 
             if (fapGmHIO_getParticle()) {
-                dComIfGp_particle_drawNormalPri0_B(&draw_info);
+                GX_DEBUG_GROUP(dComIfGp_particle_drawNormalPri0_B, &draw_info);
             }
 
             #if DEBUG
@@ -1706,7 +1707,7 @@ int mDoGph_Painter() {
             fapGm_HIO_c::startCpuTimer();
             #endif
 
-            dComIfGd_drawShadow(camera_p->view.viewMtx);
+            GX_DEBUG_GROUP(dComIfGd_drawShadow, camera_p->view.viewMtx);
 
             #if DEBUG
             // "shadow drawing (Rendering)"
@@ -1715,17 +1716,17 @@ int mDoGph_Painter() {
             fapGm_HIO_c::startCpuTimer();
             #endif
 
-            dComIfGd_drawOpaList();
+            GX_DEBUG_GROUP(dComIfGd_drawOpaList);
 
             if (DEBUG && g_kankyoHIO.navy.field_0x30d) {
                 if (dKy_darkworld_check() != TRUE) {
-                    dComIfGd_drawOpaListDark();
+                    GX_DEBUG_GROUP(dComIfGd_drawOpaListDark);
                 }
             } else {
-                dComIfGd_drawOpaListDark();
+                GX_DEBUG_GROUP(dComIfGd_drawOpaListDark);
             }
 
-            dComIfGd_drawOpaListPacket();
+            GX_DEBUG_GROUP(dComIfGd_drawOpaListPacket);
             
             #if DEBUG
             // "drawing up to special-use drawing (Opaque) except J3D (Rendering)"
@@ -1734,12 +1735,12 @@ int mDoGph_Painter() {
             fapGm_HIO_c::startCpuTimer();
             #endif
 
-            dComIfGd_drawXluListBG();
-            dComIfGd_drawXluListDarkBG();
+            GX_DEBUG_GROUP(dComIfGd_drawXluListBG);
+            GX_DEBUG_GROUP(dComIfGd_drawXluListDarkBG);
 
             if (fapGmHIO_getParticle()) {
-                dComIfGp_particle_drawFogPri0_A(&draw_info);
-                dComIfGp_particle_drawNormalPri0_A(&draw_info);
+                GX_DEBUG_GROUP(dComIfGp_particle_drawFogPri0_A, &draw_info);
+                GX_DEBUG_GROUP(dComIfGp_particle_drawNormalPri0_A, &draw_info);
             }
 
             #if DEBUG
@@ -1749,14 +1750,14 @@ int mDoGph_Painter() {
             fapGm_HIO_c::startCpuTimer();
             #endif
 
-            dComIfGd_drawXluList();
+            GX_DEBUG_GROUP(dComIfGd_drawXluList);
 
             if (DEBUG && g_kankyoHIO.navy.field_0x30d) {
                 if (dKy_darkworld_check() != TRUE) {
-                    dComIfGd_drawXluListDark();
+                    GX_DEBUG_GROUP(dComIfGd_drawXluListDark);
                 }
             } else {
-                dComIfGd_drawXluListDark();
+                GX_DEBUG_GROUP(dComIfGd_drawXluListDark);
             }
 
             #if DEBUG
