@@ -211,10 +211,6 @@ void OSCreateAlarm(OSAlarm* alarm) {}
 
 void OSCancelAlarm(OSAlarm* alarm) {}
 
-void OSTicksToCalendarTime(OSTime ticks, OSCalendarTime* td) {
-    if (td) memset(td, 0, sizeof(OSCalendarTime));
-}
-
 u16 OSGetFontEncode() { return 0; }
 
 char* OSGetFontTexture(char* string, void** image, s32* x, s32* y, s32* width) { return 0; }
