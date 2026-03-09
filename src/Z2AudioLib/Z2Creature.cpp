@@ -930,6 +930,9 @@ void Z2CreatureOI::framework(u32 mapinfo, s8 reverb) {
 }
 
 Z2SoundHandlePool* Z2CreatureOI::startCreatureSoundLevel(JAISoundID soundID, u32 mapinfo, s8 reverb) {
+    STUB_LOG();
+    return NULL;
+    
     if (soundID == Z2SE_EN_OI_MOVE) {
         Z2SoundHandlePool* handle1 = mSoundObjAnime.startLevelSound(soundID, mapinfo, reverb);
         Z2SoundHandlePool* handle2 = field_0xa4.startLevelSound(soundID, mapinfo, reverb);
