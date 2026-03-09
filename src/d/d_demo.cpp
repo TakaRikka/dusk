@@ -22,7 +22,7 @@ void jstudio_tAdaptor_message::adaptor_do_MESSAGE(JStudio::data::TEOperationData
     case JStudio::data::UNK_0x19: {
         JUT_ASSERT(107, pContent!=NULL);
         JUT_ASSERT(108, uSize==4);
-        u32 content = *(u32*)pContent;
+        u32 content = *(BE(u32)*)pContent;
         dMsgObject_setDemoMessage(content);
         break;
     }
@@ -215,7 +215,6 @@ int dDemo_actor_c::getDemoIDData(int* o_arg0, int* o_arg1, int* o_arg2, u16* o_r
     }
 
     u32 var_r31 = *it;
-    be_swap(var_r31);
     *o_arg0 = var_r31 >> 0x1E;
     *o_arg1 = (var_r31 >> 0x18) & 0xF;
     *o_arg2 = (var_r31 >> 0x10) & 0xF;

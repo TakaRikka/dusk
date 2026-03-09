@@ -82,7 +82,7 @@ void JStudio_JStage::TAdaptor_object_::adaptor_object_data_(void const* param_1,
     if (param_2 == 0) {
         uVar3 = JStage::TActor::ID_NORMAL;
     } else {
-        uVar3 = *(int*)param_1;
+        uVar3 = *(BE(s32)*)param_1;
     }
     pJSGObject_->JSGSetData(uVar3, param_3, param_4);
 }
@@ -113,7 +113,7 @@ JStudio_JStage::TAdaptor_object_::adaptor_object_ENABLE_(JStudio::data::TEOperat
     case JStudio::data::UNK_0x2:
         JUT_ASSERT(157, uSize==4);
         JUT_ASSERT(158, pContent!=NULL);
-        if (*(u32*)pContent != 0) {
+        if (*(BE(u32)*)pContent != 0) {
             pJSGObject_->JSGFEnableFlag(2);
         } else {
             pJSGObject_->JSGFDisableFlag(2);
