@@ -16,12 +16,12 @@ static int daNpc_shopMaro_Delete(void* i_this) {
     return 1;
 }
 
-static bool daNpc_shopMaro_Execute(void* i_this) {
-    return false;
+static BOOL daNpc_shopMaro_Execute(void* i_this) {
+    return FALSE;
 }
 
-static bool daNpc_shopMaro_Draw(void* i_this) {
-    return false;
+static BOOL daNpc_shopMaro_Draw(void* i_this) {
+    return FALSE;
 }
 
 static BOOL daNpc_shopMaro_IsDelete(void* i_this) {

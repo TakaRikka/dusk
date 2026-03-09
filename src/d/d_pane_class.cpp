@@ -357,7 +357,7 @@ Vec CPaneMgr::getGlobalVtx(J2DPane* p_pane, Mtx* param_1, u8 param_2, bool param
     MtxP mp = (MtxP)param_1;
     J2DPane* parent = p_pane->getParentPane();
     
-    J2DOrthoGraph ortho(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, -1.0f, 1.0f);
+    J2DOrthoGraph ortho(0.0f, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), -1.0f, 1.0f);
     ortho.setOrtho(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(), mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), -1.0f, 1.0f);
 
     if (parent != NULL) {

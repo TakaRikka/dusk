@@ -42,7 +42,7 @@ struct TResource {
 
     char* getMessageText_messageEntry(const void* pEntry) const {
         JUT_ASSERT(141, pEntry!=NULL);
-        return pMessageText_ + *(int*)pEntry;
+        return pMessageText_ + *(BE(s32)*)pEntry;
     }
 
     const char* getMessageText_messageIndex(u16 uMessageIndex) const {

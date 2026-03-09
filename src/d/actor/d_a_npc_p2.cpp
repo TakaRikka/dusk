@@ -7,20 +7,20 @@
 
 #include "d/actor/d_a_npc_p2.h"
 
-static bool daNpc_P2Create(void* param_0) {
-    return true;
+static BOOL daNpc_P2Create(void* param_0) {
+    return TRUE;
 }
 
-static bool daNpc_P2Delete(void* param_0) {
-    return true;
+static BOOL daNpc_P2Delete(void* param_0) {
+    return TRUE;
 }
 
-static bool daNpc_P2Execute(void* param_0) {
-    return true;
+static BOOL daNpc_P2Execute(void* param_0) {
+    return TRUE;
 }
 
-static bool daNpc_P2Draw(void* param_0) {
-    return true;
+static BOOL daNpc_P2Draw(void* param_0) {
+    return TRUE;
 }
 
 static BOOL daNpc_P2IsDelete(void* param_0) {

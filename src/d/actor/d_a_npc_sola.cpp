@@ -485,8 +485,8 @@ static void daNpc_solA_Draw(void* param_0) {
     return static_cast<daNpc_solA_c*>(param_0)->Draw();
 }
 
-static bool daNpc_solA_IsDelete(void* param_0) {
-    return true;
+static BOOL daNpc_solA_IsDelete(void* param_0) {
+    return TRUE;
 }
 
 static actor_method_class daNpc_solA_MethodTable = {

@@ -20,8 +20,8 @@ void dDlst_snapShot_c::draw() {
 }
 
 void dOvlpFd3_dlst_c::draw() {
-    GXSetViewport(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f);
-    GXSetScissor(0, 0, FB_WIDTH, FB_HEIGHT);
+    GXSetViewport(0.0f, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), 0.0f, 1.0f);
+    GXSetScissor(0, 0, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGB, GX_RGBA4, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);

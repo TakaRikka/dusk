@@ -320,8 +320,8 @@ void daFmtMng_c::executeFight() {
     }
 }
 
-static bool daFmtMng_Draw(daFmtMng_c* param_0) {
-    return true;
+static BOOL daFmtMng_Draw(daFmtMng_c* param_0) {
+    return TRUE;
 }
 
 static int daFmtMng_Execute(daFmtMng_c* param_0) {

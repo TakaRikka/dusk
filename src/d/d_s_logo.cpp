@@ -751,7 +751,7 @@ void dScnLogo_c::nextSceneChange() {
     if (!mDoRst::isReset()) {
         if (!isOpeningCut())
         {
-            dComIfG_changeOpeningScene(this, PROC_NAME_SCENE);
+            dComIfG_changeOpeningScene(this, PROC_OPENING_SCENE);
         } else {
             #if DEBUG
             fopScnM_ChangeReq(this, PROC_MENU_SCENE, 0, 30);
