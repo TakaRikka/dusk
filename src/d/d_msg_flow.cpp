@@ -49,8 +49,8 @@ void dMsgFlow_c::init(fopAc_ac_c* i_partner, int i_flowID, int param_2, fopAc_ac
 
             labelInfoTBL = mLabelInfo_p + 0x10;
             mFlowNodeTBL = (mesg_flow*)(mFlow_p + 0x10);
-            mFlowIdxTBL = (u16*)(mFlowNodeTBL + (*(u16*)(mFlow_p + 8)));
-            field_0x18 = mFlowIdxTBL + *(u16*)(mFlow_p + 8);
+            mFlowIdxTBL = (BE(u16)*)(mFlowNodeTBL + (*(BE(u16)*)(mFlow_p + 8)));
+            field_0x18 = mFlowIdxTBL + *(BE(u16)*)(mFlow_p + 8);
 
             mFlow = prevFlowID;
 
@@ -322,8 +322,8 @@ void dMsgFlow_c::setInitValueGroupChange(int i_msgNo, fopAc_ac_c** i_talkPartner
     labelInfoTBL = mLabelInfo_p + 0x10;
 
     mFlowNodeTBL = (mesg_flow*)(mFlow_p + 0x10);
-    mFlowIdxTBL = (u16*)(mFlowNodeTBL + *(u16*)(mFlow_p + 8));
-    field_0x18 = mFlowIdxTBL + *(u16*)(mFlow_p + 8);
+    mFlowIdxTBL = (BE(u16)*)(mFlowNodeTBL + *(BE(u16)*)(mFlow_p + 8));
+    field_0x18 = mFlowIdxTBL + *(BE(u16)*)(mFlow_p + 8);
     mFlow = var_r28;
     setNodeIndex(getInitNodeIndex(mFlow), i_talkPartners);
 }
@@ -337,7 +337,7 @@ u8* dMsgFlow_c::getMsgDataBlock(char const* block_tag) {
     aMsgRes_p = dMsgObject_getMsgDtPtr();
     JUT_ASSERT(742, NULL != aMsgRes_p);
 
-    u32 num = *(u32*)(aMsgRes_p + 0xC);
+    u32 num = *(BE(u32)*)(aMsgRes_p + 0xC);
     aMsgRes_p += 0x20;
 
     for (u32 i = 0; i < num; i++) {
@@ -348,7 +348,7 @@ u8* dMsgFlow_c::getMsgDataBlock(char const* block_tag) {
             return aMsgRes_p;
         }
 
-        aMsgRes_p += *(int*)(block_p + 4);
+        aMsgRes_p += *(BE(int)*)(block_p + 4);
     }
 
     return NULL;
@@ -727,8 +727,8 @@ int dMsgFlow_c::nodeProc(fopAc_ac_c* i_speaker_p, fopAc_ac_c** i_talkPartners) {
 }
 
 int dMsgFlow_c::getParam(u16* prm0, u16* prm1, u8* params) {
-    *prm0 = *(u16*)params;
-    *prm1 = *(u16*)(params + 2);
+    *prm0 = *(BE(u16)*)params;
+    *prm1 = *(BE(u16)*)(params + 2);
 
     return *(int*)params;
 }
