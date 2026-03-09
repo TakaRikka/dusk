@@ -1476,9 +1476,9 @@ fpc_ProcID fopAcM_createItemFromEnemyID(u8 i_enemyID, cXyz const* i_pos, int i_i
                                         f32* i_speedF, f32* i_speedY) {
                                             int itemNo;
     int tableNo = 0xFF;
-    u32* data = (u32*)dEnemyItem_c::getItemData();
+    uintptr_t* data = (uintptr_t*)dEnemyItem_c::getItemData();
     data++;
-    int tableNum = (int) *data;
+    BE(int) tableNum = (int) *data;
     data++;
     EnemyTable* table = (EnemyTable*)data;
     
