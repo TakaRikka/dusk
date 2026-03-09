@@ -1136,8 +1136,13 @@ void mDoGph_gInf_c::bloom_c::draw() {
     bool enabled = mEnable && m_buffer != NULL;
 #endif
     if (mMonoColor.a != 0 || enabled) {
+#if TARGET_PC
         GXSetViewport(0.0f, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), 0.0f, 1.0f);
         GXSetScissor(0, 0, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
+#else
+        GXSetViewport(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f);
+        GXSetScissor(0, 0, FB_WIDTH, FB_HEIGHT);
+#endif
         GXLoadTexObj(getFrameBufferTexObj(), GX_TEXMAP0);
         GXSetNumChans(0);
         GXSetNumTexGens(1);
@@ -1617,8 +1622,13 @@ int mDoGph_Painter() {
                 view_port_class new_port;
                 new_port.x_orig = 0.0f;
                 new_port.y_orig = 0.0f;
+            #if TARGET_PC
                 new_port.width = mDoGph_gInf_c::getWidth();
                 new_port.height = mDoGph_gInf_c::getHeight();
+            #else
+                new_port.width = FB_WIDTH;
+                new_port.height = FB_HEIGHT;
+            #endif
                 new_port.near_z = view_port->near_z;
                 new_port.far_z = view_port->far_z;
                 new_port.scissor = view_port->scissor;
@@ -1912,8 +1922,12 @@ int mDoGph_Painter() {
                     retry_captue_frame(&camera_p->view, view_port,
                                        dComIfGp_getCameraZoomForcus(camera_id));
                 }
-
+                
+                #if TARGET_PC
                 GXSetViewport(0.0f, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), 0.0f, 1.0f);
+                #else
+                GXSetViewport(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f);
+                #endif
 
                 Mtx m2;
                 Mtx44 m;
