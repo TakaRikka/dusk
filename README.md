@@ -62,4 +62,9 @@ cmake -B build/dusk -GNinja
 ninja -C build/dusk
 ```
 
-After building the executable, extract the original game files to a folder named `data` in the same folder as the executable.
+#### Running
+Pass the disc image as a positional argument. Supported formats: ISO (GCM), RVZ, WIA, WBFS, CISO, GCZ
+```sh
+build/dusk/dusk /path/to/game.rvz
+```
+If no path is specified, Dusk defaults to `game.iso` in the current working directory.
