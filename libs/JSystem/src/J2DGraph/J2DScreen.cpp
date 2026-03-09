@@ -38,7 +38,7 @@ void J2DScreen::clean() {
     mFontRes = NULL;
 
     if (mNameTable != NULL) {
-        JKR_DELETE_ARRAY(mNameTable->getResNameTable());
+        JKR_DELETE_ARRAY(const_cast<ResNTAB*>(mNameTable->getResNameTable()));
         JKR_DELETE(mNameTable);
         mNameTable = NULL;
     }

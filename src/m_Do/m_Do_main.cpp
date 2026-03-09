@@ -44,13 +44,14 @@
 #include <chrono>
 #include <thread>
 #include "SSystem/SComponent/c_API.h"
-#include "dusk/dvd_emu.h"
 #include "dusk/dusk.h"
 #include "dusk/logging.h"
 
 #include <aurora/aurora.h>
 #include <aurora/event.h>
 #include <aurora/main.h>
+#include <aurora/dvd.h>
+#include <dolphin/dvd.h>
 
 #include "cxxopts.hpp"
 
@@ -67,7 +68,7 @@ const int audioHeapSize = 0x14D800;
 #endif
 
 // =========================================================================
-// LOAD_COPYDATE - PC Version using DvdEmu
+// LOAD_COPYDATE - PC Version
 // =========================================================================
 #define COPYDATE_PATH "/str/Final/Release/COPYDATE"
 
@@ -75,33 +76,26 @@ s32 LOAD_COPYDATE(void*) {
     char buffer[32];
     memset(buffer, 0, sizeof(buffer));
 
-    u32 size = 0;
-    void* data = DvdEmu::loadFile(COPYDATE_PATH, &size, nullptr);
+    DVDFileInfo fi;
+    if (DVDOpen(COPYDATE_PATH, &fi)) {
+        u32 readLen = (fi.length < sizeof(buffer) - 1) ? fi.length : sizeof(buffer) - 1;
+        // DVDReadPrio requires 32-byte aligned buffer and length rounded up to 32
+        u32 alignedLen = (readLen + 31) & ~31;
+        alignas(32) char readBuf[64];
+        DVDReadPrio(&fi, readBuf, alignedLen, 0, 2);
+        DVDClose(&fi);
 
-    // Fallback: Try root if not found
-    if (!data) {
-        data = DvdEmu::loadFile("/COPYDATE", &size, nullptr);
-    }
-
-    if (data) {
-        u32 copyLen = (size < sizeof(buffer) - 1) ? size : sizeof(buffer) - 1;
-        memcpy(buffer, data, copyLen);
-        buffer[copyLen] = '\0';
-
-#ifdef _WIN32
-        _aligned_free(data);
-#else
-        free(data);
-#endif
+        memcpy(buffer, readBuf, readLen);
+        buffer[readLen] = '\0';
     } else {
         strcpy(buffer, "PC PORT BUILD");
-        OSReport("Warning: COPYDATE file not found at %s\n", COPYDATE_PATH);
+        DuskLog.warn("COPYDATE file not found at {}", COPYDATE_PATH);
     }
 
     memcpy(mDoMain::COPYDATE_STRING, buffer, sizeof(mDoMain::COPYDATE_STRING) - 1);
     mDoMain::COPYDATE_STRING[sizeof(mDoMain::COPYDATE_STRING) - 1] = '\0';
 
-    OS_REPORT("\x1b[36mCOPYDATE=[%s]\n\x1b[m", mDoMain::COPYDATE_STRING);
+    DuskLog.info("COPYDATE=[{}]", mDoMain::COPYDATE_STRING);
     return 1;
 }
 
@@ -203,8 +197,11 @@ int game_main(int argc, char* argv[]) {
 
         arg_options.add_options()
             ("l,log-level", "Log level from " + std::to_string(AuroraLogLevel::LOG_DEBUG) + " to " + std::to_string(AuroraLogLevel::LOG_FATAL), cxxopts::value<uint8_t>()->default_value("0"))
-            ("h,help", "Print usage");
+            ("h,help", "Print usage")
+            ("dvd", "Path to DVD image file", cxxopts::value<std::string>()->default_value("game.iso"));
 
+        arg_options.parse_positional({"dvd"});
+        arg_options.positional_help("<dvd-image>");
         arg_options.allow_unrecognised_options();
 
         parsed_arg_options = arg_options.parse(argc, argv);
@@ -234,10 +231,13 @@ int game_main(int argc, char* argv[]) {
 
     auroraInfo = aurora_initialize(argc, argv, &config);
 
-    OSInit();
+    const auto& dvd_path = parsed_arg_options["dvd"].as<std::string>();
+    DuskLog.info("Loading DVD image: {}", dvd_path);
+    if (!aurora_dvd_open(dvd_path.c_str())) {
+        DuskLog.fatal("Failed to open DVD image: {}", dvd_path);
+    }
 
-    // 3. Init DVD Emulation
-    DvdEmu::setBasePath("data");
+    OSInit();
 
     mDoMain::sPowerOnTime = OSGetTime();
 

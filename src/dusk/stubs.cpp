@@ -9,7 +9,6 @@
 #include <condition_variable>
 #include <unordered_map>
 #include <memory>
-#include <dusk/dvd_emu.h>
 #include <dusk/logging.h>
 
 
@@ -1166,123 +1165,6 @@ void AIStartDMA(void) {
 }
 
 void AIStopDMA(void) {
-    STUB_LOG();
-}
-
-#pragma mark DVD
-#include <dolphin/dvd.h>
-s32 DVDCancel(volatile DVDCommandBlock* block) {
-    STUB_LOG();
-    return 0;
-}
-s32 DVDCancel(DVDCommandBlock* block) {
-    STUB_LOG();
-    return 0;
-}
-BOOL DVDChangeDir(const char* dirName) {
-    STUB_LOG();
-    return TRUE;
-}
-BOOL DVDCheckDisk(void) {
-    STUB_LOG();
-    return TRUE;
-}
-BOOL DVDClose(DVDFileInfo* fileInfo) {
-    STUB_LOG();
-    return TRUE;
-}
-int DVDCloseDir(DVDDir* dir) {
-    STUB_LOG();
-    return 0;
-}
-s32 DVDConvertPathToEntrynum(const char* pathPtr) {
-    return DVDConvertPathToEntrynum_Emu(pathPtr);
-}
-BOOL DVDFastOpen(s32 entrynum, DVDFileInfo* fileInfo) {
-    const char* path = DVDGetPathForEntry(entrynum);
-    if (!path) {
-        OSReport("[DVD] DVDFastOpen: no path for entry %d\n", entrynum);
-        return FALSE;
-    }
-    u32 fileSize = DvdEmu::getFileSize(path);
-    if (fileSize == 0) {
-        OSReport("[DVD] DVDFastOpen: file not found or empty for entry %d (%s)\n", entrynum, path);
-        return FALSE;
-    }
-    // Repurpose startAddr to store entrynum for later DVDReadPrio lookups
-    fileInfo->startAddr = (u32)entrynum;
-    fileInfo->length = fileSize;
-    fileInfo->callback = NULL;
-    fileInfo->cb.state = 0;
-    return TRUE;
-}
-s32 DVDGetCommandBlockStatus(const DVDCommandBlock* block) {
-    STUB_LOG();
-    return 0;
-}
-DVDDiskID* DVDGetCurrentDiskID(void) {
-    STUB_LOG();
-    return NULL;
-}
-s32 DVDGetDriveStatus(void) {
-    STUB_LOG();
-    return 0;
-}
-void DVDInit(void) {
-    STUB_LOG();
-}
-BOOL DVDOpen(const char* fileName, DVDFileInfo* fileInfo) {
-    s32 entryNum = DVDConvertPathToEntrynum(fileName);
-    if (entryNum < 0) {
-        OSReport("[DVD] DVDOpen: file not found: %s\n", fileName);
-        return FALSE;
-    }
-    return DVDFastOpen(entryNum, fileInfo);
-}
-int DVDOpenDir(const char* dirName, DVDDir* dir) {
-    STUB_LOG();
-    return 0;
-}
-BOOL DVDReadAsyncPrio(DVDFileInfo* fileInfo, void* addr, s32 length, s32 offset,
-                      DVDCallback callback, s32 prio) {
-    // Synchronous read, then invoke callback with result
-    s32 entryNum = (s32)fileInfo->startAddr;
-    const char* path = DVDGetPathForEntry(entryNum);
-    if (!path) {
-        OSReport("[DVD] DVDReadAsyncPrio: no path for entry %d\n", entryNum);
-        if (callback) callback(-1, fileInfo);
-        return FALSE;
-    }
-    u32 bytesRead = DvdEmu::loadFileToBuffer(path, addr, (u32)length, (u32)offset);
-    if (callback) {
-        callback((s32)bytesRead, fileInfo);
-    }
-    return TRUE;
-}
-int DVDReadDir(DVDDir* dir, DVDDirEntry* dirent) {
-    STUB_LOG();
-    return 0;
-}
-s32 DVDReadPrio(DVDFileInfo* fileInfo, void* addr, s32 length, s32 offset, s32 prio) {
-    s32 entryNum = (s32)fileInfo->startAddr;
-    const char* path = DVDGetPathForEntry(entryNum);
-    if (!path) {
-        OSReport("[DVD] DVDReadPrio: no path for entry %d\n", entryNum);
-        return -1;
-    }
-    u32 bytesRead = DvdEmu::loadFileToBuffer(path, addr, (u32)length, (u32)offset);
-    return (s32)bytesRead;
-}
-
-void DVDReadAbsAsyncForBS(void* a, struct bb2struct* b, int c, int d, void (*e)()) {
-    STUB_LOG();
-}
-
-void DVDReadDiskID(void* a, DVDDiskID* b, void (*c)()) {
-    STUB_LOG();
-}
-
-void DVDReset() {
     STUB_LOG();
 }
 
