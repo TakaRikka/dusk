@@ -9,7 +9,8 @@
             "MIMode": "gdb",
             "miDebuggerPath": "gdb",
             "symbolSearchPath": "${command:cmake.launchTargetPath}",
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "cwd":"${workspaceRoot}"
         }
     ]
 }
