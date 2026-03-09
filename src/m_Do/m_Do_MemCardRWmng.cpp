@@ -415,8 +415,8 @@ static u32 mDoMemCdRWm_CalcCheckSum(void* data, u32 size) {
     int i;
     u16 high, low;
     high = low = 0;
-    u16* d;
-    for (i = 0, d = (u16*)data; i < size / 2; i++, d++) {
+    BE(u16)* d;
+    for (i = 0, d = (BE(u16)*)data; i < size / 2; i++, d++) {
         high += *d;
         low += ~*d;
     }
@@ -443,11 +443,11 @@ BOOL mDoMemCdRWm_TestCheckSumGameData(void* data) {
     u64 checksum;
     u8* file_ptr = (u8*)data;
     checksum = mDoMemCdRWm_CalcCheckSumGameData(data, (SAVEDATA_SIZE - sizeof(u64)));
-    return checksum == *(u64*)(file_ptr + (SAVEDATA_SIZE - sizeof(u64)));
+    return checksum == *(BE(u64)*)(file_ptr + (SAVEDATA_SIZE - sizeof(u64)));
 }
 
 void mDoMemCdRWm_SetCheckSumGameData(u8* data, u8 dataNum) {
     u8* file_ptr = data + (dataNum * SAVEDATA_SIZE);
     u64 checksum = mDoMemCdRWm_CalcCheckSumGameData(file_ptr, (SAVEDATA_SIZE - sizeof(u64)));
-    *(u64*)(file_ptr + (SAVEDATA_SIZE - sizeof(u64))) = checksum;
+    *(BE(u64)*)(file_ptr + (SAVEDATA_SIZE - sizeof(u64))) = checksum;
 }
