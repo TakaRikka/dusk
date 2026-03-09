@@ -3,7 +3,8 @@
 #include "JSystem/JGadget/binary.h"
 #include "JSystem/JGadget/define.h"
 #include "global.h"
-#include <stdint.h>
+#include <cstdint>
+#include <cstdlib>
 
 #include "global.h"
 

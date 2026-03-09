@@ -8,6 +8,6 @@ void aurora_log_callback(AuroraLogLevel level, const char* module, const char* m
 
 extern aurora::Module DuskLog;
 
-#define STUB_LOG() DuskLog.debug("{} is a stub", __FUNCTION__)
+#define STUB_LOG() //DuskLog.debug("{} is a stub", __FUNCTION__)
 
 #endif

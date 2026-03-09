@@ -1335,7 +1335,6 @@ set(DUSK_FILES
         src/dusk/extras.cpp
         src/dusk/globals.cpp
         #src/dusk/m_Do_ext_dusk.cpp
-        src/dusk/dvd_emu.cpp
         src/dusk/imgui/imgui.hpp
         src/dusk/imgui/processes.cpp
         src/dusk/imgui/camera.cpp

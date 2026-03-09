@@ -240,7 +240,7 @@ inline void* operator new[](size_t, JKRHeapToken, void* where) {
 #define JKR_NEW new (JKRHeapToken::Dummy)
 #define JKR_NEW_ARGS(...) new (JKRHeapToken::Dummy, __VA_ARGS__ )
 #define JKR_DELETE(expr) jkrDelete(expr)
-#define JKR_DELETE_ARRAY(expr)  delete[] (expr)
+#define JKR_DELETE_ARRAY(expr) jkrDeleteArray(expr)
 #define JKR_HEAP_TOKEN , JKRHeapToken::Dummy
 #define JKR_HEAP_TOKEN_PARAM , JKRHeapToken
 #else
@@ -261,7 +261,7 @@ void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM, int alignment);
 void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM, JKRHeap* heap, int alignment);
 
 void operator delete(void* ptr JKR_HEAP_TOKEN_PARAM);
-void operator delete[](void* ptr);
+void operator delete[](void* ptr JKR_HEAP_TOKEN_PARAM);
 
 #if TARGET_PC
 template<typename T>
@@ -280,6 +280,10 @@ inline void jkrDelete(void* ptr) {
     }
 
     operator delete(ptr, JKRHeapToken::Dummy);
+}
+
+static void jkrDeleteArray(void* ptr) {
+    operator delete[](ptr, JKRHeapToken::Dummy);
 }
 #endif
 
