@@ -24,12 +24,14 @@
 #include "d/actor/d_a_horse.h"
 #include <cstring>
 
+#include "dusk/memory.h"
+
 int dMeter2_c::_create() {
     stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
     if (dStage_stagInfo_GetUpButton(stag_info) == 1) {
-        mpHeap = fopMsgM_createExpHeap(0x5A400, NULL);
+        mpHeap = fopMsgM_createExpHeap(HEAP_SIZE(0x5A400, 0xA0000), NULL);
     } else {
-        mpHeap = fopMsgM_createExpHeap(0x60800, NULL);
+        mpHeap = fopMsgM_createExpHeap(HEAP_SIZE(0x60800, 0xC1000), NULL);
     }
 
     JKRHeap* heap = mDoExt_setCurrentHeap(mpHeap);

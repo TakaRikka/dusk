@@ -82,6 +82,10 @@ static int daKytag12_Execute_standard(kytag12_class* i_this) {
     f32 var_f29;
     f32 var_f28;
 
+    #if AVOID_UB
+    var_f30 = 0;
+    #endif
+
     int var_r24 = 0;
     int var_r23 = 0;
     int var_r22 = 0;

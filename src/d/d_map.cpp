@@ -341,6 +341,9 @@ inline u8 twoValueLineInterpolation(u8 param_0, u8 param_1, f32 param_2) {
 }
 
 void renderingAmap_c::draw() {
+    STUB_LOG();
+    return;
+    
     f32 tmp = ((f32)(g_Counter.mCounter0 % dMap_HIO_prm_res_dst_s::m_res->field_0x1aa) /
                (f32)dMap_HIO_prm_res_dst_s::m_res->field_0x1aa);
     tmp = tmp;

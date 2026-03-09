@@ -38,6 +38,8 @@
 #include "JSystem/JKernel/JKRAram.h"
 #include "JSystem/JKernel/JKRAramArchive.h"
 
+#include "dusk/memory.h"
+
 #if DEBUG
 #include "d/d_s_menu.h"
 #include "d/d_debug_pad.h"
@@ -1422,7 +1424,7 @@ static int phase_4(dScnPly_c* i_this) {
     JUT_ASSERT(2704, heap != NULL);
     dComIfGp_setExpHeap2D(heap);
 
-    JKRExpHeap* heap2 = fopMsgM_createExpHeap(0xA800, NULL);
+    JKRExpHeap* heap2 = fopMsgM_createExpHeap(HEAP_SIZE(0xA800, 0x15000), NULL);
     JUT_ASSERT(2709, heap2 != NULL);
     dComIfGp_setMsgExpHeap(heap2);
 

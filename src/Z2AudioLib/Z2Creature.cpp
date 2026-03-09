@@ -182,6 +182,9 @@ Z2SoundHandlePool* Z2Creature::startCreatureSound(JAISoundID soundID, u32 mapinf
 }
 
 Z2SoundHandlePool* Z2Creature::startCreatureSoundLevel(JAISoundID soundID, u32 mapinfo, s8 reverb) {
+    STUB_LOG();
+    return NULL;
+
     switch (soundID) {
     case Z2SE_FAIRY_S_LV:
         Z2GetAudioMgr()->seStartLevel(soundID, mpPos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
@@ -441,6 +444,9 @@ Z2SoundHandlePool* Z2CreatureEnemy::startCreatureSound(JAISoundID soundID, u32 m
 }
 
 Z2SoundHandlePool* Z2CreatureEnemy::startCreatureSoundLevel(JAISoundID soundID, u32 mapinfo, s8 reverb) {
+    STUB_LOG();
+    return NULL;
+    
     if (soundID == 0x7FFFF) {
         Vec pos;
         Z2GetAudience()->convertAbsToRel(*mpPos, &pos, 0);
