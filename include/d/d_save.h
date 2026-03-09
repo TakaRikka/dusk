@@ -8,7 +8,7 @@
 #include "f_pc/f_pc_name.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JHostIO/JORReflexible.h"
-
+#include "dusk/endian.h"
 
 static const int DEFAULT_SELECT_ITEM_INDEX = 0;
 static const int MAX_SELECT_ITEM = 4;
@@ -164,11 +164,11 @@ public:
     void setTransformStatus(u8 i_status) { mTransformStatus = i_status; }
 
 private:
-    /* 0x00 */ u16 mMaxLife;
-    /* 0x02 */ u16 mLife;
-    /* 0x04 */ u16 mRupee;
-    /* 0x06 */ u16 mMaxOil;
-    /* 0x08 */ u16 mOil;
+    /* 0x00 */ BE(u16) mMaxLife;
+    /* 0x02 */ BE(u16) mLife;
+    /* 0x04 */ BE(u16) mRupee;
+    /* 0x06 */ BE(u16) mMaxOil;
+    /* 0x08 */ BE(u16) mOil;
     /* 0x0A */ u8 unk10;
     /* 0x0B */ u8 mSelectItem[MAX_SELECT_ITEM];  // For GC: first 2 are X & Y, others unused; For
                                                  // Wii (in order): Left, Right, Down, B
@@ -202,13 +202,13 @@ public:
     void setDate(u16 i_date) { mDate = i_date; }
 
 private:
-    /* 0x00 */ OSTime mDateIpl;
+    /* 0x00 */ BE(OSTime) mDateIpl;
     /* 0x08 */ u8 mTransformLevelFlag;
     /* 0x09 */ u8 mDarkClearLevelFlag;
     /* 0x0A */ u8 unk10;
     /* 0x0B */ u8 unk11;
-    /* 0x0C */ f32 mTime;
-    /* 0x10 */ u16 mDate;
+    /* 0x0C */ BE(f32) mTime;
+    /* 0x10 */ BE(u16) mDate;
     /* 0x12 */ u8 unk18[3];
 };  // Size: 0x18
 
@@ -226,7 +226,7 @@ public:
 
 private:
     /* 0x00 */ cXyz mPos;
-    /* 0x0C */ s16 mAngleY;
+    /* 0x0C */ BE(s16) mAngleY;
     /* 0x0E */ char mName[8];
     /* 0x16 */ u8 mSpawnId;
     /* 0x17 */ s8 mRoomNo;
@@ -268,7 +268,7 @@ public:
 
 private:
     /* 0x00 */ cXyz mPos;
-    /* 0x0C */ s16 mAngleY;
+    /* 0x0C */ BE(s16) mAngleY;
     /* 0x0E */ char mName[8];
     /* 0x16 */ s8 mLastSpawnId;
     /* 0x17 */ u8 mRegionNo;
@@ -294,7 +294,7 @@ public:
 
 private:
     /* 0x00 */ cXyz mPos;
-    /* 0x0C */ s16 mAngleY;
+    /* 0x0C */ BE(s16) mAngleY;
     /* 0x0E */ char mName[8];
     /* 0x16 */ u8 mSpawnId;
     /* 0x17 */ s8 mRoomNo;
@@ -345,7 +345,7 @@ public:
     int isFirstBit(u8 i_itemNo) const;
 
 private:
-    /* 0x0 */ u32 mItemFlags[8];
+    /* 0x0 */ BE(u32) mItemFlags[8];
 };  // Size: 0x20
 
 class dSv_player_item_record_c {
@@ -448,8 +448,8 @@ public:
     void setGetNumber(int i_no, u8 i_value) { mGetNumber[i_no] = i_value; }
 
 private:
-    /* 0x00 */ u32 mLetterGetFlags[2];
-    /* 0x08 */ u32 mLetterReadFlags[2];
+    /* 0x00 */ BE(u32) mLetterGetFlags[2];
+    /* 0x08 */ BE(u32) mLetterReadFlags[2];
     /* 0x10 */ u8 mGetNumber[64];
 };  // Size: 0x50
 
@@ -462,7 +462,7 @@ public:
     void setMaxSize(int i_sizeIndex, u8 i_size) { mMaxSize[i_sizeIndex] = i_size; }
 
 private:
-    /* 0x00 */ u16 mFishCount[16];
+    /* 0x00 */ BE(u16) mFishCount[16];
     /* 0x20 */ u8 mMaxSize[16];
 };  // Size: 0x34
 
@@ -483,10 +483,10 @@ public:
     u8 getClearCount() const { return mClearCount; }
 
 private:
-    /* 0x00 */ u64 unk0;
-    /* 0x08 */ s64 mTotalTime;
-    /* 0x10 */ u16 unk16;
-    /* 0x12 */ u16 mDeathCount;
+    /* 0x00 */ BE(u64) unk0;
+    /* 0x08 */ BE(s64) mTotalTime;
+    /* 0x10 */ BE(u16) unk16;
+    /* 0x12 */ BE(u16) mDeathCount;
     /* 0x14 */ char mPlayerName[16];
     /* 0x24 */ u8 unk36;
     /* 0x25 */ char mHorseName[16];
@@ -536,7 +536,7 @@ private:
     /* 0x3 */ u8 mVibration;      // Rumble status
     /* 0x4 */ u8 mLanguage;
     /* 0x5 */ u8 unk5;
-    /* 0x6 */ u16 mCalibrateDist;  // Wii pointer horizontal calibration. Default is 0x015E
+    /* 0x6 */ BE(u16) mCalibrateDist;  // Wii pointer horizontal calibration. Default is 0x015E
     /* 0x8 */ u8 mCalValue;        // Wii pointer vertical calibration. Default is 0x00
     /* 0x9 */ bool mShortCut;      // Wii icon shortcut enabled/disabled.
     /* 0xA */ u8 mCameraControl;   // 0 : normal, 1 : inverted
@@ -657,9 +657,9 @@ public:
     s32 isStageBossEnemy2() const { return isDungeonItem(STAGE_BOSS_ENEMY_2); }
 
 private:
-    /* 0x00 */ u32 mTbox[2];
-    /* 0x08 */ u32 mSwitch[4];
-    /* 0x18 */ u32 mItem[1];
+    /* 0x00 */ BE(u32) mTbox[2];
+    /* 0x08 */ BE(u32) mSwitch[4];
+    /* 0x18 */ BE(u32) mItem[1];
     /* 0x1C */ u8 mKeyNum;
     /* 0x1D */ u8 mDungeonItem;
 };  // Size: 0x20
@@ -692,11 +692,11 @@ public:
 
 private:
     /* 0x00 */ u8 unk0[1][4];
-    /* 0x04 */ u32 mHookGameTime;
-    /* 0x08 */ u32 mBalloonScore;
-    /* 0x0C */ u32 mRaceGameTime;
-    /* 0x10 */ u32 unk16;
-    /* 0x14 */ u32 unk20;
+    /* 0x04 */ BE(u32) mHookGameTime;
+    /* 0x08 */ BE(u32) mBalloonScore;
+    /* 0x0C */ BE(u32) mRaceGameTime;
+    /* 0x10 */ BE(u32) unk16;
+    /* 0x14 */ BE(u32) unk20;
 };  // Size: 0x18
 
 class dSv_memory_c {
@@ -721,7 +721,7 @@ public:
     BOOL isVisitedRoom(int i_no);
 
 private:
-    /* 0x0 */ u32 mVisitedRoom[2];
+    /* 0x0 */ BE(u32) mVisitedRoom[2];
 };  // Size: 0x8
 
 STATIC_ASSERT(sizeof(dSv_memory2_c) == 8);
@@ -768,11 +768,11 @@ public:
     BOOL isOneItem(int i_no) const;
 
 private:
-    /* 0x00 */ u16 mSwitch[2];
-    /* 0x04 */ u16 mRoomSwitch;
-    /* 0x06 */ u16 mItem[2];
-    /* 0x0A */ u16 mRoomItem;
-    /* 0x0C */ u16 unk12;
+    /* 0x00 */ BE(u16) mSwitch[2];
+    /* 0x04 */ BE(u16) mRoomSwitch;
+    /* 0x06 */ BE(u16) mItem[2];
+    /* 0x0A */ BE(u16) mRoomItem;
+    /* 0x0C */ BE(u16) unk12;
 };  // Size: 0xE
 
 class dSv_zoneActor_c {
