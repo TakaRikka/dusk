@@ -1051,7 +1051,7 @@ bool jmessage_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_siz
         case MSGTAG_COLOR:
             return true;
         case MSGTAG_SCALE: {
-            u16 scale = *(u16*)i_data;
+            u16 scale = *(BE(u16)*)i_data;
             pReference->setLineScale(mTotalLineCnt, scale);
             do_scale(scale / 100.0f);
             return true;
@@ -1102,13 +1102,13 @@ bool jmessage_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_siz
         }
         case MSGTAG_UNK_3:
         case MSGTAG_AUTOBOX:
-            if (*(u16*)i_data != 0) {
+            if (*(BE(u16)*)i_data != 0) {
                 dMsgObject_c* objectPtr = pReference->mpObjectPtr;  // fakematch, should be getObjectPtr
                 objectPtr->onAutoMessageFlag();
             }
             return true;
         case MSGTAG_DEMOBOX:
-            pReference->setDemoFrame(*(u32*)i_data);
+            pReference->setDemoFrame(*(BE(u32)*)i_data);
             return true;
         case MSGTAG_PLAYER_NAME: {
             if (field_0x49 != 0) {
@@ -1414,7 +1414,7 @@ bool jmessage_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_siz
             dMsgUnit_setTag(1, (s32)dComIfGp_getMessageCountNumber(), buffer);
             break;
         case MSGTAG_FUNDRAISE_REMAIN: {
-            s16 fund_raise_val = *(u32*)i_data;
+            s16 fund_raise_val = *(BE(u32)*)i_data;
             dMsgObject_c* objectPtr = pReference->getObjectPtr();
             objectPtr->setFundRaisingValue(fund_raise_val);
 
@@ -1555,7 +1555,7 @@ bool jmessage_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_siz
             do_space(i_tag);
             return true;
         case MSGTAG_WII_MSGID_OVERRIDE:
-            pReference->setRevoMessageID(*(u32*)i_data);
+            pReference->setRevoMessageID(*(BE(u32)*)i_data);
             return true;
         }
     }
@@ -2169,7 +2169,7 @@ bool jmessage_tSequenceProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_si
             pReference->setNowColorType(*(u8*)i_data & 0xFF);
             return true;
         case MSGTAG_SCALE:
-            pReference->setNowTagScale(*(u16*)i_data & 0xFFFF);
+            pReference->setNowTagScale(*(BE(u16)*)i_data & 0xFFFF);
             return true;
         case MSGTAG_RUBY:
         case 0xFFFF02:
@@ -2220,7 +2220,7 @@ bool jmessage_tSequenceProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_si
             return true;
         case MSGTAG_UNK_3:
         case MSGTAG_AUTOBOX:
-            pReference->setSendTimer(*(u16*)i_data);
+            pReference->setSendTimer(*(BE(u16)*)i_data);
             if (pReference->getSendTimer() == 0) {
                 pReference->setSendFlag(3);
             } else {
@@ -2228,24 +2228,24 @@ bool jmessage_tSequenceProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_si
             }
             return true;
         case MSGTAG_BOXATMOST:
-            pReference->setSendTimer(*(u16*)i_data);
+            pReference->setSendTimer(*(BE(u16)*)i_data);
             pReference->setSendFlag(2);
             return true;
         case MSGTAG_BOXATLEAST:
-            dMeter2Info_setMsgKeyWaitTimer(*(u16*)i_data);
-            pReference->setSendTimer(*(u16*)i_data);
+            dMeter2Info_setMsgKeyWaitTimer(*(BE(u16)*)i_data);
+            pReference->setSendTimer(*(BE(u16)*)i_data);
             pReference->setSendFlag(6);
             return true;
         case MSGTAG_DEMOBOX:
-            pReference->setDemoFrame(*(u32*)i_data);
+            pReference->setDemoFrame(*(BE(u32)*)i_data);
             pReference->setSendFlag(4);
             return true;
         case MSGTAG_UNK_6:
-            field_0xa8 = *(u16*)i_data;
+            field_0xa8 = *(BE(u16)*)i_data;
             field_0xa4 = field_0xa8;
             return true;
         case MSGTAG_PAUSE:
-            field_0xa4 = *(u16*)i_data;
+            field_0xa4 = *(BE(u16)*)i_data;
             mMouthCheck = 0;
             return true;
         case MSGTAG_SELECT_2WAY:
@@ -2361,7 +2361,7 @@ bool jmessage_tSequenceProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_si
             pReference->resetInputFigure();
             pReference->setSendFlag(5);
 
-            if (*(u32*)i_data == 1) {
+            if (*(BE(u32)*)i_data == 1) {
                 dComIfGs_onTmpBit(dSv_event_tmp_flag_c::tempBitLabels[80]);
             }
             return true;
@@ -2903,7 +2903,7 @@ bool jmessage_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_s
             do_color(*(u8*)i_data & 0xFF);
             return 1;
         case MSGTAG_SCALE:
-            field_0x13c = *(u16*)i_data & 0xFFFF;
+            field_0x13c = *(BE(u16)*)i_data & 0xFFFF;
             do_scale(field_0x13c / 100.0f);
             return 1;
         case MSGTAG_RUBY:
@@ -2937,7 +2937,7 @@ bool jmessage_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_s
             stack_pushCurrent(pReference->getObjectPtr()->getLetterName());
             return 1;
         case MSGTAG_LINE_DOWN:
-            do_linedown(*(u16*)i_data);
+            do_linedown(*(BE(u16)*)i_data);
             return 1;
         case MSGTAG_CURRENT_LETTER_PAGE:
         case MSGTAG_MAX_LETTER_PAGE:
@@ -4178,7 +4178,7 @@ bool jmessage_string_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u3
             dMsgUnit_setTag(1, (s32)dComIfGp_getMessageCountNumber(), buffer);
             break;
         case MSGTAG_FUNDRAISE_REMAIN: {
-            s16 uVar9 = *(int*)i_data;
+            s16 uVar9 = *(BE(int)*)i_data;
             dMsgObject_getMsgObjectClass()->setFundRaisingValue(uVar9);
             dMsgUnit_setTag(10, uVar9 - dMsgObject_getFundRaising(), buffer);
             break;
@@ -4384,7 +4384,7 @@ bool jmessage_string_tSequenceProcessor::do_tag(u32 i_tag, void const* i_data, u
     case MSGTAG_GROUP(0):
         switch(i_tag) {
         case MSGTAG_BOXATLEAST:
-            dMeter2Info_setMsgKeyWaitTimer(*(u16*)i_data);
+            dMeter2Info_setMsgKeyWaitTimer(*(BE(u16)*)i_data);
             break;
         }
         break;
@@ -4537,7 +4537,7 @@ bool jmessage_string_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, 
             do_color(*(u8*)i_data & 0xFF);
             break;
         case MSGTAG_SCALE:
-            do_scale(*(u16*)i_data / 100.0f);
+            do_scale(*(BE(u16)*)i_data / 100.0f);
             break;
         case MSGTAG_RUBY:
         case 0xFFFF02:
@@ -4572,7 +4572,7 @@ bool jmessage_string_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, 
             push_word(dMsgObject_getMsgObjectClass()->getLetterName());
             break;
         case MSGTAG_LINE_DOWN:
-            do_linedown(*(u16*)i_data);
+            do_linedown(*(BE(u16)*)i_data);
             break;
         case MSGTAG_CURRENT_LETTER_PAGE: {
             char buffer[4];
@@ -4788,7 +4788,7 @@ bool jmessage_string_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, 
             dMsgUnit_setTag(1, (s32)dComIfGp_getMessageCountNumber(), buffer);
             break;
         case MSGTAG_FUNDRAISE_REMAIN: {
-            s16 uVar9 = *(int*)i_data;
+            s16 uVar9 = *(BE(int)*)i_data;
             dMsgObject_getMsgObjectClass()->setFundRaisingValue(uVar9);
             dMsgUnit_setTag(10, uVar9 - dMsgObject_getFundRaising(), buffer);
             break;
