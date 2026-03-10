@@ -17,6 +17,7 @@ set(AURORA_ENABLE_DVD ON CACHE BOOL "Enable DVD API support" FORCE)
 add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
 
 option(DUSK_BUILD_WARNINGS "If off, compiler warnings will be suppressed")
+option(DUSK_SELECTED_OPT "If on, selected parts of the project will be compiled with optimizations on Debug, intending to make the game run at 30 FPS. Note for MSVC: you will need to remove '/RTC1' from your debug flags in CMake.")
 
 if (CMAKE_SYSTEM_NAME STREQUAL Linux)
     # -Wno-multichar: Multi-character constants ('ABCD') are implementation-defined but all compilers
@@ -117,5 +118,13 @@ target_link_libraries(dusk PRIVATE game aurora::main)
 include(extern/aurora/cmake/AuroraCopyRuntimeDLLs.cmake)
 aurora_copy_runtime_dlls(dusk game)
 
-target_compile_options(xxhash PRIVATE /O2 /Ob2)
-target_compile_options(aurora_gx PRIVATE /O2 /Ob2)
+if (DUSK_SELECTED_OPT)
+    if (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
+        set(_opt_flags /O2 /Ob2)
+    elseif (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
+        set(_opt_flags -O2)
+    endif ()
+
+    target_compile_options(xxhash PRIVATE ${_opt_flags})
+    target_compile_options(aurora_gx PRIVATE ${_opt_flags})
+endif ()
