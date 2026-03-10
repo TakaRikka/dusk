@@ -68,12 +68,12 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
     TListChunk* list_chunk = (TListChunk*)findChunk(stream, 'LIST');
     JUT_ASSERT(145, list_chunk);
 
-    u8* envt = JKR_NEW_ARGS (heap, 2) u8[envt_chunk->mSize];
+    u8* envt = JKR_NEW_ARRAY_ARGS(u8, envt_chunk->mSize, heap, 2);
     JASCalc::bcopy(envt_chunk->mData, envt, envt_chunk->mSize);
 
     BE(u32)* ptr = &osc_chunk->mCount;
     u32 count = *ptr++;
-    JASOscillator::Data* osc_data = JKR_NEW_ARGS (heap, 0) JASOscillator::Data[count];
+    JASOscillator::Data* osc_data = JKR_NEW_ARRAY_ARGS(JASOscillator::Data, count, heap, 0);
     for (int i = 0; i < count; i++, ptr += sizeof(TOsc) >> 2) {
         TOsc* op = (TOsc*)ptr;
         JUT_ASSERT(155, op->id == 'Osci');
@@ -209,7 +209,7 @@ JASBasicBank* JASBNKParser::Ver0::createBasicBank(void const* stream, JKRHeap* h
                         if (points != NULL) {
                             const JASOscillator::Point* endPtr = getOscTableEndPtr(points);
                             int size = endPtr - points;
-                            JASOscillator::Point* table = JKR_NEW_ARGS (heap, 0) JASOscillator::Point[size];
+                            JASOscillator::Point* table = JKR_NEW_ARRAY_ARGS(JASOscillator::Point, size, heap, 0);
                             JUT_ASSERT(396, table != NULL);
                             JASCalc::bcopy(points, table, size * sizeof(JASOscillator::Point));
                             osc->mTable = table;
@@ -221,7 +221,7 @@ JASBasicBank* JASBNKParser::Ver0::createBasicBank(void const* stream, JKRHeap* h
                         if (points != NULL) {
                             const JASOscillator::Point* endPtr = getOscTableEndPtr(points);
                             int size = endPtr - points;
-                            JASOscillator::Point* table = JKR_NEW_ARGS (heap, 0) JASOscillator::Point[size];
+                            JASOscillator::Point* table = JKR_NEW_ARRAY_ARGS(JASOscillator::Point, size, heap, 0);
                             JUT_ASSERT(409, table != NULL);
                             JASCalc::bcopy(points, table, size * sizeof(JASOscillator::Point));
                             osc->rel_table = table;

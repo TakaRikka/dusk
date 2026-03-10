@@ -81,7 +81,7 @@ void J3DTexture::entryNum(u16 num) {
     J3D_ASSERT_NONZEROARG(79, num != 0);
 
     mNum = num;
-    mpRes = JKR_NEW ResTIMG[num];
+    mpRes = JKR_NEW_ARRAY(ResTIMG, num);
     J3D_ASSERT_ALLOCMEM(83, mpRes != NULL);
     
     delete[] mpTexObj;

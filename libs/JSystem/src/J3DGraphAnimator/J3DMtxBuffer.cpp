@@ -93,8 +93,8 @@ s32 J3DMtxBuffer::create(J3DModelData* pModelData, u32 mtxNum) {
 
 J3DError J3DMtxBuffer::createAnmMtx(J3DModelData* pModelData) {
     if (pModelData->getJointNum() != 0) {
-        mpScaleFlagArr = JKR_NEW u8[pModelData->getJointNum()];
-        mpAnmMtx = JKR_NEW Mtx[pModelData->getJointNum()];
+        mpScaleFlagArr = JKR_NEW_ARRAY(u8, pModelData->getJointNum());
+        mpAnmMtx = JKR_NEW_ARRAY(Mtx, pModelData->getJointNum());
         mpUserAnmMtx = mpAnmMtx;
     }
 
@@ -110,8 +110,8 @@ J3DError J3DMtxBuffer::createAnmMtx(J3DModelData* pModelData) {
 
 s32 J3DMtxBuffer::createWeightEnvelopeMtx(J3DModelData* pModelData) {
     if (pModelData->getWEvlpMtxNum() != 0) {
-        mpEvlpScaleFlagArr = JKR_NEW u8[pModelData->getWEvlpMtxNum()];
-        mpWeightEvlpMtx = JKR_NEW Mtx[pModelData->getWEvlpMtxNum()];
+        mpEvlpScaleFlagArr = JKR_NEW_ARRAY(u8, pModelData->getWEvlpMtxNum());
+        mpWeightEvlpMtx = JKR_NEW_ARRAY(Mtx, pModelData->getWEvlpMtxNum());
     }
 
     if (pModelData->getWEvlpMtxNum() != 0 && mpEvlpScaleFlagArr == NULL)
@@ -132,8 +132,8 @@ s32 J3DMtxBuffer::setNoUseDrawMtx() {
 s32 J3DMtxBuffer::createDoubleDrawMtx(J3DModelData* pModelData, u32 mtxNum) {
     if (mtxNum != 0) {
         for (s32 i = 0; i < 2; i++) {
-            mpDrawMtxArr[i] = JKR_NEW Mtx*[mtxNum];
-            mpNrmMtxArr[i] = JKR_NEW Mtx33*[mtxNum];
+            mpDrawMtxArr[i] = JKR_NEW_ARRAY(Mtx*, mtxNum);
+            mpNrmMtxArr[i] = JKR_NEW_ARRAY(Mtx33*, mtxNum);
             mpBumpMtxArr[i] = NULL;
         }
     }
@@ -150,8 +150,8 @@ s32 J3DMtxBuffer::createDoubleDrawMtx(J3DModelData* pModelData, u32 mtxNum) {
     for (s32 i = 0; i < 2; i++) {
         for (u32 j = 0; j < mtxNum; j++) {
             if (pModelData->getDrawMtxNum() != 0) {
-                mpDrawMtxArr[i][j] = JKR_NEW_ARGS (0x20) Mtx[pModelData->getDrawMtxNum()];
-                mpNrmMtxArr[i][j] = JKR_NEW_ARGS (0x20) Mtx33[pModelData->getDrawMtxNum()];
+                mpDrawMtxArr[i][j] = JKR_NEW_ARRAY_ARGS(Mtx, pModelData->getDrawMtxNum(), 0x20);
+                mpNrmMtxArr[i][j] = JKR_NEW_ARRAY_ARGS(Mtx33, pModelData->getDrawMtxNum(), 0x20);
             }
         }
     }
@@ -187,7 +187,7 @@ s32 J3DMtxBuffer::createBumpMtxArray(J3DModelData* i_modelData, u32 mtxNum) {
 
         if (bumpMtxNum != 0 && mtxNum != 0) {
             for (int i = 0; i < 2; i++) {
-                mpBumpMtxArr[i] = JKR_NEW Mtx33**[(u16)materialCount];
+                mpBumpMtxArr[i] = JKR_NEW_ARRAY(Mtx33**, (u16)materialCount);
                 if (mpBumpMtxArr[i] == NULL) {
                     return kJ3DError_Alloc;
                 }
@@ -200,7 +200,7 @@ s32 J3DMtxBuffer::createBumpMtxArray(J3DModelData* i_modelData, u32 mtxNum) {
             for (u16 j = 0; j < materialNum; j++) {
                 J3DMaterial* material = i_modelData->getMaterialNodePointer(j);
                 if (material->getNBTScale()->mbHasScale == true) {
-                    mpBumpMtxArr[i][offset] = JKR_NEW Mtx33*[mtxNum];
+                    mpBumpMtxArr[i][offset] = JKR_NEW_ARRAY(Mtx33*, mtxNum);
                     if (mpBumpMtxArr[i][offset] == NULL) {
                         return kJ3DError_Alloc;
                     }
@@ -217,7 +217,7 @@ s32 J3DMtxBuffer::createBumpMtxArray(J3DModelData* i_modelData, u32 mtxNum) {
                 J3DMaterial* material = i_modelData->getMaterialNodePointer((u16)j);
                 if (material->getNBTScale()->mbHasScale == true) {
                     for (int k = 0; k < mtxNum; k++) {
-                        mpBumpMtxArr[i][offset][k] = JKR_NEW_ARGS (0x20) Mtx33[i_modelData->getDrawMtxNum()];
+                        mpBumpMtxArr[i][offset][k] = JKR_NEW_ARRAY_ARGS(Mtx33, i_modelData->getDrawMtxNum(), 0x20);
                         if (mpBumpMtxArr[i][offset][k] == NULL) {
                             return kJ3DError_Alloc;
                         }

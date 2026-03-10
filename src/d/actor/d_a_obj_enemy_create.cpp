@@ -234,7 +234,7 @@ int daObjE_CREATE_c::create() {
 
     mActivateSw = fopAcM_GetParam(this) >> 8;
     mDeactivateSw = fopAcM_GetParam(this) >> 0x10;
-    mActorList = JKR_NEW u32[mEnemyNum];
+    mActorList = JKR_NEW_ARRAY(u32, mEnemyNum);
 
     if (mActorList == NULL) {
         return cPhs_ERROR_e;

@@ -8,7 +8,7 @@
 SpkMixingBuffer::SpkMixingBuffer(JKRHeap* heap) {
     JUT_ASSERT(25, heap);
     for (s32 chan = 0; chan < ARRAY_SIZE(mBuffer); chan++) {
-        mBuffer[chan] = JKR_NEW_ARGS (heap, 0) s16[cSamplesPerAudioPacket];
+        mBuffer[chan] = JKR_NEW_ARRAY_ARGS(s16, cSamplesPerAudioPacket, heap, 0);
         JUT_ASSERT(29, mBuffer[chan]);
         bzeroBuffer(chan);
     }

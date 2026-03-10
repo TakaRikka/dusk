@@ -65,7 +65,7 @@ J2DTextBoxEx::J2DTextBoxEx(J2DPane* p_pane, JSURandomInputStream* p_stream, u32 
     mStringPtr = NULL;
 
     if (strLength != 0) {
-        mStringPtr = JKR_NEW char[strLength];
+        mStringPtr = JKR_NEW_ARRAY(char, strLength);
     }
 
     if (mStringPtr != NULL) {

@@ -62,22 +62,22 @@ bool JUTResFont::protected_initiate(const ResFONT* pFont, JKRHeap* pHeap) {
     mValid = true;
 
     countBlock();
-    mMemBlocks = JKR_NEW_ARGS (pHeap, 0) void*[mWid1BlockNum + mGly1BlockNum + mMap1BlockNum];
+    mMemBlocks = JKR_NEW_ARRAY_ARGS(void*, mWid1BlockNum + mGly1BlockNum + mMap1BlockNum, pHeap, 0);
 
     if (!mMemBlocks) {
         return false;
     }
     p = mMemBlocks;
     if (mWid1BlockNum != 0) {
-        mpWidthBlocks = JKR_NEW_ARGS (p) ResFONT::WID1*[mWid1BlockNum];
+        mpWidthBlocks = JKR_NEW_ARRAY_ARGS(ResFONT::WID1*, mWid1BlockNum, p);
         p += mWid1BlockNum;
     }
     if (mGly1BlockNum != 0) {
-        mpGlyphBlocks = JKR_NEW_ARGS (p) ResFONT::GLY1*[mGly1BlockNum];
+        mpGlyphBlocks = JKR_NEW_ARRAY_ARGS(ResFONT::GLY1*, mGly1BlockNum, p);
         p += mGly1BlockNum;
     }
     if (mMap1BlockNum != 0) {
-        mpMapBlocks = JKR_NEW_ARGS (p) ResFONT::MAP1*[mMap1BlockNum];
+        mpMapBlocks = JKR_NEW_ARRAY_ARGS(ResFONT::MAP1*, mMap1BlockNum, p);
     }
     setBlock();
     return true;

@@ -93,7 +93,7 @@ u8* J2DPrint::setBuffer(size_t size) {
         JKR_DELETE(mStrBuff);
     }
 
-    mStrBuff = JKR_NEW_ARGS (JKRGetSystemHeap(), 0) char[size];
+    mStrBuff = JKR_NEW_ARRAY_ARGS(char, size, JKRGetSystemHeap(), 0);
     mStrBuffSize = size;
     sStrBufInitialized = true;
     return u8Buff;

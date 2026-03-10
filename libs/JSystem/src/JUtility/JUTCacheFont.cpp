@@ -178,14 +178,14 @@ bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
     }
 
     if (mTotalWidSize != 0) {
-        field_0x7c = JKR_NEW_ARGS (heap, 0) u8[mTotalWidSize];
+        field_0x7c = JKR_NEW_ARRAY_ARGS(u8, mTotalWidSize, heap, 0);
         if (field_0x7c == NULL) {
             return false;
         }
     }
 
     if (mGly1BlockNum != 0) {
-        field_0x80 = JKR_NEW_ARGS (heap, 0) u8[mGly1BlockNum * sizeof(ResFONT::GLY1)];
+        field_0x80 = JKR_NEW_ARRAY_ARGS(u8, mGly1BlockNum * sizeof(ResFONT::GLY1), heap, 0);
         if (field_0x80 == NULL) {
             return false;
         }
@@ -197,7 +197,7 @@ bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
     }
 
     if (mTotalMapSize != 0) {
-        field_0x84 = JKR_NEW_ARGS (heap, 0) u8[mTotalMapSize];
+        field_0x84 = JKR_NEW_ARRAY_ARGS(u8, mTotalMapSize, heap, 0);
         if (field_0x84 == NULL) {
             return false;
         }
@@ -215,7 +215,7 @@ bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
         mCacheBuffer = cacheBuffer;
         field_0xb0 = 0;
     } else {
-        mCacheBuffer = JKR_NEW_ARGS (heap, 0x20) u8[v1];
+        mCacheBuffer = JKR_NEW_ARRAY_ARGS(u8, v1, heap, 0x20);
         if (mCacheBuffer == NULL) {
             return false;
         }
@@ -227,25 +227,25 @@ bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
 }
 
 bool JUTCacheFont::allocArray(JKRHeap* param_0) {
-    mMemBlocks = (void**)JKR_NEW_ARGS (param_0, 0) uintptr_t[mWid1BlockNum + mGly1BlockNum + mMap1BlockNum];
+    mMemBlocks = (void**)JKR_NEW_ARRAY_ARGS(uintptr_t, mWid1BlockNum + mGly1BlockNum + mMap1BlockNum, param_0, 0);
     if (mMemBlocks == NULL) {
         return false;
     }
 
     void** blocks = mMemBlocks;
     if (mWid1BlockNum) {
-        mpWidthBlocks = JKR_NEW_ARGS (blocks) ResFONT::WID1*[mWid1BlockNum];
+        mpWidthBlocks = JKR_NEW_ARRAY_ARGS(ResFONT::WID1*, mWid1BlockNum, blocks);
         blocks = blocks + mWid1BlockNum;
     }
     if (mGly1BlockNum) {
-        mpGlyphBlocks = JKR_NEW_ARGS (blocks) ResFONT::GLY1*[mGly1BlockNum];
+        mpGlyphBlocks = JKR_NEW_ARRAY_ARGS(ResFONT::GLY1*, mGly1BlockNum, blocks);
         blocks = blocks + mGly1BlockNum;
         for (int i = 0; i < mGly1BlockNum; i++) {
             mpGlyphBlocks[i] = (ResFONT::GLY1*)((u8*)mCacheBuffer + (field_0x94 * i));
         }
     }
     if (mMap1BlockNum) {
-        mpMapBlocks = JKR_NEW_ARGS (blocks) ResFONT::MAP1*[mMap1BlockNum];
+        mpMapBlocks = JKR_NEW_ARRAY_ARGS(ResFONT::MAP1*, mMap1BlockNum, blocks);
     }
     return true;
 }

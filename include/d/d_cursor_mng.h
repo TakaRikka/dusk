@@ -59,7 +59,7 @@ class dCsr_mng_c {
         };
 
         bloObj_c() {
-            m_panes = JKR_NEW paneObj_c[1];
+            m_panes = JKR_NEW_ARRAY(paneObj_c, 1);
             m_screen = 0;
         }
 

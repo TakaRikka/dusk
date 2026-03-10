@@ -35,8 +35,8 @@ BOOL JHIInit(u32 enabled) {
             OS_REPORT("INFO:  *** Disable JHostIO ***\n");
         }
 
-        gsReadBuf = JKR_NEW_ARGS (32) u8[0xC000];
-        gsWriteBuf = JKR_NEW_ARGS (32) u8[0xC000];
+        gsReadBuf = JKR_NEW_ARRAY_ARGS(u8, 0xC000, 32);
+        gsWriteBuf = JKR_NEW_ARRAY_ARGS(u8, 0xC000, 32);
 
         if (gsReadBuf == NULL || gsWriteBuf == NULL) {
             gsEnableInterface = FALSE;

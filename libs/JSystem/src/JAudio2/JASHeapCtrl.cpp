@@ -258,7 +258,7 @@ void JASGenericMemPool::newMemPool(u32 n, int param_1) {
     JUT_ASSERT(734, n >= sizeof(TNextOnFreeList));
     void* runner;
     for (int i = 0; i < param_1; i++) {
-        runner = JKR_NEW_ARGS (JASDram, 0) u8[n];
+        runner = JKR_NEW_ARRAY_ARGS(u8, n, JASDram, 0);
         JUT_ASSERT(739, runner);
         *(void**)runner = field_0x0;
         field_0x0 = runner;

@@ -51,15 +51,15 @@ void JASDriver::initAI(void (*param_0)(void)) {
     u32 dacSize = getDacSize();
     const u32 size = dacSize * 2;
     for (int i = 0; i < 3; i++) {
-        sDmaDacBuffer[i] = JKR_NEW_ARGS(JASDram, 0x20) s16[dacSize];
+        sDmaDacBuffer[i] = JKR_NEW_ARRAY_ARGS(s16, dacSize, JASDram, 0x20);
         JUT_ASSERT(102, sDmaDacBuffer[i])
         JASCalc::bzero(sDmaDacBuffer[i], size);
         DCStoreRange(sDmaDacBuffer[i], size);
     }
-    sDspDacBuffer = JKR_NEW_ARGS(JASDram, 0) s16*[data_804507A8];
+    sDspDacBuffer = JKR_NEW_ARRAY_ARGS(s16*, data_804507A8, JASDram, 0);
     JUT_ASSERT(113, sDspDacBuffer);
     for (int i = 0; i < data_804507A8; i++) {
-        sDspDacBuffer[i] = JKR_NEW_ARGS(JASDram, 0x20) s16[getDacSize()];
+        sDspDacBuffer[i] = JKR_NEW_ARRAY_ARGS(s16, getDacSize(), JASDram, 0x20);
         JUT_ASSERT(119, sDspDacBuffer[i]);
         JASCalc::bzero(sDspDacBuffer[i], size);
         DCStoreRange(sDspDacBuffer[i], size);

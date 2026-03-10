@@ -12,8 +12,8 @@
 
 J3DError J3DDisplayListObj::newDisplayList(u32 maxSize) {
     mMaxSize = ALIGN_NEXT(maxSize, 0x20);
-    mpDisplayList[0] = JKR_NEW_ARGS (0x20) char[mMaxSize];
-    mpDisplayList[1] = JKR_NEW_ARGS (0x20) char[mMaxSize];
+    mpDisplayList[0] = JKR_NEW_ARRAY_ARGS(char, mMaxSize, 0x20);
+    mpDisplayList[1] = JKR_NEW_ARRAY_ARGS(char, mMaxSize, 0x20);
     mSize = 0;
 
     if (mpDisplayList[0] == NULL || mpDisplayList[1] == NULL)
@@ -24,7 +24,7 @@ J3DError J3DDisplayListObj::newDisplayList(u32 maxSize) {
 
 J3DError J3DDisplayListObj::newSingleDisplayList(u32 maxSize) {
     mMaxSize = ALIGN_NEXT(maxSize, 0x20);
-    mpDisplayList[0] = JKR_NEW_ARGS (0x20) char[mMaxSize];
+    mpDisplayList[0] = JKR_NEW_ARRAY_ARGS(char, mMaxSize, 0x20);
     mpDisplayList[1] = mpDisplayList[0];
     mSize = 0;
 
@@ -36,7 +36,7 @@ J3DError J3DDisplayListObj::newSingleDisplayList(u32 maxSize) {
 
 int J3DDisplayListObj::single_To_Double() {
     if (mpDisplayList[0] == mpDisplayList[1]) {
-        mpDisplayList[1] = JKR_NEW_ARGS (0x20) char[mMaxSize];
+        mpDisplayList[1] = JKR_NEW_ARRAY_ARGS(char, mMaxSize, 0x20);
 
         if (mpDisplayList[1] == NULL)
             return kJ3DError_Alloc;

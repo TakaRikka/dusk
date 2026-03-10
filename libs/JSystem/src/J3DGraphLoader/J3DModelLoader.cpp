@@ -595,7 +595,7 @@ void J3DModelLoader::readDraw(J3DDrawBlock const* i_block) {
         }
     }
     drawMtxData->mDrawFullWgtMtxNum = i;
-    mpModelData->getJointTree().mWEvlpImportantMtxIdx = JKR_NEW u16[drawMtxData->mEntryNum];
+    mpModelData->getJointTree().mWEvlpImportantMtxIdx = JKR_NEW_ARRAY(u16, drawMtxData->mEntryNum);
     J3D_ASSERT_ALLOCMEM(767, mpModelData->getJointTree().mWEvlpImportantMtxIdx);
 }
 
@@ -611,7 +611,7 @@ void J3DModelLoader::readJoint(J3DJointBlock const* i_block) {
         mpModelData->getJointTree().mJointName = NULL;
     }
     mpModelData->getJointTree().mJointNodePointer =
-        JKR_NEW J3DJoint*[mpModelData->getJointTree().mJointNum];
+        JKR_NEW_ARRAY(J3DJoint*, mpModelData->getJointTree().mJointNum);
     J3D_ASSERT_ALLOCMEM(797, mpModelData->getJointTree().mJointNodePointer);
     for (u16 i = 0; i < mpModelData->getJointNum(); i++) {
         mpModelData->getJointTree().mJointNodePointer[i] = factory.create(i);
@@ -630,10 +630,10 @@ void J3DModelLoader_v26::readMaterial(J3DMaterialBlock const* i_block, u32 i_fla
     } else {
         mpMaterialTable->mMaterialName = NULL;
     }
-    mpMaterialTable->mMaterialNodePointer = JKR_NEW J3DMaterial*[mpMaterialTable->mMaterialNum];
+    mpMaterialTable->mMaterialNodePointer = JKR_NEW_ARRAY(J3DMaterial*, mpMaterialTable->mMaterialNum);
     J3D_ASSERT_ALLOCMEM(841, mpMaterialTable->mMaterialNodePointer);
     if (i_flags & 0x200000) {
-        mpMaterialTable->field_0x10 = JKR_NEW_ARGS (0x20) J3DMaterial[mpMaterialTable->mUniqueMatNum];
+        mpMaterialTable->field_0x10 = JKR_NEW_ARRAY_ARGS(J3DMaterial, mpMaterialTable->mUniqueMatNum, 0x20);
         J3D_ASSERT_ALLOCMEM(846, mpMaterialTable->field_0x10);
     } else {
         mpMaterialTable->field_0x10 = NULL;
@@ -676,10 +676,10 @@ void J3DModelLoader_v21::readMaterial_v21(J3DMaterialBlock_v21 const* i_block, u
     } else {
         mpMaterialTable->mMaterialName = NULL;
     }
-    mpMaterialTable->mMaterialNodePointer = JKR_NEW J3DMaterial*[mpMaterialTable->mMaterialNum];
+    mpMaterialTable->mMaterialNodePointer = JKR_NEW_ARRAY(J3DMaterial*, mpMaterialTable->mMaterialNum);
     J3D_ASSERT_ALLOCMEM(940, mpMaterialTable->mMaterialNodePointer);
     if (i_flags & 0x200000) {
-        mpMaterialTable->field_0x10 = JKR_NEW_ARGS (0x20) J3DMaterial[mpMaterialTable->mUniqueMatNum];
+        mpMaterialTable->field_0x10 = JKR_NEW_ARRAY_ARGS(J3DMaterial, mpMaterialTable->mUniqueMatNum, 0x20);
         J3D_ASSERT_ALLOCMEM(945, mpMaterialTable->field_0x10);
     } else {
         mpMaterialTable->field_0x10 = NULL;
@@ -720,7 +720,7 @@ void J3DModelLoader::readShape(J3DShapeBlock const* i_block, u32 i_flags) {
     } else {
         shape_table->mShapeName = NULL;
     }
-    shape_table->mShapeNodePointer = JKR_NEW J3DShape*[shape_table->mShapeNum];
+    shape_table->mShapeNodePointer = JKR_NEW_ARRAY(J3DShape*, shape_table->mShapeNum);
     J3D_ASSERT_ALLOCMEM(1034, shape_table->mShapeNodePointer);
     factory.allocVcdVatCmdBuffer(shape_table->mShapeNum);
     J3DModelHierarchy const* hierarchy_entry = mpModelData->getHierarchy();
@@ -760,7 +760,7 @@ void J3DModelLoader_v26::readMaterialTable(J3DMaterialBlock const* i_block, u32 
     } else {
         mpMaterialTable->mMaterialName = NULL;
     }
-    mpMaterialTable->mMaterialNodePointer = JKR_NEW J3DMaterial*[mpMaterialTable->mMaterialNum];
+    mpMaterialTable->mMaterialNodePointer = JKR_NEW_ARRAY(J3DMaterial*, mpMaterialTable->mMaterialNum);
     J3D_ASSERT_ALLOCMEM(1121, mpMaterialTable->mMaterialNodePointer);
     for (u16 i = 0; i < mpMaterialTable->mMaterialNum; i++) {
         mpMaterialTable->mMaterialNodePointer[i] =
@@ -783,7 +783,7 @@ void J3DModelLoader_v21::readMaterialTable_v21(J3DMaterialBlock_v21 const* i_blo
     } else {
         mpMaterialTable->mMaterialName = NULL;
     }
-    mpMaterialTable->mMaterialNodePointer = JKR_NEW J3DMaterial*[mpMaterialTable->mMaterialNum];
+    mpMaterialTable->mMaterialNodePointer = JKR_NEW_ARRAY(J3DMaterial*, mpMaterialTable->mMaterialNum);
     J3D_ASSERT_ALLOCMEM(1172, mpMaterialTable->mMaterialNodePointer);
     for (u16 i = 0; i < mpMaterialTable->mMaterialNum; i++) {
         mpMaterialTable->mMaterialNodePointer[i] =
@@ -822,7 +822,7 @@ void J3DModelLoader::readPatchedMaterial(J3DMaterialBlock const* i_block, u32 i_
     } else {
         mpMaterialTable->mMaterialName = NULL;
     }
-    mpMaterialTable->mMaterialNodePointer = JKR_NEW J3DMaterial*[mpMaterialTable->mMaterialNum];
+    mpMaterialTable->mMaterialNodePointer = JKR_NEW_ARRAY(J3DMaterial*, mpMaterialTable->mMaterialNum);
     J3D_ASSERT_ALLOCMEM(1260, mpMaterialTable->mMaterialNodePointer);
     mpMaterialTable->field_0x10 = NULL;
     for (u16 i = 0; i < mpMaterialTable->mMaterialNum; i++) {
@@ -848,7 +848,7 @@ void J3DModelLoader::readMaterialDL(J3DMaterialDLBlock const* i_block, u32 i_fla
         } else {
             mpMaterialTable->mMaterialName = NULL;
         }
-        mpMaterialTable->mMaterialNodePointer = JKR_NEW J3DMaterial*[mpMaterialTable->mMaterialNum];
+        mpMaterialTable->mMaterialNodePointer = JKR_NEW_ARRAY(J3DMaterial*, mpMaterialTable->mMaterialNum);
         J3D_ASSERT_ALLOCMEM(1320, mpMaterialTable->mMaterialNodePointer);
         mpMaterialTable->field_0x10 = NULL;
         for (u16 i = 0; i < mpMaterialTable->mMaterialNum; i++) {

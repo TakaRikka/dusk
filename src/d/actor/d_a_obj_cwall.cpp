@@ -168,7 +168,7 @@ int daObjCwall_c::CreateHeap() {
     if (mWallModel == NULL) {
         return 0;
     }
-    mChains = JKR_NEW chain_s[6];
+    mChains = JKR_NEW_ARRAY(chain_s, 6);
     if (mChains == NULL) {
         return 0;
     }

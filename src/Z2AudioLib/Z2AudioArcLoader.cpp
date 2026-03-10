@@ -56,7 +56,7 @@ void Z2AudioArcLoader::readBSTN(const void* addr, u32 param_1) {
 
         u8* bstnDst = (u8*)addr;
         if (param_1 != 0) {
-            bstnDst = JKR_NEW_ARGS (gameHeap, 4) u8[param_1];
+            bstnDst = JKR_NEW_ARRAY_ARGS(u8, param_1, gameHeap, 4);
             if (bstnDst != NULL) {
                 memcpy(bstnDst, addr, param_1);
             }

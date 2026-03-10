@@ -505,7 +505,7 @@ static void dummy2() {
 int mDoExt_invisibleModel::create(J3DModel* i_model, u8 param_1) {
     J3DModelData* model_data = i_model->getModelData();
 
-    mpPackets = JKR_NEW mDoExt_invJntPacket[model_data->getJointNum()];
+    mpPackets = JKR_NEW_ARRAY(mDoExt_invJntPacket, model_data->getJointNum());
     if (mpPackets == NULL) {
         return 0;
     }
@@ -1327,11 +1327,11 @@ int mDoExt_McaMorf::create(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* c
     }
     setAnm(anmTransform, param_4, 0.0f, param_5, param_6, param_7, param_9);
     mPrevMorf = -1.0f;
-    mpTransformInfo = JKR_NEW J3DTransformInfo[modelData->getJointNum()];
+    mpTransformInfo = JKR_NEW_ARRAY(J3DTransformInfo, modelData->getJointNum());
     if (!mpTransformInfo) {
         goto cleanup;
     }
-    mpQuat = JKR_NEW Quaternion[modelData->getJointNum()];
+    mpQuat = JKR_NEW_ARRAY(Quaternion, modelData->getJointNum());
     if (mpQuat) {
         J3DTransformInfo* info = mpTransformInfo;
         Quaternion* quat = mpQuat;
@@ -1578,9 +1578,9 @@ int mDoExt_McaMorfSO::create(J3DModelData* i_modelData, mDoExt_McaMorfCallBack1_
     setAnm(param_3, param_4, 0.0f, param_5, param_6, param_7);
     mPrevMorf = -1.0f;
 
-    mpTransformInfo = JKR_NEW J3DTransformInfo[i_modelData->getJointNum()];
+    mpTransformInfo = JKR_NEW_ARRAY(J3DTransformInfo, i_modelData->getJointNum());
     if (mpTransformInfo != NULL) {
-        mpQuat = JKR_NEW Quaternion[i_modelData->getJointNum()];
+        mpQuat = JKR_NEW_ARRAY(Quaternion, i_modelData->getJointNum());
 
         if (mpQuat != NULL) {
             J3DTransformInfo* transInfo_p = mpTransformInfo;
@@ -1866,13 +1866,13 @@ mDoExt_McaMorf2::~mDoExt_McaMorf2() {
     setAnm(param_3, param_4, 0.0f, param_5, 0.0f, param_6, param_7, param_8);
     mPrevMorf = -1.0f;
 
-    mpTransformInfo = JKR_NEW J3DTransformInfo[param_0->getJointNum()];
+    mpTransformInfo = JKR_NEW_ARRAY(J3DTransformInfo, param_0->getJointNum());
     if (mpTransformInfo == NULL) {
         ERROR_EXIT();
         return 0;
     }
 
-    mpQuat = JKR_NEW Quaternion[param_0->getJointNum()];
+    mpQuat = JKR_NEW_ARRAY(Quaternion, param_0->getJointNum());
     if (mpQuat == NULL) {
         ERROR_EXIT();
         return 0;
@@ -2261,13 +2261,13 @@ void mDoExt_invJntPacket::draw() {
 }
 
 int mDoExt_3Dline_c::init(u16 param_0, int param_1, BOOL param_2) {
-    field_0x0 = JKR_NEW cXyz[param_0];
+    field_0x0 = JKR_NEW_ARRAY(cXyz, param_0);
     if (field_0x0 == NULL) {
         return 0;
     }
 
     if (param_1 != 0) {
-        field_0x4 = JKR_NEW f32[param_0];
+        field_0x4 = JKR_NEW_ARRAY(f32, param_0);
         if (field_0x4 == NULL) {
             return 0;
         }
@@ -2277,33 +2277,33 @@ int mDoExt_3Dline_c::init(u16 param_0, int param_1, BOOL param_2) {
 
     int sp20 = param_0 * 2;
 
-    field_0x8[0] = JKR_NEW cXyz[sp20];
+    field_0x8[0] = JKR_NEW_ARRAY(cXyz, sp20);
     if (field_0x8 == NULL) {
         return 0;
     }
 
-    field_0x8[1] = JKR_NEW cXyz[sp20];
+    field_0x8[1] = JKR_NEW_ARRAY(cXyz, sp20);
     if (field_0x8[1] == NULL) {
         return 0;
     }
 
-    field_0x10[0] = JKR_NEW mDoExt_3Dline_field_0x10_c[sp20];
+    field_0x10[0] = JKR_NEW_ARRAY(mDoExt_3Dline_field_0x10_c, sp20);
     if (field_0x10 == NULL) {
         return 0;
     }
 
-    field_0x10[1] = JKR_NEW mDoExt_3Dline_field_0x10_c[sp20];
+    field_0x10[1] = JKR_NEW_ARRAY(mDoExt_3Dline_field_0x10_c, sp20);
     if (field_0x10[1] == NULL) {
         return 0;
     }
 
     if (param_2) {
-        field_0x18[0] = JKR_NEW cXy[sp20];
+        field_0x18[0] = JKR_NEW_ARRAY(cXy, sp20);
         if (field_0x18[0] == NULL) {
             return 0;
         }
 
-        field_0x18[1] = JKR_NEW cXy[sp20];
+        field_0x18[1] = JKR_NEW_ARRAY(cXy, sp20);
         if (field_0x18[1] == NULL) {
             return 0;
         }
@@ -2329,7 +2329,7 @@ int mDoExt_3DlineMat0_c::init(u16 param_0, u16 param_1, int param_2) {
     field_0x10 = param_0;
     field_0x12 = param_1;
 
-    field_0x18 = JKR_NEW mDoExt_3Dline_c[param_0];
+    field_0x18 = JKR_NEW_ARRAY(mDoExt_3Dline_c, param_0);
     if (field_0x18 == NULL) {
         return 0;
     }
@@ -2635,7 +2635,7 @@ void mDoExt_3DlineMat0_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
 int mDoExt_3DlineMat1_c::init(u16 param_0, u16 param_1, ResTIMG* param_2, int param_3) {
     mNumLines = param_0;
     field_0x32 = param_1;
-    mpLines = JKR_NEW mDoExt_3Dline_c[param_0];
+    mpLines = JKR_NEW_ARRAY(mDoExt_3Dline_c, param_0);
     if (mpLines == NULL) {
         return 0;
     }

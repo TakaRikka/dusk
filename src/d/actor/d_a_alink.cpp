@@ -4247,12 +4247,12 @@ int daAlink_c::createHeap() {
     }
 
     int sp38 = 40;
-    J3DTransformInfo* sp1C = JKR_NEW J3DTransformInfo[sp38];
+    J3DTransformInfo* sp1C = JKR_NEW_ARRAY(J3DTransformInfo, sp38);
     if (sp1C == NULL) {
         return 0;
     }
 
-    Quaternion* sp30 = JKR_NEW Quaternion[sp38];
+    Quaternion* sp30 = JKR_NEW_ARRAY(Quaternion, sp38);
     if (sp30 == NULL) {
         return 0;
     }
@@ -4284,7 +4284,7 @@ int daAlink_c::createHeap() {
         return 0;
     }
 
-    field_0x2d78 = JKR_NEW_ARGS (0x20) u8[0x800];
+    field_0x2d78 = JKR_NEW_ARRAY_ARGS(u8, 0x800, 0x20);
     if (field_0x2d78 == NULL) {
         return 0;
     }
@@ -14220,7 +14220,7 @@ BOOL daAlink_c::checkMagicArmorWearAbility() const {
 
 J3DModelData* daAlink_c::loadAramBmd(u16 i_resIdx, u32 i_bufSize) {
     JKRArchive* anmArchive = dComIfGp_getAnmArchive();
-    u8* tmpBuffer = JKR_NEW_ARGS (0x20) u8[i_bufSize];
+    u8* tmpBuffer = JKR_NEW_ARRAY_ARGS(u8, i_bufSize, 0x20);
 
     JKRReadIdxResource(tmpBuffer, i_bufSize, i_resIdx, anmArchive);
     #if DEBUG
@@ -14241,7 +14241,7 @@ J3DModelData* daAlink_c::loadAramBmd(u16 i_resIdx, u32 i_bufSize) {
 }
 
 void* daAlink_c::loadAram(u16 i_resIdx, u32 i_bufSize) {
-    u8* tmpBuffer = JKR_NEW_ARGS (0x20) u8[i_bufSize];
+    u8* tmpBuffer = JKR_NEW_ARRAY_ARGS(u8, i_bufSize, 0x20);
     JKRReadIdxResource(tmpBuffer, i_bufSize, i_resIdx, dComIfGp_getAnmArchive());
     #if DEBUG
     daPy_aramBufferCheck(tmpBuffer, i_bufSize);

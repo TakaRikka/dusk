@@ -21,10 +21,10 @@ void Z2FxLineMgr::initDataArc(JKRArchive* arc, JKRHeap* heap) {
     JUT_ASSERT(44, arc);
     JUT_ASSERT(45, heap);
 
-    mFxLineBuffer[0] = JKR_NEW_ARGS (heap, 0x20) u8[0x2800];
-    mFxLineBuffer[1] = JKR_NEW_ARGS (heap, 0x20) u8[0x2800];
-    mFxLineBuffer[2] = JKR_NEW_ARGS (heap, 0x20) u8[0x4B00];
-    mFxLineBuffer[3] = JKR_NEW_ARGS (heap, 0x20) u8[0x4B00];
+    mFxLineBuffer[0] = JKR_NEW_ARRAY_ARGS(u8, 0x2800, heap, 0x20);
+    mFxLineBuffer[1] = JKR_NEW_ARRAY_ARGS(u8, 0x2800, heap, 0x20);
+    mFxLineBuffer[2] = JKR_NEW_ARRAY_ARGS(u8, 0x4B00, heap, 0x20);
+    mFxLineBuffer[3] = JKR_NEW_ARRAY_ARGS(u8, 0x4B00, heap, 0x20);
 
     JUT_ASSERT(53, mFxLineBuffer[0]);
     JUT_ASSERT(54, mFxLineBuffer[1]);
@@ -32,7 +32,7 @@ void Z2FxLineMgr::initDataArc(JKRArchive* arc, JKRHeap* heap) {
     JUT_ASSERT(56, mFxLineBuffer[3]);
 
     mFxDataNum = arc->countResource();
-    mConfig = JKR_NEW_ARGS (heap, 0) Z2FxLineConfig[mFxDataNum];
+    mConfig = JKR_NEW_ARRAY_ARGS(Z2FxLineConfig, mFxDataNum, heap, 0);
 
     for (u8 i = 0; i < mFxDataNum; i++) {
         void* res = arc->getResource(i);

@@ -74,7 +74,7 @@ J2DTextBox::J2DTextBox(J2DPane* p_pane, JSURandomInputStream* p_stream, u32 para
     mStringPtr = NULL;
 
     if (strLength != 0) {
-        mStringPtr = JKR_NEW char[strLength];
+        mStringPtr = JKR_NEW_ARRAY(char, strLength);
     }
 
     if (mStringPtr != NULL) {
@@ -144,7 +144,7 @@ void J2DTextBox::initiate(ResFONT const* p_font, char const* string, s16 length,
             stringLen = len + 1;
         }
 
-        mStringPtr = JKR_NEW char[stringLen];
+        mStringPtr = JKR_NEW_ARRAY(char, stringLen);
 
         if (stringLen != 0 && mStringPtr != NULL) {
             strncpy(mStringPtr, string, stringLen - 1);
@@ -198,7 +198,7 @@ void J2DTextBox::private_readStream(J2DPane* p_pane, JSURandomInputStream* p_str
     mFontSizeY = p_stream->read16b();
 
     s16 stringLen = p_stream->read16b();
-    mStringPtr = JKR_NEW char[stringLen + 1];
+    mStringPtr = JKR_NEW_ARRAY(char, stringLen + 1);
 
     if (mStringPtr != NULL) {
         p_stream->read(mStringPtr, stringLen);
@@ -326,7 +326,7 @@ s32 J2DTextBox::setString(char const* string, ...) {
     }
 
     mStringLength = 0;
-    mStringPtr = JKR_NEW char[len + 1];
+    mStringPtr = JKR_NEW_ARRAY(char, len + 1);
 
     if (mStringPtr) {
         mStringLength = len + 1;
@@ -357,7 +357,7 @@ s32 J2DTextBox::setString(s16 length, char const* string, ...) {
     mStringLength = 0;
 
     if (stringLen != 0) {
-        mStringPtr = JKR_NEW char[stringLen];
+        mStringPtr = JKR_NEW_ARRAY(char, stringLen);
     }
 
     if (mStringPtr != NULL) {

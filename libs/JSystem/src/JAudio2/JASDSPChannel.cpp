@@ -42,7 +42,7 @@ void JASDSPChannel::drop() {
 }
 
 void JASDSPChannel::initAll() {
-    sDspChannels = JKR_NEW_ARGS (JASDram, 0x20) JASDSPChannel[0x40];
+    sDspChannels = JKR_NEW_ARRAY_ARGS(JASDSPChannel, 0x40, JASDram, 0x20);
     JUT_ASSERT(102, sDspChannels);
     for (int i = 0; i < 0x40; i++) {
         sDspChannels[i].mChannel = JASDsp::getDSPHandle(i);

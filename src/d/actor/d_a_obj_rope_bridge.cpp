@@ -360,7 +360,7 @@ int daObjRBridge_c::CreateHeap() {
 
     if (!fopAcM_isSwitch(this, getSwbit2()) && !fopAcM_isSwitch(this, getSwbit())) {
         mRopeSegmentNum = 10;
-        field_0xb04 = JKR_NEW cXyz[mRopeSegmentNum];
+        field_0xb04 = JKR_NEW_ARRAY(cXyz, mRopeSegmentNum);
         if (field_0xb04 == NULL) {
             return 0;
         }
