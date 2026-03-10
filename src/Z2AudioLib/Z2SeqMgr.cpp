@@ -10,6 +10,8 @@
 #include "JSystem/JAudio2/JAISeq.h"
 #include "os_report.h"
 
+#include "dusk/logging.h"
+
 static const char* sSpotName[] = {
     "F_SP00",
     "F_SP103",
@@ -131,6 +133,9 @@ Z2SeqMgr::Z2SeqMgr() : JASGlobalInstance<Z2SeqMgr>(true) {
 }
 
 void Z2SeqMgr::bgmStart(u32 bgmID, u32 fadeTime, s32 param_2) {
+    STUB_LOG();
+    return;
+
     switch (bgmID) {
     case 0xFFFFFFFF:
         return;
