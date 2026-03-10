@@ -87,7 +87,8 @@ target_include_directories(game_debug PUBLIC
 target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES})
+add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES}
+        src/dusk/imgui/stub_log.cpp)
 
 # Hide global operator new/delete overrides from the dynamic symbol table.
 # Without this, other dylibs (e.g. Apple's AGX GPU driver) resolve these symbols
@@ -115,3 +116,6 @@ target_link_libraries(dusk PRIVATE game aurora::main)
 
 include(extern/aurora/cmake/AuroraCopyRuntimeDLLs.cmake)
 aurora_copy_runtime_dlls(dusk game)
+
+target_compile_options(xxhash PRIVATE /O2 /Ob2)
+target_compile_options(aurora_gx PRIVATE /O2 /Ob2)

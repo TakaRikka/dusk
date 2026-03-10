@@ -10,19 +10,8 @@ static bool Active = false;
 static void DrawTableCore();
 
 void DuskImguiHeaps() {
-    if (ImGui::BeginMenu(MenuView)) {
-        ImGui::MenuItem("Heaps", "F4", &Active);
-
-        ImGui::EndMenu();
-    }
-
-    if (ImGui::IsKeyPressed(ImGuiKey_F4)) {
-        Active = !Active;
-    }
-
-    if (!Active) {
+    if (!CheckMenuViewToggle("Heaps", "F4", ImGuiKey_F4, Active))
         return;
-    }
 
     if (ImGui::Begin("Heaps", &Active)) {
         if (ImGui::BeginTable(

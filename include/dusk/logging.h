@@ -5,6 +5,9 @@
 #include <aurora/lib/logging.hpp>
 
 void aurora_log_callback(AuroraLogLevel level, const char* module, const char* message, unsigned int len);
+void SendToStubLog(AuroraLogLevel level, const char* module, const char* message);
+
+extern bool StubLogEnabled;
 
 extern aurora::Module DuskLog;
 
