@@ -159,7 +159,11 @@ void mDoDvdThd_param_c::mainLoop() {
         while (command = this->getFirstCommand()) {
             this->cut(command);
             if (mDoDvdThd::SyncWidthSound) {
+                #if TARGET_PC
+                JASDvd::getThreadPointer()->sendCmdMsg(cb, &command, sizeof(void*));
+                #else
                 JASDvd::getThreadPointer()->sendCmdMsg(cb, &command, 4);
+                #endif
             } else {
                 cb(&command);
             }
