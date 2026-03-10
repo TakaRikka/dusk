@@ -1537,6 +1537,12 @@ int dEvDtBase_c::init(char* i_data, int i_roomNo) {
 
     setHeaderP((event_binary_data_header*)i_data);
 
+#if TARGET_PC
+    bool needSwap = mHeaderP->unk[0] == 0;
+    JUT_ASSERT(1234, mHeaderP->unk[0] == 0 || mHeaderP->unk[0] == 1);
+    mHeaderP->unk[0] = 1;
+#endif
+    
     if (getEventNum() > 0) {
         setEventP((dEvDtEvent_c*)(i_data + getEventTop()));
     }
@@ -1556,9 +1562,11 @@ int dEvDtBase_c::init(char* i_data, int i_roomNo) {
     if (getFDataNum() > 0) {
 #if TARGET_PC
         auto data = (f32*)(i_data + getFDataTop());
-        int num = getFDataNum();
-        for (int i = 0; i < num; i++)
-            be_swap(data[i]);
+        if (needSwap) {
+            int num = getFDataNum();
+            for (int i = 0; i < num; i++)
+                be_swap(data[i]);
+        }
         setFDataP(data);
 #else
         setFDataP((f32*)(i_data + getFDataTop()));
@@ -1569,9 +1577,11 @@ int dEvDtBase_c::init(char* i_data, int i_roomNo) {
 #if TARGET_PC
         // endian swap here
         auto data = (int*)(i_data + getIDataTop());
-        int num = getIDataNum();
-        for (int i = 0; i < num; i++)
-            be_swap(data[i]);
+        if (needSwap) {
+            int num = getIDataNum();
+            for (int i = 0; i < num; i++)
+                be_swap(data[i]);
+        }
         setIDataP(data);
 #else
         setIDataP((int*)(i_data + getIDataTop()));
