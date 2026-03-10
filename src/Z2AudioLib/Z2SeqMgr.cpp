@@ -133,8 +133,7 @@ Z2SeqMgr::Z2SeqMgr() : JASGlobalInstance<Z2SeqMgr>(true) {
 }
 
 void Z2SeqMgr::bgmStart(u32 bgmID, u32 fadeTime, s32 param_2) {
-    STUB_LOG();
-    return;
+    STUB_RET();
 
     switch (bgmID) {
     case 0xFFFFFFFF:

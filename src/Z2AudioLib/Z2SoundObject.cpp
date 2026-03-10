@@ -90,8 +90,7 @@ bool Z2SoundObjBase::stopOK(Z2SoundHandlePool& handlePool) {
 }
 
 Z2SoundHandlePool* Z2SoundObjBase::startSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
-    STUB_LOG();
-    return NULL;
+    STUB_RET_VAL(NULL);
     
     if (!alive_) {
         return NULL;
@@ -253,8 +252,7 @@ void Z2DopplerSoundObjBase::framework(u32 param_0, s8 reverb) {
 }
 
 Z2SoundHandlePool* Z2DopplerSoundObjBase::startSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
-    STUB_LOG();
-    return NULL;
+    STUB_RET_VAL(NULL);
 
     JGeometry::TVec3<f32>* pos = pos_;
     pos_ = NULL;
@@ -271,8 +269,7 @@ Z2SoundHandlePool* Z2DopplerSoundObjBase::startSound(JAISoundID soundID, u32 map
 }
 
 Z2SoundHandlePool* Z2DopplerSoundObjBase::startLevelSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
-    STUB_LOG();
-    return NULL;
+    STUB_RET_VAL(NULL);
 
     JGeometry::TVec3<f32>* pos = pos_;
     pos_ = NULL;
@@ -295,8 +292,7 @@ void Z2SoundObjSimple::init(Vec* posPtr, u8 handleNum) {
 }
 
 Z2SoundHandlePool* Z2SoundObjSimple::startSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
-    STUB_LOG();
-    return NULL;
+    STUB_RET_VAL(NULL);
 
     Z2SoundHandlePool* handle = Z2SoundObjBase::startSound(soundID, mapinfo, reverb);
 
@@ -311,8 +307,7 @@ Z2SoundHandlePool* Z2SoundObjSimple::startSound(JAISoundID soundID, u32 mapinfo,
 }
 
 Z2SoundHandlePool* Z2SoundObjSimple::startLevelSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
-    STUB_LOG();
-    return NULL;
+    STUB_RET_VAL(NULL);
 
     Z2SoundHandlePool* handle = Z2SoundObjBase::startLevelSound(soundID, mapinfo, reverb);
 

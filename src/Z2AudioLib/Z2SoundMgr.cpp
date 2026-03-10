@@ -117,10 +117,7 @@ Z2SoundMgr::Z2SoundMgr() :
 }
 
 bool Z2SoundMgr::startSound(JAISoundID soundID, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr) {
-#if TARGET_PC
-    STUB_LOG();
-    return true;
-#endif
+    STUB_RET_VAL(true);
 
     int soundType = Z2GetSoundInfo()->getSoundType(soundID);
     switch (soundType) {
