@@ -14,6 +14,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL Linux)
   set(DAWN_USE_WAYLAND ON CACHE BOOL "Enable support for Wayland surface" FORCE)
 endif ()
 set(AURORA_ENABLE_DVD ON CACHE BOOL "Enable DVD API support" FORCE)
+set(AURORA_ENABLE_CARD ON CACHE BOOL "Enable CARD API support" FORCE)
 add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
 
 option(DUSK_BUILD_WARNINGS "If off, compiler warnings will be suppressed")
@@ -65,7 +66,15 @@ FetchContent_MakeAvailable(cxxopts)
 include(files.cmake)
 
 # TODO: version handling for res includes
-set(DUSK_TP_VERSION GZ2E01)
+
+set(DUSK_GAME_NAME "GZ2E")
+set(DUSK_GAME_VERSION "01")
+
+set(DUSK_TP_VERSION ${DUSK_GAME_NAME}${DUSK_GAME_VERSION})
+
+message(STATUS "dusk: Game Name: ${DUSK_GAME_NAME}")
+message(STATUS "dusk: Game Version: ${DUSK_GAME_VERSION}")
+message(STATUS "dusk: TP Version: ${DUSK_TP_VERSION}")
 
 source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${JSYSTEM_FILES} ${JSYSTEM_DEBUG_FILES} ${REL_FILES})
 source_group("dusk" FILES ${DUSK_FILES})
@@ -85,7 +94,7 @@ target_include_directories(game_debug PUBLIC
         extern
         ${CMAKE_SOURCE_DIR}/build/${DUSK_TP_VERSION}/include
         build/${DUSK_TP_VERSION}/include)
-target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd)
+target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd kabufuda aurora::card)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES}
@@ -108,8 +117,8 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL Linux)
 endif ()
 
 target_link_libraries(game PRIVATE game_debug cxxopts::cxxopts)
-target_compile_definitions(game PRIVATE TARGET_PC AVOID_UB=1 VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0)
-
+target_compile_definitions(game PRIVATE TARGET_PC AVOID_UB=1 VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0
+        DUSK_TP_VERSION="${DUSK_TP_VERSION}" DUSK_GAME_NAME="${DUSK_GAME_NAME}" DUSK_GAME_VERSION="${DUSK_GAME_VERSION}")
 add_executable(dusk src/dusk/main.cpp)
 target_compile_definitions(dusk PRIVATE TARGET_PC AVOID_UB=1 VERSION=0)
 target_include_directories(dusk PRIVATE include)

@@ -75,7 +75,7 @@ static OSThread MemCardThread;
 
 void mDoMemCd_Ctrl_c::ThdInit() {
     #if !PLATFORM_SHIELD
-    CARDInit();
+    CARDInit(DUSK_GAME_NAME, DUSK_GAME_VERSION);
     #endif
 
     mCopyToPos = 0;
