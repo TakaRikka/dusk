@@ -17,6 +17,17 @@
 #include "SSystem/SComponent/c_xyz.h"
 #include <utility>
 
+#if TARGET_PC
+static void AssignMaterialNames(const J3DModelLoader& loader) {
+    auto table = loader.mpMaterialTable;
+    auto materialName = table->getMaterialName();
+    for (int i = 0; i < table->getMaterialNum(); i++) {
+        auto mat = table->getMaterialNodePointer(i);
+        mat->mMaterialName = materialName->getName(i);
+    }
+}
+#endif
+
 J3DModelLoader::J3DModelLoader() :
                 mpModelData(NULL),
                 mpMaterialTable(NULL),
@@ -119,6 +130,9 @@ J3DModelData* J3DModelLoader::load(void const* i_data, u32 i_flags) {
             mpModelData->getShapeNodePointer(shape_no)->onFlag(0x200);
         }
     }
+#if TARGET_PC
+    AssignMaterialNames(*this);
+#endif
     return mpModelData;
 }
 

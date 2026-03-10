@@ -211,6 +211,15 @@ void J3DMatPacket::draw() {
     j3dSys.setTexture(mpTexture);
 #endif
     mpMaterial->load();
+
+#if TARGET_PC
+    if (mpMaterial->mMaterialName != nullptr) {
+        char buf[64];
+        snprintf(buf, sizeof(buf), "Mat: %s", mpMaterial->mMaterialName);
+        GXPushDebugGroup(buf);
+    }
+#endif
+
     callDL();
 
     J3DShapePacket* packet = getShapePacket();
@@ -229,6 +238,12 @@ void J3DMatPacket::draw() {
     }
 
     J3DShape::resetVcdVatCache();
+
+#if TARGET_PC
+    if (mpMaterial->mMaterialName != nullptr) {
+        GXPopDebugGroup();
+    }
+#endif
 }
 
 J3DShapePacket::J3DShapePacket() {
