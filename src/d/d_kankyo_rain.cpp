@@ -5980,11 +5980,19 @@ static void dKyr_evil_draw2(Mtx drawMtx, u8** tex) {
 
                         mDoLib_project(&sp7C, &proj);
 
+#if TARGET_PC
+                        if (!(proj.x > -sp34.x) || !(proj.x < (dComIfGd_getViewport()->width + sp34.x)) ||
+                            !(proj.y > -sp34.y) || !(proj.y < (dComIfGd_getViewport()->height + sp34.z)))
+                        {
+                            continue;
+                        }
+#else
                         if (!(proj.x > -sp34.x) || !(proj.x < (FB_WIDTH + sp34.x)) ||
                             !(proj.y > -sp34.y) || !(proj.y < (458.0f + sp34.z)))
                         {
                             continue;
                         }
+#endif
                     }
 
                     f32 sp40;
@@ -6205,11 +6213,19 @@ void dKyr_evil_draw(Mtx drawMtx, u8** tex) {
 
                         mDoLib_project(&spA4, &proj);
 
+#if TARGET_PC
+                        if (!(proj.x > -sp44.x) || !(proj.x < (dComIfGd_getViewport()->width + sp44.x)) ||
+                            !(proj.y > -sp44.y) || !(proj.y < (dComIfGd_getViewport()->height + sp44.z)))
+                        {
+                            continue;
+                        }
+#else
                         if (!(proj.x > -sp44.x) || !(proj.x < (FB_WIDTH + sp44.x)) ||
                             !(proj.y > -sp44.y) || !(proj.y < (458.0f + sp44.z)))
                         {
                             continue;
                         }
+#endif
                     }
 
                     f32 sp5C;
