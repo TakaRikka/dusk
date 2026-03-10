@@ -3,7 +3,7 @@
 #include "Z2AudioLib/Z2Calc.h"
 #include "Z2AudioLib/Z2AudioMgr.h"
 #include "os_report.h"
-#include "dusk/logging.h"
+#include "dusk/audio.h"
 
 static void Z2_E_sw_modPitch(Z2SoundHandlePool*, u32);
 static void Z2_E_ms_modVol(Z2SoundHandlePool*, u32);
@@ -139,7 +139,7 @@ void Z2Creature::setSoundStarter(Z2SoundStarter* soundStarter) {
 }
 
 void Z2Creature::initAnime(void* animation, bool param_1, f32 startFrame, f32 param_3) {
-    STUB_RET();
+    DUSK_AUDIO_SKIP();
     mSoundObjAnime.initAnime(animation, param_1, startFrame, param_3);
 }
 
@@ -179,7 +179,7 @@ Z2SoundHandlePool* Z2Creature::startCreatureSound(JAISoundID soundID, u32 mapinf
 }
 
 Z2SoundHandlePool* Z2Creature::startCreatureSoundLevel(JAISoundID soundID, u32 mapinfo, s8 reverb) {
-    STUB_RET_VAL(NULL);
+    DUSK_AUDIO_SKIP(NULL);
 
     switch (soundID) {
     case Z2SE_FAIRY_S_LV:
@@ -440,7 +440,7 @@ Z2SoundHandlePool* Z2CreatureEnemy::startCreatureSound(JAISoundID soundID, u32 m
 }
 
 Z2SoundHandlePool* Z2CreatureEnemy::startCreatureSoundLevel(JAISoundID soundID, u32 mapinfo, s8 reverb) {
-    STUB_RET_VAL(NULL);
+    DUSK_AUDIO_SKIP(NULL);
     
     if (soundID == 0x7FFFF) {
         Vec pos;
@@ -925,7 +925,7 @@ void Z2CreatureOI::framework(u32 mapinfo, s8 reverb) {
 }
 
 Z2SoundHandlePool* Z2CreatureOI::startCreatureSoundLevel(JAISoundID soundID, u32 mapinfo, s8 reverb) {
-    STUB_RET_VAL(NULL);
+    DUSK_AUDIO_SKIP(NULL);
 
     if (soundID == Z2SE_EN_OI_MOVE) {
         Z2SoundHandlePool* handle1 = mSoundObjAnime.startLevelSound(soundID, mapinfo, reverb);

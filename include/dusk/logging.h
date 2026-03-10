@@ -11,17 +11,12 @@ extern aurora::Module DuskLog;
 #define STUB_LOG() DuskLog.debug("{} is a stub", __FUNCTION__)
 
 #if TARGET_PC
-#define STUB_RET() \
+#define STUB_RET(...) \
     STUB_LOG(); \
-    return;
-
-#define STUB_RET_VAL(rval) \
-    STUB_LOG(); \
-    return rval;
+    return __VA_ARGS__;
 
 #else
 #define STUB_RET() (void)0
-#define STUB_RET_VAL(rval) (void)0
 #endif
 
 #endif

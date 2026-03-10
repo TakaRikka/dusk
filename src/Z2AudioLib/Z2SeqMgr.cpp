@@ -10,7 +10,7 @@
 #include "JSystem/JAudio2/JAISeq.h"
 #include "os_report.h"
 
-#include "dusk/logging.h"
+#include "dusk/audio.h"
 
 static const char* sSpotName[] = {
     "F_SP00",
@@ -133,7 +133,7 @@ Z2SeqMgr::Z2SeqMgr() : JASGlobalInstance<Z2SeqMgr>(true) {
 }
 
 void Z2SeqMgr::bgmStart(u32 bgmID, u32 fadeTime, s32 param_2) {
-    STUB_RET();
+    DUSK_AUDIO_SKIP();
 
     switch (bgmID) {
     case 0xFFFFFFFF:
@@ -595,6 +595,8 @@ static void dummy1() {
 }
 
 void Z2SeqMgr::bgmStreamPrepare(u32 bgmID) {
+    DUSK_AUDIO_SKIP();
+
     u32 bgmID2 = bgmID;
     if (mStreamBgmHandle) {
         bgmStreamStop(0);
@@ -652,6 +654,8 @@ bool Z2SeqMgr::bgmStreamCheckReady() {
 }
 
 void Z2SeqMgr::bgmStreamPlay() {
+    DUSK_AUDIO_SKIP();
+    
     if (mStreamBgmHandle) {
         mStreamBgmHandle->unlockIfLocked();
     }

@@ -382,7 +382,7 @@ static void mDoMemCdRWm_SetCardStat(CARDFileInfo* file) {
 }
 
 static BOOL mDoMemCdRWm_CheckCardStat(CARDFileInfo* file) {
-    STUB_RET_VAL(TRUE);
+    STUB_RET(TRUE);
 
     CARDStat stat;
     mDoMemCd_getCardStatus(file->fileNo, &stat);
