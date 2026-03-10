@@ -66,8 +66,20 @@ static void JPAVolumeSphere(JPAEmitterWorkData* work) {
     s16 phi, r28;
     if (work->mpEmtr->checkFlag(JPADynFlag_FixedInterval)) {
         phi = u16(work->mVolumeX * 0x8000 / (work->mDivNumber - 1) + 0x4000);
+
+        #if TARGET_PC
+        // Fix div by 0 error here
+        // TODO: maybe review a better way of handling div by 0 UB
+        r28 = 0x8000;
+        if (work->mVolumeAngleNum > 1) {
+            u16 r26 = u16(work->mVolumeAngleNum * 0x10000 / (work->mVolumeAngleMax - 1));
+            r28 += f32(r26) * work->mVolumeSweep + 0x8000;
+        }
+        #else
         u16 r26 = u16(work->mVolumeAngleNum * 0x10000 / (work->mVolumeAngleMax - 1));
         r28 = f32(r26) * work->mVolumeSweep + 0x8000;
+        #endif
+
         work->mVolumeAngleNum++;
         if (work->mVolumeAngleNum == work->mVolumeAngleMax) {
             work->mVolumeAngleNum = 0;
