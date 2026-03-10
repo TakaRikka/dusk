@@ -112,3 +112,6 @@ add_executable(dusk src/dusk/main.cpp)
 target_compile_definitions(dusk PRIVATE TARGET_PC AVOID_UB=1 VERSION=0)
 target_include_directories(dusk PRIVATE include)
 target_link_libraries(dusk PRIVATE game aurora::main)
+
+include(extern/aurora/cmake/AuroraCopyRuntimeDLLs.cmake)
+aurora_copy_runtime_dlls(dusk game)
