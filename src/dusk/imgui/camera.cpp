@@ -8,14 +8,8 @@ static bool Active = false;
 static int m_cameraOverlayCorner = 3;
 
 void DuskCameraDebug() {
-    if (ImGui::BeginMenu(MenuView)) {
-        ImGui::MenuItem("Camera", "F6", &Active);
-
-        ImGui::EndMenu();
-    }
-
-    if (ImGui::IsKeyPressed(ImGuiKey_F6)) {
-        Active = !Active;
+    if (!CheckMenuViewToggle("Camera", "F6", ImGuiKey_F6, Active)) {
+        return;
     }
 
     auto* cam = (camera_process_class*)dCam_getCamera();

@@ -29,10 +29,11 @@ void imgui_main(const AuroraInfo *info)
             ImGui::EndMenu();
         }
 
-        DuskImguiDebugOverlay(info);
         DuskImguiProcesses();
+        DuskImguiDebugOverlay(info);
         DuskImguiHeaps();
         DuskCameraDebug();
+        DuskStubLog();
         DuskDebugPad();
 
         ImGui::EndMainMenuBar();
@@ -139,4 +140,18 @@ void frame_limiter()
 {
     g_frameLimiter.Sleep(
         std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds{1}) / 60);
+}
+
+bool CheckMenuViewToggle(const char* name, const char* shortcutName, ImGuiKey key, bool& active) {
+    if (ImGui::BeginMenu(MenuView)) {
+        ImGui::MenuItem(name, shortcutName, &active);
+
+        ImGui::EndMenu();
+    }
+
+    if (ImGui::IsKeyPressed(key)) {
+        active = !active;
+    }
+
+    return active;
 }

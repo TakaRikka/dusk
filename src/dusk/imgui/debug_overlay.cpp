@@ -86,17 +86,7 @@ std::string BytesToString(size_t bytes)
 static bool Active = false;
 
 void DuskImguiDebugOverlay(const AuroraInfo *info) {
-    if (ImGui::BeginMenu(MenuView)) {
-        ImGui::MenuItem("Debug overlay", "F3", &Active);
-
-        ImGui::EndMenu();
-    }
-
-    if (ImGui::IsKeyPressed(ImGuiKey_F3)) {
-        Active = !Active;
-    }
-
-    if (!Active) {
+    if (!CheckMenuViewToggle("Debug overlay", "F3", ImGuiKey_F3, Active)) {
         return;
     }
 
