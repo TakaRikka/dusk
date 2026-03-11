@@ -527,7 +527,7 @@ static DSPTaskInfo audio_task ATTRIBUTE_ALIGN(32);
 
 static u8 AUDIO_YIELD_BUFFER[8192] ATTRIBUTE_ALIGN(32);
 
-void DspBoot(void (*param_0)(void*)) {
+void DspBoot(void (*requestCallback)(void*)) {
     DspInitWork();
     OS_REPORT("Dsp をブートします\n");
     audio_task.priority = 0xf0;
@@ -542,7 +542,7 @@ void DspBoot(void (*param_0)(void*)) {
     audio_task.init_cb = DspHandShake;
     audio_task.res_cb = NULL;
     audio_task.done_cb = NULL;
-    audio_task.req_cb = param_0;
+    audio_task.req_cb = requestCallback;
     DSPInit();
     DSPAddPriorTask(&audio_task);
     OS_REPORT("Dspブートしました\n");

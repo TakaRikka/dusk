@@ -10,21 +10,21 @@ class JKRHeap;
 
 namespace JASBNKParser {
     struct TFileHeader {
-        /* 0x0 */ BE(int) id;
+        /* 0x0 */ BE(int) mMagic;
         /* 0x4 */ BE(u32) mSize;
-        /* 0x8 */ u8 _08[4];
+        /* 0x8 */ BE(u32) mGlobalId;
         /* 0xC */ BE(u32) mVersion;
     };
 
     namespace Ver1 {
         struct TOsc {
-            /* 0x00 */ BE(u32) id;
+            /* 0x00 */ BE(u32) id; // "Osci"
             /* 0x04 */ u8 mTarget;
-            /* 0x08 */ BE(f32) _08;
-            /* 0x0C */ BE(u32) mTableOffset;
-            /* 0x10 */ BE(u32) _10;
-            /* 0x14 */ BE(f32) mScale;
-            /* 0x18 */ BE(f32) _18;
+            /* 0x08 */ BE(f32) mRate;
+            /* 0x0C */ BE(u32) mAttackEnvelopeOffset;
+            /* 0x10 */ BE(u32) mReleaseEnvelopeOffset;
+            /* 0x14 */ BE(f32) mScale; // width
+            /* 0x18 */ BE(f32) mVertex;
         };
 
         struct TPercData {
@@ -36,7 +36,7 @@ namespace JASBNKParser {
         };
 
         struct TChunk {
-            /* 0x0 */ BE(u32) mID;
+            /* 0x0 */ BE(u32) mID; // Magic
             /* 0x4 */ BE(u32) mSize;
         };
 
@@ -113,7 +113,7 @@ namespace JASBNKParser {
         };
 
         struct TOffsetData {
-            /* 0x000 */ u8 field_0x20[4];
+            /* 0x000 */ BE(u32) mMagic; // 'BANK'
             /* 0x004 */ TOffset<TInst> mInstOffset[0x80];
             /* 0x204 */ u8 field_0x204[0x190];
             /* 0x394 */ TOffset<TPerc> mPercOffset[12];

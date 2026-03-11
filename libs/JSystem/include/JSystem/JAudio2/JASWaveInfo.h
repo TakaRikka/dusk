@@ -5,27 +5,32 @@
 
 class JASWaveArc;
 
+#define WAVE_FORMAT_ADPCM4 0
+#define WAVE_FORMAT_ADPCM2 1
+#define WAVE_FORMAT_PCM8   2
+#define WAVE_FORMAT_PCM16  3
+
 /**
  * @ingroup jsystem-jaudio
  * 
  */
 struct JASWaveInfo {
     JASWaveInfo() {
-        field_0x01 = 0x3c;
+        mBaseKey = 0x3c;
         field_0x20 = &one;
     }
 
-    /* 0x00 */ u8 field_0x00;
-    /* 0x01 */ u8 field_0x01;
-    /* 0x02 */ u8 field_0x02;
-    /* 0x04 */ f32 field_0x04;
-    /* 0x08 */ int field_0x08;
-    /* 0x0C */ int field_0x0c;
-    /* 0x10 */ u32 field_0x10;
-    /* 0x14 */ int field_0x14;
-    /* 0x18 */ int field_0x18;
-    /* 0x1C */ s16 field_0x1c;
-    /* 0x1E */ s16 field_0x1e;
+    /* 0x00 */ u8 mWaveFormat;
+    /* 0x01 */ u8 mBaseKey;
+    /* 0x02 */ u8 mLoopFlag;
+    /* 0x04 */ f32 mSampleRate;
+    /* 0x08 */ int mOffsetStart;
+    /* 0x0C */ int mOffsetLength;
+    /* 0x10 */ u32 mLoopStartSample;
+    /* 0x14 */ int mLoopEndSample;
+    /* 0x18 */ int mSampleCount;
+    /* 0x1C */ s16 mpLast;
+    /* 0x1E */ s16 mpPenult;
     /* 0x20 */ const u32* field_0x20;
 
     static u32 one;

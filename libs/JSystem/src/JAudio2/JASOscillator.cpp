@@ -4,9 +4,9 @@
 
 JASOscillator::JASOscillator() {
     mData = NULL;
-    _14 = 0;
+    mCurPoint = 0;
     mDirectRelease = 0;
-    _18 = 0;
+    mEnvelopeMode = 0;
     _1C = 0;
     _04 = _08 = _10 = _0C = 0.0f;
 }
@@ -17,7 +17,7 @@ void JASOscillator::initStart(JASOscillator::Data const* data) {
     _04 = 0.0f;
     _08 = 0.0f;
     _0C = 0.0f;
-    _14 = 0;
+    mCurPoint = 0;
     mDirectRelease = 0;
     if (!data) {
 		_1C = 0;
@@ -30,8 +30,8 @@ void JASOscillator::initStart(JASOscillator::Data const* data) {
         return;
     }
 
-    _10 = mData->mTable[0]._4 / 32768.0f;
-    _18 = mData->mTable[0]._0;
+    _10 = mData->mTable[0].mValue / 32768.0f;
+    mEnvelopeMode = mData->mTable[0].mEnvelopeMode;
     _1C = 1;
 }
 
@@ -44,13 +44,13 @@ void JASOscillator::incCounter(f32 param_0) {
 	case 1:
 		break;
 	}
-	_04 += param_0 * mData->_04;
+	_04 += param_0 * mData->mRate;
     update();
 }
 
 f32 JASOscillator::getValue() const {
     JUT_ASSERT(120, mData);
-	return _08 * mData->mScale + mData->_14;
+	return _08 * mData->mScale + mData->mVertex;
 }
 
 void JASOscillator::release() {
@@ -63,8 +63,8 @@ void JASOscillator::release() {
 		_04 = 0.0f;
         _0C = _08;
         _10 = 0.0f;
-        _14 = 0;
-        _18 = (mDirectRelease >> 14) & 3;
+        mCurPoint = 0;
+        mEnvelopeMode = (mDirectRelease >> 14) & 3;
         _1C = 4;
         update();
         return;
@@ -74,9 +74,9 @@ void JASOscillator::release() {
         JUT_ASSERT(157, mData->rel_table != NULL);
         _04 = 0.0f;
         _0C = _08;
-        _10 = mData->rel_table[0]._4 / 32768.0f;
-        _14 = 0;
-        _18 = mData->rel_table[0]._0;
+        _10 = mData->rel_table[0].mValue / 32768.0f;
+        mCurPoint = 0;
+        mEnvelopeMode = mData->rel_table[0].mEnvelopeMode;
     }
 
     _1C = 3;
@@ -104,31 +104,31 @@ void JASOscillator::update() {
         return;
     }
 
-    while (_04 >= psVar1[_14]._2) {
-        _04 -= psVar1[_14]._2;
+    while (_04 >= psVar1[mCurPoint].mTime) {
+        _04 -= psVar1[mCurPoint].mTime;
         _08 = _10;
-        _14++;
+        mCurPoint++;
         _0C = _08;
-        const BE(s16)* ps = &psVar1[_14]._0;
-        s16 r26 = ps[0];
-        switch(r26) {
-        case 0xf:
+        const Point* ps = &psVar1[mCurPoint];
+        s16 mode = ps->mEnvelopeMode;
+        switch(mode) {
+        case ENVELOPE_STOP:
             _1C = 0;
             return;
-        case 0xe:
+        case ENVELOPE_HOLD:
             _1C = 2;
             return;
-        case 0xd:
-            _14 = ps[2];
+        case ENVELOPE_LOOP:
+            mCurPoint = ps->mValue;
             break;
         default:
-            _18 = r26;
-            _10 = ps[2] / 32768.0f;
+            mEnvelopeMode = mode;
+            _10 = ps->mValue / 32768.0f;
             break;
         }
     }
 
-    updateCurrentValue(psVar1[_14]._2);
+    updateCurrentValue(psVar1[mCurPoint].mTime);
 }
 
 f32 const JASOscillator::sCurveTableLinear[17] = {
@@ -163,7 +163,7 @@ static f32* table_list[4] = {
 };
 
 void JASOscillator::updateCurrentValue(f32 param_0) {
-    f32* table = table_list[_18];
+    f32* table = table_list[mEnvelopeMode];
     f32 fVar1 = 16.0f * (_04 / param_0);
     u32 index = (u32) fVar1;
     f32 fVar3 = (fVar1 - index);

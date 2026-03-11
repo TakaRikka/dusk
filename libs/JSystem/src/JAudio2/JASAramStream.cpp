@@ -43,7 +43,7 @@ void JASAramStream::initSystem(u32 block_size, u32 channel_max) {
 }
 
 JASAramStream::JASAramStream() {
-    field_0x0a8 = NULL;
+    mInitialChannel = NULL;
     field_0x0ac = false;
     field_0x0ad = false;
     field_0x0ae = 0;
@@ -60,15 +60,15 @@ JASAramStream::JASAramStream() {
     field_0x114 = 0;
     field_0x118 = 0;
     field_0x12c = 0;
-    field_0x148 = 0;
+    mAramAddress = 0;
     field_0x14c = 0;
     mCallback = NULL;
     mCallbackData = NULL;
-    field_0x158 = 0;
+    mFormat = 0;
     mChannelNum = 0;
     mBufCount = 0;
-    field_0x160 = 0;
-    field_0x164 = 0;
+    mBlocksPerChannel = 0;
+    mSampleRate = 0;
     mLoop = false;
     mLoopStart = 0;
     mLoopEnd = 0;
@@ -76,21 +76,21 @@ JASAramStream::JASAramStream() {
     mPitch = 1.0f;
     for (int i = 0; i < 6; i++) {
         mChannels[i] = NULL;
-        field_0x130[i] = 0;
-        field_0x13c[i] = 0;
+        mpLasts[i] = 0;
+        mpPenults[i] = 0;
         mChannelVolume[i] = 1.0f;
         mChannelPan[i] = 0.5f;
         mChannelFxMix[i] = 0.0f;
         mChannelDolby[i] = 0.0f;
     }
     for (int i = 0; i < 6; i++) {
-        field_0x1dc[i] = 0;
+        mMixConfig[i] = 0;
     }
 }
 
-void JASAramStream::init(u32 param_0, u32 param_1, StreamCallback i_callback, void* i_callbackData) {
+void JASAramStream::init(u32 aramAddress, u32 param_1, StreamCallback i_callback, void* i_callbackData) {
     JUT_ASSERT(153, sReadBuffer != NULL);
-    field_0x148 = param_0;
+    mAramAddress = aramAddress;
     field_0x14c = param_1;
     field_0x0c8 = 0.0f;
     field_0x0ae = 0;
@@ -106,7 +106,7 @@ void JASAramStream::init(u32 param_0, u32 param_1, StreamCallback i_callback, vo
     }
     mVolume = 1.0f;
     mPitch = 1.0f;
-    field_0x1dc[0] = 0xffff;
+    mMixConfig[0] = 0xffff;
     mCallback = i_callback;
     mCallbackData = i_callbackData;
     OSInitMessageQueue(&field_0x000, field_0x040, 0x10);
@@ -169,7 +169,7 @@ bool JASAramStream::cancel() {
 }
 
 u32 JASAramStream::getBlockSamples() const {
-    return field_0x158 == 0 ? (sBlockSize << 4) / 9 : sBlockSize >> 1;
+    return mFormat == 0 ? (sBlockSize << 4) / 9 : sBlockSize >> 1;
 }
 
 void JASAramStream::headerLoadTask(void* i_data) {
@@ -245,18 +245,18 @@ bool JASAramStream::headerLoad(u32 param_0, int param_1) {
     JUT_ASSERT(428, header->bits == 16);
     JUT_ASSERT(429, header->channels <= sChannelMax);
     JUT_ASSERT(430, header->block_size == sBlockSize);
-    field_0x158 = header->format;
+    mFormat = header->format;
     mChannelNum = header->channels;
-    field_0x164 = header->field_0x10;
+    mSampleRate = header->mSampleRate;
     mLoop = header->loop != 0;
     mLoopStart = header->loop_start;
     mLoopEnd = header->loop_end;
-    mVolume = header->field_0x28 / 127.0f;
+    mVolume = header->mVolume / 127.0f;
     field_0x118 = 0;
     mBlock = 0;
     field_0x10c = 0;
-    field_0x160 = (param_0 / sBlockSize) / header->channels;
-    mBufCount = field_0x160;
+    mBlocksPerChannel = (param_0 / sBlockSize) / header->channels;
+    mBufCount = mBlocksPerChannel;
     JUT_ASSERT(445, mBufCount > 0);
     mBufCount--;
     if (mBufCount < 3) {
@@ -319,14 +319,14 @@ bool JASAramStream::load() {
     if (field_0x114 != 0) {
         return false;
     }
-    u32 sp08 = field_0x148 + field_0x10c * sBlockSize;
+    u32 sp08 = mAramAddress + field_0x10c * sBlockSize;
     for (int i = 0; i < mChannelNum; i++) {
         (void)i;
         // Fakematch? It seems the only way to get the bhead->field_0x4 load in the right order is
         // with a pointer cast on its address in one of the two places it is read, but not both.
-        if (!JKRMainRamToAram(sReadBuffer + *(u32*)&bhead->field_0x4 * i + sizeof(BlockHeader),
-                              sp08 + sBlockSize * field_0x160 * i,
-                              bhead->field_0x4, EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1, NULL)) {
+        if (!JKRMainRamToAram(sReadBuffer + *(u32*)&bhead->mSize * i + sizeof(BlockHeader),
+                              sp08 + sBlockSize * mBlocksPerChannel * i,
+                              bhead->mSize, EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1, NULL)) {
             JUT_WARN(522, "%s", "JKRMainRamToAram Failed");
             struct_80451261 = 1;
             return false;
@@ -344,14 +344,14 @@ bool JASAramStream::load() {
             }
         }
         if (r28 == loop_end_block || r28 + 2 == loop_end_block) {
-            field_0x108 = field_0x160;
+            field_0x108 = mBlocksPerChannel;
             OSSendMessage(&field_0x020, (OSMessage)5, OS_MESSAGE_BLOCK);
         } else {
-            field_0x108 = field_0x160 - 1;
+            field_0x108 = mBlocksPerChannel - 1;
         }
         for (int i = 0; i < mChannelNum; i++) {
-            field_0x130[i] = (s16)bhead->field_0x8[i].field_0x0;
-            field_0x13c[i] = (s16)bhead->field_0x8[i].field_0x2;
+            mpLasts[i] = (s16)bhead->mAdpcmContinuationData[i].mpLast;
+            mpPenults[i] = (s16)bhead->mAdpcmContinuationData[i].mpPenult;
         }
         field_0x10c = 0;
     }
@@ -402,8 +402,8 @@ void JASAramStream::updateChannel(u32 i_callbackType, JASChannel* i_channel,
     u32 block_samples = getBlockSamples();
     switch (i_callbackType) {
     case JASChannel::CB_START:
-        if (field_0x0a8 == NULL) {
-            field_0x0a8 = i_channel;
+        if (mInitialChannel == NULL) {
+            mInitialChannel = i_channel;
             field_0x0b4 = block_samples * mBufCount;
             field_0x0b8 = 0;
             field_0x0b0 = 0;
@@ -415,9 +415,9 @@ void JASAramStream::updateChannel(u32 i_callbackType, JASChannel* i_channel,
         break;
     case JASChannel::CB_PLAY:
         if (i_dspChannel->field_0x008 == 0) {
-            if (i_channel == field_0x0a8) {
+            if (i_channel == mInitialChannel) {
                 field_0x12c = 0;
-                u32 sp28 = i_dspChannel->field_0x074 + i_dspChannel->field_0x064;
+                u32 sp28 = i_dspChannel->field_0x074 + i_dspChannel->mSamplesPerBlock;
                 if (sp28 <= field_0x0b4) {
                     field_0x0b8 += field_0x0b4 - sp28;
                 } else {
@@ -427,10 +427,10 @@ void JASAramStream::updateChannel(u32 i_callbackType, JASChannel* i_channel,
                     } else {
                         field_0x0b8 += field_0x0b4;
                         field_0x0b8 += block_samples * mBufCount - sp28
-                                       - i_dspChannel->field_0x110;
+                                       - i_dspChannel->mLoopStartSample;
                         field_0x0b8 -= mLoopEnd;
                         field_0x0b8 += mLoopStart;
-                        i_dspChannel->field_0x110 = 0;
+                        i_dspChannel->mLoopStartSample = 0;
                         field_0x120 = 0;
                         field_0x12c |= 2;
                         if (field_0x0c4 < 0xffffffff) {
@@ -448,7 +448,7 @@ void JASAramStream::updateChannel(u32 i_callbackType, JASChannel* i_channel,
                 if (field_0x0c4 < 0xffffffff) {
                     fvar1 += field_0x0b8;
                 }
-                fvar1 /= field_0x164;
+                fvar1 /= mSampleRate;
                 field_0x0c8 = fvar1;
                 if (field_0x0b8 + 400 >= mLoopEnd && !field_0x0c0) {
                     if (mLoop) {
@@ -456,9 +456,9 @@ void JASAramStream::updateChannel(u32 i_callbackType, JASChannel* i_channel,
                         if (uvar5 >= mBufCount) {
                             uvar5 = 0;
                         }
-                        i_dspChannel->field_0x110 = mLoopStart % block_samples
+                        i_dspChannel->mLoopStartSample = mLoopStart % block_samples
                                                     + uvar5 * block_samples;
-                        field_0x120 = i_dspChannel->field_0x110;
+                        field_0x120 = i_dspChannel->mLoopStartSample;
                         field_0x12c |= 2;
                     } else {
                         i_dspChannel->field_0x102 = 0;
@@ -472,17 +472,17 @@ void JASAramStream::updateChannel(u32 i_callbackType, JASChannel* i_channel,
                     field_0x0bc += (mLoopEnd - 1) / block_samples - mLoopStart / block_samples + 1;
                     field_0x0c0 = true;
                 }
-                u32 uvar4 = i_dspChannel->field_0x070 - i_channel->field_0x104;
+                u32 uvar4 = i_dspChannel->mAramStreamPosition - i_channel->mWaveAramAddress;
                 if (uvar4 != 0) {
                     uvar4--;
                 }
-                u32 sp18 = uvar4 / sBlockSize;
+                u32 blockCount = uvar4 / sBlockSize;
                 u32 sp14 = (mLoopEnd - 1) / getBlockSamples();
-                if (sp18 != field_0x0b0) {
-                    bool cmp = sp18 < field_0x0b0;
-                    while (sp18 != field_0x0b0) {
+                if (blockCount != field_0x0b0) {
+                    bool cmp = blockCount < field_0x0b0;
+                    while (blockCount != field_0x0b0) {
                         if (!sLoadThread->sendCmdMsg(loadToAramTask, this)) {
-                            JUT_WARN(741, "sendCmdMsg Failed %d %d (%d %d)", i_dspChannel->field_0x070, i_channel->field_0x104, sp18, field_0x0b0);
+                            JUT_WARN(741, "sendCmdMsg Failed %d %d (%d %d)", i_dspChannel->mAramStreamPosition, i_channel->mWaveAramAddress, blockCount, field_0x0b0);
                             struct_80451261 = true;
                             break;
                         }
@@ -503,16 +503,16 @@ void JASAramStream::updateChannel(u32 i_callbackType, JASChannel* i_channel,
                                 field_0x11c = i_dspChannel->field_0x074;
                                 field_0x12c |= 1;
                             }
-                            i_dspChannel->field_0x114 += block_samples;
-                            field_0x124 = i_dspChannel->field_0x114;
+                            i_dspChannel->mEndSample += block_samples;
+                            field_0x124 = i_dspChannel->mEndSample;
                             field_0x12c |= 4;
-                            mBufCount = field_0x160;
+                            mBufCount = mBlocksPerChannel;
                             field_0x0ad = false;
                         } else {
-                            if (mBufCount != field_0x160 - 1) {
-                                mBufCount = field_0x160 - 1;
-                                i_dspChannel->field_0x114 -= block_samples;
-                                field_0x124 = i_dspChannel->field_0x114;
+                            if (mBufCount != mBlocksPerChannel - 1) {
+                                mBufCount = mBlocksPerChannel - 1;
+                                i_dspChannel->mEndSample -= block_samples;
+                                field_0x124 = i_dspChannel->mEndSample;
                                 field_0x12c |= 4;
                                 if (!field_0x0c0) {
                                     i_dspChannel->field_0x074 -= block_samples;
@@ -528,8 +528,8 @@ void JASAramStream::updateChannel(u32 i_callbackType, JASChannel* i_channel,
                         field_0x0ae &= ~4;
                     }
                 }
-                field_0x0b4 = i_dspChannel->field_0x074 + i_dspChannel->field_0x064;
-                if (field_0x118 >= field_0x160 - 2) {
+                field_0x0b4 = i_dspChannel->field_0x074 + i_dspChannel->mSamplesPerBlock;
+                if (field_0x118 >= mBlocksPerChannel - 2) {
                     JUT_WARN_DEVICE(810, 1, "%s", "buffer under error");
                     field_0x0ae |= (u8)4;
                 }
@@ -538,10 +538,10 @@ void JASAramStream::updateChannel(u32 i_callbackType, JASChannel* i_channel,
                     i_dspChannel->field_0x074 = field_0x11c;
                 }
                 if (field_0x12c & 2) {
-                    i_dspChannel->field_0x110 = field_0x120;
+                    i_dspChannel->mLoopStartSample = field_0x120;
                 }
                 if (field_0x12c & 4) {
-                    i_dspChannel->field_0x114 = field_0x124;
+                    i_dspChannel->mEndSample = field_0x124;
                 }
                 if (field_0x12c & 8) {
                     i_dspChannel->field_0x102 = field_0x128;
@@ -554,8 +554,8 @@ void JASAramStream::updateChannel(u32 i_callbackType, JASChannel* i_channel,
                 }
             }
             JUT_ASSERT(834, ch < CHANNEL_MAX);
-            i_dspChannel->field_0x104 = (s16)field_0x130[ch];
-            i_dspChannel->field_0x106 = (s16)field_0x13c[ch];
+            i_dspChannel->mpLast = (s16)mpLasts[ch];
+            i_dspChannel->mpPenult = (s16)mpPenults[ch];
         }
         break;
     case JASChannel::CB_STOP:
@@ -646,44 +646,44 @@ static JASOscillator::Point const OSC_RELEASE_TABLE[2] = {
 static JASOscillator::Data const OSC_ENV = {0, 1.0f, NULL, OSC_RELEASE_TABLE, 1.0f, 0.0f};
 
 void JASAramStream::channelStart() {
-    u8 r31;
-    switch (field_0x158) {
+    u8 format;
+    switch (mFormat) {
     case 0:
-        r31 = 0;
+        format = WAVE_FORMAT_ADPCM4;
         break;
     case 1:
-        r31 = 3;
+        format = WAVE_FORMAT_PCM16;
         break;
     }
     for (int i = 0; i < mChannelNum; i++) {
         JASWaveInfo wave_info;
-        wave_info.field_0x00 = r31;
-        wave_info.field_0x02 = 0xff;
-        wave_info.field_0x10 = 0;
-        wave_info.field_0x14 = mBufCount * getBlockSamples();
-        wave_info.field_0x18 = wave_info.field_0x14;
-        wave_info.field_0x1c = 0;
-        wave_info.field_0x1e = 0;
+        wave_info.mWaveFormat = format;
+        wave_info.mLoopFlag = 0xff;
+        wave_info.mLoopStartSample = 0;
+        wave_info.mLoopEndSample = mBufCount * getBlockSamples();
+        wave_info.mSampleCount = wave_info.mLoopEndSample;
+        wave_info.mpLast = 0;
+        wave_info.mpPenult = 0;
         // probably a fake match, this should be set in the JASWaveInfo constructor
         static u32 const one = 1;
         wave_info.field_0x20 = &one;
         JASChannel* jc = JKR_NEW JASChannel(channelCallback, this);
         JUT_ASSERT(963, jc);
         jc->setPriority(0x7f7f);
-        for (u32 j = 0; j < 6; j++) {
-            jc->setMixConfig(j, field_0x1dc[j]);
+        for (u32 j = 0; j < DSP_OUTPUT_CHANNELS; j++) {
+            jc->setMixConfig(j, mMixConfig[j]);
         }
-        jc->setInitPitch(field_0x164 / JASDriver::getDacRate());
+        jc->setInitPitch(mSampleRate / JASDriver::getDacRate());
         jc->setOscInit(0, &OSC_ENV);
-        jc->field_0xdc.field_0x4 = wave_info;
-        jc->field_0x104 = field_0x148 + sBlockSize * field_0x160 * i;
-        jc->field_0xdc.field_0x0 = 0;
+        jc->field_0xdc.mWaveInfo = wave_info;
+        jc->mWaveAramAddress = mAramAddress + sBlockSize * mBlocksPerChannel * i;
+        jc->field_0xdc.mChannelType = 0;
         int ret = jc->playForce();
         JUT_ASSERT(977, ret);
         JUT_ASSERT_MSG(979, mChannels[i] == NULL, "channelStart for already playing channel");
         mChannels[i] = jc;
     }
-    field_0x0a8 = NULL;
+    mInitialChannel = NULL;
 }
 
 

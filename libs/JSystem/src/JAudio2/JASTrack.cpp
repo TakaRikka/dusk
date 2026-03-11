@@ -356,7 +356,7 @@ int JASTrack::gateOn(u32 param_0, u32 i_velocity, f32 i_time, u32 i_flags) {
             } else {
                 JASChannel* channel = channel_mgr->mChannels[0];
                 if (channel != NULL) {
-                    channel->setKey(uvar7 - channel->field_0xdc.field_0x4.field_0x01);
+                    channel->setKey(uvar7 - channel->field_0xdc.mWaveInfo.mBaseKey);
                     channel->setVelocity(i_velocity);
                     channel->setUpdateTimer(update_timer);
                 }
@@ -545,10 +545,10 @@ void JASTrack::setOscTable(u32 osc_no, JASOscillator::Point const* i_table) {
 void JASTrack::setOscAdsr(s16 param_0, s16 param_1, s16 param_2, s16 param_3, u16 i_directRelease) {
     mOscParam[0] = sEnvOsc;
     mOscParam[0].mTable = mOscPoint;
-    mOscPoint[0]._2 = param_0;
-    mOscPoint[1]._2 = param_1;
-    mOscPoint[2]._2 = param_2;
-    mOscPoint[2]._4 = param_3;
+    mOscPoint[0].mTime = param_0;
+    mOscPoint[1].mTime = param_1;
+    mOscPoint[2].mTime = param_2;
+    mOscPoint[2].mValue = param_3;
     mDirectRelease = i_directRelease;
 }
 

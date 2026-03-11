@@ -5,9 +5,14 @@
 
 /**
  * @ingroup jsystem-jaudio
- * 
+ * Responsible for allocating and prioritizing the available hardware DSP channels.
  */
 struct JASDSPChannel {
+    /**
+     * Callback used to update DSP channel information on a regular basis.
+     * Parameters are a CallbackType, hardware channel, and specified user data.
+     * Return -1 to immediately abort playback.
+     */
     typedef s32 (*Callback)(u32, JASDsp::TChannel*, void*);
 
     enum Status {
@@ -17,9 +22,24 @@ struct JASDSPChannel {
     };
 
     enum CallbackType {
+        /**
+         * Fired on a regular basis during play to update parameters.
+         */
         /* 0 */ CB_PLAY,
+
+        /**
+         * Fired once, when the channel starts playing.
+         */
         /* 1 */ CB_START,
+
+        /**
+         * Fired once, when the channel naturally finishes playing.
+         */
         /* 2 */ CB_STOP,
+
+        /**
+         * Fired once, if the channel is abruptly stopped due to an error or prioritization.
+         */
         /* 3 */ CB_DROP,
     };
 
@@ -46,9 +66,13 @@ struct JASDSPChannel {
     static JASDSPChannel* sDspChannels;
 
     /* 0x00 */ s32 mStatus;
+
+    /**
+     * Priority of this DSP channel. Used to
+     */
     /* 0x04 */ s16 mPriority;
     /* 0x08 */ u32 mFlags;
-    /* 0x0C */ u32 field_0xc;
+    /* 0x0C */ u32 mUpdateCounter;
     /* 0x10 */ Callback mCallback;
     /* 0x14 */ void* mCallbackData;
     /* 0x18 */ JASDsp::TChannel* mChannel;

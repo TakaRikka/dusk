@@ -50,7 +50,7 @@ void JASBasicWaveBank::incWaveTable(JASBasicWaveBank::TWaveGroup const* param_0)
         if (!handle->mHeap) {
             handle->mHeap = &param_0->mHeap;
             handle->field_0x4.field_0x20 = &param_0->_48;
-            handle->field_0x4.field_0x08 = param_0->mCtrlWaveArray[i].field_0x4;
+            handle->field_0x4.mOffsetStart = param_0->mCtrlWaveArray[i].field_0x4;
         }
     }
 }
@@ -64,7 +64,7 @@ void JASBasicWaveBank::decWaveTable(JASBasicWaveBank::TWaveGroup const* param_0)
         if (handle->mHeap == &param_0->mHeap) {
             handle->mHeap = NULL;
             handle->field_0x4.field_0x20 = &mNoLoad;
-            handle->field_0x4.field_0x08 = -1;
+            handle->field_0x4.mOffsetStart = -1;
         }
     }
 }
@@ -86,9 +86,9 @@ void JASBasicWaveBank::setWaveInfo(JASBasicWaveBank::TWaveGroup* wgrp, int index
     JUT_ASSERT(206, index >= 0);
     mWaveTable[param_2].field_0x4 = param_3;
     mWaveTable[param_2].field_0x4.field_0x20 = &mNoLoad;
-    mWaveTable[param_2].field_0x4.field_0x08 = -1;
+    mWaveTable[param_2].field_0x4.mOffsetStart = -1;
     wgrp->mCtrlWaveArray[index].field_0x0 = param_2;
-    wgrp->mCtrlWaveArray[index].field_0x4 = param_3.field_0x08;
+    wgrp->mCtrlWaveArray[index].field_0x4 = param_3.mOffsetStart;
 }
 
 JASBasicWaveBank::TWaveGroup::TWaveGroup() {
@@ -131,5 +131,5 @@ intptr_t JASBasicWaveBank::TWaveHandle::getWavePtr() const {
     if (base == 0) {
         return 0;
     }
-    return (intptr_t)base + field_0x4.field_0x08;
+    return (intptr_t)base + field_0x4.mOffsetStart;
 }

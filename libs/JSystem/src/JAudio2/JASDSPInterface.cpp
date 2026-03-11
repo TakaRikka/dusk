@@ -72,8 +72,8 @@ f32 JASDsp::getDSPMixerLevel() {
     return sDSPVolume;
 }
 
-JASDsp::TChannel* JASDsp::getDSPHandle(int param_0) {
-    return CH_BUF + param_0;
+JASDsp::TChannel* JASDsp::getDSPHandle(int index) {
+    return CH_BUF + index;
 }
 
 JASDsp::TChannel* JASDsp::getDSPHandleNc(int param_0) {
@@ -87,12 +87,12 @@ void JASDsp::setFilterTable(s16* param_0, s16* param_1, u32 param_2) {
 }
 
 void JASDsp::flushBuffer() {
-    DCFlushRange(CH_BUF, sizeof(TChannel) * 64);
+    DCFlushRange(CH_BUF, sizeof(TChannel) * DSP_CHANNELS);
     DCFlushRange(FX_BUF, sizeof(FxBuf) * 4);
 }
 
 void JASDsp::invalChannelAll() {
-    DCInvalidateRange(CH_BUF, sizeof(TChannel) * 64);
+    DCInvalidateRange(CH_BUF, sizeof(TChannel) * DSP_CHANNELS);
 }
 
 u8 const ATTRIBUTE_ALIGN(32) JASDsp::DSPADPCM_FILTER[64] = {
@@ -426,16 +426,16 @@ u32 const ATTRIBUTE_ALIGN(32) JASDsp::DSPRES_FILTER[320] = {
 };
 
 void JASDsp::initBuffer() {
-    CH_BUF = JKR_NEW_ARRAY_ARGS(TChannel, 64, JASDram, 0x20);
+    CH_BUF = JKR_NEW_ARRAY_ARGS(TChannel, DSP_CHANNELS, JASDram, 0x20);
     JUT_ASSERT(354, CH_BUF);
     FX_BUF = JKR_NEW_ARRAY_ARGS(FxBuf, 4, JASDram, 0x20);
     JUT_ASSERT(356, FX_BUF);
-    JASCalc::bzero(CH_BUF, 0x6000);
+    JASCalc::bzero(CH_BUF, sizeof(TChannel) * DSP_CHANNELS);
     JASCalc::bzero(FX_BUF, sizeof(FxBuf) * 4);
     for (u8 i = 0; i < 4; i++) {
         setFXLine(i, NULL, NULL);
     }
-    DsetupTable(0x40, uintptr_t(CH_BUF), uintptr_t(&DSPRES_FILTER), uintptr_t(&DSPADPCM_FILTER), uintptr_t(FX_BUF));
+    DsetupTable(DSP_CHANNELS, uintptr_t(CH_BUF), uintptr_t(&DSPRES_FILTER), uintptr_t(&DSPADPCM_FILTER), uintptr_t(FX_BUF));
 
     flushBuffer();
 }
@@ -501,8 +501,8 @@ void JASDsp::TChannel::init() {
     mIsFinished = 0;
     mForcedStop = 0;
     mIsActive = 0;
-    field_0x058 = 0;
-    field_0x068 = 0;
+    mAutoMixerBeenSet = 0;
+    mSamplePosition = 0;
     initFilter();
 }
 
@@ -549,41 +549,41 @@ bool JASDsp::TChannel::isFinish() const {
     return mIsFinished != 0;
 }
 
-void JASDsp::TChannel::setWaveInfo(JASWaveInfo const& param_0, u32 param_1, u32 param_2) {
+void JASDsp::TChannel::setWaveInfo(JASWaveInfo const& waveInfo, u32 aramAddress, u32 skipSamples) {
     int i;
     JUT_ASSERT(610, dspMutex);
-    field_0x118 = param_1;
+    mWaveAramAddress = aramAddress;
     static const u8 COMP_BLOCKSAMPLES[8] = {0x10, 0x10, 0x01, 0x01, 0x01, 0x10, 0x10, 0x01};
-    field_0x064 = COMP_BLOCKSAMPLES[param_0.field_0x00];
+    mSamplesPerBlock = COMP_BLOCKSAMPLES[waveInfo.mWaveFormat];
     static const u8 COMP_BLOCKBYTES[8] = {0x09, 0x05, 0x08, 0x10, 0x01, 0x01, 0x01, 0x01};
-    field_0x100 = COMP_BLOCKBYTES[param_0.field_0x00];
-    field_0x068 = 0;
-    if (field_0x100 >= 4) {
-        field_0x11c = param_0.field_0x18;
-        field_0x102 = param_0.field_0x02;
+    mBytesPerBlock = COMP_BLOCKBYTES[waveInfo.mWaveFormat];
+    mSamplePosition = 0;
+    if (mBytesPerBlock >= 4) {
+        mSampleCount = waveInfo.mSampleCount;
+        field_0x102 = waveInfo.mLoopFlag;
         if (field_0x102) {
-            if (param_2 == 1) {
-                param_2 = param_0.field_0x10;
+            if (skipSamples == 1) {
+                skipSamples = waveInfo.mLoopStartSample;
             }
-            field_0x110 = param_0.field_0x10;
-            field_0x114 = param_0.field_0x14;
-            field_0x104 = param_0.field_0x1c;
-            field_0x106 = param_0.field_0x1e;
+            mLoopStartSample = waveInfo.mLoopStartSample;
+            mEndSample = waveInfo.mLoopEndSample;
+            mpLast = waveInfo.mpLast;
+            mpPenult = waveInfo.mpPenult;
         } else {
-            field_0x114 = field_0x11c;
+            mEndSample = mSampleCount;
         }
-        if (param_2 && field_0x114 > param_2) {
-            switch (param_0.field_0x00) {
-            case 0:
-            case 1:
-                field_0x068 = param_2;
-                field_0x118 += param_2 * field_0x100 >> 4;
-                field_0x110 -= param_2;
-                field_0x114 -= param_2;
+        if (skipSamples && mEndSample > skipSamples) {
+            switch (waveInfo.mWaveFormat) {
+            case WAVE_FORMAT_ADPCM4:
+            case WAVE_FORMAT_ADPCM2:
+                mSamplePosition = skipSamples;
+                mWaveAramAddress += skipSamples * mBytesPerBlock >> 4;
+                mLoopStartSample -= skipSamples;
+                mEndSample -= skipSamples;
                 break;
-            case 2:
-            case 3:
-                field_0x068 = param_2;
+            case WAVE_FORMAT_PCM8:
+            case WAVE_FORMAT_PCM16:
+                mSamplePosition = skipSamples;
                 break;
             }
         }
@@ -595,28 +595,27 @@ void JASDsp::TChannel::setWaveInfo(JASWaveInfo const& param_0, u32 param_1, u32 
 
 void JASDsp::TChannel::setOscInfo(u32 param_0) {
     JUT_ASSERT(671, dspMutex);
-    field_0x118 = 0;
-    field_0x064 = 16;
-    field_0x100 = param_0;
+    mWaveAramAddress = 0;
+    mSamplesPerBlock = 16;
+    mBytesPerBlock = param_0;
 }
 
 void JASDsp::TChannel::initAutoMixer() {
     JUT_ASSERT(688, dspMutex);
-    if (field_0x058) {
-        field_0x054 = field_0x056;
+    if (mAutoMixerBeenSet) {
+        mAutoMixerInitVolume = mAutoMixerVolume;
     } else {
-        field_0x054 = 0;
-        field_0x058 = 1;
+        mAutoMixerInitVolume = 0;
+        mAutoMixerBeenSet = 1;
     }
 }
 
-void JASDsp::TChannel::setAutoMixer(u16 param_0, u8 param_1, u8 param_2, u8 param_3,
-                                        u8 param_4) {
+void JASDsp::TChannel::setAutoMixer(u16 volume, u8 pan, u8 dolby, u8 fxMix, u8) {
     JUT_ASSERT(709, dspMutex);
-    field_0x050 = (param_1 << 8) | param_2;
-    field_0x052 = param_3 << 8 | param_3 << 1;
-    field_0x056 = param_0;
-    field_0x058 = 1;
+    mAutoMixerPanDolby = (pan << 8) | dolby;
+    mAutoMixerFxMix = fxMix << 8 | fxMix << 1;
+    mAutoMixerVolume = volume;
+    mAutoMixerBeenSet = 1;
 }
 
 void JASDsp::TChannel::setPitch(u16 param_0) {
@@ -627,21 +626,20 @@ void JASDsp::TChannel::setPitch(u16 param_0) {
     mPitch = param_0;
 }
 
-void JASDsp::TChannel::setMixerInitVolume(u8 param_0, s16 param_1) {
+void JASDsp::TChannel::setMixerInitVolume(u8 outputChannel, s16 volume) {
     JUT_ASSERT(798, dspMutex);
-    u16* tmp = field_0x010[param_0];
-    tmp[2] = param_1;
-    tmp[1] = param_1;
-    tmp[3] = 0;
+    OutputChannelConfig& cfg = mOutputChannels[outputChannel];
+    cfg.mCurrentVolume = volume;
+    cfg.mTargetVolume = volume;
+    cfg.mVolumeProgress = 0;
 }
 
-void JASDsp::TChannel::setMixerVolume(u8 param_0, s16 param_1) {
-    u16* tmp;
+void JASDsp::TChannel::setMixerVolume(u8 outputChannel, s16 volume) {
     JUT_ASSERT(841, dspMutex);
     if (mForcedStop == 0) {
-        tmp = field_0x010[param_0];
-        tmp[1] = param_1;
-        tmp[3] &= 0xff;
+        OutputChannelConfig& cfg = mOutputChannels[outputChannel];
+        cfg.mTargetVolume = volume;
+        cfg.mVolumeProgress &= 0xff;
     }
 }
 
@@ -699,16 +697,16 @@ void JASDsp::TChannel::setDistFilter(s16 param_0) {
     iir_filter_params[4] = param_0;
 }
 
-void JASDsp::TChannel::setBusConnect(u8 param_0, u8 param_1) {
+void JASDsp::TChannel::setBusConnect(u8 outputChannel, u8 param_1) {
     JUT_ASSERT(973, dspMutex);
-    u16* tmp = field_0x010[param_0];
+    OutputChannelConfig& tmp = mOutputChannels[outputChannel];
     static u16 const connect_table[12] = {
         0x0000, 0x0D00, 0x0D60, 0x0DC0, 0x0E20, 0x0E80,
         0x0EE0, 0x0CA0, 0x0F40, 0x0FA0, 0x0B00, 0x09A0,
     };
     u16 r30 = 0;
     r30 = connect_table[param_1];
-    tmp[0] = r30;
+    tmp.mBusConnect = r30;
 }
 
 u16 DSP_CreateMap2(u32 param_0) {

@@ -12,7 +12,7 @@ extern "C" void __DSP_remove_task(DSPTaskInfo* task);
 
 static void Dsp_Update_Request();
 
-static vu8 struct_80451308;
+static vu8 DspRunningStatus;
 static u8 struct_80451309;
 
 DSPTaskInfo* DSP_prior_task;
@@ -23,7 +23,7 @@ extern "C" void __DSPHandler(__OSInterrupt interrupt, OSContext* context) {
     OSClearContext(&funcContext);
     OSSetCurrentContext(&funcContext);
 
-    if (struct_80451308 == 1 || struct_80451308 == 0) {
+    if (DspRunningStatus == 1 || DspRunningStatus == 0) {
         __DSP_curr_task = DSP_prior_task;
     }
 
@@ -38,7 +38,7 @@ extern "C" void __DSPHandler(__OSInterrupt interrupt, OSContext* context) {
     case 0xDCD10000:
         __DSP_curr_task->state = 1;
         if (__DSP_curr_task == DSP_prior_task) {
-            struct_80451308 = 1;
+            DspRunningStatus = 1;
         }
         if (__DSP_curr_task->init_cb != NULL) {
             __DSP_curr_task->init_cb(__DSP_curr_task);
@@ -47,7 +47,7 @@ extern "C" void __DSPHandler(__OSInterrupt interrupt, OSContext* context) {
     case 0xDCD10001:
         __DSP_curr_task->state = 1;
         if (__DSP_curr_task == DSP_prior_task) {
-            struct_80451308 = 1;
+            DspRunningStatus = 1;
             Dsp_Update_Request();
         }
         if (__DSP_curr_task->res_cb != NULL) {
@@ -97,7 +97,7 @@ extern "C" void __DSPHandler(__OSInterrupt interrupt, OSContext* context) {
             __DSP_curr_task = DSP_prior_task;
             Dsp_Update_Request();
         } else {
-            struct_80451308 = 3;
+            DspRunningStatus = 3;
             DSPSendMailToDSP(0xCDD10001);
             while (DSPCheckMailToDSP() != 0);
             __DSP_exec_task(DSP_prior_task, __DSP_first_task);
@@ -113,7 +113,7 @@ extern "C" void __DSPHandler(__OSInterrupt interrupt, OSContext* context) {
 static u32 sync_stack[5];
 
 void DsyncFrame2(u32 param_0, u32 param_1, u32 param_2) {
-    if (struct_80451308 != 1) {
+    if (DspRunningStatus != 1) {
         sync_stack[0] = param_0;
         struct_80451309 = 1;
         sync_stack[1] = param_1;
@@ -125,7 +125,7 @@ void DsyncFrame2(u32 param_0, u32 param_1, u32 param_2) {
 }
 
 static void DsyncFrame3(u32 param_0, u32 param_1, u32 param_2, u32 param_3, u32 param_4) {
-    if (struct_80451308 != 1) {
+    if (DspRunningStatus != 1) {
         sync_stack[0] = param_0;
         struct_80451309 = 2;
         sync_stack[1] = param_1;
@@ -152,9 +152,9 @@ static void Dsp_Update_Request() {
 }
 
 int Dsp_Running_Check() {
-    return struct_80451308 == 1 ? TRUE : FALSE;
+    return DspRunningStatus == 1 ? TRUE : FALSE;
 }
 
 void Dsp_Running_Start() {
-    struct_80451308 = 1;
+    DspRunningStatus = 1;
 }

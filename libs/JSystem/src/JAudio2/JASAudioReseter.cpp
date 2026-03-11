@@ -47,7 +47,7 @@ s32 JASAudioReseter::checkDone() const {
 
 s32 JASAudioReseter::calc() {
     if (field_0x0==0) {
-        for (size_t i = 0; i<64; i++) {
+        for (size_t i = 0; i<DSP_CHANNELS; i++) {
             JASDSPChannel* handle = JASDSPChannel::getHandle(i);
             if (handle->getStatus() == 0) {
                 handle->drop();
