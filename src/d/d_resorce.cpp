@@ -352,7 +352,7 @@ int dRes_info_c::loadResource() {
                     JUT_ASSERT(769, resNameLen <= NAME_MAX);
 #endif
 
-                    char arcName[9];
+                    char arcName[10];
                     strncpy(arcName, name_p, resNameLen);
                     arcName[resNameLen] = '\0';
 
