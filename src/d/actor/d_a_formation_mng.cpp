@@ -213,7 +213,7 @@ void daFmtMng_c::executeReverse() {
         int i;
         FmtPos_c* currentPos;
         currentPos = mPos;
-        tempPos = JKR_NEW FmtPos_c[mFormationRow];
+        tempPos = JKR_NEW_ARRAY(FmtPos_c, mFormationRow);
         for (i = 0; i < mFormationRow; i++, currentPos++, tempPos++) {
             tempPos->field_0x10.set(currentPos->field_0x10);
             tempPos->field_0x1c = currentPos->field_0x1c;
@@ -354,10 +354,10 @@ void daFmtMng_c::create_init() {
     mFormationLine = getFormationLine();
     mFormationRow = getFormationRow();
     mPos = NULL;
-    mPos = JKR_NEW FmtPos_c[mFormationRow];
+    mPos = JKR_NEW_ARRAY(FmtPos_c, mFormationRow);
     JUT_ASSERT(357, mPos != NULL);
     mMember = NULL;
-    mMember = JKR_NEW FmtMember_c[mFormationLine * mFormationRow];
+    mMember = JKR_NEW_ARRAY(FmtMember_c, mFormationLine * mFormationRow);
     JUT_ASSERT(361, mMember != NULL);
 
     FmtMember_c* member = mMember;

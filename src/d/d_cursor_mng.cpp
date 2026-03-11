@@ -277,7 +277,7 @@ BOOL dCsr_mng_c::bloObj_c::create(J2DScreen* i_screen, u16 i_mask, u8 i_priority
     m_screen = i_screen;
     m_pane_num = 0;
     calcPaneObjNum(i_screen);
-    m_panes = JKR_NEW paneObj_c[m_pane_num];
+    m_panes = JKR_NEW_ARRAY(paneObj_c, m_pane_num);
     paneObj_c* sp08 = m_panes + m_pane_num;
     createPaneObj(&sp08, m_screen);
     return TRUE;

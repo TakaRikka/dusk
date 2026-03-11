@@ -321,9 +321,9 @@ J2DResReference* J2DScreen::getResReference(JSURandomInputStream* p_stream, u32 
 
     char* buffer;
     if (param_1 & 0x1F0000) {
-        buffer = JKR_NEW char[size1];
+        buffer = JKR_NEW_ARRAY(char, size1);
     } else {
-        buffer = JKR_NEW_ARGS (-4) char[size1];
+        buffer = JKR_NEW_ARRAY_ARGS(char, size1, -4);
     }
 
     if (buffer != NULL) {
@@ -343,12 +343,12 @@ bool J2DScreen::createMaterial(JSURandomInputStream* p_stream, u32 param_1, JKRA
     p_stream->skip(2);
 
     if (param_1 & 0x1F0000) {
-        mMaterials = JKR_NEW J2DMaterial[mMaterialNum];
+        mMaterials = JKR_NEW_ARRAY(J2DMaterial, mMaterialNum);
     } else {
-        mMaterials = JKR_NEW_ARGS (-4) J2DMaterial[mMaterialNum];
+        mMaterials = JKR_NEW_ARRAY_ARGS(J2DMaterial, mMaterialNum, -4);
     }
 
-    u8* buffer = JKR_NEW_ARGS (-4) u8[header.mSize];
+    u8* buffer = JKR_NEW_ARRAY_ARGS(u8, header.mSize, -4);
     if (mMaterials != NULL && buffer != NULL) {
         J2DMaterialBlock* pBlock = (J2DMaterialBlock*)buffer;
         p_stream->seek(position, JSUStreamSeekFrom_SET);
@@ -372,7 +372,7 @@ bool J2DScreen::createMaterial(JSURandomInputStream* p_stream, u32 param_1, JKRA
             }
             size++;
 
-            u8* nametab = JKR_NEW u8[size];
+            u8* nametab = JKR_NEW_ARRAY(u8, size);
             if (nametab == NULL) {
                 goto failure;
             }

@@ -632,7 +632,7 @@ void dPa_modelEcallBack::setup(JPABaseEmitter* i_emitter, cXyz const* param_1, c
 }
 
 void dPa_modelEcallBack::create(u8 param_0) {
-    mModel = JKR_NEW model_c[param_0];
+    mModel = JKR_NEW_ARRAY(model_c, param_0);
     struct_80450E9C = param_0;
     struct_80450E9D = 0;
 }
@@ -767,7 +767,7 @@ JPABaseEmitter* dPa_simpleEcallBack::create(JPAEmitterManager* param_0, u16 id, 
     field_0xa = param_2;
     mID = id;
     field_0xe = 0x20;
-    mData = JKR_NEW dPa_simpleData_c[field_0xe];
+    mData = JKR_NEW_ARRAY(dPa_simpleData_c, field_0xe);
     JUT_ASSERT(1747, mData != NULL);
     createEmitter(param_0);
     return mEmitter;

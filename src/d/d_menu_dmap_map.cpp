@@ -303,7 +303,7 @@ void dMenu_DmapMap_c::_delete() {
 void dMenu_DmapMap_c::setTexture(u16 param_0, u16 param_1, u16 param_2, u16 param_3) {
     for (int lp1 = 0; lp1 < 2; lp1++) {
         u32 var_r27 = GXGetTexBufferSize(param_0, param_1, 9, 0, 0);
-        mMapImage_p[lp1] = JKR_NEW_ARGS (0x20) u8[var_r27];
+        mMapImage_p[lp1] = JKR_NEW_ARRAY_ARGS(u8, var_r27, 0x20);
         JUT_ASSERT(1672, mMapImage_p[lp1] != NULL);
         mRend[lp1].init(mMapImage_p[lp1], param_0, param_1, param_2, param_3);
 

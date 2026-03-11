@@ -212,7 +212,7 @@ bool dMpath_HIO_file_base_c::readBinaryFile(const char* param_1)  {
     }
     if (file.open(JORFile::EFlags_READ, r26, NULL, NULL, NULL)) {
         s32 r28 = file.getFileSize();
-        char* buf = JKR_NEW char[r28];
+        char* buf = JKR_NEW_ARRAY(char, r28);
         JUT_ASSERT(855, buf != NULL);
         file.readData(buf, r28);
         copyReadBufToData(buf, r28);

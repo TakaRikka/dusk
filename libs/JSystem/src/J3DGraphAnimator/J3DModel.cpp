@@ -100,7 +100,7 @@ s32 J3DModel::createShapePacket(J3DModelData* pModelData) {
     J3D_ASSERTMSG(173, pModelData != NULL, "Error : null pointer.");
 
     if (pModelData->getShapeNum() != 0) {
-        mShapePacket = JKR_NEW J3DShapePacket[pModelData->getShapeNum()];
+        mShapePacket = JKR_NEW_ARRAY(J3DShapePacket, pModelData->getShapeNum());
 
         if (mShapePacket == NULL) {
             return kJ3DError_Alloc;
@@ -120,7 +120,7 @@ s32 J3DModel::createMatPacket(J3DModelData* pModelData, u32 mdlFlags) {
     s32 ret = 0;
 
     if (pModelData->getMaterialNum() != 0) {
-        mMatPacket = JKR_NEW J3DMatPacket[pModelData->getMaterialNum()];
+        mMatPacket = JKR_NEW_ARRAY(J3DMatPacket, pModelData->getMaterialNum());
 
         if (mMatPacket == NULL) {
             return kJ3DError_Alloc;

@@ -213,17 +213,17 @@ int daObjLv4Chan_c::CreateHeap() {
         return 0;
     }
 
-    mChains[0] = JKR_NEW ChainPos[mChainLengths[0]];
+    mChains[0] = JKR_NEW_ARRAY(ChainPos, mChainLengths[0]);
     if (mChains[0] == NULL) {
         return 0;
     }
 
-    mChains[1] = JKR_NEW ChainPos[mChainLengths[1]];
+    mChains[1] = JKR_NEW_ARRAY(ChainPos, mChainLengths[1]);
     if (mChains[1] == NULL) {
         return 0;
     }
 
-    mChains[2] = JKR_NEW ChainPos[mChainLengths[2]];
+    mChains[2] = JKR_NEW_ARRAY(ChainPos, mChainLengths[2]);
     if (mChains[2] == NULL) {
         return 0;
     }
@@ -231,17 +231,17 @@ int daObjLv4Chan_c::CreateHeap() {
     mChainModelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, l_bmdidx[1]);
     JUT_ASSERT(500, mChainModelData != NULL);
 
-    mMdls[0] = JKR_NEW dMdl_obj_c[mMdlLengths[0]];
+    mMdls[0] = JKR_NEW_ARRAY(dMdl_obj_c, mMdlLengths[0]);
     if (mMdls[0] == NULL) {
         return 0;
     }
 
-    mMdls[1] = JKR_NEW dMdl_obj_c[mMdlLengths[1]];
+    mMdls[1] = JKR_NEW_ARRAY(dMdl_obj_c, mMdlLengths[1]);
     if (mMdls[1] == NULL) {
         return 0;
     }
 
-    mMdls[2] = JKR_NEW dMdl_obj_c[mMdlLengths[2]];
+    mMdls[2] = JKR_NEW_ARRAY(dMdl_obj_c, mMdlLengths[2]);
     if (mMdls[2] == NULL) {
         return 0;
     }

@@ -26,6 +26,8 @@
 
 #include "dusk/memory.h"
 
+#include "dusk/memory.h"
+
 int dMeter2_c::_create() {
     stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
     if (dStage_stagInfo_GetUpButton(stag_info) == 1) {
@@ -33,6 +35,7 @@ int dMeter2_c::_create() {
     } else {
         mpHeap = fopMsgM_createExpHeap(HEAP_SIZE(0x60800, 0xC1000), NULL);
     }
+    JKRHEAP_NAME(mpHeap, "dMeter2_c");
 
     JKRHeap* heap = mDoExt_setCurrentHeap(mpHeap);
     mpHeap->getTotalFreeSize();
@@ -233,7 +236,8 @@ int dMeter2_c::_create() {
     dMeter2Info_setMeterMapClass(mpMap);
 
     mpHeap->getTotalFreeSize();
-    mpSubHeap = fopMsgM_createExpHeap(0x5000, mpHeap);
+    mpSubHeap = fopMsgM_createExpHeap(HEAP_SIZE(0x5000, 0x6500), mpHeap);
+    JKRHEAP_NAME(mpSubHeap, "dMeter2_c mpSubHeap");
     field_0x108 = NULL;
     mpSubContents = NULL;
     mpSubSubContents = NULL;

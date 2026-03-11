@@ -38,7 +38,7 @@ namespace {
                 return;
             }
             mNumStreamFiles = stack_14.getNumFiles();
-            mStreamFileDVDEntryNums = JKR_NEW s32[mNumStreamFiles];
+            mStreamFileDVDEntryNums = JKR_NEW_ARRAY(s32, mNumStreamFiles);
             if (!mStreamFileDVDEntryNums) {
                 mNumStreamFiles = 0;
                 return;
@@ -228,7 +228,7 @@ u8* JAUSection::newStaticSeqDataBlock_(JAISoundID param_0, u32 size) {
             JUT_WARN(432, "%s", "created UNUSED object in Heap\n");
             return NULL;
         }
-        u8* r28 = JKR_NEW_ARGS(0x20) u8[size];
+        u8* r28 = JKR_NEW_ARRAY_ARGS(u8, size, 0x20);
         if (!r28) {
             JUT_WARN(438, "%s", "created UNUSED object in Heap\n");
             return NULL;
@@ -277,7 +277,7 @@ bool JAUSection::newStaticSeqData(JAISoundID param_0) {
 void* JAUSection::newCopy(void const* param_0, u32 param_1, s32 param_2) {
     JUT_ASSERT(516, isOpen());
     JUT_ASSERT(517, isBuilding());
-    u8* r31 = JKR_NEW_ARGS(getHeap_(), param_2) u8[param_1];
+    u8* r31 = JKR_NEW_ARRAY_ARGS(u8, param_1, getHeap_(), param_2);
     if (r31) {
         memcpy(r31, param_0, param_1);
     }
@@ -382,7 +382,7 @@ bool JAUSection::beginNewBankTable(u32 param_0, u32 param_1) {
     JAUBankTableLink* bankTableLink = NULL;
     {
         TPushCurrentHeap push(getHeap_());
-        JASBank** r26 = JKR_NEW JASBank*[param_1];
+        JASBank** r26 = JKR_NEW_ARRAY(JASBank*, param_1);
         if (r26) {
             bankTableLink = JKR_NEW JAUBankTableLink(param_0, r26, param_1);
             if (bankTableLink) {
@@ -489,7 +489,7 @@ bool JAUSectionHeap::newDynamicSeqBlock(u32 size) {
             JUT_WARN(950, "%s", "created UNUSED object in Heap\n");
             return false;
         }
-        u8* r25 = JKR_NEW_ARGS(0x20) u8[size];
+        u8* r25 = JKR_NEW_ARRAY_ARGS(u8, size, 0x20);
         if (!r25) {
             JUT_WARN(956, "%s", "created UNUSED object in Heap\n");
             return false;

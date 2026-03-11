@@ -5,6 +5,7 @@
 #include <os.h>
 #include "global.h"
 #include <new>
+#include <utility>
 #include <cstdint>
 
 class JKRHeap;
@@ -238,14 +239,18 @@ inline void* operator new[](size_t, JKRHeapToken, void* where) {
 }
 
 #define JKR_NEW new (JKRHeapToken::Dummy)
-#define JKR_NEW_ARGS(...) new (JKRHeapToken::Dummy, __VA_ARGS__ )
+#define JKR_NEW_ARRAY(type, count) jkrNewArray(count, std::in_place_type<type>)
+#define JKR_NEW_ARGS(...) new (JKRHeapToken::Dummy, __VA_ARGS__)
+#define JKR_NEW_ARRAY_ARGS(type, count, ...) jkrNewArray(count, std::in_place_type<type>, __VA_ARGS__)
 #define JKR_DELETE(expr) jkrDelete(expr)
 #define JKR_DELETE_ARRAY(expr) jkrDeleteArray(expr)
 #define JKR_HEAP_TOKEN , JKRHeapToken::Dummy
 #define JKR_HEAP_TOKEN_PARAM , JKRHeapToken
 #else
 #define JKR_NEW new
+#define JKR_NEW_ARRAY(type, count) new type[count]
 #define JKR_NEW_ARGS(...) new (__VA_ARGS__ )
+#define JKR_NEW_ARRAY_ARGS(type, count, ...) new (JKRHeapToken::Dummy, __VA_ARGS__ ) type[count]
 #define JKR_DELETE(expr) delete (expr)
 #define JKR_DELETE_ARRAY(expr) delete[] (expr)
 #define JKR_HEAP_TOKEN
@@ -256,6 +261,7 @@ void* operator new(size_t size JKR_HEAP_TOKEN_PARAM);
 void* operator new(size_t size JKR_HEAP_TOKEN_PARAM, int alignment);
 void* operator new(size_t size JKR_HEAP_TOKEN_PARAM, JKRHeap* heap, int alignment);
 
+// On PC, these new[] overloads are only used to catch usages of JKR_NEW with [].
 void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM);
 void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM, int alignment);
 void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM, JKRHeap* heap, int alignment);
@@ -282,8 +288,78 @@ inline void jkrDelete(void* ptr) {
     operator delete(ptr, JKRHeapToken::Dummy);
 }
 
-static void jkrDeleteArray(void* ptr) {
-    operator delete[](ptr, JKRHeapToken::Dummy);
+template<typename... Args>
+bool constexpr newArgsHasCustomAlignment(Args&&...) {
+    return false;
+}
+
+template<>
+constexpr bool newArgsHasCustomAlignment(int&&) {
+    return true;
+}
+
+template<>
+constexpr bool newArgsHasCustomAlignment(JKRHeap*&&, int&&) {
+    return true;
+}
+
+template<typename T, typename... Args>
+T* jkrNewArray(size_t count, std::in_place_type_t<T>, Args&&... args) {
+    size_t allocSize = count * sizeof(T);
+    if constexpr (!std::is_trivially_destructible<T>()) {
+        static_assert(
+            !newArgsHasCustomAlignment(args...),
+            "jkrNewArray cannot currently handle non-trivially-destructible array allocations with custom alignment");
+
+        allocSize += sizeof(size_t);
+    }
+
+    void* ptr = operator new(allocSize, JKRHeapToken::Dummy, args...);
+    T* dataPtr;
+    if constexpr (!std::is_trivially_destructible<T>()) {
+        auto length = static_cast<size_t*>(ptr);
+        *length = count;
+        dataPtr = reinterpret_cast<T*>(length + 1);
+    } else {
+        dataPtr = static_cast<T*>(ptr);
+    }
+
+    if constexpr (!std::is_trivially_constructible<T>()) {
+        for (int i = 0; i < count; ++i) {
+            new (dataPtr + i) T();
+        }
+    }
+
+    return dataPtr;
+}
+
+template<typename T>
+void jkrDeleteArray(T* pointer) {
+    if (pointer == nullptr) {
+        return;
+    }
+
+    if constexpr (!std::is_trivially_destructible<T>()) {
+        auto countPtr = reinterpret_cast<size_t*>(pointer) - 1;
+        auto count = *countPtr;
+
+        for (int i = 0; i < count; ++i) {
+            (pointer + i)->~T();
+        }
+
+        operator delete(countPtr, JKRHeapToken::Dummy);
+    } else {
+        operator delete(pointer, JKRHeapToken::Dummy);
+    }
+}
+
+template<>
+inline void jkrDeleteArray(void* pointer) {
+    if (pointer == nullptr) {
+        return;
+    }
+
+    operator delete(pointer, JKRHeapToken::Dummy);
 }
 #endif
 

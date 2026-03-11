@@ -46,9 +46,9 @@ J3DShape* J3DShapeFactory::create(int no, u32 flag, GXVtxDescList* vtxDesc) {
     shape->mMtxGroupNum = getMtxGroupNum(no);
     shape->mRadius = getRadius(no);
     shape->mVtxDesc = getVtxDescList(no);
-    shape->mShapeMtx = JKR_NEW J3DShapeMtx*[shape->mMtxGroupNum];
+    shape->mShapeMtx = JKR_NEW_ARRAY(J3DShapeMtx*, shape->mMtxGroupNum);
     J3D_ASSERT_ALLOCMEM(74, shape->mShapeMtx);
-    shape->mShapeDraw = JKR_NEW J3DShapeDraw*[shape->mMtxGroupNum];
+    shape->mShapeDraw = JKR_NEW_ARRAY(J3DShapeDraw*, shape->mMtxGroupNum);
     J3D_ASSERT_ALLOCMEM(76, shape->mShapeDraw);
     shape->mMin = getMin(no);
     shape->mMax = getMax(no);
@@ -138,7 +138,7 @@ J3DShapeDraw* J3DShapeFactory::newShapeDraw(int shapeNo, int mtxGroupNo) const {
 }
 
 void J3DShapeFactory::allocVcdVatCmdBuffer(u32 count) {
-    mVcdVatCmdBuffer = JKR_NEW_ARGS (0x20) u8[J3DShape::kVcdVatDLSize * count];
+    mVcdVatCmdBuffer = JKR_NEW_ARRAY_ARGS(u8, J3DShape::kVcdVatDLSize * count, 0x20);
     J3D_ASSERT_ALLOCMEM(211, mVcdVatCmdBuffer);
     for (u32 i = 0; i < (J3DShape::kVcdVatDLSize * count) / 4; i++)
         ((u32*)mVcdVatCmdBuffer)[i] = 0;

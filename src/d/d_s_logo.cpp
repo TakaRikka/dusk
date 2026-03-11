@@ -127,7 +127,7 @@ void dLog_HIO_c::genMessage(JORMContext*) {}
 #endif
 
 void dScnLogo_c::preLoad_dyl_create() {
-    m_preLoad_dylPhase = JKR_NEW request_of_phase_process_class[14];
+    m_preLoad_dylPhase = JKR_NEW_ARRAY(request_of_phase_process_class, 14);
     JUT_ASSERT(194, m_preLoad_dylPhase != NULL);
 
     memset(m_preLoad_dylPhase, 0, sizeof(request_of_phase_process_class) * 14);

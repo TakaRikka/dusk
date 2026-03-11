@@ -76,14 +76,14 @@ void J3DClusterLoader_v15::readCluster(const J3DClusterBlock* block) {
     int clusterKeyPointerSize = (intptr_t)block->mClusterKeyPointer - (intptr_t)block->mClusterPointer;
     int clusterVertexPointerSize = (intptr_t)block->mClusterVertex - (intptr_t)block->mClusterPointer;
     int vtxPosSize = (intptr_t)block->mVtxPos - (intptr_t)block->mClusterPointer;
-    u8* arr = JKR_NEW_ARGS (0x20) u8[vtxPosSize];
+    u8* arr = JKR_NEW_ARRAY_ARGS(u8, vtxPosSize, 0x20);
     memcpy(arr, JSUConvertOffsetToPtr<J3DCluster>(block, block->mClusterPointer), vtxPosSize);
     mpDeformData->mClusterPointer = (J3DCluster*)arr;
     mpDeformData->mClusterKeyPointer = (J3DClusterKey*)&arr[clusterKeyPointerSize];
     mpDeformData->mClusterVertex = (J3DClusterVertex*)&arr[clusterVertexPointerSize];
 
 #if TARGET_PC
-    mpDeformData->mDeformers = JKR_NEW J3DDeformer*[mpDeformData->getClusterNum()];
+    mpDeformData->mDeformers = JKR_NEW_ARRAY(J3DDeformer*, mpDeformData->getClusterNum());
 #endif
 
     for (int i = 0; i < mpDeformData->getClusterNum(); i++) {
@@ -96,12 +96,12 @@ void J3DClusterLoader_v15::readCluster(const J3DClusterBlock* block) {
 #endif
         J3DDeformer* deformer = JKR_NEW J3DDeformer(mpDeformData);
         if (cluster->field_0x14 != 0) {
-            deformer->field_0xc = JKR_NEW f32[cluster->field_0x14 * 3];
+            deformer->field_0xc = JKR_NEW_ARRAY(f32, cluster->field_0x14 * 3);
         } else {
             deformer->field_0xc = NULL;
         }
         deformer->mFlags = cluster->mFlags;
-        deformer->field_0x8 = JKR_NEW f32[cluster->mKeyNum];
+        deformer->field_0x8 = JKR_NEW_ARRAY(f32, cluster->mKeyNum);
 #if TARGET_PC
         deformer->mArrayBase = arr - clusterPointer;
         deformer->mBlockBase = block;

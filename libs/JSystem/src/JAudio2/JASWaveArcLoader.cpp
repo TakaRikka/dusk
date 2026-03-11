@@ -168,7 +168,7 @@ void JASWaveArc::setFileName(char const* fileName) {
     char* currentDir = JASWaveArcLoader::getCurrentDir();
     size_t length = strlen(currentDir);
     length = length + strlen(fileName);
-    char* path = JKR_NEW_ARGS (JASKernel::getSystemHeap(), -4) char[length + 1];
+    char* path = JKR_NEW_ARRAY_ARGS(char, length + 1, JASKernel::getSystemHeap(), -4);
     JUT_ASSERT(322, path);
     strcpy(path, currentDir);
     strcat(path, fileName);

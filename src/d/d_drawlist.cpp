@@ -1404,7 +1404,7 @@ void dDlst_shadowControl_c::init() {
         u16 size = l_realImageSize[i];
 
         u32 buffer_size = GXGetTexBufferSize(size, size, 5, GX_DISABLE, 0);
-        field_0x15ef0[i] = JKR_NEW_ARGS (0x20) u8[buffer_size];
+        field_0x15ef0[i] = JKR_NEW_ARRAY_ARGS(u8, buffer_size, 0x20);
         GXInitTexObj(&field_0x15eb0[i], field_0x15ef0[i], size, size, GX_TF_RGB5A3, GX_CLAMP,
                      GX_CLAMP, GX_DISABLE);
         GXInitTexObjLOD(&field_0x15eb0[i], GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE,

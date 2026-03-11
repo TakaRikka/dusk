@@ -69,11 +69,11 @@ void JUTXfb::initiate(u16 width, u16 height, JKRHeap* pHeap, JUTXfb::EXfbNumber 
 
     int size = (u16)((u16)width + 0xf & ~0xf) * height * 2;
 
-    mBuffer[0] = JKR_NEW_ARGS (pHeap, 0x20) u8[size];
+    mBuffer[0] = JKR_NEW_ARRAY_ARGS(u8, size, pHeap, 0x20);
     mXfbAllocated[0] = true;
 
     if (xfbNum >= 2) {
-        mBuffer[1] = JKR_NEW_ARGS (pHeap, 0x20) u8[size];
+        mBuffer[1] = JKR_NEW_ARRAY_ARGS(u8, size, pHeap, 0x20);
         mXfbAllocated[1] = true;
     } else {
         mBuffer[1] = NULL;
@@ -81,7 +81,7 @@ void JUTXfb::initiate(u16 width, u16 height, JKRHeap* pHeap, JUTXfb::EXfbNumber 
     }
 
     if (xfbNum >= 3) {
-        mBuffer[2] = JKR_NEW_ARGS (pHeap, 0x20) u8[size];
+        mBuffer[2] = JKR_NEW_ARRAY_ARGS(u8, size, pHeap, 0x20);
         mXfbAllocated[2] = true;
     } else {
         mBuffer[2] = NULL;

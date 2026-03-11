@@ -5166,8 +5166,8 @@ void daAlinkHIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
     }
     case PROPERTY_SAVE_FILE_e: {
         if (file.open(6, "すべてのファイル(*.*)\0*.*\0", NULL, NULL, NULL)) {
-            char* fileData = JKR_NEW_ARGS (0x20) char[0x10000];
-            char* structData = JKR_NEW_ARGS (0x20) char[0x10000];
+            char* fileData = JKR_NEW_ARRAY_ARGS(char, 0x10000, 0x20);
+            char* structData = JKR_NEW_ARRAY_ARGS(char, 0x10000, 0x20);
 
             if (fileData != NULL && structData != NULL) {
                 size_t dataSize = makeFileOutData(fileData, structData);
@@ -5204,7 +5204,7 @@ void daAlinkHIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
     }
     case PROPERTY_LOAD_FILE_e: {
         if (file.open(1, "すべてのファイル(*.*)\0*.*\0", NULL, NULL, NULL)) {
-            char* fileData = JKR_NEW_ARGS (0x20) char[0x10000];
+            char* fileData = JKR_NEW_ARRAY_ARGS(char, 0x10000, 0x20);
 
             if (fileData != NULL) {
                 file.readData(fileData, 0);
