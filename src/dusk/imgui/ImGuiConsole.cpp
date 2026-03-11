@@ -97,6 +97,7 @@ namespace dusk {
                 ImGui::MenuItem("Stub Log", "F5", &m_showStubLog);
                 ImGui::MenuItem("Camera", "F6", &m_showCameraOverlay);
                 ImGui::MenuItem("Input Viewer", nullptr, &m_showInputViewer);
+                ImGui::MenuItem("Map Loader", nullptr, &m_showMapLoader);
                 ImGui::EndMenu();
             }
 
@@ -106,6 +107,7 @@ namespace dusk {
             ShowHeapOverlay();
             ShowInputViewer();
             ShowStubLog();
+            ShowMapLoader();
 
             DuskDebugPad(); // temporary, remove later
 

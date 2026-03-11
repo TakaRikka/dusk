@@ -19,6 +19,7 @@ namespace dusk {
 		void ShowHeapOverlay();
         void ShowInputViewer();
 		void ShowStubLog();
+		void ShowMapLoader();
 
 		bool CheckMenuViewToggle(ImGuiKey key, bool& active);
 
@@ -40,6 +41,14 @@ namespace dusk {
 		bool m_showInputViewer = false;
 		int m_inputOverlayCorner = 3;
 		std::string m_controllerName;
+
+		bool m_showMapLoader = false;
+		struct {
+            char stageName[8];
+            int roomNo;
+			int spawnId;
+			int layer;
+		} m_mapLoaderInfo;
 	};
 
 	extern ImGuiConsole g_imguiConsole;
