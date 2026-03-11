@@ -361,9 +361,9 @@ u16 dMsgFlow_c::getInitNodeIndex(u16 param_1) {
     JUT_ASSERT(777, NULL != mLabelInfo_p);
     var_r30 = mLabelInfo_p + 0x10;
 
-    for (int i = 0; i < *(u16*)(mLabelInfo_p + 8); i++) {
-        if (*(u32*)var_r30 >> 16 == param_1) {
-            var_r27 = *(u16*)(var_r30 + 4);
+    for (int i = 0; i < be16(*(u16*)(mLabelInfo_p + 8)); i++) {
+        if (be32(*(u32*)var_r30) >> 16 == param_1) {
+            var_r27 = be16(*(u16*)(var_r30 + 4));
         }
 
         var_r30 += 0x8;
