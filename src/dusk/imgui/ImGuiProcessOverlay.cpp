@@ -69,11 +69,7 @@ namespace dusk {
     }
 
     void ImGuiConsole::ShowProcessManager() {
-        if (ImGui::IsKeyPressed(ImGuiKey_F2)) {
-            m_showProcessManagement = !m_showProcessManagement;
-        }
-
-        if (!m_showProcessManagement) {
+        if (!CheckMenuViewToggle(ImGuiKey_F2, m_showProcessManagement)) {
             return;
         }
 

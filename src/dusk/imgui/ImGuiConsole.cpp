@@ -84,11 +84,7 @@ namespace dusk {
     ImGuiConsole::ImGuiConsole() {}
 
     void ImGuiConsole::draw() {
-        if (ImGui::IsKeyPressed(ImGuiKey_F1)) {
-            m_isHidden = !m_isHidden;
-        }
-
-        if (m_isHidden) {
+        if (CheckMenuViewToggle(ImGuiKey_F1, m_isHidden)) {
             return;
         }
 
@@ -98,6 +94,7 @@ namespace dusk {
                 ImGui::MenuItem("Process Management", "F2", &m_showProcessManagement);
                 ImGui::MenuItem("Debug Overlay", "F3", &m_showDebugOverlay);
                 ImGui::MenuItem("Heaps", "F4", &m_showHeapOverlay);
+                ImGui::MenuItem("Stub Log", "F5", &m_showStubLog);
                 ImGui::MenuItem("Camera", "F6", &m_showCameraOverlay);
                 ImGui::MenuItem("Input Viewer", nullptr, &m_showInputViewer);
                 ImGui::EndMenu();
@@ -108,6 +105,7 @@ namespace dusk {
             ShowProcessManager();
             ShowHeapOverlay();
             ShowInputViewer();
+            ShowStubLog();
 
             DuskDebugPad(); // temporary, remove later
 
@@ -116,11 +114,7 @@ namespace dusk {
     }
 
     void ImGuiConsole::ShowDebugOverlay() {
-        if (ImGui::IsKeyPressed(ImGuiKey_F3)) {
-            m_showDebugOverlay = !m_showDebugOverlay;
-        }
-
-        if (!m_showDebugOverlay) {
+        if (!CheckMenuViewToggle(ImGuiKey_F3, m_showDebugOverlay)) {
             return;
         }
 
@@ -180,6 +174,14 @@ namespace dusk {
                     stats->lastIndexSize + stats->lastStorageSize)));
         }
         ImGui::End();
+    }
+
+    bool ImGuiConsole::CheckMenuViewToggle(ImGuiKey key, bool& active) {
+        if (ImGui::IsKeyPressed(key)) {
+            active = !active;
+        }
+
+        return active;
     }
 
     std::string_view backend_name(AuroraBackend backend) {

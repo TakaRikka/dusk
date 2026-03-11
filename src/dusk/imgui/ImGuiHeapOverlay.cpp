@@ -9,11 +9,7 @@ namespace dusk {
     static void DrawTableCore();
 
     void ImGuiConsole::ShowHeapOverlay() {
-        if (ImGui::IsKeyPressed(ImGuiKey_F4)) {
-            m_showHeapOverlay = !m_showHeapOverlay;
-        }
-
-        if (!m_showHeapOverlay) {
+        if (!CheckMenuViewToggle(ImGuiKey_F4, m_showHeapOverlay)) {
             return;
         }
 

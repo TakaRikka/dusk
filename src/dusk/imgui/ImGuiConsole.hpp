@@ -4,6 +4,8 @@
 #include <aurora/aurora.h>
 #include <string>
 
+#include "imgui.h"
+
 namespace dusk {
 	class ImGuiConsole {
 	public:
@@ -16,6 +18,9 @@ namespace dusk {
 		void ShowProcessManager();
 		void ShowHeapOverlay();
         void ShowInputViewer();
+		void ShowStubLog();
+
+		bool CheckMenuViewToggle(ImGuiKey key, bool& active);
 
 	private:
 		bool m_isHidden = false;
@@ -29,6 +34,8 @@ namespace dusk {
 		bool m_showProcessManagement = false;
 
 		bool m_showHeapOverlay = false;
+
+		bool m_showStubLog = false;
 
 		bool m_showInputViewer = false;
 		int m_inputOverlayCorner = 3;

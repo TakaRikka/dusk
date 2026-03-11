@@ -6,8 +6,8 @@
 
 namespace dusk {
     void ImGuiConsole::ShowCameraOverlay() {
-        if (ImGui::IsKeyPressed(ImGuiKey_F6)) {
-            m_showCameraOverlay = !m_showCameraOverlay;
+        if (!CheckMenuViewToggle(ImGuiKey_F6, m_showCameraOverlay)) {
+            return;
         }
 
         auto* cam = (camera_process_class*)dCam_getCamera();
