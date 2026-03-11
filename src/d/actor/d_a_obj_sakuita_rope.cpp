@@ -267,13 +267,13 @@ void daObjItaRope_c::setNormalRopePos() {
 
 inline int daObjItaRope_c::createHeap() {
     mRopes = NULL;
-    mRopes = JKR_NEW RopeWork_c[field_0x635 - 2];
+    mRopes = JKR_NEW_ARRAY(RopeWork_c, field_0x635 - 2);
     if (mRopes == NULL) {
         return 0;
     }
 
     mSakuitas = NULL;
-    mSakuitas = JKR_NEW Sakuita_c[field_0x635 - 2];
+    mSakuitas = JKR_NEW_ARRAY(Sakuita_c, field_0x635 - 2);
     if (mSakuitas == NULL) {
         return 0;
     }

@@ -121,7 +121,7 @@ void JMessage::TResourceContainer::TCResource::Do_destroy(JMessage::TResource* p
 #if DEBUG
     JKR_DELETE(pResource);
 #else
-    operator delete(pResource);
+    operator delete(pResource JKR_HEAP_TOKEN);
 #endif
 }
 

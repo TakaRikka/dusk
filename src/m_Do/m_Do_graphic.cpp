@@ -36,6 +36,7 @@
 #include <cstring>
 #include "dusk/endian.h"
 #include "dusk/logging.h"
+#include "dusk/gx_helper.h"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/sc.h>
@@ -1602,7 +1603,7 @@ int mDoGph_Painter() {
             fapGm_HIO_c::startCpuTimer();
             #endif
 
-            dComIfGd_imageDrawShadow(camera_p->view.viewMtx);
+            GX_DEBUG_GROUP(dComIfGd_imageDrawShadow, camera_p->view.viewMtx);
 
             #if DEBUG
             // "drawing Shadow Texture (Rendering)"
@@ -1675,8 +1676,8 @@ int mDoGph_Painter() {
 
             j3dSys.setViewMtx(camera_p->view.viewMtx);
             dKy_setLight();
-            dComIfGd_drawOpaListSky();
-            dComIfGd_drawXluListSky();
+            GX_DEBUG_GROUP(dComIfGd_drawOpaListSky);
+            GX_DEBUG_GROUP(dComIfGd_drawXluListSky);
 
             GXSetClipMode(GX_CLIP_ENABLE);
 
@@ -1687,16 +1688,16 @@ int mDoGph_Painter() {
             fapGm_HIO_c::startCpuTimer();
             #endif
 
-            dComIfGd_drawOpaListBG();
-            dComIfGd_drawOpaListDarkBG();
-            dComIfGd_drawOpaListMiddle();
+            GX_DEBUG_GROUP(dComIfGd_drawOpaListBG);
+            GX_DEBUG_GROUP(dComIfGd_drawOpaListDarkBG);
+            GX_DEBUG_GROUP(dComIfGd_drawOpaListMiddle);
 
             if (fapGmHIO_getParticle()) {
-                dComIfGp_particle_drawFogPri0_B(&draw_info);
+                GX_DEBUG_GROUP(dComIfGp_particle_drawFogPri0_B, &draw_info);
             }
 
             if (fapGmHIO_getParticle()) {
-                dComIfGp_particle_drawNormalPri0_B(&draw_info);
+                GX_DEBUG_GROUP(dComIfGp_particle_drawNormalPri0_B, &draw_info);
             }
 
             #if DEBUG
@@ -1706,7 +1707,7 @@ int mDoGph_Painter() {
             fapGm_HIO_c::startCpuTimer();
             #endif
 
-            dComIfGd_drawShadow(camera_p->view.viewMtx);
+            GX_DEBUG_GROUP(dComIfGd_drawShadow, camera_p->view.viewMtx);
 
             #if DEBUG
             // "shadow drawing (Rendering)"
@@ -1715,17 +1716,17 @@ int mDoGph_Painter() {
             fapGm_HIO_c::startCpuTimer();
             #endif
 
-            dComIfGd_drawOpaList();
+            GX_DEBUG_GROUP(dComIfGd_drawOpaList);
 
             if (DEBUG && g_kankyoHIO.navy.field_0x30d) {
                 if (dKy_darkworld_check() != TRUE) {
-                    dComIfGd_drawOpaListDark();
+                    GX_DEBUG_GROUP(dComIfGd_drawOpaListDark);
                 }
             } else {
-                dComIfGd_drawOpaListDark();
+                GX_DEBUG_GROUP(dComIfGd_drawOpaListDark);
             }
 
-            dComIfGd_drawOpaListPacket();
+            GX_DEBUG_GROUP(dComIfGd_drawOpaListPacket);
             
             #if DEBUG
             // "drawing up to special-use drawing (Opaque) except J3D (Rendering)"
@@ -1734,12 +1735,12 @@ int mDoGph_Painter() {
             fapGm_HIO_c::startCpuTimer();
             #endif
 
-            dComIfGd_drawXluListBG();
-            dComIfGd_drawXluListDarkBG();
+            GX_DEBUG_GROUP(dComIfGd_drawXluListBG);
+            GX_DEBUG_GROUP(dComIfGd_drawXluListDarkBG);
 
             if (fapGmHIO_getParticle()) {
-                dComIfGp_particle_drawFogPri0_A(&draw_info);
-                dComIfGp_particle_drawNormalPri0_A(&draw_info);
+                GX_DEBUG_GROUP(dComIfGp_particle_drawFogPri0_A, &draw_info);
+                GX_DEBUG_GROUP(dComIfGp_particle_drawNormalPri0_A, &draw_info);
             }
 
             #if DEBUG
@@ -1749,14 +1750,14 @@ int mDoGph_Painter() {
             fapGm_HIO_c::startCpuTimer();
             #endif
 
-            dComIfGd_drawXluList();
+            GX_DEBUG_GROUP(dComIfGd_drawXluList);
 
             if (DEBUG && g_kankyoHIO.navy.field_0x30d) {
                 if (dKy_darkworld_check() != TRUE) {
-                    dComIfGd_drawXluListDark();
+                    GX_DEBUG_GROUP(dComIfGd_drawXluListDark);
                 }
             } else {
-                dComIfGd_drawXluListDark();
+                GX_DEBUG_GROUP(dComIfGd_drawXluListDark);
             }
 
             #if DEBUG
@@ -1781,7 +1782,7 @@ int mDoGph_Painter() {
                 fapGm_HIO_c::startCpuTimer();
                 #endif
 
-                motionBlure(&camera_p->view);
+                GX_DEBUG_GROUP(motionBlure, &camera_p->view);
 
                 #if DEBUG
                 // "blur filter (Rendering)"
@@ -1790,7 +1791,7 @@ int mDoGph_Painter() {
                 fapGm_HIO_c::startCpuTimer();
                 #endif
 
-                drawDepth2(&camera_p->view, view_port, dComIfGp_getCameraZoomForcus(camera_id));
+                GX_DEBUG_GROUP(drawDepth2, &camera_p->view, view_port, dComIfGp_getCameraZoomForcus(camera_id));
                 GXInvalidateTexAll();
                 GXSetClipMode(GX_CLIP_ENABLE);
 
@@ -1804,8 +1805,8 @@ int mDoGph_Painter() {
                 if (!(DEBUG && g_kankyoHIO.navy.field_0x30d != 0 &&
                       dKy_darkworld_check() == TRUE)) {
                     if (g_env_light.is_blure == 0) {
-                        dComIfGd_drawOpaListInvisible();
-                        dComIfGd_drawXluListInvisible();
+                        GX_DEBUG_GROUP(dComIfGd_drawOpaListInvisible);
+                        GX_DEBUG_GROUP(dComIfGd_drawXluListInvisible);
                     }
                 }
                 
@@ -1818,8 +1819,8 @@ int mDoGph_Painter() {
                 #endif
 
                 if (fapGmHIO_getParticle()) {
-                    dComIfGp_particle_drawFogPri4(&draw_info);
-                    dComIfGp_particle_drawProjection(&draw_info);
+                    GX_DEBUG_GROUP(dComIfGp_particle_drawFogPri4, &draw_info);
+                    GX_DEBUG_GROUP(dComIfGp_particle_drawProjection, &draw_info);
                 }
 
                 #if DEBUG
@@ -1829,7 +1830,7 @@ int mDoGph_Painter() {
                 fapGm_HIO_c::startCpuTimer();
                 #endif
 
-                dComIfGd_drawListZxlu();
+                GX_DEBUG_GROUP(dComIfGd_drawListZxlu);
 
                 #if DEBUG
                 // "drawing up to 2-draw Z-update translucent (Rendering)"
@@ -1842,10 +1843,10 @@ int mDoGph_Painter() {
 
                 if (DEBUG && g_kankyoHIO.navy.field_0x30d) {
                     if (dKy_darkworld_check() != TRUE) {
-                        dComIfGd_drawOpaListFilter();
+                        GX_DEBUG_GROUP(dComIfGd_drawOpaListFilter);
                     }
                 } else {
-                    dComIfGd_drawOpaListFilter();
+                    GX_DEBUG_GROUP(dComIfGd_drawOpaListFilter);
                 }
 
                 #if DEBUG
@@ -1858,13 +1859,13 @@ int mDoGph_Painter() {
                 GXSetClipMode(GX_CLIP_ENABLE);
 
                 if (fapGmHIO_getParticle()) {
-                    dComIfGp_particle_drawFogPri1(&draw_info);
-                    dComIfGp_particle_draw(&draw_info);
-                    dComIfGp_particle_drawFogPri2(&draw_info);
-                    dComIfGp_particle_drawFog(&draw_info);
-                    dComIfGp_particle_drawFogPri3(&draw_info);
-                    dComIfGp_particle_drawP1(&draw_info);
-                    dComIfGp_particle_drawDarkworld(&draw_info);
+                    GX_DEBUG_GROUP(dComIfGp_particle_drawFogPri1, &draw_info);
+                    GX_DEBUG_GROUP(dComIfGp_particle_draw, &draw_info);
+                    GX_DEBUG_GROUP(dComIfGp_particle_drawFogPri2, &draw_info);
+                    GX_DEBUG_GROUP(dComIfGp_particle_drawFog, &draw_info);
+                    GX_DEBUG_GROUP(dComIfGp_particle_drawFogPri3, &draw_info);
+                    GX_DEBUG_GROUP(dComIfGp_particle_drawP1, &draw_info);
+                    GX_DEBUG_GROUP(dComIfGp_particle_drawDarkworld, &draw_info);
                 }
 
                 #if DEBUG
@@ -1888,13 +1889,13 @@ int mDoGph_Painter() {
                 if (!(DEBUG && g_kankyoHIO.navy.field_0x30d != 0 &&
                       dKy_darkworld_check() == TRUE)) {
                     if (g_env_light.is_blure == 1) {
-                        dComIfGd_drawOpaListInvisible();
-                        dComIfGd_drawXluListInvisible();
+                        GX_DEBUG_GROUP(dComIfGd_drawOpaListInvisible);
+                        GX_DEBUG_GROUP(dComIfGd_drawXluListInvisible);
                     }
                 }
 
                 if (fapGmHIO_getParticle()) {
-                    dComIfGp_particle_drawScreen(&draw_info);
+                    GX_DEBUG_GROUP(dComIfGp_particle_drawScreen, &draw_info);
                 }
 
                 #if DEBUG
@@ -1906,7 +1907,7 @@ int mDoGph_Painter() {
 
                 GXSetClipMode(GX_CLIP_ENABLE);
 
-                dComIfGd_drawIndScreen();
+                GX_DEBUG_GROUP(dComIfGd_drawIndScreen);
 
                 if (strcmp(dComIfGp_getStartStageName(), "F_SP124") == 0) {
                     retry_captue_frame(&camera_p->view, view_port,
@@ -1924,7 +1925,7 @@ int mDoGph_Painter() {
 
                 cMtx_lookAt(m2, &sp38c, &cXyz::Zero, &sp398, 0);
                 j3dSys.setViewMtx(m2);
-                dComIfGd_drawXluList2DScreen();
+                GX_DEBUG_GROUP(dComIfGd_drawXluList2DScreen);
 
                 j3dSys.setViewMtx(camera_p->view.viewMtx);
                 GXSetProjection(camera_p->view.projMtx, GX_PERSPECTIVE);
@@ -1955,7 +1956,7 @@ int mDoGph_Painter() {
                 fapGm_HIO_c::startCpuTimer();
                 #endif
 
-                mDoGph_gInf_c::getBloom()->draw();
+                GX_DEBUG_GROUP(mDoGph_gInf_c::getBloom()->draw);
                 j3dSys.setViewMtx(camera_p->view.viewMtx);
                 GXSetProjection(camera_p->view.projMtx, GX_PERSPECTIVE);
 
@@ -1971,7 +1972,7 @@ int mDoGph_Painter() {
                 }
                 #endif
 
-                dComIfGd_drawOpaList3Dlast();
+                GX_DEBUG_GROUP(dComIfGd_drawOpaList3Dlast);
 
                 #if DEBUG
                 // "saturation add filter (Rendering)"

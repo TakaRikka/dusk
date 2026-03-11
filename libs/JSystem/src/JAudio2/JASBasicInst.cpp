@@ -49,7 +49,7 @@ bool JASBasicInst::getParam(int param_0, int param_1, JASInstParam* param_2) con
 
 void JASBasicInst::setKeyRegionCount(u32 count, JKRHeap* param_1) {
     JKR_DELETE_ARRAY(mKeymap);
-    mKeymap = JKR_NEW_ARGS (param_1, 0) TKeymap[count];
+    mKeymap = JKR_NEW_ARRAY_ARGS(TKeymap, count, param_1, 0);
     JUT_ASSERT(114, mKeymap != NULL);
 	mKeymapCount = count;
 }

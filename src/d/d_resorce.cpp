@@ -310,7 +310,7 @@ int dRes_info_c::loadResource() {
     JUT_ASSERT(709, mRes == NULL);
 
     s32 countFile = mArchive->countFile();
-    mRes = JKR_NEW void*[countFile];
+    mRes = JKR_NEW_ARRAY(void*, countFile);
     if (mRes == NULL) {
         OSReport_Error("<%s.arc> setRes: res pointer buffer nothing !!\n", mArchiveName);
         return -1;

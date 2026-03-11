@@ -12,7 +12,7 @@ void JASBasicBank::newInstTable(u8 num, JKRHeap* heap) {
     if (num != 0) {
         JUT_ASSERT(31, num <= JASBank::PRG_OSC);
         mInstNumMax = num;
-        mInstTable = JKR_NEW_ARGS (heap, 0) JASInst*[mInstNumMax];
+        mInstTable = JKR_NEW_ARRAY_ARGS(JASInst*, mInstNumMax, heap, 0);
         JASCalc::bzero(mInstTable, mInstNumMax * 4);
     }
 }

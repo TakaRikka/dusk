@@ -40,7 +40,7 @@ void JHIMccBuf::init() {
     if (mTempBuf != NULL) {
         initBuf();
     } else {
-        mTempBuf = JKR_NEW_ARGS (32) u8[0x18000];
+        mTempBuf = JKR_NEW_ARRAY_ARGS(u8, 0x18000, 32);
         if (mTempBuf == NULL) {
             JHIHalt("ERROR: JHIMccBuf cannot alloc temp buf.\n");
         } else {

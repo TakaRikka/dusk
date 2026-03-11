@@ -180,7 +180,7 @@ int daCstatue_c::createHeap() {
     }
 
     if (checkBossType()) {
-        mSph = JKR_NEW dCcD_Sph[9]();
+        mSph = JKR_NEW_ARRAY(dCcD_Sph, 9);
         if (!mSph) {
             return cPhs_INIT_e;
         }

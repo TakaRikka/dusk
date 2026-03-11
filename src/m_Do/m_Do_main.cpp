@@ -186,6 +186,39 @@ void main01(void) {
     exit:;
 }
 
+static AuroraBackend ParseAuroraBackend(const std::string& value) {
+    if (value == "auto") {
+        return BACKEND_AUTO;
+    }
+    if (value == "d3d11") {
+        return BACKEND_D3D11;
+    }
+    if (value == "d3d12") {
+        return BACKEND_D3D12;
+    }
+    if (value == "metal") {
+        return BACKEND_METAL;
+    }
+    if (value == "vulkan") {
+        return BACKEND_VULKAN;
+    }
+    if (value == "opengl") {
+        return BACKEND_OPENGL;
+    }
+    if (value == "opengles") {
+        return BACKEND_OPENGLES;
+    }
+    if (value == "webgpu") {
+        return BACKEND_WEBGPU;
+    }
+    if (value == "null") {
+        return BACKEND_NULL;
+    }
+
+    fmt::print(stderr, "Unknown backend: {}", value);
+    exit(1);
+}
+
 // =========================================================================
 // PC ENTRY POINT
 // =========================================================================
@@ -198,7 +231,8 @@ int game_main(int argc, char* argv[]) {
         arg_options.add_options()
             ("l,log-level", "Log level from " + std::to_string(AuroraLogLevel::LOG_DEBUG) + " to " + std::to_string(AuroraLogLevel::LOG_FATAL), cxxopts::value<uint8_t>()->default_value("0"))
             ("h,help", "Print usage")
-            ("dvd", "Path to DVD image file", cxxopts::value<std::string>()->default_value("game.iso"));
+            ("dvd", "Path to DVD image file", cxxopts::value<std::string>()->default_value("game.iso"))
+            ("backend", "Graphics API backend to use (auto, d3d11, d3d12, metal, vulkan, opengl, opengles, webgpu, null)", cxxopts::value<std::string>()->default_value("auto"));
 
         arg_options.parse_positional({"dvd"});
         arg_options.positional_help("<dvd-image>");
@@ -223,6 +257,7 @@ int game_main(int argc, char* argv[]) {
     config.windowPosY = -1;
     config.windowWidth = 608 * 2;
     config.windowHeight = 448 * 2;
+    config.desiredBackend = ParseAuroraBackend(parsed_arg_options["backend"].as<std::string>());
     config.configPath = ".";
     config.logCallback = &aurora_log_callback;
     config.logLevel = (AuroraLogLevel)parsed_arg_options["log-level"].as<uint8_t>();

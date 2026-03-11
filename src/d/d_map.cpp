@@ -1177,7 +1177,7 @@ dMap_c::dMap_c(int param_0, int param_1, int param_2, int param_3) {
     }
 
     int buffer_size = GXGetTexBufferSize(param_2, param_3, 9, GX_FALSE, 0);
-    mImage_p = JKR_NEW_ARGS (0x20) u8[buffer_size];
+    mImage_p = JKR_NEW_ARRAY_ARGS(u8, buffer_size, 0x20);
     JUT_ASSERT(2638, mImage_p != NULL);
 
     renderingDAmap_c::init(mImage_p, mTexSizeX, mTexSizeY, mTexSizeX, mTexSizeY);

@@ -525,7 +525,7 @@ void daPasserMng_c::create_init() {
     dPnt* pnt1 = dPath_GetPnt(mPath, 1);
     current.pos.set(pnt0->m_position);
     current.angle.y = cLib_targetAngleY(pnt0->m_position, pnt1->m_position);
-    childProcIds = JKR_NEW fpc_ProcID[getMaxNum()];
+    childProcIds = JKR_NEW_ARRAY(fpc_ProcID, getMaxNum());
     currentChildIndex = 0;
     int time = getTime();
     intervalTime = getIntervalTime() * 5;
@@ -556,7 +556,7 @@ void daPasserMng_c::create_init() {
             max = mPath->m_num - 2;
         }
         int i;
-        int* arr = JKR_NEW int[max];
+        int* arr = JKR_NEW_ARRAY(int, max);
         int ind = 0;
         while (ind < max) {
             int rnd = cLib_getRndValue(1, mPath->m_num - 2);

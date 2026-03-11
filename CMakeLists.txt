@@ -89,22 +89,6 @@ target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::gd auror
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES})
 
-# Hide global operator new/delete overrides from the dynamic symbol table.
-# Without this, other dylibs (e.g. Apple's AGX GPU driver) resolve these symbols
-# from libgame and crash when they encounter JKRHeap-managed memory.
-if (APPLE)
-    target_link_options(game PRIVATE
-            "LINKER:-unexported_symbol,__ZdlPv"   # operator delete(void*)
-            "LINKER:-unexported_symbol,__ZdaPv"   # operator delete[](void*)
-            "LINKER:-unexported_symbol,__Znwm"    # operator new(size_t)
-            "LINKER:-unexported_symbol,__Znam"    # operator new[](size_t)
-    )
-elseif (CMAKE_SYSTEM_NAME STREQUAL Linux)
-    target_link_options(game PRIVATE
-            "LINKER:--version-script,${CMAKE_SOURCE_DIR}/hide_new_delete.lds"
-    )
-endif ()
-
 target_link_libraries(game PRIVATE game_debug cxxopts::cxxopts)
 target_compile_definitions(game PRIVATE TARGET_PC AVOID_UB=1 VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0)
 

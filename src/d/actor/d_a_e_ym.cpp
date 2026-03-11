@@ -3360,7 +3360,7 @@ int daE_YM_c::CreateHeap() {
     }
 
     if (mType == 6) {
-        field_0x6d0 = JKR_NEW cXyz[45];
+        field_0x6d0 = JKR_NEW_ARRAY(cXyz, 45);
     }
 
     return 1;

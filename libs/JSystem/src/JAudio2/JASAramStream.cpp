@@ -33,7 +33,7 @@ void JASAramStream::initSystem(u32 block_size, u32 channel_max) {
         if (sLoadThread == NULL) {
             sLoadThread = JASDvd::getThreadPointer();
         }
-        sReadBuffer = JKR_NEW_ARGS (JASDram, 0x20) u8[(block_size + 0x20) * channel_max];
+        sReadBuffer = JKR_NEW_ARRAY_ARGS(u8, (block_size + 0x20) * channel_max, JASDram, 0x20);
         JUT_ASSERT(79, sReadBuffer);
         sBlockSize = block_size;
         sChannelMax = channel_max;

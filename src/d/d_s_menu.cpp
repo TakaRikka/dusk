@@ -1583,7 +1583,7 @@ int phase_2(dScnMenu_c* i_this) {
     }
 
     if (l_groupPoint == NULL) {
-        l_groupPoint = JKR_NEW s8[menu_info->num];
+        l_groupPoint = JKR_NEW_ARRAY(s8, menu_info->num);
         JUT_ASSERT(3252, l_groupPoint != NULL);
 
         if (mDoExt_getSafeZeldaHeapSize() >= 0) {

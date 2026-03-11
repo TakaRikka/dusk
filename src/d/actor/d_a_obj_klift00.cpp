@@ -251,14 +251,14 @@ int daObjKLift00_c::CreateHeap() {
         mpChainBase = NULL;
     }
 
-    mChainPositions = JKR_NEW ChainPos[mNumChains];
+    mChainPositions = JKR_NEW_ARRAY(ChainPos, mNumChains);
     if(!mChainPositions)
         return 0;
 
     mChainModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, l_bmdidx[1]));
     JUT_ASSERT(334, mChainModelData != NULL);
 
-    mChainMdlObjs = JKR_NEW dMdl_obj_c[mNumChainModels];
+    mChainMdlObjs = JKR_NEW_ARRAY(dMdl_obj_c, mNumChainModels);
 
     return mChainMdlObjs ? TRUE : FALSE;
 }

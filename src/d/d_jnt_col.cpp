@@ -207,7 +207,7 @@ void dJntCol_HIO_c::update() {
 }
 
 void dJntCol_HIO_c::fileOut() {
-    char* buffer = JKR_NEW_ARGS(0x20) char[0x10000];
+    char* buffer = JKR_NEW_ARRAY_ARGS(char, 0x10000, 0x20);
     if (!buffer) {
         OSReport("書き込み用領域確保できませんでした\n");
         return;

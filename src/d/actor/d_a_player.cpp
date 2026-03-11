@@ -233,7 +233,7 @@ void daPy_anmHeap_c::initData() {
 }
 
 void* daPy_anmHeap_c::mallocBuffer() {
-    mBuffer = JKR_NEW_ARGS (0x20) u8[mBufferSize];
+    mBuffer = JKR_NEW_ARRAY_ARGS(u8, mBufferSize, 0x20);
     return mBuffer;
 }
 
@@ -262,7 +262,7 @@ void daPy_anmHeap_c::createHeap(daPy_anmHeap_c::daAlinkHEAP_TYPE i_heapType) {
     mAnimeHeap = mDoExt_createSolidHeapFromGameToCurrent(&tmp, size, 0x20);
     
     if (i_heapType == 4) {
-        tmpWork = JKR_NEW char[size];
+        tmpWork = JKR_NEW_ARRAY(char, size);
         JUT_ASSERT(669, tmpWork != NULL);
     } else if (i_heapType == 3) {
         tmpTransBas = JKR_NEW mDoExt_transAnmBas(NULL);

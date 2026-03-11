@@ -94,9 +94,9 @@ void daAlink_c::setIronBallModel() {
     mpItemModelData = loadAramBmd(dRes_ID_ALANM_BMD_AL_HS_KUSARI_e, 0x1000);
     mpHookChain = JKR_NEW hsChainShape_c();
 
-    mIronBallChainPos = JKR_NEW cXyz[102];
-    mIronBallChainAngle = JKR_NEW csXyz[102];
-    field_0x3848 = JKR_NEW cXyz[102];
+    mIronBallChainPos = JKR_NEW_ARRAY(cXyz, 102);
+    mIronBallChainAngle = JKR_NEW_ARRAY(csXyz, 102);
+    field_0x3848 = JKR_NEW_ARRAY(cXyz, 102);
 
     field_0x0774 = JKR_NEW dBgS_AcchCir();
     field_0x0778 = JKR_NEW dBgS_ObjAcch();

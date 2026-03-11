@@ -239,7 +239,7 @@ void daAlink_c::changeModelDataDirectWolf(int param_0) {
 void daAlink_c::initStatusWindow() {
     onNoResetFlg2(FLG2_STATUS_WINDOW_DRAW);
     
-    void* tmpBuffer = JKR_NEW_ARGS (0x20) void*[0x500];
+    void* tmpBuffer = JKR_NEW_ARRAY_ARGS(void*, 0x500, 0x20);
     JUT_ASSERT(394, tmpBuffer);
 
     u16 bckResIdx, btpResIdx, btkResIdx;
@@ -268,7 +268,7 @@ void daAlink_c::initStatusWindow() {
         JUT_ASSERT(433, FALSE);
     }
 
-    tmpBuffer = JKR_NEW_ARGS (0x20) void*[0x100];
+    tmpBuffer = JKR_NEW_ARRAY_ARGS(void*, 0x100, 0x20);
     JUT_ASSERT(437, tmpBuffer);
 
     JKRReadIdxResource(tmpBuffer, 0x400, btpResIdx, dComIfGp_getAnmArchive());
@@ -278,7 +278,7 @@ void daAlink_c::initStatusWindow() {
     btp->searchUpdateMaterialID(field_0x06c0);
     field_0x06c0->entryTexNoAnimator(btp);
 
-    tmpBuffer = JKR_NEW_ARGS (0x20) void*[0x100];
+    tmpBuffer = JKR_NEW_ARRAY_ARGS(void*, 0x100, 0x20);
     JUT_ASSERT(449, tmpBuffer);
 
     JKRReadIdxResource(tmpBuffer, 0x400, btkResIdx, dComIfGp_getAnmArchive());

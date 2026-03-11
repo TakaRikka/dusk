@@ -88,12 +88,12 @@ BOOL daHoZelda_c::createHeap() {
         }
     }
 
-    J3DTransformInfo* transinfo_buf = JKR_NEW J3DTransformInfo[47];
+    J3DTransformInfo* transinfo_buf = JKR_NEW_ARRAY(J3DTransformInfo, 47);
     if (transinfo_buf == NULL) {
         return FALSE;
     }
 
-    Quaternion* quat_buf = JKR_NEW Quaternion[47];
+    Quaternion* quat_buf = JKR_NEW_ARRAY(Quaternion, 47);
     if (quat_buf == NULL) {
         return FALSE;
     }

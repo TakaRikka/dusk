@@ -586,7 +586,7 @@ void J2DAnmTexPattern::searchUpdateMaterialID(J2DScreen* pScreen) {
             }
         }
         JKR_DELETE_ARRAY(mTIMGPtrArray);
-        mTIMGPtrArray = JKR_NEW J2DAnmTexPatternTIMGPointer[pScreen->mTexRes->mCount];
+        mTIMGPtrArray = JKR_NEW_ARRAY(J2DAnmTexPatternTIMGPointer, pScreen->mTexRes->mCount);
         if (mTIMGPtrArray != NULL) {
             JUTResReference resRef;
             for (u16 i = 0; i < pScreen->mTexRes->mCount; i++) {

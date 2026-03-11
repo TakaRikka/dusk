@@ -25,7 +25,7 @@ void J3DDrawBuffer::initialize() {
 }
 
 int J3DDrawBuffer::allocBuffer(u32 size) {
-    mpBuffer = JKR_NEW_ARGS (0x20) J3DPacket*[size];
+    mpBuffer = JKR_NEW_ARRAY_ARGS(J3DPacket*, size, 0x20);
     if (mpBuffer == NULL)
         return kJ3DError_Alloc;
 

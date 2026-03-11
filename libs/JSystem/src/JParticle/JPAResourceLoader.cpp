@@ -54,8 +54,8 @@ void JPAResourceLoader::load_jpc(u8 const* data, JPAResourceManager* p_res_mgr) 
     JKRHeap* heap = p_res_mgr->mpHeap;
     p_res_mgr->resMaxNum = *(BE(u16)*)(data + 8);
     p_res_mgr->texMaxNum = *(BE(u16)*)(data + 0xA);
-    p_res_mgr->pResAry = JKR_NEW_ARGS (heap, 0) JPAResource*[p_res_mgr->resMaxNum];
-    p_res_mgr->pTexAry = JKR_NEW_ARGS (heap, 0) JPATexture*[p_res_mgr->texMaxNum];
+    p_res_mgr->pResAry = JKR_NEW_ARRAY_ARGS(JPAResource*, p_res_mgr->resMaxNum, heap, 0);
+    p_res_mgr->pTexAry = JKR_NEW_ARRAY_ARGS(JPATexture*, p_res_mgr->texMaxNum, heap, 0);
     JUT_ASSERT(199, (p_res_mgr->pResAry != NULL) && (p_res_mgr->pTexAry != 0));
 
     u32 offset = 0x10;
@@ -65,11 +65,11 @@ void JPAResourceLoader::load_jpc(u8 const* data, JPAResourceManager* p_res_mgr) 
         JUT_ASSERT(211, p_res != NULL);
         p_res->fldNum = header->mFieldBlockNum;
         p_res->ppFld = p_res->fldNum != 0 ?
-            JKR_NEW_ARGS (heap, 0) JPAFieldBlock*[p_res->fldNum] : NULL;
+            JKR_NEW_ARRAY_ARGS(JPAFieldBlock*, p_res->fldNum, heap, 0) : NULL;
         JUT_ASSERT(216, (p_res->ppFld != NULL) || (p_res->fldNum == 0));
         p_res->keyNum = header->mKeyBlockNum;
         p_res->ppKey = p_res->keyNum != 0 ?
-            JKR_NEW_ARGS (heap, 0) JPAKeyBlock*[p_res->keyNum] : NULL;
+            JKR_NEW_ARRAY_ARGS(JPAKeyBlock*, p_res->keyNum, heap, 0) : NULL;
         JUT_ASSERT(221, (p_res->ppKey != NULL) || (p_res->keyNum == 0));
         p_res->texNum = header->mTDB1Num;
         p_res->mpTDB1 = NULL;
