@@ -43,7 +43,7 @@ JKRArchive::JKRArchive(s32 entryNumber, JKRArchive::EMountMode mountMode) {
 JKRArchive::~JKRArchive() {
 #if TARGET_PC
     if (mFileData != nullptr) {
-        mHeap->free(mFileData);
+        JKRHeap::getSystemHeap()->free(mFileData);
         mFileData = nullptr;
     }
 #endif
@@ -257,11 +257,12 @@ void JKRArchive::initFileDataPointers() {
     assert(mFiles);
 
     if (mFileData != nullptr) {
-        mHeap->free(mFileData);
+        JKRHeap::getSystemHeap()->free(mFileData);
+        mFileData = nullptr;
     }
 
     mFileData = static_cast<void**>(
-        mHeap->alloc(mArcInfoBlock->num_file_entries * sizeof(void*), alignof(void*)));
+        JKRHeap::getSystemHeap()->alloc(mArcInfoBlock->num_file_entries * sizeof(void*), alignof(void*)));
 
     memset(mFileData, 0, mArcInfoBlock->num_file_entries * sizeof(void*));
 
