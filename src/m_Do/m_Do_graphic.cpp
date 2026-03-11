@@ -1237,6 +1237,7 @@ void mDoGph_gInf_c::bloom_c::draw() {
             GXInitTexObjLOD(&tmp_tex1, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE,
                             GX_ANISO_1);
             GXLoadTexObj(&tmp_tex1, GX_TEXMAP0);
+
             GXSetNumTexGens(8);
             u32 iVar11 = 0x1e;
             int sVar10 = 0;
@@ -1273,8 +1274,12 @@ void mDoGph_gInf_c::bloom_c::draw() {
             }
             GXPixModeSync();
 
-            // Blur filter from blur4_tex 1/4 to EFB 1/4.
+            // Blur filter from tmp_tex1 1/4 to EFB 1/4.
             mDoGph_drawFilterQuad(1, 1);
+
+#if TARGET_PC
+            GXDestroyTexObj(&tmp_tex1);
+#endif
 
             GXSetTexCopySrc(0, 0, width / 4, height / 4);
             GXSetTexCopyDst(width / 8, height / 8, GX_TF_RGBA8, GX_TRUE);
@@ -1301,15 +1306,14 @@ void mDoGph_gInf_c::bloom_c::draw() {
             GXInvalidateTexAll();
             mDoGph_drawFilterQuad(1, 1);
 
+#if TARGET_PC
+            GXDestroyTexObj(&tmp_tex2);
+#endif
+
             // Now that we've upsampled and filtered our final bloom, copy 1/4 buffer back to zBufferTex.
             GXSetTexCopySrc(0, 0, width / 4, height / 4);
             GXSetTexCopyDst(width / 4, height / 4, GX_TF_RGBA8, GX_FALSE);
             GXCopyTex(zBufferTex, GX_FALSE);
-
-#if TARGET_PC
-            // Destroy not to delete the texture but so that we refresh the copy texture with a new one.
-            GXDestroyTexObj(&tmp_tex1);
-#endif
 
             // Copy back m_buffer to screen.
             GXInitTexObj(&tmp_tex2, m_buffer, width / 2, height / 2, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP,
@@ -1330,6 +1334,10 @@ void mDoGph_gInf_c::bloom_c::draw() {
             GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ONE, GX_LO_OR);
             mDoGph_drawFilterQuad(2, 2);
 
+#if TARGET_PC
+            GXDestroyTexObj(&tmp_tex2);
+#endif
+
             // Now blend our bloom into the real FB.
             GXLoadTexObj(&tmp_tex1, GX_TEXMAP0);
             GXSetTevColor(GX_TEVREG0, mBlendColor);
@@ -1345,6 +1353,10 @@ void mDoGph_gInf_c::bloom_c::draw() {
             GXPixModeSync();
             GXInvalidateTexAll();
             mDoGph_drawFilterQuad(4, 4);
+
+#if TARGET_PC
+            GXDestroyTexObj(&tmp_tex1);
+#endif
         }
     }
 }
