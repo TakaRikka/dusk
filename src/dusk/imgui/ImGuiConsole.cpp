@@ -10,6 +10,8 @@
 
 #include "ImGuiConsole.hpp"
 
+#include "JSystem/JUtility/JUTGamePad.h"
+
 #if _WIN32
 #include "Windows.h"
 #endif
@@ -99,6 +101,13 @@ namespace dusk {
                 ImGui::MenuItem("Camera", "F6", &m_showCameraOverlay);
                 ImGui::MenuItem("Input Viewer", nullptr, &m_showInputViewer);
                 ImGui::MenuItem("Map Loader", nullptr, &m_showMapLoader);
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("Game")) {
+                if (ImGui::Selectable("Reset")) {
+                    JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
+                }
                 ImGui::EndMenu();
             }
 

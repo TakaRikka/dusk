@@ -90,7 +90,6 @@ struct J3DTexMtxInfo {
     /* 0x01 */ u8 mInfo;
     /* 0x02 */ u8 field_0x2;
     /* 0x03 */ u8 field_0x3;
-    // NOTE: big endian when loaded from file!
     /* 0x04 */ Vec mCenter;
     /* 0x10 */ J3DTextureSRTInfo mSRT;
     /* 0x24 */ Mtx44 mEffectMtx;
