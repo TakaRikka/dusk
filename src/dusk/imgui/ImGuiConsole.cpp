@@ -2,6 +2,7 @@
 #include <numeric>
 #include <string_view>
 #include <chrono>
+#include <thread>
 
 #include "fmt/format.h"
 #include "imgui.h"
