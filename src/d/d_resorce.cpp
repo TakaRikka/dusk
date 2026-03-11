@@ -867,6 +867,13 @@ dRes_info_c* dRes_control_c::getResInfo(char const* i_arcName, dRes_info_c* i_re
 dRes_info_c* dRes_control_c::newResInfo(dRes_info_c* i_resInfo, int i_infoNum) {
     for (int i = 0; i < i_infoNum; i++) {
         if (i_resInfo->getCount() == 0) {
+#if TARGET_PC
+            // The original code reuses explicitly-destructed dRes_info_c slots without
+            // placement-new. The destructor's cleanup writes (mArchive = NULL, etc.) are
+            // dead stores from the compiler's perspective and may be optimized away,
+            // leaving stale pointers. Reconstruct the slot to ensure a clean state.
+            new (i_resInfo) dRes_info_c();
+#endif
             return i_resInfo;
         }
         i_resInfo++;
