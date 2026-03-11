@@ -46,7 +46,7 @@
 #endif
 
 #if TARGET_PC
-#include "dusk/imgui.h"
+#include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/dusk.h"
 #endif
 
@@ -2160,7 +2160,7 @@ int mDoGph_Painter() {
     #endif
 
 #if TARGET_PC
-    imgui_main(&auroraInfo);
+    dusk::g_imguiConsole.draw();
 #endif
 
     mDoGph_gInf_c::endRender();

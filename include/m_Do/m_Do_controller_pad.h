@@ -46,6 +46,7 @@ public:
     static u32 getHoldZ(u32 pad) { return getHold(pad) & PAD_TRIGGER_Z; }
     static u32 getHoldY(u32 pad) { return getHold(pad) & PAD_BUTTON_Y; }
     static u32 getHoldX(u32 pad) { return getHold(pad) & PAD_BUTTON_X; }
+    static u32 getHoldStart(u32 pad) { return getHold(pad) & PAD_BUTTON_START; }
     static f32 getStickX(u32 pad) { return getCpadInfo(pad).mMainStickPosX; }
     static f32 getStickY(u32 pad) { return getCpadInfo(pad).mMainStickPosY; }
     static f32 getStickX3D(u32 pad) { return getCpadInfo(pad).mMainStickPosX; }

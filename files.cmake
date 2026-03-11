@@ -1327,7 +1327,6 @@ set(DOLPHIN_FILES
 set(DUSK_FILES
         include/dusk/endian_gx.hpp
         src/dusk/asserts.cpp
-        src/dusk/imgui.cpp
         src/dusk/logging.cpp
         src/dusk/stubs.cpp
         src/dusk/endian.cpp
@@ -1335,12 +1334,15 @@ set(DUSK_FILES
         src/dusk/extras.cpp
         src/dusk/globals.cpp
         #src/dusk/m_Do_ext_dusk.cpp
-        src/dusk/imgui/imgui.hpp
-        src/dusk/imgui/processes.cpp
-        src/dusk/imgui/camera.cpp
-        src/dusk/imgui/debug_overlay.cpp
-        src/dusk/imgui/heaps.cpp
-        src/dusk/imgui/kb_pad.cpp
+        src/dusk/imgui/ImGuiConsole.hpp
+        src/dusk/imgui/ImGuiConsole.cpp
+        src/dusk/imgui/ImGuiProcessOverlay.cpp
+        src/dusk/imgui/ImGuiCameraOverlay.cpp
+        src/dusk/imgui/ImGuiHeapOverlay.cpp
+        src/dusk/imgui/ImGuiDebugPad.cpp
+        src/dusk/imgui/ImGuiControllerOverlay.cpp
+        src/dusk/imgui/ImGuiStubLog.cpp
+        src/dusk/imgui/ImGuiMapLoader.cpp
         src/dusk/offset_ptr.cpp
         src/dusk/OSContext.cpp
         src/dusk/OSThread.cpp

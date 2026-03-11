@@ -33,7 +33,7 @@ static bool IsForStubLog(const char* message) {
 void aurora_log_callback(AuroraLogLevel level, const char* module, const char* message,
                          unsigned int len) {
     if (StubLogEnabled && level != LOG_FATAL && IsForStubLog(message)) {
-        SendToStubLog(level, module, message);
+        dusk::SendToStubLog(level, module, message);
         return;
     }
 
