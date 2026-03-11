@@ -1,6 +1,10 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JParticle/JPAResource.h"
+
+#include <cstring>
+
+#include <gx.h>
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JParticle/JPABaseShape.h"
 #include "JSystem/JParticle/JPAChildShape.h"
@@ -11,7 +15,6 @@
 #include "JSystem/JParticle/JPAKeyBlock.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
-#include <gx.h>
 #include "global.h"
 
 JPAResource::JPAResource() {
@@ -937,7 +940,10 @@ void JPAResource::setPTev() {
         if (pEts->isUseIndirect()) {
             GXSetIndTexOrder(GX_INDTEXSTAGE0, tex_coord, GX_TEXMAP2);
             GXSetIndTexCoordScale(GX_INDTEXSTAGE0, GX_ITS_1, GX_ITS_1);
-            GXSetIndTexMtx(GX_ITM_0, (f32(*)[3])pEts->getIndTexMtx(), pEts->getExpScale());
+            f32 indMtx[6];
+            std::memcpy(indMtx, pEts->getIndTexMtx(), sizeof(indMtx));
+            be_swap(indMtx);
+            GXSetIndTexMtx(GX_ITM_0, indMtx, pEts->getExpScale());
             GXSetTevIndirect(GX_TEVSTAGE0, GX_INDTEXSTAGE0, GX_ITF_8, GX_ITB_STU, GX_ITM_0,
                              GX_ITW_OFF, GX_ITW_OFF, 0, 0, GX_ITBA_OFF);
             ind_stages++;

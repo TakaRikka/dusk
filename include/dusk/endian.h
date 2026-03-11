@@ -237,7 +237,6 @@ void be_swap(T (& val)[N]) {
     for (u32 i = 0; i < N; i++) {
         be_swap(val[i]);
     }
-    val = BE<T>::swap(val);
 }
 
 template<typename T>
