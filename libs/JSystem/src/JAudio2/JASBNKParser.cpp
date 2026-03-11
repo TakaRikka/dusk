@@ -128,8 +128,10 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
             case 'Perc': {
                 JASDrumSet* drump = JKR_NEW_ARGS (heap, 0) JASDrumSet;
                 JUT_ASSERT(264, drump != NULL);
+                #if PLATFORM_SHIELD
                 u32 pmap_count = data[1];
                 JUT_ASSERT(268, pmap_count <= 128);
+                #endif
                 u32 count = *data++;
                 drump->newPercArray(count, heap);
                 for (int j = 0; j < count; j++) {
@@ -137,8 +139,10 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
                     if (offset != 0) {
                         JASDrumSet::TPerc* percp = JKR_NEW_ARGS (heap, 0) JASDrumSet::TPerc;
                         JUT_ASSERT(277, percp);
+                        #if PLATFORM_SHIELD
                         u32 type = data[0];
                         JUT_ASSERT(282, type == 'Pmap');
+                        #endif
                         BE(u32)* ptr = (BE(u32)*)((intptr_t)stream + offset);
                         TPercData* perc_data = (TPercData*)(ptr + 1);
                         percp->setVolume(perc_data->mVolume);
