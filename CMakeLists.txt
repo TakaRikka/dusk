@@ -62,7 +62,9 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(cxxopts)
 
+message(STATUS "Dusk: Fetching SDL3-mixer")
 
+include(cmake/SDL-mixer.cmake)
 include(files.cmake)
 
 # TODO: version handling for res includes
@@ -94,7 +96,7 @@ target_include_directories(game_debug PUBLIC
         extern
         ${CMAKE_SOURCE_DIR}/build/${DUSK_TP_VERSION}/include
         build/${DUSK_TP_VERSION}/include)
-target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd aurora::card)
+target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd aurora::card SDL3_mixer::SDL3_mixer)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES}
