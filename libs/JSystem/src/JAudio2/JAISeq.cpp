@@ -108,7 +108,7 @@ bool JAISeq::prepare_getSeqData_() {
 
     switch (seqDataMgr->getSeqData(getID(), &inner_.mSeqData)) {
     case 0:
-        OS_REPORT("Failed In Loading Sequence Data:SEQ(0x%08x)\n", getID());
+        OS_REPORT("Failed In Loading Sequence Data:SEQ(0x%08x)\n", (u32)getID());
         status_.state.unk = 2;
         break;
     case 1:
