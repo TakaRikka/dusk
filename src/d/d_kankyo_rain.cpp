@@ -5320,6 +5320,11 @@ void dKyr_odour_draw(Mtx drawMtx, u8** tex) {
     GXColor color_reg0;
     GXColor color_reg1;
 
+    #if AVOID_UB
+    color_reg0 = {};
+    color_reg1 = {};
+    #endif
+
     switch (dComIfGs_getCollectSmell()) {
     case fpcNm_ITEM_SMELL_YELIA_POUCH:
         color_reg0.r = 0xFF;
