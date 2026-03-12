@@ -361,9 +361,9 @@ u16 dMsgFlow_c::getInitNodeIndex(u16 param_1) {
     JUT_ASSERT(777, NULL != mLabelInfo_p);
     var_r30 = mLabelInfo_p + 0x10;
 
-    for (int i = 0; i < be16(*(u16*)(mLabelInfo_p + 8)); i++) {
-        if (be32(*(u32*)var_r30) >> 16 == param_1) {
-            var_r27 = be16(*(u16*)(var_r30 + 4));
+    for (int i = 0; i < *(BE(u16)*)(mLabelInfo_p + 8); i++) {
+        if (*(BE(u32)*)var_r30 >> 16 == param_1) {
+            var_r27 = *(BE(u16)*)(var_r30 + 4);
         }
 
         var_r30 += 0x8;
@@ -441,13 +441,13 @@ void dMsgFlow_c::setNodeIndex(u16 i_nodeIdx, fopAc_ac_c** i_talkPartners) {
 
 int dMsgFlow_c::setSelectMsg(mesg_flow_node* i_flowNode_p, mesg_flow_node* param_2,
                              fopAc_ac_c* i_speaker_p) {
-    u16* inf_p = NULL;
+    BE(u16)* inf_p = NULL;
     u16 temp_r25;
     u16 msg_no;
 
     mesg_flow_node* var_r29 = NULL;
 
-    inf_p = (u16*)getMsgDataBlock("INF1");
+    inf_p = (BE(u16)*)getMsgDataBlock("INF1");
 
     var_r29 = param_2;
     temp_r25 = ((inf_p + (var_r29->msg_index) * 10))[10];
@@ -491,13 +491,13 @@ int dMsgFlow_c::setSelectMsg(mesg_flow_node* i_flowNode_p, mesg_flow_node* param
 }
 
 int dMsgFlow_c::setNormalMsg(mesg_flow_node* i_flowNode_p, fopAc_ac_c* i_speaker_p) {
-    u16* inf_p = NULL;
+    BE(u16)* inf_p = NULL;
     mesg_flow_node* var_r29 = NULL;
     u16 msg_no;
 
     var_r29 = i_flowNode_p;
-    inf_p = (u16*)getMsgDataBlock("INF1");
-    msg_no = ((inf_p + (var_r29->msg_index) * 10))[10];
+    inf_p = (BE(u16)*)getMsgDataBlock("INF1");
+    msg_no = (inf_p + (var_r29->msg_index) * 10)[10];
 
     // "Message Set"
     OS_REPORT("\x1B[44;37mメッセ−ジセット　　　　　　　　　　\x1B[m|:");
