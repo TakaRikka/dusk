@@ -352,6 +352,28 @@ template <typename T> JASMemPool<T> JASPoolAllocObject<T>::memPool_;
 template <typename T>
 class JASMemPool_MultiThreaded : public JASGenericMemPool {
 public:
+#if TARGET_PC
+    OSMutex mutex;
+
+    JASMemPool_MultiThreaded() {
+        OSInitMutex(&mutex);
+    }
+
+    void newMemPool(int param_0) {
+        JASThreadingModel::ObjectLevelLockable<OSMutex>::Lock lock(mutex);
+        JASGenericMemPool::newMemPool(sizeof(T), param_0);
+    }
+
+    void* alloc(size_t count) {
+        JASThreadingModel::ObjectLevelLockable<OSMutex>::Lock lock(mutex);
+        return JASGenericMemPool::alloc(count);
+    }
+
+    void free(void* ptr, u32 param_1) {
+        JASThreadingModel::ObjectLevelLockable<OSMutex>::Lock lock(mutex);
+        JASGenericMemPool::free(ptr, param_1);
+    }
+#else
     void newMemPool(int param_0) {
         typename JASThreadingModel::InterruptsDisable<JASMemPool_MultiThreaded<T> >::Lock lock(*this);
         JASGenericMemPool::newMemPool(sizeof(T), param_0);
@@ -366,6 +388,7 @@ public:
         typename JASThreadingModel::InterruptsDisable<JASMemPool_MultiThreaded<T> >::Lock lock(*this);
         JASGenericMemPool::free(ptr, param_1);
     }
+#endif
 };
 
 /**
