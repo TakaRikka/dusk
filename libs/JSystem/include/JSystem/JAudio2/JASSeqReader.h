@@ -41,7 +41,7 @@ public:
 #ifdef __MWERKS__
         return *((u16*)field_0x04)++;
 #else
-        u16* value = (u16*)field_0x04;
+        BE(u16)* value = (BE(u16)*)field_0x04;
         field_0x04 += 2;
         return *value;
 #endif
@@ -51,7 +51,7 @@ public:
 #ifdef __MWERKS__
         return (*((u32*)field_0x04)++) & 0x00ffffff;
 #else
-        u32* value = (u32*)field_0x04;
+        BE(u32)* value = (BE(u32)*)field_0x04;
         field_0x04 += 4;
         return (*value) & 0x00ffffff;
 #endif
