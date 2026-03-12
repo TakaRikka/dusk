@@ -28,11 +28,11 @@ J2DWindowEx::J2DWindowEx(J2DPane* param_0, JSURandomInputStream* param_1, u32 pa
     mAnmVisibilityFull = NULL;
     mAnmVtxColor = NULL;
     s32 position = param_1->getPosition();
-    int uStack_88[2];
+    BE(int) uStack_88[2];
     param_1->read(uStack_88, 8);
     mKind = uStack_88[0];
     s32 iVar2 = param_1->getPosition();
-    int auStack_90[2];
+    BE(int) auStack_90[2];
     param_1->peek(auStack_90, 8);
     makePaneExStream(param_0, param_1);
     param_1->seek(iVar2 + auStack_90[1], JSUStreamSeekFrom_SET);
