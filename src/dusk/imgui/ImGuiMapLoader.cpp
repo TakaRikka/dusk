@@ -3,6 +3,7 @@
 #include "imgui.h"
 #include <imgui_internal.h>
 #include "ImGuiConsole.hpp"
+#include "dusk/map_loader_definitions.h"
 
 namespace dusk {
     void ImGuiConsole::ShowMapLoader() {
@@ -22,16 +23,78 @@ namespace dusk {
         }
 
         ImGui::SeparatorText("Map Loader");
-    
-        ImGui::InputText("Stage", m_mapLoaderInfo.stageName, sizeof(m_mapLoaderInfo.stageName));
-        ImGui::InputInt("Room", &m_mapLoaderInfo.roomNo);
-        ImGui::InputInt("Spawn ID", &m_mapLoaderInfo.spawnId);
-        ImGui::InputInt("Layer", &m_mapLoaderInfo.layer);
-        
-        if (ImGui::Button("Load Map")) {
-            dComIfGp_setNextStage(m_mapLoaderInfo.stageName, m_mapLoaderInfo.spawnId, m_mapLoaderInfo.roomNo, m_mapLoaderInfo.layer);
+
+        ImGui::Checkbox("Show Internal Names", &m_mapLoaderInfo.showInternalNames);
+
+        const char* previewRegion = "None";
+        if (m_mapLoaderInfo.regionIdx != -1) {
+            previewRegion = gameRegions[m_mapLoaderInfo.regionIdx].regionName;
         }
+
+        if (ImGui::BeginCombo("Select Region", previewRegion)) {
+            int idx = 0;
+            for (const auto& region : gameRegions) {
+                if (ImGui::Selectable(region.regionName)) {
+                    m_mapLoaderInfo.regionIdx = idx;
+                    m_mapLoaderInfo.mapIdx = -1;
+                }
+                idx++;
+            }
+            ImGui::EndCombo();
+        }
+
+        if (m_mapLoaderInfo.regionIdx != -1) {
+            const auto& region = gameRegions[m_mapLoaderInfo.regionIdx];
+
+            std::string previewMap = "None";
+            if (m_mapLoaderInfo.mapIdx != -1) {
+                const auto& map = region.maps[m_mapLoaderInfo.mapIdx];
+                previewMap = m_mapLoaderInfo.showInternalNames ? fmt::format("{} ({})", map.mapName, map.mapFile) : map.mapName;
+            }
+
+            if (ImGui::BeginCombo("Select Map", previewMap.data())) {
+                for (int i = 0; i < region.numMaps; ++i) {
+                    const auto& map = region.maps[i];
+                    std::string label = m_mapLoaderInfo.showInternalNames ? fmt::format("{} ({})", map.mapName, map.mapFile) : map.mapName;
+                    if (ImGui::Selectable(label.data())) {
+                        m_mapLoaderInfo.mapIdx = i;
+                    }
+                }
+                ImGui::EndCombo();
+            }
+        }else {
+            ImGui::Text("No region selected.");
+        }
+
+        if (m_mapLoaderInfo.regionIdx != -1 && m_mapLoaderInfo.mapIdx != -1) {
+            const auto& region = gameRegions[m_mapLoaderInfo.regionIdx];
+            const auto& map = region.maps[m_mapLoaderInfo.mapIdx];
+
+            if (map.numRooms > 0) {
+                ImGui::Text("Selected Room: %d", map.mapRooms[m_mapLoaderInfo.roomNoIdx]);
+                ImGui::SameLine();
+                if (ImGui::Button("-###RoomNoIdxDec")) {
+                    m_mapLoaderInfo.roomNoIdx--;
+                    if (m_mapLoaderInfo.roomNoIdx < 0) {
+                        m_mapLoaderInfo.roomNoIdx = 0;
+                    }
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("+###RoomNoIdxInc")) {
+                    m_mapLoaderInfo.roomNoIdx++;
+                    if (m_mapLoaderInfo.roomNoIdx >= map.numRooms) {
+                        m_mapLoaderInfo.roomNoIdx = map.numRooms - 1;
+                    }
+                }
+            }
+
+            if (ImGui::Button("Warp")) {
+                dComIfGp_setNextStage(map.mapFile, 0, map.mapRooms[m_mapLoaderInfo.roomNoIdx], -1);
+            }
+        }
+
     
         ImGui::End();
     }
-}  // namespace dusk
+
+    }  // namespace dusk

@@ -44,10 +44,13 @@ namespace dusk {
 
 		bool m_showMapLoader = false;
 		struct {
-            char stageName[8];
-            int roomNo;
-			int spawnId;
-			int layer;
+            int mapIdx = -1;
+		    int regionIdx = -1;
+            int roomNoIdx = 0;
+            int roomNo = -1;
+			int spawnId = 0;
+			int layer = -1;
+		    bool showInternalNames = false;
 		} m_mapLoaderInfo;
 	};
 
