@@ -26,7 +26,7 @@ JASTaskThread::~JASTaskThread() {
 
 void* JASTaskThread::allocCallStack(JASThreadCallback callback, const void* msg, u32 msgSize) {
     ThreadMemPool* heap;
-    u32 size = msgSize + 8;
+    u32 size = msgSize + offsetof(JASThreadCallStack, msg);
     JASThreadCallStack *callStack = (JASThreadCallStack*) JASKernel::getCommandHeap()->alloc(size);
     if (callStack == NULL) {
         return NULL;
