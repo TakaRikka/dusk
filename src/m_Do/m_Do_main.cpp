@@ -178,9 +178,6 @@ void main01(void) {
 
         //aurora_end_frame();
 
-        // Limiter
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
-
     } while (true);
 
     exit:;
