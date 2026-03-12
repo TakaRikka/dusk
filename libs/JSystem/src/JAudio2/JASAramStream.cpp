@@ -126,7 +126,7 @@ bool JASAramStream::prepare(s32 param_0, int param_1) {
     data.stream = this;
     data.field_0x4 = field_0x14c;
     data.field_0x8 = param_1;
-    if (!sLoadThread->sendCmdMsg(headerLoadTask, &data, 0xc)) {
+    if (!sLoadThread->sendCmdMsg(headerLoadTask, &data, sizeof(data))) {
         JUT_WARN(254, "%s", "sendCmdMsg headerLoadTask Failed");
         JASDriver::rejectCallback(channelProcCallback, this);
         return false;
@@ -194,7 +194,7 @@ void JASAramStream::firstLoadTask(void* i_data) {
     }
     if (data->field_0x4 != 0) {
         data->field_0x4--;
-        if (!sLoadThread->sendCmdMsg(firstLoadTask, data, 0xc)) {
+        if (!sLoadThread->sendCmdMsg(firstLoadTask, data, sizeof(*data))) {
             JUT_WARN(372, "%s", "sendCmdMsg firstLoadTask Failed");
             struct_80451261 = true;
         }
@@ -277,7 +277,7 @@ bool JASAramStream::headerLoad(u32 param_0, int param_1) {
     data.stream = this;
     data.field_0x4 = field_0x108 - 1;
     data.field_0x8 = param_1;
-    if (!sLoadThread->sendCmdMsg(firstLoadTask, &data, 0xc)) {
+    if (!sLoadThread->sendCmdMsg(firstLoadTask, &data, sizeof(data))) {
         JUT_WARN(472, "%s", "sendCmdMsg firstLoadTask Failed");
         struct_80451261 = true;
         return false;
