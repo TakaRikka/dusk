@@ -271,11 +271,11 @@ u32 JASDriver::getSubFrames() {
 }
 
 u32 JASDriver::getDacSize() {
-    return sSubFrames * 0x50 * 2;
+    return sSubFrames * DSP_SUBFRAME_SIZE * 2;
 }
 
 u32 JASDriver::getFrameSamples() {
-    return sSubFrames * 0x50;
+    return sSubFrames * DSP_SUBFRAME_SIZE;
 }
 
 void JASDriver::mixMonoTrack(s16* buffer, u32 param_1, MixCallback param_2) {

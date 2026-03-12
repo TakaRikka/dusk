@@ -13,6 +13,11 @@
  */
 #define DSP_OUTPUT_CHANNELS 6 // Presumed 5.1 surround
 
+/**
+ * Amount of audio samples rendered by the DSP in a single sub frame.
+ */
+#define DSP_SUBFRAME_SIZE   0x50
+
 struct JASWaveInfo;
 
 namespace JASDsp {
