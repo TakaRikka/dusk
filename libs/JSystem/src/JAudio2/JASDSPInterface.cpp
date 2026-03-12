@@ -50,6 +50,10 @@ void JASDsp::boot(void (*param_0)(void*)) {
 }
 
 void JASDsp::releaseHalt(u32 param_0) {
+#if TARGET_PC
+    // Dusk DSP does not work incrementally.
+    return;
+#endif
     DSPReleaseHalt2(param_0);
 }
 
