@@ -1002,12 +1002,6 @@ void AIStopDMA(void) {
 #pragma mark GX
 #include <dolphin/gx.h>
 
-// Moved-in GX helpers and helpers for metrics/project
-void __GXSetSUTexSize() {
-    STUB_LOG();
-}
-// __GXSetVAT, __GXSetVCD, __GXUpdateBPMask: now provided by Aurora's GXManage.cpp (fifo branch)
-
 void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
     STUB_LOG();
 }
@@ -1053,12 +1047,6 @@ void GXDrawCylinder(u8 numEdges) {
 void GXWaitDrawDone(void) {
     STUB_LOG();
 }
-void GXSetTevIndTile(GXTevStageID tev_stage, GXIndTexStageID ind_stage, u16 tilesize_s,
-                     u16 tilesize_t, u16 tilespacing_s, u16 tilespacing_t, GXIndTexFormat format,
-                     GXIndTexMtxID matrix_sel, GXIndTexBiasSel bias_sel,
-                     GXIndTexAlphaSel alpha_sel) {
-    // TODO
-}
 void GXResetWriteGatherPipe(void) {
     STUB_LOG();
 }
@@ -1084,13 +1072,6 @@ u16 GXGetNumXfbLines(u16 efbHeight, f32 yScale) {
     return 0;
 }
 
-void GXGetScissor(u32* left, u32* top, u32* wd, u32* ht) {
-    STUB_LOG();
-}
-u32 GXGetTexObjTlut(const GXTexObj* tex_obj) {
-    STUB_LOG();
-    return 0;
-}
 f32 GXGetYScaleFactor(u16 efbHeight, u16 xfbHeight) {
     STUB_LOG();
     return 0.0f;
@@ -1124,13 +1105,6 @@ OSThread* GXSetCurrentGXThread(void) {
 }
 
 void GXSetMisc(GXMiscToken token, u32 val) {
-    STUB_LOG();
-}
-
-void GXSetProjectionv(const f32* ptr) {
-    STUB_LOG();
-}
-void GXSetVtxAttrFmtv(GXVtxFmt vtxfmt, const GXVtxAttrFmtList* list) {
     STUB_LOG();
 }
 
