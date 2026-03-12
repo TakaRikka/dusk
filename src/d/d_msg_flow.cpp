@@ -730,7 +730,7 @@ int dMsgFlow_c::getParam(u16* prm0, u16* prm1, u8* params) {
     *prm0 = *(BE(u16)*)params;
     *prm1 = *(BE(u16)*)(params + 2);
 
-    return *(int*)params;
+    return *(BE(int)*)params;
 }
 
 int dMsgFlow_c::getParam(u8* prm0, u8* params) {
@@ -738,11 +738,11 @@ int dMsgFlow_c::getParam(u8* prm0, u8* params) {
         prm0[i] = params[i];
     }
 
-    return *(int*)params;
+    return *(BE(int)*)params;
 }
 
 int dMsgFlow_c::getParam(u8* params) {
-    return *(int*)params;
+    return *(BE(int)*)params;
 }
 
 queryFunc dMsgFlow_c::mQueryList[53] = {
