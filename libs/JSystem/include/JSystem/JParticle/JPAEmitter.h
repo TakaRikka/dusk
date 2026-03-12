@@ -252,7 +252,7 @@ public:
     /* 0xB0 */ JGeometry::TVec2<f32> mGlobalPScl;
     /* 0xB8 */ GXColor mGlobalPrmClr;
     /* 0xBC */ GXColor mGlobalEnvClr;
-    /* 0xC0 */ s32 mpUserWork;
+    /* 0xC0 */ uintptr_t mpUserWork;
     /* 0xC4 */ JPARandom mRndm;
     /* 0xC8 */ JPAList<JPABaseParticle> mAlivePtclBase;
     /* 0xD4 */ JPAList<JPABaseParticle> mAlivePtclChld;
