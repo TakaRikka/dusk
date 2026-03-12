@@ -3333,6 +3333,11 @@ int daHorse_c::callHorseSubstance(cXyz const* i_pos) {
             f32 x_dist = path_pnt_pos->x - i_pos->x;
             f32 z_dist = path_pnt_pos->z - i_pos->z;
             f32 farthest_sqdist;
+
+            #if AVOID_UB
+            farthest_sqdist = 0;
+            #endif
+
             f32 sqdist = (x_dist * x_dist) + (z_dist * z_dist);
 
             if (i == 0 || (farthest_sqdist > sqdist && sqdist > SQUARE(2000.0f))) {
