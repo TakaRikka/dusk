@@ -47,7 +47,7 @@ public:
             mpBrkAnm->entry(model->getModelData());
             mpMorfSO->entryDL();
             if (field_0x9c0 == 0) {
-                GXTexObj* texObj = dDlst_shadowControl_c::getSimpleTex();
+                TGXTexObj* texObj = dDlst_shadowControl_c::getSimpleTex();
                 dComIfGd_setSimpleShadow(&current.pos, mObjAcch.GetGroundH(), 15.0f, mObjAcch.m_gnd, 0, -0.6f, texObj);
             }
         }

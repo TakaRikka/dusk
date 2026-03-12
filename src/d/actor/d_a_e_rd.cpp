@@ -6581,6 +6581,12 @@ static int daE_RD_Execute(e_rd_class* i_this) {
             for (int i = 0; i < 2; i++) {
                 MtxPush();
                 s16 x, y;
+
+                #if AVOID_UB
+                x = 0;
+                y = 0;
+                #endif
+
                 if (i == 0) {
                     mae.set(38.0f, 0.0f, 0.0f);
                     MtxPosition(&mae, &ato);

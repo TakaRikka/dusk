@@ -18,6 +18,9 @@ BOOL fopKy_IsKankyo(void* i_this) {
 
 static int fopKy_Draw(void* i_this) {
     int ret;
+#if AVOID_UB
+    ret = 0;
+#endif
 
 #if DEBUG
     fapGm_HIO_c::startCpuTimer();
@@ -37,6 +40,9 @@ static int fopKy_Draw(void* i_this) {
 static int fopKy_Execute(void* i_this) {
     kankyo_class* a_this = (kankyo_class*)i_this;
     int ret;
+#if AVOID_UB
+    ret = 0;
+#endif
     
 #if DEBUG
     fapGm_HIO_c::startCpuTimer();

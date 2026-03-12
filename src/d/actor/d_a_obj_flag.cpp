@@ -259,8 +259,8 @@ static int daObjFlag_Execute(daObjFlag_c* param_0) {
     return param_0->execute();
 }
 
-static bool daObjFlag_IsDelete(daObjFlag_c* param_0) {
-    return true;
+static BOOL daObjFlag_IsDelete(daObjFlag_c* param_0) {
+    return TRUE;
 }
 
 static int daObjFlag_Delete(daObjFlag_c* param_0) {

@@ -9,6 +9,8 @@
 #include "Z2AudioLib/Z2Audience.h"
 #include "JSystem/JAudio2/JAUSoundAnimator.h"
 
+#include "dusk/audio.h"
+
 #ifndef __MWERKS__
 #include <limits>
 #define FLT_MAX std::numeric_limits<float>::max()
@@ -88,6 +90,8 @@ bool Z2SoundObjBase::stopOK(Z2SoundHandlePool& handlePool) {
 }
 
 Z2SoundHandlePool* Z2SoundObjBase::startSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
+    DUSK_AUDIO_SKIP(NULL);
+    
     if (!alive_) {
         return NULL;
     }
@@ -248,6 +252,8 @@ void Z2DopplerSoundObjBase::framework(u32 param_0, s8 reverb) {
 }
 
 Z2SoundHandlePool* Z2DopplerSoundObjBase::startSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
+    DUSK_AUDIO_SKIP(NULL);
+
     JGeometry::TVec3<f32>* pos = pos_;
     pos_ = NULL;
 
@@ -263,6 +269,8 @@ Z2SoundHandlePool* Z2DopplerSoundObjBase::startSound(JAISoundID soundID, u32 map
 }
 
 Z2SoundHandlePool* Z2DopplerSoundObjBase::startLevelSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
+    DUSK_AUDIO_SKIP(NULL);
+
     JGeometry::TVec3<f32>* pos = pos_;
     pos_ = NULL;
 
@@ -284,6 +292,8 @@ void Z2SoundObjSimple::init(Vec* posPtr, u8 handleNum) {
 }
 
 Z2SoundHandlePool* Z2SoundObjSimple::startSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
+    DUSK_AUDIO_SKIP(NULL);
+
     Z2SoundHandlePool* handle = Z2SoundObjBase::startSound(soundID, mapinfo, reverb);
 
     if (soundID == Z2SE_AL_UKI_POKOPOKO && handle != NULL && (*handle) != false) {
@@ -297,6 +307,8 @@ Z2SoundHandlePool* Z2SoundObjSimple::startSound(JAISoundID soundID, u32 mapinfo,
 }
 
 Z2SoundHandlePool* Z2SoundObjSimple::startLevelSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
+    DUSK_AUDIO_SKIP(NULL);
+
     Z2SoundHandlePool* handle = Z2SoundObjBase::startLevelSound(soundID, mapinfo, reverb);
 
     if (handle != NULL && (*handle) != false) {

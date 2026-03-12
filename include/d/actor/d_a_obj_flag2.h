@@ -35,11 +35,11 @@ public:
     void setDecayRate(f32 rate) { mDecayRate = rate; }
     void setGravity(f32 rate) { mGravity = rate; }
     void setTornado(f32 tornado) { mTornado = tornado; }
-    GXTexObj* getImageTexObj() { return &mTexObj; }
+    TGXTexObj* getImageTexObj() { return &mTexObj; }
     void setTexCoord_p(void* texCoordP) { mpTexCoord = texCoordP; }
 
     /* 0x010 */ dKy_tevstr_c mTevStr;
-    /* 0x398 */ GXTexObj mTexObj;
+    /* 0x398 */ TGXTexObj mTexObj;
     /* 0x3B8 */ dCcD_Stts mStts;
     /* 0x3F4 */ dCcD_Sph mSph;
     /* 0x52C */ u8 field_0x52c[0x540 - 0x52c];

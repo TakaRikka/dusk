@@ -24,6 +24,7 @@
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_graphic.h"
+#include "m_Do/m_Do_machine.h"
 #include "d/actor/d_a_suspend.h"
 #include "d/actor/d_a_ykgr.h"
 #include "JSystem/JHostIO/JORFile.h"
@@ -37,6 +38,8 @@
 #include "d/actor/d_a_midna.h"
 #include "JSystem/JKernel/JKRAram.h"
 #include "JSystem/JKernel/JKRAramArchive.h"
+
+#include "dusk/memory.h"
 
 #if DEBUG
 #include "d/d_s_menu.h"
@@ -1412,17 +1415,29 @@ static int phase_4(dScnPly_c* i_this) {
         dComIfGp_setPlayerPtr(i, NULL);
     }
 
+#if TARGET_PC
+    dComIfGp_setWindow(0, 0.0f, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), 0.0f,
+                       1.0f, 0, 2);
+#else
     dComIfGp_setWindow(0, 0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f, 0, 2);
+#endif
     dComIfGp_setCameraInfo(0, NULL, 0, 0, -1);
     dComIfGd_setWindow(NULL);
     dComIfGd_setViewport(NULL);
     dComIfGd_setView(NULL);
 
-    JKRExpHeap* heap = fopMsgM_createExpHeap(0xBB800, NULL);
+    JKRExpHeap* heap = fopMsgM_createExpHeap(HEAP_SIZE(0xBB800, 0xF0000), NULL);
+#if TARGET_PC
+    heap->setName("Scene2DHeap");
+#endif
+
     JUT_ASSERT(2704, heap != NULL);
     dComIfGp_setExpHeap2D(heap);
 
-    JKRExpHeap* heap2 = fopMsgM_createExpHeap(0xA800, NULL);
+    JKRExpHeap* heap2 = fopMsgM_createExpHeap(HEAP_SIZE(0xA800, 0x15000), NULL);
+#if TARGET_PC
+    heap2->setName("SceneMsgHeap");
+#endif
     JUT_ASSERT(2709, heap2 != NULL);
     dComIfGp_setMsgExpHeap(heap2);
 

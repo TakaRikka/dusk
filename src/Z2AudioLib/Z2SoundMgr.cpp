@@ -117,6 +117,8 @@ Z2SoundMgr::Z2SoundMgr() :
 }
 
 bool Z2SoundMgr::startSound(JAISoundID soundID, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr) {
+    DUSK_AUDIO_SKIP(true);
+
     int soundType = Z2GetSoundInfo()->getSoundType(soundID);
     switch (soundType) {
     case 0: {
@@ -180,8 +182,8 @@ bool Z2SoundMgr::startSound(JAISoundID soundID, JAISoundHandle* handle, const JG
         }
         return streamMgr_.startSound(soundID, handle, posPtr);
     default:
-        char error[32];
-        sprintf(error, "Unknown Sound-Type id :%08x\n", *(u32*)&soundID);
+        char error[64];
+        sprintf(error, "Unknown Sound-Type id :%08x\n", (u32)soundID);
         JUT_WARN(277, "%s", error);
     }
 

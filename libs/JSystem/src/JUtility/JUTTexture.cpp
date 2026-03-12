@@ -15,7 +15,6 @@ JUTTexture::~JUTTexture() {
     if (getEmbPaletteDelFlag()) {
         JKR_DELETE(mEmbPalette);
     }
-    GXDestroyTexObj(&mTexObj);
 }
 
 void JUTTexture::storeTIMG(ResTIMG const* param_0, u8 param_1) {
@@ -50,7 +49,7 @@ void JUTTexture::storeTIMG(ResTIMG const* param_0, u8 param_1) {
                 tlut = (GXTlut)param_1;
             }
 
-            u32 palOffset = mTexInfo->paletteOffset;
+            s32 palOffset = mTexInfo->paletteOffset;
 
             if (mEmbPalette == NULL || !getEmbPaletteDelFlag()) {
                 mEmbPalette = JKR_NEW JUTPalette(tlut, (GXTlutFmt)mTexInfo->colorFormat,
@@ -148,6 +147,9 @@ void JUTTexture::initTexObj() {
     u8* image = ((u8*)mTexInfo);
     u32 imgOffset = mTexInfo->imageOffset;
     image += (imgOffset ? imgOffset : 0x20);
+#ifdef TARGET_PC
+    mTexObj.reset();
+#endif
     GXInitTexObj(&mTexObj, image, mTexInfo->width, mTexInfo->height,
                  (GXTexFmt)mTexInfo->format, (GXTexWrapMode)mWrapS, (GXTexWrapMode)mWrapT,
                  mipmapEnabled);
@@ -165,6 +167,9 @@ void JUTTexture::initTexObj(GXTlut param_0) {
            (u16)mTexInfo->height,
            (void*)mTexInfo);
     image += (imgOffset ? imgOffset : 0x20);
+#ifdef TARGET_PC
+    mTexObj.reset();
+#endif
     GXInitTexObjCI(&mTexObj, image, mTexInfo->width, mTexInfo->height,
                  (GXCITexFmt)mTexInfo->format, (GXTexWrapMode)mWrapS,
                  (GXTexWrapMode)mWrapT, mipmapEnabled, param_0);

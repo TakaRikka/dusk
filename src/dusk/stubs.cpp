@@ -262,171 +262,6 @@ void SoundRevID(int a, int b) {
     STUB_LOG();
 }
 
-#pragma mark CARD
-
-#include <dolphin/card.h>
-
-extern "C" int CARDProbe(s32 chan) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDCancel(CARDFileInfo* fileInfo) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDCheck(s32 chan) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDCheckAsync(s32 chan, CARDCallback callback) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDClose(CARDFileInfo* fileInfo) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDCreate(s32 chan, const char* fileName, u32 size, CARDFileInfo* fileInfo) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDCreateAsync(s32 chan, const char* fileName, u32 size, CARDFileInfo* fileInfo,
-                    CARDCallback callback) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDDelete(s32 chan, const char* fileName) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDDeleteAsync(s32 chan, const char* fileName, CARDCallback callback) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDFastDeleteAsync(s32 chan, s32 fileNo, CARDCallback callback) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDFastOpen(s32 chan, s32 fileNo, CARDFileInfo* fileInfo) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDFormat(s32 chan) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDFreeBlocks(s32 chan, s32* byteNotUsed, s32* filesNotUsed) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDGetResultCode(s32 chan) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDGetStatus(s32 chan, s32 fileNo, CARDStat* stat) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDGetSectorSize(s32 chan, u32* size) {
-    STUB_LOG();
-    return 0;
-}
-
-void CARDInit() {
-    STUB_LOG();
-}
-
-s32 CARDMount(s32 chan, void* workArea, CARDCallback detachCallback) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDMountAsync(s32 chan, void* workArea, CARDCallback detachCallback,
-                   CARDCallback attachCallback) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDOpen(s32 chan, const char* fileName, CARDFileInfo* fileInfo) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDProbeEx(s32 chan, s32* memSize, s32* sectorSize) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDRead(CARDFileInfo* fileInfo, void* addr, s32 length, s32 offset) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDReadAsync(CARDFileInfo* fileInfo, void* addr, s32 length, s32 offset,
-                  CARDCallback callback) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDRename(s32 chan, const char* oldName, const char* newName) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDRenameAsync(s32 chan, const char* oldName, const char* newName, CARDCallback callback) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDSetStatusAsync(s32 chan, s32 fileNo, CARDStat* stat, CARDCallback callback) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDUnmount(s32 chan) {
-    STUB_LOG();
-    return 0;
-}
-
-extern "C" s32 CARDWrite(CARDFileInfo* fileInfo, void* addr, s32 length, s32 offset) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDWriteAsync(CARDFileInfo* fileInfo, const void* addr, s32 length, s32 offset,
-                   CARDCallback callback) {
-    STUB_LOG();
-    return 0;
-}
-
-s32 CARDGetSerialNo(s32 chan, u64* serialNo) {
-    return 0;
-}
-
-s32 CARDSetStatus(s32 chan, s32 fileNo, CARDStat* stat) {
-    return 0;
-}
-
-s32 __CARDFormatRegionAsync(int a, int b) {
-    STUB_LOG();
-    return 0;
-}
-
 #pragma mark DC
 
 void DCFlushRange(void* addr, u32 nBytes) {
@@ -1167,12 +1002,6 @@ void AIStopDMA(void) {
 #pragma mark GX
 #include <dolphin/gx.h>
 
-// Moved-in GX helpers and helpers for metrics/project
-void __GXSetSUTexSize() {
-    STUB_LOG();
-}
-// __GXSetVAT, __GXSetVCD, __GXUpdateBPMask: now provided by Aurora's GXManage.cpp (fifo branch)
-
 void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
     STUB_LOG();
 }
@@ -1218,12 +1047,6 @@ void GXDrawCylinder(u8 numEdges) {
 void GXWaitDrawDone(void) {
     STUB_LOG();
 }
-void GXSetTevIndTile(GXTevStageID tev_stage, GXIndTexStageID ind_stage, u16 tilesize_s,
-                     u16 tilesize_t, u16 tilespacing_s, u16 tilespacing_t, GXIndTexFormat format,
-                     GXIndTexMtxID matrix_sel, GXIndTexBiasSel bias_sel,
-                     GXIndTexAlphaSel alpha_sel) {
-    // TODO
-}
 void GXResetWriteGatherPipe(void) {
     STUB_LOG();
 }
@@ -1249,13 +1072,6 @@ u16 GXGetNumXfbLines(u16 efbHeight, f32 yScale) {
     return 0;
 }
 
-void GXGetScissor(u32* left, u32* top, u32* wd, u32* ht) {
-    STUB_LOG();
-}
-u32 GXGetTexObjTlut(const GXTexObj* tex_obj) {
-    STUB_LOG();
-    return 0;
-}
 f32 GXGetYScaleFactor(u16 efbHeight, u16 xfbHeight) {
     STUB_LOG();
     return 0.0f;
@@ -1289,13 +1105,6 @@ OSThread* GXSetCurrentGXThread(void) {
 }
 
 void GXSetMisc(GXMiscToken token, u32 val) {
-    STUB_LOG();
-}
-
-void GXSetProjectionv(const f32* ptr) {
-    STUB_LOG();
-}
-void GXSetVtxAttrFmtv(GXVtxFmt vtxfmt, const GXVtxAttrFmtList* list) {
     STUB_LOG();
 }
 

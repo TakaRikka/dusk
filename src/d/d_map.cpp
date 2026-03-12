@@ -341,6 +341,7 @@ inline u8 twoValueLineInterpolation(u8 param_0, u8 param_1, f32 param_2) {
 }
 
 void renderingAmap_c::draw() {
+    #if REQUIRES_GX_LINES
     f32 tmp = ((f32)(g_Counter.mCounter0 % dMap_HIO_prm_res_dst_s::m_res->field_0x1aa) /
                (f32)dMap_HIO_prm_res_dst_s::m_res->field_0x1aa);
     tmp = tmp;
@@ -376,6 +377,7 @@ void renderingAmap_c::draw() {
     setAmapPaletteColor(0x2E, temp_r31, temp_r30, temp_r29, temp_r28);
 
     renderingDAmap_c::draw();
+    #endif
 }
 
 int renderingAmap_c::getDispType() const {

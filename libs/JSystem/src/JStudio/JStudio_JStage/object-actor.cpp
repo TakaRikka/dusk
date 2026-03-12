@@ -98,7 +98,7 @@ void JStudio_JStage::TAdaptor_actor::adaptor_do_ANIMATION_MODE(JStudio::data::TE
     case JStudio::data::UNK_0x2:
         JUT_ASSERT(153, uSize==4);
         JUT_ASSERT(154, pContent!=NULL);
-        field_0x130 = *(u32*)pContent;
+        field_0x130 = *(BE(u32)*)pContent;
         break;
     }
 }
@@ -114,7 +114,7 @@ void JStudio_JStage::TAdaptor_actor::adaptor_do_TEXTURE_ANIMATION_MODE(
     case JStudio::data::UNK_0x2:
         JUT_ASSERT(182, uSize==4);
         JUT_ASSERT(183, pContent!=NULL);
-        field_0x134 = *(u32*)pContent;
+        field_0x134 = *(BE(u32)*)pContent;
         break;
     }
 }
@@ -141,7 +141,7 @@ void JStudio_JStage::TAdaptor_actor::adaptor_do_PARENT_NODE(
     case JStudio::data::UNK_0x19:
         JUT_ASSERT(237, uSize==4);
         JUT_ASSERT(238, pContent!=NULL);
-        field_0x140 = *(u32*)pContent;
+        field_0x140 = *(BE(u32)*)pContent;
         break;
     }
 }
@@ -152,7 +152,7 @@ void JStudio_JStage::TAdaptor_actor::adaptor_do_PARENT_ENABLE(
     case JStudio::data::UNK_0x2:
         JUT_ASSERT(257, uSize==4);
         JUT_ASSERT(258, pContent!=NULL);
-        bool v0 = (*(u32*)pContent != 0);
+        bool v0 = (*(BE(u32)*)pContent != 0);
         if (field_0x144 != v0) {
             field_0x144 = v0;
             switch (field_0x138) {
@@ -179,7 +179,7 @@ void JStudio_JStage::TAdaptor_actor::adaptor_do_PARENT_FUNCTION(
     case JStudio::data::UNK_0x2:
         JUT_ASSERT(303, uSize==4);
         JUT_ASSERT(304, pContent!=NULL);
-        field_0x138 = *(u32*)pContent;
+        field_0x138 = *(BE(u32)*)pContent;
         break;
     }
 }

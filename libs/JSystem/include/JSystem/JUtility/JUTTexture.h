@@ -4,6 +4,7 @@
 #include <gx.h>
 #include <stdint.h>
 #include "dusk/endian.h"
+#include "dusk/gx_helper.h"
 
 class JUTPalette;
 
@@ -95,7 +96,7 @@ public:
     }
 
 private:
-    /* 0x00 */ GXTexObj mTexObj;
+    /* 0x00 */ TGXTexObj mTexObj;
     /* 0x20 */ const ResTIMG* mTexInfo;
     /* 0x24 */ void* mTexData;
     /* 0x28 */ JUTPalette* mEmbPalette;

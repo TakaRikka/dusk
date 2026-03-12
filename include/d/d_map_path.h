@@ -246,7 +246,7 @@ struct dMpath_n {
         void remove();
         ~dTexObjAggregate_c() { remove(); };
 
-        GXTexObj* getTexObjPointer(int i_no) {
+        TGXTexObj* getTexObjPointer(int i_no) {
             JUT_ASSERT(44, i_no >= 0 && i_no < TEX_OBJ_NUMBER);
             return mp_texObj[i_no];
         }
@@ -257,7 +257,7 @@ struct dMpath_n {
             }
         }
 
-        /* 0x0 */ GXTexObj* mp_texObj[TEX_OBJ_NUMBER];
+        /* 0x0 */ TGXTexObj* mp_texObj[TEX_OBJ_NUMBER];
     };
 
     static dTexObjAggregate_c m_texObjAgg;

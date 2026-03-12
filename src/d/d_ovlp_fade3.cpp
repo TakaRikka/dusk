@@ -20,8 +20,13 @@ void dDlst_snapShot_c::draw() {
 }
 
 void dOvlpFd3_dlst_c::draw() {
+#if TARGET_PC
+    GXSetViewport(0.0f, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), 0.0f, 1.0f);
+    GXSetScissor(0, 0, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
+#else
     GXSetViewport(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f);
     GXSetScissor(0, 0, FB_WIDTH, FB_HEIGHT);
+#endif
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGB, GX_RGBA4, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -57,6 +62,9 @@ void dOvlpFd3_dlst_c::draw() {
     C_MTXPerspective(m, 60.0f, mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getHeightF(), 100.0f,
                      100000.0f);
     GXSetProjection(m, GX_PERSPECTIVE);
+#ifdef TARGET_PC
+    mDoGph_gInf_c::getFrameBufferTexObj()->reset();
+#endif
     GXInitTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), mDoGph_gInf_c::getFrameBufferTex(), FB_WIDTH / 2,
                  FB_HEIGHT / 2, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(mDoGph_gInf_c::getFrameBufferTexObj(), GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f,

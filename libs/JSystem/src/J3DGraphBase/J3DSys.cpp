@@ -1,9 +1,10 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
+#include "JSystem/J3DGraphBase/J3DFifo.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "JSystem/J3DGraphBase/J3DTexture.h"
-#include "JSystem/J3DGraphBase/J3DFifo.h"
+#include "dusk/gx_helper.h"
 #include "global.h"
 
 J3DSys j3dSys;
@@ -265,14 +266,14 @@ void J3DSys::reinitTransform() {
 
 void J3DSys::reinitTexture() {
 #if TARGET_PC
-    static GXTexObj texObj;
+    static TGXTexObj texObj;
     static bool initialized = false;
     if (!initialized) {
         GXInitTexObj(&texObj, NullTexData, 4, 4, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
         initialized = true;
     }
 #else
-    GXTexObj texObj;
+    TGXTexObj texObj;
     GXInitTexObj(&texObj, NullTexData, 4, 4, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
 #endif
     GXLoadTexObj(&texObj, GX_TEXMAP0);

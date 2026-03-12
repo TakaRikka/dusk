@@ -2,7 +2,9 @@
 
 #include <dolphin/gx.h>
 #include <dolphin/vi.h>
+#include <gx.h>
 #include <stdint.h>
+#include <vi.h>
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -10,13 +12,10 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTProcBar.h"
-#include <gx.h>
-#include <vi.h>
-#include "global.h"
 #include "aurora/aurora.h"
-#include "global.h"
-#include "JSystem/JKernel/JKRHeap.h"
+#include "dusk/gx_helper.h"
 #include "dusk/logging.h"
+#include "global.h"
 
 void JFWDisplay::ctor_subroutine(bool enableAlpha) {
     mEnableAlpha = enableAlpha;
@@ -419,7 +418,7 @@ static u8 clear_z_TX[64] ATTRIBUTE_ALIGN(32) = {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 };
 
-static GXTexObj clear_z_tobj;
+static TGXTexObj clear_z_tobj;
 
 void JFWDisplay::clearEfb_init() {
     GXInitTexObj(&clear_z_tobj, &clear_z_TX, 4, 4, GX_TF_Z24X8, GX_REPEAT, GX_REPEAT, GX_FALSE);
@@ -439,10 +438,8 @@ void JFWDisplay::clearEfb(GXColor color) {
 }
 
 void JFWDisplay::clearEfb(int param_0, int param_1, int param_2, int param_3, GXColor color) {
-#if TARGET_PC
-    STUB_LOG();
-    return;
-#endif
+    STUB_RET();
+    
     u16 width;
     u16 height;
     Mtx44 mtx;

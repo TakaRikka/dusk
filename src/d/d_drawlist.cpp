@@ -11,10 +11,11 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_s_play.h"
+#include "dusk/gx_helper.h"
+#include "dusk/logging.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_mtx.h"
-#include "dusk/logging.h"
 
 class dDlst_2Dm_c {
 public:
@@ -28,12 +29,12 @@ public:
     /* 0x10 */ f32 field_0x10;
     /* 0x14 */ GXColor field_0x14;
     /* 0x18 */ GXColor field_0x18;
-    /* 0x1C */ GXTexObj field_0x1c;
+    /* 0x1C */ TGXTexObj field_0x1c;
     /* 0x3C */ GXTlutObj field_0x3c;
     /* 0x48 */ s16 field_0x48;
     /* 0x4A */ s16 field_0x4a;
     /* 0x4C */ u8 field_0x4c;
-    /* 0x50 */ GXTexObj field_0x50;
+    /* 0x50 */ TGXTexObj field_0x50;
     /* 0x70 */ GXTlutObj field_0x70;
     /* 0x7C */ s16 field_0x7c;
     /* 0x7E */ s16 field_0x7e;
@@ -87,7 +88,7 @@ class dDlst_2DMt_tex_c {
 public:
     u8 check() { return field_0x0; }
     int getCI() { return mCI; }
-    GXTexObj* getTexObj() { return &mTexObj; }
+    TGXTexObj* getTexObj() { return &mTexObj; }
     GXTlutObj* getTlutObj() { return &mTlutObj; }
     GXColor* getColor() { return &mColor; }
     f32 getS() { return mS; }
@@ -97,7 +98,7 @@ public:
 
     /* 0x00 */ u8 field_0x0;
     /* 0x01 */ u8 mCI;
-    /* 0x04 */ GXTexObj mTexObj;
+    /* 0x04 */ TGXTexObj mTexObj;
     /* 0x24 */ GXTlutObj mTlutObj;
     /* 0x30 */ GXColor mColor;
     /* 0x34 */ f32 mS;
@@ -266,7 +267,7 @@ void dDlst_2DT_c::draw() {
     u16 var3 = (field_0x1c + var11) / var5 * 32768.0f;
     u16 var4 = (field_0x20 + var12) / var6 * 32768.0f;
 
-    GXTexObj tex;
+    TGXTexObj tex;
     GXInitTexObj(&tex, field_0x4, field_0xe, field_0x10, (GXTexFmt)field_0xc, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&tex, GX_LINEAR, GX_LINEAR, 0.0, 0.0, 0.0, 0, 0, GX_ANISO_1);
     GXLoadTexObj(&tex, GX_TEXMAP0);
@@ -311,9 +312,6 @@ void dDlst_2DT_c::draw() {
     GXEnd();
     GXSetClipMode(GX_CLIP_ENABLE);
     dComIfGp_getCurrentGrafPort()->setup2D();
-#if TARGET_PC
-    GXDestroyTexObj(&tex);
-#endif
 }
 
 void dDlst_2DT2_c::draw() {
@@ -666,7 +664,7 @@ void dDlst_2DM_c::draw() {
     int r26 = field_0x34 * f3;
     s16 r25 = r27 + s16(field_0x1e * f4);
     s16 r24 = r26 + s16(field_0x20 * f3);
-    GXTexObj tex[2];
+    TGXTexObj tex[2];
     void** stack_1c = &field_0x18;
     GXInitTexObj(&tex[0], field_0x18, field_0x1e, field_0x20, GXTexFmt(field_0x1c), GX_CLAMP, GX_CLAMP, 0);
     GXInitTexObjLOD(&tex[0], GX_LINEAR, GX_LINEAR, 0.0, 0.0, 0.0, 0, 0, GX_ANISO_1);
@@ -715,10 +713,6 @@ void dDlst_2DM_c::draw() {
     GXTexCoord2s16(r27, r24);
     GXEnd();
     dComIfGp_getCurrentGrafPort()->setup2D();
-#if TARGET_PC
-    GXDestroyTexObj(&tex[0]);
-    GXDestroyTexObj(&tex[1]);
-#endif
 }
 
 
@@ -733,7 +727,7 @@ void dDlst_2Dm_c::draw() {
     int r26 = field_0x7e * f30;
     s16 r25 = r27 + s16(f31 * GXGetTexObjWidth(&field_0x1c));
     s16 r24 = r26 + s16(f30 * GXGetTexObjHeight(&field_0x1c));
-    GXTexObj* stack_18 = &field_0x1c;
+    TGXTexObj* stack_18 = &field_0x1c;
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBA4, 8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_CLR_RGBA, GX_RGBA4, 8);
@@ -1347,7 +1341,7 @@ void dDlst_shadowSimple_c::draw() {
 }
 
 void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3,
-                                   s16 param_4, f32 param_5, GXTexObj* param_6) {
+                                   s16 param_4, f32 param_5, TGXTexObj* param_6) {
     if (param_5 < 0.0f) {
         mAlpha = param_5 * -255.0f;
         param_5 = 1.0f;
@@ -1424,6 +1418,11 @@ void dDlst_shadowControl_c::reset() {
     mSimpleNum = 0;
     mRealNum = 0;
     field_0x4 = NULL;
+
+#ifdef TARGET_PC
+    field_0x15eb0[0].reset();
+    field_0x15eb0[1].reset();
+#endif
 }
 
 void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
@@ -1529,7 +1528,7 @@ void dDlst_shadowControl_c::draw(Mtx param_0) {
     for (int i2 = 0, i3 = 0; real != NULL; real = real->getZsortNext()) {
         if (real->isUse()) {
             if (i2 == 0) {
-                GXTexObj* obj = &field_0x15eb0[i3];
+                TGXTexObj* obj = &field_0x15eb0[i3];
                 i3++;
 
                 GXLoadTexObj(obj, GX_TEXMAP0);
@@ -1671,7 +1670,7 @@ bool dDlst_shadowControl_c::addReal(u32 i_key, J3DModel* param_1) {
 }
 
 int dDlst_shadowControl_c::setSimple(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3,
-                                     s16 param_4, f32 param_5, GXTexObj* param_6) {
+                                     s16 param_4, f32 param_5, TGXTexObj* param_6) {
     if (param_3 == NULL || mSimpleNum >= 128) {
         return 0;
     }
@@ -1681,7 +1680,7 @@ int dDlst_shadowControl_c::setSimple(cXyz* param_0, f32 param_1, f32 param_2, cX
     return 1;
 }
 
-GXTexObj dDlst_shadowControl_c::mSimpleTexObj;
+TGXTexObj dDlst_shadowControl_c::mSimpleTexObj;
 
 void dDlst_shadowControl_c::setSimpleTex(ResTIMG const* i_timg) {
     mDoLib_setResTimgObj(i_timg, &mSimpleTexObj, 0, NULL);

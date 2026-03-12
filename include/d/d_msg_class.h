@@ -18,11 +18,11 @@
 
 class JMSMesgEntry_c {
 public:
-    /* 0x0 */ u32 string_offset;
+    /* 0x0 */ BE(u32) string_offset;
 
     // Attributes
-    /* 0x04 */ u16 message_id;
-    /* 0x06 */ u16 event_label_id;
+    /* 0x04 */ BE(u16) message_id;
+    /* 0x06 */ BE(u16) event_label_id;
     /* 0x08 */ u8 se_speaker;
     /* 0x09 */ u8 fuki_kind;
     /* 0x0A */ u8 output_type;
@@ -33,7 +33,7 @@ public:
     /* 0x0F */ u8 camera_id;
     /* 0x10 */ u8 base_anm_id;
     /* 0x11 */ u8 face_anm_id;
-    /* 0x12 */ u16 unk_0x12;
+    /* 0x12 */ BE(u16) unk_0x12;
 };
 
 class JMSMesgInfo_c {

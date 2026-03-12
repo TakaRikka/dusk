@@ -22,6 +22,8 @@
 #include "f_op/f_op_overlap_mng.h"
 #include <cstring>
 
+#include "dusk/gx_helper.h"
+
 inline s32 daMP_NEXT_READ_SIZE(daMP_THPReadBuffer* readBuf) {
     return *(s32*)readBuf->ptr;
 }
@@ -3155,9 +3157,9 @@ static void daMP_THPGXYuv2RgbSetup(const GXRenderModeObj* rmode) {
 static void daMP_THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x,
                                   s16 y, s16 textureWidth, s16 textureHeight, s16 polygonWidth,
                                   s16 polygonHeight) {
-    GXTexObj tobj0;
-    GXTexObj tobj1;
-    GXTexObj tobj2;
+    TGXTexObj tobj0;
+    TGXTexObj tobj1;
+    TGXTexObj tobj2;
 
     GXInitTexObj(&tobj0, y_data, textureWidth, textureHeight, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&tobj0, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);

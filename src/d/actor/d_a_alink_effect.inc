@@ -8,6 +8,7 @@
 #include "d/actor/d_a_alink.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_k_wmark.h"
+#include "dusk/gx_helper.h"
 
 const EffParamProc daAlink_c::m_fEffParamProc[] = {
     &daAlink_c::setEffectFrontRollParam,
@@ -2025,7 +2026,11 @@ void daAlink_blur_c::traceBlur(cXyz const* param_0, cXyz const* param_1, s16 par
 void daAlink_blur_c::draw() {
     j3dSys.reinitGX();
 
-    static GXTexObj texObj;
+#ifdef TARGET_PC
+    TGXTexObj texObj;
+#else
+    static TGXTexObj texObj;
+#endif
     static GXColor nColor0 = {0xFF, 0xFF, 0xFF, 0x14};
 
     GXSetNumIndStages(0);

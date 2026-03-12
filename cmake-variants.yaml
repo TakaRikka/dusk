@@ -9,6 +9,10 @@ buildType:
       short: Release
       long: Optimized, no debug symbols
       buildType: Release
+    release_debug:
+      short: RelWithDebInfo
+      long: Optimized, with debug symbols
+      buildType: RelWithDebInfo
 
 platform:
   default: win64

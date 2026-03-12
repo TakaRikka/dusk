@@ -366,7 +366,7 @@ JKRHeap* daPy_anmHeap_c::setAnimeHeap() {
 #include "assets/l_sightDL__d_a_player.h"
 
 void daPy_sightPacket_c::draw() {
-    GXTexObj texObj;
+    TGXTexObj texObj;
 
     j3dSys.reinitGX();
     GXSetNumIndStages(0);

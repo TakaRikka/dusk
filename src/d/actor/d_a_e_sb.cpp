@@ -1048,7 +1048,7 @@ int daE_SB_c::Draw() {
     mpMorf->entryDL();
     cXyz my_vec;
     my_vec.set(current.pos.x, 100.0f + current.pos.y, current.pos.z);
-    GXTexObj* tex_obj = dDlst_shadowControl_c::getSimpleTex();
+    TGXTexObj* tex_obj = dDlst_shadowControl_c::getSimpleTex();
     mShadowKey = dComIfGd_setShadow(mShadowKey, 1, model, &my_vec, 1000.0f, 300.0f,
                                     current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd,
                                     &tevStr, 0, 1.0f, tex_obj);

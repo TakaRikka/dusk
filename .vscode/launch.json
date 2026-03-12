@@ -6,10 +6,12 @@
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${command:cmake.launchTargetPath}",
+            "args": ["-l", "1", "--dvd", "${workspaceRoot}/orig/GZ2E01/GZ2E01.iso"],
             "MIMode": "gdb",
             "miDebuggerPath": "gdb",
             "symbolSearchPath": "${command:cmake.launchTargetPath}",
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "cwd":"${workspaceRoot}"
         }
     ]
 }

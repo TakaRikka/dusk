@@ -7,20 +7,20 @@
 
 #include "d/actor/d_a_npc_mk.h"
 
-static bool daNpc_Mk_Create(void* param_0) {
-    return true;
+static BOOL daNpc_Mk_Create(void* param_0) {
+    return TRUE;
 }
 
-static bool daNpc_Mk_Delete(void* param_0) {
-    return true;
+static BOOL daNpc_Mk_Delete(void* param_0) {
+    return TRUE;
 }
 
-static bool daNpc_Mk_Execute(void* param_0) {
-    return true;
+static BOOL daNpc_Mk_Execute(void* param_0) {
+    return TRUE;
 }
 
-static bool daNpc_Mk_Draw(void* param_0) {
-    return true;
+static BOOL daNpc_Mk_Draw(void* param_0) {
+    return TRUE;
 }
 
 static BOOL daNpc_Mk_IsDelete(void* param_0) {

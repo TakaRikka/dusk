@@ -65,12 +65,12 @@ u16 JMessage::TResource::toMessageIndex_messageID(u32 uMsgID, u32 upperHalf, boo
 
     int nMsgNumber = oParse_TBlock_messageID_.get_number();
 
-    const u32* pContent = (u32*)oParse_TBlock_messageID_.getContent();
+    const BE(u32)* pContent = (const BE(u32)*)oParse_TBlock_messageID_.getContent();
     JUT_ASSERT(131, pContent!=NULL);
 
-    const u32* pFirst = pContent;
-    const u32* pLast = pFirst + nMsgNumber;
-    const u32* pEntry;
+    const BE(u32)* pFirst = pContent;
+    const BE(u32)* pLast = pFirst + nMsgNumber;
+    const BE(u32)* pEntry;
 
     if (oParse_TBlock_messageID_.get_isOrdered()) {
         pEntry = std::lower_bound(pFirst, pLast, uMsgValue);

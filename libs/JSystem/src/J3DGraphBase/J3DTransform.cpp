@@ -22,7 +22,7 @@ void J3DGQRSetup7(u32 r0, u32 r1, u32 r2, u32 r3) {
 }
 
 // this uses a non-standard sqrtf, not sure why or how its supposed to be setup
-#if !PLATFORM_SHIELD
+#if !PLATFORM_SHIELD && !TARGET_PC
 inline f32 J3D_sqrtf(__REGISTER f32 x) {
 	__REGISTER f32 recip;
 

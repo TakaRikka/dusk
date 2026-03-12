@@ -1,7 +1,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 
 #include "imgui.h"
-#include "imgui.hpp"
+#include "ImGuiConsole.hpp"
 
 void DuskDebugPad() {
     if (ImGui::IsKeyPressed(ImGuiKey_K)) {

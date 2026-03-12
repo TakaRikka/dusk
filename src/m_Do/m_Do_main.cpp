@@ -46,6 +46,7 @@
 #include "SSystem/SComponent/c_API.h"
 #include "dusk/dusk.h"
 #include "dusk/logging.h"
+#include "dusk/time.h"
 
 #include <aurora/aurora.h>
 #include <aurora/event.h>
@@ -102,6 +103,10 @@ s32 LOAD_COPYDATE(void*) {
 AuroraInfo auroraInfo;
 
 void main01(void) {
+    #if TARGET_PC
+    Limiter frameLimiter{};
+    #endif
+
     OS_REPORT("\x1b[m");
     GXSetColorUpdate(GX_ENABLE);
     // 1. Setup
@@ -162,8 +167,6 @@ void main01(void) {
         static u32 frame = 0;
         frame++;
 
-
-
         // Game Inputs
         mDoCPd_c::read();
 
@@ -175,11 +178,11 @@ void main01(void) {
 
         mDoAud_Execute();
 
+        #if TARGET_PC
+        frameLimiter.Sleep(DUSK_FRAME_PERIOD);
+        #endif
 
         //aurora_end_frame();
-
-        // Limiter
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
 
     } while (true);
 

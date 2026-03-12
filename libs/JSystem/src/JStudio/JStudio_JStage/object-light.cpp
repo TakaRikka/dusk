@@ -125,7 +125,7 @@ void JStudio_JStage::TAdaptor_light::adaptor_do_FACULTY(JStudio::data::TEOperati
         JUT_ASSERT(198, uSize==4);
         JUT_ASSERT(199, pContent!=NULL);
         JStage::TELight lightType;
-        switch (*(u32*)pContent) {
+        switch (*(BE(u32)*)pContent) {
         case 0x301:
             lightType = JStage::TELIGHT_1;
             break;

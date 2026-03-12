@@ -7,9 +7,11 @@
 #include "global.h"
 #include <stdint.h>
 
+#include "dusk/gx_helper.h"
+
 /**
  * @ingroup jsystem-j3d
- * 
+ *
  */
 class J3DTexture {
 private:
@@ -19,7 +21,7 @@ private:
 
 #if TARGET_PC
     GXTlutObj* mpTlutObj;
-    GXTexObj* mpTexObj;
+    TGXTexObj* mpTexObj;
     u8** mpImgDataPtr;
     u8** mpTlutDataPtr;
 #endif
@@ -28,7 +30,7 @@ public:
     J3DTexture(u16 num, ResTIMG* res) : mNum(num), unk_0x2(0), mpRes(res) {
         J3D_ASSERT_NULLPTR(52, res != NULL || num == 0);
 #if TARGET_PC
-        mpTexObj = new GXTexObj[num];
+        mpTexObj = new TGXTexObj[num];
         mpTlutObj = new GXTlutObj[num];
         mpImgDataPtr = new u8*[num];
         mpTlutDataPtr = new u8*[num];
@@ -48,8 +50,6 @@ public:
     void addResTIMG(u16, ResTIMG const*);
     virtual ~J3DTexture(){
 #if TARGET_PC
-        for (int i = 0; i < mNum; i++)
-            GXDestroyTexObj(&mpTexObj[i]);
         delete[] mpTexObj;
         delete[] mpTlutObj;
         delete[] mpImgDataPtr;

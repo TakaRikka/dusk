@@ -103,8 +103,6 @@ void JMAVECScaleAdd(__REGISTER const Vec* vec1, __REGISTER const Vec* vec2, __RE
     dst->y = vec1->y * scale + vec2->y;
     dst->z = vec1->z * scale + vec2->z;
 #endif  // clang-format on
-
-    OSPanic(__FILE__, __LINE__, "UNIMPLEMENTED");
 }
 
 void JMAMTXApplyScale(__REGISTER const Mtx src, __REGISTER Mtx dst, __REGISTER f32 xScale,

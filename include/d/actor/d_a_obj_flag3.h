@@ -34,7 +34,7 @@ public:
     cXyz* getVec() { return mVecs; }
     cXyz* getNormal() { return mNormals; }
     cXyz* getNormalBack() { return mNormalBacks; }
-    GXTexObj* getImageTexObj() { return &mTexObj; }
+    TGXTexObj* getImageTexObj() { return &mTexObj; }
     void setSpringRate(f32 rate) { mSpringRate = rate; }
     void setWindRate(f32 rate) { mWindRate = rate; }
     void setDecayRate(f32 rate) { mDecayRate = rate; }
@@ -52,7 +52,7 @@ public:
 
     void calcFlagFactorSub(cXyz* param_1, cXyz* param_2, cXyz* param_3, f32 param_4);
 
-    /* 0x010 */ GXTexObj mTexObj;
+    /* 0x010 */ TGXTexObj mTexObj;
     /* 0x030 */ dKy_tevstr_c mTevStr;
     /* 0x3B8 */ dCcD_Stts mStts;
     /* 0x3F4 */ dCcD_Sph mSph;

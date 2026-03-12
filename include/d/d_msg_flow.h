@@ -2,6 +2,7 @@
 #define D_MSG_D_MSG_FLOW_H
 
 #include <types.h>
+#include "dusk/endian.h"
 
 enum {
     NODETYPE_MESSAGE_e = 1,
@@ -22,23 +23,23 @@ struct msg_class;
 struct mesg_flow_node {
     /* 0x00 */ u8 type;
     /* 0x01 */ u8 field_0x1;
-    /* 0x02 */ u16 msg_index;
-    /* 0x04 */ u16 next_node_idx;
-    /* 0x06 */ u16 unk_0x6;
+    /* 0x02 */ BE(u16) msg_index;
+    /* 0x04 */ BE(u16) next_node_idx;
+    /* 0x06 */ BE(u16) unk_0x6;
 };  // Size: 0x8
 
 struct mesg_flow_node_branch {
     /* 0x00 */ u8 type;
     /* 0x01 */ u8 field_0x1;
-    /* 0x02 */ u16 query_idx;
-    /* 0x04 */ u16 param;
-    /* 0x06 */ u16 next_node_idx;
+    /* 0x02 */ BE(u16) query_idx;
+    /* 0x04 */ BE(u16) param;
+    /* 0x06 */ BE(u16) next_node_idx;
 };
 
 struct mesg_flow_node_event {
     /* 0x00 */ u8 type;
     /* 0x01 */ u8 event_idx;
-    /* 0x02 */ u16 next_node_idx;
+    /* 0x02 */ BE(u16) next_node_idx;
     /* 0x04 */ u8 params[4];
 };  // Size: 0x8
 
@@ -197,8 +198,8 @@ private:
     }* mFlowNodeTBL;
     /* 0x10 */ u16 mNodeIdx;
     /* 0x12 */ u16 field_0x12;
-    /* 0x14 */ u16* mFlowIdxTBL;
-    /* 0x18 */ u16* field_0x18;
+    /* 0x14 */ BE(u16)* mFlowIdxTBL;
+    /* 0x18 */ BE(u16)* field_0x18;
     /* 0x1C */ u16 mFlow;
     /* 0x20 */ u32 mMsg;
     /* 0x24 */ u8 mSelectMessage;

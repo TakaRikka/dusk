@@ -545,6 +545,8 @@ J3DTexMtx* J3DMaterialFactory::newTexMtx(int i_idx, int i_no) const {
         be_swap(tex_mtx_info.mSRT.mRotation);
         be_swap(tex_mtx_info.mSRT.mTranslationX);
         be_swap(tex_mtx_info.mSRT.mTranslationY);
+        for (int i = 0; i < 16; i++)
+            be_swap(tex_mtx_info.mEffectMtx[i / 4][i % 4]);
         tex_mtx = JKR_NEW J3DTexMtx(tex_mtx_info);
 #else
         tex_mtx = JKR_NEW J3DTexMtx(mpTexMtxInfo[mtl_init_data->mTexMtxIdx[i_no]]);

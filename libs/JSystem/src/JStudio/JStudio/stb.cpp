@@ -261,17 +261,17 @@ void TObject::process_paragraph_reserved_(u32 arg1, const void* pContent, u32 uS
     case 0x1:
         ASSERT(pContent != NULL);
         ASSERT(uSize == 4);
-        setFlag_operation_(*(u32*)pContent);
+        setFlag_operation_(*(BE(u32)*)pContent);
         break;
     case 0x2:
         ASSERT(pContent != NULL);
         ASSERT(uSize == 4);
-        setWait(*(u32*)pContent);
+        setWait(*(BE(u32)*)pContent);
         break;
     case 0x3: {
         ASSERT(pContent != NULL);
         ASSERT(uSize == 4);
-        const void* seq = getSequence_offset(*(s32*)pContent);
+        const void* seq = getSequence_offset(*(BE(s32)*)pContent);
         setSequence_next(seq);
         break;
     }

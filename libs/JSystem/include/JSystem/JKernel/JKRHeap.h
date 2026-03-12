@@ -289,17 +289,17 @@ inline void jkrDelete(void* ptr) {
 }
 
 template<typename... Args>
-bool constexpr newArgsHasCustomAlignment(Args&&...) {
+bool constexpr newArgsHasCustomAlignment() {
     return false;
 }
 
-template<>
-constexpr bool newArgsHasCustomAlignment(int&&) {
+template<int>
+constexpr bool newArgsHasCustomAlignment() {
     return true;
 }
 
-template<>
-constexpr bool newArgsHasCustomAlignment(JKRHeap*&&, int&&) {
+template<JKRHeap*, int>
+constexpr bool newArgsHasCustomAlignment() {
     return true;
 }
 
@@ -308,7 +308,7 @@ T* jkrNewArray(size_t count, std::in_place_type_t<T>, Args&&... args) {
     size_t allocSize = count * sizeof(T);
     if constexpr (!std::is_trivially_destructible<T>()) {
         static_assert(
-            !newArgsHasCustomAlignment(args...),
+            !newArgsHasCustomAlignment<Args...>(),
             "jkrNewArray cannot currently handle non-trivially-destructible array allocations with custom alignment");
 
         allocSize += sizeof(size_t);

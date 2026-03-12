@@ -20,7 +20,7 @@ void dMpath_n::dTexObjAggregate_c::create() {
     };
 
     for (int lp1 = 0; lp1 < 7; lp1++) {
-        mp_texObj[lp1] = JKR_NEW GXTexObj();
+        mp_texObj[lp1] = JKR_NEW TGXTexObj();
         JUT_ASSERT(70, mp_texObj[lp1] != NULL);
         ResTIMG* image = (ResTIMG*)dComIfG_getObjectRes("Always", data[lp1]);
         JUT_ASSERT(72, image != NULL);
@@ -346,11 +346,13 @@ void dRenderingMap_c::makeResTIMG(ResTIMG* p_image, u16 width, u16 height, u8* p
 void dRenderingMap_c::renderingMap() {
     preRenderingMap();
     if (isDrawPath()) {
+        #if REQUIRES_GX_LINES
         preDrawPath();
         beforeDrawPath();
         drawPath();
         afterDrawPath();
         postDrawPath();
+        #endif
     }
     postRenderingMap();
 }
@@ -471,6 +473,7 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
     GXSetTevColor(GX_TEVREG1, lineColor);
 
     for (int i = 0; i < data_num; i++) {
+#if REQUIRES_GX_LINES
 #ifndef HYRULE_FIELD_SPEEDHACK
         if (i < data_num - 1) {
             GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
@@ -490,6 +493,7 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
         GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+#endif
 #endif
         GXBegin(GX_POINTS, GX_VTXFMT0, 1);
         GXPosition1x16(data_p[0]);

@@ -104,7 +104,7 @@ void JStudio_JParticle::TAdaptor_particle::adaptor_do_PARTICLE(
     if (param_1 == JStudio::data::UNK_0x19) {
         JUT_ASSERT(232, uSize==4);
         JUT_ASSERT(233, pContent!=NULL);
-        field_0x1bc = *(u32*)pContent;
+        field_0x1bc = *(BE(u32)*)pContent;
     }
 }
 
@@ -124,7 +124,7 @@ void JStudio_JParticle::TAdaptor_particle::adaptor_do_BEGIN_FADE_IN(
     case JStudio::data::UNK_0x2:
         JUT_ASSERT(272, pContent!=NULL);
         JUT_ASSERT(273, uSize==4);
-        beginParticle_fadeIn_(*(f32*)pContent);
+        beginParticle_fadeIn_(*(BE(f32)*)pContent);
         break;
     }
 }
@@ -143,7 +143,7 @@ void JStudio_JParticle::TAdaptor_particle::adaptor_do_END_FADE_OUT(
     case JStudio::data::UNK_0x2:
         JUT_ASSERT(336, pContent!=NULL);
         JUT_ASSERT(337, uSize==4);
-        endParticle_fadeOut_(*(f32*)pContent);
+        endParticle_fadeOut_(*(BE(f32)*)pContent);
         break;
     }
 }
@@ -182,7 +182,7 @@ void JStudio_JParticle::TAdaptor_particle::adaptor_do_PARENT_NODE(
     case JStudio::data::UNK_0x19:
         JUT_ASSERT(397, uSize==4);
         JUT_ASSERT(396, pContent!=NULL);
-        field_0x1d4 = *(u32*)pContent;
+        field_0x1d4 = *(BE(u32)*)pContent;
         break;
     }
 }
@@ -192,7 +192,7 @@ void JStudio_JParticle::TAdaptor_particle::adaptor_do_PARENT_ENABLE(JStudio::dat
     if (param_1 == JStudio::data::UNK_0x2) {
         JUT_ASSERT(417, uSize==4);
         JUT_ASSERT(418, pContent!=NULL);
-        field_0x1d8 = *(u32*)pContent ? 1 : 0;
+        field_0x1d8 = *(BE(u32)*)pContent ? 1 : 0;
     }
 }
 
@@ -201,7 +201,7 @@ void JStudio_JParticle::TAdaptor_particle::adaptor_do_PARENT_FUNCTION(JStudio::d
     if (param_1 == JStudio::data::UNK_0x2) {
         JUT_ASSERT(439, uSize==4);
         JUT_ASSERT(439, pContent!=NULL);
-        field_0x1cc = *(u32*)pContent;
+        field_0x1cc = *(BE(u32)*)pContent;
     }
 }
 
@@ -210,7 +210,7 @@ void JStudio_JParticle::TAdaptor_particle::adaptor_do_REPEAT(JStudio::data::TEOp
     if (param_1 == JStudio::data::UNK_0x2) {
         JUT_ASSERT(460, uSize==4);
         JUT_ASSERT(461, pContent!=NULL);
-        field_0x1b5 = *(u32*)pContent ? 1 : 0;
+        field_0x1b5 = *(BE(u32)*)pContent ? 1 : 0;
     }
 }
 
@@ -219,7 +219,7 @@ void JStudio_JParticle::TAdaptor_particle::adaptor_do_ON_EXIT_NOT_END(JStudio::d
     if (param_1 == JStudio::data::UNK_0x2) {
         JUT_ASSERT(460, uSize==4);
         JUT_ASSERT(461, pContent!=NULL);
-        field_0x1b6 = *(u32*)pContent ? 1 : 0;
+        field_0x1b6 = *(BE(u32)*)pContent ? 1 : 0;
     }
 }
 

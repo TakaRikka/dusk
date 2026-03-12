@@ -49,8 +49,8 @@ void dMsgFlow_c::init(fopAc_ac_c* i_partner, int i_flowID, int param_2, fopAc_ac
 
             labelInfoTBL = mLabelInfo_p + 0x10;
             mFlowNodeTBL = (mesg_flow*)(mFlow_p + 0x10);
-            mFlowIdxTBL = (u16*)(mFlowNodeTBL + (*(u16*)(mFlow_p + 8)));
-            field_0x18 = mFlowIdxTBL + *(u16*)(mFlow_p + 8);
+            mFlowIdxTBL = (BE(u16)*)(mFlowNodeTBL + (*(BE(u16)*)(mFlow_p + 8)));
+            field_0x18 = mFlowIdxTBL + *(BE(u16)*)(mFlow_p + 8);
 
             mFlow = prevFlowID;
 
@@ -322,8 +322,8 @@ void dMsgFlow_c::setInitValueGroupChange(int i_msgNo, fopAc_ac_c** i_talkPartner
     labelInfoTBL = mLabelInfo_p + 0x10;
 
     mFlowNodeTBL = (mesg_flow*)(mFlow_p + 0x10);
-    mFlowIdxTBL = (u16*)(mFlowNodeTBL + *(u16*)(mFlow_p + 8));
-    field_0x18 = mFlowIdxTBL + *(u16*)(mFlow_p + 8);
+    mFlowIdxTBL = (BE(u16)*)(mFlowNodeTBL + *(BE(u16)*)(mFlow_p + 8));
+    field_0x18 = mFlowIdxTBL + *(BE(u16)*)(mFlow_p + 8);
     mFlow = var_r28;
     setNodeIndex(getInitNodeIndex(mFlow), i_talkPartners);
 }
@@ -337,7 +337,7 @@ u8* dMsgFlow_c::getMsgDataBlock(char const* block_tag) {
     aMsgRes_p = dMsgObject_getMsgDtPtr();
     JUT_ASSERT(742, NULL != aMsgRes_p);
 
-    u32 num = *(u32*)(aMsgRes_p + 0xC);
+    u32 num = *(BE(u32)*)(aMsgRes_p + 0xC);
     aMsgRes_p += 0x20;
 
     for (u32 i = 0; i < num; i++) {
@@ -348,7 +348,7 @@ u8* dMsgFlow_c::getMsgDataBlock(char const* block_tag) {
             return aMsgRes_p;
         }
 
-        aMsgRes_p += *(int*)(block_p + 4);
+        aMsgRes_p += *(BE(int)*)(block_p + 4);
     }
 
     return NULL;
@@ -361,9 +361,9 @@ u16 dMsgFlow_c::getInitNodeIndex(u16 param_1) {
     JUT_ASSERT(777, NULL != mLabelInfo_p);
     var_r30 = mLabelInfo_p + 0x10;
 
-    for (int i = 0; i < *(u16*)(mLabelInfo_p + 8); i++) {
-        if (*(u32*)var_r30 >> 16 == param_1) {
-            var_r27 = *(u16*)(var_r30 + 4);
+    for (int i = 0; i < *(BE(u16)*)(mLabelInfo_p + 8); i++) {
+        if (*(BE(u32)*)var_r30 >> 16 == param_1) {
+            var_r27 = *(BE(u16)*)(var_r30 + 4);
         }
 
         var_r30 += 0x8;
@@ -441,13 +441,13 @@ void dMsgFlow_c::setNodeIndex(u16 i_nodeIdx, fopAc_ac_c** i_talkPartners) {
 
 int dMsgFlow_c::setSelectMsg(mesg_flow_node* i_flowNode_p, mesg_flow_node* param_2,
                              fopAc_ac_c* i_speaker_p) {
-    u16* inf_p = NULL;
+    BE(u16)* inf_p = NULL;
     u16 temp_r25;
     u16 msg_no;
 
     mesg_flow_node* var_r29 = NULL;
 
-    inf_p = (u16*)getMsgDataBlock("INF1");
+    inf_p = (BE(u16)*)getMsgDataBlock("INF1");
 
     var_r29 = param_2;
     temp_r25 = ((inf_p + (var_r29->msg_index) * 10))[10];
@@ -491,13 +491,13 @@ int dMsgFlow_c::setSelectMsg(mesg_flow_node* i_flowNode_p, mesg_flow_node* param
 }
 
 int dMsgFlow_c::setNormalMsg(mesg_flow_node* i_flowNode_p, fopAc_ac_c* i_speaker_p) {
-    u16* inf_p = NULL;
+    BE(u16)* inf_p = NULL;
     mesg_flow_node* var_r29 = NULL;
     u16 msg_no;
 
     var_r29 = i_flowNode_p;
-    inf_p = (u16*)getMsgDataBlock("INF1");
-    msg_no = ((inf_p + (var_r29->msg_index) * 10))[10];
+    inf_p = (BE(u16)*)getMsgDataBlock("INF1");
+    msg_no = (inf_p + (var_r29->msg_index) * 10)[10];
 
     // "Message Set"
     OS_REPORT("\x1B[44;37mメッセ−ジセット　　　　　　　　　　\x1B[m|:");
@@ -727,8 +727,8 @@ int dMsgFlow_c::nodeProc(fopAc_ac_c* i_speaker_p, fopAc_ac_c** i_talkPartners) {
 }
 
 int dMsgFlow_c::getParam(u16* prm0, u16* prm1, u8* params) {
-    *prm0 = *(u16*)params;
-    *prm1 = *(u16*)(params + 2);
+    *prm0 = *(BE(u16)*)params;
+    *prm1 = *(BE(u16)*)(params + 2);
 
     return *(int*)params;
 }

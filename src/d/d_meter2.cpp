@@ -26,12 +26,14 @@
 
 #include "dusk/memory.h"
 
+#include "dusk/memory.h"
+
 int dMeter2_c::_create() {
     stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
     if (dStage_stagInfo_GetUpButton(stag_info) == 1) {
         mpHeap = fopMsgM_createExpHeap(HEAP_SIZE(0x5A400, 0xA0000), NULL);
     } else {
-        mpHeap = fopMsgM_createExpHeap(HEAP_SIZE(0x60800, 0xA0000), NULL);
+        mpHeap = fopMsgM_createExpHeap(HEAP_SIZE(0x60800, 0xC1000), NULL);
     }
     JKRHEAP_NAME(mpHeap, "dMeter2_c");
 

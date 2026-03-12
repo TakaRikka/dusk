@@ -4,6 +4,8 @@
 #include <mtx.h>
 #include <cmath>
 
+#include "dusk/math.h"
+
 typedef f32 Mtx33[3][3];
 typedef f32 Mtx23[2][3];
 typedef f32 (*Mtx3P)[3];
@@ -70,7 +72,11 @@ inline f32 JMAFastSqrt(__REGISTER const f32 input) {
         return input;
     }
 #else
-    return sqrt(input);
+    if (input > 0.0f) {
+        return frsqrte(input) * input;
+    } else {
+        return input;
+    }
 #endif
 }
 

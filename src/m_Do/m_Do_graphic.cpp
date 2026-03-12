@@ -47,7 +47,7 @@
 #endif
 
 #if TARGET_PC
-#include "dusk/imgui.h"
+#include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/dusk.h"
 #endif
 
@@ -389,12 +389,12 @@ void mDoGph_gInf_c::onBlure() {
 }
 
 #if PLATFORM_WII || PLATFORM_SHIELD
-GXTexObj mDoGph_gInf_c::m_fullFrameBufferTexObj;
+TGXTexObj mDoGph_gInf_c::m_fullFrameBufferTexObj;
 #endif
 
-GXTexObj mDoGph_gInf_c::mFrameBufferTexObj;
+TGXTexObj mDoGph_gInf_c::mFrameBufferTexObj;
 
-GXTexObj mDoGph_gInf_c::mZbufferTexObj;
+TGXTexObj mDoGph_gInf_c::mZbufferTexObj;
 
 mDoGph_gInf_c::bloom_c mDoGph_gInf_c::m_bloom;
 
@@ -918,6 +918,10 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
             GXSetTexCopyDst(halfWidth, halfHeight,
                             (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
             GXCopyTex(frameBufferTex, GX_FALSE);
+#ifdef TARGET_PC
+            mDoGph_gInf_c::getFrameBufferTexObj()->reset();
+            mDoGph_gInf_c::getZbufferTexObj()->reset();
+#endif
             GXInitTexObj(mDoGph_gInf_c::getZbufferTexObj(), zBufferTex, halfWidth, halfHeight,
                         GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
             GXInitTexObjLOD(mDoGph_gInf_c::getZbufferTexObj(), GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f,
@@ -1131,14 +1135,18 @@ void mDoGph_gInf_c::bloom_c::remove() {
 }
 
 void mDoGph_gInf_c::bloom_c::draw() {
-#if TARGET_PC // TODO: fix bloom
-    bool enabled = false;
-#else
     bool enabled = mEnable && m_buffer != NULL;
-#endif
     if (mMonoColor.a != 0 || enabled) {
-        GXSetViewport(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f);
-        GXSetScissor(0, 0, FB_WIDTH, FB_HEIGHT);
+#if TARGET_PC
+        f32 width = mDoGph_gInf_c::getWidth();
+        f32 height = mDoGph_gInf_c::getHeight();
+#else
+        f32 width = FB_WIDTH;
+        f32 height = FB_HEIGHT;
+#endif
+        GXSetViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f);
+        GXSetScissor(0, 0, width, height);
+
         GXLoadTexObj(getFrameBufferTexObj(), GX_TEXMAP0);
         GXSetNumChans(0);
         GXSetNumTexGens(1);
@@ -1181,9 +1189,11 @@ void mDoGph_gInf_c::bloom_c::draw() {
             mDoGph_drawFilterQuad(4, 4);
         }
         if (enabled) {
-            GXSetTexCopySrc(0, 0, FB_WIDTH / 2, FB_HEIGHT / 2);
-            GXSetTexCopyDst(FB_WIDTH / 2, FB_HEIGHT / 2, GX_TF_RGBA8, 0);
+            // Store off m_buffer to copy over again at the end.
+            GXSetTexCopySrc(0, 0, width / 2, height / 2);
+            GXSetTexCopyDst(width / 2, height / 2, GX_TF_RGBA8, 0);
             GXCopyTex(m_buffer, 0);
+
             GXSetNumTevStages(3);
             GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
             GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_TEXC, GX_CC_TEXA, GX_CC_HALF, GX_CC_ZERO);
@@ -1215,19 +1225,24 @@ void mDoGph_gInf_c::bloom_c::draw() {
             GXSetTevColor(GX_TEVREG1, tevColor1);
             GXPixModeSync();
             mDoGph_drawFilterQuad(2, 2);
+
             GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_RED, GX_CH_RED, GX_CH_ALPHA);
             GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
             GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+
+            // Downsample and filter from 1/2 EFB into 1/4 zBufferTex (tmp_tex1).
             void* zBufferTex = getZbufferTex();
-            GXSetTexCopySrc(0, 0, FB_WIDTH / 2, FB_HEIGHT / 2);
-            GXSetTexCopyDst(FB_WIDTH / 4, FB_HEIGHT / 4, GX_TF_RGBA8, GX_TRUE);
+            GXSetTexCopySrc(0, 0, width / 2, height / 2);
+            GXSetTexCopyDst(width / 4, height / 4, GX_TF_RGBA8, GX_TRUE);
             GXCopyTex(zBufferTex, 0);
-            GXTexObj auStack_c0;
-            GXInitTexObj(&auStack_c0, zBufferTex, FB_WIDTH / 4, FB_HEIGHT / 4, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP,
+
+            TGXTexObj tmp_tex1;
+            GXInitTexObj(&tmp_tex1, zBufferTex, width / 4, height / 4, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP,
                          GX_FALSE);
-            GXInitTexObjLOD(&auStack_c0, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE,
+            GXInitTexObjLOD(&tmp_tex1, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE,
                             GX_ANISO_1);
-            GXLoadTexObj(&auStack_c0, GX_TEXMAP0);
+            GXLoadTexObj(&tmp_tex1, GX_TEXMAP0);
+
             GXSetNumTexGens(8);
             u32 iVar11 = 0x1e;
             int sVar10 = 0;
@@ -1263,28 +1278,50 @@ void mDoGph_gInf_c::bloom_c::draw() {
                                 GX_TRUE, GX_TEVPREV);
             }
             GXPixModeSync();
+
+            // Blur filter from tmp_tex1 1/4 to EFB 1/4.
             mDoGph_drawFilterQuad(1, 1);
-            GXSetTexCopySrc(0, 0, FB_WIDTH / 4, FB_HEIGHT / 4);
-            GXSetTexCopyDst(FB_WIDTH / 8, FB_HEIGHT / 8, GX_TF_RGBA8, GX_TRUE);
+
+            GXSetTexCopySrc(0, 0, width / 4, height / 4);
+            GXSetTexCopyDst(width / 8, height / 8, GX_TF_RGBA8, GX_TRUE);
+
+            // Downsample EFB 1/4 to zBufferTex 1/8 (tmp_tex2).
             GXCopyTex(zBufferTex, GX_FALSE);
-            GXTexObj auStack_e0;
-            GXInitTexObj(&auStack_e0, zBufferTex, FB_WIDTH / 8, FB_HEIGHT / 8, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP,
+
+            TGXTexObj tmp_tex2;
+            GXInitTexObj(&tmp_tex2, zBufferTex, width / 8, height / 8, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP,
                          GX_FALSE);
-            GXInitTexObjLOD(&auStack_c0, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE,
+#if TARGET_PC
+            // typo bug fix
+            GXInitTexObjLOD(&tmp_tex2, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE,
                             GX_ANISO_1);
-            GXLoadTexObj(&auStack_e0, GX_TEXMAP0);
+#else
+            GXInitTexObjLOD(&tmp_tex1, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE,
+                            GX_ANISO_1);
+#endif
+            GXLoadTexObj(&tmp_tex2, GX_TEXMAP0);
+
+            // Upsample 1/8 buffer back up to 1/4 buffer.
             GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_OR);
             GXPixModeSync();
             GXInvalidateTexAll();
             mDoGph_drawFilterQuad(1, 1);
-            GXSetTexCopySrc(0, 0, FB_WIDTH / 4, FB_HEIGHT / 4);
-            GXSetTexCopyDst(FB_WIDTH / 4, FB_HEIGHT / 4, GX_TF_RGBA8, GX_FALSE);
+
+#if TARGET_PC
+            tmp_tex2.reset();
+#endif
+
+            // Now that we've upsampled and filtered our final bloom, copy 1/4 buffer back to zBufferTex.
+            GXSetTexCopySrc(0, 0, width / 4, height / 4);
+            GXSetTexCopyDst(width / 4, height / 4, GX_TF_RGBA8, GX_FALSE);
             GXCopyTex(zBufferTex, GX_FALSE);
-            GXInitTexObj(&auStack_e0, m_buffer, FB_WIDTH / 2, FB_HEIGHT / 2, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP,
+
+            // Copy back m_buffer to screen.
+            GXInitTexObj(&tmp_tex2, m_buffer, width / 2, height / 2, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP,
                          GX_FALSE);
-            GXInitTexObjLOD(&auStack_e0, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE,
+            GXInitTexObjLOD(&tmp_tex2, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE,
                             GX_ANISO_1);
-            GXLoadTexObj(&auStack_e0, GX_TEXMAP0);
+            GXLoadTexObj(&tmp_tex2, GX_TEXMAP0);
             GXSetNumTexGens(1);
             GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3c);
             GXSetNumTevStages(1);
@@ -1297,7 +1334,9 @@ void mDoGph_gInf_c::bloom_c::draw() {
                             GX_TEVPREV);
             GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ONE, GX_LO_OR);
             mDoGph_drawFilterQuad(2, 2);
-            GXLoadTexObj(&auStack_c0, GX_TEXMAP0);
+
+            // Now blend our bloom into the real FB.
+            GXLoadTexObj(&tmp_tex1, GX_TEXMAP0);
             GXSetTevColor(GX_TEVREG0, mBlendColor);
             GXSetNumTevStages(1);
             GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
@@ -1618,8 +1657,13 @@ int mDoGph_Painter() {
                 view_port_class new_port;
                 new_port.x_orig = 0.0f;
                 new_port.y_orig = 0.0f;
+            #if TARGET_PC
+                new_port.width = mDoGph_gInf_c::getWidth();
+                new_port.height = mDoGph_gInf_c::getHeight();
+            #else
                 new_port.width = FB_WIDTH;
                 new_port.height = FB_HEIGHT;
+            #endif
                 new_port.near_z = view_port->near_z;
                 new_port.far_z = view_port->far_z;
                 new_port.scissor = view_port->scissor;
@@ -1913,8 +1957,12 @@ int mDoGph_Painter() {
                     retry_captue_frame(&camera_p->view, view_port,
                                        dComIfGp_getCameraZoomForcus(camera_id));
                 }
-
+                
+                #if TARGET_PC
+                GXSetViewport(0.0f, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), 0.0f, 1.0f);
+                #else
                 GXSetViewport(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f);
+                #endif
 
                 Mtx m2;
                 Mtx44 m;
@@ -2147,7 +2195,7 @@ int mDoGph_Painter() {
     #endif
 
 #if TARGET_PC
-    imgui_main(&auroraInfo);
+    dusk::g_imguiConsole.draw();
 #endif
 
     mDoGph_gInf_c::endRender();

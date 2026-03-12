@@ -71,7 +71,10 @@ void dKy_set_eyevect_calc2(camera_class* i_camera, Vec* o_out, f32 param_2, f32 
     }
 }
 
-static void dKyr_set_btitex_common(GXTexObj* i_obj, ResTIMG* i_img, GXTexMapID i_mapID) {
+static void dKyr_set_btitex_common(TGXTexObj* i_obj, ResTIMG* i_img, GXTexMapID i_mapID) {
+#ifdef TARGET_PC
+    i_obj->reset();
+#endif
     GXInitTexObj(i_obj, (&i_img->format + i_img->imageOffset), i_img->width, i_img->height,
                  (GXTexFmt)i_img->format, (GXTexWrapMode)i_img->wrapS, (GXTexWrapMode)i_img->wrapT,
                  (GXBool)(i_img->mipmapCount > 1));
@@ -84,7 +87,7 @@ static void dKyr_set_btitex_common(GXTexObj* i_obj, ResTIMG* i_img, GXTexMapID i
     GXLoadTexObj(i_obj, i_mapID);
 }
 
-static void dKyr_set_btitex(GXTexObj* i_obj, ResTIMG* i_img) {
+static void dKyr_set_btitex(TGXTexObj* i_obj, ResTIMG* i_img) {
     dKyr_set_btitex_common(i_obj, i_img, GX_TEXMAP0);
 }
 
@@ -2116,7 +2119,7 @@ static void dKyr_draw_rev_moon(Mtx drawMtx, u8** tex) {
             return;
         }
 
-        GXTexObj texobj;
+        TGXTexObj texobj;
         dKyr_set_btitex_common(&texobj, (ResTIMG*)tex[0], GX_TEXMAP0);
         dKyr_set_btitex_common(&texobj, (ResTIMG*)tex[1], GX_TEXMAP1);
         dKyr_set_btitex_common(&texobj, (ResTIMG*)tex[texidx + 2], GX_TEXMAP2);
@@ -2464,7 +2467,7 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* ppos, GXColor& unused, u8** tex) {
                 return;
             }
 
-            GXTexObj texobj;
+            TGXTexObj texobj;
             dKyr_set_btitex_common(&texobj, (ResTIMG*)tex[0], GX_TEXMAP0);
             dKyr_set_btitex_common(&texobj, (ResTIMG*)tex[1], GX_TEXMAP1);
             dKyr_set_btitex_common(&texobj, (ResTIMG*)tex[texidx + 2], GX_TEXMAP2);
@@ -2724,7 +2727,7 @@ void dKyr_drawLenzflare(Mtx drawMtx, cXyz* ppos, GXColor& param_2, u8** tex) {
 
         j3dSys.reinitGX();
 
-        GXTexObj texobj;
+        TGXTexObj texobj;
         dKyr_set_btitex(&texobj, (ResTIMG*)tex[0]);
         GXSetNumChans(0);
         GXSetTevColor(GX_TEVREG0, color_reg0);
@@ -3125,7 +3128,7 @@ void dKyr_drawRain(Mtx drawMtx, u8** tex) {
                 return;
             }
 
-            GXTexObj texobj;
+            TGXTexObj texobj;
             dKyr_set_btitex(&texobj, (ResTIMG*)tex[0]);
             GXSetNumChans(0);
             GXSetTevColor(GX_TEVREG0, color_reg0);
@@ -3290,7 +3293,7 @@ void dKyr_drawSibuki(Mtx drawMtx, u8** tex) {
     color.b = 0xC8;
     color.a = rain_packet->mSibukiAlpha * alphaFade;
 
-    GXTexObj texobj;
+    TGXTexObj texobj;
     dKyr_set_btitex(&texobj, (ResTIMG*)tex[1]);
     GXSetNumChans(0);
     GXSetTevColor(GX_TEVREG0, color);
@@ -3378,7 +3381,7 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
     Mtx camMtx;
     Mtx rotMtx;
     cXyz pos[4];
-    GXTexObj spDC;
+    TGXTexObj spDC;
     cXyz spD0;
     Vec spC4;
     Vec spB8;
@@ -3795,7 +3798,7 @@ void dKyr_drawSnow(Mtx drawMtx, u8** tex) {
                 }
 
                 if (tex[0] != NULL) {
-                    GXTexObj spA0;
+                    TGXTexObj spA0;
                     dKyr_set_btitex(&spA0, (ResTIMG*)tex[0]);
                     GXSetNumChans(0);
                     GXSetTevColor(GX_TEVREG0, color_reg0);
@@ -4334,7 +4337,7 @@ void drawCloudShadow(Mtx drawMtx, u8** tex) {
 
         GXSetClipMode(GX_CLIP_DISABLE);
 
-        GXTexObj texobj, fb_texobj;
+        TGXTexObj texobj, fb_texobj;
         if (g_env_light.mMoyaMode < 50) {
             dKy_ParticleColor_get_bg(&camera->view.lookat.eye, NULL, &sp48, &sp44, &sp40, &sp3C, 0.0f);
             f32 temp_f30 = 0.4f;
@@ -4539,7 +4542,7 @@ void drawVrkumo(Mtx drawMtx, GXColor& color, u8** tex) {
     Mtx camMtx;
     Mtx rotMtx;
 
-    GXTexObj texobj;
+    TGXTexObj texobj;
     cXyz proj;
 
     f32 rot;
@@ -5370,7 +5373,7 @@ void dKyr_odour_draw(Mtx drawMtx, u8** tex) {
         break;
     }
 
-    GXTexObj texobj, fb_texobj;
+    TGXTexObj texobj, fb_texobj;
     dKyr_set_btitex_common(&texobj, (ResTIMG*)tex[0], GX_TEXMAP1);
 
     ResTIMG* fb_timg = mDoGph_gInf_c::getFrameBufferTimg();
@@ -5764,7 +5767,7 @@ void dKyr_mud_draw(Mtx drawMtx, u8** tex) {
     
         if (g_env_light.camera_water_in_status == 0) {
             for (int i = 0; i < 1; i++) {
-                GXTexObj texobj;
+                TGXTexObj texobj;
                 dKyr_set_btitex(&texobj, (ResTIMG*)tex[0]);
 
                 GXSetNumChans(0);
@@ -5924,7 +5927,7 @@ static void dKyr_evil_draw2(Mtx drawMtx, u8** tex) {
         color_reg0.b = 0x87;
         color_reg0.a = 0xFF;
 
-        GXTexObj texobj;
+        TGXTexObj texobj;
         dKyr_set_btitex(&texobj, (ResTIMG*)tex[1]);
 
         rot += 0.7f;
@@ -5980,11 +5983,19 @@ static void dKyr_evil_draw2(Mtx drawMtx, u8** tex) {
 
                         mDoLib_project(&sp7C, &proj);
 
+#if TARGET_PC
+                        if (!(proj.x > -sp34.x) || !(proj.x < (dComIfGd_getViewport()->width + sp34.x)) ||
+                            !(proj.y > -sp34.y) || !(proj.y < (dComIfGd_getViewport()->height + sp34.z)))
+                        {
+                            continue;
+                        }
+#else
                         if (!(proj.x > -sp34.x) || !(proj.x < (FB_WIDTH + sp34.x)) ||
                             !(proj.y > -sp34.y) || !(proj.y < (458.0f + sp34.z)))
                         {
                             continue;
                         }
+#endif
                     }
 
                     f32 sp40;
@@ -6147,7 +6158,7 @@ void dKyr_evil_draw(Mtx drawMtx, u8** tex) {
         color_reg1.b = 10;
         color_reg1.a = 255;
 
-        GXTexObj texobj;
+        TGXTexObj texobj;
         dKyr_set_btitex(&texobj, (ResTIMG*)tex[0]);
 
         rot += 1.0f;
@@ -6205,11 +6216,19 @@ void dKyr_evil_draw(Mtx drawMtx, u8** tex) {
 
                         mDoLib_project(&spA4, &proj);
 
+#if TARGET_PC
+                        if (!(proj.x > -sp44.x) || !(proj.x < (dComIfGd_getViewport()->width + sp44.x)) ||
+                            !(proj.y > -sp44.y) || !(proj.y < (dComIfGd_getViewport()->height + sp44.z)))
+                        {
+                            continue;
+                        }
+#else
                         if (!(proj.x > -sp44.x) || !(proj.x < (FB_WIDTH + sp44.x)) ||
                             !(proj.y > -sp44.y) || !(proj.y < (458.0f + sp44.z)))
                         {
                             continue;
                         }
+#endif
                     }
 
                     f32 sp5C;

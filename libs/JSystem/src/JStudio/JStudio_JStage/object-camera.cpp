@@ -99,7 +99,7 @@ void JStudio_JStage::TAdaptor_camera::adaptor_do_PARENT_NODE(JStudio::data::TEOp
     case JStudio::data::UNK_0x19:
         JUT_ASSERT(166, uSize==4);
         JUT_ASSERT(167, pContent!=NULL);
-        field_0x110 = *(int*)pContent;
+        field_0x110 = *(BE(s32)*)pContent;
         break;
     }
 }
@@ -111,7 +111,7 @@ JStudio_JStage::TAdaptor_camera::adaptor_do_PARENT_ENABLE(JStudio::data::TEOpera
     case JStudio::data::UNK_0x2:
         JUT_ASSERT(185, uSize==4);
         JUT_ASSERT(186, pContent!=NULL);
-        field_0x114 = *(u32*)pContent ? true : false;
+        field_0x114 = *(BE(u32)*)pContent ? true : false;
         switch(field_0x108) {
         case 1: {
             JStage::TObject* parent = 0;
@@ -137,7 +137,7 @@ JStudio_JStage::TAdaptor_camera::adaptor_do_PARENT_FUNCTION(JStudio::data::TEOpe
     case JStudio::data::UNK_0x2:
         JUT_ASSERT(226, uSize==4);
         JUT_ASSERT(227, pContent!=NULL);
-        field_0x108 = *(int*)pContent;
+        field_0x108 = *(BE(s32)*)pContent;
         break;
     }
 }
@@ -164,7 +164,7 @@ void JStudio_JStage::TAdaptor_camera::adaptor_do_TARGET_PARENT_NODE(
     case JStudio::data::UNK_0x19:
         JUT_ASSERT(282, uSize==4);
         JUT_ASSERT(283, pContent!=NULL);
-        field_0x11c = *(int*)pContent;
+        field_0x11c = *(BE(s32)*)pContent;
         break;
     }
 }
@@ -175,7 +175,7 @@ void JStudio_JStage::TAdaptor_camera::adaptor_do_TARGET_PARENT_ENABLE(
     case JStudio::data::UNK_0x2:
         JUT_ASSERT(301, uSize==4);
         JUT_ASSERT(302, pContent!=NULL);
-        field_0x120 = *(int*)pContent ? 1 : 0;
+        field_0x120 = *(BE(s32)*)pContent ? 1 : 0;
         break;
     }
 }

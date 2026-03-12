@@ -153,7 +153,7 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_SOUND(JStudio::data::TEOperatio
     case JStudio::data::UNK_0x19:
         JUT_ASSERT(283, pContent!=NULL);
         JUT_ASSERT(284, uSize==4);
-        field_0x124 = *(u32*)pContent;
+        field_0x124 = *(BE(u32)*)pContent;
         prepareSound_();
         break;
     }
@@ -175,7 +175,7 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_BEGIN_FADE_IN(
     case JStudio::data::UNK_0x2:
         JUT_ASSERT(323, pContent!=NULL);
         JUT_ASSERT(324, uSize==4);
-        beginSound_fadeIn_(*(f32*)pContent);
+        beginSound_fadeIn_(*(BE(f32)*)pContent);
         break;
     }
 }
@@ -196,7 +196,7 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_END_FADE_OUT(
     case JStudio::data::UNK_0x2:
         JUT_ASSERT(364, pContent!=NULL);
         JUT_ASSERT(365, uSize==4);
-        endSound_fadeOut_(*(f32*)pContent);
+        endSound_fadeOut_(*(BE(f32)*)pContent);
         break;
     }
 }
@@ -235,7 +235,7 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_PARENT_NODE(JStudio::data::TEOp
 	case JStudio::data::UNK_0x19:
         JUT_ASSERT(447, uSize==4);
         JUT_ASSERT(448, pContent!=NULL);
-		field_0x140 = *(u32*)pContent;
+		field_0x140 = *(BE(u32)*)pContent;
         break;
 	}
 }
@@ -245,7 +245,7 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_PARENT_ENABLE(
     if (param_1 == JStudio::data::UNK_0x2) {
         JUT_ASSERT(468, uSize == 4);
         JUT_ASSERT(469, pContent != NULL);
-        field_0x144 = *(u32*)pContent ? 1 : 0;
+        field_0x144 = *(BE(u32)*)pContent ? 1 : 0;
     }
 }
 
@@ -254,7 +254,7 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_REPEAT(JStudio::data::TEOperati
     if (param_1 == JStudio::data::UNK_0x2) {
         JUT_ASSERT(490, uSize == 4);
         JUT_ASSERT(491, pContent != NULL);
-        field_0x11e = *(u32*)pContent ? 1 : 0;
+        field_0x11e = *(BE(u32)*)pContent ? 1 : 0;
     }
 }
 
@@ -263,7 +263,7 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_CONTINUOUS(JStudio::data::TEOpe
     if (param_1 == JStudio::data::UNK_0x2) {
         JUT_ASSERT(512, uSize == 4);
         JUT_ASSERT(513, pContent != NULL);
-        field_0x11d = *(u32*)pContent ? 1 : 0;
+        field_0x11d = *(BE(u32)*)pContent ? 1 : 0;
     }
 }
 
@@ -272,7 +272,7 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_LOCATED(JStudio::data::TEOperat
     if (param_1 == JStudio::data::UNK_0x2) {
         JUT_ASSERT(534, pContent != NULL);
         JUT_ASSERT(535, uSize == 4);
-        u32 val = *(u32*)pContent;
+        u32 val = *(BE(u32)*)pContent;
         field_0x12c = NULL;
         if (val != 0) {
             field_0x12c = &field_0x130;
@@ -285,7 +285,7 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_ON_EXIT_NOT_END(
     if (param_1 == JStudio::data::UNK_0x2) {
         JUT_ASSERT(512, uSize == 4);
         JUT_ASSERT(513, pContent != NULL);
-        field_0x11f = *(u32*)pContent ? 1 : 0;
+        field_0x11f = *(BE(u32)*)pContent ? 1 : 0;
     }
 }
 
