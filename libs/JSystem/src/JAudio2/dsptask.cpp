@@ -550,9 +550,9 @@ void DspBoot(void (*requestCallback)(void*)) {
 }
 
 int DSPSendCommands2(u32* param_1, u32 param_2, void (*callBack)(u16)) {
-    callBack(param_1[0]);
-    STUB_RET(1);
-
+#if TARGET_PC
+    OSPanic(__FILE__, __LINE__, "We do not have a DSP");
+#endif
     s32 i;
     BOOL interruptFlag;
     s32 startWorkStatus;
