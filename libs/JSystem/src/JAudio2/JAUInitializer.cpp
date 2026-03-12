@@ -15,6 +15,8 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JKernel/JKRThread.h"
 
+#include "dusk/audio/DuskAudioSystem.h"
+
 JAU_JASInitializer::JAU_JASInitializer() {
     audioMemory_ = 0;
     audioMemSize_ = 0;
@@ -60,7 +62,11 @@ void JAU_JASInitializer::initJASystem(JKRSolidHeap* heap) {
         }
 
         JASDvd::createThread(dvdThreadPriority_, 0x80, 0x1000);
+#if TARGET_PC
+        DuskAudioInitialize();
+#else
         JASAudioThread::create(audioThreadPriority_);
+#endif
         JKRThreadSwitch* threadSwitch = JKRThreadSwitch::getManager();
         if (threadSwitch) {
             if (dvdThreadId_ >= 0) {

@@ -83,7 +83,11 @@ source_group("dusk" FILES ${DUSK_FILES})
 
 # game_debug is for game code files that we know work when compiled with DEBUG=1
 # Of course, if building a release build, this distinction is irrelevant
-add_library(game_debug STATIC ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES})
+add_library(game_debug STATIC ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES}
+        src/dusk/audio/DuskAudioSystem.cpp
+        src/dusk/audio/JASCriticalSection.cpp
+        src/dusk/audio/DuskDsp.hpp
+        src/dusk/audio/DuskDsp.cpp)
 target_compile_definitions(game_debug PRIVATE TARGET_PC AVOID_UB=1 VERSION=0 $<$<CONFIG:Debug>:DEBUG=1>)
 
 # Make these properties PUBLIC so that the regular game target also sees them.
