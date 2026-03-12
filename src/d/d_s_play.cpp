@@ -1426,11 +1426,18 @@ static int phase_4(dScnPly_c* i_this) {
     dComIfGd_setViewport(NULL);
     dComIfGd_setView(NULL);
 
-    JKRExpHeap* heap = fopMsgM_createExpHeap(0xBB800, NULL);
+    JKRExpHeap* heap = fopMsgM_createExpHeap(HEAP_SIZE(0xBB800, 0xF0000), NULL);
+#if TARGET_PC
+    heap->setName("Scene2DHeap");
+#endif
+
     JUT_ASSERT(2704, heap != NULL);
     dComIfGp_setExpHeap2D(heap);
 
     JKRExpHeap* heap2 = fopMsgM_createExpHeap(HEAP_SIZE(0xA800, 0x15000), NULL);
+#if TARGET_PC
+    heap2->setName("SceneMsgHeap");
+#endif
     JUT_ASSERT(2709, heap2 != NULL);
     dComIfGp_setMsgExpHeap(heap2);
 
