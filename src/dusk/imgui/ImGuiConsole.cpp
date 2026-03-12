@@ -148,7 +148,7 @@ namespace dusk {
             }
             hasPrevious = true;
 
-            ImGuiStringViewText(fmt::format(FMT_STRING("FPS: {:.1f}\n"), io.Framerate));
+            ImGuiStringViewText(fmt::format(FMT_STRING("FPS: {:.2f}\n"), io.Framerate));
 
             if (hasPrevious) {
                 ImGui::Separator();
