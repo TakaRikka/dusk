@@ -324,7 +324,7 @@ bool JASAramStream::load() {
         (void)i;
         // Fakematch? It seems the only way to get the bhead->field_0x4 load in the right order is
         // with a pointer cast on its address in one of the two places it is read, but not both.
-        if (!JKRMainRamToAram(sReadBuffer + *(u32*)&bhead->mSize * i + sizeof(BlockHeader),
+        if (!JKRMainRamToAram(sReadBuffer + bhead->mSize * i + sizeof(BlockHeader),
                               sp08 + sBlockSize * mBlocksPerChannel * i,
                               bhead->mSize, EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1, NULL)) {
             JUT_WARN(522, "%s", "JKRMainRamToAram Failed");
