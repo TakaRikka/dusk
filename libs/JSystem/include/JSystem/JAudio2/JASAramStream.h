@@ -35,9 +35,15 @@ public:
 
     struct Header {
         /* 0x00 */ BE(u32) tag; // 'STRM'
+#if TARGET_PC
+        /* 0x04 */ BE(u32) soundBlockSize;
+        /* 0x08 */ BE(u16) format;
+        /* 0x0A */ BE(u16) bits;
+#else
         /* 0x04 */ u8 field_0x4[5];
         /* 0x09 */ u8 format;
         /* 0x0A */ u8 bits;
+#endif
         /* 0x0C */ BE(u16) channels;
         /* 0x0E */ BE(u16) loop;
         /* 0x10 */ BE(int) mSampleRate;
