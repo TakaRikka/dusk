@@ -166,13 +166,13 @@ public:
     /* 0x130 */ s16 mpLasts[CHANNEL_MAX];
     /* 0x13C */ s16 mpPenults[CHANNEL_MAX];
     /* 0x148 */ int mAramAddress;
-    /* 0x14C */ u32 field_0x14c;
+    /* 0x14C */ u32 mAramSize;
     /* 0x150 */ StreamCallback mCallback;
     /* 0x154 */ void* mCallbackData;
     /* 0x158 */ u16 mFormat;
     /* 0x15A */ u16 mChannelNum;
     /* 0x15C */ u32 mBufCount;
-    /* 0x160 */ u32 mBlocksPerChannel;
+    /* 0x160 */ u32 mAramBlocksPerChannel;
     /* 0x164 */ u32 mSampleRate;
     /* 0x168 */ bool mLoop;
     /* 0x16C */ u32 mLoopStart;
