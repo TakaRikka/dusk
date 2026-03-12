@@ -5,6 +5,7 @@
 #include "JSystem/JAudio2/JAIAudible.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "global.h"
+#include "dusk/endian.h"
 #include <cstdint>
 
 class JAISound;
@@ -55,16 +56,16 @@ public:
     void setAnonymous() { id_.composite_ = -1; }
 
     union {
-        u32 composite_;
+        BE(u32) composite_;
         struct {
             union {
-                u16 value;
+                BE(u16) value;
                 struct {
                     u8 sectionID;
                     u8 groupID;
                 } parts;
             } type;
-            u16 waveID;
+            BE(u16) waveID;
         } info;
     } id_;
 };
