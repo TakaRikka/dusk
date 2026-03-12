@@ -298,7 +298,7 @@ void daMant_packet_c::draw() {
     GXTlutObj GStack_80;
     GXInitTlutObj(&GStack_80, lut, GX_TL_RGB5A3, 0x100);
 
-    GXTexObj GStack_74;
+    TGXTexObj GStack_74;
     GXInitTexObjCI(&GStack_74, image, 0x80, 0x80, GX_TF_C8, GX_CLAMP, GX_CLAMP, 0, 0);
     GXInitTexObjLOD(&GStack_74, GX_LINEAR, GX_LINEAR, 0.0, 0.0, 0.0, 0, 0, GX_ANISO_1);
 
@@ -314,6 +314,9 @@ void daMant_packet_c::draw() {
     GXLoadNrmMtxImm(MStack_54, GX_PNMTX0);
     GXCallDisplayList(l_Egnd_mantDL, 0x3e0);
 
+#ifdef TARGET_PC
+    GStack_74.reset();
+#endif
     GXInitTexObjCI(&GStack_74, l_Egnd_mantTEX_U, 0x80, 0x80, GX_TF_C8, GX_CLAMP, GX_CLAMP, 0, 0);
     GXInitTexObjLOD(&GStack_74, GX_LINEAR, GX_LINEAR, 0.0, 0.0, 0.0, 0, 0, GX_ANISO_1);
     GXLoadTexObj(&GStack_74, GX_TEXMAP0);

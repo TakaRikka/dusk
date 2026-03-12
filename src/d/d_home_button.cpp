@@ -198,6 +198,9 @@ void dHomeButton_c::drawCapture(u8 param_0, void (*param_1)(J2DOrthoGraph&, void
     sp30.setPort();
 
     dComIfGp_setCurrentGrafPort(&sp30);
+#ifdef TARGET_PC
+    mDoGph_gInf_c::m_fullFrameBufferTexObj.reset();
+#endif
     mDoLib_setResTimgObj(mDoGph_gInf_c::m_fullFrameBufferTimg,
                          &mDoGph_gInf_c::m_fullFrameBufferTexObj, 0, NULL);
 

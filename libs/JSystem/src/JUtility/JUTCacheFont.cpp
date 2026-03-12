@@ -431,6 +431,7 @@ void JUTCacheFont::invalidiateAllCache() {
     field_0xa4 = (TGlyphCacheInfo*)mCacheBuffer;
     field_0x9c = NULL;
     field_0xa0 = NULL;
+    // TARGET_PC TODO: we're leaking all GXTexObj here
 }
 
 void JUTCacheFont::unlink(JUTCacheFont::TGlyphCacheInfo* cacheInfo) {

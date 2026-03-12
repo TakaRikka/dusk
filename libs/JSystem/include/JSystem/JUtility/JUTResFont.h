@@ -2,6 +2,7 @@
 #define JUTRESFONT_H
 
 #include "JSystem/JUtility/JUTFont.h"
+#include "dusk/gx_helper.h"
 
 class JKRHeap;
 
@@ -63,7 +64,7 @@ public:
     // some types uncertain, may need to be fixed
     /* 0x1C */ int mWidth;
     /* 0x20 */ int mHeight;
-    /* 0x24 */ GXTexObj mTexObj;
+    /* 0x24 */ TGXTexObj mTexObj;
     /* 0x44 */ int mTexPageIdx;
     /* 0x48 */ const ResFONT* mResFont;
     /* 0x4C */ ResFONT::INF1* mInf1Ptr;

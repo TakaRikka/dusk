@@ -5,9 +5,10 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "SSystem/SComponent/c_m3d_g_pla.h"
+#include "dusk/gx_helper.h"
 #include "f_op/f_op_view.h"
-#include "m_Do/m_Do_ext.h"
 #include "global.h"
+#include "m_Do/m_Do_ext.h"
 
 class J3DDrawBuffer;
 class J3DModel;
@@ -168,7 +169,7 @@ public:
     void setScaleX(f32 scale) { mScaleX = scale; }
     void setScaleY(f32 scale) { mScaleY = scale; }
 
-    /* 0x04 */ GXTexObj mTexObj;
+    /* 0x04 */ TGXTexObj mTexObj;
     /* 0x24 */ f32 field_0x24;
     /* 0x28 */ f32 field_0x28;
     /* 0x2C */ f32 field_0x2c;
@@ -201,11 +202,11 @@ public:
 class dDlst_shadowSimple_c {
 public:
     void draw();
-    void set(cXyz*, f32, f32, cXyz*, s16, f32, GXTexObj*);
+    void set(cXyz*, f32, f32, cXyz*, s16, f32, TGXTexObj*);
     dDlst_shadowSimple_c();
 
     /* 0x00 */ u8 mAlpha;
-    /* 0x04 */ GXTexObj* mpTexObj;
+    /* 0x04 */ TGXTexObj* mpTexObj;
     /* 0x08 */ Mtx mVolumeMtx;
     /* 0x38 */ Mtx mMtx;
 };  // Size: 0x68
@@ -291,12 +292,12 @@ public:
     void draw(f32 (*)[4]);
     int setReal(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*);
     bool addReal(u32, J3DModel*);
-    int setSimple(cXyz*, f32, f32, cXyz*, s16, f32, GXTexObj*);
+    int setSimple(cXyz*, f32, f32, cXyz*, s16, f32, TGXTexObj*);
     static void setSimpleTex(ResTIMG const*);
 
-    static GXTexObj* getSimpleTex() { return &mSimpleTexObj; }
+    static TGXTexObj* getSimpleTex() { return &mSimpleTexObj; }
 
-    static GXTexObj mSimpleTexObj;
+    static TGXTexObj mSimpleTexObj;
 
 private:
     /* 0x00000 */ u8 field_0x0;
@@ -307,7 +308,7 @@ private:
     /* 0x0000C */ dDlst_shadowSimple_c mSimple[128];
     /* 0x0340C */ int mNextID;
     /* 0x03410 */ dDlst_shadowReal_c mReal[8];
-    /* 0x15EB0 */ GXTexObj field_0x15eb0[2];
+    /* 0x15EB0 */ TGXTexObj field_0x15eb0[2];
     /* 0x15EF0 */ void* field_0x15ef0[2];
 };
 
@@ -444,7 +445,7 @@ public:
     }
 
     int setSimpleShadow(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3, s16 param_4,
-                        f32 param_5, GXTexObj* param_6) {
+                        f32 param_5, TGXTexObj* param_6) {
         return mShadowControl.setSimple(param_0, param_1, param_2, param_3, param_4, param_5,
                                         param_6);
     }

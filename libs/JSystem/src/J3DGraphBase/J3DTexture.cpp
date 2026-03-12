@@ -22,7 +22,7 @@ void J3DTexture::loadGX(u16 idx, GXTexMapID texMapID) const {
     }
     GXLoadTexObj(&mpTexObj[idx], texMapID);
 #else
-    GXTexObj texObj;
+    TGXTexObj texObj;
     GXTlutObj tlutObj;
 
     if (!timg->indexTexture) {
@@ -54,7 +54,7 @@ void J3DTexture::loadGXTexObj(u16 idx) {
     ResTIMG* timg = getResTIMG(idx);
 
     GXTlutObj& tlutObj = mpTlutObj[idx];
-    GXTexObj& texObj = mpTexObj[idx];
+    TGXTexObj& texObj = mpTexObj[idx];
 
     if (!timg->indexTexture) {
         GXInitTexObj(&texObj, mpImgDataPtr[idx], timg->width, timg->height,
@@ -88,7 +88,7 @@ void J3DTexture::entryNum(u16 num) {
     delete[] mpTlutObj;
     delete[] mpImgDataPtr;
     delete[] mpTlutDataPtr;
-    mpTexObj = new GXTexObj[num]();
+    mpTexObj = new TGXTexObj[num]();
     mpTlutObj = new GXTlutObj[num]();
     mpImgDataPtr = new u8*[num]();
     mpTlutDataPtr = new u8*[num]();

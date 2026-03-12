@@ -62,6 +62,9 @@ void dOvlpFd3_dlst_c::draw() {
     C_MTXPerspective(m, 60.0f, mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getHeightF(), 100.0f,
                      100000.0f);
     GXSetProjection(m, GX_PERSPECTIVE);
+#ifdef TARGET_PC
+    mDoGph_gInf_c::getFrameBufferTexObj()->reset();
+#endif
     GXInitTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), mDoGph_gInf_c::getFrameBufferTex(), FB_WIDTH / 2,
                  FB_HEIGHT / 2, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(mDoGph_gInf_c::getFrameBufferTexObj(), GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f,

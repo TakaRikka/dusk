@@ -980,7 +980,7 @@ int daObjStone_c::draw() {
 
     if (!model) {
         f32 shadow_size = l_shadow_size[mStoneType];
-        GXTexObj* pTex = dDlst_shadowControl_c::getSimpleTex();
+        TGXTexObj* pTex = dDlst_shadowControl_c::getSimpleTex();
         cXyz pos = current.pos;
 
         dComIfGd_setSimpleShadow(&pos, mChkObj.GetGroundH(), shadow_size, mChkObj.m_gnd, 0,

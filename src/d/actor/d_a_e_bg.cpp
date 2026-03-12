@@ -134,7 +134,7 @@ int daE_BG_c::draw() {
     cXyz offsetPos;
     offsetPos.set(current.pos.x, current.pos.y + 100.0f, current.pos.z);
 
-    GXTexObj* texObj = dDlst_shadowControl_c::getSimpleTex();
+    TGXTexObj* texObj = dDlst_shadowControl_c::getSimpleTex();
 
     mShadowKey = dComIfGd_setShadow(mShadowKey, 0x01, model, &offsetPos, 200.0f, 0.0f, current.pos.y,
                                    mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr, 0, 1.0f, texObj);

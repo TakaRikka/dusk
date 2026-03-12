@@ -15,10 +15,10 @@ public:
     virtual void draw();
     virtual ~dMirror_packet_c();
     cXyz& getViewScale() { return mViewScale; }
-    GXTexObj& getTexObj() { return mTexObj; }
+    TGXTexObj& getTexObj() { return mTexObj; }
     cXyz* getQuad() { return mQuad; }
 
-    /* 0x010 */ GXTexObj mTexObj;
+    /* 0x010 */ TGXTexObj mTexObj;
     /* 0x030 */ u8 mModelCount;
     /* 0x034 */ J3DModel* mModels[0x40];
     /* 0x134 */ cXyz mQuad[4];

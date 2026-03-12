@@ -1251,10 +1251,10 @@ int dComLbG_PhaseHandler(request_of_phase_process_class*, request_of_phase_proce
 BOOL dComIfG_isSceneResetButton();
 
 int dComIfGd_setSimpleShadow(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyInfo& param_3, s16 i_angle,
-                             f32 param_5, GXTexObj* i_tex);
+                             f32 param_5, TGXTexObj* i_tex);
 int dComIfGd_setShadow(u32 param_0, s8 param_1, J3DModel* param_2, cXyz* param_3, f32 param_4,
                        f32 param_5, f32 param_6, f32 param_7, cBgS_PolyInfo& param_8,
-                       dKy_tevstr_c* param_9, s16 param_10, f32 param_11, GXTexObj* param_12);
+                       dKy_tevstr_c* param_9, s16 param_10, f32 param_11, TGXTexObj* param_12);
 
 inline dSv_info_c* dComIfGs_getSaveInfo() {
     return &g_dComIfG_gameInfo.info;
@@ -4489,7 +4489,7 @@ inline int dComIfGd_setRealShadow(u32 param_0, s8 param_1, J3DModel* param_2, cX
 }
 
 inline int dComIfGd_setSimpleShadow(cXyz* pos, f32 param_1, f32 param_2, cXyz* param_3, s16 angle,
-                                    f32 param_5, GXTexObj* tex) {
+                                    f32 param_5, TGXTexObj* tex) {
     return g_dComIfG_gameInfo.drawlist.setSimpleShadow(pos, param_1, param_2, param_3, angle,
                                                        param_5, tex);
 }

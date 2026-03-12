@@ -237,8 +237,8 @@ public:
     static GXColor& getFadeColor() { return mFadeColor; }
     static GXColor& getBackColor() { return mBackColor; }
     static void endRender() { JFWDisplay::getManager()->endRender(); }
-    static GXTexObj* getZbufferTexObj() { return &mZbufferTexObj; }
-    static GXTexObj* getFrameBufferTexObj() { return &mFrameBufferTexObj; }
+    static TGXTexObj* getZbufferTexObj() { return &mZbufferTexObj; }
+    static TGXTexObj* getFrameBufferTexObj() { return &mFrameBufferTexObj; }
     static void setFrameRate(u16 i_rate) { JFWDisplay::getManager()->setFrameRate(i_rate); }
 
     static int getFrameBufferSize() {
@@ -285,8 +285,8 @@ public:
     static void setWindowSize(AuroraWindowSize const& size);
     #endif
 
-    static GXTexObj mFrameBufferTexObj;
-    static GXTexObj mZbufferTexObj;
+    static TGXTexObj mFrameBufferTexObj;
+    static TGXTexObj mZbufferTexObj;
     static bloom_c m_bloom;
     static Mtx mBlureMtx;
     static GXColor mBackColor;
@@ -331,7 +331,7 @@ public:
     static u8 mWideZoom;
     static ResTIMG* m_fullFrameBufferTimg;
     static void* m_fullFrameBufferTex;
-    static GXTexObj m_fullFrameBufferTexObj;
+    static TGXTexObj m_fullFrameBufferTexObj;
 
     static f32 m_aspect;
     static f32 m_scale;

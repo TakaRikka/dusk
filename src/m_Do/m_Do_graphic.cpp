@@ -389,12 +389,12 @@ void mDoGph_gInf_c::onBlure() {
 }
 
 #if PLATFORM_WII || PLATFORM_SHIELD
-GXTexObj mDoGph_gInf_c::m_fullFrameBufferTexObj;
+TGXTexObj mDoGph_gInf_c::m_fullFrameBufferTexObj;
 #endif
 
-GXTexObj mDoGph_gInf_c::mFrameBufferTexObj;
+TGXTexObj mDoGph_gInf_c::mFrameBufferTexObj;
 
-GXTexObj mDoGph_gInf_c::mZbufferTexObj;
+TGXTexObj mDoGph_gInf_c::mZbufferTexObj;
 
 mDoGph_gInf_c::bloom_c mDoGph_gInf_c::m_bloom;
 
@@ -918,6 +918,10 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
             GXSetTexCopyDst(halfWidth, halfHeight,
                             (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
             GXCopyTex(frameBufferTex, GX_FALSE);
+#ifdef TARGET_PC
+            mDoGph_gInf_c::getFrameBufferTexObj()->reset();
+            mDoGph_gInf_c::getZbufferTexObj()->reset();
+#endif
             GXInitTexObj(mDoGph_gInf_c::getZbufferTexObj(), zBufferTex, halfWidth, halfHeight,
                         GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
             GXInitTexObjLOD(mDoGph_gInf_c::getZbufferTexObj(), GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f,
@@ -1232,7 +1236,7 @@ void mDoGph_gInf_c::bloom_c::draw() {
             GXSetTexCopyDst(width / 4, height / 4, GX_TF_RGBA8, GX_TRUE);
             GXCopyTex(zBufferTex, 0);
 
-            GXTexObj tmp_tex1;
+            TGXTexObj tmp_tex1;
             GXInitTexObj(&tmp_tex1, zBufferTex, width / 4, height / 4, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP,
                          GX_FALSE);
             GXInitTexObjLOD(&tmp_tex1, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE,
@@ -1278,17 +1282,13 @@ void mDoGph_gInf_c::bloom_c::draw() {
             // Blur filter from tmp_tex1 1/4 to EFB 1/4.
             mDoGph_drawFilterQuad(1, 1);
 
-#if TARGET_PC
-            GXDestroyTexObj(&tmp_tex1);
-#endif
-
             GXSetTexCopySrc(0, 0, width / 4, height / 4);
             GXSetTexCopyDst(width / 8, height / 8, GX_TF_RGBA8, GX_TRUE);
 
             // Downsample EFB 1/4 to zBufferTex 1/8 (tmp_tex2).
             GXCopyTex(zBufferTex, GX_FALSE);
 
-            GXTexObj tmp_tex2;
+            TGXTexObj tmp_tex2;
             GXInitTexObj(&tmp_tex2, zBufferTex, width / 8, height / 8, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP,
                          GX_FALSE);
 #if TARGET_PC
@@ -1308,7 +1308,7 @@ void mDoGph_gInf_c::bloom_c::draw() {
             mDoGph_drawFilterQuad(1, 1);
 
 #if TARGET_PC
-            GXDestroyTexObj(&tmp_tex2);
+            tmp_tex2.reset();
 #endif
 
             // Now that we've upsampled and filtered our final bloom, copy 1/4 buffer back to zBufferTex.
@@ -1335,10 +1335,6 @@ void mDoGph_gInf_c::bloom_c::draw() {
             GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ONE, GX_LO_OR);
             mDoGph_drawFilterQuad(2, 2);
 
-#if TARGET_PC
-            GXDestroyTexObj(&tmp_tex2);
-#endif
-
             // Now blend our bloom into the real FB.
             GXLoadTexObj(&tmp_tex1, GX_TEXMAP0);
             GXSetTevColor(GX_TEVREG0, mBlendColor);
@@ -1354,10 +1350,6 @@ void mDoGph_gInf_c::bloom_c::draw() {
             GXPixModeSync();
             GXInvalidateTexAll();
             mDoGph_drawFilterQuad(4, 4);
-
-#if TARGET_PC
-            GXDestroyTexObj(&tmp_tex1);
-#endif
         }
     }
 }

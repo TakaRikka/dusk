@@ -20,7 +20,7 @@ void dMpath_n::dTexObjAggregate_c::create() {
     };
 
     for (int lp1 = 0; lp1 < 7; lp1++) {
-        mp_texObj[lp1] = JKR_NEW GXTexObj();
+        mp_texObj[lp1] = JKR_NEW TGXTexObj();
         JUT_ASSERT(70, mp_texObj[lp1] != NULL);
         ResTIMG* image = (ResTIMG*)dComIfG_getObjectRes("Always", data[lp1]);
         JUT_ASSERT(72, image != NULL);

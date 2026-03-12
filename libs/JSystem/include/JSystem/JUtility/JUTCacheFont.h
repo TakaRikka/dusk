@@ -29,7 +29,7 @@ public:
     };
 
     struct TCachePage : TGlyphCacheInfo {
-        /* 0x20 */ GXTexObj mTexObj;
+        /* 0x20 */ TGXTexObj mTexObj;
         /* 0x40 */ u8 mImage[];
     };  // Size: 0x40
 
@@ -61,7 +61,7 @@ public:
     void setPagingType(EPagingType type) { mPagingType = type; }
 
     static u32 calcCacheSize(u32 param_0, int param_1) { return (ALIGN_NEXT(param_0, 0x20) + 0x40) * param_1; }
-    GXTexObj* getTexObj(void* buffer) const { return &((TCachePage*)buffer)->mTexObj; }
+    TGXTexObj* getTexObj(void* buffer) const { return &((TCachePage*)buffer)->mTexObj; }
     void delete_and_initialize() { deleteMemBlocks_CacheFont(); initialize_state(); }
 
     u32 getCachePage() const {

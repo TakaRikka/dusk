@@ -14,6 +14,8 @@
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include <cstring>
 
+#include "dusk/gx_helper.h"
+
 class dGov_HIO_c : public mDoHIO_entry_c {
 public:
     dGov_HIO_c();
@@ -32,7 +34,7 @@ public:
 static dGov_HIO_c l_HIO;
 
 void dDlst_Gameover_CAPTURE_c::draw() {
-    GXTexObj tex_obj;
+    TGXTexObj tex_obj;
     Mtx44 m;
 
     GXSetTexCopySrc(0, 0, FB_WIDTH, FB_HEIGHT);

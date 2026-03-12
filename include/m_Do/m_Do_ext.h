@@ -582,7 +582,7 @@ public:
     f32* getSize(int i_idx) { return mpLines[i_idx].field_0x4; }
 
 private:
-    /* 0x08 */ GXTexObj mTextureObject;
+    /* 0x08 */ TGXTexObj mTextureObject;
     /* 0x28 */ GXColor mColor;
     /* 0x2C */ dKy_tevstr_c* mpTevStr;
     /* 0x30 */ u16 mNumLines;

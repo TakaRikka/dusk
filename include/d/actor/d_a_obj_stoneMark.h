@@ -25,7 +25,7 @@ public:
 
 private:
     /* 0x0568 */ request_of_phase_process_class mpPhase;
-    /* 0x0570 */ GXTexObj mTexObj;
+    /* 0x0570 */ TGXTexObj mTexObj;
     /* 0x0590 */ dBgS_ObjAcch mObjAcch;
     /* 0x0768 */ dBgS_AcchCir mAcchCir;
     /* 0x07A8 */ dCcD_Stts mStts;

@@ -417,6 +417,9 @@ void JUTResFont::loadImage(int code, GXTexMapID id){
         if (pageIdx != mTexPageIdx || i != field_0x66)
         {
             void* pImg = &mpGlyphBlocks[i]->data[pageIdx * mpGlyphBlocks[i]->textureSize];
+#ifdef TARGET_PC
+            mTexObj.reset();
+#endif
             GXInitTexObj(&mTexObj, pImg, mpGlyphBlocks[i]->textureWidth,
                          mpGlyphBlocks[i]->textureHeight, (GXTexFmt)(u16)mpGlyphBlocks[i]->textureFormat,
                          GX_CLAMP, GX_CLAMP, 0);
