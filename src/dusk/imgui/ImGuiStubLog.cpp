@@ -62,7 +62,7 @@ namespace dusk {
 
             if (ImGui::BeginChild("scrolling")) {
                 ImGuiListClipper clipper;
-                clipper.Begin(LineOffsets.size());
+                clipper.Begin(static_cast<int>(LineOffsets.size()));
                 while (clipper.Step()) {
                     for (int idx = clipper.DisplayStart; idx < clipper.DisplayEnd; idx++) {
                         const char* lineStart = StubLogBuffer.begin() + LineOffsets[idx];
