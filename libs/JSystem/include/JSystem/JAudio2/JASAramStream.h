@@ -34,28 +34,28 @@ public:
     };
 
     struct Header {
-        /* 0x00 */ u32 tag; // 'STRM'
+        /* 0x00 */ BE(u32) tag; // 'STRM'
         /* 0x04 */ u8 field_0x4[5];
         /* 0x09 */ u8 format;
         /* 0x0A */ u8 bits;
-        /* 0x0C */ u16 channels;
-        /* 0x0E */ u16 loop;
-        /* 0x10 */ int mSampleRate;
-        /* 0x14 */ u32 mSampleCount; // unused
-        /* 0x18 */ int loop_start;
-        /* 0x1C */ int loop_end;
-        /* 0x20 */ u32 block_size;
+        /* 0x0C */ BE(u16) channels;
+        /* 0x0E */ BE(u16) loop;
+        /* 0x10 */ BE(int) mSampleRate;
+        /* 0x14 */ BE(u32) mSampleCount; // unused
+        /* 0x18 */ BE(int) loop_start;
+        /* 0x1C */ BE(int) loop_end;
+        /* 0x20 */ BE(u32) block_size;
         /* 0x24 */ u8 _unused2[4];
         /* 0x28 */ u8 mVolume;
         /* 0x29 */ u8 _unused3[0x17];
     };  // Size: 0x40
 
     struct BlockHeader {
-        /* 0x00 */ u32 tag; // 'BLCK'
-        /* 0x04 */ u32 mSize;
+        /* 0x00 */ BE(u32) tag; // 'BLCK'
+        /* 0x04 */ BE(u32) mSize;
         /* 0x08 */ struct {
-            s16 mpLast;
-            s16 mpPenult;
+            BE(s16) mpLast;
+            BE(s16) mpPenult;
         } mAdpcmContinuationData[CHANNEL_MAX];
     };  // Size: 0x20
 
