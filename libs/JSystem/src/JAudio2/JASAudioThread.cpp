@@ -55,9 +55,14 @@ private:
     BOOL mInterrupts;
 };
 
+#if !TARGET_PC
 class JASChannel {
     u8 filler[0x108];
 };
+#else
+// You don't want to know how long I spent debugging this.
+#include "JSystem/JAudio2/JASChannel.h"
+#endif
 
 // NONMATCHING location of JASPoolAllocObject_MultiThreaded<JASChannel>
 void* JASAudioThread::run() {
