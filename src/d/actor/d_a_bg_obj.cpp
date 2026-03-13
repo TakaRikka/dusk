@@ -879,8 +879,8 @@ void daBgObj_c::setParticle() {
     u32* partBlockItems = (u32*)mSpecData.mpParticleBlock;
     partBlockItems++;
     for (; partNum != 0; partNum--) {
-        u32 flags = *partBlockItems++;
-        u16 res_id = *partBlockItems;
+        u32 flags = *(BE(u32)*)partBlockItems++;
+        u16 res_id = *(BE(u32)*)partBlockItems;
         *partBlockItems++;
 
         GXColor prmColor = { 0xFF, 0xFF, 0xFF, 0xFF };
