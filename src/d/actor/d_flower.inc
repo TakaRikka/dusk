@@ -5,8 +5,14 @@
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "SSystem/SComponent/c_counter.h"
 
+#if TARGET_PC
+const u16 l_J_Ohana00_64TEX__width = 64;
+const u16 l_J_Ohana00_64TEX__height = 64;
+#else
 const u16 l_J_Ohana00_64TEX__width = 63;
 const u16 l_J_Ohana00_64TEX__height = 63;
+#endif
+
 #include "assets/l_J_Ohana00_64TEX.h"
 
 static u8 l_flowerPos[708] = {
@@ -108,8 +114,14 @@ l_matDL__d_a_grass(l_J_Ohana00_64TEX)
 #include "assets/l_matLight4DL.h"
 l_matLight4DL(l_J_Ohana00_64TEX)
 
+#if TARGET_PC
+const u16 l_J_Ohana01_64128_0419TEX__width = 64;
+const u16 l_J_Ohana01_64128_0419TEX__height = 128;
+#else
 const u16 l_J_Ohana01_64128_0419TEX__width = 63;
 const u16 l_J_Ohana01_64128_0419TEX__height = 127;
+#endif
+
 #include "assets/l_J_Ohana01_64128_0419TEX.h"
 
 static u8 l_flowerPos2[1224] = {
@@ -539,10 +551,10 @@ dFlower_packet_c::dFlower_packet_c() {
 
 #if TARGET_PC
     GXInitTexObj(&mTexObj_l_J_Ohana00_64TEX, l_J_Ohana00_64TEX,
-        l_J_Ohana00_64TEX__width, l_J_Ohana00_64TEX__height, GX_TF_RGB5A3, GX_REPEAT, GX_CLAMP, GX_FALSE
+        l_J_Ohana00_64TEX__width, l_J_Ohana00_64TEX__height, GX_TF_CMPR, GX_MIRROR, GX_MIRROR, GX_FALSE
     );
     GXInitTexObj(&mTexObj_l_J_Ohana01_64128_0419TEX, l_J_Ohana01_64128_0419TEX,
-        l_J_Ohana01_64128_0419TEX__width, l_J_Ohana01_64128_0419TEX__height, GX_TF_RGB5A3, GX_REPEAT, GX_CLAMP, GX_FALSE
+        l_J_Ohana01_64128_0419TEX__width, l_J_Ohana01_64128_0419TEX__height, GX_TF_CMPR, GX_MIRROR, GX_MIRROR, GX_FALSE
     );
 #endif
 }
