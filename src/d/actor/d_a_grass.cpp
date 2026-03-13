@@ -81,6 +81,10 @@ void daGrass_c::deleteGrass() {
 }
 
 dGrass_packet_c::~dGrass_packet_c() {
+#if TARGET_PC
+    GXDestroyTexObj(&mTexObj_l_M_kusa05_RGBATEX);
+    GXDestroyTexObj(&mTexObj_l_M_Hijiki00TEX);
+#endif
 }
 
 void daGrass_c::executeGrass() {
