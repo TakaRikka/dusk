@@ -1338,7 +1338,7 @@ static int daObj_Brg_Execute(obj_brg_class* i_this) {
 
     i_this->mpBgW->CopyBackVtx();
 
-    BE(Vec)* vtx_tbl = (BE(Vec)*)i_this->mpBgW->GetVtxTbl();
+    Vec* vtx_tbl = (Vec*)i_this->mpBgW->GetVtxTbl();
 
     int dbg_0x30;
     int temp;
@@ -1622,7 +1622,7 @@ static int CallbackCreateHeap(fopAc_ac_c* i_this) {
     a_this->mpBgW->SetRideCallback(ride_call_back);
     a_this->mpBgW->CopyBackVtx();
 
-    BE(Vec)* vtx_tbl = (BE(Vec)*)a_this->mpBgW->GetVtxTbl();
+    Vec* vtx_tbl = (Vec*)a_this->mpBgW->GetVtxTbl();
     for (int i = 0; i < a_this->mpBgW->GetVtxNum(); i++) {
         vtx_tbl[i] = i_this->current.pos;
     }
