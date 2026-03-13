@@ -3861,6 +3861,11 @@ int daHorse_c::procStop() {
     }
 
     f32 var_f30;
+
+    #if AVOID_UB
+    var_f30 = 0;
+    #endif
+
     if (frame_ctrl->checkAnmEnd() || checkEndResetStateFlg0(ERFLG0_CUT_TURN_CANCEL)) {
         if (m_demoMode == 8 || m_demoMode == 16) {
             dComIfGp_evmng_cutEnd(m_demoStaffId);
