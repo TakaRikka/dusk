@@ -1454,7 +1454,7 @@ void dScnLogo_c::dvdDataLoad() {
 
 static int dScnLogo_Create(scene_class* i_this) {
     DuskLog.debug("[DIAG] dScnLogo_Create: entry i_this={}", (void*)i_this);
-    return (JKR_NEW_ARGS (i_this) dScnLogo_c())->create();
+    return (JKR_NEW_ARGS (i_this) dScnLogo_c)->create();
 }
 
 static int dScnLogo_Execute(dScnLogo_c* i_this) {

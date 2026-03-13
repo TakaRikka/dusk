@@ -23,7 +23,7 @@ SpkSystem::SpkSystem(JKRHeap* heap) : JASGlobalInstance(true) {
     mHeap = heap;
     mMixingBuffer = JKR_NEW_ARGS (heap, 0) SpkMixingBuffer(heap);
     JUT_ASSERT(35, mMixingBuffer);
-    mSoundHolder = JKR_NEW_ARGS (heap, 0) SpkSoundHolder();
+    mSoundHolder = JKR_NEW_ARGS (heap, 0) SpkSoundHolder;
     JUT_ASSERT(38, mSoundHolder);
     SpkSpeakerCtrl::setup();
     SpkSpeakerCtrl::setMixingBuffer(mMixingBuffer);

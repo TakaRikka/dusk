@@ -61,7 +61,7 @@ void JPAResourceLoader::load_jpc(u8 const* data, JPAResourceManager* p_res_mgr) 
     u32 offset = 0x10;
     for (int i = 0; i < *(BE(u16)*)(data + 8); i++) {
         JPAResourceHeader* header = (JPAResourceHeader*)(data + offset);
-        JPAResource* p_res = JKR_NEW_ARGS (heap, 0) JPAResource();
+        JPAResource* p_res = JKR_NEW_ARGS (heap, 0) JPAResource;
         JUT_ASSERT(211, p_res != NULL);
         p_res->fldNum = header->mFieldBlockNum;
         p_res->ppFld = p_res->fldNum != 0 ?

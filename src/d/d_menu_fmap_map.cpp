@@ -662,7 +662,7 @@ void dMenu_FmapMap_c::setTexture(u16 i_width, u16 i_height, u16 param_2, u16 par
     int size = GXGetTexBufferSize(i_width, i_height, GX_TF_C8, 0, 0);
     mMapImage_p = JKR_NEW_ARRAY_ARGS(u8, size, 0x20);
     init(mMapImage_p, i_width, i_height, param_2, param_3);
-    mResTIMG = JKR_NEW_ARGS (0x20) ResTIMG();
+    mResTIMG = JKR_NEW_ARGS (0x20) ResTIMG;
     makeResTIMG(mResTIMG, i_width, i_height, mMapImage_p, (u8*)m_palette, 0x1b);
 }
 

@@ -62,7 +62,7 @@ void* JKRDecomp::run() {
 JKRDecompCommand* JKRDecomp::prepareCommand(u8* srcBuffer, u8* dstBuffer, u32 srcLength,
                                             u32 dstLength,
                                             JKRDecompCommand::AsyncCallback callback) {
-    JKRDecompCommand* command = JKR_NEW_ARGS (JKRGetSystemHeap(), -4) JKRDecompCommand();
+    JKRDecompCommand* command = JKR_NEW_ARGS (JKRGetSystemHeap(), -4) JKRDecompCommand;
     command->mSrcBuffer = srcBuffer;
     command->mDstBuffer = dstBuffer;
     command->mSrcLength = srcLength;

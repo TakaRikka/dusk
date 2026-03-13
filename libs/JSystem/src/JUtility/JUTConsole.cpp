@@ -401,7 +401,7 @@ JUTConsoleManager* JUTConsoleManager::createManager(JKRHeap* pHeap) {
         pHeap = JKRGetCurrentHeap();
     }
 
-    sManager = JKR_NEW_ARGS (pHeap, 0) JUTConsoleManager();
+    sManager = JKR_NEW_ARGS (pHeap, 0) JUTConsoleManager;
     return sManager;
 }
 

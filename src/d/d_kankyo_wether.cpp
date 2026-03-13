@@ -433,8 +433,8 @@ static void wether_move_sun() {
         switch (g_env_light.mSunInitialized) {
         case FALSE:
             if (sunVisible && dKy_darkworld_check() != true) {
-                g_env_light.mpSunPacket = JKR_NEW_ARGS (0x20) dKankyo_sun_Packet();
-                g_env_light.mpSunLenzPacket = JKR_NEW_ARGS (0x20) dKankyo_sunlenz_Packet();
+                g_env_light.mpSunPacket = JKR_NEW_ARGS (0x20) dKankyo_sun_Packet;
+                g_env_light.mpSunLenzPacket = JKR_NEW_ARGS (0x20) dKankyo_sunlenz_Packet;
                 if (g_env_light.mpSunPacket != NULL && g_env_light.mpSunLenzPacket != NULL) {
                     g_env_light.mpSunPacket->mpResMoon = (u8*)dComIfG_getStageRes("F_moon.bti");
                     g_env_light.mpSunPacket->mpResMoon_A = (u8*)dComIfG_getStageRes("F_moon_A.bti");
@@ -516,7 +516,7 @@ static void wether_move_rain() {
     switch (g_env_light.mRainInitialized) {
     case FALSE:
         if (g_env_light.raincnt > 3) {
-            g_env_light.mpRainPacket = JKR_NEW_ARGS (32) dKankyo_rain_Packet();
+            g_env_light.mpRainPacket = JKR_NEW_ARGS (32) dKankyo_rain_Packet;
 
             if (g_env_light.mpRainPacket != NULL) {
                 dKyr_rain_init();
@@ -705,7 +705,7 @@ static void wether_move_housi() {
     switch (g_env_light.mHousiInitialized) {
     case FALSE:
         if (g_env_light.mHousiCount != 0) {
-            g_env_light.mpHousiPacket = JKR_NEW_ARGS (32) dKankyo_housi_Packet();
+            g_env_light.mpHousiPacket = JKR_NEW_ARGS (32) dKankyo_housi_Packet;
 
             if (g_env_light.mpHousiPacket != NULL) {
                 if (dKy_darkworld_check() == true) {
@@ -764,7 +764,7 @@ static void wether_move_odour() {
     switch (g_env_light.mOdourData.mOdourPacketStatus) {
     case 0:
         if (g_env_light.mOdourData.field_0xf21 != 0) {
-            g_env_light.mOdourData.mpOdourPacket = JKR_NEW_ARGS (32) dKankyo_odour_Packet();
+            g_env_light.mOdourData.mpOdourPacket = JKR_NEW_ARGS (32) dKankyo_odour_Packet;
 
             if (g_env_light.mOdourData.mpOdourPacket != NULL) {
                 g_env_light.mOdourData.mpOdourPacket->mpResTex = (u8*)dComIfG_getObjectRes("Always", 0x53);
@@ -798,7 +798,7 @@ static void wether_move_moya() {
     switch (g_env_light.mCloudInitialized) {
     case 0:
         if (g_env_light.mMoyaCount != 0) {
-            g_env_light.mpCloudPacket = JKR_NEW_ARGS (32) dKankyo_cloud_Packet();
+            g_env_light.mpCloudPacket = JKR_NEW_ARGS (32) dKankyo_cloud_Packet;
 
             if (g_env_light.mpCloudPacket != NULL) {
                 g_env_light.mpCloudPacket->mpResTex = (u8*)dComIfG_getObjectRes("Always", 0x53);
@@ -884,7 +884,7 @@ static void wether_move_vrkumo() {
     switch (g_env_light.mVrkumoStatus) {
     case 0:
         if (g_env_light.mVrkumoCount != 0) {
-            g_env_light.mpVrkumoPacket = JKR_NEW_ARGS (0x20) dKankyo_vrkumo_Packet();
+            g_env_light.mpVrkumoPacket = JKR_NEW_ARGS (0x20) dKankyo_vrkumo_Packet;
             if (g_env_light.mpVrkumoPacket == NULL) {
                 return;
             }
@@ -964,7 +964,7 @@ static void wether_move_mud() {
     switch (g_env_light.mMudInitialized) {
     case 0:
         if (g_env_light.field_0x1048 != 0) {
-            g_env_light.mpMudPacket = JKR_NEW_ARGS (32) dKankyo_mud_Packet();
+            g_env_light.mpMudPacket = JKR_NEW_ARGS (32) dKankyo_mud_Packet;
 
             if (g_env_light.mpMudPacket != NULL) {
                 dKyr_mud_init();
@@ -990,7 +990,7 @@ static void wether_move_evil() {
     switch (g_env_light.mEvilInitialized & 0xF) {
     case 0:
         if (g_env_light.field_0x1054 != 0) {
-            g_env_light.mpEvilPacket = JKR_NEW_ARGS (32) dKankyo_evil_Packet();
+            g_env_light.mpEvilPacket = JKR_NEW_ARGS (32) dKankyo_evil_Packet;
 
             if (g_env_light.mpEvilPacket != NULL) {
                 dKyr_evil_init();

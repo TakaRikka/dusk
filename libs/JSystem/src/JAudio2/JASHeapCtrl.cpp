@@ -301,7 +301,7 @@ void JASKernel::setupRootHeap(JKRSolidHeap* heap, u32 size) {
     sSystemHeap = JKRExpHeap::create(size, heap, false);
     JKRHEAP_NAME(sSystemHeap, "JASKernel::sSystemHeap");
     JUT_ASSERT(787, sSystemHeap);
-    sCommandHeap = JKR_NEW_ARGS (heap, 0) JASMemChunkPool<1024, JASThreadingModel::ObjectLevelLockable>();
+    sCommandHeap = JKR_NEW_ARGS (heap, 0) JASMemChunkPool<1024, JASThreadingModel::ObjectLevelLockable>;
     JKRHEAP_NAME(sSystemHeap, "JASKernel::sCommandHeap");
     JUT_ASSERT(790, sCommandHeap);
     JASDram = heap;

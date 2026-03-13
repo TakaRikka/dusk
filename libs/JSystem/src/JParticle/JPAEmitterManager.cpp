@@ -35,7 +35,7 @@ JPAEmitterManager::JPAEmitterManager(u32 i_ptclNum, u32 i_emtrNum, JKRHeap* pHea
         pResMgrAry[i] = NULL;
     }
 
-    pWd = JKR_NEW_ARGS (pHeap, 0) JPAEmitterWorkData();
+    pWd = JKR_NEW_ARGS (pHeap, 0) JPAEmitterWorkData;
     JUT_ASSERT(67, pWd);
 }
 

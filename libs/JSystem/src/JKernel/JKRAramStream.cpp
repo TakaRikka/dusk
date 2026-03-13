@@ -141,7 +141,7 @@ JKRHeap* JKRAramStream::transHeap;
 JKRAramStreamCommand* JKRAramStream::write_StreamToAram_Async(JSUFileInputStream* stream, u32 addr,
                                                               u32 size, u32 offset,
                                                               u32* returnSize) {
-    JKRAramStreamCommand* command = JKR_NEW_ARGS (JKRGetSystemHeap(), -4) JKRAramStreamCommand();
+    JKRAramStreamCommand* command = JKR_NEW_ARGS (JKRGetSystemHeap(), -4) JKRAramStreamCommand;
     command->mType = JKRAramStreamCommand::WRITE;
     command->mAddress = addr;
     command->mSize = size;

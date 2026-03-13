@@ -321,9 +321,9 @@ s32 mDoDvdThd_mountAramArchive_c::execute() {
     BOOL result = FALSE;
     if (!mArchive) {
         if (mMountDirection == 0) {
-            mArchive = JKR_NEW_ARGS (heap, 0x20) JKRAramArchive();
+            mArchive = JKR_NEW_ARGS (heap, 0x20) JKRAramArchive;
         } else {
-            mArchive = JKR_NEW_ARGS (heap, -0x20) JKRAramArchive();
+            mArchive = JKR_NEW_ARGS (heap, -0x20) JKRAramArchive;
         }
 #if DEBUG
         if (mDoDvdThd::verbose) {

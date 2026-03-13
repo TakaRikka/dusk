@@ -408,7 +408,7 @@ static int dScnName_Delete(dScnName_c* i_this) {
 }
 
 static int dScnName_Create(scene_class* i_this) {
-    JKR_NEW_ARGS (i_this) dScnName_c();
+    JKR_NEW_ARGS (i_this) dScnName_c;
     return static_cast<dScnName_c*>(i_this)->create();
 }
 

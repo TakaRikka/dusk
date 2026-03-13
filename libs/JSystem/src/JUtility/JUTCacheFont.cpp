@@ -172,7 +172,7 @@ bool JUTCacheFont::internal_initiate(ResFONT const* p_fontRes, void* param_1, u3
 }
 
 bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
-    mInf1Ptr = (ResFONT::INF1*)JKR_NEW_ARGS (heap, 0) ResFONT();
+    mInf1Ptr = (ResFONT::INF1*)JKR_NEW_ARGS (heap, 0) ResFONT;
     if (mInf1Ptr == NULL) {
         return false;
     }

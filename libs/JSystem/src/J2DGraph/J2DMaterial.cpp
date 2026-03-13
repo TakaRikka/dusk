@@ -57,15 +57,15 @@ J2DTevBlock* J2DMaterial::createTevBlock(int block_type, bool noAlign) {
         }
     } else {
         if (block_type <= 1) {
-            block = JKR_NEW_ARGS (-4) J2DTevBlock1();
+            block = JKR_NEW_ARGS (-4) J2DTevBlock1;
         } else if (block_type == 2) {
-            block = JKR_NEW_ARGS (-4) J2DTevBlock2();
+            block = JKR_NEW_ARGS (-4) J2DTevBlock2;
         } else if (block_type <= 4) {
-            block = JKR_NEW_ARGS (-4) J2DTevBlock4();
+            block = JKR_NEW_ARGS (-4) J2DTevBlock4;
         } else if (block_type <= 8) {
-            block = JKR_NEW_ARGS (-4) J2DTevBlock8();
+            block = JKR_NEW_ARGS (-4) J2DTevBlock8;
         } else {
-            block = JKR_NEW_ARGS (-4) J2DTevBlock16();
+            block = JKR_NEW_ARGS (-4) J2DTevBlock16;
         }
     }
     ASSERTMSGLINE(101, block, "Error : allocate memory.");
@@ -84,9 +84,9 @@ J2DIndBlock* J2DMaterial::createIndBlock(int block_type, bool noAlign) {
         }
     } else {
         if (block_type != 0) {
-            block = JKR_NEW_ARGS (-4) J2DIndBlockFull();
+            block = JKR_NEW_ARGS (-4) J2DIndBlockFull;
         } else {
-            block = JKR_NEW_ARGS (-4) J2DIndBlockNull();
+            block = JKR_NEW_ARGS (-4) J2DIndBlockNull;
         }
     }
     ASSERTMSGLINE(133, block, "Error : allocate memory.");

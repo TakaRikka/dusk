@@ -9,7 +9,7 @@
 JKRAMCommand* JKRAramPiece::prepareCommand(int direction, uintptr_t src, uintptr_t dst, u32 length,
                                            JKRAramBlock* block,
                                            JKRAMCommand::AsyncCallback callback) {
-    JKRAMCommand* command = JKR_NEW_ARGS (JKRGetSystemHeap(), -4) JKRAMCommand();
+    JKRAMCommand* command = JKR_NEW_ARGS (JKRGetSystemHeap(), -4) JKRAMCommand;
     command->mTransferDirection = direction;
     command->mSrc = src;
     command->mDst = dst;
@@ -40,7 +40,7 @@ JKRAMCommand* JKRAramPiece::orderAsync(int direction, uintptr_t source, uintptr_
     }
 #endif
 
-    JKRAramCommand* message = JKR_NEW_ARGS (JKRGetSystemHeap(), -4) JKRAramCommand();
+    JKRAramCommand* message = JKR_NEW_ARGS (JKRGetSystemHeap(), -4) JKRAramCommand;
     JKRAMCommand* command =
         JKRAramPiece::prepareCommand(direction, source, destination, length, block, callback);
     message->setting(1, command);

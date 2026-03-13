@@ -152,7 +152,7 @@ int dThunder_c::create() {
     f32 var_r28;
     f32 var_r27;
 
-    JKR_NEW_ARGS (this) dThunder_c();
+    JKR_NEW_ARGS (this) dThunder_c;
 
     J3DModelData* modelData;
     if (cM_rndF(1.0f) < 0.5f) {
