@@ -95,6 +95,12 @@ J3DError J3DMtxBuffer::createAnmMtx(J3DModelData* pModelData) {
     if (pModelData->getJointNum() != 0) {
         mpScaleFlagArr = JKR_NEW_ARRAY(u8, pModelData->getJointNum());
         mpAnmMtx = JKR_NEW_ARRAY(Mtx, pModelData->getJointNum());
+
+        #if AVOID_UB
+        memset(mpScaleFlagArr, 0, sizeof(u8) * pModelData->getJointNum());
+        memset(mpAnmMtx, 0, sizeof(Mtx) * pModelData->getJointNum());
+        #endif
+
         mpUserAnmMtx = mpAnmMtx;
     }
 
