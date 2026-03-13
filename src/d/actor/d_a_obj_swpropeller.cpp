@@ -78,6 +78,10 @@ static char* l_arcName[] = {"K_prop00", "Lv9_puro"};
 static char* l_joint_name = "kaiten";
 
 int daObjSwPr_c::Create() {
+#if AVOID_UB
+    mRotateTime = setRotateTime();
+#endif
+
     initBaseMtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
 
