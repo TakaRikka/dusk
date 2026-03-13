@@ -103,7 +103,7 @@ static int nodeCallBack(J3DJoint* i_joint, int param_2) {
         int jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         npc_tkj2_class* i_this = (npc_tkj2_class*)model->getUserArea();
-        int userArea = (int)i_this;
+        fopAc_ac_c *userArea = (fopAc_ac_c *)i_this;
 
         if (i_this != NULL) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
