@@ -82,7 +82,7 @@ struct UnkManualCameraParam {
 struct dCamera_event_param {
     /* 0x00 */ char name[16];
     /* 0x10 */ int field_0x10;
-    /* 0x14 */ int value;
+    /* 0x14 */ uintptr_t value;
 };
 
 struct dCamera_type_data {
