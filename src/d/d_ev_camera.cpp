@@ -48,7 +48,7 @@ int dCamera_c::StartEventCamera(int param_0, int param_1, ...) {
         if (param_name != NULL) {
             strcpy(mEventData.mEventParams[i].name, param_name);
             mEventData.mEventParams[i].field_0x10 = va_arg(args, int);
-            mEventData.mEventParams[i].value = va_arg(args, int);
+            mEventData.mEventParams[i].value = va_arg(args, uintptr_t);
         } else {
             mEventData.mEventParams[i].name[0] = 0;
             break;
