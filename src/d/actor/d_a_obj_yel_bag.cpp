@@ -543,20 +543,20 @@ static actor_method_class daObj_YBag_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_YBAG = {
-  fpcLy_CURRENT_e,         // mLayerID
-  8,                       // mListID
-  fpcPi_CURRENT_e,         // mListPrio
-  PROC_OBJ_YBAG,           // mProcName
-  &g_fpcLf_Method.base,   // sub_method
-  sizeof(daObj_YBag_c),    // mSize
-  0,                       // mSizeOther
-  0,                       // mParameters
-  &g_fopAc_Method.base,    // sub_method
-  715,                     // mPriority
-  &daObj_YBag_MethodTable, // sub_method
-  0x00044100,              // mStatus
-  fopAc_ACTOR_e,           // mActorType
-  fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 8,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_YBAG_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObj_YBag_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_YBAG_e,
+    /* Actor SubMtd */ &daObj_YBag_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

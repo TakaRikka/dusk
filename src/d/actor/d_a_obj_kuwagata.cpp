@@ -1,6 +1,6 @@
 /**
  * @file d_a_obj_kuwagata.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -10,7 +10,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_cc_d.h"
 #include "d/d_menu_insect.h"
-#include "f_pc/f_pc_name.h"
+#include "d/d_item_data.h"
 #include <cstring>
 
 class daObj_KuwHIO_c : public JORReflexible{
@@ -72,7 +72,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
 
 int daObjKUW_c::CreateHeap() {
     J3DModelData* modelData;
-    
+
     if (mSex == SEX_FEMALE) {
         modelData = (J3DModelData*)dComIfG_getObjectRes("I_Kuw", 10);
         JUT_ASSERT(255, modelData != NULL);
@@ -80,19 +80,19 @@ int daObjKUW_c::CreateHeap() {
         modelData = (J3DModelData*)dComIfG_getObjectRes("I_Kuw", 11);
         JUT_ASSERT(259, modelData != NULL);
     }
-    
+
     mpMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("I_Kuw", 7), 2, 1.0f, 0, -1, &mSound, 0, 0x11000284);
-    
+
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return 0;
     }
-    
+
     J3DModel* model = mpMorf->getModel();
     mpBrkAnm = JKR_NEW mDoExt_brkAnm();
     if (mpBrkAnm == NULL) {
         return 0;
     }
-    
+
     J3DAnmTevRegKey* brkRes;
     if (mSex == SEX_FEMALE) {
         brkRes = (J3DAnmTevRegKey*)dComIfG_getObjectRes("I_Kuw", 14);
@@ -105,12 +105,12 @@ int daObjKUW_c::CreateHeap() {
             return 0;
         }
     }
-    
+
     mpBtkAnm = JKR_NEW mDoExt_btkAnm();
     if (mpBtkAnm == NULL) {
         return 0;
     }
-    
+
     J3DAnmTextureSRTKey* btkRes;
     if (mSex == SEX_FEMALE) {
         btkRes = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("I_Kuw", 18);
@@ -123,7 +123,7 @@ int daObjKUW_c::CreateHeap() {
             return 0;
         }
     }
-    
+
     return 1;
 }
 
@@ -182,7 +182,7 @@ void daObjKUW_c::WaitAction() {
             if (mTimers[0] <= 0) {
                 mTimers[0] = 0;
             }
-            
+
             if (mTimers[0] == 0) {
                 int randVal = cM_rndF(100.0f);
                 if (randVal < 40) {
@@ -203,21 +203,21 @@ void daObjKUW_c::WaitAction() {
 BOOL daObjKUW_c::WallCheck() {
     dBgS_LinChk linChk;
     linChk.SetObj();
-    
+
     linChk.Set(&old.pos, &current.pos, NULL);
-    
+
     if (dComIfG_Bgsp().LineCross(&linChk)) {
         cM3dGPla plane;
         dComIfG_Bgsp().GetTriPla(linChk, &plane);
         cXyz* normal = plane.GetNP();
         current.pos = linChk.GetCross();
-        
+
         cXyz temp1(0.0f, 0.0f, 0.0f);
         cXyz temp2(0.0f, normal->y, normal->z);
         field_0x99a.z = -cM_atan2s(normal->x, temp1.abs(temp2));
         field_0x99a.x = cM_atan2s(normal->z, normal->y);
         field_0x9a2 = cM_atan2s(normal->x, normal->z);
-        
+
         return TRUE;
     }
 
@@ -228,15 +228,15 @@ void daObjKUW_c::SpeedSet() {
     speed.y += gravity;
     cXyz cStack_1c(0.0f, speed.y, speedF);
     cXyz local_28(0.0f, 0.0f, 0.0f);
-    
+
     mDoMtx_stack_c::ZXYrotS(field_0x99a);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mDoMtx_stack_c::multVec(&cStack_1c, &local_28);
-    
+
     current.pos.x += local_28.x;
     current.pos.y += local_28.y;
     current.pos.z += local_28.z;
-    
+
     cLib_addCalc2(&speedF, mSpeedFTarget, 0.4f, 10.0f);
     cLib_addCalc2(&speed.y, mSpeedYTarget, 0.1f, 0.5f);
     cLib_addCalcAngleS2(&current.angle.y, mAngleTarget, 0x10, 0x100);
@@ -248,36 +248,36 @@ void daObjKUW_c::WallWalk() {
     cXyz cStack_148(0.0f, 40.0f, 0.0f);
     cXyz cStack_154(0.0f, 20.0f, 100.0f);
     cXyz cStack_160;
-    
+
     dBgS_LinChk linChk;
     dBgS_LinChk linChk2;
-    
+
     linChk.SetObj();
     linChk2.SetObj();
-    
+
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(field_0x99a);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mDoMtx_stack_c::multVec(&cStack_13c, &cStack_13c);
     mDoMtx_stack_c::multVec(&cStack_148, &cStack_148);
-    
+
     linChk.Set(&cStack_148, &cStack_13c, NULL);
-    
+
     if (dComIfG_Bgsp().LineCross(&linChk)) {
         speedF = 0.3f;
-        
+
         cM3dGPla plane;
         dComIfG_Bgsp().GetTriPla(linChk, &plane);
         cXyz* normal = plane.GetNP();
-        
+
         s16 angleZ = cM_atan2s(normal->x, normal->z);
-        
+
         cXyz temp1(0.0f, 0.0f, 0.0f);
         cXyz temp2(0.0f, normal->y, normal->z);
         f32 normalLen = temp1.abs(temp2);
-        
+
         cStack_160 = linChk.GetCross();
-        
+
         int angleDiff = angleZ - field_0x9a2;
 
         if (angleDiff < 0x1000 && angleDiff > -0x1000 && cStack_160.abs(old.pos) < speedF * 3.0f) {
@@ -303,7 +303,7 @@ void daObjKUW_c::WalkAction() {
             mTimers[i] = 0;
         }
     }
-    
+
     switch (mSubAction) {
     case 0:
         mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("I_Kuw", 7), 2, 5.0f, 1.0f, 0.0f, -1.0f);
@@ -319,10 +319,10 @@ void daObjKUW_c::WalkAction() {
             mAngleTarget = cM_atan2s(targetDir.x, targetDir.z);
             mTimers[0] = cM_rndF(50.0f) + 50.0f;
         }
-        
+
         if (mTimers[1] == 0) {
             int randVal = cM_rndF(100.0f);
-            
+
             if (randVal < 30) {
                 mAction = ACTION_MOVE;
                 mSubAction = 0;
@@ -334,7 +334,7 @@ void daObjKUW_c::WalkAction() {
             }
         }
     }
-    
+
     WallWalk();
 }
 
@@ -345,7 +345,7 @@ void daObjKUW_c::MoveAction() {
             mTimers[i] = 0;
         }
     }
-    
+
     cXyz cStack_ac;
     cXyz cStack_b8(0.0f, 1.0f, 0.0f);
     dBgS_LinChk linChk;
@@ -353,7 +353,7 @@ void daObjKUW_c::MoveAction() {
     linChk.SetObj();
     cXyz local_c4;
     cXyz cStack_d0;
-    
+
     switch (mSubAction) {
     case 0:
         mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("I_Kuw", 6), 2, 5.0f, 0.0f, 0.0f, -1.0f);
@@ -369,30 +369,30 @@ void daObjKUW_c::MoveAction() {
             mDoMtx_stack_c::ZXYrotS(field_0x99a);
             mDoMtx_stack_c::multVec(&cStack_b8, &cStack_b8);
             mTimers[0] = cM_rndF(30.0f) + 10.0f;
-            
+
             if (field_0x9c0 == 0) {
                 mTimers[1] = cM_rndF(80.0f) + 80.0f;
             } else {
                 mTimers[1] = cM_rndF(50.0f) + 50.0f;
             }
-            
+
             mSpeedFTarget = cM_rndF(5.0f) + 8.0f;
             mAngleTarget = field_0x9a2;
             mSpeedYTarget = 3.0f;
             speed.y = 5.0f;
         }
-        break;        
+        break;
     case 2:
         cXyz* flamePos = playerActor->getKandelaarFlamePos();
         if (flamePos != NULL) {
             mAngleTarget = cLib_targetAngleY(&current.pos, flamePos);
-            
+
             if (flamePos->abs(current.pos) < 200.0f && speed.y < 0.0f) {
                 cLib_addCalcAngleS2(&current.angle.y, mAngleTarget, 2, 0x500);
             } else {
                 cLib_addCalcAngleS2(&current.angle.y, mAngleTarget, 0x10, 0x200);
             }
-            
+
             if (flamePos->abs(current.pos) < 11.0f && fopAcM_GetSpeedF(playerActor) < 1.0f) {
                 local_c4.set(0.0f, 0.0f, 10.0f);
                 if (field_0x9c2 == 0) {
@@ -425,7 +425,7 @@ void daObjKUW_c::MoveAction() {
                 }
             }
         }
-        
+
         if (mTimers[0] == 0) {
             if (flamePos == NULL) {
                 local_c4 = home.pos - current.pos;
@@ -436,15 +436,15 @@ void daObjKUW_c::MoveAction() {
             mTimers[0] = cM_rndF(20.0f) + 20.0f;
             mSpeedFTarget = cM_rndF(5.0f) + 8.0f;
         }
-        
+
         if (mTimers[1] == 0) {
             mSpeedYTarget = -cM_rndF(3.0f);
             mTimers[1] = cM_rndF(20.0f) + 20.0f;
         }
-        
+
         mpMorf->getFrame();
         SpeedSet();
-        
+
         if (field_0x9c0 == 0) {
             cLib_addCalcAngleS2(&field_0x99a.x, 0, 0x10, 0x1000);
             cLib_addCalcAngleS2(&field_0x99a.z, 0, 0x10, 0x1000);
@@ -452,7 +452,7 @@ void daObjKUW_c::MoveAction() {
             cLib_addCalcAngleS2(&field_0x99a.x, 0, 0x10, 0x100);
             cLib_addCalcAngleS2(&field_0x99a.z, 0, 0x10, 0x100);
         }
-        
+
         if (WallCheck()) {
             mAction = ACTION_WAIT;
             mSubAction = 0;
@@ -461,17 +461,17 @@ void daObjKUW_c::MoveAction() {
             shape_angle.x = 0;
             shape_angle.z = 0;
         }
-        
+
         if (field_0x9c0 == 1) {
             cLib_addCalcAngleS2(&current.angle.y, mAngleTarget, 0x10, 0x100);
         }
-        
+
         if (field_0x9c2 == 0) {
             cLib_chaseAngleS(&shape_angle.x, 0, 0x400);
         }
         break;
     }
-    
+
     if (mpMorf->getPlaySpeed() == 1.0f) {
         mSound.startCreatureSoundLevel(Z2SE_INSCT_BTBT, 0, -1);
     }
@@ -517,7 +517,7 @@ void daObjKUW_c::Insect_Release() {
 }
 
 static u8 const l_kuw_itemno[2] = {
-    fpcNm_ITEM_M_STAG_BEETLE, fpcNm_ITEM_F_STAG_BEETLE,
+    dItemNo_M_STAG_BEETLE_e, dItemNo_F_STAG_BEETLE_e,
 };
 
 static f32 dummyFloat() { return -9.0f; }
@@ -525,7 +525,7 @@ static f32 dummyFloat() { return -9.0f; }
 void daObjKUW_c::Z_BufferChk() {
     cXyz local_5c;
     cXyz cStack_68;
-    
+
     cStack_68 = current.pos;
     cStack_68.y += 20.0f;
     mDoLib_project(&cStack_68, &local_5c);
@@ -537,22 +537,22 @@ void daObjKUW_c::Z_BufferChk() {
     } else {
         trimHeight = 0.0f;
     }
-    
-    if (local_5c.x > 0.0f && local_5c.x < FB_WIDTH && 
+
+    if (local_5c.x > 0.0f && local_5c.x < FB_WIDTH &&
         local_5c.y > trimHeight && local_5c.y < FB_HEIGHT - trimHeight) {
         dComIfGd_peekZ(local_5c.x, local_5c.y, &field_0x9bc);
     }
-    
+
     view_class* view = dComIfGd_getView();
     f32 nearPlane = view->near_;
     f32 farPlane = view->far_;
-    
+
     mDoLib_pos2camera(&cStack_68, &local_5c);
     local_5c.z += 50.0f;
     if (local_5c.z > 0.0f) {
         local_5c.z = 0.0f;
     }
-    
+
     field_0x9b8 = ((nearPlane + ((farPlane * nearPlane) / local_5c.z)) / (farPlane - nearPlane) + 1.0f) * 16777215.0f;
 }
 
@@ -580,7 +580,7 @@ void daObjKUW_c::BoomChk() {
         home.pos = current.pos;
         cXyz targetPos = *playerPos;
         targetPos.y += 100.0f;
-        
+
         if (mBoomerangMove.posMove(&current.pos, &shape_angle.y, NULL, 0x1c00)) {
             mBoomerangMove.bgCheckAfterOffset(&current.pos);
             current.pos.y += 0.5f;
@@ -588,7 +588,7 @@ void daObjKUW_c::BoomChk() {
             dBgS_LinChk linChk;
             linChk.SetObj();
             linChk.Set(&targetPos, &current.pos, NULL);
-            
+
             if (dComIfG_Bgsp().LineCross(&linChk)) {
                 cM3dGPla plane;
                 dComIfG_Bgsp().GetTriPla(linChk, &plane);
@@ -662,7 +662,7 @@ int daObjKUW_c::Execute() {
     attention_info.position = current.pos;
     eyePos = current.pos;
     eyePos.y += 10.0f;
-    
+
     switch (field_0x9c0) {
     case 0:
         if (!fopAcM_checkHookCarryNow(this)) {
@@ -670,7 +670,7 @@ int daObjKUW_c::Execute() {
         } else {
             home.pos = current.pos;
         }
-        
+
         mParticleKey2 = dComIfGp_particle_set(mParticleKey2, 0xa1c, &current.pos, &tevStr, &shape_angle, 0, 0xff, 0, -1, 0, 0, 0);
         SetCcSph();
         ObjHit();
@@ -685,11 +685,11 @@ int daObjKUW_c::Execute() {
         ShopAction();
         break;
     }
-    
+
     if (mAction == ACTION_MOVE && mSubAction == 2 && speed.y < 0.0f) {
         mAcch.CrrPos(dComIfG_Bgsp());
     }
-    
+
     mpBrkAnm->play();
     mpBtkAnm->play();
     mpMorf->play(0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
@@ -754,7 +754,7 @@ bool daObjKUW_c::CreateChk() {
     if (type == 0xf) {
         type = 0;
     }
-    
+
     if (field_0x9c0 != 2) {
         if (type != 0) {
             if (!dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[l_musiya_num[0]]) || !dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[l_musiya_num[1]])) {
@@ -785,7 +785,7 @@ int daObjKUW_c::create() {
         if (field_0x9c0 == 2) {
             field_0x56c = 0;
             shape_angle.x -= 0x2000;
-            fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x4000);
+            fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
         } else {
             mDraw = 1;
         }
@@ -901,18 +901,18 @@ static actor_method_class l_daObjKUW_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Kuw = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_Kuw,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjKUW_c),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  479,                    // mPriority
-  &l_daObjKUW_Method,     // sub_method
-  0x000C0100,             // mStatus
-  fopAc_ENV_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Kuw_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjKUW_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Kuw_e,
+    /* Actor SubMtd */ &l_daObjKUW_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

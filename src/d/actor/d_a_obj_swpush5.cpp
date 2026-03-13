@@ -1,6 +1,6 @@
 /**
  * @file d_a_obj_swpush5.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -16,7 +16,7 @@ static void rideCallBack(dBgW* i_bgw, fopAc_ac_c* i_bgActor, fopAc_ac_c* i_rideA
     daObjSw5_c* i_this = (daObjSw5_c*)i_bgActor;
     daPy_py_c* player_p = daPy_getPlayerActorClass();
 
-    if (i_this->checkPushable() && fopAcM_CheckStatus(i_rideActor, fopAcM_STATUS_UNK_0x400) && fopAcM_GetName(i_rideActor) == PROC_ALINK) {
+    if (i_this->checkPushable() && fopAcM_CheckStatus(i_rideActor, fopAcStts_FREEZE_e) && fopAcM_GetName(i_rideActor) == fpcNm_ALINK_e) {
         static cXyz l_push_check_pos[4] = {
             cXyz(-50.0f, 0.0f, -50.0f),
             cXyz(50.0f, 0.0f, -50.0f),
@@ -298,7 +298,7 @@ void daObjSw5_c::modeWaitLower() {
     bool var_r30 = false;
     bool do_pause = false;
     daPy_py_c* player = daPy_getPlayerActorClass();
-    
+
     if (field_0x5b1 != 0) {
         var_r30 = true;
     }
@@ -418,20 +418,20 @@ static actor_method_class l_daObjSw5_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Swpush5 = {
-  fpcLy_CURRENT_e,        // mLayerID
-  2,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_Swpush5,       // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjSw5_c),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  13,                     // mPriority
-  &l_daObjSw5_Method,     // sub_method
-  0x00040100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 2,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Swpush5_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjSw5_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Swpush5_e,
+    /* Actor SubMtd */ &l_daObjSw5_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES

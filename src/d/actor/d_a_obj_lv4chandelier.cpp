@@ -251,7 +251,7 @@ int daObjLv4Chan_c::CreateHeap() {
 
 static void* searchSwChain(void* i_actor, void* i_this) {
     if (i_actor != NULL && fopAcM_IsActor(i_actor) &&
-        fopAcM_GetProfName(i_actor) == PROC_Obj_SwChain)
+        fopAcM_GetProfName(i_actor) == fpcNm_Obj_SwChain_e)
     {
         if (((daObjSwChain_c*)i_actor)->getChainID() == ((daObjLv4Chan_c*)i_this)->getArg0()) {
             return i_actor;
@@ -878,18 +878,18 @@ static actor_method_class daObjLv4Chan_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_Lv4Chan = {
-  fpcLy_CURRENT_e,        // mLayerID
-  3,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_Lv4Chan,       // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjLv4Chan_c), // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  674,                    // mPriority
-  &daObjLv4Chan_METHODS,  // sub_method
-  0x00040100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Lv4Chan_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjLv4Chan_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Lv4Chan_e,
+    /* Actor SubMtd */ &daObjLv4Chan_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

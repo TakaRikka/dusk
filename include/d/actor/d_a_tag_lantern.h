@@ -45,7 +45,7 @@ public:
         BOOL rt = false;
 
         if (fopAcM_searchPlayerDistanceXZ(this) < scale.x && 0.0f <= var_f31 && var_f31 < scale.y) {
-            rt = dComIfGp_checkItemGet(fpcNm_ITEM_KANTERA, 1) && dComIfGs_getOil() != 0;
+            rt = dComIfGp_checkItemGet(dItemNo_KANTERA_e, 1) && dComIfGs_getOil() != 0;
             field_0x5f8 = rt == true ? 0 : 1;
         } else {
             rt = true;

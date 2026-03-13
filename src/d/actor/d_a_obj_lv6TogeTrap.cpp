@@ -253,7 +253,7 @@ int daLv6TogeTrap_c::create() {
 }
 
 void* daLv6TogeTrap_c::searchSekizoAct(void* i_actor, void* i_data) {
-    if (i_actor != NULL && fopAcM_IsActor(i_actor) && fopAcM_GetProfName(i_actor) == PROC_CSTATUE) {
+    if (i_actor != NULL && fopAcM_IsActor(i_actor) && fopAcM_GetProfName(i_actor) == fpcNm_CSTATUE_e) {
         return i_actor;
     }
 
@@ -270,7 +270,7 @@ int daLv6TogeTrap_c::Execute(Mtx** param_0) {
             u8 var_r26 = TRUE;
 
             if (hitactor != NULL) {
-                if (fopAcM_GetName(hitactor) == PROC_ALINK && (mCcSph.GetTgHitGObj()->GetAtType() & AT_TYPE_NORMAL_SWORD) && field_0x8d0 != 0) {
+                if (fopAcM_GetName(hitactor) == fpcNm_ALINK_e && (mCcSph.GetTgHitGObj()->GetAtType() & AT_TYPE_NORMAL_SWORD) && field_0x8d0 != 0) {
                     var_r26 = FALSE;
                 }
 
@@ -357,7 +357,7 @@ void daLv6TogeTrap_c::moveLift() {
 void daLv6TogeTrap_c::executeType1() {
     if (field_0x60b == 0 && mCcSph.ChkCoHit()) {
         fopAc_ac_c* co_hitactor = mCcSph.GetCoHitAc();
-        if (co_hitactor != NULL && fopAcM_GetProfName(co_hitactor) == PROC_CSTATUE) {
+        if (co_hitactor != NULL && fopAcM_GetProfName(co_hitactor) == fpcNm_CSTATUE_e) {
             cXyz sp14 = current.pos - co_hitactor->current.pos;
             cXyz sp8 = current.pos - field_0x5b0;
 
@@ -515,7 +515,7 @@ void daLv6TogeTrap_c::executeType2() {
 
     if (mCcSph.ChkCoHit()) {
         fopAc_ac_c* co_hitactor = mCcSph.GetCoHitAc();
-        if (co_hitactor != NULL && fopAcM_GetProfName(co_hitactor) == PROC_CSTATUE) {
+        if (co_hitactor != NULL && fopAcM_GetProfName(co_hitactor) == fpcNm_CSTATUE_e) {
             cXyz sp28 = current.pos - co_hitactor->current.pos;
             cXyz sp1C = current.pos - field_0x5b0;
 
@@ -642,7 +642,7 @@ void daLv6TogeTrap_c::init_modeRotate() {
 void daLv6TogeTrap_c::modeRotate() {
     if (mCcSph.ChkCoHit()) {
         fopAc_ac_c* co_hitactor = mCcSph.GetCoHitAc();
-        if (co_hitactor != NULL && fopAcM_GetProfName(co_hitactor) == PROC_CSTATUE) {
+        if (co_hitactor != NULL && fopAcM_GetProfName(co_hitactor) == fpcNm_CSTATUE_e) {
             mRotateDirection *= -1;
         }
     }
@@ -773,18 +773,18 @@ static actor_method_class l_daLv6TogeTrap_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Lv6TogeTrap = {
-  fpcLy_CURRENT_e,         // mLayerID
-  3,                       // mListID
-  fpcPi_CURRENT_e,         // mListPrio
-  PROC_Obj_Lv6TogeTrap,    // mProcName
-  &g_fpcLf_Method.base,   // sub_method
-  sizeof(daLv6TogeTrap_c), // mSize
-  0,                       // mSizeOther
-  0,                       // mParameters
-  &g_fopAc_Method.base,    // sub_method
-  622,                     // mPriority
-  &l_daLv6TogeTrap_Method, // sub_method
-  0x00040000,              // mStatus
-  fopAc_ACTOR_e,           // mActorType
-  fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Lv6TogeTrap_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daLv6TogeTrap_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Lv6TogeTrap_e,
+    /* Actor SubMtd */ &l_daLv6TogeTrap_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -42,7 +42,7 @@ public:
     int CreateHeap();
     int create();
 
-    void setBgId(u32 i_bgId) { mBgId = i_bgId; }
+    void setBgId(unsigned int i_bgId) { mBgId = i_bgId; }
     bool isBomb() { return mIsBomb; }
 
 private:
@@ -91,22 +91,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daE_BG_c) == 0xbbc);
-
-class daE_BG_HIO_c : public JORReflexible {
-public:
-    daE_BG_HIO_c();
-    virtual ~daE_BG_HIO_c() {}
-
-    void genMessage(JORMContext*);
-
-    /* 0x04 */ s8 field_0x4;
-    /* 0x08 */ f32 mTrackingSpeed;
-    /* 0x0C */ f32 mRushSpeed;
-    /* 0x10 */ f32 mWaitDistanceBeforeCharging;
-    /* 0x14 */ f32 mPlayerSearchDistance;
-    /* 0x18 */ f32 mAttackRange;
-    /* 0x1C */ f32 mSwimRange;
-    /* 0x20 */ f32 mJumpTime;
-};
 
 #endif /* D_A_E_BG_H */

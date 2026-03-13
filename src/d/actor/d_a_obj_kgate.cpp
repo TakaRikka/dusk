@@ -32,7 +32,7 @@ enum {
 };
 
 static void* search_coach(void* i_actor, void* i_data) {
-    if (i_actor != NULL && fopAcM_IsActor(i_actor) && fopAcM_GetProfName(i_actor) == PROC_NPC_COACH)
+    if (i_actor != NULL && fopAcM_IsActor(i_actor) && fopAcM_GetProfName(i_actor) == fpcNm_NPC_COACH_e)
     {
         return i_actor;
     }
@@ -988,18 +988,18 @@ static actor_method_class daObjKGate_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_KkrGate = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Obj_KkrGate,
-    &g_fpcLf_Method.base,
-    sizeof(daObjKGate_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    599,
-    &daObjKGate_METHODS,
-    0x40100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_KkrGate_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjKGate_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_KkrGate_e,
+    /* Actor SubMtd */ &daObjKGate_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

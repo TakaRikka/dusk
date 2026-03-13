@@ -13,7 +13,7 @@ static const char l_specName[] = "spec.dat";
 
 int daSetBgObj_c::CreateInit() {
     static s16 l_bg_profName[5] = {
-        PROC_BG_OBJ, PROC_BG_OBJ, PROC_BG_OBJ, PROC_Obj_Flag2, PROC_Obj_Flag3,
+        fpcNm_BG_OBJ_e, fpcNm_BG_OBJ_e, fpcNm_BG_OBJ_e, fpcNm_Obj_Flag2_e, fpcNm_Obj_Flag3_e,
     };
 
     BE(u16)* spec_data_p = (BE(u16)*)dComIfG_getObjectRes(mArcName, l_specName);
@@ -56,18 +56,18 @@ static actor_method_class l_daSetBgObj_Method = {
 };
 
 actor_process_profile_definition g_profile_SET_BG_OBJ = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_SET_BG_OBJ,
-    &g_fpcLf_Method.base,
-    sizeof(daSetBgObj_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    754,
-    &l_daSetBgObj_Method,
-    0x40100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SET_BG_OBJ_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daSetBgObj_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_SET_BG_OBJ_e,
+    /* Actor SubMtd */ &l_daSetBgObj_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

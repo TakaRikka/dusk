@@ -117,7 +117,7 @@ bool daE_GE_c::checkBeforeBg(int param_0, f32 param_1) {
 
 static void* s_arrow_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor)) {
-        if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_ARROW) {
+        if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == fpcNm_ARROW_e) {
             if (fopAcM_GetSpeedF((fopAc_ac_c*)i_actor) &&
                 fopAcM_searchActorDistance((fopAc_ac_c*)i_actor, (fopAc_ac_c*)i_data) <
                     l_HIO.arrow_recognition_distance)
@@ -131,7 +131,7 @@ static void* s_arrow_sub(void* i_actor, void* i_data) {
 
 static void* s_ge_surprise(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor)) {
-        if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_E_GE) {
+        if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == fpcNm_E_GE_e) {
             if (fopAcM_searchActorDistance((fopAc_ac_c*)i_actor, (fopAc_ac_c*)i_data) <
                     l_HIO.peer_recognition_distance &&
                 static_cast<daE_GE_c*>(i_actor)->getSurpriseTime() == 0)
@@ -145,7 +145,7 @@ static void* s_ge_surprise(void* i_actor, void* i_data) {
 
 static void* s_ge_caw(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor)) {
-        if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_E_GE) {
+        if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == fpcNm_E_GE_e) {
             if (i_actor != i_data &&
                 fopAcM_searchActorDistance((fopAc_ac_c*)i_actor, (fopAc_ac_c*)i_data) <
                     l_HIO.peer_recognition_distance)
@@ -161,7 +161,7 @@ static s32 target_count;
 
 static void* s_ge_attack(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor)) {
-        if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_E_GE) {
+        if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == fpcNm_E_GE_e) {
             if (static_cast<daE_GE_c*>(i_actor)->getActionMode() == 2) {
                 target_count++;
             }
@@ -172,7 +172,7 @@ static void* s_ge_attack(void* i_actor, void* i_data) {
 
 static void* s_ge_attack2(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor)) {
-        if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_E_GE) {
+        if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == fpcNm_E_GE_e) {
             if (static_cast<daE_GE_c*>(i_actor)->checkOtherAttacker()) {
                 target_count++;
                 return NULL;
@@ -800,7 +800,7 @@ void daE_GE_c::executeDown() {
         mSphere.OffTgSetBit();
         mSphere2.OffTgSetBit();
 #endif
-        fopAcM_OffStatus(this, 0x20);
+        fopAcM_OffStatus(this, fopAcStts_UNK_0x20_e);
         field_0xb9e = 0;
         attention_info.flags = 0;
         bckSet(4, 3.0f, 2, 1.0f);
@@ -1377,18 +1377,18 @@ static actor_method_class l_daE_GE_Method = {
 };
 
 actor_process_profile_definition g_profile_E_GE = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_E_GE,               // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daE_GE_c),        // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    192,                     // mPriority
-    &l_daE_GE_Method,        // sub_method
-    0x00050120,              // mStatus
-    fopAc_ENEMY_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_GE_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_GE_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_GE_e,
+    /* Actor SubMtd */ &l_daE_GE_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x10000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x20_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

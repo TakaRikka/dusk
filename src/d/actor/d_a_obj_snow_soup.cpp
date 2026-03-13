@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_snow_soup.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include <cstring>
 
 static int daObjSnowSoup_c_createHeap(fopAc_ac_c* i_this) {
@@ -194,18 +194,18 @@ static actor_method_class daObjSnowSoup_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_SnowSoup = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_Obj_SnowSoup,
-    &g_fpcLf_Method.base,
-    sizeof(daObjSnowSoup_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x2E2,
-    &daObjSnowSoup_METHODS,
-    0x44100,
-    fopAc_ENV_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_SnowSoup_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjSnowSoup_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_SnowSoup_e,
+    /* Actor SubMtd */ &daObjSnowSoup_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -518,7 +518,7 @@ int daPasserMng_c::create() {
 }
 
 void daPasserMng_c::create_init() {
-    npcId = getDetailLevel() == 0 ? PROC_NPC_PASSER : PROC_NPC_PASSER2;
+    npcId = getDetailLevel() == 0 ? fpcNm_NPC_PASSER_e : fpcNm_NPC_PASSER2_e;
     mPath = dPath_GetRoomPath(getPathID(), fopAcM_GetHomeRoomNo(this));
     JUT_ASSERT(542, mPath != NULL);
     dPnt* pnt0 = dPath_GetPnt(mPath, 0);
@@ -602,18 +602,18 @@ static actor_method_class l_daPasserMng_Method = {
 };
 
 actor_process_profile_definition g_profile_PASSER_MNG = {
-  fpcLy_CURRENT_e,       // mLayerID
-  7,                     // mListID
-  fpcPi_CURRENT_e,       // mListPrio
-  PROC_PASSER_MNG,       // mProcName
-  &g_fpcLf_Method.base, // sub_method
-  sizeof(daPasserMng_c), // mSize
-  0,                     // mSizeOther
-  0,                     // mParameters
-  &g_fopAc_Method.base,  // sub_method
-  405,                   // mPriority
-  &l_daPasserMng_Method, // sub_method
-  0x00040100,            // mStatus
-  fopAc_ACTOR_e,         // mActorType
-  fopAc_CULLBOX_0_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_PASSER_MNG_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daPasserMng_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_PASSER_MNG_e,
+    /* Actor SubMtd */ &l_daPasserMng_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

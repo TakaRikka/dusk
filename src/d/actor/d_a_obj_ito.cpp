@@ -690,18 +690,18 @@ static actor_method_class l_daObj_Ito_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_ITO = {
-  fpcLy_CURRENT_e,        // mLayerID
-  4,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_OBJ_ITO,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(obj_ito_class),  // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  61,                     // mPriority
-  &l_daObj_Ito_Method,    // sub_method
-  0x00044100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 4,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_ITO_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(obj_ito_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_ITO_e,
+    /* Actor SubMtd */ &l_daObj_Ito_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

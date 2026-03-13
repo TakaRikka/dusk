@@ -13,75 +13,75 @@
 
 const char* daShopItem_c::getShopArcname() {
     switch (m_itemNo) {
-    case fpcNm_ITEM_NONE:
+    case dItemNo_NONE_e:
         if (strcmp("R_SP160", dComIfGp_getStartStageName()) == 0) {
             mShopItemID = SHOP_ITEMNO_ARMOR_SOLD;
         } else {
             mShopItemID = SHOP_ITEMNO_SOLD;
         }
         break;
-    case fpcNm_ITEM_OIL_BOTTLE:
+    case dItemNo_OIL_BOTTLE_e:
         mShopItemID = SHOP_ITEMNO_OIL;
         break;
-    case fpcNm_ITEM_MILK_BOTTLE:
+    case dItemNo_MILK_BOTTLE_e:
         mShopItemID = SHOP_ITEMNO_MILK;
         break;
-    case fpcNm_ITEM_HALF_MILK_BOTTLE:
+    case dItemNo_HALF_MILK_BOTTLE_e:
         mShopItemID = SHOP_ITEMNO_HALF_MILK;
         break;
-    case fpcNm_ITEM_RED_BOTTLE:
+    case dItemNo_RED_BOTTLE_e:
         mShopItemID = SHOP_ITEMNO_RED;
         break;
-    case fpcNm_ITEM_GREEN_BOTTLE:
+    case dItemNo_GREEN_BOTTLE_e:
         mShopItemID = SHOP_ITEMNO_GREEN;
         break;
-    case fpcNm_ITEM_BLUE_BOTTLE:
+    case dItemNo_BLUE_BOTTLE_e:
         mShopItemID = SHOP_ITEMNO_BLUE;
         break;
-    case fpcNm_ITEM_DROP_BOTTLE:
+    case dItemNo_DROP_BOTTLE_e:
         mShopItemID = SHOP_ITEMNO_DROP;
         break;
-    case fpcNm_ITEM_ARROW_10:
-    case fpcNm_ITEM_ARROW_20:
-    case fpcNm_ITEM_ARROW_30:
+    case dItemNo_ARROW_10_e:
+    case dItemNo_ARROW_20_e:
+    case dItemNo_ARROW_30_e:
         mShopItemID = SHOP_ITEMNO_ARROW;
         break;
-    case fpcNm_ITEM_SHIELD:
+    case dItemNo_SHIELD_e:
         mShopItemID = SHOP_ITEMNO_SHIELD_B;
         break;
-    case fpcNm_ITEM_HYLIA_SHIELD:
+    case dItemNo_HYLIA_SHIELD_e:
         mShopItemID = SHOP_ITEMNO_SHIELD_A;
         break;
-    case fpcNm_ITEM_NORMAL_BOMB:
-    case fpcNm_ITEM_BOMB_5:
-    case fpcNm_ITEM_BOMB_10:
-    case fpcNm_ITEM_BOMB_20:
-    case fpcNm_ITEM_BOMB_30:
+    case dItemNo_NORMAL_BOMB_e:
+    case dItemNo_BOMB_5_e:
+    case dItemNo_BOMB_10_e:
+    case dItemNo_BOMB_20_e:
+    case dItemNo_BOMB_30_e:
         mShopItemID = SHOP_ITEMNO_BOMB;
         break;
-    case fpcNm_ITEM_WATER_BOMB:
+    case dItemNo_WATER_BOMB_e:
         mShopItemID = SHOP_ITEMNO_WATER_BOMB;
         break;
-    case fpcNm_ITEM_POKE_BOMB:
+    case dItemNo_POKE_BOMB_e:
         mShopItemID = SHOP_ITEMNO_POKE_BOMB;
         break;
-    case fpcNm_ITEM_BOMB_BAG_LV1:
-    case fpcNm_ITEM_BOMB_IN_BAG:
+    case dItemNo_BOMB_BAG_LV1_e:
+    case dItemNo_BOMB_IN_BAG_e:
         mShopItemID = SHOP_ITEMNO_BOMB_BAG;
         break;
-    case fpcNm_ITEM_BOMB_BAG_LV2:
+    case dItemNo_BOMB_BAG_LV2_e:
         mShopItemID = SHOP_ITEMNO_BOMB_BAG_LV2;
         break;
-    case fpcNm_ITEM_BEE_CHILD:
+    case dItemNo_BEE_CHILD_e:
         mShopItemID = SHOP_ITEMNO_BEE_CHILD;
         break;
-    case fpcNm_ITEM_PACHINKO:
+    case dItemNo_PACHINKO_e:
         mShopItemID = SHOP_ITEMNO_PACHINKO;
         break;
-    case fpcNm_ITEM_HAWK_EYE:
+    case dItemNo_HAWK_EYE_e:
         mShopItemID = SHOP_ITEMNO_HAWKEYE;
         break;
-    case fpcNm_ITEM_ARMOR:
+    case dItemNo_ARMOR_e:
         mShopItemID = SHOP_ITEMNO_ARMOR;
         break;
     default:
@@ -180,7 +180,7 @@ bool daShopItem_c::_draw() {
 void daShopItem_c::setListStart() {}
 
 void daShopItem_c::setShadow() {
-    if (m_itemNo != fpcNm_ITEM_NONE) {
+    if (m_itemNo != dItemNo_NONE_e) {
         daItemBase_c::setShadow();
     } else {
         mShadowKey = dComIfGd_setShadow(mShadowKey, 1, mpModel, &current.pos, 80.0f, 0.0f,
@@ -223,7 +223,7 @@ int daShopItem_c::_create() {
     if (getShopArcname() == NULL) {
         // "Display model archive name doesn't exist![%d]\n"
         OS_REPORT("陳列用モデルのアーカイブ名がありません！[%d]\n", m_itemNo);
-        m_itemNo = fpcNm_ITEM_NONE;
+        m_itemNo = dItemNo_NONE_e;
     }
 
     int phase_state = dComIfG_resLoad(&mPhase, getShopArcname());
@@ -276,18 +276,18 @@ static actor_method_class daShopItemMethodTable = {
 };
 
 actor_process_profile_definition g_profile_ShopItem = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_ShopItem,
-    &g_fpcLf_Method.base,
-    sizeof(daShopItem_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    242,
-    &daShopItemMethodTable,
-    0x60100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ShopItem_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daShopItem_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_ShopItem_e,
+    /* Actor SubMtd */ &daShopItemMethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_NOPAUSE_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

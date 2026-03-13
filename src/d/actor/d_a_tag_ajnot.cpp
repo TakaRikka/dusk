@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_tag_ajnot.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 int daTagAJnot_c::create() {
     fopAcM_ct(this, daTagAJnot_c);
@@ -66,18 +66,18 @@ static actor_method_class l_daTagAJnot_Method = {
 };
 
 actor_process_profile_definition g_profile_Tag_AJnot = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Tag_AJnot,
-    &g_fpcLf_Method.base,
-    sizeof(daTagAJnot_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    436,
-    &l_daTagAJnot_Method,
-    0x44000,
-    fopAc_ENV_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_AJnot_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagAJnot_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Tag_AJnot_e,
+    /* Actor SubMtd */ &l_daTagAJnot_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

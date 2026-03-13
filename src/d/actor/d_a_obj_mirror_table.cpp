@@ -9,7 +9,7 @@
 #include "d/actor/d_a_mirror.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include <cstring>
 
 static char const* l_arcName = "MR-Table";
@@ -202,13 +202,13 @@ void daObjMirrorTable_c::checkOnPanel() {
 }
 
 static void rideCallBack1(dBgW* i_bgW, fopAc_ac_c* i_this, fopAc_ac_c* i_actor) {
-    if (fopAcM_GetName(i_actor) == PROC_ALINK) {
+    if (fopAcM_GetName(i_actor) == fpcNm_ALINK_e) {
         static_cast<daObjMirrorTable_c*>(i_this)->checkOnPanel();
     }
 }
 
 static void rideCallBack2(dBgW* i_bgW, fopAc_ac_c* i_this, fopAc_ac_c* i_actor) {
-    if (fopAcM_GetName(i_actor) == PROC_ALINK) {
+    if (fopAcM_GetName(i_actor) == fpcNm_ALINK_e) {
         static_cast<daObjMirrorTable_c*>(i_this)->field_0x875 = 15;
     }
 }
@@ -443,7 +443,7 @@ void daObjMirrorTable_c::create_init() {
         cXyz pos(1760.0f, 4714.3f, -20624.0f);
         csXyz angle(0, 0x8000, 0);
         cXyz scale(1.35f, 1.35f, 1.0f);
-        fopAcM_create(PROC_MIRROR, daMirror_c::getMirrorRoomPrm(),
+        fopAcM_create(fpcNm_MIRROR_e, daMirror_c::getMirrorRoomPrm(),
                       &pos, current.roomNo, &angle, &scale, 0xff);
     }
 }
@@ -463,18 +463,18 @@ static actor_method_class l_daObjMirrorTable_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_MirrorTable = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Obj_MirrorTable,
-    &g_fpcLf_Method.base,
-    sizeof(daObjMirrorTable_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x2A8,
-    &l_daObjMirrorTable_Method,
-    0x44000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_MirrorTable_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjMirrorTable_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_MirrorTable_e,
+    /* Actor SubMtd */ &l_daObjMirrorTable_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

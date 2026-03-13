@@ -87,7 +87,7 @@ s32 dScnName_c::create() {
 
         dFs_c->_create();
 
-        if (fpcM_GetName(this) == PROC_NAME_SCENE) {
+        if (fpcM_GetName(this) == fpcNm_NAME_SCENE_e) {
             dFs_c->setUseType(0);
 
             #if !PLATFORM_SHIELD
@@ -194,7 +194,7 @@ static void setBaseCsrColor(int i_no) {
 
 #if VERSION == VERSION_GCN_PAL
 void dScnName_c::bmg_data_set() {
-    if (fopAcM_GetName(this) == PROC_NAMEEX_SCENE) {
+    if (fopAcM_GetName(this) == fpcNm_NAMEEX_SCENE_e) {
         mBmgStatus = 10;
     }
 }
@@ -221,7 +221,7 @@ s32 dScnName_c::execute() {
 
     #if DEBUG
     if (!fopOvlpM_IsPeek() && dComIfG_isSceneResetButton()) {
-        fopScnM_ChangeReq(this, PROC_MENU_SCENE, 0, 5);
+        fopScnM_ChangeReq(this, fpcNm_MENU_SCENE_e, 0, 5);
         dComIfGs_init();
         dComIfG_playerStatusD();
     }
@@ -286,7 +286,7 @@ void dScnName_c::FileSelectOpen() {
 void dScnName_c::FileSelectMain() {
     dFs_c->_move();
 
-    if (fpcM_GetName(this) == PROC_NAME_SCENE) {
+    if (fpcM_GetName(this) == fpcNm_NAME_SCENE_e) {
         FileSelectMainNormal();
     }
 }
@@ -337,13 +337,13 @@ void dScnName_c::brightCheck() {
         mProc = dScnName_PROC_ChangeGameScene;
 
         // Reset rupee "first-time collection" flags so the collection cutscene will play again
-        dComIfGs_offItemFirstBit(fpcNm_ITEM_GREEN_RUPEE);
-        dComIfGs_offItemFirstBit(fpcNm_ITEM_BLUE_RUPEE);
-        dComIfGs_offItemFirstBit(fpcNm_ITEM_YELLOW_RUPEE);
-        dComIfGs_offItemFirstBit(fpcNm_ITEM_RED_RUPEE);
-        dComIfGs_offItemFirstBit(fpcNm_ITEM_PURPLE_RUPEE);
-        dComIfGs_offItemFirstBit(fpcNm_ITEM_ORANGE_RUPEE);
-        dComIfGs_offItemFirstBit(fpcNm_ITEM_SILVER_RUPEE);
+        dComIfGs_offItemFirstBit(dItemNo_GREEN_RUPEE_e);
+        dComIfGs_offItemFirstBit(dItemNo_BLUE_RUPEE_e);
+        dComIfGs_offItemFirstBit(dItemNo_YELLOW_RUPEE_e);
+        dComIfGs_offItemFirstBit(dItemNo_RED_RUPEE_e);
+        dComIfGs_offItemFirstBit(dItemNo_PURPLE_RUPEE_e);
+        dComIfGs_offItemFirstBit(dItemNo_ORANGE_RUPEE_e);
+        dComIfGs_offItemFirstBit(dItemNo_SILVER_RUPEE_e);
     }
 }
 
@@ -354,7 +354,7 @@ void dScnName_c::changeGameScene() {
         #if DEBUG
         // Goto Map Select debug menu if opening File 1 with development mode on
         if (dFs_c->getSelectNum() == 0 && mDoMain::developmentMode) {
-            fopScnM_ChangeReq(this, PROC_MENU_SCENE, 0, 5);
+            fopScnM_ChangeReq(this, fpcNm_MENU_SCENE_e, 0, 5);
             dComIfGs_init();
             dComIfG_playerStatusD();
             return;
@@ -362,9 +362,9 @@ void dScnName_c::changeGameScene() {
         #endif
 
         #if VERSION == VERSION_SHIELD_DEBUG
-        fopScnM_ChangeReq(this, PROC_PLAY_SCENE, 0, 5);
+        fopScnM_ChangeReq(this, fpcNm_PLAY_SCENE_e, 0, 5);
         #else
-        fopScnM_ChangeReq(this, field_0x41f == 0 ? PROC_PLAY_SCENE : PROC_PLAY_SCENE, 0, 5);
+        fopScnM_ChangeReq(this, field_0x41f == 0 ? fpcNm_PLAY_SCENE_e : fpcNm_PLAY_SCENE_e, 0, 5);
         #endif
         dComIfGp_offEnableNextStage();
 
@@ -419,29 +419,29 @@ static scene_method_class l_dScnName_Method = {
 };
 
 scene_process_profile_definition g_profile_NAME_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_NAME_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnName_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnName_Method,
-    0,
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NAME_SCENE_e,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnName_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnName_Method,
+                       0,
 };
 
 scene_process_profile_definition g_profile_NAMEEX_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_NAMEEX_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnName_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnName_Method,
-    0,
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NAMEEX_SCENE_e,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnName_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnName_Method,
+                       0,
 };

@@ -2,7 +2,7 @@
 
 #include "d/actor/d_a_tag_push.h"
 #include "d/actor/d_a_npc4.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 void* daTag_Push_c::srchActor(void* param_0, void* param_1) {
     daTag_Push_c* push = (daTag_Push_c*)param_0;
@@ -12,31 +12,31 @@ void* daTag_Push_c::srchActor(void* param_0, void* param_1) {
             int id = ((daTag_Push_c*)param_1)->getId();
             switch (id) {
             case 1:
-                bVar1 = fopAcM_GetName(push) == PROC_NPC_TARO;
+                bVar1 = fopAcM_GetName(push) == fpcNm_NPC_TARO_e;
                 break;
             case 2:
-                bVar1 = fopAcM_GetName(push) == PROC_NPC_JAGAR;
+                bVar1 = fopAcM_GetName(push) == fpcNm_NPC_JAGAR_e;
                 break;
             case 3:
-                bVar1 = fopAcM_GetName(push) == PROC_NPC_LEN;
+                bVar1 = fopAcM_GetName(push) == fpcNm_NPC_LEN_e;
                 break;
             case 4:
-                bVar1 = fopAcM_GetName(push) == PROC_NPC_TARO;
+                bVar1 = fopAcM_GetName(push) == fpcNm_NPC_TARO_e;
                 break;
             case 5:
-                bVar1 = fopAcM_GetName(push) == PROC_NPC_MARO;
+                bVar1 = fopAcM_GetName(push) == fpcNm_NPC_MARO_e;
                 break;
             case 6:
-                bVar1 = fopAcM_GetName(push) == PROC_NPC_BESU;
+                bVar1 = fopAcM_GetName(push) == fpcNm_NPC_BESU_e;
                 break;
             case 7:
-                bVar1 = fopAcM_GetName(push) == PROC_NPC_BOU;
+                bVar1 = fopAcM_GetName(push) == fpcNm_NPC_BOU_e;
                 break;
             case 8:
-                bVar1 = fopAcM_GetName(push) == PROC_NPC_GRS;
+                bVar1 = fopAcM_GetName(push) == fpcNm_NPC_GRS_e;
                 break;
             case 9:
-                bVar1 = fopAcM_GetName(push) == PROC_NPC_GRO;
+                bVar1 = fopAcM_GetName(push) == fpcNm_NPC_GRO_e;
                 break;
             }
         }
@@ -74,8 +74,8 @@ int daTag_Push_c::Execute() {
     if (home.roomNo == dComIfGp_roomControl_getStayNo()) {
         fopAc_ac_c* actor = mActorMngr.getActorP();
         if (isDelete()) {
-            if (actor != NULL && fopAcM_GetName(actor) != PROC_NPC_JAGAR &&
-                fopAcM_GetName(actor) != PROC_NPC_GRS && fopAcM_GetName(actor) != PROC_NPC_GRO)
+            if (actor != NULL && fopAcM_GetName(actor) != fpcNm_NPC_JAGAR_e &&
+                fopAcM_GetName(actor) != fpcNm_NPC_GRS_e && fopAcM_GetName(actor) != fpcNm_NPC_GRO_e)
             {
                 static_cast<daNpcT_c*>(actor)->setCommander(NULL);
             }
@@ -93,8 +93,8 @@ int daTag_Push_c::Execute() {
                     daPy_getPlayerActorClass()->eventInfo.chkCondition(dEvtCnd_CANTALK_e) != false)
                 {
                     if (chkPointInArea(cXyz(daPy_getPlayerActorClass()->current.pos))) {
-                        if (fopAcM_GetName(actor) == PROC_NPC_GRS ||
-                            fopAcM_GetName(actor) == PROC_NPC_GRO)
+                        if (fopAcM_GetName(actor) == fpcNm_NPC_GRS_e ||
+                            fopAcM_GetName(actor) == fpcNm_NPC_GRO_e)
                         {
                             static_cast<daNpcF_c*>(actor)->setIntDemander(this);
                             static_cast<daNpcF_c*>(actor)->setIntFlowNodeNo(getFlowNodeNo());
@@ -165,18 +165,18 @@ static actor_method_class daTag_Push_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_TAG_PUSH = {
-    fpcLy_CURRENT_e,
-    8,
-    fpcPi_CURRENT_e,
-    PROC_TAG_PUSH,
-    &g_fpcLf_Method.base,
-    sizeof(daTag_Push_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x123,
-    &daTag_Push_MethodTable,
-    0x44000,
-    0,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 8,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_PUSH_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTag_Push_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_TAG_PUSH_e,
+    /* Actor SubMtd */ &daTag_Push_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

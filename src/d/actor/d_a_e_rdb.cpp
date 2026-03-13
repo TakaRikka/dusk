@@ -521,7 +521,7 @@ static void e_rdb_damage(e_rdb_class* i_this) {
 
 static void e_rdb_end(e_rdb_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    e_wb_class* actor = (e_wb_class*)fopAcM_SearchByName(PROC_E_WB);
+    e_wb_class* actor = (e_wb_class*)fopAcM_SearchByName(fpcNm_E_WB_e);
     int frame = i_this->mpModelMorf->getFrame();
     cXyz sp40;
     f32 fVar1 = 0.0f;
@@ -531,7 +531,7 @@ static void e_rdb_end(e_rdb_class* i_this) {
         anm_init(i_this, e_rdb_class::BCK_RB_ED_DEMO_DOWN, 2.0f, 0, 1.0f);
         i_this->mMode = 1;
         if (actor != NULL) {
-            actor->field_0x169e = 60;
+            actor->demo_mode = 60;
         }
         break;
 
@@ -580,12 +580,12 @@ static void e_rdb_end(e_rdb_class* i_this) {
         break;
 
     case 10:
-        if ((((actor->mActionID == 102 && actor->mEnemy.speedF > 40.0f) &&
+        if ((((actor->action == 102 && actor->enemy.speedF > 40.0f) &&
               player->current.pos.x > 1470.0f && player->current.pos.x < 2130.0f)) &&
             ((player->current.pos.z < 200.0f) &&
              (player->shape_angle.y > 0x7000 || player->shape_angle.y < -0x7000)))
         {
-            actor->field_0x169e = 80;
+            actor->demo_mode = 80;
             i_this->mMode = 11;
         }
         // [[fallthrough]]
@@ -864,7 +864,7 @@ static void damage_check(e_rdb_class* i_this) {
 }
 
 static void* shot_s_sub(void* i_actor, void* i_data) {
-    if ((fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_ARROW) &&
+    if ((fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_ARROW_e) &&
         (fopAcM_GetParam(i_actor) == 1 || fopAcM_GetParam(i_actor) == 2))
     {
         cXyz sp28 = static_cast<fopAc_ac_c*>(i_data)->current.pos -
@@ -1285,7 +1285,7 @@ static void demo_camera(e_rdb_class* i_this) {
             csXyz i_angle(0, cM_atan2s(sp28.x, sp28.z), 0);
             sp58 = a_this->current.pos;
             sp58.y += 2000.0f;
-            fopAcM_create(PROC_E_RD, 12, &sp58, fopAcM_GetRoomNo(a_this), &i_angle, NULL, -1);
+            fopAcM_create(fpcNm_E_RD_e, 12, &sp58, fopAcM_GetRoomNo(a_this), &i_angle, NULL, -1);
             sp34.set(-7530.0f, 50.0f, -5451.0f);
             player->setPlayerPosAndAngle(&sp34, -0x5F3B, 0);
             i_this->mDemoCamCenter.set(-7661.0f, 323.0f, -5684.0f);
@@ -1295,7 +1295,7 @@ static void demo_camera(e_rdb_class* i_this) {
         }
 
         if (i_this->field_0x10aa >= 40) {
-            e_rd_class* bulblin_p = (e_rd_class*)fopAcM_SearchByName(PROC_E_RD);
+            e_rd_class* bulblin_p = (e_rd_class*)fopAcM_SearchByName(fpcNm_E_RD_e);
             if (bulblin_p != NULL) {
                 a_this->current.pos = bulblin_p->enemy.current.pos;
                 a_this->eyePos = bulblin_p->enemy.eyePos;
@@ -1342,8 +1342,8 @@ static void demo_camera(e_rdb_class* i_this) {
         if (i_this->field_0x10aa == 180) {
             sVar1 = 1;
             fopAcM_delete(a_this);
-            fopAcM_delete(fopAcM_SearchByName(PROC_E_RD));
-            fopAcM_delete(fopAcM_SearchByName(PROC_E_WB));
+            fopAcM_delete(fopAcM_SearchByName(fpcNm_E_RD_e));
+            fopAcM_delete(fopAcM_SearchByName(fpcNm_E_WB_e));
             dComIfGs_onStageMiddleBoss();
             int swBit = fopAcM_GetParam(a_this) >> 24;
             if (swBit != 0xFF) {
@@ -1921,18 +1921,18 @@ static actor_method_class l_daE_RDB_Method = {
 };
 
 actor_process_profile_definition g_profile_E_RDB = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_E_RDB,              // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(e_rdb_class),     // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    156,                     // mPriority
-    &l_daE_RDB_Method,       // sub_method
-    0x00044100,              // mStatus
-    fopAc_ENEMY_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_RDB_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_rdb_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_RDB_e,
+    /* Actor SubMtd */ &l_daE_RDB_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -84,7 +84,7 @@ fpc_ProcID fopKyM_createWpillar(cXyz const* i_pos, f32 scale, int i_param) {
     append->scale.set(scale, scale, scale);
     append->parameters = i_param;
 
-    return fopKyM_Create(PROC_WPILLAR, NULL, append);
+    return fopKyM_Create(fpcNm_WPILLAR_e, NULL, append);
 }
 
 fpc_ProcID fopKyM_createMpillar(cXyz const* i_pos, f32 i_size) {

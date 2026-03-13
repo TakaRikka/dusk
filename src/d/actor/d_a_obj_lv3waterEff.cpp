@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_lv3waterEff.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "f_op/f_op_actor_mng.h"
 
 static u16 const l_eff_id[] = {
@@ -101,18 +101,18 @@ static actor_method_class l_daObjWaterEff_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_WaterEff = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_Obj_WaterEff,
-    &g_fpcLf_Method.base,
-    sizeof(daObjWaterEff_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    555,
-    &l_daObjWaterEff_Method,
-    0x40100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_WaterEff_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjWaterEff_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_WaterEff_e,
+    /* Actor SubMtd */ &l_daObjWaterEff_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

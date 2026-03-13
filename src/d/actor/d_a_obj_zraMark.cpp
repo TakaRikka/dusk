@@ -300,7 +300,7 @@ void daObjZraMark_c::col_set() {
 
 daNpc_Hoz_c* daObjZraMark_c::schHoz() {
     fopAc_ac_c* hoz = NULL;
-    if (fopAcM_SearchByName(PROC_NPC_HOZ, &hoz) && hoz != NULL) {
+    if (fopAcM_SearchByName(fpcNm_NPC_HOZ_e, &hoz) && hoz != NULL) {
         return (daNpc_Hoz_c*)hoz;
     }
 
@@ -321,7 +321,7 @@ void daObjZraMark_c::informBlast() {
     if (field_0x72c != 0) {
         for (int i = 0; i < field_0x72c; i++) {
             fopAc_ac_c* actorp = mActorMngr[i].getActorP();
-            if (actorp != NULL && fopAcM_GetName(actorp) == PROC_NPC_ZRA) {
+            if (actorp != NULL && fopAcM_GetName(actorp) == fpcNm_NPC_ZRA_e) {
                 ((daNpc_zrA_c*)actorp)->setBlastFlag(1);
             }
         }
@@ -538,18 +538,18 @@ static actor_method_class l_daObjZraMark_Method = {
 };
 
 actor_process_profile_definition g_profile_ZRA_MARK = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_ZRA_MARK,           // mProcName
-    &g_fpcLf_Method.base,   // sub_method
-    sizeof(daObjZraMark_c),  // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    392,                     // mPriority
-    &l_daObjZraMark_Method,  // sub_method
-    0x00044100,              // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ZRA_MARK_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjZraMark_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_ZRA_MARK_e,
+    /* Actor SubMtd */ &l_daObjZraMark_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

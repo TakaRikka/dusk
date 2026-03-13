@@ -19,9 +19,9 @@ public:
 class daNpcChin_HIO_c : public mDoHIO_entry_c {
 public:
     daNpcChin_HIO_c();
+    virtual ~daNpcChin_HIO_c();
 
-    void listenPropertyEvent(const JORPropertyEvent*);
-    void genMessage(JORMContext*);
+    virtual void genMessage(JORMContext*);
 
     /* 0x08 */ daNpcChin_HIOParam m;
 };

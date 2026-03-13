@@ -21,7 +21,7 @@ public:
     static void createPortalWarpMissTag(u16 param_0, fpc_ProcID i_parentID) {
         csXyz sp18(-1, -1, param_0);
 
-        fopAcM_createChild(PROC_Tag_Mhint, i_parentID, 0x800FFFFF,
+        fopAcM_createChild(fpcNm_Tag_Mhint_e, i_parentID, 0x800FFFFF,
                            &daPy_getLinkPlayerActorClass()->current.pos, dComIfGp_roomControl_getStayNo(), &sp18, NULL, -1,
                            NULL);
     }

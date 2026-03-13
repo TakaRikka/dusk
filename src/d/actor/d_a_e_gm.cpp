@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_gm.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -172,7 +172,7 @@ void daE_GM_c::action() {
 }
 
 static void* s_obj_sub2(void* i_actor, void* i_data) {
-    if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_CSTATUE &&
+    if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_CSTATUE_e &&
         fopAcM_searchActorDistanceXZ((fopAc_ac_c*)i_actor, (fopAc_ac_c*)i_data) < 4000.0f && ((daCstatue_c*)i_actor)->checkBossAtGroundHit()) {
         return i_actor;
     }
@@ -260,7 +260,7 @@ void daE_GM_c::egg_wait() {
                 return;
             }
         }
-        
+
         if (mType == TYPE_1) {
             cLib_addCalcAngleS(&field_0xa5c, 0, 8, 0x100, 4);
             current.angle.x += field_0xa5c;
@@ -407,12 +407,12 @@ void daE_GM_c::create_item() {
 
         switch ((int)cM_rndF(fVar1)) {
             case 0:
-                fopAcM_createItem(&current.pos, fpcNm_ITEM_HEART, -1, -1, NULL, NULL, 0);
+                fopAcM_createItem(&current.pos, dItemNo_HEART_e, -1, -1, NULL, NULL, 0);
                 break;
 
             case 1:
             case 2:
-                fopAcM_createItem(&current.pos, fpcNm_ITEM_ARROW_1, -1, -1, NULL, NULL, 0);
+                fopAcM_createItem(&current.pos, dItemNo_ARROW_1_e, -1, -1, NULL, NULL, 0);
                 break;
         }
     }
@@ -475,7 +475,7 @@ void daE_GM_c::wait() {
         if (fopAcM_SearchByID(fopAcM_GetLinkId(this), (fopAc_ac_c**)&actor_p) == 0 || actor_p == NULL) {
             return;
         }
-        
+
         if (actor_p->mDemoMode != 0x15) {
             setAction(&daE_GM_c::walk);
         }
@@ -828,7 +828,7 @@ void daE_GM_c::hook() {
     } else if (mMode == -1) {
         field_0xa72 = 10;
         mSph.SetTgType(0xD8FBFDFF);
-    } else if (!fopAcM_CheckStatus(this, fopAcM_STATUS_HOOK_CARRY_NOW)) {
+    } else if (!fopAcM_CheckStatus(this, fopAcStts_HOOK_CARRY_NOW_e)) {
         setAction(&daE_GM_c::core_escape);
     }
 }
@@ -974,7 +974,7 @@ void daE_GM_c::walk2() {
         speedF = l_coreSpeedF + field_0xa40;
         mpModelMorf->setPlaySpeed(speedF / 9.0f);
         field_0xa6e += (int)(speedF / 9.0f);
-        
+
         if (field_0xa6e >= 4) {
             field_0xa6e = 0;
             mSound.startCreatureSound(Z2SE_EN_GBA_FOOTNOTE, 0, -1);
@@ -1037,7 +1037,7 @@ void daE_GM_c::core_wait() {
         field_0xa71 = false;
         current.angle.y = cLib_targetAngleY(&player->current.pos, &current.pos);
         fopAcM_SetCullSize(this, 7);
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x80000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x80000_e);
         mSph.SetTgType(0xD8FBFDFF);
         mMode++;
     } else if (mMode != -1) {
@@ -1777,8 +1777,8 @@ cPhs_Step daE_GM_c::create() {
 
         if (mType == TYPE_NORMAL) {
             mSound.init(&current.pos, NULL, 2, 1);
-            fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x10000);
-            fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x4000);
+            fopAcM_OnStatus(this, fopAcStts_UNK_0x10000_e);
+            fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
             setAction(&daE_GM_c::normal_wait);
         } else if (mType == TYPE_GOMA) {
             mSound.init(&current.pos, &eyePos, 3, 1);
@@ -1794,7 +1794,7 @@ cPhs_Step daE_GM_c::create() {
             setAction(&daE_GM_c::core_wait);
         } else {
             mSound.init(&current.pos, NULL, 2, 1);
-            fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x10000);
+            fopAcM_OnStatus(this, fopAcStts_UNK_0x10000_e);
             field_0xa50 = hREG_F(7) + 0.1f;
             field_0xa66 = cM_rndFX(100.0f) + 1000.0f;
             field_0xa64 = field_0xa66;
@@ -1824,18 +1824,18 @@ static actor_method_class l_daE_GM_Method = {
 };
 
 actor_process_profile_definition g_profile_E_GM = {
-  fpcLy_CURRENT_e,       // mLayerID
-  7,                     // mListID
-  fpcPi_CURRENT_e,       // mListPrio
-  PROC_E_GM,             // mProcName
-  &g_fpcLf_Method.base, // sub_method
-  sizeof(daE_GM_c),      // mSize
-  0,                     // mSizeOther
-  0,                     // mParameters
-  &g_fopAc_Method.base,  // sub_method
-  119,                   // mPriority
-  &l_daE_GM_Method,      // sub_method
-  0x00044100,            // mStatus
-  fopAc_ENEMY_e,         // mActorType
-  fopAc_CULLBOX_0_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_GM_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_GM_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_GM_e,
+    /* Actor SubMtd */ &l_daE_GM_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

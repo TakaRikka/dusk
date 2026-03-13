@@ -1162,13 +1162,13 @@ void dMenu_Dmap_c::screenInit() {
         mpDrawBg->mBaseScreen->search(MULTI_CHAR('nor_k_n'))->hide();
 
         u8 key_num = 0;
-        if (checkItemGet(fpcNm_ITEM_L2_KEY_PIECES1, 1)) {
+        if (checkItemGet(dItemNo_L2_KEY_PIECES1_e, 1)) {
             key_num = 1;
         }
-        if (checkItemGet(fpcNm_ITEM_L2_KEY_PIECES2, 1)) {
+        if (checkItemGet(dItemNo_L2_KEY_PIECES2_e, 1)) {
             key_num++;
         }
-        if (checkItemGet(fpcNm_ITEM_L2_KEY_PIECES3, 1)) {
+        if (checkItemGet(dItemNo_L2_KEY_PIECES3_e, 1)) {
             key_num++;
         }
 
@@ -1201,34 +1201,34 @@ void dMenu_Dmap_c::screenInit() {
         mpDrawBg->mBaseScreen->search(MULTI_CHAR('nor_k_n'))->hide();
         mpDrawBg->mBaseScreen->search(MULTI_CHAR('key_n_n'))->hide();
 
-        u8 itemNo = fpcNm_ITEM_NONE;
+        u8 itemNo = dItemNo_NONE_e;
         field_0x174[2] = 0;
 
         if (g_fmapHIO.mMapIconHIO.mLV5DungeonItemDebug) {
             itemNo = g_fmapHIO.mMapIconHIO.mLV5DungeonItem;
-            if (itemNo != fpcNm_ITEM_NONE) {
+            if (itemNo != dItemNo_NONE_e) {
                 field_0x174[2] = itemNo;
             }
         } else {
             if (dComIfGs_isDungeonItemBossKey()) {
-                itemNo = fpcNm_ITEM_LV5_BOSS_KEY;
-                field_0x174[2] = (u8)dComIfGs_isDungeonItemBossKey() ? fpcNm_ITEM_LV5_BOSS_KEY : 0;
+                itemNo = dItemNo_LV5_BOSS_KEY_e;
+                field_0x174[2] = (u8)dComIfGs_isDungeonItemBossKey() ? dItemNo_LV5_BOSS_KEY_e : 0;
                                                                     /* dSv_event_flag_c::F_0003 - Snowpeak Ruins - Handed over 
                                                                                                   tomato puree and left room */
-            } else if (checkItemGet(fpcNm_ITEM_TOMATO_PUREE, 1) && !dComIfGs_isEventBit(2)) {
-                itemNo = fpcNm_ITEM_TOMATO_PUREE;
-                field_0x174[2] = fpcNm_ITEM_TOMATO_PUREE;
+            } else if (checkItemGet(dItemNo_TOMATO_PUREE_e, 1) && !dComIfGs_isEventBit(2)) {
+                itemNo = dItemNo_TOMATO_PUREE_e;
+                field_0x174[2] = dItemNo_TOMATO_PUREE_e;
                                                              /* dSv_event_flag_c::F_0004 - Snowpeak Ruins - Handed over secret 
                                                                                            ingredient and left room */
-            } else if (checkItemGet(fpcNm_ITEM_TASTE, 1) && !dComIfGs_isEventBit(1)) {
-                itemNo = fpcNm_ITEM_TASTE;
-                field_0x174[2] = fpcNm_ITEM_TASTE;
+            } else if (checkItemGet(dItemNo_TASTE_e, 1) && !dComIfGs_isEventBit(1)) {
+                itemNo = dItemNo_TASTE_e;
+                field_0x174[2] = dItemNo_TASTE_e;
             }
         }
 
         switch (itemNo) {
-        case fpcNm_ITEM_TOMATO_PUREE:
-        case fpcNm_ITEM_TASTE:
+        case dItemNo_TOMATO_PUREE_e:
+        case dItemNo_TASTE_e:
             dMeter2Info_readItemTexture(itemNo, mItemTexBuf,
                                         (J2DPicture*)mpDrawBg->mBaseScreen->search(MULTI_CHAR('lv5_boss')), NULL, NULL, NULL, NULL,
                                         NULL, NULL, -1);
@@ -1238,11 +1238,11 @@ void dMenu_Dmap_c::screenInit() {
         mpDrawBg->mBaseScreen->search(MULTI_CHAR('i_key_n'))->hide();
         mpDrawBg->mBaseScreen->search(MULTI_CHAR('lv5_k_n'))->hide();
         mpDrawBg->mBaseScreen->search(MULTI_CHAR('key_n_n'))->hide();
-        field_0x174[2] = (u8)dComIfGs_isDungeonItemBossKey() ? fpcNm_ITEM_BOSS_KEY : 0;
+        field_0x174[2] = (u8)dComIfGs_isDungeonItemBossKey() ? dItemNo_BOSS_KEY_e : 0;
     }
 
-    field_0x174[0] = (u8)dComIfGs_isDungeonItemMap() ? fpcNm_ITEM_MAP : 0;
-    field_0x174[1] = (u8)dComIfGs_isDungeonItemCompass() ? fpcNm_ITEM_COMPUS : 0;
+    field_0x174[0] = (u8)dComIfGs_isDungeonItemMap() ? dItemNo_MAP_e : 0;
+    field_0x174[1] = (u8)dComIfGs_isDungeonItemCompass() ? dItemNo_COMPUS_e : 0;
     field_0x177 = 0;
 
     int bVar6 = 0;

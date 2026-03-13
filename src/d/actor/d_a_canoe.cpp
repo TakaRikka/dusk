@@ -21,7 +21,7 @@ static BOOL l_debugMode;
 #endif
 
 static BOOL daCanoe_searchTagWaterFall(fopAc_ac_c* i_actor, void* i_data) {
-    if (fopAcM_GetName(i_actor) == PROC_Tag_WaterFall) {
+    if (fopAcM_GetName(i_actor) == fpcNm_Tag_WaterFall_e) {
         if (((daTagWaterFall_c*)i_actor)->checkHitWaterFall(*(cXyz*)i_data)) {
             daAlink_getAlinkActorClass()->onWaterFallFrontHit();
         }
@@ -328,7 +328,7 @@ void daCanoe_c::posMove() {
 }
 
 void daCanoe_c::checkGomikabe(cBgS_PolyInfo& i_polyinfo) {
-    if (daAlink_c::getMoveBGActorName(i_polyinfo, 1) == PROC_Obj_GOMIKABE) {
+    if (daAlink_c::getMoveBGActorName(i_polyinfo, 1) == fpcNm_Obj_GOMIKABE_e) {
         ((daObjGOMIKABE_c*)dComIfG_Bgsp().GetActorPointer(i_polyinfo))->BreakSet();
     }
 }
@@ -918,20 +918,20 @@ static actor_method_class l_daCanoe_Method = {
 };
 
 actor_process_profile_definition g_profile_CANOE = {
-  fpcLy_CURRENT_e,         // mLayerID
-  4,                       // mListID
-  fpcPi_CURRENT_e,         // mListPrio
-  PROC_CANOE,              // mProcName
-  &g_fpcLf_Method.base,   // sub_method
-  sizeof(daCanoe_c),       // mSize
-  0,                       // mSizeOther
-  0,                       // mParameters
-  &g_fopAc_Method.base,    // sub_method
-  724,                     // mPriority
-  &l_daCanoe_Method,       // sub_method
-  0x00044100,              // mStatus
-  fopAc_ENV_e,             // mActorType
-  fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 4,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_CANOE_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daCanoe_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_CANOE_e,
+    /* Actor SubMtd */ &l_daCanoe_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES

@@ -55,7 +55,7 @@ cXyz* daAlink_c::getCanoeLocalPaddleTop() {
 static fopAc_ac_c* daAlink_searchCanoe(fopAc_ac_c* i_actor, void* i_data) {
     UNUSED(i_data);
 
-    if (fopAcM_GetName(i_actor) == PROC_CANOE && ((daCanoe_c*)i_actor)->getModel() != NULL) {
+    if (fopAcM_GetName(i_actor) == fpcNm_CANOE_e && ((daCanoe_c*)i_actor)->getModel() != NULL) {
         return i_actor;
     }
 
@@ -81,9 +81,9 @@ void daAlink_c::initFishingRodHand() {
     field_0x2f95 = 0x65;
     mItemVar0.field_0x3018 = 1;
 
-    if (mEquipItem == fpcNm_ITEM_JEWEL_WORM_ROD || mEquipItem == fpcNm_ITEM_WORM_ROD) {
+    if (mEquipItem == dItemNo_JEWEL_WORM_ROD_e || mEquipItem == dItemNo_WORM_ROD_e) {
         mItemMode = 0x74;
-    } else if (mEquipItem == fpcNm_ITEM_JEWEL_BEE_ROD || mEquipItem == fpcNm_ITEM_BEE_ROD) {
+    } else if (mEquipItem == dItemNo_JEWEL_BEE_ROD_e || mEquipItem == dItemNo_BEE_ROD_e) {
         mItemMode = 0x76;
     } else {
         mItemMode = 0xFF;
@@ -129,7 +129,7 @@ BOOL daAlink_c::checkCanoeJumpRide() {
 
     if (speed.y < 0.0f &&
         canoe != NULL &&
-        fopAcM_GetName(canoe) == PROC_CANOE &&
+        fopAcM_GetName(canoe) == fpcNm_CANOE_e &&
         canoe->checkJumpRideFlg() &&
         !checkDeadHP() &&
         (mProcID != PROC_FALL || mProcVar4.field_0x3010 != 0))
@@ -592,7 +592,7 @@ int daAlink_c::procCanoeWaitInit(int param_0) {
         morf = 3.0f;
         mProcVar0.field_0x3008 = 0;
 
-        if (mEquipItem == fpcNm_ITEM_NONE || (mEquipItem != 0x10B && !checkFisingRodLure())) {
+        if (mEquipItem == dItemNo_NONE_e || (mEquipItem != 0x10B && !checkFisingRodLure())) {
             anm = ANM_WAIT_SIT;
         } else if (mProcVar5.field_0x3012 == 0) {
             anm = ANM_WAIT_CANOE_LEFT;
@@ -604,7 +604,7 @@ int daAlink_c::procCanoeWaitInit(int param_0) {
     setSyncCanoePos();
     setSingleAnimeBaseMorf(anm, morf);
 
-    if (param_0 && mEquipItem != 0x10B && mEquipItem != fpcNm_ITEM_NONE && !checkFisingRodLure()) {
+    if (param_0 && mEquipItem != 0x10B && mEquipItem != dItemNo_NONE_e && !checkFisingRodLure()) {
         allUnequip(0);
     }
 
@@ -638,7 +638,7 @@ int daAlink_c::procCanoeWait() {
                         return procCanoePaddlePutInit(1);
                     }
 
-                    if (mEquipItem != fpcNm_ITEM_NONE) {
+                    if (mEquipItem != dItemNo_NONE_e) {
                         allUnequip(0);
                     }
 
@@ -648,7 +648,7 @@ int daAlink_c::procCanoeWait() {
 
             if (checkFisingRodLure()) {
                 procCanoeFishingWaitInit();
-            } else if (mEquipItem == fpcNm_ITEM_NONE && ((mThrowBoomerangAcKeep.getActor() == NULL && mProcVar1.field_0x300a == 0) || checkInputOnR())) {
+            } else if (mEquipItem == dItemNo_NONE_e && ((mThrowBoomerangAcKeep.getActor() == NULL && mProcVar1.field_0x300a == 0) || checkInputOnR())) {
                 field_0x2fde = 0xFF;
 
                 if (mThrowBoomerangAcKeep.getActor() != NULL || mProcVar1.field_0x300a != 0) {
@@ -662,7 +662,7 @@ int daAlink_c::procCanoeWait() {
                 procCanoePaddleGrabInit();
             } else if (checkInputOnR() && mEquipItem == 0x10B) {
                 procCanoeRowInit(-1);
-            } else if (mEquipItem != fpcNm_ITEM_NONE && mEquipItem != 0x10B) {
+            } else if (mEquipItem != dItemNo_NONE_e && mEquipItem != 0x10B) {
                 if (!checkUnderMove0BckNoArc(ANM_WAIT_SIT) && getNowAnmPackUnder(UNDER_0) != getNowAnmPackUpper(UPPER_0)) {
                     setSingleAnimeBase(ANM_WAIT_SIT);
                 } else if (checkInputOnR()) {
@@ -939,7 +939,7 @@ int daAlink_c::procCanoePaddleShift() {
 int daAlink_c::procCanoePaddlePutInit(int param_0) {
     if (checkCanoeSlider() && mEquipItem == 0x10B) {
         if (checkEquipAnime() && checkBowItem(field_0x2fde)) {
-            mEquipItem = fpcNm_ITEM_NONE;
+            mEquipItem = dItemNo_NONE_e;
             mRightHandIndex = 0xFE;
             mLeftHandIndex = 0xFE;
             return procCanoeWaitInit(0);
@@ -1006,7 +1006,7 @@ int daAlink_c::procCanoePaddlePut() {
                 mEquipItem = 0x105;
                 mRightHandIndex = 5;
             } else {
-                mEquipItem = fpcNm_ITEM_NONE;
+                mEquipItem = dItemNo_NONE_e;
                 mRightHandIndex = 0xFE;
             }
 
@@ -1077,7 +1077,7 @@ int daAlink_c::procCanoePaddleGrab() {
 int daAlink_c::procCanoeRodGrabInit() {
     commonProcInit(PROC_CANOE_ROD_GRAB);
 
-    if (mEquipItem != fpcNm_ITEM_NONE) {
+    if (mEquipItem != dItemNo_NONE_e) {
         allUnequip(0);
         mProcVar0.field_0x3008 = 1;
     } else {
@@ -1627,7 +1627,7 @@ int daAlink_c::procCanoeKandelaarPour() {
 }
 
 void daAlink_c::setGroundFishingRodActor() {
-    mItemAcKeep.setID(fopAcM_create(PROC_MG_ROD, 0xFFFF011D, &mLeftHandPos, -1, NULL, NULL, -1));
+    mItemAcKeep.setID(fopAcM_create(fpcNm_MG_ROD_e, 0xFFFF011D, &mLeftHandPos, -1, NULL, NULL, -1));
     initFishingRodHand();
 }
 
@@ -1667,10 +1667,10 @@ int daAlink_c::procFishingCast() {
         mItemMode = 0xFF;
         dComIfGs_setBaitItem(0xFF);
 
-        if (mEquipItem == fpcNm_ITEM_JEWEL_WORM_ROD || mEquipItem == fpcNm_ITEM_JEWEL_BEE_ROD) {
-            mEquipItem = fpcNm_ITEM_JEWEL_ROD;
+        if (mEquipItem == dItemNo_JEWEL_WORM_ROD_e || mEquipItem == dItemNo_JEWEL_BEE_ROD_e) {
+            mEquipItem = dItemNo_JEWEL_ROD_e;
         } else {
-            mEquipItem = fpcNm_ITEM_FISHING_ROD_1;
+            mEquipItem = dItemNo_FISHING_ROD_1_e;
         }
     }
 
@@ -1741,15 +1741,15 @@ int daAlink_c::procFishingFood() {
             mProcVar2.field_0x300c = 1;
 
             u16 item = dComIfGp_getSelectItem(mProcVar3.field_0x300e);
-            if (item == fpcNm_ITEM_WORM || dComIfGp_getSelectItemNum(mProcVar3.field_0x300e) == 1) {
+            if (item == dItemNo_WORM_e || dComIfGp_getSelectItemNum(mProcVar3.field_0x300e) == 1) {
                 dComIfGs_setEquipBottleItemEmpty(mProcVar3.field_0x300e);
             } else {
                 dComIfGp_addSelectItemNum(mProcVar3.field_0x300e, -1);
             }
 
-            if (mItemMode != fpcNm_ITEM_NONE) {
+            if (mItemMode != dItemNo_NONE_e) {
                 dComIfGs_setEquipBottleItemIn(mProcVar3.field_0x300e, mItemMode);
-                if (mItemMode == fpcNm_ITEM_BEE_CHILD) {
+                if (mItemMode == dItemNo_BEE_CHILD_e) {
                     dComIfGp_setSelectItemNum(mProcVar3.field_0x300e, 1);
                 }
             }
@@ -1757,16 +1757,16 @@ int daAlink_c::procFishingFood() {
             mItemMode = item;
 
             BOOL is_jewl = checkFisingRodJewl();
-            if (item == fpcNm_ITEM_WORM) {
+            if (item == dItemNo_WORM_e) {
                 if (is_jewl) {
-                    mEquipItem = fpcNm_ITEM_JEWEL_WORM_ROD;
+                    mEquipItem = dItemNo_JEWEL_WORM_ROD_e;
                 } else {
-                    mEquipItem = fpcNm_ITEM_WORM_ROD;
+                    mEquipItem = dItemNo_WORM_ROD_e;
                 }
             } else if (is_jewl) {
-                mEquipItem = fpcNm_ITEM_JEWEL_BEE_ROD;
+                mEquipItem = dItemNo_JEWEL_BEE_ROD_e;
             } else {
-                mEquipItem = fpcNm_ITEM_BEE_ROD;
+                mEquipItem = dItemNo_BEE_ROD_e;
             }
 
             dComIfGs_setBaitItem(item);

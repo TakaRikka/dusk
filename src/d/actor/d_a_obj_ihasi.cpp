@@ -168,15 +168,15 @@ static int daObj_Ihasi_Create(fopAc_ac_c* i_actor) {
             pos.set(34750.0f, -300.0f, -44000.0f);
 
             param1 = fopAcM_GetParam(i_actor) & 0xff000000 | 0xfffe00;
-            fopAcM_create(PROC_E_S1, param1, &pos, fopAcM_GetRoomNo(i_actor), &angle, NULL, -1);
+            fopAcM_create(fpcNm_E_S1_e, param1, &pos, fopAcM_GetRoomNo(i_actor), &angle, NULL, -1);
 
             pos.set(35250.0f, -300.0f, -43500.0f);
             ANGLE_ADD(angle.y, 0x5555);
-            fopAcM_create(PROC_E_S1, param1, &pos, fopAcM_GetRoomNo(i_actor), &angle, NULL, -1);
+            fopAcM_create(fpcNm_E_S1_e, param1, &pos, fopAcM_GetRoomNo(i_actor), &angle, NULL, -1);
 
             pos.set(34250.0f, -300.0f, -43500.0f);
             ANGLE_ADD(angle.y, 0x5555);
-            fopAcM_create(PROC_E_S1, param1, &pos, fopAcM_GetRoomNo(i_actor), &angle, NULL, -1);
+            fopAcM_create(fpcNm_E_S1_e, param1, &pos, fopAcM_GetRoomNo(i_actor), &angle, NULL, -1);
 
             return cPhs_ERROR_e;
         }
@@ -196,18 +196,18 @@ static int daObj_Ihasi_Create(fopAc_ac_c* i_actor) {
 
         if (!strcmp(dComIfGp_getStartStageName(), "F_SP121") && fopAcM_GetRoomNo(i_actor) == 0) {
             pos.set(34800.0f, 5700.0f, -26735.0f);
-            fopAcM_create(PROC_E_WAP, 0xffffff35, &pos, fopAcM_GetRoomNo(i_actor), NULL, NULL, -1);
+            fopAcM_create(fpcNm_E_WAP_e, 0xffffff35, &pos, fopAcM_GetRoomNo(i_actor), NULL, NULL, -1);
 
             angle.set(0x0, -0x8000, 0x0);
             pos.set(34800.0f, -300.0f, -30340.0f);
             param2 = fopAcM_GetParam(i_actor) & 0xff000000 | 0xfffe00;
-            fopAcM_create(PROC_E_S1, param2, &pos, fopAcM_GetRoomNo(i_actor), &angle, NULL, -1);
+            fopAcM_create(fpcNm_E_S1_e, param2, &pos, fopAcM_GetRoomNo(i_actor), &angle, NULL, -1);
 
             pos.set(35087.0f, -300.0f, -29879.0f);
-            fopAcM_create(PROC_E_S1, param2, &pos, fopAcM_GetRoomNo(i_actor), &angle, NULL, -1);
+            fopAcM_create(fpcNm_E_S1_e, param2, &pos, fopAcM_GetRoomNo(i_actor), &angle, NULL, -1);
 
             pos.set(34500.0f, -300.0f, -29879.0f);
-            fopAcM_create(PROC_E_S1, param2, &pos, fopAcM_GetRoomNo(i_actor), &angle, NULL, -1);
+            fopAcM_create(fpcNm_E_S1_e, param2, &pos, fopAcM_GetRoomNo(i_actor), &angle, NULL, -1);
         }
 
         daObj_Ihasi_Execute(i_this);
@@ -223,18 +223,18 @@ static actor_method_class l_daObj_Ihasi_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_IHASI = {
-    fpcLy_CURRENT_e,          // mLayerID
-    3,                        // mListID
-    fpcPi_CURRENT_e,          // mListPrio
-    PROC_OBJ_IHASI,           // mProcName
-    &g_fpcLf_Method.base,     // sub_method
-    sizeof(obj_ihasi_class),  // mSize
-    0,                        // mSizeOther
-    0,                        // mParameters
-    &g_fopAc_Method.base,     // sub_method
-    533,                      // mPriority
-    &l_daObj_Ihasi_Method,    // sub_method
-    0x00044000,               // mStatus
-    fopAc_ACTOR_e,            // mActorType
-    fopAc_CULLBOX_CUSTOM_e,   // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_IHASI_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(obj_ihasi_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_IHASI_e,
+    /* Actor SubMtd */ &l_daObj_Ihasi_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

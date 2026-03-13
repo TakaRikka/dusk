@@ -54,9 +54,9 @@ void daObjCRVLH_UP_c::Hakai() {
             mDoMtx_stack_c::multVec(&field_0x5ac[i], &field_0x5ac[i]);
         }
 
-        field_0x5a4 = fopAcM_create(PROC_Obj_CRVHAHEN, 1, &field_0x5ac[0], fopAcM_GetRoomNo(this),
+        field_0x5a4 = fopAcM_create(fpcNm_Obj_CRVHAHEN_e, 1, &field_0x5ac[0], fopAcM_GetRoomNo(this),
                                     &cStack_30, 0, -1);
-        field_0x5a8 = fopAcM_create(PROC_Obj_CRVHAHEN, 1, &field_0x5ac[1], fopAcM_GetRoomNo(this),
+        field_0x5a8 = fopAcM_create(fpcNm_Obj_CRVHAHEN_e, 1, &field_0x5ac[1], fopAcM_GetRoomNo(this),
                                     &cStack_30, 0, -1);
         dComIfGp_particle_set(dPa_RM(ID_ZF_S_CRVYAGURA05_SMK), &field_0x5ac[1], &tevStr, &cStack_30,
                               0);
@@ -199,18 +199,18 @@ static actor_method_class l_daObjCRVLH_UP_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_CRVLH_UP = {
-    fpcLy_CURRENT_e,          // mLayerID
-    3,                        // mListID
-    fpcPi_CURRENT_e,          // mListPrio
-    PROC_Obj_CRVLH_UP,        // mProcName
-    &g_fpcLf_Method.base,     // sub_method
-    sizeof(daObjCRVLH_UP_c),  // mSize
-    0,                        // mSizeOther
-    0,                        // mParameters
-    &g_fopAc_Method.base,     // sub_method
-    470,                      // mPriority
-    &l_daObjCRVLH_UP_Method,  // sub_method
-    0x00040180,               // mStatus
-    fopAc_ACTOR_e,            // mActorType
-    fopAc_CULLBOX_CUSTOM_e,   // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_CRVLH_UP_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjCRVLH_UP_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_CRVLH_UP_e,
+    /* Actor SubMtd */ &l_daObjCRVLH_UP_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_NOEXEC_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

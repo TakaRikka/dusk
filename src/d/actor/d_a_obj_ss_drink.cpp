@@ -485,18 +485,18 @@ static actor_method_class daObj_SSDrink_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_SSDRINK = {
-    fpcLy_CURRENT_e,             // mLayerID
-    7,                           // mListID
-    fpcPi_CURRENT_e,             // mListPrio
-    PROC_OBJ_SSDRINK,            // mProcName
-    &g_fpcLf_Method.base,        // sub_method
-    sizeof(daObj_SSDrink_c),     // mSize
-    0,                           // mSizeOther
-    0,                           // mParameters
-    &g_fopAc_Method.base,        // sub_method
-    68,                          // mPriority
-    &daObj_SSDrink_MethodTable,  // sub_method
-    0x00064100,                  // mStatus
-    fopAc_UNK_GROUP_5_e,         // mActorType
-    fopAc_CULLBOX_CUSTOM_e,      // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_SSDRINK_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObj_SSDrink_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_SSDRINK_e,
+    /* Actor SubMtd */ &daObj_SSDrink_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_NOPAUSE_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_UNK_GROUP_5_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

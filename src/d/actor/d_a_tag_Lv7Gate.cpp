@@ -8,7 +8,7 @@
 #include "d/actor/d_a_tag_Lv7Gate.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_path.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 static char* l_arcName = "Lv7Gate";
 
@@ -147,13 +147,13 @@ void daTagLv7Gate_c::create_init() {
 
             csXyz local_54(getFlowNodeNo(), -0x4000, 0);
 
-            fopAcM_create(PROC_NPC_TKS, 7, &pos, fopAcM_GetRoomNo(this), &local_54, NULL, -1);
+            fopAcM_create(fpcNm_NPC_TKS_e, 7, &pos, fopAcM_GetRoomNo(this), &local_54, NULL, -1);
 
             pos.set(2603.315f, -200.0f, 5485.9224f);
 
             local_54.set(0, -0x4000, 0);
 
-            fopAcM_create(PROC_NPC_TKJ, 0, &pos, fopAcM_GetRoomNo(this), &local_54, NULL, -1);
+            fopAcM_create(fpcNm_NPC_TKJ_e, 0, &pos, fopAcM_GetRoomNo(this), &local_54, NULL, -1);
         }
     }
     eventInfo.setArchiveName(l_arcName);
@@ -360,18 +360,18 @@ static actor_method_class l_daTagLv7Gate_Method = {
 };
 
 actor_process_profile_definition g_profile_Tag_Lv7Gate = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Tag_Lv7Gate,        // mProcName
-    &g_fpcLf_Method.base,   // sub_method
-    sizeof(daTagLv7Gate_c),  // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    263,                     // mPriority
-    &l_daTagLv7Gate_Method,  // sub_method
-    0x40000,                 // mStatus
-    0,                       // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_Lv7Gate_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagLv7Gate_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Tag_Lv7Gate_e,
+    /* Actor SubMtd */ &l_daTagLv7Gate_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

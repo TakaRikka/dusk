@@ -218,7 +218,7 @@ static void dummy_dt_cm3dgpla() {
 
 static void* s_npc_sub(void* param_0, void* param_1) {
     if (fopAcM_IsActor(param_0) &&
-        (fopAcM_GetName(param_0) == PROC_NPC_NE || fopAcM_GetName(param_0) == PROC_NPC_DU))
+        (fopAcM_GetName(param_0) == fpcNm_NPC_NE_e || fopAcM_GetName(param_0) == fpcNm_NPC_DU_e))
     {
         cXyz unkXyz1 =
             ((fopAc_ac_c*)param_0)->current.pos - ((npc_henna_class*)param_1)->actor.current.pos;
@@ -231,14 +231,14 @@ static void* s_npc_sub(void* param_0, void* param_1) {
 
 static void* s_piro_sub(void* param_0, void* param_1) {
     UNUSED(param_1);
-    if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_NPC_INKO) {
+    if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == fpcNm_NPC_INKO_e) {
         return param_0;
     }
     return NULL;
 }
 
 static void* s_du_sub(void* param_0, void* param_1) {
-    if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_NPC_DU &&
+    if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == fpcNm_NPC_DU_e &&
         ((npc_du_class*)param_0)->mPlayerDist < 300.0f)
     {
         ((npc_henna_class*)param_1)->field_0x7d5 = 70;
@@ -249,7 +249,7 @@ static void* s_du_sub(void* param_0, void* param_1) {
 
 static void* s_shop_sub(void* param_0, void* param_1) {
     UNUSED(param_1);
-    if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_FSHOP &&
+    if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == fpcNm_FSHOP_e &&
         (s32)(fopAcM_GetParam(param_0) & 0xff) < 35)
     {
         return param_0;
@@ -260,7 +260,7 @@ static void* s_shop_sub(void* param_0, void* param_1) {
 static void* s_koro2ball_sub(void* param_0, void* param_1) {
     UNUSED(param_1);
     if (fopAcM_IsActor(param_0)) {
-        if (fopAcM_GetName(param_0) == PROC_FSHOP && (fopAcM_GetParam(param_0) & 0xff) == 35) {
+        if (fopAcM_GetName(param_0) == fpcNm_FSHOP_e && (fopAcM_GetParam(param_0) & 0xff) == 35) {
             return param_0;
         }
     }
@@ -413,7 +413,7 @@ static void henna_shop(npc_henna_class* i_this) {
 
 static void* s_rod_sub(void* param_0, void* param_1) {
     UNUSED(param_1);
-    if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_MG_ROD) {
+    if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == fpcNm_MG_ROD_e) {
         return param_0;
     }
     return NULL;
@@ -422,7 +422,7 @@ static void* s_rod_sub(void* param_0, void* param_1) {
 static void* s_fish_sub(void* param_0, void* param_1) {
     (void) param_1;
     if (fopAcM_IsActor(param_0)) {
-        if (fopAcM_GetName(param_0) == PROC_NPC_DU || fopAcM_GetName(param_0) == PROC_MG_FISH) {
+        if (fopAcM_GetName(param_0) == fpcNm_NPC_DU_e || fopAcM_GetName(param_0) == fpcNm_MG_FISH_e) {
             cXyz offset = ((fopAc_ac_c*)param_0)->current.pos - ((fopAc_ac_c*)param_1)->current.pos;
             if (offset.abs() < 500.0f + TREG_F(12)) {
                 return param_0;
@@ -2259,7 +2259,7 @@ static void message_guide(npc_henna_class* i_this) {
 static void* s_boat_sub(void* param_0, void* param_1) {
     UNUSED(param_1);
     if (fopAcM_IsActor(param_0)) {
-        if (fopAcM_GetName(param_0) == PROC_CANOE) {
+        if (fopAcM_GetName(param_0) == fpcNm_CANOE_e) {
             return param_0;
         }
     }
@@ -2746,7 +2746,7 @@ static int daNpc_Henna_Create(fopAc_ac_c* i_this) {
             a_this->field_0x618 = i_this->shape_angle.y = i_this->current.angle.y = newAngle;
             lbl_82_bss_91 = dComIfGs_getEventReg(0xf63f);
             daNpc_Henna_Execute(a_this);
-            fopAcM_create(PROC_FSHOP, -1, &i_this->current.pos, fopAcM_GetRoomNo(i_this), NULL,
+            fopAcM_create(fpcNm_FSHOP_e, -1, &i_this->current.pos, fopAcM_GetRoomNo(i_this), NULL,
                           NULL, -1);
             return loadResult;
         } else {
@@ -2760,7 +2760,7 @@ static int daNpc_Henna_Create(fopAc_ac_c* i_this) {
                     fopAc_ac_c* player = dComIfGp_getPlayer(0);
                     npcDfPos.set(player->current.pos.x, player->current.pos.y + 700.0f,
                                  player->current.pos.z);
-                    fopAcM_create(PROC_NPC_DF, WREG_S(3) - 0xf4, &npcDfPos,
+                    fopAcM_create(fpcNm_NPC_DF_e, WREG_S(3) - 0xf4, &npcDfPos,
                                   fopAcM_GetRoomNo(i_this), NULL, NULL, -1);
                 }
                 f32 rnd = cM_rndF(1.0f);
@@ -2771,19 +2771,19 @@ static int daNpc_Henna_Create(fopAc_ac_c* i_this) {
                 } else {
                     npcDfPos.set(2249.0f, 50.0f, -2218.0f);
                 }
-                fopAcM_create(PROC_NPC_DU, 0xffffff00, &npcDfPos, fopAcM_GetRoomNo(i_this), NULL,
+                fopAcM_create(fpcNm_NPC_DU_e, 0xffffff00, &npcDfPos, fopAcM_GetRoomNo(i_this), NULL,
                               NULL, -1);
                 npcDfPos.x -= 300.0f;
                 npcDfPos.z += 100.0f;
-                fopAcM_create(PROC_NPC_DU, 0xffffff01, &npcDfPos, fopAcM_GetRoomNo(i_this), NULL,
+                fopAcM_create(fpcNm_NPC_DU_e, 0xffffff01, &npcDfPos, fopAcM_GetRoomNo(i_this), NULL,
                               NULL, -1);
                 for (s32 i = 0; i < 5; i++) {
                     npcDfPos.set(0.0f, 45.0f, 8000.0f);
-                    fopAcM_create(PROC_BD, 0xffffffff, &npcDfPos, fopAcM_GetRoomNo(i_this), NULL,
+                    fopAcM_create(fpcNm_BD_e, 0xffffffff, &npcDfPos, fopAcM_GetRoomNo(i_this), NULL,
                                   NULL, -1);
                 }
                 npcDfPos.set(-1500.0f, 3000.0f + nREG_F(7), 3000.0f);
-                fopAcM_create(PROC_NPC_TK, 0xffffffff, &npcDfPos, fopAcM_GetRoomNo(i_this), NULL,
+                fopAcM_create(fpcNm_NPC_TK_e, 0xffffffff, &npcDfPos, fopAcM_GetRoomNo(i_this), NULL,
                               NULL, -1);
                 data_80450C99 = 0;
                 /* dSv_event_flag_c::F_0463 - Fishing Pond - Reserved for fishing */
@@ -2812,10 +2812,10 @@ static int daNpc_Henna_Create(fopAc_ac_c* i_this) {
                     ato.z = cM_rndF(2300.0f);
                     MtxPosition(&ato, &mae);
                     angl.y = cM_rndF(65536.0f);
-                    fopAcM_create(PROC_MG_FISH, sp_0x18, &mae, fopAcM_GetRoomNo(i_this),
+                    fopAcM_create(fpcNm_MG_FISH_e, sp_0x18, &mae, fopAcM_GetRoomNo(i_this),
                                   &angl, NULL, -1);
                 }
-                fopAcM_create(PROC_NPC_NE, 0xffffff01, &i_this->home.pos, fopAcM_GetRoomNo(i_this),
+                fopAcM_create(fpcNm_NPC_NE_e, 0xffffff01, &i_this->home.pos, fopAcM_GetRoomNo(i_this),
                               NULL, NULL, -1);
             }
 
@@ -2845,20 +2845,20 @@ static actor_method_class l_daNpc_Henna_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_HENNA = {
-    fpcLy_CURRENT_e,          // mLayerID
-    7,                        // mListID
-    fpcPi_CURRENT_e,          // mListPrio
-    PROC_NPC_HENNA,           // mProcName
-    &g_fpcLf_Method.base,     // sub_method
-    sizeof(npc_henna_class),  // mSize
-    0,                        // mSizeOther
-    0,                        // mParameters
-    &g_fopAc_Method.base,     // sub_method
-    342,                      // mPriority
-    &l_daNpc_Henna_Method,    // sub_method
-    0x00044000,               // mStatus
-    fopAc_NPC_e,              // mActorType
-    fopAc_CULLBOX_0_e,        // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_HENNA_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(npc_henna_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_HENNA_e,
+    /* Actor SubMtd */ &l_daNpc_Henna_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };
 
 AUDIO_INSTANCES

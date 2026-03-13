@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_zrTurara.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "SSystem/SComponent/c_math.h"
 
 daZrTurara_HIO_c::daZrTurara_HIO_c() {
@@ -193,7 +193,7 @@ void daZrTurara_c::modeBreak() {
         pos.y -= 200.0f;
         pos.x += l_HIO.mDebrisRange * cM_rndFX(1.0f);
         pos.y += l_HIO.mDebrisRange * cM_rndFX(1.0f);
-        fopAcM_create(PROC_Obj_zrTuraraRc, getScale(), &pos,
+        fopAcM_create(fpcNm_Obj_zrTuraraRc_e, getScale(), &pos,
                       fopAcM_GetRoomNo(this), NULL, NULL, 0xff);
         mDebrisCount++;
         mBreakTimer = cM_rndF(1.0f) * 20.0f;
@@ -261,18 +261,18 @@ static actor_method_class l_daZrTurara_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_zrTurara = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Obj_zrTurara,
-    &g_fpcLf_Method.base,
-    sizeof(daZrTurara_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x28C,
-    &l_daZrTurara_Method,
-    0x40100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_zrTurara_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daZrTurara_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_zrTurara_e,
+    /* Actor SubMtd */ &l_daZrTurara_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

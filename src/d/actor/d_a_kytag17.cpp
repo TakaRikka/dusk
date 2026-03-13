@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_kytag17.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 static int daKytag17_Draw(kytag17_class* i_this) {
     return 1;
@@ -40,18 +40,18 @@ static actor_method_class l_daKytag17_Method = {
     (process_method_func)daKytag17_Draw};
 
 actor_process_profile_definition g_profile_KYTAG17 = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_KYTAG17,           // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(kytag17_class),  // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    111,                    // mPriority
-    &l_daKytag17_Method,    // sub_method
-    0x44000,                // mStatus
-    fopAc_ACTOR_e,          // mActorType
-    fopAc_CULLBOX_0_e,      // cullType   
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KYTAG17_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(kytag17_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_KYTAG17_e,
+    /* Actor SubMtd */ &l_daKytag17_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

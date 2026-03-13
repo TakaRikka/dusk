@@ -12,7 +12,7 @@ BOOL daAlink_c::checkZoraWearMaskDraw() {
 }
 
 BOOL daAlink_c::checkAcceptUseItemInWater(u16 i_itemNo) const {
-    return i_itemNo == fpcNm_ITEM_HVY_BOOTS || i_itemNo == fpcNm_ITEM_WATER_BOMB || checkHookshotItem(i_itemNo);
+    return i_itemNo == dItemNo_HVY_BOOTS_e || i_itemNo == dItemNo_WATER_BOMB_e || checkHookshotItem(i_itemNo);
 }
 
 void daAlink_c::swimDeleteItem() {
@@ -324,7 +324,7 @@ int daAlink_c::checkNextActionSwim() {
     }
 
     if (mAttList != NULL && mAttList->mType == fopAc_attn_ETC_e && checkNoResetFlg0(FLG0_SWIM_UP) &&
-        fopAcM_GetName(field_0x27f4) == PROC_CANOE)
+        fopAcM_GetName(field_0x27f4) == fpcNm_CANOE_e)
     {
         setDoStatus(BUTTON_STATUS_GET_ON);
 
@@ -346,7 +346,7 @@ int daAlink_c::checkNextActionSwim() {
 int daAlink_c::checkSwimAction(int param_0) {
     f32 var_f31;
     if (checkWolf()) {
-        if (getMoveBGActorName(mLinkAcch.m_gnd, 0) == PROC_Obj_ITA) {
+        if (getMoveBGActorName(mLinkAcch.m_gnd, 0) == fpcNm_Obj_ITA_e) {
             var_f31 = 200.0f;
         } else {
             var_f31 = mpHIO->mWolf.mWlSwim.m.mStartHeight;
@@ -761,7 +761,7 @@ void daAlink_c::setSwimMoveAnime() {
     if (checkBootsOrArmorHeavy()) {
         anm = ANM_SWIM_WAIT;
         mMaxSpeed = mpHIO->mSwim.m.mUnderwaterFallMaxSpeed;
-        if (mEquipItem != fpcNm_ITEM_NONE && !checkHookshotAnime()) {
+        if (mEquipItem != dItemNo_NONE_e && !checkHookshotAnime()) {
             setDoStatus(BUTTON_STATUS_PUT_AWAY);
         }
     }
@@ -921,7 +921,7 @@ int daAlink_c::procSwimUp() {
 
     setNormalSpeedF(0.0f, mpHIO->mSwim.m.mDeceleration);
 
-    if (checkSetItemTrigger(fpcNm_ITEM_HVY_BOOTS)) {
+    if (checkSetItemTrigger(dItemNo_HVY_BOOTS_e)) {
         setHeavyBoots(1);
     }
 
@@ -1014,7 +1014,7 @@ int daAlink_c::procSwimWait() {
 
     setSwimUpDownOffset();
 
-    if (checkEquipHeavyBoots() && mEquipItem != fpcNm_ITEM_NONE) {
+    if (checkEquipHeavyBoots() && mEquipItem != dItemNo_NONE_e) {
         setDoStatus(BUTTON_STATUS_PUT_AWAY);
     }
 
@@ -1373,7 +1373,7 @@ int daAlink_c::procSwimDamageInit(dCcD_GObjInf* i_hitObj) {
 
     BOOL bvar4 = checkNoResetFlg0(FLG0_SWIM_UP)
                 || ((i_hitObj != NULL && i_hitObj->GetTgHitAc() != NULL)
-                    && fopAcM_GetName(i_hitObj->GetTgHitAc()) == PROC_E_SG);
+                    && fopAcM_GetName(i_hitObj->GetTgHitAc()) == fpcNm_E_SG_e);
 
     if (!getZoraSwim() && bvar4 && mProcID != PROC_SWIM_WAIT) {
         return 1;

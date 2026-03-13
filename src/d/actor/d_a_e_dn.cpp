@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_dn.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -186,51 +186,53 @@ static void anm_init(e_dn_class* i_this, int i_anm_id, f32 i_morf, u8 i_attr, f3
 
 static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
-        int jointNo = i_joint->getJntNo();
+        J3DJoint* joint = i_joint;
+        int jointNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
-        e_dn_class* i_this = (e_dn_class*)model->getUserArea();
-        if (i_this != NULL) {
+        e_dn_class* dn = (e_dn_class*)model->getUserArea();
+        void* dn_v = (void*)dn;
+        if (dn != NULL) {
             MTXCopy(model->getAnmMtx(jointNo), *calc_mtx);
 
             if (jointNo != JNT_WORLD_ROOT) {
                 if (jointNo == JNT_WAIST) {
-                    cMtx_YrotM(*calc_mtx, (s16)i_this->field_0x830.y);
-                    cMtx_ZrotM(*calc_mtx, i_this->jnt_waist_z_rot + (-i_this->field_0x762[2].x + i_this->field_0x830.x));
+                    cMtx_YrotM(*calc_mtx, (s16)dn->field_0x830.y);
+                    cMtx_ZrotM(*calc_mtx, dn->jnt_waist_z_rot + (-dn->field_0x762[2].x + dn->field_0x830.x));
                 } else if (jointNo == JNT_LEGL1) {
-                    cMtx_YrotM(*calc_mtx, i_this->jnt_legl1_y_rot);
+                    cMtx_YrotM(*calc_mtx, dn->jnt_legl1_y_rot);
                 } else if (jointNo == JNT_LEGL2) {
-                    cMtx_ZrotM(*calc_mtx, i_this->field_0x7fc[0]);
+                    cMtx_ZrotM(*calc_mtx, dn->field_0x7fc[0]);
                 } else if (jointNo == JNT_LEGR1) {
-                    cMtx_YrotM(*calc_mtx, i_this->field_0x7fc[1]);
+                    cMtx_YrotM(*calc_mtx, dn->field_0x7fc[1]);
                 } else if (jointNo == JNT_LEGR2) {
-                    cMtx_ZrotM(*calc_mtx, i_this->field_0x7fc[2]);
+                    cMtx_ZrotM(*calc_mtx, dn->field_0x7fc[2]);
                 } else if (jointNo == JNT_BACKBONE02) {
-                    cMtx_YrotM(*calc_mtx, (i_this->field_0x6fa / 2) + (-i_this->field_0x6f6 + i_this->field_0x762[1].y));
-                    cMtx_ZrotM(*calc_mtx, i_this->field_0x762[1].x + i_this->field_0x7ec[1]);
+                    cMtx_YrotM(*calc_mtx, (dn->field_0x6fa / 2) + (-dn->field_0x6f6 + dn->field_0x762[1].y));
+                    cMtx_ZrotM(*calc_mtx, dn->field_0x762[1].x + dn->field_0x7ec[1]);
                 } else if (jointNo == JNT_NECK01 || jointNo == JNT_NECK02) {
-                    cMtx_YrotM(*calc_mtx, i_this->field_0x762[0].y + (-i_this->field_0x6f6 + i_this->field_0x6fa));
-                    cMtx_ZrotM(*calc_mtx, i_this->field_0x7ec[0] + (-i_this->field_0x6f8 + i_this->field_0x762[0].x));
+                    cMtx_YrotM(*calc_mtx, dn->field_0x762[0].y + (-dn->field_0x6f6 + dn->field_0x6fa));
+                    cMtx_ZrotM(*calc_mtx, dn->field_0x7ec[0] + (-dn->field_0x6f8 + dn->field_0x762[0].x));
                 } else if (jointNo == JNT_ARML1) {
-                    cMtx_ZrotM(*calc_mtx, i_this->field_0x762[3].y + i_this->jnt_arml1_z_rot_offset);
+                    cMtx_ZrotM(*calc_mtx, dn->field_0x762[3].y + dn->jnt_arml1_z_rot_offset);
                 } else if (jointNo == JNT_ARML2) {
-                    cMtx_ZrotM(*calc_mtx, i_this->field_0x762[4].y + i_this->jnt_arml2_z_rot_offset);
+                    cMtx_ZrotM(*calc_mtx, dn->field_0x762[4].y + dn->jnt_arml2_z_rot_offset);
                 } else if (jointNo == JNT_ARMR1) {
-                    cMtx_ZrotM(*calc_mtx, i_this->field_0x762[5].y + i_this->jnt_armr1_z_rot_offset);
+                    cMtx_ZrotM(*calc_mtx, dn->field_0x762[5].y + dn->jnt_armr1_z_rot_offset);
                 } else if (jointNo == JNT_ARMR2) {
-                    cMtx_ZrotM(*calc_mtx, i_this->field_0x762[6].y + i_this->jnt_armr2_z_rot_offset);
+                    cMtx_ZrotM(*calc_mtx, dn->field_0x762[6].y + dn->jnt_armr2_z_rot_offset);
                 } else if (jointNo >= JNT_TAIL01 && jointNo <= JNT_TAIL04) {
-                    cMtx_YrotM(*calc_mtx, i_this->field_0x80e[jointNo - 31].y + i_this->jnt_tail_y_rot_offset);
-                    cMtx_ZrotM(*calc_mtx, (s16)i_this->field_0x80e[jointNo - 31].x);
+                    cMtx_YrotM(*calc_mtx, dn->field_0x80e[jointNo - 31].y + dn->jnt_tail_y_rot_offset);
+                    cMtx_ZrotM(*calc_mtx, (s16)dn->field_0x80e[jointNo - 31].x);
                 }
             }
 
-            if (i_this->death_jnt_rot != 0) {
+            if (dn->death_jnt_rot != 0) {
                 if ((jointNo & 1) != 0) {
-                    cMtx_YrotM(*calc_mtx, i_this->death_jnt_rot);
+                    cMtx_YrotM(*calc_mtx, dn->death_jnt_rot);
                 } else if ((jointNo & 2) != 0) {
-                    cMtx_XrotM(*calc_mtx, i_this->death_jnt_rot);
+                    cMtx_XrotM(*calc_mtx, dn->death_jnt_rot);
                 } else if ((jointNo & 4) != 0) {
-                    cMtx_ZrotM(*calc_mtx, i_this->death_jnt_rot);
+                    cMtx_ZrotM(*calc_mtx, dn->death_jnt_rot);
                 }
             }
 
@@ -270,6 +272,7 @@ static int daE_DN_Draw(e_dn_class* i_this) {
     g_env_light.settingTevStruct(0, &actor->current.pos, &actor->tevStr);
     g_env_light.setLightTevColorType_MAJI(model, &actor->tevStr);
 
+    J3DMaterial* matNode_p;
     if (i_this->death_flag != 0) {
         J3DModelData* modelData = model->getModelData();
         for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
@@ -285,7 +288,7 @@ static int daE_DN_Draw(e_dn_class* i_this) {
     if (i_this->death_flag != 0) {
         J3DModelData* modelData = model->getModelData();
         for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
-            J3DMaterial* matNode_p = modelData->getMaterialNodePointer(i);
+            matNode_p = modelData->getMaterialNodePointer(i);
             matNode_p->getTevColor(0)->r = 0;
             matNode_p->getTevColor(0)->g = 0;
             matNode_p->getTevColor(0)->b = 0;
@@ -305,16 +308,16 @@ static int daE_DN_Draw(e_dn_class* i_this) {
 
     cXyz shadow_pos;
     shadow_pos.set(actor->current.pos.x, actor->current.pos.y + 50.0f + BREG_F(18), actor->current.pos.z);
-    i_this->shadow_key = dComIfGd_setShadow(i_this->shadow_key, 1, model, &shadow_pos, BREG_F(19) + 950.0f, 0.0f, 
-                                            actor->current.pos.y, i_this->objacch.GetGroundH(), 
-                                            i_this->objacch.m_gnd, &i_this->actor.tevStr, 0, 1.0f, 
+    i_this->shadow_key = dComIfGd_setShadow(i_this->shadow_key, 1, model, &shadow_pos, BREG_F(19) + 950.0f, 0.0f,
+                                            actor->current.pos.y, i_this->objacch.GetGroundH(),
+                                            i_this->objacch.m_gnd, &i_this->actor.tevStr, 0, 1.0f,
                                             dDlst_shadowControl_c::getSimpleTex());
     dComIfGd_addRealShadow(i_this->shadow_key, i_this->knife_model);
     if (i_this->skull_model != NULL) {
         dComIfGd_addRealShadow(i_this->shadow_key, i_this->skull_model);
     }
     dComIfGd_addRealShadow(i_this->shadow_key, i_this->tate_model);
-    
+
     return 1;
 }
 
@@ -364,6 +367,7 @@ static fopAc_ac_c* target_info[10];
 static int target_info_count;
 
 static void* s_b_sub(void* i_actor, void* i_data) {
+    UNUSED(i_data);
     if (fopAcM_IsActor(i_actor) && dBomb_c::checkBombActor((fopAc_ac_c*)i_actor) && !((dBomb_c*)i_actor)->checkStateExplode() && target_info_count < 10) {
         target_info[target_info_count] = (fopAc_ac_c*)i_actor;
         target_info_count++;
@@ -436,7 +440,7 @@ static dBomb_c* search_bomb(e_dn_class* i_this, int param_2) {
     } else {
         return NULL;
     }
-    
+
     return NULL;
 }
 
@@ -458,7 +462,7 @@ static BOOL player_way_check(e_dn_class* i_this) {
         way = way * -1;
     }
 
-    if ((u32)((s16)way & 0xFFFF) < 0x6000) {
+    if ((u16)way < 0x6000) {
         return FALSE;
     }
 
@@ -475,7 +479,7 @@ static int pl_check(e_dn_class* i_this, f32 search_area, s16 search_angle) {
             return 1;
         }
     }
-        
+
     for (int i = 0; i <= 2; i++) {
         if (i_this->cc_sph[i].ChkCoHit() != 0) {
             if (player == dCc_GetAc(i_this->cc_sph[i].GetCoHitObj()->GetAc())) {
@@ -483,7 +487,7 @@ static int pl_check(e_dn_class* i_this, f32 search_area, s16 search_angle) {
             }
         }
     }
-    
+
     return 0;
 }
 
@@ -521,15 +525,14 @@ static BOOL jump_pos_check(e_dn_class* i_this, cXyz* i_pos) {
     work.x = 0.0f;
     work.y = 200.0f;
 
-    int i = 0;
-    while (i < KREG_S(7) + 10) {
+    for (int i = 0; i < KREG_S(7) + 10; i++) {
         work.z = z_offset;
         MtxPosition(&work, &new_pos);
         new_pos += actor->current.pos;
         gnd_chk.SetPos(&new_pos);
         new_pos.y = dComIfG_Bgsp().GroundCross(&gnd_chk);
 
-        if ((actor->current.pos.y - new_pos.y) < 200.0f) {
+        if (actor->current.pos.y - new_pos.y < 200.0f) {
             *i_pos = new_pos;
             work.z += KREG_F(18) + 200.0f;
             MtxPosition(&work, &new_pos);
@@ -537,15 +540,13 @@ static BOOL jump_pos_check(e_dn_class* i_this, cXyz* i_pos) {
             gnd_chk.SetPos(&new_pos);
             new_pos.y = dComIfG_Bgsp().GroundCross(&gnd_chk);
 
-            if ((actor->current.pos.y - new_pos.y) < 200.0f) {
+            if (actor->current.pos.y - new_pos.y < 200.0f) {
                 *i_pos = new_pos;
             }
 
             return TRUE;
         }
-
         z_offset += 50.0f;
-        i++;
     }
 
     return FALSE;
@@ -709,7 +710,6 @@ static void e_dn_otoreac(e_dn_class* i_this) {
 
 static void e_dn_bomb_action(e_dn_class* i_this) {
     fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
-    s16 angle;
     cXyz work, bomb_pos_target;
     dBomb_c* bomb = bomb_check(i_this);
     if (bomb == NULL) {
@@ -748,23 +748,24 @@ static void e_dn_bomb_action(e_dn_class* i_this) {
             }
             break;
 
-        case 4:
+        case 4: {
             if (i_this->arg1 == 1 && bomb->speedF < 0.1f && !bomb->checkStateCarry() && JMAFastSqrt(work.x * work.x + work.z * work.z) < 250.0f) {
-                angle = i_this->search_angle_y - actor->shape_angle.y;
+                s16 angle = i_this->search_angle_y - actor->shape_angle.y;
                 if (angle < 0x4000 && angle > -0x4000) { // ±90°
                     i_this->mode = 10;
                     break;
                 }
             }
 
-            target_angle_y += 0x8000; // 180°
+            ANGLE_ADD_2(target_angle_y, 0x8000); // 180°
             dash_speed = l_HIO.dash_speed;
             if (JMAFastSqrt(work.x * work.x + work.z * work.z) > 600.0f) {
                 i_this->mode = 5;
                 anm_init(i_this, ANM_WAIT_01, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
             }
-            
+
             break;
+        }
 
         case 5:
             i_this->sound.startCreatureSoundLevel(Z2SE_EN_DN_V_LOOK_BOMB, 0, -1);
@@ -863,7 +864,7 @@ static void e_dn_normal(e_dn_class* i_this) {
 
         case 3:
             movement_speed = l_HIO.movement_speed;
-            angle = actor->current.angle.y;
+            s16 angle = actor->current.angle.y;
             cLib_addCalcAngleS2(&actor->current.angle.y, i_this->cur_angle_y_target, 2, 0x400);
 
             /* If the actor is facing roughly 22.5° from the target y, stop moving */
@@ -887,7 +888,7 @@ static void e_dn_normal(e_dn_class* i_this) {
 
             cLib_addCalcAngleS2(&i_this->jnt_tail_y_rot_offset, angle, 2, 0x400);
 
-            if (i_this->timer[0] == 0 || 
+            if (i_this->timer[0] == 0 ||
                 (i_this->timer[1] == 0 && (fopAcM_wayBgCheck(actor, 200.0f, 50.0f) || move_gake_check(i_this, 200.0f, 0)))) {
                 i_this->mode = 2;
                 i_this->timer[0] = cM_rndF(100.0f) + 50.0f;
@@ -947,8 +948,9 @@ static void e_dn_drawback(e_dn_class* i_this) {
 }
 
 static void e_dn_wolfbite(e_dn_class* i_this) {
-    fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)actor;
 
     i_this->invulnerability_timer = 10;
     cLib_addCalc0(&actor->speedF, 1.0f, 2.0f);
@@ -975,8 +977,8 @@ static void e_dn_wolfbite(e_dn_class* i_this) {
                 }
             }
 
-            if (actor->health <= 0 || actor->checkWolfBiteDamage()) {
-                actor->offWolfBiteDamage();
+            if (actor->health <= 0 || enemy->checkWolfBiteDamage()) {
+                enemy->offWolfBiteDamage();
                 anm_init(i_this, ANM_HANGED_DAMAGE, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
                 S16_SUB(actor->health, 10);
                 if (actor->health <= 0) {
@@ -1032,13 +1034,17 @@ static int way_check(e_dn_class* i_this) {
 int learn_check;
 
 static void* shot_s_sub(void* i_actor, void* i_data) {
-    e_dn_class* i_this = (e_dn_class*)i_data;
-    fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
-    if ((fopAcM_IsActor(i_actor) && (learn_check & 0x80000000) != 0 && fopAcM_GetName(i_actor) == PROC_ARROW && (fopAcM_GetParam(i_actor) == 1 || 
-        fopAcM_GetParam(i_actor) == 2))) {
-        cXyz sp28(actor->current.pos - ((fopAc_ac_c*)i_actor)->current.pos);
-        if (sp28.abs() < 1000.0f) {
-            return i_actor;
+    UNUSED(i_data);
+    if (fopAcM_IsActor(i_actor)) {
+        if ((learn_check & 0x80000000) != 0 &&
+        fopAcM_GetName(i_actor) == fpcNm_ARROW_e &&
+        (fopAcM_GetParam(i_actor) == 1 || fopAcM_GetParam(i_actor) == 2)) {
+            fopAc_ac_c* arrowActor = (fopAc_ac_c*)i_actor;
+            e_dn_class* dn = (e_dn_class*)i_data;
+            cXyz sp28(dn->actor.current.pos - arrowActor->current.pos);
+            if (sp28.abs() < 1000.0f) {
+                return i_actor;
+            }
         }
     }
 
@@ -1050,7 +1056,6 @@ static void e_dn_fight_run(e_dn_class* i_this) {
     cXyz sp4c, sp58;
     f32 fVar1 = 0.0f;
     int frame = i_this->anm_p->getFrame();
-    BOOL wayCheck;
     s8 sVar4 = 1;
 
     if (pl_check(i_this, i_this->pl_range + 50.0f, 0x7FFF) == 0 && i_this->timer[0] == 0) {
@@ -1199,7 +1204,7 @@ static void e_dn_fight_run(e_dn_class* i_this) {
             return;
         }
     } else if (
-        dComIfGp_checkPlayerStatus1(0, 0x2000000) != 0 || 
+        dComIfGp_checkPlayerStatus1(0, 0x2000000) != 0 ||
         (((i_this->search_angle_x < 0x1000 && i_this->search_angle_x > -0x1000) || def != 0) && player_way_check(i_this))
     ) {
         if (
@@ -1223,8 +1228,9 @@ static void e_dn_fight_run(e_dn_class* i_this) {
                 i_this->timer[2] = JREG_F(1) + (cM_rndF(30.0f) + 30.0f);
                 f32 fVar1 = 1.0f;
                 if (cM_rndF(1.0f) < fVar1) {
-                    wayCheck = way_check(i_this);
-                    if (!wayCheck && cM_rndF(1.0f) < 0.75f) {
+                    //TOOD: probably fakematch (debug)
+                    BOOL wayCheck;
+                    if (!(wayCheck = way_check(i_this)) && cM_rndF(1.0f) < 0.75f) {
                         if (i_this->pl_dir < (l_HIO.attack_init_range - 100.0f) + TREG_F(7)) {
                             i_this->action = ACTION_ATTACK_0;
                         } else {
@@ -1282,7 +1288,7 @@ static void e_dn_fight_run(e_dn_class* i_this) {
 
 static void e_dn_jump(e_dn_class* i_this) {
     fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
-    
+
     i_this->field_0x6f4 = 1;
     switch (i_this->mode) {
         case 0:
@@ -1442,13 +1448,16 @@ static void e_dn_gakejump(e_dn_class* i_this) {
 static fopAc_ac_c* at_hit_check(e_dn_class* i_this) {
     fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    
+
     if (i_this->mode >= 10) {
         return NULL;
     }
-    
+
+    fopAc_ac_c* rv;
     if (i_this->at_sph.ChkAtHit() != 0) {
-        return dCc_GetAc(i_this->at_sph.GetAtHitObj()->GetAc());
+        cCcD_Obj* atHitObj = i_this->at_sph.GetAtHitObj();
+        rv = dCc_GetAc(atHitObj->GetAc());
+        return rv;
     }
 
     return NULL;
@@ -1482,7 +1491,7 @@ static void e_dn_attack_0(e_dn_class* i_this) {
 
     if (i_this->at_chk_flag != 0) {
         fopAc_ac_c* actor_p = at_hit_check(i_this);
-        if (actor_p != NULL && fopAcM_GetName(actor_p) == PROC_ALINK && daPy_getPlayerActorClass()->checkPlayerGuard()) {
+        if (actor_p != NULL && fopAcM_GetName(actor_p) == fpcNm_ALINK_e && daPy_getPlayerActorClass()->checkPlayerGuard()) {
             dComIfGp_getVibration().StartShock(3, 31, cXyz(0.0f, 1.0f, 0.0f));
         }
     }
@@ -1541,7 +1550,8 @@ static void e_dn_attack(e_dn_class* i_this) {
     cLib_addCalc0(&actor->speedF, 1.0f, 5.0f);
     if (i_this->at_chk_flag != 0) {
         fopAc_ac_c* actor_p = at_hit_check(i_this);
-        if (actor_p != NULL && fopAcM_GetName(actor_p) == PROC_ALINK && daPy_getPlayerActorClass()->checkPlayerGuard()) {
+        UNUSED(actor_p); // maybe debug fakematch?
+        if (actor_p != NULL && fopAcM_GetName(actor_p) == fpcNm_ALINK_e && daPy_getPlayerActorClass()->checkPlayerGuard()) {
             i_this->anm_p->setPlaySpeed(0.0f);
             i_this->action = ACTION_FIGHT_RUN;
             i_this->mode = 0;
@@ -1759,7 +1769,8 @@ static BOOL body_gake(e_dn_class* i_this) {
 }
 
 static void e_dn_damage(e_dn_class* i_this) {
-    fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)actor;
     cXyz sp34, sp40;
 
     if (actor->health <= 0) {
@@ -1768,7 +1779,7 @@ static void e_dn_damage(e_dn_class* i_this) {
     }
 
     if (daPy_py_c::checkNowWolf() != 0) {
-        if (i_this->field_0x6f3 == 0 && actor->checkWolfDownStartFlg()) {
+        if (i_this->field_0x6f3 == 0 && enemy->checkWolfDownStartFlg()) {
             if (i_this->timer[0] > 40) {
                 i_this->timer[0] = 90;
                 OS_REPORT("      DN WOLFHIT LONG  \n");
@@ -1790,13 +1801,13 @@ static void e_dn_damage(e_dn_class* i_this) {
             }
 
         }
-    } else if (actor != NULL && actor->checkCutDownHitFlg()) {
-        actor->offCutDownHitFlg();
+    } else if (enemy != NULL && enemy->checkCutDownHitFlg()) {
+        enemy->offCutDownHitFlg();
         i_this->mode = 3;
         actor->health = 0;
         i_this->timer[0] = 100;
         i_this->timer[1] = 46;
-        actor->offDownFlg();
+        enemy->offDownFlg();
         actor->health = 0;
         i_this->sound.startCreatureVoice(Z2SE_EN_DN_V_DEATH, -1);
         i_this->death_flag = 1;
@@ -1824,15 +1835,16 @@ static void e_dn_damage(e_dn_class* i_this) {
 
         case 1:
             if (i_this->objacch.ChkWallHit() != 0 && i_this->timer[0] == 0) {
-                int kado_kabe = kado_check(i_this);
-                if (kado_kabe != 0) {
+                //TODO: probably fakematch (debug)
+                int kado_kabe;
+                if ((kado_kabe = kado_check(i_this)) != 0) {
                     OS_REPORT("              ..KADO KABE ..%x\n", kado_kabe);
                     if (kado_kabe == 2) {
                         i_this->field_0x70e = 0xC00;
-                        i_this->field_0x724.y += TREG_S(8) + -7000;
+                        ANGLE_ADD_2(i_this->field_0x724.y, TREG_S(8) + -7000);
                     } else {
                         i_this->field_0x70e = -0xC00;
-                        i_this->field_0x724.y += -(TREG_S(8) - 7000);
+                        ANGLE_ADD_2(i_this->field_0x724.y, -(TREG_S(8) - 7000));
                     }
 
                     i_this->field_0x7e8 = BREG_F(10) + 8000.0f;
@@ -1844,7 +1856,7 @@ static void e_dn_damage(e_dn_class* i_this) {
                     i_this->mode = 10;
                     actor->speed.y = 0.0f;
                     i_this->field_0x704 *= 0.2f;
-                    i_this->field_0x724.y += 0x8000;
+                    ANGLE_ADD_2(i_this->field_0x724.y, 0x8000);
                     i_this->field_0x7e8 = BREG_F(10) + 8000.0f;
                     i_this->unk_timer_5 = BREG_S(7) + 5;
                     i_this->field_0x754 = BREG_F(4) + 100.0f;
@@ -1908,7 +1920,7 @@ static void e_dn_damage(e_dn_class* i_this) {
 
             if (i_this->objacch.ChkGroundHit()) {
                 if (actor->health > 0 && !daPy_py_c::checkNowWolf()) {
-                    actor->onDownFlg();
+                    enemy->onDownFlg();
                 }
 
                 dKy_Sound_set(actor->current.pos, 100, fopAcM_GetID(&i_this->actor), 5);
@@ -1958,7 +1970,7 @@ static void e_dn_damage(e_dn_class* i_this) {
                 MTXCopy(i_this->anm_p->getModel()->getAnmMtx(JNT_BACKBONE02), *calc_mtx);
                 sp34.set(0.0f, 0.0f, 0.0f);
                 MtxPosition(&sp34, &sp40);
-                
+
                 s8 unused = 0;
 
                 dn_disappear(i_this);
@@ -1976,8 +1988,8 @@ static void e_dn_damage(e_dn_class* i_this) {
 
                 i_this->sound.startCreatureVoice(Z2SE_EN_DN_V_UP, -1);
 
-                if (actor != NULL) {
-                    actor->offDownFlg();
+                if (enemy != NULL) {
+                    enemy->offDownFlg();
                 }
             }
             break;
@@ -2018,8 +2030,8 @@ static void e_dn_damage(e_dn_class* i_this) {
                 i_this->timer[0] = 5;
                 i_this->mode = 21;
 
-                if (actor != NULL) {
-                    actor->offDownFlg();
+                if (enemy != NULL) {
+                    enemy->offDownFlg();
                 }
             }
             break;
@@ -2036,7 +2048,7 @@ static void e_dn_damage(e_dn_class* i_this) {
             break;
 
         case 30:
-            if (!actor->checkWolfDownPullFlg()) {
+            if (!enemy->checkWolfDownPullFlg()) {
                 i_this->timer[1] = 0;
             }
 
@@ -2051,8 +2063,8 @@ static void e_dn_damage(e_dn_class* i_this) {
                 i_this->sound.startCreatureVoice(Z2SE_EN_DN_V_UP, -1);
                 i_this->timer[0] = 10;
             } else if (i_this->timer[1] == 1) {
-                actor->onWolfDownPullEndFlg();
-                actor->offCutDownHitFlg();
+                enemy->onWolfDownPullEndFlg();
+                enemy->offCutDownHitFlg();
                 actor->health = 0;
                 i_this->timer[0] = 1000;
                 i_this->timer[1] = 35;
@@ -2062,13 +2074,13 @@ static void e_dn_damage(e_dn_class* i_this) {
 
         case 31:
             if (i_this->timer[0] == 0) {
-                actor->offDownFlg();
+                enemy->offDownFlg();
                 i_this->mode = 20;
                 i_this->field_0x6f3 = 0;
             }
     }
 
-    if (actor != NULL && actor->checkDownFlg()) {
+    if (enemy != NULL && enemy->checkDownFlg()) {
         i_this->field_0x6f2 = 0;
     }
 
@@ -2167,7 +2179,7 @@ static void e_dn_reg(e_dn_class* i_this) {
     cXyz sp34, sp40;
     f32 dash_speed = 0.0f;
     int frame = i_this->anm_p->getFrame();
-    
+
     i_this->field_0x6f2 = 0;
     i_this->invulnerability_timer = 10;
 
@@ -2237,9 +2249,11 @@ static void e_dn_reg(e_dn_class* i_this) {
             break;
     }
 
+    s16 sp0A = actor->current.angle.y;
     cLib_addCalcAngleS2(&actor->current.angle.y, i_this->cur_angle_y_target, 2, 0x800);
-    s16 sVar1 = actor->current.angle.y - i_this->cur_angle_y_target;
-    if (sVar1 > 0x800 || sVar1 < -0x800) {
+    sp0A -= actor->current.angle.y;
+    s16 sp08 = actor->current.angle.y - i_this->cur_angle_y_target;
+    if (sp08 > 0x800 || sp08 < -0x800) {
         dash_speed = 0.0f;
     }
 
@@ -2343,7 +2357,8 @@ static void damage_check(e_dn_class* i_this) {
                     i_this->invulnerability_timer = 1000;
                 } else {
                     at_power_check(&i_this->at_info);
-                    s16 sVar1 = actor->health;
+                    s16 oldHealth1 = actor->health;
+                    s16 oldHealth2 = actor->health;
                     cc_at_check(actor, &i_this->at_info);
 
                     if (daPy_getPlayerActorClass()->getCutType() == daPy_py_c::CUT_TYPE_HEAD_JUMP) {
@@ -2362,7 +2377,7 @@ static void damage_check(e_dn_class* i_this) {
 
                     i_this->learn |= i_this->at_info.mHitBit;
                     if (i_this->at_info.mHitType == 16 || i_this->at_info.mpCollider->ChkAtType(AT_TYPE_HOOKSHOT)) {
-                        actor->health = sVar1;
+                        actor->health = oldHealth2;
                         i_this->action = ACTION_DRAWBACK;
                         i_this->mode = 0;
 
@@ -2425,7 +2440,7 @@ static void action(e_dn_class* i_this) {
 
     s8 pl_search = 0;
     s8 bVar2 = 1;
-    actor->offHeadLockFlg();
+    i_this->actor.offHeadLockFlg();
     if (fopAcM_otherBgCheck(player, actor)) {
         fopAcM_OffStatus(actor, 0);
         actor->attention_info.flags = 0;
@@ -2561,15 +2576,15 @@ static void action(e_dn_class* i_this) {
         MtxPosition(&work, &sp24c);
         actor->current.pos += sp24c;
         work = i_this->field_0x5bc - i_this->field_0x5c8;
-        f32 fVar1 = work.abs();
+        f32 var_f28 = work.abs();
         work = i_this->field_0x5bc - actor->current.pos;
-        f32 fVar2 = work.abs();
-        f32 fVar3 = fVar1 * (NREG_F(19) + 0.3f);
-        if (fVar3 > NREG_F(18) + 250.0f) {
-            fVar3 = NREG_F(18) + 250.0f;
+        f32 var_f25 = work.abs();
+        f32 var_f30 = var_f28 * (NREG_F(19) + 0.3f);
+        if (var_f30 > NREG_F(18) + 250.0f) {
+            var_f30 = NREG_F(18) + 250.0f;
         }
 
-        i_this->cur_pos_y_offset = fVar3 * cM_ssin((fVar2 / fVar1) * 32768.0f);
+        i_this->cur_pos_y_offset = var_f30 * cM_ssin((var_f25 / var_f28) * 32768.0f);
         i_this->field_0x5d8 = 0;
     } else {
         cLib_addCalc0(&i_this->cur_pos_y_offset, 1.0f, 30.0f);
@@ -2621,9 +2636,9 @@ static void action(e_dn_class* i_this) {
         }
     }
 
-    s16 max_step, sVar2, sVar3;
-    sVar2 = 0;
-    sVar3 = 0;
+    s16 sp14, sp12, max_step;
+    sp14 = 0;
+    sp12 = 0;
     max_step = 0x800;
     if (i_this->field_0x700 != 0) {
         i_this->field_0x700--;
@@ -2657,22 +2672,22 @@ static void action(e_dn_class* i_this) {
             }
             work.y += -(TREG_F(2) + 150.0f) * l_HIO.model_size;
 
-            sVar2 = cM_atan2s(work.x, work.z) - actor->shape_angle.y;
-            sVar3 = actor->shape_angle.x + cM_atan2s(work.y, JMAFastSqrt(work.x * work.x + work.z * work.z));
-            if (sVar2 > 0x2710) {
-                sVar2 = 10000;
-            } else if (sVar2 < -10000) {
-                sVar2 = -10000;
+            sp14 = cM_atan2s(work.x, work.z) - actor->shape_angle.y;
+            sp12 = actor->shape_angle.x + cM_atan2s(work.y, JMAFastSqrt(work.x * work.x + work.z * work.z));
+            if (sp14 > 0x2710) {
+                sp14 = 10000;
+            } else if (sp14 < -10000) {
+                sp14 = -10000;
             }
 
-            if (sVar3 > 0x2710) {
-                sVar3 = 10000;
-            } else if (sVar3 < -20000) {
-                sVar3 = -20000;
+            if (sp12 > 0x2710) {
+                sp12 = 10000;
+            } else if (sp12 < -20000) {
+                sp12 = -20000;
             }
 
-            cLib_addCalcAngleS2(&i_this->field_0x6f6, sVar2 / 2, 2, max_step);
-            cLib_addCalcAngleS2(&i_this->field_0x6f8, sVar3 / 2, 2, max_step);
+            cLib_addCalcAngleS2(&i_this->field_0x6f6, sp14 / 2, 2, max_step);
+            cLib_addCalcAngleS2(&i_this->field_0x6f8, sp12 / 2, 2, max_step);
         }
 
         i_this->field_0x6fc = 0;
@@ -2698,7 +2713,7 @@ static void action(e_dn_class* i_this) {
             work.z = 15000.0f;
         }
         MtxPosition(&work, &sp24c);
-        
+
         i_this->field_0x7a4[0].y = sp24c.x;
         i_this->field_0x7a4[0].x = sp24c.z;
         i_this->field_0x7a4[1].y = sp24c.x;
@@ -2710,13 +2725,13 @@ static void action(e_dn_class* i_this) {
         i_this->field_0x7a4[1].x = i_this->field_0x75c * cM_scos(i_this->field_0x760) * (BREG_F(0) + 70.0f);
         i_this->field_0x7a4[2].x += i_this->field_0x7a4[1].x;
         cLib_addCalc0(&i_this->field_0x75c, 1.0f, BREG_F(1) + 3.0f);
-        i_this->field_0x760 += BREG_S(0) + 4000;
+        ANGLE_ADD_2(i_this->field_0x760, BREG_S(0) + 4000);
     }
 
     if (fabsf(i_this->field_0x754) > 1.0f) {
         i_this->field_0x7a4[0].x = i_this->field_0x754 * cM_scos(i_this->field_0x758) * (BREG_F(2) + 70.0f);
         cLib_addCalc0(&i_this->field_0x754, 1.0f, BREG_F(3) + 3.0f);
-        i_this->field_0x758 += BREG_S(1) + 4000;
+        ANGLE_ADD_2(i_this->field_0x758, BREG_S(1) + 4000);
     }
 
     if (actor->speed.y < 0.0f && i_this->objacch.ChkGroundHit()) {
@@ -2725,48 +2740,48 @@ static void action(e_dn_class* i_this) {
     }
 
     if (i_this->field_0x704) {
-        s16 sVar4 = i_this->field_0x724.y - actor->shape_angle.y;
-        i_this->field_0x7a4[3].y = 0x4000 + -sVar4;
+        sp14 = i_this->field_0x724.y - actor->shape_angle.y;
+        i_this->field_0x7a4[3].y = 0x4000 + -sp14;
         if (i_this->field_0x7a4[3].y > 6000) { // ~33°
             i_this->field_0x7a4[3].y = 6000;
         } else if (i_this->field_0x7a4[3].y < -9000) { // ~49.4°
             i_this->field_0x7a4[3].y = -9000;
         }
 
-        i_this->field_0x7a4[4].y = 0x4000 + -sVar4;
+        i_this->field_0x7a4[4].y = 0x4000 + -sp14;
         if (i_this->field_0x7a4[4].y > 17000) { // ~93.4°
             i_this->field_0x7a4[4].y = 17000;
         } else if (i_this->field_0x7a4[4].y < 0) {
             i_this->field_0x7a4[4].y = 0;
         }
 
-        i_this->field_0x7a4[5].y = sVar4 + 0x4000;
+        i_this->field_0x7a4[5].y = sp14 + 0x4000;
         if (i_this->field_0x7a4[5].y > 6000) {
             i_this->field_0x7a4[5].y = 6000;
         } else if (i_this->field_0x7a4[5].y < -9000) {
             i_this->field_0x7a4[5].y = -9000;
         }
 
-        i_this->field_0x7a4[6].y = sVar4 + 0x4000;
+        i_this->field_0x7a4[6].y = sp14 + 0x4000;
         if (i_this->field_0x7a4[6].y > 17000) {
             i_this->field_0x7a4[6].y = 17000;
         } else if (i_this->field_0x7a4[6].y < 0) {
             i_this->field_0x7a4[6].y = 0;
         }
 
-        cMtx_YrotS(*calc_mtx, sVar4);
+        cMtx_YrotS(*calc_mtx, sp14);
         work.x = 0.0f;
         work.y = 0.0f;
         work.z = BREG_F(8) + 12000.0f;
         MtxPosition(&work, &sp24c);
         i_this->field_0x836.y = -sp24c.x;
         i_this->field_0x836.x = -sp24c.z * 1.3f;
-        
+
         if (i_this->field_0x836.x > (s16)(BREG_S(6) + 10000)) {
             i_this->field_0x836.x = BREG_S(6) + 10000;
         }
 
-        i_this->field_0x836.x += BREG_S(7) + 6000;
+        ANGLE_ADD_2(i_this->field_0x836.x, BREG_S(7) + 6000);
     }
 
     static s16 j_spd[11] = {
@@ -2812,15 +2827,15 @@ static void action(e_dn_class* i_this) {
         i_this->unk_timer_4--;
     }
 
-    f32 fVar1 = i_this->unk_timer_4 * (DREG_F(13) + 1.0f);
-    if (fVar1 > 30.0f) {
-        fVar1 = 30.0f;
+    f32 var_f31 = i_this->unk_timer_4 * (DREG_F(13) + 1.0f);
+    if (var_f31 > 30.0f) {
+        var_f31 = 30.0f;
     }
-    fVar1 *= fVar1;
+    var_f31 *= var_f31;
 
     for (int i = 0; i < 4; i++) {
-        i_this->field_0x80e[i].x = fVar1 * (cM_ssin(i_this->frame_counter * (DREG_S(5) + 5000) + i * (DREG_S(7) + -15000)) * (DREG_F(18) + 5.0f));
-        i_this->field_0x80e[i].y = fVar1 * (cM_ssin(i_this->frame_counter * (DREG_S(5) + 0x12C0) + i * (DREG_S(7) + -13000)) * (DREG_F(18) + 5.0f));
+        i_this->field_0x80e[i].x = var_f31 * (cM_ssin(i_this->frame_counter * (DREG_S(5) + 5000) + i * (DREG_S(7) + -15000)) * (DREG_F(18) + 5.0f));
+        i_this->field_0x80e[i].y = var_f31 * (cM_ssin(i_this->frame_counter * (DREG_S(5) + 0x12C0) + i * (DREG_S(7) + -13000)) * (DREG_F(18) + 5.0f));
     }
 
     cLib_addCalcAngleS2(&i_this->jnt_tail_y_rot_offset, 0, 4, 0x100);
@@ -2830,10 +2845,10 @@ static void action(e_dn_class* i_this) {
             Vec sp258;
             cXyz sp264, sp270;
             dBgS_GndChk gnd_chk;
-            s16 sVar6, sVar7;
-            sVar6 = 0;
-            sVar7 = 0;
-            fVar1 = 100.0f;
+            s16 sp0C, sp0A;
+            sp0C = 0;
+            sp0A = 0;
+            f32 var_f27 = 100.0f;
 
             MTXCopy(i_this->anm_p->getModel()->getAnmMtx(JNT_BACKBONE02), *calc_mtx);
             work.set(0.0f, 0.0f, 0.0f);
@@ -2846,32 +2861,31 @@ static void action(e_dn_class* i_this) {
             if (sp264.y != -G_CM3D_F_INF) {
                 sp258.x = sp264.x;
                 sp258.y = sp264.y + 100.0f;
-                sp258.z = sp264.z + fVar1;
+                sp258.z = sp264.z + var_f27;
                 gnd_chk.SetPos(&sp258);
                 sp258.y = dComIfG_Bgsp().GroundCross(&gnd_chk);
 
+                f32 x, y, z;
                 if (sp258.y != -G_CM3D_F_INF) {
-                    f32 z, y;
                     y = sp258.y - sp264.y;
                     z = sp258.z - sp264.z;
-                    sVar7 = -cM_atan2s(y, z);
-                    if (sVar7 > 0x3000 || sVar7 < -0x3000) {
-                        sVar7 = 0;
+                    sp0A = -cM_atan2s(y, z);
+                    if (sp0A > 0x3000 || sp0A < -0x3000) {
+                        sp0A = 0;
                     }
                 }
 
-                sp258.x = sp264.x + fVar1;
+                sp258.x = sp264.x + var_f27;
                 sp258.y = sp264.y + 100.0f;
                 sp258.z = sp264.z;
                 gnd_chk.SetPos(&sp258);
                 sp258.y = dComIfG_Bgsp().GroundCross(&gnd_chk);
                 if (sp258.y != -G_CM3D_F_INF) {
-                    f32 x, y;
                     y = sp258.y - sp264.y;
                     x = sp258.x - sp264.x;
-                    sVar6 = (s16)cM_atan2s(y, x);
-                    if (sVar6 > 0x3000 || sVar6 < -0x3000) {
-                        sVar6 = 0;
+                    sp0C = (s16)cM_atan2s(y, x);
+                    if (sp0C > 0x3000 || sp0C < -0x3000) {
+                        sp0C = 0;
                     }
                 }
             }
@@ -2898,8 +2912,8 @@ static void action(e_dn_class* i_this) {
                 actor->current.pos += sp24c;
             }
 
-            i_this->field_0x730.x = sVar7;
-            i_this->field_0x730.z = sVar6;
+            i_this->field_0x730.x = sp0A;
+            i_this->field_0x730.z = sp0C;
         }
     }
 
@@ -2986,7 +3000,7 @@ static int daE_DN_Execute(e_dn_class* i_this) {
         return 1;
     }
 
-    if (c_start == 0 && dComIfGp_event_runCheck() && 
+    if (c_start == 0 && dComIfGp_event_runCheck() &&
         (fopAcM_getTalkEventPartner((fopAc_ac_c*)daPy_getLinkPlayerActorClass()) == daPy_py_c::getMidnaActor() || daPy_getPlayerActorClass()->eventInfo.checkCommandDoor())) {
         return 1;
     }
@@ -3109,7 +3123,7 @@ static int daE_DN_Execute(e_dn_class* i_this) {
     } else {
         i_this->cc_sph[0].SetR(50.0f);
     }
-    
+
     actor->attention_info.position = actor->eyePos;
     actor->attention_info.position.y += 70.0f + BREG_F(7);
 
@@ -3175,7 +3189,7 @@ static int daE_DN_Execute(e_dn_class* i_this) {
 
         i_this->skull_model->setBaseTRMtx(mDoMtx_stack_c::get());
     }
-    
+
     MTXCopy(i_this->anm_p->getModel()->getAnmMtx(JNT_ARML2), *calc_mtx);
     i_this->tate_model->setBaseTRMtx(*calc_mtx);
 
@@ -3362,7 +3376,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
 static cPhs_Step daE_DN_Create(fopAc_ac_c* actor) {
     e_dn_class* i_this = (e_dn_class*)actor;
 
-    fopAcM_ct(actor, e_dn_class);
+    fopAcM_ct(&i_this->actor, e_dn_class);
 
     cPhs_Step phase = dComIfG_resLoad(&i_this->phase, "E_dn");
     if (phase == cPhs_COMPLEATE_e) {
@@ -3402,7 +3416,7 @@ static cPhs_Step daE_DN_Create(fopAc_ac_c* actor) {
             l_HIO.no = mDoHIO_CREATE_CHILD("リザードマン", &l_HIO);
         }
 
-        fopAcM_OnStatus(actor, fopAcM_STATUS_UNK_0x100);
+        fopAcM_OnStatus(actor, fopAcStts_CULL_e);
         actor->attention_info.flags = fopAc_AttnFlag_BATTLE_e;
         fopAcM_SetMtx(actor, i_this->anm_p->getModel()->getBaseTRMtx());
         fopAcM_SetMin(actor, -200.0f, -200.0f, -200.0f);
@@ -3472,7 +3486,7 @@ static cPhs_Step daE_DN_Create(fopAc_ac_c* actor) {
         if ((i_this->arg0 == 13 || i_this->arg0 == 14) || (i_this->arg0 == 15 || i_this->arg0 == 16)) {
             i_this->status = 1;
             i_this->action = ACTION_REG;
-            fopAcM_OnStatus(actor, fopAcM_STATUS_UNK_0x4000);
+            fopAcM_OnStatus(actor, fopAcStts_UNK_0x4000_e);
             i_this->acchcir.SetWall(80.0f, 2.0f);
         }
 
@@ -3501,18 +3515,18 @@ static actor_method_class l_daE_DN_Method = {
 };
 
 actor_process_profile_definition g_profile_E_DN = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_DN,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(e_dn_class),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  118,                    // mPriority
-  &l_daE_DN_Method,       // sub_method
-  0x00040000,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_DN_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_dn_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_DN_e,
+    /* Actor SubMtd */ &l_daE_DN_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

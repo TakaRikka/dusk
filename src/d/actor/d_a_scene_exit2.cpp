@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_scene_exit2.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 void daScExit_c::initBaseMtx() {
     setBaseMtx();
@@ -173,18 +173,18 @@ static actor_method_class l_daScExit_Method = {
 };
 
 actor_process_profile_definition g_profile_SCENE_EXIT2 = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_SCENE_EXIT2,
-    &g_fpcLf_Method.base,
-    sizeof(daScExit_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    583,
-    &l_daScExit_Method,
-    0x40000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SCENE_EXIT2_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daScExit_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_SCENE_EXIT2_e,
+    /* Actor SubMtd */ &l_daScExit_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

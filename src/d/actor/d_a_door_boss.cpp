@@ -8,7 +8,7 @@
 #include "d/actor/d_a_door_boss.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "d/d_door_param2.h"
 #include "SSystem/SComponent/c_math.h"
 
@@ -338,7 +338,7 @@ int daBdoor_c::execute() {
         &daBdoor_c::actionOpen,
         &daBdoor_c::actionEnd,
     };
-    if (fopAcM_CheckStatus(this, 0x1000)) {
+    if (fopAcM_CheckStatus(this, fopAcStts_STAFF_SHUTTER_e)) {
         mStaffID = dComIfGp_evmng_getMyStaffId(l_staff_name, NULL, 0);
         demoProc();
     } else {
@@ -417,18 +417,18 @@ static actor_method_class l_daBdoor_Method = {
 };
 
 actor_process_profile_definition g_profile_BOSS_DOOR = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_BOSS_DOOR,
-    &g_fpcLf_Method.base,
-    sizeof(daBdoor_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x129,
-    &l_daBdoor_Method,
-    0x44000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_6_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BOSS_DOOR_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daBdoor_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_BOSS_DOOR_e,
+    /* Actor SubMtd */ &l_daBdoor_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

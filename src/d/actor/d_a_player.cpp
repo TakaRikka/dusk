@@ -133,61 +133,61 @@ u32 daPy_py_c::setParamData(int i_roomNo, int i_mode, int param_2, int param_3) 
 }
 
 BOOL daPy_py_c::checkFishingRodItem(int i_itemNo) {
-    return i_itemNo == fpcNm_ITEM_FISHING_ROD_1 || (i_itemNo >= fpcNm_ITEM_BEE_ROD && i_itemNo <= fpcNm_ITEM_JEWEL_WORM_ROD);
+    return i_itemNo == dItemNo_FISHING_ROD_1_e || (i_itemNo >= dItemNo_BEE_ROD_e && i_itemNo <= dItemNo_JEWEL_WORM_ROD_e);
 }
 
 BOOL daPy_py_c::checkBombItem(int i_itemNo) {
-    return i_itemNo == fpcNm_ITEM_NORMAL_BOMB || i_itemNo == fpcNm_ITEM_WATER_BOMB || i_itemNo == fpcNm_ITEM_POKE_BOMB;
+    return i_itemNo == dItemNo_NORMAL_BOMB_e || i_itemNo == dItemNo_WATER_BOMB_e || i_itemNo == dItemNo_POKE_BOMB_e;
 }
 
 BOOL daPy_py_c::checkBottleItem(int i_itemNo) {
-    return (i_itemNo >= fpcNm_ITEM_EMPTY_BOTTLE && i_itemNo <= fpcNm_ITEM_FAIRY)
-            || i_itemNo == fpcNm_ITEM_BEE_CHILD
-            || i_itemNo == fpcNm_ITEM_WORM
-            || i_itemNo == fpcNm_ITEM_FAIRY_DROP
-            || i_itemNo == fpcNm_ITEM_CHUCHU_BLACK
-            || (i_itemNo >= fpcNm_ITEM_CHUCHU_RARE && i_itemNo <= fpcNm_ITEM_LV3_SOUP);
+    return (i_itemNo >= dItemNo_EMPTY_BOTTLE_e && i_itemNo <= dItemNo_FAIRY_e)
+            || i_itemNo == dItemNo_BEE_CHILD_e
+            || i_itemNo == dItemNo_WORM_e
+            || i_itemNo == dItemNo_FAIRY_DROP_e
+            || i_itemNo == dItemNo_CHUCHU_BLACK_e
+            || (i_itemNo >= dItemNo_CHUCHU_RARE_e && i_itemNo <= dItemNo_LV3_SOUP_e);
 }
 
 BOOL daPy_py_c::checkDrinkBottleItem(int i_itemNo) {
-    return (i_itemNo >= fpcNm_ITEM_RED_BOTTLE && i_itemNo <= fpcNm_ITEM_HALF_MILK_BOTTLE)
-            || i_itemNo == fpcNm_ITEM_RED_BOTTLE_2
-            || i_itemNo == fpcNm_ITEM_UGLY_SOUP
-            || i_itemNo == fpcNm_ITEM_HOT_SPRING
-            || i_itemNo == fpcNm_ITEM_BEE_CHILD
-            || i_itemNo == fpcNm_ITEM_CHUCHU_BLACK
-            || i_itemNo == fpcNm_ITEM_FAIRY_DROP
-            || (i_itemNo >= fpcNm_ITEM_CHUCHU_RARE && i_itemNo != fpcNm_ITEM_CHUCHU_YELLOW && i_itemNo <= fpcNm_ITEM_LV3_SOUP);
+    return (i_itemNo >= dItemNo_RED_BOTTLE_e && i_itemNo <= dItemNo_HALF_MILK_BOTTLE_e)
+            || i_itemNo == dItemNo_RED_BOTTLE_2_e
+            || i_itemNo == dItemNo_UGLY_SOUP_e
+            || i_itemNo == dItemNo_HOT_SPRING_e
+            || i_itemNo == dItemNo_BEE_CHILD_e
+            || i_itemNo == dItemNo_CHUCHU_BLACK_e
+            || i_itemNo == dItemNo_FAIRY_DROP_e
+            || (i_itemNo >= dItemNo_CHUCHU_RARE_e && i_itemNo != dItemNo_CHUCHU_YELLOW_e && i_itemNo <= dItemNo_LV3_SOUP_e);
 }
 
 BOOL daPy_py_c::checkOilBottleItem(int i_itemNo) {
-    return i_itemNo == fpcNm_ITEM_CHUCHU_YELLOW || i_itemNo == fpcNm_ITEM_OIL_BOTTLE_2 || i_itemNo == fpcNm_ITEM_OIL_BOTTLE;
+    return i_itemNo == dItemNo_CHUCHU_YELLOW_e || i_itemNo == dItemNo_OIL_BOTTLE_2_e || i_itemNo == dItemNo_OIL_BOTTLE_e;
 }
 
 BOOL daPy_py_c::checkOpenBottleItem(int i_itemNo) {
-    return i_itemNo == fpcNm_ITEM_WATER_BOTTLE || i_itemNo == fpcNm_ITEM_WORM || i_itemNo == fpcNm_ITEM_FAIRY;
+    return i_itemNo == dItemNo_WATER_BOTTLE_e || i_itemNo == dItemNo_WORM_e || i_itemNo == dItemNo_FAIRY_e;
 }
 
 BOOL daPy_py_c::checkBowItem(int i_itemNo) {
-    return i_itemNo == fpcNm_ITEM_BOW || i_itemNo == fpcNm_ITEM_BOMB_ARROW || i_itemNo == fpcNm_ITEM_HAWK_ARROW;
+    return i_itemNo == dItemNo_BOW_e || i_itemNo == dItemNo_BOMB_ARROW_e || i_itemNo == dItemNo_HAWK_ARROW_e;
 }
 
 BOOL daPy_py_c::checkHookshotItem(int i_itemNo) {
-    return i_itemNo == fpcNm_ITEM_HOOKSHOT || i_itemNo == fpcNm_ITEM_W_HOOKSHOT;
+    return i_itemNo == dItemNo_HOOKSHOT_e || i_itemNo == dItemNo_W_HOOKSHOT_e;
 }
 
 BOOL daPy_py_c::checkTradeItem(int i_itemNo) {
-    return (i_itemNo >= fpcNm_ITEM_LETTER && i_itemNo <= fpcNm_ITEM_IRIAS_PENDANT)
-            || i_itemNo == fpcNm_ITEM_ANCIENT_DOCUMENT
-            || i_itemNo == fpcNm_ITEM_AIR_LETTER
-            || i_itemNo == fpcNm_ITEM_ANCIENT_DOCUMENT2
-            || i_itemNo == fpcNm_ITEM_RAFRELS_MEMO
-            || i_itemNo == fpcNm_ITEM_TKS_LETTER
-            || i_itemNo == fpcNm_ITEM_ASHS_SCRIBBLING;
+    return (i_itemNo >= dItemNo_LETTER_e && i_itemNo <= dItemNo_IRIAS_PENDANT_e)
+            || i_itemNo == dItemNo_ANCIENT_DOCUMENT_e
+            || i_itemNo == dItemNo_AIR_LETTER_e
+            || i_itemNo == dItemNo_ANCIENT_DOCUMENT2_e
+            || i_itemNo == dItemNo_RAFRELS_MEMO_e
+            || i_itemNo == dItemNo_TKS_LETTER_e
+            || i_itemNo == dItemNo_ASHS_SCRIBBLING_e;
 }
 
 BOOL daPy_py_c::checkDungeonWarpItem(int i_itemNo) {
-    return i_itemNo == fpcNm_ITEM_DUNGEON_EXIT || i_itemNo == fpcNm_ITEM_DUNGEON_BACK;
+    return i_itemNo == dItemNo_DUNGEON_EXIT_e || i_itemNo == dItemNo_DUNGEON_BACK_e;
 }
 
 void daPy_actorKeep_c::setActor() {
@@ -410,12 +410,12 @@ void daPy_sightPacket_c::setSightImage(ResTIMG* i_img) {
 
 BOOL daPy_py_c::checkMasterSwordEquip() {
     u16 equipSword = dComIfGs_getSelectEquipSword();
-    return equipSword == fpcNm_ITEM_MASTER_SWORD || equipSword == fpcNm_ITEM_LIGHT_SWORD;
+    return equipSword == dItemNo_MASTER_SWORD_e || equipSword == dItemNo_LIGHT_SWORD_e;
 }
 
 BOOL daPy_py_c::checkWoodShieldEquip() {
     u16 equipShield = dComIfGs_getSelectEquipShield();
-    return equipShield == fpcNm_ITEM_WOOD_SHIELD || equipShield == fpcNm_ITEM_SHIELD;
+    return equipShield == dItemNo_WOOD_SHIELD_e || equipShield == dItemNo_SHIELD_e;
 }
 
 f32 daPy_py_c::getAttentionOffsetY() {

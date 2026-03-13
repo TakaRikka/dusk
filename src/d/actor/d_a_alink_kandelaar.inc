@@ -13,7 +13,7 @@
 static fopAc_ac_c* daAlink_searchTagKandelaar(fopAc_ac_c* i_actor, void* i_data) {
     UNUSED(i_data);
 
-    if (fopAcM_GetName(i_actor) == PROC_TAG_LANTERN) {
+    if (fopAcM_GetName(i_actor) == fpcNm_TAG_LANTERN_e) {
         return i_actor;
     }
 
@@ -24,7 +24,7 @@ static fopAc_ac_c* daAlink_searchTagKtOnFire(fopAc_ac_c* i_actor, void* i_data) 
     UNUSED(i_data);
     daAlink_c* player_p = daAlink_getAlinkActorClass();
 
-    if (fopAcM_GetName(i_actor) == PROC_Tag_KtOnFire &&
+    if (fopAcM_GetName(i_actor) == fpcNm_Tag_KtOnFire_e &&
         i_actor->current.pos.abs2(player_p->current.pos) < SQUARE(150.0f) &&
         fopAcM_seenActorAngleY(player_p, i_actor) < 0x3000)
     {
@@ -66,7 +66,7 @@ BOOL daAlink_c::checkWaterInKandelaarOffset(f32 param_0) {
 
 void daAlink_c::checkWaterInKandelaar(f32 param_0) {
     if (checkNoResetFlg2(FLG2_UNK_1) && checkWaterInKandelaarOffset(param_0)) {
-        if (mEquipItem == fpcNm_ITEM_KANTERA) {
+        if (mEquipItem == dItemNo_KANTERA_e) {
             deleteEquipItem(TRUE, TRUE);
         } else {
             offKandelaarModel();
@@ -82,7 +82,7 @@ void daAlink_c::offKandelaarModel() {
 
 bool daAlink_c::checkUseKandelaar(int param_0) {
     return (param_0 == 0 && checkNoResetFlg2(FLG2_UNK_1)) ||
-           (param_0 != 0 && mEquipItem == fpcNm_ITEM_KANTERA);
+           (param_0 != 0 && mEquipItem == dItemNo_KANTERA_e);
 }
 
 bool daAlink_c::checkKandelaarSwing(int param_0) const {
@@ -236,7 +236,7 @@ void daAlink_c::resetOilBottleModel() {
 
     if (mProcVar3.field_0x300e != 0) {
         setKandelaarModel();
-        mEquipItem = fpcNm_ITEM_KANTERA;
+        mEquipItem = dItemNo_KANTERA_e;
     }
 
     returnKeepItemData();
@@ -321,7 +321,7 @@ int daAlink_c::commonKandelaarPour(int param_0) {
 }
 
 void daAlink_c::initKandelaarSwing() {
-    if (mEquipItem == fpcNm_ITEM_KANTERA) {
+    if (mEquipItem == dItemNo_KANTERA_e) {
         if (dComIfGs_getOil() != 0) {
             mZ2Link.getKantera().startSound(Z2SE_AL_KANTERA_SWING, 0, mVoiceReverbIntensity);
         } else {
@@ -349,10 +349,10 @@ int daAlink_c::procKandelaarSwingInit() {
     fopAc_ac_c* catch_target_p = dComIfGp_att_getCatghTarget();
     if (catch_target_p != NULL) {
         s16 name = fopAcM_GetName(catch_target_p);
-        BOOL is_sm2 = name == PROC_E_SM2;
+        BOOL is_sm2 = name == fpcNm_E_SM2_e;
 
-        if (name == PROC_OBJ_OILTUBO ||
-            (name == PROC_TAG_SSDRINK && ((daTag_SSDrink_c*)catch_target_p)->checkShopOil()) ||
+        if (name == fpcNm_OBJ_OILTUBO_e ||
+            (name == fpcNm_TAG_SSDRINK_e && ((daTag_SSDrink_c*)catch_target_p)->checkShopOil()) ||
             (is_sm2 && ((e_sm2_class*)catch_target_p)->checkYellow()))
         {
             return procBottleSwingInit(catch_target_p, is_sm2);
@@ -366,7 +366,7 @@ int daAlink_c::procKandelaarSwingInit() {
     mNormalSpeed = 0.0f;
     current.angle.y = shape_angle.y;
 
-    if ((mLinkAcch.ChkGroundHit() && getMoveBGActorName(mLinkAcch.m_gnd, FALSE) == PROC_OBJ_WEB1) ||
+    if ((mLinkAcch.ChkGroundHit() && getMoveBGActorName(mLinkAcch.m_gnd, FALSE) == fpcNm_OBJ_WEB1_e) ||
         (checkStageName("F_SP108") &&
          fopAcIt_Judge((fopAcIt_JudgeFunc)daAlink_searchTagKtOnFire, NULL) != NULL))
     {

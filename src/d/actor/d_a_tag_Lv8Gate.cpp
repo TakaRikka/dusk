@@ -5,7 +5,7 @@
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "d/actor/d_a_obj_mirror_table.h"
 #include <cstring>
 
@@ -136,7 +136,7 @@ int daTagLv8Gate_c::execute() {
                     daPy_getPlayerActorClass()->setPlayerPosAndAngle(&current.pos, shape_angle.y,
                                                                      0);
 
-                    fopAc_ac_c* mirror_table = fopAcM_SearchByName(PROC_Obj_MirrorTable);
+                    fopAc_ac_c* mirror_table = fopAcM_SearchByName(fpcNm_Obj_MirrorTable_e);
                     if (mirror_table != NULL) {
                         static_cast<daObjMirrorTable_c*>(mirror_table)->setEffect();
                     }
@@ -235,18 +235,18 @@ static actor_method_class l_daTagLv8Gate_Method = {
 };
 
 actor_process_profile_definition g_profile_Tag_Lv8Gate = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Tag_Lv8Gate,        // mProcName
-    &g_fpcLf_Method.base,   // sub_method
-    sizeof(daTagLv8Gate_c),  // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    0x108,                   // mPriority
-    &l_daTagLv8Gate_Method,  // sub_method
-    0x40000,                 // mStatus
-    0,                       // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_Lv8Gate_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagLv8Gate_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Tag_Lv8Gate_e,
+    /* Actor SubMtd */ &l_daTagLv8Gate_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

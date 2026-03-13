@@ -445,7 +445,7 @@ static s16 m_view_angle_wide;
 
 static s16 m_view_angle;
 
-#define IS_COW(actor) (fopAcM_GetName((actor)) == PROC_COW)
+#define IS_COW(actor) (fopAcM_GetName((actor)) == fpcNm_COW_e)
 #define IS_VALID_COW_INTERACTION(cow_1, actor)                                                     \
     (fopAcM_IsActor((cow_1)) && !fpcM_IsCreating(fopAcM_GetID((cow_1))) && IS_COW((cow_1)) &&      \
      (cow_1) != (actor))
@@ -965,7 +965,7 @@ void daCow_c::checkBeforeBg() {
     if (cLib_calcTimer(&mTimer6)) {
         return;
     }
-    
+
     s16 sVar2;
     if (planeTri[1] && planeTri[2]) {
         switch (mAction) {
@@ -1458,7 +1458,7 @@ void daCow_c::action_enter() {
                         mEnterTimerDone)
                     {
                         daNpc_Aru_c* aru;
-                        fopAcM_SearchByName(PROC_NPC_ARU, (fopAc_ac_c**)&aru);
+                        fopAcM_SearchByName(fpcNm_NPC_ARU_e, (fopAc_ac_c**)&aru);
                         if (aru) {
                             aru->setLastIn();
                         }
@@ -1660,7 +1660,7 @@ void daCow_c::action_angry() {
         if (!mDealDamageTimer) {
             if (!player->checkHorseRide() && mSph[0].ChkCoHit()) {
                 fopAc_ac_c* a = dCc_GetAc(mSph[0].GetCoHitObj()->GetAc());
-                if (fopAcM_GetName(a) == PROC_ALINK) {
+                if (fopAcM_GetName(a) == fpcNm_ALINK_e) {
                     // if touched link who is not on a horse
                     s16 sangle = shape_angle.y;
                     cXyz pos = daPy_getPlayerActorClass()->current.pos;
@@ -1893,7 +1893,7 @@ void daCow_c::executeCrazyWait() {
 
         mAcchCir.SetWall(100.0f, 110.0f);
         mTimer1 = 30;
-        fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x100);
+        fopAcM_OffStatus(this, fopAcStts_CULL_e);
     }
 }
 
@@ -2392,7 +2392,7 @@ void daCow_c::executeCrazyBack() {
         }
         break;
     case daCow_c::Action_4:
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x100);
+        fopAcM_OnStatus(this, fopAcStts_CULL_e);
         if (fopAcM_CheckCondition(this, fopAcCnd_NODRAW_e)) {
             fopAcM_delete(this);
         }
@@ -2464,19 +2464,19 @@ void daCow_c::action_crazy() {
 
         dComIfGoat_SetThrow(this);
         mMode = daCow_c::Mode_1;
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x100);
+        fopAcM_OnStatus(this, fopAcStts_CULL_e);
         break;
     case daCow_c::Mode_1:
         TICK_TIMER(mForgetCowPTimer);
         TICK_TIMER(mTimer1);
 
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
         if (dComIfGp_event_runCheck() &&
             strcmp(dComIfGp_getEventManager().getRunEventName(), "WILDGOAT") &&
             strcmp(dComIfGp_getEventManager().getRunEventName(), "WILDGOAT_SUCCESS") &&
             strcmp(dComIfGp_getEventManager().getRunEventName(), "WILDGOAT_FAILURE"))
         {
-            fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x4000);
+            fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
         }
 
         switch (mCrazy) {
@@ -2648,7 +2648,7 @@ bool daCow_c::checkWolfBusters() {
     }
 
     daNpc_Aru_c* aru;
-    fopAcM_SearchByName(PROC_NPC_ARU, (fopAc_ac_c**)&aru);
+    fopAcM_SearchByName(fpcNm_NPC_ARU_e, (fopAc_ac_c**)&aru);
     if (!aru) {
         return false;
     }
@@ -2675,7 +2675,7 @@ void daCow_c::action_wolf() {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     daNpc_Aru_c* aru;
-    fopAcM_SearchByName(PROC_NPC_ARU, (fopAc_ac_c**)&aru);
+    fopAcM_SearchByName(fpcNm_NPC_ARU_e, (fopAc_ac_c**)&aru);
     if (!aru) {
         return;
     }
@@ -2684,7 +2684,7 @@ void daCow_c::action_wolf() {
     s16 aruAngle = cLib_targetAngleY(&current.pos, &aru->current.pos);
     s16 sp14;
     s16 ang2;
-    
+
     switch (mMode) {
     case daCow_c::Mode_0:
         mMode = daCow_c::Mode_1;
@@ -2693,7 +2693,7 @@ void daCow_c::action_wolf() {
         attention_info.flags |= fopAc_AttnFlag_LOCK_e;
         mSound.startCreatureVoice(Z2SE_GOAT_V_ANGRY, -1);
         mTimer10 = cM_rndF(90.0f) + 90.0f;
-        
+
         break;
     case daCow_c::Mode_1:
         sp14 = 0;
@@ -2807,7 +2807,7 @@ void daCow_c::action_damage() {
         mChangeRedTev = 0;
         speedF = 0.0f;
         break;
-        
+
     case daCow_c::Mode_1:
         setRedTev();
         if (mpMorf->isStop()) {
@@ -3030,7 +3030,7 @@ bool daCow_c::initialize() {
     }
 
     fopAcM_setCullSizeBox(this, -100.0f, -100.0f, -200.0f, 100.0f, 250.0f, 200.0f);
-    fopAcM_OnStatus(this, 0x8000000);
+    fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
 
     mAcch.CrrPos(dComIfG_Bgsp());
 
@@ -3050,7 +3050,7 @@ bool daCow_c::initialize() {
         mPrm0 = 4;
         setCowInCage();
     }
-    
+
     u8 prm1;
     switch (mPrm0) {
     case 3: {
@@ -3288,20 +3288,20 @@ static actor_method_class daCow_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_COW = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_COW,                // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daCow_c),         // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    692,                     // mPriority
-    &daCow_MethodTable,      // sub_method
-    0x00040100,              // mStatus
-    fopAc_NPC_e,             // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_COW_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daCow_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_COW_e,
+    /* Actor SubMtd */ &daCow_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

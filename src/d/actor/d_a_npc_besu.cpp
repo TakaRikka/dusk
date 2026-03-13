@@ -1195,65 +1195,65 @@ void daNpc_Besu_c::srchActors() {
     switch (mType) {
         case 0:
             if (mActorMngr[0].getActorP() == NULL) {
-                mActorMngr[0].entry(getNearestActorP(PROC_NPC_TARO));
+                mActorMngr[0].entry(getNearestActorP(fpcNm_NPC_TARO_e));
             }
             if (mActorMngr[1].getActorP() == NULL) {
-                mActorMngr[1].entry(getNearestActorP(PROC_NPC_MARO));
+                mActorMngr[1].entry(getNearestActorP(fpcNm_NPC_MARO_e));
                 return;
             }
             break;
         case 2:
             if (mActorMngr[3].getActorP() == NULL) {
                 // LEN is Renaldo
-                mActorMngr[3].entry(getNearestActorP(PROC_NPC_LEN));
+                mActorMngr[3].entry(getNearestActorP(fpcNm_NPC_LEN_e));
                 return;
             }
             break;
         case 11:
             if (mActorMngr[0].getActorP() == NULL) {
-                mActorMngr[0].entry(getNearestActorP(PROC_NPC_TARO));
+                mActorMngr[0].entry(getNearestActorP(fpcNm_NPC_TARO_e));
             }
             if (mActorMngr[1].getActorP() == NULL) {
-                mActorMngr[1].entry(getNearestActorP(PROC_NPC_MARO));
+                mActorMngr[1].entry(getNearestActorP(fpcNm_NPC_MARO_e));
                 return;
             }
             break;
         case 12:
             if (mActorMngr[0].getActorP() == NULL) {
-                mActorMngr[0].entry(getNearestActorP(PROC_NPC_TARO));
+                mActorMngr[0].entry(getNearestActorP(fpcNm_NPC_TARO_e));
             }
             if (mActorMngr[1].getActorP() == NULL) {
-                mActorMngr[1].entry(getNearestActorP(PROC_NPC_MARO));
+                mActorMngr[1].entry(getNearestActorP(fpcNm_NPC_MARO_e));
                 return;
             }
             break;
         case 13:
             if (mActorMngr[0].getActorP() == NULL) {
-                mActorMngr[0].entry(getNearestActorP(PROC_NPC_TARO));
+                mActorMngr[0].entry(getNearestActorP(fpcNm_NPC_TARO_e));
             }
             if (mActorMngr[2].getActorP() == NULL) {
-                mActorMngr[2].entry(getNearestActorP(PROC_NPC_KOLIN));
+                mActorMngr[2].entry(getNearestActorP(fpcNm_NPC_KOLIN_e));
             }
             if (mActorMngr[4].getActorP() == NULL) {
-                mActorMngr[4].entry(getNearestActorP(PROC_NPC_SARU));
+                mActorMngr[4].entry(getNearestActorP(fpcNm_NPC_SARU_e));
                 return;
             }
             break;
         case 14:
             if (mActorMngr[0].getActorP() == NULL) {
-                mActorMngr[0].entry(getNearestActorP(PROC_NPC_TARO));
+                mActorMngr[0].entry(getNearestActorP(fpcNm_NPC_TARO_e));
             }
             if (mActorMngr[1].getActorP() == NULL) {
-                mActorMngr[1].entry(getNearestActorP(PROC_NPC_MARO));
+                mActorMngr[1].entry(getNearestActorP(fpcNm_NPC_MARO_e));
                 return;
             }
             break;
         case 17:
             if (mActorMngr[5].getActorP() == NULL) {
-                mActorMngr[5].entry(getNearestActorP(PROC_NPC_HANJO));
+                mActorMngr[5].entry(getNearestActorP(fpcNm_NPC_HANJO_e));
             }
             if (mActorMngr[6].getActorP() == NULL) {
-                mActorMngr[6].entry(getNearestActorP(PROC_NPC_SEIRA));
+                mActorMngr[6].entry(getNearestActorP(fpcNm_NPC_SEIRA_e));
             }
             break;
     }
@@ -1329,9 +1329,9 @@ void daNpc_Besu_c::action() {
 }
 
 void daNpc_Besu_c::beforeMove() {
-    fopAcM_OffStatus(this, 0x08000000U);
+    fopAcM_OffStatus(this, fopAcStts_UNK_0x8000000_e);
     if (checkHide()) {
-        fopAcM_OnStatus(this, 0x08000000U);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
     }
 
     if (checkHide() || mNoDraw) {
@@ -3069,18 +3069,18 @@ static actor_method_class daNpc_Besu_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_BESU = {
-  fpcLy_CURRENT_e,         // mLayerID
-  7,                       // mListID
-  fpcPi_CURRENT_e,         // mListPrio
-  PROC_NPC_BESU,           // mProcName
-  &g_fpcLf_Method.base,   // sub_method
-  sizeof(daNpc_Besu_c),    // mSize
-  0,                       // mSizeOther
-  0,                       // mParameters
-  &g_fopAc_Method.base,    // sub_method
-  323,                     // mPriority
-  &daNpc_Besu_MethodTable, // sub_method
-  0x00040108,              // mStatus
-  fopAc_NPC_e,             // mActorType
-  fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_BESU_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Besu_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_BESU_e,
+    /* Actor SubMtd */ &daNpc_Besu_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x8_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

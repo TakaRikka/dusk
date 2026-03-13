@@ -671,18 +671,18 @@ static actor_method_class daBalloon2D_METHODS = {
 };
 
 actor_process_profile_definition g_profile_BALLOON2D = {
-    fpcLy_CURRENT_e,        // mLayerID
-    3,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_BALLOON2D,         // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(daBalloon2D_c), // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    765,                    // mPriority
-    &daBalloon2D_METHODS,   // sub_method
-    0x00040000,             // mStatus
-    fopAc_ACTOR_e,          // mActorType
-    fopAc_CULLBOX_0_e,      // cullType
-  };
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BALLOON2D_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daBalloon2D_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_BALLOON2D_e,
+    /* Actor SubMtd */ &daBalloon2D_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
+};

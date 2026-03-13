@@ -1729,15 +1729,15 @@ static leafdraw_method_class l_dMw_Method = {
 };
 
 msg_process_profile_definition g_profile_MENUWINDOW = {
-    fpcLy_CURRENT_e,
-    12,
-    fpcPi_CURRENT_e,
-    PROC_MENUWINDOW,
-    &g_fpcLf_Method.base,
-    sizeof(dMw_c),
-    0,
-    0,
-    &g_fopMsg_Method,
-    0x02FF,
-    &l_dMw_Method,
+    /* Layer ID    */ fpcLy_CURRENT_e,
+    /* List ID     */ 12,
+    /* List Prio   */ fpcPi_CURRENT_e,
+    /* Proc Name   */ fpcNm_MENUWINDOW_e,
+    /* Proc SubMtd */ &g_fpcLf_Method.base,
+    /* Size        */ sizeof(dMw_c),
+    /* Size Other  */ 0,
+    /* Parameters  */ 0,
+    /* Leaf SubMtd */ &g_fopMsg_Method,
+    /* Draw Prio   */ fpcDwPi_MENUWINDOW_e,
+    /* Msg SubMtd  */ &l_dMw_Method,
 };

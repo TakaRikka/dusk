@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_bg.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -15,6 +15,23 @@
 #include "d/d_drawlist.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera_mng.h"
+
+class daE_BG_HIO_c : public JORReflexible {
+public:
+    daE_BG_HIO_c();
+    virtual ~daE_BG_HIO_c() {}
+
+    void genMessage(JORMContext*);
+
+    /* 0x04 */ s8 field_0x4;
+    /* 0x08 */ f32 mTrackingSpeed;
+    /* 0x0C */ f32 mRushSpeed;
+    /* 0x10 */ f32 mWaitDistanceBeforeCharging;
+    /* 0x14 */ f32 mPlayerSearchDistance;
+    /* 0x18 */ f32 mAttackRange;
+    /* 0x1C */ f32 mSwimRange;
+    /* 0x20 */ f32 mJumpTime;
+};
 
 daE_BG_HIO_c::daE_BG_HIO_c() {
     field_0x4 = -1;
@@ -227,7 +244,7 @@ void daE_BG_c::setSparkEffect() {
 }
 
 fopAc_ac_c* daE_BG_c::search_esa() {
-    dmg_rod_class* rod = (dmg_rod_class*)fopAcM_SearchByName(PROC_MG_ROD);
+    dmg_rod_class* rod = (dmg_rod_class*)fopAcM_SearchByName(fpcNm_MG_ROD_e);
     if (rod != NULL && rod->kind == 1 && rod->action != 5 && rod->is_hook_in_water != 0 &&
         rod->actor.current.pos.y < rod->water_surface_y - 20.0f) {
         return &rod->actor;
@@ -286,7 +303,7 @@ void daE_BG_c::executeBorn() {
         }
 
         if (field_0x68f == 0) {
-            mBgId = fopAcM_createChild(PROC_E_BG, fopAcM_GetID(this), 0xffffff02, &current.pos,
+            mBgId = fopAcM_createChild(fpcNm_E_BG_e, fopAcM_GetID(this), 0xffffff02, &current.pos,
                                            fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
             mMoveMode = 3;
         }
@@ -328,14 +345,15 @@ void daE_BG_c::executeSwim() {
                         setActionMode(2, 0);
                         return;
                     }
-                } else if (dComIfGp_checkPlayerStatus0(0, fopAcM_STATUS_HOOK_CARRY_NOW)) {
+                } else if (dComIfGp_checkPlayerStatus0(0, fopAcStts_HOOK_CARRY_NOW_e)) {
                     setActionMode(2, 0);
                     return;
                 }
             }
         }
 
-        if (search_esa() != NULL) {
+        fopAc_ac_c* search_actor = search_esa();
+        if (search_actor != NULL) {
             setActionMode(7, 0);
             return;
         }
@@ -380,8 +398,8 @@ void daE_BG_c::executeSwim() {
         field_0x6ac = field_0x69a - shape_angle.y;
 
         cLib_addCalcAngleS(&shape_angle.y, field_0x69a, 0x10, 0x400, 0x100);
-        s32 targetAngleX = cLib_targetAngleX(&current.pos, &field_0x660);
-        cLib_addCalcAngleS(&shape_angle.x, targetAngleX, 0x10, 0x400, 0x100);
+        cLib_addCalcAngleS(&shape_angle.x, (s16)cLib_targetAngleX(&current.pos, &field_0x660),
+                           0x10, 0x400, 0x100);
 
         cLib_chaseF(&speedF, cM_scos(shape_angle.x) * 4.0f, 0.2f);
         cLib_chaseF(&speed.y, cM_ssin(shape_angle.x) * 4.0f, 0.2f);
@@ -446,7 +464,7 @@ void daE_BG_c::executeAttack() {
                 return;
             }
         } else {
-            if (!dComIfGp_checkPlayerStatus0(0, fopAcM_STATUS_HOOK_CARRY_NOW)) {
+            if (!dComIfGp_checkPlayerStatus0(0, fopAcStts_HOOK_CARRY_NOW_e)) {
                 setActionMode(1, 0);
                 return;
             }
@@ -471,7 +489,7 @@ void daE_BG_c::executeAttack() {
         cLib_chaseF(&speedF, l_HIO.mTrackingSpeed * cM_scos(shape_angle.x), 1.0f);
         cLib_chaseF(&speed.y, l_HIO.mTrackingSpeed * cM_ssin(shape_angle.x), 1.0f);
 
-        if (!dComIfGp_checkPlayerStatus0(0, fopAcM_STATUS_HOOK_CARRY_NOW)) {
+        if (!dComIfGp_checkPlayerStatus0(0, fopAcStts_HOOK_CARRY_NOW_e)) {
             if (daPy_getPlayerActorClass()->checkEquipHeavyBoots()) {
                 mMoveMode = 1;
                 field_0x69a = cM_rndFX(8192.0f);
@@ -480,7 +498,7 @@ void daE_BG_c::executeAttack() {
 
         if (mAtSphere.ChkAtHit()) {
             fopAc_ac_c* hitActor = dCc_GetAc(mAtSphere.GetAtHitObj()->GetAc());
-            if (fopAcM_GetName(hitActor) == PROC_ALINK) {
+            if (fopAcM_GetName(hitActor) == fpcNm_ALINK_e) {
                 mMoveMode = 10;
                 field_0x68f = 30;
                 speedF = cM_rndFX(1.0f) + -5.0f;
@@ -542,7 +560,7 @@ void daE_BG_c::executeAttack() {
             field_0x6ae = 0;
         }
 
-        if (dComIfGp_checkPlayerStatus0(0, fopAcM_STATUS_HOOK_CARRY_NOW)) {
+        if (dComIfGp_checkPlayerStatus0(0, fopAcStts_HOOK_CARRY_NOW_e)) {
             mMoveMode = 0;
             break;
         }
@@ -583,7 +601,7 @@ void daE_BG_c::executeAttack() {
         cLib_chaseF(&speedF, 0.0f, 1.0f);
         cLib_chaseF(&speed.y, 0.0f, 1.0f);
 
-        if (dComIfGp_checkPlayerStatus0(0, fopAcM_STATUS_HOOK_CARRY_NOW)) {
+        if (dComIfGp_checkPlayerStatus0(0, fopAcStts_HOOK_CARRY_NOW_e)) {
             mMoveMode = 0;
         } else {
             if (field_0x68f == 0) {
@@ -635,7 +653,7 @@ void daE_BG_c::executeAttack() {
 
         if (mAtSphere.ChkAtHit()) {
             fopAc_ac_c* hitActor = dCc_GetAc(mAtSphere.GetAtHitObj()->GetAc());
-            if (fopAcM_GetName(hitActor) == PROC_ALINK) {
+            if (fopAcM_GetName(hitActor) == fpcNm_ALINK_e) {
                 mMoveMode = 5;
                 field_0x68f = 30;
 
@@ -743,8 +761,8 @@ bool daE_BG_c::setBombCarry(int param_0) {
                                                      fopAcM_GetRoomNo(this));
     }
 
+    fopAc_ac_c* unkActor1;
     if (bomb != NULL) {
-        fopAc_ac_c* unkActor1;
         fopAcM_SearchByID(fopAcM_GetLinkId(this), &unkActor1);
         if (unkActor1 != NULL) {
             ((daE_BG_c*)unkActor1)->setBgId(fopAcM_GetID(bomb));
@@ -935,6 +953,8 @@ void daE_BG_c::executeEat() {
     field_0x6a2 = nREG_S(0) + 0xc00;
     field_0x69c += field_0x6a0;
 
+    f32 targetSpeedX;
+    f32 targetSpeedY;
     switch (this->mMoveMode) {
     case 0:
         field_0x660.y = rodPos.y + cM_rndFX(100.0f);
@@ -1038,10 +1058,8 @@ void daE_BG_c::executeEat() {
         cLib_addCalcAngleS(&shape_angle.x, 0, 0x10, 0x400, 0x100);
 
         if (rodPos.abs(current.pos) > 70.0f) {
-            cM_scos(shape_angle.x);
-            cLib_chaseF(&speedF, 0.0f, 0.1f);
-            cM_ssin(shape_angle.x);
-            cLib_chaseF(&speed.y, 0.0f, 0.1f);
+            cLib_chaseF(&speedF, cM_scos(shape_angle.x) * 0.0f, 0.1f);
+            cLib_chaseF(&speed.y, cM_ssin(shape_angle.x) * 0.0f, 0.1f);
         } else {
             cLib_chaseF(&speedF, cM_scos(shape_angle.x) * -1.0f, 0.3f);
             cLib_chaseF(&speed.y, cM_ssin(shape_angle.x) * -1.0f, 0.3f);
@@ -1286,7 +1304,7 @@ static int daE_BG_Delete(daE_BG_c* i_this) {
 
 int daE_BG_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_BG", 10);
-    JUT_ASSERT(0, modelData != NULL);
+    JUT_ASSERT(1890, modelData != NULL);
 
     mpMorfSO = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL,
                                     (J3DAnmTransform*)dComIfG_getObjectRes("E_BG", 7), 0, 1.0f, 0,
@@ -1420,18 +1438,18 @@ static actor_method_class l_daE_BG_Method = {
 };
 
 actor_process_profile_definition g_profile_E_BG = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_E_BG,              // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(daE_BG_c),       // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    204,                    // mPriority
-    &l_daE_BG_Method,       // sub_method
-    0x000D0100,             // mStatus
-    fopAc_ENEMY_e,          // mActorType
-    fopAc_CULLBOX_CUSTOM_e, // cullType
-  };
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_BG_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_BG_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_BG_e,
+    /* Actor SubMtd */ &l_daE_BG_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x10000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
+};

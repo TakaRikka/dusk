@@ -103,7 +103,7 @@ static void lifeGetCoCallBack(fopAc_ac_c* i_this, dCcD_GObjInf* param_2, fopAc_a
 static void* s_sh_sub(void* param_1, void* param_2) {
     UNUSED(param_2);
 
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_E_SH) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_E_SH_e) {
         return param_1;
     }
     return NULL;
@@ -158,7 +158,7 @@ int daObjWStatue_c::__CreateHeap() {
 
 int daObjWStatue_c::create() {
     fopAcM_ct(this, daObjWStatue_c);
-    m_itemNo = fpcNm_ITEM_WOOD_STATUE;
+    m_itemNo = dItemNo_WOOD_STATUE_e;
     if (fopAcM_isSwitch(this, getSwbit2())) {
         return cPhs_ERROR_e;
     }
@@ -338,7 +338,7 @@ int daObjWStatue_c::actionInitBoomerangCarry() {
 }
 
 int daObjWStatue_c::actionBoomerangCarry() {
-    fopAc_ac_c* boomerang = fopAcM_SearchByName(PROC_BOOMERANG);
+    fopAc_ac_c* boomerang = fopAcM_SearchByName(fpcNm_BOOMERANG_e);
     if (boomerang != NULL) {
         current.pos = boomerang->current.pos;
     } else {
@@ -485,18 +485,18 @@ static actor_method_class l_daObjWStatue_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_WoodStatue = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Obj_WoodStatue,     // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daObjWStatue_c),  // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    563,                     // mPriority
-    &l_daObjWStatue_Method,  // sub_method
-    0x00044100,              // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_WoodStatue_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjWStatue_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_WoodStatue_e,
+    /* Actor SubMtd */ &l_daObjWStatue_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

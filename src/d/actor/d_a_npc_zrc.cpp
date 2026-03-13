@@ -913,7 +913,7 @@ void daNpc_zrC_c::reset() {
     speed.setall(0.0f);
     setLookMode(LOOK_NONE);
     if (mType == 1) {
-        fopAcM_OffStatus(this, 0x100);
+        fopAcM_OffStatus(this, fopAcStts_CULL_e);
     } else if (mType == 2) {
         setExpression(EXPR_PRAY, -1.0f);
         setMotion(2, -1.0f, FALSE);
@@ -1138,7 +1138,7 @@ BOOL daNpc_zrC_c::doEvent() {
                 (this->*mpActionFn)(NULL);
             } else if (dComIfGp_event_chkTalkXY()) {
                 if (dComIfGp_evmng_ChkPresentEnd()) {
-                    if (mType == 2 && dComIfGp_event_getPreItemNo() == fpcNm_ITEM_ASHS_SCRIBBLING) {
+                    if (mType == 2 && dComIfGp_event_getPreItemNo() == dItemNo_ASHS_SCRIBBLING_e) {
                         mFlowID = 0x35;
                         mOrderEvtNo = EVT_EARRING_GET;
                         changeEvent(l_resNames[l_evtGetParamList[mOrderEvtNo].arcIdx],
@@ -1797,18 +1797,18 @@ static actor_method_class daNpc_zrC_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_ZRC = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_NPC_ZRC,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daNpc_zrC_c),    // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  389,                    // mPriority
-  &daNpc_zrC_MethodTable, // sub_method
-  0x00044100,             // mStatus
-  fopAc_NPC_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_ZRC_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_zrC_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_ZRC_e,
+    /* Actor SubMtd */ &daNpc_zrC_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

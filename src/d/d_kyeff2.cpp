@@ -44,15 +44,15 @@ static leafdraw_method_class l_dKyeff2_Method = {
 };
 
 kankyo_process_profile_definition g_profile_KYEFF2 = {
-    fpcLy_CURRENT_e,
-    12,
-    fpcPi_CURRENT_e,
-    PROC_KYEFF2,
-    &g_fpcLf_Method.base,
-    sizeof(dKyeff2_c),
-    0,
-    0,
-    &g_fopKy_Method,
-    3,
-    &l_dKyeff2_Method,
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 12,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_KYEFF2_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dKyeff2_c),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_KYEFF2_e,
+    /* Kankyo SubMtd */ &l_dKyeff2_Method,
 };

@@ -600,18 +600,18 @@ static actor_method_class daObjWarpOBrg_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_OrdinBrg = {
-    fpcLy_CURRENT_e,         // mLayerID
-    3,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Obj_OrdinBrg,       // mProcName
-    &g_fpcLf_Method.base,   // sub_method
-    sizeof(daObjWarpOBrg_c), // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    531,                     // mPriority
-    &daObjWarpOBrg_METHODS,  // sub_method
-    0x00040000,              // mStatus
-    fopAc_ENV_e,             // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_OrdinBrg_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjWarpOBrg_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_OrdinBrg_e,
+    /* Actor SubMtd */ &daObjWarpOBrg_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

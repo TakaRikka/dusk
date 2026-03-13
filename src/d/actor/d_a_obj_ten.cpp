@@ -1,6 +1,6 @@
 /**
  * @file d_a_obj_ten.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -270,9 +270,9 @@ void daObjTEN_c::MoveAction() {
     linkchk.SetObj();
     cXyz cStack_c8;
     cXyz cStack_d4;
-    
+
     switch (field_0x5e9) {
-    case 0: 
+    case 0:
         {
             J3DAnmTransform* anmTransform = (J3DAnmTransform*)dComIfG_getObjectRes("I_Ten", 6);
             mMorf->setAnm(anmTransform, 2, 5.0f, 0.0f, 0.0f, -1.0f);
@@ -300,7 +300,7 @@ void daObjTEN_c::MoveAction() {
             speed.y = 5.0f;
         }
         break;
-    case 2: 
+    case 2:
         {
             cXyz local_e0;
             cXyz* flamePos = player->getKandelaarFlamePos();
@@ -703,7 +703,7 @@ int daObjTEN_c::create() {
         if (field_0x624 == 2) {
             field_0x56c = 0;
             shape_angle.x -= 0x2000;
-            fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x4000);
+            fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
         } else {
             mDraw = true;
         }
@@ -810,18 +810,18 @@ static actor_method_class l_daObjTEN_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Ten = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_Ten,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjTEN_c),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  483,                    // mPriority
-  &l_daObjTEN_Method,     // sub_method
-  0x000C0120,             // mStatus
-  fopAc_ENV_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ten_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjTEN_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Ten_e,
+    /* Actor SubMtd */ &l_daObjTEN_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x20_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

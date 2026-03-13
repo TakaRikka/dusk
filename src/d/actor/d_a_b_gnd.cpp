@@ -372,7 +372,7 @@ static int daB_GND_Draw(b_gnd_class* i_this) {
 }
 
 static void* shot_s_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_ARROW &&
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_ARROW_e &&
         (fopAcM_GetParam(i_actor) == 1 || fopAcM_GetParam(i_actor) == 2))
     {
         cXyz vec_to_arrow = ((fopAc_ac_c*)i_data)->current.pos - ((fopAc_ac_c*)i_actor)->current.pos;
@@ -1235,7 +1235,7 @@ static void b_gnd_g_wait(b_gnd_class* i_this) {
     s16 angle_step = 0x400;
 
     mant_class* mant_p = (mant_class*)fopAcM_SearchByID(i_this->mMantChildID);
-    dmg_rod_class* mgrod_p = (dmg_rod_class*)fopAcM_SearchByName(PROC_MG_ROD);
+    dmg_rod_class* mgrod_p = (dmg_rod_class*)fopAcM_SearchByName(fpcNm_MG_ROD_e);
 
     if (mgrod_p != NULL && mgrod_p->action != 0) {
         if (i_this->mMoveMode < 5 && i_this->mPlayerDistXZ < 600.0f) {
@@ -2331,7 +2331,7 @@ static void eff_set(b_gnd_class* i_this) {
 }
 
 static void* s_fkdel_sub(void* i_actor, void* i_data) {
-    if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_FK) {
+    if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_FK_e) {
         fopAcM_delete((fopAc_ac_c*)i_actor);
     }
 
@@ -2339,7 +2339,7 @@ static void* s_fkdel_sub(void* i_actor, void* i_data) {
 }
 
 static void* s_objgbdel_sub(void* i_actor, void* i_data) {
-    if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_OBJ_GB) {
+    if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_OBJ_GB_e) {
         fopAcM_delete((fopAc_ac_c*)i_actor);
     }
 
@@ -3184,7 +3184,7 @@ static void demo_camera(b_gnd_class* i_this) {
                 i_this->mDemoCamMode = 45;
                 i_this->mDemoCamTimer = 0;
                 sp108.set(0.0f, 1100.0f, 0.0f);
-                fopAcM_create(PROC_OBJ_GB, 0xF0069600, &sp108, fopAcM_GetRoomNo(a_this), 0, 0, -1);
+                fopAcM_create(fpcNm_OBJ_GB_e, 0xF0069600, &sp108, fopAcM_GetRoomNo(a_this), 0, 0, -1);
             }
 
             cLib_addCalc0(&a_this->speedF, 1.0f, 0.7f);
@@ -3645,7 +3645,7 @@ static void demo_camera(b_gnd_class* i_this) {
     case 92:
         if (i_this->mDemoCamTimer == 1) {
             sp108.set(0.0f, 1100.0f, 0.0f);
-            fopAcM_create(PROC_OBJ_GB, 0xF0069600, &sp108, fopAcM_GetRoomNo(a_this), NULL, NULL, -1);
+            fopAcM_create(fpcNm_OBJ_GB_e, 0xF0069600, &sp108, fopAcM_GetRoomNo(a_this), NULL, NULL, -1);
         }
 
         if (i_this->mDemoCamTimer == 5) {
@@ -3681,7 +3681,7 @@ static void demo_camera(b_gnd_class* i_this) {
         a_this->shape_angle.y = a_this->current.angle.y = 0x37FE;
 
         sp108.set(0.0f, 1100.0f, 0.0f);
-        fopAcM_create(PROC_OBJ_GB, 0xF0069600, &sp108, fopAcM_GetRoomNo(a_this), NULL, NULL, -1);
+        fopAcM_create(fpcNm_OBJ_GB_e, 0xF0069600, &sp108, fopAcM_GetRoomNo(a_this), NULL, NULL, -1);
         break;
     case 96:
         i_this->mDemoCamTimer++;
@@ -4440,7 +4440,7 @@ static int daB_GND_Execute(b_gnd_class* i_this) {
                 sp118 = (player->current.pos - i_this->mLightBallPos[i]);
                 fk_angle.y = (s16)cM_atan2s(sp118.x, sp118.z);
 
-                fopAcM_create(PROC_E_FK, i | 0xFFFFFF00, &i_this->mLightBallPos[i], fopAcM_GetRoomNo(a_this), &fk_angle, NULL, -1);
+                fopAcM_create(fpcNm_E_FK_e, i | 0xFFFFFF00, &i_this->mLightBallPos[i], fopAcM_GetRoomNo(a_this), &fk_angle, NULL, -1);
                 i_this->mLightBallSound[i].startSound(Z2SE_EN_GND_LIGHTBALL_SUB_HIT, 0, -1);
             }
         } else if (i_this->field_0x1e56[i] == 2) {
@@ -4811,7 +4811,7 @@ static int daB_GND_Create(fopAc_ac_c* a_this) {
             b_path[i].z = sp30.z;
         }
 
-        i_this->mMantChildID = fopAcM_createChild(PROC_MANT, fopAcM_GetID(a_this),
+        i_this->mMantChildID = fopAcM_createChild(fpcNm_MANT_e, fopAcM_GetID(a_this),
                 0, &a_this->current.pos, fopAcM_GetRoomNo(a_this), NULL, NULL, -1, 0);
         a_this->health = 24;
         i_this->field_0x560 = 24;
@@ -4957,20 +4957,20 @@ static actor_method_class l_daB_GND_Method = {
 };
 
 actor_process_profile_definition g_profile_B_GND = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_B_GND,             // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(b_gnd_class),    // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  214,                    // mPriority
-  &l_daB_GND_Method,      // sub_method
-  0x00044000,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_B_GND_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(b_gnd_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_B_GND_e,
+    /* Actor SubMtd */ &l_daB_GND_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 static int unk_bss_0xF0;

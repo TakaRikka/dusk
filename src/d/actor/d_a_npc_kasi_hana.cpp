@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_kasi_hana.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -170,7 +170,7 @@ BOOL daNpcKasi_Mng_c::calcCenterPos() {
     if (hana_p == NULL || kyu_p == NULL || mich_p == NULL) {
         return FALSE;
     }
-    
+
     cXyz hana_pos(*fopAcM_GetPosition_p(hana_p));
     cXyz kyu_pos(*fopAcM_GetPosition_p(kyu_p));
     cXyz mich_pos(*fopAcM_GetPosition_p(mich_p));
@@ -378,11 +378,11 @@ BOOL daNpcKasi_Mng_c::createHearts() {
             i_pos.y += 115.0f;
             fopAc_ac_c* heart_p = NULL;
             csXyz i_angle(0, cLib_getRndValue<int>(0, 7) << 13, 0);
-            heart_p = fopAcM_fastCreateItem(&i_pos, fpcNm_ITEM_HEART, fopAcM_GetRoomNo(actor_p), &i_angle,
+            heart_p = fopAcM_fastCreateItem(&i_pos, dItemNo_HEART_e, fopAcM_GetRoomNo(actor_p), &i_angle,
                                            &i_scale, &i_speedF, &i_speedY, -1, 0, NULL);
             if (heart_p != NULL) {
                 Z2GetAudioMgr()->seStart(Z2SE_GIRLS_HEART, &i_pos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
-                fopAcM_OnStatus(heart_p, fopAcM_STATUS_UNK_0x4000);
+                fopAcM_OnStatus(heart_p, fopAcStts_UNK_0x4000_e);
             }
         }
     }
@@ -393,34 +393,34 @@ BOOL daNpcKasi_Mng_c::createHearts() {
 void daNpcKasi_Mng_c::allDemoMove() {
     daNpcKasiHana_c* hana_p = (daNpcKasiHana_c*)mHanaActorMngr.getActorP();
     if (hana_p != NULL) {
-        fopAcM_OnStatus(hana_p, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OnStatus(hana_p, fopAcStts_UNK_0x4000_e);
     }
 
     daNpcKasiKyu_c* kyu_p = (daNpcKasiKyu_c*)mKyuActorMngr.getActorP();
     if (kyu_p != NULL) {
-        fopAcM_OnStatus(kyu_p, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OnStatus(kyu_p, fopAcStts_UNK_0x4000_e);
     }
 
     daNpcKasiMich_c* mich_p = (daNpcKasiMich_c*)mMichActorMngr.getActorP();
     if (mich_p != NULL) {
-        fopAcM_OnStatus(mich_p, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OnStatus(mich_p, fopAcStts_UNK_0x4000_e);
     }
 }
 
 void daNpcKasi_Mng_c::allDemoNotMove() {
     daNpcKasiHana_c* hana_p = (daNpcKasiHana_c*)mHanaActorMngr.getActorP();
     if (hana_p != NULL) {
-        fopAcM_OffStatus(hana_p, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OffStatus(hana_p, fopAcStts_UNK_0x4000_e);
     }
 
     daNpcKasiKyu_c* kyu_p = (daNpcKasiKyu_c*)mKyuActorMngr.getActorP();
     if (kyu_p != NULL) {
-        fopAcM_OffStatus(kyu_p, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OffStatus(kyu_p, fopAcStts_UNK_0x4000_e);
     }
 
     daNpcKasiMich_c* mich_p = (daNpcKasiMich_c*)mMichActorMngr.getActorP();
     if (mich_p != NULL) {
-        fopAcM_OffStatus(mich_p, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OffStatus(mich_p, fopAcStts_UNK_0x4000_e);
     }
 }
 
@@ -438,7 +438,7 @@ BOOL daNpcKasi_Mng_c::isMiniGamePlaying() {
 void daNpcKasi_Mng_c::schMemberActor() {
     if (mKyuActorMngr.getPId() == fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* kyu_p = NULL;
-        if (fopAcM_SearchByName(PROC_NPC_KASIKYU, (fopAc_ac_c**)&kyu_p) != 0) {
+        if (fopAcM_SearchByName(fpcNm_NPC_KASIKYU_e, (fopAc_ac_c**)&kyu_p) != 0) {
             setKyuActor(kyu_p);
         }
     }
@@ -446,7 +446,7 @@ void daNpcKasi_Mng_c::schMemberActor() {
     if (mMichActorMngr.getPId() == fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* mich_p = NULL;
 
-        if (fopAcM_SearchByName(PROC_NPC_KASIMICH, (fopAc_ac_c**)&mich_p) != 0) {
+        if (fopAcM_SearchByName(fpcNm_NPC_KASIMICH_e, (fopAc_ac_c**)&mich_p) != 0) {
             setMichActor(mich_p);
         }
     }
@@ -456,7 +456,7 @@ void daNpcKasi_Mng_c::schDanchoActor() {
     if (mDanchoActorMngr.getPId() == fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* dancho_p = NULL;
 
-        if (fopAcM_SearchByName(PROC_NPC_CHIN, (fopAc_ac_c**)&dancho_p) != 0) {
+        if (fopAcM_SearchByName(fpcNm_NPC_CHIN_e, (fopAc_ac_c**)&dancho_p) != 0) {
             setDanchoActor(dancho_p);
         }
     }
@@ -519,7 +519,7 @@ void daNpcKasi_Mng_c::chgWeightLight() {
 }
 
 static daNpc_GetParam2 l_bckGetParamList[15] = {
-    {BCK_MICH_IYAN_WAIT, J3DFrameCtrl::EMode_LOOP, GIRLS}, 
+    {BCK_MICH_IYAN_WAIT, J3DFrameCtrl::EMode_LOOP, GIRLS},
     {BCK_MICH_KYA_TALK, J3DFrameCtrl::EMode_LOOP, GIRLS},
     {BCK_MICH_OUEN_WAIT_A, J3DFrameCtrl::EMode_LOOP, GIRLS},
     {BCK_MICH_OUEN_WAIT_B, J3DFrameCtrl::EMode_LOOP, GIRLS},
@@ -626,7 +626,7 @@ daNpcKasiHana_c::~daNpcKasiHana_c() {
     for (int i = 0; i < 3; i++) {
         dComIfG_resDelete(&mPhases[i], l_arcNames[i]);
     }
-    
+
     if (heap != NULL) {
         mAnm_p->stopZelAnime();
     }
@@ -938,7 +938,7 @@ void daNpcKasiHana_c::reset() {
         mPath.setPathInfo(getRailNo(), fopAcM_GetRoomNo(this), 0);
         mPath.setIdx(6);
     } else if (mType == TYPE_CHEER) {
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
     }
 
     field_0x1441 = 0;
@@ -1140,8 +1140,8 @@ void daNpcKasiHana_c::lookat() {
     } else {
         mLookat.setAttnPos(NULL);
     }
-    
-    mLookat.setParam(body_angleX_min, body_angleX_max, body_angleY_min, body_angleY_max, 0.0f, 0.0f, 0.0f, 0.0f, 
+
+    mLookat.setParam(body_angleX_min, body_angleX_max, body_angleY_min, body_angleY_max, 0.0f, 0.0f, 0.0f, 0.0f,
                      head_angleX_min, head_angleX_max, head_angleY_min, head_angleY_max, mCurAngle.y, lookatPos);
     mLookat.calc(this, model->getBaseTRMtx(), lookatAngle, i_snap, angle_delta, FALSE);
 }
@@ -1382,7 +1382,7 @@ cXyz daNpcKasiHana_c::getChacePos() {
 
     cXyz sp3c;
     mPath.getDstPos(current.pos, sp3c);
-    
+
     return sp3c;
 }
 
@@ -1449,7 +1449,7 @@ int daNpcKasiHana_c::fear(int param_1) {
         case 4: {
             cXyz sp28;
             mAnm_p->setPlaySpeed(1.5f);
-            
+
             if (mPath.getDstPos(current.pos, sp28)) {
                 mEscape = true;
                 mMode = 5;
@@ -1486,8 +1486,8 @@ void* daNpcKasiHana_c::_srch_escape_tag(void* i_actor, void* i_data) {
     if (!fopAcM_IsActor(i_actor)) {
         return NULL;
     }
-    
-    if (fopAcM_GetName(i_actor) != PROC_Tag_Escape) {
+
+    if (fopAcM_GetName(i_actor) != fpcNm_Tag_Escape_e) {
         return NULL;
     }
 
@@ -1498,7 +1498,7 @@ void* daNpcKasiHana_c::_srch_escape_tag(void* i_actor, void* i_data) {
         mTargetTag = (daTagEscape_c*)i_actor;
         return NULL;
     }
-    
+
     if (iVar1 > 0x4000) {
         f32 fVar1 = fopAcM_searchActorDistanceXZ2((fopAc_ac_c*)i_data, (fopAc_ac_c*)i_actor);
         if (fVar1 < mTargetTagDist) {
@@ -1784,13 +1784,13 @@ BOOL daNpcKasiHana_c::_Evt_Kasi_Appear(int i_index) {
     } else {
         return TRUE;
     }
-    
+
     if (eventManager.getIsAddvance(i_index)) {
         _Evt_Kasi_Appear_CutInit(i_cutIndex);
     }
 
     return _Evt_Kasi_Appear_CutMain(i_cutIndex);
-    
+
 }
 
 BOOL daNpcKasiHana_c::_Evt_Kasi_Appear_CutInit(int const& i_cutIndex) {
@@ -1800,7 +1800,7 @@ BOOL daNpcKasiHana_c::_Evt_Kasi_Appear_CutInit(int const& i_cutIndex) {
             setMotion(MOT_W_WAIT_A, -1.0f, 0);
             field_0x1430 = 20;
             break;
-        
+
         case 20:
             mKasiMng.onSygnal(0x400);
             setMotion(MOT_MICH_KYA_TALK, -1.0f, 0);
@@ -1829,13 +1829,13 @@ BOOL daNpcKasiHana_c::_Evt_Kasi_Appear_CutMain(int const& i_cutIndex) {
                 rv = TRUE;
             }
             break;
-        
+
         case 20:
             if (talkProc(NULL, TRUE, NULL)) {
                 rv = TRUE;
             }
             break;
-        
+
         case 21:
             if (mMotion == MOT_MICH_KYA_TALK && (mAnm_p->getFrame() == 19.0f || mAnm_p->getFrame() == 1.0f)) {
                 setMotion(MOT_W_WAIT_A, -1.0f, 0);
@@ -1874,7 +1874,7 @@ BOOL daNpcKasiHana_c::_Evt_Kasi_Talk(int i_index) {
 
     /* dSv_event_flag_c::F_289 - Castle Town - Heard conversation about entering Star Game 1 */
     if (daNpcF_chkEvtBit(289)) {
-        mesNo = dComIfGp_evmng_getMyIntegerP(i_index, "mesNo2");    
+        mesNo = dComIfGp_evmng_getMyIntegerP(i_index, "mesNo2");
     } else {
         mesNo = dComIfGp_evmng_getMyIntegerP(i_index, "mesNo1");
     }
@@ -1895,7 +1895,7 @@ BOOL daNpcKasiHana_c::_Evt_Kasi_Talk_CutInit(int const& i_cutIndex) {
             setMotion(MOT_MICH_KYA_TALK, -1.0f, 0);
             initTalk(mMessageNo, actors);
             break;
-        
+
         case 20:
             mKasiMng.onSygnal(0x20000);
             break;
@@ -1903,7 +1903,7 @@ BOOL daNpcKasiHana_c::_Evt_Kasi_Talk_CutInit(int const& i_cutIndex) {
         case 30:
             mKasiMng.onSygnal(0x40000);
             break;
-            
+
         case 31:
             mKasiMng.onSygnal(0x1000);
             break;
@@ -1925,7 +1925,7 @@ BOOL daNpcKasiHana_c::_Evt_Kasi_Talk_CutMain(int const& i_cutIndex, int param_2)
                 rv = TRUE;
             }
             break;
-        
+
         case 20:
             if (mMotion == MOT_MICH_KYA_TALK && (mAnm_p->getFrame() == 19.0f || mAnm_p->getFrame() == 1.0f)) {
                 setMotion(MOT_W_WAIT_A, -1.0f, 0);
@@ -1943,7 +1943,7 @@ BOOL daNpcKasiHana_c::_Evt_Kasi_Talk_CutMain(int const& i_cutIndex, int param_2)
                 rv = TRUE;
             }
             break;
-            
+
         case 31:
             rv = TRUE;
             break;
@@ -1985,7 +1985,7 @@ BOOL daNpcKasiHana_c::_Evt_Kasi_CutInit(int const& i_cutIndex) {
             mKasiMng.onSygnal(0x400);
             initTalk(mMessageNo, NULL);
             break;
-        
+
         case 21:
             mKasiMng.onSygnal(0x1000);
             field_0x1430 = 24;
@@ -2036,7 +2036,7 @@ BOOL daNpcKasiHana_c::_Evt_Kasi_CutMain(int const& i_cutIndex) {
 
         case 30: {
             cXyz sp38(mKasiMng.getCenterPos());
-            
+
             if (_turn_pos(sp38, 0xA00)) {
                 rv = TRUE;
             }
@@ -2064,7 +2064,7 @@ BOOL daNpcKasiHana_c::_Evt_Kasi_Cheer(int i_index) {
 
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int i_cutIndex = -1;
-    
+
     int* cutId = dComIfGp_evmng_getMyIntegerP(i_index, "cutId");
     if (cutId != NULL) {
         i_cutIndex = *cutId;
@@ -2136,7 +2136,7 @@ BOOL daNpcKasiHana_c::_Evt_Kasi_Cheer_CutMain(int const& i_cutIndex, int param_2
                 rv = TRUE;
             }
             break;
-        
+
         case 20:
             if (field_0x1430 > 0) {
                 field_0x1430--;
@@ -2210,7 +2210,7 @@ BOOL daNpcKasiHana_c::_Evt_Kasi_Cheer2_CutInit(int const& i_cutIndex) {
             field_0x1430 = 86;
             initTalk(mMessageNo, actors);
             break;
-        
+
         case 20:
             mKasiMng.onSygnal(0x2000);
             break;
@@ -2243,7 +2243,7 @@ BOOL daNpcKasiHana_c::_Evt_Kasi_Cheer2_CutMain(int const& i_cutIndex, int param_
                 rv = TRUE;
             }
             break;
-        
+
         case 20:
             if (field_0x1430 > 0) {
                 field_0x1430--;
@@ -2310,18 +2310,18 @@ static actor_method_class daNpcKasiHana_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_KASIHANA = {
-  fpcLy_CURRENT_e,            // mLayerID
-  7,                          // mListID
-  fpcPi_CURRENT_e,            // mListPrio
-  PROC_NPC_KASIHANA,          // mProcName
-  &g_fpcLf_Method.base,      // sub_method
-  sizeof(daNpcKasiHana_c),    // mSize
-  0,                          // mSizeOther
-  0,                          // mParameters
-  &g_fopAc_Method.base,       // sub_method
-  420,                        // mPriority
-  &daNpcKasiHana_MethodTable, // sub_method
-  0x00040108,                 // mStatus
-  fopAc_NPC_e,                // mActorType
-  fopAc_CULLBOX_CUSTOM_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_KASIHANA_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcKasiHana_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_KASIHANA_e,
+    /* Actor SubMtd */ &daNpcKasiHana_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x8_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

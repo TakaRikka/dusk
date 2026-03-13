@@ -117,10 +117,10 @@ static void* s_obj_delete(void* i_actor, void* i_data) {
     UNUSED(i_data);
     
     if (fopAcM_IsActor(i_actor)) {
-        if (fopAcM_GetName(i_actor) == PROC_E_DB) {
+        if (fopAcM_GetName(i_actor) == fpcNm_E_DB_e) {
             fopAc_ac_c* actor = (fopAc_ac_c*)i_actor;
             actor->health = 1000;
-        } else if (fopAcM_GetName(i_actor) == PROC_E_DB_LEAF) {
+        } else if (fopAcM_GetName(i_actor) == fpcNm_E_DB_LEAF_e) {
             fopAcM_delete((fopAc_ac_c*)i_actor);
         }
     }
@@ -149,7 +149,7 @@ static int target_info_count;
 static void* s_h_sub(void* i_actor, void* i_data) {
     UNUSED(i_data);
 
-    if ((fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_Pillar) && target_info_count < 20) {
+    if ((fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_Obj_Pillar_e) && target_info_count < 20) {
         target_info[target_info_count] = (daPillar_c*)i_actor;
         target_info_count++;
     }
@@ -217,7 +217,7 @@ static daPillar_c* search_hasira(e_mk_class* i_this) {
 static void* s_d_sub(void* i_actor, void* i_data) {
     UNUSED(i_data);
     
-    if ((fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_DB)) {
+    if ((fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_DB_e)) {
         e_db_class* actor = (e_db_class*)i_actor;
         if (actor->action == 10) {
             if (actor->mode >= 1 && target_info_count < 20) {
@@ -1521,7 +1521,7 @@ static void demo_camera_start(e_mk_class* i_this) {
                 i_this->camCenter = player->current.pos;
                 i_this->camCenter.y += 100.0f;
                 i_this->demoMode = e_mk_class::DEMO_MODE_FINISH;
-                fopAcM_OffStatus(actor, 0x4000);
+                fopAcM_OffStatus(actor, fopAcStts_UNK_0x4000_e);
                 Z2GetAudioMgr()->subBgmStart(Z2BGM_BOOMERAMG_MONKEY);
             }
 
@@ -1936,7 +1936,7 @@ static void demo_camera_end(e_mk_class* i_this) {
 static void* s_ks_sub(void* i_actor, void* i_data) {
     UNUSED(i_data);
 
-    if ((fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_NPC_KS) && static_cast<npc_ks_class*>(i_actor)->set_id == 0) {
+    if ((fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_NPC_KS_e) && static_cast<npc_ks_class*>(i_actor)->set_id == 0) {
         return i_actor;
     }
 
@@ -1946,7 +1946,7 @@ static void* s_ks_sub(void* i_actor, void* i_data) {
 static void* s_brg_sub(void* i_actor, void* i_data) {
     UNUSED(i_data);
 
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_OBJ_BRG) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_OBJ_BRG_e) {
         static_cast<obj_brg_class*>(i_actor)->field_0xaef4 = VREG_F(11) + 500.0f;
         static_cast<obj_brg_class*>(i_actor)->mType |= (u8)4;
     }
@@ -1957,7 +1957,7 @@ static void* s_brg_sub(void* i_actor, void* i_data) {
 static void* s_brg_sub2(void* i_actor, void* i_data) {
     UNUSED(i_data);
 
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_OBJ_BRG) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_OBJ_BRG_e) {
 #if PLATFORM_SHIELD
         static_cast<obj_brg_class*>(i_actor)->mType &= (u8)~4u;
 #else
@@ -2711,7 +2711,7 @@ static int daE_MK_Execute(e_mk_class* i_this) {
             parameters = 1;
         }
 
-        i_this->boomerangId = fopAcM_createChild(PROC_E_MK_BO, fopAcM_GetID(actor), parameters,
+        i_this->boomerangId = fopAcM_createChild(fpcNm_E_MK_BO_e, fopAcM_GetID(actor), parameters,
                                                  &actor->current.pos, fopAcM_GetRoomNo(actor), NULL, NULL,
                                                  -1, NULL);
         i_this->unkFlag4 = 0;
@@ -2917,12 +2917,12 @@ static int daE_MK_Create(fopAc_ac_c* i_actor) {
                 mk->action = e_mk_class::ACT_S_DEMO;
                 u32 i_parameters = fopAcM_GetParam(i_actor) & 0xFF000000 | 0xFFFF01;
                 cXyz sp30(-21.0f, 5114.0f, -4941.0f);
-                mk->dbId1 = fopAcM_createChild(PROC_E_DB, fopAcM_GetID(i_actor), i_parameters,
+                mk->dbId1 = fopAcM_createChild(fpcNm_E_DB_e, fopAcM_GetID(i_actor), i_parameters,
                                                         &sp30, fopAcM_GetRoomNo(i_actor), NULL,
                                                         NULL, -1, NULL);
 
                 sp30.set(-10.0f, 5114.0f, -4401.0f);
-                mk->dbId2 = fopAcM_createChild(PROC_E_DB, fopAcM_GetID(i_actor), i_parameters,
+                mk->dbId2 = fopAcM_createChild(fpcNm_E_DB_e, fopAcM_GetID(i_actor), i_parameters,
                                                         &sp30, fopAcM_GetRoomNo(i_actor), NULL,
                                                         NULL, -1, NULL);
                 
@@ -2949,18 +2949,18 @@ static actor_method_class l_daE_MK_Method = {
 };
 
 actor_process_profile_definition g_profile_E_MK = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_MK,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(e_mk_class),     // size
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  165,                    // mPriority
-  &l_daE_MK_Method,       // sub_method
-  0x00040100,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_MK_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_mk_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_MK_e,
+    /* Actor SubMtd */ &l_daE_MK_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

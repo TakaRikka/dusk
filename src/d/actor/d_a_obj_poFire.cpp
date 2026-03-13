@@ -73,8 +73,8 @@ void daPoFire_c::setBaseMtx() {
 }
 
 
-static u8 const itemNo[4] = {fpcNm_ITEM_POU_FIRE1, fpcNm_ITEM_POU_FIRE2, fpcNm_ITEM_POU_FIRE3,
-                             fpcNm_ITEM_POU_FIRE4};
+static u8 const itemNo[4] = {dItemNo_POU_FIRE1_e, dItemNo_POU_FIRE2_e, dItemNo_POU_FIRE3_e,
+                             dItemNo_POU_FIRE4_e};
 
 int daPoFire_c::create() {
     fopAcM_ct(this, daPoFire_c);
@@ -157,7 +157,7 @@ void* daPoFire_c::searchCandle(void* i_actor, void* i_this) {
     daPoFire_c* _this = static_cast<daPoFire_c*>(i_this);
     daPoCandle_c* _actor = static_cast<daPoCandle_c*>(i_actor);
     if (_actor != NULL && fopAcM_IsActor(_actor) &&
-        fopAcM_GetProfName(_actor) == PROC_Obj_poCandle &&
+        fopAcM_GetProfName(_actor) == fpcNm_Obj_poCandle_e &&
         _this->mActorID == ((daPoCandle_c*)_actor)->getIDNum())
     {
         return _actor;
@@ -168,7 +168,7 @@ void* daPoFire_c::searchCandle(void* i_actor, void* i_this) {
 void* daPoFire_c::searchFireTag(void* i_actor, void* i_this) {
     daPoFire_c* _this = static_cast<daPoFire_c*>(i_this);
     daTagPoFire_c* _actor = static_cast<daTagPoFire_c*>(i_actor);
-    if (_actor != NULL && fopAcM_IsActor(_actor) && fopAcM_GetProfName(_actor) == PROC_Tag_poFire) {
+    if (_actor != NULL && fopAcM_IsActor(_actor) && fopAcM_GetProfName(_actor) == fpcNm_Tag_poFire_e) {
         return _actor;
     }
     return NULL;
@@ -438,18 +438,18 @@ static actor_method_class l_daPoFire_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_poFire = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Tag_Lv4Candle,      // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daPoFire_c),      // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    540,                     // mPriority
-    &l_daPoFire_Method,      // sub_method
-    0x00044000,              // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_Lv4Candle_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daPoFire_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Tag_Lv4Candle_e,
+    /* Actor SubMtd */ &l_daPoFire_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

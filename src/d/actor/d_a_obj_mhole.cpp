@@ -67,7 +67,7 @@ static void* searchParentSub(void* i_magLift, void* i_mhole) {
     fopAc_ac_c* mag_lift = (fopAc_ac_c*)i_magLift;
 
     if (mag_lift != NULL && fopAcM_IsActor(mag_lift) &&
-        fopAcM_GetProfName(mag_lift) == PROC_Obj_MagLift &&
+        fopAcM_GetProfName(mag_lift) == fpcNm_Obj_MagLift_e &&
         mag_lift->home.pos.abs(mhole->home.pos) < 10.0f)
     {
         return mag_lift;
@@ -384,18 +384,18 @@ static actor_method_class l_daObjMHole_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_MHole = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Obj_MHole,          // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daObjMHole_c),    // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    589,                     // mPriority
-    &l_daObjMHole_Method,    // sub_method
-    0x00040100,              // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_MHole_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjMHole_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_MHole_e,
+    /* Actor SubMtd */ &l_daObjMHole_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

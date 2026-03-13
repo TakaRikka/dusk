@@ -637,7 +637,7 @@ void daNpcImpal_c::lookat() {
 }
 
 static void* s_sub1(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_Carry &&
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_Obj_Carry_e &&
         ((fopAc_ac_c*)i_actor)->current.pos.absXZ(((fopAc_ac_c*)i_data)->current.pos) < 1000.0f)
     {
         fopAcM_delete((fopAc_ac_c*)i_actor);
@@ -735,7 +735,7 @@ bool daNpcImpal_c::wait(void* param_0) {
                         return true;
                     }
                     u8 preitemno = dComIfGp_event_getPreItemNo();
-                    if (preitemno == fpcNm_ITEM_ANCIENT_DOCUMENT) {
+                    if (preitemno == dItemNo_ANCIENT_DOCUMENT_e) {
                         mFlowID = 5;
                         setAction(&daNpcImpal_c::talk);
                     } else {
@@ -1238,18 +1238,18 @@ static actor_method_class daNpcImpal_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_IMPAL = {
-    fpcLy_CURRENT_e,          // mLayerID
-    7,                        // mListID
-    fpcPi_CURRENT_e,          // mListPrio
-    PROC_NPC_IMPAL,           // mProcName
-    &g_fpcLf_Method.base,     // sub_method
-    sizeof(daNpcImpal_c),     // mSize
-    0,                        // mSizeOther
-    0,                        // mParameters
-    &g_fopAc_Method.base,     // sub_method
-    416,                      // mPriority
-    &daNpcImpal_MethodTable,  // sub_method
-    0x00040100,               // mStatus
-    fopAc_NPC_e,              // mActorType
-    fopAc_CULLBOX_CUSTOM_e,   // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_IMPAL_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcImpal_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_IMPAL_e,
+    /* Actor SubMtd */ &daNpcImpal_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

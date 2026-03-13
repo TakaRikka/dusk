@@ -152,7 +152,7 @@ int dGameover_c::_create() {
             if (!strcmp(dComIfGp_getLastPlayStageName(), "D_MN10A")) {
                 // Last stage was Stallord Arena
                 // Remove Ooccoo from inventory
-                dComIfGs_setItem(SLOT_18, fpcNm_ITEM_NONE);
+                dComIfGs_setItem(SLOT_18, dItemNo_NONE_e);
                 dComIfGs_resetLastWarpAcceptStage();
             }
 
@@ -307,8 +307,8 @@ void dGameover_c::saveClose_proc() {
         }
 
         // Reset Lantern and oil status back into inventory if gameover during monkey steal sequence
-        if (dComIfGs_isItemFirstBit(fpcNm_ITEM_KANTERA) && dComIfGs_getItem(SLOT_1, true) == fpcNm_ITEM_NONE) {
-            dComIfGs_setItem(SLOT_1, fpcNm_ITEM_KANTERA);
+        if (dComIfGs_isItemFirstBit(dItemNo_KANTERA_e) && dComIfGs_getItem(SLOT_1, true) == dItemNo_NONE_e) {
+            dComIfGs_setItem(SLOT_1, dItemNo_KANTERA_e);
             dComIfGs_setOil(dMeter2Info_getOilGaugeBackUp());
         }
 
@@ -478,7 +478,7 @@ static int dGameover_Create(msg_class* i_this) {
 
 s32 d_GameOver_Create(u8 i_gameoverType) {
     dMeter2Info_setGameOverType(i_gameoverType);
-    return fopMsgM_create(PROC_GAMEOVER, NULL, NULL, NULL, NULL, NULL);
+    return fopMsgM_create(fpcNm_GAMEOVER_e, NULL, NULL, NULL, NULL, NULL);
 }
 
 bool d_GameOver_Delete(fpc_ProcID& i_id) {
@@ -501,15 +501,15 @@ static leafdraw_method_class l_dGameover_Method = {
 };
 
 msg_process_profile_definition g_profile_GAMEOVER = {
-    fpcLy_CURRENT_e,
-    0x0C,
-    fpcPi_CURRENT_e,
-    PROC_GAMEOVER,
-    &g_fpcLf_Method.base,
-    sizeof(dGameover_c),
-    0,
-    0,
-    &g_fopMsg_Method,
-    0x303,
-    &l_dGameover_Method,
+    /* Layer ID    */ fpcLy_CURRENT_e,
+    /* List ID     */ 12,
+    /* List Prio   */ fpcPi_CURRENT_e,
+    /* Proc Name   */ fpcNm_GAMEOVER_e,
+    /* Proc SubMtd */ &g_fpcLf_Method.base,
+    /* Size        */ sizeof(dGameover_c),
+    /* Size Other  */ 0,
+    /* Parameters  */ 0,
+    /* Leaf SubMtd */ &g_fopMsg_Method,
+    /* Draw Prio   */ fpcDwPi_GAMEOVER_e,
+    /* Msg SubMtd  */ &l_dGameover_Method,
 };

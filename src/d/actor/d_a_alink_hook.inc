@@ -305,7 +305,7 @@ void daAlink_c::cancelHookshotCarry() {
 }
 
 void daAlink_c::changeHookshotDrawModel() {
-    if (mEquipItem == fpcNm_ITEM_HOOKSHOT && field_0x3020 == 1) {
+    if (mEquipItem == dItemNo_HOOKSHOT_e && field_0x3020 == 1) {
         J3DModel* tmp = mHeldItemModel;
         mHeldItemModel = field_0x0710;
         field_0x0710 = tmp;
@@ -318,7 +318,7 @@ void daAlink_c::changeHookshotDrawModel() {
 
 BOOL daAlink_c::checkHookshotRoofLv7Boss() {
     return mCargoCarryAcKeep.getActor() != NULL &&
-           fopAcM_GetName(mCargoCarryAcKeep.getActor()) == PROC_B_DR;
+           fopAcM_GetName(mCargoCarryAcKeep.getActor()) == fpcNm_B_DR_e;
 }
 
 BOOL daAlink_c::checkChaseHookshot() {
@@ -335,8 +335,8 @@ BOOL daAlink_c::checkChaseHookshot() {
     if (mTargetedActor != NULL) {
         s16 actorName = fopAcM_GetName(mTargetedActor);
         return field_0x2804 == mTargetedActor &&
-               (checkBossOctaIealRoom() || actorName == PROC_Obj_FallObj ||
-                actorName == PROC_B_DR || actorName == PROC_E_PH);
+               (checkBossOctaIealRoom() || actorName == fpcNm_Obj_FallObj_e ||
+                actorName == fpcNm_B_DR_e || actorName == fpcNm_E_PH_e);
     }
 
     return false;
@@ -416,7 +416,7 @@ void daAlink_c::setHookshotModel() {
     resetHookshotMode();
     mpHookChain->setUserArea((uintptr_t)this);
     field_0x2f94 = 1;
-    if (mEquipItem == fpcNm_ITEM_W_HOOKSHOT) {
+    if (mEquipItem == dItemNo_W_HOOKSHOT_e) {
         field_0x2f95 = 6;
     }
 
@@ -462,7 +462,7 @@ void daAlink_c::setHookshotSight() {
             mSight.onLockFlg();
 
             if (mHookTargetAcKeep.getActor() != NULL &&
-                fopAcM_GetName(mHookTargetAcKeep.getActor()) == PROC_B_DR)
+                fopAcM_GetName(mHookTargetAcKeep.getActor()) == fpcNm_B_DR_e)
             {
                 ((daB_DR_c*)mHookTargetAcKeep.getActor())->onTarget();
             }
@@ -757,14 +757,14 @@ int daAlink_c::setHookshotHangMoveBGCollect() {
             field_0x3022 = sp8.y;
 
             s16 movebg_name = getMoveBGActorName(*polyinfo, 1);
-            if (movebg_name == PROC_Obj_SwHang) {
+            if (movebg_name == fpcNm_Obj_SwHang_e) {
                 daObjSwHang_c* swhang = (daObjSwHang_c*)dComIfG_Bgsp().GetActorPointer(*polyinfo);
                 swhang->setHangPlayer();
 
                 f32 prev_y = mIronBallBgChkPos.y;
                 mIronBallBgChkPos.y = swhang->getHangPos().y;
                 current.pos.y += mIronBallBgChkPos.y - prev_y;
-            } else if (movebg_name == PROC_Obj_Chandelier) {
+            } else if (movebg_name == fpcNm_Obj_Chandelier_e) {
                 ((daObjChandelier_c*)dComIfG_Bgsp().GetActorPointer(*polyinfo))->moveHookOn();
             }
         }
@@ -991,12 +991,12 @@ void daAlink_c::setHookshotPos() {
                     mHookshotTopPos = field_0x381c;
 
                     targetAc_p = mHookTargetAcKeep.getActor();
-                    if (targetAc_p != NULL && (targetAc_p->actor_status & 0x280000)) {
+                    if (targetAc_p != NULL && (targetAc_p->actor_status & (fopAcStts_UNK_0x200000_e | fopAcStts_UNK_0x80000_e))) {
                         mHookTargetAcKeep.setData(targetAc_p);
                         mIronBallCenterPos = mHookshotTopPos - targetAc_p->current.pos;
                         setHookshotCatchNow();
 
-                        if (targetAc_p->actor_status & 0x200000) {
+                        if (targetAc_p->actor_status & fopAcStts_UNK_0x200000_e) {
                             mItemMode = 5;
                             field_0x316c.set(field_0x301c, field_0x301e, 0);
                             mDoMtx_stack_c::ZrotS(-targetAc_p->shape_angle.z);
@@ -1338,7 +1338,7 @@ int daAlink_c::checkLandHookshotHang() {
         ((mProcID != PROC_HOOKSHOT_ROOF_SHOOT && mProcID != PROC_HOOKSHOT_WALL_SHOOT) ||
          checkHookshotWait()) &&
         (!checkHookshotRoofLv7Boss() || !checkEquipHeavyBoots()) &&
-        checkSetItemTrigger(fpcNm_ITEM_HVY_BOOTS))
+        checkSetItemTrigger(dItemNo_HVY_BOOTS_e))
     {
         if (dComIfGp_checkPlayerStatus1(0, 0x10000)) {
             return procHookshotRoofBootsInit(mCargoCarryAcKeep.getActor());
@@ -1522,11 +1522,11 @@ int daAlink_c::procHookshotFly() {
     if (targetAc_p != NULL) {
         targetAc_name = fopAcM_GetName(targetAc_p);
     } else {
-        targetAc_name = PROC_ALINK;
+        targetAc_name = fpcNm_ALINK_e;
     }
 
     BOOL var_r29 = FALSE;
-    if (targetAc_name == PROC_Obj_SwHang) {
+    if (targetAc_name == fpcNm_Obj_SwHang_e) {
         int swhang_type = static_cast<daObjSwHang_c*>(targetAc_p)->getType();
         if (swhang_type == 3 || swhang_type == 4) {
             var_r29 = TRUE;
@@ -1557,15 +1557,15 @@ int daAlink_c::procHookshotFly() {
     }
 
     current.pos += field_0x37d4;
-    if (checkSetItemTrigger(fpcNm_ITEM_W_HOOKSHOT) != 0) {
+    if (checkSetItemTrigger(dItemNo_W_HOOKSHOT_e) != 0) {
         mProcVar5.field_0x3012 = 1;
     } else if (mProcVar5.field_0x3012 != 0 && !itemButton()) {
         mProcVar5.field_0x3012 = 0;
     }
 
     if (mItemMode != 5 && mItemMode != HS_MODE_FLY_e) {
-        if (targetAc_name == PROC_B_OB ||
-            (targetAc_name == PROC_B_DR && static_cast<daB_DR_c*>(targetAc_p)->isBack()))
+        if (targetAc_name == fpcNm_B_OB_e ||
+            (targetAc_name == fpcNm_B_DR_e && static_cast<daB_DR_c*>(targetAc_p)->isBack()))
         {
             dComIfGp_getVibration().StartShock(1, 1, cXyz(0.0f, 1.0f, 0.0f));
             return procBossBodyHangInit(targetAc_p);
@@ -1619,7 +1619,7 @@ int daAlink_c::procHookshotFly() {
                 } else if (is_force_fall) {
                     procFallInit(1, 5.0f);
                     field_0x2f99 = 0x70;
-                } else if (targetAc_name == PROC_E_PH || targetAc_name == PROC_B_DR || var_r29) {
+                } else if (targetAc_name == fpcNm_E_PH_e || targetAc_name == fpcNm_B_DR_e || var_r29) {
                     procHookshotRoofWaitInit(1, targetAc_p, mProcVar5.field_0x3012);
                 } else if (var_r28 && dComIfG_Bgsp().GetMonkeyBarsCode(mPolyInfo2)) {
                     cXyz sp88;
@@ -1739,7 +1739,7 @@ int daAlink_c::procHookshotRoofWait() {
     setShapeAngleToAtnActor(0);
 
     if (mProcVar2.field_0x300c == 0) {
-        if (checkSetItemTrigger(fpcNm_ITEM_W_HOOKSHOT)) {
+        if (checkSetItemTrigger(dItemNo_W_HOOKSHOT_e)) {
             mProcVar5.field_0x3012 = 1;
         } else if (mProcVar5.field_0x3012 != 0 && !itemButton()) {
             mProcVar5.field_0x3012 = 0;
@@ -1754,7 +1754,7 @@ int daAlink_c::procHookshotRoofWait() {
             mProcVar2.field_0x300c = 1;
         }
     } else if (!checkHookshotRoofLv7Boss()) {
-        if (checkSetItemTrigger(fpcNm_ITEM_W_HOOKSHOT) || mProcVar5.field_0x3012 != 0) {
+        if (checkSetItemTrigger(dItemNo_W_HOOKSHOT_e) || mProcVar5.field_0x3012 != 0) {
             return procHookshotRoofShootInit(mCargoCarryAcKeep.getActor());
         }
         hookshotRoofTurn();
@@ -2000,7 +2000,7 @@ int daAlink_c::procHookshotWallWait() {
     }
 
     if (mProcVar2.field_0x300c == 0) {
-        if (checkSetItemTrigger(fpcNm_ITEM_W_HOOKSHOT)) {
+        if (checkSetItemTrigger(dItemNo_W_HOOKSHOT_e)) {
             mProcVar5.field_0x3012 = 1;
         } else if (mProcVar5.field_0x3012 != 0 && !itemButton()) {
             mProcVar5.field_0x3012 = 0;
@@ -2014,7 +2014,7 @@ int daAlink_c::procHookshotWallWait() {
             setHookshotWallWaitAnime();
             mProcVar2.field_0x300c = 1;
         }
-    } else if (checkSetItemTrigger(fpcNm_ITEM_W_HOOKSHOT) || mProcVar5.field_0x3012 != 0) {
+    } else if (checkSetItemTrigger(dItemNo_W_HOOKSHOT_e) || mProcVar5.field_0x3012 != 0) {
         return procHookshotWallShootInit();
     }
 

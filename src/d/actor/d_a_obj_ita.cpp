@@ -140,7 +140,7 @@ static void rideCallBack(dBgW* param_1, fopAc_ac_c* a_this, fopAc_ac_c* i_player
     (void) a_this; // it is used, but this is needed for dbg matching
     daObjIta_c* i_this = (daObjIta_c*)a_this;
 
-    if (fopAcM_GetName(i_player) == PROC_ALINK) {
+    if (fopAcM_GetName(i_player) == fpcNm_ALINK_e) {
         daPy_py_c* player = daPy_getPlayerActorClass();
         if (i_this->field_0x5ac < 0.0f) {
             i_this->field_0x5a8 = (0.8f + HREG_F(2)) * i_this->field_0x5ac;
@@ -232,7 +232,7 @@ int daObjIta_c::Execute(Mtx** mtx) {
     cXyz& unused_pos = fopAcM_GetPosition(player);
     cXyz& playerSpeed = fopAcM_GetSpeed(player);
 
-    if (fopAcM_SearchByName(PROC_E_YMB, (fopAc_ac_c**)&e_ymb) != 0 && e_ymb != NULL) {
+    if (fopAcM_SearchByName(fpcNm_E_YMB_e, (fopAc_ac_c**)&e_ymb) != 0 && e_ymb != NULL) {
         e_ymb_Pos = &fopAcM_GetPosition(e_ymb);
     }
 
@@ -297,18 +297,18 @@ static actor_method_class l_daObjIta_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_ITA = {
-  fpcLy_CURRENT_e,        // mLayerID
-  3,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_ITA,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjIta_c),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  474,                    // mPriority
-  &l_daObjIta_Method,     // sub_method
-  0x00040100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_ITA_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjIta_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_ITA_e,
+    /* Actor SubMtd */ &l_daObjIta_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

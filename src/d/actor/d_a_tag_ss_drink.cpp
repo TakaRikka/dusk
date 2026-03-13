@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_tag_ss_drink.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "d/d_msg_object.h"
 #include "d/actor/d_a_myna.h"
 
@@ -259,18 +259,18 @@ static actor_method_class daTag_SSDrink_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_TAG_SSDRINK = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_TAG_SSDRINK,
-    &g_fpcLf_Method.base,
-    sizeof(daTag_SSDrink_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x46,
-    &daTag_SSDrink_MethodTable,
-    0x64100,
-    5,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_SSDRINK_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTag_SSDrink_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_TAG_SSDRINK_e,
+    /* Actor SubMtd */ &daTag_SSDrink_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_NOPAUSE_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_UNK_GROUP_5_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

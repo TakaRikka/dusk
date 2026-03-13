@@ -303,7 +303,7 @@ BOOL daNpc_zrA_c::talk(void* param_0) {
 }
 
 static void* s_subMulti(void* i_proc, void* i_this) {
-    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_NPC_ZRA) {
+    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == fpcNm_NPC_ZRA_e) {
         daNpc_zrA_c* _this = static_cast<daNpc_zrA_c*>(i_this);
         daNpc_zrA_c* other = static_cast<daNpc_zrA_c*>(i_proc);
         if (other != _this && other->getType() == daNpc_zrA_c::TYPE_WAIT
@@ -1643,14 +1643,14 @@ BOOL daNpc_zrA_c::diveCalc(s16 i_angleStep, s16 i_angleScale, BOOL param_2) {
 }
 
 static void* s_subHoz(void* i_proc, void* i_this) {
-    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_NPC_HOZ) {
+    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == fpcNm_NPC_HOZ_e) {
         return i_proc;
     }
     return NULL;
 }
 
 static void* s_sub(void* i_proc, void* i_this) {
-    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_CANOE) {
+    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == fpcNm_CANOE_e) {
         return i_proc;
     }
     return NULL;
@@ -2353,9 +2353,9 @@ void daNpc_zrA_c::moveRiverPosCalc(cXyz& o_pos) {
 void daNpc_zrA_c::createRuppi() {
     int item;
     if (cLib_getRndValue(0, 5) < 4) {
-        item = fpcNm_ITEM_GREEN_RUPEE;
+        item = dItemNo_GREEN_RUPEE_e;
     } else {
-        item = fpcNm_ITEM_BLUE_RUPEE;
+        item = dItemNo_BLUE_RUPEE_e;
     }
     cXyz pos(0.0f, 0.0f, -100.0f);
     mDoMtx_stack_c::transS(current.pos);
@@ -2550,7 +2550,7 @@ BOOL daNpc_zrA_c::ECut_thanksBlast(int i_staffID) {
 
         case 1:
             if (mActorMngr[2].getActorP() != NULL
-                && fopAcM_GetName(mActorMngr[2].getActorP()) == PROC_CANOE)
+                && fopAcM_GetName(mActorMngr[2].getActorP()) == fpcNm_CANOE_e)
             {
                 static_cast<daCanoe_c*>(mActorMngr[2].getActorP())->setWaterFallDownSe();
             }
@@ -2883,7 +2883,7 @@ BOOL daNpc_zrA_c::ECut_resultAnnounce(int i_staffID) {
 
         case 1:
             if (mActorMngr[2].getActorP() != NULL
-                && fopAcM_GetName(mActorMngr[2].getActorP()) == PROC_CANOE)
+                && fopAcM_GetName(mActorMngr[2].getActorP()) == fpcNm_CANOE_e)
             {
                 static_cast<daCanoe_c*>(mActorMngr[2].getActorP())->setWaterFallDownSe();
             }
@@ -3217,7 +3217,7 @@ void daNpc_zrA_c::calcCanoeMove(BOOL param_0) {
 }
 
 static void* s_subMark(void* i_proc, void* i_this) {
-    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_ZRA_MARK) {
+    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == fpcNm_ZRA_MARK_e) {
         daObjZraMark_c* zra_mark = static_cast<daObjZraMark_c*>(i_proc);
         daNpc_zrA_c* _this = static_cast<daNpc_zrA_c*>(i_this);
         if (zra_mark->getMarkNo() == _this->getNoFromParam()) {
@@ -3534,7 +3534,7 @@ BOOL daNpc_zrA_c::tobiEnd(void* param_0) {
 }
 
 static void* s_subSP(void* i_proc, void* i_this) {
-    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_NPC_ZRA) {
+    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == fpcNm_NPC_ZRA_e) {
         daNpc_zrA_c* other = static_cast<daNpc_zrA_c*>(i_proc);
         daNpc_zrA_c* _this = static_cast<daNpc_zrA_c*>(i_this);
         if (other->getType() == _this->getType()

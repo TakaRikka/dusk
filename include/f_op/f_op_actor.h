@@ -28,13 +28,38 @@ struct actor_process_profile_definition2 {
 };
 
 enum fopAc_Status_e {
-    fopAcStts_NOEXEC_e = 0x00000080,
-    fopAcStts_CULL_e = 0x00000100,
-    fopAcStts_FREEZE_e = 0x00000400,
-    fopAcStts_CARRY_e = 0x00002000,
-    fopAcStts_NOPAUSE_e = 0x00020000,
-    fopAcStts_NODRAW_e = 0x01000000,
-    fopAcStts_BOSS_e = 0x04000000,
+    fopAcStts_UNK_0x1_e           = 1 << 0,
+    fopAcStts_UNK_0x2_e           = 1 << 1,
+    fopAcStts_UNK_0x4_e           = 1 << 2,
+    fopAcStts_UNK_0x8_e           = 1 << 3,
+    fopAcStts_UNK_0x10_e          = 1 << 4,
+    fopAcStts_UNK_0x20_e          = 1 << 5,
+    fopAcStts_UNK_0x40_e          = 1 << 6,
+    fopAcStts_NOEXEC_e            = 1 << 7,
+    fopAcStts_CULL_e              = 1 << 8,
+    fopAcStts_UNK_0x200_e         = 1 << 9,
+    fopAcStts_FREEZE_e            = 1 << 10,
+    fopAcStts_STAFF_EXTRA_e       = 1 << 11,    // Actor is an extra participant of an active staff. Usually handled automatically via an "ALL" staff, but can be manually set/unset by an actor?
+    fopAcStts_STAFF_SHUTTER_e     = 1 << 12,    // Actor is a primary participant of an active "SHUTTER_DOOR" staff
+    fopAcStts_CARRY_NOW_e         = 1 << 13,
+    fopAcStts_UNK_0x4000_e        = 1 << 14,
+    fopAcStts_STAFF_PRIMARY_e     = 1 << 15,    // Actor is a primary participant of an active staff
+    fopAcStts_UNK_0x10000_e       = 1 << 16,
+    fopAcStts_NOPAUSE_e           = 1 << 17,
+    fopAcStts_UNK_0x40000_e       = 1 << 18,
+    fopAcStts_UNK_0x80000_e       = 1 << 19,
+    fopAcStts_HOOK_CARRY_NOW_e    = 1 << 20,
+    fopAcStts_UNK_0x200000_e      = 1 << 21,
+    fopAcStts_UNK_0x400000_e      = 1 << 22,
+    fopAcStts_UNK_0x800000_e      = 1 << 23,
+    fopAcStts_NODRAW_e            = 1 << 24,
+    fopAcStts_UNK_0x2000000_e     = 1 << 25,
+    fopAcStts_BOSS_e              = 1 << 26,
+    fopAcStts_UNK_0x8000000_e     = 1 << 27,
+    fopAcStts_UNK_0x10000000_e    = 1 << 28,
+    fopAcStts_UNK_0x20000000_e    = 1 << 29,
+    fopAcStts_UNK_0x40000000_e    = 1 << 30,
+    fopAcStts_HAWK_CARRY_NOW_e    = 1 << 31,
 };
 
 enum fopAc_Group_e {
@@ -323,7 +348,7 @@ public:
         fopEn_flag_WolfDownPullEnd = 0x20,
         fopEn_flag_WolfBiteDamage  = 0x40,
         fopEn_flag_HeadLock        = 0x80,
-        
+
         fopEn_flag_WolfNoLock      = 0x200,
     };
 

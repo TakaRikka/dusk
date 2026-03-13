@@ -162,7 +162,7 @@ inline int daObjKazeNeko_c::execute() {
     }
     if (mCyl.ChkTgHit() != 0) {
         daNPC_TK_c* tk = (daNPC_TK_c*)mCyl.GetTgHitAc();
-        if (fopAcM_GetName(tk) == PROC_NPC_TK) {
+        if (fopAcM_GetName(tk) == fpcNm_NPC_TK_e) {
             field_0x740 = attr().field_0x0c;
             tk->setBump();
         }
@@ -170,7 +170,7 @@ inline int daObjKazeNeko_c::execute() {
     swingHead();
     if (field_0x750 > 0) {
         if (--field_0x750 <= 0) {
-            daNPC_TK_c* tk = (daNPC_TK_c*)fopAcM_SearchByName(PROC_NPC_TK);
+            daNPC_TK_c* tk = (daNPC_TK_c*)fopAcM_SearchByName(fpcNm_NPC_TK_e);
             if (tk != NULL) {
                 tk->endHawkCamera();
                 field_0x752 = 1;
@@ -228,18 +228,18 @@ static actor_method_class l_daObjKazeNeko_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_KazeNeko = {
-  fpcLy_CURRENT_e,         // mLayerID
-  7,                       // mListID
-  fpcPi_CURRENT_e,         // mListPrio
-  PROC_Obj_KazeNeko,       // mProcName
-  &g_fpcLf_Method.base,   // sub_method
-  sizeof(daObjKazeNeko_c), // mSize
-  0,                       // mSizeOther
-  0,                       // mParameters
-  &g_fopAc_Method.base,    // sub_method
-  30,                      // mPriority
-  &l_daObjKazeNeko_Method, // sub_method
-  0x00044180,              // mStatus
-  fopAc_ACTOR_e,           // mActorType
-  fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_KazeNeko_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjKazeNeko_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_KazeNeko_e,
+    /* Actor SubMtd */ &l_daObjKazeNeko_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e | fopAcStts_NOEXEC_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -1325,13 +1325,13 @@ bool jmessage_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_siz
             return true;
         }
         case MSGTAG_BOMB_MAX: {
-            u8 bomb_type = fpcNm_ITEM_NORMAL_BOMB;
+            u8 bomb_type = dItemNo_NORMAL_BOMB_e;
 
             const u8 type = *(u8*)i_data;
             if (type == 1) {
-                bomb_type = fpcNm_ITEM_WATER_BOMB;
+                bomb_type = dItemNo_WATER_BOMB_e;
             } else if (type == 2) {
-                bomb_type = fpcNm_ITEM_POKE_BOMB;
+                bomb_type = dItemNo_POKE_BOMB_e;
             }
 
             char buffer[40];
@@ -4090,11 +4090,11 @@ bool jmessage_string_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u3
             break;
         }
         case MSGTAG_BOMB_MAX: {
-            u8 bombType = fpcNm_ITEM_NORMAL_BOMB;
+            u8 bombType = dItemNo_NORMAL_BOMB_e;
             if ((*(u8*)i_data) == 1) {
-                bombType = fpcNm_ITEM_WATER_BOMB;
+                bombType = dItemNo_WATER_BOMB_e;
             } else if ((*(s8*)i_data & 0xFFU) == 2) {
-                bombType = fpcNm_ITEM_POKE_BOMB;
+                bombType = dItemNo_POKE_BOMB_e;
             }
 
             char buffer[40];
@@ -4703,11 +4703,11 @@ bool jmessage_string_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, 
             break;
         }
         case MSGTAG_BOMB_MAX: {
-            u8 bombType = fpcNm_ITEM_NORMAL_BOMB;
+            u8 bombType = dItemNo_NORMAL_BOMB_e;
             if ((*(u8*)i_data) == 1) {
-                bombType = fpcNm_ITEM_WATER_BOMB;
+                bombType = dItemNo_WATER_BOMB_e;
             } else if ((*(s8*)i_data & 0xFFU) == 2) {
-                bombType = fpcNm_ITEM_POKE_BOMB;
+                bombType = dItemNo_POKE_BOMB_e;
             }
 
             char buffer[40];

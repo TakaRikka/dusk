@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_suspend.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 int daSus_c::create() {
     s8 roomNo = fopAcM_GetRoomNo(this);
@@ -43,18 +43,18 @@ static actor_method_class daSus_METHODS = {
 };
 
 actor_process_profile_definition g_profile_SUSPEND = {
-    fpcLy_CURRENT_e,
-    11,
-    fpcPi_CURRENT_e,
-    PROC_SUSPEND,
-    &g_fpcLf_Method.base,
-    sizeof(daSus_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    763,
-    &daSus_METHODS,
-    0x60000,
-    5,
-    fopAc_CULLBOX_0_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 11,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SUSPEND_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daSus_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_SUSPEND_e,
+    /* Actor SubMtd */ &daSus_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_NOPAUSE_e,
+    /* Group        */ fopAc_UNK_GROUP_5_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -335,7 +335,7 @@ static int daB_BQ_Draw(b_bq_class* i_this) {
 }
 
 static void* s_fw_sub0(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_OBJ_FW) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_OBJ_FW_e) {
         static_cast<obj_fw_class*>(i_actor)->field_0x58c = 0.0f;
     }
 
@@ -345,7 +345,7 @@ static void* s_fw_sub0(void* i_actor, void* i_data) {
 static void* s_fw_sub1(void* i_actor, void* i_data) {
     fopAc_ac_c* data = (fopAc_ac_c*)i_data;
 
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_OBJ_FW) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_OBJ_FW_e) {
         obj_fw_class* fw = static_cast<obj_fw_class*>(i_actor);
 
         fw->field_0x567 = 1;
@@ -382,7 +382,7 @@ static s8 data_805BAD70;
 static void* s_fw_sub2(void* i_actor, void* i_data) {
     fopAc_ac_c* data = (fopAc_ac_c*)i_data;
 
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_OBJ_FW) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_OBJ_FW_e) {
         obj_fw_class* fw = static_cast<obj_fw_class*>(i_actor);
 
         fw->field_0x567 = 2;
@@ -409,7 +409,7 @@ static void* s_fw_sub2(void* i_actor, void* i_data) {
 }
 
 static void* s_fw_del_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_OBJ_FW) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_OBJ_FW_e) {
         fopAcM_delete((fopAc_ac_c*)i_actor);
     }
 
@@ -418,7 +418,7 @@ static void* s_fw_del_sub(void* i_actor, void* i_data) {
 
 static void* s_bi_del_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) &&
-        (fopAcM_GetName(i_actor) == PROC_E_BI || fopAcM_GetName(i_actor) == PROC_E_BI_LEAF))
+        (fopAcM_GetName(i_actor) == fpcNm_E_BI_e || fopAcM_GetName(i_actor) == fpcNm_E_BI_LEAF_e))
     {
         fopAcM_delete((fopAc_ac_c*)i_actor);
     }
@@ -1189,7 +1189,7 @@ static void fish_set(b_bq_class* i_this) {
         pos.y = -200.0f;
         pos.z = lf_pos[i].pos_z;
 
-        fopAcM_create(PROC_NPC_LF, lf_pos[i].param, &pos, fopAcM_GetRoomNo(i_this), NULL, NULL, -1);
+        fopAcM_create(fpcNm_NPC_LF_e, lf_pos[i].param, &pos, fopAcM_GetRoomNo(i_this), NULL, NULL, -1);
     }
 }
 
@@ -1921,7 +1921,7 @@ static void demo_camera(b_bq_class* i_this) {
                 dComIfGp_getVibration().StartShock(5, 1, cXyz(0.0f, 1.0f, 0.0f));
 
                 cXyz sp120(1.0f, 1.0f, 1.0f);
-                fopAcM_createItemForBoss(&i_this->field_0x5cc, fpcNm_ITEM_UTAWA_HEART,
+                fopAcM_createItemForBoss(&i_this->field_0x5cc, dItemNo_UTAWA_HEART_e,
                                          fopAcM_GetRoomNo(a_this), &a_this->shape_angle, &sp120,
                                          0.0f, 0.0f, -1);
 
@@ -2079,13 +2079,13 @@ static void demo_camera(b_bq_class* i_this) {
             spFC += player->current.pos;
 
             OS_REPORT("///YSTONE POS  %d,%d,%d\n", (int)spFC.x, (int)spFC.y, (int)spFC.z);
-            fopAcM_create(PROC_OBJ_YSTONE, 0, &spFC, fopAcM_GetRoomNo(a_this), NULL, NULL, -1);
+            fopAcM_create(fpcNm_OBJ_YSTONE_e, 0, &spFC, fopAcM_GetRoomNo(a_this), NULL, NULL, -1);
         }
 
         if (i_this->mDemoModeTimer == 120) {
             i_this->field_0x1151 = 1;
 
-            obj_ystone_class* ystone = (obj_ystone_class*)fopAcM_SearchByName(PROC_OBJ_YSTONE);
+            obj_ystone_class* ystone = (obj_ystone_class*)fopAcM_SearchByName(fpcNm_OBJ_YSTONE_e);
             if (ystone != NULL) {
                 ystone->field_0x59b = 0;
             }
@@ -2111,7 +2111,7 @@ static void demo_camera(b_bq_class* i_this) {
 
         cLib_addCalc2(&i_this->field_0x1298, 210.0f, 0.05f, 0.5f);
 
-        obj_ystone_class* ystone = (obj_ystone_class*)fopAcM_SearchByName(PROC_OBJ_YSTONE);
+        obj_ystone_class* ystone = (obj_ystone_class*)fopAcM_SearchByName(fpcNm_OBJ_YSTONE_e);
         if (ystone != NULL) {
             ystone->setCurrentPos(spFC);
         }
@@ -2378,7 +2378,7 @@ static int daB_BQ_Execute(b_bq_class* i_this) {
         if (i_this->field_0x1394 == 10) {
             fpcM_Search(s_fw_del_sub, i_this);
         } else if (i_this->field_0x1394 == 0) {
-            fopAcM_createChild(PROC_E_BI, fopAcM_GetID(a_this), 0xFFFFFF35, &a_this->current.pos,
+            fopAcM_createChild(fpcNm_E_BI_e, fopAcM_GetID(a_this), 0xFFFFFF35, &a_this->current.pos,
                                fopAcM_GetRoomNo(a_this), NULL, NULL, -1, NULL);
         }
     }
@@ -2497,7 +2497,7 @@ static int daB_BQ_Create(fopAc_ac_c* i_this) {
             if (!dComIfGs_isStageLife()) {
                 cXyz scale(1.0f, 1.0f, 1.0f);
                 pos.set(60.0f, 0.0f, 1778.0f);
-                fopAcM_createItemForBoss(&pos, fpcNm_ITEM_UTAWA_HEART, fopAcM_GetRoomNo(i_this),
+                fopAcM_createItemForBoss(&pos, dItemNo_UTAWA_HEART_e, fopAcM_GetRoomNo(i_this),
                                          &i_this->shape_angle, &scale, 0.0f, 0.0f, -1);
             }
 
@@ -2626,13 +2626,13 @@ static int daB_BQ_Create(fopAc_ac_c* i_this) {
             tentacle_pos += i_this->current.pos;
 
             a_this->mTentacleIDs[i] =
-                fopAcM_createChild(PROC_B_BH, fopAcM_GetID(i_this), params | i, &tentacle_pos,
+                fopAcM_createChild(fpcNm_B_BH_e, fopAcM_GetID(i_this), params | i, &tentacle_pos,
                                    fopAcM_GetRoomNo(i_this), NULL, NULL, -1, NULL);
             offset.x *= -1.0f;
         }
 
         a_this->mMonkeyBombID =
-            fopAcM_createChild(PROC_E_MB, fopAcM_GetID(i_this), 0xFFFFFFFF, &i_this->current.pos,
+            fopAcM_createChild(fpcNm_E_MB_e, fopAcM_GetID(i_this), 0xFFFFFFFF, &i_this->current.pos,
                                fopAcM_GetRoomNo(i_this), NULL, NULL, -1, NULL);
 
         if (dComIfG_play_c::getLayerNo(0) == 4) {
@@ -2673,18 +2673,18 @@ static actor_method_class l_daB_BQ_Method = {
 };
 
 actor_process_profile_definition g_profile_B_BQ = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_B_BQ,
-    &g_fpcLf_Method.base,
-    sizeof(b_bq_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    212,
-    &l_daB_BQ_Method,
-    0x44000,
-    fopAc_ENEMY_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_B_BQ_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(b_bq_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_B_BQ_e,
+    /* Actor SubMtd */ &l_daB_BQ_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

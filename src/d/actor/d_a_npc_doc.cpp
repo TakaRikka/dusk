@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_doc.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -193,7 +193,7 @@ int daNpc_Doc_c::create() {
         #endif
 
         reset();
-        
+
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this),
                   fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mCcStts.Init(mpHIO->m.common.weight, 0, this);
@@ -385,7 +385,7 @@ void daNpc_Doc_c::setParam() {
     if (daPy_py_c::checkNowWolf()) {
         attn_flags |= fopAc_AttnFlag_UNK_0x800000;
     }
-    
+
     attention_info.flags = attn_flags;
 
     scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
@@ -409,11 +409,11 @@ BOOL daNpc_Doc_c::checkChangeEvt() {
             if (dComIfGp_evmng_ChkPresentEnd()) {
                 mPreItemNo = dComIfGp_event_getPreItemNo();
                 if (mType == 1) {
-                    if (mPreItemNo == fpcNm_ITEM_WOOD_STATUE) {
+                    if (mPreItemNo == dItemNo_WOOD_STATUE_e) {
                         return 0;
                     }
 
-                    if (!daNpcT_chkEvtBit(0x141) && mPreItemNo == fpcNm_ITEM_BILL) {
+                    if (!daNpcT_chkEvtBit(0x141) && mPreItemNo == dItemNo_BILL_e) {
                         return 0;
                     }
                 }
@@ -508,10 +508,10 @@ void daNpc_Doc_c::beforeMove() {
         }
     }
 
-    fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x8000000);
+    fopAcM_OffStatus(this, fopAcStts_UNK_0x8000000_e);
 
     if (checkHide()) {
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
     }
 
     if (checkHide() || mNoDraw) {
@@ -524,7 +524,7 @@ void daNpc_Doc_c::setAttnPos() {
 
     mStagger.calc(FALSE);
     f32 rad = cM_s2rad((s16)(mCurAngle.y - field_0xd7e.y));
-    
+
     mJntAnm.setParam(this, mpMorf[0]->getModel(), &pos, getBackboneJointNo(), getNeckJointNo(), getHeadJointNo(),
                      mpHIO->m.common.body_angleX_min, mpHIO->m.common.body_angleX_max, mpHIO->m.common.body_angleY_min, mpHIO->m.common.body_angleY_max,
                      mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max, mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
@@ -756,9 +756,9 @@ int daNpc_Doc_c::talk(void* param_0) {
     case MODE_ENTER:
     case MODE_INIT:
         if (!mStagger.checkStagger()) {
-            if (mPreItemNo == fpcNm_ITEM_BILL) {
+            if (mPreItemNo == dItemNo_BILL_e) {
                 initTalk(0x43F, NULL);
-            } else if (mPreItemNo == fpcNm_ITEM_WOOD_STATUE) {
+            } else if (mPreItemNo == dItemNo_WOOD_STATUE_e) {
                 initTalk(0x447, NULL);
             } else {
                 initTalk(mFlowNodeNo, NULL);
@@ -786,9 +786,9 @@ int daNpc_Doc_c::talk(void* param_0) {
                     if (mMotionSeqMngr.getNo() != 10 || mMotionSeqMngr.checkEndSequence()) {
                         int sp8[] = {-1, -1};
 
-                        if (mPreItemNo == fpcNm_ITEM_BILL) {
+                        if (mPreItemNo == dItemNo_BILL_e) {
                             sp8[0] = 0x1457;
-                        } else if (mPreItemNo == fpcNm_ITEM_WOOD_STATUE) {
+                        } else if (mPreItemNo == dItemNo_WOOD_STATUE_e) {
                             sp8[0] = 0x146E;
                             if (daNpcT_chkEvtBit(0x163)) {
                                 sp8[0] = 0x1472;
@@ -874,20 +874,20 @@ static actor_method_class daNpc_Doc_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_DOC = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_NPC_DOC,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daNpc_Doc_c),    // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  335,                    // mPriority
-  &daNpc_Doc_MethodTable, // sub_method
-  0x00040107,             // mStatus
-  fopAc_NPC_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_DOC_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Doc_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_DOC_e,
+    /* Actor SubMtd */ &daNpc_Doc_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e | fopAcStts_UNK_0x2_e | fopAcStts_UNK_0x1_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

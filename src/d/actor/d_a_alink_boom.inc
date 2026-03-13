@@ -73,7 +73,7 @@ fopAc_ac_c* daAlink_c::getBoomerangActor() {
         return mThrowBoomerangAcKeep.getActor();
     }
 
-    if (mEquipItem == fpcNm_ITEM_BOOMERANG) {
+    if (mEquipItem == dItemNo_BOOMERANG_e) {
         return mItemAcKeep.getActor();
     }
 
@@ -130,7 +130,7 @@ BOOL daAlink_c::checkBoomerangAnime() const {
 }
 
 BOOL daAlink_c::checkBoomerangThrowAnime() const {
-    return (mEquipItem == fpcNm_ITEM_BOOMERANG || checkNoResetFlg1(FLG1_UNK_2) || mEquipItem == 0x102) &&
+    return (mEquipItem == dItemNo_BOOMERANG_e || checkNoResetFlg1(FLG1_UNK_2) || mEquipItem == 0x102) &&
            checkUpperAnime(dRes_ID_ALANM_BCK_BOOMTHROW_e);
 }
 
@@ -163,7 +163,7 @@ void daAlink_c::setBoomerangCatchAnime() {
     setFacePriBck(dRes_ID_ALANM_BCK_FAT_e);
     field_0x2f97 = 254;
 
-    if (mEquipItem != fpcNm_ITEM_COPY_ROD) {
+    if (mEquipItem != dItemNo_COPY_ROD_e) {
         seStartOnlyReverb(JA_SE_LK_BOOM_CATCH);
     }
 }
@@ -173,7 +173,7 @@ void daAlink_c::throwBoomerang() {
     onNoResetFlg1(FLG1_UNK_2);
 
     //! @bug `item` pointer is being accessed without checking if NULL first
-    BOOL boomerang_item = fopAcM_GetName(item) == PROC_BOOMERANG;
+    BOOL boomerang_item = fopAcM_GetName(item) == fpcNm_BOOMERANG_e;
     if (boomerang_item) {
         item->setThrow();
         item->current.angle.y = shape_angle.y + mBodyAngle.y;
@@ -197,13 +197,13 @@ void daAlink_c::throwBoomerang() {
 
         fopAcM_cancelCarryNow(item);
         item = NULL;
-        mEquipItem = fpcNm_ITEM_NONE;
+        mEquipItem = dItemNo_NONE_e;
         field_0x2f94 = 0xFF;
         field_0x2f96 = 0xFE;
     }
 
     mItemAcKeep.clearData();
-    mEquipItem = fpcNm_ITEM_NONE;
+    mEquipItem = dItemNo_NONE_e;
     field_0x2f94 = 0xFF;
     field_0x2f96 = 0xFE;
 
@@ -235,7 +235,7 @@ void daAlink_c::throwBoomerang() {
 int daAlink_c::returnBoomerang(int param_0) {
     dComIfGp_clearPlayerStatus0(0, 0x400000);
 
-    if (mEquipItem == fpcNm_ITEM_NONE
+    if (mEquipItem == dItemNo_NONE_e
         && !checkMagneBootsOn()
         && mItemAcKeep.getActor() == NULL
         #if !PLATFORM_SHIELD
@@ -252,7 +252,7 @@ int daAlink_c::returnBoomerang(int param_0) {
         mItemAcKeep = mThrowBoomerangAcKeep;
         mThrowBoomerangAcKeep.clearData();
 
-        mEquipItem = fpcNm_ITEM_BOOMERANG;
+        mEquipItem = dItemNo_BOOMERANG_e;
         field_0x2f94 = 2;
         onNoResetFlg0(FLG0_UNK_20);
 

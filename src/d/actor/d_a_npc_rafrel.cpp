@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_rafrel.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -64,7 +64,7 @@ static int l_loadRes_RAFREL0[] = {
 
 static int l_loadRes_RAFREL1[] = {
     0,
-    1, 
+    1,
     -1,
 };
 
@@ -204,7 +204,7 @@ int daNpcRafrel_c::Create() {
             return cPhs_ERROR_e;
         }
 
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
         mType = 2;
     }
 
@@ -312,7 +312,7 @@ int daNpcRafrel_c::CreateHeap() {
     if (mType == 1) {
         mdlData_p = dComIfG_getObjectRes(l_arcNames[1], 0x15);
         JUT_ASSERT(438, mdlData_p != NULL);
-  
+
         mpItemModel = mDoExt_J3DModel__create((J3DModelData*)mdlData_p, J3DMdlFlag_DifferedDLBuffer, BMD_DEFAULT_DIFF_FLAGS);
         if (mpItemModel == NULL) {
             return 0;
@@ -368,7 +368,7 @@ int daNpcRafrel_c::Draw() {
     if (mpItemModel != NULL) {
         enum { JNT_19 = 19, JNT_20 = 20};
         int item_jnt_no = mType == 1 ? JNT_20 : JNT_19;
- 
+
         g_env_light.setLightTevColorType_MAJI(mpItemModel, &tevStr);
         mpItemModel->setBaseTRMtx(mAnm_p->getModel()->getAnmMtx(item_jnt_no));
         mDoExt_modelUpdateDL(mpItemModel);
@@ -617,7 +617,7 @@ void daNpcRafrel_c::reset() {
     }
 
     if (isSneaking()) {
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
     }
 
     setWaitAction();
@@ -640,7 +640,7 @@ void daNpcRafrel_c::setParam() {
         attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(mpHIO->m.common.attention_distance, mpHIO->m.common.attention_angle);
         attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
         attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(mpHIO->m.common.talk_distance, mpHIO->m.common.talk_angle);
-    
+
         if (mType == 1 && field_0xe15 != 0 && field_0xe16 == 0) {
             Vec sp8 = {current.pos.x + 150.0f, current.pos.y, current.pos.z - 100.0f};
             if (fopAcM_GetPosition(daPy_getPlayerActorClass()).abs(sp8) > 160.0f) {
@@ -678,7 +678,7 @@ BOOL daNpcRafrel_c::drawDbgInfo() {
     if (!mpHIO->m.common.debug_info_ON) {
         return false;
     }
-    
+
     f32 distMax1 = dComIfGp_getAttention()
                         ->getDistTable(attention_info.distances[fopAc_attn_SPEAK_e])
                         .mDistMax;
@@ -769,7 +769,7 @@ void daNpcRafrel_c::playExpression() {
 void daNpcRafrel_c::playMotion() {
     daNpcF_anmPlayData anm0_phase1 = {8, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* anm0[] = {&anm0_phase1};
-    
+
     daNpcF_anmPlayData anm1_phase1 = {9, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* anm1[] = {&anm1_phase1};
 
@@ -1000,7 +1000,7 @@ bool daNpcRafrel_c::step(s16 i_angY, int param_1, f32 param_2) {
             setExpression(7, -1.0f);
             setMotion(param_1, -1.0f, false);
         }
-    
+
         mTurnTargetAngle = i_angY;
         mTurnAmount = 0;
 
@@ -1028,15 +1028,15 @@ bool daNpcRafrel_c::step(s16 i_angY, int param_1, f32 param_2) {
 
 void daNpcRafrel_c::searchActors() {
     if (field_0xc7c[1].getActorP() == NULL) {
-        field_0xc7c[1].entry(fopAcM_SearchByName(PROC_NPC_ASH));
+        field_0xc7c[1].entry(fopAcM_SearchByName(fpcNm_NPC_ASH_e));
     }
 
     if (field_0xc7c[2].getActorP() == NULL) {
-        field_0xc7c[2].entry(fopAcM_SearchByName(PROC_NPC_SHAD));
+        field_0xc7c[2].entry(fopAcM_SearchByName(fpcNm_NPC_SHAD_e));
     }
 
     if (field_0xc7c[3].getActorP() == NULL) {
-        field_0xc7c[3].entry(fopAcM_SearchByName(PROC_NPC_MOIR));
+        field_0xc7c[3].entry(fopAcM_SearchByName(fpcNm_NPC_MOIR_e));
     }
 }
 
@@ -1227,7 +1227,7 @@ bool daNpcRafrel_c::wait_type2(void* param_0) {
         setLookMode(LOOK_NONE, NULL);
         field_0xe10 = 2;
         break;
-        
+
     case 2:
         switch (field_0xe08) {
         case 0:
@@ -1365,11 +1365,11 @@ bool daNpcRafrel_c::demo(void* param_0) {
     case 2:
         if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
             evtmgr = &dComIfGp_getEventManager();
-            
+
             const int staffId = evtmgr->getMyStaffId(l_myName, NULL, 0);
             if (staffId != -1) {
                 mStaffID = staffId;
-                
+
                 int actIdx = evtmgr->getMyActIdx(staffId, l_evtNames, ARRAY_SIZE(l_evtNames), 0, 0);
                 if (actIdx > 0 && actIdx < 7) {
                     mOrderEvtNo = actIdx;
@@ -1449,7 +1449,7 @@ bool daNpcRafrel_c::leave(void* param_0) {
 
 int daNpcRafrel_c::EvCut_Introduction(int i_staffId) {
     dEvent_manager_c* evtmgr = &dComIfGp_getEventManager();
-    
+
     int* idata = dComIfGp_evmng_getMyIntegerP(i_staffId, "prm");
     if (idata == NULL) {
         return 0;
@@ -1475,7 +1475,7 @@ int daNpcRafrel_c::EvCut_Introduction(int i_staffId) {
 
 int daNpcRafrel_c::EvCut_Meeting(int i_staffId) {
     dEvent_manager_c* evtmgr = &dComIfGp_getEventManager();
-    
+
     int* idata = dComIfGp_evmng_getMyIntegerP(i_staffId, "prm");
     if (idata == NULL) {
         return 0;
@@ -1686,7 +1686,7 @@ int daNpcRafrel_c::EvCut_WiretapSponsor(int i_staffId) {
 
 int daNpcRafrel_c::EvCut_WiretapEntrant(int i_staffId) {
     dEvent_manager_c& evtmgr = dComIfGp_getEventManager();
-    
+
     int* idata = dComIfGp_evmng_getMyIntegerP(i_staffId, "prm");
     if (idata == NULL) {
         return 0;
@@ -1758,18 +1758,18 @@ static actor_method_class daNpcRafrel_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_RAFREL = {
-  fpcLy_CURRENT_e,          // mLayerID
-  7,                        // mListID
-  fpcPi_CURRENT_e,          // mListPrio
-  PROC_NPC_RAFREL,          // mProcName
-  &g_fpcLf_Method.base,    // sub_method
-  sizeof(daNpcRafrel_c),    // mSize
-  0,                        // mSizeOther
-  0,                        // mParameters
-  &g_fopAc_Method.base,     // sub_method
-  414,                      // mPriority
-  &daNpcRafrel_MethodTable, // sub_method
-  0x00040100,               // mStatus
-  fopAc_NPC_e,              // mActorType
-  fopAc_CULLBOX_CUSTOM_e,   // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_RAFREL_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcRafrel_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_RAFREL_e,
+    /* Actor SubMtd */ &daNpcRafrel_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

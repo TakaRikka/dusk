@@ -773,7 +773,7 @@ void daB_DS_c::mCreateTrap(bool param_0) {
                 angle.x = 0;
                 angle.y = 0;
                 angle.z = 0;
-                mTrapID[i] = fopAcM_createChild(PROC_Obj_Lv6TogeTrap, fopAcM_GetID(this), params,
+                mTrapID[i] = fopAcM_createChild(fpcNm_Obj_Lv6TogeTrap_e, fopAcM_GetID(this), params,
                                                 &current.pos, fopAcM_GetRoomNo(this), &angle,
                                                 &trap_scale, -1, NULL);
                 trap_count++;
@@ -810,7 +810,7 @@ void daB_DS_c::mCreateTrap(bool param_0) {
             }
 
             mTrapID[i] =
-                fopAcM_createChild(PROC_Obj_Lv6TogeTrap, fopAcM_GetID(this), 0x27104DFF, &pos,
+                fopAcM_createChild(fpcNm_Obj_Lv6TogeTrap_e, fopAcM_GetID(this), 0x27104DFF, &pos,
                                    fopAcM_GetRoomNo(this), &angle, &trap_scale, -1, NULL);
             if (mBackboneLevel == 2) {
                 angle.y += 0x2AAA;
@@ -833,7 +833,7 @@ void daB_DS_c::mCreateTrap(bool param_0) {
                     angle.y = mBirthAngle02_dt[i] + mBirthAngle01_dt[j * 2];
                     pos.y = mBirthYpos02_dt[i];
                     mTrapID[idx] =
-                        fopAcM_createChild(PROC_Obj_Lv6TogeTrap, fopAcM_GetID(this), params, &pos,
+                        fopAcM_createChild(fpcNm_Obj_Lv6TogeTrap_e, fopAcM_GetID(this), params, &pos,
                                            fopAcM_GetRoomNo(this), &angle, &trap_scale, -1, NULL);
                 }
             }
@@ -1282,7 +1282,7 @@ void daB_DS_c::executeOpeningDemo() {
 
         dComIfGp_event_reset();
         dComIfGs_onZoneSwitch(0, fopAcM_GetRoomNo(this));
-        fopAcM_OffStatus(this, 0x4000);
+        fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
         mMode++;
         // fallthrough
     }
@@ -2062,7 +2062,7 @@ void daB_DS_c::executeDamage() {
 
                 if (mStaltroopID[i] == 0) {
                     mStaltroopID[i] =
-                        fopAcM_createChild(PROC_E_ZS, fopAcM_GetID(this), 1, &sp1B0,
+                        fopAcM_createChild(fpcNm_E_ZS_e, fopAcM_GetID(this), 1, &sp1B0,
                                            fopAcM_GetRoomNo(this), &angle, NULL, -1, NULL);
                 }
             }
@@ -2071,7 +2071,7 @@ void daB_DS_c::executeDamage() {
                 for (int i = 0; i < 5; i++) {
                     if (mStaltroop2ID[i] == 0) {
                         mStaltroop2ID[i] =
-                            fopAcM_createChild(PROC_E_ZS, fopAcM_GetID(this), 2, &current.pos,
+                            fopAcM_createChild(fpcNm_E_ZS_e, fopAcM_GetID(this), 2, &current.pos,
                                                fopAcM_GetRoomNo(this), NULL, NULL, -1, NULL);
                     }
                 }
@@ -2298,7 +2298,7 @@ void daB_DS_c::executeDamage() {
         p2_angle.y = 0;
         p2_angle.x = 0;
 
-        fopAcM_create(PROC_B_DS, param | TYPE_BATTLE_2, &current.pos, fopAcM_GetRoomNo(this),
+        fopAcM_create(fpcNm_B_DS_e, param | TYPE_BATTLE_2, &current.pos, fopAcM_GetRoomNo(this),
                       &p2_angle, NULL, 0xff);
         mMode = 101;
         // fallthrough
@@ -2413,7 +2413,7 @@ void daB_DS_c::breath_smokeSet() {
 
         cXyz bullet_pos = mBulletPos;
 
-        fopAcM_create(PROC_B_DS, TYPE_BULLET_A, &bullet_pos, fopAcM_GetRoomNo(this), &bullet_angle,
+        fopAcM_create(fpcNm_B_DS_e, TYPE_BULLET_A, &bullet_pos, fopAcM_GetRoomNo(this), &bullet_angle,
                       NULL, 0xff);
     }
 }
@@ -2919,7 +2919,7 @@ void daB_DS_c::mFuwafuwaSet(bool param_0) {
 }
 
 void daB_DS_c::mBattle2BreathFireSet(u32 i_params) {
-    fopAcM_createChild(PROC_B_DS, fopAcM_GetID(this), i_params, &mMouthPos, fopAcM_GetRoomNo(this),
+    fopAcM_createChild(fpcNm_B_DS_e, fopAcM_GetID(this), i_params, &mMouthPos, fopAcM_GetRoomNo(this),
                        &shape_angle, NULL, -1, NULL);
     mCreateFireBreath = false;
 }
@@ -5447,7 +5447,7 @@ cPhs_Step daB_DS_c::create() {
                 angle.x = angle.y = angle.z = 0;
                 pos.set(-400.0f, 1775.0f, -4132.0f);
 
-                fopAcM_createItemForBoss(&pos, fpcNm_ITEM_UTAWA_HEART, fopAcM_GetRoomNo(this), &angle, &scale,
+                fopAcM_createItemForBoss(&pos, dItemNo_UTAWA_HEART_e, fopAcM_GetRoomNo(this), &angle, &scale,
                                          0.0f, 0.0f, -1);
             }
 
@@ -5492,7 +5492,7 @@ cPhs_Step daB_DS_c::create() {
                 mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1,
                           &mAcchCir, fopAcM_GetSpeed_p(this), NULL, NULL);
                 mAcch.CrrPos(dComIfG_Bgsp());
-                fopAcM_OnStatus(this, 0x4000);
+                fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
             }
 
             setActionMode(8, 0);
@@ -5603,7 +5603,7 @@ cPhs_Step daB_DS_c::create() {
                     fopAcM_onSwitch(this, bitSw);
                 }
 
-                fopAcM_OnStatus(this, 0x4000);
+                fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
 
                 if (cDmr_SkipInfo == 0 && !dComIfGs_isZoneSwitch(5, fopAcM_GetRoomNo(this))) {
                     mDrawZant = false;
@@ -5687,20 +5687,20 @@ static actor_method_class l_daB_DS_Method = {
 };
 
 actor_process_profile_definition g_profile_B_DS = {
-    fpcLy_CURRENT_e,
-    4,
-    fpcPi_CURRENT_e,
-    PROC_B_DS,
-    &g_fpcLf_Method.base,
-    sizeof(daB_DS_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0xDC,
-    &l_daB_DS_Method,
-    0x4040000,
-    fopAc_ENEMY_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 4,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_B_DS_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daB_DS_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_B_DS_e,
+    /* Actor SubMtd */ &l_daB_DS_Method,
+    /* Status       */ fopAcStts_BOSS_e | fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 #ifndef __MWERKS__

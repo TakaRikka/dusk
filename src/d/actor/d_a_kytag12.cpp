@@ -46,7 +46,7 @@ static int daKytag12_Draw(kytag12_class* param_0) {
 static void daKytag12_light_swprd_proc(kytag12_class* i_this) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
-    if (dComIfGs_getSelectEquipSword() == fpcNm_ITEM_LIGHT_SWORD) {
+    if (dComIfGs_getSelectEquipSword() == dItemNo_LIGHT_SWORD_e) {
         if (player->getCutType() != daPy_py_c::CUT_TYPE_NONE) {
             if (i_this->field_0x576 == 0) {
                 cXyz sp28(player->current.pos);
@@ -869,7 +869,7 @@ static int daKytag12_Execute_R00(kytag12_class* i_this) {
         sp80.y = player->current.pos.y;
 
         if (player->current.pos.abs(sp80) < 600.0f &&
-            dComIfGs_getSelectEquipSword() == fpcNm_ITEM_LIGHT_SWORD && player->getCutType() != daPy_py_c::CUT_TYPE_NONE &&
+            dComIfGs_getSelectEquipSword() == dItemNo_LIGHT_SWORD_e && player->getCutType() != daPy_py_c::CUT_TYPE_NONE &&
             d_kytag12_cut_turn_check())
         {
             i_this->field_0x575 = 1;
@@ -1032,18 +1032,18 @@ static actor_method_class l_daKytag12_Method = {
 };
 
 actor_process_profile_definition g_profile_KYTAG12 = {
-  fpcLy_CURRENT_e,       // mLayerID
-  7,                     // mListID
-  fpcPi_CURRENT_e,       // mListPrio
-  PROC_KYTAG12,          // mProcName
-  &g_fpcLf_Method.base, // sub_method
-  sizeof(kytag12_class), // mSize
-  0,                     // mSizeOther
-  0,                     // mParameters
-  &g_fopAc_Method.base,  // sub_method
-  106,                   // mPriority
-  &l_daKytag12_Method,   // sub_method
-  0x00044000,            // mStatus
-  fopAc_ACTOR_e,         // mActorType
-  fopAc_CULLBOX_0_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KYTAG12_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(kytag12_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_KYTAG12_e,
+    /* Actor SubMtd */ &l_daKytag12_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

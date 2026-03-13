@@ -1394,7 +1394,7 @@ void daAlink_c::setWolfBarrierHitEffect(dBgS_LinChk& i_linchk) {
 
     const u16* effNames;
     s16 movebg_name = getMoveBGActorName(i_linchk, TRUE);
-    if (movebg_name == PROC_Obj_GanonWall2 || movebg_name == PROC_OBJ_GB) {
+    if (movebg_name == fpcNm_Obj_GanonWall2_e || movebg_name == fpcNm_OBJ_GB_e) {
         effNames = ganonNameID;
     } else {
         effNames = normalNameID;
@@ -1665,7 +1665,7 @@ void daAlink_c::setBottleEffect() {
 
     JPABaseEmitter* emitter;
 
-    if (mEquipItem == fpcNm_ITEM_FAIRY) {
+    if (mEquipItem == dItemNo_FAIRY_e) {
         if (mpHookTipModel != NULL) {
             cXyz pos;
             mDoMtx_multVecZero(mpHookTipModel->getAnmMtx(2), &pos);
@@ -1677,7 +1677,7 @@ void daAlink_c::setBottleEffect() {
 
             emitter = setEmitter(&field_0x325c, ID_ZF_J_FAIRYITEM02_STAR, &pos, NULL);
         }
-    } else if (mEquipItem == fpcNm_ITEM_CHUCHU_RARE && mProcID == PROC_BOTTLE_GET) {
+    } else if (mEquipItem == dItemNo_CHUCHU_RARE_e && mProcID == PROC_BOTTLE_GET) {
         if (field_0x072c != NULL && field_0x072c->getFrame() < 2.0f) {
             cXyz pos;
             mDoMtx_multVec(mHeldItemModel->getAnmMtx(0), &chuchuLocalOffset, &pos);
@@ -1687,7 +1687,7 @@ void daAlink_c::setBottleEffect() {
                 emitter->setGlobalScale(chuchuScale);
             }
         }
-    } else if (mProcID == PROC_BOTTLE_OPEN && mProcVar3.field_0x300e != 0 && mEquipItem == fpcNm_ITEM_WATER_BOTTLE) {
+    } else if (mProcID == PROC_BOTTLE_OPEN && mProcVar3.field_0x300e != 0 && mEquipItem == dItemNo_WATER_BOTTLE_e) {
         emitter = setEmitter(&field_0x325c, ID_ZI_J_LK_BINWATERN_A, &current.pos, NULL);
         if (emitter != NULL) {
             emitter->setGlobalRTMatrix(mHeldItemModel->getBaseTRMtx());

@@ -236,7 +236,7 @@ void dBgS_Acch::LineCheck(dBgS& i_bgs) {
         pos.y += var_f2;
 
         if (GetSpeedY() < 0.0f) {
-            if (m_my_ac != NULL && fopAcM_GetName(m_my_ac) == PROC_ALINK &&
+            if (m_my_ac != NULL && fopAcM_GetName(m_my_ac) == fpcNm_ALINK_e &&
                 !static_cast<daPy_py_c*>(m_my_ac)->checkPlayerFly() && ChkLink())
             {
                 pos.y -= GetSpeedY();

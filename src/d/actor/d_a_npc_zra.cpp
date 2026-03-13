@@ -14,7 +14,7 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_meter2_info.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "d/actor/d_a_canoe.h"
 #include "d/actor/d_a_npc_hoz.h"
 #include "d/actor/d_a_obj_zraMark.h"
@@ -1665,7 +1665,7 @@ void daNpc_zrA_c::reset() {
     speed.setall(0.0f);
 
     if ((mType == TYPE_SWIM && mPath.getPathInfo() != NULL) || mType == TYPE_WATERFALL) {
-        fopAcM_OnStatus(this, 0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
     }
 
     mBtkID = 0;
@@ -2337,18 +2337,18 @@ static actor_method_class daNpc_zrA_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_ZRA = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_NPC_ZRA,
-    &g_fpcLf_Method.base,
-    sizeof(daNpc_zrA_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x183,
-    &daNpc_zrA_MethodTable,
-    0x44100,
-    fopAc_NPC_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_ZRA_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_zrA_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_ZRA_e,
+    /* Actor SubMtd */ &daNpc_zrA_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

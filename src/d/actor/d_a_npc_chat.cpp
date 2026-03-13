@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_chat.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h"
@@ -1408,7 +1408,7 @@ static jntTblMPrm a_jntTbl_M[16] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, -0.3f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, -0x0014, 0, 0,
@@ -1430,7 +1430,7 @@ static jntTblMPrm a_jntTbl_M[16] = {
     0.0f, 0.0f, 0.0f, 0, -0x000A, 0xB, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 1, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1452,7 +1452,7 @@ static jntTblMPrm a_jntTbl_M[16] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1474,7 +1474,7 @@ static jntTblMPrm a_jntTbl_M[16] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1496,7 +1496,7 @@ static jntTblMPrm a_jntTbl_M[16] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1518,7 +1518,7 @@ static jntTblMPrm a_jntTbl_M[16] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1540,7 +1540,7 @@ static jntTblMPrm a_jntTbl_M[16] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1562,7 +1562,7 @@ static jntTblMPrm a_jntTbl_M[16] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1584,7 +1584,7 @@ static jntTblMPrm a_jntTbl_M[16] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, -0.3f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, -0x0014, 0, 0,
@@ -1606,7 +1606,7 @@ static jntTblMPrm a_jntTbl_M[16] = {
     0.0f, 0.0f, 0.0f, 0, -0x000A, 0xB, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 1, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1628,7 +1628,7 @@ static jntTblMPrm a_jntTbl_M[16] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1650,7 +1650,7 @@ static jntTblMPrm a_jntTbl_M[16] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1672,7 +1672,7 @@ static jntTblMPrm a_jntTbl_M[16] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1826,7 +1826,7 @@ static jntTblWPrm a_jntTbl_W[14] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1850,7 +1850,7 @@ static jntTblWPrm a_jntTbl_W[14] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1874,7 +1874,7 @@ static jntTblWPrm a_jntTbl_W[14] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, -0.3f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, -0x0014, 0, 0,
@@ -1898,7 +1898,7 @@ static jntTblWPrm a_jntTbl_W[14] = {
     0.0f, 0.0f, 0.0f, 0, 0, 1, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1922,7 +1922,7 @@ static jntTblWPrm a_jntTbl_W[14] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1946,7 +1946,7 @@ static jntTblWPrm a_jntTbl_W[14] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1970,7 +1970,7 @@ static jntTblWPrm a_jntTbl_W[14] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1994,7 +1994,7 @@ static jntTblWPrm a_jntTbl_W[14] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -2018,7 +2018,7 @@ static jntTblWPrm a_jntTbl_W[14] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -2042,7 +2042,7 @@ static jntTblWPrm a_jntTbl_W[14] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, -0.3f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, -0x0014, 0, 0,
@@ -2066,7 +2066,7 @@ static jntTblWPrm a_jntTbl_W[14] = {
     0.0f, 0.0f, 0.0f, 0, 0, 1, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -2090,7 +2090,7 @@ static jntTblWPrm a_jntTbl_W[14] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
-    
+
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -2464,7 +2464,7 @@ J3DModel* daNpcChat_c::ObjCreate(int param_1) {
 J3DModel* daNpcChat_c::ChairCreate(f32 i_scale) {
     const char* i_arcName = mTwilight ? "objectTW" : "object";
     int i_index = isM_() ? ((mTwilight != 0) ? 4 : 4) : ((mTwilight != 0) ? 5 : 5);
-    
+
     J3DModelData* a_mdlData_p = (J3DModelData*)dComIfG_getObjectRes(i_arcName, i_index);
     if (a_mdlData_p != NULL) {
         J3DModel* model = mDoExt_J3DModel__create(a_mdlData_p, 0x80000, 0x11000084);
@@ -2480,7 +2480,7 @@ J3DModel* daNpcChat_c::ChairCreate(f32 i_scale) {
 
         return model;
     }
-    
+
     return NULL;
 }
 
@@ -2512,7 +2512,7 @@ cPhs_Step daNpcChat_c::loadResrc(int idx, int param_2) {
     if (rv != cPhs_COMPLEATE_e) {
         return rv;
     }
-    
+
     if (param_2 != 0 || field_0xe51 == 1) {
         rv = dComIfG_resLoad(&mPhase3, l_resNameTbl[idx][3]);
         if (rv != cPhs_COMPLEATE_e) {
@@ -2929,7 +2929,7 @@ int daNpcChat_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
 }
 
 static void* s_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_NPC_CHAT) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_NPC_CHAT_e) {
         ((daNpcChat_c*)i_data)->setTalkMember((daNpcChat_c*)i_actor);
     }
 
@@ -2941,7 +2941,7 @@ BOOL daNpcChat_c::searchGroup() {
         case 0:
             field_0xe38 = 1;
             return FALSE;
-        
+
         case 1:
             fpcM_Search(s_sub, this);
             int iVar1 = 0;
@@ -3036,7 +3036,7 @@ BOOL daNpcChat_c::appearCheck() {
                     if (iVar1 == mTalkMemberNum) {
                         for (int i = 0; i < mTalkMemberNum; i++) {
                             mTalkMembers[i]->offHide();
-                            fopAcM_OffStatus(mTalkMembers[i], fopAcM_STATUS_UNK_0x8000000);
+                            fopAcM_OffStatus(mTalkMembers[i], fopAcStts_UNK_0x8000000_e);
                         }
                     }
                 }
@@ -3053,7 +3053,7 @@ BOOL daNpcChat_c::appearCheck() {
                 if (iVar2 == mTalkMemberNum) {
                     for (int i = 0; i < mTalkMemberNum; i++) {
                         mTalkMembers[i]->onHide();
-                        fopAcM_OnStatus(mTalkMembers[i], fopAcM_STATUS_UNK_0x8000000);
+                        fopAcM_OnStatus(mTalkMembers[i], fopAcStts_UNK_0x8000000_e);
                     }
                 }
             }
@@ -3386,7 +3386,7 @@ void daNpcChat_c::setMotionAnm(int i_index, f32 i_morf) {
                 case OBJ_KAGOM:
                 case OBJ_KAGOW:
                     break;
-                
+
                 case OBJ_GUITAR:
                 case OBJ_FLUTE:
                     index = ANM_PLAYM;
@@ -3430,7 +3430,7 @@ void daNpcChat_c::setMotionAnm(int i_index, f32 i_morf) {
         case ANM_2LADYTALK_B:
             mSound.playVoice(4);
             break;
-        
+
         case ANM_SURPRISE:
             mSound.playVoice(1);
             break;
@@ -3588,7 +3588,7 @@ void daNpcChat_c::reset() {
         mHide = false;
     } else {
         mHide = true;
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
     }
 
     setAction(&daNpcChat_c::wait);
@@ -3928,7 +3928,7 @@ bool daNpcChat_c::wait(void* param_1) {
                         setMotion(mTalkMotionNo, -1.0f, 1);
                         mTurnMode = 0;
                     }
-                    
+
                     orderEvent(mOrderSpeakEvt, l_evtNames[mOrderEvtNo], 0xFFFF, 0x28, 0xFF, 1);
                 }
             }
@@ -3953,7 +3953,7 @@ bool daNpcChat_c::fear(void* param_1) {
             dComIfGs_onSaveDunSwitch(60);
             mMode = 2;
             break;
-        
+
         case 2:
             if (mMotionAnm == ANM_SURPRISE) {
                 if (mAnm_p->isStop()) {
@@ -4002,7 +4002,7 @@ bool daNpcChat_c::talk(void* param_1) {
 
             mMode = 2;
             break;
-        
+
         case 2:
             if (mLookPlayerCheck == 1) {
                 if (mCurAngle.y == fopAcM_searchPlayerAngleY(this)) {
@@ -4012,7 +4012,7 @@ bool daNpcChat_c::talk(void* param_1) {
                     } else {
                         int msgTimer, i_expression, i_motion;
                         msgTimer = mMsgTimer;
-                        
+
                         if (ctrlMsgAnm(i_expression, i_motion, this, FALSE) != 0) {
                             setMotion(i_motion, -1.0f, 0);
                         }
@@ -4076,7 +4076,7 @@ bool daNpcChat_c::demo(void* param_1) {
         case 0:
             mMode = 2;
             break;
-        
+
         case 2:
             if (dComIfGp_event_runCheck()) {
                 if (eventInfo.checkCommandTalk() == false) {
@@ -4144,18 +4144,18 @@ static actor_method_class daNpcChat_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_CHAT = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_NPC_CHAT,          // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daNpcChat_c),    // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  398,                    // mPriority
-  &daNpcChat_MethodTable, // sub_method
-  0x00044107,             // mStatus
-  fopAc_NPC_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_CHAT_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcChat_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_CHAT_e,
+    /* Actor SubMtd */ &daNpcChat_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e | fopAcStts_UNK_0x2_e | fopAcStts_UNK_0x1_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

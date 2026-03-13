@@ -98,13 +98,15 @@ static void anm_init(npc_du_class* i_this, int i_index, f32 i_morf, u8 i_mode, f
 
 static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
-        int jntNo = i_joint->getJntNo();
+        J3DJoint* joint = i_joint;
+        int jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         npc_du_class* actor = (npc_du_class*)model->getUserArea();
+        npc_du_class* actor_copy = actor;
         if (actor != NULL) {
             if (jntNo == JNT_NECK2) {
                 MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
-                
+
                 cMtx_XrotM(*calc_mtx, actor->mNeck2XRot);
                 model->setAnmMtx(jntNo, *calc_mtx);
 
@@ -600,8 +602,8 @@ static int daNpc_Du_Delete(npc_du_class* i_this) {
     return 1;
 }
 
-static int useHeapInit(fopAc_ac_c* actor) {
-    npc_du_class* i_this = (npc_du_class*)actor;
+static int useHeapInit(fopAc_ac_c* i_actor) {
+    npc_du_class* i_this = (npc_du_class*)i_actor;
 
     i_this->mpMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Npc_Du", 0xA), NULL, NULL,
                                         (J3DAnmTransform*)dComIfG_getObjectRes("Npc_Du", 6), 0, 1.0f, 0, -1, 1, NULL,
@@ -611,7 +613,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
     }
 
     J3DModel* model = i_this->mpMorf->getModel();
-    model->setUserArea((uintptr_t)actor);
+    model->setUserArea((uintptr_t)i_this);
     for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
         model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
     }
@@ -632,45 +634,45 @@ static int useHeapInit(fopAc_ac_c* actor) {
     return 1;
 }
 
-static cPhs_Step daNpc_Du_Create(fopAc_ac_c* a_this) {
-    npc_du_class* i_this = (npc_du_class*)a_this;
-    fopAcM_ct(a_this, npc_du_class);
+static cPhs_Step daNpc_Du_Create(fopAc_ac_c* i_this) {
+    npc_du_class* du = (npc_du_class*)i_this;
+    fopAcM_ct(&du->actor, npc_du_class);
 
-    cPhs_Step phase = dComIfG_resLoad(&i_this->mPhase, "Npc_Du");
+    cPhs_Step phase = dComIfG_resLoad(&du->mPhase, "Npc_Du");
     if (phase == cPhs_COMPLEATE_e) {
-        OS_REPORT("NPC_DU PARAM %x\n", fopAcM_GetParam(a_this));
-        i_this->arg0 = fopAcM_GetParam(a_this);
-        i_this->arg1 = (fopAcM_GetParam(a_this) & 0xFF00) >> 8;
-        i_this->mMsgFNo = a_this->current.angle.x;
-        a_this->current.angle.x = a_this->shape_angle.x = 0;
+        OS_REPORT("NPC_DU PARAM %x\n", fopAcM_GetParam(i_this));
+        du->arg0 = fopAcM_GetParam(i_this);
+        du->arg1 = (fopAcM_GetParam(i_this) & 0xFF00) >> 8;
+        du->mMsgFNo = i_this->current.angle.x;
+        i_this->current.angle.x = i_this->shape_angle.x = 0;
 
-        if (i_this->arg0 == 1) {
-            i_this->mMsgFNo = 0x2EF;
+        if (du->arg0 == 1) {
+            du->mMsgFNo = 0x2EF;
         } else {
-            i_this->mMsgFNo = 0x2F0;
+            du->mMsgFNo = 0x2F0;
         }
 
         OS_REPORT("NPC_DU//////////////NPC_DU SET 1 !!\n");
 
-        if (!fopAcM_entrySolidHeap(a_this, useHeapInit, 0x1280)) {
+        if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x1280)) {
             OS_REPORT("//////////////NPC_DU SET NON !!\n");
             return cPhs_ERROR_e;
         }
 
         OS_REPORT("//////////////NPC_DU SET 2 !!\n");
         if (!hio_set) {
-            i_this->mIsFirstSpawn = 1;
+            du->mIsFirstSpawn = 1;
             hio_set = true;
             l_HIO.id = mDoHIO_CREATE_CHILD("アヒル", &l_HIO);
         }
 
-        i_this->mAction = ACTION_NORMAL;
+        du->mAction = ACTION_NORMAL;
 
-        fopAcM_SetMtx(a_this, i_this->mpMorf->getModel()->getBaseTRMtx());
-        i_this->mBgc.Set(fopAcM_GetPosition_p(a_this), fopAcM_GetOldPosition_p(a_this), a_this, 1, &i_this->mAcchCir,
-                         fopAcM_GetSpeed_p(a_this), NULL, NULL);
-        i_this->mAcchCir.SetWall(20.0f, 25.0f);
-        i_this->mStts.Init(100, 0, a_this);
+        fopAcM_SetMtx(i_this, du->mpMorf->getModel()->getBaseTRMtx());
+        du->mBgc.Set(fopAcM_GetPosition_p(i_this), fopAcM_GetOldPosition_p(i_this), i_this, 1, &du->mAcchCir,
+                         fopAcM_GetSpeed_p(i_this), NULL, NULL);
+        du->mAcchCir.SetWall(20.0f, 25.0f);
+        du->mStts.Init(100, 0, i_this);
 
         static dCcD_SrcSph cc_sph_src = {
             {
@@ -684,11 +686,11 @@ static cPhs_Step daNpc_Du_Create(fopAc_ac_c* a_this) {
             } // mSphAttr
         };
 
-        i_this->mSph.Set(cc_sph_src);
-        i_this->mSph.SetStts(&i_this->mStts);
-        i_this->mFrameCounter = cM_rndF(65536.0f);
-        a_this->gravity = -5.0f;
-        daNpc_Du_Execute(i_this);
+        du->mSph.Set(cc_sph_src);
+        du->mSph.SetStts(&du->mStts);
+        du->mFrameCounter = cM_rndF(65536.0f);
+        i_this->gravity = -5.0f;
+        daNpc_Du_Execute(du);
     }
 
     return phase;
@@ -703,18 +705,18 @@ static actor_method_class l_daNpc_Du_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_DU = {
-  fpcLy_CURRENT_e,       // mLayerID
-  7,                     // mListID
-  fpcPi_CURRENT_e,       // mListPrio
-  PROC_NPC_DU,           // mProcName
-  &g_fpcLf_Method.base, // sub_method
-  sizeof(npc_du_class),  // mSize
-  0,                     // mSizeOther
-  0,                     // mParameters
-  &g_fopAc_Method.base,  // sub_method
-  722,                   // mPriority
-  &l_daNpc_Du_Method,    // sub_method
-  0x08044100,            // mStatus
-  fopAc_NPC_e,           // mActorType
-  fopAc_CULLBOX_0_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_DU_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(npc_du_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_DU_e,
+    /* Actor SubMtd */ &l_daNpc_Du_Method,
+    /* Status       */ fopAcStts_UNK_0x8000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

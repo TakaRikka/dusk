@@ -1,6 +1,6 @@
 /**
  * @file d_a_obj_gomikabe.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -123,7 +123,7 @@ void daObjGOMIKABE_c::BreakSet() {
     field_0x5a2++;
     mAction++;
     Z2GetAudioMgr()->seStart(Z2SE_OBJ_G_KABE_BRK, &current.pos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
-    fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x100);
+    fopAcM_OffStatus(this, fopAcStts_CULL_e);
     if (mpBgW != NULL && mpBgW->ChkUsed()) {
         dComIfG_Bgsp().Release(mpBgW);
     }
@@ -135,7 +135,7 @@ void daObjGOMIKABE_c::getWaterStream(cXyz& param_1, cXyz& param_2, f32 i_scale) 
     int local_58 = 0;
     s32 res = fopAcM_getWaterStream(&param_1, mGndChk, &local_48, &local_58, 0);
     cXyz local_54(local_58 * local_48.x, local_58 * local_48.y, local_58 * local_48.z);
-    
+
     if (res != 0) {
         cLib_addCalc2(&param_2.x, local_54.x * 0.7f, 0.5f, i_scale);
         cLib_addCalc2(&param_2.z, local_54.z * 0.7f, 0.5f, i_scale);
@@ -394,18 +394,18 @@ static actor_method_class l_daObjGOMIKABE_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_GOMIKABE = {
-  fpcLy_CURRENT_e,         // mLayerID
-  7,                       // mListID
-  fpcPi_CURRENT_e,         // mListPrio
-  PROC_Obj_GOMIKABE,       // mProcName
-  &g_fpcLf_Method.base,   // sub_method
-  sizeof(daObjGOMIKABE_c), // mSize
-  0,                       // mSizeOther
-  0,                       // mParameters
-  &g_fopAc_Method.base,    // sub_method
-  519,                     // mPriority
-  &l_daObjGOMIKABE_Method, // sub_method
-  0x00040100,              // mStatus
-  fopAc_ACTOR_e,           // mActorType
-  fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_GOMIKABE_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjGOMIKABE_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_GOMIKABE_e,
+    /* Actor SubMtd */ &l_daObjGOMIKABE_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

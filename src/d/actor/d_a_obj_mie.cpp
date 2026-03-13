@@ -380,7 +380,7 @@ int daObj_Mie_c::createHeapCallBack(fopAc_ac_c* a_this) {
 
 void* daObj_Mie_c::srchPouyaa(void* param_1, void* param_2) {
     if (fopAcM_IsActor(param_1) && param_1 != param_2 &&
-        fopAcM_GetName(param_1) == PROC_NPC_POUYA &&
+        fopAcM_GetName(param_1) == fpcNm_NPC_POUYA_e &&
         static_cast<daNpc_Pouya_c*>(param_1)->getType() == 1)
     {
         return param_1;
@@ -521,18 +521,18 @@ static actor_method_class daObj_Mie_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_MIE = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_OBJ_MIE,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObj_Mie_c),    // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  86,                     // mPriority
-  &daObj_Mie_MethodTable, // sub_method
-  0x00044100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_MIE_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObj_Mie_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_MIE_e,
+    /* Actor SubMtd */ &daObj_Mie_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

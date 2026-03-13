@@ -10,27 +10,27 @@
 #include "f_pc/f_pc_leaf.h"
 
 scene_process_profile_definition g_profile_WARNING_SCENE = {
-    fpcLy_ROOT_e,           // mLayerID     
-    1,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_WARNING_SCENE,     // mProcName               
-    &g_fpcNd_Method.base,  // sub_method                  
-    0x204,                  // mSize        
-    0,                      // mSizeOther              
-    0,                      // mParameters              
-    &g_fopScn_Method.base, // sub_method                   
-    NULL,                   // mpMtd
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_WARNING_SCENE_e,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ 0x204,
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ NULL,
 };
 
 scene_process_profile_definition g_profile_WARNING2_SCENE = {
-    fpcLy_ROOT_e,           // mLayerID          
-    1,                      // mListID   
-    fpcPi_CURRENT_e,        // mListPrio    
-    PROC_WARNING2_SCENE,    // mProcName                     
-    &g_fpcNd_Method.base,  // sub_method                       
-    0x204,                  // mSize             
-    0,                      // mSizeOther                
-    0,                      // mParameters                
-    &g_fopScn_Method.base, // sub_method                        
-    NULL,                   // mpMtd
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_WARNING2_SCENE_e,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ 0x204,
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ NULL,
 };

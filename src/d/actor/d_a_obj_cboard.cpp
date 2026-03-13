@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_cboard.h"
 #include "d/d_bg_w.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 void daObjBoard_c::initBaseMtx() {
     setBaseMtx();
@@ -157,18 +157,18 @@ static actor_method_class daObjBoard_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_Cboard = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Obj_Cboard,
-    &g_fpcLf_Method.base,
-    sizeof(daObjBoard_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    453,
-    &daObjBoard_METHODS,
-    0x40000,
-    fopAc_CULLBOX_0_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Cboard_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjBoard_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Cboard_e,
+    /* Actor SubMtd */ &daObjBoard_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -144,7 +144,7 @@ int daObjLife_c::create() {
     }
 
     m_itemNo = getItemNo();
-    if (m_itemNo != fpcNm_ITEM_KAKERA_HEART && m_itemNo != fpcNm_ITEM_UTAWA_HEART) {
+    if (m_itemNo != dItemNo_KAKERA_HEART_e && m_itemNo != dItemNo_UTAWA_HEART_e) {
         // "Heart Container: Item No is incorrect!<%d>\n"
         OS_REPORT_ERROR("ハートの器：アイテム番号が不正です！<%d>\n", m_itemNo);
     }
@@ -153,7 +153,7 @@ int daObjLife_c::create() {
         return cPhs_ERROR_e;
     }
 
-    if (m_itemNo == fpcNm_ITEM_UTAWA_HEART && dComIfGs_isStageLife()) {
+    if (m_itemNo == dItemNo_UTAWA_HEART_e && dComIfGs_isStageLife()) {
         return cPhs_ERROR_e;
     }
 
@@ -328,7 +328,7 @@ int daObjLife_c::actionGetDemo() {
             fopAcM_onItem(this, savebit);
         }
 
-        if (m_itemNo == fpcNm_ITEM_KAKERA_HEART) {
+        if (m_itemNo == dItemNo_KAKERA_HEART_e) {
             if (strcmp(dComIfGp_getStartStageName(), "F_SP121") == 0) {
                 if (fopAcM_GetRoomNo(this) == 0) {
                     if (savebit == 128) {
@@ -372,7 +372,7 @@ int daObjLife_c::actionInitBoomerangCarry() {
 }
 
 int daObjLife_c::actionBoomerangCarry() {
-    fopAc_ac_c* boomerang = fopAcM_SearchByName(PROC_BOOMERANG);
+    fopAc_ac_c* boomerang = fopAcM_SearchByName(fpcNm_BOOMERANG_e);
     if (boomerang != NULL) {
         current.pos = boomerang->current.pos;
     } else {
@@ -511,18 +511,18 @@ static actor_method_class l_daObjLife_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_LifeContainer = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_LifeContainer, // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjLife_c),    // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  239,                    // mPriority
-  &l_daObjLife_Method,    // sub_method
-  0x000C4100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_LifeContainer_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjLife_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_LifeContainer_e,
+    /* Actor SubMtd */ &l_daObjLife_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

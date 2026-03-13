@@ -86,7 +86,7 @@ struct fopAcM_search4ev_prm {
     void clear() {
         name[0] = 0;
         event_id = -1;
-        procname = PROC_PLAY_SCENE;
+        procname = fpcNm_PLAY_SCENE_e;
         argument = 0;
     }
 
@@ -133,39 +133,6 @@ struct DOUBLE_POS {
     double x, y, z;
 };
 
-enum fopAcM_STATUS {
-    /* 0x00000001 */ fopAcM_STATUS_UNK_0x1          = 1 << 0,
-    /* 0x00000002 */ fopAcM_STATUS_UNK_0x2          = 1 << 1,
-    /* 0x00000004 */ fopAcM_STATUS_UNK_0x4          = 1 << 2,
-    /* 0x00000008 */ fopAcM_STATUS_UNK_0x8          = 1 << 3,
-    /* 0x00000010 */ fopAcM_STATUS_UNK_0x10         = 1 << 4,
-    /* 0x00000020 */ fopAcM_STATUS_UNK_0x20         = 1 << 5,
-    /* 0x00000040 */ fopAcM_STATUS_UNK_0x40         = 1 << 6,
-    /* 0x00000080 */ fopAcM_STATUS_UNK_0x80         = 1 << 7,
-    /* 0x00000100 */ fopAcM_STATUS_UNK_0x100        = 1 << 8,
-    /* 0x00000200 */ fopAcM_STATUS_UNK_0x200        = 1 << 9,
-    /* 0x00000400 */ fopAcM_STATUS_UNK_0x400        = 1 << 10,
-    /* 0x00000800 */ fopAcM_STATUS_UNK_0x800        = 1 << 11,
-    /* 0x00001000 */ fopAcM_STATUS_UNK_0x1000       = 1 << 12,
-    /* 0x00002000 */ fopAcM_STATUS_CARRY_NOW        = 1 << 13,
-    /* 0x00004000 */ fopAcM_STATUS_UNK_0x4000       = 1 << 14,
-    /* 0x00008000 */ fopAcM_STATUS_UNK_0x8000       = 1 << 15,
-    /* 0x00010000 */ fopAcM_STATUS_UNK_0x10000      = 1 << 16,
-    /* 0x00020000 */ fopAcM_STATUS_UNK_0x20000      = 1 << 17,
-    /* 0x00040000 */ fopAcM_STATUS_UNK_0x40000      = 1 << 18,
-    /* 0x00080000 */ fopAcM_STATUS_UNK_0x80000      = 1 << 19,
-    /* 0x00100000 */ fopAcM_STATUS_HOOK_CARRY_NOW   = 1 << 20,
-    /* 0x00200000 */ fopAcM_STATUS_UNK_0x200000     = 1 << 21,
-    /* 0x00400000 */ fopAcM_STATUS_UNK_0x400000     = 1 << 22,
-    /* 0x00800000 */ fopAcM_STATUS_UNK_0x800000     = 1 << 23,
-    /* 0x01000000 */ fopAcM_STATUS_UNK_0x1000000    = 1 << 24,
-    /* 0x02000000 */ fopAcM_STATUS_UNK_0x2000000    = 1 << 25,
-    /* 0x04000000 */ fopAcM_STATUS_UNK_0x4000000    = 1 << 26,
-    /* 0x08000000 */ fopAcM_STATUS_UNK_0x8000000    = 1 << 27,
-
-    /* 0x80000000 */ fopAcM_STATUS_HAWK_CARRY_NOW   = 1 << 31,
-};
-
 inline s8 fopAcM_GetRoomNo(const fopAc_ac_c* i_actor) {
     return i_actor->current.roomNo;
 }
@@ -187,11 +154,11 @@ inline u32 fopAcM_CheckStatus(fopAc_ac_c* i_actor, u32 actor_status) {
 }
 
 inline u32 fopAcM_checkCarryNow(fopAc_ac_c* i_actor) {
-    return i_actor->actor_status & fopAcM_STATUS_CARRY_NOW;
+    return i_actor->actor_status & fopAcStts_CARRY_NOW_e;
 }
 
 inline u32 fopAcM_checkHawkCarryNow(fopAc_ac_c* actor) {
-    return fopAcM_CheckStatus(actor, 0x80000000);
+    return fopAcM_CheckStatus(actor, fopAcStts_HAWK_CARRY_NOW_e);
 }
 
 enum fopAcM_CARRY {
@@ -211,7 +178,7 @@ inline u32 fopAcM_CheckCarryType(const fopAc_ac_c* actor, fopAcM_CARRY type) {
 }
 
 inline u32 fopAcM_checkHookCarryNow(fopAc_ac_c* i_actor) {
-    return fopAcM_CheckStatus(i_actor, fopAcM_STATUS_HOOK_CARRY_NOW);
+    return fopAcM_CheckStatus(i_actor, fopAcStts_HOOK_CARRY_NOW_e);
 }
 
 inline u32 fopAcM_GetParam(const void* i_actor) {
@@ -307,19 +274,19 @@ inline void fopAcM_SetRoomNo(fopAc_ac_c* actor, s8 roomNo) {
 }
 
 inline void fopAcM_setHookCarryNow(fopAc_ac_c* actor) {
-    fopAcM_OnStatus(actor, fopAcM_STATUS_HOOK_CARRY_NOW);
+    fopAcM_OnStatus(actor, fopAcStts_HOOK_CARRY_NOW_e);
 }
 
 inline void fopAcM_cancelHookCarryNow(fopAc_ac_c* actor) {
-    fopAcM_OffStatus(actor, fopAcM_STATUS_HOOK_CARRY_NOW);
+    fopAcM_OffStatus(actor, fopAcStts_HOOK_CARRY_NOW_e);
 }
 
 inline void fopAcM_setHawkCarryNow(fopAc_ac_c* actor) {
-    fopAcM_OnStatus(actor, fopAcM_STATUS_HAWK_CARRY_NOW);
+    fopAcM_OnStatus(actor, fopAcStts_HAWK_CARRY_NOW_e);
 }
 
 inline void fopAcM_cancelHawkCarryNow(fopAc_ac_c* actor) {
-    fopAcM_OffStatus(actor, fopAcM_STATUS_HAWK_CARRY_NOW);
+    fopAcM_OffStatus(actor, fopAcStts_HAWK_CARRY_NOW_e);
 }
 
 inline s8 fopAcM_GetHomeRoomNo(const fopAc_ac_c* i_actor) {

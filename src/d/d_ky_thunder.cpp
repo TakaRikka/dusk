@@ -273,15 +273,15 @@ static leafdraw_method_class l_dThunder_Method = {
 };
 
 kankyo_process_profile_definition g_profile_KY_THUNDER = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_KY_THUNDER,
-    &g_fpcLf_Method.base,
-    sizeof(dThunder_c),
-    0,
-    0,
-    &g_fopKy_Method,
-    6,
-    &l_dThunder_Method,
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 7,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_KY_THUNDER_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dThunder_c),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_KY_THUNDER_e,
+    /* Kankyo SubMtd */ &l_dThunder_Method,
 };

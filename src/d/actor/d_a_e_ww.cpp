@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_ww.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -108,7 +108,7 @@ public:
 
     /* ホワイトウルフォス - White Werewolf */
     /* 0x04 */ s8 field_0x04;
-    /* 0x08 */ f32 model_size;              // モデルサイズ - Model Size      
+    /* 0x08 */ f32 model_size;              // モデルサイズ - Model Size
     /* 0x0C */ f32 attack_interval;         // 攻撃間隔 - Attack Interval
     /* 0x10 */ f32 run_anm;                 // 走りアニメーション - Run Animation
     /* 0x14 */ f32 walk_anm;                // 歩きアニメーション - Walk Animation
@@ -130,7 +130,7 @@ namespace {
             {{0.0f, 0.0f, 0.0f}, 40.0f} // mSph
         } // mSphAttr
     };
-    
+
     dCcD_SrcSph cc_ww_tg_src = {
         {
             {0x0, {{0x0, 0x1, 0x0}, {0xD8FBFDFF, 0x43}, 0x0}}, // mObj
@@ -260,7 +260,7 @@ int daE_WW_c::draw() {
         #endif
         return 1;
     }
-    
+
     J3DModel* model_p = mpModelMorf->getModel();
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(model_p, &tevStr);
@@ -320,7 +320,7 @@ void daE_WW_c::damage_check() {
         if (var_r29 != NULL) {
             mAtInfo.mpCollider = var_r29;
             if (mAtInfo.mpCollider->ChkAtType(AT_TYPE_IRON_BALL) != 0) {
-                if (fopAcM_GetName(dCc_GetAc(mAtInfo.mpCollider->GetAc())) == PROC_Obj_Carry) {
+                if (fopAcM_GetName(dCc_GetAc(mAtInfo.mpCollider->GetAc())) == fpcNm_Obj_Carry_e) {
                     S16_ADD(health, 150);
                 } else if (dComIfGp_checkPlayerStatus0(0, 0x400) != 0) {
                     S16_ADD(health, 180);
@@ -410,7 +410,7 @@ void daE_WW_c::setGroundAngle() {
     sp14.y = mObjAcch.GetGroundH();
     dBgS_GndChk gnd_chk;
     Vec gnd_pos;
-    
+
     if (field_0x75c == 0) {
         gnd_pos.x = sp14.x + 100.0f * cM_ssin(shape_angle.y);
         gnd_pos.y = 150.0f + sp14.y;
@@ -528,7 +528,7 @@ void daE_WW_c::setAppearEffect() {
 
 static void* s_child_ww(void* i_actor, void* i_data) {
     if (i_actor != i_data && fopAcM_IsActor(i_actor)
-    && fopAcM_GetName(i_actor) == PROC_E_WW && !fpcM_IsCreating(fopAcM_GetID(i_actor))) {
+    && fopAcM_GetName(i_actor) == fpcNm_E_WW_e && !fpcM_IsCreating(fopAcM_GetID(i_actor))) {
         if (fopAcM_GetLinkId((fopAc_ac_c*)i_actor) == fopAcM_GetID(i_data)) {
             lbl_237_bss_30++;
         }
@@ -545,22 +545,22 @@ static void* s_obj_sub(void* i_proc, void* i_data) {
             if (fVar2 == fVar3) {
                 f32 fVar4 = fopAcM_GetSpeed((fopAc_ac_c *) i_proc).y;
                 if (fVar4 == fVar3) {
-                    if (fopAcM_GetName(i_proc) == PROC_Obj_Carry) {
+                    if (fopAcM_GetName(i_proc) == fpcNm_Obj_Carry_e) {
                         return i_proc;
                     }
 
-                    if (fopAcM_GetName(i_proc) == PROC_NBOMB) {
+                    if (fopAcM_GetName(i_proc) == fpcNm_NBOMB_e) {
                         return i_proc;
                     }
                 }
             }
         }
 
-        if (dist < 500.0f && (fopAcM_GetName(i_proc) == PROC_BOOMERANG || fopAcM_GetName(i_proc) == PROC_NBOMB)) {
+        if (dist < 500.0f && (fopAcM_GetName(i_proc) == fpcNm_BOOMERANG_e || fopAcM_GetName(i_proc) == fpcNm_NBOMB_e)) {
             return i_proc;
         }
-        
-        if (dist < 700.0f && fopAcM_GetName(i_proc) == PROC_ARROW) {
+
+        if (dist < 700.0f && fopAcM_GetName(i_proc) == fpcNm_ARROW_e) {
             f32 fVar5 = fopAcM_GetSpeedF((fopAc_ac_c *) i_proc);
             f32 fVar6 = 0.0f;
             if (fVar5 != fVar6) {
@@ -603,7 +603,7 @@ bool daE_WW_c::checkSideStep() {
 }
 
 static void* s_attack_ww(void* i_actor, void* i_data) {
-    if (i_actor != i_data && fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_WW && !fpcM_IsCreating(fopAcM_GetID(i_actor)) && ((daE_WW_c*)i_actor)->isAttack() != 0) {
+    if (i_actor != i_data && fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_WW_e && !fpcM_IsCreating(fopAcM_GetID(i_actor)) && ((daE_WW_c*)i_actor)->isAttack() != 0) {
         return i_actor;
     }
 
@@ -628,7 +628,7 @@ void daE_WW_c::createWolf(cXyz param_0, u8 param_1) {
         var_r28 = 1;
     }
 
-    mChildID[var_r29] = fopAcM_createChild(PROC_E_WW, var_r30, (var_r28 << 24) | (field_0x6b4 | (0xF0FF0000 | 0xF000) | (temp_r27 * 0x10)), &param_0, fopAcM_GetRoomNo(this), &sp14, NULL, -1, NULL);
+    mChildID[var_r29] = fopAcM_createChild(fpcNm_E_WW_e, var_r30, (var_r28 << 24) | (field_0x6b4 | (0xF0FF0000 | 0xF000) | (temp_r27 * 0x10)), &param_0, fopAcM_GetRoomNo(this), &sp14, NULL, -1, NULL);
 }
 
 static cXyz create_pos[15] = {
@@ -655,7 +655,7 @@ void daE_WW_c::executeMaster() {
     f32 temp_f30 = sp48.absXZ(current.pos);
     cXyz sp3C;
     cXyz sp30;
-    fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x4000);
+    fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
     field_0x724 = 10;
     switch (mActionMode) {
     case ACTION_MODE_0:
@@ -786,7 +786,7 @@ void daE_WW_c::executeMaster() {
 void daE_WW_c::executeWait() {
     switch (mActionMode) {
     case ACTION_MODE_0:
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
         setBck(BCK_WW_APPEAR, J3DFrameCtrl::EMode_NONE, 0.0f, 1.0f);
         mActionMode = ACTION_MODE_1;
         break;
@@ -806,7 +806,7 @@ void daE_WW_c::executeWait() {
                 mActionMode = ACTION_MODE_10;
                 return;
             }
-            
+
             setBck(BCK_WW_WAIT, J3DFrameCtrl::EMode_LOOP, 3.0f, 1.0f);
             return;
         }
@@ -826,7 +826,7 @@ void daE_WW_c::executeWait() {
             }
         }
 
-        fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
         if (var_r28) {
             setActionMode(ACTION_ATTACK, ACTION_MODE_0);
             field_0x756 = 1;
@@ -871,7 +871,7 @@ int daE_WW_c::calcJumpSpeed() {
 
 void daE_WW_c::executeAttack() {
     daPy_py_c* player_p = daPy_getPlayerActorClass();
-    
+
     switch (mActionMode) {
     case ACTION_MODE_0:
         setBck(BCK_WW_RUN, J3DFrameCtrl::EMode_LOOP, 3.0f, l_HIO.run_anm); // Change BCK index to enum ?
@@ -913,7 +913,7 @@ void daE_WW_c::executeAttack() {
             return;
         }
         break;
-    
+
     case ACTION_MODE_10:
         field_0x6cc = fopAcM_searchPlayerAngleY(this);
         shape_angle.y = field_0x6cc;
@@ -951,7 +951,7 @@ void daE_WW_c::executeAttack() {
                 if (player_p->getSpeedF() >= 18.0f) {
                     var_f31 = 1000.0f + nREG_F(18) + mDistCheckModifier;
                 }
-                
+
                 if (fopAcM_searchPlayerDistance(this) < var_f31 && checkAttackWall() != 0) {
                     mActionMode = ACTION_MODE_20;
                     setBck(BCK_WW_JUMPATTACKA, J3DFrameCtrl::EMode_NONE, 3.0f, 1.0f); // Change to ANM_JUMP ?
@@ -1090,7 +1090,7 @@ void daE_WW_c::executeChase() {
     s16 sp8;
     cXyz sp28 = daPy_getPlayerActorClass()->current.pos;
     f32 temp_f31 = sp28.absXZ(current.pos);
-    
+
     switch (mActionMode) {
     case ACTION_MODE_5:
         if (temp_f31 > 1500.0f + nREG_F(18) + mDistCheckModifier) {
@@ -1171,7 +1171,7 @@ void daE_WW_c::executeChase() {
         field_0x75a = 1;
         cLib_addCalcAngleS(&shape_angle.y, getNearPlayerAngle(), 4, 0x800, 0x100);
         current.angle.y = shape_angle.y;
-        
+
         f32 fVar5 = daPy_getPlayerActorClass()->speedF;
         f32 fVar6 = 0.0f;
         if (fVar5 != fVar6) {
@@ -1476,7 +1476,7 @@ void daE_WW_c::executeMoveOut() {
                         mActionMode = ACTION_MODE_11;
                     }
                 } else if (fVar1 > nREG_F(18) + 3000.0f + mDistCheckModifier) {
-                    if (fopAcM_CheckCondition(this, fopAcM_STATUS_UNK_0x4)) {
+                    if (fopAcM_CheckCondition(this, fopAcStts_UNK_0x4_e)) {
                         fopAcM_delete(this);
                         break;
                     }
@@ -1538,7 +1538,7 @@ void daE_WW_c::executeMoveOut() {
             speedF = l_HIO.run_speed;
             mActionMode = ACTION_MODE_16;
             field_0x728 = 60;
-            
+
             if ((s16)(cLib_targetAngleY(&current.pos, &field_0x668) - fopAcM_searchPlayerAngleY(this)) < 0) {
                 field_0x6cc = 0x2000;
             } else {
@@ -1656,7 +1656,7 @@ bool daE_WW_c::checkWalkStart() {
             u8 uVar1 = 0;
             spdc.set(0.0f, 100.0f, nREG_F(18) + 1500.0f + 100.0f);
             cLib_offsetPos(&spd0, &spe8, (s16)(angleY + 0x1400 + cM_rndFX(1024.0f)), &spdc);
-            
+
             f32 fVar1 = checkCreateBg(spd0);
             if (fVar1 != -G_CM3D_F_INF) {
                 uVar1 = 1;
@@ -1756,7 +1756,7 @@ void daE_WW_c::executeWalk() {
             if (checkMoveOut()) return;
             break;
         }
-        
+
         case ACTION_MODE_10:
             setBck(BCK_WW_RUN, J3DFrameCtrl::EMode_LOOP, 3.0f, l_HIO.run_anm);
             mActionMode = ACTION_MODE_11;
@@ -1908,7 +1908,7 @@ void daE_WW_c::mtx_set() {
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mDoMtx_stack_c::XrotM(field_0x6ce);
     mDoMtx_stack_c::scaleM(l_HIO.model_size, l_HIO.model_size, l_HIO.model_size);
-    
+
     mpModelMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
     mpModelMorf->modelCalc();
 }
@@ -1930,7 +1930,7 @@ void daE_WW_c::cc_set() {
         mSph2[0].SetC(sp8);
         mSph2[0].SetR(70.0f + nREG_F(17));
         dComIfG_Ccsp()->Set(&mSph2[0]);
-        mDoMtx_stack_c::copy(model_p->getAnmMtx(JNT_HEAD)), 
+        mDoMtx_stack_c::copy(model_p->getAnmMtx(JNT_HEAD)),
         mDoMtx_stack_c::transM(-10.0f, -20.0f, 0.0f);
         mDoMtx_stack_c::multVecZero(&sp8);
         mSph1[1].SetC(sp8);
@@ -2138,7 +2138,7 @@ int daE_WW_c::_delete() {
     if (heap != 0) {
         mSound.deleteObject();
     }
-    
+
     return 1;
 }
 
@@ -2184,7 +2184,7 @@ int daE_WW_c::create() {
         if (field_0x6b4 == 0xF) {
             field_0x6b4 = 0;
         }
-        
+
         u8 var_r26 = fopAcM_GetParam(this) >> 4; // Arg1 ?
         if (var_r26 == 0xFF || var_r26 == 0) {
             var_r26 = 30;
@@ -2224,7 +2224,7 @@ int daE_WW_c::create() {
                 var_r27 = 10;
             }
         }
-        
+
         field_0x6ac = 100.0f * var_r27;
         shape_angle.x = 0;
         current.angle.x = 0;
@@ -2256,7 +2256,7 @@ int daE_WW_c::create() {
                 health = 100;
                 field_0x560 = 100;
             }
-            
+
             mCcStts.Init(0xFE, 0, this);
             field_0x75d = 1;
             attention_info.flags = fopAc_AttnFlag_BATTLE_e;
@@ -2306,20 +2306,20 @@ static actor_method_class l_daE_WW_Method = {
 };
 
 actor_process_profile_definition g_profile_E_WW = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_WW,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daE_WW_c),       // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  209,                    // mPriority
-  &l_daE_WW_Method,       // sub_method
-  0x00044100,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_WW_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_WW_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_WW_e,
+    /* Actor SubMtd */ &l_daE_WW_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

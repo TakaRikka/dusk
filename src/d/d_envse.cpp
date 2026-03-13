@@ -249,15 +249,15 @@ static leafdraw_method_class l_dEnvSe_Method = {
 };
 
 kankyo_process_profile_definition g_profile_ENVSE = {
-    fpcLy_CURRENT_e,
-    2,
-    fpcPi_CURRENT_e,
-    PROC_ENVSE,
-    &g_fpcLf_Method.base,
-    sizeof(dEnvSe_c),
-    0,
-    0,
-    &g_fopKy_Method,
-    689,
-    &l_dEnvSe_Method,
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 2,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_ENVSE_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dEnvSe_c),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_ENVSE_e,
+    /* Kankyo SubMtd */ &l_dEnvSe_Method,
 };

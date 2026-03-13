@@ -164,20 +164,20 @@ static execFunc l_execFunc[] = {
 };
 
 static s16 const l_preLoad_dylKeyTbl[14] = {
-    PROC_BG,
-    PROC_DEMO00,
-    PROC_NBOMB,
-    PROC_SPINNER,
-    PROC_Obj_LifeContainer,
-    PROC_CROD,
-    PROC_DISAPPEAR,
-    PROC_Tag_Attp,
-    PROC_MG_ROD,
-    PROC_BOOMERANG,
-    PROC_ARROW,
-    PROC_SUSPEND,
-    PROC_MIDNA,
-    PROC_Obj_Yousei,
+    fpcNm_BG_e,
+    fpcNm_DEMO00_e,
+    fpcNm_NBOMB_e,
+    fpcNm_SPINNER_e,
+    fpcNm_Obj_LifeContainer_e,
+    fpcNm_CROD_e,
+    fpcNm_DISAPPEAR_e,
+    fpcNm_Tag_Attp_e,
+    fpcNm_MG_ROD_e,
+    fpcNm_BOOMERANG_e,
+    fpcNm_ARROW_e,
+    fpcNm_SUSPEND_e,
+    fpcNm_MIDNA_e,
+    fpcNm_Obj_Yousei_e,
 };
 
 bool dScnLogo_c::preLoad_dyl() {
@@ -751,10 +751,10 @@ void dScnLogo_c::nextSceneChange() {
     if (!mDoRst::isReset()) {
         if (!isOpeningCut())
         {
-            dComIfG_changeOpeningScene(this, PROC_OPENING_SCENE);
+            dComIfG_changeOpeningScene(this, fpcNm_OPENING_SCENE_e);
         } else {
             #if DEBUG
-            fopScnM_ChangeReq(this, PROC_MENU_SCENE, 0, 30);
+            fopScnM_ChangeReq(this, fpcNm_MENU_SCENE_e, 0, 30);
             dComIfGs_init();
             dComIfG_playerStatusD();
             return;
@@ -1461,7 +1461,7 @@ static int dScnLogo_Execute(dScnLogo_c* i_this) {
     fpc_ProcID id = fpcM_GetID(i_this);
 
     if (mDoRst::isReset()) {
-        fopScnM_ChangeReq(i_this, PROC_LOGO_SCENE, 0, 5);
+        fopScnM_ChangeReq(i_this, fpcNm_LOGO_SCENE_e, 0, 5);
     }
 
     return 1;
@@ -1625,15 +1625,15 @@ static scene_method_class l_dScnLogo_Method = {
 };
 
 scene_process_profile_definition g_profile_LOGO_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_LOGO_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnLogo_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnLogo_Method,
-    0,
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_LOGO_SCENE_e,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnLogo_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnLogo_Method,
+                       0,
 };

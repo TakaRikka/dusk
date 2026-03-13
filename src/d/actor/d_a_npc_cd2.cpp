@@ -1088,12 +1088,12 @@ int PathTrace_c::decIndex(int param_1) {
 
 static void* s_sub(void* param_1, void* param_2) {
     if (fopAcM_IsActor(param_1) &&
-        ((fopAcM_GetName(param_1) == PROC_ALINK && !dKy_darkworld_check()) ||
-         fopAcM_GetName(param_1) == PROC_NPC_CD3 || fopAcM_GetName(param_1) == PROC_NPC_PASSER ||
-         fopAcM_GetName(param_1) == PROC_NPC_GUARD || fopAcM_GetName(param_1) == PROC_NPC_FGUARD ||
-         fopAcM_GetName(param_1) == PROC_NPC_SHOE || fopAcM_GetName(param_1) == PROC_NPC_KASIHANA ||
-         fopAcM_GetName(param_1) == PROC_NPC_KASIKYU ||
-         fopAcM_GetName(param_1) == PROC_NPC_KASIMICH))
+        ((fopAcM_GetName(param_1) == fpcNm_ALINK_e && !dKy_darkworld_check()) ||
+         fopAcM_GetName(param_1) == fpcNm_NPC_CD3_e || fopAcM_GetName(param_1) == fpcNm_NPC_PASSER_e ||
+         fopAcM_GetName(param_1) == fpcNm_NPC_GUARD_e || fopAcM_GetName(param_1) == fpcNm_NPC_FGUARD_e ||
+         fopAcM_GetName(param_1) == fpcNm_NPC_SHOE_e || fopAcM_GetName(param_1) == fpcNm_NPC_KASIHANA_e ||
+         fopAcM_GetName(param_1) == fpcNm_NPC_KASIKYU_e ||
+         fopAcM_GetName(param_1) == fpcNm_NPC_KASIMICH_e))
     {
         static_cast<PathTrace_c*>(param_2)->checkObstacleSub((fopAc_ac_c*)param_1);
     }

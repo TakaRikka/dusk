@@ -150,6 +150,9 @@ daNpcChin_HIO_c::daNpcChin_HIO_c() {
     m = daNpcChin_Param_c::m;
 }
 
+daNpcChin_HIO_c::~daNpcChin_HIO_c() {
+}
+
 void daNpcChin_HIO_c::genMessage(JORMContext* ctx) {
     daNpcF_commonGenMessage(ctx, &m.common);
 }
@@ -1216,9 +1219,9 @@ bool daNpcChin_c::wait(void* param_0) {
 
             u16 eventMask = 0xffff;
             if (mOrderEvtNo == EVT_CHIN_APPEAR) {
-                // maybe fakematch? this still doesn't quite match for debug but it's closer
+                //TODO: maybe fakematch?
 #if PLATFORM_SHIELD
-                eventMask = eventMask & 0xff7f;
+                eventMask &= (u16)~0x80;
 #else
                 eventMask &= ~0x80;
 #endif
@@ -1360,6 +1363,8 @@ bool daNpcChin_c::demo(void* param_0) {
             Event_DT();
         }
 
+        (void)0;
+
         break;
     }
     default: {
@@ -1433,6 +1438,8 @@ bool daNpcChin_c::watch_game(void* param_0) {
                 orderEvent(getForcibleTalk2(), l_evtNames[mOrderEvtNo], 0xffff, 4, 0xff, 2);
             }
         }
+
+        (void)0;
 
         break;
     }
@@ -2116,18 +2123,18 @@ static actor_method_class daNpcChin_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_CHIN = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_NPC_CHIN,          // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(daNpcChin_c),    // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    424,                    // mPriority
-    &daNpcChin_MethodTable, // sub_method
-    0x00044100,             // mStatus
-    fopAc_NPC_e,            // mActorType
-    fopAc_CULLBOX_CUSTOM_e, // cullType
-  };
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_CHIN_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcChin_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_CHIN_e,
+    /* Actor SubMtd */ &daNpcChin_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
+};

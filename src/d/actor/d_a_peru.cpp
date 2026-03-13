@@ -402,7 +402,7 @@ void daPeru_c::srchActors() {
 
     if (mActors[1].getActorP() == NULL) {
         fopAc_ac_c* local_18 = NULL;
-        if (fopAcM_SearchByName(PROC_Obj_CatDoor, &local_18) != 0) {
+        if (fopAcM_SearchByName(fpcNm_Obj_CatDoor_e, &local_18) != 0) {
             mActors[1].entry(local_18);
         }
     }
@@ -1008,7 +1008,7 @@ int daPeru_c::_cutAppear_Init(int const& param_1) {
     {
         mFaceMotionSeqMngr.setNo(2, -1.0f, 0, 0);
         fopAc_ac_c* midna = NULL;
-        if (fopAcM_SearchByName(PROC_MIDNA, &midna) != 0) {
+        if (fopAcM_SearchByName(fpcNm_MIDNA_e, &midna) != 0) {
             if (midna == NULL) {
                 OS_REPORT("---- there is no midna!!\n");
                 JUT_ASSERT(2446, FALSE);
@@ -1269,18 +1269,18 @@ static actor_method_class daPeru_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_PERU = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_PERU,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daPeru_c),       // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  694,                    // mPriority
-  &daPeru_MethodTable,    // sub_method
-  0x08044108,             // mStatus
-  fopAc_NPC_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_PERU_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daPeru_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_PERU_e,
+    /* Actor SubMtd */ &daPeru_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x8000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x8_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

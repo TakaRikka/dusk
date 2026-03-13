@@ -246,7 +246,7 @@ void daObj_BouMato_c::tgHitCallBack(fopAc_ac_c* param_1, dCcD_GObjInf* param_2,
                                         fopAc_ac_c* param_3, dCcD_GObjInf* param_4) {
     u8 cutType = 0;
     if (param_3 != NULL) {
-        if (fopAcM_GetProfName(param_3) == PROC_ALINK) {
+        if (fopAcM_GetProfName(param_3) == fpcNm_ALINK_e) {
             cutType = static_cast<daPy_py_c*>(param_3)->getCutType();
         } else {
             cutType = daPy_py_c::CUT_TYPE_NM_VERTICAL;
@@ -257,7 +257,7 @@ void daObj_BouMato_c::tgHitCallBack(fopAc_ac_c* param_1, dCcD_GObjInf* param_2,
 
 void* daObj_BouMato_c::srchArrow(void* param_1, void* param_2) {
     if (l_findCount < 100 && param_1 != NULL && param_1 != param_2) {
-        if (fopAcM_IsExecuting(fopAcM_GetID(param_1)) && fopAcM_GetName(param_1) == PROC_ARROW &&
+        if (fopAcM_IsExecuting(fopAcM_GetID(param_1)) && fopAcM_GetName(param_1) == fpcNm_ARROW_e &&
             static_cast<daArrow_c*>(param_1)->getHitAcID() != -1)
         {
             l_findActorPtrs[l_findCount] = (daArrow_c*)param_1;
@@ -288,7 +288,7 @@ void daObj_BouMato_c::setSwayParam(fopAc_ac_c* param_1) {
     field_0xa2a = (fopAcM_searchActorAngleY(this, param_1) - shape_angle.y) + 0x8000;
     field_0xa10 = 8;
     mIsCurTurnRight = false;
-    if (fopAcM_GetProfName(param_1) == PROC_ALINK) {
+    if (fopAcM_GetProfName(param_1) == fpcNm_ALINK_e) {
         switch (mCutType) {
         case daPy_py_c::CUT_TYPE_NM_RIGHT:
         case daPy_py_c::CUT_TYPE_NM_LEFT:
@@ -368,18 +368,18 @@ static actor_method_class daObj_BouMato_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_BOUMATO = {
-  fpcLy_CURRENT_e,            // mLayerID
-  7,                          // mListID
-  fpcPi_CURRENT_e,            // mListPrio
-  PROC_OBJ_BOUMATO,           // mProcName
-  &g_fpcLf_Method.base,      // sub_method
-  sizeof(daObj_BouMato_c),    // mSize
-  0,                          // mSizeOther
-  0,                          // mParameters
-  &g_fopAc_Method.base,       // sub_method
-  80,                         // mPriority
-  &daObj_BouMato_MethodTable, // sub_method
-  0x00044100,                 // mStatus
-  fopAc_ACTOR_e,              // mActorType
-  fopAc_CULLBOX_CUSTOM_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_BOUMATO_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObj_BouMato_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_BOUMATO_e,
+    /* Actor SubMtd */ &daObj_BouMato_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

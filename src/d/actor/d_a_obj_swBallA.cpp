@@ -17,7 +17,7 @@ static daObjCarry_c* l_target_info[8];
 static int l_target_info_count;
 
 static void* s_ball_sub(void* param_1, void* param_2) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_Obj_Carry &&
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_Obj_Carry_e &&
         ((daObjCarry_c*)param_1)->getType() == daObjCarry_c::TYPE_LV8_BALL)
     {
         if (l_target_info_count < 8) {
@@ -228,7 +228,7 @@ void daObjSwBallA_c::PutCrrPos() {
         daObjCarry_c* carryObj = (daObjCarry_c*)fopAcM_SearchByID(player->getGrabActorID());
         if (carryObj != NULL &&
             fopAcM_IsActor(carryObj)
-                && fopAcM_GetName(carryObj) == PROC_Obj_Carry &&
+                && fopAcM_GetName(carryObj) == fpcNm_Obj_Carry_e &&
               carryObj->getType() == daObjCarry_c::TYPE_LV8_BALL)
         {
             player->setForcePutPos(current.pos);
@@ -348,18 +348,18 @@ static actor_method_class l_daObjSwBallA_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_SwBallA = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_SwBallA,       // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjSwBallA_c), // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  571,                    // mPriority
-  &l_daObjSwBallA_Method, // sub_method
-  0x00040100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_SwBallA_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjSwBallA_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_SwBallA_e,
+    /* Actor SubMtd */ &l_daObjSwBallA_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

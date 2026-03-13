@@ -152,7 +152,7 @@ static BOOL target_bgc[5];
 
 static void* s_w_sub(void* i_proc, void* i_this) {
     if (fopAcM_IsActor(i_proc) &&
-        (fopAcM_GetName(i_proc) == PROC_OBJ_FOOD || fopAcM_GetName(i_proc) == PROC_OBJ_KANBAN2) &&
+        (fopAcM_GetName(i_proc) == fpcNm_OBJ_FOOD_e || fopAcM_GetName(i_proc) == fpcNm_OBJ_KANBAN2_e) &&
         fopAcM_checkCarryNow(static_cast<fopAc_ac_c*>(i_proc)) && target_info_count < 5)
     {
         target_info[target_info_count] = static_cast<fopAc_ac_c*>(i_proc);
@@ -978,7 +978,7 @@ static s16 hang_set(do_class* i_this) {
     cXyz vec1, vec2, vec3[2];
     vec1 = _this->old.pos - _this->current.pos;
     cMtx_YrotS(*calc_mtx, cM_atan2s(vec1.x, vec1.z));
-    
+
     vec1.x = 0.0f;
     vec1.y = 0.0f;
     vec1.z = -100.0f;
@@ -1198,7 +1198,7 @@ case1and2:
         i_this->mpMorf->setPlaySpeed(i_this->mAnmSpeed);
         cLib_addCalc2(&i_this->speedF, i_this->mAnmSpeed * l_HIO.mRunSpeed, 1.0f,
                       0.2f * l_HIO.mRunSpeed);
-        
+
         vec = food->current.pos - i_this->current.pos;
         angle_step = 0x1000;
         if (vec.abs() < 120.0f * i_this->mScale.z) {
@@ -1235,15 +1235,15 @@ case1and2:
             if (get_item) {
                 int item_no;
                 if (dComIfGs_getLife() <= 4) {
-                    item_no = fpcNm_ITEM_HEART;
+                    item_no = dItemNo_HEART_e;
                 } else {
                     int rnd = cM_rndF(11.0f);
                     if (rnd <= 5) {
-                        item_no = fpcNm_ITEM_HEART;
+                        item_no = dItemNo_HEART_e;
                     } else if (rnd <= 9) {
-                        item_no = fpcNm_ITEM_GREEN_RUPEE;
+                        item_no = dItemNo_GREEN_RUPEE_e;
                     } else {
-                        item_no = fpcNm_ITEM_BLUE_RUPEE;
+                        item_no = dItemNo_BLUE_RUPEE_e;
                     }
                 }
 
@@ -1342,7 +1342,7 @@ static void do_swim(do_class* i_this) {
 }
 
 static void* s_c_sub(void* param_0, void* param_1) {
-    if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_CANOE) {
+    if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == fpcNm_CANOE_e) {
         return param_0;
     }
     return 0;
@@ -1412,7 +1412,7 @@ static void do_help(do_class* i_this) {
     }
 
     cLib_addCalc2(&i_this->speedF, target_speed, 1.0f, 2.0f);
-    
+
     if (!daPy_getLinkPlayerActorClass()->checkCanoeRide() && i_this->mDistFromPlayer < 200.0f) {
         i_this->mAction = ACT_WAIT_1;
         i_this->mMode = 0;
@@ -1492,7 +1492,7 @@ static s8 do_boat(do_class* i_this) {
                       fabsf(i_this->field_0x698.x) + 2.0f);
         cLib_addCalc2(&i_this->current.pos.z, i_this->field_0x68c.z, 1.0f,
                       fabsf(i_this->field_0x698.z) + 2.0f);
-        
+
         if (_this->speed.y <= -80.0f) {
             _this->speed.y = -80.0f;
         }
@@ -1699,7 +1699,7 @@ static s8 do_carry(do_class* i_this) {
     i_this->mCcDisableTimer = 5;
     _this->speed.y = 0.0f;
     _this->speedF = 0.0f;
-    
+
     switch (i_this->mMode) {
     case 0:
         anm_init(i_this, ANM_TO_CARRY_B, 1.0f, 0,
@@ -1726,7 +1726,7 @@ static s8 do_carry(do_class* i_this) {
     if (!fopAcM_checkCarryNow(_this)) {
         i_this->mAction = ACT_WAIT_1;
         i_this->mMode = 0;
-        
+
         dBgS_GndChk gnd_chk;
         cXyz vec = _this->current.pos;
         vec.y += 50.0f;
@@ -2266,7 +2266,7 @@ static int daDo_Execute(do_class* i_this) {
     MtxPosition(&vec, &i_this->eyePos);
     i_this->attention_info.position = i_this->eyePos;
     i_this->attention_info.position.y += i_this->mScale.y * 16.0f;
-    
+
     vec.set(-15.0f, -15.0f, 0.0f);
     MtxPosition(&vec, &center);
     if (i_this->mCcDisableTimer != 0) {
@@ -2300,7 +2300,7 @@ static int daDo_Execute(do_class* i_this) {
             MtxTrans(20.0f, -24.0f, 0.0f, 1);
             vec.set(0.0f, 0.0f, 0.0f);
             MtxPosition(&vec, &item->current.pos);
-            
+
             item->shape_angle = i_this->shape_angle;
             item->current.angle = item->shape_angle;
             item->speed.zero();
@@ -2312,7 +2312,7 @@ static int daDo_Execute(do_class* i_this) {
         obj_food_class* food =
             static_cast<obj_food_class*>(fopAcM_SearchByID(i_this->mFoodActorID));
         if (food != NULL) {
-            if (fopAcM_GetName(food) == PROC_OBJ_FOOD) {
+            if (fopAcM_GetName(food) == fpcNm_OBJ_FOOD_e) {
                 MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(10), *calc_mtx);
                 cMtx_YrotM(*calc_mtx, 0x4000);
                 MtxTrans(0.0f, -7.0f, 25.0f, 1);
@@ -2482,7 +2482,7 @@ static cPhs_Step daDo_Create(fopAc_ac_c* i_this) {
             noFallCheck = true;
             _this->mParam2 = 200;
         }
-        
+
         _this->mItemActorID = -1;
         daDo_Execute(_this);
     }
@@ -2501,18 +2501,18 @@ static actor_method_class l_daDo_Method = {
 };
 
 actor_process_profile_definition g_profile_DO = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_DO,
-    &g_fpcLf_Method.base,
-    sizeof(do_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x2BB,
-    &l_daDo_Method,
-    0x8044000,
-    fopAc_NPC_e,
-    fopAc_CULLBOX_0_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DO_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(do_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_DO_e,
+    /* Actor SubMtd */ &l_daDo_Method,
+    /* Status       */ fopAcStts_UNK_0x8000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

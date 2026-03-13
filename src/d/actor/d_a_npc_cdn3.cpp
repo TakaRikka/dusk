@@ -368,231 +368,80 @@ void daNpcCdn3_c::initEscape() {
     dComIfGs_onSaveDunSwitch(0x3c);
 }
 
-daNpcCdn3_c::seqFunc* daNpcCdn3_c::m_funcTbl[44] = {
-    m_seq00_funcTbl, m_seq01_funcTbl,
-    m_seq02_funcTbl, m_seq03_funcTbl,
-    m_seq04_funcTbl, m_seq05_funcTbl,
-    m_seq06_funcTbl, m_seq07_funcTbl,
-    m_seq08_funcTbl, m_seq09_funcTbl,
-    m_seq10_funcTbl, m_seq11_funcTbl,
-    m_seq12_funcTbl, m_seq13_funcTbl,
-    m_seq14_funcTbl, m_seq15_funcTbl,
-    m_seq16_funcTbl, m_seq17_funcTbl,
-    m_seq18_funcTbl, m_seq19_funcTbl,
-    m_seq20_funcTbl, m_seq21_funcTbl,
-    m_seq22_funcTbl, m_seq23_funcTbl,
-    m_seq24_funcTbl, m_seq25_funcTbl,
-    m_seq26_funcTbl, m_seq27_funcTbl,
-    m_seq28_funcTbl, m_seq29_funcTbl,
-    m_seq30_funcTbl, m_seq31_funcTbl,
-    m_seq32_funcTbl, m_seq33_funcTbl,
-    m_seq34_funcTbl, m_seq35_funcTbl,
-    m_seq36_funcTbl, m_seq37_funcTbl,
-    m_seq38_funcTbl, m_seq39_funcTbl,
-    m_seq40_funcTbl, m_seq41_funcTbl,
-    m_seq42_funcTbl, m_seq43_funcTbl,
-};
+inline int daNpcCdn3_c::create() {
+    fopAcM_ct(this, daNpcCdn3_c);
+    mIsDarkWorld = dKy_darkworld_check();
+    m_type = getType();
+    mObjNum = getObjNum();
+    m_seqNum = getSeqNum();
+    mFlowNodeNum = getFlowNodeNum();
+    if (m_seqNum < 0 || 44 <= m_seqNum) {
+        // "Castle town townspeople map tool setting error
+        //  Argument 1 motion sequence = %d is abnormal"
+        OSReport_Error("城下町の町人 マップツール設定値異常 引数1モーションシーケンス=%dが異常です。\n", m_seqNum);
+        JUT_ASSERT(175, FALSE);
+    }
+    int rv = loadResrc(m_type, mObjNum);
+    if (rv == cPhs_COMPLEATE_e) {
+        int heapSize = 0x2890;
+#if DEBUG
+        heapSize |= fopAcM::HeapSkipMargin;
+#else
+        heapSize |= 0x80000000;
+#endif
+        if (fopAcM_entrySolidHeap(this, createHeapCallBack, heapSize) == 0) {
+            // "Actor creation failed!"
+            OS_REPORT("アクター生成失敗しました！\n");
+            return cPhs_ERROR_e;
+        }
+        create_init();
+    }
+    return rv;
+}
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq00_funcTbl[2] = {&daNpcCdn3_c::walka, NULL};
+inline void daNpcCdn3_c::create_init() {
+#if DEBUG
+    // "NPC(C class,D class)HighPoly"
+    l_Cd2_HIO.entryHIO("NPC(C級,D級)HighPoly");
+#endif
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq01_funcTbl[2] = {&daNpcCdn3_c::runa, NULL};
+    gravity = -3.0f;
+    initTimeSchedule();
+    fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -40.0f, -10.0f, -40.0f, 40.0f, 190.0f, 40.0f);
+    mAcchCir.SetWall(Cd2_HIO_chkWallH(m_type), Cd2_HIO_chkWallR(m_type));
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
+              fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
+    mAcch.SetRoofNone();
+    mAcch.SetWaterNone();
+    mAcch.CrrPos(dComIfG_Bgsp());
+    setEnvTevCol();
+    setRoomNo();
+    initCollision();
+    if (strcmp(dComIfGp_getStartStageName(), "F_SP116") == 0 &&
+        dComIfGp_getStartStageRoomNo() == 3 && getType() == 7)
+    {
+        attention_info.distances[fopAc_attn_SPEAK_e] = 0xda;
+        attention_info.distances[fopAc_attn_TALK_e] = 0xda;
+    } else {
+        attention_info.distances[fopAc_attn_SPEAK_e] = 0xd9;
+        attention_info.distances[fopAc_attn_TALK_e] = 0xd9;
+    }
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq02_funcTbl[2] = {&daNpcCdn3_c::waita, NULL};
+    if (isInShop()) {
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
+    }
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq03_funcTbl[2] = {&daNpcCdn3_c::talka, NULL};
+    if (m_path.setPath(getPathID(), fopAcM_GetRoomNo(this), 1, &current.pos, false)) {
+        setAction(MODE_PATH);
+    } else {
+        setAction(MODE_WAIT);
+    }
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq04_funcTbl[2] = {&daNpcCdn3_c::runb, NULL};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq05_funcTbl[4] = {&daNpcCdn3_c::turnr, &daNpcCdn3_c::waita,
-                                                        &daNpcCdn3_c::talka, NULL};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq06_funcTbl[4] = {&daNpcCdn3_c::turnl, &daNpcCdn3_c::waita,
-                                                        &daNpcCdn3_c::talka, NULL};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq07_funcTbl[2] = {&daNpcCdn3_c::waitwall, NULL};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq08_funcTbl[7] = {
-    &daNpcCdn3_c::talkwall,
-    &daNpcCdn3_c::waitwall,
-    &daNpcCdn3_c::talkbwall,
-    &daNpcCdn3_c::waitwall,
-    &daNpcCdn3_c::talkwall,
-    &daNpcCdn3_c::talkbwall,
-    NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq09_funcTbl[2] = {&daNpcCdn3_c::talkb, NULL};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq10_funcTbl[2] = {&daNpcCdn3_c::talkc, NULL};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq11_funcTbl[6] = {&daNpcCdn3_c::talka, &daNpcCdn3_c::waita,
-                                                        &daNpcCdn3_c::talkb, &daNpcCdn3_c::waitb,
-                                                        &daNpcCdn3_c::talkc, NULL};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq12_funcTbl[2] = {&daNpcCdn3_c::waitb, NULL};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq13_funcTbl[6] = {
-    &daNpcCdn3_c::browsea, &daNpcCdn3_c::browseb, &daNpcCdn3_c::talka,
-    &daNpcCdn3_c::talkb,   &daNpcCdn3_c::waita,   NULL};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq14_funcTbl[2] = {&daNpcCdn3_c::walkb, NULL};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq15_funcTbl[2] = {&daNpcCdn3_c::sitwaita, NULL};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq16_funcTbl[7] = {
-    &daNpcCdn3_c::sittalka,
-    &daNpcCdn3_c::sitwaita,
-    &daNpcCdn3_c::sittalkab,
-    &daNpcCdn3_c::sitwaita,
-    &daNpcCdn3_c::sittalka,
-    &daNpcCdn3_c::sittalkab,
-    NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq17_funcTbl[2] = {
-    &daNpcCdn3_c::playm,
-    NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq18_funcTbl[2] = {&daNpcCdn3_c::sitwaitb, NULL};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq19_funcTbl[7] = {
-    &daNpcCdn3_c::sittalkb,
-    &daNpcCdn3_c::sitwaitb,
-    &daNpcCdn3_c::sittalkbb,
-    &daNpcCdn3_c::sitwaitb,
-    &daNpcCdn3_c::sittalkb,
-    &daNpcCdn3_c::sittalkbb,
-    NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq20_funcTbl[2] = {&daNpcCdn3_c::looka, NULL};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq21_funcTbl[2] = {&daNpcCdn3_c::lookb, NULL};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq22_funcTbl[4] = {&daNpcCdn3_c::looka, &daNpcCdn3_c::lookb,
-                                                        &daNpcCdn3_c::waita, NULL};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq23_funcTbl[7] = {
-    &daNpcCdn3_c::talka,
-    &daNpcCdn3_c::waita,
-    &daNpcCdn3_c::talkb,
-    &daNpcCdn3_c::waita,
-    &daNpcCdn3_c::talka,
-    &daNpcCdn3_c::talkb,
-    NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq24_funcTbl[5] = {
-    &daNpcCdn3_c::talkb, &daNpcCdn3_c::talka, &daNpcCdn3_c::talkc, &daNpcCdn3_c::waita, NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq25_funcTbl[7] = {
-    &daNpcCdn3_c::browsea,
-    &daNpcCdn3_c::browseb,
-    &daNpcCdn3_c::talka,
-    &daNpcCdn3_c::talkb,
-    &daNpcCdn3_c::talkc,
-    &daNpcCdn3_c::waita,
-    NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq26_funcTbl[3] = {
-    &daNpcCdn3_c::browsea,
-    &daNpcCdn3_c::browseb,
-    NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq27_funcTbl[2] = {&daNpcCdn3_c::dance, NULL};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq28_funcTbl[3] = {
-    &daNpcCdn3_c::ladytalka,
-    &daNpcCdn3_c::normtalka,
-    NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq29_funcTbl[3] = {
-    &daNpcCdn3_c::ladytalkb,
-    &daNpcCdn3_c::normtalkb,
-    NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq30_funcTbl[6] = {
-    &daNpcCdn3_c::talka, &daNpcCdn3_c::ladytalka, &daNpcCdn3_c::waita,
-    &daNpcCdn3_c::talkb, &daNpcCdn3_c::waita,     NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq31_funcTbl[6] = {
-    &daNpcCdn3_c::waita, &daNpcCdn3_c::ladytalkb, &daNpcCdn3_c::talka,
-    &daNpcCdn3_c::waita, &daNpcCdn3_c::talkb,     NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq32_funcTbl[7] = {
-    &daNpcCdn3_c::talka,
-    &daNpcCdn3_c::ladytalka,
-    &daNpcCdn3_c::waita,
-    &daNpcCdn3_c::talkb,
-    &daNpcCdn3_c::waita,
-    &daNpcCdn3_c::normtalka,
-    NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq33_funcTbl[7] = {
-    &daNpcCdn3_c::waita,
-    &daNpcCdn3_c::ladytalkb,
-    &daNpcCdn3_c::talka,
-    &daNpcCdn3_c::waita,
-    &daNpcCdn3_c::talkb,
-    &daNpcCdn3_c::normtalkb,
-    NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq34_funcTbl[9] = {
-    &daNpcCdn3_c::talka,     &daNpcCdn3_c::ladytalka, &daNpcCdn3_c::ladytalkb,
-    &daNpcCdn3_c::waita,     &daNpcCdn3_c::talkb,     &daNpcCdn3_c::waita,
-    &daNpcCdn3_c::normtalka, &daNpcCdn3_c::normtalkb, NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq35_funcTbl[2] = {
-    &daNpcCdn3_c::sellme,
-    NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq36_funcTbl[4] = {
-    &daNpcCdn3_c::ladytalkb,
-    &daNpcCdn3_c::talka,
-    &daNpcCdn3_c::waita,
-    NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq37_funcTbl[2] = {
-    &daNpcCdn3_c::sing, NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq38_funcTbl[2] = {
-    &daNpcCdn3_c::sittalka, NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq39_funcTbl[2] = {
-    &daNpcCdn3_c::sittalkab, NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq40_funcTbl[3] = {
-    &daNpcCdn3_c::sittalka, &daNpcCdn3_c::sittalkab, NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq41_funcTbl[2] = {
-    &daNpcCdn3_c::sittalkb, NULL,
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq42_funcTbl[2] = {
-    &daNpcCdn3_c::sittalkbb, NULL,
-
-};
-
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq43_funcTbl[3] = {
-    &daNpcCdn3_c::sittalkb, &daNpcCdn3_c::sittalkbb, NULL,
-};
+    mpMorf->setMorf(0.0f);
+    field_0xb64 = current.pos.y = mAcch.GetGroundH();
+    setMtx();
+}
 
 void daNpcCdn3_c::executeEscape() {
     if (field_0xb68 == 0) {
@@ -834,7 +683,7 @@ int daNpcCdn3_c::ctrlMsgAnm() {
 }
 
 static void* s_sub1(void* param_1, void* param_2) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_Tag_Schedule &&
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_Tag_Schedule_e &&
         static_cast<daNpcCdn3_c*>(param_2)->searchNextScheduleTagSub(
             static_cast<fopAc_ac_c*>(param_1)))
     {
@@ -872,7 +721,7 @@ bool daNpcCdn3_c::searchNextScheduleTagSub(fopAc_ac_c* param_1) {
 }
 
 static void* s_sub2(void* param_1, void* param_2) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_Tag_Schedule &&
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_Tag_Schedule_e &&
         static_cast<daNpcCdn3_c*>(param_2)->searchFirstScheduleTagSub(
             static_cast<fopAc_ac_c*>(param_1)))
     {
@@ -1005,11 +854,19 @@ void daNpcCdn3_c::setSchedule(daTagSchedule_c* param_1) {
 }
 
 inline bool daNpcCdn3_c::isInShop() {
-    u8 rv = FALSE;
-    if (strcmp(dComIfGp_getStartStageName(), "R_SP160") == 0 && dComIfG_play_c::getLayerNo(0) <= 1) {
-        rv = TRUE;
+    return (bool)(strcmp(dComIfGp_getStartStageName(), "R_SP160") == 0 && dComIfG_play_c::getLayerNo(0) <= 1);
+}
+
+inline bool daNpcCdn3_c::isOrchestra() {
+    if (strcmp(dComIfGp_getStartStageName(), "F_SP116") != 0) {
+        return false;
+    } else if (m_seqNum == 17 && (getType() == 4 || getType() == 5 || getType() == 6 || getType() == 16)) {
+        return true;
+    } else if (m_seqNum == 37 && getType() == 7) {
+        return true;
+    } else {
+        return false;
     }
-    return rv;
 }
 
 bool daNpcCdn3_c::isChairStyle() {
@@ -1456,74 +1313,6 @@ int daNpcCdn3_c::sing(void* param_0) {
     return field_0xaa0 == 0;
 }
 
-int daNpcCdn3_c::create() {
-    fopAcM_ct(this, daNpcCdn3_c);
-    mIsDarkWorld = dKy_darkworld_check();
-    m_type = getType();
-    mObjNum = getObjNum();
-    m_seqNum = getSeqNum();
-    mFlowNodeNum = getFlowNodeNum();
-    if (m_seqNum < 0 || 44 <= m_seqNum) {
-        OSReport_Error("城下町の町人 マップツール設定値異常 引数1モーションシーケンス=%dが異常です。\n", m_seqNum);
-        JUT_ASSERT(175, FALSE);
-    }
-    int rv = loadResrc(m_type, mObjNum);
-    if (rv == cPhs_COMPLEATE_e) {
-        int msb = 0x80000000;
-        int heapSize = 0x2890;
-        heapSize |= msb;
-        if (fopAcM_entrySolidHeap(this, createHeapCallBack, heapSize) == 0) {
-            OS_REPORT("アクター生成失敗しました！\n");
-            return cPhs_ERROR_e;
-        }
-        create_init();
-    }
-    return rv;
-}
-
-void daNpcCdn3_c::create_init() {
-#if DEBUG
-    l_Cd2_HIO.entryHIO("NPC(C級,D級)HighPoly");
-#endif
-
-    gravity = -3.0f;
-    initTimeSchedule();
-    fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this, -40.0f, -10.0f, -40.0f, 40.0f, 190.0f, 40.0f);
-    mAcchCir.SetWall(Cd2_HIO_chkWallH(m_type), Cd2_HIO_chkWallR(m_type));
-    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
-              fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-    mAcch.SetRoofNone();
-    mAcch.SetWaterNone();
-    mAcch.CrrPos(dComIfG_Bgsp());
-    setEnvTevCol();
-    setRoomNo();
-    initCollision();
-    if (strcmp(dComIfGp_getStartStageName(), "F_SP116") == 0 &&
-        dComIfGp_getStartStageRoomNo() == 3 && getType() == 7)
-    {
-        attention_info.distances[fopAc_attn_SPEAK_e] = 0xda;
-        attention_info.distances[fopAc_attn_TALK_e] = 0xda;
-    } else {
-        attention_info.distances[fopAc_attn_SPEAK_e] = 0xd9;
-        attention_info.distances[fopAc_attn_TALK_e] = 0xd9;
-    }
-
-    if (isInShop()) {
-        fopAcM_OnStatus(this, 0x4000);
-    }
-
-    if (m_path.setPath(getPathID(), fopAcM_GetRoomNo(this), 1, &current.pos, false)) {
-        setAction(MODE_PATH);
-    } else {
-        setAction(MODE_WAIT);
-    }
-
-    mpMorf->setMorf(0.0f);
-    field_0xb64 = current.pos.y = mAcch.GetGroundH();
-    setMtx();
-}
-
 void daNpcCdn3_c::setMtx() {
     mDoMtx_stack_c::transS(current.pos.x, field_0xb64, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -1589,9 +1378,9 @@ int daNpcCdn3_c::execute() {
     mAcchCir.SetWallR(Cd2_HIO_chkWallR(m_type));
     checkTimeSchedule();
     if (field_0xb95 != 0) {
-        fopAcM_OnStatus(this, 0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
     } else {
-        fopAcM_OffStatus(this, 0x8000000);
+        fopAcM_OffStatus(this, fopAcStts_UNK_0x8000000_e);
     }
     if (field_0xb95 != 0) {
         if (!mIsDarkWorld && daPy_py_c::checkNowWolf()) {
@@ -1711,6 +1500,232 @@ inline int daNpcCdn3_c::draw() {
     return 1;
 }
 
+daNpcCdn3_c::seqFunc* daNpcCdn3_c::m_funcTbl[44] = {
+    m_seq00_funcTbl, m_seq01_funcTbl,
+    m_seq02_funcTbl, m_seq03_funcTbl,
+    m_seq04_funcTbl, m_seq05_funcTbl,
+    m_seq06_funcTbl, m_seq07_funcTbl,
+    m_seq08_funcTbl, m_seq09_funcTbl,
+    m_seq10_funcTbl, m_seq11_funcTbl,
+    m_seq12_funcTbl, m_seq13_funcTbl,
+    m_seq14_funcTbl, m_seq15_funcTbl,
+    m_seq16_funcTbl, m_seq17_funcTbl,
+    m_seq18_funcTbl, m_seq19_funcTbl,
+    m_seq20_funcTbl, m_seq21_funcTbl,
+    m_seq22_funcTbl, m_seq23_funcTbl,
+    m_seq24_funcTbl, m_seq25_funcTbl,
+    m_seq26_funcTbl, m_seq27_funcTbl,
+    m_seq28_funcTbl, m_seq29_funcTbl,
+    m_seq30_funcTbl, m_seq31_funcTbl,
+    m_seq32_funcTbl, m_seq33_funcTbl,
+    m_seq34_funcTbl, m_seq35_funcTbl,
+    m_seq36_funcTbl, m_seq37_funcTbl,
+    m_seq38_funcTbl, m_seq39_funcTbl,
+    m_seq40_funcTbl, m_seq41_funcTbl,
+    m_seq42_funcTbl, m_seq43_funcTbl,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq00_funcTbl[2] = {&daNpcCdn3_c::walka, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq01_funcTbl[2] = {&daNpcCdn3_c::runa, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq02_funcTbl[2] = {&daNpcCdn3_c::waita, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq03_funcTbl[2] = {&daNpcCdn3_c::talka, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq04_funcTbl[2] = {&daNpcCdn3_c::runb, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq05_funcTbl[4] = {&daNpcCdn3_c::turnr, &daNpcCdn3_c::waita,
+                                                        &daNpcCdn3_c::talka, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq06_funcTbl[4] = {&daNpcCdn3_c::turnl, &daNpcCdn3_c::waita,
+                                                        &daNpcCdn3_c::talka, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq07_funcTbl[2] = {&daNpcCdn3_c::waitwall, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq08_funcTbl[7] = {
+    &daNpcCdn3_c::talkwall,
+    &daNpcCdn3_c::waitwall,
+    &daNpcCdn3_c::talkbwall,
+    &daNpcCdn3_c::waitwall,
+    &daNpcCdn3_c::talkwall,
+    &daNpcCdn3_c::talkbwall,
+    NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq09_funcTbl[2] = {&daNpcCdn3_c::talkb, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq10_funcTbl[2] = {&daNpcCdn3_c::talkc, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq11_funcTbl[6] = {&daNpcCdn3_c::talka, &daNpcCdn3_c::waita,
+                                                        &daNpcCdn3_c::talkb, &daNpcCdn3_c::waitb,
+                                                        &daNpcCdn3_c::talkc, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq12_funcTbl[2] = {&daNpcCdn3_c::waitb, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq13_funcTbl[6] = {
+    &daNpcCdn3_c::browsea, &daNpcCdn3_c::browseb, &daNpcCdn3_c::talka,
+    &daNpcCdn3_c::talkb,   &daNpcCdn3_c::waita,   NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq14_funcTbl[2] = {&daNpcCdn3_c::walkb, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq15_funcTbl[2] = {&daNpcCdn3_c::sitwaita, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq16_funcTbl[7] = {
+    &daNpcCdn3_c::sittalka,
+    &daNpcCdn3_c::sitwaita,
+    &daNpcCdn3_c::sittalkab,
+    &daNpcCdn3_c::sitwaita,
+    &daNpcCdn3_c::sittalka,
+    &daNpcCdn3_c::sittalkab,
+    NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq17_funcTbl[2] = {
+    &daNpcCdn3_c::playm,
+    NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq18_funcTbl[2] = {&daNpcCdn3_c::sitwaitb, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq19_funcTbl[7] = {
+    &daNpcCdn3_c::sittalkb,
+    &daNpcCdn3_c::sitwaitb,
+    &daNpcCdn3_c::sittalkbb,
+    &daNpcCdn3_c::sitwaitb,
+    &daNpcCdn3_c::sittalkb,
+    &daNpcCdn3_c::sittalkbb,
+    NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq20_funcTbl[2] = {&daNpcCdn3_c::looka, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq21_funcTbl[2] = {&daNpcCdn3_c::lookb, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq22_funcTbl[4] = {&daNpcCdn3_c::looka, &daNpcCdn3_c::lookb,
+                                                        &daNpcCdn3_c::waita, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq23_funcTbl[7] = {
+    &daNpcCdn3_c::talka,
+    &daNpcCdn3_c::waita,
+    &daNpcCdn3_c::talkb,
+    &daNpcCdn3_c::waita,
+    &daNpcCdn3_c::talka,
+    &daNpcCdn3_c::talkb,
+    NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq24_funcTbl[5] = {
+    &daNpcCdn3_c::talkb, &daNpcCdn3_c::talka, &daNpcCdn3_c::talkc, &daNpcCdn3_c::waita, NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq25_funcTbl[7] = {
+    &daNpcCdn3_c::browsea,
+    &daNpcCdn3_c::browseb,
+    &daNpcCdn3_c::talka,
+    &daNpcCdn3_c::talkb,
+    &daNpcCdn3_c::talkc,
+    &daNpcCdn3_c::waita,
+    NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq26_funcTbl[3] = {
+    &daNpcCdn3_c::browsea,
+    &daNpcCdn3_c::browseb,
+    NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq27_funcTbl[2] = {&daNpcCdn3_c::dance, NULL};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq28_funcTbl[3] = {
+    &daNpcCdn3_c::ladytalka,
+    &daNpcCdn3_c::normtalka,
+    NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq29_funcTbl[3] = {
+    &daNpcCdn3_c::ladytalkb,
+    &daNpcCdn3_c::normtalkb,
+    NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq30_funcTbl[6] = {
+    &daNpcCdn3_c::talka, &daNpcCdn3_c::ladytalka, &daNpcCdn3_c::waita,
+    &daNpcCdn3_c::talkb, &daNpcCdn3_c::waita,     NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq31_funcTbl[6] = {
+    &daNpcCdn3_c::waita, &daNpcCdn3_c::ladytalkb, &daNpcCdn3_c::talka,
+    &daNpcCdn3_c::waita, &daNpcCdn3_c::talkb,     NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq32_funcTbl[7] = {
+    &daNpcCdn3_c::talka,
+    &daNpcCdn3_c::ladytalka,
+    &daNpcCdn3_c::waita,
+    &daNpcCdn3_c::talkb,
+    &daNpcCdn3_c::waita,
+    &daNpcCdn3_c::normtalka,
+    NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq33_funcTbl[7] = {
+    &daNpcCdn3_c::waita,
+    &daNpcCdn3_c::ladytalkb,
+    &daNpcCdn3_c::talka,
+    &daNpcCdn3_c::waita,
+    &daNpcCdn3_c::talkb,
+    &daNpcCdn3_c::normtalkb,
+    NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq34_funcTbl[9] = {
+    &daNpcCdn3_c::talka,     &daNpcCdn3_c::ladytalka, &daNpcCdn3_c::ladytalkb,
+    &daNpcCdn3_c::waita,     &daNpcCdn3_c::talkb,     &daNpcCdn3_c::waita,
+    &daNpcCdn3_c::normtalka, &daNpcCdn3_c::normtalkb, NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq35_funcTbl[2] = {
+    &daNpcCdn3_c::sellme,
+    NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq36_funcTbl[4] = {
+    &daNpcCdn3_c::ladytalkb,
+    &daNpcCdn3_c::talka,
+    &daNpcCdn3_c::waita,
+    NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq37_funcTbl[2] = {
+    &daNpcCdn3_c::sing, NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq38_funcTbl[2] = {
+    &daNpcCdn3_c::sittalka, NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq39_funcTbl[2] = {
+    &daNpcCdn3_c::sittalkab, NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq40_funcTbl[3] = {
+    &daNpcCdn3_c::sittalka, &daNpcCdn3_c::sittalkab, NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq41_funcTbl[2] = {
+    &daNpcCdn3_c::sittalkb, NULL,
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq42_funcTbl[2] = {
+    &daNpcCdn3_c::sittalkbb, NULL,
+
+};
+
+daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq43_funcTbl[3] = {
+    &daNpcCdn3_c::sittalkb, &daNpcCdn3_c::sittalkbb, NULL,
+};
+
 static int daNpcCdn3_Create(void* i_this) {
     return static_cast<daNpcCdn3_c*>(i_this)->create();
 }
@@ -1741,18 +1756,18 @@ static actor_method_class daNpcCdn3_METHODS = {
 };
 
 actor_process_profile_definition g_profile_NPC_CD3 = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_NPC_CD3,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daNpcCdn3_c),    // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  395,                    // mPriority
-  &daNpcCdn3_METHODS,     // sub_method
-  0x00040107,             // mStatus
-  fopAc_NPC_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_CD3_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcCdn3_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_CD3_e,
+    /* Actor SubMtd */ &daNpcCdn3_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e | fopAcStts_UNK_0x2_e | fopAcStts_UNK_0x1_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

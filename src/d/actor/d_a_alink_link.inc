@@ -130,7 +130,7 @@ BOOL daAlink_c::setBodyAngleToCamera() {
         }
 
         s16 var_r29;
-        if (!dComIfGp_checkPlayerStatus0(0, 0x202000) && mEquipItem == fpcNm_ITEM_IRONBALL) {
+        if (!dComIfGp_checkPlayerStatus0(0, 0x202000) && mEquipItem == dItemNo_IRONBALL_e) {
             var_r29 = -10000;
         } else {
             var_r29 = mpHIO->mItem.m.mItemFPUpMaxUnk;
@@ -164,7 +164,7 @@ BOOL daAlink_c::subjectCancelTrigger() {
 BOOL daAlink_c::checkSubjectEnd(BOOL i_isPlaySe) {
     setDoStatus(BUTTON_STATUS_BACK);
 
-    if (checkEventRun() || checkEquipAnime() || doTrigger() || checkSetItemTrigger(fpcNm_ITEM_HAWK_EYE) || subjectCancelTrigger() || checkEndResetFlg0(ERFLG0_FORCE_SUBJECT_CANCEL) || dComIfGp_checkCameraAttentionStatus(field_0x317c, 0x2000)) {
+    if (checkEventRun() || checkEquipAnime() || doTrigger() || checkSetItemTrigger(dItemNo_HAWK_EYE_e) || subjectCancelTrigger() || checkEndResetFlg0(ERFLG0_FORCE_SUBJECT_CANCEL) || dComIfGp_checkCameraAttentionStatus(field_0x317c, 0x2000)) {
         if (i_isPlaySe) {
             seStartSystem(Z2SE_SUBJ_VIEW_OUT);
         }
@@ -177,7 +177,7 @@ BOOL daAlink_c::checkSubjectEnd(BOOL i_isPlaySe) {
 }
 
 void daAlink_c::searchPeepObj(fopAc_ac_c* i_actor, void* i_data) {
-    if (fopAcM_GetName(i_actor) == PROC_KYTAG05) {
+    if (fopAcM_GetName(i_actor) == fpcNm_KYTAG05_e) {
         f32 var_f31 = current.pos.abs2(i_actor->current.pos);
         if (var_f31 < field_0x3478) {
             field_0x3478 = var_f31;
@@ -220,7 +220,7 @@ int daAlink_c::procCoSubjectivity() {
         return 1;
     }
 
-    if (checkSubjectEnd(FALSE) || (dComIfGp_checkPlayerStatus0(0, 0x200000) && checkSetItemTrigger(fpcNm_ITEM_HAWK_EYE))) {
+    if (checkSubjectEnd(FALSE) || (dComIfGp_checkPlayerStatus0(0, 0x200000) && checkSetItemTrigger(dItemNo_HAWK_EYE_e))) {
         seStartSystem(Z2SE_SUBJ_VIEW_OUT);
         checkWaitAction();
     } else if (!checkWolf() && (checkItemAction() || checkItemChangeFromButton())) {

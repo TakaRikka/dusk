@@ -188,7 +188,7 @@ void HitSeStart(cXyz const* i_sePos, int i_roomNo, dCcD_GObjInf const* i_CcObj, 
             } else if (hit_obj->ChkAtType(AT_TYPE_HOOKSHOT)) {
                 sfx = Z2SE_HIT_HOOKSHOT_REBOUND;
             } else {
-                if (fopAcM_GetProfName(hit_actor) == PROC_ALINK) {
+                if (fopAcM_GetProfName(hit_actor) == fpcNm_ALINK_e) {
                     daPy_py_c* sp14 = (daPy_py_c*)hit_actor;
                     if (sp14->checkMasterSwordEquip()) {
                         master_sword_hit = true;

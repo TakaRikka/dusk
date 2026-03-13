@@ -42,7 +42,7 @@ static void action(e_bi_leaf_class* i_this) {
             i_this->action = 0;
 
             i_this->parentActorID =
-                fopAcM_createChild(PROC_E_BI, fopAcM_GetID(i_this), (i_this->type << 8) | 1,
+                fopAcM_createChild(fpcNm_E_BI_e, fopAcM_GetID(i_this), (i_this->type << 8) | 1,
                                    &i_this->current.pos, fopAcM_GetRoomNo(i_this),
                                    &i_this->current.angle, NULL, -1, NULL);
             i_this->timer = 20;
@@ -123,18 +123,18 @@ static actor_method_class l_daE_BI_LEAF_Method = {
 };
 
 actor_process_profile_definition g_profile_E_BI_LEAF = {
-    fpcLy_CURRENT_e,
-    9,
-    fpcPi_CURRENT_e,
-    PROC_E_BI_LEAF,
-    &g_fpcLf_Method.base,
-    sizeof(e_bi_leaf_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    148,
-    &l_daE_BI_LEAF_Method,
-    0x40000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 9,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_BI_LEAF_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_bi_leaf_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_BI_LEAF_e,
+    /* Actor SubMtd */ &l_daE_BI_LEAF_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

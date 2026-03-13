@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_obj_rcircle.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 static int daObjRCircle_c_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjRCircle_c*>(i_this)->createHeap();
@@ -123,18 +123,18 @@ static actor_method_class daObjRCircle_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_RCircle = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_Obj_RCircle,
-    &g_fpcLf_Method.base,
-    sizeof(daObjRCircle_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    740,
-    &daObjRCircle_METHODS,
-    0x44180,
-    fopAc_ENV_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_RCircle_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjRCircle_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_RCircle_e,
+    /* Actor SubMtd */ &daObjRCircle_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e | fopAcStts_NOEXEC_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

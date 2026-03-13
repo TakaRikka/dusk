@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_ystone.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include <cstring>
 
 static char const* l_arcName[7] = {
@@ -293,18 +293,18 @@ static actor_method_class l_daObj_Ystone_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_YSTONE = {
-    fpcLy_CURRENT_e,
-    8,
-    fpcPi_CURRENT_e,
-    PROC_OBJ_YSTONE,
-    &g_fpcLf_Method.base,
-    sizeof(obj_ystone_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x259,
-    &l_daObj_Ystone_Method,
-    0x44100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 8,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_YSTONE_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(obj_ystone_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_YSTONE_e,
+    /* Actor SubMtd */ &l_daObj_Ystone_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

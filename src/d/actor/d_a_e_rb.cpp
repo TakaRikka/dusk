@@ -508,7 +508,7 @@ static int target_info_count;
 
 static void* s_s_sub(void* i_actor, void* i_data) {
     fopAc_ac_c* parent;
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RB &&
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_RB_e &&
         fopAcM_SearchByID(((fopAc_ac_c*)i_actor)->parentActorID, &parent) && parent != NULL &&
         (fopAc_ac_c*)i_data == parent && target_info_count < 10)
     {
@@ -644,7 +644,7 @@ static void e_rb_base_1(e_rb_class* i_this) {
         i_this->mode = 0;
 
         for (int i = 0; i < i_this->childNum; i++) {
-            fopAcM_createChild(PROC_E_RB, fopAcM_GetID(enemy), 1, &enemy->current.pos, fopAcM_GetRoomNo(enemy), NULL, NULL, -1, NULL);
+            fopAcM_createChild(fpcNm_E_RB_e, fopAcM_GetID(enemy), 1, &enemy->current.pos, fopAcM_GetRoomNo(enemy), NULL, NULL, -1, NULL);
         }
     }
 }
@@ -793,7 +793,7 @@ static int daE_RB_Create(fopAc_ac_c* i_this) {
             }
 
             for (int i = 0; i < a_this->childNum; i++) {
-                fopAcM_createChild(PROC_E_RB, fopAcM_GetID(i_this), 1, &i_this->current.pos, fopAcM_GetRoomNo(i_this), NULL, NULL, -1, NULL);
+                fopAcM_createChild(fpcNm_E_RB_e, fopAcM_GetID(i_this), 1, &i_this->current.pos, fopAcM_GetRoomNo(i_this), NULL, NULL, -1, NULL);
             }
 
             a_this->appearRange = (fopAcM_GetParam(i_this) & 0xFF0000) >> 0x10;
@@ -870,18 +870,18 @@ static actor_method_class l_daE_RB_Method = {
 };
 
 actor_process_profile_definition g_profile_E_RB = {
-    fpcLy_CURRENT_e,       // mLayerID
-    7,                     // mListID
-    fpcPi_CURRENT_e,       // mListPrio
-    PROC_E_RB,             // mProcName
-    &g_fpcLf_Method.base, // sub_method
-    sizeof(e_rb_class),    // mSize
-    0,                     // mSizeOther
-    0,                     // mParameters
-    &g_fopAc_Method.base,  // sub_method
-    153,                   // mPriority
-    &l_daE_RB_Method,      // sub_method
-    0x10040120,            // mStatus
-    fopAc_ENEMY_e,         // mActorType
-    fopAc_CULLBOX_0_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_RB_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_rb_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_RB_e,
+    /* Actor SubMtd */ &l_daE_RB_Method,
+    /* Status       */ fopAcStts_UNK_0x10000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x20_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

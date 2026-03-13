@@ -96,7 +96,7 @@ void daAlink_c::setSpinnerSyncPos() {
 
 int daAlink_c::procSpinnerReadyInit() {
     fopAc_ac_c* spinner = (fopAc_ac_c*)fopAcM_fastCreate(
-        PROC_SPINNER, daSpinner_c::getWaitArg(), &current.pos, fopAcM_GetRoomNo(this),
+        fpcNm_SPINNER_e, daSpinner_c::getWaitArg(), &current.pos, fopAcM_GetRoomNo(this),
         &shape_angle, NULL, -1, NULL, NULL);
 
     if (spinner == NULL) {
@@ -191,7 +191,7 @@ int daAlink_c::procSpinnerWait() {
         return procSmallJumpInit(2);
     }
 
-    int itemSetBtn = checkItemSetButton(fpcNm_ITEM_SPINNER);
+    int itemSetBtn = checkItemSetButton(dItemNo_SPINNER_e);
     if (mProcVar2.field_0x300c == 0) {
         if (!itemButton()) {
             mProcVar2.field_0x300c = 1;
@@ -211,7 +211,7 @@ int daAlink_c::procSpinnerWait() {
             mProcVar3.field_0x300e = shape_angle.y;
         }
     } else {
-        if (checkSetItemTrigger(fpcNm_ITEM_SPINNER) || swordSwingTrigger() || itemSetBtn == 2) {
+        if (checkSetItemTrigger(dItemNo_SPINNER_e) || swordSwingTrigger() || itemSetBtn == 2) {
             if (swordSwingTrigger()) {
                 swordEquip(0);
             }

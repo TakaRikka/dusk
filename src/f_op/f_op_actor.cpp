@@ -245,7 +245,7 @@ static int fopAc_Draw(void* i_this) {
         int var_r28 = dComIfGp_event_moveApproval(actor);
         if ((var_r28 == 2 || (!fopAcM_CheckStatus(actor, fopAc_ac_c::getStopStatus()) &&
             (!fopAcM_CheckStatus(actor, fopAcStts_CULL_e) || !fopAcM_cullingCheck(actor)))) &&
-            !fopAcM_CheckStatus(actor, 0x21000000))
+            !fopAcM_CheckStatus(actor, fopAcStts_UNK_0x20000000_e | fopAcStts_NODRAW_e))
         {
             fopAcM_OffCondition(actor, fopAcCnd_NODRAW_e);
 
@@ -320,9 +320,9 @@ static int fopAc_Execute(void* i_this) {
         daSus_c::check(actor);
         actor->eventInfo.beforeProc();
         s32 move = dComIfGp_event_moveApproval(actor);
-        fopAcM_OffStatus(actor, 0x40000000);
+        fopAcM_OffStatus(actor, fopAcStts_UNK_0x40000000_e);
 
-        if (!fopAcM_CheckStatus(actor, 0x20000000) &&
+        if (!fopAcM_CheckStatus(actor, fopAcStts_UNK_0x20000000_e) &&
             (move == 2 ||
                 (move != 0 && !fopAcM_CheckStatus(actor, fopAc_ac_c::getStopStatus()) &&
                 (!fopAcM_CheckStatus(actor, fopAcStts_NOEXEC_e) || !fopAcM_CheckCondition(actor, fopAcCnd_NODRAW_e)))))
@@ -345,7 +345,7 @@ static int fopAc_Execute(void* i_this) {
             fopAcM_OnCondition(actor, fopAcCnd_NOEXEC_e);
         }
 
-        if (fopAcM_CheckStatus(actor, 0x20) &&
+        if (fopAcM_CheckStatus(actor, fopAcStts_UNK_0x20_e) &&
             actor->home.pos.y - actor->current.pos.y > 5000.0f)
         {
             fopAcM_delete(actor);
@@ -385,7 +385,7 @@ static int fopAc_IsDelete(void* i_this) {
     #endif
 
     ret = fpcMtd_IsDelete((process_method_class*)actor->sub_method, actor);
-    
+
     #if DEBUG
     }
     #endif
@@ -407,7 +407,7 @@ static int fopAc_Delete(void* i_this) {
     #endif
 
     ret = fpcMtd_Delete((process_method_class*)actor->sub_method, actor);
-    
+
     #if DEBUG
     }
     #endif
@@ -533,13 +533,13 @@ static int fopAc_Create(void* i_this) {
     #endif
 
     ret = fpcMtd_Create((process_method_class*)actor->sub_method, actor);
-    
+
     #if DEBUG
     }
 
     fopAcM_assert(1113, actor, fopAcM_CheckCondition(actor, fopAcCnd_INIT_e), "fopAcM_ct No Call !!");
     #endif
-    
+
     if (ret == cPhs_COMPLEATE_e) {
         fopDwTg_ToDrawQ(&actor->draw_tag, fpcM_DrawPriority(actor));
     } else if (ret == cPhs_ERROR_e) {

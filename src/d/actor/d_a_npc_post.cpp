@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_post.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -61,7 +61,7 @@ enum post1_RES_File_ID {
     /* 0x17 */ BCK_POST_HELLO,
     /* 0x18 */ BCK_POST_REGRET,
     /* 0x19 */ BCK_POST_RUN,
-    
+
     /* BTK */
     /* 0x1C */ BTK_POST_HAND = 0x1C,
     /* 0x1D */ BTK_POST_RUN,
@@ -223,7 +223,7 @@ void daNpc_Post_HIO_c::listenPropertyEvent(const JORPropertyEvent* evt) {
                 memset(&buffer, 0, sizeof(buffer));
                 len = 0;
                 daNpcT_cmnListenPropertyEvent(buffer, &len, &m.common);
-                
+
                 sprintf(buffer + len, "%.3ff,\t//  走り速度\n", m.run_spd);
                 len = strlen(buffer);
                 sprintf(buffer + len, "%d,   \t//  頷き間隔\n", m.nod_interval);
@@ -405,7 +405,7 @@ cPhs_Step daNpc_Post_c::create() {
         }
 
         OS_REPORT("\n");
-        
+
         static int const heapSize[4] = {
             0x0, 0x5060, 0x4EC0, 0x0,
         };
@@ -569,7 +569,7 @@ u8 daNpc_Post_c::getType() {
     switch (param) {
         case 0:
             return TYPE_0;
-        
+
         case 1:
             return TYPE_DELIVER;
 
@@ -623,7 +623,7 @@ void daNpc_Post_c::reset() {
     switch (mType) {
         case TYPE_0:
             break;
-        
+
         case TYPE_DELIVER:
             mHide = true;
             break;
@@ -709,7 +709,7 @@ void daNpc_Post_c::setAfterTalkMotion() {
         case FACE_MOT_REGRET:
             idx = FACE_MOT_H_REGRET;
             break;
-        
+
         case FACE_MOT_HAPPY:
             idx = FACE_MOT_H_HAPPY;
             break;
@@ -717,7 +717,7 @@ void daNpc_Post_c::setAfterTalkMotion() {
         case FACE_MOT_SAD:
             idx = FACE_MOT_H_SAD;
             break;
-            
+
         case FACE_MOT_ANGRY:
             idx = FACE_MOT_H_ANGRY;
             break;
@@ -730,7 +730,7 @@ void daNpc_Post_c::srchActors() {
     switch (mType) {
         case TYPE_0:
             break;
-        
+
         case TYPE_DELIVER:
             for (int i = 0; i < 4; i++) {
                 if (mActorMngrs[i].getActorP() == NULL) {
@@ -812,10 +812,10 @@ void daNpc_Post_c::action() {
 }
 
 void daNpc_Post_c::beforeMove() {
-    fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x8000000);
+    fopAcM_OffStatus(this, fopAcStts_UNK_0x8000000_e);
 
     if (checkHide()) {
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
     }
 
     if (checkHide() || mNoDraw) {
@@ -856,7 +856,7 @@ void daNpc_Post_c::setAttnPos() {
                      mHIO->m.common.head_angleY_min, mHIO->m.common.head_angleY_max,
                      mHIO->m.common.neck_rotation_ratio, rad_val, &sp7c);
     mJntAnm.calcJntRad(0.2f, 1.0f, rad_val);
-    
+
     setMtx();
 
     if (mpFlagModelMorf != NULL) {
@@ -949,7 +949,7 @@ int daNpc_Post_c::drawDbgInfo() {
         dDbVw_drawSphereXlu(attention_info.position, 9.0f, (GXColor){0x80, 0x80, 0x80, 0xA0}, 1);
     }
     #endif
-    
+
     return 0;
 }
 
@@ -1110,7 +1110,7 @@ int daNpc_Post_c::cutDeliver(int i_staffId) {
     int* piVar1 = NULL;
     int prm = -1;
     int timer = 0;
-    
+
     piVar1 = dComIfGp_evmng_getMyIntegerP(i_staffId, "prm");
     if (piVar1 != NULL) {
         prm = *piVar1;
@@ -1130,7 +1130,7 @@ int daNpc_Post_c::cutDeliver(int i_staffId) {
                 current.pos.x = work.x;
                 current.pos.z = work.z;
                 work.y = dComIfG_Bgsp().GroundCross(&mGndChk);
-                
+
                 if (work.y != -1e9f) {
                     current.pos.y = work.y;
                 }
@@ -1404,7 +1404,7 @@ int daNpc_Post_c::wait(void* param_1) {
                                 actor_p->noEffect();
                             } else if (daPy_getPlayerActorClass()->eventInfo.chkCondition(1) != FALSE && dMeter2Info_getNewLetterNum()) {
                                 mActorPos = actor_p->current.pos;
-                                
+
                                 f32 fVar2 = player->current.pos.absXZ(actor_p->current.pos);
                                 f32 adjustedScale = actor_p->scale.x - 700.0f;
                                 if (adjustedScale <= fVar2) {
@@ -1430,7 +1430,7 @@ int daNpc_Post_c::wait(void* param_1) {
 
                 if (mPlayerActorMngr.getActorP() != NULL && !mTwilight) {
                     mJntAnm.lookPlayer(0);
-                    
+
                     if (!chkActorInSight(mPlayerActorMngr.getActorP(), mAttnFovY, mCurAngle.y)) {
                         mJntAnm.lookNone(0);
                     }
@@ -1507,7 +1507,7 @@ int daNpc_Post_c::talk(void* param_1) {
             }
             break;
 
-        case MODE_EXIT: 
+        case MODE_EXIT:
             break;
     }
 
@@ -1567,18 +1567,18 @@ static actor_method_class daNpc_Post_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_POST = {
-  fpcLy_CURRENT_e,         // mLayerID
-  7,                       // mListID
-  fpcPi_CURRENT_e,         // mListPrio
-  PROC_NPC_POST,           // mProcName
-  &g_fpcLf_Method.base,   // sub_method
-  sizeof(daNpc_Post_c),    // mSize
-  0,                       // mSizeOther
-  0,                       // mParameters
-  &g_fopAc_Method.base,    // sub_method
-  403,                     // mPriority
-  &daNpc_Post_MethodTable, // sub_method
-  0x00040107,              // mStatus
-  fopAc_NPC_e,             // mActorType
-  fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_POST_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Post_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_POST_e,
+    /* Actor SubMtd */ &daNpc_Post_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e | fopAcStts_UNK_0x2_e | fopAcStts_UNK_0x1_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

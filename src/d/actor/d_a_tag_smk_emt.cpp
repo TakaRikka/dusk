@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_tag_smk_emt.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include <cstring>
 
 daTagSmkEmt_c::daTagSmkEmt_c() {
@@ -85,18 +85,18 @@ static actor_method_class daTagSmkEmt_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Tag_SmkEmt = {
-    fpcLy_CURRENT_e,         // mLayerID    
-    7,                       // mListID  
-    fpcPi_CURRENT_e,         // mListPrio   
-    PROC_Tag_SmkEmt,         // mProcName                
-    &g_fpcLf_Method.base,   // sub_method                      
-    sizeof(daTagSmkEmt_c),   // mSize                       
-    0,                       // mSizeOther  
-    0,                       // mParameters         
-    &g_fopAc_Method.base,    // sub_method                     
-    743,                     // mPriority       
-    &daTagSmkEmt_METHODS,    // sub_method                     
-    0x40000,                 // mStatus            
-    fopAc_ACTOR_e,           // mActorType  
-    fopAc_CULLBOX_CUSTOM_e,  // cullType     
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_SmkEmt_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagSmkEmt_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Tag_SmkEmt_e,
+    /* Actor SubMtd */ &daTagSmkEmt_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

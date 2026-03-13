@@ -550,7 +550,7 @@ void daE_DK_c::executeAttack() {
         mCoreSphere.SetTgSpl(1);
         setElectricEffect();
         field_0x6a3 = 1;
-        fopAcM_OffStatus(this, 0x80000);
+        fopAcM_OffStatus(this, fopAcStts_UNK_0x80000_e);
         if (mMoveMode == 2) {
             if (field_0x698 == 0) {
                 field_0x69c = 150;
@@ -652,7 +652,7 @@ void daE_DK_c::executeDeath() {
         mSphere.OffCoSetBit();
         mSphere.OffTgSetBit();
         mCoreSphere.OffTgSetBit();
-        fopAcM_OffStatus(this, 0x100);
+        fopAcM_OffStatus(this, fopAcStts_CULL_e);
 
         field_0x68e = 0;
 
@@ -697,7 +697,7 @@ void daE_DK_c::executeDeath() {
 
         BodyDeathMove();
 
-        if (fopAcM_CheckStatus(this, 0x100000) == 0) {
+        if (fopAcM_CheckStatus(this, fopAcStts_HOOK_CARRY_NOW_e) == 0) {
             mMoveMode = 3;
 
             mpMorfSO->setPlaySpeed(1.0f);
@@ -764,7 +764,7 @@ void daE_DK_c::action() {
 
     damage_check();
 
-    fopAcM_OnStatus(this, 0x80000);
+    fopAcM_OnStatus(this, fopAcStts_UNK_0x80000_e);
 
     if (fopAcM_searchPlayerDistance(this) > l_HIO.first_attack_range) {
         field_0x690 = 0x0;
@@ -1082,18 +1082,18 @@ static actor_method_class l_daE_DK_Method = {
 };
 
 actor_process_profile_definition g_profile_E_DK = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_E_DK,              // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(daE_DK_c),       // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    755,                    // mPriority
-    &l_daE_DK_Method,       // sub_method
-    0x000C0100,             // mStatus
-    fopAc_ENEMY_e,          // mActorType
-    fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_DK_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_DK_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_DK_e,
+    /* Actor SubMtd */ &l_daE_DK_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

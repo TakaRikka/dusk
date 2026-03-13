@@ -78,7 +78,7 @@ void daObjCRVLH_DW_c::Break() {
     dComIfGp_particle_set(dPa_RM(ID_ZF_S_CRVYAGURA03_SAND), &current.pos, &tevStr, &shape_angle, 0);
     dComIfGp_particle_set(dPa_RM(ID_ZF_S_CRVYAGURA04_SMK), &current.pos, &tevStr, &shape_angle, 0);
     dComIfGp_getVibration().StartShock(VIBMODE_S_POWER5, 0x1f, cXyz(0.0f, 1.0f, 0.0f));
-    field_0x5a4 = fopAcM_createChild(PROC_Obj_CRVHAHEN, fopAcM_GetID(this), 1, &current.pos,
+    field_0x5a4 = fopAcM_createChild(fpcNm_Obj_CRVHAHEN_e, fopAcM_GetID(this), 1, &current.pos,
                                      fopAcM_GetRoomNo(this), &cStack_2c, NULL, -1, NULL);
 
     if (fopAcM_SearchByID(field_0x5a0, &local_30) && local_30 != NULL) {
@@ -96,8 +96,8 @@ void daObjCRVLH_DW_c::Obj_Hit() {
     if (field_0x5b8 == 0) {
         if (mCyl.ChkCoHit() != 0) {
             fopAc_ac_c* actor = mCyl.GetCoHitObj()->GetAc();
-            if (fopAcM_GetName(dCc_GetAc(actor)) == PROC_E_WB &&
-                ((e_wb_class*)actor)->mActionID == ACT_PL_RIDE2)
+            if (fopAcM_GetName(dCc_GetAc(actor)) == fpcNm_E_WB_e &&
+                ((e_wb_class*)actor)->action == ACT_PL_RIDE2)
             {
                 Break();
             }
@@ -176,7 +176,7 @@ int daObjCRVLH_DW_c::create() {
         fopAcM_setCullSizeFar(this, 100.0f);
         fopAcM_setCullSizeBox(this, -500.0f, -500.0f, -500.0f, 500.0f, 1000.0f, 500.0f);
         daObjCRVLH_DW_Execute(this);
-        field_0x5a0 = fopAcM_createChild(PROC_Obj_CRVLH_UP, fopAcM_GetID(this), 1, &current.pos,
+        field_0x5a0 = fopAcM_createChild(fpcNm_Obj_CRVLH_UP_e, fopAcM_GetID(this), 1, &current.pos,
                                          fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
     }
 
@@ -240,18 +240,18 @@ static actor_method_class l_daObjCRVLH_DW_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_CRVLH_DW = {
-    fpcLy_CURRENT_e,          // mLayerID
-    3,                        // mListID
-    fpcPi_CURRENT_e,          // mListPrio
-    PROC_Obj_CRVLH_DW,        // mProcName
-    &g_fpcLf_Method.base,     // sub_method
-    sizeof(daObjCRVLH_DW_c),  // mSize
-    0,                        // mSizeOther
-    0,                        // mParameters
-    &g_fopAc_Method.base,     // sub_method
-    471,                      // mPriority
-    &l_daObjCRVLH_DW_Method,  // sub_method
-    0x00040180,               // mStatus
-    fopAc_ACTOR_e,            // mActorType
-    fopAc_CULLBOX_CUSTOM_e,   // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_CRVLH_DW_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjCRVLH_DW_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_CRVLH_DW_e,
+    /* Actor SubMtd */ &l_daObjCRVLH_DW_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_NOEXEC_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -57,7 +57,7 @@ static void hit_check(e_mk_bo_class* i_this) {
         if (i_this->ccAtSph.ChkAtHit()) {
             cCcD_Obj* at_hit_obj = i_this->ccAtSph.GetAtHitObj();
             fopAc_ac_c* at_hit_actor = dCc_GetAc(at_hit_obj->GetAc());
-            if (at_hit_actor != NULL && fopAcM_GetName(at_hit_actor) == PROC_ALINK && daPy_getPlayerActorClass()->checkPlayerGuard()) {
+            if (at_hit_actor != NULL && fopAcM_GetName(at_hit_actor) == fpcNm_ALINK_e && daPy_getPlayerActorClass()->checkPlayerGuard()) {
                 dComIfGp_getVibration().StartShock(4, 0x1F, cXyz(0.0f, 1.0f, 0.0f));
             }
         }
@@ -168,7 +168,7 @@ static s8 e_mk_bo_shot(e_mk_bo_class* i_this) {
         OS_REPORT("E_MK_BO ANY HIT !!!!\n");
 
         cCcD_Obj* at_hit_obj = i_this->ccAtSph.GetAtHitObj();
-        if (fopAcM_GetName(dCc_GetAc(at_hit_obj->GetAc())) == PROC_ALINK) {
+        if (fopAcM_GetName(dCc_GetAc(at_hit_obj->GetAc())) == fpcNm_ALINK_e) {
             OS_REPORT("E_MK_BO PL HIT !!!!\n");
             e_mk->unkFlag4 = 5;
             i_this->field_0x5f8 = 10;
@@ -813,20 +813,20 @@ static actor_method_class l_daE_MK_BO_Method = {
 };
 
 actor_process_profile_definition g_profile_E_MK_BO = {
-  fpcLy_CURRENT_e,       // mLayerID
-  8,                     // mListID
-  fpcPi_CURRENT_e,       // mListPrio
-  PROC_E_MK_BO,          // mProcName
-  &g_fpcLf_Method.base, // sub_method
-  sizeof(e_mk_bo_class), // mSize
-  0,                     // mSizeOther
-  0,                     // mParameters
-  &g_fopAc_Method.base,  // sub_method
-  166,                   // mPriority
-  &l_daE_MK_BO_Method,   // sub_method
-  0x00044100,            // mStatus
-  fopAc_ENEMY_e,         // mActorType
-  fopAc_CULLBOX_0_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 8,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_MK_BO_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_mk_bo_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_MK_BO_e,
+    /* Actor SubMtd */ &l_daE_MK_BO_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };
 
 AUDIO_INSTANCES

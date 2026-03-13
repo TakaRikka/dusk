@@ -8,7 +8,7 @@
 #include "d/actor/d_a_tag_waterfall.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_debug_viewer.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "f_op/f_op_camera_mng.h"
 
 daTagWaterFall_HIO_c::daTagWaterFall_HIO_c() {
@@ -125,7 +125,7 @@ void* s_waterfall(void* pProc, void* param_1) {
     UNUSED(param_1);
 
     if (fopAcM_IsActor(pProc) &&
-        fopAcM_GetName(pProc) == PROC_Tag_WaterFall &&
+        fopAcM_GetName(pProc) == fpcNm_Tag_WaterFall_e &&
         !fpcM_IsCreating(fopAcM_GetID(pProc)) &&
         static_cast<daTagWaterFall_c*>(pProc)->checkHitWaterFallCamera()) {
         return pProc;
@@ -335,18 +335,18 @@ static actor_method_class l_daTagWaterFall_Method = {
 };
 
 actor_process_profile_definition g_profile_Tag_WaterFall = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_Tag_WaterFall,
-    &g_fpcLf_Method.base,
-    sizeof(daTagWaterFall_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    198,
-    &l_daTagWaterFall_Method,
-    0x44000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_WaterFall_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagWaterFall_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Tag_WaterFall_e,
+    /* Actor SubMtd */ &l_daTagWaterFall_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_obj_smoke.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 void daObjSmoke_c::initBaseMtx() {
     setBaseMtx();
@@ -73,18 +73,18 @@ static actor_method_class l_daObjSmoke_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Smoke = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Obj_Smoke,          // mProcName
-    &g_fpcLf_Method.base,   // sub_method
-    sizeof(daObjSmoke_c),    // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    632,                     // mPriority
-    &l_daObjSmoke_Method,    // sub_method
-    0x40100,                 // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Smoke_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjSmoke_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Smoke_e,
+    /* Actor SubMtd */ &l_daObjSmoke_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

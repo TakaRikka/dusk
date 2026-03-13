@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_yamid.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -195,7 +195,7 @@ cPhs_Step daNpc_yamiD_c::create() {
     daNpcT_ct(this, daNpc_yamiD_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4,
                        l_evtList, l_resNameList);
-    
+
     mType = getType();
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = false;
@@ -220,7 +220,7 @@ cPhs_Step daNpc_yamiD_c::create() {
         fopAcM_SetMtx(this, mpMorf[0]->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeFar(this, 3.0f);
         fopAcM_setCullSizeBox(this, -300.0f, -50.0f, -300.0f, 300.0f, 450.0f, 300.0f);
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
 
         mSound.init(&current.pos, &eyePos, 3, 1);
 #if DEBUG
@@ -232,7 +232,7 @@ cPhs_Step daNpc_yamiD_c::create() {
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
                   fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mCcStts.Init(mpHIO->m.common.weight, 0, this);
-        
+
         field_0xe44.Set(mCcDCyl);
         field_0xe44.SetStts(&mCcStts);
         field_0xe44.SetTgHitCallback(tgHitCallBack);
@@ -329,7 +329,7 @@ int daNpc_yamiD_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         J3DModel* model = j3dSys.getModel();
         daNpc_yamiD_c* i_this = (daNpc_yamiD_c*)model->getUserArea();
-        
+
         if (i_this != NULL) {
             i_this->ctrlJoint(i_joint, model);
         }
@@ -394,7 +394,7 @@ void daNpc_yamiD_c::reset() {
     if (mpMatAnm[0] != NULL) {
         mpMatAnm[0]->initialize();
     }
-    
+
     if (getPathID() != 0xFF) {
         mPath.initialize();
         mPath.setPathInfo(getPathID(), fopAcM_GetRoomNo(this), 0);
@@ -533,7 +533,7 @@ void daNpc_yamiD_c::setAttnPos() {
     mDoMtx_stack_c::multVec(&work, &eyePos);
     mJntAnm.setEyeAngleX(eyePos, 1.0f, 0);
     mJntAnm.setEyeAngleY(eyePos, mCurAngle.y, TRUE, 1.0f, 0);
-    
+
     attention_info.position = current.pos;
     attention_info.position.y += mpHIO->m.common.attention_offset;
 }
@@ -558,7 +558,7 @@ void daNpc_yamiD_c::setCollision() {
         f32 cyl_h = mCylH;
         f32 wall_r = mWallR;
         work = current.pos;
-        
+
         field_0xe44.SetCoSPrm(0x79);
         field_0xe44.SetTgType(tgType);
         field_0xe44.SetTgSPrm(tgSPrm);
@@ -629,7 +629,7 @@ int daNpc_yamiD_c::wait(void* param_1) {
 
                     if (chkActorInSight(mPlayerActorMngr.getActorP(), mAttnFovY, mCurAngle.y)) {
                         mJntAnm.lookPlayer(0);
-                        
+
                         if (field_0xf82 == 0 && !is_vanish()) {
                             cXyz pos(current.pos);
                             Z2GetAudioMgr()->seStart(Z2SE_YAMI_MURMUR_T, &pos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
@@ -796,18 +796,18 @@ static actor_method_class daNpc_yamiD_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_YAMID = {
-  fpcLy_CURRENT_e,          // mLayerID
-  7,                        // mListID
-  fpcPi_CURRENT_e,          // mListPrio
-  PROC_NPC_YAMID,           // mProcName
-  &g_fpcLf_Method.base,    // sub_method
-  sizeof(daNpc_yamiD_c),    // mSize
-  0,                        // mSizeOther
-  0,                        // mParameters
-  &g_fopAc_Method.base,     // sub_method
-  315,                      // mPriority
-  &daNpc_yamiD_MethodTable, // sub_method
-  0x00044107,               // mStatus
-  fopAc_NPC_e,              // mActorType
-  fopAc_CULLBOX_CUSTOM_e,   // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_YAMID_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_yamiD_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_YAMID_e,
+    /* Actor SubMtd */ &daNpc_yamiD_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e | fopAcStts_UNK_0x2_e | fopAcStts_UNK_0x1_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -208,7 +208,7 @@ static daE_OC_HIO_c l_HIO;
 static void* s_other_oc(void* arg_lhs, void* arg_rhs) {
     f32 dist;
     if (arg_lhs != arg_rhs && fopAcM_IsActor(arg_lhs)) {
-        if (fpcM_IsCreating(fopAcM_GetID(arg_lhs)) == 0 && fopAcM_GetName(arg_lhs) == PROC_E_OC) {
+        if (fpcM_IsCreating(fopAcM_GetID(arg_lhs)) == 0 && fopAcM_GetName(arg_lhs) == fpcNm_E_OC_e) {
             if (((daE_OC_c*) arg_lhs)->isBattleOn()) {
                 dist = fopAcM_searchActorDistance((fopAc_ac_c*) arg_lhs, (fopAc_ac_c*) arg_rhs);
                 if (dist < l_HIO.battle_participation_radius) {
@@ -331,7 +331,7 @@ bool daE_OC_c::searchPlayer() {
 
 static void* s_obj_sub(void* arg_lhs, void* arg_rhs) {
     if (fopAcM_IsActor(arg_lhs)) {
-        if (fpcM_IsCreating(fopAcM_GetID(arg_lhs)) == 0 && fopAcM_GetName(arg_lhs) == PROC_Obj_RotBridge) {
+        if (fpcM_IsCreating(fopAcM_GetID(arg_lhs)) == 0 && fopAcM_GetName(arg_lhs) == fpcNm_Obj_RotBridge_e) {
             if (fopAcM_GetRoomNo((fopAc_ac_c*) arg_lhs) == fopAcM_GetRoomNo((fopAc_ac_c*) arg_rhs)) {
                 return arg_lhs;
             }
@@ -429,7 +429,7 @@ bool daE_OC_c::searchSound() {
 static void* s_demo_oc(void* arg_lhs, void* arg_rhs) {
     (void) arg_rhs;
     if (fopAcM_IsActor(arg_lhs)) {
-        if (fpcM_IsCreating(fopAcM_GetID(arg_lhs)) == 0 && fopAcM_GetName(arg_lhs) == PROC_E_OC
+        if (fpcM_IsCreating(fopAcM_GetID(arg_lhs)) == 0 && fopAcM_GetName(arg_lhs) == fpcNm_E_OC_e
             && (fopAcM_GetParam(arg_lhs) & 0xFF) == 4) {
             return arg_lhs;
         }
@@ -1129,7 +1129,7 @@ void daE_OC_c::executeFind() {
     f32 pl_dist = fopAcM_searchPlayerDistance(this);
     if (mOcState < 3 || !setWatchMode()) {
         if (field_0x6b4 == 2 && !dComIfGp_event_runCheck()) {
-            fopAcM_OffStatus(this, 0x4000);
+            fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
             field_0x6b4 = 0;
         }
 
@@ -1286,7 +1286,7 @@ void daE_OC_c::executeFind() {
                         // Forest Temple - Entrance
                         fopAc_ac_c* ks_actor;
                         // Caged girl monkey in 1st room:
-                        fopAcM_SearchByName(PROC_NPC_KS, &ks_actor);
+                        fopAcM_SearchByName(fpcNm_NPC_KS_e, &ks_actor);
                         if (ks_actor) {
                             mWatchPos = ks_actor->current.pos;
                             mWatchPos.y += 100.0f;
@@ -1448,14 +1448,14 @@ void daE_OC_c::executeAttack() {
             fopAc_ac_c* hit_actor;
             if (mSphs_at[0].ChkAtHit()) {
                 hit_actor = dCc_GetAc(mSphs_at[0].GetAtHitObj()->GetAc());
-                if (fopAcM_GetName(hit_actor) == PROC_ALINK) {
+                if (fopAcM_GetName(hit_actor) == fpcNm_ALINK_e) {
                     my_bool = 1;
                 }
             }
 
             if (mSphs_at[1].ChkAtHit()) {
                 hit_actor = dCc_GetAc(mSphs_at[1].GetAtHitObj()->GetAc());
-                if (fopAcM_GetName(hit_actor) == PROC_ALINK) {
+                if (fopAcM_GetName(hit_actor) == fpcNm_ALINK_e) {
                     my_bool = 1;
                 }
             }
@@ -2370,18 +2370,19 @@ void daE_OC_c::executeMoveOut() {
 
 bool daE_OC_c::checkWaterSurface() {
     dBgS_ObjGndChk_Spl gnd_chk_spl;
-    cXyz my_vec_0 = current.pos;
+    Vec my_vec_0;
+    my_vec_0 = current.pos;
     my_vec_0.y += 500.0f;
-    gnd_chk_spl.SetPos((Vec*)&my_vec_0);
+    gnd_chk_spl.SetPos(&my_vec_0);
     mWaterLvl = dComIfG_Bgsp().GroundCross(&gnd_chk_spl);
     if (mAcch.ChkGroundHit()) {
         mWaterLvl = -G_CM3D_F_INF;
     }
 
     if (mWaterLvl > (current.pos.y - 140.0f)) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
@@ -2593,7 +2594,7 @@ int daE_OC_c::execute() {
             camera->mCamera.Start();
             camera->mCamera.SetTrimSize(0);
             dComIfGp_event_reset();
-            fopAcM_OffStatus(this, 0x4000);
+            fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
             fopAc_ac_c* search_actor = (fopAc_ac_c*)fpcM_Search(s_demo_oc, this);
             if (search_actor) {
                 fopAcM_OffStatus(search_actor, 0x4000);
@@ -2758,7 +2759,7 @@ cPhs_Step daE_OC_c::create() {
             if (mName == "E_OC") {
                 mSphs_at[0].SetAtAtp(1);
                 mSphs_at[1].SetAtAtp(1);
-                fopAcM_OnStatus(this, 0x10000);
+                fopAcM_OnStatus(this, fopAcStts_UNK_0x10000_e);
             } else {
                 mSphs_at[0].SetAtAtp(2);
                 mSphs_at[1].SetAtAtp(2);
@@ -2785,7 +2786,7 @@ cPhs_Step daE_OC_c::create() {
                     setActionMode(E_OC_ACTION_DEMO_CHILD, 0);
                     break;
                 default:
-                    fopAcM_OffStatus(this, 0x4000);
+                    fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
                     break;
             }
 
@@ -2809,20 +2810,20 @@ static actor_method_class l_daE_OC_Method = {
 };
 
 actor_process_profile_definition g_profile_E_OC = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_OC,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daE_OC_c),       // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  201,                    // mPriority
-  &l_daE_OC_Method,       // sub_method
-  0x00044100,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_OC_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_OC_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_OC_e,
+    /* Actor SubMtd */ &l_daE_OC_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

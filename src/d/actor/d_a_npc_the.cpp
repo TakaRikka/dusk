@@ -602,7 +602,7 @@ void daNpcThe_c::lookat() {
         actor = daPy_getPlayerActorClass();
         break;
     case LOOK_ACTOR:
-        actor = fopAcM_SearchByName(PROC_NPC_ZRC);
+        actor = fopAcM_SearchByName(fpcNm_NPC_ZRC_e);
         break;
     case LOOK_ATTN:
         break;
@@ -1343,18 +1343,18 @@ static actor_method_class daNpcThe_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_THE = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_NPC_THE,
-    &g_fpcLf_Method.base,
-    sizeof(daNpcThe_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x174,
-    &daNpcThe_MethodTable,
-    0x44108,
-    fopAc_NPC_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_THE_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcThe_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_THE_e,
+    /* Actor SubMtd */ &daNpcThe_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x8_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

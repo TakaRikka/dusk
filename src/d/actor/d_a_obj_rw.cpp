@@ -110,7 +110,7 @@ static void damage_check(obj_rw_class* i_this) {
                     sp2C.z = 0.0f;
                     MtxPosition(&sp2C, &pos);
                     pos += actor->current.pos;
-                    fopAcM_createItem(&pos, fpcNm_ITEM_HEART, -1, -1, NULL, NULL, 0);
+                    fopAcM_createItem(&pos, dItemNo_HEART_e, -1, -1, NULL, NULL, 0);
                 }
 
                 i_this->field_0x674 = 15;
@@ -122,7 +122,7 @@ static void damage_check(obj_rw_class* i_this) {
                     fopAcM_createDisappear(actor, &pos, 20, 0, actor->field_0x564);
 
                     cXyz scale(1.0f, 1.0f, 1.0f);
-                    fopAcM_createItemForBoss(&pos, fpcNm_ITEM_KAKERA_HEART, fopAcM_GetRoomNo(actor), &actor->shape_angle, &scale, 0.0f, 0.0f, actor->field_0x564);
+                    fopAcM_createItemForBoss(&pos, dItemNo_KAKERA_HEART_e, fopAcM_GetRoomNo(actor), &actor->shape_angle, &scale, 0.0f, 0.0f, actor->field_0x564);
 
                     int swbit = (fopAcM_GetParam(actor) & 0xFF000000) >> 0x18;
                     if (swbit != 0xFF) {
@@ -373,9 +373,9 @@ static int daOBJ_RW_Create(fopAc_ac_c* actor) {
         if (swbit != 0xFF && dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(actor))) {
             i_this->field_0xe38 = 1;
             cXyz scale(1.0f, 1.0f, 1.0f);
-            fopAcM_createItemForBoss(&actor->current.pos, fpcNm_ITEM_KAKERA_HEART, fopAcM_GetRoomNo(actor), &actor->shape_angle, &scale, 0.0f, 0.0f, actor->field_0x564);
+            fopAcM_createItemForBoss(&actor->current.pos, dItemNo_KAKERA_HEART_e, fopAcM_GetRoomNo(actor), &actor->shape_angle, &scale, 0.0f, 0.0f, actor->field_0x564);
         } else {
-            fopAcM_createChild(PROC_OBJ_MAKI, fopAcM_GetID(actor), 0xFFFFFF01, &actor->home.pos, fopAcM_GetRoomNo(actor), &actor->home.angle, NULL, -1, NULL);
+            fopAcM_createChild(fpcNm_OBJ_MAKI_e, fopAcM_GetID(actor), 0xFFFFFF01, &actor->home.pos, fopAcM_GetRoomNo(actor), &actor->home.angle, NULL, -1, NULL);
             fopAcM_OnStatus(actor, 0);
             actor->attention_info.flags = fopAc_AttnFlag_BATTLE_e;
         }
@@ -395,18 +395,18 @@ static actor_method_class l_daOBJ_RW_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_RW = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_OBJ_RW,            // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(obj_rw_class),   // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  711,                    // mPriority
-  &l_daOBJ_RW_Method,     // sub_method
-  0x00040100,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_RW_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(obj_rw_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_RW_e,
+    /* Actor SubMtd */ &l_daOBJ_RW_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

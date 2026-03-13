@@ -9,7 +9,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_bg_w.h"
 #include "d/d_debug_viewer.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "d/d_s_play.h"
 
 
@@ -66,7 +66,7 @@ int daObjFallObj_c::Create() {
         cXyz acStack_30(0.0f, -300.0f, 0.0f);
         u32 params = uVar1 | (getTime() << 8);
         mChildId = fopAcM_createChildFromOffset(
-            PROC_Obj_FallObj, fopAcM_GetID(this), params, &acStack_30, fopAcM_GetRoomNo(this), &shape_angle,
+            fpcNm_Obj_FallObj_e, fopAcM_GetID(this), params, &acStack_30, fopAcM_GetRoomNo(this), &shape_angle,
             &scale, -1, 0);
     } else {
         mChildId = fpcM_ERROR_PROCESS_ID_e;
@@ -449,18 +449,18 @@ static actor_method_class daObjFallObj_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_FallObj = {
-  fpcLy_CURRENT_e,        // mLayerID
-  3,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_FallObj,       // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjFallObj_c), // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  552,                    // mPriority
-  &daObjFallObj_METHODS,  // sub_method
-  0x00040100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_FallObj_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjFallObj_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_FallObj_e,
+    /* Actor SubMtd */ &daObjFallObj_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

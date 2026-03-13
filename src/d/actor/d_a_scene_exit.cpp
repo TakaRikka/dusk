@@ -105,19 +105,19 @@ static actor_method_class l_daScex_Method = {
 };
 
 actor_process_profile_definition2 g_profile_SCENE_EXIT = {
-  fpcLy_CURRENT_e,       // mLayerID
-  10,                    // mListID
-  fpcPi_CURRENT_e,       // mListPrio
-  PROC_SCENE_EXIT,       // mProcName
-  &g_fpcLf_Method.base, // sub_method
-  sizeof(daScex_c),      // mSize
-  0,                     // mSizeOther
-  0,                     // mParameters
-  &g_fopAc_Method.base,  // sub_method
-  761,                   // mPriority
-  &l_daScex_Method,      // sub_method
-  0x00060000,            // mStatus
-  fopAc_UNK_GROUP_5_e,   // mActorType
-  fopAc_CULLBOX_0_e,     // cullType
-  0                      // field_0x30
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 10,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SCENE_EXIT_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daScex_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_SCENE_EXIT_e,
+    /* Actor SubMtd */ &l_daScex_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_NOPAUSE_e,
+    /* Group        */ fopAc_UNK_GROUP_5_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
+    /* Unknown      */ 0                      // field_0x30,
 };

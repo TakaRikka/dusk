@@ -109,7 +109,7 @@ void daB_ZANTZ_c::calcSnortEffect() {
     }
 
     if (var_r28 != NULL) {
-        if (fopAcM_GetName(dCc_GetAc(var_r28->GetAc())) == PROC_ALINK) {
+        if (fopAcM_GetName(dCc_GetAc(var_r28->GetAc())) == fpcNm_ALINK_e) {
             daPy_py_c* player = daPy_getPlayerActorClass();
             s16 var_r26 = cLib_targetAngleY(&current.pos, &player->current.pos);
             player->setThrowDamage(var_r26, 30.0f, 10.0f, 0, 0, 2);
@@ -509,18 +509,18 @@ static actor_method_class l_daB_ZANTZ_Method = {
 };
 
 actor_process_profile_definition g_profile_B_ZANTZ = {
-  fpcLy_CURRENT_e,        // mLayerID
-  4,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_B_ZANTZ,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daB_ZANTZ_c),    // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  228,                    // mPriority
-  &l_daB_ZANTZ_Method,    // sub_method
-  0x00040000,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 4,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_B_ZANTZ_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daB_ZANTZ_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_B_ZANTZ_e,
+    /* Actor SubMtd */ &l_daB_ZANTZ_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

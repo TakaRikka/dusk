@@ -9,7 +9,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 static Vec const l_key_offset[2] = {
     {205.0f, 180.0f, 0.0f},
@@ -242,18 +242,18 @@ static actor_method_class daObjMGate_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_MGate = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Obj_MGate,
-    &g_fpcLf_Method.base,
-    sizeof(daObjMGate_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    452,
-    &daObjMGate_METHODS,
-    0x40100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_MGate_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjMGate_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_MGate_e,
+    /* Actor SubMtd */ &daObjMGate_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

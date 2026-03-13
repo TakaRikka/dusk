@@ -1168,7 +1168,7 @@ void dMeter2Draw_c::initButton() {
         }
     }
 
-    mButtonBItem = fpcNm_ITEM_SWORD;
+    mButtonBItem = dItemNo_SWORD_e;
     changeTextureItemB(mButtonBItem);
 
     for (int i = 0; i < 2; i++) {
@@ -2302,10 +2302,10 @@ void dMeter2Draw_c::drawButtonB(u8 i_action, bool param_1, f32 i_posX, f32 i_pos
             mButtonBItem = dComIfGs_getSelectEquipSword();
 
             switch (dComIfGs_getSelectEquipSword()) {
-            case fpcNm_ITEM_WOOD_STICK:
-            case fpcNm_ITEM_SWORD:
-            case fpcNm_ITEM_MASTER_SWORD:
-            case fpcNm_ITEM_LIGHT_SWORD:
+            case dItemNo_WOOD_STICK_e:
+            case dItemNo_SWORD_e:
+            case dItemNo_MASTER_SWORD_e:
+            case dItemNo_LIGHT_SWORD_e:
                 changeTextureItemB(mButtonBItem);
                 break;
             default:
@@ -2315,8 +2315,8 @@ void dMeter2Draw_c::drawButtonB(u8 i_action, bool param_1, f32 i_posX, f32 i_pos
         }
     } else if (param_1 == true && i_action == 0x4F) {
         mpScreen->search(MULTI_CHAR('item_b_n'))->show();
-        mButtonBItem = fpcNm_ITEM_LURE_ROD;
-        changeTextureItemB(fpcNm_ITEM_LURE_ROD);
+        mButtonBItem = dItemNo_LURE_ROD_e;
+        changeTextureItemB(dItemNo_LURE_ROD_e);
         var_r31 = 2;
     } else {
         mpScreen->search(MULTI_CHAR('item_b_n'))->hide();
@@ -2415,7 +2415,7 @@ void dMeter2Draw_c::drawButtonS(u8 i_action) {
 void dMeter2Draw_c::drawButtonBin(u8 i_action) {
     int bottle_num = 0;
     for (int i = 0; i < 4; i++) {
-        if (dComIfGs_getItem((u8)(SLOT_11 + i), true) != fpcNm_ITEM_NONE) {
+        if (dComIfGs_getItem((u8)(SLOT_11 + i), true) != dItemNo_NONE_e) {
             bottle_num++;
         }
     }
@@ -2489,7 +2489,7 @@ void dMeter2Draw_c::drawButtonXY(int i_no, u8 i_itemNo, u8 i_action, bool param_
         mpTextXY[i_no]->hide();
 
         int var_r29;
-        if (i_itemNo == fpcNm_ITEM_NONE || i_itemNo == 0) {
+        if (i_itemNo == dItemNo_NONE_e || i_itemNo == 0) {
             mpScreen->search(tag[i_no])->hide();
             var_r29 = 1;
         } else {
@@ -3272,10 +3272,10 @@ char* dMeter2Draw_c::getActionString(u8 i_action, u8 i_type, u8* param_2) {
 
 void dMeter2Draw_c::changeTextureItemB(u8 i_itemNo) {
     int var_r31 = 0;
-    if (i_itemNo == fpcNm_ITEM_LURE_ROD) {
+    if (i_itemNo == dItemNo_LURE_ROD_e) {
         var_r31 = 2;
-    } else if (i_itemNo == fpcNm_ITEM_SWORD || i_itemNo == fpcNm_ITEM_MASTER_SWORD || i_itemNo == fpcNm_ITEM_WOOD_STICK ||
-               i_itemNo == fpcNm_ITEM_LIGHT_SWORD)
+    } else if (i_itemNo == dItemNo_SWORD_e || i_itemNo == dItemNo_MASTER_SWORD_e || i_itemNo == dItemNo_WOOD_STICK_e ||
+               i_itemNo == dItemNo_LIGHT_SWORD_e)
     {
         var_r31 = 1;
     }
@@ -3317,8 +3317,8 @@ void dMeter2Draw_c::changeTextureItemB(u8 i_itemNo) {
 void dMeter2Draw_c::changeTextureItemXY(int i_no, u8 i_itemNo) {
     JUT_ASSERT(0, i_no < SELECT_MAX_e);
 
-    if (i_itemNo == fpcNm_ITEM_LIGHT_ARROW) {
-        i_itemNo = fpcNm_ITEM_BOW;
+    if (i_itemNo == dItemNo_LIGHT_ARROW_e) {
+        i_itemNo = dItemNo_BOW_e;
     }
 
     if (field_0x76c[i_no] == 0) {
@@ -3509,7 +3509,7 @@ void dMeter2Draw_c::setItemParamX(u8 i_itemNo) {
         mItemParams[SELECT_X_e].num_scale = g_drawHIO.mXItemNumScale;
     } else {
         switch (i_itemNo) {
-        case fpcNm_ITEM_BOOMERANG:
+        case dItemNo_BOOMERANG_e:
             mItemParams[SELECT_X_e].pos_x = 4.0f;
             mItemParams[SELECT_X_e].pos_y = -11.0f;
             mItemParams[SELECT_X_e].scale = 1.7f;
@@ -3518,7 +3518,7 @@ void dMeter2Draw_c::setItemParamX(u8 i_itemNo) {
             mItemParams[SELECT_X_e].num_pos_y = -9.2f;
             mItemParams[SELECT_X_e].num_scale = 0.95f;
             break;
-        case fpcNm_ITEM_BOW:
+        case dItemNo_BOW_e:
             mItemParams[SELECT_X_e].pos_x = 9.2f;
             mItemParams[SELECT_X_e].pos_y = -14.0f;
             mItemParams[SELECT_X_e].scale = 2.0f;
@@ -3527,7 +3527,7 @@ void dMeter2Draw_c::setItemParamX(u8 i_itemNo) {
             mItemParams[SELECT_X_e].num_pos_y = -9.2f;
             mItemParams[SELECT_X_e].num_scale = 0.95f;
             break;
-        case fpcNm_ITEM_HVY_BOOTS:
+        case dItemNo_HVY_BOOTS_e:
             mItemParams[SELECT_X_e].pos_x = 4.0f;
             mItemParams[SELECT_X_e].pos_y = -14.0f;
             mItemParams[SELECT_X_e].scale = 1.7f;
@@ -3536,7 +3536,7 @@ void dMeter2Draw_c::setItemParamX(u8 i_itemNo) {
             mItemParams[SELECT_X_e].num_pos_y = -9.2f;
             mItemParams[SELECT_X_e].num_scale = 0.95f;
             break;
-        case fpcNm_ITEM_HOOKSHOT:
+        case dItemNo_HOOKSHOT_e:
             mItemParams[SELECT_X_e].pos_x = 17.0f;
             mItemParams[SELECT_X_e].pos_y = -14.0f;
             mItemParams[SELECT_X_e].scale = 1.5f;
@@ -3545,7 +3545,7 @@ void dMeter2Draw_c::setItemParamX(u8 i_itemNo) {
             mItemParams[SELECT_X_e].num_pos_y = -9.2f;
             mItemParams[SELECT_X_e].num_scale = 0.95f;
             break;
-        case fpcNm_ITEM_KANTERA:
+        case dItemNo_KANTERA_e:
             mItemParams[SELECT_X_e].pos_x = -2.0f;
             mItemParams[SELECT_X_e].pos_y = -15.0f;
             mItemParams[SELECT_X_e].scale = g_drawHIO.mButtonXItemScale;
@@ -3588,7 +3588,7 @@ void dMeter2Draw_c::setItemParamY(u8 i_itemNo) {
         mItemParams[SELECT_Y_e].num_scale = g_drawHIO.mYItemNumScale;
     } else {
         switch (i_itemNo) {
-        case fpcNm_ITEM_BOOMERANG:
+        case dItemNo_BOOMERANG_e:
             mItemParams[SELECT_Y_e].pos_x = 14.0f;
             mItemParams[SELECT_Y_e].pos_y = 1.3f;
             mItemParams[SELECT_Y_e].scale = 1.7f;
@@ -3597,7 +3597,7 @@ void dMeter2Draw_c::setItemParamY(u8 i_itemNo) {
             mItemParams[SELECT_Y_e].num_pos_y = -9.2f;
             mItemParams[SELECT_Y_e].num_scale = 0.95f;
             break;
-        case fpcNm_ITEM_BOW:
+        case dItemNo_BOW_e:
             mItemParams[SELECT_Y_e].pos_x = -1.3f;
             mItemParams[SELECT_Y_e].pos_y = -6.6f;
             mItemParams[SELECT_Y_e].scale = 2.0f;
@@ -3606,7 +3606,7 @@ void dMeter2Draw_c::setItemParamY(u8 i_itemNo) {
             mItemParams[SELECT_Y_e].num_pos_y = -9.2f;
             mItemParams[SELECT_Y_e].num_scale = 0.95f;
             break;
-        case fpcNm_ITEM_HVY_BOOTS:
+        case dItemNo_HVY_BOOTS_e:
             mItemParams[SELECT_Y_e].pos_x = 1.3f;
             mItemParams[SELECT_Y_e].pos_y = 1.3f;
             mItemParams[SELECT_Y_e].scale = 1.7f;
@@ -3615,7 +3615,7 @@ void dMeter2Draw_c::setItemParamY(u8 i_itemNo) {
             mItemParams[SELECT_Y_e].num_pos_y = -9.2f;
             mItemParams[SELECT_Y_e].num_scale = 0.95f;
             break;
-        case fpcNm_ITEM_HOOKSHOT:
+        case dItemNo_HOOKSHOT_e:
             mItemParams[SELECT_Y_e].pos_x = 6.6f;
             mItemParams[SELECT_Y_e].pos_y = -4.0f;
             mItemParams[SELECT_Y_e].scale = 1.5f;
@@ -3624,7 +3624,7 @@ void dMeter2Draw_c::setItemParamY(u8 i_itemNo) {
             mItemParams[SELECT_Y_e].num_pos_y = -9.2f;
             mItemParams[SELECT_Y_e].num_scale = 0.95f;
             break;
-        case fpcNm_ITEM_KANTERA:
+        case dItemNo_KANTERA_e:
             mItemParams[SELECT_Y_e].pos_x = -1.8f;
             mItemParams[SELECT_Y_e].pos_y = g_drawHIO.mButtonYItemPosY;
             mItemParams[SELECT_Y_e].scale = g_drawHIO.mButtonYItemScale;
@@ -3667,7 +3667,7 @@ void dMeter2Draw_c::setItemParamZ(u8 i_itemNo) {
         mItemParams[SELECT_Z_e].num_scale = g_drawHIO.field_0x218;
     } else {
         switch (i_itemNo) {
-        case fpcNm_ITEM_BOOMERANG:
+        case dItemNo_BOOMERANG_e:
             mItemParams[SELECT_Z_e].pos_x = 4.0f;
             mItemParams[SELECT_Z_e].pos_y = 1.3f;
             mItemParams[SELECT_Z_e].scale = 2.2f;
@@ -3676,7 +3676,7 @@ void dMeter2Draw_c::setItemParamZ(u8 i_itemNo) {
             mItemParams[SELECT_Z_e].num_pos_y = -30.0f;
             mItemParams[SELECT_Z_e].num_scale = 0.75f;
             break;
-        case fpcNm_ITEM_BOW:
+        case dItemNo_BOW_e:
             mItemParams[SELECT_Z_e].pos_x = -1.3f;
             mItemParams[SELECT_Z_e].pos_y = 1.3f;
             mItemParams[SELECT_Z_e].scale = 2.2f;
@@ -3685,7 +3685,7 @@ void dMeter2Draw_c::setItemParamZ(u8 i_itemNo) {
             mItemParams[SELECT_Z_e].num_pos_y = -30.0f;
             mItemParams[SELECT_Z_e].num_scale = 0.75f;
             break;
-        case fpcNm_ITEM_HVY_BOOTS:
+        case dItemNo_HVY_BOOTS_e:
             mItemParams[SELECT_Z_e].pos_x = -6.6f;
             mItemParams[SELECT_Z_e].pos_y = 9.2f;
             mItemParams[SELECT_Z_e].scale = 2.2f;
@@ -3694,7 +3694,7 @@ void dMeter2Draw_c::setItemParamZ(u8 i_itemNo) {
             mItemParams[SELECT_Z_e].num_pos_y = -30.0f;
             mItemParams[SELECT_Z_e].num_scale = 0.8f;
             break;
-        case fpcNm_ITEM_HOOKSHOT:
+        case dItemNo_HOOKSHOT_e:
             mItemParams[SELECT_Z_e].pos_x = -4.0f;
             mItemParams[SELECT_Z_e].pos_y = 1.3f;
             mItemParams[SELECT_Z_e].scale = 1.7f;
@@ -3703,7 +3703,7 @@ void dMeter2Draw_c::setItemParamZ(u8 i_itemNo) {
             mItemParams[SELECT_Z_e].num_pos_y = -30.0f;
             mItemParams[SELECT_Z_e].num_scale = 0.8f;
             break;
-        case fpcNm_ITEM_KANTERA:
+        case dItemNo_KANTERA_e:
             mItemParams[SELECT_Z_e].pos_x = -6.6f;
             mItemParams[SELECT_Z_e].pos_y = 6.6f;
             mItemParams[SELECT_Z_e].scale = g_drawHIO.field_0x1d4;
@@ -3755,13 +3755,13 @@ void dMeter2Draw_c::setItemParamB(u8 i_itemNo) {
             mItemParams[3].num_scale = 0.75f;
         } else {
             switch (i_itemNo) {
-            case fpcNm_ITEM_LURE_ROD:
-            case fpcNm_ITEM_BEE_ROD:
-            case fpcNm_ITEM_JEWEL_ROD:
-            case fpcNm_ITEM_JEWEL_BEE_ROD:
-            case fpcNm_ITEM_JEWEL_WORM_ROD:
-            case fpcNm_ITEM_HORSE_FLUTE:
-            case fpcNm_ITEM_FISHING_ROD_1:
+            case dItemNo_LURE_ROD_e:
+            case dItemNo_BEE_ROD_e:
+            case dItemNo_JEWEL_ROD_e:
+            case dItemNo_JEWEL_BEE_ROD_e:
+            case dItemNo_JEWEL_WORM_ROD_e:
+            case dItemNo_HORSE_FLUTE_e:
+            case dItemNo_FISHING_ROD_1_e:
                 mItemParams[3].pos_x = 17.3f;
                 mItemParams[3].pos_y = -46.8f;
                 mItemParams[3].scale = 1.7f;
@@ -3770,7 +3770,7 @@ void dMeter2Draw_c::setItemParamB(u8 i_itemNo) {
                 mItemParams[3].num_pos_y = -30.0f;
                 mItemParams[3].num_scale = 0.75f;
                 break;
-            case fpcNm_ITEM_BOOMERANG:
+            case dItemNo_BOOMERANG_e:
                 mItemParams[3].pos_x = 26.0f;
                 mItemParams[3].pos_y = -54.7f;
                 mItemParams[3].scale = 2.2f;
@@ -3779,7 +3779,7 @@ void dMeter2Draw_c::setItemParamB(u8 i_itemNo) {
                 mItemParams[3].num_pos_y = -30.0f;
                 mItemParams[3].num_scale = 0.75f;
                 break;
-            case fpcNm_ITEM_BOW:
+            case dItemNo_BOW_e:
                 mItemParams[3].pos_x = 20.7f;
                 mItemParams[3].pos_y = -55.7f;
                 mItemParams[3].scale = 2.2f;
@@ -3788,7 +3788,7 @@ void dMeter2Draw_c::setItemParamB(u8 i_itemNo) {
                 mItemParams[3].num_pos_y = -30.0f;
                 mItemParams[3].num_scale = 0.75f;
                 break;
-            case fpcNm_ITEM_HVY_BOOTS:
+            case dItemNo_HVY_BOOTS_e:
                 mItemParams[3].pos_x = 15.4f;
                 mItemParams[3].pos_y = -47.8f;
                 mItemParams[3].scale = 2.2f;
@@ -3797,8 +3797,8 @@ void dMeter2Draw_c::setItemParamB(u8 i_itemNo) {
                 mItemParams[3].num_pos_y = -30.0f;
                 mItemParams[3].num_scale = 0.8f;
                 break;
-            case fpcNm_ITEM_SPINNER:
-            case fpcNm_ITEM_HAWK_EYE:
+            case dItemNo_SPINNER_e:
+            case dItemNo_HAWK_EYE_e:
                 mItemParams[3].pos_x = 23.3f;
                 mItemParams[3].pos_y = -47.8f;
                 mItemParams[3].scale = 1.7f;
@@ -3807,9 +3807,9 @@ void dMeter2Draw_c::setItemParamB(u8 i_itemNo) {
                 mItemParams[3].num_pos_y = -30.0f;
                 mItemParams[3].num_scale = 0.8f;
                 break;
-            case fpcNm_ITEM_COPY_ROD:
-            case fpcNm_ITEM_W_HOOKSHOT:
-            case fpcNm_ITEM_IRONBALL:
+            case dItemNo_COPY_ROD_e:
+            case dItemNo_W_HOOKSHOT_e:
+            case dItemNo_IRONBALL_e:
                 mItemParams[3].pos_x = 29.3f;
                 mItemParams[3].pos_y = -47.8f;
                 mItemParams[3].scale = 1.7f;
@@ -3818,13 +3818,13 @@ void dMeter2Draw_c::setItemParamB(u8 i_itemNo) {
                 mItemParams[3].num_pos_y = -30.0f;
                 mItemParams[3].num_scale = 0.8f;
                 break;
-            case fpcNm_ITEM_PACHINKO:
-            case fpcNm_ITEM_BOMB_BAG_LV1:
-            case fpcNm_ITEM_NORMAL_BOMB:
-            case fpcNm_ITEM_WATER_BOMB:
-            case fpcNm_ITEM_POKE_BOMB:
-            case fpcNm_ITEM_RAFRELS_MEMO:
-            case fpcNm_ITEM_TKS_LETTER:
+            case dItemNo_PACHINKO_e:
+            case dItemNo_BOMB_BAG_LV1_e:
+            case dItemNo_NORMAL_BOMB_e:
+            case dItemNo_WATER_BOMB_e:
+            case dItemNo_POKE_BOMB_e:
+            case dItemNo_RAFRELS_MEMO_e:
+            case dItemNo_TKS_LETTER_e:
                 mItemParams[3].pos_x = 20.3f;
                 mItemParams[3].pos_y = -47.8f;
                 mItemParams[3].scale = 1.7f;
@@ -3833,7 +3833,7 @@ void dMeter2Draw_c::setItemParamB(u8 i_itemNo) {
                 mItemParams[3].num_pos_y = -22.0f;
                 mItemParams[3].num_scale = 0.8f;
                 break;
-            case fpcNm_ITEM_HOOKSHOT:
+            case dItemNo_HOOKSHOT_e:
                 mItemParams[3].pos_x = 21.0f;
                 mItemParams[3].pos_y = -46.7f;
                 mItemParams[3].scale = 1.7f;
@@ -3842,7 +3842,7 @@ void dMeter2Draw_c::setItemParamB(u8 i_itemNo) {
                 mItemParams[3].num_pos_y = -30.0f;
                 mItemParams[3].num_scale = 0.8f;
                 break;
-            case fpcNm_ITEM_KANTERA:
+            case dItemNo_KANTERA_e:
                 mItemParams[3].pos_x = 19.0f;
                 mItemParams[3].pos_y = -45.0f;
                 mItemParams[3].scale = g_drawHIO.mButtonBItemScale[0];

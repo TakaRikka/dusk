@@ -646,7 +646,7 @@ int daKnob20_c::execute() {
 
     setActionFromFlow();
     field_0x60f = frontCheck();
-    if (fopAcM_CheckStatus(this, 0x1000)) {
+    if (fopAcM_CheckStatus(this, fopAcStts_STAFF_SHUTTER_e)) {
         startDemoProc();
         demoProc();
         dMeter2Info_onGameStatus(2);
@@ -701,18 +701,18 @@ static actor_method_class l_daKnob20_Method = {
 };
 
 actor_process_profile_definition g_profile_KNOB20 = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_KNOB20,            // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(daKnob20_c),     // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    293,                    // mPriority
-    &l_daKnob20_Method,     // sub_method
-    0x44100,                // mStatus
-    fopAc_ACTOR_e,          // mActorType
-    fopAc_CULLBOX_6_e,      // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KNOB20_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daKnob20_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_KNOB20_e,
+    /* Actor SubMtd */ &l_daKnob20_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_obj_cowdoor.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 void daCowdoor_c::setBaseMtx() {
     mDoMtx_stack_c::transS( current.pos.x, current.pos.y, current.pos.z);
@@ -100,18 +100,18 @@ static actor_method_class l_daCowdoor_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Cowdoor = {
-    fpcLy_CURRENT_e,        // mLayerID
-    3,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_Obj_Cowdoor,       // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(daCowdoor_c),    // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    447,                    // mPriority
-    &l_daCowdoor_Method,    // sub_method
-    0x40100,                // mStatus
-    fopAc_ACTOR_e,          // mActorType
-    fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Cowdoor_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daCowdoor_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Cowdoor_e,
+    /* Actor SubMtd */ &l_daCowdoor_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

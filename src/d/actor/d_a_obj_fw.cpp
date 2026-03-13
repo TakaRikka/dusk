@@ -34,7 +34,7 @@ static u8 hio_set;
 static daObj_Fw_HIO_c l_HIO;
 
 static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* a_this, fopAc_ac_c* param_3) {
-    if (fopAcM_GetName(param_3) == PROC_ALINK) {
+    if (fopAcM_GetName(param_3) == fpcNm_ALINK_e) {
         obj_fw_class* i_this = (obj_fw_class*)a_this;
         
         if (i_this->field_0x592 == 0) {
@@ -306,18 +306,18 @@ static actor_method_class l_daObj_Fw_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_FW = {
-  fpcLy_CURRENT_e,        // mLayerID
-  8,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_OBJ_FW,            // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(obj_fw_class),   // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  42,                     // mPriority
-  &l_daObj_Fw_Method,     // sub_method
-  0x00044100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 8,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_FW_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(obj_fw_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_FW_e,
+    /* Actor SubMtd */ &l_daObj_Fw_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

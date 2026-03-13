@@ -6,7 +6,7 @@
 #include "d/actor/d_a_alink.h"
 
 cXyz* daAlink_c::getIronBallCenterPos() {
-    if (mEquipItem == fpcNm_ITEM_IRONBALL) {
+    if (mEquipItem == dItemNo_IRONBALL_e) {
         return &mIronBallCenterPos;
     }
 
@@ -14,7 +14,7 @@ cXyz* daAlink_c::getIronBallCenterPos() {
 }
 
 int daAlink_c::getIronBallBgHit() const {
-    if (mEquipItem == fpcNm_ITEM_IRONBALL) {
+    if (mEquipItem == dItemNo_IRONBALL_e) {
         return field_0x301c;
     }
 
@@ -22,21 +22,21 @@ int daAlink_c::getIronBallBgHit() const {
 }
 
 bool daAlink_c::checkIronBallThrowMode() const {
-    return mEquipItem == fpcNm_ITEM_IRONBALL &&
+    return mEquipItem == dItemNo_IRONBALL_e &&
            (mItemVar0.field_0x3018 == 4 || mItemVar0.field_0x3018 == 5 || mItemVar0.field_0x3018 == 6 || mItemVar0.field_0x3018 == 3);
 }
 
 bool daAlink_c::checkIronBallThrowReturnMode() const {
-    return mEquipItem == fpcNm_ITEM_IRONBALL && (mItemVar0.field_0x3018 == 4 || mItemVar0.field_0x3018 == 5 || mItemVar0.field_0x3018 == 6 ||
+    return mEquipItem == dItemNo_IRONBALL_e && (mItemVar0.field_0x3018 == 4 || mItemVar0.field_0x3018 == 5 || mItemVar0.field_0x3018 == 6 ||
                                       mItemVar0.field_0x3018 == 7 || mItemVar0.field_0x3018 == 3);
 }
 
 bool daAlink_c::checkIronBallReturn() const {
-    return mEquipItem == fpcNm_ITEM_IRONBALL && mItemVar0.field_0x3018 == 7;
+    return mEquipItem == dItemNo_IRONBALL_e && mItemVar0.field_0x3018 == 7;
 }
 
 bool daAlink_c::checkIronBallGroundStop() const {
-    return mEquipItem == fpcNm_ITEM_IRONBALL && mItemVar0.field_0x3018 != 0 && mItemVar0.field_0x3018 != 8 && field_0x301e == 0 &&
+    return mEquipItem == dItemNo_IRONBALL_e && mItemVar0.field_0x3018 != 0 && mItemVar0.field_0x3018 != 8 && field_0x301e == 0 &&
            field_0x301e < 10;
 }
 
@@ -1003,7 +1003,7 @@ int daAlink_c::procIronBallThrowInit() {
 int daAlink_c::procIronBallThrow() {
     daPy_frameCtrl_c* framectrl = &mUnderFrameCtrl[0];
 
-    if (mEquipItem != fpcNm_ITEM_IRONBALL) {
+    if (mEquipItem != dItemNo_IRONBALL_e) {
         return checkWaitAction();
     }
 
@@ -1061,7 +1061,7 @@ int daAlink_c::procIronBallReturnInit() {
 int daAlink_c::procIronBallReturn() {
     daPy_frameCtrl_c* frameCtrl = mUnderFrameCtrl;
 
-    if (mEquipItem != fpcNm_ITEM_IRONBALL) {
+    if (mEquipItem != dItemNo_IRONBALL_e) {
         return checkWaitAction();
     }
 

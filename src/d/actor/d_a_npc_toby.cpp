@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_toby.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -441,7 +441,7 @@ void* daNpc_Toby_c::srchToby(void* i_actor, void* i_data) {
     if (mFindCount < 50) {
         fopAc_ac_c* actor_p = (fopAc_ac_c*)i_actor;
         if (actor_p != NULL && actor_p != o_actor) {
-            if (fopAcM_IsExecuting(fopAcM_GetID(actor_p)) && fopAcM_GetName(actor_p) == PROC_NPC_TOBY) {
+            if (fopAcM_IsExecuting(fopAcM_GetID(actor_p)) && fopAcM_GetName(actor_p) == fpcNm_NPC_TOBY_e) {
                 mFindActorPtrs[mFindCount] = actor_p;
                 mFindCount++;
             }
@@ -615,7 +615,7 @@ int daNpc_Toby_c::checkChangeEvt() {
         if (dComIfGp_event_chkTalkXY()) {
             if (dComIfGp_evmng_ChkPresentEnd()) {
                 mPreItemNo = dComIfGp_event_getPreItemNo();
-                if (mPreItemNo == fpcNm_ITEM_RAFRELS_MEMO) {
+                if (mPreItemNo == dItemNo_RAFRELS_MEMO_e) {
                     return FALSE;
                 }
 
@@ -702,16 +702,16 @@ void daNpc_Toby_c::srchActors() {
     switch (mType) {
     case 0:
         if (mActorMngr[0].getActorP() == NULL) {
-            mActorMngr[0].entry(getNearestActorP(PROC_Obj_TobyHouse));
+            mActorMngr[0].entry(getNearestActorP(fpcNm_Obj_TobyHouse_e));
         }
 
         if (mActorMngr[1].getActorP() == NULL) {
             // Fyer's music box that he plays when Link gets shot from the cannon.
-            mActorMngr[1].entry(getNearestActorP(PROC_OBJ_AUTOMATA));
+            mActorMngr[1].entry(getNearestActorP(fpcNm_OBJ_AUTOMATA_e));
         }
 
         if (mActorMngr[2].getActorP() == NULL) {
-            mActorMngr[2].entry(getNearestActorP(PROC_Obj_SCannon));
+            mActorMngr[2].entry(getNearestActorP(fpcNm_Obj_SCannon_e));
         }
 
         break;
@@ -719,7 +719,7 @@ void daNpc_Toby_c::srchActors() {
     case 1:
         if (mActorMngr[3].getActorP() == NULL) {
             // Shadow Bulbin (drained Lake Hylia Kargorok fight):
-            mActorMngr[3].entry(getNearestActorP(PROC_E_RDY));
+            mActorMngr[3].entry(getNearestActorP(fpcNm_E_RDY_e));
         }
 
         break;
@@ -729,7 +729,7 @@ void daNpc_Toby_c::srchActors() {
 
     case 3:
         if (mActorMngr[2].getActorP() == NULL) {
-            mActorMngr[2].entry(getNearestActorP(PROC_Obj_SCannon));
+            mActorMngr[2].entry(getNearestActorP(fpcNm_Obj_SCannon_e));
         }
 
         break;
@@ -760,7 +760,7 @@ int daNpc_Toby_c::evtCutProc() {
         }
 
         return TRUE;
-    } 
+    }
 
     return FALSE;
 }
@@ -797,9 +797,9 @@ void daNpc_Toby_c::action() {
 }
 
 void daNpc_Toby_c::beforeMove() {
-    fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x8000000);
+    fopAcM_OffStatus(this, fopAcStts_UNK_0x8000000_e);
     if (checkHide()) {
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
     }
 
     if (checkHide() || mNoDraw) {
@@ -1072,7 +1072,7 @@ int daNpc_Toby_c::cutTobyHouseFire(int arg0) {
         retval = 1;
         break;
 
-    case 3: 
+    case 3:
         if (mMotionSeqMngr.getNo() != 19) {
             mpMorf[0]->setPlaySpeed(mPlaySpeed);
             mBckAnm.setPlaySpeed(mPlaySpeed);
@@ -1084,7 +1084,7 @@ int daNpc_Toby_c::cutTobyHouseFire(int arg0) {
         action();
         break;
 
-    case 4: 
+    case 4:
         if (cLib_calcTimer(&mEventTimer) == 0) {
             retval = 1;
         }
@@ -1381,15 +1381,15 @@ int daNpc_Toby_c::cutRepairSCannon(int arg0) {
                     mHide = 0;
                     mMotionSeqMngr.setNo(0x15, 0.0f, 0, 0);
                     break;
-                case 1:   
+                case 1:
                     mHide = 0;
                     mMotionSeqMngr.setNo(0x16, 0.0f, 0, 0);
                     break;
-                case 2:   
+                case 2:
                     mHide = 0;
                     mMotionSeqMngr.setNo(0x17, 0.0f, 0, 0);
                     break;
-                default:  
+                default:
                     mHide = 1;
                     break;
                 }
@@ -2098,7 +2098,7 @@ int daNpc_Toby_c::talk(void*) {
             }
 #endif
 
-            if (mPreItemNo == fpcNm_ITEM_RAFRELS_MEMO) {
+            if (mPreItemNo == dItemNo_RAFRELS_MEMO_e) {
                 initTalk(2, NULL);
             } else {
                 initTalk(mFlowNodeNo, NULL);
@@ -2112,7 +2112,7 @@ int daNpc_Toby_c::talk(void*) {
         if (mStagger.checkStagger() == 0) {
             if (mTwilight || mPlayerAngle == mCurAngle.y) {
                 int spC[3] = {-1, -1, -1};
-                if (mPreItemNo == fpcNm_ITEM_RAFRELS_MEMO) {
+                if (mPreItemNo == dItemNo_RAFRELS_MEMO_e) {
                     spC[0] = 0x1420;
                     spC[1] = 0x142D;
                 }
@@ -2206,20 +2206,20 @@ static actor_method_class daNpc_Toby_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_TOBY = {
-  fpcLy_CURRENT_e,         // mLayerID
-  7,                       // mListID
-  fpcPi_CURRENT_e,         // mListPrio
-  PROC_NPC_TOBY,           // mProcName
-  &g_fpcLf_Method.base,   // sub_method
-  sizeof(daNpc_Toby_c),    // mSize
-  0,                       // mSizeOther
-  0,                       // mParameters
-  &g_fopAc_Method.base,    // sub_method
-  377,                     // mPriority
-  &daNpc_Toby_MethodTable, // sub_method
-  0x00040107,              // mStatus
-  fopAc_NPC_e,             // mActorType
-  fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_TOBY_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Toby_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_TOBY_e,
+    /* Actor SubMtd */ &daNpc_Toby_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e | fopAcStts_UNK_0x2_e | fopAcStts_UNK_0x1_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

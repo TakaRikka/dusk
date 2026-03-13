@@ -246,21 +246,19 @@ static actor_method_class l_daDsh_Method = {
 };
 
 actor_process_profile_definition2 g_profile_DSHUTTER = {
-    {
-        fpcLy_CURRENT_e,        // mLayerID
-        7,                      // mListID
-        fpcPi_CURRENT_e,        // mListPrio
-        PROC_DSHUTTER,          // mProcName
-        &g_fpcLf_Method.base,  // sub_method
-        sizeof(daDsh_c),        // mSize
-        0,                      // mSizeOther
-        0,                      // mParameters
-        &g_fopAc_Method.base,   // sub_method
-        296,                    // mPriority
-        &l_daDsh_Method,        // sub_method
-        0x44000,                // mStatus
-        fopAc_ACTOR_e,          // mActorType
-        fopAc_CULLBOX_0_e,      // cullType
-    },
-    0,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DSHUTTER_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daDsh_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_DSHUTTER_e,
+    /* Actor SubMtd */ &l_daDsh_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
+    /* Unknown      */ 0,
 };

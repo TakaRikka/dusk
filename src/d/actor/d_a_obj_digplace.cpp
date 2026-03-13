@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_digplace.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 int daObjDigpl_c::create() {
     fopAcM_ct(this, daObjDigpl_c);
@@ -17,7 +17,7 @@ int daObjDigpl_c::create() {
     mSwitch = fopAcM_GetParam(this) & 0xFF;
 
     if (mType == 5) {
-        fopAcM_OffStatus(this, 0x80);
+        fopAcM_OffStatus(this, fopAcStts_NOEXEC_e);
         mpDigPoints =
             dPath_GetRoomPath((fopAcM_GetParam(this) >> 0x14) & 0xFF, fopAcM_GetRoomNo(this));
     }
@@ -176,18 +176,18 @@ static actor_method_class l_daObjDigpl_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Digpl = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Obj_Digpl,
-    &g_fpcLf_Method.base,
-    sizeof(daObjDigpl_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    250,
-    &l_daObjDigpl_Method,
-    0x44080,
-    fopAc_ENV_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Digpl_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjDigpl_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Digpl_e,
+    /* Actor SubMtd */ &l_daObjDigpl_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_NOEXEC_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -11,7 +11,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "f_op/f_op_actor_enemy.h"
 
 class daE_BA_HIO_c {
@@ -67,7 +67,7 @@ static int daE_BA_Draw(e_ba_class* i_this) {
 }
 
 static void* shot_b_sub(void* i_proc, void* i_this) {
-    if (fopAcM_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_BOOMERANG
+    if (fopAcM_IsActor(i_proc) && fopAcM_GetName(i_proc) == fpcNm_BOOMERANG_e
         && !dComIfGp_checkPlayerStatus0(0, 0x80000) && daPy_py_c::checkBoomerangCharge()
         && fopAcM_GetParam(i_proc) == 1)
     {
@@ -818,7 +818,7 @@ static void action(e_ba_class* i_this) {
             if (i_this->mKnockbackSpeed <= 1.0f || i_this->mAcch.ChkWallHit()) {
                 fopAcM_delete(a_this);
                 if (i_this->mHomeType == e_ba_class::HOME_APPEAR) {
-                    // should be fpcNm_ITEM_HEART : fpcNm_ITEM_ARROW_10 but that gives incorrect code
+                    // should be dItemNo_HEART_e : dItemNo_ARROW_10_e but that gives incorrect code
                     int item_no = dComIfGs_getLife() <= 4 ? 0 : 0xE;
                     fopAcM_createItem(&a_this->current.pos, item_no, -1, -1, NULL, NULL, 0);
                     fopAcM_createDisappear(a_this, &a_this->current.pos, 6, 0, 0xff);
@@ -1032,7 +1032,7 @@ static cPhs_Step daE_BA_Create(fopAc_ac_c* i_this) {
         }
 
         _this->mFightFlyDistance = (f32)_this->mDistanceParam * 100.0f;
-        if (fopAcM_SearchByName(PROC_E_PZ) != NULL) {
+        if (fopAcM_SearchByName(fpcNm_E_PZ_e) != NULL) {
             _this->mFightFlyDistance = 100000.0f;
         }
 
@@ -1105,18 +1105,18 @@ static actor_method_class l_daE_BA_Method = {
 };
 
 actor_process_profile_definition g_profile_E_BA = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_E_BA,
-    &g_fpcLf_Method.base,
-    sizeof(e_ba_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0xB4,
-    &l_daE_BA_Method,
-    0x10050100,
-    fopAc_ENEMY_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_BA_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_ba_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_BA_e,
+    /* Actor SubMtd */ &l_daE_BA_Method,
+    /* Status       */ fopAcStts_UNK_0x10000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x10000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

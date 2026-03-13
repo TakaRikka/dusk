@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_obj_lv4gear.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjLv4Gear_c*>(i_this)->CreateHeap();
@@ -16,7 +16,7 @@ static void* searchSwSpinSub(void* i_actor, void* i_data) {
     daObjSwSpinner_c* sw = (daObjSwSpinner_c*)i_actor;
     daObjLv4Gear_c* gear = (daObjLv4Gear_c*)i_data;
 
-    if (sw != NULL && fopAc_IsActor(sw) && fpcM_GetProfName(sw) == PROC_Obj_SwSpinner) {
+    if (sw != NULL && fopAc_IsActor(sw) && fpcM_GetProfName(sw) == fpcNm_Obj_SwSpinner_e) {
         u8 sw_bit = sw->getSwbit();
         if (sw_bit != 0xFF && sw_bit == gear->getSwBit()) {
             return sw;
@@ -161,18 +161,18 @@ static actor_method_class l_daObjLv4Gear_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Lv4Gear = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Obj_Lv4Gear,        // mProcName
-    &g_fpcLf_Method.base,   // sub_method
-    sizeof(daObjLv4Gear_c),  // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    561,                     // mPriority
-    &l_daObjLv4Gear_Method,  // sub_method
-    0x40100,                 // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Lv4Gear_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjLv4Gear_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Lv4Gear_e,
+    /* Actor SubMtd */ &l_daObjLv4Gear_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

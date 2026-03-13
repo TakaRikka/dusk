@@ -8,7 +8,7 @@
 #include "d/actor/d_a_tag_evtmsg.h"
 #include "d/actor/d_a_npc4.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 enum evt_cut_e {
     EVT_CUT_NONE_e,
@@ -242,18 +242,18 @@ static actor_method_class daTag_EvtMsg_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_TAG_EVTMSG = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_TAG_MSG,
-    &g_fpcLf_Method.base,
-    sizeof(daTag_EvtMsg_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    285,
-    &daTag_EvtMsg_MethodTable,
-    0x44000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_MSG_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTag_EvtMsg_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_TAG_MSG_e,
+    /* Actor SubMtd */ &daTag_EvtMsg_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

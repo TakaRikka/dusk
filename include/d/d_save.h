@@ -5,7 +5,7 @@
 #include "SSystem/SComponent/c_xyz.h"
 #include <os.h>
 #include "global.h"
-#include "f_pc/f_pc_name.h"
+#include "d/d_item_data.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JHostIO/JORReflexible.h"
 #include "dusk/endian.h"
@@ -399,7 +399,7 @@ public:
     u8 getPohNum() const { return mPohNum; }
     void addPohNum() {
         if (mPohNum < 0xFF) {
-            mPohNum += 1;
+            mPohNum++;
         }
     };
 

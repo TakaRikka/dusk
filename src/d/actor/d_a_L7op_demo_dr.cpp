@@ -247,9 +247,10 @@ void daL7ODR_c::setZoomOutCamPos(cXyz& param_0, cXyz& param_1, f32 param_2) {
 void daL7ODR_c::dr_wait() {
     if (field_0x88c == 0) {
         cXyz sp8(0.0f, 0.0f, 0.0f);
+        s16 angle = 0x400;
         field_0x8b4 = 1;
 
-        current.pos.set(5000.0f * cM_ssin(0x400), 7000.0f, 5000.0f * cM_scos(0x400));
+        current.pos.set(5000.0f * cM_ssin(angle), 7000.0f, 5000.0f * cM_scos(angle));
         current.angle.y = cLib_targetAngleY(&current.pos, &sp8) + 0x4000;
 
         mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("B_dr", 0x2F), 2, 3.0f, 1.0f, 0.0f, -1.0f);
@@ -260,6 +261,8 @@ void daL7ODR_c::dr_wait() {
         speedF = 0.0f;
         gravity = 0.0f;
         field_0x88c++;
+    } else if (field_0x88c == -1) {
+        // empty block
     }
 }
 
@@ -272,7 +275,7 @@ void daL7ODR_c::dr_fly() {
     if (field_0x88c == 0) {
         field_0x8b4 = 0;
         mpModelMorf->setPlaySpeed(1.0f);
-    
+
         field_0x898 = 600.0f;
         mDemoCamCenter = player->current.pos;
         mDemoCamCenter.y += 160.0f;
@@ -340,10 +343,12 @@ void daL7ODR_c::dr_fly() {
                 mSound.startCreatureSound(Z2SE_EN_DR_WING, 0, -1);
             }
 
-            if (field_0x898 == temp_f30) {
-                field_0x89c = 140.0f;
-                field_0x88c++;
+            if (field_0x898 != temp_f30) {
+                return;
             }
+
+            field_0x89c = 140.0f;
+            field_0x88c++;
         } else if (field_0x88c == 3) {
             cXyz sp258;
             cLib_chaseAngleS(&current.angle.x, 0x800, 0x10);
@@ -626,7 +631,7 @@ void daL7ODR_c::dr_fly() {
             cLib_chaseF(&speedF, 0.0f, field_0x89c);
             speed.y = -speedF * cM_ssin(current.angle.x);
             mAcch.CrrPos(dComIfG_Bgsp());
-            
+
             s16 sp8 = current.angle.y;
             current.angle.y = -0x8000;
             fopAcM_posMoveF(this, NULL);
@@ -735,7 +740,7 @@ static int daL7ODR_IsDelete(daL7ODR_c* i_this) {
 }
 
 int daL7ODR_c::_delete() {
-    fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "L7ODR");
     dComIfG_resDelete(&mPhase, "B_dr");
 
     if (heap != NULL) {
@@ -804,14 +809,13 @@ int daL7ODR_c::create() {
 
         mSound.init(&current.pos, &eyePos, 3, 1);
 
-        health = 1;
-        field_0x560 = 1;
-        
+        field_0x560 = health = 1;
+
         scale.setall(1.0f);
 
         attention_info.distances[fopAc_attn_BATTLE_e] = 0;
         attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;
-    
+
         fopAcM_SetGroup(this, 0);
         fopAcM_OffStatus(this, 0);
 
@@ -840,18 +844,18 @@ static actor_method_class l_daL7ODR_Method = {
 };
 
 actor_process_profile_definition g_profile_L7ODR = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_L7ODR,             // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daL7ODR_c),      // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  222,                    // mPriority
-  &l_daL7ODR_Method,      // sub_method
-  0x00040100,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_L7ODR_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daL7ODR_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_L7ODR_e,
+    /* Actor SubMtd */ &l_daL7ODR_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

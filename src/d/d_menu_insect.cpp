@@ -546,10 +546,10 @@ void dMenu_Insect_c::screenSetDoIcon() {
 
 u8 dMenu_Insect_c::getGetInsectNum() {
     static u8 l_itemno[MAX_INSECT_NUM] = {
-        fpcNm_ITEM_M_BEETLE,      fpcNm_ITEM_F_BEETLE,      fpcNm_ITEM_M_BUTTERFLY, fpcNm_ITEM_F_BUTTERFLY, fpcNm_ITEM_M_STAG_BEETLE, fpcNm_ITEM_F_STAG_BEETLE,
-        fpcNm_ITEM_M_GRASSHOPPER, fpcNm_ITEM_F_GRASSHOPPER, fpcNm_ITEM_M_NANAFUSHI, fpcNm_ITEM_F_NANAFUSHI, fpcNm_ITEM_M_DANGOMUSHI,  fpcNm_ITEM_F_DANGOMUSHI,
-        fpcNm_ITEM_M_MANTIS,      fpcNm_ITEM_F_MANTIS,      fpcNm_ITEM_M_LADYBUG,   fpcNm_ITEM_F_LADYBUG,   fpcNm_ITEM_M_SNAIL,       fpcNm_ITEM_F_SNAIL,
-        fpcNm_ITEM_M_DRAGONFLY,   fpcNm_ITEM_F_DRAGONFLY,   fpcNm_ITEM_M_ANT,       fpcNm_ITEM_F_ANT,       fpcNm_ITEM_M_MAYFLY,      fpcNm_ITEM_F_MAYFLY,
+        dItemNo_M_BEETLE_e,      dItemNo_F_BEETLE_e,      dItemNo_M_BUTTERFLY_e, dItemNo_F_BUTTERFLY_e, dItemNo_M_STAG_BEETLE_e, dItemNo_F_STAG_BEETLE_e,
+        dItemNo_M_GRASSHOPPER_e, dItemNo_F_GRASSHOPPER_e, dItemNo_M_NANAFUSHI_e, dItemNo_F_NANAFUSHI_e, dItemNo_M_DANGOMUSHI_e,  dItemNo_F_DANGOMUSHI_e,
+        dItemNo_M_MANTIS_e,      dItemNo_F_MANTIS_e,      dItemNo_M_LADYBUG_e,   dItemNo_F_LADYBUG_e,   dItemNo_M_SNAIL_e,       dItemNo_F_SNAIL_e,
+        dItemNo_M_DRAGONFLY_e,   dItemNo_F_DRAGONFLY_e,   dItemNo_M_ANT_e,       dItemNo_F_ANT_e,       dItemNo_M_MAYFLY_e,      dItemNo_F_MAYFLY_e,
     };
 
     u8 insectNum = 0;
@@ -567,10 +567,10 @@ u8 dMenu_Insect_c::getGetInsectNum() {
 
 u8 dMenu_Insect_c::getInsectItemID(int param_0, int param_1) {
     static u8 l_itemno[MAX_INSECT_NUM] = {
-        fpcNm_ITEM_M_ANT,       fpcNm_ITEM_F_ANT,       fpcNm_ITEM_M_MAYFLY,      fpcNm_ITEM_F_MAYFLY,      fpcNm_ITEM_M_BEETLE,     fpcNm_ITEM_F_BEETLE,
-        fpcNm_ITEM_M_MANTIS,    fpcNm_ITEM_F_MANTIS,    fpcNm_ITEM_M_STAG_BEETLE, fpcNm_ITEM_F_STAG_BEETLE, fpcNm_ITEM_M_DANGOMUSHI, fpcNm_ITEM_F_DANGOMUSHI,
-        fpcNm_ITEM_M_BUTTERFLY, fpcNm_ITEM_F_BUTTERFLY, fpcNm_ITEM_M_LADYBUG,     fpcNm_ITEM_F_LADYBUG,     fpcNm_ITEM_M_SNAIL,      fpcNm_ITEM_F_SNAIL,
-        fpcNm_ITEM_M_NANAFUSHI, fpcNm_ITEM_F_NANAFUSHI, fpcNm_ITEM_M_GRASSHOPPER, fpcNm_ITEM_F_GRASSHOPPER, fpcNm_ITEM_M_DRAGONFLY,  fpcNm_ITEM_F_DRAGONFLY,
+        dItemNo_M_ANT_e,       dItemNo_F_ANT_e,       dItemNo_M_MAYFLY_e,      dItemNo_F_MAYFLY_e,      dItemNo_M_BEETLE_e,     dItemNo_F_BEETLE_e,
+        dItemNo_M_MANTIS_e,    dItemNo_F_MANTIS_e,    dItemNo_M_STAG_BEETLE_e, dItemNo_F_STAG_BEETLE_e, dItemNo_M_DANGOMUSHI_e, dItemNo_F_DANGOMUSHI_e,
+        dItemNo_M_BUTTERFLY_e, dItemNo_F_BUTTERFLY_e, dItemNo_M_LADYBUG_e,     dItemNo_F_LADYBUG_e,     dItemNo_M_SNAIL_e,      dItemNo_F_SNAIL_e,
+        dItemNo_M_NANAFUSHI_e, dItemNo_F_NANAFUSHI_e, dItemNo_M_GRASSHOPPER_e, dItemNo_F_GRASSHOPPER_e, dItemNo_M_DRAGONFLY_e,  dItemNo_F_DRAGONFLY_e,
     };
 
     int index = param_0 + param_1 * 6;
@@ -613,14 +613,14 @@ bool dMenu_Insect_c::isGiveInsect(int param_0, int param_1) {
 }
 
 bool dMenu_Insect_c::isCatchInsect(u8 i_insectID) {
-    if (i_insectID >= fpcNm_ITEM_M_BEETLE && i_insectID <= fpcNm_ITEM_F_MAYFLY) {
+    if (i_insectID >= dItemNo_M_BEETLE_e && i_insectID <= dItemNo_F_MAYFLY_e) {
         return dComIfGs_isItemFirstBit(i_insectID);
     }
     return false;
 }
 
 bool dMenu_Insect_c::isGiveInsect(u8 i_insectID) {
-    if (i_insectID >= fpcNm_ITEM_M_BEETLE && i_insectID <= fpcNm_ITEM_F_MAYFLY) {
+    if (i_insectID >= dItemNo_M_BEETLE_e && i_insectID <= dItemNo_F_MAYFLY_e) {
         int label = i_insectID + 0xd1;
         return dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[label]);
     }

@@ -206,7 +206,7 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
         mItemSlotParam1[i] = 0.0f;
     }
     for (int i = 0; i < MAX_ITEM_SLOTS; i++) {
-        if (dComIfGs_getLineUpItem(i) != fpcNm_ITEM_NONE) {
+        if (dComIfGs_getLineUpItem(i) != dItemNo_NONE_e) {
             mTotalItemTexToAlloc++;
         }
     }
@@ -280,10 +280,10 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
             mpItemBuf[i][j] = (ResTIMG*)mpHeap->alloc(0xC00, 0x20);
         }
         u8 item = dComIfGs_getItem(mItemSlots[i], false);
-        if (item != fpcNm_ITEM_NONE) {
-            if (item == fpcNm_ITEM_LIGHT_ARROW) {
+        if (item != dItemNo_NONE_e) {
+            if (item == dItemNo_LIGHT_ARROW_e) {
                 // safety check to prevent attempts setting up a light arrow texture
-                item = fpcNm_ITEM_BOW;
+                item = dItemNo_BOW_e;
             }
             s32 i_textureNum =
                 dMeter2Info_readItemTexture(item, mpItemBuf[i][0], NULL, mpItemBuf[i][1], NULL,
@@ -430,7 +430,7 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     mpItemExplain = JKR_NEW dMenu_ItemExplain_c(mpHeap, dComIfGp_getRingResArchive(), i_stick, true);
     setRotate();
     mpDrawCursor->setPos(mItemSlotPosX[0] + mCenterPosX, mItemSlotPosY[0] + mCenterPosY);
-    if (dComIfGs_getItem(mItemSlots[0], false) != fpcNm_ITEM_NONE) {
+    if (dComIfGs_getItem(mItemSlots[0], false) != dItemNo_NONE_e) {
         mpDrawCursor->setParam(mItemSlotParam1[0], mItemSlotParam2[0], 0.1f, 0.6f, 0.5f);
     } else {
         mpDrawCursor->setParam(1.0f, 1.0f, 0.1f, 0.6f, 0.5f);
@@ -666,7 +666,7 @@ bool dMenu_Ring_c::isOpen() {
     }
     setScale();
     mpDrawCursor->setPos(mItemSlotPosX[SLOT_0] + mCenterPosX, mItemSlotPosY[SLOT_0] + mCenterPosY);
-    if (dComIfGs_getItem(mItemSlots[SLOT_0], false) != fpcNm_ITEM_NONE) {
+    if (dComIfGs_getItem(mItemSlots[SLOT_0], false) != dItemNo_NONE_e) {
         mpDrawCursor->setParam(mItemSlotParam1[0], mItemSlotParam2[0], 0.1f, 0.6f, 0.5f);
     } else {
         mpDrawCursor->setParam(1.0f, 1.0f, 0.1f, 0.6f, 0.5f);
@@ -728,7 +728,7 @@ bool dMenu_Ring_c::isClose() {
     }
     mpDrawCursor->setPos(mItemSlotPosX[mCurrentSlot] + mCenterPosX,
                          mItemSlotPosY[mCurrentSlot] + mCenterPosY);
-    if (dComIfGs_getItem(mItemSlots[mCurrentSlot], false) != fpcNm_ITEM_NONE) {
+    if (dComIfGs_getItem(mItemSlots[mCurrentSlot], false) != dItemNo_NONE_e) {
         mpDrawCursor->setParam(mItemSlotParam1[mCurrentSlot], mItemSlotParam2[mCurrentSlot], 0.1f, 0.6f,
                                0.5f);
     } else {
@@ -885,25 +885,25 @@ void dMenu_Ring_c::setItem() {
     u8 uVar3;
     u8 uVar4;
 
-    if (mXButtonSlot != fpcNm_ITEM_NONE) {
+    if (mXButtonSlot != dItemNo_NONE_e) {
         uVar1 = mItemSlots[mXButtonSlot];
     } else {
-        uVar1 = fpcNm_ITEM_NONE;
+        uVar1 = dItemNo_NONE_e;
     }
-    if (mYButtonSlot != fpcNm_ITEM_NONE) {
+    if (mYButtonSlot != dItemNo_NONE_e) {
         uVar2 = mItemSlots[mYButtonSlot];
     } else {
-        uVar2 = fpcNm_ITEM_NONE;
+        uVar2 = dItemNo_NONE_e;
     }
-    if (field_0x6ac != fpcNm_ITEM_NONE) {
+    if (field_0x6ac != dItemNo_NONE_e) {
         uVar3 = mItemSlots[field_0x6ac];
     } else {
-        uVar3 = fpcNm_ITEM_NONE;
+        uVar3 = dItemNo_NONE_e;
     }
-    if (field_0x6ad != fpcNm_ITEM_NONE) {
+    if (field_0x6ad != dItemNo_NONE_e) {
         uVar4 = mItemSlots[field_0x6ad];
     } else {
-        uVar4 = fpcNm_ITEM_NONE;
+        uVar4 = dItemNo_NONE_e;
     }
 
     u8 mixItemIndex0 = dComIfGs_getMixItemIndex(0);
@@ -919,30 +919,30 @@ void dMenu_Ring_c::setItem() {
         if (mItemSlots[mCurrentSlot] == uVar1) {
             uVar2 = dComIfGs_getSelectItemIndex(0);
             mixItemIndex1 = dComIfGs_getMixItemIndex(0);
-            if (uVar2 == fpcNm_ITEM_NONE) {
-                mYButtonSlot = fpcNm_ITEM_NONE;
+            if (uVar2 == dItemNo_NONE_e) {
+                mYButtonSlot = dItemNo_NONE_e;
             } else {
                 mYButtonSlot = mXButtonSlot;
             }
             mXButtonSlot = mCurrentSlot;
             uVar1 = mItemSlots[mXButtonSlot];
-            mixItemIndex0 = fpcNm_ITEM_NONE;
+            mixItemIndex0 = dItemNo_NONE_e;
         } else {
             if (dComIfGs_getMixItemIndex(1) == mItemSlots[mCurrentSlot]) {
                 uVar2 = dComIfGs_getSelectItemIndex(0);
-                mixItemIndex1 = fpcNm_ITEM_NONE;
-                if (uVar2 == fpcNm_ITEM_NONE) {
-                    mYButtonSlot = fpcNm_ITEM_NONE;
+                mixItemIndex1 = dItemNo_NONE_e;
+                if (uVar2 == dItemNo_NONE_e) {
+                    mYButtonSlot = dItemNo_NONE_e;
                 } else {
                     mYButtonSlot = mXButtonSlot;
                 }
                 mXButtonSlot = mCurrentSlot;
                 uVar1 = mItemSlots[mXButtonSlot];
-                mixItemIndex0 = fpcNm_ITEM_NONE;
+                mixItemIndex0 = dItemNo_NONE_e;
             } else {
                 mXButtonSlot = mCurrentSlot;
                 uVar1 = mItemSlots[mXButtonSlot];
-                mixItemIndex0 = fpcNm_ITEM_NONE;
+                mixItemIndex0 = dItemNo_NONE_e;
             }
         }
     } else if (field_0x6b3 == 1) {
@@ -950,30 +950,30 @@ void dMenu_Ring_c::setItem() {
             u8 temp = dComIfGs_getSelectItemIndex(1);
             uVar1 = temp;
             mixItemIndex0 = dComIfGs_getMixItemIndex(1);
-            if (temp == fpcNm_ITEM_NONE) {
-                mXButtonSlot = fpcNm_ITEM_NONE;
+            if (temp == dItemNo_NONE_e) {
+                mXButtonSlot = dItemNo_NONE_e;
             } else {
                 mXButtonSlot = mYButtonSlot;
             }
             mYButtonSlot = mCurrentSlot;
             uVar2 = mItemSlots[mYButtonSlot];
-            mixItemIndex1 = fpcNm_ITEM_NONE;
+            mixItemIndex1 = dItemNo_NONE_e;
         } else {
             if (dComIfGs_getMixItemIndex(0) == mItemSlots[mCurrentSlot]) {
                 uVar1 = dComIfGs_getSelectItemIndex(1);
-                mixItemIndex0 = fpcNm_ITEM_NONE;
-                if (uVar1 == fpcNm_ITEM_NONE) {
-                    mXButtonSlot = fpcNm_ITEM_NONE;
+                mixItemIndex0 = dItemNo_NONE_e;
+                if (uVar1 == dItemNo_NONE_e) {
+                    mXButtonSlot = dItemNo_NONE_e;
                 } else {
                     mXButtonSlot = mYButtonSlot;
                 }
                 mYButtonSlot = mCurrentSlot;
                 uVar2 = mItemSlots[mYButtonSlot];
-                mixItemIndex1 = fpcNm_ITEM_NONE;
+                mixItemIndex1 = dItemNo_NONE_e;
             } else {
                 mYButtonSlot = mCurrentSlot;
                 uVar2 = mItemSlots[mYButtonSlot];
-                mixItemIndex1 = fpcNm_ITEM_NONE;
+                mixItemIndex1 = dItemNo_NONE_e;
             }
         }
     }
@@ -983,9 +983,9 @@ void dMenu_Ring_c::setItem() {
     field_0x6b4[3] = uVar4;
     field_0x6b8[0] = mixItemIndex0;
     field_0x6b8[1] = mixItemIndex1;
-    field_0x6b8[2] = fpcNm_ITEM_NONE;
-    field_0x6b8[3] = fpcNm_ITEM_NONE;
-    field_0x6cd = fpcNm_ITEM_NONE;
+    field_0x6b8[2] = dItemNo_NONE_e;
+    field_0x6b8[3] = dItemNo_NONE_e;
+    field_0x6cd = dItemNo_NONE_e;
     setJumpItem(true);
 }
 
@@ -999,19 +999,19 @@ void dMenu_Ring_c::setJumpItem(bool i_useVibrationM) {
             setSelectItem(i, getItem(field_0x6b4[i], field_0x6b8[i]));
         }
     }
-    if (mXButtonSlot != fpcNm_ITEM_NONE) {
+    if (mXButtonSlot != dItemNo_NONE_e) {
         field_0x518[0] = mItemSlotPosX[mXButtonSlot];
         field_0x528[0] = mItemSlotPosY[mXButtonSlot];
     }
-    if (mYButtonSlot != fpcNm_ITEM_NONE) {
+    if (mYButtonSlot != dItemNo_NONE_e) {
         field_0x518[1] = mItemSlotPosX[mYButtonSlot];
         field_0x528[1] = mItemSlotPosY[mYButtonSlot];
     }
-    if (field_0x6ac != fpcNm_ITEM_NONE) {
+    if (field_0x6ac != dItemNo_NONE_e) {
         field_0x518[2] = mItemSlotPosX[field_0x6ac];
         field_0x528[2] = mItemSlotPosY[field_0x6ac];
     }
-    if (field_0x6ad != fpcNm_ITEM_NONE) {
+    if (field_0x6ad != dItemNo_NONE_e) {
         field_0x518[3] = mItemSlotPosX[field_0x6ad];
         field_0x528[3] = mItemSlotPosY[field_0x6ad];
     }
@@ -1127,12 +1127,12 @@ void dMenu_Ring_c::setNameString(u32 i_stringID) {
 void dMenu_Ring_c::setActiveCursor() {
     u8 item = dComIfGs_getItem(mItemSlots[mCurrentSlot], false);
     if (mStatus == STATUS_WAIT && mOldStatus != STATUS_EXPLAIN_FORCE && mOldStatus != STATUS_EXPLAIN && mpItemExplain->getStatus() == 0) {
-        if (mDoCPd_c::getTrigR(PAD_1) && !mPlayerIsWolf && item != fpcNm_ITEM_NONE) {
+        if (mDoCPd_c::getTrigR(PAD_1) && !mPlayerIsWolf && item != dItemNo_NONE_e) {
             for (int i = 0; i < MAX_SELECT_ITEM; i++) {
                 setSelectItemForce(i);
             }
             setMixItem();
-        } else if (mDoCPd_c::getTrigX(PAD_1) && !mPlayerIsWolf && item != fpcNm_ITEM_NONE) {
+        } else if (mDoCPd_c::getTrigX(PAD_1) && !mPlayerIsWolf && item != dItemNo_NONE_e) {
             for (int i = 0; i < MAX_SELECT_ITEM; i++) {
                 setSelectItemForce(i);
             }
@@ -1144,7 +1144,7 @@ void dMenu_Ring_c::setActiveCursor() {
                     (this->*stick_init[mStatus])();
                 }
             }
-        } else if (mDoCPd_c::getTrigY(PAD_1) && !mPlayerIsWolf && item != fpcNm_ITEM_NONE) {
+        } else if (mDoCPd_c::getTrigY(PAD_1) && !mPlayerIsWolf && item != dItemNo_NONE_e) {
             for (int i = 0; i < MAX_SELECT_ITEM; i++) {
                 setSelectItemForce(i);
             }
@@ -1168,7 +1168,7 @@ void dMenu_Ring_c::setMixItem() {
     bool bVar1 = false;
     u8 selectItemIndex0 = dComIfGs_getSelectItemIndex(0);
     u8 selectItemIndex1 = dComIfGs_getSelectItemIndex(1);
-    u8 local_28[4] = {fpcNm_ITEM_NONE, fpcNm_ITEM_NONE, fpcNm_ITEM_NONE, fpcNm_ITEM_NONE};
+    u8 local_28[4] = {dItemNo_NONE_e, dItemNo_NONE_e, dItemNo_NONE_e, dItemNo_NONE_e};
 
     if (dComIfGs_getMixItemIndex(0) == SLOT_4 &&
         mItemSlots[mCurrentSlot] == dComIfGs_getSelectItemIndex(0))
@@ -1194,11 +1194,11 @@ void dMenu_Ring_c::setMixItem() {
         bVar1 = true;
     } else {
         switch (item) {
-        case fpcNm_ITEM_NORMAL_BOMB:
-        case fpcNm_ITEM_WATER_BOMB:
-        case fpcNm_ITEM_POKE_BOMB:
-        case fpcNm_ITEM_HAWK_EYE:
-            if ((dComIfGs_getSelectItemIndex(0) == 4 && dComIfGs_getMixItemIndex(0) == fpcNm_ITEM_NONE) ||
+        case dItemNo_NORMAL_BOMB_e:
+        case dItemNo_WATER_BOMB_e:
+        case dItemNo_POKE_BOMB_e:
+        case dItemNo_HAWK_EYE_e:
+            if ((dComIfGs_getSelectItemIndex(0) == 4 && dComIfGs_getMixItemIndex(0) == dItemNo_NONE_e) ||
                 (dComIfGs_getMixItemIndex(0) == 4))
             {
                 Z2GetAudioMgr()->seStart(Z2SE_SY_ITEM_COMBINE_ON, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
@@ -1214,7 +1214,7 @@ void dMenu_Ring_c::setMixItem() {
                     mYButtonSlot = 0xff;
                 }
             } else if ((dComIfGs_getSelectItemIndex(1) == 4 &&
-                        dComIfGs_getMixItemIndex(1) == fpcNm_ITEM_NONE) ||
+                        dComIfGs_getMixItemIndex(1) == dItemNo_NONE_e) ||
                        (dComIfGs_getMixItemIndex(1) == 4))
             {
                 Z2GetAudioMgr()->seStart(Z2SE_SY_ITEM_COMBINE_ON, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
@@ -1237,10 +1237,10 @@ void dMenu_Ring_c::setMixItem() {
         field_0x6b4[0] = selectItemIndex0;
         field_0x6b4[1] = selectItemIndex1;
         setJumpItem(false);
-        if (local_28[0] != fpcNm_ITEM_NONE) {
+        if (local_28[0] != dItemNo_NONE_e) {
             mXButtonSlot = local_28[0];
         }
-        if (local_28[1] != fpcNm_ITEM_NONE) {
+        if (local_28[1] != dItemNo_NONE_e) {
             mYButtonSlot = local_28[1];
         }
     }
@@ -1283,7 +1283,7 @@ void dMenu_Ring_c::drawItem() {
                     f32 y = (48.0f - f1) * 0.5f + (mItemSlotPosY[i] - 24.0f + mCenterPosY);
                     mpItemTex[i][j]->draw(x, y, f0, f1, 0, 0, 0);
                     u8 item = dComIfGs_getItem(mItemSlots[i], false);
-                    if ((j == 0 && item != fpcNm_ITEM_BEE_CHILD) || (j == 2 && item == fpcNm_ITEM_BEE_CHILD)) {
+                    if ((j == 0 && item != dItemNo_BEE_CHILD_e) || (j == 2 && item == dItemNo_BEE_CHILD_e)) {
                         u8 itemNum = getItemNum(mItemSlots[i]);
                         u8 itemMaxNum = getItemMaxNum(mItemSlots[i]);
                         if (itemMaxNum != 0) {
@@ -1291,7 +1291,7 @@ void dMenu_Ring_c::drawItem() {
                             drawNumber(itemNum, itemMaxNum, x + 24.0f, y + 48.0f);
                         }
                     }
-                    if (j == 0 && item == fpcNm_ITEM_KANTERA /* Lantern */) {
+                    if (j == 0 && item == dItemNo_KANTERA_e /* Lantern */) {
                         setKanteraPos(x + 24.0f + 15.0f, y + 48.0f + 10.0f);
                         mpKanteraMeter->setScale(0.64f, 0.64f);
                         mpKanteraMeter->setNowGauge(dComIfGs_getMaxOil(), dComIfGs_getOil());
@@ -1327,7 +1327,7 @@ void dMenu_Ring_c::drawItem2() {
                 f32 y = (48.0f - f1) * 0.5f + (mItemSlotPosY[idx] - 24.0f + mCenterPosY);
                 mpItemTex[idx][i]->draw(x, y, f0, f1, 0, 0, 0);
                 u8 item = dComIfGs_getItem(mItemSlots[idx], false);
-                if ((i == 0 && item != fpcNm_ITEM_BEE_CHILD) || (i == 2 && item == fpcNm_ITEM_BEE_CHILD)) {
+                if ((i == 0 && item != dItemNo_BEE_CHILD_e) || (i == 2 && item == dItemNo_BEE_CHILD_e)) {
                     u8 itemNum = getItemNum(mItemSlots[idx]);
                     u8 itemMaxNum = getItemMaxNum(mItemSlots[idx]);
                     if (itemMaxNum != 0) {
@@ -1335,7 +1335,7 @@ void dMenu_Ring_c::drawItem2() {
                         drawNumber(itemNum, itemMaxNum, x + 24.0f, y + 48.0f);
                     }
                 }
-                if (i == 0 && item == fpcNm_ITEM_KANTERA) {
+                if (i == 0 && item == dItemNo_KANTERA_e) {
                     setKanteraPos(x + 24.0f + 15.0f, y + 48.0f + 10.0f);
                     mpKanteraMeter->setScale(0.64f, 0.64f);
                     mpKanteraMeter->setNowGauge(dComIfGs_getMaxOil(), dComIfGs_getOil());
@@ -1365,7 +1365,7 @@ void dMenu_Ring_c::stick_wait_init() {
 void dMenu_Ring_c::stick_wait_proc() {
     u8 item = dComIfGs_getItem(mItemSlots[mCurrentSlot], false);
 
-    if (item != fpcNm_ITEM_NONE) {
+    if (item != dItemNo_NONE_e) {
         setDoStatus(0x24);
     } else {
         setDoStatus(0);
@@ -1414,7 +1414,7 @@ void dMenu_Ring_c::stick_move_proc() {
             field_0x66e = field_0x670;
             mpDrawCursor->setPos(mItemSlotPosX[mCurrentSlot], mItemSlotPosY[mCurrentSlot]);
             u8 item = dComIfGs_getItem(mItemSlots[mCurrentSlot], false);
-            if (item != fpcNm_ITEM_NONE) {
+            if (item != dItemNo_NONE_e) {
                 mpDrawCursor->setParam(mItemSlotParam1[mCurrentSlot], mItemSlotParam2[mCurrentSlot], 0.1f,
                                        0.6f, 0.5f);
             } else {
@@ -1441,7 +1441,7 @@ void dMenu_Ring_c::stick_move_proc() {
             field_0x66e = field_0x670;
             mpDrawCursor->setPos(mItemSlotPosX[mCurrentSlot], mItemSlotPosY[mCurrentSlot]);
             u8 item = dComIfGs_getItem(mItemSlots[mCurrentSlot], false);
-            if (item != fpcNm_ITEM_NONE) {
+            if (item != dItemNo_NONE_e) {
                 mpDrawCursor->setParam(mItemSlotParam1[mCurrentSlot], mItemSlotParam2[mCurrentSlot], 0.1f,
                                        0.6f, 0.5f);
             } else {
@@ -1501,7 +1501,7 @@ void dMenu_Ring_c::stick_explain_force_proc() {
 void dMenu_Ring_c::setSelectItem(int i_idx, u8 i_itemNo) {
     f32 texScale = 1.0f;
 
-    if (i_itemNo != fpcNm_ITEM_NONE) {
+    if (i_itemNo != dItemNo_NONE_e) {
         if (field_0x6be[i_idx] == 0) {
             field_0x6be[i_idx] = 1;
         } else {
@@ -1596,26 +1596,26 @@ u8 dMenu_Ring_c::getItemNum(u8 i_slotNo) {
     u8 ret = 0;
 
     switch (item) {
-    case fpcNm_ITEM_BOMB_BAG_LV1:
+    case dItemNo_BOMB_BAG_LV1_e:
         ret = 0;
         break;
-    case fpcNm_ITEM_NORMAL_BOMB:
-    case fpcNm_ITEM_WATER_BOMB:
-    case fpcNm_ITEM_POKE_BOMB:
+    case dItemNo_NORMAL_BOMB_e:
+    case dItemNo_WATER_BOMB_e:
+    case dItemNo_POKE_BOMB_e:
         ret = dComIfGs_getBombNum(i_slotNo - 0xF);
         break;
 
-    case fpcNm_ITEM_BEE_CHILD:
+    case dItemNo_BEE_CHILD_e:
         ret = dComIfGs_getBottleNum(i_slotNo - 0xB);
         break;
-    case fpcNm_ITEM_BOW:
-    case fpcNm_ITEM_LIGHT_ARROW:
-    case fpcNm_ITEM_ARROW_LV1:
-    case fpcNm_ITEM_ARROW_LV2:
-    case fpcNm_ITEM_ARROW_LV3:
+    case dItemNo_BOW_e:
+    case dItemNo_LIGHT_ARROW_e:
+    case dItemNo_ARROW_LV1_e:
+    case dItemNo_ARROW_LV2_e:
+    case dItemNo_ARROW_LV3_e:
         ret = dComIfGs_getArrowNum();
         break;
-    case fpcNm_ITEM_PACHINKO:
+    case dItemNo_PACHINKO_e:
         ret = dComIfGs_getPachinkoNum();
         break;
     }
@@ -1635,26 +1635,26 @@ u8 dMenu_Ring_c::getItemMaxNum(u8 i_slotNo) {
     u8 ret = 0;
 
     switch (item) {
-    case fpcNm_ITEM_BOMB_BAG_LV1:
+    case dItemNo_BOMB_BAG_LV1_e:
         ret = 1;
         break;
-    case fpcNm_ITEM_NORMAL_BOMB:
-    case fpcNm_ITEM_WATER_BOMB:
-    case fpcNm_ITEM_POKE_BOMB:
+    case dItemNo_NORMAL_BOMB_e:
+    case dItemNo_WATER_BOMB_e:
+    case dItemNo_POKE_BOMB_e:
         ret = dComIfGs_getBombMax(item);
         break;
 
-    case fpcNm_ITEM_BEE_CHILD:
+    case dItemNo_BEE_CHILD_e:
         ret = dComIfGs_getBottleMax();
         break;
-    case fpcNm_ITEM_BOW:
-    case fpcNm_ITEM_LIGHT_ARROW:
-    case fpcNm_ITEM_ARROW_LV1:
-    case fpcNm_ITEM_ARROW_LV2:
-    case fpcNm_ITEM_ARROW_LV3:
+    case dItemNo_BOW_e:
+    case dItemNo_LIGHT_ARROW_e:
+    case dItemNo_ARROW_LV1_e:
+    case dItemNo_ARROW_LV2_e:
+    case dItemNo_ARROW_LV3_e:
         ret = dComIfGs_getArrowMax();
         break;
-    case fpcNm_ITEM_PACHINKO:
+    case dItemNo_PACHINKO_e:
         ret = dComIfGs_getPachinkoMax();
         break;
     }
@@ -1671,105 +1671,105 @@ bool dMenu_Ring_c::checkExplainForce() {
     u8 item = dComIfGs_getItem(mItemSlots[mCurrentSlot], true);
 
     for (int i = 0; i < 4; i++) {
-        local_18[i] = fpcNm_ITEM_NONE;
+        local_18[i] = dItemNo_NONE_e;
     }
 
     switch (item) {
-    case fpcNm_ITEM_BOW:
+    case dItemNo_BOW_e:
         switch (item0) {
-        case fpcNm_ITEM_NORMAL_BOMB:
-        case fpcNm_ITEM_WATER_BOMB:
-        case fpcNm_ITEM_POKE_BOMB:
-            local_18[0] = fpcNm_ITEM_BOMB_ARROW;
+        case dItemNo_NORMAL_BOMB_e:
+        case dItemNo_WATER_BOMB_e:
+        case dItemNo_POKE_BOMB_e:
+            local_18[0] = dItemNo_BOMB_ARROW_e;
             break;
-        case fpcNm_ITEM_HAWK_EYE:
-            local_18[0] = fpcNm_ITEM_HAWK_ARROW;
+        case dItemNo_HAWK_EYE_e:
+            local_18[0] = dItemNo_HAWK_ARROW_e;
             break;
         }
         switch (item1) {
-        case fpcNm_ITEM_NORMAL_BOMB:
-        case fpcNm_ITEM_WATER_BOMB:
-        case fpcNm_ITEM_POKE_BOMB:
-            local_18[1] = fpcNm_ITEM_BOMB_ARROW;
+        case dItemNo_NORMAL_BOMB_e:
+        case dItemNo_WATER_BOMB_e:
+        case dItemNo_POKE_BOMB_e:
+            local_18[1] = dItemNo_BOMB_ARROW_e;
             break;
-        case fpcNm_ITEM_HAWK_EYE:
-            local_18[1] = fpcNm_ITEM_HAWK_ARROW;
+        case dItemNo_HAWK_EYE_e:
+            local_18[1] = dItemNo_HAWK_ARROW_e;
             break;
         }
         break;
-    case fpcNm_ITEM_NORMAL_BOMB:
-    case fpcNm_ITEM_WATER_BOMB:
-    case fpcNm_ITEM_POKE_BOMB:
-        if (item0 == fpcNm_ITEM_BOW) {
-            local_18[0] = fpcNm_ITEM_BOMB_ARROW;
-        } else if (item1 == fpcNm_ITEM_BOW) {
-            local_18[1] = fpcNm_ITEM_BOMB_ARROW;
+    case dItemNo_NORMAL_BOMB_e:
+    case dItemNo_WATER_BOMB_e:
+    case dItemNo_POKE_BOMB_e:
+        if (item0 == dItemNo_BOW_e) {
+            local_18[0] = dItemNo_BOMB_ARROW_e;
+        } else if (item1 == dItemNo_BOW_e) {
+            local_18[1] = dItemNo_BOMB_ARROW_e;
         }
         break;
-    case fpcNm_ITEM_HAWK_EYE:
-        if (item0 == fpcNm_ITEM_BOW) {
-            local_18[0] = fpcNm_ITEM_HAWK_ARROW;
-        } else if (item1 == fpcNm_ITEM_BOW) {
-            local_18[1] = fpcNm_ITEM_HAWK_ARROW;
+    case dItemNo_HAWK_EYE_e:
+        if (item0 == dItemNo_BOW_e) {
+            local_18[0] = dItemNo_HAWK_ARROW_e;
+        } else if (item1 == dItemNo_BOW_e) {
+            local_18[1] = dItemNo_HAWK_ARROW_e;
         }
         break;
-    case fpcNm_ITEM_BEE_CHILD:
-        if (item0 == fpcNm_ITEM_FISHING_ROD_1) {
-            local_18[0] = fpcNm_ITEM_BEE_ROD;
-        } else if (item1 == fpcNm_ITEM_FISHING_ROD_1) {
-            local_18[1] = fpcNm_ITEM_BEE_ROD;
+    case dItemNo_BEE_CHILD_e:
+        if (item0 == dItemNo_FISHING_ROD_1_e) {
+            local_18[0] = dItemNo_BEE_ROD_e;
+        } else if (item1 == dItemNo_FISHING_ROD_1_e) {
+            local_18[1] = dItemNo_BEE_ROD_e;
         }
         break;
-    case fpcNm_ITEM_WORM:
-        if (item0 == fpcNm_ITEM_FISHING_ROD_1) {
-            local_18[0] = fpcNm_ITEM_WORM_ROD;
-        } else if (item1 == fpcNm_ITEM_FISHING_ROD_1) {
-            local_18[1] = fpcNm_ITEM_WORM_ROD;
+    case dItemNo_WORM_e:
+        if (item0 == dItemNo_FISHING_ROD_1_e) {
+            local_18[0] = dItemNo_WORM_ROD_e;
+        } else if (item1 == dItemNo_FISHING_ROD_1_e) {
+            local_18[1] = dItemNo_WORM_ROD_e;
         }
         break;
-    case fpcNm_ITEM_ZORAS_JEWEL:
-        if (item0 == fpcNm_ITEM_FISHING_ROD_1) {
-            local_18[0] = fpcNm_ITEM_JEWEL_ROD;
-        } else if (item1 == fpcNm_ITEM_FISHING_ROD_1) {
-            local_18[1] = fpcNm_ITEM_JEWEL_ROD;
+    case dItemNo_ZORAS_JEWEL_e:
+        if (item0 == dItemNo_FISHING_ROD_1_e) {
+            local_18[0] = dItemNo_JEWEL_ROD_e;
+        } else if (item1 == dItemNo_FISHING_ROD_1_e) {
+            local_18[1] = dItemNo_JEWEL_ROD_e;
         }
         break;
-    case fpcNm_ITEM_FISHING_ROD_1:
-        if (item0 == fpcNm_ITEM_BEE_CHILD) {
-            local_18[0] = fpcNm_ITEM_BEE_ROD;
-        } else if (item1 == fpcNm_ITEM_BEE_CHILD) {
-            local_18[1] = fpcNm_ITEM_BEE_ROD;
-        } else if (item0 == fpcNm_ITEM_ZORAS_JEWEL) {
-            local_18[0] = fpcNm_ITEM_JEWEL_ROD;
-        } else if (item1 == fpcNm_ITEM_ZORAS_JEWEL) {
-            local_18[1] = fpcNm_ITEM_JEWEL_ROD;
-        } else if (item0 == fpcNm_ITEM_WORM) {
-            local_18[0] = fpcNm_ITEM_WORM_ROD;
-        } else if (item1 == fpcNm_ITEM_WORM) {
-            local_18[1] = fpcNm_ITEM_WORM_ROD;
+    case dItemNo_FISHING_ROD_1_e:
+        if (item0 == dItemNo_BEE_CHILD_e) {
+            local_18[0] = dItemNo_BEE_ROD_e;
+        } else if (item1 == dItemNo_BEE_CHILD_e) {
+            local_18[1] = dItemNo_BEE_ROD_e;
+        } else if (item0 == dItemNo_ZORAS_JEWEL_e) {
+            local_18[0] = dItemNo_JEWEL_ROD_e;
+        } else if (item1 == dItemNo_ZORAS_JEWEL_e) {
+            local_18[1] = dItemNo_JEWEL_ROD_e;
+        } else if (item0 == dItemNo_WORM_e) {
+            local_18[0] = dItemNo_WORM_ROD_e;
+        } else if (item1 == dItemNo_WORM_e) {
+            local_18[1] = dItemNo_WORM_ROD_e;
         }
         break;
     }
 
-    if (local_18[0] != fpcNm_ITEM_NONE && local_18[1] == fpcNm_ITEM_NONE && local_18[2] == fpcNm_ITEM_NONE && local_18[3] == fpcNm_ITEM_NONE &&
-        dComIfGs_getMixItemIndex(0) == fpcNm_ITEM_NONE)
+    if (local_18[0] != dItemNo_NONE_e && local_18[1] == dItemNo_NONE_e && local_18[2] == dItemNo_NONE_e && local_18[3] == dItemNo_NONE_e &&
+        dComIfGs_getMixItemIndex(0) == dItemNo_NONE_e)
     {
         field_0x6c7[0] = local_18[0];
-        field_0x6c7[1] = fpcNm_ITEM_NONE;
-        field_0x6c7[2] = fpcNm_ITEM_NONE;
-        field_0x6c7[3] = fpcNm_ITEM_NONE;
-    } else if (local_18[0] == fpcNm_ITEM_NONE && local_18[1] != fpcNm_ITEM_NONE && local_18[2] == fpcNm_ITEM_NONE &&
-               local_18[3] == fpcNm_ITEM_NONE && dComIfGs_getMixItemIndex(1) == fpcNm_ITEM_NONE)
+        field_0x6c7[1] = dItemNo_NONE_e;
+        field_0x6c7[2] = dItemNo_NONE_e;
+        field_0x6c7[3] = dItemNo_NONE_e;
+    } else if (local_18[0] == dItemNo_NONE_e && local_18[1] != dItemNo_NONE_e && local_18[2] == dItemNo_NONE_e &&
+               local_18[3] == dItemNo_NONE_e && dComIfGs_getMixItemIndex(1) == dItemNo_NONE_e)
     {
-        field_0x6c7[0] = fpcNm_ITEM_NONE;
+        field_0x6c7[0] = dItemNo_NONE_e;
         field_0x6c7[1] = local_18[1];
-        field_0x6c7[2] = fpcNm_ITEM_NONE;
-        field_0x6c7[3] = fpcNm_ITEM_NONE;
+        field_0x6c7[2] = dItemNo_NONE_e;
+        field_0x6c7[3] = dItemNo_NONE_e;
     } else {
-        field_0x6c7[0] = fpcNm_ITEM_NONE;
-        field_0x6c7[1] = fpcNm_ITEM_NONE;
-        field_0x6c7[2] = fpcNm_ITEM_NONE;
-        field_0x6c7[3] = fpcNm_ITEM_NONE;
+        field_0x6c7[0] = dItemNo_NONE_e;
+        field_0x6c7[1] = dItemNo_NONE_e;
+        field_0x6c7[2] = dItemNo_NONE_e;
+        field_0x6c7[3] = dItemNo_NONE_e;
     }
     return 0;
 }
@@ -1869,19 +1869,19 @@ void dMenu_Ring_c::setDoStatus(u8 i_doStatus) {
 }
 
 bool dMenu_Ring_c::isMixItemOn() {
-    if (!mPlayerIsWolf && dComIfGs_getItem(mItemSlots[mCurrentSlot], false) != fpcNm_ITEM_NONE) {
+    if (!mPlayerIsWolf && dComIfGs_getItem(mItemSlots[mCurrentSlot], false) != dItemNo_NONE_e) {
         u8 item = dComIfGs_getItem(mItemSlots[mCurrentSlot], false);
         switch (item) {
-        case fpcNm_ITEM_HAWK_EYE:
-        case fpcNm_ITEM_NORMAL_BOMB:
-        case fpcNm_ITEM_WATER_BOMB:
-        case fpcNm_ITEM_POKE_BOMB:
-            if ((dComIfGs_getSelectItemIndex(0) == SLOT_4) && (dComIfGs_getMixItemIndex(0) == fpcNm_ITEM_NONE) ||
+        case dItemNo_HAWK_EYE_e:
+        case dItemNo_NORMAL_BOMB_e:
+        case dItemNo_WATER_BOMB_e:
+        case dItemNo_POKE_BOMB_e:
+            if ((dComIfGs_getSelectItemIndex(0) == SLOT_4) && (dComIfGs_getMixItemIndex(0) == dItemNo_NONE_e) ||
                 (dComIfGs_getMixItemIndex(0) == SLOT_4))
             {
                 return true;
             }
-            if ((dComIfGs_getSelectItemIndex(1) == SLOT_4) && (dComIfGs_getMixItemIndex(1) == fpcNm_ITEM_NONE) ||
+            if ((dComIfGs_getSelectItemIndex(1) == SLOT_4) && (dComIfGs_getMixItemIndex(1) == dItemNo_NONE_e) ||
                 (dComIfGs_getMixItemIndex(1) == SLOT_4))
             {
                 return true;
@@ -1893,7 +1893,7 @@ bool dMenu_Ring_c::isMixItemOn() {
 }
 
 bool dMenu_Ring_c::isMixItemOff() {
-    if ((!mPlayerIsWolf) && (dComIfGs_getItem(mItemSlots[mCurrentSlot], 0) != fpcNm_ITEM_NONE)) {
+    if ((!mPlayerIsWolf) && (dComIfGs_getItem(mItemSlots[mCurrentSlot], 0) != dItemNo_NONE_e)) {
         if ((dComIfGs_getMixItemIndex(0) == SLOT_4) &&
             (mItemSlots[mCurrentSlot] == dComIfGs_getSelectItemIndex(0)))
         {

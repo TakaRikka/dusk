@@ -36,7 +36,7 @@ static int CheckCreateHeap(fopAc_ac_c* i_this) {
 
 static void* search_big_volc(void* i_actor, void*) {
     if (i_actor != NULL && fopAcM_IsActor(i_actor) &&
-        fopAcM_GetProfName(i_actor) == PROC_Obj_VolcanicBomb)
+        fopAcM_GetProfName(i_actor) == fpcNm_Obj_VolcanicBomb_e)
     {
         return i_actor;
     }
@@ -613,18 +613,18 @@ static actor_method_class l_daObjVolcBall_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_VolcanicBall = {
-  fpcLy_CURRENT_e,         // mLayerID
-  3,                       // mListID
-  fpcPi_CURRENT_e,         // mListPrio
-  PROC_Obj_VolcanicBall,   // mProcName
-  &g_fpcLf_Method.base,   // sub_method
-  sizeof(daObjVolcBall_c),              // mSize
-  0,                       // mSizeOther
-  0,                       // mParameters
-  &g_fopAc_Method.base,    // sub_method
-  593,                     // mPriority
-  &l_daObjVolcBall_Method, // sub_method
-  0x00040000,              // mStatus
-  fopAc_ACTOR_e,           // mActorType
-  fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_VolcanicBall_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjVolcBall_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_VolcanicBall_e,
+    /* Actor SubMtd */ &l_daObjVolcBall_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

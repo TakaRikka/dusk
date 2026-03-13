@@ -49,8 +49,8 @@ void daObj_KatHIO_c::genMessage(JORMContext* ctx) {
 #endif
 
 static u8 const l_kat_itemno[2] = {
-    fpcNm_ITEM_M_SNAIL,
-    fpcNm_ITEM_F_SNAIL,
+    dItemNo_M_SNAIL_e,
+    dItemNo_F_SNAIL_e,
 };
 
 void daObjKAT_c::InitCcSph() {
@@ -727,7 +727,7 @@ inline int daObjKAT_c::create() {
         if (field_0x808 == 2) {
             field_0x56c = 0;
             ANGLE_ADD(shape_angle.x, -0x2000);
-            fopAcM_OnStatus(this, 0x4000);
+            fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
         } else {
             mDraw = true;
         }
@@ -880,18 +880,18 @@ static actor_method_class l_daObjKAT_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Kat = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_Obj_Kat,           // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(daObjKAT_c),     // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    488,                    // mPriority
-    &l_daObjKAT_Method,     // sub_method
-    0x000C0100,             // mStatus
-    fopAc_ENV_e,            // mActorType
-    fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Kat_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjKAT_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Kat_e,
+    /* Actor SubMtd */ &l_daObjKAT_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

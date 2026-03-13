@@ -1087,23 +1087,23 @@ u16 dMsgFlow_c::query021(mesg_flow_node_branch* i_flowNode_p, fopAc_ac_c* i_spea
     u16 ret = 0;
 
     switch (prm0) {
-    case fpcNm_ITEM_SWORD:
-    case fpcNm_ITEM_MASTER_SWORD:
-    case fpcNm_ITEM_LIGHT_SWORD:
+    case dItemNo_SWORD_e:
+    case dItemNo_MASTER_SWORD_e:
+    case dItemNo_LIGHT_SWORD_e:
         if (dComIfGs_getSelectEquipSword() == prm0) {
             ret = 1;
         }
         break;
-    case fpcNm_ITEM_WOOD_SHIELD:
-    case fpcNm_ITEM_SHIELD:
-    case fpcNm_ITEM_HYLIA_SHIELD:
+    case dItemNo_WOOD_SHIELD_e:
+    case dItemNo_SHIELD_e:
+    case dItemNo_HYLIA_SHIELD_e:
         if (dComIfGs_getSelectEquipShield() == prm0) {
             ret = 1;
         }
         break;
-    case fpcNm_ITEM_WEAR_KOKIRI:
-    case fpcNm_ITEM_ARMOR:
-    case fpcNm_ITEM_WEAR_ZORA:
+    case dItemNo_WEAR_KOKIRI_e:
+    case dItemNo_ARMOR_e:
+    case dItemNo_WEAR_ZORA_e:
         if (dComIfGs_getSelectEquipClothes() == prm0) {
             ret = 1;
         }
@@ -1145,7 +1145,7 @@ u16 dMsgFlow_c::query022(mesg_flow_node_branch* i_flowNode_p, fopAc_ac_c* i_spea
 
 u16 dMsgFlow_c::query023(mesg_flow_node_branch* i_flowNode_p, fopAc_ac_c* i_speaker_p, int param_2) {
     const u8 prm0 = i_flowNode_p->param;
-    int i_bagNum = 3 - dComIfGs_checkBombBag(fpcNm_ITEM_NONE);
+    int i_bagNum = 3 - dComIfGs_checkBombBag(dItemNo_NONE_e);
     JUT_ASSERT(2312, i_bagNum >= 0);
 
     u16 ret = i_bagNum;
@@ -1398,13 +1398,13 @@ u16 dMsgFlow_c::query038(mesg_flow_node_branch* i_flowNode_p, fopAc_ac_c* i_spea
 
     u8 ret = 0;
     switch(dComIfGs_getItem((u8)(BombBag + SLOT_15), false)) {
-    case fpcNm_ITEM_NORMAL_BOMB:
+    case dItemNo_NORMAL_BOMB_e:
         ret = 1;
         break;
-    case fpcNm_ITEM_WATER_BOMB:
+    case dItemNo_WATER_BOMB_e:
         ret = 2;
         break;
-    case fpcNm_ITEM_POKE_BOMB:
+    case dItemNo_POKE_BOMB_e:
         ret = 3;
         break;
     }
@@ -1425,7 +1425,7 @@ u16 dMsgFlow_c::query039(mesg_flow_node_branch* i_flowNode_p, fopAc_ac_c* i_spea
 
     u8 BombBag = dComIfGs_getTmpReg(0xFBFF) - 1;
     u8 BombNum = dComIfGs_getBombNum(BombBag);
-    u8 BombMax = dComIfGs_getBombMax(fpcNm_ITEM_NORMAL_BOMB);
+    u8 BombMax = dComIfGs_getBombMax(dItemNo_NORMAL_BOMB_e);
 
     u8 ret = 0;
     if (BombMax < BombNum + prm0) {
@@ -1484,7 +1484,7 @@ u16 dMsgFlow_c::query041(mesg_flow_node_branch* i_flowNode_p, fopAc_ac_c* i_spea
 
     u8 BombBag = dComIfGs_getTmpReg(0xFBFF) - 1;
     u8 BombNum = dComIfGs_getBombNum(BombBag);
-    u8 BombMax = dComIfGs_getBombMax(fpcNm_ITEM_WATER_BOMB);
+    u8 BombMax = dComIfGs_getBombMax(dItemNo_WATER_BOMB_e);
 
     u8 ret = 0;
     if (BombMax < BombNum + prm0) {
@@ -1529,7 +1529,7 @@ u16 dMsgFlow_c::query043(mesg_flow_node_branch* i_flowNode_p, fopAc_ac_c* i_spea
     const int prm0 = i_flowNode_p->param;
     u8 BombBag = dComIfGs_getTmpReg(0xFBFF) - 1;
     u8 BombNum = dComIfGs_getBombNum(BombBag);
-    u8 BombMax = dComIfGs_getBombMax(fpcNm_ITEM_POKE_BOMB);
+    u8 BombMax = dComIfGs_getBombMax(dItemNo_POKE_BOMB_e);
 
     u8 ret = 0;
     if (BombMax < BombNum + prm0) {
@@ -2031,15 +2031,15 @@ int dMsgFlow_c::event017(mesg_flow_node_event* i_flowNode_p, fopAc_ac_c* i_speak
 
     if (prm1 <= 1) {
         switch (prm0) {
-        case fpcNm_ITEM_DROP_CONTAINER:
+        case dItemNo_DROP_CONTAINER_e:
             dMeter2Info_setLightDropGetFlag(0, 1);
             dComIfGs_onLightDropGetFlag(0);
             break;
-        case fpcNm_ITEM_DROP_CONTAINER02:
+        case dItemNo_DROP_CONTAINER02_e:
             dMeter2Info_setLightDropGetFlag(1, 1);
             dComIfGs_onLightDropGetFlag(1);
             break;
-        case fpcNm_ITEM_DROP_CONTAINER03:
+        case dItemNo_DROP_CONTAINER03_e:
             dMeter2Info_setLightDropGetFlag(2, 1);
             dComIfGs_onLightDropGetFlag(2);
             break;
@@ -2151,25 +2151,25 @@ int dMsgFlow_c::event023(mesg_flow_node_event* i_flowNode_p, fopAc_ac_c* i_speak
 
     switch (prm0) {
     case 1:
-        dComIfGs_setEmptyBottleItemIn(fpcNm_ITEM_RED_BOTTLE);
+        dComIfGs_setEmptyBottleItemIn(dItemNo_RED_BOTTLE_e);
         break;
     case 2:
-        dComIfGs_setEmptyBottleItemIn(fpcNm_ITEM_GREEN_BOTTLE);
+        dComIfGs_setEmptyBottleItemIn(dItemNo_GREEN_BOTTLE_e);
         break;
     case 3:
-        dComIfGs_setEmptyBottleItemIn(fpcNm_ITEM_BLUE_BOTTLE);
+        dComIfGs_setEmptyBottleItemIn(dItemNo_BLUE_BOTTLE_e);
         break;
     case 4:
-        dComIfGs_setEmptyBottleItemIn(fpcNm_ITEM_MILK_BOTTLE);
+        dComIfGs_setEmptyBottleItemIn(dItemNo_MILK_BOTTLE_e);
         break;
     case 5:
-        dComIfGs_setEmptyBottleItemIn(fpcNm_ITEM_HALF_MILK_BOTTLE);
+        dComIfGs_setEmptyBottleItemIn(dItemNo_HALF_MILK_BOTTLE_e);
         break;
     case 6:
-        dComIfGs_setEmptyBottleItemIn(fpcNm_ITEM_OIL_BOTTLE);
+        dComIfGs_setEmptyBottleItemIn(dItemNo_OIL_BOTTLE_e);
         break;
     case 7:
-        dComIfGs_setEmptyBottleItemIn(fpcNm_ITEM_HOT_SPRING);
+        dComIfGs_setEmptyBottleItemIn(dItemNo_HOT_SPRING_e);
         break;
     }
 
@@ -2205,7 +2205,7 @@ int dMsgFlow_c::event025(mesg_flow_node_event* i_flowNode_p, fopAc_ac_c* i_speak
 
 int dMsgFlow_c::event026(mesg_flow_node_event* i_flowNode_p, fopAc_ac_c* i_speaker_p) {
     fopAc_ac_c* speaker_p;
-    if (fopAcM_GetName(i_speaker_p) == PROC_MYNA) {
+    if (fopAcM_GetName(i_speaker_p) == fpcNm_MYNA_e) {
         daMyna_c* myna = (daMyna_c*)i_speaker_p;
         speaker_p = myna->getSpeakActorPtr();
     } else {
@@ -2213,9 +2213,9 @@ int dMsgFlow_c::event026(mesg_flow_node_event* i_flowNode_p, fopAc_ac_c* i_speak
     }
 
     if (speaker_p != NULL) {
-        if (fopAcM_GetName(speaker_p) == PROC_OBJ_SSITEM ||
-            fopAcM_GetName(speaker_p) == PROC_OBJ_SSDRINK ||
-            fopAcM_GetName(speaker_p) == PROC_TAG_SSDRINK)
+        if (fopAcM_GetName(speaker_p) == fpcNm_OBJ_SSITEM_e ||
+            fopAcM_GetName(speaker_p) == fpcNm_OBJ_SSDRINK_e ||
+            fopAcM_GetName(speaker_p) == fpcNm_TAG_SSDRINK_e)
         {
             daObj_SSBase_c* ss_item = (daObj_SSBase_c*)speaker_p;
             ss_item->setSoldOut();
@@ -2252,36 +2252,36 @@ int dMsgFlow_c::event027(mesg_flow_node_event* i_flowNode_p, fopAc_ac_c* i_speak
 
     switch (aParam8[1]) {
     case 0:
-        if (dComIfGs_getItem((u8)(SLOT_15 + BombBag), false) == fpcNm_ITEM_BOMB_BAG_LV1) {
-            dComIfGs_setItem((u8)(SLOT_15 + BombBag), fpcNm_ITEM_NORMAL_BOMB);
+        if (dComIfGs_getItem((u8)(SLOT_15 + BombBag), false) == dItemNo_BOMB_BAG_LV1_e) {
+            dComIfGs_setItem((u8)(SLOT_15 + BombBag), dItemNo_NORMAL_BOMB_e);
         }
 
         if (prm1 != 0) {
             dComIfGp_setItemBombNumCount(BombBag, (u8)prm1);
         } else {
-            dComIfGp_setItemBombNumCount(BombBag, dComIfGs_getBombMax(fpcNm_ITEM_NORMAL_BOMB));
+            dComIfGp_setItemBombNumCount(BombBag, dComIfGs_getBombMax(dItemNo_NORMAL_BOMB_e));
         }
         break;
     case 1:
-        if (dComIfGs_getItem((u8)(SLOT_15 + BombBag), false) == fpcNm_ITEM_BOMB_BAG_LV1) {
-            dComIfGs_setItem((u8)(SLOT_15 + BombBag), fpcNm_ITEM_WATER_BOMB);
+        if (dComIfGs_getItem((u8)(SLOT_15 + BombBag), false) == dItemNo_BOMB_BAG_LV1_e) {
+            dComIfGs_setItem((u8)(SLOT_15 + BombBag), dItemNo_WATER_BOMB_e);
         }
 
         if (prm1 != 0) {
             dComIfGp_setItemBombNumCount(BombBag, (u8)prm1);
         } else {
-            dComIfGp_setItemBombNumCount(BombBag, dComIfGs_getBombMax(fpcNm_ITEM_WATER_BOMB));
+            dComIfGp_setItemBombNumCount(BombBag, dComIfGs_getBombMax(dItemNo_WATER_BOMB_e));
         }
         break;
     case 2:
-        if (dComIfGs_getItem((u8)(SLOT_15 + BombBag), false) == fpcNm_ITEM_BOMB_BAG_LV1) {
-            dComIfGs_setItem((u8)(SLOT_15 + BombBag), fpcNm_ITEM_POKE_BOMB);
+        if (dComIfGs_getItem((u8)(SLOT_15 + BombBag), false) == dItemNo_BOMB_BAG_LV1_e) {
+            dComIfGs_setItem((u8)(SLOT_15 + BombBag), dItemNo_POKE_BOMB_e);
         }
 
         if (prm1 != 0) {
             dComIfGp_setItemBombNumCount(BombBag, (u8)prm1);
         } else {
-            dComIfGp_setItemBombNumCount(BombBag, dComIfGs_getBombMax(fpcNm_ITEM_POKE_BOMB));
+            dComIfGp_setItemBombNumCount(BombBag, dComIfGs_getBombMax(dItemNo_POKE_BOMB_e));
         }
         break;
     case 3:
@@ -2291,16 +2291,16 @@ int dMsgFlow_c::event027(mesg_flow_node_event* i_flowNode_p, fopAc_ac_c* i_speak
         dComIfGp_setItemBombNumCount(BombBag, (u8)prm1);
         break;
     case 6:
-        dComIfGs_setItem((u8)(SLOT_15 + BombBag), fpcNm_ITEM_NORMAL_BOMB);
-        dComIfGp_setItemBombNumCount(BombBag, dComIfGs_getBombMax(fpcNm_ITEM_NORMAL_BOMB));
+        dComIfGs_setItem((u8)(SLOT_15 + BombBag), dItemNo_NORMAL_BOMB_e);
+        dComIfGp_setItemBombNumCount(BombBag, dComIfGs_getBombMax(dItemNo_NORMAL_BOMB_e));
         break;
     case 7:
-        dComIfGs_setItem((u8)(SLOT_15 + BombBag), fpcNm_ITEM_WATER_BOMB);
-        dComIfGp_setItemBombNumCount(BombBag, dComIfGs_getBombMax(fpcNm_ITEM_WATER_BOMB));
+        dComIfGs_setItem((u8)(SLOT_15 + BombBag), dItemNo_WATER_BOMB_e);
+        dComIfGp_setItemBombNumCount(BombBag, dComIfGs_getBombMax(dItemNo_WATER_BOMB_e));
         break;
     case 8:
-        dComIfGs_setItem((u8)(SLOT_15 + BombBag), fpcNm_ITEM_POKE_BOMB);
-        dComIfGp_setItemBombNumCount(BombBag, dComIfGs_getBombMax(fpcNm_ITEM_POKE_BOMB));
+        dComIfGs_setItem((u8)(SLOT_15 + BombBag), dItemNo_POKE_BOMB_e);
+        dComIfGp_setItemBombNumCount(BombBag, dComIfGs_getBombMax(dItemNo_POKE_BOMB_e));
         break;
     case 9:
     case 10:
@@ -2324,20 +2324,20 @@ int dMsgFlow_c::event028(mesg_flow_node_event* i_flowNode_p, fopAc_ac_c* i_speak
     dComIfGp_setItemRupeeCount(BombPrice);
     dComIfGs_setBombNum(BombBag, 0);
 
-    if (dComIfGs_getItem((u8)(SLOT_15 + BombBag), true) != fpcNm_ITEM_BOMB_ARROW) {
-        dComIfGs_setItem((u8)(SLOT_15 + BombBag), fpcNm_ITEM_BOMB_BAG_LV1);
+    if (dComIfGs_getItem((u8)(SLOT_15 + BombBag), true) != dItemNo_BOMB_ARROW_e) {
+        dComIfGs_setItem((u8)(SLOT_15 + BombBag), dItemNo_BOMB_BAG_LV1_e);
     } else {
         for (int i = 0; i < 3; i++) {
             if (SLOT_15 + BombBag == dComIfGs_getSelectItemIndex(i)) {
                 u8 mix_item = dComIfGs_getMixItemIndex(i);
 
-                dComIfGs_setMixItemIndex(i, fpcNm_ITEM_NONE);
+                dComIfGs_setMixItemIndex(i, dItemNo_NONE_e);
                 dComIfGs_setSelectItemIndex(i, mix_item);
                 dComIfGp_setSelectItem(i);
             }
         }
 
-        dComIfGs_setItem((u8)(SLOT_15 + BombBag), fpcNm_ITEM_BOMB_BAG_LV1);
+        dComIfGs_setItem((u8)(SLOT_15 + BombBag), dItemNo_BOMB_BAG_LV1_e);
     }
 
     // "Bomb Purchase"
@@ -2467,12 +2467,12 @@ int dMsgFlow_c::event034(mesg_flow_node_event* i_flowNode_p, fopAc_ac_c* i_speak
 int dMsgFlow_c::event035(mesg_flow_node_event* i_flowNode_p, fopAc_ac_c* i_speaker_p) {
     int prm0 = getParam(i_flowNode_p->params);
 
-    if (prm0 == fpcNm_ITEM_TOMATO_PUREE || prm0 == fpcNm_ITEM_TASTE) {
+    if (prm0 == dItemNo_TOMATO_PUREE_e || prm0 == dItemNo_TASTE_e) {
         dComIfGs_offItemFirstBit(prm0);
-    } else if (prm0 == fpcNm_ITEM_RAFRELS_MEMO || prm0 == fpcNm_ITEM_ASHS_SCRIBBLING) {
-        dComIfGs_setItem(SLOT_19, fpcNm_ITEM_NONE);
-    } else if (prm0 == fpcNm_ITEM_LETTER || prm0 == fpcNm_ITEM_BILL || prm0 == fpcNm_ITEM_WOOD_STATUE || prm0 == fpcNm_ITEM_IRIAS_PENDANT) {
-        dComIfGs_setWarashibeItem(fpcNm_ITEM_NONE);
+    } else if (prm0 == dItemNo_RAFRELS_MEMO_e || prm0 == dItemNo_ASHS_SCRIBBLING_e) {
+        dComIfGs_setItem(SLOT_19, dItemNo_NONE_e);
+    } else if (prm0 == dItemNo_LETTER_e || prm0 == dItemNo_BILL_e || prm0 == dItemNo_WOOD_STATUE_e || prm0 == dItemNo_IRIAS_PENDANT_e) {
+        dComIfGs_setWarashibeItem(dItemNo_NONE_e);
     }
 
     // "Item Remove"
@@ -2538,25 +2538,25 @@ int dMsgFlow_c::event040(mesg_flow_node_event* i_flowNode_p, fopAc_ac_c* i_speak
     case 0:
         break;
     case 1:
-        dComIfGs_setBottleItemIn(fpcNm_ITEM_RED_BOTTLE, fpcNm_ITEM_EMPTY_BOTTLE);
+        dComIfGs_setBottleItemIn(dItemNo_RED_BOTTLE_e, dItemNo_EMPTY_BOTTLE_e);
         break;
     case 2:
-        dComIfGs_setBottleItemIn(fpcNm_ITEM_GREEN_BOTTLE, fpcNm_ITEM_EMPTY_BOTTLE);
+        dComIfGs_setBottleItemIn(dItemNo_GREEN_BOTTLE_e, dItemNo_EMPTY_BOTTLE_e);
         break;
     case 3:
-        dComIfGs_setBottleItemIn(fpcNm_ITEM_BLUE_BOTTLE, fpcNm_ITEM_EMPTY_BOTTLE);
+        dComIfGs_setBottleItemIn(dItemNo_BLUE_BOTTLE_e, dItemNo_EMPTY_BOTTLE_e);
         break;
     case 4:
-        dComIfGs_setBottleItemIn(fpcNm_ITEM_MILK_BOTTLE, fpcNm_ITEM_EMPTY_BOTTLE);
+        dComIfGs_setBottleItemIn(dItemNo_MILK_BOTTLE_e, dItemNo_EMPTY_BOTTLE_e);
         break;
     case 5:
-        dComIfGs_setBottleItemIn(fpcNm_ITEM_HALF_MILK_BOTTLE, fpcNm_ITEM_EMPTY_BOTTLE);
+        dComIfGs_setBottleItemIn(dItemNo_HALF_MILK_BOTTLE_e, dItemNo_EMPTY_BOTTLE_e);
         break;
     case 6:
-        dComIfGs_setBottleItemIn(fpcNm_ITEM_OIL_BOTTLE, fpcNm_ITEM_EMPTY_BOTTLE);
+        dComIfGs_setBottleItemIn(dItemNo_OIL_BOTTLE_e, dItemNo_EMPTY_BOTTLE_e);
         break;
     case 7:
-        dComIfGs_setBottleItemIn(fpcNm_ITEM_HOT_SPRING, fpcNm_ITEM_EMPTY_BOTTLE);
+        dComIfGs_setBottleItemIn(dItemNo_HOT_SPRING_e, dItemNo_EMPTY_BOTTLE_e);
         break;
     }
 

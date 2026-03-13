@@ -361,7 +361,7 @@ void daObjSwpush2::Act_c::rideCB(dBgW* i_bgw, fopAc_ac_c* i_this, fopAc_ac_c* i_
             a_this->mRideType = 1;
         }
 
-        bool is_player_ride = fopAcM_GetProfName(i_rideActor) == PROC_ALINK;
+        bool is_player_ride = fopAcM_GetProfName(i_rideActor) == fpcNm_ALINK_e;
         if (is_player_ride) {
             a_this->mShockTimer = 4;
         }
@@ -715,18 +715,18 @@ actor_method_class Mthd_Table = {
 }
 
 actor_process_profile_definition g_profile_Obj_Swpush2 = {
-  fpcLy_CURRENT_e,        // mLayerID
-  2,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_Swpush2,       // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjSwpush2::Act_c),   // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  12,                     // mPriority
-  &daObjSwpush2::Mthd_Table,         // sub_method
-  0x00040100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 2,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Swpush2_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjSwpush2::Act_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Swpush2_e,
+    /* Actor SubMtd */ &daObjSwpush2::Mthd_Table,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

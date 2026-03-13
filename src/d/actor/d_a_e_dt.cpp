@@ -706,7 +706,7 @@ int E_DT_n::mDt_OtamaNo[20];
 
 static void* s_otama_todo(void* i_proc, void* i_this) {
     if (fopAcM_IsActor(i_proc) && !fpcM_IsCreating(fopAcM_GetID(i_proc))
-        && fopAcM_GetName(i_proc) == PROC_E_OT)
+        && fopAcM_GetName(i_proc) == fpcNm_E_OT_e)
     {
         daE_OT_c* otama = static_cast<daE_OT_c*>(i_proc);
         E_DT_n::mDt_OtamaNum++;
@@ -730,7 +730,7 @@ int E_DT_n::m_fall_no;
 
 static void* s_fall_otama(void* i_proc, void* i_this) {
     if (fopAcM_IsActor(i_proc) && !fpcM_IsCreating(fopAcM_GetID(i_proc))
-        && fopAcM_GetName(i_proc) == PROC_E_OT)
+        && fopAcM_GetName(i_proc) == fpcNm_E_OT_e)
     {
         daE_OT_c* otama = static_cast<daE_OT_c*>(i_proc);
         if (E_DT_n::m_fall_no == otama->getChildNo()
@@ -764,10 +764,10 @@ void daE_DT_c::setStayOtamaDelete() {
 
 static void* s_demo_otama(void* i_proc, void* i_this) {
     if (fopAcM_IsActor(i_proc) && !fpcM_IsCreating(fopAcM_GetID(i_proc))
-        && fopAcM_GetName(i_proc) == PROC_E_OT)
+        && fopAcM_GetName(i_proc) == fpcNm_E_OT_e)
     {
         daE_OT_c* otama = static_cast<daE_OT_c*>(i_proc);
-        fopAcM_OffStatus(otama, 0x8000);
+        fopAcM_OffStatus(otama, fopAcStts_STAFF_PRIMARY_e);
     }
     return NULL;
 }
@@ -799,7 +799,7 @@ bool daE_DT_c::checkBombEat() {
 
 bool daE_DT_c::isShutterOpen() {
     daAmiShutter_c* shutter;
-    fopAcM_SearchByName(PROC_Obj_AmiShutter, (fopAc_ac_c**)&shutter);
+    fopAcM_SearchByName(fpcNm_Obj_AmiShutter_e, (fopAc_ac_c**)&shutter);
     if (shutter != NULL && shutter->isShutterOpen()) {
         return true;
     } else {
@@ -884,7 +884,7 @@ void daE_DT_c::executeCry() {
             getNumberOfOtama();
             for (int i = 0; i < 20; i++) {
                 if (E_DT_n::mDt_OtamaNo[i] == 0) {
-                    fopAcM_create(PROC_E_OT, i, &current.pos, fopAcM_GetRoomNo(this),
+                    fopAcM_create(fpcNm_E_OT_e, i, &current.pos, fopAcM_GetRoomNo(this),
                                   &shape_angle, NULL, 0xff);
                 }
             }
@@ -1145,14 +1145,14 @@ void daE_DT_c::executeJump() {
         switch (field_0x704) {
         case 0:
             if (mBodyCcSph[0].ChkCoHit()) {
-                if (fopAcM_GetName(dCc_GetAc(mBodyCcSph[0].GetCoHitObj()->GetAc())) == PROC_ALINK)
+                if (fopAcM_GetName(dCc_GetAc(mBodyCcSph[0].GetCoHitObj()->GetAc())) == fpcNm_ALINK_e)
                 {
                     field_0x704 = 2;
                     mLinkPressed = true;
                 }
             }
             if (mBodyCcSph[1].ChkCoHit()) {
-                if (fopAcM_GetName(dCc_GetAc(mBodyCcSph[1].GetCoHitObj()->GetAc())) == PROC_ALINK)
+                if (fopAcM_GetName(dCc_GetAc(mBodyCcSph[1].GetCoHitObj()->GetAc())) == fpcNm_ALINK_e)
                 {
                     field_0x704 = 2;
                     mLinkPressed = true;
@@ -1602,7 +1602,7 @@ void daE_DT_c::executeOpening() {
         attention_info.flags = 0;
         if (getNumberOfOtama() == 0) {
             for (i = 0; i < 20; i++) {
-                fopAcM_create(PROC_E_OT, i | 0xff030000, &current.pos, fopAcM_GetRoomNo(this),
+                fopAcM_create(fpcNm_E_OT_e, i | 0xff030000, &current.pos, fopAcM_GetRoomNo(this),
                               &shape_angle, NULL, 0xff);
             }
         }
@@ -1656,7 +1656,7 @@ void daE_DT_c::executeOpening() {
                 }
                 if (create_otama) {
                     vec1.set(0.0f, 2000.0f, 0.0f);
-                    fopAcM_create(PROC_E_OT, 0xff01ffff, &vec1, fopAcM_GetRoomNo(this),
+                    fopAcM_create(fpcNm_E_OT_e, 0xff01ffff, &vec1, fopAcM_GetRoomNo(this),
                                 &shape_angle, NULL, 0xff);
                 }
                 if (mpMorf->isStop() && getNumberOfOtama() <= 20) {
@@ -1846,7 +1846,7 @@ void daE_DT_c::executeOpening() {
             getNumberOfOtama();
             for (int i = 0; i < 20; i++) {
                 if (E_DT_n::mDt_OtamaNo[i] == 0) {
-                    mDemoID = fopAcM_create(PROC_E_OT, i | 0xff030000, &current.pos,
+                    mDemoID = fopAcM_create(fpcNm_E_OT_e, i | 0xff030000, &current.pos,
                                             fopAcM_GetRoomNo(this), &shape_angle, NULL, 0xff);
                 }
             }
@@ -2561,20 +2561,20 @@ static actor_method_class l_daE_DT_Method = {
 };
 
 actor_process_profile_definition g_profile_E_DT = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_DT,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daE_DT_c),       // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  202,                    // mPriority
-  &l_daE_DT_Method,       // sub_method
-  0x00040000,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_DT_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_DT_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_DT_e,
+    /* Actor SubMtd */ &l_daE_DT_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES

@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_zra_rock.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 static char const* l_arcName = "H_ZraRock";
 
@@ -150,18 +150,18 @@ static actor_method_class l_daObjZraRock_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_ZraRock = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Obj_ZraRock,
-    &g_fpcLf_Method.base,
-    sizeof(daObjZraRock_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x260,
-    &l_daObjZraRock_Method,
-    0x44100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_ZraRock_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjZraRock_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_ZraRock_e,
+    /* Actor SubMtd */ &l_daObjZraRock_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

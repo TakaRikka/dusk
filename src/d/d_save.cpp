@@ -27,12 +27,12 @@
 
 static u8 dSv_item_rename(u8 i_itemNo) {
     switch (i_itemNo) {
-    case fpcNm_ITEM_OIL_BOTTLE_2:
-        return fpcNm_ITEM_OIL_BOTTLE;
-    case fpcNm_ITEM_RED_BOTTLE_2:
-        return fpcNm_ITEM_RED_BOTTLE;
-    case fpcNm_ITEM_OIL2:
-        return fpcNm_ITEM_OIL;
+    case dItemNo_OIL_BOTTLE_2_e:
+        return dItemNo_OIL_BOTTLE_e;
+    case dItemNo_RED_BOTTLE_2_e:
+        return dItemNo_RED_BOTTLE_e;
+    case dItemNo_OIL2_e:
+        return dItemNo_OIL_e;
     default:
         return i_itemNo;
     }
@@ -56,11 +56,11 @@ void dSv_player_status_a_c::init() {
         mSelectEquip[i] = 0;
     }
 
-    mSelectEquip[COLLECT_CLOTHING] = fpcNm_ITEM_WEAR_CASUAL;
-    mSelectEquip[COLLECT_SWORD] = fpcNm_ITEM_NONE;
-    mSelectEquip[COLLECT_SHIELD] = fpcNm_ITEM_NONE;
-    mSelectEquip[COLLECT_SMELL] = fpcNm_ITEM_NONE;
-    mSelectEquip[B_BUTTON_ITEM] = fpcNm_ITEM_NONE;
+    mSelectEquip[COLLECT_CLOTHING] = dItemNo_WEAR_CASUAL_e;
+    mSelectEquip[COLLECT_SWORD] = dItemNo_NONE_e;
+    mSelectEquip[COLLECT_SHIELD] = dItemNo_NONE_e;
+    mSelectEquip[COLLECT_SMELL] = dItemNo_NONE_e;
+    mSelectEquip[B_BUTTON_ITEM] = dItemNo_NONE_e;
     mWalletSize = WALLET;
     mMaxMagic = 0;
     mMagic = 0;
@@ -293,8 +293,8 @@ void dSv_player_last_mark_info_c::setWarpItemData(const char* i_name, const cXyz
 
 void dSv_player_item_c::init() {
     for (int i = 0; i < MAX_ITEM_SLOTS; i++) {
-        mItems[i] = fpcNm_ITEM_NONE;
-        mItemSlots[i] = fpcNm_ITEM_NONE;
+        mItems[i] = dItemNo_NONE_e;
+        mItemSlots[i] = dItemNo_NONE_e;
     }
 }
 
@@ -316,51 +316,51 @@ u8 dSv_player_item_c::getItem(int i_slotNo, bool i_checkCombo) const {
         if (i_checkCombo) {
             for (int i = 0; i < SELECT_ITEM_NUM; i++) {
                 if ((i_slotNo == dComIfGs_getSelectItemIndex(i) || i_slotNo == dComIfGs_getMixItemIndex(i)) &&
-                    dComIfGs_getMixItemIndex(i) != fpcNm_ITEM_NONE)
+                    dComIfGs_getMixItemIndex(i) != dItemNo_NONE_e)
                 {
                     u8 select_item = mItems[dComIfGs_getSelectItemIndex(i)];
                     u8 mix_item = mItems[dComIfGs_getMixItemIndex(i)];
 
                     // Get Bomb arrow check: Bow + Normal Bombs
-                    if ((select_item == fpcNm_ITEM_BOW && mix_item == fpcNm_ITEM_NORMAL_BOMB) ||
-                        (mix_item == fpcNm_ITEM_BOW && select_item == fpcNm_ITEM_NORMAL_BOMB)) {
-                        return fpcNm_ITEM_BOMB_ARROW;
+                    if ((select_item == dItemNo_BOW_e && mix_item == dItemNo_NORMAL_BOMB_e) ||
+                        (mix_item == dItemNo_BOW_e && select_item == dItemNo_NORMAL_BOMB_e)) {
+                        return dItemNo_BOMB_ARROW_e;
                     }
 
                     // Get Bomb arrow check: Bow + Water Bombs
-                    if ((select_item == fpcNm_ITEM_BOW && mix_item == fpcNm_ITEM_WATER_BOMB) ||
-                        (mix_item == fpcNm_ITEM_BOW && select_item == fpcNm_ITEM_WATER_BOMB)) {
-                        return fpcNm_ITEM_BOMB_ARROW;
+                    if ((select_item == dItemNo_BOW_e && mix_item == dItemNo_WATER_BOMB_e) ||
+                        (mix_item == dItemNo_BOW_e && select_item == dItemNo_WATER_BOMB_e)) {
+                        return dItemNo_BOMB_ARROW_e;
                     }
 
                     // Get Bomb arrow check: Bow + Bomblings
-                    if ((select_item == fpcNm_ITEM_BOW && mix_item == fpcNm_ITEM_POKE_BOMB) ||
-                        (mix_item == fpcNm_ITEM_BOW && select_item == fpcNm_ITEM_POKE_BOMB)) {
-                        return fpcNm_ITEM_BOMB_ARROW;
+                    if ((select_item == dItemNo_BOW_e && mix_item == dItemNo_POKE_BOMB_e) ||
+                        (mix_item == dItemNo_BOW_e && select_item == dItemNo_POKE_BOMB_e)) {
+                        return dItemNo_BOMB_ARROW_e;
                     }
 
                     // Get Hawkeye check
-                    if ((select_item == fpcNm_ITEM_BOW && mix_item == fpcNm_ITEM_HAWK_EYE) ||
-                        (mix_item == fpcNm_ITEM_BOW && select_item == fpcNm_ITEM_HAWK_EYE)) {
-                        return fpcNm_ITEM_HAWK_ARROW;
+                    if ((select_item == dItemNo_BOW_e && mix_item == dItemNo_HAWK_EYE_e) ||
+                        (mix_item == dItemNo_BOW_e && select_item == dItemNo_HAWK_EYE_e)) {
+                        return dItemNo_HAWK_ARROW_e;
                     }
 
                     // Get Rod w/ bee larva
-                    if ((select_item == fpcNm_ITEM_FISHING_ROD_1 && mix_item == fpcNm_ITEM_BEE_CHILD) ||
-                        (mix_item == fpcNm_ITEM_FISHING_ROD_1 && select_item == fpcNm_ITEM_BEE_CHILD)) {
-                        return fpcNm_ITEM_BEE_ROD;
+                    if ((select_item == dItemNo_FISHING_ROD_1_e && mix_item == dItemNo_BEE_CHILD_e) ||
+                        (mix_item == dItemNo_FISHING_ROD_1_e && select_item == dItemNo_BEE_CHILD_e)) {
+                        return dItemNo_BEE_ROD_e;
                     }
 
                     // Get Rod w/ coral earring
-                    if ((select_item == fpcNm_ITEM_FISHING_ROD_1 && mix_item == fpcNm_ITEM_ZORAS_JEWEL) ||
-                        (mix_item == fpcNm_ITEM_FISHING_ROD_1 && select_item == fpcNm_ITEM_ZORAS_JEWEL)) {
-                        return fpcNm_ITEM_JEWEL_ROD;
+                    if ((select_item == dItemNo_FISHING_ROD_1_e && mix_item == dItemNo_ZORAS_JEWEL_e) ||
+                        (mix_item == dItemNo_FISHING_ROD_1_e && select_item == dItemNo_ZORAS_JEWEL_e)) {
+                        return dItemNo_JEWEL_ROD_e;
                     }
 
                     // Get Rod w/ worm
-                    if ((select_item == fpcNm_ITEM_FISHING_ROD_1 && mix_item == fpcNm_ITEM_WORM) ||
-                        (mix_item == fpcNm_ITEM_FISHING_ROD_1 && select_item == fpcNm_ITEM_WORM)) {
-                        return fpcNm_ITEM_WORM_ROD;
+                    if ((select_item == dItemNo_FISHING_ROD_1_e && mix_item == dItemNo_WORM_e) ||
+                        (mix_item == dItemNo_FISHING_ROD_1_e && select_item == dItemNo_WORM_e)) {
+                        return dItemNo_WORM_ROD_e;
                     }
 
                     // This block will only run on the Wii version
@@ -370,9 +370,9 @@ u8 dSv_player_item_c::getItem(int i_slotNo, bool i_checkCombo) const {
                         if (dComIfGs_getSelectItemIndex(i) == 0 &&
                             dComIfGs_getMixItemIndex(i) == 0)
                         {
-                            dComIfGs_setSelectItemIndex(i, fpcNm_ITEM_NONE);
-                            dComIfGs_setMixItemIndex(i, fpcNm_ITEM_NONE);
-                            return fpcNm_ITEM_NONE;
+                            dComIfGs_setSelectItemIndex(i, dItemNo_NONE_e);
+                            dComIfGs_setMixItemIndex(i, dItemNo_NONE_e);
+                            return dItemNo_NONE_e;
                         }
                     }
                     // Uncertain combination item＝＝＝＞%d, %d\n
@@ -384,7 +384,7 @@ u8 dSv_player_item_c::getItem(int i_slotNo, bool i_checkCombo) const {
         return mItems[i_slotNo];
     }
 
-    return fpcNm_ITEM_NONE;
+    return dItemNo_NONE_e;
 }
 
 void dSv_player_item_c::setLineUpItem() {
@@ -398,12 +398,12 @@ void dSv_player_item_c::setLineUpItem() {
     int slot_idx = 0;
 
     for (int i = 0; i < 24; i++) {
-        mItemSlots[i] = fpcNm_ITEM_NONE;
+        mItemSlots[i] = dItemNo_NONE_e;
     }
 
     for (int i = 0; i < 23; i++) {
         u8 current = i_item_lst[i];
-        if (mItems[current] != fpcNm_ITEM_NONE) {
+        if (mItems[current] != dItemNo_NONE_e) {
             mItemSlots[slot_idx] = current;
             slot_idx++;
         }
@@ -415,7 +415,7 @@ u8 dSv_player_item_c::getLineUpItem(int i_slotNo) const {
         return mItemSlots[i_slotNo];
     }
 
-    return fpcNm_ITEM_NONE;
+    return dItemNo_NONE_e;
 }
 
 void dSv_player_item_c::setBottleItemIn(u8 curItemIn, u8 newItemIn) {
@@ -425,7 +425,7 @@ void dSv_player_item_c::setBottleItemIn(u8 curItemIn, u8 newItemIn) {
     for (int i = 0; i < 4; i++) {
         if (curItemIn == mItems[i + SLOT_11]) {
             setItem(i + SLOT_11, newItemIn);
-            if (newItemIn == fpcNm_ITEM_HOT_SPRING) {
+            if (newItemIn == dItemNo_HOT_SPRING_e) {
                 dMeter2Info_setHotSpringTimer(i + SLOT_11);
             }
 
@@ -441,13 +441,13 @@ void dSv_player_item_c::setBottleItemIn(u8 curItemIn, u8 newItemIn) {
 
 void dSv_player_item_c::setEmptyBottleItemIn(u8 i_itemNo) {
     i_itemNo = dSv_item_rename(i_itemNo);
-    setBottleItemIn(fpcNm_ITEM_EMPTY_BOTTLE, i_itemNo);
+    setBottleItemIn(dItemNo_EMPTY_BOTTLE_e, i_itemNo);
 }
 
 void dSv_player_item_c::setEmptyBottle() {
     for (int i = 0; i < 4; i++) {
-        if (dComIfGs_getItem((u8)(i + SLOT_11), true) == fpcNm_ITEM_NONE) {
-            dComIfGs_setItem((u8)(i + SLOT_11), fpcNm_ITEM_EMPTY_BOTTLE);
+        if (dComIfGs_getItem((u8)(i + SLOT_11), true) == dItemNo_NONE_e) {
+            dComIfGs_setItem((u8)(i + SLOT_11), dItemNo_EMPTY_BOTTLE_e);
             return;
         }
     }
@@ -455,7 +455,7 @@ void dSv_player_item_c::setEmptyBottle() {
 
 void dSv_player_item_c::setEmptyBottle(u8 i_itemNo) {
     for (int i = 0; i < 4; i++) {
-        if (dComIfGs_getItem((u8)(i + SLOT_11), true) == fpcNm_ITEM_NONE) {
+        if (dComIfGs_getItem((u8)(i + SLOT_11), true) == dItemNo_NONE_e) {
             dComIfGs_setItem((u8)(i + SLOT_11), i_itemNo);
             return;
         }
@@ -467,7 +467,7 @@ void dSv_player_item_c::setEquipBottleItemIn(u8 curItemIn, u8 newItemIn) {
 
     if (dComIfGs_getSelectItemIndex(curItemIn) >= SLOT_11 &&
         dComIfGs_getSelectItemIndex(curItemIn) <= SLOT_14) {
-        if (newItemIn == fpcNm_ITEM_HOT_SPRING) {
+        if (newItemIn == dItemNo_HOT_SPRING_e) {
             dMeter2Info_setHotSpringTimer(dComIfGs_getSelectItemIndex(curItemIn));
         }
 
@@ -479,7 +479,7 @@ void dSv_player_item_c::setEquipBottleItemIn(u8 curItemIn, u8 newItemIn) {
 }
 
 void dSv_player_item_c::setEquipBottleItemEmpty(u8 curItemIn) {
-    setEquipBottleItemIn(curItemIn, fpcNm_ITEM_EMPTY_BOTTLE);
+    setEquipBottleItemIn(curItemIn, dItemNo_EMPTY_BOTTLE_e);
 }
 
 u8 dSv_player_item_c::checkBottle(u8 i_itemNo) {
@@ -496,7 +496,7 @@ u8 dSv_player_item_c::checkBottle(u8 i_itemNo) {
 
 BOOL dSv_player_item_c::checkInsectBottle() {
     for (int i = 0; i < 24; i++) {
-        if (dComIfGs_isItemFirstBit(fpcNm_ITEM_M_BEETLE + i) &&
+        if (dComIfGs_isItemFirstBit(dItemNo_M_BEETLE_e + i) &&
             !dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[0x191 + i])) {
             return TRUE;
         }
@@ -508,7 +508,7 @@ u8 dSv_player_item_c::checkEmptyBottle() {
     u8 bottleNum = 0;
 
     for (int i = 0; i < BOTTLE_MAX; i++) {
-        if (mItems[i + SLOT_11] == fpcNm_ITEM_EMPTY_BOTTLE) {
+        if (mItems[i + SLOT_11] == dItemNo_EMPTY_BOTTLE_e) {
             bottleNum++;
         }
     }
@@ -520,7 +520,7 @@ void dSv_player_item_c::setBombBagItemIn(u8 i_curBomb, u8 i_newBomb, bool i_setN
         if (i_curBomb == mItems[i + SLOT_15]) {
             setItem(i + SLOT_15, i_newBomb);
 
-            if (i_setNum == true && i_newBomb != fpcNm_ITEM_BOMB_BAG_LV1) {
+            if (i_setNum == true && i_newBomb != dItemNo_BOMB_BAG_LV1_e) {
                 dComIfGs_setBombNum(i, dComIfGs_getBombMax(i_newBomb));
             }
 
@@ -539,7 +539,7 @@ void dSv_player_item_c::setBombBagItemIn(u8 i_curBomb, u8 i_newBomb, u8 i_bombNu
         if (i_curBomb == mItems[i + SLOT_15]) {
             setItem(i + SLOT_15, i_newBomb);
 
-            if (i_setNum == 1 && i_newBomb != fpcNm_ITEM_BOMB_BAG_LV1) {
+            if (i_setNum == 1 && i_newBomb != dItemNo_BOMB_BAG_LV1_e) {
                 if (i_bombNum > dComIfGs_getBombMax(i_newBomb)) {
                     i_bombNum = dComIfGs_getBombMax(i_newBomb);
                 }
@@ -557,17 +557,17 @@ void dSv_player_item_c::setBombBagItemIn(u8 i_curBomb, u8 i_newBomb, u8 i_bombNu
 }
 
 void dSv_player_item_c::setEmptyBombBagItemIn(u8 i_newBomb, bool i_setNum) {
-    setBombBagItemIn(fpcNm_ITEM_BOMB_BAG_LV1, i_newBomb, i_setNum);
+    setBombBagItemIn(dItemNo_BOMB_BAG_LV1_e, i_newBomb, i_setNum);
 }
 
 void dSv_player_item_c::setEmptyBombBagItemIn(u8 i_newBomb, u8 i_bombNum, bool i_setNum) {
-    setBombBagItemIn(fpcNm_ITEM_BOMB_BAG_LV1, i_newBomb, i_bombNum, i_setNum);
+    setBombBagItemIn(dItemNo_BOMB_BAG_LV1_e, i_newBomb, i_bombNum, i_setNum);
 }
 
 void dSv_player_item_c::setEmptyBombBag() {
     for (int i = 0; i < 3; i++) {
-        if (dComIfGs_getItem((u8)(i + SLOT_15), true) == fpcNm_ITEM_NONE) {
-            dComIfGs_setItem((u8)(i + SLOT_15), fpcNm_ITEM_BOMB_BAG_LV1);
+        if (dComIfGs_getItem((u8)(i + SLOT_15), true) == dItemNo_NONE_e) {
+            dComIfGs_setItem((u8)(i + SLOT_15), dItemNo_BOMB_BAG_LV1_e);
             return;
         }
     }
@@ -575,10 +575,10 @@ void dSv_player_item_c::setEmptyBombBag() {
 
 void dSv_player_item_c::setEmptyBombBag(u8 i_newBomb, u8 i_bombNum) {
     for (int i = 0; i < 3; i++) {
-        if (dComIfGs_getItem((u8)(i + SLOT_15), true) == fpcNm_ITEM_NONE) {
+        if (dComIfGs_getItem((u8)(i + SLOT_15), true) == dItemNo_NONE_e) {
             dComIfGs_setItem((u8)(i + SLOT_15), i_newBomb);
 
-            if (i_newBomb != fpcNm_ITEM_BOMB_BAG_LV1) {
+            if (i_newBomb != dItemNo_BOMB_BAG_LV1_e) {
                 if (i_bombNum > dComIfGs_getBombMax(i_newBomb)) {
                     i_bombNum = dComIfGs_getBombMax(i_newBomb);
                 }
@@ -614,16 +614,16 @@ void dSv_player_item_c::setWarashibeItem(u8 i_itemNo) {
 
 void dSv_player_item_c::setRodTypeLevelUp() {
     switch (mItems[SLOT_20]) {
-    case fpcNm_ITEM_BEE_ROD: {
-        mItems[SLOT_20] = fpcNm_ITEM_JEWEL_BEE_ROD;
+    case dItemNo_BEE_ROD_e: {
+        mItems[SLOT_20] = dItemNo_JEWEL_BEE_ROD_e;
         break;
     }
-    case fpcNm_ITEM_WORM_ROD: {
-        mItems[SLOT_20] = fpcNm_ITEM_JEWEL_WORM_ROD;
+    case dItemNo_WORM_ROD_e: {
+        mItems[SLOT_20] = dItemNo_JEWEL_WORM_ROD_e;
         break;
     }
-    case fpcNm_ITEM_FISHING_ROD_1: {
-        mItems[SLOT_20] = fpcNm_ITEM_JEWEL_ROD;
+    case dItemNo_FISHING_ROD_1_e: {
+        mItems[SLOT_20] = dItemNo_JEWEL_ROD_e;
         break;
     }
     }
@@ -635,27 +635,27 @@ void dSv_player_item_c::setRodTypeLevelUp() {
 
 void dSv_player_item_c::setBaitItem(u8 i_itemNo) {
     switch (i_itemNo) {
-    case fpcNm_ITEM_BEE_CHILD: {
-        if (dComIfGs_isItemFirstBit(fpcNm_ITEM_ZORAS_JEWEL)) {
-            mItems[SLOT_20] = fpcNm_ITEM_JEWEL_BEE_ROD;
+    case dItemNo_BEE_CHILD_e: {
+        if (dComIfGs_isItemFirstBit(dItemNo_ZORAS_JEWEL_e)) {
+            mItems[SLOT_20] = dItemNo_JEWEL_BEE_ROD_e;
         } else {
-            mItems[SLOT_20] = fpcNm_ITEM_BEE_ROD;
+            mItems[SLOT_20] = dItemNo_BEE_ROD_e;
         }
         break;
     }
-    case fpcNm_ITEM_WORM: {
-        if (dComIfGs_isItemFirstBit(fpcNm_ITEM_ZORAS_JEWEL)) {
-            mItems[SLOT_20] = fpcNm_ITEM_JEWEL_WORM_ROD;
+    case dItemNo_WORM_e: {
+        if (dComIfGs_isItemFirstBit(dItemNo_ZORAS_JEWEL_e)) {
+            mItems[SLOT_20] = dItemNo_JEWEL_WORM_ROD_e;
         } else {
-            mItems[SLOT_20] = fpcNm_ITEM_WORM_ROD;
+            mItems[SLOT_20] = dItemNo_WORM_ROD_e;
         }
         break;
     }
-    case fpcNm_ITEM_NONE: {
-        if (dComIfGs_isItemFirstBit(fpcNm_ITEM_ZORAS_JEWEL)) {
-            mItems[SLOT_20] = fpcNm_ITEM_JEWEL_ROD;
+    case dItemNo_NONE_e: {
+        if (dComIfGs_isItemFirstBit(dItemNo_ZORAS_JEWEL_e)) {
+            mItems[SLOT_20] = dItemNo_JEWEL_ROD_e;
         } else {
-            mItems[SLOT_20] = fpcNm_ITEM_FISHING_ROD_1;
+            mItems[SLOT_20] = dItemNo_FISHING_ROD_1_e;
         }
         break;
     }
@@ -761,37 +761,37 @@ void dSv_player_item_max_c::init() {
     for (int i = 0; i < 7; i++) {
         mItemMax[i] = 30;
     }
-    setBombNum(fpcNm_ITEM_NORMAL_BOMB, 30);
-    setBombNum(fpcNm_ITEM_WATER_BOMB, 15);
-    setBombNum(fpcNm_ITEM_POKE_BOMB, 10);
+    setBombNum(dItemNo_NORMAL_BOMB_e, 30);
+    setBombNum(dItemNo_WATER_BOMB_e, 15);
+    setBombNum(dItemNo_POKE_BOMB_e, 10);
     mItemMax[7] = 0;
 }
 
 void dSv_player_item_max_c::setBombNum(u8 i_bombType, u8 i_maxNum) {
     switch (i_bombType) {
-    case fpcNm_ITEM_NORMAL_BOMB:
+    case dItemNo_NORMAL_BOMB_e:
         mItemMax[NORMAL_BOMB_MAX] = i_maxNum;
         return;
-    case fpcNm_ITEM_WATER_BOMB:
+    case dItemNo_WATER_BOMB_e:
         mItemMax[WATER_BOMB_MAX] = i_maxNum;
         return;
-    case fpcNm_ITEM_POKE_BOMB:
+    case dItemNo_POKE_BOMB_e:
         mItemMax[POKE_BOMB_MAX] = i_maxNum;
     }
 }
 
 u8 dSv_player_item_max_c::getBombNum(u8 i_bombType) const {
     u8 lv_multiplier = 1;
-    if (dComIfGs_isItemFirstBit(fpcNm_ITEM_BOMB_BAG_LV2)) {
+    if (dComIfGs_isItemFirstBit(dItemNo_BOMB_BAG_LV2_e)) {
         lv_multiplier = 2;
     }
 
     switch (i_bombType) {
-    case fpcNm_ITEM_NORMAL_BOMB:
+    case dItemNo_NORMAL_BOMB_e:
         return (u8)(mItemMax[NORMAL_BOMB_MAX] * lv_multiplier);
-    case fpcNm_ITEM_WATER_BOMB:
+    case dItemNo_WATER_BOMB_e:
         return (u8)(mItemMax[WATER_BOMB_MAX] * lv_multiplier);
-    case fpcNm_ITEM_POKE_BOMB:
+    case dItemNo_POKE_BOMB_e:
         return (u8)(mItemMax[POKE_BOMB_MAX] * lv_multiplier);
     default:
         return 0;
@@ -1752,9 +1752,9 @@ int dSv_info_c::memory_to_card(char* card_ptr, int dataNum) {
     }
 
     // If have the lantern and Slot 1 in the item wheel is blank
-    if (dComIfGs_isItemFirstBit(fpcNm_ITEM_KANTERA) && dComIfGs_getItem(SLOT_1, 1) == fpcNm_ITEM_NONE) {
+    if (dComIfGs_isItemFirstBit(dItemNo_KANTERA_e) && dComIfGs_getItem(SLOT_1, 1) == dItemNo_NONE_e) {
         // Set Slot 1 to Lantern and fetch current oil
-        dComIfGs_setItem(SLOT_1, fpcNm_ITEM_KANTERA);
+        dComIfGs_setItem(SLOT_1, dItemNo_KANTERA_e);
         current_lantern_oil = dComIfGs_getOil();
 
         // Set oil to oil gauge backup
@@ -1804,7 +1804,7 @@ int dSv_info_c::memory_to_card(char* card_ptr, int dataNum) {
 
     // Now that we've saved, reset slot if needed
     if (tmp_lantern_check == true) {
-        dComIfGs_setItem(SLOT_1, fpcNm_ITEM_NONE);
+        dComIfGs_setItem(SLOT_1, dItemNo_NONE_e);
         dComIfGs_setOil(current_lantern_oil);
     }
     
@@ -1844,13 +1844,13 @@ int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
 
     dComIfGs_setKeyNum(6, 0);
 
-    if (dComIfGs_getItem(SLOT_9, true) == fpcNm_ITEM_W_HOOKSHOT) {
-        dComIfGs_setItem(SLOT_10, fpcNm_ITEM_W_HOOKSHOT);
-        dComIfGs_setItem(SLOT_9, fpcNm_ITEM_NONE);
+    if (dComIfGs_getItem(SLOT_9, true) == dItemNo_W_HOOKSHOT_e) {
+        dComIfGs_setItem(SLOT_10, dItemNo_W_HOOKSHOT_e);
+        dComIfGs_setItem(SLOT_9, dItemNo_NONE_e);
     }
 
-    if (dComIfGs_getItem(SLOT_9, true) == fpcNm_ITEM_HOOKSHOT && dComIfGs_getItem(SLOT_10, true) == fpcNm_ITEM_W_HOOKSHOT) {
-        dComIfGs_setItem(SLOT_9, fpcNm_ITEM_NONE);
+    if (dComIfGs_getItem(SLOT_9, true) == dItemNo_HOOKSHOT_e && dComIfGs_getItem(SLOT_10, true) == dItemNo_W_HOOKSHOT_e) {
+        dComIfGs_setItem(SLOT_9, dItemNo_NONE_e);
     }
 
     dComIfGs_setLineUpItem();

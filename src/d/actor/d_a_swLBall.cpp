@@ -18,7 +18,7 @@ static daObjCarry_c* l_target_info[2];
 static int l_target_info_count;
 
 static void* s_lb_sub(void* param_1, void* param_2) {
-    if ((fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_Obj_Carry) &&
+    if ((fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_Obj_Carry_e) &&
         static_cast<daObjCarry_c*>(param_1)->prm_chk_type_lightball())
     {
         if (l_target_info_count < 2) {
@@ -190,7 +190,7 @@ void daSwLBall_c::PutCrrPos() {
         if (fopAcM_searchPlayerDistanceXZ(this) < 300.0f && angleDiff < 0x4000) {
             fopAc_ac_c* carryObj = (fopAc_ac_c*)fopAcM_SearchByID(player->getGrabActorID());
             if (carryObj != NULL && fopAcM_IsActor(carryObj) &&
-                fopAcM_GetName(carryObj) == PROC_Obj_Carry &&
+                fopAcM_GetName(carryObj) == fpcNm_Obj_Carry_e &&
                 static_cast<daObjCarry_c*>(carryObj)->prm_chk_type_lightball())
             {
                 player->setForcePutPos(current.pos);
@@ -255,18 +255,18 @@ static actor_method_class l_daSwLBall_Method = {
 };
 
 actor_process_profile_definition g_profile_SwLBall = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_SwLBall,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daSwLBall_c),    // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  549,                    // mPriority
-  &l_daSwLBall_Method,    // sub_method
-  0x00040000,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SwLBall_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daSwLBall_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_SwLBall_e,
+    /* Actor SubMtd */ &l_daSwLBall_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

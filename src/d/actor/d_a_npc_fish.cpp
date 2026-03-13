@@ -36,7 +36,7 @@ static void fish_set(fopAc_ac_c* i_this, fish_data_s* data) {
             param = 2;
         }
         param |= data->field_0x10 << 8;
-        fopAcM_create(PROC_MG_FISH, param, &pos, fopAcM_GetRoomNo(i_this), NULL, NULL, -1);
+        fopAcM_create(fpcNm_MG_FISH_e, param, &pos, fopAcM_GetRoomNo(i_this), NULL, NULL, -1);
     }
 }
 
@@ -120,7 +120,7 @@ static int daNpc_Fish_Create(fopAc_ac_c* i_this) {
         }
         if (param != 0) {
             pos.set(-3382.0f, 0.0f, -7473.0f);
-            fopAcM_create(PROC_OBJ_LP, 0xFF010E00 | param, &pos, fopAcM_GetRoomNo(i_this), NULL,
+            fopAcM_create(fpcNm_OBJ_LP_e, 0xFF010E00 | param, &pos, fopAcM_GetRoomNo(i_this), NULL,
                           NULL, -1);
         }
     }
@@ -128,7 +128,7 @@ static int daNpc_Fish_Create(fopAc_ac_c* i_this) {
         for (int i = 0; i < 4; i++) {
             pos.set(cM_rndFX(700.0f) + -2936.0f, 0.0f, cM_rndFX(700.0f) + -7865.0f);
             csXyz angle(0, 0, -1);
-            fopAcM_create(PROC_FR, 0, &pos, fopAcM_GetRoomNo(i_this), &angle, NULL, -1);
+            fopAcM_create(fpcNm_FR_e, 0, &pos, fopAcM_GetRoomNo(i_this), &angle, NULL, -1);
         }
     }
     
@@ -139,7 +139,7 @@ static int daNpc_Fish_Create(fopAc_ac_c* i_this) {
         fish_set(i_this, fish_d127_S);
         for (int i = 0; i < 12; i++) {
             pos.set(lf_pos[i].pos_x, -180.0f, lf_pos[i].pos_z);
-            fopAcM_create(PROC_NPC_LF, lf_pos[i].param, &pos, fopAcM_GetRoomNo(i_this), NULL, NULL,
+            fopAcM_create(fpcNm_NPC_LF_e, lf_pos[i].param, &pos, fopAcM_GetRoomNo(i_this), NULL, NULL,
                           -1);
         }
     }
@@ -153,18 +153,18 @@ static actor_method_class l_daNpc_Fish_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_FISH = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_NPC_FISH,
-    &g_fpcLf_Method.base,
-    sizeof(npc_fish_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    719,
-    &l_daNpc_Fish_Method,
-    0x40100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_6_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_FISH_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(npc_fish_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_FISH_e,
+    /* Actor SubMtd */ &l_daNpc_Fish_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

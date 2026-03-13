@@ -328,6 +328,7 @@ target_info = .bss:0x000000C8; // type:object size:0x28 scope:global
 target_info_count = .bss:0x000000F0; // type:object size:0x4 scope:global data:4byte
 check_index$4747 = .bss:0x000000F4; // type:object size:0xFF scope:local
 c_start = .bss:0x000001F4; // type:object size:0x4 scope:global
+data_8077aa20 = .bss:0x000001F8; // type:object size:0x1 scope:global
 sInstance__40JASGlobalInstance<19JASDefaultBankTable> = .bss:0x000001FC; // type:object size:0x4 scope:global
 sInstance__35JASGlobalInstance<14JASAudioThread> = .bss:0x00000200; // type:object size:0x4 scope:global
 sInstance__27JASGlobalInstance<7Z2SeMgr> = .bss:0x00000204; // type:object size:0x4 scope:global

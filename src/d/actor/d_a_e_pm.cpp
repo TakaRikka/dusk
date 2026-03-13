@@ -222,7 +222,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 }
 
 static void* s_pm_sub(void* i_proc, void* i_data) {
-    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_E_PM
+    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == fpcNm_E_PM_e
                               && static_cast<daE_PM_c*>(i_proc)->SwitchChk() == 1) {
         return i_proc;
     }
@@ -504,7 +504,7 @@ void daE_PM_c::Ap_StartAction() {
         break;
 
     case Mode1:
-        if (fopAcM_SearchByName(PROC_Obj_SmWStone, (fopAc_ac_c**)&stone) && stone != NULL) {
+        if (fopAcM_SearchByName(fpcNm_Obj_SmWStone_e, (fopAc_ac_c**)&stone) && stone != NULL) {
             stone->deleteStone();
         }
 
@@ -547,16 +547,16 @@ void daE_PM_c::Ap_StartAction() {
         mParticleKey = dComIfGp_particle_set(mParticleKey, 0x880C, &current.pos, &tevStr,
                                              &current.angle, &scale, 0xff, NULL, -1,
                                              NULL, NULL, NULL);
-        
+
         if (mAnm == ANM_APPEAR02 && mpMorf->isStop()) {
             SetAnm(ANM_WAIT01, J3DFrameCtrl::EMode_NONE, 5.0f, 1.0f);
             mCreatureSound.startCreatureVoice(Z2SE_EN_PM_V_LAUGH, -1);
         }
-        
+
         if (mCamCenter.y >= current.pos.y) {
             mCamCenterTarget.y = current.pos.y;
         }
-        
+
         if (mAcch.ChkGroundHit() && mTimer[0] == 0) {
             SetAnm(ANM_APPEAR02, J3DFrameCtrl::EMode_NONE, 5.0f, 1.0f);
             mTargetHeadAngleX = 0x2000;
@@ -572,7 +572,7 @@ void daE_PM_c::Ap_StartAction() {
             cLib_offsetPos(&mCamEyeTarget, &eye, shape_angle.y, &offset);
             mCamCenterTarget.y = current.pos.y + 100.0f;
         }
-        
+
         if (mCamCenterTarget.y <= mAcch.GetGroundH() + 100.0f) {
             mCamCenterTarget.y = mAcch.GetGroundH() + 100.0f;
         }
@@ -592,7 +592,7 @@ void daE_PM_c::Ap_StartAction() {
 
 static void* s_obj_sub(void* i_proc, void* i_data) {
     for (int i = 0; i < 5; i++) {
-        if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_E_PM && i_proc != NULL
+        if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == fpcNm_E_PM_e && i_proc != NULL
                                   && static_cast<daE_PM_c*>(i_proc)->SwitchChk() == 0) {
             return i_proc;
         }
@@ -626,7 +626,7 @@ void daE_PM_c::Ap_CreateAction() {
 
     case 1:
         mCreatureSound.startCreatureSoundLevel(Z2SE_EN_PM_TRUMPET, 0, -1);
-        
+
         if (mTimer[0] == 2 && mAnm == ANM_FOGBLOW_LP) {
             vec2.set(500.0f, 150.0f, 0.0f);
             mCamCenter.set(-11239.0f, 1850.0f, 16932.0f);
@@ -644,7 +644,7 @@ void daE_PM_c::Ap_CreateAction() {
             for (int i = 0; i < 2; i++) {
                 vec5.set(i * 100.0f + 500.0f, 150.0f, -(i * 100.0f));
                 cLib_offsetPos(&vec2, &current.pos, shape_angle.y, &vec5);
-                mPuppetID[i] = fopAcM_createChild(PROC_E_FS, fopAcM_GetID(this), 0, &vec2,
+                mPuppetID[i] = fopAcM_createChild(fpcNm_E_FS_e, fopAcM_GetID(this), 0, &vec2,
                                                   fopAcM_GetRoomNo(this), &shape_angle,
                                                   NULL, -1, NULL);
             }
@@ -674,7 +674,7 @@ void daE_PM_c::Ap_CreateAction() {
             for (int i = 2; i < 4; i++) {
                 vec5.set(-500.0f - (i - 2) * 100.0f, 150.0f, -((i - 2) * 100.0f));
                 cLib_offsetPos(&vec2, &current.pos, shape_angle.y, &vec5);
-                mPuppetID[i] = fopAcM_createChild(PROC_E_FS, fopAcM_GetID(this), 0, &vec2,
+                mPuppetID[i] = fopAcM_createChild(fpcNm_E_FS_e, fopAcM_GetID(this), 0, &vec2,
                                                   fopAcM_GetRoomNo(this), &shape_angle,
                                                   NULL, -1, NULL);
             }
@@ -720,13 +720,13 @@ void daE_PM_c::Ap_EscapeAction() {
         mBossLightOn = true;
         mTargetHeadAngleX = s_TargetAngle;
         cLib_addCalcAngleS2(&mHeadAngleZ, -0x500, 4, 0x600);
-        
+
         if (mTimer[0] == 0) {
             SetAnm(ANM_RUN, J3DFrameCtrl::EMode_LOOP, 5.0f, 1.0f);
             mMode++;
             mTargetSpeed = 13.0f;
         }
-        
+
         mDoorAction = 0;
         break;
 
@@ -736,11 +736,11 @@ void daE_PM_c::Ap_EscapeAction() {
         } else {
             mCreatureSound.startCreatureSound(Z2SE_EN_PM_FN_R, 0, -1);
         }
-        
+
         point.set(mPoint.x, mPoint.y, mPoint.z);
         mTargetAngleY = cLib_targetAngleY(&current.pos, &point);
         cLib_addCalc2(&speedF, mTargetSpeed, 0.05f, 10.0f);
-        
+
         if (mPointIndex == 7 && mDoorAction == 0) {
             mCamCenter = *s_LinkPos;
             mCamCenter.y += 200.0f;
@@ -865,7 +865,7 @@ void daE_PM_c::DemoBeforeEscape() {
         MtxPosition(&vec2, &vec2);
         mParticleKey = dComIfGp_particle_set(mParticleKey, 0x880C, &vec2, &tevStr, &current.angle,
                                              &scale, 0xff, NULL, -1, NULL, NULL, NULL);
-        
+
         if (mpMorf->isStop()) {
             if (mSwBit != 0xff && !dComIfGs_isSwitch(mSwBit, fopAcM_GetRoomNo(this))) {
                 dComIfGs_onSwitch(mSwBit, fopAcM_GetRoomNo(this));
@@ -1294,7 +1294,7 @@ void daE_PM_c::DemoBossStart2() {
             vec1.set(current.pos.x, 1900.0f, current.pos.z);
             SetStopCam(vec1, 500.0f, 0.0f, s_TargetAngle);
             mCamEye.set(mCamEyeTarget);
-            actor_status &= ~0x100;
+            actor_status &= ~fopAcStts_CULL_e;
         }
         if (mSecondEncounter) {
             player->mDemo.setDemoType(daPy_demo_c::DEMO_TYPE_ORIGINAL_e);
@@ -1699,7 +1699,7 @@ static void* s_boss_sub(void* i_actor, void* param_1) {
     fopAc_ac_c* actor = static_cast<fopAc_ac_c*>(i_actor);
     cXyz& actor_pos = fopAcM_GetPosition(actor);
     cXyz& player_pos = fopAcM_GetPosition(player);
-    if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_SM_DOOR) {
+    if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_Obj_SM_DOOR_e) {
         u8 prm = (fopAcM_GetParam(actor) & 0xF0) >> 4;
         if (player_pos.absXZ(actor_pos) < 16000.0f && prm == 1) {
             return i_actor;
@@ -2070,7 +2070,7 @@ int daE_PM_c::Execute() {
     }
 
     Yazirushi();
-    
+
     if (mStage == 4) {
         BossAction();
     } else if (mStage == 0) {
@@ -2145,7 +2145,7 @@ void daE_PM_c::StartAction() {
                 mMode++;
                 mTimer[0] = 240;
             }
-            
+
         } else if (mStage == 4) {
             SearchNearP();
             mCcStts.Init(0xFA, 0xFF, this);
@@ -2276,7 +2276,7 @@ void daE_PM_c::GakkiLoopAction(cXyz param_0, f32 param_1) {
                 s16 angle = shape_angle.y + step * i;
                 cLib_offsetPos(&vec1, &param_0, angle, &vec2);
                 if (!way_bg_check2(this, vec3, vec1) || mStage == 4) {
-                    mPuppetID[i] = fopAcM_createChild(PROC_E_FS, fopAcM_GetID(this), 0xFFFFFFF,
+                    mPuppetID[i] = fopAcM_createChild(fpcNm_E_FS_e, fopAcM_GetID(this), 0xFFFFFFF,
                                                       &vec1, fopAcM_GetRoomNo(this), &shape_angle,
                                                       NULL, -1, NULL);
                 }
@@ -2624,7 +2624,7 @@ int daE_PM_c::Draw() {
 
 int daE_PM_c::Delete() {
     dComIfG_resDelete(&mPhase, "E_PM");
-    
+
     if (mHIOInit) {
         hio_set = false;
     }
@@ -2716,7 +2716,7 @@ void daE_PM_c::SkipChk() {
                 mDoMtx_stack_c::transS(current.pos);
                 mDoMtx_stack_c::YrotM(shape_angle.y);
                 mDoMtx_stack_c::multVec(&vec1, &vec1);
-                mPuppetID[i] = fopAcM_createChild(PROC_E_FS, fopAcM_GetID(this), 0, &vec1,
+                mPuppetID[i] = fopAcM_createChild(fpcNm_E_FS_e, fopAcM_GetID(this), 0, &vec1,
                                                   fopAcM_GetRoomNo(this), &shape_angle,
                                                   NULL, -1, NULL);
             }
@@ -2728,7 +2728,7 @@ void daE_PM_c::SkipChk() {
                 mDoMtx_stack_c::transS(current.pos);
                 mDoMtx_stack_c::YrotM(shape_angle.y);
                 mDoMtx_stack_c::multVec(&vec1, &vec1);
-                mPuppetID[i] = fopAcM_createChild(PROC_E_FS, fopAcM_GetID(this), 0, &vec1,
+                mPuppetID[i] = fopAcM_createChild(fpcNm_E_FS_e, fopAcM_GetID(this), 0, &vec1,
                                                   fopAcM_GetRoomNo(this), &shape_angle,
                                                   NULL, -1, NULL);
             }
@@ -2870,18 +2870,18 @@ static actor_method_class l_daE_PM_Method = {
 };
 
 actor_process_profile_definition g_profile_E_PM = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_PM,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daE_PM_c),       // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  161,                    // mPriority
-  &l_daE_PM_Method,       // sub_method
-  0x00040100,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_PM_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_PM_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_PM_e,
+    /* Actor SubMtd */ &l_daE_PM_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

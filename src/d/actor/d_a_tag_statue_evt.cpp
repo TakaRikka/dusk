@@ -33,7 +33,7 @@ static int CheckCreateHeap(fopAc_ac_c* i_this) {
 // Returns ID of Owl Statue corresponding to tag
 static void* s_s_sub(void* i_proc, void* param_1) {
     UNUSED(param_1);
-    if (fopAcM_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_CSTAF) {
+    if (fopAcM_IsActor(i_proc) && fopAcM_GetName(i_proc) == fpcNm_CSTAF_e) {
         return i_proc;
     }
 
@@ -355,11 +355,11 @@ int daTagStatue_c::demoProc() {
                 // If the player already has 5 Sky Characters, reward them with the completed
                 // Ancient Sky Book, otherwise, reward another character
                 if (getLetterCount() == 5) {
-                    item = fpcNm_ITEM_ANCIENT_DOCUMENT2;
+                    item = dItemNo_ANCIENT_DOCUMENT2_e;
                     /* Sky character - Sky character 6 */
                     dComIfGs_onEventBit(dSv_event_flag_c::F_0796);
                 } else {
-                    item = fpcNm_ITEM_AIR_LETTER;
+                    item = dItemNo_AIR_LETTER_e;
                 }
 
                 mItemId =
@@ -538,18 +538,18 @@ reinterpret_cast<process_method_func>(daTagStatue_Draw),
 };
 
 actor_process_profile_definition g_profile_Tag_Statue = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_Tag_Statue,
-    &g_fpcLf_Method.base,
-    sizeof(daTagStatue_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    588,
-    &l_daTagStatue_Method,
-    0x40100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_Statue_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagStatue_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Tag_Statue_e,
+    /* Actor SubMtd */ &l_daTagStatue_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

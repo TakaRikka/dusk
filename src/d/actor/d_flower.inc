@@ -293,7 +293,7 @@ void dFlower_data_c::WorkAt_NoCutAnim(fopAc_ac_c* i_hitActor, u32 i_massFlg, int
     cXyz sp14(*var_r26->GetAtVecP());
 
     f32 temp_f31 = sp14.abs2XZ();
-    if (cM3d_IsZero(temp_f31) && fopAcM_GetName(i_hitActor) == PROC_ALINK) {
+    if (cM3d_IsZero(temp_f31) && fopAcM_GetName(i_hitActor) == fpcNm_ALINK_e) {
         sp14.x = m_pos.x - i_hitActor->current.pos.x;
         sp14.y = m_pos.y - i_hitActor->current.pos.y;
         sp14.z = m_pos.z - i_hitActor->current.pos.z;
@@ -453,7 +453,7 @@ void dFlower_data_c::hitCheck(fopAc_ac_c* i_hitActor, int i_roomNo) {
 
     fopAc_ac_c* hit_actor;
     u32 mass_flags = dComIfG_Ccsp()->ChkMass(&sp14, &hit_actor, &hitinf);
-    bool at_hit = (mass_flags & 1) && (hit_actor != NULL && fopAcM_GetName(hit_actor) != PROC_Obj_Carry);
+    bool at_hit = (mass_flags & 1) && (hit_actor != NULL && fopAcM_GetName(hit_actor) != fpcNm_Obj_Carry_e);
 
     if (!(mass_flags & 2) && !at_hit) {
         if (field_0x01 >= 8) {

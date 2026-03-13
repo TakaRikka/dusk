@@ -244,10 +244,12 @@ static fopAc_ac_c* target_info[20];
 static int target_info_count;
 
 static void* s_d_sub(void* i_actor, void* i_data) {
-    daObjCarry_c* actor = (daObjCarry_c*)i_actor;
-    
-    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == PROC_Obj_Carry && actor->getType() == 5 && target_info_count < 20) {
-        target_info[target_info_count] = actor;
+    UNUSED(i_data);
+
+    if (fopAcM_IsActor(i_actor) &&
+        fopAcM_GetName(i_actor) == fpcNm_Obj_Carry_e &&
+        ((daObjCarry_c*)i_actor)->getType() == 5 && target_info_count < 20) {
+        target_info[target_info_count] = (fopAc_ac_c*)i_actor;
         target_info_count++;
     }
 
@@ -441,7 +443,7 @@ static s8 e_yg_attack(e_yg_class* i_this) {
 
             if (i_this->mPlayerDist < TREG_F(4) + 300.0f) {
                 /* If Phantom Zant actor exists */
-                if (fopAcM_SearchByName(PROC_E_PZ) != NULL) {
+                if (fopAcM_SearchByName(fpcNm_E_PZ_e) != NULL) {
                     i_this->mTimers[0] = fopAcM_GetID(actor) & 0x1F;
                     i_this->mActionMode = ATTACK_MODE_23;
                     anm_init(i_this, BCK_YG_WAIT, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
@@ -637,51 +639,52 @@ static void e_yg_dokuro(e_yg_class* i_this) {
     if (skull_p == NULL || i_this->mBgc.ChkWallHit() || fopAcM_checkCarryNow(skull_p)) {
         i_this->mAction = ACTION_NORMAL;
         i_this->mActionMode = MODE_INIT;
-    } else {
-        cXyz pos_delta(skull_p->current.pos - actor->current.pos);
-        f32 abs_val = pos_delta.abs();
-        i_this->mCurrentAngleYTarget = (s16)cM_atan2s(pos_delta.x, pos_delta.z);
-        f32 target = 0.0f;
+        return;
+    }
 
-        switch (i_this->mActionMode) {
-            case MODE_INIT:
-                anm_init(i_this, BCK_YG_FIND, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
-                i_this->mActionMode = DOKURO_MODE_RUN;
-                break;
+    cXyz pos_delta(skull_p->current.pos - actor->current.pos);
+    f32 abs_val = pos_delta.abs();
+    i_this->mCurrentAngleYTarget = (s16)cM_atan2s(pos_delta.x, pos_delta.z);
+    f32 target = 0.0f;
 
-            case DOKURO_MODE_RUN:
-                if (i_this->mpMorf->isStop()) {
-                    anm_init(i_this, BCK_YG_RUN, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
-                    i_this->mActionMode = DOKURO_MODE_2;
-                }
-                break;
-            
-            case DOKURO_MODE_2:
-                if (abs_val < TREG_F(14) + 75.0f) {
-                    anm_init(i_this, BCK_YG_GNAW, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
-                    i_this->mTimers[0] = cM_rndF(60.0f) + 90.0f;
-                    i_this->mActionMode = DOKURO_MODE_3;
-                } else {
-                    target = l_HIO.movement_spd;
-                }
-                break;
+    switch (i_this->mActionMode) {
+    case MODE_INIT:
+        anm_init(i_this, BCK_YG_FIND, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
+        i_this->mActionMode = DOKURO_MODE_RUN;
+        break;
 
-            case DOKURO_MODE_3:
-                if (abs_val < TREG_F(15) + 65.0f) {
-                    target = -2.0f;
-                } else if (abs_val > TREG_F(16) + 70.0f) {
-                    target = 2.0f;
-                }
-                break;
+    case DOKURO_MODE_RUN:
+        if (i_this->mpMorf->isStop()) {
+            anm_init(i_this, BCK_YG_RUN, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
+            i_this->mActionMode = DOKURO_MODE_2;
         }
+        break;
 
-        cLib_addCalcAngleS2(&actor->current.angle.y, i_this->mCurrentAngleYTarget, 2, 0x2000);
-        cLib_addCalc2(&actor->speedF, target, 1.0f, 10.0f);
-
-        if (pl_check(i_this, i_this->mDistance)) {
-            i_this->mAction = ACTION_ATTACK;
-            i_this->mActionMode = MODE_INIT;
+    case DOKURO_MODE_2:
+        if (abs_val < TREG_F(14) + 75.0f) {
+            anm_init(i_this, BCK_YG_GNAW, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f);
+            i_this->mTimers[0] = cM_rndF(60.0f) + 90.0f;
+            i_this->mActionMode = DOKURO_MODE_3;
+        } else {
+            target = l_HIO.movement_spd;
         }
+        break;
+
+    case DOKURO_MODE_3:
+        if (abs_val < TREG_F(15) + 65.0f) {
+            target = -2.0f;
+        } else if (abs_val > TREG_F(16) + 70.0f) {
+            target = 2.0f;
+        }
+        break;
+    }
+
+    cLib_addCalcAngleS2(&actor->current.angle.y, i_this->mCurrentAngleYTarget, 2, 0x2000);
+    cLib_addCalc2(&actor->speedF, target, 1.0f, 10.0f);
+
+    if (pl_check(i_this, i_this->mDistance)) {
+        i_this->mAction = ACTION_ATTACK;
+        i_this->mActionMode = MODE_INIT;
     }
 }
 
@@ -831,6 +834,8 @@ static void damage_check(e_yg_class* i_this) {
 }
 
 static void ke_control(e_yg_class* i_this, yg_ke_s* yg_p, int param_3, f32 i_posZ) {
+    UNUSED(param_3);
+
     cXyz work, pos_offset;
     int i;
     cXyz* pcVar1 = &yg_p->field_0x0[1];
@@ -841,46 +846,52 @@ static void ke_control(e_yg_class* i_this, yg_ke_s* yg_p, int param_3, f32 i_pos
     work.z = i_posZ;
 
     cXyz spc4;
-    f32 fVar2, fVar3, fVar4;
-    f32 fVar1;
+    f32 var_f30;
+    f32 sp24;
+    f32 var_f25;
     if (i_this->mWaterFlag) {
-        fVar1 = ZREG_F(9) + -5.0f;
+        var_f25 = ZREG_F(9) + -5.0f;
     } else {
-        fVar1 = ZREG_F(8) + -12.0f;
+        var_f25 = ZREG_F(8) + -12.0f;
     }
 
-    s16 sVar1 = cM_rndF2(65536.0f);
-    
-    fVar2 = JREG_F(8) + 3.0f;
-    f32 fVar5 = JREG_F(5) + (i_this->mBgc.GetGroundH() + 3.0f);
-    if (fVar5 < i_this->mGroundCross) {
-        fVar5 = i_this->mGroundCross;
-    }
-    
-    f32 fVar6 = JREG_F(17) + 0.8f;
+    s16 x_rot;
+    s16 y_rot;
+    s16 sp10 = cM_rndF2(65536.0f);
 
+    f32 var_f24 = JREG_F(8) + 3.0f;
+    f32 var_f31 = JREG_F(5) + (i_this->mBgc.GetGroundH() + 3.0f);
+    if (var_f31 < i_this->mGroundCross) {
+        var_f31 = i_this->mGroundCross;
+    }
+
+    f32 sp20;
+    f32 sp1C;
+    f32 var_f29;
+    f32 var_f28;
+    f32 var_f27;
+    f32 var_f26 = JREG_F(17) + 0.8f;
     for (i = 1; i < 10; i++, pcVar1++, pcVar2++) {
-        f32 fVar7 = fVar2 * cM_ssin(sVar1 + i * 7000);
-        f32 fVar8 = fVar2 * cM_ssin(sVar1 + 10000 + i * 6000);
-        f32 fVar9 = (10 - i) * 0.1f;
+        sp20 = var_f24 * cM_ssin(sp10 + i * 7000);
+        sp1C = var_f24 * cM_ssin(sp10 + 10000 + i * 6000);
+        var_f27 = (10 - i) * 0.1f;
 
-        spc4.x = pcVar2->x + (fVar7 + yg_p->field_0xf0.x * fVar9);
-        spc4.y = pcVar2->y + yg_p->field_0xf0.y * fVar9;
-        spc4.z = pcVar2->z + (fVar8 + yg_p->field_0xf0.z * fVar9);
-        
-        fVar3 = spc4.x + (pcVar1->x - pcVar1[-1].x);
-        
-        f32 fVar10;
-        f32 fVar11 = spc4.z + (pcVar1->z - pcVar1[-1].z);
+        spc4.x = pcVar2->x + (sp20 + yg_p->field_0xf0.x * var_f27);
+        spc4.y = pcVar2->y + yg_p->field_0xf0.y * var_f27;
+        spc4.z = pcVar2->z + (sp1C + yg_p->field_0xf0.z * var_f27);
 
-        fVar4 = fVar1 + (pcVar1->y + spc4.y);
-        if (fVar4 < fVar5) {
-            fVar4 = fVar5;
+        sp24 = spc4.x + (pcVar1->x - pcVar1[-1].x);
+
+        var_f29 = spc4.z + (pcVar1->z - pcVar1[-1].z);
+
+        var_f28 = var_f25 + (pcVar1->y + spc4.y);
+        if (var_f28 < var_f31) {
+            var_f28 = var_f31;
         }
 
-        fVar10 = fVar4 - pcVar1[-1].y;
-        s16 x_rot = -cM_atan2s(fVar10, fVar11);
-        s16 y_rot = (s16)cM_atan2s(fVar3, JMAFastSqrt(fVar10 * fVar10 + fVar11 * fVar11));
+        var_f30 = var_f28 - pcVar1[-1].y;
+        x_rot = -cM_atan2s(var_f30, var_f29);
+        y_rot = (s16)cM_atan2s(sp24, JMAFastSqrt(var_f30 * var_f30 + var_f29 * var_f29));
         cMtx_XrotS(*calc_mtx, x_rot);
         cMtx_YrotM(*calc_mtx, y_rot);
         MtxPosition(&work, &pos_offset);
@@ -891,9 +902,9 @@ static void ke_control(e_yg_class* i_this, yg_ke_s* yg_p, int param_3, f32 i_pos
         pcVar1->y = pcVar1[-1].y + pos_offset.y;
         pcVar1->z = pcVar1[-1].z + pos_offset.z;
 
-        pcVar2->x = fVar6 * (pcVar1->x - pcVar2->x);
-        pcVar2->y = fVar6 * (pcVar1->y - pcVar2->y);
-        pcVar2->z = fVar6 * (pcVar1->z - pcVar2->z);
+        pcVar2->x = var_f26 * (pcVar1->x - pcVar2->x);
+        pcVar2->y = var_f26 * (pcVar1->y - pcVar2->y);
+        pcVar2->z = var_f26 * (pcVar1->z - pcVar2->z);
     }
 }
 
@@ -971,7 +982,7 @@ static void ke_set(e_yg_class* i_this) {
             work.set(0.0f, ZREG_F(4) + 15.0f, 0.0f);
         }
         MtxPosition(&work, &i_this->mYgKes[i].field_0xf0);
-        
+
         i_this->mYgKes[i].field_0xf0 -= i_this->mYgKes[i].field_0x0[0];
         ke_move(i_this, &i_this->mLineMat, &i_this->mYgKes[i], i, pos_z);
         MtxPull();
@@ -1224,7 +1235,7 @@ static int daE_YG_Execute(e_yg_class* i_this) {
         MTXCopy(daPy_getLinkPlayerActorClass()->getWolfMouthMatrix(), mDoMtx_stack_c::get());
         mDoMtx_stack_c::multVecZero(&actor->current.pos);
         mDoMtx_stack_c::YrotM(KREG_S(0));
-        mDoMtx_stack_c::XrotM(KREG_S(1) + (s16)0x8000);
+        mDoMtx_stack_c::XrotM(KREG_S(1) + 0x8000);
         mDoMtx_stack_c::ZrotM(KREG_S(2) + 2500);
         mDoMtx_stack_c::transM(KREG_F(0) + 10.0f, KREG_F(1) + -60.0f, KREG_F(2) + -20.0f);
         model->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -1425,7 +1436,7 @@ static cPhs_Step daE_YG_Create(fopAc_ac_c* actor) {
         i_this->mDistance = l_HIO.pl_recognition_dist;
 
         /* If Phantom Zant actor exists */
-        if (fopAcM_SearchByName(PROC_E_PZ) != 0) {
+        if (fopAcM_SearchByName(fpcNm_E_PZ_e) != 0) {
             i_this->mDistance = 10000.0f;
             i_this->mUnkFlag2 = 1;
         }
@@ -1447,18 +1458,18 @@ static actor_method_class l_daE_YG_Method = {
 };
 
 actor_process_profile_definition g_profile_E_YG = {
-  fpcLy_CURRENT_e,       // mLayerID
-  7,                     // mListID
-  fpcPi_CURRENT_e,       // mListPrio
-  PROC_E_YG,             // mProcName
-  &g_fpcLf_Method.base, // sub_method
-  sizeof(e_yg_class),    // mSize
-  0,                     // mSizeOther
-  0,                     // mParameters
-  &g_fopAc_Method.base,  // sub_method
-  190,                   // mPriority
-  &l_daE_YG_Method,      // sub_method
-  0x00050120,            // mStatus
-  fopAc_ENEMY_e,         // mActorType
-  fopAc_CULLBOX_0_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_YG_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_yg_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_YG_e,
+    /* Actor SubMtd */ &l_daE_YG_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x10000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x20_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

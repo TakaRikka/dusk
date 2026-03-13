@@ -379,7 +379,7 @@ void daB_ZANT_c::setDamageSe(dCcD_Sph* i_hitSph, int i_dmgAmount) {
     BOOL var_r29;
     u8 at_se = ((dCcD_GObjInf*)mAtInfo.mpCollider)->GetAtSe();
 
-    if (mAtInfo.mpCollider->ChkAtType(AT_TYPE_HOOKSHOT) && !fopAcM_CheckStatus(this, 0x280000)) {
+    if (mAtInfo.mpCollider->ChkAtType(AT_TYPE_HOOKSHOT) && !fopAcM_CheckStatus(this, fopAcStts_UNK_0x200000_e | fopAcStts_UNK_0x80000_e)) {
         var_r29 = 1;
     } else {
         var_r29 = 0;
@@ -745,20 +745,20 @@ static void* s_obj_sub(void* i_actor, void* i_data) {
         if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && !fopAcM_checkCarryNow((fopAc_ac_c*)i_actor)) {
             f32 obj_dist = fopAcM_searchActorDistanceXZ((fopAc_ac_c*)i_actor, (fopAc_ac_c*)i_data);
             if (obj_dist < 300.0f && fopAcM_GetSpeed((fopAc_ac_c*)i_actor).y) {
-                if (fopAcM_GetName(i_actor) == PROC_Obj_Carry) {
+                if (fopAcM_GetName(i_actor) == fpcNm_Obj_Carry_e) {
                     return i_actor;
                 }
 
-                if (fopAcM_GetName(i_actor) == PROC_NBOMB) {
+                if (fopAcM_GetName(i_actor) == fpcNm_NBOMB_e) {
                     return i_actor;
                 }
             }
 
-            if (obj_dist < 300.0f && fopAcM_GetName(i_actor) == PROC_NBOMB && ((daNbomb_c*)i_actor)->getExTime() < 10) {
+            if (obj_dist < 300.0f && fopAcM_GetName(i_actor) == fpcNm_NBOMB_e && ((daNbomb_c*)i_actor)->getExTime() < 10) {
                 return i_actor;
             }
 
-            if (obj_dist < 700.0f && fopAcM_GetName(i_actor) == PROC_ARROW && fopAcM_GetSpeedF((fopAc_ac_c*)i_actor)) {
+            if (obj_dist < 700.0f && fopAcM_GetName(i_actor) == fpcNm_ARROW_e && fopAcM_GetSpeedF((fopAc_ac_c*)i_actor)) {
                 s16 actor_angle = ((fopAc_ac_c*)i_actor)->current.angle.y;
                 s16 angle_to_boss = fopAcM_searchActorAngleY((fopAc_ac_c*)i_actor, (fopAc_ac_c*)i_data);
                 if (abs((s16)(actor_angle - angle_to_boss)) < 0x2000) {
@@ -946,7 +946,7 @@ static int target_info_count;
 
 static void* s_pillar_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor)) {
-        if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_Obj_Pillar) {
+        if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == fpcNm_Obj_Pillar_e) {
             if (((daPillar_c*)i_actor)->getMdlType() != 0) {
                 ((daB_ZANT_c*)i_data)->mPillarIDs[8] = fopAcM_GetID(i_actor);
             } else {
@@ -1051,7 +1051,7 @@ void daB_ZANT_c::executeSmallAttack() {
                 parameter = 6;
             }
 
-            fopAcM_createChild(PROC_B_ZANTM, fopAcM_GetID(this), parameter, &sp44, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
+            fopAcM_createChild(fpcNm_B_ZANTM_e, fopAcM_GetID(this), parameter, &sp44, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
             dComIfGp_particle_set(0x886B, &sp44, &shape_angle, NULL);
 
             field_0x6fd++;
@@ -1343,7 +1343,7 @@ void daB_ZANT_c::executeOpening() {
         }
 
         Z2GetAudioMgr()->setDemoName("force_start");
-        fopAcM_OffStatus(this, 0x4000);
+        fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
         
         sp34.set(0.0f, 0.0f, -700.0f);
         player->setPlayerPosAndAngle(&sp34, 0, 0);
@@ -1886,7 +1886,7 @@ void daB_ZANT_c::executeHook() {
             setBck(BCK_ZAN_HOOK_WAIT, J3DFrameCtrl::EMode_LOOP, 3.0f, 1.0f);
         }
     case 3:
-        if (!fopAcM_CheckStatus(this, 0x100000)) {
+        if (!fopAcM_CheckStatus(this, fopAcStts_HOOK_CARRY_NOW_e)) {
             setTgHitBit(TRUE);
             setCoHitBit(TRUE);
             setActionMode(ACT_SWIM, 10);
@@ -4049,7 +4049,7 @@ void daB_ZANT_c::executeLastAttack() {
             mRollCc.ClrAtHit();
         }
 
-        if (sp48 != NULL && fopAcM_GetName(dCc_GetAc(sp48->GetAc())) == PROC_ALINK) {
+        if (sp48 != NULL && fopAcM_GetName(dCc_GetAc(sp48->GetAc())) == fpcNm_ALINK_e) {
             sp3C = 1;
             field_0x6fd++;
 
@@ -4335,7 +4335,7 @@ void daB_ZANT_c::executeLastDamage() {
 
 static void* s_del_tp(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor)) {
-        if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_OBJ_TP) {
+        if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == fpcNm_OBJ_TP_e) {
             fopAcM_delete((fopAc_ac_c*)i_actor);
         }
     }
@@ -4589,18 +4589,18 @@ void daB_ZANT_c::initNextRoom() {
     fopAcM_SearchByID(mMobileIDs[0], &pmobile);
 
     if (mFightPhase == PHASE_OI) {
-        fopAcM_OnStatus(this, 0x80000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x80000_e);
 
         if (pmobile == NULL) {
             cXyz pos(0.0f, -3300.0f, 0.0f);
             for (int i = 0; i < 4; i++) {
-                mMobileIDs[i] = fopAcM_create(PROC_B_ZANTZ, i | 0xFFFFFF00, &pos, warp_next_room[mFightPhase], &shape_angle, NULL, -1);
+                mMobileIDs[i] = fopAcM_create(fpcNm_B_ZANTZ_e, i | 0xFFFFFF00, &pos, warp_next_room[mFightPhase], &shape_angle, NULL, -1);
             }
 
             mCorrectMobileNo = 0;
         }
     } else {
-        fopAcM_OffStatus(this, 0x80000);
+        fopAcM_OffStatus(this, fopAcStts_UNK_0x80000_e);
 
         if (pmobile != NULL) {
             fopAcM_delete(pmobile);
@@ -5600,20 +5600,20 @@ static actor_method_class l_daB_ZANT_Method = {
 };
 
 actor_process_profile_definition g_profile_B_ZANT = {
-  fpcLy_CURRENT_e,              // mLayerID
-  4,                            // mListID
-  fpcPi_CURRENT_e,              // mListPrio
-  PROC_B_ZANT,                  // mProcName
-  &g_fpcLf_Method.base,        // sub_method
-  sizeof(daB_ZANT_c),           // mSize
-  0,                            // mSizeOther
-  0,                            // mParameters
-  &g_fopAc_Method.base,         // sub_method
-  226,                          // mPriority
-  &l_daB_ZANT_Method,           // sub_method
-  0x00040000,                   // mStatus
-  fopAc_ENEMY_e,                // mActorType
-  fopAc_CULLBOX_CUSTOM_e,       // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 4,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_B_ZANT_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daB_ZANT_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_B_ZANT_e,
+    /* Actor SubMtd */ &l_daB_ZANT_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

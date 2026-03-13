@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_kytag09.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 static int daKytag09_Draw(kytag09_class* i_this) {
     J3DModelData* modelData = i_this->mpModel->getModelData();
@@ -145,18 +145,18 @@ static actor_method_class l_daKytag09_Method = {
 };
 
 actor_process_profile_definition g_profile_KYTAG09 = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_KYTAG09,
-    &g_fpcLf_Method.base,
-    sizeof(kytag09_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    103,
-    &l_daKytag09_Method,
-    0x60000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KYTAG09_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(kytag09_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_KYTAG09_e,
+    /* Actor SubMtd */ &l_daKytag09_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_NOPAUSE_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

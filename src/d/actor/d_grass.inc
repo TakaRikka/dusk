@@ -373,7 +373,7 @@ void dGrass_data_c::hitCheck(int i_roomNo, u16 i_particleName) {
     fopAc_ac_c* hit_actor;
 
     u32 mass_flags = dComIfG_Ccsp()->ChkMass(&m_pos, &hit_actor, &hitinf);
-    bool at_hit = (mass_flags & 1) && (hit_actor != NULL && fopAcM_GetName(hit_actor) != PROC_Obj_Carry);
+    bool at_hit = (mass_flags & 1) && (hit_actor != NULL && fopAcM_GetName(hit_actor) != fpcNm_Obj_Carry_e);
 
     if (!(mass_flags & 2) && !at_hit) {
         if (field_0x02 >= 16) {

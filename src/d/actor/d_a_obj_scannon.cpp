@@ -1,6 +1,6 @@
 /**
  * @file d_a_obj_scannon.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -393,7 +393,7 @@ void daSCannon_c::exeModeWait() {
                 mMode = MODE_ORDER_EVT;
                 if (!fopAcM_isSwitch(this, getSw2())) {
                     cXyz pos(TKS_SET_POS);
-                    fopAcM_create(PROC_NPC_TKS, 1, &pos, fopAcM_GetRoomNo(this), NULL, NULL, -1);
+                    fopAcM_create(fpcNm_NPC_TKS_e, 1, &pos, fopAcM_GetRoomNo(this), NULL, NULL, -1);
                 }
             }
             break;
@@ -626,7 +626,7 @@ void daSCannon_c::demoInitFinish() {
 #endif
 
     fopAcM_seStartCurrent(this, Z2SE_OBJ_BOMB_EXPLODE, 0);
-    fopAcM_OffStatus(this, 0x80);
+    fopAcM_OffStatus(this, fopAcStts_NOEXEC_e);
 
     dComIfGp_getVibration().StopQuake(0x1F);
     dComIfGp_getVibration().StartShock(8, 0x1F, cXyz(0.0f, 1.0f, 0.0f));
@@ -665,7 +665,7 @@ void daSCannon_c::demoInitWarpEndWait() {
     }
 
     mpPtlBtk->setPlaySpeed(1.0f);
-    
+
     daPy_py_c* player_p = (daPy_py_c*)dComIfGp_getPlayer(0);
     if (player_p != NULL) {
         cXyz pos(-101987.7f, -18470.0f, 55863.813f);
@@ -709,7 +709,7 @@ void daSCannon_c::changeScene() {
             dComIfGp_getVibration().StopQuake(0x1F);
         }
 
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x80);
+        fopAcM_OnStatus(this, fopAcStts_NOEXEC_e);
 
         if (field_0x619 == 0) {
             field_0x619 = 1;
@@ -851,18 +851,18 @@ static actor_method_class daSCannon_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_SCannon = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_SCannon,       // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daSCannon_c),    // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  734,                    // mPriority
-  &daSCannon_METHODS,     // sub_method
-  0x00044180,             // mStatus
-  fopAc_ENV_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_SCannon_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daSCannon_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_SCannon_e,
+    /* Actor SubMtd */ &daSCannon_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e | fopAcStts_NOEXEC_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

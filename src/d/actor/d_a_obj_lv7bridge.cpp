@@ -36,7 +36,7 @@ static void* searchSwSpinner(void* i_actor, void* i_data) {
     fopAc_ac_c* swspinner = (fopAc_ac_c*)i_actor;
     fopAc_ac_c* brg = (fopAc_ac_c*)i_data;
 
-    if (swspinner != NULL && fopAcM_IsActor(swspinner) && fopAcM_GetProfName(swspinner) == PROC_Obj_SwSpinner) {
+    if (swspinner != NULL && fopAcM_IsActor(swspinner) && fopAcM_GetProfName(swspinner) == fpcNm_Obj_SwSpinner_e) {
         if (((daObjLv7Brg_c*)brg)->getSwbit() == ((daObjSwSpinner_c*)swspinner)->getSwbit()) {
             return swspinner;
         }
@@ -474,18 +474,18 @@ static actor_method_class daObjLv7Brg_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_Lv7Bridge = {
-  fpcLy_CURRENT_e,        // mLayerID
-  3,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_Lv7Bridge,     // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjLv7Brg_c),  // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  566,                    // mPriority
-  &daObjLv7Brg_METHODS,   // sub_method
-  0x00040100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Lv7Bridge_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjLv7Brg_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Lv7Bridge_e,
+    /* Actor SubMtd */ &daObjLv7Brg_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

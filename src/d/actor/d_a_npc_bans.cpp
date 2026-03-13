@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_bans.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -574,7 +574,7 @@ u8 daNpc_Bans_c::getType() {
 
         case 1:
             return TYPE_TWILIGHT; // Eldin Twilight
-        
+
         case 2:
             return TYPE_COLIN_KIDNAPPED; // After Colin kidnapped but before horseback battle cleared
 
@@ -604,7 +604,7 @@ BOOL daNpc_Bans_c::isDelete() {
                 Do not delete if TYPE_TWILIGHT
             */
             return FALSE;
-        
+
         case TYPE_COLIN_KIDNAPPED:
             /*
                 Delete if TYPE_COLIN_KIDNAPPED and:
@@ -639,7 +639,7 @@ void daNpc_Bans_c::reset() {
     if (mpMatAnm[0] != NULL) {
         mpMatAnm[0]->initialize();
     }
-    
+
     initialize();
 
     for (int i = 0; i < 8; i++) {
@@ -789,7 +789,7 @@ void daNpc_Bans_c::srchActors() {
                 }
             }
             break;
-        
+
         case TYPE_TWILIGHT:
             for (int i = 0; i < 2; i++) {
                 if (mActorMngrs[i + 5].getActorP() == NULL) {
@@ -798,7 +798,7 @@ void daNpc_Bans_c::srchActors() {
             }
 
             if (mActorMngrs[3].getActorP() == NULL) {
-                mActorMngrs[3].entry(getNearestActorP(PROC_NPC_LEN));
+                mActorMngrs[3].entry(getNearestActorP(fpcNm_NPC_LEN_e));
             }
             break;
 
@@ -894,10 +894,10 @@ void daNpc_Bans_c::action() {
 }
 
 void daNpc_Bans_c::beforeMove() {
-    fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x8000000);
+    fopAcM_OffStatus(this, fopAcStts_UNK_0x8000000_e);
 
     if (checkHide()) {
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
     }
 
     if (checkPlayerIn2ndFloorOfBombShop()) {
@@ -1062,7 +1062,7 @@ int daNpc_Bans_c::drawDbgInfo() {
         dDbVw_drawSphereXlu(attention_info.position, 9.0f, (GXColor){0x80, 0x80, 0x80, 0xA0}, 1);
     }
     #endif
-    
+
     return 0;
 }
 
@@ -1146,12 +1146,12 @@ BOOL daNpc_Bans_c::selectAction() {
         return TRUE;
     }
     #endif
-    
+
     switch (mType) {
         case TYPE_SHOP:
             mNextAction = &daNpc_Bans_c::tend;
             break;
-        
+
         default:
             mNextAction = &daNpc_Bans_c::wait;
             break;
@@ -1205,7 +1205,7 @@ fopAc_ac_c* daNpc_Bans_c::getKMsgTagP() {
     int reg_r29 = 0; // unused
     f32 fVar1 = G_CM3D_F_INF;
     mFindCount = 0;
-    mSrchName = PROC_TAG_KMSG;
+    mSrchName = fpcNm_TAG_KMSG_e;
     fopAcM_Search(srchActor, this);
 
     for (int i = 0; i < mFindCount; i++) {
@@ -1254,7 +1254,7 @@ int daNpc_Bans_c::cutAnger(int i_staffId) {
 
                 initTalk(12, NULL);
                 break;
-            
+
             case 2:
                 if (mType == TYPE_MAKING_BOMBS) {
                     mFaceMotionSeqMngr.setNo(FACE_BLINK, -1.0f, FALSE, 0);
@@ -1272,7 +1272,7 @@ int daNpc_Bans_c::cutAnger(int i_staffId) {
                 mEventTimer = timer;
                 mDropWaterTimer = 20;
                 break;
-            
+
             case 4:
                 mEventTimer = timer;
                 break;
@@ -1281,7 +1281,7 @@ int daNpc_Bans_c::cutAnger(int i_staffId) {
                 mFaceMotionSeqMngr.setNo(FACE_BLINK, -1.0f, FALSE, 0);
                 mMotionSeqMngr.setNo(MOT_ANGRY_C, -1.0f, FALSE, 0);
                 break;
-                
+
             case 6:
                 mFaceMotionSeqMngr.setNo(FACE_TALK_A, -1.0f, FALSE, 0);
                 mMotionSeqMngr.setNo(MOT_REST, -1.0f, FALSE, 0);
@@ -1303,7 +1303,7 @@ int daNpc_Bans_c::cutAnger(int i_staffId) {
                 step(mPlayerAngle, -1, -1, 15, 0);
             }
             break;
-        
+
         case 2:
             if (mMotionSeqMngr.getNo() == MOT_ANGRY_A || mMotionSeqMngr.getNo() == MOT_ANGRY_C) {
                 if (mMotionSeqMngr.checkEndSequence()) {
@@ -1347,7 +1347,7 @@ int daNpc_Bans_c::cutAnger(int i_staffId) {
                 rv = 1;
             }
             break;
-        
+
         case 4:
             action();
             if (cLib_calcTimer(&mEventTimer) == 0) {
@@ -1490,7 +1490,7 @@ int daNpc_Bans_c::wait(void*) {
                         mFaceMotionSeqMngr.setNo(FACE_NONE, -1.0f, FALSE, 0);
                         mMotionSeqMngr.setNo(MOT_WAIT_TW, -1.0f, FALSE, 0);
                         break;
-                    
+
                     case TYPE_COLIN_KIDNAPPED:
                         mFaceMotionSeqMngr.setNo(FACE_BLINK, -1.0f, FALSE, 0);
                         mMotionSeqMngr.setNo(MOT_FAINT, -1.0f, FALSE, 0);
@@ -1523,7 +1523,7 @@ int daNpc_Bans_c::wait(void*) {
                     daNpcT_chkEvtBit(60) && // dSv_event_flag_c::M_027 - Cutscene - [cutscene: 13] kids in the church (beast eyes)
                     !dComIfGp_event_runCheck()
                 ) {
-                   mDemo13Flag = 0; 
+                   mDemo13Flag = 0;
                 }
             }
 
@@ -1654,7 +1654,7 @@ int daNpc_Bans_c::tend(void*) {
                     if (actor_p != NULL) {
                         cXyz attnPos = getAttnPos(daPy_getPlayerActorClass());
                         BOOL bVar2 = NULL != mPlayerActorMngr.getActorP();
-                        
+
                         int i_no = actor_p->attention_info.distances[fopAc_attn_SPEAK_e];
                         f32 dist_max = dComIfGp_getAttention()->getDistTable(i_no).mDistMax;
                         f32 neg_lower_y = dComIfGp_getAttention()->getDistTable(i_no).mLowerY * -1.0f;
@@ -1810,7 +1810,7 @@ int daNpc_Bans_c::shop(void*) {
 
 int daNpc_Bans_c::test(void*) {
     int rv = 0;
-    
+
     switch (mMode) {
         case 0:
         case 1:
@@ -1861,18 +1861,18 @@ static actor_method_class daNpc_Bans_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_BANS = {
-  fpcLy_CURRENT_e,          // mLayerID
-  7,                        // mListID
-  fpcPi_CURRENT_e,          // mListPrio
-  PROC_NPC_BANS,            // mProcName
-  &g_fpcLf_Method.base,    // sub_method
-  sizeof(daNpc_Bans_c),     // mSize
-  0,                        // mSizeOther
-  0,                        // mParameters
-  &g_fopAc_Method.base,     // sub_method
-  322,                      // mPriority
-  &daNpc_Bans_MethodTable,  // sub_method
-  0x00040107,               // mStatus
-  fopAc_NPC_e,              // mActorType
-  fopAc_CULLBOX_CUSTOM_e,   // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_BANS_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Bans_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_BANS_e,
+    /* Actor SubMtd */ &daNpc_Bans_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e | fopAcStts_UNK_0x2_e | fopAcStts_UNK_0x1_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

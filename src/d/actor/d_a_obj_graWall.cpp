@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_obj_graWall.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 int daObjGraWall_c::Create() {
     fopAcM_ct(this, daObjGraWall_c);
@@ -104,18 +104,18 @@ static actor_method_class l_daObjGraWall_Method = {
 };
 
 actor_process_profile_definition g_profile_GRA_WALL = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_GRA_WALL,
-    &g_fpcLf_Method.base,
-    sizeof(daObjGraWall_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    611,
-    &l_daObjGraWall_Method,
-    0x40000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_GRA_WALL_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjGraWall_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_GRA_WALL_e,
+    /* Actor SubMtd */ &l_daObjGraWall_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

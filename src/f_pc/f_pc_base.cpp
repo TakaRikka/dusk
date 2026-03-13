@@ -19,7 +19,7 @@
 #include "dusk/logging.h"
 
 #if TARGET_PC
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 static const char* getProcName(s16 id) {
     for (auto procName : procNames) {

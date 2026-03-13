@@ -39,63 +39,63 @@ public:
     bool checkStateExplode() { return fopAcM_GetParam(this) == 0; }
 
     static bool checkBombActor(fopAc_ac_c* i_actor) {
-        return fopAcM_GetName(i_actor) == PROC_NBOMB;
+        return fopAcM_GetName(i_actor) == fpcNm_NBOMB_e;
     }
 
     static fopAc_ac_c* createNormalBombPlayer(cXyz* i_pos) {
-        return (fopAc_ac_c*)fopAcM_fastCreate(PROC_NBOMB, 8, i_pos, -1, NULL, NULL, -1, NULL, NULL);
+        return (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_NBOMB_e, 8, i_pos, -1, NULL, NULL, -1, NULL, NULL);
     }
 
     static fopAc_ac_c* createNormalBombExplode(cXyz* i_pos) {
-        return (fopAc_ac_c*)fopAcM_fastCreate(PROC_NBOMB, 0, i_pos, -1, NULL, NULL, -1, NULL, NULL);
+        return (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_NBOMB_e, 0, i_pos, -1, NULL, NULL, -1, NULL, NULL);
     }
 
     static fopAc_ac_c* createWaterBombPlayer(cXyz* i_pos) {
-        return (fopAc_ac_c*)fopAcM_fastCreate(PROC_NBOMB, 9, i_pos, -1, NULL, NULL, -1, NULL, NULL);
+        return (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_NBOMB_e, 9, i_pos, -1, NULL, NULL, -1, NULL, NULL);
     }
 
     static fopAc_ac_c* createFlowerBomb(cXyz* i_pos, csXyz* i_angle, int param_2) {
-        return (fopAc_ac_c*)fopAcM_fastCreate(PROC_NBOMB, 4, i_pos, param_2, i_angle, NULL, -1,
+        return (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_NBOMB_e, 4, i_pos, param_2, i_angle, NULL, -1,
                                               NULL, NULL);
     }
 
     static fopAc_ac_c* createInsectBombPlayer(cXyz* i_pos) {
-        return (fopAc_ac_c*)fopAcM_fastCreate(PROC_NBOMB, 10, i_pos, -1, NULL, NULL, -1,
+        return (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_NBOMB_e, 10, i_pos, -1, NULL, NULL, -1,
                                               NULL, NULL);
     }
 
     static fopAc_ac_c* createEnemyBombBoomerang(cXyz* i_pos, csXyz* i_angle, int i_roomNo) {
-        return (fopAc_ac_c*)fopAcM_fastCreate(PROC_NBOMB, 12, i_pos, i_roomNo, i_angle, NULL, -1,
+        return (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_NBOMB_e, 12, i_pos, i_roomNo, i_angle, NULL, -1,
                                               NULL, NULL);
     }
 
     static fopAc_ac_c* createWaterBombExplode(cXyz* i_pos) {
-        return (fopAc_ac_c*)fopAcM_fastCreate(PROC_NBOMB, 18, i_pos, -1, NULL, NULL, -1, NULL,
+        return (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_NBOMB_e, 18, i_pos, -1, NULL, NULL, -1, NULL,
                                               NULL);
     }
 
     static fopAc_ac_c* createEnemyWaterBomb(cXyz* i_pos, csXyz* i_angle, int i_roomNo) {
-        return (fopAc_ac_c*)fopAcM_fastCreate(PROC_NBOMB, 14, i_pos, i_roomNo, i_angle, NULL, -1,
+        return (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_NBOMB_e, 14, i_pos, i_roomNo, i_angle, NULL, -1,
                                               NULL, NULL);
     }
 
     static fopAc_ac_c* createEnemyWaterBombHookshot(cXyz* i_pos, csXyz* i_angle, int i_roomNo) {
-        return (fopAc_ac_c*)fopAcM_fastCreate(PROC_NBOMB, 16, i_pos, i_roomNo, i_angle, NULL, -1,
+        return (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_NBOMB_e, 16, i_pos, i_roomNo, i_angle, NULL, -1,
                                               NULL, NULL);
     }
 
     static fopAc_ac_c* createBombCargoCarry(cXyz* i_pos, csXyz* i_angle, int i_roomNo) {
-        return (fopAc_ac_c*)fopAcM_fastCreate(PROC_NBOMB, 0x11, i_pos, i_roomNo, i_angle, NULL, -1,
+        return (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_NBOMB_e, 0x11, i_pos, i_roomNo, i_angle, NULL, -1,
                                  NULL, NULL);
     }
 
     static fopAc_ac_c* createEnemyBombHookshot(cXyz* i_pos, csXyz* i_angle, int i_roomNo) {
-        return (fopAc_ac_c*)fopAcM_fastCreate(PROC_NBOMB, 13, i_pos, i_roomNo, i_angle, NULL, -1,
+        return (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_NBOMB_e, 13, i_pos, i_roomNo, i_angle, NULL, -1,
                                               NULL, NULL);
     }
 
     static fopAc_ac_c* createEnemyBomb(cXyz* i_pos, csXyz* i_angle, int i_roomNo) {
-        return (fopAc_ac_c*)fopAcM_fastCreate(PROC_NBOMB, 0xB, i_pos, i_roomNo, i_angle, NULL, -1,
+        return (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_NBOMB_e, 0xB, i_pos, i_roomNo, i_angle, NULL, -1,
                                               NULL, NULL);
     }
 };

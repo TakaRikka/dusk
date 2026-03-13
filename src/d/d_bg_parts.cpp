@@ -660,7 +660,7 @@ int dBgp_c::execute(bool param_0) {
                     angle.x = (unitData->field_0x14 << 8) | unitData->field_0x5;
                     angle.z = (unitData->field_0x4 << 8) | unitData->field_0x3;
 
-                    fopAcM_create(PROC_SET_BG_OBJ, parameters, &pos, mPacket.getRoomNo(), &angle, &size, -1);
+                    fopAcM_create(fpcNm_SET_BG_OBJ_e, parameters, &pos, mPacket.getRoomNo(), &angle, &size, -1);
                 }
                 unitData++;
             }

@@ -555,7 +555,7 @@ void daObjTks_c::talk() {
         if (field_0xde1 != 0 && parentActorID == fpcM_ERROR_PROCESS_ID_e && daNpcF_chkEvtBit(0x147)) {
             cXyz pos(current.pos);
             pos.y += 30.0f;
-            parentActorID = fopAcM_createChild(PROC_NPC_TKC, fopAcM_GetID(this), 1, &pos, fopAcM_GetRoomNo(this), &mCurAngle, NULL, -1, NULL);
+            parentActorID = fopAcM_createChild(fpcNm_NPC_TKC_e, fopAcM_GetID(this), 1, &pos, fopAcM_GetRoomNo(this), &mCurAngle, NULL, -1, NULL);
         }
 
         if (talkProc(NULL, TRUE, NULL)) {
@@ -629,7 +629,7 @@ void daObjTks_c::demo() {
                 case '0002':
                     cXyz pos(current.pos);
                     pos.y += 30.0f;
-                    parentActorID = fopAcM_createChild(PROC_NPC_TKC, fopAcM_GetID(this), 0, &pos, fopAcM_GetRoomNo(this), &mCurAngle, NULL, -1, NULL);
+                    parentActorID = fopAcM_createChild(fpcNm_NPC_TKC_e, fopAcM_GetID(this), 0, &pos, fopAcM_GetRoomNo(this), &mCurAngle, NULL, -1, NULL);
 
                     Z2GetAudioMgr()->subBgmStart(Z2BGM_OBACHAN);
                     Z2GetAudioMgr()->bgmAllUnMute(0);
@@ -905,18 +905,18 @@ static actor_method_class daObjTks_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_TKS = {
-    fpcLy_CURRENT_e,            // mLayerID
-    7,                          // mListID
-    fpcPi_CURRENT_e,            // mListPrio
-    PROC_OBJ_TKS,               // mProcName
-    &g_fpcLf_Method.base,      // sub_method
-    sizeof(daObjTks_c),         // mSize
-    0,                          // mSizeOther
-    0,                          // mParameters
-    &g_fopAc_Method.base,       // sub_method
-    376,                        // mPriority
-    &daObjTks_MethodTable,      // sub_method
-    0x08044008,                 // mStatus
-    fopAc_NPC_e,                // mActorType
-    fopAc_CULLBOX_CUSTOM_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_TKS_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjTks_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_TKS_e,
+    /* Actor SubMtd */ &daObjTks_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x8000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_UNK_0x8_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

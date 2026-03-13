@@ -126,12 +126,12 @@ static void* s_bomb_sub(void* param_1, void* param_2) {
 static void* shot_b_sub(void* param_1, void* param_2) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (fopAcM_IsActor(param_1)) {
-        if (fopAcM_GetName(param_1) == PROC_BOOMERANG && daPy_py_c::checkBoomerangCharge() &&
+        if (fopAcM_GetName(param_1) == fpcNm_BOOMERANG_e && daPy_py_c::checkBoomerangCharge() &&
                 fopAcM_GetParam(param_1) == 1) {
             return param_1;
         }
 
-        if (fopAcM_GetName(param_1) == PROC_E_MK_BO && (((fopAc_ac_c*)param_1)->field_0x560 != 0))
+        if (fopAcM_GetName(param_1) == fpcNm_E_MK_BO_e && (((fopAc_ac_c*)param_1)->field_0x560 != 0))
         {
             return param_1;
         }
@@ -149,7 +149,7 @@ static f32 hz_check_pos_z;
 
 static void* s_hz_sub(void* param_1, void* param_2) {
     if (fopAcM_IsActor(param_1)) {
-        if (fopAcM_GetName(param_1) == PROC_E_HZ) {
+        if (fopAcM_GetName(param_1) == fpcNm_E_HZ_e) {
             daE_HZ_c* hz = (daE_HZ_c*)param_1;
             if (hz->isWait() == true) {
                 f32 xDiff = hz_check_pos_x - hz->current.pos.x;
@@ -705,18 +705,18 @@ static actor_method_class l_daObj_Toby_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_TOBY = {
-  fpcLy_CURRENT_e,        // mLayerID
-  3,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_OBJ_TOBY,          // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(obj_toby_class), // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  58,                     // mPriority
-  &l_daObj_Toby_Method,   // sub_method
-  0x00044000,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_TOBY_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(obj_toby_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_TOBY_e,
+    /* Actor SubMtd */ &l_daObj_Toby_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

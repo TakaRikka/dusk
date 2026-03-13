@@ -21,7 +21,7 @@ static int getNowLevel(fopAc_ac_c* i_this) {
 
 static void* searchStop(void* param_1, void* param_2) {
     if (param_1 != NULL && fopAcM_IsActor(param_1) &&
-        fopAcM_GetProfName(param_1) == PROC_Obj_Stopper)
+        fopAcM_GetProfName(param_1) == fpcNm_Obj_Stopper_e)
     {
         return param_1;
     }
@@ -414,7 +414,7 @@ int daMBdoorL1_c::createKey() {
             cStack_30.y = 0;
             unaff_r29 = (u8)door_param2_c::getFRoomNo(this);
         }
-        mKeyHoleId = fopAcM_createChildFromOffset(PROC_OBJ_KEYHOLE, fopAcM_GetID(this), 0xffffffff,
+        mKeyHoleId = fopAcM_createChildFromOffset(fpcNm_OBJ_KEYHOLE_e, fopAcM_GetID(this), 0xffffffff,
                                                   &cStack_28, unaff_r29, &cStack_30, &scale,
                                                   -1, NULL);
         current.pos = cStack_1c;
@@ -953,7 +953,7 @@ int daMBdoorL1_c::openInit() {
                 }
             }
         }
-        if (fopAcM_CheckStatus(this, 0x1000)) {
+        if (fopAcM_CheckStatus(this, fopAcStts_STAFF_SHUTTER_e)) {
             fopAcM_onSwitch(this, swBit3);
         }
         field_0x5e1 = 1;
@@ -1598,7 +1598,7 @@ int daMBdoorL1_c::actionOpen() {
 }
 
 int daMBdoorL1_c::actionInit() {
-    if (fopAcM_CheckStatus(this, 0x1000)) {
+    if (fopAcM_CheckStatus(this, fopAcStts_STAFF_SHUTTER_e)) {
         setAction(ACTION_START_DEMO);
         actionStartDemo();
     } else {
@@ -1623,7 +1623,7 @@ int daMBdoorL1_c::actionInit() {
 int daMBdoorL1_c::actionStartDemo() {
     field_0x5e8 = dComIfGp_evmng_getMyStaffId(l_staff_name, NULL, 0);
     demoProc();
-    if (!fopAcM_CheckStatus(this, 0x1000)) {
+    if (!fopAcM_CheckStatus(this, fopAcStts_STAFF_SHUTTER_e)) {
         setAction(ACTION_CLOSE_WAIT);
     }
     return 1;
@@ -1728,18 +1728,18 @@ static actor_method_class l_daMBdoorL1_Method = {
 };
 
 actor_process_profile_definition g_profile_L1MBOSS_DOOR = {
-  fpcLy_CURRENT_e,       // mLayerID
-  7,                     // mListID
-  fpcPi_CURRENT_e,       // mListPrio
-  PROC_L1MBOSS_DOOR,     // mProcName
-  &g_fpcLf_Method.base, // sub_method
-  sizeof(daMBdoorL1_c),  // mSize
-  0,                     // mSizeOther
-  0,                     // mParameters
-  &g_fopAc_Method.base,  // sub_method
-  299,                   // mPriority
-  &l_daMBdoorL1_Method,  // sub_method
-  0x00044000,            // mStatus
-  fopAc_ACTOR_e,         // mActorType
-  fopAc_CULLBOX_6_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_L1MBOSS_DOOR_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daMBdoorL1_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_L1MBOSS_DOOR_e,
+    /* Actor SubMtd */ &l_daMBdoorL1_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

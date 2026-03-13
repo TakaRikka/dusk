@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_aru.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -531,7 +531,7 @@ void* daNpc_Aru_c::srchCow(void* i_actor, void* i_data) {
     if (mFindCount < 50) {
         fopAc_ac_c* actor_p = (fopAc_ac_c*) i_actor;
         if (actor_p != NULL && actor_p != data_p) {
-            if (fopAcM_IsExecuting(fopAcM_GetID(actor_p)) && fopAcM_GetName(actor_p) == PROC_COW && !((daCow_c*)actor_p)->isGuardFad()) {
+            if (fopAcM_IsExecuting(fopAcM_GetID(actor_p)) && fopAcM_GetName(actor_p) == fpcNm_COW_e && !((daCow_c*)actor_p)->isGuardFad()) {
                 mFindActorPtrs[mFindCount] = actor_p;
                 mFindCount++;
             }
@@ -546,7 +546,7 @@ void* daNpc_Aru_c::srchUDoor(void* i_actor, void* i_data) {
     if (mFindCount < 50) {
         fopAc_ac_c* actor_p = (fopAc_ac_c*) i_actor;
         if (actor_p != NULL && actor_p != data_p) {
-            if (fopAcM_IsExecuting(fopAcM_GetID(actor_p)) && fopAcM_GetName(actor_p) == PROC_OBJ_UDOOR) {
+            if (fopAcM_IsExecuting(fopAcM_GetID(actor_p)) && fopAcM_GetName(actor_p) == fpcNm_OBJ_UDOOR_e) {
                 mFindActorPtrs[mFindCount] = (fopAc_ac_c*) actor_p;
                 mFindCount++;
             }
@@ -574,7 +574,7 @@ BOOL daNpc_Aru_c::chkThrust(fopAc_ac_c* actor_p) {
             }
         }
 
-        if (fopAcM_GetName(actor_p) == PROC_ALINK && daPy_py_c::checkNowWolf() && actorDistance < mpHIO->m.warning_range) {
+        if (fopAcM_GetName(actor_p) == fpcNm_ALINK_e && daPy_py_c::checkNowWolf() && actorDistance < mpHIO->m.warning_range) {
             return TRUE;
         }
     }
@@ -621,7 +621,7 @@ fopAc_ac_c* daNpc_Aru_c::getCowP(int param_1) {
 fopAc_ac_c* daNpc_Aru_c::getUDoor_l_P() {
     fopAc_ac_c* rv = NULL;
     f32 fVar1 = G_CM3D_F_INF;
-    
+
     mFindCount = 0;
     fopAcM_Search(srchUDoor, this);
 
@@ -638,7 +638,7 @@ fopAc_ac_c* daNpc_Aru_c::getUDoor_l_P() {
 fopAc_ac_c* daNpc_Aru_c::getUDoor_r_P() {
     fopAc_ac_c* rv = NULL;
     f32 fVar1 = G_CM3D_F_INF;
-    
+
     mFindCount = 0;
     fopAcM_Search(srchUDoor, this);
 
@@ -683,7 +683,7 @@ BOOL daNpc_Aru_c::isDelete() {
 
         case TYPE_1:
             return FALSE;
-        
+
         case TYPE_2:
             /* dSv_event_flag_c::M_013 - Misc. - First heard about Twilight gate from Midna */
             return daNpcT_chkEvtBit(45) == FALSE;
@@ -724,7 +724,7 @@ void daNpc_Aru_c::reset() {
             mPlayerActorMngr.entry(daPy_getPlayerActorClass());
             mEventTimer = 30;
             break;
-        
+
         case TYPE_2:
             mTimerID = fpcM_ERROR_PROCESS_ID_e;
             mPlayerActorMngr.entry(daPy_getPlayerActorClass());
@@ -739,7 +739,7 @@ void daNpc_Aru_c::reset() {
                 }
             }
             break;
-            
+
         case TYPE_4:
             mTimerID = fpcM_ERROR_PROCESS_ID_e;
             mEventTimer = 30;
@@ -869,7 +869,7 @@ void daNpc_Aru_c::setAfterTalkMotion() {
         case FACE_WORRY:
             i_index = FACE_H_WORRY;
             break;
-        
+
         case FACE_BITTERSMILE:
             i_index = FACE_H_BITTERSMILE;
             break;
@@ -901,7 +901,7 @@ void daNpc_Aru_c::srchActors() {
                 mActorMngrs[1].entry(getUDoor_r_P());
             }
             break;
-        
+
         case TYPE_2:
             if (chkBullRunningStage() && mTimerID == fpcM_ERROR_PROCESS_ID_e) {
                 mTimerID = dTimer_createTimer(2, 0x989298, 3, 0, 210.0f, 410.0f, 32.0f, 419.0f);
@@ -996,10 +996,10 @@ void daNpc_Aru_c::action() {
 }
 
 void daNpc_Aru_c::beforeMove() {
-    fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x8000000);
+    fopAcM_OffStatus(this, fopAcStts_UNK_0x8000000_e);
 
     if (checkHide()) {
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
     }
 
     if (checkHide() || mNoDraw) {
@@ -1021,7 +1021,7 @@ void daNpc_Aru_c::setAttnPos() {
                      mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
                      mpHIO->m.common.neck_rotation_ratio, rad, &sp4c);
     mJntAnm.calcJntRad(0.2f, 1.0f, rad);
-    
+
     setMtx();
     mDoMtx_stack_c::copy(mpMorf[0]->getModel()->getAnmMtx(getHeadJointNo()));
     mDoMtx_stack_c::multVec(&sp40, &eyePos);
@@ -1258,6 +1258,7 @@ void daNpc_Aru_c::adjustMoveDir() {
         }
     }
 
+    s16 sVar4;
     if (bVar1[1] != 0 && bVar1[2] != 0) {
         mTimer = mpHIO->m.no_turn_time;
 
@@ -1294,7 +1295,7 @@ void daNpc_Aru_c::adjustMoveDir() {
                 field_0xfca = 2;
             }
         } else {
-            s16 sVar4 = sVar3[0] - mCurAngle.y;
+            sVar4 = sVar3[0] - mCurAngle.y;
 
             if (abs(sVar4) > 0x7800) {
                 if (mActorDirection == 1 || mActorDirection == 2 || mActorDirection == 3) {
@@ -1504,7 +1505,7 @@ int daNpc_Aru_c::cutRideOnHorse(int i_staffID) {
                 step(mPlayerAngle, 12, 11, 15, 0);
             }
             break;
-        
+
         case 1:
             if (talkProc(NULL, FALSE, NULL, FALSE) && mFlow.checkEndFlow()) {
                 rv = 1;
@@ -1714,7 +1715,7 @@ int daNpc_Aru_c::cutSpeakTo(int i_staffID) {
                     mStepMode = 0;
                 }
                 break;
-            
+
             case 1:
                 mFaceMotionSeqMngr.setNo(FACE_NONE, -1.0f, FALSE, 0);
                 mMotionSeqMngr.setNo(MOT_WAIT_A, -1.0f, FALSE, 0);
@@ -1733,7 +1734,7 @@ int daNpc_Aru_c::cutSpeakTo(int i_staffID) {
                 step(mPlayerAngle, 12, 11, 15, 0);
             }
             break;
-        
+
         case 1:
             if (talkProc(NULL, FALSE, NULL, FALSE)) {
                 int itemNo;
@@ -2063,7 +2064,7 @@ int daNpc_Aru_c::skipFence(void* param_1) {
                         field_0xe33 = true;
                     }
                     break;
-                
+
                 case TYPE_4:
                     if (daNpcT_chkTmpBit(177) && // dSv_event_tmp_flag_c::T_0177 - Ordon Ranch - 1st day: Asked to jump gate by Fado
                         !daNpcT_chkTmpBit(178)) { // dSv_event_tmp_flag_c::T_0178 - Ordon Ranch - 1st day: Spoke with Fado while jumping over gate
@@ -2121,7 +2122,7 @@ int daNpc_Aru_c::talk(void*) {
                                     evtChange();
                                 }
                                 break;
-                            
+
                             case 23:
                                 if (mType == TYPE_0) {
                                     dStage_changeScene(9, 0.0f, 0, fopAcM_GetRoomNo(this), 0, -1);
@@ -2214,18 +2215,18 @@ static actor_method_class daNpc_Aru_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_ARU = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_NPC_ARU,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daNpc_Aru_c),    // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  321,                    // mPriority
-  &daNpc_Aru_MethodTable, // sub_method
-  0x00040107,             // mStatus
-  fopAc_NPC_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_ARU_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Aru_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_ARU_e,
+    /* Actor SubMtd */ &daNpc_Aru_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e | fopAcStts_UNK_0x2_e | fopAcStts_UNK_0x1_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

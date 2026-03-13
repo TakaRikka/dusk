@@ -669,7 +669,7 @@ void daNpcTks_c::reset() {
             setAction(&daNpcTks_c::demo_scannon);
             cXyz i_pos(current.pos);
             i_pos.y += 60.0f;
-            parentActorID = fopAcM_createChild(PROC_NPC_TKC, fopAcM_GetID(this), 3, &i_pos, fopAcM_GetRoomNo(this),
+            parentActorID = fopAcM_createChild(fpcNm_NPC_TKC_e, fopAcM_GetID(this), 3, &i_pos, fopAcM_GetRoomNo(this),
                                             &mCurAngle, NULL, -1, NULL);
             break;
         }
@@ -680,7 +680,7 @@ void daNpcTks_c::reset() {
             setAction(&daNpcTks_c::demo_Lv6Gate);
             cXyz i_pos(current.pos);
             i_pos.y += 60.0f;
-            parentActorID = fopAcM_createChild(PROC_NPC_TKC, fopAcM_GetID(this), 3, &i_pos, fopAcM_GetRoomNo(this),
+            parentActorID = fopAcM_createChild(fpcNm_NPC_TKC_e, fopAcM_GetID(this), 3, &i_pos, fopAcM_GetRoomNo(this),
                                             &mCurAngle, NULL, -1, NULL);
             break;
         }
@@ -693,7 +693,7 @@ void daNpcTks_c::reset() {
             cXyz i_pos(current.pos);
             csXyz i_angle(0, fopAcM_searchPlayerAngleY(this), 0);
             i_pos.y += 60.0f;
-            parentActorID = fopAcM_createChild(PROC_NPC_TKC, fopAcM_GetID(this), 4, &i_pos, fopAcM_GetRoomNo(this),
+            parentActorID = fopAcM_createChild(fpcNm_NPC_TKC_e, fopAcM_GetID(this), 4, &i_pos, fopAcM_GetRoomNo(this),
                                             &i_angle, NULL, -1, NULL);
             break;
         }
@@ -731,7 +731,7 @@ void daNpcTks_c::reset() {
             setAction(&daNpcTks_c::waitLv6);
             cXyz i_pos(current.pos);
             i_pos.y += 60.0f;
-            parentActorID = fopAcM_createChild(PROC_NPC_TKC, fopAcM_GetID(this), 4, &i_pos, fopAcM_GetRoomNo(this),
+            parentActorID = fopAcM_createChild(fpcNm_NPC_TKC_e, fopAcM_GetID(this), 4, &i_pos, fopAcM_GetRoomNo(this),
                                             &mCurAngle, NULL, -1, NULL);
             break;
         }
@@ -2334,7 +2334,7 @@ void daNpcTks_c::demo_Lv7Start() {
                                 current.pos.set(120.0f, 3000.0f, 5500.0f);
                                 old.pos = current.pos;
                                 setAngle(fopAcM_searchPlayerAngleY(this));
-                                parentActorID = fopAcM_createChild(PROC_NPC_TKC, fopAcM_GetID(this), 3, &current.pos, fopAcM_GetRoomNo(this),
+                                parentActorID = fopAcM_createChild(fpcNm_NPC_TKC_e, fopAcM_GetID(this), 3, &current.pos, fopAcM_GetRoomNo(this),
                                                                    &mCurAngle, NULL, -1, NULL);
                                 dComIfGp_event_setTalkPartner(this);
                                 field_0x138b = false;
@@ -2528,7 +2528,7 @@ void daNpcTks_c::demo_Lv7Start() {
                             int iVar1[2] = {0x2520, -1};
                             if (talkProc(iVar1, TRUE, NULL)) {
                                 if (!mFlow.checkEndFlow()) {
-                                    fopAc_ac_c* actor_p = fopAcM_SearchByName(PROC_Tag_Lv7Gate);
+                                    fopAc_ac_c* actor_p = fopAcM_SearchByName(fpcNm_Tag_Lv7Gate_e);
                                     if (actor_p != NULL) {
                                         setLookMode(LOOK_ACTOR, actor_p);
                                     }
@@ -3046,18 +3046,18 @@ static actor_method_class daNpcTks_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_TKS = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_NPC_TKS,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daNpcTks_c),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  374,                    // mPriority
-  &daNpcTks_MethodTable,  // sub_method
-  0x08044108,             // mStatus
-  fopAc_NPC_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_TKS_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcTks_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_TKS_e,
+    /* Actor SubMtd */ &daNpcTks_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x8000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x8_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

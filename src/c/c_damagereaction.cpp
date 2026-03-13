@@ -49,9 +49,9 @@ BOOL cDmrNowMidnaTalk() {
     if (dComIfGp_event_runCheck()) {
         fopAc_ac_c* actor = (fopAc_ac_c*)fopAcM_getTalkEventPartner(daPy_getLinkPlayerActorClass());
         if (actor) {
-            if (fopAcM_GetName(actor) == PROC_MIDNA || fopAcM_GetName(actor) == PROC_Tag_Mhint ||
-                     fopAcM_GetName(actor) == PROC_Tag_Mstop || fopAcM_GetName(actor) == PROC_Tag_Hstop ||
-                     fopAcM_GetName(actor) == PROC_Tag_Mwait || fopAcM_GetName(actor) == PROC_Tag_Wljump) {
+            if (fopAcM_GetName(actor) == fpcNm_MIDNA_e || fopAcM_GetName(actor) == fpcNm_Tag_Mhint_e ||
+                     fopAcM_GetName(actor) == fpcNm_Tag_Mstop_e || fopAcM_GetName(actor) == fpcNm_Tag_Hstop_e ||
+                     fopAcM_GetName(actor) == fpcNm_Tag_Mwait_e || fopAcM_GetName(actor) == fpcNm_Tag_Wljump_e) {
                 return 1;
             }
         }

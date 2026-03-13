@@ -249,7 +249,7 @@ int daNpc_Kn_c::teach02_shieldReflectWait(void* param_0) {
                         cXyz sp20(150.0f, 0.0f, 0.0f);
                         mDoMtx_stack_c::copy(mpModelMorf[0]->getModel()->getAnmMtx(0xD));
                         mDoMtx_stack_c::multVec(&sp20, &sp20);
-                        parentActorID = fopAcM_createChild(PROC_KN_BULLET, fopAcM_GetID(this), 0, &sp20, fopAcM_GetRoomNo(this), &current.angle, NULL, -1, NULL);
+                        parentActorID = fopAcM_createChild(fpcNm_KN_BULLET_e, fopAcM_GetID(this), 0, &sp20, fopAcM_GetRoomNo(this), &current.angle, NULL, -1, NULL);
                     }
                 } else {
                     mMotionSeqMngr.setNo(0x19, -1.0f, 1, 0);
@@ -257,7 +257,7 @@ int daNpc_Kn_c::teach02_shieldReflectWait(void* param_0) {
                 }
             } else {
                 fopAc_ac_c* parent_p;
-                if (fopAcM_SearchByID(parentActorID, &parent_p) && parent_p != NULL && fopAcM_GetName(parent_p) == PROC_KN_BULLET && ((daObjKnBullet_c*)parent_p)->getActionMode() == 0) {
+                if (fopAcM_SearchByID(parentActorID, &parent_p) && parent_p != NULL && fopAcM_GetName(parent_p) == fpcNm_KN_BULLET_e && ((daObjKnBullet_c*)parent_p)->getActionMode() == 0) {
                     if (mpModelMorf[0]->getFrame() >= 34.0f && mpModelMorf[0]->getFrame() < 35.0f) {
                         ((daObjKnBullet_c*)parent_p)->setActionMode(1);
                         parent_p->current.angle.y = mCurAngle.y;
@@ -270,7 +270,7 @@ int daNpc_Kn_c::teach02_shieldReflectWait(void* param_0) {
                 fopAc_ac_c* aTgHitActor_p = mCylCc.GetTgHitAc();
                 JUT_ASSERT(437, NULL != aTgHitActor_p);
 
-                if (fopAcM_GetName(aTgHitActor_p) == PROC_KN_BULLET) {
+                if (fopAcM_GetName(aTgHitActor_p) == fpcNm_KN_BULLET_e) {
                     mEvtNo = 0xB;
 
                     s16 var_r27 = cLib_targetAngleY(&aTgHitActor_p->current.pos, &current.pos);

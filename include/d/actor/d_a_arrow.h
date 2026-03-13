@@ -74,7 +74,7 @@ public:
     void deleteArrow() { field_0x93f = 1; }
 
     static fopAc_ac_c* makeArrow(fopAc_ac_c* i_actor, u16 param_1) {
-        return (fopAc_ac_c*)fopAcM_fastCreate(PROC_ARROW,
+        return (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_ARROW_e,
                                               param_1 << 8,
                                               &i_actor->current.pos,
                                               fopAcM_GetRoomNo(i_actor),
@@ -86,7 +86,7 @@ public:
     }
 
     static fopAc_ac_c* makeSlingStone(fopAc_ac_c* i_actor, cXyz* i_pos) {
-        return (fopAc_ac_c*)fopAcM_fastCreate(PROC_ARROW,
+        return (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_ARROW_e,
                                               0x401,
                                               i_pos,
                                               fopAcM_GetRoomNo(i_actor),

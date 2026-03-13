@@ -45,7 +45,7 @@ static inline f32 rangef(f32 value1, f32 value2, f32 ratio) {
 }
 
 inline static bool is_player(fopAc_ac_c* actor) {
-    return fopAcM_GetName(actor) == PROC_ALINK || fopAcM_GetName(actor) == PROC_ALINK;
+    return fopAcM_GetName(actor) == fpcNm_ALINK_e || fopAcM_GetName(actor) == fpcNm_ALINK_e;
 }
 
 static void hideActor(fopAc_ac_c* actor) {
@@ -54,10 +54,10 @@ static void hideActor(fopAc_ac_c* actor) {
         daPy_py_c* player = (daPy_py_c*)actor;
         if (player->checkHorseRide()) {
             daHorse_c* horse = dComIfGp_getHorseActor();
-            fopAcM_OnStatus(horse, 0x1000000);
+            fopAcM_OnStatus(horse, fopAcStts_NODRAW_e);
         }
     } else {
-        fopAcM_OnStatus(actor, 0x1000000);
+        fopAcM_OnStatus(actor, fopAcStts_NODRAW_e);
     }
 }
 
@@ -1705,13 +1705,13 @@ s32 dCamera_c::nextMode(s32 i_curMode) {
         } else if (link->checkGoatThrow() && dComIfGoat_GetThrow() != NULL) {
             dComIfGp_getAttention()->LockSoundOff();
             mpLockonTarget = dComIfGoat_GetThrow();
-            if (fopAcM_GetName(mpLockonTarget) == PROC_E_GOB) {
+            if (fopAcM_GetName(mpLockonTarget) == fpcNm_E_GOB_e) {
                 if (link->checkGoatThrowAfter()) {
                     next_mode = 2;
                 } else {
                     next_mode = 1;
                 }
-            } else if (fopAcM_GetName(mpLockonTarget) == PROC_OBJ_GRA) {
+            } else if (fopAcM_GetName(mpLockonTarget) == fpcNm_OBJ_GRA_e) {
                 next_mode = 1;
             } else {
                 next_mode = 2;
@@ -4166,7 +4166,7 @@ bool dCamera_c::chaseCamera(s32 param_0) {
     if (player->checkThrowDamage()) {
         chase->field_0x91 = true;
         fopAc_ac_c* target = dComIfGp_getAttention()->LockonTarget(0);
-        if (target != NULL && fopAcM_GetName(target) == PROC_E_HZ) {
+        if (target != NULL && fopAcM_GetName(target) == fpcNm_E_HZ_e) {
             setFlag(0x2000);
             mpAuxTargetActor1 = target;
         }
@@ -4662,8 +4662,8 @@ bool dCamera_c::lockonCamera(s32 param_0) {
         }
 
         if (mpLockonTarget != NULL) {
-            if (fopAcM_GetName(mpLockonTarget) == PROC_Obj_Bemos
-                || fopAcM_GetName(mpLockonTarget) == PROC_Obj_Lv6bemos2)
+            if (fopAcM_GetName(mpLockonTarget) == fpcNm_Obj_Bemos_e
+                || fopAcM_GetName(mpLockonTarget) == fpcNm_Obj_Lv6bemos2_e)
             {
                 setUSOAngle();
             }
@@ -4742,7 +4742,7 @@ bool dCamera_c::lockonCamera(s32 param_0) {
     }
 
     if (mpLockonTarget != NULL && mLockOnActorID != fpcM_ERROR_PROCESS_ID_e
-        && fopAcM_GetName(mpLockonTarget) != PROC_E_HZ)
+        && fopAcM_GetName(mpLockonTarget) != fpcNm_E_HZ_e)
     {
         val15 = 60.0f;
         val16 = 20.0f;
@@ -4750,12 +4750,12 @@ bool dCamera_c::lockonCamera(s32 param_0) {
     }
 
     if (mpLockonTarget != NULL) {
-        if (fopAcM_GetName(mpLockonTarget) == PROC_COW) {
+        if (fopAcM_GetName(mpLockonTarget) == fpcNm_COW_e) {
             val27 = 0.8f;
             val22 = 0.8f;
             val23 = 5.0f;
             val24 = 10.0f;
-        } else if (fopAcM_GetName(mpLockonTarget) == PROC_Obj_Cdoor) {
+        } else if (fopAcM_GetName(mpLockonTarget) == fpcNm_Obj_Cdoor_e) {
             val23 = 15.0f;
             val24 = 5.0f;
         }
@@ -4985,7 +4985,7 @@ bool dCamera_c::lockonCamera(s32 param_0) {
             dComIfG_Bgsp().GetTriPla(lin_chk, &plane);
             mViewCache.mCenter = lin_chk.GetCross();
             mViewCache.mCenter += *plane.GetNP() * 5.0f;
-            if (fopAcM_GetName(mpLockonTarget) != PROC_E_HZ) {
+            if (fopAcM_GetName(mpLockonTarget) != fpcNm_E_HZ_e) {
                 ForceLockOff(mLockOnActorID);
             }
         }
@@ -5323,9 +5323,9 @@ bool dCamera_c::talktoCamera(s32 param_0) {
     }
 
     bool sp5C = false;
-    if (fopAcM_GetName(speaker) == PROC_NI || fopAcM_GetName(speaker) == PROC_BD
-        || fopAcM_GetName(speaker) == PROC_SQ || fopAcM_GetName(speaker) == PROC_FR
-        || fopAcM_GetName(speaker) == PROC_DO || fopAcM_GetName(speaker) == PROC_NPC_NE)
+    if (fopAcM_GetName(speaker) == fpcNm_NI_e || fopAcM_GetName(speaker) == fpcNm_BD_e
+        || fopAcM_GetName(speaker) == fpcNm_SQ_e || fopAcM_GetName(speaker) == fpcNm_FR_e
+        || fopAcM_GetName(speaker) == fpcNm_DO_e || fopAcM_GetName(speaker) == fpcNm_NPC_NE_e)
     {
         sp5C = true;
         talk->field_0x54 = 260.0f;
@@ -5336,7 +5336,7 @@ bool dCamera_c::talktoCamera(s32 param_0) {
         val23 = 40.0f;
     }
 
-    if (fopAcM_GetName(speaker) == PROC_Tag_Mwait) {
+    if (fopAcM_GetName(speaker) == fpcNm_Tag_Mwait_e) {
         daTagMwait_c* tagMwait = (daTagMwait_c*)speaker;
         if (tagMwait->checkEndMessage()) {
             talk->field_0x3c = 35;
@@ -5458,10 +5458,10 @@ bool dCamera_c::talktoCamera(s32 param_0) {
             sp284.Val(talk->field_0x5c);
             sp280 = sp284 - talk->field_0x30.U();
             talk->field_0x28.U(sp284);
-        } else if (fopAcM_GetName(speaker) == PROC_OBJ_KANBAN2
-                    || fopAcM_GetName(speaker) == PROC_TAG_KMSG
-                    || fopAcM_GetName(speaker) == PROC_KNOB20
-                    || fopAcM_GetName(speaker) == PROC_Obj_NamePlate) {
+        } else if (fopAcM_GetName(speaker) == fpcNm_OBJ_KANBAN2_e
+                    || fopAcM_GetName(speaker) == fpcNm_TAG_KMSG_e
+                    || fopAcM_GetName(speaker) == fpcNm_KNOB20_e
+                    || fopAcM_GetName(speaker) == fpcNm_Obj_NamePlate_e) {
             sp284.Val(directionOf(speaker));
             sp280 = sp284 - talk->field_0x30.U();
             talk->field_0x28.U(sp284);
@@ -5553,7 +5553,7 @@ bool dCamera_c::talktoCamera(s32 param_0) {
 
         bool sp5B = false;
         int i = 0;
-        if (fopAcM_GetName(speaker) == PROC_MIDNA && mMidnaRidingAndVisible) {
+        if (fopAcM_GetName(speaker) == fpcNm_MIDNA_e && mMidnaRidingAndVisible) {
             talk->field_0x4 = attentionPos(speaker);
             talk->field_0x4.y -= 35.0f;
             f32 fVar36 = talk->field_0x30.U() - talk->field_0x28.U() > cSAngle::_0 ? -40.0f : 40.0f;
@@ -5654,8 +5654,8 @@ bool dCamera_c::talktoCamera(s32 param_0) {
         }
     }
 
-    if ((fopAcM_GetName(speaker) == PROC_Tag_Mhint && ((daTagMhint_c*)speaker)->checkNoAttention())
-        || (fopAcM_GetName(speaker) == PROC_Tag_Mstop && ((daTagMstop_c*)speaker)->checkNoAttention()))
+    if ((fopAcM_GetName(speaker) == fpcNm_Tag_Mhint_e && ((daTagMhint_c*)speaker)->checkNoAttention())
+        || (fopAcM_GetName(speaker) == fpcNm_Tag_Mstop_e && ((daTagMstop_c*)speaker)->checkNoAttention()))
     {
         bool sp59 = false;
         if (mIsWolf == 1 && check_owner_action(mPadID, 0x100000)) {
@@ -5726,7 +5726,7 @@ bool dCamera_c::talktoCamera(s32 param_0) {
             if (sp5C) {
                 sp1508.y = attentionPos(speaker).y;
             }
-            if (fopAcM_GetName(speaker) == PROC_NPC_KKRI) {
+            if (fopAcM_GetName(speaker) == fpcNm_NPC_KKRI_e) {
                 sp1508.y = attentionPos(speaker).y - 40.0f;
             }
             if (sp58) {
@@ -8531,7 +8531,7 @@ bool dCamera_c::rideCamera(s32 param_0) {
             wk->field_0x98 = (daHorse_c*)wk->field_0xa0;
             wk->field_0x00 = 0;
         } else if (player->checkCargoCarry()) {
-            fopAc_ac_c* spA0 = fopAcM_SearchByName(PROC_KAGO);
+            fopAc_ac_c* spA0 = fopAcM_SearchByName(fpcNm_KAGO_e);
             if (spA0 != NULL) {
                 wk->field_0x9c = spA0;
                 wk->field_0xa0 = spA0;
@@ -8596,9 +8596,9 @@ bool dCamera_c::rideCamera(s32 param_0) {
         if (player->checkBoardRide()) {
             wk->field_0x94 = 0;
             if (dComIfGs_isTmpBit((u16)dSv_event_tmp_flag_c::tempBitLabels[0x54])) {
-                wk->field_0x94 = fopAcM_SearchByName(PROC_NPC_YKM);
+                wk->field_0x94 = fopAcM_SearchByName(fpcNm_NPC_YKM_e);
             } else if (dComIfGs_isTmpBit((u16)dSv_event_tmp_flag_c::tempBitLabels[0x55])) {
-                wk->field_0x94 = fopAcM_SearchByName(PROC_NPC_YKW);
+                wk->field_0x94 = fopAcM_SearchByName(fpcNm_NPC_YKW_e);
             }
         }
 
@@ -8720,8 +8720,8 @@ bool dCamera_c::rideCamera(s32 param_0) {
             }
 
             if (sp1AC != NULL &&
-                (fopAcM_GetName(sp1AC) == PROC_E_RD || fopAcM_GetName(sp1AC) == PROC_E_FK ||
-                 fopAcM_GetName(sp1AC) == PROC_B_GND || fopAcM_GetName(sp1AC) == PROC_E_KR))
+                (fopAcM_GetName(sp1AC) == fpcNm_E_RD_e || fopAcM_GetName(sp1AC) == fpcNm_E_FK_e ||
+                 fopAcM_GetName(sp1AC) == fpcNm_B_GND_e || fopAcM_GetName(sp1AC) == fpcNm_E_KR_e))
             {
                 cXyz sp4C0 = positionOf(sp1AC) - positionOf(wk->field_0x9c);
                 cSAngle spF8 = -mViewCache.mDirection.U();
@@ -8754,7 +8754,7 @@ bool dCamera_c::rideCamera(s32 param_0) {
                 }
             }
 
-            if (sp1AC != NULL && fopAcM_GetName(sp1AC) == PROC_E_KR) {
+            if (sp1AC != NULL && fopAcM_GetName(sp1AC) == fpcNm_E_KR_e) {
                 val12 = -5.0f;
                 val15 = 10.0f;
                 val7 = 800.0f;
@@ -8762,9 +8762,9 @@ bool dCamera_c::rideCamera(s32 param_0) {
                 val2 = -20.0f;
             } else {
                 if (sp1AC != NULL &&
-                    (fopAcM_GetName(sp1AC) == PROC_E_RD &&
+                    (fopAcM_GetName(sp1AC) == fpcNm_E_RD_e &&
                          (fopAcM_GetParam(sp1AC) & 4) != 0 ||
-                     fopAcM_GetName(sp1AC) == PROC_B_GND) &&
+                     fopAcM_GetName(sp1AC) == fpcNm_B_GND_e) &&
                     sp1A8 == NULL)
                 {
 #if DEBUG
@@ -8787,10 +8787,10 @@ bool dCamera_c::rideCamera(s32 param_0) {
                         val20 = 15.0f;
                     }
                 } else {
-                    if (sp1AC != NULL && (fopAcM_GetName(sp1AC) == PROC_E_RD ||
-                                              fopAcM_GetName(sp1AC) == PROC_E_FK) ||
-                        sp1A8 != NULL && (fopAcM_GetName(sp1A8) == PROC_E_RD ||
-                                              fopAcM_GetName(sp1A8) == PROC_E_FK) ||
+                    if (sp1AC != NULL && (fopAcM_GetName(sp1AC) == fpcNm_E_RD_e ||
+                                              fopAcM_GetName(sp1AC) == fpcNm_E_FK_e) ||
+                        sp1A8 != NULL && (fopAcM_GetName(sp1A8) == fpcNm_E_RD_e ||
+                                              fopAcM_GetName(sp1A8) == fpcNm_E_FK_e) ||
                         sp1A4 != NULL)
                     {
 #if DEBUG
@@ -11214,43 +11214,43 @@ static leafdraw_method_class method = {
 };
 
 camera_process_profile_definition g_profile_CAMERA = {
-    fpcLy_CURRENT_e,
-    11,
-    fpcPi_CURRENT_e,
-    PROC_CAMERA,
-    &g_fpcLf_Method.base,
-    sizeof(camera_process_class),
-    0,
-    0,
-    &g_fopVw_Method,
-    0,
-    &g_fopCam_Method,
-    0,
-    0,
-    0,
-    0,
-    0,
-    &method,
-    0,
+    /* Layer ID           */ fpcLy_CURRENT_e,
+    /* List ID            */ 11,
+    /* List Prio          */ fpcPi_CURRENT_e,
+    /* Proc Name          */ fpcNm_CAMERA_e,
+    /* Proc SubMtd        */ &g_fpcLf_Method.base,
+    /* Size               */ sizeof(camera_process_class),
+    /* Size Other         */ 0,
+    /* Parameters         */ 0,
+    /* View Leaf SubMtd   */ &g_fopVw_Method,
+    /* Draw Prio          */ fpcDwPi_CAMERA_e,
+    /* fopCam Leaf SubMtd */ &g_fopCam_Method,
+                             0,
+                             0,
+                             0,
+                             0,
+                             0,
+    /* Camera SubMtd      */ &method,
+                             0,
 };
 
 camera_process_profile_definition g_profile_CAMERA2 = {
-    fpcLy_CURRENT_e,
-    11,
-    fpcPi_CURRENT_e,
-    PROC_CAMERA2,
-    &g_fpcLf_Method.base,
-    sizeof(camera_process_class),
-    0,
-    0,
-    &g_fopVw_Method,
-    1,
-    &g_fopCam_Method,
-    0,
-    0,
-    0,
-    0,
-    0,
-    &method,
-    0,
+    /* Layer ID           */ fpcLy_CURRENT_e,
+    /* List ID            */ 11,
+    /* List Prio          */ fpcPi_CURRENT_e,
+    /* Proc Name          */ fpcNm_CAMERA2_e,
+    /* Proc SubMtd        */ &g_fpcLf_Method.base,
+    /* Size               */ sizeof(camera_process_class),
+    /* Size Other         */ 0,
+    /* Parameters         */ 0,
+    /* View Leaf SubMtd   */ &g_fopVw_Method,
+    /* Draw Prio          */ fpcDwPi_CAMERA2_e,
+    /* fopCam Leaf SubMtd */ &g_fopCam_Method,
+                             0,
+                             0,
+                             0,
+                             0,
+                             0,
+    /* Camera SubMtd      */ &method,
+                             0,
 };

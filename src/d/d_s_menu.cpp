@@ -217,19 +217,19 @@ u8 dSm_read_presettxt(u8* i_data) {
                     OS_REPORT("\nsword[%d]", value);
                     switch (value) {
                     case 0:
-                        dMeter2Info_setSword(fpcNm_ITEM_NONE, false);
+                        dMeter2Info_setSword(dItemNo_NONE_e, false);
                         break;
                     case 1:
-                        dMeter2Info_setSword(fpcNm_ITEM_SWORD, false);
+                        dMeter2Info_setSword(dItemNo_SWORD_e, false);
                         break;
                     case 2:
-                        dMeter2Info_setSword(fpcNm_ITEM_MASTER_SWORD, false);
+                        dMeter2Info_setSword(dItemNo_MASTER_SWORD_e, false);
                         break;
                     case 3:
-                        dMeter2Info_setSword(fpcNm_ITEM_WOOD_STICK, false);
+                        dMeter2Info_setSword(dItemNo_WOOD_STICK_e, false);
                         break;
                     case 4:
-                        dMeter2Info_setSword(fpcNm_ITEM_LIGHT_SWORD, false);
+                        dMeter2Info_setSword(dItemNo_LIGHT_SWORD_e, false);
                         break;
                     }
                 }
@@ -243,16 +243,16 @@ u8 dSm_read_presettxt(u8* i_data) {
                     OS_REPORT("\nshield[%d]", value);
                     switch (value) {
                     case 0:
-                        dMeter2Info_setShield(fpcNm_ITEM_NONE, false);
+                        dMeter2Info_setShield(dItemNo_NONE_e, false);
                         break;
                     case 1:
-                        dMeter2Info_setShield(fpcNm_ITEM_WOOD_SHIELD, false);
+                        dMeter2Info_setShield(dItemNo_WOOD_SHIELD_e, false);
                         break;
                     case 2:
-                        dMeter2Info_setShield(fpcNm_ITEM_SHIELD, false);
+                        dMeter2Info_setShield(dItemNo_SHIELD_e, false);
                         break;
                     case 3:
-                        dMeter2Info_setShield(fpcNm_ITEM_HYLIA_SHIELD, false);
+                        dMeter2Info_setShield(dItemNo_HYLIA_SHIELD_e, false);
                         break;
                     }
                 }
@@ -266,10 +266,10 @@ u8 dSm_read_presettxt(u8* i_data) {
                     OS_REPORT("\nboomerang[%d]", value);
                     switch (value) {
                     case 0:
-                        dScnMenu_setItem(SLOT_0, fpcNm_ITEM_NONE);
+                        dScnMenu_setItem(SLOT_0, dItemNo_NONE_e);
                         break;
                     case 1:
-                        dScnMenu_setItem(SLOT_0, fpcNm_ITEM_BOOMERANG);
+                        dScnMenu_setItem(SLOT_0, dItemNo_BOOMERANG_e);
                         break;
                     }
                 }
@@ -282,13 +282,13 @@ u8 dSm_read_presettxt(u8* i_data) {
                 } else {
                     OS_REPORT("\nbow max[%d]", value);
                     if (value == 0) {
-                        dScnMenu_setItem(SLOT_4, fpcNm_ITEM_NONE);
+                        dScnMenu_setItem(SLOT_4, dItemNo_NONE_e);
                     } else if (value <= 10) {
-                        dScnMenu_setItem(SLOT_4, fpcNm_ITEM_ARROW_10);
+                        dScnMenu_setItem(SLOT_4, dItemNo_ARROW_10_e);
                     } else if (value <= 20) {
-                        dScnMenu_setItem(SLOT_4, fpcNm_ITEM_ARROW_20);
+                        dScnMenu_setItem(SLOT_4, dItemNo_ARROW_20_e);
                     } else {
-                        dScnMenu_setItem(SLOT_4, fpcNm_ITEM_ARROW_30);
+                        dScnMenu_setItem(SLOT_4, dItemNo_ARROW_30_e);
                     }
                     dComIfGs_setArrowMax(value);
                 }
@@ -309,7 +309,7 @@ u8 dSm_read_presettxt(u8* i_data) {
                     error = 1;
                 } else if (value == 1) {
                     OS_REPORT("\narror-fire[%d]", value);
-                    dScnMenu_setItem(SLOT_4, fpcNm_ITEM_LIGHT_ARROW);
+                    dScnMenu_setItem(SLOT_4, dItemNo_LIGHT_ARROW_e);
                 }
             } else if (dSm_read_comp_keyword(pos, i_data, "arrow-light", 11) == 0) {
                 value = dSm_read_get_number(i_data, &pos);
@@ -319,7 +319,7 @@ u8 dSm_read_presettxt(u8* i_data) {
                     error = 1;
                 } else if (value == 1) {
                     OS_REPORT("\narror-light[%d]", value);
-                    dScnMenu_setItem(SLOT_4, fpcNm_ITEM_LIGHT_ARROW);
+                    dScnMenu_setItem(SLOT_4, dItemNo_LIGHT_ARROW_e);
                 }
             } else if (dSm_read_comp_keyword(pos, i_data, "bomb", 4) == 0) {
                 value = dSm_read_get_number(i_data, &pos);
@@ -330,10 +330,10 @@ u8 dSm_read_presettxt(u8* i_data) {
                 } else {
                     OS_REPORT("\nbomb max [%d]", value);
                     if (value == 0) {
-                        dScnMenu_setItem(SLOT_15, fpcNm_ITEM_NONE);
+                        dScnMenu_setItem(SLOT_15, dItemNo_NONE_e);
                         dComIfGs_setBombMax(value);
                     } else {
-                        dScnMenu_setItem(SLOT_15, fpcNm_ITEM_BOMB_BAG_LV1);
+                        dScnMenu_setItem(SLOT_15, dItemNo_BOMB_BAG_LV1_e);
                         dComIfGs_setBombMax(value);
                     }
                 }
@@ -356,7 +356,7 @@ u8 dSm_read_presettxt(u8* i_data) {
                     OS_REPORT("\nbottle [%d]", value);
                     if (value <= 4) {
                         for (int i = 0; i < value; i++) {
-                            dScnMenu_setItem((u8)(i + SLOT_11), fpcNm_ITEM_EMPTY_BOTTLE);
+                            dScnMenu_setItem((u8)(i + SLOT_11), dItemNo_EMPTY_BOTTLE_e);
                         }
                     }
                 }
@@ -768,7 +768,7 @@ int toGameScene(dScnMenu_c* i_this) {
         dComIfGs_offEventBit(dSv_event_flag_c::saveBitLabels[550]);
         /* Secret techniques - Obtained 1 secret techinques - Shield attack */
         dComIfGs_offEventBit(dSv_event_flag_c::F_0338);
-        rt = fopScnM_ChangeReq(i_this, PROC_PLAY_SCENE, 0, 5);
+        rt = fopScnM_ChangeReq(i_this, fpcNm_PLAY_SCENE_e, 0, 5);
         dComIfGs_init();
         dComIfGp_offEnableNextStage();
         daNpcMsg_setEvtNum(7);
@@ -788,7 +788,7 @@ int toGameScene(dScnMenu_c* i_this) {
             g_env_light.light_mask_type = (u8)(g_env_light.light_mask_type | 0xF0);
         }
 
-        rt = fopScnM_ChangeReq(i_this, PROC_PLAY_SCENE, 0, 5);
+        rt = fopScnM_ChangeReq(i_this, fpcNm_PLAY_SCENE_e, 0, 5);
         dComIfGs_setRestartRoomParam(0);
     }
 
@@ -840,30 +840,30 @@ void setEnvData(menu_data_class* i_data) {
             dComIfGs_onDarkClearLV(4);
         } else if (memcmp(&i_data->env_data[i], "剣無", 4) == 0) {
             // "No Sword"
-            dMeter2Info_setSword(fpcNm_ITEM_NONE, false);
-            dComIfGs_offItemFirstBit(fpcNm_ITEM_WOOD_STICK);
-            dComIfGs_offItemFirstBit(fpcNm_ITEM_SWORD);
-            dComIfGs_offItemFirstBit(fpcNm_ITEM_MASTER_SWORD);
-            dComIfGs_offItemFirstBit(fpcNm_ITEM_LIGHT_SWORD);
-            dMeter2Info_setShield(fpcNm_ITEM_NONE, false);
-            dComIfGs_offItemFirstBit(fpcNm_ITEM_SHIELD);
-            dComIfGs_offItemFirstBit(fpcNm_ITEM_WOOD_SHIELD);
-            dComIfGs_offItemFirstBit(fpcNm_ITEM_HYLIA_SHIELD);
+            dMeter2Info_setSword(dItemNo_NONE_e, false);
+            dComIfGs_offItemFirstBit(dItemNo_WOOD_STICK_e);
+            dComIfGs_offItemFirstBit(dItemNo_SWORD_e);
+            dComIfGs_offItemFirstBit(dItemNo_MASTER_SWORD_e);
+            dComIfGs_offItemFirstBit(dItemNo_LIGHT_SWORD_e);
+            dMeter2Info_setShield(dItemNo_NONE_e, false);
+            dComIfGs_offItemFirstBit(dItemNo_SHIELD_e);
+            dComIfGs_offItemFirstBit(dItemNo_WOOD_SHIELD_e);
+            dComIfGs_offItemFirstBit(dItemNo_HYLIA_SHIELD_e);
         } else if (memcmp(&i_data->env_data[i], "神剣", 4) == 0) {
             // "Master Sword"
-            dMeter2Info_setSword(fpcNm_ITEM_MASTER_SWORD, false);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_WOOD_STICK);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_SWORD);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_MASTER_SWORD);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_LIGHT_SWORD);
+            dMeter2Info_setSword(dItemNo_MASTER_SWORD_e, false);
+            dComIfGs_onItemFirstBit(dItemNo_WOOD_STICK_e);
+            dComIfGs_onItemFirstBit(dItemNo_SWORD_e);
+            dComIfGs_onItemFirstBit(dItemNo_MASTER_SWORD_e);
+            dComIfGs_onItemFirstBit(dItemNo_LIGHT_SWORD_e);
         } else if (memcmp(&i_data->env_data[i], "木刀", 4) == 0) {
             // "Wooden Sword"
-            dMeter2Info_setSword(fpcNm_ITEM_WOOD_STICK, false);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_WOOD_STICK);
-            dMeter2Info_setShield(fpcNm_ITEM_NONE, false);
-            dComIfGs_offItemFirstBit(fpcNm_ITEM_SHIELD);
-            dComIfGs_offItemFirstBit(fpcNm_ITEM_WOOD_SHIELD);
-            dComIfGs_offItemFirstBit(fpcNm_ITEM_HYLIA_SHIELD);
+            dMeter2Info_setSword(dItemNo_WOOD_STICK_e, false);
+            dComIfGs_onItemFirstBit(dItemNo_WOOD_STICK_e);
+            dMeter2Info_setShield(dItemNo_NONE_e, false);
+            dComIfGs_offItemFirstBit(dItemNo_SHIELD_e);
+            dComIfGs_offItemFirstBit(dItemNo_WOOD_SHIELD_e);
+            dComIfGs_offItemFirstBit(dItemNo_HYLIA_SHIELD_e);
         } else if (memcmp(&i_data->env_data[i], "童", 2) == 0) {
             // "Child"
             if (g_playerKind == 0) {
@@ -880,8 +880,8 @@ void setEnvData(menu_data_class* i_data) {
             // "Green Tunic"
             if (g_playerKind == 0) {
                 g_playerKind = 3;
-                dMeter2Info_setSword(fpcNm_ITEM_SWORD, false);
-                dMeter2Info_setShield(fpcNm_ITEM_HYLIA_SHIELD, false);
+                dMeter2Info_setSword(dItemNo_SWORD_e, false);
+                dMeter2Info_setShield(dItemNo_HYLIA_SHIELD_e, false);
             }
         } else if (memcmp(&i_data->env_data[i], "SET", 3) == 0 && i_data->env_data[i + 3] >= '0' &&
                 i_data->env_data[i + 3] <= '9')
@@ -1023,17 +1023,17 @@ void setEnvData(menu_data_class* i_data) {
             i--;
         } else if (memcmp(&i_data->env_data[i], "鉄靴", 4) == 0) {
             // "Iron Boots"
-            dScnMenu_setItem(SLOT_3, fpcNm_ITEM_HVY_BOOTS);
+            dScnMenu_setItem(SLOT_3, dItemNo_HVY_BOOTS_e);
             dComIfGs_setSelectItemIndex(SELECT_ITEM_Y, SLOT_3);
         } else if (memcmp(&i_data->env_data[i], "水服", 4) == 0) {
             // "Water Tunic"
-            dMeter2Info_setCloth(fpcNm_ITEM_WEAR_ZORA, false);
+            dMeter2Info_setCloth(dItemNo_WEAR_ZORA_e, false);
         } else if (memcmp(&i_data->env_data[i], "(初)", 4) == 0 ||
                 memcmp(&i_data->env_data[i], "（初）", 6) == 0)
         {
             // "(First)"
             dComIfGs_offGetMagicUseFlag();
-            dComIfGs_offItemFirstBit(fpcNm_ITEM_BOW);
+            dComIfGs_offItemFirstBit(dItemNo_BOW_e);
         } else if (memcmp(&i_data->env_data[i], "ミドナ瀕死", 10) == 0) {
             // "Midna Dying"
             dComIfGs_onDarkClearLV(0);
@@ -1331,7 +1331,7 @@ block_24:
         if (g_presetHIO.field_0x2717 == 2) {
             g_presetHIO.field_0x2717 = 0;
             dSm_read_stageset(g_presetHIO.mPresetData);
-            fopScnM_ChangeReq(i_this, PROC_MENU_SCENE, 0, 5);
+            fopScnM_ChangeReq(i_this, fpcNm_MENU_SCENE_e, 0, 5);
         } else {
             dScnMenu_c::cursolStageName[0] = 0;
             toGameScene(i_this);
@@ -1655,7 +1655,7 @@ int dScnMenu_Create(scene_class* i_this) {
 void dScnMenu_setItem(int i_slotNo, u8 i_itemNo) {
     dComIfGs_setItem(i_slotNo, i_itemNo);
 
-    if (i_itemNo != fpcNm_ITEM_NONE) {
+    if (i_itemNo != dItemNo_NONE_e) {
         dComIfGs_onItemFirstBit(i_itemNo);
     }
 }
@@ -1663,8 +1663,8 @@ void dScnMenu_setItem(int i_slotNo, u8 i_itemNo) {
 void dScnMenu_setPlayerDebugMode() {
     if (mDoCPd_c::isConnect(PAD_3) || !dScnMenu_setPlayerDebugModeDungeon()) {
         if (strcmp(dComIfGp_getNextStageName(), "D_MN05") == 0) {
-            dScnMenu_setItem(SLOT_11, fpcNm_ITEM_EMPTY_BOTTLE);
-            dScnMenu_setItem(SLOT_12, fpcNm_ITEM_RED_BOTTLE);
+            dScnMenu_setItem(SLOT_11, dItemNo_EMPTY_BOTTLE_e);
+            dScnMenu_setItem(SLOT_12, dItemNo_RED_BOTTLE_e);
             dComIfGs_setSelectItemIndex(SELECT_ITEM_X, SLOT_11);
             dComIfGs_setSelectItemIndex(SELECT_ITEM_Y, SLOT_12);
             dComIfGs_setRupee(0);
@@ -1674,36 +1674,36 @@ void dScnMenu_setPlayerDebugMode() {
                 strcmp(dComIfGp_getNextStageName(), "D_MN04A") == 0)
         {
             for (int i = 0x17; i >= 0; i--) {
-                dScnMenu_setItem(i, fpcNm_ITEM_NONE);
+                dScnMenu_setItem(i, dItemNo_NONE_e);
             }
 
             for (int i = 0; i < 0x100; i++) {
                 dComIfGs_offItemFirstBit(i);
             }
 
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_L2_KEY_PIECES1);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_L2_KEY_PIECES2);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_L2_KEY_PIECES3);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_LV2_BOSS_KEY);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_BOW);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_HOOKSHOT);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_BOOMERANG);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_RED_BOTTLE);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_OIL_BOTTLE);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_FAIRY);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_KANTERA);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_PACHINKO);
-            dComIfGs_onItemFirstBit(fpcNm_ITEM_HVY_BOOTS);
+            dComIfGs_onItemFirstBit(dItemNo_L2_KEY_PIECES1_e);
+            dComIfGs_onItemFirstBit(dItemNo_L2_KEY_PIECES2_e);
+            dComIfGs_onItemFirstBit(dItemNo_L2_KEY_PIECES3_e);
+            dComIfGs_onItemFirstBit(dItemNo_LV2_BOSS_KEY_e);
+            dComIfGs_onItemFirstBit(dItemNo_BOW_e);
+            dComIfGs_onItemFirstBit(dItemNo_HOOKSHOT_e);
+            dComIfGs_onItemFirstBit(dItemNo_BOOMERANG_e);
+            dComIfGs_onItemFirstBit(dItemNo_RED_BOTTLE_e);
+            dComIfGs_onItemFirstBit(dItemNo_OIL_BOTTLE_e);
+            dComIfGs_onItemFirstBit(dItemNo_FAIRY_e);
+            dComIfGs_onItemFirstBit(dItemNo_KANTERA_e);
+            dComIfGs_onItemFirstBit(dItemNo_PACHINKO_e);
+            dComIfGs_onItemFirstBit(dItemNo_HVY_BOOTS_e);
 
-            dScnMenu_setItem(SLOT_4, fpcNm_ITEM_BOW);
-            dScnMenu_setItem(SLOT_9, fpcNm_ITEM_HOOKSHOT);
-            dScnMenu_setItem(SLOT_0, fpcNm_ITEM_BOOMERANG);
-            dScnMenu_setItem(SLOT_13, fpcNm_ITEM_FAIRY);
-            dScnMenu_setItem(SLOT_12, fpcNm_ITEM_OIL_BOTTLE);
-            dScnMenu_setItem(SLOT_11, fpcNm_ITEM_RED_BOTTLE);
-            dScnMenu_setItem(SLOT_1, fpcNm_ITEM_KANTERA);
-            dScnMenu_setItem(SLOT_23, fpcNm_ITEM_PACHINKO);
-            dScnMenu_setItem(SLOT_3, fpcNm_ITEM_HVY_BOOTS);
+            dScnMenu_setItem(SLOT_4, dItemNo_BOW_e);
+            dScnMenu_setItem(SLOT_9, dItemNo_HOOKSHOT_e);
+            dScnMenu_setItem(SLOT_0, dItemNo_BOOMERANG_e);
+            dScnMenu_setItem(SLOT_13, dItemNo_FAIRY_e);
+            dScnMenu_setItem(SLOT_12, dItemNo_OIL_BOTTLE_e);
+            dScnMenu_setItem(SLOT_11, dItemNo_RED_BOTTLE_e);
+            dScnMenu_setItem(SLOT_1, dItemNo_KANTERA_e);
+            dScnMenu_setItem(SLOT_23, dItemNo_PACHINKO_e);
+            dScnMenu_setItem(SLOT_3, dItemNo_HVY_BOOTS_e);
 
             dComIfGs_setMixItemIndex(SELECT_ITEM_X, 0xFF);
             dComIfGs_setMixItemIndex(SELECT_ITEM_Y, 0xFF);
@@ -1731,15 +1731,15 @@ void dScnMenu_setPlayerDebugMode() {
                 dMeter2Info_onTempBit(0);
             }
         } else if (strcmp(dComIfGp_getNextStageName(), "R_SP107") == 0) {
-            dMeter2Info_setSword(fpcNm_ITEM_NONE, false);
-            dMeter2Info_setShield(fpcNm_ITEM_NONE, false);
+            dMeter2Info_setSword(dItemNo_NONE_e, false);
+            dMeter2Info_setShield(dItemNo_NONE_e, false);
         } else if (dMeter2Info_isNextStage("F_SP102", 0, 0, 0) == 0) {
             if (strcmp(dComIfGp_getNextStageName(), "D_MN01A") == 0) {
-                dScnMenu_setItem(SLOT_9, fpcNm_ITEM_HOOKSHOT);
-                dScnMenu_setItem(SLOT_3, fpcNm_ITEM_HVY_BOOTS);
+                dScnMenu_setItem(SLOT_9, dItemNo_HOOKSHOT_e);
+                dScnMenu_setItem(SLOT_3, dItemNo_HVY_BOOTS_e);
                 dComIfGs_setSelectItemIndex(SELECT_ITEM_X, SLOT_9);
                 dComIfGs_setSelectItemIndex(SELECT_ITEM_Y, SLOT_3);
-                dMeter2Info_setCloth(fpcNm_ITEM_WEAR_ZORA, false);
+                dMeter2Info_setCloth(dItemNo_WEAR_ZORA_e, false);
             }
         }
     }
@@ -1747,23 +1747,23 @@ void dScnMenu_setPlayerDebugMode() {
 
 void dScnMenu_setPlayerItemReset() {
     for (int i = 23; i >= 0; i--) {
-        dScnMenu_setItem(i, fpcNm_ITEM_NONE);
+        dScnMenu_setItem(i, dItemNo_NONE_e);
     }
 
     for (int i = 0; i < 0x100; i++) {
         dComIfGs_offItemFirstBit(i);
     }
 
-    dComIfGs_onItemFirstBit(fpcNm_ITEM_SWORD);
-    dComIfGs_onItemFirstBit(fpcNm_ITEM_MASTER_SWORD);
-    dComIfGs_onItemFirstBit(fpcNm_ITEM_WOOD_STICK);
-    dComIfGs_offItemFirstBit(fpcNm_ITEM_LIGHT_SWORD);
-    dComIfGs_onItemFirstBit(fpcNm_ITEM_SHIELD);
-    dComIfGs_onItemFirstBit(fpcNm_ITEM_HYLIA_SHIELD);
-    dComIfGs_onItemFirstBit(fpcNm_ITEM_WEAR_CASUAL);
-    dComIfGs_onItemFirstBit(fpcNm_ITEM_WEAR_KOKIRI);
-    dComIfGs_onItemFirstBit(fpcNm_ITEM_ARMOR);
-    dComIfGs_onItemFirstBit(fpcNm_ITEM_WEAR_ZORA);
+    dComIfGs_onItemFirstBit(dItemNo_SWORD_e);
+    dComIfGs_onItemFirstBit(dItemNo_MASTER_SWORD_e);
+    dComIfGs_onItemFirstBit(dItemNo_WOOD_STICK_e);
+    dComIfGs_offItemFirstBit(dItemNo_LIGHT_SWORD_e);
+    dComIfGs_onItemFirstBit(dItemNo_SHIELD_e);
+    dComIfGs_onItemFirstBit(dItemNo_HYLIA_SHIELD_e);
+    dComIfGs_onItemFirstBit(dItemNo_WEAR_CASUAL_e);
+    dComIfGs_onItemFirstBit(dItemNo_WEAR_KOKIRI_e);
+    dComIfGs_onItemFirstBit(dItemNo_ARMOR_e);
+    dComIfGs_onItemFirstBit(dItemNo_WEAR_ZORA_e);
 
     dComIfGs_setMixItemIndex(SELECT_ITEM_X, 0xFF);
     dComIfGs_setSelectItemIndex(SELECT_ITEM_X, 0xFF);
@@ -1778,10 +1778,10 @@ void dScnMenu_setPlayerItemReset() {
 bool dScnMenu_setPlayerDebugModeDungeon() {
     if (strcmp(dComIfGp_getNextStageName(), "D_MN05") == 0) {
         dScnMenu_setPlayerItemReset();
-        dScnMenu_setItem(SLOT_1, fpcNm_ITEM_KANTERA);
-        dScnMenu_setItem(SLOT_23, fpcNm_ITEM_PACHINKO);
-        dScnMenu_setItem(SLOT_11, fpcNm_ITEM_OIL_BOTTLE);
-        dScnMenu_setItem(SLOT_12, fpcNm_ITEM_RED_BOTTLE);
+        dScnMenu_setItem(SLOT_1, dItemNo_KANTERA_e);
+        dScnMenu_setItem(SLOT_23, dItemNo_PACHINKO_e);
+        dScnMenu_setItem(SLOT_11, dItemNo_OIL_BOTTLE_e);
+        dScnMenu_setItem(SLOT_12, dItemNo_RED_BOTTLE_e);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_X, SLOT_11);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_Y, SLOT_12);
         dComIfGs_setMaxLife(20);
@@ -1792,14 +1792,14 @@ bool dScnMenu_setPlayerDebugModeDungeon() {
             strcmp(dComIfGp_getNextStageName(), "D_MN04A") == 0)
     {
         dScnMenu_setPlayerItemReset();
-        dScnMenu_setItem(SLOT_0, fpcNm_ITEM_BOOMERANG);
-        dScnMenu_setItem(SLOT_1, fpcNm_ITEM_KANTERA);
-        dScnMenu_setItem(SLOT_23, fpcNm_ITEM_PACHINKO);
-        dScnMenu_setItem(SLOT_3, fpcNm_ITEM_HVY_BOOTS);
-        dScnMenu_setItem(SLOT_4, fpcNm_ITEM_BOW);
-        dScnMenu_setItem(SLOT_15, fpcNm_ITEM_NORMAL_BOMB);
-        dScnMenu_setItem(SLOT_11, fpcNm_ITEM_OIL_BOTTLE);
-        dScnMenu_setItem(SLOT_12, fpcNm_ITEM_RED_BOTTLE);
+        dScnMenu_setItem(SLOT_0, dItemNo_BOOMERANG_e);
+        dScnMenu_setItem(SLOT_1, dItemNo_KANTERA_e);
+        dScnMenu_setItem(SLOT_23, dItemNo_PACHINKO_e);
+        dScnMenu_setItem(SLOT_3, dItemNo_HVY_BOOTS_e);
+        dScnMenu_setItem(SLOT_4, dItemNo_BOW_e);
+        dScnMenu_setItem(SLOT_15, dItemNo_NORMAL_BOMB_e);
+        dScnMenu_setItem(SLOT_11, dItemNo_OIL_BOTTLE_e);
+        dScnMenu_setItem(SLOT_12, dItemNo_RED_BOTTLE_e);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_X, 0);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_Y, 3);
         dComIfGs_setMaxLife(25);
@@ -1813,15 +1813,15 @@ bool dScnMenu_setPlayerDebugModeDungeon() {
             strcmp(dComIfGp_getNextStageName(), "D_MN01B") == 0)
     {
         dScnMenu_setPlayerItemReset();
-        dScnMenu_setItem(SLOT_0, fpcNm_ITEM_BOOMERANG);
-        dScnMenu_setItem(SLOT_1, fpcNm_ITEM_KANTERA);
-        dScnMenu_setItem(SLOT_23, fpcNm_ITEM_PACHINKO);
-        dScnMenu_setItem(SLOT_3, fpcNm_ITEM_HVY_BOOTS);
-        dScnMenu_setItem(SLOT_4, fpcNm_ITEM_BOW);
-        dScnMenu_setItem(SLOT_15, fpcNm_ITEM_NORMAL_BOMB);
-        dScnMenu_setItem(SLOT_16, fpcNm_ITEM_WATER_BOMB);
-        dScnMenu_setItem(SLOT_11, fpcNm_ITEM_OIL_BOTTLE);
-        dScnMenu_setItem(SLOT_12, fpcNm_ITEM_RED_BOTTLE);
+        dScnMenu_setItem(SLOT_0, dItemNo_BOOMERANG_e);
+        dScnMenu_setItem(SLOT_1, dItemNo_KANTERA_e);
+        dScnMenu_setItem(SLOT_23, dItemNo_PACHINKO_e);
+        dScnMenu_setItem(SLOT_3, dItemNo_HVY_BOOTS_e);
+        dScnMenu_setItem(SLOT_4, dItemNo_BOW_e);
+        dScnMenu_setItem(SLOT_15, dItemNo_NORMAL_BOMB_e);
+        dScnMenu_setItem(SLOT_16, dItemNo_WATER_BOMB_e);
+        dScnMenu_setItem(SLOT_11, dItemNo_OIL_BOTTLE_e);
+        dScnMenu_setItem(SLOT_12, dItemNo_RED_BOTTLE_e);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_X, SLOT_16);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_Y, SLOT_3);
         dComIfGs_setMaxLife(30);
@@ -1836,16 +1836,16 @@ bool dScnMenu_setPlayerDebugModeDungeon() {
             strcmp(dComIfGp_getNextStageName(), "D_MN10B") == 0)
     {
         dScnMenu_setPlayerItemReset();
-        dScnMenu_setItem(SLOT_0, fpcNm_ITEM_BOOMERANG);
-        dScnMenu_setItem(SLOT_1, fpcNm_ITEM_KANTERA);
-        dScnMenu_setItem(SLOT_23, fpcNm_ITEM_PACHINKO);
-        dScnMenu_setItem(SLOT_3, fpcNm_ITEM_HVY_BOOTS);
-        dScnMenu_setItem(SLOT_4, fpcNm_ITEM_BOW);
-        dScnMenu_setItem(SLOT_9, fpcNm_ITEM_HOOKSHOT);
-        dScnMenu_setItem(SLOT_15, fpcNm_ITEM_NORMAL_BOMB);
-        dScnMenu_setItem(SLOT_16, fpcNm_ITEM_WATER_BOMB);
-        dScnMenu_setItem(SLOT_11, fpcNm_ITEM_GREEN_BOTTLE);
-        dScnMenu_setItem(SLOT_12, fpcNm_ITEM_RED_BOTTLE);
+        dScnMenu_setItem(SLOT_0, dItemNo_BOOMERANG_e);
+        dScnMenu_setItem(SLOT_1, dItemNo_KANTERA_e);
+        dScnMenu_setItem(SLOT_23, dItemNo_PACHINKO_e);
+        dScnMenu_setItem(SLOT_3, dItemNo_HVY_BOOTS_e);
+        dScnMenu_setItem(SLOT_4, dItemNo_BOW_e);
+        dScnMenu_setItem(SLOT_9, dItemNo_HOOKSHOT_e);
+        dScnMenu_setItem(SLOT_15, dItemNo_NORMAL_BOMB_e);
+        dScnMenu_setItem(SLOT_16, dItemNo_WATER_BOMB_e);
+        dScnMenu_setItem(SLOT_11, dItemNo_GREEN_BOTTLE_e);
+        dScnMenu_setItem(SLOT_12, dItemNo_RED_BOTTLE_e);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_X, SLOT_9);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_Y, SLOT_4);
         dComIfGs_setMaxLife(40);
@@ -1860,17 +1860,17 @@ bool dScnMenu_setPlayerDebugModeDungeon() {
             strcmp(dComIfGp_getNextStageName(), "D_MN11B") == 0)
     {
         dScnMenu_setPlayerItemReset();
-        dScnMenu_setItem(SLOT_0, fpcNm_ITEM_BOOMERANG);
-        dScnMenu_setItem(SLOT_1, fpcNm_ITEM_KANTERA);
-        dScnMenu_setItem(SLOT_23, fpcNm_ITEM_PACHINKO);
-        dScnMenu_setItem(SLOT_2, fpcNm_ITEM_SPINNER);
-        dScnMenu_setItem(SLOT_3, fpcNm_ITEM_HVY_BOOTS);
-        dScnMenu_setItem(SLOT_4, fpcNm_ITEM_BOW);
-        dScnMenu_setItem(SLOT_9, fpcNm_ITEM_HOOKSHOT);
-        dScnMenu_setItem(SLOT_15, fpcNm_ITEM_NORMAL_BOMB);
-        dScnMenu_setItem(SLOT_16, fpcNm_ITEM_WATER_BOMB);
-        dScnMenu_setItem(SLOT_11, fpcNm_ITEM_GREEN_BOTTLE);
-        dScnMenu_setItem(SLOT_12, fpcNm_ITEM_RED_BOTTLE);
+        dScnMenu_setItem(SLOT_0, dItemNo_BOOMERANG_e);
+        dScnMenu_setItem(SLOT_1, dItemNo_KANTERA_e);
+        dScnMenu_setItem(SLOT_23, dItemNo_PACHINKO_e);
+        dScnMenu_setItem(SLOT_2, dItemNo_SPINNER_e);
+        dScnMenu_setItem(SLOT_3, dItemNo_HVY_BOOTS_e);
+        dScnMenu_setItem(SLOT_4, dItemNo_BOW_e);
+        dScnMenu_setItem(SLOT_9, dItemNo_HOOKSHOT_e);
+        dScnMenu_setItem(SLOT_15, dItemNo_NORMAL_BOMB_e);
+        dScnMenu_setItem(SLOT_16, dItemNo_WATER_BOMB_e);
+        dScnMenu_setItem(SLOT_11, dItemNo_GREEN_BOTTLE_e);
+        dScnMenu_setItem(SLOT_12, dItemNo_RED_BOTTLE_e);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_X, SLOT_2);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_Y, SLOT_12);
         dComIfGs_setMaxLife(45);
@@ -1884,18 +1884,18 @@ bool dScnMenu_setPlayerDebugModeDungeon() {
             strcmp(dComIfGp_getNextStageName(), "T_MN06") == 0)
     {
         dScnMenu_setPlayerItemReset();
-        dScnMenu_setItem(SLOT_0, fpcNm_ITEM_BOOMERANG);
-        dScnMenu_setItem(SLOT_1, fpcNm_ITEM_KANTERA);
-        dScnMenu_setItem(SLOT_23, fpcNm_ITEM_PACHINKO);
-        dScnMenu_setItem(SLOT_2, fpcNm_ITEM_SPINNER);
-        dScnMenu_setItem(SLOT_3, fpcNm_ITEM_HVY_BOOTS);
-        dScnMenu_setItem(SLOT_4, fpcNm_ITEM_BOW);
-        dScnMenu_setItem(SLOT_9, fpcNm_ITEM_HOOKSHOT);
-        dScnMenu_setItem(SLOT_6, fpcNm_ITEM_IRONBALL);
-        dScnMenu_setItem(SLOT_15, fpcNm_ITEM_NORMAL_BOMB);
-        dScnMenu_setItem(SLOT_16, fpcNm_ITEM_WATER_BOMB);
-        dScnMenu_setItem(SLOT_11, fpcNm_ITEM_FAIRY);
-        dScnMenu_setItem(SLOT_12, fpcNm_ITEM_RED_BOTTLE);
+        dScnMenu_setItem(SLOT_0, dItemNo_BOOMERANG_e);
+        dScnMenu_setItem(SLOT_1, dItemNo_KANTERA_e);
+        dScnMenu_setItem(SLOT_23, dItemNo_PACHINKO_e);
+        dScnMenu_setItem(SLOT_2, dItemNo_SPINNER_e);
+        dScnMenu_setItem(SLOT_3, dItemNo_HVY_BOOTS_e);
+        dScnMenu_setItem(SLOT_4, dItemNo_BOW_e);
+        dScnMenu_setItem(SLOT_9, dItemNo_HOOKSHOT_e);
+        dScnMenu_setItem(SLOT_6, dItemNo_IRONBALL_e);
+        dScnMenu_setItem(SLOT_15, dItemNo_NORMAL_BOMB_e);
+        dScnMenu_setItem(SLOT_16, dItemNo_WATER_BOMB_e);
+        dScnMenu_setItem(SLOT_11, dItemNo_FAIRY_e);
+        dScnMenu_setItem(SLOT_12, dItemNo_RED_BOTTLE_e);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_X, SLOT_6);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_Y, SLOT_12);
         dComIfGs_setMaxLife(50);
@@ -1909,19 +1909,19 @@ bool dScnMenu_setPlayerDebugModeDungeon() {
             strcmp(dComIfGp_getNextStageName(), "T_MN07") == 0)
     {
         dScnMenu_setPlayerItemReset();
-        dScnMenu_setItem(SLOT_0, fpcNm_ITEM_BOOMERANG);
-        dScnMenu_setItem(SLOT_1, fpcNm_ITEM_KANTERA);
-        dScnMenu_setItem(SLOT_23, fpcNm_ITEM_PACHINKO);
-        dScnMenu_setItem(SLOT_2, fpcNm_ITEM_SPINNER);
-        dScnMenu_setItem(SLOT_3, fpcNm_ITEM_HVY_BOOTS);
-        dScnMenu_setItem(SLOT_4, fpcNm_ITEM_BOW);
-        dScnMenu_setItem(SLOT_9, fpcNm_ITEM_HOOKSHOT);
-        dScnMenu_setItem(SLOT_6, fpcNm_ITEM_IRONBALL);
-        dScnMenu_setItem(SLOT_8, fpcNm_ITEM_COPY_ROD);
-        dScnMenu_setItem(SLOT_15, fpcNm_ITEM_NORMAL_BOMB);
-        dScnMenu_setItem(SLOT_16, fpcNm_ITEM_WATER_BOMB);
-        dScnMenu_setItem(SLOT_11, fpcNm_ITEM_GREEN_BOTTLE);
-        dScnMenu_setItem(SLOT_12, fpcNm_ITEM_RED_BOTTLE);
+        dScnMenu_setItem(SLOT_0, dItemNo_BOOMERANG_e);
+        dScnMenu_setItem(SLOT_1, dItemNo_KANTERA_e);
+        dScnMenu_setItem(SLOT_23, dItemNo_PACHINKO_e);
+        dScnMenu_setItem(SLOT_2, dItemNo_SPINNER_e);
+        dScnMenu_setItem(SLOT_3, dItemNo_HVY_BOOTS_e);
+        dScnMenu_setItem(SLOT_4, dItemNo_BOW_e);
+        dScnMenu_setItem(SLOT_9, dItemNo_HOOKSHOT_e);
+        dScnMenu_setItem(SLOT_6, dItemNo_IRONBALL_e);
+        dScnMenu_setItem(SLOT_8, dItemNo_COPY_ROD_e);
+        dScnMenu_setItem(SLOT_15, dItemNo_NORMAL_BOMB_e);
+        dScnMenu_setItem(SLOT_16, dItemNo_WATER_BOMB_e);
+        dScnMenu_setItem(SLOT_11, dItemNo_GREEN_BOTTLE_e);
+        dScnMenu_setItem(SLOT_12, dItemNo_RED_BOTTLE_e);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_X, SLOT_8);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_Y, SLOT_12);
         dComIfGs_setMaxLife(55);
@@ -1933,20 +1933,20 @@ bool dScnMenu_setPlayerDebugModeDungeon() {
         dComIfGs_setBombNum(1, 15);
     } else if (strcmp(dComIfGp_getNextStageName(), "D_MN08") == 0) {
         dScnMenu_setPlayerItemReset();
-        dScnMenu_setItem(SLOT_0, fpcNm_ITEM_BOOMERANG);
-        dScnMenu_setItem(SLOT_1, fpcNm_ITEM_KANTERA);
-        dScnMenu_setItem(SLOT_23, fpcNm_ITEM_PACHINKO);
-        dScnMenu_setItem(SLOT_2, fpcNm_ITEM_SPINNER);
-        dScnMenu_setItem(SLOT_3, fpcNm_ITEM_HVY_BOOTS);
-        dScnMenu_setItem(SLOT_4, fpcNm_ITEM_BOW);
-        dScnMenu_setItem(SLOT_9, fpcNm_ITEM_HOOKSHOT);
-        dScnMenu_setItem(SLOT_6, fpcNm_ITEM_IRONBALL);
-        dScnMenu_setItem(SLOT_8, fpcNm_ITEM_COPY_ROD);
-        dScnMenu_setItem(SLOT_10, fpcNm_ITEM_W_HOOKSHOT);
-        dScnMenu_setItem(SLOT_15, fpcNm_ITEM_NORMAL_BOMB);
-        dScnMenu_setItem(SLOT_16, fpcNm_ITEM_WATER_BOMB);
-        dScnMenu_setItem(SLOT_11, fpcNm_ITEM_BLUE_BOTTLE);
-        dScnMenu_setItem(SLOT_12, fpcNm_ITEM_RED_BOTTLE);
+        dScnMenu_setItem(SLOT_0, dItemNo_BOOMERANG_e);
+        dScnMenu_setItem(SLOT_1, dItemNo_KANTERA_e);
+        dScnMenu_setItem(SLOT_23, dItemNo_PACHINKO_e);
+        dScnMenu_setItem(SLOT_2, dItemNo_SPINNER_e);
+        dScnMenu_setItem(SLOT_3, dItemNo_HVY_BOOTS_e);
+        dScnMenu_setItem(SLOT_4, dItemNo_BOW_e);
+        dScnMenu_setItem(SLOT_9, dItemNo_HOOKSHOT_e);
+        dScnMenu_setItem(SLOT_6, dItemNo_IRONBALL_e);
+        dScnMenu_setItem(SLOT_8, dItemNo_COPY_ROD_e);
+        dScnMenu_setItem(SLOT_10, dItemNo_W_HOOKSHOT_e);
+        dScnMenu_setItem(SLOT_15, dItemNo_NORMAL_BOMB_e);
+        dScnMenu_setItem(SLOT_16, dItemNo_WATER_BOMB_e);
+        dScnMenu_setItem(SLOT_11, dItemNo_BLUE_BOTTLE_e);
+        dScnMenu_setItem(SLOT_12, dItemNo_RED_BOTTLE_e);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_X, SLOT_10);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_Y, SLOT_11);
         dComIfGs_setMaxLife(65);
@@ -1958,20 +1958,20 @@ bool dScnMenu_setPlayerDebugModeDungeon() {
         dComIfGs_setBombNum(1, 15);
     } else if (strcmp(dComIfGp_getNextStageName(), "D_MN09") == 0) {
         dScnMenu_setPlayerItemReset();
-        dScnMenu_setItem(SLOT_0, fpcNm_ITEM_BOOMERANG);
-        dScnMenu_setItem(SLOT_1, fpcNm_ITEM_KANTERA);
-        dScnMenu_setItem(SLOT_23, fpcNm_ITEM_PACHINKO);
-        dScnMenu_setItem(SLOT_2, fpcNm_ITEM_SPINNER);
-        dScnMenu_setItem(SLOT_3, fpcNm_ITEM_HVY_BOOTS);
-        dScnMenu_setItem(SLOT_4, fpcNm_ITEM_BOW);
-        dScnMenu_setItem(SLOT_9, fpcNm_ITEM_HOOKSHOT);
-        dScnMenu_setItem(SLOT_6, fpcNm_ITEM_IRONBALL);
-        dScnMenu_setItem(SLOT_8, fpcNm_ITEM_COPY_ROD);
-        dScnMenu_setItem(SLOT_10, fpcNm_ITEM_W_HOOKSHOT);
-        dScnMenu_setItem(SLOT_15, fpcNm_ITEM_NORMAL_BOMB);
-        dScnMenu_setItem(SLOT_16, fpcNm_ITEM_WATER_BOMB);
-        dScnMenu_setItem(SLOT_11, fpcNm_ITEM_BLUE_BOTTLE);
-        dScnMenu_setItem(SLOT_12, fpcNm_ITEM_RED_BOTTLE);
+        dScnMenu_setItem(SLOT_0, dItemNo_BOOMERANG_e);
+        dScnMenu_setItem(SLOT_1, dItemNo_KANTERA_e);
+        dScnMenu_setItem(SLOT_23, dItemNo_PACHINKO_e);
+        dScnMenu_setItem(SLOT_2, dItemNo_SPINNER_e);
+        dScnMenu_setItem(SLOT_3, dItemNo_HVY_BOOTS_e);
+        dScnMenu_setItem(SLOT_4, dItemNo_BOW_e);
+        dScnMenu_setItem(SLOT_9, dItemNo_HOOKSHOT_e);
+        dScnMenu_setItem(SLOT_6, dItemNo_IRONBALL_e);
+        dScnMenu_setItem(SLOT_8, dItemNo_COPY_ROD_e);
+        dScnMenu_setItem(SLOT_10, dItemNo_W_HOOKSHOT_e);
+        dScnMenu_setItem(SLOT_15, dItemNo_NORMAL_BOMB_e);
+        dScnMenu_setItem(SLOT_16, dItemNo_WATER_BOMB_e);
+        dScnMenu_setItem(SLOT_11, dItemNo_BLUE_BOTTLE_e);
+        dScnMenu_setItem(SLOT_12, dItemNo_RED_BOTTLE_e);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_X, SLOT_4);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_Y, SLOT_12);
         dComIfGs_setMaxLife(75);
@@ -2005,28 +2005,28 @@ static scene_method_class l_dScnMenu_Method = {
 };
 
 scene_process_profile_definition g_profile_MENU_SCENE = {
-    fpcLy_ROOT_e,                               // mLayerID
-    1,                                          // mListID
-    fpcPi_CURRENT_e,                            // mListPrio
-    PROC_MENU_SCENE,                            // mProcName
-    &g_fpcNd_Method.base,                      // sub_method
-    sizeof(dScnMenu_c),                         // mSize
-    0,                                          // mSizeOther
-    0,                                          // mParameters
-    &g_fopScn_Method.base,                     // sub_method
-    &l_dScnMenu_Method,  // mpMtd
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MENU_SCENE_e,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnMenu_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnMenu_Method,
 };
 #else
 scene_process_profile_definition g_profile_MENU_SCENE = {
-    fpcLy_ROOT_e,           // mLayerID
-    1,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_MENU_SCENE,        // mProcName
-    &g_fpcNd_Method.base,  // sub_method
-    0,                      // mSize
-    0,                      // mSizeOther      
-    0,                      // mParameters      
-    &g_fopScn_Method.base, // sub_method
-    NULL,                   // mpMtd
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MENU_SCENE_e,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ 0,
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ NULL,
 };
 #endif

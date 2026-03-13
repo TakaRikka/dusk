@@ -636,7 +636,7 @@ int dAttention_c::makeList() {
 void dAttention_c::setOwnerAttentionPos() {
     mOwnerAttnPos = mpPlayer->attention_info.position;
 
-    if (fopAcM_GetName(mpPlayer) == PROC_ALINK) {
+    if (fopAcM_GetName(mpPlayer) == fpcNm_ALINK_e) {
         mOwnerAttnPos.y -= ((daPy_py_c*)mpPlayer)->getAttentionOffsetY();
     }
 }
@@ -830,7 +830,7 @@ bool dAttention_c::chaseAttention() {
 f32 dAttention_c::EnemyDistance(fopAc_ac_c* i_actor) {
     if (i_actor == mpPlayer || mpPlayer == NULL) {
         return -1.0f;
-    } else if (fopAcM_GetProfName(i_actor) == PROC_ALINK) {
+    } else if (fopAcM_GetProfName(i_actor) == fpcNm_ALINK_e) {
         return -1.0f;
     } else if (!(i_actor->attention_info.flags & fopAc_AttnFlag_BATTLE_e) &&
                !(i_actor->attention_info.flags & fopAc_AttnFlag_ENEMY_NOLOCK_e)) {
@@ -1749,7 +1749,7 @@ fopAc_ac_c* dAttCatch_c::convPId(fpc_ProcID i_id) {
 }
 
 void dAttCatch_c::init() {
-    mCatchItemNo = fpcNm_ITEM_WATER_BOTTLE;
+    mCatchItemNo = dItemNo_WATER_BOTTLE_e;
     mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     mCatghTargetID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
@@ -1760,7 +1760,7 @@ void dAttCatch_c::proc() {
     mChangeItem = mCatchItemNo;
     mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
-    mCatchItemNo = fpcNm_ITEM_WATER_BOTTLE;
+    mCatchItemNo = dItemNo_WATER_BOTTLE_e;
 }
 
 int dAttCatch_c::request(fopAc_ac_c* i_reqActor, u8 i_itemNo, f32 i_horizontalDist, f32 i_upDist,

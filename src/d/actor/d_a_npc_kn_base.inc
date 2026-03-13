@@ -8,7 +8,7 @@ void daNpc_Kn_c::tgHitCallBack(fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf,
     daNpc_Kn_c* kn_actor = (daNpc_Kn_c*)i_tgActor;
     u8 cut_type = 0;
     if (i_atActor != NULL) {
-        if (fopAcM_GetProfName(i_atActor) == PROC_ALINK) {
+        if (fopAcM_GetProfName(i_atActor) == fpcNm_ALINK_e) {
             cut_type = ((daPy_py_c*)i_atActor)->getCutType();
         } else {
             cut_type = 1;
@@ -1005,7 +1005,7 @@ BOOL daNpc_Kn_c::srchPlayerActor() {
 cXyz daNpc_Kn_c::getAttnPos(fopAc_ac_c* i_actor) {
     cXyz attn_pos(i_actor->attention_info.position);
 
-    if (fopAcM_GetName(i_actor) == PROC_ALINK) {
+    if (fopAcM_GetName(i_actor) == fpcNm_ALINK_e) {
         attn_pos.y -= static_cast<daPy_py_c*>(i_actor)->getAttentionOffsetY();
     }
 

@@ -282,7 +282,7 @@ static void* search(void* param_1, void* param_2) {
         return NULL;
     }
 
-    if (fopAcM_GetProfName(param_1) == PROC_ITEM) {
+    if (fopAcM_GetProfName(param_1) == fpcNm_ITEM_e) {
         daItem_c* item = (daItem_c*)target;
         // somehow this condition is supposed to produce a double `li r0, 0x1` instruction,
         // this only produces one and is likely a fakematch anyway
@@ -298,7 +298,7 @@ static void* search(void* param_1, void* param_2) {
         return NULL;
     }
 
-    if (fopAcM_GetProfName(param_1) == PROC_Obj_Carry) {
+    if (fopAcM_GetProfName(param_1) == fpcNm_Obj_Carry_e) {
         daObjCarry_c* carry = (daObjCarry_c*)target;
         if (carry->getType() == 7 || carry->getType() == 1 || carry->getType() == 5) {
             int sp10 = hikiyose(&qs->current.pos, &carry->current.pos, &carry->old.pos,
@@ -410,18 +410,18 @@ static actor_method_class l_daTagQs_Method = {
 };
 
 actor_process_profile_definition g_profile_TAG_QS = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_TAG_QS,
-    &g_fpcLf_Method.base,
-    sizeof(daTagQs_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    274,
-    &l_daTagQs_Method,
-    0x40000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_QS_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagQs_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_TAG_QS_e,
+    /* Actor SubMtd */ &l_daTagQs_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

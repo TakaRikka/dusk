@@ -622,8 +622,8 @@ void dMeter2Info_c::warpInProc() {
     dComIfGs_setWarpMarkFlag(0);
     dComIfGs_resetLastWarpAcceptStage();
 
-    if (dComIfGs_getItem(SLOT_18, true) != fpcNm_ITEM_LV7_DUNGEON_EXIT) {
-        dComIfGs_setItem(SLOT_18, fpcNm_ITEM_DUNGEON_EXIT);
+    if (dComIfGs_getItem(SLOT_18, true) != dItemNo_LV7_DUNGEON_EXIT_e) {
+        dComIfGs_setItem(SLOT_18, dItemNo_DUNGEON_EXIT_e);
     }
 }
 
@@ -654,7 +654,7 @@ void dMeter2Info_c::warpOutProc() {
     }
 
     dComIfGs_setWarpItemData(dComIfGp_getStartStageName(), pos, angle.y, room_no, 0, 1);
-    dComIfGs_setItem(SLOT_18, fpcNm_ITEM_DUNGEON_BACK);
+    dComIfGs_setItem(SLOT_18, dItemNo_DUNGEON_BACK_e);
 }
 
 void dMeter2Info_c::resetMeterString() {
@@ -674,114 +674,114 @@ void dMeter2Info_c::setWarpInfo(const char* i_stageName, const cXyz& i_position,
 u8 dMeter2Info_c::getItemType(u8 i_itemNo) {
     u8 type;
     switch (i_itemNo) {
-    case fpcNm_ITEM_GREEN_RUPEE:
+    case dItemNo_GREEN_RUPEE_e:
         type = ItemType_GREEN_RUPEE;
         break;
-    case fpcNm_ITEM_BLUE_RUPEE:
+    case dItemNo_BLUE_RUPEE_e:
         type = ItemType_BLUE_RUPEE;
         break;
-    case fpcNm_ITEM_YELLOW_RUPEE:
+    case dItemNo_YELLOW_RUPEE_e:
         type = ItemType_YELLOW_RUPEE;
         break;
-    case fpcNm_ITEM_RED_RUPEE:
+    case dItemNo_RED_RUPEE_e:
         type = ItemType_RED_RUPEE;
         break;
-    case fpcNm_ITEM_PURPLE_RUPEE:
-    case fpcNm_ITEM_LINKS_SAVINGS:
+    case dItemNo_PURPLE_RUPEE_e:
+    case dItemNo_LINKS_SAVINGS_e:
         type = ItemType_PURPLE_RUPEE;
         break;
-    case fpcNm_ITEM_ORANGE_RUPEE:
+    case dItemNo_ORANGE_RUPEE_e:
         type = ItemType_ORANGE_RUPEE;
         break;
-    case fpcNm_ITEM_SILVER_RUPEE:
+    case dItemNo_SILVER_RUPEE_e:
         type = ItemType_SILVER_RUPEE;
         break;
-    case fpcNm_ITEM_EMPTY_BOTTLE:
+    case dItemNo_EMPTY_BOTTLE_e:
         type = ItemType_EMPTY_BOTTLE;
         break;
-    case fpcNm_ITEM_RED_BOTTLE:
-    case fpcNm_ITEM_RED_BOTTLE_2:
+    case dItemNo_RED_BOTTLE_e:
+    case dItemNo_RED_BOTTLE_2_e:
         type = ItemType_RED_BOTTLE;
         break;
-    case fpcNm_ITEM_GREEN_BOTTLE:
+    case dItemNo_GREEN_BOTTLE_e:
         type = ItemType_GREEN_BOTTLE;
         break;
-    case fpcNm_ITEM_BLUE_BOTTLE:
+    case dItemNo_BLUE_BOTTLE_e:
         type = ItemType_BLUE_BOTTLE;
         break;
-    case fpcNm_ITEM_MILK_BOTTLE:
+    case dItemNo_MILK_BOTTLE_e:
         type = ItemType_MILK_BOTTLE;
         break;
-    case fpcNm_ITEM_HALF_MILK_BOTTLE:
+    case dItemNo_HALF_MILK_BOTTLE_e:
         type = ItemType_HALF_MILK_BOTTLE;
         break;
-    case fpcNm_ITEM_OIL_BOTTLE:
-    case fpcNm_ITEM_OIL_BOTTLE_2:
-    case fpcNm_ITEM_OIL_BOTTLE3:
+    case dItemNo_OIL_BOTTLE_e:
+    case dItemNo_OIL_BOTTLE_2_e:
+    case dItemNo_OIL_BOTTLE3_e:
         type = ItemType_OIL_BOTTLE;
         break;
-    case fpcNm_ITEM_WATER_BOTTLE:
+    case dItemNo_WATER_BOTTLE_e:
         type = ItemType_WATER_BOTTLE;
         break;
-    case fpcNm_ITEM_HOT_SPRING:
-    case fpcNm_ITEM_HOT_SPRING_2:
+    case dItemNo_HOT_SPRING_e:
+    case dItemNo_HOT_SPRING_2_e:
         type = ItemType_HOT_SPRING;
         break;
-    case fpcNm_ITEM_LV1_SOUP:
+    case dItemNo_LV1_SOUP_e:
         type = ItemType_LV1_SOUP;
         break;
-    case fpcNm_ITEM_LV2_SOUP:
-    case fpcNm_ITEM_LV3_SOUP:
+    case dItemNo_LV2_SOUP_e:
+    case dItemNo_LV3_SOUP_e:
         type = ItemType_LV2_3_SOUP;
         break;
-    case fpcNm_ITEM_UGLY_SOUP:
+    case dItemNo_UGLY_SOUP_e:
         type = ItemType_UGLY_SOUP;
         break;
-    case fpcNm_ITEM_CHUCHU_RED:
+    case dItemNo_CHUCHU_RED_e:
         type = ItemType_CHUCHU_RED;
         break;
-    case fpcNm_ITEM_CHUCHU_BLUE:
+    case dItemNo_CHUCHU_BLUE_e:
         type = ItemType_CHUCHU_BLUE;
         break;
-    case fpcNm_ITEM_CHUCHU_GREEN:
+    case dItemNo_CHUCHU_GREEN_e:
         type = ItemType_CHUCHU_GREEN;
         break;
-    case fpcNm_ITEM_CHUCHU_YELLOW:
+    case dItemNo_CHUCHU_YELLOW_e:
         type = ItemType_CHUCHU_YELLOW;
         break;
-    case fpcNm_ITEM_CHUCHU_PURPLE:
+    case dItemNo_CHUCHU_PURPLE_e:
         type = ItemType_CHUCHU_PURPLE;
         break;
-    case fpcNm_ITEM_CHUCHU_RARE:
+    case dItemNo_CHUCHU_RARE_e:
         type = ItemType_CHUCHU_RARE;
         break;
-    case fpcNm_ITEM_CHUCHU_BLACK:
+    case dItemNo_CHUCHU_BLACK_e:
         type = ItemType_CHUCHU_BLACK;
         break;
-    case fpcNm_ITEM_POU_FIRE1:
-    case fpcNm_ITEM_POU_FIRE2:
-    case fpcNm_ITEM_POU_FIRE3:
-    case fpcNm_ITEM_POU_FIRE4:
+    case dItemNo_POU_FIRE1_e:
+    case dItemNo_POU_FIRE2_e:
+    case dItemNo_POU_FIRE3_e:
+    case dItemNo_POU_FIRE4_e:
         type = ItemType_POU_FIRE;
         break;
-    case fpcNm_ITEM_FAIRY:
+    case dItemNo_FAIRY_e:
         type = ItemType_FAIRY;
         break;
-    case fpcNm_ITEM_BEE_CHILD:
-    case fpcNm_ITEM_SHOP_BEE_CHILD:
+    case dItemNo_BEE_CHILD_e:
+    case dItemNo_SHOP_BEE_CHILD_e:
         type = ItemType_BEE_CHILD;
         break;
-    case fpcNm_ITEM_WORM:
+    case dItemNo_WORM_e:
         type = ItemType_WORM;
         break;
-    case fpcNm_ITEM_FAIRY_DROP:
-    case fpcNm_ITEM_DROP_BOTTLE:
+    case dItemNo_FAIRY_DROP_e:
+    case dItemNo_DROP_BOTTLE_e:
         type = ItemType_DROP_BOTTLE;
         break;
-    case fpcNm_ITEM_BOMB_ARROW:
+    case dItemNo_BOMB_ARROW_e:
         type = ItemType_BOMB_ARROW;
         break;
-    case fpcNm_ITEM_HAWK_ARROW:
+    case dItemNo_HAWK_ARROW_e:
         type = ItemType_HAWK_ARROW;
         break;
     default:
@@ -799,10 +799,10 @@ int dMeter2Info_c::readItemTexture(u8 i_itemNo, void* i_texBuf1, J2DPicture* i_p
     int tex_num = 0;
 
     if (i_texBuf1 != NULL) {
-        if ((i_itemNo == fpcNm_ITEM_KANTERA && dComIfGs_getOil() == 0) || i_itemNo == fpcNm_ITEM_KANTERA2) {
+        if ((i_itemNo == dItemNo_KANTERA_e && dComIfGs_getOil() == 0) || i_itemNo == dItemNo_KANTERA2_e) {
             u32 size = JKRReadIdxResource(i_texBuf1, 0xC00, ITEMICON_BTI_IM_KANTERA_OFF_48, dComIfGp_getItemIconArchive());
             JUT_ASSERT(1166, size != 0);
-        } else if (i_itemNo == fpcNm_ITEM_COPY_ROD && !daPy_getPlayerActorClass()->checkCopyRodTopUse() && param_9 == -1) {
+        } else if (i_itemNo == dItemNo_COPY_ROD_e && !daPy_getPlayerActorClass()->checkCopyRodTopUse() && param_9 == -1) {
             u32 size = JKRReadIdxResource(i_texBuf1, 0xC00, ITEMICON_BTI_ST_COPY_ROD_B, dComIfGp_getItemIconArchive());
             JUT_ASSERT(1173, size != 0);
         } else if ((itemType == ItemType_POU_FIRE || itemType == ItemType_FAIRY || itemType == ItemType_BEE_CHILD || itemType == ItemType_WORM) && i_texBuf3 == NULL) {
@@ -1265,8 +1265,8 @@ void dMeter2Info_c::changeWater(u8 i_slotNo) {
 
     mHotSpringTimer[i_bottleIdx] = 0;
 
-    if (dComIfGs_getItem(i_slotNo, true) == fpcNm_ITEM_HOT_SPRING) {
-        dComIfGs_setItem(i_slotNo, fpcNm_ITEM_WATER_BOTTLE);
+    if (dComIfGs_getItem(i_slotNo, true) == dItemNo_HOT_SPRING_e) {
+        dComIfGs_setItem(i_slotNo, dItemNo_WATER_BOTTLE_e);
 
         for (int i = 0; i < 3; i++) {
             if (i_slotNo == dComIfGs_getSelectItemIndex(i)) {
@@ -1286,7 +1286,7 @@ void dMeter2Info_c::setMiniGameItem(u8 i_minigameFlag) {
         u8 setRentBagIdx = false;
 
         for (int bagIdx = 0; bagIdx < 3; bagIdx++) {
-            if (!setRentBagIdx && dComIfGs_getItem((u8)(bagIdx + SLOT_15), true) == fpcNm_ITEM_NONE) {
+            if (!setRentBagIdx && dComIfGs_getItem((u8)(bagIdx + SLOT_15), true) == dItemNo_NONE_e) {
                 mRentalBombBagIdx = bagIdx;
                 setRentBagIdx = true;
             }
@@ -1322,12 +1322,12 @@ void dMeter2Info_c::setMiniGameItem(u8 i_minigameFlag) {
         dComIfGs_setArrowNum(mSaveArrowNumMG);
     }
 
-    dComIfGs_setItem((u8)(mRentalBombBagIdx + SLOT_15), fpcNm_ITEM_NORMAL_BOMB);
-    dComIfGp_setItem((u8)(mRentalBombBagIdx + SLOT_15), fpcNm_ITEM_NORMAL_BOMB);
+    dComIfGs_setItem((u8)(mRentalBombBagIdx + SLOT_15), dItemNo_NORMAL_BOMB_e);
+    dComIfGp_setItem((u8)(mRentalBombBagIdx + SLOT_15), dItemNo_NORMAL_BOMB_e);
 
     if (mMiniGameItemSetFlag != 3) {
-        dComIfGs_setItem(SLOT_4, fpcNm_ITEM_BOW);
-        dComIfGp_setItem(SLOT_4, fpcNm_ITEM_BOW);
+        dComIfGs_setItem(SLOT_4, dItemNo_BOW_e);
+        dComIfGp_setItem(SLOT_4, dItemNo_BOW_e);
         dComIfGs_setMixItemIndex(SELECT_ITEM_Y, 0xFF);
         dComIfGs_setSelectItemIndex(SELECT_ITEM_Y, 0xFF);
         dComIfGs_setMixItemIndex(SELECT_ITEM_X, SLOT_4);
@@ -1445,18 +1445,18 @@ u8 dMeter2Info_getPixel(f32 i_posX, f32 i_posY, f32 param_2, f32 param_3, f32 i_
 
 void dMeter2Info_setCloth(u8 i_clothId, bool i_offItemBit) {
     switch (i_clothId) {
-    case fpcNm_ITEM_WEAR_CASUAL:
-    case fpcNm_ITEM_WEAR_KOKIRI:
-    case fpcNm_ITEM_ARMOR:
-    case fpcNm_ITEM_WEAR_ZORA:
+    case dItemNo_WEAR_CASUAL_e:
+    case dItemNo_WEAR_KOKIRI_e:
+    case dItemNo_ARMOR_e:
+    case dItemNo_WEAR_ZORA_e:
         break;
     default:
         OS_REPORT("cloth item id error!! ==> %d\n", i_clothId);
-        i_clothId = fpcNm_ITEM_WEAR_CASUAL;
+        i_clothId = dItemNo_WEAR_CASUAL_e;
         i_offItemBit = false;
     }
 
-    if (i_offItemBit && dComIfGs_getSelectEquipClothes() != fpcNm_ITEM_NONE) {
+    if (i_offItemBit && dComIfGs_getSelectEquipClothes() != dItemNo_NONE_e) {
         dComIfGs_offItemFirstBit(dComIfGs_getSelectEquipClothes());
     }
 
@@ -1466,15 +1466,15 @@ void dMeter2Info_setCloth(u8 i_clothId, bool i_offItemBit) {
 
 void dMeter2Info_setSword(u8 i_itemId, bool i_offItemBit) {
     switch (i_itemId) {
-    case fpcNm_ITEM_NONE:
-    case fpcNm_ITEM_WOOD_STICK:
-    case fpcNm_ITEM_SWORD:
-    case fpcNm_ITEM_MASTER_SWORD:
-    case fpcNm_ITEM_LIGHT_SWORD:
+    case dItemNo_NONE_e:
+    case dItemNo_WOOD_STICK_e:
+    case dItemNo_SWORD_e:
+    case dItemNo_MASTER_SWORD_e:
+    case dItemNo_LIGHT_SWORD_e:
         break;
     default:
         OS_REPORT("sword item id error!! ==> %d\n", i_itemId);
-        i_itemId = fpcNm_ITEM_NONE;
+        i_itemId = dItemNo_NONE_e;
         i_offItemBit = false;
     }
 
@@ -1488,14 +1488,14 @@ void dMeter2Info_setSword(u8 i_itemId, bool i_offItemBit) {
 
 void dMeter2Info_setShield(u8 i_itemId, bool i_offItemBit) {
     switch (i_itemId) {
-    case fpcNm_ITEM_NONE:
-    case fpcNm_ITEM_WOOD_SHIELD:
-    case fpcNm_ITEM_SHIELD:
-    case fpcNm_ITEM_HYLIA_SHIELD:
+    case dItemNo_NONE_e:
+    case dItemNo_WOOD_SHIELD_e:
+    case dItemNo_SHIELD_e:
+    case dItemNo_HYLIA_SHIELD_e:
         break;
     default:
         OS_REPORT("shield item id error!! ==> %d\n", i_itemId);
-        i_itemId = fpcNm_ITEM_NONE;
+        i_itemId = dItemNo_NONE_e;
         i_offItemBit = false;
     }
 

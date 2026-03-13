@@ -550,18 +550,18 @@ void daNpc_Len_c::srchActors() {
         break;
     case TYPE_4:
         if (mActorMngr[0].getActorP() == NULL) {
-            mActorMngr[0].entry(getNearestActorP(PROC_NPC_KOLINB));
+            mActorMngr[0].entry(getNearestActorP(fpcNm_NPC_KOLINB_e));
         }
         break;
     case TYPE_8:
         if (mActorMngr[1].getActorP() == NULL) {
-            mActorMngr[1].entry(getNearestActorP(PROC_NPC_YELIA));
+            mActorMngr[1].entry(getNearestActorP(fpcNm_NPC_YELIA_e));
         }
         if (mActorMngr[2].getActorP() == NULL) {
-            mActorMngr[2].entry(getNearestActorP(PROC_NPC_GRD));
+            mActorMngr[2].entry(getNearestActorP(fpcNm_NPC_GRD_e));
         }
         if (mActorMngr[3].getActorP() == NULL) {
-            mActorMngr[3].entry(getNearestActorP(PROC_NPC_GRZ));
+            mActorMngr[3].entry(getNearestActorP(fpcNm_NPC_GRZ_e));
         }
         break;
     }
@@ -643,9 +643,9 @@ void daNpc_Len_c::action() {
 }
 
 void daNpc_Len_c::beforeMove() {
-    fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x8000000);
+    fopAcM_OffStatus(this, fopAcStts_UNK_0x8000000_e);
     if (checkHide()) {
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
     }
 
     if (checkHide() || mNoDraw != 0) {
@@ -1213,7 +1213,7 @@ int daNpc_Len_c::talk(void* param_0) {
                  * control) A */
                 daNpcT_offTmpBit(0xB);
             }
-            if (mPreItemNo == fpcNm_ITEM_WOOD_STATUE) {
+            if (mPreItemNo == dItemNo_WOOD_STATUE_e) {
                 initTalk(0x28, NULL);
             } else {
                 initTalk(mFlowNodeNo, NULL);
@@ -1297,18 +1297,18 @@ static actor_method_class daNpc_Len_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_LEN = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_NPC_LEN,            // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daNpc_Len_c),     // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    337,                     // mPriority
-    &daNpc_Len_MethodTable,  // sub_method
-    0x00040107,              // mStatus
-    fopAc_NPC_e,             // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_LEN_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Len_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_LEN_e,
+    /* Actor SubMtd */ &daNpc_Len_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e | fopAcStts_UNK_0x2_e | fopAcStts_UNK_0x1_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

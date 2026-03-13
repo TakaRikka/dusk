@@ -8,7 +8,7 @@
 #include "d/actor/d_a_tag_wara_howl.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 daTagWrHowl_c::daTagWrHowl_c() {}
 
@@ -84,18 +84,18 @@ static actor_method_class daTagWrHowl_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Tag_WaraHowl = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_Tag_WaraHowl,
-    &g_fpcLf_Method.base,
-    sizeof(daTagWrHowl_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    733,
-    &daTagWrHowl_METHODS,
-    0x40000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_WaraHowl_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagWrHowl_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Tag_WaraHowl_e,
+    /* Actor SubMtd */ &daTagWrHowl_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -178,7 +178,7 @@ int daAlink_c::returnCopyRod() {
     offNoResetFlg3(FLG3_COPY_ROD_THROW_AFTER);
 
     BOOL rt;
-    if (mEquipItem == fpcNm_ITEM_COPY_ROD) {
+    if (mEquipItem == dItemNo_COPY_ROD_e) {
         mItemAcKeep = mCopyRodAcKeep;
         onNoResetFlg0(FLG0_UNK_20);
         rt = TRUE;
@@ -347,8 +347,8 @@ int daAlink_c::procCopyRodSwingInit() {
     daCstatue_c* statue = (daCstatue_c*)getCopyRodControllActor();
 
     if (statue != NULL &&
-        ((fopAcM_GetName(statue) == PROC_CSTATUE && statue->checkNotSmallType()) ||
-         fopAcM_GetName(statue) != PROC_CSTATUE))
+        ((fopAcM_GetName(statue) == fpcNm_CSTATUE_e && statue->checkNotSmallType()) ||
+         fopAcM_GetName(statue) != fpcNm_CSTATUE_e))
     {
         setSingleAnimeParam(ANM_COPYROD_SWING_LARGE, &mpHIO->mItem.mCopyRod.m.mBigSwingAnm);
         field_0x3478 = 13.0f;
@@ -408,9 +408,9 @@ int daAlink_c::procCopyRodReviveInit() {
     }
 
     if (mDemo.getParam0() == 0) {
-        if (mEquipItem != fpcNm_ITEM_COPY_ROD) {
+        if (mEquipItem != dItemNo_COPY_ROD_e) {
             deleteEquipItem(FALSE, FALSE);
-            mEquipItem = fpcNm_ITEM_COPY_ROD;
+            mEquipItem = dItemNo_COPY_ROD_e;
             setCopyRodModel();
         }
         field_0x0724->setFrame(0.0f);

@@ -539,10 +539,10 @@ public:
     /* 0x0C4 */ f32 boar_jump_height;
     /* 0x0C8 */ f32 water_depth_limit;
     /* 0x0CC */ f32 enemy_search_range;
-    /* 0x0D0 */ f32 m0D0;
+    /* 0x0D0 */ f32 climb_step;
     /* 0x0D4 */ f32 floor_angle_limit;
     /* 0x0D8 */ f32 dash_anm_speed;
-    /* 0x0DC */ f32 field_0xdc;
+    /* 0x0DC */ f32 min_walk_rate;
     /* 0x0E0 */ f32 walk_min_speed;
     /* 0x0E4 */ f32 cliff_jump_anm_speed;
     /* 0x0E8 */ f32 cliff_jump_start_frame;

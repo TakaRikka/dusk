@@ -27,7 +27,7 @@ void daTagGuard_c::createGuard(u32 i_parameters) {
         i_parameters |= getPathID() << 0x10;
     }
 
-    fopAcM_createChild(PROC_NPC_GUARD, fopAcM_GetID(this), i_parameters, &pos,
+    fopAcM_createChild(fpcNm_NPC_GUARD_e, fopAcM_GetID(this), i_parameters, &pos,
                        fopAcM_GetRoomNo(this), &current.angle, NULL, -1, NULL);
 }
 
@@ -81,18 +81,18 @@ static actor_method_class l_daTagGuard_Method = {
 };
 
 actor_process_profile_definition g_profile_TAG_GUARD = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_TAG_GUARD,
-    &g_fpcLf_Method.base,
-    sizeof(daTagGuard_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    408,
-    &l_daTagGuard_Method,
-    0x40000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_GUARD_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagGuard_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_TAG_GUARD_e,
+    /* Actor SubMtd */ &l_daTagGuard_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

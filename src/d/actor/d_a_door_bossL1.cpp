@@ -775,7 +775,7 @@ int daBdoorL1_c::createKey() {
         int actorParams = getNowLevel();
         int flags = ~0xFF;
         flags |= actorParams;
-        mKeyHoleId = fopAcM_createChildFromOffset(PROC_OBJ_KEYHOLE, fopAcM_GetID(this), flags,
+        mKeyHoleId = fopAcM_createChildFromOffset(fpcNm_OBJ_KEYHOLE_e, fopAcM_GetID(this), flags,
                                                              &cStack_30, fopAcM_GetRoomNo(this), 0,
                                                              &scale, -1, 0);
         current.pos = cStack_24;
@@ -907,7 +907,7 @@ int daBdoorL1_c::actionEnd() {
 
 int daBdoorL1_c::execute() {
     static actionFunc l_action[4] = {&daBdoorL1_c::actionWait, &daBdoorL1_c::actionCloseWait, &daBdoorL1_c::actionOpen, &daBdoorL1_c::actionEnd};
-    if (fopAcM_CheckStatus(this, 0x1000)) {
+    if (fopAcM_CheckStatus(this, fopAcStts_STAFF_SHUTTER_e)) {
         field_0x5a0 = dComIfGp_evmng_getMyStaffId(l_staff_name, 0, 0);
         dMeter2Info_onGameStatus(2);
         demoProc();
@@ -977,18 +977,18 @@ static actor_method_class l_daBdoorL1_Method = {
 };
 
 actor_process_profile_definition g_profile_L1BOSS_DOOR = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_L1BOSS_DOOR,
-    &g_fpcLf_Method.base,
-    sizeof(daBdoorL1_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x12A,
-    &l_daBdoorL1_Method,
-    0x44000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_6_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_L1BOSS_DOOR_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daBdoorL1_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_L1BOSS_DOOR_e,
+    /* Actor SubMtd */ &l_daBdoorL1_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

@@ -17,12 +17,6 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_path.h"
 
-#define ATTR_F32(x) (*((f32*)&attr().x))
-#define ATTR_S16(x) (*((s16*)&attr().x))
-// There are a lot of attr() problems in debug,
-// they seem to be fixed by casting, like `((daObjMovebox::Attr_c*)&attr())->field`
-// but sometimes breaks in release
-
 #if DEBUG
 const char* const daObjMovebox::Hio_c::M_name[8] = {
     "押引・木・1.5m",          // Push-pull type, wood, 1.5m
@@ -35,36 +29,6 @@ const char* const daObjMovebox::Hio_c::M_name[8] = {
     "dummy4",
 };
 #endif
-
-const daObjMovebox::BgcSrc_c daObjMovebox::Bgc_c::M_lin5[] = {
-    {0.0f, 0.0f, 0.0f, 0.0f},   {-0.5f, -0.5f, 1.0f, 1.0f}, {0.5f, -0.5f, -1.0f, 1.0f},
-    {0.5f, 0.5f, -1.0f, -1.0f}, {-0.5f, 0.5f, 1.0f, -1.0f},
-};
-
-const daObjMovebox::BgcSrc_c daObjMovebox::Bgc_c::M_lin20[] = {
-    {0.0f, 0.0f, 0.0f, 0.0f},    {-0.25f, -0.25f, 0.0f, 0.0f}, {-0.5f, -0.5f, 1.0f, 1.0f},
-    {0.0f, -0.5f, -1.0f, 1.0f},  {0.0f, 0.0f, -1.0f, -1.0f},   {-0.5f, 0.0f, 1.0f, -1.0f},
-    {0.25f, -0.25f, 0.0f, 0.0f}, {0.0f, -0.5f, 1.0f, 1.0f},    {0.5f, -0.5f, -1.0f, 1.0f},
-    {0.5f, 0.0f, -1.0f, -1.0f},  {0.0f, 0.0f, 1.0f, -1.0f},    {0.25f, 0.25f, 0.0f, 0.0f},
-    {0.0f, 0.0f, 1.0f, 1.0f},    {0.5f, 0.0f, -1.0f, 1.0f},    {0.5f, 0.5f, -1.0f, -1.0f},
-    {0.0f, 0.5f, 1.0f, -1.0f},   {-0.25f, 0.25f, 0.0f, 0.0f},  {-0.5f, 0.0f, 1.0f, 1.0f},
-    {0.0f, 0.0f, -1.0f, 1.0f},   {0.0f, 0.5f, -1.0f, -1.0f},   {-0.5f, 0.5f, 1.0f, -1.0f},
-    {-0.75f, 0.25f, 0.0f, 0.0f}, {-0.75f, -0.25f, 0.0f, 0.0f},
-};
-
-daObjMovebox::Bgc_c::Bgc_c() {
-    for (int i = 0; i < 23; i++) {
-        field_0x0[i] = 0.0f;
-        field_0x64[i] = cXyz::Zero;
-    }
-
-    field_0x5c = 0xFFFFFFFF;
-    field_0x178 = 0xFFFFFFFF;
-    field_0x17c = FLT_MAX;
-    field_0x60 = 0.0f;
-    mState = STATE_0_e;
-}
-
 
 #if DEBUG
 namespace daObjMovebox {
@@ -135,13 +99,42 @@ void daObjMovebox::Hio_c::genMessage(JORMContext* context) {
 
 #endif
 
+const daObjMovebox::BgcSrc_c daObjMovebox::Bgc_c::M_lin5[] = {
+    {0.0f, 0.0f, 0.0f, 0.0f},   {-0.5f, -0.5f, 1.0f, 1.0f}, {0.5f, -0.5f, -1.0f, 1.0f},
+    {0.5f, 0.5f, -1.0f, -1.0f}, {-0.5f, 0.5f, 1.0f, -1.0f},
+};
+
+const daObjMovebox::BgcSrc_c daObjMovebox::Bgc_c::M_lin20[] = {
+    {0.0f, 0.0f, 0.0f, 0.0f},    {-0.25f, -0.25f, 0.0f, 0.0f}, {-0.5f, -0.5f, 1.0f, 1.0f},
+    {0.0f, -0.5f, -1.0f, 1.0f},  {0.0f, 0.0f, -1.0f, -1.0f},   {-0.5f, 0.0f, 1.0f, -1.0f},
+    {0.25f, -0.25f, 0.0f, 0.0f}, {0.0f, -0.5f, 1.0f, 1.0f},    {0.5f, -0.5f, -1.0f, 1.0f},
+    {0.5f, 0.0f, -1.0f, -1.0f},  {0.0f, 0.0f, 1.0f, -1.0f},    {0.25f, 0.25f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 1.0f, 1.0f},    {0.5f, 0.0f, -1.0f, 1.0f},    {0.5f, 0.5f, -1.0f, -1.0f},
+    {0.0f, 0.5f, 1.0f, -1.0f},   {-0.25f, 0.25f, 0.0f, 0.0f},  {-0.5f, 0.0f, 1.0f, 1.0f},
+    {0.0f, 0.0f, -1.0f, 1.0f},   {0.0f, 0.5f, -1.0f, -1.0f},   {-0.5f, 0.5f, 1.0f, -1.0f},
+    {-0.75f, 0.25f, 0.0f, 0.0f}, {-0.75f, -0.25f, 0.0f, 0.0f},
+};
+
+daObjMovebox::Bgc_c::Bgc_c() {
+    for (int i = 0; i < 23; i++) {
+        field_0x0[i] = 0.0f;
+        field_0x64[i] = cXyz::Zero;
+    }
+
+    field_0x5c = 0xFFFFFFFF;
+    field_0x178 = 0xFFFFFFFF;
+    field_0x17c = FLT_MAX;
+    field_0x60 = 0.0f;
+    mState = STATE_0_e;
+}
+
 dBgS_ObjGndChk daObjMovebox::Bgc_c::M_gnd_work[23];
 
 void daObjMovebox::Bgc_c::gnd_pos(const daObjMovebox::Act_c* i_actor,
                                   const daObjMovebox::BgcSrc_c* i_bgcSrc, int i_checkNum,
                                   f32 param_3) {
-    cXyz sp50;
-    cXyz sp5C;
+    cXyz sp20;
+    cXyz sp14;
     f32 var_f31 = -G_CM3D_F_INF;
 
     mDoMtx_stack_c::transS(i_actor->current.pos);
@@ -149,20 +142,20 @@ void daObjMovebox::Bgc_c::gnd_pos(const daObjMovebox::Act_c* i_actor,
     field_0x5c = -1;
 
     for (int i = 0; i < i_checkNum; i++, i_bgcSrc++) {
-        sp50.set(i_bgcSrc->field_0xc + i_bgcSrc->field_0x4 * i_actor->attr().field_0x70, param_3,
+        sp20.set(i_bgcSrc->field_0xc + i_bgcSrc->field_0x4 * i_actor->attr().mScaleXZ, param_3,
                  i_bgcSrc->field_0x8 + i_bgcSrc->field_0x0 * i_actor->attr().field_0x78);
 
-        mDoMtx_stack_c::multVec(&sp50, &sp5C);
-        M_gnd_work[i].SetPos(&sp5C);
-        M_gnd_work[i].SetActorPid(fopAcM_GetID(i_actor));
+        mDoMtx_stack_c::multVec(&sp20, &sp14);
+        M_gnd_work[i].SetPos(&sp14);
+        M_gnd_work[i].SetActorPid(i_actor->id);
         field_0x0[i] = dComIfG_Bgsp().GroundCross(&M_gnd_work[i]);
 #if DEBUG
-        L_gnd_start[i_actor->mType][i].set(sp50);
+        L_gnd_start[i_actor->mType][i].set(sp14);
         L_gnd_flag[i_actor->mType][i] = 1;
 #endif
         if (field_0x0[i] > var_f31) {
             fopAc_ac_c* bg_actor = dComIfG_Bgsp().GetActorPointer(M_gnd_work[i]);
-            if (bg_actor == NULL || fopAcM_GetName(bg_actor) != PROC_Obj_Movebox ||
+            if (bg_actor == NULL || fopAcM_GetName(bg_actor) != fpcNm_Obj_Movebox_e ||
                 ((daObjMovebox::Act_c*)bg_actor)->field_0x5ac != 2)
             {
                 var_f31 = field_0x0[i];
@@ -222,9 +215,9 @@ void daObjMovebox::Bgc_c::wall_pos(daObjMovebox::Act_c const* i_actor,
 
         mDoMtx_stack_c::YrotS(sp8C);
         mDoMtx_stack_c::transM(sp60);
-        mDoMtx_stack_c::scaleM(i_actor->attr().field_0x70,
-                               i_actor->attr().field_0x64,
-                               i_actor->attr().field_0x70);
+        mDoMtx_stack_c::scaleM(i_actor->attr().mScaleXZ,
+                               i_actor->attr().mScaleY,
+                               i_actor->attr().mScaleXZ);
         mDoMtx_stack_c::transM(0.0f, 0.5f, 0.0f);
         mDoMtx_stack_c::XrotM(0x4000);
 
@@ -261,8 +254,8 @@ void daObjMovebox::Bgc_c::proc_vertical(daObjMovebox::Act_c* i_actor) {
     State_e var_r29 = mState;
     mState = STATE_0_e;
 
-    gnd_pos(i_actor, i_actor->attr().field_0x9e ? M_lin20 : M_lin5,
-            i_actor->attr().field_0x9e ? 21 : 5, 100.0f);
+    gnd_pos(i_actor, i_actor->attr().mUseLargeGrid ? M_lin20 : M_lin5,
+            i_actor->attr().mUseLargeGrid ? 21 : 5, 100.0f);
 
     if (field_0x5c >= 0 && field_0x0[field_0x5c] > i_actor->current.pos.y) {
         i_actor->current.pos.y = field_0x0[field_0x5c];
@@ -305,6 +298,7 @@ bool daObjMovebox::Bgc_c::chk_wall_pre(daObjMovebox::Act_c const* i_actor,
 bool daObjMovebox::Bgc_c::chk_wall_touch(daObjMovebox::Act_c const* i_actor,
                                          daObjMovebox::BgcSrc_c const* i_bgcSrc, s16 param_2) {
     static dBgS_ObjLinChk touch_work;
+    static const f32 bgc_add = 10.0f;
 
     const s16 sp8C = i_actor->home.angle.y + param_2;
 
@@ -318,7 +312,7 @@ bool daObjMovebox::Bgc_c::chk_wall_touch(daObjMovebox::Act_c const* i_actor,
     mDoMtx_stack_c::XrotM(0x4000);
     sp50.set(i_bgcSrc->field_0xc, 0.0f, i_bgcSrc->field_0x8);
     mDoMtx_stack_c::multVec(&cXyz::BaseY, &sp68);
-    sp68 *= i_actor->attr().field_0x70 * 0.5f + 10.0f;
+    sp68 *= i_actor->attr().mScaleXZ * 0.5f + 10.0f;
 
     mDoMtx_stack_c::XrotM(0x4000);
     sp50.set(i_bgcSrc->field_0xc, 0.0f, i_bgcSrc->field_0x8);
@@ -326,10 +320,10 @@ bool daObjMovebox::Bgc_c::chk_wall_touch(daObjMovebox::Act_c const* i_actor,
     mDoMtx_stack_c::YrotS(sp8C);
 
     mDoMtx_stack_c::transM(sp5C);
-    
-    mDoMtx_stack_c::scaleM(i_actor->attr().field_0x70,
-                           i_actor->attr().field_0x64,
-                           i_actor->attr().field_0x70);
+
+    mDoMtx_stack_c::scaleM(i_actor->attr().mScaleXZ,
+                           i_actor->attr().mScaleY,
+                           i_actor->attr().mScaleXZ);
     mDoMtx_stack_c::transM(0.0f, 0.5f, 0.0f);
     mDoMtx_stack_c::XrotM(0x4000);
 
@@ -436,77 +430,179 @@ const dCcD_SrcCyl daObjMovebox::Act_c::M_cyl_src = {
     }
 };
 
-// __declspec(section ".rodata")
 const daObjMovebox::Attr_c daObjMovebox::Act_c::M_attr[8] = {
     {
-        0x6,           0xE,       0xA,     0x6,     0xE,     0xA,     75.0f,         90.0f,
-        -3.0f,         0.005f,    0.001f,  0.0f,    1.8f,    3.9f,    -0.39f,        -0.2f,
-        0.02f,         1000,      0.04f,   0.013f,  0.15f,   0.1f,    0.1f,          0.06f,
-        0.075f,        4,         7,       0xC00,   150.0f,  150.0f,  0.0066666668f, 150.0f,
-        0.0066666668f, 150.0f,    0x8013C, 0x8013D, 0x80151, 0x8002A, 0x8002D,       {-90, -1},
-        {-90, 90},     {151, 90}, 0,       0,       0,
+        // Timing
+        6,      14,     10,     6,      14,     10,
+        // Misc
+        75.0f,  90.0f,  -3.0f,  0.005f, 0.001f, 0.0f,   1.8f,   3.9f,   -0.39f, -0.2f,
+        // Water
+        0.02f,  1000,   0.04f,  0.013f,
+        // Tilt
+        0.15f,  0.1f,   0.1f,   0.06f,  0.075f,
+        // Scales/Limits
+        4,          7,              0xC00,
+        150.0f,     150.0f,         1.0f / 150.0f,  150.0f,         1.0f / 150.0f,  150.0f,
+        // Sound effects
+        Z2SE_OBJ_MOVE_WBLOCK,       Z2SE_OBJ_MOVE_WBLOCK_LIMIT, Z2SE_OBJ_WBOX_FALL_NORMAL,
+        Z2SE_OBJ_FALL_WATER_M,      JA_SE_OBJ_FALL_MAGMA_M,
+        // Cull
+        {-90, -1, -90, 90, 151, 90},
+        // Flags
+        false, false, false
     },
     {
-        0x8,           0x13,      0xD,     0x8,     0x13,    0xD,     75.0f,         90.0f,
-        -5.0f,         0.005f,    0.001f,  0.0f,    1.8f,    4.5f,    -0.5f,         -0.2f,
-        0.02f,         1000,      0.04f,   0.013f,  0.15f,   0.1f,    0.1f,          0.06f,
-        0.075f,        4,         7,       0xC00,   150.0f,  150.0f,  0.0066666668f, 150.0f,
-        0.0066666668f, 150.0f,    0x20038, 0x20039, 0x8002F, 0x8002B, 0x8002E,       {-90, -1},
-        {-90, 90},     {151, 90}, 0,       0,       0,
+        // Timing
+        8, 19, 13, 8, 19, 13,
+        // Misc
+        75.0f,  90.0f,  -5.0f,  0.005f, 0.001f, 0.0f,   1.8f,   4.5f,   -0.5f,  -0.2f,
+        // Water
+        0.02f,  1000,   0.04f,  0.013f,
+        // Tilt
+        0.15f,  0.1f,   0.1f,   0.06f,  0.075f,
+        // Scales/Limits
+        4,              7,              0xC00,
+        150.0f,         150.0f,         1.0f / 150.0f,  150.0f,         1.0f / 150.0f,  150.0f,
+        // Sound effects
+        JA_SE_LK_MOVE_ROCK,         JA_SE_LK_MOVE_ROCK_LIMIT,   JA_SE_OBJ_BLOCK_FALL_NORMAL,
+        Z2SE_OBJ_FALL_WATER_L,      JA_SE_OBJ_FALL_MAGMA_L,
+        // Cull
+        {-90, -1,  -90, 90,  151, 90},
+        // Flags
+        false, false, false
     },
     {
-        0x8,     0x13,    0xD,     0x8,        0x13,        0xD,        50.0f,  110.0f,  -5.0f,
-        0.005f,  0.001f,  0.0f,    1.8f,       4.5f,        -0.5f,      -0.2f,  0.02f,   1000,
-        0.04f,   0.013f,  0.15f,   0.1f,       0.1f,        0.06f,      0.075f, 4,       7,
-        0x1000,  200.0f,  200.0f,  0.005f,     200.0f,      0.005f,     200.0f, 0x80154, 0x80155,
-        0x8002F, 0x8002B, 0x8002E, {-110, -1}, {-110, 110}, {210, 110}, 0,      1,       0,
+        // Timing
+        8, 19, 13, 8, 19, 13,
+        // Misc
+        50.0f,  110.0f, -5.0f,  0.005f, 0.001f, 0.0f,   1.8f,   4.5f,   -0.5f,  -0.2f,
+        // Water
+        0.02f,  1000,   0.04f,  0.013f,
+        // Tilt
+        0.15f,  0.1f,   0.1f,   0.06f,  0.075f,
+        // Scales/Limits
+        4,              7,              0x1000,
+        200.0f,         200.0f,         1 / 200.0f,     200.0f,         1.0f / 200.0f,  200.0f,
+        // Sound effects
+        Z2SE_OBJ_MOVE_ROCK,         Z2SE_OBJ_MOVE_ROCK_LIMIT,   JA_SE_OBJ_BLOCK_FALL_NORMAL,
+        Z2SE_OBJ_FALL_WATER_L,      JA_SE_OBJ_FALL_MAGMA_L,
+        // Cull
+        {-110, -1, -110, 110, 210, 110},
+        // Flags
+        false, true, false
     },
     {
-        0x8,           0x13,       0xD,     0x8,     0x13,    0xD,     75.0f,         180.0f,
-        -5.0f,         0.005f,     0.001f,  0.0f,    1.8f,    4.5f,    -0.5f,         -0.2f,
-        0.02f,         1000,       0.04f,   0.013f,  0.15f,   0.1f,    0.1f,          0.06f,
-        0.075f,        4,          7,       0xC00,   300.0f,  300.0f,  0.0033333334f, 300.0f,
-        0.0033333334f, 300.0f,     0x20038, 0x20039, 0x8002F, 0x8002B, 0x8002E,       {-180, -1},
-        {-180, 180},   {310, 180}, 0,       0,       0,
+        // Timing
+        8, 19, 13, 8, 19, 13,
+        // Misc
+        75.0f,  180.0f, -5.0f,  0.005f, 0.001f, 0.0f,   1.8f,   4.5f,   -0.5f,  -0.2f,
+        // Water
+        0.02f,  1000,   0.04f,  0.013f,
+        // Tilt
+        0.15f,  0.1f,   0.1f,   0.06f,  0.075f,
+        // Scales/Limits
+        4,              7,              0xC00,
+        300.0f,         300.0f,         1.0f / 300.0f,  300.0f,         1.0f / 300.0f,  300.0f,
+        // Sound effects
+        JA_SE_LK_MOVE_ROCK,         JA_SE_LK_MOVE_ROCK_LIMIT,   JA_SE_OBJ_BLOCK_FALL_NORMAL,
+        Z2SE_OBJ_FALL_WATER_L,      JA_SE_OBJ_FALL_MAGMA_L,
+        // Cull
+        {-180, -1, -180, 180, 310, 180},
+        // Flags
+        false, false, false
     },
     {
-        0x8,           0x13,       0xD,     0x8,     0x13,    0xD,     75.0f,         180.0f,
-        -5.0f,         0.005f,     0.001f,  0.0f,    1.8f,    4.5f,    -0.5f,         -0.2f,
-        0.02f,         1000,       0.04f,   0.013f,  0.15f,   0.1f,    0.1f,          0.06f,
-        0.075f,        4,          7,       0x2670,  300.0f,  300.0f,  0.0033333334f, 300.0f,
-        0.0033333334f, 300.0f,     0x20038, 0x20039, 0x8002F, 0x8002B, 0x8002E,       {-180, -1},
-        {-180, 180},   {310, 180}, 0,       0,       0,
+        // Timing
+        8, 19, 13, 8, 19, 13,
+        // Misc
+        75.0f,  180.0f, -5.0f,  0.005f, 0.001f, 0.0f,   1.8f,   4.5f,   -0.5f,  -0.2f,
+        // Water
+        0.02f,  1000,   0.04f,  0.013f,
+        // Tilt
+        0.15f,  0.1f,   0.1f,   0.06f,  0.075f,
+        // Scales/Limits
+        4,              7,              0x2670,
+        300.0f,         300.0f,         1.0f / 300.0f,  300.0f,         1.0f / 300.0f,  300.0f,
+        // Sound effects
+        JA_SE_LK_MOVE_ROCK,         JA_SE_LK_MOVE_ROCK_LIMIT,   JA_SE_OBJ_BLOCK_FALL_NORMAL,
+        Z2SE_OBJ_FALL_WATER_L,      JA_SE_OBJ_FALL_MAGMA_L,
+        // Cull
+        {-180, -1, -180, 180, 310, 180},
+        // Flags
+        false, false, false
     },
     {
-        0x8,           0x13,      0xD,     0x8,     0x13,    0xD,     75.0f,         90.0f,
-        -5.0f,         0.005f,    0.001f,  0.0f,    1.8f,    4.5f,    -0.5f,         -0.2f,
-        0.02f,         1000,      0.04f,   0.013f,  0.15f,   0.1f,    0.1f,          0.06f,
-        0.075f,        4,         7,       0xC00,   150.0f,  150.0f,  0.0066666668f, 150.0f,
-        0.0066666668f, 150.0f,    0x20038, 0x20039, 0x8002F, 0x8002B, 0x8002E,       {-90, -1},
-        {-90, 90},     {360, 90}, 0,       0,       0,
+        // Timing
+        8, 19, 13, 8, 19, 13,
+        // Misc
+        75.0f,  90.0f,  -5.0f,  0.005f, 0.001f, 0.0f,   1.8f,   4.5f,   -0.5f,  -0.2f,
+        // Water
+        0.02f,  1000,   0.04f,  0.013f,
+        // Tilt
+        0.15f,  0.1f,   0.1f,   0.06f,  0.075f,
+        // Scales/Limits
+        4,              7,              0xC00,
+        150.0f,         150.0f,         1.0f / 150.0f,  150.0f,         1.0f / 150.0f,  150.0f,
+        // Sound effects
+        JA_SE_LK_MOVE_ROCK,         JA_SE_LK_MOVE_ROCK_LIMIT,   JA_SE_OBJ_BLOCK_FALL_NORMAL,
+        Z2SE_OBJ_FALL_WATER_L,      JA_SE_OBJ_FALL_MAGMA_L,
+        // Cull
+        {-90, -1, -90, 90, 360, 90},
+        // Flags
+        false, false, false
     },
     {
-        0x8,     0x13,    0xD,     0x8,         0x13,       0xD,           50.0f,  90.0f,   -3.0f,
-        0.005f,  0.001f,  0.0f,    1.8f,        3.9f,       -0.39f,        -0.2f,  0.02f,   1000,
-        0.04f,   0.013f,  0.15f,   0.1f,        0.1f,       0.06f,         0.075f, 4,       7,
-        0x1620,  200.0f,  200.0f,  0.005f,      230.0f,     0.0043478259f, 100.0f, 0x8013C, 0x8013D,
-        0x80151, 0x8002A, 0x8002D, {-130, -10}, {-60, 130}, {210, 60},     0,      1,       0,
+        // Timing
+        8, 19, 13, 8, 19, 13,
+        // Misc
+        50.0f,  90.0f,  -3.0f,  0.005f, 0.001f, 0.0f,   1.8f,   3.9f,   -0.39f, -0.2f,
+        // Water
+        0.02f,  1000,   0.04f,  0.013f,
+        // Tilt
+        0.15f,  0.1f,   0.1f,   0.06f,  0.075f,
+        // Scales/Limits
+        4,              7,              0x1620,
+        200.0f,         200.0f,         1 / 200.0f,     230.0f,         1.0f / 230.0f,  100.0f,
+        // Sound effects
+        Z2SE_OBJ_MOVE_WBLOCK,       Z2SE_OBJ_MOVE_WBLOCK_LIMIT, Z2SE_OBJ_WBOX_FALL_NORMAL,
+        Z2SE_OBJ_FALL_WATER_M,      JA_SE_OBJ_FALL_MAGMA_M,
+        // Cull
+        {-130, -10, -60, 130, 210, 60},
+        // Flags
+        false, true, false
     },
     {
-        0x4,           0x4,       0x14,    0x4,     0x4,     0x14,    75.0f,         90.0f,
-        -3.0f,         0.005f,    0.001f,  0.0f,    1.8f,    3.9f,    -0.39f,        -0.2f,
-        0.02f,         1000,      0.04f,   0.013f,  0.15f,   0.1f,    0.1f,          0.06f,
-        0.075f,        4,         7,       0x1620,  150.0f,  150.0f,  0.0066666668f, 150.0f,
-        0.0066666668f, 150.0f,    0x8013C, 0x8013D, 0x80151, 0x8002A, 0x8002D,       {-90, -1},
-        {-90, 90},     {151, 90}, 0,       0,       0,
+        // Timing
+        4, 4, 20, 4, 4, 20,
+        // Misc
+        75.0f,  90.0f,  -3.0f,  0.005f, 0.001f, 0.0f,   1.8f,   3.9f,   -0.39f, -0.2f,
+        // Water
+        0.02f,  1000,   0.04f,  0.013f,
+        // Tilt
+        0.15f,  0.1f,   0.1f,   0.06f,  0.075f,
+        // Scales/Limits
+        4,              7,              0x1620,
+        150.0f,         150.0f,         1.0f / 150.0f,  150.0f,         1.0f / 150.0f,  150.0f,
+        // Sound effects
+        Z2SE_OBJ_MOVE_WBLOCK,       Z2SE_OBJ_MOVE_WBLOCK_LIMIT, Z2SE_OBJ_WBOX_FALL_NORMAL,
+        Z2SE_OBJ_FALL_WATER_M,      JA_SE_OBJ_FALL_MAGMA_M,
+        // Cull
+        {-90, -1, -90, 90, 151, 90},
+        // Flags
+        false, false, false
     },
 };
 
-const inline daObjMovebox::Attr_c& daObjMovebox::Act_c::attr() const {
-#if DEBUG
-    return daObjMovebox::Act_c::M_hio[mType].mAttr;
+// see comment in header
+#if PLATFORM_GCN
+inline const daObjMovebox::Attr_c& daObjMovebox::Act_c::attr() const {
 #else
-    return M_attr[mType];
+inline daObjMovebox::Attr_c& daObjMovebox::Act_c::attr() const {
+#endif
+#if DEBUG
+    return M_hio[mType].mAttr;
+#else
+    return const_cast<daObjMovebox::Attr_c&>(M_attr[mType]);
 #endif
 }
 
@@ -630,9 +726,9 @@ void daObjMovebox::Act_c::path_save() {
 int daObjMovebox::Act_c::CreateHeap() {
     BOOL var_r29 = true;
 
-    if (attr().field_0x58 >= 0) {
+    if (attr().mModelResIdx >= 0) {
         J3DModelData* modelData =
-            (J3DModelData*)dComIfG_getObjectRes(M_arcname[mType], attr().field_0x58);
+            (J3DModelData*)dComIfG_getObjectRes(M_arcname[mType], attr().mModelResIdx);
         JUT_ASSERT(1403, modelData != NULL);
 
         mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
@@ -660,16 +756,16 @@ void daObjMovebox::Act_c::RideCallBack(dBgW* i_bgw, fopAc_ac_c* i_actor, fopAc_a
         var_f29 = i_rideActor->current.pos.x - a_this->current.pos.x;
         var_f28 = i_rideActor->current.pos.z - a_this->current.pos.z;
 
-        if (fopAcM_GetProfName(i_rideActor) == PROC_ALINK) {
+        if (fopAcM_GetProfName(i_rideActor) == fpcNm_ALINK_e) {
             var_f30 = a_this->attr().mPlayerGravity;
-            var_f27 = a_this->attr().field_0x74 * a_this->attr().mPlayerTiltPower;
+            var_f27 = a_this->attr().mTiltForceScale * a_this->attr().mPlayerTiltPower;
         } else {
             var_f30 = a_this->attr().mMiscGravity;
-            var_f27 = a_this->attr().field_0x74 * a_this->attr().mMiscTiltPower;
+            var_f27 = a_this->attr().mTiltForceScale * a_this->attr().mMiscTiltPower;
         }
 
         var_f31 = 1.0f - (JMAFastSqrt(var_f29 * var_f29 + var_f28 * var_f28) *
-                          a_this->attr().field_0x74);
+                          a_this->attr().mTiltForceScale);
         var_f31 = (var_f31 * 0.9f) + 0.1f;
         if (var_f31 < 0.0f) {
             var_f31 = 0.0f;
@@ -684,7 +780,7 @@ void daObjMovebox::Act_c::RideCallBack(dBgW* i_bgw, fopAc_ac_c* i_actor, fopAc_a
 
         a_this->field_0x8c0 += var_f27 * var_f29;
         a_this->field_0x8c4 += var_f27 * var_f28;
-    } else if (fopAcM_GetProfName(i_rideActor) == PROC_Obj_Movebox) {
+    } else if (fopAcM_GetProfName(i_rideActor) == fpcNm_Obj_Movebox_e) {
         cLib_onBit<daObjMovebox::Bgc_c::State_e>(a_this->mBgc.mState,
                                                  daObjMovebox::Bgc_c::STATE_40_e);
     }
@@ -698,26 +794,28 @@ enum MOVE_DIR {
 };
 
 fopAc_ac_c* daObjMovebox::Act_c::PPCallBack(fopAc_ac_c* i_bgActor, fopAc_ac_c* i_pushActor,
-                                            s16 i_angle, dBgW_Base::PushPullLabel pp_label) {
+                                            s16 i_angle, dBgW_Base::PushPullLabel i_pp_label) {
     UNUSED(i_pushActor);
 
-    dBgW::PushPullLabel var_r26 = cLib_checkBit<dBgW::PushPullLabel>(
-        pp_label, (dBgW::PushPullLabel)(dBgW::PPLABEL_PUSH | dBgW::PPLABEL_PULL));
+    static const int pp_field = 3;
+
+    dBgW::PushPullLabel pp_label = cLib_checkBit<dBgW::PushPullLabel>(
+        i_pp_label, (dBgW::PushPullLabel)(dBgW::PPLABEL_PUSH | dBgW::PPLABEL_PULL));
     Act_c* a_this = (Act_c*)i_bgActor;
 
     bool sp_e =
-        a_this->attr().field_0x9e ?
-            (cLib_checkBit<dBgW::PushPullLabel>(pp_label, dBgW::PPLABEL_HEAVY) ? true : false) :
+        a_this->attr().mUseLargeGrid ?
+            (cLib_checkBit<dBgW::PushPullLabel>(i_pp_label, dBgW::PPLABEL_HEAVY) ? true : false) :
             true;
 
-    if (var_r26 && sp_e) {
+    if (pp_label && sp_e) {
         s16 sp10 =
-            cLib_checkBit<dBgW::PushPullLabel>(var_r26, dBgW::PPLABEL_PULL) ? i_angle - 0x8000 : i_angle;
+            cLib_checkBit<dBgW::PushPullLabel>(pp_label, dBgW::PPLABEL_PULL) ? i_angle - 0x8000 : i_angle;
         s16 dir = sp10 - a_this->home.angle.y;
 
         JUT_ASSERT(1499, pp_label != pp_field);
 
-        a_this->mPPLabel = pp_label;
+        a_this->mPPLabel = i_pp_label;
         int move_dir;
         if (dir >= -0x2000 && dir < 0x2000) {
             move_dir = DIR_SOUTH;
@@ -778,10 +876,10 @@ int daObjMovebox::Act_c::Create() {
 
     fopAcM_SetMtx(this, mBgMtx);
 
-    fopAcM_setCullSizeBox(this, attr().mCullX.min, attr().mCullX.max, attr().mCullY.min,
-                          attr().mCullY.max, attr().mCullZ.min, attr().mCullZ.max);
+    fopAcM_setCullSizeBox(this, attr().mCull.xMin, attr().mCull.xMax, attr().mCull.yMin,
+                          attr().mCull.yMax, attr().mCull.zMin, attr().mCull.zMax);
     fopAcM_SetSpeedF(this, 0.0f);
-    fopAcM_SetGravity(this, ATTR_F32(mGravity));
+    fopAcM_SetGravity(this, attr().mGravity);
     fopAcM_posMoveF(this, NULL);
 
     mBgc.proc_vertical(this);
@@ -820,17 +918,13 @@ int daObjMovebox::Act_c::Create() {
 void daObjMovebox::Act_c::afl_sway() {
     bool var_r22;
     bool var_r21;
-    
+
     f32 var_f31 = field_0x8c0 * field_0x8c0 + field_0x8c4 * field_0x8c4;
     f32 var_f29 = attr().mMaxTiltPower * attr().mMaxTiltPower;
 
-    const BgcSrc_c* pbgc;
-    if (attr().field_0x9e) {
-        pbgc = mBgc.M_lin20;
-    } else {
-        pbgc = mBgc.M_lin5;
-    }
-    s32 check_num = attr().field_0x9e ? 21 : 5;
+    //TODO: possible fakematch, the const_cast is very suspicious
+    BgcSrc_c* pbgc = const_cast<BgcSrc_c*>(attr().mUseLargeGrid ? mBgc.M_lin20 : mBgc.M_lin5);
+    s32 check_num = attr().mUseLargeGrid ? 21 : 5;
 
     var_r22 = mBgc.chk_wall_touch2(this, pbgc, check_num, M_dir_base[0]) ||
               mBgc.chk_wall_touch2(this, pbgc, check_num, M_dir_base[2]);
@@ -900,8 +994,8 @@ int daObjMovebox::Act_c::check_to_walk() {
 
         for (int i = 0; i < 4; i++) {
             if (field_0x8f0[i] >= (s16)var_r28) {
-                const BgcSrc_c* pbgc = attr().field_0x9e ? mBgc.M_lin20 : mBgc.M_lin5;
-                int check_num = attr().field_0x9e ? 21 : 5;
+                const BgcSrc_c* pbgc = attr().mUseLargeGrid ? mBgc.M_lin20 : mBgc.M_lin5;
+                int check_num = attr().mUseLargeGrid ? 21 : 5;
 
                 if (!mBgc.chk_wall_pre(this, pbgc, check_num, M_dir_base[i])) {
                     var_r27 = i;
@@ -950,7 +1044,7 @@ void daObjMovebox::Act_c::eff_smoke_slip_start() {
 
 void daObjMovebox::Act_c::mode_wait_init() {
     fopAcM_SetSpeedF(this, 0.0f);
-    fopAcM_SetGravity(this, ATTR_F32(mGravity));
+    fopAcM_SetGravity(this, attr().mGravity);
     mpBgW->SetCrrFunc(dBgS_MoveBGProc_Trans);
     clr_moment_cnt();
     field_0x8e8 = -1;
@@ -970,8 +1064,8 @@ void daObjMovebox::Act_c::mode_wait() {
         path_save();
     }
 
-    daObj::posMoveF_stream(this, NULL, &cXyz::Zero, ATTR_F32(mViscosityResistance),
-                           ATTR_F32(mInertiaResistance));
+    daObj::posMoveF_stream(this, NULL, &cXyz::Zero, attr().mViscosityResistance,
+                           attr().mInertiaResistance);
 
     cXyz sp48;
     mDoMtx_stack_c::transS(home.pos);
@@ -991,10 +1085,10 @@ void daObjMovebox::Act_c::mode_wait() {
         mode_walk_init();
 
         if (cLib_checkBit<dBgW::PushPullLabel>(mPPLabel, dBgW::PPLABEL_PULL)) {
-            field_0x8f8 = ATTR_S16(mPullMoveTime);
+            field_0x8f8 = attr().mPullMoveTime;
             field_0x8e4 = 32768.0f / attr().mPullMoveTime;
         } else {
-            field_0x8f8 = ATTR_S16(mPushMoveTime);
+            field_0x8f8 = attr().mPushMoveTime;
             field_0x8e4 = 32768.0f / attr().mPushMoveTime;
         }
     }
@@ -1032,16 +1126,16 @@ void daObjMovebox::Act_c::mode_walk() {
     sound_slip();
 
     if (var_r28) {
-        const BgcSrc_c* pbgc = attr().field_0x9e ? mBgc.M_lin20 : mBgc.M_lin5;
-        int check_num = attr().field_0x9e ? 21 : 5;
+        const BgcSrc_c* pbgc = attr().mUseLargeGrid ? mBgc.M_lin20 : mBgc.M_lin5;
+        int check_num = attr().mUseLargeGrid ? 21 : 5;
 
         if (mBgc.chk_wall_pre(this, pbgc, check_num, M_dir_base[field_0x8e8])) {
             sound_limit();
         }
     }
 
-    daObj::posMoveF_stream(this, NULL, &cXyz::Zero, ATTR_F32(mViscosityResistance),
-                           ATTR_F32(mInertiaResistance));
+    daObj::posMoveF_stream(this, NULL, &cXyz::Zero, attr().mViscosityResistance,
+                           attr().mInertiaResistance);
 
     current.pos.x = sp78.x;
     current.pos.z = sp78.z;
@@ -1080,7 +1174,7 @@ void daObjMovebox::Act_c::mode_afl() {
     } else if (var_f30 <= -attr().field_0x68) {
         var_f31 = 1.0f;
     } else {
-        var_f31 = -var_f30 * attr().field_0x6c;
+        var_f31 = -var_f30 * attr().mWaterBobScale;
     }
 
     S16_ADD(field_0x8b8, attr().mWaterOscillationAngleSpeed * (cM_rnd() + 1.0f));
@@ -1114,7 +1208,7 @@ static void dummy() {
 
 void daObjMovebox::Act_c::mode_proc_call() {
     typedef void (daObjMovebox::Act_c::*modeFunc)();
-    static modeFunc mode_proc[] = {
+    static const modeFunc mode_proc[] = {
         &daObjMovebox::Act_c::mode_wait,
         &daObjMovebox::Act_c::mode_walk,
         &daObjMovebox::Act_c::mode_afl,
@@ -1133,7 +1227,7 @@ void daObjMovebox::Act_c::sound_slip() {
         }
     }
 
-    mDoAud_seStartLevel(attr().field_0x7c, &eyePos, var_r29, mReverb);
+    mDoAud_seStartLevel(attr().mSoundSlip, &eyePos, var_r29, mReverb);
 }
 
 void daObjMovebox::Act_c::sound_limit() {
@@ -1146,7 +1240,7 @@ void daObjMovebox::Act_c::sound_limit() {
         }
     }
 
-    mDoAud_seStart(attr().field_0x80, &eyePos, var_r29, mReverb);
+    mDoAud_seStart(attr().mSoundLimit, &eyePos, var_r29, mReverb);
 }
 
 void daObjMovebox::Act_c::sound_land() {
@@ -1159,7 +1253,7 @@ void daObjMovebox::Act_c::sound_land() {
         }
     }
 
-    mDoAud_seStart(attr().field_0x84, &eyePos, var_r29, mReverb);
+    mDoAud_seStart(attr().mSoundLand, &eyePos, var_r29, mReverb);
 }
 
 void daObjMovebox::Act_c::vib_land() {
@@ -1171,10 +1265,10 @@ f32 dummy_literal(f32 x) {
 }
 
 void daObjMovebox::Act_c::eff_land_smoke() {
-    daObjEff::Act_c::make_land_smoke(&current.pos, ATTR_F32(mLandSmokeScale));
+    daObjEff::Act_c::make_land_smoke(&current.pos, attr().mLandSmokeScale);
 }
 
-void dummy_static() {
+void daObjMovebox::Act_c::eff_break() {
     static cXyz particle_scale;
 }
 
@@ -1203,12 +1297,12 @@ int daObjMovebox::Act_c::Execute(Mtx** param_0) {
                 u32 params;
                 daObjBurnBox_c::make_prm_burnBox(&params, 1);
 
-                fopAcM_createChild(PROC_Obj_BurnBox, fopAcM_GetID(this), params, &current.pos,
+                fopAcM_createChild(fpcNm_Obj_BurnBox_e, fopAcM_GetID(this), params, &current.pos,
                                    fopAcM_GetRoomNo(this), &shape_angle, &scale, -1, NULL);
                 field_0x908 = 5;
             } else if (hit_obj->ChkAtType(AT_TYPE_BOMB) || hit_obj->ChkAtType(AT_TYPE_IRON_BALL)) {
                 fopAc_ac_c* hit_ac = mCcCyl.GetTgHitAc();
-                if (hit_ac != NULL && fopAcM_GetProfName(hit_ac) != PROC_Obj_Carry) {
+                if (hit_ac != NULL && fopAcM_GetProfName(hit_ac) != fpcNm_Obj_Carry_e) {
                     cXyz sp48(current.pos);
                     J3DModelData* kibako_bmd =
                         (J3DModelData*)dComIfG_getObjectRes("Always", "BreakWoodBox.bmd");
@@ -1235,7 +1329,7 @@ int daObjMovebox::Act_c::Execute(Mtx** param_0) {
         if (cLib_checkBit<daObjMovebox::Bgc_c::State_e>(mBgc.mState,
                                                         daObjMovebox::Bgc_c::STATE_20_e))
         {
-            mDoAud_seStart(attr().field_0x88, &eyePos, 0, mReverb);
+            mDoAud_seStart(attr().mSoundFallWater, &eyePos, 0, mReverb);
         }
 
         if (field_0x5ac == 0) {
@@ -1305,13 +1399,13 @@ int daObjMovebox::Act_c::Draw() {
         dComIfGd_setList();
     }
 
-    if (attr().field_0x9d == 0 && mBgc.field_0x5c >= 0) {
+    if (attr().mDisableShadow == 0 && mBgc.field_0x5c >= 0) {
         int index = mBgc.field_0x5c;
         f32 var_f31 = mBgc.field_0x0[index];
         cM3dGPla sp40;
         bool b = dComIfG_Bgsp().GetTriPla(mBgc.M_gnd_work[index], &sp40);
         if (b && var_f31 != -G_CM3D_F_INF) {
-            dComIfGd_setSimpleShadow(&current.pos, var_f31, ATTR_F32(mShadowSize), &sp40.mNormal,
+            dComIfGd_setSimpleShadow(&current.pos, var_f31, attr().mShadowSize, &sp40.mNormal,
                                      shape_angle.y, -0.4f, NULL);
         }
     }
@@ -1365,12 +1459,12 @@ int daObjMovebox::Act_c::Mthd_Create() {
 
     int phase_state = dComIfG_resLoad(&mPhase, M_arcname[mType]);
     if (phase_state == cPhs_COMPLEATE_e) {
-        u32 heap_size = attr().field_0x60;
+        u32 heap_size = attr().mHeapSize;
         path_init();
 
-        phase_state = MoveBGCreate(M_arcname[mType], attr().field_0x5c, dBgS_MoveBGProc_Trans,
+        phase_state = MoveBGCreate(M_arcname[mType], attr().mMoveBGIdx, dBgS_MoveBGProc_Trans,
                                    heap_size, NULL);
-        JUT_ASSERT(0, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+        JUT_ASSERT(1663, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
 
     return phase_state;
@@ -1413,18 +1507,18 @@ static actor_method_class Mthd_Table = {
 };  // namespace daObjMovebox
 
 actor_process_profile_definition g_profile_Obj_Movebox = {
-    fpcLy_CURRENT_e,              // mLayerID
-    3,                            // mListID
-    fpcPi_CURRENT_e,              // mListPrio
-    PROC_Obj_Movebox,             // mProcName
-    &g_fpcLf_Method.base,        // sub_method
-    sizeof(daObjMovebox::Act_c),  // mSize
-    0,                            // mSizeOther
-    0,                            // mParameters
-    &g_fopAc_Method.base,         // sub_method
-    17,                           // mPriority
-    &daObjMovebox::Mthd_Table,    // sub_method
-    0x00040504,                   // mStatus
-    fopAc_ACTOR_e,                // mActorType
-    fopAc_CULLBOX_CUSTOM_e,       // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Movebox_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjMovebox::Act_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Movebox_e,
+    /* Actor SubMtd */ &daObjMovebox::Mthd_Table,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_FREEZE_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

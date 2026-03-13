@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_kasi_mich.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -483,7 +483,7 @@ void daNpcKasiMich_c::reset() {
         mPath.setPathInfo(getRailNo(), fopAcM_GetRoomNo(this), 0);
         mPath.setIdx(6);
     } else if (mType == 1) {
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
     }
 
     field_0x1430 = 0;
@@ -689,8 +689,8 @@ void daNpcKasiMich_c::lookat() {
     } else {
         mLookat.setAttnPos(NULL);
     }
-    
-    mLookat.setParam(body_angleX_min, body_angleX_max, body_angleY_min, body_angleY_max, 0.0f, 0.0f, 0.0f, 0.0f, 
+
+    mLookat.setParam(body_angleX_min, body_angleX_max, body_angleY_min, body_angleY_max, 0.0f, 0.0f, 0.0f, 0.0f,
                      head_angleX_min, head_angleX_max, head_angleY_min, head_angleY_max, mCurAngle.y, lookatPos);
     mLookat.calc(this, model->getBaseTRMtx(), lookatAngle, i_snap, angle_delta, FALSE);
 }
@@ -862,7 +862,7 @@ int daNpcKasiMich_c::fear(int param_1) {
         case 4: {
             cXyz sp28;
             mAnm_p->setPlaySpeed(1.5f);
-            
+
             if (mPath.getDstPos(current.pos, sp28)) {
                 mEscape = true;
                 mMode = -1;
@@ -887,8 +887,8 @@ void* daNpcKasiMich_c::_srch_escape_tag(void* i_actor, void* i_data) {
     if (!fopAcM_IsActor(i_actor)) {
         return NULL;
     }
-    
-    if (fopAcM_GetName(i_actor) != PROC_Tag_Escape) {
+
+    if (fopAcM_GetName(i_actor) != fpcNm_Tag_Escape_e) {
         return NULL;
     }
 
@@ -899,7 +899,7 @@ void* daNpcKasiMich_c::_srch_escape_tag(void* i_actor, void* i_data) {
         mTargetTag = (daTagEscape_c*)i_actor;
         return NULL;
     }
-    
+
     if (iVar1 > 0x4000) {
         f32 fVar1 = fopAcM_searchActorDistanceXZ2((fopAc_ac_c*)i_data, (fopAc_ac_c*)i_actor);
         if (fVar1 < mTargetTagDist) {
@@ -1021,7 +1021,7 @@ cXyz daNpcKasiMich_c::getChacePos() {
 
     cXyz chacePos;
     mPath.getDstPos(current.pos, chacePos);
-    
+
     return chacePos;
 }
 
@@ -1165,7 +1165,7 @@ int daNpcKasiMich_c::kya_stop(int param_1) {
     switch (mMode) {
         case -1:
             break;
-        
+
         case 0:
             if (mMotion != MOT_MICH_KYA_TALK) {
                 setAction(&daNpcKasiMich_c::wait);
@@ -1350,7 +1350,7 @@ int daNpcKasiMich_c::cheer(int param_1) {
 BOOL daNpcKasiMich_c::_turn_to_link(s16 param_1) {
     cXyz pos(*fopAcM_GetPosition_p(daPy_getPlayerActorClass()));
     return _turn_pos(pos, param_1);
-    
+
 }
 
 BOOL daNpcKasiMich_c::_turn_pos(cXyz const& param_1, s16 param_2) {
@@ -1412,18 +1412,18 @@ static actor_method_class daNpcKasiMich_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_KASIMICH = {
-  fpcLy_CURRENT_e,            // mLayerID
-  7,                          // mListID
-  fpcPi_CURRENT_e,            // mListPrio
-  PROC_NPC_KASIMICH,          // mProcName
-  &g_fpcLf_Method.base,      // sub_method
-  sizeof(daNpcKasiMich_c),    // mSize
-  0,                          // mSizeOther
-  0,                          // mParameters
-  &g_fopAc_Method.base,       // sub_method
-  422,                        // mPriority
-  &daNpcKasiMich_MethodTable, // sub_method
-  0x00040108,                 // mStatus
-  fopAc_NPC_e,                // mActorType
-  fopAc_CULLBOX_CUSTOM_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_KASIMICH_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcKasiMich_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_KASIMICH_e,
+    /* Actor SubMtd */ &daNpcKasiMich_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x8_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

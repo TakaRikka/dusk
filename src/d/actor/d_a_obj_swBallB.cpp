@@ -17,7 +17,7 @@ static daObjCarry_c* l_target_info[2];
 static int l_target_info_count;
 
 static void* s_ball_sub(void* param_1, void* param_2) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_Obj_Carry &&
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_Obj_Carry_e &&
         ((daObjCarry_c*)param_1)->prm_chk_type_lightball())
     {
         if (l_target_info_count < 2) {
@@ -293,7 +293,7 @@ void daObjSwBallB_c::PutCrrPos() {
     if (fopAcM_searchPlayerDistanceXZ(this) < 150.0f && sVar5 < 0x4000 && sVar5 > -0x4000) {
         daObjCarry_c* carryObj = (daObjCarry_c*)fopAcM_SearchByID(player->getGrabActorID());
         if (carryObj != NULL && fopAcM_IsActor(carryObj) &&
-            fopAcM_GetName(carryObj) == PROC_Obj_Carry && carryObj->prm_chk_type_lightball())
+            fopAcM_GetName(carryObj) == fpcNm_Obj_Carry_e && carryObj->prm_chk_type_lightball())
         {
             player->setForcePutPos(current.pos);
             if (!dComIfGp_event_runCheck()) {
@@ -411,18 +411,18 @@ static actor_method_class l_daObjSwBallB_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_SwBallB = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_SwBallB,       // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjSwBallB_c), // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  572,                    // mPriority
-  &l_daObjSwBallB_Method, // sub_method
-  0x00044100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_SwBallB_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjSwBallB_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_SwBallB_e,
+    /* Actor SubMtd */ &l_daObjSwBallB_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

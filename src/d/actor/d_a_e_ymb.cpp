@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_ymb.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -301,7 +301,7 @@ int daE_YMB_c::JointCallBack(J3DJoint* i_joint, int param_2) {
 }
 
 static void rideCallBack(dBgW* param_1, fopAc_ac_c* aActor_p, fopAc_ac_c* param_3) {
-    if (fopAcM_GetName(param_3) == PROC_ALINK) {
+    if (fopAcM_GetName(param_3) == fpcNm_ALINK_e) {
         ((daE_YMB_c*)aActor_p)->field_0x724 = 20;
     }
 }
@@ -362,8 +362,8 @@ int daE_YMB_c::draw() {
     cXyz sp58;
     sp58.set(current.pos.x, current.pos.y + 100.0f, current.pos.z);
     tevStr.field_0x344 = (tevStr.field_0x344 * field_0x6d8) / 255.0f;
-    mShadowKey = dComIfGd_setShadow(mShadowKey, 0, model, &sp58, 2500.0f, 0.0f, 
-                                    current.pos.y, field_0x6d4, mGndChk, &tevStr, 0, 
+    mShadowKey = dComIfGd_setShadow(mShadowKey, 0, model, &sp58, 2500.0f, 0.0f,
+                                    current.pos.y, field_0x6d4, mGndChk, &tevStr, 0,
                                     1.0f, dDlst_shadowControl_c::getSimpleTex());
 
     return 1;
@@ -762,7 +762,7 @@ void daE_YMB_c::setDeathEffect() {
 }
 
 static void* search_drop(void* i_actor, void* i_data) {
-    if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_Drop) {
+    if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_Obj_Drop_e) {
         if (!fpcM_IsCreating(fopAcM_GetID(i_actor))) {
             u8 switchBit = ((daE_YMB_c*)i_data)->getSwitchBit();
             if (switchBit == 0xFF) {
@@ -1075,7 +1075,7 @@ void daE_YMB_c::executeFlyAttack() {
 
             if (field_0x1324.ChkAtHit()) {
                 actor = dCc_GetAc(field_0x1324.GetAtHitObj()->GetAc());
-                if (fopAcM_GetName(actor) == PROC_ALINK) {
+                if (fopAcM_GetName(actor) == fpcNm_ALINK_e) {
                     field_0x6fc = 30;
                     speed.y = 0.0f;
                     speedF = 0.0f;
@@ -1597,7 +1597,7 @@ void daE_YMB_c::executeWaterJump() {
 
         case 5:
             mSound.startCreatureSoundLevel(Z2SE_EN_YB_FLY, 0, -1);
-            
+
             if (field_0x6fc == 0 && cLib_chaseF(&speed.y, 0.0f, 3.0f) != 0 && mpModelMorf->isStop()) {
                 setActionMode(1, 1);
             }
@@ -1696,7 +1696,7 @@ void daE_YMB_c::executeDamage() {
             if (!(u8)checkBck(BCK_YB_FLY_WAIT)) {
                 cLib_addCalcAngleS(&shape_angle.y, cLib_targetAngleY(&current.pos, &YMB_DOWN_POS[field_0x711]) + 0x8000, 8, 0x200, 0x80);
             }
-            
+
             if (field_0x6fc == 0) {
                 cLib_chaseF(&speed.y, 0.0f, 5.0f);
             }
@@ -2057,7 +2057,7 @@ void daE_YMB_c::setCreateDrop() {
         mDoMtx_stack_c::multVecZero(&sp1c);
         drop->setPos(sp1c);
         drop->setAppear();
-        fopAcM_OnStatus(drop, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OnStatus(drop, fopAcStts_UNK_0x4000_e);
     }
 
     field_0x721 = 1;
@@ -2157,7 +2157,7 @@ void daE_YMB_c::executeDeath() {
         case 4:
             cLib_chaseF(&field_0x75c, -5.0f, 1.0f);
             mDemoCamCenter.y += field_0x75c;
-            
+
             camera->mCamera.Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
 
             if (field_0x6fc == 0) {
@@ -2477,7 +2477,7 @@ void daE_YMB_c::executeStartDemo() {
 
             if (field_0x6fc >= 95) {
                 setBoilEffect(1);
-                
+
                 if (field_0x6fc == 95) {
                     dComIfGp_getVibration().StopQuake(31);
                 }
@@ -2942,7 +2942,7 @@ void daE_YMB_c::setAttentionPos() {
 
     if (field_0x6f4 == 0) {
         mDoMtx_stack_c::copy(model->getAnmMtx(1));
-        
+
         if (daPy_getPlayerActorClass()->getCutType() == daPy_py_c::CUT_TYPE_WOLF_JUMP || mAction == 7) {
             mDoMtx_stack_c::transM(200.0f, 50.0f, 0.0f);
         } else {
@@ -2983,7 +2983,7 @@ void daE_YMB_c::setAttentionPos() {
 void daE_YMB_c::cc_set() {
     cXyz sp28;
     J3DModel* model = mpModelMorf->getModel();
-    
+
     setAttentionPos();
     mDoMtx_stack_c::copy(model->getAnmMtx(1));
     mDoMtx_stack_c::multVecZero(&sp28);
@@ -3149,7 +3149,7 @@ int daE_YMB_c::CreateHeap() {
     }
 
     mpBgW->SetCrrFunc(dBgS_MoveBGProc_Typical);
-    
+
     return 1;
 }
 
@@ -3248,18 +3248,18 @@ static actor_method_class l_daE_YMB_Method = {
 };
 
 actor_process_profile_definition g_profile_E_YMB = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_YMB,             // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daE_YMB_c),      // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  196,                    // mPriority
-  &l_daE_YMB_Method,      // sub_method
-  0x00044000,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_YMB_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_YMB_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_YMB_e,
+    /* Actor SubMtd */ &l_daE_YMB_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

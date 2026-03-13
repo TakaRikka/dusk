@@ -28,7 +28,7 @@ public:
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ mDoExt_McaMorfSO* mpModelMorf;
     /* 0x574 */ Z2CreatureEnemy mSound;
-    /* 0x618 */ u8 field_0x618[0x624 - 0x618];
+    /* 0x618 */ cXyz field_0x618;
     /* 0x624 */ actionFn mAction;
     /* 0x630 */ actionFn field_0x630;
     /* 0x63C */ int field_0x63c;

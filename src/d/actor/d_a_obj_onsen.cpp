@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_obj_onsen.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 void daObjOnsen_c::initBaseMtx() {
     mpModel[0]->setBaseScale(scale);
@@ -128,18 +128,18 @@ static actor_method_class daObjOnsen_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_Onsen = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Obj_Onsen,
-    &g_fpcLf_Method.base,
-    sizeof(daObjOnsen_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    602,
-    &daObjOnsen_METHODS,
-    0x44100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Onsen_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjOnsen_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Onsen_e,
+    /* Actor SubMtd */ &daObjOnsen_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

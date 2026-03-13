@@ -248,7 +248,7 @@ int daTagCsw_c::create() {
 
 static void* searchTagCswOut(void* param_0, void* param_1) {
     UNUSED(param_1);
-    if (param_0 != NULL && fopAcM_IsActor(param_0) && fopAcM_GetProfName(param_0) == PROC_TAG_CSW) {
+    if (param_0 != NULL && fopAcM_IsActor(param_0) && fopAcM_GetProfName(param_0) == fpcNm_TAG_CSW_e) {
         daTagCsw_c* csw1 = static_cast<daTagCsw_c*>(param_0);
         daTagCsw_c* csw2 = static_cast<daTagCsw_c*>(param_1);
         if (csw1->getType() == 1) {
@@ -262,7 +262,7 @@ static void* searchTagCswOut(void* param_0, void* param_1) {
 
 static void* searchCStatue(void* param_0, void* param_1) {
     UNUSED(param_1);
-    if (param_0 != NULL && fopAcM_IsActor(param_0) && fopAcM_GetProfName(param_0) == PROC_CSTATUE) {
+    if (param_0 != NULL && fopAcM_IsActor(param_0) && fopAcM_GetProfName(param_0) == fpcNm_CSTATUE_e) {
         daCstatue_c* cstatue = static_cast<daCstatue_c*>(param_0);
         if (cstatue->checkNormalType()) {
             return param_0;
@@ -550,18 +550,18 @@ static actor_method_class l_daTagCsw_Method = {
 };
 
 actor_process_profile_definition g_profile_TAG_CSW = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_TAG_CSW,
-    &g_fpcLf_Method.base,
-    sizeof(daTagCsw_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x111,
-    &l_daTagCsw_Method,
-    0x40000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_CSW_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagCsw_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_TAG_CSW_e,
+    /* Actor SubMtd */ &l_daTagCsw_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };
