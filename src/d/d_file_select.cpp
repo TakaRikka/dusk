@@ -1007,10 +1007,10 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
     ken0->hide();
     ken1->hide();
 
-    if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_SWORD_e)) {
+    if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_SWORD)) {
         ken0->hide();
         ken1->show();
-    } else if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_WOOD_STICK_e) &&
+    } else if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_WOOD_STICK) &&
                !pSave->getEvent().isEventBit(dSv_event_flag_c::F_0026))
     {
         ken0->show();
@@ -1018,8 +1018,8 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
     }
 
     J2DPane* ken2 = mSelDt.ScrDt->search(MULTI_CHAR('ken_02'));
-    if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_MASTER_SWORD_e) ||
-        pSave->getPlayer().getGetItem().isFirstBit(dItemNo_LIGHT_SWORD_e))
+    if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_MASTER_SWORD) ||
+        pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_LIGHT_SWORD))
     {
         ken2->show();
     } else {
@@ -1031,37 +1031,37 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
     tate0->hide();
     tate1->hide();
 
-    if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_SHIELD_e)) {
+    if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_SHIELD)) {
         tate0->show();
         tate1->hide();
-    } else if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_WOOD_SHIELD_e)) {
+    } else if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_WOOD_SHIELD)) {
         tate0->hide();
         tate1->show();
     }
 
     J2DPane* tate2 = mSelDt.ScrDt->search(MULTI_CHAR('tate_02'));
-    if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_HYLIA_SHIELD_e)) {
+    if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_HYLIA_SHIELD)) {
         tate2->show();
     } else {
         tate2->hide();
     }
 
     J2DPane* fuku0 = mSelDt.ScrDt->search(MULTI_CHAR('fuku_00'));
-    if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_WEAR_KOKIRI_e)) {
+    if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_WEAR_KOKIRI)) {
         fuku0->show();
     } else {
         fuku0->hide();
     }
 
     J2DPane* fuku1 = mSelDt.ScrDt->search(MULTI_CHAR('fuku_01'));
-    if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_WEAR_ZORA_e)) {
+    if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_WEAR_ZORA)) {
         fuku1->show();
     } else {
         fuku1->hide();
     }
 
     J2DPane* fuku2 = mSelDt.ScrDt->search(MULTI_CHAR('fuku_02'));
-    if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_ARMOR_e)) {
+    if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_ARMOR)) {
         fuku2->show();
     } else {
         fuku2->hide();
@@ -5180,8 +5180,15 @@ dFile_select3D_c::~dFile_select3D_c() {
 void dFile_select3D_c::_create(u8 i_mirrorIdx, u8 i_maskIdx) {
     JKRHeap* ppHeap;
 
-    mpSolidHeap = mDoExt_createSolidHeapFromGameToCurrent(&ppHeap, 0x25800, 32);
-    JUT_ASSERT(8680, mpSolidHeap != NULL);
+#if TARGET_PC
+    constexpr u32 file_select_heap_size = 0x80000;
+#else
+    constexpr u32 file_select_heap_size = 0x25800;
+#endif
+    mpSolidHeap = mDoExt_createSolidHeapFromGameToCurrent(&ppHeap, file_select_heap_size, 32);
+    if (mpSolidHeap == NULL) {
+        return;
+    }
 
     field_0x03c4 = 0.0f;
     field_0x03c8 = 0.0f;
@@ -5257,10 +5264,43 @@ void dFile_select3D_c::setJ3D(char const* param_0, char const* param_1, char con
     J3DModelData* modelData;
 
     archive = dComIfGp_getCollectResArchive();
+    if (archive == NULL) {
+        return;
+    }
+
+    auto make_work_copy = [this, archive](void* src_res) -> void* {
+        if (src_res == NULL) {
+            return NULL;
+        }
+
+        u32 res_size = archive->getResSize(src_res);
+        if (res_size == 0) {
+            return NULL;
+        }
+
+        void* dst_res = JKRAllocFromHeap(mpSolidHeap, res_size, 0x20);
+        if (dst_res == NULL) {
+            return NULL;
+        }
+
+        std::memcpy(dst_res, src_res, res_size);
+        return dst_res;
+    };
 
     bmdRes = archive->getResource('BMD ', param_0);
-    modelData = J3DModelLoaderDataBase::load(bmdRes, 0x51020010);
-    JUT_ASSERT(8823, modelData != NULL);
+    if (bmdRes == NULL) {
+        return;
+    }
+
+    void* bmdWork = make_work_copy(bmdRes);
+    if (bmdWork == NULL) {
+        return;
+    }
+
+    modelData = J3DModelLoaderDataBase::load(bmdWork, 0x51020010);
+    if (modelData == NULL) {
+        return;
+    }
 
     for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
         material = JKR_NEW J3DMaterialAnm();
@@ -5269,35 +5309,45 @@ void dFile_select3D_c::setJ3D(char const* param_0, char const* param_1, char con
     }
 
     mpModel = JKR_NEW J3DModel(modelData, 0, 1);
-    JUT_ASSERT(8836, mpModel != NULL);
+    if (mpModel == NULL) {
+        return;
+    }
 
     if (param_1) {
         bckRes = archive->getResource('BCK ', param_1);
-        anmBase = (J3DAnmTransform*)J3DAnmLoaderDataBase::load(bckRes);
-        JUT_ASSERT(8846, anmBase != NULL);
-
-        mBckAnm = JKR_NEW mDoExt_bckAnm();
-        if (mBckAnm == NULL || !mBckAnm->init((J3DAnmTransform*)anmBase, 1, 2, 1.0f, 0, -1, false))
-        {
-            return;
+        if (bckRes != NULL) {
+            void* bckWork = make_work_copy(bckRes);
+            if (bckWork != NULL) {
+                anmBase = (J3DAnmTransform*)J3DAnmLoaderDataBase::load(bckWork);
+                if (anmBase != NULL) {
+                    mBckAnm = JKR_NEW mDoExt_bckAnm();
+                    if (mBckAnm == NULL || !mBckAnm->init((J3DAnmTransform*)anmBase, 1, 2, 1.0f, 0, -1, false)) {
+                        delete mBckAnm;
+                        mBckAnm = NULL;
+                    }
+                }
+            }
         }
     }
 
     if (param_2) {
         brkRes = archive->getResource('BRK ', param_2);
-        anmBase = (J3DAnmTevRegKey*)J3DAnmLoaderDataBase::load(brkRes);
-        JUT_ASSERT(8859, anmBase != NULL);
-        ((J3DAnmTevRegKey*)anmBase)->searchUpdateMaterialID(modelData);
-
-        mBrkAnm = JKR_NEW mDoExt_brkAnm();
-        if (mBrkAnm == NULL ||
-            !mBrkAnm->init(modelData, (J3DAnmTevRegKey*)anmBase, -1, 2, 1.0f, 0, -1))
-        {
-            return;
+        if (brkRes != NULL) {
+            void* brkWork = make_work_copy(brkRes);
+            if (brkWork != NULL) {
+                anmBase = (J3DAnmTevRegKey*)J3DAnmLoaderDataBase::load(brkWork);
+                if (anmBase != NULL) {
+                    ((J3DAnmTevRegKey*)anmBase)->searchUpdateMaterialID(modelData);
+                    mBrkAnm = JKR_NEW mDoExt_brkAnm();
+                    if (mBrkAnm == NULL || !mBrkAnm->init(modelData, (J3DAnmTevRegKey*)anmBase, -1, 2, 1.0f, 0, -1)) {
+                        delete mBrkAnm;
+                        mBrkAnm = NULL;
+                    }
+                }
+            }
         }
     }
 }
-
 void dFile_select3D_c::set_mtx() {
     cXyz stack_8;
     f32 tmp = mPane->getScaleX();
@@ -5369,20 +5419,42 @@ void dFile_select3D_c::createMaskModel() {
     if (mMaskIdx == 0) {
         return;
     }
+
     setJ3D("md_mask_UI.bmd", bck_name[mMaskIdx - 1], brk_name[mMaskIdx - 1]);
+    if (mpModel == NULL) {
+        return;
+    }
+
+    J3DModelData* model_data = mpModel->getModelData();
+    if (model_data == NULL) {
+        return;
+    }
+
+    auto hide_shape_safe = [model_data](u16 material_idx) {
+        if (material_idx >= model_data->getMaterialNum()) {
+            return;
+        }
+
+        J3DMaterial* material = model_data->getMaterialNodePointer(material_idx);
+        if (material == NULL || material->getShape() == NULL) {
+            return;
+        }
+
+        material->getShape()->hide();
+    };
+
     switch (mMaskIdx) {
     case 1:
-        mpModel->getModelData()->getMaterialNodePointer(0)->getShape()->hide();
-        mpModel->getModelData()->getMaterialNodePointer(1)->getShape()->hide();
+        hide_shape_safe(0);
+        hide_shape_safe(1);
     case 2:
-        mpModel->getModelData()->getMaterialNodePointer(2)->getShape()->hide();
-        mpModel->getModelData()->getMaterialNodePointer(3)->getShape()->hide();
+        hide_shape_safe(2);
+        hide_shape_safe(3);
     case 3:
-        mpModel->getModelData()->getMaterialNodePointer(6)->getShape()->hide();
-        mpModel->getModelData()->getMaterialNodePointer(7)->getShape()->hide();
+        hide_shape_safe(6);
+        hide_shape_safe(7);
     }
 }
-
 void dFile_select3D_c::createMirrorModel() {
     const static f32 m_mirror_offset_x[5] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
     const static f32 m_mirror_offset_y[5] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
@@ -5411,26 +5483,48 @@ void dFile_select3D_c::createMirrorModel() {
     if (mMirrorIdx == 0) {
         return;
     }
+
     setJ3D("kageri_mirrer_UI.bmd", bck_name[mMirrorIdx - 1], brk_name[mMirrorIdx - 1]);
+    if (mpModel == NULL) {
+        return;
+    }
+
+    J3DModelData* model_data = mpModel->getModelData();
+    if (model_data == NULL) {
+        return;
+    }
+
+    auto hide_shape_safe = [model_data](u16 material_idx) {
+        if (material_idx >= model_data->getMaterialNum()) {
+            return;
+        }
+
+        J3DMaterial* material = model_data->getMaterialNodePointer(material_idx);
+        if (material == NULL || material->getShape() == NULL) {
+            return;
+        }
+
+        material->getShape()->hide();
+    };
+
     switch (mMirrorIdx) {
     case 1:
-        mpModel->getModelData()->getMaterialNodePointer(4)->getShape()->hide();
-        mpModel->getModelData()->getMaterialNodePointer(5)->getShape()->hide();
-        mpModel->getModelData()->getMaterialNodePointer(6)->getShape()->hide();
-        mpModel->getModelData()->getMaterialNodePointer(7)->getShape()->hide();
+        hide_shape_safe(4);
+        hide_shape_safe(5);
+        hide_shape_safe(6);
+        hide_shape_safe(7);
     case 2:
-        mpModel->getModelData()->getMaterialNodePointer(8)->getShape()->hide();
-        mpModel->getModelData()->getMaterialNodePointer(9)->getShape()->hide();
-        mpModel->getModelData()->getMaterialNodePointer(10)->getShape()->hide();
-        mpModel->getModelData()->getMaterialNodePointer(11)->getShape()->hide();
+        hide_shape_safe(8);
+        hide_shape_safe(9);
+        hide_shape_safe(10);
+        hide_shape_safe(11);
     case 3:
-        mpModel->getModelData()->getMaterialNodePointer(12)->getShape()->hide();
-        mpModel->getModelData()->getMaterialNodePointer(13)->getShape()->hide();
-        mpModel->getModelData()->getMaterialNodePointer(14)->getShape()->hide();
-        mpModel->getModelData()->getMaterialNodePointer(15)->getShape()->hide();
+        hide_shape_safe(12);
+        hide_shape_safe(13);
+        hide_shape_safe(14);
+        hide_shape_safe(15);
     }
 }
-
 #pragma push
 #pragma optimization_level 2
 void dFile_select3D_c::toItem3Dpos(f32 param_0, f32 param_1, f32 param_2, cXyz* param_3) {
