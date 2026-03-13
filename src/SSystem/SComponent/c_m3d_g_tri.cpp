@@ -20,7 +20,7 @@ void cM3dGTri::setPos(const Vec* vtx_a, const Vec* vtx_b, const Vec* vtx_c) {
     JUT_ASSERT(99, !cM3d_IsZero(GetNP()->x) || !cM3d_IsZero(GetNP()->y) || !cM3d_IsZero(GetNP()->z));
 }
 
-void cM3dGTri::setBg(const BE(Vec)* vtx_a, const BE(Vec)* vtx_b, const BE(Vec)* vtx_c, const cM3dGPla* plane) {
+void cM3dGTri::setBg(const Vec* vtx_a, const Vec* vtx_b, const Vec* vtx_c, const cM3dGPla* plane) {
     mA.x = vtx_a->x;
     mA.y = vtx_a->y;
     mA.z = vtx_a->z;

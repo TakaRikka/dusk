@@ -138,46 +138,18 @@ f32 cBgS::GroundCross(cBgS_GndChk* p_gnd) {
     return p_gnd->GetNowY();
 }
 
-// this is identical to cBgD_t except using u32's for the table offsets.
-// u32 is needed to match in ConvDzb ?
-struct cBgD_t_ {
-    // Vertex Info
-    /* 0x00 */ BE(int) m_v_num;
-    /* 0x04 */ OFFSET_PTR_RAW m_v_tbl;
-
-    // Triangle Info
-    /* 0x08 */ BE(int) m_t_num;
-    /* 0x0C */ OFFSET_PTR_RAW m_t_tbl;
-
-    // Spatial List Info
-    /* 0x10 */ BE(int) m_b_num;
-    /* 0x14 */ OFFSET_PTR_RAW m_b_tbl;
-
-    // Face Group Data Info
-    /* 0x18 */ BE(int) m_tree_num;
-    /* 0x1C */ OFFSET_PTR_RAW m_tree_tbl;
-
-    // String Group Info
-    /* 0x20 */ BE(int) m_g_num;
-    /* 0x24 */ OFFSET_PTR_RAW m_g_tbl;
-
-    // Surface Property Info
-    /* 0x28 */ BE(int) m_ti_num;
-    /* 0x2C */ OFFSET_PTR_RAW m_ti_tbl;
-
-    /* 0x30 */ u32 m_flags;
-};  // Size: 0x34
-
-struct cBgD_Grp_t_ {
-    OFFSET_PTR_RAW strOffset;
-    u8 data[0x30];
-};
+template <>
+void be_swap(cBgD_Vtx_t& val) {
+    be_swap(val.x);
+    be_swap(val.y);
+    be_swap(val.z);
+}
 
 void* cBgS::ConvDzb(void* p_dzb) {
-    cBgD_t_* pbgd = (cBgD_t_*)p_dzb;
+    cBgD_t* pbgd = (cBgD_t*)p_dzb;
 
-    if (((pbgd->m_flags & 0x80000000) == 0)) {
-        pbgd->m_flags |= 0x80000000;
+    if (((pbgd->mFlags & 0x80000000) == 0)) {
+        pbgd->mFlags |= 0x80000000;
     } else {
         return p_dzb;
     }
@@ -191,8 +163,15 @@ void* cBgS::ConvDzb(void* p_dzb) {
     pbgd->m_ti_tbl.setBase(p_dzb);
 
     for (int i = 0; i < pbgd->m_g_num; i++) {
-        ((cBgD_Grp_t_*)pbgd->m_g_tbl)[i].strOffset.setBase(p_dzb);
+        ((cBgD_Grp_t*)pbgd->m_g_tbl)[i].m_name.setBase(p_dzb);
     }
+
+#if TARGET_LITTLE_ENDIAN
+    for (int i = 0; i < pbgd->m_v_num; i++) {
+        be_swap(pbgd->m_v_tbl[i]);
+    }
+#endif
+
 #else
     if (pbgd->m_v_tbl != 0) {
         pbgd->m_v_tbl += (uintptr_t)p_dzb;

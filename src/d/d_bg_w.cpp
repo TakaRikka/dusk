@@ -60,25 +60,12 @@ void cBgW::GlobalVtx() {
     if (pm_base != NULL) {
         if (!mNeedsFullTransform) {
             for (int i = 0; i < pm_bgd->m_v_num; i++) {
-                BE(Vec)* vtx = &pm_vtx_tbl[i];
-#if TARGET_LITTLE_ENDIAN
-                Vec copy = *vtx;
-                VECAdd(&copy, &mTransVel, &copy);
-                *vtx = copy;
-#else
+                Vec* vtx = &pm_vtx_tbl[i];
                 VECAdd(vtx, &mTransVel, vtx);
-#endif
             }
         } else {
             for (int i = 0; i < pm_bgd->m_v_num; i++) {
-#if TARGET_LITTLE_ENDIAN
-                Vec copy1 = pm_bgd->m_v_tbl[i];
-                Vec copy2;
-                MTXMultVec(pm_base, &copy1, &copy2);
-                *(BE(Vec)*)&pm_vtx_tbl[i] = copy2;
-#else
                 MTXMultVec(pm_base, &pm_bgd->m_v_tbl[i], &pm_vtx_tbl[i]);
-#endif
             }
         }
     }
@@ -213,7 +200,7 @@ void cBgW::MakeBlckTransMinMax(cXyz* i_min, cXyz* i_max) {
 }
 
 void cBgW::MakeBlckMinMax(int vtx_index, cXyz* i_min, cXyz* i_max) {
-    BE(Vec)* vtx = &pm_vtx_tbl[vtx_index];
+    cBgD_Vtx_t* vtx = &pm_vtx_tbl[vtx_index];
 
     if (i_min->x > vtx->x) {
         i_min->x = vtx->x;
