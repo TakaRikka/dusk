@@ -124,8 +124,6 @@ void daGrass_c::deleteFlower() {
     }
 }
 
-dFlower_packet_c::~dFlower_packet_c() {}
-
 void daGrass_c::executeFlower() {
     if (m_flower != NULL) {
         m_flower->calc();
