@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_gnd.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -39,9 +39,9 @@ static daNpcT_motionAnmData_c l_motionAnmData[1] = {
 };
 
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
-    {0, -1, 0}, 
-    {-1, 0, 0}, 
-    {-1, 0, 0}, 
+    {0, -1, 0},
+    {-1, 0, 0},
+    {-1, 0, 0},
     {-1, 0, 0},
 };
 
@@ -139,7 +139,7 @@ int daNpc_Gnd_c::create() {
         J3DModelData* modelData = mpMorf[0]->getModel()->getModelData();
         fopAcM_SetMtx(this, mpMorf[0]->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -300.0f, -50.0f, -300.0f, 300.0f, 450.0f, 300.0f);
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
         mSound.init(&current.pos, &eyePos, 3, 1);
 #if DEBUG
         mpHIO = &l_HIO;
@@ -514,7 +514,7 @@ bool daNpc_Gnd_c::afterSetMotionAnm(int param_0, int param_1, f32 param_2, int p
     } bpkAnmData[] = {
         {0x0E, 1},
     };
-    
+
     J3DAnmTevRegKey* brk = NULL;
     J3DAnmColor* bpk = NULL;
 
@@ -685,18 +685,18 @@ static actor_method_class daNpc_Gnd_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_GND = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_NPC_GND,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daNpc_Gnd_c),    // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  305,                    // mPriority
-  &daNpc_Gnd_MethodTable, // sub_method
-  0x00044107,             // mStatus
-  fopAc_NPC_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_GND_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Gnd_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_GND_e,
+    /* Actor SubMtd */ &daNpc_Gnd_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e | fopAcStts_UNK_0x2_e | fopAcStts_UNK_0x1_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

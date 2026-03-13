@@ -48,7 +48,7 @@ static int fopKy_Execute(void* i_this) {
     fapGm_HIO_c::startCpuTimer();
 #endif
 
-    if (!dScnPly_c::isPause() && (!dComIfGp_isPauseFlag() || fpcM_GetName(a_this) == PROC_ENVSE)) {
+    if (!dScnPly_c::isPause() && (!dComIfGp_isPauseFlag() || fpcM_GetName(a_this) == fpcNm_ENVSE_e)) {
         ret = fpcMtd_Execute(&((kankyo_class*)i_this)->sub_method->base, i_this);
     }
 

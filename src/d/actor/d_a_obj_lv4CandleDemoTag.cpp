@@ -115,7 +115,7 @@ void dalv4CandleDemoTag_c::init_modeEnemyCreate() {
         pos.y = pnt->m_position.y;
         pos.z = pnt->m_position.z;
 
-        fopAcM_create(PROC_E_BS, 0xFFFFFEFF, &pos, fopAcM_GetRoomNo(this), NULL, NULL, -1);
+        fopAcM_create(fpcNm_E_BS_e, 0xFFFFFEFF, &pos, fopAcM_GetRoomNo(this), NULL, NULL, -1);
     }
 
     mMode = 1;
@@ -154,7 +154,7 @@ bool dalv4CandleDemoTag_c::eventStart() {
 
 void* dalv4CandleDemoTag_c::searchShutterAct(void* param_0, void* param_1) {
     if (param_0 != NULL && fopAcM_IsActor(param_0) &&
-        fopAcM_GetProfName(param_0) == PROC_Obj_Lv4EdShutter)
+        fopAcM_GetProfName(param_0) == fpcNm_Obj_Lv4EdShutter_e)
     {
         return param_0;
     }
@@ -195,18 +195,18 @@ static actor_method_class l_dalv4CandleDemoTag_Method = {
 };
 
 actor_process_profile_definition g_profile_Tag_Lv4CandleDm = {
-  fpcLy_CURRENT_e,              // mLayerID
-  7,                            // mListID
-  fpcPi_CURRENT_e,              // mListPrio
-  PROC_Tag_Lv4CandleDm,         // mProcName
-  &g_fpcLf_Method.base,        // sub_method
-  sizeof(dalv4CandleDemoTag_c), // mSize
-  0,                            // mSizeOther
-  0,                            // mParameters
-  &g_fopAc_Method.base,         // sub_method
-  541,                          // mPriority
-  &l_dalv4CandleDemoTag_Method, // sub_method
-  0x00044000,                   // mStatus
-  fopAc_ACTOR_e,                // mActorType
-  fopAc_CULLBOX_CUSTOM_e,       // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_Lv4CandleDm_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(dalv4CandleDemoTag_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Tag_Lv4CandleDm_e,
+    /* Actor SubMtd */ &l_dalv4CandleDemoTag_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

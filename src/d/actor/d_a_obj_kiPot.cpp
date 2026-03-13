@@ -66,7 +66,7 @@ void daKiPot_c::init_modeWait() {
 
 void daKiPot_c::modeWait() {
     if (chkEvent() && eventInfo.checkCommandCatch() == 0) {
-        dComIfGp_att_CatchRequest(this, fpcNm_ITEM_UGLY_SOUP, 100.0f, 50.0f, -50.0f, 0x2000, 1);
+        dComIfGp_att_CatchRequest(this, dItemNo_UGLY_SOUP_e, 100.0f, 50.0f, -50.0f, 0x2000, 1);
         eventInfo.onCondition(dEvtCnd_40_e);
     }
 }
@@ -115,18 +115,18 @@ static actor_method_class l_daKiPot_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_KiPot = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Obj_KiPot,          // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daKiPot_c),       // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    517,                     // mPriority
-    &l_daKiPot_Method,       // sub_method
-    0x00044000,              // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_KiPot_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daKiPot_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_KiPot_e,
+    /* Actor SubMtd */ &l_daKiPot_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

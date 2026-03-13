@@ -285,21 +285,7 @@ public:
         }
     }
 
-    bool isOrchestra() {
-        if (strcmp(dComIfGp_getStartStageName(), "F_SP116") != 0) {
-            return 0;
-        } else {
-            if (m_seqNum == 17 &&
-                (getType() == 4 || getType() == 5 || getType() == 6 || getType() == 16))
-            {
-                return 1;
-            } else if (m_seqNum == 37 && getType() == 7) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-    }
+    bool isOrchestra();
 
     int chkEvent() {
         attention_info.flags = 0;

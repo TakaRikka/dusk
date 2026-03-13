@@ -10,7 +10,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "d/d_s_play.h"
 #include <cmath>
 
@@ -74,7 +74,7 @@ static void rideCallBack(dBgW* param_0, fopAc_ac_c* param_1, fopAc_ac_c* param_2
     cXyz& player_pos = fopAcM_GetPosition(player_p);
 
     //!@bug Missing parentheses causes this comparison to always evaluate to false
-    if (!fopAcM_GetName(param_2) == PROC_ALINK) {
+    if (!fopAcM_GetName(param_2) == fpcNm_ALINK_e) {
         ice_p->field_0x5f4 = 0x100;
         ice_p->field_0x5a4 = -1.0f;
         ice_p->field_0x5ac = 0x500;
@@ -98,7 +98,7 @@ static void rideCallBack(dBgW* param_0, fopAc_ac_c* param_1, fopAc_ac_c* param_2
         ice_p->Check_RideOn(player_pos);
     }
 
-    if (ice_p->field_0x5b1 == 0xFF && fopAcM_GetName(param_2) == PROC_ALINK) {
+    if (ice_p->field_0x5b1 == 0xFF && fopAcM_GetName(param_2) == fpcNm_ALINK_e) {
         ice_p->field_0x5f4 = 0x300;
         ice_p->field_0x5a4 = -6.0f;
         ice_p->field_0x5ac = 0x1000;
@@ -149,7 +149,7 @@ int daObjIce_l_c::create() {
     }
 
     if (field_0x5b0 != 0) {
-        if (dComIfGs_getCollectSmell() == fpcNm_ITEM_SMELL_FISH) {
+        if (dComIfGs_getCollectSmell() == dItemNo_SMELL_FISH_e) {
             field_0x5b1 = 1;
         } else {
             field_0x5b1 = 0xFF;
@@ -256,18 +256,18 @@ static actor_method_class l_daObjIce_l_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Ice_l = {
-  fpcLy_CURRENT_e,        // mLayerID
-  3,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_Ice_l,         // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjIce_l_c),   // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  456,                    // mPriority
-  &l_daObjIce_l_Method,   // sub_method
-  0x00044180,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ice_l_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjIce_l_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Ice_l_e,
+    /* Actor SubMtd */ &l_daObjIce_l_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e | fopAcStts_NOEXEC_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

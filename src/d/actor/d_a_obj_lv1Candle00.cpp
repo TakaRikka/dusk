@@ -6,7 +6,7 @@
 
 #include "d/actor/d_a_obj_lv1Candle00.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 static daLv1Cdl00_HIO_c l_HIO;
 
@@ -210,7 +210,7 @@ int daLv1Cdl00_c::Execute() {
         cCcD_Obj* obj = mCyl.GetTgHitObj();
         if (obj != NULL) {
             bool bvar1 = true;
-            if (fopAcM_GetName(obj->GetAc()) == PROC_ALINK) {
+            if (fopAcM_GetName(obj->GetAc()) == fpcNm_ALINK_e) {
                 if (mCyl.GetTgHitGObj()->ChkAtType(AT_TYPE_NORMAL_SWORD) && mTgHit) {
                     bvar1 = false;
                 }
@@ -276,18 +276,18 @@ static actor_method_class l_daLv1Cdl00_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Lv1Cdl00 = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Obj_Lv1Cdl00,
-    &g_fpcLf_Method.base,
-    sizeof(daLv1Cdl00_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x1EE,
-    &l_daLv1Cdl00_Method,
-    0x60000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Lv1Cdl00_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daLv1Cdl00_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Lv1Cdl00_e,
+    /* Actor SubMtd */ &l_daLv1Cdl00_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_NOPAUSE_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

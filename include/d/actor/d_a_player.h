@@ -687,8 +687,8 @@ public:
     static void setMidnaMotionNum(int i_motionNum);
     static void setMidnaFaceNum(int i_faceNum);
 
-    static BOOL checkShieldGet() { return dComIfGs_getSelectEquipShield() != fpcNm_ITEM_NONE; }
-    static BOOL checkSwordGet() { return dComIfGs_getSelectEquipSword() != fpcNm_ITEM_NONE; }
+    static BOOL checkShieldGet() { return dComIfGs_getSelectEquipShield() != dItemNo_NONE_e; }
+    static BOOL checkSwordGet() { return dComIfGs_getSelectEquipSword() != dItemNo_NONE_e; }
 
     cXyz getHeadTopPos() const { return mHeadTopPos; }
     u32 checkThrowDamage() const { return checkNoResetFlg1(FLG1_THROW_DAMAGE); }
@@ -1123,40 +1123,40 @@ public:
     static int getLastSceneDamage() { return (dComIfGs_getLastSceneMode() >> 4) & 0x7F; }
     static u32 getLastSceneSwordAtUpTime() { return (dComIfGs_getLastSceneMode() >> 11) & 0xFF; }
 
-    static BOOL checkNormalSwordEquip() { return dComIfGs_getSelectEquipSword() == fpcNm_ITEM_SWORD; }
+    static BOOL checkNormalSwordEquip() { return dComIfGs_getSelectEquipSword() == dItemNo_SWORD_e; }
 
     static u32 getLastSceneMode() {
         return dComIfGs_getLastSceneMode() & 0xF;
     }
 
     static bool checkWoodSwordEquip() {
-        return dComIfGs_getSelectEquipSword() == fpcNm_ITEM_WOOD_STICK;
+        return dComIfGs_getSelectEquipSword() == dItemNo_WOOD_STICK_e;
     }
 
     static bool checkLightMasterSwordEquip() {
-        return dComIfGs_getSelectEquipSword() == fpcNm_ITEM_LIGHT_SWORD;
+        return dComIfGs_getSelectEquipSword() == dItemNo_LIGHT_SWORD_e;
     }
 
     static bool checkCasualWearFlg() {
-        return dComIfGs_getSelectEquipClothes() == fpcNm_ITEM_WEAR_CASUAL;
+        return dComIfGs_getSelectEquipClothes() == dItemNo_WEAR_CASUAL_e;
     }
 
     static u32 checkNowWolf() { return ((daPy_py_c*)dComIfGp_getLinkPlayer())->checkWolf(); }
 
     static bool checkZoraWearFlg() {
-        return dComIfGs_getSelectEquipClothes() == fpcNm_ITEM_WEAR_ZORA;
+        return dComIfGs_getSelectEquipClothes() == dItemNo_WEAR_ZORA_e;
     }
 
     static bool checkMagicArmorWearFlg() {
-        return dComIfGs_getSelectEquipClothes() == fpcNm_ITEM_ARMOR;
+        return dComIfGs_getSelectEquipClothes() == dItemNo_ARMOR_e;
     }
 
     static bool checkCarvingWoodShieldEquip() {
-        return dComIfGs_getSelectEquipShield() == fpcNm_ITEM_WOOD_SHIELD;
+        return dComIfGs_getSelectEquipShield() == dItemNo_WOOD_SHIELD_e;
     }
 
     static bool checkShopWoodShieldEquip() {
-        return dComIfGs_getSelectEquipShield() == fpcNm_ITEM_SHIELD;
+        return dComIfGs_getSelectEquipShield() == dItemNo_SHIELD_e;
     }
 
     static BOOL checkPowerGloveGet() { return false; }

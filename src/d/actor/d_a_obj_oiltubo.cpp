@@ -252,7 +252,7 @@ int daObj_Oiltubo_c::wait(void* unused) {
     switch (mMode) {
     case 1:
         if (!eventInfo.checkCommandCatch()) {
-            dComIfGp_att_CatchRequest(this, fpcNm_ITEM_OIL_BOTTLE_2, 100.0f, 50.0f, -50.0f, 0x2000, 1);
+            dComIfGp_att_CatchRequest(this, dItemNo_OIL_BOTTLE_2_e, 100.0f, 50.0f, -50.0f, 0x2000, 1);
             eventInfo.onCondition(dEvtCnd_40_e);
         }
         break;
@@ -291,18 +291,18 @@ static actor_method_class daObj_Oiltubo_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_OILTUBO = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_OBJ_OILTUBO,
-    &g_fpcLf_Method.base,
-    sizeof(daObj_Oiltubo_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    66,
-    &daObj_Oiltubo_MethodTable,
-    0x44100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_OILTUBO_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObj_Oiltubo_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_OILTUBO_e,
+    /* Actor SubMtd */ &daObj_Oiltubo_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

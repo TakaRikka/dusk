@@ -114,7 +114,7 @@ static void chain_control_01(e_th_ball_class* i_this) {
     dBgS_GndChk gndchk;
 
     th_chain_s* chain_s = &i_this->field_0x65c;
-    if (master != NULL && fopAcM_GetName(master) == PROC_E_TH && master->mNoDraw == 0) {
+    if (master != NULL && fopAcM_GetName(master) == fpcNm_E_TH_e && master->mNoDraw == 0) {
         chain_s->m_pos[0] = master->mHandR_Pos1;
     }
 
@@ -895,7 +895,7 @@ static void action(e_th_ball_class* i_this) {
             fopAc_ac_c* at_hit_actor = dCc_GetAc(at_hit_obj->GetAc());
 
             if (i_this->mAction == ACTION_SPIN) {
-                if (fopAcM_GetName(at_hit_actor) == PROC_Obj_THASHI) {
+                if (fopAcM_GetName(at_hit_actor) == fpcNm_Obj_THASHI_e) {
                     i_this->speedF = 30.0f + TREG_F(18);
                     
                     cXyz sp20 = i_this->current.pos - master->current.pos;
@@ -910,7 +910,7 @@ static void action(e_th_ball_class* i_this) {
                     master->mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_th", 0x1B), 2, 10.0f, 1.0f, 0.0f, -1.0f);
                     master->mAnm = 0x1B;
                 }
-            } else if (i_this->mAction == ACTION_SHOT && i_this->speedF > 0.0f && fopAcM_GetName(at_hit_actor) == PROC_E_MD) {
+            } else if (i_this->mAction == ACTION_SHOT && i_this->speedF > 0.0f && fopAcM_GetName(at_hit_actor) == fpcNm_E_MD_e) {
                 i_this->current.angle.y -= 0x8000;
                 i_this->speedF *= 0.3f + AREG_F(14);
                 i_this->mAction = ACTION_RETURN;
@@ -931,7 +931,7 @@ static void get_demo(e_th_ball_class* i_this) {
     case 0:
         break;
     case 1:
-        demo_id = fopAcM_createItemForTrBoxDemo(&i_this->current.pos, fpcNm_ITEM_IRONBALL, -1, fopAcM_GetRoomNo(i_this), NULL, NULL);
+        demo_id = fopAcM_createItemForTrBoxDemo(&i_this->current.pos, dItemNo_IRONBALL_e, -1, fopAcM_GetRoomNo(i_this), NULL, NULL);
         JUT_ASSERT(1670, demo_id != fpcM_ERROR_PROCESS_ID_e);
         i_this->mDemoMode = 2;
         break;
@@ -1124,18 +1124,18 @@ static actor_method_class l_daE_TH_BALL_Method = {
 };
 
 actor_process_profile_definition g_profile_E_TH_BALL = {
-  fpcLy_CURRENT_e,         // mLayerID
-  8,                       // mListID
-  fpcPi_CURRENT_e,         // mListPrio
-  PROC_E_TH_BALL,          // mProcName
-  &g_fpcLf_Method.base,   // sub_method
-  sizeof(e_th_ball_class), // mSize
-  0,                       // mSizeOther
-  0,                       // mParameters
-  &g_fopAc_Method.base,    // sub_method
-  135,                     // mPriority
-  &l_daE_TH_BALL_Method,   // sub_method
-  0x00040100,              // mStatus
-  fopAc_ENEMY_e,           // mActorType
-  fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 8,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_TH_BALL_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_th_ball_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_TH_BALL_e,
+    /* Actor SubMtd */ &l_daE_TH_BALL_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_mm_mt.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -16,10 +16,10 @@ static int daE_MM_MT_Draw(e_mm_mt_class* i_this) {
     g_env_light.setLightTevColorType_MAJI(i_this->mp_model, &i_this->enemy.tevStr);
 
     mDoExt_modelUpdateDL(i_this->mp_model);
-    
+
     cXyz local_18(i_this->enemy.current.pos.x, i_this->enemy.current.pos.y + 100, i_this->enemy.current.pos.z);
 
-    if (!fopAcM_CheckStatus(actor, fopAcM_STATUS_CARRY_NOW)) {
+    if (!fopAcM_CheckStatus(actor, fopAcStts_CARRY_NOW_e)) {
         i_this->m_shadowKey = dComIfGd_setShadow(
             i_this->m_shadowKey, 1, i_this->mp_model, &local_18, 700.0f, 0.0f,
             i_this->enemy.current.pos.y, i_this->m_acch.GetGroundH(), i_this->m_acch.m_gnd,
@@ -42,9 +42,9 @@ static bool e_mm_hookCheck(e_mm_mt_class* i_this) {
         return false;
     }
 
-    if (i_this->m_sphere.ChkTgHit() 
+    if (i_this->m_sphere.ChkTgHit()
         && i_this->m_sphere.GetTgHitObj()->ChkAtType(AT_TYPE_HOOKSHOT)
-        || fopAcM_CheckStatus(actor, 0x100000)) {
+        || fopAcM_CheckStatus(actor, fopAcStts_HOOK_CARRY_NOW_e)) {
         i_this->field_0x69C = 0.0f;
         i_this->field_0x68A[0] = true;
         cXyz local_24 = i_this->enemy.current.pos;
@@ -62,7 +62,7 @@ static bool e_mm_hookCheck(e_mm_mt_class* i_this) {
         pdVar3->setHookshotCarryOffset(fopAcM_GetID(i_this), &VStack_18);
         return 1;
     }
-    
+
 
     if (i_this->field_0x68A[0]) {
         if (daPy_getPlayerActorClass()->setForceGrab(actor, 0, 1)) {
@@ -89,8 +89,8 @@ static void e_mm_mt_normal(e_mm_mt_class* i_this) {
     fopAc_ac_c* helmasaurActor;
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = (fopAc_ac_c*) dComIfGp_getPlayer(0);
-    
-    
+
+
     if (fopAcM_SearchByID(actor->parentActorID, &helmasaurActor)) {
         actor->scale.x = helmasaurActor->scale.x;
         e_mm_class* helmasaur = (e_mm_class*)helmasaurActor;
@@ -108,16 +108,16 @@ static void e_mm_mt_normal(e_mm_mt_class* i_this) {
             if (i_this->m_sphere.ChkAtShieldHit()) {
                 i_this->m_invulnerabilityTimer = 15;
                 helmasaur->field_0xb99 |= 1;
-                i_this->m_atInfo.mpCollider = i_this->m_sphere.GetAtHitObj(); 
+                i_this->m_atInfo.mpCollider = i_this->m_sphere.GetAtHitObj();
                 i_this->m_sphere.SetAtSe(9);
             }
         } else {
             i_this->m_sphere.OffAtSetBit();
         }
-        if (actor->argument != 1 
-            && ((i_this->m_sphere.ChkTgHit() 
-            && i_this->m_sphere.GetTgHitObj()->ChkAtType(AT_TYPE_HOOKSHOT)) 
-            || fopAcM_CheckStatus(actor, 0x100000))) {
+        if (actor->argument != 1
+            && ((i_this->m_sphere.ChkTgHit()
+            && i_this->m_sphere.GetTgHitObj()->ChkAtType(AT_TYPE_HOOKSHOT))
+            || fopAcM_CheckStatus(actor, fopAcStts_HOOK_CARRY_NOW_e))) {
                 helmasaur->field_0xb99 |= 4;
         }
         if (!helmasaur->field_0x672) {
@@ -135,7 +135,7 @@ static void e_mm_mt_normal(e_mm_mt_class* i_this) {
             fopAcM_OffStatus(actor, 0);
             actor->attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;
             actor->attention_info.distances[fopAc_attn_BATTLE_e] = 0;
-            fopAcM_OnStatus(actor, 0x400);
+            fopAcM_OnStatus(actor, fopAcStts_FREEZE_e);
             s16 actor_angle = player->shape_angle.y + 0x4000;
             s16 angle = actor->shape_angle.y - actor_angle;
             if (angle > 0x4000 || angle < -0x4000) {
@@ -164,7 +164,7 @@ static void e_mm_mt_hagare(e_mm_mt_class* i_this) {
         int arg = i_this->m_mode;
         switch (arg) {
             case -10:
-                cLib_addCalc2(&i_this->enemy.speedF, 3.0f, 1.0f, 0.15f); 
+                cLib_addCalc2(&i_this->enemy.speedF, 3.0f, 1.0f, 0.15f);
                 cLib_addCalc2(&i_this->field_0x69C, 2000.0f, 0.1f, 200.0f);
                 if (i_this->enemy.speedF >= 2.95f) {
                     i_this->m_mode = 0;
@@ -187,7 +187,7 @@ static void e_mm_mt_hagare(e_mm_mt_class* i_this) {
             sVar6 = 0x4000;
         }
 
-        cLib_addCalcAngleS2(&i_this->enemy.shape_angle.y, 
+        cLib_addCalcAngleS2(&i_this->enemy.shape_angle.y,
                         player->shape_angle.y + 0x4000 +  i_this->m_carryAngle,
                         4,
                         spA + 0x100);
@@ -268,7 +268,7 @@ static s16 wall_angle_get(e_mm_mt_class* i_this) {
     cMtx_YrotS(*calc_mtx, a_this->current.angle.y);
     vec1.x = 0.0f;
     vec1.y = 0.0f;
-    vec1.z = -50.0f; 
+    vec1.z = -50.0f;
     MtxPosition(&vec1, &vec2);
     vec2 += a_this->current.pos;
     vec1.x = 5.0f;
@@ -287,7 +287,7 @@ static s16 wall_angle_get(e_mm_mt_class* i_this) {
         }
     }
 
-    vec1 = vec3[1] - vec3[0]; 
+    vec1 = vec3[1] - vec3[0];
     return  vec1.atan2sX_Z() + 0x4000;
 }
 
@@ -311,7 +311,7 @@ static void e_mm_mt_drop(e_mm_mt_class* i_this) {
                 if (!i_this->m_timer[0] && i_this->m_acch.ChkWallHit()) {
                     s16 wall_angle = wall_angle_get(i_this);
                     if (wall_angle != 0x23) {
-                        wall_angle = i_this->enemy.current.angle.y - wall_angle; 
+                        wall_angle = i_this->enemy.current.angle.y - wall_angle;
                         i_this->m_spin = wall_angle * (TREG_F(6) + -0.3f);
                         ANGLE_ADD(i_this->enemy.current.angle.y, 0x8000 - (wall_angle << 1));
                         if (i_this->m_acch.ChkWaterHit()) {
@@ -336,8 +336,8 @@ static void e_mm_mt_drop(e_mm_mt_class* i_this) {
                             mDoAud_seStart(Z2SE_EN_MM_MET_BOUND_LND, &i_this->enemy.current.pos, (u32)(i_this->enemy.speed.y), 0);
                         }
                         i_this->field_0x69C = NREG_F(0) + 3500.0f;
-                        cXyz local_40 = i_this->enemy.current.pos; 
-                        cXyz local_4c(1.5f, 1.5f, 1.5f); 
+                        cXyz local_40 = i_this->enemy.current.pos;
+                        cXyz local_4c(1.5f, 1.5f, 1.5f);
                         if (!i_this->m_spin ) {
                             i_this->m_spin = cM_rndFX(1300.0f);
                         }
@@ -347,7 +347,7 @@ static void e_mm_mt_drop(e_mm_mt_class* i_this) {
                             mDoAud_seStart(Z2SE_EN_MM_MET_BOUND_WTR, &i_this->enemy.current.pos, 0, 0);
                         } else {
                             mDoAud_seStart(Z2SE_EN_MM_MET_BOUND_LND, &i_this->enemy.current.pos, 0, 0);
-                        }    
+                        }
                     }
                 }
                 break;
@@ -356,11 +356,11 @@ static void e_mm_mt_drop(e_mm_mt_class* i_this) {
             break;
         }
         cMtx_YrotS(*calc_mtx, i_this->enemy.current.angle.y);
-    
+
         local_28.x = 0.0f;
-        local_28.y = 0.0f; 
+        local_28.y = 0.0f;
         local_28.z = i_this->enemy.speedF;
-        
+
         MtxPosition(&local_28, &local_34);
         i_this->enemy.speed.x = local_34.x;
         i_this->enemy.speed.z = local_34.z;
@@ -386,7 +386,7 @@ static void e_mm_mt_drop(e_mm_mt_class* i_this) {
         } else {
              i_this->m_sphere.OffAtSetBit();
         }
-        if (fopAcM_checkCarryNow(actor)) { 
+        if (fopAcM_checkCarryNow(actor)) {
             i_this->m_action = 2;
             i_this->m_mode = 0;
             i_this->m_carryAngleSpeed = \
@@ -398,8 +398,8 @@ static void e_mm_mt_drop(e_mm_mt_class* i_this) {
             }
             i_this->m_sphere.OffAtSetBit();
             return;
-        } 
-        if (fopAcM_CheckStatus(actor, 0x200) && !i_this->m_invulnerabilityTimer) {
+        }
+        if (fopAcM_CheckStatus(actor, fopAcStts_UNK_0x200_e) && !i_this->m_invulnerabilityTimer) {
             i_this->m_action = 1;
             i_this->m_mode = -10;
             i_this->field_0x68A[0] = false;
@@ -412,7 +412,7 @@ static void e_mm_mt_drop(e_mm_mt_class* i_this) {
             if (sVar1 > 0x4000 || sVar1 < -0x4000) {
                 i_this-> m_carryAngle = -0x8000;
                 return;
-            } 
+            }
             i_this->m_carryAngle = 0;
         }
     }
@@ -713,7 +713,7 @@ static int daE_MM_MT_Execute(e_mm_mt_class* i_this) {
         i_this->m_invulnerabilityTimer--;
     }
     action(i_this);
-    fopAcM_OffStatus(actor, fopAcM_STATUS_UNK_0x200);
+    fopAcM_OffStatus(actor, fopAcStts_UNK_0x200_e);
     i_this->m_sound.framework(0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
     return true;
 }
@@ -753,7 +753,7 @@ static int daE_MM_MT_Create(fopAc_ac_c* i_this) {
     cPhs_Step cVar1;
     bool bVar2;
     f32 fVar3;
-    
+
     e_mm_mt_class* helmasaurShell = (e_mm_mt_class*) i_this;
     fopAc_ac_c* actor = (fopAc_ac_c*) i_this;
 
@@ -764,7 +764,7 @@ static int daE_MM_MT_Create(fopAc_ac_c* i_this) {
         OS_REPORT("E_MM_MT PARAM %x\n", fopAcM_GetParam(i_this));
         helmasaurShell->parameters = fopAcM_GetParam(i_this);
         OS_REPORT("E_MM_MT//////////////E_MM_MT SET 1 !!\n");
-        
+
 
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x850)) {
             OS_REPORT("//////////////E_MM_MT SET NON !!\n");
@@ -786,7 +786,7 @@ static int daE_MM_MT_Create(fopAc_ac_c* i_this) {
         i_this->field_0x560 = 2000;
         static dCcD_SrcSph cc_sph_src = {
             {
-                {0x0, {{AT_TYPE_CSTATUE_SWING, 0x1, 0xd}, {0xd8fbfdff, 0x3}, 0x75}},  // mObj  
+                {0x0, {{AT_TYPE_CSTATUE_SWING, 0x1, 0xd}, {0xd8fbfdff, 0x3}, 0x75}},  // mObj
                 {dCcD_SE_METAL, 0x0, 0x1, 0x0, 0x0},                // mGObjAt
                 {dCcD_SE_NONE, 0x2, 0x0, 0x0, 0x407},                // mGObjTg
                 {0x0},                                             // mGObjCo
@@ -813,14 +813,14 @@ static int daE_MM_MT_Create(fopAc_ac_c* i_this) {
         } else {
             static dCcD_SrcSph hk_sph_src = {
                 {
-                    {0x0, {{0x0, 0x0, 0x0}, {0x4080, 0x3}, 0x0}},  // mObj  
+                    {0x0, {{0x0, 0x0, 0x0}, {0x4080, 0x3}, 0x0}},  // mObj
                     {dCcD_SE_13, 0x0, 0x0, 0x0, 0x0},                // mGObjAt
                     {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x406},                // mGObjTg
                     {0x0},                                             // mGObjCo
                 },                                                     // mObjInf
                 {
                     {{0.0f, 0.0f, 0.0f}, 40.0f}  // m_sphere
-                }  
+                }
             };
             helmasaurShell->m_stts.SetWeight(200);
             helmasaurShell->m_sph.Set(hk_sph_src);
@@ -836,7 +836,7 @@ static int daE_MM_MT_Create(fopAc_ac_c* i_this) {
         i_this->attention_info.distances[fopAc_attn_CARRY_e] = 7;
         helmasaurShell->m_lifetime = cM_rndF(65535.0f);
         daE_MM_MT_Execute(helmasaurShell);
-    } 
+    }
     return phase;
 }
 
@@ -849,18 +849,18 @@ static actor_method_class l_daE_MM_MT_Method = {
 };
 
 actor_process_profile_definition g_profile_E_MM_MT = {
-  fpcLy_CURRENT_e,        // mLayerID
-  8,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_MM_MT,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(e_mm_mt_class),  // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  168,                    // mPriority
-  &l_daE_MM_MT_Method,    // sub_method
-  0x000C0100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 8,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_MM_MT_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_mm_mt_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_MM_MT_e,
+    /* Actor SubMtd */ &l_daE_MM_MT_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

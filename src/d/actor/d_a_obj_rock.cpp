@@ -201,18 +201,18 @@ static actor_method_class l_daObj_Rock_Method = {
     (process_method_func)daObj_Rock_Draw};
 
 actor_process_profile_definition g_profile_OBJ_ROCK = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_OBJ_ROCK,           // mProcName
-    &g_fpcLf_Method.base,   // sub_method
-    sizeof(obj_rock_class),  // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    710,                     // mPriority
-    &l_daObj_Rock_Method,    // sub_method
-    0x40000,                 // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_ROCK_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(obj_rock_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_ROCK_e,
+    /* Actor SubMtd */ &l_daObj_Rock_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -72,7 +72,7 @@ static void anm_init(obj_tp_class* i_this, int param_2, f32 param_3, u8 param_4,
 }
 
 static void* s_tp_sub(void* param_1, void* param_2) {
-    if ((fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_OBJ_TP) &&
+    if ((fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_OBJ_TP_e) &&
         ((fopAc_ac_c*)param_1)->parentActorID == ((fopAc_ac_c*)param_2)->parentActorID &&
         ((obj_tp_class*)param_2)->field_0x5a0 == ((obj_tp_class*)param_1)->field_0x59c)
     {
@@ -457,7 +457,7 @@ static int daObj_Tp_Create(fopAc_ac_c* i_this) {
                 } else {
                     parameters |= (i + 1) << 4;
                 }
-                fopAcM_createChild(PROC_OBJ_TP, fopAcM_GetID(tp), parameters, &cStack_28,
+                fopAcM_createChild(fpcNm_OBJ_TP_e, fopAcM_GetID(tp), parameters, &cStack_28,
                                    fopAcM_GetRoomNo(tp), &cStack_30, 0, -1, 0);
             }
             tp->field_0x5a4 = 1;
@@ -499,18 +499,18 @@ static actor_method_class l_daObj_Tp_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_TP = {
-  fpcLy_CURRENT_e,        // mLayerID
-  3,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_OBJ_TP,            // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(obj_tp_class),   // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  59,                     // mPriority
-  &l_daObj_Tp_Method,     // sub_method
-  0x00044000,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_TP_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(obj_tp_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_TP_e,
+    /* Actor SubMtd */ &l_daObj_Tp_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

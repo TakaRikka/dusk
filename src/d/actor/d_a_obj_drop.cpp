@@ -29,13 +29,13 @@ static void* searchParentSub(void* pproc, void* pdata) {
     fopAc_ac_c* pym = (fopAc_ac_c*)pproc;
 
     if (pym != NULL && fopAcM_IsActor(pym)) {
-        if (fopAcM_GetProfName(pym) == PROC_E_YM) {
+        if (fopAcM_GetProfName(pym) == fpcNm_E_YM_e) {
             u8 swbit = ((daE_YM_c*)pym)->getSwitchBit();
             if (swbit != 0xFF && swbit == pdrop->getYmSwbit()) {
                 pdrop->field_0x6b7 = 1;
                 return pym;
             }
-        } else if (fopAcM_GetProfName(pym) == PROC_E_YMB) {
+        } else if (fopAcM_GetProfName(pym) == fpcNm_E_YMB_e) {
             u8 swbit = ((daE_YMB_c*)pym)->getSwitchBit();
             if (swbit != 0xFF && swbit == pdrop->getYmSwbit()) {
                 pdrop->field_0x6b7 = 2;
@@ -111,7 +111,7 @@ void daObjDrop_c::dropGet() {
         s8 area = dComIfGp_getStartStageDarkArea();
         // "Drop of Light No%d<%d/%d> Get Area<%d>!\n"
         OS_REPORT("光の雫No%d<%d/%d>ゲットArea<%d>！\n", getSave(), num + 1, need_num, area);
-        execItemGet(fpcNm_ITEM_HEART);
+        execItemGet(dItemNo_HEART_e);
         mSetCollectDrop = false;
     }
 }
@@ -231,12 +231,12 @@ int daObjDrop_c::modeNoParent() {
 int daObjDrop_c::modeParentWait() {
     fopAc_ac_c* pparent = fopAcM_SearchByID(parentActorID);
     if (pparent != NULL) {
-        if (fopAcM_GetProfName(pparent) == PROC_E_YM) {
+        if (fopAcM_GetProfName(pparent) == fpcNm_E_YM_e) {
             current.pos = pparent->current.pos;
             return 1;
         }
 
-        if (fopAcM_GetProfName(pparent) == PROC_E_YMB && !mAppear) {
+        if (fopAcM_GetProfName(pparent) == fpcNm_E_YMB_e && !mAppear) {
             return 1;
         }
     }
@@ -489,7 +489,7 @@ int daObjDrop_c::actionCompleateDemo() {
             u8 need_num = dComIfGp_getNeedLightDropNum();
             u8 num = dComIfGs_getLightDropNum(dComIfGp_getStartStageDarkArea());
             if (need_num == num) {
-                fopAcM_OnStatus(this, 0x4000);
+                fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
                 dComIfGs_onSaveSwitch(13);
             }
         } else if (timer == 1) {
@@ -585,18 +585,18 @@ static actor_method_class l_daObjDrop_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Drop = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Obj_Drop,           // mProcName
-    &g_fpcLf_Method.base,   // sub_method
-    sizeof(daObjDrop_c),     // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    243,                     // mPriority
-    &l_daObjDrop_Method,     // sub_method
-    0x00040000,              // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Drop_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjDrop_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Drop_e,
+    /* Actor SubMtd */ &l_daObjDrop_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -1594,16 +1594,16 @@ static void* s_obj_sub(void* i_actor, void* i_data) {
             f32 mActorDistance =
                 fopAcM_searchActorDistanceXZ((fopAc_ac_c*)i_actor, (fopAc_ac_c*)i_data);
             if (mActorDistance < 300.0f && fopAcM_GetSpeed((fopAc_ac_c*)i_actor).y) {
-                if (fopAcM_GetName(i_actor) == PROC_Obj_Carry) {
+                if (fopAcM_GetName(i_actor) == fpcNm_Obj_Carry_e) {
                     return i_actor;
                 }
 
-                if (fopAcM_GetName((fopAc_ac_c*)i_actor) == PROC_NBOMB) {
+                if (fopAcM_GetName((fopAc_ac_c*)i_actor) == fpcNm_NBOMB_e) {
                     return i_actor;
                 }
             }
 
-            if (mActorDistance < 300.0f && fopAcM_GetName(i_actor) == PROC_NBOMB) {
+            if (mActorDistance < 300.0f && fopAcM_GetName(i_actor) == fpcNm_NBOMB_e) {
                 daNbomb_c* mNBomb = (daNbomb_c*)i_actor;
                 if (mNBomb->checkInsectBombMove((fopAc_ac_c*)i_actor)) {
                     return i_actor;
@@ -1614,7 +1614,7 @@ static void* s_obj_sub(void* i_actor, void* i_data) {
                 }
             }
 
-            if ((mActorDistance < 700.0f && fopAcM_GetName(i_actor) == PROC_ARROW) &&
+            if ((mActorDistance < 700.0f && fopAcM_GetName(i_actor) == fpcNm_ARROW_e) &&
                 fopAcM_GetSpeedF((fopAc_ac_c*)i_actor))
             {
                 s16 mAngleY = ((fopAc_ac_c*)i_actor)->current.angle.y;
@@ -1690,7 +1690,7 @@ void daB_TN_c::executeRoomDemo() {
         }
 
         mBlendStatus = 0;
-        fopAcM_OffStatus(this, 0x4000);
+        fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
 
         camera->mCamera.Stop();
         camera->mCamera.SetTrimSize(3);
@@ -5147,7 +5147,7 @@ int daB_TN_c::create() {
                     }
                 }
 
-                fopAcM_OffStatus(this, 0x4000);
+                fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
                 setActionMode(ACT_WAITH, ACTION2_0_e);
             }
 
@@ -5175,20 +5175,20 @@ static actor_method_class l_daB_TN_Method = {
 };
 
 actor_process_profile_definition g_profile_B_TN = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_B_TN,               // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daB_TN_c),        // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    225,                     // mPriority
-    &l_daB_TN_Method,        // sub_method
-    0x00044000,              // mStatus
-    fopAc_ENEMY_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_B_TN_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daB_TN_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_B_TN_e,
+    /* Actor SubMtd */ &l_daB_TN_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

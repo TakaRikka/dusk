@@ -214,15 +214,15 @@ public:
     void searchActors() {
         if (mMode == 0) {
             if (mActorMngr[1].getActorP() == NULL) {
-                mActorMngr[1].entry(fopAcM_SearchByName(PROC_NPC_ASH));
+                mActorMngr[1].entry(fopAcM_SearchByName(fpcNm_NPC_ASH_e));
             }
 
             if (mActorMngr[2].getActorP() == NULL) {
-                mActorMngr[2].entry(fopAcM_SearchByName(PROC_NPC_RAFREL));
+                mActorMngr[2].entry(fopAcM_SearchByName(fpcNm_NPC_RAFREL_e));
             }
 
             if (mActorMngr[3].getActorP() == NULL) {
-                mActorMngr[3].entry(fopAcM_SearchByName(PROC_NPC_MOIR));
+                mActorMngr[3].entry(fopAcM_SearchByName(fpcNm_NPC_MOIR_e));
             }
 
             if (mActorMngr[4].getActorP() == NULL) {

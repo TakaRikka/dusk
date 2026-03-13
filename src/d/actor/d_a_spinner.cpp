@@ -483,7 +483,7 @@ int daSpinner_c::checkPathMove() {
 
     daTagSppath_c* sppath_tag = (daTagSppath_c*)mCyl.GetAtHitAc();
 
-    if (mCyl.ChkAtHit() && mSpinnerTag == TAG_NONE && sppath_tag != NULL && fopAcM_GetName(sppath_tag) == PROC_Tag_Sppath) {
+    if (mCyl.ChkAtHit() && mSpinnerTag == TAG_NONE && sppath_tag != NULL && fopAcM_GetName(sppath_tag) == fpcNm_Tag_Sppath_e) {
         if (sppath_tag->getKeepPath() == field_0xa68) {
             return 0;
         }
@@ -677,7 +677,7 @@ int daSpinner_c::execute() {
         move_angle = (mDoCPd_c::getStickAngle3D(PAD_1) + 0x10000 + dCam_getControledAngleY(dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0)))) - 0x8000;
 
 #if PLATFORM_WII || VERSION == VERSION_SHIELD_DEBUG
-        if (dComIfG_getTrigB(PAD_1) && dComIfGp_getSelectItem(3) == fpcNm_ITEM_SPINNER) {
+        if (dComIfG_getTrigB(PAD_1) && dComIfGp_getSelectItem(3) == dItemNo_SPINNER_e) {
 #else
         if (dComIfG_getTrigA(PAD_1)) {
 #endif
@@ -942,20 +942,20 @@ static actor_method_class l_daSpinner_Method = {
 };
 
 actor_process_profile_definition g_profile_SPINNER = {
-  fpcLy_CURRENT_e,       // mLayerID
-  4,                     // mListID
-  fpcPi_CURRENT_e,       // mListPrio
-  PROC_SPINNER,          // mProcName
-  &g_fpcLf_Method.base, // sub_method
-  sizeof(daSpinner_c),            // mSize
-  0,                     // mSizeOther
-  0,                     // mParameters
-  &g_fopAc_Method.base,  // sub_method
-  687,                   // mPriority
-  &l_daSpinner_Method,   // sub_method
-  0x00060000,            // mStatus
-  fopAc_UNK_GROUP_5_e,   // mActorType
-  fopAc_CULLBOX_0_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 4,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SPINNER_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daSpinner_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_SPINNER_e,
+    /* Actor SubMtd */ &l_daSpinner_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_NOPAUSE_e,
+    /* Group        */ fopAc_UNK_GROUP_5_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };
 
 AUDIO_INSTANCES

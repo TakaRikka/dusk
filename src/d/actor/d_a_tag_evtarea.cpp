@@ -6,7 +6,7 @@
 
 #include "d/actor/d_a_tag_evtarea.h"
 #include "d/actor/d_a_npc.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 cPhs_Step daTag_EvtArea_c::create() {
     int var_r28 = 0;
@@ -232,18 +232,18 @@ static actor_method_class daTag_EvtArea_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_TAG_EVTAREA = {
-    fpcLy_CURRENT_e,
-    8,
-    fpcPi_CURRENT_e,
-    PROC_TAG_EVTAREA,
-    &g_fpcLf_Method.base,
-    sizeof(daTag_EvtArea_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    287,
-    &daTag_EvtArea_MethodTable,
-    0x44000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 8,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_EVTAREA_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTag_EvtArea_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_TAG_EVTAREA_e,
+    /* Actor SubMtd */ &daTag_EvtArea_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

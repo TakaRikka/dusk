@@ -5,7 +5,7 @@
 
 #if TARGET_PC
 #define PROCS_DUMP_NAMES 1
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #endif
 
 #include "d/dolzel.h" // IWYU pragma: keep
@@ -1147,11 +1147,11 @@ s32 fopAcM_orderDoorEvent(fopAc_ac_c* i_actorA, fopAc_ac_c* i_actorB, u16 i_prio
     s16 evid = i_actorB->eventInfo.getEventId();
     u8 toolid = i_actorB->eventInfo.getMapToolId();
 
-    if (fopAcM_GetProfName(i_actorB) == PROC_Obj_Kshutter) {
+    if (fopAcM_GetProfName(i_actorB) == fpcNm_Obj_Kshutter_e) {
         if (toolid != 0xFF) {
             evid = dComIfGp_getEventManager().getEventIdx(i_actorA, NULL, toolid);
         }
-    } else if (fopAcM_GetProfName(i_actorB) == PROC_Obj_SmgDoor) {
+    } else if (fopAcM_GetProfName(i_actorB) == fpcNm_Obj_SmgDoor_e) {
     }
     OS_REPORT("toolid<%d>evid<%d>\n", toolid, evid);
 
@@ -1383,7 +1383,7 @@ fpc_ProcID fopAcM_createItemForPresentDemo(cXyz const* i_pos, int i_itemNo, u8 p
     JUT_ASSERT(3214, 0 <= i_itemNo && i_itemNo < 256);
     dComIfGp_event_setGtItm(i_itemNo);
 
-    if (i_itemNo == fpcNm_ITEM_NONE) {
+    if (i_itemNo == dItemNo_NONE_e) {
         OS_REPORT("プレゼントデモ用なのに「ハズレ」です！[%d]\n", i_itemNo); // Even though it is for a Present Demo, it is a 'Miss'!
         return fpcM_ERROR_PROCESS_ID_e;
     }
@@ -1397,7 +1397,7 @@ fpc_ProcID fopAcM_createItemForTrBoxDemo(cXyz const* i_pos, int i_itemNo, int i_
    JUT_ASSERT(3259, 0 <= i_itemNo && i_itemNo < 256);
    dComIfGp_event_setGtItm(i_itemNo);
 
-    if (i_itemNo == fpcNm_ITEM_NONE) {
+    if (i_itemNo == dItemNo_NONE_e) {
         OS_REPORT("ゲットデモ用なのに「ハズレ」です！[%d]\n", i_itemNo); // Even though it is for a Get Demo, it is a 'Miss'!
         return fpcM_ERROR_PROCESS_ID_e;
     }
@@ -1530,7 +1530,7 @@ fpc_ProcID fopAcM_createItemFromTable(cXyz const* i_pos, int i_itemNo, int i_ite
 #endif
 
     i_itemNo = fopAcM_getItemNoFromTableNo(i_itemNo);
-    if (i_itemNo == fpcNm_ITEM_NONE) {
+    if (i_itemNo == dItemNo_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
@@ -1556,12 +1556,12 @@ fpc_ProcID fopAcM_createDemoItem(const cXyz* i_pos, int i_itemNo, int i_itemBitN
     JUT_ASSERT(3824, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo < (dSv_info_c::DAN_ITEM + dSv_info_c::MEMORY_ITEM + dSv_info_c::ZONE_ITEM )) || i_itemBitNo == 255);
     // clang-format on
 
-    if (i_itemNo == fpcNm_ITEM_NONE) {
+    if (i_itemNo == dItemNo_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
     u32 params = (i_itemNo & 0xFF) << 0x0 | (i_itemBitNo & 0x7F) << 0x8 | (param_7 & 0xFF) << 0x10;
-    return fopAcM_create(PROC_Demo_Item, params, i_pos, i_roomNo, i_angle, scale, -1);
+    return fopAcM_create(fpcNm_Demo_Item_e, params, i_pos, i_roomNo, i_angle, scale, -1);
 }
 
 fpc_ProcID fopAcM_createItemForBoss(const cXyz* i_pos, int i_itemNo, int i_roomNo,
@@ -1570,7 +1570,7 @@ fpc_ProcID fopAcM_createItemForBoss(const cXyz* i_pos, int i_itemNo, int i_roomN
     int _ = -1;
     u32 params = 0xFFFF0000 | param_8 << 8 | (i_itemNo & 0xFF);
 
-    fopAc_ac_c* actor = fopAcM_fastCreate(PROC_Obj_LifeContainer, params, i_pos, i_roomNo, i_angle,
+    fopAc_ac_c* actor = fopAcM_fastCreate(fpcNm_Obj_LifeContainer_e, params, i_pos, i_roomNo, i_angle,
                                           i_scale, -1, NULL, NULL);
     if (actor != NULL) {
         actor->speedF = i_speedF;
@@ -1615,7 +1615,7 @@ fpc_ProcID fopAcM_createItem(const cXyz* i_pos, int i_itemNo, int i_itemBitNo, i
     JUT_ASSERT(4067, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo < (dSv_info_c::DAN_ITEM + dSv_info_c::MEMORY_ITEM + dSv_info_c::ZONE_ITEM )) || i_itemBitNo == 255);
     // clang-format on
 
-    if (i_itemNo == fpcNm_ITEM_NONE) {
+    if (i_itemNo == dItemNo_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
@@ -1635,38 +1635,38 @@ fpc_ProcID fopAcM_createItem(const cXyz* i_pos, int i_itemNo, int i_itemBitNo, i
     u32 params = MAKE_ITEM_PARAMS(item_no, i_itemBitNo, unk, param_7);
 
     switch (i_itemNo) {
-    case fpcNm_ITEM_RECOVERY_FAILY:
-        ret = fopAcM_create(PROC_Obj_Yousei, 0xFFFFFFFF, i_pos, i_roomNo, i_angle, i_scale, -1);
+    case dItemNo_RECOVERY_FAILY_e:
+        ret = fopAcM_create(fpcNm_Obj_Yousei_e, 0xFFFFFFFF, i_pos, i_roomNo, i_angle, i_scale, -1);
         break;
 #if DEBUG
 // Return pointer fopAc_ac_c* is uninitialized for these branches
-    case fpcNm_ITEM_SMALL_KEY:
+    case dItemNo_SMALL_KEY_e:
         // "Small Key: Can't support map display, so program generation is prohibited!\n"
         OS_REPORT_ERROR("小さい鍵：マップ表示対応出来ないので、プログラム生成禁止！\n");
         JUT_ASSERT(4145, FALSE);
         break;
-    case fpcNm_ITEM_KANTERA:
+    case dItemNo_KANTERA_e:
         // "Lantern: Program generation is prohibited!\n"
         OS_REPORT_ERROR("カンテラ：プログラム生成禁止！\n");
         JUT_ASSERT(4149, FALSE);
         break;
-    case fpcNm_ITEM_LIGHT_DROP:
+    case dItemNo_LIGHT_DROP_e:
         // "Light Drop: Program generation is prohibited!\n"
         OS_REPORT_ERROR("光の雫：プログラム生成禁止！\n");
         JUT_ASSERT(4153, FALSE);
         break;
 #endif
-    case fpcNm_ITEM_KAKERA_HEART:
-    case fpcNm_ITEM_UTAWA_HEART:
-        ret = fopAcM_create(PROC_Obj_LifeContainer, params, i_pos, i_roomNo, i_angle, i_scale, -1);
+    case dItemNo_KAKERA_HEART_e:
+    case dItemNo_UTAWA_HEART_e:
+        ret = fopAcM_create(fpcNm_Obj_LifeContainer_e, params, i_pos, i_roomNo, i_angle, i_scale, -1);
         break;
-    case fpcNm_ITEM_TRIPLE_HEART:
+    case dItemNo_TRIPLE_HEART_e:
         for (i = 0; i < 2; i++) {
-            fopAcM_create(PROC_ITEM, params, i_pos, i_roomNo, &item_angle, i_scale, -1);
+            fopAcM_create(fpcNm_ITEM_e, params, i_pos, i_roomNo, &item_angle, i_scale, -1);
             item_angle.y = cM_rndFX(0x7FFF);
         }
     default:
-        ret = fopAcM_create(PROC_ITEM, params, i_pos, i_roomNo, &item_angle, i_scale, -1);
+        ret = fopAcM_create(fpcNm_ITEM_e, params, i_pos, i_roomNo, &item_angle, i_scale, -1);
         break;
     }
 
@@ -1681,7 +1681,7 @@ fopAc_ac_c* fopAcM_fastCreateItem2(const cXyz* i_pos, int i_itemNo, int i_itemBi
 
     csXyz item_angle(csXyz::Zero);
 
-    if (i_itemNo == fpcNm_ITEM_NONE) {
+    if (i_itemNo == dItemNo_NONE_e) {
         return NULL;
     }
 
@@ -1700,41 +1700,41 @@ fopAc_ac_c* fopAcM_fastCreateItem2(const cXyz* i_pos, int i_itemNo, int i_itemBi
     u32 params = MAKE_ITEM_PARAMS(item_no, i_itemBitNo, unk, param_5);
 
     switch (i_itemNo) {
-    case fpcNm_ITEM_RECOVERY_FAILY:
-        ret = fopAcM_fastCreate(PROC_Obj_Yousei, 0xFFFFFFFF, i_pos, i_roomNo, i_angle, i_scale, -1,
+    case dItemNo_RECOVERY_FAILY_e:
+        ret = fopAcM_fastCreate(fpcNm_Obj_Yousei_e, 0xFFFFFFFF, i_pos, i_roomNo, i_angle, i_scale, -1,
                                 NULL, NULL);
         break;
 #if DEBUG
 // Return pointer fopAc_ac_c* is uninitialized for these branches
-    case fpcNm_ITEM_SMALL_KEY:
+    case dItemNo_SMALL_KEY_e:
         // "Small Key: Can't support map display, so program generation is prohibited!\n"
         OS_REPORT_ERROR("小さい鍵：マップ表示対応出来ないので、プログラム生成禁止！\n");
         JUT_ASSERT(4268, FALSE);
         break;
-    case fpcNm_ITEM_KANTERA:
+    case dItemNo_KANTERA_e:
         // "Lantern: Program generation is prohibited!\n"
         OS_REPORT_ERROR("カンテラ：プログラム生成禁止！\n");
         JUT_ASSERT(4272, FALSE);
         break;
-    case fpcNm_ITEM_LIGHT_DROP:
+    case dItemNo_LIGHT_DROP_e:
         // "Light Drop: Program generation is prohibited!\n"
         OS_REPORT_ERROR("光の雫：プログラム生成禁止！\n");
         JUT_ASSERT(4276, FALSE);
         break;
 #endif
-    case fpcNm_ITEM_KAKERA_HEART:
-    case fpcNm_ITEM_UTAWA_HEART:
-        ret = fopAcM_fastCreate(PROC_Obj_LifeContainer, params, i_pos, i_roomNo, i_angle, i_scale,
+    case dItemNo_KAKERA_HEART_e:
+    case dItemNo_UTAWA_HEART_e:
+        ret = fopAcM_fastCreate(fpcNm_Obj_LifeContainer_e, params, i_pos, i_roomNo, i_angle, i_scale,
                                 -1, NULL, NULL);
         break;
-    case fpcNm_ITEM_TRIPLE_HEART:
+    case dItemNo_TRIPLE_HEART_e:
         for (i = 0; i < 2; i++) {
-            ret = fopAcM_fastCreate(PROC_ITEM, params, i_pos, i_roomNo, &item_angle, i_scale, -1,
+            ret = fopAcM_fastCreate(fpcNm_ITEM_e, params, i_pos, i_roomNo, &item_angle, i_scale, -1,
                                     NULL, NULL);
             item_angle.y = cM_rndFX(0x7FFF);
         }
     default:
-        ret = fopAcM_fastCreate(PROC_ITEM, params, i_pos, i_roomNo, &item_angle, i_scale, -1, NULL,
+        ret = fopAcM_fastCreate(fpcNm_ITEM_e, params, i_pos, i_roomNo, &item_angle, i_scale, -1, NULL,
                                 NULL);
     }
     return ret;
@@ -1747,7 +1747,7 @@ fopAc_ac_c* fopAcM_fastCreateItem(const cXyz* i_pos, int i_itemNo, int i_roomNo,
     JUT_ASSERT(4324, 0 <= i_itemNo && i_itemNo < 256);
     
     csXyz angle;
-    if (i_itemNo == fpcNm_ITEM_NONE) {
+    if (i_itemNo == dItemNo_NONE_e) {
         return NULL;
     }
 
@@ -1765,34 +1765,34 @@ fopAc_ac_c* fopAcM_fastCreateItem(const cXyz* i_pos, int i_itemNo, int i_roomNo,
     }
     
     switch (i_itemNo) {
-    case fpcNm_ITEM_RECOVERY_FAILY:
-        ret = fopAcM_fastCreate(PROC_Obj_Yousei, 0xFFFFFFFF, i_pos, i_roomNo, i_angle, i_scale, -1,
+    case dItemNo_RECOVERY_FAILY_e:
+        ret = fopAcM_fastCreate(fpcNm_Obj_Yousei_e, 0xFFFFFFFF, i_pos, i_roomNo, i_angle, i_scale, -1,
                                  NULL, NULL);
         break;
 #if DEBUG
 // Return pointer fopAc_ac_c* is uninitialized for these branches
-    case fpcNm_ITEM_SMALL_KEY:
+    case dItemNo_SMALL_KEY_e:
         // "Small Key: Can't support map display, so program generation is prohibited!\n"
         OS_REPORT_ERROR("小さい鍵：マップ表示対応出来ないので、プログラム生成禁止！\n");
         JUT_ASSERT(4383, FALSE);
         break;
-    case fpcNm_ITEM_KANTERA:
+    case dItemNo_KANTERA_e:
         // "Lantern: Program generation is prohibited!\n"
         OS_REPORT_ERROR("カンテラ：プログラム生成禁止！\n");
         JUT_ASSERT(4387, FALSE);
         break;
-    case fpcNm_ITEM_LIGHT_DROP:
+    case dItemNo_LIGHT_DROP_e:
         // "Light Drop: Program generation is prohibited!\n"
         OS_REPORT_ERROR("光の雫：プログラム生成禁止！\n");
         JUT_ASSERT(4391, FALSE);
         break;
 #endif
-    case fpcNm_ITEM_KAKERA_HEART:
-    case fpcNm_ITEM_UTAWA_HEART:
-        ret = fopAcM_fastCreate(PROC_Obj_LifeContainer, params, i_pos, i_roomNo, i_angle, i_scale,
+    case dItemNo_KAKERA_HEART_e:
+    case dItemNo_UTAWA_HEART_e:
+        ret = fopAcM_fastCreate(fpcNm_Obj_LifeContainer_e, params, i_pos, i_roomNo, i_angle, i_scale,
                                  -1, NULL, NULL);
         break;
-    case fpcNm_ITEM_TRIPLE_HEART:
+    case dItemNo_TRIPLE_HEART_e:
         for (i = 0; i < 2; i++) {
             if (i_angle != NULL) {
                 angle = *i_angle;
@@ -1803,7 +1803,7 @@ fopAc_ac_c* fopAcM_fastCreateItem(const cXyz* i_pos, int i_itemNo, int i_roomNo,
             ANGLE_ADD(angle.y, cM_rndFX(0x2000));
 
             ret = (fopAc_ac_c*)fopAcM_fastCreate(
-                PROC_ITEM, params, i_pos, i_roomNo, &angle, i_scale, -1, i_createFunc, NULL);
+                fpcNm_ITEM_e, params, i_pos, i_roomNo, &angle, i_scale, -1, i_createFunc, NULL);
 
             if (ret != NULL) {
                 if (i_speedF != NULL) {
@@ -1823,7 +1823,7 @@ fopAc_ac_c* fopAcM_fastCreateItem(const cXyz* i_pos, int i_itemNo, int i_roomNo,
         }
         angle.z = 0xFF;
 
-        ret = fopAcM_fastCreate(PROC_ITEM, params, i_pos, i_roomNo,
+        ret = fopAcM_fastCreate(fpcNm_ITEM_e, params, i_pos, i_roomNo,
                                                            &angle, i_scale, -1, i_createFunc, NULL);
 
         if (ret != NULL) {
@@ -1855,7 +1855,7 @@ fpc_ProcID fopAcM_createBokkuri(u16 i_setId, const cXyz* i_pos, int i_itemNo, in
     }
 
     daObjCarry_c::make_prm_bokkuri(&params, &params_ex, i_itemNo, i_itemBit, i_itemType, param_8);
-    return fopAcM_create(PROC_Obj_Carry, i_setId, params, i_pos, i_roomNo, &params_ex, NULL, -1, NULL);
+    return fopAcM_create(fpcNm_Obj_Carry_e, i_setId, params, i_pos, i_roomNo, &params_ex, NULL, -1, NULL);
 }
 
 fpc_ProcID fopAcM_createWarpHole(const cXyz* i_pos, const csXyz* i_angle, int i_roomNo, u8 param_4,
@@ -1865,7 +1865,7 @@ fpc_ProcID fopAcM_createWarpHole(const cXyz* i_pos, const csXyz* i_angle, int i_
     }
     u32 actorParams = 0x17000000 + 0xFF;
     u32 actorParamsOut =  actorParams | (param_5 << 0x1B) | (param_6 << 0x10) | (param_4 << 0x8);
-    return fopAcM_create(PROC_Obj_BossWarp, actorParamsOut, i_pos, i_roomNo, i_angle, NULL, -1);
+    return fopAcM_create(fpcNm_Obj_BossWarp_e, actorParamsOut, i_pos, i_roomNo, i_angle, NULL, -1);
 }
 
 void* enemySearchJugge(void* i_actor, void* i_data) {
@@ -1962,13 +1962,13 @@ fpc_ProcID fopAcM_createDisappear(const fopAc_ac_c* i_actor, const cXyz* i_pos, 
                                   u8 i_type, u8 i_enemyID) {
     u32 param = (i_enemyID << 0x10) | (i_size << 0x8) | i_type;
     fopAc_ac_c* actor = fopAcM_fastCreate(
-        PROC_DISAPPEAR, param, i_pos, fopAcM_GetRoomNo(i_actor), &i_actor->current.angle, NULL, 0xFF,
+        fpcNm_DISAPPEAR_e, param, i_pos, fopAcM_GetRoomNo(i_actor), &i_actor->current.angle, NULL, 0xFF,
         NULL, NULL);
     return fopAcM_GetID(actor);
 }
 
 void fopAcM_setCarryNow(fopAc_ac_c* i_actor, int param_1) {
-    i_actor->actor_status |= 0x2000;
+    i_actor->actor_status |= fopAcStts_CARRY_NOW_e;
 
     if (param_1 != 0) {
         fopAcM_setStageLayer(i_actor);
@@ -1978,7 +1978,7 @@ void fopAcM_setCarryNow(fopAc_ac_c* i_actor, int param_1) {
 
 void fopAcM_cancelCarryNow(fopAc_ac_c* i_actor) {
     if (fopAcM_checkCarryNow(i_actor)) {
-        i_actor->actor_status &= ~0x2000;
+        i_actor->actor_status &= ~fopAcStts_CARRY_NOW_e;
 
         if (fopAcM_GetHomeRoomNo(i_actor) != -1 &&
             fopScnM_SearchByID(dStage_roomControl_c::getStatusProcID(fopAcM_GetRoomNo(i_actor))) !=
@@ -1990,8 +1990,8 @@ void fopAcM_cancelCarryNow(fopAc_ac_c* i_actor) {
         i_actor->shape_angle.z = 0;
         i_actor->shape_angle.x = 0;
 
-        if (dComIfGp_event_runCheck() && fopAcM_GetGroup(i_actor) != 2) {
-            i_actor->actor_status |= 0x800;
+        if (dComIfGp_event_runCheck() && fopAcM_GetGroup(i_actor) != fopAc_ENEMY_e) {
+            i_actor->actor_status |= fopAcStts_STAFF_EXTRA_e;
         }
     }
 }

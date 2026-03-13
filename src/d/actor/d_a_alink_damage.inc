@@ -585,7 +585,7 @@ BOOL daAlink_c::checkDamageAction() {
         if (tghit_ac != NULL) {
             tghit_ac_name = fopAcM_GetName(tghit_ac);
         } else {
-            tghit_ac_name = PROC_ALINK;
+            tghit_ac_name = fpcNm_ALINK_e;
         }
 
         dCcD_GObjInf* tghit_gobj = var_r29->GetTgHitGObj();
@@ -621,7 +621,7 @@ BOOL daAlink_c::checkDamageAction() {
                 seStartOnlyReverb(Z2SE_AL_BURN_START);
             }
 
-            if ((mProcID != PROC_GUARD_ATTACK || (tghit_ac_name != PROC_E_TK_BALL && tghit_ac_name != PROC_KN_BULLET)) && !checkModeFlg(0x4000000)) {
+            if ((mProcID != PROC_GUARD_ATTACK || (tghit_ac_name != fpcNm_E_TK_BALL_e && tghit_ac_name != fpcNm_KN_BULLET_e)) && !checkModeFlg(0x4000000)) {
                 if (at_spl == 10 || at_spl == 11 || at_spl == 9) {
                     return procGuardBreakInit();
                 }
@@ -633,7 +633,7 @@ BOOL daAlink_c::checkDamageAction() {
                                 return procHorseHangInit(var_r29, 0);
                             }
                         } else if (at_spl == 8 || checkModeFlg(0x70C52)) {
-                            if (!checkModeFlg(0x400) && mEquipItem != fpcNm_ITEM_IRONBALL) {
+                            if (!checkModeFlg(0x400) && mEquipItem != dItemNo_IRONBALL_e) {
                                 setSmallGuard(var_r29);
                             }
                         } else {
@@ -1624,7 +1624,7 @@ int daAlink_c::procCoElecDamageInit(fopAc_ac_c* i_tgHitActor, dCcD_GObjInf* i_tg
     }
 
     if (i_tgHitActor != NULL) {
-        i_tgHitActor->actor_status |= 0x800;
+        i_tgHitActor->actor_status |= fopAcStts_STAFF_EXTRA_e;
     }
 
     commonProcInit(PROC_ELEC_DAMAGE);
@@ -1634,7 +1634,7 @@ int daAlink_c::procCoElecDamageInit(fopAc_ac_c* i_tgHitActor, dCcD_GObjInf* i_tg
     daAlink_ANM anm;
     daAlink_WANM wolf_anm;
     if ((mLinkAcch.ChkGroundHit() && !temp_r27) || checkMagneBootsOn()) {
-        if (mEquipItem == fpcNm_ITEM_IRONBALL) {
+        if (mEquipItem == dItemNo_IRONBALL_e) {
             setIronBallWaitUpperAnime(1);
         }
         anm = ANM_ELEC_STUN_GND;

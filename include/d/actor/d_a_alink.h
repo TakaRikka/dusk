@@ -3232,7 +3232,7 @@ public:
     virtual bool checkChainBlockPushPull();
     virtual BOOL checkElecDamage() const { return mProcID == PROC_ELEC_DAMAGE; }
     virtual BOOL checkEmptyBottleSwing() const {
-        return mEquipItem == fpcNm_ITEM_EMPTY_BOTTLE && mProcID == PROC_BOTTLE_SWING;
+        return mEquipItem == dItemNo_EMPTY_BOTTLE_e && mProcID == PROC_BOTTLE_SWING;
     }
     virtual BOOL checkBottleSwingMode() const { return mProcID == PROC_BOTTLE_SWING; }
     virtual BOOL checkHawkWait() const { return mProcID == PROC_HAWK_SUBJECT; }
@@ -3334,7 +3334,7 @@ public:
     virtual u32 checkBoardRide() const;
     virtual u32 checkSpinnerRide() const;
     virtual bool checkArrowChargeEnd() const;
-    virtual bool checkNoEquipItem() const { return mEquipItem == fpcNm_ITEM_NONE; }
+    virtual bool checkNoEquipItem() const { return mEquipItem == dItemNo_NONE_e; }
     virtual bool checkKandelaarSwing(int) const;
     virtual s16 getBoardCutTurnOffsetAngleY() const {
         if (mProcID == PROC_BOARD_CUT_TURN) {
@@ -3402,7 +3402,7 @@ public:
     }
     virtual BOOL checkWolfDownAttackPullOut() const { return mProcID == PROC_WOLF_DOWN_AT_LAND; }
     virtual cXyz* getMidnaAtnPos() const { return (cXyz*)&mMidnaAtnPos; }
-    virtual bool checkCopyRodEquip() const { return mEquipItem == fpcNm_ITEM_COPY_ROD; }
+    virtual bool checkCopyRodEquip() const { return mEquipItem == dItemNo_COPY_ROD_e; }
     virtual void setKandelaarMtx(Mtx i_mtx, int, int);
     virtual bool getStickAngleFromPlayerShape(s16* o_angle) const;
     virtual bool checkSpinnerPathMove();
@@ -3487,11 +3487,11 @@ public:
         return checkHookshotReadyAnime() || checkHookshotShootAnime();
     }
     BOOL checkBoomerangReadyAnime() const {
-        return (mEquipItem == fpcNm_ITEM_BOOMERANG || mEquipItem == 0x102) && checkUpperAnime(dRes_ID_ALANM_BCK_BOOMWAIT_e);
+        return (mEquipItem == dItemNo_BOOMERANG_e || mEquipItem == 0x102) && checkUpperAnime(dRes_ID_ALANM_BCK_BOOMWAIT_e);
     }
     bool checkDkCaught2Anime() const { return checkUpperAnime(dRes_ID_ALANM_BCK_WAITHDB_e); }
     BOOL checkCopyRodThrowAnime() const {
-        return mEquipItem == fpcNm_ITEM_COPY_ROD && checkUpperAnime(dRes_ID_ALANM_BCK_BOOMTHROW_e);
+        return mEquipItem == dItemNo_COPY_ROD_e && checkUpperAnime(dRes_ID_ALANM_BCK_BOOMTHROW_e);
     }
     BOOL checkCutDashChargeAnime() const { return checkUpperAnime(dRes_ID_ALANM_BCK_CUTDTP_e); }
     BOOL checkBoomerangAnimeAndReturnWait() const { return checkBoomerangAnime(); }
@@ -3526,7 +3526,7 @@ public:
     bool checkDashDamageAnime() const { return checkUpperAnime(dRes_ID_ALANM_BCK_DAMD_e); }
     bool checkBoomerangCatchAnime() const { return checkUpperAnime(dRes_ID_ALANM_BCK_BOOMCATCH_e); }
     BOOL checkCopyRodReadyAnime() const {
-        return mEquipItem == fpcNm_ITEM_COPY_ROD && checkUpperAnime(dRes_ID_ALANM_BCK_BOOMWAIT_e);
+        return mEquipItem == dItemNo_COPY_ROD_e && checkUpperAnime(dRes_ID_ALANM_BCK_BOOMWAIT_e);
     }
     BOOL checkCanoeFishingWaitAnime() const {
         return checkUpperAnime(dRes_ID_ALANM_BCK_CANOEREELINGR_e) || checkUpperAnime(dRes_ID_ALANM_BCK_WAITFISHR_e);
@@ -3685,12 +3685,12 @@ public:
     }
 
     bool checkFisingRodJewl() const {
-        return (mEquipItem == fpcNm_ITEM_JEWEL_ROD || mEquipItem == fpcNm_ITEM_JEWEL_WORM_ROD) || mEquipItem == fpcNm_ITEM_JEWEL_BEE_ROD;
+        return (mEquipItem == dItemNo_JEWEL_ROD_e || mEquipItem == dItemNo_JEWEL_WORM_ROD_e) || mEquipItem == dItemNo_JEWEL_BEE_ROD_e;
     }
 
-    bool checkFisingRodWorm() const { return mItemMode == fpcNm_ITEM_WORM; }
+    bool checkFisingRodWorm() const { return mItemMode == dItemNo_WORM_e; }
 
-    bool checkFisingRodBee() const { return mItemMode == fpcNm_ITEM_BEE_CHILD; }
+    bool checkFisingRodBee() const { return mItemMode == dItemNo_BEE_CHILD_e; }
 
     void fishingCastWaitAnimeStart() {
         if (mProcID == PROC_FISHING_CAST) {
@@ -3772,7 +3772,7 @@ public:
     void setGrassCancelStatus(u8 i_status) { setBStatus(i_status); }
 
     void seStartSystem(u32 i_soundID) { mDoAud_seStart(i_soundID, NULL, 0, 0); }
-    bool checkIronBallEquip() const { return mEquipItem == fpcNm_ITEM_IRONBALL; }
+    bool checkIronBallEquip() const { return mEquipItem == dItemNo_IRONBALL_e; }
     BOOL checkFishingRodEquip() const { return checkFishingRodItem(mEquipItem); }
 
     f32 getAnmSpeedStickRate(f32 param_0, f32 param_1) const {

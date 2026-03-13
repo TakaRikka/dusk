@@ -1539,7 +1539,7 @@ static int dTimer_Create(msg_class* i_this) {
 fpc_ProcID dTimer_createTimer(s32 i_mode, u32 i_limitMs, u8 i_type, u8 param_3, f32 param_4, f32 param_5,
                        f32 param_6, f32 param_7) {
     if (dComIfG_getTimerMode() == -1) {
-        return fopMsgM_Timer_create(PROC_TIMER, i_mode, i_limitMs, i_type, param_3, param_4,
+        return fopMsgM_Timer_create(fpcNm_TIMER_e, i_mode, i_limitMs, i_type, param_3, param_4,
                                     param_5, param_6, param_7, NULL);
     }
 
@@ -1555,7 +1555,7 @@ s32 dTimer_createStockTimer() {
             return -1;
         } else {
             u8 timer_type = dComIfG_getTimerType();
-            return fopMsgM_Timer_create(PROC_TIMER, 10, 0, timer_type, 0, 221.0f, 439.0f, 32.0f,
+            return fopMsgM_Timer_create(fpcNm_TIMER_e, 10, 0, timer_type, 0, 221.0f, 439.0f, 32.0f,
                                         419.0f, NULL);
         }
     } else {
@@ -1634,15 +1634,15 @@ static leafdraw_method_class l_dTimer_Method = {
 };
 
 msg_process_profile_definition g_profile_TIMER = {
-    fpcLy_CURRENT_e,
-    12,
-    fpcPi_CURRENT_e,
-    PROC_TIMER,
-    &g_fpcLf_Method.base,
-    sizeof(dTimer_c),
-    0,
-    0,
-    &g_fopMsg_Method,
-    768,
-    &l_dTimer_Method,
+    /* Layer ID    */ fpcLy_CURRENT_e,
+    /* List ID     */ 12,
+    /* List Prio   */ fpcPi_CURRENT_e,
+    /* Proc Name   */ fpcNm_TIMER_e,
+    /* Proc SubMtd */ &g_fpcLf_Method.base,
+    /* Size        */ sizeof(dTimer_c),
+    /* Size Other  */ 0,
+    /* Parameters  */ 0,
+    /* Leaf SubMtd */ &g_fopMsg_Method,
+    /* Draw Prio   */ fpcDwPi_TIMER_e,
+    /* Msg SubMtd  */ &l_dTimer_Method,
 };

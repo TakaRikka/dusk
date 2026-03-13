@@ -136,9 +136,11 @@ u16 daTag_Cam_c::getAreaNoChk() {
     return home.angle.z & 0x200;
 }
 
+#if PLATFORM_GCN
 static u8 const lit_3874[12] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
+#endif
 
 int daTag_Cam_c::create() {
     fopAcM_ct(this, daTag_Cam_c);
@@ -331,18 +333,18 @@ static actor_method_class l_daTag_Cam_Method = {
 };
 
 actor_process_profile_definition g_profile_TAG_CAMERA = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_TAG_CAMERA,        // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(daTag_Cam_c),    // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    279,                    // mPriority
-    &l_daTag_Cam_Method,    // sub_method
-    0x00044000,             // mStatus
-    fopAc_ACTOR_e,          // mActorType
-    fopAc_CULLBOX_6_e,      // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_CAMERA_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTag_Cam_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_TAG_CAMERA_e,
+    /* Actor SubMtd */ &l_daTag_Cam_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

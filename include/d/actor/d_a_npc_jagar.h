@@ -206,7 +206,7 @@ public:
 
     int crashPumpkin(fopAc_ac_c* pumpkin_p) {
         int reg_r30;
-        if (mType == 0 && fopAcM_GetName(pumpkin_p) == PROC_OBJ_PUMPKIN && !daNpcT_chkEvtBit(0xAE)
+        if (mType == 0 && fopAcM_GetName(pumpkin_p) == fpcNm_OBJ_PUMPKIN_e && !daNpcT_chkEvtBit(0xAE)
             && daNpcT_chkEvtBit(0x25B) && !daNpcT_chkEvtBit(0x235)) {
             ++field_0xffc;
             reg_r30 = chkPointInArea(pumpkin_p->current.pos, current.pos, mpHIO->m.pumpkin_watch_range,

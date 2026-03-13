@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_bi.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -76,7 +76,7 @@ static int daE_BI_Draw(e_bi_class* i_this) {
     if (i_this->ride_time == 0) {
         return 1;
     }
-    
+
     g_env_light.settingTevStruct(0, &actor->current.pos, &actor->tevStr);
     J3DModel* model = i_this->anm_p->getModel();
     g_env_light.setLightTevColorType_MAJI(model, &actor->tevStr);
@@ -403,7 +403,7 @@ static void e_bi_ex(e_bi_class* i_this) {
             i_this->ex_eff[i] = dComIfGp_particle_set(i_this->ex_eff[i], ex_eff_id[i], &actor->current.pos, &actor->tevStr,
                                                            &actor->shape_angle, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
             JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(i_this->ex_eff[i]);
-            
+
             if (emitter != NULL) {
                 MTXCopy(i_this->anm_p->getModel()->getAnmMtx(0), *calc_mtx);
                 emitter->setGlobalRTMatrix(*calc_mtx);
@@ -646,7 +646,7 @@ static void action(e_bi_class* i_this) {
 }
 
 static void* s_fw_sub(void* i_actor, void* i_data) {
-    if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_OBJ_FW) {
+    if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_OBJ_FW_e) {
         cXyz sp28 = ((fopAc_ac_c*)i_actor)->current.pos - ((fopAc_ac_c*)i_data)->current.pos;
         if (sp28.abs() < XREG_F(18) + 500.0f) {
             return i_actor;
@@ -705,7 +705,7 @@ static int daE_BI_Execute(e_bi_class* i_this) {
     }
 
     cXyz mae, ato;
-    
+
     i_this->counter++;
 
     for (int i = 0; i < 3; i++) {
@@ -787,7 +787,7 @@ static int daE_BI_Execute(e_bi_class* i_this) {
     actor->attention_info.position.y += KREG_F(3) + 45.0f;
 
     f32 center = 0.0f;
-    if (dComIfGp_checkPlayerStatus0(0, fopAcM_STATUS_UNK_0x80000)) {
+    if (dComIfGp_checkPlayerStatus0(0, fopAcStts_UNK_0x80000_e)) {
         center = 100.0f;
     }
 
@@ -838,9 +838,9 @@ static int daE_BI_IsDelete(e_bi_class* i_this) {
 
 static int daE_BI_Delete(e_bi_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    
+
     dComIfG_resDelete(&i_this->phase, "E_BI");
-    
+
     if (i_this->hio_init != 0) {
         hio_set = 0;
     }
@@ -881,7 +881,7 @@ static cPhs_Step daE_BI_Create(fopAc_ac_c* actor) {
 
         if (!fopAcM_entrySolidHeap(actor, useHeapInit, 0x27A0)) {
             OS_REPORT("//////////////E_BI SET NON !!\n");
-            
+
             return cPhs_ERROR_e;
         }
 
@@ -950,7 +950,7 @@ static cPhs_Step daE_BI_Create(fopAc_ac_c* actor) {
         i_this->at_info.mpSound = &i_this->sound;
         i_this->at_info.mPowerType = 1;
         i_this->sound.setEnemyName("E_bi");
-        
+
         i_this->counter = cM_rndF(65535.0f);
         actor->attention_info.distances[fopAc_attn_CARRY_e] = 42;
 
@@ -967,7 +967,7 @@ static cPhs_Step daE_BI_Create(fopAc_ac_c* actor) {
                 }
             }
 
-            i_this->child_no = fopAcM_createChild(PROC_E_BI_LEAF, fopAcM_GetID(actor), i_this->arg1, &actor->current.pos,
+            i_this->child_no = fopAcM_createChild(fpcNm_E_BI_LEAF_e, fopAcM_GetID(actor), i_this->arg1, &actor->current.pos,
                                                         fopAcM_GetRoomNo(actor), &actor->shape_angle, NULL, -1, NULL);
         } else {
             i_this->mode = -2;
@@ -996,18 +996,18 @@ static actor_method_class l_daE_BI_Method = {
 };
 
 actor_process_profile_definition g_profile_E_BI = {
-  fpcLy_CURRENT_e,        // mLayerID
-  9,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_BI,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(e_bi_class),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  147,                    // mPriority
-  &l_daE_BI_Method,       // sub_method
-  0x100D0100,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 9,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_BI_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_bi_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_BI_e,
+    /* Actor SubMtd */ &l_daE_BI_Method,
+    /* Status       */ fopAcStts_UNK_0x10000000_e | fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x10000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

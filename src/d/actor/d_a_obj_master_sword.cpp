@@ -45,7 +45,7 @@ void daObjMasterSword_c::executeWait() {
     }
 
     if (fopAcM_checkCarryNow(this)) {
-        dMeter2Info_setCloth(fpcNm_ITEM_WEAR_KOKIRI, false);
+        dMeter2Info_setCloth(dItemNo_WEAR_KOKIRI_e, false);
         fopAcM_orderMapToolEvent(this, getEventID(), 0xFF, 0xFFFF, 1, 0);
     }
 }
@@ -186,9 +186,9 @@ int daObjMasterSword_c::execute() {
     mBrk.play();
 
     if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::tempBitLabels[73])) {
-        dComIfGs_onItemFirstBit(fpcNm_ITEM_MASTER_SWORD);
-        dMeter2Info_setSword(fpcNm_ITEM_MASTER_SWORD, false);
-        dComIfGs_setSelectEquipSword(fpcNm_ITEM_MASTER_SWORD);
+        dComIfGs_onItemFirstBit(dItemNo_MASTER_SWORD_e);
+        dMeter2Info_setSword(dItemNo_MASTER_SWORD_e, false);
+        dComIfGs_setSelectEquipSword(dItemNo_MASTER_SWORD_e);
 
         dComIfGp_setItemLifeCount(dComIfGs_getMaxLife(), 0);
         dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[getFlagNo()]);
@@ -245,18 +245,18 @@ static actor_method_class l_daObjMasterSword_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_MasterSword = {
-  fpcLy_CURRENT_e,            // mLayerID
-  7,                          // mListID
-  fpcPi_CURRENT_e,            // mListPrio
-  PROC_Obj_MasterSword,       // mProcName
-  &g_fpcLf_Method.base,      // sub_method
-  sizeof(daObjMasterSword_c), // mSize
-  0,                          // mSizeOther
-  0,                          // mParameters
-  &g_fopAc_Method.base,       // sub_method
-  562,                        // mPriority
-  &l_daObjMasterSword_Method, // sub_method
-  0x00040000,                 // mStatus
-  fopAc_ACTOR_e,              // mActorType
-  fopAc_CULLBOX_CUSTOM_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_MasterSword_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjMasterSword_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_MasterSword_e,
+    /* Actor SubMtd */ &l_daObjMasterSword_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

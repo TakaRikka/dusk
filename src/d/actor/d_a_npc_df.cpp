@@ -250,7 +250,7 @@ static void df_rod(npc_df_class* i_this, df_s* df_p) {
 
                 cLib_addCalc2(&df_p->field_0x5c, df_p->field_0x60, 0.8f, 0.1f);
 
-                npc_henna_class* henna_p = (npc_henna_class*)fopAcM_SearchByName(PROC_NPC_HENNA);
+                npc_henna_class* henna_p = (npc_henna_class*)fopAcM_SearchByName(fpcNm_NPC_HENNA_e);
                 if (henna_p != NULL) {
                     henna_p->field_0x7b8 = 10;
                 }
@@ -305,7 +305,7 @@ static void df_control(npc_df_class* i_this) {
 }
 
 static void* s_rod_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_MG_ROD) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_MG_ROD_e) {
         return i_actor;
     }
 
@@ -422,18 +422,18 @@ static actor_method_class l_daNpc_Df_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_DF = {
-  fpcLy_CURRENT_e,        // mLayerID
-  9,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_NPC_DF,            // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(npc_df_class),   // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  439,                    // mPriority
-  &l_daNpc_Df_Method,     // sub_method
-  0x00040000,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 9,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_DF_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(npc_df_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_DF_e,
+    /* Actor SubMtd */ &l_daNpc_Df_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

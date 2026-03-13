@@ -9,7 +9,7 @@
 
 #include "JSystem/JHostIO/JORFile.h"
 #include "d/d_debug_viewer.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include <cstring>
 
 static TAG_LANTERN_HIO_CLASS l_HIO;
@@ -169,18 +169,18 @@ static actor_method_class daTag_Lantern_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_TAG_LANTERN = {
-    fpcLy_CURRENT_e,             // mLayerID
-    7,                           // mListID
-    fpcPi_CURRENT_e,             // mListPrio
-    PROC_TAG_LANTERN,            // mProcName
-    &g_fpcLf_Method.base,       // sub_method
-    sizeof(daTag_Lantern_c),     // mSize
-    0,                           // mSizeOther
-    0,                           // mParameters
-    &g_fopAc_Method.base,        // sub_method
-    286,                         // mPriority
-    &daTag_Lantern_MethodTable,  // sub_method
-    0x40000,                     // mStatus
-    fopAc_ACTOR_e,               // mActorType
-    fopAc_CULLBOX_CUSTOM_e,      // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_LANTERN_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTag_Lantern_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_TAG_LANTERN_e,
+    /* Actor SubMtd */ &daTag_Lantern_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

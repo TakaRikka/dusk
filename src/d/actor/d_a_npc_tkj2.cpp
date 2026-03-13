@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_tkj2.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -9,6 +9,21 @@
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 #include <cstring>
+
+class daNpc_Tkj2_HIO_c : public JORReflexible {
+public:
+    daNpc_Tkj2_HIO_c();
+    virtual ~daNpc_Tkj2_HIO_c() {}
+#if DEBUG
+    virtual void genMessage(JORMContext* ctx);
+#endif
+
+    /* 天空人（アクション用）- Sky People (For Action) */
+    /* 0x04 */ s8 child;
+    /* 0x08 */ f32 basic_size;          // 基本大きさ - Basic Size
+    /* 0x0C */ f32 hook_hit_size;       // フックヒット大きさ - Hook Hit Size
+    /* 0x10 */ f32 boots_struggle_sp;   // ブーツ時もがきSP - Boots Struggle SP
+};
 
 enum Tkj2_RES_File_ID {
     /* BCK */
@@ -62,11 +77,20 @@ enum Action {
 };
 
 daNpc_Tkj2_HIO_c::daNpc_Tkj2_HIO_c() {
-    field_0x4 = -1;
+    child = -1;
     basic_size = 1.0f;
     hook_hit_size = 1.0f;
     boots_struggle_sp = 2.0f;
 }
+
+#if DEBUG
+void daNpc_Tkj2_HIO_c::genMessage(JORMContext* ctx) {
+    ctx->genLabel("天空人（アクション用）", 0x80000001);
+    ctx->genSlider("基本大きさ", &basic_size, 0.0f, 3.0f);
+    ctx->genSlider("フックヒット大きさ", &hook_hit_size, 0.0f, 5.0f);
+    ctx->genSlider("ブーツ時もがきSP", &boots_struggle_sp, 0.0f, 100.0f);
+}
+#endif
 
 static void anm_init(npc_tkj2_class* i_this, int i_index, f32 i_morf, u8 i_attr, f32 i_rate) {
     i_this->mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Tkj2", i_index), i_attr, i_morf, i_rate, 0.0f, -1.0f);
@@ -75,9 +99,11 @@ static void anm_init(npc_tkj2_class* i_this, int i_index, f32 i_morf, u8 i_attr,
 
 static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
-        int jntNo = i_joint->getJntNo();
+        J3DJoint* joint = i_joint;
+        int jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         npc_tkj2_class* i_this = (npc_tkj2_class*)model->getUserArea();
+        int userArea = (int)i_this;
 
         if (i_this != NULL) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
@@ -100,21 +126,21 @@ static int nodeCallBack(J3DJoint* i_joint, int param_2) {
 }
 
 static int daNpc_Tkj2_Draw(npc_tkj2_class* i_this) {
-    fopAc_ac_c* a_this = &i_this->actor;
+    fopAc_ac_c* actor = &i_this->actor;
     J3DModel* model = i_this->mpModelMorf->getModel();
 
-    g_env_light.settingTevStruct(0, &a_this->current.pos, &a_this->tevStr);
-    g_env_light.setLightTevColorType_MAJI(model, &a_this->tevStr);
+    g_env_light.settingTevStruct(0, &actor->current.pos, &actor->tevStr);
+    g_env_light.setLightTevColorType_MAJI(model, &actor->tevStr);
     i_this->mpBtkAnm->entry(model->getModelData());
     i_this->mpBtpAnm->entry(model->getModelData());
     i_this->mpModelMorf->entryDL();
 
-    if (!fopAcM_checkCarryNow(a_this)) {
+    if (!fopAcM_checkCarryNow(actor)) {
         cXyz pos;
-        pos.set(a_this->current.pos.x, a_this->current.pos.y + 100.0f, a_this->current.pos.z);
+        pos.set(actor->current.pos.x, actor->current.pos.y + 100.0f, actor->current.pos.z);
         i_this->mShadowKey = dComIfGd_setShadow(i_this->mShadowKey, 1, model, &pos, 400.0f, 40.0f,
-                                                a_this->current.pos.y, i_this->mObjAcch.GetGroundH(), i_this->mObjAcch.m_gnd,
-                                                &a_this->tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+                                                actor->current.pos.y, i_this->mObjAcch.GetGroundH(), i_this->mObjAcch.m_gnd,
+                                                &i_this->actor.tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
     }
 
     return 1;
@@ -122,13 +148,13 @@ static int daNpc_Tkj2_Draw(npc_tkj2_class* i_this) {
 
 static void npc_tkj2_carry_check(npc_tkj2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     if (fopAcM_checkCarryNow(a_this)) {
-        cLib_offBit<u32>(a_this->attention_info.flags, 0x10);
+        cLib_offBit<u32>(a_this->attention_info.flags, fopAc_AttnFlag_CARRY_e);
         i_this->mAction = 1;
         i_this->field_0x60a = 0;
-        a_this->speed.y = 0.0f;
-        a_this->speedF = 0.0f;
+        a_this->speedF = a_this->speed.y = 0.0f;
         i_this->field_0x630 = 0;
         i_this->mStts.Init(100, 0, a_this);
     }
@@ -180,7 +206,7 @@ static void Wind_effect(npc_tkj2_class* i_this) {
                     }
                 }
 
-                i_this->field_0x5c4 = cM_atan2s(i_this->field_0x5fc.x, i_this->field_0x5fc.z);
+                i_this->field_0x5c4 = (s16)cM_atan2s(i_this->field_0x5fc.x, i_this->field_0x5fc.z);
                 i_this->field_0x5eb = 1;
             }
         }
@@ -207,7 +233,7 @@ static void CheckRoof(npc_tkj2_class* i_this) {
     for (int i = 0; i < 4; i++) {
         cLib_offsetPos(&end, &a_this->current.pos, a_this->shape_angle.y + i * 0x4000, &spc8);
         lin_chk.Set(&a_this->current.pos, &end, NULL);
-        
+
         if (dComIfG_Bgsp().LineCross(&lin_chk)) {
             cM3dGPla plane;
             dComIfG_Bgsp().GetTriPla(lin_chk, &plane);
@@ -217,7 +243,8 @@ static void CheckRoof(npc_tkj2_class* i_this) {
             cXyz spec(0.0f, 0.0f, 0.0f);
             cXyz spf8(0.0f, np->y, np->z);
 
-            i_this->field_0x5ec.z = -cM_atan2s(np->x, spec.abs(spf8));
+            f32 specAbs = spec.abs(spf8);
+            i_this->field_0x5ec.z = -cM_atan2s(np->x, specAbs);
             i_this->field_0x5ec.x = cM_atan2s(np->z, np->y);
             i_this->field_0x630 = 1;
             a_this->current.pos = lin_chk.GetCross();
@@ -258,14 +285,16 @@ static bool CheckWall(npc_tkj2_class* i_this, s16 param_2) {
         cM3dGPla plane;
         dComIfG_Bgsp().GetTriPla(lin_chk_1, &plane);
         cXyz* np = plane.GetNP();
+        f32 var_f30 = np->y;
         cXyz sp1e0(0.0f, 0.0f, 0.0f);
         cXyz sp1ec(0.0f, np->y, np->z);
         f32 fVar1 = sp1e0.abs(sp1ec);
         a_this->current.pos = lin_chk_1.GetCross();
-        s16 sVar1 = -cM_atan2s(np->x, fVar1);
-        s16 sVar2 = cM_atan2s(np->z, np->y);
-        cLib_chaseAngleS(&i_this->field_0x5ec.x, sVar2, 0x150);
-        cLib_chaseAngleS(&i_this->field_0x5ec.z, sVar1, 0x150);
+        s16 sp10, sp0E;
+        sp0E = -cM_atan2s(np->x, fVar1);
+        sp10 = cM_atan2s(np->z, np->y);
+        cLib_chaseAngleS(&i_this->field_0x5ec.x, sp10, 0x150);
+        cLib_chaseAngleS(&i_this->field_0x5ec.z, sp0E, 0x150);
         return true;
     }
 
@@ -273,6 +302,7 @@ static bool CheckWall(npc_tkj2_class* i_this, s16 param_2) {
 }
 
 static bool GndCheck2(npc_tkj2_class* i_this) {
+    fopAc_ac_c* actor = &i_this->actor;
     dBgS_ObjGndChk obj_gnd_chk;
     cXyz sp78(i_this->field_0x5b8.x, i_this->field_0x5b8.y + 100.0f, i_this->field_0x5b8.z);
     obj_gnd_chk.SetPos(&sp78);
@@ -302,8 +332,9 @@ static bool GndCheck(npc_tkj2_class* i_this, cXyz param_2) {
 
 static void npc_tkj2_normal(npc_tkj2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     cXyz sp38, sp44;
-    f32 fVar1 = 0.0f;
+    f32 var_f31 = 0.0f;
     cXyz sp50(0.0f, 100.0f, 0.0f);
 
     switch (i_this->field_0x60a) {
@@ -324,7 +355,7 @@ static void npc_tkj2_normal(npc_tkj2_class* i_this) {
                 sp38 = a_this->home.pos - a_this->current.pos;
                 sp38.x += cM_rndFX(300.0f);
                 sp38.z += cM_rndFX(300.0f);
-                i_this->field_0x5c4 = cM_atan2s(sp38.x, sp38.z);
+                i_this->field_0x5c4 = (s16)cM_atan2s(sp38.x, sp38.z);
 
                 if (GndCheck(i_this, sp50)) {
                     i_this->field_0x5c4 = a_this->current.angle.y + 0x8000 + (s16)cM_rndFX(4000.0f);
@@ -347,10 +378,10 @@ static void npc_tkj2_normal(npc_tkj2_class* i_this) {
                 mDoMtx_stack_c::multVec(&sp38, &sp44);
                 sp44.x += cM_rndFX(300.0f);
                 sp44.z += cM_rndFX(300.0f);
-                i_this->field_0x5c4 = cM_atan2s(sp44.x, sp44.z);
+                i_this->field_0x5c4 = (s16)cM_atan2s(sp44.x, sp44.z);
 
-                if (!CheckWall(i_this, i_this->field_0x5c4)) {
-                    i_this->field_0x5c4 += 0x8000;
+                if ((u8)CheckWall(i_this, i_this->field_0x5c4) == FALSE) {
+                    ANGLE_ADD_2(i_this->field_0x5c4, 0x8000);
                 }
 
                 i_this->field_0x610[0] = cM_rndF(60.0f) + 30.0f;
@@ -359,9 +390,9 @@ static void npc_tkj2_normal(npc_tkj2_class* i_this) {
             break;
 
         case 10:
-            fVar1 = 5.0f;
+            var_f31 = 5.0f;
             sp50.set(0.0f, 100.0f, 100.0f);
-            
+
             if (GndCheck(i_this, sp50)) {
                 i_this->field_0x60a = 1;
                 i_this->field_0x610[0] = 0;
@@ -369,16 +400,17 @@ static void npc_tkj2_normal(npc_tkj2_class* i_this) {
 
             if (i_this->field_0x610[0] == 0) {
                 i_this->field_0x60a = 0;
+                var_f31 = 0.0f;
                 a_this->speedF = 0.0f;
-                fVar1 = 3.0f;
+                var_f31 = 3.0f;
             }
             break;
 
         case 11:
-            fVar1 = 5.0f;
+            var_f31 = 5.0f;
 
-            if (!CheckWall(i_this, a_this->current.angle.y)) {
-                fVar1 = 0.0f;
+            if ((u8)CheckWall(i_this, a_this->current.angle.y) == FALSE) {
+                var_f31 = 0.0f;
             }
 
             if (i_this->field_0x610[0] == 0) {
@@ -388,10 +420,11 @@ static void npc_tkj2_normal(npc_tkj2_class* i_this) {
     }
 
     cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->field_0x5c4, 8, 0x400);
-    cLib_addCalc2(&a_this->speedF, fVar1, 1.0f, 5.0f);
+    cLib_addCalc2(&a_this->speedF, var_f31, 1.0f, 5.0f);
 }
 
 static cXyz return_pos_get(npc_tkj2_class* i_this) {
+    fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     dBgS_GndChk gnd_chk;
     cXyz sp84, sp90;
@@ -451,7 +484,8 @@ static s8 npc_tkj2_carry(npc_tkj2_class* i_this) {
             if (player->checkEquipHeavyBoots() && speed.y != 0.0f) {
                 i_this->mpModelMorf->setPlaySpeed(l_HIO.boots_struggle_sp);
             } else if (i_this->field_0x88c.ChkTgHit()) {
-                if (i_this->field_0x88c.GetTgHitGObj()->GetAtMtrl() == dCcD_MTRL_WIND) {
+                dCcD_GObjInf* tgHitGObj = i_this->field_0x88c.GetTgHitGObj();
+                if (tgHitGObj->GetAtMtrl() == dCcD_MTRL_WIND) {
                     i_this->mpModelMorf->setPlaySpeed(2.0f);
                     i_this->field_0x88c.ClrTgHit();
                 }
@@ -464,6 +498,7 @@ static s8 npc_tkj2_carry(npc_tkj2_class* i_this) {
     }
 
     if (!fopAcM_checkCarryNow(a_this)) {
+        cXyz* playerSpeed = fopAcM_GetSpeed_p(player);
         if (player->checkGrabThrow()) {
             i_this->mSound.startCreatureVoice(Z2SE_TKJ_V_THROWN_CRY, -1);
             i_this->field_0x60a = 0;
@@ -488,7 +523,7 @@ static s8 npc_tkj2_carry(npc_tkj2_class* i_this) {
         a_this->home.pos = return_pos_get(i_this);
     }
 
-    
+
     if (fopAcM_checkCarryNow(a_this)) {
         if (daPy_getLinkPlayerActorClass()->checkAutoJump()) {
             if (strcmp(dComIfGp_getStartStageName(), "D_MN07") == 0 && fopAcM_GetRoomNo(a_this) == 1) {
@@ -496,7 +531,7 @@ static s8 npc_tkj2_carry(npc_tkj2_class* i_this) {
             }
         }
     }
-    
+
     return rv;
 }
 
@@ -513,7 +548,7 @@ static void npc_tkj2_fly(npc_tkj2_class* i_this) {
             fVar1 = 1.0f;
             i_this->field_0x5b8 = a_this->home.pos;
             break;
-        
+
         case 1:
             fVar1 = 0.3f;
             break;
@@ -537,7 +572,7 @@ static void npc_tkj2_fly(npc_tkj2_class* i_this) {
         i_this->field_0x60a = 0;
         i_this->field_0x5f8 = 0x500;
 
-        if (GndCheck2(i_this)) {
+        if ((u8)GndCheck2(i_this) != FALSE) {
             i_this->field_0x5b8 = fopAcM_GetPosition(player);
         }
     } else if (i_this->mObjAcch.ChkGroundHit()) {
@@ -567,7 +602,7 @@ static void npc_tkj2_drop(npc_tkj2_class* i_this) {
         i_this->field_0x60a = 0;
         a_this->home.pos = a_this->current.pos;
     }
-    
+
     cLib_addCalc2(&a_this->speedF, 20.0f, 0.5f, 10.0f);
 }
 static void npc_tkj2_return(npc_tkj2_class* i_this) {
@@ -577,8 +612,8 @@ static void npc_tkj2_return(npc_tkj2_class* i_this) {
 
     sp4c.x = i_this->field_0x5b8.x - a_this->current.pos.x;
     sp4c.z = i_this->field_0x5b8.z - a_this->current.pos.z;
-    i_this->field_0x5c4 = cM_atan2s(sp4c.x, sp4c.z);
-    JMAFastSqrt(sp4c.x * sp4c.x + sp4c.z * sp4c.z);
+    i_this->field_0x5c4 = (s16)cM_atan2s(sp4c.x, sp4c.z);
+    f32 var_f29 = JMAFastSqrt(sp4c.x * sp4c.x + sp4c.z * sp4c.z);
     f32 fVar1;
 
     switch (i_this->field_0x60a) {
@@ -625,7 +660,7 @@ static void npc_tkj2_return(npc_tkj2_class* i_this) {
     }
 
     if (fVar2 < 100.0f) {
-        if (!GndCheck2(i_this)) {
+        if ((u8)GndCheck2(i_this) == FALSE) {
             anm_init(i_this, BCK_TKJ_FLY_FALL, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f);
             i_this->mAction = 6;
             i_this->field_0x60a = 0;
@@ -643,12 +678,15 @@ static void npc_tkj2_return(npc_tkj2_class* i_this) {
 }
 
 static void ObjHit(npc_tkj2_class* i_this) {
-    fopAc_ac_c* a_this = &i_this->actor;
-    
     i_this->field_0x620--;
     if (i_this->field_0x620 <= 0) {
         i_this->field_0x620 = 0;
     }
+
+    fopAc_ac_c* a_this = &i_this->actor;
+
+    fopAc_ac_c* player = daPy_getPlayerActorClass();
+    u8 cutType = (u8)daPy_getPlayerActorClass()->getCutType();
 
     if (i_this->field_0x620 > 0) {
         i_this->field_0x88c.ClrTgHit();
@@ -656,6 +694,8 @@ static void ObjHit(npc_tkj2_class* i_this) {
         if (i_this->field_0x630 == 0 && a_this->speedF != 0.0f) {
             cLib_addCalc2(&a_this->speedF, 10.0f, 1.0f, 5.0f);
         }
+
+        (void)0;
     } else if (i_this->field_0x88c.ChkTgHit()) {
         if (a_this->speedF == 0.0f) {
             i_this->field_0x88c.ClrTgHit();
@@ -693,81 +733,85 @@ static void action(npc_tkj2_class* i_this) {
     i_this->field_0x5cc = fopAcM_searchPlayerAngleY(a_this);
 
     s8 sVar1 = 0;
-    BOOL bVar1 = FALSE;
-    s8 sVar2 = 1;
+    s8 sp0D = 0;
+    BOOL sp24 = FALSE;
+    s8 sp0C = 0;
+    s8 sp0B = 1;
+    s8 sp0A = 1;
     cXyz sp50(0.0f, 100.0f, 0.0f);
     i_this->field_0xa8c = 0;
 
     switch (i_this->mAction) {
-        case ACTION_NORMAL:
-            npc_tkj2_normal(i_this);
-            sVar1 = 1;
-            bVar1 = TRUE;
+    case ACTION_NORMAL:
+        npc_tkj2_normal(i_this);
+        sVar1 = 1;
+        sp0D = 1;
+        sp24 = TRUE;
 
-            if (i_this->field_0x630 != 0) {
-                sVar2 = 0;
-            }
+        if (i_this->field_0x630 != 0) {
+            sp0B = 0;
+        }
 
-            if (i_this->field_0x88c.ChkTgHit()) {
-                cCcD_ObjHitInf* tgHitObj = i_this->field_0x88c.GetTgHitObj();
+        if (i_this->field_0x88c.ChkTgHit()) {
+            cCcD_ObjHitInf* tgHitObj = i_this->field_0x88c.GetTgHitObj();
 
-                if (tgHitObj != NULL) {
-                    if (tgHitObj->ChkAtType(AT_TYPE_BOOMERANG)) {
-                        mode_init_boomCarry(i_this);
-                    } else {
-                        tgHitObj->ChkAtType(AT_TYPE_HOOKSHOT);
-                    }
+            if (tgHitObj != NULL) {
+                if (tgHitObj->ChkAtType(AT_TYPE_BOOMERANG)) {
+                    mode_init_boomCarry(i_this);
+                } else {
+                    tgHitObj->ChkAtType(AT_TYPE_HOOKSHOT);
                 }
             }
+        }
 
-            ObjHit(i_this);
-            break;
+        ObjHit(i_this);
+        break;
 
-        case ACTION_CARRY:
-            sVar2 = npc_tkj2_carry(i_this);
-            break;
+    case ACTION_CARRY:
+        sp0B = npc_tkj2_carry(i_this);
+        break;
 
-        case ACTION_FLY:
-            npc_tkj2_fly(i_this);
-            break;
+    case ACTION_FLY:
+        npc_tkj2_fly(i_this);
+        break;
 
-        case ACTION_DROP:
-            npc_tkj2_drop(i_this);
-            cLib_addCalc2(&a_this->speedF, 5.0f, 0.3f, 1.0f);
+    case ACTION_DROP:
+        npc_tkj2_drop(i_this);
+        cLib_addCalc2(&a_this->speedF, 5.0f, 0.3f, 1.0f);
 
-            if (GndCheck(i_this, sp50)) {
-                i_this->field_0x5b8 = a_this->home.pos;
-                i_this->field_0x60a = 0;
-                a_this->speedF = 5.0f;
-                a_this->speed.y = 10.0f;
-                i_this->mAction = 4;
+        if (GndCheck(i_this, sp50)) {
+            i_this->field_0x5b8 = a_this->home.pos;
+            i_this->field_0x60a = 0;
+            a_this->speedF = 5.0f;
+            a_this->speed.y = 10.0f;
+            i_this->mAction = 4;
 
-                if (GndCheck2(i_this)) {
-                    i_this->field_0x5b8 = fopAcM_GetPosition(player);
-                }
-
-                i_this->field_0x5c4 = fopAcM_searchPlayerAngleY(a_this) + 0x8000;
-                i_this->field_0x5f8 = 0x500;
-            }
-            break;
-
-        case ACTION_DROP_2:
-            npc_tkj2_drop(i_this);
-
-            if (GndCheck2(i_this)) {
+            if ((u8)GndCheck2(i_this) != FALSE) {
                 i_this->field_0x5b8 = fopAcM_GetPosition(player);
-                i_this->field_0x60a = 0;
-                a_this->speedF = 5.0f;
-                a_this->speed.y = 10.0f;
-                i_this->mAction = 4;
-                i_this->field_0x5f8 = 0x500;
-                i_this->field_0x5c4 = fopAcM_searchPlayerAngleY(a_this) + 0x8000;
             }
-            break;
 
-        case ACTION_RETURN:
-            npc_tkj2_return(i_this);
-            break;
+            i_this->field_0x5c4 = fopAcM_searchPlayerAngleY(a_this) + 0x8000;
+            i_this->field_0x5f8 = 0x500;
+        }
+        break;
+
+    case ACTION_DROP_2:
+        npc_tkj2_drop(i_this);
+
+        if ((u8)GndCheck2(i_this) != FALSE) {
+            i_this->field_0x5b8 = fopAcM_GetPosition(player);
+            i_this->field_0x60a = 0;
+            a_this->speedF = 5.0f;
+            a_this->speed.y = 10.0f;
+            i_this->mAction = 4;
+            i_this->field_0x5f8 = 0x500;
+            i_this->field_0x5c4 = fopAcM_searchPlayerAngleY(a_this) + 0x8000;
+        }
+        break;
+
+    case ACTION_RETURN:
+        npc_tkj2_return(i_this);
+        break;
     }
 
     Wind_effect(i_this);
@@ -777,7 +821,7 @@ static void action(npc_tkj2_class* i_this) {
         i_this->field_0xa8c = 1;
     }
 
-    if (fopAcM_CheckStatus(a_this, fopAcM_STATUS_HOOK_CARRY_NOW)) {
+    if (fopAcM_CheckStatus(a_this, fopAcStts_HOOK_CARRY_NOW_e)) {
         i_this->field_0x5ea = 1;
     } else if (i_this->field_0x5ea != 0) {
         i_this->field_0x5ea = 0;
@@ -789,7 +833,7 @@ static void action(npc_tkj2_class* i_this) {
             a_this->speedF = 0.0f;
             a_this->speed.y = 0.0f;
         } else if (player->setForceGrab(a_this, 0, 1)) {
-            cLib_offBit<u32>(a_this->attention_info.flags, 0x10);
+            cLib_offBit<u32>(a_this->attention_info.flags, fopAc_AttnFlag_CARRY_e);
             i_this->mAction = 1;
             i_this->field_0x630 = 0;
             i_this->field_0x60a = 0;
@@ -809,38 +853,40 @@ static void action(npc_tkj2_class* i_this) {
             i_this->mAction = 3;
             i_this->field_0x60a = 0;
             a_this->speed.y = 0.0f;
-            bVar1 = TRUE;
+            sp24 = TRUE;
             i_this->field_0x610[0] = 15;
         }
     }
 
     cLib_addCalcAngleS2(&a_this->shape_angle.y, a_this->current.angle.y, 2, 0x2000);
 
-    if (i_this->field_0x630 == 0) {
-        if (i_this->field_0x630 != 0) {
-            mDoMtx_stack_c::ZXYrotS(i_this->field_0x5ec);
-            mDoMtx_stack_c::YrotM(a_this->current.angle.y);
-        } else {
-            mDoMtx_stack_c::YrotS(a_this->current.angle.y);
-        }
+    if (sp0A) {
+        if (i_this->field_0x630 == 0) {
+            if (i_this->field_0x630 != 0) {
+                mDoMtx_stack_c::ZXYrotS(i_this->field_0x5ec);
+                mDoMtx_stack_c::YrotM(a_this->current.angle.y);
+            } else {
+                mDoMtx_stack_c::YrotS(a_this->current.angle.y);
+            }
 
-        sp38.x = 0.0f;
-        sp38.y = 0.0f;
-        sp38.z = a_this->speedF;
-        mDoMtx_stack_c::multVec(&sp38, &sp44);
-        a_this->speed.x = sp44.x;
-        a_this->speed.z = sp44.z;
-        a_this->current.pos += a_this->speed;
-        a_this->speed.y += a_this->gravity;
+            sp38.x = 0.0f;
+            sp38.y = 0.0f;
+            sp38.z = a_this->speedF;
+            mDoMtx_stack_c::multVec(&sp38, &sp44);
+            a_this->speed.x = sp44.x;
+            a_this->speed.z = sp44.z;
+            a_this->current.pos += a_this->speed;
+            a_this->speed.y += a_this->gravity;
 
-        if (a_this->speed.y < -80.0f) {
-            a_this->speed.y = -80.0f;
+            if (a_this->speed.y < -80.0f) {
+                a_this->speed.y = -80.0f;
+            }
         }
     }
 
     if (!fopAcM_checkCarryNow(a_this)) {
         cXyz* ccMoveP = i_this->mStts.GetCCMoveP();
-        
+
         if (ccMoveP != NULL) {
             a_this->current.pos.x += ccMoveP->x;
             a_this->current.pos.y += ccMoveP->y;
@@ -848,7 +894,7 @@ static void action(npc_tkj2_class* i_this) {
         }
     }
 
-    if (sVar2) {
+    if (sp0B) {
         i_this->mObjAcch.CrrPos(dComIfG_Bgsp());
     }
 
@@ -868,30 +914,30 @@ static void action(npc_tkj2_class* i_this) {
         i_this->field_0x5e4 = 0.0f;
     }
 
-    s16 sVar3 = 0;
-    s16 sVar4 = 0;
-    s16 sVar5 = BREG_S(0) + 6000;
-    s16 sVar6 = BREG_S(1) + 9000;
+    s16 sp18 = 0;
+    s16 sp16 = 0;
 
     if (i_this->field_0xa8c != 0) {
         sp38 = player->eyePos - a_this->current.pos;
         sp38.y += TREG_F(1) + -110.0f;
-        s16 sVar7 = a_this->shape_angle.y - i_this->field_0x5cc;
+        s16 sp14 = a_this->shape_angle.y - i_this->field_0x5cc;
 
-        if (sVar7 < 0x4000 && sVar7 > -0x4000) {
-            sVar3 = cM_atan2s(sp38.x, sp38.z) - a_this->shape_angle.y;
-            sVar4 = (s16)cM_atan2s(sp38.y, JMAFastSqrt(sp38.x * sp38.x + sp38.z * sp38.z));
-            
-            if (sVar3 > sVar6) {
-                sVar3 = sVar6;
-            } else if (sVar3 < -sVar6) {
-                sVar3 = -sVar6;
+        if (sp14 < 0x4000 && sp14 > -0x4000) {
+            sp18 = cM_atan2s(sp38.x, sp38.z) - a_this->shape_angle.y;
+            sp16 = (s16)cM_atan2s(sp38.y, JMAFastSqrt(sp38.x * sp38.x + sp38.z * sp38.z));
+            s16 sp12 = BREG_S(0) + 6000;
+            s16 sp10 = BREG_S(1) + 9000;
+
+            if (sp18 > sp10) {
+                sp18 = sp10;
+            } else if (sp18 < (s16)-sp10) {
+                sp18 = -sp10;
             }
 
-            if (sVar4 > sVar5) {
-                sVar4 = sVar5;
-            } else if (sVar4 < -sVar5) {
-                sVar4 = -sVar5;
+            if (sp16 > sp12) {
+                sp16 = sp12;
+            } else if (sp16 < (s16)-sp12) {
+                sp16 = -sp12;
             }
         }
 
@@ -903,8 +949,8 @@ static void action(npc_tkj2_class* i_this) {
         i_this->field_0xa94 = 0;
     }
 
-    cLib_addCalcAngleS2(&i_this->field_0xa8e, sVar3, 2, 0x600);
-    cLib_addCalcAngleS2(&i_this->field_0xa90, sVar4, 2, 0x600);
+    cLib_addCalcAngleS2(&i_this->field_0xa8e, sp18, 2, 0x600);
+    cLib_addCalcAngleS2(&i_this->field_0xa90, sp16, 2, 0x600);
     cLib_addCalcAngleS2(&i_this->field_0xa92, i_this->field_0xa94, 4, 300);
 
     if (i_this->field_0x5f2 != 0) {
@@ -921,7 +967,7 @@ static void action(npc_tkj2_class* i_this) {
                 i_this->field_0x5f2 = 0;
                 i_this->field_0x5f3 = 0;
             } else if (player->setForceGrab(a_this, 0, 1)) {
-                cLib_offBit<u32>(a_this->attention_info.flags, 0x10);
+                cLib_offBit<u32>(a_this->attention_info.flags, fopAc_AttnFlag_CARRY_e);
                 i_this->mAction = 1;
                 i_this->field_0x630 = 0;
                 i_this->field_0x60a = 0;
@@ -942,7 +988,7 @@ static void action(npc_tkj2_class* i_this) {
             i_this->field_0x5f3 = 1;
         } else if (i_this->mBoomerangMove.posMove(&a_this->current.pos, &a_this->shape_angle.y, NULL, 0x1C00) != 0) {
             i_this->mBoomerangMove.bgCheckAfterOffset(&a_this->current.pos);
-            a_this->current.pos.y += 0.5f;
+            a_this->current.pos.y += 0.5f + yREG_F(19);
         }
     }
 
@@ -950,7 +996,7 @@ static void action(npc_tkj2_class* i_this) {
         npc_tkj2_carry_check(i_this);
     }
 
-    if (bVar1) {
+    if (sp24) {
         cLib_onBit<u32>(a_this->attention_info.flags, fopAc_AttnFlag_CARRY_e);
     } else {
         cLib_offBit<u32>(a_this->attention_info.flags, fopAc_AttnFlag_CARRY_e);
@@ -986,7 +1032,7 @@ static int daNpc_Tkj2_Execute(npc_tkj2_class* i_this) {
 
     mDoMtx_stack_c::ZXYrotM(a_this->shape_angle);
     mDoMtx_stack_c::scaleM(l_HIO.basic_size, l_HIO.basic_size, l_HIO.basic_size);
-    
+
     J3DModel* model = i_this->mpModelMorf->getModel();
     model->setBaseTRMtx(mDoMtx_stack_c::get());
     i_this->mpModelMorf->play(0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
@@ -1026,11 +1072,15 @@ static int daNpc_Tkj2_IsDelete(npc_tkj2_class* i_this) {
 
 static int daNpc_Tkj2_Delete(npc_tkj2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
+    fopAcM_RegisterDeleteID(i_this, "Npc_Tkj2");
 
     dComIfG_resDelete(&i_this->mPhase, "Tkj2");
 
     if (i_this->field_0xa9c != 0) {
         hio_set = 0;
+#if DEBUG
+        mDoHIO_deleteChild(l_HIO.child);
+#endif
     }
 
     if (a_this->heap != NULL) {
@@ -1077,51 +1127,50 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-static cPhs_Step daNpc_Tkj2_Create(fopAc_ac_c* a_this) {
-    fopAcM_ct(a_this, npc_tkj2_class);
-    npc_tkj2_class* i_this = (npc_tkj2_class*)a_this;
+static cPhs_Step daNpc_Tkj2_Create(fopAc_ac_c* i_this) {
+    npc_tkj2_class* tkj2 = (npc_tkj2_class*)i_this;
+    fopAcM_ct(&tkj2->actor, npc_tkj2_class);
 
-    cPhs_Step phase = dComIfG_resLoad(&i_this->mPhase, "Tkj2");
+    cPhs_Step phase = dComIfG_resLoad(&tkj2->mPhase, "Tkj2");
     if (phase == cPhs_COMPLEATE_e) {
-        OS_REPORT("NPC_TKJ2 PARAM %x\n", fopAcM_GetParam(a_this));
+        OS_REPORT("NPC_TKJ2 PARAM %x\n", fopAcM_GetParam(i_this));
 
-        i_this->field_0x5b4 = fopAcM_GetParam(a_this);
-        a_this->shape_angle.x = 0;
-        a_this->current.angle.x = 0;
+        tkj2->field_0x5b4 = fopAcM_GetParam(i_this);
+        i_this->current.angle.x = i_this->shape_angle.x = 0;
 
-        if (!fopAcM_entrySolidHeap(a_this, useHeapInit, 0x2F00)) {
+        if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x2F00)) {
             OS_REPORT("//////////////NPC_TKJ2 SET NON !!\n");
             return cPhs_ERROR_e;
         }
 
         if (hio_set == 0) {
-            i_this->field_0xa9c = 1;
+            tkj2->field_0xa9c = 1;
             hio_set = 1;
-            l_HIO.field_0x4 = -1;
+            // "Sky people (for action)"
+            l_HIO.child = mDoHIO_CREATE_CHILD("天空人（アクション用）", &l_HIO);
         }
 
         #if DEBUG
-        fopAcM_OnStatus(a_this, 0);
+        fopAcM_OnStatus(i_this, 0);
         #endif
 
-        a_this->attention_info.flags = 0;
-        i_this->mAction = 0;
+        i_this->attention_info.flags = 0;
+        tkj2->mAction = 0;
 
-        fopAcM_SetMtx(a_this, i_this->mpModelMorf->getModel()->getBaseTRMtx());
-        i_this->mObjAcch.Set(fopAcM_GetPosition_p(a_this), fopAcM_GetOldPosition_p(a_this), a_this, 1, &i_this->mAcchCir,
-                             fopAcM_GetSpeed_p(a_this), NULL, NULL);
-        i_this->mAcchCir.SetWall(70.0f, 80.0f);
-        a_this->health = 100;
-        a_this->field_0x560 = 100;
+        fopAcM_SetMtx(i_this, tkj2->mpModelMorf->getModel()->getBaseTRMtx());
+        tkj2->mObjAcch.Set(fopAcM_GetPosition_p(i_this), fopAcM_GetOldPosition_p(i_this), i_this, 1, &tkj2->mAcchCir,
+                             fopAcM_GetSpeed_p(i_this), NULL, NULL);
+        tkj2->mAcchCir.SetWall(70.0f, 80.0f);
+        i_this->field_0x560 = i_this->health = 100;
 
-        if (i_this->field_0x5b4 == 1) {
-            CheckRoof(i_this);
+        if (tkj2->field_0x5b4 == 1) {
+            CheckRoof(tkj2);
         }
 
-        if (i_this->field_0x630 != 0) {
-            i_this->mStts.Init(0xFF, 0, a_this);
+        if (tkj2->field_0x630 != 0) {
+            tkj2->mStts.Init(0xFF, 0, i_this);
         } else {
-            i_this->mStts.Init(100, 0, a_this);
+            tkj2->mStts.Init(100, 0, i_this);
         }
 
         static dCcD_SrcSph cc_sph_src = {
@@ -1136,14 +1185,14 @@ static cPhs_Step daNpc_Tkj2_Create(fopAc_ac_c* a_this) {
             } // mSphAttr
         };
 
-        i_this->field_0x88c.Set(cc_sph_src);
-        i_this->field_0x88c.SetStts(&i_this->mStts);
-        a_this->attention_info.distances[fopAc_attn_CARRY_e] = 7;
+        tkj2->field_0x88c.Set(cc_sph_src);
+        tkj2->field_0x88c.SetStts(&tkj2->mStts);
+        i_this->attention_info.distances[fopAc_attn_CARRY_e] = 7;
 
-        i_this->mSound.init(&a_this->current.pos, &a_this->eyePos, 3, 1);
-        i_this->field_0x88c.OnTgNoHitMark();
-        i_this->field_0x5fc.set(0.0f, 0.0f, 0.0f);
-        daNpc_Tkj2_Execute(i_this);
+        tkj2->mSound.init(&i_this->current.pos, &i_this->eyePos, 3, 1);
+        tkj2->field_0x88c.OnTgNoHitMark();
+        tkj2->field_0x5fc.set(0.0f, 0.0f, 0.0f);
+        daNpc_Tkj2_Execute(tkj2);
     }
 
     return phase;
@@ -1158,18 +1207,22 @@ static actor_method_class l_daNpc_Tkj2_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_TKJ2 = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_NPC_TKJ2,          // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(npc_tkj2_class), // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  696,                    // mPriority
-  &l_daNpc_Tkj2_Method,   // sub_method
-  0x000C4000,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_0_e,      // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_TKJ2_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(npc_tkj2_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_TKJ2_e,
+    /* Actor SubMtd */ &l_daNpc_Tkj2_Method,
+#if PLATFORM_SHIELD || VERSION == VERSION_WII_USA_R2 || VERSION == VERSION_WII_JPN
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e,
+#else
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+#endif
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

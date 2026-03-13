@@ -47,7 +47,7 @@ void* searchSpiralSub(void* i_actor, void* i_data) {
     fopAc_ac_c* other = (fopAc_ac_c*)i_data;
 
     if (actor != NULL && fopAcM_IsActor(actor)) {
-        if (fopAcM_GetProfName(actor) == PROC_SPIRAL_DOOR && actor != other) {
+        if (fopAcM_GetProfName(actor) == fpcNm_SPIRAL_DOOR_e && actor != other) {
             if (door_param2_c::getBRoomNo(actor) == door_param2_c::getBRoomNo(other)) {
                 return actor;
             }
@@ -209,7 +209,6 @@ int daSpiral_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-// DEBUG NONMATCHING - regalloc
 int daSpiral_c::CreateHeap() {
     J3DModelData* modelData = getModelData();
     JUT_ASSERT(338, modelData != NULL);
@@ -223,35 +222,38 @@ int daSpiral_c::CreateHeap() {
         return 0;
     }
 
-    cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(getAlwaysArcName(), getSpiralDzbName(mType));
-    JUT_ASSERT(356, bgd != NULL);
-    bool spiral_rt = mpSpiralDzb->Set(bgd, 1, &mSpiralBgMtx);
-    if (spiral_rt == true) {
-        return 0;
+    {
+        cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(getAlwaysArcName(), getSpiralDzbName(mType));
+        JUT_ASSERT(356, bgd != NULL);
+        bool spiral_rt = mpSpiralDzb->Set(bgd, 1, &mSpiralBgMtx);
+        if (spiral_rt == true) {
+            return 0;
+        }
+
+        mDoorDarkDzb = JKR_NEW dBgW();
+        if (mDoorDarkDzb == NULL) {
+            return 0;
+        }
     }
 
-    mDoorDarkDzb = JKR_NEW dBgW();
-    if (mDoorDarkDzb == NULL) {
-        return 0;
-    }
+    {
+        cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(getAlwaysArcName(), getDzb());
+        JUT_ASSERT(375, bgd != NULL);
 
-    bgd = (cBgD_t*)dComIfG_getObjectRes(getAlwaysArcName(), getDzb());
-    JUT_ASSERT(375, bgd != NULL);
+        cXyz dzb_pos(l_dzb_offset);
+        mDoMtx_stack_c::YrotS(home.angle.y);
+        mDoMtx_stack_c::multVec(&dzb_pos, &dzb_pos);
+        mDoMtx_stack_c::transS(current.pos.x + dzb_pos.x, current.pos.y + dzb_pos.y, current.pos.z + dzb_pos.z);
+        mDoMtx_stack_c::YrotM(home.angle.y);
+        cMtx_copy(mDoMtx_stack_c::get(), mDoorDarkBgMtx);
 
-    cXyz dzb_pos(l_dzb_offset);
-    mDoMtx_stack_c::YrotS(home.angle.y);
-    mDoMtx_stack_c::multVec(&dzb_pos, &dzb_pos);
-    mDoMtx_stack_c::transS(current.pos.x + dzb_pos.x, current.pos.y + dzb_pos.y, current.pos.z + dzb_pos.z);
-    mDoMtx_stack_c::YrotM(home.angle.y);
-    cMtx_copy(mDoMtx_stack_c::get(), mDoorDarkBgMtx);
-
-    bool dark_rt = mDoorDarkDzb->Set(bgd, 1, &mDoorDarkBgMtx);
-    if (dark_rt == true) {
-        return 0;
+        bool dark_rt = mDoorDarkDzb->Set(bgd, 1, &mDoorDarkBgMtx);
+        if (dark_rt == true) {
+            return 0;
+        }
     }
 
     if (checkMakeStop() && !mStop.create(this)) {
-        int _;
         return 0;
     }
 
@@ -637,7 +639,7 @@ void daSpiral_c::setPartner() {
     JUT_ASSERT(1065, actor);
 
     dComIfGp_event_setDoorPartner(actor);
-    fopAcM_OnStatus(actor, 0x8000);
+    fopAcM_OnStatus(actor, fopAcStts_STAFF_PRIMARY_e);
 }
 
 void daSpiral_c::clrPartner() {
@@ -805,11 +807,8 @@ BOOL daSpiral_c::drawCheck(int) {
 }
 
 #if DEBUG
-// DEBUG NONMATCHING - stack
 void daSpiral_c::debugDraw() {
-    GXColor spC = {0xFF, 0xFF, 0xFF, 0xFF};
-    GXColor sp8 = spC;
-    GXColor color = sp8;
+    GXColor color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
 
     cXyz sp68[4];
     cXyz sp38[4];
@@ -843,7 +842,7 @@ void daSpiral_c::debugDraw() {
     }
 
     if (KREG_S(9) == 1000) {
-        dDbVw_drawQuadOpa(sp68, spC, TRUE);
+        dDbVw_drawQuadOpa(sp68, color, TRUE);
         dDbVw_drawSphereXlu(current.pos, 30.0f, color, TRUE);
     }
 
@@ -1193,18 +1192,18 @@ static actor_method_class l_daSpiral_Method = {
 #endif
 
 actor_process_profile_definition g_profile_SPIRAL_DOOR = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_SPIRAL_DOOR,       // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(daSpiral_c),                  // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    301,                    // mPriority
-    DASPIRAL_METHODS,     // sub_method
-    0x44000,                // mStatus
-    fopAc_ACTOR_e,          // mActorType
-    fopAc_CULLBOX_6_e,      // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SPIRAL_DOOR_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daSpiral_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_SPIRAL_DOOR_e,
+    /* Actor SubMtd */ DASPIRAL_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

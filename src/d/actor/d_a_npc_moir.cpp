@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_moir.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -43,7 +43,7 @@ enum MoiR1_RES_File_ID {
 };
 
 enum MoiR2_RES_File_ID {
-    /* BCK */ 
+    /* BCK */
     /* 0x04 */ BCK_MOIR_DRIVEAWAY = 0x4,
     /* 0x05 */ BCK_MOIR_F_DRIVEAWAY,
     /* 0x06 */ BCK_MOIR_F_FUE,
@@ -311,7 +311,7 @@ cPhs_Step daNpcMoiR_c::Create() {
             return cPhs_ERROR_e;
         }
 
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
         mMode = MODE_2;
     }
 
@@ -521,15 +521,15 @@ int daNpcMoiR_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
 
 void daNpcMoiR_c::searchActors() {
     if (mActorMngr[1].getActorP() == NULL) {
-        mActorMngr[1].entry(fopAcM_SearchByName(PROC_NPC_ASH));
+        mActorMngr[1].entry(fopAcM_SearchByName(fpcNm_NPC_ASH_e));
     }
 
     if (mActorMngr[2].getActorP() == NULL) {
-        mActorMngr[2].entry(fopAcM_SearchByName(PROC_NPC_SHAD));
+        mActorMngr[2].entry(fopAcM_SearchByName(fpcNm_NPC_SHAD_e));
     }
 
     if (mActorMngr[3].getActorP() == NULL) {
-        mActorMngr[3].entry(fopAcM_SearchByName(PROC_NPC_RAFREL));
+        mActorMngr[3].entry(fopAcM_SearchByName(fpcNm_NPC_RAFREL_e));
     }
 }
 
@@ -941,7 +941,7 @@ void daNpcMoiR_c::lookat() {
     switch (mLookMode) {
         case LOOK_NONE:
             break;
-            
+
         case LOOK_RESET:
             bVar1 = TRUE;
             break;
@@ -982,7 +982,7 @@ void daNpcMoiR_c::lookat() {
         mLookat.setAttnPos(0);
     }
 
-    mLookat.setParam(body_angleX_min, body_angleX_max, body_angleY_min, body_angleY_max, 0.0f, 0.0f, 0.0f, 0.0f, 
+    mLookat.setParam(body_angleX_min, body_angleX_max, body_angleY_min, body_angleY_max, 0.0f, 0.0f, 0.0f, 0.0f,
                         head_angleX_min, head_angleX_max, head_angleY_min, head_angleY_max, mCurAngle.y, spd0);
     mLookat.calc(this, model->getBaseTRMtx(), local_dc, bVar1, sVar1, FALSE);
 }
@@ -1567,7 +1567,7 @@ bool daNpcMoiR_c::leave(void* param_1) {
             setMotion(MOT_RUN, -1.0f, 0);
             mTurnMode = 0;
             speedF = 0.0f;
-            fopAcM_SearchByName(PROC_NPC_TK, (fopAc_ac_c**)&actor_p);
+            fopAcM_SearchByName(fpcNm_NPC_TK_e, (fopAc_ac_c**)&actor_p);
 
             if (actor_p != NULL) {
                 actor_p->setAway();
@@ -1721,7 +1721,7 @@ BOOL daNpcMoiR_c::EvCut_Appear2(int i_cutIndex) {
                 setExpression(EXPR_NONE, -1.0f);
                 setMotion(MOT_TAKAJO_NI, -1.0f, 0);
                 mTurnMode = 0;
-                ni_class* actor_p = (ni_class*)fopAcM_SearchByName(PROC_NI);
+                ni_class* actor_p = (ni_class*)fopAcM_SearchByName(fpcNm_NI_e);
 
                 if (actor_p != NULL) {
                     actor_p->changeMode();
@@ -1791,7 +1791,7 @@ BOOL daNpcMoiR_c::EvCut_Appear2(int i_cutIndex) {
 
         case '0005':
             if (talkProc(NULL, TRUE, NULL)) {
-                ni_class* actor_p = (ni_class*)fopAcM_SearchByName(PROC_NI);
+                ni_class* actor_p = (ni_class*)fopAcM_SearchByName(fpcNm_NI_e);
 
                 if (actor_p != NULL) {
                     actor_p->changeMode();
@@ -1986,7 +1986,7 @@ void daNpcMoiR_c::setAttnPos() {
     sp58.y = current.pos.y;
     field_0xca0.SetC(sp58);
     field_0xca0.SetH(mpHIO->m.common.height);
-    
+
     f32 fVar1;
     if (mMode == MODE_SIT) {
         fVar1 = 40.0f;
@@ -2020,18 +2020,18 @@ static actor_method_class daNpcMoiR_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_MOIR = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_NPC_MOIR,          // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daNpcMoiR_c),    // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  415,                    // mPriority
-  &daNpcMoiR_MethodTable, // sub_method
-  0x00040100,             // mStatus
-  fopAc_NPC_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_MOIR_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcMoiR_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_MOIR_e,
+    /* Actor SubMtd */ &daNpcMoiR_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

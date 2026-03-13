@@ -1096,7 +1096,7 @@ inline int daDemo00_c::execute() {
                         case 2: {
                             u16 sp0A = sp0E & 0x3FFF;
                             if ((sp0E & 0xC000) == 0) {
-                                fopAcM_create(PROC_MOVIE_PLAYER, sp0A, NULL, fopAcM_GetRoomNo(this), NULL, NULL, 0xFF);
+                                fopAcM_create(fpcNm_MOVIE_PLAYER_e, sp0A, NULL, fopAcM_GetRoomNo(this), NULL, NULL, 0xFF);
                                 mDoGph_gInf_c::fadeOut(1.0f);
                             } else {
                                 switch (sp0A) {
@@ -1896,18 +1896,18 @@ static actor_method_class l_daDemo00_Method = {
 };
 
 actor_process_profile_definition g_profile_DEMO00 = {
-  fpcLy_CURRENT_e,       // mLayerID
-  7,                     // mListID
-  fpcPi_CURRENT_e,       // mListPrio
-  PROC_DEMO00,           // mProcName
-  &g_fpcLf_Method.base, // sub_method
-  sizeof(daDemo00_c),    // mSize
-  0,                     // mSizeOther
-  0,                     // mParameters
-  &g_fopAc_Method.base,  // sub_method
-  685,                   // mPriority
-  &l_daDemo00_Method,    // sub_method
-  0x00044000,            // mStatus
-  fopAc_ACTOR_e,         // mActorType
-  fopAc_CULLBOX_0_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DEMO00_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daDemo00_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_DEMO00_e,
+    /* Actor SubMtd */ &l_daDemo00_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

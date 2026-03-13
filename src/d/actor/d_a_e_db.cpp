@@ -1752,7 +1752,7 @@ static void action(e_db_class* i_this) {
         spA = TRUE;
         actor->field_0x566 = 1;
         sound_pl_search = TRUE;
-        fopAcM_OffStatus(actor, 0x10000);
+        fopAcM_OffStatus(actor, fopAcStts_UNK_0x10000_e);
         break;
     case ACTION_E_DEAD:
         e_db_e_dead(i_this);
@@ -2190,7 +2190,7 @@ static int daE_DB_Create(fopAc_ac_c* i_this) {
             a_this->field_0x850 = 1;
         }
 
-        a_this->leaf_actor_id = fopAcM_createChild(PROC_E_DB_LEAF, fopAcM_GetID(i_this), 0, &i_this->current.pos, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, NULL, -1, NULL);
+        a_this->leaf_actor_id = fopAcM_createChild(fpcNm_E_DB_LEAF_e, fopAcM_GetID(i_this), 0, &i_this->current.pos, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, NULL, -1, NULL);
         daE_DB_Execute(a_this);
     }
 
@@ -2206,18 +2206,18 @@ static actor_method_class l_daE_DB_Method = {
 };
 
 actor_process_profile_definition g_profile_E_DB = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_E_DB,              // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(e_db_class),     // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    136,                    // mPriority
-    &l_daE_DB_Method,       // sub_method
-    0x10050120,             // mStatus
-    fopAc_ENEMY_e,          // mActorType
-    fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_DB_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_db_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_DB_e,
+    /* Actor SubMtd */ &l_daE_DB_Method,
+    /* Status       */ fopAcStts_UNK_0x10000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x10000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x20_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

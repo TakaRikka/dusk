@@ -9,7 +9,7 @@
 
 static void rideCallBack(dBgW* param_0, fopAc_ac_c* param_1, fopAc_ac_c* param_2) {
     UNUSED(param_0);
-    if (fopAcM_GetName(param_2) == PROC_ALINK) {
+    if (fopAcM_GetName(param_2) == fpcNm_ALINK_e) {
         nObjMHasu::daObjMHasu_c* hasu = (nObjMHasu::daObjMHasu_c*)(param_1);
         hasu->setRideFlag(true);
         hasu->setHasuCount(param_2->speedF);
@@ -185,18 +185,18 @@ actor_method_class daObjMHasu_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_MHasu = {
-  fpcLy_CURRENT_e,                   // mLayerID
-  3,                                 // mListID
-  fpcPi_CURRENT_e,                   // mListPrio
-  PROC_Obj_MHasu,                    // mProcName
-  &g_fpcLf_Method.base,             // sub_method
-  sizeof(nObjMHasu::daObjMHasu_c),   // mSize
-  0,                                 // mSizeOther
-  0,                                 // mParameters
-  &g_fopAc_Method.base,              // sub_method
-  666,                               // mPriority
-  &daObjMHasu_METHODS,               // sub_method
-  0x00040100,                        // mStatus
-  fopAc_ACTOR_e,                     // mActorType
-  fopAc_CULLBOX_CUSTOM_e,            // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_MHasu_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(nObjMHasu::daObjMHasu_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_MHasu_e,
+    /* Actor SubMtd */ &daObjMHasu_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

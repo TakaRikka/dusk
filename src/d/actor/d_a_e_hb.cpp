@@ -1492,7 +1492,7 @@ static int daE_HB_Create(fopAc_ac_c* i_this) {
             a_this->field_0x851 = 1;
         }
 
-        a_this->leaf_actor_id = fopAcM_createChild(PROC_E_HB_LEAF, fopAcM_GetID(i_this), 0, &i_this->current.pos, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, NULL, -1, NULL);
+        a_this->leaf_actor_id = fopAcM_createChild(fpcNm_E_HB_LEAF_e, fopAcM_GetID(i_this), 0, &i_this->current.pos, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, NULL, -1, NULL);
         i_this->field_0x565 = (fopAcM_GetParam(i_this) & 0xFF0000) >> 0x10;
         i_this->field_0x564 = (fopAcM_GetParam(i_this) & 0xFF000000) >> 0x18;
 
@@ -1511,18 +1511,18 @@ static actor_method_class l_daE_HB_Method = {
 };
 
 actor_process_profile_definition g_profile_E_HB = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_E_HB,              // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(e_hb_class),     // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    140,                    // mPriority
-    &l_daE_HB_Method,       // sub_method
-    0x10050100,             // mStatus
-    fopAc_ENEMY_e,          // mActorType
-    fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_HB_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_hb_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_HB_e,
+    /* Actor SubMtd */ &l_daE_HB_Method,
+    /* Status       */ fopAcStts_UNK_0x10000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x10000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

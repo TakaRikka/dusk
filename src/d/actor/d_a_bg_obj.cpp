@@ -317,7 +317,7 @@ void daBgObj_c::initAtt() {
         (ce5_val << 2) |
         (cd3_val);
 
-    fopAc_ac_c* actor = fopAcM_fastCreate(PROC_Tag_Attp, actor_params, &current.pos, fopAcM_GetRoomNo(this),
+    fopAc_ac_c* actor = fopAcM_fastCreate(fpcNm_Tag_Attp_e, actor_params, &current.pos, fopAcM_GetRoomNo(this),
         &current.angle, &scale, -1, NULL, NULL);
 
     if (actor != NULL) {
@@ -1363,18 +1363,18 @@ static actor_method_class daBgObj_METHODS = {
 };
 
 actor_process_profile_definition g_profile_BG_OBJ = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_BG_OBJ,
-    &g_fpcLf_Method.base,
-    sizeof(daBgObj_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    752,
-    &daBgObj_METHODS,
-    0x10044100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BG_OBJ_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daBgObj_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_BG_OBJ_e,
+    /* Actor SubMtd */ &daBgObj_METHODS,
+    /* Status       */ fopAcStts_UNK_0x10000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

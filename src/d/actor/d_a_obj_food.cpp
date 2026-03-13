@@ -12,7 +12,7 @@
 #include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 static bool hio_set;
 
@@ -502,18 +502,18 @@ static actor_method_class l_daObj_Food_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_FOOD = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_OBJ_FOOD,
-    &g_fpcLf_Method.base,
-    sizeof(obj_food_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x2C8,
-    &l_daObj_Food_Method,
-    0x44100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_FOOD_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(obj_food_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_FOOD_e,
+    /* Actor SubMtd */ &l_daObj_Food_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

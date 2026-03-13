@@ -28,52 +28,6 @@ public:
     u8 rangeDisplay;
 };
 
-namespace {
-static dCcD_SrcCyl cc_hp_src = {
-    {
-        {0, {{0x0, 0x0, 0x0}, {0xd8000000, 0x3}, 0x0}},
-        {dCcD_SE_13, 0, 0, 0, {0}},
-        {dCcD_SE_NONE, 0, 0, 0, {6}},
-        {0},
-    },
-    {
-        {
-            {0.0f, 0.0f, 0.0f},
-            50.0f,
-            300.0f,
-        }
-    }
-};
-
-static dCcD_SrcSph cc_lamp_src = {
-    {
-        {0x0, {{0x0, 0x0, 0x0}, {0xD8FBFDFF, 0x43}, 0x75}},  // mObj
-        {dCcD_SE_13, 0x0, 0x0, 0x0, 0x0},                         // mGObjAt
-        {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x6},                       // mGObjTg
-        {0x0},                                                    // mGObjCo
-    },                                                            // mObjInf
-    {
-        {{0.0f, 0.0f, 0.0f}, 40.0f}  // mSph
-    }  // mSphAttr
-};
-
-static dCcD_SrcCyl cc_hp_at_src = {
-    {
-        {0, {{0x400, 0x1, 0xd}, {0x0, 0x0}, 0x0}},
-        {dCcD_SE_METAL, 0, 1, 0, {0}},
-        {dCcD_SE_NONE, 0, 0, 0, {2}},
-        {0},
-    },
-    {
-        {
-            {0.0f, 0.0f, 0.0f},
-            50.0f,
-            300.0f,
-        }
-    }
-};
-}  // namespace
-
 daE_HP_HIO_c::daE_HP_HIO_c() {
     mChild = -1;
     modelSize = 1.2f;
@@ -94,6 +48,52 @@ void daE_HP_HIO_c::genMessage(JORMContext* ctx) {
     ctx->genCheckBox("範囲表示(FINALでは不可)", &rangeDisplay, 0x1);
 }
 #endif
+
+namespace {
+static dCcD_SrcCyl cc_hp_src = {
+    {
+        {0, {{0x0, 0x0, 0x0}, {0xd8000000, 0x3}, 0x0}},
+        {dCcD_SE_13, 0, 0, 0, {0}},
+        {dCcD_SE_NONE, 0, 0, 0, {6}},
+        {0},
+    },
+    {
+            {
+                {0.0f, 0.0f, 0.0f},
+                50.0f,
+                300.0f,
+            }
+    }
+};
+
+static dCcD_SrcSph cc_lamp_src = {
+    {
+        {0x0, {{0x0, 0x0, 0x0}, {0xD8FBFDFF, 0x43}, 0x75}},  // mObj
+        {dCcD_SE_13, 0x0, 0x0, 0x0, 0x0},                         // mGObjAt
+        {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x6},                       // mGObjTg
+        {0x0},                                                    // mGObjCo
+    },                                                            // mObjInf
+    {
+            {{0.0f, 0.0f, 0.0f}, 40.0f}  // mSph
+    }  // mSphAttr
+};
+
+static dCcD_SrcCyl cc_hp_at_src = {
+    {
+        {0, {{0x400, 0x1, 0xd}, {0x0, 0x0}, 0x0}},
+        {dCcD_SE_METAL, 0, 1, 0, {0}},
+        {dCcD_SE_NONE, 0, 0, 0, {2}},
+        {0},
+    },
+    {
+            {
+                {0.0f, 0.0f, 0.0f},
+                50.0f,
+                300.0f,
+            }
+    }
+};
+}  // namespace
 
 int daE_HP_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     J3DJoint* joint = i_joint;
@@ -230,7 +230,8 @@ int daE_HP_c::draw() {
     mDoMtx_stack_c::multVec(&unkXyz1, &field_0x75c);
     mDoMtx_stack_c::transS(field_0x75c);
 
-    unkXyz1 = dComIfGp_getCamera(0)->view.lookat.eye - field_0x75c;
+    camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
+    unkXyz1 = camera->view.lookat.eye - field_0x75c;
     mDoMtx_stack_c::YrotM(unkXyz1.atan2sX_Z());
     mDoMtx_stack_c::XrotM((s16)unkXyz1.atan2sY_XZ());
     mDoMtx_stack_c::scaleM(l_HIO.modelSize, l_HIO.modelSize, l_HIO.modelSize);
@@ -250,7 +251,7 @@ int daE_HP_c::draw() {
         }
     }
 
-    mpMorf->getModel();
+    model = mpMorf->getModel();
     mpMorf->entryDL();
 
     if (checkDownFlg()) {
@@ -302,7 +303,8 @@ void daE_HP_c::setActionMode(int param_0, int i_mode) {
 }
 
 bool daE_HP_c::mChkDistance(f32 param_0) {
-    cXyz vecToPlayer = dComIfGp_getPlayer(0)->current.pos - current.pos;
+    fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
+    cXyz vecToPlayer = player->current.pos - current.pos;
     if (vecToPlayer.abs() < param_0) {
         return true;
     } else {
@@ -677,8 +679,7 @@ void daE_HP_c::executeDown() {
             field_0x772.z = 0;
 
             unkXyz1 = home.pos - current.pos;
-            latDist = unkXyz1.atan2sX_Z();
-            cMtx_YrotS(*calc_mtx, latDist);
+            cMtx_YrotS(*calc_mtx, unkXyz1.atan2sX_Z());
 
             unkXyz1.x = 0.0f;
             unkXyz1.y = 100.0f;
@@ -756,7 +757,7 @@ void daE_HP_c::executeDead() {
             fopAcM_delete(this);
         } else {
             if (field_0x784 == -1) {
-                field_0x784 = fopAcM_createItemForPresentDemo(&current.pos, fpcNm_ITEM_POU_SPIRIT, 0, -1,
+                field_0x784 = fopAcM_createItemForPresentDemo(&current.pos, dItemNo_POU_SPIRIT_e, 0, -1,
                                                               -1, 0, 0);
             }
 
@@ -812,7 +813,8 @@ void daE_HP_c::action() {
         break;
     }
 
-    if (checkBallModelDraw()) {
+    fopEn_enemy_c* enemy = this;
+    if (enemy->checkBallModelDraw()) {
         mSound2.startCreatureSoundLevel(Z2SE_EN_PO_SOUL, 0, -1);
     }
 
@@ -841,7 +843,7 @@ void daE_HP_c::action() {
                 }
 
                 field_0x772.x = -cM_atan2s(planeNormal->z, planeNormal->y);
-                field_0x772.z = cM_atan2s(planeNormal->x, planeNormal->y);
+                field_0x772.z = (s16)cM_atan2s(planeNormal->x, planeNormal->y);
             }
         } else if (mAction != 1 && mAction != 3) {
             gravity = 0.0f;
@@ -1318,18 +1320,18 @@ static actor_method_class l_daE_HP_Method = {
 };
 
 actor_process_profile_definition g_profile_E_HP = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_E_HP,               // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daE_HP_c),        // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    172,                     // mPriority
-    &l_daE_HP_Method,        // sub_method
-    0x00040100,              // mStatus
-    fopAc_ENEMY_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_HP_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_HP_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_HP_e,
+    /* Actor SubMtd */ &l_daE_HP_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

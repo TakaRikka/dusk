@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_lv4HsTarget.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 daLv4HsTarget_HIO_c::daLv4HsTarget_HIO_c() {}
 
@@ -91,18 +91,18 @@ static actor_method_class l_daLv4HsTarget_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Lv4HsTarget = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Obj_Lv4HsTarget,
-    &g_fpcLf_Method.base,
-    sizeof(daLv4HsTarget_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    640,
-    &l_daLv4HsTarget_Method,
-    0x40100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Lv4HsTarget_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daLv4HsTarget_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Lv4HsTarget_e,
+    /* Actor SubMtd */ &l_daLv4HsTarget_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -10,7 +10,7 @@
 #include "m_Do/m_Do_lib.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_menu_insect.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "f_op/f_op_camera_mng.h"
 #include <cstring>
 
@@ -24,7 +24,7 @@ daObj_AriHIO_c::daObj_AriHIO_c() {
     mScaleFemale = 2.0f;
 }
 
-static u8 const l_ari_itemno[2] = {fpcNm_ITEM_M_ANT, fpcNm_ITEM_F_ANT};
+static u8 const l_ari_itemno[2] = {dItemNo_M_ANT_e, dItemNo_F_ANT_e};
 
 void daObjARI_c::InitCcSph() {
     const static dCcD_SrcSph ccSphSrc = {
@@ -615,7 +615,7 @@ cPhs_Step daObjARI_c::create() {
         if (mLocation == LOC_UNK_2) {
             field_0x56c = 0;
             shape_angle.x -= 0x2000;
-            fopAcM_OnStatus(this, 0x4000);
+            fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
         } else {
             mDraw = true;
         }
@@ -740,18 +740,18 @@ static actor_method_class l_daObjARI_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Ari = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_Obj_Ari,
-    &g_fpcLf_Method.base,
-    sizeof(daObjARI_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x1E4,
-    &l_daObjARI_Method,
-    0xC0100,
-    fopAc_ENV_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ari_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjARI_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Ari_e,
+    /* Actor SubMtd */ &l_daObjARI_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -206,7 +206,7 @@ static f32 m_obj_dist;
 
 static void* s_obj_sub(void* param_0, void* param_1) {
     f32 obj_dist, abs_dist_to_player;
-    if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_Obj_Carry) {
+    if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == fpcNm_Obj_Carry_e) {
         if (!fpcM_IsCreating(fopAcM_GetID(param_0))) {
             obj_dist = fopAcM_searchActorDistanceXZ((fopAc_ac_c*)param_0, (fopAc_ac_c*)param_1);
 
@@ -498,7 +498,7 @@ bool daE_YM_c::checkSurpriseNear() {
         if (mDistToPlayer < my_val) {
             if (mSphCc.ChkCoHit()) {
                 cCcD_Obj* hit_obj = mSphCc.GetCoHitObj();
-                if (fopAcM_GetName(dCc_GetAc(hit_obj->GetAc())) == PROC_ALINK) {
+                if (fopAcM_GetName(dCc_GetAc(hit_obj->GetAc())) == fpcNm_ALINK_e) {
                     if (mType == 4) {
                         return checkRailSurprise();
                     }
@@ -711,7 +711,7 @@ void daE_YM_c::executeWait() {
                             field_0x6f0 = 0x14;
                             mMode = 3;
                             field_0x6a6 = 0;
-                            fopAcM_OnStatus(this, 0x4000);
+                            fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
                         }
                     }
             }
@@ -857,7 +857,7 @@ void daE_YM_c::executeEscape() {
         }
     }
     if (!dComIfGp_event_runCheck()) {
-        fopAcM_OffStatus(this, 0x4000);
+        fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
     }
     switch (mMode) {
         case 0:
@@ -1681,7 +1681,7 @@ bool daE_YM_c::setAttackMotion() {
 
     if (mSphCc.ChkAtHit()) {
         cCcD_Obj* at_hit_obj = mSphCc.GetAtHitObj();
-        if (fopAcM_GetName(dCc_GetAc(at_hit_obj->GetAc())) == PROC_ALINK) {
+        if (fopAcM_GetName(dCc_GetAc(at_hit_obj->GetAc())) == fpcNm_ALINK_e) {
             if (mAction != ACT_ATTACK_WALL) {
                 setActionMode(ACT_ATTACK_WALL);
             } else if (mMode == 4) {
@@ -2156,7 +2156,7 @@ void daE_YM_c::executeFlyAttack() {
             cLib_chaseF(&speedF, l_HIO.mFlyAttackSpeed * cM_ssin(tan_val), 3.0f);
             if (mSphCc.ChkAtHit()) {
                 fopAc_ac_c* hit_actor = dCc_GetAc(mSphCc.GetAtHitObj()->GetAc());
-                if (fopAcM_GetName(hit_actor) == PROC_ALINK) {
+                if (fopAcM_GetName(hit_actor) == fpcNm_ALINK_e) {
                     bckSetFly(7, 0, 0.0f, 1.0f);
                     speedF = speed.y = 0.0f;
                     mMode = 4;
@@ -2245,7 +2245,7 @@ bool daE_YM_c::checkRailDig() {
             field_0x6f0 = 0x14;
             mMode = 3;
             mAcchCir.SetWall(40.0f, 60.0f);
-            fopAcM_OnStatus(this, 0x4000);
+            fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
             return true;
         }
     }
@@ -2923,7 +2923,7 @@ void daE_YM_c::executeRiver() {
             mSound.startCreatureSoundLevel(Z2SE_EN_YM_FLY, 0, -1);
             if (mSphCc.ChkTgHit()) {
                 cCcD_Obj * tg_hit_obj = mSphCc.GetTgHitObj();
-                if (fopAcM_GetName(dCc_GetAc(tg_hit_obj->GetAc())) == PROC_KAGO) {
+                if (fopAcM_GetName(dCc_GetAc(tg_hit_obj->GetAc())) == fpcNm_KAGO_e) {
                     if (mpKago == tg_hit_obj->GetAc()) {
                         if (mpKago->getLockActor() == this) {
                             mpKago->setLockActor(NULL);
@@ -2968,7 +2968,7 @@ void daE_YM_c::executeRiver() {
 }
 
 static void* s_ym_sub(void* main_p, void* other_p) {
-    if (fopAcM_IsActor(main_p) && fopAcM_GetName(main_p) == PROC_E_YM) {
+    if (fopAcM_IsActor(main_p) && fopAcM_GetName(main_p) == fpcNm_E_YM_e) {
         if (!fpcM_IsCreating(fopAcM_GetID(main_p)) && main_p != other_p &&
             ((daE_YM_c*)main_p)->current.pos == ((daE_YM_c*)other_p)->current.pos)
         {
@@ -3721,18 +3721,18 @@ static actor_method_class l_daE_YM_Method = {
 };
 
 actor_process_profile_definition g_profile_E_YM = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_YM,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daE_YM_c),       // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  194,                    // mPriority
-  &l_daE_YM_Method,       // sub_method
-  0x00040100,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_YM_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_YM_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_YM_e,
+    /* Actor SubMtd */ &l_daE_YM_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

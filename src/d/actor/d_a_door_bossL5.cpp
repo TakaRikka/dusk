@@ -325,7 +325,7 @@ int daBdoorL5_c::createKey() {
         cXyz prevPos(current.pos);
         current.pos = home.pos;
         cXyz pos(0.0f, 0.0f, 50.0f);
-        mKeyHoleId = fopAcM_createChildFromOffset(PROC_OBJ_KEYHOLE, fopAcM_GetID(this), 0xffffff05,
+        mKeyHoleId = fopAcM_createChildFromOffset(fpcNm_OBJ_KEYHOLE_e, fopAcM_GetID(this), 0xffffff05,
                                                              &pos, fopAcM_GetRoomNo(this), &shape_angle,
                                                              &scale, -1, 0);
         current.pos = prevPos;
@@ -443,7 +443,7 @@ int daBdoorL5_c::actionEnd() {
 int daBdoorL5_c::execute() {
     static actionFunc l_action[4] = {&daBdoorL5_c::actionWait, &daBdoorL5_c::actionCloseWait, &daBdoorL5_c::actionOpen, &daBdoorL5_c::actionEnd};
     field_0x59c = -1;
-    if (fopAcM_CheckStatus(this, 0x1000)) {
+    if (fopAcM_CheckStatus(this, fopAcStts_STAFF_SHUTTER_e)) {
         field_0x59c = dComIfGp_evmng_getMyStaffId(l_staff_name, 0, 0);
         dMeter2Info_onGameStatus(2);
         demoProc();
@@ -503,18 +503,18 @@ static actor_method_class l_daBdoorL5_Method = {
 };
 
 actor_process_profile_definition g_profile_L5BOSS_DOOR = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_L5BOSS_DOOR,
-    &g_fpcLf_Method.base,
-    sizeof(daBdoorL5_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x12C,
-    &l_daBdoorL5_Method,
-    0x44000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_6_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_L5BOSS_DOOR_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daBdoorL5_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_L5BOSS_DOOR_e,
+    /* Actor SubMtd */ &l_daBdoorL5_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

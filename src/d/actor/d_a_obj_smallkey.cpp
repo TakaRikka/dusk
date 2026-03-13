@@ -34,18 +34,18 @@ static void* searchParentSub(void* i_actor, void* i_data) {
     fopAc_ac_c* a_other = (fopAc_ac_c*)i_data;
 
     if (a_actor != NULL && fopAcM_IsActor(a_actor)) {
-        if (fopAcM_GetProfName(a_actor) == PROC_OBJ_GM) {
+        if (fopAcM_GetProfName(a_actor) == fpcNm_OBJ_GM_e) {
             if (a_other->home.pos.abs(a_actor->home.pos) < 1.0f) {
                 return a_actor;
             }
-        } else if (fopAcM_GetProfName(a_actor) == PROC_E_GB) {
+        } else if (fopAcM_GetProfName(a_actor) == fpcNm_E_GB_e) {
             if (a_other->home.pos.abs(a_actor->home.pos) < 50.0f) {
                 return a_actor;
             }
 
             // “Small Key: position isn't synced with Big Baba!\n”
             OS_REPORT("\x1b[43;30m小さい鍵：デカババと位置がずれています！\n\x1b[m");
-        } else if (fopAcM_GetProfName(a_actor) == PROC_E_ZM) {
+        } else if (fopAcM_GetProfName(a_actor) == fpcNm_E_ZM_e) {
             f32 other_dist = a_other->home.pos.abs(a_actor->home.pos);
             u8 temp_r27 = fopAcM_GetParamBit(a_actor, 0, 8);
             if (other_dist < 10.0f && temp_r27 < 10) {
@@ -155,7 +155,7 @@ int daKey_c::create() {
         mIsPrmInit = TRUE;
     }
 
-    m_itemNo = fpcNm_ITEM_SMALL_KEY;
+    m_itemNo = dItemNo_SMALL_KEY_e;
 
     if (strcmp(dComIfGp_getStartStageName(), "F_SP118") == 0) {
         OS_REPORT(" SMKEY 0\n");
@@ -222,10 +222,10 @@ int daKey_c::actionInit() {
     void* pparent = fpcM_Search(searchParentSub, this);
     if (pparent != NULL) {
         parentActorID = fopAcM_GetID(pparent);
-        if (fopAcM_GetProfName(pparent) == PROC_OBJ_GM || fopAcM_GetProfName(pparent) == PROC_E_ZM) {
+        if (fopAcM_GetProfName(pparent) == fpcNm_OBJ_GM_e || fopAcM_GetProfName(pparent) == fpcNm_E_ZM_e) {
             hide();
             actionParentWaitInit();
-        } else if (fopAcM_GetProfName(pparent) == PROC_E_GB) {
+        } else if (fopAcM_GetProfName(pparent) == fpcNm_E_GB_e) {
             show();
             actionInitE_GB();
         }
@@ -250,7 +250,7 @@ int daKey_c::actionParentWait() {
     if (pparent == NULL) {
         show();
         actionWaitInit();
-    } else if (fopAcM_GetProfName(pparent) == PROC_E_ZM) {
+    } else if (fopAcM_GetProfName(pparent) == fpcNm_E_ZM_e) {
         current.pos = pparent->home.pos;
     } else {
         current.pos = pparent->current.pos;
@@ -399,7 +399,7 @@ int daKey_c::actionInitBoomerangCarry() {
 }
 
 int daKey_c::actionBoomerangCarry() {
-    fopAc_ac_c* pboomerang = fopAcM_SearchByName(PROC_BOOMERANG);
+    fopAc_ac_c* pboomerang = fopAcM_SearchByName(fpcNm_BOOMERANG_e);
     if (pboomerang != NULL) {
         current.pos = pboomerang->current.pos;
     } else {
@@ -559,18 +559,18 @@ static actor_method_class l_daKey_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_SmallKey = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_Obj_SmallKey,      // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(daKey_c),        // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    237,                    // mPriority
-    &l_daKey_Method,        // sub_method
-    0x00040100,             // mStatus
-    fopAc_ACTOR_e,          // mActorType
-    fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_SmallKey_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daKey_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_SmallKey_e,
+    /* Actor SubMtd */ &l_daKey_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

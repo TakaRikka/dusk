@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_lv3saka00.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "m_Do/m_Do_mtx.h"
 
 static char* l_arcName[] = {"Obj_saka", "Obj_saka2"};
@@ -184,18 +184,18 @@ static actor_method_class daObjLv3saka_METHODS = {
     (process_method_func)daObjLv3saka_MoveBGDraw};
 
 actor_process_profile_definition g_profile_Obj_Lv3R10Saka = {
-    fpcLy_CURRENT_e,         // mLayerID
-    3,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Obj_Lv3R10Saka,     // mProcName
-    &g_fpcLf_Method.base,   // sub_method
-    sizeof(daObjLv3saka_c),  // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    528,                     // mPriority
-    &daObjLv3saka_METHODS,   // sub_method
-    0x40100,                 // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Lv3R10Saka_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjLv3saka_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Lv3R10Saka_e,
+    /* Actor SubMtd */ &daObjLv3saka_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

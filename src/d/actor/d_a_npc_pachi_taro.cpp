@@ -1089,11 +1089,11 @@ void daNpc_Pachi_Taro_c::srchActors() {
     switch (mType) {
         case TYPE_0:
             if (mActorMngrs[0].getActorP() == NULL) {
-                mActorMngrs[0].entry(getNearestActorP(PROC_NPC_PACHI_MARO));
+                mActorMngrs[0].entry(getNearestActorP(fpcNm_NPC_PACHI_MARO_e));
             }
 
             if (mActorMngrs[1].getActorP() == NULL) {
-                mActorMngrs[1].entry(getNearestActorP(PROC_NPC_PACHI_BESU));
+                mActorMngrs[1].entry(getNearestActorP(fpcNm_NPC_PACHI_BESU_e));
             }
 
             if (mActorMngrs[2].getActorP() == NULL) {
@@ -1126,7 +1126,7 @@ void* daNpc_Pachi_Taro_c::_srch_DistTag1_main(void* i_actor, void* i_data) {
         return NULL;
     }
 
-    if (fopAcM_GetName(i_actor) != PROC_TAG_PATI) {
+    if (fopAcM_GetName(i_actor) != fpcNm_TAG_PATI_e) {
         return NULL;
     }
 
@@ -1148,7 +1148,7 @@ void* daNpc_Pachi_Taro_c::_srch_DistTag2_main(void* i_actor, void* i_data) {
         return NULL;
     }
 
-    if (fopAcM_GetName(i_actor) != PROC_TAG_PATI) {
+    if (fopAcM_GetName(i_actor) != fpcNm_TAG_PATI_e) {
         return NULL;
     }
 
@@ -1170,7 +1170,7 @@ void* daNpc_Pachi_Taro_c::_srch_EscapeTag1_main(void* i_actor, void* i_data) {
         return NULL;
     }
 
-    if (fopAcM_GetName(i_actor) != PROC_TAG_PATI) {
+    if (fopAcM_GetName(i_actor) != fpcNm_TAG_PATI_e) {
         return NULL;
     }
 
@@ -1192,7 +1192,7 @@ void* daNpc_Pachi_Taro_c::_srch_EscapeTag2_main(void* i_actor, void* i_data) {
         return NULL;
     }
 
-    if (fopAcM_GetName(i_actor) != PROC_TAG_PATI) {
+    if (fopAcM_GetName(i_actor) != fpcNm_TAG_PATI_e) {
         return NULL;
     }
 
@@ -2559,18 +2559,18 @@ static actor_method_class daNpc_Pachi_Taro_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_PACHI_TARO = {
-  fpcLy_CURRENT_e,               // mLayerID
-  7,                             // mListID
-  fpcPi_CURRENT_e,               // mListPrio
-  PROC_NPC_PACHI_TARO,           // mProcName
-  &g_fpcLf_Method.base,         // sub_method
-  sizeof(daNpc_Pachi_Taro_c),    // mSize
-  0,                             // mSizeOther
-  0,                             // mParameters
-  &g_fopAc_Method.base,          // sub_method
-  369,                           // mPriority
-  &daNpc_Pachi_Taro_MethodTable, // sub_method
-  0x00044107,                    // mStatus
-  fopAc_NPC_e,                   // mActorType
-  fopAc_CULLBOX_CUSTOM_e,        // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_PACHI_TARO_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Pachi_Taro_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_PACHI_TARO_e,
+    /* Actor SubMtd */ &daNpc_Pachi_Taro_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e | fopAcStts_UNK_0x2_e | fopAcStts_UNK_0x1_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

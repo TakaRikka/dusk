@@ -234,10 +234,10 @@ int daKago_c::executeBalloonMenu() {
             fopAcM_orderPotentialEvent(this, 1, 0xffff, 0);
             eventInfo.onCondition(dEvtCnd_CANDEMO_e);
 
-            #if VERSION == VERSION_SHIELD_DEBUG
-            return 0;
-            #else
+            #if PLATFORM_GCN
             break;
+            #else
+            return 0;
             #endif
         }
 
@@ -368,7 +368,7 @@ f32 daKago_c::checkGroundHeight(cXyz i_pos, f32* o_step) {
             gnd_height = gndCrossMag;
             field_0x6e0 = 1;
 
-            if (current.pos.y < gndCrossMag) {
+            if (current.pos.y < gnd_height) {
                 mGroundHeight = current.pos.y;
             } else {
                 mGroundHeight = mGroundFlyHeight;
@@ -417,7 +417,7 @@ f32 daKago_c::checkRoofHeight(cXyz i_pos) {
 
         if (std::abs(current.pos.y - roof_height) < 310.0f) {
             fopAc_ac_c* actor = dComIfG_Bgsp().GetActorPointer(roofChk);
-            if (actor != NULL && fopAcM_GetName(actor) == PROC_Obj_RIVERROCK) {
+            if (actor != NULL && fopAcM_GetName(actor) == fpcNm_Obj_RIVERROCK_e) {
                 if (((daObjRIVERROCK_c*)actor)->mBreakSubAction == daObjRIVERROCK_c::BREAK_MOVE) {
                     field_0x6e5 = 1;
                 }
@@ -636,24 +636,26 @@ s8 daKago_c::searchNearPassPoint() {
     cXyz pointPos;
 
     cXyz playerPos(daPy_getPlayerActorClass()->current.pos);
-    f32 prev_nearest_distXZ, nearest_distXZ;
-    nearest_distXZ = prev_nearest_distXZ = 100000.0f;
-    int nearest_point_no;
+    f32 nearest_DistXZ[2];
+    nearest_DistXZ[0] = nearest_DistXZ[1] = 100000.0f;
+    int nearest_point_no[2];
 
     for (int i = 0; i < mpPath1->m_num; i++) {
         pointPos = dPath_GetPnt(mpPath1, i)->m_position;
 
         f32 player_pnt_distXZ = playerPos.absXZ(pointPos);
-        if (player_pnt_distXZ < nearest_distXZ) {
-            prev_nearest_distXZ = nearest_distXZ;
-            nearest_distXZ = player_pnt_distXZ;
-            nearest_point_no = i;
-        } else if (player_pnt_distXZ < prev_nearest_distXZ) {
-            prev_nearest_distXZ = player_pnt_distXZ;
+        if (player_pnt_distXZ < nearest_DistXZ[0]) {
+            nearest_DistXZ[1] = nearest_DistXZ[0];
+            nearest_point_no[1] = nearest_point_no[0];
+            nearest_DistXZ[0] = player_pnt_distXZ;
+            nearest_point_no[0] = i;
+        } else if (player_pnt_distXZ < nearest_DistXZ[1]) {
+            nearest_DistXZ[1] = player_pnt_distXZ;
+            nearest_point_no[1] = i;
         }
     }
 
-    int next_point_no = nearest_point_no + mPathStep;
+    int next_point_no = nearest_point_no[0] + mPathStep;
     if (next_point_no < 0) {
         next_point_no = 1;
     } else if (next_point_no >= mpPath1->m_num) {
@@ -697,7 +699,7 @@ int daKago_c::setSceneChange(int i_mode) {
 
 void daKago_c::createBalloonScore() {
     if (mType != TYPE_TWILIGHT && mBalloon2DId == fpcM_ERROR_PROCESS_ID_e) {
-        mBalloon2DId = fopAcM_create(PROC_BALLOON2D, 0, NULL, -1, NULL, NULL, -1);
+        mBalloon2DId = fopAcM_create(fpcNm_BALLOON2D_e, 0, NULL, -1, NULL, NULL, -1);
         field_0x6e9 = 1;
     }
 }
@@ -724,7 +726,7 @@ void daKago_c::endBalloonScore() {
             ((daBalloon2D_c*)balloon2D)->hide();
         }
 
-        fopAcM_SearchByName(PROC_OBJ_BALLOON, &balloonObj);
+        fopAcM_SearchByName(fpcNm_OBJ_BALLOON_e, &balloonObj);
         if (balloonObj != NULL) {
             ((daObj_Balloon_c*)balloonObj)->saveBestScore();
         }
@@ -1479,13 +1481,16 @@ void daKago_c::executeWait() {
                 setActionMode(ACTION_LANDING_e, 0);
                 executeLanding();
             }
+
+            return;
         }
-        return;
+
+#if DEBUG
+        mPathDir = 1;
+#endif
     }
 
 #if DEBUG
-    mPathDir = 1;
-
     if (mDoCPd_c::getHoldL(PAD_1) && mDoCPd_c::getHoldR(PAD_1) &&
         mDoCPd_c::getTrigB(PAD_1))
     {
@@ -1498,9 +1503,10 @@ void daKago_c::executeWait() {
 
             if (mSceneType == SCENE_TYPE_RIVER) {
                 createBalloonScore();
-                return;
             }
         }
+
+        return;
     }
 #endif
 }
@@ -1575,7 +1581,7 @@ void daKago_c::executeAttack() {
         mpLockActor = NULL;
         if (dComIfGp_getAttention()->LockonTruth()) {
             fopAc_ac_c* ym = dComIfGp_getAttention()->LockonTarget(0);
-            if (fopAcM_GetName(ym) != PROC_E_YM) {
+            if (fopAcM_GetName(ym) != fpcNm_E_YM_e) {
                 break;
             }
 
@@ -2334,6 +2340,7 @@ void daKago_c::initFirstDemo() {
     cXyz cStack_34;
 
     daPy_py_c* player = daPy_getPlayerActorClass();
+    s16 targetYaw;
     s16 playerYaw = player->shape_angle.y;
     cXyz playerPos = player->current.pos;
 
@@ -2343,7 +2350,6 @@ void daKago_c::initFirstDemo() {
         midnaPos = midna->current.pos;
     }
 
-   s16 targetYaw;
     switch (mDemoMode) {
     case 0: {
         Z2GetAudioMgr()->setDemoName(mDemoName);
@@ -2356,9 +2362,9 @@ void daKago_c::initFirstDemo() {
         shape_angle.y = current.angle.y = cLib_targetAngleY(&playerPos, &field_0x6a4);
         cStack_34.set(-300.0f, 400.0f, -1000.0f);
         cLib_offsetPos(&current.pos, &playerPos, shape_angle.y, &cStack_34);
-        targetYaw = cLib_targetAngleY(&playerPos, &current.pos);
+        playerYaw = cLib_targetAngleY(&playerPos, &current.pos);
 
-        player->setPlayerPosAndAngle(&playerPos, targetYaw, 0);
+        player->setPlayerPosAndAngle(&playerPos, playerYaw, 0);
         if (midna != NULL) {
             midna->current.pos = playerPos;
             midnaPos = midna->current.pos;
@@ -2497,8 +2503,7 @@ bool daKago_c::executeFirstDemo() {
     cXyz playerPos = player->current.pos;
 
     int unkFlag1;
-    int mode = mDemoMode;  // fakematch
-    switch (mode) {
+    switch (mDemoMode) {
     case 0:
         dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 2);
 
@@ -2739,11 +2744,11 @@ bool daKago_c::executeFirstDemo() {
     case 8:
         unkFlag1 = 0;
 
-        if (mode == 7 || field_0x6e8 == 0) {
+        if (mDemoMode == 7 || field_0x6e8 == 0) {
             if (field_0x728 == 110) {
                 unkFlag1 = 1;
             }
-        } else if (mode == 8 && field_0x728 == 140) {
+        } else if (mDemoMode == 8 && field_0x728 == 140) {
             unkFlag1 = 1;
         }
 
@@ -3445,7 +3450,9 @@ void daKago_c::setWaterFallEffect() {
 }
 
 static void* s_waterfall(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Tag_WaterFall) {
+    UNUSED(i_data);
+
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_Tag_WaterFall_e) {
         if (!fpcM_IsCreating(fopAcM_GetID(i_actor))) {
             if (((daTagWaterFall_c*)i_actor)->checkHitWaterFall(((fopAc_ac_c*)i_data)->current.pos))
             {
@@ -3888,18 +3895,18 @@ static actor_method_class l_daKago_Method = {
 };
 
 actor_process_profile_definition g_profile_KAGO = {
-    fpcLy_CURRENT_e,        // mLayerID
-    4,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_KAGO,              // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(daKago_c),       // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    693,                    // mPriority
-    &l_daKago_Method,       // sub_method
-    0x00044000,             // mStatus
-    fopAc_NPC_e,            // mActorType
-    fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 4,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KAGO_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daKago_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_KAGO_e,
+    /* Actor SubMtd */ &l_daKago_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -55,7 +55,7 @@ public:
     int _create();
     int _delete();
     int _execute();
-    int _draw();
+    bool _draw();
 
     static JPABaseEmitter* m_emitter;
     static bool m_flag;

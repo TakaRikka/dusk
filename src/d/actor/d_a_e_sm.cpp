@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_sm.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -77,7 +77,7 @@ public:
     /* スライム - Slime */
     /* 0x04 */ s8 field_0x4;
     /* 0x08 */ f32 basic_size;      // 基本大きさ - Basic Size
-    /* 0x0C */ f32 pl_notice_dist;  // PL認識距離 - PL Notice Distance   
+    /* 0x0C */ f32 pl_notice_dist;  // PL認識距離 - PL Notice Distance
     /* 0x10 */ f32 core_size;       // コア大きさ - Core Size
 };
 
@@ -186,7 +186,7 @@ static BOOL pl_check(daE_SM_c* i_this, f32 param_2) {
 
 static void move_check(daE_SM_c* i_this, int* param_2) {
     *param_2 = -1;
-    
+
     if (pl_check(i_this, i_this->field_0x970)) {
         *param_2 = 0;
     }
@@ -199,7 +199,7 @@ void daE_SM_c::Particle_Set(u16 i_resID, cXyz i_scale, cXyz i_pos, csXyz i_rotat
 void daE_SM_c::ArrowCheck() {
     cXyz* tgHitPosP = mCoSm.GetTgHitPosP();
     field_0x6d4 = 10;
-    
+
     if (((daArrow_c*)mAtInfo.mpActor)->changeActorControll()) {
         field_0x6f9[field_0x6f8] = 1;
         daArrow_c* arrow_p;
@@ -347,7 +347,7 @@ void daE_SM_c::SmDamageCheck() {
                 mSound.startCreatureVoice(Z2SE_EN_SC_V_WHISTLE, -1);
             }
         }
-        
+
         field_0x6be = 0;
         field_0x6c0[0] = 50;
         field_0x685 = false;
@@ -433,7 +433,7 @@ void daE_SM_c::SmDamageCheck() {
 
     cXyz sp34(field_0x990);
     sp34.y += 100.0f;
-    
+
     if (!(sp34.abs(*hookshotTopPos) < field_0x6f0 * 100.0f)) {
         return;
     }
@@ -493,7 +493,7 @@ void daE_SM_c::E_SM_Normal() {
 
                 if (field_0xa10) {
                     field_0x9b0.y = s_TargetAngle;
-                    
+
                     if (way_bg_check(this, scale.x * 100.0f, field_0x990, field_0x9b0.y)) {
                         field_0x9b0.y += 0x100;
                     }
@@ -647,7 +647,7 @@ void daE_SM_c::E_SM_Attack() {
                 field_0x6dc = 0.041f;
             }
             break;
-        
+
         case 1:
             if (field_0x6dc > 0.041f) {
                 field_0x6dc = 0.041f;
@@ -698,7 +698,7 @@ void daE_SM_c::Action() {
         case ACTION_NORMAL:
             E_SM_Normal();
             break;
-        
+
         case ACTION_MOVE:
             E_SM_Move();
             break;
@@ -741,7 +741,7 @@ void daE_SM_c::Action() {
     field_0x9b8.z = sp38.z;
     field_0x990 += field_0x9b8;
     field_0x9b8.y -= 5.0f;
-    
+
     cXyz* ccMoveP = field_0xe8c.GetCCMoveP();
     if (ccMoveP != NULL) {
         field_0x990 += *ccMoveP;
@@ -781,7 +781,7 @@ void daE_SM_c::E_SM_C_Near_Escape() {
                 field_0x6d8 = s_TargetAngle + 0x8000;
             }
             break;
-        
+
         case 0:
             field_0x6b6 = 3;
             cLib_chaseAngleS(&current.angle.y, field_0x6d8, 0x2000);
@@ -1054,7 +1054,7 @@ void daE_SM_c::E_SM_C_Escape() {
         case 0:
             E_SM_C_Near_Escape();
             break;
-        
+
         case 1:
             E_SM_C_Far_Escape();
             break;
@@ -1108,7 +1108,7 @@ void daE_SM_c::E_SM_C_Free() {
                 field_0x6d8 = s_TargetAngle + 0x8000;
             }
             break;
-        
+
         case 1:
             E_SM_C_Escape();
             break;
@@ -1143,7 +1143,7 @@ void daE_SM_c::E_SM_C_Death() {
                 speed.set(0.0f, 0.0f, 0.0f);
             }
             break;
-        
+
         case 2:
             speedF = 0.0f;
 
@@ -1445,7 +1445,7 @@ void daE_SM_c::DemoStart() {
                 field_0xe8c.SetWeight(254);
             }
             break;
-        
+
         case 1:
             if (field_0x6c0[0] == 0) {
                 mDemoMode++;
@@ -1480,7 +1480,7 @@ void daE_SM_c::DemoMid() {
             SetStopingCam();
             mDemoMode++;
             break;
-        
+
         case 1:
             sp1c = current.pos;
             sp1c.y += 80.0f;
@@ -1530,7 +1530,7 @@ void daE_SM_c::E_SM_C_Demo() {
         case 0:
             DemoStart();
             break;
-        
+
         case 1:
             DemoMid();
             break;
@@ -1603,7 +1603,7 @@ void daE_SM_c::CoreAction() {
             }
 
             field_0xa60.CrrPos(dComIfG_Bgsp());
-            fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x100);
+            fopAcM_OffStatus(this, fopAcStts_CULL_e);
         }
     }
 
@@ -1674,7 +1674,7 @@ int daE_SM_c::Execute() {
         field_0x6d6--;
     }
 
-    fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x100);
+    fopAcM_OnStatus(this, fopAcStts_CULL_e);
     Action();
     CoreAction();
     cXyz i_effSize(1.0f, 1.0f, 1.0f);
@@ -2018,18 +2018,18 @@ static actor_method_class l_daE_SM_Method = {
 };
 
 actor_process_profile_definition g_profile_E_SM = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_SM,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daE_SM_c),       // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  127,                    // mPriority
-  &l_daE_SM_Method,       // sub_method
-  0x000C0100,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_SM_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_SM_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_SM_e,
+    /* Actor SubMtd */ &l_daE_SM_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

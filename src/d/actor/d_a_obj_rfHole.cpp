@@ -60,7 +60,7 @@ int daRfHole_c::create() {
 }
 
 void daRfHole_c::rideCallBack(dBgW* param_1, fopAc_ac_c* param_2, fopAc_ac_c* param_3) {
-    if (fopAcM_GetName(param_3) == PROC_ALINK && static_cast<daRfHole_c*>(param_2)->playerAreaCheck()) {
+    if (fopAcM_GetName(param_3) == fpcNm_ALINK_e && static_cast<daRfHole_c*>(param_2)->playerAreaCheck()) {
         static_cast<daRfHole_c*>(param_2)->field_0x5ae = 1;
     }
 }
@@ -202,18 +202,18 @@ static actor_method_class l_daRfHole_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_RfHole = {
-  fpcLy_CURRENT_e,        // mLayerID
-  3,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_RfHole,        // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daRfHole_c),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  514,                    // mPriority
-  &l_daRfHole_Method,     // sub_method
-  0x00040100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_RfHole_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daRfHole_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_RfHole_e,
+    /* Actor SubMtd */ &l_daRfHole_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

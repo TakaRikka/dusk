@@ -10,15 +10,15 @@
 
 BOOL daAlink_c::checkEnemyGroup(fopAc_ac_c* i_actor) {
     return i_actor != NULL
-            && (fopAcM_GetGroup(i_actor) == fopAc_ENEMY_e || fopAcM_GetName(i_actor) == PROC_E_ZH || checkSpecialNpc(i_actor));
+            && (fopAcM_GetGroup(i_actor) == fopAc_ENEMY_e || fopAcM_GetName(i_actor) == fpcNm_E_ZH_e || checkSpecialNpc(i_actor));
 }
 
 BOOL daAlink_c::checkSpecialNpc(fopAc_ac_c* i_actor) {
     s16 name = fopAcM_GetName(i_actor);
 
-    return name == PROC_NPC_KAKASHI ||
-          (name == PROC_NPC_KN && static_cast<daNpc_Kn_c*>(i_actor)->checkBattleMode()) ||
-          (name == PROC_OBJ_GRA && !static_cast<daObj_GrA_c*>(i_actor)->checkNpcObjGra());
+    return name == fpcNm_NPC_KAKASHI_e ||
+          (name == fpcNm_NPC_KN_e && static_cast<daNpc_Kn_c*>(i_actor)->checkBattleMode()) ||
+          (name == fpcNm_OBJ_GRA_e && !static_cast<daObj_GrA_c*>(i_actor)->checkNpcObjGra());
 }
 
 BOOL daAlink_c::checkShieldAttackEmphasys() {
@@ -53,15 +53,15 @@ void daAlink_c::stickArrowIncrement(int param_0) {
         if (arrow_num != 0) {
             if (checkShieldGet()
                 #if !PLATFORM_SHIELD
-                && checkItemGet(fpcNm_ITEM_BOW, true)
+                && checkItemGet(dItemNo_BOW_e, true)
                 #endif
                 )
             {
                 int arrow_type;
                 if (arrow_num == 1) {
-                    arrow_type = fpcNm_ITEM_ARROW_1;
+                    arrow_type = dItemNo_ARROW_1_e;
                 } else {
-                    arrow_type = fpcNm_ITEM_ARROW_10;
+                    arrow_type = dItemNo_ARROW_10_e;
                 }
 
                 dComIfGp_setItemArrowNumCount(arrow_num);
@@ -101,7 +101,7 @@ void daAlink_c::setArrowShieldActor(fopAc_ac_c* i_actor, int param_1) {
         field_0x2f7c[arrow_num] = 10;
 
         dComIfGp_setItemArrowNumCount(1);
-        fopAcM_createItemForSimpleDemo(&current.pos, fpcNm_ITEM_ARROW_10, -1, NULL, NULL, 0.0f, 0.0f);
+        fopAcM_createItemForSimpleDemo(&current.pos, dItemNo_ARROW_10_e, -1, NULL, NULL, 0.0f, 0.0f);
     }
 
     if (param_1 && field_0x2fcb == 0 && !checkMagicArmorNoDamage()) {
@@ -186,7 +186,7 @@ void daAlink_c::setUpperGuardAnime(f32 param_0) {
 void daAlink_c::setShieldGuard() {
     f32 var_f31 = mNowAnmPackUpper[2].getRatio();
 
-    if ((mProcID == PROC_GUARD_SLIP && mEquipItem != fpcNm_ITEM_IRONBALL) || checkSmallUpperGuardAnime() ||
+    if ((mProcID == PROC_GUARD_SLIP && mEquipItem != dItemNo_IRONBALL_e) || checkSmallUpperGuardAnime() ||
         (checkGuardAccept() && !checkGrabAnime() && !checkUpperReadyThrowAnime() &&
          !checkDkCaught2Anime() && !checkKandelaarSwingAnime() && !checkCutDashAnime() &&
          !checkCutDashChargeAnime() && (!checkEquipAnime() || checkUpperGuardAnime()) &&
@@ -255,7 +255,7 @@ int daAlink_c::procGuardSlipInit(int i_atSpl, dCcD_GObjInf* i_objinf) {
 
     const daAlinkHIO_anm_c* anmParams;
     daAlink_ANM anm;
-    if (mEquipItem == fpcNm_ITEM_IRONBALL) {
+    if (mEquipItem == dItemNo_IRONBALL_e) {
         setSingleAnimeBase(ANM_IRONBALL_DEF);
         setIronBallWaitUpperAnime(1);
         mNowAnmPackUpper[2].setRatio(0.0f);
@@ -294,7 +294,7 @@ int daAlink_c::procGuardSlipInit(int i_atSpl, dCcD_GObjInf* i_objinf) {
     mProcVar4.field_0x3010 = 0;
     mProcVar5.field_0x3012 = 0;
 
-    if (i_objinf != NULL && i_objinf->GetTgHitAc() != NULL && fopAcM_GetName(i_objinf->GetTgHitAc()) == PROC_E_MM_MT && i_objinf->GetTgHitAc()->argument == 1) {
+    if (i_objinf != NULL && i_objinf->GetTgHitAc() != NULL && fopAcM_GetName(i_objinf->GetTgHitAc()) == fpcNm_E_MM_MT_e && i_objinf->GetTgHitAc()->argument == 1) {
         if (checkBootsOrArmorHeavy()) {
             mNormalSpeed = mpHIO->mGuard.m.mMagneHvyGuardSpeed;
             mProcVar5.field_0x3012 = 1;
@@ -322,7 +322,7 @@ int daAlink_c::procGuardSlipInit(int i_atSpl, dCcD_GObjInf* i_objinf) {
 }
 
 int daAlink_c::procGuardSlip() {
-    if (mEquipItem != fpcNm_ITEM_IRONBALL) {
+    if (mEquipItem != dItemNo_IRONBALL_e) {
         setUpperGuardAnime(-1.0f);
     }
 
@@ -356,7 +356,7 @@ int daAlink_c::procGuardSlip() {
             onEndResetFlg1(ERFLG1_UNK_20);
         }
 
-        if (mEquipItem == fpcNm_ITEM_IRONBALL) {
+        if (mEquipItem == dItemNo_IRONBALL_e) {
             mNowAnmPackUpper[2].setRatio(1.0f);
         }
 
@@ -495,7 +495,7 @@ int daAlink_c::procGuardBreakInit() {
     commonProcInit(PROC_GUARD_BREAK);
     setSingleAnimeParam(ANM_GUARD_BREAK, &mpHIO->mGuard.m.mGuardBreakAnm);
 
-    if (mEquipItem == fpcNm_ITEM_IRONBALL) {
+    if (mEquipItem == dItemNo_IRONBALL_e) {
         deleteEquipItem(FALSE, FALSE);
     }
 

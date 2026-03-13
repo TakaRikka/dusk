@@ -244,18 +244,18 @@ actor_method_class l_daObj_Maki_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_MAKI = {
-    fpcLy_CURRENT_e,         // mLayerID
-    3,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_OBJ_MAKI,           // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(obj_maki_class),  // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    50,                      // mPriority
-    &l_daObj_Maki_Method,    // sub_method
-    0x00040100,              // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_MAKI_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(obj_maki_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_MAKI_e,
+    /* Actor SubMtd */ &l_daObj_Maki_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

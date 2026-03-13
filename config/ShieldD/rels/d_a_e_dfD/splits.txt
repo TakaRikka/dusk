@@ -14,4 +14,4 @@ d/actor/d_a_e_df.cpp:
 	.ctors      start:0x00000000 end:0x00000004
 	.rodata     start:0x00000000 end:0x000000DC
 	.data       start:0x00000000 end:0x00000238
-	.bss        start:0x00000004 end:0x00000010
+	.bss        start:0x00000000 end:0x00000010

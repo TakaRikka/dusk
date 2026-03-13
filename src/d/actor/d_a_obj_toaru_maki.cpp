@@ -129,18 +129,18 @@ static actor_method_class daObjToaruMaki_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_ToaruMaki = {
-  fpcLy_CURRENT_e,         // mLayerID
-  7,                       // mListID
-  fpcPi_CURRENT_e,         // mListPrio
-  PROC_Obj_ToaruMaki,      // mProcName
-  &g_fpcLf_Method.base,   // sub_method
-  sizeof(daObjToaruMaki_c),// mSize
-  0,                       // mSizeOther
-  0,                       // mParameters
-  &g_fopAc_Method.base,    // sub_method
-  749,                     // mPriority
-  &daObjToaruMaki_METHODS, // sub_method
-  0x00040000,              // mStatus
-  fopAc_ENV_e,             // mActorType
-  fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_ToaruMaki_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjToaruMaki_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_ToaruMaki_e,
+    /* Actor SubMtd */ &daObjToaruMaki_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

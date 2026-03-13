@@ -364,7 +364,7 @@ void dMenu_ItemExplain_c::open_init() {
             if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dStage_SaveTbl_LV2) {
                 s32 itemsObtained = 0;
                 for (int i = 0; i < 3; i++) {
-                    if (checkItemGet(i + fpcNm_ITEM_L2_KEY_PIECES1, 1) != 0) {
+                    if (checkItemGet(i + dItemNo_L2_KEY_PIECES1_e, 1) != 0) {
                         itemsObtained++;
                     }
                 }
@@ -625,7 +625,7 @@ u8 dMenu_ItemExplain_c::openExplainDmap(u8 param_0, u8 param_1, u8 param_2, bool
 
     if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dStage_SaveTbl_LV2 && param_0 == 0x26) {
         for (int i = 0; i < 3; i++) {
-            if (checkItemGet(i + fpcNm_ITEM_L2_KEY_PIECES1, 1) != 0) {
+            if (checkItemGet(i + dItemNo_L2_KEY_PIECES1_e, 1) != 0) {
                 itemsObtained++;
             }
         }

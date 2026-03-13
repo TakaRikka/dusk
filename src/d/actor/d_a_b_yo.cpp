@@ -454,7 +454,7 @@ void daB_YO_c::damage_check() {
     mCcIronStts.Move();
 
     if (mAction == ACT_CHASE && mAtCyl.ChkAtHit()
-        && fopAcM_GetName(mAtCyl.GetAtHitObj()->GetAc()) == PROC_ALINK)
+        && fopAcM_GetName(mAtCyl.GetAtHitObj()->GetAc()) == fpcNm_ALINK_e)
     {
         reflectFreeMove();
         mActionTimer2 = 90;
@@ -537,7 +537,7 @@ void daB_YO_c::setBreakFrizad() {
         angle.set(0, shape_angle.y + cM_rndFX(4000.0f), 0);
         pos.set(current.pos.x + cM_rndF(50.0f), current.pos.y + (cM_rndF(100.0f) + 100.0f),
                 current.pos.z + cM_rndF(50.0f));
-        fopAcM_createChild(PROC_E_FZ, fopAcM_GetID(this), mFreezardNo << 8 | 3, &pos,
+        fopAcM_createChild(fpcNm_E_FZ_e, fopAcM_GetID(this), mFreezardNo << 8 | 3, &pos,
                            fopAcM_GetRoomNo(this), &angle, NULL, -1, NULL);
     }
 }
@@ -715,7 +715,7 @@ void daB_YO_c::setApperEffect2() {
 
 static void* s_frizad_delete(void* param_0, void* param_1) {
     if (fopAcM_IsActor(param_0) && !fpcM_IsCreating(fopAcM_GetID(param_0))
-                                && fopAcM_GetName(param_0) == PROC_E_FZ) {
+                                && fopAcM_GetName(param_0) == fpcNm_E_FZ_e) {
         static_cast<daE_FZ_c*>(param_0)->demoDelete();
     }
     return NULL;
@@ -771,7 +771,7 @@ void daB_YO_c::executeOpening() {
             return;
         }
         Z2GetAudioMgr()->seStart(Z2SE_EN_YO_DEMO_OP1, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
-        fopAcM_OffStatus(this, 0x4000);
+        fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
         field_0xfb5 = 3;
         setBck(ANM_WAIT_A, J3DFrameCtrl::EMode_LOOP, 3.0f, 1.0f);
         mMode = 1;
@@ -788,7 +788,7 @@ void daB_YO_c::executeOpening() {
         shape_angle.y = -0x1000;
         setYoMessage(0x234E);
         ystone_pos.set(0.0f, 0.0f, 3000.0f);
-        mYstoneID = fopAcM_create(PROC_OBJ_YSTONE, 5, &ystone_pos, fopAcM_GetRoomNo(this),
+        mYstoneID = fopAcM_create(fpcNm_OBJ_YSTONE_e, 5, &ystone_pos, fopAcM_GetRoomNo(this),
                                   NULL, NULL, 0xff);
         Z2GetAudioMgr()->subBgmStart(Z2BGM_BOSS_SNOWWOMAN_D1);
         mAcch.CrrPos(dComIfG_Bgsp());
@@ -1653,7 +1653,7 @@ void daB_YO_c::executeSeriousDemo() {
             mIceCenterPos.y -= 100.0f;
             mIceAngle = 0;
             for (int i = 0; i < 10; i++) {
-                mIcicleID[i] = fopAcM_createChild(PROC_B_YOI, fopAcM_GetID(this), i, &current.pos,
+                mIcicleID[i] = fopAcM_createChild(fpcNm_B_YOI_e, fopAcM_GetID(this), i, &current.pos,
                                                   fopAcM_GetRoomNo(this), &shape_angle,
                                                   NULL, -1, NULL);
             }
@@ -1750,7 +1750,7 @@ void daB_YO_c::createIcecleRevival(u8 param_0) {
             }
             if (icicle == NULL) {
                 if (param_0 != 0) {
-                    mIcicleID[i] = fopAcM_createChild(PROC_B_YOI, fopAcM_GetID(this), i | 0x10000,
+                    mIcicleID[i] = fopAcM_createChild(fpcNm_B_YOI_e, fopAcM_GetID(this), i | 0x10000,
                                                       &current.pos, fopAcM_GetRoomNo(this),
                                                       &shape_angle, NULL, -1, NULL);
                 }
@@ -1985,7 +1985,7 @@ void daB_YO_c::executeAttackYose() {
 
 void daB_YO_c::checkDamageWithIceBreak() {
     s16 player_angle = fopAcM_searchPlayerAngleY(this);
-    if (mAtCyl.ChkAtHit() && fopAcM_GetName(mAtCyl.GetAtHitObj()->GetAc()) == PROC_ALINK) {
+    if (mAtCyl.ChkAtHit() && fopAcM_GetName(mAtCyl.GetAtHitObj()->GetAc()) == fpcNm_ALINK_e) {
         for (int i = 0; i < 10; i++) {
             s16 angle_diff = mIceAngle + 0x1999 * i - player_angle;
             if (abs(angle_diff) < 0xccc && mIcicleID[i] != -1) {
@@ -2160,11 +2160,11 @@ void daB_YO_c::executeDemoRevival() {
                     fopAcM_SearchByID(mIcicleID[i], (fopAc_ac_c**)&icicle);
                 }
                 if (icicle == NULL) {
-                    mIcicleID[i] = fopAcM_createChild(PROC_B_YOI, fopAcM_GetID(this), i | 0x20000,
+                    mIcicleID[i] = fopAcM_createChild(fpcNm_B_YOI_e, fopAcM_GetID(this), i | 0x20000,
                                                       &current.pos, fopAcM_GetRoomNo(this),
                                                       &shape_angle, NULL, -1, NULL);
                 } else {
-                    fopAcM_OnStatus(icicle, 0x4000);
+                    fopAcM_OnStatus(icicle, fopAcStts_UNK_0x4000_e);
                 }
                 field_0xfb0++;
             }
@@ -2184,7 +2184,7 @@ void daB_YO_c::executeDemoRevival() {
                 if (mIcicleID[i] != -1) {
                     fopAcM_SearchByID(mIcicleID[i], (fopAc_ac_c**)&icicle);
                     if (icicle != NULL) {
-                        fopAcM_OffStatus(icicle, 0x4000);
+                        fopAcM_OffStatus(icicle, fopAcStts_UNK_0x4000_e);
                     }
                 }
             }
@@ -2292,7 +2292,7 @@ void daB_YO_c::executeDeath() {
             eventInfo.onCondition(dEvtCnd_CANDEMO_e);
             return;
         }
-        fopAcM_OnStatus(this, 0x4000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
         gravity = 0.0f;
         speed.y = 0.0f;
         camera->mCamera.Stop();
@@ -3371,7 +3371,7 @@ cPhs_Step daB_YO_c::create() {
                 }
 
                 cXyz pos(0.0f, 0.0f, 3000.0f);
-                mYstoneID = fopAcM_create(PROC_OBJ_YSTONE, 5, &pos, fopAcM_GetRoomNo(this),
+                mYstoneID = fopAcM_create(fpcNm_OBJ_YSTONE_e, 5, &pos, fopAcM_GetRoomNo(this),
                                          NULL, NULL, 0xff);
                 
                 mRoomType = 1;
@@ -3388,7 +3388,7 @@ cPhs_Step daB_YO_c::create() {
                 g_env_light.mColpatWeather = 2;
                 g_env_light.wether_pat0 = 2;
                 g_env_light.wether_pat1 = 2;
-                fopAcM_OffStatus(this, 0x4000);
+                fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
             
             } else {
                 mRoomType = 0;
@@ -3435,20 +3435,20 @@ static actor_method_class l_daB_YO_Method = {
 };
 
 actor_process_profile_definition g_profile_B_YO = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_B_YO,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daB_YO_c),       // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  223,                    // mPriority
-  &l_daB_YO_Method,       // sub_method
-  0x00044000,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_B_YO_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daB_YO_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_B_YO_e,
+    /* Actor SubMtd */ &l_daB_YO_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

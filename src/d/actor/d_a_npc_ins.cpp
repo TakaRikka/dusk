@@ -1246,7 +1246,7 @@ int daNpcIns_c::waitPresent(void* param_1) {
             checkPlayerSearch();
 
             u8 type = dMeter2Info_getInsectSelectType();
-            if (type != fpcNm_ITEM_NONE) {
+            if (type != dItemNo_NONE_e) {
                 if (type != 0 && !isInsect(type)) {
                     break;
                 }
@@ -1605,99 +1605,99 @@ bool daNpcIns_c::isInsectComplete() {
 
 const insect_param_data& daNpcIns_c::getInsectParamData(int i_index) {
     switch (i_index) {
-        case fpcNm_ITEM_M_BEETLE:
+        case dItemNo_M_BEETLE_e:
             i_index = INSECT_M_BEETLE;
             break;
 
-        case fpcNm_ITEM_F_BEETLE:
+        case dItemNo_F_BEETLE_e:
             i_index = INSECT_F_BEETLE;
             break;
 
-        case fpcNm_ITEM_M_BUTTERFLY:
+        case dItemNo_M_BUTTERFLY_e:
             i_index = INSECT_M_BUTTERFLY;
             break;
 
-        case fpcNm_ITEM_F_BUTTERFLY:
+        case dItemNo_F_BUTTERFLY_e:
             i_index = INSECT_F_BUTTERFLY;
             break;
 
-        case fpcNm_ITEM_M_STAG_BEETLE:
+        case dItemNo_M_STAG_BEETLE_e:
             i_index = INSECT_M_STAG_BEETLE;
             break;
 
-        case fpcNm_ITEM_F_STAG_BEETLE:
+        case dItemNo_F_STAG_BEETLE_e:
             i_index = INSECT_F_STAG_BEETLE;
             break;
 
-        case fpcNm_ITEM_M_GRASSHOPPER:
+        case dItemNo_M_GRASSHOPPER_e:
             i_index = INSECT_M_GRASSHOPPER;
             break;
 
-        case fpcNm_ITEM_F_GRASSHOPPER:
+        case dItemNo_F_GRASSHOPPER_e:
             i_index = INSECT_F_GRASSHOPPER;
             break;
 
-        case fpcNm_ITEM_M_NANAFUSHI:
+        case dItemNo_M_NANAFUSHI_e:
             i_index = INSECT_M_NANAFUSHI;
             break;
 
-        case fpcNm_ITEM_F_NANAFUSHI:
+        case dItemNo_F_NANAFUSHI_e:
             i_index = INSECT_F_NANAFUSHI;
             break;
 
-        case fpcNm_ITEM_M_DANGOMUSHI:
+        case dItemNo_M_DANGOMUSHI_e:
             i_index = INSECT_M_DANGOMUSHI;
             break;
 
-        case fpcNm_ITEM_F_DANGOMUSHI:
+        case dItemNo_F_DANGOMUSHI_e:
             i_index = INSECT_F_DANGOMUSHI;
             break;
 
-        case fpcNm_ITEM_M_MANTIS:
+        case dItemNo_M_MANTIS_e:
             i_index = INSECT_M_MANTIS;
             break;
 
-        case fpcNm_ITEM_F_MANTIS:
+        case dItemNo_F_MANTIS_e:
             i_index = INSECT_F_MANTIS;
             break;
 
-        case fpcNm_ITEM_M_LADYBUG:
+        case dItemNo_M_LADYBUG_e:
             i_index = INSECT_M_LADYBUG;
             break;
 
-        case fpcNm_ITEM_F_LADYBUG:
+        case dItemNo_F_LADYBUG_e:
             i_index = INSECT_F_LADYBUG;
             break;
 
-        case fpcNm_ITEM_M_SNAIL:
+        case dItemNo_M_SNAIL_e:
             i_index = INSECT_M_SNAIL;
             break;
 
-        case fpcNm_ITEM_F_SNAIL:
+        case dItemNo_F_SNAIL_e:
             i_index = INSECT_F_SNAIL;
             break;
 
-        case fpcNm_ITEM_M_DRAGONFLY:
+        case dItemNo_M_DRAGONFLY_e:
             i_index = INSECT_M_DRAGONFLY;
             break;
 
-        case fpcNm_ITEM_F_DRAGONFLY:
+        case dItemNo_F_DRAGONFLY_e:
             i_index = INSECT_F_DRAGONFLY;
             break;
 
-        case fpcNm_ITEM_M_ANT:
+        case dItemNo_M_ANT_e:
             i_index = INSECT_M_ANT;
             break;
 
-        case fpcNm_ITEM_F_ANT:
+        case dItemNo_F_ANT_e:
             i_index = INSECT_F_ANT;
             break;
 
-        case fpcNm_ITEM_M_MAYFLY:
+        case dItemNo_M_MAYFLY_e:
             i_index = INSECT_M_MAYFLY;
             break;
 
-        case fpcNm_ITEM_F_MAYFLY:
+        case dItemNo_F_MAYFLY_e:
             i_index = INSECT_F_MAYFLY;
             break;
 
@@ -1812,18 +1812,18 @@ static actor_method_class daNpcIns_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_INS = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_NPC_INS,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daNpcIns_c),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  425,                    // mPriority
-  &daNpcIns_MethodTable,  // sub_method
-  0x00040100,             // mStatus
-  fopAc_NPC_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_INS_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcIns_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_INS_e,
+    /* Actor SubMtd */ &daNpcIns_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

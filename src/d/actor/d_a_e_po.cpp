@@ -1115,7 +1115,7 @@ static void e_po_dead(e_po_class* i_this) {
             if (var_r0) {
                 u32 param = 0xFFFFF000;
                 param |= i_this->mArg0;
-                i_this->field_0x5B8 = fopAcM_create(PROC_Obj_poFire, param, &i_this->field_0x788,
+                i_this->field_0x5B8 = fopAcM_create(fpcNm_Obj_poFire_e, param, &i_this->field_0x788,
                                                     fopAcM_GetRoomNo(a_this), NULL, NULL, -1);
                 i_this->mType = 7;
                 i_this->field_0x74A[1] = 50;
@@ -1187,7 +1187,7 @@ static void e_po_dead(e_po_class* i_this) {
             return;
         }
         scale.x = 6.0f;
-        fopAcM_create(PROC_KYTAG03, 0x10000B2, &i_this->field_0x7B8, fopAcM_GetRoomNo(a_this),
+        fopAcM_create(fpcNm_KYTAG03_e, 0x10000B2, &i_this->field_0x7B8, fopAcM_GetRoomNo(a_this),
                       &a_this->shape_angle, &scale, -1);
         i_this->mType = 10;
 
@@ -1472,7 +1472,7 @@ static void e_po_limbering(e_po_class* i_this) {
             param |= i_this->BitSW << 8;
             param |= mRollCount << 16;
             param |= i_this->BitSW3 << 24;
-            fopAcM_create(PROC_E_PO, param, &a_this->current.pos, fopAcM_GetRoomNo(a_this),
+            fopAcM_create(fpcNm_E_PO_e, param, &a_this->current.pos, fopAcM_GetRoomNo(a_this),
                           &a_this->shape_angle, NULL, -1);
             i_this->field_0x7E2 += 1;
         }
@@ -1484,7 +1484,7 @@ static void e_po_limbering(e_po_class* i_this) {
             param |= i_this->BitSW << 8;
             param |= (mRollCount + (i + 1) * 0x3F) << 16;
             param |= i_this->BitSW3 << 24;
-            fopAcM_create(PROC_E_PO, param, &a_this->current.pos, fopAcM_GetRoomNo(a_this),
+            fopAcM_create(fpcNm_E_PO_e, param, &a_this->current.pos, fopAcM_GetRoomNo(a_this),
                           &a_this->shape_angle, NULL, -1);
         }
         mRollPlus = 0;
@@ -1514,7 +1514,7 @@ static void e_po_limbering(e_po_class* i_this) {
             dComIfGp_event_reset();
             daPy_getPlayerActorClass()->cancelOriginalDemo();
             mRollDemoFlag = 2;
-            fopAcM_OffStatus(a_this, fopAcM_STATUS_UNK_0x4000);
+            fopAcM_OffStatus(a_this, fopAcStts_UNK_0x4000_e);
             i_this->field_0x74A[2] = 0;
             i_this->mActionID = ACT_ROLL_MOVE;
             i_this->mType = 0;
@@ -1570,7 +1570,7 @@ static void e_po_roll_move(e_po_class* i_this) {
         if (mRollDemoFlag != 0) {
             anm_init(i_this, ANM_WAIT02, 10.0f, 2, 1.0f);
             i_this->field_0x74A[1] = 2;
-            fopAcM_OffStatus(a_this, fopAcM_STATUS_UNK_0x4000);
+            fopAcM_OffStatus(a_this, fopAcStts_UNK_0x4000_e);
         } else {
             anm_init(i_this, ANM_RUN_AFTER2, 10.0f, 2, 1.0f);
             i_this->field_0x74A[1] = 20;
@@ -1601,7 +1601,7 @@ static void e_po_roll_move(e_po_class* i_this) {
             if (mRollPlus != 0) {
                 if (i_this->mAnmID == ANM_AWAKE) {
                     anm_init(i_this, ANM_WAIT02, 10.0f, 2, 1.0f);
-                    fopAcM_OffStatus(a_this, fopAcM_STATUS_UNK_0x4000);
+                    fopAcM_OffStatus(a_this, fopAcStts_UNK_0x4000_e);
                 }
                 i_this->field_0x7D4 = 0.0f;
                 i_this->mType = 2;
@@ -1828,7 +1828,7 @@ static void e_po_holl_demo(e_po_class* i_this) {
         a_this->current.pos.set(mKPosInit_dt[0]);
         for (int i = 1; i < 4; i++) {
             param = i - 0xFFF9;
-            fopAcM_create(PROC_E_PO, param, &a_this->current.pos, fopAcM_GetRoomNo(a_this),
+            fopAcM_create(fpcNm_E_PO_e, param, &a_this->current.pos, fopAcM_GetRoomNo(a_this),
                           &a_this->shape_angle, NULL, -1);
         }
         a_this->health = 2;
@@ -2225,7 +2225,7 @@ static void e_po_holl_demo(e_po_class* i_this) {
                         i_this->field_0x838.set(mKeyeInit_dt[i + 10]);
                         i_this->field_0x7E2 ^= local_100;
                         i_this->field_0x7DE += 1;
-                        fopAcM_createChild(PROC_E_PO, fopAcM_GetID(a_this), param,
+                        fopAcM_createChild(fpcNm_E_PO_e, fopAcM_GetID(a_this), param,
                                            &mKPosInit_dt[i + 14], fopAcM_GetRoomNo(a_this),
                                            &a_this->shape_angle, NULL, -1, NULL);
                         if (i == 0) {
@@ -3164,20 +3164,20 @@ static actor_method_class l_daE_PO_Method = {
 };
 
 actor_process_profile_definition g_profile_E_PO = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_E_PO,               // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(e_po_class),      // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    162,                     // mPriority
-    &l_daE_PO_Method,        // sub_method
-    0x00044100,              // mStatus
-    fopAc_ENEMY_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_PO_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_po_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_PO_e,
+    /* Actor SubMtd */ &l_daE_PO_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

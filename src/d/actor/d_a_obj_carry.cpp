@@ -766,7 +766,7 @@ static void TgHitCallBackBokkuri(fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf
                                  fopAc_ac_c* i_atActor, dCcD_GObjInf* i_atObjInf) {
     daObjCarry_c* objCarry = (daObjCarry_c*)i_tgActor;
     if (objCarry != NULL && i_atActor != NULL && i_atObjInf->ChkAtType(AT_TYPE_SHIELD_ATTACK) &&
-        fopAcM_IsActor(i_atActor) && fopAcM_GetName(i_atActor) == PROC_ALINK)
+        fopAcM_IsActor(i_atActor) && fopAcM_GetName(i_atActor) == fpcNm_ALINK_e)
     {
         objCarry->field_0xd5c = 6000.0f + cM_rndF(2000.0f);
         objCarry->field_0xd60 = 4000.0f + cM_rndF(1500.0f);
@@ -801,7 +801,7 @@ static void* s_swA_sub(void* i_actor, void* i_data) {
     daObjSwBallA_c* swball = (daObjSwBallA_c*)i_actor;
     daObjCarry_c* objCarry = (daObjCarry_c*)i_data;
 
-    if (fopAcM_IsActor(swball) && fopAcM_GetName(swball) == PROC_Obj_SwBallA && swball != NULL &&
+    if (fopAcM_IsActor(swball) && fopAcM_GetName(swball) == fpcNm_Obj_SwBallA_e && swball != NULL &&
         objCarry != NULL)
     {
         if (swball->getSwbit() == objCarry->getSwbit2()) {
@@ -817,7 +817,7 @@ static int l_sw_id;
 static void* s_sw_sub(void* i_actor, void* i_data) {
     daObjSwBallB_c* swball = (daObjSwBallB_c*)i_actor;
 
-    if (fopAcM_IsActor(swball) && fopAcM_GetName(swball) == PROC_Obj_SwBallB && swball != NULL &&
+    if (fopAcM_IsActor(swball) && fopAcM_GetName(swball) == fpcNm_Obj_SwBallB_e && swball != NULL &&
         swball->getID() == l_sw_id)
     {
         return i_actor;
@@ -829,7 +829,7 @@ static void* s_sw_sub(void* i_actor, void* i_data) {
 static void* s_setA_sub(void* i_actor, void* i_data) {
     daTagSetBall_c* tagball = (daTagSetBall_c*)i_actor;
 
-    if (fopAcM_IsActor(tagball) && fopAcM_GetName(tagball) == PROC_Tag_SetBall && tagball &&
+    if (fopAcM_IsActor(tagball) && fopAcM_GetName(tagball) == fpcNm_Tag_SetBall_e && tagball &&
         i_data != NULL && tagball->getType() == 0xF)
     {
         return i_actor;
@@ -841,7 +841,7 @@ static void* s_setA_sub(void* i_actor, void* i_data) {
 static void* s_setB_sub(void* i_actor, void* i_data) {
     daTagSetBall_c* tagball = (daTagSetBall_c*)i_actor;
 
-    if (fopAcM_IsActor(tagball) && fopAcM_GetName(tagball) == PROC_Tag_SetBall && tagball &&
+    if (fopAcM_IsActor(tagball) && fopAcM_GetName(tagball) == fpcNm_Tag_SetBall_e && tagball &&
         i_data != NULL && tagball->getType() == 0)
     {
         return i_actor;
@@ -1069,7 +1069,7 @@ int daObjCarry_c::Create() {
     }
 
     if (checkCarryHookshot()) {
-        fopAcM_OnStatus(this, 0x80000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x80000_e);
         mCyl.SetTgType(mCyl.GetTgType() | 0x4000);
     }
 
@@ -1238,7 +1238,7 @@ int daObjCarry_c::CreateInit_LightBall() {
     mSound.init(&current.pos, 1);
 
     if (dComIfGp_roomControl_getStayNo()) {
-        fopAcM_OnStatus(this, 0x2000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x2000000_e);
     }
 
     mDalkmistInf.mPos = current.pos;
@@ -1246,7 +1246,7 @@ int daObjCarry_c::CreateInit_LightBall() {
 
     dKy_dalkmist_inf_set(&mDalkmistInf);
     field_0xe0c = 1;
-    fopAcM_OnStatus(this, 0x20000);
+    fopAcM_OnStatus(this, fopAcStts_NOPAUSE_e);
 
     mCyl.SetTgSe(9);
     mCyl.SetTgHitMark(CcG_Tg_UNK_MARK_2);
@@ -1766,7 +1766,7 @@ int daObjCarry_c::execute() {
                 mode_init_walk(0);
             }
 
-            if (mpCannonActor != NULL && fopAcM_IsActor(mpCannonActor) && fopAcM_GetProfName(mpCannonActor) == PROC_Obj_Ytaihou) {
+            if (mpCannonActor != NULL && fopAcM_IsActor(mpCannonActor) && fopAcM_GetProfName(mpCannonActor) == fpcNm_Obj_Ytaihou_e) {
                 mStts.ClrCcMove();
                 mCyl.SetAtAtp(100);
                 mAcch.SetIronBall();
@@ -1868,9 +1868,9 @@ int daObjCarry_c::execute() {
     field_0xdec = current.pos;
 
     if (fopAcM_checkCarryNow(this)) {
-        fopAcM_OffStatus(this, 0x400);
+        fopAcM_OffStatus(this, fopAcStts_FREEZE_e);
     } else {
-        fopAcM_OnStatus(this, 0x400);
+        fopAcM_OnStatus(this, fopAcStts_FREEZE_e);
     }
 
     return 1;
@@ -3058,7 +3058,7 @@ void daObjCarry_c::mode_init_fit() {
     mCyl.OnCoSPrmBit(0x10);
 
     cLib_offBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
-    fopAcM_OffStatus(this, 0x80000);
+    fopAcM_OffStatus(this, fopAcStts_UNK_0x80000_e);
     field_0xda8 = 0;
 
     speedF = 0.0f;
@@ -3529,7 +3529,7 @@ bool daObjCarry_c::cc_damage_proc_kibako() {
                 if (mAcch.ChkGroundHit()) {
                     u32 params;
                     daObjBurnBox_c::make_prm_burnBox(&params, 0);
-                    fopAcM_createChild(PROC_Obj_BurnBox, fopAcM_GetID(this), params, &current.pos, fopAcM_GetRoomNo(this), &shape_angle, &scale, -1, NULL);
+                    fopAcM_createChild(fpcNm_Obj_BurnBox_e, fopAcM_GetID(this), params, &current.pos, fopAcM_GetRoomNo(this), &shape_angle, &scale, -1, NULL);
 
                     break_obj = true;
                     do_break_eff = false;
@@ -3565,7 +3565,7 @@ bool daObjCarry_c::cc_damage_proc_ironball() {
 
     if (mAcch.ChkGroundHit() && dComIfG_Bgsp().ChkPolySafe(mAcch.m_gnd) && dComIfG_Bgsp().ChkMoveBG_NoDABg(mAcch.m_gnd) && dComIfG_Bgsp().GetActorPointer(mAcch.m_gnd)) {
         s16 name = fopAcM_GetName(dComIfG_Bgsp().GetActorPointer(mAcch.m_gnd));
-        if (name == PROC_Obj_YIblltray) {
+        if (name == fpcNm_Obj_YIblltray_e) {
             var_r27 = false;
             mStts.ClrCcMove();
         }
@@ -3602,7 +3602,7 @@ bool daObjCarry_c::cc_damage_proc_taru() {
                 if (mAcch.ChkGroundHit()) {
                     u32 params;
                     daObjBurnBox_c::make_prm_burnBox(&params, 2);
-                    fopAcM_createChild(PROC_Obj_BurnBox, fopAcM_GetID(this), params, &current.pos, fopAcM_GetRoomNo(this), &shape_angle, &scale, -1, NULL);
+                    fopAcM_createChild(fpcNm_Obj_BurnBox_e, fopAcM_GetID(this), params, &current.pos, fopAcM_GetRoomNo(this), &shape_angle, &scale, -1, NULL);
 
                     break_obj = true;
                     do_break_eff = false;
@@ -4306,18 +4306,18 @@ static actor_method_class l_daObjCarry_Method = {
     (process_method_func)daObjCarry_Draw};
 
 actor_process_profile_definition g_profile_Obj_Carry = {
-    fpcLy_CURRENT_e,         // mLayerID
-    8,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Obj_Carry,          // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daObjCarry_c),    // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    244,                     // mPriority
-    &l_daObjCarry_Method,    // sub_method
-    0x40500,                 // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 8,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Carry_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjCarry_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Carry_e,
+    /* Actor SubMtd */ &l_daObjCarry_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_FREEZE_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -124,7 +124,7 @@ void daOptiLift_c::lightSet() {
 }
 
 void daOptiLift_c::rideCallBack(dBgW* i_bgw, fopAc_ac_c* i_this, fopAc_ac_c* i_rideActor) {
-    if (fopAcM_GetName(i_rideActor) == PROC_ALINK) {
+    if (fopAcM_GetName(i_rideActor) == fpcNm_ALINK_e) {
         ((daOptiLift_c*)i_this)->mPlayerRide = true;
     }
 }
@@ -477,18 +477,18 @@ static actor_method_class l_daOptiLift_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Lv8OptiLift = {
-    fpcLy_CURRENT_e,         // mLayerID
-    3,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Obj_Lv8OptiLift,    // mProcName
-    &g_fpcLf_Method.base,   // sub_method
-    sizeof(daOptiLift_c),    // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    643,                     // mPriority
-    &l_daOptiLift_Method,    // sub_method
-    0x00040100,              // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Lv8OptiLift_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daOptiLift_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Lv8OptiLift_e,
+    /* Actor SubMtd */ &l_daOptiLift_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

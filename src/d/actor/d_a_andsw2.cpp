@@ -8,7 +8,7 @@
 #include "d/actor/d_a_andsw2.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 u8 daAndsw2_c::getEventNo() {
     return home.angle.x & 0xFF;
@@ -343,18 +343,18 @@ static actor_method_class l_daAndsw2_Method = {
 };
 
 actor_process_profile_definition g_profile_ANDSW2 = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_ANDSW2,            // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(daAndsw2_c),     // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    303,                    // mPriority
-    &l_daAndsw2_Method,     // sub_method
-    0x44000,                // mStatus
-    fopAc_ACTOR_e,          // mActorType
-    fopAc_CULLBOX_6_e,      // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ANDSW2_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daAndsw2_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_ANDSW2_e,
+    /* Actor SubMtd */ &l_daAndsw2_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

@@ -1,6 +1,6 @@
 /**
  * @file d_a_obj_tombo.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -11,7 +11,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_camera_mng.h"
-#include "f_pc/f_pc_name.h"
+#include "d/d_item_data.h"
 #include "m_Do/m_Do_lib.h"
 #include <cstring>
 
@@ -47,7 +47,7 @@ daObj_TomHIO_c::daObj_TomHIO_c() {
 }
 
 static u8 const l_tom_itemno[2] = {
-    fpcNm_ITEM_M_DRAGONFLY, fpcNm_ITEM_F_DRAGONFLY,
+    dItemNo_M_DRAGONFLY_e, dItemNo_F_DRAGONFLY_e,
 };
 
 void daObjTOMBO_c::InitCcSph() {
@@ -595,7 +595,7 @@ bool daObjTOMBO_c::CreateChk() {
             if (dMenu_Insect_c::isCatchNotGiveInsect(l_tom_itemno[mSex])) {
                 return 0;
             }
-            
+
             if ((mSex == SEX_MALE &&
                     !dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[l_musiya_num[mSex]])) ||
                 (mSex == SEX_FEMALE &&
@@ -617,7 +617,7 @@ int daObjTOMBO_c::create() {
         if (field_0x75c == 2) {
             field_0x56c = 0;
             shape_angle.x -= 0x2000;
-            fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x4000);
+            fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
         } else {
             mDraw = true;
         }
@@ -682,18 +682,18 @@ static actor_method_class l_daObjTOMBO_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Tombo = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_Tombo,         // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjTOMBO_c),   // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  487,                    // mPriority
-  &l_daObjTOMBO_Method,   // sub_method
-  0x000C0100,             // mStatus
-  fopAc_ENV_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Tombo_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjTOMBO_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Tombo_e,
+    /* Actor SubMtd */ &l_daObjTOMBO_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

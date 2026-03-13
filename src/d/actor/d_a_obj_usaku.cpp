@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_usaku.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 static int daObj_Usaku_Draw(obj_usaku_class* i_this) {
     fopAc_ac_c* a_this = static_cast<fopAc_ac_c*>(i_this);
@@ -117,18 +117,18 @@ static actor_method_class l_daObj_Usaku_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_USAKU = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_OBJ_USAKU,
-    &g_fpcLf_Method.base,
-    sizeof(obj_usaku_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    78,
-    &l_daObj_Usaku_Method,
-    0x40100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_USAKU_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(obj_usaku_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_USAKU_e,
+    /* Actor SubMtd */ &l_daObj_Usaku_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

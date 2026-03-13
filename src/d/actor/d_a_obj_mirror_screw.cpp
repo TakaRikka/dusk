@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_mirror_screw.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 static char const* l_arcName = "MR-Screw";
 
@@ -192,7 +192,7 @@ int daObjMirrorScrew_c::Create() {
     initBaseMtx();
 
     cXyz sw_pos(current.pos.x, current.pos.y + 2636.121f, current.pos.z);
-    fopAcM_createChild(PROC_Obj_SwSpinner, fopAcM_GetID(this), getSwitchNo() << 8, &sw_pos,
+    fopAcM_createChild(fpcNm_Obj_SwSpinner_e, fopAcM_GetID(this), getSwitchNo() << 8, &sw_pos,
                        fopAcM_GetRoomNo(this), NULL, NULL, -1, NULL);
 
     mpSwSpinner = NULL;
@@ -208,27 +208,27 @@ int daObjMirrorScrew_c::Create() {
 
 int daObjMirrorScrew_c::Execute(Mtx** i_mtxP) {
     if (mpSwSpinner == NULL) {
-        mpSwSpinner = static_cast<daObjSwSpinner_c*>(fopAcM_SearchByName(PROC_Obj_SwSpinner));
+        mpSwSpinner = static_cast<daObjSwSpinner_c*>(fopAcM_SearchByName(fpcNm_Obj_SwSpinner_e));
     }
 
     if (mpSpPath == NULL) {
-        mpSpPath = static_cast<daTagSppath_c*>(fopAcM_SearchByName(PROC_Tag_Sppath));
+        mpSpPath = static_cast<daTagSppath_c*>(fopAcM_SearchByName(fpcNm_Tag_Sppath_e));
     }
 
     if (mpChain == NULL) {
-        mpChain = static_cast<daObjMirrorChain_c*>(fopAcM_SearchByName(PROC_Obj_MirrorChain));
+        mpChain = static_cast<daObjMirrorChain_c*>(fopAcM_SearchByName(fpcNm_Obj_MirrorChain_e));
     }
 
     if (mpTable == NULL) {
-        mpTable = static_cast<daObjMirrorTable_c*>(fopAcM_SearchByName(PROC_Obj_MirrorTable));
+        mpTable = static_cast<daObjMirrorTable_c*>(fopAcM_SearchByName(fpcNm_Obj_MirrorTable_e));
     }
 
     if (mp6Pole == NULL) {
-        mp6Pole = static_cast<daObjMirror6Pole_c*>(fopAcM_SearchByName(PROC_Obj_Mirror6Pole));
+        mp6Pole = static_cast<daObjMirror6Pole_c*>(fopAcM_SearchByName(fpcNm_Obj_Mirror6Pole_e));
     }
 
     if (mpSand == NULL) {
-        mpSand = static_cast<daObjMirrorSand_c*>(fopAcM_SearchByName(PROC_Obj_MirrorSand));
+        mpSand = static_cast<daObjMirrorSand_c*>(fopAcM_SearchByName(fpcNm_Obj_MirrorSand_e));
     }
 
     callExecute();
@@ -259,18 +259,18 @@ static actor_method_class l_daObjMirrorScrew_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_MirrorScrew = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Obj_MirrorScrew,
-    &g_fpcLf_Method.base,
-    sizeof(daObjMirrorScrew_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x2A6,
-    &l_daObjMirrorScrew_Method,
-    0x40000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_MirrorScrew_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjMirrorScrew_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_MirrorScrew_e,
+    /* Actor SubMtd */ &l_daObjMirrorScrew_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

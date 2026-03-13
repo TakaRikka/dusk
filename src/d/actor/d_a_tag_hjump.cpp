@@ -26,6 +26,11 @@ static char const l_arcName[] = "Hfence";
 #if DEBUG
 daTagHjump_HIO_c l_HIO;
 
+daTagHjump_HIO_c::daTagHjump_HIO_c() {
+    height = 350.0f;
+    depth = 400.0f;
+}
+
 void daTagHjump_HIO_c::genMessage(JORMContext* ctx) {
     ctx->genSlider("高さ", &height, 0.0f, 500.0f);
     ctx->genSlider("奥行き", &depth, 0.0f, 1000.0f);
@@ -107,11 +112,6 @@ int daTagHjump_c::create() {
 
     field_0x5b4 = current.pos.y + scale.y;
     return phase;
-}
-
-daTagHjump_HIO_c::daTagHjump_HIO_c() {
-    height = 350.0f;
-    depth = 400.0f;
 }
 
 static int daTagHjump_Create(fopAc_ac_c* i_this) {
@@ -229,18 +229,18 @@ static actor_method_class l_daTagHjump_Method = {
 };
 
 actor_process_profile_definition g_profile_Tag_Hjump = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Tag_Hjump,
-    &g_fpcLf_Method.base,
-    sizeof(daTagHjump_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    434,
-    &l_daTagHjump_Method,
-    0x44100,
-    fopAc_ENV_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_Hjump_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagHjump_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Tag_Hjump_e,
+    /* Actor SubMtd */ &l_daTagHjump_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

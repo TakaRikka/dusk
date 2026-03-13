@@ -215,18 +215,18 @@ static actor_method_class l_daObj_Tatigi_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_TATIGI = {
-  fpcLy_CURRENT_e,          // mLayerID
-  7,                        // mListID
-  fpcPi_CURRENT_e,          // mListPrio
-  PROC_OBJ_TATIGI,          // mProcName
-  &g_fpcLf_Method.base,    // sub_method
-  sizeof(obj_tatigi_class), // mSize
-  0,                        // mSizeOther
-  0,                        // mParameters
-  &g_fopAc_Method.base,     // sub_method
-  709,                      // mPriority
-  &l_daObj_Tatigi_Method,   // sub_method
-  0x00040000,               // mStatus
-  fopAc_ACTOR_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e,   // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_TATIGI_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(obj_tatigi_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_TATIGI_e,
+    /* Actor SubMtd */ &l_daObj_Tatigi_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -393,12 +393,9 @@ void daAlink_c::setCrawlMoveAngle() {
         sp2C.set(sp20.x - sp38.x, dComIfG_Bgsp().GroundCross(&mLinkGndChk) - sp38.y,
                  sp20.z - sp38.z);
 #else
-        // Likely fakematch:
+        // Fakematch:
         // dBgS::GroundCross is implicitly inlined to cBgS::GroundCross, but for some
-        // reason here that breaks instruction ordering. This is the only place in the code
-        // where it causes issues.
-        // It _is_ possible that this is caused by an actual version difference in Shield, given
-        // that the Wii versions need the cast but Shield prod does not.
+        // reason here that breaks instruction ordering. See also daHorse_c::checkHorseNoMove.
         sp2C.set(sp20.x - sp38.x, ((cBgS&)dComIfG_Bgsp()).GroundCross(&mLinkGndChk) - sp38.y,
                  sp20.z - sp38.z);
 #endif
@@ -476,7 +473,7 @@ void daAlink_c::setCrawlAutoMoveAimPos() {
 }
 
 int daAlink_c::procCrawlStartInit() {
-    if (mEquipItem != fpcNm_ITEM_NONE) {
+    if (mEquipItem != dItemNo_NONE_e) {
         return procPreActionUnequipInit(PROC_CRAWL_START, NULL);
     }
 

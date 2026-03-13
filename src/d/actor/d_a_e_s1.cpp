@@ -268,7 +268,7 @@ static void* s_last_sub(void* i_actor, void* i_data) {
     fopAc_ac_c* a_actor = (fopAc_ac_c*)i_actor;
     fopAc_ac_c* a_data = (fopAc_ac_c*)i_data;
 
-    if (fopAcM_IsActor(a_actor) && fopAcM_GetName(a_actor) == PROC_E_S1) {
+    if (fopAcM_IsActor(a_actor) && fopAcM_GetName(a_actor) == fpcNm_E_S1_e) {
         e_s1_class* e_data = (e_s1_class*)a_data;
         e_s1_class* e_actor = (e_s1_class*)a_actor;
 
@@ -781,7 +781,7 @@ static void* s_down_sub(void* i_actor, void* i_data) {
     fopAc_ac_c* a_actor = (fopAc_ac_c*)i_actor;
     fopAc_ac_c* a_data = (fopAc_ac_c*)i_data;
 
-    if (fopAcM_IsActor(a_actor) && fopAcM_GetName(a_actor) == PROC_E_S1) {
+    if (fopAcM_IsActor(a_actor) && fopAcM_GetName(a_actor) == fpcNm_E_S1_e) {
         e_s1_class* e_data = (e_s1_class*)a_data;
         e_s1_class* e_actor = (e_s1_class*)a_actor;
 
@@ -805,7 +805,7 @@ static void* s_fail_sub(void* i_actor, void* i_data) {
     fopAc_ac_c* a_actor = (fopAc_ac_c*)i_actor;
     fopAc_ac_c* a_data = (fopAc_ac_c*)i_data;
 
-    if (fopAcM_IsActor(a_actor) && fopAcM_GetName(a_actor) == PROC_E_S1) {
+    if (fopAcM_IsActor(a_actor) && fopAcM_GetName(a_actor) == fpcNm_E_S1_e) {
         e_s1_class* e_data = (e_s1_class*)a_data;
         e_s1_class* e_actor = (e_s1_class*)a_actor;
 
@@ -835,7 +835,7 @@ static void* s_allfail_sub(void* i_actor, void* i_data) {
     fopAc_ac_c* a_actor = (fopAc_ac_c*)i_actor;
     fopAc_ac_c* a_data = (fopAc_ac_c*)i_data;
 
-    if (fopAcM_IsActor(a_actor) && fopAcM_GetName(a_actor) == PROC_E_S1) {
+    if (fopAcM_IsActor(a_actor) && fopAcM_GetName(a_actor) == fpcNm_E_S1_e) {
         e_s1_class* e_data = (e_s1_class*)a_data;
         e_s1_class* e_actor = (e_s1_class*)a_actor;
 
@@ -857,7 +857,7 @@ static void* s_allwakeup_sub(void* i_actor, void* i_data) {
     fopAc_ac_c* a_actor = (fopAc_ac_c*)i_actor;
     fopAc_ac_c* a_data = (fopAc_ac_c*)i_data;
 
-    if (fopAcM_IsActor(a_actor) && fopAcM_GetName(a_actor) == PROC_E_S1) {
+    if (fopAcM_IsActor(a_actor) && fopAcM_GetName(a_actor) == fpcNm_E_S1_e) {
         e_s1_class* e_data = (e_s1_class*)a_data;
         e_s1_class* e_actor = (e_s1_class*)a_actor;
 
@@ -888,7 +888,7 @@ static void* s_posrevise_sub(void* i_actor, void* i_data) {
     fopAc_ac_c* a_actor = (fopAc_ac_c*)i_actor;
     fopAc_ac_c* a_data = (fopAc_ac_c*)i_data;
 
-    if (fopAcM_IsActor(a_actor) && fopAcM_GetName(a_actor) == PROC_E_S1) {
+    if (fopAcM_IsActor(a_actor) && fopAcM_GetName(a_actor) == fpcNm_E_S1_e) {
         e_s1_class* e_data = (e_s1_class*)a_data;
         e_s1_class* e_actor = (e_s1_class*)a_actor;
 
@@ -2250,20 +2250,20 @@ static actor_method_class l_daE_S1_Method = {
 };
 
 actor_process_profile_definition g_profile_E_S1 = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_E_S1,               // mProcName
-    &g_fpcLf_Method.base,   // sub_method
-    sizeof(e_s1_class),      // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    121,                     // mPriority
-    &l_daE_S1_Method,        // sub_method
-    0x00040000,              // mStatus
-    fopAc_ENEMY_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_S1_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_s1_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_S1_e,
+    /* Actor SubMtd */ &l_daE_S1_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

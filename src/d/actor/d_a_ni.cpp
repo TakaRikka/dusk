@@ -138,7 +138,7 @@ static int daNi_Draw(ni_class* i_this) {
 }
 
 static void* s_play_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_NI) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_NI_e) {
         ni_class* a_actor = (ni_class*)i_actor;
 
         if (a_actor->mAction == ACTION_PLAY_e) {
@@ -212,7 +212,7 @@ static fopAc_ac_c* target_info[10];
 static int target_info_count;
 
 static void* s_t_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_NPC_NE && target_info_count < 10)
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_NPC_NE_e && target_info_count < 10)
     {
         target_info[target_info_count] = (fopAc_ac_c*)i_actor;
         target_info_count++;
@@ -378,7 +378,7 @@ static void ni_normal(ni_class* i_this) {
         }
     }
 
-    fopAc_ac_c* cow = fopAcM_SearchByName(PROC_COW);
+    fopAc_ac_c* cow = fopAcM_SearchByName(fpcNm_COW_e);
     if (cow != NULL && cow->speedF > 1.0f) {
         sp50 = cow->current.pos - a_this->current.pos;
         f32 var_f30 = sp50.abs();
@@ -755,7 +755,7 @@ static void ni_damage(ni_class* i_this) {
 static void* s_b_sub(void* i_actor, void* i_data) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_BOOMERANG &&
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_BOOMERANG_e &&
         daPy_py_c::checkBoomerangCharge() && fopAcM_GetParam(i_actor) == 1)
     {
         return i_actor;
@@ -807,7 +807,7 @@ static void ni_windspin(ni_class* i_this) {
 static int ni_demo0(ni_class* i_this) {
     cXyz sp28;
     cXyz sp34;
-    daNpcMoiR_c* moi = (daNpcMoiR_c*)fopAcM_SearchByName(PROC_NPC_MOIR);
+    daNpcMoiR_c* moi = (daNpcMoiR_c*)fopAcM_SearchByName(fpcNm_NPC_MOIR_e);
 
     if (i_this->mTimers[0] == 0 && moi != NULL) {
         mDoMtx_stack_c::copy(moi->getHandRMtx());
@@ -1998,18 +1998,18 @@ static actor_method_class l_daNi_Method = {
 };
 
 actor_process_profile_definition g_profile_NI = {
-  fpcLy_CURRENT_e,          // mLayerID
-  7,                        // mListID
-  fpcPi_CURRENT_e,          // mListPrio
-  PROC_NI,                  // mProcName
-  &g_fpcLf_Method.base,     // sub_method
-  sizeof(ni_class),         // mSize
-  0,                        // mSizeOther
-  0,                        // mParameters
-  &g_fopAc_Method.base,     // sub_method
-  695,                      // mPriority
-  &l_daNi_Method,           // sub_method
-  0x80c4000,                // mStatus
-  fopAc_NPC_e,              // mActorType
-  fopAc_ACTOR_e,            // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NI_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(ni_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NI_e,
+    /* Actor SubMtd */ &l_daNi_Method,
+    /* Status       */ fopAcStts_UNK_0x8000000_e | fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_ACTOR_e,
 };

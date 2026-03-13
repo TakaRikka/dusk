@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_izumi_gate.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 void daIzumiGate_c::initBaseMtx() {
     setBaseMtx();
@@ -93,18 +93,18 @@ static actor_method_class l_daIzumiGate_Method = {
 };
 
 actor_process_profile_definition g_profile_Izumi_Gate = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_Izumi_Gate,
-    &g_fpcLf_Method.base,
-    sizeof(daIzumiGate_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    38,
-    &l_daIzumiGate_Method,
-    0x40000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Izumi_Gate_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daIzumiGate_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Izumi_Gate_e,
+    /* Actor SubMtd */ &l_daIzumiGate_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

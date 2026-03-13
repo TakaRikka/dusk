@@ -748,21 +748,26 @@ static void action(e_sh_class* i_this) {
 
     if (unkFlag1) {
         fopAcM_OnStatus(enemy, 0);
-        i_this->enemy.attention_info.flags = fopAc_attn_CARRY_e;
+        //TODO: was this maybe hardcoded as just "4"?
+#if PLATFORM_GCN
+        enemy->attention_info.flags = fopAc_attn_CARRY_e;
+#else
+        enemy->attention_info.flags = fopAc_attn_UNK_4;
+#endif
     } else {
         fopAcM_OffStatus(enemy, 0);
-        i_this->enemy.attention_info.flags = fopAc_attn_LOCK_e;
+        enemy->attention_info.flags = fopAc_attn_LOCK_e;
     }
 
-    cMtx_YrotS(*calc_mtx, i_this->enemy.current.angle.y);
+    cMtx_YrotS(*calc_mtx, enemy->current.angle.y);
     baseVec.x = 0.0f;
     baseVec.y = 0.0f;
-    baseVec.z = i_this->enemy.speedF;
+    baseVec.z = enemy->speedF;
     MtxPosition(&baseVec, &finalVec);
-    i_this->enemy.speed.x = finalVec.x;
-    i_this->enemy.speed.z = finalVec.z;
-    i_this->enemy.current.pos += enemy->speed;
-    i_this->enemy.speed.y = i_this->enemy.speed.y - (JREG_F(5) + 5.0f);
+    enemy->speed.x = finalVec.x;
+    enemy->speed.z = finalVec.z;
+    enemy->current.pos += enemy->speed;
+    enemy->speed.y = enemy->speed.y - (JREG_F(5) + 5.0f);
 
     cXyz* ccMoveP = i_this->mStts.GetCCMoveP();
     if (ccMoveP != NULL) {
@@ -777,10 +782,10 @@ static void action(e_sh_class* i_this) {
         baseVec.z = -i_this->field_0x6a4;
         cMtx_YrotS(*calc_mtx, i_this->field_0x6a8);
         MtxPosition(&baseVec, &finalVec);
-        i_this->enemy.current.pos += finalVec;
+        enemy->current.pos += finalVec;
         cLib_addCalc0(&i_this->field_0x6a4, 1.0f, 6.0f);
 
-        i_this->enemy.speedF = 0.0f;
+        enemy->speedF = 0.0f;
     }
 
     i_this->mObjAcch.CrrPos(dComIfG_Bgsp());
@@ -1187,7 +1192,7 @@ static int daE_SH_Create(fopAc_ac_c* i_this) {
 
     int resLoadResult = dComIfG_resLoad(&sh->mPhase, "E_sh");
     if (resLoadResult == cPhs_COMPLEATE_e) {
-        OS_REPORT("", fopAcM_GetParam(i_this));
+        OS_REPORT("E_sh PARAM %x\n", fopAcM_GetParam(i_this));
 
         sh->field_0x5b4 = (u8)fopAcM_GetParam(i_this);
         u8 bVar1 = (fopAcM_GetParam(i_this) & 0xff00) >> 8;
@@ -1205,21 +1210,26 @@ static int daE_SH_Create(fopAc_ac_c* i_this) {
             sh->field_0x6b8 = (f32)bVar2 * 100.0f;
         }
 
-        OS_REPORT("");
+        OS_REPORT("E_sh//////////////E_SH SET 1 !!\n");
 
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x2960)) {
-            OS_REPORT("");
+            OS_REPORT("//////////////E_SH SET NON !!\n");
             return cPhs_ERROR_e;
         }
 
-        OS_REPORT("");
+        OS_REPORT("//////////////E_SH SET 2 !!\n");
         if (!hio_set) {
             sh->mInitState = 1;
             hio_set = true;
-            l_HIO.mChild = mDoHIO_CREATE_CHILD("E_sh", &l_HIO);
+            l_HIO.mChild = mDoHIO_CREATE_CHILD("スタルハウンド", &l_HIO);
         }
 
+        //TODO: was this maybe hardcoded as just "4"?
+#if PLATFORM_GCN
         i_this->attention_info.flags = fopAc_attn_CARRY_e;
+#else
+        i_this->attention_info.flags = fopAc_attn_UNK_4;
+#endif
 
         fopAcM_SetMtx(i_this, sh->mAnm_p->getModel()->getBaseTRMtx());
         fopAcM_SetMin(i_this, -200.0f, -200.0f, -200.0f);
@@ -1263,18 +1273,18 @@ static actor_method_class l_daE_SH_Method = {
 };
 
 actor_process_profile_definition g_profile_E_SH = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_E_SH,              // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(e_sh_class),     // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    126,                    // mPriority
-    &l_daE_SH_Method,       // sub_method
-    0x00040100,             // mStatus
-    fopAc_ENEMY_e,          // mActorType
-    fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_SH_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_sh_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_SH_e,
+    /* Actor SubMtd */ &l_daE_SH_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

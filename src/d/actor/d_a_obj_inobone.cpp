@@ -32,7 +32,7 @@ static void bornCoCallBack(fopAc_ac_c* i_coActorA, dCcD_GObjInf* i_coObjInfA,
     daObjIBone_c* a_coActorA = (daObjIBone_c*)i_coActorA;
 
     if (i_coActorA != NULL && i_coActorB != NULL &&
-        fopAcM_GetName(i_coActorB) == PROC_HORSE &&
+        fopAcM_GetName(i_coActorB) == fpcNm_HORSE_e &&
         daPy_getPlayerActorClass()->checkHorseRide())
     {
         a_coActorA->field_0x828 = 1;
@@ -76,7 +76,7 @@ static void* s_boar_sub(void* i_actor, void* i_data) {
         fopAc_ac_c* actor = (fopAc_ac_c*)i_actor;
         fopAc_ac_c* data = (fopAc_ac_c*)i_data;
 
-        if (fopAcM_GetName(actor) == PROC_E_WB) {
+        if (fopAcM_GetName(actor) == fpcNm_E_WB_e) {
             f32 xz_dist = fopAcM_searchActorDistanceXZ(data, actor);
             f32 y_dist = fopAcM_searchActorDistanceY(data, actor);
 
@@ -180,7 +180,7 @@ int daObjIBone_c::execute() {
             break;
         
         case 1:
-            fopAcM_createItemForDirectGet(&current.pos, fpcNm_ITEM_HEART,
+            fopAcM_createItemForDirectGet(&current.pos, dItemNo_HEART_e,
                 fopAcM_GetRoomNo(this), NULL, NULL, 0.0f, 0.0f);
             setBreakEffect();
             fopAcM_delete(this);
@@ -190,7 +190,7 @@ int daObjIBone_c::execute() {
         case 3: {
             csXyz angle(0, home.angle.y, 0);
 
-            fopAcM_createItem(&current.pos, fpcNm_ITEM_HEART, -1,
+            fopAcM_createItem(&current.pos, dItemNo_HEART_e, -1,
                 fopAcM_GetHomeRoomNo(this), &angle, NULL, 0);
             setBreakEffect();
             fopAcM_delete(this);
@@ -286,18 +286,18 @@ static actor_method_class l_daObjIBone_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_InoBone = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_InoBone,       // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjIBone_c),   // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  729,                    // mPriority
-  &l_daObjIBone_Method,   // sub_method
-  0x00040100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_InoBone_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjIBone_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_InoBone_e,
+    /* Actor SubMtd */ &l_daObjIBone_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

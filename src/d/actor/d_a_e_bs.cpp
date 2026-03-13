@@ -403,7 +403,7 @@ static void e_bs_attack(e_bs_class* i_this) {
 
     if (i_this->is_wep_attack) {
         fopAc_ac_c* at_hit_actor = at_hit_check(i_this);
-        if (at_hit_actor != NULL && fopAcM_GetName(at_hit_actor) == PROC_ALINK && daPy_getPlayerActorClass()->checkPlayerGuard()) {
+        if (at_hit_actor != NULL && fopAcM_GetName(at_hit_actor) == fpcNm_ALINK_e && daPy_getPlayerActorClass()->checkPlayerGuard()) {
             i_this->modelMorf->setPlaySpeed(0.0f);
             i_this->action = ACTION_FIGHT_RUN;
             i_this->mode = 0;
@@ -929,18 +929,18 @@ static actor_method_class l_daE_BS_Method = {
 };
 
 actor_process_profile_definition g_profile_E_BS = {
-    fpcLy_CURRENT_e,       // mLayerID
-    7,                     // mListID
-    fpcPi_CURRENT_e,       // mListPrio
-    PROC_E_BS,             // mProcName
-    &g_fpcLf_Method.base, // sub_method
-    sizeof(e_bs_class),    // mSize
-    0,                     // mSizeOther
-    0,                     // mParameters
-    &g_fopAc_Method.base,  // sub_method
-    124,                   // mPriority
-    &l_daE_BS_Method,      // sub_method
-    0x10040100,            // mStatus
-    fopAc_ENEMY_e,         // mActorType
-    fopAc_CULLBOX_0_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_BS_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_bs_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_BS_e,
+    /* Actor SubMtd */ &l_daE_BS_Method,
+    /* Status       */ fopAcStts_UNK_0x10000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

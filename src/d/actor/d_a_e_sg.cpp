@@ -156,7 +156,7 @@ static cXyz bg_cross[10];
 static int target_info_count;
 
 static void* s_box_sub(void* i_ac, void*) {
-    if (fopAcM_IsActor(i_ac) && fopAcM_GetName(i_ac) == PROC_OBJ_KBOX && target_info_count < 10) {
+    if (fopAcM_IsActor(i_ac) && fopAcM_GetName(i_ac) == fpcNm_OBJ_KBOX_e && target_info_count < 10) {
         target_info[target_info_count] = (obj_kbox_class*)i_ac;
         target_info_count++;
     }
@@ -213,7 +213,7 @@ static obj_kbox_class* search_box(e_sg_class* i_this) {
 }
 
 static dmg_rod_class* search_esa(e_sg_class* i_this) {
-    dmg_rod_class* rod = (dmg_rod_class*)fopAcM_SearchByName(PROC_MG_ROD);
+    dmg_rod_class* rod = (dmg_rod_class*)fopAcM_SearchByName(fpcNm_MG_ROD_e);
 
     if (rod != NULL && rod->kind == 1 && rod->action != 5 && rod->is_hook_in_water != 0 &&
         rod->actor.current.pos.y < rod->water_surface_y - 20.0f)
@@ -736,7 +736,7 @@ static void e_sg_drop(e_sg_class* i_this) {
                 local_48.x += i_this->current.pos.x;
                 local_48.z += i_this->current.pos.z;
                 local_48.y = i_this->mGroundY + 10.0f;
-                fopAcM_createItem(&local_48, fpcNm_ITEM_HEART, -1, -1, NULL, NULL, 0);
+                fopAcM_createItem(&local_48, dItemNo_HEART_e, -1, -1, NULL, NULL, 0);
             }
         }
     }
@@ -1224,7 +1224,7 @@ static int daE_SG_Create(fopAc_ac_c* i_this) {
 
                 child_angle.y = cM_rndF(65536.0f);
 
-                fopAcM_createChild(PROC_E_SG, fopAcM_GetID(i_this), parameters, &child_pos,
+                fopAcM_createChild(fpcNm_E_SG_e, fopAcM_GetID(i_this), parameters, &child_pos,
                                    fopAcM_GetRoomNo(i_this), &child_angle, 0, -1, 0);
             }
             a_this->mArg0 = false;
@@ -1253,18 +1253,18 @@ static actor_method_class l_daE_SG_Method = {
 };
 
 actor_process_profile_definition g_profile_E_SG = {
-    fpcLy_CURRENT_e,       // mLayerID
-    7,                     // mListID
-    fpcPi_CURRENT_e,       // mListPrio
-    PROC_E_SG,             // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(e_sg_class),    // mSize
-    0,                     // mSizeOther
-    0,                     // mParameters
-    &g_fopAc_Method.base,  // sub_method
-    122,                   // mPriority
-    &l_daE_SG_Method,      // sub_method
-    0x000D0100,            // mStatus
-    fopAc_ENEMY_e,         // mActorType
-    fopAc_CULLBOX_0_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_SG_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_sg_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_SG_e,
+    /* Actor SubMtd */ &l_daE_SG_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x10000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

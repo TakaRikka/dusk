@@ -13,6 +13,11 @@
 #if DEBUG
 daAttp_HIO_c l_HIO;
 
+daAttp_HIO_c::daAttp_HIO_c() {
+    type_spec = 0;
+    dist_max = dist_max_release = dist_adjust = upper_y = lower_y = 0.0f;
+}
+
 void daAttp_HIO_c::genMessage(JORMContext* ctx) {
     static const char* l_type_name[37] = {
         "注目なし - ダミー",       // No focus - dummy
@@ -258,11 +263,6 @@ int daAttp_c::_delete() {
     return 1;
 }
 
-daAttp_HIO_c::daAttp_HIO_c() {
-    type_spec = 0;
-    dist_max = dist_max_release = dist_adjust = upper_y = lower_y = 0.0f;
-}
-
 static int daAttp_Draw(daAttp_c* i_this) {
     return i_this->draw();
 }
@@ -273,13 +273,13 @@ static int daAttp_Execute(daAttp_c* i_this) {
 }
 
 static int daAttp_Delete(daAttp_c* i_this) {
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "Attp");
     return i_this->_delete();
 }
 
 static int daAttp_Create(fopAc_ac_c* i_this) {
     daAttp_c* attp = static_cast<daAttp_c*>(i_this);
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterCreateID(i_this, "Attp");
     return attp->create();
 }
 
@@ -290,18 +290,18 @@ static actor_method_class l_daAttp_Method = {
 };
 
 actor_process_profile_definition g_profile_Tag_Attp = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_Tag_Attp,          // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(daAttp_c),       // mSize
-    0,                      // mSizeOther
-    0,                      // mParameter
-    &g_fopAc_Method.base,   // sub_method
-    440,                    // mPriority
-    &l_daAttp_Method,       // sub_method
-    0x40100,                // mStatus
-    fopAc_ACTOR_e,          // mActorType
-    fopAc_CULLBOX_0_e,      // cullType   
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_Attp_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daAttp_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Tag_Attp_e,
+    /* Actor SubMtd */ &l_daAttp_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

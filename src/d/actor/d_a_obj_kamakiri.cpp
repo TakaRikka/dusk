@@ -506,7 +506,7 @@ void daObjKAM_c::Insect_Release() {
     field_0x980 = 1;
 }
 
-static u8 const l_kam_itemno[2] = {fpcNm_ITEM_M_MANTIS, fpcNm_ITEM_F_MANTIS};
+static u8 const l_kam_itemno[2] = {dItemNo_M_MANTIS_e, dItemNo_F_MANTIS_e};
 
 f32 floatDummy() {
     return -9.0f;
@@ -775,7 +775,7 @@ int daObjKAM_c::create() {
         if (field_0x9c0 == 2) {
             field_0x56c = 0;
             ANGLE_SUB(shape_angle.x, 0x2000);
-            fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x4000);
+            fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
         } else {
             mDraw = true;
         }
@@ -905,18 +905,18 @@ static actor_method_class l_daObjKAM_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Kam = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Obj_Kam,            // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daObjKAM_c),      // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    482,                     // mPriority
-    &l_daObjKAM_Method,      // sub_method
-    0x000C0120,              // mStatus
-    fopAc_ENV_e,             // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Kam_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjKAM_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Kam_e,
+    /* Actor SubMtd */ &l_daObjKAM_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x20_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

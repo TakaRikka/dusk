@@ -207,7 +207,7 @@ static void* s_obj_sub(void* arg0, void* arg1) {
 
             return arg0;
         }
-    } else if (fopAcM_GetName(arg0) == PROC_E_BG) {
+    } else if (fopAcM_GetName(arg0) == fpcNm_E_BG_e) {
         // bomb fish:
         if (arg0 != NULL && ((daE_BG_c*) arg0)->isBomb()) {
             if (arg1 != NULL) {
@@ -217,7 +217,7 @@ static void* s_obj_sub(void* arg0, void* arg1) {
 
             return arg0;
         }
-    } else if (fopAcM_GetName(arg0) == PROC_NBOMB) {
+    } else if (fopAcM_GetName(arg0) == fpcNm_NBOMB_e) {
         // generic bomb:
         if (arg1 != NULL) {
             ((daE_SB_c*) arg1)->field_0x5f0 = fopAcM_searchActorDistanceXZ((fopAc_ac_c*) arg0, (fopAc_ac_c*) arg1);
@@ -231,7 +231,7 @@ static void* s_obj_sub(void* arg0, void* arg1) {
 }
 
 static void* s_bomb_sub(void* arg0, void* arg1) {
-    if (fopAcM_GetName(arg0) == PROC_E_BG) {
+    if (fopAcM_GetName(arg0) == fpcNm_E_BG_e) {
         // bomb fish:
         if (arg0 != NULL && ((daE_BG_c*) arg0)->isBomb()) {
             if (arg1 != NULL) {
@@ -241,7 +241,7 @@ static void* s_bomb_sub(void* arg0, void* arg1) {
 
             return arg0;
         }
-    } else if (fopAcM_GetName(arg0) == PROC_NBOMB) {
+    } else if (fopAcM_GetName(arg0) == fpcNm_NBOMB_e) {
         // generic bomb:
         if (arg1 != NULL) {
             ((daE_SB_c*) arg1)->field_0x5f0 = fopAcM_searchActorDistanceXZ((fopAc_ac_c*) arg0, (fopAc_ac_c*) arg1);
@@ -1169,20 +1169,20 @@ static actor_method_class l_daE_SB_Method = {
 };
 
 actor_process_profile_definition g_profile_E_SB = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_SB,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daE_SB_c),       // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  125,                    // mPriority
-  &l_daE_SB_Method,       // sub_method
-  0x00040100,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_SB_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_SB_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_SB_e,
+    /* Actor SubMtd */ &l_daE_SB_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

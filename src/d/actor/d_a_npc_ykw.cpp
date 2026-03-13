@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_ykw.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -479,7 +479,7 @@ void* daNpc_ykW_c::srchItemHeart(void* param_0, void* param_1) {
         fopAc_ac_c* item = (fopAc_ac_c*)param_0;
         if (item != NULL && item != npc && fopAcM_IsActor(item))
         {
-            if (fopAcM_IsExecuting(fopAcM_GetID(item)) && fopAcM_GetName(item) == PROC_ITEM &&
+            if (fopAcM_IsExecuting(fopAcM_GetID(item)) && fopAcM_GetName(item) == fpcNm_ITEM_e &&
                 ((daItemBase_c*)item)->getItemNo() == 0)
             {
                 npc->mFindActorPtrs[mFindCount] = item;
@@ -494,7 +494,7 @@ void* daNpc_ykW_c::srchYkw(void* param_0, void* param_1) {
     fopAc_ac_c* actor1 = (fopAc_ac_c*)param_0;
     fopAc_ac_c* actor2 = (fopAc_ac_c*)param_1;
     if (mFindCount < 50 && param_0 != NULL && actor1 != actor2) {
-        if (fopAcM_IsExecuting(fopAcM_GetID(actor1)) && fopAcM_GetName(actor1) == PROC_NPC_YKW) {
+        if (fopAcM_IsExecuting(fopAcM_GetID(actor1)) && fopAcM_GetName(actor1) == fpcNm_NPC_YKW_e) {
             mFindActorPtrs[mFindCount] = actor1;
             mFindCount++;
         }
@@ -523,7 +523,7 @@ void* daNpc_ykW_c::srchYkm(void* param_0, void* param_1) {
     fopAc_ac_c* actor1 = (fopAc_ac_c*)param_0;
     fopAc_ac_c* actor2 = (fopAc_ac_c*)param_1;
     if (mFindCount < 50 && param_0 != NULL && actor1 != actor2) {
-        if (fopAcM_IsExecuting(fopAcM_GetID(actor1)) && fopAcM_GetName(actor1) == PROC_NPC_YKM) {
+        if (fopAcM_IsExecuting(fopAcM_GetID(actor1)) && fopAcM_GetName(actor1) == fpcNm_NPC_YKM_e) {
             mFindActorPtrs[mFindCount] = actor1;
             mFindCount++;
         }
@@ -653,14 +653,14 @@ void daNpc_ykW_c::reset() {
         }
 
         mHide = true;
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
 
         break;
     case 5:
     case 6:
         eventInfo.setIdx(1);
         mHide = true;
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
 
         break;
     default:
@@ -737,7 +737,7 @@ void daNpc_ykW_c::setParam() {
     mRealShadowSize = mpHIO->m.common.real_shadow_size;
 
     if (field_0xf80 == 4) {
-        fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x100);
+        fopAcM_OffStatus(this, fopAcStts_CULL_e);
         mRealShadowSize = 1500.0f;
     }
 
@@ -878,9 +878,9 @@ void daNpc_ykW_c::action() {
 }
 
 void daNpc_ykW_c::beforeMove() {
-    fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x8000000);
+    fopAcM_OffStatus(this, fopAcStts_UNK_0x8000000_e);
     if (checkHide()) {
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
     }
     if (checkHide() || mNoDraw != 0) {
         attention_info.flags = 0;
@@ -1586,7 +1586,7 @@ BOOL daNpc_ykW_c::cutLv5DungeonClear(int param_0) {
 
             mHide = false;
 
-            fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x8000000);
+            fopAcM_OffStatus(this, fopAcStts_UNK_0x8000000_e);
 
             newPlayerPos.setall(0.0f);
 
@@ -1784,7 +1784,7 @@ BOOL daNpc_ykW_c::cutLv5DungeonClear(int param_0) {
                 mFindCount = 0;
                 fpcM_Search(srchItemHeart, this);
                 for (unkInt1 = 0; unkInt1 < mFindCount; unkInt1++) {
-                    fopAcM_OffStatus(mFindActorPtrs[unkInt1], fopAcM_STATUS_UNK_0x4000);
+                    fopAcM_OffStatus(mFindActorPtrs[unkInt1], fopAcStts_UNK_0x4000_e);
                 }
             }
         }
@@ -1825,7 +1825,7 @@ BOOL daNpc_ykW_c::cutLv5DungeonClear(int param_0) {
                                              &unkXyz1, &unkFloat2, &unkFloat3, -1, 0, NULL);
             if (unkActor1 != NULL) {
                 mDoAud_seStart(Z2SE_OBJ_YO_HEART_S, &itemPos, 0, 0);
-                fopAcM_OnStatus(unkActor1, fopAcM_STATUS_UNK_0x4000);
+                fopAcM_OnStatus(unkActor1, fopAcStts_UNK_0x4000_e);
             }
             mEventTimer = (int)(unkFloat1 * 1.8000001f) + 6;
             field_0x1038++;
@@ -2296,7 +2296,7 @@ int daNpc_ykW_c::cutHug(int param_0) {
                                           &heartScale, &heartSpeed, &heartSpeedY, -1, 0, 0);
             if (itemActor != NULL) {
                 mDoAud_seStart(Z2SE_OBJ_YO_HEART_S, &heartPos, 0, 0);
-                fopAcM_OnStatus(itemActor, fopAcM_STATUS_UNK_0x4000);
+                fopAcM_OnStatus(itemActor, fopAcStts_UNK_0x4000_e);
             }
 
             mEventTimer = timer;
@@ -2401,7 +2401,7 @@ int daNpc_ykW_c::wait(void* param_0) {
     case 2:
         if (field_0x106f != 0) {
             mHide = true;
-            fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+            fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
             if (putUtuwaHeart(0, 0.0f, 0.0f, 0x5000, 0)) {
                 fopAcM_delete(this);
             }
@@ -3028,18 +3028,18 @@ static actor_method_class daNpc_ykW_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_YKW = {
-    fpcLy_CURRENT_e,          // mLayerID
-    7,                        // mListID
-    fpcPi_CURRENT_e,          // mListPrio
-    PROC_NPC_YKW,             // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daNpc_ykW_c),      // mSize
-    0,                        // mSizeOther
-    0,                        // mParameters
-    &g_fopAc_Method.base,     // sub_method
-    381,                      // mPriority
-    &daNpc_ykW_MethodTable,   // sub_method
-    0x00040108,               // mStatus
-    fopAc_NPC_e,              // mActorType
-    fopAc_CULLBOX_CUSTOM_e,   // cullType
-  };
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_YKW_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_ykW_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_YKW_e,
+    /* Actor SubMtd */ &daNpc_ykW_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x8_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
+};

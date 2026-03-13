@@ -82,7 +82,7 @@ const static dCcD_SrcSph l_coSphSrc = {
 
 void daArrow_c::atHitCallBack(dCcD_GObjInf* i_atObjInf, fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf) {
     if (i_tgObjInf->ChkTgArrowThrough()) {
-        if (i_tgActor != NULL && fopAcM_GetName(i_tgActor) == PROC_E_PZ) {
+        if (i_tgActor != NULL && fopAcM_GetName(i_tgActor) == fpcNm_E_PZ_e) {
             ((daE_PZ_c*)i_tgActor)->onBombArrowHit();
         }
     } else if (i_tgActor != NULL && fopAcM_IsActor(i_tgActor)) {
@@ -457,7 +457,7 @@ void daArrow_c::setBombMoveEffect() {
 bool daArrow_c::checkReget() {
     if (field_0x7cc.ChkCoHit()) {
         dComIfGp_setItemArrowNumCount(1);
-        fopAcM_createItemForSimpleDemo(&current.pos, fpcNm_ITEM_ARROW_1, -1, NULL, NULL, 0.0f, 0.0f);
+        fopAcM_createItemForSimpleDemo(&current.pos, dItemNo_ARROW_1_e, -1, NULL, NULL, 0.0f, 0.0f);
         mDoAud_seStart(Z2SE_CONSUMP_ITEM_GET, 0, 0, 0);
         field_0x93f = 1;
         return true;
@@ -632,7 +632,7 @@ int daArrow_c::procMove() {
         }
 
         if (mArrowType == 4) {
-            if (field_0x688.GetAtHitAc() != NULL && fopAcM_GetName(field_0x688.GetAtHitAc()) == PROC_E_PZ) {
+            if (field_0x688.GetAtHitAc() != NULL && fopAcM_GetName(field_0x688.GetAtHitAc()) == fpcNm_E_PZ_e) {
                 iVar3 = 0;
             } else {
                 procSlingHitInit(field_0x688.GetAtHitPosP(), &field_0x688);
@@ -1125,7 +1125,7 @@ static int daArrow_draw(daArrow_c* i_this) {
 }
 
 static void* daAlink_searchHorseZelda(fopAc_ac_c* param_0, void* param_1) {
-    if (fopAcM_GetName(param_0) == PROC_HOZELDA) {
+    if (fopAcM_GetName(param_0) == fpcNm_HOZELDA_e) {
         return param_0;
     }
 
@@ -1221,18 +1221,18 @@ static actor_method_class l_daArrowMethodTable = {
 };
 
 actor_process_profile_definition g_profile_ARROW = {
-  fpcLy_CURRENT_e,        // mLayerID
-  9,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_ARROW,             // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daArrow_c),      // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  750,                    // mPriority
-  &l_daArrowMethodTable,  // sub_method
-  0x00060000,             // mStatus
-  fopAc_UNK_GROUP_5_e,    // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 9,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ARROW_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daArrow_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_ARROW_e,
+    /* Actor SubMtd */ &l_daArrowMethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_NOPAUSE_e,
+    /* Group        */ fopAc_UNK_GROUP_5_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

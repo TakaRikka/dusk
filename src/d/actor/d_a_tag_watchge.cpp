@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_tag_watchge.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 int daTagWatchGe_c::draw() {
     return 1;
@@ -20,7 +20,7 @@ static s32 m_group_count;
 
 static void* s_watchge(void* i_guayP, void* i_this) {
     u8 group_no = static_cast<daTagWatchGe_c*>(i_this)->getGroupNo();
-    if (fopAcM_GetName(i_guayP) == PROC_E_GE) {
+    if (fopAcM_GetName(i_guayP) == fpcNm_E_GE_e) {
         if (static_cast<daE_GE_c*>(i_guayP)->getGroupNo() == group_no) {
             m_group_count++;
         }
@@ -95,18 +95,18 @@ static actor_method_class l_daTagWatchGe_Method = {
 };
 
 actor_process_profile_definition g_profile_Tag_WatchGe = {
-    fpcLy_CURRENT_e,         // mLayerID  
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio 
-    PROC_Tag_WatchGe,        // mProcName               
-    &g_fpcLf_Method.base,   // sub_method                    
-    sizeof(daTagWatchGe_c),  // mSize                      
-    0,                       // mSizeOther
-    0,                       // mParameters       
-    &g_fopAc_Method.base,    // sub_method                   
-    193,                     // mPriority    
-    &l_daTagWatchGe_Method,  // sub_method                     
-    0x44000,                 // mStatus          
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_0_e,       // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_WatchGe_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagWatchGe_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Tag_WatchGe_e,
+    /* Actor SubMtd */ &l_daTagWatchGe_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

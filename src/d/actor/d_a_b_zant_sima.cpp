@@ -31,10 +31,10 @@ static int daB_ZANTS_Draw(daB_ZANTS_c* i_this) {
 }
 
 static void zants_ride_call_back(dBgW* i_bgw, fopAc_ac_c* i_this, fopAc_ac_c* i_target) {
-    if (fopAcM_GetName(i_target) == PROC_ALINK) {
+    if (fopAcM_GetName(i_target) == fpcNm_ALINK_e) {
         ((daB_ZANTS_c*)i_this)->mPlayerID = fopAcM_GetID(i_target);
         ((daB_ZANTS_c*)i_this)->mSinkTimers[TIMER_PLAYER] = 3;
-    } else if (fopAcM_GetName(i_target) == PROC_B_ZANT) {
+    } else if (fopAcM_GetName(i_target) == fpcNm_B_ZANT_e) {
         ((daB_ZANTS_c*)i_this)->mBossID = fopAcM_GetID(i_target);
         ((daB_ZANTS_c*)i_this)->mSinkTimers[TIMER_ZANT] = 3;
     }
@@ -228,18 +228,18 @@ static actor_method_class l_daB_ZANTS_Method = {
 };
 
 actor_process_profile_definition g_profile_B_ZANTS = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_B_ZANTS,
-    &g_fpcLf_Method.base,
-    sizeof(daB_ZANTS_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    229,
-    &l_daB_ZANTS_Method,
-    0x40000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_B_ZANTS_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daB_ZANTS_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_B_ZANTS_e,
+    /* Actor SubMtd */ &l_daB_ZANTS_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

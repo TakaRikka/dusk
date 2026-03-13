@@ -48,7 +48,7 @@ int daObj_SSItem_c::create() {
     field_0xB04 = -1;
 
     if (field_0xB0E == 2) {
-        field_0xB04 = fopAcM_create(PROC_OBJ_PUMPKIN, 0x10000319, &current.pos,
+        field_0xB04 = fopAcM_create(fpcNm_OBJ_PUMPKIN_e, 0x10000319, &current.pos,
                                     fopAcM_GetRoomNo(this), &current.angle, NULL, -1);
         return cPhs_COMPLEATE_e;
     } else {
@@ -372,18 +372,18 @@ static actor_method_class daObj_SSItem_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_SSITEM = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_OBJ_SSITEM,
-    &g_fpcLf_Method.base,
-    sizeof(daObj_SSItem_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x45,
-    &daObj_SSItem_MethodTable,
-    0x44100,
-    0,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_SSITEM_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObj_SSItem_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_SSITEM_e,
+    /* Actor SubMtd */ &daObj_SSItem_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

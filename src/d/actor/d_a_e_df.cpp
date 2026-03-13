@@ -13,7 +13,7 @@
 class daE_DF_HIO_c : public JORReflexible {
 public:
     daE_DF_HIO_c();
-    virtual ~daE_DF_HIO_c() {};
+    virtual ~daE_DF_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -23,17 +23,17 @@ public:
 
 STATIC_ASSERT(sizeof(daE_DF_HIO_c) == 0xC);
 
-#if DEBUG
-inline void daE_DF_HIO_c::genMessage(JORMContext* i_ctx) {
-    i_ctx->genLabel("デクレシア", 0x80000001);
-    i_ctx->genSlider("速度", &field_0x8, 0.0f, 100.0f);
-}
-#endif
-
 daE_DF_HIO_c::daE_DF_HIO_c() {
     mNo = -1;
     field_0x8 = 0.0f;
 }
+
+#if DEBUG
+void daE_DF_HIO_c::genMessage(JORMContext* i_ctx) {
+    i_ctx->genLabel("デクレシア", 0x80000001);
+    i_ctx->genSlider("速度", &field_0x8, 0.0f, 100.0f);
+}
+#endif
 
 int daE_DF_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_DF", 0xD);
@@ -101,13 +101,13 @@ void daE_DF_c::CameraSet(f32 i_posz) {
     cXyz vec(0.0f, 0.0f, i_posz);
 
     dBgS_LinChk line_chk;
-    u16 angle = 0;
+    s16 angle = 0;
     for (s16 i = 0; i < 4; i++) {
-        cLib_offsetPos(&end, &start, angle, &vec);
+        cLib_offsetPos(&end, &start, (s16)angle, &vec);
         line_chk.Set(&start, &end, NULL);
 
         if (dComIfG_Bgsp().LineCross(&line_chk) == 0) {
-            cLib_offsetPos(&end, &center, angle, &vec);
+            cLib_offsetPos(&end, &center, (s16)angle, &vec);
             end.y += 400.0f;
             camera->mCamera.Set(center, end, mFovY, 0);
 
@@ -116,7 +116,7 @@ void daE_DF_c::CameraSet(f32 i_posz) {
             break;
         }
 
-        angle += 0x10000 - 0x8000;
+        ANGLE_ADD_2(angle, 0x8000);
     }
 }
 
@@ -409,10 +409,10 @@ void daE_DF_c::LinkEatAction() {
     cLib_chaseAngleS(&mChaseAngle.z, 0, 0x100);
 }
 
-bool daE_DF_c::Mogu_Mogu() {
+u8 daE_DF_c::Mogu_Mogu() {
     if (mMoguCount > 4) {
         mMoguCount = 0;
-        return true;
+        return 1;
     }
 
     if (mpMorfSO->isLoop()) {
@@ -428,10 +428,10 @@ bool daE_DF_c::Mogu_Mogu() {
         } else {
             mCreatureSound.startCreatureSound(Z2SE_EN_DF_EAT_WAIT, 0, -1);
         }
-        return false;
+        return 0;
     }
 
-    return false;
+    return 0;
 }
 
 void daE_DF_c::ObjEatAction() {
@@ -492,22 +492,23 @@ void daE_DF_c::SearchAction() {
 
     daObjCarry_c* obj_carry = (daObjCarry_c*)fpcM_Search(s_obj_sub, this);
     if (obj_carry != NULL) {
-        if (fopAcM_GetName(obj_carry) == PROC_Obj_Carry) {
+        if (fopAcM_GetName(obj_carry) == fpcNm_Obj_Carry_e) {
             mEatObjType = EAT_TYPE_OBJ;
-            mCarryType = obj_carry->getType();
+            daObjCarry_c* obj_carry_copy = obj_carry;
+            mCarryType = obj_carry_copy->getType();
             fopAcM_delete(obj_carry);
             cXyz* obj_pos = &fopAcM_GetPosition(obj_carry);
             Set_Angle(obj_pos);
             mAction = ACT_EAT;
 
-        } else if (fopAcM_GetName(obj_carry) == PROC_ALINK && mTimer == 0) {
+        } else if (fopAcM_GetName(obj_carry) == fpcNm_ALINK_e && mTimer == 0) {
             mEatObjType = EAT_TYPE_LINK;
             Set_Angle(player_pos);
             mTargetAngle = cLib_targetAngleY(&current.pos, player_pos);
             mAction = ACT_EAT;
             dComIfGp_getVibration().StartShock(5, 0x1f, cXyz(0.0f, 1.0f, 0.0f));
 
-        } else if (fopAcM_GetName(obj_carry) == PROC_NBOMB) {
+        } else if (fopAcM_GetName(obj_carry) == fpcNm_NBOMB_e) {
             cXyz* obj_pos = &fopAcM_GetPosition(obj_carry);
             Set_Angle(obj_pos);
             mEatObjType = EAT_TYPE_BOMB;
@@ -697,7 +698,7 @@ int daE_DF_c::Create() {
             }
         }
 
-        fopAcM_OffStatus(this, 0x4000);
+        fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
         daE_DF_Execute(this);
     }
 
@@ -717,18 +718,18 @@ static actor_method_class l_daE_DF_Method = {
 };
 
 actor_process_profile_definition g_profile_E_DF = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_E_DF,               // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daE_DF_c),        // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    130,                     // mPriority
-    &l_daE_DF_Method,        // sub_method
-    0x00040100,              // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_DF_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_DF_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_DF_e,
+    /* Actor SubMtd */ &l_daE_DF_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

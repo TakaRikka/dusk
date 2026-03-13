@@ -473,7 +473,7 @@ void daE_FB_c::executeAttack() {
                         child_type = 11;
                     }
 
-                    fopAcM_createChild(PROC_E_FB, fopAcM_GetID(this), child_type, &child_pos,
+                    fopAcM_createChild(fpcNm_E_FB_e, fopAcM_GetID(this), child_type, &child_pos,
                                        fopAcM_GetRoomNo(this), &sp_0x28, NULL, -1, NULL);
                 }
             }
@@ -590,7 +590,7 @@ void daE_FB_c::executeDamage() {
                 mini_pos.x += cM_rndF(50.0f);
                 mini_pos.y += cM_rndF(100.0f) + 100.0f;
                 mini_pos.z += cM_rndF(50.0f);
-                fopAcM_create(PROC_E_FZ, 1, &mini_pos, fopAcM_GetRoomNo(this), &mini_angle, NULL, -1);
+                fopAcM_create(fpcNm_E_FZ_e, 1, &mini_pos, fopAcM_GetRoomNo(this), &mini_angle, NULL, -1);
             }
 
             dead_eff_set();
@@ -1002,20 +1002,20 @@ static actor_method_class l_daE_FB_Method = {
 };
 
 actor_process_profile_definition g_profile_E_FB = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_FB,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daE_FB_c),       // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  176,                    // mPriority
-  &l_daE_FB_Method,       // sub_method
-  0x00040100,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_FB_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_FB_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_FB_e,
+    /* Actor SubMtd */ &l_daE_FB_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

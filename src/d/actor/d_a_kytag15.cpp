@@ -8,7 +8,7 @@
 #include "d/actor/d_a_kytag15.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include <cstring>
 
 static int daKytag15_Draw(kytag15_class* i_this) {
@@ -130,18 +130,18 @@ static actor_method_class l_daKytag15_Method = {
 };
 
 actor_process_profile_definition g_profile_KYTAG15 = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_KYTAG15,
-    &g_fpcLf_Method.base,
-    sizeof(kytag15_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    109,
-    &l_daKytag15_Method,
-    0x44000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KYTAG15_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(kytag15_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_KYTAG15_e,
+    /* Actor SubMtd */ &l_daKytag15_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -158,7 +158,7 @@ void daB_YOI_c::damage_check() {
             if (pos.y < 50.0f) {
                 pos.y = 50.0f;
             }
-            fopAcM_createItem(&pos, fpcNm_ITEM_HEART, -1, -1, NULL, NULL, 0);
+            fopAcM_createItem(&pos, dItemNo_HEART_e, -1, -1, NULL, NULL, 0);
         }
     }
 }
@@ -175,7 +175,7 @@ void daB_YOI_c::setOperate(int param_0) {
         setActionMode(ACT_RISE_UP, 1);
         break;
     case 3:
-        fopAcM_OffStatus(this, 0x4000);
+        fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
         setActionMode(ACT_RISE_UP, 8);
         break;
     case 4:
@@ -197,7 +197,7 @@ void daB_YOI_c::setOperate(int param_0) {
             if (pos.y < 50.0f) {
                 pos.y = 50.0f;
             }
-            fopAcM_createItem(&pos, fpcNm_ITEM_HEART, -1, -1, NULL, NULL, 0);
+            fopAcM_createItem(&pos, dItemNo_HEART_e, -1, -1, NULL, NULL, 0);
         }
         break;
     case 8:
@@ -207,7 +207,7 @@ void daB_YOI_c::setOperate(int param_0) {
         setActionMode(ACT_DAMAGE, 0);
         break;
     case 10:
-        fopAcM_OnStatus(this, 0x4000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
         setActionMode(ACT_DEATH, 0);
         break;
     }
@@ -1069,7 +1069,7 @@ cPhs_Step daB_YOI_c::create() {
             setActionMode(ACT_FIRST, 0);
             break;
         case 1:
-            fopAcM_OffStatus(this, 0x4000);
+            fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
             setActionMode(ACT_RISE_UP, 9);
             break;
         case 2:
@@ -1100,18 +1100,18 @@ static actor_method_class l_daB_YOI_Method = {
 };
 
 actor_process_profile_definition g_profile_B_YOI = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_B_YOI,             // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daB_YOI_c),      // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  224,                    // mPriority
-  &l_daB_YOI_Method,      // sub_method
-  0x00044000,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_B_YOI_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daB_YOI_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_B_YOI_e,
+    /* Actor SubMtd */ &l_daB_YOI_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_sf.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -369,7 +369,7 @@ static void e_sf_normal(e_sf_class* i_this) {
                 angle = 0x7000;
             }
             break;
-        
+
         case NORMAL_PHASE_WAIT:
             target = l_HIO.move_spd;
             cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mAngleYOffset, 8, 0x400);
@@ -410,7 +410,7 @@ static void e_sf_drawback(e_sf_class* i_this) {
             i_this->mSound.startCreatureVoice(Z2SE_EN_SF_V_DRAWBACK, -1);
             i_this->mAngleYOffset = player->shape_angle.y + 0x8000;
             break;
-        
+
         case DRAWBACK_PHASE_END:
             a_this->onHeadLockFlg();
             cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mAngleYOffset, 4, 0x400);
@@ -448,7 +448,7 @@ static void e_sf_fight_run(e_sf_class* i_this) {
                 i_this->mActionPhase = FIGHT_RUN_PHASE_0;
             }
             break;
-        
+
         case FIGHT_RUN_PHASE_0:
             if (i_this->mType == 0) {
                 anm_init(i_this, BCK_SF_WALK02, 5.0f, J3DFrameCtrl::EMode_LOOP, cM_rndFX(0.05f) + 1.0f);
@@ -577,7 +577,7 @@ static void e_sf_attack_0(e_sf_class* i_this) {
 
     if (i_this->mHitCheckFlag) {
         fopAc_ac_c* actor_p = at_hit_check(i_this);
-        if (actor_p != NULL && fopAcM_GetName(actor_p) == PROC_ALINK) {
+        if (actor_p != NULL && fopAcM_GetName(actor_p) == fpcNm_ALINK_e) {
             if (daPy_getPlayerActorClass()->checkPlayerGuard()) {
                 i_this->mpModelMorf->setPlaySpeed(0.0f);
                 i_this->mAction = ACTION_FIGHT_RUN;
@@ -630,7 +630,7 @@ static void e_sf_attack(e_sf_class* i_this) {
 
     if (i_this->mHitCheckFlag) {
         fopAc_ac_c* actor_p = at_hit_check(i_this);
-        if (actor_p != NULL && fopAcM_GetName(actor_p) == PROC_ALINK) {
+        if (actor_p != NULL && fopAcM_GetName(actor_p) == fpcNm_ALINK_e) {
             if (daPy_getPlayerActorClass()->checkPlayerGuard()) {
                 i_this->mpModelMorf->setPlaySpeed(0.0f);
                 i_this->mAction = ACTION_FIGHT_RUN;
@@ -672,7 +672,7 @@ static int e_sf_guard(e_sf_class* i_this) {
 
             cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mPlayerAngleY, 2, 0x800);
             break;
-        
+
         case GUARD_PHASE_RECOVER:
             if (cc_pl_cut_bit_get() == 0x100 || cc_pl_cut_bit_get() == 0x80 || cc_pl_cut_bit_get() == 0x400) {
                 i_this->mTimers[0] = KREG_S(0) + 20;
@@ -709,7 +709,7 @@ static void e_sf_s_damage(e_sf_class* i_this) {
             i_this->mSound.startCreatureVoice(Z2SE_EN_SF_V_DAMAGE, -1);
             i_this->mSound.startCreatureSound(Z2SE_EN_SF_SHAKE_BONES, 0, -1);
             break;
-        
+
         case S_DAMAGE_PHASE_END:
             if (i_this->mpModelMorf->isStop()) {
                 if (i_this->mTimers[1] != 0) {
@@ -753,7 +753,7 @@ static void e_sf_crash(e_sf_class* i_this) {
             a_this->attention_info.flags = 0;
             cXyz scale(l_HIO.basic_size, l_HIO.basic_size, l_HIO.basic_size);
             dComIfGp_particle_set(dPa_RM(ID_ZI_S_SF_BARASMOKE_A), &a_this->current.pos, &a_this->shape_angle, &scale);
-            
+
             if (dComIfG_Bgsp().GetPolyAtt0(i_this->mBgc.m_gnd) == 4) {
                 dComIfGp_particle_set(dPa_RM(ID_ZI_S_SF_BARAKUSA_A), &a_this->current.pos, &a_this->shape_angle, &scale);
             }
@@ -762,7 +762,7 @@ static void e_sf_crash(e_sf_class* i_this) {
             i_this->mSound.startCreatureSound(Z2SE_EN_SF_BREAK_DOWN, 0, -1);
             break;
         }
-        
+
         case CRASH_PHASE_WAIT:
             if (i_this->mpModelMorf->isStop()) {
                 i_this->mTimers[0] = cM_rndF(50.0f) + 300.0f;
@@ -781,7 +781,7 @@ static void e_sf_crash(e_sf_class* i_this) {
             if (i_this->mTimers[0] == 0) {
                 i_this->mAction = ACTION_GETUP;
                 i_this->mActionPhase = PHASE_INIT;
-                
+
                 ret_ct++;
                 if (ret_ct >= 3) {
                     dComIfGs_onOneZoneSwitch(5, -1);
@@ -843,7 +843,7 @@ static s16 e_sf_sitwait(e_sf_class* i_this) {
                 i_this->mDemoMode = 1;
             }
             break;
-        
+
         case SITWAIT_PHASE_END:
             rv = 0xFF;
             i_this->mSound.startCreatureVoiceLevel(Z2SE_EN_SF_V_FIRST_DEMO, -1);
@@ -891,7 +891,7 @@ static s16 e_sf_getup(e_sf_class* i_this) {
                 i_this->mSound.startCreatureSound(Z2SE_EN_SF_BUILD_UP, 0, -1);
             }
             break;
-        
+
         case GETUP_PHASE_WAIT:
             if (i_this->mpModelMorf->isStop()) {
                 if (i_this->mType == 0) {
@@ -1078,7 +1078,7 @@ static void action(e_sf_class* i_this) {
             if (e_sf_guard(i_this) != 0) {
                 unkFlag1 = 1;
             }
-            
+
             isLinkSearch = 1;
             break;
 
@@ -1190,7 +1190,7 @@ static void action(e_sf_class* i_this) {
         a_this->current.pos += spd8;
         cLib_addCalc0(&i_this->field_0x6c4, 1.0f, TREG_F(12) + 7.0f);
     }
-    
+
     i_this->mBgc.CrrPos(dComIfG_Bgsp());
 
     if (i_this->field_0x6ae > 0) {
@@ -1372,7 +1372,7 @@ static void demo_camera(e_sf_class* i_this) {
     switch (i_this->mDemoMode) {
         case 0:
             break;
-        
+
         case 1:
             if (!a_this->eventInfo.checkCommandDemoAccrpt()) {
                 fopAcM_orderPotentialEvent(a_this, 2, 0xFFFF, 0);
@@ -1411,7 +1411,7 @@ static void demo_camera(e_sf_class* i_this) {
                 cLib_addCalc2(&i_this->mDemoCamFovy, 55.0f, 0.05f, 0.25f);
             }
             break;
-        
+
         case 10:
             if (!a_this->eventInfo.checkCommandDemoAccrpt()) {
                 fopAcM_orderPotentialEvent(a_this, 2, 0xFFFF, 0);
@@ -1557,7 +1557,7 @@ static int daE_SF_Execute(e_sf_class* i_this) {
     MtxPosition(&sp2c, &sp38);
     i_this->mCcSphs[1].SetC(sp38 + sp50);
     i_this->mCcSphs[1].SetR(l_HIO.basic_size * 35.0f);
-    
+
     MTXCopy(model->getAnmMtx(JNT_WAIST), *calc_mtx);
     sp2c.set(BREG_F(14) + 30.0f, BREG_F(15), BREG_F(16));
     MtxPosition(&sp2c, &sp38);
@@ -1608,7 +1608,7 @@ static int daE_SF_Execute(e_sf_class* i_this) {
     } else {
         i_this->mHitCheckFlag = 0;
     }
-    
+
     dComIfG_Ccsp()->Set(&i_this->mAtSph);
 
     if (i_this->field_0x6ab != 0) {
@@ -1719,7 +1719,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_sf", wepon_data[i_this->mType]);
     JUT_ASSERT(2752, modelData != NULL);
-    
+
     i_this->mSwordModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
     if (i_this->mSwordModel == NULL) {
         return 0;
@@ -1793,9 +1793,9 @@ static cPhs_Step daE_SF_Create(fopAc_ac_c* a_this) {
             l_HIO.id = -1;
         }
 
-        fopAcM_OnStatus(a_this, fopAcM_STATUS_UNK_0x100);
+        fopAcM_OnStatus(a_this, fopAcStts_CULL_e);
         a_this->attention_info.flags = fopAc_AttnFlag_BATTLE_e;
-        
+
         fopAcM_SetMtx(a_this, i_this->mpModelMorf->getModel()->getBaseTRMtx());
         fopAcM_SetMin(a_this, -200.0f, -200.0f, -200.0f);
         fopAcM_SetMax(a_this, 200.0f, 200.0f, 200.0f);
@@ -1885,18 +1885,18 @@ static actor_method_class l_daE_SF_Method = {
 };
 
 actor_process_profile_definition g_profile_E_SF = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_SF,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(e_sf_class),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  123,                    // mPriority
-  &l_daE_SF_Method,       // sub_method
-  0x00040000,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_SF_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_sf_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_SF_e,
+    /* Actor SubMtd */ &l_daE_SF_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_obj_onsenFire.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 int daObjOnsenFire_c::create() {
     fopAcM_ct(this, daObjOnsenFire_c);
@@ -45,18 +45,18 @@ static actor_method_class l_daObjOnsenFire_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_ONSEN_FIRE = {
-    fpcLy_CURRENT_e,           // mLayerID         
-    3,                         // mListID       
-    fpcPi_CURRENT_e,           // mListPrio        
-    PROC_OBJ_ONSEN_FIRE,       // mProcName                           
-    &g_fpcLf_Method.base,     // sub_method                           
-    sizeof(daObjOnsenFire_c),  // mSize                               
-    0,                         // mSizeOther       
-    0,                         // mParameters              
-    &g_fopAc_Method.base,      // sub_method                          
-    612,                       // mPriority                 
-    &l_daObjOnsenFire_Method,  // sub_method                              
-    0x44000,                   // mStatus                 
-    fopAc_ACTOR_e,             // mActorType       
-    fopAc_CULLBOX_CUSTOM_e,    // cullType        
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_ONSEN_FIRE_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjOnsenFire_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_ONSEN_FIRE_e,
+    /* Actor SubMtd */ &l_daObjOnsenFire_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -194,18 +194,18 @@ static actor_method_class l_daLv9SwShutter_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Lv9SwShutter = {
-  fpcLy_CURRENT_e,          // mLayerID
-  3,                        // mListID
-  fpcPi_CURRENT_e,          // mListPrio
-  PROC_Obj_Lv9SwShutter,    // mProcName
-  &g_fpcLf_Method.base,    // sub_method
-  sizeof(daLv9SwShutter_c), // mSize
-  0,                        // mSizeOther
-  0,                        // mParameters
-  &g_fopAc_Method.base,     // sub_method
-  647,                      // mPriority
-  &l_daLv9SwShutter_Method, // sub_method
-  0x00040000,               // mStatus
-  fopAc_ACTOR_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e,   // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Lv9SwShutter_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daLv9SwShutter_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Lv9SwShutter_e,
+    /* Actor SubMtd */ &l_daLv9SwShutter_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

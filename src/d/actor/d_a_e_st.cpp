@@ -334,20 +334,20 @@ static int daE_ST_Draw(e_st_class* i_this) {
     pos.set(a_this->current.pos.x, a_this->current.pos.y + 400.0f + BREG_F(18), a_this->current.pos.z);
     if (fopAcM_gc_c::gndCheck(&pos)) {
         pos.y = TREG_F(7) + fopAcM_gc_c::getGroundY();
-        i_this->mShadowKey = dComIfGd_setShadow(i_this->mShadowKey, 1, model, &pos, l_HIO.basic_size * 700.0f, 0.0f,
-                                                a_this->current.pos.y, fopAcM_gc_c::getGroundY(), *fopAcM_gc_c::getGroundCheck(),
-                                                &a_this->tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+        i_this->mShadowKey =
+            dComIfGd_setShadow(i_this->mShadowKey, 1, model, &pos, l_HIO.basic_size * 700.0f, 0.0f,
+                               a_this->current.pos.y, fopAcM_gc_c::getGroundY(),
+                               *fopAcM_gc_c::getGroundCheck(), &i_this->actor.tevStr, 0, 1.0f,
+                               dDlst_shadowControl_c::getSimpleTex());
     }
 
     if (i_this->field_0x720 != 0) {
-        u8 uVar1 = JREG_S(5) + 180;
-        GXColor color = {uVar1, uVar1, uVar1, 0xFF};
-        i_this->mLineMat1.update(20, color, &a_this->tevStr);
+        u8 brightness = JREG_S(5) + 180;
+        i_this->mLineMat1.update(20, COMPOUND_LITERAL(GXColor){brightness, brightness, brightness, 0xFF}, &a_this->tevStr);
         dComIfGd_set3DlineMat(&i_this->mLineMat1);
 
         if (i_this->field_0x760 != 0) {
-            GXColor color2 = {uVar1, uVar1, uVar1, 0xFF};
-            i_this->mLineMat2.update(20, color2, &a_this->tevStr);
+            i_this->mLineMat2.update(20, COMPOUND_LITERAL(GXColor){brightness, brightness, brightness, 0xFF}, &a_this->tevStr);
             dComIfGd_set3DlineMat(&i_this->mLineMat2);
         }
     }
@@ -863,7 +863,7 @@ static void e_st_shoot(e_st_class* i_this) {
 
             if (frame >= 0x1E && frame <= 0x2A) {
                 for (int i = 0; i < TREG_S(2) + 5; i++) {
-                    fopAcM_createChild(PROC_E_ST_LINE, fopAcM_GetID(a_this), i_this->mParameters,
+                    fopAcM_createChild(fpcNm_E_ST_LINE_e, fopAcM_GetID(a_this), i_this->mParameters,
                                        &i_this->field_0x704, fopAcM_GetRoomNo(a_this), NULL, NULL, -1, NULL);
                     i_this->mParameters++;
                 }
@@ -1249,7 +1249,7 @@ static void e_st_hang_shoot(e_st_class* i_this) {
 
             if (frame >= 0x1E && frame <= 0x2A) {
                 for (int i = 0; i < TREG_S(2) + 5; i++) {
-                    fopAcM_createChild(PROC_E_ST_LINE, fopAcM_GetID(a_this), i_this->mParameters,
+                    fopAcM_createChild(fpcNm_E_ST_LINE_e, fopAcM_GetID(a_this), i_this->mParameters,
                                        &i_this->field_0x704, fopAcM_GetRoomNo(a_this), NULL, NULL, -1, NULL);
                     i_this->mParameters++;
                 }
@@ -1490,7 +1490,7 @@ static void e_st_hang_2_shoot(e_st_class* i_this) {
 
             if (frame >= 0x1E && frame <= 0x2A) {
                 for (int i = 0; i < TREG_S(2) + 5; i++) {
-                    fopAcM_createChild(PROC_E_ST_LINE, fopAcM_GetID(a_this), i_this->mParameters,
+                    fopAcM_createChild(fpcNm_E_ST_LINE_e, fopAcM_GetID(a_this), i_this->mParameters,
                                        &i_this->field_0x704, fopAcM_GetRoomNo(a_this), NULL, NULL, -1, NULL);
                     i_this->mParameters++;
                 }
@@ -1924,7 +1924,7 @@ static s8 e_st_g_fight(e_st_class* i_this) {
     if (i_this->mAtSph.ChkAtHit()) {
         cCcD_Obj* at_hit_obj_p = i_this->mAtSph.GetAtHitObj();
         fopAc_ac_c* actor_p = dCc_GetAc(at_hit_obj_p->GetAc());
-        if (actor_p != NULL && fopAcM_GetName(actor_p) == PROC_ALINK) {
+        if (actor_p != NULL && fopAcM_GetName(actor_p) == fpcNm_ALINK_e) {
             dComIfGp_getVibration().StartShock(VIBMODE_S_POWER4, 31, cXyz(0.0f, 1.0f, 0.0f));
         }
     }
@@ -3207,18 +3207,18 @@ static actor_method_class l_daE_ST_Method = {
 };
 
 actor_process_profile_definition g_profile_E_ST = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_ST,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(e_st_class),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  129,                    // mPriority
-  &l_daE_ST_Method,       // sub_method
-  0x10040100,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_ST_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_st_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_ST_e,
+    /* Actor SubMtd */ &l_daE_ST_Method,
+    /* Status       */ fopAcStts_UNK_0x10000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

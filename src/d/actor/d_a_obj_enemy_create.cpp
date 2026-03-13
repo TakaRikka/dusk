@@ -159,34 +159,34 @@ void daObjE_CREATE_c::NameChk() {
     case ENEMY_NONE:
         break;
     case ENEMY_KEESE:
-        mEnemyProcName = PROC_E_BA;
+        mEnemyProcName = fpcNm_E_BA_e;
         break;
     case ENEMY_RAT:
-        mEnemyProcName = PROC_E_MS;
+        mEnemyProcName = fpcNm_E_MS_e;
         break;
     case ENEMY_CHU:
-        mEnemyProcName = PROC_E_SM2;
+        mEnemyProcName = fpcNm_E_SM2_e;
         mEnemyParams = 0xFFFFFF1F;
         break;
     case ENEMY_CHU2:
-        mEnemyProcName = PROC_E_SM2;
+        mEnemyProcName = fpcNm_E_SM2_e;
         mEnemyParams = 0xFFFFFF3F;
         break;
     case ENEMY_BABY_GOHMA:
-        mEnemyProcName = PROC_E_GM;
+        mEnemyProcName = fpcNm_E_GM_e;
         mEnemyParams = 0x000AFF02;
         break;
     case ENEMY_BUBBLE:
-        mEnemyProcName = PROC_E_BU;
+        mEnemyProcName = fpcNm_E_BU_e;
         break;
     case ENEMY_BOKOBLIN:
-        mEnemyProcName = PROC_E_OC;
+        mEnemyProcName = fpcNm_E_OC_e;
         break;
     case ENEMY_LIZALFOS:
-        mEnemyProcName = PROC_E_DN;
+        mEnemyProcName = fpcNm_E_DN_e;
         break;
     case ENEMY_SHADOW_BEAST:
-        mEnemyProcName = PROC_E_S1;
+        mEnemyProcName = fpcNm_E_S1_e;
 
         if (mEnemyNum == 1) {
             mEnemyParams = 0xFFFFFEF0;
@@ -195,15 +195,15 @@ void daObjE_CREATE_c::NameChk() {
         }
         break;
     case ENEMY_SHADOW_VERMIN:
-        mEnemyProcName = PROC_E_YG;
+        mEnemyProcName = fpcNm_E_YG_e;
         mEnemyParams = 0xFFFFFF00;
         break;
     case ENEMY_SHADOW_KEESE:
-        mEnemyProcName = PROC_E_YK;
+        mEnemyProcName = fpcNm_E_YK_e;
         mEnemyParams = 0xFFFFFF01;
         break;
     case ENEMY_BOKOBLIN2:
-        mEnemyProcName = PROC_E_OC;
+        mEnemyProcName = fpcNm_E_OC_e;
         mEnemyParams = 0xFFFF01FF;
         mEnemyAngle.set(0x100, shape_angle.y, shape_angle.z);
         break;
@@ -254,18 +254,18 @@ static actor_method_class l_daObjE_CREATE_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_E_CREATE = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Obj_E_CREATE,
-    &g_fpcLf_Method.base,
-    sizeof(daObjE_CREATE_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    458,
-    &l_daObjE_CREATE_Method,
-    0x40000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_E_CREATE_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjE_CREATE_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_E_CREATE_e,
+    /* Actor SubMtd */ &l_daObjE_CREATE_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

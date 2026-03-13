@@ -1,6 +1,6 @@
 /**
  * @file d_a_obj_kshutter.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -204,7 +204,7 @@ int daObjKshtr_c::Create() {
     }
 
     if (mType == TYPE_V_SHUTTER) {
-        fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x100);
+        fopAcM_OffStatus(this, fopAcStts_CULL_e);
     }
 
     initBaseMtx();
@@ -299,7 +299,7 @@ void daObjKshtr_c::initKey() {
                 uVar1 = 0xFFFFFFFF;
             }
 
-            mKeyHoleId = fopAcM_createChildFromOffset(PROC_OBJ_KEYHOLE, fopAcM_GetID(this), uVar1, &sp20, fopAcM_GetRoomNo(this), NULL, &scale, -1, NULL);
+            mKeyHoleId = fopAcM_createChildFromOffset(fpcNm_OBJ_KEYHOLE_e, fopAcM_GetID(this), uVar1, &sp20, fopAcM_GetRoomNo(this), NULL, &scale, -1, NULL);
         }
     }
 }
@@ -633,7 +633,7 @@ BOOL daObjKshtr_c::openProc() {
 
         default:
             return openProc_type2();
-        
+
         case TYPE_L3BOSS:
             return openProc_typeL3Boss();
 
@@ -734,7 +734,7 @@ BOOL daObjKshtr_c::demoJail1() {
                 mDemoMode = 2;
             }
             break;
-        
+
         case 2:
             anmInit();
             mDoAud_seStart(Z2SE_OBJ_WOOD_DOOR_ROLLOPEN2, &current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
@@ -750,7 +750,7 @@ BOOL daObjKshtr_c::demoJail1() {
                 mDemoMode = 4;
             }
             break;
-        
+
         case 4:
             break;
     }
@@ -776,7 +776,7 @@ BOOL daObjKshtr_c::demoJail2() {
                 mDemoMode = 2;
             }
             break;
-        
+
         case 2:
             speedF = 0.0f;
             mDemoMode = 3;
@@ -804,7 +804,7 @@ BOOL daObjKshtr_c::demoJail11() {
             mDoAud_seStart(Z2SE_OBJ_WOOD_DOOR_ROLLOPEN2, &current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
             offDzb();
             break;
-        
+
         case 1:
             if (mpBckAnm->play()) {
                 mDemoMode = 2;
@@ -972,18 +972,18 @@ static actor_method_class daObjKshtr_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_Kshutter = {
-  fpcLy_CURRENT_e,        // mLayerID
-  3,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_Kshutter,      // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjKshtr_c),   // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  443,                    // mPriority
-  &daObjKshtr_METHODS,    // sub_method
-  0x00040100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Kshutter_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjKshtr_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Kshutter_e,
+    /* Actor SubMtd */ &daObjKshtr_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

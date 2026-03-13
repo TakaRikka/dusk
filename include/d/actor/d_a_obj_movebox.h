@@ -24,9 +24,13 @@ namespace daObjMovebox {
 enum Type_e { pp_field = 3 };
 
 struct Attr_c {
-    struct sMinMax { // fabricated
-        s16 min;
-        s16 max;
+    struct sMinMax3 { // fabricated
+        s16 xMin;
+        s16 xMax;
+        s16 yMin;
+        s16 yMax;
+        s16 zMin;
+        s16 zMax;
     };
     /* 0x00 */ s16 mFirstPushStopTime;
     /* 0x02 */ s16 mRepeatPushStopTime;
@@ -53,26 +57,24 @@ struct Attr_c {
     /* 0x4C */ f32 mMaxTiltPower;
     /* 0x50 */ f32 mTiltSpringFactor;
     /* 0x54 */ f32 mTiltViscoscityResistance;
-    /* 0x58 */ int field_0x58;
-    /* 0x5C */ int field_0x5c;
-    /* 0x60 */ u32 field_0x60;
-    /* 0x64 */ f32 field_0x64;
+    /* 0x58 */ int mModelResIdx;
+    /* 0x5C */ int mMoveBGIdx;
+    /* 0x60 */ u32 mHeapSize;
+    /* 0x64 */ f32 mScaleY;
     /* 0x68 */ f32 field_0x68;
-    /* 0x6C */ f32 field_0x6c;
-    /* 0x70 */ f32 field_0x70;
-    /* 0x74 */ f32 field_0x74;
+    /* 0x6C */ f32 mWaterBobScale; // always the reciprocal of field_0x68
+    /* 0x70 */ f32 mScaleXZ;
+    /* 0x74 */ f32 mTiltForceScale; // always the reciprocal of mScaleXZ
     /* 0x78 */ f32 field_0x78;
-    /* 0x7C */ u32 field_0x7c;
-    /* 0x80 */ u32 field_0x80;
-    /* 0x84 */ u32 field_0x84;
-    /* 0x88 */ u32 field_0x88;
-    /* 0x8C */ int field_0x8c;
-    /* 0x90 */ sMinMax mCullX;
-    /* 0x94 */ sMinMax mCullY;
-    /* 0x98 */ sMinMax mCullZ;
-    /* 0x9C */ u8 field_0x9c;
-    /* 0x9D */ u8 field_0x9d;
-    /* 0x9E */ u8 field_0x9e;
+    /* 0x7C */ Z2SoundID mSoundSlip;
+    /* 0x80 */ Z2SoundID mSoundLimit;
+    /* 0x84 */ Z2SoundID mSoundLand;
+    /* 0x88 */ Z2SoundID mSoundFallWater;
+    /* 0x8C */ Z2SoundID mSoundFallMagma;
+    /* 0x90 */ sMinMax3 mCull;
+    /* 0x9C */ bool field_0x9c;
+    /* 0x9D */ bool mDisableShadow;
+    /* 0x9E */ bool mUseLargeGrid;
 };
 
 struct Hio_c : JORReflexible {
@@ -153,7 +155,13 @@ struct Act_c : public dBgS_MoveBgActor {
     int prm_get_swSave1() const;
     void prmZ_init();
     void prmX_init();
+    // it seems like this signature changed between GCN and Wii?
+    // GCN only matches with a const reference return type and Wii/Shield only match with non-const
+#if PLATFORM_GCN
     const daObjMovebox::Attr_c& attr() const;
+#else
+    daObjMovebox::Attr_c& attr() const;
+#endif
     void set_mtx();
     void init_mtx();
     void path_init();
@@ -176,6 +184,7 @@ struct Act_c : public dBgS_MoveBgActor {
     void sound_land();
     void vib_land();
     void eff_land_smoke();
+    void eff_break();
 
     virtual int CreateHeap();
     virtual int Create();

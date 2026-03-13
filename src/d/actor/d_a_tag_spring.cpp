@@ -9,7 +9,7 @@
 
 #include "d/actor/d_a_player.h"
 #include "d/d_debug_viewer.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 class daTagSpring_HIO_c : public mDoHIO_entry_c {
 public:
@@ -163,18 +163,18 @@ static actor_method_class l_daTagSpring_Method = {
 };
 
 actor_process_profile_definition g_profile_Tag_Spring = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_Tag_Spring,        // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(daTagSpring_c),  // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    587,                    // mPriority
-    &l_daTagSpring_Method,  // sub_method
-    0x40000,                // mStatus
-    fopAc_ACTOR_e,          // mActorType
-    fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_Spring_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagSpring_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Tag_Spring_e,
+    /* Actor SubMtd */ &l_daTagSpring_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

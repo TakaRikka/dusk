@@ -3,7 +3,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_e_db_leaf.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 static int daE_DB_LEAF_Draw(e_db_leaf_class* i_this) {
     g_env_light.settingTevStruct(0,&i_this->current.pos,&i_this->tevStr);
@@ -68,18 +68,18 @@ static actor_method_class l_daE_DB_LEAF_Method = {
 };
 
 actor_process_profile_definition g_profile_E_DB_LEAF = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_E_DB_LEAF,
-    &g_fpcLf_Method.base,
-    sizeof(e_db_leaf_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    137,
-    &l_daE_DB_LEAF_Method,
-    0x40000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_DB_LEAF_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_db_leaf_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_DB_LEAF_e,
+    /* Actor SubMtd */ &l_daE_DB_LEAF_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

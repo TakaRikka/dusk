@@ -1007,7 +1007,7 @@ static void e_gf_end(e_gb_class* i_this) {
             }
 
             if (i_this->timer[0] == 0) {
-                daKey_c* key_p = (daKey_c*)fopAcM_SearchByName(PROC_Obj_SmallKey);
+                daKey_c* key_p = (daKey_c*)fopAcM_SearchByName(fpcNm_Obj_SmallKey_e);
                 cXyz pos(actor->home.pos);
                 pos.z += YREG_F(12);
                 if (key_p != NULL) {
@@ -1081,7 +1081,7 @@ static void action2(e_gb_class* i_this) {
     }
 
     if (i_this->keyStatus != 0) {
-        daKey_c* key_p = (daKey_c*)fopAcM_SearchByName(PROC_Obj_SmallKey);
+        daKey_c* key_p = (daKey_c*)fopAcM_SearchByName(fpcNm_Obj_SmallKey_e);
         if (key_p != NULL) {
             key_p->seStartTwinkle(Z2SE_OBJ_KEY_TWINKLE, &i_this->keyPos);
         }
@@ -1730,18 +1730,18 @@ static actor_method_class l_daE_GB_Method = {
 };
 
 actor_process_profile_definition g_profile_E_GB = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_GB,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(e_gb_class),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  139,                    // mPriority
-  &l_daE_GB_Method,       // sub_method
-  0x00040000,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_GB_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_gb_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_GB_e,
+    /* Actor SubMtd */ &l_daE_GB_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

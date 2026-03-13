@@ -10,7 +10,7 @@
 #include "m_Do/m_Do_lib.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_menu_insect.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "f_op/f_op_camera_mng.h"
 #include <cstring>
 
@@ -494,7 +494,7 @@ void daObjKABUTO_c::Insect_Release() {
     mMode = 0;
 }
 
-static u8 const l_kab_itemno[2] = {fpcNm_ITEM_M_BEETLE, fpcNm_ITEM_F_BEETLE};
+static u8 const l_kab_itemno[2] = {dItemNo_M_BEETLE_e, dItemNo_F_BEETLE_e};
 
 // Some unused function went here.
 // This fake function is here in its place to make the literals match
@@ -733,7 +733,7 @@ cPhs_Step daObjKABUTO_c::create() {
         if (mLocation == LOC_UNK_2) {
             field_0x56c = 0;
             shape_angle.x -= 0x2000;
-            fopAcM_OnStatus(this, 0x4000);
+            fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
         } else {
             mDraw = true;
             attention_info.distances[fopAc_attn_CARRY_e] = 0x5D;
@@ -864,18 +864,18 @@ static actor_method_class l_daObjKABUTO_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Kabuto = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_Obj_Kabuto,
-    &g_fpcLf_Method.base,
-    sizeof(daObjKABUTO_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x1DD,
-    &l_daObjKABUTO_Method,
-    0xC0120,
-    fopAc_ENV_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Kabuto_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjKABUTO_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Kabuto_e,
+    /* Actor SubMtd */ &l_daObjKABUTO_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x20_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

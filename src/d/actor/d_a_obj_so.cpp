@@ -65,7 +65,7 @@ static void ride_call_back_1(dBgW* i_BgW, fopAc_ac_c* a_this, fopAc_ac_c* param_
 
 static void so_hasira(obj_so_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
-    daPillar_c* pillar_p = (daPillar_c*)fopAcM_SearchByName(PROC_Obj_Pillar);
+    daPillar_c* pillar_p = (daPillar_c*)fopAcM_SearchByName(fpcNm_Obj_Pillar_e);
     if (pillar_p != NULL) {
         mDoMtx_stack_c::transS(pillar_p->current.pos.x, pillar_p->current.pos.y, pillar_p->current.pos.z);
         mDoMtx_stack_c::YrotM(pillar_p->mRotY);
@@ -849,10 +849,10 @@ static void demo_camera(obj_so_class* i_this) {
                 cXyz sp48(-4264.0f, 302.0f, -2330.0f);
                 cXyz sp54(16400.0f, 3529.0f, 8385.0f);
                 sp54 += sp48;
-                fpc_ProcID i_parentID = fopAcM_create(PROC_E_OC, 0xFFFF0103, &sp54, fopAcM_GetRoomNo(a_this), &i_angle, 0, -1);
+                fpc_ProcID i_parentID = fopAcM_create(fpcNm_E_OC_e, 0xFFFF0103, &sp54, fopAcM_GetRoomNo(a_this), &i_angle, 0, -1);
                 sp54.set(16200.0f, 3481.0f, 8418.0f);
                 sp54 += sp48;
-                fopAcM_createChild(PROC_E_OC, i_parentID, 0xFFFF0104, &sp54, fopAcM_GetRoomNo(a_this), &i_angle, NULL, -1, NULL);
+                fopAcM_createChild(fpcNm_E_OC_e, i_parentID, 0xFFFF0104, &sp54, fopAcM_GetRoomNo(a_this), &i_angle, NULL, -1, NULL);
             } else if (i_this->field_0x1ba2 == 125) {
                 i_this->mDemoMode = 100;
             }
@@ -1063,7 +1063,7 @@ static int daObj_So_Create(fopAc_ac_c* a_this) {
                 i_this->field_0xdae = 3;
                 if (fopAcM_GetRoomNo(a_this) == 4) {
                     cXyz sp2c(-5374.0f, 4280.0f, -2342.0f);
-                    i_this->field_0x1b94 = fopAcM_create(PROC_OBJ_GM, 0x600, &sp2c, fopAcM_GetRoomNo(a_this),
+                    i_this->field_0x1b94 = fopAcM_create(fpcNm_OBJ_GM_e, 0x600, &sp2c, fopAcM_GetRoomNo(a_this),
                                                          NULL, NULL, -1);
                 }
             }
@@ -1089,18 +1089,18 @@ static actor_method_class l_daObj_So_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_SO = {
-  fpcLy_CURRENT_e,        // mLayerID
-  2,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_OBJ_SO,            // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(obj_so_class),   // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  55,                     // mPriority
-  &l_daObj_So_Method,     // sub_method
-  0x00044000,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 2,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_SO_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(obj_so_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_SO_e,
+    /* Actor SubMtd */ &l_daObj_So_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

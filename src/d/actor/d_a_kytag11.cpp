@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_kytag11.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "d/d_kankyo_static.h"
 
 static int daKytag11_Draw(kytag11_class* i_this) {
@@ -114,18 +114,18 @@ static actor_method_class l_daKytag11_Method = {
 };
 
 actor_process_profile_definition g_profile_KYTAG11 = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_KYTAG11,
-    &g_fpcLf_Method.base,
-    sizeof(kytag11_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    105,
-    &l_daKytag11_Method,
-    0x44000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KYTAG11_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(kytag11_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_KYTAG11_e,
+    /* Actor SubMtd */ &l_daKytag11_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

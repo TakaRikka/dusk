@@ -1007,10 +1007,10 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
     ken0->hide();
     ken1->hide();
 
-    if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_SWORD)) {
+    if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_SWORD_e)) {
         ken0->hide();
         ken1->show();
-    } else if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_WOOD_STICK) &&
+    } else if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_WOOD_STICK_e) &&
                !pSave->getEvent().isEventBit(dSv_event_flag_c::F_0026))
     {
         ken0->show();
@@ -1018,8 +1018,8 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
     }
 
     J2DPane* ken2 = mSelDt.ScrDt->search(MULTI_CHAR('ken_02'));
-    if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_MASTER_SWORD) ||
-        pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_LIGHT_SWORD))
+    if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_MASTER_SWORD_e) ||
+        pSave->getPlayer().getGetItem().isFirstBit(dItemNo_LIGHT_SWORD_e))
     {
         ken2->show();
     } else {
@@ -1031,37 +1031,37 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
     tate0->hide();
     tate1->hide();
 
-    if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_SHIELD)) {
+    if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_SHIELD_e)) {
         tate0->show();
         tate1->hide();
-    } else if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_WOOD_SHIELD)) {
+    } else if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_WOOD_SHIELD_e)) {
         tate0->hide();
         tate1->show();
     }
 
     J2DPane* tate2 = mSelDt.ScrDt->search(MULTI_CHAR('tate_02'));
-    if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_HYLIA_SHIELD)) {
+    if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_HYLIA_SHIELD_e)) {
         tate2->show();
     } else {
         tate2->hide();
     }
 
     J2DPane* fuku0 = mSelDt.ScrDt->search(MULTI_CHAR('fuku_00'));
-    if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_WEAR_KOKIRI)) {
+    if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_WEAR_KOKIRI_e)) {
         fuku0->show();
     } else {
         fuku0->hide();
     }
 
     J2DPane* fuku1 = mSelDt.ScrDt->search(MULTI_CHAR('fuku_01'));
-    if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_WEAR_ZORA)) {
+    if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_WEAR_ZORA_e)) {
         fuku1->show();
     } else {
         fuku1->hide();
     }
 
     J2DPane* fuku2 = mSelDt.ScrDt->search(MULTI_CHAR('fuku_02'));
-    if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_ARMOR)) {
+    if (pSave->getPlayer().getGetItem().isFirstBit(dItemNo_ARMOR_e)) {
         fuku2->show();
     } else {
         fuku2->hide();

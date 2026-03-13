@@ -32,7 +32,7 @@ public:
     static void make_land_smoke(cXyz* i_pos, f32 i_scale) {
         cXyz scale(i_scale, i_scale, i_scale);
         scale *= 1.6666666f;
-        fopAcM_create(PROC_Obj_Eff, 3, i_pos, -1, NULL, &scale, -1);
+        fopAcM_create(fpcNm_Obj_Eff_e, 3, i_pos, -1, NULL, &scale, -1);
     }
 };
 };  // namespace daObjEff

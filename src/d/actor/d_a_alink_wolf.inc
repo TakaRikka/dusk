@@ -824,7 +824,7 @@ void daAlink_c::setSpeedAndAngleWolfAtn() {
 
 BOOL daAlink_c::checkWolfAtnWait() {
     if ((checkEnemyGroup(mTargetedActor) || mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK_23_e) ||
-        (mTargetedActor != NULL && fopAcM_GetName(mTargetedActor) == PROC_NPC_MOI &&
+        (mTargetedActor != NULL && fopAcM_GetName(mTargetedActor) == fpcNm_NPC_MOI_e &&
          ((daNpc_Moi_c*)mTargetedActor)->chkSFight()))
     {
         return true;
@@ -1586,7 +1586,7 @@ BOOL daAlink_c::checkWolfBarrierWallHit(cBgS_PolyInfo& i_polyinfo) {
     }
 
     s16 bg_name = getMoveBGActorName(i_polyinfo, TRUE);
-    if (bg_name == PROC_OBJ_TP || bg_name == PROC_OBJ_GB || bg_name == PROC_Obj_GanonWall2) {
+    if (bg_name == fpcNm_OBJ_TP_e || bg_name == fpcNm_OBJ_GB_e || bg_name == fpcNm_Obj_GanonWall2_e) {
         return true;
     }
 
@@ -3813,7 +3813,7 @@ int daAlink_c::procWolfSlopeStart() {
 static fopAc_ac_c* daAlink_searchGoldWolf(fopAc_ac_c* i_actor, void* i_data) {
     UNUSED(i_data);
 
-    if (fopAcM_GetName(i_actor) == PROC_NPC_GWOLF) {
+    if (fopAcM_GetName(i_actor) == fpcNm_NPC_GWOLF_e) {
         return i_actor;
     }
 
@@ -3825,10 +3825,10 @@ static void* daAlink_searchWolfHowl(fopAc_ac_c* i_actor, void* i_data) {
     fopAc_ac_c** var_r30 = (fopAc_ac_c**)i_data;
     daAlink_c* player_p = daAlink_getAlinkActorClass();
 
-    if ((actor_name == PROC_KAGO && dComIfGs_isEventBit(dSv_event_flag_c::M_051)) ||
-        (actor_name == PROC_E_PM &&
+    if ((actor_name == fpcNm_KAGO_e && dComIfGs_isEventBit(dSv_event_flag_c::M_051)) ||
+        (actor_name == fpcNm_E_PM_e &&
          player_p->current.pos.abs2XZ(i_actor->current.pos) < SQUARE(3000.0f)) ||
-        actor_name == PROC_OBJ_SEKIZOA ||
+        actor_name == fpcNm_OBJ_SEKIZOA_e ||
         (*var_r30 == NULL && actor_name == player_p->getGrassHowlEventActor()))
     {
         *var_r30 = i_actor;
@@ -3869,10 +3869,10 @@ int daAlink_c::procWolfHowlDemoInit() {
     if (field_0x27f4 != NULL) {
         name = fopAcM_GetName(field_0x27f4);
     } else {
-        name = PROC_ALINK;
+        name = fpcNm_ALINK_e;
     }
 
-    if (name == PROC_Tag_WaraHowl) {
+    if (name == fpcNm_Tag_WaraHowl_e) {
         shape_angle.y = field_0x27f4->shape_angle.y;
         current.angle.y = shape_angle.y;
     } else {
@@ -3916,8 +3916,8 @@ int daAlink_c::procWolfHowlDemoInit() {
     mProcVar4.field_0x3010 = 0;
     mProcVar0.field_0x3008 = -1;
 
-    if (name != PROC_ALINK) {
-        if (name == PROC_Obj_Yobikusa) {
+    if (name != fpcNm_ALINK_e) {
+        if (name == fpcNm_Obj_Yobikusa_e) {
             daObjYobikusa_c* yobikusa_p = (daObjYobikusa_c*)field_0x27f4;
 
             mZ2WolfHowlMgr.setCorrectCurve(yobikusa_p->getType());
@@ -3930,16 +3930,16 @@ int daAlink_c::procWolfHowlDemoInit() {
             } else if (yobikusa_p->getType() == 1) {
                 field_0x3198 = 0xEE;
             }
-        } else if (name == PROC_TAG_HOWL) {
+        } else if (name == fpcNm_TAG_HOWL_e) {
             mZ2WolfHowlMgr.setCorrectCurve(static_cast<daTag_Howl_c*>(field_0x27f4)->getCurveID());
-        } else if (name == PROC_Obj_WindStone) {
+        } else if (name == fpcNm_Obj_WindStone_e) {
             mZ2WolfHowlMgr.setCorrectCurve(static_cast<daWindStone_c*>(field_0x27f4)->getTuneId());
             mProcVar0.field_0x3008 = static_cast<daWindStone_c*>(field_0x27f4)->getNextSceneId();
             mProcVar4.field_0x3010 = 1;
-        } else if (name == PROC_Obj_SmWStone) {
+        } else if (name == fpcNm_Obj_SmWStone_e) {
             mZ2WolfHowlMgr.setCorrectCurve(static_cast<daSmWStone_c*>(field_0x27f4)->getTuneId());
             mProcVar4.field_0x3010 = 1;
-        } else if (name == PROC_Tag_WaraHowl) {
+        } else if (name == fpcNm_Tag_WaraHowl_e) {
             mZ2WolfHowlMgr.setCorrectCurve(static_cast<daTagWrHowl_c*>(field_0x27f4)->getTuneId());
         } else {
             mZ2WolfHowlMgr.setCorrectCurve(-1);
@@ -4101,14 +4101,14 @@ int daAlink_c::procWolfHowlDemo() {
                             fopAcM_OnStatus(actor_p, 0x800);
 
                             s16 actorName = fopAcM_GetName(actor_p);
-                            if (actorName == PROC_KAGO) {
+                            if (actorName == fpcNm_KAGO_e) {
                                 static_cast<daKago_c*>(actor_p)->setEvent();
                                 static_cast<daKago_c*>(actor_p)->setKagoPath(mProcVar5.field_0x3012);
-                            } else if (actorName == PROC_OBJ_SEKIZOA) {
+                            } else if (actorName == fpcNm_OBJ_SEKIZOA_e) {
                                 static_cast<daObj_Sekizoa_c*>(actor_p)->setWolfHowling();
-                            } else if (actorName == PROC_E_PM) {
+                            } else if (actorName == fpcNm_E_PM_e) {
                                 static_cast<daE_PM_c*>(actor_p)->AppearSet();
-                            } else if (actorName == PROC_HORSE) {
+                            } else if (actorName == fpcNm_HORSE_e) {
                                 daHorse_c* horse = static_cast<daHorse_c*>(actor_p);
                                 int ret = horse->callHorse(&current.pos);
                                 if (ret == 1 || ret == 2) {
@@ -4120,7 +4120,7 @@ int daAlink_c::procWolfHowlDemo() {
                                     setWolfHowlNotHappen(isSkipEdge);
                                     return 1;
                                 }
-                            } else if (actorName == PROC_NPC_TK) {
+                            } else if (actorName == fpcNm_NPC_TK_e) {
                                 static_cast<daNPC_TK_c*>(actor_p)->setEventWolf();
                                 static_cast<daNPC_TK_c*>(actor_p)->setHawkPath(mProcVar5.field_0x3012);
                             }
@@ -4176,14 +4176,14 @@ int daAlink_c::procWolfHowlDemo() {
 
 BOOL daAlink_c::checkWolfRope() {
     return checkModeFlg(0x20000) && field_0x280c.getActor() != NULL &&
-           fopAcM_GetName(field_0x280c.getActor()) == PROC_Obj_Crope;
+           fopAcM_GetName(field_0x280c.getActor()) == fpcNm_Obj_Crope_e;
 }
 
 fopAc_ac_c* daAlink_c::checkWolfRopeHit(dCcD_GObjInf* i_collider, cXyz const* param_1,
                                         int param_2) const {
     daObjCrope_c* rope_p = (daObjCrope_c*)i_collider->GetCoHitAc();
 
-    if (i_collider->ChkCoHit() && rope_p != NULL && fopAcM_GetName(rope_p) == PROC_Obj_Crope) {
+    if (i_collider->ChkCoHit() && rope_p != NULL && fopAcM_GetName(rope_p) == fpcNm_Obj_Crope_e) {
         if (param_2) {
             if (rope_p->getRopeStartPos()->abs2XZ(*param_1) > SQUARE(100.0f)) {
                 if (rope_p->getRopeEndPos()->abs2XZ(*param_1) > SQUARE(100.0f)) {
@@ -4987,9 +4987,9 @@ const cXyz* daAlink_c::checkMidnaLockJumpPoint() const {
 
     if (mProcID == PROC_WOLF_TAG_JUMP && field_0x280c.getActorConst() != NULL) {
         wljump_p = field_0x280c.getActorConst();
-    } else if (field_0x27f4 != NULL && fopAcM_GetName(field_0x27f4) == PROC_Tag_Wljump) {
+    } else if (field_0x27f4 != NULL && fopAcM_GetName(field_0x27f4) == fpcNm_Tag_Wljump_e) {
         wljump_p = field_0x27f4;
-    } else if (partner_p != NULL && fopAcM_GetName(partner_p) == PROC_Tag_Wljump) {
+    } else if (partner_p != NULL && fopAcM_GetName(partner_p) == fpcNm_Tag_Wljump_e) {
         wljump_p = partner_p;
     }
 
@@ -5225,7 +5225,7 @@ int daAlink_c::procWolfTagJumpLand() {
 static fopAc_ac_c* daAlink_searchGiant(fopAc_ac_c* i_actor, void* i_data) {
     cXyz* gnd_chk_pos = static_cast<cXyz*>(i_data);
 
-    if (fopAcM_GetName(i_actor) == PROC_OBJ_SEKIZOA &&
+    if (fopAcM_GetName(i_actor) == fpcNm_OBJ_SEKIZOA_e &&
         i_actor->current.pos.abs2(*gnd_chk_pos) < SQUARE(200.0f))
     {
         return i_actor;
@@ -5237,7 +5237,7 @@ static fopAc_ac_c* daAlink_searchGiant(fopAc_ac_c* i_actor, void* i_data) {
 static void* daAlink_searchGiantTalk(fopAc_ac_c* i_actor, void* i_data) {
     UNUSED(i_data);
 
-    if (fopAcM_GetName(i_actor) == PROC_OBJ_SEKIZOA &&
+    if (fopAcM_GetName(i_actor) == fpcNm_OBJ_SEKIZOA_e &&
         static_cast<daObj_Sekizoa_c*>(i_actor)->getType() == 0)
     {
         return i_actor;
@@ -6039,8 +6039,8 @@ BOOL daAlink_c::checkWolfLieContinue(int param_0) {
 
     if ((param_0 ||
          ((mTargetedActor != NULL && (mTargetedActor->attention_info.flags & fopAc_AttnFlag_UNK_0x800000)) &&
-          (fopAcM_GetName(mTargetedActor) == PROC_NPC_JAGAR ||
-           fopAcM_GetName(mTargetedActor) == PROC_NPC_BOU))) &&
+          (fopAcM_GetName(mTargetedActor) == fpcNm_NPC_JAGAR_e ||
+           fopAcM_GetName(mTargetedActor) == fpcNm_NPC_BOU_e))) &&
         !getSlidePolygon(&slide_poly) && !checkWolfLieWaterIn())
     {
         return true;
@@ -6485,7 +6485,7 @@ int daAlink_c::decideDoStatusSwimWolf() {
         return 1;
     }
 
-    if (field_0x27f4 != NULL && fopAcM_GetName(field_0x27f4) == PROC_Obj_Drop) {
+    if (field_0x27f4 != NULL && fopAcM_GetName(field_0x27f4) == fpcNm_Obj_Drop_e) {
         setDoStatus(BUTTON_STATUS_UNK_57);
         if (doTrigger()) {
             fopAcM_setCarryNow(field_0x27f4, 0);
@@ -7946,7 +7946,7 @@ int daAlink_c::procWolfLockAttackInit(int param_0) {
     commonProcInit(PROC_WOLF_LOCK_ATTACK);
     setSingleAnimeWolfParam(WANM_ATTACK_A_START, &mpHIO->mWolf.mWlAttack.mWlAtNjump.m.mAerialAttackAnm);
 
-    if (fopAcM_GetName(mWolfLockAcKeep[0].getActor()) == PROC_E_YMB) {
+    if (fopAcM_GetName(mWolfLockAcKeep[0].getActor()) == fpcNm_E_YMB_e) {
         mProcVar5.field_0x3012 = 1;
 
         if (param_0 == 0) {
@@ -8019,7 +8019,7 @@ int daAlink_c::procWolfLockAttack() {
 
     // early return checks for colliding with at shields or if the actor hit is not freezard
     if (isAtShieldHit || (checkAtShieldHit(mAtCyl) && (mAtCyl.GetAtHitAc() == NULL ||
-                                                 fopAcM_GetName(mAtCyl.GetAtHitAc()) != PROC_E_FB)))
+                                                 fopAcM_GetName(mAtCyl.GetAtHitAc()) != fpcNm_E_FB_e)))
     {
         return procCoLargeDamageInit(-4, TRUE, 0, 0, NULL, 2);
     }
@@ -8082,7 +8082,7 @@ int daAlink_c::procWolfLockAttackTurnInit(int param_0) {
     }
 
     if (mWolfLockAcKeep[0].getActor() != NULL &&
-        fopAcM_GetName(mWolfLockAcKeep[0].getActor()) == PROC_E_YMB)
+        fopAcM_GetName(mWolfLockAcKeep[0].getActor()) == fpcNm_E_YMB_e)
     {
         mProcVar5.field_0x3012 = 1;
     } else {
@@ -8344,7 +8344,7 @@ int daAlink_c::procWolfGrabUpInit() {
         return checkNextActionWolf(0);
     }
 
-    if (fopAcM_GetName(field_0x27f4) == PROC_Obj_MasterSword) {
+    if (fopAcM_GetName(field_0x27f4) == fpcNm_Obj_MasterSword_e) {
         setGrabItemActor(field_0x27f4);
         return 1;
     }
@@ -8371,8 +8371,8 @@ int daAlink_c::procWolfGrabUpInit() {
     field_0x37c8 = field_0x27f4->current.pos - field_0x3510;
     mProcVar3.field_0x300e = 0;
 
-    if (fopAcM_GetName(field_0x27f4) != PROC_Obj_Drop &&
-        fopAcM_GetName(field_0x27f4) != PROC_Obj_Sword)
+    if (fopAcM_GetName(field_0x27f4) != fpcNm_Obj_Drop_e &&
+        fopAcM_GetName(field_0x27f4) != fpcNm_Obj_Sword_e)
     {
         f32 prev_x = current.pos.x;
         f32 prev_z = current.pos.z;
@@ -8577,7 +8577,7 @@ int daAlink_c::procWolfPush() {
 static fopAc_ac_c* daAlink_searchEnemyCargo(fopAc_ac_c* i_actor, void* i_data) {
     UNUSED(i_data);
 
-    if (fopAcM_GetName(i_actor) == PROC_E_YC) {
+    if (fopAcM_GetName(i_actor) == fpcNm_E_YC_e) {
         return i_actor;
     }
 
@@ -8699,7 +8699,7 @@ int daAlink_c::procWolfGanonCatchInit() {
     }
 
     mDemo.setSpecialDemoType();
-    field_0x27f4->actor_status |= 0x800;
+    field_0x27f4->actor_status |= fopAcStts_STAFF_EXTRA_e;
 
     commonProcInit(PROC_WOLF_GANON_CATCH);
     field_0x280c.setData(field_0x27f4);
@@ -8952,7 +8952,7 @@ int daAlink_c::procWolfChainWait() {
 int daAlink_c::procWolfDigInit() {
     BOOL var_r28 = TRUE;
 
-    if (checkEndResetFlg1(ERFLG1_UNK_100000) && field_0x27f4 != NULL && fopAcM_GetName(field_0x27f4) == PROC_Obj_Digpl) {
+    if (checkEndResetFlg1(ERFLG1_UNK_100000) && field_0x27f4 != NULL && fopAcM_GetName(field_0x27f4) == fpcNm_Obj_Digpl_e) {
         int type = ((daObjDigpl_c*)field_0x27f4)->getType();
         if (type == 0 || type == 2 || type == 3) {
             var_r28 = FALSE;
@@ -8977,11 +8977,11 @@ int daAlink_c::procWolfDigInit() {
     if (field_0x27f4 != NULL) {
         mProcVar1.mDigActorName = fopAcM_GetName(field_0x27f4);
     } else {
-        mProcVar1.mDigActorName = PROC_ALINK;
+        mProcVar1.mDigActorName = fpcNm_ALINK_e;
     }
 
     fopAc_ac_c* var_r29;
-    if (checkEndResetFlg1(ERFLG1_UNK_100000) && mProcVar1.mDigActorName != PROC_Obj_Lv4DigSand && mProcVar1.mDigActorName != PROC_Obj_DigSnow) {
+    if (checkEndResetFlg1(ERFLG1_UNK_100000) && mProcVar1.mDigActorName != fpcNm_Obj_Lv4DigSand_e && mProcVar1.mDigActorName != fpcNm_Obj_DigSnow_e) {
         var_r29 = field_0x27f4;
     } else {
         var_r29 = NULL;
@@ -8991,7 +8991,7 @@ int daAlink_c::procWolfDigInit() {
     mProcVar4.mDigExitID = 0;
 
     if (var_r29 != NULL) {
-        if (fopAcM_GetName(var_r29) == PROC_Obj_Digpl) {
+        if (fopAcM_GetName(var_r29) == fpcNm_Obj_Digpl_e) {
             mProcVar2.mDigType = ((daObjDigpl_c*)var_r29)->getType();
             mProcVar4.mDigExitID = ((daObjDigpl_c*)var_r29)->getSceneNum();
             field_0x280c.setData(var_r29);
@@ -9015,9 +9015,9 @@ int daAlink_c::procWolfDigInit() {
         mProcVar2.mDigType = 4;
 
         if (checkEndResetFlg1(ERFLG1_UNK_100000)) {
-            if (mProcVar1.mDigActorName == PROC_Obj_DigSnow) {
+            if (mProcVar1.mDigActorName == fpcNm_Obj_DigSnow_e) {
                 ((daObjDigSnow_c* )field_0x27f4)->startDig();
-            } else if (mProcVar1.mDigActorName == PROC_Obj_Lv4DigSand) {
+            } else if (mProcVar1.mDigActorName == fpcNm_Obj_Lv4DigSand_e) {
                 ((daObjL4DigSand_c*)field_0x27f4)->startDig();
             }
             field_0x280c.setData(field_0x27f4);
@@ -9119,9 +9119,9 @@ int daAlink_c::procWolfDig() {
             setWolfDigEffect();
         } else {
             if (field_0x280c.getActor() != NULL) {
-                if (mProcVar1.mDigActorName == PROC_Obj_DigSnow) {
+                if (mProcVar1.mDigActorName == fpcNm_Obj_DigSnow_e) {
                     ((daObjDigSnow_c*)field_0x280c.getActor())->endDig();
-                } else if (mProcVar1.mDigActorName == PROC_Obj_Lv4DigSand) {
+                } else if (mProcVar1.mDigActorName == fpcNm_Obj_Lv4DigSand_e) {
                     ((daObjL4DigSand_c*)field_0x280c.getActor())->endDig();
                 }
             }
@@ -9284,21 +9284,21 @@ int daAlink_c::procWolfDigThrough() {
 }
 
 void daAlink_c::setSmellSave() {
-    if (dComIfGs_getCollectSmell() == fpcNm_ITEM_SMELL_MEDICINE) {
+    if (dComIfGs_getCollectSmell() == dItemNo_SMELL_MEDICINE_e) {
         dComIfGs_offEventBit(dSv_event_flag_c::F_0387);
     }
 
     dMsgObject_setSmellType(mProcVar5.field_0x3012);
 
-    if (mProcVar5.field_0x3012 == fpcNm_ITEM_SMELL_MEDICINE) {
+    if (mProcVar5.field_0x3012 == dItemNo_SMELL_MEDICINE_e) {
         dComIfGs_onEventBit(dSv_event_flag_c::F_0387);
-    } else if (mProcVar5.field_0x3012 == fpcNm_ITEM_SMELL_CHILDREN) {
+    } else if (mProcVar5.field_0x3012 == dItemNo_SMELL_CHILDREN_e) {
         fopAcM_onSwitch(this, 102);
-    } else if (mProcVar5.field_0x3012 == fpcNm_ITEM_SMELL_YELIA_POUCH) {
+    } else if (mProcVar5.field_0x3012 == dItemNo_SMELL_YELIA_POUCH_e) {
         fopAcM_onSwitch(this, 103);
-    } else if (mProcVar5.field_0x3012 == fpcNm_ITEM_SMELL_FISH) {
+    } else if (mProcVar5.field_0x3012 == dItemNo_SMELL_FISH_e) {
         dComIfGs_onEventBit(dSv_event_flag_c::F_0801);
-    } else if (mProcVar5.field_0x3012 == fpcNm_ITEM_SMELL_POH) {
+    } else if (mProcVar5.field_0x3012 == dItemNo_SMELL_POH_e) {
         dComIfGs_onEventBit(dSv_event_flag_c::F_0810);
     }
 
@@ -9331,7 +9331,7 @@ int daAlink_c::procWolfGetSmellInit() {
     dComIfGp_setPlayerStatus1(0, 0x4000000);
     mProcVar2.field_0x300c = 0;
 
-    if (dComIfGs_getCollectSmell() == fpcNm_ITEM_NONE) {
+    if (dComIfGs_getCollectSmell() == dItemNo_NONE_e) {
         field_0x3198 = 0xBBC;
     } else {
         field_0x3198 = 0xBBB;
@@ -9339,9 +9339,9 @@ int daAlink_c::procWolfGetSmellInit() {
 
     field_0x319c = -1;
 
-    if (mProcVar5.field_0x3012 == fpcNm_ITEM_SMELL_YELIA_POUCH) {
+    if (mProcVar5.field_0x3012 == dItemNo_SMELL_YELIA_POUCH_e) {
         field_0x319c = 0x2220;
-    } else if (mProcVar5.field_0x3012 == fpcNm_ITEM_SMELL_CHILDREN) {
+    } else if (mProcVar5.field_0x3012 == dItemNo_SMELL_CHILDREN_e) {
         field_0x319c = 0x2240;
     }
 
@@ -9364,7 +9364,7 @@ int daAlink_c::procWolfGetSmell() {
             dComIfGp_getEvent()->reset(this);
             dComIfGp_clearPlayerStatus1(0, 0x4000000);
 
-            if (mProcVar5.field_0x3012 == fpcNm_ITEM_SMELL_YELIA_POUCH) {
+            if (mProcVar5.field_0x3012 == dItemNo_SMELL_YELIA_POUCH_e) {
                 fopAcM_orderOtherEvent(this, "SMELL_1st", 0xFFFF, 0x400, 1);
             } else {
                 fopAcM_orderOtherEvent(this, "SMELL_Child", 0xFFFF, 0x400, 1);

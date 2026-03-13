@@ -622,7 +622,7 @@ void daNpc_Moi_c::setParam() {
         attention_info.distances[fopAc_attn_SPEAK_e] =
             daNpcT_getDistTableIdx(talk_distance, talk_angle);
         attention_info.flags = 0;
-        fopAcM_OffStatus(this, 0x100);
+        fopAcM_OffStatus(this, fopAcStts_CULL_e);
     } else {
         attention_info.distances[fopAc_attn_LOCK_e] =
             daNpcT_getDistTableIdx(attention_distance, attention_angle);
@@ -781,7 +781,7 @@ void daNpc_Moi_c::action() {
         }
     }
 
-    if (mSph.ChkAtHit() && fopAcM_GetProfName(mSph.GetAtHitAc()) == PROC_ALINK) {
+    if (mSph.ChkAtHit() && fopAcM_GetProfName(mSph.GetAtHitAc()) == fpcNm_ALINK_e) {
         /* dSv_event_tmp_flag_c::T_0047 - Ordon Village - Right after wrestling with Bo
                                           (Used to connect with conversation after wearing clothes)
          */
@@ -790,9 +790,9 @@ void daNpc_Moi_c::action() {
 }
 
 void daNpc_Moi_c::beforeMove() {
-    fopAcM_OffStatus(this, 0x8000000);
+    fopAcM_OffStatus(this, fopAcStts_UNK_0x8000000_e);
     if (checkHide()) {
-        fopAcM_OnStatus(this, 0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
     }
 
     if (checkHide() || mNoDraw != 0) {
@@ -1059,7 +1059,7 @@ int daNpc_Moi_c::setAction(int (daNpc_Moi_c::*param_0)(void*)) {
 }
 
 BOOL daNpc_Moi_c::chkPlayerGetWoodShield() {
-    return (u8)(dComIfGs_isItemFirstBit(fpcNm_ITEM_WOOD_SHIELD) ? 1 : 0);
+    return (u8)(dComIfGs_isItemFirstBit(dItemNo_WOOD_SHIELD_e) ? 1 : 0);
 }
 
 void daNpc_Moi_c::setSSlash(int param_1) {
@@ -1146,7 +1146,7 @@ void daNpc_Moi_c::torch() {
         if (actor == NULL && field_0x166f == 0) {
             if (field_0x15c0 == 0xFFFFFFFF) {
                 field_0x15c0 =
-                    fopAcM_createChild(PROC_EP, fopAcM_GetID(this), -247, &field_0x1628,
+                    fopAcM_createChild(fpcNm_EP_e, fopAcM_GetID(this), -247, &field_0x1628,
                                        fopAcM_GetRoomNo(this), &mCurAngle, NULL, -1, NULL);
             }
             if (fopAcM_SearchByID(field_0x15c0, &actor) && actor != NULL) {
@@ -1991,20 +1991,20 @@ static actor_method_class daNpc_Moi_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_MOI = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_NPC_MOI,            // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daNpc_Moi_c),     // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    355,                     // mPriority
-    &daNpc_Moi_MethodTable,  // sub_method
-    0x00040107,              // mStatus
-    fopAc_NPC_e,             // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_MOI_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Moi_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_MOI_e,
+    /* Actor SubMtd */ &daNpc_Moi_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e | fopAcStts_UNK_0x2_e | fopAcStts_UNK_0x1_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES

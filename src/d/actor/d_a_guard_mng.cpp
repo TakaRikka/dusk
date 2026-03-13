@@ -10,10 +10,10 @@
 
 static void* s_sub(void* i_actorP, void* i_this) {
     if (fopAcM_IsActor(i_actorP)) {
-        if (fopAcM_GetName(i_actorP) == PROC_NPC_CD3 || fopAcM_GetName(i_actorP) == PROC_NPC_PASSER || fopAcM_GetName(i_actorP) == PROC_NPC_FGUARD) {
+        if (fopAcM_GetName(i_actorP) == fpcNm_NPC_CD3_e || fopAcM_GetName(i_actorP) == fpcNm_NPC_PASSER_e || fopAcM_GetName(i_actorP) == fpcNm_NPC_FGUARD_e) {
             static_cast<daGuardMng_c*>(i_this)->countMerchantNum();
         } else {
-            if (fopAcM_GetName(i_actorP) == PROC_TAG_GUARD) {
+            if (fopAcM_GetName(i_actorP) == fpcNm_TAG_GUARD_e) {
                 static_cast<daGuardMng_c*>(i_this)->checkAppearTag((daTagGuard_c *)i_actorP);
             }
         }
@@ -67,18 +67,18 @@ static actor_method_class l_daGuardMng_Method = {
 };
 
 actor_process_profile_definition g_profile_GUARD_MNG = {
-    fpcLy_CURRENT_e,        // mLayerID      
-    7,                      // mListID    
-    fpcPi_CURRENT_e,        // mListPrio     
-    PROC_GUARD_MNG,         // mProcName                 
-    &g_fpcLf_Method.base,  // sub_method                        
-    sizeof(daGuardMng_c),   // mSize                        
-    0,                      // mSizeOther    
-    0,                      // mParameters           
-    &g_fopAc_Method.base,   // sub_method                       
-    407,                    // mPriority          
-    &l_daGuardMng_Method,   // sub_method                       
-    0x40100,                // mStatus              
-    fopAc_ACTOR_e,          // mActorType    
-    fopAc_CULLBOX_0_e,      // cullType   
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_GUARD_MNG_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daGuardMng_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_GUARD_MNG_e,
+    /* Actor SubMtd */ &l_daGuardMng_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

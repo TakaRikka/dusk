@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_kkri.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -300,7 +300,7 @@ daNpc_Kkri_c::~daNpc_Kkri_c() {
     if (mpMorf[0] != NULL) {
         mpMorf[0]->stopZelAnime();
     }
-    
+
 #if DEBUG
     if (mpHIO != NULL) {
         mpHIO->removeHIO();
@@ -468,7 +468,7 @@ int daNpc_Kkri_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
 void* daNpc_Kkri_c::srchYm(void* i_actor, void* i_data) {
     if (mFindCount < 50) {
         daE_YM_c* ym_p = (daE_YM_c*)i_actor;
-        if (ym_p != NULL && ym_p != i_data && fopAcM_IsExecuting(fopAcM_GetID(ym_p)) && fopAcM_GetName(ym_p) == PROC_E_YM && !ym_p->isHide()) {
+        if (ym_p != NULL && ym_p != i_data && fopAcM_IsExecuting(fopAcM_GetID(ym_p)) && fopAcM_GetName(ym_p) == fpcNm_E_YM_e && !ym_p->isHide()) {
             mFindActorPtrs[mFindCount] = ym_p;
             mFindCount++;
         }
@@ -626,7 +626,7 @@ void daNpc_Kkri_c::srchActors() {
     switch (mType) {
     case 0:
         if (mActorMng[0].getActorP() == NULL) {
-            mActorMng[0].entry(getNearestActorP(PROC_Tag_KtOnFire));
+            mActorMng[0].entry(getNearestActorP(fpcNm_Tag_KtOnFire_e));
         }
         /* fallthrough */
     case 1:
@@ -677,10 +677,10 @@ void daNpc_Kkri_c::action() {
 }
 
 void daNpc_Kkri_c::beforeMove() {
-    fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x8000000);
+    fopAcM_OffStatus(this, fopAcStts_UNK_0x8000000_e);
 
     if (checkHide()) {
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
     }
 
     if (checkHide() || mNoDraw) {
@@ -1107,7 +1107,7 @@ int daNpc_Kkri_c::fearWait(void*) {
             } else {
                 mFindCount = 0;
                 fopAcM_Search(srchYm, this);
-                
+
                 int alive_ym_cnt = 0;
                 for (int i = 0; i < mFindCount; i++) {
                     if (mFindActorPtrs[i]->health > 0) {
@@ -1246,18 +1246,18 @@ static actor_method_class daNpc_Kkri_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_KKRI = {
-  fpcLy_CURRENT_e,         // mLayerID
-  7,                       // mListID
-  fpcPi_CURRENT_e,         // mListPrio
-  PROC_NPC_KKRI,           // mProcName
-  &g_fpcLf_Method.base,   // sub_method
-  sizeof(daNpc_Kkri_c),    // mSize
-  0,                       // mSizeOther
-  0,                       // mParameters
-  &g_fopAc_Method.base,    // sub_method
-  346,                     // mPriority
-  &daNpc_Kkri_MethodTable, // sub_method
-  0x00040107,              // mStatus
-  fopAc_NPC_e,             // mActorType
-  fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_KKRI_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Kkri_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_KKRI_e,
+    /* Actor SubMtd */ &daNpc_Kkri_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e | fopAcStts_UNK_0x2_e | fopAcStts_UNK_0x1_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

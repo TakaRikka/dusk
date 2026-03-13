@@ -157,25 +157,25 @@ void daTenbin_c::rideCallBackRight(dBgW* i_dBgW, fopAc_ac_c* i_act1, fopAc_ac_c*
     UNUSED(i_dBgW);
     daTenbin_c* i_tenbin = (daTenbin_c*)i_act1;
     daPy_py_c* player = dComIfGp_getLinkPlayer();
-    if (fopAcM_GetName(i_act2) == PROC_SPINNER) {
+    if (fopAcM_GetName(i_act2) == fpcNm_SPINNER_e) {
         if (player->checkSpinnerRide()) {
             i_tenbin->field_0x5B2 += (u16)2;
         }
     }
-    if (fopAcM_GetName(i_act2) == PROC_ALINK && dComIfGp_checkPlayerStatus0(0, 0x100) == 0) {
+    if (fopAcM_GetName(i_act2) == fpcNm_ALINK_e && dComIfGp_checkPlayerStatus0(0, 0x100) == 0) {
         i_tenbin->field_0x5B2 += (u16)2;
         if (player->checkBootsOrArmorHeavy()) {
             i_tenbin->field_0x5B2 += (u16)60000;
         }
         if (player->getGrabActorID() != -1) {
             fopAc_ac_c* found = fopAcM_SearchByID(player->getGrabActorID());
-            if (fopAcM_GetName(found) == PROC_CSTATUE) {
+            if (fopAcM_GetName(found) == fpcNm_CSTATUE_e) {
                 i_tenbin->field_0x5B2++;
                 i_tenbin->field_0x650 = fopAcM_GetID(found);
             }
         }
     }
-    if (fopAcM_GetName(i_act2) == PROC_CSTATUE) {
+    if (fopAcM_GetName(i_act2) == fpcNm_CSTATUE_e) {
         daCstatue_c* i_statue = (daCstatue_c*)i_act2;
         if (i_statue->checkNormalType()) {
             i_tenbin->field_0x5B2 += (u16)4;
@@ -189,25 +189,25 @@ void daTenbin_c::rideCallBackLeft(dBgW* i_dBgW, fopAc_ac_c* i_act1, fopAc_ac_c* 
     UNUSED(i_dBgW);
     daTenbin_c* i_tenbin = (daTenbin_c*)i_act1;
     daPy_py_c* player = dComIfGp_getLinkPlayer();
-    if (fopAcM_GetName(i_act2) == PROC_SPINNER) {
+    if (fopAcM_GetName(i_act2) == fpcNm_SPINNER_e) {
         if (player->checkSpinnerRide()) {
             i_tenbin->field_0x5B4 += (u16)2;
         }
     }
-    if (fopAcM_GetName(i_act2) == PROC_ALINK && dComIfGp_checkPlayerStatus0(0, 0x100) == 0) {
+    if (fopAcM_GetName(i_act2) == fpcNm_ALINK_e && dComIfGp_checkPlayerStatus0(0, 0x100) == 0) {
         i_tenbin->field_0x5B4 += (u16)2;
         if (player->checkEquipHeavyBoots()) {
             i_tenbin->field_0x5B4 += (u16)60000;
         }
         if (player->getGrabActorID() != -1) {
             fopAc_ac_c* found = fopAcM_SearchByID(player->getGrabActorID());
-            if (fopAcM_GetName(found) == PROC_CSTATUE) {
+            if (fopAcM_GetName(found) == fpcNm_CSTATUE_e) {
                 i_tenbin->field_0x5B4++;
                 i_tenbin->field_0x650 = fopAcM_GetID(found);
             }
         }
     }
-    if (fopAcM_GetName(i_act2) == PROC_CSTATUE) {
+    if (fopAcM_GetName(i_act2) == fpcNm_CSTATUE_e) {
         daCstatue_c* i_statue = (daCstatue_c*)i_act2;
         if (i_statue->checkNormalType()) {
             i_tenbin->field_0x5B4 += (u16)4;
@@ -355,18 +355,18 @@ static actor_method_class l_daTenbin_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Lv6Tenbin = {
-    fpcLy_CURRENT_e,         // mLayerID
-    3,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Obj_Lv6Tenbin,      // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daTenbin_c),      // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    623,                     // mPriority
-    &l_daTenbin_Method,      // sub_method
-    0x00060100,              // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Lv6Tenbin_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTenbin_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Lv6Tenbin_e,
+    /* Actor SubMtd */ &l_daTenbin_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_NOPAUSE_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

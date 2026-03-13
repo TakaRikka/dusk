@@ -183,20 +183,20 @@ static actor_method_class daPPolamp_METHODS = {
 };
 
 actor_process_profile_definition g_profile_PPolamp = {
-  fpcLy_CURRENT_e,       // mLayerID
-  7,                     // mListID
-  fpcPi_CURRENT_e,       // mListPrio
-  PROC_PPolamp,          // mProcName
-  &g_fpcLf_Method.base, // sub_method
-  sizeof(daPPolamp_c),   // mSize
-  0,                     // mSizeOther
-  0,                     // mParameters
-  &g_fopAc_Method.base,  // sub_method
-  727,                   // mPriority
-  &daPPolamp_METHODS,    // sub_method
-  0x00040180,            // mStatus
-  fopAc_ENV_e,           // mActorType
-  fopAc_CULLBOX_12_e,    // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_PPolamp_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daPPolamp_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_PPolamp_e,
+    /* Actor SubMtd */ &daPPolamp_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_NOEXEC_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_12_e,
 };
 
 AUDIO_INSTANCES;

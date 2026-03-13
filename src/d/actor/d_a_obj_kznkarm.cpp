@@ -1,6 +1,6 @@
 /**
  * @file d_a_obj_kznkarm.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -20,8 +20,8 @@ public:
     void ct();
     void dt();
 
-    /* 0x04 */ int mCount; 
-    /* 0x04 */ daObjKznkarm_Attr_c mAttr; 
+    /* 0x04 */ int mCount;
+    /* 0x04 */ daObjKznkarm_Attr_c mAttr;
 };
 
 static daObjKznkarm_Hio_c M_hio;
@@ -76,7 +76,7 @@ void daObjKznkarm_Hio_c::genMessage(JORMContext* ctx) {
  daObjKznkarm_Attr_c const daObjKznkarm_c::M_attr = {
     -5.0f, -30.0f, 0.6f, 0.94f,
      40.0f, 40.0f, -60.0f,
-    -6.0f, -6.0f, -60.0f, 0.0f, 
+    -6.0f, -6.0f, -60.0f, 0.0f,
     12.0f, 0, 0x1000, 0, -0x2000,
 };
 
@@ -113,13 +113,13 @@ inline daObjKznkarm_Attr_c* daObjKznkarm_c::attr() const {
     #if DEBUG
     return &M_hio.mAttr;
     #else
-    return (daObjKznkarm_Attr_c*)&M_attr; 
+    return (daObjKznkarm_Attr_c*)&M_attr;
     #endif
 }
 
 void daObjKznkarm_c::initBroken() {
     mMode = MODE_BROKEN_e;
-    fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x80);
+    fopAcM_OffStatus(this, fopAcStts_NOEXEC_e);
     daObjKazeNeko_c* kazeNeko = (daObjKazeNeko_c*)fpcM_SearchByID(parentActorID);
     if (kazeNeko != NULL) {
         kazeNeko->getFirstVec(&speed, fopAcM_GetParam(this));
@@ -148,7 +148,7 @@ void daObjKznkarm_c::executeBroken() {
             speed *= attr()->bounce_coeff;
             current.pos.y = gndH;
         }
-        
+
         if (speed.abs() < fabsf(gravity)) {
             speed.zero();
             field_0x7a8 = 0;
@@ -170,7 +170,7 @@ void daObjKznkarm_c::executeBroken() {
 
 void daObjKznkarm_c::initCarry() {
     mMode = MODE_CARRY_e;
-    fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x80);
+    fopAcM_OffStatus(this, fopAcStts_NOEXEC_e);
     cLib_offBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
     field_0x7ae = 0;
     field_0x7af = 0;
@@ -203,7 +203,7 @@ void daObjKznkarm_c::executeCarry() {
 
 void daObjKznkarm_c::initThrow() {
     mMode = MODE_THROW_e;
-    fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x80);
+    fopAcM_OffStatus(this, fopAcStts_NOEXEC_e);
     speed.zero();
     if (speedF > 1.0f) {
         daPy_py_c* player = daPy_getPlayerActorClass();
@@ -227,12 +227,12 @@ void daObjKznkarm_c::executeThrow() {
             speed.y = maxFallSpeed;
         }
     }
-    
+
     f32 savedSpeedY = speed.y;
     fopAcM_posMove(this, 0);
     mAcch.CrrPos(dComIfG_Bgsp());
     speed.y = savedSpeedY;
-    
+
     if (mAcch.ChkGroundLanding()) {
         f32 speedAbs = speed.abs();
         cM3dGPla groundPla;
@@ -249,7 +249,7 @@ void daObjKznkarm_c::executeThrow() {
         speed.zero();
         setAction(MODE_STAY_e);
     }
-    
+
     if (mAcch.ChkWallHit()) {
         f32 speedAbs = speed.abs();
         cM3dGPla wallPla;
@@ -264,7 +264,7 @@ void daObjKznkarm_c::executeThrow() {
         }
         field_0x7ac *= -1;
     }
-    
+
     if (field_0x7ae == 0) {
         if (mAcch.ChkWaterIn()) {
             cXyz effectPos = current.pos;
@@ -280,12 +280,12 @@ void daObjKznkarm_c::executeThrow() {
             field_0x7ae = 1;
         }
     }
-    
+
     if (field_0x7ae != 0) {
         speed.x *= attr()->water_drag;
         speed.z *= attr()->water_drag;
     }
-    
+
     f32 fVar1 = (speed.absXZ() / attr()->initial_throwing_force);
     int angleOffset = (f32)field_0x7ac * fVar1;
     shape_angle.z += angleOffset;
@@ -294,7 +294,7 @@ void daObjKznkarm_c::executeThrow() {
 
 void daObjKznkarm_c::initStay() {
     mMode = MODE_STAY_e;
-    fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x80);
+    fopAcM_OnStatus(this, fopAcStts_NOEXEC_e);
     cLib_onBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
     speedF = 0.0f;
     field_0x7a8 = getGroundSlope(shape_angle.y) - 0x4000;
@@ -377,7 +377,7 @@ inline int daObjKznkarm_c::draw() {
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
-    
+
     cXyz shadowPos = cXyz(current.pos.x, current.pos.y + 50.0f, current.pos.z);
     mShadowId = dComIfGd_setShadow(mShadowId, 1, mpModel, &shadowPos, 600.0f, 0.0f,
                                    current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
@@ -446,18 +446,18 @@ static actor_method_class l_daObjKznkarm_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_KznkArm = {
-  fpcLy_CURRENT_e,         // mLayerID
-  7,                       // mListID
-  fpcPi_CURRENT_e,         // mListPrio
-  PROC_Obj_KznkArm,        // mProcName
-  &g_fpcLf_Method.base,   // sub_method
-  sizeof(daObjKznkarm_c),  // mSize
-  0,                       // mSizeOther
-  0,                       // mParameters
-  &g_fopAc_Method.base,    // sub_method
-  31,                      // mPriority
-  &l_daObjKznkarm_Method,  // sub_method
-  0x00044100,              // mStatus
-  fopAc_ACTOR_e,           // mActorType
-  fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_KznkArm_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjKznkarm_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_KznkArm_e,
+    /* Actor SubMtd */ &l_daObjKznkarm_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

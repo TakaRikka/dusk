@@ -1,6 +1,6 @@
 /**
  * @file d_a_obj_gra2.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -222,7 +222,7 @@ static int jointCtrlCallBack(J3DJoint* i_joint, int param_2) {
 void daObj_GrA_c::rideCallBack(dBgW* param_1, fopAc_ac_c* actor_p, fopAc_ac_c* param_3) {
     daObj_GrA_c* aActor_p = (daObj_GrA_c*) actor_p;
     JUT_ASSERT(684, NULL != aActor_p);
-    aActor_p->field_0x10c4 = fopAcM_GetProfName(param_3) == PROC_ALINK;
+    aActor_p->field_0x10c4 = fopAcM_GetProfName(param_3) == fpcNm_ALINK_e;
 }
 
 daObj_GrA_c::daObj_GrA_c() {}
@@ -397,7 +397,7 @@ int daObj_GrA_c::CreateHeap() {
     field_0x83c = l_entryJntNoList;
     setFaceAnm(22, false, 0.0f);
     setBaseAnm(17, 0.0f);
-    
+
     return 1;
 }
 
@@ -487,7 +487,7 @@ int daObj_GrA_c::jointCtrl(J3DJoint* i_joint, J3DModel* param_2) {
             switch (jointNo) {
                 case 1:
                     break;
-                    
+
                 case 3:
                     mDoMtx_stack_c::ZXYrotM(field_0x9bc);
                     break;
@@ -667,7 +667,7 @@ int daObj_GrA_c::init() {
     attention_info.distances[fopAc_attn_CARRY_e] = 40;
     attention_info.distances[fopAc_attn_BATTLE_e] = 22;
     mAcchCir.SetWall(mpHIO->m.mWallH, mpHIO->m.mWallR);
-    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, 
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
               fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
     mCcStts.Init(mpHIO->m.mWeight, 0, this);
     field_0xf50.Set(mCcDCyl);
@@ -704,7 +704,7 @@ int daObj_GrA_c::init() {
     setRoomNo();
 
     if (mMode == 2) {
-        fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
     }
 
     field_0x1528.setPathInfo(getPathNo(), fopAcM_GetRoomNo(this), 1);
@@ -1019,7 +1019,7 @@ void daObj_GrA_c::mainProc() {
             if (mMode == 0) {
                 if ((home.pos - current.pos).absXZ() > getSrchCircleR()) {
                     cXyz sp3c(0.0f, 0.0f, getSrchCircleR());
-                    cLib_offsetPos(&current.pos, &home.pos, 
+                    cLib_offsetPos(&current.pos, &home.pos,
                                    cLib_targetAngleY(&home.pos, &current.pos), &sp3c);
                 }
             }
@@ -1453,7 +1453,7 @@ int daObj_GrA_c::talk(void* param_1) {
                         setBaseMotion(0, mpHIO->m.field_0x0c);
                         setFaceMotion(0, -1.0f);
                     }
-                    
+
                     return 0;
                 }
 
@@ -1542,7 +1542,7 @@ int daObj_GrA_c::ctrlMsgAnm(int& param_1, int& param_2, fopAc_ac_c* param_3) {
 
 static void* s_sub(void* i_actor, void* i_data) {
     daObj_GrA_c* i_this = (daObj_GrA_c*)i_data;
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_TAG_GRA && i_this->checkTagGraSub((fopAc_ac_c*)i_actor)) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_TAG_GRA_e && i_this->checkTagGraSub((fopAc_ac_c*)i_actor)) {
         return i_actor;
     }
     return NULL;
@@ -1642,10 +1642,10 @@ int daObj_GrA_c::setPrtcl() {
 
         for (int i = 0; i < 3; i++) {
             if (i == 0) {
-                field_0x2020[i] = dComIfGp_particle_set(field_0x2020[i], l_prticles_id[i], &sp28, &tevStr, &current.angle, 
+                field_0x2020[i] = dComIfGp_particle_set(field_0x2020[i], l_prticles_id[i], &sp28, &tevStr, &current.angle,
                                                         &sp34, 0xFF, NULL, -1, NULL, NULL, NULL);
             } else {
-                field_0x2020[i] = dComIfGp_particle_setPolyColor(field_0x2020[i], l_prticles_id[i], mAcch.m_gnd, &sp28, 
+                field_0x2020[i] = dComIfGp_particle_setPolyColor(field_0x2020[i], l_prticles_id[i], mAcch.m_gnd, &sp28,
                                                                     &tevStr, &current.angle, &sp34, 0, NULL, -1, NULL);
             }
 
@@ -1783,7 +1783,7 @@ int daObj_GrA_c::base013(int param_1) {
     } else if (field_0x201c < 10) {
         field_0x201c++;
     }
-    
+
     if (field_0x2010 != field_0x842 && field_0x201c < 10) {
         mSound.startCreatureSound(Z2SE_GORON_ROLLING, cLib_minMaxLimit(fabsf(mpModelMorf->getPlaySpeed()) * 20.0f, 1.0f, 127.0f), -1);
         field_0x2010 = field_0x842;
@@ -2130,18 +2130,18 @@ static actor_method_class daObj_GrA_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_GRA = {
-  fpcLy_CURRENT_e,        // mLayerID
-  3,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_OBJ_GRA,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObj_GrA_c),    // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  19,                     // mPriority
-  &daObj_GrA_MethodTable, // sub_method
-  0x00040100,             // mStatus
-  fopAc_NPC_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_GRA_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObj_GrA_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_GRA_e,
+    /* Actor SubMtd */ &daObj_GrA_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -2,6 +2,7 @@
 #define D_A_NPC_TKJ2_H
 
 #include "d/actor/d_a_npc.h"
+#include "d/d_cc_uty.h"
 
 /**
  * @ingroup actors-npcs
@@ -51,7 +52,7 @@ public:
     /* 0x84C */ u8 field_0x84c[0x850 - 0x84c];
     /* 0x850 */ dCcD_Stts mStts;
     /* 0x88C */ dCcD_Sph field_0x88c;
-    /* 0x9C4 */ u8 field_0x9c4[0x9e8 - 0x9c4];
+    /* 0x9C4 */ dCcU_AtInfo field_0x9c4;
     /* 0x9E8 */ Z2CreatureEnemy mSound;
     /* 0xA8C */ s8 field_0xa8c;
     /* 0xA8E */ s16 field_0xa8e;
@@ -63,17 +64,5 @@ public:
 };
 
 STATIC_ASSERT(sizeof(npc_tkj2_class) == 0xaa0);
-
-class daNpc_Tkj2_HIO_c {
-public:
-    daNpc_Tkj2_HIO_c();
-    virtual ~daNpc_Tkj2_HIO_c() {}
-
-    /* 天空人（アクション用）- Sky People (For Action) */
-    /* 0x04 */ s8 field_0x4;
-    /* 0x08 */ f32 basic_size;          // 基本大きさ - Basic Size
-    /* 0x0C */ f32 hook_hit_size;       // フックヒット大きさ - Hook Hit Size
-    /* 0x10 */ f32 boots_struggle_sp;   // ブーツ時もがきSP - Boots Struggle SP
-};
 
 #endif /* D_A_NPC_TKJ2_H */

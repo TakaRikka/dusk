@@ -320,7 +320,7 @@ fopAc_ac_c* at_power_check(dCcU_AtInfo* i_AtInfo) {
         i_AtInfo->mAttackPower = at_power_get(i_AtInfo);
 
         s16 ac_name = fopAcM_GetName(i_AtInfo->mpActor);
-        if (ac_name == PROC_ALINK || ac_name == PROC_ALINK) {
+        if (ac_name == fpcNm_ALINK_e || ac_name == fpcNm_ALINK_e) {
             if (i_AtInfo->mpCollider->ChkAtType(AT_TYPE_8000) ||
                 i_AtInfo->mpCollider->ChkAtType(AT_TYPE_IRON_BALL))
             {
@@ -329,13 +329,13 @@ fopAc_ac_c* at_power_check(dCcU_AtInfo* i_AtInfo) {
                 i_AtInfo->mHitType = HIT_TYPE_LINK_NORMAL_ATTACK;
                 i_AtInfo->mHitBit = cc_pl_cut_bit_get();
             }
-        } else if (ac_name == PROC_NBOMB) {
+        } else if (ac_name == fpcNm_NBOMB_e) {
             i_AtInfo->mHitType = HIT_TYPE_BOMB;
             i_AtInfo->mHitBit = 0x10000000;
-        } else if (ac_name == PROC_BOOMERANG) {
+        } else if (ac_name == fpcNm_BOOMERANG_e) {
             i_AtInfo->mHitType = HIT_TYPE_BOOMERANG;
             i_AtInfo->mHitBit = 0x40000000;
-        } else if (ac_name == PROC_ARROW) {
+        } else if (ac_name == fpcNm_ARROW_e) {
             i_AtInfo->mHitType = HIT_TYPE_ARROW;
             i_AtInfo->mHitBit = 0x80000000;
         }
@@ -352,7 +352,7 @@ fopAc_ac_c* at_power_check(dCcU_AtInfo* i_AtInfo) {
         i_AtInfo->mHitBit = 0x1000;
     } else {
         s16 ac_name = fopAcM_GetName(i_AtInfo->mpActor);
-        if (ac_name == PROC_ALINK || ac_name == PROC_ALINK) {
+        if (ac_name == fpcNm_ALINK_e || ac_name == fpcNm_ALINK_e) {
             if (dCcD_GetGObjInf(i_AtInfo->mpCollider)->GetAtSpl() == 1) {
                 i_AtInfo->mHitStatus = 1;
             }
@@ -378,7 +378,7 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* i_enemy, dCcU_AtInfo* i_AtInfo) {
             f32 z = i_AtInfo->mpActor->speed.z;
             i_AtInfo->mHitDirection.y = cM_atan2s(-x, -z) + (s16)cM_rndFX(4000.0f);
         } else {
-            if (fopAcM_GetName(i_AtInfo->mpActor) == PROC_BOOMERANG) {
+            if (fopAcM_GetName(i_AtInfo->mpActor) == fpcNm_BOOMERANG_e) {
                 x_diff = i_enemy->current.pos.x - player_p->current.pos.x;
                 z_diff = i_enemy->current.pos.z - player_p->current.pos.z;
                 i_AtInfo->mHitDirection.y = cM_atan2s(-x_diff, -z_diff) + (s16)cM_rndFX(10000.0f);
@@ -402,9 +402,9 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* i_enemy, dCcU_AtInfo* i_AtInfo) {
         }
 
         if (static_cast<dCcD_GObjInf*>(i_AtInfo->mpCollider)->GetAtMtrl() == dCcD_MTRL_LIGHT) {
-            if (fopAcM_GetName(i_enemy) == PROC_B_GND) {
+            if (fopAcM_GetName(i_enemy) == fpcNm_B_GND_e) {
                 i_AtInfo->mAttackPower = 0;
-            } else if (fopAcM_GetName(i_enemy) != PROC_B_ZANT) {
+            } else if (fopAcM_GetName(i_enemy) != fpcNm_B_ZANT_e) {
                 i_AtInfo->mAttackPower = 100;
             }
         }
@@ -467,8 +467,8 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* i_enemy, dCcU_AtInfo* i_AtInfo) {
             ((daPy_py_c*)dComIfGp_getPlayer(0))->checkHorseRide())
         {
             // actor is Bulblin or Horseback Ganon
-            if ((fopAcM_GetName(i_enemy) == PROC_E_RD && ((s8*)i_enemy)[0x129a] != 0) ||
-                fopAcM_GetName(i_enemy) == PROC_B_GND)
+            if ((fopAcM_GetName(i_enemy) == fpcNm_E_RD_e && ((s8*)i_enemy)[0x129a] != 0) ||
+                fopAcM_GetName(i_enemy) == fpcNm_B_GND_e)
             {
                 pause_time = 3;
             } else {
@@ -478,9 +478,9 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* i_enemy, dCcU_AtInfo* i_AtInfo) {
 
         s16 ac_name = fopAcM_GetName(i_enemy);
         // actor is Stalkin, Chu, Keese, Shadow Keese, Shadow Vermin, Baby Gohma, or Rat
-        if (ac_name == PROC_E_BS || ac_name == PROC_E_SM2 || ac_name == PROC_E_BA ||
-            ac_name == PROC_E_YK || ac_name == PROC_E_YG || ac_name == PROC_E_GM ||
-            ac_name == PROC_E_MS)
+        if (ac_name == fpcNm_E_BS_e || ac_name == fpcNm_E_SM2_e || ac_name == fpcNm_E_BA_e ||
+            ac_name == fpcNm_E_YK_e || ac_name == fpcNm_E_YG_e || ac_name == fpcNm_E_GM_e ||
+            ac_name == fpcNm_E_MS_e)
         {
             pause_time = 0;
         }

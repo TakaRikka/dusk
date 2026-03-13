@@ -85,7 +85,7 @@ static void sibuki_set(fr_class* i_this) {
 
 static void* s_wd_sub(void* param_1, void* param_2) {
     UNUSED(param_2);
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_OBJ_LP) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_OBJ_LP_e) {
         return param_1;
     }
 
@@ -741,18 +741,18 @@ static actor_method_class l_daFr_Method = {
 };
 
 actor_process_profile_definition g_profile_FR = {
-  fpcLy_CURRENT_e,       // mLayerID
-  8,                     // mListID
-  fpcPi_CURRENT_e,       // mListPrio
-  PROC_FR,               // mProcName
-  &g_fpcLf_Method.base, // sub_method
-  sizeof(fr_class),      // mSize
-  0,                     // mSizeOther
-  0,                     // mParameters
-  &g_fopAc_Method.base,  // sub_method
-  235,                   // mPriority
-  &l_daFr_Method,        // sub_method
-  0x08040100,            // mStatus
-  fopAc_NPC_e,           // mActorType
-  fopAc_CULLBOX_0_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 8,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_FR_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(fr_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_FR_e,
+    /* Actor SubMtd */ &l_daFr_Method,
+    /* Status       */ fopAcStts_UNK_0x8000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

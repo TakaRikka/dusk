@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_zrTuraraRock.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 static daZrTuraRc_HIO_c l_HIO;
 
@@ -178,18 +178,18 @@ static actor_method_class l_daZrTuraRc_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_zrTuraraRc = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_Obj_zrTuraraRc,
-    &g_fpcLf_Method.base,
-    sizeof(daZrTuraRc_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x28D,
-    &l_daZrTuraRc_Method,
-    0x40100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_zrTuraraRc_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daZrTuraRc_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_zrTuraraRc_e,
+    /* Actor SubMtd */ &l_daZrTuraRc_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

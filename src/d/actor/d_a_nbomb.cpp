@@ -49,7 +49,7 @@ void daNbomb_c::tgHitCallback(dCcD_GObjInf* i_hitObj) {
         {
             procBoomerangMoveInit(i_hitObj);
         }
-    } else if (i_hitObj->ChkAtType(AT_TYPE_HOOKSHOT) && fopAcM_CheckStatus(this, 0x80000)) {
+    } else if (i_hitObj->ChkAtType(AT_TYPE_HOOKSHOT) && fopAcM_CheckStatus(this, fopAcStts_UNK_0x80000_e)) {
         if (fopAcM_checkCarryNow(this)) {
             fopAcM_cancelCarryNow(this);
         }
@@ -350,7 +350,7 @@ int daNbomb_c::create() {
         mDoMtx_stack_c::transS(current.pos);
 
         if (!checkStateFlg0(FLG0_INSECT_BOMB)) {
-            fopAcM_OnStatus(this, 0x80000);
+            fopAcM_OnStatus(this, fopAcStts_UNK_0x80000_e);
         }
 
         mDoMtx_stack_c::ZXYrotM(0, shape_angle.y, shape_angle.z);
@@ -607,7 +607,7 @@ void daNbomb_c::setHitPolygon(BOOL param_0) {
 }
 
 BOOL daNbomb_c::procExplodeInit() {
-    fopAcM_OnStatus(this, 0x20000);
+    fopAcM_OnStatus(this, fopAcStts_NOPAUSE_e);
     daAlink_c* player = daAlink_getAlinkActorClass();
 
     scale.x = player->getBombEffScale();
@@ -1685,18 +1685,18 @@ static actor_method_class l_daNbombMethod = {
 };
 
 actor_process_profile_definition g_profile_NBOMB = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_NBOMB,             // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daNbomb_c),      // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  270,                    // mPriority
-  &l_daNbombMethod,       // sub_method
-  0x00040100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NBOMB_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNbomb_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NBOMB_e,
+    /* Actor SubMtd */ &l_daNbombMethod,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

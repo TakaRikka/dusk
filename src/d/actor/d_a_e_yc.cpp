@@ -12,7 +12,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "d/actor/d_a_e_rdy.h"
 
 static f32 S_area_dis;
@@ -835,18 +835,18 @@ static actor_method_class l_daE_YC_Method = {
 };
 
 actor_process_profile_definition g_profile_E_YC = {
-    fpcLy_CURRENT_e,
-    4,
-    fpcPi_CURRENT_e,
-    PROC_E_YC,
-    &g_fpcLf_Method.base,
-    sizeof(e_yc_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0xBB,
-    &l_daE_YC_Method,
-    0x40100,
-    fopAc_ENEMY_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 4,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_YC_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_yc_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_YC_e,
+    /* Actor SubMtd */ &l_daE_YC_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

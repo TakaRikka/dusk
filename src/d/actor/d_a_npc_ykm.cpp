@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_ykm.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -803,7 +803,7 @@ void* daNpc_ykM_c::srchGadget(void* i_actor, void* i_data) {
     if (mFindCount < 50) {
         fopAc_ac_c* actor = (fopAc_ac_c*)i_actor;
         if (actor != NULL && actor != data) {
-            if (fopAcM_IsExecuting(fopAcM_GetID(actor)) && fopAcM_GetName(actor) == PROC_OBJ_GADGET) {
+            if (fopAcM_IsExecuting(fopAcM_GetID(actor)) && fopAcM_GetName(actor) == fpcNm_OBJ_GADGET_e) {
                 mFindActorPtrs[mFindCount] = actor;
                 mFindCount++;
             }
@@ -852,7 +852,7 @@ void* daNpc_ykM_c::srchYkm(void* i_actor, void* i_data) {
     if (mFindCount < 50) {
         fopAc_ac_c* actor = (fopAc_ac_c*)i_actor;
         if (actor != NULL && actor != data) {
-            if (fopAcM_IsExecuting(fopAcM_GetID(actor)) && fopAcM_GetName(actor) == PROC_NPC_YKM) {
+            if (fopAcM_IsExecuting(fopAcM_GetID(actor)) && fopAcM_GetName(actor) == fpcNm_NPC_YKM_e) {
                 mFindActorPtrs[mFindCount] = actor;
                 mFindCount++;
             }
@@ -885,7 +885,7 @@ void* daNpc_ykM_c::srchYkw(void* i_actor, void* i_data) {
     if (mFindCount < 50) {
         fopAc_ac_c* actor = (fopAc_ac_c*)i_actor;
         if (actor != NULL && actor != data) {
-            if (fopAcM_IsExecuting(fopAcM_GetID(actor)) && fopAcM_GetName(actor) == PROC_NPC_YKW) {
+            if (fopAcM_IsExecuting(fopAcM_GetID(actor)) && fopAcM_GetName(actor) == fpcNm_NPC_YKW_e) {
                 mFindActorPtrs[mFindCount] = actor;
                 mFindCount++;
             }
@@ -1008,7 +1008,7 @@ void daNpc_ykM_c::reset() {
 
         case TYPE_3:
             mHide = true;
-            fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+            fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
             break;
 
         case TYPE_4:
@@ -1017,13 +1017,13 @@ void daNpc_ykM_c::reset() {
 
         case TYPE_5:
             mHide = true;
-            fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+            fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
             eventInfo.setIdx(1);
             break;
 
         case TYPE_6:
             mHide = true;
-            fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+            fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
             eventInfo.setIdx(2);
             break;
     }
@@ -1095,15 +1095,15 @@ void daNpc_ykM_c::setParam() {
     mAcchCir.SetWallR(mWallR);
     mAcchCir.SetWallH(mpHIO->m.common.knee_length);
 
-    fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x100);
+    fopAcM_OnStatus(this, fopAcStts_CULL_e);
     mRealShadowSize = mpHIO->m.common.real_shadow_size;
 
     if (field_0x157b != 0) {
-        fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x100);
+        fopAcM_OffStatus(this, fopAcStts_CULL_e);
     }
 
     if (mType == TYPE_3) {
-        fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x100);
+        fopAcM_OffStatus(this, fopAcStts_CULL_e);
         mRealShadowSize = 1800.0f;
     }
 
@@ -1134,14 +1134,14 @@ BOOL daNpc_ykM_c::checkChangeEvt() {
 
             case TYPE_COOK:
                 if (!daNpcT_chkEvtBit(4) /* dSv_event_flag_c::TEST_004 - Snowpeak Ruins - Handed over secret ingredient */
-                    && checkItemGet(fpcNm_ITEM_TASTE, 1)) {
+                    && checkItemGet(dItemNo_TASTE_e, 1)) {
                     mEvtNo = EVENT_GET_TASTE;
                     evtChange();
                     return TRUE;
                 }
 
-                if (!daNpcT_chkEvtBit(3) /* dSv_event_flag_c::TEST_003 - Snowpeak Ruins - Handed over tomato puree */ 
-                    && checkItemGet(fpcNm_ITEM_TOMATO_PUREE, 1)) {
+                if (!daNpcT_chkEvtBit(3) /* dSv_event_flag_c::TEST_003 - Snowpeak Ruins - Handed over tomato puree */
+                    && checkItemGet(dItemNo_TOMATO_PUREE_e, 1)) {
                     mEvtNo = EVENT_GET_TOMATOPUREE;
                     evtChange();
                     return TRUE;
@@ -1219,7 +1219,7 @@ void daNpc_ykM_c::srchActors() {
 
         case TYPE_3:
             if (mActorMngr[5].getActorP() == NULL) {
-                mActorMngr[5].entry(getNearestActorP(PROC_NPC_YKW));
+                mActorMngr[5].entry(getNearestActorP(fpcNm_NPC_YKW_e));
             }
             break;
 
@@ -1320,10 +1320,10 @@ void daNpc_ykM_c::action() {
 }
 
 void daNpc_ykM_c::beforeMove() {
-    fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x8000000);
+    fopAcM_OffStatus(this, fopAcStts_UNK_0x8000000_e);
 
     if (checkHide()) {
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
     }
 
     if (checkHide() || mNoDraw) {
@@ -1802,7 +1802,7 @@ BOOL daNpc_ykM_c::chkTouchPlayer() {
             if (field_0xf94[i].ChkCoHit()) {
                 actor = field_0xf94[i].GetCoHitAc();
 
-                if (actor != NULL && fopAcM_GetName(actor) == PROC_ALINK) {
+                if (actor != NULL && fopAcM_GetName(actor) == fpcNm_ALINK_e) {
                     return TRUE;
                 }
             }
@@ -1811,7 +1811,7 @@ BOOL daNpc_ykM_c::chkTouchPlayer() {
         if (field_0xe58.ChkCoHit()) {
             actor = field_0xe58.GetCoHitAc();
 
-            if (actor != NULL && fopAcM_GetName(actor) == PROC_ALINK) {
+            if (actor != NULL && fopAcM_GetName(actor) == fpcNm_ALINK_e) {
                 return TRUE;
             }
         }
@@ -1990,7 +1990,7 @@ int daNpc_ykM_c::cutMeetingAgain(int i_cutIndex) {
     int prm = -1;
     int timer = 0;
     int unusedInt1 = 0;
-    
+
     piVar1 = dComIfGp_evmng_getMyIntegerP(i_cutIndex, "prm");
     if (piVar1 != NULL) {
         prm = *piVar1;
@@ -2533,7 +2533,7 @@ int daNpc_ykM_c::cutLv5DungeonClear(int i_cutIndex) {
                 mMotionSeqMngr.setNo(MOTION_WAIT_X, 0.0f, FALSE, 0);
                 mJntAnm.lookNone(1);
                 mHide = false;
-                fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x8000000);
+                fopAcM_OffStatus(this, fopAcStts_UNK_0x8000000_e);
                 break;
 
             case 1:
@@ -2667,7 +2667,7 @@ int daNpc_ykM_c::cutLv5DungeonClear(int i_cutIndex) {
                         }
                     }
                 }
-                
+
                 if (rv == 0 && field_0xe58.ChkCoHit()) {
                     if (daPy_getPlayerActorClass() == field_0xe58.GetCoHitAc()) {
                         rv = 1;
@@ -3086,7 +3086,7 @@ int daNpc_ykM_c::cutHug(int i_cutIndex) {
 void daNpc_ykM_c::setDialogueMotion() {
     int uVar1 = field_0x154c;
     uVar1 >>= 1;
-    
+
     if (0.5f < cM_rnd()) {
         int dummy; // force r31 to be used for stack pointer instead of r1
         if (cM_rnd() - 0.5f < 0.0f) {
@@ -3349,7 +3349,7 @@ BOOL daNpc_ykM_c::cook(void* param_1) {
             }
             // fallthrough
         case 2: {
-            if (!daPy_py_c::checkNowWolf() && !checkItemGet(fpcNm_ITEM_TOMATO_PUREE, 1) && !checkItemGet(fpcNm_ITEM_TASTE, 1) &&
+            if (!daPy_py_c::checkNowWolf() && !checkItemGet(dItemNo_TOMATO_PUREE_e, 1) && !checkItemGet(dItemNo_TASTE_e, 1) &&
                 !daNpcT_chkEvtBit(10) /* dSv_event_flag_c::F_0006 - Snowpeak Ruins - First conversation with Yeto in kitchen */) {
                 actor_p = mActorMngr[6].getActorP();
                 if (actor_p != NULL &&
@@ -3629,7 +3629,7 @@ BOOL daNpc_ykM_c::talk(void* param_1) {
                     mFaceMotionSeqMngr.setNo(FACE_NONE, -1.0f, FALSE, 0);
                     mMotionSeqMngr.setNo(MOTION_WAIT_A, -1.0f, FALSE, 0);
 
-                    if (daNpcT_chkEvtBit(10) /* dSv_event_flag_c::F_0006 - Snowpeak Ruins - First conversation with Yeto in kitchen */ 
+                    if (daNpcT_chkEvtBit(10) /* dSv_event_flag_c::F_0006 - Snowpeak Ruins - First conversation with Yeto in kitchen */
                         && !chkContinueAttnPlayer()) {
                         field_0x157f = 1;
                     }
@@ -3736,18 +3736,18 @@ static actor_method_class daNpc_ykM_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_YKM = {
-  fpcLy_CURRENT_e,          // mLayerID
-  7,                        // mListID
-  fpcPi_CURRENT_e,          // mListPrio
-  PROC_NPC_YKM,             // mProcName
-  &g_fpcLf_Method.base,    // sub_method
-  sizeof(daNpc_ykM_c),      // mSize
-  0,                        // mSizeOther
-  0,                        // mParameters
-  &g_fopAc_Method.base,     // sub_method
-  380,                      // mPriority
-  &daNpc_ykM_MethodTable,   // sub_method
-  0x00040107,               // mStatus
-  fopAc_NPC_e,              // mActorType
-  fopAc_CULLBOX_CUSTOM_e,   // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_YKM_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_ykM_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_YKM_e,
+    /* Actor SubMtd */ &daNpc_ykM_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e | fopAcStts_UNK_0x2_e | fopAcStts_UNK_0x1_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

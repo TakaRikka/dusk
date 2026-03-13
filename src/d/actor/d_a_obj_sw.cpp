@@ -52,7 +52,7 @@ static int daObj_Sw_Draw(obj_sw_class* i_this) {
 static int saru_ct;
 
 static void* s_ks_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_NPC_KS) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_NPC_KS_e) {
         int swBit = fopAcM_GetParam(i_actor) >> 24;
         if (swBit != 0xFF) {
             if (dComIfGs_isSwitch(swBit, fopAcM_GetRoomNo((fopAc_ac_c*)i_actor))) {
@@ -91,7 +91,7 @@ static path sc_path[17] = {
 };
 
 static void* s_ksdel_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_NPC_KS) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_NPC_KS_e) {
         fopAcM_delete((fopAc_ac_c*)i_actor);
 
         ((obj_sw_class*)i_data)->field_0x5a8[saru_ct].field_0x4.x = sc_path[7 - saru_ct].field_0x4;
@@ -794,14 +794,14 @@ static int daObj_Sw_Create(fopAc_ac_c* a_this) {
 
         i_this->field_0xd8c = (i_this->field_0x91c * 63) / 8;
         if (fopAcM_GetRoomNo(a_this) == 2 || fopAcM_GetRoomNo(a_this) == 4) {
-            fopAcM_createChild(PROC_OBJ_BRG, fopAcM_GetID(a_this), swBit << 24 | 0xFFFFFF,
+            fopAcM_createChild(fpcNm_OBJ_BRG_e, fopAcM_GetID(a_this), swBit << 24 | 0xFFFFFF,
                                &a_this->current.pos, fopAcM_GetRoomNo(a_this),
                                &a_this->current.angle, NULL, -1, NULL);
         }
 
         if (fopAcM_GetRoomNo(a_this) == 4 && swBit != 0xFF) {
             if (!dComIfGs_isSwitch(swBit, fopAcM_GetRoomNo(a_this))) {
-                fopAcM_createChild(PROC_E_MK, fopAcM_GetID(a_this), swBit << 16 | 1,
+                fopAcM_createChild(fpcNm_E_MK_e, fopAcM_GetID(a_this), swBit << 16 | 1,
                                    &a_this->current.pos, fopAcM_GetRoomNo(a_this),
                                    &a_this->current.angle, NULL, -1, NULL);
                 return cPhs_ERROR_e;
@@ -819,18 +819,18 @@ static actor_method_class l_daObj_Sw_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_SW = {
-    fpcLy_CURRENT_e,       // mLayerID
-    4,                     // mListID
-    fpcPi_CURRENT_e,       // mListPrio
-    PROC_OBJ_SW,           // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(obj_sw_class),  // mSize
-    0,                     // mSizeOther
-    0,                     // mParameters
-    &g_fopAc_Method.base,  // sub_method
-    60,                    // mPriority
-    &l_daObj_Sw_Method,    // sub_method
-    0x00044000,            // mStatus
-    fopAc_ACTOR_e,         // mActorType
-    fopAc_CULLBOX_0_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 4,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_SW_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(obj_sw_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_SW_e,
+    /* Actor SubMtd */ &l_daObj_Sw_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

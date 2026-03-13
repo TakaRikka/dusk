@@ -10,7 +10,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "c/c_damagereaction.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "f_op/f_op_actor_mng.h"
 
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
@@ -300,18 +300,18 @@ static actor_method_class l_daB_OH2_Method = {
 };
 
 actor_process_profile_definition g_profile_B_OH2 = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_B_OH2,
-    &g_fpcLf_Method.base,
-    sizeof(b_oh2_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    219,
-    &l_daB_OH2_Method,
-    0x44000,
-    fopAc_ENEMY_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_B_OH2_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(b_oh2_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_B_OH2_e,
+    /* Actor SubMtd */ &l_daB_OH2_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

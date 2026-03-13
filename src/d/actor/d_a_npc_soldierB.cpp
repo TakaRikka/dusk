@@ -786,7 +786,7 @@ void daNpc_SoldierB_c::lookat() {
 }
 
 static void* s_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_NPC_SOLDIERa &&
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_NPC_SOLDIERa_e &&
         ((daNpc_SoldierA_c*)i_actor)->getType() == 0)
     {
         return i_actor;
@@ -978,20 +978,20 @@ static actor_method_class daNpc_SoldierB_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_SOLDIERb = {
-    fpcLy_CURRENT_e,              // mLayerID
-    7,                            // mListID
-    fpcPi_CURRENT_e,              // mListPrio
-    PROC_NPC_SOLDIERb,            // mProcName
-    &g_fpcLf_Method.base,         // sub_method
-    sizeof(daNpc_SoldierB_c),     // mSize
-    0,                            // mSizeOther
-    0,                            // mParameters
-    &g_fopAc_Method.base,         // sub_method
-    400,                          // mPriority
-    &daNpc_SoldierB_MethodTable,  // sub_method
-    0x00044100,                   // mStatus
-    fopAc_NPC_e,                  // mActorType
-    fopAc_CULLBOX_CUSTOM_e,       // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_SOLDIERb_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_SoldierB_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_SOLDIERb_e,
+    /* Actor SubMtd */ &daNpc_SoldierB_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

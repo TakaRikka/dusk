@@ -10,7 +10,7 @@
 static fopAc_ac_c* daAlink_searchIceLeaf(fopAc_ac_c* i_actor, void* i_data) {
     UNUSED(i_data);
 
-    if (fopAcM_GetName(i_actor) == PROC_Obj_IceLeaf) {
+    if (fopAcM_GetName(i_actor) == fpcNm_Obj_IceLeaf_e) {
         return i_actor;
     }
 
@@ -29,7 +29,7 @@ bool daAlink_c::checkSnowCodePolygon(cBgS_PolyInfo& i_polyinfo) {
 
 bool daAlink_c::checkBoardRestart() {
     return (mRideStatus == 0 && mRideAcKeep.getActor() != NULL) &&
-           fopAcM_GetName(mRideAcKeep.getActor()) == PROC_Obj_IceLeaf;
+           fopAcM_GetName(mRideAcKeep.getActor()) == fpcNm_Obj_IceLeaf_e;
 }
 
 int daAlink_c::boardCommon(BOOL i_canMove) {

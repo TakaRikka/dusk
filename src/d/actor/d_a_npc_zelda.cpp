@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_zelda.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -188,7 +188,7 @@ int daNpc_Zelda_c::create() {
         J3DModelData* unusedModelData = mpMorf[0]->getModel()->getModelData();
         fopAcM_SetMtx(this, mpMorf[0]->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -200.0f, -100.0f, -200.0f, 200.0f, 300.0f, 200.0f);
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
         mSound.init(&current.pos, &eyePos, 3, 1);
 
 #if DEBUG
@@ -787,18 +787,18 @@ static actor_method_class daNpc_Zelda_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_ZELDA = {
-    fpcLy_CURRENT_e,          // mLayerID
-    7,                        // mListID
-    fpcPi_CURRENT_e,          // mListPrio
-    PROC_NPC_ZELDA,           // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daNpc_Zelda_c),    // mSize
-    0,                        // mSizeOther
-    0,                        // mParameters
-    &g_fopAc_Method.base,     // sub_method
-    384,                      // mPriority
-    &daNpc_Zelda_MethodTable, // sub_method
-    0x00040108,               // mStatus
-    fopAc_NPC_e,              // mActorType
-    fopAc_CULLBOX_CUSTOM_e,   // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_ZELDA_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Zelda_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_ZELDA_e,
+    /* Actor SubMtd */ &daNpc_Zelda_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x8_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

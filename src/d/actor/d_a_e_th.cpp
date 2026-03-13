@@ -46,7 +46,7 @@ daE_TH_HIO_c::daE_TH_HIO_c() {
 }
 
 static void* s_md_sub1(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_MD && (fopAcM_GetParam(i_actor) & 0xFF00) == 0xFF00 && ((fopAc_ac_c*)i_actor)->current.pos.z == 560.0f) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_MD_e && (fopAcM_GetParam(i_actor) & 0xFF00) == 0xFF00 && ((fopAc_ac_c*)i_actor)->current.pos.z == 560.0f) {
         fopAcM_delete((fopAc_ac_c*)i_actor);
     }
 
@@ -54,7 +54,7 @@ static void* s_md_sub1(void* i_actor, void* i_data) {
 }
 
 static void* s_md_sub2(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_MD && (fopAcM_GetParam(i_actor) & 0xFF00) != 0xFF00 && ((fopAc_ac_c*)i_actor)->current.pos.z == -950.0f) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_MD_e && (fopAcM_GetParam(i_actor) & 0xFF00) != 0xFF00 && ((fopAc_ac_c*)i_actor)->current.pos.z == -950.0f) {
         fopAcM_delete((fopAc_ac_c*)i_actor);
     }
 
@@ -1203,7 +1203,7 @@ static int daE_TH_Create(fopAc_ac_c* a_this) {
         OS_REPORT("E_th PARAM %x\n", fopAcM_GetParam(a_this));
 
         i_this->field_0x5b6 = fopAcM_GetParam(a_this);
-        if (i_this->field_0x5b6 == 2 && dComIfGs_isStageMiddleBoss() && checkItemGet(fpcNm_ITEM_IRONBALL, TRUE)) {
+        if (i_this->field_0x5b6 == 2 && dComIfGs_isStageMiddleBoss() && checkItemGet(dItemNo_IRONBALL_e, TRUE)) {
             return cPhs_ERROR_e;
         }
     
@@ -1267,7 +1267,7 @@ static int daE_TH_Create(fopAc_ac_c* a_this) {
         i_this->mSound.init(&i_this->current.pos, &i_this->eyePos, 3, 1);
         i_this->mAtInfo.mpSound = &i_this->mSound;
 
-        i_this->mBallID = fopAcM_createChild(PROC_E_TH_BALL, fopAcM_GetID(i_this), 0, &i_this->current.pos, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, NULL, -1, NULL);
+        i_this->mBallID = fopAcM_createChild(fpcNm_E_TH_BALL_e, fopAcM_GetID(i_this), 0, &i_this->current.pos, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, NULL, -1, NULL);
 
         if (i_this->field_0x5b6 == 2 && dComIfGs_isStageMiddleBoss()) {
             i_this->mAction = ACTION_END;
@@ -1308,18 +1308,18 @@ static actor_method_class l_daE_TH_Method = {
 };
 
 actor_process_profile_definition g_profile_E_TH = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_TH,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(e_th_class),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  134,                    // mPriority
-  &l_daE_TH_Method,       // sub_method
-  0x00040100,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_TH_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_th_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_TH_e,
+    /* Actor SubMtd */ &l_daE_TH_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_lv4PoGate.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 daLv4PoGate_HIO_c::daLv4PoGate_HIO_c() {
     mOpenSpeed = 10.0f;
@@ -260,18 +260,18 @@ static actor_method_class l_daLv4PoGate_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Lv4PoGate = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Obj_Lv4PoGate,
-    &g_fpcLf_Method.base,
-    sizeof(daLv4PoGate_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    638,
-    &l_daLv4PoGate_Method,
-    0x40000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Lv4PoGate_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daLv4PoGate_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Lv4PoGate_e,
+    /* Actor SubMtd */ &l_daLv4PoGate_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

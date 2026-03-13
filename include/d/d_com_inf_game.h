@@ -4270,7 +4270,7 @@ inline void dComIfGp_clearItemBombNumCount(u8 i_no) {
 }
 
 inline s16 dComIfGp_getItemMaxBombNumCount() {
-    return g_dComIfG_gameInfo.play.getItemMaxBombNumCount(fpcNm_ITEM_NORMAL_BOMB);
+    return g_dComIfG_gameInfo.play.getItemMaxBombNumCount(dItemNo_NORMAL_BOMB_e);
 }
 
 inline void dComIfGp_setNowVibration(u8 status) {

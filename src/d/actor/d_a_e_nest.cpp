@@ -4,7 +4,7 @@
  */
 
  #include "d/dolzel_rel.h" // IWYU pragma: keep
- 
+
 #include "d/d_s_play.h"
 #include "d/actor/d_a_e_nest.h"
 #include "d/actor/d_a_npc_tk.h"
@@ -12,7 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_bomb.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "f_op/f_op_camera_mng.h"
 #include <cstring>
 
@@ -57,7 +57,7 @@ static void hahen_normal(e_nest_class* i_this, nest_hahen_s* i_debris) {
     fopAc_ac_c* a_this = static_cast<fopAc_ac_c*>(i_this);
     dBgS_LinChk lin_chk;
     dBgS_ObjGndChk_Spl gnd_chk;
-    
+
     i_debris->mCounter++;
     if (i_debris->mTimer != 0) {
         i_debris->mTimer--;
@@ -189,7 +189,7 @@ static int daE_Nest_Draw(e_nest_class* i_this) {
             cXyz vec;
             f32 scale = l_HIO.mScale * i_this->scale.x;
             vec.set(i_this->current.pos.x, i_this->current.pos.y + 50.0f, i_this->current.pos.z);
-            i_this->mShadowKey = 
+            i_this->mShadowKey =
                 dComIfGd_setShadow(i_this->mShadowKey, 1, i_this->mpModel, &vec, scale * 500.0f,
                                    0.0f, i_this->current.pos.y, i_this->mAcch.GetGroundH(),
                                    i_this->mAcch.m_gnd, &i_this->tevStr, 0, 1.0f,
@@ -315,7 +315,7 @@ static void e_nest_normal(e_nest_class* i_this) {
                         i_this->mHitActorID = fopAcM_GetID(daPy_getPlayerActorClass());
                         /* dSv_event_flag_c::F_0073 - Ordon Village - Attacked after charging at large beehive */
                         dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[172]);
-                    } else if (fopAcM_GetName(actor) == PROC_NPC_TK) {
+                    } else if (fopAcM_GetName(actor) == fpcNm_NPC_TK_e) {
                         daNPC_TK_c* hawk = static_cast<daNPC_TK_c*>(actor);
                         hawk->setBump();
                         i_this->mHitActorID = fopAcM_GetID(hawk);
@@ -437,7 +437,7 @@ static s8 e_nest_carry(e_nest_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     a_this->speed.y = 0.0f;
     s8 ret = true;
-    
+
     switch (i_this->mMode) {
     case 0: {
         cLib_offBit<u32>(a_this->attention_info.flags, fopAc_AttnFlag_CARRY_e);
@@ -538,7 +538,7 @@ static void e_nest_float(e_nest_class* i_this) {
     if (i_this->current.pos.y + 60.0f > vec.y) {
         fopAcM_effHamonSet(&i_this->mRippleKey, &vec, i_this->scale.x, 0.05f);
     }
-    
+
     cLib_addCalc2(&i_this->current.pos.y, i_this->mWaterHeight - 40.0f +
                   i_this->mBob * 0.004f * cM_ssin(i_this->mFrame * 900), 0.1f, 10.0f);
     i_this->mRotation.x = i_this->mBob * cM_ssin(i_this->mFrame * 1000);
@@ -776,7 +776,7 @@ static void bee_nest_action(e_nest_class* i_this) {
 
 static void* shot_b_sub(void* i_actor, void* i_data) {
     daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_BOOMERANG
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_BOOMERANG_e
                     && !dComIfGp_checkPlayerStatus0(0, 0x80000) && player->checkBoomerangCharge()
                     && fopAcM_GetParam(i_actor) == 1) {
         return i_actor;
@@ -787,7 +787,7 @@ static void* shot_b_sub(void* i_actor, void* i_data) {
 static void demo_camera(e_nest_class* i_this) {
     camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     s8 end_demo = false;
-    
+
     switch (i_this->mDemoStage) {
     case 0:
         break;
@@ -923,7 +923,7 @@ static int daE_Nest_IsDelete(e_nest_class* param_0) {
 
 static int daE_Nest_Delete(e_nest_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "E_nest");
-    
+
     if (i_this->mHIOInit) {
         hio_set = false;
     }
@@ -956,7 +956,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 
     _this->mSound.init(&_this->current.pos, 1);
     _this->mBeeSound.init(&_this->current.pos, 2);
-    
+
     return 1;
 }
 
@@ -995,7 +995,7 @@ static cPhs_Step daE_Nest_Create(fopAc_ac_c* i_this) {
             _this->mParamScale = 10;
         }
         _this->scale.x = _this->mParamScale * 0.1f;
-        
+
         _this->mRotation.y = _this->current.angle.y;
 
         if (_this->mBrokenSwitch != 0xff
@@ -1047,7 +1047,7 @@ static cPhs_Step daE_Nest_Create(fopAc_ac_c* i_this) {
         _this->mCcCyl.SetStts(&_this->mCcStts);
 
         if (_this->mParamType == e_nest_class::TYPE_BEE) {
-            fopAcM_createChild(PROC_E_BEE, fopAcM_GetID(_this),
+            fopAcM_createChild(fpcNm_E_BEE_e, fopAcM_GetID(_this),
                                _this->mParamScale << 16 | 0x100 | _this->mParam1,
                                &_this->current.pos, fopAcM_GetRoomNo(_this),
                                NULL, NULL, -1, NULL);
@@ -1055,11 +1055,11 @@ static cPhs_Step daE_Nest_Create(fopAc_ac_c* i_this) {
                              &_this->mAcchCir, &_this->speed, NULL, NULL);
             _this->mAcchCir.SetWall(_this->scale.x * 50.0f, _this->scale.x * 50.0f);
         } else if (_this->mParamType == e_nest_class::TYPE_BUG) {
-            fopAcM_createChild(PROC_E_BUG, fopAcM_GetID(_this),
+            fopAcM_createChild(fpcNm_E_BUG_e, fopAcM_GetID(_this),
                                _this->mParam1 | 0xff000000, &_this->current.pos,
                                fopAcM_GetRoomNo(_this), NULL, NULL, -1, NULL);
         }
-        
+
         mtx_cc_set(_this);
         _this->mHitActorID = -1;
     }
@@ -1075,18 +1075,18 @@ static actor_method_class l_daE_Nest_Method = {
 };
 
 actor_process_profile_definition g_profile_E_NEST = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_E_NEST,
-    &g_fpcLf_Method.base,
-    sizeof(e_nest_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0xB2,
-    &l_daE_Nest_Method,
-    0xD4100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_NEST_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_nest_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_NEST_e,
+    /* Actor SubMtd */ &l_daE_Nest_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x10000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

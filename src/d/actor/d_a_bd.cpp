@@ -15,7 +15,46 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include <cstring>
 
+class daBd_HIO_c : public JORReflexible {
+public:
+    daBd_HIO_c();
+    virtual ~daBd_HIO_c() {}
 
+    void genMessage(JORMContext*);
+
+    /* 0x04 */ s8 id;
+    /* 0x08 */ f32 mBasicSize;
+    /* 0x0C */ f32 mFlightSpeed;
+    /* 0x10 */ f32 mGroundSpeed;
+    /* 0x14 */ s16 mFlightTime;
+    /* 0x18 */ f32 mLinkDetectRange;
+    /* 0x1C */ s16 mChirpDist;
+    /* 0x1E */ s8 field_0x1E;
+};
+
+daBd_HIO_c::daBd_HIO_c() {
+    id = -1;
+    mBasicSize = 1.2f;
+    mFlightSpeed = 20.0f;
+    mGroundSpeed = 3.0f;
+    mFlightTime = 400;
+    mLinkDetectRange = 300.0f;
+    mChirpDist = 60;
+    field_0x1E = 0;
+}
+
+#if DEBUG
+/* daBd_HIO_c::genMessage (JORMContext *) */
+void daBd_HIO_c::genMessage(JORMContext* mctx) {
+    mctx->genLabel("　小鳥　", 0x80000001);
+    mctx->genSlider("基本大きさ", &mBasicSize, 0.0f, 5.0f);
+    mctx->genSlider("飛行速度", &mFlightSpeed, 0.0f, 50.0f);
+    mctx->genSlider("地上速度", &mGroundSpeed, 0.0f, 20.0f);
+    mctx->genSlider("飛行時間（およそ）", &mFlightTime, 0, 30000);
+    mctx->genSlider("リンク認識距離", &mLinkDetectRange, 0.0f, 2000.0f);
+    mctx->genSlider("羽LevelSE鳴る距離", &mChirpDist, 0, 1000);
+}
+#endif
 
 struct land_pos {
     /* 0x00 */ s32 unk;
@@ -44,7 +83,11 @@ static land_pos land_pos127[20] = {
     {0, -2302.0f, 1216.0f, -242.0f}, {-1, 0.0f, 0.0f, 0.0f},
 };
 
-static int wait_bck[3] = {ANM_PITA_LEFTUP, ANM_PITA_RIGHT, ANM_PITA_DOWN};
+static void anm_init(bd_class* i_this, int i_anmID, f32 i_morf, u8 i_attr, f32 i_speed) {
+    i_this->mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Bd", i_anmID), i_attr, i_morf,
+                           i_speed, 0.0f, -1.0f, NULL);
+    i_this->mAnmID = i_anmID;
+}
 
 static u8 hio_set;
 static daBd_HIO_c l_HIO;
@@ -58,37 +101,6 @@ static cXyz land_sp_pos[4] = {
 
 static int rope_pt;
 
-daBd_HIO_c::daBd_HIO_c() {
-    id = -1;
-    mBasicSize = 1.2f;
-    mFlightSpeed = 20.0f;
-    mGroundSpeed = 3.0f;
-    mFlightTime = 400;
-    mLinkDetectRange = 300.0f;
-    mChirpDist = 60;
-    field_0x1E = 0;
-}
-
-#if DEBUG
-/* daBd_HIO_c::genMessage (JORMContext *) */
-void daBd_HIO_c::genMessage(JORMContext* mctx) {
-    mctx->genLabel("小鳥", 0x80000001);
-    mctx->genSlider("基本大きさ", &mBasicSize, 0.0f, 5.0f);
-    mctx->genSlider("飛行速度", &mFlightSpeed, 0.0f, 50.0f);
-    mctx->genSlider("地上速度", &mGroundSpeed, 0.0f, 20.0f);
-    mctx->genSlider("飛行時間（およそ）", &mFlightTime, 0, 30000);
-    mctx->genSlider("リンク認識距離", &mLinkDetectRange, 0.0f, 2000.0f);
-    mctx->genSlider("羽LevelSE鳴る距離", &mChirpDist, 0, 1000);
-}
-#endif
-
-
-static void anm_init(bd_class* i_this, int i_anmID, f32 i_morf, u8 i_attr, f32 i_speed) {
-    i_this->mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Bd", i_anmID), i_attr, i_morf,
-                           i_speed, 0.0f, -1.0f, NULL);
-    i_this->mAnmID = i_anmID;
-}
-
 static int daBd_Draw(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
 
@@ -99,7 +111,6 @@ static int daBd_Draw(bd_class* i_this) {
     i_this->mpMorf->entryDL();
     return 1;
 }
-
 
 static int way_bg_check(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
@@ -123,22 +134,23 @@ static int way_bg_check(bd_class* i_this) {
     return 0;
 }
 
-
 static void* s_a_sub(void* i_target, void* i_bird) {
-    fopAc_ac_c* a_target = (fopAc_ac_c*)i_target;
-    bd_class* b_bird = (bd_class*)i_bird;
-    fopEn_enemy_c* a_bird = (fopEn_enemy_c*)i_bird;
+    UNUSED(i_bird);
 
-    if ((fopAcM_IsActor(i_target) && fopAcM_GetGroup(a_target) == fopAc_ENEMY_e) ||
-        fopAcM_GetGroup(a_target) == fopAc_NPC_e || fopAcM_GetName(i_target) == PROC_OBJ_KANBAN2 ||
-        fopAcM_GetName(i_target) == PROC_OBJ_FOOD)
+    if ((fopAcM_IsActor(i_target) && fopAcM_GetGroup((fopAc_ac_c*)i_target) == fopAc_ENEMY_e) ||
+        fopAcM_GetGroup((fopAc_ac_c*)i_target) == fopAc_NPC_e || fopAcM_GetName(i_target) == fpcNm_OBJ_KANBAN2_e ||
+        fopAcM_GetName(i_target) == fpcNm_OBJ_FOOD_e)
     {
-        cXyz distance = a_bird->current.pos - a_target->current.pos;
+        fopEn_enemy_c* birdEnemy = (fopEn_enemy_c*)i_bird;
+        fopAc_ac_c* a_target = (fopAc_ac_c*)i_target;
+
+        cXyz distance = birdEnemy->current.pos - a_target->current.pos;
         if (distance.abs() < l_HIO.mLinkDetectRange + 10.0f * fabsf(a_target->speedF)) {
             return i_target;
         }
 
-        distance = b_bird->field_0x5C4 - a_target->current.pos;
+        bd_class* bird = (bd_class*)birdEnemy;
+        distance = bird->field_0x5C4 - a_target->current.pos;
         if (distance.abs() < l_HIO.mLinkDetectRange + 10.0f * fabsf(a_target->speedF)) {
             return i_target;
         }
@@ -146,9 +158,7 @@ static void* s_a_sub(void* i_target, void* i_bird) {
     return NULL;
 }
 
-
 static void pl_check(bd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     f32 var_f30;
@@ -161,7 +171,7 @@ static void pl_check(bd_class* i_this) {
     }
 
     if ((i_this->field_0x618 & 0xF) == 0) {
-        var_r28 = (u32)(uintptr_t)fpcM_Search(s_a_sub, a_this);
+        var_r28 = (u32)(uintptr_t)fpcM_Search(s_a_sub, i_this);
     }
 
     if (daPy_getPlayerActorClass()->checkHorseRide()) {
@@ -201,23 +211,22 @@ static int pointBgCheck(cXyz* param_0, cXyz* param_1) {
     return 0;
 }
 
-
 static int land_check(bd_class* i_this) {
-    int land_pos_len;
-    land_pos* land_pos;
-    s8 temp_r1[112];
+    s8 sp3C[108];
 
     int sp20 = g_Counter.mCounter0 + fopAcM_GetID(i_this);
     if ((sp20 & 7) != 0) {
         return -1;
     }
 
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
-    camera_process_class* camera = dComIfGp_getCamera(0);
+    fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
+    camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
     cXyz sp30;
     sp30 = camera->view.lookat.center - camera->view.lookat.eye;
     s16 spA = cM_atan2s(sp30.x, sp30.z);
 
+    int land_pos_len;
+    land_pos* land_pos;
     if (strcmp(dComIfGp_getStartStageName(), "F_SP103") == 0) {
         land_pos_len = 20;
         land_pos = land_pos103;
@@ -227,7 +236,7 @@ static int land_check(bd_class* i_this) {
     }
 
     for (int i = 0; i < land_pos_len; i++) {
-        temp_r1[i] = 0;
+        sp3C[i] = 0;
     }
     f32 var_f31 = 1000.0f;
     for (int i = 0; i < 5; i++) {
@@ -235,7 +244,7 @@ static int land_check(bd_class* i_this) {
             if (land_pos[j].unk < 0) {
                 break;
             }
-            if (temp_r1[j] != 0) {
+            if (sp3C[j] != 0) {
                 continue;
             }
             sp30.x = land_pos[j].x - camera->view.lookat.eye.x;
@@ -256,8 +265,8 @@ static int land_check(bd_class* i_this) {
             sp30.x = land_pos[j].x;
             sp30.y = land_pos[j].y + 5.0f;
             sp30.z = land_pos[j].z;
-            if (pointBgCheck(&a_this->current.pos, &sp30)) {
-                temp_r1[j] = 1;
+            if (pointBgCheck(&enemy->current.pos, &sp30)) {
+                sp3C[j] = 1;
             } else {
                 return j;
             }
@@ -267,6 +276,7 @@ static int land_check(bd_class* i_this) {
     return -1;
 }
 
+static int wait_bck[3] = {ANM_PITA_LEFTUP, ANM_PITA_RIGHT, ANM_PITA_DOWN};
 
 static void drop_check(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
@@ -278,13 +288,11 @@ static void drop_check(bd_class* i_this) {
     }
 }
 
-
 static void turn_set(bd_class* i_this) {
+    fopEn_enemy_c* enemy = &i_this->enemy;
     s16 angle_table[3] = {-0x8000, 0x4000, -0x4000};
-    s16 angle = angle_table[(int)cM_rndF(2.99f)];
-    i_this->mTargetAngleY = i_this->enemy.current.angle.y + angle;
+    i_this->mTargetAngleY = enemy->current.angle.y + angle_table[(int)cM_rndF(2.99f)];
 }
-
 
 static void bd_ground(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
@@ -393,7 +401,6 @@ static void bd_ground(bd_class* i_this) {
         i_this->field_0x658--;
     }
 }
-
 
 static void bd_fly(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
@@ -514,7 +521,6 @@ static void bd_fly(bd_class* i_this) {
     }
 }
 
-
 static void bd_landing(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -604,7 +610,6 @@ static void bd_landing2(bd_class* i_this) {
                         TREG_S(7) + 1000);
 }
 
-
 static void bd_landing3(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -646,7 +651,6 @@ static void bd_landing3(bd_class* i_this) {
         i_this->field_0x61C = 0;
     }
 }
-
 
 static void bd_rope(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
@@ -734,7 +738,6 @@ static void bd_drop(bd_class* i_this) {
         i_this->field_0x61C = 0;
     }
 }
-
 
 static void action(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
@@ -851,18 +854,19 @@ static void action(bd_class* i_this) {
     }
 }
 
-
 static int daBd_Execute(bd_class* i_this) {
-    fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
+    //TODO: almost definitely a fakematch, forces debug to use .rodata pool
+    (void)1.2f;
+
+    fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->enemy;
     daNpc_Kkri_c* kkri;
-    daCow_c* cow;
 
     if (i_this->field_0x5B6 >= 1) {
         if (i_this->field_0x642 != 0) {
             i_this->field_0x642--;
         }
 
-        fopAcM_SearchByName(PROC_NPC_KKRI, (fopAc_ac_c**)&kkri);
+        fopAcM_SearchByName(fpcNm_NPC_KKRI_e, (fopAc_ac_c**)&kkri);
         if (kkri != NULL && i_this->field_0x642 == 0) {
             if (i_this->field_0x5B6 == 1) {
                 MTXCopy(kkri->getBd1Mtx(), *calc_mtx);
@@ -889,8 +893,8 @@ static int daBd_Execute(bd_class* i_this) {
     action(i_this);
     mDoMtx_stack_c::transS(a_this->current.pos.x, a_this->current.pos.y + i_this->field_0x620,
                            a_this->current.pos.z);
-    mDoMtx_stack_c::YrotM(a_this->shape_angle.y);
-    mDoMtx_stack_c::XrotM(a_this->shape_angle.x);
+    mDoMtx_stack_c::YrotM((s16)a_this->shape_angle.y);
+    mDoMtx_stack_c::XrotM((s16)a_this->shape_angle.x);
     mDoMtx_stack_c::ZrotM(a_this->shape_angle.z);
     mDoMtx_stack_c::scaleM(l_HIO.mBasicSize, l_HIO.mBasicSize, l_HIO.mBasicSize);
     J3DModel* model_p = i_this->mpMorf->getModel();
@@ -908,7 +912,7 @@ static int daBd_Execute(bd_class* i_this) {
     i_this->mSound.framework(0, dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
 
     if (i_this->field_0x656 == 0 && dComIfGp_event_runCheck()) {
-        cow = (daCow_c*)fopAcM_SearchByName(PROC_COW);
+        fopAc_ac_c* cow = (fopAc_ac_c*)fopAcM_SearchByName(fpcNm_COW_e);
         if (cow != NULL && cow->speedF > 1.0f) {
             i_this->field_0x656 = 1;
             i_this->mActionID = ACT_GROUND;
@@ -965,10 +969,9 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-
 static int daBd_Create(fopAc_ac_c* i_act_this) {
     bd_class* i_this = (bd_class*)i_act_this;
-    fopAcM_ct(i_act_this, bd_class);
+    fopAcM_ct(&i_this->enemy, bd_class);
 
     int phase_state = dComIfG_resLoad(&i_this->mPhase, "Bd");
     if (phase_state == cPhs_COMPLEATE_e) {
@@ -998,8 +1001,7 @@ static int daBd_Create(fopAc_ac_c* i_act_this) {
                          i_act_this, 1, &i_this->mAcchCir, fopAcM_GetSpeed_p(i_act_this), NULL,
                          NULL);
         i_this->mAcchCir.SetWall(10.0f, 10.0f);
-        i_act_this->health = 1;
-        i_act_this->field_0x560 = 1;
+        i_act_this->field_0x560 = i_act_this->health = 1;
         i_this->mStts.Init(100, 0, i_act_this);
 
         static dCcD_SrcSph cc_sph_src = {
@@ -1038,7 +1040,7 @@ static int daBd_Create(fopAc_ac_c* i_act_this) {
         if (i_this->field_0x5B4 != 0xFF && i_this->field_0x5B4 != 0 && i_this->field_0x5B4 != 1) {
             for (int i = 0; i < i_this->field_0x5B4 - 1; i++) {
                 fopAcM_createChild(
-                    PROC_BD, fopAcM_GetID(i_act_this), fopAcM_GetParam(i_act_this) & 0xFFFFFF00,
+                    fpcNm_BD_e, fopAcM_GetID(i_act_this), fopAcM_GetParam(i_act_this) & 0xFFFFFF00,
                     &i_act_this->current.pos, fopAcM_GetRoomNo(i_act_this), &sp1C, NULL, -1, NULL);
             }
         }
@@ -1053,20 +1055,20 @@ static actor_method_class l_daBd_Method = {
 };
 
 actor_process_profile_definition g_profile_BD = {
-    fpcLy_CURRENT_e,       // mLayerID
-    8,                     // mListID
-    fpcPi_CURRENT_e,       // mListPrio
-    PROC_BD,               // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(bd_class),      // mSize
-    0,                     // mSizeOther
-    0,                     // mParameters
-    &g_fopAc_Method.base,  // sub_method
-    718,                   // mPriority
-    &l_daBd_Method,        // sub_method
-    0x000C4100,            // mStatus
-    fopAc_ACTOR_e,         // mActorType
-    fopAc_CULLBOX_0_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 8,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BD_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(bd_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_BD_e,
+    /* Actor SubMtd */ &l_daBd_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };
 
 AUDIO_INSTANCES

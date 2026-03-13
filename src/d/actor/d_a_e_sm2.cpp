@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_sm2.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -53,10 +53,11 @@ void daE_SM2_HIO_c::genMessage(JORMContext* ctx) {
 
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
-        int jnt_no = i_joint->getJntNo();
+        J3DJoint* joint = i_joint;
+        int jnt_no = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         e_sm2_class* a_this = (e_sm2_class*)model->getUserArea();
-    
+
         if (a_this != NULL && jnt_no >= 1) {
             MtxTrans(a_this->jnt_pos[jnt_no].x, a_this->jnt_pos[jnt_no].y, a_this->jnt_pos[jnt_no].z, 0);
             cMtx_YrotM(*calc_mtx, a_this->field_0x7f8[jnt_no].y);
@@ -79,8 +80,9 @@ static int daE_SM2_Draw(e_sm2_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->enemy;
     g_env_light.settingTevStruct(0, &actor->current.pos, &actor->tevStr);
 
+    J3DModel* model;
     if (!i_this->isPiece) {
-        J3DModel* model = i_this->modelMorf->getModel();
+        model = i_this->modelMorf->getModel();
         g_env_light.setLightTevColorType_MAJI(model, &actor->tevStr);
 
         J3DMaterial* material = model->getModelData()->getMaterialNodePointer(0);
@@ -95,16 +97,20 @@ static int daE_SM2_Draw(e_sm2_class* i_this) {
         if (i_this->shadowId != 353535) {
             cXyz pos;
             pos.set(actor->current.pos.x, 50.0f + actor->current.pos.y + BREG_F(18), actor->current.pos.z);
-            
-            f32 var_f31 = i_this->size * (2500.0f + BREG_F(19)) * i_this->field_0x830;
+
+            f32 var_f31 = (2500.0f + BREG_F(19)) * i_this->size * i_this->field_0x830;
             if (var_f31 < 700.0f) {
                 var_f31 = 700.0f;
             }
 
-            i_this->shadowId = dComIfGd_setShadow(i_this->shadowId, 1, model, &pos, var_f31, 0.0f, actor->current.pos.y, i_this->acch.GetGroundH(), i_this->acch.m_gnd, &actor->tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+            i_this->shadowId =
+                dComIfGd_setShadow(i_this->shadowId, 1, model, &pos, var_f31, 0.0f,
+                                   actor->current.pos.y, i_this->acch.GetGroundH(),
+                                   i_this->acch.m_gnd, &i_this->enemy.tevStr, 0, 1.0f,
+                                   dDlst_shadowControl_c::getSimpleTex());
         }
     } else {
-        J3DModel* model = i_this->pieceModelMorf->getModel();
+        model = i_this->pieceModelMorf->getModel();
 
         J3DMaterial* material = model->getModelData()->getMaterialNodePointer(0);
         material->getTevKColor(1)->r = i_this->color_R;
@@ -136,7 +142,7 @@ static void sm2_delete(e_sm2_class* i_this) {
 
     if (!i_this->is_roof) {
         fopAcM_delete(actor);
-        
+
         int swbit = (fopAcM_GetParam(actor) & 0xFF000000) >> 0x18;
         if (swbit != 0xFF) {
             dComIfGs_onSwitch(swbit, fopAcM_GetRoomNo(actor));
@@ -186,7 +192,7 @@ static void cc_stts_init(e_sm2_class* i_this) {
 
 static void* s_s_sub(void* i_actor, void* i_data) {
     cXyz pos_delta;
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_SM2) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_SM2_e) {
         e_sm2_class* pother = (e_sm2_class*)i_data;
         e_sm2_class* pactor = (e_sm2_class*)i_actor;
 
@@ -668,22 +674,22 @@ static void fail(e_sm2_class* i_this) {
             i_this->timers[0] = KREG_S(7) + 9;
         } else {
             static u8 item_no[] = {
-                fpcNm_ITEM_CHUCHU_GREEN,
-                fpcNm_ITEM_CHUCHU_RED,
-                fpcNm_ITEM_CHUCHU_BLUE,
-                fpcNm_ITEM_CHUCHU_YELLOW,
-                fpcNm_ITEM_CHUCHU_PURPLE,
-                fpcNm_ITEM_CHUCHU_RARE,
-                fpcNm_ITEM_CHUCHU_BLACK,
+                dItemNo_CHUCHU_GREEN_e,
+                dItemNo_CHUCHU_RED_e,
+                dItemNo_CHUCHU_BLUE_e,
+                dItemNo_CHUCHU_YELLOW_e,
+                dItemNo_CHUCHU_PURPLE_e,
+                dItemNo_CHUCHU_RARE_e,
+                dItemNo_CHUCHU_BLACK_e,
             };
 
             dComIfGp_att_CatchRequest(actor, item_no[i_this->type], 100.0f, 50.0f, -150.0f, 0x5000, 1);
             actor->eventInfo.onCondition(0x40);
         }
-        
+
         return;
     }
-    
+
     if (i_this->mode == 2 && i_this->timers[0] == 1) {
         MTXCopy(daPy_getPlayerActorClass()->getLeftItemMatrix(), *calc_mtx);
         work.set(0.0f, 0.0f, 0.0f);
@@ -909,7 +915,7 @@ static void damage_check(e_sm2_class* i_this) {
                             pos = i_this->field_0x708[j_d[j]];
                             pos.y += cM_rndF(y_ad[i_this->sizetype]);
 
-                            fopAcM_createChild(PROC_E_SM2, fopAcM_GetID(actor), 0xFFFFFF00 | (i_this->type << 4) | 0xB, &pos, fopAcM_GetRoomNo(actor), &rotation, NULL, -1, NULL);
+                            fopAcM_createChild(fpcNm_E_SM2_e, fopAcM_GetID(actor), 0xFFFFFF00 | (i_this->type << 4) | 0xB, &pos, fopAcM_GetRoomNo(actor), &rotation, NULL, -1, NULL);
                         }
 
                         i_this->field_0xfd4 = 1;
@@ -944,7 +950,7 @@ static void damage_check(e_sm2_class* i_this) {
                             pos = work;
                         }
 
-                        fopAcM_createChild(PROC_E_SM2, fopAcM_GetID(actor), parameters, &pos, fopAcM_GetRoomNo(actor), &rotation, NULL, -1, NULL);
+                        fopAcM_createChild(fpcNm_E_SM2_e, fopAcM_GetID(actor), parameters, &pos, fopAcM_GetRoomNo(actor), &rotation, NULL, -1, NULL);
                     }
 
                     i_this->sound.startCreatureSound(Z2SE_EN_SM_HIT2, 0, -1);
@@ -957,7 +963,7 @@ static void damage_check(e_sm2_class* i_this) {
                     i_this->isPiece = TRUE;
                     actor->speed.y = 20.0f + BREG_F(6);
                     i_this->field_0xfd4 = 1;
-                    fopAcM_OffStatus(actor, fopAcM_STATUS_UNK_0x100);
+                    fopAcM_OffStatus(actor, fopAcStts_CULL_e);
                 }
                 return;
             }
@@ -1187,8 +1193,9 @@ static void action(e_sm2_class* i_this) {
         }
     }
 
+    J3DModel* model;
     if (!i_this->isPiece) {
-        J3DModel* model = i_this->modelMorf->getModel();
+        model = i_this->modelMorf->getModel();
 
         mDoMtx_stack_c::transS(i_this->field_0x840.x, i_this->field_0x840.y, i_this->field_0x840.z);
         mDoMtx_stack_c::YrotM(i_this->field_0x84c.y);
@@ -1214,13 +1221,14 @@ static void action(e_sm2_class* i_this) {
         i_this->modelMorf->play(0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         i_this->modelMorf->modelCalc();
     } else {
-        J3DModel* model = i_this->pieceModelMorf->getModel();
+        model = i_this->pieceModelMorf->getModel();
 
         mDoMtx_stack_c::transS(actor->current.pos.x, actor->current.pos.y, actor->current.pos.z);
         mDoMtx_stack_c::YrotM(actor->shape_angle.y + (i_this->counter * -400));
 
-        f32 temp_f27 = (0.5f / i_this->field_0x6b0) * (1.0f + ((0.007f + NREG_F(16)) * (i_this->timers[1] * cM_ssin(i_this->counter * (ZREG_S(1) + 8000)))));
-        mDoMtx_stack_c::scaleM((1.08f + KREG_F(7)) * temp_f27, i_this->field_0x6b0, temp_f27);
+        f32 var_f25 = 1.0f + ((0.007f + NREG_F(16)) * (i_this->timers[1] * cM_ssin(i_this->counter * (ZREG_S(1) + 8000))));
+        f32 var_f27 = (0.5f / i_this->field_0x6b0) * var_f25;
+        mDoMtx_stack_c::scaleM((1.08f + KREG_F(7)) * var_f27, i_this->field_0x6b0, var_f27);
         mDoMtx_stack_c::YrotM(i_this->counter * 400);
         model->setBaseTRMtx(mDoMtx_stack_c::get());
 
@@ -1293,7 +1301,8 @@ static void action(e_sm2_class* i_this) {
     cLib_addCalc0(&i_this->field_0x82c, 0.1f, 0.2f);
 
     if (i_this->field_0xfd4 != 0) {
-        eff_set(i_this, &i_this->field_0x708[3], (2.0f + TREG_F(12)) * i_this->size);
+        f32 size = (2.0f + TREG_F(12)) * i_this->size;
+        eff_set(i_this, &i_this->field_0x708[3], size);
         i_this->field_0xfd4 = 0;
     }
 }
@@ -1385,7 +1394,7 @@ static int daE_SM2_Execute(e_sm2_class* i_this) {
 
     if (actor->home.pos.y - actor->current.pos.y > 5000.0f) {
         fopAcM_delete(actor);
-        
+
         int bitsw = (fopAcM_GetParam(actor) & 0xFF000000) >> 0x18;
         if (bitsw != 0xFF) {
             dComIfGs_onSwitch(bitsw, fopAcM_GetRoomNo(actor));
@@ -1406,7 +1415,7 @@ static int daE_SM2_Delete(e_sm2_class* i_this) {
     #if DEBUG
     l_HIO.removeHIO(i_this->enemy);
     #endif
-    
+
     dComIfG_resDelete(&i_this->phase, "E_sm2");
 
     if (actor->heap != NULL) {
@@ -1471,27 +1480,27 @@ static int daE_SM2_Create(fopAc_ac_c* i_this) {
         if (swbit != 0xFF && dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(i_this))) {
             return cPhs_ERROR_e;
         }
-    
+
         a_this->field_0x5b4 = fopAcM_GetParam(i_this) & 0xF;
         if (a_this->field_0x5b4 == 0xF) {
             a_this->field_0x5b4 = 0;
         }
-    
+
         a_this->type = (fopAcM_GetParam(i_this) & 0xF0) >> 4;
         if (a_this->type == 0xF) {
             a_this->type = TYPE_GREEN;
         }
-    
-        if (!dComIfGs_isItemFirstBit(fpcNm_ITEM_ARMOR) && a_this->type == TYPE_GREEN) {
+
+        if (!dComIfGs_isItemFirstBit(dItemNo_ARMOR_e) && a_this->type == TYPE_GREEN) {
             return cPhs_ERROR_e;
         }
-    
+
         if (a_this->field_0x5b4 < 10) {
             if (strcmp(dComIfGp_getStartStageName(), "T_ENEMY") == 0) {
                 a_this->type = cM_rndF(6.999f);
             }
         }
-    
+
         if (a_this->type == TYPE_RANDOM) {
             int num = (g_Counter.mCounter0 & 7);
             if (num == 0) {
@@ -1502,15 +1511,15 @@ static int daE_SM2_Create(fopAc_ac_c* i_this) {
                 a_this->type = TYPE_BLUE;
             }
         }
-    
-        if (a_this->type == TYPE_RARE && checkItemGet(fpcNm_ITEM_CHUCHU_RARE, 1)) {
+
+        if (a_this->type == TYPE_RARE && checkItemGet(dItemNo_CHUCHU_RARE_e, 1)) {
             if (cM_rndF(1.0f) <= 0.5f) {
                 a_this->type = TYPE_RED;
             } else {
                 a_this->type = TYPE_BLUE;
             }
         }
-    
+
         col_set(a_this, 1);
 
         a_this->sizetype = (fopAcM_GetParam(i_this) & 0xFF00) >> 8;
@@ -1529,14 +1538,14 @@ static int daE_SM2_Create(fopAc_ac_c* i_this) {
         a_this->field_0x5b8 = i_this->home.angle.z & 0xFF;
         i_this->current.angle.z = i_this->shape_angle.z = 0;
         a_this->size = size_get(a_this->sizetype);
-    
+
         OS_REPORT("E_SM2//////////////E_SM2 SET 1 !!\n");
 
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x20D0)) {
             OS_REPORT("//////////////E_SM2 SET NON !!\n");
             return cPhs_ERROR_e;
         }
-    
+
         OS_REPORT("//////////////E_SM2 SET 2 !!\n");
 
         a_this->sound.init(&i_this->current.pos, &i_this->current.pos, 3, 1);
@@ -1552,7 +1561,7 @@ static int daE_SM2_Create(fopAc_ac_c* i_this) {
             a_this->jnt_pos[i] = i_this->current.pos;
             a_this->field_0x6c8[i] = 1.0f;
         }
-        
+
         #if DEBUG
         l_HIO.entryHIO("スライム(豪華）");
         #endif
@@ -1637,20 +1646,20 @@ static actor_method_class l_daE_SM2_Method = {
 };
 
 actor_process_profile_definition g_profile_E_SM2 = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_SM2,             // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(e_sm2_class),    // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  128,                    // mPriority
-  &l_daE_SM2_Method,      // sub_method
-  0x00040120,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_SM2_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_sm2_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_SM2_e,
+    /* Actor SubMtd */ &l_daE_SM2_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x20_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES

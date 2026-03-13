@@ -480,7 +480,7 @@ int daNpcTkj_c::wait(void*) {
             mJntAnm.lookNone(0);
         }
 
-        if (mItemNo == fpcNm_ITEM_DUNGEON_EXIT_2 && mItemPartnerId == fpcM_ERROR_PROCESS_ID_e) {
+        if (mItemNo == dItemNo_DUNGEON_EXIT_2_e && mItemPartnerId == fpcM_ERROR_PROCESS_ID_e) {
             dComIfGs_onDungeonItemWarp();
             fopAcM_delete(this);
         }
@@ -691,18 +691,18 @@ static actor_method_class daNpc_Tkj_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_TKJ = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_NPC_TKJ,           // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daNpcTkj_c),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  373,                    // mPriority
-  &daNpc_Tkj_MethodTable, // sub_method
-  0x08044107,             // mStatus
-  fopAc_NPC_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_TKJ_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcTkj_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_TKJ_e,
+    /* Actor SubMtd */ &daNpc_Tkj_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x8000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e | fopAcStts_UNK_0x2_e | fopAcStts_UNK_0x1_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

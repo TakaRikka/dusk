@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_sw.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -136,8 +136,8 @@ int daE_SW_c::draw() {
     if (field_0x6e4 == 0) {
         cXyz i_pos;
         i_pos.set(current.pos.x, current.pos.y + 100.0f, current.pos.z);
-        mShadowKey = dComIfGd_setShadow(mShadowKey, 1, model, &i_pos, 700.0f, 0.0f, current.pos.y, 
-                                            mBgc.GetGroundH(), mBgc.m_gnd, &tevStr, 0, 1.0f, 
+        mShadowKey = dComIfGd_setShadow(mShadowKey, 1, model, &i_pos, 700.0f, 0.0f, current.pos.y,
+                                            mBgc.GetGroundH(), mBgc.m_gnd, &tevStr, 0, 1.0f,
                                             dDlst_shadowControl_c::getSimpleTex());
     }
 
@@ -210,7 +210,7 @@ void daE_SW_c::setActionMode(s16 i_actionMode, s16 i_moveMode) {
 }
 
 static void* s_b_sub(void* i_actor, void* i_data) {
-    if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_NBOMB && 
+    if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_NBOMB_e &&
         !fopAcM_checkCarryNow((fopAc_ac_c*)i_actor) && !((dBomb_c*)i_actor)->checkStateExplode()) {
         f32 fVar1 = fopAcM_searchActorDistance((fopAc_ac_c*)i_actor, (fopAc_ac_c*)i_data);
         if (fVar1 < target_dist) {
@@ -275,7 +275,7 @@ void daE_SW_c::checkFall() {
     f32 fVar1 = dComIfG_Bgsp().GroundCross(&gnd_chk);
 
     if (speed.y < 0.0f) {
-        if (fVar1 == -G_CM3D_F_INF || std::abs(fVar1 - current.pos.y) > 1000.0f || dComIfG_Bgsp().GetGroundCode(gnd_chk) == 4 || 
+        if (fVar1 == -G_CM3D_F_INF || std::abs(fVar1 - current.pos.y) > 1000.0f || dComIfG_Bgsp().GetGroundCode(gnd_chk) == 4 ||
             dComIfG_Bgsp().GetGroundCode(gnd_chk) == 10 || dComIfG_Bgsp().GetGroundCode(gnd_chk) == 5) {
             setActionMode(13, 0);
         }
@@ -385,7 +385,7 @@ void daE_SW_c::executeChaseSlow() {
     if (fVar1 < 15.0f) {
         fVar1 = 15.0f;
     }
-    
+
     if (fVar1 > 70.0f) {
         fVar1 = 70.0f;
     }
@@ -451,7 +451,7 @@ void daE_SW_c::executeChaseSlow() {
                             bVar1 = 1;
                         }
                     }
-                    
+
                     if (((s16)cLib_distanceAngleS(fopCamM_GetAngleY(dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0))), field_0x6cc) > 0x6000 || bVar1) && data_807B0200 == 0) {
                         field_0x6ea = 60;
                         data_807B0200 = 1;
@@ -695,7 +695,7 @@ void daE_SW_c::executeAttack() {
     s16 sVar1;
     f32 fVar1;
     cXyz sp54, sp60;
-    
+
     switch (mMoveMode) {
         case 0:
             field_0x98c.SetTgType(0xd8fbfdff);
@@ -769,7 +769,7 @@ void daE_SW_c::executeAttack() {
                 mMoveMode = 2;
             }
             break;
-            
+
         case 2:
             setJumpEffect();
             cLib_chaseAngleS(&shape_angle.x, 0x4000, 0x400);
@@ -889,7 +889,7 @@ void daE_SW_c::executeHook() {
             cLib_addCalcAngleS(&shape_angle.y, (s16)(field_0x6cc + field_0x6a4), 4, 0x1000, 0x100);
             current.angle.y = shape_angle.y;
 
-            if (!fopAcM_CheckStatus(this, 0x100000)) {
+            if (!fopAcM_CheckStatus(this, fopAcStts_HOOK_CARRY_NOW_e)) {
                 setActionMode(7, 10);
             }
             break;
@@ -961,7 +961,7 @@ void daE_SW_c::executeChance() {
             // fallthrough
         case 2:
             if ((field_0x6bc & 1) != 0 && mBgc.ChkGroundHit()) {
-                field_0xae8 = dComIfGp_particle_set(field_0xae8, ZLM_SAND00_IA_6, &field_0x674, &tevStr, &shape_angle, NULL, 
+                field_0xae8 = dComIfGp_particle_set(field_0xae8, ZLM_SAND00_IA_6, &field_0x674, &tevStr, &shape_angle, NULL,
                                                     0xFF, NULL, -1, NULL, NULL, NULL);
             }
 
@@ -1148,7 +1148,7 @@ void daE_SW_c::executeDie() {
 }
 
 static void* s_child_sub(void* i_actor, void* i_data) {
-    if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_SW) {
+    if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_SW_e) {
         if (fopAcM_GetLinkId((fopAc_ac_c*)i_actor) == fopAcM_GetID(i_data)) {
             data_807B0201++;
         }
@@ -1160,7 +1160,7 @@ static void* s_child_sub(void* i_actor, void* i_data) {
 void daE_SW_c::executeMaster() {
     camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
-    fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x100);
+    fopAcM_OffStatus(this, fopAcStts_CULL_e);
     attention_info.flags = 0;
     field_0x98c.OffTgSetBit();
     field_0x98c.OffCoSetBit();
@@ -1169,7 +1169,7 @@ void daE_SW_c::executeMaster() {
         field_0x6ea = 30;
         if ((field_0x684 == 0 || !(field_0x6c8 < 1000.0f)) && !(field_0x6c8 > 10000.0f)) {
             int iVar1 = abs((s16)(fopCamM_GetAngleY(camera) - (fopAcM_searchPlayerAngleY(this) + 0x8000)));
-            
+
             if (iVar1 < 0x2000) {
                 data_807B0201 = 0;
                 fpcM_Search(s_child_sub, this);
@@ -1184,7 +1184,7 @@ void daE_SW_c::executeMaster() {
                     }
 
                     u32 param = (iVar1 << 24) | ((fopAcM_GetParam(this) & 0xFFF) | 0x3000);
-                    fopAcM_createChild(PROC_E_SW, fopAcM_GetID(this), param,
+                    fopAcM_createChild(fpcNm_E_SW_e, fopAcM_GetID(this), param,
                                        &home.pos, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
                 }
             }
@@ -1362,7 +1362,7 @@ void daE_SW_c::action() {
         case ACTION_EXECUTE_DIE:
             executeDie();
             break;
-            
+
         case ACTION_EXECUTE_MASTER:
             executeMaster();
             break;
@@ -1389,7 +1389,7 @@ void daE_SW_c::mtx_set() {
         mDoMtx_stack_c::ZXYrotM(shape_angle);
 
         f32 fVar1 = field_0x6dc;
-        
+
         if (l_HIO.basic_size != 1.0f) {
             fVar1 = l_HIO.basic_size;
         }
@@ -1403,7 +1403,7 @@ void daE_SW_c::mtx_set() {
 void daE_SW_c::cc_set() {
     if (mpModelMorf != NULL) {
         J3DModel* model = mpModelMorf->getModel();
-        
+
         if (field_0x694 != 1) {
             MTXCopy(model->getAnmMtx(1), mDoMtx_stack_c::get());
             mDoMtx_stack_c::multVecZero(&eyePos);
@@ -1451,7 +1451,7 @@ void daE_SW_c::damage_check() {
 
     if (field_0x98c.ChkAtShieldHit()) {
         field_0x98c.OffAtShieldHit();
-        
+
         if (daPy_getPlayerActorClass()->checkPlayerGuard()) {
             setActionMode(ACTION_EXECUTE_CHANCE, 0);
             cc_at_check(this, &mAtInfo);
@@ -1668,7 +1668,7 @@ cPhs_Step daE_SW_c::create() {
         uVar2 = 0;
     }
     field_0x6e8 = uVar2;
-    
+
     field_0xaf8 = 0;
 
     if (field_0x694 == 0) {
@@ -1803,20 +1803,20 @@ static actor_method_class l_daE_SW_Method = {
 };
 
 actor_process_profile_definition g_profile_E_SW = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_E_SW,              // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(daE_SW_c),       // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    191,                    // mPriority
-    &l_daE_SW_Method,       // sub_method
-    0x000C0100,             // mStatus
-    fopAc_ENEMY_e,          // mActorType
-    fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_SW_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_SW_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_SW_e,
+    /* Actor SubMtd */ &l_daE_SW_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 void daE_SW_c::d_checkFall() {
@@ -1835,7 +1835,7 @@ void daE_SW_c::d_checkFall() {
     f32 fVar1 = dComIfG_Bgsp().GroundCross(&gnd_chk);
 
     if (speed.y < 0.0f) {
-        if ((fVar1 == -G_CM3D_F_INF || std::abs(fVar1 - current.pos.y) > 1000.0f) || dComIfG_Bgsp().GetGroundCode(gnd_chk) == 4 || 
+        if ((fVar1 == -G_CM3D_F_INF || std::abs(fVar1 - current.pos.y) > 1000.0f) || dComIfG_Bgsp().GetGroundCode(gnd_chk) == 4 ||
             dComIfG_Bgsp().GetGroundCode(gnd_chk) == 10 || dComIfG_Bgsp().GetGroundCode(gnd_chk) == 5) {
             d_setAction(&daE_SW_c::d_fall);
         }
@@ -2109,7 +2109,7 @@ bool daE_SW_c::d_chaseCheck() {
     camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     
     s16 sVar1 = cLib_distanceAngleS(fopCamM_GetAngleY(camera), field_0x6cc);
-    if (bVar1 || (sVar1 > 0x6000 && (abs((s16)(current.angle.y - field_0x6cc)) < 0x2000 || 
+    if (bVar1 || (sVar1 > 0x6000 && (abs((s16)(current.angle.y - field_0x6cc)) < 0x2000 ||
         fVar1 < l_HIO.human_attack_init_range))) {
         return true;
     }
@@ -2142,12 +2142,12 @@ void daE_SW_c::d_chase() {
                 d_setAction(&daE_SW_c::d_wait);
                 return;
             }
-            
+
             if (player->current.pos.absXZ(current.pos) < l_HIO.human_attack_init_range) {
                 d_setAction(&daE_SW_c::d_attk);
                 return;
             }
-                
+
             if (field_0x6ec == 0) {
                 if (mBgc.ChkWallHit()) {
                     if (field_0x6f8[0].ChkWallHit()) {
@@ -2164,7 +2164,7 @@ void daE_SW_c::d_chase() {
                     field_0x69e = field_0x6cc;
                 }
             }
-            
+
             cLib_addCalcAngleS2(&current.angle.y, field_0x69e, 8, 0x400);
             cLib_chaseF(&speedF, 15.0f, 1.0f);
             break;
@@ -2172,7 +2172,7 @@ void daE_SW_c::d_chase() {
         default:
             return;
     }
-    
+
     shape_angle.y = current.angle.y;
 
     if (field_0x6ea != 0) {
@@ -2257,7 +2257,7 @@ void daE_SW_c::d_attk() {
                 field_0x6e5 = 1;
                 shape_angle.x = 0;
                 f32 fVar1;
-                
+
                 if (player->checkHorseRide() == 0) {
                     fVar1 = 19.0f;
                 } else {
@@ -2292,7 +2292,7 @@ void daE_SW_c::d_attk() {
                     fopAcM_delete(this);
                     return;
                 }
-                
+
                 current.pos.y = fopAcM_gc_c::getGroundY();
             }
             // fallthrough
@@ -2461,7 +2461,7 @@ void daE_SW_c::d_damage() {
             if (mBgc.ChkGroundHit()) {
                 speed.y = cM_rndF(3.0f) + 28.0f;
                 speedF = cM_rndF(3.0f) + 8.0f;
-                mMoveMode++; 
+                mMoveMode++;
             }
 
             shape_angle.x = (int)shape_angle.x - 1500.0f;
@@ -2471,7 +2471,7 @@ void daE_SW_c::d_damage() {
             field_0xae8 = dComIfGp_particle_set(field_0xae8, ZLM_SAND00_IA_6, &field_0x674, &tevStr, &shape_angle,
                                                 NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
             cLib_addCalcAngleS(&shape_angle.z, 0, 8, 0x800, 0x10);
-            
+
             if (!mBgc.ChkGroundHit()) {
                 break;
             }
@@ -2498,7 +2498,7 @@ void daE_SW_c::d_damage() {
 
     if (mBgc.ChkWallHit()) {
         speedF = 0.0f;
-        
+
         if (speed.y > 0.0f) {
             speed.y *= 0.5f;
         }
@@ -2599,8 +2599,8 @@ void daE_SW_c::d_hook() {
         case 1:
             cLib_addCalcAngleS(&shape_angle.y, (s16)(field_0x6cc + field_0x6a4), 4, 0x1000, 0x100);
             current.angle.y = shape_angle.y;
-            
-            if (!fopAcM_CheckStatus(this, 0x100000)) {
+
+            if (!fopAcM_CheckStatus(this, fopAcStts_HOOK_CARRY_NOW_e)) {
                 speed.y = 20.0f;
                 speedF = -10.0f;
                 gravity = -5.0f;
@@ -2666,11 +2666,11 @@ int daE_SW_c::d_execute() {
     if (field_0x6ee != 0) {
         field_0x6ee--;
     }
-    
+
     if (field_0x6f0 != 0) {
         field_0x6f0--;
     }
-    
+
     if (field_0x6f2 != 0) {
         field_0x6f2--;
     }

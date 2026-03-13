@@ -8,7 +8,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_tag_bottle_item.h"
 #include "d/d_item.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "d/d_s_play.h"
 
 int daTag_BottleItem_c::create() {
@@ -113,15 +113,15 @@ int daTag_BottleItem_c::chkEvent() {
 int daTag_BottleItem_c::orderEvent() {
     makeSoup();
 
-    if (!daPy_py_c::checkNowWolf() && mBottleItemType != fpcNm_ITEM_EMPTY_BOTTLE) {
+    if (!daPy_py_c::checkNowWolf() && mBottleItemType != dItemNo_EMPTY_BOTTLE_e) {
         attention_info.flags = (fopAc_AttnFlag_TALKCHECK_e | fopAc_AttnFlag_SPEAK_e);
     } else {
         attention_info.flags = 0;
     }
 
     if (attention_info.flags == (fopAc_AttnFlag_TALKCHECK_e | fopAc_AttnFlag_SPEAK_e)) {
-        attention_info.distances[fopAc_attn_TALK_e] = fpcNm_ITEM_EMPTY_BOTTLE;
-        attention_info.distances[fopAc_attn_SPEAK_e] = fpcNm_ITEM_EMPTY_BOTTLE;
+        attention_info.distances[fopAc_attn_TALK_e] = dItemNo_EMPTY_BOTTLE_e;
+        attention_info.distances[fopAc_attn_SPEAK_e] = dItemNo_EMPTY_BOTTLE_e;
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
     }
 
@@ -129,16 +129,16 @@ int daTag_BottleItem_c::orderEvent() {
 }
 
 void daTag_BottleItem_c::makeSoup() {
-    if (mBottleItemType == fpcNm_ITEM_LV1_SOUP
+    if (mBottleItemType == dItemNo_LV1_SOUP_e
            /* dSv_event_flag_c::F_0003 - Snowpeak Ruins - Handed over tomato puree and left room */
         && dComIfGs_isEventBit(2)) {
-        mBottleItemType = fpcNm_ITEM_LV2_SOUP;
+        mBottleItemType = dItemNo_LV2_SOUP_e;
     }
 
-    if (mBottleItemType == fpcNm_ITEM_LV2_SOUP
+    if (mBottleItemType == dItemNo_LV2_SOUP_e
            /* dSv_event_flag_c::F_0004 - Snowpeak Ruins - Handed over secret ingredient and left room */
         && dComIfGs_isEventBit(1)) {
-        mBottleItemType = fpcNm_ITEM_LV3_SOUP;
+        mBottleItemType = dItemNo_LV3_SOUP_e;
     }
 }
 
@@ -192,18 +192,18 @@ static actor_method_class daTag_BottleItem_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_TAG_BTLITM = {
-    fpcLy_CURRENT_e,                // mLayerID
-    7,                              // mListID
-    fpcPi_CURRENT_e,                // mListPri
-    PROC_TAG_SSDRINK,               // mProcName
-    &g_fpcLf_Method.base,          // sub_method
-    sizeof(daTag_BottleItem_c),     // mSize
-    0,                              // mSizeOther
-    0,                              // mParameters
-    &g_fopAc_Method.base,           // sub_method
-    70,                             // mPriority
-    &daTag_BottleItem_MethodTable,  // sub_method
-    0x64100,                        // mStatus
-    5,                              // mActorType
-    fopAc_CULLBOX_CUSTOM_e,         // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_SSDRINK_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTag_BottleItem_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_TAG_SSDRINK_e,
+    /* Actor SubMtd */ &daTag_BottleItem_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_NOPAUSE_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_UNK_GROUP_5_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

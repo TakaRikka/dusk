@@ -220,7 +220,7 @@ void daE_PZ_c::mEnemyScaleSet() {
         for (int i = 0; i < 25; i++) {
             fopAc_ac_c* spC;
             if (field_0x7dc[i] != 0 && fopAcM_SearchByID(field_0x7dc[i], &spC) && spC != NULL) {
-                fopAcM_OnStatus(spC, 0x4000);
+                fopAcM_OnStatus(spC, fopAcStts_UNK_0x4000_e);
 
                 if (field_0x7d8 == 2 && field_0x843 == 0) {
                     Z2GetAudioMgr()->seStart(Z2SE_EN_PZ_DKBB_VANISH, &spC->current.pos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
@@ -381,7 +381,7 @@ void daE_PZ_c::damage_check() {
 }
 
 static void* s_PointSearch(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_PZ && ((daE_PZ_c*)i_actor)->arg0 == 10) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_PZ_e && ((daE_PZ_c*)i_actor)->arg0 == 10) {
         ((daE_PZ_c*)i_data)->mPointPos[((daE_PZ_c*)i_data)->mPointNum].set(((daE_PZ_c*)i_actor)->current.pos);
         ((daE_PZ_c*)i_data)->field_0x780[((daE_PZ_c*)i_data)->mPointNum] = (fopAcM_GetParam(i_actor) & 0xFF00) >> 8;
 
@@ -629,7 +629,7 @@ void daE_PZ_c::executeOpeningDemo() {
         if (mAnm != 0xD) {
             setBck(0xD, 2, 3.0f, 1.0f);
             // fakematch, fpcM_GetID should be fopAcM_GetID
-            parentActorID = fopAcM_createChild(PROC_E_PZ, fpcM_GetID(this), sp28 + arg0, &field_0x7a8, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
+            parentActorID = fopAcM_createChild(fpcNm_E_PZ_e, fpcM_GetID(this), sp28 + arg0, &field_0x7a8, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
         }
 
         lbl_222_bss_71 = field_0x7d8 = 0;
@@ -783,7 +783,7 @@ void daE_PZ_c::executeOpeningDemo() {
 
         for (int i = 0; i < 25; i++) {
             if (field_0x7dc[i] != 0 && fopAcM_SearchByID(field_0x7dc[i], &parent) && parent != NULL) {
-                fopAcM_OnStatus(parent, 0x4000);
+                fopAcM_OnStatus(parent, fopAcStts_UNK_0x4000_e);
             }
         }
 
@@ -829,7 +829,7 @@ void daE_PZ_c::executeOpeningDemo() {
 
         for (int i = 0; i < 25; i++) {
             if (field_0x7dc[i] != 0 && fopAcM_SearchByID(field_0x7dc[i], &parent) && parent != NULL) {
-                fopAcM_OnStatus(parent, 0x4000);
+                fopAcM_OnStatus(parent, fopAcStts_UNK_0x4000_e);
             }
         }
 
@@ -854,7 +854,7 @@ void daE_PZ_c::executeOpeningDemo() {
 
         for (int i = 0; i < 25; i++) {
             if (field_0x7dc[i] != 0 && fopAcM_SearchByID(field_0x7dc[i], &parent) && parent != NULL) {
-                fopAcM_OffStatus(parent, 0x4000);
+                fopAcM_OffStatus(parent, fopAcStts_UNK_0x4000_e);
             }
         }
 
@@ -985,7 +985,7 @@ void daE_PZ_c::executeOpeningDemo() {
         if (mAnm == 0xB && mpModelMorf->isStop()) {
             setBck(0xD, 2, 3.0f, 1.0f);
             // fakematch, fpcM_GetID should be fopAcM_GetID
-            parentActorID = fopAcM_createChild(PROC_E_PZ, fpcM_GetID(this), sp28 + arg0, &field_0x7a8, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
+            parentActorID = fopAcM_createChild(fpcNm_E_PZ_e, fpcM_GetID(this), sp28 + arg0, &field_0x7a8, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
 
             lbl_222_bss_71 = field_0x7d8 = 2;
         }
@@ -1138,7 +1138,7 @@ void daE_PZ_c::executeOpeningDemo() {
             mDemoCameraEye.set(mPzEyeInit_dt[4]);
 
             // fakematch, fpcM_GetID should be fopAcM_GetID
-            parentActorID = fopAcM_createChild(PROC_E_PZ, fpcM_GetID(this), sp28 + arg0, &field_0x7a8, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
+            parentActorID = fopAcM_createChild(fpcNm_E_PZ_e, fpcM_GetID(this), sp28 + arg0, &field_0x7a8, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
 
             setBck(0xC, 0, 10.0f, 1.0f);
             daPy_getPlayerActorClass()->changeDemoMode(0x10, 0, 0, 0);
@@ -1407,7 +1407,7 @@ void daE_PZ_c::executeAttack() {
         break;
     case 1:
         if (mpModelMorf->isStop()) {
-            parentActorID = fopAcM_createChild(PROC_E_PZ, fopAcM_GetID(this), sp20 + arg0, &field_0x7a8, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
+            parentActorID = fopAcM_createChild(fpcNm_E_PZ_e, fopAcM_GetID(this), sp20 + arg0, &field_0x7a8, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
 
             if (mAnm == 0xB) {
                 setBck(0xC, 0, 3.0f, 1.0f);
@@ -1662,7 +1662,7 @@ void daE_PZ_c::executeDead() {
 
         sp68.set(current.pos);
         sp68.y = mAcch.GetGroundH();
-        fopAcM_create(PROC_KYTAG12, 1, &sp68, fopAcM_GetRoomNo(this), NULL, NULL, -1);
+        fopAcM_create(fpcNm_KYTAG12_e, 1, &sp68, fopAcM_GetRoomNo(this), NULL, NULL, -1);
 
         field_0x7c4 = 0.0f;
         field_0x7d0 = 140;
@@ -1758,12 +1758,12 @@ static const struct {
     u32 parameters;
     int unk_0x8;
 } BIRTH_DT[] = {
-    {PROC_E_YK, 0xFFFFFF01, 20},
-    {PROC_E_YG, 0xFFFFFF00, 20},
-    {PROC_E_PZ, 0xFFFF001E, 12},
-    {PROC_E_S1, 0xFFFFEF00, 8},
-    {PROC_E_YH, 0xFF1FFF00, 12},
-    {PROC_E_PZ, 0xFFFFFF28, 3},
+    {fpcNm_E_YK_e, 0xFFFFFF01, 20},
+    {fpcNm_E_YG_e, 0xFFFFFF00, 20},
+    {fpcNm_E_PZ_e, 0xFFFF001E, 12},
+    {fpcNm_E_S1_e, 0xFFFFEF00, 8},
+    {fpcNm_E_YH_e, 0xFF1FFF00, 12},
+    {fpcNm_E_PZ_e, 0xFFFFFF28, 3},
 };
 
 static const s16 mDBaBa_birthAngle_dt[] = {
@@ -2507,7 +2507,7 @@ int daE_PZ_c::create() {
         } else {
             if ((arg0 == 0 || arg0 == 1) && bitSw != 0xFF && fopAcM_isSwitch( this, bitSw)) {
                 cXyz pos(0.0f, 0.0f, -1300.0f);
-                fopAcM_create(PROC_KYTAG12, 1, &pos, fopAcM_GetRoomNo(this), NULL, NULL, -1);
+                fopAcM_create(fpcNm_KYTAG12_e, 1, &pos, fopAcM_GetRoomNo(this), NULL, NULL, -1);
                 return cPhs_ERROR_e;
             }
     
@@ -2619,7 +2619,7 @@ int daE_PZ_c::create() {
             } else if (arg0 != 30 && arg0 != 40) {
                 if (arg0 == 22 || arg0 == 23) {
                     arg0 -= 2;
-                    fopAcM_OnStatus(this, 0x4000);
+                    fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
                 }
                 field_0x7c8 = 1.0f;
                 setActionMode(6, 0);
@@ -2657,20 +2657,20 @@ static actor_method_class l_daE_PZ_Method = {
 };
 
 actor_process_profile_definition g_profile_E_PZ = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_PZ,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daE_PZ_c),       // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  175,                    // mPriority
-  &l_daE_PZ_Method,       // sub_method
-  0x00040100,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_PZ_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_PZ_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_PZ_e,
+    /* Actor SubMtd */ &l_daE_PZ_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

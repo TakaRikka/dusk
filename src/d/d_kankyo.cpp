@@ -8303,17 +8303,17 @@ static leafdraw_method_class l_dKy_Method = {
 };
 
 kankyo_process_profile_definition g_profile_KANKYO = {
-    fpcLy_CURRENT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_KANKYO,
-    &g_fpcLf_Method.base,
-    sizeof(sub_kankyo__class),
-    0,
-    0,
-    &g_fopKy_Method,
-    2,
-    &l_dKy_Method,
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 1,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_KANKYO_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(sub_kankyo__class),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_KANKYO_e,
+    /* Kankyo SubMtd */ &l_dKy_Method,
 };
 
 static void dummy_str_0x40a0() {

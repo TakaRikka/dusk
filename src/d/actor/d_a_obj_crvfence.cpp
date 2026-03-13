@@ -1,6 +1,6 @@
 /**
  * @file d_a_obj_crvfence.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -139,7 +139,7 @@ void daObjCRVFENCE_c::BrokenAction() {
 
             field_0x5a0 = 1;
             break;
-        
+
         case 1:
             if (field_0x5ee == 0) {
                 FenceMove(field_0x5ee, &field_0x5dc, &field_0x5e8, &field_0x5d0, field_0x5f0);
@@ -162,7 +162,7 @@ void daObjCRVFENCE_c::BrokenAction() {
 }
 
 static void* s_obj_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_searchActorDistance((fopAc_ac_c*)i_data, (fopAc_ac_c*)i_actor) < 600.0f && fopAcM_GetName(i_actor) == PROC_E_WB) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_searchActorDistance((fopAc_ac_c*)i_data, (fopAc_ac_c*)i_actor) < 600.0f && fopAcM_GetName(i_actor) == fpcNm_E_WB_e) {
         return i_actor;
     }
 
@@ -172,10 +172,10 @@ static void* s_obj_sub(void* i_actor, void* i_data) {
 void daObjCRVFENCE_c::NormalAction() {
     if (!field_0x5f4) {
         e_wb_class* wb_p = (e_wb_class*)fpcM_Search(s_obj_sub, this);
-        if (wb_p != NULL && wb_p->mActionID == ACT_PL_RIDE2) {
-            fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x100);
+        if (wb_p != NULL && wb_p->action == ACT_PL_RIDE2) {
+            fopAcM_OffStatus(this, fopAcStts_CULL_e);
             fopAcM_seStartCurrent(this, Z2SE_OBJ_SAKU_BREAK, 0);
-            cXyz sp5c(fopAcM_GetPosition(&wb_p->mEnemy));
+            cXyz sp5c(fopAcM_GetPosition(&wb_p->enemy));
             Mtx mtx;
             mDoMtx_inverse(field_0x65c->getBaseTRMtx(), mtx);
             mDoMtx_stack_c::copy(mtx);
@@ -275,7 +275,7 @@ void daObjCRVFENCE_c::setBaseMtx() {
     mDoMtx_stack_c::ZXYrotM(field_0x5c4);
     mDoMtx_stack_c::scaleM(1.0f, 1.2f, 1.0f);
     field_0x660->setBaseTRMtx(mDoMtx_stack_c::get());
-    
+
     mDoMtx_stack_c::transS(field_0x5d0);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mDoMtx_stack_c::ZXYrotM(field_0x5e8);
@@ -424,18 +424,18 @@ static actor_method_class l_daObjCRVFENCE_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_CRVFENCE = {
-  fpcLy_CURRENT_e,         // mLayerID
-  3,                       // mListID
-  fpcPi_CURRENT_e,         // mListPrio
-  PROC_Obj_CRVFENCE,       // mProcName
-  &g_fpcLf_Method.base,   // sub_method
-  sizeof(daObjCRVFENCE_c), // mSize
-  0,                       // mSizeOther
-  0,                       // mParameters
-  &g_fopAc_Method.base,    // sub_method
-  467,                     // mPriority
-  &l_daObjCRVFENCE_Method, // sub_method
-  0x00040180,              // mStatus
-  fopAc_ACTOR_e,           // mActorType
-  fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_CRVFENCE_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjCRVFENCE_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_CRVFENCE_e,
+    /* Actor SubMtd */ &l_daObjCRVFENCE_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_NOEXEC_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

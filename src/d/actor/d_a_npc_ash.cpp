@@ -69,16 +69,16 @@ void daNpcAsh_c::setLookMode(int i_lookMode, fopAc_ac_c* i_talkPartner) {
 
 void daNpcAsh_c::searchActors() {
     if (!mActorMngr[1].getActorP()) {
-        mActorMngr[1].entry(fopAcM_SearchByName(PROC_NPC_SHAD));
+        mActorMngr[1].entry(fopAcM_SearchByName(fpcNm_NPC_SHAD_e));
     }
     if (!mActorMngr[2].getActorP()) {
-        mActorMngr[2].entry(fopAcM_SearchByName(PROC_NPC_RAFREL));
+        mActorMngr[2].entry(fopAcM_SearchByName(fpcNm_NPC_RAFREL_e));
     }
     if (!mActorMngr[3].getActorP()) {
-        mActorMngr[3].entry(fopAcM_SearchByName(PROC_NPC_MOIR));
+        mActorMngr[3].entry(fopAcM_SearchByName(fpcNm_NPC_MOIR_e));
     }
     if (isMap() && !mActorMngr[4].getActorP()) {
-        mActorMngr[4].entry(fopAcM_SearchByName(PROC_Obj_Table));
+        mActorMngr[4].entry(fopAcM_SearchByName(fpcNm_Obj_Table_e));
     }
     if (!mActorMngr[5].getActorP()) {
         mActorMngr[5].entry(getEvtAreaTagP(17, 0));
@@ -240,7 +240,7 @@ cPhs_Step daNpcAsh_c::Create() {
         if (dComIfGs_isSaveSwitch(0x14)) {
             return cPhs_ERROR_e;
         }
-        fopAcM_OnStatus(this, 0x4000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
         mType = TYPE_CASTLE;
     }
 
@@ -592,7 +592,7 @@ void daNpcAsh_c::reset() {
     }
 
     if (isSneaking()) {
-        fopAcM_OnStatus(this, 0x4000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
     }
 
     if (mType == TYPE_BAR) {
@@ -1336,18 +1336,18 @@ static actor_method_class daNpcAsh_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_ASH = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_NPC_ASH,
-    &g_fpcLf_Method.base,
-    sizeof(daNpcAsh_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    411,
-    &daNpcAsh_MethodTable,
-    0x40100,
-    fopAc_NPC_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_ASH_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpcAsh_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_ASH_e,
+    /* Actor SubMtd */ &daNpcAsh_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

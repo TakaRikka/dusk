@@ -4,7 +4,7 @@
 
 static void* s_sub2(void* i_actor, void* i_data) {
     daObj_GrA_c* i_this = (daObj_GrA_c*)i_data;
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_OBJ_GRA && (u8)i_this->checkGraSub((fopAc_ac_c*)i_actor)) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_OBJ_GRA_e && (u8)i_this->checkGraSub((fopAc_ac_c*)i_actor)) {
         return i_actor;
     }
     return NULL;
@@ -64,9 +64,9 @@ int daObj_GrA_c::waitDemo(void* param_1) {
                 } else {
                     #if DEBUG
                     if (mpHIO->m.field_0x8a) {
-                        fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x100);
+                        fopAcM_OffStatus(this, fopAcStts_CULL_e);
                     } else {
-                        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x100);
+                        fopAcM_OnStatus(this, fopAcStts_CULL_e);
                     }
                     #endif
 
@@ -80,7 +80,7 @@ int daObj_GrA_c::waitDemo(void* param_1) {
 
         case 2:
             #if DEBUG
-            fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x100);
+            fopAcM_OnStatus(this, fopAcStts_CULL_e);
             #endif
             break;
     }
@@ -150,7 +150,7 @@ int daObj_GrA_c::startDemo(void* param_1) {
                     player->changeOriginalDemo();
                     gra_p->field_0x204c.entry(this);
                     gra_p->setProcess(&daObj_GrA_c::soldierDemo);
-                    fopAcM_OnStatus(gra_p, fopAcM_STATUS_UNK_0x8000);
+                    fopAcM_OnStatus(gra_p, fopAcStts_STAFF_PRIMARY_e);
                     field_0x2056 = 0;
                     dComIfGp_getEvent()->setSkipProc(this, skipCallBack, 0);
                     dComIfGp_getEvent()->onSkipFade();
@@ -408,7 +408,7 @@ int daObj_GrA_c::startDemo(void* param_1) {
                     } else if (mAcch.ChkGroundHit()) {
                         cXyz spd8(-1482.0f, 3650.0f, -4459.0f);
                         if ((current.pos - spd8).absXZ() > 50.0f) {
-                            cLib_addCalcAngleS2(&current.angle.y, cLib_targetAngleY(&current.pos, &spd8), 
+                            cLib_addCalcAngleS2(&current.angle.y, cLib_targetAngleY(&current.pos, &spd8),
                                                 24, mpHIO->m.field_0x88);
                             shape_angle.y = current.angle.y;
                             field_0x91a.y = current.angle.y;
@@ -575,7 +575,7 @@ BOOL daObj_GrA_c::chkPointInArea(cXyz param_1, cXyz param_2, f32 param_3, f32 pa
     sp74.y += var_f31;
     sp74.y += sp68.y;
 
-    return chkPointInArea(param_1, sp74, sp68, param_6); 
+    return chkPointInArea(param_1, sp74, sp68, param_6);
 }
 
 BOOL daObj_GrA_c::chkPointInArea(cXyz param_1, cXyz param_2, cXyz param_3, s16 param_4) {
@@ -602,7 +602,7 @@ BOOL daObj_GrA_c::chkActorInSight2(fopAc_ac_c* actor, f32 param_2, s16 param_3) 
 cXyz daObj_GrA_c::getAttentionPos(fopAc_ac_c* i_actor_p) {
     cXyz pos = i_actor_p->attention_info.position;
 
-    if (fopAcM_GetName(i_actor_p) == PROC_ALINK) {
+    if (fopAcM_GetName(i_actor_p) == fpcNm_ALINK_e) {
         pos.y -= daPy_py_c::getAttentionOffsetY();
     }
 

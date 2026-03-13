@@ -2,7 +2,7 @@
 
 #include "d/actor/d_a_tag_wljump.h"
 #include "d/d_path.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_midna.h"
 
@@ -241,18 +241,18 @@ static actor_method_class l_daTagWljump_Method = {
 };
 
 actor_process_profile_definition g_profile_Tag_Wljump = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_Tag_Wljump,
-    &g_fpcLf_Method.base,
-    sizeof(daTagWljump_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    260,
-    &l_daTagWljump_Method,
-    0x44000,
-    fopAc_ENV_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_Wljump_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagWljump_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Tag_Wljump_e,
+    /* Actor SubMtd */ &l_daTagWljump_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

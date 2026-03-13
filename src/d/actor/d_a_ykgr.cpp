@@ -198,7 +198,13 @@ inline int daYkgr_c::_execute() {
     if (m_alpha_flag == 0) {
         if (m_alpha > 0) {
             if (m_alpha > l_HIO.field_0xc) {
-                m_alpha = m_alpha - l_HIO.field_0xc;
+                // this doesn't feel right but it looks an awful lot
+                // like the cast only exists in Shield+ShieldD
+#if PLATFORM_SHIELD
+                m_alpha -= (u8)l_HIO.field_0xc;
+#else
+                m_alpha -= l_HIO.field_0xc;
+#endif
             } else {
                 m_alpha = 0;
             }
@@ -206,7 +212,11 @@ inline int daYkgr_c::_execute() {
     } else {
         if (m_alpha < 0xff) {
             if (m_alpha < 0xff - l_HIO.field_0xc) {
-                m_alpha = m_alpha + l_HIO.field_0xc;
+#if PLATFORM_SHIELD
+                m_alpha += (u8)l_HIO.field_0xc;
+#else
+                m_alpha += l_HIO.field_0xc;
+#endif
             } else {
                 m_alpha = 0xff;
             }
@@ -235,10 +245,12 @@ void daYkgr_c::set_mtx() {
     MTXCopy(mDoMtx_stack_c::get(), field_0x570);
 }
 
-inline int daYkgr_c::_draw() {
-    bool rv;
+// typically we would expect an int return type, but debug seems to indicate this returns a bool
+inline bool daYkgr_c::_draw() {
     f32 alpha = 255.0f;
     if (strcmp(dComIfGp_getStartStageName(), "D_MN04A") == 0) {
+        int dummy; // force stack pointer into r31 on debug
+
         alpha = dComIfGs_BossLife_public_Get() / 100.0f;
         m_alpha = alpha * 255.0f;
         if (m_alpha == 0) {
@@ -246,7 +258,7 @@ inline int daYkgr_c::_draw() {
         }
     }
     if (m_alpha == 0) {
-        rv = true;
+        return true;
     } else {
         set_mtx();
         if  (m_emitter != NULL) {
@@ -258,9 +270,8 @@ inline int daYkgr_c::_draw() {
                 m_emitter->setGlobalAlpha(m_alpha);
             }
         }
-        rv = true;
+        return true;
     }
-    return rv;
 }
 
 static int daYkgrDraw(void* i_this) {
@@ -280,20 +291,20 @@ static actor_method_class daYkgrMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Ykgr = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_Ykgr,
-    &g_fpcLf_Method.base,
-    sizeof(daYkgr_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x01AE,
-    &daYkgrMethodTable,
-    0x00044000,
-    0,
-    0,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Ykgr_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daYkgr_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Ykgr_e,
+    /* Actor SubMtd */ &daYkgrMethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ 0,
 };
 
 AUDIO_INSTANCES;

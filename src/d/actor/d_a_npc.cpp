@@ -1242,7 +1242,7 @@ void daNpcT_c::tgHitCallBack(fopAc_ac_c* i_actor1, dCcD_GObjInf* i_obj1, fopAc_a
     fopAc_ac_c* actor1 = i_actor1;
     u8 cut_type = 0;
     if (i_actor2 != NULL) {
-        if (fopAcM_GetProfName(i_actor2) == PROC_ALINK) {
+        if (fopAcM_GetProfName(i_actor2) == fpcNm_ALINK_e) {
             cut_type = static_cast<daPy_py_c*>(i_actor2)->getCutType();
         } else {
             cut_type = daPy_py_c::CUT_TYPE_NM_VERTICAL;
@@ -2235,7 +2235,7 @@ fopAc_ac_c* daNpcT_c::hitChk(dCcD_GObjInf* i_objInf, u32 param_1) {
     if (mDamageTimer == 0) {
         hit_actor_p = i_objInf->GetTgHitAc();
         if (hit_actor_p != NULL) {
-            if (fopAcM_GetName(hit_actor_p) == PROC_NPC_TK && (param_1 & 1)) {
+            if (fopAcM_GetName(hit_actor_p) == fpcNm_NPC_TK_e && (param_1 & 1)) {
                 ((daNPC_TK_c*)hit_actor_p)->setBump();
                 return hit_actor_p;
             }
@@ -2403,7 +2403,7 @@ BOOL daNpcT_c::srchPlayerActor() {
 
 cXyz daNpcT_c::getAttnPos(fopAc_ac_c* i_actor) {
     cXyz attn_pos = i_actor->attention_info.position;
-    if (fopAcM_GetName(i_actor) == PROC_ALINK) {
+    if (fopAcM_GetName(i_actor) == fpcNm_ALINK_e) {
         attn_pos.y -= daPy_py_c::getAttentionOffsetY();
         if (daPy_py_c::checkNowWolf()) {
             attn_pos = i_actor->current.pos;
@@ -2610,7 +2610,7 @@ fopAc_ac_c* daNpcT_c::getEvtAreaTagP(int i_type, int i_no) {
     f32 var_f31 = G_CM3D_F_INF;
 
     mFindCount = 0;
-    mSrchName = PROC_TAG_EVTAREA;
+    mSrchName = fpcNm_TAG_EVTAREA_e;
     fpcM_Search(srchActor, this);
 
     for (int i = 0; i < mFindCount; i++) {
@@ -2625,7 +2625,7 @@ fopAc_ac_c* daNpcT_c::getEvtAreaTagP(int i_type, int i_no) {
 fopAc_ac_c* daNpcT_c::getShopItemTagP() {
     int unusedInt1 = 0;
     mFindCount = 0;
-    mSrchName = PROC_TAG_SHOPITM;
+    mSrchName = fpcNm_TAG_SHOPITM_e;
     fpcM_Search(srchActor, this);
 
     for (s32 i = 0; i < mFindCount; i++) {

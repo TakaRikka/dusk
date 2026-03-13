@@ -13,7 +13,7 @@
 static char* l_arcName = "P_L4Rwall";
 
 static void* s_BossSearch(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_B_DS) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_B_DS_e) {
         return i_actor;
     }
 
@@ -49,7 +49,7 @@ int daObjLv4Wall_c::Create() {
     cXyz swpos(current.pos);
     swpos.y -= 1700.0f;
 
-    fopAcM_createChild(PROC_Obj_SwSpinner, fopAcM_GetID(this), getSwbit() << 8, &swpos, fopAcM_GetRoomNo(this), NULL, NULL, -1, NULL);
+    fopAcM_createChild(fpcNm_Obj_SwSpinner_e, fopAcM_GetID(this), getSwbit() << 8, &swpos, fopAcM_GetRoomNo(this), NULL, NULL, -1, NULL);
     mpSwSpinner = NULL;
     return 1;
 }
@@ -79,7 +79,7 @@ int daObjLv4Wall_c::create1st() {
 
 int daObjLv4Wall_c::Execute(Mtx** param_0) {
     if (mpSwSpinner == NULL) {
-        mpSwSpinner = (daObjSwSpinner_c*)fopAcM_SearchByName(PROC_Obj_SwSpinner);
+        mpSwSpinner = (daObjSwSpinner_c*)fopAcM_SearchByName(fpcNm_Obj_SwSpinner_e);
     }
 
     if (mpSwSpinner == NULL) {
@@ -250,18 +250,18 @@ static actor_method_class daObjLv4Wall_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_Lv4RailWall = {
-  fpcLy_CURRENT_e,        // mLayerID
-  3,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_Lv4RailWall,   // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjLv4Wall_c), // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  574,                    // mPriority
-  &daObjLv4Wall_METHODS,  // sub_method
-  0x00040100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Lv4RailWall_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjLv4Wall_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Lv4RailWall_e,
+    /* Actor SubMtd */ &daObjLv4Wall_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

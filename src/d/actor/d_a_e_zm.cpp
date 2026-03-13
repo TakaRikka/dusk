@@ -294,7 +294,7 @@ bool daE_ZM_c::mCutTypeCheck() {
 }
 
 static void* s_PointSearch(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_ZM && ((daE_ZM_c*)i_actor)->arg0 == 10 &&
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_ZM_e && ((daE_ZM_c*)i_actor)->arg0 == 10 &&
         ((daE_ZM_c*)i_data)->arg2 == ((daE_ZM_c*)i_actor)->arg2) {
         ((daE_ZM_c*)i_data)->field_0x66c[((daE_ZM_c*)i_data)->field_0x6e5] = ((daE_ZM_c*)i_actor)->current.pos;
         ((daE_ZM_c*)i_data)->field_0x6e5++;
@@ -474,7 +474,7 @@ void daE_ZM_c::executeAttack() {
                     sp50 -= sp44;
                     angle.x = sp50.atan2sY_XZ();
 
-                    parentActorID = fopAcM_createChild(PROC_E_ZM, fopAcM_GetID(this), 20, &sp44, fopAcM_GetRoomNo(this), &angle, NULL, -1, NULL);
+                    parentActorID = fopAcM_createChild(fpcNm_E_ZM_e, fopAcM_GetID(this), 20, &sp44, fopAcM_GetRoomNo(this), &angle, NULL, -1, NULL);
                     dComIfGp_particle_set(dPa_RM(ID_ZI_S_ZM_HASSYA_A), &sp44, &shape_angle, &i_scale);
                     mSound.startCreatureSound(Z2SE_EN_ZM_BALL_OUT, 0, -1);
                     setBck(BCK_ZM_MOUTHOPEN, J3DFrameCtrl::EMode_NONE, 3.0f, -1.0f);
@@ -1034,18 +1034,18 @@ static actor_method_class l_daE_ZM_Method = {
 };
 
 actor_process_profile_definition g_profile_E_ZM = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_ZM,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daE_ZM_c),       // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  174,                    // mPriority
-  &l_daE_ZM_Method,       // sub_method
-  0x00040120,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_ZM_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_ZM_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_ZM_e,
+    /* Actor SubMtd */ &l_daE_ZM_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x20_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

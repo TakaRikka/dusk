@@ -179,7 +179,7 @@ int daObjYIblltray_c::Create() {
 }
 
 void daObjYIblltray_c::rideActor(fopAc_ac_c* i_actor) {
-    if (mBallID == fpcM_ERROR_PROCESS_ID_e && fopAcM_GetProfName(i_actor) == PROC_Obj_Carry &&
+    if (mBallID == fpcM_ERROR_PROCESS_ID_e && fopAcM_GetProfName(i_actor) == fpcNm_Obj_Carry_e &&
         ((daObjCarry_c*)i_actor)->getType() == daObjCarry_c::TYPE_IRON_BALL)
     {
         mBallID = fopAcM_GetID(i_actor);
@@ -201,7 +201,7 @@ void daObjYIblltray_c::sendBall(fpc_ProcID i_ID) {
 
 static fopAc_ac_c* searchObjYIblltray(void* i_trayB, void* i_trayA) {
     if (i_trayB != NULL && fopAcM_IsActor(i_trayB) &&
-        fopAcM_GetProfName(i_trayB) == PROC_Obj_YIblltray && i_trayB != i_trayA)
+        fopAcM_GetProfName(i_trayB) == fpcNm_Obj_YIblltray_e && i_trayB != i_trayA)
     {
         if (((daObjYIblltray_c*)i_trayA)->getSwNo() == ((daObjYIblltray_c*)i_trayB)->getSwNo()) {
             return (fopAc_ac_c*)i_trayB;
@@ -212,7 +212,7 @@ static fopAc_ac_c* searchObjYIblltray(void* i_trayB, void* i_trayA) {
 }
 
 static fopAc_ac_c* searchNearIronball(void* i_ball, void* i_tray) {
-    if (i_ball != NULL && fopAcM_IsActor(i_ball) && fopAcM_GetProfName(i_ball) == PROC_Obj_Carry &&
+    if (i_ball != NULL && fopAcM_IsActor(i_ball) && fopAcM_GetProfName(i_ball) == fpcNm_Obj_Carry_e &&
         ((daObjCarry_c*)i_ball)->getType() == daObjCarry_c::TYPE_IRON_BALL &&
         VECSquareDistance(&((daObjCarry_c*)i_ball)->current.pos,
                           &((daObjYIblltray_c*)i_tray)->mInBallPos) < 900.0f)
@@ -224,7 +224,7 @@ static fopAc_ac_c* searchNearIronball(void* i_ball, void* i_tray) {
 }
 
 static fopAc_ac_c* searchNearBackTrayIronball(void* i_ball, void* i_tray) {
-    if (i_ball != NULL && fopAcM_IsActor(i_ball) && fopAcM_GetProfName(i_ball) == PROC_Obj_Carry &&
+    if (i_ball != NULL && fopAcM_IsActor(i_ball) && fopAcM_GetProfName(i_ball) == fpcNm_Obj_Carry_e &&
         ((daObjCarry_c*)i_ball)->getType() == daObjCarry_c::TYPE_IRON_BALL &&
         VECSquareDistance(&((daObjCarry_c*)i_ball)->current.pos,
                           &((daObjYIblltray_c*)i_tray)->mBackPos) < 900.0f)
@@ -581,18 +581,18 @@ static actor_method_class daObjYIblltray_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_YIblltray = {
-    fpcLy_CURRENT_e,           // mLayerID
-    3,                         // mListID
-    fpcPi_CURRENT_e,           // mListPrio
-    PROC_Obj_YIblltray,        // mProcName
-    &g_fpcLf_Method.base,     // sub_method
-    sizeof(daObjYIblltray_c),  // mSize
-    0,                         // mSizeOther
-    0,                         // mParameters
-    &g_fopAc_Method.base,      // sub_method
-    667,                       // mPriority
-    &daObjYIblltray_METHODS,   // sub_method
-    0x00044100,                // mStatus
-    fopAc_ACTOR_e,             // mActorType
-    fopAc_CULLBOX_CUSTOM_e,    // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_YIblltray_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjYIblltray_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_YIblltray_e,
+    /* Actor SubMtd */ &daObjYIblltray_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

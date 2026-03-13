@@ -227,7 +227,7 @@ daE_FM_HIO_c::daE_FM_HIO_c() {
 }
 
 static void* s_fmobj_del(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_OBJ_FMOBJ) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_OBJ_FMOBJ_e) {
         fopAcM_delete((fopAc_ac_c*)i_actor);
     }
 
@@ -247,7 +247,7 @@ static f32 h_power;
 static s8 h_unk;
 
 static void* s_hasira_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_HHASHI) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_Obj_HHASHI_e) {
         ((daObjHHASHI_c*)i_actor)->Rolling(&h_pos, h_range, h_power, h_unk);
     }
 
@@ -255,7 +255,7 @@ static void* s_hasira_sub(void* i_actor, void* i_data) {
 }
 
 static void* s_hasira_poscheck(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_HHASHI) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_Obj_HHASHI_e) {
         f32 x = ((fopAc_ac_c*)i_actor)->current.pos.x - ((fopAc_ac_c*)i_data)->current.pos.x;
         f32 z = ((fopAc_ac_c*)i_actor)->current.pos.z - ((fopAc_ac_c*)i_data)->current.pos.z;
         if (JMAFastSqrt((x * x) + (z * z)) < 500.0f) {
@@ -272,7 +272,7 @@ static void* s_hasira_poscheck(void* i_actor, void* i_data) {
 static f32 fire_range;
 
 static void* s_hasira_eff_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_HHASHI) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_Obj_HHASHI_e) {
         daObjHHASHI_c* a_actor = (daObjHHASHI_c*)i_actor;
         for (int i = 0; i < 10; i++) {
             if (((e_fm_class*)i_data)->mHashiraActors[i] == a_actor) {
@@ -1697,11 +1697,11 @@ static void demo_camera(e_fm_class* i_this) {
             spE0 += player->current.pos;
 
             OS_REPORT("///YSTONE POS  %d,%d,%d\n", (int)spE0.x, (int)spE0.y, (int)spE0.z);
-            fopAcM_create(PROC_OBJ_YSTONE, 0, &spE0, fopAcM_GetRoomNo(actor), NULL, NULL, -1);
+            fopAcM_create(fpcNm_OBJ_YSTONE_e, 0, &spE0, fopAcM_GetRoomNo(actor), NULL, NULL, -1);
         }
 
         if (i_this->mDemoCamTimer == VREG_S(1) + 120) {
-            obj_ystone_class* ystone = (obj_ystone_class*)fopAcM_SearchByName(PROC_OBJ_YSTONE);
+            obj_ystone_class* ystone = (obj_ystone_class*)fopAcM_SearchByName(fpcNm_OBJ_YSTONE_e);
             if (ystone != NULL) {
                 ystone->field_0x59b = 0;
             }
@@ -1733,7 +1733,7 @@ static void demo_camera(e_fm_class* i_this) {
 
         cLib_addCalc2(&i_this->field_0x1b05c, 210.0f, 0.05f, 0.5f);
 
-        obj_ystone_class* ystone = (obj_ystone_class*)fopAcM_SearchByName(PROC_OBJ_YSTONE);
+        obj_ystone_class* ystone = (obj_ystone_class*)fopAcM_SearchByName(fpcNm_OBJ_YSTONE_e);
         if (ystone != NULL) {
             ystone->setCurrentPos(spE0);
         }
@@ -1744,7 +1744,7 @@ static void demo_camera(e_fm_class* i_this) {
             fopAcM_createWarpHole(&warp_pos, &warp_rot, fopAcM_GetRoomNo(actor), 0, 1, 0xFF);
 
             spEC = actor->current.pos;
-            fopAcM_create(PROC_NPC_GRZ, 0xFFFFFF01, &spEC, fopAcM_GetRoomNo(actor), &actor->shape_angle, NULL, -1);
+            fopAcM_create(fpcNm_NPC_GRZ_e, 0xFFFFFF01, &spEC, fopAcM_GetRoomNo(actor), &actor->shape_angle, NULL, -1);
             i_this->mDrawDemoModel = FALSE;
         }
 
@@ -2565,7 +2565,7 @@ static void chain_control3(e_fm_class* i_this, chain_s* i_chain_s, int param_2) 
 static int ba_count;
 
 static void* s_ba_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_BA) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_BA_e) {
         ba_count++;
     }
 
@@ -2755,7 +2755,7 @@ static void action(e_fm_class* i_this) {
         rot.x = JREG_S(8);
 
         for (int i = 0; i < create_num; i++) {
-            fopAcM_createChild(PROC_E_BA, fopAcM_GetID(actor), 0xFFFF1F02, &actor->eyePos, fopAcM_GetRoomNo(actor), &rot, NULL, -1, NULL);
+            fopAcM_createChild(fpcNm_E_BA_e, fopAcM_GetID(actor), 0xFFFF1F02, &actor->eyePos, fopAcM_GetRoomNo(actor), &rot, NULL, -1, NULL);
             ANGLE_ADD(rot.y, 0x10000 / create_num);
         }
     }
@@ -3345,7 +3345,7 @@ static int daE_FM_Execute(e_fm_class* i_this) {
             csXyz rot(actor->shape_angle);
             rot.y += 0x800;
 
-            fopAcM_createItemForBoss(&actor->eyePos, fpcNm_ITEM_UTAWA_HEART, fopAcM_GetRoomNo(actor), &rot, NULL, 10.0f + KREG_F(19), 30.0f, -1);
+            fopAcM_createItemForBoss(&actor->eyePos, dItemNo_UTAWA_HEART_e, fopAcM_GetRoomNo(actor), &rot, NULL, 10.0f + KREG_F(19), 30.0f, -1);
         }
 
         if (i_this->field_0x182c == 3) {
@@ -3740,7 +3740,7 @@ static int daE_FM_Create(fopAc_ac_c* i_this) {
             if (!dComIfGs_isStageLife()) {
                 cXyz size(1.0f, 1.0f, 1.0f);
                 pos.set(209.0f, 0.0f, 861.0f);
-                fopAcM_createItemForBoss(&pos, fpcNm_ITEM_UTAWA_HEART, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, &size, 0.0f, 0.0f, -1);
+                fopAcM_createItemForBoss(&pos, dItemNo_UTAWA_HEART_e, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, &size, 0.0f, 0.0f, -1);
             }
 
             g_env_light.mColpatWeather = 2;
@@ -3880,20 +3880,20 @@ static actor_method_class l_daE_FM_Method = {
 };
 
 actor_process_profile_definition g_profile_E_FM = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_E_FM,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(e_fm_class),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  158,                    // mPriority
-  &l_daE_FM_Method,       // sub_method
-  0x00044000,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_FM_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_fm_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_FM_e,
+    /* Actor SubMtd */ &l_daE_FM_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

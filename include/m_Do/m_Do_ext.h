@@ -550,6 +550,16 @@ public:
     int init(u16, u16, int);
     void update(int, f32, GXColor&, u16, dKy_tevstr_c*);
     void update(int, GXColor&, dKy_tevstr_c*);
+    // some calls to these functions define i_color inline which is illegal in C++ for a non-const
+    // reference parameter - we add these overloads to enable standard compiler compatibility
+#if !__MWERKS__
+    void update(int param_0, f32 param_1, const GXColor& i_color, u16 param_3, dKy_tevstr_c* i_tevStr) {
+        update(param_0, param_1, const_cast<GXColor&>(i_color), param_3, i_tevStr);
+    }
+    void update(int param_0, const GXColor& i_color, dKy_tevstr_c* i_tevStr) {
+        update(param_0, const_cast<GXColor&>(i_color), i_tevStr);
+    }
+#endif
 
     virtual int getMaterialID() { return 0; }
     virtual void setMaterial();

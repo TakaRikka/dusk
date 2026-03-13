@@ -16,8 +16,8 @@ public:
     e_yrHIO_c() {
         mInvulnerable = 0;
         mStationary = 0;
-        field_0x8 = 20.0f;
-        field_0xc = 2500.0f;
+        field_0x0c = 20.0f;
+        mTurningRadius = 2500.0f;
         mModelScale = 1.0f;
         mAttackAMinTime = 2000;
         mAttackAMaxTime = 2500;
@@ -51,68 +51,68 @@ public:
     virtual ~e_yrHIO_c() {}
 
 #if DEBUG
-    void genMessage(JORMContext*);
+    virtual void genMessage(JORMContext*);
 #endif
 
-    /* 0x04 */ u8 mInvulnerable;
-    /* 0x05 */ u8 mStationary;
-    /* 0x06 */ u8 mSuddenAttack;
-    /* 0x08 */ f32 field_0x8;
-    /* 0x0C */ f32 field_0xc;
+    /* 0x06 */ u8 mInvulnerable;
+    /* 0x07 */ u8 mStationary;
+    /* 0x08 */ u8 mSuddenAttack;
+    /* 0x0C */ f32 field_0x0c;
     /* 0x10 */ f32 mTurningRadius;
-    /* 0x14 */ f32 mModelScale;
-    /* 0x18 */ s16 mAttackAMinTime;
-    /* 0x1A */ s16 mAttackAMaxTime;
-    /* 0x1C */ s16 mAttackBMinTime;
-    /* 0x1E */ s16 mAttackBMaxTime;
-    /* 0x20 */ f32 mAttackMoveSpeed;
-    /* 0x24 */ f32 mAttackFrequency;
-    /* 0x28 */ f32 mFlyPlaybackSpeed;
-    /* 0x2C */ f32 mHoveringPlaybackSpeed;
-    /* 0x30 */ f32 mAttackPlaybackSpeed;
-    /* 0x34 */ s16 mChanceTime;
-    /* 0x38 */ f32 field_0x38;
-    /* 0x3C */ f32 mChancePlaybackSpeed;
-    /* 0x40 */ s16 field_0x40;
-    /* 0x44 */ f32 field_0x44;
-    /* 0x48 */ f32 field_0x48;
-    /* 0x4C */ f32 field_0x4c;
-    /* 0x50 */ s16 mBrakeStartDist;
-    /* 0x54 */ f32 field_0x54;
-    /* 0x58 */ f32 mLargeDamage;
-    /* 0x5C */ f32 mSmallDamage;
-    /* 0x60 */ s16 mHitOccurrenceFrame;
-    /* 0x64 */ f32 mDetectDistSky;
-    /* 0x68 */ f32 mDetectDistGround;
-    /* 0x6C */ s16 mDetectAngleSky;
-    /* 0x6E */ s16 mDetectAngleGround;
-    /* 0x70 */ f32 mDetectHeightSky;
-    /* 0x74 */ f32 mDetectHeightGround;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 mModelScale;
+    /* 0x1C */ s16 mAttackAMinTime;
+    /* 0x1E */ s16 mAttackAMaxTime;
+    /* 0x20 */ s16 mAttackBMinTime;
+    /* 0x22 */ s16 mAttackBMaxTime;
+    /* 0x24 */ f32 mAttackMoveSpeed;
+    /* 0x28 */ f32 mAttackFrequency;
+    /* 0x2C */ f32 mFlyPlaybackSpeed;
+    /* 0x30 */ f32 mHoveringPlaybackSpeed;
+    /* 0x34 */ f32 mAttackPlaybackSpeed;
+    /* 0x38 */ s16 mChanceTime;
+    /* 0x3C */ f32 field_0x38;
+    /* 0x40 */ f32 mChancePlaybackSpeed;
+    /* 0x44 */ s16 field_0x40;
+    /* 0x48 */ f32 field_0x44;
+    /* 0x4C */ f32 field_0x48;
+    /* 0x50 */ f32 field_0x4c;
+    /* 0x54 */ s16 mBrakeStartDist;
+    /* 0x58 */ f32 field_0x54;
+    /* 0x5C */ f32 mLargeDamage;
+    /* 0x60 */ f32 mSmallDamage;
+    /* 0x64 */ s16 mHitOccurrenceFrame;
+    /* 0x68 */ f32 mDetectDistSky;
+    /* 0x6C */ f32 mDetectDistGround;
+    /* 0x70 */ s16 mDetectAngleSky;
+    /* 0x72 */ s16 mDetectAngleGround;
+    /* 0x74 */ f32 mDetectHeightSky;
+    /* 0x78 */ f32 mDetectHeightGround;
 };
 
 #if DEBUG
 void e_yrHIO_c::genMessage(JORMContext* ctx) {
     // "Kagarok"
-    ctx->genLabel("\u3000闇カーゴロック", 0x80000001);
+    ctx->genLabel("　闇カーゴロック", 0x80000001);
     ctx->genCheckBox("不死身", &mInvulnerable, 0x1);
     ctx->genCheckBox("静止", &mStationary, 0x1);
     ctx->genCheckBox("いきなり攻撃", &mSuddenAttack, 0x1);
-    ctx->genSlider("旋回半径", &mTurningRadius, 0.0, 10000.0f);
-    ctx->genSlider("モデルスケール", &mModelScale, 0.0, 10.0f);
+    ctx->genSlider("旋回半径", &mTurningRadius, 0.0f, 10000.0f);
+    ctx->genSlider("モデルスケール", &mModelScale, 0.0f, 10.0f);
     ctx->genSlider("Ａ攻時間（最短）", &mAttackAMinTime, 0, 15000);
     ctx->genSlider("Ａ攻時間（最長）", &mAttackAMaxTime, 0, 15000);
     ctx->genSlider("Ｂ攻時間（最短）", &mAttackBMinTime, 0, 15000);
     ctx->genSlider("Ｂ攻時間（最長）", &mAttackBMaxTime, 0, 15000);
-    ctx->genSlider("攻撃移動速度", &mAttackMoveSpeed, 0.0, 2.0f);
-    ctx->genSlider("攻撃頻度", &mAttackFrequency, 0.0, 10.0f);
-    ctx->genSlider("fly再生速度", &mFlyPlaybackSpeed, 0.0, 3.0f);
-    ctx->genSlider("hovering再生速度", &mHoveringPlaybackSpeed, 0.0, 3.0f);
-    ctx->genSlider("atack再生速度", &mAttackPlaybackSpeed, 0.0, 3.0f);
-    ctx->genSlider("chance再生速度", &mChancePlaybackSpeed, 0.0, 3.0f);
+    ctx->genSlider("攻撃移動速度", &mAttackMoveSpeed, 0.0f, 2.0f);
+    ctx->genSlider("攻撃頻度", &mAttackFrequency, 0.0f, 10.0f);
+    ctx->genSlider("fly再生速度", &mFlyPlaybackSpeed, 0.0f, 3.0f);
+    ctx->genSlider("hovering再生速度", &mHoveringPlaybackSpeed, 0.0f, 3.0f);
+    ctx->genSlider("atack再生速度", &mAttackPlaybackSpeed, 0.0f, 3.0f);
+    ctx->genSlider("chance再生速度", &mChancePlaybackSpeed, 0.0f, 3.0f);
     ctx->genSlider("chance時間", &mChanceTime, 0, 200);
     ctx->genSlider("brake開始距離", &mBrakeStartDist, 0, 3000);
-    ctx->genSlider("大ダメージ力", &mLargeDamage, 0.0, 150.0f);
-    ctx->genSlider("小ダメージ力", &mSmallDamage, 0.0, 150.0f);
+    ctx->genSlider("大ダメージ力", &mLargeDamage, 0.0f, 150.0f);
+    ctx->genSlider("小ダメージ力", &mSmallDamage, 0.0f, 150.0f);
     ctx->genSlider("ＨＩＴ発生フレーム", &mHitOccurrenceFrame, 0, 5);
     ctx->genSlider("プ認距離（空）", &mDetectDistSky, 0.0f, 10000.0f);
     ctx->genSlider("プ認高さ（空）", &mDetectHeightSky, 0.0f, 5000.0f);
@@ -299,7 +299,7 @@ static int e_yr_player_view_check(e_yr_class* i_this) {
     if (vDistToPlayer < detectHeight) {
         s16 r28 = actor->current.angle.y - i_this->field_0xe84 - i_this->mYawToPlayer;
         if (r28 < 0) {
-            r28 = -r28;
+            r28 = r28 * -1;
         }
         if ((u16)r28 < detectAngle) {
             return 1;
@@ -311,7 +311,7 @@ static int e_yr_player_view_check(e_yr_class* i_this) {
 static void path_check(e_yr_class* i_this) {
     static u8 check_index[255];
 
-    if (i_this->field_0x6ec != 0) {
+    if (i_this->ppd != 0) {
         dPnt* point;
         fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
 
@@ -322,8 +322,8 @@ static void path_check(e_yr_class* i_this) {
         unkXyz1 = actor->current.pos;
         unkXyz1.y += 100.0f;
 
-        point = i_this->field_0x6ec->m_points;
-        for (s32 i = 0; i < i_this->field_0x6ec->m_num; i++, point++) {
+        point = i_this->ppd->m_points;
+        for (s32 i = 0; i < i_this->ppd->m_num; i++, point++) {
             unkXyz2.x = point->m_position.x;
             unkXyz2.y = point->m_position.y + 100.0f;
             unkXyz2.z = point->m_position.z;
@@ -343,8 +343,8 @@ static void path_check(e_yr_class* i_this) {
         f32 unkFloat1 = 0.0f;
         bool unkFlag1 = false;
         for (s32 i = 0; i < 100; i++, unkFloat1 += 50.0f) {
-            point = i_this->field_0x6ec->m_points;
-            for (s32 j = 0; j < i_this->field_0x6ec->m_num; j++, point++) {
+            point = i_this->ppd->m_points;
+            for (s32 j = 0; j < i_this->ppd->m_num; j++, point++) {
                 if (check_index[j] != 0) {
                     xDist = actor->current.pos.x - point->m_position.x;
                     yDist = actor->current.pos.y - point->m_position.y;
@@ -352,8 +352,8 @@ static void path_check(e_yr_class* i_this) {
 
                     if (JMAFastSqrt(xDist * xDist + yDist * yDist + zDist * zDist) < unkFloat1) {
                         i_this->field_0x6ea = j - (s32)i_this->field_0x6eb;
-                        if (i_this->field_0x6ea >= (s8)i_this->field_0x6ec->m_num) {
-                            i_this->field_0x6ea = i_this->field_0x6ec->m_num;
+                        if (i_this->field_0x6ea >= (s8)i_this->ppd->m_num) {
+                            i_this->field_0x6ea = i_this->ppd->m_num;
                         } else {
                             if (i_this->field_0x6ea < 0) {
                                 i_this->field_0x6ea = 0;
@@ -396,10 +396,11 @@ static void daE_Yr_shadowDraw(e_yr_class* i_this) {
     cXyz unkXyz1;
     unkXyz1.set(actor->current.pos.x, actor->current.pos.y + 150.0f + BREG_F(18),
                   actor->current.pos.z);
-    i_this->mShadowKey = dComIfGd_setShadow(i_this->mShadowKey, 1, model, &unkXyz1,
-                                   800.0f + BREG_F(19), 40.0f + BREG_F(17), actor->current.pos.y,
-                                   i_this->mAcch.GetGroundH(), i_this->mAcch.m_gnd, &actor->tevStr,
-                                   0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+    i_this->mShadowKey =
+        dComIfGd_setShadow(i_this->mShadowKey, 1, model, &unkXyz1,
+                           800.0f + BREG_F(19), 40.0f + BREG_F(17), actor->current.pos.y,
+                           i_this->mAcch.GetGroundH(), i_this->mAcch.m_gnd, &i_this->mEnemy.tevStr,
+                           0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
 }
 
 static int daE_Yr_Draw(e_yr_class* i_this) {
@@ -435,18 +436,18 @@ static void e_yr_pos_move(e_yr_class* i_this) {
     f32 zDiff = i_this->field_0x680.z - actor->current.pos.z;
     s16 yaw = cM_atan2s(xDiff, zDiff);
     s16 pitch = -cM_atan2s(yDiff, JMAFastSqrt(xDiff * xDiff + zDiff * zDiff));
-    s16 angleY = actor->current.angle.y;
+    s16 curAngleY = actor->current.angle.y;
 
     cLib_addCalcAngleS2(&actor->current.angle.y, yaw, 10 + TREG_S(3), i_this->field_0x69c * i_this->field_0x694);
-    angleY = (angleY - actor->current.angle.y) * 0x20;
+    s16 targetAngleY = (curAngleY - actor->current.angle.y) * 0x20;
     s16 limit = 5500 + TREG_S(1);
-    if (angleY > limit) {
-        angleY = limit;
-    } else if (angleY < -limit) {
-        angleY = -limit;
+    if (targetAngleY > limit) {
+        targetAngleY = limit;
+    } else if (targetAngleY < -limit) {
+        targetAngleY = -limit;
     }
 
-    cLib_addCalcAngleS2(&actor->current.angle.z, angleY, 10 + TREG_S(3),
+    cLib_addCalcAngleS2(&actor->current.angle.z, targetAngleY, 10 + TREG_S(3),
                         i_this->field_0x69c * i_this->field_0x694 * 0.5f);
 
     cLib_addCalcAngleS2(&actor->current.angle.x, pitch, 10 + TREG_S(3),
@@ -512,8 +513,10 @@ static void e_yr_path_move(e_yr_class* i_this) {
 
     s32 frame;
     switch (i_this->field_0x67c) {
-    case 0:
-        frame = i_this->mpMorfSO->getFrame();
+    case 0: {
+        // this case uses a different stack address than others in debug -
+        // it seems plausible that the frame variable was inadvertently shadowed here
+        s32 frame = i_this->mpMorfSO->getFrame();
         if (actor->current.pos.y > i_this->field_0x680.y &&
             frame == 9 + TREG_S(0))
         {
@@ -522,6 +525,7 @@ static void e_yr_path_move(e_yr_class* i_this) {
         }
 
         break;
+    }
     case 1:
         if (actor->current.pos.y <= (i_this->field_0x680).y) {
             i_this->field_0x67c = 0;
@@ -531,6 +535,7 @@ static void e_yr_path_move(e_yr_class* i_this) {
         break;
     case 10:
     default:
+        (void)0;
         break;
     }
 
@@ -542,18 +547,18 @@ static void e_yr_path_move(e_yr_class* i_this) {
     switch (i_this->field_0x67d) {
     case 0: {
         i_this->field_0x6ea += i_this->field_0x6eb;
-        if (i_this->field_0x6ea >= (s8)i_this->field_0x6ec->m_num) {
-            if (dPath_ChkClose(i_this->field_0x6ec)) {
+        if (i_this->field_0x6ea >= (s8)i_this->ppd->m_num) {
+            if (dPath_ChkClose(i_this->ppd)) {
                 i_this->field_0x6ea = 0;
             } else {
                 i_this->field_0x6eb = -1;
-                i_this->field_0x6ea = i_this->field_0x6ec->m_num - 2;
+                i_this->field_0x6ea = i_this->ppd->m_num - 2;
             }
 
-            s32 nextId = i_this->field_0x6ec->m_nextID;
+            s32 nextId = i_this->ppd->m_nextID;
             if (nextId != 0xffff) {
-                i_this->field_0x6ec = dPath_GetRoomPath(nextId, fopAcM_GetRoomNo(actor));
-                JUT_ASSERT(0x451, i_this->field_0x6ec != NULL);
+                i_this->ppd = dPath_GetRoomPath(nextId, fopAcM_GetRoomNo(actor));
+                JUT_ASSERT(0x451, i_this->ppd != NULL);
             }
         } else {
             if (i_this->field_0x6ea < 0) {
@@ -565,7 +570,7 @@ static void e_yr_path_move(e_yr_class* i_this) {
     case -1: {
         i_this->field_0x67d = 1;
 
-        point = i_this->field_0x6ec->m_points;
+        point = i_this->ppd->m_points;
         point = &point[i_this->field_0x6ea];
 
         if (i_this->field_0x6f0 != 0) {
@@ -623,7 +628,7 @@ static void e_yr_path_move(e_yr_class* i_this) {
         }
         if (dist < 10.0f * TREG_F(10) + 300.0f) {
             i_this->field_0x67d = 0;
-            point = i_this->field_0x6ec->m_points;
+            point = i_this->ppd->m_points;
             point = &point[i_this->field_0x6ea];
             if (point->mArg0 == 5) {
                 i_this->field_0x66c = 1;
@@ -682,11 +687,11 @@ static void e_yr_path_move(e_yr_class* i_this) {
         unkChar1 = 1;
         if (i_this->field_0x6a4[2] == 0) {
             i_this->field_0x6ea++;
-            if (i_this->field_0x6ea >= i_this->field_0x6ec->m_num) {
+            if (i_this->field_0x6ea >= i_this->ppd->m_num) {
                 i_this->field_0x6ea = 0;
             }
 
-            point = i_this->field_0x6ec->m_points;
+            point = i_this->ppd->m_points;
             point = &point[i_this->field_0x6ea];
             i_this->field_0x680.x = point->m_position.x;
             i_this->field_0x680.y = point->m_position.y;
@@ -719,7 +724,7 @@ static void e_yr_path_move(e_yr_class* i_this) {
             zDiff = i_this->field_0x680.z - actor->current.pos.z;
             if (JMAFastSqrt(xDiff * xDiff + zDiff * zDiff) < 50.0f) {
                 i_this->field_0x67d = 22;
-                point = i_this->field_0x6ec->m_points;
+                point = i_this->ppd->m_points;
                 point = &point[i_this->field_0x6ea];
                 if (point->mArg0 == 3) {
                     i_this->field_0x6a4[2] = cM_rndF(50.0f) + 50.0f;
@@ -806,9 +811,9 @@ static void e_yr_auto_move(e_yr_class* i_this) {
     case 0:
         if (i_this->field_0x6a4[1] == 0) {
             xDiff =
-                actor->home.pos.x + cM_rndFX(l_e_yrHIO.field_0xc) - actor->current.pos.x;
+                actor->home.pos.x + cM_rndFX(l_e_yrHIO.mTurningRadius) - actor->current.pos.x;
             zDiff =
-                actor->home.pos.z + cM_rndFX(l_e_yrHIO.field_0xc) - actor->current.pos.z;
+                actor->home.pos.z + cM_rndFX(l_e_yrHIO.mTurningRadius) - actor->current.pos.z;
             if (JMAFastSqrt(xDiff * xDiff + zDiff * zDiff) > 200.0f) {
                 i_this->field_0x6a4[1] = cM_rndF(150.0f) + 50.0f;
 
@@ -1102,6 +1107,9 @@ static void e_yr_atack_move(e_yr_class* i_this) {
         cLib_addCalc2(&actor->current.pos.y, i_this->mAcch.GetGroundH() + 100.0f + TREG_F(17), 0.05f, 5.0f);
 
         break;
+    default:
+        (void)0;
+        break;
     }
     }
 
@@ -1164,6 +1172,7 @@ static void e_yr_horse_move(e_yr_class* i_this) {
 
     f32 horseSpeed = dComIfGp_getHorseActor()->speedF;
     if (horseSpeed > 60.0f) {
+        int dummy; // force stack pointer into r31 for debug
         horseSpeed = 60.0f;
     } else {
         if (horseSpeed < 30.0f) {
@@ -1302,6 +1311,9 @@ static void e_yr_horse_move(e_yr_class* i_this) {
             i_this->field_0x6a4[3] = cM_rndF(100.0f) + 60.0f;
         }
 
+        break;
+    default:
+        (void)0;
         break;
     }
 
@@ -1526,11 +1538,11 @@ static void e_yr_wait_move(e_yr_class* i_this) {
 }
 
 static void e_yr_su_wait_move(e_yr_class* i_this) {
-    s32 old_0x6e0;
-
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
     fopAc_ac_c* playerActor = dComIfGp_getPlayer(0);
     daPy_py_c* player = (daPy_py_c*)playerActor;
+
+    s32 old_0x6e0;
 
     cXyz unkXyz1;
     cXyz unkXyz2;
@@ -1934,8 +1946,7 @@ static void ground_angle_set(e_yr_class* i_this) {
         dBgS_GndChk gndChk;
         f32 unkFloat1 = 75.0f;
 
-        model = i_this->mpMorfSO->getModel();
-        MTXCopy(model->getAnmMtx(0), *calc_mtx);
+        MTXCopy(i_this->mpMorfSO->getModel()->getAnmMtx(0), *calc_mtx);
         unkXyz1.set(0.0f, 0.0f, 0.0f);
         MtxPosition(&unkXyz1, &unkXyz3);
 
@@ -2009,9 +2020,12 @@ static void ground_angle_set(e_yr_class* i_this) {
     cLib_addCalcAngleS2(&i_this->field_0x6f8.z, unkShort1, 1, 0x400);
 }
 
-static int daE_Yr_Execute(e_yr_class* i_this) {
+// stripped function, inferred from its local static variable (which is not stripped)
+static inline void wing_smoke_set(e_yr_class* i_this) {
     static s32 wing_j[4] = {12, 13, 17, 18};
+}
 
+static int daE_Yr_Execute(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
 
     fopAc_ac_c* playerActor = dComIfGp_getPlayer(0);
@@ -2456,6 +2470,8 @@ static int daE_Yr_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, e_yr_class);
 
     if (loadResult == cPhs_COMPLEATE_e) {
+        int dummy; // force stack pointer into r31 for debug
+
         // "It won't reset because it's already been defeated"
         OS_REPORT("PARAM %x\n", fopAcM_GetParam(i_this));
 
@@ -2485,8 +2501,8 @@ static int daE_Yr_Create(fopAc_ac_c* i_this) {
         i_this->home.pos = i_this->current.pos;
 
         if (yr->field_0x666 != 0xff) {
-            yr->field_0x6ec = dPath_GetRoomPath(yr->field_0x666, fopAcM_GetRoomNo(i_this));
-            if (yr->field_0x6ec == 0) {
+            yr->ppd = dPath_GetRoomPath(yr->field_0x666, fopAcM_GetRoomNo(i_this));
+            if (yr->ppd == 0) {
                 return cPhs_ERROR_e;
             }
 
@@ -2553,20 +2569,20 @@ static actor_method_class l_daE_Yr_Method = {
 };
 
 actor_process_profile_definition g_profile_E_YR = {
-    (u32)fpcLy_CURRENT_e,   // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_E_YR,              // mProcName
-    &g_fpcLf_Method.base,   // sub_method
-    sizeof(e_yr_class),     // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    189,                    // mPriority
-    &l_daE_Yr_Method,       // sub_method
-    0x10040100,             // mStatus
-    fopAc_ENEMY_e,          // mActorType
-    fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ (u32)fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_YR_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_yr_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_YR_e,
+    /* Actor SubMtd */ &l_daE_Yr_Method,
+    /* Status       */ fopAcStts_UNK_0x10000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 e_yr_class::e_yr_class() {

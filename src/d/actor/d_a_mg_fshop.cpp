@@ -506,7 +506,7 @@ static void rod_set(fshop_class* i_this) {
 
 static void* s_fish_sub(void* i_actor, void* i_data) {
     (void) i_data;
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_MG_FISH) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_MG_FISH_e) {
         if (((mg_fish_class*)i_actor)->actor.speedF > 0.1f) {
             fs_weed_s* weed = (fs_weed_s*)i_data;
             f32 x_dist = ((mg_fish_class*)i_actor)->actor.current.pos.x - weed->field_0x00[0].x;
@@ -550,7 +550,7 @@ static void tsubo_set(fshop_class* i_this) {
             pTsubo->field_0x20 = cM_rndF(65536.0f);
             pTsubo->field_0x22 = cM_rndF(65536.0f);
 
-            npc_henna_class* henna = (npc_henna_class*)fopAcM_SearchByName(PROC_NPC_HENNA);
+            npc_henna_class* henna = (npc_henna_class*)fopAcM_SearchByName(fpcNm_NPC_HENNA_e);
             if (henna != NULL) {
                 henna->field_0x7b5 = 60;
             }
@@ -682,7 +682,7 @@ static void koro2_mtx_set(fshop_class* i_this) {
 
 static void* s_sel_sub(void* i_actor, void* i_data) {
     (void) i_data;
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_FSHOP) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_FSHOP_e) {
         if (((fshop_class*)i_actor)->field_0x400e == (u8)((((fshop_class*)i_data)->field_0x400c & 7) + 1)) {
             return i_actor;
         }
@@ -693,7 +693,7 @@ static void* s_sel_sub(void* i_actor, void* i_data) {
 
 static void* s_ball_sub(void* i_actor, void* i_data) {
     UNUSED(i_data);
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_FSHOP && (fopAcM_GetParam(i_actor) & 0xFF) == 0x23) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_FSHOP_e && (fopAcM_GetParam(i_actor) & 0xFF) == 0x23) {
         return i_actor;
     }
 
@@ -915,7 +915,7 @@ static int daFshop_Execute(fshop_class* i_this) {
                 actor->field_0x567 = 1;
             }
 
-            npc_henna_class* henna = (npc_henna_class*)fopAcM_SearchByName(PROC_NPC_HENNA);
+            npc_henna_class* henna = (npc_henna_class*)fopAcM_SearchByName(fpcNm_NPC_HENNA_e);
             if (henna != NULL && henna->field_0x7b9 != 0 && (actor->field_0x567 == 1 || dTimer_getRestTimeMs() == 0)) {
                 BOOL bVar5 = FALSE;
                 for (int i = 0; i < 100; i++) {
@@ -945,7 +945,7 @@ static int daFshop_Execute(fshop_class* i_this) {
                     || mDoCPd_c::getTrigZ(PAD_1)
 #endif
                     ) {
-                        npc_henna_class* henna = (npc_henna_class*)fopAcM_SearchByName(PROC_NPC_HENNA);
+                        npc_henna_class* henna = (npc_henna_class*)fopAcM_SearchByName(fpcNm_NPC_HENNA_e);
                         if (henna != NULL) {
                             BOOL bVar5 = FALSE;
                             for (int i = 0; i < 100; i++) {
@@ -1696,10 +1696,10 @@ static int daFshop_Create(fopAc_ac_c* actor) {
         i_this->field_0x6b7c = 1;
 
         for (int i = 0; i < 8; i++) {
-            fopAcM_createChild(PROC_FSHOP, fopAcM_GetID(actor), i - 155, &actor->current.pos, fopAcM_GetRoomNo(actor), NULL, NULL, -1, NULL);
+            fopAcM_createChild(fpcNm_FSHOP_e, fopAcM_GetID(actor), i - 155, &actor->current.pos, fopAcM_GetRoomNo(actor), NULL, NULL, -1, NULL);
         }
     
-        fopAcM_createChild(PROC_FSHOP, fopAcM_GetID(actor), 0xFFFFFF23, &actor->current.pos, fopAcM_GetRoomNo(actor), NULL, NULL, -1, NULL);
+        fopAcM_createChild(fpcNm_FSHOP_e, fopAcM_GetID(actor), 0xFFFFFF23, &actor->current.pos, fopAcM_GetRoomNo(actor), NULL, NULL, -1, NULL);
 
         u8 sp10;
 #if VERSION == VERSION_GCN_PAL || VERSION == VERSION_WII_PAL
@@ -1740,24 +1740,24 @@ static int daFshop_Create(fopAc_ac_c* actor) {
 
             if (sp24 >= 10) {
                 parameters = (sp24 << 8) | 0xFFFF0000 | i;
-                fopAcM_create(PROC_MG_FISH, parameters, &actor->current.pos, fopAcM_GetRoomNo(actor), NULL, NULL, -1);
+                fopAcM_create(fpcNm_MG_FISH_e, parameters, &actor->current.pos, fopAcM_GetRoomNo(actor), NULL, NULL, -1);
             }
         }
 
         cXyz work_pos(-648.0f + YREG_F(7), 215.0f + YREG_F(8), 380.0f + YREG_F(9));
         csXyz work_angle(0, 0, 0);
-        fopAcM_create(PROC_OBJ_KAGE, 0xFFFFFF01, &work_pos, fopAcM_GetRoomNo(actor), &work_angle, NULL, -1);
+        fopAcM_create(fpcNm_OBJ_KAGE_e, 0xFFFFFF01, &work_pos, fopAcM_GetRoomNo(actor), &work_angle, NULL, -1);
 
         for (int i = 0; i < 8; i++) {
-            fopAcM_create(PROC_MG_FISH, 0xFFFF2005, &actor->current.pos, fopAcM_GetRoomNo(actor), NULL, NULL, -1);
+            fopAcM_create(fpcNm_MG_FISH_e, 0xFFFF2005, &actor->current.pos, fopAcM_GetRoomNo(actor), NULL, NULL, -1);
         }
 
         work_pos.set(-131.0f, 3000.0f + nREG_F(7), -4500.0f);
-        fopAcM_create(PROC_NPC_TK, -1, &work_pos, fopAcM_GetRoomNo(actor), NULL, NULL, -1);
+        fopAcM_create(fpcNm_NPC_TK_e, -1, &work_pos, fopAcM_GetRoomNo(actor), NULL, NULL, -1);
 
         for (int i = 0; i < 5; i++) {
             work_pos.set(-450.0f, 0.0f, -878.0f);
-            fopAcM_create(PROC_BD, 0xFFFFFFFF, &work_pos, fopAcM_GetRoomNo(actor), NULL, NULL, -1);
+            fopAcM_create(fpcNm_BD_e, 0xFFFFFFFF, &work_pos, fopAcM_GetRoomNo(actor), NULL, NULL, -1);
         }
     }
 
@@ -1773,20 +1773,20 @@ static actor_method_class l_daFshop_Method = {
 };
 
 actor_process_profile_definition g_profile_FSHOP = {
-  fpcLy_CURRENT_e,       // mLayerID
-  7,                     // mListID
-  fpcPi_CURRENT_e,       // mListPrio
-  PROC_FSHOP,            // mProcName
-  &g_fpcLf_Method.base, // sub_method
-  sizeof(fshop_class),            // mSize
-  0,                     // mSizeOther
-  0,                     // mParameters
-  &g_fopAc_Method.base,  // sub_method
-  721,                   // mPriority
-  &l_daFshop_Method,     // sub_method
-  0x00044000,            // mStatus
-  fopAc_ACTOR_e,         // mActorType
-  fopAc_CULLBOX_0_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_FSHOP_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(fshop_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_FSHOP_e,
+    /* Actor SubMtd */ &l_daFshop_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };
 
 AUDIO_INSTANCES;

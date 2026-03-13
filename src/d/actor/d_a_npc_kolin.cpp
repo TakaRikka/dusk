@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_kolin.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -49,7 +49,7 @@ enum Kolin_TW_RES_File_ID {
 };
 
 enum Kolin1_RES_File_ID {
-    /* BCK */ 
+    /* BCK */
     /* 0x06 */ BCK_KOLIN_CLUP = 0x6,
     /* 0x07 */ BCK_KOLIN_F_CLUP,
     /* 0x08 */ BCK_KOLIN_F_HAPPY_TALK,
@@ -80,7 +80,7 @@ enum Kolin1_RES_File_ID {
     /* 0x21 */ BTK_KOLIN_NOZOKU,
     /* 0x22 */ BTK_KOLIN_STONE,
     /* 0x23 */ BTK_KOLIN_WALK_A,
-    
+
     /* BTP */
     /* 0x26 */ BTP_KOLIN_F_CLUP = 0x26,
     /* 0x27 */ BTP_KOLIN_F_KIZUKU,
@@ -431,7 +431,7 @@ cPhs_Step daNpc_Kolin_c::create() {
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("\t(%s:%d) flowNo:%d, PathID:%02x, BitSW:%02x<%08x> ", fopAcM_getProcNameString(this), mType, mFlowNodeNo,
                   (getPathID() >> 32) & 0xFF, getBitSW() & 0xFF, fopAcM_GetParam(this));
-        
+
         if (isDelete()) {
             OS_REPORT("===>isDelete:TRUE\n");
             return cPhs_ERROR_e;
@@ -725,7 +725,7 @@ void daNpc_Kolin_c::reset() {
         case 10:
             field_0x1017 = 1;
             break;
-    
+
         case 9:
         case 11:
         default:
@@ -740,7 +740,7 @@ void daNpc_Kolin_c::reset() {
           /* dSv_event_flag_c::F_0016 - Ordon Village - On 3rd day, start following Colin who is blocking path */
          !daNpcT_chkEvtBit(20))) {
         /* dSv_event_tmp_flag_c::T_0021 - Ordon Village - Colin follows to Link's house */
-        daNpcT_offTmpBit(22);        
+        daNpcT_offTmpBit(22);
     }
 
     field_0x1010 = cM_rnd();
@@ -795,7 +795,7 @@ void daNpc_Kolin_c::setParam() {
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
 
     if (mType == 4) {
-        fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x100);
+        fopAcM_OffStatus(this, fopAcStts_CULL_e);
     }
 
     scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
@@ -832,7 +832,7 @@ BOOL daNpc_Kolin_c::checkChangeEvt() {
         switch (mType) {
             case 2:
                 break;
-                
+
             case 3:
                     /* dSv_event_flag_c::F_0019 - Ordon Woods - Spoke with Ilia (Colin is there too) at the spring */
                 if (daNpcT_chkEvtBit(23)) {
@@ -859,7 +859,7 @@ BOOL daNpc_Kolin_c::checkChangeEvt() {
 
 void daNpc_Kolin_c::setAfterTalkMotion() {
     int i_index = FACE_NONE;
-    
+
     switch (mFaceMotionSeqMngr.getNo()) {
         case FACE_NORMAL_TALK:
             i_index = FACE_H_NORMAL_TALK;
@@ -894,19 +894,19 @@ void daNpc_Kolin_c::srchActors() {
             }
 
             if (mActorMngr[2].getActorP() == NULL) {
-                mActorMngr[2].entry(getNearestActorP(PROC_Obj_Hfuta));
+                mActorMngr[2].entry(getNearestActorP(fpcNm_Obj_Hfuta_e));
             }
             break;
 
         case 3:
             if (mActorMngr[3].getActorP() == NULL) {
-                mActorMngr[3].entry(getNearestActorP(PROC_NPC_YELIA));
+                mActorMngr[3].entry(getNearestActorP(fpcNm_NPC_YELIA_e));
             }
             break;
 
         case 4:
             if (mActorMngr[4].getActorP() == NULL) {
-                mActorMngr[4].entry(getNearestActorP(PROC_NPC_LEN));
+                mActorMngr[4].entry(getNearestActorP(fpcNm_NPC_LEN_e));
             }
             break;
 
@@ -973,10 +973,10 @@ void daNpc_Kolin_c::action() {
 }
 
 void daNpc_Kolin_c::beforeMove() {
-    fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x8000000);
+    fopAcM_OffStatus(this, fopAcStts_UNK_0x8000000_e);
 
     if (checkHide()) {
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
     }
 
     if (checkHide() || mNoDraw) {
@@ -1000,7 +1000,7 @@ void daNpc_Kolin_c::setAttnPos() {
                      mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
                      mpHIO->m.common.neck_rotation_ratio, rad_val, NULL);
     mJntAnm.calcJntRad(0.2f, 1.0f, rad_val);
-    
+
     setMtx();
     mDoMtx_stack_c::copy(mpMorf[0]->getModel()->getAnmMtx(getHeadJointNo()));
     mDoMtx_stack_c::multVec(&sp3c, &eyePos);
@@ -1131,7 +1131,7 @@ int daNpc_Kolin_c::selectAction() {
                 mNextAction = &daNpc_Kolin_c::follow;
             }
             break;
-            
+
         case 10:
             mNextAction = &daNpc_Kolin_c::clothWait;
             break;
@@ -1386,7 +1386,7 @@ int daNpc_Kolin_c::cutHail(int i_cutIndex) {
             }
 
             iVar1[0] = msgNo;
-            
+
             if (talkProc(iVar1, FALSE, NULL, FALSE)) {
                 if (msgNo == 0) {
                     if (mFlow.checkEndFlow()) {
@@ -1727,7 +1727,7 @@ int daNpc_Kolin_c::cutCacaricoConversation(int i_cutIndex) {
                 rv = 1;
             }
             break;
-        
+
         case 1:
             mJntAnm.lookPlayer(0);
             rv = 1;
@@ -1803,7 +1803,7 @@ int daNpc_Kolin_c::cutClothTry(int i_cutIndex) {
                 rv = 1;
             }
             break;
-        
+
         case 1:
             rv = 1;
             break;
@@ -1893,7 +1893,7 @@ int daNpc_Kolin_c::wait(void* param_1) {
             if (!mStagger.checkStagger()) {
                 if (mType == 4) {
                     mJntAnm.lookNone(0);
-                    
+
                     if (getBitSW() != 0xFF) {
                         if (dComIfGs_isSwitch(getBitSW(), fopAcM_GetRoomNo(this)) && mMotionSeqMngr.getNo() != MOT_DEMO_FEAR) {
                             mMode = 1;
@@ -1925,7 +1925,7 @@ int daNpc_Kolin_c::wait(void* param_1) {
 
                             if (!chkActorInSight(mPlayerActorMngr.getActorP(), mAttnFovY, mCurAngle.y)) {
                                 mJntAnm.lookNone(0);
-                                
+
                                 if (mType == 11) {
                                     field_0x1018 = 1;
                                 }
@@ -1964,7 +1964,7 @@ int daNpc_Kolin_c::wait(void* param_1) {
                         switch (mType) {
                             case 3:
                                 actor_p = mActorMngr[3].getActorP();
-                                
+
                                 if (actor_p != NULL) {
                                     mJntAnm.lookActor(actor_p, 0.0f, 0);
                                 }
@@ -1979,7 +1979,7 @@ int daNpc_Kolin_c::wait(void* param_1) {
 
                             case 11:
                                 daHorse_c* horse_actor = dComIfGp_getHorseActor();
-                                
+
                                 if (horse_actor != NULL) {
                                     mJntAnm.lookActor(horse_actor, 60.0f, 0);
                                 }
@@ -2252,18 +2252,18 @@ static actor_method_class daNpc_Kolin_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_KOLIN = {
-  fpcLy_CURRENT_e,          // mLayerID
-  7,                        // mListID
-  fpcPi_CURRENT_e,          // mListPrio
-  PROC_NPC_KOLIN,           // mProcName
-  &g_fpcLf_Method.base,    // sub_method
-  sizeof(daNpc_Kolin_c),    // mSize
-  0,                        // mSizeOther
-  0,                        // mParameters
-  &g_fopAc_Method.base,     // sub_method
-  350,                      // mPriority
-  &daNpc_Kolin_MethodTable, // sub_method
-  0x00040107,               // mStatus
-  fopAc_NPC_e,              // mActorType
-  fopAc_CULLBOX_CUSTOM_e,   // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_KOLIN_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Kolin_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_KOLIN_e,
+    /* Actor SubMtd */ &daNpc_Kolin_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x4_e | fopAcStts_UNK_0x2_e | fopAcStts_UNK_0x1_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

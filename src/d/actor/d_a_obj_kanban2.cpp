@@ -271,7 +271,7 @@ void daObj_Kanban2_c::setKanbanSE(int i_se) {
 }
 
 void daObj_Kanban2_c::createBreakParts(u32 i_parameters, csXyz i_rot) {
-    fopAcM_create(PROC_OBJ_KANBAN2, i_parameters, &current.pos, fopAcM_GetRoomNo(this), &i_rot, NULL, -1);
+    fopAcM_create(fpcNm_OBJ_KANBAN2_e, i_parameters, &current.pos, fopAcM_GetRoomNo(this), &i_rot, NULL, -1);
 }
 
 void daObj_Kanban2_c::createWallHitBreak() {
@@ -432,7 +432,7 @@ void daObj_Kanban2_c::damage_check() {
         } else if (hit_obj->ChkAtType(AT_TYPE_SHIELD_ATTACK) || hit_obj->ChkAtType(AT_TYPE_BOOMERANG) || hit_obj->ChkAtType(AT_TYPE_COPY_ROD) || hit_obj->ChkAtType(AT_TYPE_1000000) || hit_obj->ChkAtType(AT_TYPE_20000)) {
             damage_type = DAMAGE_SHAKE;
         } else if (hit_obj->ChkAtType(AT_TYPE_THROW_OBJ)) {
-            if (fopAcM_GetName(hit_actor) == PROC_NPC_TK) {
+            if (fopAcM_GetName(hit_actor) == fpcNm_NPC_TK_e) {
                 ((daNPC_TK_c*)hit_actor)->setBump();
                 damage_type = DAMAGE_PIECES;
             } else {
@@ -808,7 +808,7 @@ void daObj_Kanban2_c::calcNormalSwing() {
 
     if ((mPartFlags & 0xFF) != 0 && mCcSph.ChkCoHit()) {
         fopAc_ac_c* hit_actor = dCc_GetAc(mCcSph.GetCoHitObj()->GetAc());
-        if (fopAcM_GetName(hit_actor) == PROC_HORSE) {
+        if (fopAcM_GetName(hit_actor) == fpcNm_HORSE_e) {
             cXyz sp28(current.pos);
             if (mPartFlags & PARTS_TOP_HALF) {
                 sp28.y += 100.0f;
@@ -1444,7 +1444,7 @@ void daObj_Kanban2_c::executeFloat() {
 
         if (field_0x62a == 0 && mCcSph.ChkCoHit()) {
             cCcD_Obj* hit_obj = mCcSph.GetCoHitObj();
-            if (fopAcM_GetName(dCc_GetAc(hit_obj->GetAc())) == PROC_ALINK && daPy_getPlayerActorClass()->speedF > 1.0f) {
+            if (fopAcM_GetName(dCc_GetAc(hit_obj->GetAc())) == fpcNm_ALINK_e && daPy_getPlayerActorClass()->speedF > 1.0f) {
                 field_0x5e8.y = 0x100;
                 field_0x62a = 10;
             }
@@ -1779,20 +1779,20 @@ static actor_method_class l_daObj_Kanban2_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_KANBAN2 = {
-  fpcLy_CURRENT_e,         // mLayerID
-  7,                       // mListID
-  fpcPi_CURRENT_e,         // mListPrio
-  PROC_OBJ_KANBAN2,        // mProcName
-  &g_fpcLf_Method.base,   // sub_method
-  sizeof(daObj_Kanban2_c), // mSize
-  0,                       // mSizeOther
-  0,                       // mParameters
-  &g_fopAc_Method.base,    // sub_method
-  63,                      // mPriority
-  &l_daObj_Kanban2_Method, // sub_method
-  0x00044100,              // mStatus
-  fopAc_ENV_e,             // mActorType
-  fopAc_CULLBOX_0_e,       // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_KANBAN2_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObj_Kanban2_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_KANBAN2_e,
+    /* Actor SubMtd */ &l_daObj_Kanban2_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENV_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };
 
 AUDIO_INSTANCES

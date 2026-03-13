@@ -51,7 +51,7 @@ public:
     void BombEatAction();
     void Spid_Out();
     void LinkEatAction();
-    bool Mogu_Mogu();
+    u8 Mogu_Mogu();
     void ObjEatAction();
     void EatAction();
     void SearchAction();

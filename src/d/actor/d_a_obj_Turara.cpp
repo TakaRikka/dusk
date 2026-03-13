@@ -353,7 +353,7 @@ void daTurara_c::init_modeDropEnd2() {
     current.pos.y -= 100.0f;
     cXyz first_vec(current.pos);
     first_vec.y += 100.0f;
-    mEmID = fopAcM_create(PROC_E_KK, getSwBit1() << 0x10 | 3, &first_vec, fopAcM_GetRoomNo(this), 0, 0, -1);
+    mEmID = fopAcM_create(fpcNm_E_KK_e, getSwBit1() << 0x10 | 3, &first_vec, fopAcM_GetRoomNo(this), 0, 0, -1);
     JUT_ASSERT(770, mEmID != fpcM_ERROR_PROCESS_ID_e);
     cXyz second_vec(0.7f, 0.7f, 0.7f);
     dComIfGp_particle_set(0x8a8f, &first_vec, NULL, &second_vec);
@@ -419,18 +419,18 @@ static actor_method_class l_daTurara_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Turara = {
-  fpcLy_CURRENT_e,        // mLayerID
-  3,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_Turara,        // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daTurara_c),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  545,                    // mPriority
-  &l_daTurara_Method,     // sub_method
-  0x00044100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Turara_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTurara_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Turara_e,
+    /* Actor SubMtd */ &l_daTurara_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

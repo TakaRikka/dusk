@@ -9,7 +9,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_bg_w.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "f_op/f_op_actor_mng.h"
 
 daObj_Web1_HIO_c::daObj_Web1_HIO_c() {
@@ -33,7 +33,7 @@ static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* i_this, fopAc_ac_c* i_actor)
     _this->mDistToActor = JMAFastSqrt((x_diff * x_diff) + (z_diff * z_diff));
 
     if (_this->mDistToActor < 140.0f) {
-        if (fopAcM_GetName(i_actor) == PROC_ALINK || fopAcM_GetName(i_actor) == PROC_ALINK) {
+        if (fopAcM_GetName(i_actor) == fpcNm_ALINK_e || fopAcM_GetName(i_actor) == fpcNm_ALINK_e) {
             if (_this->field_0x5aa == 0) {
                 _this->mReboundTimer = 60;
             }
@@ -43,7 +43,7 @@ static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* i_this, fopAc_ac_c* i_actor)
             } else {
                 _this->field_0x5aa = 6;
             }
-        } else if (fopAcM_GetName(i_actor) == PROC_OBJ_GM) {
+        } else if (fopAcM_GetName(i_actor) == fpcNm_OBJ_GM_e) {
             _this->field_0x5aa = 120;
         } else {
             _this->field_0x5aa = 3;
@@ -316,18 +316,18 @@ static actor_method_class l_daObj_Web1_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_WEB1 = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_OBJ_WEB1,
-    &g_fpcLf_Method.base,
-    sizeof(obj_web1_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    48,
-    &l_daObj_Web1_Method,
-    0x40100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_WEB1_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(obj_web1_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_WEB1_e,
+    /* Actor SubMtd */ &l_daObj_Web1_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

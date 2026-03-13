@@ -527,18 +527,18 @@ void daB_DR_c::mStatusONOFF(int i_status) {
         attention_info.distances[fopAc_attn_BATTLE_e] = 0;
         attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;
         fopAcM_OffStatus(this, 0);
-        fopAcM_OffStatus(this, 0x200000);
+        fopAcM_OffStatus(this, fopAcStts_UNK_0x200000_e);
         return;
     case 1:
         attention_info.distances[fopAc_attn_BATTLE_e] = 85;
         attention_info.flags |= fopAc_AttnFlag_BATTLE_e;
         fopAcM_OnStatus(this, 0);
-        fopAcM_OnStatus(this, 0x200000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x200000_e);
         return;
     case 2:
         attention_info.distances[fopAc_attn_BATTLE_e] = 60;
         fopAcM_OnStatus(this, 0);
-        fopAcM_OffStatus(this, 0x200000);
+        fopAcM_OffStatus(this, fopAcStts_UNK_0x200000_e);
         attention_info.flags |= fopAc_AttnFlag_BATTLE_e;
         return;
     }    
@@ -842,7 +842,7 @@ void daB_DR_c::chkPartCreate(bool param_0) {
 
             prm |= (BREAK_PARTS_DT[part_no].prm << 8);
             size.x = size.y = size.z = BREAK_PARTS_DT[part_no].size;
-            fopAcM_create(PROC_B_DR, prm, &pos, fopAcM_GetRoomNo(this), &rot, &size, -1);
+            fopAcM_create(fpcNm_B_DR_e, prm, &pos, fopAcM_GetRoomNo(this), &rot, &size, -1);
 
             field_0x7e0++;
             part_no++;
@@ -988,7 +988,7 @@ void daB_DR_c::tail_hit_check() {
     if (health > 0) {
         daPy_getPlayerActorClass()->onBossRoomWait();
 
-        if (fopAcM_CheckStatus(this, 0x200000) && cLib_calcTimer<u8>(&field_0x7d0) == 0 && mActionMode != ACTION_TAIL_HIT && field_0x7d1 != 2) {
+        if (fopAcM_CheckStatus(this, fopAcStts_UNK_0x200000_e) && cLib_calcTimer<u8>(&field_0x7d0) == 0 && mActionMode != ACTION_TAIL_HIT && field_0x7d1 != 2) {
             if (mTailCc.ChkTgHit()) {
                 speedF = 0.0f;
                 dComIfGs_onZoneSwitch(21, fopAcM_GetRoomNo(this));
@@ -1004,7 +1004,7 @@ void daB_DR_c::week_hit_check() {
     if (mWeekCc.ChkTgSet()) {
         daPy_getPlayerActorClass()->onBossRoomWait();
 
-        if (health > 0 && fopAcM_CheckStatus(this, 0x200000) && cLib_calcTimer<u8>(&field_0x7d0) == 0 && mActionMode != ACTION_WEEK_HIT && field_0x7d1 == 2) {
+        if (health > 0 && fopAcM_CheckStatus(this, fopAcStts_UNK_0x200000_e) && cLib_calcTimer<u8>(&field_0x7d0) == 0 && mActionMode != ACTION_WEEK_HIT && field_0x7d1 == 2) {
             if (mWeekCc.ChkTgHit() && mWeekCc.GetTgHitObj()->ChkAtType(AT_TYPE_HOOKSHOT)) {
                 speedF = 0.0f;
                 Z2GetAudioMgr()->changeBgmStatus(2);
@@ -1624,7 +1624,7 @@ void daB_DR_c::executeTailHit() {
         mMoveMode++;
     case 15:
         ato = current.pos + mBoot_c_trance;
-        parentActorID = fopAcM_createChild(PROC_B_DRE, fopAcM_GetID(this), 1, &ato, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
+        parentActorID = fopAcM_createChild(fpcNm_B_DRE_e, fopAcM_GetID(this), 1, &ato, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
 
         Z2GetAudioMgr()->subBgmStart(Z2BGM_DRAGON_D02);
         dComIfGs_onZoneSwitch(23, fopAcM_GetRoomNo(this));
@@ -1836,7 +1836,7 @@ void daB_DR_c::executeWeekHit() {
                 sp44.z = 0.0f;
                 sp44.x = 0.0f;
 
-                parentActorID = fopAcM_createChild(PROC_B_DRE, fopAcM_GetID(this), 0, &sp44, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
+                parentActorID = fopAcM_createChild(fpcNm_B_DRE_e, fopAcM_GetID(this), 0, &sp44, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
                 mTimer[0] = BREG_S(3) + 20;
                 mMoveMode = 1000;
                 return;
@@ -2008,7 +2008,7 @@ void daB_DR_c::mBreathSet() {
 
         sp1C.x = NREG_S(8) - 1000;
         mTimer[1] = 3;
-        fopAcM_createChild(PROC_B_DR, fopAcM_GetID(this), 10, &field_0x760, fopAcM_GetRoomNo(this), &sp1C, NULL, -1, NULL);
+        fopAcM_createChild(fpcNm_B_DR_e, fopAcM_GetID(this), 10, &field_0x760, fopAcM_GetRoomNo(this), &sp1C, NULL, -1, NULL);
     }
 }
 
@@ -4085,7 +4085,7 @@ int daB_DR_c::create() {
                 mSound.init(&current.pos, &eyePos, 3, 1);
                 mColliderStts.Init(0x19, 0, this);
 
-                fopAcM_OnStatus(this, 0x4000);
+                fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
 
                 if (arg0 == 0x14) {
                     setActionMode(0xF, 0);
@@ -4108,7 +4108,7 @@ int daB_DR_c::create() {
                     angle.x = angle.y = angle.z = 0;
                     pos.set(224.0f, 0.0f, 762.0f);
 
-                    fopAcM_createItemForBoss(&pos, fpcNm_ITEM_UTAWA_HEART, fopAcM_GetRoomNo(this), &angle, &size, 0.0f, 0.0f, -1);
+                    fopAcM_createItemForBoss(&pos, dItemNo_UTAWA_HEART_e, fopAcM_GetRoomNo(this), &angle, &size, 0.0f, 0.0f, -1);
                 }
 
                 dScnKy_env_light_c* kankyo = dKy_getEnvlight();
@@ -4248,10 +4248,10 @@ int daB_DR_c::create() {
                     mTimer[0] = 2;
 
                     if (BREG_S(5) == 0) {
-                        parentActorID = fopAcM_createChild(PROC_L7ODR, fopAcM_GetID(this), 0, &current.pos, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
+                        parentActorID = fopAcM_createChild(fpcNm_L7ODR_e, fopAcM_GetID(this), 0, &current.pos, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
                         mStatusONOFF(0);
                     } else if (BREG_S(0) != 0) {
-                        parentActorID = fopAcM_createChild(PROC_B_DRE, fopAcM_GetID(this), 0, &current.pos, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
+                        parentActorID = fopAcM_createChild(fpcNm_B_DRE_e, fopAcM_GetID(this), 0, &current.pos, fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
                     }
     
                     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
@@ -4294,20 +4294,20 @@ static actor_method_class l_daB_DR_Method = {
 };
 
 actor_process_profile_definition g_profile_B_DR = {
-  fpcLy_CURRENT_e,        // mLayerID
-  4,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_B_DR,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daB_DR_c),       // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  221,                    // mPriority
-  &l_daB_DR_Method,       // sub_method
-  0x04040000,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 4,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_B_DR_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daB_DR_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_B_DR_e,
+    /* Actor SubMtd */ &l_daB_DR_Method,
+    /* Status       */ fopAcStts_BOSS_e | fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

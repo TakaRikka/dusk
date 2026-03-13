@@ -8,14 +8,16 @@
 #include "d/d_path.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
-
 /**
  * @ingroup actors-enemies
  * @class e_rd_class
- * @brief Bulblin
- * 
- * @details 
- * 
+ * @brief Rider (Bulblin / King Bulblin on Boar)
+ *
+ * @details Bulblin enemy that rides a Bullbo (wild boar). Handles mounting,
+ * riding, combat, and dismounting behavior, as well as on-foot actions when
+ * not riding. Bulblins appear as regular riders, 
+ * while King Bulblin serves as the boss variant of the boar rider.
+ *
  */
 class e_rd_class {
 public:
@@ -28,11 +30,11 @@ public:
     /* 0x05B7 */ u8 arg1;
     /* 0x05B8 */ u8 arg2;
     /* 0x05B9 */ u8 field_0x5b9;
-    /* 0x05BA */ u8 field_0x5ba;
+    /* 0x05BA */ u8 scene_no;
     /* 0x05BB */ u8 field_0x5bb;
     /* 0x05BC */ u8 weapon_type;
-    /* 0x05BD */ s8 field_0x5bd;
-    /* 0x05C0 */ cXyz field_0x5c0;
+    /* 0x05BD */ s8 armament_flag;
+    /* 0x05C0 */ cXyz find_pos;
     /* 0x05CC */ s16 target_ya;
     /* 0x05D0 */ mDoExt_McaMorfSO* anm_p;
     /* 0x05D4 */ Z2CreatureEnemy sound;
@@ -40,29 +42,29 @@ public:
     /* 0x067C */ int anm;
     /* 0x0680 */ int field_0x680;
     /* 0x0684 */ dJntCol_c mJntCol;
-    /* 0x0694 */ J3DModel* arrow;
+    /* 0x0694 */ J3DModel* arrow_model;
     /* 0x0698 */ mDoExt_McaMorfSO* bow_anm;
-    /* 0x069C */ mDoExt_McaMorf* mpMorfHornAnm;
-    /* 0x06A0 */ s8 field_0x6a0;
-    /* 0x06A4 */ cXyz field_0x6a4;
-    /* 0x06B0 */ cXyz field_0x6b0;
-    /* 0x06BC */ csXyz field_0x6bc;
+    /* 0x069C */ mDoExt_McaMorf* horn_anm;
+    /* 0x06A0 */ s8 horn_mode;
+    /* 0x06A4 */ cXyz horn_pos;
+    /* 0x06B0 */ cXyz horn_spd;
+    /* 0x06BC */ csXyz horn_rot;
     /* 0x06C2 */ s8 run_flag;
     /* 0x06C3 */ u8 field_0x6c3;
     /* 0x06C4 */ J3DModel* eye_model[2];
     /* 0x06CC */ f32 field_0x6cc;
     /* 0x06D0 */ f32 field_0x6d0;
     /* 0x06D4 */ J3DModel* armor_boss_part[14];
-    /* 0x070C */ s8 field_0x70c[14];
-    /* 0x071C */ cXyz field_0x71c[14];
-    /* 0x07C4 */ cXyz field_0x7c4[14];
-    /* 0x086C */ csXyz field_0x86c[14];
+    /* 0x070C */ s8 part_break[14];
+    /* 0x071C */ cXyz part_pos[14];
+    /* 0x07C4 */ cXyz part_spd[14];
+    /* 0x086C */ csXyz part_angle[14];
     /* 0x08C0 */ u32 armor_break_eff[14][3];
     /* 0x0968 */ s8 field_0x968;
     /* 0x096C */ f32 field_0x96c;
     /* 0x0970 */ s16 counter;
     /* 0x0972 */ s16 action;
-    /* 0x0974 */ s16 prev_action;
+    /* 0x0974 */ s16 old_action;
     /* 0x0978 */ f32 dis;
     /* 0x097C */ s16 angleY;
     /* 0x0980 */ f32 attack_range;
@@ -76,7 +78,7 @@ public:
     /* 0x099E */ s16 attack_timer;
     /* 0x09A0 */ s8 field_0x9a0;
     /* 0x09A1 */ s8 look_timer;
-    /* 0x09A2 */ s8 field_0x9a2;
+    /* 0x09A2 */ s8 arrow_draw;
     /* 0x09A3 */ s8 arrow_flag;
     /* 0x09A4 */ s8 field_0x9a4;
     /* 0x09A5 */ u8 field_0x9a5;
@@ -86,19 +88,19 @@ public:
     /* 0x09AB */ s8 field_0x9ab;
     /* 0x09AC */ s8 field_0x9ac;
     /* 0x09AD */ s8 field_0x9ad;
-    /* 0x09B0 */ cXyz field_0x9b0;
+    /* 0x09B0 */ cXyz center_body;
     /* 0x09BC */ s8 ride_mode;
     /* 0x09BD */ s8 field_0x9bd;
     /* 0x09BE */ s8 boar_stand;
     /* 0x09BF */ u8 field_0x9bf;
-    /* 0x09C0 */ f32 field_0x9c0;
-    /* 0x09C4 */ f32 field_0x9c4;
-    /* 0x09C8 */ s8 field_0x9c8;
+    /* 0x09C0 */ f32 mount_jump_y;
+    /* 0x09C4 */ f32 mount_jump_speed;
+    /* 0x09C8 */ s8 aim_type;
     /* 0x09C9 */ u8 field_0x9c9;
-    /* 0x09CA */ s16 field_0x9ca;
-    /* 0x09CC */ s16 field_0x9cc;
-    /* 0x09CE */ s16 field_0x9ce;
-    /* 0x09D0 */ s16 field_0x9d0;
+    /* 0x09CA */ s16 aim_angle_y;
+    /* 0x09CC */ s16 aim_angle_x;
+    /* 0x09CE */ s16 head_angle_y;
+    /* 0x09D0 */ s16 head_shake;
     /* 0x09D4 */ cXyz eye;
     /* 0x09E0 */ cXyz field_0x9e0; // unused, dbg offset 0xa18
     /* 0x09EC */ f32 jump_z;
@@ -111,7 +113,7 @@ public:
     /* 0x0A0C */ csXyz jump_angle;
     /* 0x0A12 */ csXyz field_0xa12;
     /* 0x0A18 */ csXyz field_0xa18;
-    /* 0x0A1E */ s8 field_0xa1e;
+    /* 0x0A1E */ s8 jump_timer;
     /* 0x0A1F */ s8 field_0xa1f;
     /* 0x0A20 */ u32 field_0xa20;
     /* 0x0A24 */ f32 field_0xa24;
@@ -139,47 +141,47 @@ public:
     /* 0x0AF8 */ s16 field_0xaf8;
     /* 0x0AFA */ s8 field_0xafa;
     /* 0x0AFB */ s8 field_0xafb;
-    /* 0x0AFC */ dPath* path;
-    /* 0x0B00 */ s8 field_0xb00;
-    /* 0x0B01 */ s8 path_dir;
+    /* 0x0AFC */ dPath* ppd;
+    /* 0x0B00 */ s8 jyunkai_no; /* 巡回ポイントNo (Patrol point index) */
+    /* 0x0B01 */ s8 dir;
     /* 0x0B04 */ dBgS_AcchCir AcchCir;
-    /* 0x0B44 */ dBgS_ObjAcch ObjAcch;
-    /* 0x0D1C */ dCcD_Stts mStts;
+    /* 0x0B44 */ dBgS_ObjAcch Bgc;
+    /* 0x0D1C */ dCcD_Stts Stts;
     /* 0x0D58 */ dCcD_Sph cc_sph[3];
     /* 0x1100 */ dCcD_Sph at_sph;
-    /* 0x1238 */ dCcU_AtInfo AtInfo;
+    /* 0x1238 */ dCcU_AtInfo at_info;
     /* 0x125C */ u8 hio_set;
     /* 0x125D */ s8 field_0x125d;
     /* 0x1260 */ u32 field_0x1260;
     /* 0x1264 */ u32 field_0x1264;
-    /* 0x1268 */ u32 enemy_downWtrA[3];
-    /* 0x1274 */ u32 fire_eff[2];
-    /* 0x127C */ cXyz field_0x127c;
-    /* 0x1288 */ cXyz field_0x1288;
+    /* 0x1268 */ u32 w_eff_id[3];
+    /* 0x1274 */ u32 fire_eff_id[2];
+    /* 0x127C */ cXyz fire_pos;
+    /* 0x1288 */ cXyz fire_eff;
     /* 0x1294 */ s8 field_0x1294;
     /* 0x1295 */ s8 one_hit_kill;
     /* 0x1296 */ s8 field_0x1296;
     /* 0x1297 */ s8 field_0x1297;
     /* 0x1298 */ s8 field_0x1298;
     /* 0x1299 */ u8 field_0x1299;
-    /* 0x129A */ s8 actor_set; // 1: Eldin Field, 2 Eldin Bridge, 3 Lake Hylia Bridge, 4 ???
+    /* 0x129A */ s8 actor_set;
     /* 0x129B */ u8 field_0x129b;
-    /* 0x129C */ s8 field_0x129c;
+    /* 0x129C */ s8 horn_timer;
     /* 0x12A0 */ int sw;
     /* 0x12A4 */ s16 demo_mode;
     /* 0x12A6 */ s16 demo_timer;
     /* 0x12A8 */ cXyz demo_cam_eye;
-    /* 0x12B4 */ cXyz demo_cam_center;
-    /* 0x12C0 */ cXyz field_0x12c0;
-    /* 0x12CC */ cXyz field_0x12cc;
-    /* 0x12D8 */ cXyz field_0x12d8;
-    /* 0x12E4 */ cXyz field_0x12e4;
+    /* 0x12B4 */ cXyz demo_cam_ctr;
+    /* 0x12C0 */ cXyz demo_cam_way;
+    /* 0x12CC */ cXyz demo_cam_target;
+    /* 0x12D8 */ cXyz demo_cam_eye_spd;
+    /* 0x12E4 */ cXyz demo_cam_way_spd;
     /* 0x12F0 */ cXyz field_0x12f0;
     /* 0x12FC */ u8 field_0x12fc[0x1300 - 0x12fc];
-    /* 0x1300 */ f32 field_0x1300;
+    /* 0x1300 */ f32 demo_cam_eye_z;
     /* 0x1304 */ u8 blurRate;
     /* 0x1308 */ f32 demo_cam_zoom;
-    /* 0x130C */ f32 field_0x130c;
+    /* 0x130C */ f32 demo_cam_morf;
     /* 0x1310 */ u8 field_0x1310[0x131c - 0x1310];
     /* 0x131C */ dMsgFlow_c MsgFlow;
 };

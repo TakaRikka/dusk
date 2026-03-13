@@ -207,10 +207,10 @@ int dumpTagObject(void* i_object, void*) {
         }
 
         u32 other_heap_size = 0;
-        if (profname == PROC_ALINK) {
+        if (profname == fpcNm_ALINK_e) {
             fopAc_ac_c* spC = a_actor;
             other_heap_size = daAlink_c::getOtherHeapSize();
-        } else if (profname == PROC_MIDNA) {
+        } else if (profname == fpcNm_MIDNA_e) {
             fopAc_ac_c* sp8 = a_actor;
             other_heap_size = daMidna_c::getOtherHeapSize();
         }
@@ -237,10 +237,10 @@ int dumpObject(void* i_object, void* i_data) {
         u32 actor_size = a_actor->base.base.profile->process_size + (a_actor->heap == NULL ? 0 : a_actor->heap->getHeapSize());
 
         u32 other_heap_size = 0;
-        if (profname == PROC_ALINK) {
+        if (profname == fpcNm_ALINK_e) {
             fopAc_ac_c* sp24 = a_actor;
             other_heap_size = daAlink_c::getOtherHeapSize();
-        } else if (profname == PROC_MIDNA) {
+        } else if (profname == fpcNm_MIDNA_e) {
             fopAc_ac_c* sp20 = a_actor;
             other_heap_size = daMidna_c::getOtherHeapSize();
         }

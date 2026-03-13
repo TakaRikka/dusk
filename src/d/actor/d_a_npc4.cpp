@@ -697,7 +697,7 @@ int daNpcF_c::draw(BOOL i_isTest, BOOL param_1, f32 i_shadowDepth, GXColorS10* i
 
 void daNpcF_c::tgHitCallBack(fopAc_ac_c* i_this, dCcD_GObjInf* param_1, fopAc_ac_c* i_actor,
                              dCcD_GObjInf* param_3) {
-    if (i_actor != NULL && fopAcM_GetProfName(i_actor) == PROC_ALINK) {
+    if (i_actor != NULL && fopAcM_GetProfName(i_actor) == fpcNm_ALINK_e) {
         daNpcF_c* npc = static_cast<daNpcF_c*>(i_this);
         if (daPy_getPlayerActorClass() == i_actor) {
             npc->setCutType(static_cast<daPy_py_c*>(i_actor)->getCutType());
@@ -735,9 +735,9 @@ void* daNpcF_c::srchAttnActor1(void* i_proc, void* param_1) {
     void* param_1_copy = param_1;
     fopAc_ac_c* actor = NULL;
     if (mFindCount < 100 && fopAcM_IsActor(i_proc)
-        && (fopAcM_GetName(i_proc) == PROC_NI || fopAcM_GetName(i_proc) == PROC_COW
-            || fopAcM_GetName(i_proc) == PROC_NPC_NE || fopAcM_GetName(i_proc) == PROC_DO
-            || fopAcM_GetName(i_proc) == PROC_SQ || fopAcM_GetName(i_proc) == PROC_BD))
+        && (fopAcM_GetName(i_proc) == fpcNm_NI_e || fopAcM_GetName(i_proc) == fpcNm_COW_e
+            || fopAcM_GetName(i_proc) == fpcNm_NPC_NE_e || fopAcM_GetName(i_proc) == fpcNm_DO_e
+            || fopAcM_GetName(i_proc) == fpcNm_SQ_e || fopAcM_GetName(i_proc) == fpcNm_BD_e))
     {
         actor = static_cast<fopAc_ac_c*>(i_proc);
         mFindActorPList[mFindCount] = actor;
@@ -1196,7 +1196,7 @@ BOOL daNpcF_c::hitChk2(dCcD_Cyl* i_ccCyl, BOOL param_1, BOOL param_2) {
         if (hit_actor != NULL) {
             actorAngleY = fopAcM_searchActorAngleY(this, hit_actor);
             field_0x990 = actorAngleY - mCurAngle.y;
-            if (fopAcM_GetName(hit_actor) == PROC_NPC_TK) {
+            if (fopAcM_GetName(hit_actor) == fpcNm_NPC_TK_e) {
                 if (param_1) {
                     static_cast<daNPC_TK_c*>(hit_actor)->setBump();
                     return true;
@@ -1509,7 +1509,7 @@ fopAc_ac_c* daNpcF_c::getEvtAreaTagP(int i_type, int i_no) {
     int r29 = 0;
     f32 f31 = G_CM3D_F_INF;
     mFindCount = 0;
-    mSrchActorName = PROC_TAG_EVTAREA;
+    mSrchActorName = fpcNm_TAG_EVTAREA_e;
     fpcM_Search(this->srchActor, this);
 
     for (int i = 0; i < mFindCount; i++) {
@@ -1658,7 +1658,7 @@ BOOL daNpcF_c::chkPointInArea(cXyz i_point, cXyz i_center, cXyz i_bounds, s16 i_
 cXyz daNpcF_c::getAttentionPos(fopAc_ac_c* i_actor_p) {
     cXyz pos = i_actor_p->attention_info.position;
 
-    if (fopAcM_GetName(i_actor_p) == PROC_ALINK) {
+    if (fopAcM_GetName(i_actor_p) == fpcNm_ALINK_e) {
         pos.y -= daPy_py_c::getAttentionOffsetY();
     }
 

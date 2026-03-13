@@ -102,7 +102,7 @@ void daObjMATO_c::hit_check() {
                 mData[i].ccStts.Move();
                 if (mData[i].ccCyl.ChkCoHit()) {
                     fopAc_ac_c* a_pCoHitAc = dCc_GetAc(mData[i].ccCyl.GetCoHitObj()->GetAc());
-                    if (fopAcM_GetName(a_pCoHitAc) == PROC_ALINK) {
+                    if (fopAcM_GetName(a_pCoHitAc) == fpcNm_ALINK_e) {
                         mData[i].is_hit = TRUE;
                         getRupee(i);
                         setAction(&daObjMATO_c::disappear, i);
@@ -139,13 +139,13 @@ void daObjMATO_c::wait(int i_no) {
 }
 
 static const int l_rupee_itemno_table[] = {
-    fpcNm_ITEM_GREEN_RUPEE,
-    fpcNm_ITEM_BLUE_RUPEE,
-    fpcNm_ITEM_YELLOW_RUPEE,
-    fpcNm_ITEM_RED_RUPEE,
-    fpcNm_ITEM_PURPLE_RUPEE,
-    fpcNm_ITEM_ORANGE_RUPEE,
-    fpcNm_ITEM_SILVER_RUPEE,
+    dItemNo_GREEN_RUPEE_e,
+    dItemNo_BLUE_RUPEE_e,
+    dItemNo_YELLOW_RUPEE_e,
+    dItemNo_RED_RUPEE_e,
+    dItemNo_PURPLE_RUPEE_e,
+    dItemNo_ORANGE_RUPEE_e,
+    dItemNo_SILVER_RUPEE_e,
 };
 
 static const u8 l_rupee_count_table[] = {
@@ -374,18 +374,18 @@ static actor_method_class l_daObjMATO_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Mato = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_Mato,          // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjMATO_c),    // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  441,                    // mPriority
-  &l_daObjMATO_Method,    // sub_method
-  0x00040000,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Mato_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjMATO_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Mato_e,
+    /* Actor SubMtd */ &l_daObjMATO_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

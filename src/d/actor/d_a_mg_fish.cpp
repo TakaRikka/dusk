@@ -119,7 +119,7 @@ static f32 dummy_3759() {
 static void* s_hitfish_sub(void* a, void* b) {
     if (fopAc_IsActor(a)) {
         mg_fish_class* fish = (mg_fish_class*)a;
-        if (fopAcM_GetName(fish) == PROC_MG_FISH && fish->mCurAction == ACTION_MG_FISH_MF_HIT) {
+        if (fopAcM_GetName(fish) == fpcNm_MG_FISH_e && fish->mCurAction == ACTION_MG_FISH_MF_HIT) {
             return &LEAFDRAW_BASE(&fish->actor);
         }
     }
@@ -171,7 +171,7 @@ static void mouth_close(mg_fish_class* i_this) {
 
 static void* s_lure_sub(void* a, void* b) {
     if (fopAc_IsActor(a)) {
-        if (fopAcM_GetName(a) == PROC_MG_ROD) {
+        if (fopAcM_GetName(a) == fpcNm_MG_ROD_e) {
             dmg_rod_class* rod = (dmg_rod_class*)a;
             if (rod->kind == 0 &&
                 rod->action == 4 &&
@@ -186,7 +186,7 @@ static void* s_lure_sub(void* a, void* b) {
 
 static void* s_esa_sub(void* a, void* b) {
     if (fopAc_IsActor(a)) {
-        if (fopAcM_GetName(a) == PROC_MG_ROD) {
+        if (fopAcM_GetName(a) == fpcNm_MG_ROD_e) {
             dmg_rod_class* rod = (dmg_rod_class*)a;
             if (rod->kind == 1 &&
                 rod->action != 5 &&
@@ -201,7 +201,7 @@ static void* s_esa_sub(void* a, void* b) {
 
 static void* s_bait_sub(void* a, void* b) {
     if (fopAc_IsActor(a)) {
-        if (fopAcM_GetName(a) == PROC_FR) {
+        if (fopAcM_GetName(a) == fpcNm_FR_e) {
             fr_class* fr = (fr_class*)a;
             if (fr->field_0x5ec != 0 &&
                 fr->speedF > 1.0f) {
@@ -219,7 +219,7 @@ static daMg_Fish_HIO_c l_HIO;
 static s32 s_fish_ct;
 
 static void* s_other_search_sub(void* a, void* b) {
-    if (fopAc_IsActor(a) && b != a && fopAcM_GetName(a) == PROC_MG_FISH) {
+    if (fopAc_IsActor(a) && b != a && fopAcM_GetName(a) == fpcNm_MG_FISH_e) {
         mg_fish_class* fish = (mg_fish_class*)a;
         if (fish->mCurAction == ACTION_MG_FISH_MF_LURE_SEARCH) {
             s_fish_ct += 1;
@@ -341,7 +341,7 @@ static PathNode swim_path[43] = {
 };
 
 static void* s_other_bait_sub(void* a, void* b) {
-    if (fopAc_IsActor(a) && b != a && fopAcM_GetName(a) == PROC_MG_FISH) {
+    if (fopAc_IsActor(a) && b != a && fopAcM_GetName(a) == fpcNm_MG_FISH_e) {
         mg_fish_class* fish = (mg_fish_class*)a;
         if (fish->mCurAction == ACTION_MG_FISH_MF_BAIT_SEARCH &&
             fish->mBaitId == ((mg_fish_class*)b)->mBaitId) {
@@ -494,7 +494,7 @@ static int nodeCallBackBB(J3DJoint* joint, int param_1) {
 }
 
 static void* s_bt_sub(void* a, void* b) {
-    if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_MG_FISH) {
+    if (fopAc_IsActor(a) && fopAcM_GetName(a) == fpcNm_MG_FISH_e) {
         mg_fish_class* fish = (mg_fish_class*)a;
         if (fish->mGedouKind == GEDOU_KIND_BT) {
             return fish;
@@ -504,7 +504,7 @@ static void* s_bt_sub(void* a, void* b) {
 }
 
 static void* s_sp_sub(void* a, void* b) {
-    if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_MG_FISH) {
+    if (fopAc_IsActor(a) && fopAcM_GetName(a) == fpcNm_MG_FISH_e) {
         mg_fish_class* fish = (mg_fish_class*)a;
         if (fish->mGedouKind == GEDOU_KIND_SP) {
             return fish;
@@ -514,7 +514,7 @@ static void* s_sp_sub(void* a, void* b) {
 }
 
 static void* s_lh_sub(void* a, void* b) {
-    if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_MG_FISH) {
+    if (fopAc_IsActor(a) && fopAcM_GetName(a) == fpcNm_MG_FISH_e) {
         mg_fish_class* fish = (mg_fish_class*)a;
         if (fish->mGedouKind == GEDOU_KIND_LH) {
             fish->field_0x74c = ((mg_fish_class*)b)->field_0x74c;
@@ -525,7 +525,7 @@ static void* s_lh_sub(void* a, void* b) {
 }
 
 static void* s_bin_sub(void* a, void* b) {
-    if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_MG_FISH) {
+    if (fopAc_IsActor(a) && fopAcM_GetName(a) == fpcNm_MG_FISH_e) {
         mg_fish_class* fish = (mg_fish_class*)a;
         if (fish->mGedouKind == GEDOU_KIND_O_GD_BOTT) {
             return fish;
@@ -535,7 +535,7 @@ static void* s_bin_sub(void* a, void* b) {
 }
 
 static void* s_kn_sub(void* a, void* b) {
-    if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_MG_FISH) {
+    if (fopAc_IsActor(a) && fopAcM_GetName(a) == fpcNm_MG_FISH_e) {
         mg_fish_class* fish = (mg_fish_class*)a;
         if (fish->mGedouKind == GEDOU_KIND_KN) {
             return fish;
@@ -545,7 +545,7 @@ static void* s_kn_sub(void* a, void* b) {
 }
 
 static void* s_ed_sub(void* a, void* b) {
-    if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_MG_FISH) {
+    if (fopAc_IsActor(a) && fopAcM_GetName(a) == fpcNm_MG_FISH_e) {
         mg_fish_class* fish = (mg_fish_class*)a;
         if (fish->mGedouKind == GEDOU_KIND_ED) {
             return fish;
@@ -555,7 +555,7 @@ static void* s_ed_sub(void* a, void* b) {
 }
 
 static void* s_sy_sub(void* a, void* b) {
-    if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_MG_FISH) {
+    if (fopAc_IsActor(a) && fopAcM_GetName(a) == fpcNm_MG_FISH_e) {
         mg_fish_class* fish = (mg_fish_class*)a;
         if (fish->mGedouKind == GEDOU_KIND_SY) {
             return fish;
@@ -565,7 +565,7 @@ static void* s_sy_sub(void* a, void* b) {
 }
 
 static void* s_bb_sub(void* a, void* b) {
-    if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_MG_FISH) {
+    if (fopAc_IsActor(a) && fopAcM_GetName(a) == fpcNm_MG_FISH_e) {
         mg_fish_class* fish = (mg_fish_class*)a;
         if (fish->mGedouKind == GEDOU_KIND_BB) {
             return fish;
@@ -575,14 +575,14 @@ static void* s_bb_sub(void* a, void* b) {
 }
 
 static void* s_bb2_sub(void* a, void* b) {
-    if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_E_BG) {
+    if (fopAc_IsActor(a) && fopAcM_GetName(a) == fpcNm_E_BG_e) {
         return a;
     }
     return NULL;
 }
 
 static void* s_sg_sub(void* a, void* b) {
-    if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_E_SG) {
+    if (fopAc_IsActor(a) && fopAcM_GetName(a) == fpcNm_E_SG_e) {
         return a;
     }
     return NULL;
@@ -936,7 +936,7 @@ static void mf_swim_s(mg_fish_class* i_this) {
             fpcEx_Search(s_bb2_sub, i_this) != NULL) {
             if (fpcEx_Search(s_bb2_sub, i_this) != NULL &&
                 fpcEx_Search(s_bb_sub, i_this) == NULL) {
-                fopAcM_create(PROC_MG_FISH, 0x17, &i_this->actor.current.pos,
+                fopAcM_create(fpcNm_MG_FISH_e, 0x17, &i_this->actor.current.pos,
                     fopAcM_GetRoomNo(&i_this->actor), NULL, NULL, -1);
             }
         } else {
@@ -1962,7 +1962,7 @@ static void mf_jump(mg_fish_class* i_this) {
     }
     case 10: {
         if (i_this->mGedouKind == GEDOU_KIND_KS_2) {
-            i_this->mBaitId = fopAcM_createChild(PROC_KYTAG03, fopAcM_GetID(i_this), 0x10000b3,
+            i_this->mBaitId = fopAcM_createChild(fpcNm_KYTAG03_e, fopAcM_GetID(i_this), 0x10000b3,
                 &commonXyz2, fopAcM_GetRoomNo(&i_this->actor), NULL, NULL, -1, 0);
         }
         i_this->mActionPhase = 0xb;
@@ -3120,7 +3120,7 @@ static void action(mg_fish_class* i_this) {
             i_this->mActionPhase = 0;
             i_this->field_0x624[1] = cM_rndF(30.0f) + 50.0f;
 
-            fopAc_ac_c* henna = fopAcM_SearchByName(PROC_NPC_HENNA);
+            fopAc_ac_c* henna = fopAcM_SearchByName(fpcNm_NPC_HENNA_e);
             if (henna != NULL) {
                 ((npc_henna_class*)henna)->field_0x7b5 = 20;
             }
@@ -4061,20 +4061,20 @@ static actor_method_class l_daMg_Fish_Method = {
 };
 
 actor_process_profile_definition g_profile_MG_FISH = {
-    (u32)fpcLy_CURRENT_e,  // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_MG_FISH,           // mProcName
-    &g_fpcLf_Method.base,   // sub_method
-    sizeof(mg_fish_class),  // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    720,                    // mPriority
-    &l_daMg_Fish_Method,    // sub_method
-    0x00040100,             // mStatus
-    fopAc_ACTOR_e,          // mActorType
-    fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ (u32)fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MG_FISH_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(mg_fish_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_MG_FISH_e,
+    /* Actor SubMtd */ &l_daMg_Fish_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES

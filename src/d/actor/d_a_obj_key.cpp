@@ -58,7 +58,7 @@ static daObj_Key_HIO_c l_HIO;
 static s16 target_info_count;
 
 static void* s_count_sub(void* i_actor, void* i_other) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_OBJ_KEY && ((fopAc_ac_c*)i_actor)->field_0x560 != 0) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_OBJ_KEY_e && ((fopAc_ac_c*)i_actor)->field_0x560 != 0) {
         ((fopAc_ac_c*)i_actor)->health = target_info_count;
         target_info_count++;
     }
@@ -67,13 +67,13 @@ static void* s_count_sub(void* i_actor, void* i_other) {
 }
 
 static void* s_master_sub(void* i_actor, void* i_other) {
-    if ((fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_DN) ||
-        fopAcM_GetName(i_actor) == PROC_E_RD ||
-        fopAcM_GetName(i_actor) == PROC_E_RDB ||
-        fopAcM_GetName(i_actor) == PROC_E_DB ||
-        fopAcM_GetName(i_actor) == PROC_E_HB ||
-        fopAcM_GetName(i_actor) == PROC_E_OC ||
-        fopAcM_GetName(i_actor) == PROC_ALINK)
+    if ((fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_DN_e) ||
+        fopAcM_GetName(i_actor) == fpcNm_E_RD_e ||
+        fopAcM_GetName(i_actor) == fpcNm_E_RDB_e ||
+        fopAcM_GetName(i_actor) == fpcNm_E_DB_e ||
+        fopAcM_GetName(i_actor) == fpcNm_E_HB_e ||
+        fopAcM_GetName(i_actor) == fpcNm_E_OC_e ||
+        fopAcM_GetName(i_actor) == fpcNm_ALINK_e)
     {
         f32 x_dist = ((fopAc_ac_c*)i_actor)->current.pos.x - ((fopAc_ac_c*)i_other)->current.pos.x;
         f32 z_dist = ((fopAc_ac_c*)i_actor)->current.pos.z - ((fopAc_ac_c*)i_other)->current.pos.z;
@@ -89,7 +89,7 @@ static void* s_master_sub(void* i_actor, void* i_other) {
 static void masterkey_check(obj_key_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
-    daKey_c* pkey = (daKey_c*)fopAcM_SearchByName(PROC_Obj_SmallKey);
+    daKey_c* pkey = (daKey_c*)fopAcM_SearchByName(fpcNm_Obj_SmallKey_e);
     if (pkey != NULL) {
         f32 x_dist = actor->current.pos.x - pkey->current.pos.x;
         f32 z_dist = actor->current.pos.z - pkey->current.pos.z;
@@ -278,14 +278,14 @@ static void chain_control_01(obj_key_class* i_this) {
     u8 sp8 = 0;
 
     J3DModel* parent_model;
-    if (fopAcM_GetName(pparent) == PROC_E_DN) {
+    if (fopAcM_GetName(pparent) == fpcNm_E_DN_e) {
         e_dn_class* dn = (e_dn_class*)pparent;
         parent_model = dn->anm_p->getModel();
 
         MTXCopy(parent_model->getAnmMtx(1), *calc_mtx);
         spC4.set(5.0f + KREG_F(0), 30.0f + KREG_F(1), 20.0f + KREG_F(2));
         MtxPosition(&spC4, &spB8);
-    } else if (fopAcM_GetName(pparent) == PROC_E_RD) {
+    } else if (fopAcM_GetName(pparent) == fpcNm_E_RD_e) {
         e_rd_class* rd = (e_rd_class*)pparent;
         parent_model = rd->anm_p->getModel();
 
@@ -293,7 +293,7 @@ static void chain_control_01(obj_key_class* i_this) {
         spC4.set(12.0f + VREG_F(0), -5.0f + VREG_F(1), VREG_F(2));
         MtxPosition(&spC4, &spB8);
         rd->enemy.field_0x567 = 1;
-    } else if (fopAcM_GetName(pparent) == PROC_E_RDB) {
+    } else if (fopAcM_GetName(pparent) == fpcNm_E_RDB_e) {
         e_rdb_class* rdb = (e_rdb_class*)pparent;
         parent_model = rdb->mpModelMorf->getModel();
 
@@ -311,7 +311,7 @@ static void chain_control_01(obj_key_class* i_this) {
             fopAcM_delete(pkey);
             fopAcM_delete(actor);
         }
-    } else if (fopAcM_GetName(pparent) == PROC_E_OC) {
+    } else if (fopAcM_GetName(pparent) == fpcNm_E_OC_e) {
         daE_OC_c* oc = (daE_OC_c*)pparent;
         parent_model = oc->getOcModel();
 
@@ -319,7 +319,7 @@ static void chain_control_01(obj_key_class* i_this) {
         spC4.set(5.0f + nREG_F(0), nREG_F(1), nREG_F(2));
         MtxPosition(&spC4, &spB8);
         sp8 = 1;
-    } else if (fopAcM_GetName(pparent) == PROC_E_DB || fopAcM_GetName(pparent) == PROC_E_HB) {
+    } else if (fopAcM_GetName(pparent) == fpcNm_E_DB_e || fopAcM_GetName(pparent) == fpcNm_E_HB_e) {
         e_db_class* db = (e_db_class*)pparent;
 
         if (db->action == 20) {
@@ -437,7 +437,7 @@ static void chain_control_01(obj_key_class* i_this) {
     }
 
     s16 spA;
-    if (fopAcM_GetName(pparent) == PROC_E_RDB) {
+    if (fopAcM_GetName(pparent) == fpcNm_E_RDB_e) {
         e_rdb_class* rdb = (e_rdb_class*)pparent;
         if (rdb->field_0x1104 != 0) {
             spA = -(pparent->shape_angle.y + TREG_S(7) + 0x4000);
@@ -650,18 +650,18 @@ static actor_method_class l_daObj_Key_Method = {
 };
 
 actor_process_profile_definition g_profile_OBJ_KEY = {
-    fpcLy_CURRENT_e,        // mLayerID
-    7,                      // mListID
-    fpcPi_CURRENT_e,        // mListPrio
-    PROC_OBJ_KEY,           // mProcName
-    &g_fpcLf_Method.base,  // sub_method
-    sizeof(obj_key_class),  // mSize
-    0,                      // mSizeOther
-    0,                      // mParameters
-    &g_fopAc_Method.base,   // sub_method
-    44,                     // mPriority
-    &l_daObj_Key_Method,    // sub_method
-    0x00044100,             // mStatus
-    fopAc_ACTOR_e,          // mActorType
-    fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_KEY_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(obj_key_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_KEY_e,
+    /* Actor SubMtd */ &l_daObj_Key_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

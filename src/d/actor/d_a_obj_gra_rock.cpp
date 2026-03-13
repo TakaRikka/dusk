@@ -117,7 +117,7 @@ void daObjGraRock_c::col_set() {
             dComIfGs_onSwitch(field_0x9c8, fopAcM_GetRoomNo(this));
             csXyz local_34(current.angle);
             local_34.x = 2;
-            fopAcM_create(PROC_NPC_GRA, 0x5fffff00, &acStack_2c, fopAcM_GetRoomNo(this), &local_34, 0,
+            fopAcM_create(fpcNm_NPC_GRA_e, 0x5fffff00, &acStack_2c, fopAcM_GetRoomNo(this), &local_34, 0,
                                           -1);
             Z2GetAudioMgr()->seStart(Z2SE_OBJ_ZR_GRN_ROCK_BRK, &current.pos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f,
                              0);
@@ -307,18 +307,18 @@ static actor_method_class l_daObjGraRock_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_GraRock = {
-  fpcLy_CURRENT_e,        // mLayerID
-  3,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_GraRock,       // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjGraRock_c), // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  609,                    // mPriority
-  &l_daObjGraRock_Method, // sub_method
-  0x00044100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_GraRock_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjGraRock_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_GraRock_e,
+    /* Actor SubMtd */ &l_daObjGraRock_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

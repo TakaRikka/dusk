@@ -111,7 +111,7 @@ int daE_KK_c::JointCallBack(J3DJoint* i_joint, int param_1) {
 }
 
 int daE_KK_c::draw() {
-    if (field_0x679 == 2 && !checkItemGet(fpcNm_ITEM_IRONBALL, 1)) {
+    if (field_0x679 == 2 && !checkItemGet(dItemNo_IRONBALL_e, 1)) {
         return 1;
     } else {
         cXyz position;
@@ -465,7 +465,7 @@ void daE_KK_c::executeIcicleWait() {
             field_0x67d = 0;
             field_0x76c = 0;
             nextActionCheck();
-            fopAcM_OffStatus(this, 0x4000);
+            fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
         }
     }
 }
@@ -567,7 +567,7 @@ void daE_KK_c::executeSpearThrow() {
             }
         }
         if ((s32)mpMorfSO->getFrame() == 0x17) {
-            fopAcM_createChild(PROC_E_KK, fopAcM_GetID(this), 0xFF0001, &field_0x698,
+            fopAcM_createChild(fpcNm_E_KK_e, fopAcM_GetID(this), 0xFF0001, &field_0x698,
                                fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL);
             field_0x67d = 1;
             mCyl.OffTgNoHitMark();
@@ -1262,7 +1262,7 @@ void daE_KK_c::cc_set() {
 
 int daE_KK_c::execute() {
     if (field_0x679 == 2) {
-        if (!checkItemGet(fpcNm_ITEM_IRONBALL, 1)) {
+        if (!checkItemGet(dItemNo_IRONBALL_e, 1)) {
             return 1;
         }
 
@@ -1448,7 +1448,7 @@ int daE_KK_c::create() {
             if (field_0x679 != 3) {
                 setActionMode(0, 0);
             } else {
-                fopAcM_OnStatus(this, 0x4000);
+                fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
                 field_0x67d = 1;
                 s16 player_angle = fopAcM_searchPlayerAngleY(this);
                 shape_angle.y = player_angle;
@@ -1460,7 +1460,7 @@ int daE_KK_c::create() {
         fopAcM_SetMin(this, -600.0f, -600.0f, -600.0f);
         fopAcM_SetMax(this, 600.0f, 600.0f, 600.0f);
 
-        if (field_0x679 == 2 && !checkItemGet(fpcNm_ITEM_IRONBALL, 1)) {
+        if (field_0x679 == 2 && !checkItemGet(dItemNo_IRONBALL_e, 1)) {
             attention_info.distances[fopAc_attn_BATTLE_e] = 0;
             fopAcM_SetGroup(this, 0);
             fopAcM_OffStatus(this, 0);
@@ -1493,18 +1493,18 @@ static actor_method_class l_daE_KK_Method = {
 };
 
 actor_process_profile_definition g_profile_E_KK = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_E_KK,               // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daE_KK_c),        // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    171,                     // mPriority
-    &l_daE_KK_Method,        // sub_method
-    0x00040120,              // mStatus
-    fopAc_ENEMY_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_KK_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daE_KK_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_KK_e,
+    /* Actor SubMtd */ &l_daE_KK_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x20_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

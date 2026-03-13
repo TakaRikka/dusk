@@ -171,7 +171,7 @@ void daNPC_TK_c::setActionMode(int param_0) {
         field_0x694 = 0;
         field_0x6c5 = 0;
         current.angle.y = shape_angle.y;
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x4000_e);
     }
 }
 
@@ -311,7 +311,7 @@ static s32 checkRangeOfTake(fopAc_ac_c* param_0, fopAc_ac_c* param_1) {
 
 static void* s_obj_sub(void* param_0, void* param_1) {
     if (fopAcM_IsActor(param_0) != 0 &&
-        (fopAcM_GetName(param_0) == PROC_NI ||
+        (fopAcM_GetName(param_0) == fpcNm_NI_e ||
          fopAcM_CheckCarryType((fopAc_ac_c*)param_0, fopAcM_CARRY_CHICKEN) != 0))
     {
         checkRangeOfTake((fopAc_ac_c*)param_1, (fopAc_ac_c*)param_0);
@@ -321,7 +321,7 @@ static void* s_obj_sub(void* param_0, void* param_1) {
 
 static void* s_hanjo(void* param_0, void* param_1) {
     UNUSED(param_1);
-    if (fopAcM_IsActor(param_0) != 0 && fopAcM_GetName(param_0) == PROC_NPC_HANJO) {
+    if (fopAcM_IsActor(param_0) != 0 && fopAcM_GetName(param_0) == fpcNm_NPC_HANJO_e) {
         return param_0;
     } else {
         return 0;
@@ -567,7 +567,7 @@ bool daNPC_TK_c::executePerchDemo(int param_0) {
             }
 
             current.pos.y = current.pos.y + field_0x67c;
-            
+
             dPnt* pnt = dPath_GetPnt(mpPath1, mPathStep2);
             pathPos = pnt->m_position;
             cLib_addCalcAngleS(&current.angle.y, cLib_targetAngleY(&current.pos, &pathPos), 0x20,
@@ -947,8 +947,8 @@ void daNPC_TK_c::executeAttack() {
 
         if (mSphere.ChkAtHit() != 0) {
             fopAc_ac_c* local_118 = dCc_GetAc(mSphere.GetAtHitObj()->GetAc());
-            if (fopAcM_GetName(local_118) != PROC_ALINK &&
-                fopAcM_GetName(local_118) != PROC_E_ARROW)
+            if (fopAcM_GetName(local_118) != fpcNm_ALINK_e &&
+                fopAcM_GetName(local_118) != fpcNm_E_ARROW_e)
             {
                 setAwayAction(0);
 
@@ -979,11 +979,11 @@ void daNPC_TK_c::executeAttack() {
 
         field_0x634 = m_near_actor;
         if (field_0x634 != 0 && current.pos.abs(field_0x634->current.pos) < l_HIO.field_0x34) {
-            if (fopAcM_GetName(field_0x634) == PROC_NI) {
+            if (fopAcM_GetName(field_0x634) == fpcNm_NI_e) {
                 mCarryType = 0;
-            } else if (fopAcM_GetName(field_0x634) == PROC_OBJ_KAGO) {
+            } else if (fopAcM_GetName(field_0x634) == fpcNm_OBJ_KAGO_e) {
                 mCarryType = 2;
-            } else if (fopAcM_GetName(field_0x634) == PROC_OBJ_PUMPKIN) {
+            } else if (fopAcM_GetName(field_0x634) == fpcNm_OBJ_PUMPKIN_e) {
                 mCarryType = 1;
             }
 
@@ -1287,11 +1287,11 @@ void daNPC_TK_c::executeBack() {
 
                     fopAcM_setHawkCarryNow(field_0x634);
 
-                    if (fopAcM_GetName(field_0x634) == PROC_NI) {
+                    if (fopAcM_GetName(field_0x634) == fpcNm_NI_e) {
                         fopAcM_setCarryNow(field_0x634, 0);
                     }
 
-                    if (fopAcM_GetName(field_0x634) == PROC_OBJ_KAGO &&
+                    if (fopAcM_GetName(field_0x634) == fpcNm_OBJ_KAGO_e &&
                          /* dSv_event_flag_c::F_0577 - Ordon Village - 2nd Day - Retrieved basket from monkey (hit hawk) */
                         !dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[0x241]))
                     {
@@ -1395,7 +1395,7 @@ void daNPC_TK_c::executeBack() {
             if (field_0x694 == 10) {
                 if (current.pos.absXZ(playerPos) < 200.0f) {
                     field_0x6b4 = 0;
-                    if (fopAcM_GetName(field_0x634) == PROC_OBJ_KAGO &&
+                    if (fopAcM_GetName(field_0x634) == fpcNm_OBJ_KAGO_e &&
                          /* dSv_event_flag_c::F_0577 - Ordon Village - 2nd Day - Retrieved basket from monkey (hit hawk) */
                         !dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[0x241]))
                     {
@@ -1436,7 +1436,7 @@ void daNPC_TK_c::executeBack() {
                     field_0x6c3 = 0;
 
                     fopAcM_cancelHawkCarryNow(field_0x634);
-                    if (fopAcM_GetName(field_0x634) == PROC_NI) {
+                    if (fopAcM_GetName(field_0x634) == fpcNm_NI_e) {
                         fopAcM_cancelCarryNow(field_0x634);
                     }
                     field_0x634 = NULL;
@@ -1536,7 +1536,7 @@ void daNPC_TK_c::executeAttackLink() {
         field_0x694 = 1;
         setBck(8, 2, 10.0f, 1.0f);
         mSound.startCreatureVoice(Z2SE_HAWK_V_TAKE_OFF, -1);
-        fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x4000);
+        fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
         field_0x6b4 = 0x1e;
         break;
     }
@@ -1566,12 +1566,12 @@ void daNPC_TK_c::executeAttackLink() {
             cLib_chaseF(&speed.y, cM_scos(pitch) * (40.0f + nREG_F(5)), 3.0f);
             cLib_chaseF(&speedF, cM_ssin(pitch) * (40.0f + nREG_F(5)), 3.0f);
             if (mSphere.ChkAtHit()) {
-                if (fopAcM_GetName(dCc_GetAc(mSphere.GetAtHitObj()->GetAc())) != PROC_ALINK) {
+                if (fopAcM_GetName(dCc_GetAc(mSphere.GetAtHitObj()->GetAc())) != fpcNm_ALINK_e) {
                     if (daPy_getPlayerActorClass()->getDamageWaitTimer() == 0) {
                         break;
                     }
                 }
-                if (fopAcM_GetName(dCc_GetAc(mSphere.GetAtHitObj()->GetAc())) == PROC_ALINK) {
+                if (fopAcM_GetName(dCc_GetAc(mSphere.GetAtHitObj()->GetAc())) == fpcNm_ALINK_e) {
                     field_0x6c7++;
                     mSphere.ClrAtHit();
                 }
@@ -1603,7 +1603,7 @@ void daNPC_TK_c::executeAttackLink() {
         mSphere.OnAtSetBit();
         field_0x6ae = 1;
         if (mSphere.ChkAtHit() != 0) {
-            if (fopAcM_GetName(dCc_GetAc(mSphere.GetAtHitObj()->GetAc())) == PROC_ALINK) {
+            if (fopAcM_GetName(dCc_GetAc(mSphere.GetAtHitObj()->GetAc())) == fpcNm_ALINK_e) {
                 field_0x6c7++;
                 mSphere.ClrAtHit();
                 field_0x694 = 4;
@@ -1641,8 +1641,8 @@ void daNPC_TK_c::executeAttackLink() {
         cLib_chaseF(&speed.y, targetSpeedY, 1.0f);
         cLib_chaseF(&speedF, 30.0f, 3.0f);
         if (field_0x6b0 == 0) {
-            if (dComIfGp_checkPlayerStatus0(0, fopAcM_STATUS_HOOK_CARRY_NOW) ||
-                dComIfGp_checkPlayerStatus0(0, fopAcM_STATUS_UNK_0x100) ||
+            if (dComIfGp_checkPlayerStatus0(0, fopAcStts_HOOK_CARRY_NOW_e) ||
+                dComIfGp_checkPlayerStatus0(0, fopAcStts_CULL_e) ||
                 daPy_getPlayerActorClass()->checkWolfTagLockJumpReady())
             {
                 field_0x6b0 = 10;
@@ -1804,7 +1804,7 @@ void daNPC_TK_c::executeAttackDemo() {
         cLib_chaseF(&speedF, (50.0f + nREG_F(4)) * cM_ssin(pitch), 10.0f);
 
         if (mSphere.ChkAtHit()) {
-            if (fopAcM_GetName(dCc_GetAc(mSphere.GetAtHitObj()->GetAc())) != PROC_ALINK) {
+            if (fopAcM_GetName(dCc_GetAc(mSphere.GetAtHitObj()->GetAc())) != fpcNm_ALINK_e) {
                 if (daPy_getPlayerActorClass()->getDamageWaitTimer() == 0) {
                     return;
                 }
@@ -1815,7 +1815,7 @@ void daNPC_TK_c::executeAttackDemo() {
             field_0x694 = 2;
             field_0x6b0 = 0xf;
 
-            if (fopAcM_GetName(dCc_GetAc(mSphere.GetAtHitObj()->GetAc())) == PROC_ALINK) {
+            if (fopAcM_GetName(dCc_GetAc(mSphere.GetAtHitObj()->GetAc())) == fpcNm_ALINK_e) {
                 field_0x6c7++;
                 mSphere.ClrAtHit();
             }
@@ -2462,7 +2462,7 @@ void daNPC_TK_c::executeWolfPerch() {
 
 void daNPC_TK_c::executeResistanceDemo() {
     daNpcMoiR_c* npcMoiR;
-    if (fopAcM_SearchByName(PROC_NPC_MOIR, (fopAc_ac_c**)&npcMoiR) == 0 || npcMoiR == NULL) {
+    if (fopAcM_SearchByName(fpcNm_NPC_MOIR_e, (fopAc_ac_c**)&npcMoiR) == 0 || npcMoiR == NULL) {
         return;
     }
 
@@ -3309,20 +3309,20 @@ static actor_method_class l_daNPC_TK_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_TK = {
-    fpcLy_CURRENT_e,         // mLayerID
-    6,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_NPC_TK,             // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daNPC_TK_c),      // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    703,                     // mPriority
-    &l_daNPC_TK_Method,      // sub_method
-    0x08044000,              // mStatus
-    fopAc_NPC_e,             // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 6,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_TK_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNPC_TK_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_TK_e,
+    /* Actor SubMtd */ &l_daNPC_TK_Method,
+    /* Status       */ fopAcStts_UNK_0x8000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES

@@ -298,7 +298,7 @@ int dEvent_manager_c::create() {
         OS_REPORT("event manager: BASE_KEEPは読み込めなかった\n");
     }
     #endif
-    
+
     mEventList[BASE_ACTOR].init();
 
 #if DEBUG
@@ -495,19 +495,19 @@ void dEvent_manager_c::remove() {
 }
 
 static void* extraOnObjectCallBack(fopAc_ac_c* actor, void* data) {
-    fopAcM_OnStatus(actor, fopAcM_STATUS_UNK_0x800);
+    fopAcM_OnStatus(actor, fopAcStts_STAFF_EXTRA_e);
     return NULL;
 }
 
 static void* extraOffObjectCallBack(fopAc_ac_c* actor, void* data) {
-    fopAcM_OffStatus(actor, fopAcM_STATUS_UNK_0x800);
+    fopAcM_OffStatus(actor, fopAcStts_STAFF_EXTRA_e);
     return NULL;
 }
 
 static void* allOffObjectCallBack(fopAc_ac_c* actor, void* data) {
     fopAc_ac_c* spC = (fopAc_ac_c*)data;
 
-    fopAcM_OffStatus(actor, fopAcM_STATUS_UNK_0x8000 | fopAcM_STATUS_UNK_0x1000);
+    fopAcM_OffStatus(actor, fopAcStts_STAFF_PRIMARY_e | fopAcStts_STAFF_SHUTTER_e);
     return NULL;
 }
 
@@ -542,7 +542,7 @@ void dEvent_manager_c::startProc(dEvDtEvent_c* event) {
             }
 
             if (event_actor_p != NULL) {
-                fopAcM_OnStatus(event_actor_p, fopAcM_STATUS_UNK_0x8000);
+                fopAcM_OnStatus(event_actor_p, fopAcStts_STAFF_PRIMARY_e);
                 // "event manager: C:Staff ON %s!!"
                 OS_REPORT("\x1B[34m%06d: event manager: Ｃ：スタッフ　ON　%s!!\n\x1B[m", g_Counter.mCounter0, dStage_getName(fopAcM_GetProfName(event_actor_p), -1));
             } else {
@@ -1029,7 +1029,7 @@ int dEvent_manager_c::getMyStaffId(const char* staffName, fopAc_ac_c* actor, int
     dEvDtEvent_c* event = getEventData(mCurrentEvId);
     if (event != NULL && (event->mEventState == dEvDt_State_START_e || event->mEventState == dEvDt_State_END_e)) {
         n_staff = event->getNStaff();
-    
+
         bool hasDp = false;
         if (strchr(staffName, ':') != NULL) {
             hasDp = true;
@@ -1312,7 +1312,7 @@ void dEvent_manager_c::issueStaff(const char* staffname) {
         char nameBuf[32];
         strcpy(nameBuf, staffname);
         fopAc_ac_c* actor = fopAcM_searchFromName4Event(nameBuf, -1);
-        fopAcM_OnStatus(actor, fopAcM_STATUS_UNK_0x800);
+        fopAcM_OnStatus(actor, fopAcStts_STAFF_EXTRA_e);
     }
 }
 
@@ -1323,7 +1323,7 @@ void dEvent_manager_c::cancelStaff(const char* staffname) {
         char nameBuf[32];
         strcpy(nameBuf, staffname);
         fopAc_ac_c* actor = fopAcM_searchFromName4Event(nameBuf, -1);
-        fopAcM_OffStatus(actor, fopAcM_STATUS_UNK_0x800);
+        fopAcM_OffStatus(actor, fopAcStts_STAFF_EXTRA_e);
     }
 }
 
@@ -1414,18 +1414,18 @@ fopAc_ac_c* dEvent_manager_c::specialCast(const char* staffname, BOOL param_1) {
     }
 
     if (strcmp(staffname, "SHUTTER_DOOR") == 0) {
-        shutterActor = specialCast_Shutter(PROC_KNOB20, param_1);
+        shutterActor = specialCast_Shutter(fpcNm_KNOB20_e, param_1);
         if (shutterActor == NULL) {
-            shutterActor = specialCast_Shutter(PROC_BOSS_DOOR, param_1);
+            shutterActor = specialCast_Shutter(fpcNm_BOSS_DOOR_e, param_1);
         }
         if (shutterActor == NULL) {
-            shutterActor = specialCast_Shutter(PROC_L1BOSS_DOOR, param_1);
+            shutterActor = specialCast_Shutter(fpcNm_L1BOSS_DOOR_e, param_1);
         }
         if (shutterActor == NULL) {
-            shutterActor = specialCast_Shutter(PROC_L1MBOSS_DOOR, param_1);
+            shutterActor = specialCast_Shutter(fpcNm_L1MBOSS_DOOR_e, param_1);
         }
         if (shutterActor == NULL) {
-            shutterActor = specialCast_Shutter(PROC_L5BOSS_DOOR, param_1);
+            shutterActor = specialCast_Shutter(fpcNm_L5BOSS_DOOR_e, param_1);
         }
         if (shutterActor != NULL) {
             dComIfGp_getEvent()->onEventFlag(0x10);
@@ -1434,9 +1434,9 @@ fopAc_ac_c* dEvent_manager_c::specialCast(const char* staffname, BOOL param_1) {
 
     if (shutterActor != NULL) {
         if (param_1) {
-            fopAcM_OnStatus(shutterActor, 0x1000);
+            fopAcM_OnStatus(shutterActor, fopAcStts_STAFF_SHUTTER_e);
         } else {
-            fopAcM_OffStatus(shutterActor, 0x1000);
+            fopAcM_OffStatus(shutterActor, fopAcStts_STAFF_SHUTTER_e);
         }
     }
 

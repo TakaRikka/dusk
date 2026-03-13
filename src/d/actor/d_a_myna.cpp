@@ -200,15 +200,15 @@ static daTag_MynaLight_c* daMyna_LightActor;
 static int daMyna_actor_count;
 
 static void* daMyna_searchSSItem(void* param_0, void* param_1) {
-    if (fopAcM_IsActor(param_0) && (fopAcM_GetName(param_0) == PROC_OBJ_SSITEM ||
-                                    fopAcM_GetName(param_0) == PROC_OBJ_SSDRINK ||
-                                    fopAcM_GetName(param_0) == PROC_TAG_SSDRINK))
+    if (fopAcM_IsActor(param_0) && (fopAcM_GetName(param_0) == fpcNm_OBJ_SSITEM_e ||
+                                    fopAcM_GetName(param_0) == fpcNm_OBJ_SSDRINK_e ||
+                                    fopAcM_GetName(param_0) == fpcNm_TAG_SSDRINK_e))
     {
         if ((fopAcM_GetParam(param_1) & 0xF0000000) == (fopAcM_GetParam(param_0) & 0xF0000000) &&
             daMyna_actor_count < 10)
         {
             fopAc_ac_c* pfVar4 = static_cast<fopAc_ac_c*>(param_0);
-            if (fopAcM_GetName(param_0) == PROC_OBJ_SSITEM) {
+            if (fopAcM_GetName(param_0) == fpcNm_OBJ_SSITEM_e) {
                 pfVar4 = static_cast<daObj_SSItem_c*>(param_0)->getExchangeItemPtr();
             }
             if (pfVar4 != NULL) {
@@ -223,7 +223,7 @@ static void* daMyna_searchSSItem(void* param_0, void* param_1) {
 
 static void* daMyna_searchLight(void* i_mynaLightTagActor, void* param_1) {
     if (fopAcM_IsActor(i_mynaLightTagActor) &&
-        fopAcM_GetName(i_mynaLightTagActor) == PROC_TAG_MNLIGHT)
+        fopAcM_GetName(i_mynaLightTagActor) == fpcNm_TAG_MNLIGHT_e)
     {
         if ((fopAcM_GetParam(param_1) & 0xF0000000) ==
             (fopAcM_GetParam(i_mynaLightTagActor) & 0xF0000000))
@@ -239,7 +239,7 @@ static fopAc_ac_c* daMyna_evtTagActor0;
 static fopAc_ac_c* daMyna_evtTagActor1;
 
 static void* daMyna_searchEvtTag(void* i_evtTagActor, void* param_1) {
-    if (fopAcM_IsActor(i_evtTagActor) && fopAcM_GetName(i_evtTagActor) == PROC_TAG_EVT) {
+    if (fopAcM_IsActor(i_evtTagActor) && fopAcM_GetName(i_evtTagActor) == fpcNm_TAG_EVT_e) {
         if (((fopAcM_GetParam(i_evtTagActor) & 0xF000000) >> 24) == 0) {
             // Event range tag 0 search
             daMyna_evtTagActor0 = static_cast<fopAc_ac_c*>(i_evtTagActor);
@@ -1519,7 +1519,7 @@ u8 daMyna_c::getItemType(void* param_0) {
     u8 itemType = 0xF;
     u8 uVar1 = fopAcM_GetParam(param_0) & 0xFF;
 
-    if (fopAcM_GetName(param_0) == PROC_OBJ_SSITEM) {
+    if (fopAcM_GetName(param_0) == fpcNm_OBJ_SSITEM_e) {
         switch (uVar1) {
         case 0:
             itemType = 1;
@@ -1531,7 +1531,7 @@ u8 daMyna_c::getItemType(void* param_0) {
             itemType = 0;
             break;
         }
-    } else if (fopAcM_GetName(param_0) == PROC_OBJ_SSDRINK) {
+    } else if (fopAcM_GetName(param_0) == fpcNm_OBJ_SSDRINK_e) {
         switch (uVar1) {
         case 0:
             itemType = 3;
@@ -1552,7 +1552,7 @@ u8 daMyna_c::getItemType(void* param_0) {
             itemType = 8;
             break;
         }
-    } else if (fopAcM_GetName(param_0) == PROC_TAG_SSDRINK) {
+    } else if (fopAcM_GetName(param_0) == fpcNm_TAG_SSDRINK_e) {
         switch (uVar1) {
         case 0:
             itemType = 9;
@@ -1815,20 +1815,20 @@ static actor_method_class daMyna_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_MYNA = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_MYNA,
-    &g_fpcLf_Method.base,
-    sizeof(daMyna_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x0130,
-    &daMyna_MethodTable,
-    0x40000,
-    0,
-    fopAc_CULLBOX_0_e
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MYNA_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daMyna_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_MYNA_e,
+    /* Actor SubMtd */ &daMyna_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };
 
 AUDIO_INSTANCES;

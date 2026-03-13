@@ -152,7 +152,7 @@ int daTogeRoll_c::Execute(Mtx** i_mtx) {
         bool bVar1 = true;
 
         if (hit_actor != NULL) {
-            if (fopAcM_GetName(hit_actor) == PROC_ALINK && gobj->GetAtType() & 2 && field_0x1158) {
+            if (fopAcM_GetName(hit_actor) == fpcNm_ALINK_e && gobj->GetAtType() & 2 && field_0x1158) {
                 bVar1 = false;
             }
             if (bVar1) {
@@ -210,7 +210,7 @@ void daTogeRoll_c::moveTogeRoll() {
             for (int i = 0; i < 8; i++) {
                 if (mSph[i].ChkCoHit()) {
                     fopAc_ac_c* hit_actor = dCc_GetAc(mSph[i].GetCoHitObj()->GetAc());
-                    if (hit_actor != NULL && fopAcM_GetName(hit_actor) == PROC_CSTATUE) {
+                    if (hit_actor != NULL && fopAcM_GetName(hit_actor) == fpcNm_CSTATUE_e) {
                         field_0x5e0 = hit_actor->current.pos;
                         cXyz pos1 = current.pos - hit_actor->current.pos;
                         cXyz pos2 = current.pos - field_0x5b0;
@@ -439,18 +439,18 @@ static actor_method_class l_daTogeRoll_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Lv6TogeRoll = {
-    fpcLy_CURRENT_e,         // mLayerID
-    3,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Obj_Lv6TogeRoll,    // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daTogeRoll_c),    // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    621,                     // mPriority
-    &l_daTogeRoll_Method,    // sub_method
-    0x00040100,              // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Lv6TogeRoll_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTogeRoll_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Lv6TogeRoll_e,
+    /* Actor SubMtd */ &l_daTogeRoll_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

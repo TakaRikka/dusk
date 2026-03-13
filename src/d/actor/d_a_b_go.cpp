@@ -274,7 +274,7 @@ static int daB_GO_Create(fopAc_ac_c* i_this) {
             child_angle.y = cM_rndF(0x10000);
 
             a_this->mGoronChildIDs[i] =
-                fopAcM_createChild(PROC_B_GOS, fopAcM_GetID(a_this), i, &child_pos,
+                fopAcM_createChild(fpcNm_B_GOS_e, fopAcM_GetID(a_this), i, &child_pos,
                                    fopAcM_GetRoomNo(a_this), &child_angle, NULL, -1, NULL);
         }
     }
@@ -291,18 +291,18 @@ static actor_method_class l_daB_GO_Method = {
 };
 
 actor_process_profile_definition g_profile_B_GO = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_B_GO,
-    &g_fpcLf_Method.base,
-    sizeof(b_go_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    215,
-    &l_daB_GO_Method,
-    0x40100,
-    fopAc_ENEMY_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_B_GO_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(b_go_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_B_GO_e,
+    /* Actor SubMtd */ &l_daB_GO_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

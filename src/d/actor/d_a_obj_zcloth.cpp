@@ -9,7 +9,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
 #include "d/d_a_itembase_static.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 void daObjZCloth_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
@@ -87,18 +87,18 @@ static actor_method_class l_daObjZCloth_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_ZoraCloth = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_Obj_ZoraCloth,
-    &g_fpcLf_Method.base,
-    sizeof(daObjZCloth_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x220,
-    &l_daObjZCloth_Method,
-    0x40100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_ZoraCloth_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjZCloth_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_ZoraCloth_e,
+    /* Actor SubMtd */ &l_daObjZCloth_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -245,15 +245,15 @@ static leafdraw_method_class l_dOvlpFd2_Method = {
 };
 
 overlap_process_profile_definition g_profile_OVERLAP2 = {
-    fpcLy_ROOT_e,
-    2,
-    fpcPi_CURRENT_e,
-    PROC_OVERLAP2,
-    &g_fpcLf_Method.base,
-    sizeof(dOvlpFd2_c),
-    0,
-    0,
-    &g_fopOvlp_Method,
-    775,
-    &l_dOvlpFd2_Method,
+    /* Layer ID    */ fpcLy_ROOT_e,
+    /* List ID     */ 2,
+    /* List Prio   */ fpcPi_CURRENT_e,
+    /* Proc Name   */ fpcNm_OVERLAP2_e,
+    /* Proc SubMtd */ &g_fpcLf_Method.base,
+    /* Size        */ sizeof(dOvlpFd2_c),
+    /* Size Other  */ 0,
+    /* Parameters  */ 0,
+    /* Leaf SubMtd */ &g_fopOvlp_Method,
+    /* Draw Prio   */ fpcDwPi_OVERLAP2_e,
+    /* Fade SubMtd */ &l_dOvlpFd2_Method,
 };

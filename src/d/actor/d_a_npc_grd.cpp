@@ -1106,7 +1106,7 @@ int daNpc_Grd_c::test(void* param_1) {
 }
 
 static void* s_sub1(void* i_actor, void* i_data) {
-    if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_NPC_GRZ) {
+    if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_NPC_GRZ_e) {
         return i_actor;
     }
 
@@ -1114,7 +1114,7 @@ static void* s_sub1(void* i_actor, void* i_data) {
 }
 
 static void* s_sub2(void* i_actor, void* i_data) {
-    if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_NPC_YELIA) {
+    if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_NPC_YELIA_e) {
         return i_actor;
     }
 
@@ -1249,20 +1249,20 @@ static actor_method_class daNpc_Grd_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_GRD = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_NPC_GRD,            // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daNpc_Grd_c),     // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    308,                     // mPriority
-    &daNpc_Grd_MethodTable,  // sub_method
-    0x00044100,              // mStatus
-    fopAc_NPC_e,             // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_GRD_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Grd_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_GRD_e,
+    /* Actor SubMtd */ &daNpc_Grd_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

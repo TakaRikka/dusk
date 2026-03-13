@@ -28,7 +28,7 @@ static void* s_obj_sub(void* i_actor, void* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     cXyz& actor_pos = fopAcM_GetPosition(actor);
     cXyz& pos = fopAcM_GetPosition(_this);
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_PM
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_PM_e
         && actor_pos.absXZ(pos) < 800.0f)
     {
         return i_actor;
@@ -293,18 +293,18 @@ static actor_method_class l_daObjSM_DOOR_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_SM_DOOR = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_SM_DOOR,       // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjSM_DOOR_c), // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  476,                    // mPriority
-  &l_daObjSM_DOOR_Method, // sub_method
-  0x00044100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_SM_DOOR_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjSM_DOOR_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_SM_DOOR_e,
+    /* Actor SubMtd */ &l_daObjSM_DOOR_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

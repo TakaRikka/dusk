@@ -221,7 +221,7 @@ static int daB_GM_Draw(b_gm_class* i_this) {
 }
 
 static void* s_ko_del(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_GM && fopAcM_GetParam(i_actor) == 0) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_GM_e && fopAcM_GetParam(i_actor) == 0) {
         ((daE_GM_c*)i_actor)->InstantKill();
     }
 
@@ -341,7 +341,7 @@ static BOOL bg_check(b_gm_class* i_this) {
 static int ko_ct;
 
 static void* s_ko_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_GM) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_GM_e) {
         ko_ct++;
     }
 
@@ -349,7 +349,7 @@ static void* s_ko_sub(void* i_actor, void* i_data) {
 }
 
 static void* s_ko2_move(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_GM && fopAcM_GetParam(i_actor) == 3) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_GM_e && fopAcM_GetParam(i_actor) == 3) {
         ((daE_GM_c*)i_actor)->MoveStart(0);
         return i_actor;
     }
@@ -358,7 +358,7 @@ static void* s_ko2_move(void* i_actor, void* i_data) {
 }
 
 static void* s_ko2_get(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_GM && fopAcM_GetParam(i_actor) == 3) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_GM_e && fopAcM_GetParam(i_actor) == 3) {
         return i_actor;
     }
 
@@ -366,7 +366,7 @@ static void* s_ko2_get(void* i_actor, void* i_data) {
 }
 
 static void* s_ko_move(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_GM && fopAcM_GetParam(i_actor) == 1) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_E_GM_e && fopAcM_GetParam(i_actor) == 1) {
         ((daE_GM_c*)i_actor)->MoveStart(cM_rndF(15.0f));
     }
 
@@ -615,7 +615,7 @@ static void b_gm_kogoma(b_gm_class* i_this) {
             fpcM_Search(s_ko_sub, a_this);
             if (ko_ct < 100) {
                 csXyz angle(0, a_this->shape_angle.y, 0);
-                fopAcM_createChild(PROC_E_GM, fopAcM_GetID(a_this), 0, &kogoma_pos, fopAcM_GetRoomNo(a_this), &angle, NULL, -1, 0);
+                fopAcM_createChild(fpcNm_E_GM_e, fopAcM_GetID(a_this), 0, &kogoma_pos, fopAcM_GetRoomNo(a_this), &angle, NULL, -1, 0);
             }
         }
 
@@ -1343,7 +1343,7 @@ static void demo_camera(b_gm_class* i_this) {
             spBC += a_this->eyePos;
 
             csXyz angle(0, cM_rndF(0x10000), 0);
-            fopAcM_createChild(PROC_E_GM, fopAcM_GetID(a_this), params, &spBC, fopAcM_GetRoomNo(a_this), &angle, NULL, -1, NULL);
+            fopAcM_createChild(fpcNm_E_GM_e, fopAcM_GetID(a_this), params, &spBC, fopAcM_GetRoomNo(a_this), &angle, NULL, -1, NULL);
         }
 
         if (i_this->mDemoModeTimer == 90) {
@@ -1447,12 +1447,12 @@ static void demo_camera(b_gm_class* i_this) {
 
         if (i_this->mDemoModeTimer == 160) {
             csXyz angle(0, player->shape_angle.y - 0x4000, 0);
-            fopAcM_createItemForBoss(&i_this->field_0x1cec, fpcNm_ITEM_UTAWA_HEART, fopAcM_GetRoomNo(a_this), &angle, NULL, 10.0f, 30.0f, -1);
+            fopAcM_createItemForBoss(&i_this->field_0x1cec, dItemNo_UTAWA_HEART_e, fopAcM_GetRoomNo(a_this), &angle, NULL, 10.0f, 30.0f, -1);
         }
 
         if (i_this->mDemoModeTimer == 190) {
             i_this->field_0x1cec.y += 600.0f;
-            fopAcM_create(PROC_OBJ_YSTONE, 0, &i_this->field_0x1cec, fopAcM_GetRoomNo(a_this), NULL, NULL, -1);
+            fopAcM_create(fpcNm_OBJ_YSTONE_e, 0, &i_this->field_0x1cec, fopAcM_GetRoomNo(a_this), NULL, NULL, -1);
             i_this->mDemoMode = 42;
             i_this->mDemoModeTimer = 0;
         }
@@ -1479,7 +1479,7 @@ static void demo_camera(b_gm_class* i_this) {
             cLib_addCalc2(&i_this->field_0x1cec.y, 100.0f, 0.05f, 0.7f);
         }
 
-        obj_ystone_class* ystone = (obj_ystone_class*)fopAcM_SearchByName(PROC_OBJ_YSTONE);
+        obj_ystone_class* ystone = (obj_ystone_class*)fopAcM_SearchByName(fpcNm_OBJ_YSTONE_e);
         if (ystone != NULL) {
             if (i_this->mDemoModeTimer > 200) {
                 cLib_addCalc2(&i_this->field_0x1cec.y, 100.0f, 0.05f, 1.0f);
@@ -2103,7 +2103,7 @@ static int daB_GM_Create(fopAc_ac_c* i_this) {
             if (!dComIfGs_isStageLife()) {
                 cXyz size(1.0f, 1.0f, 1.0f);
                 pos.set(400.0f, 0.0f, 0.0f);
-                fopAcM_createItemForBoss(&pos, fpcNm_ITEM_UTAWA_HEART, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, &size, 0.0f, 0.0f, -1);
+                fopAcM_createItemForBoss(&pos, dItemNo_UTAWA_HEART_e, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, &size, 0.0f, 0.0f, -1);
             }
 
             return phase_state;
@@ -2232,20 +2232,20 @@ static actor_method_class l_daB_GM_Method = {
 };
 
 actor_process_profile_definition g_profile_B_GM = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_B_GM,              // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(b_gm_class),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  213,                    // mPriority
-  &l_daB_GM_Method,       // sub_method
-  0x00044000,             // mStatus
-  fopAc_ENEMY_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_B_GM_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(b_gm_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_B_GM_e,
+    /* Actor SubMtd */ &l_daB_GM_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES;

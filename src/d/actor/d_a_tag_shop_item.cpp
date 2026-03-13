@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_tag_shop_item.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include <cstring>
 
 int daTag_ShopItem_c::create() {
@@ -80,7 +80,7 @@ int daTag_ShopItem_c::Execute() {
     if (mProcessID == fpcM_ERROR_PROCESS_ID_e) {
         if (mCreateTimer == 0) {
             mProcessID =
-                fopAcM_create(PROC_ShopItem, getType() | (getGroupID() << 28),
+                fopAcM_create(fpcNm_ShopItem_e, getType() | (getGroupID() << 28),
                               &current.pos, fopAcM_GetRoomNo(this), &current.angle, NULL, -1);
 
         } else {
@@ -185,18 +185,18 @@ static actor_method_class daTag_ShopItem_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_TAG_SHOPITM = {
-    fpcLy_CURRENT_e,              // mLayerID
-    7,                            // mListID
-    fpcPi_CURRENT_e,              // mListPrio
-    PROC_TAG_SHOPITM,             // mProcName
-    &g_fpcLf_Method.base,        // sub_method
-    sizeof(daTag_ShopItem_c),     // mSize
-    0,                            // mSizeOther
-    0,                            // mParameters
-    &g_fopAc_Method.base,         // sub_method
-    75,                           // mPriority
-    &daTag_ShopItem_MethodTable,  // sub_method
-    0x64100,                      // mStatus
-    5,                            // mActorType
-    fopAc_CULLBOX_CUSTOM_e,       // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_SHOPITM_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTag_ShopItem_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_TAG_SHOPITM_e,
+    /* Actor SubMtd */ &daTag_ShopItem_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_NOPAUSE_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_UNK_GROUP_5_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

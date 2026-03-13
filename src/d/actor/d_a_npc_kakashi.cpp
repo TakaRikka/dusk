@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_kakashi.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -197,8 +197,8 @@ int daNpc_Kakashi_c::create() {
         J3DModelData* modelData = mpMorf[0]->getModel()->getModelData();
         fopAcM_SetMtx(this, mpMorf[0]->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -300.0f, -50.0f, -300.0f, 300.0f, 450.0f, 300.0f);
-        fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x8000000);
-        
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
+
         mSound.init(&current.pos, 3);
 
 #if DEBUG
@@ -209,7 +209,7 @@ int daNpc_Kakashi_c::create() {
         reset();
 
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-    
+
         mCcStts.Init(mpHIO->m.common.weight, 0, this);
         for (int i = 0; i < 3; i++) {
             mCcSph[i].Set(mCcDSph);
@@ -463,7 +463,7 @@ BOOL daNpc_Kakashi_c::checkChangeEvt() {
         case 3:
         case 4:
             break;
-        }        
+        }
     }
 
     return 0;
@@ -867,8 +867,8 @@ void daNpc_Kakashi_c::setStaggerParam(fopAc_ac_c* i_hitActor) {
             setPrtcls(0);
             sp14.y = fopAcM_searchPlayerAngleY(this);
 
-            fopAcM_createChild(PROC_OBJ_KBACKET, fopAcM_GetID(this), 0x80000000, &pos, fopAcM_GetRoomNo(this), &sp14, NULL, -1, NULL);
-            fopAcM_createChild(PROC_OBJ_KBACKET, fopAcM_GetID(this), 0x80000001, &pos, fopAcM_GetRoomNo(this), &sp14, NULL, -1, NULL);
+            fopAcM_createChild(fpcNm_OBJ_KBACKET_e, fopAcM_GetID(this), 0x80000000, &pos, fopAcM_GetRoomNo(this), &sp14, NULL, -1, NULL);
+            fopAcM_createChild(fpcNm_OBJ_KBACKET_e, fopAcM_GetID(this), 0x80000001, &pos, fopAcM_GetRoomNo(this), &sp14, NULL, -1, NULL);
 
             if (field_0x1393 == 0) {
                 break;
@@ -1172,20 +1172,20 @@ static actor_method_class daNpc_Kakashi_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_KAKASHI = {
-  fpcLy_CURRENT_e,            // mLayerID
-  7,                          // mListID
-  fpcPi_CURRENT_e,            // mListPrio
-  PROC_NPC_KAKASHI,           // mProcName
-  &g_fpcLf_Method.base,      // sub_method
-  sizeof(daNpc_Kakashi_c),    // mSize
-  0,                          // mSizeOther
-  0,                          // mParameters
-  &g_fopAc_Method.base,       // sub_method
-  319,                        // mPriority
-  &daNpc_Kakashi_MethodTable, // sub_method
-  0x00044000,                 // mStatus
-  fopAc_NPC_e,                // mActorType
-  fopAc_CULLBOX_CUSTOM_e,     // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_KAKASHI_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Kakashi_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_KAKASHI_e,
+    /* Actor SubMtd */ &daNpc_Kakashi_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES

@@ -132,18 +132,18 @@ namespace {
 };  // namespace daObjTimer
 
 actor_process_profile_definition g_profile_Obj_Timer = {
-  fpcLy_CURRENT_e,          // mLayerID
-  10,                       // mListID
-  fpcPi_CURRENT_e,          // mListPrio
-  PROC_Obj_Timer,           // mProcName
-  &g_fpcLf_Method.base,    // sub_method
-  sizeof(daObjTimer::Act_c), // mSize
-  0,                        // mSizeOther
-  0,                        // mParameters
-  &g_fopAc_Method.base,     // sub_method
-  22,                       // mPriority
-  &daObjTimer::l_daTimer_Method,           // sub_method
-  0x00040000,               // mStatus
-  fopAc_ACTOR_e,            // mActorType
-  fopAc_CULLBOX_0_e,        // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 10,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Timer_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjTimer::Act_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Timer_e,
+    /* Actor SubMtd */ &daObjTimer::l_daTimer_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

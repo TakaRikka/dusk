@@ -76,7 +76,7 @@ void daObjLndRope_c::create_init() {
             csXyz childAngle(0, cLib_targetAngleY(ropePosition, ropePosition + 1) + 0x4000,
                              -cLib_targetAngleX(ropePosition, ropePosition + 1));
             *procId =
-                fopAcM_createChild(PROC_Obj_Laundry, fopAcM_GetID(this), *laundryEntry,
+                fopAcM_createChild(fpcNm_Obj_Laundry_e, fopAcM_GetID(this), *laundryEntry,
                                    ropePosition, fopAcM_GetRoomNo(this), &childAngle, NULL, -1, 0);
         }
 
@@ -289,18 +289,18 @@ static actor_method_class l_daObjLndRope_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_LndRope = {
-    fpcLy_CURRENT_e,         // mLayerID
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio
-    PROC_Obj_LndRope,        // mProcName
-    &g_fpcLf_Method.base,    // sub_method
-    sizeof(daObjLndRope_c),  // mSize
-    0,                       // mSizeOther
-    0,                       // mParameters
-    &g_fopAc_Method.base,    // sub_method
-    34,                      // mPriority
-    &l_daObjLndRope_Method,  // sub_method
-    0x00040180,              // mStatus
-    fopAc_ACTOR_e,           // mActorType
-    fopAc_CULLBOX_CUSTOM_e,  // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_LndRope_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjLndRope_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_LndRope_e,
+    /* Actor SubMtd */ &l_daObjLndRope_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_NOEXEC_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

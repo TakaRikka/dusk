@@ -16,7 +16,7 @@ static fopAc_ac_c* l_target_info[8];
 static int l_target_info_count;
 
 static void* s_ball_sub(void* i_actor, void* i_data) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_Carry && ((daObjCarry_c*)i_actor)->getType() == daObjCarry_c::TYPE_LV8_BALL) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_Obj_Carry_e && ((daObjCarry_c*)i_actor)->getType() == daObjCarry_c::TYPE_LV8_BALL) {
         if (l_target_info_count < 8) {
             l_target_info[l_target_info_count] = (fopAc_ac_c*)i_actor;
             l_target_info_count++;
@@ -203,7 +203,7 @@ void daSwBall_c::PutCrrPos() {
 
         if (fopAcM_searchPlayerDistanceXZ(this) < 300.0f + KREG_F(0) && spA < 0x4000) {
             fopAc_ac_c* grab_actor = fopAcM_SearchByID(player->getGrabActorID());
-            if (grab_actor != NULL && fopAcM_IsActor(grab_actor) && fopAcM_GetName(grab_actor) == PROC_Obj_Carry) {
+            if (grab_actor != NULL && fopAcM_IsActor(grab_actor) && fopAcM_GetName(grab_actor) == fpcNm_Obj_Carry_e) {
                 daObjCarry_c* carry_obj = (daObjCarry_c*)grab_actor;
                 if (carry_obj->getType() == daObjCarry_c::TYPE_LV8_BALL) {
                     player->setForcePutPos(current.pos);
@@ -277,18 +277,18 @@ static actor_method_class l_daSwBall_Method = {
 };
 
 actor_process_profile_definition g_profile_SwBall = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_SwBall,            // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daSwBall_c),     // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  550,                    // mPriority
-  &l_daSwBall_Method,     // sub_method
-  0x00040000,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SwBall_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daSwBall_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_SwBall_e,
+    /* Actor SubMtd */ &l_daSwBall_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -9,7 +9,7 @@
 #include "SSystem/SComponent/c_counter.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 #include "d/actor/d_a_mg_rod.h"
 #include "d/actor/d_a_mg_fish.h"
 #include "SSystem/SComponent/c_math.h"
@@ -133,7 +133,7 @@ static int daNpc_Ne_Draw(npc_ne_class* i_this) {
     if (daPy_py_c::linkGrabSubjectNoDraw(i_this)) {
         return 1;
     }
-    
+
     J3DModel* model = i_this->mpMorf->getModel();
     if (i_this->mResName == "Npc_net") {
         if (!dComIfGs_wolfeye_effect_check()) {
@@ -219,7 +219,7 @@ static int way_bg_check(npc_ne_class* i_this, s16 i_angle) {
             return 1;
         }
     }
-    
+
     mDoMtx_YrotS(*calc_mtx, _this->current.angle.y + i_angle);
     vec3.set(0.0f, 150.0f, 150.0f);
     MtxPosition(&vec3, &vec2);
@@ -313,7 +313,7 @@ static int target_info_count;
 
 static void* s_bl_sub(void* i_proc, void* i_this) {
     if (fopAc_IsActor(i_proc)
-        && (fopAcM_GetName(i_proc) == PROC_OBJ_FOOD || fopAcM_GetName(i_proc) == PROC_BD)
+        && (fopAcM_GetName(i_proc) == fpcNm_OBJ_FOOD_e || fopAcM_GetName(i_proc) == fpcNm_BD_e)
         && target_info_count < 5)
     {
         target_info[target_info_count] = static_cast<fopAc_ac_c*>(i_proc);
@@ -324,7 +324,7 @@ static void* s_bl_sub(void* i_proc, void* i_this) {
 
 static void* s_ss_sub(void* i_proc, void* i_this) {
     if (fopAc_IsActor(i_proc)
-        && (fopAcM_GetName(i_proc) == PROC_NI || fopAcM_GetName(i_proc) == PROC_BD)
+        && (fopAcM_GetName(i_proc) == fpcNm_NI_e || fopAcM_GetName(i_proc) == fpcNm_BD_e)
         && target_info_count < 5)
     {
         target_info[target_info_count] = static_cast<fopAc_ac_c*>(i_proc);
@@ -373,7 +373,7 @@ static fopAc_ac_c* search_bird(npc_ne_class* i_this) {
                     }
                 }
             }
-            
+
             i++;
             if (i == target_info_count) {
                 i = 0;
@@ -645,7 +645,7 @@ static void npc_ne_away(npc_ne_class* i_this) {
         }
         i_this->mBackboneTargetAngleY = ang_y;
     }
-    
+
     i_this->mpMorf->setPlaySpeed(i_this->mAnmSpeed);
 }
 
@@ -690,7 +690,7 @@ static cXyz ground_search(npc_ne_class* i_this) {
 
 static void* s_fish_sub(void* i_proc, void* i_this) {
     npc_ne_class* _this = static_cast<npc_ne_class*>(i_this);
-    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_MG_FISH) {
+    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == fpcNm_MG_FISH_e) {
         mg_fish_class* fish = (mg_fish_class*)i_proc;
         if (fish->mCurAction == 0x35 && fish->mActionPhase >= 10) {
             _this->mFishID = fopAcM_GetID(fish);
@@ -825,7 +825,7 @@ static void npc_ne_tame(npc_ne_class* i_this) {
                 i_this->mMode++;
                 i_this->mSound.startSound(Z2SE_CAT_CRY_FAMILIER, 0, -1);
                 // fallthrough
-            
+
             case 6:
                 i_this->mTargetAngleY = i_this->mAngleToPlayer;
                 angle_max_step = 0xa00;
@@ -839,7 +839,7 @@ static void npc_ne_tame(npc_ne_class* i_this) {
                     i_this->mMode = 1;
                 }
                 break;
-            
+
             case 7:
                 i_this->mAnmSpeed = 1.0f;
                 anm_init(i_this, npc_ne_class::ANM_RUN, 3.0f, 2, i_this->mAnmSpeed);
@@ -853,7 +853,7 @@ static void npc_ne_tame(npc_ne_class* i_this) {
                 cLib_addCalc2(&i_this->mAnmSpeed, 1.5f, 1.0f, 0.1f);
                 cLib_addCalc2(&_this->speedF, i_this->mAnmSpeed * l_HIO.mRunSpeed,
                               1.0f, 0.5f * l_HIO.mRunSpeed);
-                
+
                 if (i_this->mCounter & 1) {
                     ivar7 = way_bg_check(i_this, 0);
                 }
@@ -861,7 +861,7 @@ static void npc_ne_tame(npc_ne_class* i_this) {
                 {
                     i_this->mTargetAngleY =
                         i_this->mAngleToPlayer + 0x8000 + (s16)cM_rndFX(4000.0f);
-                    way_check(i_this, i_this->mTargetAngleY);    
+                    way_check(i_this, i_this->mTargetAngleY);
                 }
 
                 if (i_this->mDistToTarget > dist3 + 40.0f) {
@@ -870,13 +870,13 @@ static void npc_ne_tame(npc_ne_class* i_this) {
                     i_this->mMode = 1;
                 }
                 break;
-            
+
             case 10:
             case 11:
                 i_this->mTargetAngleY = i_this->mAngleToPlayer;
                 cLib_addCalc0(&_this->speedF, 1.0f, 3.0f);
                 angle_diff = _this->current.angle.y - i_this->mTargetAngleY;
-                
+
                 if (i_this->mMode == 10) {
                     if (angle_diff > 0x400 || angle_diff < -0x400) {
                         i_this->mAnmSpeed = 1.0f;
@@ -1003,7 +1003,7 @@ static void npc_ne_bird(npc_ne_class* i_this) {
         i_this->mMode++;
         i_this->mDistScale = cM_rndFX(0.2f) + 1.0f;
         // fallthrough
-    
+
     case 1:
         max_angle_step = 0x400;
         i_this->mTailTargetAngle = -15000;
@@ -1635,7 +1635,7 @@ static BOOL npc_ne_home(npc_ne_class* i_this) {
     s16 prev_ang_y = i_this->current.angle.y;
     cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->mTargetAngleY, 2, i_this->mAngleYStep);
     cLib_addCalc2(&i_this->mAngleYStep, 5000.0f, 1.0f, 200.0f);
-    
+
     f32 ang_z = i_this->speedF * (i_this->current.angle.y - prev_ang_y) * -0.5f;
     if (ang_z > 4000.0f) {
         ang_z = 4000.0f;
@@ -1643,7 +1643,7 @@ static BOOL npc_ne_home(npc_ne_class* i_this) {
         ang_z = -4000.0f;
     }
     i_this->current.angle.z = ang_z;
-    
+
     if (i_this->mAngleYStep > 1000.0f) {
         f32 ang_y = i_this->speedF * (i_this->current.angle.y - prev_ang_y) * 0.1f;
         if (ang_y > 5000.0f) {
@@ -2309,7 +2309,7 @@ static void action(npc_ne_class* i_this) {
             if (bird_check && !i_this->mWantsFish) {
                 fopAc_ac_c* bird_or_ball = search_bird(i_this);
                 if (bird_or_ball != NULL) {
-                    if (fopAcM_GetName(bird_or_ball) == PROC_OBJ_FOOD) {
+                    if (fopAcM_GetName(bird_or_ball) == fpcNm_OBJ_FOOD_e) {
                         i_this->mAction = npc_ne_class::ACT_BALL;
                         i_this->mMode = 0;
                         carry_check = true;
@@ -2335,7 +2335,7 @@ static void action(npc_ne_class* i_this) {
     cXyz vec1, vec2;
     if (i_this->mWantsFish && i_this->mAction != npc_ne_class::ACT_SANBASI
                             && player->current.pos.z > -2800.0f) {
-        dmg_rod_class* rod = ((dmg_rod_class*)fopAcM_SearchByName(PROC_MG_ROD));
+        dmg_rod_class* rod = ((dmg_rod_class*)fopAcM_SearchByName(fpcNm_MG_ROD_e));
         if (rod != NULL && rod->kind == 1 && rod->action != 5
                         && rod->play_cam_mode != 0 && !i_this->mNoFollow) {
             if (i_this->mDistToTarget > 500.0f) {
@@ -2638,7 +2638,7 @@ static void demo_camera(npc_ne_class* i_this) {
     case 2:
         daPy_getPlayerActorClass()->setPlayerPosAndAngle(&player->current.pos,
                                                          i_this->mAngleToPlayer + 0x8000, 0);
-        
+
         center = _this->current.pos;
         eye = _this->current.pos;
         eye.y += 200.0f;
@@ -2664,7 +2664,7 @@ static void demo_camera(npc_ne_class* i_this) {
         }
 
         if (i_this->mDemoCounter == 12) {
-            fopAc_ac_c* door = fopAcM_SearchByName(PROC_OBJ_NDOOR);
+            fopAc_ac_c* door = fopAcM_SearchByName(fpcNm_OBJ_NDOOR_e);
             if (door != NULL) {
                 door->field_0x567 = 10;
                 Z2GetAudioMgr()->seStart(Z2SE_OBJ_CAT_DOOR, &door->current.pos,
@@ -2702,7 +2702,7 @@ static void demo_camera(npc_ne_class* i_this) {
     case 11:
         daPy_getPlayerActorClass()->setPlayerPosAndAngle(&player->current.pos,
                                                          i_this->mAngleToPlayer + 0x8000, 0);
-        
+
         mDoMtx_YrotS(*calc_mtx, _this->current.angle.y);
 
         if (i_this->mMode >= 13) {
@@ -2838,7 +2838,7 @@ static void demo_camera(npc_ne_class* i_this) {
         }
 
         i_this->mDemoCounter++;
-        
+
         if (i_this->mDemoMode < 10 && i_this->mAction != npc_ne_class::ACT_HOME) {
             i_this->mDemoMode = 100;
         }
@@ -2857,7 +2857,7 @@ static int message(npc_ne_class* i_this) {
             i_this->mIsTalking = 0;
             if (i_this->mIsGengle == 1 && (i_this->mMsgFlow.getNowMsgNo() == 0x18a1 ||
                                            i_this->mMsgFlow.getNowMsgNo() == 0x18a2)) {
-                fopAcM_createItem(&dComIfGp_getPlayer(0)->eyePos, fpcNm_ITEM_SILVER_RUPEE, -1,
+                fopAcM_createItem(&dComIfGp_getPlayer(0)->eyePos, dItemNo_SILVER_RUPEE_e, -1,
                                   fopAcM_GetRoomNo(i_this), NULL, NULL, 3);
             }
         }
@@ -2897,7 +2897,7 @@ static int daNpc_Ne_Execute(npc_ne_class* i_this) {
             /* dSv_event_flag_c::F_0470 - Fishing Pond - Reserved for fishing */
         if (dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[470])
                                     && i_this->mDistToTarget < 1500.0f) {
-            if (fopAcM_SearchByName(PROC_MG_ROD) != NULL) {
+            if (fopAcM_SearchByName(fpcNm_MG_ROD_e) != NULL) {
                 i_this->mNoFollow = false;
             } else {
                 i_this->mNoFollow = true;
@@ -3114,7 +3114,7 @@ static cPhs_Step daNpc_Ne_Create(fopAc_ac_c* i_this) {
         _this->mPathIndex = (u8)(fopAcM_GetParam(_this) >> 0x10);
         _this->mIsGengle = (u8)(fopAcM_GetParam(_this) >> 0x18);
 
-        if (_this->mIsGengle == 1 
+        if (_this->mIsGengle == 1
                 /* dSv_event_flag_c::F_0457 - Castle Town - Revived cat */
             && !dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[457])) {
             return cPhs_ERROR_e;
@@ -3256,20 +3256,20 @@ static actor_method_class l_daNpc_Ne_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_NE = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_NPC_NE,
-    &g_fpcLf_Method.base,
-    sizeof(npc_ne_class),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x2BC,
-    &l_daNpc_Ne_Method,
-    0x8044000,
-    fopAc_NPC_e,
-    fopAc_CULLBOX_0_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_NE_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(npc_ne_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_NE_e,
+    /* Actor SubMtd */ &l_daNpc_Ne_Method,
+    /* Status       */ fopAcStts_UNK_0x8000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };
 
 AUDIO_INSTANCES;

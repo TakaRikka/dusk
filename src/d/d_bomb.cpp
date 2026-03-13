@@ -14,14 +14,14 @@ bool dBomb_c::checkStateCarry() {
 }
 
 bool dBomb_c::checkFlowerBombWait(fopAc_ac_c* i_actor) {
-    return (fopAcM_GetName(i_actor) == PROC_NBOMB && fopAcM_GetParam(i_actor) == PRM_FLOWER_BOMB);
+    return (fopAcM_GetName(i_actor) == fpcNm_NBOMB_e && fopAcM_GetParam(i_actor) == PRM_FLOWER_BOMB);
 }
 
 bool dBomb_c::checkWaterBomb(fopAc_ac_c* i_actor) {
-    return (fopAcM_GetName(i_actor) == PROC_NBOMB && ((daNbomb_c*)i_actor)->checkWaterBomb());
+    return (fopAcM_GetName(i_actor) == fpcNm_NBOMB_e && ((daNbomb_c*)i_actor)->checkWaterBomb());
 }
 
 bool dBomb_c::checkInsectBombMove(fopAc_ac_c* i_actor) {
-    return (fopAcM_GetName(i_actor) == PROC_NBOMB &&
+    return (fopAcM_GetName(i_actor) == fpcNm_NBOMB_e &&
             fopAcM_GetParam(i_actor) == PRM_INSECT_BOMB_MOVE);
 }

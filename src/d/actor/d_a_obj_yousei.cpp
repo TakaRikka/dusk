@@ -93,7 +93,7 @@ void daObjYOUSEI_c::MoveAction() {
         break;
     case 1:
         if (field_0x5d6 == 100 && mPrm != 0) {
-            execItemGet(fpcNm_ITEM_RECOVERY_FAILY);
+            execItemGet(dItemNo_RECOVERY_FAILY_e);
         }
 
         f32 var_f31 = (25.0f + yREG_F(16)) / field_0x5d6;
@@ -372,7 +372,7 @@ void daObjYOUSEI_c::WaitAction() {
         data_804D1830 = 0;
         fopAcM_delete(this);
     } else {
-        dComIfGp_att_CatchRequest(this, fpcNm_ITEM_FAIRY, 150.0f, 50.0f, -100.0f, 0x5000, 1);
+        dComIfGp_att_CatchRequest(this, dItemNo_FAIRY_e, 150.0f, 50.0f, -100.0f, 0x5000, 1);
         eventInfo.onCondition(0x40);
     }
 
@@ -530,7 +530,7 @@ void daObjYOUSEI_c::LinkAction() {
         data_804D1830 = 0;
         fopAcM_delete(this);
     } else {
-        dComIfGp_att_CatchRequest(this, fpcNm_ITEM_FAIRY, 150.0f, 50.0f, -100.0f, 0x5000, 1);
+        dComIfGp_att_CatchRequest(this, dItemNo_FAIRY_e, 150.0f, 50.0f, -100.0f, 0x5000, 1);
         eventInfo.onCondition(0x40);
     }
 
@@ -833,7 +833,7 @@ int daObjYOUSEI_c::create() {
     mSound.init(&current.pos, &eyePos, 3, 1);
 
     if (mPrm == 0) {
-        execItemGet(fpcNm_ITEM_RECOVERY_FAILY);
+        execItemGet(dItemNo_RECOVERY_FAILY_e);
         CareAction();
         scale.set(0.2f, 0.2f, 0.2f);
     } else {
@@ -860,20 +860,20 @@ static actor_method_class l_daObjYOUSEI_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Yousei = {
-  fpcLy_CURRENT_e,        // mLayerID
-  7,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_Yousei,        // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjYOUSEI_c),  // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  475,                    // mPriority
-  &l_daObjYOUSEI_Method,  // sub_method
-  0x000C0100,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Yousei_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjYOUSEI_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Yousei_e,
+    /* Actor SubMtd */ &l_daObjYOUSEI_Method,
+    /* Status       */ fopAcStts_UNK_0x80000_e | fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
 
 AUDIO_INSTANCES

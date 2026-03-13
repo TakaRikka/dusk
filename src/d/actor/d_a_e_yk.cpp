@@ -150,7 +150,7 @@ static int daE_YK_Draw(e_yk_class* i_this) {
  * 
  * Checks if the given actor is:
  * - A valid actor
- * - A boomerang (PROC_BOOMERANG)
+ * - A boomerang (fpcNm_BOOMERANG_e)
  * - Player is not in a certain state (0x80000)
  * - Boomerang is charged
  * - Boomerang parameter is 1
@@ -159,7 +159,7 @@ static int daE_YK_Draw(e_yk_class* i_this) {
  * by a charged boomerang's wind effect.
  */
 static void* shot_b_sub(void* i_actor, void* param_1) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_BOOMERANG &&
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_BOOMERANG_e &&
                                 !dComIfGp_checkPlayerStatus0(0,0x80000) &&
                                 daPy_py_c::checkBoomerangCharge() &&
                                 fopAcM_GetParam(i_actor) == 1) {
@@ -1473,7 +1473,7 @@ static int daE_YK_Create(fopAc_ac_c* i_this) {
         
         yk->mPlayerTrigger = 100.0f * yk->mPlayerTriggerBase;
         
-        if (fopAcM_SearchByName(PROC_E_PZ)) {
+        if (fopAcM_SearchByName(fpcNm_E_PZ_e)) {
             // For phantom zant fights. Used in pl_check above
             yk->mPlayerTrigger = 100000.0f; 
         }
@@ -1558,18 +1558,18 @@ static actor_method_class l_daE_YK_Method = {
 };
 
 actor_process_profile_definition g_profile_E_YK = {
-    fpcLy_CURRENT_e,         // mLayerID  
-    7,                       // mListID
-    fpcPi_CURRENT_e,         // mListPrio 
-    PROC_E_YK,               // mProcName        
-    &g_fpcLf_Method.base,   // sub_method                    
-    sizeof(e_yk_class),      // mSize                 
-    0,                       // mSizeOther
-    0,                       // mParameters       
-    &g_fopAc_Method.base,    // sub_method                   
-    188,                     // mPriority     
-    &l_daE_YK_Method,        // sub_method               
-    0x10050100,              // mStatus          
-    fopAc_ENEMY_e,           // mActorType   
-    fopAc_CULLBOX_CUSTOM_e,  // cullType   
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_E_YK_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(e_yk_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_E_YK_e,
+    /* Actor SubMtd */ &l_daE_YK_Method,
+    /* Status       */ fopAcStts_UNK_0x10000000_e | fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x10000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

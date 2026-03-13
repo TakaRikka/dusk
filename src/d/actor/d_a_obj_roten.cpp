@@ -178,18 +178,18 @@ static actor_method_class daObj_Roten_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_ROTEN = {
-  fpcLy_CURRENT_e,          // mLayerID
-  7,                        // mListID
-  fpcPi_CURRENT_e,          // mListPrio
-  PROC_OBJ_ROTEN,           // mProcName
-  &g_fpcLf_Method.base,    // sub_method
-  sizeof(daObj_Roten_c),    // mSize
-  0,                        // mSizeOther
-  0,                        // mParameters
-  &g_fopAc_Method.base,     // sub_method
-  67,                       // mPriority
-  &daObj_Roten_MethodTable, // sub_method
-  0x00040000,               // mStatus
-  fopAc_ACTOR_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e,   // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_ROTEN_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObj_Roten_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_OBJ_ROTEN_e,
+    /* Actor SubMtd */ &daObj_Roten_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

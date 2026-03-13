@@ -119,7 +119,7 @@ int daObjLv4PRwall_c::Create() {
 static void* searchObjSwTurn(void* i_actor, void* i_data) {
     daObjSwTurn_c* swturn = (daObjSwTurn_c*)i_actor;
     daObjLv4PRwall_c* prwall = (daObjLv4PRwall_c*)i_data;
-    if (swturn != NULL && fopAcM_IsActor(swturn) && fopAcM_GetProfName(swturn) == PROC_Obj_SwTurn) {
+    if (swturn != NULL && fopAcM_IsActor(swturn) && fopAcM_GetProfName(swturn) == fpcNm_Obj_SwTurn_e) {
         if (swturn->getSwNo() == prwall->getSwNo()) {
             return i_actor;
         }
@@ -303,18 +303,18 @@ static actor_method_class daObjLv4PRwall_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_Lv4PRwall = {
-  fpcLy_CURRENT_e,          // mLayerID
-  3,                        // mListID
-  fpcPi_CURRENT_e,          // mListPrio
-  PROC_Obj_Lv4PRwall,       // mProcName
-  &g_fpcLf_Method.base,    // sub_method
-  sizeof(daObjLv4PRwall_c), // mSize
-  0,                        // mSizeOther
-  0,                        // mParameters
-  &g_fopAc_Method.base,     // sub_method
-  672,                      // mPriority
-  &daObjLv4PRwall_METHODS,  // sub_method
-  0x00040100,               // mStatus
-  fopAc_ACTOR_e,            // mActorType
-  fopAc_CULLBOX_CUSTOM_e,   // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Lv4PRwall_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjLv4PRwall_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Lv4PRwall_e,
+    /* Actor SubMtd */ &daObjLv4PRwall_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

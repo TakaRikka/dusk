@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_tag_escape.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 int daTagEscape_c::create() {
     fopAcM_ct(this, daTagEscape_c);
@@ -34,18 +34,18 @@ static actor_method_class l_daTagEscape_Method = {
 };
 
 actor_process_profile_definition g_profile_Tag_Escape = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_Tag_Escape,
-    &g_fpcLf_Method.base,
-    sizeof(daTagEscape_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    397,
-    &l_daTagEscape_Method,
-    0x40000,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tag_Escape_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daTagEscape_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Tag_Escape_e,
+    /* Actor SubMtd */ &l_daTagEscape_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

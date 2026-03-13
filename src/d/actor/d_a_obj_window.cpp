@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_window.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "f_pc/f_pc_name.h"
 
 static char* l_arcName = "J_KazeD";
 
@@ -178,18 +178,18 @@ static actor_method_class daObjWindow_METHODS = {
 };
 
 actor_process_profile_definition g_profile_Obj_Window = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Obj_Window,
-    &g_fpcLf_Method.base,
-    sizeof(daObjWindow_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x1EB,
-    &daObjWindow_METHODS,
-    0x40100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Window_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjWindow_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Window_e,
+    /* Actor SubMtd */ &daObjWindow_METHODS,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

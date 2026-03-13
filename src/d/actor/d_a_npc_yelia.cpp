@@ -642,7 +642,7 @@ BOOL daNpc_Yelia_c::checkChangeEvt() {
             if (dComIfGp_evmng_ChkPresentEnd()) {
                 mPreItemNo = dComIfGp_event_getPreItemNo();
                 if (mType == TYPE_WOOD_STATUE && daNpcT_chkEvtBit(0x11f)
-                    && mPreItemNo == fpcNm_ITEM_IRIAS_PENDANT)
+                    && mPreItemNo == dItemNo_IRIAS_PENDANT_e)
                 {
                     if (mPendantTimer >= 70) {
                         dStage_changeScene(10, 0.0f, 0, fopAcM_GetRoomNo(this), 0,
@@ -663,7 +663,7 @@ BOOL daNpc_Yelia_c::checkChangeEvt() {
                     mPendantTimer++;
                 }
                 else if (mType == TYPE_KAKARIKO && !daNpcT_chkEvtBit(0x11f)
-                    && mPreItemNo == fpcNm_ITEM_WOOD_STATUE)
+                    && mPreItemNo == dItemNo_WOOD_STATUE_e)
                 {
                     mEvtNo = EVENT_TAKE_WOODSTATUE;
                     evtChange();
@@ -749,23 +749,23 @@ void daNpc_Yelia_c::srchActors() {
     switch (mType) {
     case TYPE_KAKARIKO:
         if (mActorMngr[2].getActorP() == NULL) {
-            mActorMngr[2].entry(getNearestActorP(PROC_NPC_GRD));
+            mActorMngr[2].entry(getNearestActorP(fpcNm_NPC_GRD_e));
         }
         if (mActorMngr[3].getActorP() == NULL) {
-            mActorMngr[3].entry(getNearestActorP(PROC_NPC_GRZ));
+            mActorMngr[3].entry(getNearestActorP(fpcNm_NPC_GRZ_e));
         }
         break;
     case TYPE_TWILIGHT:
         if (mActorMngr[0].getActorP() == NULL) {
-            mActorMngr[0].entry(getNearestActorP(PROC_NPC_THE));
+            mActorMngr[0].entry(getNearestActorP(fpcNm_NPC_THE_e));
         }
         if (mActorMngr[1].getActorP() == NULL) {
-            mActorMngr[1].entry(getNearestActorP(PROC_NPC_ZRC));
+            mActorMngr[1].entry(getNearestActorP(fpcNm_NPC_ZRC_e));
         }
         break;
     case TYPE_AFTER_ESCORT:
         if (mActorMngr[1].getActorP() == NULL) {
-            mActorMngr[1].entry(getNearestActorP(PROC_NPC_KOLINB));
+            mActorMngr[1].entry(getNearestActorP(fpcNm_NPC_KOLINB_e));
         }
         break;
     case TYPE_HORSE:
@@ -817,9 +817,9 @@ void daNpc_Yelia_c::action() {
 }
 
 void daNpc_Yelia_c::beforeMove() {
-    fopAcM_OffStatus(this, 0x8000000);
+    fopAcM_OffStatus(this, fopAcStts_UNK_0x8000000_e);
     if (checkHide()) {
-        fopAcM_OnStatus(this, 0x8000000);
+        fopAcM_OnStatus(this, fopAcStts_UNK_0x8000000_e);
     }
     if (checkHide() || mNoDraw) {
         attention_info.flags = 0;
@@ -1193,7 +1193,7 @@ BOOL daNpc_Yelia_c::cutTakeWoodStatue(int i_staffId) {
             if (prm == 13) {
                 if (mItemId == fpcM_ERROR_PROCESS_ID_e) {
                     mItemId = fopAcM_createItemForPresentDemo(&current.pos,
-                        fpcNm_ITEM_WOOD_STATUE, 9, -1, fopAcM_GetRoomNo(this), &mCurAngle, &scale);
+                        dItemNo_WOOD_STATUE_e, 9, -1, fopAcM_GetRoomNo(this), &mCurAngle, &scale);
                 }
                 if (fopAcM_SearchByID(mItemId, (fopAc_ac_c**)&item)
                                         && item != NULL && fopAc_IsActor(item)) {
@@ -1589,18 +1589,18 @@ static actor_method_class daNpc_Yelia_MethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_YELIA = {
-  fpcLy_CURRENT_e,          // mLayerID
-  7,                        // mListID
-  fpcPi_CURRENT_e,          // mListPrio
-  PROC_NPC_YELIA,           // mProcName
-  &g_fpcLf_Method.base,    // sub_method
-  sizeof(daNpc_Yelia_c),    // mSize
-  0,                        // mSizeOther
-  0,                        // mParameters
-  &g_fopAc_Method.base,     // sub_method
-  379,                      // mPriority
-  &daNpc_Yelia_MethodTable, // sub_method
-  0x00040108,               // mStatus
-  fopAc_NPC_e,              // mActorType
-  fopAc_CULLBOX_CUSTOM_e,   // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_YELIA_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daNpc_Yelia_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_NPC_YELIA_e,
+    /* Actor SubMtd */ &daNpc_Yelia_MethodTable,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_CULL_e | fopAcStts_UNK_0x8_e,
+    /* Group        */ fopAc_NPC_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

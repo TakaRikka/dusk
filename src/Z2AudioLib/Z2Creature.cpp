@@ -158,11 +158,12 @@ void Z2Creature::stopAnime() {
 }
 
 Z2SoundHandlePool* Z2Creature::startCreatureSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
+    Z2SoundHandlePool* handle;
     switch (soundID) {
     case Z2SE_KOSARU_V_KAGO_WAIT:
         return mSoundObjSimple1.startSound(soundID, mapinfo, 0);
     default:
-        Z2SoundHandlePool* handle = mSoundObjAnime.startSound(soundID, mapinfo, reverb);
+        handle = mSoundObjAnime.startSound(soundID, mapinfo, reverb);
         if (handle != NULL && *handle) {
             switch (soundID) {
             case Z2SE_FAIRY_S_FLY:
@@ -181,12 +182,13 @@ Z2SoundHandlePool* Z2Creature::startCreatureSound(JAISoundID soundID, u32 mapinf
 Z2SoundHandlePool* Z2Creature::startCreatureSoundLevel(JAISoundID soundID, u32 mapinfo, s8 reverb) {
     DUSK_AUDIO_SKIP(NULL);
 
+    Z2SoundHandlePool* handle;
     switch (soundID) {
     case Z2SE_FAIRY_S_LV:
         Z2GetAudioMgr()->seStartLevel(soundID, mpPos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
         return NULL;
     default:
-        Z2SoundHandlePool* handle = mSoundObjAnime.startLevelSound(soundID, mapinfo, reverb);
+        handle = mSoundObjAnime.startLevelSound(soundID, mapinfo, reverb);
         if (handle != NULL && *handle) {
             if (soundID == Z2SE_YM_SNOBO_RIDE || soundID == Z2SE_YW_SNOBO_RIDE) {
                 f32 volume = 0.0f;
@@ -252,7 +254,7 @@ Z2SoundHandlePool* Z2Creature::startCreatureVoiceLevel(JAISoundID soundID, s8 re
         }
     }
 
-    return mSoundObjSimple1.startLevelSound((u32)soundID, 0, reverb);
+    return mSoundObjSimple1.startLevelSound(soundID, 0, reverb);
 }
 
 Z2SoundHandlePool* Z2Creature::startCreatureExtraSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
@@ -300,10 +302,10 @@ void Z2CreatureCitizen::setMdlType(s8 param_0, bool param_1, bool param_2) {
 
     if (param_0 == 0) {
         field_0xa1 = data_80451358;
-        data_80451358 = !data_80451358 ? 1 : 0;
+        data_80451358 = !data_80451358 ? (s8)1 : (s8)0;
     } else if (param_0 == 1) {
         field_0xa1 = data_80451359;
-        data_80451359 = !data_80451359 ? 1 : 0;
+        data_80451359 = !data_80451359 ? (s8)1 : (s8)0;
     }
 }
 
@@ -457,8 +459,9 @@ Z2SoundHandlePool* Z2CreatureEnemy::startCreatureSoundLevel(JAISoundID soundID, 
 
     switch (mEnemyID) {
     case Z2_ENEMY_FZ:
+        f32 volume; // force extra b instruction on debug by declaring this in the switch scope
         if (handle != NULL && *handle && soundID == Z2SE_EN_FZ_MOVE) {
-            f32 volume = Z2Calc::getParamByExp(mapinfo, 1.0f, 50.0f, 0.4f, 0.1f, 1.1f,
+            volume = Z2Calc::getParamByExp(mapinfo, 1.0f, 50.0f, 0.4f, 0.1f, 1.1f,
                                                Z2Calc::CURVE_POSITIVE);
             (*handle)->getAuxiliary().moveVolume(volume, 0);
         }
@@ -611,7 +614,6 @@ Z2SoundHandlePool* Z2CreatureEnemy::startCreatureExtraSoundLevel(JAISoundID soun
 }
 
 Z2SoundHandlePool* Z2CreatureEnemy::startCollisionSE(u32 hitID, u32 mapinfo) {
-    u8 var1;
     switch (mEnemyID) {
     case Z2_ENEMY_WS:
         field_0xa3 = 1;
@@ -637,14 +639,15 @@ Z2SoundHandlePool* Z2CreatureEnemy::startCollisionSE(u32 hitID, u32 mapinfo) {
             Z2GetSeqMgr()->onEnemyDamage();
             break;
         case 0x20:
-        case 0x24:
+        case 0x24: {
             field_0xa3 = 1;
-            var1 = Z2Param::ENDING_BLOW_VOL_LOWER_TIME;
+            u8 var1 = Z2Param::ENDING_BLOW_VOL_LOWER_TIME;
             if (hitID == Z2SE_HIT_SWORD || hitID == Z2SE_HIT_SWORD_STAB || hitID == Z2SE_HIT_WOLFBITE) {
                 var1 = 20;
             }
             Z2GetSeqMgr()->setBattleLastHit(var1);
             break;
+        }
         case 0x21:
             if (mEnemyID == Z2_ENEMY_HB) {
                 field_0xa3 = 1;
@@ -727,7 +730,7 @@ void Z2SoundObjBeeGroup::playBeeGroupSound(JAISoundID soundID, u8 param_1) {
         break;
     }
 
-    Z2SoundHandlePool* handle1 = startLevelSound((u32)soundID, 0, -1);
+    Z2SoundHandlePool* handle1 = startLevelSound(soundID, 0, -1);
     Z2SoundHandlePool* handle2 = startLevelSound(sound_id2, 0, -1);
 
     if (handle1 != NULL && *handle1 != false) {
@@ -794,18 +797,27 @@ Z2SoundHandlePool* Z2CreatureFM::startChainSound(JAISoundID soundID, u8 param_1,
 
 Z2SoundHandlePool* Z2CreatureFM::startChainSoundLevel(JAISoundID soundID, u8 param_1, f32 param_2,
                                                       u32 mapinfo, s8 reverb) {
-    Z2SoundHandlePool* handle;
     f32 pitch;
+    f32 var_f30;
+    f32 var_f28;
+    f32 var_f27 = 0.7f;
+    f32 sp20 = 7.0f;
+    f32 sp1C = 5.0f;
+    var_f30 = 0.0f;
+    Z2SoundHandlePool* handle = NULL;
     switch (param_1) {
     case 0:
         handle = field_0xa4.startLevelSound(soundID, mapinfo, reverb);
         if (handle != NULL && *handle) {
             if (param_2 > 30.0f) {
+                var_f28 = 1.0f;
                 pitch = 1.06f;
             } else {
+                var_f28 = (param_2 * 7.0f) / 100.0f;
                 pitch = (param_2 * 5.0f) / 100.0f;
             }
-            pitch += Z2Calc::getRandom(0.03f, 1.0f, 0.5f) + 0.7f;
+            var_f30 = Z2Calc::getRandom(0.03f, 1.0f, 0.5f);
+            pitch += var_f27 + var_f30;
             if (pitch > 1.06f) {
                 pitch = 1.06f;
             }
@@ -817,11 +829,14 @@ Z2SoundHandlePool* Z2CreatureFM::startChainSoundLevel(JAISoundID soundID, u8 par
         handle = field_0xa4.startLevelSound(soundID, mapinfo, reverb);
         if (handle != NULL && *handle) {
             if (param_2 > 30.0f) {
+                var_f28 = 1.0f;
                 pitch = 1.06f;
             } else {
+                var_f28 = (param_2 * 7.0f) / 100.0f;
                 pitch = (param_2 * 5.0f) / 100.0f;
             }
-            pitch += Z2Calc::getRandom(0.03f, 1.0f, 0.5f) + 0.5f;
+            var_f30 = Z2Calc::getRandom(0.03f, 1.0f, 0.5f);
+            pitch += var_f27 - 0.2f + var_f30;
             if (pitch > 1.06f) {
                 pitch = 1.06f;
             }
@@ -833,9 +848,8 @@ Z2SoundHandlePool* Z2CreatureFM::startChainSoundLevel(JAISoundID soundID, u8 par
         return field_0xe4.startLevelSound(soundID, mapinfo, reverb);
     case 3:
         return field_0x104.startLevelSound(soundID, mapinfo, reverb);
-    default:
-        return NULL;
     }
+    return NULL;
 }
 
 void Z2CreatureGob::init(Vec* animePosPtr, Vec* simplePosPtr, Vec* simple2PosPtr, u8 animeHandleNum, u8 simpleHandleNum,

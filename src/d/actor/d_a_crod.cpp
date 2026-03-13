@@ -221,15 +221,15 @@ int daCrod_c::execute() {
                 fopAc_ac_c* hit_ac = mAtCps.GetAtHitAc();
 
                 if (player->checkCopyRodEquip() && hit_ac != NULL &&
-                    (fopAcM_GetName(hit_ac) == PROC_CSTATUE ||
-                     fopAcM_GetName(hit_ac) == PROC_CSTAF))
+                    (fopAcM_GetName(hit_ac) == fpcNm_CSTATUE_e ||
+                     fopAcM_GetName(hit_ac) == fpcNm_CSTAF_e))
                 {
                     fopAcM_SetParam(this, 4);
                     mControllActorKeep.setData(hit_ac);
                     mCameraActorKeep.setData(hit_ac);
 
                     u16 anm_id;
-                    if (fopAcM_GetName(hit_ac) == PROC_CSTATUE &&
+                    if (fopAcM_GetName(hit_ac) == fpcNm_CSTATUE_e &&
                         static_cast<daCstatue_c*>(hit_ac)->checkBossType())
                     {
                         anm_id = ANM_WAIT_C;
@@ -322,7 +322,7 @@ int daCrod_c::execute() {
 
             if (fopAcM_GetParam(this) == 4) {
                 fopAc_ac_c* control_actor = mControllActorKeep.getActor();
-                if (fopAcM_GetName(control_actor) == PROC_CSTATUE) {
+                if (fopAcM_GetName(control_actor) == fpcNm_CSTATUE_e) {
                     current.pos = static_cast<daCstatue_c*>(control_actor)->getBallPos();
                 } else {
                     current.pos = static_cast<daCstaF_c*>(control_actor)->getBallPos();
@@ -383,18 +383,18 @@ static actor_method_class l_daCrod_Method = {
 };
 
 actor_process_profile_definition g_profile_CROD = {
-    fpcLy_CURRENT_e,
-    8,
-    fpcPi_CURRENT_e,
-    PROC_CROD,
-    &g_fpcLf_Method.base,
-    sizeof(daCrod_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    688,
-    &l_daCrod_Method,
-    0x60000,
-    5,
-    fopAc_CULLBOX_0_e,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 8,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_CROD_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daCrod_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_CROD_e,
+    /* Actor SubMtd */ &l_daCrod_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_NOPAUSE_e,
+    /* Group        */ fopAc_UNK_GROUP_5_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

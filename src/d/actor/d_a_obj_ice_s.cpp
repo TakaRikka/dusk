@@ -123,7 +123,7 @@ static void rideCallBack(dBgW* param_1, fopAc_ac_c* param_2, fopAc_ac_c* param_3
     cXyz* pBallCenter = player->getIronBallCenterPos();
 
     // !@bug misplaced ! operator. This condition is probably always false
-    if (!fopAcM_GetName(param_3) == PROC_ALINK) {
+    if (!fopAcM_GetName(param_3) == fpcNm_ALINK_e) {
         ice->field_0x5d8 = 0x100;
         ice->field_0x5a4 = -1.0f;
         ice->field_0x5ac = 0x500;
@@ -147,7 +147,7 @@ static void rideCallBack(dBgW* param_1, fopAc_ac_c* param_2, fopAc_ac_c* param_3
         ice->field_0x5ac = 0x1000;
         ice->Check_RideOn(*playerPos);
     }
-    if (ice->field_0x5c5 == 0xff && fopAcM_GetName(param_3) == PROC_ALINK) {
+    if (ice->field_0x5c5 == 0xff && fopAcM_GetName(param_3) == fpcNm_ALINK_e) {
         ice->field_0x5d8 = 0x300;
         ice->field_0x5a4 = -11.0f;
         ice->field_0x5ac = 0x1000;
@@ -201,7 +201,7 @@ int daObjIce_s_c::create() {
         field_0x5c4 = 1;
     }
     if (field_0x5c4 != 0) {
-        if (dComIfGs_getCollectSmell() == fpcNm_ITEM_SMELL_FISH) {
+        if (dComIfGs_getCollectSmell() == dItemNo_SMELL_FISH_e) {
             field_0x5c5 = 1;
         } else {
             field_0x5c5 = 0xff;
@@ -301,18 +301,18 @@ static actor_method_class l_daObjIce_s_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Ice_s = {
-  fpcLy_CURRENT_e,        // mLayerID
-  3,                      // mListID
-  fpcPi_CURRENT_e,        // mListPrio
-  PROC_Obj_Ice_s,         // mProcName
-  &g_fpcLf_Method.base,  // sub_method
-  sizeof(daObjIce_s_c),   // mSize
-  0,                      // mSizeOther
-  0,                      // mParameters
-  &g_fopAc_Method.base,   // sub_method
-  457,                    // mPriority
-  &l_daObjIce_s_Method,   // sub_method
-  0x00044180,             // mStatus
-  fopAc_ACTOR_e,          // mActorType
-  fopAc_CULLBOX_CUSTOM_e, // cullType
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 3,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ice_s_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daObjIce_s_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_Obj_Ice_s_e,
+    /* Actor SubMtd */ &l_daObjIce_s_Method,
+    /* Status       */ fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e | fopAcStts_NOEXEC_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
