@@ -38,7 +38,11 @@ static int daObj_Sw_Draw(obj_sw_class* i_this) {
                     mDoExt_modelUpdateDL(i_this->field_0x8c8);
                 }
             }
+            #if TARGET_PC
+            sc_p++;
+            #else
             sc_p = (obj_sc_s*)((s8*)sc_p + 100);
+            #endif
         }
     } else {
         g_env_light.settingTevStruct(16, &a_this->current.pos, &a_this->tevStr);
@@ -226,7 +230,11 @@ static void sc_build(obj_sw_class* i_this) {
             sc_p->field_0x35 = 1;
         }
 
+        #if TARGET_PC
+        sc_p++;
+        #else
         sc_p = (obj_sc_s*)((s8*)sc_p + 100);
+        #endif
     }
 }
 
