@@ -1018,6 +1018,11 @@ int dDlst_shadowPoly_c::set(cBgD_Vtx_t* i_vtx, u16 param_1, u16 param_2, u16 par
 
 
 void dDlst_shadowPoly_c::draw() {
+#if TARGET_PC
+    if (mCount == 0)
+        return;
+#endif
+
     dDlst_shadowTri_c* tri = getTri();
 
     GXBegin(GX_TRIANGLES, GX_VTXFMT0, mCount * 3);
