@@ -72,8 +72,8 @@ static u8 l_flowerNormal[180] = {
     0x46, 0x54, 0x0D, 0x3C, 0x4B, 0xEE, 0x80, 0x3F, 0x7F, 0xF5, 0xF9, 0x3C, 0x49, 0x81, 0xBF,
 };
 
-static u8 l_flowerColor[8] = {
-    0xFF, 0xFF, 0xFF, 0xFF, 0xB2, 0xB2, 0xB2, 0xFF,
+static GXColor l_flowerColor[2] = {
+    {0xFF, 0xFF, 0xFF, 0xFF}, {0xB2, 0xB2, 0xB2, 0xFF}
 };
 
 static u8 l_flowerTexCoord[] = {
@@ -213,8 +213,8 @@ static u8 l_flowerNormal2[288] = {
     0x3B, 0x76, 0x7B, 0x1C, 0x3B, 0x99, 0x6B, 0x76, 0x3F, 0x7F, 0xF5, 0xF9, 0xBC, 0x8A, 0x1D, 0xFC,
 };
 
-static u8 l_flowerColor2[8] = {
-    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xB2, 0xFF,
+static GXColor l_flowerColor2[2] = {
+    {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xB2, 0xFF}
 };
 
 static u8 l_flowerTexCoord2[] = {
@@ -526,6 +526,13 @@ dFlower_packet_c::dFlower_packet_c() {
         for (int i = 0; i < (ARRAY_SIZE(l_flowerTexCoord2) / sizeof(Vec)); i++) {
             be_swap(((Vec*)l_flowerTexCoord2)[i]);
         }
+        for (int i = 0; i < (ARRAY_SIZE(l_flowerNormal) / sizeof(Vec)); i++) {
+            be_swap(((Vec*)l_flowerNormal)[i]);
+        }
+        for (int i = 0; i < (ARRAY_SIZE(l_flowerNormal2) / sizeof(Vec)); i++) {
+            be_swap(((Vec*)l_flowerNormal2)[i]);
+        }
+        
         initialized = true;
     }
 #endif
