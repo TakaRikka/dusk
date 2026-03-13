@@ -20,7 +20,7 @@ JUTTexture::~JUTTexture() {
 void JUTTexture::storeTIMG(ResTIMG const* param_0, u8 param_1) {
     if (param_0 && param_1 < 0x10) {
         mTexInfo = param_0;
-        u32 imgOffset = mTexInfo->imageOffset;
+        s32 imgOffset = mTexInfo->imageOffset;
         mTexData = (void*)((intptr_t)mTexInfo + imgOffset);
 
         if (mTexInfo->imageOffset == 0) {
@@ -145,7 +145,7 @@ void JUTTexture::init() {
 void JUTTexture::initTexObj() {
     GXBool mipmapEnabled = mTexInfo->mipmapEnabled != 0 ? GX_TRUE : GX_FALSE;
     u8* image = ((u8*)mTexInfo);
-    u32 imgOffset = mTexInfo->imageOffset;
+    s32 imgOffset = mTexInfo->imageOffset;
     image += (imgOffset ? imgOffset : 0x20);
 #ifdef TARGET_PC
     mTexObj.reset();
@@ -162,7 +162,7 @@ void JUTTexture::initTexObj(GXTlut param_0) {
     GXBool mipmapEnabled = mTexInfo->mipmapEnabled != 0 ? GX_TRUE : GX_FALSE;
     mTlutName = param_0;
     u8* image = ((u8*)mTexInfo);
-    u32 imgOffset = mTexInfo->imageOffset;
+    s32 imgOffset = mTexInfo->imageOffset;
     DuskLog.debug("initTexObj: Offset={}, W={}, H={}, Ptr={}", imgOffset, (u16)mTexInfo->width,
            (u16)mTexInfo->height,
            (void*)mTexInfo);
