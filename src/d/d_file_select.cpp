@@ -5186,8 +5186,15 @@ dFile_select3D_c::~dFile_select3D_c() {
 void dFile_select3D_c::_create(u8 i_mirrorIdx, u8 i_maskIdx) {
     JKRHeap* ppHeap;
 
-    mpSolidHeap = mDoExt_createSolidHeapFromGameToCurrent(&ppHeap, 0x25800, 32);
-    JUT_ASSERT(8680, mpSolidHeap != NULL);
+#if TARGET_PC
+    constexpr u32 file_select_heap_size = 0x80000;
+#else
+    constexpr u32 file_select_heap_size = 0x25800;
+#endif
+    mpSolidHeap = mDoExt_createSolidHeapFromGameToCurrent(&ppHeap, file_select_heap_size, 32);
+    if (mpSolidHeap == NULL) {
+        JUT_ASSERT(5189, mpSolidHeap != NULL);
+    }
 
     field_0x03c4 = 0.0f;
     field_0x03c8 = 0.0f;
@@ -5263,47 +5270,70 @@ void dFile_select3D_c::setJ3D(char const* param_0, char const* param_1, char con
     J3DModelData* modelData;
 
     archive = dComIfGp_getCollectResArchive();
+    JUT_ASSERT(5267, archive != NULL);
+
+    auto make_work_copy = [this, archive](void* src_res) -> void* {
+        JUT_ASSERT(5271, src_res != NULL);
+
+        u32 res_size = archive->getResSize(src_res);
+        JUT_ASSERT(5274, res_size != 0);
+
+        void* dst_res = JKRAllocFromHeap(mpSolidHeap, res_size, 0x20);
+        JUT_ASSERT(5277, dst_res != NULL);
+
+        std::memcpy(dst_res, src_res, res_size);
+        return dst_res;
+    };
 
     bmdRes = archive->getResource('BMD ', param_0);
-    modelData = J3DModelLoaderDataBase::load(bmdRes, 0x51020010);
-    JUT_ASSERT(8823, modelData != NULL);
+    JUT_ASSERT(5285, bmdRes != NULL);
+
+    void* bmdWork = make_work_copy(bmdRes);
+    modelData = J3DModelLoaderDataBase::load(bmdWork, 0x51020010);
+    JUT_ASSERT(5290, modelData != NULL);
 
     for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
         material = JKR_NEW J3DMaterialAnm();
+        JUT_ASSERT(5294, material != NULL);
         modelData->getMaterialNodePointer(i)->change();
         modelData->getMaterialNodePointer(i)->setMaterialAnm(material);
     }
 
     mpModel = JKR_NEW J3DModel(modelData, 0, 1);
-    JUT_ASSERT(8836, mpModel != NULL);
+    JUT_ASSERT(5300, mpModel != NULL);
 
     if (param_1) {
         bckRes = archive->getResource('BCK ', param_1);
-        anmBase = (J3DAnmTransform*)J3DAnmLoaderDataBase::load(bckRes);
-        JUT_ASSERT(8846, anmBase != NULL);
+        JUT_ASSERT(5304, bckRes != NULL);
+
+        void* bckWork = make_work_copy(bckRes);
+        anmBase = (J3DAnmTransform*)J3DAnmLoaderDataBase::load(bckWork);
+        JUT_ASSERT(5308, anmBase != NULL);
 
         mBckAnm = JKR_NEW mDoExt_bckAnm();
-        if (mBckAnm == NULL || !mBckAnm->init((J3DAnmTransform*)anmBase, 1, 2, 1.0f, 0, -1, false))
-        {
-            return;
-        }
+        JUT_ASSERT(5311, mBckAnm != NULL);
+
+        BOOL bckOk = mBckAnm->init((J3DAnmTransform*)anmBase, 1, 2, 1.0f, 0, -1, false);
+        JUT_ASSERT(5314, bckOk);
     }
 
     if (param_2) {
         brkRes = archive->getResource('BRK ', param_2);
-        anmBase = (J3DAnmTevRegKey*)J3DAnmLoaderDataBase::load(brkRes);
-        JUT_ASSERT(8859, anmBase != NULL);
+        JUT_ASSERT(5319, brkRes != NULL);
+
+        void* brkWork = make_work_copy(brkRes);
+        anmBase = (J3DAnmTevRegKey*)J3DAnmLoaderDataBase::load(brkWork);
+        JUT_ASSERT(5323, anmBase != NULL);
+
         ((J3DAnmTevRegKey*)anmBase)->searchUpdateMaterialID(modelData);
 
         mBrkAnm = JKR_NEW mDoExt_brkAnm();
-        if (mBrkAnm == NULL ||
-            !mBrkAnm->init(modelData, (J3DAnmTevRegKey*)anmBase, -1, 2, 1.0f, 0, -1))
-        {
-            return;
-        }
+        JUT_ASSERT(5328, mBrkAnm != NULL);
+
+        BOOL brkOk = mBrkAnm->init(modelData, (J3DAnmTevRegKey*)anmBase, -1, 2, 1.0f, 0, -1);
+        JUT_ASSERT(5331, brkOk);
     }
 }
-
 void dFile_select3D_c::set_mtx() {
     cXyz stack_8;
     f32 tmp = mPane->getScaleX();
@@ -5375,7 +5405,9 @@ void dFile_select3D_c::createMaskModel() {
     if (mMaskIdx == 0) {
         return;
     }
+
     setJ3D("md_mask_UI.bmd", bck_name[mMaskIdx - 1], brk_name[mMaskIdx - 1]);
+
     switch (mMaskIdx) {
     case 1:
         mpModel->getModelData()->getMaterialNodePointer(0)->getShape()->hide();
@@ -5388,7 +5420,6 @@ void dFile_select3D_c::createMaskModel() {
         mpModel->getModelData()->getMaterialNodePointer(7)->getShape()->hide();
     }
 }
-
 void dFile_select3D_c::createMirrorModel() {
     const static f32 m_mirror_offset_x[5] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
     const static f32 m_mirror_offset_y[5] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
@@ -5417,7 +5448,9 @@ void dFile_select3D_c::createMirrorModel() {
     if (mMirrorIdx == 0) {
         return;
     }
+
     setJ3D("kageri_mirrer_UI.bmd", bck_name[mMirrorIdx - 1], brk_name[mMirrorIdx - 1]);
+
     switch (mMirrorIdx) {
     case 1:
         mpModel->getModelData()->getMaterialNodePointer(4)->getShape()->hide();
@@ -5436,7 +5469,6 @@ void dFile_select3D_c::createMirrorModel() {
         mpModel->getModelData()->getMaterialNodePointer(15)->getShape()->hide();
     }
 }
-
 #pragma push
 #pragma optimization_level 2
 void dFile_select3D_c::toItem3Dpos(f32 param_0, f32 param_1, f32 param_2, cXyz* param_3) {
@@ -5459,3 +5491,4 @@ void dFile_select3D_c::calcViewMtx(Mtx param_0) {
     cXyz pos2(0.0f, 1.0f, 0.0f);
     cMtx_lookAt(param_0, &pos1, &cXyz::Zero, &pos2, 0);
 }
+
