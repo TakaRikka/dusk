@@ -321,8 +321,8 @@ void TObject_hermite::prepare_data_(const data::TParse_TParagraph::TData& rData,
     ASSERT(pContent != NULL);
 
 #if TARGET_PC
-    u32 u = BE<u32>::swap(pContent->_0 & 0xFFFFFFF);
-    u32 uSize = BE<u32>::swap(pContent->_0 >> 0x1C);
+    u32 u = (pContent->_0 & 0xFFFFFFF);
+    u32 uSize = (pContent->_0 >> 0x1C);
     endianSwapListData(pContent->_4, u * uSize);
     fnValue.data_set(pContent->_4, u, uSize);
 #else
