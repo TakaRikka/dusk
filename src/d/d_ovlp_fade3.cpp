@@ -104,6 +104,20 @@ void dOvlpFd3_dlst_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB8, 0);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+
+    #if TARGET_PC
+    GXPosition2s16(-FB_WIDTH / 2, FB_HEIGHT / 2);
+    GXTexCoord2s8(0, 0);
+
+    GXPosition2s16(FB_WIDTH / 2, FB_HEIGHT / 2);
+    GXTexCoord2s8(1, 0);
+
+    GXPosition2s16(FB_WIDTH / 2, -FB_HEIGHT / 2);
+    GXTexCoord2s8(1, 1);
+
+    GXPosition2s16(-FB_WIDTH / 2, -FB_HEIGHT / 2);
+    GXTexCoord2s8(0, 1);
+    #else
     GXPosition2s16(-mDoGph_gInf_c::getWidth() / 2, mDoGph_gInf_c::getHeight() / 2);
     GXTexCoord2s8(0, 0);
 
@@ -115,6 +129,8 @@ void dOvlpFd3_dlst_c::draw() {
 
     GXPosition2s16(-mDoGph_gInf_c::getWidth() / 2, -mDoGph_gInf_c::getHeight() / 2);
     GXTexCoord2s8(0, 1);
+    #endif
+
     GXEnd();
 
     J2DOrthoGraph* graf_ctx = (J2DOrthoGraph*)dComIfGp_getCurrentGrafPort();
