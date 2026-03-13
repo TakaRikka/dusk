@@ -449,6 +449,31 @@ dGrass_packet_c::dGrass_packet_c() {
     mp_normal = (Vec*)&l_normal;
     mp_colors = (GXColor*)l_color;
     mp_texCoords = (Vec*)l_texCoord;
+
+#if TARGET_LITTLE_ENDIAN
+    static bool initialized = false;
+    if (!initialized) {
+        for (int i = 0; i < (ARRAY_SIZE(l_pos) / sizeof(Vec)); i++) {
+            be_swap(mp_pos[i]);
+        }
+        for (int i = 0; i < (ARRAY_SIZE(l_texCoord) / sizeof(Vec)); i++) {
+            be_swap(mp_texCoords[i]);
+        }
+
+        initialized = true;
+    }
+#endif
+
+#if TARGET_PC
+    GXInitTexObj(&mTexObj_l_M_kusa05_RGBATEX, l_M_kusa05_RGBATEX,
+        l_M_kusa05_RGBATEX__width, l_M_kusa05_RGBATEX__height, GX_TF_RGB5A3, GX_REPEAT, GX_CLAMP, GX_FALSE
+    );
+
+    GXInitTexObj(&mTexObj_l_M_Hijiki00TEX, l_M_Hijiki00TEX,
+        l_M_Hijiki00TEX__width, l_M_Hijiki00TEX__height, GX_TF_RGB5A3, GX_REPEAT, GX_CLAMP, GX_FALSE
+    );
+#endif
+
     mp_kusa9q_DL = l_kusa9q_matDL;
     m_kusa9q_DL_size = 0xA0;
     mp_kusa9q_14_DL = l_kusa9q_l4_matDL;
@@ -593,12 +618,18 @@ void dGrass_packet_c::draw() {
             }
 
             if (var_r29->field_0x05 <= 3 || var_r29->field_0x05 >= 10) {
+#if TARGET_PC
+                GXLoadTexObj(&mTexObj_l_M_kusa05_RGBATEX, GX_TEXMAP0);
+#endif
                 if (sp48 <= 3) {
                     GXCallDisplayList(mp_kusa9q_14_DL, m_kusa9q_DL_14_size);
                 } else {
                     GXCallDisplayList(mp_kusa9q_DL, m_kusa9q_DL_size);
                 }
             } else {
+#if TARGET_PC
+                GXLoadTexObj(&mTexObj_l_M_Hijiki00TEX, GX_TEXMAP0);
+#endif
                 GXCallDisplayList(l_Tengusa_matDL, 0xA0);
             }
 
