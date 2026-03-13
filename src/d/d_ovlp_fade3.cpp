@@ -13,7 +13,11 @@
 #include "m_Do/m_Do_graphic.h"
 
 void dDlst_snapShot_c::draw() {
+    #if TARGET_PC
+    GXSetTexCopySrc(0, 0, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
+    #else
     GXSetTexCopySrc(0, 0, FB_WIDTH, FB_HEIGHT);
+    #endif
     GXSetTexCopyDst(FB_WIDTH / 2, FB_HEIGHT / 2, GX_TF_RGBA8, GX_TRUE);
     GXCopyTex(mDoGph_gInf_c::getFrameBufferTex(), GX_FALSE);
     GXPixModeSync();

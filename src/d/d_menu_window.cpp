@@ -32,7 +32,13 @@ public:
         if (getDrawFlag() == 1) {
             setDrawFlag();
             dComIfGp_onPauseFlag();
+            
+            #if TARGET_PC
+            GXSetTexCopySrc(0, 0, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
+            #else
             GXSetTexCopySrc(0, 0, FB_WIDTH, FB_HEIGHT);
+            #endif
+
             GXSetTexCopyDst(FB_WIDTH / 2, FB_HEIGHT / 2, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_ENABLE);
             GXCopyTex(mDoGph_gInf_c::getFrameBufferTex(), GX_FALSE);
             GXPixModeSync();
