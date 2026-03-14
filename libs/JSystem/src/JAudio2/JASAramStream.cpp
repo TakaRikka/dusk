@@ -442,10 +442,12 @@ void JASAramStream::updateChannel(u32 i_callbackType, JASChannel* i_channel,
     case JASChannel::CB_PLAY:
         if (i_dspChannel->mResetFlag == 0) {
             if (i_channel == mPrimaryChannel) {
+                /*
                 if (JASAudioThread::snIntCount == 1) {
                     OSReportForceEnableOn();
                     OSReport("mSamplesLeft: %08d, mAramStreamPosition: %08d\n", i_dspChannel->mSamplesLeft, i_dspChannel->mAramStreamPosition);
                 }
+                */
 
                 mChannelUpdateFlags = 0;
                 u32 adjustedSamplesLeft = i_dspChannel->mSamplesLeft + i_dspChannel->mSamplesPerBlock;
