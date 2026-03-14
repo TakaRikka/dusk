@@ -200,4 +200,6 @@ static const float INF = 2000000000.0f;
 using std::isnan;
 #endif
 
+#define CRASH(msg, ...) OSPanic(__FILE__, __LINE__, msg, __VA_ARGS__)
+
 #endif
