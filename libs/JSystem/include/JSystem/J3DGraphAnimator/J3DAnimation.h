@@ -9,9 +9,9 @@
 #include "dusk/endian.h"
 
 #if TARGET_PC
-#define OFFSET_PTR BE(u32)
+#define OFFSET_PTR_V0 BE(u32)
 #else
-#define OFFSET_PTR void*
+#define OFFSET_PTR_V0 void*
 #endif
 
 struct J3DTransformInfo;
@@ -80,7 +80,7 @@ struct J3DAnmColorKeyTable {
  */
 struct J3DAnmVtxColorIndexData {
     /* 0x00 */ BE(u16) mNum;
-    /* 0x04 */ OFFSET_PTR mpData;
+    /* 0x04 */ OFFSET_PTR_V0 mpData;
 };
 
 /**
@@ -200,13 +200,13 @@ struct J3DAnmVtxColorFullData {
     /* 0x0A */ BE(s16) mFrameMax;
     /* 0x0C */ BE(u16) mAnmTableNum[2];
     /* 0x10 */ u8 field_0x10[0x18 - 0x10];
-    /* 0x18 */ OFFSET_PTR mTableOffsets[2];
-    /* 0x20 */ OFFSET_PTR mVtxColorIndexDataOffsets[2];
-    /* 0x28 */ OFFSET_PTR mVtxColorIndexPointerOffsets[2];
-    /* 0x30 */ OFFSET_PTR mRValuesOffset;
-    /* 0x34 */ OFFSET_PTR mGValuesOffset;
-    /* 0x38 */ OFFSET_PTR mBValuesOffset;
-    /* 0x3C */ OFFSET_PTR mAValuesOffset;
+    /* 0x18 */ OFFSET_PTR_V0 mTableOffsets[2];
+    /* 0x20 */ OFFSET_PTR_V0 mVtxColorIndexDataOffsets[2];
+    /* 0x28 */ OFFSET_PTR_V0 mVtxColorIndexPointerOffsets[2];
+    /* 0x30 */ OFFSET_PTR_V0 mRValuesOffset;
+    /* 0x34 */ OFFSET_PTR_V0 mGValuesOffset;
+    /* 0x38 */ OFFSET_PTR_V0 mBValuesOffset;
+    /* 0x3C */ OFFSET_PTR_V0 mAValuesOffset;
 };  // Size = 0x40
 
 STATIC_ASSERT(sizeof(J3DAnmVtxColorFullData) == 0x40);
@@ -222,8 +222,8 @@ struct J3DAnmVisibilityFullData {
     /* 0x0A */ BE(s16) mFrameMax;
     /* 0x0C */ BE(u16) field_0xc;
     /* 0x0E */ BE(u16) field_0xe;
-    /* 0x10 */ OFFSET_PTR mTableOffset;
-    /* 0x14 */ OFFSET_PTR mValuesOffset;
+    /* 0x10 */ OFFSET_PTR_V0 mTableOffset;
+    /* 0x14 */ OFFSET_PTR_V0 mValuesOffset;
 };  // Size = 0x18
 
 STATIC_ASSERT(sizeof(J3DAnmVisibilityFullData) == 0x18);
@@ -239,10 +239,10 @@ struct J3DAnmTransformFullData {
     /* 0x0A */ BE(s16) mFrameMax;
     /* 0x0C */ BE(u16) field_0xc;
     /* 0x0E */ u8 field_0xe[0x14 - 0xe];
-    /* 0x14 */ OFFSET_PTR mTableOffset;
-    /* 0x18 */ OFFSET_PTR mScaleValOffset;
-    /* 0x1C */ OFFSET_PTR mRotValOffset;
-    /* 0x20 */ OFFSET_PTR mTransValOffset;
+    /* 0x14 */ OFFSET_PTR_V0 mTableOffset;
+    /* 0x18 */ OFFSET_PTR_V0 mScaleValOffset;
+    /* 0x1C */ OFFSET_PTR_V0 mRotValOffset;
+    /* 0x20 */ OFFSET_PTR_V0 mTransValOffset;
 };  // Size = 0x24
 
 STATIC_ASSERT(sizeof(J3DAnmTransformFullData) == 0x24);
@@ -261,13 +261,13 @@ struct J3DAnmColorKeyData {
     /* 0x12 */ BE(u16) field_0x12;
     /* 0x14 */ BE(u16) field_0x14;
     /* 0x16 */ BE(u16) field_0x16;
-    /* 0x18 */ OFFSET_PTR mTableOffset;
-    /* 0x1C */ OFFSET_PTR mUpdateMaterialIDOffset;
-    /* 0x20 */ OFFSET_PTR mNameTabOffset;
-    /* 0x24 */ OFFSET_PTR mRValOffset;
-    /* 0x28 */ OFFSET_PTR mGValOffset;
-    /* 0x2C */ OFFSET_PTR mBValOffset;
-    /* 0x30 */ OFFSET_PTR mAValOffset;
+    /* 0x18 */ OFFSET_PTR_V0 mTableOffset;
+    /* 0x1C */ OFFSET_PTR_V0 mUpdateMaterialIDOffset;
+    /* 0x20 */ OFFSET_PTR_V0 mNameTabOffset;
+    /* 0x24 */ OFFSET_PTR_V0 mRValOffset;
+    /* 0x28 */ OFFSET_PTR_V0 mGValOffset;
+    /* 0x2C */ OFFSET_PTR_V0 mBValOffset;
+    /* 0x30 */ OFFSET_PTR_V0 mAValOffset;
 };  // Size = 0x34
 
 STATIC_ASSERT(sizeof(J3DAnmColorKeyData) == 0x34);
@@ -285,26 +285,26 @@ struct J3DAnmTextureSRTKeyData {
     /* 0x0E */ BE(u16) field_0xe;
     /* 0x10 */ BE(u16) field_0x10;
     /* 0x12 */ BE(u16) field_0x12;
-    /* 0x14 */ OFFSET_PTR mTableOffset;
-    /* 0x18 */ OFFSET_PTR mUpdateMatIDOffset;
-    /* 0x1C */ OFFSET_PTR mNameTab1Offset;
-    /* 0x20 */ OFFSET_PTR mUpdateTexMtxIDOffset;
-    /* 0x24 */ OFFSET_PTR unkOffset;
-    /* 0x28 */ OFFSET_PTR mScaleValOffset;
-    /* 0x2C */ OFFSET_PTR mRotValOffset;
-    /* 0x30 */ OFFSET_PTR mTransValOffset;
+    /* 0x14 */ OFFSET_PTR_V0 mTableOffset;
+    /* 0x18 */ OFFSET_PTR_V0 mUpdateMatIDOffset;
+    /* 0x1C */ OFFSET_PTR_V0 mNameTab1Offset;
+    /* 0x20 */ OFFSET_PTR_V0 mUpdateTexMtxIDOffset;
+    /* 0x24 */ OFFSET_PTR_V0 unkOffset;
+    /* 0x28 */ OFFSET_PTR_V0 mScaleValOffset;
+    /* 0x2C */ OFFSET_PTR_V0 mRotValOffset;
+    /* 0x30 */ OFFSET_PTR_V0 mTransValOffset;
     /* 0x34 */ BE(u16) field_0x34;
     /* 0x36 */ BE(u16) field_0x36;
     /* 0x38 */ BE(u16) field_0x38;
     /* 0x3A */ BE(u16) field_0x3a;
-    /* 0x3C */ OFFSET_PTR mInfoTable2Offset;
-    /* 0x40 */ OFFSET_PTR field_0x40;
-    /* 0x44 */ OFFSET_PTR mNameTab2Offset;
-    /* 0x48 */ OFFSET_PTR field_0x48;
-    /* 0x4C */ OFFSET_PTR field_0x4c;
-    /* 0x50 */ OFFSET_PTR field_0x50;
-    /* 0x54 */ OFFSET_PTR field_0x54;
-    /* 0x58 */ OFFSET_PTR field_0x58;
+    /* 0x3C */ OFFSET_PTR_V0 mInfoTable2Offset;
+    /* 0x40 */ OFFSET_PTR_V0 field_0x40;
+    /* 0x44 */ OFFSET_PTR_V0 mNameTab2Offset;
+    /* 0x48 */ OFFSET_PTR_V0 field_0x48;
+    /* 0x4C */ OFFSET_PTR_V0 field_0x4c;
+    /* 0x50 */ OFFSET_PTR_V0 field_0x50;
+    /* 0x54 */ OFFSET_PTR_V0 field_0x54;
+    /* 0x58 */ OFFSET_PTR_V0 field_0x58;
     /* 0x5C */ BE(s32) field_0x5c;
 };  // Size = 0x60
 
@@ -321,13 +321,13 @@ struct J3DAnmVtxColorKeyData {
     /* 0x0A */ BE(s16) mFrameMax;
     /* 0x0C */ BE(u16) mAnmTableNum[2];
     /* 0x10 */ u8 field_0x10[0x18 - 0x10];
-    /* 0x18 */ OFFSET_PTR mTableOffsets[2];
-    /* 0x20 */ OFFSET_PTR mVtxColoIndexDataOffset[2];
-    /* 0x28 */ OFFSET_PTR mVtxColoIndexPointerOffset[2];
-    /* 0x30 */ OFFSET_PTR mRValOffset;
-    /* 0x34 */ OFFSET_PTR mGValOffset;
-    /* 0x38 */ OFFSET_PTR mBValOffset;
-    /* 0x3C */ OFFSET_PTR mAValOffset;
+    /* 0x18 */ OFFSET_PTR_V0 mTableOffsets[2];
+    /* 0x20 */ OFFSET_PTR_V0 mVtxColoIndexDataOffset[2];
+    /* 0x28 */ OFFSET_PTR_V0 mVtxColoIndexPointerOffset[2];
+    /* 0x30 */ OFFSET_PTR_V0 mRValOffset;
+    /* 0x34 */ OFFSET_PTR_V0 mGValOffset;
+    /* 0x38 */ OFFSET_PTR_V0 mBValOffset;
+    /* 0x3C */ OFFSET_PTR_V0 mAValOffset;
 };  // Size = 0x40
 
 STATIC_ASSERT(sizeof(J3DAnmVtxColorKeyData) == 0x40);
@@ -343,10 +343,10 @@ struct J3DAnmTexPatternFullData {
     /* 0x0A */ BE(s16) mFrameMax;
     /* 0x0C */ BE(u16) field_0xc;
     /* 0x0E */ BE(u16) field_0xe;
-    /* 0x10 */ OFFSET_PTR mTableOffset;
-    /* 0x14 */ OFFSET_PTR mValuesOffset;
-    /* 0x18 */ OFFSET_PTR mUpdateMaterialIDOffset;
-    /* 0x1C */ OFFSET_PTR mNameTabOffset;
+    /* 0x10 */ OFFSET_PTR_V0 mTableOffset;
+    /* 0x14 */ OFFSET_PTR_V0 mValuesOffset;
+    /* 0x18 */ OFFSET_PTR_V0 mUpdateMaterialIDOffset;
+    /* 0x1C */ OFFSET_PTR_V0 mNameTabOffset;
 };  // Size = 0x20
 
 STATIC_ASSERT(sizeof(J3DAnmTexPatternFullData) == 0x20);
@@ -370,20 +370,20 @@ struct J3DAnmTevRegKeyData {
     /* 0x1A */ BE(u16) field_0x1a;
     /* 0x1C */ BE(u16) field_0x1c;
     /* 0x1E */ BE(u16) field_0x1e;
-    /* 0x20 */ OFFSET_PTR mCRegTableOffset;
-    /* 0x24 */ OFFSET_PTR mKRegTableOffset;
-    /* 0x28 */ OFFSET_PTR mCRegUpdateMaterialIDOffset;
-    /* 0x2C */ OFFSET_PTR mKRegUpdateMaterialIDOffset;
-    /* 0x30 */ OFFSET_PTR mCRegNameTabOffset;
-    /* 0x34 */ OFFSET_PTR mKRegNameTabOffset;
-    /* 0x38 */ OFFSET_PTR mCRValuesOffset;
-    /* 0x3C */ OFFSET_PTR mCGValuesOffset;
-    /* 0x40 */ OFFSET_PTR mCBValuesOffset;
-    /* 0x44 */ OFFSET_PTR mCAValuesOffset;
-    /* 0x48 */ OFFSET_PTR mKRValuesOffset;
-    /* 0x4C */ OFFSET_PTR mKGValuesOffset;
-    /* 0x50 */ OFFSET_PTR mKBValuesOffset;
-    /* 0x54 */ OFFSET_PTR mKAValuesOffset;
+    /* 0x20 */ OFFSET_PTR_V0 mCRegTableOffset;
+    /* 0x24 */ OFFSET_PTR_V0 mKRegTableOffset;
+    /* 0x28 */ OFFSET_PTR_V0 mCRegUpdateMaterialIDOffset;
+    /* 0x2C */ OFFSET_PTR_V0 mKRegUpdateMaterialIDOffset;
+    /* 0x30 */ OFFSET_PTR_V0 mCRegNameTabOffset;
+    /* 0x34 */ OFFSET_PTR_V0 mKRegNameTabOffset;
+    /* 0x38 */ OFFSET_PTR_V0 mCRValuesOffset;
+    /* 0x3C */ OFFSET_PTR_V0 mCGValuesOffset;
+    /* 0x40 */ OFFSET_PTR_V0 mCBValuesOffset;
+    /* 0x44 */ OFFSET_PTR_V0 mCAValuesOffset;
+    /* 0x48 */ OFFSET_PTR_V0 mKRValuesOffset;
+    /* 0x4C */ OFFSET_PTR_V0 mKGValuesOffset;
+    /* 0x50 */ OFFSET_PTR_V0 mKBValuesOffset;
+    /* 0x54 */ OFFSET_PTR_V0 mKAValuesOffset;
 };  // Size = 0x58
 
 STATIC_ASSERT(sizeof(J3DAnmTevRegKeyData) == 0x58);
@@ -399,13 +399,13 @@ struct J3DAnmColorFullData { /* PlaceHolder Structure */
     /* 0x0C */ BE(s16) mFrameMax;
     /* 0x0E */ BE(u16) mUpdateMaterialNum;
     /* 0x10 */ u8 field_0x10[0x18 - 0x10];
-    /* 0x18 */ OFFSET_PTR mTableOffset;
-    /* 0x1C */ OFFSET_PTR mUpdateMaterialIDOffset;
-    /* 0x20 */ OFFSET_PTR mNameTabOffset;
-    /* 0x24 */ OFFSET_PTR mRValuesOffset;
-    /* 0x28 */ OFFSET_PTR mGValuesOffset;
-    /* 0x2C */ OFFSET_PTR mBValuesOffset;
-    /* 0x30 */ OFFSET_PTR mAValuesOffset;
+    /* 0x18 */ OFFSET_PTR_V0 mTableOffset;
+    /* 0x1C */ OFFSET_PTR_V0 mUpdateMaterialIDOffset;
+    /* 0x20 */ OFFSET_PTR_V0 mNameTabOffset;
+    /* 0x24 */ OFFSET_PTR_V0 mRValuesOffset;
+    /* 0x28 */ OFFSET_PTR_V0 mGValuesOffset;
+    /* 0x2C */ OFFSET_PTR_V0 mBValuesOffset;
+    /* 0x30 */ OFFSET_PTR_V0 mAValuesOffset;
 };  // Size = 0x34
 
 STATIC_ASSERT(sizeof(J3DAnmColorFullData) == 0x34);
@@ -431,10 +431,10 @@ struct J3DAnmTransformKeyData {
     /* 0x0E */ BE(u16) mSCount;
     /* 0x10 */ BE(u16) mRCount;
     /* 0x12 */ BE(u16) mTCount;
-    /* 0x14 */ OFFSET_PTR mJointAnimationTableOffs;
-    /* 0x18 */ OFFSET_PTR mSTableOffs;
-    /* 0x1c */ OFFSET_PTR mRTableOffs;
-    /* 0x20 */ OFFSET_PTR mTTableOffs;
+    /* 0x14 */ OFFSET_PTR_V0 mJointAnimationTableOffs;
+    /* 0x18 */ OFFSET_PTR_V0 mSTableOffs;
+    /* 0x1c */ OFFSET_PTR_V0 mRTableOffs;
+    /* 0x20 */ OFFSET_PTR_V0 mTTableOffs;
 };
 
 /**
@@ -446,8 +446,8 @@ struct J3DAnmClusterKeyData {
     /* 0x08 */ u8 field_0x8;
     /* 0x0A */ BE(s16) mFrameMax;
     /* 0x0C */ BE(s32) field_0xc;
-    /* 0x10 */ OFFSET_PTR mTableOffset;
-    /* 0x14 */ OFFSET_PTR mWeightOffset;
+    /* 0x10 */ OFFSET_PTR_V0 mTableOffset;
+    /* 0x14 */ OFFSET_PTR_V0 mWeightOffset;
 };
 
 /**
@@ -459,8 +459,8 @@ struct J3DAnmClusterFullData {
     /* 0x08 */ u8 field_0x8;
     /* 0x0A */ BE(s16) mFrameMax;
     /* 0x0C */ BE(s32) field_0xc;
-    /* 0x10 */ OFFSET_PTR mTableOffset;
-    /* 0x14 */ OFFSET_PTR mWeightOffset;
+    /* 0x10 */ OFFSET_PTR_V0 mTableOffset;
+    /* 0x14 */ OFFSET_PTR_V0 mWeightOffset;
 };
 
 /**
@@ -718,7 +718,7 @@ public:
     // Address to which getAnmVtxColorIndexData pointers are relative.
     u16* colorAddressBase[2];
 
-    u16* offsetColorIndexAddress(u8 index, OFFSET_PTR ptr) const {
+    u16* offsetColorIndexAddress(u8 index, OFFSET_PTR_V0 ptr) const {
         return colorAddressBase[index] + ptr;
     }
 #endif
@@ -994,6 +994,6 @@ public:
     /* 0x10 */ f32 mFrame;
 };  // Size: 0x14
 
-#undef OFFSET_PTR
+#undef OFFSET_PTR_V0
 
 #endif /* J3DANIMATION_H */
