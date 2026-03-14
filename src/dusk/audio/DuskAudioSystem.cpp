@@ -35,7 +35,7 @@ static void InitSDL3Output() {
     constexpr SDL_AudioSpec spec = {
         SDL_AUDIO_S16,
         1,
-        32000,
+        SampleRate,
     };
     PlaybackStream = SDL_OpenAudioDeviceStream(
         SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK,
@@ -46,6 +46,7 @@ static void InitSDL3Output() {
 
 void dusk::audio::Initialize() {
     InitSDL3Output();
+    DspInit();
 
     JASDsp::initBuffer();
     JASDSPChannel::initAll();

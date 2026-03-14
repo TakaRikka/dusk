@@ -5,7 +5,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <iosfwd>
 
 #include "Adpcm.hpp"
 #include "global.h"
@@ -58,8 +57,17 @@ static void RenderChannel(
     ChannelAuxData& channelAux,
     DspSubframe& subframe);
 
-static void ResetChannel(JASDsp::TChannel& channel) {
+static void ResetChannel(JASDsp::TChannel& channel, const ChannelAuxData& aux) {
     channel.mSamplesLeft = channel.mEndSample - channel.mSamplePosition;
+
+    const SDL_AudioSpec spec = {
+        SDL_AUDIO_S16,
+        1,
+        static_cast<int>(static_cast<u64>(SampleRate) * channel.mPitch / 4096)
+    };
+
+    SDL_ClearAudioStream(aux.resampleStream);
+    SDL_SetAudioStreamFormat(aux.resampleStream, &spec, nullptr);
 
     channel.mResetFlag = false;
 }
@@ -92,13 +100,21 @@ void dusk::audio::DspRender(DspSubframe& subframe) {
     }
 }
 
-static void RenderChannel(
-    JASDsp::TChannel& channel,
-    ChannelAuxData& channelAux,
-    DspSubframe& subframe) {
-    if (channel.mResetFlag) {
-        ResetChannel(channel);
-    }
+static void SDLCALL ReadChannelSamples(
+    void *userdata,
+    SDL_AudioStream *stream,
+    int additional_amount,
+    int) {
+
+    const auto index = static_cast<u32>(reinterpret_cast<uintptr_t>(userdata));
+    auto& channel = JASDsp::CH_BUF[index];
+    auto& aux = ChannelAux[index];
+
+    additional_amount = ALIGN_NEXT(additional_amount, channel.mSamplesPerBlock);
+
+    int requestedSize = static_cast<int>(sizeof(s16) * additional_amount);
+    auto requested = static_cast<s16*>(alloca(requestedSize));
+    memset(requested, 0, requestedSize);
 
     auto aramBase = static_cast<u8*>(ARGetStorageAddress()) + channel.mWaveAramAddress;
 
@@ -107,15 +123,15 @@ static void RenderChannel(
     auto curSamplePosition = channel.mEndSample - channel.mSamplesLeft;
     auto dataPosition = ConvertSamplesToDataLength(channel, curSamplePosition);
 
-    u32 renderSamples = std::min(channel.mSamplesLeft, static_cast<u32>(DSP_SUBFRAME_SIZE));
+    u32 renderSamples = std::min(channel.mSamplesLeft, static_cast<u32>(additional_amount));
 
     Adpcm4ToPcm16(
         aramBase + dataPosition,
         ConvertSamplesToDataLength(channel, renderSamples),
-        subframe.data(),
+        requested,
         renderSamples,
-        channelAux.hist1,
-        channelAux.hist0);
+        aux.hist1,
+        aux.hist0);
 
     channel.mSamplesLeft -= renderSamples;
     channel.mSamplePosition += renderSamples;
@@ -135,16 +151,50 @@ static void RenderChannel(
 
         Adpcm4ToPcm16(
             aramBase + dataPosition,
-            ConvertSamplesToDataLength(channel, DSP_SUBFRAME_SIZE - renderSamples),
-            subframe.data() + renderSamples,
-            subframe.size() - renderSamples,
-            channelAux.hist1,
-            channelAux.hist0);
+            ConvertSamplesToDataLength(channel, additional_amount - renderSamples),
+            requested + renderSamples,
+            additional_amount - renderSamples,
+            aux.hist1,
+            aux.hist0);
 
-        channel.mSamplesLeft -= (DSP_SUBFRAME_SIZE - renderSamples);
-        channel.mSamplePosition += (DSP_SUBFRAME_SIZE - renderSamples);
+        channel.mSamplesLeft -= (additional_amount - renderSamples);
+        channel.mSamplePosition += (additional_amount - renderSamples);
     }
 
     channel.mAramStreamPosition = channel.mWaveAramAddress
         + ConvertSamplesToDataLength(channel, channel.mSamplePosition);
+
+    SDL_PutAudioStreamData(stream, requested, requestedSize);
+}
+
+static void RenderChannel(
+    JASDsp::TChannel& channel,
+    ChannelAuxData& channelAux,
+    DspSubframe& subframe) {
+    if (channel.mResetFlag) {
+        ResetChannel(channel, channelAux);
+    }
+
+    SDL_GetAudioStreamData(
+        channelAux.resampleStream,
+        subframe.data(),
+        static_cast<int>(subframe.size() * sizeof(s16)));
+}
+
+void dusk::audio::DspInit() {
+    constexpr SDL_AudioSpec spec = {
+        SDL_AUDIO_S16,
+        1,
+        SampleRate
+    };
+
+    for (int i = 0; i < DSP_CHANNELS; i++) {
+        auto& aux = ChannelAux[i];
+        aux.resampleStream = SDL_CreateAudioStream(&spec, &spec);
+
+        SDL_SetAudioStreamGetCallback(
+            aux.resampleStream,
+            ReadChannelSamples,
+            reinterpret_cast<void*>(i));
+    }
 }
