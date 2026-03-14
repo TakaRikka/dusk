@@ -514,7 +514,7 @@ void JASDsp::TChannel::playStart() {
     JUT_ASSERT(508, dspMutex);
     field_0x10c = 0;
     field_0x060 = 0;
-    field_0x008 = 1;
+    mResetFlag = 1;
     field_0x066 = 0;
     int i;
     for (i = 0; i < 4; i++) {
@@ -564,8 +564,8 @@ void JASDsp::TChannel::setWaveInfo(JASWaveInfo const& waveInfo, u32 aramAddress,
     mSamplePosition = 0;
     if (mBytesPerBlock >= 4) {
         mSampleCount = waveInfo.mSampleCount;
-        field_0x102 = waveInfo.mLoopFlag;
-        if (field_0x102) {
+        mLoopFlag = waveInfo.mLoopFlag;
+        if (mLoopFlag) {
             if (skipSamples == 1) {
                 skipSamples = waveInfo.mLoopStartSample;
             }

@@ -94,11 +94,29 @@ namespace JASDsp {
         void setDistFilter(s16);
         void setBusConnect(u8 outputChannel, u8 param_1);
 
+        /**
+         * Whether this channel is currently actively playing audio.
+         */
         /* 0x000 */ u16 mIsActive;
+
+        /**
+         * Written by DSP to indicate playback has finished.
+         */
         /* 0x002 */ u16 mIsFinished;
+
+        /**
+         * Pitch shift via changing playback speed.
+         */
         /* 0x004 */ u16 mPitch;
         /* 0x006 */ short _unused1;
-        /* 0x008 */ u16 field_0x008;
+
+        /**
+         * Set to 1 when playback starts, cleared by DSP later,
+         * checked by JASAramStream before actually doing processing.
+         * Presumably to instruct DSP to clear state?
+         * (Corroborated by fields JASAramStream checks never being cleared explicitly by CPU.)
+         */
+        /* 0x008 */ u16 mResetFlag;
         /* 0x00A */ u8 _unused2[0x00C - 0x00A];
         /* 0x00C */ s16 mPauseFlag;
         /* 0x00E */ short _unused3;
@@ -112,19 +130,33 @@ namespace JASDsp {
         /* 0x05A */ u8 _unused5[0x060 - 0x05A];
         /* 0x060 */ short field_0x060; // Only cleared to zero, presumed used by DSP.
         /* 0x062 */ u8 _unused6[0x064 - 0x062];
+
+        /**
+         * Samples per ADPCM frame for ADPCM audio. Seems just set to 1 for PCM formats.
+         * Name could use improvement, probably?
+         */
         /* 0x064 */ u16 mSamplesPerBlock;
         /* 0x066 */ short field_0x066; // Only cleared to zero, presumed used by DSP.
-        /* 0x068 */ int mSamplePosition; // Only ever initialized by code, name is guess.
+        /* 0x068 */ u32 mSamplePosition; // Only ever initialized by code, name is guess.
         /* 0x06C */ u8 _unused7[0x070 - 0x06C];
-        /* 0x070 */ int mAramStreamPosition; // Seems written by DSP, used for audio streaming.
-        /* 0x074 */ int field_0x074;
+
+        /**
+         * Current audio read position in ARAM. Updated by DSP.
+         */
+        /* 0x070 */ u32 mAramStreamPosition;
+
+        /**
+         * Amount of (decoded) audio samples left until the end of the buffer.
+         * Gets written by DSP, but also CPU.
+         */
+        /* 0x074 */ u32 mSamplesLeft;      // Never directly cleared to zero. Seems sus. Cleared by DSP?
         /* 0x078 */ short field_0x078[4];  // Only cleared to zero, presumed used by DSP.
         /* 0x080 */ short field_0x080[20]; // Only cleared to zero, presumed used by DSP.
         /* 0x0A8 */ short field_0x0a8[4];  // Only cleared to zero, presumed used by DSP.
         /* 0x0B0 */ u16 field_0x0b0[16];   // Only cleared to zero, presumed used by DSP.
         /* 0x0D0 */ u8 _unused8[0x100 - 0x0D0];
         /* 0x100 */ u16 mBytesPerBlock;
-        /* 0x102 */ u16 field_0x102;
+        /* 0x102 */ u16 mLoopFlag;
 
         /**
          * Used for decoding ADPCM data around loop edges.
