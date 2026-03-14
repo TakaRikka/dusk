@@ -2,6 +2,8 @@
 
 #include <SDL3/SDL_init.h>
 #include <array>
+#include <fstream>
+#include <ios>
 
 #include "JSystem/JAudio2/JASAiCtrl.h"
 #include "JSystem/JAudio2/JASChannel.h"
@@ -10,6 +12,9 @@
 #include "JSystem/JAudio2/JASHeapCtrl.h"
 
 #include "DuskDsp.hpp"
+#include "JSystem/JAudio2/JASAudioThread.h"
+
+using namespace dusk::audio;
 
 static DspSubframe AllSubframeBuffers[DSP_OUTPUT_CHANNELS];
 
@@ -39,7 +44,7 @@ static void InitSDL3Output() {
         nullptr);
 }
 
-void DuskAudioInitialize() {
+void dusk::audio::Initialize() {
     InitSDL3Output();
 
     JASDsp::initBuffer();
@@ -53,21 +58,29 @@ void DuskAudioInitialize() {
 void SDLCALL GetNewAudio(
     void*,
     SDL_AudioStream*,
-    int,
-    int total_amount) {
-    while (total_amount > 0) {
+    int needed,
+    int) {
+    while (needed > 0) {
         const int rendered = RenderNewAudioFrame();
-        total_amount -= rendered;
+        needed -= rendered;
     }
 }
+
+static std::ofstream outRaw("guh.raw", std::ios_base::out | std::ios_base::binary);
 
 int RenderNewAudioFrame() {
     JASCriticalSection section;
     const u32 countSubframes = JASDriver::getSubFrames();
 
+    JASAudioThread::setDSPSyncCount(countSubframes);
+
     for (u32 i = 0; i < countSubframes; i++) {
         RenderAudioSubframe();
+
+        JASAudioThread::snIntCount -= 1;
     }
+
+    outRaw.flush();
 
     return static_cast<u16>(countSubframes) * DSP_SUBFRAME_SIZE;
 }
@@ -76,7 +89,9 @@ void RenderAudioSubframe() {
     DspSubframe& subFrame = AllSubframeBuffers[0];
 
     JASDriver::updateDSP();
-    DuskDspRender(subFrame);
+    DspRender(subFrame);
+
+    outRaw.write((const char*)subFrame.data(), subFrame.size() * sizeof(s16));
 
     SDL_PutAudioStreamData(PlaybackStream, &subFrame, sizeof(subFrame));
 }

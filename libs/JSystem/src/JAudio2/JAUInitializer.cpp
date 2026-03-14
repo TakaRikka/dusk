@@ -63,7 +63,7 @@ void JAU_JASInitializer::initJASystem(JKRSolidHeap* heap) {
 
         JASDvd::createThread(dvdThreadPriority_, 0x80, 0x1000);
 #if TARGET_PC
-        DuskAudioInitialize();
+        dusk::audio::Initialize();
 #else
         JASAudioThread::create(audioThreadPriority_);
 #endif

@@ -1,3 +1,5 @@
 #pragma once
 
-void DuskAudioInitialize();
+namespace dusk::audio {
+    void Initialize();
+}

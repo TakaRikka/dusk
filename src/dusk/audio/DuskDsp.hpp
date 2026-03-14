@@ -4,6 +4,15 @@
 
 #include <array>
 
-using DspSubframe = std::array<s16, DSP_SUBFRAME_SIZE>;
+namespace dusk::audio {
+    struct ChannelAuxData {
+        s16 hist1;
+        s16 hist0;
+    };
 
-void DuskDspRender(DspSubframe& subframe);
+    extern ChannelAuxData ChannelAux[DSP_CHANNELS];
+
+    using DspSubframe = std::array<s16, DSP_SUBFRAME_SIZE>;
+
+    void DspRender(DspSubframe& subframe);
+}
