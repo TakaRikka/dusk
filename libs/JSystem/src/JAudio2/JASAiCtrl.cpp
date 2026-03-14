@@ -98,7 +98,10 @@ void JASDriver::setOutputRate(JASOutputRate param_0) {
         sSubFrames = 10;
         sDacRate = 48000.0f;
     }
+
+#if !TARGET_PC
     sDacRate *= 1.0008897f;
+#endif
 }
 
 const JASDriver::MixFunc JASDriver::sMixFuncs[4] = {
