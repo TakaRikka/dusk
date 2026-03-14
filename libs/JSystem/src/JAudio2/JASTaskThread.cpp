@@ -40,7 +40,7 @@ void* JASTaskThread::allocCallStack(JASThreadCallback callback, const void* msg,
 
 void* JASTaskThread::allocCallStack(JASThreadCallback callback, void* msg) {
     JASThreadCallStack *callStack;
-    callStack = (JASThreadCallStack*)JASKernel::getCommandHeap()->alloc(12);
+    callStack = (JASThreadCallStack*)JASKernel::getCommandHeap()->alloc(offsetof(JASThreadCallStack, msg) + sizeof(void*));
     if (callStack == NULL) {
         return NULL;
     }
