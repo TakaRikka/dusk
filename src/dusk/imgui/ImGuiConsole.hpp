@@ -47,7 +47,9 @@ namespace dusk {
             int mapIdx = -1;
 		    int regionIdx = -1;
             int roomNoIdx = 0;
+            int pointNoIdx = 0;
             int roomNo = -1;
+            int pointNo = -1;
 			int spawnId = 0;
 			int layer = -1;
 		    bool showInternalNames = false;
