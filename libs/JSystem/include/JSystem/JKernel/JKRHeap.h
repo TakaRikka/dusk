@@ -276,7 +276,18 @@ void jkrDelete(T* ptr) {
         return;
     }
     ptr->~T();
-    operator delete(ptr, JKRHeapToken::Dummy);
+
+    if constexpr (requires { T::operator delete(ptr, JKRHeapToken::Dummy); }) {
+        T::operator delete(ptr, JKRHeapToken::Dummy);
+    } else if constexpr (requires { T::operator delete(ptr, sizeof(T), JKRHeapToken::Dummy); }) {
+        T::operator delete(ptr, sizeof(T), JKRHeapToken::Dummy);
+    } else if constexpr (requires { T::operator delete(ptr); }) {
+        T::operator delete(ptr);
+    } else if constexpr (requires { T::operator delete(ptr, sizeof(T)); }) {
+        T::operator delete(ptr, sizeof(T));
+    } else {
+        operator delete(ptr, JKRHeapToken::Dummy);
+    }
 }
 
 template<>
