@@ -3,10 +3,11 @@
 #include "imgui.h"
 #include <imgui_internal.h>
 #include "ImGuiConsole.hpp"
+#include "ImGuiMenuTools.hpp"
 #include "dusk/map_loader_definitions.h"
 
 namespace dusk {
-    void ImGuiConsole::ShowMapLoader() {
+    void ImGuiMenuTools::ShowMapLoader() {
         if (!m_showMapLoader) {
             return;
         }

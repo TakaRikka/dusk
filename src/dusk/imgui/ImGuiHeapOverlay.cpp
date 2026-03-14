@@ -4,12 +4,13 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "imgui.h"
 #include "ImGuiConsole.hpp"
+#include "ImGuiMenuTools.hpp"
 
 namespace dusk {
     static void DrawTableCore();
 
-    void ImGuiConsole::ShowHeapOverlay() {
-        if (!CheckMenuViewToggle(ImGuiKey_F4, m_showHeapOverlay)) {
+    void ImGuiMenuTools::ShowHeapOverlay() {
+        if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F4, m_showHeapOverlay)) {
             return;
         }
 

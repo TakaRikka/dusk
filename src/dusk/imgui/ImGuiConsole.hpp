@@ -5,55 +5,22 @@
 #include <string>
 
 #include "imgui.h"
+#include "ImGuiMenuGame.hpp"
+#include "ImGuiMenuTools.hpp"
 
 namespace dusk {
 	class ImGuiConsole {
 	public:
 		ImGuiConsole();
-
 		void draw();
 
-		void ShowDebugOverlay();
-        void ShowCameraOverlay();
-		void ShowProcessManager();
-		void ShowHeapOverlay();
-        void ShowInputViewer();
-		void ShowStubLog();
-		void ShowMapLoader();
-
-		bool CheckMenuViewToggle(ImGuiKey key, bool& active);
+		static bool CheckMenuViewToggle(ImGuiKey key, bool& active);
 
 	private:
 		bool m_isHidden = false;
 
-		bool m_showDebugOverlay = false;
-		int m_debugOverlayCorner = 0; // top-left
-
-		bool m_showCameraOverlay = false;
-		int m_cameraOverlayCorner = 3;
-
-		bool m_showProcessManagement = false;
-
-		bool m_showHeapOverlay = false;
-
-		bool m_showStubLog = false;
-
-		bool m_showInputViewer = false;
-		int m_inputOverlayCorner = 3;
-		std::string m_controllerName;
-
-		bool m_showMapLoader = false;
-		struct {
-            int mapIdx = -1;
-		    int regionIdx = -1;
-            int roomNoIdx = 0;
-            int pointNoIdx = 0;
-            int roomNo = -1;
-            int pointNo = -1;
-			int spawnId = 0;
-			int layer = -1;
-		    bool showInternalNames = false;
-		} m_mapLoaderInfo;
+		ImGuiMenuGame m_menuGame;
+        ImGuiMenuTools m_menuTools;
 	};
 
 	extern ImGuiConsole g_imguiConsole;
@@ -62,6 +29,7 @@ namespace dusk {
 	std::string BytesToString(size_t bytes);
 	void SetOverlayWindowLocation(int corner);
 	bool ShowCornerContextMenu(int& corner, int avoidCorner);
+	void ImGuiStringViewText(std::string_view text);
 }
 
 void DuskDebugPad();

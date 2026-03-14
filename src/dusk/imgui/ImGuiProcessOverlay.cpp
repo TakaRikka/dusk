@@ -11,6 +11,7 @@
 #include "f_pc/f_pc_node.h"
 #include "imgui.h"
 #include "ImGuiConsole.hpp"
+#include "ImGuiMenuTools.hpp"
 #include "imgui_internal.h"
 
 namespace dusk {
@@ -68,8 +69,8 @@ namespace dusk {
         return 1;
     }
 
-    void ImGuiConsole::ShowProcessManager() {
-        if (!CheckMenuViewToggle(ImGuiKey_F2, m_showProcessManagement)) {
+    void ImGuiMenuTools::ShowProcessManager() {
+        if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F2, m_showProcessManagement)) {
             return;
         }
 

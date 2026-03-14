@@ -3,6 +3,7 @@
 #include "dusk/logging.h"
 #include "imgui.h"
 #include "ImGuiConsole.hpp"
+#include "ImGuiMenuTools.hpp"
 
 namespace dusk {
     static ImGuiTextBuffer StubLogBuffer;
@@ -38,8 +39,8 @@ namespace dusk {
 
     static void ClearPastFrame();
 
-    void ImGuiConsole::ShowStubLog() {
-        if (!CheckMenuViewToggle(ImGuiKey_F5, m_showStubLog)) {
+    void ImGuiMenuTools::ShowStubLog() {
+        if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F5, m_showStubLog)) {
             ClearPastFrame();
             return;
         }

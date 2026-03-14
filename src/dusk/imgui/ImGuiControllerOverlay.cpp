@@ -3,6 +3,7 @@
 #include "imgui.h"
 #include <imgui_internal.h>
 #include "ImGuiConsole.hpp"
+#include "ImGuiMenuGame.hpp"
 
 namespace dusk {
     void TextCenter(const std::string& text) {
@@ -14,7 +15,7 @@ namespace dusk {
 
     static inline float GetScale() { return ImGui::GetCurrentContext()->CurrentDpiScale; }
 
-    void ImGuiConsole::ShowInputViewer() {
+    void ImGuiMenuGame::windowInputViewer() {
         if (!m_showInputViewer) {
             return;
         }

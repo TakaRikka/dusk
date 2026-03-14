@@ -1336,6 +1336,10 @@ set(DUSK_FILES
         #src/dusk/m_Do_ext_dusk.cpp
         src/dusk/imgui/ImGuiConsole.hpp
         src/dusk/imgui/ImGuiConsole.cpp
+        src/dusk/imgui/ImGuiMenuGame.cpp
+        src/dusk/imgui/ImGuiMenuGame.hpp
+        src/dusk/imgui/ImGuiMenuTools.cpp
+        src/dusk/imgui/ImGuiMenuTools.hpp
         src/dusk/imgui/ImGuiProcessOverlay.cpp
         src/dusk/imgui/ImGuiCameraOverlay.cpp
         src/dusk/imgui/ImGuiHeapOverlay.cpp

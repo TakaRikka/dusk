@@ -3,10 +3,11 @@
 
 #include "imgui.h"
 #include "ImGuiConsole.hpp"
+#include "ImGuiMenuTools.hpp"
 
 namespace dusk {
-    void ImGuiConsole::ShowCameraOverlay() {
-        if (!CheckMenuViewToggle(ImGuiKey_F6, m_showCameraOverlay)) {
+    void ImGuiMenuTools::ShowCameraOverlay() {
+        if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F6, m_showCameraOverlay)) {
             return;
         }
 
