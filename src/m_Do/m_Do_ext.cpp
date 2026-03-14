@@ -2276,7 +2276,7 @@ int mDoExt_3Dline_c::init(u16 param_0, int param_1, BOOL param_2) {
     int sp20 = param_0 * 2;
 
     field_0x8[0] = JKR_NEW_ARRAY(cXyz, sp20);
-    if (field_0x8 == NULL) {
+    if (field_0x8[0] == NULL) {
         return 0;
     }
 
@@ -2286,7 +2286,7 @@ int mDoExt_3Dline_c::init(u16 param_0, int param_1, BOOL param_2) {
     }
 
     field_0x10[0] = JKR_NEW_ARRAY(mDoExt_3Dline_field_0x10_c, sp20);
-    if (field_0x10 == NULL) {
+    if (field_0x10[0] == NULL) {
         return 0;
     }
 

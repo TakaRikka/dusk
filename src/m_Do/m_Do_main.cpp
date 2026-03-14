@@ -245,8 +245,8 @@ int game_main(int argc, char* argv[]) {
 
         if (parsed_arg_options.count("help"))
         {
-        printf((arg_options.help() + "\n").c_str());
-        exit(0);
+            printf("%s", (arg_options.help() + "\n").c_str());
+            exit(0);
         }
     }
     catch (const cxxopts::exceptions::exception& e) {
@@ -310,13 +310,13 @@ bool JKRHeap::dump_sort() {
     return true;
 }
 
+#ifdef __MWERKS__
 template <typename T>
 JHIComPortManager<T>* JHIComPortManager<T>::instance = nullptr;
 
 template <>
 JHIComPortManager<JHICmnMem>* JHIComPortManager<JHICmnMem>::instance = nullptr;
 
-#ifdef __MWERKS__
 template<>
 Z2WolfHowlMgr* JASGlobalInstance<Z2WolfHowlMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 

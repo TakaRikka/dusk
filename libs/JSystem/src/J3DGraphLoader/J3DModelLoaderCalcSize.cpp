@@ -222,7 +222,7 @@ u32 J3DModelLoader_v26::calcSizeMaterial(const J3DMaterialBlock* block, u32 flag
 	J3DMaterialFactory factory(*block);
 	u32 count       = block->mMaterialNum;
 	int uniqueCount = factory.countUniqueMaterials();
-	if (block->mpNameTable != NULL) {
+	if (block->mpNameTable != (uintptr_t)NULL) {
 		size += 0x10;
 	}
 	size += (count * sizeof(J3DMaterial*));

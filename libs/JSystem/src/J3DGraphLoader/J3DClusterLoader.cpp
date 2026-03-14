@@ -56,13 +56,13 @@ void J3DClusterLoader_v15::readCluster(const J3DClusterBlock* block) {
     mpDeformData->mVtxNrmNum = block->mVtxNrmNum;
     mpDeformData->mClusterVertexNum = block->mClusterVertexNum;
 
-    if (block->mClusterName != NULL) {
+    if ((uintptr_t)block->mClusterName != (uintptr_t)NULL) {
         mpDeformData->mClusterName =
             JKR_NEW JUTNameTab(JSUConvertOffsetToPtr<ResNTAB>(block, block->mClusterName));
     } else {
         mpDeformData->mClusterName = NULL;
     }
-    if (block->mClusterKeyName != NULL) {
+    if ((uintptr_t)block->mClusterKeyName != (uintptr_t)NULL) {
         mpDeformData->mClusterKeyName =
             JKR_NEW JUTNameTab(JSUConvertOffsetToPtr<ResNTAB>(block, block->mClusterKeyName));
     } else {

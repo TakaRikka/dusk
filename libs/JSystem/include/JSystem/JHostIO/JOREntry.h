@@ -99,7 +99,12 @@ public:
 
     static JHIComPortManager<T>* getInstance() { return instance; }
 
+#ifdef __MWERKS__
     static JHIComPortManager<T>* instance;
+#else
+    // C++17 allows in-class instantiation
+    static inline JHIComPortManager<T>* instance = nullptr;
+#endif
 
     /* 0x00000 */ T port;
     /* 0x0000C */ JHIpvector<JHITag<T>*, 10> field_0xc;
