@@ -17,6 +17,12 @@
 #include <memory>
 
 #include "JSystem/JKernel/JKRHeap.h"
+#include "dusk/os.h"
+
+#if _WIN32
+#define WIN32_LEAN_AND_MEAN 1
+#include <windows.h>
+#endif
 
 // ============================================================================
 // Malloc-based allocator to bypass JKRHeap operator new/delete
@@ -742,6 +748,30 @@ __OSInterruptHandler __OSSetInterruptHandler(__OSInterrupt interrupt,
 
 OSInterruptMask __OSUnmaskInterrupts(OSInterruptMask mask) {
     return 0;
+}
+
+void OSSetCurrentThreadName(const char* name) {
+    // "Why is this current thread only?", you might ask?
+    // Because macOS requires that. For some reason.
+
+#if _WIN32
+    wchar_t buffer[256];
+    const auto converted = MultiByteToWideChar(
+        CP_UTF8,
+        0,
+        name,
+        -1,
+        buffer,
+        sizeof(buffer)/sizeof(wchar_t));
+    if (converted == 0) {
+        CRASH("OSSetThreadName: MultiByteToWideChar failed");
+    }
+
+    const auto result = SetThreadDescription(GetCurrentThread(), buffer);
+    if (!SUCCEEDED(result)) {
+        CRASH("OSSetThreadName: SetThreadDescription failed");
+    }
+#endif
 }
 
 #ifdef __cplusplus

@@ -7,6 +7,10 @@
 #include "global.h"
 #include <stdint.h>
 
+#if TARGET_PC
+#include "dusk/os.h"
+#endif
+
 JSUList<JKRThread> JKRThread::sThreadList(0);
 
 void* JKRIdleThread::sThread;
@@ -88,6 +92,14 @@ void JKRThread::setCommon_heapSpecified(JKRHeap* heap, u32 stack_size, int param
 }
 
 void* JKRThread::start(void* thread) {
+#if TARGET_PC
+    auto& thd = *static_cast<JKRThread*>(thread);
+    if (thd.mThreadName == nullptr) {
+        thd.mThreadName = typeid(thd).name();
+    }
+    OSSetCurrentThreadName(thd.mThreadName);
+#endif
+
     return ((JKRThread*)thread)->run();
 }
 

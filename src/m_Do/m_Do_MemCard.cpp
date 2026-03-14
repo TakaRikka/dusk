@@ -10,6 +10,7 @@
 #include "m_Do/m_Do_MemCardRWmng.h"
 #include "m_Do/m_Do_Reset.h"
 #include "os_report.h"
+#include "dusk/os.h"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/nand.h>
@@ -865,6 +866,10 @@ mDoMemCd_Ctrl_c g_mDoMemCd_control;
 
 static int mDoMemCd_main(void*) {
     JKRThread(OSGetCurrentThread(), 0);
+
+#if TARGET_PC
+    OSSetCurrentThreadName("MemCardThread");
+#endif
 
     JKRSetCurrentHeap(mDoExt_getAssertHeap());
 

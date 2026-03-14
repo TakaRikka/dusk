@@ -10,6 +10,7 @@
 #include "JSystem/JKernel/JKRDvdRipper.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
+#include "dusk/os.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_ext.h"
@@ -17,6 +18,9 @@
 
 s32 mDoDvdThd::main(void* param_0) {
     JKRThread(OSGetCurrentThread(), 0);
+#if TARGET_PC
+    OSSetCurrentThreadName("DVD thread");
+#endif
     JKRSetCurrentHeap(mDoExt_getAssertHeap());
     mDoDvdThd_param_c* param = static_cast<mDoDvdThd_param_c*>(param_0);
     param->mainLoop();
