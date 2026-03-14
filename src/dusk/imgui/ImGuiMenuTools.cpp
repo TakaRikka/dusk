@@ -16,6 +16,7 @@ namespace dusk {
             ImGui::MenuItem("Stub Log", "F5", &m_showStubLog);
             ImGui::MenuItem("Camera", "F6", &m_showCameraOverlay);
             ImGui::MenuItem("Map Loader", nullptr, &m_showMapLoader);
+            ImGui::MenuItem("Audio Debug", "F7", &m_showAudioDebug);
             ImGui::EndMenu();
         }
 
@@ -25,6 +26,7 @@ namespace dusk {
         ShowHeapOverlay();
         ShowStubLog();
         ShowMapLoader();
+        ShowAudioDebug();
 
         DuskDebugPad(); // temporary, remove later
     }

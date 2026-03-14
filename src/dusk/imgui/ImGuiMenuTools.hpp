@@ -18,6 +18,7 @@ namespace dusk {
 		void ShowHeapOverlay();
 		void ShowStubLog();
 		void ShowMapLoader();
+        void ShowAudioDebug();
 
     private:
 		bool m_showDebugOverlay = false;
@@ -33,6 +34,8 @@ namespace dusk {
 		bool m_showStubLog = false;
 
 		bool m_showMapLoader = false;
+
+        bool m_showAudioDebug = false;
 		struct {
 			int mapIdx = -1;
 			int regionIdx = -1;

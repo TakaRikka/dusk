@@ -106,7 +106,8 @@ target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::gd auror
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES}
-        src/dusk/imgui/ImGuiStubLog.cpp)
+        src/dusk/imgui/ImGuiStubLog.cpp
+        src/dusk/imgui/ImGuiAudio.cpp)
 
 target_link_libraries(game PRIVATE game_debug cxxopts::cxxopts)
 target_compile_definitions(game PRIVATE TARGET_PC AVOID_UB=1 VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0
