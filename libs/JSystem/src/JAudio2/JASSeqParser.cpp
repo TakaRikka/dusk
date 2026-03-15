@@ -937,6 +937,9 @@ s32 JASSeqParser::parseNoteOff(JASTrack* param_0, u8 param_1) {
 
 s32 JASSeqParser::parseNoteOn(JASTrack* param_0, u8 param_1) {
     JASSeqCtrl* seqCtrl = param_0->getSeqCtrl();
+    if (seqCtrl->trace) {
+        printf("Guh\n");
+    }
     u32 r28 = seqCtrl->readByte();
     u32 r30 = r28;
     r30 &= 7;
@@ -950,7 +953,7 @@ s32 JASSeqParser::parseNoteOn(JASTrack* param_0, u8 param_1) {
     return 0;
 }
 
-s32 JASSeqParser::parseCommand(JASTrack* param_0, u8 cmd, u16 param_2) {
+s32 JASSeqParser::parseCommand(JASTrack* param_0, u8 cmd, u16 parameterTypesOverride) {
     JASSeqCtrl* seqCtrl = param_0->getSeqCtrl();
     CmdInfo* cmdInfo = NULL;
     if (cmd != 0xb0) {
@@ -959,32 +962,32 @@ s32 JASSeqParser::parseCommand(JASTrack* param_0, u8 cmd, u16 param_2) {
     } else {
         cmdInfo = &sExtCmdInfo[seqCtrl->readByte() & 0xff];
     }
-    u16 r28 = (u16)cmdInfo->mParameterTypes;
-    r28 |= param_2;
-    u32 stack_28[8];
-    for (int i = 0; i < cmdInfo->mParameterCount; i++, r28 >>= 2) {
-        int r27 = 0;
-        switch (r28 & 3) {
+    u16 parameterTypes = (u16)cmdInfo->mParameterTypes;
+    parameterTypes |= parameterTypesOverride;
+    u32 args[8];
+    for (int i = 0; i < cmdInfo->mParameterCount; i++, parameterTypes >>= 2) {
+        int value = 0;
+        switch (parameterTypes & 3) {
         case 0:
-            r27 = (u8)seqCtrl->readByte();
+            value = (u8)seqCtrl->readByte();
             break;
         case 1:
-            r27 = (u16)seqCtrl->read16();
+            value = (u16)seqCtrl->read16();
             break;
         case 2:
-            r27 = seqCtrl->read24();
+            value = seqCtrl->read24();
             break;
         case 3:
-            r27 = readReg(param_0, (u8)seqCtrl->readByte());
+            value = readReg(param_0, (u8)seqCtrl->readByte());
             break;
         }
-        stack_28[i] = r27;
+        args[i] = value;
     }
     s32 (JASSeqParser::*ptr)(JASTrack*, u32*) = cmdInfo->mHandler;
     if (!ptr) {
         return 0;
     }
-    return execCommand(param_0, ptr, cmdInfo->mParameterCount, stack_28);
+    return execCommand(param_0, ptr, cmdInfo->mParameterCount, args);
 }
 
 s32 JASSeqParser::parseRegCommand(JASTrack* param_0, int param_1) {
@@ -1004,7 +1007,15 @@ s32 JASSeqParser::parseRegCommand(JASTrack* param_0, int param_1) {
 }
 
 s32 JASSeqParser::parse(JASTrack* param_0) {
-    u32 r31 = param_0->getSeqCtrl()->readByte();
+    JASSeqCtrl* ctrl = param_0->getSeqCtrl();
+    u32 base = ctrl->mReader.mCurPos - ctrl->mReader.mBase;
+    u32 r31 = ctrl->readByte();
+
+    if (ctrl->trace) {
+        OSReportForceEnableOn();
+        OSReport("%06X: %02X\n", base, r31);
+        fflush(stdout);
+    }
     s32 r30 = 0;
     if ((r31 & 0x80) == 0) {
         r30 = parseNoteOn(param_0, r31);
