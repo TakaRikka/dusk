@@ -92,6 +92,12 @@ void dusk::audio::DspRender(DspSubframe& subframe) {
             continue;
         }
 
+        if (channel.mPauseFlag) {
+            // Not really sure what the practical difference between pause and
+            // deactivation is. Either avoids clearing state or allows the DSP to avoid popping?
+            continue;
+        }
+
         ValidateChannel(channel);
 
         DspSubframe channelSubframe = {};
