@@ -44,6 +44,8 @@ namespace dusk {
 			int layer = -1;
 			bool showInternalNames = false;
 		} m_mapLoaderInfo;
+
+		bool m_isDevelopmentMode = false;
     };
 }
 

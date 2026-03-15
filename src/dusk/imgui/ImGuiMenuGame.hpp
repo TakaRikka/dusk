@@ -2,6 +2,7 @@
 #define DUSK_IMGUI_MENUGAME_HPP
 
 #include <aurora/aurora.h>
+#include <pad.h>
 #include <string>
 
 #include "imgui.h"
@@ -23,6 +24,13 @@ namespace dusk {
             float m_soundEffectsVolume = 1.0f;
             float m_fanfareVolume = 1.0f;
         } m_audioSettings;
+
+        struct {
+            int m_selectedPort = 0;
+            bool m_isReading = false;
+            PADButtonMapping* m_pendingMapping = nullptr;
+            int m_pendingPort = -1;
+        } m_controllerConfig;
 
         bool m_showControllerConfig = false;
 
