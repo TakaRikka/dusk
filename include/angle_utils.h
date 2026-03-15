@@ -85,4 +85,15 @@
 #define ANGLE_SUB_2  S16_SUB_2
 #define ANGLE_MULT_2 S16_MULT_2
 
+#if TARGET_PC
+static inline s16 cAngle_degreeToS16(f32 deg) {
+    s32 angle = (s32)(deg * (0x8000 / 180.0f));
+    angle &= 0xFFFF;
+    if (angle >= 0x8000) {
+        angle -= 0x10000;
+    }
+    return (s16)angle;
+}
+#endif
+
 #endif // !_ANGLE_UTILS_H_
