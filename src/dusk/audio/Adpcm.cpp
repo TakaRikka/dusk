@@ -33,8 +33,7 @@ static s16 Clamp16(s32 value) {
 void dusk::audio::Adpcm4ToPcm16(const u8* adpcm, size_t adpcmLength, s16* pcm, size_t pcmLength, s16& hist2, s16& hist1) {
     assert (adpcmLength % AdpcmFrameSize == 0 && "ADPCM must be divisible by frame size");
 
-    const auto expectedPcmLength = (adpcmLength / AdpcmFrameSize) * 16;
-    assert (expectedPcmLength <= pcmLength && "PCM output buffer is too small!");
+    auto endPtr = pcm + pcmLength;
 
     for (int i = 0; i < adpcmLength; i += AdpcmFrameSize) {
         u8 header = adpcm[i];
@@ -55,6 +54,8 @@ void dusk::audio::Adpcm4ToPcm16(const u8* adpcm, size_t adpcmLength, s16* pcm, s
             hist1 = sample;
 
             *pcm++ = sample;
+            if (endPtr == pcm)
+                return;
         }
     }
 }

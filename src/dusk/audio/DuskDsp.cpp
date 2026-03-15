@@ -46,7 +46,9 @@ static u32 ConvertDataLengthToSamples(const JASDsp::TChannel& channel, u32 dataL
 
 static u32 ConvertSamplesToDataLength(const JASDsp::TChannel& channel, u32 samples) {
     if (samples % channel.mSamplesPerBlock != 0) {
-        CRASH("Indivisible sample count: %d\n", samples);
+        // Ensure we round up.
+        samples += channel.mSamplesPerBlock;
+        //CRASH("Indivisible sample count: %d\n", samples);
     }
 
     return (samples / channel.mSamplesPerBlock) * channel.mBytesPerBlock;
