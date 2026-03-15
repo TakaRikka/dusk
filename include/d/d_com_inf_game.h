@@ -1084,7 +1084,11 @@ s32 dComIfGs_isDungeonItemWarp(int i_stageNo);
 void dComIfGs_BossLife_public_Set(s8);
 s8 dComIfGs_sense_type_change_Get();
 void dComIfGs_sense_type_change_Set(s8);
+#if TARGET_PC
+cXyz dComIfGs_getWarpPlayerPos();
+#else
 cXyz& dComIfGs_getWarpPlayerPos();
+#endif
 const char* dComIfGs_getWarpStageName();
 s16 dComIfGs_getWarpPlayerAngleY();
 s8 dComIfGs_getWarpRoomNo();
@@ -1174,7 +1178,11 @@ void dComIfGs_setWarpItemData(char const* stage, cXyz pos, s16 angle, s8 roomNo,
                               u8 param_5);
 void dComIfGs_setLastWarpMarkItemData(const char* stage, cXyz pos, s16 angle, s8 roomNo, u8, u8);
 const char* dComIfGs_getWarpStageName();
+#if TARGET_PC
+cXyz dComIfGs_getWarpPlayerPos();
+#else
 cXyz& dComIfGs_getWarpPlayerPos();
+#endif
 s16 dComIfGs_getWarpPlayerAngleY();
 s8 dComIfGs_getWarpRoomNo();
 u8 dComIfGs_getWarpMarkFlag();
@@ -1420,7 +1428,11 @@ inline BOOL dComIfGs_isTransformLV(int i_no) {
     return g_dComIfG_gameInfo.info.getPlayer().getPlayerStatusB().isTransformLV(i_no);
 }
 
+#if TARGET_PC
+inline cXyz dComIfGs_getHorseRestartPos() {
+#else
 inline cXyz& dComIfGs_getHorseRestartPos() {
+#endif
     return g_dComIfG_gameInfo.info.getPlayer().getHorsePlace().getPos();
 }
 
@@ -1441,7 +1453,11 @@ inline void dComIfGs_setHorseRestart(const char* i_stageName, cXyz& i_pos, s16 i
     g_dComIfG_gameInfo.info.getPlayer().getHorsePlace().set(i_stageName, i_pos, i_angle, i_roomNo);
 }
 
+#if TARGET_PC
+inline cXyz dComIfGs_getPlayerFieldLastStayPos() {
+#else
 inline cXyz& dComIfGs_getPlayerFieldLastStayPos() {
+#endif
     return g_dComIfG_gameInfo.info.getPlayer().getPlayerFieldLastStayInfo().getPos();
 }
 
@@ -1483,7 +1499,11 @@ inline void dComIfGs_setPlayerFieldLastStayInfo(const char* i_stage, cXyz& i_pos
                                                                          i_point, i_region);
 }
 
+#if TARGET_PC
+inline cXyz dComIfGs_getLastWarpMarkPlayerPos() {
+#else
 inline cXyz& dComIfGs_getLastWarpMarkPlayerPos() {
+#endif
     return g_dComIfG_gameInfo.info.getPlayer().getPlayerLastMarkInfo().getPos();
 }
 

@@ -2660,7 +2660,11 @@ const char* dComIfGs_getWarpStageName() {
     return dComIfGs_getLastWarpMarkStageName();
 }
 
+#if TARGET_PC
+cXyz dComIfGs_getWarpPlayerPos() {
+#else
 cXyz& dComIfGs_getWarpPlayerPos() {
+#endif
     return dComIfGs_getLastWarpMarkPlayerPos();
 }
 
