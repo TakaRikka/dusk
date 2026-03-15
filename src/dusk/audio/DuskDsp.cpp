@@ -7,6 +7,7 @@
 #include <cassert>
 
 #include "Adpcm.hpp"
+#include "JSystem/JAudio2/JASDriverIF.h"
 #include "global.h"
 
 using namespace dusk::audio;
@@ -187,6 +188,16 @@ static void RenderChannel(
         channelAux.resampleStream,
         subframe.data(),
         static_cast<int>(subframe.size() * sizeof(s16)));
+
+    for (auto& sample : subframe) {
+        u16 volume;
+        if (channel.mAutoMixerBeenSet) {
+            volume = channel.mAutoMixerVolume;
+        } else {
+            volume = channel.mOutputChannels[0].mTargetVolume;
+        }
+        sample = (s16)((s64)sample * volume / JASDriver::getChannelLevel_dsp());
+    }
 }
 
 void dusk::audio::DspInit() {
