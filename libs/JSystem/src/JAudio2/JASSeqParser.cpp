@@ -937,9 +937,6 @@ s32 JASSeqParser::parseNoteOff(JASTrack* param_0, u8 param_1) {
 
 s32 JASSeqParser::parseNoteOn(JASTrack* param_0, u8 param_1) {
     JASSeqCtrl* seqCtrl = param_0->getSeqCtrl();
-    if (seqCtrl->trace) {
-        printf("Guh\n");
-    }
     u32 r28 = seqCtrl->readByte();
     u32 r30 = r28;
     r30 &= 7;
@@ -1010,12 +1007,6 @@ s32 JASSeqParser::parse(JASTrack* param_0) {
     JASSeqCtrl* ctrl = param_0->getSeqCtrl();
     u32 base = ctrl->mReader.mCurPos - ctrl->mReader.mBase;
     u32 r31 = ctrl->readByte();
-
-    if (ctrl->trace) {
-        OSReportForceEnableOn();
-        OSReport("%06X: %02X\n", base, r31);
-        fflush(stdout);
-    }
     s32 r30 = 0;
     if ((r31 & 0x80) == 0) {
         r30 = parseNoteOn(param_0, r31);
