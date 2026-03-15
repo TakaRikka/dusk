@@ -27,7 +27,7 @@ public:
     virtual ~Z2HioSeSeqDataMgr() {}
     virtual SeqDataReturnValue getSeqData(JAISoundID param_1, JAISeqData* param_2) {
         if (field_0x18->getSeqList()->getSeqData(param_1, param_2)) {
-            param_2->field_0x4 = 4;
+            param_2->mOffset = 4;
             return SeqDataReturnValue_2;
         } else {
             return JAUSeqDataMgr_SeqCollection::getSeqData(param_1, param_2);

@@ -959,10 +959,10 @@ s32 JASSeqParser::parseCommand(JASTrack* param_0, u8 cmd, u16 param_2) {
     } else {
         cmdInfo = &sExtCmdInfo[seqCtrl->readByte() & 0xff];
     }
-    u16 r28 = (u16)cmdInfo->field_0xe;
+    u16 r28 = (u16)cmdInfo->mParameterTypes;
     r28 |= param_2;
     u32 stack_28[8];
-    for (int i = 0; i < cmdInfo->field_0xc; i++, r28 >>= 2) {
+    for (int i = 0; i < cmdInfo->mParameterCount; i++, r28 >>= 2) {
         int r27 = 0;
         switch (r28 & 3) {
         case 0:
@@ -980,11 +980,11 @@ s32 JASSeqParser::parseCommand(JASTrack* param_0, u8 cmd, u16 param_2) {
         }
         stack_28[i] = r27;
     }
-    s32 (JASSeqParser::*ptr)(JASTrack*, u32*) = cmdInfo->field_0x0;
+    s32 (JASSeqParser::*ptr)(JASTrack*, u32*) = cmdInfo->mHandler;
     if (!ptr) {
         return 0;
     }
-    return execCommand(param_0, ptr, cmdInfo->field_0xc, stack_28);
+    return execCommand(param_0, ptr, cmdInfo->mParameterCount, stack_28);
 }
 
 s32 JASSeqParser::parseRegCommand(JASTrack* param_0, int param_1) {

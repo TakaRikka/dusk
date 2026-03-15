@@ -171,9 +171,9 @@ void JASTrack::assignExtBuffer(u32 index, JASSoundParams* i_soundParams) {
     mChannelMgrs[index]->mSoundParams = i_soundParams;
 }
 
-void JASTrack::setSeqData(void* param_0, u32 param_1) {
+void JASTrack::setSeqData(void* base, u32 offset) {
     JUT_ASSERT(257, mStatus == STATUS_FREE);
-    mSeqCtrl.start(param_0, param_1);
+    mSeqCtrl.start(base, offset);
 }
 
 void JASTrack::startSeq() {

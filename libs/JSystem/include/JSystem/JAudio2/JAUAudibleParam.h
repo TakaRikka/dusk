@@ -2,6 +2,7 @@
 #define JAUAUDIBLEPARAM_H
 
 #include <types.h>
+#include "dusk/endian.h"
 
 /**
  * @ingroup jsystem-jaudio
@@ -14,8 +15,8 @@ struct JAUAudibleParam {
 
     union {
         struct {
-            u16 f0;
-            u16 f1;
+            BE(u16) f0;
+            BE(u16) f1;
         } half;
         struct {
             u8 b0_0 : 4;
@@ -29,7 +30,7 @@ struct JAUAudibleParam {
             u8 b2;
             u8 b3;
         } bytes;
-        u32 raw;
+        BE(u32) raw;
     } field_0x0;
 };
 
