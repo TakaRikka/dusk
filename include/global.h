@@ -83,7 +83,11 @@ extern int __abs(int);
 void* __memcpy(void*, const void*, int);
 #endif
 
-#ifdef _MSVC_LANG
+#ifndef M_PI
+#define M_PI 3.14159265358979323846f
+#endif
+
+#if defined(_MSVC_LANG) && !defined(__clang__)
 inline int __builtin_clz(unsigned int v) {
     int count = 32;
     while (v != 0) {
@@ -94,7 +98,6 @@ inline int __builtin_clz(unsigned int v) {
 }
 
 #define COMPOUND_LITERAL(x)
-#define M_PI 3.14159265358979323846f
 #else
 
 #define COMPOUND_LITERAL(x) (x)
