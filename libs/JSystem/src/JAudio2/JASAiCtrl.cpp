@@ -152,6 +152,8 @@ void JASDriver::updateDSP() {
 
     JASPortCmd::execAllCommand();
     DSPSyncCallback();
+#if !TARGET_PC
+    // Safety kill code? Our audio engine isn't consistent enough and hits this incorrectly.
     static u32 old_time = 0;
     static u32 history[10] = {0x000F4240};
     u32 r28 = OSGetTick();
@@ -172,6 +174,7 @@ void JASDriver::updateDSP() {
         JASDSPChannel::killActiveChannel();
         #endif
     }
+#endif
     JASChannel::receiveBankDisposeMsg();
     JASDSPChannel::updateAll();
 
