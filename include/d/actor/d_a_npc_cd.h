@@ -58,8 +58,8 @@ struct daNpcCd_HIO_Jnt_c : public JORReflexible {
     void genMessage(JORMContext*);
 #endif
 
-    /* 0x04 */ Vec jntT;
-    /* 0x10 */ SVec jntR;
+    /* 0x04 */ BE(Vec) jntT;
+    /* 0x10 */ struct { BE(s16) x, y, z; } jntR;
 };
 
 struct daNpcCd_HIO_Child_c : public JORReflexible {
@@ -71,17 +71,17 @@ struct daNpcCd_HIO_Child_c : public JORReflexible {
 #endif
 
     /* 0x004 */ daNpcCd_HIO_Jnt_c field_0x4[12];
-    /* 0x124 */ s16 field_0x124[0x0C];
-    /* 0x13C */ f32 mObjScale;
-    /* 0x140 */ s16 mAtn;
-    /* 0x144 */ f32 mAnmPlaySpeed;
-    /* 0x148 */ f32 mWalkAnmPlaySpeed;
-    /* 0x14C */ f32 mMaxSpeed;
-    /* 0x150 */ f32 mWalkMaxSpeed;
-    /* 0x154 */ f32 mCylH;
-    /* 0x158 */ f32 mCylR;
-    /* 0x15C */ f32 mChkWallH;
-    /* 0x160 */ f32 mChkWallR;
+    /* 0x124 */ BE(s16) field_0x124[0x0C];
+    /* 0x13C */ BE(f32) mObjScale;
+    /* 0x140 */ BE(s16) mAtn;
+    /* 0x144 */ BE(f32) mAnmPlaySpeed;
+    /* 0x148 */ BE(f32) mWalkAnmPlaySpeed;
+    /* 0x14C */ BE(f32) mMaxSpeed;
+    /* 0x150 */ BE(f32) mWalkMaxSpeed;
+    /* 0x154 */ BE(f32) mCylH;
+    /* 0x158 */ BE(f32) mCylR;
+    /* 0x15C */ BE(f32) mChkWallH;
+    /* 0x160 */ BE(f32) mChkWallR;
 };
 
 STATIC_ASSERT(sizeof(daNpcCd_HIO_Child_c) == 0x164);

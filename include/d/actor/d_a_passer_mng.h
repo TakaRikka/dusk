@@ -253,7 +253,7 @@ public:
 
     struct Group {
         u8 field_0x00;
-        int field_0x04[0];
+        BE(int) field_0x04[0];
     };
 
     static Group* mGroupTbl[4];
