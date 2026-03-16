@@ -22,6 +22,7 @@ namespace dusk {
             ImGui::Separator();
 
             if (ImGui::BeginMenu("Graphics")) {
+                ImGui::Checkbox("Native Bloom", &m_graphicsSettings.m_enableBloom);
                 ImGui::EndMenu();
             }
 

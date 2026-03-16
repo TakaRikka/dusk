@@ -1135,6 +1135,11 @@ void mDoGph_gInf_c::bloom_c::remove() {
 }
 
 void mDoGph_gInf_c::bloom_c::draw() {
+#if TARGET_PC
+    if (!dusk::g_imguiConsole.isBloomEnabled()) {
+        return;
+    }
+#endif
     bool enabled = mEnable && m_buffer != NULL;
     if (mMonoColor.a != 0 || enabled) {
 #if TARGET_PC
