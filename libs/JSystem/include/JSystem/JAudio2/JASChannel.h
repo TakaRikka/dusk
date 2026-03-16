@@ -79,7 +79,7 @@ public:
     };
 
     union MixConfig {
-        u16 whole;
+        BE(u16) whole;
         struct {
             u8 upper;
             u8 lower0 : 4;
