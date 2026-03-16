@@ -15,7 +15,7 @@ void JAUSoundTable::init(void const* param_0) {
 }
 
 u8 JAUSoundTable::getTypeID(JAISoundID param_0) const {
-#if TARGET_PC
+#if DUSK_AUDIO_DISABLED
     if (this == NULL) {
         return 0xff;
     }
@@ -35,7 +35,7 @@ u8 JAUSoundTable::getTypeID(JAISoundID param_0) const {
 }
 
 JAUSoundTableItem* JAUSoundTable::getData(JAISoundID param_0) const {
-#if TARGET_PC
+#if DUSK_AUDIO_DISABLED
     if (this == NULL) {
         return NULL;
     }

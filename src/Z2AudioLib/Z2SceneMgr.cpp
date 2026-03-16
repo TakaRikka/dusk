@@ -1718,7 +1718,7 @@ void Z2SceneMgr::setSceneName(char* spot, s32 room, s32 layer) {
 
     if (Z2GetSoundMgr()->getStreamMgr()->isActive()) {
         JAUSoundTable* sound_table = JAUSoundTable::getInstance();
-#if TARGET_PC
+#if DUSK_AUDIO_DISABLED
         if (sound_table->isValid())
 #endif
         {
