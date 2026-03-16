@@ -33,7 +33,7 @@ static void InitSDL3Output() {
     SDL_Init(SDL_INIT_AUDIO);
 
     constexpr SDL_AudioSpec spec = {
-        SDL_AUDIO_S16,
+        SDL_AUDIO_F32,
         1,
         SampleRate,
     };
@@ -68,6 +68,7 @@ void SDLCALL GetNewAudio(
 }
 
 static std::ofstream outRaw("guh.raw", std::ios_base::out | std::ios_base::binary);
+static std::ofstream outRawF32("guh.f32.raw", std::ios_base::out | std::ios_base::binary);
 
 int RenderNewAudioFrame() {
     JASCriticalSection section;
@@ -92,7 +93,14 @@ void RenderAudioSubframe() {
     JASDriver::updateDSP();
     DspRender(subFrame);
 
-    outRaw.write((const char*)subFrame.data(), subFrame.size() * sizeof(s16));
+    std::array<f32, DSP_SUBFRAME_SIZE> guh = {};
+    for (int i = 0; i < DSP_SUBFRAME_SIZE; i++) {
+        guh[i] = (f32)subFrame[i] / (f32)0x7FFF;
+    }
 
-    SDL_PutAudioStreamData(PlaybackStream, &subFrame, sizeof(subFrame));
+    outRaw.write((const char*)subFrame.data(), sizeof(subFrame));
+    outRawF32.write((const char*)guh.data(), sizeof(guh));
+
+    SDL_PutAudioStreamData(PlaybackStream, guh.data(), sizeof(guh));
+    // SDL_PutAudioStreamData(PlaybackStream, subFrame.data(), sizeof(subFrame));
 }
