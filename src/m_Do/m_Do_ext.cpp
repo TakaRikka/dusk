@@ -2199,6 +2199,9 @@ void mDoExt_invJntPacket::draw() {
 
     if (field_0x16) {
         J3DModelData* sp20 = field_0x10->getModelData();
+#if TARGET_PC
+        j3dSys.setTexture(sp20->getTexture());
+#endif
         J3DJoint* sp1C = sp20->getJointNodePointer(field_0x14);
 
         for (J3DMaterial* mesh = sp1C->getMesh(); mesh != NULL; mesh = mesh->getNext()) {

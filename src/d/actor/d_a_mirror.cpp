@@ -208,6 +208,9 @@ void dMirror_packet_c::modelDraw(J3DModel* i_model, Mtx param_1) {
     color.a = kankyo->bg_amb_col[0].a;
 
     J3DModelData* modelData = i_model->getModelData();
+#if TARGET_PC
+    j3dSys.setTexture(modelData->getTexture());
+#endif
     u16 materialNum = modelData->getMaterialNum();
     for (u16 i = 0; i < materialNum; i++) {
         J3DMatPacket* matPacket = i_model->getMatPacket(i);
