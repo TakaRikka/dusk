@@ -17,7 +17,7 @@ namespace dusk::audio {
 
     extern ChannelAuxData ChannelAux[DSP_CHANNELS];
 
-    using DspSubframe = std::array<s16, DSP_SUBFRAME_SIZE>;
+    using DspSubframe = std::array<f32, DSP_SUBFRAME_SIZE>;
 
     void DspInit();
     void DspRender(DspSubframe& subframe);

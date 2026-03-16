@@ -80,7 +80,7 @@ static void ResetChannel(JASDsp::TChannel& channel, ChannelAuxData& aux) {
 
 static void MixSubframe(DspSubframe& dst, const DspSubframe& src) {
     for (int i = 0; i < dst.size(); i++) {
-        dst[i] = static_cast<s16>(dst[i] + src[i]);
+        dst[i] += src[i];
     }
 }
 
@@ -197,7 +197,7 @@ static void RenderChannel(
         ResetChannel(channel, channelAux);
     }
 
-    int wantRead = static_cast<int>(subframe.size() * sizeof(s16));
+    int wantRead = static_cast<int>(subframe.size() * sizeof(subframe[0]));
     auto read = SDL_GetAudioStreamData(
         channelAux.resampleStream,
         subframe.data(),
@@ -207,27 +207,33 @@ static void RenderChannel(
         channel.mIsFinished = true;
     }
 
+    u16 volume;
+    if (channel.mAutoMixerBeenSet) {
+        volume = channel.mAutoMixerVolume;
+    } else {
+        volume = channel.mOutputChannels[0].mTargetVolume;
+    }
+    f32 ratio = static_cast<f32>(volume) / static_cast<f32>(JASDriver::getChannelLevel_dsp());
     for (auto& sample : subframe) {
-        u16 volume;
-        if (channel.mAutoMixerBeenSet) {
-            volume = channel.mAutoMixerVolume;
-        } else {
-            volume = channel.mOutputChannels[0].mTargetVolume;
-        }
-        sample = (s16)((s64)sample * volume / JASDriver::getChannelLevel_dsp());
+        sample *= ratio;
     }
 }
 
 void dusk::audio::DspInit() {
-    constexpr SDL_AudioSpec spec = {
+    constexpr SDL_AudioSpec srcSpec = {
         SDL_AUDIO_S16,
+        1,
+        SampleRate
+    };
+    constexpr SDL_AudioSpec dstSpec = {
+        SDL_AUDIO_F32,
         1,
         SampleRate
     };
 
     for (int i = 0; i < DSP_CHANNELS; i++) {
         auto& aux = ChannelAux[i];
-        aux.resampleStream = SDL_CreateAudioStream(&spec, &spec);
+        aux.resampleStream = SDL_CreateAudioStream(&srcSpec, &dstSpec);
 
         SDL_SetAudioStreamGetCallback(
             aux.resampleStream,
