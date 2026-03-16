@@ -60,7 +60,7 @@ static void RenderChannel(
     ChannelAuxData& channelAux,
     DspSubframe& subframe);
 
-static void ResetChannel(JASDsp::TChannel& channel, const ChannelAuxData& aux) {
+static void ResetChannel(JASDsp::TChannel& channel, ChannelAuxData& aux) {
     channel.mSamplesLeft = channel.mEndSample - channel.mSamplePosition;
 
     const SDL_AudioSpec spec = {
@@ -68,6 +68,9 @@ static void ResetChannel(JASDsp::TChannel& channel, const ChannelAuxData& aux) {
         1,
         static_cast<int>(static_cast<u64>(SampleRate) * channel.mPitch / 4096)
     };
+
+    aux.hist0 = 0;
+    aux.hist1 = 0;
 
     SDL_ClearAudioStream(aux.resampleStream);
     SDL_SetAudioStreamFormat(aux.resampleStream, &spec, nullptr);
