@@ -704,6 +704,15 @@ void JASDsp::TChannel::setDistFilter(s16 param_0) {
 void JASDsp::TChannel::setBusConnect(u8 outputChannel, u8 param_1) {
     JUT_ASSERT(973, dspMutex);
     OutputChannelConfig& tmp = mOutputChannels[outputChannel];
+#if AVOID_UB
+    if (param_1 == 255) {
+        // Seems to happen for "dolby mode" where the mix config is 0xFFFF.
+        // Probably UB without side effect in the base game as afaict the DSP
+        // doesn't look at mix config when "dolby mode" is active.
+        return;
+    }
+    JUT_ASSERT(0, param_1 < 12);
+#endif
     static u16 const connect_table[12] = {
         0x0000, 0x0D00, 0x0D60, 0x0DC0, 0x0E20, 0x0E80,
         0x0EE0, 0x0CA0, 0x0F40, 0x0FA0, 0x0B00, 0x09A0,
