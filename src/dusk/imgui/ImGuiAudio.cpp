@@ -3,12 +3,23 @@
 #include "JSystem/JAudio2/JAISeMgr.h"
 #include "JSystem/JAudio2/JAIStreamMgr.h"
 #include "JSystem/JAudio2/JASCriticalSection.h"
+#include "JSystem/JAudio2/JASDSPChannel.h"
 #include "JSystem/JAudio2/JASDSPInterface.h"
 #include "JSystem/JAudio2/JASTrack.h"
 
 static void ShowAllDspChannels() {
+    int activeChannels = 0;
+    for (int i = 0; i < DSP_CHANNELS; i++) {
+        if (JASDsp::CH_BUF[i].mIsActive) {
+            activeChannels++;
+        }
+    }
+
+    ImGui::Text("Active channels: %d", activeChannels);
+
     for (int i = 0; i < DSP_CHANNELS; i++) {
         auto& channel = JASDsp::CH_BUF[i];
+        auto& jasChannel = JASDSPChannel::sDspChannels[i];
         if (!channel.mIsActive) {
             continue;
         }
@@ -19,8 +30,11 @@ static void ShowAllDspChannels() {
         if (ImGui::BeginChild(buf, ImVec2(), ImGuiChildFlags_Border | ImGuiChildFlags_AutoResizeY)) {
             ImGui::Text("[%02X]", i);
             ImGui::TextUnformatted(channel.mLoopFlag ? "Loop: true" : "Loop: false");
+            ImGui::SameLine();
+            ImGui::Text("Priority: %hd", jasChannel.mPriority);
             ImGui::Text("Format: %02X/%02X", channel.mSamplesPerBlock, channel.mBytesPerBlock);
             ImGui::Text("Position: %08X/%08X", channel.mSamplePosition, channel.mEndSample);
+            ImGui::SameLine();
             ImGui::Text("Memory: %08X/%08X", channel.mWaveAramAddress, channel.mAramStreamPosition);
         }
 
