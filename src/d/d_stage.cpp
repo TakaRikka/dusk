@@ -147,7 +147,14 @@ static int dStage_RoomKeepDoorInit(dStage_dt_c* i_stage, void* i_data, int entry
 }
 
 void dStage_startStage_c::set(const char* i_Name, s8 i_RoomNo, s16 i_Point, s8 i_Layer) {
+#if TARGET_PC
+    // UB fix.
+    if (mName != i_Name) {
+        strncpy_s(mName, sizeof(mName), i_Name, sizeof(mName));
+    }
+#else
     strcpy(mName, i_Name);
+#endif
     mRoomNo = i_RoomNo;
     mPoint = i_Point;
     mLayer = i_Layer;
