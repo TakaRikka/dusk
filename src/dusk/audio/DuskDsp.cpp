@@ -125,6 +125,12 @@ static void SDLCALL ReadChannelSamples(
     auto& channel = JASDsp::CH_BUF[index];
     auto& aux = ChannelAux[index];
 
+    if (channel.mSamplesLeft == 0 && !channel.mLoopFlag) {
+        // May get called when we're out of data to read.
+        // This is expected, as we need to drain the resampler channel before we mark the channel as finished.
+        return;
+    }
+
     additional_amount = ALIGN_NEXT(additional_amount, channel.mSamplesPerBlock);
 
     int requestedSize = static_cast<int>(sizeof(s16) * additional_amount);
@@ -154,8 +160,6 @@ static void SDLCALL ReadChannelSamples(
     if (channel.mSamplesLeft == 0) {
         // Reached end of buffer.
         if (!channel.mLoopFlag) {
-            // Finish.
-            channel.mIsFinished = true;
             return;
         }
 
@@ -190,10 +194,15 @@ static void RenderChannel(
         ResetChannel(channel, channelAux);
     }
 
-    SDL_GetAudioStreamData(
+    int wantRead = static_cast<int>(subframe.size() * sizeof(s16));
+    auto read = SDL_GetAudioStreamData(
         channelAux.resampleStream,
         subframe.data(),
-        static_cast<int>(subframe.size() * sizeof(s16)));
+        wantRead);
+
+    if (read < wantRead) {
+        channel.mIsFinished = true;
+    }
 
     for (auto& sample : subframe) {
         u16 volume;
