@@ -95,6 +95,10 @@ namespace dusk {
             m_menuGame.draw();
             m_menuTools.draw();
 
+            ImGui::SetCursorPosX(ImGui::GetWindowWidth() - 80.0f);
+            ImGuiIO& io = ImGui::GetIO();
+            ImGuiStringViewText(fmt::format(FMT_STRING("FPS: {:.2f}\n"), io.Framerate));
+
             ImGui::EndMainMenuBar();
         }
     }

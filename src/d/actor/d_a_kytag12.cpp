@@ -704,8 +704,13 @@ static int daKytag12_Execute_R00(kytag12_class* i_this) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     dKankyo_evil_Packet* temp_r25 = dKy_getEnvlight()->mpEvilPacket;
 
+#if AVOID_UB
+    f32 var_f26 = 0;
+    f32 var_f25 = 0;
+#else
     f32 var_f26;
     f32 var_f25;
+#endif
 
     int var_r24 = 0;
 
