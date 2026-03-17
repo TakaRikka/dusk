@@ -42,7 +42,7 @@ int daPasserMng_c::execute() {
 template <int N>
 struct SizedGroup {
     u8 field_0x00;
-    int field_0x04[N];
+    BE(int) field_0x04[N];
 };
 
 static SizedGroup<7> const groupA = {
