@@ -20,6 +20,7 @@ public:
     void OffWaterGrp() { mGrp &= ~WATER_GRP; }
     void OnNormalGrp() { mGrp |= NORMAL_GRP; }
     void OffNormalGrp() { mGrp &= ~NORMAL_GRP; }
+    void OnFullGrp() { mGrp |= FULL_GRP; }
     void OffFullGrp() { mGrp &= ~FULL_GRP; }
     void OnAll() { mGrp |= FULL_GRP; }
     u32 MaskNormalGrp() { return mGrp & NORMAL_GRP; }

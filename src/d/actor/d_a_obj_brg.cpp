@@ -20,7 +20,8 @@ static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* i_bgActor, fopAc_ac_c* i_rid
     obj_brg_class* a_this = (obj_brg_class*)i_bgActor;
 
     cXyz sp74 = a_this->mBr[0].field_0x0bc - i_rideActor->current.pos;
-    int var_r27 = JMAFastSqrt(sp74.x * sp74.x + sp74.z * sp74.z) / (a_this->field_0xaedc * 51.0f) - -0.5f;
+    f32 var_f28 = JMAFastSqrt(sp74.x * sp74.x + sp74.z * sp74.z);
+    int var_r27 = var_f28 / (a_this->field_0xaedc * 51.0f) - -0.5f;
 
     if (var_r27 > a_this->field_0xb1ea - 1) {
         var_r27 = a_this->field_0xb1ea - 1;
@@ -37,7 +38,7 @@ static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* i_bgActor, fopAc_ac_c* i_rid
     if (a_this->mType & 5) {
         var_f30 = 0.85f;
     } else if (a_this->field_0xb1ed == 2) {
-        var_f30 = KREG_F(7) + 0.1f;
+        var_f30 = KREG_F(4) + 0.1f;
     } else {
         var_f30 = 1.0f;
     }

@@ -3,7 +3,7 @@
 #include "d/d_bg_w_kcol.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_horse.h"
-#include "d/d_bg_s_cap_poly.h"
+#include "d/d_bg_s_capt_poly.h"
 
 #include <algorithm>
 #include <cmath>
@@ -1009,7 +1009,7 @@ void dBgWKCol::CaptPoly(dBgS_CaptPoly& i_captpoly) {
                                             cM3dGPla plane;
                                             plane = GetTriPla(r28[0]);
 
-                                            i_captpoly.m_callback(i_captpoly, (cBgD_Vtx_t*)&vtx_tbl, 0, 1, 2, &plane);
+                                            i_captpoly.m_callback(&i_captpoly, (cBgD_Vtx_t*)&vtx_tbl, 0, 1, 2, &plane);
                                         }
                                     }
                                 }

@@ -84,7 +84,10 @@ bool dBgS_PolyPassChk::ChkNoHorse() {
         return true;
     }
 
-    return !ChkHorse();
+    if (!ChkHorse())
+        return true;
+
+    return false;
 }
 
 void dBgS_PolyPassChk::SetStatue() {

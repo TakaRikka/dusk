@@ -24,7 +24,7 @@ public:
     void OffMoveBGOnly() { m_flags &= ~MOVE_BG_ONLY; }
     void OnMoveBGOnly() { m_flags |= MOVE_BG_ONLY; }
     void OnFind() { m_flags |= FIND; }
-    bool ChkMoveBGOnly() { return m_flags & MOVE_BG_ONLY; }
+    BOOL ChkMoveBGOnly() { return m_flags & MOVE_BG_ONLY; }
     void SetHeight(f32 height) { m_height = height; }
     f32 GetHeight() { return m_height; }
     cXyz& GetPosP() { return m_ground; }

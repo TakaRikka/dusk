@@ -616,6 +616,7 @@ public:
     void setItemMaxMagicCount(s16 max) { mItemInfo.mItemMaxMagicCount += max; }
     s32 getItemOilCount() { return mItemInfo.mItemOilCount; }
     void setItemOilCount(s32 oil) { mItemInfo.mItemOilCount += oil; }
+    void setItemMaxOilCount(s32 oil) { mItemInfo.mItemMaxOilCount += oil; }
     void clearItemOilCount() { mItemInfo.mItemOilCount = 0; }
     s32 getItemNowOil() { return mItemInfo.mItemNowOil; }
     void setItemNowOil(s32 oil) { mItemInfo.mItemNowOil = oil; }
@@ -630,6 +631,7 @@ public:
     s32 getOxygenCount() { return mItemInfo.mOxygenCount; }
     void setOxygenCount(s32 oxygen) { mItemInfo.mOxygenCount += oxygen; }
     void clearOxygenCount() { mItemInfo.mOxygenCount = 0; }
+    void setMaxOxygenCount(s32 oxygen) { mItemInfo.mMaxOxygenCount += oxygen; }
     s32 getMaxOxygenCount() { return mItemInfo.mMaxOxygenCount; }
     void clearMaxOxygenCount() { mItemInfo.mMaxOxygenCount = 0; }
     s16 getItemArrowNumCount() { return mItemInfo.mItemArrowNumCount; }
@@ -1696,12 +1698,20 @@ inline u8 dComIfGs_getBombMax(u8 i_bombType) {
     return g_dComIfG_gameInfo.info.getPlayer().getItemMax().getBombNum(i_bombType);
 }
 
+inline void dComIfGs_setPohSpiritNum(u8 i_num) {
+    g_dComIfG_gameInfo.info.getPlayer().getCollect().setPohNum(i_num);
+}
+
 inline u8 dComIfGs_getPohSpiritNum() {
     return g_dComIfG_gameInfo.info.getPlayer().getCollect().getPohNum();
 }
 
 inline void dComIfGs_addPohSpiritNum() {
     g_dComIfG_gameInfo.info.getPlayer().getCollect().addPohNum();
+}
+
+inline BOOL dComIfGs_isCollectClothes(u8 i_clothesNo) {
+    return g_dComIfG_gameInfo.info.getPlayer().getCollect().isCollect(COLLECT_CLOTHING, i_clothesNo);
 }
 
 inline void dComIfGs_setCollectClothes(u8 i_clothesNo) {
@@ -1721,16 +1731,32 @@ inline BOOL dComIfGs_isCollectClothing(u8 i_clothesNo) {
                                                                       i_clothesNo);
 }
 
+inline void dComIfGs_offCollectClothes(u8 i_clothesNo) {
+    g_dComIfG_gameInfo.info.getPlayer().getCollect().offCollect(COLLECT_CLOTHING, i_clothesNo);
+}
+
 inline BOOL dComIfGs_isCollectSword(u8 i_swordNo) {
     return g_dComIfG_gameInfo.info.getPlayer().getCollect().isCollect(COLLECT_SWORD, i_swordNo);
+}
+
+inline void dComIfGs_offCollectSword(u8 i_swordNo) {
+    g_dComIfG_gameInfo.info.getPlayer().getCollect().offCollect(COLLECT_SWORD, i_swordNo);
 }
 
 inline BOOL dComIfGs_isCollectShield(u8 i_item) {
     return g_dComIfG_gameInfo.info.getPlayer().getCollect().isCollect(COLLECT_SHIELD, i_item);
 }
 
+inline void dComIfGs_offCollectShield(u8 i_shieldNo) {
+    g_dComIfG_gameInfo.info.getPlayer().getCollect().offCollect(COLLECT_SHIELD, i_shieldNo);
+}
+
 inline void dComIfGs_onCollectCrystal(u8 i_item) {
     g_dComIfG_gameInfo.info.getPlayer().getCollect().onCollectCrystal(i_item);
+}
+
+inline void dComIfGs_offCollectCrystal(u8 i_item) {
+    g_dComIfG_gameInfo.info.getPlayer().getCollect().offCollectCrystal(i_item);
 }
 
 inline bool dComIfGs_isCollectCrystal(u8 i_item) {
@@ -1739,6 +1765,10 @@ inline bool dComIfGs_isCollectCrystal(u8 i_item) {
 
 inline void dComIfGs_onCollectMirror(u8 i_item) {
     g_dComIfG_gameInfo.info.getPlayer().getCollect().onCollectMirror(i_item);
+}
+
+inline void dComIfGs_offCollectMirror(u8 i_item) {
+    g_dComIfG_gameInfo.info.getPlayer().getCollect().offCollectMirror(i_item);
 }
 
 inline bool dComIfGs_isCollectMirror(u8 i_item) {
@@ -3538,7 +3568,7 @@ inline u8 dComIfGp_getItemLifeCountType() {
     return g_dComIfG_gameInfo.play.getItemLifeCountType();
 }
 
-inline void dComIfGp_setItemLifeCount(float amount, u8 type) {
+inline void dComIfGp_setItemLifeCount(f32 amount, u8 type) {
     g_dComIfG_gameInfo.play.setItemLifeCount(amount, type);
 }
 
@@ -3602,6 +3632,10 @@ inline void dComIfGp_setItemOilCount(s32 oil) {
     g_dComIfG_gameInfo.play.setItemOilCount(oil);
 }
 
+inline void dComIfGp_setItemMaxOilCount(s32 oil) {
+    g_dComIfG_gameInfo.play.setItemMaxOilCount(oil);
+}
+
 inline void dComIfGp_clearItemOilCount() {
     g_dComIfG_gameInfo.play.clearItemOilCount();
 }
@@ -3656,6 +3690,10 @@ inline void dComIfGp_setOxygenCount(s32 oxygen) {
 
 inline void dComIfGp_clearOxygenCount() {
     g_dComIfG_gameInfo.play.clearOxygenCount();
+}
+
+inline void dComIfGp_setMaxOxygenCount(s32 oxygen) {
+    g_dComIfG_gameInfo.play.setMaxOxygenCount(oxygen);
 }
 
 inline s32 dComIfGp_getMaxOxygenCount() {

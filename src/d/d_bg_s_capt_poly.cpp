@@ -7,11 +7,11 @@
 dBgS_CaptPoly::dBgS_CaptPoly() {
     SetPolyPassChk(GetPolyPassChkInfo());
     SetGrpPassChk(GetGrpPassChkInfo());
-    field_0x48 = 0;
+    m_callback = NULL;
 }
 
 void dBgS_CaptPoly::Set(cXyz& min, cXyz& max) {
-    aab.Set(&min, &max);
+    m_bnd.Set(&min, &max);
 
     JUT_ASSERT(36, !(fpclassify(min.x) == FP_QNAN));
     JUT_ASSERT(37, !(fpclassify(min.y) == FP_QNAN));

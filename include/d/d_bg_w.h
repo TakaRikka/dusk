@@ -156,6 +156,10 @@ public:
     u32 GetMaskPolyInf1_NoShift(int, u32) const;
     u32 GetPolyInf2(int, u32, u32) const;
     int GetTriGrp(int) const;
+    
+    #if DEBUG
+    void DebugLocalPos();
+    #endif
 
     virtual ~cBgW();
     virtual bool ChkMemoryError();
@@ -218,23 +222,23 @@ public:
     virtual bool ChkShdwDrawThrough(int, cBgS_PolyPassChk*);
     virtual bool ChkGrpThrough(int, cBgS_GrpPassChk*, int);
 
-    u32 GetOldInvMtx(Mtx m) { return MTXInverse(m_inv_mtx, m); }
-    MtxP GetBaseMtxP() { return pm_base; }
-    bool ChkNoCalcVtx() { return mFlags & NO_CALC_VTX_e; }
-    bool ChkFlush() { return field_0x91 & 8; }
+    u32 GetOldInvMtx(Mtx m) const { return PSMTXInverse(m_inv_mtx, m); }
+    MtxP GetBaseMtxP() { return *pm_base; }
+    BOOL ChkNoCalcVtx() { return mFlags & NO_CALC_VTX_e; }
+    BOOL ChkFlush() { return field_0x91 & 8; }
     void SetLock() { mFlags |= (u8)LOCK_e; }
     void OffRoofRegist() { field_0x91 |= (u8)0x4; }
     void OnRoofRegist() { field_0x91 &= ~0x04; }
-    bool ChkRoofRegist() { return field_0x91 & 4;}
+    bool ChkRoofRegist() { return (field_0x91 & 4) == 0;}
     cBgD_Vtx_t* GetVtxTbl() const { return pm_vtx_tbl; }
     int GetVtxNum() const { return pm_bgd->m_v_num; }
     void ClrNoCalcVtx() { mFlags &= ~NO_CALC_VTX_e; }
-    void SetBaseMtxP(MtxP mtx) { pm_base = mtx; }
+    void SetBaseMtxP(Mtx* mtx) { pm_base = mtx; }
     void SetNoCalcVtx() { mFlags |= NO_CALC_VTX_e; }
     cBgD_t* GetBgd() const { return pm_bgd; }
 
 public:
-    /* 0x18 */ MtxP pm_base;  // Model Matrix
+    /* 0x18 */ Mtx* pm_base;  // Model Matrix
     /* 0x1C */ Mtx m_inv_mtx;
     /* 0x4C */ Mtx m_mtx;
     /* 0x7C */ cXyz mTransVel;
@@ -333,10 +337,16 @@ public:
     virtual bool ChkShdwDrawThrough(int, cBgS_PolyPassChk*);
     virtual bool ChkGrpThrough(int, cBgS_GrpPassChk*, int);
 
+    #if DEBUG
+    void DrawBox() const;
+    void DebugDraw() const;
+    void DrawPoly(const cBgS_PolyInfo&, const GXColor&) const;
+    #endif
+
     void SetCrrFunc(dBgW_CrrFunc func) { m_crr_func = func; }
     void SetRideCallback(dBgW_RideCallback func) { m_ride_callback = func; }
     void SetArrowStickCallback(dBgW_ArrowStickCallback func) { m_arrow_stick_callback = func; }
-    void OnMoveFlag() { m_flags |= 1; }
+    void OnMoveFlag() { m_flags |= (u8)1; }
 
 private:
     /* 0xB0 */ dBgW_CrrFunc m_crr_func;
@@ -346,5 +356,9 @@ private:
 };
 
 dBgW* dBgW_NewSet(cBgD_t* pbgd, u32 flags, Mtx* pbase_mtx);
+
+#if DEBUG
+extern u8 lbl_8074C7F0;
+#endif
 
 #endif /* D_BG_D_BG_W_H */

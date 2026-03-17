@@ -420,12 +420,14 @@ public:
     void offCollectMirror(u8 i_item);
     BOOL isCollectMirror(u8 i_item) const;
 
+    void setPohNum(u8 i_num) { mPohNum = i_num; }
     u8 getPohNum() const { return mPohNum; }
+
     void addPohNum() {
         if (mPohNum < 0xFF) {
             mPohNum++;
         }
-    };
+    }
 
 private:
     /* 0x0 */ u8 mItem[8];

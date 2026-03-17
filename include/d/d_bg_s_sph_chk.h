@@ -15,6 +15,7 @@ public:
     dBgS_SphChk();
     virtual ~dBgS_SphChk();
 
+    void Init() { ClearPi(); }
     void SetCallback(SphChk_Callback i_callback) { mCallback = i_callback; }
 
     /* 0x50 */ SphChk_Callback mCallback;

@@ -240,7 +240,7 @@ cPhs_Step daObjSwpush::Act_c::Mthd_Create() {
                 mDoMtx_stack_c::scaleM(field_0x5f8);
                 MTXCopy(mDoMtx_stack_c::get(), mMtx);
                 mpBgW->ClrNoCalcVtx();
-                mpBgW->SetBaseMtxP(mMtx);
+                mpBgW->SetBaseMtxP(&mMtx);
                 mpBgW->GlobalVtx();
                 mpBgW->SetBaseMtxP(NULL);
                 mpBgW->SetNoCalcVtx();
