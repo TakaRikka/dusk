@@ -669,8 +669,9 @@ static int dScnPly_Draw(dScnPly_c* i_this) {
         #endif
 
         dComIfG_Ccsp()->Draw();
-        #if DEBUG
         dComIfG_Bgsp().Draw();
+
+        #if DEBUG
         dPath_Draw();
         #endif
 

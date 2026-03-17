@@ -14,9 +14,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_horse.h"
 
-#if DEBUG
 #include "d/d_debug_viewer.h"
-#endif
 
 #if DEBUG
 static void ASSERT_SOLDHEAP() {
@@ -1115,7 +1113,6 @@ bool cBgW::ChkMoveBg() const {
     return mFlags & MOVE_BG_e;
 }
 
-#if DEBUG
 void dBgW::DrawBox() const {
     cXyz min;
     cXyz max;
@@ -1156,7 +1153,7 @@ void dBgW::DrawBox() const {
     points[7].y = min.y;
     points[7].z = max.z;
 
-    dDbVw_drawCube8pXlu(points, (GXColor){0, 0xFF, 0, 0x64});
+    dDbVw_drawCube8pXlu(points, COMPOUND_LITERAL(GXColor){0, 0xFF, 0, 0x64});
 }
 
 void dBgW::DebugDraw() const {
@@ -1218,7 +1215,6 @@ void dBgW::DrawPoly(const cBgS_PolyInfo& polyinfo, const GXColor& color) const {
 
     dDbVw_drawTriangleXlu(points, color, TRUE);
 }
-#endif
 
 dBgW::dBgW() {
     m_crr_func = NULL;

@@ -937,8 +937,8 @@ void dBgWKCol::CaptPoly(dBgS_CaptPoly& i_captpoly) {
             int sp34;
             int sp30;
             if (sp4C < sp48) {
-                u16* sp2C = NULL;
-                u16* sp28 = NULL;
+                BE(u16)* sp2C = NULL;
+                BE(u16)* sp28 = NULL;
                 int sp24 = sp4C;
 
                 do {
@@ -951,21 +951,21 @@ void dBgWKCol::CaptPoly(dBgS_CaptPoly& i_captpoly) {
                         int sp1C = sp5C;
 
                         do {
-                            u16* sp18 = (u16*)m_pkc_head->m_block_data;
+                            BE(u16)* sp18 = (BE(u16)*)m_pkc_head->m_block_data;
                             int r29 = m_pkc_head->m_block_width_shift;
                             int sp14 =
                                 4 * (((u32)sp24 >> r29) << m_pkc_head->m_area_xy_blocks_shift |
                                      ((u32)sp20 >> r29) << m_pkc_head->m_area_x_blocks_shift |
                                       (u32)sp1C >> r29);
-                            while ((sp14 = (*(int*)((intptr_t)sp18 + sp14))) >= 0) {
-                                sp18 = (u16*)((intptr_t)sp18 + sp14);
+                            while ((sp14 = (*(BE(u32)*)((intptr_t)sp18 + sp14))) >= 0) {
+                                sp18 = (BE(u16)*)((intptr_t)sp18 + sp14);
                                 r29--;
                                 sp14 = (((u32)sp24 >> r29 & 1) << 2 |
                                         ((u32)sp20 >> r29 & 1) << 1 |
                                         ((u32)sp1C >> r29 & 1) << 0) << 2;
                             }
 
-                            u16* r28 = (u16*)((intptr_t)sp18 + (sp14 & 0x7FFFFFFF));
+                            BE(u16)* r28 = (BE(u16)*)((intptr_t)sp18 + (sp14 & 0x7FFFFFFF));
 
                             r29 = 1 << r29;
                             int sp10 = r29 - 1;

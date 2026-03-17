@@ -12,10 +12,10 @@
 #include "f_op/f_op_actor_mng.h"
 #include "dusk/offset_ptr.h"
 
-#if DEBUG
 #include "d/d_debug_viewer.h"
 #include "d/d_bg_s_capt_poly.h"
-#endif
+
+#include "dusk/imgui/ImGuiConsole.hpp"
 
 #if DEBUG
 int g_ground_counter;
@@ -28,8 +28,9 @@ int g_sph_counter;
 int g_capt_poly_counter;
 #endif
 
-#if DEBUG
+
 void dBgS_HIO::genMessage(JORMContext* mctx) {
+#if DEBUG
     mctx->genLabel("zelda地形チェック", 0);
 
     mctx->genLabel("チェック回数 ----------", 0);
@@ -83,11 +84,13 @@ void dBgS_HIO::genMessage(JORMContext* mctx) {
     mctx->genCheckBox("作業２", &m_flags, 0x40);
     mctx->genCheckBox("作業３", &m_flags, 0x80);
     mctx->genCheckBox("作業４", &m_flags, 0x100);
+#endif
 }
 
 dBgS_InsideHIO::~dBgS_InsideHIO() {}
 
 void dBgS_InsideHIO::genMessage(JORMContext* mctx) {
+#if DEBUG
     mctx->genLabel("デバッグポリゴン描画 -----", 0);
     mctx->genCheckBox("デバッグポリゴン描画", &m_flags, FLAG_DISP_POLY_e);
 
@@ -117,8 +120,8 @@ void dBgS_InsideHIO::genMessage(JORMContext* mctx) {
 
     mctx->genLabel("-----", 0);
     mctx->genCheckBox("Obj床 プレイヤー下", &m_flags, FLAG_GNDCHK_PLAYER_UNDER_e);
-}
 #endif
+}
 
 void cBgS_ChkElm::Init() {
     m_bgw_base_ptr = NULL;
@@ -456,9 +459,9 @@ static OSStopwatch s_spl_sw;
 static OSStopwatch s_shdw_sw;
 static OSStopwatch s_sph_chk_sw;
 static OSStopwatch s_capt_poly_sw;
+#endif
 
 static dBgS_InsideHIO s_InsideHio;
-#endif
 
 void dBgS::Ct() {
     cBgS::Ct();
@@ -541,7 +544,6 @@ void dBgS::Move() {
     #endif
 }
 
-#if DEBUG
 void dBgS_AabDraw(cM3dGAab& aab, GXColor& color) {
     cXyz points[8];
 
@@ -643,11 +645,15 @@ static int poly_draw(dBgS_CaptPoly* capt, cBgD_Vtx_t* vtxList, int v0, int v1, i
     
     return 0;
 }
-#endif
 
 void dBgS::Draw() {
-    #if DEBUG
     cBgS::Draw();
+
+    if (dusk::g_imguiConsole.isCollisionView()) {
+        s_InsideHio.m_flags |= dBgS_InsideHIO::FLAG_DISP_POLY_e;
+    } else {
+        s_InsideHio.m_flags &= ~dBgS_InsideHIO::FLAG_DISP_POLY_e;
+    }
 
     if (s_InsideHio.ChkDispPoly()) {
         cM3dGAab aab;
@@ -696,6 +702,7 @@ void dBgS::Draw() {
         CaptPoly(capt);
     }
 
+    #if DEBUG
     if (m_hio.ChkCheckCounter()) {
         OSReport("ラインチェック %d回\n", g_line_counter);
         g_line_counter = 0;
@@ -721,17 +728,18 @@ void dBgS::Draw() {
         OSReport("ポリゴンキャプチャ %d\n", g_capt_poly_counter);
         g_capt_poly_counter = 0;
     }
+    #endif
 
     if (m_hio.ChkObjLineCheck()) {
         dBgS_LinChk linechk;
         linechk.Set(&m_hio.m_linecheck_start, &m_hio.m_linecheck_end, NULL);
 
-        dDbVw_drawLineOpa(m_hio.m_linecheck_start, m_hio.m_linecheck_end, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, TRUE, 12);
-        dDbVw_drawSphereOpa(m_hio.m_linecheck_start, 10.0f, (GXColor){0xFF, 0, 0, 0xFF}, TRUE);
-        dDbVw_drawSphereOpa(m_hio.m_linecheck_end, 10.0f, (GXColor){0, 0, 0xFF, 0xFF}, TRUE);
+        dDbVw_drawLineOpa(m_hio.m_linecheck_start, m_hio.m_linecheck_end, COMPOUND_LITERAL(GXColor){0xFF, 0xFF, 0xFF, 0xFF}, TRUE, 12);
+        dDbVw_drawSphereOpa(m_hio.m_linecheck_start, 10.0f, COMPOUND_LITERAL(GXColor){0xFF, 0, 0, 0xFF}, TRUE);
+        dDbVw_drawSphereOpa(m_hio.m_linecheck_end, 10.0f, COMPOUND_LITERAL(GXColor){0, 0, 0xFF, 0xFF}, TRUE);
 
         if (LineCross(&linechk)) {
-            dDbVw_drawSphereOpa(*linechk.GetCrossP(), 10.0f, (GXColor){0, 0xFF, 0, 0xFF}, TRUE);
+            dDbVw_drawSphereOpa(*linechk.GetCrossP(), 10.0f, COMPOUND_LITERAL(GXColor){0, 0xFF, 0, 0xFF}, TRUE);
         }
     }
 
@@ -754,20 +762,18 @@ void dBgS::Draw() {
         sp3C = sp54;
         sp3C.y = var_f30;
 
-        dDbVw_drawLineOpa(sp54, sp3C, (GXColor){0, 0xFF, 0, 0xFF}, TRUE, 12);
-        dDbVw_drawPointOpa(sp3C, (GXColor){0xFF, 0, 0, 0xFF}, TRUE, 12);
+        dDbVw_drawLineOpa(sp54, sp3C, COMPOUND_LITERAL(GXColor){0, 0xFF, 0, 0xFF}, TRUE, 12);
+        dDbVw_drawPointOpa(sp3C, COMPOUND_LITERAL(GXColor){0xFF, 0, 0, 0xFF}, TRUE, 12);
 
         if (var_f30 != G_CM3D_F_INF) {
-            DrawPoly(gndchk, (GXColor){0xFF, 0xFF, 0, 0xFF});
+            DrawPoly(gndchk, COMPOUND_LITERAL(GXColor){0xFF, 0xFF, 0, 0xFF});
         }
     }
-
-    #endif
 }
 
-#if DEBUG
 void dBgS::CaptPoly(dBgS_CaptPoly& capt) {
     if (!m_hio.ChkCaptPolyOff()) {
+        #if DEBUG
         if (m_hio.ChkCheckCounter()) {
             g_capt_poly_counter++;
         }
@@ -775,6 +781,7 @@ void dBgS::CaptPoly(dBgS_CaptPoly& capt) {
         if (m_hio.ChkCaptPolyTimer()) {
             OSStartStopwatch(&s_capt_poly_sw);
         }
+        #endif
 
         cBgS_ChkElm* elm = m_chk_element;
         for (int i = 0; i < 0x100; i++) {
@@ -784,10 +791,12 @@ void dBgS::CaptPoly(dBgS_CaptPoly& capt) {
             elm++;
         }
 
+        #if DEBUG
         if (m_hio.ChkCaptPolyTimer()) {
             OSStopStopwatch(&s_capt_poly_sw);
             OSDumpStopwatch(&s_capt_poly_sw);
         }
+        #endif
     }
 }
 
@@ -798,7 +807,6 @@ void dBgS::ChkDeleteActorRegist(fopAc_ac_c* actor) {
         }
     }
 }
-#endif
 
 bool dBgS::Regist(dBgW_Base* pbgw, fopAc_ac_c* pactor) {
     if (pbgw == NULL) {
@@ -1533,7 +1541,6 @@ fopAc_ac_c* dBgS::PushPullCallBack(const cBgS_PolyInfo& param_0, fopAc_ac_c* i_p
     return callback(bg_actor, i_pushActor, i_angle, i_label);
 }
 
-#if DEBUG
 void dBgS::DebugDrawPoly(const dBgW_Base& param_1) {
     if (m_hio.ChkShapeDisp()) {
         param_1.DebugDraw();
@@ -1546,7 +1553,6 @@ void dBgS::DrawPoly(const cBgS_PolyInfo& polyInfo, GXColor const& color) {
         pdBgw->DrawPoly(polyInfo, color);
     }
 }
-#endif
 
 bool dBgS_CheckBWallPoly(const cBgS_PolyInfo& polyinfo) {
     cM3dGPla pla;

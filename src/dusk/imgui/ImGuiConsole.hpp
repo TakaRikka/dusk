@@ -13,7 +13,9 @@ namespace dusk {
 	public:
 		ImGuiConsole();
 		void draw();
+
         bool isBloomEnabled() { return m_menuGame.isBloomEnabled(); }
+		bool isCollisionView() { return m_menuTools.isCollisionView(); }
 
 		static bool CheckMenuViewToggle(ImGuiKey key, bool& active);
 

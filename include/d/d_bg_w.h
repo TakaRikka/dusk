@@ -337,11 +337,9 @@ public:
     virtual bool ChkShdwDrawThrough(int, cBgS_PolyPassChk*);
     virtual bool ChkGrpThrough(int, cBgS_GrpPassChk*, int);
 
-    #if DEBUG
     void DrawBox() const;
     void DebugDraw() const;
     void DrawPoly(const cBgS_PolyInfo&, const GXColor&) const;
-    #endif
 
     void SetCrrFunc(dBgW_CrrFunc func) { m_crr_func = func; }
     void SetRideCallback(dBgW_RideCallback func) { m_ride_callback = func; }

@@ -67,7 +67,6 @@ u8 dKy_pol_sound_get(cBgS_PolyInfo const* param_0);
 
 class dBgS_HIO : public JORReflexible {
 public:
-#if DEBUG
     enum flags_e {
         FLAG_ACCH_WALL_OFF_e   = 0x2,
         FLAG_CHECK_COUNTER_e   = 0x4,
@@ -104,7 +103,7 @@ public:
     }
 
     virtual void genMessage(JORMContext*);
-    virtual ~dBgS_HIO();
+    virtual ~dBgS_HIO() {}
 
     bool ChkLineOff() { return m_flags2 & FLAG2_LINE_OFF_e; }
     bool ChkCheckCounter() { return m_flags & FLAG_CHECK_COUNTER_e; }
@@ -134,12 +133,10 @@ public:
     /* 0x18 */ cXyz m_linecheck_end;
     /* 0x24 */ cXyz m_gndcheck_pos;
     /* 0x30 */ s32 m_errorCheck_actor_num;
-#endif
 };
 
 class dBgS_InsideHIO : public JORReflexible {
 public:
-#if DEBUG
     enum flags_e {
         FLAG_DISP_POLY_e           = 0x1,
         FLAG_DISP_DP_AREA_e        = 0x2,
@@ -184,7 +181,6 @@ public:
     /* 0x08 */ f32 m_raise_amount;
     /* 0x0C */ cXyz m_p0;
     /* 0x18 */ cXyz m_p1;
-#endif
 };
 
 class dBgS : public cBgS {
@@ -237,9 +233,7 @@ public:
     void DrawPoly(cBgS_PolyInfo const& param_0, GXColor const& param_1);
     fopAc_ac_c* GetActorPointer(cBgS_PolyInfo const& param_0) const { return cBgS::GetActorPointer(param_0); }
     
-    #if DEBUG
     void DebugDrawPoly(const dBgW_Base& param_1);
-    #endif
 
     #if DEBUG
     bool LineCross(cBgS_LinChk* i_linChk);
@@ -260,10 +254,8 @@ public:
     void Draw();
     void CaptPoly(dBgS_CaptPoly&);
 
-#if DEBUG
     /* 0x1404 */ u8 field_0x1404[0x1408 - 0x1404];
     /* 0x1408 */ dBgS_HIO m_hio;
-#endif
 };  // Size: 0x1404
 
 bool dBgS_CheckBGroundPoly(cBgS_PolyInfo const&);

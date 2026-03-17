@@ -19,6 +19,8 @@ namespace dusk {
 		void ShowStubLog();
 		void ShowMapLoader();
 
+		bool isCollisionView() { return m_enableCollisionView; }
+
     private:
 		bool m_showDebugOverlay = false;
 		int m_debugOverlayCorner = 0; // top-left
@@ -46,6 +48,8 @@ namespace dusk {
 		} m_mapLoaderInfo;
 
 		bool m_isDevelopmentMode = false;
+
+		bool m_enableCollisionView = false;
     };
 }
 

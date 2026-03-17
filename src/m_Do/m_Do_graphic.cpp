@@ -707,9 +707,7 @@ void mDoGph_BlankingOFF() {}
 static void dScnPly_BeforeOfPaint() {
     dComIfGd_reset();
 
-    #if DEBUG
     dDbVw_deleteDrawPacketList();
-    #endif
 }
 
 int mDoGph_BeforeOfDraw() {

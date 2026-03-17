@@ -105,11 +105,9 @@ public:
     virtual void CallRideCallBack(fopAc_ac_c*, fopAc_ac_c*);
     virtual void CallArrowStickCallBack(fopAc_ac_c*, fopAc_ac_c*, cXyz&);
 
-    #if DEBUG
     virtual void DebugDraw() const {}
     virtual void DrawPoly(cBgS_PolyInfo const& param_0, GXColor const& param_1) const {}
     virtual void DrawBox() const {}
-    #endif
 
     PushPull_CallBack GetPushPullCallback() const { return m_pushPull_Callback; }
     s16 GetDiffShapeAngleY() { return m_diff_ShapeAngleY; }

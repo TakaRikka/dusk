@@ -6,6 +6,7 @@
 #include "ImGuiMenuTools.hpp"
 
 #include "m_Do/m_Do_main.h"
+#include "d/d_com_inf_game.h"
 
 namespace dusk {
     ImGuiMenuTools::ImGuiMenuTools() {}
@@ -17,6 +18,7 @@ namespace dusk {
             if (ImGui::Checkbox("Development Mode", &m_isDevelopmentMode)) {
                 isToggleDevelopmentMode = true;
             }
+            ImGui::Checkbox("Enable Collision View", &m_enableCollisionView);
             ImGui::Separator();
 
             ImGui::MenuItem("Process Management", "F2", &m_showProcessManagement);
