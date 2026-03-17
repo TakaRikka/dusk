@@ -18,6 +18,12 @@
 #include "f_op/f_op_overlap_mng.h"
 #include "dusk/memory.h"
 
+#if TARGET_PC
+#define SHOW_TV_SETTINGS_SCREEN (this->mShowTvSettingsScreen)
+#else
+#define SHOW_TV_SETTINGS_SCREEN (1)
+#endif
+
 static dSn_HIO_c g_snHIO;
 
 #if VERSION == VERSION_GCN_PAL
@@ -293,13 +299,27 @@ void dScnName_c::FileSelectMain() {
 }
 
 void dScnName_c::FileSelectMainNormal() {
+#if TARGET_PC
+    mShowTvSettingsScreen = !dusk::getSettings().game.hideTvSettingsScreen;
+#endif
+
     switch(dFs_c->isSelectEnd()) {
     case 1:
-        mWaitTimer = 15;
-        mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor);
-        mDoGph_gInf_c::startFadeOut(15);
+        if (SHOW_TV_SETTINGS_SCREEN) {
+            mWaitTimer = 15;
+            mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor);
+            mDoGph_gInf_c::startFadeOut(15);
+        } else {
+            mWaitTimer = 1;
+        }
+
         mProc = dScnName_PROC_FileSelectClose;
         field_0x420 = 1;
+
+        if (!SHOW_TV_SETTINGS_SCREEN) {
+            mDoAud_seStart(Z2SE_ENTER_GAME, NULL, 0, 0);
+        }
+
         break;
     }
 }
@@ -308,12 +328,17 @@ void dScnName_c::FileSelectClose() {
     mWaitTimer--;
 
     if (mWaitTimer == 0) {
-        mProc = dScnName_PROC_BrightCheckOpen;
-        mWaitTimer = 15;
-        mDrawProc = 1;
-        mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor);
-        mDoGph_gInf_c::startFadeIn(15);
-        field_0x420 = 0;
+        if (SHOW_TV_SETTINGS_SCREEN) {
+            mProc = dScnName_PROC_BrightCheckOpen;
+            mWaitTimer = 15;
+            mDrawProc = 1;
+            mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor);
+            mDoGph_gInf_c::startFadeIn(15);
+            field_0x420 = 0;
+        } else {
+            doPreLoadSetup();
+            field_0x420 = 0;
+        }
     }
 }
 
@@ -330,22 +355,26 @@ void dScnName_c::brightCheck() {
     mBrightCheck->_move();
 
     if (mBrightCheck->isEnd()) {
-        dComIfGs_setSaveTotalTime(dComIfGs_getTotalTime());
-        dComIfGs_setSaveStartTime(OSGetTime());
-        mDoAud_bgmStop(45);
-
-        field_0x41f = 0;
-        mProc = dScnName_PROC_ChangeGameScene;
-
-        // Reset rupee "first-time collection" flags so the collection cutscene will play again
-        dComIfGs_offItemFirstBit(dItemNo_GREEN_RUPEE_e);
-        dComIfGs_offItemFirstBit(dItemNo_BLUE_RUPEE_e);
-        dComIfGs_offItemFirstBit(dItemNo_YELLOW_RUPEE_e);
-        dComIfGs_offItemFirstBit(dItemNo_RED_RUPEE_e);
-        dComIfGs_offItemFirstBit(dItemNo_PURPLE_RUPEE_e);
-        dComIfGs_offItemFirstBit(dItemNo_ORANGE_RUPEE_e);
-        dComIfGs_offItemFirstBit(dItemNo_SILVER_RUPEE_e);
+        doPreLoadSetup();
     }
+}
+
+void dScnName_c::doPreLoadSetup() {
+    dComIfGs_setSaveTotalTime(dComIfGs_getTotalTime());
+    dComIfGs_setSaveStartTime(OSGetTime());
+    mDoAud_bgmStop(45);
+
+    field_0x41f = 0;
+    mProc = dScnName_PROC_ChangeGameScene;
+
+    // Reset rupee "first-time collection" flags so the collection cutscene will play again
+    dComIfGs_offItemFirstBit(dItemNo_GREEN_RUPEE_e);
+    dComIfGs_offItemFirstBit(dItemNo_BLUE_RUPEE_e);
+    dComIfGs_offItemFirstBit(dItemNo_YELLOW_RUPEE_e);
+    dComIfGs_offItemFirstBit(dItemNo_RED_RUPEE_e);
+    dComIfGs_offItemFirstBit(dItemNo_PURPLE_RUPEE_e);
+    dComIfGs_offItemFirstBit(dItemNo_ORANGE_RUPEE_e);
+    dComIfGs_offItemFirstBit(dItemNo_SILVER_RUPEE_e);
 }
 
 void dScnName_c::changeGameScene() {
