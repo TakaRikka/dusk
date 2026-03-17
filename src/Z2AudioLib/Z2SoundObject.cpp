@@ -136,6 +136,8 @@ Z2SoundHandlePool* Z2SoundObjBase::startSound(JAISoundID soundID, u32 mapinfo, s
 }
 
 Z2SoundHandlePool* Z2SoundObjBase::startLevelSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
+    DUSK_AUDIO_SKIP(NULL);
+
     if (!alive_) {
         return NULL;
     }

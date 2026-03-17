@@ -2008,7 +2008,7 @@ int dMsgFlow_c::event015(mesg_flow_node_event* i_flowNode_p, fopAc_ac_c* i_speak
 
 int dMsgFlow_c::event016(mesg_flow_node_event* i_flowNode_p, fopAc_ac_c* i_speaker_p) {
     dShopSystem_c* shop = (dShopSystem_c*)i_speaker_p;
-    shop->setEventParam(*(u32*)i_flowNode_p->params);
+    shop->setEventParam(*(BE(u32)*)i_flowNode_p->params);
 
     u8 prm[4];
     getParam(prm, i_flowNode_p->params);
