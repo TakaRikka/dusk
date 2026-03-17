@@ -1909,17 +1909,16 @@ bool dBgWKCol::RoofChk(dBgS_RoofChk* param_0) {
     bool sp0A = false;
     u32 sp30 = ~m_pkc_head->m_area_y_width_mask;
     do {
-        uintptr_t block = (uintptr_t)(BE(u32)*)m_pkc_head->m_block_data;
+        uintptr_t block = (uintptr_t)(BE(s32)*)m_pkc_head->m_block_data;
         u32 shift = m_pkc_head->m_block_width_shift;
         int idx = 4 * (((u32)z >> shift) << m_pkc_head->m_area_xy_blocks_shift |
                        ((u32)y >> shift) << m_pkc_head->m_area_x_blocks_shift |
                        (u32)x >> shift);
-
-        while ((idx = (*(BE(u32)*)(block + (idx & 0x7fffffff)))) >= 0) {
+        while ((idx = (*(BE(s32)*)(block + (idx & 0x7fffffff)))) >= 0) {
             block += idx;
             shift--;
             idx = (((u32)z >> shift & 1) << 2 | ((u32)y >> shift & 1) << 1 |
-                   ((u32)z >> shift & 1) << 0)
+                   ((u32)x >> shift & 1) << 0)
                   << 2;
         }
 
