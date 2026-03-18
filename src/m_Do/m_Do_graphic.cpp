@@ -680,6 +680,7 @@ void mDoGph_gInf_c::setWideZoomLightProjection(Mtx& m) {
 #if TARGET_PC
 void mDoGph_gInf_c::setWindowSize(AuroraWindowSize const& size) {
     JUTVideo::getManager()->setWindowSize(size);
+    dComIfGp_setWindow(0, 0.0f, 0.0f, getWidth(), getHeight(), 0.0f, 1.0f, 0, 2);
     mFader->mBox.set(0, 0, getWidth(), getHeight());
 }
 #endif
