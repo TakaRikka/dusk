@@ -37,7 +37,7 @@ public:
         ACTION_DEAD_e,
     };
 
-    static void PPCallBack(fopAc_ac_c*, fopAc_ac_c*, s16, dBgW_Base::PushPullLabel);
+    static fopAc_ac_c* PPCallBack(fopAc_ac_c*, fopAc_ac_c*, s16, dBgW_Base::PushPullLabel);
     void initBaseMtx();
     void setBaseMtx();
     u16 getPointNo();

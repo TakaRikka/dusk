@@ -25,7 +25,7 @@ enum WALK_TYPE {
     WALK_IRON_BALL_HIT,
 };
 
-void daObjIceBlk_c::PPCallBack(fopAc_ac_c* i_bgActor, fopAc_ac_c* i_pushActor, s16 i_angle,
+fopAc_ac_c* daObjIceBlk_c::PPCallBack(fopAc_ac_c* i_bgActor, fopAc_ac_c* i_pushActor, s16 i_angle,
                                dBgW_Base::PushPullLabel i_label) {
     bool temp_r3 = cLib_checkBit<u8>(i_label, dBgW::PPLABEL_PUSH) != 0;
     bool temp_r3_2 = cLib_checkBit<u8>(i_label, dBgW::PPLABEL_PUSH) != 0;
@@ -54,6 +54,7 @@ void daObjIceBlk_c::PPCallBack(fopAc_ac_c* i_bgActor, fopAc_ac_c* i_pushActor, s
     }
 
     ((daObjIceBlk_c*)i_bgActor)->mPPLabel = i_label;
+    return i_bgActor;
 }
 
 static void rideCallBack(dBgW* i_bgw, fopAc_ac_c* i_bgActor, fopAc_ac_c* i_rideActor) {
