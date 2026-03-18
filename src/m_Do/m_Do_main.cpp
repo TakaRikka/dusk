@@ -172,18 +172,24 @@ void main01(void) {
 
         VIWaitForRetrace();
 
+#if TARGET_PC
+        if (!aurora_begin_frame()) {
+            DuskLog.debug("aurora_begin_frame returned false, skipping draw this frame");
+            continue;
+        }
+#endif
+
         // EXECUTE GAME LOGIC & RENDER
         // This calls mDoGph_Painter -> JFWDisplay -> GX Functions
         fapGm_Execute();
 
         mDoAud_Execute();
 
+        aurora_end_frame();
+
         #if TARGET_PC
         frameLimiter.Sleep(DUSK_FRAME_PERIOD);
         #endif
-
-        //aurora_end_frame();
-
     } while (true);
 
     exit:;
