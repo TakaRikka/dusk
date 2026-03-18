@@ -451,9 +451,7 @@ public:
     void CalcTgVec();
     virtual ~dCcD_Cps() {}
     dCcD_Cps() {}
-    #if DEBUG
     virtual void Draw(const GXColor& color);
-    #endif
 };  // Size = 0x144
 
 // Triangle
@@ -463,9 +461,7 @@ public:
     cCcD_ShapeAttr* GetShapeAttr();
     virtual ~dCcD_Tri() {}
     dCcD_Tri() {}
-    #if DEBUG
     virtual void Draw(const GXColor& color);
-    #endif
 };
 
 // Cylinder
@@ -478,9 +474,7 @@ public:
     void MoveCTg(cXyz&);
     virtual ~dCcD_Cyl() {}
     dCcD_Cyl() {}
-    #if DEBUG
     virtual void Draw(const GXColor& color);
-    #endif
 };  // Size = 0x13C
 
 // Sphere
@@ -492,9 +486,7 @@ public:
     void MoveCAt(cXyz&);
     virtual cCcD_ShapeAttr* GetShapeAttr();
     virtual ~dCcD_Sph() {}
-    #if DEBUG
     virtual void Draw(const GXColor& color);
-    #endif
 };  // Size = 0x138
 
 dCcD_GObjInf* dCcD_GetGObjInf(cCcD_Obj* param_0);

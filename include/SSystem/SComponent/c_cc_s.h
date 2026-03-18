@@ -22,12 +22,10 @@ public:
     /* 0x2802 */ u16 mObjTgCount;
     /* 0x2804 */ u16 mObjCoCount;
     /* 0x2806 */ u16 mObjCount;
-#if DEBUG
     /* 0x280C */ u16 field_0x280c;
     /* 0x280E */ u16 field_0x280e;
     /* 0x2810 */ u16 field_0x2810;
     /* 0x2812 */ u16 field_0x2812;
-#endif
     /* 0x2808 */ cCcD_DivideArea mDivideArea;
     /* 0x2848 vtable */
 

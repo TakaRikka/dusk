@@ -15,7 +15,7 @@ namespace dusk {
 		void draw();
 
         bool isBloomEnabled() { return m_menuGame.isBloomEnabled(); }
-		bool isCollisionView() { return m_menuTools.isCollisionView(); }
+		ImGuiMenuTools::CollisionViewSettings& getCollisionViewSettings() { return m_menuTools.getCollisionViewSettings(); }
 
 		static bool CheckMenuViewToggle(ImGuiKey key, bool& active);
 

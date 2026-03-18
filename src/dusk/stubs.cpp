@@ -1041,9 +1041,6 @@ GXDrawSyncCallback GXSetDrawSyncCallback(GXDrawSyncCallback cb) {
     STUB_LOG();
     return cb;
 }
-void GXDrawCylinder(u8 numEdges) {
-    STUB_LOG();
-}
 void GXWaitDrawDone(void) {
     STUB_LOG();
 }

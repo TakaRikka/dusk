@@ -618,6 +618,14 @@ static int poly_draw(dBgS_CaptPoly* capt, cBgD_Vtx_t* vtxList, int v0, int v1, i
     GXColor roof_color = {0, 0, 0xFF, 0xFF};
     GXColor wall_color = {0, 0xFF, 0, 0xFF};
 
+#if TARGET_PC
+    dusk::ImGuiMenuTools::CollisionViewSettings collisionViewSettings = dusk::g_imguiConsole.getCollisionViewSettings();
+    f32 view_opacity = 255 * (collisionViewSettings.m_terrainViewOpacity / 100.0f);
+    ground_color.a = view_opacity;
+    roof_color.a = view_opacity;
+    wall_color.a = view_opacity;
+#endif
+
     cXyz raise;
     PSVECScale(&plane->mNormal, &raise, s_InsideHio.m_raise_amount);
 
@@ -649,11 +657,18 @@ static int poly_draw(dBgS_CaptPoly* capt, cBgD_Vtx_t* vtxList, int v0, int v1, i
 void dBgS::Draw() {
     cBgS::Draw();
 
-    if (dusk::g_imguiConsole.isCollisionView()) {
-        s_InsideHio.m_flags |= dBgS_InsideHIO::FLAG_DISP_POLY_e;
-    } else {
-        s_InsideHio.m_flags &= ~dBgS_InsideHIO::FLAG_DISP_POLY_e;
-    }
+#if TARGET_PC
+    #define IMGUI_TOGGLE_HIO_FLAG(status, flag) \
+        if (status) { \
+            s_InsideHio.m_flags |= flag; \
+        } else { \
+            s_InsideHio.m_flags &= ~flag; \
+        }
+
+    dusk::ImGuiMenuTools::CollisionViewSettings collisionViewSettings = dusk::g_imguiConsole.getCollisionViewSettings();
+    IMGUI_TOGGLE_HIO_FLAG(collisionViewSettings.m_enableTerrainView, dBgS_InsideHIO::FLAG_DISP_POLY_e);
+    IMGUI_TOGGLE_HIO_FLAG(collisionViewSettings.m_enableWireframe, dBgS_InsideHIO::FLAG_WHITE_WIRE_e);
+#endif
 
     if (s_InsideHio.ChkDispPoly()) {
         cM3dGAab aab;
@@ -663,6 +678,11 @@ void dBgS::Draw() {
             cXyz max;
 
             f32 var_f31 = fabsf(s_InsideHio.m_p0.x);
+
+#if TARGET_PC
+            dusk::ImGuiMenuTools::CollisionViewSettings collisionViewSettings = dusk::g_imguiConsole.getCollisionViewSettings();
+            var_f31 = collisionViewSettings.m_drawRange;
+#endif
 
             min.x = player->current.pos.x - var_f31;
             min.y = player->current.pos.y - var_f31;

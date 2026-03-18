@@ -10,6 +10,8 @@
 #include "d/d_jnt_col.h"
 #include "f_op/f_op_actor_mng.h"
 
+#include "dusk/imgui/ImGuiConsole.hpp"
+
 class dCcS_HIO : public JORReflexible {
 public:
     enum flags_e {
@@ -55,10 +57,11 @@ public:
     /* 0x8 */ s16 m_shield_range;
 };
 
-#if DEBUG
+
 dCcS_HIO::~dCcS_HIO() {}
 
 void dCcS_HIO::genMessage(JORMContext* mctx) {
+#if DEBUG
     mctx->genLabel("処理関係 -----", 0);
     mctx->genCheckBox("処理Off", &m_flags, 0x40);
     mctx->genCheckBox("多数ヒットチェック(草木花)Off", &m_flags, 0x80);
@@ -79,15 +82,17 @@ void dCcS_HIO::genMessage(JORMContext* mctx) {
 
     mctx->genLabel("特殊-----", 0);
     mctx->genSlider("盾範囲(max=360度)", &m_shield_range, 0, 0x7FFF);
+#endif
 }
 
+#if DEBUG
 static OSStopwatch s_move_timer;
 static OSStopwatch s_mass_timer;
 
-static dCcS_HIO s_Hio;
-
 int g_mass_counter;
 #endif
+
+static dCcS_HIO s_Hio;
 
 void dCcS::Ct() {
     cCcS::Ct();
@@ -762,6 +767,23 @@ void dCcS::Draw() {
         OS_REPORT("Mass Counter %d\n", g_mass_counter);
         g_mass_counter = 0;
     }
+    #endif
+
+#if TARGET_PC
+#define IMGUI_TOGGLE_HIO_FLAG(status, flag) \
+        if (status) { \
+            s_Hio.m_flags |= flag; \
+        } else { \
+            s_Hio.m_flags &= ~flag; \
+        }
+
+    dusk::ImGuiMenuTools::CollisionViewSettings collisionViewSettings = dusk::g_imguiConsole.getCollisionViewSettings();
+    IMGUI_TOGGLE_HIO_FLAG(collisionViewSettings.m_enableAtView, dCcS_HIO::FLAG_AT_ON_e);
+    IMGUI_TOGGLE_HIO_FLAG(collisionViewSettings.m_enableTgView, dCcS_HIO::FLAG_TG_ON_e);
+    IMGUI_TOGGLE_HIO_FLAG(collisionViewSettings.m_enableCoView, dCcS_HIO::FLAG_CO_ON_e);
+
+    f32 view_opacity = 255 * (collisionViewSettings.m_colliderViewOpacity / 100.0f);
+#endif
 
     if (s_Hio.CheckAtOn()) {
         for (int i = 0; i < field_0x280c; i++) {
@@ -769,9 +791,11 @@ void dCcS::Draw() {
                 dCcD_GObjInf* gobj = (dCcD_GObjInf*)mpObjAt[i]->GetGObjInf();
                 if (gobj->ChkAtHit()) {
                     GXColor color = {0xFF, 0, 0, 0xB4};
+                    color.a = view_opacity;
                     mpObjAt[i]->Draw(color);
                 } else {
                     GXColor color = {0xFF, 0, 0, 0x50};
+                    color.a = view_opacity;
                     mpObjAt[i]->Draw(color);
                 }
             }
@@ -784,9 +808,11 @@ void dCcS::Draw() {
                 dCcD_GObjInf* gobj = (dCcD_GObjInf*)mpObjTg[i]->GetGObjInf();
                 if (gobj->ChkTgHit()) {
                     GXColor color = {0, 0xFF, 0, 0xB4};
+                    color.a = view_opacity;
                     mpObjTg[i]->Draw(color);
                 } else {
                     GXColor color = {0, 0xFF, 0, 0x50};
+                    color.a = view_opacity;
                     mpObjTg[i]->Draw(color);
                 }
             }
@@ -799,9 +825,11 @@ void dCcS::Draw() {
                 dCcD_GObjInf* gobj = (dCcD_GObjInf*)mpObjCo[i]->GetGObjInf();
                 if (gobj->ChkCoHit()) {
                     GXColor color = {0xFF, 0xFF, 0xFF, 0xB4};
+                    color.a = view_opacity;
                     mpObjCo[i]->Draw(color);
                 } else {
                     GXColor color = {0xFF, 0xFF, 0xFF, 0x50};
+                    color.a = view_opacity;
                     mpObjCo[i]->Draw(color);
                 }
             }
@@ -820,6 +848,7 @@ void dCcS::Draw() {
         }
     }
 
+    #if DEBUG
     if (s_Hio.ChkCounter()) {
         OS_REPORT("At:%d,Tg:%d,Co:%d\n", field_0x280c, field_0x280e, field_0x2810);
     }

@@ -18,8 +18,22 @@ namespace dusk {
             if (ImGui::Checkbox("Development Mode", &m_isDevelopmentMode)) {
                 isToggleDevelopmentMode = true;
             }
-            ImGui::Checkbox("Enable Collision View", &m_enableCollisionView);
+            
             ImGui::Separator();
+
+            if (ImGui::BeginMenu("Collision View")) {
+                ImGui::Checkbox("Enable Terrain view", &m_collisionViewSettings.m_enableTerrainView);
+                // can't use wireframe atm because aurora doesn't support GX_LINES
+                //ImGui::Checkbox("Enable wireframe view", &m_collisionViewSettings.m_enableWireframe);
+                ImGui::SliderFloat("Opacity##terrain", &m_collisionViewSettings.m_terrainViewOpacity, 0.0f, 100.0f);
+                ImGui::SliderFloat("Draw Range", &m_collisionViewSettings.m_drawRange, 0.0f, 1000.0f);
+                ImGui::Separator();
+                ImGui::Checkbox("Enable Attack Collider view", &m_collisionViewSettings.m_enableAtView);
+                ImGui::Checkbox("Enable Target Collider view", &m_collisionViewSettings.m_enableTgView);
+                ImGui::Checkbox("Enable Push Collider view", &m_collisionViewSettings.m_enableCoView);
+                ImGui::SliderFloat("Opacity##colliders", &m_collisionViewSettings.m_colliderViewOpacity, 0.0f, 100.0f);
+                ImGui::EndMenu();
+            }
 
             ImGui::MenuItem("Process Management", "F2", &m_showProcessManagement);
             ImGui::MenuItem("Debug Overlay", "F3", &m_showDebugOverlay);

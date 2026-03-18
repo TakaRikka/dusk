@@ -472,12 +472,10 @@ void cCcS::Move() {
     ChkCo();
     MoveAfterCheck();
 
-    #if DEBUG
     field_0x280c = mObjAtCount;
     field_0x280e = mObjTgCount;
     field_0x2810 = mObjCoCount;
     field_0x2812 = mObjCount;
-    #endif
 
     mObjAtCount = 0;
     mObjTgCount = 0;
