@@ -1008,9 +1008,14 @@ bool daObj_Sekizoa_c::afterSetMotionAnm(int i_frame, int i_mode, f32 i_morf, int
         if (mBtkAnm.getBtkAnm() == anm_text) {
             mAnmFlags |= ANM_PLAY_BTK;
         } else {
-            if (setBtkAnm(anm_text, mpMorf[0]->getModel()->getModelData(), 1.0f,
-                          btkAnmData[4].field_0x4))
-            {
+#if AVOID_UB
+            // negative attribute values are ignored in favor of the animation's default value
+            if (setBtkAnm(anm_text, mpMorf[0]->getModel()->getModelData(), 1.0f, -1)) {
+#else
+            // !@bug Out-of-bounds array read, in practice this ends up reading from a jump table
+            //       positioned immediately after btkAnmData in .data.
+            if (setBtkAnm(anm_text, mpMorf[0]->getModel()->getModelData(), 1.0f, btkAnmData[4].field_0x4)) {
+#endif
                 if (frame_1 == 3) {
                     mBtkAnm.setPlaySpeed(0.0f);
                 }
@@ -1032,8 +1037,15 @@ bool daObj_Sekizoa_c::afterSetMotionAnm(int i_frame, int i_mode, f32 i_morf, int
         if (mBrkAnm.getBrkAnm() == anm_tev) {
             mAnmFlags |= ANM_PLAY_BRK;
         } else {
-            frame_1 = setBrkAnm(anm_tev, mpMorf[0]->getModel()->getModelData(), 1.0,
+            // !@bug OoB index into brkAnmData ends up indexing into btkAnmData instead.
+            //       This was probably supposed to use brkAnmData[5] instead.
+#if AVOID_UB
+            frame_1 = setBrkAnm(anm_tev, mpMorf[0]->getModel()->getModelData(), 1.0f,
+                                btkAnmData[0].field_0x4);
+#else
+            frame_1 = setBrkAnm(anm_tev, mpMorf[0]->getModel()->getModelData(), 1.0f,
                                 brkAnmData[6].field_0x4);
+#endif
             if (frame_1 != 0) {
                 if (frame_2 == 5) {
                     mBrkAnm.setPlaySpeed(0.0f);

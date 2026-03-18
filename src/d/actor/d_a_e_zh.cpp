@@ -542,7 +542,7 @@ bool daE_ZH_c::mBallBgLineCheck() {
 bool daE_ZH_c::mSearchMove(u8 param_1) {
     if (mS_Ball == NULL) {
         setActionMode(ACTION_EXECUTE_FLY_DELETE, 0);
-        return NULL;
+        return false;
     }
 
     cXyz sp50, sp5c;

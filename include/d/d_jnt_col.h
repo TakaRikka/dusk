@@ -33,7 +33,7 @@ public:
     void offPassNum(int num) { field_0xc &= ~(1 << num); }
     bool checkShieldType(int i) { return getType(i) == 3; }
 
-    s8 getType(int i) { return mData[i].mType; }
+    int getType(int i) { return mData[i].mType; }
     int getJntNum(int i) { return (s16)mData[i].mJntNum; }
 
     /* 0x00 */ const dJntColData_c* mData;
@@ -63,5 +63,10 @@ public:
     /* 0x0C */ dJntColData_c* field_0xc;
 
 };
+
+#if DEBUG
+void dJntCol_setDebugHIO();
+void dJntCol_deleteDebugHIO();
+#endif
 
 #endif /* D_D_JNT_COL_H */

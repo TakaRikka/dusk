@@ -36,7 +36,7 @@ public:
     void SetHit() { mStts |= STTS_HIT; }
     u32 ChkHit() const { return mStts & STTS_HIT; }
     void SetCross(const cXyz& pos) { mLin.SetEnd(pos); }
-    cXyz* GetCrossP() { return &mLin.GetEndP(); }
+    cXyz* GetCrossP() { return mLin.GetEndP(); }
     cM3dGLin* GetLinP() { return &mLin; }
     bool ChkBackFlag() const { return mBackFlag; }
     void OnBackFlag() { mBackFlag = true; }
@@ -45,13 +45,17 @@ public:
     bool GetPreWallChk() const { return mPreWallChk; }
     bool GetPreGroundChk() const { return mPreGroundChk; }
     bool GetPreRoofChk() const { return mPreRoofChk; }
-    cXyz* GetStartP() { return &mLin.GetStartP(); }
+    cXyz* GetStartP() { return mLin.GetStartP(); }
     void ClrSttsRoofOff() { mStts &= ~STTS_ROOF_OFF; }
     void SetSttsRoofOff() { mStts |= STTS_ROOF_OFF; }
     void ClrSttsWallOff() { mStts &= ~STTS_WALL_OFF; }
     void SetSttsWallOff() { mStts |= STTS_WALL_OFF; }
     void ClrSttsGroundOff() { mStts &= ~STTS_GROUND_OFF; }
     void SetSttsGroundOff() { mStts |= STTS_GROUND_OFF; }
+    void ClearCheckIndex() { ClearPi(); }
+    bool ChkSttsWallOff() const { return (mStts & STTS_WALL_OFF); }
+    bool ChkSttsGroundOff() const { return (mStts & STTS_GROUND_OFF); }
+    bool ChkSttsRoofOff() const { return (mStts & STTS_ROOF_OFF); }
 };
 
 #endif /* C_BG_S_LIN_CHK_H */

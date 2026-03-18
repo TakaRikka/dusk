@@ -1934,7 +1934,13 @@ int daE_HZ_c::CreateHeap() {
         return 0;
     }
 
+    // This happens to work with MWCC since the member will only ever be initialized a pointer to a
+    // string in this TU's .data section, but comparing against a string literal is still UB.
+#if AVOID_UB
+    if (strcmp(mpName, "E_hzp") == 0) {
+#else
     if (mpName == "E_hzp") {
+#endif
         modelData = (J3DModelData*)dComIfG_getObjectRes(mpName, 3);
     } else {
         modelData = (J3DModelData*)dComIfG_getObjectRes(mpName, 3);

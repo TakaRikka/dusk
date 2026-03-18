@@ -203,6 +203,9 @@ cPhs_Step daNpc_zrZ_c::create() {
     mSwitch1 = home.angle.z & 0xff;
     mSwitch2 = (home.angle.z >> 8) & 0xff;
     mSwitch3 = fopAcM_GetParam(this) >> 0x18;
+    // !@bug home.angle.x is promoted to a 32-bit signed integer prior
+    //       to being compared, so the compared value can never exceed
+    //       SHORT_MAX and the condition always passes.
     if (home.angle.x != 0xffff) {
         mFlowID = home.angle.x;
     } else {

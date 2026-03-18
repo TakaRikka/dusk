@@ -21,7 +21,7 @@ bool JASBasicBank::getInstParam(int prg_no, int param_1, int param_2,
                                 JASInstParam* o_param) const {
     JASInst* inst = getInst(prg_no);
     if (inst == NULL) {
-        return NULL;
+        return false;
     }
     return inst->getParam(param_1, param_2, o_param);
 }

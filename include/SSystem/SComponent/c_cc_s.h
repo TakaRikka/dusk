@@ -16,7 +16,7 @@ public:
     /* 0x1000 */ cCcD_Obj* mpObjCo[0x100];
     /* 0x1400 */ cCcD_Obj* mpObj[0x500];
 #if DEBUG
-    /* 0x2800 */ int m_debug_code;
+    /* 0x2800 */ u32 m_debug_code;
 #endif
     /* 0x2800 */ u16 mObjAtCount;
     /* 0x2802 */ u16 mObjTgCount;

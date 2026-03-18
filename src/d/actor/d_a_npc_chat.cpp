@@ -2628,7 +2628,7 @@ BOOL daNpcChat_c::setAttention(int param_1) {
         cXyz(0.0f, 10.0f, 0.0f),
     };
 
-    int jointNo = isM_() ? JNTM_HEAD : JNTW_HEAD;
+    int jointNo = isM_() ? (int)JNTM_HEAD : (int)JNTW_HEAD;
     mDoMtx_stack_c::copy(mAnm_p->getModel()->getAnmMtx(jointNo));
     mDoMtx_stack_c::multVec(&a_eyeOfsTbl[param_1], &eyePos);
     mBaseAttnPos.set(current.pos.x, current.pos.y + AtnOfs(param_1), current.pos.z);

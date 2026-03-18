@@ -10490,7 +10490,7 @@ BOOL dKy_camera_water_in_status_check() {
 
 u8 dKy_pol_efftype_get(const cBgS_PolyInfo* polyinfo_p) {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
-    if (polyinfo_p == NULL || &dComIfG_Bgsp() == NULL) {
+    if (polyinfo_p == NULL || IS_REF_NULL(dComIfG_Bgsp())) {
         return 0xFF;
     }
 
@@ -10520,7 +10520,7 @@ u8 dKy_pol_efftype_get(const cBgS_PolyInfo* polyinfo_p) {
 
 u8 dKy_pol_efftype2_get(const cBgS_PolyInfo* polyinfo_p) {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
-    if (polyinfo_p == NULL || &dComIfG_Bgsp() == NULL) {
+    if (polyinfo_p == NULL || IS_REF_NULL(dComIfG_Bgsp())) {
         return 0xFF;
     }
 
@@ -10550,7 +10550,7 @@ u8 dKy_pol_efftype2_get(const cBgS_PolyInfo* polyinfo_p) {
 
 u8 dKy_pol_sound_get(const cBgS_PolyInfo* polyinfo_p) {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
-    if (polyinfo_p == NULL || &dComIfG_Bgsp() == NULL) {
+    if (polyinfo_p == NULL || IS_REF_NULL(dComIfG_Bgsp())) {
         return 0;
     }
 
@@ -10581,7 +10581,7 @@ u8 dKy_pol_sound_get(const cBgS_PolyInfo* polyinfo_p) {
 
 u8 dKy_pol_argument_get(const cBgS_PolyInfo* polyinfo_p) {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
-    if (polyinfo_p == NULL || &dComIfG_Bgsp() == NULL) {
+    if (polyinfo_p == NULL || IS_REF_NULL(dComIfG_Bgsp())) {
         return 0;
     }
 
@@ -10606,7 +10606,7 @@ u8 dKy_pol_argument_get(const cBgS_PolyInfo* polyinfo_p) {
 u8 dKy_pol_eff_prim_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     u8 eff_id = 0;
-    if (polyinfo_p == NULL || out_color_p == NULL || &dComIfG_Bgsp() == NULL) {
+    if (polyinfo_p == NULL || out_color_p == NULL || IS_REF_NULL(dComIfG_Bgsp())) {
         return 0xFF;
     }
 
@@ -10643,7 +10643,7 @@ u8 dKy_pol_eff_prim_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) {
 u8 dKy_pol_eff_env_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     u8 eff_id = 0;
-    if (polyinfo_p == NULL || out_color_p == NULL || &dComIfG_Bgsp() == NULL) {
+    if (polyinfo_p == NULL || out_color_p == NULL || IS_REF_NULL(dComIfG_Bgsp())) {
         return 0xFF;
     }
 
@@ -10680,7 +10680,7 @@ u8 dKy_pol_eff_env_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) {
 u8 dKy_pol_eff2_prim_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     u8 eff_id = 0;
-    if (polyinfo_p == NULL || out_color_p == NULL || &dComIfG_Bgsp() == NULL) {
+    if (polyinfo_p == NULL || out_color_p == NULL || IS_REF_NULL(dComIfG_Bgsp())) {
         return 0xFF;
     }
 
@@ -10717,7 +10717,7 @@ u8 dKy_pol_eff2_prim_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) 
 u8 dKy_pol_eff2_env_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     u8 eff_id = 0;
-    if (polyinfo_p == NULL || out_color_p == NULL || &dComIfG_Bgsp() == NULL) {
+    if (polyinfo_p == NULL || out_color_p == NULL || IS_REF_NULL(dComIfG_Bgsp())) {
         return 0xFF;
     }
 
@@ -10755,7 +10755,7 @@ u8 dKy_pol_eff_alpha_get(const cBgS_PolyInfo* polyinfo_p) {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     int z0;
     u8 eff_id = 0;
-    if (polyinfo_p == NULL || &dComIfG_Bgsp() == NULL) {
+    if (polyinfo_p == NULL || IS_REF_NULL(dComIfG_Bgsp())) {
         return 0xFF;
     }
 
@@ -10792,7 +10792,7 @@ f32 dKy_pol_eff_ratio_get(const cBgS_PolyInfo* polyinfo_p) {
     u8 eff_id;
     f32 ratio = 0.0f;
 
-    if (polyinfo_p == NULL || &dComIfG_Bgsp() == NULL) {
+    if (polyinfo_p == NULL || IS_REF_NULL(dComIfG_Bgsp())) {
         return 0.0f;
     }
 
@@ -10829,7 +10829,7 @@ u8 dKy_pol_eff2_alpha_get(const cBgS_PolyInfo* polyinfo_p) {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     int z0;
     u8 retval = 0;
-    if (polyinfo_p == NULL || &dComIfG_Bgsp() == NULL) {
+    if (polyinfo_p == NULL || IS_REF_NULL(dComIfG_Bgsp())) {
         return 0xFF;
     }
 
@@ -10865,7 +10865,7 @@ f32 dKy_pol_eff2_ratio_get(const cBgS_PolyInfo* polyinfo_p) {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     f32 ratio = 0.0f;
 
-    if (polyinfo_p == NULL || &dComIfG_Bgsp() == NULL) {
+    if (polyinfo_p == NULL || IS_REF_NULL(dComIfG_Bgsp())) {
         return 0.0f;
     }
 

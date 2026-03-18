@@ -365,7 +365,7 @@ void dCcD_Cps::Draw(const GXColor& color) {
 
     cXyz cStack_d8;
     CalcVec(&cStack_d8);
-    cMtx_trans(auStack_98, GetStartP().x, GetStartP().y, GetStartP().z);
+    cMtx_trans(auStack_98, GetStartP()->x, GetStartP()->y, GetStartP()->z);
     cM3d_UpMtx(cStack_d8, auStack_c8);
     cMtx_concat(auStack_98, auStack_c8, auStack_68);
     cMtx_scale(auStack_98, GetR(), 0.5f * GetLen(), GetR());
@@ -375,8 +375,8 @@ void dCcD_Cps::Draw(const GXColor& color) {
     cMtx_XrotS(auStack_98, 0x4000);
     cMtx_concat(auStack_68, auStack_98, auStack_68);
     dDbVw_drawCylinderMXlu(auStack_68, color, 1);
-    dDbVw_drawSphereXlu(GetStartP(), GetR(), color, 1);
-    dDbVw_drawSphereXlu(GetEndP(), GetR(), color, 1);
+    dDbVw_drawSphereXlu(*GetStartP(), GetR(), color, 1);
+    dDbVw_drawSphereXlu(*GetEndP(), GetR(), color, 1);
 }
 
 #endif

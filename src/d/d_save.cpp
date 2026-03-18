@@ -1810,7 +1810,7 @@ int dSv_info_c::memory_to_card(char* card_ptr, int dataNum) {
     OS_REPORT("(dSv_reserve_c) size %d\n", sizeof(dSv_reserve_c));
     OS_REPORT("(dSv_MiniGame_c) size %d\n", sizeof(dSv_MiniGame_c));
     OS_REPORT("セーブ全体情報(dSv_save_c) size %d\n", sizeof(dSv_save_c));
-    printf("Write size:%d\n", card_ptr - var_r29);
+    printf("Write size:%d\n", (int)(card_ptr - var_r29));
 
     // Now that we've saved, reset events if needed
     if (lantern_not_recovered == true) {
@@ -1829,11 +1829,11 @@ int dSv_info_c::memory_to_card(char* card_ptr, int dataNum) {
     }
     
     if (card_ptr - var_r29 > (QUEST_LOG_SIZE - 8)) {
-        printf("SAVE size over(%d/%d)\n", (QUEST_LOG_SIZE - 8), card_ptr - var_r29);
+        printf("SAVE size over(%d/%d)\n", (QUEST_LOG_SIZE - 8), (int)(card_ptr - var_r29));
         return -1;
     }
 
-    printf("SAVE size:%d\n", card_ptr - var_r29);
+    printf("SAVE size:%d\n", (int)(card_ptr - var_r29));
     return 0;
 }
 
@@ -1879,11 +1879,11 @@ int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
 
     OS_REPORT("########### save stage ====> %s\n", dMeter2Info_getSaveStageName());
     if (i_cardPtr - var_r30 > (QUEST_LOG_SIZE - 8)) {
-        printf("LOAD size over(%d/%d)\n", (QUEST_LOG_SIZE - 8), i_cardPtr - var_r30);
+        printf("LOAD size over(%d/%d)\n", (QUEST_LOG_SIZE - 8), (int)(i_cardPtr - var_r30));
         return -1;
     }
 
-    printf("LOAD size:%d\n", i_cardPtr - var_r30);
+    printf("LOAD size:%d\n", (int)(i_cardPtr - var_r30));
     return 0;
 }
 
@@ -1900,11 +1900,11 @@ int dSv_info_c::initdata_to_card(char* i_cardPtr, int i_dataNum) {
     i_cardPtr += sizeof(dSv_save_c);
 
     if (i_cardPtr - var_r30 > (QUEST_LOG_SIZE - 8)) {
-        printf("INIT size over %d/%d\n", (QUEST_LOG_SIZE - 8), i_cardPtr - var_r30);
+        printf("INIT size over %d/%d\n", (QUEST_LOG_SIZE - 8), (int)(i_cardPtr - var_r30));
         return -1;
     }
 
-    printf("INIT size:%d\n", i_cardPtr - var_r30);
+    printf("INIT size:%d\n", (int)(i_cardPtr - var_r30));
     return 0;
 }
 

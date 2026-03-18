@@ -44,6 +44,16 @@ public:
     virtual void MoveAfterCheck();
     virtual void CalcParticleAngle(dCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, csXyz*);
 
+    #if DEBUG
+    void OnMassAllTimer() {
+        m_is_mass_all_timer = 1;
+    }
+
+    void OffMassAllTimer() {
+        m_is_mass_all_timer = 0;
+    }
+    #endif
+
     void SetMass(cCcD_Obj* i_obj, u8 i_priority) { mMass_Mng.Set(i_obj, i_priority); }
     void SetMassCam(cM3dGCps& i_cps) { mMass_Mng.SetCam(i_cps); }
     u32 GetMassResultCam() { return mMass_Mng.GetResultCam(); }
@@ -70,7 +80,7 @@ public:
     // /* 0x0000 */ cCcS mCCcS;
     /* 0x284C */ dCcMassS_Mng mMass_Mng;
 #if DEBUG
-    /* 0x2AD0 */ u8 field_0x2ad0;
+    /* 0x2AD0 */ u8 m_is_mass_all_timer;
 #endif
 };  // Size = 0x2AC4
 

@@ -434,7 +434,7 @@ void JASAramStream::updateChannel(u32 i_callbackType, JASChannel* i_channel,
                         field_0x120 = 0;
                         field_0x12c |= 2;
                         if (field_0x0c4 < 0xffffffff) {
-                            field_0x0c4++;
+                            field_0x0c4 += 1;
                         }
                         field_0x0c0 = false;
                     }

@@ -1235,7 +1235,7 @@ static int daE_YG_Execute(e_yg_class* i_this) {
         MTXCopy(daPy_getLinkPlayerActorClass()->getWolfMouthMatrix(), mDoMtx_stack_c::get());
         mDoMtx_stack_c::multVecZero(&actor->current.pos);
         mDoMtx_stack_c::YrotM(KREG_S(0));
-        mDoMtx_stack_c::XrotM(KREG_S(1) + 0x8000);
+        mDoMtx_stack_c::XrotM((s16)(KREG_S(1) + 0x8000));
         mDoMtx_stack_c::ZrotM(KREG_S(2) + 2500);
         mDoMtx_stack_c::transM(KREG_F(0) + 10.0f, KREG_F(1) + -60.0f, KREG_F(2) + -20.0f);
         model->setBaseTRMtx(mDoMtx_stack_c::get());

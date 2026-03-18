@@ -666,8 +666,8 @@ static void obj_brg_move(obj_brg_class* i_this) {
             if ((i_this->mType & 1) == 1) {
                 i_this->mBr[i].field_0x0e0 = 1.0f;
             } else {
-                var_f27 = ( f32(i) / (i_this->field_0xb1ea - 1)) * M_PI;
-                i_this->mBr[i].field_0x0e0 = fabsf(sin(var_f27));
+                var_f27 = ((f32)i / (i_this->field_0xb1ea - 1)) * M_PI;
+                i_this->mBr[i].field_0x0e0 = fabsf(sinf(var_f27));
             }
 
             i_this->mBr[i].field_0x704 = i_this->mBr[i].field_0x705 = 3;
@@ -994,11 +994,11 @@ static int daObj_Brg_Execute(obj_brg_class* i_this) {
     f32 dbg_0x5c;
     for (int i = 0; i < i_this->field_0xb1ea; i++, part++) {
         if (i_this->field_0xb1ed == 2) {
-            dbg_0x5c = f32(i) / f32(i_this->field_0xb1ea - 1) * M_PI;
-            var_f26 = (-300.0f + WREG_F(15)) * f32(sin(dbg_0x5c));
+            dbg_0x5c = (f32)i / (f32)(i_this->field_0xb1ea - 1) * M_PI;
+            var_f26 = (-300.0f + WREG_F(15)) * (f32)sin(dbg_0x5c);
         } else if (i_this->field_0xb1ed == 1) {
-            dbg_0x5c = f32(i) / f32(i_this->field_0xb1ea - 1) * M_PI;
-            var_f26 = (-100.0f + WREG_F(13)) * f32(sin(dbg_0x5c));
+            dbg_0x5c = (f32)i / (f32)(i_this->field_0xb1ea - 1) * M_PI;
+            var_f26 = (-100.0f + WREG_F(13)) * (f32)sin(dbg_0x5c);
         }
 
         MtxTrans(part->field_0x0bc.x, part->field_0x0bc.y, part->field_0x0bc.z, 0);
@@ -1795,7 +1795,7 @@ static int daObj_Brg_Create(fopAc_ac_c* i_this) {
             };
 
             for (brno = 0; brno < a_this->field_0xb1ea; brno++) {
-                a_this->mBr[brno].field_0x098[2] = brg_init_pos[brno];
+                a_this->mBr[brno].field_0x0b0 = brg_init_pos[brno];
             }
         }
 

@@ -190,7 +190,7 @@ public:
     bool isPauseWindow() { return mPauseWindow != false; }
     void onShowFlag() { mShowFlag |= 1; }
     void offShowFlag() { mShowFlag &= ~1; }
-    bool isShowFlag() { return mShowFlag & 1 != 0; }
+    bool isShowFlag() { return (mShowFlag & 1) != 0; }
     bool isFadeNowCheck() { return mDoGph_gInf_c::getFader()->getStatus() == 1; }
 
 private:

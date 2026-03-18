@@ -19,6 +19,16 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "Z2AudioLib/Z2WolfHowlMgr.h"
 
+// POSIX already defines a macro with this name, but we know that this specific name is
+// used in TP based on assertion messages. This redefinition is scoped to this TU which
+// is unlikely to ever actually need the POSIX define, so we can just redefine it.
+#if defined(LINE_MAX)
+#undef LINE_MAX
+#endif
+#define LINE_MAX 30
+//TODO: This is likely an enum value based on its name
+#define PLOT_BUFFER_MAX_e 0x300
+
 typedef void (dMsgScrnHowl_c::*dMsgScrnHowl_cFunc)();
 
 static dMsgScrnHowl_cFunc init_proc[5] = {

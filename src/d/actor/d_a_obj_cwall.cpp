@@ -333,6 +333,10 @@ void daObjCwall_c::getChainBasePos(cXyz* pBasePos) {
 void daObjCwall_c::setChainMtx() {
     chain_s* pChain = mChains;
     s16 sVar7 = home.angle.y;
+
+    // !@bug The variable is promoted to a 32-bit signed integer prior
+    //       to being compared to 0xC000, so the compared value can never
+    //       exceed SHORT_MAX and the subcondition fails.
     if (sVar7 == 0x4000 || sVar7 == 0xc000) {
         sVar7 += 0x4000;
     }

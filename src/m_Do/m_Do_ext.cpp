@@ -72,11 +72,11 @@ static void mDoExt_setJ3DData(Mtx mtx, const J3DTransformInfo* transformInfo, u1
         *mtx_p++ *= sp0C.x;
         *mtx_p++ *= sp0C.x;
         *mtx_p++ *= sp0C.x;
-        *mtx_p++;
+        UNUSED(*mtx_p++);
         *mtx_p++ *= sp0C.y;
         *mtx_p++ *= sp0C.y;
         *mtx_p++ *= sp0C.y;
-        *mtx_p++;
+        UNUSED(*mtx_p++);
         *mtx_p++ *= sp0C.z;
         *mtx_p++ *= sp0C.z;
         *mtx_p++ *= sp0C.z;

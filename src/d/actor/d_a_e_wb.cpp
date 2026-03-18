@@ -1100,7 +1100,7 @@ static void e_wb_f_run(e_wb_class* i_this) {
     } else {
         e_rd_class* local_90 = (e_rd_class*)fopAcM_SearchByID(i_this->rd_id);
         int saku;
-        if (saku = e_wb_saku_check(i_this)) {
+        if ((saku = e_wb_saku_check(i_this))) {
             i_this->field_0x6d4 = 60;
             if ((saku & 2) != 0) {
                 i_this->field_0x6d6 = 0x3000;

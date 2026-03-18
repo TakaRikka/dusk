@@ -947,7 +947,7 @@ void daObjMarm_c::calcHimo() {
 
     getRopeStartPos(&offset1);
     getFpartsOffset(&offset2);
-    fabs(offset1.y - offset2.y);
+    UNUSED(fabs(offset1.y - offset2.y));
 
     cXyz* line_mat1_pos = mpRope1->getPos(0);
     *line_mat1_pos = offset1;

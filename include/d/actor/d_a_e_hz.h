@@ -87,7 +87,7 @@ private:
     /* 0x6B4 */ s16 field_0x6b4;
     /* 0x6B6 */ s16 field_0x6b6;
     /* 0x6B8 */ u8 field_0x6B8[0x6BC - 0x6B8];
-    /* 0x6BC */ char* mpName;
+    /* 0x6BC */ const char* mpName;
     /* 0x6C0 */ s32 mAction;
     /* 0x6C4 */ s32 mPrevAction;
     /* 0x6C8 */ s32 mMode;  // That's just a guess. Might need a better name for it's usage

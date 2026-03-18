@@ -156,7 +156,7 @@ static void cb(void* param_0) {
 void mDoDvdThd_param_c::mainLoop() {
     mDoDvdThd_command_c* command;
     while (this->waitForKick() != 0) {
-        while (command = this->getFirstCommand()) {
+        while ((command = this->getFirstCommand())) {
             this->cut(command);
             if (mDoDvdThd::SyncWidthSound) {
                 JASDvd::getThreadPointer()->sendCmdMsg(cb, &command, 4);

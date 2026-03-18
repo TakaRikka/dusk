@@ -512,7 +512,7 @@ bool dPa_modelEcallBack::model_c::set(J3DModelData* i_modelData, dKy_tevstr_c co
     field_0x8.field_0x344 = param_1.field_0x344;
     typedef struct Arr{
         int field_0x0[2];
-    };
+    } Arr;
     *(Arr*)&field_0x8.AmbCol = *(Arr*)&param_1.AmbCol;
     *(Arr*)&field_0x8.FogCol = *(Arr*)&param_1.FogCol;
     *(Arr*)&field_0x8.TevColor = *(Arr*)&param_1.TevColor;
@@ -844,11 +844,11 @@ u32 dPa_simpleEcallBack::set(cXyz const* i_pos, dKy_tevstr_c const* param_2, u8 
         GXColor local_60;
         GXColor local_64 = {0xff, 0xff, 0xff, 0xff};
         GXColor local_68 = {0xff, 0xff, 0xff, 0xff};
-        if (&param_5 != NULL) {
+        if (IS_REF_NONNULL(param_5)) {
             local_64 = param_5;
         }
 
-        if (&param_4 != NULL) {
+        if (IS_REF_NONNULL(param_4)) {
             local_68 = param_4;
         }
 
@@ -865,11 +865,11 @@ u32 dPa_simpleEcallBack::set(cXyz const* i_pos, dKy_tevstr_c const* param_2, u8 
         GXColor local_70;
         GXColor local_74 = {0xff, 0xff, 0xff, 0xff};
         GXColor local_78 = {0xff, 0xff, 0xff, 0xff};
-        if (&param_5 != NULL) {
+        if (IS_REF_NONNULL(param_5)) {
             local_74 = param_5;
         }
 
-        if (&param_4 != NULL) {
+        if (IS_REF_NONNULL(param_4)) {
             local_78 = param_4;
         }
 
@@ -887,13 +887,13 @@ u32 dPa_simpleEcallBack::set(cXyz const* i_pos, dKy_tevstr_c const* param_2, u8 
         pData->field_0x10.g = local_6c.g;
         pData->field_0x10.b = local_6c.b;
     } else {
-        if (&param_4 != NULL) {
+        if (IS_REF_NONNULL(param_4)) {
             pData->field_0x0c.r = param_4.r;
             pData->field_0x0c.g = param_4.g;
             pData->field_0x0c.b = param_4.b;
         }
 
-        if (&param_5 != NULL) {
+        if (IS_REF_NONNULL(param_5)) {
             pData->field_0x10.r = param_5.r;
             pData->field_0x10.g = param_5.g;
             pData->field_0x10.b = param_5.b;

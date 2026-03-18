@@ -295,7 +295,7 @@ u32 JASSeqParser::readReg(JASTrack* param_0, u32 param_1) const {
     case 0x6a:
         result = param_0->getReleasePrio();
         // @bug this should have been <<=
-        result << 8;
+        (void)(result << 8);
         result |= param_0->getNoteOnPrio();
         break;
     case 0x6b:

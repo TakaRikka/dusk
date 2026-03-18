@@ -23,6 +23,7 @@ int daTagTheBHint_c::execute() {
     if (fopAcM_searchPlayerDistanceXZ2(this) < field_0x568) {
         daNpcTheB_c* the_b = (daNpcTheB_c*)fpcM_SearchByName(fpcNm_NPC_THEB_e);
         if (the_b) {
+            // !@bug Comparison of s8 (getRoomNo) with 0xFF always evaluates to false
             int roomNo = getRoomNo() == 0xff ? fopAcM_GetRoomNo(this) : getRoomNo();
 
             the_b->setHintEvent(getMessageNo(), getLinkID(), roomNo);

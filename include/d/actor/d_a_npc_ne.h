@@ -95,7 +95,7 @@ public:
     /* 0x5D8 */ f32 mDistToTarget;
     /* 0x5DC */ s16 mAngleToPlayer;
     /* 0x5E0 */ f32 mDistScale;
-    /* 0x5E4 */ char* mResName;
+    /* 0x5E4 */ const char* mResName;
     /* 0x5E8 */ mDoExt_McaMorf* mpMorf;
     /* 0x5EC */ mDoExt_btkAnm* mpBtkAnm;
     /* 0x5F0 */ mDoExt_btpAnm* mpBtpAnm;

@@ -33,6 +33,10 @@ void cCcS::Ct() {
         *obj = NULL;
     }
     mObjCount = 0;
+
+    #if DEBUG
+    m_debug_code = 1234;
+    #endif
 }
 
 void cCcS::Dt() {
@@ -98,9 +102,8 @@ void cCcS::ClrCoHitInf() {
         if (*obj != NULL) {
             (*obj)->GetGObjInf()->ClrCoHit();
 
-            cCcD_Stts* stts = (*obj)->GetStts();
-            if (stts != NULL) {
-                stts->ClrCcMove();
+            if ((*obj)->GetStts() != NULL) {
+                (*obj)->GetStts()->ClrCo();
             }
         }
     }
@@ -111,9 +114,8 @@ void cCcS::ClrTgHitInf() {
         if (*obj != NULL) {
             (*obj)->GetGObjInf()->ClrTgHit();
 
-            cCcD_Stts* stts = (*obj)->GetStts();
-            if (stts != NULL) {
-                stts->ClrTg();
+            if ((*obj)->GetStts() != NULL) {
+                (*obj)->GetStts()->ClrTg();
             }
         }
     }
@@ -124,9 +126,8 @@ void cCcS::ClrAtHitInf() {
         if (*obj != NULL) {
             (*obj)->GetGObjInf()->ClrAtHit();
 
-            cCcD_Stts* stts = (*obj)->GetStts();
-            if (stts != NULL) {
-                stts->ClrAt();
+            if ((*obj)->GetStts() != NULL) {
+                (*obj)->GetStts()->ClrAt();
             }
         }
     }
@@ -155,18 +156,18 @@ void cCcS::ChkAtTg() {
             continue;
 
         cCcD_ShapeAttr* pat_sa = (*pat_obj)->GetShapeAttr();
-        JUT_ASSERT(0, pat_sa != NULL);
+        JUT_ASSERT(338, pat_sa != NULL);
 
         for (cCcD_Obj** ptg_obj = mpObjTg; ptg_obj < objTgEnd; ++ptg_obj) {
             if (*ptg_obj == NULL || !(*ptg_obj)->ChkTgSet())
                 continue;
-            if (!(*pat_obj)->GetDivideInfo().Chk((*ptg_obj)->GetDivideInfo()))
+            if (!(*pat_obj)->GetPDivideInfo()->Chk(*(*ptg_obj)->GetPDivideInfo()))
                 continue;
             if (ChkNoHitAtTg(*pat_obj, *ptg_obj))
                 continue;
 
             cCcD_ShapeAttr* ptg_sa = (*ptg_obj)->GetShapeAttr();
-            JUT_ASSERT(0, ptg_sa != NULL);
+            JUT_ASSERT(354, ptg_sa != NULL);
 
             static cXyz cross;
             bool didCross = pat_sa->CrossAtTg(*ptg_sa, &cross);
@@ -176,9 +177,12 @@ void cCcS::ChkAtTg() {
             } else if (anyBsRevHit && !didCross) {
                 cCcD_ShapeAttr* pat_sa = (*pat_obj)->GetShapeAttr();
                 if (pat_sa == NULL) {
-                    cross.set(0.0f, 0.0f, 0.0f);
+                    cross.x = 0.0f;
+                    cross.y = 0.0f;
+                    cross.z = 0.0f;
                 } else {
-                    pat_sa->GetWorkAab().CalcCenter(&cross);
+                    cM3dGAab& aab = pat_sa->GetWorkAab();
+                    aab.CalcCenter(&cross);
                 }
 
                 SetAtTgCommonHitInf(*pat_obj, *ptg_obj, &cross);
@@ -213,24 +217,22 @@ void cCcS::ChkCo() {
             continue;
 
         cCcD_ShapeAttr* pco1_sa = (*pco1_obj)->GetShapeAttr();
-        JUT_ASSERT(0, pco1_sa != NULL);
+        JUT_ASSERT(444, pco1_sa != NULL);
 
         for (cCcD_Obj** pco2_obj = pco1_obj + 1; pco2_obj < objCoEnd; ++pco2_obj) {
             if (*pco2_obj == NULL || !(*pco2_obj)->ChkCoSet())
                 continue;
-            if (!(*pco1_obj)->GetDivideInfo().Chk((*pco2_obj)->GetDivideInfo()))
+            if (!(*pco1_obj)->GetPDivideInfo()->Chk(*(*pco2_obj)->GetPDivideInfo()))
                 continue;
             if (ChkNoHitCo(*pco1_obj, *pco2_obj))
                 continue;
 
             cCcD_ShapeAttr* pco2_sa = (*pco2_obj)->GetShapeAttr();
-            JUT_ASSERT(0, pco2_sa != NULL);
+            JUT_ASSERT(456, pco2_sa != NULL);
 
             f32 cross_len;
             if (pco1_sa->CrossCo(*pco2_sa, &cross_len)) {
-                cXyz& co2_center = pco2_sa->GetCoCP();
-                cXyz& co1_center = pco1_sa->GetCoCP();
-                SetCoCommonHitInf(*pco1_obj, &co1_center, *pco2_obj, &co2_center, cross_len);
+                SetCoCommonHitInf(*pco1_obj, &pco1_sa->GetCoCP(), *pco2_obj, &pco2_sa->GetCoCP(), cross_len);
             }
         }
     }
@@ -238,7 +240,11 @@ void cCcS::ChkCo() {
 
 void cCcS::CalcTgPlusDmg(cCcD_Obj* pat_obj, cCcD_Obj* ptg_obj, cCcD_Stts* pat_stts,
                          cCcD_Stts* ptg_stts) {
-    ptg_stts->PlusDmg(pat_obj->GetAtAtp());
+    UNUSED(ptg_obj);
+    UNUSED(pat_stts);
+
+    int atp = pat_obj->GetAtAtp();
+    ptg_stts->PlusDmg(atp);
 }
 
 void cCcS::SetAtTgCommonHitInf(cCcD_Obj* pat_obj, cCcD_Obj* ptg_obj, cXyz* pcross) {
@@ -296,8 +302,8 @@ void cCcS::SetPosCorrect(cCcD_Obj* pco1_obj, cXyz* ppos1, cCcD_Obj* pco2_obj, cX
         return;
     if (pco1_obj->GetStts() == NULL || pco2_obj->GetStts() == NULL)
         return;
-    if (pco1_obj->GetStts()->GetAc() != NULL &&
-        pco1_obj->GetStts()->GetAc() == pco2_obj->GetStts()->GetAc())
+    if (pco1_obj->GetStts()->GetActor() != NULL &&
+        pco1_obj->GetStts()->GetActor() == pco2_obj->GetStts()->GetActor())
         return;
 
     if (!(fabsf(cross_len) < (1.0f / 125.0f))) {
@@ -346,12 +352,12 @@ void cCcS::SetPosCorrect(cCcD_Obj* pco1_obj, cXyz* ppos1, cCcD_Obj* pco2_obj, cX
         }
 
         f32 objDistLen;
-        Vec vec1;
-        Vec vec2;
+        cXyz vec1;
+        cXyz vec2;
         Vec objsDist;
         if (bothCoSph3DCrr) {
-            VECSubtract(ppos2, ppos1, &objsDist);
-            objDistLen = VECMag(&objsDist);
+            PSVECSubtract(ppos2, ppos1, &objsDist);
+            objDistLen = PSVECMag(&objsDist);
         } else {
             objsDist.x = ppos2->x - ppos1->x;
             objsDist.y = 0;
@@ -361,10 +367,11 @@ void cCcS::SetPosCorrect(cCcD_Obj* pco1_obj, cXyz* ppos1, cCcD_Obj* pco2_obj, cX
 
         if (!cM3d_IsZero(objDistLen)) {
             if (bothCoSph3DCrr) {
-                VECScale(&objsDist, &objsDist, cross_len / objDistLen);
+                f32 sp1C = cross_len / objDistLen;
+                PSVECScale(&objsDist, &objsDist, sp1C);
                 obj2Weight *= -1;
-                VECScale(&objsDist, &vec1, obj2Weight);
-                VECScale(&objsDist, &vec2, obj1Weight);
+                PSVECScale(&objsDist, &vec1, obj2Weight);
+                PSVECScale(&objsDist, &vec2, obj1Weight);
             } else {
                 f32 pushFactor = cross_len / objDistLen;
                 objsDist.x *= pushFactor;
@@ -435,7 +442,7 @@ void cCcS::CalcArea() {
     for (cCcD_Obj** pset_obj = mpObj; pset_obj < mpObj + mObjCount; ++pset_obj) {
         if (*pset_obj != NULL) {
             cCcD_ShapeAttr* pset_sa = (*pset_obj)->GetShapeAttr();
-            JUT_ASSERT(0, pset_sa != NULL);
+            JUT_ASSERT(826, pset_sa != NULL);
 
             pset_sa->CalcAabBox();
             aab.SetMinMax(pset_sa->GetWorkAab());
@@ -445,10 +452,10 @@ void cCcS::CalcArea() {
     mDivideArea.SetArea(aab);
     for (cCcD_Obj** pset_obj = mpObj; pset_obj < mpObj + mObjCount; ++pset_obj) {
         if (*pset_obj != NULL) {
-            const cCcD_ShapeAttr* pset_sa = (*pset_obj)->GetShapeAttr();
-            JUT_ASSERT(0, pset_sa != NULL);
+            cCcD_ShapeAttr* pset_sa = (*pset_obj)->GetShapeAttr();
+            JUT_ASSERT(839, pset_sa != NULL);
 
-            cCcD_DivideInfo* divideInfo = &(*pset_obj)->GetDivideInfo();
+            cCcD_DivideInfo* divideInfo = (*pset_obj)->GetPDivideInfo();
             mDivideArea.CalcDivideInfo(divideInfo, pset_sa->GetWorkAab(),
                                        (*pset_obj)->ChkBsRevHit());
         }
@@ -456,10 +463,22 @@ void cCcS::CalcArea() {
 }
 
 void cCcS::Move() {
+    #if DEBUG
+    JUT_ASSERT(866, m_debug_code == 1234);
+    #endif
+
     CalcArea();
     ChkAtTg();
     ChkCo();
     MoveAfterCheck();
+
+    #if DEBUG
+    field_0x280c = mObjAtCount;
+    field_0x280e = mObjTgCount;
+    field_0x2810 = mObjCoCount;
+    field_0x2812 = mObjCount;
+    #endif
+
     mObjAtCount = 0;
     mObjTgCount = 0;
     mObjCoCount = 0;

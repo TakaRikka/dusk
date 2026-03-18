@@ -724,7 +724,13 @@ void daE_OC_c::damage_check() {
     } else if (mAtInfo.mpCollider->ChkAtType(AT_TYPE_40)) {
         S16_ADD(health, 10);
     } else if (mAtInfo.mpCollider->ChkAtType(AT_TYPE_SLINGSHOT)) {
+        // This happens to work with MWCC since the member will only ever be initialized a pointer to a
+        // string in this TU's .data section, but comparing against a string literal is still UB.
+#if AVOID_UB
+        if (strcmp(mName, "E_OC") == 0) {
+#else
         if (mName == "E_OC") {
+#endif
             S16_SUB(health, 5);
             if (health < 0) {
                 health = 0;
@@ -855,7 +861,12 @@ void daE_OC_c::setDashSound() {
         } else if (mpMorf->checkFrame(8.5f)) {
             mSound.startCreatureSound(Z2SE_EN_OC_FOOTNOTE_R, 0, -1);
         }
+        // See comment in damage_check
+#if AVOID_UB
+        if (strcmp(mName, "E_OC") == 0) {
+#else
         if (mName == "E_OC") {
+#endif
             mSound.startCreatureSoundLevel(Z2SE_EN_OC_CLUB_DAGGLE, 0, -1);
         } else {
             mSound.startCreatureSoundLevel(Z2SE_EN_OC_NATA_DAGGLE, 0, -1);
@@ -1421,7 +1432,12 @@ void daE_OC_c::executeAttack() {
                 } else if (mpMorf->checkFrame(12.5f)) {
                     mSound.startCreatureSound(Z2SE_EN_OC_ATTACK_B, 0, -1);
                 } else if (mpMorf->checkFrame(19.0f)) {
+                    // See comment in damage_check
+#if AVOID_UB
+                    if (strcmp(mName, "E_OC") == 0) {
+#else
                     if (mName == "E_OC") {
+#endif
                         mSound.startCreatureSound(Z2SE_EN_OC_CLUB_HIT, 0, -1);
                     } else {
                         mSound.startCreatureSound(Z2SE_EN_OC_NATA_HIT, 0, -1);
@@ -1843,7 +1859,12 @@ void daE_OC_c::executeDeath() {
         case 2:
             cLib_chaseF(&speedF, 0.0f, 1.0f);
             if (field_0x6c0 == 0) {
+                // See comment in damage_check
+#if AVOID_UB
+                if (strcmp(mName, "E_OC") == 0) {
+#else
                 if (mName == "E_OC") {
+#endif
                     fopAcM_createDisappear(this, &current.pos, 10, 0, 4);
                 } else {
                     fopAcM_createDisappear(this, &current.pos, 10, 0, 0x34);
@@ -1917,7 +1938,12 @@ void daE_OC_c::executeWaterDeath() {
             }
 
             if (mpMorf->isStop()) {
+                // See comment in damage_check
+#if AVOID_UB
+                if (strcmp(mName, "E_OC") == 0) {
+#else
                 if (mName == "E_OC") {
+#endif
                     fopAcM_createDisappear(this, &current.pos, 10, 0, 4);
                 } else {
                     fopAcM_createDisappear(this, &current.pos, 10, 0, 0x34);
@@ -2741,7 +2767,12 @@ cPhs_Step daE_OC_c::create() {
                 mAcchCir.SetWallH(70.0f);
             }
             mAcchCir.SetWallR(100.0f);
+            // See comment in damage_check
+#if AVOID_UB
+            if (strcmp(mName, "E_OC") == 0) {
+#else
             if (mName == "E_OC") {
+#endif
                 field_0x560 = health = 40;
             } else {
                 field_0x560 = health = 220;
@@ -2756,7 +2787,12 @@ cPhs_Step daE_OC_c::create() {
             mSphs_at[0].SetStts(&mStts);
             mSphs_at[1].Set(E_OC_n::at_sph_src);
             mSphs_at[1].SetStts(&mStts);
+            // See comment in damage_check
+#if AVOID_UB
+            if (strcmp(mName, "E_OC") == 0) {
+#else
             if (mName == "E_OC") {
+#endif
                 mSphs_at[0].SetAtAtp(1);
                 mSphs_at[1].SetAtAtp(1);
                 fopAcM_OnStatus(this, fopAcStts_UNK_0x10000_e);

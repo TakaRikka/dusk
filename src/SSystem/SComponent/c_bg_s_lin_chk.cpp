@@ -28,11 +28,11 @@ void cBgS_LinChk::Set2(cXyz const* startPos, cXyz const* endPos, unsigned int ac
     field_0x40 = *endPos;
     SetActorPid(actorPid);
     mStts &= ~STTS_HIT;
-    ClearPi();
+    ClearCheckIndex();
 }
 
 void cBgS_LinChk::PreCalc() {
-    mPreWallChk = !(mStts & STTS_WALL_OFF);
-    mPreGroundChk = !(mStts & STTS_GROUND_OFF);
-    mPreRoofChk = !(mStts & STTS_ROOF_OFF);
+    mPreWallChk = !ChkSttsWallOff();
+    mPreGroundChk = !ChkSttsGroundOff();
+    mPreRoofChk = !ChkSttsRoofOff();
 }

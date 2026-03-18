@@ -51,9 +51,10 @@
 #define ANM_HS_WALK_FAST           34
 #define ANM_HS_WALK_SLOW           35
 
-static f32* strippedFunc() {
-    f32 v[3] = {};
-    return v;
+static void strippedFunc() {
+    extern void F(f32*);
+    f32 v[3] = {0.0f};
+    F(v);
 }
 
 static char const l_arcName[] = "Horse";

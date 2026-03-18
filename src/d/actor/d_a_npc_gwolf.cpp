@@ -291,10 +291,13 @@ cPhs_Step daNpc_GWolf_c::create() {
 
     mExitId = fopAcM_GetParam(this) >> 24;
 
+    // !@bug home.angle.x is promoted to a 32-bit signed integer prior
+    //       to being compared, so the compared value can never exceed
+    //       SHORT_MAX and the condition always passes.
     if (home.angle.x != 0xFFFF) {
-        field_0xe08 = home.angle.x;
+        mFlowID = home.angle.x;
     } else {
-        field_0xe08 = -1;
+        mFlowID = -1;
     }
 
     swBit = getSwBitFromParam();
@@ -1817,7 +1820,7 @@ BOOL daNpc_GWolf_c::talk(void* param_1) {
                 break;
             }
 
-            int msgNo = field_0xe08;
+            int msgNo = mFlowID;
             mOrderSpeakEvt = false;
             initTalk(msgNo, NULL);
             mTurnMode = 0;

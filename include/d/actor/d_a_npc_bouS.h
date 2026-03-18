@@ -72,7 +72,7 @@ public:
     void setExpression(int, f32);
     bool talk(void*);
     bool demo(void*);
-                   inline fopAc_ac_c* searchInstructionTag();
+    inline fopAc_ac_c* searchInstructionTag();
     bool instruction(void*);
     bool checkIntroDemoStart();
     int EvCut_BousIntroSumo1(int);

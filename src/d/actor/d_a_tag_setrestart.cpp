@@ -163,7 +163,7 @@ static int daTagRestart_Execute(daTagRestart_c* i_this) {
 }
 
 static int daTagRestart_Delete(daTagRestart_c* i_this) {
-    ("Delete -> TagRestart( =%d)\n", fopAcM_GetID(i_this));
+    fopAcM_RegisterDeleteID(i_this, "TagRestart");
     return i_this->_delete();
 }
 

@@ -89,7 +89,7 @@ public:
     /* 0x5B7 */ u8 field_0x5b7;
     /* 0x5B8 */ int order;
     /* 0x5BC */ int bitTRB;
-    /* 0x5C0 */ char* res_name;
+    /* 0x5C0 */ const char* res_name;
     /* 0x5C4 */ f32 dis;
     /* 0x5C8 */ s16 target_angle;
     /* 0x5CC */ mDoExt_McaMorfSO* model;

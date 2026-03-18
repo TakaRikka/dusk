@@ -1463,9 +1463,8 @@ bool dShopSystem_c::searchItemActor() {
         for (int i = 0; i < dShopSystem_sellItemMax; i++) {
             u32 processId = dShopSystem_itemActor[i]->getProcessID();
             mItemCtrl.setItemIndex(i, processId);
-            mItemCtrl.setMessageIndex(i, (u16)dShopSystem_itemActor[i]->home.angle.x != 0xFFFF ?
-                                             (u16)dShopSystem_itemActor[i]->home.angle.x :
-                                             -1);
+            int itemFlowId = dShopSystem_itemActor[i]->getFlowNodeNum();
+            mItemCtrl.setMessageIndex(i, itemFlowId);
 
             if (processId + 0x10000 == 0xFFFF) {
                 onFlag(i);

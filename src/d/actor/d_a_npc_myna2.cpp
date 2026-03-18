@@ -189,10 +189,13 @@ int daNpc_myna2_c::create() {
     mType = getTypeFromParam();
     field_0xe0d = (fopAcM_GetParam(this) & 0xFF00) >> 8;
 
+    // !@bug home.angle.x is promoted to a 32-bit signed integer prior
+    //       to being compared, so the compared value can never exceed
+    //       SHORT_MAX and the condition always passes.
     if (home.angle.x != 0xFFFF) {
-        field_0xe04 = home.angle.x;
+        mFlowID = home.angle.x;
     } else {
-        field_0xe04 = -1;
+        mFlowID = -1;
     }
 
     if (isDelete()) {
@@ -928,7 +931,7 @@ int daNpc_myna2_c::talk(void* param_0) {
     switch (mMode) {
     case 0:
         if (!mIsDamaged) {
-            initTalk(field_0xe04, NULL);
+            initTalk(mFlowID, NULL);
             mTurnMode = 0;
             mAnm_p->setPlaySpeed(1.0f);
             mMode = 2;
@@ -1014,7 +1017,7 @@ int daNpc_myna2_c::ECut_firstTalk(int i_staffId) {
         case 10:
             break;
         case 20:
-            initTalk(field_0xe04, NULL);
+            initTalk(mFlowID, NULL);
             break;
         }
     }
@@ -1063,7 +1066,7 @@ int daNpc_myna2_c::ECut_gameFailure(int i_staffId) {
         case 20:
             break;
         case 10:
-            initTalk(field_0xe04, NULL);
+            initTalk(mFlowID, NULL);
             break;
         }
     }
@@ -1121,7 +1124,7 @@ int daNpc_myna2_c::ECut_gameGoal(int i_staffId) {
             }
             break;
         case 10:
-            initTalk(field_0xe04, NULL);
+            initTalk(mFlowID, NULL);
             break;
         case 20:
             break;
@@ -1183,7 +1186,7 @@ int daNpc_myna2_c::ECut_gameGoalSuccess(int i_staffId) {
             }
             break;
         case 10:
-            initTalk(field_0xe04, NULL);
+            initTalk(mFlowID, NULL);
             break;
         case 20: {
             int itemNo = 0;
@@ -1193,7 +1196,7 @@ int daNpc_myna2_c::ECut_gameGoalSuccess(int i_staffId) {
             break;
         }
         case 25:
-            initTalk(field_0xe04, NULL);
+            initTalk(mFlowID, NULL);
             break;
         case 30:
             break;

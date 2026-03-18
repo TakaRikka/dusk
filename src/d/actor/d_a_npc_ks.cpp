@@ -250,7 +250,13 @@ static int daNpc_Ks_Draw(npc_ks_class* i_this) {
 
     fopAc_ac_c* actor = &i_this->actor;
     J3DModel* model = i_this->model->getModel();
+    // This happens to work with MWCC since the member will only ever be initialized a pointer to a
+    // string in this TU's .data section, but comparing against a string literal is still UB.
+#if AVOID_UB
+    if (strcmp(i_this->res_name, "Npc_kst") == 0) {
+#else
     if (i_this->res_name == "Npc_kst") {
+#endif
         g_env_light.settingTevStruct(4, &actor->current.pos, &actor->tevStr);
     } else {
         g_env_light.settingTevStruct(0, &actor->current.pos, &actor->tevStr);

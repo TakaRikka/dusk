@@ -135,7 +135,13 @@ static int daNpc_Ne_Draw(npc_ne_class* i_this) {
     }
 
     J3DModel* model = i_this->mpMorf->getModel();
+    // This happens to work with MWCC since the member will only ever be initialized a pointer to a
+    // string in this TU's .data section, but comparing against a string literal is still UB.
+#if AVOID_UB
+    if (strcmp(i_this->mResName, "Npc_net") == 0) {
+#else
     if (i_this->mResName == "Npc_net") {
+#endif
         if (!dComIfGs_wolfeye_effect_check()) {
             return 1;
         }
@@ -426,7 +432,12 @@ static void npc_ne_wait(npc_ne_class* i_this) {
     daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
     cLib_addCalc0(&_this->speedF, 1.0f, 1.3f);
 
+    // See comment in daNpc_Ne_Draw
+#if AVOID_UB
+    if (strcmp(i_this->mResName, "Npc_net") == 0) {
+#else
     if (i_this->mResName == "Npc_net") {
+#endif
         switch (i_this->mMode) {
         case 0:
             i_this->mTargetAngleY = cM_rndF(0x10000);
@@ -2173,7 +2184,12 @@ static void action(npc_ne_class* i_this) {
 
     _this->gravity = -7.0f;
 
+    // See comment in daNpc_Ne_Draw
+#if AVOID_UB
+    if (strcmp(i_this->mResName, "Npc_net") == 0) {
+#else
     if (i_this->mResName == "Npc_net") {
+#endif
         i_this->mDistToTarget = 10000.0f;
     } else {
         i_this->mDistToTarget = i_this->mDistScale * fopAcM_searchPlayerDistance(_this);
@@ -2298,9 +2314,15 @@ static void action(npc_ne_class* i_this) {
             break;
         }
 
+        // See comment in daNpc_Ne_Draw
+#if AVOID_UB
+        if (strcmp(i_this->mResName, "Npc_net") != 0) {
+#else
         if (i_this->mResName != "Npc_net") {
-            if (i_this->mMessageState == 1 && daPy_py_c::checkNowWolf()
-                                         && i_this->mDistToTarget < 300.0f) {
+#endif
+            if (i_this->mMessageState == 1 &&
+                daPy_py_c::checkNowWolf() &&
+                i_this->mDistToTarget < 300.0f) {
                 i_this->mAction = npc_ne_class::ACT_MESSAGE;
                 i_this->mMode = 0;
                 bird_check = false;
@@ -2846,8 +2868,15 @@ static void demo_camera(npc_ne_class* i_this) {
 }
 
 static int message(npc_ne_class* i_this) {
-    if (i_this->mResName == "Npc_net" && !dComIfGs_wolfeye_effect_check()) {
-        i_this->mMessageState = 0;
+    // See comment in daNpc_Ne_Draw
+#if AVOID_UB
+    if (strcmp(i_this->mResName, "Npc_net") == 0) {
+#else
+    if (i_this->mResName == "Npc_net") {
+#endif
+        if (!dComIfGs_wolfeye_effect_check()) {
+            i_this->mMessageState = 0;
+        }
     }
 
     if (i_this->mIsTalking) {
@@ -2872,7 +2901,12 @@ static int message(npc_ne_class* i_this) {
                                 !fopAcM_otherBgCheck(daPy_getLinkPlayerActorClass(), i_this)) {
             fopAcM_OnStatus(i_this, 0);
             cLib_onBit<u32>(i_this->attention_info.flags, fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
+            // See comment in daNpc_Ne_Draw
+#if AVOID_UB
+            if (strcmp(i_this->mResName, "Npc_net") == 0) {
+#else
             if (i_this->mResName == "Npc_net") {
+#endif
                 cLib_onBit<u32>(i_this->attention_info.flags, fopAc_AttnFlag_UNK_0x800000 | fopAc_AttnFlag_UNK_0x400000);
             }
             i_this->eventInfo.onCondition(dEvtCnd_CANTALK_e);
@@ -2978,14 +3012,21 @@ static int daNpc_Ne_Execute(npc_ne_class* i_this) {
     message(i_this);
     demo_camera(i_this);
 
-    if (i_this->mResName == "Npc_net" && !dComIfGs_wolfeye_effect_check()) {
-        static u16 e_name[2] = {0x8497, 0x8498};
-        for (int i = 0; i < 2; i++) {
-            i_this->mParticle[i] = dComIfGp_particle_set(i_this->mParticle[i], e_name[i],
-                                                        &i_this->eyePos, NULL, NULL);
-            JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(i_this->mParticle[i]);
-            if (emitter != NULL) {
-                emitter->setGlobalAlpha(!dComIfGs_wolfeye_effect_check() ? 0xff : 0);
+    // See comment in daNpc_Ne_Draw
+#if AVOID_UB
+    if (strcmp(i_this->mResName, "Npc_net") == 0) {
+#else
+    if (i_this->mResName == "Npc_net") {
+#endif
+        if (!dComIfGs_wolfeye_effect_check()) {
+            static u16 e_name[2] = {0x8497, 0x8498};
+            for (int i = 0; i < 2; i++) {
+                i_this->mParticle[i] = dComIfGp_particle_set(i_this->mParticle[i], e_name[i],
+                                                            &i_this->eyePos, NULL, NULL);
+                JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(i_this->mParticle[i]);
+                if (emitter != NULL) {
+                    emitter->setGlobalAlpha(!dComIfGs_wolfeye_effect_check() ? 0xff : 0);
+                }
             }
         }
     }
@@ -3231,7 +3272,12 @@ static cPhs_Step daNpc_Ne_Create(fopAc_ac_c* i_this) {
         _this->mAcchCir.SetWall(_this->mBaseScale.y * 30.0f, _this->mBaseScale.z * 35.0f);
         _this->mDistScale = cM_rndFX(0.2f) + 1.0f;
         _this->mGroundY = i_this->current.pos.y;
+        // See comment in daNpc_Ne_Draw
+#if AVOID_UB
+        if (strcmp(_this->mResName, "Npc_net") == 0) {
+#else
         if (_this->mResName == "Npc_net") {
+#endif
             _this->mAction = npc_ne_class::ACT_WAIT;
             _this->mMode = 0;
         }

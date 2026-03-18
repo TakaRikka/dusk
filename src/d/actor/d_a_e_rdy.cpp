@@ -2155,7 +2155,7 @@ static void e_rdy_damage(e_rdy_class* i_this) {
 
     case 1:
         if (i_this->mAcch.ChkWallHit() && i_this->mTimer[0] == 0) {
-            if (check = kado_check(i_this)) {
+            if ((check = kado_check(i_this))) {
                 OS_REPORT("              ..KADO KABE ..%x\n", check);
                 if (check == 2) {
                     i_this->field_0xac6 = 0x1000;
@@ -4721,7 +4721,7 @@ static int daE_RDY_Execute(e_rdy_class* i_this) {
         }
         MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(JNT_HAND_R), *calc_mtx);
         MtxTrans(20.0f + NREG_F(0), 5.0f + NREG_F(1), -10.0f + NREG_F(2), 1);
-        cMtx_XrotM(*calc_mtx, NREG_S(0) + 0x8000);
+        cMtx_XrotM(*calc_mtx, (s16)(NREG_S(0) + 0x8000));
         cMtx_YrotM(*calc_mtx, NREG_S(1) + ang_y + -0x15cd);
         cMtx_ZrotM(*calc_mtx, NREG_S(2) + 0x28cd);
         i_this->mpHawkGrassModel->setBaseTRMtx(*calc_mtx);

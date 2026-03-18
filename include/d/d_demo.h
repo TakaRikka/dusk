@@ -340,27 +340,6 @@ public:
     virtual JPABaseEmitter* emitter_create(u32);
 };
 
-namespace {
-class jstudio_tAdaptor_message : public JStudio::TAdaptor_message {
-public:
-    typedef JStudio::TObject_message ObjectType;
-
-    jstudio_tAdaptor_message() {}
-
-    virtual ~jstudio_tAdaptor_message();
-    virtual void adaptor_do_MESSAGE(JStudio::data::TEOperationData, const void*, u32);
-};
-
-class jstudio_tCreateObject_message : public JStudio::TCreateObject {
-public:
-    jstudio_tCreateObject_message() {}
-
-    virtual ~jstudio_tCreateObject_message();
-    virtual bool create(JStudio::TObject**, const JStudio::stb::data::TParse_TBlock_object&);
-};
-
-};  // namespace
-
 int dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, char const*, int, u16*, u32, s8);
 
 class dDemo_c {
@@ -409,7 +388,7 @@ public:
     static JStudio_JStage::TCreateObject* m_stage;
     static JStudio_JAudio2::TCreateObject* m_audio;
     static dDemo_particle_c* m_particle;
-    static jstudio_tCreateObject_message* m_message;
+    static JStudio::TCreateObject* m_message;
     static JStudio::TFactory* m_factory;
     static jmessage_tControl* m_mesgControl;
     static dDemo_object_c* m_object;

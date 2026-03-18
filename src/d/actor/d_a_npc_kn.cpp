@@ -4961,11 +4961,11 @@ int daNpc_Kn_c::setPrtcl() {
         // cXyz* pos = mParticleMngr[i].mpModel == true ? &mParticleMngr[i].mPos : NULL;
 
         mParticleMngr[i].mManager.setEffectCenter(&tevStr, &mParticleMngr[i].mPos, check, sp_0x18,
-                                                  mParticleMngr[i].mpModel == true ? &mParticleMngr[i].mPos : NULL,
-                                                  mParticleMngr[i].mpModel == true ? &mParticleMngr[i].mAngle : NULL,
+                                                  mParticleMngr[i].field_0x00 == true ? &mParticleMngr[i].mPos : NULL,
+                                                  mParticleMngr[i].field_0x00 == true ? &mParticleMngr[i].mAngle : NULL,
                                                   0, fopAcM_GetRoomNo(this), 0.0f, speedF);
 
-        if (mParticleMngr[i].mpModel != false) {
+        if (mParticleMngr[i].field_0x00 != false) {
             emitter = mParticleMngr[i].mManager.getCenterEmitter(0, 0);
             if (emitter != NULL) {
                 switch (i) {
@@ -4984,7 +4984,7 @@ int daNpc_Kn_c::setPrtcl() {
             }
         }
 
-        mParticleMngr[i].mpModel = NULL;
+        mParticleMngr[i].field_0x00 = false;
     }
 
     return 1;
@@ -4996,21 +4996,21 @@ int daNpc_Kn_c::setSlipPrtcl() {
     mParticleMngr[0].mPos.y -= 20.0f;
     mParticleMngr[0].mAngle = current.angle;
     ANGLE_SUB_2(mParticleMngr[0].mAngle.y, 0x8000);
-    mParticleMngr[0].mpModel = true;
+    mParticleMngr[0].field_0x00 = true;
 
     mDoMtx_stack_c::copy(mpModelMorf[0]->getModel()->getAnmMtx(0x1b));
     mDoMtx_stack_c::multVecZero(&mParticleMngr[1].mPos);
     mParticleMngr[1].mPos.y -= 20.0f;
     mParticleMngr[1].mAngle = current.angle;
     ANGLE_SUB_2(mParticleMngr[1].mAngle.y, 0x8000);
-    mParticleMngr[1].mpModel = true;
+    mParticleMngr[1].field_0x00 = true;
     return 1;
 }
 
 int daNpc_Kn_c::setLandingPrtcl() {
     mParticleMngr[2].mPos = current.pos;
     mParticleMngr[2].mAngle = mCurAngle;
-    mParticleMngr[2].mpModel = true;
+    mParticleMngr[2].field_0x00 = true;
     return 1;
 }
 

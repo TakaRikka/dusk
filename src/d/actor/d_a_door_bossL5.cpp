@@ -348,7 +348,7 @@ int daBdoorL5_c::checkArea() {
     if (fabsf(local_48.z) > 100.0f) {
         return 0;
     }
-    if ((s16)fabs(current.angle.y - 0x7fff - player->current.angle.y) <= 0x4000) {
+    if ((s16)fabs((f64)(current.angle.y - 0x7fff - player->current.angle.y)) <= 0x4000) {
         return 1;
     } else {
         return 0;

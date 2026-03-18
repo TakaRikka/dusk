@@ -1930,7 +1930,7 @@ static void eff_set(e_yh_class* i_this) {
                     dComIfGp_particle_set(i_this->mParticleIds2[2], dPa_RM(ID_ZI_S_YD_YODAHIT_A),
                                           &a_this->current.pos, 0, NULL);
                 {
-                    JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(i_this->mParticleIds[5]);
+                    JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(i_this->mParticleIds2[2]);
                     if (emitter != NULL) {
                         MTXCopy(model->getAnmMtx(1), *calc_mtx);
                         emitter->setGlobalRTMatrix(*calc_mtx);

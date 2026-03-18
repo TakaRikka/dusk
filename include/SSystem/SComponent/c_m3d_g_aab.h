@@ -18,25 +18,25 @@ public:
     bool CrossY(const cXyz*) const;
     bool UnderPlaneYUnder(f32) const;
     bool TopPlaneYUnder(f32) const;
-    void ClearForMinMax(void);
+    void ClearForMinMax();
     void SetMinMax(const cXyz&);
     void SetMinMax(const cM3dGAab&);
     void SetMin(const cXyz&);
     void SetMax(const cXyz&);
     void CalcCenter(cXyz*) const;
     void PlusR(f32);
-    const cXyz* GetMaxP(void) const { return &mMax; }
-    cXyz* GetMaxP(void) { return &mMax; }
-    const cXyz* GetMinP(void) const { return &mMin; }
-    cXyz* GetMinP(void) { return &mMin; }
-    const f32 GetMaxX(void) const { return mMax.x; }
-    const f32 GetMaxY(void) const { return mMax.y; }
-    const f32 GetMaxZ(void) const { return mMax.z; }
-    const f32 GetMinX(void) const { return mMin.x; }
-    const f32 GetMinY(void) const { return mMin.y; }
-    const f32 GetMinZ(void) const { return mMin.z; }
+    const cXyz* GetMaxP() const { return &mMax; }
+    cXyz* GetMaxP() { return &mMax; }
+    const cXyz* GetMinP() const { return &mMin; }
+    cXyz* GetMinP() { return &mMin; }
+    const f32 GetMaxX() const { return mMax.x; }
+    const f32 GetMaxY() const { return mMax.y; }
+    const f32 GetMaxZ() const { return mMax.z; }
+    const f32 GetMinX() const { return mMin.x; }
+    const f32 GetMinY() const { return mMin.y; }
+    const f32 GetMinZ() const { return mMin.z; }
     bool Cross(const cM3dGLin *param_1) const {
-        return cM3d_Cross_MinMaxBoxLine(GetMinP(), GetMaxP(), (Vec*)&param_1->GetStartP(), (Vec*)&param_1->GetEndP());
+        return cM3d_Cross_MinMaxBoxLine(GetMinP(), GetMaxP(), param_1->GetStartP(), param_1->GetEndP());
     }
     bool Cross(const cM3dGAab *param_1) const {
         return cM3d_Cross_AabAab(this, param_1);

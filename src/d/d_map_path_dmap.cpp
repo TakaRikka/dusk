@@ -199,10 +199,10 @@ void dMapInfo_n::getRoomMinMaxXZ(int i_roomNo, f32* i_roomLeftX, f32* i_roomInne
 
 void dMapInfo_n::getFloorParameter(f32 param_0, s8* i_floorNo, f32* param_2, f32* param_3,
                                    f32* param_4, f32* param_5) {
-    f32 gap_level = dStage_stagInfo_GetGapLevel(dComIfGp_getStageStagInfo());
-    f32 range_up = fabsf(dStage_stagInfo_GetRangeUp(dComIfGp_getStageStagInfo()));
-    f32 range_down = fabsf(dStage_stagInfo_GetRangeDown(dComIfGp_getStageStagInfo()));
-    s8 floorNo = (f32)floor(param_0 / gap_level);
+    f32 gap_level = (f32)dStage_stagInfo_GetGapLevel(dComIfGp_getStageStagInfo());
+    f32 range_up = fabsf((f32)dStage_stagInfo_GetRangeUp(dComIfGp_getStageStagInfo()));
+    f32 range_down = fabsf((f32)dStage_stagInfo_GetRangeDown(dComIfGp_getStageStagInfo()));
+    s8 floorNo = (s8)(f32)floor(param_0 / gap_level);
 
     if (i_floorNo != NULL) {
         *i_floorNo = floorNo;

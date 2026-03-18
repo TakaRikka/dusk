@@ -524,8 +524,8 @@ bool cBgW::LineCheckRp(cBgS_LinChk* plinchk, int node_index) {
     cBgW_NodeTree* node = &pm_node_tree[node_index];
 
     if (!cM3d_Cross_MinMaxBoxLine(node->GetMinP(), node->GetMaxP(),
-                                  &plinchk->GetLinP()->GetStartP(),
-                                  &plinchk->GetLinP()->GetEndP()))
+                                  plinchk->GetLinP()->GetStartP(),
+                                  plinchk->GetLinP()->GetEndP()))
     {
         return false;
     }

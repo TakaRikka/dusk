@@ -1318,7 +1318,7 @@ int daMBdoorL1_c::checkArea() {
         return 0;
     }
     
-    if ((s16)fabs(angle - 0x7fff - player->current.angle.y) > 0x4000) {
+    if ((s16)fabs((f64)(angle - 0x7fff - player->current.angle.y)) > 0x4000) {
         return 0;
     } else {
         return 1;

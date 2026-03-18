@@ -138,10 +138,13 @@ int daNpc_grS_c::create() {
 
     mType = getTypeFromParam();
 
+    // !@bug home.angle.x is promoted to a 32-bit signed integer prior
+    //       to being compared, so the compared value can never exceed
+    //       SHORT_MAX and the condition always passes.
     if (home.angle.x != 0xffff) {
-        field_0xe0c = home.angle.x;
+        mFlowID = home.angle.x;
     } else {
-        field_0xe0c = -1;
+        mFlowID = -1;
     }
 
     if (isDelete()) {
@@ -856,7 +859,7 @@ int daNpc_grS_c::selectAction() {
         mpNextActionFn = &daNpc_grS_c::test;
     }
     else {
-        (int)mType;
+        UNUSED((int)mType);
         mpNextActionFn = &daNpc_grS_c::wait;
     }
 
@@ -936,7 +939,7 @@ int daNpc_grS_c::doEvent() {
             if (eventInfo.checkCommandDemoAccrpt() && mEventIdx != -1 &&
                 eventManager->endCheck(mEventIdx))
             {
-                (int)mOrderEvtNo;
+                UNUSED((int)mOrderEvtNo);
                 dComIfGp_event_reset();
                 mOrderEvtNo = 0;
                 mEventIdx = -1;
@@ -1157,7 +1160,7 @@ int daNpc_grS_c::talk(void* param_0) {
             daNpcF_offTmpBit(11);
         }
 
-        unkInt1 = field_0xe0c;
+        unkInt1 = mFlowID;
         mIsSpeaking = false;
         initTalk(unkInt1, NULL);
         mTurnMode = 0;

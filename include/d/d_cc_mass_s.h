@@ -9,7 +9,7 @@ class dCcMassS_Obj {
 private:
     /* 0x00 */ cCcD_Obj* mpObj;
     /* 0x04 */ u8 mPriority;
-    /* 0x08 */ dCcMassS_ObjCallback mpCallback;
+    /* 0x08 */ dCcMassS_ObjCallback mpAreaCheckFunc;
     /* 0x0C */ cCcD_DivideInfo mDivideInfo;
     /* 0x1C vtable */
 
@@ -19,10 +19,10 @@ public:
     void Set(cCcD_Obj* p_obj, u8 priority, dCcMassS_ObjCallback callback);
     void Clear();
 
-    cCcD_Obj* GetObj() { return mpObj; }
+    cCcD_Obj* GetObj() const { return mpObj; }
     u8 GetPriority() const { return mPriority; }
-    dCcMassS_ObjCallback GetCallback() const { return mpCallback; }
-    cCcD_DivideInfo& GetDivideInfo() { return mDivideInfo; }
+    dCcMassS_ObjCallback GetAreaCheckFunc() const { return mpAreaCheckFunc; }
+    cCcD_DivideInfo* GetPDivideInfo() { return &mDivideInfo; }
 };  // Size = 0x20
 
 STATIC_ASSERT(0x20 == sizeof(dCcMassS_Obj));

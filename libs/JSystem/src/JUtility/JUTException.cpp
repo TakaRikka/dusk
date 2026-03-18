@@ -949,7 +949,7 @@ bool JUTException::queryMapAddress_single(char* mapPath, u32 address, s32 sectio
                                 dst--;
                                 i--;
                             }
-                            (void)*src;  // needed to match debug
+                            UNUSED(*src);  // needed to match debug
                             *dst = 0;
                             if (print) {
                                 if (begin_with_newline) {

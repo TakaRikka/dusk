@@ -108,7 +108,7 @@ u8 STControl::checkTrigger() {
     f32 stickValue = getValueStick();
     s16 stickAngle = getAngleStick();
     u8 var_r6 = 0;
-    s16 temp_r7 = 0x2000 - field_0x26 >> 1;
+    s16 temp_r7 = (0x2000 - field_0x26) >> 1;
 
     if (!cM3d_IsZero(stickValue)) {
         if (stickAngle < field_0x22 - 0x7000 + temp_r7) {

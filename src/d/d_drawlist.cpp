@@ -1853,7 +1853,7 @@ int dDlst_list_c::set(dDlst_base_c**& p_start, dDlst_base_c**& p_end, dDlst_base
         return 0;
     }
     *p_start = p_newDlst;
-    *p_start++;
+    UNUSED(*p_start++);
     return 1;
 }
 
