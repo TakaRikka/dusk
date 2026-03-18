@@ -399,13 +399,13 @@ void J3DModelLoader::readVertex(J3DVertexBlock const* i_block) {
 
     if (vertex_data.mVtxTexCoordArray[0] == NULL) {
         vertex_data.mTexCoordNum = 0;
-        return;
-    }
-    if (local_28) {
-        vertex_data.mTexCoordNum = (local_28 - (uintptr_t)vertex_data.mVtxTexCoordArray[0]) / 8 + 1;
     } else {
-        vertex_data.mTexCoordNum =
-            (i_block->mBlockSize - (uintptr_t)i_block->mpVtxTexCoordArray[0]) / 8 + 1;
+        if (local_28) {
+            vertex_data.mTexCoordNum = (local_28 - (uintptr_t)vertex_data.mVtxTexCoordArray[0]) / 8 + 1;
+        } else {
+            vertex_data.mTexCoordNum =
+                (i_block->mBlockSize - (uintptr_t)i_block->mpVtxTexCoordArray[0]) / 8 + 1;
+        }
     }
 
 #if TARGET_PC
