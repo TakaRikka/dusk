@@ -3448,17 +3448,25 @@ int daHorse_c::callHorseSubstance(cXyz const* i_pos) {
 
     if (m_path != NULL && (checkStateFlg0(FLG0_NO_DRAW_WAIT) || dist_xz2 > initDistance2)) {
         daAlink_c* player = daAlink_getAlinkActorClass();
-        BE(Vec)* farthest_pos;
-        BE(Vec)* path_pnt_pos;
-
+        #if TARGET_PC
+        Vec farthest_pos;
+        Vec path_pnt_pos;
+        f32 farthest_sqdist = 0;
+        #else
+        Vec* farthest_pos;
+        Vec* path_pnt_pos;
+        #endif
+ 
         for (int i = 0; i < m_path->m_num; i++) {
+            #if TARGET_PC
+            path_pnt_pos = m_path->m_points[i].m_position;
+            f32 x_dist = path_pnt_pos.x - i_pos->x;
+            f32 z_dist = path_pnt_pos.z - i_pos->z;
+            #else
             path_pnt_pos = &m_path->m_points[i].m_position;
             f32 x_dist = path_pnt_pos->x - i_pos->x;
             f32 z_dist = path_pnt_pos->z - i_pos->z;
             f32 farthest_sqdist;
-
-            #if AVOID_UB
-            farthest_sqdist = 0;
             #endif
 
             f32 sqdist = (x_dist * x_dist) + (z_dist * z_dist);
@@ -3469,7 +3477,11 @@ int daHorse_c::callHorseSubstance(cXyz const* i_pos) {
             }
         }
 
+        #if TARGET_PC
+        cXyz pos(farthest_pos.x, farthest_pos.y, farthest_pos.z);
+        #else
         cXyz pos(farthest_pos->x, farthest_pos->y, farthest_pos->z);
+        #endif
         setHorsePosAndAngle(&pos, shape_angle.y);
         rt = 1;
     } else if (dist_xz2 <= SQUARE(800.0f)) {
