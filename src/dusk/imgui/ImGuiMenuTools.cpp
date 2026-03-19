@@ -7,6 +7,8 @@
 
 #include "m_Do/m_Do_main.h"
 #include "d/d_com_inf_game.h"
+#include "d/actor/d_a_alink.h"
+#include "d/actor/d_a_horse.h"
 
 namespace dusk {
     ImGuiMenuTools::ImGuiMenuTools() {}
@@ -41,6 +43,7 @@ namespace dusk {
             ImGui::MenuItem("Stub Log", "F5", &m_showStubLog);
             ImGui::MenuItem("Debug Camera", "F6", &m_showCameraOverlay);
             ImGui::MenuItem("Map Loader", nullptr, &m_showMapLoader);
+            ImGui::MenuItem("Player Info", nullptr, &m_showPlayerInfo);
             ImGui::EndMenu();
         }
 
@@ -54,6 +57,7 @@ namespace dusk {
         ShowHeapOverlay();
         ShowStubLog();
         ShowMapLoader();
+        ShowPlayerInfo();
 
         DuskDebugPad(); // temporary, remove later
     }
@@ -118,6 +122,64 @@ namespace dusk {
                 BytesToString(stats->lastVertSize + stats->lastUniformSize +
                     stats->lastIndexSize + stats->lastStorageSize)));
         }
+        ImGui::End();
+    }
+
+    void ImGuiMenuTools::ShowPlayerInfo() {
+        if (!m_showPlayerInfo) {
+            return;
+        }
+
+        ImGuiIO& io = ImGui::GetIO();
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoResize;
+
+        ImGui::SetNextWindowBgAlpha(0.65f);
+        ImGui::SetNextWindowSizeConstraints(ImVec2(300, 200), ImVec2(300, 200));
+
+        if (ImGui::Begin("Player Info", nullptr, windowFlags)) {
+            daAlink_c* player = (daAlink_c*)dComIfGp_getPlayer(0);
+            daHorse_c* horse = dComIfGp_getHorseActor();
+
+            ImGui::Text("Link");
+            ImGuiStringViewText(
+                player != nullptr
+                ? fmt::format("Position: {: .2f}, {: .2f}, {: .2f}\n", player->current.pos.x, player->current.pos.y, player->current.pos.z)
+                : "Position: ?, ?, ?\n"
+            );
+
+            ImGuiStringViewText(
+                player != nullptr
+                ? fmt::format("Angle: {0}\n", player->shape_angle.y)
+                : "Angle: ?\n"
+            );
+
+            ImGuiStringViewText(
+                player != nullptr
+                ? fmt::format("Speed: {0}\n", player->speedF)
+                : "Speed: ?\n"
+            );
+
+            ImGui::Separator();
+            ImGui::Text("Epona");
+            ImGuiStringViewText(
+                horse != nullptr
+                ? fmt::format("Position: {: .2f}, {: .2f}, {: .2f}\n", horse->current.pos.x, horse->current.pos.y, horse->current.pos.z)
+                : "Position: ?, ?, ?\n"
+            );
+
+            ImGuiStringViewText(
+                horse != nullptr
+                ? fmt::format("Angle: {0}\n", horse->shape_angle.y)
+                : "Angle: ?\n"
+            );
+
+            ImGuiStringViewText(
+                horse != nullptr
+                ? fmt::format("Speed: {0}\n", horse->speedF)
+                : "Speed: ?\n"
+            );
+        }
+
         ImGui::End();
     }
 }

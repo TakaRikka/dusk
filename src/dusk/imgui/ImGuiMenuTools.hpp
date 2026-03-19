@@ -29,6 +29,7 @@ namespace dusk {
 		void ShowHeapOverlay();
 		void ShowStubLog();
 		void ShowMapLoader();
+        void ShowPlayerInfo();
 
         CollisionViewSettings& getCollisionViewSettings() { return m_collisionViewSettings; }
 
@@ -59,6 +60,7 @@ namespace dusk {
 		} m_mapLoaderInfo;
 
 		bool m_isDevelopmentMode = false;
+		bool m_showPlayerInfo = false;
 
 		CollisionViewSettings m_collisionViewSettings;
     };
