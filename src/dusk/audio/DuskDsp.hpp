@@ -16,8 +16,6 @@ namespace dusk::audio {
         OutputChannel_MAX
     };
 
-    constexpr
-
     struct ChannelAuxData {
         s16 hist1;
         s16 hist0;
