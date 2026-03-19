@@ -72,20 +72,31 @@ static void RenderChannel(
     ChannelAuxData& channelAux,
     OutputSubframe& subframe);
 
-static void ResetChannel(JASDsp::TChannel& channel, ChannelAuxData& aux) {
-    channel.mSamplesLeft = channel.mEndSample - channel.mSamplePosition;
+constexpr static int PitchToSampleRate(u16 value) {
+    return static_cast<int>(static_cast<u64>(SampleRate) * value / 4096);
+}
+
+static void UpdateSampleRate(const JASDsp::TChannel& channel, ChannelAuxData& aux) {
+    auto sampleRate = PitchToSampleRate(channel.mPitch);
 
     const SDL_AudioSpec spec = {
         SDL_AUDIO_S16,
         1,
-        static_cast<int>(static_cast<u64>(SampleRate) * channel.mPitch / 4096)
+        sampleRate
     };
+
+    SDL_SetAudioStreamFormat(aux.resampleStream, &spec, nullptr);
+    aux.prevPitch = channel.mPitch;
+}
+
+static void ResetChannel(JASDsp::TChannel& channel, ChannelAuxData& aux) {
+    channel.mSamplesLeft = channel.mEndSample - channel.mSamplePosition;
 
     aux.hist0 = 0;
     aux.hist1 = 0;
 
     SDL_ClearAudioStream(aux.resampleStream);
-    SDL_SetAudioStreamFormat(aux.resampleStream, &spec, nullptr);
+    UpdateSampleRate(channel, aux);
 
     channel.mResetFlag = false;
 }
@@ -329,6 +340,8 @@ static void RenderChannel(
     OutputSubframe& subframe) {
     if (channel.mResetFlag) {
         ResetChannel(channel, channelAux);
+    } else if (channelAux.prevPitch != channel.mPitch) {
+        UpdateSampleRate(channel, channelAux);
     }
 
     DspSubframe audioLoadBuffer = {};

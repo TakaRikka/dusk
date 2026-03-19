@@ -20,6 +20,7 @@ namespace dusk::audio {
         s16 hist1;
         s16 hist0;
         SDL_AudioStream* resampleStream;
+        u16 prevPitch;
     };
 
     extern ChannelAuxData ChannelAux[DSP_CHANNELS];
