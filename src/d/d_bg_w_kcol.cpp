@@ -1588,9 +1588,9 @@ bool dBgWKCol::WallCorrect(dBgS_Acch* pwi) {
                 while ((idx = *(BE(u32)*)(block + idx)) >= 0) {
                     block += idx;
                     shift--;
-                    idx = ((((u32)spBC >> idx) & 1) << 2 |
-                            (((u32)spB8 >> idx) & 1) << 1 |
-                            (((u32)spB4 >> idx) & 1) << 0) * 4;
+                    idx = ((((u32)spBC >> shift) & 1) << 2 |
+                            (((u32)spB8 >> shift) & 1) << 1 |
+                            (((u32)spB4 >> shift) & 1) << 0) * 4;
                 }
 
                 BE(u16)* p_prismlist = (BE(u16)*)(block + (idx & 0x7FFFFFFF));
