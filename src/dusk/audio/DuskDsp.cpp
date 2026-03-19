@@ -167,6 +167,10 @@ static void SDLCALL ReadChannelSamples(
     int additional_amount,
     int) {
 
+    if (additional_amount == 0) {
+        return;
+    }
+
     const auto index = static_cast<u32>(reinterpret_cast<uintptr_t>(userdata));
     auto& channel = JASDsp::CH_BUF[index];
     auto& aux = ChannelAux[index];
