@@ -197,7 +197,11 @@ BOOL dSv_player_status_b_c::isTransformLV(int i_no) const {
 
 void dSv_horse_place_c::init() {
     strcpy(mName, "");
+#if TARGET_PC
+    mPos = BE<Vec>(0.0f, 0.0f, 0.0f);
+#else
     mPos.set(0.0f, 0.0f, 0.0f);
+#endif
     mAngleY = 0;
     mSpawnId = 0;
     mRoomNo = 0;
@@ -228,7 +232,11 @@ void dSv_player_return_place_c::set(const char* i_name, s8 i_roomNo, u8 i_status
 
 void dSv_player_field_last_stay_info_c::init() {
     strcpy(mName, "");
+#if TARGET_PC
+    mPos = BE<Vec>(0.0f, 0.0f, 0.0f);
+#else
     mPos.set(0.0f, 0.0f, 0.0f);
+#endif
     mAngleY = 0;
     mLastSpawnId = 0;
     mRegionNo = 1;
@@ -244,7 +252,11 @@ void dSv_player_field_last_stay_info_c::set(const char* i_name, const cXyz& i_po
                                             s8 i_spawn, u8 i_regionNo) {
     JUT_ASSERT(468, strlen(i_name) <= 7);
     strcpy(mName, i_name);
+#if TARGET_PC
+    mPos = i_pos;
+#else
     mPos.set(i_pos);
+#endif
     mAngleY = i_angle;
     mLastSpawnId = i_spawn;
     mRegionNo = i_regionNo;
@@ -269,7 +281,11 @@ BOOL dSv_player_field_last_stay_info_c::isRegionBit(int i_region) const {
 
 void dSv_player_last_mark_info_c::init() {
     strcpy(mName, "");
+#if TARGET_PC
+    mPos = BE<Vec>(0.0f, 0.0f, 0.0f);
+#else
     mPos.set(0.0f, 0.0f, 0.0f);
+#endif
     mAngleY = 0;
     mRoomNo = 0;
     mSpawnId = 0;
@@ -283,7 +299,11 @@ void dSv_player_last_mark_info_c::init() {
 void dSv_player_last_mark_info_c::setWarpItemData(const char* i_name, const cXyz& i_pos,
                                                   s16 i_angle, s8 i_roomNo, u8 unk_4, u8 unk_5) {
     strcpy(mName, i_name);
+#if TARGET_PC
+    mPos = i_pos;
+#else
     mPos.set(i_pos);
+#endif
     mAngleY = i_angle;
     mRoomNo = i_roomNo;
 
@@ -1790,7 +1810,7 @@ int dSv_info_c::memory_to_card(char* card_ptr, int dataNum) {
     OS_REPORT("(dSv_reserve_c) size %d\n", sizeof(dSv_reserve_c));
     OS_REPORT("(dSv_MiniGame_c) size %d\n", sizeof(dSv_MiniGame_c));
     OS_REPORT("セーブ全体情報(dSv_save_c) size %d\n", sizeof(dSv_save_c));
-    printf("Write size:%d\n", card_ptr - var_r29);
+    printf("Write size:%d\n", (int)(card_ptr - var_r29));
 
     // Now that we've saved, reset events if needed
     if (lantern_not_recovered == true) {
@@ -1809,11 +1829,11 @@ int dSv_info_c::memory_to_card(char* card_ptr, int dataNum) {
     }
     
     if (card_ptr - var_r29 > (QUEST_LOG_SIZE - 8)) {
-        printf("SAVE size over(%d/%d)\n", (QUEST_LOG_SIZE - 8), card_ptr - var_r29);
+        printf("SAVE size over(%d/%d)\n", (QUEST_LOG_SIZE - 8), (int)(card_ptr - var_r29));
         return -1;
     }
 
-    printf("SAVE size:%d\n", card_ptr - var_r29);
+    printf("SAVE size:%d\n", (int)(card_ptr - var_r29));
     return 0;
 }
 
@@ -1859,11 +1879,11 @@ int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
 
     OS_REPORT("########### save stage ====> %s\n", dMeter2Info_getSaveStageName());
     if (i_cardPtr - var_r30 > (QUEST_LOG_SIZE - 8)) {
-        printf("LOAD size over(%d/%d)\n", (QUEST_LOG_SIZE - 8), i_cardPtr - var_r30);
+        printf("LOAD size over(%d/%d)\n", (QUEST_LOG_SIZE - 8), (int)(i_cardPtr - var_r30));
         return -1;
     }
 
-    printf("LOAD size:%d\n", i_cardPtr - var_r30);
+    printf("LOAD size:%d\n", (int)(i_cardPtr - var_r30));
     return 0;
 }
 
@@ -1880,11 +1900,11 @@ int dSv_info_c::initdata_to_card(char* i_cardPtr, int i_dataNum) {
     i_cardPtr += sizeof(dSv_save_c);
 
     if (i_cardPtr - var_r30 > (QUEST_LOG_SIZE - 8)) {
-        printf("INIT size over %d/%d\n", (QUEST_LOG_SIZE - 8), i_cardPtr - var_r30);
+        printf("INIT size over %d/%d\n", (QUEST_LOG_SIZE - 8), (int)(i_cardPtr - var_r30));
         return -1;
     }
 
-    printf("INIT size:%d\n", i_cardPtr - var_r30);
+    printf("INIT size:%d\n", (int)(i_cardPtr - var_r30));
     return 0;
 }
 

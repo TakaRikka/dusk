@@ -2,6 +2,9 @@
 #define C_MATH_H
 
 #include "JSystem/JMath/JMATrigonometric.h"
+#if TARGET_PC
+#include "angle_utils.h"
+#endif
 
 #ifndef __MWERKS__
 #include <limits>
@@ -32,7 +35,11 @@ inline f32 cM_ssin(s16 x) {
 }
 
 inline s16 cM_deg2s(f32 deg) {
+#if TARGET_PC
+    return cAngle_degreeToS16(deg);
+#else
     return deg * 182.04445f;
+#endif
 }
 
 inline s16 i_cM_deg2s(f32 deg) {

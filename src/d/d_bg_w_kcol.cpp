@@ -3,7 +3,7 @@
 #include "d/d_bg_w_kcol.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_horse.h"
-#include "d/d_bg_s_cap_poly.h"
+#include "d/d_bg_s_capt_poly.h"
 
 #include <algorithm>
 #include <cmath>
@@ -937,8 +937,8 @@ void dBgWKCol::CaptPoly(dBgS_CaptPoly& i_captpoly) {
             int sp34;
             int sp30;
             if (sp4C < sp48) {
-                u16* sp2C = NULL;
-                u16* sp28 = NULL;
+                BE(u16)* sp2C = NULL;
+                BE(u16)* sp28 = NULL;
                 int sp24 = sp4C;
 
                 do {
@@ -951,21 +951,21 @@ void dBgWKCol::CaptPoly(dBgS_CaptPoly& i_captpoly) {
                         int sp1C = sp5C;
 
                         do {
-                            u16* sp18 = (u16*)m_pkc_head->m_block_data;
+                            BE(u16)* sp18 = (BE(u16)*)m_pkc_head->m_block_data;
                             int r29 = m_pkc_head->m_block_width_shift;
                             int sp14 =
                                 4 * (((u32)sp24 >> r29) << m_pkc_head->m_area_xy_blocks_shift |
                                      ((u32)sp20 >> r29) << m_pkc_head->m_area_x_blocks_shift |
                                       (u32)sp1C >> r29);
-                            while ((sp14 = (*(int*)((intptr_t)sp18 + sp14))) >= 0) {
-                                sp18 = (u16*)((intptr_t)sp18 + sp14);
+                            while ((sp14 = (*(BE(u32)*)((intptr_t)sp18 + sp14))) >= 0) {
+                                sp18 = (BE(u16)*)((intptr_t)sp18 + sp14);
                                 r29--;
                                 sp14 = (((u32)sp24 >> r29 & 1) << 2 |
                                         ((u32)sp20 >> r29 & 1) << 1 |
                                         ((u32)sp1C >> r29 & 1) << 0) << 2;
                             }
 
-                            u16* r28 = (u16*)((intptr_t)sp18 + (sp14 & 0x7FFFFFFF));
+                            BE(u16)* r28 = (BE(u16)*)((intptr_t)sp18 + (sp14 & 0x7FFFFFFF));
 
                             r29 = 1 << r29;
                             int sp10 = r29 - 1;
@@ -1009,7 +1009,7 @@ void dBgWKCol::CaptPoly(dBgS_CaptPoly& i_captpoly) {
                                             cM3dGPla plane;
                                             plane = GetTriPla(r28[0]);
 
-                                            i_captpoly.m_callback(i_captpoly, (cBgD_Vtx_t*)&vtx_tbl, 0, 1, 2, &plane);
+                                            i_captpoly.m_callback(&i_captpoly, (cBgD_Vtx_t*)&vtx_tbl, 0, 1, 2, &plane);
                                         }
                                     }
                                 }
@@ -1588,9 +1588,9 @@ bool dBgWKCol::WallCorrect(dBgS_Acch* pwi) {
                 while ((idx = *(BE(u32)*)(block + idx)) >= 0) {
                     block += idx;
                     shift--;
-                    idx = ((((u32)spBC >> idx) & 1) << 2 |
-                            (((u32)spB8 >> idx) & 1) << 1 |
-                            (((u32)spB4 >> idx) & 1) << 0) * 4;
+                    idx = ((((u32)spBC >> shift) & 1) << 2 |
+                            (((u32)spB8 >> shift) & 1) << 1 |
+                            (((u32)spB4 >> shift) & 1) << 0) * 4;
                 }
 
                 BE(u16)* p_prismlist = (BE(u16)*)(block + (idx & 0x7FFFFFFF));
@@ -1909,17 +1909,16 @@ bool dBgWKCol::RoofChk(dBgS_RoofChk* param_0) {
     bool sp0A = false;
     u32 sp30 = ~m_pkc_head->m_area_y_width_mask;
     do {
-        uintptr_t block = (uintptr_t)(BE(u32)*)m_pkc_head->m_block_data;
+        uintptr_t block = (uintptr_t)(BE(s32)*)m_pkc_head->m_block_data;
         u32 shift = m_pkc_head->m_block_width_shift;
         int idx = 4 * (((u32)z >> shift) << m_pkc_head->m_area_xy_blocks_shift |
                        ((u32)y >> shift) << m_pkc_head->m_area_x_blocks_shift |
                        (u32)x >> shift);
-
-        while ((idx = (*(BE(u32)*)(block + (idx & 0x7fffffff)))) >= 0) {
+        while ((idx = (*(BE(s32)*)(block + (idx & 0x7fffffff)))) >= 0) {
             block += idx;
             shift--;
             idx = (((u32)z >> shift & 1) << 2 | ((u32)y >> shift & 1) << 1 |
-                   ((u32)z >> shift & 1) << 0)
+                   ((u32)x >> shift & 1) << 0)
                   << 2;
         }
 

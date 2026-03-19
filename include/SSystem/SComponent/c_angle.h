@@ -10,7 +10,11 @@
 #define S2RAD_CONSTANT (M_PI / 0x8000)
 #define RAD2S_CONSTANT (0x8000 / M_PI)
 
+#if TARGET_PC
+#define DEG2S(x) cAngle_degreeToS16((x))
+#else
 #define DEG2S(x) ((s16)((x) * DEG2S_CONSTANT))
+#endif
 #define S2DEG(x) ((x) * S2DEG_CONSTANT)
 #define S2RAD(x) ((x) * S2RAD_CONSTANT)
 #define RAD2S(x) ((x) * RAD2S_CONSTANT)

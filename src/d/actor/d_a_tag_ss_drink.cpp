@@ -136,7 +136,7 @@ int daTag_SSDrink_c::chkEvent() {
     if (!dComIfGp_getEvent()->isOrderOK()) {
         retVal = 0;
         if (eventInfo.checkCommandTalk()) {
-            if (!checkProcess(&daTag_SSDrink_c::talk) == 0) {
+            if (checkProcess(&daTag_SSDrink_c::talk) != 0) {
                 retVal = (this->*mProcessFunc)(0);
             } else {
                 if (dComIfGp_event_chkTalkXY() == 0 || dComIfGp_evmng_ChkPresentEnd() != 0) {

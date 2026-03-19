@@ -4,9 +4,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_searcher.h"
 
-#if DEBUG
 #include "d/d_debug_viewer.h"
-#endif
 
 void dCcD_GAtTgCoCommonBase::ClrActorInfo() {
     mApid = -1;
@@ -354,8 +352,6 @@ void dCcD_Cps::CalcTgVec() {
     CalcVec(dest);
 }
 
-#if DEBUG
-
 void dCcD_Cps::Draw(const GXColor& color) {
     Mtx auStack_68;
     Mtx auStack_98;
@@ -365,7 +361,7 @@ void dCcD_Cps::Draw(const GXColor& color) {
 
     cXyz cStack_d8;
     CalcVec(&cStack_d8);
-    cMtx_trans(auStack_98, GetStartP().x, GetStartP().y, GetStartP().z);
+    cMtx_trans(auStack_98, GetStartP()->x, GetStartP()->y, GetStartP()->z);
     cM3d_UpMtx(cStack_d8, auStack_c8);
     cMtx_concat(auStack_98, auStack_c8, auStack_68);
     cMtx_scale(auStack_98, GetR(), 0.5f * GetLen(), GetR());
@@ -375,11 +371,9 @@ void dCcD_Cps::Draw(const GXColor& color) {
     cMtx_XrotS(auStack_98, 0x4000);
     cMtx_concat(auStack_68, auStack_98, auStack_68);
     dDbVw_drawCylinderMXlu(auStack_68, color, 1);
-    dDbVw_drawSphereXlu(GetStartP(), GetR(), color, 1);
-    dDbVw_drawSphereXlu(GetEndP(), GetR(), color, 1);
+    dDbVw_drawSphereXlu(*GetStartP(), GetR(), color, 1);
+    dDbVw_drawSphereXlu(*GetEndP(), GetR(), color, 1);
 }
-
-#endif
 
 void dCcD_Tri::Set(dCcD_SrcTri const& src) {
     dCcD_GObjInf::Set(src.mObjInf);
@@ -390,8 +384,6 @@ cCcD_ShapeAttr* dCcD_Tri::GetShapeAttr() {
     return this;
 }
 
-#if DEBUG
-
 void dCcD_Tri::Draw(const GXColor& color) {
     cXyz cStack_34[3];
     cStack_34[0] = mA;
@@ -399,8 +391,6 @@ void dCcD_Tri::Draw(const GXColor& color) {
     cStack_34[2] = mC;
     dDbVw_drawTriangleXlu(cStack_34, color, 1);
 }
-
-#endif
 
 void dCcD_Cyl::Set(dCcD_SrcCyl const& src) {
     dCcD_GObjInf::Set(src.mObjInf);
@@ -433,13 +423,9 @@ void dCcD_Cyl::MoveCTg(cXyz& pos) {
     SetC(pos);
 }
 
-#if DEBUG
-
 void dCcD_Cyl::Draw(const GXColor& color) {
     dDbVw_drawCylinderXlu(*GetCP(), GetR(), GetH(), color, 1);
 }
-
-#endif
 
 void dCcD_Sph::Set(dCcD_SrcSph const& src) {
     dCcD_GObjInf::Set(src.mObjInf);
@@ -464,10 +450,6 @@ cCcD_ShapeAttr* dCcD_Sph::GetShapeAttr() {
     return this;
 }
 
-#if DEBUG
-
 void dCcD_Sph::Draw(const GXColor& color) {
     dDbVw_drawSphereXlu(*GetCP(), GetR(), color, 1);
 }
-
-#endif

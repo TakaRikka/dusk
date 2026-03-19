@@ -2167,7 +2167,7 @@ bool dCamera_c::gameOverEvCamera() {
             mViewCache.mEye = sp230;
             gover_p->field_0x0++;
             mViewCache.mFovy = 75.0f;
-            bVar9 = 75.0f;
+            bVar9 = true;
         }
         // fallthrough intentional.
         case 4: {

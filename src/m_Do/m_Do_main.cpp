@@ -172,18 +172,24 @@ void main01(void) {
 
         VIWaitForRetrace();
 
+#if TARGET_PC
+        if (!aurora_begin_frame()) {
+            DuskLog.debug("aurora_begin_frame returned false, skipping draw this frame");
+            continue;
+        }
+#endif
+
         // EXECUTE GAME LOGIC & RENDER
         // This calls mDoGph_Painter -> JFWDisplay -> GX Functions
         fapGm_Execute();
 
         mDoAud_Execute();
 
+        aurora_end_frame();
+
         #if TARGET_PC
         frameLimiter.Sleep(DUSK_FRAME_PERIOD);
         #endif
-
-        //aurora_end_frame();
-
     } while (true);
 
     exit:;
@@ -245,8 +251,8 @@ int game_main(int argc, char* argv[]) {
 
         if (parsed_arg_options.count("help"))
         {
-        printf((arg_options.help() + "\n").c_str());
-        exit(0);
+            printf("%s", (arg_options.help() + "\n").c_str());
+            exit(0);
         }
     }
     catch (const cxxopts::exceptions::exception& e) {
@@ -310,13 +316,13 @@ bool JKRHeap::dump_sort() {
     return true;
 }
 
+#ifdef __MWERKS__
 template <typename T>
 JHIComPortManager<T>* JHIComPortManager<T>::instance = nullptr;
 
 template <>
 JHIComPortManager<JHICmnMem>* JHIComPortManager<JHICmnMem>::instance = nullptr;
 
-#ifdef __MWERKS__
 template<>
 Z2WolfHowlMgr* JASGlobalInstance<Z2WolfHowlMgr>::sInstance JAS_GLOBAL_INSTANCE_INIT;
 

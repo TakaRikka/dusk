@@ -21,6 +21,10 @@
 #include "m_Do/m_Do_Reset.h"
 #include <cstdio>
 #include <cstring>
+#if TARGET_PC
+#include <format>
+#include <fmt/ranges.h>
+#endif
 
 void dStage_nextStage_c::set(const char* i_stage, s8 i_roomId, s16 i_point, s8 i_layer, s8 i_wipe,
                              u8 i_speed) {
@@ -1668,7 +1672,20 @@ static int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* 
             player_data++;
         }
         if (i == num) {
+#if TARGET_PC
+            std::vector<s16> valid_points;
+            valid_points.reserve(num);
+            player_data = player->m_entries;
+            for (i = 0; i < num; i++) {
+                valid_points.push_back(player_data->base.angle.z);
+                player_data++;
+            }
+            std::ranges::sort(valid_points);
+            DuskLog.fatal("Failed to find player start point for next stage! Requested point: {}, Valid points: [{}]",
+                          point, fmt::join(valid_points, ", "));
+#else
             OS_REPORT_ERROR("プレイヤーが発見できません。[No.%d]\n切り替えの情報や処理の確認をお願いします。\n", point);
+#endif
         }
         JUT_ASSERT(1636, i != num);
 

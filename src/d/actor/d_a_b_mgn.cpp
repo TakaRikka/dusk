@@ -1325,6 +1325,7 @@ void daB_MGN_c::executeDash() {
         }
 
         if (mMoveMode == 11) {
+            // @bug - parenthesis should not be on the condition
             if (abs((s16)(angle - field_0xa90) < 0x1800) != 0) {
                 if ((s16)(angle - field_0xa90) < 0) {
                     angle = field_0xa90 - 0x1800;

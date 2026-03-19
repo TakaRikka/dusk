@@ -1602,9 +1602,15 @@ u8 dMsgObject_c::isSend() {
 }
 
 void dMsgObject_c::readMessageGroupLocal(mDoDvdThd_mountXArchive_c** p_arcMount) {
-#if TARGET_PC
+#if AVOID_UB
+    // largest possible value msgGroup appears to be 99, but just in case
+    // we leave enough space to fit INT_MAX
     static char arcName[32];
 #else
+    // We write at least 23 bytes into this which causes an overflow,
+    // but in practice arcName is followed by two bytes of padding
+    // at the end of .bss which mitigates the problem.
+    static char arcName[22];
 #endif
 
     int msgGroup = dStage_stagInfo_GetMsgGroup(dComIfGp_getStage()->getStagInfo());
@@ -2141,7 +2147,7 @@ u16 dMsgObject_c::getSmellTypeMessageIDLocal() {
     if (smell < dItemNo_SMELL_MEDICINE_e + 1 && smell >= dItemNo_SMELL_YELIA_POUCH_e) {
         msgId = smell + 0x165;
     } else {
-        if (dComIfGs_getCollectSmell() != -1) {
+        if (dComIfGs_getCollectSmell() != 0xFF) {
             OS_REPORT("smell type ====> %d\n", dComIfGs_getCollectSmell());
             JUT_WARN(4858, "smell type no entry!");
         }

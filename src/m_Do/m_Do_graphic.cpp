@@ -680,6 +680,7 @@ void mDoGph_gInf_c::setWideZoomLightProjection(Mtx& m) {
 #if TARGET_PC
 void mDoGph_gInf_c::setWindowSize(AuroraWindowSize const& size) {
     JUTVideo::getManager()->setWindowSize(size);
+    dComIfGp_setWindow(0, 0.0f, 0.0f, getWidth(), getHeight(), 0.0f, 1.0f, 0, 2);
     mFader->mBox.set(0, 0, getWidth(), getHeight());
 }
 #endif
@@ -707,9 +708,7 @@ void mDoGph_BlankingOFF() {}
 static void dScnPly_BeforeOfPaint() {
     dComIfGd_reset();
 
-    #if DEBUG
     dDbVw_deleteDrawPacketList();
-    #endif
 }
 
 int mDoGph_BeforeOfDraw() {
@@ -1135,6 +1134,11 @@ void mDoGph_gInf_c::bloom_c::remove() {
 }
 
 void mDoGph_gInf_c::bloom_c::draw() {
+#if TARGET_PC
+    if (!dusk::g_imguiConsole.isBloomEnabled()) {
+        return;
+    }
+#endif
     bool enabled = mEnable && m_buffer != NULL;
     if (mMonoColor.a != 0 || enabled) {
 #if TARGET_PC

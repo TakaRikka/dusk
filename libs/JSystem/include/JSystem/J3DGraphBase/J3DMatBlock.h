@@ -116,7 +116,13 @@ public:
         // same logic but without the bug.
         // See J3DMaterialFactory::newColorChan - both the bugged and correct behavior are present there, as it calls
         // both constructors.
+#if TARGET_PC
+        // The faulty comparison is EXTREMELY noisy in the build due to warnings being emitted for
+        // every TU that includes it - best to just remove it since it doesn't do anything anyway.
+        u32 ambSrc = info.mAmbSrc;
+#else
         u32 ambSrc = info.mAmbSrc == 0xFFFF ? 0 : info.mAmbSrc;
+#endif
         mColorChanID = calcColorChanID(info.mEnable, info.mMatSrc, info.mLightMask,
             info.mDiffuseFn, info.mAttnFn, ambSrc);
     }

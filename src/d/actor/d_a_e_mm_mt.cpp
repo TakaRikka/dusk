@@ -370,7 +370,7 @@ static void e_mm_mt_drop(e_mm_mt_class* i_this) {
         i_this->enemy.speed.y += -5.0f;
         i_this->enemy.eyePos = i_this->enemy.current.pos;
         i_this->enemy.attention_info.position = i_this->enemy.current.pos;
-        cLib_addCalcAngleS2(&i_this->m_rotation.z, (TREG_S(6)+0x10000)-0x8000, 1, 0x1000);
+        cLib_addCalcAngleS2(&i_this->m_rotation.z, (s16)((TREG_S(6) + 0x10000) - 0x8000), 1, 0x1000);
         cLib_onBit<u32>(i_this->enemy.attention_info.flags, fopAc_AttnFlag_CARRY_e);
         i_this->enemy.attention_info.distances[fopAc_attn_CARRY_e] = 7;
         i_this->m_rotation.y += i_this->m_spin;

@@ -56,7 +56,7 @@ namespace dusk {
             ImGui::SameLine();
             ImGui::Checkbox("Pause", &StubLogPaused);
 
-            ImGui::Text("Line count (this frame): %llu", LineOffsets.size());
+            ImGui::Text("Line count (this frame): %zu", LineOffsets.size());
 
             ImGui::Separator();
 

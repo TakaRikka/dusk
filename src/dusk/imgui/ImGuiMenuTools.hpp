@@ -9,6 +9,17 @@
 namespace dusk {
     class ImGuiMenuTools {
     public:
+		struct CollisionViewSettings {
+			bool m_enableTerrainView = false;
+			bool m_enableWireframe = false;
+			bool m_enableAtView = false;
+			bool m_enableTgView = false;
+			bool m_enableCoView = false;
+			float m_terrainViewOpacity = 50.0f;
+			float m_colliderViewOpacity = 50.0f;
+			float m_drawRange = 100.0f;
+		};
+
         ImGuiMenuTools();
         void draw();
 
@@ -18,7 +29,10 @@ namespace dusk {
 		void ShowHeapOverlay();
 		void ShowStubLog();
 		void ShowMapLoader();
+        void ShowPlayerInfo();
         void ShowAudioDebug();
+
+        CollisionViewSettings& getCollisionViewSettings() { return m_collisionViewSettings; }
 
     private:
 		bool m_showDebugOverlay = false;
@@ -47,6 +61,11 @@ namespace dusk {
 			int layer = -1;
 			bool showInternalNames = false;
 		} m_mapLoaderInfo;
+
+		bool m_isDevelopmentMode = false;
+		bool m_showPlayerInfo = false;
+
+		CollisionViewSettings m_collisionViewSettings;
     };
 }
 

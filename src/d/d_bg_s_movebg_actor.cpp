@@ -14,8 +14,9 @@ dBgS_MoveBgActor::dBgS_MoveBgActor() {
     mpBgW = NULL;
 }
 
-static int CheckCreateHeap(fopAc_ac_c* p_actor) {
-    return static_cast<dBgS_MoveBgActor*>(p_actor)->MoveBGCreateHeap();
+static int CheckCreateHeap(fopAc_ac_c* actor) {
+    dBgS_MoveBgActor* i_this = (dBgS_MoveBgActor*)actor;
+    return i_this->MoveBGCreateHeap();
 }
 
 int dBgS_MoveBgActor::CreateHeap() {
@@ -68,8 +69,7 @@ int dBgS_MoveBgActor::MoveBGCreateHeap() {
 
     mpBgW = JKR_NEW dBgW();
     if (mpBgW != NULL) {
-        cBgD_t* res = (cBgD_t*)dComIfG_getObjectRes(m_name, m_dzb_id);
-        if (!mpBgW->Set(res, cBgW::MOVE_BG_e, &mBgMtx)) {
+        if (!mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_name, m_dzb_id), cBgW::MOVE_BG_e, &mBgMtx)) {
             if (m_set_func != NULL) {
                 mpBgW->SetCrrFunc(m_set_func);
             }
@@ -87,6 +87,8 @@ int dBgS_MoveBgActor::MoveBGCreateHeap() {
 
 int dBgS_MoveBgActor::MoveBGCreate(char const* i_arcName, int i_dzb_id,
                                    MoveBGActor_SetFunc i_setFunc, u32 i_heapSize, Mtx* i_bgMtx) {
+    bool var_r28 = true;
+
     if (i_bgMtx == NULL) {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
         mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -104,6 +106,15 @@ int dBgS_MoveBgActor::MoveBGCreate(char const* i_arcName, int i_dzb_id,
         return cPhs_ERROR_e;
     }
 
+    #if DEBUG
+    if (mpBgW != NULL && mpBgW->ChkUsed()) {
+        BOOL isDebugPad = mDoCPd_c::isConnect(PAD_3);
+        if (isDebugPad) {
+            JUT_WARN(185, "%s", "dBgS_MoveBgActor::MoveBGCreate() Don't Regist CreateHeap\n");
+        }
+    }
+    #endif
+
     if (mpBgW != NULL && dComIfG_Bgsp().Regist(mpBgW, this)) {
         return cPhs_ERROR_e;
     }
@@ -116,7 +127,10 @@ int dBgS_MoveBgActor::MoveBGDelete() {
     int ret = Delete();
 
     if (mpBgW != NULL && mpBgW->ChkUsed()) {
-        dComIfG_Bgsp().Release(mpBgW);
+        bool rt = dComIfG_Bgsp().Release(mpBgW);
+        if (rt != 0) {
+            OS_REPORT("Release Error\n");
+        }
     }
     return ret;
 }

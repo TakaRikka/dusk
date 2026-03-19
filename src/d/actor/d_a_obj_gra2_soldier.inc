@@ -768,7 +768,7 @@ int daObj_GrA_c::rollDemo(void* param_1) {
                         field_0x91a.y = current.angle.y;
 
                         if (mDemoCamMode >= 5) {
-                            field_0x848 = 4;
+                            mFlowID = 4;
                             evtcutTalk(-1, 1);
                             field_0x2000 = 0;
                         }
@@ -1169,7 +1169,7 @@ int daObj_GrA_c::rollAttacked(void* param_1) {
 
                 case 2:
                     if (mDemoCamMode >= 5) {
-                        field_0x848 = 5;
+                        mFlowID = 5;
                         evtcutTalk(-1, 1);
                         field_0x2018 = 3;
                     }

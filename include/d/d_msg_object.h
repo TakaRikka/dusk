@@ -557,6 +557,11 @@ inline bool dMsgObject_isSelectTalkNowCheck() {
     return dMsgObject_getMsgObjectClass()->getStatus() != 8 || (dMsgObject_getMsgObjectClass()->getStatus() != 9 && dMsgObject_getMsgObjectClass()->getStatus() != 20);
 }
 
+inline void dMsgObject_setOffering(u16 i_num) {
+    dComIfGs_setEventReg(0xF7FF, i_num >> 8);
+    dComIfGs_setEventReg(0xF8FF, i_num & 0xFF);
+}
+
 class dMsgObject_HowlHIO_c {
 public:
     dMsgObject_HowlHIO_c();

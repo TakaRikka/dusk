@@ -19,6 +19,10 @@ public:
 
     u32 getProcessID() { return mProcessID; }
 
+    int getFlowNodeNum() {
+        return (u16)home.angle.x == 0xFFFF ? -1 : (u16)home.angle.x;
+    }
+
     /* 0x56C */ u32 mProcessID;
     /* 0x570 */ s16 mCreateTimer;
     /* 0x572 */ u8 field_0x572;

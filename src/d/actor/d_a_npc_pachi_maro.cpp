@@ -1098,7 +1098,7 @@ int daNpc_Pachi_Maro_c::wait(void* param_1) {
                 }
 
                 if (mJntAnm.getMode() == 0) {
-                    (s32)mType;
+                    UNUSED((int)mType);
                 }
             }
             break;

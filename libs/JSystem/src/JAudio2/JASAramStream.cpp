@@ -472,7 +472,7 @@ void JASAramStream::updateChannel(u32 i_callbackType, JASChannel* i_channel,
                         mChannelUpdateFlags |= CHANNEL_UPDATE_LOOP_START;
 #if !TARGET_PC // The variable assigned here is never used.
                         if (field_0x0c4 < 0xffffffff) {
-                            field_0x0c4++;
+                            field_0x0c4 += 1;
                         }
 #endif
                         mEndSetup = false;

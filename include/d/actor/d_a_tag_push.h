@@ -24,6 +24,9 @@ public:
     u8 getBitSW2() { return (fopAcM_GetParam(this) & 0xFF00) >> 8; }
 
     u32 getFlowNodeNo() {
+        // !@bug home.angle.x is promoted to a 32-bit signed integer prior
+        //       to being compared, so the compared value can never exceed
+        //       SHORT_MAX and the condition always passes.
         if (home.angle.x != 0xFFFF) {
             return (u16)home.angle.x;
         }

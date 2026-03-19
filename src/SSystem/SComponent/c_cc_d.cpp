@@ -218,9 +218,7 @@ void cCcD_Stts::PlusCcMove(f32 x, f32 y, f32 z) {
 }
 
 void cCcD_Stts::ClrCcMove() {
-    m_cc_move.z = 0.0f;
-    m_cc_move.y = 0.0f;
-    m_cc_move.x = 0.0f;
+    m_cc_move.x = m_cc_move.y = m_cc_move.z = 0.0f;
 }
 
 void cCcD_Stts::PlusDmg(int dmg) {
@@ -231,7 +229,8 @@ void cCcD_Stts::PlusDmg(int dmg) {
 }
 
 f32 cCcD_Stts::GetWeightF() const {
-    return (s32)m_weight;
+    int weighti = GetWeightUc();
+    return weighti;
 }
 
 void cCcD_ObjCommonBase::ct() {
@@ -259,17 +258,13 @@ fopAc_ac_c* cCcD_Obj::GetAc() {
     if (mStts == NULL) {
         return NULL;
     } else {
-        return mStts->GetAc();
+        return mStts->GetActor();
     }
 }
 
 void cCcD_ShapeAttr::getShapeAccess(cCcD_ShapeAttr::Shape* pshape) const {
     pshape->_0 = 2;
-    pshape->_14 = 0.0f;
-    pshape->_10 = 0.0f;
-    pshape->_4.z = 0.0f;
-    pshape->_4.y = 0.0f;
-    pshape->_4.x = 0.0f;
+    pshape->_4.x = pshape->_4.y = pshape->_4.z = pshape->_10 = pshape->_14 = 0.0f;
 }
 
 bool cCcD_PntAttr::GetNVec(cXyz const& param_0, cXyz* param_1) const {
@@ -321,19 +316,20 @@ bool cCcD_TriAttr::CrossAtTg(const cCcD_TriAttr& other, cXyz* pxyz) const {
 }
 
 void cCcD_TriAttr::CalcAabBox() {
-    mAab.ClearForMinMax();
-    mAab.SetMinMax(mA);
-    mAab.SetMinMax(mB);
-    mAab.SetMinMax(mC);
+    GetWorkAab().ClearForMinMax();
+    GetWorkAab().SetMinMax(mA);
+    GetWorkAab().SetMinMax(mB);
+    GetWorkAab().SetMinMax(mC);
 }
 
 bool cCcD_TriAttr::GetNVec(const cXyz& param_0, cXyz* pOut) const {
     if (getPlaneFunc(&param_0) >= 0.0f) {
-        *pOut = mNormal;
+        *pOut = *GetNP();
     } else {
-        *pOut = mNormal;
-        VECScale(pOut, pOut, -1.0f);
+        *pOut = *GetNP();
+        PSVECScale(pOut, pOut, -1.0f);
     }
+
     return true;
 }
 
@@ -362,7 +358,7 @@ bool cCcD_CpsAttr::CrossAtTg(const cCcD_SphAttr& sphAttr, cXyz* pxyz) const {
 }
 
 bool cCcD_CpsAttr::CrossAtTg(const cCcD_TriAttr& triAttr, cXyz* pxyz) const {
-    if (triAttr.cM3dGTri::Cross(*this, pxyz)) {
+    if (cM3dGCps::Cross(triAttr, pxyz)) {
         return true;
     } else {
         return false;
@@ -400,43 +396,46 @@ bool cCcD_CpsAttr::CrossCo(const cCcD_SphAttr& sphAttr, f32* param_1) const {
 }
 
 void cCcD_CpsAttr::CalcAabBox() {
-    mAab.ClearForMinMax();
-    mAab.SetMinMax(mStart);
-    mAab.SetMinMax(mEnd);
-    mAab.PlusR(mRadius);
+    GetWorkAab().ClearForMinMax();
+    GetWorkAab().SetMinMax(*GetStartP());
+    GetWorkAab().SetMinMax(*GetEndP());
+    GetWorkAab().PlusR(GetR());
 }
 
 bool cCcD_CpsAttr::GetNVec(const cXyz& param_0, cXyz* param_1) const {
-    Vec diff;
-    const cXyz& endP = GetEndP();
-    VECSubtract(&endP, &mStart, &diff);
+    cXyz diff;
+    PSVECSubtract(GetEndP(), GetStartP(), &diff);
 
-    f32 diffLen = VECDotProduct(&diff, &diff);
+    f32 diffLen = PSVECDotProduct(&diff, &diff);
     if (cM3d_IsZero(diffLen)) {
         return false;
-    } else {
-        Vec vec1, vec2;
-        VECSubtract(&param_0, &mStart, &vec1);
-        f32 vec1Len = VECDotProduct(&vec1, &diff) / diffLen;
-        if (vec1Len < 0.0f) {
-            vec2 = mStart;
-        } else {
-            if (vec1Len > 1.0f) {
-                vec2 = endP;
-            } else {
-                VECScale(&diff, &diff, vec1Len);
-                VECAdd(&diff, &mStart, &vec2);
-            }
-        }
+    }
 
-        VECSubtract(&param_0, &vec2, param_1);
-        if (cM3d_IsZero(VECMag(param_1))) {
-            param_1->set(0.0f, 0.0f, 0.0f);
-            return false;
+    cXyz vec1;
+    PSVECSubtract(&param_0, GetStartP(), &vec1);
+    f32 vec1Len = PSVECDotProduct(&vec1, &diff) / diffLen;
+
+    cXyz vec2;
+    if (vec1Len < 0.0f) {
+        vec2 = *GetStartP();
+    } else {
+        if (vec1Len > 1.0f) {
+            vec2 = *GetEndP();
         } else {
-            VECNormalize(param_1, param_1);
-            return true;
+            PSVECScale(&diff, &diff, vec1Len);
+            PSVECAdd(&diff, GetStartP(), &vec2);
         }
+    }
+
+    PSVECSubtract(&param_0, &vec2, param_1);
+    if (cM3d_IsZero(PSVECMag(param_1))) {
+        param_1->x = 0.0f;
+        param_1->y = 0.0f;
+        param_1->z = 0.0f;
+        return false;
+    } else {
+        PSVECNormalize(param_1, param_1);
+        return true;
     }
 }
 
@@ -473,7 +472,7 @@ bool cCcD_CylAttr::CrossAtTg(const cCcD_TriAttr& triAttr, cXyz* pxyz) const {
 }
 
 bool cCcD_CylAttr::CrossCo(const cCcD_CylAttr& other, f32* f) const {
-    if (cM3dGCyl::Cross(&other, f)) {
+    if (cM3dGCyl::cross(&other, f)) {
         return true;
     } else {
         return false;
@@ -481,7 +480,7 @@ bool cCcD_CylAttr::CrossCo(const cCcD_CylAttr& other, f32* f) const {
 }
 
 bool cCcD_CylAttr::CrossCo(const cCcD_SphAttr& sphAttr, f32* f) const {
-    if (cM3dGCyl::Cross(&sphAttr, f)) {
+    if (cM3dGCyl::cross(&sphAttr, f)) {
         return true;
     } else {
         return false;
@@ -507,51 +506,51 @@ void cCcD_CylAttr::CalcAabBox() {
     max.x = GetCP()->x + GetR();
     max.y = GetCP()->y + GetH();
     max.z = GetCP()->z + GetR();
-    mAab.Set(&min, &max);
+    GetWorkAab().Set(&min, &max);
 }
 
 bool cCcD_CylAttr::GetNVec(const cXyz& param_0, cXyz* param_1) const {
-    Vec vec;
-    if (GetCP()->y > param_0.y) {
-        vec = mCenter;
+    const cXyz* cp = GetCP();
+    cXyz vec;
+    if (cp->y > param_0.y) {
+        vec = *cp;
     } else {
-        if (GetCP()->y + GetH() < param_0.y) {
-            vec.x = GetCP()->x;
-            vec.y = GetCP()->y;
-            vec.z = GetCP()->z;
-            vec.y = GetCP()->y + GetH();
+        if (cp->y + GetH() < param_0.y) {
+            vec = *cp;
+            vec.y += GetH();
         } else {
-            vec = mCenter;
+            vec = *cp;
             vec.y = param_0.y;
         }
     }
 
-    VECSubtract(&param_0, &vec, param_1);
-    if (cM3d_IsZero(VECMag(param_1))) {
-        param_1->set(0.0f, 0.0f, 0.0f);
+    PSVECSubtract(&param_0, &vec, param_1);
+    if (cM3d_IsZero(PSVECMag(param_1))) {
+        param_1->x = 0.0f;
+        param_1->y = 0.0f;
+        param_1->z = 0.0f;
         return false;
     } else {
-        VECNormalize(param_1, param_1);
+        PSVECNormalize(param_1, param_1);
         return true;
     }
+
     return false;
 }
 
 void cCcD_CylAttr::getShapeAccess(cCcD_ShapeAttr::Shape* pshape) const {
     pshape->_0 = 1;
-    pshape->_4.x = mCenter.x;
-    pshape->_4.y = mCenter.y;
-    pshape->_4.z = mCenter.z;
-    pshape->_10 = mRadius;
-    pshape->_14 = mHeight;
-}
 
-inline bool inlineCross(const cM3dGSph& sph, const cM3dGCps* pcps, cXyz* pxyz) {
-    return cM3d_Cross_CpsSph(*pcps, sph, pxyz);
+    const cXyz& center = GetC();
+    pshape->_4.x = center.x;
+    pshape->_4.y = center.y;
+    pshape->_4.z = center.z;
+    pshape->_10 = GetR();
+    pshape->_14 = GetH();
 }
 
 bool cCcD_SphAttr::CrossAtTg(const cCcD_CpsAttr& cpsAttr, cXyz* pxyz) const {
-    if (inlineCross(*this, &cpsAttr, pxyz)) {
+    if (cM3dGSph::Cross(&cpsAttr, pxyz)) {
         return true;
     } else {
         return false;
@@ -575,7 +574,7 @@ bool cCcD_SphAttr::CrossAtTg(const cCcD_SphAttr& sphAttr, cXyz* pxyz) const {
 }
 
 bool cCcD_SphAttr::CrossAtTg(const cCcD_TriAttr& triAttr, cXyz* pxyz) const {
-    if (triAttr.cM3dGTri::Cross(*this, pxyz)) {
+    if (cM3dGSph::Cross(triAttr, pxyz)) {
         return true;
     } else {
         return false;
@@ -583,7 +582,7 @@ bool cCcD_SphAttr::CrossAtTg(const cCcD_TriAttr& triAttr, cXyz* pxyz) const {
 }
 
 bool cCcD_SphAttr::CrossCo(const cCcD_CylAttr& cylAttr, f32* f) const {
-    if (cM3dGSph::Cross(&cylAttr, f)) {
+    if (cM3dGSph::cross(&cylAttr, f)) {
         return true;
     } else {
         return false;
@@ -591,7 +590,7 @@ bool cCcD_SphAttr::CrossCo(const cCcD_CylAttr& cylAttr, f32* f) const {
 }
 
 bool cCcD_SphAttr::CrossCo(const cCcD_SphAttr& sphAttr, f32* f) const {
-    if (cM3dGSph::Cross(&sphAttr, f)) {
+    if (cM3dGSph::cross(&sphAttr, f)) {
         return true;
     } else {
         return false;
@@ -622,37 +621,40 @@ void cCcD_SphAttr::CalcAabBox() {
     max.y += GetR();
     max.z += GetR();
 
-    mAab.Set(&min, &max);
+    GetWorkAab().Set(&min, &max);
 }
 
 bool cCcD_SphAttr::GetNVec(const cXyz& param_0, cXyz* param_1) const {
-    param_1->x = param_0.x - mCenter.x;
-    param_1->y = param_0.y - mCenter.y;
-    param_1->z = param_0.z - mCenter.z;
+    const cXyz& center = GetC();
+    param_1->x = param_0.x - center.x;
+    param_1->y = param_0.y - center.y;
+    param_1->z = param_0.z - center.z;
 
-    if (cM3d_IsZero(VECMag(param_1))) {
+    if (cM3d_IsZero(PSVECMag(param_1))) {
         param_1->x = 0.0f;
         param_1->y = 0.0f;
         param_1->z = 0.0f;
         return false;
     } else {
-        VECNormalize(param_1, param_1);
+        PSVECNormalize(param_1, param_1);
         return true;
     }
 }
 
 void cCcD_SphAttr::getShapeAccess(cCcD_ShapeAttr::Shape* pshape) const {
     pshape->_0 = 0;
-    pshape->_4.x = mCenter.x;
-    pshape->_4.y = mCenter.y;
-    pshape->_4.z = mCenter.z;
-    pshape->_10 = mRadius;
+
+    const cXyz& center = GetC();
+    pshape->_4.x = center.x;
+    pshape->_4.y = center.y;
+    pshape->_4.z = center.z;
+    pshape->_10 = GetR();
     pshape->_14 = 0.0f;
 }
 
 void cCcD_ObjAt::SetHit(cCcD_Obj* pObj) {
-    mRPrm = 1;
-    mHitObj = pObj;
+    SetRPrm(1);
+    SetHitObj(pObj);
 }
 
 void cCcD_ObjAt::Set(const cCcD_SrcObjAt& src) {
@@ -662,8 +664,8 @@ void cCcD_ObjAt::Set(const cCcD_SrcObjAt& src) {
 }
 
 void cCcD_ObjAt::ClrHit() {
-    mRPrm &= ~1;
-    mHitObj = NULL;
+    ClrRPrm(1);
+    ClrObj();
 }
 
 void cCcD_ObjTg::Set(const cCcD_SrcObjTg& src) {
@@ -672,36 +674,36 @@ void cCcD_ObjTg::Set(const cCcD_SrcObjTg& src) {
 }
 
 void cCcD_ObjTg::SetGrp(u32 grp) {
-    mSPrm &= ~0x1E;
-    mSPrm |= grp;
+    OffSPrmBit(0x1E);
+    OnSPrmBit(grp);
 }
 
 void cCcD_ObjTg::ClrHit() {
-    mRPrm &= ~1;
-    mHitObj = NULL;
+    ClrRPrm(1);
+    ClrObj();
 }
 
 void cCcD_ObjTg::SetHit(cCcD_Obj* pObj) {
-    mRPrm = 1;
-    mHitObj = pObj;
+    SetRPrm(1);
+    SetHitObj(pObj);
 }
 
 void cCcD_ObjCo::SetHit(cCcD_Obj* pObj) {
-    mRPrm = 1;
-    mHitObj = pObj;
+    SetRPrm(1);
+    SetHitObj(pObj);
 }
 
 void cCcD_ObjCo::ClrHit() {
-    mRPrm &= ~1;
-    mHitObj = NULL;
+    ClrRPrm(1);
+    ClrObj();
 }
 
 void cCcD_ObjCo::SetIGrp(u32 grp) {
-    mSPrm &= ~0xE;
-    mSPrm |= grp;
+    OffSPrmBit(0xE);
+    OnSPrmBit(grp);
 }
 
 void cCcD_ObjCo::SetVsGrp(u32 grp) {
-    mSPrm &= ~0x70;
-    mSPrm |= grp;
+    OffSPrmBit(0x70);
+    OnSPrmBit(grp);
 }

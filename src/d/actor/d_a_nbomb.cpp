@@ -986,7 +986,7 @@ BOOL daNbomb_c::procWait() {
         speedF *= player->getBombBoundRate();
         current.angle.y = (mAcchCir.GetWallAngleY() * 2) - (current.angle.y + 0x8000);
     } else if (mAcch.ChkGroundLanding() && speedF > 5.0f && cM_deg2s(50.0f) <= field_0xb5a) {
-        if ((f32)fabs(var_r28) >= (f32)0x4000) {
+        if ((f32)fabs((f64)var_r28) >= (f32)0x4000) {
             speedF *= player->getBombBoundRate();
             current.angle.y = (var_r27 * 2) - (current.angle.y + 0x8000);
             mAcch.ClrGroundLanding();

@@ -105,17 +105,15 @@ public:
     virtual void CallRideCallBack(fopAc_ac_c*, fopAc_ac_c*);
     virtual void CallArrowStickCallBack(fopAc_ac_c*, fopAc_ac_c*, cXyz&);
 
-    #if DEBUG
-    virtual void DebugDraw() {}
-    virtual void DrawPoly(cBgS_PolyInfo const& param_0, GXColor const& param_1) {}
-    virtual void DebugBox() {}
-    #endif
+    virtual void DebugDraw() const {}
+    virtual void DrawPoly(cBgS_PolyInfo const& param_0, GXColor const& param_1) const {}
+    virtual void DrawBox() const {}
 
     PushPull_CallBack GetPushPullCallback() const { return m_pushPull_Callback; }
     s16 GetDiffShapeAngleY() { return m_diff_ShapeAngleY; }
     int GetRoomId() { return m_roomId; }
-    bool chkStickWall() { return field_0xb & 1; }
-    bool chkStickRoof() { return field_0xb & 2; }
+    BOOL chkStickWall() { return field_0xb & 1; }
+    BOOL chkStickRoof() { return field_0xb & 2; }
     bool ChkPushPullOk() const { return m_pushPull_Ok; }
     void SetPushPullCallback(PushPull_CallBack i_callBack) { m_pushPull_Callback = i_callBack; }
     void SetRoomId(int id) { m_roomId = id; }

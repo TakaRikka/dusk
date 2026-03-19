@@ -380,7 +380,10 @@ int Act_c::Draw() {
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mModel);
     dComIfGd_setList();
-    dComIfG_Bgsp().DebugDrawPoly(mpBgW);
+
+    #if DEBUG
+    dComIfG_Bgsp().DebugDrawPoly(*mpBgW);
+    #endif
     return 1;
 }
 

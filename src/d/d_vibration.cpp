@@ -25,7 +25,12 @@ u16* makedata(u16* data, u32 pattern, s32 length) {
 }
 
 s32 rollshift(u32 pattern, s32 length, s32 index) {
+#if AVOID_UB
+    if (length == 0)
+        index = 0;
+#else
     index %= length;
+#endif
     return (pattern >> index) | (pattern << (length - index));
 }
 

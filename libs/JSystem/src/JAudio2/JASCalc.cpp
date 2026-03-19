@@ -5,7 +5,7 @@
 #include <limits>
 
 void JASCalc::imixcopy(const s16* s1, const s16* s2, s16* dst, u32 n) {
-    for (n; n != 0; n--) {
+    for (; n != 0; n--) {
         *dst++ = *(s1)++;
         *dst++ = *(s2)++;
     }

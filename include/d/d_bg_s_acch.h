@@ -25,7 +25,7 @@ private:
 
 public:
     enum {
-        /* 0x2 */ WALL_HIT = 2,
+        /* 0x2 */ FLAG_WALL_HIT = 2,
         /* 0x4 */ WALL_H_DIRECT = 4,
     };
 
@@ -42,16 +42,18 @@ public:
     virtual ~dBgS_AcchCir() {}
     #endif
 
+    void SetWallPolyIndex(int index) { SetPolyIndex(index); }
+
     f32 GetWallH() { return m_wall_h; }
     f32 GetWallR() { return m_wall_r; }
     void SetWallH(f32 h) { m_wall_h = h; }
     void ClrWallHDirect() { m_flags &= ~WALL_H_DIRECT; }
-    bool ChkWallHit() { return (m_flags & WALL_HIT) != 0; }
+    bool ChkWallHit() { return (m_flags & FLAG_WALL_HIT) != 0; }
     s16 GetWallAngleY() { return m_wall_angle_y; }
-    bool ChkWallHDirect() { return (m_flags & WALL_H_DIRECT) != 0; }
+    BOOL ChkWallHDirect() { return (m_flags & WALL_H_DIRECT); }
     f32 GetWallHDirect() { return m_wall_h_direct; }
     f32 GetWallRR() { return m_wall_rr; }
-    void SetWallHit() { m_flags |= WALL_HIT; }
+    void SetWallHit() { m_flags |= FLAG_WALL_HIT; }
     void SetWallAngleY(s16 i_angle) { m_wall_angle_y = i_angle; }
     cM3dGCir* GetCirP() { return &m_cir; }
 
@@ -62,26 +64,26 @@ class dBgS;
 class dBgS_Acch : public cBgS_Chk, public dBgS_Chk {
 public:
     enum {
-        /* 0x000002 */ GRND_NONE = (1 << 1),
-        /* 0x000004 */ WALL_NONE = (1 << 2),
-        /* 0x000008 */ ROOF_NONE = (1 << 3),
-        /* 0x000010 */ WALL_HIT = (1 << 4),
-        /* 0x000020 */ GROUND_HIT = (1 << 5),
-        /* 0x000040 */ GROUND_FIND = (1 << 6),
-        /* 0x000080 */ GROUND_LANDING = (1 << 7),
-        /* 0x000100 */ GROUND_AWAY = (1 << 8),
-        /* 0x000200 */ ROOF_HIT = (1 << 9),
-        /* 0x000400 */ WATER_NONE = (1 << 10),
-        /* 0x000800 */ WATER_HIT = (1 << 11),
-        /* 0x001000 */ WATER_IN = (1 << 12),
-        /* 0x002000 */ LINE_CHECK = (1 << 13),
-        /* 0x004000 */ LINE_CHECK_NONE = (1 << 14),
-        /* 0x008000 */ CLR_SPEED_Y = (1 << 15),
-        /* 0x010000 */ LINE_CHECK_HIT = (1 << 16),
-        /* 0x100000 */ MOVE_BG_ONLY = (1 << 20),
-        /* 0x200000 */ GND_THIN_CELLING_OFF = (1 << 21),
-        /* 0x400000 */ WALL_SORT = (1 << 22),
-        /* 0x800000 */ LINE_DOWN = (1 << 23),
+        /* 0x000002 */ FLAG_GRND_NONE = (1 << 1),
+        /* 0x000004 */ FLAG_WALL_NONE = (1 << 2),
+        /* 0x000008 */ FLAG_ROOF_NONE = (1 << 3),
+        /* 0x000010 */ FLAG_WALL_HIT = (1 << 4),
+        /* 0x000020 */ FLAG_GROUND_HIT = (1 << 5),
+        /* 0x000040 */ FLAG_GROUND_FIND = (1 << 6),
+        /* 0x000080 */ FLAG_GROUND_LANDING = (1 << 7),
+        /* 0x000100 */ FLAG_GROUND_AWAY = (1 << 8),
+        /* 0x000200 */ FLAG_ROOF_HIT = (1 << 9),
+        /* 0x000400 */ FLAG_WATER_NONE = (1 << 10),
+        /* 0x000800 */ FLAG_WATER_HIT = (1 << 11),
+        /* 0x001000 */ FLAG_WATER_IN = (1 << 12),
+        /* 0x002000 */ FLAG_LINE_CHECK = (1 << 13),
+        /* 0x004000 */ FLAG_LINE_CHECK_NONE = (1 << 14),
+        /* 0x008000 */ FLAG_CLR_SPEED_Y = (1 << 15),
+        /* 0x010000 */ FLAG_LINE_CHECK_HIT = (1 << 16),
+        /* 0x100000 */ FLAG_MOVE_BG_ONLY = (1 << 20),
+        /* 0x200000 */ FLAG_GND_THIN_CELLING_OFF = (1 << 21),
+        /* 0x400000 */ FLAG_WALL_SORT = (1 << 22),
+        /* 0x800000 */ FLAG_LINE_DOWN = (1 << 23),
     };
 
     dBgS_Acch();
@@ -124,56 +126,56 @@ public:
     f32 GetRoofHeight() const { return m_roof_height; }
     int GetTblSize() { return m_tbl_size; }
     void SetLin() { m_lin.SetStartEnd(*pm_old_pos, *pm_pos); }
-    bool ChkGroundFind() { return (m_flags & GROUND_FIND) != 0; }
-    bool ChkGroundHit() const { return (m_flags & GROUND_HIT) != 0; }
-    bool ChkGroundLanding() const { return (m_flags & GROUND_LANDING) != 0; }
-    void ClrGroundLanding() { m_flags &= ~GROUND_LANDING; }
-    void ClrGroundAway() { m_flags &= ~GROUND_AWAY; }
-    void ClrWallHit() { m_flags &= ~WALL_HIT; }
-    void SetRoofNone() { m_flags |= ROOF_NONE; }
-    void SetRoofHit() { m_flags |= ROOF_HIT; }
-    void SetWaterNone() { m_flags |= WATER_NONE; }
-    u32 ChkWallHit() const { return m_flags & WALL_HIT; }
-    void OffLineCheckHit() { m_flags &= ~LINE_CHECK_HIT; }
-    void OffLineCheck() { m_flags &= ~LINE_CHECK; }
-    u32 ChkLineCheckNone() const { return (m_flags & LINE_CHECK_NONE) != 0; }
-    u32 ChkLineCheck() const { return (m_flags & LINE_CHECK) != 0; }
-    void ClrRoofHit() { m_flags &= ~ROOF_HIT; }
-    void ClrWaterHit() { m_flags &= ~WATER_HIT; }
-    void SetWaterHit() { m_flags |= WATER_HIT; }
-    void ClrWaterIn() { m_flags &= ~WATER_IN; }
-    void SetWaterIn() { m_flags |= WATER_IN; }
-    const u32 MaskWaterIn() const { return m_flags & WATER_IN; }
+    bool ChkGroundFind() { return (m_flags & FLAG_GROUND_FIND) != 0; }
+    bool ChkGroundHit() const { return (m_flags & FLAG_GROUND_HIT) != 0; }
+    bool ChkGroundLanding() const { return (m_flags & FLAG_GROUND_LANDING) != 0; }
+    void ClrGroundLanding() { m_flags &= ~FLAG_GROUND_LANDING; }
+    void ClrGroundAway() { m_flags &= ~FLAG_GROUND_AWAY; }
+    void ClrWallHit() { m_flags &= ~FLAG_WALL_HIT; }
+    void SetRoofNone() { m_flags |= FLAG_ROOF_NONE; }
+    void SetRoofHit() { m_flags |= FLAG_ROOF_HIT; }
+    void SetWaterNone() { m_flags |= FLAG_WATER_NONE; }
+    u32 ChkWallHit() const { return m_flags & FLAG_WALL_HIT; }
+    void OffLineCheckHit() { m_flags &= ~FLAG_LINE_CHECK_HIT; }
+    void OffLineCheck() { m_flags &= ~FLAG_LINE_CHECK; }
+    u32 ChkLineCheckNone() const { return (m_flags & FLAG_LINE_CHECK_NONE); }
+    u32 ChkLineCheck() const { return (m_flags & FLAG_LINE_CHECK); }
+    void ClrRoofHit() { m_flags &= ~FLAG_ROOF_HIT; }
+    void ClrWaterHit() { m_flags &= ~FLAG_WATER_HIT; }
+    void SetWaterHit() { m_flags |= FLAG_WATER_HIT; }
+    void ClrWaterIn() { m_flags &= ~FLAG_WATER_IN; }
+    void SetWaterIn() { m_flags |= FLAG_WATER_IN; }
+    const u32 MaskWaterIn() const { return m_flags & FLAG_WATER_IN; }
     const bool ChkWaterIn() const { return MaskWaterIn() != 0; }
-    void ClrGroundFind() { m_flags &= ~GROUND_FIND; }
-    u32 MaskRoofHit() const { return m_flags & ROOF_HIT; }
+    void ClrGroundFind() { m_flags &= ~FLAG_GROUND_FIND; }
+    u32 MaskRoofHit() const { return m_flags & FLAG_ROOF_HIT; }
     bool ChkRoofHit() const { return MaskRoofHit() != 0; }
-    void OffClrSpeedY() { m_flags |= CLR_SPEED_Y; }
-    void OnClrSpeedY() { m_flags &= ~CLR_SPEED_Y; }
-    bool ChkClrSpeedY() const { return !(m_flags & CLR_SPEED_Y); }
-    void SetGroundFind() { m_flags |= GROUND_FIND; }
-    void SetGroundHit() { m_flags |= GROUND_HIT; }
-    void SetGroundLanding() { m_flags |= GROUND_LANDING; }
-    void SetGroundAway() { m_flags |= GROUND_AWAY; }
-    const u32 MaskWaterHit() const { return m_flags & WATER_HIT; }
+    void OffClrSpeedY() { m_flags |= FLAG_CLR_SPEED_Y; }
+    void OnClrSpeedY() { m_flags &= ~FLAG_CLR_SPEED_Y; }
+    bool ChkClrSpeedY() const { return !(m_flags & FLAG_CLR_SPEED_Y); }
+    void SetGroundFind() { m_flags |= FLAG_GROUND_FIND; }
+    void SetGroundHit() { m_flags |= FLAG_GROUND_HIT; }
+    void SetGroundLanding() { m_flags |= FLAG_GROUND_LANDING; }
+    void SetGroundAway() { m_flags |= FLAG_GROUND_AWAY; }
+    const u32 MaskWaterHit() const { return m_flags & FLAG_WATER_HIT; }
     const bool ChkWaterHit() const { return MaskWaterHit() != 0; }
-    void ClrWaterNone() { m_flags &= ~WATER_NONE; }
+    void ClrWaterNone() { m_flags &= ~FLAG_WATER_NONE; }
     void SetWaterCheckOffset(f32 offset) { m_wtr_chk_offset = offset; }
-    void OnLineCheck() { m_flags |= LINE_CHECK; }
-    void ClrRoofNone() { m_flags &= ~ROOF_NONE; }
+    void OnLineCheck() { m_flags |= FLAG_LINE_CHECK; }
+    void ClrRoofNone() { m_flags &= ~FLAG_ROOF_NONE; }
     void SetRoofCrrHeight(f32 height) { m_roof_crr_height = height; }
     void SetWtrChkMode(int mode) { m_wtr_mode = mode; }
-    void SetGrndNone() { m_flags |= GRND_NONE; }
-    void ClrGrndNone() { m_flags &= ~GRND_NONE; }
-    bool ChkMoveBGOnly() const { return (m_flags & MOVE_BG_ONLY) != 0; }
-    void SetWallHit() { m_flags |= WALL_HIT; }
-    void ClrWallNone() { m_flags &= ~WALL_NONE; }
-    void OnLineCheckNone() { m_flags |= LINE_CHECK_NONE; }
-    void OffLineCheckNone() { m_flags &= ~LINE_CHECK_NONE; }
-    void SetWallNone() { m_flags |= WALL_NONE; }
-    void OnLineCheckHit() { m_flags |= LINE_CHECK_HIT; }
-    bool ChkGroundAway() const { return (m_flags & GROUND_AWAY) != 0; }
-    void ClrGroundHit() { m_flags &= ~GROUND_HIT; }
+    void SetGrndNone() { m_flags |= FLAG_GRND_NONE; }
+    void ClrGrndNone() { m_flags &= ~FLAG_GRND_NONE; }
+    bool ChkMoveBGOnly() const { return (m_flags & FLAG_MOVE_BG_ONLY) != 0; }
+    void SetWallHit() { m_flags |= FLAG_WALL_HIT; }
+    void ClrWallNone() { m_flags &= ~FLAG_WALL_NONE; }
+    void OnLineCheckNone() { m_flags |= FLAG_LINE_CHECK_NONE; }
+    void OffLineCheckNone() { m_flags &= ~FLAG_LINE_CHECK_NONE; }
+    void SetWallNone() { m_flags |= FLAG_WALL_NONE; }
+    void OnLineCheckHit() { m_flags |= FLAG_LINE_CHECK_HIT; }
+    bool ChkGroundAway() const { return (m_flags & FLAG_GROUND_AWAY) != 0; }
+    void ClrGroundHit() { m_flags &= ~FLAG_GROUND_HIT; }
     void SetGroundCheckOffset(f32 offset) { m_gnd_chk_offset = offset; }
 
     cM3dGCyl* GetWallBmdCylP() { return &m_wall_cyl; }
@@ -186,7 +188,7 @@ public:
 
     f32 GetWallH(int i_no) { return pm_acch_cir[i_no].GetWallH(); }
     f32 GetWallR(int i_no) { return pm_acch_cir[i_no].GetWallR(); }
-    bool ChkWallHDirect(int i_no) { return pm_acch_cir[i_no].ChkWallHDirect(); }
+    BOOL ChkWallHDirect(int i_no) { return pm_acch_cir[i_no].ChkWallHDirect(); }
     f32 GetWallHDirect(int i_no) { return pm_acch_cir[i_no].GetWallHDirect(); }
     f32 GetWallRR(int i_no) { return pm_acch_cir[i_no].GetWallRR(); }
     void SetWallCirHit(int i_no) { pm_acch_cir[i_no].SetWallHit(); }

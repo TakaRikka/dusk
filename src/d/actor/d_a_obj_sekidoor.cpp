@@ -112,7 +112,9 @@ int daObj_SekiDoor_c::Execute(Mtx** i_mtx) {
 
     if (mOpening != 0) {
         if (mDestroyed != 0) {
-            if(!dComIfGp_event_runCheck){
+            // !@bug Missing parentheses - the function is not callled and
+            //       this always evaluates to false.
+            if (!dComIfGp_event_runCheck) {
                 fopAcM_delete(this);
             }
         }

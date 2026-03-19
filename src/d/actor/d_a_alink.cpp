@@ -15717,7 +15717,7 @@ int daAlink_c::procMoveTurnInit(int param_0) {
     dComIfGp_setPlayerStatus0(0, 0x800);
 
     if (param_0 != 0) {
-        mProcVar3.field_0x300e = (mpHIO->mMove.m.mMaxTurnAngle * 4) + 19030;
+        mProcVar3.field_0x300e = (s16)((mpHIO->mMove.m.mMaxTurnAngle * 4) + 19030);
         mProcVar4.field_0x3010 = mpHIO->mMove.m.mMaxTurnAngle * 2;
         mProcVar1.field_0x300a = 2;
         current.angle.y = mMoveAngle;

@@ -3,6 +3,8 @@
 
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 
+class J3DMaterial;
+
 /**
  * @ingroup jsystem-j3d
  * 

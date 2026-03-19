@@ -18,9 +18,9 @@
 #include "d/d_lib.h"
 
 #if VERSION == VERSION_GCN_JPN
-#define LINE_MAX 9
+#define D_MENU_LETTER_LINE_MAX 9
 #else
-#define LINE_MAX 12
+#define D_MENU_LETTER_LINE_MAX 12
 #endif
 
 typedef void (dMenu_Letter_c::*initFunc)();
@@ -258,8 +258,8 @@ void dMenu_Letter_c::_draw() {
                 uVar10 = (J2DTextBox*)field_0x2f4[i]->getPanePtr();
             }
             J2DTextBox* uVar18 = (J2DTextBox*)field_0x2ec[i]->getPanePtr();
-            mpString->getStringPage(dMenu_Letter::getLetterText(dVar1), field_0x3e3 - 1, LINE_MAX,
-                uVar18, uVar10, NULL, NULL, 0);
+            mpString->getStringPage(dMenu_Letter::getLetterText(dVar1), field_0x3e3 - 1,
+                                    D_MENU_LETTER_LINE_MAX, uVar18, uVar10, NULL, NULL, 0);
         }
         mpString->drawOutFont((J2DTextBox*)field_0x2ec[1]->getPanePtr(), -1.0f);
         if (mProcess == 4) {
@@ -491,10 +491,10 @@ void dMenu_Letter_c::read_open_init() {
             text1 = (J2DTextBox*)field_0x2f4[i]->getPanePtr();
         }
         J2DTextBox* text2 = (J2DTextBox*)field_0x2ec[i]->getPanePtr();
-        mpString->getStringPage(dMenu_Letter::getLetterText(idx), field_0x3e3 - 1, LINE_MAX, text2, text1,
-                                NULL, NULL, 0);
+        mpString->getStringPage(dMenu_Letter::getLetterText(idx), field_0x3e3 - 1,
+                                D_MENU_LETTER_LINE_MAX, text2, text1, NULL, NULL, 0);
     }
-    field_0x3e2 = mpString->getPageMax(LINE_MAX);
+    field_0x3e2 = mpString->getPageMax(D_MENU_LETTER_LINE_MAX);
     if (field_0x3e2 > 1) {
         char acStack_30[20];
         sprintf(acStack_30, "%d/%d", field_0x3e3, field_0x3e2);
@@ -642,7 +642,8 @@ void dMenu_Letter_c::read_next_fadein_init() {
             text1 = (J2DTextBox*)field_0x2f4[i]->getPanePtr();
         }
         J2DTextBox* text2 = (J2DTextBox*)field_0x2ec[i]->getPanePtr();
-        mpString->getStringPage(dMenu_Letter::getLetterText(idx), field_0x3e3 - 1, LINE_MAX, text2, text1, NULL, NULL, 0);
+        mpString->getStringPage(dMenu_Letter::getLetterText(idx), field_0x3e3 - 1,
+                                D_MENU_LETTER_LINE_MAX, text2, text1, NULL, NULL, 0);
     }
     char acStack_30[10];
     sprintf(acStack_30, "%d/%d", field_0x3e3, field_0x3e2);

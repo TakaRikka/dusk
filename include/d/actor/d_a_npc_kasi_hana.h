@@ -182,7 +182,8 @@ public:
     s16 getMessageNo() { return s16(home.angle.x); }
     s8 getType() {
         s8 rv = fopAcM_GetParam(this) & 0xFF;
-        
+
+        // !@bug Comparison of s8 with 0xFF will always evaluate to false
         if (rv == 0xFF) {
             rv = 0;
         }

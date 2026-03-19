@@ -121,7 +121,7 @@ private:
     /* 0xDFC */ int field_0xdfc;
     /* 0xE00 */ int field_0xe00;
     /* 0xE04 */ int field_0xe04;
-    /* 0xE08 */ int field_0xe08;
+    /* 0xE08 */ int mFlowID;
     /* 0xE0C */ s16 mLookMode;
     /* 0xE0E */ u16 mMode;
     /* 0xE10 */ u8 mType;

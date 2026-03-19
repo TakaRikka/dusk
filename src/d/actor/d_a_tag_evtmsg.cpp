@@ -36,6 +36,9 @@ int daTag_EvtMsg_c::create() {
     scale.y *= 100.0f;
     scale.z = scale.x;
 
+    // !@bug home.angle.x is promoted to a 32-bit signed integer prior
+    //       to being compared, so the compared value can never exceed
+    //       SHORT_MAX and the condition always passes.
     if (home.angle.z != 0xFFFF) {
         mFlowID = home.angle.z;
     } else {

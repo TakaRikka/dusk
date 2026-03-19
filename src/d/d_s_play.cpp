@@ -669,8 +669,9 @@ static int dScnPly_Draw(dScnPly_c* i_this) {
         #endif
 
         dComIfG_Ccsp()->Draw();
-        #if DEBUG
         dComIfG_Bgsp().Draw();
+
+        #if DEBUG
         dPath_Draw();
         #endif
 
@@ -1426,7 +1427,7 @@ static int phase_4(dScnPly_c* i_this) {
     dComIfGd_setViewport(NULL);
     dComIfGd_setView(NULL);
 
-    JKRExpHeap* heap = fopMsgM_createExpHeap(HEAP_SIZE(0xBB800, 0xF0000), NULL);
+    JKRExpHeap* heap = fopMsgM_createExpHeap(HEAP_SIZE(0xBB800, 0x177000), NULL);
 #if TARGET_PC
     heap->setName("Scene2DHeap");
 #endif

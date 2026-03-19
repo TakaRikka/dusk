@@ -2977,8 +2977,8 @@ static void hook_set(dmg_rod_class* i_this, cXyz* param_1, int param_2) {
         mDoMtx_stack_c::XrotM(-0x4000);
 
         if (param_2 == 1 && (i_this->action <= ACTION_LURE_STANDBY || (i_this->lure_type != MG_LURE_SP && i_this->action == ACTION_LURE_CATCH))) {
-            sp38.x = fabsf(hook->field_0x18.y);
-            sp38.z = fabsf(hook->field_0x18.x - 0x4000);
+            sp38.x = fabsf((f32)hook->field_0x18.y);
+            sp38.z = fabsf((f32)(hook->field_0x18.x - 0x4000));
 
             f32 var_f31 = JMAFastSqrt(SQUARE(sp38.x) + SQUARE(sp38.z));
             if (var_f31 > 7000.0f) {

@@ -384,6 +384,7 @@ int daObj_SSDrink_c::chkEvent() {
 }
 
 int daObj_SSDrink_c::orderEvent() {
+    // !@bug Comparison of u16 (getFlowNodeNum()) with -1 always evaluates to false
     if (!daPy_py_c::checkNowWolf() && field_0xb0c != 0x60 && getFlowNodeNum() != -1) {
         attention_info.flags = fopAc_AttnFlag_TALKREAD_e | fopAc_AttnFlag_SPEAK_e;
     } else {

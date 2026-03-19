@@ -96,7 +96,7 @@ void* JASAudioThread::run() {
 
         case AUDIOMSG_DSP:
             JUT_ASSERT(125, snIntCount != 0);
-            snIntCount--;
+            snIntCount -= 1;
             if (snIntCount == 0) {
                 JASProbe::stop(7);
                 JASDriver::finishDSPFrame();

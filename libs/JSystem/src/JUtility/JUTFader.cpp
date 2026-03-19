@@ -25,12 +25,18 @@ void JUTFader::control() {
 	if (mStatus == 1) {
 		return;
 	}
-    
+
 	switch (mStatus) {
     case 0:
         mColor.a = 0xFF;
         break;
     case 2:
+    #if AVOID_UB
+        if (field_0x8 == 0) {
+            mStatus = 1;
+            break;
+        }
+    #endif
         mColor.a = 0xFF - ((++field_0xa * 0xFF) / field_0x8);
 
         if (field_0xa >= field_0x8) {
@@ -39,6 +45,12 @@ void JUTFader::control() {
 
         break;
     case 3:
+    #if AVOID_UB
+        if (field_0x8 == 0) {
+            mStatus = 0;
+            break;
+        }
+    #endif
         mColor.a = ((++field_0xa * 0xFF) / field_0x8);
 
         if (field_0xa >= field_0x8) {

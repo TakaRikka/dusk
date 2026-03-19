@@ -2,6 +2,7 @@
 #define DUSK_IMGUI_MENUGAME_HPP
 
 #include <aurora/aurora.h>
+#include <pad.h>
 #include <string>
 
 #include "imgui.h"
@@ -11,6 +12,7 @@ namespace dusk {
     public:
         ImGuiMenuGame();
         void draw();
+        bool isBloomEnabled() { return m_graphicsSettings.m_enableBloom; }
 
         void windowInputViewer();
         void windowControllerConfig();
@@ -23,6 +25,17 @@ namespace dusk {
             float m_soundEffectsVolume = 1.0f;
             float m_fanfareVolume = 1.0f;
         } m_audioSettings;
+
+        struct {
+            int m_selectedPort = 0;
+            bool m_isReading = false;
+            PADButtonMapping* m_pendingMapping = nullptr;
+            int m_pendingPort = -1;
+        } m_controllerConfig;
+
+        struct {
+            bool m_enableBloom = 1;
+        } m_graphicsSettings;
 
         bool m_showControllerConfig = false;
 

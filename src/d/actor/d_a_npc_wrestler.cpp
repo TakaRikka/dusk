@@ -2219,8 +2219,8 @@ bool daNpcWrestler_c::sumouReady(void* param_1) {
                     // fallthrough
                 case 2:
                     field_0xe5e += field_0xbd8->field_0xac;
-                    field_0xe54 -= fabsf(field_0xbd8->field_0xac);
-                    if (field_0xe54 < fabsf(field_0xbd8->field_0xac)) {
+                    field_0xe54 -= fabsf((f32)field_0xbd8->field_0xac);
+                    if (field_0xe54 < fabsf((f32)field_0xbd8->field_0xac)) {
                         field_0xe80 = 1;
                         field_0xe84++;
                     }

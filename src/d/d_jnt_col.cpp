@@ -376,8 +376,8 @@ int dJntCol_c::searchNearPos(cM3dGLin const* param_1, cXyz const* param_2, cXyz*
                     mDoMtx_stack_c::YrotM(cM_atan2s(-sp1AC.x, sp1AC.z));
                     mDoMtx_stack_c::transM(-sp188.x, -sp188.y, -sp188.z);
                     mDoMtx_stack_c::multVec(&sp17C, &sp194);
-                    mDoMtx_stack_c::multVec(&param_1->GetStartP(), &sp170);
-                    mDoMtx_stack_c::multVec(&param_1->GetEndP(), &sp164);
+                    mDoMtx_stack_c::multVec(param_1->GetStartP(), &sp170);
+                    mDoMtx_stack_c::multVec(param_1->GetEndP(), &sp164);
                     sp1C4.SetStartEnd(sp170, sp164);
                     sp1C = 1;
                 } else {

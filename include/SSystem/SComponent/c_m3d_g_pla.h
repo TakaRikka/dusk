@@ -31,8 +31,8 @@ public:
         cM3d_CalcPla(v1, v2, v3, &mNormal, &mD);
     }
 
-    f32 getCrossY_NonIsZero(const cXyz *param_1) {
-        return ((-mNormal.x * param_1->x - mNormal.z * param_1->z) - mD) / mNormal.y;
+    f32 getCrossY_NonIsZero(const cXyz& param_1) const {
+        return ((-mNormal.x * param_1.x - mNormal.z * param_1.z) - mD) / mNormal.y;
     }
 
     bool cross(cM3dGLin const& line, Vec& point) {

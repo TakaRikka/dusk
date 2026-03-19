@@ -112,7 +112,4 @@ struct dMsgScrnHowl_c : public dMsgScrnBase_c {
     /* 0x27A8 */ f32 field_0x27a8;
 };
 
-#define LINE_MAX 30
-#define PLOT_BUFFER_MAX_e 0x300
-
 #endif /* MSG_SCRN_D_MSG_SCRN_HOWL_H */

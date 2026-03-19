@@ -288,8 +288,9 @@ int daObj_Pumpkin_c::Execute() {
     if (field_0xBAE) {
         int item_table_no = getItemTableNo();
         if (item_table_no >= 0 && mItemProcId == fpcM_ERROR_PROCESS_ID_e) {
-            mItemProcId = fopAcM_createItemFromTable(&current.pos, item_table_no, -1, fopAcM_GetRoomNo(this),
-                                                     NULL, 0, NULL, NULL, NULL, NULL);
+            mItemProcId = fopAcM_createItemFromTable(&current.pos, item_table_no, -1,
+                                                     fopAcM_GetRoomNo(this), NULL, 0, NULL, NULL,
+                                                     NULL, false);
         }
 
         if (mItemProcId == fpcM_ERROR_PROCESS_ID_e || fopAcM_IsExecuting(mItemProcId)) {

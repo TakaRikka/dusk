@@ -72,11 +72,11 @@ static void mDoExt_setJ3DData(Mtx mtx, const J3DTransformInfo* transformInfo, u1
         *mtx_p++ *= sp0C.x;
         *mtx_p++ *= sp0C.x;
         *mtx_p++ *= sp0C.x;
-        *mtx_p++;
+        UNUSED(*mtx_p++);
         *mtx_p++ *= sp0C.y;
         *mtx_p++ *= sp0C.y;
         *mtx_p++ *= sp0C.y;
-        *mtx_p++;
+        UNUSED(*mtx_p++);
         *mtx_p++ *= sp0C.z;
         *mtx_p++ *= sp0C.z;
         *mtx_p++ *= sp0C.z;
@@ -2199,6 +2199,9 @@ void mDoExt_invJntPacket::draw() {
 
     if (field_0x16) {
         J3DModelData* sp20 = field_0x10->getModelData();
+#if TARGET_PC
+        j3dSys.setTexture(sp20->getTexture());
+#endif
         J3DJoint* sp1C = sp20->getJointNodePointer(field_0x14);
 
         for (J3DMaterial* mesh = sp1C->getMesh(); mesh != NULL; mesh = mesh->getNext()) {
@@ -2276,7 +2279,7 @@ int mDoExt_3Dline_c::init(u16 param_0, int param_1, BOOL param_2) {
     int sp20 = param_0 * 2;
 
     field_0x8[0] = JKR_NEW_ARRAY(cXyz, sp20);
-    if (field_0x8 == NULL) {
+    if (field_0x8[0] == NULL) {
         return 0;
     }
 
@@ -2286,7 +2289,7 @@ int mDoExt_3Dline_c::init(u16 param_0, int param_1, BOOL param_2) {
     }
 
     field_0x10[0] = JKR_NEW_ARRAY(mDoExt_3Dline_field_0x10_c, sp20);
-    if (field_0x10 == NULL) {
+    if (field_0x10[0] == NULL) {
         return 0;
     }
 

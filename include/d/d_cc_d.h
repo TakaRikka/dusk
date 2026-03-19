@@ -144,7 +144,7 @@ public:
     void ClrEffCounter() { mEffCounter = 0; }
     u32 GetGFlag() const { return mGFlag; }
     u32 GetRPrm() const { return mRPrm; }
-    u32 MskSPrm(u32 mask) const { return mGFlag & mask; }
+    u32 MskSPrm(u32 mask) { return mGFlag & mask; }
     u32 MskRPrm(u32 mask) const { return mRPrm & mask; }
     bool ChkSPrm(u32 mask) { return MskSPrm(mask); }
     void OnSPrm(u32 flag) { mGFlag |= flag; }
@@ -173,7 +173,7 @@ public:
     u8 GetSe() { return mSe; }
     dCcG_At_Spl GetSpl() { return (dCcG_At_Spl)mSpl; }
     u8 GetMtrl() { return mMtrl; }
-    u8 GetHitMark() { return mHitMark; }
+    int GetHitMark() { return mHitMark; }
     void SetRVec(cXyz& vec) { mRVec = vec; }
     void SetHitPos(cXyz& pos) { mHitPos = pos; }
     cXyz* GetHitPosP() { return &mHitPos; }
@@ -203,10 +203,10 @@ public:
     void SetHitMark(CcG_Tg_HitMark mark) { mHitMark = mark; }
     s16* GetShieldFrontRangeYAngle() { return mShieldFrontRangeYAngle; }
     s16 GetShieldRange() { return mShieldRange; }
-    u8 GetSpl() { return mSpl; }
+    int GetSpl() { return mSpl; }
     void SetSpl(dCcG_Tg_Spl tg_spl) { mSpl = tg_spl; }
     void SetSpl(u8 tg_spl) { mSpl = tg_spl; }
-    u8 GetHitMark() { return mHitMark; }
+    int GetHitMark() { return mHitMark; }
     void SetRVec(cXyz& vec) { mRVec = vec; }
     cXyz* GetVecP() { return &mVec; }
     cXyz* GetRVecP() { return &mRVec; }
@@ -250,7 +250,7 @@ public:
     void SetRoomId(int id) { mRoomId = id; }
     fpc_ProcID GetAtOldApid() { return mAtOldApid; }
     fpc_ProcID GetTgOldApid() { return mTgOldApid; }
-    bool ChkNoActor() { return field_0x1C & 1;}
+    BOOL ChkNoActor() { return field_0x1C & 1;}
     bool ChkNoneActorPerfTblId() { return field_0x08 == 0xFFFF; }
     dCcG_At_Spl GetAtSpl() { return (dCcG_At_Spl)mAt; }
     void SetAtSpl(dCcG_At_Spl spl) { mAt = spl; }
@@ -451,9 +451,7 @@ public:
     void CalcTgVec();
     virtual ~dCcD_Cps() {}
     dCcD_Cps() {}
-    #if DEBUG
     virtual void Draw(const GXColor& color);
-    #endif
 };  // Size = 0x144
 
 // Triangle
@@ -463,9 +461,7 @@ public:
     cCcD_ShapeAttr* GetShapeAttr();
     virtual ~dCcD_Tri() {}
     dCcD_Tri() {}
-    #if DEBUG
     virtual void Draw(const GXColor& color);
-    #endif
 };
 
 // Cylinder
@@ -478,9 +474,7 @@ public:
     void MoveCTg(cXyz&);
     virtual ~dCcD_Cyl() {}
     dCcD_Cyl() {}
-    #if DEBUG
     virtual void Draw(const GXColor& color);
-    #endif
 };  // Size = 0x13C
 
 // Sphere
@@ -492,9 +486,7 @@ public:
     void MoveCAt(cXyz&);
     virtual cCcD_ShapeAttr* GetShapeAttr();
     virtual ~dCcD_Sph() {}
-    #if DEBUG
     virtual void Draw(const GXColor& color);
-    #endif
 };  // Size = 0x138
 
 dCcD_GObjInf* dCcD_GetGObjInf(cCcD_Obj* param_0);

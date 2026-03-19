@@ -496,6 +496,7 @@ static s8 e_kr_path_move(e_kr_class* i_this) {
         if (totalDiff < 10.0f * TREG_F(10) + 300.0f) {
             point = &i_this->field_0x6e4->m_points[i_this->field_0x6e2];
             u8 pointArg1 = point->mArg1;
+            // !@bug Comparison of u8 with -1 will always evaluate to false
             if (pointArg1 == -1) {
                 i_this->field_0x684 = 50.0f * 1.2f;
             } else {

@@ -1872,7 +1872,7 @@ static void demo_camera(b_bq_class* i_this) {
             spFC.set(BREG_F(5) + -30.0f, 0.0f, BREG_F(6) + 1938.0f);
         }
 
-        daPy_getPlayerActorClass()->setPlayerPosAndAngle(&spFC, BREG_S(5) + 0x8000, 0);
+        daPy_getPlayerActorClass()->setPlayerPosAndAngle(&spFC, (s16)(BREG_S(5) + 0x8000), 0);
 
         if (i_this->field_0x5c8 != 0) {
             i_this->field_0x5cc.y += i_this->field_0x5d8;

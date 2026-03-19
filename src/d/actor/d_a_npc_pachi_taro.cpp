@@ -1464,7 +1464,7 @@ int daNpc_Pachi_Taro_c::wait(void* param_1) {
 
                 // ???
                 if (mJntAnm.getMode() == 0) {
-                    (int)mType;
+                    UNUSED((int)mType);
                 }
 
                 if (field_0x1004 == 0) {

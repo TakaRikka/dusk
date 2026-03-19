@@ -117,6 +117,7 @@ set(DOLZEL_FILES
         src/d/d_bg_plc.cpp
         src/d/d_bg_s.cpp
         src/d/d_bg_s_acch.cpp
+        src/d/d_bg_s_capt_poly.cpp
         src/d/d_bg_s_chk.cpp
         src/d/d_bg_s_gnd_chk.cpp
         src/d/d_bg_s_grp_pass_chk.cpp

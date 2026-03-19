@@ -254,7 +254,7 @@ BOOL daBdoor_c::checkArea() {
     if (fabsf(vec.z) > 100.0f) {
         return false;
     }
-    return (s16)fabs(current.angle.y - 0x7fff - player->current.angle.y) <= 0x4000 ? 1 : 0;
+    return (s16)fabs((f64)(current.angle.y - 0x7fff - player->current.angle.y)) <= 0x4000 ? 1 : 0;
 }
 
 BOOL daBdoor_c::checkFront() {

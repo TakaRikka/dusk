@@ -696,7 +696,7 @@ BOOL daNpc_Post_c::checkChangeEvt() {
             return TRUE;
         }
 
-        (int)mType;
+        UNUSED((int)mType);
     }
 
     return FALSE;

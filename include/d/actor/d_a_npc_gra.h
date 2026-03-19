@@ -160,7 +160,7 @@ private:
     /* 0x14B0 */ int field_0x1460;
     /* 0x1464 */ int field_0x1464;
     /* 0x1468 */ int field_0x1468;
-    /* 0x146C */ int field_0x146C;
+    /* 0x146C */ int mFlowID;
     /* 0x1470 */ s16 mLookMode;
     /* 0x1472 */ u16 field_0x1472;
     /* 0x1474 */ u8 mType;

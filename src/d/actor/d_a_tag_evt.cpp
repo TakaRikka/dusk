@@ -168,6 +168,7 @@ int daTag_Evt_c::isDelete() {
         if (field_0x5DD == 0xFF ||
             (field_0x5DD != 0xFF && dComIfGs_isSwitch(field_0x5DD, fopAcM_GetRoomNo(this)) != 0))
         {
+            // !@bug Comparison of u8 field with 0xFFF will always evaluate to false
             if (field_0x5DE != 0xFFF) {
                 return dComIfGs_isSwitch(field_0x5DE, fopAcM_GetRoomNo(this));
             } else {

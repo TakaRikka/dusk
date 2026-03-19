@@ -343,10 +343,13 @@ BOOL daNpc_grA_c::create() {
     mType = getTypeFromParam();
     mMode = getMode();
     mSwBit = getSwBit();
+    // !@bug home.angle.x is promoted to a 32-bit signed integer prior
+    //       to being compared, so the compared value can never exceed
+    //       SHORT_MAX and the condition always passes.
     if (home.angle.x != 0xffff) {
-        field_0x146C = home.angle.x;
+        mFlowID = home.angle.x;
     } else{
-        field_0x146C = -1;
+        mFlowID = -1;
     }
     if (isDelete()) {
         return cPhs_ERROR_e;
@@ -2146,7 +2149,7 @@ BOOL daNpc_grA_c::ECut_talkSpa(int i_staffID) {
             setLookMode(5);
             break;
         case 1:
-            initTalk(field_0x146C, arr);
+            initTalk(mFlowID, arr);
             break;
         case 2:
             if (daNpcF_chkEvtBit(6) && daNpcF_chkEvtBit(0x3e) == FALSE) {
@@ -3020,7 +3023,7 @@ BOOL daNpc_grA_c::ECut_rollRockCrash(int i_staffID) {
             break;
         case 0x14: {
             setLookMode(0);
-            initTalk(field_0x146C, NULL);
+            initTalk(mFlowID, NULL);
             cXyz c(200.0f, 100.0f, 0.0f);
             mDoMtx_stack_c::YrotS(home.angle.y);
             mDoMtx_stack_c::multVec(&c, &c);
@@ -3588,7 +3591,7 @@ BOOL daNpc_grA_c::waitSpaWater(void*) {
         }
         setLookMode(0);
         mTurnMode = 0;
-        field_0x146C = 0x28;
+        mFlowID = 0x28;
         field_0x1472 = 2;
         field_0x9ea = 1;
         // fallthrough
@@ -3968,7 +3971,7 @@ BOOL daNpc_grA_c::talk(void*) {
                 setGateWalk();
             }
         } else {
-            r27 = field_0x146C;
+            r27 = mFlowID;
         }
         initTalk(r27, NULL);
         field_0x1484 = fopAcM_searchPlayerAngleY(this);

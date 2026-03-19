@@ -2,6 +2,8 @@
 
 #include "JSystem/JStudio/JStudio/jstudio-object.h"
 
+#include "dusk/audio.h"
+
 namespace JStudio {
 namespace {
 
@@ -1103,6 +1105,8 @@ u32 const JStudio::TAdaptor_sound::sauVariableValue_3_POSITION_XYZ[3] = {
 };
 
 void JStudio::TObject_sound::do_paragraph(u32 param_1, void const* param_2, u32 param_3) {
+    DUSK_AUDIO_SKIP()
+
     TAdaptor* adaptor = getAdaptor();
     TControl* control;
     if (adaptor == NULL) {

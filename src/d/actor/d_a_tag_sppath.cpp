@@ -97,7 +97,7 @@ int daTagSppath_c::getNearPathPos(cXyz* i_result, dPath* i_path) {
                     if (flatness > 0.001f) {
                         flatness = 30.0f / flatness;
                         if (segLen > flatness) {
-                            line.GetStartP() = line.GetStart() + pntDiff * flatness;
+                            *line.GetStartP() = line.GetStart() + pntDiff * flatness;
                         }
                     }
                 }
@@ -111,7 +111,7 @@ int daTagSppath_c::getNearPathPos(cXyz* i_result, dPath* i_path) {
                     if (flatness > 0.001f) {
                         flatness = 30.0f / flatness;
                         if (segLen > flatness) {
-                            line.GetEndP() = line.GetEnd() + pntDiff * flatness;
+                            *line.GetEndP() = line.GetEnd() + pntDiff * flatness;
                         }
                     }
                 }

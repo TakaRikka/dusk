@@ -517,8 +517,7 @@ BOOL daNpcChPath_c::setPath(int path_index, int room_no, cXyz& i_vec, bool param
     mCurrentID = path_index;
     mPntIndex = 0;
 
-    // Is this really what the Nintendo devs wrote?? The debug ROM suggests as such.
-    if (param_4 && &i_vec) {
+    if (param_4 && IS_REF_NONNULL(i_vec)) {
         f32 fVar1 = G_CM3D_F_INF;
         for (int pnt_index = 0; pnt_index < mpPath->m_num; pnt_index++) {
             dPnt* pnt = dPath_GetPnt(mpPath, pnt_index);
@@ -534,8 +533,7 @@ BOOL daNpcChPath_c::setPath(int path_index, int room_no, cXyz& i_vec, bool param
 
     field_0x8 = G_CM3D_F_INF;
 
-    // ditto.
-    if (&i_vec) {
+    if (IS_REF_NONNULL(i_vec)) {
         field_0x4 = &i_vec;
         cXyz targetPoint;
         getTargetPoint(targetPoint);

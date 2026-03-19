@@ -110,7 +110,7 @@ int fpcPi_Change(process_priority_class* i_procPriority, fpc_ProcID i_layerID, u
 
 int fpcPi_Handler() {
     process_priority_class* i_procPriority;
-    while (i_procPriority = fpcPi_GetFromQueue()) {
+    while ((i_procPriority = fpcPi_GetFromQueue())) {
         base_process_class* process = (base_process_class*)i_procPriority->base.mpTagData;
         layer_management_tag_class* pLayerTag = &process->layer_tag;
         line_tag* pLineTag = &process->line_tag_;

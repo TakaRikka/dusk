@@ -219,13 +219,21 @@ public:
     void init();
     void set(const char* i_name, const cXyz& i_pos, s16 i_angle, s8 i_roomNo);
 
+#if TARGET_PC
+    cXyz getPos() { return cXyz(mPos); }
+#else
     cXyz& getPos() { return mPos; }
+#endif
     s16 getAngleY() const { return mAngleY; }
     const char* getStageName() const { return mName; }
     s8 getRoomNo() const { return mRoomNo; }
 
 private:
+#if TARGET_PC
+    /* 0x00 */ BE(Vec) mPos;
+#else
     /* 0x00 */ cXyz mPos;
+#endif
     /* 0x0C */ BE(s16) mAngleY;
     /* 0x0E */ char mName[8];
     /* 0x16 */ u8 mSpawnId;
@@ -257,7 +265,11 @@ public:
     void onRegionBit(int i_region);
     void set(const char* i_name, const cXyz& i_pos, s16 i_angle, s8 i_spawn, u8 i_regionNo);
 
+#if TARGET_PC
+    cXyz getPos() { return cXyz(mPos); }
+#else
     cXyz& getPos() { return mPos; }
+#endif
     s16 getAngleY() { return mAngleY; }
     char* getName() { return mName; }
     u8 getRegionNo() const { return mRegionNo; }
@@ -267,7 +279,11 @@ public:
 
 
 private:
+#if TARGET_PC
+    /* 0x00 */ BE(Vec) mPos;
+#else
     /* 0x00 */ cXyz mPos;
+#endif
     /* 0x0C */ BE(s16) mAngleY;
     /* 0x0E */ char mName[8];
     /* 0x16 */ s8 mLastSpawnId;
@@ -284,7 +300,11 @@ public:
     void init();
     void setWarpItemData(const char* i_name, const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u8, u8);
 
+#if TARGET_PC
+    cXyz getPos() { return cXyz(mPos); }
+#else
     cXyz& getPos() { return mPos; }
+#endif
     s16 getAngleY() const { return mAngleY; }
     const char* getName() { return mName; }
     s8 getRoomNo() const { return mRoomNo; }
@@ -293,7 +313,11 @@ public:
     void resetWarpAcceptStage() { mWarpAcceptStage = -1; }
 
 private:
+#if TARGET_PC
+    /* 0x00 */ BE(Vec) mPos;
+#else
     /* 0x00 */ cXyz mPos;
+#endif
     /* 0x0C */ BE(s16) mAngleY;
     /* 0x0E */ char mName[8];
     /* 0x16 */ u8 mSpawnId;
@@ -396,12 +420,14 @@ public:
     void offCollectMirror(u8 i_item);
     BOOL isCollectMirror(u8 i_item) const;
 
+    void setPohNum(u8 i_num) { mPohNum = i_num; }
     u8 getPohNum() const { return mPohNum; }
+
     void addPohNum() {
         if (mPohNum < 0xFF) {
             mPohNum++;
         }
-    };
+    }
 
 private:
     /* 0x0 */ u8 mItem[8];

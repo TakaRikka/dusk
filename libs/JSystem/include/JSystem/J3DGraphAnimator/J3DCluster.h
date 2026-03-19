@@ -108,8 +108,8 @@ public:
         J3D_ASSERT_RANGE(199, (i < mClusterKeyNum));
         return &mClusterKeyPointer[i];
     }
-    f32* getVtxPos() { return mVtxPos; }
-    f32* getVtxNrm() { return mVtxNrm; }
+    BE(f32)* getVtxPos() { return mVtxPos; }
+    BE(f32)* getVtxNrm() { return mVtxNrm; }
 
     /* 0x00 */ u16 mClusterNum;
     /* 0x02 */ u16 mClusterKeyNum;
@@ -119,8 +119,8 @@ public:
     /* 0x10 */ J3DClusterVertex* mClusterVertex;
     /* 0x14 */ u16 mVtxPosNum;
     /* 0x16 */ u16 mVtxNrmNum;
-    /* 0x18 */ f32* mVtxPos;
-    /* 0x1C */ f32* mVtxNrm;
+    /* 0x18 */ BE(f32)* mVtxPos;
+    /* 0x1C */ BE(f32)* mVtxNrm;
     /* 0x20 */ JUTNameTab* mClusterName;
     /* 0x24 */ JUTNameTab* mClusterKeyName;
 

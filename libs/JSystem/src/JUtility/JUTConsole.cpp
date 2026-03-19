@@ -181,7 +181,7 @@ void JUTConsole::doDraw(JUTConsole::EConsoleType consoleType) const {
                 mFont->drawString_scale((int)f31, sp94, mFontSizeX, mFontSizeY,
                                         mVisible ? "[ON]" : "[OFF]", TRUE);
                 f31 += (int)(mFontSizeX * 6.0f);
-                if (this == NULL)  // ????
+                if (IS_REF_NULL(*this))  // ????
                 {
                     mFont->setCharColor(JUtility::TColor(0xff, 0xff, 0x64, 0xff));
                     mFont->drawString_scale((int)(f31 - mFontSizeX), mFontSizeX, mFontSizeY, sp94,

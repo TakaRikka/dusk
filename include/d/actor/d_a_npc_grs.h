@@ -103,7 +103,7 @@ private:
     /* 0xE00 */ int field_0xe00;
     /* 0xE04 */ int field_0xe04;
     /* 0xE08 */ int field_0xe08;
-    /* 0xE0C */ int field_0xe0c;
+    /* 0xE0C */ int mFlowID;
     /* 0xE10 */ s16 mLookMode;
     /* 0xE12 */ u16 mActionState;
     /* 0xE14 */ u8 mType;

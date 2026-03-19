@@ -635,7 +635,7 @@ void daNpc_Bou_c::action() {
 
     hit_actor = field_0xba0.getActorP();
     if (hit_actor != NULL) {
-        abs( (s16)(fopAcM_searchPlayerAngleY(this) - mCurAngle.y) );
+        UNUSED(abs((s16)(fopAcM_searchPlayerAngleY(this) - mCurAngle.y)));
         switch (((daTag_Push_c*) hit_actor)->getId()) {
             case 7: {
                 mEvtNo = 8;

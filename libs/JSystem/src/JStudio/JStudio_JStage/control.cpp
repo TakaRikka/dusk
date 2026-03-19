@@ -37,7 +37,7 @@ bool JStudio_JStage::TCreateObject::create(
         eObject = JStage::OBJECT_FOG;
         break;
     default:
-        return NULL;
+        return false;
     }
     JUT_ASSERT(99, pfnCreateObject!=NULL);
     JUT_ASSERT(100, eObject!=JStage::OBJECT_UNDEFINED);

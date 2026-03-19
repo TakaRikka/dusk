@@ -40,8 +40,8 @@ public:
 
     bool Cross(const cM3dGCps* cps, cXyz* xyz) const { return cM3d_Cross_CpsCyl(*cps, *this, xyz); }
     bool Cross(const cM3dGTri& tri, cXyz* xyz) const { return cM3d_Cross_CylTri(this, &tri, xyz); }
-    bool Cross(const cM3dGCyl* other, f32* f) const { return cM3d_Cross_CylCyl(this, other, f); }
-    bool Cross(const cM3dGSph* sph, f32* f) const { return cM3d_Cross_CylSph(this, sph, f); }
+    bool cross(const cM3dGCyl* other, f32* f) const { return cM3d_Cross_CylCyl(this, other, f); }
+    bool cross(const cM3dGSph* sph, f32* f) const { return cM3d_Cross_CylSph(this, sph, f); }
 };  // Size = 0x18
 
 STATIC_ASSERT(0x18 == sizeof(cM3dGCyl));

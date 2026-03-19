@@ -493,6 +493,9 @@ cPhs_Step daNpc_zrA_c::create() {
     fopAcM_ct(this, daNpc_zrA_c);
 
     mType = getTypeFromArgument();
+    // !@bug home.angle.x is promoted to a 32-bit signed integer prior
+    //       to being compared, so the compared value can never exceed
+    //       SHORT_MAX and the condition always passes.
     if (home.angle.x != 0xffff) {
         mFlowID = home.angle.x;
     } else {

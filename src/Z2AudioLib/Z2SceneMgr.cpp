@@ -1718,11 +1718,16 @@ void Z2SceneMgr::setSceneName(char* spot, s32 room, s32 layer) {
 
     if (Z2GetSoundMgr()->getStreamMgr()->isActive()) {
         JAUSoundTable* sound_table = JAUSoundTable::getInstance();
-        JSUList<JAIStream>* stream_list = Z2GetSoundMgr()->getStreamMgr()->getStreamList();
-        JSULink<JAIStream>* stream;
-        for (stream = stream_list->getFirst(); stream != NULL; stream = stream->getNext()) {
-            if (bVar2 || sound_table->getTypeID(stream->getObject()->getID()) != 0x71) {
-                stream->getObject()->stop(Z2Param::SCENE_CHANGE_BGM_FADEOUT_TIME);
+#if DUSK_AUDIO_DISABLED
+        if (sound_table->isValid())
+#endif
+        {
+            JSUList<JAIStream>* stream_list = Z2GetSoundMgr()->getStreamMgr()->getStreamList();
+            JSULink<JAIStream>* stream;
+            for (stream = stream_list->getFirst(); stream != NULL; stream = stream->getNext()) {
+                if (bVar2 || sound_table->getTypeID(stream->getObject()->getID()) != 0x71) {
+                    stream->getObject()->stop(Z2Param::SCENE_CHANGE_BGM_FADEOUT_TIME);
+                }
             }
         }
     }

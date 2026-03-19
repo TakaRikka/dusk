@@ -354,7 +354,7 @@ void J3DAnmFullLoader_v15::setAnmCluster(J3DAnmClusterFull* param_1,
     param_1->mFrame = 0.0f;
     param_1->mAnmTable =
         JSUConvertOffsetToPtr<J3DAnmClusterFullTable>(param_2, param_2->mTableOffset);
-    param_1->mWeight = JSUConvertOffsetToPtr<f32>(param_2, param_2->mWeightOffset);
+    param_1->mWeight = JSUConvertOffsetToPtr<BE(f32)>(param_2, param_2->mWeightOffset);
 }
 
 void J3DAnmFullLoader_v15::readAnmVtxColor(const J3DAnmVtxColorFullData* param_1) {
@@ -618,7 +618,7 @@ void J3DAnmKeyLoader_v15::setAnmCluster(J3DAnmClusterKey* param_1,
     param_1->mFrame = 0.0f;
     param_1->mAnmTable =
         JSUConvertOffsetToPtr<J3DAnmClusterKeyTable>(param_2, param_2->mTableOffset);
-    param_1->mWeight = JSUConvertOffsetToPtr<f32>(param_2, param_2->mWeightOffset);
+    param_1->mWeight = JSUConvertOffsetToPtr<BE(f32)>(param_2, param_2->mWeightOffset);
 }
 
 

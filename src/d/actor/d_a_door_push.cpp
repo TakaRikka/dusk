@@ -11,7 +11,7 @@
 #include "f_pc/f_pc_name.h"
 #include "f_op/f_op_actor_mng.h"
 
-static void PPCallBack(fopAc_ac_c* i_this, fopAc_ac_c* i_unused, s16 i_unused2,
+static fopAc_ac_c* PPCallBack(fopAc_ac_c* i_this, fopAc_ac_c* i_unused, s16 i_unused2,
                        dBgW_Base::PushPullLabel param_3) {
     if (cLib_checkBit(param_3, dBgW_Base::PPLABEL_PUSH) != 0) {
         daDoorPush_c* l_this = (daDoorPush_c*)i_this;
@@ -19,9 +19,11 @@ static void PPCallBack(fopAc_ac_c* i_this, fopAc_ac_c* i_unused, s16 i_unused2,
         l_this->field_0x62e[1] = 0;
         l_this->field_0x62c[0] = 1;
     }
+
+    return i_this;
 }
 
-static void PPCallBack2(fopAc_ac_c* i_this, fopAc_ac_c* i_unused, s16 i_unused2,
+static fopAc_ac_c* PPCallBack2(fopAc_ac_c* i_this, fopAc_ac_c* i_unused, s16 i_unused2,
                         dBgW_Base::PushPullLabel param_3) {
     if (cLib_checkBit(param_3, dBgW_Base::PPLABEL_PUSH) != 0) {
         daDoorPush_c* l_this = (daDoorPush_c*)i_this;
@@ -29,6 +31,8 @@ static void PPCallBack2(fopAc_ac_c* i_this, fopAc_ac_c* i_unused, s16 i_unused2,
         l_this->field_0x62e[0] = 0;
         l_this->field_0x62c[1] = 1;
     }
+
+    return i_this;
 }
 
 void daDoorPush_c::initBaseMtx() {

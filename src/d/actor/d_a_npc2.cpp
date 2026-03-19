@@ -544,7 +544,7 @@ void daBaseNpc_c::orderEvent(int param_0, char* i_evtName) {
     if (i_evtName != NULL) {
         mEvtIdx = dComIfGp_getEventManager().getEventIdx(this, i_evtName, -1);
         fopAcM_orderOtherEventId(this, mEvtIdx, 0xFF, 0xFFFF, 0, 1);
-    } else if (field_0x848 >= 0 && attention_info.flags == (fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e)) {
+    } else if (mFlowID >= 0 && attention_info.flags == (fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e)) {
         eventInfo.onCondition(1);
         if (param_0 != 0) {
             fopAcM_orderSpeakEvent(this, 0, 0);

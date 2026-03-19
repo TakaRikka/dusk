@@ -66,14 +66,14 @@ bool cM3d_Len2dSqPntAndSegLine(f32 param_1, f32 param_2, f32 param_3, f32 param_
 bool cM3d_Len3dSqPntAndSegLine(const cM3dGLin* pLine, const Vec* pVec, Vec* pOutVec, f32* pOutF) {
     bool retVal = false;
     Vec tmp;
-    VECSubtract(&pLine->GetEndP(), &pLine->GetStartP(), &tmp);
+    VECSubtract(pLine->GetEndP(), pLine->GetStartP(), &tmp);
     f32 seqLen = VECDotProduct(&tmp, &tmp);
     if (cM3d_IsZero(seqLen)) {
         *pOutF = 0.0f;
         return retVal;
     } else {
         Vec tmp2;
-        VECSubtract(pVec, &pLine->GetStartP(), &tmp2);
+        VECSubtract(pVec, pLine->GetStartP(), &tmp2);
         f32 tmpF = VECDotProduct(&tmp2, &tmp);
         tmpF /= seqLen;
         if (tmpF < 0.0f || tmpF > 1.0f) {
@@ -82,7 +82,7 @@ bool cM3d_Len3dSqPntAndSegLine(const cM3dGLin* pLine, const Vec* pVec, Vec* pOut
             retVal = true;
         }
         VECScale(&tmp, &tmp, tmpF);
-        VECAdd(&tmp, &pLine->GetStartP(), pOutVec);
+        VECAdd(&tmp, pLine->GetStartP(), pOutVec);
         *pOutF = VECSquareDistance(pOutVec, pVec);
         return retVal;
     }
@@ -213,7 +213,7 @@ int cM3d_Check_LinLin(const cM3dGLin* lin_a, const cM3dGLin* lin_b, f32* dst_a, 
         VECScale(&linAVec, &linAVec, invLinALen);
         VECScale(&linBVec, &linBVec, invLinBLen);
         Vec tmp;
-        VECSubtract(&lin_a->GetStartP(), &lin_b->GetStartP(), &tmp);
+        VECSubtract(lin_a->GetStartP(), lin_b->GetStartP(), &tmp);
         f32 tmpF = -VECDotProduct(&linAVec, &linBVec);
         f32 tmpF2 = VECDotProduct(&tmp, &linAVec);
         VECSquareMag(&tmp);  // result not used
@@ -262,19 +262,19 @@ static bool cM3d_CrossInfLineVsInfPlane_proc(f32 pFloatA, f32 pFloatB, const Vec
 }
 
 bool cM3d_Cross_LinPla(const cM3dGLin* lin, const cM3dGPla* pla, Vec* dst, bool a, bool b) {
-    f32 startVal = pla->getPlaneFunc(&lin->GetStartP());
-    f32 endVal = pla->getPlaneFunc(&lin->GetEndP());
+    f32 startVal = pla->getPlaneFunc(lin->GetStartP());
+    f32 endVal = pla->getPlaneFunc(lin->GetEndP());
     if (startVal * endVal > 0.0f) {
         *dst = lin->GetEnd();
         return false;
     } else {
         if (startVal >= 0.0f && endVal <= 0.0f) {
             if (a) {
-                return cM3d_CrossInfLineVsInfPlane_proc(startVal, endVal, &lin->GetStartP(), &lin->GetEndP(), dst);
+                return cM3d_CrossInfLineVsInfPlane_proc(startVal, endVal, lin->GetStartP(), lin->GetEndP(), dst);
             }
         } else {
             if (b) {
-                return cM3d_CrossInfLineVsInfPlane_proc(startVal, endVal, &lin->GetStartP(), &lin->GetEndP(), dst);
+                return cM3d_CrossInfLineVsInfPlane_proc(startVal, endVal, lin->GetStartP(), lin->GetEndP(), dst);
             }
         }
         *dst = lin->GetEnd();
@@ -1034,53 +1034,53 @@ bool cM3d_Cross_LinSph(cM3dGLin const* line, cM3dGSph const* sph, Vec* param_2) 
     const Vec* center = sph->GetCP();
 
     f32 max_x = center->x + sph->GetR();
-    if (max_x < line->GetStartP().x && max_x < line->GetEndP().x) {
+    if (max_x < line->GetStartP()->x && max_x < line->GetEndP()->x) {
         return false;
     }
     f32 min_x = center->x - sph->GetR();
-    if (min_x > line->GetStartP().x && min_x > line->GetEndP().x) {
+    if (min_x > line->GetStartP()->x && min_x > line->GetEndP()->x) {
         return false;
     }
 
     f32 max_y = center->y + sph->GetR();
-    if (max_y < line->GetStartP().y && max_y < line->GetEndP().y) {
+    if (max_y < line->GetStartP()->y && max_y < line->GetEndP()->y) {
         return false;
     }
     f32 min_y = center->y - sph->GetR();
-    if (min_y > line->GetStartP().y && min_y > line->GetEndP().y) {
+    if (min_y > line->GetStartP()->y && min_y > line->GetEndP()->y) {
         return false;
     }
 
     f32 max_z = center->z + sph->GetR();
-    if (max_z < line->GetStartP().z && max_z < line->GetEndP().z) {
+    if (max_z < line->GetStartP()->z && max_z < line->GetEndP()->z) {
         return false;
     }
     f32 min_z = center->z - sph->GetR();
-    if (min_z > line->GetStartP().z && min_z > line->GetEndP().z) {
+    if (min_z > line->GetStartP()->z && min_z > line->GetEndP()->z) {
         return false;
     }
 
-    VECSubtract(&line->GetEndP(), &line->GetStartP(), &lin_vec);
+    VECSubtract(line->GetEndP(), line->GetStartP(), &lin_vec);
     f32 len_sq = VECSquareMag(&lin_vec);
     if (cM3d_IsZero(len_sq)) {
         return false;
     }
 
-    VECSubtract(center, &line->GetStartP(), &vec);
+    VECSubtract(center, line->GetStartP(), &vec);
     f32 proj = VECDotProduct(&vec, &lin_vec) / len_sq;
     if (proj < 0.0f || proj > 1.0f) {
-        if (line->GetStartP().abs2(*center) < line->GetEndP().abs2(*center)) {
-            if (cM3d_Cross_SphPnt(sph, &line->GetStartP())) {
-                param_2->x = line->GetStartP().x;
-                param_2->y = line->GetStartP().y;
-                param_2->z = line->GetStartP().z;
+        if (line->GetStartP()->abs2(*center) < line->GetEndP()->abs2(*center)) {
+            if (cM3d_Cross_SphPnt(sph, line->GetStartP())) {
+                param_2->x = line->GetStartP()->x;
+                param_2->y = line->GetStartP()->y;
+                param_2->z = line->GetStartP()->z;
                 return true;
             }
         } else {
-            if (cM3d_Cross_SphPnt(sph, &line->GetEndP())) {
-                param_2->x = line->GetEndP().x;
-                param_2->y = line->GetEndP().y;
-                param_2->z = line->GetEndP().z;
+            if (cM3d_Cross_SphPnt(sph, line->GetEndP())) {
+                param_2->x = line->GetEndP()->x;
+                param_2->y = line->GetEndP()->y;
+                param_2->z = line->GetEndP()->z;
                 return true;
             }
         }
@@ -1089,7 +1089,7 @@ bool cM3d_Cross_LinSph(cM3dGLin const* line, cM3dGSph const* sph, Vec* param_2) 
 
     Vec proj_vec;
     VECScale(&lin_vec, &proj_vec, proj);
-    VECAdd(&proj_vec, &line->GetStartP(), param_2);
+    VECAdd(&proj_vec, line->GetStartP(), param_2);
     if (cM3d_LenSq(param_2, center) <= sph->GetR() * sph->GetR()) {
         return true;
     }
@@ -1100,8 +1100,8 @@ int cM3d_Cross_LinSph_CrossPos(cM3dGSph const& sph, cM3dGLin const& line, Vec* p
                                Vec* param_3) {
     int ret;
     Vec line_vec, vec;
-    VECSubtract(&line.GetEndP(), &line.GetStartP(), &line_vec);
-    VECSubtract(&line.GetStartP(), sph.GetCP(), &vec);
+    VECSubtract(line.GetEndP(), line.GetStartP(), &line_vec);
+    VECSubtract(line.GetStartP(), sph.GetCP(), &vec);
     f32 len_sq = VECDotProduct(&line_vec, &line_vec);
     f32 dVar9 = VECDotProduct(&line_vec, &vec) * 2.0f;
     f32 dVar6 = VECDotProduct(&vec, &vec) - sph.GetR() * sph.GetR();
@@ -1113,7 +1113,7 @@ int cM3d_Cross_LinSph_CrossPos(cM3dGSph const& sph, cM3dGLin const& line, Vec* p
             ret = 1;
             Vec vec2;
             VECScale(&line_vec, &vec2, -dVar6 / dVar9);
-            VECAdd(&vec2, &line.GetStartP(), param_2);
+            VECAdd(&vec2, line.GetStartP(), param_2);
         }
     } else {
         f32 f11 = dVar9 * dVar9 - len_sq * 4.0f * dVar6;
@@ -1121,7 +1121,7 @@ int cM3d_Cross_LinSph_CrossPos(cM3dGSph const& sph, cM3dGLin const& line, Vec* p
             ret = 1;
             Vec vec2;
             VECScale(&line_vec, &vec2, -dVar9 / (len_sq * 2.0f));
-            VECAdd(&vec2, &line.GetStartP(), param_2);
+            VECAdd(&vec2, line.GetStartP(), param_2);
         } else if (f11 < 0.0f) {
             ret = 0;
         } else {
@@ -1131,9 +1131,9 @@ int cM3d_Cross_LinSph_CrossPos(cM3dGSph const& sph, cM3dGLin const& line, Vec* p
             f32 scale1 = f1 * (-dVar9 + sqrtf(f11));
             f32 scale2 = f1 * (-dVar9 - sqrtf(f11));
             VECScale(&line_vec, &vec2, scale1);
-            VECAdd(&vec2, &line.GetStartP(), param_2);
+            VECAdd(&vec2, line.GetStartP(), param_2);
             VECScale(&line_vec, &vec2, scale2);
-            VECAdd(&vec2, &line.GetStartP(), param_3);
+            VECAdd(&vec2, line.GetStartP(), param_3);
         }
     }
 
@@ -1460,17 +1460,17 @@ int cM3d_Cross_CylLin(cM3dGCyl const* cyl, cM3dGLin const* line, Vec* param_2, V
     f2 = 0.0f;
     uVar11 = 0;
 
-    if (cM3d_Cross_CylPnt(cyl, &line->GetStartP()) && cM3d_Cross_CylPnt(cyl, &line->GetEndP())) {
-        *param_2 = line->GetStartP();
-        *param_3 = line->GetEndP();
+    if (cM3d_Cross_CylPnt(cyl, line->GetStartP()) && cM3d_Cross_CylPnt(cyl, line->GetEndP())) {
+        *param_2 = *line->GetStartP();
+        *param_3 = *line->GetEndP();
         return 2;
     }
 
     Vec vec1, vec2, vec3;
     Vec vec[4];
     const Vec* center = cyl->GetCP();
-    VECSubtract(&line->GetStartP(), center, &vec1);
-    VECSubtract(&line->GetEndP(), center, &vec2);
+    VECSubtract(line->GetStartP(), center, &vec1);
+    VECSubtract(line->GetEndP(), center, &vec2);
     VECSubtract(&vec2, &vec1, &vec3);
     r_sq = cyl->GetR() * cyl->GetR();
 
@@ -1599,7 +1599,7 @@ int cM3d_Cross_CylLin(cM3dGCyl const* cyl, cM3dGLin const* line, Vec* param_2, V
             if (count == 0) {
                 *param_2 = vec[i];
             } else if (count == 1) {
-                if (cM3d_LenSq(&line->GetStartP(), param_2) < cM3d_LenSq(&line->GetStartP(), &vec[i])) {
+                if (cM3d_LenSq(line->GetStartP(), param_2) < cM3d_LenSq(line->GetStartP(), &vec[i])) {
                     *param_3 = vec[i];
                 } else {
                     *param_3 = *param_2;
@@ -1707,36 +1707,36 @@ inline bool cM3d_Cross_CpsCyl_Check(cM3dGCps const& cps, cM3dGCyl const& cyl, Ve
 bool cM3d_Cross_CpsCyl(cM3dGCps const& cps, cM3dGCyl const& cyl, Vec* param_2) {
     cM3dGLin line;
 
-    if (cM3d_Cross_CylPnt(&cyl, &cps.GetEndP())) {
-        *param_2 = cps.GetEndP();
+    if (cM3d_Cross_CylPnt(&cyl, cps.GetEndP())) {
+        *param_2 = *cps.GetEndP();
         return true;
     }
 
-    if (cM3d_Cross_CylPnt(&cyl, &cps.GetStartP())) {
-        *param_2 = cps.GetStartP();
+    if (cM3d_Cross_CylPnt(&cyl, cps.GetStartP())) {
+        *param_2 = *cps.GetStartP();
         return true;
     }
 
-    line.GetStartP() = *cyl.GetCP();
-    line.GetEndP() = *cyl.GetCP();
-    line.GetEndP().y += cyl.GetH();
+    *line.GetStartP() = *cyl.GetCP();
+    *line.GetEndP() = *cyl.GetCP();
+    line.GetEndP()->y += cyl.GetH();
     Vec vec;
     f32 tmp;
 
-    if (cM3d_Len3dSqPntAndSegLine(&cps, &line.GetEndP(), &vec, &tmp)) {
-        f32 dist = VECDistance(&line.GetEndP(), &vec);
+    if (cM3d_Len3dSqPntAndSegLine(&cps, line.GetEndP(), &vec, &tmp)) {
+        f32 dist = VECDistance(line.GetEndP(), &vec);
         if (dist < cps.GetR()) {
-            VECAdd(&line.GetEndP(), &vec, param_2);
+            VECAdd(line.GetEndP(), &vec, param_2);
             VECScale(param_2, param_2, 0.5f);
-            *param_2 = line.GetEndP();
+            *param_2 = *line.GetEndP();
             return true;
         }
     }
 
-    if (cM3d_Len3dSqPntAndSegLine(&cps, &line.GetStartP(), &vec, &tmp)) {
-        f32 dist = VECDistance(&line.GetStartP(), &vec);
+    if (cM3d_Len3dSqPntAndSegLine(&cps, line.GetStartP(), &vec, &tmp)) {
+        f32 dist = VECDistance(line.GetStartP(), &vec);
         if (dist < cps.GetR()) {
-            VECAdd(&line.GetStartP(), &vec, param_2);
+            VECAdd(line.GetStartP(), &vec, param_2);
             VECScale(param_2, param_2, 0.5f);
             return true;
         }
@@ -1749,7 +1749,7 @@ bool cM3d_Cross_CpsCyl(cM3dGCps const& cps, cM3dGCyl const& cyl, Vec* param_2) {
         cM3dGSph sph;
         f32 tmp2;
         sph.SetR(cps.GetR());
-        sph.SetC(cps.GetStartP());
+        sph.SetC(*cps.GetStartP());
         return cM3d_Cross_CylSph(&cyl, &sph, param_2, &tmp2);
     } else if (iVar2 == 2) {
         if (f1 >= 0.0f && f1 <= 1.0f && f2 >= 0.0f && f2 <= 1.0f) {
@@ -1818,8 +1818,8 @@ static void cM3d_Cross_CpsSph_CrossPos(cM3dGCps const& param_1, cM3dGSph const& 
     if (iVar5 == 1) {
         *param_4 = aVStack_70;
     } else if (iVar5 == 2) {
-        f32 dVar8 = VECSquareDistance(&aVStack_70, &param_1.GetStartP());
-        f32 dVar9 = VECSquareDistance(&VStack_7c, &param_1.GetStartP());
+        f32 dVar8 = VECSquareDistance(&aVStack_70, param_1.GetStartP());
+        f32 dVar9 = VECSquareDistance(&VStack_7c, param_1.GetStartP());
         if (dVar8 < dVar9) {
             *param_4 = aVStack_70;
         } else {
@@ -1840,14 +1840,14 @@ static void cM3d_Cross_CpsSph_CrossPos(cM3dGCps const& param_1, cM3dGSph const& 
 
 
 bool cM3d_Cross_CpsSph(cM3dGCps const& param_1, cM3dGSph const& param_2, Vec* param_3) {
-    f32 local_38 = VECDistance(&param_1.GetStartP(), param_2.GetCP());
+    f32 local_38 = VECDistance(param_1.GetStartP(), param_2.GetCP());
     if (local_38 < param_1.GetR() + param_2.GetR()) {
-        cM3d_Cross_CpsSph_CrossPos(param_1, param_2, param_1.GetStartP(), param_3);
+        cM3d_Cross_CpsSph_CrossPos(param_1, param_2, *param_1.GetStartP(), param_3);
         return true;
     }
-    local_38 = VECDistance(&param_1.GetEndP(), param_2.GetCP());
+    local_38 = VECDistance(param_1.GetEndP(), param_2.GetCP());
     if (local_38 < param_1.GetR() + param_2.GetR()) {
-        cM3d_Cross_CpsSph_CrossPos(param_1, param_2, param_1.GetEndP(), param_3);
+        cM3d_Cross_CpsSph_CrossPos(param_1, param_2, *param_1.GetEndP(), param_3);
         return true;
     }
     Vec auStack_34;
@@ -1922,13 +1922,13 @@ inline f32 cM3d_2LinCenter(cM3dGLin const& pLinA, f32 pLinAF, cM3dGLin const& pL
 
 bool cM3d_Cross_CpsTri(cM3dGCps const& cps, cM3dGTri tri, Vec* param_2) {
     cM3dGSph sph;
-    sph.SetC(cps.GetStartP());
+    sph.SetC(*cps.GetStartP());
     sph.SetR(cps.GetR());
     if (cM3d_Cross_SphTri(&sph, &tri, param_2)) {
         return true;
     }
 
-    sph.SetC(cps.GetEndP());
+    sph.SetC(*cps.GetEndP());
     sph.SetR(cps.GetR());
     if (cM3d_Cross_SphTri(&sph, &tri, param_2)) {
         return true;
@@ -2044,25 +2044,25 @@ static int cM3d_2PlaneCrossLine(const cM3dGPla& pPlaneA, const cM3dGPla& pPlaneB
         if (absTX >= absTY && absTX >= absTZ) {
             cM3d_PlaneCrossLineProcWork(pPlaneA.GetNP()->y, pPlaneA.GetNP()->z, pPlaneB.GetNP()->y,
                                         pPlaneB.GetNP()->z, tmp.x, pPlaneA.GetD(), pPlaneB.GetD(),
-                                        &pLinOut->GetStartP().y, &pLinOut->GetStartP().z);
-            pLinOut->GetStartP().x = 0.0f;
+                                        &pLinOut->GetStartP()->y, &pLinOut->GetStartP()->z);
+            pLinOut->GetStartP()->x = 0.0f;
         } else if (absTY >= absTX && absTY >= absTZ) {
             cM3d_PlaneCrossLineProcWork(pPlaneA.GetNP()->z, pPlaneA.GetNP()->x, pPlaneB.GetNP()->z,
                                         pPlaneB.GetNP()->x, tmp.y, pPlaneA.GetD(), pPlaneB.GetD(),
-                                        &pLinOut->GetStartP().z, &pLinOut->GetStartP().x);
-            pLinOut->GetStartP().y = 0.0f;
+                                        &pLinOut->GetStartP()->z, &pLinOut->GetStartP()->x);
+            pLinOut->GetStartP()->y = 0.0f;
         } else {
             cM3d_PlaneCrossLineProcWork(pPlaneA.GetNP()->x, pPlaneA.GetNP()->y, pPlaneB.GetNP()->x,
                                         pPlaneB.GetNP()->y, tmp.z, pPlaneA.GetD(), pPlaneB.GetD(),
-                                        &pLinOut->GetStartP().x, &pLinOut->GetStartP().y);
-            pLinOut->GetStartP().z = 0.0f;
+                                        &pLinOut->GetStartP()->x, &pLinOut->GetStartP()->y);
+            pLinOut->GetStartP()->z = 0.0f;
         }
-        f32 scale = VECMag(&pLinOut->GetStartP());
+        f32 scale = VECMag(pLinOut->GetStartP());
         if (cM3d_IsZero(scale)) {
             scale = 1.0f;
         }
         VECScale(&tmp, &tmp, scale);
-        VECAdd(&pLinOut->GetStartP(), &tmp, &pLinOut->GetEndP());
+        VECAdd(pLinOut->GetStartP(), &tmp, pLinOut->GetEndP());
         return 1;
     }
 }
@@ -2073,10 +2073,10 @@ BOOL cM3d_3PlaneCrossPos(const cM3dGPla& pPlaneA, const cM3dGPla& pPlaneB, const
     if (!cM3d_2PlaneCrossLine(pPlaneA, pPlaneB, &lin)) {
         return false;
     } else {
-        const Vec* end = &lin.GetEndP();
-        f32 tmpf1 = pPlaneC.getPlaneFunc(&lin.GetStartP());
+        const Vec* end = lin.GetEndP();
+        f32 tmpf1 = pPlaneC.getPlaneFunc(lin.GetStartP());
         f32 tmpf2 = pPlaneC.getPlaneFunc(end);
-        if (!cM3d_CrossInfLineVsInfPlane_proc(tmpf1, tmpf2, &lin.GetStartP(), end, pVecOut)) {
+        if (!cM3d_CrossInfLineVsInfPlane_proc(tmpf1, tmpf2, lin.GetStartP(), end, pVecOut)) {
             return false;
         } else {
             return true;
@@ -2094,10 +2094,10 @@ f32 cM3d_lineVsPosSuisenCross(const cM3dGLin* pLine, const Vec* pPoint, Vec* pVe
         *pVecOut = *pPoint;
         return 0.0f;
     } else {
-        VECSubtract(pPoint, &pLine->GetStartP(), &tmp2);
+        VECSubtract(pPoint, pLine->GetStartP(), &tmp2);
         f32 retVal = VECDotProduct(&tmp2, &tmp1) / diffLen;
         VECScale(&tmp1, &tmp3, retVal);
-        VECAdd(&tmp3, &pLine->GetStartP(), pVecOut);
+        VECAdd(&tmp3, pLine->GetStartP(), pVecOut);
         return retVal;
     }
 }

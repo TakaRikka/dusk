@@ -10,13 +10,119 @@
 #include "d/d_jnt_col.h"
 #include "f_op/f_op_actor_mng.h"
 
+#include "dusk/imgui/ImGuiConsole.hpp"
+
+class dCcS_HIO : public JORReflexible {
+public:
+    enum flags_e {
+        FLAG_CAM_COL_DISP_e   = 0x1,
+        FLAG_AT_ON_e          = 0x2,
+        FLAG_TG_ON_e          = 0x4,
+        FLAG_CO_ON_e          = 0x8,
+        FLAG_DRAW_CLEAR_OFF_e = 0x10,
+        FLAG_COUNTER_e        = 0x20,
+        FLAG_MOVE_OFF_e       = 0x40,
+        FLAG_MASS_OFF_e       = 0x80,
+        FLAG_MOVE_TIMER_e     = 0x100,
+        FLAG_MASS_TIMER_e     = 0x200,
+        FLAG_MASS_COUNTER_e   = 0x400,
+        FLAG_ALL_MASS_TIMER_e = 0x800,
+
+    };
+
+    dCcS_HIO() {
+        m_flags = 0;
+        m_shield_range = 0x4000;
+    }
+
+    virtual ~dCcS_HIO();
+
+    void genMessage(JORMContext*);
+
+    BOOL ChkMoveTimer() { return m_flags & FLAG_MOVE_TIMER_e; }
+    BOOL ChkMoveOff() { return m_flags & FLAG_MOVE_OFF_e; }
+    BOOL ChkAllMassTimer() { return m_flags & FLAG_ALL_MASS_TIMER_e; }
+    BOOL ChkDrawClearOff() { return m_flags & FLAG_DRAW_CLEAR_OFF_e; }
+    BOOL ChkCounter() { return m_flags & FLAG_COUNTER_e; }
+    BOOL ChkCamColDisp() { return m_flags & FLAG_CAM_COL_DISP_e; }
+    BOOL CheckCoOn() { return m_flags & FLAG_CO_ON_e; }
+    BOOL CheckTgOn() { return m_flags & FLAG_TG_ON_e; }
+    BOOL CheckAtOn() { return m_flags & FLAG_AT_ON_e; }
+    BOOL ChkMassCounter() { return m_flags & FLAG_MASS_COUNTER_e; }
+    BOOL ChkMassOff() { return m_flags & FLAG_MASS_OFF_e; }
+    BOOL ChkMassTimer() { return m_flags & FLAG_MASS_TIMER_e; }
+
+    /* 0x4 */ s8 id;
+    /* 0x6 */ u16 m_flags;
+    /* 0x8 */ s16 m_shield_range;
+};
+
+
+dCcS_HIO::~dCcS_HIO() {}
+
+void dCcS_HIO::genMessage(JORMContext* mctx) {
+#if DEBUG
+    mctx->genLabel("処理関係 -----", 0);
+    mctx->genCheckBox("処理Off", &m_flags, 0x40);
+    mctx->genCheckBox("多数ヒットチェック(草木花)Off", &m_flags, 0x80);
+    mctx->genCheckBox("多数ヒット １回時間", &m_flags, 0x200);
+    mctx->genCheckBox("多数ヒット 通しの処理時間(->terminal)", &m_flags, 0x800);
+    mctx->genCheckBox("多数ヒット チェックカウンタ", &m_flags, 0x400);
+    mctx->genCheckBox("処理時間(->terminal)", &m_flags, 0x100);
+
+    mctx->genLabel("描画関係 -----", 0);
+    mctx->genCheckBox("At 描画", &m_flags, 2);
+    mctx->genCheckBox("Tg 描画", &m_flags, 4);
+    mctx->genCheckBox("Co 描画", &m_flags, 8);
+    mctx->genCheckBox("カメラCo描画", &m_flags, 1);
+    mctx->genCheckBox("クリアOff", &m_flags, 0x10);
+
+    mctx->genLabel("情報(->terminal) -----", 0);
+    mctx->genCheckBox("個数", &m_flags, 0x20);
+
+    mctx->genLabel("特殊-----", 0);
+    mctx->genSlider("盾範囲(max=360度)", &m_shield_range, 0, 0x7FFF);
+#endif
+}
+
+#if DEBUG
+static OSStopwatch s_move_timer;
+static OSStopwatch s_mass_timer;
+
+int g_mass_counter;
+#endif
+
+static dCcS_HIO s_Hio;
+
 void dCcS::Ct() {
     cCcS::Ct();
+
+    #if DEBUG
+    m_is_mass_all_timer = 0;
+    s_Hio.id = mDoHIO_CREATE_CHILD("zelda コリジョンシステム", &s_Hio);
+
+    OSInitStopwatch(&s_move_timer, "CollsionCheckMove");
+    OSResetStopwatch(&s_move_timer);
+    OSInitStopwatch(&s_mass_timer, "MassCheck");
+    OSResetStopwatch(&s_mass_timer);
+
+    g_mass_counter = 0;
+    #endif
+
     mMass_Mng.Ct();
+
+    #if DEBUG
+    dJntCol_setDebugHIO();
+    #endif
 }
 
 void dCcS::Dt() {
     cCcS::Dt();
+
+    #if DEBUG
+    mDoHIO_DELETE_CHILD(s_Hio.id);
+    dJntCol_deleteDebugHIO();
+    #endif
 }
 
 bool dCcS::ChkShieldFrontRange(cCcD_Obj* i_atObj, cCcD_Obj* i_tgObj, int param_2,
@@ -110,11 +216,11 @@ void dCcS::CalcTgPlusDmg(cCcD_Obj* i_atObj, cCcD_Obj* i_tgObj, cCcD_Stts* i_atSt
 bool dCcS::ChkAtTgHitAfterCross(bool i_setAt, bool i_setTg, cCcD_GObjInf const* i_atObjInf,
                                 cCcD_GObjInf const* i_tgObjInf, cCcD_Stts* i_atStts,
                                 cCcD_Stts* i_tgStts, cCcD_GStts* i_atGStts, cCcD_GStts* i_tgGStts) {
-    dCcD_GObjInf* atObjInf = (dCcD_GObjInf*)i_atObjInf;
-    dCcD_GObjInf* tgObjInf = (dCcD_GObjInf*)i_tgObjInf;
-
     fpc_ProcID tgApid = i_atStts->GetApid();
     fpc_ProcID atApid = i_tgStts->GetApid();
+    
+    dCcD_GObjInf* atObjInf = (dCcD_GObjInf*)i_atObjInf;
+    dCcD_GObjInf* tgObjInf = (dCcD_GObjInf*)i_tgObjInf;
 
     if (i_setAt) {
         static_cast<dCcD_GStts*>(i_atGStts)->SetAtApid(atApid);
@@ -269,9 +375,10 @@ void dCcS::SetPosCorrect(cCcD_Obj* i_co1Obj, cXyz* i_pos1, cCcD_Obj* i_co2Obj, c
     int co1_rank = GetRank(i_co1Obj->GetStts()->GetWeightUc());
     int co2_rank = GetRank(i_co2Obj->GetStts()->GetWeightUc());
     u8 rank = rank_tbl[co1_rank][co2_rank];
+    u8 var_r22 = 100 - rank;
 
     f32 fvar1 = rank * 0.01f;
-    f32 fvar2 = (u8)(100 - rank) * 0.01f;
+    f32 fvar2 = var_r22 * 0.01f;
 
     cXyz co1_move;
     cXyz co2_move;
@@ -279,8 +386,8 @@ void dCcS::SetPosCorrect(cCcD_Obj* i_co1Obj, cXyz* i_pos1, cCcD_Obj* i_co2Obj, c
 
     f32 fvar14;
     if (bvar2) {
-        VECSubtract(i_pos2, i_pos1, &local_c8);
-        fvar14 = VECMag(&local_c8);
+        PSVECSubtract(i_pos2, i_pos1, &local_c8);
+        fvar14 = PSVECMag(&local_c8);
     } else {
         local_c8.x = i_pos2->x - i_pos1->x;
         local_c8.y = 0.0f;
@@ -290,14 +397,15 @@ void dCcS::SetPosCorrect(cCcD_Obj* i_co1Obj, cXyz* i_pos1, cCcD_Obj* i_co2Obj, c
 
     if (!cM3d_IsZero(fvar14)) {
         if (bvar2) {
-            VECScale(&local_c8, &local_c8, i_cross_len / fvar14);
+            f32 var_f26 = i_cross_len / fvar14;
+            PSVECScale(&local_c8, &local_c8, var_f26);
             fvar1 *= -1.0f;
-            VECScale(&local_c8, &co1_move, fvar1);
-            VECScale(&local_c8, &co2_move, fvar2);
+            PSVECScale(&local_c8, &co1_move, fvar1);
+            PSVECScale(&local_c8, &co2_move, fvar2);
         } else {
-            fvar14 = i_cross_len / fvar14;
-            local_c8.x *= fvar14;
-            local_c8.z *= fvar14;
+            f32 var_f27 = i_cross_len / fvar14;
+            local_c8.x *= var_f27;
+            local_c8.z *= var_f27;
 
             co1_move.x = -local_c8.x * fvar1;
             co1_move.y = 0.0f;
@@ -332,27 +440,25 @@ void dCcS::CalcParticleAngle(dCcD_GObjInf* i_atObjInf, cCcD_Stts* i_atStts, cCcD
                              csXyz* o_angle) {
     cXyz vec(*i_atObjInf->GetAtVecP());
 
-    if (cM3d_IsZero(VECMag(&vec))) {
+    if (cM3d_IsZero(PSVECMag(&vec))) {
         fopAc_ac_c* atActor = i_atStts->GetActor();
         fopAc_ac_c* tgActor = i_tgStts->GetActor();
 
         if (atActor == NULL || tgActor == NULL) {
-            vec.z = 0.0f;
-            vec.x = 0.0f;
+            vec.x = vec.z = 0.0f;
             vec.y = -1.0f;
         } else {
-            VECSubtract(&tgActor->current.pos, &atActor->current.pos, &vec);
+            PSVECSubtract(&tgActor->current.pos, &atActor->current.pos, &vec);
 
-            if (cM3d_IsZero(VECMag(&vec))) {
-                vec.z = 0.0f;
-                vec.x = 0.0f;
+            if (cM3d_IsZero(PSVECMag(&vec))) {
+                vec.x = vec.z = 0.0f;
                 vec.y = -1.0f;
             } else {
-                VECNormalize(&vec, &vec);
+                PSVECNormalize(&vec, &vec);
             }
         }
     } else {
-        VECNormalize(&vec, &vec);
+        PSVECNormalize(&vec, &vec);
     }
 
     cM3d_CalcVecZAngle(vec, o_angle);
@@ -441,9 +547,9 @@ void dCcS::SetAtTgGObjInf(bool i_setAt, bool i_setTg, cCcD_Obj* i_atObj, cCcD_Ob
 
         atObjInf->SetAtHitApid(i_tgStts->GetApid());
 
-        if (chk_shield || tgObjInf->GetTgHitMark() == 8 && atObjInf->GetAtMtrl() != dCcD_MTRL_ICE &&
+        if (chk_shield || (tgObjInf->GetTgHitMark() == 8 && atObjInf->GetAtMtrl() != dCcD_MTRL_ICE &&
                               (atObjInf->GetAtSpl() == 0 || atObjInf->GetAtSpl() == 5 ||
-                               atObjInf->GetAtSpl() == 8))
+                               atObjInf->GetAtSpl() == 8)))
         {
             atObjInf->OnAtShieldHit();
         }
@@ -466,7 +572,8 @@ void dCcS::SetAtTgGObjInf(bool i_setAt, bool i_setTg, cCcD_Obj* i_atObj, cCcD_Ob
         if (chk_shield) {
             tgObjInf->OnTgShieldHit();
         } else {
-            i_tgStts->PlusDmg(i_atObj->GetAtAtp());
+            int atp = i_atObj->GetAtAtp();
+            i_tgStts->PlusDmg(atp);
         }
 
         if (at_gstts->ChkNoActor()) {
@@ -523,9 +630,10 @@ bool dCcS::ChkCamera(cXyz& param_0, cXyz& param_1, f32 param_2, fopAc_ac_c* para
                 dCcD_GObjInf* obj = (dCcD_GObjInf*)(*i)->GetGObjInf();
 
                 if (obj == NULL || !obj->ChkCoNoCamHit()) {
-                    cCcD_ShapeAttr* shapeAttr = (*i)->GetShapeAttr();
+                    cCcD_ShapeAttr* pco_sa = (*i)->GetShapeAttr();
+                    JUT_ASSERT(1058, pco_sa != NULL);
 
-                    if (sp48.CrossCo(*shapeAttr, &sp14)) {
+                    if (sp48.CrossCo(*pco_sa, &sp14)) {
                         return true;
                     }
                 }
@@ -604,10 +712,11 @@ bool dCcS::chkCameraPoint(cXyz const& param_0, cCcD_ShapeAttr::Shape* param_1, f
                 dCcD_GObjInf* obj = (dCcD_GObjInf*)(*i)->GetGObjInf();
 
                 if (obj == NULL || !obj->ChkCoNoCamHit()) {
-                    cCcD_ShapeAttr* shapeAttr = (*i)->GetShapeAttr();
+                    cCcD_ShapeAttr* pco_sa = (*i)->GetShapeAttr();
+                    JUT_ASSERT(1196, pco_sa != NULL);
 
-                    if (sp48.CrossCo(*shapeAttr, &sp14)) {
-                        shapeAttr->getShapeAccess(param_1);
+                    if (sp48.CrossCo(*pco_sa, &sp14)) {
+                        pco_sa->getShapeAccess(param_1);
 
                         if (param_1->_0 != 2) {
                             return true;
@@ -626,12 +735,134 @@ void dCcS::MoveAfterCheck() {}
 void dCcS::DrawAfter() {}
 
 void dCcS::Move() {
+    #if DEBUG
+    if (s_Hio.ChkAllMassTimer()) {
+        OnMassAllTimer();
+    } else {
+        OffMassAllTimer();
+    }
+
+    if (s_Hio.ChkMoveOff()) {
+        return;
+    }
+
+    if (s_Hio.ChkMoveTimer()) {
+        OSStartStopwatch(&s_move_timer);
+    }
+    #endif
+
     cCcS::Move();
+
+    #if DEBUG
+    if (s_Hio.ChkMoveTimer()) {
+        OSStopStopwatch(&s_move_timer);
+        OSDumpStopwatch(&s_move_timer);
+    }
+    #endif
 }
 
 void dCcS::Draw() {
+    #if DEBUG
+    if (s_Hio.ChkMassCounter()) {
+        OS_REPORT("Mass Counter %d\n", g_mass_counter);
+        g_mass_counter = 0;
+    }
+    #endif
+
+#if TARGET_PC
+#define IMGUI_TOGGLE_HIO_FLAG(status, flag) \
+        if (status) { \
+            s_Hio.m_flags |= flag; \
+        } else { \
+            s_Hio.m_flags &= ~flag; \
+        }
+
+    dusk::ImGuiMenuTools::CollisionViewSettings collisionViewSettings = dusk::g_imguiConsole.getCollisionViewSettings();
+    IMGUI_TOGGLE_HIO_FLAG(collisionViewSettings.m_enableAtView, dCcS_HIO::FLAG_AT_ON_e);
+    IMGUI_TOGGLE_HIO_FLAG(collisionViewSettings.m_enableTgView, dCcS_HIO::FLAG_TG_ON_e);
+    IMGUI_TOGGLE_HIO_FLAG(collisionViewSettings.m_enableCoView, dCcS_HIO::FLAG_CO_ON_e);
+
+    f32 view_opacity = 255 * (collisionViewSettings.m_colliderViewOpacity / 100.0f);
+#endif
+
+    if (s_Hio.CheckAtOn()) {
+        for (int i = 0; i < field_0x280c; i++) {
+            if (mpObjAt[i] != NULL && mpObjAt[i]->ChkAtSet()) {
+                dCcD_GObjInf* gobj = (dCcD_GObjInf*)mpObjAt[i]->GetGObjInf();
+                if (gobj->ChkAtHit()) {
+                    GXColor color = {0xFF, 0, 0, 0xB4};
+                    color.a = view_opacity;
+                    mpObjAt[i]->Draw(color);
+                } else {
+                    GXColor color = {0xFF, 0, 0, 0x50};
+                    color.a = view_opacity;
+                    mpObjAt[i]->Draw(color);
+                }
+            }
+        }
+    }
+
+    if (s_Hio.CheckTgOn()) {
+        for (int i = 0; i < field_0x280e; i++) {
+            if (mpObjTg[i] != NULL && mpObjTg[i]->ChkTgSet()) {
+                dCcD_GObjInf* gobj = (dCcD_GObjInf*)mpObjTg[i]->GetGObjInf();
+                if (gobj->ChkTgHit()) {
+                    GXColor color = {0, 0xFF, 0, 0xB4};
+                    color.a = view_opacity;
+                    mpObjTg[i]->Draw(color);
+                } else {
+                    GXColor color = {0, 0xFF, 0, 0x50};
+                    color.a = view_opacity;
+                    mpObjTg[i]->Draw(color);
+                }
+            }
+        }
+    }
+
+    if (s_Hio.CheckCoOn()) {
+        for (int i = 0; i < field_0x2810; i++) {
+            if (mpObjCo[i] != NULL && mpObjCo[i]->ChkCoSet()) {
+                dCcD_GObjInf* gobj = (dCcD_GObjInf*)mpObjCo[i]->GetGObjInf();
+                if (gobj->ChkCoHit()) {
+                    GXColor color = {0xFF, 0xFF, 0xFF, 0xB4};
+                    color.a = view_opacity;
+                    mpObjCo[i]->Draw(color);
+                } else {
+                    GXColor color = {0xFF, 0xFF, 0xFF, 0x50};
+                    color.a = view_opacity;
+                    mpObjCo[i]->Draw(color);
+                }
+            }
+        }
+    }
+
+    if (s_Hio.ChkCamColDisp()) {
+        for (int i = 0; i < field_0x2810; i++) {
+            if (mpObjCo[i] != NULL && mpObjCo[i]->ChkCoSet()) {
+                dCcD_GObjInf* gobj = (dCcD_GObjInf*)mpObjCo[i]->GetGObjInf();
+                if (!gobj->ChkCoNoCamHit()) {
+                    GXColor color = {0xFF, 0xFF, 0, 0x50};
+                    mpObjCo[i]->Draw(color);
+                }
+            }
+        }
+    }
+
+    #if DEBUG
+    if (s_Hio.ChkCounter()) {
+        OS_REPORT("At:%d,Tg:%d,Co:%d\n", field_0x280c, field_0x280e, field_0x2810);
+    }
+    #endif
+
     DrawAfter();
-    DrawClear();
+
+    #if DEBUG
+    if (!s_Hio.ChkDrawClearOff())
+    #endif
+    {
+        DrawClear();
+    }
+
     mMass_Mng.Clear();
 }
 
@@ -657,7 +888,10 @@ BOOL dCcS::ChkAtTgMtrlHit(u8 i_atMtrl, u8 i_tgMtrl) {
 }
 
 bool dCcS::ChkNoHitGAtTg(cCcD_GObjInf const* i_atObjInf, cCcD_GObjInf const* i_tgObjInf,
-                         cCcD_GStts*, cCcD_GStts*) {
+                         cCcD_GStts* i_atStts, cCcD_GStts* i_tgStts) {
+    UNUSED(i_atStts);
+    UNUSED(i_tgStts);
+
     dCcD_GObjInf* atObjInf = (dCcD_GObjInf*)i_atObjInf;
     dCcD_GObjInf* tgObjInf = (dCcD_GObjInf*)i_tgObjInf;
 

@@ -14,6 +14,24 @@
 s16 dDemo_c::m_branchId = -1;
 
 namespace {
+class jstudio_tAdaptor_message : public JStudio::TAdaptor_message {
+public:
+    typedef JStudio::TObject_message ObjectType;
+
+    jstudio_tAdaptor_message() {}
+
+    virtual ~jstudio_tAdaptor_message();
+    virtual void adaptor_do_MESSAGE(JStudio::data::TEOperationData, const void*, u32);
+};
+
+class jstudio_tCreateObject_message : public JStudio::TCreateObject {
+public:
+    jstudio_tCreateObject_message() {}
+
+    virtual ~jstudio_tCreateObject_message();
+    virtual bool create(JStudio::TObject**, const JStudio::stb::data::TParse_TBlock_object&);
+};
+
 jstudio_tAdaptor_message::~jstudio_tAdaptor_message() {}
 
 void jstudio_tAdaptor_message::adaptor_do_MESSAGE(JStudio::data::TEOperationData iType,
@@ -168,7 +186,7 @@ JStudio_JAudio2::TCreateObject* dDemo_c::m_audio;
 
 dDemo_particle_c* dDemo_c::m_particle;
 
-jstudio_tCreateObject_message* dDemo_c::m_message;
+JStudio::TCreateObject* dDemo_c::m_message;
 
 JStudio::TFactory* dDemo_c::m_factory;
 

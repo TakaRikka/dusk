@@ -227,10 +227,6 @@ void JFWDisplay::endGX() {
 }
 
 void JFWDisplay::beginRender() {
-#if TARGET_PC
-    aurora_begin_frame();
-#endif
-
     if (field_0x40) {
         JUTProcBar::getManager()->wholeLoopEnd();
     }
@@ -342,10 +338,6 @@ void JFWDisplay::endFrame() {
         JUTProcBar::getManager()->setCostFrame(retrace_cnt - prevFrame);
         prevFrame = retrace_cnt;
     }
-
-#if TARGET_PC
-    aurora_end_frame();
-#endif
 }
 
 void JFWDisplay::waitBlanking(int param_0) {

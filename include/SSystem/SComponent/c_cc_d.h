@@ -188,6 +188,7 @@ public:
     cXyz* GetCCMoveP() { return &m_cc_move; }
     fpc_ProcID GetApid() const { return m_apid; }
     u8 GetDmg() const { return m_dmg; }
+    void ClrCo() { ClrCcMove(); }
 };  // Size = 0x1C
 
 STATIC_ASSERT(0x1C == sizeof(cCcD_Stts));
@@ -213,7 +214,7 @@ public:
     void ct();
     void SetSPrm(u32 sprm) { mSPrm = sprm; }
     s32 getSPrm() const { return mSPrm; }
-    void setRPrm(s32 rprm) { mRPrm = rprm; }
+    void SetRPrm(u32 rprm) { mRPrm = rprm; }
     s32 getRPrm() const { return mRPrm; }
     cCcD_Obj* GetHitObj() { return mHitObj; }
     const cCcD_Obj* GetHitObj() const { return mHitObj; }
@@ -222,6 +223,9 @@ public:
     void OnSPrmBit(u32 flag) { mSPrm |= flag; }
     void OffSPrmBit(u32 flag) { mSPrm &= ~flag; }
     u32 ChkSPrm(u32 prm) const { return MskSPrm(prm) != 0; }
+    void SetHitObj(cCcD_Obj* pobj) { mHitObj = pobj; }
+    void ClrRPrm(u32 prm) { mRPrm &= ~prm; }
+    void ClrObj() { mHitObj = NULL; }
 
     void Set(cCcD_SrcObjCommonBase const& src) { mSPrm = src.mSPrm; }
 };
@@ -240,7 +244,7 @@ public:
     void ClrHit();
     int GetType() const { return mType; }
     u32 GetGrp() const { return MskSPrm(0x1E); }
-    bool ChkSet() const { return MskSPrm(1); }
+    BOOL ChkSet() const { return MskSPrm(1); }
     u8 GetAtp() const { return mAtp; }
     u32 MskType(u32 msk) const { return mType & msk; }
     void SetType(u32 type) { mType = type; }
@@ -269,7 +273,7 @@ public:
     int GetType() const { return mType; }
     void SetType(u32 type) { mType = type; }
     u32 GetGrp() const { return MskSPrm(0x1E); }
-    bool ChkSet() const { return MskSPrm(1); }
+    BOOL ChkSet() const { return MskSPrm(1); }
     void ClrSet() { OffSPrmBit(1); }
     u32 ChkHit() const { return MskRPrm(1); }
 
@@ -289,7 +293,7 @@ public:
     void SetIGrp(u32);
     void SetVsGrp(u32);
     u32 GetGrp() const { return MskSPrm(0x1E); }
-    bool ChkSet() const { return MskSPrm(1); }
+    BOOL ChkSet() const { return MskSPrm(1); }
     u32 GetVsGrp() const { return MskSPrm(0x70); }
     u32 GetIGrp() const { return MskSPrm(0xE); }
     u32 ChkNoCrr() const { return MskSPrm(0x100); }
@@ -323,10 +327,10 @@ public:
     u32 GetCoGrp() const { return mObjCo.GetGrp(); }
     int GetTgType() const { return mObjTg.GetType(); }
     u32 GetAtType() const { return mObjAt.GetType(); }
-    bool ChkTgSet() const { return mObjTg.ChkSet(); }
-    bool ChkAtSet() const { return mObjAt.ChkSet(); }
-    bool ChkCoSet() const { return mObjCo.ChkSet(); }
-    u32 ChkCoSameActorHit() const { return mObjCo.ChkCoSameActorHit(); }
+    BOOL ChkTgSet() const { return mObjTg.ChkSet(); }
+    BOOL ChkAtSet() const { return mObjAt.ChkSet(); }
+    BOOL ChkCoSet() const { return mObjCo.ChkSet(); }
+    u32 ChkCoSameActorHit() { return mObjCo.MskSPrm(0x400); }
     void OnCoSameActorHit() { mObjCo.OnCoSameActorHit(); }
     void OffCoSameActorHit() { mObjCo.OffCoSameActorHit(); }
     u32 GetCoVsGrp() const { return mObjCo.GetVsGrp(); }
@@ -334,8 +338,8 @@ public:
     u8 GetAtAtp() const { return mObjAt.GetAtp(); }
     u32 ChkAtNoTgHitInfSet() const { return mObjAt.MskSPrm(0x20); }
     u32 ChkTgNoAtHitInfSet() const { return mObjTg.MskSPrm(0x20); }
-    u32 ChkCoNoCoHitInfSet() const { return mObjCo.MskSPrm(0x200); }
-    bool ChkTgNoSlingHitInfSet() const { return mObjTg.MskSPrm(0x40); }
+    u32 ChkCoNoCoHitInfSet() { return mObjCo.MskSPrm(0x200); }
+    BOOL ChkTgNoSlingHitInfSet() { return mObjTg.MskSPrm(0x40); }
     void SetAtHit(cCcD_Obj* obj) { mObjAt.SetHit(obj); }
     void SetTgHit(cCcD_Obj* obj) { mObjTg.SetHit(obj); }
     void SetCoHit(cCcD_Obj* obj) { mObjCo.SetHit(obj); }
@@ -430,7 +434,6 @@ public:
     /* vt[21]*/ virtual void getShapeAccess(cCcD_ShapeAttr::Shape*) const;
 
     cM3dGAab& GetWorkAab() { return mAab; }
-    cM3dGAab const& GetWorkAab() const { return mAab; }
 
     static cXyz m_virtual_center;
 };
@@ -456,7 +459,7 @@ public:
     void SetStts(cCcD_Stts* stts) { mStts = stts; }
     cCcD_DivideInfo& GetDivideInfo() { return mDivideInfo; }
     cCcD_DivideInfo* GetPDivideInfo() { return &mDivideInfo; }
-    int ChkBsRevHit() const { return mFlags & 2; }
+    int ChkBsRevHit() { return mFlags & 2; }
 
 private:
     /* 0x040 */ int mFlags;

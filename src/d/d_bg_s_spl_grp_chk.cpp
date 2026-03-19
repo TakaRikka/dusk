@@ -10,6 +10,17 @@
 void dBgS_SplGrpChk::Set(cXyz& ground, f32 roof) {
     m_ground = ground;
     m_roof = roof;
+
+    JUT_ASSERT(23, !isnan(m_ground.x));
+    JUT_ASSERT(24, !isnan(m_ground.y));
+    JUT_ASSERT(25, !isnan(m_ground.z));
+
+    JUT_ASSERT(29, -INF < m_ground.x && m_ground.x < INF);
+    JUT_ASSERT(30, -INF < m_ground.y && m_ground.y < INF);
+    JUT_ASSERT(31, -INF < m_ground.z && m_ground.z < INF);
+
+    JUT_ASSERT(33, !isnan(m_roof));
+    JUT_ASSERT(34, -INF < m_roof && m_roof < INF);
 }
 
 dBgS_SplGrpChk::dBgS_SplGrpChk() {

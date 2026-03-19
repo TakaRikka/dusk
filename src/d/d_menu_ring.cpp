@@ -1507,6 +1507,8 @@ void dMenu_Ring_c::setSelectItem(int i_idx, u8 i_itemNo) {
         } else {
             field_0x6be[i_idx] = 0;
         }
+        // !@bug Out-of-bounds access into mpSelectItemTexBuf
+        //       (innermost dimension is 2, we take index 2 which is invalid)
         field_0x686[i_idx] = dMeter2Info_readItemTexture(
             i_itemNo, mpSelectItemTexBuf[i_idx][field_0x6be[i_idx]][0], mpSelectItemTex[i_idx][0],
             mpSelectItemTexBuf[i_idx][field_0x6be[i_idx]][1], mpSelectItemTex[i_idx][1],

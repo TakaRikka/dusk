@@ -133,7 +133,7 @@ static const float INF = 2000000000.0f;
 #define NO_INLINE
 #endif
 #endif
-    
+
 // Hack to trick the compiler into not inlining functions that use this macro.
 #define FORCE_DONT_INLINE \
     (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; \
@@ -201,6 +201,17 @@ static const float INF = 2000000000.0f;
 #ifndef __MWERKS__
 #include <cmath>
 using std::isnan;
+#endif
+
+// Comparing a non-volatile reference type to NULL is tautological
+// and triggers a warning on modern compilers, but in some cases is
+// required to match the original assembly.
+#if defined(__MWERKS__) || defined(DECOMPCTX)
+#define IS_REF_NULL(r) (&(r) == NULL)
+#define IS_REF_NONNULL(r) (&(r) != NULL)
+#else
+#define IS_REF_NULL(r) (0)
+#define IS_REF_NONNULL(r) (1)
 #endif
 
 #define CRASH(msg, ...) OSPanic(__FILE__, __LINE__, msg, __VA_ARGS__)

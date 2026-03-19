@@ -56,21 +56,21 @@ void J3DClusterLoader_v15::readCluster(const J3DClusterBlock* block) {
     mpDeformData->mVtxNrmNum = block->mVtxNrmNum;
     mpDeformData->mClusterVertexNum = block->mClusterVertexNum;
 
-    if (block->mClusterName != NULL) {
+    if ((uintptr_t)block->mClusterName != (uintptr_t)NULL) {
         mpDeformData->mClusterName =
             JKR_NEW JUTNameTab(JSUConvertOffsetToPtr<ResNTAB>(block, block->mClusterName));
     } else {
         mpDeformData->mClusterName = NULL;
     }
-    if (block->mClusterKeyName != NULL) {
+    if ((uintptr_t)block->mClusterKeyName != (uintptr_t)NULL) {
         mpDeformData->mClusterKeyName =
             JKR_NEW JUTNameTab(JSUConvertOffsetToPtr<ResNTAB>(block, block->mClusterKeyName));
     } else {
         mpDeformData->mClusterKeyName = NULL;
     }
 
-    mpDeformData->mVtxPos = JSUConvertOffsetToPtr<f32>(block, block->mVtxPos);
-    mpDeformData->mVtxNrm = JSUConvertOffsetToPtr<f32>(block, block->mVtxNrm);
+    mpDeformData->mVtxPos = JSUConvertOffsetToPtr<BE(f32)>(block, block->mVtxPos);
+    mpDeformData->mVtxNrm = JSUConvertOffsetToPtr<BE(f32)>(block, block->mVtxNrm);
 
     intptr_t clusterPointer = (intptr_t) block->mClusterPointer;
     int clusterKeyPointerSize = (intptr_t)block->mClusterKeyPointer - (intptr_t)block->mClusterPointer;

@@ -244,6 +244,9 @@ cPhs_Step daNpcTheB_c::create() {
             return cPhs_ERROR_e;
         }
 
+        // !@bug The return value (an s16) is promoted to a 32-bit signed
+        //       integer prior to being compared, so the compared value can
+        //       never exceed SHORT_MAX and the condition always passes.
         if (getMessageNo() != 0xFFFF) {
             mMsgNo = getMessageNo();
         } else {

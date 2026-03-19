@@ -437,11 +437,11 @@ inline void fopAcM_SetAngle(fopAc_ac_c* i_actor, s16 x, s16 y, s16 z) {
     i_actor->current.angle.set(x, y, z);
 }
 
-inline void dComIfGs_onSwitch(int i_no, int i_roomNo);
-inline void dComIfGs_offSwitch(int i_no, int i_roomNo);
-inline void dComIfGs_revSwitch(int i_no, int i_roomNo);
-inline BOOL dComIfGs_isSwitch(int i_no, int i_roomNo);
-inline void dComIfGs_offActor(int i_no, int i_roomNo);
+void dComIfGs_onSwitch(int i_no, int i_roomNo);
+void dComIfGs_offSwitch(int i_no, int i_roomNo);
+void dComIfGs_revSwitch(int i_no, int i_roomNo);
+BOOL dComIfGs_isSwitch(int i_no, int i_roomNo);
+void dComIfGs_offActor(int i_no, int i_roomNo);
 
 inline void fopAcM_onSwitch(const fopAc_ac_c* i_actor, int sw) {
     return dComIfGs_onSwitch(sw, fopAcM_GetHomeRoomNo(i_actor));
@@ -463,12 +463,12 @@ inline fopAc_ac_c* fopAcM_SearchByName(s16 proc_id) {
     return (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeForPName, &proc_id);
 }
 
-inline void dComIfGs_onItem(int bitNo, int roomNo);
+void dComIfGs_onItem(int bitNo, int roomNo);
 inline void fopAcM_onItem(const fopAc_ac_c* item, int bitNo) {
     dComIfGs_onItem(bitNo, fopAcM_GetHomeRoomNo(item));
 }
 
-inline bool dComIfGs_isItem(int bitNo, int roomNo);
+bool dComIfGs_isItem(int bitNo, int roomNo);
 inline bool fopAcM_isItem(const fopAc_ac_c* item, int bitNo) {
     return dComIfGs_isItem(bitNo, fopAcM_GetHomeRoomNo(item));
 }
@@ -481,7 +481,7 @@ inline int fopAcM_GetSetId(const fopAc_ac_c* i_actor) {
     return i_actor->setID;
 }
 
-inline void dComIfGs_onActor(int bitNo, int roomNo);
+void dComIfGs_onActor(int bitNo, int roomNo);
 
 inline void fopAcM_onActor(const fopAc_ac_c* i_actor) {
     dComIfGs_onActor(fopAcM_GetSetId(i_actor), fopAcM_GetHomeRoomNo(i_actor));
@@ -716,7 +716,7 @@ inline void make_prm_warp_hole(u32* o_params, u8 prm1, u8 prm2, u8 prm3) {
     *o_params = pprm2 | pprm3 | pprm1;
 }
 
-inline fopAc_ac_c* dComIfGp_getPlayer(int);
+fopAc_ac_c* dComIfGp_getPlayer(int);
 
 inline s16 fopAcM_searchPlayerAngleY(const fopAc_ac_c* actor) {
     return fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0));

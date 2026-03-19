@@ -13,7 +13,7 @@ class cBgS_ChkElm {
 public:
     /* 0x00 */ dBgW_Base* m_bgw_base_ptr;
     /* 0x04 */ bool m_used;
-    /* 0x08 */ u32 m_actor_id;
+    /* 0x08 */ fpc_ProcID m_actor_id;
     /* 0x0C */ fopAc_ac_c* m_actor_ptr;
     /* 0x10 vtable */
 
@@ -50,6 +50,7 @@ public:
     bool GetTriPnt(cBgS_PolyInfo const&, cXyz*, cXyz*, cXyz*) const;
     void ShdwDraw(cBgS_ShdwDraw*);
     u32 GetGrpInf(cBgS_PolyInfo const&) const;
+    void Draw();
 
     virtual ~cBgS() {}
     virtual void Ct();
@@ -66,41 +67,121 @@ u8 dKy_pol_sound_get(cBgS_PolyInfo const* param_0);
 
 class dBgS_HIO : public JORReflexible {
 public:
-#if DEBUG
+    enum flags_e {
+        FLAG_ACCH_WALL_OFF_e   = 0x2,
+        FLAG_CHECK_COUNTER_e   = 0x4,
+        FLAG_ACCH_WALL_TIMER_e = 0x8,
+        FLAG_OBJ_LINE_CHECK_e  = 0x10,
+        FLAG_ACCH_DRAW_WALL_e  = 0x400,
+        FLAG_ROOF_TIMER_e      = 0x2000,
+        FLAG_ROOF_OFF_e        = 0x4000,
+
+        FLAG2_GND_CHK_e            = 0x1,
+        FLAG2_SHAPE_DISP_e         = 0x2,
+        FLAG2_GROUND_CHECK_TIMER_e = 0x4,
+        FLAG2_SPL_OFF_e            = 0x8,
+        FLAG2_SPL_TIMER_e          = 0x10,
+        FLAG2_LINE_OFF_e           = 0x40,
+        FLAG2_LINE_TIMER_e         = 0x80,
+        FLAG2_SHDW_DRAW_OFF_e      = 0x100,
+        FLAG2_SHDW_DRAW_TIMER_e    = 0x200,
+        FLAG2_CAPTPOLY_OFF_e       = 0x800,
+        FLAG2_CAPTPOLY_TIMER_e     = 0x1000,
+        FLAG2_SPH_CHK_OFF_e        = 0x2000,
+        FLAG2_SPH_CHK_TIMER_e      = 0x4000,
+    };
+
     dBgS_HIO() {
-        field_0x6 = 0;
-        field_0x8 = 0;
+        m_flags = 0;
+        m_flags2 = 0;
 
-        field_0xc.x = field_0xc.y = field_0xc.z = 0.0f;
-        field_0x18.x = field_0x18.y = field_0x18.z = 0.0f;
-        field_0x24.x = field_0x24.y = field_0x24.z = 0.0f;
+        m_linecheck_start.x = m_linecheck_start.y = m_linecheck_start.z = 0.0f;
+        m_linecheck_end.x = m_linecheck_end.y = m_linecheck_end.z = 0.0f;
+        m_gndcheck_pos.x = m_gndcheck_pos.y = m_gndcheck_pos.z = 0.0f;
 
-        field_0x30 = -1;
+        m_errorCheck_actor_num = -1;
     }
 
     virtual void genMessage(JORMContext*);
-    virtual ~dBgS_HIO();
+    virtual ~dBgS_HIO() {}
 
-    BOOL ChkLineOff();
-    BOOL ChkCheckCounter();
-    BOOL ChkLineTimer();
-    BOOL ChkGroundCheckTimer();
+    bool ChkLineOff() { return m_flags2 & FLAG2_LINE_OFF_e; }
+    bool ChkCheckCounter() { return m_flags & FLAG_CHECK_COUNTER_e; }
+    bool ChkLineTimer() { return m_flags2 & FLAG2_LINE_TIMER_e; }
+    bool ChkGroundCheckTimer() { return m_flags2 & FLAG2_GROUND_CHECK_TIMER_e; }
+    bool ChkObjLineCheck() { return m_flags & FLAG_OBJ_LINE_CHECK_e; }
+    bool ChkGndCheck() { return m_flags2 & FLAG2_GND_CHK_e; }
+    bool ChkCaptPolyTimer() { return m_flags2 & FLAG2_CAPTPOLY_TIMER_e; }
+    bool ChkCaptPolyOff() { return m_flags2 & FLAG2_CAPTPOLY_OFF_e; }
+    bool ChkShdwDrawOff() { return m_flags2 & FLAG2_SHDW_DRAW_OFF_e; }
+    bool ChkShdwDrawTimer() { return m_flags2 & FLAG2_SHDW_DRAW_TIMER_e; }
+    bool ChkAcchWallOff() { return m_flags & FLAG_ACCH_WALL_OFF_e; }
+    bool ChkAcchWallTimer() { return m_flags & FLAG_ACCH_WALL_TIMER_e; }
+    bool ChkRoofTimer() { return m_flags & FLAG_ROOF_TIMER_e; }
+    bool ChkRoofOff() { return m_flags & FLAG_ROOF_OFF_e; }
+    bool ChkSplOff() { return m_flags2 & FLAG2_SPL_OFF_e; }
+    bool ChkSplTimer() { return m_flags2 & FLAG2_SPL_TIMER_e; }
+    bool ChkSphChkOff() { return m_flags2 & FLAG2_SPH_CHK_OFF_e; }
+    bool ChkSphChkTimer() { return m_flags2 & FLAG2_SPH_CHK_TIMER_e; }
+    bool ChkShapeDisp() { return m_flags2 & FLAG2_SHAPE_DISP_e; }
+    bool ChkAcchDrawWall() { return m_flags & FLAG_ACCH_DRAW_WALL_e; }
 
-    /* 0x04 */ u8 field_0x4[0x6 - 0x4];
-    /* 0x06 */ u16 field_0x6;
-    /* 0x08 */ u16 field_0x8;
-    /* 0x0C */ cXyz field_0xc;
-    /* 0x18 */ cXyz field_0x18;
-    /* 0x24 */ cXyz field_0x24;
-    /* 0x30 */ int field_0x30;
-#endif
+    /* 0x04 */ s8 id;
+    /* 0x06 */ u16 m_flags;
+    /* 0x08 */ u16 m_flags2;
+    /* 0x0C */ cXyz m_linecheck_start;
+    /* 0x18 */ cXyz m_linecheck_end;
+    /* 0x24 */ cXyz m_gndcheck_pos;
+    /* 0x30 */ s32 m_errorCheck_actor_num;
 };
 
-extern int g_line_counter;
-extern OSStopwatch s_line_sw;
+class dBgS_InsideHIO : public JORReflexible {
+public:
+    enum flags_e {
+        FLAG_DISP_POLY_e           = 0x1,
+        FLAG_DISP_DP_AREA_e        = 0x2,
+        FLAG_WHITE_WIRE_e          = 0x4,
+        FLAG_PLAYER_AROUND_e       = 0x8,
+        FLAG_DISP_WATER_POLY_e     = 0x10,
+        FLAG_GROUND_OFF_e          = 0x20,
+        FLAG_WALL_OFF_e            = 0x40,
+        FLAG_ROOF_OFF_e            = 0x80,
+        FLAG_GNDCHK_PLAYER_UNDER_e = 0x100,
+    };
 
-extern int g_ground_counter;
-extern OSStopwatch s_ground_sw;
+    dBgS_InsideHIO() {
+        m_flags = FLAG_PLAYER_AROUND_e;
+
+        m_raise_amount = 1.0f;
+
+        m_p0.x = 100.0f;
+        m_p0.y = 0.0f;
+        m_p0.z = 0.0f;
+
+        m_p1.x = 0.0f;
+        m_p1.y = 0.0f;
+        m_p1.z = 0.0f;
+    }
+
+    virtual void genMessage(JORMContext*);
+    virtual ~dBgS_InsideHIO();
+
+    BOOL ChkWallOff() { return m_flags & FLAG_WALL_OFF_e; }
+    BOOL ChkRoofOff() { return m_flags & FLAG_ROOF_OFF_e; }
+    BOOL ChkGroundOff() { return m_flags & FLAG_GROUND_OFF_e; }
+    BOOL ChkGndChkPlayerUnder() { return m_flags & FLAG_GNDCHK_PLAYER_UNDER_e; }
+    BOOL ChkWhiteWire() { return m_flags & FLAG_WHITE_WIRE_e; }
+    BOOL ChkDispWaterPoly() { return m_flags & FLAG_DISP_WATER_POLY_e; }
+    BOOL ChkDispDpArea() { return m_flags & FLAG_DISP_DP_AREA_e; }
+    BOOL ChkPlayerAround() { return m_flags & FLAG_PLAYER_AROUND_e; }
+    BOOL ChkDispPoly() { return m_flags & FLAG_DISP_POLY_e; }
+
+    /* 0x04 */ s8 id;
+    /* 0x06 */ u16 m_flags;
+    /* 0x08 */ f32 m_raise_amount;
+    /* 0x0C */ cXyz m_p0;
+    /* 0x18 */ cXyz m_p1;
+};
 
 class dBgS : public cBgS {
 public:
@@ -149,58 +230,32 @@ public:
 
     bool WaterChk(dBgS_SplGrpChk* chk) { return SplGrpChk(chk); }
     u32 GetMtrlSndId(const cBgS_PolyInfo& param_0) { return dKy_pol_sound_get(&param_0); }
-    void DebugDrawPoly(dBgW_Base *param_1) {}
-    void DebugDrawPoly(dBgW_Base const& param_1) {}
     void DrawPoly(cBgS_PolyInfo const& param_0, GXColor const& param_1);
     fopAc_ac_c* GetActorPointer(cBgS_PolyInfo const& param_0) const { return cBgS::GetActorPointer(param_0); }
+    
+    void DebugDrawPoly(const dBgW_Base& param_1);
+
+    #if DEBUG
+    bool LineCross(cBgS_LinChk* i_linChk);
+    f32 GroundCross(cBgS_GndChk* i_gndChk);
+    void ShdwDraw(cBgS_ShdwDraw*);
+    #else
     bool LineCross(cBgS_LinChk* i_linChk) {
-        #if DEBUG
-        if (m_hio.ChkLineOff()) {
-            return false;
-        }
-        if (m_hio.ChkCheckCounter()) {
-            g_line_counter++;
-        }
-        if (m_hio.ChkLineTimer()) {
-            OSStartStopwatch(&s_line_sw);
-        }
-        bool rt = cBgS::LineCross(i_linChk);
-        if (m_hio.ChkLineTimer()) {
-            OSStopStopwatch(&s_line_sw);
-            OSDumpStopwatch(&s_line_sw);
-        }
-        return rt;
-        #else
         return cBgS::LineCross(i_linChk);
-        #endif
     }
+
     f32 GroundCross(cBgS_GndChk* i_gndChk) {
-        #if DEBUG
-        if (m_hio.ChkCheckCounter()) {
-            g_ground_counter++;
-        }
-        if (m_hio.ChkGroundCheckTimer()) {
-            OSStartStopwatch(&s_ground_sw);
-        }
-        f32 rt = cBgS::GroundCross(i_gndChk);
-        if (m_hio.ChkGroundCheckTimer()) {
-            OSStopStopwatch(&s_ground_sw);
-            OSDumpStopwatch(&s_ground_sw);
-        }
-        return rt;
-        #else
         return cBgS::GroundCross(i_gndChk);
-        #endif
     }
+    #endif
 
     void ChkDeleteActorRegist(fopAc_ac_c*);
 
     void Draw();
+    void CaptPoly(dBgS_CaptPoly&);
 
-#if DEBUG
     /* 0x1404 */ u8 field_0x1404[0x1408 - 0x1404];
     /* 0x1408 */ dBgS_HIO m_hio;
-#endif
 };  // Size: 0x1404
 
 bool dBgS_CheckBGroundPoly(cBgS_PolyInfo const&);

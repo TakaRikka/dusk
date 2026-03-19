@@ -1260,7 +1260,7 @@ JPABaseShape::JPABaseShape(u8 const* pData, JKRHeap* pHeap) {
     }
 
     if (isTexAnm()) {
-        JUT_ASSERT(1698, pBsd->texAnmKeyNum != NULL);
+        JUT_ASSERT(1698, pBsd->texAnmKeyNum != 0);
         u32 offs = sizeof(JPABaseShapeData);
         if (isTexCrdAnm()) {
             offs += 0x28;
@@ -1271,7 +1271,7 @@ JPABaseShape::JPABaseShape(u8 const* pData, JKRHeap* pHeap) {
     }
 
     if (isPrmAnm()) {
-        JUT_ASSERT(1707, pBsd->prmAnmKeyNum != NULL);
+        JUT_ASSERT(1707, pBsd->prmAnmKeyNum != 0);
         JPAClrAnmKeyData* anmKeyData = (JPAClrAnmKeyData*)(pData + pBsd->mClrPrmAnmOffset);
         makeColorTable(&mpPrmClrAnmTbl, anmKeyData,
                        pBsd->prmAnmKeyNum, pBsd->mClrAnmFrmMax, pHeap);
@@ -1280,7 +1280,7 @@ JPABaseShape::JPABaseShape(u8 const* pData, JKRHeap* pHeap) {
     }
 
     if (isEnvAnm()) {
-        JUT_ASSERT(1716, pBsd->envAnmKeyNum != NULL);
+        JUT_ASSERT(1716, pBsd->envAnmKeyNum != 0);
         JPAClrAnmKeyData* anmKeyData = (JPAClrAnmKeyData*)(pData + pBsd->mClrEnvAnmOffset);
         makeColorTable(&mpEnvClrAnmTbl, anmKeyData,
                        pBsd->envAnmKeyNum, pBsd->mClrAnmFrmMax, pHeap);
