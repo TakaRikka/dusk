@@ -9,6 +9,7 @@
 
 #include "Adpcm.hpp"
 #include "JSystem/JAudio2/JASDriverIF.h"
+#include "dusk/endian.h"
 #include "global.h"
 
 using namespace dusk::audio;
