@@ -470,7 +470,7 @@ void JASChannel::updateMixer(f32 i_volume, f32 i_pan, f32 i_fxmix, f32 i_dolby, 
                 case 6:
                     volume *= scale;
                     break;
-                default:
+                default: // 0, 1, 4, 5, 8-15
                     if (JASDriver::getOutputMode() == JAS_OUTPUT_MONO) {
                         volume *= scale;
                     } else {
