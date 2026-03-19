@@ -69,8 +69,8 @@ void J3DClusterLoader_v15::readCluster(const J3DClusterBlock* block) {
         mpDeformData->mClusterKeyName = NULL;
     }
 
-    mpDeformData->mVtxPos = JSUConvertOffsetToPtr<f32>(block, block->mVtxPos);
-    mpDeformData->mVtxNrm = JSUConvertOffsetToPtr<f32>(block, block->mVtxNrm);
+    mpDeformData->mVtxPos = JSUConvertOffsetToPtr<BE(f32)>(block, block->mVtxPos);
+    mpDeformData->mVtxNrm = JSUConvertOffsetToPtr<BE(f32)>(block, block->mVtxNrm);
 
     intptr_t clusterPointer = (intptr_t) block->mClusterPointer;
     int clusterKeyPointerSize = (intptr_t)block->mClusterKeyPointer - (intptr_t)block->mClusterPointer;

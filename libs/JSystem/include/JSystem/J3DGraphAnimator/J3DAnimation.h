@@ -650,13 +650,13 @@ public:
  */
 class J3DAnmCluster : public J3DAnmBase {
 public:
-    J3DAnmCluster(s16 frameMax, f32* pWeight) : J3DAnmBase(frameMax) { mWeight = pWeight; }
+    J3DAnmCluster(s16 frameMax, BE(f32)* pWeight) : J3DAnmBase(frameMax) { mWeight = pWeight; }
 
     virtual ~J3DAnmCluster() {}
     virtual s32 getKind() const { return 3; }
     virtual f32 getWeight(u16) const { return 1.0f; }
 
-    /* 0x0C */ f32* mWeight;
+    /* 0x0C */ BE(f32)* mWeight;
 };  // Size: 0x10
 
 /**
