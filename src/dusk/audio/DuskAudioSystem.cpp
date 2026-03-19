@@ -16,6 +16,8 @@
 #include "DuskDsp.hpp"
 #include "JSystem/JAudio2/JASAudioThread.h"
 
+#define DUSK_DUMP_AUDIO
+
 using namespace dusk::audio;
 
 static OutputSubframe OutBuffer;
@@ -70,7 +72,7 @@ void SDLCALL GetNewAudio(
     }
 }
 
-#if 0
+#if defined(DUSK_DUMP_AUDIO)
 static std::ofstream outRaw("guh.raw", std::ios_base::out | std::ios_base::binary);
 #endif
 
@@ -86,7 +88,7 @@ int RenderNewAudioFrame() {
         JASAudioThread::snIntCount -= 1;
     }
 
-#if 0
+#if defined(DUSK_DUMP_AUDIO)
     outRaw.flush();
 #endif
 
@@ -110,11 +112,11 @@ void RenderAudioSubframe() {
     JASDriver::updateDSP();
     DspRender(OutBuffer);
 
-#if 0
-    outRaw.write((const char*)subFrame.data(), sizeof(subFrame));
-#endif
-
     InterleaveOutputData(OutBuffer, OutInterleaveBuffer);
+
+#if defined(DUSK_DUMP_AUDIO)
+    outRaw.write((const char*)OutInterleaveBuffer.data(), sizeof(OutInterleaveBuffer));
+#endif
 
     SDL_PutAudioStreamData(PlaybackStream, &OutInterleaveBuffer, sizeof(OutInterleaveBuffer));
 }
