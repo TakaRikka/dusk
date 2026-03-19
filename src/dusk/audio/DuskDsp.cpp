@@ -18,12 +18,12 @@ ChannelAuxData dusk::audio::ChannelAux[DSP_CHANNELS] = {};
 static bool ValidateChannelWaveFormat(const JASDsp::TChannel& channel) {
     if (channel.mSamplesPerBlock == AdpcmSampleCount && channel.mBytesPerBlock == Adpcm4FrameSize)
         return true;
+    if (channel.mSamplesPerBlock == 1 && channel.mBytesPerBlock == 16)
+        return true;
     /*
     if (channel.mSamplesPerBlock == AdpcmSampleCount && channel.mBytesPerBlock == Adpcm2FrameSize)
         return true;
     if (channel.mSamplesPerBlock == 1 && channel.mBytesPerBlock == 8)
-        return true;
-    if (channel.mSamplesPerBlock == 1 && channel.mBytesPerBlock == 16)
         return true;
     */
     return false;
@@ -47,6 +47,16 @@ static u32 ConvertDataLengthToSamples(const JASDsp::TChannel& channel, u32 dataL
 }
 
 static u32 ConvertSamplesToDataLength(const JASDsp::TChannel& channel, u32 samples) {
+    if (channel.mSamplesPerBlock == 1) {
+        if (channel.mBytesPerBlock == 16) {
+            return samples * 2;
+        }
+        if (channel.mBytesPerBlock == 8) {
+            return samples;
+        }
+        CRASH("Unknown format");
+    }
+
     if (samples % channel.mSamplesPerBlock != 0) {
         // Ensure we round up.
         samples += channel.mSamplesPerBlock;
@@ -120,6 +130,37 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
     }
 }
 
+static void ReadSamplesCore(
+    const JASDsp::TChannel& channel,
+    const u8* data,
+    size_t dataLength,
+    s16* pcm,
+    size_t pcmLength,
+    s16& hist1,
+    s16& hist0) {
+    if (channel.mSamplesPerBlock == 1) {
+        if (channel.mBytesPerBlock == 0x10) {
+            // PCM16
+            assert(reinterpret_cast<uintptr_t>(data) % 2 == 0 && "PCM data must be aligned");
+            assert(dataLength % 2 == 0 && "Data length must be multiple of 2");
+            assert(dataLength * 2 >= pcmLength && "Input too small!");
+
+            auto srcPcm = reinterpret_cast<const BE(s16)*>(data);
+            for (size_t i = 0; i < pcmLength; i++) {
+                pcm[i] = srcPcm[i];
+            }
+        } else {
+            CRASH("Unsupported format: PCM8");
+        }
+    } else {
+        if (channel.mBytesPerBlock == 9) {
+            Adpcm4ToPcm16(data, dataLength, pcm, pcmLength, hist1, hist0);
+        } else {
+            CRASH("Unsupported format: ADPCM2");
+        }
+    }
+}
+
 static void SDLCALL ReadChannelSamples(
     void *userdata,
     SDL_AudioStream *stream,
@@ -151,7 +192,8 @@ static void SDLCALL ReadChannelSamples(
 
     u32 renderSamples = std::min(channel.mSamplesLeft, static_cast<u32>(additional_amount));
 
-    Adpcm4ToPcm16(
+    ReadSamplesCore(
+        channel,
         aramBase + dataPosition,
         ConvertSamplesToDataLength(channel, renderSamples),
         requested,
@@ -173,7 +215,8 @@ static void SDLCALL ReadChannelSamples(
         curSamplePosition = channel.mEndSample - channel.mSamplesLeft;
         dataPosition = ConvertSamplesToDataLength(channel, curSamplePosition);
 
-        Adpcm4ToPcm16(
+        ReadSamplesCore(
+            channel,
             aramBase + dataPosition,
             ConvertSamplesToDataLength(channel, additional_amount - renderSamples),
             requested + renderSamples,
