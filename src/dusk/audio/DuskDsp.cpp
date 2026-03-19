@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <span>
 
 #include "Adpcm.hpp"
 #include "JSystem/JAudio2/JASDriverIF.h"
@@ -58,7 +59,7 @@ static u32 ConvertSamplesToDataLength(const JASDsp::TChannel& channel, u32 sampl
 static void RenderChannel(
     JASDsp::TChannel& channel,
     ChannelAuxData& channelAux,
-    DspSubframe& subframe);
+    OutputSubframe& subframe);
 
 static void ResetChannel(JASDsp::TChannel& channel, ChannelAuxData& aux) {
     channel.mSamplesLeft = channel.mEndSample - channel.mSamplePosition;
@@ -84,9 +85,7 @@ static void MixSubframe(DspSubframe& dst, const DspSubframe& src) {
     }
 }
 
-void dusk::audio::DspRender(DspSubframe& subframe) {
-    subframe.fill(0);
-
+void dusk::audio::DspRender(OutputSubframe& subframe) {
     // This cast half exists because my debugger sucks and this is an easy way to look at the data.
     auto& channels = *reinterpret_cast<std::array<JASDsp::TChannel, DSP_CHANNELS>*>(JASDsp::CH_BUF);
 
@@ -112,9 +111,12 @@ void dusk::audio::DspRender(DspSubframe& subframe) {
 
         ValidateChannel(channel);
 
-        DspSubframe channelSubframe = {};
+        OutputSubframe channelSubframe = {};
         RenderChannel(channel, channelAux, channelSubframe);
-        MixSubframe(subframe, channelSubframe);
+
+        for (int o = 0; o < subframe.channels.size(); o++) {
+            MixSubframe(subframe.channels[o], channelSubframe.channels[o]);
+        }
     }
 }
 
@@ -189,34 +191,116 @@ static void SDLCALL ReadChannelSamples(
     SDL_PutAudioStreamData(stream, requested, requestedSize);
 }
 
+constexpr u16 GetBusConnect(const OutputChannel channel) {
+    switch (channel) {
+    // TODO: This is a guess for now.
+    case OutputChannel::LEFT:
+        return 0x0D00;
+    case OutputChannel::RIGHT:
+        return 0x0D60;
+    default:
+        CRASH("Invalid output channel!");
+    }
+}
+
+static const JASDsp::OutputChannelConfig* GetOutputConfig(
+    const JASDsp::TChannel& sourceChannel,
+    OutputChannel channel) {
+
+    auto busConnect = GetBusConnect(channel);
+    for (const auto& mOutputChannel : sourceChannel.mOutputChannels) {
+        auto config = &mOutputChannel;
+        if (config->mBusConnect == busConnect) {
+            return config;
+        }
+    }
+
+    return nullptr;
+}
+
+static f32 GetVolumeForOutputChannel(
+    const JASDsp::TChannel& sourceChannel,
+    OutputChannel outputChannel) {
+
+    u16 volume;
+    f32 panValue = 1;
+    if (sourceChannel.mAutoMixerBeenSet) {
+        volume = sourceChannel.mAutoMixerVolume;
+
+        auto autoMixerPan = static_cast<f32>(sourceChannel.mAutoMixerPanDolby >> 8) / 127;
+
+        switch (outputChannel) {
+            case OutputChannel::LEFT:
+                panValue = 1 - autoMixerPan;
+                break;
+            case OutputChannel::RIGHT:
+                panValue = autoMixerPan;
+                break;
+            default:
+                CRASH("Unhandled output channel: OutputChannel");
+        }
+
+    } else {
+        auto config = GetOutputConfig(sourceChannel, outputChannel);
+        if (config == nullptr) {
+            return 0;
+        }
+
+        volume = config->mTargetVolume;
+    }
+
+    // TODO: interpolate to avoid popping.
+    f32 ratio = static_cast<f32>(volume) / static_cast<f32>(JASDriver::getChannelLevel_dsp());
+    ratio *= panValue;
+
+    return ratio;
+}
+
+static void RenderOutputChannel(
+    const JASDsp::TChannel& sourceChannel,
+    OutputChannel outputChannel,
+    const std::span<f32> inputSamples,
+    OutputSubframe& fullOutputSubframe) {
+
+    auto& outputSubframe = fullOutputSubframe[outputChannel];
+    assert(inputSamples.size() <= outputSubframe.size());
+
+    auto volume = GetVolumeForOutputChannel(sourceChannel, outputChannel);
+    if (volume == 0) {
+        return;
+    }
+
+    for (int i = 0; i < inputSamples.size(); i++) {
+        outputSubframe[i] = inputSamples[i] * volume;
+    }
+}
+
 static void RenderChannel(
     JASDsp::TChannel& channel,
     ChannelAuxData& channelAux,
-    DspSubframe& subframe) {
+    OutputSubframe& subframe) {
     if (channel.mResetFlag) {
         ResetChannel(channel, channelAux);
     }
 
-    int wantRead = static_cast<int>(subframe.size() * sizeof(subframe[0]));
+    DspSubframe audioLoadBuffer = {};
+
+    int wantRead = sizeof(audioLoadBuffer);
     auto read = SDL_GetAudioStreamData(
         channelAux.resampleStream,
-        subframe.data(),
+        &audioLoadBuffer,
         wantRead);
 
     if (read < wantRead) {
         channel.mIsFinished = true;
     }
 
-    u16 volume;
-    if (channel.mAutoMixerBeenSet) {
-        volume = channel.mAutoMixerVolume;
-    } else {
-        volume = channel.mOutputChannels[0].mTargetVolume;
-    }
-    f32 ratio = static_cast<f32>(volume) / static_cast<f32>(JASDriver::getChannelLevel_dsp());
-    for (auto& sample : subframe) {
-        sample *= ratio;
-    }
+    auto hasReadSamples = std::span(audioLoadBuffer).subspan(0, wantRead / sizeof(f32));
+
+    static_assert(OutputSubframe::NUM_CHANNELS == 2, "Keep RenderChannel in sync!");
+
+    RenderOutputChannel(channel, OutputChannel::LEFT, hasReadSamples, subframe);
+    RenderOutputChannel(channel, OutputChannel::RIGHT, hasReadSamples, subframe);
 }
 
 void dusk::audio::DspInit() {
@@ -231,13 +315,13 @@ void dusk::audio::DspInit() {
         SampleRate
     };
 
-    for (int i = 0; i < DSP_CHANNELS; i++) {
+    for (u32 i = 0; i < DSP_CHANNELS; i++) {
         auto& aux = ChannelAux[i];
         aux.resampleStream = SDL_CreateAudioStream(&srcSpec, &dstSpec);
 
         SDL_SetAudioStreamGetCallback(
             aux.resampleStream,
             ReadChannelSamples,
-            reinterpret_cast<void*>(i));
+            reinterpret_cast<void*>(static_cast<uintptr_t>(i)));
     }
 }

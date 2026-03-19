@@ -2,8 +2,10 @@
 
 #include <SDL3/SDL_init.h>
 #include <array>
+#include <cassert>
 #include <fstream>
 #include <ios>
+#include <span>
 
 #include "JSystem/JAudio2/JASAiCtrl.h"
 #include "JSystem/JAudio2/JASChannel.h"
@@ -16,7 +18,8 @@
 
 using namespace dusk::audio;
 
-static DspSubframe AllSubframeBuffers[DSP_OUTPUT_CHANNELS];
+static OutputSubframe OutBuffer;
+static std::array<f32, DSP_SUBFRAME_SIZE * OutputSubframe::NUM_CHANNELS> OutInterleaveBuffer;
 
 static SDL_AudioStream* PlaybackStream;
 
@@ -34,7 +37,7 @@ static void InitSDL3Output() {
 
     constexpr SDL_AudioSpec spec = {
         SDL_AUDIO_F32,
-        1,
+        2,
         SampleRate,
     };
     PlaybackStream = SDL_OpenAudioDeviceStream(
@@ -90,15 +93,28 @@ int RenderNewAudioFrame() {
     return static_cast<u16>(countSubframes) * DSP_SUBFRAME_SIZE;
 }
 
+static void InterleaveOutputData(const OutputSubframe& data, std::span<f32> target) {
+    assert(target.size() >= data.channels[0].size() * OutputSubframe::NUM_CHANNELS);
+
+    size_t outPos = 0;
+    for (size_t inPos = 0; inPos < data.channels[0].size(); inPos++) {
+        for (size_t channelIdx = 0; channelIdx < OutputSubframe::NUM_CHANNELS; channelIdx++) {
+            target[outPos++] = data.channels[channelIdx][inPos];
+        }
+    }
+}
+
 void RenderAudioSubframe() {
-    DspSubframe& subFrame = AllSubframeBuffers[0];
+    OutBuffer = {};
 
     JASDriver::updateDSP();
-    DspRender(subFrame);
+    DspRender(OutBuffer);
 
 #if 0
     outRaw.write((const char*)subFrame.data(), sizeof(subFrame));
 #endif
 
-    SDL_PutAudioStreamData(PlaybackStream, subFrame.data(), sizeof(subFrame));
+    InterleaveOutputData(OutBuffer, OutInterleaveBuffer);
+
+    SDL_PutAudioStreamData(PlaybackStream, &OutInterleaveBuffer, sizeof(OutInterleaveBuffer));
 }
