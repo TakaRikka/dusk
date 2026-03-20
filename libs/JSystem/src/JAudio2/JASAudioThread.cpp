@@ -66,6 +66,7 @@ class JASChannel {
 
 // NONMATCHING location of JASPoolAllocObject_MultiThreaded<JASChannel>
 void* JASAudioThread::run() {
+#if !TARGET_PC
     OSInitFastCast();
     JASDriver::initAI(DMACallback);
     JASDsp::boot(DSPCallback);
@@ -115,6 +116,9 @@ void* JASAudioThread::run() {
             JUT_PANIC(152, "AUDIO THREAD INVALID MESSAGE\n");
         }
     }
+#else
+    return 0;
+#endif
 }
 
 void JASAudioThread::DMACallback() {
@@ -128,6 +132,7 @@ void JASAudioThread::DMACallback() {
 }
 
 void JASAudioThread::DSPCallback(void*) {
+#if !TARGET_PC
     JASAudioThread* pAudioThread = getInstance();
     JUT_ASSERT(184, pAudioThread);
 	while (DSPCheckMailFromDSP() == 0) { }
@@ -144,4 +149,5 @@ void JASAudioThread::DSPCallback(void*) {
 			JASDsp::finishWork(mail);
 		}
 	}
+#endif
 }
