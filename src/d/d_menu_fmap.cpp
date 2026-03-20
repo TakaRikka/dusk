@@ -1,27 +1,28 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include "d/d_menu_fmap.h"
-#include "SSystem/SComponent/c_math.h"
+#include <cstdio>
+#include <cstring>
 #include "JSystem/JKernel/JKRAramArchive.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
-#include <cstdio>
-#include <cstring>
-#include "f_op/f_op_msg_mng.h"
+#include "SSystem/SComponent/c_math.h"
+#include "d/actor/d_a_midna.h"
+#include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
+#include "d/d_menu_fmap.h"
 #include "d/d_menu_fmap2D.h"
 #include "d/d_menu_fmap_map.h"
 #include "d/d_menu_window.h"
-#include "d/d_meter_HIO.h"
-#include "d/d_meter_map.h"
 #include "d/d_meter2_draw.h"
 #include "d/d_meter2_info.h"
+#include "d/d_meter_HIO.h"
+#include "d/d_meter_map.h"
 #include "d/d_msg_object.h"
 #include "d/d_msg_scrn_explain.h"
 #include "d/d_stage.h"
-#include "d/actor/d_a_player.h"
-#include "d/actor/d_a_midna.h"
+#include "dusk/memory.h"
+#include "f_op/f_op_msg_mng.h"
 
 static dMf_HIO_c g_fmHIO;
 
@@ -189,7 +190,7 @@ dMenu_Fmap_c::dMenu_Fmap_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
         field_0x148[i] = 0.0f;
     }
 
-    mpTalkHeap = JKRCreateExpHeap(0x32000, mpHeap, false);
+    mpTalkHeap = JKRCreateExpHeap(HEAP_SIZE(0x32000, 0x40000), mpHeap, false);
     JUT_ASSERT(359, mpTalkHeap != NULL);
     field_0x200 = 0;
     mIsWarpMap = false;

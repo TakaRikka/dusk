@@ -318,6 +318,17 @@ static int dEvDt_Next_Stage(int i_staffId, int i_wipe) {
     return 1;
 }
 
+#if TARGET_PC
+void dEvDtStaff_c::StaffWorkPtrHolder::createPtr() {
+    if (m_ptr == nullptr)
+        m_ptr = (StaffWork*)JKRAllocFromHeap(mDoExt_getGameHeap(), sizeof(StaffWork), 8);
+}
+void dEvDtStaff_c::StaffWorkPtrHolder::deletePtr() {
+    delete m_ptr;
+    m_ptr = nullptr;
+}
+#endif
+
 BOOL dEvDtFlag_c::flagCheck(int flag) {
     if (flagMaxCheck(flag)) {
         return FALSE;
@@ -527,7 +538,12 @@ void dEvDtStaff_c::specialProcLight() {
 
 void dEvDtStaff_c::specialProcMessage() {
     MessageData* data = (MessageData*)&mData;
+#if TARGET_PC
+    StaffWorkPtrHolder& wk = *(StaffWorkPtrHolder*)&mWork;
+    wk.createPtr();
+#else
     StaffWork* wk = (StaffWork*)&mWork;
+#endif
 
     int staffId = dComIfGp_evmng_getMyStaffId("MESSAGE", NULL, 0);
     if (staffId == -1) {
