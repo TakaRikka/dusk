@@ -15,6 +15,8 @@
 #include "SSystem/SComponent/c_counter.h"
 #include <cstring>
 
+#include "JSystem/JKernel/JKRExpHeap.h"
+
 inline BOOL dEvDtFlagCheck(int i_flag) {
     return dComIfGp_getEventManager().getFlags().flagCheck(i_flag);
 }
