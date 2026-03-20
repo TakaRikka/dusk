@@ -16,7 +16,7 @@
 #include "DuskDsp.hpp"
 #include "JSystem/JAudio2/JASAudioThread.h"
 
-#define DUSK_DUMP_AUDIO
+// #define DUSK_DUMP_AUDIO
 
 using namespace dusk::audio;
 
@@ -25,13 +25,25 @@ static std::array<f32, DSP_SUBFRAME_SIZE * OutputSubframe::NUM_CHANNELS> OutInte
 
 static SDL_AudioStream* PlaybackStream;
 
+/**
+ * SDL audiostream callback to trigger rendering of new audio data.
+ */
 static void SDLCALL GetNewAudio(
-    void *userdata,
-    SDL_AudioStream *stream,
-    int additional_amount,
-    int total_amount);
+    void*,
+    SDL_AudioStream*,
+    int needed,
+    int);
 
+/**
+ * Render an entire new frame of audio and output it to SDL3.
+ * Note: "audio frames" are unrelated to video frames.
+ * @return Amount of audio samples rendered.
+ */
 static int RenderNewAudioFrame();
+
+/**
+ * Render an audio subframe and output it to SDL3.
+ */
 static void RenderAudioSubframe();
 
 static void InitSDL3Output() {

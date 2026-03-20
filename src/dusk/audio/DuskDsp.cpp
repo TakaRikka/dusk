@@ -16,6 +16,9 @@ using namespace dusk::audio;
 
 ChannelAuxData dusk::audio::ChannelAux[DSP_CHANNELS] = {};
 
+/**
+ * Validate that a DSP channel's format is actually something we know how to play.
+ */
 static bool ValidateChannelWaveFormat(const JASDsp::TChannel& channel) {
     if (channel.mSamplesPerBlock == AdpcmSampleCount && channel.mBytesPerBlock == Adpcm4FrameSize)
         return true;
@@ -30,6 +33,9 @@ static bool ValidateChannelWaveFormat(const JASDsp::TChannel& channel) {
     return false;
 }
 
+/**
+ * Validate that a DSP channel is actually something we know how to play.
+ */
 static void ValidateChannel(const JASDsp::TChannel& channel) {
     if (!ValidateChannelWaveFormat(channel)) {
         CRASH(
@@ -39,39 +45,27 @@ static void ValidateChannel(const JASDsp::TChannel& channel) {
     }
 }
 
-static u32 ConvertDataLengthToSamples(const JASDsp::TChannel& channel, u32 dataLen) {
-    if (dataLen % channel.mBytesPerBlock != 0) {
-        CRASH("Indivisible data length: %d\n", dataLen);
-    }
-
-    return (dataLen / channel.mBytesPerBlock) * channel.mSamplesPerBlock;
-}
-
 static u32 ConvertSamplesToDataLength(const JASDsp::TChannel& channel, u32 samples) {
-    if (channel.mSamplesPerBlock == 1) {
-        if (channel.mBytesPerBlock == 16) {
-            return samples * 2;
-        }
-        if (channel.mBytesPerBlock == 8) {
-            return samples;
-        }
-        CRASH("Unknown format");
-    }
-
     if (samples % channel.mSamplesPerBlock != 0) {
         // Ensure we round up.
         samples += channel.mSamplesPerBlock;
         //CRASH("Indivisible sample count: %d\n", samples);
     }
 
-    return (samples / channel.mSamplesPerBlock) * channel.mBytesPerBlock;
+    return (samples / channel.mSamplesPerBlock) * BlockBytes(channel);
 }
 
+/**
+ * Render the audio data contributed by a single DSP channel. Reads & decodes new input samples.
+ */
 static void RenderChannel(
     JASDsp::TChannel& channel,
     ChannelAuxData& channelAux,
     OutputSubframe& subframe);
 
+/**
+ * Converts a pitch value on a DSP channel to a sample rate.
+ */
 constexpr static int PitchToSampleRate(u16 value) {
     return static_cast<int>(static_cast<u64>(SampleRate) * value / 4096);
 }
@@ -89,6 +83,9 @@ static void UpdateSampleRate(const JASDsp::TChannel& channel, ChannelAuxData& au
     aux.prevPitch = channel.mPitch;
 }
 
+/**
+ * Reset state for a DSP channel between independent playbacks.
+ */
 static void ResetChannel(JASDsp::TChannel& channel, ChannelAuxData& aux) {
     channel.mSamplesLeft = channel.mEndSample - channel.mSamplePosition;
 
@@ -101,6 +98,9 @@ static void ResetChannel(JASDsp::TChannel& channel, ChannelAuxData& aux) {
     channel.mResetFlag = false;
 }
 
+/**
+ * Mix subframe data from src into dst.
+ */
 static void MixSubframe(DspSubframe& dst, const DspSubframe& src) {
     for (int i = 0; i < dst.size(); i++) {
         dst[i] += src[i];
@@ -142,14 +142,16 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
     }
 }
 
-static void ReadSamplesCore(
+/**
+ * Actually decode samples from memory for the given audio channel.
+ */
+static void ReadSampleData(
     const JASDsp::TChannel& channel,
+    ChannelAuxData& aux,
     const u8* data,
     size_t dataLength,
     s16* pcm,
-    size_t pcmLength,
-    s16& hist1,
-    s16& hist0) {
+    size_t pcmLength) {
     if (channel.mSamplesPerBlock == 1) {
         if (channel.mBytesPerBlock == 0x10) {
             // PCM16
@@ -166,16 +168,62 @@ static void ReadSamplesCore(
         }
     } else {
         if (channel.mBytesPerBlock == 9) {
-            Adpcm4ToPcm16(data, dataLength, pcm, pcmLength, hist1, hist0);
+            Adpcm4ToPcm16(data, dataLength, pcm, pcmLength, aux.hist1, aux.hist0);
         } else {
             CRASH("Unsupported format: ADPCM2");
         }
     }
 }
 
+/**
+ * Read a single *contiguous* chunk of sample data from a channel,
+ * writes the samples to the channel's resampler stream.
+ *
+ * @returns Amount of samples actually read.
+ */
+static int ReadChannelSamplesChunk(
+    JASDsp::TChannel& channel,
+    ChannelAuxData& aux,
+    int desiredSamples) {
+
+    assert(desiredSamples >= 0);
+
+    auto aramBase = static_cast<u8*>(ARGetStorageAddress()) + channel.mWaveAramAddress;
+
+    // Streaming logic directly modifies mSamplesLeft.
+    // So we use that as our tracking of where we are.
+    auto curSamplePosition = channel.mEndSample - channel.mSamplesLeft;
+    assert(curSamplePosition % channel.mSamplesPerBlock == 0);
+    auto dataPosition = ConvertSamplesToDataLength(channel, curSamplePosition);
+
+    u32 renderSamples = std::min(channel.mSamplesLeft, static_cast<u32>(desiredSamples));
+
+    int renderSize = static_cast<int>(sizeof(s16) * renderSamples);
+    auto renderData = static_cast<s16*>(alloca(renderSize));
+    memset(renderData, 0, renderSize);
+
+    ReadSampleData(
+        channel,
+        aux,
+        aramBase + dataPosition,
+        ConvertSamplesToDataLength(channel, renderSamples),
+        renderData,
+        renderSamples);
+
+    channel.mSamplesLeft -= renderSamples;
+    channel.mSamplePosition += renderSamples;
+
+    SDL_PutAudioStreamData(aux.resampleStream, renderData, renderSize);
+
+    return static_cast<int>(renderSamples);
+}
+
+/**
+ * Reads new audio channels from a DSP channel and writes them to the resampler stream.
+ */
 static void SDLCALL ReadChannelSamples(
     void *userdata,
-    SDL_AudioStream *stream,
+    SDL_AudioStream*,
     int additional_amount,
     int) {
 
@@ -195,30 +243,8 @@ static void SDLCALL ReadChannelSamples(
 
     additional_amount = ALIGN_NEXT(additional_amount, channel.mSamplesPerBlock);
 
-    int requestedSize = static_cast<int>(sizeof(s16) * additional_amount);
-    auto requested = static_cast<s16*>(alloca(requestedSize));
-    memset(requested, 0, requestedSize);
-
-    auto aramBase = static_cast<u8*>(ARGetStorageAddress()) + channel.mWaveAramAddress;
-
-    // Streaming logic directly modifies mSamplesLeft.
-    // So we use that as our tracking of where we are.
-    auto curSamplePosition = channel.mEndSample - channel.mSamplesLeft;
-    auto dataPosition = ConvertSamplesToDataLength(channel, curSamplePosition);
-
-    u32 renderSamples = std::min(channel.mSamplesLeft, static_cast<u32>(additional_amount));
-
-    ReadSamplesCore(
-        channel,
-        aramBase + dataPosition,
-        ConvertSamplesToDataLength(channel, renderSamples),
-        requested,
-        renderSamples,
-        aux.hist1,
-        aux.hist0);
-
-    channel.mSamplesLeft -= renderSamples;
-    channel.mSamplePosition += renderSamples;
+    auto samplesRead = ReadChannelSamplesChunk(channel, aux, additional_amount);
+    additional_amount -= samplesRead;
 
     if (channel.mSamplesLeft == 0) {
         // Reached end of buffer.
@@ -228,28 +254,19 @@ static void SDLCALL ReadChannelSamples(
 
         channel.mSamplesLeft = channel.mEndSample - channel.mLoopStartSample;
         channel.mSamplePosition = channel.mLoopStartSample;
-        curSamplePosition = channel.mEndSample - channel.mSamplesLeft;
-        dataPosition = ConvertSamplesToDataLength(channel, curSamplePosition);
+    }
 
-        ReadSamplesCore(
-            channel,
-            aramBase + dataPosition,
-            ConvertSamplesToDataLength(channel, additional_amount - renderSamples),
-            requested + renderSamples,
-            additional_amount - renderSamples,
-            aux.hist1,
-            aux.hist0);
-
-        channel.mSamplesLeft -= (additional_amount - renderSamples);
-        channel.mSamplePosition += (additional_amount - renderSamples);
+    if (additional_amount >= 0) {
+        ReadChannelSamplesChunk(channel, aux, additional_amount);
     }
 
     channel.mAramStreamPosition = channel.mWaveAramAddress
         + ConvertSamplesToDataLength(channel, channel.mSamplePosition);
-
-    SDL_PutAudioStreamData(stream, requested, requestedSize);
 }
 
+/**
+ * Get the expected BusConnect value needed to define the given output channel in a DSP channel.
+ */
 constexpr u16 GetBusConnect(const OutputChannel channel) {
     switch (channel) {
     // TODO: This is a guess for now.
@@ -262,6 +279,10 @@ constexpr u16 GetBusConnect(const OutputChannel channel) {
     }
 }
 
+/**
+ * For a DSP channel the JASDsp::OutputChannelConfig value targeting the given output channel.
+ * Returns null if the DSP channel does not output to this output channel.
+ */
 static const JASDsp::OutputChannelConfig* GetOutputConfig(
     const JASDsp::TChannel& sourceChannel,
     OutputChannel channel) {
@@ -277,6 +298,9 @@ static const JASDsp::OutputChannelConfig* GetOutputConfig(
     return nullptr;
 }
 
+/**
+ * Get the volume that the given DSP channel should render to the given output channel at.
+ */
 static f32 GetVolumeForOutputChannel(
     const JASDsp::TChannel& sourceChannel,
     OutputChannel outputChannel) {
@@ -315,6 +339,9 @@ static f32 GetVolumeForOutputChannel(
     return ratio;
 }
 
+/**
+ * Given decoded & resampled input samples, render a DSP channel to a given output channel.
+ */
 static void RenderOutputChannel(
     const JASDsp::TChannel& sourceChannel,
     OutputChannel outputChannel,

@@ -16,6 +16,9 @@ namespace dusk::audio {
         OutputChannel_MAX
     };
 
+    /**
+     * Data stored by DSP implementation for each DSP channel.
+     */
     struct ChannelAuxData {
         s16 hist1;
         s16 hist0;
@@ -25,8 +28,14 @@ namespace dusk::audio {
 
     extern ChannelAuxData ChannelAux[DSP_CHANNELS];
 
+    /**
+     * Data storage for a single subframe and output channel's worth of samples.
+     */
     using DspSubframe = std::array<f32, DSP_SUBFRAME_SIZE>;
 
+    /**
+     * Data storage for a single subframe's worth of samples, across all output channels.
+     */
     struct OutputSubframe {
         static constexpr int NUM_CHANNELS = static_cast<int>(OutputChannel::OutputChannel_MAX);
 
@@ -38,6 +47,38 @@ namespace dusk::audio {
         }
     };
 
+    /**
+     * Initialize the DSP system, creating data storage needed for channels and such.
+     */
     void DspInit();
+
+    /**
+     * Render a subframe of audio with the current DSP state.
+     */
     void DspRender(OutputSubframe& subframe);
+
+    /**
+     * Get the amount of samples a single "block" of this channel's data has.
+     */
+    constexpr u32 BlockSamples(const JASDsp::TChannel& channel) {
+        return channel.mSamplesPerBlock;
+    }
+
+    /**
+     * Get the amount of bytes a single "block" of this channel's data has.
+     */
+    constexpr u32 BlockBytes(const JASDsp::TChannel& channel) {
+        if (channel.mSamplesPerBlock == 1) {
+            if (channel.mBytesPerBlock == 16) {
+                return 2;
+            }
+            if (channel.mBytesPerBlock == 8) {
+                return 1;
+            }
+
+            CRASH("Unknown format");
+        }
+
+        return channel.mBytesPerBlock;
+    }
 }
