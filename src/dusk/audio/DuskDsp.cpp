@@ -179,7 +179,7 @@ static void ReadSampleData(
  * Read a single *contiguous* chunk of sample data from a channel,
  * writes the samples to the channel's resampler stream.
  *
- * @returns Amount of samples actually read.
+ * @returns Amount of samples actually read. Can be greater than the amount requested.
  */
 static int ReadChannelSamplesChunk(
     JASDsp::TChannel& channel,
@@ -193,6 +193,22 @@ static int ReadChannelSamplesChunk(
     // Streaming logic directly modifies mSamplesLeft.
     // So we use that as our tracking of where we are.
     auto curSamplePosition = channel.mEndSample - channel.mSamplesLeft;
+
+    u32 skipSamples = curSamplePosition % channel.mSamplesPerBlock;
+    if (skipSamples != 0) {
+        // We need to start reading in the middle of a block. This can happen thanks to loops.
+        // So we move back to the start of the block and keep track that those samples should
+        // *not* be emitted.
+        desiredSamples += static_cast<int>(skipSamples);
+        curSamplePosition -= skipSamples;
+
+        channel.mSamplesLeft += skipSamples;
+        channel.mSamplePosition -= skipSamples;
+    }
+
+    // Pad desiredSamples so that we always leave the channel block-aligned.
+    desiredSamples = ALIGN_NEXT(desiredSamples, channel.mSamplesPerBlock);
+
     assert(curSamplePosition % channel.mSamplesPerBlock == 0);
     auto dataPosition = ConvertSamplesToDataLength(channel, curSamplePosition);
 
@@ -213,9 +229,14 @@ static int ReadChannelSamplesChunk(
     channel.mSamplesLeft -= renderSamples;
     channel.mSamplePosition += renderSamples;
 
-    SDL_PutAudioStreamData(aux.resampleStream, renderData, renderSize);
+    SDL_PutAudioStreamData(
+        aux.resampleStream,
+        renderData + skipSamples,
+        static_cast<int>(renderSize - skipSamples * sizeof(u16)));
 
-    return static_cast<int>(renderSamples);
+    assert(channel.mSamplePosition % channel.mSamplesPerBlock == 0 || channel.mSamplesLeft == 0);
+
+    return static_cast<int>(renderSamples - skipSamples);
 }
 
 /**
@@ -241,8 +262,6 @@ static void SDLCALL ReadChannelSamples(
         return;
     }
 
-    additional_amount = ALIGN_NEXT(additional_amount, channel.mSamplesPerBlock);
-
     auto samplesRead = ReadChannelSamplesChunk(channel, aux, additional_amount);
     additional_amount -= samplesRead;
 
@@ -254,6 +273,9 @@ static void SDLCALL ReadChannelSamples(
 
         channel.mSamplesLeft = channel.mEndSample - channel.mLoopStartSample;
         channel.mSamplePosition = channel.mLoopStartSample;
+
+        aux.hist1 = channel.mpPenult;
+        aux.hist0 = channel.mpLast;
     }
 
     if (additional_amount >= 0) {
