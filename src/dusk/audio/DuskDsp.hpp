@@ -6,6 +6,8 @@
 #include <cassert>
 
 #include "SDL3/SDL_audio.h"
+// ReSharper disable once CppUnusedIncludeDirective
+#include "global.h"
 
 namespace dusk::audio {
     constexpr int SampleRate = 32000;
