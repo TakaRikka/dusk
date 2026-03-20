@@ -89,7 +89,8 @@ add_library(game_debug STATIC ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES}
         src/dusk/audio/DuskDsp.hpp
         src/dusk/audio/DuskDsp.cpp
         src/dusk/audio/Adpcm.cpp
-        src/dusk/audio/Adpcm.hpp)
+        src/dusk/audio/Adpcm.hpp
+        src/dusk/audio/DspStub.cpp)
 target_compile_definitions(game_debug PRIVATE TARGET_PC AVOID_UB=1 VERSION=0 $<$<CONFIG:Debug>:DEBUG=1>)
 
 # Make these properties PUBLIC so that the regular game target also sees them.

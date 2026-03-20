@@ -507,10 +507,6 @@ set(JSYSTEM_DEBUG_FILES
         libs/JSystem/src/JAudio2/JASDSPInterface.cpp
         libs/JSystem/src/JAudio2/JASDriverIF.cpp
         libs/JSystem/src/JAudio2/JASSoundParams.cpp
-        libs/JSystem/src/JAudio2/dspproc.cpp
-        libs/JSystem/src/JAudio2/dsptask.cpp
-        libs/JSystem/src/JAudio2/osdsp.cpp
-        libs/JSystem/src/JAudio2/osdsp_task.cpp
         libs/JSystem/src/JAudio2/JAIAudible.cpp
         libs/JSystem/src/JAudio2/JAIAudience.cpp
         libs/JSystem/src/JAudio2/JAISe.cpp
