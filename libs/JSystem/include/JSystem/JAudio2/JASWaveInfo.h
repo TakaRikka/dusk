@@ -3,7 +3,7 @@
 
 #include <types.h>
 
-class JASWaveArc;
+struct JASWaveArc;
 
 #define WAVE_FORMAT_ADPCM4 0
 #define WAVE_FORMAT_ADPCM2 1
