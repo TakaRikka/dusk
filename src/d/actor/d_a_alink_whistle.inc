@@ -145,7 +145,7 @@ int daAlink_c::procGrassWhistleWaitInit(int param_0, int param_1, int param_2, s
     mProcVar2.field_0x300c = param_0;
     mProcVar3.field_0x300e = param_1;
 
-    dCam_getBody()->StartEventCamera(12, fopAcM_GetID(this), 0);
+    dCam_getBody()->StartEventCamera(12, fopAcM_GetID(this), nullptr);
     mProcVar0.field_0x3008 = 0;
     mProcVar4.field_0x3010 = 0;
     mProcVar5.field_0x3012 = 0;

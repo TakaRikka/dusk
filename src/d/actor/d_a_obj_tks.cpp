@@ -164,7 +164,7 @@ int daObjTks_c::Create() {
         field_0xde1 = 1;
 
         static const int m_cameraItemNum = 1;
-        dCam_getBody()->StartEventCamera(18, fopAcM_GetID(this), "Type", 1, &m_cameraItemNum, 0);
+        dCam_getBody()->StartEventCamera(18, fopAcM_GetID(this), "Type", 1, &m_cameraItemNum, nullptr);
     }
 
     return phase_state;

@@ -2570,7 +2570,7 @@ int daAlink_c::procHorseBottleDrinkInit(u16 i_itemNo) {
     dComIfGp_setPlayerStatus1(0, 0x2000);
 
     field_0x319c = 1;
-    dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", 1, &field_0x319c, 0);
+    dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", 1, &field_0x319c, nullptr);
     mProcVar2.field_0x300c = 0;
     return 1;
 }

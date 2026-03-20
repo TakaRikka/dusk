@@ -3967,7 +3967,7 @@ int daAlink_c::procWolfHowlDemoInit() {
         }
     }
 
-    dCam_getBody()->StartEventCamera(12, fopAcM_GetID(this), 0);
+    dCam_getBody()->StartEventCamera(12, fopAcM_GetID(this), nullptr);
     mProcVar1.field_0x300a = 0;
     mMsgClassID = fpcM_ERROR_PROCESS_ID_e;
     field_0x32cc = 0x5DD;
@@ -9206,7 +9206,7 @@ int daAlink_c::procWolfDigThroughInit(int param_0) {
             field_0x3198 = 3;
         }
 
-        dCam_getBody()->StartEventCamera(0x1E, fopAcM_GetID(this), "Type", 1, &field_0x3198, 0);
+        dCam_getBody()->StartEventCamera(0x1E, fopAcM_GetID(this), "Type", 1, &field_0x3198, nullptr);
 
         cXyz sp8(current.pos.x, 30.0f + field_0x27f4->current.pos.y, current.pos.z);
         if (fopAcM_gc_c::gndCheck(&sp8)) {
@@ -9413,7 +9413,7 @@ int daAlink_c::procWolfGetSmell() {
 
             mProcVar4.field_0x3010 = 1;
 
-            dCam_getBody()->StartEventCamera(8, fopAcM_GetID(this), 0);
+            dCam_getBody()->StartEventCamera(8, fopAcM_GetID(this), nullptr);
             field_0x2f99 = 12;
 
             if (field_0x3198 == 0xBBC) {

@@ -379,7 +379,7 @@ int daAlink_c::procBottleDrinkInit(u16 i_itemNo) {
     mProcVar0.field_0x3008 = 0;
 
     u32 id = fopAcM_GetID(this);
-    dCam_getBody()->StartEventCamera(0x12, id, "Type", 1, &field_0x3194, 0);
+    dCam_getBody()->StartEventCamera(0x12, id, "Type", 1, &field_0x3194, nullptr);
     mProcVar2.field_0x300c = 0;
     mProcVar3.field_0x300e = 0;
     return 1;
@@ -429,7 +429,7 @@ int daAlink_c::procBottleOpenInit(u16 i_itemNo) {
 
     mProcVar3.field_0x300e = 0;
 
-    dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", 1, &field_0x3194, 0);
+    dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", 1, &field_0x3194, nullptr);
     mProcVar2.field_0x300c = 0;
 
     field_0x27c8.initialize(current.pos.y + mHeight);
@@ -738,7 +738,7 @@ int daAlink_c::procBottleGetInit(BOOL param_0) {
     }
 
     u32 id = fopAcM_GetID(this);
-    dCam_getBody()->StartEventCamera(0x12, id, "Type", 1, &field_0x3194, 0);
+    dCam_getBody()->StartEventCamera(0x12, id, "Type", 1, &field_0x3194, nullptr);
 
     if (mEquipItem == dItemNo_FAIRY_DROP_e || mEquipItem == dItemNo_CHUCHU_RARE_e || mEquipItem == dItemNo_WORM_e) {
         setFaceBasicTexture(FTANM_I_BINGET);

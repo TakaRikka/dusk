@@ -3019,7 +3019,7 @@ int daAlink_c::procCoDead() {
     if (!checkNoResetFlg2(FLG2_FORCE_GAMEOVER)) {
         mProcVar3.field_0x300e++;
         if (mProcVar3.field_0x300e == 2) {
-            dCam_getBody()->StartEventCamera(9, fopAcM_GetID(this), 0);
+            dCam_getBody()->StartEventCamera(9, fopAcM_GetID(this), nullptr);
         } else if (mProcVar3.field_0x300e > 10) {
             mProcVar3.field_0x300e = 10;
         }
@@ -3330,7 +3330,7 @@ int daAlink_c::procCoFogDeadInit() {
 
     field_0x3194 = 0;
 
-    dCam_getBody()->StartEventCamera(0x13, fopAcM_GetID(this), "Type", 1, &field_0x3194, 0);
+    dCam_getBody()->StartEventCamera(0x13, fopAcM_GetID(this), "Type", 1, &field_0x3194, nullptr);
     mProcVar0.field_0x3008 = 60;
     mProcVar2.field_0x300c = 0;
     return 1;
@@ -3849,7 +3849,7 @@ int daAlink_c::procNotUseItemInit(int i_itemNo) {
     current.angle.y = shape_angle.y;
     field_0x3194 = 3;
 
-    dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", 1, &field_0x3194, 0);
+    dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", 1, &field_0x3194, nullptr);
     keepItemData();
     dComIfGp_setPlayerStatus1(0, 0x4000800);
 
