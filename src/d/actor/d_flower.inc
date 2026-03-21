@@ -510,6 +510,10 @@ dFlower_packet_c::dFlower_packet_c() {
     }
 
     m_deleteRoom = &dFlower_packet_c::deleteRoom;
+
+#if AVOID_UB
+    m_playerSwordTop.set(0, 0, 0);
+#endif
 }
 
 void dFlower_packet_c::draw() {

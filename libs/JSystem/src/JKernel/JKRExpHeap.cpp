@@ -51,6 +51,7 @@ JKRExpHeap* JKRExpHeap::createRoot(int maxHeaps, bool errorFlag) {
 #endif
         heap = JKR_NEW_ARGS (mem1) JKRExpHeap(start1, alignedSize, NULL, errorFlag);
         sRootHeap = heap;
+        JKRHEAP_NAME(sRootHeap, "Root");
     }
     heap->field_0x6e = true;
     return heap;

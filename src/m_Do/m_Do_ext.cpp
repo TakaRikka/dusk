@@ -659,6 +659,7 @@ static JKRAssertHeap* AssertHeap;
 JKRAssertHeap* mDoExt_createAssertHeap(JKRHeap* parentHeap) {
     JUT_ASSERT(1666, AssertHeap == NULL);
     AssertHeap = JKRAssertHeap::create(parentHeap);
+    JKRHEAP_NAME(AssertHeap, "Assert");
     return AssertHeap;
 }
 

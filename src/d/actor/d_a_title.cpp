@@ -138,6 +138,7 @@ int daTitle_c::create() {
 
     m2DHeap = JKRCreateExpHeap(0x8000, mDoExt_getGameHeap(), false);
     JUT_ASSERT(345, m2DHeap != NULL);
+    JKRHEAP_NAME(m2DHeap, "daTitle_c::m2DHeap");
     loadWait_init();
 
     g_daTitHIO.id = mDoHIO_CREATE_CHILD("タイトルロゴ", &g_daTitHIO);

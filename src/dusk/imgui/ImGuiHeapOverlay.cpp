@@ -1,4 +1,5 @@
 #include <array>
+#include <optional>
 
 #include "JSystem/JFramework/JFWSystem.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -58,10 +59,10 @@ namespace dusk {
         };
     }
 
-    static const char* GetHeapName(const JKRHeap* heap) {
+    static std::optional<const char*> GetHeapName(const JKRHeap* heap) {
         const auto name = heap->getName();
         if (strlen(name) == 0) {
-            return "Unknown";
+            return std::nullopt;
         }
 
         return name;
@@ -74,13 +75,20 @@ namespace dusk {
         auto indentSize = depth * 16;
         if (indentSize != 0)
             ImGui::Indent(indentSize);
-        ImGui::TextUnformatted(GetHeapName(heap));
+        auto heapName = GetHeapName(heap);
+        if (heapName.has_value()) {
+            ImGui::TextUnformatted(heapName.value());
+        } else {
+            char unkNameBuf[32];
+            snprintf(unkNameBuf, sizeof(unkNameBuf), "Unknown (%p)", heap);
+            ImGui::TextUnformatted(unkNameBuf);
+        }
         if (indentSize != 0)
             ImGui::Unindent(indentSize);
 
         ImGui::TableNextColumn();
         ImGui::ProgressBar(
-            1 - (f32)heap->getFreeSize() / (f32)heap->getSize(),
+            heap->getSize() > 0 ? 1 - (f32)heap->getFreeSize() / (f32)heap->getSize() : 0.0f,
             ImVec2(ImGui::GetContentRegionAvail().x, 0));
 
         ImGui::TableNextColumn();
