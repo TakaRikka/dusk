@@ -217,11 +217,14 @@ public:
 
 #if TARGET_PC
     void setName(const char* name);
+    void setNamef(const char* fmt, ...);
     const char* getName() const;
 
 #define JKRHEAP_NAME(heap, name) (heap)->setName(name)
+#define JKRHEAP_NAMEF(heap, name, ...) (heap)->setNamef(name, __VA_ARGS__)
 #else
 #define JKRHEAP_NAME(heap, name)
+#define JKRHEAP_NAMEF(heap, name)
 #endif
 };
 

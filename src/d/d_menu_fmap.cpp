@@ -192,6 +192,7 @@ dMenu_Fmap_c::dMenu_Fmap_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
 
     mpTalkHeap = JKRCreateExpHeap(HEAP_SIZE(0x32000, 0x40000), mpHeap, false);
     JUT_ASSERT(359, mpTalkHeap != NULL);
+    JKRHEAP_NAME(mpTalkHeap, "dMenu_Fmap_c::mpTalkHeap");
     field_0x200 = 0;
     mIsWarpMap = false;
 

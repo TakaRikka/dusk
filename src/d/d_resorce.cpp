@@ -606,6 +606,7 @@ int dRes_info_c::setRes() {
             heap->lock();
             mDataHeap = mDoExt_createSolidHeapToCurrent(0, heap, 0x20);
             JUT_ASSERT(1260, mDataHeap != NULL);
+            JKRHEAP_NAMEF(mDataHeap, "Resource (%s)", mArchiveName);
 
             int rt = loadResource();
             mDoExt_restoreCurrentHeap();
@@ -624,6 +625,7 @@ int dRes_info_c::setRes() {
                 OSReport_Error("<%s.arc> mDMCommandsetRes: can't alloc memory\n", mArchiveName);
                 return -1;
             }
+            JKRHEAP_NAMEF(mDataHeap, "Resource (%s)", mArchiveName);
             int rt = loadResource();
             mDoExt_restoreCurrentHeap();
             r28 = mDoExt_adjustSolidHeap(mDataHeap);

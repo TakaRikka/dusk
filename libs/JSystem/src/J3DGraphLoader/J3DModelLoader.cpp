@@ -264,7 +264,7 @@ void J3DModelLoader::setupBBoardInfo() {
                     mpModelData->getJointNodePointer(i)->setMtxType(0);
                     break;
                 default:
-                    OSReport("WRONG SHAPE MATRIX TYPE (__FILE__)\n");
+                    OSReport("WRONG SHAPE MATRIX TYPE (%d)\n", r26->mShapeMtxType);
                     break;
             }
         }
