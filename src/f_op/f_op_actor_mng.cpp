@@ -736,7 +736,9 @@ u8 var_r30 = fopAcM::HeapAdjustEntry;
     fopAcM::HeapAdjustEntry = var_r30;
 
 #if TARGET_PC
-    JKRHEAP_NAMEF(i_actor->heap, "Actor %d (%s)", i_actor->id, GetProcName(i_actor->profname));
+    if (result) {
+        JKRHEAP_NAMEF(i_actor->heap, "Actor %d (%s)", i_actor->id, GetProcName(i_actor->profname));
+    }
 #endif
 
     return result;
