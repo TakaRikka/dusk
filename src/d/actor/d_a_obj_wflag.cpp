@@ -7,131 +7,160 @@
 #include "d/actor/d_a_obj_wflag.h"
 #include "d/d_com_inf_game.h"
 #include "SSystem/SComponent/c_math.h"
+#include "d/actor/d_a_e_wb.h"
+#include "d/d_s_play.h"
 
 static int daObj_Wflag_Draw(obj_wflag_class* i_this) {
-    g_env_light.settingTevStruct(0, &i_this->current.pos, &i_this->tevStr);
-    g_env_light.setLightTevColorType_MAJI(i_this->mpModel, &i_this->tevStr);
-    mDoExt_modelUpdateDL(i_this->mpModel);
-    J3DModel* morfModel = i_this->mMorf->getModel();
-    g_env_light.setLightTevColorType_MAJI(morfModel, &i_this->tevStr);
-    i_this->field_0x578->entry(morfModel->getModelData());
-    i_this->field_0x57c->entry(morfModel->getModelData());
-    i_this->mMorf->entryDL();
+    fopAc_ac_c* actor = &i_this->actor;
+    g_env_light.settingTevStruct(0, &actor->current.pos, &actor->tevStr);
+    g_env_light.setLightTevColorType_MAJI(i_this->pillar_model, &actor->tevStr);
+    mDoExt_modelUpdateDL(i_this->pillar_model);
+
+    J3DModel* morfModel = i_this->anm_p->getModel();
+    g_env_light.setLightTevColorType_MAJI(morfModel, &actor->tevStr);
+
+    i_this->kolin_btk->entry(morfModel->getModelData());
+    i_this->kolin_btp->entry(morfModel->getModelData());
+    i_this->anm_p->entryDL();
+
     for (int i = 0; i < 1; i++) {
-        wf_tail_s* tail = &i_this->mTails[i];
+        wf_tail_s* tail = &i_this->tail_s[i];
         for (int j = 0; j < 19; j++) {
-            g_env_light.setLightTevColorType_MAJI(tail->mModels[j], &i_this->tevStr);
-            mDoExt_modelUpdateDL(tail->mModels[j]);
+            g_env_light.setLightTevColorType_MAJI(tail->model[j], &actor->tevStr);
+            mDoExt_modelUpdateDL(tail->model[j]);
         }
     }
+
     return 1;
 }
 
-static void tail_control(fopAc_ac_c* param_1, wf_tail_s* param_2) {
-    static f32 pd[19] = {1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.2f,
-                         0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f};
+static void tail_control(fopAc_ac_c* i_this, wf_tail_s* i_tail) {
+    static f32 pd[19] = {
+        1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.2f,
+        0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f,
+    };
 
-    cXyz local_74;
-    cXyz cStack_80;
+    cXyz sp4C;
+    cXyz sp40;
+    cXyz sp34;
+
     int i;
-    cXyz* ptr;
-    f32 dVar11;
-    cXyz local_98;
-    cXyz local_a4;
-    f32 dVar9;
-    f32 dVar14;
-    f32 dVar13;
+    cXyz* pPos;
+    f32 var_f27;
+    f32 var_f28;
+    f32 var_f31;
+    f32 var_f30;
     f32 speed;
     csXyz* pAngle;
 
-    ptr = &param_2->field_0x004[1];
-    pAngle = &param_2->field_0x0f4[1];
-    dVar11 = -20.0f;
-    cMtx_YrotS(*calc_mtx, param_1->current.angle.y);
-    local_74.x = 0.0f;
-    local_74.y = 0.0f;
-    local_74.z = -(20.0f + param_1->speedF * 10.0f);
-    MtxPosition(&local_74, &local_98);
-    speed = param_1->speedF * 2.0f;
-    local_74.x = 0.0f;
-    local_74.y = 0.0f;
-    local_74.z = 20.0f;
-    for (i = 1; i < 20; i++, ptr++, pAngle++) {
-        local_a4.x =
-            local_98.x * pd[i - 1];
-        local_a4.z =
-            local_98.z * pd[i - 1];
-        local_a4.x += (speed * cM_ssin(param_2->field_0x000 * 5400 + i * (-3700))) * 0.3f;
-        local_a4.z += (speed * cM_ssin(param_2->field_0x000 * 5700 + i * (-4200))) * 0.3f;
-        local_a4.y = speed * cM_ssin(param_2->field_0x000 * 4200 + i * (-2400));
-        dVar9 = local_a4.x + (ptr->x - ptr[-1].x);
-        dVar14 = local_a4.y + (dVar11 + (ptr[0].y - ptr[-1].y));
-        dVar13 = local_a4.z + (ptr->z - ptr[-1].z);
-        s16 xRot = -cM_atan2s(dVar14, dVar13);
-        s32 yRot = cM_atan2s(dVar9, JMAFastSqrt(dVar14 * dVar14 + dVar13 * dVar13));
+    pPos = &i_tail->pos[1];
+    pAngle = &i_tail->rot[1];
+    var_f27 = NREG_F(2) + -20.0f;
+
+    cXyz sp28;
+    cXyz sp1C;
+    cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+    sp4C.x = 0.0f;
+    sp4C.y = 0.0f;
+    sp4C.z = -(NREG_F(3) + 20.0f + i_this->speedF * 10.0f);
+    MtxPosition(&sp4C, &sp28);
+
+    speed = i_this->speedF * (NREG_F(7) + 2.0f);
+    sp4C.x = 0.0f;
+    sp4C.y = 0.0f;
+    sp4C.z = NREG_F(0) + 20.0f;
+
+    for (i = 1; i < 20; i++, pPos++, pAngle++) {
+        sp1C.x = sp28.x * pd[i - 1];
+        sp1C.z = sp28.z * pd[i - 1];
+
+        sp1C.x += (speed * cM_ssin(i_tail->field_0x0 * (XREG_S(6) + 5400) + i * (XREG_S(7) + -3700))) * 0.3f;
+        sp1C.z += (speed * cM_ssin(i_tail->field_0x0 * (XREG_S(6) + 5700) + i * (XREG_S(7) + -4200))) * 0.3f;
+        sp1C.y = speed * cM_ssin(i_tail->field_0x0 * (XREG_S(6) + 4200) + i * (XREG_S(7) + -2400));
+
+        var_f28 = sp1C.x + (pPos->x - pPos[-1].x);
+        var_f31 = sp1C.y + (var_f27 + (pPos[0].y - pPos[-1].y));
+        var_f30 = sp1C.z + (pPos->z - pPos[-1].z);
+
+        s16 xRot = -cM_atan2s(var_f31, var_f30);
+        s16 yRot = (s16)cM_atan2s(var_f28, JMAFastSqrt(SQUARE(var_f31) + SQUARE(var_f30)));
         cMtx_XrotS(*calc_mtx, xRot);
         cMtx_YrotM(*calc_mtx, yRot);
-        MtxPosition(&local_74, &cStack_80);
-        pAngle[-1].x = xRot;
-        pAngle[-1].y = yRot;
-        *ptr = ptr[-1] + cStack_80;
+        MtxPosition(&sp4C, &sp40);
+
+        pAngle[-1].x = (s16)xRot;
+        pAngle[-1].y = (s16)yRot;
+        *pPos = pPos[-1] + sp40;
     }
 }
 
 static void tail_mtxset(wf_tail_s* i_tail) {
     for (int i = 0; i < 19; i++) {
-        MtxTrans(i_tail->field_0x004[i].x, i_tail->field_0x004[i].y, i_tail->field_0x004[i].z, 0);
-        cMtx_XrotM(*calc_mtx, i_tail->field_0x0f4[i].x);
-        cMtx_YrotM(*calc_mtx, i_tail->field_0x0f4[i].y);
+        MtxTrans(i_tail->pos[i].x, i_tail->pos[i].y, i_tail->pos[i].z, 0);
+        cMtx_XrotM(*calc_mtx, i_tail->rot[i].x);
+        cMtx_YrotM(*calc_mtx, i_tail->rot[i].y);
         cMtx_XrotM(*calc_mtx, -0x8000);
         cMtx_ZrotM(*calc_mtx, i * 0x2734);
-        i_tail->mModels[i]->setBaseTRMtx(*calc_mtx);
+        i_tail->model[i]->setBaseTRMtx(*calc_mtx);
     }
 }
 
 static int daObj_Wflag_Execute(obj_wflag_class* i_this) {
-    cXyz cStack_3c;
-    i_this->field_0x836++;
+    fopAc_ac_c* actor = &i_this->actor;
+    cXyz sp14;
+
+    i_this->counter++;
+
     for (int i = 0; i < 2; i++) {
-        if (i_this->field_0x830[i] != 0) {
-            i_this->field_0x830[i]--;
+        if (i_this->timers[i] != 0) {
+            i_this->timers[i]--;
         }
     }
-    if (i_this->field_0x834 != 0) {
-        i_this->field_0x834--;
+
+    if (i_this->unk_timer != 0) {
+        i_this->unk_timer--;
     }
-    fopAc_ac_c* actor = fopAcM_SearchByID(i_this->parentActorID);
-    if (actor != NULL) {
-        i_this->current.angle.y = actor->shape_angle.y;
-        i_this->speedF = actor->speedF;
-        // TODO: Figure out what the actor class is
-        MTXCopy((*(mDoExt_McaMorfSO**)((char*)actor + 0x5e0))->getModel()->getAnmMtx(16), *calc_mtx);
-        cMtx_XrotM(*calc_mtx, (i_this->speedF * cM_ssin(i_this->field_0x836 * 5400)) * 5.0f);
-        i_this->mpModel->setBaseTRMtx(*calc_mtx);
+
+    fopAc_ac_c* parent = fopAcM_SearchByID(actor->parentActorID);
+    if (parent != NULL) {
+        actor->current.angle.y = parent->shape_angle.y;
+        actor->speedF = parent->speedF;
+        
+        J3DModel* model = ((e_wb_class*)parent)->anm_p->getModel();
+        MTXCopy(model->getAnmMtx(YREG_S(3) + 16), *calc_mtx);
+        s16 rotX = (actor->speedF * cM_ssin(i_this->counter * 5400)) * 5.0f;
+        cMtx_XrotM(*calc_mtx, rotX);
+        i_this->pillar_model->setBaseTRMtx(*calc_mtx);
     } else {
-         mDoMtx_stack_c::transS(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z);
-        mDoMtx_stack_c::YrotM(i_this->shape_angle.y);
-        i_this->mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+        mDoMtx_stack_c::transS(actor->current.pos.x, actor->current.pos.y, actor->current.pos.z);
+        mDoMtx_stack_c::YrotM((s16)actor->shape_angle.y);
+        i_this->pillar_model->setBaseTRMtx(mDoMtx_stack_c::get());
     }
-    MTXCopy(i_this->mpModel->getBaseTRMtx(), mDoMtx_stack_c::get());
-    mDoMtx_stack_c::transM(133.0f, 248.0f, 0.0f);
-    mDoMtx_stack_c::YrotM(0x4000);
-    mDoMtx_stack_c::XrotM(2100);
-    mDoMtx_stack_c::ZrotM(0);
-    i_this->mMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
-    i_this->field_0x578->play();
-    i_this->field_0x57c->play();
-    i_this->mMorf->play(NULL, 0, 0);
-    i_this->mMorf->modelCalc();
-    MTXCopy(i_this->mpModel->getBaseTRMtx(), mDoMtx_stack_c::get());
+
+    MTXCopy(i_this->pillar_model->getBaseTRMtx(), mDoMtx_stack_c::get());
+    mDoMtx_stack_c::transM(VREG_F(0) + 133.0f, VREG_F(1) + 248.0f, VREG_F(2) + 0.0f);
+    mDoMtx_stack_c::YrotM(VREG_S(0) + 0x4000);
+    mDoMtx_stack_c::XrotM(VREG_S(1) + 2100);
+    mDoMtx_stack_c::ZrotM((s16)VREG_S(2));
+    
+    J3DModel* model = i_this->anm_p->getModel();
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    i_this->kolin_btk->play();
+    i_this->kolin_btp->play();
+    i_this->anm_p->play(NULL, 0, 0);
+    i_this->anm_p->modelCalc();
+    MTXCopy(i_this->pillar_model->getBaseTRMtx(), mDoMtx_stack_c::get());
+
     for (int i = 0; i < 1; i++) {
-        wf_tail_s* pTail = &i_this->mTails[i];
-        mDoMtx_stack_c::transM(143.0f, 418.0f, 0.0f);
-        mDoMtx_stack_c::multVecZero(pTail->field_0x004);
-        pTail->field_0x000++;
-        tail_control(i_this, pTail);
-        tail_mtxset(pTail);
+        wf_tail_s* tail = &i_this->tail_s[i];
+        mDoMtx_stack_c::transM(VREG_F(3) + 143.0f, VREG_F(4) + 418.0f, VREG_F(5) + 0.0f);
+        mDoMtx_stack_c::multVecZero(tail->pos);
+        tail->field_0x0++;
+        tail_control(actor, tail);
+        tail_mtxset(tail);
     }
+
     return 1;
 }
 
@@ -140,7 +169,9 @@ static int daObj_Wflag_IsDelete(obj_wflag_class* i_this) {
 }
 
 static int daObj_Wflag_Delete(obj_wflag_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhaseReq, "Obj_wflag");
+    fopAc_ac_c* actor = &i_this->actor;
+    fpc_ProcID id = fopAcM_GetID(i_this);
+    dComIfG_resDelete(&i_this->phase, "Obj_wflag");
     return 1;
 }
 
@@ -148,61 +179,71 @@ static int useHeapInit(fopAc_ac_c* i_actor) {
     obj_wflag_class* i_this = (obj_wflag_class*)i_actor;
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Obj_wflag", 10);
     JUT_ASSERT(409, modelData != NULL);
-    i_this->mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
-    if (i_this->mpModel == NULL) {
+
+    i_this->pillar_model = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
+    if (i_this->pillar_model == NULL) {
         return 0;
     } 
-    i_this->mMorf = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Obj_wflag", 11), NULL, NULL, ( J3DAnmTransform*)dComIfG_getObjectRes("Obj_wflag", 6), 2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11020284);
-    if (i_this->mMorf == NULL || i_this->mMorf->getModel() == NULL) {
+
+    i_this->anm_p = JKR_NEW mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Obj_wflag", 11), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("Obj_wflag", 6), 2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11020284);
+    if (i_this->anm_p == NULL || i_this->anm_p->getModel() == NULL) {
         return 0;
     } 
-    i_this->field_0x578 = JKR_NEW mDoExt_btkAnm();
-    if (i_this->field_0x578 == NULL) {
+
+    i_this->kolin_btk = JKR_NEW mDoExt_btkAnm();
+    if (i_this->kolin_btk == NULL) {
         return 0;
     }
 
-    if (i_this->field_0x578->init(i_this->mMorf->getModel()->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Obj_wflag", 14), 1, 2, 1.0f, 0, -1) == 0) {
+    if (i_this->kolin_btk->init(i_this->anm_p->getModel()->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Obj_wflag", 14), 1, 2, 1.0f, 0, -1) == 0) {
         return 0;
     }
 
-    i_this->field_0x57c = JKR_NEW mDoExt_btpAnm();
-    if (i_this->field_0x57c == NULL) {
+    i_this->kolin_btp = JKR_NEW mDoExt_btpAnm();
+    if (i_this->kolin_btp == NULL) {
         return cPhs_ERROR_e;
     } 
 
-    if (i_this->field_0x57c->init(i_this->mMorf->getModel()->getModelData(), (J3DAnmTexPattern*)dComIfG_getObjectRes("Obj_wflag", 18), 1, 2, 1.0f, 0, -1) == 0) {
+    if (i_this->kolin_btp->init(i_this->anm_p->getModel()->getModelData(), (J3DAnmTexPattern*)dComIfG_getObjectRes("Obj_wflag", 18), 1, 2, 1.0f, 0, -1) == 0) {
         return cPhs_ERROR_e;
     }
 
     modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Obj_wflag", 9));
     JUT_ASSERT(479, modelData != NULL);
+
     for (int i = 0; i < 1; i++) {
         for (int j = 0; j < 19; j++) {
-            i_this->mTails[i].mModels[j] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
-            if (i_this->mTails[i].mModels[j] == NULL) {
+            i_this->tail_s[i].model[j] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
+            if (i_this->tail_s[i].model[j] == NULL) {
                 return 0;
             }
         }
     }
+
     return 1;
 }
 
-static int daObj_Wflag_Create(fopAc_ac_c* i_this) {
-    fopAcM_ct(i_this, obj_wflag_class);
-    int rv = dComIfG_resLoad(&((obj_wflag_class*)i_this)->mPhaseReq, "Obj_wflag");
+static int daObj_Wflag_Create(fopAc_ac_c* actor) {
+    obj_wflag_class* i_this = (obj_wflag_class*)actor;
+    fopAcM_ct(actor, obj_wflag_class);
+
+    int rv = dComIfG_resLoad(&i_this->phase, "Obj_wflag");
     if (rv == cPhs_COMPLEATE_e) {
-        OS_REPORT("OBJ_WFLAG PARAM %x\n", fopAcM_GetParam(i_this));
-        ((obj_wflag_class*)i_this)->field_0x82c = fopAcM_GetParam(i_this);
+        OS_REPORT("OBJ_WFLAG PARAM %x\n", fopAcM_GetParam(actor));
+        i_this->unk_0x82c = fopAcM_GetParam(actor);
+
         OS_REPORT("OBJ_WFLAG//////////////OBJ_WFLAG SET 1 !!\n");
-        if (fopAcM_entrySolidHeap(i_this, useHeapInit, 0xd700) == 0) {
+    
+        if (!fopAcM_entrySolidHeap(actor, useHeapInit, 0xd700)) {
             OS_REPORT("//////////////OBJ_WFLAG SET NON !!\n");
             return cPhs_ERROR_e;
-        } else {
-            OS_REPORT("//////////////OBJ_WFLAG SET 2 !!\n");
-            ((obj_wflag_class*)i_this)->field_0x836 = cM_rndF(65536.0f);
-            daObj_Wflag_Execute(((obj_wflag_class*)i_this));
         }
+
+        OS_REPORT("//////////////OBJ_WFLAG SET 2 !!\n");
+        i_this->counter = cM_rndF(65536.0f);
+        daObj_Wflag_Execute(i_this);
     }
+
     return rv;
 }
 
