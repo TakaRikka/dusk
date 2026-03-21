@@ -68,7 +68,7 @@ JStudio::ctb::TObject* JStudio::ctb::TControl::getObject_index(u32 param_0) {
 JStudio::ctb::TFactory::~TFactory() {}
 
 JStudio::ctb::TObject* JStudio::ctb::TFactory::create(JStudio::ctb::data::TParse_TBlock const& param_0) {
-    switch(param_0.get_scheme()) {
+    switch(BSWAP16(param_0.get_scheme())) {
     case 1:
         return JKR_NEW TObject_TxyzRy(param_0);
     default:
