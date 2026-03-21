@@ -2555,7 +2555,7 @@ f32 dMenu_Collect3D_c::mViewOffsetY = -100.0f;
 
 void dMenu_Collect3D_c::setupItem3D(Mtx param_0) {
 #if TARGET_PC
-    f32 scaleFactor = mDoGph_gInf_c::getWidth() / FB_WIDTH; // TODO: get display pixel density from aurora
+    f32 scaleFactor = mDoGph_gInf_c::getHeight() / FB_HEIGHT;
     GXSetViewport(0.0f, mViewOffsetY * scaleFactor, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), 0.0f, 1.0f);
 #else
     GXSetViewport(0.0f, mViewOffsetY, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f);

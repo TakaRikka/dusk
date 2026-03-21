@@ -117,6 +117,13 @@ public:
     static void setTickRate(u32 rate) { JFWDisplay::getManager()->setTickRate(rate); }
     static void waitBlanking(int wait) { JFWDisplay::getManager()->waitBlanking(wait); }
 
+#if TARGET_PC
+    static f32 hudAspectScaleDown;
+    static f32 hudAspectScaleUp;
+    static f32 ScaleHUDXLeft(f32 baseX) { return getMinXF() + baseX; }
+    static f32 ScaleHUDXRight(f32 baseX) { return -getMinXF() + baseX; }
+#endif
+
     static void setBlureMtx(const Mtx m) {
         cMtx_copy(m, mBlureMtx);
     }
@@ -266,7 +273,12 @@ public:
     #if WIDESCREEN_SUPPORT
     static void setTvSize();
 
+    #if TARGET_PC
+    static void onWide(f32 width, f32 height);
+    #else 
     static void onWide();
+    #endif
+
     static void offWide();
     static u8 isWide();
 
