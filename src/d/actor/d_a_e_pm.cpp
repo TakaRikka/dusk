@@ -338,6 +338,10 @@ static s16 s_TargetAngle;
 void daE_PM_c::SearchFarP() {
     //! @bug best_distance is not initialized
     f32 best_distance;
+    #if AVOID_UB
+    best_distance = 0.0f;
+    #endif
+
     int best_index;
     dPnt* pnt = dPath_GetPnt(mpPath, 0);
     Vec pos;
@@ -2652,6 +2656,11 @@ void daE_PM_c::setGakkiBaseMtx() {
 
 void daE_PM_c::setLampBaseMtx() {
     cXyz vec1, vec2;
+#if AVOID_UB
+    vec1.set(0, 0, 0);
+    vec2.set(0, 0, 0);
+#endif
+
     MTXCopy(mpMorf->getModel()->getAnmMtx(JNT_HAND_R), *calc_mtx);
     cXyz vec3(0.0f, -30.0f, -5.0f);
     //! @bug vec1 is not initialized in its first two uses, which are probably supposed to be vec3

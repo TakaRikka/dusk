@@ -514,6 +514,11 @@ void exceptionRestart() {
 }
 
 void myExceptionCallback(u16, OSContext*, u32, u32) {
+    #if TARGET_PC
+    printf("myExceptionCallback abort");
+    abort();
+    #endif
+
     u32 btnHold;
     u32 btnTrig;
 
@@ -971,8 +976,13 @@ int mDoMch_Create() {
     sysConsole->setPosition(16, 42);
 
     JUTException::setMapFile(MAP_FOLDER MAP_FILE);
+    #if TARGET_PC
+    JUTException::setPreUserCallback(nullptr);
+    JUTException::setPostUserCallback(nullptr);
+    #else
     JUTException::setPreUserCallback(myExceptionCallback);
     JUTException::setPostUserCallback(fault_callback_scroll);
+    #endif
 
     cMl::init(mDoExt_getZeldaHeap());
     cM_initRnd(100, 100, 100);

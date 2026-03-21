@@ -2080,7 +2080,12 @@ void dComIfGp_createSubExpHeap2D() {
         if (dComIfGp_getSubExpHeap2D(i) == NULL) {
             JKRExpHeap* i_heap = JKRCreateExpHeap(size, dComIfGp_getExpHeap2D(), false);
             JUT_ASSERT(3576, i_heap != NULL);
-            JKRHEAP_NAMEF(i_heap, "SubExpHeap2D %d", i);
+
+            #if TARGET_PC
+            if (i_heap != NULL) {
+                JKRHEAP_NAMEF(i_heap, "SubExpHeap2D %d", i);
+            }
+            #endif
             dComIfGp_setSubExpHeap2D(i, i_heap);
         }
     }
