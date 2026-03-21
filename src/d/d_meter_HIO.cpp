@@ -3003,7 +3003,7 @@ void dMeter_drawHIO_c::updateFMsgDebug() {
 #endif
 
 dMeter_ringHIO_c::dMeter_ringHIO_c() {
-#if WIDESCREEN_SUPPORT
+#if WIDESCREEN_SUPPORT && !TARGET_PC
     updateOnWide();
 #else
     mRingRadiusH = 175.0f;
