@@ -945,9 +945,11 @@ static int phase_0(dScnLogo_c* i_this) {
 
     i_this->mLogoHeap = JKRExpHeap::create(i_this->dummyGameAlloc, var_r29, NULL, false);
     JUT_ASSERT(1525, i_this->mLogoHeap != NULL);
+    JKRHEAP_NAME(i_this->mLogoHeap, "Logo");
 
     i_this->mLogo01Heap = JKRCreateExpHeap(var_r28, i_this->mLogoHeap, false);
     JUT_ASSERT(1528, i_this->mLogo01Heap != NULL);
+    JKRHEAP_NAME(i_this->mLogo01Heap, "Logo01");
 
     #if VERSION == VERSION_GCN_PAL
     switch (i_this->getPalLanguage()) {

@@ -260,6 +260,7 @@ void daPy_anmHeap_c::createHeap(daPy_anmHeap_c::daAlinkHEAP_TYPE i_heapType) {
 
     JKRHeap* tmp;
     mAnimeHeap = mDoExt_createSolidHeapFromGameToCurrent(&tmp, size, 0x20);
+    JKRHEAP_NAMEF(mAnimeHeap, "Alink anime type %d", i_heapType);
     
     if (i_heapType == 4) {
         tmpWork = JKR_NEW_ARRAY(char, size);

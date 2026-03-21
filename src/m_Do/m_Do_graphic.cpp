@@ -2220,6 +2220,7 @@ static void dummy() {
 
 int mDoGph_Create() {
     JKRSolidHeap* heap = mDoExt_createSolidHeapToCurrent(0, NULL, 0);
+    JKRHEAP_NAME(heap, "mDoGph");
     mDoGph_gInf_c::create();
     dComIfGd_init();
     u32 var_r30 = mDoExt_adjustSolidHeap(heap);

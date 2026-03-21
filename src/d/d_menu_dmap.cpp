@@ -100,6 +100,7 @@ dMenu_DmapBg_c::dMenu_DmapBg_c(JKRExpHeap* i_heap, STControl* i_stick) {
 
     mpTalkHeap = JKRCreateExpHeap(0x32000, mpHeap, false);
     JUT_ASSERT(624, mpTalkHeap != NULL);
+    JKRHEAP_NAME(mpTalkHeap, "dMenu_DmapBg_c::mpTalkHeap");
 
     mpItemExplain = NULL;
 
