@@ -3323,6 +3323,9 @@ void daB_GG_c::DeathCam() {
 
 void daB_GG_c::GroundAction() {
     s16 var_r30 = 0;
+#if AVOID_UB
+    var_r30 = 1;
+#endif
 
     switch (mSubAction) {
     case SUBACT_MOVE:

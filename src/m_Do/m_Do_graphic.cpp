@@ -442,6 +442,14 @@ void darwFilter(GXColor matColor) {
     GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetChanMatColor(GX_COLOR0A0, matColor);
     GXSetCurrentMtx(0);
+
+#if TARGET_PC
+    f32 width = mDoGph_gInf_c::getWidth();
+    f32 height = mDoGph_gInf_c::getHeight();
+    GXSetViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f);
+    GXSetScissor(0, 0, width, height);
+#endif
+
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_RGB8, 0);
@@ -478,7 +486,7 @@ void mDoGph_gInf_c::calcFade() {
     }
 
     if (mFadeColor.a != 0) {
-        //darwFilter(mFadeColor);
+        darwFilter(mFadeColor);
     }
 }
 
