@@ -1471,12 +1471,21 @@ struct EnemyTable {
 fpc_ProcID fopAcM_createItemFromEnemyID(u8 i_enemyID, cXyz const* i_pos, int i_itemBitNo,
                                         int i_roomNo, csXyz const* i_angle, cXyz const* i_scale,
                                         f32* i_speedF, f32* i_speedY) {
-                                            int itemNo;
+    int itemNo;
     int tableNo = 0xFF;
-    uintptr_t* data = (uintptr_t*)dEnemyItem_c::getItemData();
+
+#if TARGET_PC
+    u8* data = (u8*)dEnemyItem_c::getItemData();
+    data += 4;
+    BE(int) tableNum = *(int*)data;
+    data += 4;
+#else
+    u32* data = (u32*)dEnemyItem_c::getItemData();
     data++;
-    BE(int) tableNum = (int) *data;
+    int tableNum = (int)*data;
     data++;
+#endif
+
     EnemyTable* table = (EnemyTable*)data;
     
     for (u32 i = 0; i < tableNum; i++) {
