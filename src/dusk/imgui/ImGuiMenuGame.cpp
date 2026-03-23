@@ -110,7 +110,7 @@ namespace dusk {
         ImGui::SetNextWindowBgAlpha(0.65f);
         ImGui::SetNextWindowSizeConstraints(ImVec2(850, 400), ImVec2(850, 400));
 
-        if (!ImGui::Begin("Controller Config", nullptr, windowFlags)) {
+        if (!ImGui::Begin("Controller Config", &m_showControllerConfig, windowFlags)) {
             ImGui::End();
             return;
         }

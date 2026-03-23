@@ -272,14 +272,14 @@ namespace dusk {
 
     ImGuiSaveEditor::ImGuiSaveEditor() {}
 
-    void ImGuiSaveEditor::draw() {
+    void ImGuiSaveEditor::draw(bool& open) {
         ImGuiIO& io = ImGui::GetIO();
         ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoResize;
 
         ImGui::SetNextWindowBgAlpha(0.65f);
         ImGui::SetNextWindowSizeConstraints(ImVec2(600, 700), ImVec2(600, 700));
 
-        if (ImGui::Begin("Save Editor", nullptr, windowFlags)) {
+        if (ImGui::Begin("Save Editor", &open, windowFlags)) {
             if (ImGui::BeginTabBar("SaveEditorTabBar", ImGuiTabBarFlags_NoCloseWithMiddleMouseButton)) {
                 if (ImGui::BeginTabItem("Player Status")) {
                     drawPlayerStatusTab();

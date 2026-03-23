@@ -11,7 +11,7 @@ namespace dusk {
 	public:
 		ImGuiSaveEditor();
 		
-		void draw();
+		void draw(bool& open);
         void drawPlayerStatusTab();
         void drawLocationTab();
 		void drawInventoryTab();

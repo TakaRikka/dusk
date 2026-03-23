@@ -61,7 +61,7 @@ namespace dusk {
         ShowPlayerInfo();
 
         if (m_showSaveEditor) {
-            m_saveEditor.draw();
+            m_saveEditor.draw(m_showSaveEditor);
         }
 
         DuskDebugPad(); // temporary, remove later
@@ -141,7 +141,7 @@ namespace dusk {
         ImGui::SetNextWindowBgAlpha(0.65f);
         ImGui::SetNextWindowSizeConstraints(ImVec2(300, 200), ImVec2(300, 200));
 
-        if (ImGui::Begin("Player Info", nullptr, windowFlags)) {
+        if (ImGui::Begin("Player Info", &m_showPlayerInfo, windowFlags)) {
             daAlink_c* player = (daAlink_c*)dComIfGp_getPlayer(0);
             daHorse_c* horse = dComIfGp_getHorseActor();
 
