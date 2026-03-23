@@ -68,3 +68,6 @@ Pass the disc image as a positional argument. Supported formats: ISO (GCM), RVZ,
 build/dusk/dusk /path/to/game.rvz
 ```
 If no path is specified, Dusk defaults to `game.iso` in the current working directory.
+
+#### 30 FPS on Debug
+When compiled fully in a Debug the game runs too slowly to hit playable 30 FPS. To avoid this, you can set a CMake cache variable to optimize specific critical files without hampering debuggability in the rest of the program: `-DDUSK_SELECTED_OPT=ON`. When building for MSVC (Windows) you must also modify `CMAKE_CXX_FLAGS_DEBUG` and `CMAKE_C_FLAGS_DEBUG` to remove `/RTC1` from the flags, like so: `-DCMAKE_CXX_FLAGS_DEBUG="/MDd /Zi /Ob0 /Od" -DCMAKE_C_FLAGS_DEBUG="/MDd /Zi /Ob0 /Od"`

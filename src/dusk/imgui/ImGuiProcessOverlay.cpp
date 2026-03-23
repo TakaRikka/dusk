@@ -74,7 +74,7 @@ namespace dusk {
             return;
         }
 
-        if (ImGui::Begin("Processes")) {
+        if (ImGui::Begin("Processes", &m_showProcessManagement)) {
             if (ImGui::BeginTabBar("Tabs")) {
                 showTreeRecursive = true;
                 if (ImGui::BeginTabItem("Tree")) {
