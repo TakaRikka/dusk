@@ -15,43 +15,6 @@
 #include "JSystem/JKernel/JKRHeap.h"
 
 // ============================================================================
-// Malloc-based allocator to bypass JKRHeap operator new/delete
-// Without this, side-table allocations call operator new -> JKRHeap::alloc
-// -> OSLockMutex -> GetMutexData -> operator new ... infinite recursion.
-// ============================================================================
-
-template<typename T>
-struct MallocAllocator {
-    using value_type = T;
-    MallocAllocator() = default;
-    template<typename U> MallocAllocator(const MallocAllocator<U>&) noexcept {}
-    T* allocate(std::size_t n) {
-        void* p = std::malloc(n * sizeof(T));
-        if (!p) throw std::bad_alloc();
-        return static_cast<T*>(p);
-    }
-    void deallocate(T* p, std::size_t) noexcept { std::free(p); }
-    template<typename U> bool operator==(const MallocAllocator<U>&) const noexcept { return true; }
-    template<typename U> bool operator!=(const MallocAllocator<U>&) const noexcept { return false; }
-};
-
-template<typename T>
-struct MallocDeleter {
-    void operator()(T* p) const {
-        p->~T();
-        std::free(p);
-    }
-};
-
-template<typename T, typename... Args>
-std::unique_ptr<T, MallocDeleter<T>> make_malloc_unique(Args&&... args) {
-    void* mem = std::malloc(sizeof(T));
-    if (!mem) throw std::bad_alloc();
-    T* obj = JKR_NEW_ARGS (mem) T(std::forward<Args>(args)...);
-    return std::unique_ptr<T, MallocDeleter<T>>(obj);
-}
-
-// ============================================================================
 // Side-table: native mutex per OSMutex
 // ============================================================================
 
@@ -59,17 +22,13 @@ struct PCMutexData {
     std::recursive_mutex nativeMutex;
 };
 
-template<typename K, typename V>
-using MallocMap = std::unordered_map<K, V, std::hash<K>, std::equal_to<K>,
-    MallocAllocator<std::pair<const K, V>>>;
-
 // Lazy-initialized to avoid DLL static init crashes
 static std::mutex& GetMutexMapMutex() {
     static std::mutex mtx;
     return mtx;
 }
-static MallocMap<OSMutex*, std::unique_ptr<PCMutexData, MallocDeleter<PCMutexData>>>& GetMutexMap() {
-    static MallocMap<OSMutex*, std::unique_ptr<PCMutexData, MallocDeleter<PCMutexData>>> map;
+static std::unordered_map<OSMutex*, std::unique_ptr<PCMutexData>>& GetMutexMap() {
+    static std::unordered_map<OSMutex*, std::unique_ptr<PCMutexData>> map;
     return map;
 }
 
@@ -78,7 +37,7 @@ static PCMutexData& GetMutexData(OSMutex* mutex) {
     auto& map = GetMutexMap();
     auto it = map.find(mutex);
     if (it == map.end()) {
-        auto result = map.emplace(mutex, make_malloc_unique<PCMutexData>());
+        auto result = map.emplace(mutex, std::make_unique<PCMutexData>());
         return *result.first->second;
     }
     return *it->second;
@@ -97,8 +56,8 @@ static std::mutex& GetCondMapMutex() {
     static std::mutex mtx;
     return mtx;
 }
-static MallocMap<OSCond*, std::unique_ptr<PCCondData, MallocDeleter<PCCondData>>>& GetCondMap() {
-    static MallocMap<OSCond*, std::unique_ptr<PCCondData, MallocDeleter<PCCondData>>> map;
+static std::unordered_map<OSCond*, std::unique_ptr<PCCondData>>& GetCondMap() {
+    static std::unordered_map<OSCond*, std::unique_ptr<PCCondData>> map;
     return map;
 }
 
@@ -107,7 +66,7 @@ static PCCondData& GetCondData(OSCond* cond) {
     auto& map = GetCondMap();
     auto it = map.find(cond);
     if (it == map.end()) {
-        auto result = map.emplace(cond, make_malloc_unique<PCCondData>());
+        auto result = map.emplace(cond, std::make_unique<PCCondData>());
         return *result.first->second;
     }
     return *it->second;
