@@ -33,6 +33,8 @@ namespace dusk {
 	void SetOverlayWindowLocation(int corner);
 	bool ShowCornerContextMenu(int& corner, int avoidCorner);
 	void ImGuiStringViewText(std::string_view text);
+	void ImGuiBeginGroupPanel(const char* name, const ImVec2& size);
+	void ImGuiEndGroupPanel();
 }
 
 void DuskDebugPad();

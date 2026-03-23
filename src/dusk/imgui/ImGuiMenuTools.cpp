@@ -44,6 +44,7 @@ namespace dusk {
             ImGui::MenuItem("Debug Camera", "F6", &m_showCameraOverlay);
             ImGui::MenuItem("Map Loader", nullptr, &m_showMapLoader);
             ImGui::MenuItem("Player Info", nullptr, &m_showPlayerInfo);
+            ImGui::MenuItem("Save Editor", nullptr, &m_showSaveEditor);
             ImGui::EndMenu();
         }
 
@@ -58,6 +59,10 @@ namespace dusk {
         ShowStubLog();
         ShowMapLoader();
         ShowPlayerInfo();
+
+        if (m_showSaveEditor) {
+            m_saveEditor.draw();
+        }
 
         DuskDebugPad(); // temporary, remove later
     }
