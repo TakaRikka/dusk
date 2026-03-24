@@ -272,6 +272,7 @@ int game_main(int argc, char* argv[]) {
     config.logLevel = (AuroraLogLevel)parsed_arg_options["log-level"].as<uint8_t>();
     config.mem1Size = 256 * 1024 * 1024;
     config.mem2Size = 24 * 1024 * 1024;
+    config.allowJoystickBackgroundEvents = true;
 
     auroraInfo = aurora_initialize(argc, argv, &config);
 

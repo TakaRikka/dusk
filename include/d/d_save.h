@@ -163,7 +163,6 @@ public:
     u8 getTransformStatus() const { return mTransformStatus; }
     void setTransformStatus(u8 i_status) { mTransformStatus = i_status; }
 
-private:
     /* 0x00 */ BE(u16) mMaxLife;
     /* 0x02 */ BE(u16) mLife;
     /* 0x04 */ BE(u16) mRupee;
@@ -201,7 +200,6 @@ public:
     u16 getDate() const { return mDate; }
     void setDate(u16 i_date) { mDate = i_date; }
 
-private:
     /* 0x00 */ BE(OSTime) mDateIpl;
     /* 0x08 */ u8 mTransformLevelFlag;
     /* 0x09 */ u8 mDarkClearLevelFlag;
@@ -228,7 +226,6 @@ public:
     const char* getStageName() const { return mName; }
     s8 getRoomNo() const { return mRoomNo; }
 
-private:
 #if TARGET_PC
     /* 0x00 */ BE(Vec) mPos;
 #else
@@ -248,7 +245,6 @@ public:
     u8 getPlayerStatus() const { return mPlayerStatus; }
     s8 getRoomNo() const { return mRoomNo; }
 
-private:
     /* 0x00 */ char mName[8];
     /* 0x08 */ u8 mPlayerStatus;
     /* 0x09 */ s8 mRoomNo;
@@ -277,8 +273,6 @@ public:
     void offFieldDataExistFlag() { mFieldDataExistFlag = false; }
     void onFieldDataExistFlag() { mFieldDataExistFlag = true; }
 
-
-private:
 #if TARGET_PC
     /* 0x00 */ BE(Vec) mPos;
 #else
@@ -312,7 +306,6 @@ public:
     void setWarpAcceptStage(s8 accept) { mWarpAcceptStage = accept; }
     void resetWarpAcceptStage() { mWarpAcceptStage = -1; }
 
-private:
 #if TARGET_PC
     /* 0x00 */ BE(Vec) mPos;
 #else
@@ -356,7 +349,6 @@ public:
     static const int BOMB_BAG_MAX = 3;
     static const int BOTTLE_MAX = 4;
 
-private:
     /* 0x00 */ u8 mItems[24];
     /* 0x18 */ u8 mItemSlots[24];
 };  // Size: 0x30
@@ -368,7 +360,6 @@ public:
     void offFirstBit(u8 i_itemNo);
     int isFirstBit(u8 i_itemNo) const;
 
-private:
     /* 0x0 */ BE(u32) mItemFlags[8];
 };  // Size: 0x20
 
@@ -386,7 +377,6 @@ public:
     u8 getPachinkoNum() const { return mPachinkoNum; }
     void setPachinkoNum(u8 i_num) { mPachinkoNum = i_num; }
 
-private:
     /* 0x0 */ u8 mArrowNum;
     /* 0x1 */ u8 mBombNum[3];
     /* 0x4 */ u8 mBottleNum[4];
@@ -403,7 +393,6 @@ public:
     u8 getArrowNum() const { return mItemMax[ARROW_MAX]; }
     void setArrowNum(u8 i_maxNum) { mItemMax[ARROW_MAX] = i_maxNum; }
 
-private:
     /* 0x0 */ u8 mItemMax[8];
 };  // Size: 0x8
 
@@ -429,7 +418,6 @@ public:
         }
     }
 
-private:
     /* 0x0 */ u8 mItem[8];
     /* 0x8 */ u8 unk8;
     /* 0x9 */ u8 mCrystal;
@@ -443,7 +431,6 @@ class dSv_player_wolf_c {
 public:
     void init();
 
-private:
     /* 0x0 */ u8 unk0[3];
     /* 0x3 */ u8 unk3;
 };  // Size: 0x4
@@ -457,7 +444,6 @@ public:
     void offLightDropGetFlag(u8 i_nowLevel);
     BOOL isLightDropGetFlag(u8 i_nowLevel) const;
 
-private:
     /* 0x0 */ u8 mLightDropNum[4];
     /* 0x4 */ u8 mLightDropGetFlag;
     /* 0x5 */ u8 unk5[3];
@@ -473,7 +459,6 @@ public:
     u8 getGetNumber(int i_no) { return mGetNumber[i_no]; }
     void setGetNumber(int i_no, u8 i_value) { mGetNumber[i_no] = i_value; }
 
-private:
     /* 0x00 */ BE(u32) mLetterGetFlags[2];
     /* 0x08 */ BE(u32) mLetterReadFlags[2];
     /* 0x10 */ u8 mGetNumber[64];
@@ -487,7 +472,6 @@ public:
     u8 getMaxSize(int i_sizeIndex) const { return mMaxSize[i_sizeIndex]; }
     void setMaxSize(int i_sizeIndex, u8 i_size) { mMaxSize[i_sizeIndex] = i_size; }
 
-private:
     /* 0x00 */ BE(u16) mFishCount[16];
     /* 0x20 */ u8 mMaxSize[16];
 };  // Size: 0x34
@@ -508,7 +492,6 @@ public:
     void setHorseName(const char* i_name) { strcpy(mHorseName, i_name); }
     u8 getClearCount() const { return mClearCount; }
 
-private:
     /* 0x00 */ BE(u64) unk0;
     /* 0x08 */ BE(s64) mTotalTime;
     /* 0x10 */ BE(u16) unk16;
@@ -555,7 +538,6 @@ public:
         LANGUAGE_ITALIAN,
     };
 
-private:
     /* 0x0 */ u8 mRuby;
     /* 0x1 */ u8 mSoundMode;
     /* 0x2 */ u8 mAttentionType;  // Lock-On Type; 0 : hold, 1 : switch
@@ -682,7 +664,6 @@ public:
     void offStageBossEnemy2() { offDungeonItem(STAGE_BOSS_ENEMY_2); }
     s32 isStageBossEnemy2() const { return isDungeonItem(STAGE_BOSS_ENEMY_2); }
 
-private:
     /* 0x00 */ BE(u32) mTbox[2];
     /* 0x08 */ BE(u32) mSwitch[4];
     /* 0x18 */ BE(u32) mItem[1];
@@ -701,7 +682,6 @@ public:
 
     void* getPEventBit() { return (void*)mEvent; }
 
-private:
     /* 0x0 */ u8 mEvent[256];
 };  // Size: 0x100
 
@@ -716,7 +696,6 @@ public:
     u32 getRaceGameTime() const { return mRaceGameTime; }
     void setRaceGameTime(u32 i_time) { mRaceGameTime = i_time; }
 
-private:
     /* 0x00 */ u8 unk0[1][4];
     /* 0x04 */ BE(u32) mHookGameTime;
     /* 0x08 */ BE(u32) mBalloonScore;
@@ -732,7 +711,6 @@ public:
     dSv_memBit_c& getBit() { return mBit; }
     const dSv_memBit_c& getBit() const { return mBit; }
 
-private:
     /* 0x0 */ dSv_memBit_c mBit;
 };  // Size: 0x20
 
@@ -746,7 +724,6 @@ public:
     void offVisitedRoom(int i_no);
     BOOL isVisitedRoom(int i_no);
 
-private:
     /* 0x0 */ BE(u32) mVisitedRoom[2];
 };  // Size: 0x8
 
@@ -765,7 +742,6 @@ public:
 
     void reset() { mStageNo = -1; }
 
-private:
     /* 0x00 */ s8 mStageNo;
     /* 0x01 */ u8 unk1;
     /* 0x04 */ u32 mSwitch[2];
@@ -793,7 +769,6 @@ public:
     void offOneItem(int i_no);
     BOOL isOneItem(int i_no) const;
 
-private:
     /* 0x00 */ BE(u16) mSwitch[2];
     /* 0x04 */ BE(u16) mRoomSwitch;
     /* 0x06 */ BE(u16) mItem[2];
@@ -810,7 +785,6 @@ public:
 
     static const int ACTOR_MAX = 0x80;
 
-private:
     /* 0x00 */ u32 mActorFlags[4];
 };  // Size: 0x10
 
@@ -826,7 +800,6 @@ public:
     dSv_zoneActor_c& getActor() { return mActor; }
     const dSv_zoneActor_c& getActor() const { return mActor; }
 
-private:
     /* 0x00 */ s8 mRoomNo;
     /* 0x01 */ u8 unk1;
     /* 0x02 */ dSv_zoneBit_c mBit;
@@ -855,7 +828,6 @@ public:
         mLastAngleY = angle;
     }
 
-private:
     /* 0x00 */ s8 mRoomNo;
     /* 0x01 */ u8 field_0x01[3];
     /* 0x04 */ s16 mStartPoint;
@@ -891,7 +863,6 @@ public:
     f32 getCameraFvy() const { return mCameraFvy; }
     void setCameraFvy(f32 i_fvy) { mCameraFvy = i_fvy; }
 
-private:
     /* 0x00 */ cXyz mPosition;
     /* 0x0C */ u32 mParam;
     /* 0x10 */ s16 mAngleY;
@@ -928,7 +899,6 @@ public:
     static const int STAGE_MAX = 32;
     static const int STAGE2_MAX = 64;
 
-    // private:
     /* 0x000 */ dSv_player_c mPlayer;
     /* 0x1F0 */ dSv_memory_c mSave[STAGE_MAX];
     /* 0x5F0 */ dSv_memory2_c mSave2[STAGE2_MAX];
