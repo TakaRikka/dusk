@@ -23,6 +23,11 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Graphics")) {
                 ImGui::Checkbox("Native Bloom", &m_graphicsSettings.m_enableBloom);
+                ImGui::Checkbox("Water Projection Offset", &m_graphicsSettings.m_waterProjectionOffset);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Adds GC-specific -0.01 transS offset\n"
+                                      "that causes ~6px ghost artifacts in water reflections");
+                }
                 ImGui::EndMenu();
             }
 
