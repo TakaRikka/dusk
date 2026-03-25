@@ -1081,7 +1081,13 @@ static void trimming(view_class* param_0, view_port_class* param_1) {
         GXSetDither(GX_TRUE);
         GXSetNumIndStages(0);
         Mtx44 ortho;
+
+        #if TARGET_PC
+        C_MTXOrtho(ortho, 0.0f, param_1->height, 0.0f, param_1->width, 0.0f, 10.0f);
+        #else
         C_MTXOrtho(ortho, 0.0f, FB_HEIGHT, 0.0f, FB_WIDTH, 0.0f, 10.0f);
+        #endif
+
         GXLoadPosMtxImm(cMtx_getIdentity(), 0);
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -1089,6 +1095,17 @@ static void trimming(view_class* param_0, view_port_class* param_1) {
         GXSetProjection(ortho, GX_ORTHOGRAPHIC);
         GXSetCurrentMtx(0);
         GXBegin(GX_QUADS, GX_VTXFMT0, 8);
+
+        #if TARGET_PC
+        GXPosition3s16(0, 0, -5);
+        GXPosition3s16(param_1->width, 0, -5);
+        GXPosition3s16(param_1->width, sc_top, -5);
+        GXPosition3s16(0, sc_top, -5);
+        GXPosition3s16(0, sc_bottom, -5);
+        GXPosition3s16(param_1->width, sc_bottom, -5);
+        GXPosition3s16(param_1->width, param_1->height, -5);
+        GXPosition3s16(0, param_1->height, -5);
+        #else
         GXPosition3s16(0, 0, -5);
         GXPosition3s16(FB_WIDTH, 0, -5);
         GXPosition3s16(FB_WIDTH, sc_top, -5);
@@ -1097,6 +1114,8 @@ static void trimming(view_class* param_0, view_port_class* param_1) {
         GXPosition3s16(FB_WIDTH, sc_bottom, -5);
         GXPosition3s16(FB_WIDTH, FB_HEIGHT, -5);
         GXPosition3s16(0, FB_HEIGHT, -5);
+        #endif
+
         GXEnd();
     }
     GXSetScissor(param_1->scissor.x_orig, param_1->scissor.y_orig, param_1->scissor.width,
