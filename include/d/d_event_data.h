@@ -136,6 +136,17 @@ public:
         } msgs;
     };
 
+#if TARGET_PC
+    struct StaffWorkPtrHolder {
+        StaffWork* m_ptr = nullptr;
+
+        StaffWork* operator->() const { return m_ptr; }
+
+        void createPtr();
+        void deletePtr();
+    };
+#endif
+
     struct MessageData {
         BE(s16) unk;
     };

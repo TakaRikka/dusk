@@ -577,7 +577,7 @@ void daNpcTkc_c::reset() {
         setAngle(fopAcM_searchPlayerAngleY(this));
 
         static int const m_cameraItemNum = 1;
-        dCam_getBody()->StartEventCamera(18, fopAcM_GetID(this), "Type", 1, &m_cameraItemNum, 0);
+        dCam_getBody()->StartEventCamera(18, fopAcM_GetID(this), "Type", 1, &m_cameraItemNum, nullptr);
     } else if (parentActorID == fpcM_ERROR_PROCESS_ID_e) {
         home.pos.y += mpHIO->m.target_height;
     } else {

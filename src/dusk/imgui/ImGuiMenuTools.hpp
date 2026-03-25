@@ -5,6 +5,7 @@
 #include <string>
 
 #include "imgui.h"
+#include "ImGuiSaveEditor.hpp"
 
 namespace dusk {
     class ImGuiMenuTools {
@@ -66,6 +67,9 @@ namespace dusk {
 		bool m_showPlayerInfo = false;
 
 		CollisionViewSettings m_collisionViewSettings;
+
+		bool m_showSaveEditor = false;
+        ImGuiSaveEditor m_saveEditor;
     };
 }
 

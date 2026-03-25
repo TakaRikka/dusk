@@ -1173,6 +1173,7 @@ dPa_control_c::dPa_control_c() {
     size_t heapSize = 0x96000;
 #endif
     m_resHeap = JKRCreateExpHeap(heapSize, mDoExt_getArchiveHeap(), false);
+    JKRHEAP_NAME(m_resHeap, "Particle control");
     JUT_ASSERT(2426, m_resHeap != NULL);
     mHeap = NULL;
     mSceneHeap = NULL;

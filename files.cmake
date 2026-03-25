@@ -1344,6 +1344,7 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiControllerOverlay.cpp
         src/dusk/imgui/ImGuiStubLog.cpp
         src/dusk/imgui/ImGuiMapLoader.cpp
+        src/dusk/imgui/ImGuiSaveEditor.cpp
         src/dusk/offset_ptr.cpp
         src/dusk/OSContext.cpp
         src/dusk/OSThread.cpp

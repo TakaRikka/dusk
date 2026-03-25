@@ -5,6 +5,7 @@
 #include <string.h>
 #include <cstdlib>
 #include <cstdint>
+#include <memory>
 #include <mutex>
 #include <condition_variable>
 #include <unordered_map>
@@ -55,42 +56,6 @@ u32 OSGetSoundMode() {
 // Message Queue (thread-safe implementation)
 // ==========================================================================
 
-// Malloc-based allocator to bypass JKRHeap operator new/delete
-template<typename T>
-struct MallocAllocator {
-    using value_type = T;
-    MallocAllocator() = default;
-    template<typename U> MallocAllocator(const MallocAllocator<U>&) noexcept {}
-    T* allocate(std::size_t n) {
-        void* p = std::malloc(n * sizeof(T));
-        if (!p) throw std::bad_alloc();
-        return static_cast<T*>(p);
-    }
-    void deallocate(T* p, std::size_t) noexcept { std::free(p); }
-    template<typename U> bool operator==(const MallocAllocator<U>&) const noexcept { return true; }
-    template<typename U> bool operator!=(const MallocAllocator<U>&) const noexcept { return false; }
-};
-
-template<typename T>
-struct MallocDeleter {
-    void operator()(T* p) const {
-        p->~T();
-        std::free(p);
-    }
-};
-
-template<typename T, typename... Args>
-std::unique_ptr<T, MallocDeleter<T>> make_malloc_unique(Args&&... args) {
-    void* mem = std::malloc(sizeof(T));
-    if (!mem) throw std::bad_alloc();
-    T* obj = new (mem) T(std::forward<Args>(args)...);
-    return std::unique_ptr<T, MallocDeleter<T>>(obj);
-}
-
-template<typename K, typename V>
-using MallocMap = std::unordered_map<K, V, std::hash<K>, std::equal_to<K>,
-    MallocAllocator<std::pair<const K, V>>>;
-
 // Side-table for native synchronization per OSMessageQueue
 struct PCMessageQueueData {
     std::mutex mtx;
@@ -103,8 +68,8 @@ static std::mutex& GetMsgQueueMapMutex() {
     static std::mutex mtx;
     return mtx;
 }
-static MallocMap<OSMessageQueue*, std::unique_ptr<PCMessageQueueData, MallocDeleter<PCMessageQueueData>>>& GetMsgQueueMap() {
-    static MallocMap<OSMessageQueue*, std::unique_ptr<PCMessageQueueData, MallocDeleter<PCMessageQueueData>>> map;
+static std::unordered_map<OSMessageQueue*, std::unique_ptr<PCMessageQueueData>>& GetMsgQueueMap() {
+    static std::unordered_map<OSMessageQueue*, std::unique_ptr<PCMessageQueueData>> map;
     return map;
 }
 
@@ -113,7 +78,7 @@ static PCMessageQueueData& GetMsgQueueData(OSMessageQueue* mq) {
     auto& map = GetMsgQueueMap();
     auto it = map.find(mq);
     if (it == map.end()) {
-        auto result = map.emplace(mq, make_malloc_unique<PCMessageQueueData>());
+        auto result = map.emplace(mq, std::make_unique<PCMessageQueueData>());
         return *result.first->second;
     }
     return *it->second;

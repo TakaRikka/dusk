@@ -588,9 +588,11 @@ static void cut_control2(obj_brg_class* i_this, br_s* i_part) {
 }
 
 static void himo_cut_control1(obj_brg_class* i_this, cXyz* param_1, f32 param_2) {
-    cXyz sp74;
-    cXyz sp80;
-    cXyz sp8C;
+    STUB_RET();
+
+    cXyz sp74 = {};
+    cXyz sp80 = {};
+    cXyz sp8C = {};
 
     sp74.x = 0.0f;
     sp74.y = 0.0f;
@@ -602,7 +604,7 @@ static void himo_cut_control1(obj_brg_class* i_this, cXyz* param_1, f32 param_2)
     sp74.y = 0.0f;
     sp74.z = param_2;
 
-    int i, temp_r27 = (intptr_t) ++param_1;
+    intptr_t i, temp_r27 = (intptr_t) ++param_1;
     f32 var_f31, var_f30, var_f29, var_f28, var_f27;
     for (i = 1; i < 5; i++, param_1++) {
         var_f28 = i_this->field_0xaf30 * cM_ssin( (i_this->field_0xaf20 * 6000) + (NREG_S(3) - 10000) * (temp_r27 + i) )

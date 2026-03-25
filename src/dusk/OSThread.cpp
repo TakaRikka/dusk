@@ -25,45 +25,6 @@
 #endif
 
 // ============================================================================
-// Malloc-based allocator to bypass JKRHeap operator new/delete
-// ============================================================================
-
-template<typename T>
-struct MallocAllocator {
-    using value_type = T;
-    MallocAllocator() = default;
-    template<typename U> MallocAllocator(const MallocAllocator<U>&) noexcept {}
-    T* allocate(std::size_t n) {
-        void* p = std::malloc(n * sizeof(T));
-        if (!p) throw std::bad_alloc();
-        return static_cast<T*>(p);
-    }
-    void deallocate(T* p, std::size_t) noexcept { std::free(p); }
-    template<typename U> bool operator==(const MallocAllocator<U>&) const noexcept { return true; }
-    template<typename U> bool operator!=(const MallocAllocator<U>&) const noexcept { return false; }
-};
-
-template<typename T>
-struct MallocDeleter {
-    void operator()(T* p) const {
-        p->~T();
-        std::free(p);
-    }
-};
-
-template<typename T, typename... Args>
-std::unique_ptr<T, MallocDeleter<T>> make_malloc_unique(Args&&... args) {
-    void* mem = std::malloc(sizeof(T));
-    if (!mem) throw std::bad_alloc();
-    T* obj = JKR_NEW_ARGS (mem) T(std::forward<Args>(args)...);
-    return std::unique_ptr<T, MallocDeleter<T>>(obj);
-}
-
-template<typename K, typename V>
-using MallocMap = std::unordered_map<K, V, std::hash<K>, std::equal_to<K>,
-    MallocAllocator<std::pair<const K, V>>>;
-
-// ============================================================================
 // Side-table: native thread data per OSThread
 // ============================================================================
 
@@ -82,8 +43,8 @@ static std::mutex& GetThreadDataMutex() {
     static std::mutex mtx;
     return mtx;
 }
-static MallocMap<OSThread*, std::unique_ptr<PCThreadData, MallocDeleter<PCThreadData>>>& GetThreadDataMap() {
-    static MallocMap<OSThread*, std::unique_ptr<PCThreadData, MallocDeleter<PCThreadData>>> map;
+static std::unordered_map<OSThread*, std::unique_ptr<PCThreadData>>& GetThreadDataMap() {
+    static std::unordered_map<OSThread*, std::unique_ptr<PCThreadData>> map;
     return map;
 }
 
@@ -92,8 +53,8 @@ static std::mutex& GetQueueCvMutex() {
     static std::mutex mtx;
     return mtx;
 }
-static MallocMap<OSThreadQueue*, std::unique_ptr<std::condition_variable, MallocDeleter<std::condition_variable>>>& GetQueueCvMap() {
-    static MallocMap<OSThreadQueue*, std::unique_ptr<std::condition_variable, MallocDeleter<std::condition_variable>>> map;
+static std::unordered_map<OSThreadQueue*, std::unique_ptr<std::condition_variable>>& GetQueueCvMap() {
+    static std::unordered_map<OSThreadQueue*, std::unique_ptr<std::condition_variable>> map;
     return map;
 }
 
@@ -102,7 +63,7 @@ static std::condition_variable& GetQueueCV(OSThreadQueue* queue) {
     auto& map = GetQueueCvMap();
     auto it = map.find(queue);
     if (it == map.end()) {
-        auto result = map.emplace(queue, make_malloc_unique<std::condition_variable>());
+        auto result = map.emplace(queue, std::make_unique<std::condition_variable>());
         return *result.first->second;
     }
     return *it->second;
@@ -301,7 +262,7 @@ int OSCreateThread(OSThread* thread, void* (*func)(void*), void* param,
 
     // Create side-table entry (but don't start the thread yet)
     {
-        auto data = make_malloc_unique<PCThreadData>();
+        auto data = std::make_unique<PCThreadData>();
         data->func  = func;
         data->param = param;
 

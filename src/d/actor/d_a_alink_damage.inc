@@ -1982,7 +1982,7 @@ int daAlink_c::procCoLavaReturnInit(BOOL i_isSandReturn) {
     mNormalSpeed = 0.0f;
     field_0x3194 = 1;
 
-    dCam_getBody()->StartEventCamera(9, fopAcM_GetID(this), "Type", 1, &field_0x3194, 0);
+    dCam_getBody()->StartEventCamera(9, fopAcM_GetID(this), "Type", 1, &field_0x3194, nullptr);
     return 1;
 }
 
@@ -2040,7 +2040,7 @@ int daAlink_c::procCoSwimFreezeReturnInit() {
     field_0x3194 = 1;
 
     u32 id = fopAcM_GetID(this);
-    dCam_getBody()->StartEventCamera(9, id, "Type", 1, &field_0x3194, 0);
+    dCam_getBody()->StartEventCamera(9, id, "Type", 1, &field_0x3194, nullptr);
     mProcVar2.field_0x300c = 0x2D;
     return 1;
 }

@@ -71,6 +71,7 @@ s32 dScnName_c::create() {
     if (phase_state == cPhs_COMPLEATE_e) {
         mHeap = JKRCreateExpHeap(HEAP_SIZE(0x180000, 0x1C0000), mDoExt_getGameHeap(), false);
         JUT_ASSERT(289, mHeap != NULL);
+        JKRHEAP_NAME(mHeap, "File select");
 
         field_0x1d0 = (JKRExpHeap*)mDoExt_setCurrentHeap(mHeap);
 

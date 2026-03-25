@@ -412,6 +412,7 @@ bool fopAcM_entrySolidHeap_(fopAc_ac_c* i_actor, heapCallbackFunc i_heapCallback
         if (dummy_heap != NULL) {
             heap = mDoExt_createSolidHeap(-1, dummy_heap, 0x20);
             JUT_ASSERT(1211, heap);
+            JKRHEAP_NAMEF(heap, "Actor mng (%s)", procNameString);
 
             if (fopAcM::HeapAdjustVerbose) {
                 // Attempting registration with max dummy heap.
@@ -453,6 +454,7 @@ bool fopAcM_entrySolidHeap_(fopAc_ac_c* i_actor, heapCallbackFunc i_heapCallback
 
             heap = mDoExt_createSolidHeapFromGame(i_size, 0x20);
             if (heap != NULL) {
+                JKRHEAP_NAMEF(heap, "Actor mng (%s)", procNameString);
                 if (fopAcM::HeapAdjustVerbose) {
                     // Attempting registration with estimated heap size. %08x [%s]
                     OS_REPORT("見積もりヒープサイズで登録してみます。%08x [%s]\n", heap,
@@ -734,14 +736,9 @@ u8 var_r30 = fopAcM::HeapAdjustEntry;
     fopAcM::HeapAdjustEntry = var_r30;
 
 #if TARGET_PC
-    char buf[32];
-    snprintf(
-        buf,
-        sizeof(buf),
-        "Actor %d (%s)",
-        i_actor->id,
-        GetProcName(i_actor->profname));
-    JKRHEAP_NAME(i_actor->heap, buf);
+    if (result) {
+        JKRHEAP_NAMEF(i_actor->heap, "Actor %d (%s)", i_actor->id, GetProcName(i_actor->profname));
+    }
 #endif
 
     return result;
@@ -1479,12 +1476,21 @@ struct EnemyTable {
 fpc_ProcID fopAcM_createItemFromEnemyID(u8 i_enemyID, cXyz const* i_pos, int i_itemBitNo,
                                         int i_roomNo, csXyz const* i_angle, cXyz const* i_scale,
                                         f32* i_speedF, f32* i_speedY) {
-                                            int itemNo;
+    int itemNo;
     int tableNo = 0xFF;
-    uintptr_t* data = (uintptr_t*)dEnemyItem_c::getItemData();
+
+#if TARGET_PC
+    u8* data = (u8*)dEnemyItem_c::getItemData();
+    data += 4;
+    int tableNum = *(BE(int)*)data;
+    data += 4;
+#else
+    u32* data = (u32*)dEnemyItem_c::getItemData();
     data++;
-    BE(int) tableNum = (int) *data;
+    int tableNum = (int)*data;
     data++;
+#endif
+
     EnemyTable* table = (EnemyTable*)data;
     
     for (u32 i = 0; i < tableNum; i++) {

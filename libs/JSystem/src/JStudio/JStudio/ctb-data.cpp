@@ -2,4 +2,4 @@
 
 #include "JSystem/JStudio/JStudio/ctb.h"
 
-const u32 JStudio::ctb::data::ga4cSignature = 'CTB\0';
+const u32 JStudio::ctb::data::ga4cSignature = BSWAP32('CTB\0');

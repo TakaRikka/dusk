@@ -699,6 +699,14 @@ void JKRHeap::setName(const char* name) {
     strncpy(mName, name, sizeof(mName) - 1);
     mName[sizeof(mName) - 1] = '\0';
 }
+
+void JKRHeap::setNamef(const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(mName, sizeof(mName), fmt, args);
+    va_end(args);
+}
+
 const char* JKRHeap::getName() const {
     return mName;
 }

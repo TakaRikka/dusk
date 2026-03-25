@@ -38,6 +38,7 @@ int dkWpillar_c::create() {
 
     mpHeap = mDoExt_createSolidHeapFromGameToCurrent(0x2200, 0x20);
     if (mpHeap != NULL) {
+        JKRHEAP_NAME(mpHeap, "d_k_wpillar::mpModel");
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 0x1C);
         JUT_ASSERT(96, modelData);
 

@@ -256,7 +256,7 @@ void daAlink_c::commonKandelaarPourInit() {
     mProcVar2.field_0x300c = 0;
     dComIfGp_setPlayerStatus1(0, 0x2000);
     field_0x3194 = 10;
-    dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", 1, &field_0x3194, 0);
+    dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", 1, &field_0x3194, nullptr);
 }
 
 int daAlink_c::commonKandelaarPour(int param_0) {

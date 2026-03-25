@@ -96,10 +96,10 @@ public:
         /* 0x02 */ const char mStageName[8];
         /* 0x0A */ u8 mRoomNo;
         /* 0x0B */ u8 mWarpPlayerNo;
-        /* 0x0C */ u16 mMessageID;
+        /* 0x0C */ BE(u16) mMessageID;
         /* 0x0E */ u8 mStageNo;
         /* 0x0F */ u8 mSwitchNo;
-        /* 0x10 */ cXyz mPosition;
+        /* 0x10 */ BE(Vec) mPosition;
     };
 
     /* 0x0 */ u8 field_0x0[8];
