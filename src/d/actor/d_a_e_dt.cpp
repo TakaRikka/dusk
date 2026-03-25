@@ -1578,11 +1578,17 @@ bool daE_DT_c::pointInSight(cXyz* i_point) {
     f32 width = scissor->width;
     f32 height = scissor->height;
     mDoLib_project(i_point, &proj);
+
+    #if TARGET_PC
+    view_port_class* viewport = dComIfGp_getWindow(dComIfGp_getCameraWinID(idx))->getViewPort();
+    return proj.x > 0.0f && proj.x < width && proj.y > (30.0f * viewport->height / FB_HEIGHT) && -(30.0f * viewport->height / FB_HEIGHT) < height;
+    #else
     if (proj.x > 0.0f && proj.x < width && proj.y > 30.0f && -30.0f < height) {
         return true;
     } else {
         return false;
     }
+    #endif
 }
 
 void daE_DT_c::executeOpening() {
