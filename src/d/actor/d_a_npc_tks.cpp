@@ -823,7 +823,15 @@ void daNpcTks_c::playMotion() {
     daNpcF_anmPlayData dat4a = {ANM_JUMP_S, 4.0f, 1};
     daNpcF_anmPlayData dat4b = {ANM_FLY, 0.0f, 0};
     daNpcF_anmPlayData* pDat4[2] = {&dat4a, &dat4b};
+
+    #if TARGET_PC
+    // Note: this fixes a crash in the cutscene after entering city and likely needs to be revisited as its
+    // unclear why this was 1 in the first place and unclear why this fixes it
+    daNpcF_anmPlayData dat5 = {ANM_JUMP_E, 0.0f, 0};
+    #else
     daNpcF_anmPlayData dat5 = {ANM_JUMP_E, 0.0f, 1};
+    #endif
+
     daNpcF_anmPlayData* pDat5[1] = {&dat5};
     daNpcF_anmPlayData dat6a = {ANM_LAND, 0.0f, 1};
     daNpcF_anmPlayData dat6b = {ANM_WAIT_A, 4.0f, 0};
