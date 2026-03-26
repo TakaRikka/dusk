@@ -47,6 +47,7 @@
 #include "dusk/dusk.h"
 #include "dusk/logging.h"
 #include "dusk/time.h"
+#include "dusk/main.h"
 
 #include <aurora/aurora.h>
 #include <aurora/event.h>
@@ -72,6 +73,10 @@ const int audioHeapSize = 0x14D800;
 // LOAD_COPYDATE - PC Version
 // =========================================================================
 #define COPYDATE_PATH "/str/Final/Release/COPYDATE"
+
+#if TARGET_PC
+bool dusk::IsShuttingDown = false;
+#endif
 
 s32 LOAD_COPYDATE(void*) {
     char buffer[32];
@@ -305,6 +310,8 @@ int game_main(int argc, char* argv[]) {
 
     fflush(stdout);
     fflush(stderr);
+
+    dusk::IsShuttingDown = true;
 
     aurora_shutdown();
 
