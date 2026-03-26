@@ -1008,6 +1008,7 @@ int daPeru_c::_cutAppear_Init(int const& param_1) {
         initTalk(mFlowNodeNo, NULL);
         break;
     case 140:
+    {
         static cXyz see_pos;
         see_pos.set(0.0f, -300.0f, 300.0f);
         mDoMtx_stack_c::ZXYrotS(shape_angle);
@@ -1016,6 +1017,7 @@ int daPeru_c::_cutAppear_Init(int const& param_1) {
         mJntAnm.lookPos(&see_pos, 0);
         setCnt(80);
         break;
+    }
     case 150:
         mJntAnm.lookNone(0);
         setAction(&daPeru_c::demo_walk_to_window, 0);
