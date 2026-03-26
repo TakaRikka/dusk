@@ -26,6 +26,8 @@ int dThunder_c::createHeap() {
         if (mpHeap == NULL) {
             return 0;
         }
+
+        JKRHEAP_NAME(mpHeap, "dThunder_c::mpHeap");
     }
 
     return 1;

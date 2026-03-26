@@ -12,18 +12,16 @@ namespace dusk {
             return;
         }
 
-        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize |
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_AlwaysAutoResize |
             ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
     
         ImGui::SetNextWindowBgAlpha(0.65f);
         ImGui::SetNextWindowSizeConstraints(ImVec2(300, 0), ImVec2(FLT_MAX, FLT_MAX));
     
-        if (!ImGui::Begin("Map Loader", nullptr, windowFlags)) {
+        if (!ImGui::Begin("Map Loader", &m_showMapLoader, windowFlags)) {
             ImGui::End();
             return;
         }
-
-        ImGui::SeparatorText("Map Loader");
 
         ImGui::Checkbox("Show Internal Names", &m_mapLoaderInfo.showInternalNames);
 
@@ -38,6 +36,8 @@ namespace dusk {
                 if (ImGui::Selectable(region.regionName)) {
                     if (m_mapLoaderInfo.regionIdx != idx) {
                         m_mapLoaderInfo.mapIdx = 0;
+                        m_mapLoaderInfo.roomNoIdx = 0;
+                        m_mapLoaderInfo.pointNoIdx = 0;
                     }
                     m_mapLoaderInfo.regionIdx = idx;
                 }
@@ -70,7 +70,7 @@ namespace dusk {
                     m_mapLoaderInfo.pointNoIdx = 0;
                 }
             }
-        }else {
+        } else {
             ImGui::Text("No region selected.");
         }
 

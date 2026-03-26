@@ -32,6 +32,10 @@ public:
 
     J3DModel* getModel() { return mpModel; }
 
+#if TARGET_PC
+    void setIdx(u8 idx) { this->idx = idx; }
+#endif
+
 private:
     /* 0x00 */ JKRSolidHeap* mpHeap;
     /* 0x04 */ J3DModel* mpModel;
@@ -40,6 +44,9 @@ private:
     /* 0x10 */ u8 mDrawBG;
     /* 0x11 */ s8 mRoomNo;
     /* 0x12 */ u8 field_0x12;
+#if TARGET_PC
+    u8 idx;
+#endif
 };  // Size: 0x14
 
 class dSmplMdl_draw_c {

@@ -153,7 +153,7 @@ void JStudio_JParticle::TAdaptor_particle::adaptor_do_PARENT(
     switch (param_1) {
     case JStudio::data::UNK_0x18:
         JUT_ASSERT(313, pContent!=NULL);
-        JUT_ASSERT(314, uSize==4);
+        JUT_ASSERT(314, uSize>0);
         field_0x1d0 = NULL;
         const JStage::TSystem* pJSGSystem = pCreateObject_->get_pJSGSystem_();
         JUT_ASSERT(345, pJSGSystem!=NULL);
@@ -172,7 +172,7 @@ void JStudio_JParticle::TAdaptor_particle::adaptor_do_PARENT_NODE(
     case JStudio::data::UNK_0x18:
         if (field_0x1d0 != NULL) {
             JUT_ASSERT(380, pContent!=NULL);
-            JUT_ASSERT(381, uSize==4);
+            JUT_ASSERT(381, uSize>0);
             field_0x1d4 = field_0x1d0->JSGFindNodeID((const char*)pContent);
             if (field_0x1d4 == -1) {
                 return;

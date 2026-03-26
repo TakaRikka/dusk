@@ -1649,6 +1649,7 @@ void dMenu_Dmap_c::_create() {
 
     mDmapHeap = JKRCreateExpHeap(field_0xe8->getFreeSize() - 0x10, field_0xe8, false);
     JUT_ASSERT(3732, mDmapHeap != NULL);
+    JKRHEAP_NAME(mDmapHeap, "dMenu_Dmap_c::mDmapHeap");
     JKRHeap* heap = mDoExt_setCurrentHeap(mDmapHeap);
     u32 sp28 = mDmapHeap->getTotalFreeSize();
     

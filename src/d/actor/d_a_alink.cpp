@@ -4453,7 +4453,7 @@ void daAlink_c::playerInit() {
     mAtSph.StartCAt(current.pos);
 
     mAnmHeap3.setBufferSize(0x20000);
-    mAnmHeap3.createHeap(daPy_anmHeap_c::HEAP_TYPE_4);
+    PLAYER_CREATE_ANM_HEAP(mAnmHeap3, daPy_anmHeap_c::HEAP_TYPE_4, "daAlink_c::mAnmHeap3");
 
     if (checkWolf()) {
         changeWolf();
@@ -4462,7 +4462,7 @@ void daAlink_c::playerInit() {
     }
 
     mAnmHeap4.setBufferSize(0xB00);
-    mAnmHeap4.createHeap(daPy_anmHeap_c::HEAP_TYPE_4);
+    PLAYER_CREATE_ANM_HEAP(mAnmHeap4, daPy_anmHeap_c::HEAP_TYPE_4, "daAlink_c::mAnmHeap4");
     setShieldModel();
 
     #if DEBUG
@@ -4507,24 +4507,24 @@ void daAlink_c::playerInit() {
 
     for (i = 0; i < 3; i++) {
         mUnderAnmHeap[i].setBuffer(mUnderAnmHeap[0].getBuffer() + (i * 0x2C00));
-        mUnderAnmHeap[i].createHeap(daPy_anmHeap_c::HEAP_TYPE_3);
+        PLAYER_CREATE_ANM_HEAP_F(mUnderAnmHeap[i], daPy_anmHeap_c::HEAP_TYPE_3, "daAlink_c::mUnderAnmHeap[%d]", i);
     }
     mUpperAnmHeap[0].setBuffer(mUnderAnmHeap[0].getBuffer() + 0x8400);
 
     for (i = 0; i < 3; i++) {
         mUpperAnmHeap[i].setBuffer(mUpperAnmHeap[0].getBuffer() + (i * 0x2C00));
-        mUpperAnmHeap[i].createHeap(daPy_anmHeap_c::HEAP_TYPE_3);
+        PLAYER_CREATE_ANM_HEAP_F(mUpperAnmHeap[i], daPy_anmHeap_c::HEAP_TYPE_3, "daAlink_c::mUpperAnmHeap[%d]", i);
     }
 
-    mFaceBtpHeap.createHeap(daPy_anmHeap_c::HEAP_TYPE_1);
-    mFaceBtkHeap.createHeap(daPy_anmHeap_c::HEAP_TYPE_2);
-    mFaceBckHeap.createHeap(daPy_anmHeap_c::HEAP_TYPE_3);
+    PLAYER_CREATE_ANM_HEAP(mFaceBtpHeap, daPy_anmHeap_c::HEAP_TYPE_1, "daAlink_c::mFaceBtpHeap");
+    PLAYER_CREATE_ANM_HEAP(mFaceBtkHeap, daPy_anmHeap_c::HEAP_TYPE_2, "daAlink_c::mFaceBtkHeap");
+    PLAYER_CREATE_ANM_HEAP(mFaceBckHeap, daPy_anmHeap_c::HEAP_TYPE_3, "daAlink_c::mFaceBckHeap");
 
     for (i = 0; i < 2; i++) {
         mItemHeap[i].setBufferSize(0x13200);
-        mItemHeap[i].createHeap(daPy_anmHeap_c::HEAP_TYPE_4);
+        PLAYER_CREATE_ANM_HEAP_F(mItemHeap[i], daPy_anmHeap_c::HEAP_TYPE_4, "daAlink_c::mItemHeap[%d]", i);
     }
-    mAnmHeap9.createHeap(daPy_anmHeap_c::HEAP_TYPE_3);
+    PLAYER_CREATE_ANM_HEAP(mAnmHeap9, daPy_anmHeap_c::HEAP_TYPE_3, "daAlink_c::mAnmHeap9");
     resetBasAnime();
 
     mZ2Link.init(&current.pos, &eyePos, &field_0x3720);

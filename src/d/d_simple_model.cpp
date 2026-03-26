@@ -18,6 +18,7 @@ static void dSmplMdl_modelUpdateDL(J3DModel* i_model) {
 dSmplMdl_draw_c::dSmplMdl_draw_c() {
     for (int i = 0; i < 8; i++) {
         mModel[i].init();
+        mModel[i].setIdx(i);
     }
 
     for (int i = 0; i < 500; i++) {
@@ -128,6 +129,7 @@ BOOL diff_model_c::create(J3DModelData* i_modelData, int roomNo, u8 drawBG) {
     JUT_ASSERT(397, i_modelData != NULL);
     if (mpHeap == NULL) {
         mpHeap = mDoExt_createSolidHeapFromGameToCurrent(0x2000, 0x20);
+        JKRHEAP_NAMEF(mpHeap, "Simple model (%d)", idx);
 
         if (mpHeap != NULL) {
             mpModel = mDoExt_J3DModel__create(i_modelData, 0x80000, 0x11000084);

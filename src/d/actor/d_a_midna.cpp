@@ -565,12 +565,12 @@ cPhs_Step daMidna_c::create() {
         mpFunc = &daMidna_c::checkMetamorphoseEnableBase;
         
         for (u16 i = 0; i < 3; i++) {
-            mBckHeap[i].createHeap(daPy_anmHeap_c::HEAP_TYPE_3);
+            PLAYER_CREATE_ANM_HEAP_F(mBckHeap[i], daPy_anmHeap_c::HEAP_TYPE_3, "daMidna_c::mBckHeap[%d]", i);
         }
         
-        mBtpHeap.createHeap(daPy_anmHeap_c::HEAP_TYPE_1);
-        mBtkHeap.createHeap(daPy_anmHeap_c::HEAP_TYPE_2);
-        
+        PLAYER_CREATE_ANM_HEAP_F(mBtpHeap, daPy_anmHeap_c::HEAP_TYPE_1, "daMidna_c::mBtpHeap");
+        PLAYER_CREATE_ANM_HEAP_F(mBtkHeap, daPy_anmHeap_c::HEAP_TYPE_2, "daMidna_c::mBtkHeap");
+
         mSound.init(&current.pos, &eyePos, 3, 1);
         mpShadowModel = mpMorf->getModel();
         mpShadowModel->setUserArea((uintptr_t)this);
