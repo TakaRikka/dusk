@@ -36,6 +36,8 @@ namespace dusk {
                 if (ImGui::Selectable(region.regionName)) {
                     if (m_mapLoaderInfo.regionIdx != idx) {
                         m_mapLoaderInfo.mapIdx = 0;
+                        m_mapLoaderInfo.roomNoIdx = 0;
+                        m_mapLoaderInfo.pointNoIdx = 0;
                     }
                     m_mapLoaderInfo.regionIdx = idx;
                 }
@@ -68,7 +70,7 @@ namespace dusk {
                     m_mapLoaderInfo.pointNoIdx = 0;
                 }
             }
-        }else {
+        } else {
             ImGui::Text("No region selected.");
         }
 
