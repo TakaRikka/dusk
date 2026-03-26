@@ -524,6 +524,7 @@ bool fopAcM_entrySolidHeap_(fopAc_ac_c* i_actor, heapCallbackFunc i_heapCallback
                 OSReport_Error("最大空きヒープサイズで確保失敗。[%s]\n", procNameString);
                 return false;
             }
+            JKRHEAP_NAMEF(heap, "Actor mng (%s)", procNameString);
 #if DEBUG
             if (!fopAcM::HeapAdjustQuiet) {
                 // Attempting registration with max heap size. %08x
@@ -625,6 +626,7 @@ bool fopAcM_entrySolidHeap_(fopAc_ac_c* i_actor, heapCallbackFunc i_heapCallback
 
             if (alignedSize + adjOffset + 0x10 < freeSize) {
                 newHeap = mDoExt_createSolidHeapFromGame(alignedSize, 0x20);
+                JKRHEAP_NAMEF(newHeap, "Actor mng (%s)", procNameString);
             }
 
             if (fopAcM::HeapAdjustVerbose) {

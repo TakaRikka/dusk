@@ -73,6 +73,20 @@ private:
     /* 0x8 */ f32 m_offsetXZ;
 };  // Size: 0xC
 
+#if TARGET_PC
+#define PLAYER_CREATE_ANM_HEAP_F(heap, type, fmt, ...) \
+    { \
+        char pcah_name_buf[32]; \
+        sprintf(pcah_name_buf, fmt, ##__VA_ARGS__); \
+        (heap).createHeap(type, pcah_name_buf); \
+        \
+    }
+#define PLAYER_CREATE_ANM_HEAP(heap, type, name) (heap).createHeap(type, name)
+#else
+#define PLAYER_CREATE_ANM_HEAP_F(heap, type, name, ...) (heap).createHeap(type)
+#define PLAYER_CREATE_ANM_HEAP(heap, type, name) (heap).createHeap(type)
+#endif
+
 class daPy_anmHeap_c {
 public:
     enum daAlinkHEAP_TYPE {
@@ -87,7 +101,11 @@ public:
     ~daPy_anmHeap_c();
     void initData();
     void* mallocBuffer();
+#if TARGET_PC
+    void createHeap(daAlinkHEAP_TYPE i_heapType, const char* name);
+#else
     void createHeap(daAlinkHEAP_TYPE i_heapType);
+#endif
     void* loadData(u16 i_resId);
     void* loadDataIdx(u16 i_resId);
     void* loadDataPriIdx(u16 i_resId);

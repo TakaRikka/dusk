@@ -2222,6 +2222,7 @@ dMenu_Collect3D_c::~dMenu_Collect3D_c() {
 void dMenu_Collect3D_c::_create() {
     mpHeap->getTotalFreeSize();
     mpSolidHeap = mDoExt_createSolidHeapToCurrent(0x25800, mpHeap, 0x20);
+    JKRHEAP_NAME(mpSolidHeap, "dMenu_Collect3D_c::mpSolidHeap");
     mDoExt_setCurrentHeap((JKRHeap*)mpSolidHeap);
     daAlink_c* linkActor = daAlink_getAlinkActorClass();
     if (linkActor != NULL) {

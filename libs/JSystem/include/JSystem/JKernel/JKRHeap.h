@@ -222,9 +222,13 @@ public:
 
 #define JKRHEAP_NAME(heap, name) (heap)->setName(name)
 #define JKRHEAP_NAMEF(heap, name, ...) (heap)->setNamef(name, __VA_ARGS__)
+#define JKRHEAP_CURRENT_NAME(heap, name) JKRHEAP_NAME(mDoExt_getCurrentHeap(), name)
+#define JKRHEAP_CURRENT_NAMEF(heap, name, ...) JKRHEAP_NAMEF(mDoExt_getCurrentHeap(), name, __VA_ARGS__)
 #else
 #define JKRHEAP_NAME(heap, name)
-#define JKRHEAP_NAMEF(heap, name)
+#define JKRHEAP_NAMEF(heap, name, ...)
+#define JKRHEAP_CURRENT_NAME(heap, name)
+#define JKRHEAP_CURRENT_NAMEF(heap, name, ...)
 #endif
 };
 
