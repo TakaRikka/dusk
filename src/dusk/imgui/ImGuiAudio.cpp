@@ -10,6 +10,7 @@
 #include "dusk/audio/DuskAudioSystem.h"
 
 static std::array<u8, DSP_CHANNELS> channelSortIndices = {};
+static std::array<u32, DSP_CHANNELS> lastResetCounts = {};
 
 static bool sortUpdateCount = true;
 
@@ -28,7 +29,14 @@ static void DisplayDspChannel(int i) {
     if (ImGui::BeginChild(buf, ImVec2(), ImGuiChildFlags_Border | ImGuiChildFlags_AutoResizeY)) {
         ImGui::Text("[%02X]", i);
         ImGui::SameLine();
-        ImGui::Text("Update count: %d", jasChannel.mUpdateCounter);
+
+        auto resetCount = GetResetCount(i);
+        ImColor color = IM_COL32_WHITE;
+        if (lastResetCounts[i] != resetCount) {
+            lastResetCounts[i] = resetCount;
+            color = IM_COL32(0, 0xFF, 0, 0xFF);
+        }
+        ImGui::TextColored(color, "Update count: %d, reset count: %ud", jasChannel.mUpdateCounter, resetCount);
         ImGui::TextUnformatted(channel.mLoopFlag ? "Loop: true" : "Loop: false");
         ImGui::SameLine();
         ImGui::Text("Priority: %hd", jasChannel.mPriority);
