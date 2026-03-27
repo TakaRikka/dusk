@@ -21,6 +21,8 @@
 #include "m_Do/m_Do_Reset.h"
 #include <cstdio>
 #include <cstring>
+
+#include "dusk/string.hpp"
 #if TARGET_PC
 #include <format>
 #include <fmt/ranges.h>
@@ -154,7 +156,7 @@ void dStage_startStage_c::set(const char* i_Name, s8 i_RoomNo, s16 i_Point, s8 i
 #if TARGET_PC
     // UB fix.
     if (mName != i_Name) {
-        strncpy_s(mName, sizeof(mName), i_Name, sizeof(mName));
+        dusk::SafeStringCopy(mName, i_Name);
     }
 #else
     strcpy(mName, i_Name);
