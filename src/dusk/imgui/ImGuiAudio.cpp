@@ -82,7 +82,7 @@ static void InitChannelSortIndices() {
 
 static void SortChannelsByUpdateCount() {
     InitChannelSortIndices();
-    std::ranges::sort(
+    std::ranges::stable_sort(
         channelSortIndices,
         [](u8 a, u8 b) {
             auto& jasChannelA = JASDSPChannel::sDspChannels[a];
