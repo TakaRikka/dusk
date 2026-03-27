@@ -8,7 +8,7 @@
 #endif
 #include <stdint.h>
 #include <global.h>
-#include "JSystem/JHostIO/JORReflexible.h"
+#include "JSystem/JHostIO/JOREvent.h"
 #include "JSystem/JSupport/JSUMemoryStream.h"
 
 #define MCTX_MSG_RESET 0
@@ -195,9 +195,7 @@ public:
     void startUpdateNode(JORReflexible* obj) { putNode(obj); }
 
     void genNodeSub(const char* label, JORReflexible* i_node, u32, u32);
-    void putNode(JORReflexible* obj) {
-        mOutputStream << (uintptr_t)obj;
-    }
+    void putNode(JORReflexible* obj) { mOutputStream << (uintptr_t)obj; }
     void invalidNode(JORReflexible* i_node, u32);
 
     void genControl(u32 type, u32 kind, const char* label, u32 style, u32 id,
@@ -221,6 +219,10 @@ public:
     void genButton(const char* label, u32 id, u32 style = 0, JOREventListener* pListener = NULL,
                    u16 posX = -1, u16 posY = -1, u16 width = JORM_DEFAULT_WIDTH,
                    u16 height = JORM_DEFAULT_HEIGHT);
+
+    void updateButton(u32 param_1, u32 param_2, u32 param_3) {
+        updateControl(param_1, param_2, param_3);
+    }
 
     void genLabel(const char* label, u32 id, u32 style = 0, JOREventListener* pListener = NULL,
                   u16 posX = -1, u16 posY = -1, u16 width = JORM_DEFAULT_WIDTH,
@@ -271,6 +273,7 @@ public:
     DEFINE_START_COMBO_BOX_ID(s32, JORPropertyEvent::EKind_ValueID)
 
     DEFINE_UPDATE_COMBO_BOX(u8)
+    DEFINE_UPDATE_COMBO_BOX(s32)
 
     DEFINE_UPDATE_COMBO_BOX_ID(s32)
 
@@ -278,6 +281,16 @@ public:
 
     void genComboBoxItem(const char* label, s32 itemNo) {
         genSelectorItemSub(label, itemNo, 0, 0, 0, 0, 0);
+    }
+
+    void editComboBoxItem(u32 param_0, u32 param_1, const char* param_2, s32 param_3, u32 param_4);
+
+    void addComboBoxItem(u32 param_1, s32* param_2, const char* param_3, s32 param_4, u32 param_5) {
+        editComboBoxItem(param_1, (uintptr_t)param_2, param_3, param_4, param_5);
+    }
+
+    void removeComboBoxItem(u32 param_1, s32* param_2, u32 param_3) {
+        editComboBoxItem(param_1, (uintptr_t)param_2, NULL, 0, param_3);
     }
 
     /**
@@ -313,8 +326,6 @@ public:
     void updateRadioButton(u32 mode, s16* pSrc, u32 param_3) {
         updateSelectorSub(mode, (uintptr_t)pSrc, *pSrc, param_3);
     }
-
-    void editComboBoxItem(u32 param_0, u32 param_1, const char* param_2, s32 param_3, u32 param_4);
 
     void openMessageBox(void* param_0, u32 style, const char* message, const char* title);
 

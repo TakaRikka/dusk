@@ -1,6 +1,7 @@
 #ifndef JASDSPINTERFACE_H
 #define JASDSPINTERFACE_H
 
+#include <cstdint>
 #include <types.h>
 
 struct JASWaveInfo;

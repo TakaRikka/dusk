@@ -20,6 +20,7 @@
 #endif
 
 Z2AudioMgr* Z2AudioMgr::mAudioMgrPtr;
+u8 gMuffleOutOfRangeMic = false;
 
 Z2AudioMgr::Z2AudioMgr() : mSoundStarter(true) {
     mAudioMgrPtr = this;

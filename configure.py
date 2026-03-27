@@ -1236,7 +1236,7 @@ config.libs = [
     JSystemLib(
         "JAHNodeLib",
         [
-            Object(NonMatching, "JSystem/JAHNodeLib/JAHAudienceSettingNode.cpp"),
+            Object(Matching, "JSystem/JAHNodeLib/JAHAudienceSettingNode.cpp"),
             Object(NonMatching, "JSystem/JAHNodeLib/JAHConductNode.cpp"),
             Object(NonMatching, "JSystem/JAHNodeLib/JAHIDSwapNode.cpp"),
             Object(NonMatching, "JSystem/JAHNodeLib/JAHSoundPlayerNode.cpp"),

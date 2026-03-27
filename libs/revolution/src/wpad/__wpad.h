@@ -3,6 +3,7 @@
 
 #include <revolution/os.h>
 #include <revolution/wpad.h>
+#include "global.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -14,8 +14,8 @@ public:
     void setFadeOutStart(u8 fadeType);
     void setFadeInStart(u8 fadeType);
     void setSceneName(char* spot, s32 room, s32 layer);
-    void sceneChange(JAISoundID bgm, u8 seWave1, u8 seWave2, u8 bgmWave1, u8 bgmWave2,
-                     u8 demoWave, bool);
+    void sceneChange(JAISoundID bgm, u8 seWave1, u8 seWave2, u8 bgmWave1, u8 bgmWave2, u8 demoWave,
+                     bool);
     void framework();
     void load1stDynamicWave();
     void _load1stWaveInner_1();
@@ -31,9 +31,9 @@ public:
     bool loadSeWave(u32 wave);
     bool loadBgmWave(u32 wave);
 
-    #if PLATFORM_SHIELD
+#if PLATFORM_SHIELD
     bool loadSceneWave(u32 wave, u32 bank);
-    #endif
+#endif
 
     bool isSceneExist() { return sceneExist; }
     int getCurrentSceneNum() { return sceneNum; }

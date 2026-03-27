@@ -5,9 +5,9 @@
 #include "dusk/endian.h"
 
 /**
-* @ingroup jsystem-jsupport
-* 
-*/
+ * @ingroup jsystem-jsupport
+ *
+ */
 class JSUInputStream : public JSUIosBase {
 public:
     JSUInputStream() {}
@@ -93,13 +93,9 @@ public:
         return *this;
     }
 
-    s32 read(bool& val) {
-        return read(&val, sizeof(bool));
-    }
+    s32 read(bool& val) { return read(&val, sizeof(bool)); }
 
-    s32 read(u8& val) {
-        return read(&val, sizeof(u8));
-    }
+    s32 read(u8& val) { return read(&val, sizeof(u8)); }
 
     s32 read(u32& param_0) {
         auto ret = read(&param_0, 4);
@@ -114,9 +110,9 @@ public:
 
 // move?
 /**
-* @ingroup jsystem-jsupport
-* 
-*/
+ * @ingroup jsystem-jsupport
+ *
+ */
 template <typename T>
 T* JSUConvertOffsetToPtr(const void*, const void*);
 

@@ -1,6 +1,7 @@
 #include <revolution.h>
 #include <revolution/pad.h>
 #include <revolution/si.h>
+#include "global.h"
 
 #include <cstring>
 

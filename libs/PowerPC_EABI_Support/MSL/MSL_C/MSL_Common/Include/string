@@ -10,7 +10,6 @@ using ::memcmp;
 using ::memchr;
 using ::memmove;
 
-using ::strrchr;
 using ::strlen;
 using ::strncmp;
 using ::strcmp;
@@ -25,6 +24,11 @@ using ::wcslen;
 inline char* strchr(char* str, int c) {
     return ::strchr(str, c);
 }
+
+inline char* strrchr(char* str, int c) {
+    return ::strrchr(str, c);
+}
+
 };  // namespace std
 
 #endif

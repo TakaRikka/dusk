@@ -2862,7 +2862,7 @@ JSystem/JAHostIO/JAHVirtualNode.cpp:
 	.text       start:0x804B0490 end:0x804B0A80
 	.data       start:0x80704000 end:0x80704048
 	.sdata      start:0x807490E0 end:0x80749108
-	.sbss       start:0x8074CDA0 end:0x8074CDAC
+	.sbss       start:0x8074CDA0 end:0x8074CDA8
 
 JSystem/JAHostIO/JAHUAsnData.cpp:
 	.text       start:0x804B0A80 end:0x804B15A0
@@ -2926,7 +2926,7 @@ JSystem/JMessage/locale.cpp:
 
 Z2AudioLib/Z2Calc.cpp:
 	.text       start:0x804BAF50 end:0x804BB4D0
-	.sbss       start:0x8074CDAC end:0x8074CDB0
+	.sbss       start:0x8074CDA8 end:0x8074CDB0
 	.sdata2     start:0x80751EC0 end:0x80751ED8
 
 Z2AudioLib/Z2Param.cpp:

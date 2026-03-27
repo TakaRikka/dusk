@@ -1,8 +1,11 @@
-#include "JSystem/JSystem.h" // IWYU pragma: keep
+#include "JSystem/JSystem.h"  // IWYU pragma: keep
 
-#include "JSystem/JAHostIO/JAHioMgr.h"
 #include "JSystem/JAHostIO/JAHFrameNode.h"
+#include "JSystem/JAHostIO/JAHioMgr.h"
 #include "JSystem/JHostIO/JORServer.h"
+
+template <>
+JAHioMgr* JAHSingletonBase<JAHioMgr>::sInstance = NULL;
 
 JAHioMgr::JAHioMgr() : field_0x4(0), field_0x8(0) {}
 
