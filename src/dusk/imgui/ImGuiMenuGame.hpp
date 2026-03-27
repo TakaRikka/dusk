@@ -13,6 +13,7 @@ namespace dusk {
         ImGuiMenuGame();
         void draw();
         bool isBloomEnabled() { return m_graphicsSettings.m_enableBloom; }
+        bool isWaterProjectionOffsetEnabled() { return m_graphicsSettings.m_waterProjectionOffset; }
 
         void windowInputViewer();
         void windowControllerConfig();
@@ -35,6 +36,7 @@ namespace dusk {
 
         struct {
             bool m_enableBloom = 1;
+            bool m_waterProjectionOffset = false;
         } m_graphicsSettings;
 
         bool m_showControllerConfig = false;

@@ -1,10 +1,12 @@
-#include "JSystem/JSystem.h" // IWYU pragma: keep
+#include "JSystem/JSystem.h"  // IWYU pragma: keep
 
-#include "JSystem/JAHostIO/JAHioNode.h"
+#include <cstring>
 #include "JSystem/JAHostIO/JAHioMessage.h"
 #include "JSystem/JAHostIO/JAHioMgr.h"
+#include "JSystem/JAHostIO/JAHioNode.h"
 #include "JSystem/JHostIO/JORServer.h"
-#include <cstring>
+
+JAHioNode* JAHioNode::smCurrentNode;
 
 JAHioNode::JAHioNode(const char* name) : mTree(this) {
     mLastChild = NULL;
@@ -86,7 +88,9 @@ void JAHioNode::generateTempChildren(JORMContext* mctx) {
     }
 }
 
-u32 JAHioNode::getNodeKind() const { return 0; }
+u32 JAHioNode::getNodeKind() const {
+    return 0;
+}
 
 JAHioNode* JAHioNode::getParent() {
     if (mTree.getParent()) {
@@ -96,9 +100,9 @@ JAHioNode* JAHioNode::getParent() {
 }
 
 void JAHioNode::listenPropertyEvent(const JORPropertyEvent* event) {
-    propertyEvent(JAH_P_EVENT0, (u32)event->id);
+    propertyEvent(JAH_P_EVENT0, (uintptr_t)event->id);
     JORReflexible::listenPropertyEvent(event);
-    propertyEvent(JAH_P_EVENT1, (u32)event->id);
+    propertyEvent(JAH_P_EVENT1, (uintptr_t)event->id);
 }
 
 void JAHioNode::listenNodeEvent(const JORNodeEvent* event) {

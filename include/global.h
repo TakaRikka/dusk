@@ -179,6 +179,7 @@ static const float INF = 2000000000.0f;
 #ifdef __MWERKS__
     #define MULTI_CHAR(x) (x)
 #else
+#if __cplusplus
     template <int N>
     inline constexpr unsigned long long MultiCharLiteral(const char (&buf)[N]) {
         static_assert(N - 1 >= 3 && N - 1 <= 10, "MULTI_CHAR literal must be 1-8 characters");
@@ -190,6 +191,7 @@ static const float INF = 2000000000.0f;
     }
     #define MULTI_CHAR(x) MultiCharLiteral(#x)
 #endif
+#endif
 
 // potential fakematch?
 #if DEBUG
@@ -199,8 +201,10 @@ static const float INF = 2000000000.0f;
 #endif
 
 #ifndef __MWERKS__
+#if __cplusplus
 #include <cmath>
 using std::isnan;
+#endif
 #endif
 
 // Comparing a non-volatile reference type to NULL is tautological

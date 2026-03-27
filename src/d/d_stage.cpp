@@ -393,6 +393,7 @@ static void dummy1(dStage_roomControl_c* roomControl) {
 JKRExpHeap* dStage_roomControl_c::createMemoryBlock(int i_blockIdx, u32 i_heapSize) {
     if (mMemoryBlock[i_blockIdx] == NULL) {
         mMemoryBlock[i_blockIdx] = JKRCreateExpHeap(i_heapSize, mDoExt_getArchiveHeap(), false);
+        JKRHEAP_NAMEF(mMemoryBlock[i_blockIdx], "Room control memory block %d", i_blockIdx);
     }
 
     return mMemoryBlock[i_blockIdx];

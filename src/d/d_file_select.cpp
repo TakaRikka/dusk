@@ -5195,6 +5195,7 @@ void dFile_select3D_c::_create(u8 i_mirrorIdx, u8 i_maskIdx) {
     if (mpSolidHeap == NULL) {
         JUT_ASSERT(5189, mpSolidHeap != NULL);
     }
+    JKRHEAP_NAME(mpSolidHeap, "dFile_select3D_c::mpSolidHeap");
 
     field_0x03c4 = 0.0f;
     field_0x03c8 = 0.0f;

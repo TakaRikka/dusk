@@ -5,9 +5,9 @@
 #include "JSystem/JSupport/JSURandomOutputStream.h"
 
 /**
-* @ingroup jsystem-jsupport
-* 
-*/
+ * @ingroup jsystem-jsupport
+ *
+ */
 class JSUMemoryInputStream : public JSURandomInputStream {
 public:
     JSUMemoryInputStream(const void* res, s32 size) { setBuffer(res, size); }
@@ -19,9 +19,7 @@ public:
     s32 getLength() const;
     s32 getPosition() const;
 
-    void* getPointer() const {
-        return (u8*)mBuffer + mPosition;
-    }
+    void* getPointer() const { return (u8*)mBuffer + mPosition; }
 
 private:
     /* 0x08 */ const void* mBuffer;
@@ -39,7 +37,7 @@ public:
     virtual ~JSUMemoryOutputStream() {}
     virtual s32 writeData(const void*, s32);
     virtual s32 getLength() const;
-    virtual s32 getPosition() const;
+    virtual s32 getPosition() const { return mPosition; }
     virtual s32 seek(s32, JSUStreamSeekFrom);
     virtual s32 getAvailable() const;
     virtual s32 seekPos(s32, JSUStreamSeekFrom);

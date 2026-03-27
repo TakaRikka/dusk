@@ -616,24 +616,14 @@ s32 OSEnableScheduler(void) {
 // ============================================================================
 
 BOOL OSDisableInterrupts(void) {
-    GetInterruptMutex().lock();
-    sInterruptLockCount++;
-    return (BOOL)(sInterruptLockCount > 1);  // TRUE if was already locked
+    return FALSE;
 }
 
 BOOL OSRestoreInterrupts(BOOL level) {
-    if (sInterruptLockCount > 0) {
-        sInterruptLockCount--;
-        GetInterruptMutex().unlock();
-    }
-    return level;
+    return FALSE;
 }
 
 BOOL OSEnableInterrupts(void) {
-    if (sInterruptLockCount > 0) {
-        sInterruptLockCount--;
-        GetInterruptMutex().unlock();
-    }
     return FALSE;
 }
 

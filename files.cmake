@@ -543,8 +543,17 @@ set(JSYSTEM_DEBUG_FILES
         libs/JSystem/src/JGadget/binary.cpp
         libs/JSystem/src/JGadget/define.cpp
         libs/JSystem/src/JGadget/linklist.cpp
+        libs/JSystem/src/JGadget/search.cpp
         libs/JSystem/src/JGadget/std-vector.cpp
+        libs/JSystem/src/JAHostIO/JAHFrameNode.cpp
+        libs/JSystem/src/JAHostIO/JAHioMessage.cpp
+        libs/JSystem/src/JAHostIO/JAHioMgr.cpp
+        libs/JSystem/src/JAHostIO/JAHioNode.cpp
+        libs/JSystem/src/JAHostIO/JAHioUtil.cpp
+        libs/JSystem/src/JAHostIO/JAHVirtualNode.cpp
+        libs/JSystem/src/JHostIO/JORFile.cpp
         libs/JSystem/src/JHostIO/JORHostInfo.cpp
+        libs/JSystem/src/JHostIO/JORMessageBox.cpp
         libs/JSystem/src/JHostIO/JORServer.cpp
         libs/JSystem/src/JHostIO/JHIhioASync.cpp
         libs/JSystem/src/JHostIO/JHIRMcc.cpp

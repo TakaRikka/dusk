@@ -40,6 +40,7 @@ int dTimer_c::_create() {
         dComIfGp_setAllMapArchive(resInfo->getArchive());
 
         mp_heap = fopMsgM_createExpHeap(0x11000, NULL);
+        JKRHEAP_NAME(mp_heap, "dTimer_c::mp_heap");
         JKRHeap* prev_heap = mDoExt_setCurrentHeap(mp_heap);
         if (mp_heap != NULL) {
             mp_heap->getTotalFreeSize();

@@ -389,10 +389,6 @@ s32 JSUMemoryOutputStream::getAvailable() const {
     return mLength - mPosition;
 }
 
-s32 JSUMemoryOutputStream::getPosition() const {
-    return mPosition;
-}
-
 #pragma mark JSURandomOutputStream
 #include <JSystem/JSupport/JSURandomOutputStream.h>
 s32 JSUMemoryOutputStream::seek(s32 offset, JSUStreamSeekFrom origin) {

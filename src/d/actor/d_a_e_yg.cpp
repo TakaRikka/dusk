@@ -527,7 +527,7 @@ static void search_ground_1(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     dBgS_LinChk lin_chk;
     cXyz start, end, work;
-    cXyz pos[16];
+    cXyz pos[16]{};
     s16 y_rot = actor->shape_angle.y;
     s8 line_cross_flag = false;
 
@@ -560,6 +560,14 @@ static void search_ground_1(e_yg_class* i_this) {
                 pos[i] = actor->current.pos;
                 pos[i].x += 10000.0f;
             }
+        } else {
+            // Ensure all elements are initialized. This function is buggy and
+            // blows up if pos[0].x or pos[0].z is NaN, but for some reason this
+            // never happens on hardware - probably just dumb luck.
+#if AVOID_UB
+            pos[i] = actor->current.pos;
+            pos[i].x += 10000.0f;
+#endif
         }
 
         ANGLE_ADD(y_rot, 0x1000);

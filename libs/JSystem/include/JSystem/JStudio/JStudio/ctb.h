@@ -64,9 +64,9 @@ struct data {
     };
 
     struct TBlockData {
-        u32 size;
-        u16 scheme;
-        u16 IDSize;
+        BE(u32) size;
+        BE(u16) scheme;
+        BE(u16) IDSize;
         u32 field_0x8[0];
     };
 
