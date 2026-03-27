@@ -108,8 +108,7 @@ static void MixSubframe(DspSubframe& dst, const DspSubframe& src) {
 }
 
 void dusk::audio::DspRender(OutputSubframe& subframe) {
-    // This cast half exists because my debugger sucks and this is an easy way to look at the data.
-    auto& channels = *reinterpret_cast<std::array<JASDsp::TChannel, DSP_CHANNELS>*>(JASDsp::CH_BUF);
+    std::span channels(JASDsp::CH_BUF, DSP_CHANNELS);
 
     for (int i = 0; i < channels.size(); i++) {
         auto& channel = channels[i];
