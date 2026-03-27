@@ -22,9 +22,10 @@ public:
 
 class JORReflexible : public JOREventListener {
 public:
+    static JORServer* getJORServer() { return JORServer::getInstance(); }
+
 #if DEBUG
     JORReflexible() {}
-    static JORServer* getJORServer() { return JORServer::getInstance(); }
 
     virtual void listenPropertyEvent(const JORPropertyEvent*);
     virtual void listen(u32, const JOREvent*);
