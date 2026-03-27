@@ -26,6 +26,10 @@ template <size_t BufSize>
 void SafeStringCopyTruncate(char (&buffer)[BufSize], const char* src) {
     static_assert(BufSize > 0, "Target buffer cannot be size zero");
 
+    if (buffer == src) {
+        CRASH("Cannot copy string to same buffer");
+    }
+
     strncpyProxy(buffer, src, BufSize);
     buffer[BufSize - 1] = 0;
 }
