@@ -130,8 +130,9 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
             continue;
         }
 
-        if (channel.mBytesPerBlock == 0) {
+        if (channel.mWaveAramAddress == 0) {
             // I think these are oscillator channels? Not backed by audio.
+            // No idea how to implement these yet, so skip them.
             channel.mIsFinished = true;
             continue;
         }
