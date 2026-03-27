@@ -585,7 +585,13 @@ void* operator new(size_t size JKR_HEAP_TOKEN_PARAM, int alignment) {
 #endif
 
 void* operator new(size_t size JKR_HEAP_TOKEN_PARAM, JKRHeap* heap, int alignment) {
-    return JKRHeap::alloc(size, alignment, heap);
+    void* mem = JKRHeap::alloc(size, alignment, heap);
+#if TARGET_PC
+    if (mem == nullptr) {
+        return fallback_alloc(size, abs(alignment), true);
+    }
+#endif
+    return mem;
 }
 
 #if !TARGET_PC

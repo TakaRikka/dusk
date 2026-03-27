@@ -125,6 +125,11 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
             continue;
         }
 
+        if (channel.mForcedStop) {
+            channel.mIsFinished = true;
+            continue;
+        }
+
         if (channel.mBytesPerBlock == 0) {
             // I think these are oscillator channels? Not backed by audio.
             channel.mIsFinished = true;
