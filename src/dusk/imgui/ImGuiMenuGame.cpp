@@ -9,6 +9,7 @@
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_audio.h"
+#include <SDL3/SDL_gamepad.h>
 
 namespace dusk {
     ImGuiMenuGame::ImGuiMenuGame() {}
@@ -90,6 +91,118 @@ namespace dusk {
         dl->AddCircleFilled(pos, radius, stickGray, 8);
         dl->AddCircleFilled(ImVec2(pos.x + stick.x * (radius), pos.y + -stick.y * (radius)), 3, red);
         ImGui::EndChild();
+    }
+
+    struct SpecificButtonName {
+        SDL_GamepadType Type;
+        const char* Name;
+    };
+
+    struct ButtonNames {
+        SDL_GamepadButton Button;
+        std::vector<SpecificButtonName> Names;
+    };
+
+// clang-format off
+    static const std::vector<ButtonNames> GamepadButtonNames = {
+        { SDL_GAMEPAD_BUTTON_LEFT_STICK, {
+           {SDL_GAMEPAD_TYPE_PS3, "L3"},
+           {SDL_GAMEPAD_TYPE_PS4, "L3"},
+           {SDL_GAMEPAD_TYPE_PS5, "L3"},
+           {SDL_GAMEPAD_TYPE_XBOX360, "Left Stick"},
+           {SDL_GAMEPAD_TYPE_XBOXONE, "Left Stick"},
+           {SDL_GAMEPAD_TYPE_GAMECUBE, "Control Stick"},
+        }},
+        { SDL_GAMEPAD_BUTTON_RIGHT_STICK, {
+           {SDL_GAMEPAD_TYPE_PS3, "R3"},
+           {SDL_GAMEPAD_TYPE_PS4, "R3"},
+           {SDL_GAMEPAD_TYPE_PS5, "R3"},
+           {SDL_GAMEPAD_TYPE_XBOX360, "Right Stick"},
+           {SDL_GAMEPAD_TYPE_XBOXONE, "Right Stick"},
+           {SDL_GAMEPAD_TYPE_GAMECUBE, "C Stick"},
+        }},
+        { SDL_GAMEPAD_BUTTON_LEFT_SHOULDER, {
+           {SDL_GAMEPAD_TYPE_PS3, "L1"},
+           {SDL_GAMEPAD_TYPE_PS4, "L1"},
+           {SDL_GAMEPAD_TYPE_PS5, "L1"},
+           {SDL_GAMEPAD_TYPE_XBOX360, "LB"},
+           {SDL_GAMEPAD_TYPE_XBOXONE, "LB"},
+        }},
+        { SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER, {
+           {SDL_GAMEPAD_TYPE_PS3, "R1"},
+           {SDL_GAMEPAD_TYPE_PS4, "R1"},
+           {SDL_GAMEPAD_TYPE_PS5, "R1"},
+           {SDL_GAMEPAD_TYPE_XBOX360, "RB"},
+           {SDL_GAMEPAD_TYPE_XBOXONE, "RB"},
+           {SDL_GAMEPAD_TYPE_GAMECUBE, "Z"},
+        }},
+        { SDL_GAMEPAD_BUTTON_BACK, {
+           {SDL_GAMEPAD_TYPE_PS3, "Select"},
+           {SDL_GAMEPAD_TYPE_PS4, "Share"},
+           {SDL_GAMEPAD_TYPE_PS5, "Create"},
+           {SDL_GAMEPAD_TYPE_XBOX360, "Back"},
+           {SDL_GAMEPAD_TYPE_XBOXONE, "View"},
+        }},
+        { SDL_GAMEPAD_BUTTON_START, {
+           {SDL_GAMEPAD_TYPE_PS3, "Start"},
+           {SDL_GAMEPAD_TYPE_PS4, "Options"},
+           {SDL_GAMEPAD_TYPE_PS5, "Options"},
+           {SDL_GAMEPAD_TYPE_XBOX360, "Start"},
+           {SDL_GAMEPAD_TYPE_XBOXONE, "Menu"},
+           {SDL_GAMEPAD_TYPE_GAMECUBE, "Start/Pause"},
+        }},
+    };
+// clang-format on
+
+    static const char* GetNameForGamepadButton(SDL_Gamepad* gamepad, u32 buttonUntyped) {
+        auto button = static_cast<SDL_GamepadButton>(buttonUntyped);
+        auto label = SDL_GetGamepadButtonLabel(gamepad, button);
+
+        switch (label) {
+        case SDL_GAMEPAD_BUTTON_LABEL_A:
+            return "A";
+        case SDL_GAMEPAD_BUTTON_LABEL_B:
+            return "B";
+        case SDL_GAMEPAD_BUTTON_LABEL_X:
+            return "X";
+        case SDL_GAMEPAD_BUTTON_LABEL_Y:
+            return "Y";
+        case SDL_GAMEPAD_BUTTON_LABEL_CROSS:
+            return "Cross";
+        case SDL_GAMEPAD_BUTTON_LABEL_CIRCLE:
+            return "Circle";
+        case SDL_GAMEPAD_BUTTON_LABEL_TRIANGLE:
+            return "Triangle";
+        case SDL_GAMEPAD_BUTTON_LABEL_SQUARE:
+            return "Square";
+        default:; // Fall through
+        }
+
+        auto padType = SDL_GetGamepadType(gamepad);
+        for (const auto& buttonNames : GamepadButtonNames) {
+            if (buttonNames.Button != button) {
+                continue;
+            }
+
+            for (const auto& name : buttonNames.Names) {
+                if (name.Type == padType) {
+                    return name.Name;
+                }
+            }
+        }
+
+        switch (button) {
+        case SDL_GAMEPAD_BUTTON_DPAD_LEFT:
+            return "D-pad left";
+        case SDL_GAMEPAD_BUTTON_DPAD_RIGHT:
+            return "D-pad right";
+        case SDL_GAMEPAD_BUTTON_DPAD_UP:
+            return "D-pad up";
+        case SDL_GAMEPAD_BUTTON_DPAD_DOWN:
+            return "D-pad down";
+        default:
+            return PADGetNativeButtonName(buttonUntyped);
+        }
     }
 
     void ImGuiMenuGame::windowControllerConfig() {
@@ -196,6 +309,7 @@ namespace dusk {
 
         ImGuiBeginGroupPanel("Buttons", ImVec2(150, 20));
 
+        SDL_Gamepad* gamepad = PADGetSDLGamepadForIndex(PADGetIndexForPort(m_controllerConfig.m_selectedPort));
         u32 buttonCount;
         PADButtonMapping* mappingList = PADGetButtonMappings(m_controllerConfig.m_selectedPort, &buttonCount);
         if (mappingList != nullptr) {
@@ -213,7 +327,7 @@ namespace dusk {
 
                 bool pressed = ImGui::Button(m_controllerConfig.m_isReading && m_controllerConfig.m_pendingMapping == &mappingList[i]
                     ? fmt::format("Press a Key...##{}", btnName).c_str()
-                    : fmt::format("{0}##-{1}", PADGetNativeButtonName(mappingList[i].nativeButton), i).c_str(),
+                    : fmt::format("{0}##-{1}", GetNameForGamepadButton(gamepad, mappingList[i].nativeButton), i).c_str(),
                     ImVec2(100.0f, 20.0f));
 
                 if (pressed) {
@@ -321,7 +435,7 @@ namespace dusk {
                 }
             }
         }
-        
+
         if (deadZones != nullptr) {
             ImGui::Text("R Threshold");
             {
