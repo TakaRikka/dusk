@@ -6,14 +6,16 @@
 #include "JSystem/JAudio2/JASCriticalSection.h"
 #include "JSystem/JAudio2/JASDSPChannel.h"
 #include "JSystem/JAudio2/JASDSPInterface.h"
-#include "JSystem/JAudio2/JASDriverIF.h"
 #include "JSystem/JAudio2/JASTrack.h"
+#include "dusk/audio/DuskAudioSystem.h"
 
 static std::array<u8, DSP_CHANNELS> channelSortIndices = {};
 
 static bool sortUpdateCount = true;
 
 static void DisplayDspChannel(int i) {
+    using namespace dusk::audio;
+
     auto& channel = JASDsp::CH_BUF[i];
     auto& jasChannel = JASDSPChannel::sDspChannels[i];
     if (!channel.mIsActive) {
@@ -39,19 +41,25 @@ static void DisplayDspChannel(int i) {
             auto pan = (channel.mAutoMixerPanDolby >> 8) / 127.5f;
             auto dolby = (channel.mAutoMixerPanDolby & 0xFF) / 127.5f;
             auto fxMix = (channel.mAutoMixerFxMix >> 8) / 127.5f;
-            auto volume = (channel.mAutoMixerVolume) / (f32) JASDriver::getChannelLevel_dsp();
+            auto volume = VolumeFromU16(channel.mAutoMixerVolume);
             ImGui::Text(
                 "Auto mixer active (pan: %f, dolby: %f, fx: %f, volume: %f)",
                 pan, dolby, fxMix, volume);
         } else {
             ImGui::Text(
-                "Bus connect: %04X,%04X,%04X,%04X,%04X,%04X",
+                "Bus connect: %04X(%.2f),%04X(%.2f),%04X(%.2f),%04X(%.2f),%04X(%.2f),%04X(%.2f)",
                 channel.mOutputChannels[0].mBusConnect,
+                VolumeFromU16(channel.mOutputChannels[0].mTargetVolume),
                 channel.mOutputChannels[1].mBusConnect,
+                VolumeFromU16(channel.mOutputChannels[1].mTargetVolume),
                 channel.mOutputChannels[2].mBusConnect,
+                VolumeFromU16(channel.mOutputChannels[2].mTargetVolume),
                 channel.mOutputChannels[3].mBusConnect,
+                VolumeFromU16(channel.mOutputChannels[3].mTargetVolume),
                 channel.mOutputChannels[4].mBusConnect,
-                channel.mOutputChannels[5].mBusConnect);
+                VolumeFromU16(channel.mOutputChannels[4].mTargetVolume),
+                channel.mOutputChannels[5].mBusConnect,
+                VolumeFromU16(channel.mOutputChannels[5].mTargetVolume));
         }
     }
 

@@ -15,6 +15,7 @@
 
 #include "DuskDsp.hpp"
 #include "JSystem/JAudio2/JASAudioThread.h"
+#include "JSystem/JAudio2/JASDriverIF.h"
 
 // #define DUSK_DUMP_AUDIO
 
@@ -71,6 +72,12 @@ void dusk::audio::Initialize() {
     JASPoolAllocObject_MultiThreaded<JASChannel>::newMemPool(0x48);
 
     SDL_ResumeAudioStreamDevice(PlaybackStream);
+}
+
+void dusk::audio::SetMasterVolume(const f32 value) {
+    JASCriticalSection section;
+
+    MasterVolume = value;
 }
 
 void SDLCALL GetNewAudio(
@@ -131,4 +138,12 @@ void RenderAudioSubframe() {
 #endif
 
     SDL_PutAudioStreamData(PlaybackStream, &OutInterleaveBuffer, sizeof(OutInterleaveBuffer));
+}
+
+u32 dusk::audio::GetResetCount(int channelIdx) {
+    return ChannelAux[channelIdx].resetCount;
+}
+
+f32 dusk::audio::VolumeFromU16(u16 value) {
+    return static_cast<f32>(value) / static_cast<f32>(JASDriver::getChannelLevel_dsp());
 }

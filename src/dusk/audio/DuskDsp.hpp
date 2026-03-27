@@ -6,6 +6,8 @@
 #include <cassert>
 
 #include "SDL3/SDL_audio.h"
+#include <span>
+
 // ReSharper disable once CppUnusedIncludeDirective
 #include "global.h"
 
@@ -26,6 +28,21 @@ namespace dusk::audio {
         s16 hist0;
         SDL_AudioStream* resampleStream;
         u16 prevPitch;
+
+        // Used for debugging tools.
+        u32 resetCount;
+
+        /**
+         * Previous volume values, per output channel.
+         * Used to avoid clicking when volumes change.
+         * Set to NaN after channel reset, indicating that initial volume value is previous.
+         */
+        f32 prevVolume[static_cast<int>(OutputChannel::OutputChannel_MAX)];
+
+        f32& PrevVolume(OutputChannel channel) {
+            assert(channel < OutputChannel::OutputChannel_MAX);
+            return prevVolume[static_cast<int>(channel)];
+        }
     };
 
     extern ChannelAuxData ChannelAux[DSP_CHANNELS];
@@ -83,4 +100,13 @@ namespace dusk::audio {
 
         return channel.mBytesPerBlock;
     }
+
+    /**
+     * Apply a volume level to audio data.
+     * Interpolates across the two provided volume levels to avoid clicking.
+     */
+    void ApplyVolume(std::span<f32> dst, std::span<f32> src, f32 startVolume, f32 endVolume);
+
+    extern f32 MasterVolume;
+    extern f32 PrevMasterVolume;
 }

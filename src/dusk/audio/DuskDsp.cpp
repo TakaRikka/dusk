@@ -9,12 +9,16 @@
 
 #include "Adpcm.hpp"
 #include "JSystem/JAudio2/JASDriverIF.h"
+#include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/endian.h"
 #include "global.h"
 
 using namespace dusk::audio;
 
 ChannelAuxData dusk::audio::ChannelAux[DSP_CHANNELS] = {};
+
+f32 dusk::audio::MasterVolume = 1.0f;
+f32 dusk::audio::PrevMasterVolume = 1.0f;
 
 /**
  * Validate that a DSP channel's format is actually something we know how to play.
@@ -87,6 +91,8 @@ static void UpdateSampleRate(const JASDsp::TChannel& channel, ChannelAuxData& au
  * Reset state for a DSP channel between independent playbacks.
  */
 static void ResetChannel(JASDsp::TChannel& channel, ChannelAuxData& aux) {
+    aux.resetCount += 1;
+
     channel.mSamplesLeft = channel.mEndSample - channel.mSamplePosition;
 
     aux.hist0 = 0;
@@ -94,6 +100,10 @@ static void ResetChannel(JASDsp::TChannel& channel, ChannelAuxData& aux) {
 
     SDL_ClearAudioStream(aux.resampleStream);
     UpdateSampleRate(channel, aux);
+
+    for (auto& volume : aux.prevVolume) {
+        volume = NAN;
+    }
 
     channel.mResetFlag = false;
 }
@@ -145,6 +155,11 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
             MixSubframe(subframe.channels[o], channelSubframe.channels[o]);
         }
     }
+
+    for (auto& channel : subframe.channels) {
+        ApplyVolume(channel, channel, PrevMasterVolume, MasterVolume);
+    }
+    PrevMasterVolume = MasterVolume;
 }
 
 /**
@@ -325,17 +340,24 @@ static const JASDsp::OutputChannelConfig* GetOutputConfig(
     return nullptr;
 }
 
+struct VolumeValue {
+    f32 Target;
+    f32 Init;
+};
+
 /**
  * Get the volume that the given DSP channel should render to the given output channel at.
  */
-static f32 GetVolumeForOutputChannel(
+static VolumeValue GetVolumeForOutputChannel(
     const JASDsp::TChannel& sourceChannel,
     OutputChannel outputChannel) {
 
     u16 volume;
+    u16 initVolume;
     f32 panValue = 1;
     if (sourceChannel.mAutoMixerBeenSet) {
         volume = sourceChannel.mAutoMixerVolume;
+        initVolume = sourceChannel.mAutoMixerInitVolume;
 
         auto autoMixerPan = static_cast<f32>(sourceChannel.mAutoMixerPanDolby >> 8) / 127;
 
@@ -353,17 +375,21 @@ static f32 GetVolumeForOutputChannel(
     } else {
         auto config = GetOutputConfig(sourceChannel, outputChannel);
         if (config == nullptr) {
-            return 0;
+            return {0, 0};
         }
 
         volume = config->mTargetVolume;
+        initVolume = config->mCurrentVolume;
     }
 
     // TODO: interpolate to avoid popping.
-    f32 ratio = static_cast<f32>(volume) / static_cast<f32>(JASDriver::getChannelLevel_dsp());
-    ratio *= panValue;
+    f32 targetRatio = VolumeFromU16(volume);
+    targetRatio *= panValue;
 
-    return ratio;
+    f32 initRatio = VolumeFromU16(initVolume);
+    initRatio *= panValue;
+
+    return {targetRatio, initRatio};
 }
 
 /**
@@ -371,6 +397,7 @@ static f32 GetVolumeForOutputChannel(
  */
 static void RenderOutputChannel(
     const JASDsp::TChannel& sourceChannel,
+    ChannelAuxData& aux,
     OutputChannel outputChannel,
     const std::span<f32> inputSamples,
     OutputSubframe& fullOutputSubframe) {
@@ -379,13 +406,20 @@ static void RenderOutputChannel(
     assert(inputSamples.size() <= outputSubframe.size());
 
     auto volume = GetVolumeForOutputChannel(sourceChannel, outputChannel);
-    if (volume == 0) {
+
+    f32 targetVolume = volume.Target;
+    auto& prevVolume = aux.PrevVolume(outputChannel);
+    if (std::isnan(prevVolume)) {
+        // Initialize previous volume to new volume on first render.
+        prevVolume = volume.Init;
+    }
+
+    if (prevVolume == 0 && targetVolume == 0) {
         return;
     }
 
-    for (int i = 0; i < inputSamples.size(); i++) {
-        outputSubframe[i] = inputSamples[i] * volume;
-    }
+    ApplyVolume(outputSubframe, inputSamples, prevVolume, targetVolume);
+    prevVolume = targetVolume;
 }
 
 static void RenderChannel(
@@ -414,8 +448,8 @@ static void RenderChannel(
 
     static_assert(OutputSubframe::NUM_CHANNELS == 2, "Keep RenderChannel in sync!");
 
-    RenderOutputChannel(channel, OutputChannel::LEFT, hasReadSamples, subframe);
-    RenderOutputChannel(channel, OutputChannel::RIGHT, hasReadSamples, subframe);
+    RenderOutputChannel(channel, channelAux, OutputChannel::LEFT, hasReadSamples, subframe);
+    RenderOutputChannel(channel, channelAux,OutputChannel::RIGHT, hasReadSamples, subframe);
 }
 
 void dusk::audio::DspInit() {
@@ -438,5 +472,26 @@ void dusk::audio::DspInit() {
             aux.resampleStream,
             ReadChannelSamples,
             reinterpret_cast<void*>(static_cast<uintptr_t>(i)));
+    }
+}
+
+void dusk::audio::ApplyVolume(
+    std::span<f32> dst,
+    const std::span<f32> src,
+    const f32 startVolume,
+    const f32 endVolume) {
+    assert(dst.size() >= src.size());
+
+    if (startVolume == endVolume) {
+        for (int i = 0; i < src.size(); i++) {
+            dst[i] = src[i] * startVolume;
+        }
+    } else {
+        const f32 step = (endVolume - startVolume) / static_cast<f32>(src.size());
+        auto curVolume = startVolume;
+        for (int i = 0; i < src.size(); i++) {
+            dst[i] = src[i] * curVolume;
+            curVolume += step;
+        }
     }
 }
