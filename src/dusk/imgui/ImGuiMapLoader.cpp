@@ -99,6 +99,24 @@ namespace dusk {
                 }
             }
 
+            constexpr int MAX_LAYER = 14;
+
+            ImGui::Text("Selected Layer: %3d", m_mapLoaderInfo.layer);
+            ImGui::SameLine();
+            if (ImGui::Button("-###layerDec")) {
+                m_mapLoaderInfo.layer--;
+                if (m_mapLoaderInfo.layer < -1) {
+                    m_mapLoaderInfo.layer = MAX_LAYER;
+                }
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("+###layerInc")) {
+                m_mapLoaderInfo.layer++;
+                if (m_mapLoaderInfo.layer > MAX_LAYER) {
+                    m_mapLoaderInfo.layer = -1;
+                }
+            }
+
             if (room.numPoints > 1) {
                 ImGui::Text("Selected Point: %3d", room.roomPoints[m_mapLoaderInfo.pointNoIdx]);
                 ImGui::SameLine();
@@ -118,7 +136,7 @@ namespace dusk {
             }
 
             if (ImGui::Button("Warp")) {
-                dComIfGp_setNextStage(map.mapFile, room.roomPoints[m_mapLoaderInfo.pointNoIdx], room.roomNo, -1);
+                dComIfGp_setNextStage(map.mapFile, room.roomPoints[m_mapLoaderInfo.pointNoIdx], room.roomNo, m_mapLoaderInfo.layer);
             }
         }
 
