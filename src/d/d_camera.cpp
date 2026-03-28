@@ -4846,6 +4846,15 @@ bool dCamera_c::lockonCamera(s32 param_0) {
         }
     }
 
+#if TARGET_PC
+    f32 sp194 = 1.0f;
+    if (mCurCamStyleTimer < lockon_change_timer && !lockon->field_0x2a) {
+        sp194 = dCamMath::rationalBezierRatio((f32)mCurCamStyleTimer / lockon_change_timer, 0.5f);
+        ang2 *= sp194;
+    } else if (mCurCamStyleTimer >= lockon_change_timer) {
+        lockon->field_0x2a = true;
+    }
+#else
     f32 sp194;
     if (mCurCamStyleTimer < lockon_change_timer && !lockon->field_0x2a) {
         sp194 = dCamMath::rationalBezierRatio((f32)mCurCamStyleTimer / lockon_change_timer, 0.5f);
@@ -4854,7 +4863,7 @@ bool dCamera_c::lockonCamera(s32 param_0) {
         lockon->field_0x2a = true;
         sp194 = 1.0f;
     }
-
+#endif
     cSAngle ang3(mViewCache.mDirection.U().Inv() - ang1);
 
     if (mCurCamStyleTimer != 0 && mCurCamStyleTimer < lockon_change_timer) {
