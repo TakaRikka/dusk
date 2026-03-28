@@ -629,5 +629,8 @@ constexpr auto gameRegions = std::to_array({
         MapEntry("Cutscene: Hyrule Castle Throne Room", "R_SP301", {
             {0, {0, 20, 100}},
         }),
+        MapEntry("Title screen movie map", "S_MV000", {
+            {0, {0, 1}},
+        }),
     })
 });

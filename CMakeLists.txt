@@ -52,6 +52,7 @@ endif ()
 
 
 include(FetchContent)
+include(ExternalProject)
 
 message(STATUS "dusk: Fetching cxxopts")
 FetchContent_Declare(
@@ -62,6 +63,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(cxxopts)
 
+include(cmake/libjpeg.cmake)
 include(files.cmake)
 
 # TODO: version handling for res includes
@@ -107,7 +109,7 @@ add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${J
         src/dusk/imgui/ImGuiStubLog.cpp
         src/dusk/imgui/ImGuiAudio.cpp)
 
-target_link_libraries(game PRIVATE game_debug cxxopts::cxxopts)
+target_link_libraries(game PRIVATE game_debug cxxopts::cxxopts libjpeg-turbo-lib)
 target_compile_definitions(game PRIVATE TARGET_PC AVOID_UB=1 VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0
         DUSK_TP_VERSION="${DUSK_TP_VERSION}" DUSK_GAME_NAME="${DUSK_GAME_NAME}" DUSK_GAME_VERSION="${DUSK_GAME_VERSION}")
 add_executable(dusk src/dusk/main.cpp)

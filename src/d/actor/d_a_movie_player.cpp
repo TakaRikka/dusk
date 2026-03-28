@@ -14,21 +14,29 @@
 #pragma optimization_level 4
 #pragma optimize_for_size off
 
-#include "JSystem/JKernel/JKRExpHeap.h"
+#include <cstring>
+#include <span>
 #include "JSystem/JAudio2/JASAiCtrl.h"
 #include "JSystem/JAudio2/JASDriverIF.h"
-#include "d/actor/d_a_movie_player.h"
+#include "JSystem/JKernel/JKRExpHeap.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include "d/actor/d_a_movie_player.h"
+
+#include <cassert>
+
 #include "f_op/f_op_overlap_mng.h"
-#include <cstring>
 
 #include "dusk/gx_helper.h"
+#include "dusk/memory.h"
+#include "dusk/os.h"
+
+#include "turbojpeg.h"
 
 inline s32 daMP_NEXT_READ_SIZE(daMP_THPReadBuffer* readBuf) {
-    return *(s32*)readBuf->ptr;
+    return *(BE(s32)*)readBuf->ptr;
 }
 
-#ifdef __cplusplus
+#if defined(__cplusplus) && !TARGET_PC
 extern "C" {
 #endif
 
@@ -196,6 +204,7 @@ static void __THPAudioInitialize(THPAudioDecodeInfo* info, u8* ptr) {
     info->encodeData++;
 }
 
+#if !TARGET_PC
 static u8 THPStatistics[1120] ATTRIBUTE_ALIGN(32);
 
 static THPHuffmanTab* Ydchuff ATTRIBUTE_ALIGN(32);
@@ -2562,8 +2571,116 @@ static void __THPHuffDecodeDCTCompV(__REGISTER THPFileInfo* info, THPCoeff* bloc
         }
     }
 }
+#else // !TARGET_PC
+
+static std::vector<u8> FixJpeg(const std::span<u8> data) {
+    std::vector<u8> fixedData;
+    fixedData.reserve(data.size());
+
+    size_t startOfScanLocation = 0;
+    for (; startOfScanLocation < data.size() - 1; startOfScanLocation++) {
+        if (data[startOfScanLocation] == 0xFF && data[startOfScanLocation + 1] == 0xDA) {
+            goto sosFound;
+        }
+    }
+
+    CRASH("Unable to find SOS marker!");
+
+    sosFound:
+
+    startOfScanLocation += 2; // TODO: Skip entire SOS header?
+
+    size_t endOfImage = data.size() - 1;
+    for (; endOfImage > startOfScanLocation; endOfImage--) {
+        if (data[endOfImage] == 0xFF && data[endOfImage + 1] == 0xD9) {
+            goto eoiFound;
+        }
+    }
+
+    CRASH("Unable to find EOI marker!");
+    eoiFound:
+
+    // Copy data before SOS
+    for (size_t i = 0; i < startOfScanLocation; i++) {
+        fixedData.push_back(data[i]);
+    }
+
+    // Copy data inside SOS, fixing up lacking of "byte shuffling"
+    for (size_t i = startOfScanLocation; i < endOfImage; i++) {
+        u8 value = data[i];
+        fixedData.push_back(value);
+        if (value == 0xFF) {
+            fixedData.push_back(0x00);
+        }
+    }
+
+    // Copy data after SOS.
+    for (size_t i = endOfImage; i < data.size(); i++) {
+        fixedData.push_back(data[i]);
+    }
+
+    return fixedData;
+}
+
+struct TjHandle {
+    tjhandle mHandle;
+
+    explicit TjHandle(const tjhandle handle) : mHandle(handle) {}
+    ~TjHandle() {
+        tj3Destroy(mHandle);
+    }
+
+    operator tjhandle() const {
+        return mHandle;
+    }
+};
+
+extern daMP_THPPlayer daMP_ActivePlayer;
+
+static s32 THPVideoDecode(void* file, size_t fileSize, void* tileY, void* tileU, void* tileV, void* work) {
+    const TjHandle handle(tj3Init(TJINIT_DECOMPRESS));
+    if (handle == nullptr) {
+        OSReport_Error("Failed to create turbojpeg handle: %s", tj3GetErrorStr(nullptr));
+        return 1;
+    }
+
+    const auto fixedData = FixJpeg(std::span(static_cast<u8*>(file), fileSize));
+
+    auto ret = tj3DecompressHeader(handle, fixedData.data(), fixedData.size());
+    if (ret == -1) {
+        OSReport_Error("Parsing JPEG header failed: %s", tj3GetErrorStr(handle));
+        return 1;
+    }
+
+    if (tj3Get(handle, TJPARAM_JPEGWIDTH) != daMP_ActivePlayer.videoInfo.xSize) {
+        OSReport_Error("Invalid width in video frame!");
+        return 1;
+    }
+
+    if (tj3Get(handle, TJPARAM_JPEGHEIGHT) != daMP_ActivePlayer.videoInfo.ySize) {
+        OSReport_Error("Invalid height in video frame!");
+        return 1;
+    }
+
+    ret = tj3Set(handle, TJPARAM_SUBSAMP, TJSAMP_420);
+    if (ret != 0) {
+        OSReport_Error("Failed to set subsampling mode: %s", tj3GetErrorStr(handle));
+        return 1;
+    }
+
+    u8* planes[3] = {static_cast<u8*>(tileY), static_cast<u8*>(tileU), static_cast<u8*>(tileV)};
+    ret = tj3DecompressToYUVPlanes8(handle, fixedData.data(), fixedData.size(), planes, nullptr);
+    if (ret != 0) {
+        OSReport_Error("Image decompression failed: %s", tj3GetErrorStr(handle));
+        return 1;
+    }
+
+    return 0;
+}
+#endif
 
 static BOOL THPInit() {
+#if !TARGET_PC
     u8* base;
     base = (u8*)(0xE000 << 16);
 
@@ -2585,10 +2702,11 @@ static BOOL THPInit() {
     OSInitFastCast();
 
     __THPInitFlag = TRUE;
+#endif
     return TRUE;
 }
 
-#ifdef __cplusplus
+#if defined(__cplusplus) && !TARGET_PC
 }
 #endif
 
@@ -2654,6 +2772,10 @@ void daMP_ReadThreadCancel() {
 }
 
 void* daMP_Reader(void*) {
+#if TARGET_PC
+    OSSetCurrentThreadName("movie player reader");
+#endif
+
     daMP_THPReadBuffer* buf;
 	s32 curFrame;
 	s32 status;
@@ -2751,10 +2873,10 @@ static BOOL daMP_First;
 static void daMP_VideoDecode(daMP_THPReadBuffer* readBuffer) {
     THPTextureSet* textureSet;
 	s32 i;
-	u32* tileOffsets;
+	BE(u32)* tileOffsets;
 	u8* tile;
 
-    tileOffsets = (u32*)(readBuffer->ptr + 8);
+    tileOffsets = (BE(u32)*)(readBuffer->ptr + 8);
 	tile = &readBuffer->ptr[daMP_ActivePlayer.compInfo.numComponents * 4] + 8;
 	textureSet = (THPTextureSet*)daMP_PopFreeTextureSet();
 
@@ -2762,8 +2884,13 @@ static void daMP_VideoDecode(daMP_THPReadBuffer* readBuffer) {
         switch (daMP_ActivePlayer.compInfo.frameComp[i]) {
 		case 0: {
 			if ((daMP_ActivePlayer.videoError = THPVideoDecode(
-			         tile, textureSet->ytexture, textureSet->utexture,
-			         textureSet->vtexture, daMP_ActivePlayer.thpWork))) {
+			        tile,
+#if TARGET_PC
+	                *tileOffsets,
+#endif
+			         textureSet->ytexture, textureSet->utexture,
+			         textureSet->vtexture,
+			         daMP_ActivePlayer.thpWork))) {
 				if (daMP_First) {
 					daMP_PrepareReady(FALSE);
 					daMP_First = FALSE;
@@ -2789,6 +2916,10 @@ static void daMP_VideoDecode(daMP_THPReadBuffer* readBuffer) {
 }
 
 static void* daMP_VideoDecoder(void* param_0) {
+#if TARGET_PC
+    OSSetCurrentThreadName("video decoder");
+#endif
+
     daMP_THPReadBuffer* thpBuffer;
 
 	while (TRUE) {
@@ -2820,6 +2951,10 @@ static void* daMP_VideoDecoder(void* param_0) {
 }
 
 static void* daMP_VideoDecoderForOnMemory(void* param_0) {
+#if TARGET_PC
+    OSSetCurrentThreadName("video decoder");
+#endif
+
     daMP_THPReadBuffer readBuffer;
 	s32 readSize;
 	s32 frame;
@@ -2944,10 +3079,10 @@ static void daMP_PushDecodedAudioBuffer(void* buffer) {
 static void daMP_AudioDecode(daMP_THPReadBuffer* readBuffer) {
     THPAudioBuffer* audioBuf;
 	s32 i;
-	u32* offsets;
+	BE(u32)* offsets;
 	u8* audioData;
 
-	offsets = (u32*)(readBuffer->ptr + 8);
+	offsets = (BE(u32)*)(readBuffer->ptr + 8);
 	audioData = &readBuffer->ptr[daMP_ActivePlayer.compInfo.numComponents * 4] + 8;
 	audioBuf = (THPAudioBuffer*)daMP_PopFreeAudioBuffer();
 
@@ -2969,6 +3104,10 @@ static void daMP_AudioDecode(daMP_THPReadBuffer* readBuffer) {
 }
 
 static void* daMP_AudioDecoder(void* param_0) {
+#if TARGET_PC
+    OSSetCurrentThreadName("movie audio decoder");
+#endif
+
     daMP_THPReadBuffer* buf;
 
     while (TRUE) {
@@ -2979,6 +3118,10 @@ static void* daMP_AudioDecoder(void* param_0) {
 }
 
 static void* daMP_AudioDecoderForOnMemory(void* param_0) {
+#if TARGET_PC
+    OSSetCurrentThreadName("movie audio decoder");
+#endif
+
     s32 size;
 	s32 readSize;
 	daMP_THPReadBuffer readBuffer;
@@ -3168,18 +3311,25 @@ static void daMP_THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x,
     TGXTexObj tobj0;
     TGXTexObj tobj1;
     TGXTexObj tobj2;
+#if TARGET_PC
+#define FMT (GXTexFmt)GX_TF_R8_PC
+#else
+#define FMT GX_TF_I8
+#endif
 
-    GXInitTexObj(&tobj0, y_data, textureWidth, textureHeight, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(&tobj0, y_data, textureWidth, textureHeight, FMT, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&tobj0, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
     GXLoadTexObj(&tobj0, GX_TEXMAP0);
 
-    GXInitTexObj(&tobj1, u_data, textureWidth >> 1, textureHeight >> 1, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(&tobj1, u_data, textureWidth >> 1, textureHeight >> 1, FMT, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&tobj1, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
     GXLoadTexObj(&tobj1, GX_TEXMAP1);
 
-    GXInitTexObj(&tobj2, v_data, textureWidth >> 1, textureHeight >> 1, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(&tobj2, v_data, textureWidth >> 1, textureHeight >> 1, FMT, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&tobj2, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
     GXLoadTexObj(&tobj2, GX_TEXMAP2);
+
+#undef FMT
 
     GXBegin(GX_QUADS, GX_VTXFMT7, 4);
     GXPosition3s16(x, y, 0);
@@ -3191,6 +3341,12 @@ static void daMP_THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x,
     GXPosition3s16(x, y + polygonHeight, 0);
     GXTexCoord2u16(0, 1);
     GXEnd();
+
+#if TARGET_PC
+    GXDestroyTexObj(&tobj0);
+    GXDestroyTexObj(&tobj1);
+    GXDestroyTexObj(&tobj2);
+#endif
 }
 
 static u16 daMP_VolumeTable[] = {
@@ -3546,6 +3702,11 @@ static BOOL daMP_THPPlayerSetBuffer(u8* buffer) {
 
 		ysize = ALIGN_NEXT(daMP_ActivePlayer.videoInfo.xSize * daMP_ActivePlayer.videoInfo.ySize, 32);
 		uvsize = ALIGN_NEXT(daMP_ActivePlayer.videoInfo.xSize * daMP_ActivePlayer.videoInfo.ySize / 4, 32);
+#if TARGET_PC
+	    assert(ysize >= tj3YUVPlaneSize(0, daMP_ActivePlayer.videoInfo.xSize, 0, daMP_ActivePlayer.videoInfo.ySize, TJSAMP_420));
+	    assert(uvsize >= tj3YUVPlaneSize(1, daMP_ActivePlayer.videoInfo.xSize, 0, daMP_ActivePlayer.videoInfo.ySize, TJSAMP_420));
+	    assert(uvsize >= tj3YUVPlaneSize(2, daMP_ActivePlayer.videoInfo.xSize, 0, daMP_ActivePlayer.videoInfo.ySize, TJSAMP_420));
+#endif
 
 		for (i = 0; i < ARRAY_SIZE(daMP_ActivePlayer.textureSet); i++) {
 			daMP_ActivePlayer.textureSet[i].ytexture = ptr;

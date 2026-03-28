@@ -111,6 +111,11 @@ int RenderNewAudioFrame() {
     outRaw.flush();
 #endif
 
+    if (JASDriver::extMixCallback != nullptr) {
+        // TODO: actually mix this data in.
+        JASDriver::extMixCallback(countSubframes * DSP_SUBFRAME_SIZE);
+    }
+
     return static_cast<u16>(countSubframes) * DSP_SUBFRAME_SIZE;
 }
 
