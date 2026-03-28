@@ -49,11 +49,11 @@ bool JASDrumSet::getParam(int key, int param_1, JASInstParam* param_2) const {
     static JASOscillator::Data osc;
 
     osc.mTarget = 0;
-    osc._04 = 1.0f;
+    osc.mRate = 1.0f;
     osc.mTable = NULL;
     osc.rel_table = NULL;
     osc.mScale = 1.0f;
-    osc._14 = 0.0f;
+    osc.mVertex = 0.0f;
 
     static JASOscillator::Data* oscp = &osc;
 

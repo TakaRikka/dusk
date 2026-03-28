@@ -23,10 +23,10 @@ f32 JASDriver::getDSPLevel() {
     return JASDsp::getDSPMixerLevel();
 }
 
-u32 JASDriver::JAS_SYSTEM_OUTPUT_MODE = 0x00000001;
+u32 JASDriver::JAS_SYSTEM_OUTPUT_MODE = JAS_OUTPUT_STEREO;
 
-void JASDriver::setOutputMode(u32 param_0) {
-    JAS_SYSTEM_OUTPUT_MODE = param_0;
+void JASDriver::setOutputMode(u32 mode) {
+    JAS_SYSTEM_OUTPUT_MODE = mode;
 }
 
 u32 JASDriver::getOutputMode() {

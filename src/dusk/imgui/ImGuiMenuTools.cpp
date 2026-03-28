@@ -20,7 +20,7 @@ namespace dusk {
             if (ImGui::Checkbox("Development Mode", &m_isDevelopmentMode)) {
                 isToggleDevelopmentMode = true;
             }
-            
+
             ImGui::Separator();
 
             if (ImGui::BeginMenu("Collision View")) {
@@ -45,6 +45,7 @@ namespace dusk {
             ImGui::MenuItem("Map Loader", nullptr, &m_showMapLoader);
             ImGui::MenuItem("Player Info", nullptr, &m_showPlayerInfo);
             ImGui::MenuItem("Save Editor", nullptr, &m_showSaveEditor);
+            ImGui::MenuItem("Audio Debug", "F7", &m_showAudioDebug);
             ImGui::EndMenu();
         }
 
@@ -59,6 +60,7 @@ namespace dusk {
         ShowStubLog();
         ShowMapLoader();
         ShowPlayerInfo();
+        ShowAudioDebug();
 
         if (m_showSaveEditor) {
             m_saveEditor.draw(m_showSaveEditor);

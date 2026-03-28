@@ -14,6 +14,8 @@
 #include <chrono>
 #include <thread>
 
+#include "dusk/os.h"
+
 #if PLATFORM_GCN
 const int stack_size = 3072;
 #else
@@ -65,6 +67,11 @@ static void mDoDvdErr_Watch(void*) {
     OSDisableInterrupts();
 #endif
 #endif
+
+#if TARGET_PC
+    OSSetCurrentThreadName("DVD error thread");
+#endif
+
     JKRThread(OSGetCurrentThread(), 0);
 
     JKRSetCurrentHeap(mDoExt_getAssertHeap());

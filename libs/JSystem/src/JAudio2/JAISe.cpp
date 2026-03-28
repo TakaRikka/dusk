@@ -57,7 +57,7 @@ void JAISe::startTrack_(const JASSoundParams& params) {
     }
 
     inner_.field_0x26c = 1;
-    inner_.track.setSeqData(inner_.mSeqData.field_0x0, inner_.mSeqData.field_0x4);
+    inner_.track.setSeqData(inner_.mSeqData.mBase, inner_.mSeqData.mOffset);
     inner_.track.startSeq();
 }
 

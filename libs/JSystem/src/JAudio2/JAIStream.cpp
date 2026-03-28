@@ -48,7 +48,7 @@ void JAIStream::JAIStreamMgr_startID_(JAISoundID id, s32 streamFileEntry,
 }
 
 bool JAIStream::prepare_prepareStream_() {
-    u32 local_28;
+    u32 size;
     JAIStreamAramMgr* streamAramMgr;
 
     switch (field_0x290) {
@@ -56,9 +56,9 @@ bool JAIStream::prepare_prepareStream_() {
         streamAramMgr = streamMgr_->getStreamAramMgr();
         JUT_ASSERT(100, streamAramMgr);
 
-        streamAramAddr_ = streamAramMgr->newStreamAram(&local_28);
+        streamAramAddr_ = streamAramMgr->newStreamAram(&size);
         if (streamAramAddr_ != NULL) {
-            inner_.aramStream_.init((uintptr_t)streamAramAddr_, local_28, &JAIStream_JASAramStreamCallback_, this);
+            inner_.aramStream_.init((uintptr_t)streamAramAddr_, size, &JAIStream_JASAramStreamCallback_, this);
             field_0x290 = 1;
             prepareCount_ = 0;
         } else {

@@ -15,6 +15,7 @@
 
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
+#include "dusk/string.hpp"
 #ifdef __MWERKS__
 #include <stdint.h>
 #else
@@ -585,7 +586,13 @@ void* operator new(size_t size JKR_HEAP_TOKEN_PARAM, int alignment) {
 #endif
 
 void* operator new(size_t size JKR_HEAP_TOKEN_PARAM, JKRHeap* heap, int alignment) {
-    return JKRHeap::alloc(size, alignment, heap);
+    void* mem = JKRHeap::alloc(size, alignment, heap);
+#if TARGET_PC
+    if (mem == nullptr) {
+        return fallback_alloc(size, abs(alignment), true);
+    }
+#endif
+    return mem;
 }
 
 #if !TARGET_PC
@@ -695,9 +702,7 @@ JKRHeap* JKRHeap::getCurrentHeap() {
 }
 
 void JKRHeap::setName(const char* name) {
-    size_t len = strlen(name);
-    strncpy(mName, name, sizeof(mName) - 1);
-    mName[sizeof(mName) - 1] = '\0';
+    dusk::SafeStringCopyTruncate(mName, name);
 }
 
 void JKRHeap::setNamef(const char* fmt, ...) {

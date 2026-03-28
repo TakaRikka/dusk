@@ -367,46 +367,6 @@ VIRetraceCallback VISetPreRetraceCallback(VIRetraceCallback cb) {
 
 }  // extern "C"
 
-#pragma mark DSP
-#include <dolphin/dsp.h>
-extern "C" void __DSP_insert_task(DSPTaskInfo* task) {
-    STUB_LOG();
-}
-
-extern "C" void __DSP_boot_task(DSPTaskInfo*) {
-    STUB_LOG();
-}
-
-extern "C" void __DSP_exec_task(DSPTaskInfo*, DSPTaskInfo*) {
-    STUB_LOG();
-}
-
-extern "C" void __DSP_remove_task(DSPTaskInfo* task) {
-    STUB_LOG();
-}
-
-void DSPAssertInt(void) {
-    STUB_LOG();
-}
-u32 DSPCheckMailFromDSP(void) {
-    STUB_LOG();
-    return 0;
-}
-u32 DSPCheckMailToDSP(void) {
-    STUB_LOG();
-    return 0;
-}
-void DSPInit(void) {
-    STUB_LOG();
-}
-u32 DSPReadMailFromDSP(void) {
-    STUB_LOG();
-    return 0;
-}
-void DSPSendMailToDSP(u32 mail) {
-    STUB_LOG();
-}
-
 #pragma mark Z2Audio
 class Z2AudioCS {
 public:

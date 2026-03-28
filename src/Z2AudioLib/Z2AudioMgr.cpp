@@ -31,15 +31,15 @@ Z2AudioMgr::Z2AudioMgr() : mSoundStarter(true) {
 void Z2AudioMgr::init(JKRSolidHeap* heap, u32 memSize, void* baaData, JKRArchive* seqArc) {
     JAU_JASInitializer JASInitializer;
     JASInitializer.audioMemSize_ = memSize;
-    JASInitializer.field_0x1c = 140;
+    JASInitializer.mJasTrackPoolSize = 140;
     JASInitializer.dspLevel_ = 1.3f;
     JASInitializer.waveArcDir_ = "Audiores/Waves/";
     JASInitializer.initJASystem(heap);
 
     JAU_JAIInitializer JAIInitializer;
-    JAIInitializer.field_0x0 = 78;
-    JAIInitializer.field_0x4 = 4;
-    JAIInitializer.field_0xc = 48;
+    JAIInitializer.mJaiSePoolSize = 78;
+    JAIInitializer.mJaiSeqPoolSize = 4;
+    JAIInitializer.mJaiSoundChildPoolSize = 48;
     JAIInitializer.initJAInterface();
     
     JAISeMgr* seMgr = mSoundMgr.getSeMgr();
@@ -107,19 +107,6 @@ void Z2AudioMgr::init(JKRSolidHeap* heap, u32 memSize, void* baaData, JKRArchive
     JASPoolAllocObject<Z2SoundHandlePool>::newMemPool(0x4e);
     OS_REPORT("[Z2AudioMgr::init]before Create Section: %d\n", heap->getFreeSize());
 
-#if TARGET_PC
-    // Fix a race condition with OS threading where JAUNewSectionHeap will use all the remaining
-    // space in the JASDram heap before JASAudioThread has finished initializing.
-
-    OSLockMutex(&JASAudioThread::sThreadInitCompleteMutex);
-    while (!JASAudioThread::sThreadInitComplete) {
-        OSWaitCond(
-            &JASAudioThread::sThreadInitCompleteCond,
-            &JASAudioThread::sThreadInitCompleteMutex);
-    }
-    OSUnlockMutex(&JASAudioThread::sThreadInitCompleteMutex);
-#endif
-
     JAUSectionHeap* sectionHeap = JAUNewSectionHeap(true);
     sectionHeap->setSeqDataArchive(seqArc);
     size_t resMaxSize = JASResArcLoader::getResMaxSize(seqArc);
@@ -158,7 +145,7 @@ void Z2AudioMgr::init(JKRSolidHeap* heap, u32 memSize, void* baaData, JKRArchive
 }
 
 void Z2AudioMgr::setOutputMode(u32 mode) {
-    if (mode <= 2) {
+    if (mode <= JAS_OUTPUT_SURROUND) {
         JAISetOutputMode(mode);
     }
 }

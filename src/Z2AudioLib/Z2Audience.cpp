@@ -552,7 +552,11 @@ JAIAudible* Z2Audience::newAudible(const JGeometry::TVec3<f32>& pos, JAISoundID 
 }
 
 void Z2Audience::deleteAudible(JAIAudible* audible) {
+#if TARGET_PC
+    JKR_DELETE(static_cast<Z2Audible*>(audible));
+#else
     JKR_DELETE(audible);
+#endif
 }
 
 Z2Audible::~Z2Audible() {}

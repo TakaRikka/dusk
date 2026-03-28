@@ -31,7 +31,7 @@ JASChannel::JASChannel(Callback i_callback, void* i_callbackData) :
     mKeySweepCount(0),
     mSkipSamples(0)
 {
-    field_0xdc.field_0x0 = 0;
+    field_0xdc.mChannelType = 0;
     field_0x104 = 0;
     mMixConfig[0].whole = 0x150;
     mMixConfig[1].whole = 0x210;
@@ -171,12 +171,12 @@ void JASChannel::updateEffectorParam(JASDsp::TChannel* i_channel, u16* i_mixerVo
     f32 pan = 0.5f;
     f32 dolby = 0.0f;
     switch (JASDriver::getOutputMode()) {
-    case 0:
+    case JAS_OUTPUT_MONO:
         break;
-    case 1:
+    case JAS_OUTPUT_STEREO:
         pan = calcPan(&pan_vector);
         break;
-    case 2:
+    case JAS_OUTPUT_SURROUND:
         pan = calcPan(&pan_vector);
         dolby = calcEffect(&dolby_vector);
         break;
@@ -229,7 +229,7 @@ s32 JASChannel::initialUpdateDSPChannel(JASDsp::TChannel* i_channel) {
         mCallback(CB_START, this, i_channel, mCallbackData);
     }
 
-    if (field_0xdc.field_0x4.field_0x20[0] == 0) {
+    if (field_0xdc.mWaveInfo.field_0x20[0] == 0) {
         JUT_WARN_DEVICE(346, 2, "%s", "Lost wave data while playing");
         mDspCh->free();
         mDspCh = NULL;
@@ -245,19 +245,19 @@ s32 JASChannel::initialUpdateDSPChannel(JASDsp::TChannel* i_channel) {
         return -1;
     }
 
-    switch (field_0xdc.field_0x0) {
+    switch (field_0xdc.mChannelType) {
     case 0:
-        i_channel->setWaveInfo(field_0xdc.field_0x4, field_0x104, mSkipSamples);
+        i_channel->setWaveInfo(field_0xdc.mWaveInfo, mWaveAramAddress, mSkipSamples);
         break;
     case 2:
-        i_channel->setOscInfo(field_0x104);
+        i_channel->setOscInfo(mOscillatorSomething);
         break;
     }
 
-    for (u8 i = 0; i < 6; i++) {
+    for (u8 i = 0; i < DSP_OUTPUT_CHANNELS; i++) {
         MixConfig mix_config = mMixConfig[i];
         u32 output_mode = JASDriver::getOutputMode();
-        if (output_mode == 0) {
+        if (output_mode == JAS_OUTPUT_MONO) {
             switch (mix_config.parts.upper) {
             case 8:
                 mix_config.parts.upper = 11;
@@ -266,7 +266,7 @@ s32 JASChannel::initialUpdateDSPChannel(JASDsp::TChannel* i_channel) {
                 mix_config.parts.upper = 2;
                 break;
             }
-        } else if (output_mode == 1 && mix_config.parts.upper == 8) {
+        } else if (output_mode == JAS_OUTPUT_STEREO && mix_config.parts.upper == 8) {
             mix_config.parts.upper = 11;
         }
         i_channel->setBusConnect(i, mix_config.parts.upper);
@@ -281,9 +281,9 @@ s32 JASChannel::initialUpdateDSPChannel(JASDsp::TChannel* i_channel) {
     }
     mVibrate.resetCounter();
     mTremolo.resetCounter();
-    u16 mixer_volume[6];
+    u16 mixer_volume[DSP_OUTPUT_CHANNELS];
     updateEffectorParam(i_channel, mixer_volume, effect_params);
-    for (u8 i = 0; i < 6; i++) {
+    for (u8 i = 0; i < DSP_OUTPUT_CHANNELS; i++) {
         i_channel->setMixerInitVolume(i, mixer_volume[i]);
     }
 
@@ -307,7 +307,7 @@ s32 JASChannel::updateDSPChannel(JASDsp::TChannel* i_channel) {
         mCallback(CB_PLAY, this, i_channel, mCallbackData);
     }
 
-    if (field_0xdc.field_0x4.field_0x20[0] == 0) {
+    if (field_0xdc.mWaveInfo.field_0x20[0] == 0) {
         JUT_WARN_DEVICE(456, 2, "%s","Lost wave data while playing");
         mDspCh->free();
         mDspCh = NULL;
@@ -378,18 +378,18 @@ s32 JASChannel::updateDSPChannel(JASDsp::TChannel* i_channel) {
     return 0;
 }
 
-void JASChannel::updateAutoMixer(JASDsp::TChannel* i_channel, f32 param_1, f32 param_2,
-                                 f32 param_3, f32 param_4) {
-    if (JASDriver::getOutputMode() == 0) {
-        param_1 *= 0.707f;
+void JASChannel::updateAutoMixer(JASDsp::TChannel* i_channel, f32 volume, f32 pan,
+                                 f32 fxmix, f32 dolby) {
+    if (JASDriver::getOutputMode() == JAS_OUTPUT_MONO) {
+        volume *= 0.707f;
     }
-    param_1 = JASCalc::clamp01(param_1);
+    volume = JASCalc::clamp01(volume);
 
-    u16 r31 = param_1 * JASDriver::getChannelLevel_dsp();
-    u8 r30 = param_2 * 127.5f;
-    u8 r29 = param_4 * 127.5f;
-    u8 r28 = param_3 * 127.5f;
-    i_channel->setAutoMixer(r31, r30, r29, r28, 0);
+    u16 dspVolume = volume * JASDriver::getChannelLevel_dsp();
+    u8 dspPan = pan * 127.5f;
+    u8 dspDolby = dolby * 127.5f;
+    u8 dspFxMix = fxmix * 127.5f;
+    i_channel->setAutoMixer(dspVolume, dspPan, dspDolby, dspFxMix, 0);
 }
 
 void JASChannel::updateMixer(f32 i_volume, f32 i_pan, f32 i_fxmix, f32 i_dolby, u16* i_volumeOut) {
@@ -429,7 +429,7 @@ void JASChannel::updateMixer(f32 i_volume, f32 i_pan, f32 i_fxmix, f32 i_dolby, 
                     volume *= scale;
                     break;
                 default:
-                    if (JASDriver::getOutputMode() == 0) {
+                    if (JASDriver::getOutputMode() == JAS_OUTPUT_MONO) {
                         volume *= scale;
                     } else {
                         volume *= JMASinRadian(scale * JGeometry::TUtil<f32>::PI() * 0.5f);
@@ -470,8 +470,8 @@ void JASChannel::updateMixer(f32 i_volume, f32 i_pan, f32 i_fxmix, f32 i_dolby, 
                 case 6:
                     volume *= scale;
                     break;
-                default:
-                    if (JASDriver::getOutputMode() == 0) {
+                default: // 0, 1, 4, 5, 8-15
+                    if (JASDriver::getOutputMode() == JAS_OUTPUT_MONO) {
                         volume *= scale;
                     } else {
                         volume *= JMASinRadian(scale * JGeometry::TUtil<f32>::PI() * 0.5f);

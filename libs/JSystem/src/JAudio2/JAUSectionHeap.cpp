@@ -245,11 +245,11 @@ u8* JAUSection::newStaticSeqDataBlock_(JAISoundID param_0, u32 size) {
     return NULL;
 }
 
-bool JAUSection::newStaticSeqData(JAISoundID param_0, void const* param_1, u32 param_2) {
+bool JAUSection::newStaticSeqData(JAISoundID param_0, void const* param_1, u32 size) {
     {
-        u8* r30 = newStaticSeqDataBlock_(param_0, param_2);
+        u8* r30 = newStaticSeqDataBlock_(param_0, size);
         if (r30) {
-            memcpy(r30, param_1, param_2);
+            memcpy(r30, param_1, size);
             return true;
         }
     }

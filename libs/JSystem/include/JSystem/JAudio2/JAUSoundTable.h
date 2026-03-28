@@ -12,9 +12,9 @@
 struct JAUSoundTableItem {
     u8 mPriority;
     u8 field_0x1;
-    u16 mResourceId;
-    u32 field_0x4;
-    f32 field_0x8;
+    BE(u16) mResourceId;
+    BE(u32) field_0x4;
+    BE(f32) field_0x8;
 };
 
 /**

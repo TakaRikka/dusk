@@ -21,17 +21,8 @@ JASAudioThread::JASAudioThread(int stackSize, int msgCount, u32 threadPriority)
     OSInitThreadQueue(&sThreadQueue);
 }
 
-#if TARGET_PC
-bool JASAudioThread::sThreadInitComplete = false;
-OSMutex JASAudioThread::sThreadInitCompleteMutex;
-OSCond JASAudioThread::sThreadInitCompleteCond;
-#endif
-
 void JASAudioThread::create(s32 threadPriority) {
-#if TARGET_PC
-    OSInitMutex(&sThreadInitCompleteMutex);
-    OSInitCond(&sThreadInitCompleteCond);
-#endif
+    OSPanic(__FILE__, __LINE__, "JASAudioThread does not work on PC!");
 
 #if PLATFORM_GCN
     const int size = 0x1400;
@@ -64,12 +55,18 @@ private:
     BOOL mInterrupts;
 };
 
+#if !TARGET_PC
 class JASChannel {
     u8 filler[0x108];
 };
+#else
+// You don't want to know how long I spent debugging this.
+#include "JSystem/JAudio2/JASChannel.h"
+#endif
 
 // NONMATCHING location of JASPoolAllocObject_MultiThreaded<JASChannel>
 void* JASAudioThread::run() {
+#if !TARGET_PC
     OSInitFastCast();
     JASDriver::initAI(DMACallback);
     JASDsp::boot(DSPCallback);
@@ -78,13 +75,6 @@ void* JASAudioThread::run() {
 
     JASPoolAllocObject_MultiThreaded<JASChannel>::newMemPool(0x48);
     JASDriver::startDMA();
-
-#if TARGET_PC
-    OSLockMutex(&sThreadInitCompleteMutex);
-    sThreadInitComplete = true;
-    OSUnlockMutex(&sThreadInitCompleteMutex);
-    OSSignalCond(&sThreadInitCompleteCond);
-#endif
 
     OSMessage msg;
     while (true) {
@@ -126,6 +116,9 @@ void* JASAudioThread::run() {
             JUT_PANIC(152, "AUDIO THREAD INVALID MESSAGE\n");
         }
     }
+#else
+    return 0;
+#endif
 }
 
 void JASAudioThread::DMACallback() {
@@ -139,6 +132,7 @@ void JASAudioThread::DMACallback() {
 }
 
 void JASAudioThread::DSPCallback(void*) {
+#if !TARGET_PC
     JASAudioThread* pAudioThread = getInstance();
     JUT_ASSERT(184, pAudioThread);
 	while (DSPCheckMailFromDSP() == 0) { }
@@ -155,4 +149,5 @@ void JASAudioThread::DSPCallback(void*) {
 			JASDsp::finishWork(mail);
 		}
 	}
+#endif
 }

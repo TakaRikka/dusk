@@ -14,9 +14,9 @@ class J3DAnmCluster;
 class JUTNameTab;
 
 #if TARGET_PC
-#define OFFSET_PTR BE(u32)
+#define OFFSET_PTR_V0 BE(u32)
 #else
-#define OFFSET_PTR void*
+#define OFFSET_PTR_V0 void*
 #endif
 
 /**
@@ -49,7 +49,7 @@ public:
 
     /* 0x00 */ BE(f32) mMaxAngle;
     /* 0x04 */ BE(f32) mMinAngle;
-    /* 0x08 */ OFFSET_PTR mClusterKey;
+    /* 0x08 */ OFFSET_PTR_V0 mClusterKey;
     /* 0x0C */ u8 mFlags;
     /* 0x0E */ u8 field_0xe[0x10 - 0xD];
     /* 0x10 */ BE(u16) mKeyNum;
@@ -57,9 +57,9 @@ public:
     /* 0x14 */ BE(u16) field_0x14;
     /* 0x16 */ BE(u16) field_0x16;
 #if TARGET_PC
-    OFFSET_PTR field_0x18;
-    OFFSET_PTR mClusterVertex;
-    OFFSET_PTR mDeformer;
+    OFFSET_PTR_V0 field_0x18;
+    OFFSET_PTR_V0 mClusterVertex;
+    OFFSET_PTR_V0 mDeformer;
 #else
     /* 0x18 */ u16* field_0x18;
     /* 0x1C */ J3DClusterVertex* mClusterVertex;
@@ -82,8 +82,8 @@ public:
 
     /* 0x00 */ BE(u16) mPosNum;
     /* 0x02 */ BE(u16) mNrmNum;
-    /* 0x04 */ OFFSET_PTR field_0x4;
-    /* 0x08 */ OFFSET_PTR field_0x8;
+    /* 0x04 */ OFFSET_PTR_V0 field_0x4;
+    /* 0x08 */ OFFSET_PTR_V0 field_0x8;
 };  // Size: 0x0C
 
 /**
@@ -144,14 +144,14 @@ public:
 
     /* 0x00 */ BE(u16) mNum;
 #if TARGET_PC
-    /* 0x04 */ OFFSET_PTR field_0x4;
-    /* 0x08 */ OFFSET_PTR field_0x8;
+    /* 0x04 */ OFFSET_PTR_V0 field_0x4;
+    /* 0x08 */ OFFSET_PTR_V0 field_0x8;
 #else
     /* 0x04 */ u16* field_0x4;
     /* 0x08 */ u16* field_0x8;
 #endif
 };  // Size: 0x0C
 
-#undef OFFSET_PTR
+#undef OFFSET_PTR_V0
 
 #endif /* J3DCLUSTER_H */

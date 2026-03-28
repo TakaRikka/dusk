@@ -1634,7 +1634,12 @@ void dMsgObject_c::readMessageGroupLocal(mDoDvdThd_mountXArchive_c** p_arcMount)
     #elif REGION_JPN
     sprintf(arcName, "/res/Msgjp/bmgres%d.arc", msgGroup);
     #else
+#if TARGET_PC
+    // Original game UB
+    snprintf(arcName, sizeof(arcName), "/res/Msgus/bmgres%d.arc", msgGroup);
+#else
     sprintf(arcName, "/res/Msgus/bmgres%d.arc", msgGroup);
+#endif
     #endif
 
     *p_arcMount = mDoDvdThd_mountXArchive_c::create(arcName, 0, JKRArchive::MOUNT_MEM, NULL);

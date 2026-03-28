@@ -62,7 +62,6 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(cxxopts)
 
-
 include(files.cmake)
 
 # TODO: version handling for res includes
@@ -81,7 +80,14 @@ source_group("dusk" FILES ${DUSK_FILES})
 
 # game_debug is for game code files that we know work when compiled with DEBUG=1
 # Of course, if building a release build, this distinction is irrelevant
-add_library(game_debug STATIC ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES})
+add_library(game_debug STATIC ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES}
+        src/dusk/audio/DuskAudioSystem.cpp
+        src/dusk/audio/JASCriticalSection.cpp
+        src/dusk/audio/DuskDsp.hpp
+        src/dusk/audio/DuskDsp.cpp
+        src/dusk/audio/Adpcm.cpp
+        src/dusk/audio/Adpcm.hpp
+        src/dusk/audio/DspStub.cpp)
 target_compile_definitions(game_debug PRIVATE TARGET_PC AVOID_UB=1 VERSION=0 $<$<CONFIG:Debug>:DEBUG=1>)
 
 # Make these properties PUBLIC so that the regular game target also sees them.
@@ -98,7 +104,8 @@ target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::gd auror
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES}
-        src/dusk/imgui/ImGuiStubLog.cpp)
+        src/dusk/imgui/ImGuiStubLog.cpp
+        src/dusk/imgui/ImGuiAudio.cpp)
 
 target_link_libraries(game PRIVATE game_debug cxxopts::cxxopts)
 target_compile_definitions(game PRIVATE TARGET_PC AVOID_UB=1 VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0

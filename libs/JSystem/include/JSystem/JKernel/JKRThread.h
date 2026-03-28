@@ -132,6 +132,10 @@ public:
 
     static JSUList<JKRThread> sThreadList;
     // static u8 sThreadList[12];
+
+#if TARGET_PC
+    const char* mThreadName;
+#endif
 };
 
 class JKRIdleThread : public JKRThread {

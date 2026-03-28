@@ -1467,7 +1467,7 @@ static f32 l_ladderAnmBaseTransY = 102.00054168701172f;
 
 static dCcD_SrcCyl l_cylSrc = {
     {
-        {0, {{AT_TYPE_WOLF_ATTACK, 3, 0x1A}, {0xD8FFFDFF, 5}, 0x73}},
+        {0, {{(u32)AT_TYPE_WOLF_ATTACK, 3, 0x1A}, {0xD8FFFDFF, 5}, 0x73}},
         {dCcD_SE_WOLF_BITE, 3, 1, 0, {1}},
         {dCcD_SE_NONE, 6, 0, 0, {0}},
         {0},
