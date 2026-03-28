@@ -27,9 +27,10 @@
 #include "f_op/f_op_overlap_mng.h"
 
 #include "dusk/gx_helper.h"
-#include "dusk/memory.h"
 #include "dusk/os.h"
+#include "dusk/layout.hpp"
 
+#include "JSystem/JAudio2/JASCriticalSection.h"
 #include "turbojpeg.h"
 
 inline s32 daMP_NEXT_READ_SIZE(daMP_THPReadBuffer* readBuf) {
@@ -2573,9 +2574,12 @@ static void __THPHuffDecodeDCTCompV(__REGISTER THPFileInfo* info, THPCoeff* bloc
 }
 #else // !TARGET_PC
 
-static std::vector<u8> FixJpeg(const std::span<u8> data) {
-    std::vector<u8> fixedData;
-    fixedData.reserve(data.size());
+static std::vector<u8> FixedJpegData;
+static tjhandle JpegDecompressHandle;
+
+static const std::vector<u8>& FixJpeg(const std::span<u8> data) {
+    FixedJpegData.resize(0);
+    FixedJpegData.reserve(data.size());
 
     size_t startOfScanLocation = 0;
     for (; startOfScanLocation < data.size() - 1; startOfScanLocation++) {
@@ -2602,48 +2606,32 @@ static std::vector<u8> FixJpeg(const std::span<u8> data) {
 
     // Copy data before SOS
     for (size_t i = 0; i < startOfScanLocation; i++) {
-        fixedData.push_back(data[i]);
+        FixedJpegData.push_back(data[i]);
     }
 
     // Copy data inside SOS, fixing up lacking of "byte shuffling"
     for (size_t i = startOfScanLocation; i < endOfImage; i++) {
         u8 value = data[i];
-        fixedData.push_back(value);
+        FixedJpegData.push_back(value);
         if (value == 0xFF) {
-            fixedData.push_back(0x00);
+            FixedJpegData.push_back(0x00);
         }
     }
 
     // Copy data after SOS.
     for (size_t i = endOfImage; i < data.size(); i++) {
-        fixedData.push_back(data[i]);
+        FixedJpegData.push_back(data[i]);
     }
 
-    return fixedData;
+    return FixedJpegData;
 }
-
-struct TjHandle {
-    tjhandle mHandle;
-
-    explicit TjHandle(const tjhandle handle) : mHandle(handle) {}
-    ~TjHandle() {
-        tj3Destroy(mHandle);
-    }
-
-    operator tjhandle() const {
-        return mHandle;
-    }
-};
 
 extern daMP_THPPlayer daMP_ActivePlayer;
 
-static s32 THPVideoDecode(void* file, size_t fileSize, void* tileY, void* tileU, void* tileV, void* work) {
-    const TjHandle handle(tj3Init(TJINIT_DECOMPRESS));
-    if (handle == nullptr) {
-        OSReport_Error("Failed to create turbojpeg handle: %s", tj3GetErrorStr(nullptr));
-        return 1;
-    }
+static s32 THPVideoDecode(void* file, size_t fileSize, void* tileY, void* tileU, void* tileV, void*) {
+    assert(JpegDecompressHandle);
 
+    const auto handle = JpegDecompressHandle;
     const auto fixedData = FixJpeg(std::span(static_cast<u8*>(file), fileSize));
 
     auto ret = tj3DecompressHeader(handle, fixedData.data(), fixedData.size());
@@ -3220,8 +3208,13 @@ static void daMP_THPGXYuv2RgbSetup(const GXRenderModeObj* rmode) {
 	Mtx44 m;
 	Mtx e_m;
 
+#if TARGET_PC
+    w = JUTVideo::getManager()->getFbWidth();
+    h = JUTVideo::getManager()->getEfbHeight();
+#else
     w = rmode->fbWidth;
     h = rmode->efbHeight;
+#endif
     var_f31 = 0.0f;
 
     #if WIDESCREEN_SUPPORT
@@ -3651,6 +3644,13 @@ static BOOL daMP_THPPlayerOpen(char const* filename, BOOL onMemory) {
 }
 
 static BOOL daMP_THPPlayerClose() {
+#if TARGET_PC
+    tj3Destroy(JpegDecompressHandle);
+    JpegDecompressHandle = nullptr;
+
+    FixedJpegData.clear();
+#endif
+
     if (daMP_ActivePlayer.open && daMP_ActivePlayer.state == 0) {
         daMP_ActivePlayer.open = 0;
         DVDClose(&daMP_ActivePlayer.fileInfo);
@@ -3784,6 +3784,12 @@ static BOOL daMP_ProperTimingForGettingNextFrame() {
 		}
 	} else {
 		s32 frameRate = daMP_ActivePlayer.header.frameRate * 100.0f;
+#if TARGET_PC
+	    // DUSK HACK: We only fire retrace callbacks *half* as often as the game expects,
+	    // because we only run them once per frame, and normally there should be two scans
+	    // per game frame.
+	    frameRate *= 2;
+#endif
 		if (VIGetTvFormat() == VI_PAL) {
 			daMP_ActivePlayer.curCount = daMP_ActivePlayer.retaceCount * frameRate / 5000;
 		} else {
@@ -4112,6 +4118,9 @@ static BOOL daMP_THPPlayerSetVolume(s32 vol, s32 duration) {
 		if (duration < 0)
 			duration = 0;
 
+#if TARGET_PC
+	    JASCriticalSection section;
+#endif
 		interrupt = OSDisableInterrupts();
 
 		daMP_ActivePlayer.targetVolume = vol;
@@ -4155,11 +4164,14 @@ static BOOL daMP_ActivePlayer_Init(char const* moviePath) {
     daMP_THPPlayerGetVideoInfo(&daMP_videoInfo);
     daMP_THPPlayerGetAudioInfo(&daMP_audioInfo);
 
+#if !TARGET_PC
+    // Window can be resized during playback, update this during draw.
     u16 width = JUTVideo::getManager()->getRenderMode()->fbWidth;
     u16 height = JUTVideo::getManager()->getRenderMode()->efbHeight;
 
     daMP_DrawPosX = (width - daMP_videoInfo.xSize) >> 1;
     daMP_DrawPosY = (height - daMP_videoInfo.ySize) >> 1;
+#endif
 
     // "The memory needed for this THP movie is %d bytes\n"
     OS_REPORT("このＴＨＰムービーが必要なメモリは%dバイトです\n", daMP_THPPlayerCalcNeedMemory());
@@ -4175,6 +4187,15 @@ static BOOL daMP_ActivePlayer_Init(char const* moviePath) {
     }
 
     daMP_THPPlayerSetBuffer((u8*)daMP_buffer);
+
+#if TARGET_PC
+    assert(JpegDecompressHandle == nullptr);
+    JpegDecompressHandle = tj3Init(TJINIT_DECOMPRESS);
+    if (JpegDecompressHandle == nullptr) {
+        OSReport_Error("Failed to create turbojpeg handle: %s", tj3GetErrorStr(nullptr));
+        return 0;
+    }
+#endif
 
     if (!daMP_THPPlayerPrepare(0, 0, daMP_audioInfo.sndNumTracks != 1 ? OSGetTick() % daMP_audioInfo.sndNumTracks : 0)) {
         OSReport("Fail to prepare\n");
@@ -4211,14 +4232,55 @@ static void daMP_ActivePlayer_Main() {
     }
 }
 
+#if TARGET_PC && 0
+#include "imgui.h"
+#endif
+
 static void daMP_ActivePlayer_Draw() {
-    int frame = daMP_THPPlayerDrawCurrentFrame(JUTVideo::getManager()->getRenderMode(), daMP_DrawPosX, daMP_DrawPosY, daMP_videoInfo.xSize, daMP_videoInfo.ySize);
+#if TARGET_PC
+    u16 width = JUTVideo::getManager()->getFbWidth();
+    u16 height = JUTVideo::getManager()->getEfbHeight();
+
+    const auto rect = dusk::LayoutRect::FitRectInRect(
+        width,
+        height,
+        static_cast<f32>(daMP_videoInfo.xSize),
+        static_cast<f32>(daMP_videoInfo.ySize));
+
+    daMP_DrawPosX = static_cast<u32>(rect.PosX);
+    daMP_DrawPosY = static_cast<u32>(rect.PosY);
+#endif
+
+    int frame = daMP_THPPlayerDrawCurrentFrame(
+        JUTVideo::getManager()->getRenderMode(),
+        daMP_DrawPosX, daMP_DrawPosY,
+#if TARGET_PC
+        static_cast<u32>(rect.Width()),
+        static_cast<u32>(rect.Height()));
+#else
+        daMP_videoInfo.xSize,
+        daMP_videoInfo.ySize);
+#endif
     daMP_THPPlayerDrawDone();
 
     if (!fopOvlpM_IsPeek() && frame > 0 && (cAPICPad_ANY_BUTTON(0) || !daMP_c::daMP_c_Get_MovieRestFrame())) {
         dComIfGp_event_reset();
         daMP_c::daMP_c_Set_PercentMovieVolume(0.0f);
     }
+
+#if TARGET_PC && 0
+    if (ImGui::Begin("Movie player")) {
+        ImGui::Text("daMP_ReadedBufferQueue: %d", daMP_ReadedBufferQueue.usedCount);
+        ImGui::Text("daMP_ReadedBufferQueue2: %d", daMP_ReadedBufferQueue2.usedCount);
+        ImGui::Text("daMP_FreeReadBufferQueue: %d", daMP_FreeReadBufferQueue.usedCount);
+        ImGui::Text("daMP_DecodedTextureSetQueue: %d", daMP_DecodedTextureSetQueue.usedCount);
+        ImGui::Text("daMP_FreeTextureSetQueue: %d", daMP_FreeTextureSetQueue.usedCount);
+        ImGui::Text("daMP_DecodedAudioBufferQueue: %d", daMP_DecodedAudioBufferQueue.usedCount);
+        ImGui::Text("daMP_FreeAudioBufferQueue: %d", daMP_FreeAudioBufferQueue.usedCount);
+    }
+
+    ImGui::End();
+#endif
 }
 
 static BOOL daMP_Fail_alloc;
