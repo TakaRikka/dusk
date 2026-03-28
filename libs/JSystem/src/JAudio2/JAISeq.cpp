@@ -40,7 +40,7 @@ void JAISeq::JAISeqMgr_startID_(JAISoundID id, const JGeometry::TVec3<f32>* posP
 void JAISeq::playSeqData_(const JASSoundParams& params, JAISoundActivity activity) {
     JUT_ASSERT(72, JASTrack_isFreeOrStopped( & inner_.outputTrack ));
 
-    inner_.outputTrack.setSeqData(inner_.mSeqData.field_0x0, inner_.mSeqData.field_0x4);
+    inner_.outputTrack.setSeqData(inner_.mSeqData.mBase, inner_.mSeqData.mOffset);
     if (audible_) {
         initTrack_JAISound_(&inner_.outputTrack);
     } else {

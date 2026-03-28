@@ -2,6 +2,7 @@
 #define JAUSOUNDANIMATOR_H
 
 #include "JSystem/JAudio2/JAISound.h"
+#include "dusk/offset_ptr.h"
 
 class JAUSoundAnimation;
 
@@ -62,10 +63,10 @@ public:
     }
 
     /* 0x00 */ JAISoundID mSoundId;
-    /* 0x04 */ f32 field_0x04;
-    /* 0x08 */ f32 field_0x08;
-    /* 0x0C */ f32 field_0x0c;
-    /* 0x10 */ u32 mFlags;
+    /* 0x04 */ BE(f32) field_0x04;
+    /* 0x08 */ BE(f32) field_0x08;
+    /* 0x0C */ BE(f32) field_0x0c;
+    /* 0x10 */ BE(u32) mFlags;
     /* 0x14 */ u8 field_0x14;
     /* 0x15 */ u8 field_0x15;
     /* 0x16 */ u8 field_0x16;
@@ -97,23 +98,31 @@ public:
     int getEndSoundIndex(f32) const;
 
     u16 getNumSounds() const {
+#if TARGET_PC
+        return mNumSounds;
+#else
         if (mControl != NULL) {
             return mControl->getNumSounds(this);
         } else {
             return mNumSounds;
         }
+#endif
     }
 
     const JAUSoundAnimationSound* getSound(int i_index) const {
+#if TARGET_PC
+            return &mSounds + i_index;
+#else
         if (mControl != NULL) {
             return mControl->getSound(this, i_index);
         } else {
             return &mSounds + i_index;
         }
+#endif
     }
 
-    /* 0x0 */ u16 mNumSounds;
-    /* 0x4 */ JAUSoundAnimationControl* mControl;
+    /* 0x0 */ BE(u16) mNumSounds;
+    /* 0x4 */ OFFSET_PTR(JAUSoundAnimationControl) mControl;
     /* 0x8 */ JAUSoundAnimationSound mSounds;  // actually an array
 };
 

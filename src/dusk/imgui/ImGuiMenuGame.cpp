@@ -7,8 +7,9 @@
 #include <imgui_internal.h>
 
 #include "JSystem/JUtility/JUTGamePad.h"
-#include "m_Do/m_Do_controller_pad.h"
+#include "dusk/audio/DuskAudioSystem.h"
 #include "m_Do/m_Do_audio.h"
+#include "m_Do/m_Do_controller_pad.h"
 
 namespace dusk {
     ImGuiMenuGame::ImGuiMenuGame() {}
@@ -23,6 +24,11 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Graphics")) {
                 ImGui::Checkbox("Native Bloom", &m_graphicsSettings.m_enableBloom);
+                ImGui::Checkbox("Water Projection Offset", &m_graphicsSettings.m_waterProjectionOffset);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Adds GC-specific -0.01 transS offset\n"
+                                      "that causes ~6px ghost artifacts in water reflections");
+                }
                 ImGui::EndMenu();
             }
 
@@ -30,6 +36,8 @@ namespace dusk {
                 ImGui::Text("Master Volume");
                 ImGui::SliderFloat("##m_masterVolume", &m_audioSettings.m_masterVolume, 0.0f, 1.0f, "");
 
+                /*
+                // TODO: implement additional settings
                 ImGui::Text("Main Music Volume");
                 ImGui::SliderFloat("##m_mainMusicVolume", &m_audioSettings.m_mainMusicVolume, 0.0f, 1.0f, "");
 
@@ -44,8 +52,10 @@ namespace dusk {
 
                 Z2AudioMgr* audioMgr = Z2AudioMgr::getInterface();
                 if (audioMgr != nullptr) {
-                    // TODO: actually apply volume settings
                 }
+                */
+
+                audio::SetMasterVolume(m_audioSettings.m_masterVolume);
 
                 ImGui::EndMenu();
             }

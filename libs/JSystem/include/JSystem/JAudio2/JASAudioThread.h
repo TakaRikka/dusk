@@ -32,11 +32,6 @@ struct JASAudioThread : public JKRThread, public JASGlobalInstance<JASAudioThrea
 	
     static volatile int snIntCount; // type unsure
 
-#if TARGET_PC
-    static bool sThreadInitComplete;
-    static OSMutex sThreadInitCompleteMutex;
-    static OSCond sThreadInitCompleteCond;
-#endif
 };
 
 #endif /* JASAUDIOTHREAD_H */

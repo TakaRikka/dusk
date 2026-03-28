@@ -31,7 +31,17 @@ struct cXyz : Vec {
         z = vec.z;
     }
 #else
-    cXyz() = default;
+    cXyz() {
+        if (std::isnan(x)) {
+            x = 0.0f;
+        }
+        if (std::isnan(y)) {
+            y = 0.0f;
+        }
+        if (std::isnan(z)) {
+            z = 0.0f;
+        }
+    }
     ~cXyz() = default;
     cXyz(const cXyz& vec) = default;
 #endif

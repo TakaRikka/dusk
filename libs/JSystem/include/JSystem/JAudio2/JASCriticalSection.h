@@ -9,11 +9,17 @@
  */
 class JASCriticalSection {
 public:
+#if TARGET_PC
+    JASCriticalSection();
+    ~JASCriticalSection();
+#else
+public:
     JASCriticalSection() { mInterruptState = OSDisableInterrupts(); };
     ~JASCriticalSection() { OSRestoreInterrupts(mInterruptState); };
 
 private:
     u32 mInterruptState;
+#endif
 };
 
 #endif /* JASCRITICALSECTION_H */

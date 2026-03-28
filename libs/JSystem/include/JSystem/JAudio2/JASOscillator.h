@@ -9,10 +9,21 @@
  * 
  */
 struct JASOscillator {
+    enum EnvelopeMode {
+        /* 0x0 */ ENVELOPE_LINEAR,
+        /* 0x1 */ ENVELOPE_SQUARE,
+        /* 0x2 */ ENVELOPE_SQUARE_ROOT,
+        /* 0x3 */ ENVELOPE_SAMPLE_CELL,
+
+        ENVELOPE_LOOP = 0xD,
+        ENVELOPE_HOLD = 0xE,
+        ENVELOPE_STOP = 0xF,
+    };
+
 	struct Point {
-		/* 0x0 */ BE(s16) _0;
-		/* 0x2 */ BE(s16) _2;
-		/* 0x4 */ BE(s16) _4;
+		/* 0x0 */ BE(s16) mEnvelopeMode; // EnvelopeMode
+		/* 0x2 */ BE(s16) mTime;
+		/* 0x4 */ BE(s16) mValue;
 	};
 
     struct EffectParams {
@@ -37,11 +48,11 @@ struct JASOscillator {
 
 	struct Data {
 		/* 0x00 */ u32 mTarget;
-		/* 0x04 */ f32 _04;
+		/* 0x04 */ f32 mRate;
 		/* 0x08 */ const Point* mTable;
 		/* 0x0C */ const Point* rel_table;
-		/* 0x10 */ f32 mScale;
-		/* 0x14 */ f32 _14;
+		/* 0x10 */ f32 mScale; // aka width
+		/* 0x14 */ f32 mVertex;
 	};
 
 	enum Target {
@@ -75,9 +86,9 @@ struct JASOscillator {
 	/* 0x08 */ f32 _08;
 	/* 0x0C */ f32 _0C;
 	/* 0x10 */ f32 _10;
-	/* 0x14 */ u16 _14;
+	/* 0x14 */ u16 mCurPoint;
 	/* 0x16 */ u16 mDirectRelease;
-	/* 0x18 */ u8 _18;
+	/* 0x18 */ u8 mEnvelopeMode; // EnvelopeMode
 	/* 0x1A */ u16 _1A;
 	/* 0x1C */ int _1C;
 

@@ -7,9 +7,9 @@
 #include "dusk/endian.h"
 
 #if TARGET_PC
-#define OFFSET_PTR BE(u32)
+#define OFFSET_PTR_V0 BE(u32)
 #else
-#define OFFSET_PTR void*
+#define OFFSET_PTR_V0 void*
 #endif
 
 /**
@@ -31,13 +31,13 @@ public:
     /* 0x0C */ BE(u16) mClusterVertexNum;
     /* 0x0E */ BE(u16) mVtxPosNum;
     /* 0x10 */ BE(u16) mVtxNrmNum;
-    /* 0x14 */ OFFSET_PTR mClusterPointer;
-    /* 0x18 */ OFFSET_PTR mClusterKeyPointer;
-    /* 0x1C */ OFFSET_PTR mClusterVertex;
-    /* 0x20 */ OFFSET_PTR mVtxPos;
-    /* 0x24 */ OFFSET_PTR mVtxNrm;
-    /* 0x28 */ OFFSET_PTR mClusterName;
-    /* 0x2C */ OFFSET_PTR mClusterKeyName;
+    /* 0x14 */ OFFSET_PTR_V0 mClusterPointer;
+    /* 0x18 */ OFFSET_PTR_V0 mClusterKeyPointer;
+    /* 0x1C */ OFFSET_PTR_V0 mClusterVertex;
+    /* 0x20 */ OFFSET_PTR_V0 mVtxPos;
+    /* 0x24 */ OFFSET_PTR_V0 mVtxNrm;
+    /* 0x28 */ OFFSET_PTR_V0 mClusterName;
+    /* 0x2C */ OFFSET_PTR_V0 mClusterKeyName;
 };
 
 /**
@@ -67,6 +67,6 @@ public:
     /* 0x04 */ J3DDeformData* mpDeformData;
 };
 
-#undef OFFSET_PTR
+#undef OFFSET_PTR_V0
 
 #endif /* J3DCLUSTERLOADER_H */

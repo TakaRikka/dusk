@@ -33,7 +33,7 @@ struct Z2AudioCamera {
     f32 getVolCenterZ() const { return mVolCenterZ; }
     void setMainCamera(bool param_0) { mSetMainCamera = param_0; }
 
-    void setTargetVolume(f32 vol) { 
+    void setTargetVolume(f32 vol) {
         JUT_ASSERT(281, vol <= 1.f);
         if (vol < 0.0f) {
             vol = 0.0f;
@@ -44,6 +44,10 @@ struct Z2AudioCamera {
     f32 getDolbyCenterZ() const { return mDolbyCenterZ; }
     f32 getFovySin() const { return mFovySin; }
     const JGeometry::TVec3<f32>* getVel() const { return &mVel; }
+
+    f32 getTargetVolume() const { return mTargetVolume; }
+    f32 getCamDist() const { return mCamDist; }
+
 
     /* 0x00 */ JGeometry::TPosition3f32 field_0x0;
     /* 0x30 */ JGeometry::TVec3<f32> mVel;
@@ -67,6 +71,10 @@ struct Z2SpotMic {
     f32 calcMicDist(Z2Audible* audible);
     u32 calcMicPriority(f32);
     f32 calcMicVolume(f32, int camID, f32);
+
+    void calcPriorityFactor();
+    void setIgnoreIfOut(bool value) { mIgnoreIfOut = value; }
+    void setMicOn(bool value) { mMicOn = value; }
 
     void setPosPtr(Vec* posPtr) { mPosPtr = posPtr; }
     bool isOn() { return mMicOn; }
@@ -230,6 +238,8 @@ struct Z2Audience : public JAIAudience, public JASGlobalInstance<Z2Audience> {
     Z2Audience3DSetting* getSetting() { return &mSetting; }
 
     const Z2AudioCamera* getAudioCamera(int camID) const { return &mAudioCamera[camID]; } 
+
+    void setUsingOffMicVol(bool value) { mUsingOffMicVol = value; }
 
     /* 0x004 */ f32 field_0x4;
     /* 0x008 */ u8 field_0x8;

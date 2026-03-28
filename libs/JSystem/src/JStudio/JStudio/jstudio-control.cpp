@@ -49,7 +49,7 @@ int JStudio::TControl::transformOnGet_setOrigin_TxyzRy(Vec const& param_0, f32 p
 int JStudio::TControl::transform_setOrigin_ctb(JStudio::ctb::TObject const& param_0) {
     switch (param_0.getScheme()) {
     case 1: {
-        const f32* pfVar4 = (const f32*)param_0.getData();
+        const BE(f32)* pfVar4 = (const BE(f32)*)param_0.getData();
         Vec local_144 = {0.0f, 0.0f, 0.0f};
         local_144.x = pfVar4[0];
         local_144.y = pfVar4[1];

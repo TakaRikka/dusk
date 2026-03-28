@@ -34,9 +34,9 @@ void JASSeqCtrl::init() {
     field_0x51 = 0;
 }
 
-void JASSeqCtrl::start(void* param_0, u32 param_1) {
-    mReader.init(param_0);
-    mReader.jump(param_1);
+void JASSeqCtrl::start(void* base, u32 offset) {
+    mReader.init(base);
+    mReader.jump(offset);
 }
 
 int JASSeqCtrl::tickProc(JASTrack* param_0) {

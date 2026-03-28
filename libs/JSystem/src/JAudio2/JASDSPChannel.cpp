@@ -10,7 +10,7 @@ JASDSPChannel::JASDSPChannel() :
     mStatus(STATUS_INACTIVE),
     mPriority(-1),
     mFlags(0),
-    field_0xc(0),
+    mUpdateCounter(0),
     mCallback(NULL),
     mCallbackData(NULL),
     mChannel(NULL)
@@ -42,9 +42,9 @@ void JASDSPChannel::drop() {
 }
 
 void JASDSPChannel::initAll() {
-    sDspChannels = JKR_NEW_ARRAY_ARGS(JASDSPChannel, 0x40, JASDram, 0x20);
+    sDspChannels = JKR_NEW_ARRAY_ARGS(JASDSPChannel, DSP_CHANNELS, JASDram, 0x20);
     JUT_ASSERT(102, sDspChannels);
-    for (int i = 0; i < 0x40; i++) {
+    for (int i = 0; i < DSP_CHANNELS; i++) {
         sDspChannels[i].mChannel = JASDsp::getDSPHandle(i);
     }
 }
@@ -56,7 +56,7 @@ JASDSPChannel* JASDSPChannel::alloc(u8 i_priority, Callback i_callback, void* i_
     }
     channel->drop();
     channel->mPriority = i_priority;
-    channel->field_0xc = 0;
+    channel->mUpdateCounter = 0;
     channel->mCallback = i_callback;
     channel->mCallbackData = i_callbackData;
     return channel;
@@ -70,7 +70,7 @@ JASDSPChannel* JASDSPChannel::allocForce(u8 i_priority, Callback i_callback, voi
     channel->mStatus = STATUS_INACTIVE;
     channel->drop();
     channel->mPriority = i_priority;
-    channel->field_0xc = 0;
+    channel->mUpdateCounter = 0;
     channel->mCallback = i_callback;
     channel->mCallbackData = i_callbackData;
     return channel;
@@ -83,16 +83,16 @@ void JASDSPChannel::setPriority(u8 i_priority) {
 JASDSPChannel* JASDSPChannel::getLowestChannel(int i_priority) {
     s16 best_priority = 0xff;
     int best_index = -1;
-    int best_unknown = 0;
-    for (int i = 0; i < 0x40; i++) {
+    int best_updateCounter = 0;
+    for (int i = 0; i < DSP_CHANNELS; i++) {
         JASDSPChannel* channel = &sDspChannels[i];
         s16 priority = channel->mPriority;
         if (priority < 0) {
             return &sDspChannels[i];
         }
         if (priority <= i_priority && priority <= best_priority) {
-            if (priority != best_priority || channel->field_0xc > best_unknown) {
-                best_unknown = channel->field_0xc;
+            if (priority != best_priority || channel->mUpdateCounter > best_updateCounter) {
+                best_updateCounter = channel->mUpdateCounter;
                 best_index = i;
                 best_priority = priority;
             }
@@ -107,14 +107,14 @@ JASDSPChannel* JASDSPChannel::getLowestChannel(int i_priority) {
 JASDSPChannel* JASDSPChannel::getLowestActiveChannel() {
     s16 best_priority = 0xff;
     int best_index = -1;
-    int best_unknown = 0;
-    for (int i = 0; i < 0x40; i++) {
+    int best_updateCounter = 0;
+    for (int i = 0; i < DSP_CHANNELS; i++) {
         JASDSPChannel* channel = &sDspChannels[i];
         if (channel->mStatus == STATUS_ACTIVE) {
             s16 priority = channel->mPriority;
             if (priority < 0x7f && priority <= best_priority) {
-                if (priority != best_priority || channel->field_0xc > best_unknown) {
-                    best_unknown = channel->field_0xc;
+                if (priority != best_priority || channel->mUpdateCounter > best_updateCounter) {
+                    best_updateCounter = channel->mUpdateCounter;
                     best_index = i;
                     best_priority = priority;
                 }
@@ -195,7 +195,7 @@ void JASDSPChannel::updateProc() {
                 mChannel->playStop();
                 mChannel->flush();
             } else {
-                field_0xc++;
+                mUpdateCounter++;
                 if (flush) {
                     mChannel->flush();
                 }
@@ -205,7 +205,7 @@ void JASDSPChannel::updateProc() {
 }
 
 void JASDSPChannel::updateAll() {
-    for (u32 i = 0; i < 0x40; i++) {
+    for (u32 i = 0; i < DSP_CHANNELS; i++) {
         if ((i & 0xf) == 0 && i != 0) {
             JASDsp::releaseHalt((i - 1) >> 4);
         }
@@ -230,8 +230,8 @@ JASDSPChannel* JASDSPChannel::getHandle(u32 i_index) {
 
 u32 JASDSPChannel::getNumUse() {
     u32 count = 0;
-    for (int i = 0; i < 0x40; i++) {
-        if (sDspChannels[i].mStatus == 0) {
+    for (int i = 0; i < DSP_CHANNELS; i++) {
+        if (sDspChannels[i].mStatus == STATUS_ACTIVE) {
             count++;
         }
     }
@@ -240,8 +240,8 @@ u32 JASDSPChannel::getNumUse() {
 
 u32 JASDSPChannel::getNumFree() {
     u32 count = 0;
-    for (int i = 0; i < 0x40; i++) {
-        if (sDspChannels[i].mStatus == 1) {
+    for (int i = 0; i < DSP_CHANNELS; i++) {
+        if (sDspChannels[i].mStatus == STATUS_INACTIVE) {
             count++;
         }
     }
@@ -250,8 +250,8 @@ u32 JASDSPChannel::getNumFree() {
 
 u32 JASDSPChannel::getNumBreak() {
         u32 count = 0;
-    for (int i = 0; i < 0x40; i++) {
-        if (sDspChannels[i].mStatus == 2) {
+    for (int i = 0; i < DSP_CHANNELS; i++) {
+        if (sDspChannels[i].mStatus == STATUS_DROP) {
             count++;
         }
     }

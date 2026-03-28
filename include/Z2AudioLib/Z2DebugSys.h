@@ -12,9 +12,8 @@ class Z2ParamNode : public JAHFrameNode {
 public:
     Z2ParamNode() : JAHFrameNode("サウンド各種パラメータ") {}
 
-    /* vt[07] */ virtual ~Z2ParamNode() {}
     /* vt[08] */ virtual void message(JAHControl& control);
-    /* vt[0F] */ virtual void propertyEvent(JAH_P_Event, u32);
+    /* vt[0F] */ virtual void propertyEvent(JAH_P_Event, uintptr_t);
     /* vt[12] */ virtual void onFrame();
 };
 
@@ -27,7 +26,7 @@ public:
     virtual ~Z2HioSeSeqDataMgr() {}
     virtual SeqDataReturnValue getSeqData(JAISoundID param_1, JAISeqData* param_2) {
         if (field_0x18->getSeqList()->getSeqData(param_1, param_2)) {
-            param_2->field_0x4 = 4;
+            param_2->mOffset = 4;
             return SeqDataReturnValue_2;
         } else {
             return JAUSeqDataMgr_SeqCollection::getSeqData(param_1, param_2);

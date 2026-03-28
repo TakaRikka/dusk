@@ -36,6 +36,8 @@ namespace dusk {
                 if (ImGui::Selectable(region.regionName)) {
                     if (m_mapLoaderInfo.regionIdx != idx) {
                         m_mapLoaderInfo.mapIdx = 0;
+                        m_mapLoaderInfo.roomNoIdx = 0;
+                        m_mapLoaderInfo.pointNoIdx = 0;
                     }
                     m_mapLoaderInfo.regionIdx = idx;
                 }
@@ -55,7 +57,7 @@ namespace dusk {
 
             if (ImGui::BeginCombo("Select Map", previewMap.data())) {
                 int prevMapIdx = m_mapLoaderInfo.mapIdx;
-                for (int i = 0; i < region.numMaps; ++i) {
+                for (int i = 0; i < region.maps.size(); ++i) {
                     const auto& map = region.maps[i];
                     std::string label = m_mapLoaderInfo.showInternalNames ? fmt::format("{} ({})", map.mapName, map.mapFile) : map.mapName;
                     if (ImGui::Selectable(label.data())) {
@@ -68,7 +70,7 @@ namespace dusk {
                     m_mapLoaderInfo.pointNoIdx = 0;
                 }
             }
-        }else {
+        } else {
             ImGui::Text("No region selected.");
         }
 
@@ -77,46 +79,64 @@ namespace dusk {
             const auto& map = region.maps[m_mapLoaderInfo.mapIdx];
             const auto& room = map.mapRooms[m_mapLoaderInfo.roomNoIdx];
 
-            if (map.numRooms > 1) {
+            if (map.mapRooms.size() > 1) {
                 ImGui::Text("Selected Room:   %2d", room.roomNo);
                 ImGui::SameLine();
                 if (ImGui::Button("-###RoomNoIdxDec")) {
                     m_mapLoaderInfo.roomNoIdx--;
                     if (m_mapLoaderInfo.roomNoIdx < 0) {
-                        m_mapLoaderInfo.roomNoIdx = map.numRooms - 1;
+                        m_mapLoaderInfo.roomNoIdx = map.mapRooms.size() - 1;
                     }
                     m_mapLoaderInfo.pointNoIdx = 0;
                 }
                 ImGui::SameLine();
                 if (ImGui::Button("+###RoomNoIdxInc")) {
                     m_mapLoaderInfo.roomNoIdx++;
-                    if (m_mapLoaderInfo.roomNoIdx >= map.numRooms) {
+                    if (m_mapLoaderInfo.roomNoIdx >= map.mapRooms.size()) {
                         m_mapLoaderInfo.roomNoIdx = 0;
                     }
                     m_mapLoaderInfo.pointNoIdx = 0;
                 }
             }
 
-            if (room.numPoints > 1) {
+            constexpr int MAX_LAYER = 14;
+
+            ImGui::Text("Selected Layer: %3d", m_mapLoaderInfo.layer);
+            ImGui::SameLine();
+            if (ImGui::Button("-###layerDec")) {
+                m_mapLoaderInfo.layer--;
+                if (m_mapLoaderInfo.layer < -1) {
+                    m_mapLoaderInfo.layer = MAX_LAYER;
+                }
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("+###layerInc")) {
+                m_mapLoaderInfo.layer++;
+                if (m_mapLoaderInfo.layer > MAX_LAYER) {
+                    m_mapLoaderInfo.layer = -1;
+                }
+            }
+
+            if (room.roomPoints.size() > 1) {
                 ImGui::Text("Selected Point: %3d", room.roomPoints[m_mapLoaderInfo.pointNoIdx]);
                 ImGui::SameLine();
                 if (ImGui::Button("-###PointNoIdxDec")) {
                     m_mapLoaderInfo.pointNoIdx--;
                     if (m_mapLoaderInfo.pointNoIdx < 0) {
-                        m_mapLoaderInfo.pointNoIdx = room.numPoints - 1;
+                        m_mapLoaderInfo.pointNoIdx = room.roomPoints.size() - 1;
                     }
                 }
                 ImGui::SameLine();
                 if (ImGui::Button("+###PointNoIdxInc")) {
                     m_mapLoaderInfo.pointNoIdx++;
-                    if (m_mapLoaderInfo.pointNoIdx >= room.numPoints) {
+                    if (m_mapLoaderInfo.pointNoIdx >= room.roomPoints.size()) {
                         m_mapLoaderInfo.pointNoIdx = 0;
                     }
                 }
             }
 
             if (ImGui::Button("Warp")) {
-                dComIfGp_setNextStage(map.mapFile, room.roomPoints[m_mapLoaderInfo.pointNoIdx], room.roomNo, -1);
+                dComIfGp_setNextStage(map.mapFile, room.roomPoints[m_mapLoaderInfo.pointNoIdx], room.roomNo, m_mapLoaderInfo.layer);
             }
         }
 

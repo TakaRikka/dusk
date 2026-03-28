@@ -31,7 +31,7 @@ public:
     /* vt[0C] */ virtual s32 getNodeType() { return 0; }
     /* vt[0D] */ virtual u32 getNodeKind() const;
     /* vt[0E] */ virtual u32 getNodeIcon() const { return 0; }
-    /* vt[0F] */ virtual void propertyEvent(JAH_P_Event, u32) {}
+    /* vt[0F] */ virtual void propertyEvent(JAH_P_Event, uintptr_t) {}
     /* vt[10] */ virtual void nodeEvent(JAH_N_Event) {}
     void updateNode();
     void setNodeName(const char*);

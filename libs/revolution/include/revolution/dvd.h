@@ -3,7 +3,6 @@
 
 #include <revolution/types.h>
 #include <revolution/esp.h>
-#include "global.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -188,15 +187,16 @@ typedef struct DVDGameTOC {
 
 typedef struct DVDPartitionParams  DVDPartitionParams;
 
+#define ROUND_HACK(n, a) (((u32)(n) + (a)-1) & ~((a)-1))
 struct DVDPartitionParams {
     ESTicket ticket;
-    u8 padding0[ROUND(sizeof(ESTicket), 32) - sizeof(ESTicket)];
+    u8 padding0[ROUND_HACK(sizeof(ESTicket), 32) - sizeof(ESTicket)];
     ESTicketView ticketView;
-    u8 padding1[ROUND(sizeof(ESTicketView), 32) - sizeof(ESTicketView)];
+    u8 padding1[ROUND_HACK(sizeof(ESTicketView), 32) - sizeof(ESTicketView)];
     u32 numTmdBytes;
     u8 padding2[28];
     ESTitleMeta tmd;
-    u8 padding3[ROUND(sizeof(ESTitleMeta), 32) - sizeof(ESTitleMeta)];
+    u8 padding3[ROUND_HACK(sizeof(ESTitleMeta), 32) - sizeof(ESTitleMeta)];
     u32 numCertBytes;
     u8 padding4[28];
     u8 certificates[4096];
@@ -204,6 +204,7 @@ struct DVDPartitionParams {
     u8 padding5[28];
     u8 h3Hash[98304];
 };
+#undef ROUND_HACK
 
 typedef struct diRegVals {
     u32 ImmRegVal;

@@ -31,6 +31,7 @@ namespace dusk {
 		void ShowStubLog();
 		void ShowMapLoader();
         void ShowPlayerInfo();
+        void ShowAudioDebug();
 
         CollisionViewSettings& getCollisionViewSettings() { return m_collisionViewSettings; }
 
@@ -48,6 +49,8 @@ namespace dusk {
 		bool m_showStubLog = false;
 
 		bool m_showMapLoader = false;
+
+        bool m_showAudioDebug = false;
 		struct {
 			int mapIdx = -1;
 			int regionIdx = -1;

@@ -18,7 +18,7 @@ public:
     /* 0x08 */ u32 m_fileAttribute;
     /* 0x0C */ u32 m_lowDateTime;
     /* 0x10 */ u32 m_highDateTime;
-    /* 0x14 */ char* m_filename;
+    /* 0x14 */ char m_filename[];
 };
 
 class JORFile {

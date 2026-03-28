@@ -42,13 +42,13 @@ JASChannel* JASBank::noteOn(JASBank const* param_0, int param_1, u8 param_2, u8 
         return NULL;
     }
     channel->setPriority(param_4);
-    channel->field_0xdc.field_0x4 = *waveInfo;
-    channel->field_0x104 = wavePtr;
-    channel->field_0xdc.field_0x0 = stack_60.field_0x1c;
+    channel->field_0xdc.mWaveInfo = *waveInfo;
+    channel->mWaveAramAddress = wavePtr;
+    channel->field_0xdc.mChannelType = stack_60.field_0x1c;
     channel->setBankDisposeID(param_0);
-    channel->setInitPitch(stack_60.mPitch * (waveInfo->field_0x04 / JASDriver::getDacRate()));
+    channel->setInitPitch(stack_60.mPitch * (waveInfo->mSampleRate / JASDriver::getDacRate()));
     if (stack_60.field_0x1e == 0) {
-        channel->setKey(param_2 - waveInfo->field_0x01);
+        channel->setKey(param_2 - waveInfo->mBaseKey);
     }
     channel->setInitVolume(stack_60.mVolume);
     channel->setVelocity(param_3);
@@ -79,10 +79,10 @@ JASChannel* JASBank::noteOnOsc(int param_0, u8 param_1, u8 param_2, u16 param_3,
         return NULL;
     }
     channel->setPriority(param_3);
-    channel->field_0x104 = param_0;
-    channel->field_0xdc.field_0x0 = 2;
+    channel->mOscillatorSomething = param_0;
+    channel->field_0xdc.mChannelType = 2;
     channel->setInitPitch(16736.016f / JASDriver::getDacRate());
-    channel->setKey(param_1 - channel->field_0xdc.field_0x4.field_0x01);
+    channel->setKey(param_1 - channel->field_0xdc.mWaveInfo.mBaseKey);
     channel->setVelocity(param_2);
     channel->setOscInit(0, &OSC_ENV);
     if (!channel->play()) {

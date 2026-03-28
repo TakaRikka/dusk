@@ -1,34 +1,91 @@
 #ifndef Z2FXLINEMGR_H
 #define Z2FXLINEMGR_H
 
-#include "JSystem/JAudio2/JASGadget.h"
 #include "JSystem/JAHostIO/JAHFrameNode.h"
+#include "JSystem/JAudio2/JASDSPInterface.h"
+#include "JSystem/JAudio2/JASGadget.h"
 
 class JKRArchive;
 class JKRExpHeap;
 class JKRHeap;
 
-class Z2FxLineEditNode : public JAHFrameNode {
-public:
-    Z2FxLineEditNode(JKRExpHeap*);
+struct Z2FxLineConfigSingle {
+    /* 0x00 */ u8 unk0;
+    /* 0x01 */ u8 unk1;
+    /* 0x02 */ u8 unk2;
+    /* 0x03 */ u8 unk3;
+    /* 0x04 */ s16 unk4;
+    /* 0x06 */ s16 unk6;
+    /* 0x08 */ s16 unk8[8];
 };
 
 struct Z2FxLineConfig {
-    /* 0x00 */ u8 field_0x0;
-    /* 0x01 */ u8 field_0x1;
-    /* 0x02 */ u8 field_0x2;
-    /* 0x03 */ u8 field_0x3;
-    /* 0x04 */ s16 field_0x4;
-    /* 0x06 */ s16 field_0x6;
-    /* 0x08 */ s16 field_0x8[8];
-    /* 0x18 */ u8 field_0x18;
-    /* 0x19 */ u8 field_0x19;
-    /* 0x1A */ u8 field_0x1a;
-    /* 0x1B */ u8 field_0x1b;
-    /* 0x1C */ s16 field_0x1c;
-    /* 0x1E */ s16 field_0x1e;
-    /* 0x20 */ s16 field_0x20[8];
+    /* 0x00 */ Z2FxLineConfigSingle unk0;
+    /* 0x18 */ Z2FxLineConfigSingle unk18;
 };  // Size: 0x30
+
+class Z2FxLineEditNode : public JAHFrameNode {
+public:
+    class LineStereo : public JAHFrameNode {
+    public:
+        LineStereo(bool dolby) : JAHFrameNode(NULL) {
+            unk70.unk0.unk0 = 1;
+            unk70.unk0.unk1 = 0;
+            unk70.unk0.unk4 = 0x6000;
+            unk70.unk0.unk2 = 1;
+            unk70.unk0.unk6 = 0;
+            unk70.unk0.unk3 = 0x40;
+            unk70.unk0.unk8[0] = 0;
+            unk70.unk0.unk8[1] = 0;
+            unk70.unk0.unk8[2] = 0;
+            unk70.unk0.unk8[3] = 0;
+            unk70.unk0.unk8[4] = 0;
+            unk70.unk0.unk8[5] = 0;
+            unk70.unk0.unk8[6] = 0x3fff;
+            unk70.unk0.unk8[7] = 0;
+
+            unk70.unk18.unk0 = 1;
+            unk70.unk18.unk1 = 0;
+            unk70.unk18.unk4 = 0;
+            unk70.unk18.unk2 = 1;
+            unk70.unk18.unk6 = 0x6000;
+            unk70.unk18.unk3 = 0x40;
+            unk70.unk18.unk8[0] = 0;
+            unk70.unk18.unk8[1] = 0;
+            unk70.unk18.unk8[2] = 0;
+            unk70.unk18.unk8[3] = 0;
+            unk70.unk18.unk8[4] = 0;
+            unk70.unk18.unk8[5] = 0;
+            unk70.unk18.unk8[6] = 0x3fff;
+            unk70.unk18.unk8[7] = 0;
+
+            if (dolby)
+                setNodeName("Dolby Stereo");
+            else
+                setNodeName("Norma Stereo");
+            mIsDolby = dolby;
+        }
+
+        void message(JAHControl&);
+        void propertyEvent(JAH_P_Event, uintptr_t);
+        void lineEditSingle(Z2FxLineConfigSingle*, JAHControl&);
+
+        /* 0x70 */ Z2FxLineConfig unk70;
+        /* 0xA0 */ bool mIsDolby;
+    };
+
+    Z2FxLineEditNode(JKRExpHeap*);
+
+    void message(JAHControl&);
+    void syncSetting(u8, JASDsp::FxlineConfig_*);
+    void update(bool);
+    void saveLine(LineStereo*);
+    void loadLine(LineStereo*);
+
+    /* 0x70 */ JKRExpHeap* mHeap;
+    /* 0x74 */ LineStereo* unk74;
+    /* 0x78 */ LineStereo* unk78;
+};
 
 struct Z2FxLineMgr : public JASGlobalInstance<Z2FxLineMgr> {
     Z2FxLineMgr();
@@ -38,6 +95,8 @@ struct Z2FxLineMgr : public JASGlobalInstance<Z2FxLineMgr> {
     void setFxForceOff(bool);
     void setUnderWaterFx(bool isUnderWaterFx);
     void setSceneFx(s32 sceneNo);
+
+    void setHIOEdit(Z2FxLineEditNode* hioEdit) { mHIOEdit = hioEdit; }
 
     /* 0x00 */ Z2FxLineConfig* mConfig;
     /* 0x04 */ void* mFxLineBuffer[4];

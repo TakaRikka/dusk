@@ -99,7 +99,7 @@ bool JASWaveArc::sendLoadCmd() {
 
     _5a++;
 
-    if (JASDvd::getThreadPointer()->sendCmdMsg(loadToAramCallback, &commandInfo, 0x10) == 0) {
+    if (JASDvd::getThreadPointer()->sendCmdMsg(loadToAramCallback, &commandInfo, sizeof(commandInfo)) == 0) {
         JUT_WARN(193, "%s", "sendCmdMsg loadToAramCallback Failed");
         mHeap.free();
         return false;

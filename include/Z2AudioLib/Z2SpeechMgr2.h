@@ -30,6 +30,9 @@ struct Z2SpeechMgr2 : public JASGlobalInstance<Z2SpeechMgr2> {
     void playOneShotVoice(u8, u16, Vec*, s8);
     bool isMidnaSpeak();
 
+    u16* getStylePtr() { return &mMood; }
+    u8* getTalkerPtr() { return &mVoice; }
+
     /* 0x000 */ JAISoundHandle field_0x0;
     /* 0x004 */ JAISoundHandle field_0x4;
     /* 0x008 */ JMath::TRandom_<JMath::TRandom_fast_> random;

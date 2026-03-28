@@ -1,4 +1,5 @@
 #include <revolution.h>
+#include "global.h"
 #include <cstring>
 
 #if SDK_AUG2010

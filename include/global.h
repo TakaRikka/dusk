@@ -83,7 +83,11 @@ extern int __abs(int);
 void* __memcpy(void*, const void*, int);
 #endif
 
-#ifdef _MSVC_LANG
+#ifndef M_PI
+#define M_PI 3.14159265358979323846f
+#endif
+
+#if defined(_MSVC_LANG) && !defined(__clang__)
 inline int __builtin_clz(unsigned int v) {
     int count = 32;
     while (v != 0) {
@@ -94,7 +98,6 @@ inline int __builtin_clz(unsigned int v) {
 }
 
 #define COMPOUND_LITERAL(x)
-#define M_PI 3.14159265358979323846f
 #else
 
 #define COMPOUND_LITERAL(x) (x)
@@ -176,6 +179,7 @@ static const float INF = 2000000000.0f;
 #ifdef __MWERKS__
     #define MULTI_CHAR(x) (x)
 #else
+#if __cplusplus
     template <int N>
     inline constexpr unsigned long long MultiCharLiteral(const char (&buf)[N]) {
         static_assert(N - 1 >= 3 && N - 1 <= 10, "MULTI_CHAR literal must be 1-8 characters");
@@ -187,6 +191,7 @@ static const float INF = 2000000000.0f;
     }
     #define MULTI_CHAR(x) MultiCharLiteral(#x)
 #endif
+#endif
 
 // potential fakematch?
 #if DEBUG
@@ -196,8 +201,10 @@ static const float INF = 2000000000.0f;
 #endif
 
 #ifndef __MWERKS__
+#if __cplusplus
 #include <cmath>
 using std::isnan;
+#endif
 #endif
 
 // Comparing a non-volatile reference type to NULL is tautological
@@ -210,5 +217,7 @@ using std::isnan;
 #define IS_REF_NULL(r) (0)
 #define IS_REF_NONNULL(r) (1)
 #endif
+
+#define CRASH(msg, ...) OSPanic(__FILE__, __LINE__, "%s", msg, ##__VA_ARGS__)
 
 #endif

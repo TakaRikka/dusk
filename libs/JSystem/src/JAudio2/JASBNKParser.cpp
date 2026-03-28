@@ -23,7 +23,7 @@ JASBasicBank* JASBNKParser::createBasicBank(void const* stream, JKRHeap* heap) {
     u32 free_size = heap->getFreeSize();
     
     TFileHeader* filep = (TFileHeader*)stream;
-    JUT_ASSERT(59, filep->id == 'IBNK');
+    JUT_ASSERT(59, filep->mMagic == 'IBNK');
     JASBasicBank* bank = NULL;
     switch (filep->mVersion) {
     case 0:
@@ -79,11 +79,11 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
         JUT_ASSERT(155, op->id == 'Osci');
         JASOscillator::Data* data = &osc_data[i];
         data->mTarget = op->mTarget;
-        data->_04 = op->_08;
+        data->mRate = op->mRate;
         data->mScale = op->mScale;
-        data->_14 = op->_18;
-        data->mTable = (JASOscillator::Point*)(envt + op->mTableOffset);
-        data->rel_table = (JASOscillator::Point*)(envt + op->_10);
+        data->mVertex = op->mVertex;
+        data->mTable = (JASOscillator::Point*)(envt + op->mAttackEnvelopeOffset);
+        data->rel_table = (JASOscillator::Point*)(envt + op->mReleaseEnvelopeOffset);
     }
     TListChunk* list = list_chunk;
     JUT_ASSERT(172, list->count <= JASBank::PRG_OSC);
@@ -128,8 +128,10 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
             case 'Perc': {
                 JASDrumSet* drump = JKR_NEW_ARGS (heap, 0) JASDrumSet;
                 JUT_ASSERT(264, drump != NULL);
+                #if PLATFORM_SHIELD
                 u32 pmap_count = data[1];
                 JUT_ASSERT(268, pmap_count <= 128);
+                #endif
                 u32 count = *data++;
                 drump->newPercArray(count, heap);
                 for (int j = 0; j < count; j++) {
@@ -137,8 +139,10 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
                     if (offset != 0) {
                         JASDrumSet::TPerc* percp = JKR_NEW_ARGS (heap, 0) JASDrumSet::TPerc;
                         JUT_ASSERT(277, percp);
+                        #if PLATFORM_SHIELD
                         u32 type = data[0];
                         JUT_ASSERT(282, type == 'Pmap');
+                        #endif
                         BE(u32)* ptr = (BE(u32)*)((intptr_t)stream + offset);
                         TPercData* perc_data = (TPercData*)(ptr + 1);
                         percp->setVolume(perc_data->mVolume);
@@ -203,7 +207,7 @@ JASBasicBank* JASBNKParser::Ver0::createBasicBank(void const* stream, JKRHeap* h
                         osc = JKR_NEW_ARGS (heap, 0) JASOscillator::Data;
                         JUT_ASSERT(386, osc != NULL);
                         osc->mTarget = tosc->mTarget;
-                        osc->_04 = tosc->field_0x4;
+                        osc->mRate = tosc->field_0x4;
 
                         JASOscillator::Point* points = tosc->mPointOffset.ptr(header);
                         if (points != NULL) {
@@ -230,7 +234,7 @@ JASBasicBank* JASBNKParser::Ver0::createBasicBank(void const* stream, JKRHeap* h
                         }
 
                         osc->mScale = tosc->mScale;
-                        osc->_14 = tosc->field_0x14;
+                        osc->mVertex = tosc->field_0x14;
                         instp->setOsc(osc_idx, osc);
                     }
 
@@ -312,7 +316,7 @@ JASOscillator::Data* JASBNKParser::Ver0::findOscPtr(JASBasicBank* bank, THeader 
 JASOscillator::Point const* JASBNKParser::Ver0::getOscTableEndPtr(JASOscillator::Point const* points) {
     const JASOscillator::Point* ptr = points;
     while(true) {
-        s16 tmp = ptr->_0;
+        s16 tmp = ptr->mEnvelopeMode;
         ptr++;
         if (tmp > 10) {
             break;

@@ -237,7 +237,11 @@ void* daPy_anmHeap_c::mallocBuffer() {
     return mBuffer;
 }
 
-void daPy_anmHeap_c::createHeap(daPy_anmHeap_c::daAlinkHEAP_TYPE i_heapType) {
+#if TARGET_PC
+void daPy_anmHeap_c::createHeap(daPy_anmHeap_c::daAlinkHEAP_TYPE i_heapType, const char* name) {
+#else
+void daPy_anmHeap_c::createHeap(daPy_anmHeap_c::daAlinkHEAP_TYPE i_heapType, const char* name) {
+#endif
     u32 size;
 
     if (i_heapType == 4) {
@@ -260,8 +264,8 @@ void daPy_anmHeap_c::createHeap(daPy_anmHeap_c::daAlinkHEAP_TYPE i_heapType) {
 
     JKRHeap* tmp;
     mAnimeHeap = mDoExt_createSolidHeapFromGameToCurrent(&tmp, size, 0x20);
-    JKRHEAP_NAMEF(mAnimeHeap, "Alink anime type %d", i_heapType);
-    
+    JKRHEAP_NAME(mAnimeHeap, name);
+
     if (i_heapType == 4) {
         tmpWork = JKR_NEW_ARRAY(char, size);
         JUT_ASSERT(669, tmpWork != NULL);

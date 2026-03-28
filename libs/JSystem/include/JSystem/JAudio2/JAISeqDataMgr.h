@@ -10,17 +10,17 @@
  */
 struct JAISeqData {
     JAISeqData(const void* param_0, u32 param_1) {
-        field_0x0 = (void*)param_0;
-        field_0x4 = param_1;
+        mBase = (void*)param_0;
+        mOffset = param_1;
     }
 
     void set(const void* param_0, u32 param_1) {
-        field_0x0 = (void*)param_0;
-        field_0x4 = param_1;
+        mBase = (void*)param_0;
+        mOffset = param_1;
     }
 
-    /* 0x00 */ void* field_0x0;
-    /* 0x04 */ u32 field_0x4;
+    /* 0x00 */ void* mBase;
+    /* 0x04 */ u32 mOffset;
 };
 
 /**
@@ -29,10 +29,10 @@ struct JAISeqData {
  */
 struct JAISeqDataRegion {
     bool intersects(const JAISeqData& seqData) const {
-        if ((uintptr_t)addr + size < (uintptr_t)seqData.field_0x0) {
+        if ((uintptr_t)addr + size < (uintptr_t)seqData.mBase) {
             return false;
         }
-        if ((uintptr_t)seqData.field_0x0 + seqData.field_0x4 < (uintptr_t)addr) {
+        if ((uintptr_t)seqData.mBase + seqData.mOffset < (uintptr_t)addr) {
             return false;
         }
         return true;

@@ -1,4 +1,4 @@
-#include "JSystem/JSystem.h" // IWYU pragma: keep
+#include "JSystem/JSystem.h"  // IWYU pragma: keep
 
 #include "JSystem/JAHostIO/JAHioMessage.h"
 #include "JSystem/JAHostIO/JAHioNode.h"
@@ -7,7 +7,7 @@
 
 u16 JAHControl::smButtonWidth[] = {20, 50, 100, 150, 300, 600};
 u16 JAHControl::smCommentWidth[] = {20, 50, 100, 200, 400, 800};
-u16 JAHControl::smComboWidth[] = { 50, 100, 150, 200, 300, 600};
+u16 JAHControl::smComboWidth[] = {50, 100, 150, 200, 300, 600};
 u16 JAHControl::smYTop = 5;
 u16 JAHControl::smXLeft = 5;
 u16 JAHControl::smIndentSize = 30;

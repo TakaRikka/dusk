@@ -14,9 +14,9 @@ public:
     enum BranchCondition {};
 
     struct CmdInfo {
-        s32 (JASSeqParser::*field_0x0)(JASTrack*, u32*);
-        u16 field_0xc;
-        u16 field_0xe;
+        s32 (JASSeqParser::*mHandler)(JASTrack*, u32*);
+        u16 mParameterCount;
+        u16 mParameterTypes;
     };
 
     virtual ~JASSeqParser() {}

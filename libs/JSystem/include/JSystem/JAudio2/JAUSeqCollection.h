@@ -11,11 +11,11 @@ struct JAISeqDataRegion;
  * 
  */
 struct JAUSeqCollectionData {
-    s8 field_0x0;
-    s8 field_0x1;
-    BE(u16) field_0x2;
-    BE(u32) field_0x4;
-    BE(u32) field_0x8;
+    s8 mMagic1; // 'S'
+    s8 mMagic2; // 'C'
+    BE(u16) mNumSoundCategories;
+    BE(u32) mSectionSize;
+    BE(u32) mTableOffsets[0]; // VLA
 };
 
 /**
@@ -29,12 +29,12 @@ public:
     bool getSeqData(int, int, JAISeqData*);
     bool getSeqDataRegion(JAISeqDataRegion*);
 
-    bool isValid() const { return field_0x8; }
+    bool isValid() const { return mHeader; }
 
-    /* 0x00 */ u16 field_0x0;
-    /* 0x04 */ const BE(u32)* field_0x4;
-    /* 0x08 */ const JAUSeqCollectionData* field_0x8;
-    /* 0x0C */ int field_0xc;
+    /* 0x00 */ u16 mNumSoundCategories;
+    /* 0x04 */ const BE(u32)* mTableOffsets;
+    /* 0x08 */ const JAUSeqCollectionData* mHeader;
+    /* 0x0C */ u32 mSectionSize;
 };
 
 /**
@@ -49,7 +49,7 @@ public:
     SeqDataReturnValue getSeqData(JAISoundID, JAISeqData*);
     ~JAUSeqDataMgr_SeqCollection();
 
-    const void* getResource() const { return field_0x4; }
+    const void* getResource() const { return mTableOffsets; }
     void init(const void* param_1) { JAUSeqCollection::init(param_1); }
 
     /* 0x14 */ JAISeqDataUser* user_;

@@ -54,7 +54,7 @@ struct JASTrack : public JASPoolAllocObject_MultiThreaded<JASTrack> {
         /* 0x4c */ JASTrack* mTrack;
     };
 
-    struct TList : JGadget::TLinkList<JASTrack, JASTrackNodeOffset> {
+    struct TList : JGadget::TLinkList<JASTrack, -JASTrackNodeOffset> {
         TList() : mCallbackRegistered(false) {}
         void append(JASTrack*);
         void seqMain();

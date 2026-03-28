@@ -532,6 +532,7 @@ int daBg_c::create() {
         if (room_heap != NULL) {
             this->heap = JKRCreateSolidHeap(-1, room_heap, false);
             JUT_ASSERT(471, heap != NULL);
+            JKRHEAP_NAME(heap, "d_a_bg Anms");
 
             JKRHeap* old = mDoExt_setCurrentHeap(this->heap);
             int rt = createHeap();

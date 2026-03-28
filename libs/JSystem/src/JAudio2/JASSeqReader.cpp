@@ -8,81 +8,81 @@
 #include "JSystem/JAudio2/JASSeqReader.h"
 
 void JASSeqReader::init() {
-    field_0x00 = 0;
-    field_0x04 = 0;
-    field_0x08 = 0;
+    mBase = 0;
+    mCurPos = 0;
+    mCurStackDepth = 0;
 
-    for (int i = 0; i < 8; i++) {
-        field_0x0c[i] = NULL;
-        field_0x2c[i] = 0;
+    for (int i = 0; i < JAS_SEQ_STACK_SIZE; i++) {
+        mReturnAddr[i] = NULL;
+        mLoopCount[i] = 0;
     }
 }
 
-void JASSeqReader::init(void* param_0) {
-    field_0x00 = (u8*)param_0;
-    field_0x04 = field_0x00;
-    field_0x08 = 0;
+void JASSeqReader::init(void* base) {
+    mBase = (u8*)base;
+    mCurPos = mBase;
+    mCurStackDepth = 0;
 
-    for (int i = 0; i < 8; i++) {
-        field_0x0c[i] = NULL;
-        field_0x2c[i] = 0;
+    for (int i = 0; i < JAS_SEQ_STACK_SIZE; i++) {
+        mReturnAddr[i] = NULL;
+        mLoopCount[i] = 0;
     }
     
 }
 
 bool JASSeqReader::call(u32 param_0) {
-    if (field_0x08 >= 8) {
+    if (mCurStackDepth >= JAS_SEQ_STACK_SIZE) {
         JUT_WARN(42, "%s", "Cannot exec call command");
         return false;
     }
 
-    field_0x0c[field_0x08++] = (u16*)field_0x04;
-    field_0x04 = field_0x00 + param_0;
+    mReturnAddr[mCurStackDepth++] = (u16*)mCurPos;
+    mCurPos = mBase + param_0;
 
     return true;
 }
 
 bool JASSeqReader::loopStart(u32 param_0) {
-    if (8 <= field_0x08) {
+    if (JAS_SEQ_STACK_SIZE <= mCurStackDepth) {
         JUT_WARN(53, "%s", "Cannot exec loopStart command");
         return false;
     }
 
-    field_0x0c[field_0x08] = (u16*)field_0x04;
-    field_0x2c[field_0x08++] = param_0;
+    mReturnAddr[mCurStackDepth] = (u16*)mCurPos;
+    mLoopCount[mCurStackDepth++] = param_0;
 
     return true;
 }
 
 
 bool JASSeqReader::loopEnd() {
-    if (field_0x08 == 0) {
+    if (mCurStackDepth == 0) {
         JUT_WARN(65, "%s", "cannot loopE for call-stack is NULL");
         return false;
     }
 
-    u16 tmp = field_0x2c[field_0x08 - 1];
+    u16 tmp = mLoopCount[mCurStackDepth - 1];
 
     if (tmp != 0) {
         tmp--;
     }
 
     if (!tmp) {
-        field_0x08--;
+        mCurStackDepth--;
         return true;
     }
 
-    field_0x2c[field_0x08 - 1] = tmp;
-    field_0x04 = (u8*)field_0x0c[field_0x08 - 1];
+    mLoopCount[mCurStackDepth - 1] = tmp;
+    mCurPos = (u8*)mReturnAddr[mCurStackDepth - 1];
     return true;
 }
 
 bool JASSeqReader::ret() {
-    if (field_0x08 == 0) {
+    if (mCurStackDepth == 0) {
         return false;
     }
 
-    field_0x04 = (u8*)field_0x0c[--field_0x08];
+    mCurPos = (u8*)mReturnAddr[--mCurStackDepth];
 
     return true;
 }

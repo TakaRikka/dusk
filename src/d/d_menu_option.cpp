@@ -24,6 +24,8 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
+#include "JSystem/JAudio2/JASDriverIF.h"
+
 typedef void (dMenu_Option_c::*initFunc)();
 static initFunc init[] = {
     &dMenu_Option_c::atten_init,
@@ -89,7 +91,7 @@ dMenu_Option_c::dMenu_Option_c(JKRArchive* i_archive, STControl* i_stick) {
 
 dMenu_Option_c::~dMenu_Option_c() {}
 
-static const u32 dMo_soundMode[3] = {0, 1, 2};
+static const u32 dMo_soundMode[3] = {JAS_OUTPUT_MONO, JAS_OUTPUT_STEREO, JAS_OUTPUT_SURROUND};
 
 void dMenu_Option_c::_create() {
     static const u64 text_a_tag[5] = {MULTI_CHAR('atext1_1'), MULTI_CHAR('atext1_2'), MULTI_CHAR('atext1_3'), MULTI_CHAR('atext1_4'), MULTI_CHAR('atext1_5')};
@@ -1755,13 +1757,13 @@ void dMenu_Option_c::screenSet() {
     }
 }
 
-void dMenu_Option_c::setSoundMode(u32 param_0) {
-    switch (param_0) {
-    case 0:
+void dMenu_Option_c::setSoundMode(u32 soundMode) {
+    switch (soundMode) {
+    case JAS_OUTPUT_MONO:
         OSSetSoundMode(OS_SOUND_MODE_MONO);
         break;
-    case 1:
-    case 2:
+    case JAS_OUTPUT_STEREO:
+    case JAS_OUTPUT_SURROUND: // Via dolby pro logic 2, so it's over 2 output channels.
         OSSetSoundMode(OS_SOUND_MODE_STEREO);
         break;
     }

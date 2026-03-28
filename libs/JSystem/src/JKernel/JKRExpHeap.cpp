@@ -214,7 +214,9 @@ void* JKRExpHeap::do_alloc(u32 size, int alignment) {
 #endif
 
 #if TARGET_PC
-    JUT_ASSERT_MSG_F(__LINE__, ptr != nullptr, "failed to alloc memory! (0x%x byte).\n", size);
+    JUT_ASSERT_MSG_F(__LINE__, ptr != nullptr,
+        "Failed to alloc memory! (%s) (0x%X bytes).\n  Heap size: %u\n  Used size: %u",
+        this->getName(), size, getSize(), getTotalUsedSize());
 #else
     if (ptr == NULL) {
         JUTWarningConsole_f(":::cannot alloc memory (0x%x byte).\n", size);
