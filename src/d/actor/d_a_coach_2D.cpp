@@ -14,6 +14,8 @@
 #include "JSystem/J2DGraph/J2DAnmLoader.h"
 #include <cstring>
 
+#include "dusk/memory.h"
+
 class daCoach2D_HIO_c : public mDoHIO_entry_c {
 public:
     struct Param {
@@ -153,7 +155,7 @@ int daCoach2D_c::createHeap() {
 int daCoach2D_c::create() {
     int phase_state = dComIfG_resLoad(this, l_arcName);
     if (phase_state == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap(this, daCoach2D_createHeap, 0x5050)) {
+        if (!fopAcM_entrySolidHeap(this, daCoach2D_createHeap, HEAP_SIZE(0x5050, 0x6000))) {
             return cPhs_ERROR_e;
         }
 
