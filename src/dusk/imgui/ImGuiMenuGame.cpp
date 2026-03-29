@@ -29,6 +29,10 @@ namespace dusk {
                     ImGui::SetTooltip("Adds GC-specific -0.01 transS offset\n"
                                       "that causes ~6px ghost artifacts in water reflections");
                 }
+                ImGui::Checkbox("Fullscreen", &m_graphicsSettings.m_fullscreen);
+                if (m_graphicsSettings.m_fullscreen != VIGetWindowFullscreen()) {
+                    VISetWindowFullscreen(m_graphicsSettings.m_fullscreen);
+                }
                 ImGui::EndMenu();
             }
 

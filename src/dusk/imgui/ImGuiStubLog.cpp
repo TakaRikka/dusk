@@ -36,18 +36,20 @@ namespace dusk {
 
         std::lock_guard lock(StubLogMutex);
 
+        if (StubLogBuffer.size() > 1024 * 1024) {
+            DuskLog.warn("Stub log FULL. Dropping logs!");
+            return;
+        }
+
         LineOffsets.push_back(StubLogBuffer.size());
         const auto levelName = LogLevelName(level);
         StubLogBuffer.appendf("[%s | %s] %s\n", levelName, module, message);
     }
 
-    static void ClearPastFrame();
-
     void ImGuiMenuTools::ShowStubLog() {
         std::lock_guard lock(StubLogMutex);
 
         if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F5, m_showStubLog)) {
-            ClearPastFrame();
             return;
         }
 
@@ -78,7 +80,6 @@ namespace dusk {
         }
 
         ImGui::End();
-        ClearPastFrame();
     }
 
     void ClearPastFrame() {
@@ -87,5 +88,11 @@ namespace dusk {
         }
         StubLogBuffer.clear();
         LineOffsets.clear();
+    }
+
+    void ImGuiMenuTools::afterDraw() {
+        std::lock_guard lock(StubLogMutex);
+
+        ClearPastFrame();
     }
 }

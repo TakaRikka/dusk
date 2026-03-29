@@ -37,6 +37,7 @@ namespace dusk {
         struct {
             bool m_enableBloom = 1;
             bool m_waterProjectionOffset = false;
+            bool m_fullscreen = false;
         } m_graphicsSettings;
 
         bool m_showControllerConfig = false;
