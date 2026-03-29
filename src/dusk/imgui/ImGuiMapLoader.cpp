@@ -5,6 +5,7 @@
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuTools.hpp"
 #include "dusk/map_loader_definitions.h"
+#include "fmt/format.h"
 
 namespace dusk {
     void ImGuiMenuTools::ShowMapLoader() {
