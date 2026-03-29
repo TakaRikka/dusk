@@ -37,6 +37,14 @@ inline s32 daMP_NEXT_READ_SIZE(daMP_THPReadBuffer* readBuf) {
     return *(BE(s32)*)readBuf->ptr;
 }
 
+#if TARGET_PC
+// idk what OS_THREAD_ATTR_DETACH does, and it stops OSThreadJoin()
+// probably the difference doesn't matter since we are using OS threads anyways.
+#define OS_THREAD_ATTR 0
+#else
+#define OS_THREAD_ATTR OS_THREAD_ATTR_DETACH
+#endif
+
 #if defined(__cplusplus) && !TARGET_PC
 extern "C" {
 #endif
@@ -2700,6 +2708,9 @@ static BOOL THPInit() {
 
 static daMP_THPPlayer daMP_ActivePlayer;
 
+#if TARGET_PC
+static BOOL ReadThreadCancelled;
+#endif
 static BOOL daMP_ReadThreadCreated;
 
 static OSMessageQueue daMP_FreeReadBufferQueue;
@@ -2754,7 +2765,14 @@ void daMP_ReadThreadStart() {
 
 void daMP_ReadThreadCancel() {
     if (daMP_ReadThreadCreated) {
+#if TARGET_PC
+        ReadThreadCancelled = TRUE;
+        OSReceiveMessage(&daMP_ReadedBufferQueue, nullptr, OS_MESSAGE_NOBLOCK);
+        OSSendMessage(&daMP_FreeReadBufferQueue, nullptr, OS_MESSAGE_NOBLOCK);
+        OSJoinThread(&daMP_ReadThread, nullptr);
+#else
         OSCancelThread(&daMP_ReadThread);
+#endif
         daMP_ReadThreadCreated = FALSE;
     }
 }
@@ -2774,8 +2792,17 @@ void* daMP_Reader(void*) {
     offset = daMP_ActivePlayer.initOffset;
 	initReadSize = daMP_ActivePlayer.initReadSize;
 
+#if TARGET_PC
+	while (!ReadThreadCancelled) {
+#else
 	while (TRUE) {
+#endif
 		buf = (daMP_THPReadBuffer*)daMP_PopFreeReadBuffer();
+#if TARGET_PC
+	    if (!buf) {
+	        return nullptr;
+	    }
+#endif
 		status = DVDReadPrio(&daMP_ActivePlayer.fileInfo, buf->ptr, initReadSize, offset, 2);
 		if (status != initReadSize) {
 			if (status == -1)
@@ -2783,7 +2810,11 @@ void* daMP_Reader(void*) {
 			if (frame == 0)
 				daMP_PrepareReady(FALSE);
 
+#if TARGET_PC
+		    return nullptr;
+#else
 			OSSuspendThread(&daMP_ReadThread);
+#endif
 		}
 
 		buf->frameNumber = frame;
@@ -2796,20 +2827,35 @@ void* daMP_Reader(void*) {
 		if (curFrame == daMP_ActivePlayer.header.numFrames - 1) {
 			if (daMP_ActivePlayer.playFlag & 1)
 				offset = daMP_ActivePlayer.header.movieDataOffsets;
-			else
-				OSSuspendThread(&daMP_ReadThread);
+			else {
+#if TARGET_PC
+			    return nullptr;
+#else
+			    OSSuspendThread(&daMP_ReadThread);
+#endif
+			}
 		}
 
 		frame++;
 	}
+
+#if TARGET_PC
+    return nullptr;
+#endif
 }
 
 static u8 daMP_ReadThreadStack[0x2000];
 
+#if TARGET_PC
+static BOOL VideoThreadCancelled;
+#endif
 static BOOL daMP_VideoDecodeThreadCreated;
 
 static BOOL daMP_CreateReadThread(s32 param_0) {
-    if (!OSCreateThread(&daMP_ReadThread, daMP_Reader, 0, daMP_ReadThreadStack + sizeof(daMP_ReadThreadStack), sizeof(daMP_ReadThreadStack), param_0, 1)) {
+#if TARGET_PC
+    ReadThreadCancelled = FALSE;
+#endif
+    if (!OSCreateThread(&daMP_ReadThread, daMP_Reader, 0, daMP_ReadThreadStack + sizeof(daMP_ReadThreadStack), sizeof(daMP_ReadThreadStack), param_0, OS_THREAD_ATTR)) {
         OSReport("Can't create read thread\n");
         return FALSE;
     }
@@ -2868,6 +2914,12 @@ static void daMP_VideoDecode(daMP_THPReadBuffer* readBuffer) {
 	tile = &readBuffer->ptr[daMP_ActivePlayer.compInfo.numComponents * 4] + 8;
 	textureSet = (THPTextureSet*)daMP_PopFreeTextureSet();
 
+#if TARGET_PC
+    if (textureSet == nullptr) {
+        return;
+    }
+#endif
+
     for (i = 0; i < daMP_ActivePlayer.compInfo.numComponents; i++) {
         switch (daMP_ActivePlayer.compInfo.frameComp[i]) {
 		case 0: {
@@ -2905,15 +2957,23 @@ static void daMP_VideoDecode(daMP_THPReadBuffer* readBuffer) {
 
 static void* daMP_VideoDecoder(void* param_0) {
 #if TARGET_PC
-    OSSetCurrentThreadName("video decoder");
+    OSSetCurrentThreadName("movie video decoder");
 #endif
 
     daMP_THPReadBuffer* thpBuffer;
-
+#if TARGET_PC
+	while (!VideoThreadCancelled) {
+#else
 	while (TRUE) {
+#endif
 		if (daMP_ActivePlayer.audioExist) {
 			for (; daMP_ActivePlayer.videoDecodeCount < 0;) {
 				thpBuffer = (daMP_THPReadBuffer*)daMP_PopReadedBuffer2();
+#if TARGET_PC
+			    if (thpBuffer == nullptr) {
+			        goto exit;
+			    }
+#endif
 				s32 remaining
 				    = ((thpBuffer->frameNumber + daMP_ActivePlayer.initReadFrame)
 				       % daMP_ActivePlayer.header.numFrames);
@@ -2933,14 +2993,24 @@ static void* daMP_VideoDecoder(void* param_0) {
 		else
 			thpBuffer = (daMP_THPReadBuffer*)daMP_PopReadedBuffer();
 
+#if TARGET_PC
+	    if (thpBuffer == nullptr) {
+	        goto exit;
+	    }
+#endif
+
 		daMP_VideoDecode(thpBuffer);
 		daMP_PushFreeReadBuffer(thpBuffer);
 	}
+#if TARGET_PC
+    exit:;
+    return nullptr;
+#endif
 }
 
 static void* daMP_VideoDecoderForOnMemory(void* param_0) {
 #if TARGET_PC
-    OSSetCurrentThreadName("video decoder");
+    OSSetCurrentThreadName("movie video decoder");
 #endif
 
     daMP_THPReadBuffer readBuffer;
@@ -2999,13 +3069,17 @@ static void* daMP_VideoDecoderForOnMemory(void* param_0) {
 }
 
 static BOOL daMP_CreateVideoDecodeThread(OSPriority prio, u8* param_1) {
+#if TARGET_PC
+    VideoThreadCancelled = FALSE;
+#endif
+
     if (param_1 != NULL) {
-        if (!OSCreateThread(&daMP_VideoDecodeThread, daMP_VideoDecoderForOnMemory, param_1, daMP_VideoDecodeThreadStack + sizeof(daMP_VideoDecodeThreadStack), sizeof(daMP_VideoDecodeThreadStack), prio, 1)) {
+        if (!OSCreateThread(&daMP_VideoDecodeThread, daMP_VideoDecoderForOnMemory, param_1, daMP_VideoDecodeThreadStack + sizeof(daMP_VideoDecodeThreadStack), sizeof(daMP_VideoDecodeThreadStack), prio, OS_THREAD_ATTR)) {
             OSReport("Can't create video decode thread\n");
             return FALSE;
         }
     } else {
-        if (!OSCreateThread(&daMP_VideoDecodeThread, daMP_VideoDecoder, NULL, daMP_VideoDecodeThreadStack + sizeof(daMP_VideoDecodeThreadStack), sizeof(daMP_VideoDecodeThreadStack), prio, 1)) {
+        if (!OSCreateThread(&daMP_VideoDecodeThread, daMP_VideoDecoder, NULL, daMP_VideoDecodeThreadStack + sizeof(daMP_VideoDecodeThreadStack), sizeof(daMP_VideoDecodeThreadStack), prio, OS_THREAD_ATTR)) {
             OSReport("Can't create video decode thread\n");
             return FALSE;
         }
@@ -3026,12 +3100,24 @@ static void daMP_VideoDecodeThreadStart() {
 
 void daMP_VideoDecodeThreadCancel() {
     if (daMP_VideoDecodeThreadCreated) {
+#if TARGET_PC
+        VideoThreadCancelled = TRUE;
+        // Push junk into the queues so the thread unblocks and can exit cleanly.
+        daMP_PushFreeTextureSet(nullptr);
+        daMP_PushReadedBuffer(nullptr);
+        daMP_PushReadedBuffer2(nullptr);
+        OSJoinThread(&daMP_VideoDecodeThread, nullptr);
+#else
         OSCancelThread(&daMP_VideoDecodeThread);
+#endif
         daMP_VideoDecodeThreadCreated = FALSE;
     }
 }
 
 static BOOL daMP_AudioDecodeThreadCreated;
+#if TARGET_PC
+static BOOL AudioThreadCancelled;
+#endif
 
 static OSThread daMP_AudioDecodeThread;
 
@@ -3073,6 +3159,11 @@ static void daMP_AudioDecode(daMP_THPReadBuffer* readBuffer) {
 	offsets = (BE(u32)*)(readBuffer->ptr + 8);
 	audioData = &readBuffer->ptr[daMP_ActivePlayer.compInfo.numComponents * 4] + 8;
 	audioBuf = (THPAudioBuffer*)daMP_PopFreeAudioBuffer();
+#if TARGET_PC
+    if (!audioBuf) {
+        return;
+    }
+#endif
 
 	for (i = 0; i < daMP_ActivePlayer.compInfo.numComponents; i++) {
 		switch (daMP_ActivePlayer.compInfo.frameComp[i]) {
@@ -3098,11 +3189,21 @@ static void* daMP_AudioDecoder(void* param_0) {
 
     daMP_THPReadBuffer* buf;
 
+#if TARGET_PC
+    while (!AudioThreadCancelled) {
+#else
     while (TRUE) {
+#endif
         buf = (daMP_THPReadBuffer*)daMP_PopReadedBuffer();
+#if TARGET_PC
+        if (!buf) {
+            return nullptr;
+        }
+#endif
         daMP_AudioDecode(buf);
         daMP_PushReadedBuffer2(buf);
     }
+    return nullptr;
 }
 
 static void* daMP_AudioDecoderForOnMemory(void* param_0) {
@@ -3120,7 +3221,11 @@ static void* daMP_AudioDecoderForOnMemory(void* param_0) {
 	readBuffer.ptr = (u8*)param_0;
     frame = 0;
 
+#if TARGET_PC
+	while (!AudioThreadCancelled) {
+#else
 	while (TRUE) {
+#endif
 		readBuffer.frameNumber = frame;
 		daMP_AudioDecode(&readBuffer);
 
@@ -3130,7 +3235,11 @@ static void* daMP_AudioDecoderForOnMemory(void* param_0) {
 				readSize = *(s32*)readBuffer.ptr;
 				readBuffer.ptr = daMP_ActivePlayer.movieData;
 			} else {
+#if TARGET_PC
+			    return nullptr;
+#else
 				OSSuspendThread(&daMP_AudioDecodeThread);
+#endif
 			}
 		} else {
 			size = *(s32*)readBuffer.ptr;
@@ -3139,6 +3248,7 @@ static void* daMP_AudioDecoderForOnMemory(void* param_0) {
 		}
 		frame++;
 	}
+    return nullptr;
 }
 
 static OSMessage daMP_FreeAudioBufferMessage[3];
@@ -3146,13 +3256,16 @@ static OSMessage daMP_FreeAudioBufferMessage[3];
 static OSMessage daMP_DecodedAudioBufferMessage[3];
 
 static BOOL daMP_CreateAudioDecodeThread(OSPriority prio, u8* param_1) {
+#if TARGET_PC
+    AudioThreadCancelled = FALSE;
+#endif
     if (param_1 != NULL) {
-        if (!OSCreateThread(&daMP_AudioDecodeThread, daMP_AudioDecoderForOnMemory, param_1, daMP_AudioDecodeThreadStack + sizeof(daMP_AudioDecodeThreadStack), sizeof(daMP_AudioDecodeThreadStack), prio, 1)) {
+        if (!OSCreateThread(&daMP_AudioDecodeThread, daMP_AudioDecoderForOnMemory, param_1, daMP_AudioDecodeThreadStack + sizeof(daMP_AudioDecodeThreadStack), sizeof(daMP_AudioDecodeThreadStack), prio, OS_THREAD_ATTR)) {
             OS_REPORT("Can't create audio decode thread\n");
             return FALSE;
         }
     } else {
-        if (!OSCreateThread(&daMP_AudioDecodeThread, daMP_AudioDecoder, NULL, daMP_AudioDecodeThreadStack + sizeof(daMP_AudioDecodeThreadStack), sizeof(daMP_AudioDecodeThreadStack), prio, 1)) {
+        if (!OSCreateThread(&daMP_AudioDecodeThread, daMP_AudioDecoder, NULL, daMP_AudioDecodeThreadStack + sizeof(daMP_AudioDecodeThreadStack), sizeof(daMP_AudioDecodeThreadStack), prio, OS_THREAD_ATTR)) {
             OSReport("Can't create audio decode thread\n");
             return FALSE;
         }
@@ -3173,7 +3286,17 @@ void daMP_AudioDecodeThreadStart() {
 
 void daMP_AudioDecodeThreadCancel() {
     if (daMP_AudioDecodeThreadCreated) {
+#if TARGET_PC
+        AudioThreadCancelled = TRUE;
+        // Push junk into the queues so the thread unblocks and can exit cleanly.
+        OSSendMessage(&daMP_ReadedBufferQueue, nullptr, OS_MESSAGE_NOBLOCK);
+        daMP_PushFreeAudioBuffer(nullptr);
+        OSReceiveMessage(&daMP_ReadedBufferQueue2, nullptr, OS_MESSAGE_NOBLOCK);
+        OSReceiveMessage(&daMP_DecodedAudioBufferQueue, nullptr, OS_MESSAGE_NOBLOCK);
+        OSJoinThread(&daMP_AudioDecodeThread, nullptr);
+#else
         OSCancelThread(&daMP_AudioDecodeThread);
+#endif
         daMP_AudioDecodeThreadCreated = FALSE;
     }
 }
