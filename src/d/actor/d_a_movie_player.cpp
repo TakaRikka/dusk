@@ -31,7 +31,10 @@
 #include "dusk/layout.hpp"
 
 #include "JSystem/JAudio2/JASCriticalSection.h"
+
+#if MOVIE_SUPPORT
 #include "turbojpeg.h"
+#endif
 
 inline s32 daMP_NEXT_READ_SIZE(daMP_THPReadBuffer* readBuf) {
     return *(BE(s32)*)readBuf->ptr;
@@ -2582,6 +2585,7 @@ static void __THPHuffDecodeDCTCompV(__REGISTER THPFileInfo* info, THPCoeff* bloc
 }
 #else // !TARGET_PC
 
+#if MOVIE_SUPPORT
 static std::vector<u8> FixedJpegData;
 static tjhandle JpegDecompressHandle;
 
@@ -2673,6 +2677,11 @@ static s32 THPVideoDecode(void* file, size_t fileSize, void* tileY, void* tileU,
 
     return 0;
 }
+#else // MOVIE_SUPPORT
+static s32 THPVideoDecode(void*, size_t, void*, void*, void*, void*) {
+    return 1; // Immediate error.
+}
+#endif
 #endif
 
 static BOOL THPInit() {
@@ -3767,7 +3776,7 @@ static BOOL daMP_THPPlayerOpen(char const* filename, BOOL onMemory) {
 }
 
 static BOOL daMP_THPPlayerClose() {
-#if TARGET_PC
+#if TARGET_PC && MOVIE_SUPPORT
     tj3Destroy(JpegDecompressHandle);
     JpegDecompressHandle = nullptr;
 
@@ -4311,7 +4320,7 @@ static BOOL daMP_ActivePlayer_Init(char const* moviePath) {
 
     daMP_THPPlayerSetBuffer((u8*)daMP_buffer);
 
-#if TARGET_PC
+#if TARGET_PC && MOVIE_SUPPORT
     assert(JpegDecompressHandle == nullptr);
     JpegDecompressHandle = tj3Init(TJINIT_DECOMPRESS);
     if (JpegDecompressHandle == nullptr) {

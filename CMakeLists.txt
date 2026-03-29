@@ -19,6 +19,7 @@ add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
 
 option(DUSK_BUILD_WARNINGS "If off, compiler warnings will be suppressed")
 option(DUSK_SELECTED_OPT "If on, selected parts of the project will be compiled with optimizations on Debug, intending to make the game run at 30 FPS. Note for MSVC: you will need to remove '/RTC1' from your debug flags in CMake.")
+option(DUSK_MOVIE_SUPPORT "If on, compile against libjpeg-turbo to enable THP file decoding" ON)
 
 if (CMAKE_SYSTEM_NAME STREQUAL Linux)
     # -Wno-multichar: Multi-character constants ('ABCD') are implementation-defined but all compilers
@@ -52,7 +53,10 @@ endif ()
 
 
 include(FetchContent)
-include(ExternalProject)
+
+if (DUSK_MOVIE_SUPPORT)
+    include(ExternalProject)
+endif ()
 
 message(STATUS "dusk: Fetching cxxopts")
 FetchContent_Declare(
@@ -63,7 +67,9 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(cxxopts)
 
-include(cmake/libjpeg.cmake)
+if (DUSK_MOVIE_SUPPORT)
+    include(cmake/libjpeg.cmake)
+endif ()
 include(files.cmake)
 
 # TODO: version handling for res includes
@@ -109,7 +115,11 @@ add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${J
         src/dusk/imgui/ImGuiStubLog.cpp
         src/dusk/imgui/ImGuiAudio.cpp)
 
-target_link_libraries(game PRIVATE game_debug cxxopts::cxxopts libjpeg-turbo-lib)
+target_link_libraries(game PRIVATE game_debug cxxopts::cxxopts)
+if (DUSK_MOVIE_SUPPORT)
+    target_link_libraries(game PRIVATE libjpeg-turbo-lib)
+    target_compile_definitions(game PRIVATE MOVIE_SUPPORT=1)
+endif ()
 target_compile_definitions(game PRIVATE TARGET_PC AVOID_UB=1 VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0
         DUSK_TP_VERSION="${DUSK_TP_VERSION}" DUSK_GAME_NAME="${DUSK_GAME_NAME}" DUSK_GAME_VERSION="${DUSK_GAME_VERSION}")
 add_executable(dusk src/dusk/main.cpp)
