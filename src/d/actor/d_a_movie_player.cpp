@@ -2638,7 +2638,7 @@ static const std::vector<u8>& FixJpeg(const std::span<u8> data) {
     return FixedJpegData;
 }
 
-extern daMP_THPPlayer daMP_ActivePlayer;
+static daMP_THPPlayer daMP_ActivePlayer;
 
 static s32 THPVideoDecode(void* file, size_t fileSize, void* tileY, void* tileU, void* tileV, void*) {
     assert(JpegDecompressHandle);
@@ -2715,7 +2715,9 @@ static BOOL THPInit() {
 }
 #endif
 
+#if !TARGET_PC // Defined earlier in file.
 static daMP_THPPlayer daMP_ActivePlayer;
+#endif
 
 #if TARGET_PC
 static BOOL ReadThreadCancelled;

@@ -83,9 +83,9 @@ typedef struct THPHeader {
 	/* 0x2C */ BE(u32) finalFrameDataOffsets;
 } THPHeader;
 
-u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag);
-s32 __THPAudioGetNewSample(THPAudioDecodeInfo* info);
-void __THPAudioInitialize(THPAudioDecodeInfo* info, u8* ptr);
+static u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag);
+static s32 __THPAudioGetNewSample(THPAudioDecodeInfo* info);
+static void __THPAudioInitialize(THPAudioDecodeInfo* info, u8* ptr);
 
 #define THP_AUDIO_BUFFER_COUNT 3
 #define THP_READ_BUFFER_COUNT  10
