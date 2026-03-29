@@ -13,6 +13,8 @@
 #include <vi.h>
 #include <stdint.h>
 
+#include "JSystem/JKernel/JKRExpHeap.h"
+
 static int JKRDecompressFromDVD(JKRDvdFile*, void*, u32, u32, u32, u32, u32*);
 static int decompSZS_subroutine(u8*, u8*);
 static u8* firstSrcData();
@@ -240,6 +242,8 @@ static OSMutex decompMutex;
 
 u32 JKRDvdRipper::sSZSBufferSize = 0x00000400;
 
+JKRHeap* JKRDvdRipper::sHeap = NULL;
+
 static u8* szpBuf;
 
 static u8* szpEnd;
@@ -282,12 +286,20 @@ static int JKRDecompressFromDVD(JKRDvdFile* dvdFile, void* dst, u32 fileSize, u3
     OSLockMutex(&decompMutex);
     u32 result = 0;
     u32 szsBufferSize = JKRDvdRipper::getSZSBufferSize();
+#if TARGET_PC
+    szpBuf = (u8 *)JKRAllocFromHeap(JKRDvdRipper::getHeap(), szsBufferSize, -0x20);
+#else
     szpBuf = (u8 *)JKRAllocFromSysHeap(szsBufferSize, -0x20);
+#endif
     JUT_ASSERT(909, szpBuf != NULL);
 
     szpEnd = szpBuf + szsBufferSize;
     if (inFileOffset != 0) {
+#if TARGET_PC
+        refBuf = (u8 *)JKRAllocFromHeap(JKRDvdRipper::getHeap(), 0x1120, -4);
+#else
         refBuf = (u8 *)JKRAllocFromSysHeap(0x1120, -4);
+#endif
         JUT_ASSERT(918, refBuf != NULL);
         refEnd = refBuf + 0x1120;
         refCurrent = refBuf;

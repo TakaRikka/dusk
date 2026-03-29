@@ -2,7 +2,9 @@
 #define DOLZEL_BASE_PCH
 
 // Fixes weak .bss
+#if !TARGET_PC
 #include "weak_bss_1109_to_1009.h" // IWYU pragma: export
+#endif
 
 #include <cmath> // IWYU pragma: export
 #include <cstring> // IWYU pragma: export

@@ -22,6 +22,7 @@
 #include <cstdio>
 #include <cstring>
 
+#include "dusk/logging.h"
 #include "dusk/string.hpp"
 #if TARGET_PC
 #include <format>

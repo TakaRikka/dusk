@@ -4,7 +4,6 @@
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "m_Do/m_Do_mtx.h"
 #include "global.h"
-#include "dusk/logging.h"
 #if TARGET_PC
 #include <aurora/aurora.h>
 #endif
@@ -100,9 +99,7 @@ public:
     }
 
     static int startFadeOut(int param_0) { return JFWDisplay::getManager()->startFadeOut(param_0); }
-    static int startFadeIn(int param_0) { 
-        DuskLog.debug("mDoGph_gInf_c::startFadeIn START");
-        return JFWDisplay::getManager()->startFadeIn(param_0); }
+    static int startFadeIn(int param_0) { return JFWDisplay::getManager()->startFadeIn(param_0); }
     static void setFadeColor(JUtility::TColor& color) { mFader->setColor(color); }
     static void setClearColor(JUtility::TColor color) { JFWDisplay::getManager()->setClearColor(color); }
     static void setBackColor(GXColor& color) { mBackColor = color; }
