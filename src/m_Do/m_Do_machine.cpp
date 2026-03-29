@@ -29,6 +29,10 @@
 #include "DynamicLink.h"
 #include "os_report.h"
 
+#if TARGET_PC
+#include <assert.h>
+#endif
+
 #if !PLATFORM_GCN
 #include <revolution/sc.h>
 #include <revolution/wpad.h>
@@ -991,6 +995,11 @@ int mDoMch_Create() {
     GXSetVerifyCallback((GXVerifyCallback)&myGXVerifyCallback);
     #endif
     JKRDvdRipper::setSZSBufferSize(0x4000);
+#if TARGET_PC
+    JKRHeap* dvdHeap = JKRCreateExpHeap(0x10000, NULL, false);
+    assert(dvdHeap != NULL);
+    JKRDvdRipper::setHeap(dvdHeap);
+#endif
     JKRDvdAramRipper::setSZSBufferSize(0x4000);
     JKRAram::setSZSBufferSize(0x2000);
     mDoDvdThd::create(OSGetThreadPriority(OSGetCurrentThread()) - 2);

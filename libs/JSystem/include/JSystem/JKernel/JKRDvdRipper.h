@@ -36,6 +36,9 @@ public:
     static JSUList<JKRDMCommand> sDvdAsyncList;
     static u32 sSZSBufferSize;
     static bool errorRetry;
+#if TARGET_PC
+    static JKRHeap* sHeap;
+#endif
 
     enum EAllocDirection {
         UNKNOWN_EALLOC_DIRECTION = 0,
@@ -54,6 +57,12 @@ public:
 
     static bool isErrorRetry(void) { return errorRetry; }
     inline static u32 getSZSBufferSize() { return sSZSBufferSize; }
+
+#if TARGET_PC
+    static inline JKRHeap* getHeap() { return sHeap; }
+    static inline void setHeap(JKRHeap* i_heap) { sHeap = i_heap; }
+
+#endif
 };
 
 // void JKRDecompressFromDVD(JKRDvdFile*, void*, u32, u32, u32, u32, u32*);
