@@ -28,8 +28,6 @@ if (DUSK_MOVIE_SUPPORT AND NOT libjpeg-turbo_FOUND)
     set(DUSK_MOVIE_SUPPORT_REAL OFF)
 endif ()
 
-message(WARNING "FOUND: ${libjpeg-turbo_FOUND}")
-
 if (CMAKE_SYSTEM_NAME STREQUAL Linux)
     # -Wno-multichar: Multi-character constants ('ABCD') are implementation-defined but all compilers
     #   (CW, GCC, Clang, MSVC) encode them identically in big-endian order.
