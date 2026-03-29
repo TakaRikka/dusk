@@ -2585,6 +2585,8 @@ static void __THPHuffDecodeDCTCompV(__REGISTER THPFileInfo* info, THPCoeff* bloc
 }
 #else // !TARGET_PC
 
+static daMP_THPPlayer daMP_ActivePlayer;
+
 #if MOVIE_SUPPORT
 static std::vector<u8> FixedJpegData;
 static tjhandle JpegDecompressHandle;
@@ -2637,8 +2639,6 @@ static const std::vector<u8>& FixJpeg(const std::span<u8> data) {
 
     return FixedJpegData;
 }
-
-static daMP_THPPlayer daMP_ActivePlayer;
 
 static s32 THPVideoDecode(void* file, size_t fileSize, void* tileY, void* tileU, void* tileV, void*) {
     assert(JpegDecompressHandle);
