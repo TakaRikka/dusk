@@ -174,6 +174,7 @@ namespace dusk {
 
     void ImGuiConsole::draw() {
         if (CheckMenuViewToggle(ImGuiKey_F1, m_isHidden)) {
+            m_menuTools.afterDraw();
             return;
         }
 
@@ -187,6 +188,8 @@ namespace dusk {
 
             ImGui::EndMainMenuBar();
         }
+
+        m_menuTools.afterDraw();
     }
 
     bool ImGuiConsole::CheckMenuViewToggle(ImGuiKey key, bool& active) {
