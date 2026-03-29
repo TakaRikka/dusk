@@ -101,7 +101,9 @@ JAHioNode* JAHioNode::getParent() {
 
 void JAHioNode::listenPropertyEvent(const JORPropertyEvent* event) {
     propertyEvent(JAH_P_EVENT0, (uintptr_t)event->id);
+#if DEBUG
     JORReflexible::listenPropertyEvent(event);
+#endif
     propertyEvent(JAH_P_EVENT1, (uintptr_t)event->id);
 }
 

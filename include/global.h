@@ -218,7 +218,6 @@ using std::isnan;
 #define IS_REF_NONNULL(r) (1)
 #endif
 
-#define CRASH(msg) OSPanic(__FILE__, __LINE__, "%s", msg)
-#define CRASHF(msg, ...) OSPanic(__FILE__, __LINE__, msg, __VA_ARGS__)
+#define CRASH(msg, ...) OSPanic(__FILE__, __LINE__, "%s", msg, ##__VA_ARGS__)
 
 #endif

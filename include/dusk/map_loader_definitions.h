@@ -1,79 +1,67 @@
 #pragma once
 
 struct RoomEntry {
-    static constexpr int MAX_POINTS = 70;
-
     u8 roomNo;
-    s16 roomPoints[MAX_POINTS] = {};
-    int numPoints;
+    std::vector<s16> roomPoints = {};
 
-    constexpr RoomEntry() : roomNo(0), numPoints(0) {}
+    constexpr RoomEntry() : roomNo(0) {}
     constexpr RoomEntry(const RoomEntry& other) = default;
 
     template <int N>
     constexpr RoomEntry(const u8 roomNo, const s16 (&points)[N]) :
-        roomNo(roomNo), numPoints(N) {
-        static_assert(N <= MAX_POINTS);
+        roomNo(roomNo) {
         for (int i = 0; i < N; i++) {
-            roomPoints[i] = points[i];
+            roomPoints.push_back(points[i]);
         }
     }
 
     constexpr RoomEntry(const u8 roomNo) :
-        roomNo(roomNo), numPoints(1) {
-        roomPoints[0] = 0;
+        roomNo(roomNo) {
+        roomPoints.push_back(0);
     }
 };
 
 struct MapEntry {
-    static constexpr int MAX_ROOMS = 50;
-
     const char* mapName;
     const char* mapFile;
-    RoomEntry mapRooms[MAX_ROOMS] = {};
-    int numRooms;
+    std::vector<RoomEntry> mapRooms = {};
 
-    constexpr MapEntry() : mapName(nullptr), mapFile(nullptr), numRooms(0) {}
+    constexpr MapEntry() : mapName(nullptr), mapFile(nullptr) {}
     constexpr MapEntry(const MapEntry& other) = default;
 
     template <int N>
     constexpr MapEntry(const char* mapName, const char* mapFile, const RoomEntry (&rooms)[N], const char*) : mapName(mapName),
-        mapFile(mapFile), numRooms(N) {
-        static_assert(N <= MAX_ROOMS);
+        mapFile(mapFile) {
         for (int i = 0; i < N; i++) {
-            mapRooms[i] = rooms[i];
+            mapRooms.push_back(rooms[i]);
         }
     }
 
     template <int N>
     constexpr MapEntry(const char* mapName, const char* mapFile, const RoomEntry (&rooms)[N]) :
-    mapName(mapName), mapFile(mapFile), numRooms(N) {
-        static_assert(N <= MAX_ROOMS);
+    mapName(mapName), mapFile(mapFile) {
         for (int i = 0; i < N; i++) {
-            mapRooms[i] = rooms[i];
+            mapRooms.push_back(rooms[i]);
         }
     }
 
     constexpr MapEntry(const char* mapName, const char* mapFile) : mapName(mapName),
-                mapFile(mapFile), numRooms(0) {}
+                mapFile(mapFile) {}
 };
 
 struct RegionEntry {
-    static constexpr int MAX_MAPS = 22;
     const char* regionName = nullptr;
-    int numMaps = 0;
-    MapEntry maps[MAX_MAPS] = {};
+    std::vector<MapEntry> maps = {};
 
     template <int N>
-    constexpr RegionEntry(const char* regionName, const MapEntry (&maps)[N]) : regionName(regionName), numMaps(N) {
-        static_assert(N <= MAX_MAPS);
+    constexpr RegionEntry(const char* regionName, const MapEntry (&maps)[N]) : regionName(regionName) {
         for (int i = 0; i < N; i++) {
-            this->maps[i] = maps[i];
+            this->maps.push_back(maps[i]);
         }
     }
 };
 
-constexpr auto gameRegions = std::to_array({
+static const auto gameRegions = std::to_array({
     RegionEntry("Hyrule Field", {
         MapEntry("Hyrule Field", "F_SP121",
             {
