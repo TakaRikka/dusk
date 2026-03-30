@@ -22,6 +22,13 @@ u16* makedata(u16* data, u32 pattern, s32 length) {
     data[1] = pattern >> 16;
     data[2] = pattern;
     data[3] = 0;
+
+#if TARGET_PC
+    data[0] = BSWAP16(data[0]);
+    data[1] = BSWAP16(data[1]);
+    data[2] = BSWAP16(data[2]);
+#endif
+
     return data;
 }
 
