@@ -198,31 +198,24 @@ void daObj_Stick_c::setMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-static u32 daObj_Stick_Create(void* i_this) {
+static int daObj_Stick_Create(void* i_this) {
     return static_cast<daObj_Stick_c*>(i_this)->create();
 }
 
-#if TARGET_PC
 static int daObj_Stick_Delete(void* param_0) {
-    static_cast<daObj_Stick_c*>(param_0)->Delete();
+    return static_cast<daObj_Stick_c*>(param_0)->Delete();
+}
+
+static int daObj_Stick_Execute(void* param_0) {
+    return static_cast<daObj_Stick_c*>(param_0)->Execute();
+}
+
+static int daObj_Stick_Draw(void* param_0) {
+    return static_cast<daObj_Stick_c*>(param_0)->Draw();
+}
+
+static int daObj_Stick_IsDelete(void* param_0) {
     return 1;
-}
-#else
-static void daObj_Stick_Delete(void* param_0) {
-    static_cast<daObj_Stick_c*>(param_0)->Delete();
-}
-#endif
-
-static void daObj_Stick_Execute(void* param_0) {
-    static_cast<daObj_Stick_c*>(param_0)->Execute();
-}
-
-static void daObj_Stick_Draw(void* param_0) {
-    static_cast<daObj_Stick_c*>(param_0)->Draw();
-}
-
-static BOOL daObj_Stick_IsDelete(void* param_0) {
-    return TRUE;
 }
 
 static actor_method_class daObj_Stick_MethodTable = {

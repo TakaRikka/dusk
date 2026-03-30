@@ -89,8 +89,8 @@ static void* s_boar_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-static void CheckCreateHeap(fopAc_ac_c* i_this) {
-    static_cast<daObjIBone_c*>(i_this)->CreateHeap();
+static int CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daObjIBone_c*>(i_this)->CreateHeap();
 }
 
 void daObjIBone_c::initBaseMtx() {
@@ -150,7 +150,7 @@ int daObjIBone_c::create() {
     int result = dComIfG_resLoad(&mPhase, l_arcName);
             
     if (result == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x860)) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x860)) {
             return cPhs_ERROR_e;
         } else if (!Create()) {
             return cPhs_ERROR_e;

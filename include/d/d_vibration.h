@@ -47,18 +47,21 @@ class dVibTest_c : public JORReflexible {
 public:
     dVibTest_c();
 
+    void Init();
+    void setDefault();
+
     virtual void listenPropertyEvent(const JORPropertyEvent*);
     virtual void genMessage(JORMContext*);
-    virtual ~dVibTest_c() {}
+    virtual ~dVibTest_c();
 
-    /* 0x04 */ s8 field_0x4;
+    /* 0x04 */ s8 id;
     /* 0x06 */ u16 m_pattern;
     /* 0x08 */ u16 m_pattern2;
     /* 0x0A */ u16 field_0xa;
     /* 0x0C */ s16 m_randombit;
     /* 0x0E */ s16 m_length;
     /* 0x10 */ int field_0x10;
-    /* 0x14 */ int m_vibswitch;
+    /* 0x14 */ s32 m_vibswitch;
     /* 0x18 */ u16 m_displayDbg;
 };
 
@@ -81,6 +84,10 @@ public:
     void Init();
     void Pause();
     void Remove();
+
+    #if DEBUG
+    int testShake();
+    #endif
 
     static const vib_pattern MS_patt[VIBMODE_S_MAX];
     static const vib_pattern CS_patt[VIBMODE_S_MAX];
@@ -122,5 +129,8 @@ private:
     /* 0x88 */ s32 mFrame;
     /* 0x8C */ s32 mMode;
 };  // Size: 0x90
+
+extern const char* shock_names[VIBMODE_S_MAX];
+extern const char* quake_names[VIBMODE_Q_MAX];
 
 #endif /* D_D_VIBRATION_H */

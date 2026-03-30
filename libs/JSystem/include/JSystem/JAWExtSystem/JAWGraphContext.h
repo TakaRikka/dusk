@@ -24,6 +24,15 @@ public:
     void setGXforPrint();
     void setGXforDraw();
 
+    void color(const JUtility::TColor& color0, const JUtility::TColor& color1) {
+        color(color0, color1, color0, color1);
+    }
+
+    void lineWidth(u8 width) {
+        field_0x16 = width;
+        GXSetLineWidth(field_0x16, GX_TO_ZERO);
+    }
+
     /* 0x00 */ J2DPrint* field_0x0;
     /* 0x04 */ JUtility::TColor field_0x4;
     /* 0x08 */ JUtility::TColor field_0x8;

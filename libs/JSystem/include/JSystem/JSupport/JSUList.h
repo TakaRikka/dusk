@@ -230,6 +230,8 @@ public:
         return *this;
     }
 
+    operator int() { return (int)mTree; }
+
     T* getObject() const { return this->mTree->getObject(); }
 
     bool operator==(const JSUTree<T>* other) const { return this->mTree == other; }

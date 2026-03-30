@@ -149,6 +149,8 @@ struct JAUSoundTable : public JASGlobalInstance<JAUSoundTable> {
     void init(void const*);
     u8 getTypeID(JAISoundID) const;
     JAUSoundTableItem* getData(JAISoundID) const;
+    int getNumGroups_inSection(u8) const;
+    int getNumItems_inGroup(u8, u8) const;
 
     JAUSoundTableItem* getItem(JAUSoundTableGroup* group, int index) const {
         u32 offset = group->getItemOffset(index);

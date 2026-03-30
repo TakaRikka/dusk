@@ -267,7 +267,7 @@ struct dStage_MemoryConfig_c {
 // PATH / RPAT
 struct dPath;
 struct dStage_dPath_c {
-    /* 0x0 */ BE(int) m_num;
+    /* 0x0 */ BE(int) num;
     /* 0x4 */ OFFSET_PTR(dPath) m_path;
 };
 

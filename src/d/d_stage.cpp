@@ -2137,7 +2137,7 @@ static int dStage_pathInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
 
     i_stage->setPathInfo(path_c);
 
-    for (int i = 0; i < path_c->m_num; i++) {
+    for (int i = 0; i < path_c->num; i++) {
 #if TARGET_PC
         path->m_points.setBase(i_stage->getPntInf()->m_pnt_offset);
 #else
@@ -2166,7 +2166,7 @@ static int dStage_rpatInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, vo
     dPath* pPath = pStagePath->m_path;
 
     i_stage->setPath2Info(pStagePath);
-    for (s32 i = 0; i < pStagePath->m_num; pPath++, i++, (void)0) {
+    for (s32 i = 0; i < pStagePath->num; pPath++, i++, (void)0) {
 #if TARGET_PC
         pPath->m_points.setBase(i_stage->getPnt2Inf()->m_pnt_offset);
 #else

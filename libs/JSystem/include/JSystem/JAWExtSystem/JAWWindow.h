@@ -16,8 +16,8 @@ public:
         y = i_y;
     }
 
-    /* 0x00*/ int x;
-    /* 0x04*/ int y;
+    /* 0x00 */ int x;
+    /* 0x04 */ int y;
 };
 
 class JAWWindow {
@@ -29,9 +29,9 @@ public:
         virtual void drawSelf(f32, f32);
         virtual void drawSelf(f32, f32, Mtx*);
 
-        /* 0x0FC */ JAWGraphContext field_0xfc;
+        /* 0x0FC */ JAWGraphContext m_graf;
         /* 0x118 */ JAWWindow* m_pParent;
-        /* 0x11C */ JUTPoint field_0x11c;
+        /* 0x11C */ JUTPoint m_point;
     };
 
     class TJ2DWindowDraw : public J2DWindow {
@@ -94,21 +94,29 @@ public:
     static JUtility::TColor convJudaColor(u16);
     void padProc(const JUTGamePad&);
 
+    void setWindowColor(const JUtility::TColor& color) {
+        setWindowColor(color, color, color, color);
+    }
+
+    void setWindowColor(u8 r, u8 g, u8 b, u8 a) {
+        setWindowColor(JUtility::TColor(r, g, b, a));
+    }
+
     /* 0x004 */ Mtx mMatrix;
     /* 0x034 */ u8 field_0x34[0x38 - 0x34];
-    /* 0x038 */ TJ2DWindowDraw field_0x38;
-    /* 0x180 */ J2DTextBox field_0x180;
-    /* 0x2B0 */ TWindowText field_0x2b0;
-    /* 0x3D8 */ JUtility::TColor field_0x3d8;
-    /* 0x3DC */ JUtility::TColor field_0x3dc;
-    /* 0x3E0 */ JUtility::TColor field_0x3e0;
-    /* 0x3E4 */ JUtility::TColor field_0x3e4;
+    /* 0x038 */ TJ2DWindowDraw m_drawWindow;
+    /* 0x180 */ J2DTextBox m_titleText;
+    /* 0x2B0 */ TWindowText m_windowText;
+    /* 0x3D8 */ JUtility::TColor m_windowColor0;
+    /* 0x3DC */ JUtility::TColor m_windowColor1;
+    /* 0x3E0 */ JUtility::TColor m_windowColor2;
+    /* 0x3E4 */ JUtility::TColor m_windowColor3;
     /* 0x3E8 */ int field_0x3e8;
-    /* 0x3EC */ u8 field_0x3ec;
+    /* 0x3EC */ u8 m_isInit;
 
     void setMatrix(Mtx mtx) { MTXCopy(mtx, mMatrix); }
-    void setAlpha(u8 alpha) { field_0x38.setAlpha(alpha); }
-    void draw(int x, int y, const J2DGrafContext* p_grafCtx) { field_0x38.drawPane(x, y, p_grafCtx); }
+    void setAlpha(u8 alpha) { m_drawWindow.setAlpha(alpha); }
+    void draw(int x, int y, const J2DGrafContext* p_grafCtx) { m_drawWindow.drawPane(x, y, p_grafCtx); }
 };
 
 #endif /* JAWWINDOW_H */
