@@ -10532,6 +10532,10 @@ int dCamera_c::StartShake(s32 i_length, u8* i_pattern, s32 i_flags, cXyz i_pos) 
 #define PATTERN_LENGTH_MAX 4
 #endif
 
+    #if TARGET_PC
+    *(u32*)i_pattern = BSWAP32(*(u32*)i_pattern);
+    #endif
+
     if (i_length < 0 || i_length > PATTERN_LENGTH_MAX << 3) {
         OS_REPORT("camera: shake: too long data\n");
         i_length = PATTERN_LENGTH_MAX << 3;
