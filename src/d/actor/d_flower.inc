@@ -509,6 +509,42 @@ dFlower_packet_c::dFlower_packet_c() {
         unused += 0x2000;
     }
 
+#if TARGET_LITTLE_ENDIAN
+    static bool initialized = false;
+    if (!initialized) {
+        for (int i = 0; i < (ARRAY_SIZE(l_flowerPos) / sizeof(Vec)); i++) {
+            be_swap(((Vec*)l_flowerPos)[i]);
+        }
+        for (int i = 0; i < (ARRAY_SIZE(l_flowerTexCoord) / sizeof(Vec)); i++) {
+            be_swap(((Vec*)l_flowerTexCoord)[i]);
+        }
+        for (int i = 0; i < (ARRAY_SIZE(l_flowerPos2) / sizeof(Vec)); i++) {
+            be_swap(((Vec*)l_flowerPos2)[i]);
+        }
+        for (int i = 0; i < (ARRAY_SIZE(l_flowerTexCoord2) / sizeof(Vec)); i++) {
+            be_swap(((Vec*)l_flowerTexCoord2)[i]);
+        }
+        for (int i = 0; i < (ARRAY_SIZE(l_flowerNormal) / sizeof(Vec)); i++) {
+            be_swap(((Vec*)l_flowerNormal)[i]);
+        }
+        for (int i = 0; i < (ARRAY_SIZE(l_flowerNormal2) / sizeof(Vec)); i++) {
+            be_swap(((Vec*)l_flowerNormal2)[i]);
+        }
+        
+        initialized = true;
+    }
+#endif
+
+#if TARGET_PC
+    GXInitTexObj(&mTexObj_l_J_Ohana00_64TEX, l_J_Ohana00_64TEX,
+        l_J_Ohana00_64TEX__width, l_J_Ohana00_64TEX__height, GX_TF_CMPR, GX_MIRROR, GX_MIRROR, GX_FALSE
+    );
+
+    GXInitTexObj(&mTexObj_l_J_Ohana01_64128_0419TEX, l_J_Ohana01_64128_0419TEX,
+        l_J_Ohana01_64128_0419TEX__width, l_J_Ohana01_64128_0419TEX__height, GX_TF_CMPR, GX_MIRROR, GX_MIRROR, GX_FALSE
+    );
+#endif
+
     m_deleteRoom = &dFlower_packet_c::deleteRoom;
 
 #if AVOID_UB
@@ -614,6 +650,10 @@ void dFlower_packet_c::draw() {
                 if (!cLib_checkBit<u8>(sp44->m_state, 4) && !cLib_checkBit<u8>(sp44->m_state, 0x40)) {
                     GXLoadPosMtxImm(sp44->m_modelMtx, 0);
                     GXLoadNrmMtxImm(j3dSys.getViewMtx(), 0);
+
+#if TARGET_PC
+                GXLoadTexObj(&mTexObj_l_J_Ohana00_64TEX, GX_TEXMAP0);
+#endif
 
                     if (!cLib_checkBit<u8>(sp44->m_state, 8)) {
                         GXCallDisplayList(&l_J_hana00DL, 0x140);
@@ -756,6 +796,10 @@ void dFlower_packet_c::draw() {
                 if (!cLib_checkBit<u8>(sp34->m_state, 4) && cLib_checkBit<u8>(sp34->m_state, 0x40)) {
                     GXLoadPosMtxImm(sp34->m_modelMtx, 0);
                     GXLoadNrmMtxImm(j3dSys.getViewMtx(), 0);
+
+#if TARGET_PC
+                    GXLoadTexObj(&mTexObj_l_J_Ohana01_64128_0419TEX, GX_TEXMAP0);
+#endif
 
                     if (!cLib_checkBit<u8>(sp34->m_state, 8)) {
                         if (!cLib_checkBit<u8>(sp34->m_state, 0x10)) {

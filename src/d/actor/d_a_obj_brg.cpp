@@ -1796,6 +1796,10 @@ static int daObj_Brg_Create(fopAc_ac_c* i_this) {
                 cXyz(334.0f, 85.0f, -16054.0f),
                 cXyz(334.0f, 150.0f, -16270.0f),
                 cXyz(334.0f, 216.0f, -16485.0f),
+#ifdef TARGET_PC
+                // Avoids out-of-bounds index (n=22)
+                cXyz(0.f, 0.f, 0.f),
+#endif
             };
 
             for (brno = 0; brno < a_this->field_0xb1ea; brno++) {

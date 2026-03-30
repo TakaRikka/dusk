@@ -6,6 +6,9 @@
 #include "JSystem/JAudio2/JASAudioThread.h"
 #include "JSystem/JAudio2/JAUSoundTable.h"
 
+#if TARGET_PC
+#define AUDIO_INSTANCES
+#else
 #define AUDIO_INSTANCES                                                                            \
     template<> JASDefaultBankTable* JASGlobalInstance<JASDefaultBankTable>::sInstance;                        \
     template<> JASAudioThread* JASGlobalInstance<JASAudioThread>::sInstance;                                  \
@@ -32,5 +35,6 @@
     template<> Z2EnvSeMgr* JASGlobalInstance<Z2EnvSeMgr>::sInstance;                                          \
     template<> Z2SpeechMgr* JASGlobalInstance<Z2SpeechMgr>::sInstance;                                        \
     template<> Z2WolfHowlMgr* JASGlobalInstance<Z2WolfHowlMgr>::sInstance;
+#endif
 
 #endif

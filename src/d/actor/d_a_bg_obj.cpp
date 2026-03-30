@@ -976,7 +976,7 @@ void daBgObj_c::setSe() {
     temp++;
 
     for (; i != 0; i--) {
-        fopAcM_seStart(this, *temp, 0);
+        fopAcM_seStart(this, *(BE(u32)*)temp, 0);
         temp++;
     }
 }

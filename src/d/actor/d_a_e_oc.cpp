@@ -2662,10 +2662,18 @@ int daE_OC_c::_delete() {
     return 1;
 }
 
+#if TARGET_PC
+static int daE_OC_Delete(daE_OC_c* i_this) {
+    fopAcM_RegisterDeleteID(i_this, "E_OC");
+    i_this->_delete();
+    return 1;
+}
+#else
 static void daE_OC_Delete(daE_OC_c* i_this) {
     fopAcM_RegisterDeleteID(i_this, "E_OC");
     i_this->_delete();
 }
+#endif
 
 int daE_OC_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(mName, 0x3);

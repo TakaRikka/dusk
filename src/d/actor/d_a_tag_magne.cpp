@@ -44,10 +44,18 @@ int daTagMagne_c::_delete() {
     return 1;
 }
 
+#if TARGET_PC
+static int daTagMagne_Delete(daTagMagne_c* i_this) {
+    int id = fopAcM_GetID(i_this);
+    i_this->_delete();
+    return 1;
+}
+#else
 static void daTagMagne_Delete(daTagMagne_c* i_this) {
     int id = fopAcM_GetID(i_this);
     i_this->_delete();
 }
+#endif
 
 static void daTagMagne_Create(fopAc_ac_c* i_this) {
     daTagMagne_c* magne = static_cast<daTagMagne_c*>(i_this);

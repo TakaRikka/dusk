@@ -103,6 +103,11 @@ public:
     /* 0x12A48 */ u32 m_Jhana01DL_size;
     /* 0x12A4C */ u8* mp_Jhana01_cDL;
     /* 0x12A50 */ u32 m_Jhana01_cDL_size;
+
+#if TARGET_PC
+    TGXTexObj mTexObj_l_J_Ohana00_64TEX;
+    TGXTexObj mTexObj_l_J_Ohana01_64128_0419TEX;
+#endif
 };  // Size: 0x12A54
 
 #endif /* D_FLOWER_H */

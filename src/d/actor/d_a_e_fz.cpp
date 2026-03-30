@@ -905,9 +905,16 @@ s32 daE_FZ_c::_delete() {
     return 1;
 }
 
+#if TARGET_PC
+static int daE_FZ_Delete(daE_FZ_c* i_this) {
+    i_this->_delete();
+    return 1;
+}
+#else
 static void daE_FZ_Delete(daE_FZ_c* i_this) {
     i_this->_delete();
 }
+#endif
 
 s32 daE_FZ_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes("E_FZ", 3);
