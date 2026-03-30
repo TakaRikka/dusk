@@ -10,6 +10,10 @@
 #include <cmath>
 #include "f_op/f_op_actor_enemy.h"
 
+#define PLAYER_NOT_FOUND  0
+#define PLAYER_TARGET   1
+#define PLAYER_NEAR     2
+
 class daE_WS_HIO_c : public JORReflexible {
 public:
     daE_WS_HIO_c();
@@ -27,6 +31,7 @@ public:
     /* 0x20 */ f32 attack_speed;
     /* 0x24 */ u8 debug_ON;
 };
+
 
 namespace {
 static dCcD_SrcSph cc_ws_src = {
@@ -66,13 +71,27 @@ daE_WS_HIO_c::daE_WS_HIO_c() {
     attack_speed = 10.0f;
 }
 
+#if DEBUG
+void daE_WS_HIO_c::genMessage(JORMContext* ctx) {
+    ctx->genLabel("スタルウォーーーーーーーール", 0x80000001);
+    ctx->genSlider("基本サイズ", &base_size, 0.0f, 5.0f);
+    ctx->genSlider("サーチ角度", &search_angle, 0.0f, 30000.0f);
+    ctx->genSlider("攻撃速度", &attack_speed, 0.0f, 100.0f);
+    ctx->genSlider("移動範囲", &move_range, 0.0f, 1000.0f);
+    ctx->genSlider("サーチ範囲", &search_range, 0.0f, 1000.0f);
+    ctx->genSlider("サーチY上下範囲", &search_y_range, 0.0f, 1000.0f);
+    ctx->genSlider("地面までの距離", &dist_to_ground, 0.0f, 1000.0f);
+    ctx->genCheckBox("デバック表示", &debug_ON, 0x1);
+}
+#endif
+
 int daE_WS_c::draw() {
-    J3DModel* model_p = mpModelMorf->getModel();
+    J3DModel* model = mAnm_p->getModel();
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
-    g_env_light.setLightTevColorType_MAJI(model_p, &tevStr);
+    g_env_light.setLightTevColorType_MAJI(model, &tevStr);
 
     if (mDownColor) {
-        J3DModelData* modelData_p = model_p->getModelData();
+        J3DModelData* modelData_p = model->getModelData();
         for (u16 i = 0; i < modelData_p->getMaterialNum(); i++) {
             J3DMaterial* material_p = modelData_p->getMaterialNodePointer(i);
             material_p->getTevColor(0)->r = mDownColor;
@@ -81,48 +100,48 @@ int daE_WS_c::draw() {
         }
     }
 
-    mpModelMorf->entryDL();
+    mAnm_p->entryDL();
 
     cXyz sp8;
     sp8.set(current.pos.x, 100.0f + current.pos.y, current.pos.z);
-    mShadowId = dComIfGd_setShadow(mShadowId, 1, model_p, &sp8, 400.0f, 0.0f, current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+    mShadowId = dComIfGd_setShadow(mShadowId, 1, model, &sp8, 400.0f, 0.0f, current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
     return 1;
 }
 
-static int daE_WS_Draw(daE_WS_c* a_this) {
-    return a_this->draw();
+static int daE_WS_Draw(daE_WS_c* i_this) {
+    return i_this->draw();
 }
 
 void daE_WS_c::setBck(int i_anm, u8 i_mode, f32 i_morf, f32 i_speed) {
-    mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_WS", i_anm), i_mode, i_morf, i_speed, 0.0f, -1.0f);
+    mAnm_p->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_WS", i_anm), i_mode, i_morf, i_speed, 0.0f, -1.0f);
 }
 
 void daE_WS_c::setFootSound() {
-    if (mpModelMorf->getAnm() == dComIfG_getObjectRes("E_WS", 7)) {
-        if (mpModelMorf->checkFrame(0.0f)  ||
-            mpModelMorf->checkFrame(4.5f)  ||
-            mpModelMorf->checkFrame(7.5f)  ||
-            mpModelMorf->checkFrame(9.0f)  ||
-            mpModelMorf->checkFrame(13.5f) ||
-            mpModelMorf->checkFrame(16.0f) ||
-            mpModelMorf->checkFrame(19.0f) ||
-            mpModelMorf->checkFrame(23.5f) ||
-            mpModelMorf->checkFrame(25.0f) ||
-            mpModelMorf->checkFrame(28.0f) ||
-            mpModelMorf->checkFrame(32.5f) ||
-            mpModelMorf->checkFrame(36.0f) ||
-            mpModelMorf->checkFrame(39.5f))
+    if (mAnm_p->getAnm() == dComIfG_getObjectRes("E_WS", 7)) {
+        if (mAnm_p->checkFrame(0.0f)  ||
+            mAnm_p->checkFrame(4.5f)  ||
+            mAnm_p->checkFrame(7.5f)  ||
+            mAnm_p->checkFrame(9.0f)  ||
+            mAnm_p->checkFrame(13.5f) ||
+            mAnm_p->checkFrame(16.0f) ||
+            mAnm_p->checkFrame(19.0f) ||
+            mAnm_p->checkFrame(23.5f) ||
+            mAnm_p->checkFrame(25.0f) ||
+            mAnm_p->checkFrame(28.0f) ||
+            mAnm_p->checkFrame(32.5f) ||
+            mAnm_p->checkFrame(36.0f) ||
+            mAnm_p->checkFrame(39.5f))
         {
             mSound.startCreatureSound(Z2SE_EN_WS_FOOTNOTE, 0, -1);
         }
-    } else if (mpModelMorf->getAnm() == dComIfG_getObjectRes("E_WS", 8)) {
-        if (mpModelMorf->checkFrame(0.5f)  ||
-            mpModelMorf->checkFrame(6.0f)  ||
-            mpModelMorf->checkFrame(11.0f) ||
-            mpModelMorf->checkFrame(16.0f) ||
-            mpModelMorf->checkFrame(21.0f) ||
-            mpModelMorf->checkFrame(26.5f) ||
-            mpModelMorf->checkFrame(31.0f))
+    } else if (mAnm_p->getAnm() == dComIfG_getObjectRes("E_WS", 8)) {
+        if (mAnm_p->checkFrame(0.5f)  ||
+            mAnm_p->checkFrame(6.0f)  ||
+            mAnm_p->checkFrame(11.0f) ||
+            mAnm_p->checkFrame(16.0f) ||
+            mAnm_p->checkFrame(21.0f) ||
+            mAnm_p->checkFrame(26.5f) ||
+            mAnm_p->checkFrame(31.0f))
         {
             mSound.startCreatureSound(Z2SE_EN_WS_FOOTNOTE, 0, -1);
         }
@@ -141,13 +160,13 @@ f32 daE_WS_c::calcTargetDist(cXyz i_basePos, cXyz i_targetPos) {
 }
 
 s16 daE_WS_c::calcTargetAngle(cXyz i_basePos, cXyz i_targetPos) {
-    cXyz sp1C;
-    cXyz sp10 = i_targetPos - i_basePos;
+    cXyz mae;
+    cXyz ato = i_targetPos - i_basePos;
 
-    mDoMtx_stack_c::XrotS(-field_0x668.x);
-    mDoMtx_stack_c::YrotM(-field_0x668.y);
-    mDoMtx_stack_c::multVec(&sp10, &sp1C);
-    return cM_atan2s(sp1C.x, sp1C.z);
+    mDoMtx_stack_c::XrotS(-mTargetWallAngle.x);
+    mDoMtx_stack_c::YrotM(-mTargetWallAngle.y);
+    mDoMtx_stack_c::multVec(&ato, &mae);
+    return cM_atan2s(mae.x, mae.z);
 }
 
 static u8 hio_set;
@@ -171,13 +190,13 @@ int daE_WS_c::checkPlayerPos() {
         dComIfGp_checkPlayerStatus1(0, 0x2000000) ||
         dComIfGp_checkPlayerStatus1(0, 0x10000) ||
         calcTargetDist(current.pos, player_pos) < 150.0f) &&
-        checkInSearchRange(player_pos, field_0x65c) && checkInSearchRange(current.pos, field_0x65c))
+        checkInSearchRange(player_pos, mHomePos) && checkInSearchRange(current.pos, mHomePos))
     {
         dBgS_GndChk gndchk;
         cXyz gndpos;
 
         mDoMtx_stack_c::transS(current.pos);
-        mDoMtx_stack_c::ZXYrotM(field_0x66e);
+        mDoMtx_stack_c::ZXYrotM(mWallAngle);
         mDoMtx_stack_c::ZXYrotM(shape_angle);
         mDoMtx_stack_c::transM(0.0f, 100.0f, 0.0f);
         mDoMtx_stack_c::multVecZero(&gndpos);
@@ -187,17 +206,17 @@ int daE_WS_c::checkPlayerPos() {
         if (current.pos.y - gndpos.y > l_HIO.dist_to_ground) {
             // Return 1 if walltula is looking towards player
             if (cLib_distanceAngleS(shape_angle.y, calcTargetAngle(current.pos, player_pos)) < l_HIO.search_angle) {
-                return 1;
+                return PLAYER_TARGET;
             }
 
             // otherwise return 2 if player is near the walltula
             if (calcTargetDist(current.pos, player_pos) < 150.0f) {
-                return 2;
+                return PLAYER_NEAR;
             }
         }
     }
 
-    return 0;
+    return PLAYER_NOT_FOUND;
 }
 
 bool daE_WS_c::checkAttackEnd() {
@@ -205,17 +224,17 @@ bool daE_WS_c::checkAttackEnd() {
     mDoMtx_stack_c::copy(daPy_getLinkPlayerActorClass()->getModelJointMtx(0));
     mDoMtx_stack_c::multVecZero(&player_pos);
 
-    BOOL r30 = false;
+    BOOL checkPlayerNear = FALSE;
     if (
         daPy_getPlayerActorClass()->checkClimbMove() ||
         dComIfGp_checkPlayerStatus1(0, 0x02000000) ||
         dComIfGp_checkPlayerStatus1(0, 0x10000) ||
         calcTargetDist(current.pos, player_pos) < 200.0f
     ) {
-        r30 = true;
+        checkPlayerNear = TRUE;
     }
-    if (!r30 ||
-        !checkInSearchRange(current.pos, field_0x65c) ||
+    if (!checkPlayerNear ||
+        !checkInSearchRange(current.pos, mHomePos) ||
         checkBeforeBg(shape_angle.y)
     )
     {
@@ -228,41 +247,41 @@ bool daE_WS_c::checkAttackEnd() {
 }
 
 void daE_WS_c::executeWait() {
-    int temp_r3 = checkPlayerPos();
-    if (temp_r3 == 1) {
+    int playerCheck = checkPlayerPos();
+    if (playerCheck == PLAYER_TARGET) {
         setActionMode(ACTION_ATTACK_e);
         return;
     }
 
-    if (temp_r3 == 2 && mMode != 3 && mMode != 4) {
+    if (playerCheck == PLAYER_NEAR && mMode != 3 && mMode != 4) {
         mMode = 2;
     }
 
     switch (mMode) {
     case 0:
-        mMoveWaitTimer = 50.0f + cM_rndF(50.0f);
+        mWaitTimer = 50.0f + cM_rndF(50.0f);
         setBck(9, 2, 3.0f, 1.0f);
         mMode = 1;
         /* fallthrough */
     case 1:
-        if (mMoveWaitTimer == 0) {
+        if (mWaitTimer == 0) {
             mMode = 2;
         }
         break;
     case 2:
         speedF = 0.0f;
-        field_0x690 = 0;
-        mTargetAngle = shape_angle.y + cM_rndFX(32768.0f);
+        mIsReturnHome = 0;
+        mTargetAngle = shape_angle.y + cM_rndFX(32768.0f); // random turn up to ±180°
 
-        if (temp_r3 == 2) {
-            mTargetStep = 0x200;
+        if (playerCheck == PLAYER_NEAR) {
+            mStepAngle = 0x200;
             setBck(8, 2, 3.0f, 2.4f);
         } else {
-            if (calcTargetDist(current.pos, field_0x65c) >= l_HIO.move_range) {
-                mTargetAngle = calcTargetAngle(current.pos, field_0x65c);
-                field_0x690 = 1;
+            if (calcTargetDist(current.pos, mHomePos) >= l_HIO.move_range) {
+                mTargetAngle = calcTargetAngle(current.pos, mHomePos);
+                mIsReturnHome = 1;
             }
-            mTargetStep = 0x100;
+            mStepAngle = 0x100;
             setBck(8, 2, 3.0f, 1.2f);
         }
 
@@ -271,37 +290,37 @@ void daE_WS_c::executeWait() {
     case 3:
         setFootSound();
 
-        if (cLib_chaseAngleS(&shape_angle.y, mTargetAngle, mTargetStep)) {
+        if (cLib_chaseAngleS(&shape_angle.y, mTargetAngle, mStepAngle)) {
             mMode = 4;
-            mMoveWaitTimer = 10;
+            mWaitTimer = 10;
             setBck(9, 2, 3.0f, 1.0f);
         }
         break;
     case 4:
-        if (mMoveWaitTimer == 0) {
+        if (mWaitTimer == 0) {
             mMode = 5;
         }
         break;
     case 5:
         mMode = 6;
         speedF = 3.0f;
-        mMoveWaitTimer = 20.0f + cM_rndF(10.0f);
+        mWaitTimer = 20.0f + cM_rndF(10.0f);
         setBck(7, 2, 3.0f, 1.0f);
         /* fallthrough */
     case 6:
         setFootSound();
 
-        if (field_0x690 == 0) {
-            if (calcTargetDist(current.pos, field_0x65c) >= l_HIO.move_range) {
-                mMoveWaitTimer = 0;
+        if (mIsReturnHome == 0) {
+            if (calcTargetDist(current.pos, mHomePos) >= l_HIO.move_range) {
+                mWaitTimer = 0;
             }
         }
 
         if (checkBeforeBg(shape_angle.y)) {
-            mMoveWaitTimer = 0;
+            mWaitTimer = 0;
         }
 
-        if (mMoveWaitTimer == 0) {
+        if (mWaitTimer == 0) {
             speedF = 0.0f;
             mMode = 0;
         }
@@ -333,11 +352,11 @@ void daE_WS_c::executeAttack() {
             mMode = 2;
             setBck(10, 2, 3.0f, 1.0f);
             mSound.startCreatureVoice(Z2SE_EN_WS_V_YOKOKU, -1);
-            mMoveWaitTimer = 10;
+            mWaitTimer = 10;
         }
         break;
     case 2:
-        if (mMoveWaitTimer == 0) {
+        if (mWaitTimer == 0) {
             speedF = l_HIO.attack_speed * mBodyScale;
             setBck(7, 2, 3.0f, 3.0f);
             mMode = 3;
@@ -352,20 +371,20 @@ void daE_WS_c::executeAttack() {
         setFootSound();
         cLib_chaseAngleS(&shape_angle.y, calcTargetAngle(current.pos, player_pos), 0x400);
 
-        BOOL r28 = false;
+        BOOL checkAttackStart = FALSE;
         if (checkBeforeBg(shape_angle.y)) {
-            r28 = true;
+            checkAttackStart = TRUE;
         }
         if (mCcSph.ChkAtHit()) {
-            cCcD_Obj* r27 = mCcSph.GetAtHitObj();
-            if (fopAcM_GetName(dCc_GetAc(r27->GetAc())) == fpcNm_ALINK_e) {
-                r28 = true;
+            cCcD_Obj* hitObj = mCcSph.GetAtHitObj();
+            if (fopAcM_GetName(dCc_GetAc(hitObj->GetAc())) == fpcNm_ALINK_e) {
+                checkAttackStart = TRUE;
             }
         }
-        if (!checkInSearchRange(current.pos, field_0x65c)) {
-            r28 = true;
+        if (!checkInSearchRange(current.pos, mHomePos)) {
+            checkAttackStart = TRUE;
         }
-        if (r28) {
+        if (checkAttackStart) {
             mMode = 4;
             speedF = 0.0f;
             setBck(4, 0, 3.0f, 1.0f);
@@ -378,11 +397,11 @@ void daE_WS_c::executeAttack() {
         break;
     }
     case 4:
-        if (mpModelMorf->checkFrame(7.5f)) {
+        if (mAnm_p->checkFrame(7.5f)) {
             mSound.startCreatureVoice(Z2SE_EN_WS_V_ATTACK, -1);
         }
 
-        if (mpModelMorf->isStop()) {
+        if (mAnm_p->isStop()) {
             setActionMode(ACTION_WAIT_e);
         }
         /* fallthrough */
@@ -408,9 +427,9 @@ void daE_WS_c::executeDown() {
         mSound.startCreatureVoice(Z2SE_EN_WS_V_DAMAGE, -1);
         /* fallthrough */
     case 1:
-        if (mpModelMorf->isStop()) {
-            mAcchCir.SetWall(0.0f, 4.0f);
-            current.angle.y = field_0x668.y;
+        if (mAnm_p->isStop()) {
+            mBgc.SetWall(0.0f, 4.0f);
+            current.angle.y = mTargetWallAngle.y;
             setBck(6, 0, 3.0f, 0.0f);
             mSound.startCreatureVoice(Z2SE_EN_WS_V_DEATH, -1);
             speedF = 5.0f;
@@ -433,7 +452,7 @@ void daE_WS_c::executeDown() {
             speedF = 3.0f + cM_rndF(2.0f);
             speed.y = 12.0f;
             mMode = 3;
-            mMoveWaitTimer = 30;
+            mWaitTimer = 30;
             setBck(6, 0, 5.0f, 1.0f);
             mSound.startCreatureSound(Z2SE_CM_BODYFALL_S, 0, -1);
         }
@@ -467,8 +486,8 @@ void daE_WS_c::executeDown() {
     case 4:
         cLib_addCalc2(&mDownColor, -20.0f, 1.0f, 0.4f);
 
-        if (mpModelMorf->isStop()) {
-            mMoveWaitTimer = 15;
+        if (mAnm_p->isStop()) {
+            mWaitTimer = 15;
             mMode = 5;
             return;
         }
@@ -476,12 +495,12 @@ void daE_WS_c::executeDown() {
     case 5:
         cLib_addCalc2(&mDownColor, -20.0f, 1.0f, 0.4f);
 
-        if (mMoveWaitTimer == 0) {
+        if (mWaitTimer == 0) {
             fopAcM_delete(this);
             fopAcM_createDisappear(this, &current.pos, 7, 0, 7);
 
-            if (mSwbit != 0xFF && !dComIfGs_isSwitch(mSwbit, fopAcM_GetRoomNo(this))) {
-                dComIfGs_onSwitch(mSwbit, fopAcM_GetRoomNo(this));
+            if (bitSw != 0xFF && !dComIfGs_isSwitch(bitSw, fopAcM_GetRoomNo(this))) {
+                dComIfGs_onSwitch(bitSw, fopAcM_GetRoomNo(this));
             }
         }
         break;
@@ -497,36 +516,36 @@ void daE_WS_c::executeWindDown() {
         mCcSph.OffTgSetBit();
         mCcBokkuriSph.OffTgSetBit();
     
-        mAcchCir.SetWall(0.0f, 4.0f);
+        mBgc.SetWall(0.0f, 4.0f);
         mMode = 1;
         setBck(7, 2, 3.0f, 1.0f);
     
         mSound.startCreatureVoice(Z2SE_EN_WS_V_DAMAGE, -1);
-        mMoveWaitTimer = 5;
+        mWaitTimer = 5;
         mAcch.SetGroundUpY(20.0f);
         attention_info.flags = 0;
         speed.y = 0.0f;
         speedF = 5.0f;
-        current.angle.y = field_0x668.y;
-        mTargetStep = -0x800;
+        current.angle.y = mTargetWallAngle.y;
+        mStepAngle = -0x800;
         break;
     case 1:
-        shape_angle.y += mTargetStep;
-        cLib_chaseAngleS(&field_0x66e.y, 0, 0x400);
-        cLib_chaseAngleS(&field_0x66e.x, 0, 0x400);
+        shape_angle.y += mStepAngle;
+        cLib_chaseAngleS(&mWallAngle.y, 0, 0x400);
+        cLib_chaseAngleS(&mWallAngle.x, 0, 0x400);
         shape_angle.x += 0x800;
         shape_angle.z += 0x800;
         speed.y = 30.0f;
 
-        if (mMoveWaitTimer == 0) {
+        if (mWaitTimer == 0) {
             mMode = 2;
             gravity = -3.0f;
         }
         break;
     case 2:
-        shape_angle.y += mTargetStep;
-        cLib_chaseAngleS(&field_0x66e.y, 0, 0x400);
-        cLib_chaseAngleS(&field_0x66e.x, 0, 0x400);
+        shape_angle.y += mStepAngle;
+        cLib_chaseAngleS(&mWallAngle.y, 0, 0x400);
+        cLib_chaseAngleS(&mWallAngle.x, 0, 0x400);
         cLib_chaseAngleS(&shape_angle.x, -0x8000, 0x400);
         cLib_chaseAngleS(&shape_angle.z, 0, 0x400);
 
@@ -534,15 +553,15 @@ void daE_WS_c::executeWindDown() {
             speedF = 3.0f + cM_rndF(2.0f);
             speed.y = 12.0f;
             mMode = 3;
-            mMoveWaitTimer = 30;
+            mWaitTimer = 30;
             setBck(6, 0, 5.0f, 1.0f);
             mSound.startCreatureVoice(Z2SE_EN_WS_V_DEATH, -1);
             mSound.startCreatureSound(Z2SE_CM_BODYFALL_S, 0, -1);
         }
         break;
     case 3:
-        shape_angle.y += mTargetStep;
-        cLib_chaseAngleS(&mTargetStep, 0, 0x80);
+        shape_angle.y += mStepAngle;
+        cLib_chaseAngleS(&mStepAngle, 0, 0x80);
         cLib_chaseAngleS(&shape_angle.x, -0x8000, 0x400);
         cLib_chaseAngleS(&shape_angle.z, 0, 0x400);
 
@@ -556,23 +575,23 @@ void daE_WS_c::executeWindDown() {
         break;
     case 4:
         cLib_addCalc2(&mDownColor, -20.0f, 1.0f, 0.4f);
-        shape_angle.y += mTargetStep;
-        cLib_chaseAngleS(&mTargetStep, 0, 0x80);
-        shape_angle.y += mTargetStep;
+        shape_angle.y += mStepAngle;
+        cLib_chaseAngleS(&mStepAngle, 0, 0x80);
+        shape_angle.y += mStepAngle;
 
-        if (mpModelMorf->isStop()) {
-            mMoveWaitTimer = 15;
+        if (mAnm_p->isStop()) {
+            mWaitTimer = 15;
             mMode = 5;
         }
         break;
     case 5:
         cLib_addCalc2(&mDownColor, -20.0f, 1.0f, 0.4f);
-        if (mMoveWaitTimer == 0) {
+        if (mWaitTimer == 0) {
             fopAcM_delete(this);
             fopAcM_createDisappear(this, &current.pos, 7, 0, 7);
 
-            if (mSwbit != 0xFF && !dComIfGs_isSwitch(mSwbit, fopAcM_GetRoomNo(this))) {
-                dComIfGs_onSwitch(mSwbit, fopAcM_GetRoomNo(this));
+            if (bitSw != 0xFF && !dComIfGs_isSwitch(bitSw, fopAcM_GetRoomNo(this))) {
+                dComIfGs_onSwitch(bitSw, fopAcM_GetRoomNo(this));
             }
         }
         break;
@@ -653,47 +672,47 @@ void daE_WS_c::action() {
     mSound.setLinkSearch(field_0x566);
 
     if (mAction != ACTION_DOWN_e && mAction != ACTION_WIND_DOWN_e) {
-        cXyz sp14;
-        mDoMtx_stack_c::YrotS(field_0x668.y);
-        mDoMtx_stack_c::XrotM(field_0x668.x);
+        cXyz ato;
+        mDoMtx_stack_c::YrotS(mTargetWallAngle.y);
+        mDoMtx_stack_c::XrotM(mTargetWallAngle.x);
         mDoMtx_stack_c::YrotM(current.angle.y);
 
-        cXyz sp8(0.0f, 0.0f, speedF);
-        mDoMtx_stack_c::multVec(&sp8, &sp14);
-        speed = sp14;
+        cXyz mae(0.0f, 0.0f, speedF);
+        mDoMtx_stack_c::multVec(&mae, &ato);
+        speed = ato;
         current.pos += speed;
     } else {
         fopAcM_posMoveF(this, NULL);
     }
 
     mAcch.CrrPos(dComIfG_Bgsp());
-    mpModelMorf->play(0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+    mAnm_p->play(0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 }
 
 void daE_WS_c::mtx_set() {
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(field_0x66e);
+    mDoMtx_stack_c::ZXYrotM(mWallAngle);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mDoMtx_stack_c::scaleM(mBodyScale, mBodyScale, mBodyScale);
 
-    J3DModel* model_p = mpModelMorf->getModel();
+    J3DModel* model_p = mAnm_p->getModel();
     model_p->setBaseTRMtx(mDoMtx_stack_c::get());
-    mpModelMorf->modelCalc();
+    mAnm_p->modelCalc();
 }
 
 void daE_WS_c::cc_set() {
     cXyz mae;
     cXyz ato;
-    J3DModel* model_p = mpModelMorf->getModel();
+    J3DModel* model = mAnm_p->getModel();
 
-    mDoMtx_stack_c::YrotS(field_0x668.y);
-    mDoMtx_stack_c::XrotM(field_0x668.x);
+    mDoMtx_stack_c::YrotS(mTargetWallAngle.y);
+    mDoMtx_stack_c::XrotM(mTargetWallAngle.x);
     mae.set(0.0f, 15.0f + nREG_F(10), 0.0f);
     mDoMtx_stack_c::multVec(&mae, &ato);
     attention_info.position = current.pos + ato;
     attention_info.position.y += 90.0f * mBodyScale;
 
-    MTXCopy(model_p->getAnmMtx(1), mDoMtx_stack_c::get());
+    MTXCopy(model->getAnmMtx(1), mDoMtx_stack_c::get());
     mae.set(-15.0f + nREG_F(5), -10.0f + nREG_F(6), nREG_F(7));
     mDoMtx_stack_c::multVec(&mae, &eyePos);
 
@@ -707,8 +726,8 @@ void daE_WS_c::cc_set() {
 }
 
 int daE_WS_c::execute() {
-    if (mMoveWaitTimer != 0) {
-        mMoveWaitTimer--;
+    if (mWaitTimer != 0) {
+        mWaitTimer--;
     }
 
     if (mInvulnerabilityTimer != 0) {
@@ -725,8 +744,8 @@ int daE_WS_c::execute() {
     return 1;
 }
 
-static int daE_WS_Execute(daE_WS_c* a_this) {
-    return a_this->execute();
+static int daE_WS_Execute(daE_WS_c* i_this) {
+    return i_this->execute();
 }
 
 void daE_WS_c::checkInitialWall() {
@@ -739,7 +758,7 @@ void daE_WS_c::checkInitialWall() {
         linchk.Set(&current.pos, &endpos, NULL);
 
         if (dComIfG_Bgsp().LineCross(&linchk)) {
-            if (field_0x691 == 0 && dComIfG_Bgsp().GetWallCode(linchk) != 1 && dComIfG_Bgsp().GetWallCode(linchk) != 4) {
+            if (arg0 == 0 && dComIfG_Bgsp().GetWallCode(linchk) != 1 && dComIfG_Bgsp().GetWallCode(linchk) != 4) {
                 return;
             }
 
@@ -749,9 +768,9 @@ void daE_WS_c::checkInitialWall() {
             dComIfG_Bgsp().GetTriPla(linchk, &tri);
 
             cXyz* tri_np = tri.GetNP();
-            field_0x668.y = cM_atan2s(tri_np->x, tri_np->z);
-            field_0x668.x = cM_atan2s(tri_np->absXZ(), tri_np->y);
-            field_0x66e = field_0x668;
+            mTargetWallAngle.y = cM_atan2s(tri_np->x, tri_np->z);
+            mTargetWallAngle.x = cM_atan2s(tri_np->absXZ(), tri_np->y);
+            mWallAngle = mTargetWallAngle;
             return;
         }
     }
@@ -759,8 +778,8 @@ void daE_WS_c::checkInitialWall() {
 
 bool daE_WS_c::checkBeforeBg(s16 i_angle) {
     dBgS_LinChk linchk;
-    cXyz sp68;
-    cXyz sp5C;
+    cXyz mae;
+    cXyz ato;
     cXyz endpos;
     cXyz startpos;
 
@@ -768,56 +787,56 @@ bool daE_WS_c::checkBeforeBg(s16 i_angle) {
         return false;
     }
 
-    mDoMtx_stack_c::YrotS(field_0x668.y);
-    mDoMtx_stack_c::XrotM(field_0x668.x);
+    mDoMtx_stack_c::YrotS(mTargetWallAngle.y);
+    mDoMtx_stack_c::XrotM(mTargetWallAngle.x);
     mDoMtx_stack_c::YrotM(i_angle);
-    sp68.set(0.0f, 50.0f * mBodyScale, 0.0f);
-    mDoMtx_stack_c::multVec(&sp68, &startpos);
+    mae.set(0.0f, 50.0f * mBodyScale, 0.0f);
+    mDoMtx_stack_c::multVec(&mae, &startpos);
     startpos += current.pos;
     
-    mDoMtx_stack_c::YrotS(field_0x668.y);
-    mDoMtx_stack_c::XrotM(field_0x668.x);
+    mDoMtx_stack_c::YrotS(mTargetWallAngle.y);
+    mDoMtx_stack_c::XrotM(mTargetWallAngle.x);
     mDoMtx_stack_c::YrotM(i_angle);
-    sp68.set(0.0f, 0.0f, 50.0f * mBodyScale);
-    mDoMtx_stack_c::multVec(&sp68, &sp5C);
+    mae.set(0.0f, 0.0f, 50.0f * mBodyScale);
+    mDoMtx_stack_c::multVec(&mae, &ato);
 
-    sp68.set(sp5C.x, 0.0f, sp5C.z);
-    endpos = startpos + sp68;
+    mae.set(ato.x, 0.0f, ato.z);
+    endpos = startpos + mae;
 
     linchk.Set(&startpos, &endpos, NULL);
     if (dComIfG_Bgsp().LineCross(&linchk)) {
         return 1;
     }
 
-    if (sp5C.y > 0.0f) {
-        sp68.set(0.0f, 50.0f * mBodyScale, 0.0f);
+    if (ato.y > 0.0f) {
+        mae.set(0.0f, 50.0f * mBodyScale, 0.0f);
     } else {
-        sp68.set(0.0f, -l_HIO.dist_to_ground, 0.0f);
+        mae.set(0.0f, -l_HIO.dist_to_ground, 0.0f);
     }
 
-    endpos = startpos + sp68;
+    endpos = startpos + mae;
     linchk.Set(&startpos, &endpos, NULL);
     if (dComIfG_Bgsp().LineCross(&linchk)) {
         return true;
     }
 
-    mDoMtx_stack_c::YrotS(field_0x668.y);
-    mDoMtx_stack_c::XrotM(field_0x668.x);
+    mDoMtx_stack_c::YrotS(mTargetWallAngle.y);
+    mDoMtx_stack_c::XrotM(mTargetWallAngle.x);
     mDoMtx_stack_c::YrotM(i_angle);
-    sp68.set(0.0f, 50.0f * mBodyScale, 100.0f * mBodyScale);
-    mDoMtx_stack_c::multVec(&sp68, &sp5C);
-    startpos = current.pos + sp5C;
+    mae.set(0.0f, 50.0f * mBodyScale, 100.0f * mBodyScale);
+    mDoMtx_stack_c::multVec(&mae, &ato);
+    startpos = current.pos + ato;
 
     cXyz sp38(0.0f, -40.0f * mBodyScale, 100.0f * mBodyScale);
-    mDoMtx_stack_c::multVec(&sp38, &sp5C);
-    endpos = current.pos + sp5C;
+    mDoMtx_stack_c::multVec(&sp38, &ato);
+    endpos = current.pos + ato;
 
     linchk.Set(&startpos, &endpos, NULL);
     if (!dComIfG_Bgsp().LineCross(&linchk)) {
         return true;
     }
 
-    if (field_0x691 == 0 && dComIfG_Bgsp().GetWallCode(linchk) != 1 && dComIfG_Bgsp().GetWallCode(linchk) != 4) {
+    if (arg0 == 0 && dComIfG_Bgsp().GetWallCode(linchk) != 1 && dComIfG_Bgsp().GetWallCode(linchk) != 4) {
         return true;
     }
 
@@ -825,7 +844,7 @@ bool daE_WS_c::checkBeforeBg(s16 i_angle) {
     dComIfG_Bgsp().GetTriPla(linchk, &tri);
     
     cXyz* tri_np = tri.GetNP();
-    cLib_chaseAngleS(&field_0x66e.y, cM_atan2s(tri_np->x, tri_np->z), 0x100);
+    cLib_chaseAngleS(&mWallAngle.y, cM_atan2s(tri_np->x, tri_np->z), 0x100);
     checkWall();
     return false;
 }
@@ -834,7 +853,7 @@ bool daE_WS_c::checkWall() {
     cXyz startpos;
     cXyz endpos;
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(field_0x66e);
+    mDoMtx_stack_c::ZXYrotM(mWallAngle);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
 
     mDoMtx_stack_c::transM(0.0f, 100.0f, 0.0f);
@@ -846,7 +865,7 @@ bool daE_WS_c::checkWall() {
     dBgS_LinChk linchk;
     linchk.Set(&startpos, &endpos, NULL);
     if (dComIfG_Bgsp().LineCross(&linchk)) {
-        if (field_0x691 == 0 && dComIfG_Bgsp().GetWallCode(linchk) != 1 && dComIfG_Bgsp().GetWallCode(linchk) != 4) {
+        if (arg0 == 0 && dComIfG_Bgsp().GetWallCode(linchk) != 1 && dComIfG_Bgsp().GetWallCode(linchk) != 4) {
             return false;
         }
 
@@ -856,8 +875,8 @@ bool daE_WS_c::checkWall() {
         dComIfG_Bgsp().GetTriPla(linchk, &tri);
 
         cXyz* tri_np = tri.GetNP();
-        field_0x668.y = cM_atan2s(tri_np->x, tri_np->z);
-        field_0x668.x = cM_atan2s(tri_np->absXZ(), tri_np->y);
+        mTargetWallAngle.y = cM_atan2s(tri_np->x, tri_np->z);
+        mTargetWallAngle.x = cM_atan2s(tri_np->absXZ(), tri_np->y);
         return true;
     }
 
@@ -871,8 +890,8 @@ static int daE_WS_IsDelete(daE_WS_c* a_this) {
 int daE_WS_c::_delete() {
     dComIfG_resDelete(&mPhase, "E_WS");
 
-    if (mHIOInit) {
-        hio_set = false;
+    if (mHioSet) {
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -883,24 +902,25 @@ int daE_WS_c::_delete() {
     return 1;
 }
 
-static int daE_WS_Delete(daE_WS_c* a_this) {
-    return a_this->_delete();
+static int daE_WS_Delete(daE_WS_c* i_this) {
+    fopAcM_RegisterDeleteID(i_this, "E_WS");
+    return i_this->_delete();
 }
 
 int daE_WS_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_WS", 0xD);
     JUT_ASSERT(1401, modelData != NULL);
 
-    mpModelMorf = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_WS", 7), 0, 1.0f, 0, -1, &mSound, 0x80000, 0x11000084);
-    if (mpModelMorf == NULL || mpModelMorf->getModel() == NULL) {
+    mAnm_p = JKR_NEW mDoExt_McaMorfSO(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_WS", 7), 0, 1.0f, 0, -1, &mSound, 0x80000, 0x11000084);
+    if (mAnm_p == NULL || mAnm_p->getModel() == NULL) {
         return 0;
     }
 
     return 1;
 }
 
-static int useHeapInit(fopAc_ac_c* i_this) {
-    return ((daE_WS_c*)i_this)->CreateHeap();
+static int useHeapInit(fopAc_ac_c* actor) {
+    return ((daE_WS_c*)actor)->CreateHeap();
 }
 
 int daE_WS_c::create() {
@@ -910,8 +930,8 @@ int daE_WS_c::create() {
     if (phase_state == cPhs_COMPLEATE_e) {
         OS_REPORT("E_WS PARAM %x\n", fopAcM_GetParam(this));
     
-        mSwbit = (fopAcM_GetParam(this) & 0xFF00) >> 8;
-        if (mSwbit != 0xFF && dComIfGs_isSwitch(mSwbit, fopAcM_GetRoomNo(this))) {
+        bitSw = (fopAcM_GetParam(this) & 0xFF00) >> 8;
+        if (bitSw != 0xFF && dComIfGs_isSwitch(bitSw, fopAcM_GetRoomNo(this))) {
             OS_REPORT("E_WS やられ後なので再セットしません\n");
             return cPhs_ERROR_e;
         }
@@ -922,13 +942,13 @@ int daE_WS_c::create() {
     
         if (!hio_set) {
             hio_set = true;
-            mHIOInit = true;
+            mHioSet = true;
             l_HIO.id = mDoHIO_CREATE_CHILD("スタルウォール", &l_HIO);
         }
     
-        field_0x691 = fopAcM_GetParam(this);
-        if (field_0x691 == 0xFF) {
-            field_0x691 = 0;
+        arg0 = fopAcM_GetParam(this);
+        if (arg0 == 0xFF) {
+            arg0 = 0;
         }
     
         if (((fopAcM_GetParam(this) & 0xFF0000) >> 0x10) == 1) {
@@ -938,12 +958,12 @@ int daE_WS_c::create() {
         }
     
         attention_info.flags = fopAc_AttnFlag_BATTLE_e;
-        fopAcM_SetMtx(this, mpModelMorf->getModel()->getBaseTRMtx());
+        fopAcM_SetMtx(this, mAnm_p->getModel()->getBaseTRMtx());
         fopAcM_SetMin(this, -200.0f, -200.0f, -200.0f);
         fopAcM_SetMax(this, 200.0f, 200.0f, 200.0f);
     
-        mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), NULL, NULL);
-        mAcchCir.SetWall(0.0f, 0.0f);
+        mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mBgc, fopAcM_GetSpeed_p(this), NULL, NULL);
+        mBgc.SetWall(0.0f, 0.0f);
     
         health = 10;
         field_0x560 = 10;
@@ -963,7 +983,7 @@ int daE_WS_c::create() {
         setActionMode(ACTION_WAIT_e);
         checkInitialWall();
 
-        field_0x65c = current.pos;
+        mHomePos = current.pos;
         speed.y = 0.0f;
         gravity = 0.0f;
         mtx_set();
@@ -972,8 +992,8 @@ int daE_WS_c::create() {
     return phase_state;
 }
 
-static int daE_WS_Create(daE_WS_c* a_this) {
-    return a_this->create();
+static int daE_WS_Create(daE_WS_c* i_this) {
+    return i_this->create();
 }
 
 static actor_method_class l_daE_WS_Method = {

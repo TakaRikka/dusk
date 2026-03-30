@@ -33,6 +33,9 @@ public:
     bool isAllocated() const { return mBase; }
     u32 getSize() const { return mSize; }
 
+    JSUTree<JASHeap>* getFirstChild() { return mTree.getFirstChild(); }
+    JSUTree<JASHeap>* getEndChild() { return mTree.getEndChild(); }
+
     /* 0x00 */ JSUTree<JASHeap> mTree;
     /* 0x1C */ OSMutex mMutex;
     /* 0x34 */ JASDisposer* mDisposer;

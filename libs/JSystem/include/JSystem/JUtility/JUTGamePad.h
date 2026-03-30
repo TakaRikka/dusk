@@ -117,7 +117,7 @@ public:
     }
 
     void stopMotorWave() { mRumble.stopPatternedRumbleAtThePeriod(); }
-    void stopMotor() { mRumble.stopMotor(mPortNum, false); }
+    void stopMotor() { mRumble.stopMotor(mPortNum); }
     void stopMotorHard() { CRumble::stopMotorHard(mPortNum); }
 
     static s8 getPortStatus(EPadPort port) {
@@ -233,7 +233,7 @@ public:
         /* 0x10 */ u8* field_0x10;
     };  // Size: 0x14
 
-    void startMotorWave(void* data, CRumble::ERumble rumble, u32 length) {
+    void startMotorWave(u8* data, CRumble::ERumble rumble, u32 length) {
         mRumble.startPatternedRumble(data, rumble, length);
     }
 

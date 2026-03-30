@@ -20,7 +20,7 @@ struct dPath {
     /* 0x2 */ BE(u16) m_nextID;
     /* 0x4 */ u8 field_0x4;
     /* 0x5 */ bool m_closed;
-    /* 0x6 */ u8 field_0x6;
+    /* 0x6 */ u8 swbit;
     /* 0x7 */ u8 field_0x7;
     /* 0x8 */ OFFSET_PTR(dPnt) m_points;
 };

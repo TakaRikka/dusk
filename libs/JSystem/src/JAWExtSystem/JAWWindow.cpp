@@ -6,29 +6,29 @@
 #include "JSystem/JGeometry.h"
 
 JAWWindow::JAWWindow(const char* param_1, int param_2, int param_3) :
-    field_0x38('WIN1', JGeometry::TBox2<f32>(0.0f, 0.0f, param_2, param_3), "frame_lu.bti"),
-    field_0x180('TITL', JGeometry::TBox2<f32>(10.0f, 10.0f, 640.0f, 170.0f), (const ResFONT*)JUTResFONT_Ascfont_fix16, param_1, -1, HBIND_LEFT, VBIND_TOP),
-    field_0x2b0(this),
-    field_0x3d8(JUtility::TColor(0, 0, 0, 255)),
-    field_0x3dc(JUtility::TColor(0, 0, 0, 255)),
-    field_0x3e0(JUtility::TColor(0, 0, 0, 255)),
-    field_0x3e4(JUtility::TColor(0, 0, 0, 255)) {
+    m_drawWindow('WIN1', JGeometry::TBox2<f32>(0.0f, 0.0f, param_2, param_3), "frame_lu.bti"),
+    m_titleText('TITL', JGeometry::TBox2<f32>(10.0f, 10.0f, 640.0f, 170.0f), (const ResFONT*)JUTResFONT_Ascfont_fix16, param_1, -1, HBIND_LEFT, VBIND_TOP),
+    m_windowText(this),
+    m_windowColor0(JUtility::TColor(0, 0, 0, 255)),
+    m_windowColor1(JUtility::TColor(0, 0, 0, 255)),
+    m_windowColor2(JUtility::TColor(0, 0, 0, 255)),
+    m_windowColor3(JUtility::TColor(0, 0, 0, 255)) {
     field_0x3e8 = 0;
-    field_0x3ec = 0;
-    field_0x38.setContentsColor(field_0x3d8, field_0x3e0, field_0x3dc, field_0x3e4);
-    field_0x180.setCharColor(JUtility::TColor(0, 255, 0, 255));
-    field_0x180.setGradColor(JUtility::TColor(255, 255, 255, 255));
-    field_0x38.appendChild(&field_0x180);
-    field_0x38.appendChild(&field_0x2b0);
+    m_isInit = FALSE;
+    m_drawWindow.setContentsColor(m_windowColor0, m_windowColor2, m_windowColor1, m_windowColor3);
+    m_titleText.setCharColor(JUtility::TColor(0, 255, 0, 255));
+    m_titleText.setGradColor(JUtility::TColor(255, 255, 255, 255));
+    m_drawWindow.appendChild(&m_titleText);
+    m_drawWindow.appendChild(&m_windowText);
 }
 
 JAWWindow::~JAWWindow() {}
 
 BOOL JAWWindow::initIf() {
-    if (field_0x3ec) {
+    if (m_isInit) {
         return TRUE;
     } else {
-        field_0x3ec = TRUE;
+        m_isInit = TRUE;
         return onInit();
     }
 }
@@ -36,30 +36,30 @@ BOOL JAWWindow::initIf() {
 BOOL JAWWindow::onInit() { return TRUE; }
 
 void JAWWindow::setTitleColor(const JUtility::TColor& param_1, const JUtility::TColor& param_2) {
-    field_0x180.setCharColor(param_1);
-    field_0x180.setGradColor(param_2);
+    m_titleText.setCharColor(param_1);
+    m_titleText.setGradColor(param_2);
 }
 
 void JAWWindow::setWindowColor(const JUtility::TColor& param_1, const JUtility::TColor& param_2, const JUtility::TColor& param_3, const JUtility::TColor& param_4) {
-    field_0x3d8 = param_1;
-    field_0x3dc = param_2;
-    field_0x3e0 = param_3;
-    field_0x3e4 = param_4;
-    field_0x38.setContentsColor(field_0x3d8, field_0x3e0, field_0x3dc, field_0x3e4);
+    m_windowColor0 = param_1;
+    m_windowColor1 = param_2;
+    m_windowColor2 = param_3;
+    m_windowColor3 = param_4;
+    m_drawWindow.setContentsColor(m_windowColor0, m_windowColor2, m_windowColor1, m_windowColor3);
 }
 
 void JAWWindow::onDraw(JAWGraphContext*) {}
 
 void JAWWindow::move(f32 param_1, f32 param_2) {
-    field_0x38.move(param_1, param_2);
+    m_drawWindow.move(param_1, param_2);
 }
 
 void JAWWindow::addPosition(f32 param_1, f32 param_2) {
-    field_0x38.add(param_1, param_2);
+    m_drawWindow.add(param_1, param_2);
 }
 
 void JAWWindow::addSize(f32 width, f32 height) {
-    JGeometry::TBox2<f32> bounds = field_0x38.getBounds();
+    JGeometry::TBox2<f32> bounds = m_drawWindow.getBounds();
     f32 newWidth = width + bounds.getWidth();
     f32 newHeight = height + bounds.getHeight();
     if (newWidth < 36.0f) {
@@ -72,7 +72,7 @@ void JAWWindow::addSize(f32 width, f32 height) {
     } else if (newHeight > 480.0f) {
         newHeight = 480.0f;
     }
-    field_0x38.resize(newWidth, newHeight);
+    m_drawWindow.resize(newWidth, newHeight);
 }
 
 JUtility::TColor JAWWindow::convJudaColor(u16 param_1) {
@@ -189,7 +189,7 @@ void JAWWindow::padProc(const JUTGamePad& pad) {
 JAWWindow::TWindowText::TWindowText(JAWWindow* window) :
     J2DPane('TEXT', JGeometry::TBox2<f32>(10.0f, 30.0f, 650.0f, 510.0f)),
     m_pParent(window),
-    field_0x11c(0, 0) {
+    m_point(0, 0) {
 }
 
 JAWWindow::TWindowText::~TWindowText() {}
@@ -201,15 +201,15 @@ void JAWWindow::TWindowText::drawSelf(f32 param_1, f32 param_2) {
 }
 
 void JAWWindow::TWindowText::drawSelf(f32, f32, Mtx* param_3) {
-    field_0xfc.reset();
-    MTXTrans(*param_3, -field_0x11c.x, -field_0x11c.y, 0.0f);
+    m_graf.reset();
+    MTXTrans(*param_3, -m_point.x, -m_point.y, 0.0f);
     Mtx stack_48;
     MTXConcat(*param_3, mGlobalMtx, stack_48);
     GXLoadPosMtxImm(stack_48, 0);
-    field_0xfc.setParentAlpha(mColorAlpha);
+    m_graf.setParentAlpha(mColorAlpha);
     JUT_ASSERT(209, m_pParent != NULL);
     m_pParent->setMatrix(stack_48);
-    m_pParent->onDraw(&field_0xfc);
+    m_pParent->onDraw(&m_graf);
 }
 
 static void dummy(J2DPane* pane, J2DWindow* window) {

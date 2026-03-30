@@ -59,7 +59,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[11] = {
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[20] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
-    {4, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
+    {4, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, 
 };
 
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[40] = {

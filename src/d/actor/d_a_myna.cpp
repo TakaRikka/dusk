@@ -74,9 +74,9 @@ static char* l_bckFileNameTBL[] = {
 
 static char* l_btpFileNameTBL[] = {"MYNA.btp"};
 
-static void createHeapCallBack(fopAc_ac_c* i_this) {
+static int createHeapCallBack(fopAc_ac_c* i_this) {
     daMyna_c* a_this = static_cast<daMyna_c*>(i_this);
-    a_this->createHeap();
+    return a_this->createHeap();
 }
 
 static int jntNodeCallBack(J3DJoint* i_jnt, int param_1) {
@@ -339,7 +339,7 @@ int daMyna_c::create() {
         return phase;
     }
 
-    if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)&createHeapCallBack, 0x21F0)) {
+    if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x21F0)) {
         return cPhs_ERROR_e;
     }
 

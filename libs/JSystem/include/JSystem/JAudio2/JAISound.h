@@ -50,6 +50,12 @@ public:
 
     JAISoundID(const JAISoundID& other) { id_.composite_ = other.id_.composite_; };
 
+    JAISoundID(unsigned int sectionID, unsigned int groupID, unsigned int waveID) {
+        id_.info.type.parts.sectionID = sectionID;
+        id_.info.type.parts.groupID = groupID;
+        id_.info.waveID = waveID;
+    }
+
     JAISoundID() {}
 
     bool isAnonymous() const { return id_.composite_ == -1; }
@@ -322,6 +328,8 @@ public:
     void pause(bool param_0) {
         status_.field_0x0.flags.paused = param_0;
     }
+
+    bool isPaused() const { return status_.field_0x0.flags.paused; }
 
     void updateLifeTime(u32 lifeTime) {
         if (lifeTime > lifeTime_) {
