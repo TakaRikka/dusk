@@ -202,9 +202,16 @@ static u32 daObj_Stick_Create(void* i_this) {
     return static_cast<daObj_Stick_c*>(i_this)->create();
 }
 
+#if TARGET_PC
+static int daObj_Stick_Delete(void* param_0) {
+    static_cast<daObj_Stick_c*>(param_0)->Delete();
+    return 1;
+}
+#else
 static void daObj_Stick_Delete(void* param_0) {
     static_cast<daObj_Stick_c*>(param_0)->Delete();
 }
+#endif
 
 static void daObj_Stick_Execute(void* param_0) {
     static_cast<daObj_Stick_c*>(param_0)->Execute();
