@@ -1406,7 +1406,12 @@ void dDlst_shadowControl_c::init() {
     for (int i = 0; i < 2; i++) {
         u16 size = l_realImageSize[i];
 
+#ifdef TARGET_PC
+        // Don't need to allocate an actual texture buffer for aurora; only a placeholder
+        u32 buffer_size = 0x20;
+#else
         u32 buffer_size = GXGetTexBufferSize(size, size, 5, GX_DISABLE, 0);
+#endif
         field_0x15ef0[i] = JKR_NEW_ARRAY_ARGS(u8, buffer_size, 0x20);
         GXInitTexObj(&field_0x15eb0[i], field_0x15ef0[i], size, size, GX_TF_RGB5A3, GX_CLAMP,
                      GX_CLAMP, GX_DISABLE);
@@ -1640,7 +1645,7 @@ int dDlst_shadowControl_c::setReal(u32 param_1, s8 param_2, J3DModel* param_3, c
     u32 rv = pdVar12->set(mNextID, param_3, param_4, param_5, param_6, param_7, dVar17, dVar16);
     if (!rv) {
         return 0;
-    } 
+    }
     mRealNum++;
     if (pdVar10 == NULL) {
         if (pdVar11 == NULL) {
