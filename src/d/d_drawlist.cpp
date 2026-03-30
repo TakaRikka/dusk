@@ -1398,11 +1398,7 @@ void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* pa
 }
 
 void dDlst_shadowControl_c::init() {
-#if TARGET_PC
-    static u16 l_realImageSize[2] = {512, 256};
-#else
     static u16 l_realImageSize[2] = {192, 64};
-#endif
     for (int i = 0; i < 2; i++) {
         u16 size = l_realImageSize[i];
 
