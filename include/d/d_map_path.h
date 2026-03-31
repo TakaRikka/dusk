@@ -5,7 +5,7 @@
 #include "JSystem/JHostIO/JORMContext.h"
 
 struct dMpath_RGB5A3_s {
-    u16 color;
+    BE(u16) color;
 };
 
 namespace dMpath_ColorCnv_n {

@@ -66,14 +66,14 @@ struct dMap_prm_res_s {
     /* 0x1A7 */ u8 field_0x1a7;
     /* 0x1A8 */ u8 field_0x1a8;
     /* 0x1A9 */ u8 field_0x1a9;
-    /* 0x1AA */ s16 field_0x1aa;
-    /* 0x1AC */ s16 field_0x1ac;
-    /* 0x1AE */ s16 field_0x1ae;
-    /* 0x1B0 */ s16 field_0x1b0;
-    /* 0x1B2 */ s16 field_0x1b2;
-    /* 0x1B4 */ s16 field_0x1b4;
-    /* 0x1B6 */ s16 field_0x1b6;
-    /* 0x1B8 */ f32 cursor_size;
+    /* 0x1AA */ BE(s16) field_0x1aa;
+    /* 0x1AC */ BE(s16) field_0x1ac;
+    /* 0x1AE */ BE(s16) field_0x1ae;
+    /* 0x1B0 */ BE(s16) field_0x1b0;
+    /* 0x1B2 */ BE(s16) field_0x1b2;
+    /* 0x1B4 */ BE(s16) field_0x1b4;
+    /* 0x1B6 */ BE(s16) field_0x1b6;
+    /* 0x1B8 */ BE(f32) cursor_size;
 };
 
 struct dMap_prm_hio_s {

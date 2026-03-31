@@ -276,7 +276,7 @@ bool isTexNoReg(void* pDL) {
 }
 
 u16 getTexNoReg(void* pDL) {
-    u32 var_r31 = *(u32*)((u8*)pDL + 1);
+    u32 var_r31 = *(BE(u32)*)((u8*)pDL + 1);
     return var_r31 & 0xFFFFFF;
 }
 
