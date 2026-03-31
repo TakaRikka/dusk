@@ -8,7 +8,7 @@
 #include <aurora/aurora.h>
 #endif
 
-#if WIDESCREEN_SUPPORT
+#if WIDESCREEN_SUPPORT && !TARGET_PC
 #define FB_WIDTH  (640)
 #define FB_HEIGHT (456)
 #else
