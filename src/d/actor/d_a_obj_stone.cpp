@@ -126,7 +126,7 @@ static f32 bound(cXyz* param_0, cBgS_PolyInfo const& param_1, f32 param_2) {
         cXyz pos;
         f32 abs = param_0->abs();
 
-        C_VECReflect(param_0, (Vec*)&plane, &pos);
+        C_VECReflect(param_0, &plane.mNormal, &pos);
         *param_0 = pos * abs * param_2;
 
         return param_0->absXZ();
