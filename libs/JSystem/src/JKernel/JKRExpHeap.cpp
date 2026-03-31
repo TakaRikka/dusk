@@ -472,7 +472,7 @@ void JKRExpHeap::do_freeAll() {
     JKRHeap::callAllDisposer();
     mHeadFreeList = (CMemBlock*)mStart;
     mTailFreeList = mHeadFreeList;
-    mHeadFreeList->initiate(NULL, NULL, mSize - 0x10, 0, 0);
+    mHeadFreeList->initiate(NULL, NULL, mSize - sizeof(CMemBlock), 0, 0);
     mHeadUsedList = NULL;
     mTailUsedList = NULL;
 #if DEBUG
