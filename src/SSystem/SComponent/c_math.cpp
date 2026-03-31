@@ -109,6 +109,9 @@ static u16 atntable[1025] = {
 
 u16 U_GetAtanTable(f32 f0, f32 f1) {
     int idx = f0 / f1 * 0x400;
+#if TARGET_PC
+    idx = idx < 0 ? 0 : idx > 0x400 ? 0x400 : idx;
+#endif
     return atntable[idx];
 }
 

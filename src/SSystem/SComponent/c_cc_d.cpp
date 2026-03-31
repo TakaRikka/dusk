@@ -65,9 +65,14 @@ void cCcD_DivideArea::CalcDivideInfo(cCcD_DivideInfo* pDivideInfo, const cM3dGAa
         if (!mXDiffIsZero) {
             s32 var1 = mInvScaledXDiff * (aab.GetMinP()->x - GetMinP()->x);
             s32 var3 = mInvScaledXDiff * (aab.GetMaxP()->x - GetMinP()->x);
+#if TARGET_PC
+            var1 = var1 < 0 ? 0 : var1 > 31 ? 31 : var1;
+            var3 = var3 < 0 ? 0 : var3 > 31 ? 31 : var3;
+#else
             if (31 < var3) {
                 var3 = 31;
             }
+#endif
 
             xDivInfo = l_base[var3];
             if (0 < var1) {
@@ -81,9 +86,14 @@ void cCcD_DivideArea::CalcDivideInfo(cCcD_DivideInfo* pDivideInfo, const cM3dGAa
         if (!mYDiffIsZero) {
             s32 var1 = mInvScaledYDiff * (aab.GetMinP()->y - GetMinP()->y);
             s32 var3 = mInvScaledYDiff * (aab.GetMaxP()->y - GetMinP()->y);
+#if TARGET_PC
+            var1 = var1 < 0 ? 0 : var1 > 31 ? 31 : var1;
+            var3 = var3 < 0 ? 0 : var3 > 31 ? 31 : var3;
+#else
             if (31 < var3) {
                 var3 = 31;
             }
+#endif
 
             yDivInfo = l_base[var3];
             if (0 < var1) {
@@ -97,9 +107,14 @@ void cCcD_DivideArea::CalcDivideInfo(cCcD_DivideInfo* pDivideInfo, const cM3dGAa
         if (!mZDiffIsZero) {
             s32 var1 = mInvScaledZDiff * (aab.GetMinP()->z - GetMinP()->z);
             s32 var3 = mInvScaledZDiff * (aab.GetMaxP()->z - GetMinP()->z);
+#if TARGET_PC
+            var1 = var1 < 0 ? 0 : var1 > 31 ? 31 : var1;
+            var3 = var3 < 0 ? 0 : var3 > 31 ? 31 : var3;
+#else
             if (31 < var3) {
                 var3 = 31;
             }
+#endif
 
             zDivInfo = l_base[var3];
             if (0 < var1) {
