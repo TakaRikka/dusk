@@ -864,7 +864,16 @@ void dMenu_DmapBg_c::draw() {
     J2DOrthoGraph* grafContext = (J2DOrthoGraph*)dComIfGp_getCurrentGrafPort();
     grafContext->setup2D();
 
+#if TARGET_PC
+    // GXGetScissor uses 11-bit GC register fields (max 2047) which overflow
+    // at window widths > ~1705px, producing garbage values on restore.
+    scissor_left = 0;
+    scissor_top = 0;
+    scissor_width = (u32)mDoGph_gInf_c::getWidth();
+    scissor_height = (u32)mDoGph_gInf_c::getHeight();
+#else
     GXGetScissor(&scissor_left, &scissor_top, &scissor_width, &scissor_height);
+#endif
 #if TARGET_PC
     grafContext->scissor(field_0xd94, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
 #else
@@ -876,8 +885,8 @@ void dMenu_DmapBg_c::draw() {
     dMenu_Dmap_c::myclass->drawFloorScreenBack(mFloorScreen, field_0xd94, field_0xd98, grafContext);
 
 #if TARGET_PC
-    f32 dVar21 = mDoGph_gInf_c::getWidth() / FB_WIDTH;
-    f32 dVar16 = mDoGph_gInf_c::getHeight() / FB_HEIGHT;
+    f32 dVar21 = mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getWidth();
+    f32 dVar16 = mDoGph_gInf_c::getHeightF() / mDoGph_gInf_c::getHeight();
 #else
     f32 dVar21 = mDoGph_gInf_c::getWidthF() / FB_WIDTH;
     f32 dVar16 = mDoGph_gInf_c::getHeightF() / FB_HEIGHT;
@@ -890,8 +899,15 @@ void dMenu_DmapBg_c::draw() {
         Mtx mtx;
         Vec local_200 = pane.getGlobalVtx(center_pane, &mtx, 0, false, 0);
         Vec local_20c = pane.getGlobalVtx(center_pane, &mtx, 3, false, 0);
+#if TARGET_PC
+        grafContext->scissor(((local_200.x - mDoGph_gInf_c::getMinXF()) / dVar21),
+                             ((local_200.y - mDoGph_gInf_c::getMinYF()) / dVar16),
+                             ((local_20c.x - local_200.x) / dVar21),
+                             (2.0f + (local_20c.y - local_200.y)) / dVar16);
+#else
         grafContext->scissor(((local_200.x - mDoGph_gInf_c::getMinXF()) / dVar21), ((local_200.y / dVar16) / dVar16),
                              ((local_20c.x - local_200.x) / dVar21), 2.0f + (local_20c.y - local_200.y));
+#endif
         grafContext->setScissor();
 
         f32 dVar17 = field_0xd8c / 255.0f;
@@ -925,10 +941,17 @@ void dMenu_DmapBg_c::draw() {
     Mtx local_110;
     Vec local_218 = pane.getGlobalVtx(center_pane, &local_110, 0, false, 0);
     Vec local_224 = pane.getGlobalVtx(center_pane, &local_110, 3, false, 0);
+#if TARGET_PC
+    f32 local_294 = ((local_218.x - mDoGph_gInf_c::getMinXF()) / dVar21);
+    f32 local_298 = ((local_218.y - mDoGph_gInf_c::getMinYF()) / dVar16);
+    f32 local_29c = ((local_224.x - local_218.x) / dVar21);
+    f32 local_2a0 = (2.0f + (local_224.y - local_218.y)) / dVar16;
+#else
     f32 local_294 = ((local_218.x - mDoGph_gInf_c::getMinXF()) / dVar21);
     f32 local_298 = ((local_218.y / dVar16) / dVar16);
     f32 local_29c = ((local_224.x - local_218.x) / dVar21);
     f32 local_2a0 = 2.0f + (local_224.y - local_218.y);
+#endif
     grafContext->scissor(local_294, local_298, local_29c, local_2a0);
     grafContext->setScissor();
 
