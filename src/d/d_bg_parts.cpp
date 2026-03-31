@@ -106,7 +106,7 @@ void dBgp_c::modelMaterial_c::set(J3DModelData* i_modelData, J3DMaterial* i_mate
 void dBgp_c::model_c::create(J3DModelData* i_modelData, Mtx i_mtx) {
     const void* binary = i_modelData->getBinary();
 
-    mId = *(u32*)((char*)binary + 0x1C);
+    mId = *(BE(u32)*)((char*)binary + 0x1C);
     if (mId != 0xFFFF) {
         addShare(mId);
     }

@@ -656,7 +656,7 @@ void dMsgObject_c::setMessageIndexDemo(u32 revoMsgIndex, bool param_2) {
 u32 dMsgObject_c::getMessageIndex(u32 param_0) {
     u32 i = 0;
     JMSMesgInfo_c* pMsg = (JMSMesgInfo_c*)((char*)mpMsgDt + 0x20);
-    u32 msgIndexCount = *((u16*)((char*)mpMsgDt + 0x28));
+    u32 msgIndexCount = *((BE(u16)*)((char*)mpMsgDt + 0x28));
     int rv;
     for (; i < msgIndexCount; i++) {
         if (pMsg->entries[i].message_id == param_0) {
@@ -683,12 +683,12 @@ u32 dMsgObject_c::getRevoMessageIndex(u32 param_1) {
     JUT_ASSERT(1916, groupID==s_groupID || groupID == 0)
     changeGroup(groupID);
     pMsg = (JMSMesgInfo_c*)((char*)mpMsgDt + 0x20);
-    msgIndexCount = *((u16*)((char*)mpMsgDt + 0x28));
+    msgIndexCount = *((BE(u16)*)((char*)mpMsgDt + 0x28));
     for (; i < msgIndexCount; i++) {
         if (pMsg->entries[i].message_id == param_1) {
             s8* ptr = (s8*)pMsg + pMsg->header.size + pMsg->entries[i].string_offset + 8;
             if (ptr[0] == 26 && ptr[2] == 3 && (s8)ptr[4] == 0) {
-                rv = pMsg->entries[*(int*)(ptr + 5)].message_id;
+                rv = pMsg->entries[*(BE(int)*)(ptr + 5)].message_id;
             } else {
                 rv = param_1;
             }
@@ -706,7 +706,7 @@ u32 dMsgObject_c::getRevoMessageIndex(u32 param_1) {
 u32 dMsgObject_c::getMessageIndexAlways(u32 param_0) {
     u32 i = 0;
     JMSMesgInfo_c* pMsg = (JMSMesgInfo_c*)((char*)mpMsgRes + 0x20);
-    u32 msgIndexCount = *((u16*)((char*)mpMsgRes + 0x28));
+    u32 msgIndexCount = *((BE(u16)*)((char*)mpMsgRes + 0x28));
     int rv;
     for (; i < msgIndexCount; i++) {
         if (pMsg->entries[i].message_id == param_0) {

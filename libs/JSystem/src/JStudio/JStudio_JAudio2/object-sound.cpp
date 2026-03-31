@@ -225,7 +225,9 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_PARENT_NODE(JStudio::data::TEOp
 	case JStudio::data::UNK_0x18:
 		if (field_0x13c != NULL) {
             JUT_ASSERT(431, pContent!=NULL);
+#if DUSK_SUSPICIOUS_ASSERTS
             JUT_ASSERT(432, uSize==0);
+#endif
 			field_0x140 = field_0x13c->JSGFindNodeID((char*)pContent);
 			if (field_0x140 == -1) {
 				return;

@@ -2518,7 +2518,7 @@ void daNPC_TK_c::executeResistanceDemo() {
                            0x200, 0x10);
         shape_angle.x = -current.angle.x;
 
-        cLib_addCalcAngleS(&current.angle.y, cLib_targetAngleY((Vec*)&current, &posWithOffset), 8,
+        cLib_addCalcAngleS(&current.angle.y, cLib_targetAngleY(&current.pos, &posWithOffset), 8,
                            0x400, 0x10);
         shape_angle.y = current.angle.y;
 

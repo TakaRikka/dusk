@@ -535,6 +535,14 @@ void JUTGamePad::CRumble::stopPatternedRumble(s16 port) {
 }
 
 void JUTGamePad::CRumble::stopPatternedRumbleAtThePeriod() {
+#if TARGET_PC
+    if (mFrameCount == 0) {
+        // Does not trap on hardware
+        // PowerPC spec says result is "undefined". Let's just write zero.
+        mLength = 0;
+        return;
+    }
+#endif
     u32 r31 = mFrame % mFrameCount;
     mLength = (mFrame + mFrameCount - 1) % mFrameCount;
 }

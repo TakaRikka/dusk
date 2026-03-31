@@ -7,6 +7,7 @@
 #include <imgui_internal.h>
 
 #include "JSystem/JUtility/JUTGamePad.h"
+#include "d/actor/d_a_alink.h"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -23,16 +24,20 @@ namespace dusk {
             ImGui::Separator();
 
             if (ImGui::BeginMenu("Graphics")) {
+                if (ImGui::MenuItem("Toggle Fullscreen", "F11")) {
+                    m_graphicsSettings.m_fullscreen = !m_graphicsSettings.m_fullscreen;
+                    VISetWindowFullscreen(m_graphicsSettings.m_fullscreen);
+                }
+
+                ImGui::Separator();
+
                 ImGui::Checkbox("Native Bloom", &m_graphicsSettings.m_enableBloom);
                 ImGui::Checkbox("Water Projection Offset", &m_graphicsSettings.m_waterProjectionOffset);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Adds GC-specific -0.01 transS offset\n"
                                       "that causes ~6px ghost artifacts in water reflections");
                 }
-                ImGui::Checkbox("Fullscreen", &m_graphicsSettings.m_fullscreen);
-                if (m_graphicsSettings.m_fullscreen != VIGetWindowFullscreen()) {
-                    VISetWindowFullscreen(m_graphicsSettings.m_fullscreen);
-                }
+
                 ImGui::EndMenu();
             }
 
@@ -71,6 +76,11 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
+            if (ImGui::BeginMenu("Tweaks")) {
+                ImGui::MenuItem("Fast iron boots", nullptr, &tweaks::FastIronBoots);
+                ImGui::EndMenu();
+            }
+
             ImGui::EndMenu();
         }
 
@@ -79,6 +89,11 @@ namespace dusk {
 
         if ((ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) && ImGui::IsKeyPressed(ImGuiKey_R)) {
             JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
+        }
+
+        if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
+            m_graphicsSettings.m_fullscreen = !m_graphicsSettings.m_fullscreen;
+            VISetWindowFullscreen(m_graphicsSettings.m_fullscreen);
         }
     }
 
