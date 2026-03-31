@@ -7,6 +7,7 @@
 #include <imgui_internal.h>
 
 #include "JSystem/JUtility/JUTGamePad.h"
+#include "d/actor/d_a_alink.h"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -68,6 +69,11 @@ namespace dusk {
                 ImGui::MenuItem("Configure Controller", nullptr, &m_showControllerConfig);
                 ImGui::Checkbox("Show Input Viewer", &m_showInputViewer);
 
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("Tweaks")) {
+                ImGui::MenuItem("Fast iron boots", nullptr, &tweaks::FastIronBoots);
                 ImGui::EndMenu();
             }
 
