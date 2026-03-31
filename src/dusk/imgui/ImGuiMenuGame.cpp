@@ -24,7 +24,7 @@ namespace dusk {
             ImGui::Separator();
 
             if (ImGui::BeginMenu("Graphics")) {
-                if (ImGui::MenuItem("Fullscreen", "F11")) {
+                if (ImGui::MenuItem("Toggle Fullscreen", "F11")) {
                     m_graphicsSettings.m_fullscreen = !m_graphicsSettings.m_fullscreen;
                     VISetWindowFullscreen(m_graphicsSettings.m_fullscreen);
                 }
