@@ -1521,7 +1521,7 @@ void dDlst_shadowControl_c::draw(Mtx param_0) {
     dKy_GxFog_set();
 
     GXSetChanCtrl(GX_ALPHA0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSETARRAY(GX_VA_POS, l_shadowVolPos, sizeof(l_shadowVolPos), sizeof(l_shadowVolPos[0]));
+    GXSETARRAY(GX_VA_POS, l_shadowVolPos, sizeof(l_shadowVolPos), sizeof(l_shadowVolPos[0]), true);
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0);
     GXSetNumTevStages(1);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
@@ -1553,7 +1553,7 @@ void dDlst_shadowControl_c::draw(Mtx param_0) {
 
     GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB8, 0);
-    GXSETARRAY(GX_VA_POS, l_simpleShadowPos, sizeof(l_simpleShadowPos), sizeof(l_simpleShadowPos[0]));
+    GXSETARRAY(GX_VA_POS, l_simpleShadowPos, sizeof(l_simpleShadowPos), sizeof(l_simpleShadowPos[0]), true);
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);

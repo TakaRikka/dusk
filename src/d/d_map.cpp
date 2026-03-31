@@ -375,7 +375,7 @@ void renderingAmap_c::draw() {
                                   dMap_HIO_prm_res_dst_s::m_res->field_0x1a7, tmp);
     setAmapPaletteColor(0x2E, temp_r31, temp_r30, temp_r29, temp_r28);
 
-    renderingDAmap_c::draw();
+    GX_DEBUG_GROUP(renderingDAmap_c::draw);
 }
 
 int renderingAmap_c::getDispType() const {

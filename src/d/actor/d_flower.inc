@@ -521,32 +521,6 @@ dFlower_packet_c::dFlower_packet_c() {
         unused += 0x2000;
     }
 
-#if TARGET_LITTLE_ENDIAN
-    static bool initialized = false;
-    if (!initialized) {
-        for (int i = 0; i < (ARRAY_SIZE(l_flowerPos) / sizeof(Vec)); i++) {
-            be_swap(((Vec*)l_flowerPos)[i]);
-        }
-        for (int i = 0; i < (ARRAY_SIZE(l_flowerTexCoord) / sizeof(Vec)); i++) {
-            be_swap(((Vec*)l_flowerTexCoord)[i]);
-        }
-        for (int i = 0; i < (ARRAY_SIZE(l_flowerPos2) / sizeof(Vec)); i++) {
-            be_swap(((Vec*)l_flowerPos2)[i]);
-        }
-        for (int i = 0; i < (ARRAY_SIZE(l_flowerTexCoord2) / sizeof(Vec)); i++) {
-            be_swap(((Vec*)l_flowerTexCoord2)[i]);
-        }
-        for (int i = 0; i < (ARRAY_SIZE(l_flowerNormal) / sizeof(Vec)); i++) {
-            be_swap(((Vec*)l_flowerNormal)[i]);
-        }
-        for (int i = 0; i < (ARRAY_SIZE(l_flowerNormal2) / sizeof(Vec)); i++) {
-            be_swap(((Vec*)l_flowerNormal2)[i]);
-        }
-        
-        initialized = true;
-    }
-#endif
-
 #if TARGET_PC
     GXInitTexObj(&mTexObj_l_J_Ohana00_64TEX, l_J_Ohana00_64TEX,
         l_J_Ohana00_64TEX__width, l_J_Ohana00_64TEX__height, GX_TF_CMPR, GX_MIRROR, GX_MIRROR, GX_FALSE
@@ -579,10 +553,10 @@ void dFlower_packet_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXSETARRAY(GX_VA_POS, &l_flowerPos, sizeof(l_flowerPos), 0xC);
-    GXSETARRAY(GX_VA_NRM, &l_flowerNormal, sizeof(l_flowerNormal), 0xC);
-    GXSETARRAY(GX_VA_CLR0, &l_flowerColor, sizeof(l_flowerColor), 4);
-    GXSETARRAY(GX_VA_TEX0, &l_flowerTexCoord, sizeof(l_flowerTexCoord), 8);
+    GXSETARRAY(GX_VA_POS, &l_flowerPos, sizeof(l_flowerPos), 0xC, false);
+    GXSETARRAY(GX_VA_NRM, &l_flowerNormal, sizeof(l_flowerNormal), 0xC, false);
+    GXSETARRAY(GX_VA_CLR0, &l_flowerColor, sizeof(l_flowerColor), 4, false);
+    GXSETARRAY(GX_VA_TEX0, &l_flowerTexCoord, sizeof(l_flowerTexCoord), 8, false);
 
     GXColor sp64;
     dFlower_room_c* sp5C = m_room;
@@ -678,10 +652,10 @@ void dFlower_packet_c::draw() {
         sp5C++;
     }
 
-    GXSETARRAY(GX_VA_POS, mp_pos, sizeof(l_flowerPos2), 0xC);
-    GXSETARRAY(GX_VA_NRM, &l_flowerNormal2, sizeof(l_flowerNormal2), 0xC);
-    GXSETARRAY(GX_VA_CLR0, mp_colors, sizeof(l_flowerColor2), 4);
-    GXSETARRAY(GX_VA_TEX0, mp_texCoords, sizeof(l_flowerTexCoord2), 8);
+    GXSETARRAY(GX_VA_POS, mp_pos, sizeof(l_flowerPos2), 0xC, true);
+    GXSETARRAY(GX_VA_NRM, &l_flowerNormal2, sizeof(l_flowerNormal2), 0xC, false);
+    GXSETARRAY(GX_VA_CLR0, mp_colors, sizeof(l_flowerColor2), 4, true);
+    GXSETARRAY(GX_VA_TEX0, mp_texCoords, sizeof(l_flowerTexCoord2), 8, true);
 
     sp5C = m_room;
 
