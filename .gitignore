@@ -17,6 +17,10 @@ orig/*/*
 *.map
 *.MAP
 
+# Save files
+*.raw
+*.gci
+
 # Build files
 build/
 .ninja_*
@@ -32,6 +36,7 @@ compile_commands.json
 
 # Miscellaneous
 *.exe
+*.zip
 
 # MacOS
 .DS_Store
