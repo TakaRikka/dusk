@@ -1653,7 +1653,7 @@ int mDoGph_Painter() {
     #endif
 
     dComIfGp_setCurrentGrafPort(&ortho);
-    dComIfGd_drawCopy2D();
+    GX_DEBUG_GROUP(dComIfGd_drawCopy2D);
 
     #if DEBUG
     // "↓↓↓↓↓↓↓↓↓↓ CPU time measuring start ↓↓↓↓↓↓↓↓↓↓"
@@ -2166,25 +2166,25 @@ int mDoGph_Painter() {
         JPADrawInfo draw_info3(m5, 0.0f, FB_HEIGHT, 0.0f, FB_WIDTH);
 
         if (!dComIfGp_isPauseFlag()) {
-            dComIfGp_particle_draw2Dback(&draw_info3);
+            GX_DEBUG_GROUP(dComIfGp_particle_draw2Dback, &draw_info3);
         }
 
-        dComIfGp_particle_draw2DmenuBack(&draw_info3);
+        GX_DEBUG_GROUP(dComIfGp_particle_draw2DmenuBack, &draw_info3);
         ortho.setPort();
 
-        dComIfGd_draw2DOpa();
-        drawItem3D();
+        GX_DEBUG_GROUP(dComIfGd_draw2DOpa);
+        GX_DEBUG_GROUP(drawItem3D);
         ortho.setPort();
 
         #if DEBUG
         captureScreenSetPort();
         #endif
 
-        dComIfGd_draw2DOpaTop();
-        dComIfGd_draw2DXlu();
+        GX_DEBUG_GROUP(dComIfGd_draw2DOpaTop);
+        GX_DEBUG_GROUP(dComIfGd_draw2DXlu);
 
-        if (!dComIfGp_isPauseFlag()) {
-            dComIfGp_particle_draw2Dfore(&draw_info3);
+        if (dComIfGp_isPauseFlag()) {
+            GX_DEBUG_GROUP(dComIfGp_particle_draw2Dfore, &draw_info3);
         }
 
 #if DEBUG
@@ -2197,7 +2197,7 @@ int mDoGph_Painter() {
             mDoGph_gInf_c::calcFade();
         }
 
-        dComIfGp_particle_draw2DmenuFore(&draw_info3);
+        GX_DEBUG_GROUP(dComIfGp_particle_draw2DmenuFore, &draw_info3);
         j3dSys.setViewMtx(m4);
     } else {
         // No camera window active — still draw 2D display lists

@@ -1865,6 +1865,12 @@ int dDlst_list_c::set(dDlst_base_c**& p_start, dDlst_base_c**& p_end, dDlst_base
 void dDlst_list_c::draw(dDlst_base_c** p_start, dDlst_base_c** p_end) {
     for (; p_start < p_end; p_start++) {
         dDlst_base_c* dlst = *p_start;
+
+#if DEBUG && TARGET_PC
+        char buf[64];
+        snprintf(buf, sizeof(buf), "%s::draw()", typeid(dlst).name());
+        GXScopedDebugGroup scope(buf);
+#endif
         dlst->draw();
     }
 }
