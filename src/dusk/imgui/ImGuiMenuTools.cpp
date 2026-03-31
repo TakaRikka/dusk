@@ -45,6 +45,7 @@ namespace dusk {
             ImGui::MenuItem("Player Info", nullptr, &m_showPlayerInfo);
             ImGui::MenuItem("Save Editor", nullptr, &m_showSaveEditor);
             ImGui::MenuItem("Audio Debug", "F7", &m_showAudioDebug);
+            ImGui::MenuItem("OSReport Force", nullptr, &OSReportReallyForceEnable);
             ImGui::EndMenu();
         }
 

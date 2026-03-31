@@ -121,6 +121,13 @@ public:
 
     static s32 getUsedSize_(JKRExpHeap* heap) { return heap->mSize - heap->getTotalFreeSize(); }
     static void* getState_(TState* state) { return getState_buf_(state); }
+
+#if TARGET_PC
+    [[nodiscard]] CMemBlock* getFreeHead() { return mHeadFreeList; }
+    [[nodiscard]] const CMemBlock* getFreeHead() const { return mHeadFreeList; }
+    [[nodiscard]] CMemBlock* getUsedHead() { return mHeadUsedList; }
+    [[nodiscard]] const CMemBlock* getUsedHead() const { return mHeadUsedList; }
+#endif
 };
 
 inline JKRExpHeap* JKRCreateExpHeap(u32 size, JKRHeap* parent, bool errorFlag) {
