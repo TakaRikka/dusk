@@ -121,14 +121,35 @@ namespace dusk {
             return;
         }
 
-        // if pending for an input mapping, check to set new input
-        if (m_controllerConfig.m_pendingMapping != nullptr) {
+        // if pending for a button mapping, check to set new input
+        if (m_controllerConfig.m_pendingButtonMapping != nullptr) {
             s32 nativeButton = PADGetNativeButtonPressed(m_controllerConfig.m_pendingPort);
             if (nativeButton != -1) {
-                m_controllerConfig.m_pendingMapping->nativeButton = nativeButton;
-                m_controllerConfig.m_pendingMapping = nullptr;
+                m_controllerConfig.m_pendingButtonMapping->nativeButton = nativeButton;
+                m_controllerConfig.m_pendingButtonMapping = nullptr;
                 m_controllerConfig.m_pendingPort = -1;
                 PADBlockInput(false);
+            }
+        }
+
+        // if pending for an axis mapping, check to set new input
+        if (m_controllerConfig.m_pendingAxisMapping != nullptr) {
+            auto nativeAxis = PADGetNativeAxisPulled(m_controllerConfig.m_pendingPort);
+            if (nativeAxis.nativeAxis != -1) {
+                m_controllerConfig.m_pendingAxisMapping->nativeAxis = nativeAxis;
+                m_controllerConfig.m_pendingAxisMapping->nativeButton = -1;
+                m_controllerConfig.m_pendingAxisMapping = nullptr;
+                m_controllerConfig.m_pendingPort = -1;
+                PADBlockInput(false);
+            } else {
+                auto nativeButton = PADGetNativeButtonPressed(m_controllerConfig.m_pendingPort);
+                if (nativeButton != -1) {
+                    m_controllerConfig.m_pendingAxisMapping->nativeAxis = {-1, AXIS_SIGN_POSITIVE};
+                    m_controllerConfig.m_pendingAxisMapping->nativeButton = nativeButton;
+                    m_controllerConfig.m_pendingAxisMapping = nullptr;
+                    m_controllerConfig.m_pendingPort = -1;
+                    PADBlockInput(false);
+                }
             }
         }
 
@@ -155,10 +176,12 @@ namespace dusk {
         ImGui::EndTabBar();
 
         // if tab is changed while waiting for input, cancel pending
-        if (m_controllerConfig.m_pendingMapping != nullptr &&
+        if ((m_controllerConfig.m_pendingButtonMapping != nullptr ||
+             m_controllerConfig.m_pendingAxisMapping != nullptr) &&
             m_controllerConfig.m_pendingPort != m_controllerConfig.m_selectedPort)
         {
-            m_controllerConfig.m_pendingMapping = nullptr;
+            m_controllerConfig.m_pendingButtonMapping = nullptr;
+            m_controllerConfig.m_pendingAxisMapping = nullptr;
             m_controllerConfig.m_pendingPort = -1;
             PADBlockInput(false);
         }
@@ -216,34 +239,78 @@ namespace dusk {
         }
 
         // buttons panel
-        constexpr float buttonSize = 40;
+        constexpr float uiButtonSize = 40;
 
         ImGuiBeginGroupPanel("Buttons", ImVec2(150, 20));
 
         u32 buttonCount;
-        PADButtonMapping* mappingList = PADGetButtonMappings(m_controllerConfig.m_selectedPort, &buttonCount);
-        if (mappingList != nullptr) {
+        PADButtonMapping* btnMappingList = PADGetButtonMappings(m_controllerConfig.m_selectedPort, &buttonCount);
+        if (btnMappingList != nullptr) {
             for (int i = 0; i < buttonCount; i++) {
-                const char* btnName = PADGetButtonName(mappingList[i].padButton);
+                const char* btnName = PADGetButtonName(btnMappingList[i].padButton);
                 ImVec2 len = ImGui::CalcTextSize(btnName);
                 ImVec2 pos = ImGui::GetCursorPos();
 
                 ImGui::SetCursorPosY(pos.y + len.y / 4);
-                ImGui::SetCursorPosX(pos.x + abs(len.x - buttonSize));
+                ImGui::SetCursorPosX(pos.x + abs(len.x - uiButtonSize));
                 ImGui::Text("%s", btnName);
                 ImGui::SameLine();
 
                 ImGui::SetCursorPosY(pos.y);
 
-                bool pressed = ImGui::Button(m_controllerConfig.m_isReading && m_controllerConfig.m_pendingMapping == &mappingList[i]
-                    ? fmt::format("Press a Key...##{}", btnName).c_str()
-                    : fmt::format("{0}##-{1}", PADGetNativeButtonName(mappingList[i].nativeButton), i).c_str(),
+                std::string dispName;
+                if (m_controllerConfig.m_isReading && m_controllerConfig.m_pendingButtonMapping == &btnMappingList[i]) {
+                    dispName = fmt::format("Press a Key...##{}", btnName);
+                } else {
+                    dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(btnMappingList[i].nativeButton), i);
+                }
+                bool pressed = ImGui::Button(dispName.c_str(),
                     ImVec2(100.0f, 20.0f));
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
                     m_controllerConfig.m_pendingPort = m_controllerConfig.m_selectedPort;
-                    m_controllerConfig.m_pendingMapping = &mappingList[i];
+                    m_controllerConfig.m_pendingButtonMapping = &btnMappingList[i];
+                    PADBlockInput(true);
+                }
+            }
+        }
+
+        ImGuiEndGroupPanel();
+        ImGui::SameLine();
+
+        uint32_t axisCount;
+        PADAxisMapping* axisMappingList = PADGetAxisMappings(m_controllerConfig.m_selectedPort, &axisCount);
+
+        ImGuiBeginGroupPanel("Triggers", ImVec2(150, 20));
+
+        PADAxis triggers[] = {PAD_AXIS_TRIGGER_L, PAD_AXIS_TRIGGER_R};
+        if (axisMappingList != nullptr) {
+            for (PADAxis trigger : triggers) {
+                const char* axisName = PADGetAxisName(axisMappingList[trigger].padAxis);
+                ImVec2 len = ImGui::CalcTextSize(axisName);
+                ImVec2 pos = ImGui::GetCursorPos();
+
+                ImGui::SetCursorPosY(pos.y + len.y / 4);
+                ImGui::SetCursorPosX(pos.x + abs(len.x - uiButtonSize));
+                ImGui::Text("%s", axisName);
+                ImGui::SameLine();
+
+                ImGui::SetCursorPosY(pos.y);
+
+                std::string dispName;
+                if (m_controllerConfig.m_isReading && m_controllerConfig.m_pendingAxisMapping == &axisMappingList[trigger]) {
+                    dispName = fmt::format("Press a Key...##{}", axisName);
+                } else {
+                    dispName = fmt::format("{0}##-{1}", PADGetNativeAxisName(axisMappingList[trigger].nativeAxis), trigger);
+                }
+                bool pressed = ImGui::Button(dispName.c_str(),
+                    ImVec2(100.0f, 20.0f));
+
+                if (pressed) {
+                    m_controllerConfig.m_isReading = true;
+                    m_controllerConfig.m_pendingPort = m_controllerConfig.m_selectedPort;
+                    m_controllerConfig.m_pendingAxisMapping = &axisMappingList[trigger];
                     PADBlockInput(true);
                 }
             }
@@ -254,32 +321,52 @@ namespace dusk {
 
         int port = m_controllerConfig.m_selectedPort;
 
-        const char* stickDirections[] = {
-            "Up",
-            "Down",
-            "Left",
-            "Right",
-        };
-
         // main stick panel
         ImGuiBeginGroupPanel("Control Stick", ImVec2(150, 20));
 
         drawVirtualStick("##mainStick", ImVec2{ mDoCPd_c::getStickX(port), mDoCPd_c::getStickY(port) });
 
-        {
-            for (int i = 0; i < 4; i++) {
-                const char* label = stickDirections[i];
+        if (axisMappingList != nullptr) {
+            const PADAxis lStickAxes[] = {PAD_AXIS_LEFT_Y_POS, PAD_AXIS_LEFT_Y_NEG, PAD_AXIS_LEFT_X_NEG, PAD_AXIS_LEFT_X_POS};
+            for (auto axis : lStickAxes) {
+                const char* label = PADGetAxisDirectionLabel(axis);
                 ImVec2 len = ImGui::CalcTextSize(label);
                 ImVec2 pos = ImGui::GetCursorPos();
 
                 ImGui::SetCursorPosY(pos.y + len.y / 4);
-                ImGui::SetCursorPosX(pos.x + abs(len.x - buttonSize));
+                ImGui::SetCursorPosX(pos.x + abs(len.x - uiButtonSize));
                 ImGui::Text("%s", label);
                 ImGui::SameLine();
 
                 ImGui::SetCursorPosY(pos.y);
 
-                bool pressed = ImGui::Button(fmt::format("Temp##{}", label).c_str(), ImVec2(100.0f, 20.0f));
+                std::string dispName;
+                if (m_controllerConfig.m_isReading && m_controllerConfig.m_pendingAxisMapping == &axisMappingList[axis]) {
+                    dispName = fmt::format("Press a Key...##{}", label);
+                } else {
+                    if (axisMappingList[axis].nativeAxis.nativeAxis != -1) {
+                        const char* signStr;
+                        if (axis == PAD_AXIS_TRIGGER_L || axis == PAD_AXIS_TRIGGER_R) {
+                            signStr = "";
+                        } else if (axisMappingList[axis].nativeAxis.sign == AXIS_SIGN_POSITIVE) {
+                            signStr = "+";
+                        } else {
+                            signStr = "-";
+                        }
+                        dispName = fmt::format("{0}{1}##-{2}", PADGetNativeAxisName(axisMappingList[axis].nativeAxis), signStr, axis);
+                    } else {
+                        assert(axisMappingList[axis].nativeButton != -1);
+                        dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(axisMappingList[axis].nativeButton), axis);
+                    }
+                }
+                bool pressed = ImGui::Button(dispName.c_str(), ImVec2(100.0f, 20.0f));
+
+                if (pressed) {
+                    m_controllerConfig.m_isReading = true;
+                    m_controllerConfig.m_pendingPort = m_controllerConfig.m_selectedPort;
+                    m_controllerConfig.m_pendingAxisMapping = &axisMappingList[axis];
+                    PADBlockInput(true);
+                }
             }
         }
 
@@ -303,20 +390,47 @@ namespace dusk {
 
         drawVirtualStick("##subStick", ImVec2{ mDoCPd_c::getSubStickX(port), mDoCPd_c::getSubStickY(port) });
 
-        {
-            for (int i = 0; i < 4; i++) {
-                const char* label = stickDirections[i];
+        if (axisMappingList != nullptr) {
+            const PADAxis rStickAxes[] = {PAD_AXIS_RIGHT_Y_POS, PAD_AXIS_RIGHT_Y_NEG, PAD_AXIS_RIGHT_X_NEG, PAD_AXIS_RIGHT_X_POS};
+            for (auto axis : rStickAxes) {
+                const char* label = PADGetAxisDirectionLabel(axisMappingList[axis].padAxis);
                 ImVec2 len = ImGui::CalcTextSize(label);
                 ImVec2 pos = ImGui::GetCursorPos();
 
                 ImGui::SetCursorPosY(pos.y + len.y / 4);
-                ImGui::SetCursorPosX(pos.x + abs(len.x - buttonSize));
+                ImGui::SetCursorPosX(pos.x + abs(len.x - uiButtonSize));
                 ImGui::Text("%s", label);
                 ImGui::SameLine();
 
                 ImGui::SetCursorPosY(pos.y);
 
-                bool pressed = ImGui::Button(fmt::format("Temp##sub{}", label).c_str(), ImVec2(100.0f, 20.0f));
+                std::string dispName;
+                if (m_controllerConfig.m_isReading && m_controllerConfig.m_pendingAxisMapping == &axisMappingList[axis]) {
+                    dispName = fmt::format("Press a Key...##sub{}", label);
+                } else {
+                    if (axisMappingList[axis].nativeAxis.nativeAxis != -1) {
+                        const char* signStr;
+                        if (axis == PAD_AXIS_TRIGGER_L || axis == PAD_AXIS_TRIGGER_R) {
+                            signStr = "";
+                        } else if (axisMappingList[axis].nativeAxis.sign == AXIS_SIGN_POSITIVE) {
+                            signStr = "+";
+                        } else {
+                            signStr = "-";
+                        }
+                        dispName = fmt::format("{0}{1}##-{2}", PADGetNativeAxisName(axisMappingList[axis].nativeAxis), signStr, axis);
+                    } else {
+                        assert(axisMappingList[axis].nativeButton != -1);
+                        dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(axisMappingList[axis].nativeButton), axis);
+                    }
+                }
+                bool pressed = ImGui::Button(fmt::format("{0}##sub{1}", dispName, label).c_str(), ImVec2(100.0f, 20.0f));
+
+                if (pressed) {
+                    m_controllerConfig.m_isReading = true;
+                    m_controllerConfig.m_pendingPort = m_controllerConfig.m_selectedPort;
+                    m_controllerConfig.m_pendingAxisMapping = &axisMappingList[axis];
+                    PADBlockInput(true);
+                }
             }
         }
 
