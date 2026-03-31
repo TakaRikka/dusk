@@ -455,7 +455,7 @@ dMpath_n::dTexObjAggregate_c dMpath_n::m_texObjAgg;
  * make the map look worse for extra speed in the emulator, especially in large
  * areas such as hyrule field.
  */
-// #define HYRULE_FIELD_SPEEDHACK
+#define HYRULE_FIELD_SPEEDHACK
 
 void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_line) {
     s32 width = getDecorationLineWidth(p_line->field_0x1);
