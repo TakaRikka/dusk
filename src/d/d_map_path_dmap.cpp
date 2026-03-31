@@ -617,10 +617,7 @@ bool renderingDAmap_c::isSwitch(dDrawPath_c::group_class const* i_group) {
 }
 
 void renderingDAmap_c::draw() {
-#if !TARGET_PC
-    // Currently breaks Aurora.
     renderingMap();
-#endif
     mIsDraw = true;
 }
 

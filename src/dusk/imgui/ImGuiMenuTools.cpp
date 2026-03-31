@@ -25,8 +25,7 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Collision View")) {
                 ImGui::Checkbox("Enable Terrain view", &m_collisionViewSettings.m_enableTerrainView);
-                // can't use wireframe atm because aurora doesn't support GX_LINES
-                //ImGui::Checkbox("Enable wireframe view", &m_collisionViewSettings.m_enableWireframe);
+                ImGui::Checkbox("Enable wireframe view", &m_collisionViewSettings.m_enableWireframe);
                 ImGui::SliderFloat("Opacity##terrain", &m_collisionViewSettings.m_terrainViewOpacity, 0.0f, 100.0f);
                 ImGui::SliderFloat("Draw Range", &m_collisionViewSettings.m_drawRange, 0.0f, 1000.0f);
                 ImGui::Separator();
