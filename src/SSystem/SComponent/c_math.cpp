@@ -7,6 +7,7 @@
 #include "SSystem/SComponent/c_m3d.h"
 #include <cmath>
 #include <global.h>
+#include "dusk/logging.h"
 
 s16 cM_rad2s(f32 rad) {
     s32 s = (std::fmod(rad, 2 * M_PI) * (0x8000 / M_PI));
@@ -110,6 +111,10 @@ static u16 atntable[1025] = {
 u16 U_GetAtanTable(f32 f0, f32 f1) {
     int idx = f0 / f1 * 0x400;
 #if TARGET_PC
+    // When Wolf Link is playing a Human Link animation, idx can be INT_MIN every frame
+    if (idx < 0 || idx > 0x400) {
+        DuskLog.warn("U_GetAtanTable: idx out of range: {}", idx);
+    }
     idx = idx < 0 ? 0 : idx > 0x400 ? 0x400 : idx;
 #endif
     return atntable[idx];
