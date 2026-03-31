@@ -1316,7 +1316,13 @@ void mDoGph_gInf_c::bloom_c::draw() {
             GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3c);
             for (int texCoord = (int)GX_TEXCOORD1; texCoord < (int)GX_MAX_TEXCOORD; texCoord++) {
                 GXSetTexCoordGen((GXTexCoordID)texCoord, GX_TG_MTX2x4, GX_TG_TEX0, iVar11);
+
+                #if TARGET_PC
+                f32 dVar15 = mBlureSize * ((448.0f / getHeight()) / 6400.0f);
+                #else
                 f32 dVar15 = mBlureSize * (1.0f / 6400.0f);
+                #endif
+
                 mDoMtx_stack_c::transS((dVar15 * cM_scos(sVar10)) * getInvScale(),
                                        dVar15 * cM_ssin(sVar10), 0.0f);
                 GXLoadTexMtxImm(mDoMtx_stack_c::get(), iVar11, GX_MTX2x4);
