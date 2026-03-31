@@ -107,7 +107,7 @@ add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${J
         src/dusk/imgui/ImGuiStubLog.cpp
         src/dusk/imgui/ImGuiAudio.cpp)
 
-target_link_libraries(game PRIVATE game_debug cxxopts::cxxopts)
+target_link_libraries(game PRIVATE game_debug cxxopts::cxxopts absl::flat_hash_map)
 target_compile_definitions(game PRIVATE TARGET_PC AVOID_UB=1 VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0
         DUSK_TP_VERSION="${DUSK_TP_VERSION}" DUSK_GAME_NAME="${DUSK_GAME_NAME}" DUSK_GAME_VERSION="${DUSK_GAME_VERSION}")
 target_precompile_headers(game PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/include/dusk_pch.hpp>")
