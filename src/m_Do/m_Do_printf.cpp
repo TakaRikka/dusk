@@ -21,6 +21,10 @@ u8 __OSReport_System_disable;
 
 u8 __OSReport_enable;
 
+#if TARGET_PC
+bool dusk::OSReportReallyForceEnable = false;
+#endif
+
 #ifdef __GEKKO__
 asm void OSSwitchFiberEx(__REGISTER u32 param_0, __REGISTER u32 param_1, __REGISTER u32 param_2, __REGISTER u32 param_3, __REGISTER u32 code, __REGISTER u32 stack) {
     nofralloc
@@ -153,6 +157,9 @@ void mDoPrintf_vprintf_Thread(char const* fmt, va_list args) {
     #endif
 
     vprintf(fmt, args);
+    if (dusk::OSReportReallyForceEnable) {
+        fflush(stdout);
+    }
 
     #if DEBUG
     if (thread != NULL) {
@@ -170,12 +177,16 @@ void mDoPrintf_vprintf(char const* fmt, va_list args) {
         #if DEBUG
         mDoPrintf_vprintf_Thread(fmt, args);
         #else
+#if !TARGET_PC
         u8* stackPtr = (u8*)OSGetStackPointer();
         if (stackPtr < (u8*)currentThread->stackEnd + 0xA00 || stackPtr > currentThread->stackBase) {
             mDoPrintf_vprintf_Interrupt(fmt, args);
         } else {
+#endif
             mDoPrintf_vprintf_Thread(fmt, args);
+#if !TARGET_PC
         }
+#endif
         #endif
     }
 }
@@ -184,7 +195,11 @@ void mDoPrintf_VReport(const char* fmt, va_list args) {
     if (!print_initialized) {
         OSReportInit();
     }
+#if TARGET_PC
+    if (dusk::OSReportReallyForceEnable || __OSReport_enable || !__OSReport_disable) {
+#else
     if (__OSReport_enable || !__OSReport_disable) {
+#endif
         OSThread* currentThread = mDoExt_GetCurrentRunningThread();
         if (__OSReport_MonopolyThread == NULL || __OSReport_MonopolyThread == currentThread) {
             mDoPrintf_vprintf(fmt, args);

@@ -356,21 +356,21 @@ int daObjYtaihou_c::Delete() {
     return 1;
 }
 
-static void daObjYtaihou_create1st(daObjYtaihou_c* i_this) {
+static int daObjYtaihou_create1st(daObjYtaihou_c* i_this) {
     fopAcM_ct(i_this, daObjYtaihou_c);
-    i_this->create1st();
+    return i_this->create1st();
 }
 
-static void daObjYtaihou_MoveBGDelete(daObjYtaihou_c* i_this) {
-    i_this->MoveBGDelete();
+static int daObjYtaihou_MoveBGDelete(daObjYtaihou_c* i_this) {
+    return i_this->MoveBGDelete();
 }
 
-static void daObjYtaihou_MoveBGExecute(daObjYtaihou_c* i_this) {
-    i_this->MoveBGExecute();
+static int daObjYtaihou_MoveBGExecute(daObjYtaihou_c* i_this) {
+    return i_this->MoveBGExecute();
 }
 
-static void daObjYtaihou_MoveBGDraw(daObjYtaihou_c* i_this) {
-    i_this->Draw();
+static int daObjYtaihou_MoveBGDraw(daObjYtaihou_c* i_this) {
+    return i_this->Draw();
 }
 
 static actor_method_class daObjYtaihou_METHODS = {

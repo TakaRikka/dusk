@@ -292,11 +292,22 @@ void dDrawPath_c::rendering(dDrawPath_c::floor_class const* p_floor) {
     }
 }
 
+#ifdef TARGET_PC
+static u32 getRoomPosArraySize(const dDrawPath_c::room_class* room) {
+    if (room->mpFloor == NULL || room->mpFloatData == NULL || room->mFloorNum == 0) {
+        return 0;
+    }
+    const dDrawPath_c::group_class* firstGroup = room->mpFloor[0].mpGroup;
+    JUT_ASSERT(0, firstGroup != NULL);
+    JUT_ASSERT(0, (const u8*)firstGroup >= (const u8*)room->mpFloatData);
+    return (const u8*)firstGroup - (const u8*)room->mpFloatData;
+}
+#endif
+
 void dDrawPath_c::rendering(dDrawPath_c::room_class const* room) {
     JUT_ASSERT(1043, room != NULL);
     if (room != NULL) {
-        // TODO: FILL IN SIZE.
-        GXSETARRAY(GX_VA_POS, room->mpFloatData, 0, 8);
+        GXSetArray(GX_VA_POS, room->mpFloatData, getRoomPosArraySize(room), 8, false);
         floor_class* floor = room->mpFloor;
 
         if (floor != NULL) {
@@ -346,13 +357,11 @@ void dRenderingMap_c::makeResTIMG(ResTIMG* p_image, u16 width, u16 height, u8* p
 void dRenderingMap_c::renderingMap() {
     preRenderingMap();
     if (isDrawPath()) {
-        #if REQUIRES_GX_LINES
         preDrawPath();
         beforeDrawPath();
         drawPath();
         afterDrawPath();
         postDrawPath();
-        #endif
     }
     postRenderingMap();
 }
@@ -446,7 +455,7 @@ dMpath_n::dTexObjAggregate_c dMpath_n::m_texObjAgg;
  * make the map look worse for extra speed in the emulator, especially in large
  * areas such as hyrule field.
  */
-// #define HYRULE_FIELD_SPEEDHACK
+#define HYRULE_FIELD_SPEEDHACK
 
 void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_line) {
     s32 width = getDecorationLineWidth(p_line->field_0x1);
@@ -473,7 +482,6 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
     GXSetTevColor(GX_TEVREG1, lineColor);
 
     for (int i = 0; i < data_num; i++) {
-#if REQUIRES_GX_LINES
 #ifndef HYRULE_FIELD_SPEEDHACK
         if (i < data_num - 1) {
             GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
@@ -494,7 +502,7 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
         GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
 #endif
-#endif
+
         GXBegin(GX_POINTS, GX_VTXFMT0, 1);
         GXPosition1x16(data_p[0]);
         GXTexCoord2f32(0, 0);

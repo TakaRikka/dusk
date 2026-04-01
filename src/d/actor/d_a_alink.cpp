@@ -54,6 +54,10 @@
 #include "res/Object/Alink.h"
 #include <cstring>
 
+#if TARGET_PC
+bool dusk::tweaks::FastIronBoots = false;
+#endif
+
 static int daAlink_Create(fopAc_ac_c* i_this);
 static int daAlink_Delete(daAlink_c* i_this);
 static int daAlink_Execute(daAlink_c* i_this);
@@ -7509,6 +7513,11 @@ void daAlink_c::setBlendMoveAnime(f32 i_morf) {
     f32 sp28 = mpHIO->mMove.m.mFootPositionRatio;
     BOOL sp24 = checkEventRun();
     BOOL sp20 = checkBootsMoveAnime(1);
+#if TARGET_PC
+    if (dusk::tweaks::FastIronBoots) {
+        sp20 = FALSE;
+    }
+#endif
 
     f32 var_f29;
 
@@ -9469,6 +9478,11 @@ void daAlink_c::setStickData() {
             } else {
                 mHeavySpeedMultiplier = mpHIO->mItem.mIronBoots.m.mInputFactor;
             }
+#if TARGET_PC
+            if (dusk::tweaks::FastIronBoots) {
+                mHeavySpeedMultiplier = 1.0f;
+            }
+#endif
             mStickValue *= mHeavySpeedMultiplier;
         } else if (checkBootsOrArmorHeavy()) {
             if (checkZoraWearAbility()) {
@@ -9476,6 +9490,11 @@ void daAlink_c::setStickData() {
             } else {
                 mHeavySpeedMultiplier = mpHIO->mItem.mIronBoots.m.mWaterInputFactor;
             }
+#if TARGET_PC
+            if (dusk::tweaks::FastIronBoots) {
+                mHeavySpeedMultiplier = 1.0f;
+            }
+#endif
             mStickValue *= mHeavySpeedMultiplier;
         } else if ((checkWolf() && field_0x2fbc == 11 && checkWaterPolygonUnder()) ||
                    mGndPolyAtt0 == 11)

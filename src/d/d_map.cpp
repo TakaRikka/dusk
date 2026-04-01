@@ -341,7 +341,6 @@ inline u8 twoValueLineInterpolation(u8 param_0, u8 param_1, f32 param_2) {
 }
 
 void renderingAmap_c::draw() {
-    #if REQUIRES_GX_LINES
     f32 tmp = ((f32)(g_Counter.mCounter0 % dMap_HIO_prm_res_dst_s::m_res->field_0x1aa) /
                (f32)dMap_HIO_prm_res_dst_s::m_res->field_0x1aa);
     tmp = tmp;
@@ -376,8 +375,7 @@ void renderingAmap_c::draw() {
                                   dMap_HIO_prm_res_dst_s::m_res->field_0x1a7, tmp);
     setAmapPaletteColor(0x2E, temp_r31, temp_r30, temp_r29, temp_r28);
 
-    renderingDAmap_c::draw();
-    #endif
+    GX_DEBUG_GROUP(renderingDAmap_c::draw);
 }
 
 int renderingAmap_c::getDispType() const {
@@ -1099,7 +1097,7 @@ void dMap_c::resCopy() {
     }
 }
 
-dMap_c::dMap_c(int param_0, int param_1, int param_2, int param_3) {
+dMap_c::dMap_c(int width, int height, int param_2, int param_3) {
     m_res_src = NULL;
     m_res = NULL;
     mResTIMG = NULL;
@@ -1171,8 +1169,8 @@ dMap_c::dMap_c(int param_0, int param_1, int param_2, int param_3) {
 
     resCopy();
 
-    mTexSizeX = param_0;
-    mTexSizeY = param_1;
+    mTexSizeX = width;
+    mTexSizeY = height;
 
     if (dMap_HIO_prm_res_dst_s::m_res->field_0x1ae > 0) {
         field_0x74 = dMap_HIO_prm_res_dst_s::m_res->field_0x1b0 / 6;
@@ -1182,12 +1180,23 @@ dMap_c::dMap_c(int param_0, int param_1, int param_2, int param_3) {
     mImage_p = JKR_NEW_ARRAY_ARGS(u8, buffer_size, 0x20);
     JUT_ASSERT(2638, mImage_p != NULL);
 
+
+#ifdef TARGET_PC
+    // Increase map render resolution
+    renderingDAmap_c::init(mImage_p, mTexSizeX * 4, mTexSizeY * 4, mTexSizeX, mTexSizeY);
+#else
     renderingDAmap_c::init(mImage_p, mTexSizeX, mTexSizeY, mTexSizeX, mTexSizeY);
+#endif
 
     mResTIMG = JKR_NEW_ARGS (0x20) ResTIMG;
     JUT_ASSERT(2647, mResTIMG != NULL);
 
+#ifdef TARGET_PC
+    // Increase map render resolution
+    makeResTIMG(mResTIMG, mTexSizeX * 4, mTexSizeY * 4, mImage_p, (u8*)m_res, 0x33);
+#else
     makeResTIMG(mResTIMG, mTexSizeX, mTexSizeY, mImage_p, (u8*)m_res, 0x33);
+#endif
 }
 
 #if DEBUG

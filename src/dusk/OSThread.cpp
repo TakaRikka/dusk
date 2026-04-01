@@ -23,6 +23,8 @@
 #if _WIN32
 #define WIN32_LEAN_AND_MEAN 1
 #include <windows.h>
+#elif __APPLE__
+#include <pthread.h>
 #endif
 
 // ============================================================================
@@ -682,6 +684,8 @@ void OSSetCurrentThreadName(const char* name) {
     if (!SUCCEEDED(result)) {
         CRASH("OSSetThreadName: SetThreadDescription failed");
     }
+#elif __APPLE__
+    pthread_setname_np(name);
 #endif
 }
 

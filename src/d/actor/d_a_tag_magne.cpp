@@ -44,15 +44,15 @@ int daTagMagne_c::_delete() {
     return 1;
 }
 
-static void daTagMagne_Delete(daTagMagne_c* i_this) {
+static int daTagMagne_Delete(daTagMagne_c* i_this) {
     int id = fopAcM_GetID(i_this);
-    i_this->_delete();
+    return i_this->_delete();
 }
 
-static void daTagMagne_Create(fopAc_ac_c* i_this) {
+static int daTagMagne_Create(fopAc_ac_c* i_this) {
     daTagMagne_c* magne = static_cast<daTagMagne_c*>(i_this);
     int id = fopAcM_GetID(i_this);
-    magne->create();
+    return magne->create();
 }
 
 static actor_method_class l_daTagMagne_Method = {

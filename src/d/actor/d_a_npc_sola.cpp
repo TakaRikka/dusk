@@ -194,14 +194,13 @@ int daNpc_solA_c::Execute() {
     return execute();
 }
 
-void daNpc_solA_c::Draw() {
+int daNpc_solA_c::Draw() {
     if (mpMatAnm[0] != NULL) {
         J3DModelData* mdlData_p = mpMorf[0]->getModel()->getModelData();
         mdlData_p->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
-    draw(FALSE, FALSE, mpHIO->m.common.real_shadow_size, NULL, 100.0f, FALSE, FALSE,
-         FALSE);
-    return;
+    
+    return draw(FALSE, FALSE, mpHIO->m.common.real_shadow_size, NULL, 100.0f, FALSE, FALSE, FALSE);
 }
 
 BOOL daNpc_solA_c::createHeapCallBack(fopAc_ac_c* a_this) {
@@ -481,12 +480,12 @@ static int daNpc_solA_Execute(void* param_0) {
     return static_cast<daNpc_solA_c*>(param_0)->Execute();
 }
 
-static void daNpc_solA_Draw(void* param_0) {
+static int daNpc_solA_Draw(void* param_0) {
     return static_cast<daNpc_solA_c*>(param_0)->Draw();
 }
 
-static BOOL daNpc_solA_IsDelete(void* param_0) {
-    return TRUE;
+static int daNpc_solA_IsDelete(void* param_0) {
+    return 1;
 }
 
 static actor_method_class daNpc_solA_MethodTable = {

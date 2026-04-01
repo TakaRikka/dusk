@@ -318,7 +318,7 @@ void dCsr_mng_c::bloObj_c::calcPaneObjNum(J2DPane* i_pane) {
     }
 
     JSUTreeIterator<J2DPane> iter = i_pane->getPaneTree()->getFirstChild();
-    while (iter != NULL) {
+    while (iter) {
         calcPaneObjNum(*iter);
         ++iter;
     }
@@ -334,7 +334,7 @@ void dCsr_mng_c::bloObj_c::createPaneObj(paneObj_c** i_panes, J2DPane* i_pane) {
     }
 
     JSUTreeIterator<J2DPane> iter = i_pane->getPaneTree()->getFirstChild();
-    while (iter != NULL) {
+    while (iter) {
         createPaneObj(i_panes, *iter);
         ++iter;
     }

@@ -1262,10 +1262,8 @@ void dMenu_Ring_c::drawItem() {
         (g_ringHIO.mItemAlphaMin + fVar16 * (g_ringHIO.mItemAlphaMax - g_ringHIO.mItemAlphaMin));
     for (int i = 0; i < mItemsTotal; i++) {
         if (i != mCurrentSlot || (mStatus != STATUS_WAIT && mStatus != STATUS_EXPLAIN && mStatus != STATUS_EXPLAIN_FORCE)) {
-            #if REQUIRES_GX_LINES
             J2DDrawFrame(mItemSlotPosX[i] - 24.0f + mCenterPosX, mItemSlotPosY[i] - 24.0f + mCenterPosY,
                          48.0f, 48.0f, g_ringHIO.mItemFrame[g_ringHIO.UNSELECT_FRAME], 6);
-            #endif
             f32 fVar17 = 1.0f;
             if (i != mCurrentSlot) {
                 fVar17 = ringAlpha / 255.0f;
@@ -1308,10 +1306,8 @@ void dMenu_Ring_c::drawItem() {
 void dMenu_Ring_c::drawItem2() {
     s32 idx = mCurrentSlot;
     if (mStatus == STATUS_WAIT || mStatus == STATUS_EXPLAIN || mStatus == STATUS_EXPLAIN_FORCE) {
-        #if REQUIRES_GX_LINES
         J2DDrawFrame(mItemSlotPosX[idx] - 24.0f + mCenterPosX, mItemSlotPosY[idx] - 24.0f + mCenterPosY,
                      48.0f, 48.0f, g_ringHIO.mItemFrame[g_ringHIO.SELECT_FRAME], 6);
-        #endif
 
         for (int i = 0; i < 3; i++) {
             if (mpItemTex[idx][i] != NULL) {

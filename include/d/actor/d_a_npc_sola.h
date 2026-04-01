@@ -77,7 +77,7 @@ public:
     int CreateHeap();
     int Delete();
     int Execute();
-    void Draw();
+    int Draw();
     static BOOL createHeapCallBack(fopAc_ac_c*);
     static BOOL ctrlJointCallBack(J3DJoint*, int);
     bool getType();

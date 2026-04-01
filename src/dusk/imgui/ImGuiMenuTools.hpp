@@ -23,6 +23,7 @@ namespace dusk {
 
         ImGuiMenuTools();
         void draw();
+        void afterDraw();
 
 		void ShowDebugOverlay();
 		void ShowCameraOverlay();

@@ -3,6 +3,8 @@
 #include <Windows.h>
 #endif
 
+#include <aurora/main.h>
+
 int game_main(int argc, char* argv[]);
 
 void WindowsSetupConsole();

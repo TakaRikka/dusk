@@ -25,8 +25,7 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Collision View")) {
                 ImGui::Checkbox("Enable Terrain view", &m_collisionViewSettings.m_enableTerrainView);
-                // can't use wireframe atm because aurora doesn't support GX_LINES
-                //ImGui::Checkbox("Enable wireframe view", &m_collisionViewSettings.m_enableWireframe);
+                ImGui::Checkbox("Enable wireframe view", &m_collisionViewSettings.m_enableWireframe);
                 ImGui::SliderFloat("Opacity##terrain", &m_collisionViewSettings.m_terrainViewOpacity, 0.0f, 100.0f);
                 ImGui::SliderFloat("Draw Range", &m_collisionViewSettings.m_drawRange, 0.0f, 1000.0f);
                 ImGui::Separator();
@@ -46,6 +45,7 @@ namespace dusk {
             ImGui::MenuItem("Player Info", nullptr, &m_showPlayerInfo);
             ImGui::MenuItem("Save Editor", nullptr, &m_showSaveEditor);
             ImGui::MenuItem("Audio Debug", "F7", &m_showAudioDebug);
+            ImGui::MenuItem("OSReport Force", nullptr, &OSReportReallyForceEnable);
             ImGui::EndMenu();
         }
 
@@ -124,10 +124,13 @@ namespace dusk {
                 BytesToString(stats->lastIndexSize)));
             ImGuiStringViewText(fmt::format(FMT_STRING("Storage size:      {}\n"),
                 BytesToString(stats->lastStorageSize)));
+            ImGuiStringViewText(fmt::format(FMT_STRING("Tex upload size:   {}\n"),
+                BytesToString(stats->lastTextureUploadSize)));
             ImGuiStringViewText(fmt::format(
                 FMT_STRING("Total:             {}\n"),
                 BytesToString(stats->lastVertSize + stats->lastUniformSize +
-                    stats->lastIndexSize + stats->lastStorageSize)));
+                    stats->lastIndexSize + stats->lastStorageSize +
+                    stats->lastTextureUploadSize)));
         }
         ImGui::End();
     }

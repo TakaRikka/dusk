@@ -30,13 +30,15 @@ namespace dusk {
         struct {
             int m_selectedPort = 0;
             bool m_isReading = false;
-            PADButtonMapping* m_pendingMapping = nullptr;
+            PADButtonMapping* m_pendingButtonMapping = nullptr;
+            PADAxisMapping* m_pendingAxisMapping = nullptr;
             int m_pendingPort = -1;
         } m_controllerConfig;
 
         struct {
             bool m_enableBloom = 1;
             bool m_waterProjectionOffset = false;
+            bool m_fullscreen = false;
         } m_graphicsSettings;
 
         bool m_showControllerConfig = false;

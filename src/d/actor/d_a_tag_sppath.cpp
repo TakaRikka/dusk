@@ -189,7 +189,7 @@ int daTagSppath_c::execute() {
     }
 
     if (mpBestPath->field_0x4 == 0) {
-        if (mpBestPath->field_0x6 == 0xff || fopAcM_isSwitch(this, mpBestPath->field_0x6) == 0) {
+        if (mpBestPath->swbit == 0xff || fopAcM_isSwitch(this, mpBestPath->swbit) == 0) {
             field_0x6e8 = 1;
         } else {
             field_0x6e8 = 2;

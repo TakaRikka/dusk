@@ -20,6 +20,8 @@
 #include <cstdio>
 #include <cstring>
 
+#include "dusk/logging.h"
+
 #ifndef __MWERKS__
 #include "dusk/extras.h"
 #endif

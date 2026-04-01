@@ -1834,12 +1834,12 @@ void daMidna_c::setBckAnime(J3DAnmTransform* i_bck, int i_attr, f32 i_morf) {
         }
     } else {
         u8* buf = mBckHeap[0].getBuffer();
-        if (*(u32*)(buf + 0x1c) == 0xffffffff) {
+        if (*(BE(u32)*)(buf + 0x1c) == 0xffffffff) {
             offStateFlg1(FLG1_UNK_800);
             bas = NULL;
         } else {
             onStateFlg1(FLG1_UNK_800);
-            bas = mBckHeap[0].getBuffer() + *(u32*)(buf + 0x1c);
+            bas = mBckHeap[0].getBuffer() + *(BE(u32)*)(buf + 0x1c);
         }
     }
 

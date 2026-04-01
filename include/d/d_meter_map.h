@@ -89,7 +89,7 @@ public:
     virtual void draw();
     virtual ~dMeterMap_c();
 
-    bool isDispPosInsideFlg() { return field_0x2d != 0; }
+    bool isDispPosInsideFlg() { return mMapIsInside != 0; }
     dMeterMap_c* getMapPointer() { return (dMeterMap_c*)mMap; }
     void setSizeW(f32 w) { mSizeW = w; }
     void setSizeH(f32 h) { mSizeH = h; }
@@ -108,15 +108,15 @@ private:
     /* 0x0C */ s32 mIsCompass;
     /* 0x10 */ s32 mIsMap;
     /* 0x14 */ u32 field_0x14;
-    /* 0x18 */ f32 field_0x18;
-    /* 0x1C */ f32 field_0x1c;
+    /* 0x18 */ f32 mDrawPosX;
+    /* 0x1C */ f32 mDrawPosY;
     /* 0x20 */ f32 mSizeW;
     /* 0x24 */ f32 mSizeH;
-    /* 0x28 */ s16 field_0x28;
+    /* 0x28 */ s16 mSlidePositionOffset;
     /* 0x2A */ u8 field_0x2a;
     /* 0x2B */ u8 field_0x2b;
     /* 0x2C */ u8 mMapAlpha;
-    /* 0x2D */ u8 field_0x2d;
+    /* 0x2D */ u8 mMapIsInside;
     /* 0x2E */ u8 field_0x2e;
     /* 0x30 */ int field_0x30;
 };

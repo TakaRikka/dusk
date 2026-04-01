@@ -254,7 +254,7 @@ static int ReadChannelSamplesChunk(
         renderData + skipSamples,
         static_cast<int>(renderSize - skipSamples * sizeof(u16)));
 
-    assert(channel.mSamplePosition % channel.mSamplesPerBlock == 0 || channel.mSamplesLeft == 0);
+    assert(curSamplePosition % channel.mSamplesPerBlock == 0 || channel.mSamplesLeft == 0);
 
     return static_cast<int>(renderSamples - skipSamples);
 }

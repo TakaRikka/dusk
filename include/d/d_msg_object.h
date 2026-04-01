@@ -562,6 +562,10 @@ inline void dMsgObject_setOffering(u16 i_num) {
     dComIfGs_setEventReg(0xF8FF, i_num & 0xFF);
 }
 
+inline void dMsgObject_setLetterNameID(u16 id) {
+    dMsgObject_getMsgObjectClass()->setLetterNameID(id);
+}
+
 class dMsgObject_HowlHIO_c {
 public:
     dMsgObject_HowlHIO_c();

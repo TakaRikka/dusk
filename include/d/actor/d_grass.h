@@ -108,8 +108,8 @@ public:
     /* 0x1D714 */ s16 field_0x1d714;
 
 #if TARGET_PC
-    GXTexObj mTexObj_l_M_Hijiki00TEX{};
-    GXTexObj mTexObj_l_M_kusa05_RGBATEX{};
+    TGXTexObj mTexObj_l_M_Hijiki00TEX;
+    TGXTexObj mTexObj_l_M_kusa05_RGBATEX;
 #endif
 };  // Size: 0x1D718
 
