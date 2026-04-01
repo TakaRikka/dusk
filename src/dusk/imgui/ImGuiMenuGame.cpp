@@ -78,6 +78,7 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Tweaks")) {
                 ImGui::MenuItem("Fast iron boots", nullptr, &tweaks::FastIronBoots);
+                ImGui::MenuItem("Quick Transform (R+Y)", nullptr, &tweaks::QuickTransform);
                 ImGui::EndMenu();
             }
 

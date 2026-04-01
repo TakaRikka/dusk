@@ -4547,6 +4547,10 @@ public:
     /* 0x03848 */ cXyz* field_0x3848;
     /* 0x0384C */ cXyz* field_0x384c;
     /* 0x03850 */ daAlink_procFunc mpProcFunc;
+
+#if TARGET_PC
+    void handleQuickTransform();
+#endif
 };  // Size: 0x385C
 
 class daAlinkHIO_data_c : public JORReflexible {
@@ -8428,6 +8432,7 @@ inline daAlink_c* daAlink_getAlinkActorClass() {
 #if TARGET_PC
 namespace dusk::tweaks {
     extern bool FastIronBoots;
+    extern bool QuickTransform;
 }
 #endif
 
