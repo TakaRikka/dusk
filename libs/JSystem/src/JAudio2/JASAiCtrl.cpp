@@ -260,6 +260,10 @@ void JASDriver::finishDSPFrame() {
 }
 
 void JASDriver::registerMixCallback(MixCallback param_0, JASMixMode param_1) {
+#if TARGET_PC
+    JASCriticalSection section;
+#endif
+
     extMixCallback = param_0;
     sMixMode = param_1;
 }

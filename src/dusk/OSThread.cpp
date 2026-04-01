@@ -17,6 +17,7 @@
 #include <memory>
 
 #include "JSystem/JKernel/JKRHeap.h"
+#include "dusk/main.h"
 #include "dusk/os.h"
 
 #if _WIN32
@@ -38,6 +39,13 @@ struct PCThreadData {
     void* param;
     bool started   = false;
     bool suspended = false;
+
+    ~PCThreadData() {
+        if (dusk::IsShuttingDown) {
+            // Don't care about threads if we're shutting down.
+            nativeThread.detach();
+        }
+    }
 };
 
 // Lazy-initialized to avoid DLL static init crashes (used before DllMain completes)
@@ -48,6 +56,16 @@ static std::mutex& GetThreadDataMutex() {
 static std::unordered_map<OSThread*, std::unique_ptr<PCThreadData>>& GetThreadDataMap() {
     static std::unordered_map<OSThread*, std::unique_ptr<PCThreadData>> map;
     return map;
+}
+
+static PCThreadData* GetThreadData(OSThread* thread) {
+    std::lock_guard mapLock(GetThreadDataMutex());
+    auto it = GetThreadDataMap().find(thread);
+    if (it != GetThreadDataMap().end()) {
+        return it->second.get();
+    }
+
+    return nullptr;
 }
 
 // Side-table for OSThreadQueue -> condition_variable (for OSSleepThread/OSWakeupThread)
@@ -85,8 +103,6 @@ static OSThread  sDefaultThread;
 static u8        sDefaultStack[64 * 1024];
 static u32       sDefaultStackEnd = OS_THREAD_STACK_MAGIC;
 
-OSThreadQueue __OSActiveThreadQueue;
-
 // Global interrupt mutex (coarse-grained lock replacing interrupt disable)
 // Lazy-initialized to avoid DLL static init crashes
 static std::recursive_mutex& GetInterruptMutex() {
@@ -107,36 +123,6 @@ static OSSwitchThreadCallback sSwitchThreadCallback = nullptr;
 // ============================================================================
 // Internal helpers
 // ============================================================================
-
-// Linked list macros for the active thread queue
-static void EnqueueActive(OSThread* thread) {
-    OSThread* prev = __OSActiveThreadQueue.tail;
-    if (prev == nullptr) {
-        __OSActiveThreadQueue.head = thread;
-    } else {
-        prev->linkActive.next = thread;
-    }
-    thread->linkActive.prev = prev;
-    thread->linkActive.next = nullptr;
-    __OSActiveThreadQueue.tail = thread;
-}
-
-static void DequeueActive(OSThread* thread) {
-    OSThread* next = thread->linkActive.next;
-    OSThread* prev = thread->linkActive.prev;
-    if (next == nullptr) {
-        __OSActiveThreadQueue.tail = prev;
-    } else {
-        next->linkActive.prev = prev;
-    }
-    if (prev == nullptr) {
-        __OSActiveThreadQueue.head = next;
-    } else {
-        prev->linkActive.next = next;
-    }
-    thread->linkActive.next = nullptr;
-    thread->linkActive.prev = nullptr;
-}
 
 // Thread entry wrapper - runs on the new std::thread
 static void ThreadEntryWrapper(OSThread* thread, PCThreadData* data) {
@@ -195,8 +181,6 @@ void __OSThreadInit(void) {
     tls_currentThread = &sDefaultThread;
 
     // Active queue
-    OSInitThreadQueue(&__OSActiveThreadQueue);
-    EnqueueActive(&sDefaultThread);
     sActiveThreadCount = 1;
 
     OSReport("[PC-OSThread] Thread system initialized (multi-threaded mode)\n");
@@ -273,7 +257,6 @@ int OSCreateThread(OSThread* thread, void* (*func)(void*), void* param,
     }
 
     // Add to active queue
-    EnqueueActive(thread);
     sActiveThreadCount++;
 
     OSReport("[PC-OSThread] Created thread %p (priority=%d, stackSize=%u)\n",
@@ -353,16 +336,7 @@ s32 OSResumeThread(OSThread* thread) {
 
     // Only wake up if suspend count drops to 0
     if (thread->suspend == 0) {
-        PCThreadData* data = nullptr;
-
-        // Lock the global map to safely retrieve our thread data pointer
-        {
-            std::lock_guard<std::mutex> mapLock(GetThreadDataMutex());
-            auto it = GetThreadDataMap().find(thread);
-            if (it != GetThreadDataMap().end()) {
-                data = it->second.get();
-            }
-        }
+        PCThreadData* data = GetThreadData(thread);
 
         if (data) {
             // Lock the specific thread mutex to safely modify state and notify
@@ -377,7 +351,6 @@ s32 OSResumeThread(OSThread* thread) {
                 threadLock.unlock();
 
                 data->nativeThread = std::thread(ThreadEntryWrapper, thread, data);
-                data->nativeThread.detach();
                 OSReport("[PC-OSThread] Started thread %p\n", thread);
             } else {
                 // Resume from suspension: signal the condition variable
@@ -400,16 +373,7 @@ s32 OSSuspendThread(OSThread* thread) {
 
     // If transitioning from running (0) to suspended (1)
     if (prevSuspend == 0) {
-        PCThreadData* data = nullptr;
-
-        // Lock the global map to find our thread data
-        {
-            std::lock_guard<std::mutex> mapLock(GetThreadDataMutex());
-            auto it = GetThreadDataMap().find(thread);
-            if (it != GetThreadDataMap().end()) {
-                data = it->second.get();
-            }
-        }
+        PCThreadData* data = GetThreadData(thread);
 
         if (data && data->started) {
             std::unique_lock<std::mutex> threadLock(data->mtx);
@@ -497,7 +461,6 @@ void OSExitThread(void* val) {
     currentThread->val = val;
 
     if (currentThread->attr & OS_THREAD_ATTR_DETACH) {
-        DequeueActive(currentThread);
         currentThread->state = 0;
     } else {
         currentThread->state = OS_THREAD_STATE_MORIBUND;
@@ -509,10 +472,10 @@ void OSExitThread(void* val) {
 }
 
 void OSCancelThread(OSThread* thread) {
+    CRASH("OSCancelThread not implemented");
     if (!thread) return;
 
     if (thread->attr & OS_THREAD_ATTR_DETACH) {
-        DequeueActive(thread);
         thread->state = 0;
     } else {
         thread->state = OS_THREAD_STATE_MORIBUND;
@@ -523,11 +486,11 @@ void OSCancelThread(OSThread* thread) {
 }
 
 void OSDetachThread(OSThread* thread) {
+    CRASH("OSDetachThread not implemented");
     if (!thread) return;
     thread->attr |= OS_THREAD_ATTR_DETACH;
 
     if (thread->state == OS_THREAD_STATE_MORIBUND) {
-        DequeueActive(thread);
         thread->state = 0;
     }
     OSWakeupThread(&thread->queueJoin);
@@ -536,17 +499,14 @@ void OSDetachThread(OSThread* thread) {
 int OSJoinThread(OSThread* thread, void* val) {
     if (!thread) return 0;
 
-    if (!(thread->attr & OS_THREAD_ATTR_DETACH) &&
-        thread->state != OS_THREAD_STATE_MORIBUND &&
-        thread->queueJoin.head == nullptr) {
-        OSSleepThread(&thread->queueJoin);
+    if (!(thread->attr & OS_THREAD_ATTR_DETACH)) {
+        GetThreadData(thread)->nativeThread.join();
     }
 
     if (thread->state == OS_THREAD_STATE_MORIBUND) {
         if (val) {
             *(s32*)val = (s32)(intptr_t)thread->val;
         }
-        DequeueActive(thread);
         thread->state = 0;
         return 1;
     }

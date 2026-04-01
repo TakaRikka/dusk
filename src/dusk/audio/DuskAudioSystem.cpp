@@ -133,6 +133,20 @@ void RenderAudioSubframe() {
 
     InterleaveOutputData(OutBuffer, OutInterleaveBuffer);
 
+    if (JASDriver::extMixCallback != nullptr && JASDriver::sMixMode == MIX_MODE_INTERLEAVE) {
+        static_assert(OutputSubframe::NUM_CHANNELS == 2); // This code only works with Stereo so far.
+        // NOTE: In the real game, this gets called on the entire audio frame, rather than the subframe.
+        // That's probably more efficient, but I didn't wanna change the code to calculate the
+        // entire audio buffers at once.
+        // This is only used for the movie player, and it seems to work fine with the smaller calls.
+        const auto mixData = JASDriver::extMixCallback(DSP_SUBFRAME_SIZE);
+        if (mixData) {
+            for (int i = 0; i < OutInterleaveBuffer.size(); i++) {
+                OutInterleaveBuffer[i] += static_cast<f32>(mixData[i]) / static_cast<f32>(0x7FFF);
+            }
+        }
+    }
+
 #if defined(DUSK_DUMP_AUDIO)
     outRaw.write((const char*)OutInterleaveBuffer.data(), sizeof(OutInterleaveBuffer));
 #endif
