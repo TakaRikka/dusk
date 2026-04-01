@@ -300,16 +300,25 @@ void dMenu_DmapMap_c::_delete() {
     }
 }
 
-void dMenu_DmapMap_c::setTexture(u16 param_0, u16 param_1, u16 param_2, u16 param_3) {
+void dMenu_DmapMap_c::setTexture(u16 width, u16 height, u16 param_2, u16 param_3) {
+#ifdef TARGET_PC
+    // Increase map render resolution
+    width *= 2;
+    height *= 2;
+#endif
     for (int lp1 = 0; lp1 < 2; lp1++) {
-        u32 var_r27 = GXGetTexBufferSize(param_0, param_1, 9, 0, 0);
-        mMapImage_p[lp1] = JKR_NEW_ARRAY_ARGS(u8, var_r27, 0x20);
+#ifdef TARGET_PC
+        u32 sz = 0x20; // No need to allocate memory for texture
+#else
+        u32 sz = GXGetTexBufferSize(width, height, 9, 0, 0);
+#endif
+        mMapImage_p[lp1] = JKR_NEW_ARRAY_ARGS(u8, sz, 0x20);
         JUT_ASSERT(1672, mMapImage_p[lp1] != NULL);
-        mRend[lp1].init(mMapImage_p[lp1], param_0, param_1, param_2, param_3);
+        mRend[lp1].init(mMapImage_p[lp1], width, height, param_2, param_3);
 
         mResTIMG[lp1] = JKR_NEW_ARGS (0x20) ResTIMG;
         JUT_ASSERT(1687, mResTIMG[lp1] != NULL);
-        mRend[lp1].makeResTIMG(mResTIMG[lp1], param_0, param_1, mMapImage_p[lp1], (u8*)dMdm_HIO_prm_res_dst_s::m_res, 30);
+        mRend[lp1].makeResTIMG(mResTIMG[lp1], width, height, mMapImage_p[lp1], (u8*)dMdm_HIO_prm_res_dst_s::m_res, 30);
     }
 }
 
@@ -929,7 +938,7 @@ f32 dMenu_StageMapCtrl_c::m_zoomCenterMinZ;
 
 f32 dMenu_StageMapCtrl_c::m_zoomCenterMaxZ;
 
-void dMenu_StageMapCtrl_c::_create(u16 param_0, u16 param_1, u16 param_2, u16 param_3,
+void dMenu_StageMapCtrl_c::_create(u16 width, u16 height, u16 param_2, u16 param_3,
                                    s8 param_4, void* param_5) {
     field_0xe6 = dComIfGp_roomControl_getStayNo();
     field_0xe7 = param_4;
@@ -946,7 +955,7 @@ void dMenu_StageMapCtrl_c::_create(u16 param_0, u16 param_1, u16 param_2, u16 pa
     field_0x98 = param_3;
     f32 var_f26 = field_0x98 > field_0x94 ? field_0x98 : field_0x94;
 
-    dMenu_DmapMap_c::_create(param_0, param_1, param_2, param_3, param_5);
+    dMenu_DmapMap_c::_create(width, height, param_2, param_3, param_5);
     
     getInitDispCenter(&field_0x9c, &field_0xa0);
     field_0xa4 = field_0x9c;

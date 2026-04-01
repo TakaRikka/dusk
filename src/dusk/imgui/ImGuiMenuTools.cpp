@@ -124,10 +124,13 @@ namespace dusk {
                 BytesToString(stats->lastIndexSize)));
             ImGuiStringViewText(fmt::format(FMT_STRING("Storage size:      {}\n"),
                 BytesToString(stats->lastStorageSize)));
+            ImGuiStringViewText(fmt::format(FMT_STRING("Tex upload size:   {}\n"),
+                BytesToString(stats->lastTextureUploadSize)));
             ImGuiStringViewText(fmt::format(
                 FMT_STRING("Total:             {}\n"),
                 BytesToString(stats->lastVertSize + stats->lastUniformSize +
-                    stats->lastIndexSize + stats->lastStorageSize)));
+                    stats->lastIndexSize + stats->lastStorageSize +
+                    stats->lastTextureUploadSize)));
         }
         ImGui::End();
     }

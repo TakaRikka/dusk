@@ -177,7 +177,7 @@ namespace dusk {
         return result;
     }
 
-    static void ShowHeapDetailed(JKRHeap* heap, OpenHeapData& data, bool& open) {
+    void ShowHeapDetailed(JKRHeap* heap, OpenHeapData& data, bool& open) {
         char title[128];
         const char* name = data.Safe ? heap->getName() : "INVALID";
         snprintf(title, sizeof(title), "Heap %s##%p", heap->getName(), static_cast<const void*>(heap));
