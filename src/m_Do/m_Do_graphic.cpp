@@ -319,11 +319,11 @@ void mDoGph_gInf_c::create() {
     m_fullFrameBufferTex = (char*)m_fullFrameBufferTimg + sizeof(ResTIMG);
     #endif
 
-    mFrameBufferTimg = createTimg(FB_WIDTH / 2, FB_HEIGHT / 2, 6);
+    mFrameBufferTimg = createTimg(FB_WIDTH / 2, FB_HEIGHT / 2, GX_TF_RGBA8);
     JUT_ASSERT(374, mFrameBufferTimg != NULL);
     mFrameBufferTex = (char*)mFrameBufferTimg + sizeof(ResTIMG);
 
-    mZbufferTimg = createTimg(FB_WIDTH / 2, FB_HEIGHT / 2, 3);
+    mZbufferTimg = createTimg(FB_WIDTH / 2, FB_HEIGHT / 2, GX_TF_IA8);
     JUT_ASSERT(381, mZbufferTimg != NULL);
     mZbufferTex = (char*)mZbufferTimg + sizeof(ResTIMG);
 
@@ -1139,7 +1139,11 @@ void mDoGph_drawFilterQuad(s8 param_0, s8 param_1) {
 
 void mDoGph_gInf_c::bloom_c::create() {
     if (m_buffer == NULL) {
-        u32 size = GXGetTexBufferSize(FB_WIDTH / 2, FB_HEIGHT / 2, 6, GX_FALSE, 0);
+#ifdef TARGET_PC
+        u32 size = 0x20; // No need to allocate memory for texture
+#else
+        u32 size = GXGetTexBufferSize(FB_WIDTH / 2, FB_HEIGHT / 2, GX_TF_RGBA8, GX_FALSE, 0);
+#endif
         m_buffer = mDoExt_getArchiveHeap()->alloc(size, -32);
         JUT_ASSERT(1621, m_buffer != NULL);
 
