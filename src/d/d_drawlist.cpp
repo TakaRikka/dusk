@@ -1403,8 +1403,7 @@ void dDlst_shadowControl_c::init() {
         u16 size = l_realImageSize[i];
 
 #ifdef TARGET_PC
-        // Don't need to allocate an actual texture buffer for aurora; only a placeholder
-        u32 buffer_size = 0x20;
+        u32 buffer_size = 0x20; // No need to allocate memory for texture
 #else
         u32 buffer_size = GXGetTexBufferSize(size, size, 5, GX_DISABLE, 0);
 #endif
