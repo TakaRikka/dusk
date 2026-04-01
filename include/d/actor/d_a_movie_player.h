@@ -3,6 +3,8 @@
 
 #if !TARGET_PC
 #include <thp.h>
+#else
+#include <atomic>
 #endif
 #include "f_op/f_op_actor.h"
 #include "d/d_drawlist.h"
