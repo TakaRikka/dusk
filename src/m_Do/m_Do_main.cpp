@@ -48,6 +48,8 @@
 #include "dusk/logging.h"
 #include "dusk/time.h"
 #include "dusk/main.h"
+#include "dusk/imgui/ImGuiConsole.hpp"
+#include "version.h"
 
 #include <aurora/aurora.h>
 #include <aurora/event.h>
@@ -280,6 +282,10 @@ int game_main(int argc, char* argv[]) {
     config.allowJoystickBackgroundEvents = true;
 
     auroraInfo = aurora_initialize(argc, argv, &config);
+
+    VISetWindowTitle(
+        fmt::format("Dusk {} [{}]", DUSK_WC_DESCRIBE, dusk::backend_name(auroraInfo.backend))
+            .c_str());
 
     const auto& dvd_path = parsed_arg_options["dvd"].as<std::string>();
     DuskLog.info("Loading DVD image: {}", dvd_path);
