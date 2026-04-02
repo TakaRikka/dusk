@@ -327,6 +327,9 @@ void* JKRTask::run() {
         }
         msg->field_0x0 = NULL;
     }
+#ifdef TARGET_PC
+    return NULL;
+#endif
 }
 
 int JKRTask::check() {
