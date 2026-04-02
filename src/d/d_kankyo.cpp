@@ -775,7 +775,7 @@ static void dKy_FiveSenses_fullthrottle_dark_static1() {
     particle_size.y = 1.0f;
     particle_size.z = 1.0f;
 
-    #if !PLATFORM_GCN
+    #if !PLATFORM_GCN || TARGET_PC
     particle_size.x *= mDoGph_gInf_c::getScale();
     #endif
 
