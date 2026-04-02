@@ -11,6 +11,7 @@ namespace dusk {
     struct EnhancementsSettings {
         bool fastIronBoots;
         bool invertCameraXAxis;
+        bool quickTransform;
         bool restoreWiiGlitches;
         bool enableBloom;
         bool useWaterProjectionOffset;

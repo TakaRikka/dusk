@@ -148,6 +148,12 @@ public:
     void setEmphasisB(u8 param_0) { field_0x762 = param_0; }
     u8 getInsideObjCheck() { return field_0x772; }
 
+#if TARGET_PC
+    constexpr f32 getButtonZAlpha() const {
+        return mButtonZAlpha;
+    }
+#endif
+
 private:
     /* 0x004 */ item_params mItemParams[4];
     /* 0x074 */ JKRExpHeap* heap;

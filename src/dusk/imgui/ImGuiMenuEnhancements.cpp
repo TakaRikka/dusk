@@ -22,6 +22,7 @@ namespace dusk {
             if (ImGui::BeginMenu("Quality of Life")) {
                 ImGui::Checkbox("Fast Iron Boots", &m_enhancements.fastIronBoots);
                 ImGui::Checkbox("Invert Camera X Axis", &m_enhancements.invertCameraXAxis);
+                ImGui::Checkbox("Quick Transform (R+Y)", &m_enhancements.quickTransform);
                 ImGui::EndMenu();
             }
 

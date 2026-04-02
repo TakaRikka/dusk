@@ -1332,6 +1332,7 @@ set(DOLPHIN_FILES
 
 set(DUSK_FILES
         include/dusk/endian_gx.hpp
+        src/d/actor/d_a_alink_dusk.cpp
         src/dusk/asserts.cpp
         src/dusk/logging.cpp
         src/dusk/layout.cpp
