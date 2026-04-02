@@ -1195,7 +1195,7 @@ f32 dMenu_Fmap2DBack_c::getMapScissorAreaSizeX() {
 }
 
 f32 dMenu_Fmap2DBack_c::getMapScissorAreaSizeRealX() {
-#if PLATFORM_GCN
+#if PLATFORM_GCN && !TARGET_PC
     return getMapScissorAreaSizeX();
 #else
     return getMapScissorAreaSizeX() * mDoGph_gInf_c::getScale();
