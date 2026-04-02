@@ -120,7 +120,7 @@ if (DUSK_MOVIE_SUPPORT_REAL)
     target_link_libraries(game PRIVATE libjpeg-turbo::turbojpeg-static)
     target_compile_definitions(game PRIVATE MOVIE_SUPPORT=1)
 endif ()
-target_compile_definitions(game PRIVATE TARGET_PC WIDESCREEN_SUPPORT AVOID_UB=1 VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0
+target_compile_definitions(game PRIVATE TARGET_PC WIDESCREEN_SUPPORT=1 AVOID_UB=1 VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0
         DUSK_TP_VERSION="${DUSK_TP_VERSION}" DUSK_GAME_NAME="${DUSK_GAME_NAME}" DUSK_GAME_VERSION="${DUSK_GAME_VERSION}")
 target_precompile_headers(game PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/include/dusk_pch.hpp>")
 add_executable(dusk src/dusk/main.cpp)
