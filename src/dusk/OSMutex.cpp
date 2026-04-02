@@ -72,6 +72,15 @@ static PCCondData& GetCondData(OSCond* cond) {
     return *it->second;
 }
 
+void ClearCondMap() {
+    std::lock_guard<std::mutex> lock(GetCondMapMutex());
+    auto& map = GetCondMap();
+    for (auto& pair : map) {
+        pair.second->cv.notify_all();
+    }
+    map.clear();
+}
+
 // ============================================================================
 // C API functions
 // ============================================================================

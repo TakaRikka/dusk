@@ -43,7 +43,13 @@ void* JKRAramStream::run() {
 
     for (;;) {
         OSMessage message;
+#ifdef TARGET_PC
+        if (!OSReceiveMessage(&sMessageQueue, &message, OS_MESSAGE_BLOCK)) {
+            break;
+        }
+#else
         OSReceiveMessage(&sMessageQueue, &message, OS_MESSAGE_BLOCK);
+#endif
         JKRAramStreamCommand* command = (JKRAramStreamCommand*)message;
 
         switch (command->mType) {
@@ -55,6 +61,9 @@ void* JKRAramStream::run() {
             break;
         }
     }
+#ifdef TARGET_PC
+    return NULL;
+#endif
 }
 
 s32 JKRAramStream::readFromAram() {

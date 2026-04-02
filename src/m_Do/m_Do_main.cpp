@@ -108,12 +108,8 @@ s32 LOAD_COPYDATE(void*) {
 AuroraInfo auroraInfo;
 
 void main01(void) {
-    #if TARGET_PC
-    Limiter frameLimiter{};
-    #endif
-
     OS_REPORT("\x1b[m");
-    GXSetColorUpdate(GX_ENABLE);
+
     // 1. Setup
     mDoMch_Create();
     mDoGph_Create();
@@ -191,10 +187,6 @@ void main01(void) {
         mDoAud_Execute();
 
         aurora_end_frame();
-
-        #if TARGET_PC
-        frameLimiter.Sleep(DUSK_FRAME_PERIOD);
-        #endif
     } while (true);
 
     exit:;
@@ -312,7 +304,8 @@ int game_main(int argc, char* argv[]) {
     fflush(stdout);
     fflush(stderr);
 
-    dusk::IsShuttingDown = true;
+    // Notifies all CVs and causes threads to exit
+    OSResetSystem(OS_RESET_SHUTDOWN, 0, 0);
 
     aurora_shutdown();
 
