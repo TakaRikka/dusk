@@ -56,6 +56,7 @@
 
 #if TARGET_PC
 bool dusk::tweaks::FastIronBoots = false;
+bool dusk::tweaks::InvertCameraXAxis = false;
 #endif
 
 static int daAlink_Create(fopAc_ac_c* i_this);

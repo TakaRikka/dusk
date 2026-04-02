@@ -78,6 +78,7 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Tweaks")) {
                 ImGui::MenuItem("Fast iron boots", nullptr, &tweaks::FastIronBoots);
+                ImGui::MenuItem("Invert Camera X Axis", nullptr, &tweaks::InvertCameraXAxis);
                 ImGui::EndMenu();
             }
 

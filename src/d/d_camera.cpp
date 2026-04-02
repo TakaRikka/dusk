@@ -762,6 +762,13 @@ void dCamera_c::updatePad() {
         var_f29 = 0.0f;
     } else {
         var_f31 = mDoCPd_c::getSubStickX3D(mPadID);
+
+        #if TARGET_PC
+        if (dusk::tweaks::InvertCameraXAxis) {
+            var_f31 *= -1.0f;
+        }
+        #endif
+
         var_f30 = mDoCPd_c::getSubStickY(mPadID);
         var_f29 = mDoCPd_c::getSubStickValue(mPadID);
     }

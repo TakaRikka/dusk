@@ -8428,6 +8428,7 @@ inline daAlink_c* daAlink_getAlinkActorClass() {
 #if TARGET_PC
 namespace dusk::tweaks {
     extern bool FastIronBoots;
+    extern bool InvertCameraXAxis;
 }
 #endif
 
