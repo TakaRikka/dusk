@@ -2051,7 +2051,13 @@ int mDoGph_Painter() {
 
                 Mtx m2;
                 Mtx44 m;
+
+                #if TARGET_PC
+                C_MTXPerspective(m, AREG_F(8) + 60.0f, 1.3571428f, 1.0f, 100000.0f);
+                #else
                 C_MTXPerspective(m, AREG_F(8) + 60.0f, mDoGph_gInf_c::getAspect(), 1.0f, 100000.0f);
+                #endif
+
                 GXSetProjection(m, GX_PERSPECTIVE);
                 cXyz sp38c(0.0f, 0.0f, AREG_F(7) + -2.0f);
                 cXyz sp398(0.0f, 1.0f, 0.0f);
