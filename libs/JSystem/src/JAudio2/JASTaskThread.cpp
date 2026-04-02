@@ -85,7 +85,15 @@ void* JASTaskThread::run() {
     JASThreadCallStack* callstack;
     OSInitFastCast();
     do {
+#ifdef TARGET_PC
+        BOOL received = FALSE;
+        callstack = static_cast<JASThreadCallStack*>(waitMessageBlock(&received));
+        if (!received) {
+            break;
+        }
+#else
         callstack = static_cast<JASThreadCallStack*>(waitMessageBlock());
+#endif
         if (field_0x84) {
             OSSleepThread(&threadQueue_);
         }
@@ -98,6 +106,9 @@ void* JASTaskThread::run() {
 
         JASKernel::getCommandHeap()->free(callstack);
     } while (true);
+#ifdef TARGET_PC
+    return NULL;
+#endif
 }
 
 void JASTaskThread::pause(bool param_0) {

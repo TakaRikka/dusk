@@ -79,11 +79,15 @@ void JFWSystem::init() {
 
     JUTGamePad::init();
 
+#ifndef TARGET_PC
     JUTDirectPrint* dbPrint = JUTDirectPrint::start();
+#endif
 
     JUTAssertion::create();
 
+#ifndef TARGET_PC
     JUTException::create(dbPrint);
+#endif
 
     systemFont = JKR_NEW JUTResFont(CSetUpParam::systemFontRes, NULL);
 

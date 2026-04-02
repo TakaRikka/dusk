@@ -23,6 +23,8 @@
 #include "d/actor/d_a_npc_tkc.h"
 #include <cstring>
 
+#include "dusk/imgui/ImGuiMenuEnhancements.hpp"
+
 BOOL daAlink_c::checkEventRun() const {
     return dComIfGp_event_runCheck() || checkPlayerDemoMode();
 }
@@ -4290,7 +4292,7 @@ static fopAc_ac_c* daAlink_searchPortal(fopAc_ac_c* i_actor, void* i_data) {
 }
 
 bool daAlink_c::checkAcceptWarp() {
-    #if VERSION != VERSION_WII_USA_R0
+    #if TARGET_PC || VERSION != VERSION_WII_USA_R0
     cM3dGPla plane;
     #endif
 
@@ -4298,7 +4300,9 @@ bool daAlink_c::checkAcceptWarp() {
      * Fixed in versions above Wii USA Rev 0 by checking FLG0_WATER_IN_MOVE
      */
     if (mLinkAcch.ChkGroundHit() && !checkModeFlg(MODE_PLAYER_FLY)
-        #if VERSION != VERSION_WII_USA_R0
+        #if TARGET_PC
+        && (dusk::ImGuiMenuEnhancements::m_enhancements.restoreWiiGlitches || !checkNoResetFlg0(FLG0_WATER_IN_MOVE))
+        #elif VERSION != VERSION_WII_USA_R0
         && !checkNoResetFlg0(FLG0_WATER_IN_MOVE)
         #endif
        )
@@ -4307,7 +4311,9 @@ bool daAlink_c::checkAcceptWarp() {
          * Fixed in versions above Wii USA Rev 0 by checking getSlidePolygon
          */
         if (
-            #if VERSION != VERSION_WII_USA_R0
+            #if TARGET_PC
+            (dusk::ImGuiMenuEnhancements::m_enhancements.restoreWiiGlitches || !getSlidePolygon(&plane)) &&
+            #elif VERSION != VERSION_WII_USA_R0
             !getSlidePolygon(&plane) &&
             #endif
             !checkForestOldCentury()

@@ -6,6 +6,8 @@
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_tag_magne.h"
 
+#include "dusk/imgui/ImGuiMenuEnhancements.hpp"
+
 void daAlink_c::concatMagneBootMtx() {
     if (checkMagneBootsOn()) {
         mDoMtx_stack_c::concat(mMagneBootMtx);
@@ -348,7 +350,9 @@ int daAlink_c::procMagneBootsFly() {
      * Fixed in GCN and Wii KOR versions by adding a checkEquipHeavyBoots check
      */
     if (dComIfG_Bgsp().ChkPolySafe(mPolyInfo2)
-        #if PLATFORM_GCN || VERSION == VERSION_WII_KOR
+        #if TARGET_PC
+        && (dusk::ImGuiMenuEnhancements::m_enhancements.restoreWiiGlitches || checkEquipHeavyBoots())
+        #elif PLATFORM_GCN || VERSION == VERSION_WII_KOR
         && checkEquipHeavyBoots()
         #endif
         )
