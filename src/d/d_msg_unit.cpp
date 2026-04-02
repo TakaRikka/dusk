@@ -9,31 +9,31 @@
 
 // temporary until a better solution is found
 typedef struct dMsgUnit_inf1_entry {
-    u32 dat1EntryOffset;
+    BE(u32) dat1EntryOffset;
 #if REGION_JPN
-    u16 field_0x04;
-    u16 field_0x06;
-    u16 field_0x08;
-    u16 field_0x0a;
-    u16 field_0x0c;
-    u16 field_0x0e;
-    u16 field_0x10;
-    u16 field_0x12;
-    u16 field_0x14;
-    u16 field_0x16;
-    u16 field_0x18;
+    BE(u16) field_0x04;
+    BE(u16) field_0x06;
+    BE(u16) field_0x08;
+    BE(u16) field_0x0a;
+    BE(u16) field_0x0c;
+    BE(u16) field_0x0e;
+    BE(u16) field_0x10;
+    BE(u16) field_0x12;
+    BE(u16) field_0x14;
+    BE(u16) field_0x16;
+    BE(u16) field_0x18;
 #else
-    u16 startFrame;
-    u16 endFrame;
+    BE(u16) startFrame;
+    BE(u16) endFrame;
 #endif
 } dMsgUnit_inf1_entry;
 
 typedef struct dMsgUnit_inf1_section_t {
-    /* 0x00 */ u32 msgType;   // sectionType
-    /* 0x04 */ u32 size;    // total size of the section
-    /* 0x08 */ u16 entryCount;
-    /* 0x0A */ u16 entryLength;
-    /* 0x0C */ u16 msgArchiveId;
+    /* 0x00 */ BE(u32) msgType;   // sectionType
+    /* 0x04 */ BE(u32) size;    // total size of the section
+    /* 0x08 */ BE(u16) entryCount;
+    /* 0x0A */ BE(u16) entryLength;
+    /* 0x0C */ BE(u16) msgArchiveId;
     /* 0x10 */ dMsgUnit_inf1_entry entries[0];
 } dMsgUnit_inf1_section_t;
 
