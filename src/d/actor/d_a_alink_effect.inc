@@ -1562,6 +1562,11 @@ void daAlink_c::setMetamorphoseEffectStartLink() {
         emitter->setGlobalParticleScale(effScale);
     }
     #endif
+
+    #if TARGET_PC
+    static const Vec effWideScale = {mDoGph_gInf_c::getAspect(), 1.0f, 1.0f};
+    emitter->setGlobalParticleScale(effWideScale);
+    #endif
 }
 
 void daAlink_c::setMetamorphoseEffect() {
