@@ -721,67 +721,6 @@ void fapGm_After() {
     fopCamM_Management();
 }
 
-#if TARGET_PC
-// Analog L is currently not being used, so commented out
-// static f32 prevFrameAnalogL = 0.f;
-static f32 prevFrameAnalogR = 0.f;
-
-static bool DuskCheckButtonCombo(u32 combo, bool checkAnalog) {
-    const auto& padInfo = mDoCPd_c::getCpadInfo(PAD_1);
-
-    // Get the buttons that are currently held and were pressed this frame
-    uint32_t buttonsHeld = padInfo.mButtonFlags;
-    uint32_t buttonsPressedThisFrame = padInfo.mPressedButtonFlags;
-
-    if (checkAnalog) {
-        // Get the threshold for the analog buttons
-        constexpr float analogThreshold = 0.7f; // 70%
-
-        // Check if L is included in the button combo
-        // Analog L is currently not being used, so commented out
-        /*
-        if ( combo & PadInputs::Button_L )
-        {
-            // Check if analog L is at 70% or more
-            if ( padInfo->mTriggerLeft >= analogThreshold )
-            {
-                // Manually set the bit for L being pressed
-                buttonsHeld |= PadInputs::Button_L;
-
-                // If prevFrameAnalogL is less than 70%, then 70% was reached this frame
-                if ( prevFrameAnalogL < analogThreshold )
-                {
-                    buttonsPressedThisFrame |= PadInputs::Button_L;
-                }
-            }
-        }
-        */
-
-        // Check if R is included in the button combo
-        if (combo & PAD_TRIGGER_R) {
-            // Check if analog R is at 70% or more
-            if (padInfo.mTriggerRight >= analogThreshold) {
-                // Manually set the bit for R being pressed
-                buttonsHeld |= PAD_TRIGGER_R;
-
-                // If prevFrameAnalogR is less than 70%, then 70% was reached this frame
-                if (prevFrameAnalogR < analogThreshold) {
-                    buttonsPressedThisFrame |= PAD_TRIGGER_R;
-                }
-            }
-        }
-    }
-
-    // Check if the button combo is held
-    if ((buttonsHeld & combo) != combo) {
-        return false;
-    }
-
-    // Check if at least one button in the combo was pressed this frame
-    return buttonsPressedThisFrame & combo;
-}
-#endif
-
 void fapGm_Execute() {
     static u32 sExecCount = 0;
     if (sExecCount < 10 || (sExecCount % 300 == 0)) {
@@ -794,8 +733,7 @@ void fapGm_Execute() {
     #endif
 
 #if TARGET_PC
-    const auto& padInfo = mDoCPd_c::getCpadInfo(PAD_1);
-    if (DuskCheckButtonCombo(PAD_TRIGGER_R | PAD_BUTTON_Y, true)) {
+    if (mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getTrigY(PAD_1)) {
         if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
             dynamic_cast<daAlink_c*>(link)->handleQuickTransform();
         }
@@ -804,13 +742,6 @@ void fapGm_Execute() {
 
     fpcM_Management(NULL, fapGm_After);
     cCt_Counter(0);
-
-#if TARGET_PC
-    // Main code has ran, so update previous frame variables
-    // Analog L is currently not being used, so commented out
-    // prevFrameAnalogL = padInfo.mTriggerLeft;
-    prevFrameAnalogR = padInfo.mTriggerRight;
-#endif
 }
 
 fapGm_HIO_c g_HIO;
