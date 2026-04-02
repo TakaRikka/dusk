@@ -1335,6 +1335,7 @@ set(DUSK_FILES
         src/d/actor/d_a_alink_quicktransform.cpp
         src/dusk/asserts.cpp
         src/dusk/logging.cpp
+        src/dusk/layout.cpp
         src/dusk/stubs.cpp
         src/dusk/endian.cpp
         src/dusk/extras.c
@@ -1347,6 +1348,8 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiMenuGame.hpp
         src/dusk/imgui/ImGuiMenuTools.cpp
         src/dusk/imgui/ImGuiMenuTools.hpp
+        src/dusk/imgui/ImGuiMenuEnhancements.cpp
+        src/dusk/imgui/ImGuiMenuEnhancements.hpp
         src/dusk/imgui/ImGuiProcessOverlay.cpp
         src/dusk/imgui/ImGuiCameraOverlay.cpp
         src/dusk/imgui/ImGuiHeapOverlay.cpp

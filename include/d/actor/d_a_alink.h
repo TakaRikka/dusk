@@ -8429,11 +8429,4 @@ inline daAlink_c* daAlink_getAlinkActorClass() {
     return (daAlink_c*)dComIfGp_getLinkPlayer();
 }
 
-#if TARGET_PC
-namespace dusk::tweaks {
-    extern bool FastIronBoots;
-    extern bool QuickTransform;
-}
-#endif
-
 #endif /* D_A_D_A_ALINK_H */

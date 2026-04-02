@@ -101,11 +101,22 @@ public:
         }
         return message;
     }
+#ifdef TARGET_PC
+    OSMessage waitMessageBlock(BOOL* received) {
+        OSMessage message;
+        BOOL rv = OSReceiveMessage(&mMessageQueue, &message, OS_MESSAGE_BLOCK);
+        if (received) {
+            *received = rv;
+        }
+        return message;
+    }
+#else
     OSMessage waitMessageBlock() {
         OSMessage message;
         OSReceiveMessage(&mMessageQueue, &message, OS_MESSAGE_BLOCK);
         return message;
     }
+#endif
     void jamMessageBlock(OSMessage message) {
         OSJamMessage(&mMessageQueue, message, OS_MESSAGE_BLOCK);
     }

@@ -3,11 +3,10 @@
 #include "d/d_meter2.h"
 #include "d/d_meter2_draw.h"
 #include "d/d_meter2_info.h"
-
-bool dusk::tweaks::QuickTransform = false;
+#include "dusk/imgui/ImGuiMenuEnhancements.hpp"
 
 void daAlink_c::handleQuickTransform() {
-    if (!dusk::tweaks::QuickTransform) {
+    if (!dusk::ImGuiMenuEnhancements::m_enhancements.quickTransform) {
         return;
     }
 

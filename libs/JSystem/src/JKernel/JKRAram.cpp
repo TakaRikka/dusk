@@ -94,7 +94,13 @@ void* JKRAram::run(void) {
     OSInitMessageQueue(&sMessageQueue, sMessageBuffer, 4);
     do {
         OSMessage msg;
+#ifdef TARGET_PC
+        if (!OSReceiveMessage(&sMessageQueue, &msg, OS_MESSAGE_BLOCK)) {
+            break;
+        }
+#else
         OSReceiveMessage(&sMessageQueue, &msg, OS_MESSAGE_BLOCK);
+#endif
         JKRAramCommand* message = (JKRAramCommand*)msg;
         int result = message->field_0x00;
         JKRAMCommand* command = (JKRAMCommand*)message->command;
@@ -106,6 +112,9 @@ void* JKRAram::run(void) {
             break;
         }
     } while (true);
+#ifdef TARGET_PC
+    return NULL;
+#endif
 }
 
 void JKRAram::checkOkAddress(u8* addr, u32 size, JKRAramBlock* block, u32 param_4) {

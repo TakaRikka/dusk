@@ -11,7 +11,7 @@
 #include <unordered_map>
 #include <memory>
 #include <dusk/logging.h>
-
+#include <dusk/main.h>
 
 #ifndef _WIN32
 #include <sys/time.h>
@@ -84,6 +84,16 @@ static PCMessageQueueData& GetMsgQueueData(OSMessageQueue* mq) {
     return *it->second;
 }
 
+static void ClearMsgQueueMap() {
+    std::lock_guard<std::mutex> lock(GetMsgQueueMapMutex());
+    auto& map = GetMsgQueueMap();
+    for (auto & [_, value] : map) {
+        value->cvReceive.notify_all();
+        value->cvSend.notify_all();
+    }
+    map.clear();
+}
+
 void OSInitMessageQueue(OSMessageQueue* mq, void* msgArray, s32 msgCount) {
     if (!mq) return;
     mq->queueSend.head = mq->queueSend.tail = nullptr;
@@ -104,7 +114,10 @@ int OSSendMessage(OSMessageQueue* mq, void* msg, s32 flags) {
     if (mq->usedCount >= mq->msgCount) {
         if (flags == OS_MESSAGE_NOBLOCK) return 0;
         // BLOCK: wait until space is available
-        data.cvSend.wait(lock, [mq]() { return mq->usedCount < mq->msgCount; });
+        data.cvSend.wait(lock, [mq] { return mq->usedCount < mq->msgCount || dusk::IsShuttingDown; });
+    }
+    if (dusk::IsShuttingDown) {
+        return 0;
     }
 
     s32 idx = (mq->firstIndex + mq->usedCount) % mq->msgCount;
@@ -124,7 +137,10 @@ int OSReceiveMessage(OSMessageQueue* mq, void* msg, s32 flags) {
     if (mq->usedCount == 0) {
         if (flags == OS_MESSAGE_NOBLOCK) return 0;
         // BLOCK: wait until a message arrives
-        data.cvReceive.wait(lock, [mq]() { return mq->usedCount > 0; });
+        data.cvReceive.wait(lock, [mq] { return mq->usedCount > 0 || dusk::IsShuttingDown; });
+    }
+    if (dusk::IsShuttingDown) {
+        return 0;
     }
 
     if (msg) {
@@ -146,7 +162,10 @@ int OSJamMessage(OSMessageQueue* mq, void* msg, s32 flags) {
     if (mq->usedCount >= mq->msgCount) {
         if (flags == OS_MESSAGE_NOBLOCK) return 0;
         // BLOCK: wait until space is available
-        data.cvSend.wait(lock, [mq]() { return mq->usedCount < mq->msgCount; });
+        data.cvSend.wait(lock, [mq] { return mq->usedCount < mq->msgCount || dusk::IsShuttingDown; });
+    }
+    if (dusk::IsShuttingDown) {
+        return 0;
     }
 
     // Jam inserts at the front of the queue
@@ -185,8 +204,12 @@ BOOL OSGetResetButtonState() { return FALSE; }
 BOOL OSInitFont(OSFontHeader* fontData) { return FALSE; }
 BOOL OSLink(OSModuleInfo* newModule, void* bss) { return TRUE; }
 
+void ClearCondMap();
 void OSResetSystem(int reset, u32 resetCode, BOOL forceMenu) {
     OSReport("[PC] OSResetSystem called (reset=%d, code=%u)\n", reset, resetCode);
+    dusk::IsShuttingDown = true;
+    ClearMsgQueueMap();
+    ClearCondMap();
 }
 
 void OSSetStringTable(void* stringTable) {}
@@ -998,7 +1021,7 @@ f32 GXGetYScaleFactor(u16 efbHeight, u16 xfbHeight) {
 void GXInitTexCacheRegion(GXTexRegion* region, GXBool is_32b_mipmap, u32 tmem_even,
                           GXTexCacheSize size_even, u32 tmem_odd, GXTexCacheSize size_odd) {
     STUB_LOG();
-} 
+}
 // XXX, this should be some struct?
 // GXRenderModeObj GXNtsc480IntDf;
 //GXRenderModeObj GXNtsc480Int;

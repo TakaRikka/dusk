@@ -25,17 +25,8 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Graphics")) {
                 if (ImGui::MenuItem("Toggle Fullscreen", "F11")) {
-                    m_graphicsSettings.m_fullscreen = !m_graphicsSettings.m_fullscreen;
-                    VISetWindowFullscreen(m_graphicsSettings.m_fullscreen);
-                }
-
-                ImGui::Separator();
-
-                ImGui::Checkbox("Native Bloom", &m_graphicsSettings.m_enableBloom);
-                ImGui::Checkbox("Water Projection Offset", &m_graphicsSettings.m_waterProjectionOffset);
-                if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Adds GC-specific -0.01 transS offset\n"
-                                      "that causes ~6px ghost artifacts in water reflections");
+                    m_fullscreen = !m_fullscreen;
+                    VISetWindowFullscreen(m_fullscreen);
                 }
 
                 ImGui::EndMenu();
@@ -76,12 +67,6 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
-            if (ImGui::BeginMenu("Tweaks")) {
-                ImGui::MenuItem("Fast iron boots", nullptr, &tweaks::FastIronBoots);
-                ImGui::MenuItem("Quick Transform (R+Y)", nullptr, &tweaks::QuickTransform);
-                ImGui::EndMenu();
-            }
-
             ImGui::EndMenu();
         }
 
@@ -93,8 +78,8 @@ namespace dusk {
         }
 
         if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
-            m_graphicsSettings.m_fullscreen = !m_graphicsSettings.m_fullscreen;
-            VISetWindowFullscreen(m_graphicsSettings.m_fullscreen);
+            m_fullscreen = !m_fullscreen;
+            VISetWindowFullscreen(m_fullscreen);
         }
     }
 
