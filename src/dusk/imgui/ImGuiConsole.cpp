@@ -181,6 +181,7 @@ namespace dusk {
         if (ImGui::BeginMainMenuBar()) {
             m_menuGame.draw();
             m_menuTools.draw();
+            m_menuEnhancements.draw();
 
             ImGui::SetCursorPosX(ImGui::GetWindowWidth() - 80.0f);
             ImGuiIO& io = ImGui::GetIO();

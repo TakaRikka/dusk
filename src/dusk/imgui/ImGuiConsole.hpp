@@ -7,6 +7,7 @@
 #include "imgui.h"
 #include "ImGuiMenuGame.hpp"
 #include "ImGuiMenuTools.hpp"
+#include "ImGuiMenuEnhancements.hpp"
 
 namespace dusk {
 	class ImGuiConsole {
@@ -14,8 +15,6 @@ namespace dusk {
 		ImGuiConsole();
 		void draw();
 
-        bool isBloomEnabled() { return m_menuGame.isBloomEnabled(); }
-        bool isWaterProjectionOffsetEnabled() { return m_menuGame.isWaterProjectionOffsetEnabled(); }
 		ImGuiMenuTools::CollisionViewSettings& getCollisionViewSettings() { return m_menuTools.getCollisionViewSettings(); }
 
 		static bool CheckMenuViewToggle(ImGuiKey key, bool& active);
@@ -25,6 +24,7 @@ namespace dusk {
 
 		ImGuiMenuGame m_menuGame;
         ImGuiMenuTools m_menuTools;
+		ImGuiMenuEnhancements m_menuEnhancements;
 	};
 
 	extern ImGuiConsole g_imguiConsole;
