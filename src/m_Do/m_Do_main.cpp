@@ -157,6 +157,9 @@ void main01(void) {
             case AURORA_WINDOW_RESIZED:
                 mDoGph_gInf_c::setWindowSize(event->windowSize);
                 break;
+            case AURORA_DISPLAY_SCALE_CHANGED:
+                dusk::ImGuiEngine_Initialize(event->windowSize.scale);
+                break;
             case AURORA_EXIT:
                 goto exit;
             }
