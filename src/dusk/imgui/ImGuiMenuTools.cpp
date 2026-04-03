@@ -2,6 +2,7 @@
 #include "imgui.h"
 #include "aurora/gfx.h"
 
+#include "dusk/hotkeys.h"
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuTools.hpp"
 
@@ -37,15 +38,15 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
-            ImGui::MenuItem("Process Management", "F2", &m_showProcessManagement);
-            ImGui::MenuItem("Debug Overlay", "F3", &m_showDebugOverlay);
-            ImGui::MenuItem("Heap Viewer", "F4", &m_showHeapOverlay);
-            ImGui::MenuItem("Stub Log", "F5", &m_showStubLog);
-            ImGui::MenuItem("Debug Camera", "F6", &m_showCameraOverlay);
+            ImGui::MenuItem("Process Management", hotkeys::SHOW_PROCESS_MANAGEMENT, &m_showProcessManagement);
+            ImGui::MenuItem("Debug Overlay", hotkeys::SHOW_DEBUG_OVERLAY, &m_showDebugOverlay);
+            ImGui::MenuItem("Heap Viewer", hotkeys::SHOW_HEAP_VIEWER, &m_showHeapOverlay);
+            ImGui::MenuItem("Stub Log", hotkeys::SHOW_STUB_LOG, &m_showStubLog);
+            ImGui::MenuItem("Debug Camera", hotkeys::SHOW_CAMERA_DEBUG, &m_showCameraOverlay);
             ImGui::MenuItem("Map Loader", nullptr, &m_showMapLoader);
             ImGui::MenuItem("Player Info", nullptr, &m_showPlayerInfo);
             ImGui::MenuItem("Save Editor", nullptr, &m_showSaveEditor);
-            ImGui::MenuItem("Audio Debug", "F7", &m_showAudioDebug);
+            ImGui::MenuItem("Audio Debug", hotkeys::SHOW_AUDIO_DEBUG, &m_showAudioDebug);
             ImGui::MenuItem("OSReport Force", nullptr, &OSReportReallyForceEnable);
             ImGui::EndMenu();
         }

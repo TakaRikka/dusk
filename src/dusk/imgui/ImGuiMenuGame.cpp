@@ -7,6 +7,7 @@
 
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "dusk/audio/DuskAudioSystem.h"
+#include "dusk/hotkeys.h"
 #include "dusk/settings.h"
 #include "m_Do/m_Do_controller_pad.h"
 
@@ -15,14 +16,14 @@ namespace dusk {
 
     void ImGuiMenuGame::draw() {
         if (ImGui::BeginMenu("Game")) {
-            if (ImGui::MenuItem("Reset", "Ctrl+R")) {
+            if (ImGui::MenuItem("Reset", hotkeys::DO_RESET)) {
                 JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
             }
 
             ImGui::Separator();
 
             if (ImGui::BeginMenu("Graphics")) {
-                if (ImGui::MenuItem("Toggle Fullscreen", "F11")) {
+                if (ImGui::MenuItem("Toggle Fullscreen", hotkeys::TOGGLE_FULLSCREEN)) {
                     getSettings().video.enableFullscreen = !getSettings().video.enableFullscreen;
                     VISetWindowFullscreen(getSettings().video.enableFullscreen);
                 }
