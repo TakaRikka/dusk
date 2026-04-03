@@ -23,16 +23,17 @@ namespace dusk {
 
             ImGui::Separator();
 
+            auto& collisionView = getTransientSettings().collisionView;
             if (ImGui::BeginMenu("Collision View")) {
-                ImGui::Checkbox("Enable Terrain view", &m_collisionViewSettings.m_enableTerrainView);
-                ImGui::Checkbox("Enable wireframe view", &m_collisionViewSettings.m_enableWireframe);
-                ImGui::SliderFloat("Opacity##terrain", &m_collisionViewSettings.m_terrainViewOpacity, 0.0f, 100.0f);
-                ImGui::SliderFloat("Draw Range", &m_collisionViewSettings.m_drawRange, 0.0f, 1000.0f);
+                ImGui::Checkbox("Enable Terrain view", &collisionView.enableTerrainView);
+                ImGui::Checkbox("Enable wireframe view", &collisionView.enableWireframe);
+                ImGui::SliderFloat("Opacity##terrain", &collisionView.terrainViewOpacity, 0.0f, 100.0f);
+                ImGui::SliderFloat("Draw Range", &collisionView.drawRange, 0.0f, 1000.0f);
                 ImGui::Separator();
-                ImGui::Checkbox("Enable Attack Collider view", &m_collisionViewSettings.m_enableAtView);
-                ImGui::Checkbox("Enable Target Collider view", &m_collisionViewSettings.m_enableTgView);
-                ImGui::Checkbox("Enable Push Collider view", &m_collisionViewSettings.m_enableCoView);
-                ImGui::SliderFloat("Opacity##colliders", &m_collisionViewSettings.m_colliderViewOpacity, 0.0f, 100.0f);
+                ImGui::Checkbox("Enable Attack Collider view", &collisionView.enableAtView);
+                ImGui::Checkbox("Enable Target Collider view", &collisionView.enableTgView);
+                ImGui::Checkbox("Enable Push Collider view", &collisionView.enableCoView);
+                ImGui::SliderFloat("Opacity##colliders", &collisionView.colliderViewOpacity, 0.0f, 100.0f);
                 ImGui::EndMenu();
             }
 

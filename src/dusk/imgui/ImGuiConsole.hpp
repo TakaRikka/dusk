@@ -17,11 +17,7 @@ public:
     void PreDraw();
     void PostDraw();
 
-    ImGuiMenuTools::CollisionViewSettings& getCollisionViewSettings() {
-        return m_menuTools.getCollisionViewSettings();
-    }
-
-    static bool CheckMenuViewToggle(ImGuiKey key, bool& active);
+	static bool CheckMenuViewToggle(ImGuiKey key, bool& active);
 
 private:
     struct Toast {

@@ -10,12 +10,14 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
-#include "dusk/offset_ptr.h"
 
 #include "d/d_debug_viewer.h"
 #include "d/d_bg_s_capt_poly.h"
 
-#include "dusk/imgui/ImGuiConsole.hpp"
+#if TARGET_PC
+#include "dusk/offset_ptr.h"
+#include "dusk/settings.h"
+#endif
 
 #if DEBUG
 int g_ground_counter;
@@ -619,8 +621,8 @@ static int poly_draw(dBgS_CaptPoly* capt, cBgD_Vtx_t* vtxList, int v0, int v1, i
     GXColor wall_color = {0, 0xFF, 0, 0xFF};
 
 #if TARGET_PC
-    dusk::ImGuiMenuTools::CollisionViewSettings collisionViewSettings = dusk::g_imguiConsole.getCollisionViewSettings();
-    f32 view_opacity = 255 * (collisionViewSettings.m_terrainViewOpacity / 100.0f);
+    const auto& collisionViewSettings = dusk::getTransientSettings().collisionView;
+    f32 view_opacity = 255 * (collisionViewSettings.terrainViewOpacity / 100.0f);
     ground_color.a = view_opacity;
     roof_color.a = view_opacity;
     wall_color.a = view_opacity;
@@ -658,16 +660,16 @@ void dBgS::Draw() {
     cBgS::Draw();
 
 #if TARGET_PC
-    #define IMGUI_TOGGLE_HIO_FLAG(status, flag) \
+    #define DUSK_TOGGLE_HIO_FLAG(status, flag) \
         if (status) { \
             s_InsideHio.m_flags |= flag; \
         } else { \
             s_InsideHio.m_flags &= ~flag; \
         }
 
-    dusk::ImGuiMenuTools::CollisionViewSettings collisionViewSettings = dusk::g_imguiConsole.getCollisionViewSettings();
-    IMGUI_TOGGLE_HIO_FLAG(collisionViewSettings.m_enableTerrainView, dBgS_InsideHIO::FLAG_DISP_POLY_e);
-    IMGUI_TOGGLE_HIO_FLAG(collisionViewSettings.m_enableWireframe, dBgS_InsideHIO::FLAG_WHITE_WIRE_e);
+    const auto& collisionViewSettings = dusk::getTransientSettings().collisionView;
+    DUSK_TOGGLE_HIO_FLAG(collisionViewSettings.enableTerrainView, dBgS_InsideHIO::FLAG_DISP_POLY_e);
+    DUSK_TOGGLE_HIO_FLAG(collisionViewSettings.enableWireframe, dBgS_InsideHIO::FLAG_WHITE_WIRE_e);
 #endif
 
     if (s_InsideHio.ChkDispPoly()) {
@@ -680,8 +682,7 @@ void dBgS::Draw() {
             f32 var_f31 = fabsf(s_InsideHio.m_p0.x);
 
 #if TARGET_PC
-            dusk::ImGuiMenuTools::CollisionViewSettings collisionViewSettings = dusk::g_imguiConsole.getCollisionViewSettings();
-            var_f31 = collisionViewSettings.m_drawRange;
+            var_f31 = collisionViewSettings.drawRange;
 #endif
 
             min.x = player->current.pos.x - var_f31;
