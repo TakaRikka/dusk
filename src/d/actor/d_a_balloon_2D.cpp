@@ -304,7 +304,11 @@ void daBalloon2D_c::addScoreCount(cXyz* param_1, u32 param_2, u8 param_3) {
         field_0x5f8[current].field_0xf = field_0x5f8[prev].field_0xf;
     }
     cXyz acStack_2c;
+    #if TARGET_PC
+    mDoLib_project(param_1, &acStack_2c, { 0, 0, FB_WIDTH, FB_HEIGHT });
+    #else
     mDoLib_project(param_1, &acStack_2c);
+    #endif
     field_0x5f8[0].field_0x0.set(acStack_2c);
     field_0x5f8[0].field_0xc = param_2;
     field_0x5f8[0].field_0xe = 60;
