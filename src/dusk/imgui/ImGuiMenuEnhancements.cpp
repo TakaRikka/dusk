@@ -13,6 +13,7 @@ namespace dusk {
         .restoreWiiGlitches = false,
         .enableBloom = true,
         .useWaterProjectionOffset = false,
+        .mirrorMode = false,
     };
 
     ImGuiMenuEnhancements::ImGuiMenuEnhancements() {}
@@ -33,6 +34,7 @@ namespace dusk {
                     ImGui::SetTooltip("Adds GC-specific -0.01 transS offset\n"
                         "that causes ~6px ghost artifacts in water reflections");
                 }
+                ImGui::Checkbox("Mirror Mode", &m_enhancements.mirrorMode);
 
                 ImGui::EndMenu();
             }

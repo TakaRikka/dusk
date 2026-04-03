@@ -15,6 +15,7 @@ namespace dusk {
         bool restoreWiiGlitches;
         bool enableBloom;
         bool useWaterProjectionOffset;
+        bool mirrorMode;
     };
 
     class ImGuiMenuEnhancements {

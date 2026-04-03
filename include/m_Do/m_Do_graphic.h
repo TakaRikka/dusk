@@ -312,6 +312,12 @@ public:
     static JKRHeap* m_heap;
     #endif
 
+#if PLATFORM_WII || PLATFORM_SHIELD || TARGET_PC
+    static ResTIMG* m_fullFrameBufferTimg;
+    static void* m_fullFrameBufferTex;
+    static TGXTexObj m_fullFrameBufferTexObj;
+#endif
+
     #if PLATFORM_WII || PLATFORM_SHIELD
     static void resetDimming();
 
@@ -326,9 +332,6 @@ public:
     #if WIDESCREEN_SUPPORT
     static u8 mWide;
     static u8 mWideZoom;
-    static ResTIMG* m_fullFrameBufferTimg;
-    static void* m_fullFrameBufferTex;
-    static TGXTexObj m_fullFrameBufferTexObj;
 
     static f32 m_aspect;
     static f32 m_scale;

@@ -259,7 +259,7 @@ static ResTIMG* createTimg(u16 width, u16 height, u32 format) {
 
 JUTFader* mDoGph_gInf_c::mFader;
 
-#if PLATFORM_WII || PLATFORM_SHIELD
+#if PLATFORM_WII || PLATFORM_SHIELD || TARGET_PC
 ResTIMG* mDoGph_gInf_c::m_fullFrameBufferTimg;
 void* mDoGph_gInf_c::m_fullFrameBufferTex;
 #endif
@@ -313,7 +313,7 @@ void mDoGph_gInf_c::create() {
     JUTProcBar::getManager()->setVisible(false);
     JUTDbPrint::getManager()->setVisible(false);
 
-    #if PLATFORM_WII || PLATFORM_SHIELD
+    #if PLATFORM_WII || PLATFORM_SHIELD || TARGET_PC
     m_fullFrameBufferTimg = createTimg(FB_WIDTH, FB_HEIGHT, 6);
     JUT_ASSERT(366, m_fullFrameBufferTimg != NULL);
     m_fullFrameBufferTex = (char*)m_fullFrameBufferTimg + sizeof(ResTIMG);
@@ -388,7 +388,7 @@ void mDoGph_gInf_c::onBlure() {
     onBlure(cMtx_getIdentity());
 }
 
-#if PLATFORM_WII || PLATFORM_SHIELD
+#if PLATFORM_WII || PLATFORM_SHIELD || TARGET_PC
 TGXTexObj mDoGph_gInf_c::m_fullFrameBufferTexObj;
 #endif
 
@@ -789,8 +789,8 @@ int mDoGph_AfterOfDraw() {
     return 1;
 }
 
-#if PLATFORM_WII
-void drawFilterQuad(s8 param_0, s8 param_1) {
+#if PLATFORM_WII || TARGET_PC
+void mDoGph_drawFilterQuad(s8 param_0, s8 param_1) {
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3s8(0, 0, -5);
     GXTexCoord2s8(0, 0);
@@ -802,9 +802,6 @@ void drawFilterQuad(s8 param_0, s8 param_1) {
     GXTexCoord2s8(0, 1);
     GXEnd();
 }
-
-// mapping to simplify call changes between wii / other platforms
-#define mDoGph_drawFilterQuad drawFilterQuad
 #endif
 
 static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_2) {
@@ -1122,7 +1119,7 @@ static void trimming(view_class* param_0, view_port_class* param_1) {
                  param_1->scissor.height);
 }
 
-#if !PLATFORM_WII
+#if !PLATFORM_WII && !TARGET_PC
 void mDoGph_drawFilterQuad(s8 param_0, s8 param_1) {
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition2s8(0, 0);
@@ -1203,12 +1200,12 @@ void mDoGph_gInf_c::bloom_c::draw() {
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-        #if PLATFORM_WII
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_RGB8, 0);
+        #if PLATFORM_WII || TARGET_PC
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S8, 0);
         #else
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGB, GX_RGB8, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XY, GX_S8, 0);
         #endif
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB8, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S8, 0);
         if (mMonoColor.a != 0) {
             GXSetNumTevStages(1);
             GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
@@ -1452,12 +1449,12 @@ static void motionBlure(view_class* param_0) {
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-        #if PLATFORM_WII
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_RGB8, 0);
+        #if PLATFORM_WII || TARGET_PC
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S8, 0);
         #else
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGB, GX_RGB8, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XY, GX_S8, 0);
         #endif
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB8, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S8, 0);
         mDoGph_drawFilterQuad(1, 1);
         GXSetProjection(param_0->projMtx, GX_PERSPECTIVE);
     }
@@ -2103,10 +2100,14 @@ int mDoGph_Painter() {
     fapGm_HIO_c::startCpuTimer();
     #endif
 
-    #if PLATFORM_WII
-    if (data_8053a730) {
-        GXSetTexCopySrc(0, 0, FB_WIDTH, FB_HEIGHT);
-        GXSetTexCopyDst(FB_WIDTH, FB_HEIGHT, (GXTexFmt)mDoGph_gInf_c::m_fullFrameBufferTimg->format, 0);
+    #if TARGET_PC
+    if (dusk::ImGuiMenuEnhancements::m_enhancements.mirrorMode)
+    #elif PLATFORM_WII
+    if (data_8053a730)
+    #endif
+    {
+        GXSetTexCopySrc(0, 0, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
+        GXSetTexCopyDst(mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), (GXTexFmt)mDoGph_gInf_c::m_fullFrameBufferTimg->format, 0);
         GXCopyTex(mDoGph_gInf_c::m_fullFrameBufferTex, 0);
         GXPixModeSync();
         GXInvalidateTexAll();
@@ -2132,9 +2133,9 @@ int mDoGph_Painter() {
         GXSetFogRangeAdj(GX_DISABLE, 0, NULL);
         GXSetCullMode(GX_CULL_NONE);
         GXSetDither(GX_ENABLE);
-        
+
         Mtx44 mtx;
-        MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
+        MTXOrtho(mtx, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 10.0f);
         GXSetProjection(mtx, GX_ORTHOGRAPHIC);
         GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
         GXSetCurrentMtx(0);
@@ -2143,7 +2144,7 @@ int mDoGph_Painter() {
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S8, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_RGB8, 0);
-        drawFilterQuad(1, 1);
+        mDoGph_drawFilterQuad(1, 1);
     }
     #endif
 

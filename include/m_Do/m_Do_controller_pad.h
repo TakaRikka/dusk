@@ -4,6 +4,8 @@
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "SSystem/SComponent/c_API_controller_pad.h"
 
+#include "dusk/imgui/ImGuiMenuEnhancements.hpp"
+
 // Controller Ports 1 - 4
 enum { PAD_1, PAD_2, PAD_3, PAD_4 };
 
@@ -52,8 +54,31 @@ public:
     static f32 getStickX3D(u32 pad) { return getCpadInfo(pad).mMainStickPosX; }
     static f32 getStickValue(u32 pad) { return getCpadInfo(pad).mMainStickValue; }
     static s16 getStickAngle(u32 pad) { return getCpadInfo(pad).mMainStickAngle; }
-    static s16 getStickAngle3D(u32 pad) { return getCpadInfo(pad).mMainStickAngle; }
-    static f32 getSubStickX3D(u32 pad) { return getCpadInfo(pad).mCStickPosX; }
+
+    static s16 getStickAngle3D(u32 pad) {
+        #if TARGET_PC
+        if (dusk::ImGuiMenuEnhancements::m_enhancements.mirrorMode) {
+            return -getCpadInfo(pad).mMainStickAngle;
+        } else {
+            return getCpadInfo(pad).mMainStickAngle;
+        }
+        #else
+        return getCpadInfo(pad).mMainStickAngle;
+        #endif
+    }
+
+    static f32 getSubStickX3D(u32 pad) {
+        #if TARGET_PC
+        if (dusk::ImGuiMenuEnhancements::m_enhancements.mirrorMode) {
+            return -getCpadInfo(pad).mCStickPosX;
+        } else {
+            return getCpadInfo(pad).mCStickPosX;
+        }
+        #else
+        return getCpadInfo(pad).mCStickPosX;
+        #endif
+    }
+
     static f32 getSubStickX(u32 pad) { return getCpadInfo(pad).mCStickPosX; }
     static f32 getSubStickY(u32 pad) { return getCpadInfo(pad).mCStickPosY; }
     static f32 getSubStickValue(u32 pad) { return getCpadInfo(pad).mCStickValue; }
