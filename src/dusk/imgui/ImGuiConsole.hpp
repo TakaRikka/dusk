@@ -14,7 +14,8 @@ namespace dusk {
 class ImGuiConsole {
 public:
     ImGuiConsole();
-    void draw();
+    void PreDraw();
+    void PostDraw();
 
     ImGuiMenuTools::CollisionViewSettings& getCollisionViewSettings() {
         return m_menuTools.getCollisionViewSettings();
@@ -39,6 +40,7 @@ private:
     ImGuiMenuEnhancements m_menuEnhancements;
 
     void ShowToasts();
+    void ShowPipelineProgress();
 };
 
 extern ImGuiConsole g_imguiConsole;

@@ -174,7 +174,7 @@ namespace dusk {
 
     ImGuiConsole::ImGuiConsole() {}
 
-    void ImGuiConsole::draw() {
+    void ImGuiConsole::PreDraw() {
         if (!m_isLaunchInitialized) {
             m_toasts.emplace_back("Press F1 to toggle menu"s, 5.f);
             m_isLaunchInitialized = true;
@@ -182,7 +182,6 @@ namespace dusk {
 
         if (CheckMenuViewToggle(ImGuiKey_F1, m_isHidden)) {
             ShowToasts();
-            m_menuTools.afterDraw();
             return;
         }
 
@@ -200,8 +199,13 @@ namespace dusk {
 
             ImGui::EndMainMenuBar();
         }
+
         ShowToasts();
+    }
+
+    void ImGuiConsole::PostDraw() {
         m_menuTools.afterDraw();
+        ShowPipelineProgress();
     }
 
     bool ImGuiConsole::CheckMenuViewToggle(ImGuiKey key, bool& active) {
@@ -273,5 +277,33 @@ namespace dusk {
         if (toast.remain <= 0.f) {
             m_toasts.pop_front();
         }
+    }
+
+    void ImGuiConsole::ShowPipelineProgress() {
+        const auto* stats = aurora_get_stats();
+        const u32 queuedPipelines = stats->queuedPipelines;
+        if (queuedPipelines == 0) {
+            return;
+        }
+        const u32 createdPipelines = stats->createdPipelines;
+        const u32 totalPipelines = queuedPipelines + createdPipelines;
+
+        const auto* viewport = ImGui::GetMainViewport();
+        const auto padding = viewport->WorkPos.y + 10.f;
+        const auto halfWidth = viewport->GetWorkCenter().x;
+        ImGui::SetNextWindowPos(ImVec2{halfWidth, padding}, ImGuiCond_Always, ImVec2{0.5f, 0.f});
+        ImGui::SetNextWindowSize(ImVec2{halfWidth, 0.f}, ImGuiCond_Always);
+        ImGui::SetNextWindowBgAlpha(0.65f);
+        ImGui::Begin("Pipelines", nullptr,
+                     ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoMove |
+                         ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing);
+        const auto percent = static_cast<float>(createdPipelines) / static_cast<float>(totalPipelines);
+        const auto progressStr = fmt::format("Processing pipelines: {} / {}", createdPipelines, totalPipelines);
+        const auto textSize = ImGui::CalcTextSize(progressStr.data(), progressStr.data() + progressStr.size());
+        ImGui::NewLine();
+        ImGui::SameLine(ImGui::GetWindowWidth() / 2.f - textSize.x + textSize.x / 2.f);
+        ImGuiStringViewText(progressStr);
+        ImGui::ProgressBar(percent);
+        ImGui::End();
     }
 }
