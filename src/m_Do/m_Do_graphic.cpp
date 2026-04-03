@@ -2105,6 +2105,7 @@ int mDoGph_Painter() {
     #elif PLATFORM_WII
     if (data_8053a730)
     #endif
+    #if TARGET_PC || PLATFORM_WII
     {
         GXSetTexCopySrc(0, 0, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
         GXSetTexCopyDst(mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), (GXTexFmt)mDoGph_gInf_c::m_fullFrameBufferTimg->format, 0);
