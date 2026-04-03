@@ -657,12 +657,6 @@ const GXColor* dMenu_FmapMap_c::getColor(int param_0) {
 }
 
 void dMenu_FmapMap_c::setTexture(u16 i_width, u16 i_height, u16 param_2, u16 param_3) {
-#ifdef TARGET_PC
-    // Increase map render resolution
-    i_width *= 2;
-    i_height *= 2;
-#endif
-
     mMapImage_p = NULL;
     mResTIMG = NULL;
 #ifdef TARGET_PC

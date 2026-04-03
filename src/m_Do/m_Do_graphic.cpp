@@ -1221,10 +1221,14 @@ void mDoGph_gInf_c::bloom_c::draw() {
             mDoGph_drawFilterQuad(4, 4);
         }
         if (enabled) {
+#ifdef TARGET_PC
+            GXCreateFrameBuffer(width, height);
+#else
             // Store off m_buffer to copy over again at the end.
             GXSetTexCopySrc(0, 0, width / 2, height / 2);
             GXSetTexCopyDst(width / 2, height / 2, GX_TF_RGBA8, 0);
             GXCopyTex(m_buffer, 0);
+#endif
 
             GXSetNumTevStages(3);
             GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
@@ -1348,6 +1352,9 @@ void mDoGph_gInf_c::bloom_c::draw() {
             GXSetTexCopyDst(width / 4, height / 4, GX_TF_RGBA8, GX_FALSE);
             GXCopyTex(zBufferTex, GX_FALSE);
 
+#ifdef TARGET_PC
+            GXRestoreFrameBuffer();
+#else
             // Copy back m_buffer to screen.
             GXInitTexObj(&tmp_tex2, m_buffer, width / 2, height / 2, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP,
                          GX_FALSE);
@@ -1366,6 +1373,7 @@ void mDoGph_gInf_c::bloom_c::draw() {
                             GX_TEVPREV);
             GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ONE, GX_LO_OR);
             mDoGph_drawFilterQuad(2, 2);
+#endif
 
             // Now blend our bloom into the real FB.
             GXLoadTexObj(&tmp_tex1, GX_TEXMAP0);
@@ -1411,7 +1419,11 @@ static void retry_captue_frame(view_class* param_0, view_port_class* param_1, in
         var_r24 = width >> 1;
         var_r23 = height >> 1;
         GXSetTexCopySrc(x_orig, y_orig_pos, width, height);
+#ifdef TARGET_PC
+        GXSetTexCopyDst(width, height, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
+#else
         GXSetTexCopyDst(var_r24, var_r23, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
+#endif
         GXCopyTex(tex, GX_FALSE);
         GXPixModeSync();
         GXInvalidateTexAll();

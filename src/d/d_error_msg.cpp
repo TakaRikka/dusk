@@ -240,8 +240,13 @@ static void drawCapture(u8 alpha) {
     static bool l_texCopied = false;
 
     if (!l_texCopied) {
+#if TARGET_PC
+        GXSetTexCopySrc(0, 0, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
+        GXSetTexCopyDst(mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
+#else
         GXSetTexCopySrc(0, 0, FB_WIDTH, FB_HEIGHT);
         GXSetTexCopyDst(FB_WIDTH / 2, FB_HEIGHT / 2, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
+#endif
         GXCopyTex(mDoGph_gInf_c::getFrameBufferTex(), GX_FALSE);
         l_texCopied = true;
     }

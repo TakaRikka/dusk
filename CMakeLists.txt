@@ -117,7 +117,13 @@ add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${J
 
 target_link_libraries(game PRIVATE game_debug cxxopts::cxxopts absl::flat_hash_map)
 if (DUSK_MOVIE_SUPPORT_REAL)
-    target_link_libraries(game PRIVATE libjpeg-turbo::turbojpeg-static)
+    if (TARGET libjpeg-turbo::turbojpeg-static)
+        message(STATUS "dusk: Linking against libjpeg-turbo static library")
+        target_link_libraries(game PRIVATE libjpeg-turbo::turbojpeg-static)
+    else ()
+        message(STATUS "dusk: Linking against libjpeg-turbo shared library")
+        target_link_libraries(game PRIVATE libjpeg-turbo::turbojpeg)
+    endif ()
     target_compile_definitions(game PRIVATE MOVIE_SUPPORT=1)
 endif ()
 target_compile_definitions(game PRIVATE TARGET_PC AVOID_UB=1 VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0
