@@ -1398,7 +1398,12 @@ void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* pa
 }
 
 void dDlst_shadowControl_c::init() {
+#if TARGET_PC
+    // Increase shadow map resolution
+    static u16 l_realImageSize[2] = {1024, 512};
+#else
     static u16 l_realImageSize[2] = {192, 64};
+#endif
     for (int i = 0; i < 2; i++) {
         u16 size = l_realImageSize[i];
 
@@ -1471,11 +1476,18 @@ void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
     int tex = 0;
     u16 r27;
     u16 r26;
+#ifdef TARGET_PC
+    bool needsRestore = false;
+#endif
     for (; shadowReal; shadowReal = shadowReal->getZsortNext()) {
         if (shadowReal->isUse()) {
             if (r29 == 0) {
                 r27 = GXGetTexObjWidth(field_0x15eb0 + tex);
                 r26 = r27 * 2;
+#ifdef TARGET_PC
+                GXCreateFrameBuffer(r26, r26);
+                needsRestore = true;
+#endif
                 GXSetViewport(0.0f, 0.0f, r26, r26, 0.0f, 1.0f);
                 GXSetScissor(0, 0, r26, r26);
             }
@@ -1503,6 +1515,11 @@ void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
         GXPixModeSync();
         GXSetAlphaUpdate(GX_DISABLE);
     }
+#ifdef TARGET_PC
+    if (needsRestore) {
+        GXRestoreFrameBuffer();
+    }
+#endif
     GXSetClipMode(GX_CLIP_ENABLE);
     GXSetDither(GX_TRUE);
 }
