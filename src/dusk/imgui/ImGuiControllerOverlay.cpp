@@ -13,8 +13,6 @@ namespace dusk {
         ImGui::TextUnformatted(text.c_str());
     }
 
-    static inline float GetScale() { return ImGui::GetCurrentContext()->CurrentDpiScale; }
-
     void ImGuiMenuGame::windowInputViewer() {
         if (!m_showInputViewer) {
             return;
@@ -35,7 +33,7 @@ namespace dusk {
 
         ImGui::SetNextWindowBgAlpha(0.65f);
         if (ImGui::Begin("Input Viewer", nullptr, windowFlags)) {
-            float scale = GetScale();
+            float scale = ImGuiScale();
             if (!m_controllerName.empty()) {
                 TextCenter(m_controllerName);
                 ImGui::Separator();
