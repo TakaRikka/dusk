@@ -301,11 +301,6 @@ void dMenu_DmapMap_c::_delete() {
 }
 
 void dMenu_DmapMap_c::setTexture(u16 width, u16 height, u16 param_2, u16 param_3) {
-#ifdef TARGET_PC
-    // Increase map render resolution
-    width *= 2;
-    height *= 2;
-#endif
     for (int lp1 = 0; lp1 < 2; lp1++) {
 #ifdef TARGET_PC
         u32 sz = 0x20; // No need to allocate memory for texture
