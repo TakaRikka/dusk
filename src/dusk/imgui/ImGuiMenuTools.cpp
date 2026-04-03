@@ -131,6 +131,9 @@ namespace dusk {
                 BytesToString(stats->lastVertSize + stats->lastUniformSize +
                     stats->lastIndexSize + stats->lastStorageSize +
                     stats->lastTextureUploadSize)));
+
+            // TODO: persist to config
+            ShowCornerContextMenu(m_debugOverlayCorner, m_cameraOverlayCorner);
         }
         ImGui::End();
     }

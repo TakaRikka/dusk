@@ -26,7 +26,8 @@ namespace dusk {
         }
 
         ImGui::SetNextWindowBgAlpha(0.65f);
-        ImGui::SetNextWindowSizeConstraints(ImVec2(300, 0), ImVec2(FLT_MAX, FLT_MAX));
+        ImGui::SetNextWindowSizeConstraints(ImVec2(300.f * ImGuiScale(), 0),
+                                            ImVec2(FLT_MAX, FLT_MAX));
 
         if (!ImGui::Begin("Camera Debug", nullptr, windowFlags)) {
             ImGui::End();
