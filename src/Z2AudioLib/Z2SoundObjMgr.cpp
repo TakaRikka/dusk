@@ -108,7 +108,9 @@ void Z2SoundObjMgr::searchEnemy() {
     twilightBattle_ = 0;
 
     #if TARGET_PC
-    if (Z2GetSeqMgr()->checkBgmIDPlaying(Z2BGM_MIDNA_SOS)) {
+    if (Z2GetSeqMgr()->checkBgmIDPlaying(Z2BGM_MIDNA_SOS) &&
+        dusk::getSettings().game.midnasLamentNonStop)
+    {
         Z2GetSeqMgr()->changeSubBgmStatus(0);
         return;
     }
