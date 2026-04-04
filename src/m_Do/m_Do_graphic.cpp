@@ -1194,7 +1194,7 @@ void mDoGph_gInf_c::bloom_c::remove() {
 
 void mDoGph_gInf_c::bloom_c::draw() {
 #if TARGET_PC
-    if (!dusk::ImGuiMenuEnhancements::m_enhancements.enableBloom) {
+    if (!dusk::getSettings().game.enableBloom) {
         return;
     }
 #endif
@@ -1670,6 +1670,10 @@ int mDoGph_Painter() {
         DuskLog.debug("mDoGph_Painter: windowNum={}", wn);
         if (wn != 0) sDiagLoggedWindow = true;
     }
+
+#if TARGET_PC
+    dusk::g_imguiConsole.PreDraw();
+#endif
 
     #if DEBUG
     drawHeapMap();
@@ -2156,7 +2160,7 @@ int mDoGph_Painter() {
     #endif
 
     #if TARGET_PC
-    if (dusk::ImGuiMenuEnhancements::m_enhancements.mirrorMode)
+    if (dusk::getSettings().game.enableMirrorMode)
     #elif PLATFORM_WII
     if (data_8053a730)
     #endif
@@ -2287,7 +2291,7 @@ int mDoGph_Painter() {
     #endif
 
 #if TARGET_PC
-    dusk::g_imguiConsole.draw();
+    dusk::g_imguiConsole.PostDraw();
 #endif
 
     mDoGph_gInf_c::endRender();

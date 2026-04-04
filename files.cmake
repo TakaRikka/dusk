@@ -1341,9 +1341,12 @@ set(DUSK_FILES
         src/dusk/extras.c
         src/dusk/extras.cpp
         src/dusk/globals.cpp
+        src/dusk/settings.cpp
         #src/dusk/m_Do_ext_dusk.cpp
         src/dusk/imgui/ImGuiConsole.hpp
         src/dusk/imgui/ImGuiConsole.cpp
+        src/dusk/imgui/ImGuiEngine.cpp
+        src/dusk/imgui/ImGuiEngine.hpp
         src/dusk/imgui/ImGuiMenuGame.cpp
         src/dusk/imgui/ImGuiMenuGame.hpp
         src/dusk/imgui/ImGuiMenuTools.cpp

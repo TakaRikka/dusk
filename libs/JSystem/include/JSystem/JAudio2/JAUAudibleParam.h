@@ -10,7 +10,7 @@
  */
 struct JAUAudibleParam {
     f32 getDopplerPower() const {
-        return (u32)((*(u8*)&field_0x0.raw >> 4) & 0xf) * (1.0f / 15.0f);
+        return field_0x0.bytes.b0_0 * (1.0f / 15.0f);
     }
 
     union {
