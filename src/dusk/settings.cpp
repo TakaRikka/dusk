@@ -27,6 +27,7 @@ UserSettings g_userSettings = {
         .biggerWallets = false,
         .noReturnRupees = false,
         .disableRupeeCutscenes = false,
+        .noSwordRecoil = false,
 
         // Preferences
         .enableMirrorMode = false,

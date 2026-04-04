@@ -7,6 +7,8 @@
 #include "d/actor/d_a_b_gnd.h"
 #include "SSystem/SComponent/c_math.h"
 
+#include "dusk/settings.h"
+
 enum daAlink_CutNmParamType {
     CUT_NM_PARAM_VERTICAL,
     CUT_NM_PARAM_LEFT,
@@ -368,6 +370,12 @@ BOOL daAlink_c::changeCutReverseProc(daAlink_c::daAlink_ANM i_anmID) {
     if (checkCutReverseAt(&mAtCps[0]) || (mEquipItem != dItemNo_COPY_ROD_e && (checkCutReverseAt(&mAtCps[1]) || checkCutReverseAt(&mAtCps[2])))) {
         return procCutReverseInit(i_anmID);
     }
+
+    #if TARGET_PC
+    if (dusk::getSettings().game.noSwordRecoil) {
+        return FALSE;
+    }
+    #endif
 
     if (checkNoResetFlg0(FLG0_CUT_AT_FLG) || mEquipItem == dItemNo_COPY_ROD_e) {
         cXyz sp28;

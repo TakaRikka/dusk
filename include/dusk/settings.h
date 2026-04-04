@@ -31,6 +31,7 @@ struct UserSettings {
         bool biggerWallets;
         bool noReturnRupees;
         bool disableRupeeCutscenes;
+        bool noSwordRecoil;
 
         // Preferences
         bool enableMirrorMode;

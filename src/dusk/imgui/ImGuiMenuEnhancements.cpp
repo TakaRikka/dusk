@@ -27,6 +27,11 @@ namespace dusk {
                     ImGui::SetTooltip("Rupees won't play cutscenes after you've collected them the first time");
                 }
 
+                ImGui::Checkbox("No Sword Recoil", &getSettings().game.noSwordRecoil);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Link won't recoil when his sword hits walls");
+                }
+
                 ImGui::Checkbox("Hide TV Settings Screen", &getSettings().game.hideTvSettingsScreen);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Hides the TV calibration screen shown when loading a save");
