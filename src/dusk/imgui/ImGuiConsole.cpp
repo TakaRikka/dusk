@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <array>
 #include <numeric>
 #include <string_view>
@@ -14,6 +15,7 @@
 #include "JSystem/JUtility/JUTGamePad.h"
 
 #if _WIN32
+#define NOMINMAX
 #include "Windows.h"
 #endif
 
