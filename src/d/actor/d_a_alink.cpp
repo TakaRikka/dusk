@@ -54,6 +54,8 @@
 #include "res/Object/Alink.h"
 #include <cstring>
 
+#include "dusk/settings.hpp"
+
 static int daAlink_Create(fopAc_ac_c* i_this);
 static int daAlink_Delete(daAlink_c* i_this);
 static int daAlink_Execute(daAlink_c* i_this);
@@ -7510,7 +7512,7 @@ void daAlink_c::setBlendMoveAnime(f32 i_morf) {
     BOOL sp24 = checkEventRun();
     BOOL sp20 = checkBootsMoveAnime(1);
 #if TARGET_PC
-    if (dusk::ImGuiMenuEnhancements::m_enhancements.fastIronBoots) {
+    if (dusk::settings::enhancements::FastIronBoots.getValue()) {
         sp20 = FALSE;
     }
 #endif
@@ -9475,7 +9477,7 @@ void daAlink_c::setStickData() {
                 mHeavySpeedMultiplier = mpHIO->mItem.mIronBoots.m.mInputFactor;
             }
 #if TARGET_PC
-            if (dusk::ImGuiMenuEnhancements::m_enhancements.fastIronBoots) {
+            if (dusk::settings::enhancements::FastIronBoots.getValue()) {
                 mHeavySpeedMultiplier = 1.0f;
             }
 #endif
@@ -9487,7 +9489,7 @@ void daAlink_c::setStickData() {
                 mHeavySpeedMultiplier = mpHIO->mItem.mIronBoots.m.mWaterInputFactor;
             }
 #if TARGET_PC
-            if (dusk::ImGuiMenuEnhancements::m_enhancements.fastIronBoots) {
+            if (dusk::settings::enhancements::FastIronBoots.getValue()) {
                 mHeavySpeedMultiplier = 1.0f;
             }
 #endif

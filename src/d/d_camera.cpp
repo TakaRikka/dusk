@@ -766,7 +766,7 @@ void dCamera_c::updatePad() {
         var_f31 = mDoCPd_c::getSubStickX3D(mPadID);
 
         #if TARGET_PC
-        if (dusk::ImGuiMenuEnhancements::m_enhancements.invertCameraXAxis) {
+        if (dusk::settings::enhancements::InvertCameraXAxis.getValue()) {
             var_f31 *= -1.0f;
         }
         #endif

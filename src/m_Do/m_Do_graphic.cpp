@@ -1163,7 +1163,7 @@ void mDoGph_gInf_c::bloom_c::remove() {
 
 void mDoGph_gInf_c::bloom_c::draw() {
 #if TARGET_PC
-    if (!dusk::ImGuiMenuEnhancements::m_enhancements.enableBloom) {
+    if (!dusk::settings::enhancements::EnableBloom.getValue()) {
         return;
     }
 #endif
@@ -2113,7 +2113,7 @@ int mDoGph_Painter() {
     #endif
 
     #if TARGET_PC
-    if (dusk::ImGuiMenuEnhancements::m_enhancements.mirrorMode)
+    if (dusk::settings::enhancements::MirrorMode.getValue())
     #elif PLATFORM_WII
     if (data_8053a730)
     #endif

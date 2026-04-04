@@ -69,6 +69,12 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(cxxopts)
+FetchContent_Declare(json
+    URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
+    URL_HASH SHA256=42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+FetchContent_MakeAvailable(json)
 
 include(files.cmake)
 
@@ -108,7 +114,7 @@ target_include_directories(game_debug PUBLIC
         extern
         ${CMAKE_SOURCE_DIR}/build/${DUSK_TP_VERSION}/include
         build/${DUSK_TP_VERSION}/include)
-target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd aurora::card)
+target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd aurora::card nlohmann_json::nlohmann_json)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES}

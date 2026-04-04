@@ -4,43 +4,36 @@
 
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuEnhancements.hpp"
+#include "ImGuiConfig.hpp"
+#include "dusk/settings.hpp"
 #include <imgui_internal.h>
 
 namespace dusk {
-    EnhancementsSettings ImGuiMenuEnhancements::m_enhancements = {
-        .fastIronBoots = false,
-        .invertCameraXAxis = false,
-        .restoreWiiGlitches = false,
-        .enableBloom = true,
-        .useWaterProjectionOffset = false,
-        .mirrorMode = false,
-    };
-
     ImGuiMenuEnhancements::ImGuiMenuEnhancements() {}
 
     void ImGuiMenuEnhancements::draw() {
         if (ImGui::BeginMenu("Enhancements")) {
             if (ImGui::BeginMenu("Quality of Life")) {
-                ImGui::Checkbox("Fast Iron Boots", &m_enhancements.fastIronBoots);
-                ImGui::Checkbox("Invert Camera X Axis", &m_enhancements.invertCameraXAxis);
-                ImGui::Checkbox("Quick Transform (R+Y)", &m_enhancements.quickTransform);
+                config::ImguiCheckbox("Fast Iron Boots", settings::enhancements::FastIronBoots);
+                config::ImguiCheckbox("Invert Camera X Axis", settings::enhancements::InvertCameraXAxis);
+                config::ImguiCheckbox("Quick Transform (R+Y)", settings::enhancements::QuickTransform);
                 ImGui::EndMenu();
             }
 
             if (ImGui::BeginMenu("Graphics")) {
-                ImGui::Checkbox("Native Bloom", &m_enhancements.enableBloom);
-                ImGui::Checkbox("Water Projection Offset", &m_enhancements.useWaterProjectionOffset);
+                config::ImguiCheckbox("Native Bloom", settings::enhancements::EnableBloom);
+                config::ImguiCheckbox("Water Projection Offset", settings::enhancements::UseWaterProjectionOffset);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Adds GC-specific -0.01 transS offset\n"
                         "that causes ~6px ghost artifacts in water reflections");
                 }
-                ImGui::Checkbox("Mirror Mode", &m_enhancements.mirrorMode);
+                config::ImguiCheckbox("Mirror Mode", settings::enhancements::MirrorMode);
 
                 ImGui::EndMenu();
             }
 
             if (ImGui::BeginMenu("Restorations")) {
-                ImGui::Checkbox("Restore Wii 1.0 Glitches", &m_enhancements.restoreWiiGlitches);
+                config::ImguiCheckbox("Restore Wii 1.0 Glitches", settings::enhancements::RestoreWiiGlitches);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Restores patched glitches from Wii USA 1.0, the first released version");
                 }

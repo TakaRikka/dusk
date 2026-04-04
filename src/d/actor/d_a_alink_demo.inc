@@ -4301,7 +4301,7 @@ bool daAlink_c::checkAcceptWarp() {
      */
     if (mLinkAcch.ChkGroundHit() && !checkModeFlg(MODE_PLAYER_FLY)
         #if TARGET_PC
-        && (dusk::ImGuiMenuEnhancements::m_enhancements.restoreWiiGlitches || !checkNoResetFlg0(FLG0_WATER_IN_MOVE))
+        && (dusk::settings::enhancements::RestoreWiiGlitches.getValue() || !checkNoResetFlg0(FLG0_WATER_IN_MOVE))
         #elif VERSION != VERSION_WII_USA_R0
         && !checkNoResetFlg0(FLG0_WATER_IN_MOVE)
         #endif
@@ -4312,7 +4312,7 @@ bool daAlink_c::checkAcceptWarp() {
          */
         if (
             #if TARGET_PC
-            (dusk::ImGuiMenuEnhancements::m_enhancements.restoreWiiGlitches || !getSlidePolygon(&plane)) &&
+            (dusk::settings::enhancements::RestoreWiiGlitches.getValue() || !getSlidePolygon(&plane)) &&
             #elif VERSION != VERSION_WII_USA_R0
             !getSlidePolygon(&plane) &&
             #endif

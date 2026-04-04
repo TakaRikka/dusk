@@ -6,7 +6,7 @@
 #include "dusk/imgui/ImGuiMenuEnhancements.hpp"
 
 void daAlink_c::handleQuickTransform() {
-    if (!dusk::ImGuiMenuEnhancements::m_enhancements.quickTransform) {
+    if (!dusk::settings::enhancements::QuickTransform.getValue()) {
         return;
     }
 

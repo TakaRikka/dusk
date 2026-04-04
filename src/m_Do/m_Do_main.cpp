@@ -56,6 +56,8 @@
 #include <dolphin/dvd.h>
 
 #include "cxxopts.hpp"
+#include "dusk/config.hpp"
+#include "dusk/settings.hpp"
 
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
@@ -225,10 +227,41 @@ static AuroraBackend ParseAuroraBackend(const std::string& value) {
     exit(1);
 }
 
+static void ApplyCVarOverrides(const cxxopts::OptionValue& option) {
+    if (option.count() == 0) {
+        return;
+    }
+
+    const auto& cVars = option.as<std::vector<std::string>>();
+    for (const auto& cvarArg : cVars) {
+        const auto sep = cvarArg.find('=');
+        if (sep == std::string::npos) {
+            DuskLog.fatal("--cvar argument has no '=': '{}'", cvarArg);
+            continue;
+        }
+
+        const auto name = std::string_view(cvarArg).substr(0, sep);
+        const auto value = std::string_view(cvarArg).substr(sep + 1);
+
+        const auto cVar = dusk::config::GetConfigVar(name);
+        if (!cVar) {
+            DuskLog.fatal("Unknown --cvar name: '{}'", name);
+        }
+
+        try {
+            cVar->getImpl()->loadFromArg(*cVar, value);
+        } catch (const std::exception& e) {
+            DuskLog.fatal("Unable to parse: '{}': {}", value, e.what());
+        }
+    }
+}
+
 // =========================================================================
 // PC ENTRY POINT
 // =========================================================================
 int game_main(int argc, char* argv[]) {
+    dusk::settings::Register();
+
     cxxopts::ParseResult parsed_arg_options;
 
     try {
@@ -238,7 +271,8 @@ int game_main(int argc, char* argv[]) {
             ("l,log-level", "Log level from " + std::to_string(AuroraLogLevel::LOG_DEBUG) + " to " + std::to_string(AuroraLogLevel::LOG_FATAL), cxxopts::value<uint8_t>()->default_value("0"))
             ("h,help", "Print usage")
             ("dvd", "Path to DVD image file", cxxopts::value<std::string>()->default_value("game.iso"))
-            ("backend", "Graphics API backend to use (auto, d3d11, d3d12, metal, vulkan, opengl, opengles, webgpu, null)", cxxopts::value<std::string>()->default_value("auto"));
+            ("backend", "Graphics API backend to use (auto, d3d11, d3d12, metal, vulkan, opengl, opengles, webgpu, null)", cxxopts::value<std::string>()->default_value("auto"))
+            ("cvar", "Override configuration variables without modifying config", cxxopts::value<std::vector<std::string>>());
 
         arg_options.parse_positional({"dvd"});
         arg_options.positional_help("<dvd-image>");
@@ -256,6 +290,9 @@ int game_main(int argc, char* argv[]) {
         fprintf(stderr, "Argument Error: %s\n", e.what());
         exit(1);
     }
+
+    dusk::config::LoadFromUserPreferences();
+    ApplyCVarOverrides(parsed_arg_options["cvar"]);
 
     AuroraConfig config{};
     config.appName = "Dusk";
