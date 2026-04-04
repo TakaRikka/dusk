@@ -43,3 +43,7 @@ compile_commands.json
 
 # ISOs
 *.iso
+
+*.ini
+*.controller
+pipeline_cache.bin
