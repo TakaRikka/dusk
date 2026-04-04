@@ -70,6 +70,12 @@ namespace dusk {
             if (ImGui::BeginMenu("Cheats")) {
                 ImGui::Checkbox("Fast Iron Boots", &getSettings().game.enableFastIronBoots);
 
+                ImGui::Checkbox("Can Transform Anywhere",
+                                &getSettings().game.canTransformAnywhere);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Allows you to transform between forms even if NPCs are looking");
+                }
+
                 ImGui::EndMenu();
             }
 

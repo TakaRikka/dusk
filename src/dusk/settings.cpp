@@ -43,6 +43,7 @@ UserSettings g_userSettings = {
 
         // Cheats
         .enableFastIronBoots = false,
+        .canTransformAnywhere = false,
 
         // Technical
         .restoreWiiGlitches = false,
