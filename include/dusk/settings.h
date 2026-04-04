@@ -51,6 +51,7 @@ struct UserSettings {
 
         // Cheats
         bool enableFastIronBoots;
+        bool canTransformAnywhere;
 
         // Technical
         bool restoreWiiGlitches;
