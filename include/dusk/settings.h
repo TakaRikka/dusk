@@ -35,6 +35,7 @@ struct UserSettings {
         int damageMultiplier;
         bool instantDeath;
         bool fastClimbing;
+        bool noMissClimbing;
         bool fastTears;
 
         // Preferences

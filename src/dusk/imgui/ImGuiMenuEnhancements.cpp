@@ -37,6 +37,12 @@ namespace dusk {
                     ImGui::SetTooltip("Quicker climbing on ladders and vines like the HD version");
                 }
 
+                ImGui::Checkbox("No Climbing Miss Animation", &getSettings().game.noMissClimbing);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Prevents Link from playing a struggle animation\n"
+                                      "when using the Clawshot on vines at a weird angle.");
+                }
+
                 ImGui::Checkbox("Faster Tears of Light", &getSettings().game.fastTears);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Tears of Light dropped by Shadow Insects pop out faster like the HD version");
