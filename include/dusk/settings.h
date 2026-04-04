@@ -45,6 +45,9 @@ struct UserSettings {
         bool enableBloom;
         bool useWaterProjectionOffset;
 
+        // Audio
+        bool midnasLamentNonStop;
+
         // Cheats
         bool enableFastIronBoots;
 

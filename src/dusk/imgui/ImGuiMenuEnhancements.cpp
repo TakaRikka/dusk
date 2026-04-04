@@ -67,6 +67,15 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
+            if (ImGui::BeginMenu("Audio")) {
+                ImGui::Checkbox("Non-Stop Midna's Lament", &getSettings().game.midnasLamentNonStop);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Prevents enemy music while Midna's Lament is playing.");
+                }
+
+                ImGui::EndMenu();
+            }
+
             if (ImGui::BeginMenu("Cheats")) {
                 ImGui::Checkbox("Fast Iron Boots", &getSettings().game.enableFastIronBoots);
 
