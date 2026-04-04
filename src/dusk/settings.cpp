@@ -1,28 +1,97 @@
-#include "dusk/settings.hpp"
+#include "dusk/settings.h"
 #include "dusk/config.hpp"
 
-namespace dusk::settings::enhancements {
-    ConfigVar<bool> FastIronBoots("enhancements.fast_iron_boots", false);
-    ConfigVar<bool> InvertCameraXAxis("enhancements.invert_camera_x_axis", false);
-    ConfigVar<bool> QuickTransform("enhancements.quick_transform", false);
-    ConfigVar<bool> RestoreWiiGlitches("enhancements.restore_wii_glitches", false);
-    ConfigVar<bool> EnableBloom("enhancements.enable_bloom", true);
-    ConfigVar<bool> UseWaterProjectionOffset("enhancements.use_water_projection_offset", false);
-    ConfigVar<bool> MirrorMode("enhancements.mirror_mode", false);
-
-    void Register() {
-        Register(FastIronBoots);
-        Register(InvertCameraXAxis);
-        Register(QuickTransform);
-        Register(RestoreWiiGlitches);
-        Register(EnableBloom);
-        Register(UseWaterProjectionOffset);
-        Register(MirrorMode);
-    }
+namespace dusk::settings {
+namespace video {
+ConfigVar<bool> enableFullscreen("video.enableFullscreen", false);
 }
 
-namespace dusk::settings {
-    void Register() {
-        enhancements::Register();
-    }
+namespace audio {
+ConfigVar<float> masterVolume("audio.masterVolume", 1.0f);
+ConfigVar<float> mainMusicVolume("audio.mainMusicVolume", 1.0f);
+ConfigVar<float> subMusicVolume("audio.subMusicVolume", 1.0f);
+ConfigVar<float> soundEffectsVolume("audio.soundEffectsVolume", 1.0f);
+ConfigVar<float> fanfareVolume("audio.fanfareVolume", 1.0f);
+}
+
+namespace game {
+// Quality of Life
+ConfigVar<bool> enableQuickTransform("game.enableQuickTransform", false);
+ConfigVar<bool> hideTvSettingsScreen("game.hideTvSettingsScreen", false);
+ConfigVar<bool> biggerWallets("game.biggerWallets", false);
+ConfigVar<bool> noReturnRupees("game.noReturnRupees", false);
+ConfigVar<bool> disableRupeeCutscenes("game.disableRupeeCutscenes", false);
+ConfigVar<bool> noSwordRecoil("game.noSwordRecoil", false);
+ConfigVar<int> damageMultiplier("game.damageMultiplier", 1);
+ConfigVar<bool> instantDeath("game.instantDeath", false);
+ConfigVar<bool> fastClimbing("game.fastClimbing", false);
+ConfigVar<bool> fastTears("game.fastTears", false);
+
+// Preferences
+ConfigVar<bool> enableMirrorMode("game.enableMirrorMode", false);
+ConfigVar<bool> invertCameraXAxis("game.invertCameraXAxis", false);
+
+// Graphics
+ConfigVar<bool> enableBloom("game.enableBloom", true);
+ConfigVar<bool> useWaterProjectionOffset("game.useWaterProjectionOffset", false);
+
+// Cheats
+ConfigVar<bool> enableFastIronBoots("game.enableFastIronBoots", false);
+
+// Technical
+ConfigVar<bool> restoreWiiGlitches("game.restoreWiiGlitches", false);
+}
+
+void Register() {
+    // Video
+    Register(video::enableFullscreen);
+
+    // Audio
+    Register(audio::masterVolume);
+    Register(audio::mainMusicVolume);
+    Register(audio::subMusicVolume);
+    Register(audio::soundEffectsVolume);
+    Register(audio::fanfareVolume);
+
+    // Game
+    Register(game::enableQuickTransform);
+    Register(game::hideTvSettingsScreen);
+    Register(game::biggerWallets);
+    Register(game::noReturnRupees);
+    Register(game::disableRupeeCutscenes);
+    Register(game::noSwordRecoil);
+    Register(game::damageMultiplier);
+    Register(game::instantDeath);
+    Register(game::fastClimbing);
+    Register(game::fastTears);
+    Register(game::enableMirrorMode);
+    Register(game::invertCameraXAxis);
+    Register(game::enableBloom);
+    Register(game::useWaterProjectionOffset);
+    Register(game::enableFastIronBoots);
+    Register(game::restoreWiiGlitches);
+}
+}
+
+namespace dusk {
+
+// Transient settings
+
+static TransientSettings g_transientSettings = {
+    .collisionView = {
+        .enableTerrainView = false,
+        .enableWireframe = false,
+        .enableAtView = false,
+        .enableTgView = false,
+        .enableCoView = false,
+        .terrainViewOpacity = 50.0f,
+        .colliderViewOpacity = 50.0f,
+        .drawRange = 100.0f,
+    },
+};
+
+TransientSettings& getTransientSettings() {
+    return g_transientSettings;
+}
+
 }

@@ -50,9 +50,10 @@ static void DisplayDspChannel(int i) {
             auto dolby = (channel.mAutoMixerPanDolby & 0xFF) / 127.5f;
             auto fxMix = (channel.mAutoMixerFxMix >> 8) / 127.5f;
             auto volume = VolumeFromU16(channel.mAutoMixerVolume);
+            auto pitch = channel.mPitch / 4096.0f;
             ImGui::Text(
-                "Auto mixer active (pan: %f, dolby: %f, fx: %f, volume: %f)",
-                pan, dolby, fxMix, volume);
+                "Auto mixer active (pan: %f, dolby: %f, fx: %f, volume: %f, pitch %f)",
+                pan, dolby, fxMix, volume, pitch);
         } else {
             ImGui::Text(
                 "Bus connect: %04X(%.2f),%04X(%.2f),%04X(%.2f),%04X(%.2f),%04X(%.2f),%04X(%.2f)",

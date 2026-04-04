@@ -3,10 +3,9 @@
 #include "d/d_meter2.h"
 #include "d/d_meter2_draw.h"
 #include "d/d_meter2_info.h"
-#include "dusk/imgui/ImGuiMenuEnhancements.hpp"
 
 void daAlink_c::handleQuickTransform() {
-    if (!dusk::settings::enhancements::QuickTransform.getValue()) {
+    if (!dusk::settings::game::enableQuickTransform) {
         return;
     }
 

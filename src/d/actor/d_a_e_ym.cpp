@@ -16,6 +16,8 @@
 #include "f_op/f_op_camera_mng.h"
 #include <cstring>
 
+#include "dusk/settings.h"
+
 class daE_YM_HIO_c: public JORReflexible {
 public:
     daE_YM_HIO_c();
@@ -1066,7 +1068,11 @@ void daE_YM_c::executeDown() {
             }
             if (mAcch.ChkGroundHit()) {
                 if (mFlyType != 1) {
+                    #if TARGET_PC
+                    bckSet(6, 0, 0.0f, dusk::settings::game::fastTears && dComIfGp_event_getMode() == 0 ? 2.0f : 1.0f);
+                    #else
                     bckSet(6, 0, 0.0f, 1.0f);
+                    #endif
                 }
                 if (mMode == 1) {
                     mSound.startCreatureSound(Z2SE_EN_YM_LAND, 0, -1);
@@ -1086,7 +1092,11 @@ void daE_YM_c::executeDown() {
             if (current.pos.y < gnd_cross) {
                 mSound.startCreatureSound(Z2SE_CM_BODYFALL_WATER_M, 0, -1);
                 mSound.startCreatureSound(Z2SE_EN_YM_MOGAKU, 0, -1);
+                #if TARGET_PC
+                bckSet(6, 0, 0.0f, dusk::settings::game::fastTears && dComIfGp_event_getMode() == 0 ? 2.0f : 1.0f);
+                #else
                 bckSet(6, 0, 0.0f, 1.0f);
+                #endif
                 speedF = 0.0f;
                 speed.y = gravity = 0.0f;
                 current.pos.y = gnd_cross;
@@ -1102,8 +1112,13 @@ void daE_YM_c::executeDown() {
                 f32 gnd_cross_2 = dComIfG_Bgsp().GroundCross(&gnd_chk);
                 if (gnd_cross_2 == -G_CM3D_F_INF || std::abs(gnd_cross_2 - current.pos.y) > 1000.0f
                     || dComIfG_Bgsp().GetGroundCode(gnd_chk) == 4 || dComIfG_Bgsp().GetGroundCode(gnd_chk) == 10
-                    || dComIfG_Bgsp().GetGroundCode(gnd_chk) == 5) {
+                    || dComIfG_Bgsp().GetGroundCode(gnd_chk) == 5)
+            {
+                    #if TARGET_PC
+                    bckSet(6, 0, 0.0f, dusk::settings::game::fastTears && dComIfGp_event_getMode() == 0 ? 2.0f : 1.0f);
+                    #else
                     bckSet(6, 0, 0.0f, 1.0f);
+                    #endif
                     mMode = 3;
                     speedF = 0.0f;
                     shape_angle.x = -0x8000;

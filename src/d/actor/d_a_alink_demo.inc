@@ -23,7 +23,7 @@
 #include "d/actor/d_a_npc_tkc.h"
 #include <cstring>
 
-#include "dusk/imgui/ImGuiMenuEnhancements.hpp"
+#include "dusk/settings.h"
 
 BOOL daAlink_c::checkEventRun() const {
     return dComIfGp_event_runCheck() || checkPlayerDemoMode();
@@ -2232,6 +2232,12 @@ void daAlink_c::setGetSubBgm(int i_itemNo) {
 }
 
 BOOL daAlink_c::checkTreasureRupeeReturn(int i_itemNo) const {
+    #if TARGET_PC
+    if (dusk::settings::game::noReturnRupees) {
+        return FALSE;
+    }
+    #endif
+
     static const int dummy = 0;
 
     if (i_itemNo == dItemNo_LINKS_SAVINGS_e) {
@@ -4301,7 +4307,7 @@ bool daAlink_c::checkAcceptWarp() {
      */
     if (mLinkAcch.ChkGroundHit() && !checkModeFlg(MODE_PLAYER_FLY)
         #if TARGET_PC
-        && (dusk::settings::enhancements::RestoreWiiGlitches.getValue() || !checkNoResetFlg0(FLG0_WATER_IN_MOVE))
+        && (dusk::settings::game::restoreWiiGlitches || !checkNoResetFlg0(FLG0_WATER_IN_MOVE))
         #elif VERSION != VERSION_WII_USA_R0
         && !checkNoResetFlg0(FLG0_WATER_IN_MOVE)
         #endif
@@ -4312,7 +4318,7 @@ bool daAlink_c::checkAcceptWarp() {
          */
         if (
             #if TARGET_PC
-            (dusk::settings::enhancements::RestoreWiiGlitches.getValue() || !getSlidePolygon(&plane)) &&
+            (dusk::settings::game::restoreWiiGlitches || !getSlidePolygon(&plane)) &&
             #elif VERSION != VERSION_WII_USA_R0
             !getSlidePolygon(&plane) &&
             #endif

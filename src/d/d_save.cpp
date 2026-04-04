@@ -25,6 +25,8 @@
 #include "lingcod/lingcod.h"
 #endif
 
+#include "dusk/settings.h"
+
 static u8 dSv_item_rename(u8 i_itemNo) {
     switch (i_itemNo) {
     case dItemNo_OIL_BOTTLE_2_e:
@@ -111,11 +113,23 @@ u16 dSv_player_status_a_c::getRupeeMax() const {
     if (mWalletSize < 3) {  // if you make this a default, it wont match. Compiler, pls.
         switch (mWalletSize) {
         case WALLET:
+            #if TARGET_PC
+            return dusk::settings::game::biggerWallets ? 500 : 300;
+            #else
             return 300;
+            #endif
         case BIG_WALLET:
+            #if TARGET_PC
+            return dusk::settings::game::biggerWallets ? 1000 : 600;
+            #else
             return 600;
+            #endif
         case GIANT_WALLET:
+            #if TARGET_PC
+            return dusk::settings::game::biggerWallets ? 2000 : 1000;
+            #else
             return 1000;
+            #endif
         }
     }
 

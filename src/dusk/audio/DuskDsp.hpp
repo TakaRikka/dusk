@@ -26,8 +26,6 @@ namespace dusk::audio {
     struct ChannelAuxData {
         s16 hist1;
         s16 hist0;
-        SDL_AudioStream* resampleStream;
-        u16 prevPitch;
 
         // Used for debugging tools.
         u32 resetCount;
@@ -43,6 +41,17 @@ namespace dusk::audio {
             assert(channel < OutputChannel::OutputChannel_MAX);
             return prevVolume[static_cast<int>(channel)];
         }
+
+        // buffer for decoding before resampling, size is chosen based on how many input samples we would need to fetch for the highest possible pitch
+        // to fill one subframe of output samples after resampling
+        static constexpr int DECODE_BUF_SIZE = 2048;
+        s16 decodeBuf[DECODE_BUF_SIZE];
+        int decodeBufCount;
+
+        // basically stores our position between resamplePrev and decodeBuf[0] so we don't lose that fractional resampler position next subframe
+        f32 resamplePos;
+        // last consumed sample from decodeBuf
+        s16 resamplePrev;     
     };
 
     extern ChannelAuxData ChannelAux[DSP_CHANNELS];

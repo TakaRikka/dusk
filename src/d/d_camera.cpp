@@ -28,8 +28,6 @@
 #include "d/d_debug_camera.h"
 #endif
 
-#include "dusk/imgui/ImGuiMenuEnhancements.hpp"
-
 namespace {
 
 static f32 limitf(f32 value, f32 min, f32 max) {
@@ -766,7 +764,7 @@ void dCamera_c::updatePad() {
         var_f31 = mDoCPd_c::getSubStickX3D(mPadID);
 
         #if TARGET_PC
-        if (dusk::settings::enhancements::InvertCameraXAxis.getValue()) {
+        if (dusk::settings::game::invertCameraXAxis) {
             var_f31 *= -1.0f;
         }
         #endif

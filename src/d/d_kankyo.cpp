@@ -32,7 +32,7 @@
 #include <cstdlib>
 #include <cstring>
 #if TARGET_PC
-#include "dusk/imgui/ImGuiConsole.hpp"
+#include "dusk/settings.h"
 #endif
 
 static void GxXFog_set();
@@ -11381,7 +11381,7 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                                 C_MTXLightPerspective(sp1D8, dComIfGd_getView()->fovy,
                                                       camera_p->view.aspect, 1.0f, 1.0f,
 #if TARGET_PC
-                                                      dusk::settings::enhancements::UseWaterProjectionOffset.getValue() ? -0.01f : 0.0f, 0.0f);
+                                                      dusk::settings::game::useWaterProjectionOffset ? -0.01f : 0.0f, 0.0f);
 #else
                                                       -0.01f, 0.0f);
 #endif

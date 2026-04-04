@@ -48,6 +48,7 @@
 #include "dusk/logging.h"
 #include "dusk/time.h"
 #include "dusk/main.h"
+#include "dusk/imgui/ImGuiEngine.hpp"
 
 #include <aurora/aurora.h>
 #include <aurora/event.h>
@@ -57,7 +58,6 @@
 
 #include "cxxopts.hpp"
 #include "dusk/config.hpp"
-#include "dusk/settings.hpp"
 
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
@@ -158,6 +158,9 @@ void main01(void) {
             case AURORA_WINDOW_RESIZED:
                 mDoGph_gInf_c::setWindowSize(event->windowSize);
                 break;
+            case AURORA_DISPLAY_SCALE_CHANGED:
+                dusk::ImGuiEngine_Initialize(event->windowSize.scale);
+                break;
             case AURORA_EXIT:
                 goto exit;
             }
@@ -227,6 +230,10 @@ static AuroraBackend ParseAuroraBackend(const std::string& value) {
     exit(1);
 }
 
+static void aurora_imgui_init_callback(const AuroraWindowSize* size) {
+    dusk::ImGuiEngine_Initialize(size->scale);
+}
+
 static void ApplyCVarOverrides(const cxxopts::OptionValue& option) {
     if (option.count() == 0) {
         return;
@@ -261,6 +268,7 @@ static void ApplyCVarOverrides(const cxxopts::OptionValue& option) {
 // =========================================================================
 int game_main(int argc, char* argv[]) {
     dusk::settings::Register();
+    dusk::config::FinishRegistration();
 
     cxxopts::ParseResult parsed_arg_options;
 
@@ -301,12 +309,12 @@ int game_main(int argc, char* argv[]) {
     config.windowWidth = 608 * 2;
     config.windowHeight = 448 * 2;
     config.desiredBackend = ParseAuroraBackend(parsed_arg_options["backend"].as<std::string>());
-    config.configPath = ".";
     config.logCallback = &aurora_log_callback;
     config.logLevel = (AuroraLogLevel)parsed_arg_options["log-level"].as<uint8_t>();
     config.mem1Size = 256 * 1024 * 1024;
     config.mem2Size = 24 * 1024 * 1024;
     config.allowJoystickBackgroundEvents = true;
+    config.imGuiInitCallback = &aurora_imgui_init_callback;
 
     auroraInfo = aurora_initialize(argc, argv, &config);
 

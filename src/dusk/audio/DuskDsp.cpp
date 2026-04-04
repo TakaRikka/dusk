@@ -74,19 +74,6 @@ constexpr static int PitchToSampleRate(u16 value) {
     return static_cast<int>(static_cast<u64>(SampleRate) * value / 4096);
 }
 
-static void UpdateSampleRate(const JASDsp::TChannel& channel, ChannelAuxData& aux) {
-    auto sampleRate = PitchToSampleRate(channel.mPitch);
-
-    const SDL_AudioSpec spec = {
-        SDL_AUDIO_S16,
-        1,
-        sampleRate
-    };
-
-    SDL_SetAudioStreamFormat(aux.resampleStream, &spec, nullptr);
-    aux.prevPitch = channel.mPitch;
-}
-
 /**
  * Reset state for a DSP channel between independent playbacks.
  */
@@ -98,8 +85,9 @@ static void ResetChannel(JASDsp::TChannel& channel, ChannelAuxData& aux) {
     aux.hist0 = 0;
     aux.hist1 = 0;
 
-    SDL_ClearAudioStream(aux.resampleStream);
-    UpdateSampleRate(channel, aux);
+    aux.decodeBufCount = 0;
+    aux.resamplePos = 0.0;
+    aux.resamplePrev = 0;
 
     for (auto& volume : aux.prevVolume) {
         volume = NAN;
@@ -196,15 +184,16 @@ static void ReadSampleData(
 }
 
 /**
- * Read a single *contiguous* chunk of sample data from a channel,
- * writes the samples to the channel's resampler stream.
+ * Read a single *contiguous* chunk of sample data from a channel into outBuf
  *
- * @returns Amount of samples actually read. Can be greater than the amount requested.
+ * @returns Amount of samples written to outBuf. May be less than desiredSamples
  */
 static int ReadChannelSamplesChunk(
     JASDsp::TChannel& channel,
     ChannelAuxData& aux,
-    int desiredSamples) {
+    int desiredSamples,
+    s16* outBuf,
+    int outBufSize) {
 
     assert(desiredSamples >= 0);
 
@@ -249,61 +238,49 @@ static int ReadChannelSamplesChunk(
     channel.mSamplesLeft -= renderSamples;
     channel.mSamplePosition += renderSamples;
 
-    SDL_PutAudioStreamData(
-        aux.resampleStream,
-        renderData + skipSamples,
-        static_cast<int>(renderSize - skipSamples * sizeof(u16)));
+    int outputCount = static_cast<int>(renderSamples - skipSamples);
+
+    // this should never be hit with the limits on pitch shift (i think) but just in case!!
+    outputCount = std::min(outputCount, outBufSize);
+    if (outputCount > 0) {
+        memcpy(outBuf, renderData + skipSamples, outputCount * sizeof(s16));
+    }
 
     assert(curSamplePosition % channel.mSamplesPerBlock == 0 || channel.mSamplesLeft == 0);
 
-    return static_cast<int>(renderSamples - skipSamples);
+    return outputCount;
 }
 
 /**
- * Reads new audio channels from a DSP channel and writes them to the resampler stream.
+ * Fill decodeBuf with at least `needed` samples, fewer may be written if the channel has no loop and its data ends
  */
-static void SDLCALL ReadChannelSamples(
-    void *userdata,
-    SDL_AudioStream*,
-    int additional_amount,
-    int) {
-
-    if (additional_amount == 0) {
-        return;
-    }
-
-    const auto index = static_cast<u32>(reinterpret_cast<uintptr_t>(userdata));
-    auto& channel = JASDsp::CH_BUF[index];
-    auto& aux = ChannelAux[index];
-
-    if (channel.mSamplesLeft == 0 && !channel.mLoopFlag) {
-        // May get called when we're out of data to read.
-        // This is expected, as we need to drain the resampler channel before we mark the channel as finished.
-        return;
-    }
-
-    auto samplesRead = ReadChannelSamplesChunk(channel, aux, additional_amount);
-    additional_amount -= samplesRead;
-
-    if (channel.mSamplesLeft == 0) {
-        // Reached end of buffer.
-        if (!channel.mLoopFlag) {
-            return;
+static void FillDecodeBuf(JASDsp::TChannel& channel, ChannelAuxData& aux, int needed) {
+    while (aux.decodeBufCount < needed) {
+        if (channel.mSamplesLeft == 0) {
+            if (!channel.mLoopFlag) {
+                // we aren't a looping channel and there's no samples left, we out of this fuckin loop
+                break;
+            } else {
+                // we are looping, handle loop logic
+                channel.mSamplesLeft = channel.mEndSample - channel.mLoopStartSample;
+                channel.mSamplePosition = channel.mLoopStartSample;
+                aux.hist1 = channel.mpPenult;
+                aux.hist0 = channel.mpLast;
+            }
         }
 
-        channel.mSamplesLeft = channel.mEndSample - channel.mLoopStartSample;
-        channel.mSamplePosition = channel.mLoopStartSample;
+        int remainingDecodeSpace = ChannelAuxData::DECODE_BUF_SIZE - aux.decodeBufCount;
+        if (remainingDecodeSpace == 0) {
+            break;
+        }
 
-        aux.hist1 = channel.mpPenult;
-        aux.hist0 = channel.mpLast;
+        aux.decodeBufCount += ReadChannelSamplesChunk(
+            channel, aux, std::min(remainingDecodeSpace, needed - aux.decodeBufCount), 
+            aux.decodeBuf + aux.decodeBufCount, remainingDecodeSpace
+        );
     }
 
-    if (additional_amount >= 0) {
-        ReadChannelSamplesChunk(channel, aux, additional_amount);
-    }
-
-    channel.mAramStreamPosition = channel.mWaveAramAddress
-        + ConvertSamplesToDataLength(channel, channel.mSamplePosition);
+    channel.mAramStreamPosition = channel.mWaveAramAddress + ConvertSamplesToDataLength(channel, channel.mSamplePosition);
 }
 
 /**
@@ -422,57 +399,70 @@ static void RenderOutputChannel(
     prevVolume = targetVolume;
 }
 
+/**
+ * Fetch, decode, resample, output
+ */
 static void RenderChannel(
     JASDsp::TChannel& channel,
     ChannelAuxData& channelAux,
     OutputSubframe& subframe) {
+
     if (channel.mResetFlag) {
         ResetChannel(channel, channelAux);
-    } else if (channelAux.prevPitch != channel.mPitch) {
-        UpdateSampleRate(channel, channelAux);
     }
 
-    DspSubframe audioLoadBuffer = {};
+    // how many input samples we step per output sample, aka the resampling ratio
+    f32 step = (f32)PitchToSampleRate(channel.mPitch) / SampleRate;
 
-    int wantRead = sizeof(audioLoadBuffer);
-    auto read = SDL_GetAudioStreamData(
-        channelAux.resampleStream,
-        &audioLoadBuffer,
-        wantRead);
+    // how many input samples to resample to DSP_SUBFRAME_SIZE output samples
+    int needed = static_cast<int>(channelAux.resamplePos + DSP_SUBFRAME_SIZE * step) + 2;
 
-    if (read < wantRead) {
+    FillDecodeBuf(channel, channelAux, needed);
+
+    // source ran dry, channel is finished
+    if(channelAux.decodeBufCount < needed) {
         channel.mIsFinished = true;
     }
 
-    auto hasReadSamples = std::span(audioLoadBuffer).subspan(0, wantRead / sizeof(f32));
+    DspSubframe audioLoadBuffer = {};
+    f64 pos = channelAux.resamplePos;
+    s16 prev = channelAux.resamplePrev;
+    s16 next = channelAux.decodeBufCount > 0 ? channelAux.decodeBuf[0] : prev;
+    int srcIdx = 0;
+
+    // linear resampling and f32 conversion
+    for (int i = 0; i < DSP_SUBFRAME_SIZE; i++) {
+        audioLoadBuffer[i] = static_cast<f32>(prev + pos * (next - prev)) / 32768.0f;
+        pos += step;
+        while (pos >= 1.0) {
+            pos -= 1.0;
+            prev = next;
+            srcIdx++;
+            next = srcIdx < channelAux.decodeBufCount ? channelAux.decodeBuf[srcIdx] : prev;
+        }
+    }
+
+    // save resampler state for the next subframe, prevents popping on pitch change
+    channelAux.resamplePos = pos;
+    channelAux.resamplePrev = prev;
+
+    // move any remaining samples in the decode buf to the beginning
+    int remainingDecodeBuf = channelAux.decodeBufCount - srcIdx;
+    if (remainingDecodeBuf > 0) {
+        memmove(channelAux.decodeBuf, channelAux.decodeBuf + srcIdx, remainingDecodeBuf * sizeof(s16));
+    }
+
+    channelAux.decodeBufCount = std::max(0, remainingDecodeBuf);
+
+    auto hasReadSamples = std::span(audioLoadBuffer).subspan(0, DSP_SUBFRAME_SIZE);
 
     static_assert(OutputSubframe::NUM_CHANNELS == 2, "Keep RenderChannel in sync!");
 
     RenderOutputChannel(channel, channelAux, OutputChannel::LEFT, hasReadSamples, subframe);
-    RenderOutputChannel(channel, channelAux,OutputChannel::RIGHT, hasReadSamples, subframe);
+    RenderOutputChannel(channel, channelAux, OutputChannel::RIGHT, hasReadSamples, subframe);
 }
 
 void dusk::audio::DspInit() {
-    constexpr SDL_AudioSpec srcSpec = {
-        SDL_AUDIO_S16,
-        1,
-        SampleRate
-    };
-    constexpr SDL_AudioSpec dstSpec = {
-        SDL_AUDIO_F32,
-        1,
-        SampleRate
-    };
-
-    for (u32 i = 0; i < DSP_CHANNELS; i++) {
-        auto& aux = ChannelAux[i];
-        aux.resampleStream = SDL_CreateAudioStream(&srcSpec, &dstSpec);
-
-        SDL_SetAudioStreamGetCallback(
-            aux.resampleStream,
-            ReadChannelSamples,
-            reinterpret_cast<void*>(static_cast<uintptr_t>(i)));
-    }
 }
 
 void dusk::audio::ApplyVolume(

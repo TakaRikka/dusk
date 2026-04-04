@@ -1333,7 +1333,6 @@ set(DOLPHIN_FILES
 set(DUSK_FILES
         include/dusk/endian_gx.hpp
         include/dusk/config.hpp
-        include/dusk/settings.hpp
         src/d/actor/d_a_alink_dusk.cpp
         src/dusk/asserts.cpp
         src/dusk/config.cpp
@@ -1346,10 +1345,13 @@ set(DUSK_FILES
         src/dusk/extras.cpp
         src/dusk/io.cpp
         src/dusk/globals.cpp
+        src/dusk/settings.cpp
         #src/dusk/m_Do_ext_dusk.cpp
         src/dusk/imgui/ImGuiConfig.hpp
         src/dusk/imgui/ImGuiConsole.hpp
         src/dusk/imgui/ImGuiConsole.cpp
+        src/dusk/imgui/ImGuiEngine.cpp
+        src/dusk/imgui/ImGuiEngine.hpp
         src/dusk/imgui/ImGuiMenuGame.cpp
         src/dusk/imgui/ImGuiMenuGame.hpp
         src/dusk/imgui/ImGuiMenuTools.cpp

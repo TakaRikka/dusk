@@ -13,8 +13,15 @@
 #include "d/actor/d_a_obj_swhang.h"
 
 f32 daAlink_c::getHangMoveAnmSpeed() {
+    #if TARGET_PC
+    return getAnmSpeedStickRate(
+        dusk::settings::game::fastClimbing ? 2.0f : mpHIO->mWallHang.mWallMove.m.mMinAnmSpeed,
+        dusk::settings::game::fastClimbing ? 2.0f : mpHIO->mWallHang.mWallMove.m.mMaxAnmSpeed
+    );
+    #else
     return getAnmSpeedStickRate(mpHIO->mWallHang.mWallMove.m.mMinAnmSpeed,
                                 mpHIO->mWallHang.mWallMove.m.mMaxAnmSpeed);
+    #endif
 }
 
 int daAlink_c::getHangDirectionFromAngle() {
@@ -1209,7 +1216,12 @@ void daAlink_c::setLadderPos(int param_0) {
 
 f32 daAlink_c::getLadderMoveAnmSpeed() {
     return getAnmSpeedStickRate(mpHIO->mLadder.m.mMoveMinASpeed,
-                                mpHIO->mLadder.m.mMoveMaxSpeed);
+        #if TARGET_PC
+        dusk::settings::game::fastClimbing ? 1.575f : mpHIO->mLadder.m.mMoveMaxSpeed
+        #else
+        mpHIO->mLadder.m.mMoveMaxSpeed
+        #endif
+    );
 }
 
 int daAlink_c::changeLadderMoveProc(int param_0) {
@@ -1304,8 +1316,14 @@ int daAlink_c::procLadderUpStartInit() {
     mNormalSpeed = 0.0f;
     speedF = 0.0f;
 
-    setSingleAnimeBaseSpeed(ANM_LADDER_UP_START, mpHIO->mLadder.m.mClimbUpStartASpeed,
-                            mpHIO->mLadder.m.mClimbUpStartInterp);
+    setSingleAnimeBaseSpeed(ANM_LADDER_UP_START,
+        #if TARGET_PC
+        dusk::settings::game::fastClimbing ? 1.8f : mpHIO->mLadder.m.mClimbUpStartASpeed,
+        #else
+        mpHIO->mLadder.m.mClimbUpStartASpeed,
+        #endif
+        mpHIO->mLadder.m.mClimbUpStartInterp);
+
     field_0x2f99 = 0x10;
     field_0x3588 = l_waitBaseAnime;
     dComIfGp_setPlayerStatus0(0, 0x2000000);
@@ -1354,8 +1372,14 @@ int daAlink_c::procLadderUpEndInit(BOOL param_0) {
         anm_id = ANM_LADDER_UP_END_RIGHT;
     }
 
-    setSingleAnimeBaseSpeed(anm_id, mpHIO->mLadder.m.mClimbUpEndASpeed,
-                            mpHIO->mLadder.m.mClimbUpEndInterp);
+    setSingleAnimeBaseSpeed(anm_id,
+        #if TARGET_PC
+        dusk::settings::game::fastClimbing ? 1.765f : mpHIO->mLadder.m.mClimbUpEndASpeed,
+        #else
+        mpHIO->mLadder.m.mClimbUpEndASpeed,
+        #endif
+        mpHIO->mLadder.m.mClimbUpEndInterp);
+
     field_0x2f99 = 14;
     setSpecialGravity(0.0f, maxFallSpeed, 0);
 
@@ -1413,8 +1437,14 @@ int daAlink_c::procLadderDownStartInit() {
     shape_angle.y = field_0x306e + 0x8000;
     current.angle.y = field_0x306e;
 
-    setSingleAnimeBaseSpeed(ANM_LADDER_DOWN_START, mpHIO->mLadder.m.mClimbDownStartASpeed,
-                            mpHIO->mLadder.m.mClimbDownStartInterp);
+    setSingleAnimeBaseSpeed(ANM_LADDER_DOWN_START,
+        #if TARGET_PC
+        dusk::settings::game::fastClimbing ? 1.8f : mpHIO->mLadder.m.mClimbDownStartASpeed,
+        #else
+        mpHIO->mLadder.m.mClimbDownStartASpeed,
+        #endif
+        mpHIO->mLadder.m.mClimbDownStartInterp);
+
     field_0x2f99 = 0x10;
     field_0x3588 = l_waitBaseAnime;
     dComIfGp_setPlayerStatus0(0, 0x2000000);
@@ -1469,8 +1499,14 @@ int daAlink_c::procLadderDownEndInit(BOOL param_0) {
         anm_id = ANM_LADDER_DOWN_END_RIGHT;
     }
 
-    setSingleAnimeBaseSpeed(anm_id, mpHIO->mLadder.m.mClimbDownEndASpeed,
-                            mpHIO->mLadder.m.mClimbDownEndInterp);
+    setSingleAnimeBaseSpeed(anm_id,
+        #if TARGET_PC
+        dusk::settings::game::fastClimbing ? 1.8f : mpHIO->mLadder.m.mClimbDownEndASpeed,
+        #else
+        mpHIO->mLadder.m.mClimbDownEndASpeed,
+        #endif
+        mpHIO->mLadder.m.mClimbDownEndInterp);
+
     field_0x2f99 = 14;
     setSpecialGravity(0.0f, maxFallSpeed, 0);
 
@@ -1602,12 +1638,22 @@ int daAlink_c::procLadderMove() {
 
 f32 daAlink_c::getClimbMoveUpDownAnmSpeed() {
     return getAnmSpeedStickRate(mpHIO->mLadder.m.mWallVerticalMinAnmSpeed,
-                                mpHIO->mLadder.m.mWallVerticalMaxAnmSpeed);
+        #if TARGET_PC
+        dusk::settings::game::fastClimbing ? 1.875f : mpHIO->mLadder.m.mWallVerticalMaxAnmSpeed
+        #else
+        mpHIO->mLadder.m.mWallVerticalMaxAnmSpeed
+        #endif
+   );
 }
 
 f32 daAlink_c::getClimbMoveSideAnmSpeed() {
     return getAnmSpeedStickRate(mpHIO->mLadder.m.mWallHorizontalMinAnmSpeed,
-                                mpHIO->mLadder.m.mWallHorizontalMaxAnmSpeed);
+        #if TARGET_PC
+        dusk::settings::game::fastClimbing ? 2.0f : mpHIO->mLadder.m.mWallHorizontalMaxAnmSpeed
+        #else
+        mpHIO->mLadder.m.mWallHorizontalMaxAnmSpeed
+        #endif
+    );
 }
 
 BOOL daAlink_c::checkClimbCode(cBgS_PolyInfo& i_polyinfo) {

@@ -3,9 +3,7 @@
 
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "SSystem/SComponent/c_API_controller_pad.h"
-#include "dusk/settings.hpp"
-
-#include "dusk/imgui/ImGuiMenuEnhancements.hpp"
+#include "dusk/settings.h"
 
 // Controller Ports 1 - 4
 enum { PAD_1, PAD_2, PAD_3, PAD_4 };
@@ -58,7 +56,7 @@ public:
 
     static s16 getStickAngle3D(u32 pad) {
         #if TARGET_PC
-        if (dusk::settings::enhancements::MirrorMode.getValue()) {
+        if (dusk::settings::game::enableMirrorMode) {
             return -getCpadInfo(pad).mMainStickAngle;
         } else {
             return getCpadInfo(pad).mMainStickAngle;
@@ -70,7 +68,7 @@ public:
 
     static f32 getSubStickX3D(u32 pad) {
         #if TARGET_PC
-        if (dusk::settings::enhancements::MirrorMode.getValue()) {
+        if (dusk::settings::game::enableMirrorMode) {
             return -getCpadInfo(pad).mCStickPosX;
         } else {
             return getCpadInfo(pad).mCStickPosX;
