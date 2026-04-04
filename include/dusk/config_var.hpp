@@ -171,6 +171,9 @@ public:
 
     /**
      * \brief Get the current value of the CVar.
+     *
+     * This reference is not guaranteed to remain up-to-date after modification of the CVar.
+     * It will, however, remain sound to access.
      */
     [[nodiscard]] constexpr const T& getValue() const noexcept {
         checkRegistered();
