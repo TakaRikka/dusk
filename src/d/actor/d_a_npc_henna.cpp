@@ -2709,6 +2709,14 @@ static int daNpc_Henna_Create(fopAc_ac_c* i_this) {
         }
         i_this->attention_info.flags = (fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
         a_this->action = 0;
+
+#if AVOID_UB
+        a_this->field_0x654 = 0;
+        a_this->field_0x658 = 0;
+        a_this->field_0x662 = 0;
+        a_this->field_0x664 = 0;
+#endif
+
         fopAcM_SetMtx(i_this, a_this->mpMorf->getModel()->getBaseTRMtx());
         lbl_82_bss_90 = 0;
         if (a_this->arg0 == 1) {
