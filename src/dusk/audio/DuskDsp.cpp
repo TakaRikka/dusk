@@ -19,6 +19,7 @@ ChannelAuxData dusk::audio::ChannelAux[DSP_CHANNELS] = {};
 
 f32 dusk::audio::MasterVolume = 1.0f;
 f32 dusk::audio::PrevMasterVolume = 1.0f;
+bool dusk::audio::EnableReverb = true;
 
 /**
  * Validate that a DSP channel's format is actually something we know how to play.
@@ -112,32 +113,47 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
         auto& channel = channels[i];
         auto& channelAux = ChannelAux[i];
 
-        if (!channel.mIsActive) {
-            continue;
-        }
+        bool skipRender = false;
 
-        if (channel.mPauseFlag) {
+        if (!channel.mIsActive) {
+            skipRender = true;
+        }
+        else if (channel.mPauseFlag) {
             // Not really sure what the practical difference between pause and
             // deactivation is. Either avoids clearing state or allows the DSP to avoid popping?
-            continue;
+            skipRender = true;
         }
-
-        if (channel.mForcedStop) {
+        else if (channel.mForcedStop) {
             channel.mIsFinished = true;
-            continue;
+            skipRender = true;
         }
-
-        if (channel.mWaveAramAddress == 0) {
+        else if (channel.mWaveAramAddress == 0) {
             // I think these are oscillator channels? Not backed by audio.
             // No idea how to implement these yet, so skip them.
             channel.mIsFinished = true;
-            continue;
+            skipRender = true;
         }
 
-        ValidateChannel(channel);
-
         OutputSubframe channelSubframe = {};
-        RenderChannel(channel, channelAux, channelSubframe);
+
+        if (!skipRender) {
+            ValidateChannel(channel);
+            RenderChannel(channel, channelAux, channelSubframe);
+            // todo figure out an actual way to convert this accurately to dry/wet
+            channelAux.reverb.setwet(((channel.mAutoMixerFxMix >> 8) / 255.0f));
+            channelAux.reverb.setdry(1.0f - channelAux.reverb.getwet());
+        }
+
+        if (EnableReverb) {
+            channelAux.reverb.processreplace(
+                channelSubframe.channels[0].data(),
+                channelSubframe.channels[1].data(),
+                channelSubframe.channels[0].data(),
+                channelSubframe.channels[1].data(),
+                DSP_SUBFRAME_SIZE,
+                1
+            );
+        }
 
         for (int o = 0; o < subframe.channels.size(); o++) {
             MixSubframe(subframe.channels[o], channelSubframe.channels[o]);
@@ -463,6 +479,16 @@ static void RenderChannel(
 }
 
 void dusk::audio::DspInit() {
+    for (int i = 0; i < DSP_CHANNELS; i++) {
+        auto& channelAux = ChannelAux[i];
+        channelAux.reverb.setwet(0.0f);
+        channelAux.reverb.setdry(1.0f);
+        channelAux.reverb.setroomsize(0.2f);
+        channelAux.reverb.setdamp(0.3f);
+        channelAux.reverb.setwidth(1.0f);
+        channelAux.reverb.setmode(0.0f);
+        channelAux.reverb.mute();
+    }
 }
 
 void dusk::audio::ApplyVolume(

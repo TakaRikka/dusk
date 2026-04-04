@@ -20,6 +20,7 @@ struct UserSettings {
         float subMusicVolume;
         float soundEffectsVolume;
         float fanfareVolume;
+        bool enableReverb;
     } audio;
 
     // Game settings
@@ -68,4 +69,3 @@ TransientSettings& getTransientSettings();
 }
 
 #endif // DUSK_CONFIG_H
-

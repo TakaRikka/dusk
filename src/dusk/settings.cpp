@@ -17,6 +17,7 @@ UserSettings g_userSettings = {
         .subMusicVolume = 1.0f,
         .soundEffectsVolume = 1.0f,
         .fanfareVolume = 1.0f,
+        .enableReverb = true
     },
 
     // Game settings

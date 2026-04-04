@@ -8,6 +8,8 @@
 #include "SDL3/SDL_audio.h"
 #include <span>
 
+#include "revmodel.hpp"
+
 // ReSharper disable once CppUnusedIncludeDirective
 #include "global.h"
 
@@ -29,6 +31,7 @@ namespace dusk::audio {
 
         // Used for debugging tools.
         u32 resetCount;
+        revmodel reverb;
 
         /**
          * Previous volume values, per output channel.
@@ -118,4 +121,5 @@ namespace dusk::audio {
 
     extern f32 MasterVolume;
     extern f32 PrevMasterVolume;
+    extern bool EnableReverb;
 }
