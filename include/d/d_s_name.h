@@ -48,6 +48,7 @@ public:
     void FileSelectClose();
     void brightCheckOpen();
     void brightCheck();
+    void doPreLoadSetup();
     void changeGameScene();
 
     #if VERSION == VERSION_GCN_PAL
@@ -70,6 +71,9 @@ private:
     /* 0x41E */ u8 mWaitTimer;
     /* 0x41F */ u8 field_0x41f;
     /* 0x420 */ u8 field_0x420;
+#if TARGET_PC
+    bool mShowTvSettingsScreen;
+#endif
 };
 
 #endif /* D_S_D_S_NAME_H */

@@ -27,6 +27,7 @@ struct UserSettings {
     struct {
         // QoL
         bool enableQuickTransform;
+        bool hideTvSettingsScreen;
 
         // Preferences
         bool enableMirrorMode;

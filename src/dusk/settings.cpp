@@ -23,6 +23,7 @@ UserSettings g_userSettings = {
     .game = {
         // Quality of Life
         .enableQuickTransform = false,
+        .hideTvSettingsScreen = false,
 
         // Preferences
         .enableMirrorMode = false,

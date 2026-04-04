@@ -11,6 +11,10 @@ namespace dusk {
         if (ImGui::BeginMenu("Enhancements")) {
             if (ImGui::BeginMenu("Quality of Life")) {
                 ImGui::Checkbox("Quick Transform (R+Y)", &getSettings().game.enableQuickTransform);
+                ImGui::Checkbox("Hide TV Settings Screen", &getSettings().game.hideTvSettingsScreen);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Hides the TV calibration screen shown when loading a save");
+                }
                 ImGui::EndMenu();
             }
 
