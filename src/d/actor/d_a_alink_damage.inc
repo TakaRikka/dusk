@@ -152,6 +152,13 @@ f32 daAlink_c::damageMagnification(BOOL i_checkZoraMag, int param_1) {
         base_mag = 1.0f;
     }
 
+    #if TARGET_PC
+    base_mag *= dusk::getSettings().game.damageMultiplier;
+    if (dusk::getSettings().game.instantDeath) {
+        base_mag = 9999.0f;
+    }
+    #endif
+
     if (checkWolf() && !checkCargoCarry() && param_1 == 0) {
         return 2.0f * base_mag;
     }

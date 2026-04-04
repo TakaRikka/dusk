@@ -32,6 +32,9 @@ struct UserSettings {
         bool noReturnRupees;
         bool disableRupeeCutscenes;
         bool noSwordRecoil;
+        int damageMultiplier;
+        bool instantDeath;
+        bool fastClimbing;
 
         // Preferences
         bool enableMirrorMode;

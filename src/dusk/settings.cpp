@@ -28,6 +28,9 @@ UserSettings g_userSettings = {
         .noReturnRupees = false,
         .disableRupeeCutscenes = false,
         .noSwordRecoil = false,
+        .damageMultiplier = 1,
+        .instantDeath = false,
+        .fastClimbing = false,
 
         // Preferences
         .enableMirrorMode = false,

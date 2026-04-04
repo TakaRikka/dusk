@@ -32,6 +32,11 @@ namespace dusk {
                     ImGui::SetTooltip("Link won't recoil when his sword hits walls");
                 }
 
+                ImGui::Checkbox("Faster Climbing", &getSettings().game.fastClimbing);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Quicker climbing on ladders and vines like the HD version");
+                }
+
                 ImGui::Checkbox("Hide TV Settings Screen", &getSettings().game.hideTvSettingsScreen);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Hides the TV calibration screen shown when loading a save");
@@ -59,6 +64,16 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Cheats")) {
                 ImGui::Checkbox("Fast Iron Boots", &getSettings().game.enableFastIronBoots);
+
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("Difficulty")) {
+                ImGui::SliderInt("Damage Multiplier", &getSettings().game.damageMultiplier, 1, 8, "x%d");
+                ImGui::Checkbox("Instant Death", &getSettings().game.instantDeath);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Any hit will instantly kill you");
+                }
 
                 ImGui::EndMenu();
             }
