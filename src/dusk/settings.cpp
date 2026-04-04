@@ -31,6 +31,7 @@ UserSettings g_userSettings = {
         .damageMultiplier = 1,
         .instantDeath = false,
         .fastClimbing = false,
+        .fastTears = false,
 
         // Preferences
         .enableMirrorMode = false,

@@ -37,6 +37,11 @@ namespace dusk {
                     ImGui::SetTooltip("Quicker climbing on ladders and vines like the HD version");
                 }
 
+                ImGui::Checkbox("Faster Tears of Light", &getSettings().game.fastTears);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Tears of Light dropped by Shadow Insects pop out faster like the HD version");
+                }
+
                 ImGui::Checkbox("Hide TV Settings Screen", &getSettings().game.hideTvSettingsScreen);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Hides the TV calibration screen shown when loading a save");

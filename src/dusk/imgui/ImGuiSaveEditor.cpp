@@ -823,7 +823,7 @@ namespace dusk {
             for (int e = 0; e < 255; e++) {
                 ImGui::Text("%03d ", e);
                 ImGui::SameLine();
-                for (int i = 8; i >= 0; i--) {
+                for (int i = 7; i >= 0; i--) {
                     bool flag = event.mEvent[e] & (1 << i);
                     if (ImGui::Checkbox(fmt::format("##event{0}{1}", e, i).c_str(), &flag)) {
                         if (flag)
