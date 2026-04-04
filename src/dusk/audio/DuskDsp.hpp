@@ -54,7 +54,7 @@ namespace dusk::audio {
         // basically stores our position between resamplePrev and decodeBuf[0] so we don't lose that fractional resampler position next subframe
         f32 resamplePos;
         // last consumed sample from decodeBuf
-        s16 resamplePrev;     
+        s16 resamplePrev;
     };
 
     extern ChannelAuxData ChannelAux[DSP_CHANNELS];

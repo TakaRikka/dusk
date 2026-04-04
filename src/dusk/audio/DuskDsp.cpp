@@ -139,20 +139,32 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
         if (!skipRender) {
             ValidateChannel(channel);
             RenderChannel(channel, channelAux, channelSubframe);
-            // todo figure out an actual way to convert this accurately to dry/wet
-            channelAux.reverb.setwet(((channel.mAutoMixerFxMix >> 8) / 255.0f));
-            channelAux.reverb.setdry(1.0f - channelAux.reverb.getwet());
         }
 
         if (EnableReverb) {
+            // scale the input to the reverb rather than using wet/dry on the output.
+            // this way the reverb's internal buffers accumulate energy proportional to mAutoMixerFxMix,
+            // so any tail always decays at the correct level regardless of mAutoMixerFxMix changes
+            // prevents transients when the next sound starts playing with a different reverb level
+            // 700.0f was pulled out of my ass and just sounds good enough for console
+            f32 inputGain = (!skipRender) ? (channel.mAutoMixerFxMix >> 8) / 700.0f : 0.0f;
+
+            OutputSubframe reverbSubframe = {};
+            for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
+                reverbSubframe.channels[0][j] = channelSubframe.channels[0][j] * inputGain;
+                reverbSubframe.channels[1][j] = channelSubframe.channels[1][j] * inputGain;
+            }
+
             channelAux.reverb.processreplace(
-                channelSubframe.channels[0].data(),
-                channelSubframe.channels[1].data(),
-                channelSubframe.channels[0].data(),
-                channelSubframe.channels[1].data(),
-                DSP_SUBFRAME_SIZE,
-                1
+                reverbSubframe.channels[0].data(), reverbSubframe.channels[1].data(),
+                reverbSubframe.channels[0].data(), reverbSubframe.channels[1].data(),
+                DSP_SUBFRAME_SIZE, 1
             );
+
+            for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
+                channelSubframe.channels[0][j] += reverbSubframe.channels[0][j];
+                channelSubframe.channels[1][j] += reverbSubframe.channels[1][j];
+            }
         }
 
         for (int o = 0; o < subframe.channels.size(); o++) {
@@ -481,10 +493,10 @@ static void RenderChannel(
 void dusk::audio::DspInit() {
     for (int i = 0; i < DSP_CHANNELS; i++) {
         auto& channelAux = ChannelAux[i];
-        channelAux.reverb.setwet(0.0f);
-        channelAux.reverb.setdry(1.0f);
+        channelAux.reverb.setwet(1.0f);
+        channelAux.reverb.setdry(0.0f);
         channelAux.reverb.setroomsize(0.2f);
-        channelAux.reverb.setdamp(0.3f);
+        channelAux.reverb.setdamp(0.7f);
         channelAux.reverb.setwidth(1.0f);
         channelAux.reverb.setmode(0.0f);
         channelAux.reverb.mute();
