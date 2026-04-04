@@ -23,8 +23,6 @@
 #include "d/actor/d_a_npc_tkc.h"
 #include <cstring>
 
-#include "dusk/imgui/ImGuiMenuEnhancements.hpp"
-
 BOOL daAlink_c::checkEventRun() const {
     return dComIfGp_event_runCheck() || checkPlayerDemoMode();
 }
@@ -4301,7 +4299,7 @@ bool daAlink_c::checkAcceptWarp() {
      */
     if (mLinkAcch.ChkGroundHit() && !checkModeFlg(MODE_PLAYER_FLY)
         #if TARGET_PC
-        && (dusk::ImGuiMenuEnhancements::m_enhancements.restoreWiiGlitches || !checkNoResetFlg0(FLG0_WATER_IN_MOVE))
+        && (dusk::getSettings().game.restoreWiiGlitches || !checkNoResetFlg0(FLG0_WATER_IN_MOVE))
         #elif VERSION != VERSION_WII_USA_R0
         && !checkNoResetFlg0(FLG0_WATER_IN_MOVE)
         #endif
@@ -4312,7 +4310,7 @@ bool daAlink_c::checkAcceptWarp() {
          */
         if (
             #if TARGET_PC
-            (dusk::ImGuiMenuEnhancements::m_enhancements.restoreWiiGlitches || !getSlidePolygon(&plane)) &&
+            (dusk::getSettings().game.restoreWiiGlitches || !getSlidePolygon(&plane)) &&
             #elif VERSION != VERSION_WII_USA_R0
             !getSlidePolygon(&plane) &&
             #endif
