@@ -41,6 +41,9 @@ UserSettings g_userSettings = {
         .enableBloom = true,
         .useWaterProjectionOffset = false,
 
+        // Audio
+        .midnasLamentNonStop = false,
+
         // Cheats
         .enableFastIronBoots = false,
 
