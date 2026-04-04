@@ -260,7 +260,7 @@ J3DGXColorS10 J3DMaterialFactory_v21::newTevColor(int i_idx, int i_no) const {
     J3DGXColorS10 dflt = defaultTevColor;
     J3DMaterialInitData_v21* mtl_init_data = &mpMaterialInitData[mpMaterialID[i_idx]];
     if (mtl_init_data->mTevColorIdx[i_no] != 0xffff) {
-        return mpTevColor[mtl_init_data->mTevColorIdx[i_no]];
+        return (GXColorS10)mpTevColor[mtl_init_data->mTevColorIdx[i_no]];
     } else {
         return dflt;
     }
