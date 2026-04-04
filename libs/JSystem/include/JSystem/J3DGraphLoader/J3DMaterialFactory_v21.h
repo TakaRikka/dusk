@@ -92,9 +92,9 @@ public:
     /* 0x24 */ J3DTexMtxInfo* mpTexMtxInfo;
     /* 0x28 */ J3DTexMtxInfo* field_0x28;
     /* 0x2C */ BE(u16)* mpTexNo;
-    /* 0x30 */ GXCullMode* mpCullMode;
+    /* 0x30 */ BE(GXCullMode)* mpCullMode;
     /* 0x34 */ J3DTevOrderInfo* mpTevOrderInfo;
-    /* 0x38 */ GXColorS10* mpTevColor;
+    /* 0x38 */ BE(GXColorS10)* mpTevColor;
     /* 0x3C */ GXColor* mpTevKColor;
     /* 0x40 */ u8* mpTevStageNum;
     /* 0x44 */ J3DTevStageInfo* mpTevStageInfo;
