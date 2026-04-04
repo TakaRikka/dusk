@@ -28,6 +28,9 @@ struct UserSettings {
         // QoL
         bool enableQuickTransform;
         bool hideTvSettingsScreen;
+        bool biggerWallets;
+        bool noReturnRupees;
+        bool disableRupeeCutscenes;
 
         // Preferences
         bool enableMirrorMode;

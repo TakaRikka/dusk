@@ -17,6 +17,7 @@
 #include "m_Do/m_Do_main.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "dusk/memory.h"
+#include "dusk/settings.h"
 
 #if TARGET_PC
 #define SHOW_TV_SETTINGS_SCREEN (this->mShowTvSettingsScreen)
@@ -366,6 +367,12 @@ void dScnName_c::doPreLoadSetup() {
 
     field_0x41f = 0;
     mProc = dScnName_PROC_ChangeGameScene;
+
+    #if TARGET_PC
+    if (dusk::getSettings().game.disableRupeeCutscenes) {
+        return;
+    }
+    #endif
 
     // Reset rupee "first-time collection" flags so the collection cutscene will play again
     dComIfGs_offItemFirstBit(dItemNo_GREEN_RUPEE_e);

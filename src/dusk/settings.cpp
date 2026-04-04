@@ -24,6 +24,9 @@ UserSettings g_userSettings = {
         // Quality of Life
         .enableQuickTransform = false,
         .hideTvSettingsScreen = false,
+        .biggerWallets = false,
+        .noReturnRupees = false,
+        .disableRupeeCutscenes = false,
 
         // Preferences
         .enableMirrorMode = false,

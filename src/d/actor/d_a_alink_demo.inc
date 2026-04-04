@@ -23,6 +23,8 @@
 #include "d/actor/d_a_npc_tkc.h"
 #include <cstring>
 
+#include "dusk/settings.h"
+
 BOOL daAlink_c::checkEventRun() const {
     return dComIfGp_event_runCheck() || checkPlayerDemoMode();
 }
@@ -2230,6 +2232,12 @@ void daAlink_c::setGetSubBgm(int i_itemNo) {
 }
 
 BOOL daAlink_c::checkTreasureRupeeReturn(int i_itemNo) const {
+    #if TARGET_PC
+    if (dusk::getSettings().game.noReturnRupees) {
+        return FALSE;
+    }
+    #endif
+
     static const int dummy = 0;
 
     if (i_itemNo == dItemNo_LINKS_SAVINGS_e) {

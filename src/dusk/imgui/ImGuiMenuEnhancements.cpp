@@ -11,6 +11,22 @@ namespace dusk {
         if (ImGui::BeginMenu("Enhancements")) {
             if (ImGui::BeginMenu("Quality of Life")) {
                 ImGui::Checkbox("Quick Transform (R+Y)", &getSettings().game.enableQuickTransform);
+
+                ImGui::Checkbox("Bigger Wallets", &getSettings().game.biggerWallets);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Wallet sizes are like in the HD version (500, 1000, 2000)");
+                }
+
+                ImGui::Checkbox("No Rupee Returns", &getSettings().game.noReturnRupees);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Always collect Rupees even if your Wallet is too full");
+                }
+
+                ImGui::Checkbox("Disable Rupee Cutscenes", &getSettings().game.disableRupeeCutscenes);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Rupees won't play cutscenes after you've collected them the first time");
+                }
+
                 ImGui::Checkbox("Hide TV Settings Screen", &getSettings().game.hideTvSettingsScreen);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Hides the TV calibration screen shown when loading a save");
