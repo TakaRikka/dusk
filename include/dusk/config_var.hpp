@@ -211,6 +211,10 @@ public:
         }
     }
 
+    operator const T&() {
+        return getValue();
+    }
+
     /**
      * \brief Give a CVar an override value.
      *
