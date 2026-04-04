@@ -40,7 +40,7 @@ namespace dusk {
                 ImGui::Checkbox("No Climbing Miss Animation", &getSettings().game.noMissClimbing);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Prevents Link from playing a struggle animation\n"
-                                      "when using the Clawshot on vines at a weird angle.");
+                                      "when using the Clawshot on vines at a weird angle");
                 }
 
                 ImGui::Checkbox("Faster Tears of Light", &getSettings().game.fastTears);
