@@ -1634,6 +1634,10 @@ int mDoGph_Painter() {
         if (wn != 0) sDiagLoggedWindow = true;
     }
 
+#if TARGET_PC
+    dusk::g_imguiConsole.PreDraw();
+#endif
+
     #if DEBUG
     drawHeapMap();
     #endif
@@ -2244,7 +2248,7 @@ int mDoGph_Painter() {
     #endif
 
 #if TARGET_PC
-    dusk::g_imguiConsole.draw();
+    dusk::g_imguiConsole.PostDraw();
 #endif
 
     mDoGph_gInf_c::endRender();

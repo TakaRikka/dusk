@@ -38,7 +38,7 @@ namespace dusk {
 
     private:
 		bool m_showDebugOverlay = false;
-		int m_debugOverlayCorner = 0; // top-left
+		int m_debugOverlayCorner = 2; // bottom-left
 
 		bool m_showCameraOverlay = false;
 		int m_cameraOverlayCorner = 3;

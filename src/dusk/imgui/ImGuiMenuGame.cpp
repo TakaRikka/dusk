@@ -84,13 +84,14 @@ namespace dusk {
     }
 
     static void drawVirtualStick(const char* id, const ImVec2& stick) {
-        ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x + 5, ImGui::GetCursorPos().y));
+        float scale = ImGuiScale();
+        ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x + 5 * scale, ImGui::GetCursorPos().y));
 
-        ImGui::BeginChild(id, ImVec2(80, 80));
+        ImGui::BeginChild(id, ImVec2(80 * scale, 80 * scale));
         ImDrawList* dl = ImGui::GetWindowDrawList();
         ImVec2 p = ImGui::GetCursorScreenPos();
 
-        float radius = ImGui::GetCurrentContext()->CurrentDpiScale * 30.0f;
+        float radius = 30.0f * scale;
         ImVec2 pos = ImVec2(p.x + radius, p.y + radius);
 
         constexpr ImU32 stickGray = IM_COL32(150, 150, 150, 255);
@@ -98,7 +99,7 @@ namespace dusk {
         constexpr ImU32 red = IM_COL32(230, 0, 0, 255);
 
         dl->AddCircleFilled(pos, radius, stickGray, 8);
-        dl->AddCircleFilled(ImVec2(pos.x + stick.x * (radius), pos.y + -stick.y * (radius)), 3, red);
+        dl->AddCircleFilled(ImVec2(pos.x + stick.x * (radius), pos.y + -stick.y * (radius)), 3 * scale, red);
         ImGui::EndChild();
     }
 
@@ -139,12 +140,14 @@ namespace dusk {
             }
         }
 
+        float scale = ImGuiScale();
         ImGuiWindowFlags windowFlags =
             ImGuiWindowFlags_NoResize |
             ImGuiWindowFlags_AlwaysAutoResize;
 
         ImGui::SetNextWindowBgAlpha(0.65f);
-        ImGui::SetNextWindowSizeConstraints(ImVec2(850, 400), ImVec2(850, 400));
+        ImGui::SetNextWindowSizeConstraints(ImVec2(850 * scale, 400 * scale),
+                                            ImVec2(850 * scale, 400 * scale));
 
         if (!ImGui::Begin("Controller Config", &m_showControllerConfig, windowFlags)) {
             ImGui::End();
@@ -225,9 +228,9 @@ namespace dusk {
         }
 
         // buttons panel
-        constexpr float uiButtonSize = 40;
+        const float uiButtonSize = 40 * scale;
 
-        ImGuiBeginGroupPanel("Buttons", ImVec2(150, 20));
+        ImGuiBeginGroupPanel("Buttons", ImVec2(150 * scale, 20 * scale));
 
         u32 buttonCount;
         PADButtonMapping* btnMappingList = PADGetButtonMappings(m_controllerConfig.m_selectedPort, &buttonCount);
@@ -251,7 +254,7 @@ namespace dusk {
                     dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(btnMappingList[i].nativeButton), i);
                 }
                 bool pressed = ImGui::Button(dispName.c_str(),
-                    ImVec2(100.0f, 20.0f));
+                    ImVec2(100.0f * scale, 20.0f * scale));
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -268,7 +271,7 @@ namespace dusk {
         uint32_t axisCount;
         PADAxisMapping* axisMappingList = PADGetAxisMappings(m_controllerConfig.m_selectedPort, &axisCount);
 
-        ImGuiBeginGroupPanel("Triggers", ImVec2(150, 20));
+        ImGuiBeginGroupPanel("Triggers", ImVec2(150 * scale, 20 * scale));
 
         PADAxis triggers[] = {PAD_AXIS_TRIGGER_L, PAD_AXIS_TRIGGER_R};
         if (axisMappingList != nullptr) {
@@ -291,7 +294,7 @@ namespace dusk {
                     dispName = fmt::format("{0}##-{1}", PADGetNativeAxisName(axisMappingList[trigger].nativeAxis), trigger);
                 }
                 bool pressed = ImGui::Button(dispName.c_str(),
-                    ImVec2(100.0f, 20.0f));
+                    ImVec2(100.0f * scale, 20.0f * scale));
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -308,7 +311,7 @@ namespace dusk {
         int port = m_controllerConfig.m_selectedPort;
 
         // main stick panel
-        ImGuiBeginGroupPanel("Control Stick", ImVec2(150, 20));
+        ImGuiBeginGroupPanel("Control Stick", ImVec2(150 * scale, 20 * scale));
 
         drawVirtualStick("##mainStick", ImVec2{ mDoCPd_c::getStickX(port), mDoCPd_c::getStickY(port) });
 
@@ -345,7 +348,7 @@ namespace dusk {
                         dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(axisMappingList[axis].nativeButton), axis);
                     }
                 }
-                bool pressed = ImGui::Button(dispName.c_str(), ImVec2(100.0f, 20.0f));
+                bool pressed = ImGui::Button(dispName.c_str(), ImVec2(100.0f * scale, 20.0f * scale));
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -372,7 +375,7 @@ namespace dusk {
         ImGui::SameLine();
 
         // sub stick panel
-        ImGuiBeginGroupPanel("C Stick", ImVec2(150, 20));
+        ImGuiBeginGroupPanel("C Stick", ImVec2(150 * scale, 20 * scale));
 
         drawVirtualStick("##subStick", ImVec2{ mDoCPd_c::getSubStickX(port), mDoCPd_c::getSubStickY(port) });
 
@@ -409,7 +412,7 @@ namespace dusk {
                         dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(axisMappingList[axis].nativeButton), axis);
                     }
                 }
-                bool pressed = ImGui::Button(fmt::format("{0}##sub{1}", dispName, label).c_str(), ImVec2(100.0f, 20.0f));
+                bool pressed = ImGui::Button(fmt::format("{0}##sub{1}", dispName, label).c_str(), ImVec2(100.0f * scale, 20.0f * scale));
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -434,7 +437,7 @@ namespace dusk {
         ImGui::SameLine();
 
         // Triggers Panel
-        ImGuiBeginGroupPanel("Triggers", ImVec2(150, 20));
+        ImGuiBeginGroupPanel("Triggers", ImVec2(150 * scale, 20 * scale));
 
         if (deadZones != nullptr) {
             ImGui::Text("L Threshold");
@@ -460,7 +463,7 @@ namespace dusk {
         ImGui::SameLine();
 
         // Options panel
-        ImGuiBeginGroupPanel("Options", ImVec2(150, 20));
+        ImGuiBeginGroupPanel("Options", ImVec2(150 * scale, 20 * scale));
 
         if (deadZones != nullptr) {
             ImGui::Checkbox("Enable Dead Zones", &deadZones->useDeadzones);
