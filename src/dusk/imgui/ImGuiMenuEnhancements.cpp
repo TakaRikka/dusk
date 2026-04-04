@@ -67,6 +67,15 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
+            if (ImGui::BeginMenu("Audio")) {
+                ImGui::Checkbox("No Low HP Sound", &getSettings().game.noLowHpSound);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Disable the beeping sound when having low health");
+                }
+
+                ImGui::EndMenu();
+            }
+
             if (ImGui::BeginMenu("Cheats")) {
                 ImGui::Checkbox("Fast Iron Boots", &getSettings().game.enableFastIronBoots);
 
