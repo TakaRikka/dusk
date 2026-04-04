@@ -82,7 +82,7 @@ public:
     
     /* 0x00 */ u16 mMaterialNum;
     /* 0x04 */ J3DMaterialInitData_v21* mpMaterialInitData;
-    /* 0x08 */ u16* mpMaterialID;
+    /* 0x08 */ BE(u16)* mpMaterialID;
     /* 0x0C */ GXColor* mpMatColor;
     /* 0x10 */ u8* mpColorChanNum;
     /* 0x14 */ J3DColorChanInfo* mpColorChanInfo;
@@ -91,7 +91,7 @@ public:
     /* 0x20 */ J3DTexCoord2Info* mpTexCoord2Info;
     /* 0x24 */ J3DTexMtxInfo* mpTexMtxInfo;
     /* 0x28 */ J3DTexMtxInfo* field_0x28;
-    /* 0x2C */ u16* mpTexNo;
+    /* 0x2C */ BE(u16)* mpTexNo;
     /* 0x30 */ GXCullMode* mpCullMode;
     /* 0x34 */ J3DTevOrderInfo* mpTevOrderInfo;
     /* 0x38 */ GXColorS10* mpTevColor;
