@@ -1,15 +1,14 @@
 #include "fmt/format.h"
 #include "imgui.h"
-#include "aurora/gfx.h"
 
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuGame.hpp"
 #include <imgui_internal.h>
 
 #include "JSystem/JUtility/JUTGamePad.h"
-#include "d/actor/d_a_alink.h"
 #include "dusk/audio/DuskAudioSystem.h"
-#include "m_Do/m_Do_audio.h"
+#include "dusk/hotkeys.h"
+#include "dusk/settings.h"
 #include "m_Do/m_Do_controller_pad.h"
 
 namespace dusk {
@@ -17,16 +16,16 @@ namespace dusk {
 
     void ImGuiMenuGame::draw() {
         if (ImGui::BeginMenu("Game")) {
-            if (ImGui::MenuItem("Reset", "Ctrl+R")) {
+            if (ImGui::MenuItem("Reset", hotkeys::DO_RESET)) {
                 JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
             }
 
             ImGui::Separator();
 
             if (ImGui::BeginMenu("Graphics")) {
-                if (ImGui::MenuItem("Toggle Fullscreen", "F11")) {
-                    m_fullscreen = !m_fullscreen;
-                    VISetWindowFullscreen(m_fullscreen);
+                if (ImGui::MenuItem("Toggle Fullscreen", hotkeys::TOGGLE_FULLSCREEN)) {
+                    getSettings().video.enableFullscreen = !getSettings().video.enableFullscreen;
+                    VISetWindowFullscreen(getSettings().video.enableFullscreen);
                 }
 
                 ImGui::EndMenu();
@@ -34,28 +33,28 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Audio")) {
                 ImGui::Text("Master Volume");
-                ImGui::SliderFloat("##m_masterVolume", &m_audioSettings.m_masterVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##masterVolume", &getSettings().audio.masterVolume, 0.0f, 1.0f, "");
 
                 /*
                 // TODO: implement additional settings
                 ImGui::Text("Main Music Volume");
-                ImGui::SliderFloat("##m_mainMusicVolume", &m_audioSettings.m_mainMusicVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##mainMusicVolume", &getSettings().audio.mainMusicVolume, 0.0f, 1.0f, "");
 
                 ImGui::Text("Sub Music Volume");
-                ImGui::SliderFloat("##m_subMusicVolume", &m_audioSettings.m_subMusicVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##subMusicVolume", &getSettings().audio.subMusicVolume, 0.0f, 1.0f, "");
 
                 ImGui::Text("Sound Effects Volume");
-                ImGui::SliderFloat("##m_soundEffectsVolume", &m_audioSettings.m_soundEffectsVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##soundEffectsVolume", &getSettings().audio.soundEffectsVolume, 0.0f, 1.0f, "");
 
                 ImGui::Text("Fanfare Volume");
-                ImGui::SliderFloat("##m_fanfareVolume", &m_audioSettings.m_fanfareVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##fanfareVolume", &getSettings().audio.fanfareVolume, 0.0f, 1.0f, "");
 
                 Z2AudioMgr* audioMgr = Z2AudioMgr::getInterface();
                 if (audioMgr != nullptr) {
                 }
                 */
 
-                audio::SetMasterVolume(m_audioSettings.m_masterVolume);
+                audio::SetMasterVolume(getSettings().audio.masterVolume);
 
                 ImGui::EndMenu();
             }
@@ -78,8 +77,8 @@ namespace dusk {
         }
 
         if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
-            m_fullscreen = !m_fullscreen;
-            VISetWindowFullscreen(m_fullscreen);
+            getSettings().video.enableFullscreen = !getSettings().video.enableFullscreen;
+            VISetWindowFullscreen(getSettings().video.enableFullscreen);
         }
     }
 
