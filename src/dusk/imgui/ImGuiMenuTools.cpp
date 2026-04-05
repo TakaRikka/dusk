@@ -3,6 +3,7 @@
 #include "aurora/gfx.h"
 
 #include "dusk/hotkeys.h"
+#include "dusk/settings.h"
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuTools.hpp"
 
@@ -48,6 +49,8 @@ namespace dusk {
             ImGui::MenuItem("Save Editor", nullptr, &m_showSaveEditor);
             ImGui::MenuItem("Audio Debug", hotkeys::SHOW_AUDIO_DEBUG, &m_showAudioDebug);
             ImGui::MenuItem("OSReport Force", nullptr, &OSReportReallyForceEnable);
+            ImGui::Separator();
+            ImGui::MenuItem("Enable Turbo Key", hotkeys::TURBO, &getSettings().game.enableTurboKeybind);
             ImGui::EndMenu();
         }
 

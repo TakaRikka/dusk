@@ -53,6 +53,9 @@ UserSettings g_userSettings = {
 
         // Technical
         .restoreWiiGlitches = false,
+
+        // Controls
+        .enableTurboKeybind = true,
     }
 };
 
@@ -73,6 +76,7 @@ static TransientSettings g_transientSettings = {
         .colliderViewOpacity = 50.0f,
         .drawRange = 100.0f,
     },
+    .skipFrameRateLimit = false,
 };
 
 TransientSettings& getTransientSettings() {

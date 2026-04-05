@@ -57,6 +57,9 @@ struct UserSettings {
 
         // Technical
         bool restoreWiiGlitches;
+
+        // Controls
+        bool enableTurboKeybind;
     } game;
 };
 
@@ -77,6 +80,7 @@ struct CollisionViewSettings {
 
 struct TransientSettings {
     CollisionViewSettings collisionView;
+    bool skipFrameRateLimit;
 };
 
 TransientSettings& getTransientSettings();

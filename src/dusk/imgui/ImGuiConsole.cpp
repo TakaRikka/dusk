@@ -13,6 +13,7 @@
 #include "ImGuiConsole.hpp"
 
 #include "JSystem/JUtility/JUTGamePad.h"
+#include "dusk/settings.h"
 
 #if _WIN32
 #define NOMINMAX
@@ -181,6 +182,8 @@ namespace dusk {
             m_toasts.emplace_back("Press F1 to toggle menu"s, 5.f);
             m_isLaunchInitialized = true;
         }
+
+        getTransientSettings().skipFrameRateLimit = getSettings().game.enableTurboKeybind && ImGui::IsKeyDown(ImGuiKey_Tab);
 
         if (CheckMenuViewToggle(ImGuiKey_F1, m_isHidden)) {
             ShowToasts();
