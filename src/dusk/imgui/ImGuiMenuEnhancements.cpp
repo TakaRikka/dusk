@@ -98,8 +98,7 @@ namespace dusk {
 
                 ImGui::Checkbox("Can Transform Anywhere", &getSettings().game.canTransformAnywhere);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip(
-                        "Allows you to transform between forms even if NPCs are looking");
+                    ImGui::SetTooltip("Allows you to transform even if NPCs are looking");
                 }
 
                 ImGui::EndMenu();
