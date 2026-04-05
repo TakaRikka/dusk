@@ -193,9 +193,7 @@ namespace dusk {
         }
 
         if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
-            settings::video::enableFullscreen.setValue(!settings::video::enableFullscreen);
-            VISetWindowFullscreen(settings::video::enableFullscreen);
-            config::Save();
+            ImGuiMenuGame::ToggleFullscreen();
         }
 
         if (CheckMenuViewToggle(ImGuiKey_F1, m_isHidden)) {

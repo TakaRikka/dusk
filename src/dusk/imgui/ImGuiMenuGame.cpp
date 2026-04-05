@@ -14,9 +14,10 @@
 #include "m_Do/m_Do_controller_pad.h"
 
 namespace dusk {
-    static void ToggleFullscreen() {
+    void ImGuiMenuGame::ToggleFullscreen() {
         settings::video::enableFullscreen.setValue(!settings::video::enableFullscreen);
         VISetWindowFullscreen(settings::video::enableFullscreen);
+        config::Save();
     }
 
     ImGuiMenuGame::ImGuiMenuGame() {}
