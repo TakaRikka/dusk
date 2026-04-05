@@ -95,6 +95,78 @@ dMenu_Collect2D_c::~dMenu_Collect2D_c() {
     }
 }
 
+#if TARGET_PC
+void dMenu_Collect2D_c::menuCollectWide() {
+    // Main Canvas
+    mpScreen->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
+    mpScreen->translate(mDoGph_gInf_c::getMinXF(), 0.0f);
+
+    // Pieces of Heart
+    mpScreen->search(MULTI_CHAR('heart_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Scents
+    mpScreen->search(MULTI_CHAR('wolf_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Quiver
+    mpScreen->search(MULTI_CHAR('item_0_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Wallet
+    mpScreen->search(MULTI_CHAR('item_1_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Poes
+    mpScreen->search(MULTI_CHAR('item_2_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Fish Bestiary
+    mpScreen->search(MULTI_CHAR('fish_3_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Letters
+    mpScreen->search(MULTI_CHAR('lett_4_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Hidden Skills
+    mpScreen->search(MULTI_CHAR('maki_5_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Green Tunic
+    mpScreen->search(MULTI_CHAR('fuku_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Zora Armor
+    mpScreen->search(MULTI_CHAR('fuku_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Magic Armor
+    mpScreen->search(MULTI_CHAR('fuku_n2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Ordon Shield
+    mpScreen->search(MULTI_CHAR('tate_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Hylian Shield
+    mpScreen->search(MULTI_CHAR('tate_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Ordon Sword
+    mpScreen->search(MULTI_CHAR('ken_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Master Sword
+    mpScreen->search(MULTI_CHAR('ken_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Bugs
+    mpScreen->search(MULTI_CHAR('kabu_6n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // "Collection" Text
+    mpScreen->search(MULTI_CHAR('t_t00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mpScreen->search(MULTI_CHAR('f_t00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // "Save" Text
+    mpScreen->search(MULTI_CHAR('sa_tex_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // "Options" Text
+    mpScreen->search(MULTI_CHAR('op_tex_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Item Name Text
+    mpScreen->search(MULTI_CHAR('itemn_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Item Description Text
+    mpScreen->search(MULTI_CHAR('infotxtn'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+}
+#endif
+
 void dMenu_Collect2D_c::_create() {
     mpHeap->getTotalFreeSize();
     mpScreen = JKR_NEW J2DScreen();
@@ -108,7 +180,17 @@ void dMenu_Collect2D_c::_create() {
         mpButtonAB[i] = NULL;
         mpButtonText[i] = NULL;
     }
+
+    #if TARGET_PC
+    mpScreenIcon->translate(-mDoGph_gInf_c::getMinXF(), 0.0f);
+    #endif
+
     dPaneClass_showNullPane(mpScreenIcon);
+
+    #if TARGET_PC
+    menuCollectWide();
+    #endif
+
     mpDraw2DTop = JKR_NEW dMenu_Collect2DTop_c(this);
     ResTIMG* image = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "tt_block8x8.bti");
     mpBlackTex = JKR_NEW J2DPicture(image);
@@ -1004,11 +1086,23 @@ void dMenu_Collect2D_c::cursorPosSet() {
     Vec pos = mpSelPm[mCursorX][mCursorY]->getGlobalVtxCenter(false, 0);
     mpDrawCursor->setPos(pos.x, pos.y, mpSelPm[mCursorX][mCursorY]->getPanePtr(), false);
     if (mCursorY == 5) {
+        #if TARGET_PC
+        mpDrawCursor->setParam(1.1f * mDoGph_gInf_c::hudAspectScaleUp, 0.85f, 0.05f, 0.5f, 0.5f);
+        #else
         mpDrawCursor->setParam(1.1f, 0.85f, 0.05f, 0.5f, 0.5f);
+        #endif
     } else if (mCursorX == 6 && mCursorY == 0) {
+        #if TARGET_PC
+        mpDrawCursor->setParam(0.6f * mDoGph_gInf_c::hudAspectScaleUp, 0.85f, 0.03f, 0.6f, 0.6f);
+        #else
         mpDrawCursor->setParam(0.6f, 0.85f, 0.03f, 0.6f, 0.6f);
+        #endif
     } else {
+        #if TARGET_PC
+        mpDrawCursor->setParam(1.0f * mDoGph_gInf_c::hudAspectScaleUp, 1.0f, 0.1f, 0.7f, 0.7f);
+        #else
         mpDrawCursor->setParam(1.0f, 1.0f, 0.1f, 0.7f, 0.7f);
+        #endif
     }
 }
 
@@ -2028,6 +2122,10 @@ void dMenu_Collect2D_c::_move() {
 
 
 void dMenu_Collect2D_c::_draw() {
+    #if TARGET_PC
+    menuCollectWide();
+    #endif
+
     J2DGrafContext* grafPort = dComIfGp_getCurrentGrafPort();
     grafPort->setup2D();
     mpScreen->draw(0.0f, 0.0f, grafPort);

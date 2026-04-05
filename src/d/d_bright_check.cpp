@@ -143,7 +143,56 @@ void dBrightCheck_c::modeMove() {
     }
 }
 
+#if TARGET_PC
+void dBrightCheck_c::brightCheckWide() {
+    // Main Canvas
+    mBrightCheck.Scr->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
+    mBrightCheck.Scr->translate(mDoGph_gInf_c::getMinXF(), 0.0f);
+
+    // Right Square
+    mBrightCheck.Scr->search(MULTI_CHAR('fuchi_1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('big_squa'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Middle Square
+    mBrightCheck.Scr->search(MULTI_CHAR('fuchi_3'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('big_squ1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Left Square
+    mBrightCheck.Scr->search(MULTI_CHAR('fuchi_4'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('big_squ2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Gray Squares
+    mBrightCheck.Scr->search(MULTI_CHAR('gray_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('fuchi_2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Confirm A Button
+    mBrightCheck.Scr->search(MULTI_CHAR('abtn_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('gcabtn_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Text
+    mBrightCheck.Scr->search(MULTI_CHAR('menu_6n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('menu_9n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('menu_10n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('menu_7n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('menu_8n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('fmenu_8n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('fmenu_7n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('fmenu_10'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('fmenu_6n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('fmenu_9n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('t_t00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('f_t00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Spirals
+    mBrightCheck.Scr->search(MULTI_CHAR('t_mo_l_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBrightCheck.Scr->search(MULTI_CHAR('t_mo_r_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+}
+#endif
+
 void dBrightCheck_c::_draw() {
+    #if TARGET_PC
+    brightCheckWide();
+    #endif
     dComIfGd_set2DOpa(&mBrightCheck);
 }
 
