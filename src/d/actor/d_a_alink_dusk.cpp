@@ -3,6 +3,62 @@
 #include "d/d_meter2.h"
 #include "d/d_meter2_draw.h"
 #include "d/d_meter2_info.h"
+#include "m_Do/m_Do_audio.h"
+
+bool armorQuickToggleVar1 = false;
+bool armorQuickToggleVar2 = false;
+uint32_t countyer = 0;
+uint32_t armorQuickToggleTimer1 = 0;
+uint32_t armorQuickToggleTimer2 = 0;
+
+void daAlink_c::handleArmorsQuickToggle() {
+    if (!dusk::getSettings().game.enableArmorsQuickToggle) return;
+
+    // temporary if statement code for automatically having magic and zora armors unlocked to test the mod
+    if (!dComIfGs_isItemFirstBit(dItemNo_WEAR_ZORA_e)) {
+        dComIfGs_onItemFirstBit(dItemNo_WEAR_ZORA_e); dComIfGs_onItemFirstBit(dItemNo_ARMOR_e);
+    }
+
+    // Have magic and zora armors
+    if (!dComIfGs_isItemFirstBit(dItemNo_WEAR_ZORA_e) && !dComIfGs_isItemFirstBit(dItemNo_ARMOR_e)) return;
+
+    // Be Human
+    if (dComIfGs_getTransformStatus()) return;
+
+    if (!armorQuickToggleVar1 && mDoCPd_c::getTrigDown(PAD_1) && countyer < 2)
+    {
+        armorQuickToggleVar2 = true;
+        countyer++;
+    }
+
+    if (armorQuickToggleVar2) {
+        armorQuickToggleTimer1++;
+        if (armorQuickToggleTimer1 >= 15) {
+            armorQuickToggleVar2 = false;
+            armorQuickToggleVar1 = true;
+            armorQuickToggleTimer1 = 0;
+            armorQuickToggleTimer2 = 0;
+            setClothesChange(0);
+            mDoAud_seStart(0x4F, 0, 0, 0);
+            if (countyer == 1) {
+                if (dComIfGs_getSelectEquipClothes() != dItemNo_WEAR_ZORA_e) dComIfGs_setSelectEquipClothes(dItemNo_WEAR_ZORA_e);
+                else dComIfGs_setSelectEquipClothes(dItemNo_WEAR_KOKIRI_e);
+            } else if (countyer == 2 && dComIfGs_isItemFirstBit(dItemNo_ARMOR_e)) {
+                if (dComIfGs_getSelectEquipClothes() != dItemNo_ARMOR_e) dComIfGs_setSelectEquipClothes(dItemNo_ARMOR_e);
+                else dComIfGs_setSelectEquipClothes(dItemNo_WEAR_KOKIRI_e);
+            }
+            countyer = 0;
+        }
+    }
+    if (armorQuickToggleVar1) {
+        armorQuickToggleTimer2++;
+        if (armorQuickToggleTimer2 >= 20) {
+            armorQuickToggleVar1 = false;
+            armorQuickToggleTimer2 = 0;
+        }
+    }
+
+}
 
 void daAlink_c::handleQuickTransform() {
     if (!dusk::getSettings().game.enableQuickTransform) {
