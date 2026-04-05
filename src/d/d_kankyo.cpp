@@ -9696,7 +9696,7 @@ void dKy_ParticleColor_get_base(cXyz* param_0, dKy_tevstr_c* param_1, GXColor* p
         f32 var_f31;
 
         #if AVOID_UB
-        var_f31 = 0;
+        var_f31 = 100000000.0f;
         #endif
 
         if (dKy_SunMoon_Light_Check() == TRUE && i <= 1) {
