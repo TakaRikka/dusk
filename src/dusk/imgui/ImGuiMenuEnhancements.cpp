@@ -124,6 +124,8 @@ namespace dusk {
 
                 ImGui::EndMenu();
             }
+
+            ImGui::EndMenu();
         }
     }
 }
