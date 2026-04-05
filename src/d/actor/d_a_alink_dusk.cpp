@@ -12,6 +12,7 @@ u32 armorQuickToggleInitiatedTimer = 0;
 u32 armorQuickToggleCooldownTimer = 0;
 
 void daAlink_c::handleArmorsQuickToggle() {
+    // By Captain Kitty Cat
     if (!dusk::getSettings().game.enableArmorsQuickToggle) {
         return;
     }
@@ -28,6 +29,7 @@ void daAlink_c::handleArmorsQuickToggle() {
 
     if (!armorQuickToggleCooldown && mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getTrigX(PAD_1) && armorQuickToggleCounter < 2)
     {
+        mDoCPd_c::getCpadInfo(PAD_1).mPressedButtonFlags = 0;
         armorQuickToggleInitiated = true;
         armorQuickToggleCounter++;
     }
