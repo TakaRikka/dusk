@@ -1069,7 +1069,7 @@ void daE_YM_c::executeDown() {
             if (mAcch.ChkGroundHit()) {
                 if (mFlyType != 1) {
                     #if TARGET_PC
-                    bckSet(6, 0, 0.0f, dusk::settings::game::fastTears && dComIfGp_event_getMode() == 0 ? 2.0f : 1.0f);
+                    bckSet(6, 0, 0.0f, dusk::getSettings().game.fastTears && dComIfGp_event_getMode() == 0 ? 2.0f : 1.0f);
                     #else
                     bckSet(6, 0, 0.0f, 1.0f);
                     #endif
@@ -1093,7 +1093,7 @@ void daE_YM_c::executeDown() {
                 mSound.startCreatureSound(Z2SE_CM_BODYFALL_WATER_M, 0, -1);
                 mSound.startCreatureSound(Z2SE_EN_YM_MOGAKU, 0, -1);
                 #if TARGET_PC
-                bckSet(6, 0, 0.0f, dusk::settings::game::fastTears && dComIfGp_event_getMode() == 0 ? 2.0f : 1.0f);
+                bckSet(6, 0, 0.0f, dusk::getSettings().game.fastTears && dComIfGp_event_getMode() == 0 ? 2.0f : 1.0f);
                 #else
                 bckSet(6, 0, 0.0f, 1.0f);
                 #endif
@@ -1115,7 +1115,7 @@ void daE_YM_c::executeDown() {
                     || dComIfG_Bgsp().GetGroundCode(gnd_chk) == 5)
             {
                     #if TARGET_PC
-                    bckSet(6, 0, 0.0f, dusk::settings::game::fastTears && dComIfGp_event_getMode() == 0 ? 2.0f : 1.0f);
+                    bckSet(6, 0, 0.0f, dusk::getSettings().game.fastTears && dComIfGp_event_getMode() == 0 ? 2.0f : 1.0f);
                     #else
                     bckSet(6, 0, 0.0f, 1.0f);
                     #endif

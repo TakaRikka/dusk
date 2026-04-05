@@ -279,7 +279,7 @@ static const char* CalculateConfigPath() {
 // PC ENTRY POINT
 // =========================================================================
 int game_main(int argc, char* argv[]) {
-    dusk::settings::Register();
+    dusk::registerSettings();
     dusk::config::FinishRegistration();
 
     cxxopts::ParseResult parsed_arg_options;

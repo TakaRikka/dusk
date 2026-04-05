@@ -114,19 +114,19 @@ u16 dSv_player_status_a_c::getRupeeMax() const {
         switch (mWalletSize) {
         case WALLET:
             #if TARGET_PC
-            return dusk::settings::game::biggerWallets ? 500 : 300;
+            return dusk::getSettings().game.biggerWallets ? 500 : 300;
             #else
             return 300;
             #endif
         case BIG_WALLET:
             #if TARGET_PC
-            return dusk::settings::game::biggerWallets ? 1000 : 600;
+            return dusk::getSettings().game.biggerWallets ? 1000 : 600;
             #else
             return 600;
             #endif
         case GIANT_WALLET:
             #if TARGET_PC
-            return dusk::settings::game::biggerWallets ? 2000 : 1000;
+            return dusk::getSettings().game.biggerWallets ? 2000 : 1000;
             #else
             return 1000;
             #endif

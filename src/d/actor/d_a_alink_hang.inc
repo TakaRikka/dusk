@@ -15,8 +15,8 @@
 f32 daAlink_c::getHangMoveAnmSpeed() {
     #if TARGET_PC
     return getAnmSpeedStickRate(
-        dusk::settings::game::fastClimbing ? 2.0f : mpHIO->mWallHang.mWallMove.m.mMinAnmSpeed,
-        dusk::settings::game::fastClimbing ? 2.0f : mpHIO->mWallHang.mWallMove.m.mMaxAnmSpeed
+        dusk::getSettings().game.fastClimbing ? 2.0f : mpHIO->mWallHang.mWallMove.m.mMinAnmSpeed,
+        dusk::getSettings().game.fastClimbing ? 2.0f : mpHIO->mWallHang.mWallMove.m.mMaxAnmSpeed
     );
     #else
     return getAnmSpeedStickRate(mpHIO->mWallHang.mWallMove.m.mMinAnmSpeed,
@@ -286,7 +286,7 @@ int daAlink_c::procHangStartInit() {
 
     if (checkHangFootWall()) {
         #if TARGET_PC
-        if (!is_prev_hangReady && cM_rnd() < 0.7f && !dusk::settings::game::noMissClimbing) {
+        if (!is_prev_hangReady && cM_rnd() < 0.7f && !dusk::getSettings().game.noMissClimbing) {
         #else
         if (!is_prev_hangReady && cM_rnd() < 0.7f) {
         #endif
@@ -1221,7 +1221,7 @@ void daAlink_c::setLadderPos(int param_0) {
 f32 daAlink_c::getLadderMoveAnmSpeed() {
     return getAnmSpeedStickRate(mpHIO->mLadder.m.mMoveMinASpeed,
         #if TARGET_PC
-        dusk::settings::game::fastClimbing ? 1.575f : mpHIO->mLadder.m.mMoveMaxSpeed
+        dusk::getSettings().game.fastClimbing ? 1.575f : mpHIO->mLadder.m.mMoveMaxSpeed
         #else
         mpHIO->mLadder.m.mMoveMaxSpeed
         #endif
@@ -1322,7 +1322,7 @@ int daAlink_c::procLadderUpStartInit() {
 
     setSingleAnimeBaseSpeed(ANM_LADDER_UP_START,
         #if TARGET_PC
-        dusk::settings::game::fastClimbing ? 1.8f : mpHIO->mLadder.m.mClimbUpStartASpeed,
+        dusk::getSettings().game.fastClimbing ? 1.8f : mpHIO->mLadder.m.mClimbUpStartASpeed,
         #else
         mpHIO->mLadder.m.mClimbUpStartASpeed,
         #endif
@@ -1378,7 +1378,7 @@ int daAlink_c::procLadderUpEndInit(BOOL param_0) {
 
     setSingleAnimeBaseSpeed(anm_id,
         #if TARGET_PC
-        dusk::settings::game::fastClimbing ? 1.765f : mpHIO->mLadder.m.mClimbUpEndASpeed,
+        dusk::getSettings().game.fastClimbing ? 1.765f : mpHIO->mLadder.m.mClimbUpEndASpeed,
         #else
         mpHIO->mLadder.m.mClimbUpEndASpeed,
         #endif
@@ -1443,7 +1443,7 @@ int daAlink_c::procLadderDownStartInit() {
 
     setSingleAnimeBaseSpeed(ANM_LADDER_DOWN_START,
         #if TARGET_PC
-        dusk::settings::game::fastClimbing ? 1.8f : mpHIO->mLadder.m.mClimbDownStartASpeed,
+        dusk::getSettings().game.fastClimbing ? 1.8f : mpHIO->mLadder.m.mClimbDownStartASpeed,
         #else
         mpHIO->mLadder.m.mClimbDownStartASpeed,
         #endif
@@ -1505,7 +1505,7 @@ int daAlink_c::procLadderDownEndInit(BOOL param_0) {
 
     setSingleAnimeBaseSpeed(anm_id,
         #if TARGET_PC
-        dusk::settings::game::fastClimbing ? 1.8f : mpHIO->mLadder.m.mClimbDownEndASpeed,
+        dusk::getSettings().game.fastClimbing ? 1.8f : mpHIO->mLadder.m.mClimbDownEndASpeed,
         #else
         mpHIO->mLadder.m.mClimbDownEndASpeed,
         #endif
@@ -1643,7 +1643,7 @@ int daAlink_c::procLadderMove() {
 f32 daAlink_c::getClimbMoveUpDownAnmSpeed() {
     return getAnmSpeedStickRate(mpHIO->mLadder.m.mWallVerticalMinAnmSpeed,
         #if TARGET_PC
-        dusk::settings::game::fastClimbing ? 1.875f : mpHIO->mLadder.m.mWallVerticalMaxAnmSpeed
+        dusk::getSettings().game.fastClimbing ? 1.875f : mpHIO->mLadder.m.mWallVerticalMaxAnmSpeed
         #else
         mpHIO->mLadder.m.mWallVerticalMaxAnmSpeed
         #endif
@@ -1653,7 +1653,7 @@ f32 daAlink_c::getClimbMoveUpDownAnmSpeed() {
 f32 daAlink_c::getClimbMoveSideAnmSpeed() {
     return getAnmSpeedStickRate(mpHIO->mLadder.m.mWallHorizontalMinAnmSpeed,
         #if TARGET_PC
-        dusk::settings::game::fastClimbing ? 2.0f : mpHIO->mLadder.m.mWallHorizontalMaxAnmSpeed
+        dusk::getSettings().game.fastClimbing ? 2.0f : mpHIO->mLadder.m.mWallHorizontalMaxAnmSpeed
         #else
         mpHIO->mLadder.m.mWallHorizontalMaxAnmSpeed
         #endif
@@ -2089,7 +2089,7 @@ int daAlink_c::procClimbUpStartInit(int param_0) {
     mNormalSpeed = 0.0f;
 
     #if TARGET_PC
-    if (param_0 || var_r29 || cM_rnd() < 0.3f || dusk::settings::game::noMissClimbing) {
+    if (param_0 || var_r29 || cM_rnd() < 0.3f || dusk::getSettings().game.noMissClimbing) {
     #else
     if (param_0 || var_r29 || cM_rnd() < 0.3f) {
     #endif
@@ -2170,7 +2170,7 @@ int daAlink_c::procClimbDownStartInit(s16 param_0) {
     deleteEquipItem(TRUE, FALSE);
 
     #if TARGET_PC
-    if (cM_rnd() < 0.7f || dusk::settings::game::noMissClimbing) {
+    if (cM_rnd() < 0.7f || dusk::getSettings().game.noMissClimbing) {
     #else
     if (cM_rnd() < 0.7f) {
     #endif

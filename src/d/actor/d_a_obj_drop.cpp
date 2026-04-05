@@ -265,8 +265,8 @@ int daObjDrop_c::modeParentWait() {
         mModeAction = 1;
 
 #if TARGET_PC
-        mModeTimer = dusk::settings::game::fastTears && dComIfGp_event_getMode() == 0 ? 20 : 40;
-        if (dusk::settings::game::fastTears && dComIfGp_event_getMode() == 0) {
+        mModeTimer = dusk::getSettings().game.fastTears && dComIfGp_event_getMode() == 0 ? 20 : 40;
+        if (dusk::getSettings().game.fastTears && dComIfGp_event_getMode() == 0) {
             current.pos.y += 100.0f;
         } else {
             current.pos.y += 300.0f;
@@ -285,7 +285,7 @@ int daObjDrop_c::modeParentWait() {
     case 2:
         createBodyEffect();
 #if TARGET_PC
-        mModeTimer = dusk::settings::game::fastTears && dComIfGp_event_getMode() == 0 ? 5 : 45;
+        mModeTimer = dusk::getSettings().game.fastTears && dComIfGp_event_getMode() == 0 ? 5 : 45;
 #else
         mModeTimer = 45;
 #endif
@@ -331,7 +331,7 @@ int daObjDrop_c::modeWait() {
     case 2:
     case 50:
         #if TARGET_PC
-        if (dusk::settings::game::fastTears && dComIfGp_event_getMode() == 0) {
+        if (dusk::getSettings().game.fastTears && dComIfGp_event_getMode() == 0) {
             f32 player_dist = current.pos.abs(daPy_getPlayerActorClass()->current.pos);
             f32 home_dist = current.pos.abs(home.pos);
 

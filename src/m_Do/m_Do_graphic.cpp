@@ -1163,7 +1163,7 @@ void mDoGph_gInf_c::bloom_c::remove() {
 
 void mDoGph_gInf_c::bloom_c::draw() {
 #if TARGET_PC
-    if (!dusk::settings::game::enableBloom) {
+    if (!dusk::getSettings().game.enableBloom) {
         return;
     }
 #endif
@@ -2117,7 +2117,7 @@ int mDoGph_Painter() {
     #endif
 
     #if TARGET_PC
-    if (dusk::settings::game::enableMirrorMode)
+    if (dusk::getSettings().game.enableMirrorMode)
     #elif PLATFORM_WII
     if (data_8053a730)
     #endif

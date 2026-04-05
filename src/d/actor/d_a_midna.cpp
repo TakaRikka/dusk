@@ -3051,7 +3051,7 @@ BOOL daMidna_c::checkMetamorphoseEnableBase() {
         !dComIfGs_isEventBit(0xD04) ||
 #if TARGET_PC
         (fopAcIt_Judge((fopAcIt_JudgeFunc)daMidna_searchNpc, &tmp) &&
-         !dusk::settings::game::canTransformAnywhere)
+         !dusk::getSettings().game.canTransformAnywhere)
 #else
         fopAcIt_Judge((fopAcIt_JudgeFunc)daMidna_searchNpc, &tmp)
 #endif

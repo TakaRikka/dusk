@@ -51,7 +51,7 @@ namespace dusk {
             ImGui::MenuItem("Audio Debug", hotkeys::SHOW_AUDIO_DEBUG, &m_showAudioDebug);
             ImGui::MenuItem("OSReport Force", nullptr, &OSReportReallyForceEnable);
             ImGui::Separator();
-            config::ImGuiMenuItem("Enable Turbo Key", hotkeys::TURBO, settings::game::enableTurboKeybind);
+            config::ImGuiMenuItem("Enable Turbo Key", hotkeys::TURBO, getSettings().game.enableTurboKeybind);
             ImGui::EndMenu();
         }
 

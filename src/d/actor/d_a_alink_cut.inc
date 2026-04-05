@@ -372,7 +372,7 @@ BOOL daAlink_c::changeCutReverseProc(daAlink_c::daAlink_ANM i_anmID) {
     }
 
     #if TARGET_PC
-    if (dusk::settings::game::noSwordRecoil) {
+    if (dusk::getSettings().game.noSwordRecoil) {
         return FALSE;
     }
     #endif

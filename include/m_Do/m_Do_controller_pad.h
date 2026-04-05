@@ -56,7 +56,7 @@ public:
 
     static s16 getStickAngle3D(u32 pad) {
         #if TARGET_PC
-        if (dusk::settings::game::enableMirrorMode) {
+        if (dusk::getSettings().game.enableMirrorMode) {
             return -getCpadInfo(pad).mMainStickAngle;
         } else {
             return getCpadInfo(pad).mMainStickAngle;
@@ -68,7 +68,7 @@ public:
 
     static f32 getSubStickX3D(u32 pad) {
         #if TARGET_PC
-        if (dusk::settings::game::enableMirrorMode) {
+        if (dusk::getSettings().game.enableMirrorMode) {
             return -getCpadInfo(pad).mCStickPosX;
         } else {
             return getCpadInfo(pad).mCStickPosX;

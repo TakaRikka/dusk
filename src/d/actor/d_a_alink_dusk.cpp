@@ -5,7 +5,7 @@
 #include "d/d_meter2_info.h"
 
 void daAlink_c::handleQuickTransform() {
-    if (!dusk::settings::game::enableQuickTransform) {
+    if (!dusk::getSettings().game.enableQuickTransform) {
         return;
     }
 

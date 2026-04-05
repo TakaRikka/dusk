@@ -349,7 +349,7 @@ int daAlink_c::procMagneBootsFly() {
      */
     if (dComIfG_Bgsp().ChkPolySafe(mPolyInfo2)
         #if TARGET_PC
-        && (dusk::settings::game::restoreWiiGlitches || checkEquipHeavyBoots())
+        && (dusk::getSettings().game.restoreWiiGlitches || checkEquipHeavyBoots())
         #elif PLATFORM_GCN || VERSION == VERSION_WII_KOR
         && checkEquipHeavyBoots()
         #endif

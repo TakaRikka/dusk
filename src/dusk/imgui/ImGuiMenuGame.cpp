@@ -15,8 +15,8 @@
 
 namespace dusk {
     void ImGuiMenuGame::ToggleFullscreen() {
-        settings::video::enableFullscreen.setValue(!settings::video::enableFullscreen);
-        VISetWindowFullscreen(settings::video::enableFullscreen);
+        getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
+        VISetWindowFullscreen(getSettings().video.enableFullscreen);
         config::Save();
     }
 
@@ -40,8 +40,8 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Audio")) {
                 ImGui::Text("Master Volume");
-                config::ImGuiSliderInt("##masterVolume", settings::audio::masterVolume, 0, 100);
-                config::ImGuiCheckbox("Enable Reverb", settings::audio::enableReverb);
+                config::ImGuiSliderInt("##masterVolume", getSettings().audio.masterVolume, 0, 100);
+                config::ImGuiCheckbox("Enable Reverb", getSettings().audio.enableReverb);
                 /*
                 // TODO: Implement additional settings
                 ImGui::Text("Main Music Volume");
@@ -61,8 +61,8 @@ namespace dusk {
                 }
                 */
 
-                audio::SetMasterVolume(settings::audio::masterVolume / 100.0f);
-                audio::EnableReverb = settings::audio::enableReverb;
+                audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
+                audio::EnableReverb = getSettings().audio.enableReverb;
 
                 ImGui::EndMenu();
             }

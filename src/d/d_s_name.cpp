@@ -301,7 +301,7 @@ void dScnName_c::FileSelectMain() {
 
 void dScnName_c::FileSelectMainNormal() {
 #if TARGET_PC
-    mShowTvSettingsScreen = !dusk::settings::game::hideTvSettingsScreen;
+    mShowTvSettingsScreen = !dusk::getSettings().game.hideTvSettingsScreen;
 #endif
 
     switch(dFs_c->isSelectEnd()) {
@@ -369,7 +369,7 @@ void dScnName_c::doPreLoadSetup() {
     mProc = dScnName_PROC_ChangeGameScene;
 
     #if TARGET_PC
-    if (dusk::settings::game::disableRupeeCutscenes) {
+    if (dusk::getSettings().game.disableRupeeCutscenes) {
         return;
     }
     #endif

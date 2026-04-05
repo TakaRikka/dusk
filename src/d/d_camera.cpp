@@ -764,7 +764,7 @@ void dCamera_c::updatePad() {
         var_f31 = mDoCPd_c::getSubStickX3D(mPadID);
 
         #if TARGET_PC
-        if (dusk::settings::game::invertCameraXAxis) {
+        if (dusk::getSettings().game.invertCameraXAxis) {
             var_f31 *= -1.0f;
         }
         #endif

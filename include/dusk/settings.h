@@ -1,68 +1,76 @@
 #ifndef DUSK_CONFIG_H
 #define DUSK_CONFIG_H
 
-#include "config_var.hpp"
+#include "dusk/config_var.hpp"
 
-namespace dusk::settings {
+namespace dusk {
+
 using namespace config;
 
 // Persistent user settings
 
-namespace video {
-extern ConfigVar<bool> enableFullscreen;
-}
+struct UserSettings {
+    // Program settings
 
-namespace audio {
-extern ConfigVar<int> masterVolume;
-extern ConfigVar<int> mainMusicVolume;
-extern ConfigVar<int> subMusicVolume;
-extern ConfigVar<int> soundEffectsVolume;
-extern ConfigVar<int> fanfareVolume;
-extern ConfigVar<bool> enableReverb;
-}
+    struct {
+        // Video
+        ConfigVar<bool> enableFullscreen;
+    } video;
 
-namespace game {
-// QoL
-extern ConfigVar<bool> enableQuickTransform;
-extern ConfigVar<bool> hideTvSettingsScreen;
-extern ConfigVar<bool> biggerWallets;
-extern ConfigVar<bool> noReturnRupees;
-extern ConfigVar<bool> disableRupeeCutscenes;
-extern ConfigVar<bool> noSwordRecoil;
-extern ConfigVar<int> damageMultiplier;
-extern ConfigVar<bool> instantDeath;
-extern ConfigVar<bool> fastClimbing;
-extern ConfigVar<bool> fastTears;
-extern ConfigVar<bool> noMissClimbing;
+    struct {
+        // Audio
+        ConfigVar<int> masterVolume;
+        ConfigVar<int> mainMusicVolume;
+        ConfigVar<int> subMusicVolume;
+        ConfigVar<int> soundEffectsVolume;
+        ConfigVar<int> fanfareVolume;
+        ConfigVar<bool> enableReverb;
+    } audio;
 
-// Preferences
-extern ConfigVar<bool> enableMirrorMode;
-extern ConfigVar<bool> invertCameraXAxis;
+    // Game settings
 
-// Graphics
-extern ConfigVar<bool> enableBloom;
-extern ConfigVar<bool> useWaterProjectionOffset;
+    struct {
+        // QoL
+        ConfigVar<bool> enableQuickTransform;
+        ConfigVar<bool> hideTvSettingsScreen;
+        ConfigVar<bool> biggerWallets;
+        ConfigVar<bool> noReturnRupees;
+        ConfigVar<bool> disableRupeeCutscenes;
+        ConfigVar<bool> noSwordRecoil;
+        ConfigVar<int> damageMultiplier;
+        ConfigVar<bool> instantDeath;
+        ConfigVar<bool> fastClimbing;
+        ConfigVar<bool> noMissClimbing;
+        ConfigVar<bool> fastTears;
 
-// Audio
-extern ConfigVar<bool> noLowHpSound;
-extern ConfigVar<bool> midnasLamentNonStop;
+        // Preferences
+        ConfigVar<bool> enableMirrorMode;
+        ConfigVar<bool> invertCameraXAxis;
 
-// Cheats
-extern ConfigVar<bool> enableFastIronBoots;
-extern ConfigVar<bool> canTransformAnywhere;
+        // Graphics
+        ConfigVar<bool> enableBloom;
+        ConfigVar<bool> useWaterProjectionOffset;
 
-// Technical
-extern ConfigVar<bool> restoreWiiGlitches;
+        // Audio
+        ConfigVar<bool> noLowHpSound;
+        ConfigVar<bool> midnasLamentNonStop;
 
-// Controls
-extern ConfigVar<bool> enableTurboKeybind;
-}
+        // Cheats
+        ConfigVar<bool> enableFastIronBoots;
+        ConfigVar<bool> canTransformAnywhere;
 
-void Register();
+        // Technical
+        ConfigVar<bool> restoreWiiGlitches;
 
-}
+        // Controls
+        ConfigVar<bool> enableTurboKeybind;
+    } game;
+};
 
-namespace dusk {
+UserSettings& getSettings();
+
+void registerSettings();
+
 // Transient settings
 
 struct CollisionViewSettings {

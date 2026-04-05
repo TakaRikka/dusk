@@ -11381,7 +11381,7 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                                 C_MTXLightPerspective(sp1D8, dComIfGd_getView()->fovy,
                                                       camera_p->view.aspect, 1.0f, 1.0f,
 #if TARGET_PC
-                                                      dusk::settings::game::useWaterProjectionOffset ? -0.01f : 0.0f, 0.0f);
+                                                      dusk::getSettings().game.useWaterProjectionOffset ? -0.01f : 0.0f, 0.0f);
 #else
                                                       -0.01f, 0.0f);
 #endif

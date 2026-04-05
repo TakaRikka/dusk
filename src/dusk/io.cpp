@@ -11,7 +11,11 @@ using namespace dusk::io;
 #define fseek(a, b, c) _fseeki64(a, b, c)
 #else
 #define MODE_TYPE char
+#if _MSVC_VER
 #define MODE(val) ##val
+#else
+#define MODE(val) val
+#endif
 #endif
 
 static FILE* ThrowIfNotOpen(const FileStream& file) {

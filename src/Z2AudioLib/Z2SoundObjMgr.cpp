@@ -109,7 +109,7 @@ void Z2SoundObjMgr::searchEnemy() {
 
     #if TARGET_PC
     if (Z2GetSeqMgr()->checkBgmIDPlaying(Z2BGM_MIDNA_SOS) &&
-        dusk::settings::game::midnasLamentNonStop)
+        dusk::getSettings().game.midnasLamentNonStop)
     {
         Z2GetSeqMgr()->changeSubBgmStatus(0);
         return;

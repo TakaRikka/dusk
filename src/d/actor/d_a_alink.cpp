@@ -7510,7 +7510,7 @@ void daAlink_c::setBlendMoveAnime(f32 i_morf) {
     BOOL sp24 = checkEventRun();
     BOOL sp20 = checkBootsMoveAnime(1);
 #if TARGET_PC
-    if (dusk::settings::game::enableFastIronBoots) {
+    if (dusk::getSettings().game.enableFastIronBoots) {
         sp20 = FALSE;
     }
 #endif
@@ -9475,7 +9475,7 @@ void daAlink_c::setStickData() {
                 mHeavySpeedMultiplier = mpHIO->mItem.mIronBoots.m.mInputFactor;
             }
 #if TARGET_PC
-            if (dusk::settings::game::enableFastIronBoots) {
+            if (dusk::getSettings().game.enableFastIronBoots) {
                 mHeavySpeedMultiplier = 1.0f;
             }
 #endif
@@ -9487,7 +9487,7 @@ void daAlink_c::setStickData() {
                 mHeavySpeedMultiplier = mpHIO->mItem.mIronBoots.m.mWaterInputFactor;
             }
 #if TARGET_PC
-            if (dusk::settings::game::enableFastIronBoots) {
+            if (dusk::getSettings().game.enableFastIronBoots) {
                 mHeavySpeedMultiplier = 1.0f;
             }
 #endif
