@@ -10,7 +10,7 @@ namespace dusk {
     void ImGuiMenuEnhancements::draw() {
         if (ImGui::BeginMenu("Enhancements")) {
             if (ImGui::BeginMenu("Quality of Life")) {
-                ImGui::Checkbox("Armors Quick-Toggle (D-Pad Down)", &getSettings().game.enableArmorsQuickToggle);
+                ImGui::Checkbox("Armors Quick-Toggle (R+X)", &getSettings().game.enableArmorsQuickToggle);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Green/Magic -> Zora OR Zora -> Green: Press once\nGreen/Zora -> Magic OR Magic -> Green: Press twice");
                 }
