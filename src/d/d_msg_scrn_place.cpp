@@ -101,13 +101,25 @@ void dMsgScrnPlace_c::exec() {
 
     mpFontParent->scale(g_MsgObject_HIO_c.mStageTitleCharSizeX,
                         g_MsgObject_HIO_c.mStageTitleCharSizeY);
+
+#if TARGET_PC
+    mpFontParent->paneTrans(mDoGph_gInf_c::ScaleHUDXLeft(g_MsgObject_HIO_c.mStageTitleCharPosX),
+                            g_MsgObject_HIO_c.mStageTitleCharPosY - mScaleX);
+#else
     mpFontParent->paneTrans(g_MsgObject_HIO_c.mStageTitleCharPosX,
                             g_MsgObject_HIO_c.mStageTitleCharPosY - mScaleX);
+#endif
 
     mpBaseParent->scale(g_MsgObject_HIO_c.mStageTitleBaseSizeX,
                         g_MsgObject_HIO_c.mStageTitleBaseSizeY);
+
+#if TARGET_PC
+    mpBaseParent->paneTrans(mDoGph_gInf_c::ScaleHUDXLeft(g_MsgObject_HIO_c.mStageTitleBasePosX),
+                            g_MsgObject_HIO_c.mStageTitleBasePosY - mScaleY);
+#else
     mpBaseParent->paneTrans(g_MsgObject_HIO_c.mStageTitleBasePosX,
                             g_MsgObject_HIO_c.mStageTitleBasePosY - mScaleY);
+#endif
 
     if (isTalkNow()) {
         fukiAlpha(1.0f);
