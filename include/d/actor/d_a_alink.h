@@ -4549,6 +4549,7 @@ public:
     /* 0x03850 */ daAlink_procFunc mpProcFunc;
 
 #if TARGET_PC
+    void handleArmorsQuickToggle();
     void handleQuickTransform();
 #endif
 };  // Size: 0x385C
