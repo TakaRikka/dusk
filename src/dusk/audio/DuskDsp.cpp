@@ -177,8 +177,8 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
             // this way the reverb's internal buffers accumulate energy proportional to mAutoMixerFxMix,
             // so any tail always decays at the correct level regardless of mAutoMixerFxMix changes
             // prevents transients when the next sound starts playing with a different reverb level
-            // 700.0f was pulled out of my ass and just sounds good enough for console
-            f32 inputGain = (!skipRender) ? (channel.mAutoMixerFxMix >> 8) / 700.0f : 0.0f;
+            // 600.0f was pulled out of my ass and just sounds good enough for console
+            f32 inputGain = (!skipRender) ? (channel.mAutoMixerFxMix >> 8) / 600.0f : 0.0f;
 
             OutputSubframe reverbSubframe = {};
             for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
@@ -533,7 +533,7 @@ void dusk::audio::DspInit() {
         auto& channelAux = ChannelAux[i];
         channelAux.reverb.setwet(1.0f);
         channelAux.reverb.setdry(0.0f);
-        channelAux.reverb.setroomsize(0.4f);
+        channelAux.reverb.setroomsize(0.5f);
         channelAux.reverb.setdamp(0.7f);
         channelAux.reverb.setwidth(1.0f);
         channelAux.reverb.setmode(0.0f);
