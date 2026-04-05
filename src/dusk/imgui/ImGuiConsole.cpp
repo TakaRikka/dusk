@@ -23,7 +23,7 @@ using namespace std::string_literals;
 using namespace std::string_view_literals;
 
 namespace dusk {
-    float ImGuiScale() { return ImGui::GetIO().DisplayFramebufferScale.x; }
+    float ImGuiScale() { return 1.0f; }
 
     void ImGuiStringViewText(std::string_view text) {
         // begin()/end() do not work on MSVC
