@@ -73,15 +73,6 @@ namespace dusk {
 
         windowInputViewer();
         windowControllerConfig();
-
-        if ((ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) && ImGui::IsKeyPressed(ImGuiKey_R)) {
-            JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
-        }
-
-        if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
-            getSettings().video.enableFullscreen = !getSettings().video.enableFullscreen;
-            VISetWindowFullscreen(getSettings().video.enableFullscreen);
-        }
     }
 
     static void drawVirtualStick(const char* id, const ImVec2& stick) {

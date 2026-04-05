@@ -182,6 +182,17 @@ namespace dusk {
             m_isLaunchInitialized = true;
         }
 
+        if ((ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) &&
+            ImGui::IsKeyPressed(ImGuiKey_R))
+        {
+            JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
+        }
+
+        if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
+            getSettings().video.enableFullscreen = !getSettings().video.enableFullscreen;
+            VISetWindowFullscreen(getSettings().video.enableFullscreen);
+        }
+
         if (CheckMenuViewToggle(ImGuiKey_F1, m_isHidden)) {
             ShowToasts();
             return;
