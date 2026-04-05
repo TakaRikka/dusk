@@ -11,6 +11,7 @@
 #include "dusk/hotkeys.h"
 #include "dusk/settings.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include "m_Do/m_Do_graphic.h"
 
 namespace dusk {
     ImGuiMenuGame::ImGuiMenuGame() {}
@@ -27,6 +28,13 @@ namespace dusk {
                 if (ImGui::MenuItem("Toggle Fullscreen", hotkeys::TOGGLE_FULLSCREEN)) {
                     getSettings().video.enableFullscreen = !getSettings().video.enableFullscreen;
                     VISetWindowFullscreen(getSettings().video.enableFullscreen);
+                }
+
+                if (ImGui::MenuItem("Default Window Size")) {
+                    getSettings().video.enableFullscreen = false;
+                    VISetWindowFullscreen(false);
+                    VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
+                    VICenterWindow();
                 }
 
                 ImGui::EndMenu();
