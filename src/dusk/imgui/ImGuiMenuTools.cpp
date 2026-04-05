@@ -146,7 +146,8 @@ namespace dusk {
         }
 
         ImGuiIO& io = ImGui::GetIO();
-        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoResize;
+        ImGuiWindowFlags windowFlags =
+            ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize;
 
         ImGui::SetNextWindowBgAlpha(0.65f);
 
