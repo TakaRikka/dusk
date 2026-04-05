@@ -241,7 +241,7 @@ namespace dusk {
                     }
 
                     char bufId[32];
-                    snprintf(bufId, sizeof(bufId), "%p", block);
+                    snprintf(bufId, sizeof(bufId), "%p", block.block);
                     ImGui::PushID(bufId);
                     ImGui::TableNextColumn();
                     ImGui::Text("%08X", (u32)((uintptr_t)block.block - (uintptr_t)expHeap->getStartAddr()));
