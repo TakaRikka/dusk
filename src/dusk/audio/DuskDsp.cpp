@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdio>
 #include <span>
 
 #include "Adpcm.hpp"
@@ -17,9 +18,30 @@ using namespace dusk::audio;
 
 ChannelAuxData dusk::audio::ChannelAux[DSP_CHANNELS] = {};
 
+static bool sDumpWasActive = false;
+static FILE* sChannelDumpFiles[DSP_CHANNELS] = {};
+
+static void OpenChannelDumpFiles() {
+    char name[32];
+    for (int i = 0; i < DSP_CHANNELS; i++) {
+        snprintf(name, sizeof(name), "channel_%02d.raw", i);
+        sChannelDumpFiles[i] = fopen(name, "wb");
+    }
+}
+
+static void CloseChannelDumpFiles() {
+    for (int i = 0; i < DSP_CHANNELS; i++) {
+        if (sChannelDumpFiles[i]) {
+            fclose(sChannelDumpFiles[i]);
+            sChannelDumpFiles[i] = nullptr;
+        }
+    }
+}
+
 f32 dusk::audio::MasterVolume = 1.0f;
 f32 dusk::audio::PrevMasterVolume = 1.0f;
 bool dusk::audio::EnableReverb = true;
+bool dusk::audio::DumpAudio = false;
 
 /**
  * Validate that a DSP channel's format is actually something we know how to play.
@@ -107,6 +129,15 @@ static void MixSubframe(DspSubframe& dst, const DspSubframe& src) {
 }
 
 void dusk::audio::DspRender(OutputSubframe& subframe) {
+    if (DumpAudio != sDumpWasActive) {
+        sDumpWasActive = DumpAudio;
+        if (DumpAudio) {
+            OpenChannelDumpFiles();
+        } else {
+            CloseChannelDumpFiles();
+        }
+    }
+
     std::span channels(JASDsp::CH_BUF, DSP_CHANNELS);
 
     for (int i = 0; i < channels.size(); i++) {
@@ -164,6 +195,13 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
             for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
                 channelSubframe.channels[0][j] += reverbSubframe.channels[0][j];
                 channelSubframe.channels[1][j] += reverbSubframe.channels[1][j];
+            }
+        }
+
+        if (DumpAudio && sChannelDumpFiles[i]) {
+            for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
+                fwrite(&channelSubframe.channels[0][j], sizeof(f32), 1, sChannelDumpFiles[i]);
+                fwrite(&channelSubframe.channels[1][j], sizeof(f32), 1, sChannelDumpFiles[i]);
             }
         }
 
@@ -495,7 +533,7 @@ void dusk::audio::DspInit() {
         auto& channelAux = ChannelAux[i];
         channelAux.reverb.setwet(1.0f);
         channelAux.reverb.setdry(0.0f);
-        channelAux.reverb.setroomsize(0.2f);
+        channelAux.reverb.setroomsize(0.4f);
         channelAux.reverb.setdamp(0.7f);
         channelAux.reverb.setwidth(1.0f);
         channelAux.reverb.setmode(0.0f);

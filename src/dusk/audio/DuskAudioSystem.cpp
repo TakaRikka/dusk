@@ -3,8 +3,6 @@
 #include <SDL3/SDL_init.h>
 #include <array>
 #include <cassert>
-#include <fstream>
-#include <ios>
 #include <span>
 
 #include "JSystem/JAudio2/JASAiCtrl.h"
@@ -16,8 +14,6 @@
 #include "DuskDsp.hpp"
 #include "JSystem/JAudio2/JASAudioThread.h"
 #include "JSystem/JAudio2/JASDriverIF.h"
-
-// #define DUSK_DUMP_AUDIO
 
 using namespace dusk::audio;
 
@@ -91,10 +87,6 @@ void SDLCALL GetNewAudio(
     }
 }
 
-#if defined(DUSK_DUMP_AUDIO)
-static std::ofstream outRaw("guh.raw", std::ios_base::out | std::ios_base::binary);
-#endif
-
 int RenderNewAudioFrame() {
     JASCriticalSection section;
     const u32 countSubframes = JASDriver::getSubFrames();
@@ -106,10 +98,6 @@ int RenderNewAudioFrame() {
 
         JASAudioThread::snIntCount -= 1;
     }
-
-#if defined(DUSK_DUMP_AUDIO)
-    outRaw.flush();
-#endif
 
     return static_cast<u16>(countSubframes) * DSP_SUBFRAME_SIZE;
 }
@@ -146,10 +134,6 @@ void RenderAudioSubframe() {
             }
         }
     }
-
-#if defined(DUSK_DUMP_AUDIO)
-    outRaw.write((const char*)OutInterleaveBuffer.data(), sizeof(OutInterleaveBuffer));
-#endif
 
     SDL_PutAudioStreamData(PlaybackStream, &OutInterleaveBuffer, sizeof(OutInterleaveBuffer));
 }

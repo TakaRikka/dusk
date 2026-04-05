@@ -122,4 +122,5 @@ namespace dusk::audio {
     extern f32 MasterVolume;
     extern f32 PrevMasterVolume;
     extern bool EnableReverb;
+    extern bool DumpAudio;
 }
