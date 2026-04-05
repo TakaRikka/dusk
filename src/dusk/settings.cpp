@@ -23,6 +23,7 @@ UserSettings g_userSettings = {
     // Game settings
     .game = {
         // Quality of Life
+        .enableArmorsQuickToggle = false,
         .enableQuickTransform = false,
         .hideTvSettingsScreen = false,
         .biggerWallets = false,
