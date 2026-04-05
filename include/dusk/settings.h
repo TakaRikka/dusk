@@ -20,6 +20,7 @@ struct UserSettings {
         float subMusicVolume;
         float soundEffectsVolume;
         float fanfareVolume;
+        bool enableReverb;
     } audio;
 
     // Game settings
@@ -35,6 +36,7 @@ struct UserSettings {
         int damageMultiplier;
         bool instantDeath;
         bool fastClimbing;
+        bool noMissClimbing;
         bool fastTears;
 
         // Preferences
@@ -45,8 +47,13 @@ struct UserSettings {
         bool enableBloom;
         bool useWaterProjectionOffset;
 
+        // Audio
+        bool noLowHpSound;   
+        bool midnasLamentNonStop;
+
         // Cheats
         bool enableFastIronBoots;
+        bool canTransformAnywhere;
 
         // Technical
         bool restoreWiiGlitches;
@@ -77,4 +84,3 @@ TransientSettings& getTransientSettings();
 }
 
 #endif // DUSK_CONFIG_H
-

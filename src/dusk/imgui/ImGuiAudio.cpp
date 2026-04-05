@@ -8,6 +8,7 @@
 #include "JSystem/JAudio2/JASDSPInterface.h"
 #include "JSystem/JAudio2/JASTrack.h"
 #include "dusk/audio/DuskAudioSystem.h"
+#include "dusk/audio/DuskDsp.hpp"
 
 static std::array<u8, DSP_CHANNELS> channelSortIndices = {};
 static std::array<u32, DSP_CHANNELS> lastResetCounts = {};
@@ -102,6 +103,7 @@ static void ShowAllDspChannels() {
     }
 
     ImGui::Text("Active channels: %d", activeChannels);
+    ImGui::Checkbox("Dump channels to disk", &dusk::audio::DumpAudio);
     ImGui::Checkbox("Sort by update count", &sortUpdateCount);
 
     if (sortUpdateCount) {

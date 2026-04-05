@@ -37,6 +37,12 @@ namespace dusk {
                     ImGui::SetTooltip("Quicker climbing on ladders and vines like the HD version");
                 }
 
+                ImGui::Checkbox("No Climbing Miss Animation", &getSettings().game.noMissClimbing);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Prevents Link from playing a struggle animation\n"
+                                      "when using the Clawshot on vines at a weird angle");
+                }
+
                 ImGui::Checkbox("Faster Tears of Light", &getSettings().game.fastTears);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Tears of Light dropped by Shadow Insects pop out faster like the HD version");
@@ -46,11 +52,16 @@ namespace dusk {
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Hides the TV calibration screen shown when loading a save");
                 }
+
                 ImGui::EndMenu();
             }
 
             if (ImGui::BeginMenu("Preferences")) {
                 ImGui::Checkbox("Mirror Mode", &getSettings().game.enableMirrorMode);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Mirrors the world, matching the Wii version of the game");
+                }
+
                 ImGui::Checkbox("Invert Camera X Axis", &getSettings().game.invertCameraXAxis);
 
                 ImGui::EndMenu();
@@ -58,10 +69,25 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Graphics")) {
                 ImGui::Checkbox("Native Bloom", &getSettings().game.enableBloom);
+
                 ImGui::Checkbox("Water Projection Offset", &getSettings().game.useWaterProjectionOffset);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Adds GC-specific -0.01 transS offset\n"
-                        "that causes ~6px ghost artifacts in water reflections");
+                                      "that causes ~6px ghost artifacts in water reflections");
+                }
+
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("Audio")) {
+                ImGui::Checkbox("No Low HP Sound", &getSettings().game.noLowHpSound);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Disable the beeping sound when having low health");
+                }
+
+                ImGui::Checkbox("Non-Stop Midna's Lament", &getSettings().game.midnasLamentNonStop);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Prevents enemy music while Midna's Lament is playing");
                 }
 
                 ImGui::EndMenu();
@@ -70,11 +96,17 @@ namespace dusk {
             if (ImGui::BeginMenu("Cheats")) {
                 ImGui::Checkbox("Fast Iron Boots", &getSettings().game.enableFastIronBoots);
 
+                ImGui::Checkbox("Can Transform Anywhere", &getSettings().game.canTransformAnywhere);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Allows you to transform even if NPCs are looking");
+                }
+
                 ImGui::EndMenu();
             }
 
             if (ImGui::BeginMenu("Difficulty")) {
                 ImGui::SliderInt("Damage Multiplier", &getSettings().game.damageMultiplier, 1, 8, "x%d");
+
                 ImGui::Checkbox("Instant Death", &getSettings().game.instantDeath);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Any hit will instantly kill you");
@@ -86,7 +118,8 @@ namespace dusk {
             if (ImGui::BeginMenu("Technical")) {
                 ImGui::Checkbox("Restore Wii 1.0 Glitches", &getSettings().game.restoreWiiGlitches);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Restores patched glitches from Wii USA 1.0, the first released version");
+                    ImGui::SetTooltip("Restores patched glitches from Wii USA 1.0,\n"
+                                      "the first released version");
                 }
 
                 ImGui::EndMenu();

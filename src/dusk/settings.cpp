@@ -12,11 +12,12 @@ UserSettings g_userSettings = {
 
     // Audio
     .audio = {
-        .masterVolume = 1.0f,
+        .masterVolume = 0.8f,
         .mainMusicVolume = 1.0f,
         .subMusicVolume = 1.0f,
         .soundEffectsVolume = 1.0f,
         .fanfareVolume = 1.0f,
+        .enableReverb = true
     },
 
     // Game settings
@@ -31,6 +32,7 @@ UserSettings g_userSettings = {
         .damageMultiplier = 1,
         .instantDeath = false,
         .fastClimbing = false,
+        .noMissClimbing = false,
         .fastTears = false,
 
         // Preferences
@@ -41,8 +43,13 @@ UserSettings g_userSettings = {
         .enableBloom = true,
         .useWaterProjectionOffset = false,
 
+        // Audio
+        .noLowHpSound = false,
+        .midnasLamentNonStop = false,
+
         // Cheats
         .enableFastIronBoots = false,
+        .canTransformAnywhere = false,
 
         // Technical
         .restoreWiiGlitches = false,
