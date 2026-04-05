@@ -31,9 +31,12 @@ private:
     bool m_isHidden = true;
     bool m_isLaunchInitialized = false;
     std::deque<Toast> m_toasts;
+
     ImGuiMenuGame m_menuGame;
-    ImGuiMenuTools m_menuTools;
     ImGuiMenuEnhancements m_menuEnhancements;
+
+    // Keep always last
+    ImGuiMenuTools m_menuTools;
 
     void ShowToasts();
     void ShowPipelineProgress();

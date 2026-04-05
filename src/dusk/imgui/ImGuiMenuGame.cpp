@@ -147,8 +147,6 @@ namespace dusk {
             ImGuiWindowFlags_AlwaysAutoResize;
 
         ImGui::SetNextWindowBgAlpha(0.65f);
-        ImGui::SetNextWindowSizeConstraints(ImVec2(850 * scale, 400 * scale),
-                                            ImVec2(850 * scale, 400 * scale));
 
         if (!ImGui::Begin("Controller Config", &m_showControllerConfig, windowFlags)) {
             ImGui::End();
