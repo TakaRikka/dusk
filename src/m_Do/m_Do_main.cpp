@@ -44,6 +44,7 @@
 #include <chrono>
 #include <thread>
 #include "SSystem/SComponent/c_API.h"
+#include "dusk/appname.hpp"
 #include "dusk/dusk.h"
 #include "dusk/logging.h"
 #include "dusk/time.h"
@@ -56,6 +57,7 @@
 #include <aurora/dvd.h>
 #include <dolphin/dvd.h>
 
+#include "SDL3/SDL_filesystem.h"
 #include "cxxopts.hpp"
 #include "dusk/config.hpp"
 
@@ -108,6 +110,7 @@ s32 LOAD_COPYDATE(void*) {
 }
 
 AuroraInfo auroraInfo;
+const char* configPath;
 
 void main01(void) {
     OS_REPORT("\x1b[m");
@@ -263,6 +266,15 @@ static void ApplyCVarOverrides(const cxxopts::OptionValue& option) {
     }
 }
 
+static const char* CalculateConfigPath() {
+    const auto result = SDL_GetPrefPath(dusk::OrgName, dusk::AppName);
+    if (!result) {
+        DuskLog.fatal("Unable to get PrefPath: {}", SDL_GetError());
+    }
+
+    return result;
+}
+
 // =========================================================================
 // PC ENTRY POINT
 // =========================================================================
@@ -299,11 +311,14 @@ int game_main(int argc, char* argv[]) {
         exit(1);
     }
 
+    configPath = CalculateConfigPath();
+
     dusk::config::LoadFromUserPreferences();
     ApplyCVarOverrides(parsed_arg_options["cvar"]);
 
     AuroraConfig config{};
-    config.appName = "Dusk";
+    config.appName = dusk::AppName;
+    config.configPath = configPath;
     config.windowPosX = -1;
     config.windowPosY = -1;
     config.windowWidth = 608 * 2;

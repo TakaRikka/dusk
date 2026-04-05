@@ -1,8 +1,4 @@
 #include "dusk/config.hpp"
-#include "SDL3/SDL_filesystem.h"
-#include "SDL3/SDL_iostream.h"
-#include "dusk/appname.hpp"
-#include "dusk/scope.hpp"
 #include "fmt/format.h"
 #include "nlohmann/json.hpp"
 #include "absl/container/flat_hash_map.h"
@@ -12,6 +8,8 @@
 
 #include <limits>
 #include <string>
+
+#include "dusk/dusk.h"
 
 using namespace dusk::config;
 
@@ -25,13 +23,7 @@ static absl::flat_hash_map<std::string_view, ConfigVarBase*> RegisteredConfigVar
 static bool RegistrationDone;
 
 static std::string GetConfigJsonPath() {
-    dusk::ScopeValue folder(SDL_GetPrefPath(dusk::OrgName, dusk::AppName), SDL_free);
-    if (folder.value == nullptr) {
-        DuskConfigLog.error("Failed to get user preference path: %s", SDL_GetError());
-        return "";
-    }
-
-    return fmt::format("{}{}", folder.value, ConfigFileName);
+    return fmt::format("{}{}", configPath, ConfigFileName);
 }
 
 ConfigVarBase::ConfigVarBase(const char* name, const ConfigImplBase* impl) : name(name), registered(false), layer(ConfigVarLayer::Default), impl(impl) {
@@ -151,11 +143,11 @@ void dusk::config::FinishRegistration() {
 }
 
 void dusk::config::LoadFromUserPreferences() {
-    const auto configPath = GetConfigJsonPath();
-    if (configPath.empty()) {
+    const auto configJsonPath = GetConfigJsonPath();
+    if (configJsonPath.empty()) {
         return;
     }
-    LoadFromFileName(configPath.c_str());
+    LoadFromFileName(configJsonPath.c_str());
 }
 
 static void LoadFromPath(const char* path) {
@@ -202,12 +194,12 @@ void dusk::config::LoadFromFileName(const char* path) {
 }
 
 void dusk::config::Save() {
-    const auto configPath = GetConfigJsonPath();
-    if (configPath.empty()) {
+    const auto configJsonPath = GetConfigJsonPath();
+    if (configJsonPath.empty()) {
         return;
     }
 
-    DuskConfigLog.info("Saving config to '{}'", configPath);
+    DuskConfigLog.info("Saving config to '{}'", configJsonPath);
 
     json j;
 
@@ -217,7 +209,7 @@ void dusk::config::Save() {
         }
     }
 
-    io::FileStream::WriteAllText(configPath.c_str(), j.dump(4));
+    io::FileStream::WriteAllText(configJsonPath.c_str(), j.dump(4));
 }
 
 ConfigVarBase* dusk::config::GetConfigVar(std::string_view name) {
