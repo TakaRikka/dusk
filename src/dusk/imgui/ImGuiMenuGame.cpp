@@ -7,6 +7,7 @@
 #include <imgui_internal.h>
 
 #include "JSystem/JUtility/JUTGamePad.h"
+#include "dusk/audio/DuskDsp.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/hotkeys.h"
 #include "dusk/settings.h"
@@ -39,7 +40,7 @@ namespace dusk {
             if (ImGui::BeginMenu("Audio")) {
                 ImGui::Text("Master Volume");
                 config::ImGuiSliderFloat("##masterVolume", settings::audio::masterVolume, 0.0f, 1.0f, "");
-
+                config::ImGuiCheckbox("Enable Reverb", settings::audio::enableReverb);
                 /*
                 // TODO: implement additional settings
                 ImGui::Text("Main Music Volume");
@@ -60,6 +61,7 @@ namespace dusk {
                 */
 
                 audio::SetMasterVolume(settings::audio::masterVolume);
+                audio::EnableReverb = settings::audio::enableReverb;
 
                 ImGui::EndMenu();
             }

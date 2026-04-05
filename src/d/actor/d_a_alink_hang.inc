@@ -285,7 +285,11 @@ int daAlink_c::procHangStartInit() {
     offNoResetFlg2(FLG2_UNK_2000);
 
     if (checkHangFootWall()) {
+        #if TARGET_PC
+        if (!is_prev_hangReady && cM_rnd() < 0.7f && !dusk::settings::game::noMissClimbing) {
+        #else
         if (!is_prev_hangReady && cM_rnd() < 0.7f) {
+        #endif
             setSingleAnimeParam(ANM_CLIMB_HANG_MISS, &mpHIO->mLadder.m.mWallAttachMissAnm);
             field_0x3478 = mpHIO->mLadder.m.mWallAttachMissAnm.mCancelFrame;
             voiceStart(Z2SE_AL_V_FOOT_MISS);
@@ -2084,7 +2088,11 @@ int daAlink_c::procClimbUpStartInit(int param_0) {
     speed.y = 0.0f;
     mNormalSpeed = 0.0f;
 
+    #if TARGET_PC
+    if (param_0 || var_r29 || cM_rnd() < 0.3f || dusk::settings::game::noMissClimbing) {
+    #else
     if (param_0 || var_r29 || cM_rnd() < 0.3f) {
+    #endif
         setSingleAnimeParam(ANM_CLIMB_HANG, &mpHIO->mLadder.m.mWallAttachAnm);
         field_0x3478 = mpHIO->mLadder.m.mWallAttachAnm.mCancelFrame;
         voiceStart(Z2SE_AL_V_JUMP_HANG);
@@ -2161,7 +2169,11 @@ int daAlink_c::procClimbDownStartInit(s16 param_0) {
 
     deleteEquipItem(TRUE, FALSE);
 
+    #if TARGET_PC
+    if (cM_rnd() < 0.7f || dusk::settings::game::noMissClimbing) {
+    #else
     if (cM_rnd() < 0.7f) {
+    #endif
         setSingleAnimeParam(ANM_CLIMB_HANG, &mpHIO->mLadder.m.mWallAttachAnm);
         field_0x3478 = mpHIO->mLadder.m.mWallAttachAnm.mCancelFrame;
         mProcVar0.field_0x3008 = 0;

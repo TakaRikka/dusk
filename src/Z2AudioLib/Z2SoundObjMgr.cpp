@@ -107,6 +107,15 @@ static Z2EnemyInfo mEnemyInfo[64] = {
 void Z2SoundObjMgr::searchEnemy() {
     twilightBattle_ = 0;
 
+    #if TARGET_PC
+    if (Z2GetSeqMgr()->checkBgmIDPlaying(Z2BGM_MIDNA_SOS) &&
+        dusk::settings::game::midnasLamentNonStop)
+    {
+        Z2GetSeqMgr()->changeSubBgmStatus(0);
+        return;
+    }
+    #endif
+
     if (!Z2GetLink()) {
         Z2GetSeqMgr()->stopBattleBgm(1, 1);
         return;

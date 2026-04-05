@@ -8,6 +8,8 @@
 #include "SDL3/SDL_audio.h"
 #include <span>
 
+#include "freeverb/revmodel.hpp"
+
 // ReSharper disable once CppUnusedIncludeDirective
 #include "global.h"
 
@@ -29,6 +31,7 @@ namespace dusk::audio {
 
         // Used for debugging tools.
         u32 resetCount;
+        revmodel reverb;
 
         /**
          * Previous volume values, per output channel.
@@ -51,7 +54,7 @@ namespace dusk::audio {
         // basically stores our position between resamplePrev and decodeBuf[0] so we don't lose that fractional resampler position next subframe
         f32 resamplePos;
         // last consumed sample from decodeBuf
-        s16 resamplePrev;     
+        s16 resamplePrev;
     };
 
     extern ChannelAuxData ChannelAux[DSP_CHANNELS];
@@ -118,4 +121,6 @@ namespace dusk::audio {
 
     extern f32 MasterVolume;
     extern f32 PrevMasterVolume;
+    extern bool EnableReverb;
+    extern bool DumpAudio;
 }

@@ -12,6 +12,7 @@ ConfigVar<float> mainMusicVolume("audio.mainMusicVolume", 1.0f);
 ConfigVar<float> subMusicVolume("audio.subMusicVolume", 1.0f);
 ConfigVar<float> soundEffectsVolume("audio.soundEffectsVolume", 1.0f);
 ConfigVar<float> fanfareVolume("audio.fanfareVolume", 1.0f);
+ConfigVar<bool> enableReverb("audio.enableReverb", true);
 }
 
 namespace game {
@@ -26,6 +27,7 @@ ConfigVar<int> damageMultiplier("game.damageMultiplier", 1);
 ConfigVar<bool> instantDeath("game.instantDeath", false);
 ConfigVar<bool> fastClimbing("game.fastClimbing", false);
 ConfigVar<bool> fastTears("game.fastTears", false);
+ConfigVar<bool> noMissClimbing("game.noMissClimbing", false);
 
 // Preferences
 ConfigVar<bool> enableMirrorMode("game.enableMirrorMode", false);
@@ -35,8 +37,13 @@ ConfigVar<bool> invertCameraXAxis("game.invertCameraXAxis", false);
 ConfigVar<bool> enableBloom("game.enableBloom", true);
 ConfigVar<bool> useWaterProjectionOffset("game.useWaterProjectionOffset", false);
 
+// Audio
+ConfigVar<bool> noLowHpSound("game.noLowHpSound", false);
+ConfigVar<bool> midnasLamentNonStop("game.midnasLamentNonStop", false);
+
 // Cheats
 ConfigVar<bool> enableFastIronBoots("game.enableFastIronBoots", false);
+ConfigVar<bool> canTransformAnywhere("game.canTransformAnywhere", false);
 
 // Technical
 ConfigVar<bool> restoreWiiGlitches("game.restoreWiiGlitches", false);
@@ -52,6 +59,7 @@ void Register() {
     Register(audio::subMusicVolume);
     Register(audio::soundEffectsVolume);
     Register(audio::fanfareVolume);
+    Register(audio::enableReverb);
 
     // Game
     Register(game::enableQuickTransform);
@@ -69,7 +77,11 @@ void Register() {
     Register(game::enableBloom);
     Register(game::useWaterProjectionOffset);
     Register(game::enableFastIronBoots);
+    Register(game::canTransformAnywhere);
     Register(game::restoreWiiGlitches);
+    Register(game::noMissClimbing);
+    Register(game::noLowHpSound);
+    Register(game::midnasLamentNonStop);
 }
 }
 

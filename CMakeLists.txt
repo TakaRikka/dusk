@@ -17,6 +17,8 @@ set(AURORA_ENABLE_DVD ON CACHE BOOL "Enable DVD API support" FORCE)
 set(AURORA_ENABLE_CARD ON CACHE BOOL "Enable CARD API support" FORCE)
 add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
 
+add_subdirectory(libs/freeverb)
+
 option(DUSK_BUILD_WARNINGS "If off, compiler warnings will be suppressed")
 option(DUSK_SELECTED_OPT "If on, selected parts of the project will be compiled with optimizations on Debug, intending to make the game run at 30 FPS. Note for MSVC: you will need to remove '/RTC1' from your debug flags in CMake.")
 option(DUSK_MOVIE_SUPPORT "If on, compile against libjpeg-turbo to enable THP file decoding" ON)
@@ -110,18 +112,19 @@ target_include_directories(game_debug PUBLIC
         src
         assets/${DUSK_TP_VERSION}
         libs/JSystem/include
+        libs
         extern/aurora/include/dolphin
         extern
         ${CMAKE_SOURCE_DIR}/build/${DUSK_TP_VERSION}/include
         build/${DUSK_TP_VERSION}/include)
-target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd aurora::card nlohmann_json::nlohmann_json)
+target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd aurora::card freeverb nlohmann_json::nlohmann_json)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES}
         src/dusk/imgui/ImGuiStubLog.cpp
         src/dusk/imgui/ImGuiAudio.cpp)
 
-target_link_libraries(game PRIVATE game_debug cxxopts::cxxopts absl::flat_hash_map)
+target_link_libraries(game PRIVATE game_debug cxxopts::cxxopts absl::flat_hash_map freeverb)
 if (DUSK_MOVIE_SUPPORT_REAL)
     if (TARGET libjpeg-turbo::turbojpeg-static)
         message(STATUS "dusk: Linking against libjpeg-turbo static library")
@@ -138,7 +141,7 @@ target_precompile_headers(game PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE
 add_executable(dusk src/dusk/main.cpp)
 target_compile_definitions(dusk PRIVATE TARGET_PC AVOID_UB=1 VERSION=0)
 target_include_directories(dusk PRIVATE include)
-target_link_libraries(dusk PRIVATE game aurora::main)
+target_link_libraries(dusk PRIVATE game aurora::main freeverb)
 
 add_custom_command(TARGET dusk POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory

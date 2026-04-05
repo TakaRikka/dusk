@@ -18,6 +18,7 @@ extern ConfigVar<float> mainMusicVolume;
 extern ConfigVar<float> subMusicVolume;
 extern ConfigVar<float> soundEffectsVolume;
 extern ConfigVar<float> fanfareVolume;
+extern ConfigVar<bool> enableReverb;
 }
 
 namespace game {
@@ -32,6 +33,7 @@ extern ConfigVar<int> damageMultiplier;
 extern ConfigVar<bool> instantDeath;
 extern ConfigVar<bool> fastClimbing;
 extern ConfigVar<bool> fastTears;
+extern ConfigVar<bool> noMissClimbing;
 
 // Preferences
 extern ConfigVar<bool> enableMirrorMode;
@@ -41,8 +43,13 @@ extern ConfigVar<bool> invertCameraXAxis;
 extern ConfigVar<bool> enableBloom;
 extern ConfigVar<bool> useWaterProjectionOffset;
 
+// Audio
+extern ConfigVar<bool> noLowHpSound;
+extern ConfigVar<bool> midnasLamentNonStop;
+
 // Cheats
 extern ConfigVar<bool> enableFastIronBoots;
+extern ConfigVar<bool> canTransformAnywhere;
 
 // Technical
 extern ConfigVar<bool> restoreWiiGlitches;
@@ -75,4 +82,3 @@ TransientSettings& getTransientSettings();
 }
 
 #endif // DUSK_CONFIG_H
-
