@@ -74,6 +74,10 @@ namespace dusk {
             }
 
             if (ImGui::BeginMenu("Audio")) {
+                ImGui::Checkbox("No Low HP Sound", &getSettings().game.noLowHpSound);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Disable the beeping sound when having low health");
+                  
                 ImGui::Checkbox("Non-Stop Midna's Lament", &getSettings().game.midnasLamentNonStop);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Prevents enemy music while Midna's Lament is playing");

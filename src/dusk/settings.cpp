@@ -43,6 +43,7 @@ UserSettings g_userSettings = {
         .useWaterProjectionOffset = false,
 
         // Audio
+        .noLowHpSound = false,
         .midnasLamentNonStop = false,
 
         // Cheats

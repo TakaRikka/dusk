@@ -47,6 +47,7 @@ struct UserSettings {
         bool useWaterProjectionOffset;
 
         // Audio
+        bool noLowHpSound;   
         bool midnasLamentNonStop;
 
         // Cheats
