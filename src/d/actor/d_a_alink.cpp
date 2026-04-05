@@ -18777,6 +18777,11 @@ int daAlink_c::execute() {
     }
     #endif
 
+    #if TARGET_PC
+    handleArmorsQuickToggle();
+    #endif
+
+
     return 1;
 }
 
