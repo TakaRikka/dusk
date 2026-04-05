@@ -1,0 +1,12 @@
+--std=c++20
+-DTARGET_PC
+-DAVOID_UB=1
+-DVERSION=0
+-Iinclude
+-Isrc
+-Ilibs/JSystem/include
+-Ilibs
+-Iextern/aurora/include/dolphin
+-Iextern/aurora/include
+-Iextern
+-Ibuild/GZ2E01/include

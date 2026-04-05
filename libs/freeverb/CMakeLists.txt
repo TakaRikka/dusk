@@ -7,7 +7,3 @@ add_library(freeverb
     allpass.cpp
     revmodel.cpp
 )
-
-target_include_directories(freeverb PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)

@@ -8,7 +8,7 @@
 #include "SDL3/SDL_audio.h"
 #include <span>
 
-#include "revmodel.hpp"
+#include "freeverb/revmodel.hpp"
 
 // ReSharper disable once CppUnusedIncludeDirective
 #include "global.h"

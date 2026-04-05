@@ -106,6 +106,7 @@ target_include_directories(game_debug PUBLIC
         src
         assets/${DUSK_TP_VERSION}
         libs/JSystem/include
+        libs
         extern/aurora/include/dolphin
         extern
         ${CMAKE_SOURCE_DIR}/build/${DUSK_TP_VERSION}/include
