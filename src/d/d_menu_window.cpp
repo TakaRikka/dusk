@@ -126,9 +126,6 @@ BOOL dMw_UP_TRIGGER() {
 }
 
 BOOL dMw_DOWN_TRIGGER() {
-    #if TARGET_PC
-    if (dusk::getSettings().game.enableArmorsQuickToggle) return NULL;
-    #endif
     return mDoCPd_c::getTrigDown(PAD_1) != 0;
 }
 
