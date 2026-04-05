@@ -182,6 +182,17 @@ namespace dusk {
             m_isLaunchInitialized = true;
         }
 
+        if ((ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) &&
+            ImGui::IsKeyPressed(ImGuiKey_R))
+        {
+            JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
+        }
+
+        if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
+            getSettings().video.enableFullscreen = !getSettings().video.enableFullscreen;
+            VISetWindowFullscreen(getSettings().video.enableFullscreen);
+        }
+
         if (CheckMenuViewToggle(ImGuiKey_F1, m_isHidden)) {
             ShowToasts();
             return;
@@ -192,8 +203,10 @@ namespace dusk {
 
         if (ImGui::BeginMainMenuBar()) {
             m_menuGame.draw();
-            m_menuTools.draw();
             m_menuEnhancements.draw();
+
+            // Keep always last
+            m_menuTools.draw();
 
             ImGui::SetCursorPosX(ImGui::GetWindowWidth() - 80.0f * ImGuiScale());
             ImGuiIO& io = ImGui::GetIO();
