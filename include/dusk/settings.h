@@ -27,6 +27,7 @@ struct UserSettings {
 
     struct {
         // QoL
+        bool enableArmorsQuickToggle;
         bool enableQuickTransform;
         bool hideTvSettingsScreen;
         bool biggerWallets;
