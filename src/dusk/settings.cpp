@@ -8,6 +8,7 @@ UserSettings g_userSettings = {
     // Video
     .video = {
         .enableFullscreen = false,
+        .lockAspectRatio = false,
     },
 
     // Audio

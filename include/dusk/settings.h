@@ -11,6 +11,7 @@ struct UserSettings {
     struct {
         // Video
         bool enableFullscreen;
+        bool lockAspectRatio;
     } video;
 
     struct {
