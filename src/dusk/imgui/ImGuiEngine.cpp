@@ -38,6 +38,7 @@ void ImGuiEngine_Initialize(float scale) {
     ImGui::GetCurrentContext();
     ImGuiIO& io = ImGui::GetIO();
     io.Fonts->Clear();
+    io.FontGlobalScale = scale > 0.0f ? 1.0f / scale : 1.0f;
 
     const std::string fontPath = GetAssetPath("NotoMono-Regular.ttf");
     const bool hasFontFile = AssetExists(fontPath);
@@ -146,7 +147,6 @@ void ImGuiEngine_Initialize(float scale) {
     colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
     colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
 
-    style.ScaleAllSizes(scale);
 }
 
 Icon GetIcon() {
