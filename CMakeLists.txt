@@ -156,4 +156,5 @@ if (DUSK_SELECTED_OPT)
 
     target_compile_options(xxhash PRIVATE ${_opt_flags})
     target_compile_options(aurora_gx PRIVATE ${_opt_flags})
+    target_compile_options(freeverb PRIVATE ${_opt_flags})
 endif ()
