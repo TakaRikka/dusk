@@ -44,12 +44,12 @@
 #include <chrono>
 #include <thread>
 #include "SSystem/SComponent/c_API.h"
-#include "dusk/appname.hpp"
+#include "dusk/app_info.hpp"
 #include "dusk/dusk.h"
-#include "dusk/logging.h"
-#include "dusk/time.h"
-#include "dusk/main.h"
 #include "dusk/imgui/ImGuiEngine.hpp"
+#include "dusk/logging.h"
+#include "dusk/main.h"
+#include "dusk/time.h"
 
 #include <aurora/aurora.h>
 #include <aurora/event.h>
