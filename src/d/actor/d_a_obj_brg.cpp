@@ -590,8 +590,6 @@ static void cut_control2(obj_brg_class* i_this, br_s* i_part) {
 }
 
 static void himo_cut_control1(obj_brg_class* i_this, cXyz* param_1, f32 param_2) {
-    STUB_RET();
-
     cXyz sp74 = {};
     cXyz sp80 = {};
     cXyz sp8C = {};

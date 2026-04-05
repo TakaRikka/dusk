@@ -7,11 +7,11 @@ ConfigVar<bool> enableFullscreen("video.enableFullscreen", false);
 }
 
 namespace audio {
-ConfigVar<float> masterVolume("audio.masterVolume", 1.0f);
-ConfigVar<float> mainMusicVolume("audio.mainMusicVolume", 1.0f);
-ConfigVar<float> subMusicVolume("audio.subMusicVolume", 1.0f);
-ConfigVar<float> soundEffectsVolume("audio.soundEffectsVolume", 1.0f);
-ConfigVar<float> fanfareVolume("audio.fanfareVolume", 1.0f);
+ConfigVar<int> masterVolume("audio.masterVolume", 80);
+ConfigVar<int> mainMusicVolume("audio.mainMusicVolume", 100);
+ConfigVar<int> subMusicVolume("audio.subMusicVolume", 100);
+ConfigVar<int> soundEffectsVolume("audio.soundEffectsVolume", 100);
+ConfigVar<int> fanfareVolume("audio.fanfareVolume", 100);
 ConfigVar<bool> enableReverb("audio.enableReverb", true);
 }
 
@@ -47,6 +47,9 @@ ConfigVar<bool> canTransformAnywhere("game.canTransformAnywhere", false);
 
 // Technical
 ConfigVar<bool> restoreWiiGlitches("game.restoreWiiGlitches", false);
+
+// Controls
+ConfigVar<bool> enableTurboKeybind("game.enableTurboKeybind", true);
 }
 
 void Register() {
@@ -82,6 +85,7 @@ void Register() {
     Register(game::noMissClimbing);
     Register(game::noLowHpSound);
     Register(game::midnasLamentNonStop);
+    Register(game::enableTurboKeybind);
 }
 }
 
@@ -100,6 +104,7 @@ static TransientSettings g_transientSettings = {
         .colliderViewOpacity = 50.0f,
         .drawRange = 100.0f,
     },
+    .skipFrameRateLimit = false,
 };
 
 TransientSettings& getTransientSettings() {

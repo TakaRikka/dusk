@@ -39,28 +39,28 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Audio")) {
                 ImGui::Text("Master Volume");
-                config::ImGuiSliderFloat("##masterVolume", settings::audio::masterVolume, 0.0f, 1.0f, "");
+                config::ImGuiSliderInt("##masterVolume", settings::audio::masterVolume, 0, 100);
                 config::ImGuiCheckbox("Enable Reverb", settings::audio::enableReverb);
                 /*
-                // TODO: implement additional settings
+                // TODO: Implement additional settings
                 ImGui::Text("Main Music Volume");
-                ImGui::SliderFloat("##mainMusicVolume", &getSettings().audio.mainMusicVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##mainMusicVolume", &getSettings().audio.mainMusicVolume, 0, 100);
 
                 ImGui::Text("Sub Music Volume");
-                ImGui::SliderFloat("##subMusicVolume", &getSettings().audio.subMusicVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##subMusicVolume", &getSettings().audio.subMusicVolume, 0, 100);
 
                 ImGui::Text("Sound Effects Volume");
-                ImGui::SliderFloat("##soundEffectsVolume", &getSettings().audio.soundEffectsVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##soundEffectsVolume", &getSettings().audio.soundEffectsVolume, 0, 100);
 
                 ImGui::Text("Fanfare Volume");
-                ImGui::SliderFloat("##fanfareVolume", &getSettings().audio.fanfareVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##fanfareVolume", &getSettings().audio.fanfareVolume, 0, 100);
 
                 Z2AudioMgr* audioMgr = Z2AudioMgr::getInterface();
                 if (audioMgr != nullptr) {
                 }
                 */
 
-                audio::SetMasterVolume(settings::audio::masterVolume);
+                audio::SetMasterVolume(settings::audio::masterVolume / 100.0f);
                 audio::EnableReverb = settings::audio::enableReverb;
 
                 ImGui::EndMenu();
@@ -78,14 +78,6 @@ namespace dusk {
 
         windowInputViewer();
         windowControllerConfig();
-
-        if ((ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) && ImGui::IsKeyPressed(ImGuiKey_R)) {
-            JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
-        }
-
-        if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
-            ToggleFullscreen();
-        }
     }
 
     static void drawVirtualStick(const char* id, const ImVec2& stick) {
@@ -151,8 +143,6 @@ namespace dusk {
             ImGuiWindowFlags_AlwaysAutoResize;
 
         ImGui::SetNextWindowBgAlpha(0.65f);
-        ImGui::SetNextWindowSizeConstraints(ImVec2(850 * scale, 400 * scale),
-                                            ImVec2(850 * scale, 400 * scale));
 
         if (!ImGui::Begin("Controller Config", &m_showControllerConfig, windowFlags)) {
             ImGui::End();

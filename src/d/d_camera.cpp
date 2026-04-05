@@ -10156,9 +10156,9 @@ bool dCamera_c::eventCamera(s32 param_0) {
             mEye = mCenter + mDirection.Xyz();
         }
 
-        int* sp90_i;
+        BE(int)* sp90_i;
         if (getEvStringData(sp90, "Trim", "DEFAULT") != false) {
-            sp90_i = (int*)sp90;
+            sp90_i = (BE(int)*)sp90;
             if (*sp90_i == 'STAN') {
                 mEventData.field_0x1c = 0;
             } else if (*sp90_i == 'VIST') {

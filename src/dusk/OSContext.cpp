@@ -35,16 +35,6 @@ void OSInitContext(OSContext* context, u32 pc, u32 newsp) {
     context->gpr[1] = newsp;
 }
 
-u32 OSSaveContext(OSContext* context) {
-    // On PC we don't save PowerPC registers.
-    // Return 0 = "context was just saved" (as opposed to 1 = "restored from save").
-    return 0;
-}
-
-void OSLoadContext(OSContext* context) {
-    // No-op on PC (no PowerPC register restore)
-}
-
 void OSDumpContext(OSContext* context) {
     if (!context) {
         OSReport("[PC] OSDumpContext: NULL context\n");
@@ -66,20 +56,15 @@ void OSSaveFPUContext(OSContext* fpucontext) {
 }
 
 u32 OSGetStackPointer(void) {
-    // Return approximate stack pointer
-    volatile u32 dummy;
-    return (u32)(uintptr_t)&dummy;
+    return 0;
 }
 
 u32 OSSwitchStack(u32 newsp) {
-    // Not meaningful on PC - return current sp
-    return OSGetStackPointer();
+    abort();
 }
 
 int OSSwitchFiber(u32 pc, u32 newsp) {
-    // Not meaningful on PC
-    OSReport("[PC] OSSwitchFiber: not supported on PC\n");
-    return 0;
+    abort();
 }
 
 void __OSContextInit(void) {

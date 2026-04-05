@@ -13,11 +13,11 @@ extern ConfigVar<bool> enableFullscreen;
 }
 
 namespace audio {
-extern ConfigVar<float> masterVolume;
-extern ConfigVar<float> mainMusicVolume;
-extern ConfigVar<float> subMusicVolume;
-extern ConfigVar<float> soundEffectsVolume;
-extern ConfigVar<float> fanfareVolume;
+extern ConfigVar<int> masterVolume;
+extern ConfigVar<int> mainMusicVolume;
+extern ConfigVar<int> subMusicVolume;
+extern ConfigVar<int> soundEffectsVolume;
+extern ConfigVar<int> fanfareVolume;
 extern ConfigVar<bool> enableReverb;
 }
 
@@ -53,6 +53,9 @@ extern ConfigVar<bool> canTransformAnywhere;
 
 // Technical
 extern ConfigVar<bool> restoreWiiGlitches;
+
+// Controls
+extern ConfigVar<bool> enableTurboKeybind;
 }
 
 void Register();
@@ -75,6 +78,7 @@ struct CollisionViewSettings {
 
 struct TransientSettings {
     CollisionViewSettings collisionView;
+    bool skipFrameRateLimit;
 };
 
 TransientSettings& getTransientSettings();

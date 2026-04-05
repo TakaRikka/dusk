@@ -13,6 +13,8 @@
 #include "ImGuiConsole.hpp"
 
 #include "JSystem/JUtility/JUTGamePad.h"
+#include "dusk/config.hpp"
+#include "dusk/settings.h"
 
 #if _WIN32
 #define NOMINMAX
@@ -23,7 +25,7 @@ using namespace std::string_literals;
 using namespace std::string_view_literals;
 
 namespace dusk {
-    float ImGuiScale() { return ImGui::GetIO().DisplayFramebufferScale.x; }
+    float ImGuiScale() { return 1.0f; }
 
     void ImGuiStringViewText(std::string_view text) {
         // begin()/end() do not work on MSVC
@@ -182,6 +184,20 @@ namespace dusk {
             m_isLaunchInitialized = true;
         }
 
+        getTransientSettings().skipFrameRateLimit = settings::game::enableTurboKeybind && ImGui::IsKeyDown(ImGuiKey_Tab);
+        
+        if ((ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) &&
+            ImGui::IsKeyPressed(ImGuiKey_R))
+        {
+            JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
+        }
+
+        if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
+            settings::video::enableFullscreen.setValue(!settings::video::enableFullscreen);
+            VISetWindowFullscreen(settings::video::enableFullscreen);
+            config::Save();
+        }
+
         if (CheckMenuViewToggle(ImGuiKey_F1, m_isHidden)) {
             ShowToasts();
             return;
@@ -192,8 +208,10 @@ namespace dusk {
 
         if (ImGui::BeginMainMenuBar()) {
             m_menuGame.draw();
-            m_menuTools.draw();
             m_menuEnhancements.draw();
+
+            // Keep always last
+            m_menuTools.draw();
 
             ImGui::SetCursorPosX(ImGui::GetWindowWidth() - 80.0f * ImGuiScale());
             ImGuiIO& io = ImGui::GetIO();

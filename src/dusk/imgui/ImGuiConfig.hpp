@@ -28,6 +28,14 @@ namespace dusk::config {
             Save();
         }
     }
+
+    static void ImGuiMenuItem(const char* label, const char* shortcut, ConfigVar<bool>& p_selected, bool enabled = true) {
+        bool copy = p_selected.getValue();
+        if (ImGui::MenuItem(label, shortcut, &copy, enabled)) {
+            p_selected.setValue(copy);
+            Save();
+        }
+    }
 }
 
 #endif  // DUSK_IMGUICONFIG_HPP
