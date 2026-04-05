@@ -34,28 +34,29 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Audio")) {
                 ImGui::Text("Master Volume");
-                ImGui::SliderFloat("##masterVolume", &getSettings().audio.masterVolume, 0.0f, 1.0f, "");
+                ImGui::SliderInt("##masterVolume", &getSettings().audio.masterVolume, 0, 100);
                 ImGui::Checkbox("Enable Reverb", &getSettings().audio.enableReverb);
+
                 /*
-                // TODO: implement additional settings
+                // TODO: Implement additional settings
                 ImGui::Text("Main Music Volume");
-                ImGui::SliderFloat("##mainMusicVolume", &getSettings().audio.mainMusicVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##mainMusicVolume", &getSettings().audio.mainMusicVolume, 0, 100);
 
                 ImGui::Text("Sub Music Volume");
-                ImGui::SliderFloat("##subMusicVolume", &getSettings().audio.subMusicVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##subMusicVolume", &getSettings().audio.subMusicVolume, 0, 100);
 
                 ImGui::Text("Sound Effects Volume");
-                ImGui::SliderFloat("##soundEffectsVolume", &getSettings().audio.soundEffectsVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##soundEffectsVolume", &getSettings().audio.soundEffectsVolume, 0, 100);
 
                 ImGui::Text("Fanfare Volume");
-                ImGui::SliderFloat("##fanfareVolume", &getSettings().audio.fanfareVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##fanfareVolume", &getSettings().audio.fanfareVolume, 0, 100);
 
                 Z2AudioMgr* audioMgr = Z2AudioMgr::getInterface();
                 if (audioMgr != nullptr) {
                 }
                 */
 
-                audio::SetMasterVolume(getSettings().audio.masterVolume);
+                audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
                 audio::EnableReverb = getSettings().audio.enableReverb;
 
                 ImGui::EndMenu();
