@@ -7,6 +7,14 @@
 
 namespace dusk::config {
 
+/*
+ * config.hpp is a heavier "full" header for the configuration system.
+ * For a basic overview and the basic types (sufficient for accessing settings),
+ * look at config_var.hpp.
+ *
+ * Avoid including this header in the entire game, it's heavier than I'd like!
+ */
+
 /**
  * \brief Base class containing virtual functions used for save/load of CVars.
  */
