@@ -593,6 +593,7 @@ void mDoGph_gInf_c::onWide(f32 width, f32 height) {
     pc_tvSize.width = width;
     pc_tvSize.height = height;
     setTvSize();
+    dMeter2Info_onWide2D();
 }
 #else
 void mDoGph_gInf_c::onWide() {
@@ -605,10 +606,7 @@ void mDoGph_gInf_c::onWide() {
 void mDoGph_gInf_c::offWide() {
     mWide = FALSE;
     setTvSize();
-
-#if !TARGET_PC
     dMeter2Info_offWide2D();
-#endif
 }
 
 void mDoGph_gInf_c::onWideZoom() {
