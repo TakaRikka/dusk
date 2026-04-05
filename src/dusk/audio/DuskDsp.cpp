@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdio>
 #include <span>
 
 #include "Adpcm.hpp"
@@ -17,8 +18,30 @@ using namespace dusk::audio;
 
 ChannelAuxData dusk::audio::ChannelAux[DSP_CHANNELS] = {};
 
+static bool sDumpWasActive = false;
+static FILE* sChannelDumpFiles[DSP_CHANNELS] = {};
+
+static void OpenChannelDumpFiles() {
+    char name[32];
+    for (int i = 0; i < DSP_CHANNELS; i++) {
+        snprintf(name, sizeof(name), "channel_%02d.raw", i);
+        sChannelDumpFiles[i] = fopen(name, "wb");
+    }
+}
+
+static void CloseChannelDumpFiles() {
+    for (int i = 0; i < DSP_CHANNELS; i++) {
+        if (sChannelDumpFiles[i]) {
+            fclose(sChannelDumpFiles[i]);
+            sChannelDumpFiles[i] = nullptr;
+        }
+    }
+}
+
 f32 dusk::audio::MasterVolume = 1.0f;
 f32 dusk::audio::PrevMasterVolume = 1.0f;
+bool dusk::audio::EnableReverb = true;
+bool dusk::audio::DumpAudio = false;
 
 /**
  * Validate that a DSP channel's format is actually something we know how to play.
@@ -106,38 +129,81 @@ static void MixSubframe(DspSubframe& dst, const DspSubframe& src) {
 }
 
 void dusk::audio::DspRender(OutputSubframe& subframe) {
+    if (DumpAudio != sDumpWasActive) {
+        sDumpWasActive = DumpAudio;
+        if (DumpAudio) {
+            OpenChannelDumpFiles();
+        } else {
+            CloseChannelDumpFiles();
+        }
+    }
+
     std::span channels(JASDsp::CH_BUF, DSP_CHANNELS);
 
     for (int i = 0; i < channels.size(); i++) {
         auto& channel = channels[i];
         auto& channelAux = ChannelAux[i];
 
-        if (!channel.mIsActive) {
-            continue;
-        }
+        bool skipRender = false;
 
-        if (channel.mPauseFlag) {
+        if (!channel.mIsActive) {
+            skipRender = true;
+        }
+        else if (channel.mPauseFlag) {
             // Not really sure what the practical difference between pause and
             // deactivation is. Either avoids clearing state or allows the DSP to avoid popping?
-            continue;
+            skipRender = true;
         }
-
-        if (channel.mForcedStop) {
+        else if (channel.mForcedStop) {
             channel.mIsFinished = true;
-            continue;
+            skipRender = true;
         }
-
-        if (channel.mWaveAramAddress == 0) {
+        else if (channel.mWaveAramAddress == 0) {
             // I think these are oscillator channels? Not backed by audio.
             // No idea how to implement these yet, so skip them.
             channel.mIsFinished = true;
-            continue;
+            skipRender = true;
         }
 
-        ValidateChannel(channel);
-
         OutputSubframe channelSubframe = {};
-        RenderChannel(channel, channelAux, channelSubframe);
+
+        if (!skipRender) {
+            ValidateChannel(channel);
+            RenderChannel(channel, channelAux, channelSubframe);
+        }
+
+        if (EnableReverb) {
+            // scale the input to the reverb rather than using wet/dry on the output.
+            // this way the reverb's internal buffers accumulate energy proportional to mAutoMixerFxMix,
+            // so any tail always decays at the correct level regardless of mAutoMixerFxMix changes
+            // prevents transients when the next sound starts playing with a different reverb level
+            // 700.0f was pulled out of my ass and just sounds good enough for console
+            f32 inputGain = (!skipRender) ? (channel.mAutoMixerFxMix >> 8) / 700.0f : 0.0f;
+
+            OutputSubframe reverbSubframe = {};
+            for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
+                reverbSubframe.channels[0][j] = channelSubframe.channels[0][j] * inputGain;
+                reverbSubframe.channels[1][j] = channelSubframe.channels[1][j] * inputGain;
+            }
+
+            channelAux.reverb.processreplace(
+                reverbSubframe.channels[0].data(), reverbSubframe.channels[1].data(),
+                reverbSubframe.channels[0].data(), reverbSubframe.channels[1].data(),
+                DSP_SUBFRAME_SIZE, 1
+            );
+
+            for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
+                channelSubframe.channels[0][j] += reverbSubframe.channels[0][j];
+                channelSubframe.channels[1][j] += reverbSubframe.channels[1][j];
+            }
+        }
+
+        if (DumpAudio && sChannelDumpFiles[i]) {
+            for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
+                fwrite(&channelSubframe.channels[0][j], sizeof(f32), 1, sChannelDumpFiles[i]);
+                fwrite(&channelSubframe.channels[1][j], sizeof(f32), 1, sChannelDumpFiles[i]);
+            }
+        }
 
         for (int o = 0; o < subframe.channels.size(); o++) {
             MixSubframe(subframe.channels[o], channelSubframe.channels[o]);
@@ -463,6 +529,16 @@ static void RenderChannel(
 }
 
 void dusk::audio::DspInit() {
+    for (int i = 0; i < DSP_CHANNELS; i++) {
+        auto& channelAux = ChannelAux[i];
+        channelAux.reverb.setwet(1.0f);
+        channelAux.reverb.setdry(0.0f);
+        channelAux.reverb.setroomsize(0.4f);
+        channelAux.reverb.setdamp(0.7f);
+        channelAux.reverb.setwidth(1.0f);
+        channelAux.reverb.setmode(0.0f);
+        channelAux.reverb.mute();
+    }
 }
 
 void dusk::audio::ApplyVolume(

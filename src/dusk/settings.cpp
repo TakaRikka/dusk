@@ -12,11 +12,12 @@ UserSettings g_userSettings = {
 
     // Audio
     .audio = {
-        .masterVolume = 1.0f,
+        .masterVolume = 0.8f,
         .mainMusicVolume = 1.0f,
         .subMusicVolume = 1.0f,
         .soundEffectsVolume = 1.0f,
         .fanfareVolume = 1.0f,
+        .enableReverb = true
     },
 
     // Game settings
