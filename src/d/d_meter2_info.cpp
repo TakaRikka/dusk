@@ -1868,12 +1868,16 @@ f32 dMeter2Info_getWide2DPosX(f32* param_0) {
 }
 
 void dMeter2Info_onWide2D() {
+#if !TARGET_PC
     g_ringHIO.updateOnWide();
+#endif
     g_drawHIO.updateOnWide();
 }
 
 void dMeter2Info_offWide2D() {
+#if !TARGET_PC
     g_ringHIO.updateOffWide();
+#endif
     g_drawHIO.updateOffWide();
 }
 #endif

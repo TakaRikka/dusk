@@ -565,12 +565,7 @@ void dMeter2Draw_c::exec(u32 i_status) {
             mButtonsPosX = g_drawHIO.mMainHUDButtonsPosX;
             mButtonsPosY = g_drawHIO.mMainHUDButtonsPosY;
 
-            #if TARGET_PC
-            mpButtonParent->paneTrans(mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mMainHUDButtonsPosX),
-                                      g_drawHIO.mMainHUDButtonsPosY);
-            #else
             mpButtonParent->paneTrans(g_drawHIO.mMainHUDButtonsPosX, g_drawHIO.mMainHUDButtonsPosY);
-            #endif
         }
 
         if (mButtonsScale != g_drawHIO.mMainHUDButtonsScale) {
@@ -1482,11 +1477,7 @@ void dMeter2Draw_c::drawLife(s16 i_maxLife, s16 i_life, f32 i_posX, f32 i_posY) 
         mpBigHeart->scale(g_drawHIO.mBigHeartScale, g_drawHIO.mBigHeartScale);
     }
 
-    #if TARGET_PC
-    mpLifeParent->paneTrans(mDoGph_gInf_c::ScaleHUDXLeft(i_posX), i_posY);
-    #else
     mpLifeParent->paneTrans(i_posX, i_posY);
-    #endif
 }
 
 void dMeter2Draw_c::setAlphaLifeChange(bool param_0) {
@@ -1600,12 +1591,7 @@ void dMeter2Draw_c::drawKanteraScreen(u8 i_meterType) {
     mpMagicBase->resize(field_0x5b4[i_meterType], field_0x5c0[i_meterType]);
     mpMagicParent->scale(field_0x5cc[i_meterType], field_0x5d8[i_meterType]);
 
-    #if TARGET_PC
-    mpMagicParent->paneTrans(mDoGph_gInf_c::ScaleHUDXLeft(field_0x5e4[i_meterType]),
-                             field_0x5f0[i_meterType]);
-    #else
     mpMagicParent->paneTrans(field_0x5e4[i_meterType], field_0x5f0[i_meterType]);
-    #endif
 
     mpKanteraScreen->draw(0.0f, 0.0f, graf_ctx);
 }
@@ -1872,11 +1858,7 @@ void dMeter2Draw_c::drawLightDrop(u8 i_num, u8 i_needNum, f32 i_posX, f32 i_posY
     mpLightDropParent->scale(mLightDropVesselScale * field_0x6f8,
                              mLightDropVesselScale * field_0x6f8);
 
-    #if TARGET_PC
-    mpLightDropParent->paneTrans(mDoGph_gInf_c::ScaleHUDXRight(i_posX), i_posY);
-    #else
     mpLightDropParent->paneTrans(i_posX, i_posY);
-    #endif
 }
 
 void dMeter2Draw_c::setAlphaLightDropChange(bool unused) {}
@@ -2024,12 +2006,7 @@ void dMeter2Draw_c::drawRupee(s16 i_rupeeNum) {
     mpRupeeKeyParent->scale(g_drawHIO.mRupeeKeyScale * field_0x718,
                             g_drawHIO.mRupeeKeyScale * field_0x718);
 
-    #if TARGET_PC
-    mpRupeeKeyParent->paneTrans(mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mRupeeKeyPosX),
-                                g_drawHIO.mRupeeKeyPosY);
-    #else
     mpRupeeKeyParent->paneTrans(g_drawHIO.mRupeeKeyPosX, g_drawHIO.mRupeeKeyPosY);
-    #endif
 
     mpRupeeParent[0]->scale(g_drawHIO.mRupeeScale, g_drawHIO.mRupeeScale);
     mpRupeeParent[0]->paneTrans(g_drawHIO.mRupeePosX, g_drawHIO.mRupeePosY);
@@ -2611,11 +2588,7 @@ void dMeter2Draw_c::drawButtonCross(f32 i_posX, f32 i_posY) {
     mpTextI->scale(g_drawHIO.mButtonCrossTextScale, g_drawHIO.mButtonCrossTextScale);
     mpTextM->scale(g_drawHIO.mButtonCrossTextScale, g_drawHIO.mButtonCrossTextScale);
 
-    #if TARGET_PC
-    mpButtonCrossParent->paneTrans(mDoGph_gInf_c::ScaleHUDXLeft(i_posX), i_posY);
-    #else
     mpButtonCrossParent->paneTrans(i_posX, i_posY);
-    #endif
 }
 
 void dMeter2Draw_c::setAlphaButtonCrossAnimeMin() {
