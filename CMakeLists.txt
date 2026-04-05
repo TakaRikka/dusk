@@ -166,7 +166,7 @@ add_custom_command(TARGET dusk POST_BUILD
 )
 
 include(extern/aurora/cmake/AuroraCopyRuntimeDLLs.cmake)
-aurora_copy_runtime_dlls(dusk game)
+aurora_copy_runtime_dlls(dusk)
 
 if (DUSK_SELECTED_OPT)
     if (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
