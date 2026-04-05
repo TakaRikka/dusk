@@ -284,10 +284,10 @@ namespace dusk {
 
     void ImGuiSaveEditor::draw(bool& open) {
         ImGuiIO& io = ImGui::GetIO();
-        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoResize;
+        ImGuiWindowFlags windowFlags =
+            ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize;
 
         ImGui::SetNextWindowBgAlpha(0.65f);
-        ImGui::SetNextWindowSizeConstraints(ImVec2(600, 700), ImVec2(600, 700));
 
         if (ImGui::Begin("Save Editor", &open, windowFlags)) {
             if (ImGui::BeginTabBar("SaveEditorTabBar", ImGuiTabBarFlags_NoCloseWithMiddleMouseButton)) {

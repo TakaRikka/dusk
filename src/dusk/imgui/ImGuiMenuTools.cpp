@@ -149,10 +149,10 @@ namespace dusk {
         }
 
         ImGuiIO& io = ImGui::GetIO();
-        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoResize;
+        ImGuiWindowFlags windowFlags =
+            ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize;
 
         ImGui::SetNextWindowBgAlpha(0.65f);
-        ImGui::SetNextWindowSizeConstraints(ImVec2(300, 200), ImVec2(300, 200));
 
         if (ImGui::Begin("Player Info", &m_showPlayerInfo, windowFlags)) {
             daAlink_c* player = (daAlink_c*)dComIfGp_getPlayer(0);

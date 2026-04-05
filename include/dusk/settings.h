@@ -15,11 +15,11 @@ struct UserSettings {
 
     struct {
         // Audio
-        float masterVolume;
-        float mainMusicVolume;
-        float subMusicVolume;
-        float soundEffectsVolume;
-        float fanfareVolume;
+        int masterVolume;
+        int mainMusicVolume;
+        int subMusicVolume;
+        int soundEffectsVolume;
+        int fanfareVolume;
         bool enableReverb;
     } audio;
 
