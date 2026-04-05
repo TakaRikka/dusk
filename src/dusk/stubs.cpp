@@ -1062,22 +1062,15 @@ extern "C" void KPADEnableDPD(s32) {
 void LCDisable(void) {
     STUB_LOG();
 }
-void LCQueueWait(__REGISTER u32 len) {
-    STUB_LOG();
-}
-u32 LCStoreData(void* destAddr, void* srcAddr, u32 nBytes) {
-    STUB_LOG();
-    return 0;
-}
 
 #pragma mark PPC Arch
 // MSR stuff?
 void PPCHalt() {
-    STUB_LOG();
+    abort();
 }
 
 extern "C" void PPCSync(void) {
-    STUB_LOG();
+    // Does nothing on PC
 }
 
 u32 PPCMfhid2() {

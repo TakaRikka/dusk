@@ -113,8 +113,7 @@ target_include_directories(game_debug PUBLIC
         build/${DUSK_TP_VERSION}/include)
 target_link_libraries(game_debug PUBLIC aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd aurora::card freeverb)
 
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES}
+add_library(game STATIC ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES}
         src/dusk/imgui/ImGuiStubLog.cpp
         src/dusk/imgui/ImGuiAudio.cpp)
 
@@ -145,7 +144,7 @@ add_custom_command(TARGET dusk POST_BUILD
 )
 
 include(extern/aurora/cmake/AuroraCopyRuntimeDLLs.cmake)
-aurora_copy_runtime_dlls(dusk game)
+aurora_copy_runtime_dlls(dusk)
 
 if (DUSK_SELECTED_OPT)
     if (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
@@ -156,4 +155,5 @@ if (DUSK_SELECTED_OPT)
 
     target_compile_options(xxhash PRIVATE ${_opt_flags})
     target_compile_options(aurora_gx PRIVATE ${_opt_flags})
+    target_compile_options(freeverb PRIVATE ${_opt_flags})
 endif ()
