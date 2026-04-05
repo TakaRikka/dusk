@@ -31,6 +31,7 @@ UserSettings g_userSettings = {
         .damageMultiplier = 1,
         .instantDeath = false,
         .fastClimbing = false,
+        .noMissClimbing = false,
         .fastTears = false,
 
         // Preferences
@@ -43,9 +44,11 @@ UserSettings g_userSettings = {
 
         // Audio
         .noLowHpSound = false,
+        .midnasLamentNonStop = false,
 
         // Cheats
         .enableFastIronBoots = false,
+        .canTransformAnywhere = false,
 
         // Technical
         .restoreWiiGlitches = false,
