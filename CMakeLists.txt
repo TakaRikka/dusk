@@ -100,7 +100,6 @@ set(GAME_COMPILE_DEFS TARGET_PC WIDESCREEN_SUPPORT=1 AVOID_UB=1 VERSION=0
 set(GAME_INCLUDE_DIRS
     include
     src
-    assets/${DUSK_TP_VERSION}
     libs/JSystem/include
     libs
     extern/aurora/include/dolphin
