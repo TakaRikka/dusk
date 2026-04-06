@@ -1,7 +1,11 @@
 #ifndef DUSK_CONFIG_H
 #define DUSK_CONFIG_H
 
+#include "dusk/config_var.hpp"
+
 namespace dusk {
+
+using namespace config;
 
 // Persistent user settings
 
@@ -10,58 +14,63 @@ struct UserSettings {
 
     struct {
         // Video
-        bool enableFullscreen;
+        ConfigVar<bool> enableFullscreen;
     } video;
 
     struct {
         // Audio
-        float masterVolume;
-        float mainMusicVolume;
-        float subMusicVolume;
-        float soundEffectsVolume;
-        float fanfareVolume;
-        bool enableReverb;
+        ConfigVar<int> masterVolume;
+        ConfigVar<int> mainMusicVolume;
+        ConfigVar<int> subMusicVolume;
+        ConfigVar<int> soundEffectsVolume;
+        ConfigVar<int> fanfareVolume;
+        ConfigVar<bool> enableReverb;
     } audio;
 
     // Game settings
 
     struct {
         // QoL
-        bool enableArmorsQuickToggle;
-        bool enableQuickTransform;
-        bool hideTvSettingsScreen;
-        bool biggerWallets;
-        bool noReturnRupees;
-        bool disableRupeeCutscenes;
-        bool noSwordRecoil;
-        int damageMultiplier;
-        bool instantDeath;
-        bool fastClimbing;
-        bool noMissClimbing;
-        bool fastTears;
+        ConfigVar<bool> enableArmorsQuickToggle;
+        ConfigVar<bool> enableQuickTransform;
+        ConfigVar<bool> hideTvSettingsScreen;
+        ConfigVar<bool> biggerWallets;
+        ConfigVar<bool> noReturnRupees;
+        ConfigVar<bool> disableRupeeCutscenes;
+        ConfigVar<bool> noSwordRecoil;
+        ConfigVar<int> damageMultiplier;
+        ConfigVar<bool> instantDeath;
+        ConfigVar<bool> fastClimbing;
+        ConfigVar<bool> noMissClimbing;
+        ConfigVar<bool> fastTears;
 
         // Preferences
-        bool enableMirrorMode;
-        bool invertCameraXAxis;
+        ConfigVar<bool> enableMirrorMode;
+        ConfigVar<bool> invertCameraXAxis;
 
         // Graphics
-        bool enableBloom;
-        bool useWaterProjectionOffset;
+        ConfigVar<bool> enableBloom;
+        ConfigVar<bool> useWaterProjectionOffset;
 
         // Audio
-        bool noLowHpSound;   
-        bool midnasLamentNonStop;
+        ConfigVar<bool> noLowHpSound;
+        ConfigVar<bool> midnasLamentNonStop;
 
         // Cheats
-        bool enableFastIronBoots;
-        bool canTransformAnywhere;
+        ConfigVar<bool> enableFastIronBoots;
+        ConfigVar<bool> canTransformAnywhere;
 
         // Technical
-        bool restoreWiiGlitches;
+        ConfigVar<bool> restoreWiiGlitches;
+
+        // Controls
+        ConfigVar<bool> enableTurboKeybind;
     } game;
 };
 
 UserSettings& getSettings();
+
+void registerSettings();
 
 // Transient settings
 
@@ -78,6 +87,7 @@ struct CollisionViewSettings {
 
 struct TransientSettings {
     CollisionViewSettings collisionView;
+    bool skipFrameRateLimit;
 };
 
 TransientSettings& getTransientSettings();

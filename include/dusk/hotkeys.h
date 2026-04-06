@@ -14,6 +14,8 @@ constexpr const char* SHOW_STUB_LOG = "F5";
 constexpr const char* SHOW_CAMERA_DEBUG = "F6";
 constexpr const char* SHOW_AUDIO_DEBUG = "F7";
 
+constexpr const char* TURBO = "Tab";
+
 }
 
 #endif // DUSK_HOTKEYS_H

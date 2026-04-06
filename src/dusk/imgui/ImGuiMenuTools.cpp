@@ -3,13 +3,14 @@
 #include "aurora/gfx.h"
 
 #include "dusk/hotkeys.h"
+#include "dusk/settings.h"
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuTools.hpp"
 
-#include "m_Do/m_Do_main.h"
-#include "d/d_com_inf_game.h"
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_horse.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_main.h"
 
 namespace dusk {
     ImGuiMenuTools::ImGuiMenuTools() {}
@@ -17,7 +18,7 @@ namespace dusk {
     void ImGuiMenuTools::draw() {
         bool isToggleDevelopmentMode = false;
 
-        if (ImGui::BeginMenu("Tools")) {
+        if (ImGui::BeginMenu("Debug")) {
             if (ImGui::Checkbox("Development Mode", &m_isDevelopmentMode)) {
                 isToggleDevelopmentMode = true;
             }
@@ -146,10 +147,10 @@ namespace dusk {
         }
 
         ImGuiIO& io = ImGui::GetIO();
-        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoResize;
+        ImGuiWindowFlags windowFlags =
+            ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize;
 
         ImGui::SetNextWindowBgAlpha(0.65f);
-        ImGui::SetNextWindowSizeConstraints(ImVec2(300, 200), ImVec2(300, 200));
 
         if (ImGui::Begin("Player Info", &m_showPlayerInfo, windowFlags)) {
             daAlink_c* player = (daAlink_c*)dComIfGp_getPlayer(0);

@@ -3,6 +3,7 @@
 
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuGame.hpp"
+#include "ImGuiConfig.hpp"
 #include <imgui_internal.h>
 
 #include "JSystem/JUtility/JUTGamePad.h"
@@ -13,6 +14,12 @@
 #include "m_Do/m_Do_controller_pad.h"
 
 namespace dusk {
+    void ImGuiMenuGame::ToggleFullscreen() {
+        getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
+        VISetWindowFullscreen(getSettings().video.enableFullscreen);
+        config::Save();
+    }
+
     ImGuiMenuGame::ImGuiMenuGame() {}
 
     void ImGuiMenuGame::draw() {
@@ -25,8 +32,7 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Graphics")) {
                 if (ImGui::MenuItem("Toggle Fullscreen", hotkeys::TOGGLE_FULLSCREEN)) {
-                    getSettings().video.enableFullscreen = !getSettings().video.enableFullscreen;
-                    VISetWindowFullscreen(getSettings().video.enableFullscreen);
+                    ToggleFullscreen();
                 }
 
                 ImGui::EndMenu();
@@ -34,28 +40,28 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Audio")) {
                 ImGui::Text("Master Volume");
-                ImGui::SliderFloat("##masterVolume", &getSettings().audio.masterVolume, 0.0f, 1.0f, "");
-                ImGui::Checkbox("Enable Reverb", &getSettings().audio.enableReverb);
+                config::ImGuiSliderInt("##masterVolume", getSettings().audio.masterVolume, 0, 100);
+                config::ImGuiCheckbox("Enable Reverb", getSettings().audio.enableReverb);
                 /*
-                // TODO: implement additional settings
+                // TODO: Implement additional settings
                 ImGui::Text("Main Music Volume");
-                ImGui::SliderFloat("##mainMusicVolume", &getSettings().audio.mainMusicVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##mainMusicVolume", &getSettings().audio.mainMusicVolume, 0, 100);
 
                 ImGui::Text("Sub Music Volume");
-                ImGui::SliderFloat("##subMusicVolume", &getSettings().audio.subMusicVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##subMusicVolume", &getSettings().audio.subMusicVolume, 0, 100);
 
                 ImGui::Text("Sound Effects Volume");
-                ImGui::SliderFloat("##soundEffectsVolume", &getSettings().audio.soundEffectsVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##soundEffectsVolume", &getSettings().audio.soundEffectsVolume, 0, 100);
 
                 ImGui::Text("Fanfare Volume");
-                ImGui::SliderFloat("##fanfareVolume", &getSettings().audio.fanfareVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##fanfareVolume", &getSettings().audio.fanfareVolume, 0, 100);
 
                 Z2AudioMgr* audioMgr = Z2AudioMgr::getInterface();
                 if (audioMgr != nullptr) {
                 }
                 */
 
-                audio::SetMasterVolume(getSettings().audio.masterVolume);
+                audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
                 audio::EnableReverb = getSettings().audio.enableReverb;
 
                 ImGui::EndMenu();
@@ -73,15 +79,6 @@ namespace dusk {
 
         windowInputViewer();
         windowControllerConfig();
-
-        if ((ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) && ImGui::IsKeyPressed(ImGuiKey_R)) {
-            JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
-        }
-
-        if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
-            getSettings().video.enableFullscreen = !getSettings().video.enableFullscreen;
-            VISetWindowFullscreen(getSettings().video.enableFullscreen);
-        }
     }
 
     static void drawVirtualStick(const char* id, const ImVec2& stick) {
@@ -147,8 +144,6 @@ namespace dusk {
             ImGuiWindowFlags_AlwaysAutoResize;
 
         ImGui::SetNextWindowBgAlpha(0.65f);
-        ImGui::SetNextWindowSizeConstraints(ImVec2(850 * scale, 400 * scale),
-                                            ImVec2(850 * scale, 400 * scale));
 
         if (!ImGui::Begin("Controller Config", &m_showControllerConfig, windowFlags)) {
             ImGui::End();
