@@ -71,6 +71,12 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(cxxopts)
+FetchContent_Declare(json
+    URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
+    URL_HASH SHA256=42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+FetchContent_MakeAvailable(json)
 
 include(files.cmake)
 
@@ -103,7 +109,7 @@ set(GAME_INCLUDE_DIRS
     build/${DUSK_TP_VERSION}/include)
 
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
-    aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map)
+    aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json)
 
 if (DUSK_MOVIE_SUPPORT_REAL)
   if (TARGET libjpeg-turbo::turbojpeg-static)

@@ -1,66 +1,98 @@
 #include "dusk/settings.h"
+#include "dusk/config.hpp"
 
 namespace dusk {
 
 UserSettings g_userSettings = {
-    // Program settings
-
-    // Video
     .video = {
-        .enableFullscreen = false,
+        .enableFullscreen {"video.enableFullscreen", false},
     },
 
-    // Audio
     .audio = {
-        .masterVolume = 80,
-        .mainMusicVolume = 100,
-        .subMusicVolume = 100,
-        .soundEffectsVolume = 100,
-        .fanfareVolume = 100,
-        .enableReverb = true
+        .masterVolume {"audio.masterVolume", 80},
+        .mainMusicVolume {"audio.mainMusicVolume", 100},
+        .subMusicVolume {"audio.subMusicVolume", 100},
+        .soundEffectsVolume {"audio.soundEffectsVolume", 100},
+        .fanfareVolume {"audio.fanfareVolume", 100},
+        .enableReverb {"audio.enableReverb", true},
     },
 
-    // Game settings
     .game = {
         // Quality of Life
-        .enableQuickTransform = false,
-        .hideTvSettingsScreen = false,
-        .biggerWallets = false,
-        .noReturnRupees = false,
-        .disableRupeeCutscenes = false,
-        .noSwordRecoil = false,
-        .damageMultiplier = 1,
-        .instantDeath = false,
-        .fastClimbing = false,
-        .noMissClimbing = false,
-        .fastTears = false,
+        .enableQuickTransform {"game.enableQuickTransform", false},
+        .hideTvSettingsScreen {"game.hideTvSettingsScreen", false},
+        .biggerWallets {"game.biggerWallets", false},
+        .noReturnRupees {"game.noReturnRupees", false},
+        .disableRupeeCutscenes {"game.disableRupeeCutscenes", false},
+        .noSwordRecoil {"game.noSwordRecoil", false},
+        .damageMultiplier {"game.damageMultiplier", 1},
+        .instantDeath {"game.instantDeath", false},
+        .fastClimbing {"game.fastClimbing", false},
+        .noMissClimbing {"game.noMissClimbing", false},
+        .fastTears {"game.fastTears", false},
 
         // Preferences
-        .enableMirrorMode = false,
-        .invertCameraXAxis = false,
+        .enableMirrorMode {"game.enableMirrorMode", false},
+        .invertCameraXAxis {"game.invertCameraXAxis", false},
 
         // Graphics
-        .enableBloom = true,
-        .useWaterProjectionOffset = false,
+        .enableBloom {"game.enableBloom", true},
+        .useWaterProjectionOffset {"game.useWaterProjectionOffset", false},
 
         // Audio
-        .noLowHpSound = false,
-        .midnasLamentNonStop = false,
+        .noLowHpSound {"game.noLowHpSound", false},
+        .midnasLamentNonStop {"game.midnasLamentNonStop", false},
 
         // Cheats
-        .enableFastIronBoots = false,
-        .canTransformAnywhere = false,
+        .enableFastIronBoots {"game.enableFastIronBoots", false},
+        .canTransformAnywhere {"game.canTransformAnywhere", false},
 
         // Technical
-        .restoreWiiGlitches = false,
+        .restoreWiiGlitches {"game.restoreWiiGlitches", false},
 
         // Controls
-        .enableTurboKeybind = true,
-    }
+        .enableTurboKeybind {"game.enableTurboKeybind", true},
+    },
 };
 
 UserSettings& getSettings() {
     return g_userSettings;
+}
+
+void registerSettings() {
+    // Video
+    Register(g_userSettings.video.enableFullscreen);
+
+    // Audio
+    Register(g_userSettings.audio.masterVolume);
+    Register(g_userSettings.audio.mainMusicVolume);
+    Register(g_userSettings.audio.subMusicVolume);
+    Register(g_userSettings.audio.soundEffectsVolume);
+    Register(g_userSettings.audio.fanfareVolume);
+    Register(g_userSettings.audio.enableReverb);
+
+    // Game
+    Register(g_userSettings.game.enableQuickTransform);
+    Register(g_userSettings.game.hideTvSettingsScreen);
+    Register(g_userSettings.game.biggerWallets);
+    Register(g_userSettings.game.noReturnRupees);
+    Register(g_userSettings.game.disableRupeeCutscenes);
+    Register(g_userSettings.game.noSwordRecoil);
+    Register(g_userSettings.game.damageMultiplier);
+    Register(g_userSettings.game.instantDeath);
+    Register(g_userSettings.game.fastClimbing);
+    Register(g_userSettings.game.fastTears);
+    Register(g_userSettings.game.enableMirrorMode);
+    Register(g_userSettings.game.invertCameraXAxis);
+    Register(g_userSettings.game.enableBloom);
+    Register(g_userSettings.game.useWaterProjectionOffset);
+    Register(g_userSettings.game.enableFastIronBoots);
+    Register(g_userSettings.game.canTransformAnywhere);
+    Register(g_userSettings.game.restoreWiiGlitches);
+    Register(g_userSettings.game.noMissClimbing);
+    Register(g_userSettings.game.noLowHpSound);
+    Register(g_userSettings.game.midnasLamentNonStop);
+    Register(g_userSettings.game.enableTurboKeybind);
 }
 
 // Transient settings

@@ -7,10 +7,10 @@
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuTools.hpp"
 
-#include "m_Do/m_Do_main.h"
-#include "d/d_com_inf_game.h"
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_horse.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_main.h"
 
 namespace dusk {
     ImGuiMenuTools::ImGuiMenuTools() {}
@@ -18,7 +18,7 @@ namespace dusk {
     void ImGuiMenuTools::draw() {
         bool isToggleDevelopmentMode = false;
 
-        if (ImGui::BeginMenu("Tools")) {
+        if (ImGui::BeginMenu("Debug")) {
             if (ImGui::Checkbox("Development Mode", &m_isDevelopmentMode)) {
                 isToggleDevelopmentMode = true;
             }
@@ -49,8 +49,6 @@ namespace dusk {
             ImGui::MenuItem("Save Editor", nullptr, &m_showSaveEditor);
             ImGui::MenuItem("Audio Debug", hotkeys::SHOW_AUDIO_DEBUG, &m_showAudioDebug);
             ImGui::MenuItem("OSReport Force", nullptr, &OSReportReallyForceEnable);
-            ImGui::Separator();
-            ImGui::MenuItem("Enable Turbo Key", hotkeys::TURBO, &getSettings().game.enableTurboKeybind);
             ImGui::EndMenu();
         }
 

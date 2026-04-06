@@ -82,7 +82,11 @@ void dInsect_c::CalcZBuffer(f32 param_0) {
     pos = current.pos;
     pos.y += 20.0f;
 
+    #if TARGET_PC
+    mDoLib_project(&pos, &pos_projected, {0, 0, FB_WIDTH, FB_HEIGHT});
+    #else
     mDoLib_project(&pos, &pos_projected);
+    #endif
 
     if (dComIfGp_getCamera(0)) {
         camera_trim_height = dComIfGp_getCamera(0)->mCamera.mTrimHeight;

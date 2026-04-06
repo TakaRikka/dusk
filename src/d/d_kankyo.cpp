@@ -10977,7 +10977,11 @@ void dKy_depth_dist_set(void* process_p) {
 
         f32 var_f31 = sp24.abs(camera_p->view.lookat.eye);
         if (var_f31 < 2000.0f && var_f31 < kankyo->field_0x1268) {
+            #if TARGET_PC
+            mDoLib_project(&actor_p->eyePos, &sp30, {0, 0, FB_WIDTH, FB_HEIGHT});
+            #else
             mDoLib_project(&actor_p->eyePos, &sp30);
+            #endif
 
             if ((sp30.x >= 0.0f && sp30.x < FB_WIDTH) && (sp30.y >= 0.0f &&
                 #if DEBUG

@@ -13,6 +13,7 @@
 #include "ImGuiConsole.hpp"
 
 #include "JSystem/JUtility/JUTGamePad.h"
+#include "dusk/config.hpp"
 #include "dusk/settings.h"
 
 #if _WIN32
@@ -192,8 +193,7 @@ namespace dusk {
         }
 
         if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
-            getSettings().video.enableFullscreen = !getSettings().video.enableFullscreen;
-            VISetWindowFullscreen(getSettings().video.enableFullscreen);
+            ImGuiMenuGame::ToggleFullscreen();
         }
 
         if (CheckMenuViewToggle(ImGuiKey_F1, m_isHidden)) {
