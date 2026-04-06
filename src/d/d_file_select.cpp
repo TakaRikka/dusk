@@ -1189,7 +1189,13 @@ void dFile_select_c::menuSelect() {
 
 // Handles copy / start / delete actions depending on which menu is selected from menuSelect
 void dFile_select_c::menuSelectStart() {
+    #if TARGET_PC
+    if (mSelectMenuNum != 1 || !dusk::getSettings().game.hideTvSettingsScreen) {
+        mDoAud_seStart(Z2SE_SY_CURSOR_OK, NULL, 0, 0);
+    }
+    #else
     mDoAud_seStart(Z2SE_SY_CURSOR_OK, NULL, 0, 0);
+    #endif
 
     if (mSelectMenuNum == 1) {
         dComIfGs_setCardToMemory((u8*)mSaveData, mSelectNum);
