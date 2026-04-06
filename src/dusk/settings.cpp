@@ -73,6 +73,7 @@ void registerSettings() {
     Register(g_userSettings.audio.enableReverb);
 
     // Game
+    Register(g_userSettings.game.enableArmorsQuickToggle);
     Register(g_userSettings.game.enableQuickTransform);
     Register(g_userSettings.game.hideTvSettingsScreen);
     Register(g_userSettings.game.biggerWallets);
