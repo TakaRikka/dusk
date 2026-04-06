@@ -19,6 +19,12 @@
 #include "dusk/memory.h"
 #include "dusk/settings.h"
 
+#if TARGET_PC
+#define SHOW_TV_SETTINGS_SCREEN (this->mShowTvSettingsScreen)
+#else
+#define SHOW_TV_SETTINGS_SCREEN (1)
+#endif
+
 static dSn_HIO_c g_snHIO;
 
 #if VERSION == VERSION_GCN_PAL
@@ -294,9 +300,13 @@ void dScnName_c::FileSelectMain() {
 }
 
 void dScnName_c::FileSelectMainNormal() {
+#if TARGET_PC
+    mShowTvSettingsScreen = !dusk::getSettings().game.hideTvSettingsScreen;
+#endif
+
     switch(dFs_c->isSelectEnd()) {
     case 1:
-        if (!dusk::getSettings().game.hideTvSettingsScreen) {
+        if (SHOW_TV_SETTINGS_SCREEN) {
             mWaitTimer = 15;
             mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor);
             mDoGph_gInf_c::startFadeOut(15);
@@ -307,7 +317,7 @@ void dScnName_c::FileSelectMainNormal() {
         mProc = dScnName_PROC_FileSelectClose;
         field_0x420 = 1;
 
-        if (dusk::getSettings().game.hideTvSettingsScreen) {
+        if (!SHOW_TV_SETTINGS_SCREEN) {
             mDoAud_seStart(Z2SE_ENTER_GAME, NULL, 0, 0);
         }
 
@@ -319,7 +329,7 @@ void dScnName_c::FileSelectClose() {
     mWaitTimer--;
 
     if (mWaitTimer == 0) {
-        if (!dusk::getSettings().game.hideTvSettingsScreen) {
+        if (SHOW_TV_SETTINGS_SCREEN) {
             mProc = dScnName_PROC_BrightCheckOpen;
             mWaitTimer = 15;
             mDrawProc = 1;
