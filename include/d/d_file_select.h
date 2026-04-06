@@ -367,6 +367,9 @@ public:
     void menuCursorShow();
     void yesnoWakuAlpahAnmInit(u8, u8, u8, u8);
     bool yesnoWakuAlpahAnm(u8);
+    #if TARGET_PC
+    void fileSelectWide();
+    #endif
     void _draw();
     void errorMoveAnmInitSet(int, int);
     bool errorMoveAnm();

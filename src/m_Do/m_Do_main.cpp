@@ -321,8 +321,8 @@ int game_main(int argc, char* argv[]) {
     config.configPath = configPath;
     config.windowPosX = -1;
     config.windowPosY = -1;
-    config.windowWidth = 608 * 2;
-    config.windowHeight = 448 * 2;
+    config.windowWidth = FB_WIDTH * 2;
+    config.windowHeight = FB_HEIGHT * 2;
     config.desiredBackend = ParseAuroraBackend(parsed_arg_options["backend"].as<std::string>());
     config.logCallback = &aurora_log_callback;
     config.logLevel = (AuroraLogLevel)parsed_arg_options["log-level"].as<uint8_t>();

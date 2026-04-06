@@ -359,7 +359,11 @@ void dMenu_Fmap2DBack_c::draw() {
         drawDebugRegionArea();
     }
 
+#if TARGET_PC
+    grafPort->scissor(scissorLeft, scissorTop, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
+#else
     grafPort->scissor(scissorLeft, scissorTop, scissorWidth, scissorHeight);
+#endif
     grafPort->setScissor();
 
     if (isArrowDrawFlag()) {
@@ -1191,7 +1195,7 @@ f32 dMenu_Fmap2DBack_c::getMapScissorAreaSizeX() {
 }
 
 f32 dMenu_Fmap2DBack_c::getMapScissorAreaSizeRealX() {
-#if PLATFORM_GCN
+#if PLATFORM_GCN && !TARGET_PC
     return getMapScissorAreaSizeX();
 #else
     return getMapScissorAreaSizeX() * mDoGph_gInf_c::getScale();

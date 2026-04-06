@@ -64,8 +64,14 @@ void dOvlpFd3_dlst_c::draw() {
     GXEnd();
 
     Mtx44 m;
+
+    #if TARGET_PC
+    C_MTXPerspective(m, 60.0f, 1.3571428f, 100.0f, 100000.0f);
+    #else
     C_MTXPerspective(m, 60.0f, mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getHeightF(), 100.0f,
                      100000.0f);
+    #endif
+
     GXSetProjection(m, GX_PERSPECTIVE);
 #ifdef TARGET_PC
     mDoGph_gInf_c::getFrameBufferTexObj()->reset();
