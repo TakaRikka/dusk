@@ -125,6 +125,12 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
+            if (ImGui::BeginMenu("Tools")) {
+                config::ImGuiCheckbox("Enable Turbo Key", getSettings().game.enableTurboKeybind);
+
+                ImGui::EndMenu();
+            }
+
             ImGui::EndMenu();
         }
     }
