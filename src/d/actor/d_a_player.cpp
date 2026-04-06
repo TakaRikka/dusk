@@ -367,7 +367,13 @@ JKRHeap* daPy_anmHeap_c::setAnimeHeap() {
 }
 
 #if !PLATFORM_WII
+#if TARGET_PC
+#include "dusk/dvd_asset.hpp"
+static const u8* l_sightDL_get() { static u8 buf[0x89]; static bool _ = (dusk::LoadDolAsset(buf, 0x803BA0C0, 0x89), true); return buf; }
+#define l_sightDL (l_sightDL_get())
+#else
 #include "assets/l_sightDL__d_a_player.h"
+#endif
 
 void daPy_sightPacket_c::draw() {
     TGXTexObj texObj;

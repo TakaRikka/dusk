@@ -15,6 +15,22 @@
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_graphic.h"
 
+#if TARGET_PC
+#include "dusk/dvd_asset.hpp"
+static const u8* black_tex_get()  { static u8 buf[0x40];    static bool _ = (dusk::LoadDolAsset(buf, 0x8037B140, 0x40),    true); return buf; }
+static const u8* msg_data_get()   { static u8 buf[0x260];   static bool _ = (dusk::LoadDolAsset(buf, 0x8037B180, 0x260),   true); return buf; }
+static const u8* font_data_get()  { static u8 buf[0x12260]; static bool _ = (dusk::LoadDolAsset(buf, 0x8037B3E0, 0x12260), true); return buf; }
+#define black_tex  (black_tex_get())
+#define msg_data   (msg_data_get())
+#define font_data  (font_data_get())
+#if VERSION == VERSION_GCN_PAL
+// TODO: find addreses for pal languages
+#define msg_data_ge ((const u8*)nullptr)
+#define msg_data_fr ((const u8*)nullptr)
+#define msg_data_sp ((const u8*)nullptr)
+#define msg_data_it ((const u8*)nullptr)
+#endif
+#else
 #include "assets/black_tex.h"
 #include "assets/msg_data.h"
 #if VERSION == VERSION_GCN_PAL
@@ -24,6 +40,7 @@
 #include "assets/msg_data_it.h"
 #endif
 #include "assets/font_data.h"
+#endif
 
 #define MSG_READING_DISC 0
 #define MSG_COVER_OPEN   1
