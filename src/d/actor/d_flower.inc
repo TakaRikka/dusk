@@ -13,7 +13,13 @@ const u16 l_J_Ohana00_64TEX__width = 63;
 const u16 l_J_Ohana00_64TEX__height = 63;
 #endif
 
+#if TARGET_PC
+#include "dusk/dvd_asset.hpp"
+static u8* l_J_Ohana00_64TEX_get() { static u8 buf[0x800]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x9060, 0x800), true); return buf; }
+#define l_J_Ohana00_64TEX (l_J_Ohana00_64TEX_get())
+#else
 #include "assets/l_J_Ohana00_64TEX.h"
+#endif
 
 static u8 l_flowerPos[708] = {
     0xC0, 0x8C, 0x2C, 0xF7, 0x42, 0x05, 0xBC, 0xDF, 0xC1, 0xA1, 0x00, 0x70, 0xBF, 0x50, 0x51, 0xB9,
@@ -104,6 +110,16 @@ static u8 l_flowerTexCoord[] = {
     0x3E, 0xA7, 0x67, 0x4D, 0x3C, 0x14, 0x46, 0x74, 0x3E, 0xA7, 0x73, 0xE2, 0xBC, 0x2F, 0x46, 0xAA,
     0x3E, 0xA7, 0x72, 0xD6, 0xBD, 0x2F, 0x46, 0xAA};
 
+#if TARGET_PC
+static u8* l_J_hana00DL_get()   { static u8 buf[0x150]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x9D20, 0x150), true); return buf; }
+static u8* l_J_hana00_cDL_get() { static u8 buf[0xDE];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x9E80, 0xDE),  true); return buf; }
+static u8* l_matDL_get()        { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x9F60, 0x99),  true); return buf; }
+static u8* l_matLight4DL_get()  { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xA000, 0x99),  true); return buf; }
+#define l_J_hana00DL   (l_J_hana00DL_get())
+#define l_J_hana00_cDL (l_J_hana00_cDL_get())
+#define l_matDL        (l_matDL_get())
+#define l_matLight4DL  (l_matLight4DL_get())
+#else
 #include "assets/l_J_hana00DL.h"
 
 #include "assets/l_J_hana00_cDL.h"
@@ -113,6 +129,7 @@ l_matDL__d_a_grass(l_J_Ohana00_64TEX)
 
 #include "assets/l_matLight4DL.h"
 l_matLight4DL(l_J_Ohana00_64TEX)
+#endif
 
 #if TARGET_PC
 const u16 l_J_Ohana01_64128_0419TEX__width = 64;
@@ -122,7 +139,12 @@ const u16 l_J_Ohana01_64128_0419TEX__width = 63;
 const u16 l_J_Ohana01_64128_0419TEX__height = 127;
 #endif
 
+#if TARGET_PC
+static u8* l_J_Ohana01_64128_0419TEX_get() { static u8 buf[0x1000]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xA0A0, 0x1000), true); return buf; }
+#define l_J_Ohana01_64128_0419TEX (l_J_Ohana01_64128_0419TEX_get())
+#else
 #include "assets/l_J_Ohana01_64128_0419TEX.h"
+#endif
 
 static u8 l_flowerPos2[1224] = {
     0x40, 0x25, 0x9F, 0x34, 0x42, 0xC2, 0x95, 0x72, 0xC1, 0x22, 0x34, 0x78, 0x41, 0x4D, 0xF9, 0x63,
@@ -249,6 +271,18 @@ static u8 l_flowerTexCoord2[] = {
     0x40, 0x1B, 0x7D, 0x52, 0x3F, 0x97, 0xF6, 0xBA, 0x40, 0x04, 0x26, 0x74, 0x3F, 0x80, 0x3F, 0x79,
     0x40, 0x1B, 0x7D, 0x52, 0x3F, 0x80, 0x3F, 0x79, 0x40, 0x1B, 0x7D, 0x52, 0x3F, 0x51, 0x10, 0x6F};
 
+#if TARGET_PC
+static u8* l_J_hana01DL_get()      { static u8 buf[0x138]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xB7C0, 0x138), true); return buf; }
+static u8* l_J_hana01_c_00DL_get() { static u8 buf[0xDE];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xB900, 0xDE),  true); return buf; }
+static u8* l_J_hana01_c_01DL_get() { static u8 buf[0x128]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xB9E0, 0x128), true); return buf; }
+static u8* l_mat2DL_get()          { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xBB20, 0x99),  true); return buf; }
+static u8* l_mat2Light4DL_get()    { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xBBC0, 0x99),  true); return buf; }
+#define l_J_hana01DL      (l_J_hana01DL_get())
+#define l_J_hana01_c_00DL (l_J_hana01_c_00DL_get())
+#define l_J_hana01_c_01DL (l_J_hana01_c_01DL_get())
+#define l_mat2DL          (l_mat2DL_get())
+#define l_mat2Light4DL    (l_mat2Light4DL_get())
+#else
 #include "assets/l_J_hana01DL.h"
 
 #include "assets/l_J_hana01_c_00DL.h"
@@ -260,6 +294,7 @@ l_mat2DL__d_a_grass(l_J_Ohana01_64128_0419TEX)
 
 #include "assets/l_mat2Light4DL.h"
 l_mat2Light4DL(l_J_Ohana01_64128_0419TEX)
+#endif
 
 void dFlower_data_c::WorkCo(fopAc_ac_c* i_hitActor, u32 i_massFlg, int i_roomNo) {
     cXyz sp8;
