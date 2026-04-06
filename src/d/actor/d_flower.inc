@@ -619,9 +619,9 @@ void dFlower_packet_c::draw() {
             }
 
             if (sp4C <= 2) {
-                GXCallDisplayList(&l_matLight4DL, 0x80);
+                GXCallDisplayList(l_matLight4DL, 0x80);
             } else {
-                GXCallDisplayList(&l_matDL, 0x80);
+                GXCallDisplayList(l_matDL, 0x80);
             }
 
             GXSetTevColorS10(GX_TEVREG0, sp80);
@@ -677,9 +677,9 @@ void dFlower_packet_c::draw() {
 #endif
 
                     if (!cLib_checkBit<u8>(sp44->m_state, 8)) {
-                        GXCallDisplayList(&l_J_hana00DL, 0x140);
+                        GXCallDisplayList(l_J_hana00DL, 0x140);
                     } else {
-                        GXCallDisplayList(&l_J_hana00_cDL, 0xC0);
+                        GXCallDisplayList(l_J_hana00_cDL, 0xC0);
                     }
                 }
             }
@@ -826,7 +826,7 @@ void dFlower_packet_c::draw() {
                         if (!cLib_checkBit<u8>(sp34->m_state, 0x10)) {
                             GXCallDisplayList(mp_Jhana01DL, m_Jhana01DL_size);
                         } else {
-                            GXCallDisplayList(&l_J_hana01_c_00DL, 0xC0);
+                            GXCallDisplayList(l_J_hana01_c_00DL, 0xC0);
                         }
                     } else {
                         GXCallDisplayList(mp_Jhana01_cDL, m_Jhana01_cDL_size);

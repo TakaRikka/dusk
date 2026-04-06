@@ -12,7 +12,22 @@ namespace dusk {
 
 static const u8* s_dolData = nullptr; // pointer to dol data
 static size_t    s_dolSize = 0;
-struct DolSection { u32 fileOffset, vaddr, size; };
+
+struct DolHeader {
+    BE(u32) textOffset[7];
+    BE(u32) dataOffset[11];
+    BE(u32) textAddr[7];
+    BE(u32) dataAddr[11];
+    BE(u32) textSize[7];
+    BE(u32) dataSize[11];
+};
+
+struct DolSection {
+    u32 fileOffset;
+    u32 vaddr;
+    u32 size;
+};
+
 static DolSection s_dolSections[18]; // 7 text + 11 data
 static int        s_dolSectionCount = 0;
 
@@ -22,25 +37,29 @@ static bool EnsureDolParsed() {
     s32 sz = 0;
     const u8* p = aurora_dvd_get_dol(sz);
     if (!p || sz < 256) {
-        DuskLog.fatal("dvd_asset: aurora_dvd_get_dol failed (size={})", sz); return false;
+        DuskLog.fatal("dvd_asset: aurora_dvd_get_dol failed (size={})", sz);
+        return false;
     }
     
     s_dolData = p;
     s_dolSize = sz;
 
-    const BE(u32)* hdr = (const BE(u32)*)s_dolData;
+    const auto* hdr = (const DolHeader*)s_dolData;
     s_dolSectionCount = 0;
 
-    // 0x00: text file offsets 0x12: text vaddrs 0x24: text sizes
     for (int i = 0; i < 7;  i++) {
-        u32 off = hdr[0x00+i], addr = hdr[0x12+i], sz = hdr[0x24+i];
+        u32 off = hdr->textOffset[i];
+        u32 addr = hdr->textAddr[i];
+        u32 sz = hdr->textSize[i];
         if (sz > 0 && off > 0) {
             s_dolSections[s_dolSectionCount++] = {off, addr, sz};
         }
     }
-    // 0x07: data file offsets 0x19: data vaddrs 0x2B: data sizes
+
     for (int i = 0; i < 11; i++) {
-        u32 off = hdr[0x07+i], addr = hdr[0x19+i], sz = hdr[0x2B+i];
+        u32 off = hdr->dataOffset[i];
+        u32 addr = hdr->dataAddr[i];
+        u32 sz = hdr->dataSize[i];
         if (sz > 0 && off > 0) {
             s_dolSections[s_dolSectionCount++] = {off, addr, sz};
         }
@@ -76,10 +95,10 @@ bool LoadDolAsset(void* dst, u32 virtualAddress, s32 size) {
     return true;
 }
 
-void* LoadRelAsset(const char* dvdPath, s32 offset, s32 size) {
-    void* p = JKRDvdRipper::loadToMainRAM(dvdPath, nullptr, EXPAND_SWITCH_UNKNOWN1, (u32)size, nullptr, JKRDvdRipper::ALLOC_DIRECTION_FORWARD, (u32)offset, nullptr, nullptr);
+bool LoadRelAsset(void* dst, const char* dvdPath, s32 offset, s32 size) {
+    void* p = JKRDvdRipper::loadToMainRAM(dvdPath, (u8*)dst, EXPAND_SWITCH_UNKNOWN1, (u32)size, nullptr, JKRDvdRipper::ALLOC_DIRECTION_FORWARD, (u32)offset, nullptr, nullptr);
     if (!p) DuskLog.fatal("dvd_asset: failed to load {} (offset={:#x} size={:#x})", dvdPath, offset, size);
-    return p;
+    return p != nullptr;
 }
 
 bool LoadArchivedRelAsset(void* dst, u32 memType, const char* relFileName, s32 offset, s32 size) {
