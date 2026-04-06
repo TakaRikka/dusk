@@ -38,7 +38,6 @@ static void ApplyPresetQoL() {
     s.game.midnasLamentNonStop.setValue(true);
     s.game.enableFastIronBoots.setValue(true);
     s.game.canTransformAnywhere.setValue(true);
-    s.game.enableTurboKeybind.setValue(true);
 }
 
 // =========================================================================
