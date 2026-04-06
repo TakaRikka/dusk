@@ -37,7 +37,7 @@ namespace dusk {
                 }
 
                 if (ImGui::MenuItem("Default Window Size")) {
-                    getSettings().video.enableFullscreen = false;
+                    getSettings().video.enableFullscreen.setValue(false);
                     VISetWindowFullscreen(false);
                     VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
                     VICenterWindow();
