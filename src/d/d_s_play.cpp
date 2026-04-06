@@ -39,7 +39,10 @@
 #include "JSystem/JKernel/JKRAram.h"
 #include "JSystem/JKernel/JKRAramArchive.h"
 
+#if TARGET_PC
 #include "dusk/memory.h"
+#include <dusk/config.hpp>
+#endif
 
 #if DEBUG
 #include "d/d_s_menu.h"
@@ -698,6 +701,10 @@ static u8 lbl_8074CAE4;
 static u32 l_sceneChangeStartTick;
 #endif
 
+#if TARGET_PC
+BOOL firstTime = FALSE;
+#endif
+
 static int dScnPly_Execute(dScnPly_c* i_this) {
     #if DEBUG
     fapGm_HIO_c::startCpuTimer();
@@ -778,7 +785,19 @@ static int dScnPly_Execute(dScnPly_c* i_this) {
         dJprev_c::get()->update();
         #endif
 
+        #if TARGET_PC
+        if (dusk::config::IsConfigFileMissing()) {
+            firstTime = true;
+        } else if (firstTime) {
+            mDoAud_seStart(Z2SE_TITLE_ENTER, NULL, 0, 0);
+            JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
+            firstTime = false;
+        } else {
+            dDemo_c::update();
+        }
+        #else
         dDemo_c::update();
+        #endif
 
         #if DEBUG
         dJcame_c::get()->update();

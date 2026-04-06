@@ -18,6 +18,10 @@
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "m_Do/m_Do_graphic.h"
 
+#if TARGET_PC
+#include <dusk/config.hpp>
+#endif
+
 class daTit_HIO_c : public JORReflexible {
 public:
     daTit_HIO_c();
@@ -152,6 +156,12 @@ int daTitle_c::createHeapCallBack(fopAc_ac_c* actor) {
 }
 
 int daTitle_c::Execute() {
+    #if TARGET_PC
+    if (dusk::config::IsConfigFileMissing()) {
+        return 0;
+    }
+    #endif
+
     #if PLATFORM_WII || PLATFORM_SHIELD
     mDoGph_gInf_c::resetDimming();
     #endif
@@ -364,6 +374,12 @@ int daTitle_c::getDemoPrm() {
 }
 
 int daTitle_c::Draw() {
+    #if TARGET_PC
+    if (dusk::config::IsConfigFileMissing()) {
+        return 0;
+    }
+    #endif
+
     J3DModelData* modelData = mpModel->getModelData();
     cMtx_trans(mpModel->getBaseTRMtx(), IREG_F(7), IREG_F(8), IREG_F(9) + -430.0f);
     mpModel->getBaseScale()->x = -1.0f;

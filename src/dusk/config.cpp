@@ -212,9 +212,11 @@ void dusk::config::Save() {
     }
 
     io::FileStream::WriteAllText(configJsonPath.c_str(), j.dump(4));
+
+    s_configFileMissing = false;
 }
 
-bool dusk::config::WasConfigFileMissing() {
+bool dusk::config::IsConfigFileMissing() {
     return s_configFileMissing;
 }
 

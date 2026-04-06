@@ -179,13 +179,14 @@ namespace dusk {
     ImGuiConsole::ImGuiConsole() {}
 
     void ImGuiConsole::PreDraw() {
+        if (config::IsConfigFileMissing()) {
+            m_firstRunPreset.draw();
+            return;
+        }
+
         if (!m_isLaunchInitialized) {
             m_toasts.emplace_back("Press F1 to toggle menu"s, 5.f);
             m_isLaunchInitialized = true;
-        }
-
-        if (config::WasConfigFileMissing()) {
-            m_firstRunPreset.draw();
         }
 
         getTransientSettings().skipFrameRateLimit = getSettings().game.enableTurboKeybind && ImGui::IsKeyDown(ImGuiKey_Tab);

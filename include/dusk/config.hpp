@@ -116,7 +116,7 @@ ConfigVarBase* GetConfigVar(std::string_view name);
  *
  * For detect first run to prompt the user to choose a preset.
  */
-bool WasConfigFileMissing();
+bool IsConfigFileMissing();
 
 template <ConfigValue T>
 const ConfigImplBase* GetConfigImpl() {
