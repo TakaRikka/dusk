@@ -111,6 +111,13 @@ void Save();
  */
 ConfigVarBase* GetConfigVar(std::string_view name);
 
+/**
+ * \brief Returns true if no config file was found on the last LoadFromUserPreferences() call.
+ *
+ * For detect first run to prompt the user to choose a preset.
+ */
+bool WasConfigFileMissing();
+
 template <ConfigValue T>
 const ConfigImplBase* GetConfigImpl() {
     static ConfigImpl<T> config;

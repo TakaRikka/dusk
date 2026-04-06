@@ -21,6 +21,7 @@ aurora::Module DuskConfigLog("dusk::config");
 
 static absl::flat_hash_map<std::string_view, ConfigVarBase*> RegisteredConfigVars;
 static bool RegistrationDone;
+static bool s_configFileMissing = false;
 
 static std::string GetConfigJsonPath() {
     return fmt::format("{}{}", configPath, ConfigFileName);
@@ -187,6 +188,7 @@ void dusk::config::LoadFromFileName(const char* path) {
     } catch (const std::system_error& e) {
         if (e.code() == std::errc::no_such_file_or_directory) {
             DuskConfigLog.info("Config file did not exist, staying with defaults");
+            s_configFileMissing = true;
         } else {
             DuskConfigLog.error("Failed to load from config! {}", e.what());
         }
@@ -210,6 +212,10 @@ void dusk::config::Save() {
     }
 
     io::FileStream::WriteAllText(configJsonPath.c_str(), j.dump(4));
+}
+
+bool dusk::config::WasConfigFileMissing() {
+    return s_configFileMissing;
 }
 
 ConfigVarBase* dusk::config::GetConfigVar(std::string_view name) {

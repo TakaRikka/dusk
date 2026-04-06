@@ -184,6 +184,10 @@ namespace dusk {
             m_isLaunchInitialized = true;
         }
 
+        if (config::WasConfigFileMissing()) {
+            m_firstRunPreset.draw();
+        }
+
         getTransientSettings().skipFrameRateLimit = getSettings().game.enableTurboKeybind && ImGui::IsKeyDown(ImGuiKey_Tab);
         
         if ((ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) &&
