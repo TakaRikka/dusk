@@ -3,6 +3,7 @@
 
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuGame.hpp"
+#include "ImGuiConfig.hpp"
 #include <imgui_internal.h>
 
 #include "JSystem/JUtility/JUTGamePad.h"
@@ -13,6 +14,12 @@
 #include "m_Do/m_Do_controller_pad.h"
 
 namespace dusk {
+    void ImGuiMenuGame::ToggleFullscreen() {
+        getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
+        VISetWindowFullscreen(getSettings().video.enableFullscreen);
+        config::Save();
+    }
+
     ImGuiMenuGame::ImGuiMenuGame() {}
 
     void ImGuiMenuGame::draw() {
@@ -25,8 +32,7 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Graphics")) {
                 if (ImGui::MenuItem("Toggle Fullscreen", hotkeys::TOGGLE_FULLSCREEN)) {
-                    getSettings().video.enableFullscreen = !getSettings().video.enableFullscreen;
-                    VISetWindowFullscreen(getSettings().video.enableFullscreen);
+                    ToggleFullscreen();
                 }
 
                 ImGui::EndMenu();
@@ -34,9 +40,8 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Audio")) {
                 ImGui::Text("Master Volume");
-                ImGui::SliderInt("##masterVolume", &getSettings().audio.masterVolume, 0, 100);
-                ImGui::Checkbox("Enable Reverb", &getSettings().audio.enableReverb);
-
+                config::ImGuiSliderInt("##masterVolume", getSettings().audio.masterVolume, 0, 100);
+                config::ImGuiCheckbox("Enable Reverb", getSettings().audio.enableReverb);
                 /*
                 // TODO: Implement additional settings
                 ImGui::Text("Main Music Volume");
