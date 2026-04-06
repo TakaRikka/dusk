@@ -5,6 +5,7 @@
 #include <deque>
 #include <string>
 
+#include "ImGuiFirstRunPreset.hpp"
 #include "ImGuiMenuEnhancements.hpp"
 #include "ImGuiMenuGame.hpp"
 #include "ImGuiMenuTools.hpp"
@@ -32,6 +33,7 @@ private:
     bool m_isLaunchInitialized = false;
     std::deque<Toast> m_toasts;
 
+    ImGuiFirstRunPreset m_firstRunPreset;
     ImGuiMenuGame m_menuGame;
     ImGuiMenuEnhancements m_menuEnhancements;
 
