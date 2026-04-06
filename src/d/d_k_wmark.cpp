@@ -33,7 +33,11 @@ int dkWmark_c::create() {
         mColorType = this->parameters;
     }
 
+#if TARGET_PC
+    mpHeap = mDoExt_createSolidHeapFromGameToCurrent(0x1100, 0x20);
+#else
     mpHeap = mDoExt_createSolidHeapFromGameToCurrent(0x880, 0x20);
+#endif
     if (mpHeap != NULL) {
         JKRHEAP_NAME(mpHeap, "dkWmark_c::mpHeap");
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Alink", 0x23);

@@ -1175,7 +1175,11 @@ static void undwater_init() {
     J3DModelData* modelData2 = (J3DModelData*)dComIfG_getObjectRes("Always", 0x1D);
     JUT_ASSERT(1867, modelData2 != NULL);
 
+#if TARGET_PC
+    g_env_light.undwater_ef_heap = mDoExt_createSolidHeapFromGameToCurrent(0xC00, 0x20);
+#else
     g_env_light.undwater_ef_heap = mDoExt_createSolidHeapFromGameToCurrent(0x600, 0x20);
+#endif
     JKRHEAP_NAME(g_env_light.undwater_ef_heap, "g_env_light.undwater_ef_heap");
 
     if (g_env_light.undwater_ef_heap != NULL) {
