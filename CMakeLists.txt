@@ -104,9 +104,7 @@ set(GAME_INCLUDE_DIRS
     libs/JSystem/include
     libs
     extern/aurora/include/dolphin
-    extern
-    ${CMAKE_SOURCE_DIR}/build/${DUSK_TP_VERSION}/include
-    build/${DUSK_TP_VERSION}/include)
+    extern)
 
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
     aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json)
