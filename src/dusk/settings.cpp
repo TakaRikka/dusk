@@ -51,7 +51,7 @@ UserSettings g_userSettings = {
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
 
         // Controls
-        .enableTurboKeybind {"game.enableTurboKeybind", true},
+        .enableTurboKeybind {"game.enableTurboKeybind", false},
     },
 };
 
