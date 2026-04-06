@@ -393,13 +393,7 @@ static void dummy1(dStage_roomControl_c* roomControl) {
 
 JKRExpHeap* dStage_roomControl_c::createMemoryBlock(int i_blockIdx, u32 i_heapSize) {
     #if TARGET_PC
-    // Cave of Ordeals crashes around floor 29 due to no free heap space
-    // Increasing the size here avoids that, though its ugly. maybe TODO a better fix
-    if (strcmp(dComIfGp_getStartStageName(), "D_SB01") == 0) {
-        u32 prev = i_heapSize;
-        i_heapSize *= 2;
-        DuskLog.warn("Doubling heap size for D_SB01... ({}) -> ({})", prev, i_heapSize);
-    }
+    i_heapSize *= 2;
     #endif
 
     if (mMemoryBlock[i_blockIdx] == NULL) {
