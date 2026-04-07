@@ -68,9 +68,6 @@ void dusk::audio::Initialize() {
 
     JASPoolAllocObject_MultiThreaded<JASChannel>::newMemPool(0x48);
 
-    SetMasterVolume(dusk::getSettings().audio.masterVolume / 100.0f);
-    EnableReverb = dusk::getSettings().audio.enableReverb;
-
     SDL_ResumeAudioStreamDevice(PlaybackStream);
 }
 
@@ -78,6 +75,12 @@ void dusk::audio::SetMasterVolume(const f32 value) {
     JASCriticalSection section;
 
     MasterVolume = value;
+}
+
+void dusk::audio::SetEnableReverb(const bool value) {
+    JASCriticalSection section;
+
+    EnableReverb = value;
 }
 
 void SDLCALL GetNewAudio(

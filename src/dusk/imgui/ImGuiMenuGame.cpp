@@ -78,9 +78,6 @@ namespace dusk {
                 }
                 */
 
-                audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
-                audio::EnableReverb = getSettings().audio.enableReverb;
-
                 ImGui::EndMenu();
             }
 
