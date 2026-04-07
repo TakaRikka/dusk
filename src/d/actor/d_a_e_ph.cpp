@@ -1268,10 +1268,6 @@ int daE_PH_c::create() {
         if (mAction == 5) {
             dCamera_c* camera_p = dCam_getBody();
             mCamFovY = camera_p->Fovy();
-            if (mCamFovY < 1) {
-                OSReport("GUH");
-                mCamFovY = 10;
-            }
 
             mCamCenter = camera_p->Center();
             mCamCenterTarget = mCamCenter;
