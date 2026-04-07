@@ -37,18 +37,12 @@
            sudo dnf groupinstall "Development Tools" "Development Libraries"
            ```
 #### Setup
-1. Clone and initialize the Dusk repository
+Clone and initialize the Dusk repository
 ```sh
 git clone --recursive https://github.com/TakaRikka/dusk.git
 cd dusk
 git pull
 git submodule update --recursive
-```
-2. Generate assets
-```sh
-cp /path/to/GZ2E01.iso orig/GZ2E01/.
-python3 ./configure.py                                                                                          
-ninja
 ```
 
 #### Building
@@ -56,6 +50,11 @@ ninja
 ```sh
 cmake -B build/dusk -G "Visual Studio 17 2022" -A x64 # Win32 for 32bit
 ```
+
+**Visual Studio Code with ninja**
+
+Project has support for the CMakeTools extension with variants and has a debug launch target
+
 **ninja (Windows/macOS/Linux)**
 ```sh
 cmake -B build/dusk -GNinja

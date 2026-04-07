@@ -6,6 +6,7 @@ namespace dusk {
 UserSettings g_userSettings = {
     .video = {
         .enableFullscreen {"video.enableFullscreen", false},
+        .enableVsync {"video.enableVsync", true},
     },
 
     .audio = {
@@ -63,6 +64,7 @@ UserSettings& getSettings() {
 void registerSettings() {
     // Video
     Register(g_userSettings.video.enableFullscreen);
+    Register(g_userSettings.video.enableVsync);
 
     // Audio
     Register(g_userSettings.audio.masterVolume);
