@@ -80,6 +80,7 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 if (CMAKE_SYSTEM_NAME STREQUAL Linux)
   set(DAWN_USE_WAYLAND ON CACHE BOOL "Enable support for Wayland surface" FORCE)
@@ -90,7 +91,7 @@ add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
 
 add_subdirectory(libs/freeverb)
 
-option(DUSK_BUILD_WARNINGS "If off, compiler warnings will be suppressed")
+option(DUSK_BUILD_WARNINGS "Enable compiler warnings (off by default)")
 option(DUSK_SELECTED_OPT "If on, selected parts of the project will be compiled with optimizations on Debug, intending to make the game run at 30 FPS. Note for MSVC: you will need to remove '/RTC1' from your debug flags in CMake.")
 option(DUSK_MOVIE_SUPPORT "If on, compile against libjpeg-turbo to enable THP file decoding" ON)
 
@@ -136,20 +137,20 @@ endif ()
 
 include(FetchContent)
 
+# Declare all dependencies first so CMake can download them in parallel
 message(STATUS "dusk: Fetching cxxopts")
-FetchContent_Declare(
-  cxxopts
-  GIT_REPOSITORY https://github.com/jarro2783/cxxopts.git
-  GIT_TAG v3.3.1
+FetchContent_Declare(cxxopts
+    URL https://github.com/jarro2783/cxxopts/archive/refs/tags/v3.3.1.tar.gz
+    URL_HASH SHA256=3bfc70542c521d4b55a46429d808178916a579b28d048bd8c727ee76c39e2072
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
-
-FetchContent_MakeAvailable(cxxopts)
+message(STATUS "dusk: Fetching nlohmann/json")
 FetchContent_Declare(json
     URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
     URL_HASH SHA256=42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
-FetchContent_MakeAvailable(json)
+FetchContent_MakeAvailable(cxxopts json)
 
 configure_file(${CMAKE_SOURCE_DIR}/version.h.in ${CMAKE_BINARY_DIR}/version.h)
 
@@ -200,14 +201,10 @@ endif ()
 add_library(game_debug OBJECT ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES}
         src/dusk/audio/DuskAudioSystem.cpp
         src/dusk/audio/JASCriticalSection.cpp
-        src/dusk/audio/DuskDsp.hpp
         src/dusk/audio/DuskDsp.cpp
         src/dusk/audio/Adpcm.cpp
-        src/dusk/audio/Adpcm.hpp
         src/dusk/audio/DspStub.cpp
         src/dusk/imgui/ImGuiAudio.cpp)
-
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 # game_base is for all other game code files
 add_library(game_base OBJECT ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES})
@@ -235,7 +232,7 @@ target_link_libraries(game PUBLIC ${GAME_LIBS})
 add_executable(dusk src/dusk/main.cpp)
 target_compile_definitions(dusk PRIVATE TARGET_PC AVOID_UB=1 VERSION=0)
 target_include_directories(dusk PRIVATE include)
-target_link_libraries(dusk PRIVATE game aurora::main freeverb)
+target_link_libraries(dusk PRIVATE game aurora::main)
 
 add_custom_command(TARGET dusk POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -305,7 +302,7 @@ endif ()
 # Packaging logic
 function(get_target_output_name target result_var)
     get_target_property(output_name ${target} OUTPUT_NAME)
-    if (output_name STREQUAL "output_name-NOTFOUND")
+    if (NOT output_name)
         set(${result_var} "${target}" PARENT_SCOPE)
     else ()
         set(${result_var} "${output_name}" PARENT_SCOPE)
@@ -331,41 +328,40 @@ set(EXTRA_TARGETS "")
 if (TARGET crashpad_handler)
     list(APPEND EXTRA_TARGETS crashpad_handler)
 endif ()
-set(BIN_PREFIX "${CMAKE_INSTALL_PREFIX}")
-install(TARGETS ${BINARY_TARGETS} ${EXTRA_TARGETS} DESTINATION ${BIN_PREFIX})
+install(TARGETS ${BINARY_TARGETS} ${EXTRA_TARGETS} DESTINATION ${CMAKE_INSTALL_PREFIX})
 if (CMAKE_BUILD_TYPE STREQUAL Debug OR CMAKE_BUILD_TYPE STREQUAL RelWithDebInfo)
     set(DEBUG_FILES_LIST "")
     foreach (target IN LISTS BINARY_TARGETS EXTRA_TARGETS)
         get_target_output_name(${target} output_name)
         if (WIN32)
-            install(FILES $<TARGET_PDB_FILE:${target}> DESTINATION ${BIN_PREFIX} OPTIONAL)
+            install(FILES $<TARGET_PDB_FILE:${target}> DESTINATION ${CMAKE_INSTALL_PREFIX} OPTIONAL)
         elseif (APPLE)
             get_target_prefix(${target} target_prefix)
-            install(CODE "execute_process(WORKING_DIRECTORY \"${BIN_PREFIX}\" COMMAND rm -fr \"$<TARGET_FILE_NAME:${target}>.dSYM\")")
-            install(CODE "execute_process(WORKING_DIRECTORY \"${BIN_PREFIX}\" COMMAND dsymutil \"${target_prefix}$<TARGET_FILE_NAME:${target}>\")")
-            install(CODE "execute_process(WORKING_DIRECTORY \"${BIN_PREFIX}\" COMMAND strip -S \"${target_prefix}$<TARGET_FILE_NAME:${target}>\")")
+            install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND rm -fr \"$<TARGET_FILE_NAME:${target}>.dSYM\")")
+            install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND dsymutil \"${target_prefix}$<TARGET_FILE_NAME:${target}>\")")
+            install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND strip -S \"${target_prefix}$<TARGET_FILE_NAME:${target}>\")")
             if (NOT target_prefix STREQUAL "")
-                install(CODE "execute_process(WORKING_DIRECTORY \"${BIN_PREFIX}\" COMMAND mv \"${target_prefix}$<TARGET_FILE_NAME:${target}>.dSYM\" .)")
+                install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND mv \"${target_prefix}$<TARGET_FILE_NAME:${target}>.dSYM\" .)")
             endif ()
         elseif (UNIX)
             get_target_prefix(${target} target_prefix)
-            install(CODE "execute_process(WORKING_DIRECTORY \"${BIN_PREFIX}\" COMMAND objcopy --only-keep-debug \"${target_prefix}$<TARGET_FILE_NAME:${target}>\" \"${target_prefix}$<TARGET_FILE_NAME:${target}>.dbg\")")
-            install(CODE "execute_process(WORKING_DIRECTORY \"${BIN_PREFIX}\" COMMAND objcopy --strip-debug --add-gnu-debuglink=$<TARGET_FILE_NAME:${target}>.dbg \"${target_prefix}$<TARGET_FILE_NAME:${target}>\")")
+            install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND objcopy --only-keep-debug \"${target_prefix}$<TARGET_FILE_NAME:${target}>\" \"${target_prefix}$<TARGET_FILE_NAME:${target}>.dbg\")")
+            install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND objcopy --strip-debug --add-gnu-debuglink=$<TARGET_FILE_NAME:${target}>.dbg \"${target_prefix}$<TARGET_FILE_NAME:${target}>\")")
         endif ()
         list(APPEND DEBUG_FILES_LIST "${output_name}")
     endforeach ()
     if (WIN32)
         list(TRANSFORM DEBUG_FILES_LIST APPEND ".pdb")
         list(JOIN DEBUG_FILES_LIST " " DEBUG_FILES)
-        install(CODE "execute_process(WORKING_DIRECTORY \"${BIN_PREFIX}\" COMMAND 7z a -t7z \"${CMAKE_INSTALL_PREFIX}/debug.7z\" ${DEBUG_FILES})")
+        install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND 7z a -t7z \"${CMAKE_INSTALL_PREFIX}/debug.7z\" ${DEBUG_FILES})")
     elseif (APPLE)
         list(TRANSFORM DEBUG_FILES_LIST APPEND ".dSYM")
         list(JOIN DEBUG_FILES_LIST " " DEBUG_FILES)
-        install(CODE "execute_process(WORKING_DIRECTORY \"${BIN_PREFIX}\" COMMAND tar acfv \"${CMAKE_INSTALL_PREFIX}/debug.tar.xz\" ${DEBUG_FILES})")
+        install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND tar acfv \"${CMAKE_INSTALL_PREFIX}/debug.tar.xz\" ${DEBUG_FILES})")
     elseif (UNIX)
         list(TRANSFORM DEBUG_FILES_LIST APPEND ".dbg")
         list(JOIN DEBUG_FILES_LIST " " DEBUG_FILES)
-        install(CODE "execute_process(WORKING_DIRECTORY \"${BIN_PREFIX}\" COMMAND tar -I \"xz -9 -T0\" -cvf \"${CMAKE_INSTALL_PREFIX}/debug.tar.xz\" ${DEBUG_FILES})")
+        install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND tar -I \"xz -9 -T0\" -cvf \"${CMAKE_INSTALL_PREFIX}/debug.tar.xz\" ${DEBUG_FILES})")
     endif ()
 endif ()
 foreach (target IN LISTS BINARY_TARGETS)
@@ -374,7 +370,7 @@ foreach (target IN LISTS BINARY_TARGETS)
         get_target_prefix(${extra_target} extra_prefix)
         if (NOT "${target_prefix}" STREQUAL "${extra_prefix}")
             # Copy extra target to target prefix
-            install(CODE "execute_process(WORKING_DIRECTORY \"${BIN_PREFIX}\" COMMAND cp \"${extra_prefix}$<TARGET_FILE_NAME:${extra_target}>\" \"${target_prefix}$<TARGET_FILE_NAME:${extra_target}>\")")
+            install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND cp \"${extra_prefix}$<TARGET_FILE_NAME:${extra_target}>\" \"${target_prefix}$<TARGET_FILE_NAME:${extra_target}>\")")
         endif ()
     endforeach ()
 endforeach ()
