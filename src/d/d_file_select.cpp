@@ -1195,8 +1195,8 @@ void dFile_select_c::menuSelect() {
 void dFile_select_c::menuSelectStart() {
     #if TARGET_PC
     if (!dusk::getSettings().game.hideTvSettingsScreen || mSelectMenuNum != 1) {
-            mDoAud_seStart(Z2SE_SY_CURSOR_OK, NULL, 0, 0);
-        }
+        mDoAud_seStart(Z2SE_SY_CURSOR_OK, NULL, 0, 0);
+    }
     #else
         mDoAud_seStart(Z2SE_SY_CURSOR_OK, NULL, 0, 0);
     #endif
