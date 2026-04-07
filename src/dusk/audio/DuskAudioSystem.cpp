@@ -1,4 +1,3 @@
-#include "dusk/settings.h"
 #include "dusk/audio/DuskAudioSystem.h"
 
 #include <SDL3/SDL_init.h>
