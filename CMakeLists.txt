@@ -119,6 +119,8 @@ elseif (MSVC)
     add_compile_options(/bigobj)
     add_compile_options(/Zc:strictStrings-)
     add_compile_options(/MP)
+    add_compile_options(/FS)
+
     if (NOT DUSK_BUILD_WARNINGS)
         add_compile_options(/W0)
     else ()
