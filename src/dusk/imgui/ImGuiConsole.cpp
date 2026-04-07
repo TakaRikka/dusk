@@ -13,6 +13,7 @@
 #include "ImGuiConsole.hpp"
 
 #include "JSystem/JUtility/JUTGamePad.h"
+#include "SDL3/SDL_mouse.h"
 #include "dusk/config.hpp"
 #include "dusk/settings.h"
 
@@ -198,8 +199,13 @@ namespace dusk {
 
         if (CheckMenuViewToggle(ImGuiKey_F1, m_isHidden)) {
             ShowToasts();
+            ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+            SDL_HideCursor();
             return;
         }
+
+        ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouseCursorChange;
+        // Imgui will re-show cursor.
 
         // TODO: we need to be able to render the menu bar & any overlays separately
         // The code currently ties them all together, so hiding the menu hides all windows
