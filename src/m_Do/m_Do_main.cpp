@@ -110,6 +110,7 @@ s32 LOAD_COPYDATE(void*) {
 }
 
 AuroraInfo auroraInfo;
+AuroraStats dusk::lastFrameAuroraStats;
 const char* configPath;
 
 void main01(void) {
@@ -182,6 +183,7 @@ void main01(void) {
         VIWaitForRetrace();
 
 #if TARGET_PC
+        dusk::lastFrameAuroraStats = *aurora_get_stats();
         if (!aurora_begin_frame()) {
             DuskLog.debug("aurora_begin_frame returned false, skipping draw this frame");
             continue;
