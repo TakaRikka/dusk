@@ -762,6 +762,13 @@ void dCamera_c::updatePad() {
         var_f29 = 0.0f;
     } else {
         var_f31 = mDoCPd_c::getSubStickX3D(mPadID);
+
+        #if TARGET_PC
+        if (dusk::getSettings().game.invertCameraXAxis) {
+            var_f31 *= -1.0f;
+        }
+        #endif
+
         var_f30 = mDoCPd_c::getSubStickY(mPadID);
         var_f29 = mDoCPd_c::getSubStickValue(mPadID);
     }
@@ -10149,9 +10156,9 @@ bool dCamera_c::eventCamera(s32 param_0) {
             mEye = mCenter + mDirection.Xyz();
         }
 
-        int* sp90_i;
+        BE(int)* sp90_i;
         if (getEvStringData(sp90, "Trim", "DEFAULT") != false) {
-            sp90_i = (int*)sp90;
+            sp90_i = (BE(int)*)sp90;
             if (*sp90_i == 'STAN') {
                 mEventData.field_0x1c = 0;
             } else if (*sp90_i == 'VIST') {

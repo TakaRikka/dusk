@@ -81,12 +81,14 @@ void JUTVideo::preRetraceProc(u32 retrace_count) {
 
     static void* frameBuffer = NULL;
 
+#ifndef TARGET_PC
     if (frameBuffer) {
         const GXRenderModeObj* renderMode = JUTGetVideoManager()->getRenderMode();
         u16 width = renderMode->fbWidth;
         u16 height = renderMode->efbHeight;
         JUTDirectPrint::getManager()->changeFrameBuffer(frameBuffer, width, height);
     }
+#endif
 
     if (getManager()->mSetBlack == 1) {
         s32 frame_count = getManager()->mSetBlackFrameCount;

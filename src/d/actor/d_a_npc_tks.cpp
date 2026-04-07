@@ -824,9 +824,11 @@ void daNpcTks_c::playMotion() {
     daNpcF_anmPlayData dat4b = {ANM_FLY, 0.0f, 0};
     daNpcF_anmPlayData* pDat4[2] = {&dat4a, &dat4b};
 
-    #if TARGET_PC
-    // Note: this fixes a crash in the cutscene after entering city and likely needs to be revisited as its
-    // unclear why this was 1 in the first place and unclear why this fixes it
+#if TARGET_PC
+    // BUG: If mNumLoops is non-zero, the data array MUST be null-terminated to prevent
+    // playExpression from reading junk when it increments the index.
+    // For some reason this doesn't crash on hardware, but it triggers a segfault on PC
+    // in the cutscene after entering city.
     daNpcF_anmPlayData dat5 = {ANM_JUMP_E, 0.0f, 0};
     #else
     daNpcF_anmPlayData dat5 = {ANM_JUMP_E, 0.0f, 1};

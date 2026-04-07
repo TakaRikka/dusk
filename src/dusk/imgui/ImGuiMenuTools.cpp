@@ -2,13 +2,15 @@
 #include "imgui.h"
 #include "aurora/gfx.h"
 
+#include "dusk/hotkeys.h"
+#include "dusk/settings.h"
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuTools.hpp"
 
-#include "m_Do/m_Do_main.h"
-#include "d/d_com_inf_game.h"
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_horse.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_main.h"
 
 namespace dusk {
     ImGuiMenuTools::ImGuiMenuTools() {}
@@ -16,35 +18,36 @@ namespace dusk {
     void ImGuiMenuTools::draw() {
         bool isToggleDevelopmentMode = false;
 
-        if (ImGui::BeginMenu("Tools")) {
+        if (ImGui::BeginMenu("Debug")) {
             if (ImGui::Checkbox("Development Mode", &m_isDevelopmentMode)) {
                 isToggleDevelopmentMode = true;
             }
 
             ImGui::Separator();
 
+            auto& collisionView = getTransientSettings().collisionView;
             if (ImGui::BeginMenu("Collision View")) {
-                ImGui::Checkbox("Enable Terrain view", &m_collisionViewSettings.m_enableTerrainView);
-                ImGui::Checkbox("Enable wireframe view", &m_collisionViewSettings.m_enableWireframe);
-                ImGui::SliderFloat("Opacity##terrain", &m_collisionViewSettings.m_terrainViewOpacity, 0.0f, 100.0f);
-                ImGui::SliderFloat("Draw Range", &m_collisionViewSettings.m_drawRange, 0.0f, 1000.0f);
+                ImGui::Checkbox("Enable Terrain view", &collisionView.enableTerrainView);
+                ImGui::Checkbox("Enable wireframe view", &collisionView.enableWireframe);
+                ImGui::SliderFloat("Opacity##terrain", &collisionView.terrainViewOpacity, 0.0f, 100.0f);
+                ImGui::SliderFloat("Draw Range", &collisionView.drawRange, 0.0f, 1000.0f);
                 ImGui::Separator();
-                ImGui::Checkbox("Enable Attack Collider view", &m_collisionViewSettings.m_enableAtView);
-                ImGui::Checkbox("Enable Target Collider view", &m_collisionViewSettings.m_enableTgView);
-                ImGui::Checkbox("Enable Push Collider view", &m_collisionViewSettings.m_enableCoView);
-                ImGui::SliderFloat("Opacity##colliders", &m_collisionViewSettings.m_colliderViewOpacity, 0.0f, 100.0f);
+                ImGui::Checkbox("Enable Attack Collider view", &collisionView.enableAtView);
+                ImGui::Checkbox("Enable Target Collider view", &collisionView.enableTgView);
+                ImGui::Checkbox("Enable Push Collider view", &collisionView.enableCoView);
+                ImGui::SliderFloat("Opacity##colliders", &collisionView.colliderViewOpacity, 0.0f, 100.0f);
                 ImGui::EndMenu();
             }
 
-            ImGui::MenuItem("Process Management", "F2", &m_showProcessManagement);
-            ImGui::MenuItem("Debug Overlay", "F3", &m_showDebugOverlay);
-            ImGui::MenuItem("Heap Viewer", "F4", &m_showHeapOverlay);
-            ImGui::MenuItem("Stub Log", "F5", &m_showStubLog);
-            ImGui::MenuItem("Debug Camera", "F6", &m_showCameraOverlay);
+            ImGui::MenuItem("Process Management", hotkeys::SHOW_PROCESS_MANAGEMENT, &m_showProcessManagement);
+            ImGui::MenuItem("Debug Overlay", hotkeys::SHOW_DEBUG_OVERLAY, &m_showDebugOverlay);
+            ImGui::MenuItem("Heap Viewer", hotkeys::SHOW_HEAP_VIEWER, &m_showHeapOverlay);
+            ImGui::MenuItem("Stub Log", hotkeys::SHOW_STUB_LOG, &m_showStubLog);
+            ImGui::MenuItem("Debug Camera", hotkeys::SHOW_CAMERA_DEBUG, &m_showCameraOverlay);
             ImGui::MenuItem("Map Loader", nullptr, &m_showMapLoader);
             ImGui::MenuItem("Player Info", nullptr, &m_showPlayerInfo);
             ImGui::MenuItem("Save Editor", nullptr, &m_showSaveEditor);
-            ImGui::MenuItem("Audio Debug", "F7", &m_showAudioDebug);
+            ImGui::MenuItem("Audio Debug", hotkeys::SHOW_AUDIO_DEBUG, &m_showAudioDebug);
             ImGui::MenuItem("OSReport Force", nullptr, &OSReportReallyForceEnable);
             ImGui::EndMenu();
         }
@@ -131,6 +134,9 @@ namespace dusk {
                 BytesToString(stats->lastVertSize + stats->lastUniformSize +
                     stats->lastIndexSize + stats->lastStorageSize +
                     stats->lastTextureUploadSize)));
+
+            // TODO: persist to config
+            ShowCornerContextMenu(m_debugOverlayCorner, m_cameraOverlayCorner);
         }
         ImGui::End();
     }
@@ -141,10 +147,10 @@ namespace dusk {
         }
 
         ImGuiIO& io = ImGui::GetIO();
-        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoResize;
+        ImGuiWindowFlags windowFlags =
+            ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize;
 
         ImGui::SetNextWindowBgAlpha(0.65f);
-        ImGui::SetNextWindowSizeConstraints(ImVec2(300, 200), ImVec2(300, 200));
 
         if (ImGui::Begin("Player Info", &m_showPlayerInfo, windowFlags)) {
             daAlink_c* player = (daAlink_c*)dComIfGp_getPlayer(0);

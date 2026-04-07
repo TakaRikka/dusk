@@ -1096,8 +1096,14 @@ inline int daDemo00_c::execute() {
                         case 2: {
                             u16 sp0A = sp0E & 0x3FFF;
                             if ((sp0E & 0xC000) == 0) {
+#if !MOVIE_SUPPORT
+                                // If movie support isn't available, automatically reset.
+                                // TPHD-esque. Maybe not the best solution, but it works.
+                                dComIfGp_event_reset();
+#else
                                 fopAcM_create(fpcNm_MOVIE_PLAYER_e, sp0A, NULL, fopAcM_GetRoomNo(this), NULL, NULL, 0xFF);
                                 mDoGph_gInf_c::fadeOut(1.0f);
+#endif
                             } else {
                                 switch (sp0A) {
                                     case 0:
@@ -1652,7 +1658,12 @@ int daDemo00_c::draw() {
             MTXCopy(mModel.field_0x5d4->getAnmMtx(0), mDoMtx_stack_c::get());
             spb0.set(0.0f, 0.0f, 0.0f);
             mDoMtx_stack_c::multVec(&spb0, &sp98);
+
+            #if TARGET_PC
+            mDoLib_project(&sp98, &spa4, {0, 0, FB_WIDTH, FB_HEIGHT});
+            #else
             mDoLib_project(&sp98, &spa4);
+            #endif
 
             if (spa4.x >= -700.0f && spa4.x < 1600.0f && spa4.y >= -200.0f && spa4.y < 600.0f) {
                 if (mModel.mID.field_0x18 == 0 || mModel.mID.field_0x18 == 1) {

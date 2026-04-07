@@ -20,6 +20,8 @@
 #include "d/actor/d_a_e_ymb.h"
 #include "f_op/f_op_camera_mng.h"
 
+#include "dusk/settings.h"
+
 #if DEBUG
 daObjDrop_HIO_c l_HIO;
 #endif
@@ -261,8 +263,18 @@ int daObjDrop_c::modeParentWait() {
         }
 
         mModeAction = 1;
+
+#if TARGET_PC
+        mModeTimer = dusk::getSettings().game.fastTears && dComIfGp_event_getMode() == 0 ? 20 : 40;
+        if (dusk::getSettings().game.fastTears && dComIfGp_event_getMode() == 0) {
+            current.pos.y += 100.0f;
+        } else {
+            current.pos.y += 300.0f;
+        }
+#else
         mModeTimer = 40;
         current.pos.y += 300.0f;
+#endif
         mSound.startSound(Z2SE_OBJ_LIGHTDROP_APPEAR, 0, -1);
         break;
     case 1:
@@ -272,7 +284,11 @@ int daObjDrop_c::modeParentWait() {
         break;
     case 2:
         createBodyEffect();
+#if TARGET_PC
+        mModeTimer = dusk::getSettings().game.fastTears && dComIfGp_event_getMode() == 0 ? 5 : 45;
+#else
         mModeTimer = 45;
+#endif
         mModeAction = 0;
         setMode(MODE_WAIT_e);
         break;
@@ -280,6 +296,18 @@ int daObjDrop_c::modeParentWait() {
 
     return 1;
 }
+
+#if TARGET_PC
+static inline BOOL checkGetCargoRide() {
+    if ((daPy_getPlayerActorClass()->checkCargoCarry() && strcmp(dComIfGp_getStartStageName(), "F_SP112") == 0) ||
+        dComIfGs_isLightDropGetFlag(dComIfGp_getStartStageDarkArea()))
+    {
+        return true;
+    }
+
+    return false;
+}
+#endif
 
 int daObjDrop_c::modeWait() {
     daPy_py_c* pplayer = daPy_getPlayerActorClass();
@@ -302,7 +330,32 @@ int daObjDrop_c::modeWait() {
     case 1:
     case 2:
     case 50:
+        #if TARGET_PC
+        if (dusk::getSettings().game.fastTears && dComIfGp_event_getMode() == 0) {
+            f32 player_dist = current.pos.abs(daPy_getPlayerActorClass()->current.pos);
+            f32 home_dist = current.pos.abs(home.pos);
+
+            if (checkGetCargoRide() && player_dist < 1000.0f) {
+                mTargetPos = pplayer->current.pos;
+                mTargetPos.y += 100.0f;
+
+                f32 temp = 3000.0f - home_dist;
+                if (temp < 0.0f) {
+                    temp = 0.0f;
+                }
+
+                cLib_chaseF(&speedF, (temp / 3000.0f) * 10.0f * (temp / 3000.0f), 1.0f);
+            } else {
+                mTargetPos = home.pos;
+                cLib_chaseF(&speedF, 2.0f, 0.5f);
+            }
+        } else {
+            cLib_chaseF(&speedF, 7.5f, 0.4f);
+        }
+        #else
         cLib_chaseF(&speedF, 7.5f, 0.4f);
+        #endif
+
         if (mModeAction == 1) {
             cLib_chasePos(&current.pos, mTargetPos, speedF);
         }

@@ -463,7 +463,13 @@ static void damage_check(e_fs_class* i_this) {
 
 static bool checkViewArea(cXyz* i_pos) {
     Vec proj;
+
+    #if TARGET_PC
+    mDoLib_project(i_pos, &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
+    #else
     mDoLib_project(i_pos, &proj);
+    #endif
+
     bool ret = false;
     if (proj.x >= 0.0f && proj.x <= FB_WIDTH && proj.y >= 0.0f && proj.y <= FB_HEIGHT) {
         ret = true;

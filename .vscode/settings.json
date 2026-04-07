@@ -1,5 +1,10 @@
 {
-  "cmake.buildDirectory": "${workspaceFolder}/build/dusk/${buildType}/${variant:platform}/${variant:tp_version}",
+  "cmake.buildDirectory": "${workspaceFolder}/build/dusk/${buildType}/${variant:tp_version}",
+  "cmake.generator": "Ninja",
+  "cmake.configureSettings": {
+    "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+  },
+  "cmake.copyCompileCommands": "${workspaceFolder}/compile_commands.json",
   "[c]": {
     "files.encoding": "utf8",
     "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
@@ -44,8 +49,7 @@
     "build.ninja": true,
     ".ninja_*": true,
     "objdiff.json": true,
-    ".cache/**": true,
-    "compile_commands.json": true,
+    ".cache/**": true
   },
   "clangd.arguments": [
       "--function-arg-placeholders=0",

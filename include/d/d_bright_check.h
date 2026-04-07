@@ -29,6 +29,9 @@ public:
     void _move();
     void modeWait();
     void modeMove();
+    #if TARGET_PC
+    void brightCheckWide();
+    #endif
     void _draw();
 
     void draw() {

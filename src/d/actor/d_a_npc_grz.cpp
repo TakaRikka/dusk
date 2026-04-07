@@ -1363,7 +1363,15 @@ void daNpc_Grz_c::playExpression() {
     daNpcF_anmPlayData dat7 = {ANM_LIEDOWN, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat7[1] = {&dat7};
     daNpcF_anmPlayData dat8 = {ANM_GETUP, mpHIO->m.common.morf_frame, 1};
-    daNpcF_anmPlayData* pDat8[1] = {&dat8};
+#if TARGET_PC
+    // BUG: If mNumLoops is non-zero, the data array MUST be null-terminated to prevent
+    // playExpression from reading junk when it increments the index.
+    // For some reason this doesn't crash on hardware, but it triggers a segfault on PC
+    // when first talking to Fyrus after defating him.
+    daNpcF_anmPlayData* pDat8[2] = {&dat8, NULL};
+#else
+    daNpcF_anmPlayData* pDat8[2] = {&dat8};
+#endif
     daNpcF_anmPlayData dat9 = {ANM_F_WEAK_WAIT, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat9[1] = {&dat9};
     daNpcF_anmPlayData dat10 = {ANM_NONE, mpHIO->m.common.morf_frame, 0};

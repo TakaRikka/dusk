@@ -429,7 +429,13 @@ void daE_FK_c::DamageAction() {
 
 bool daE_FK_c::checkViewArea() {
     Vec proj;
+
+    #if TARGET_PC
+    mDoLib_project(&current.pos, &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
+    #else
     mDoLib_project(&current.pos, &proj);
+    #endif
+
     return (proj.x >= 0.0f && proj.x <= FB_WIDTH) && (proj.y >= 0.0f && proj.y <= FB_HEIGHT);
 }
 

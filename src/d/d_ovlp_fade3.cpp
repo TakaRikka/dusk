@@ -13,12 +13,13 @@
 #include "m_Do/m_Do_graphic.h"
 
 void dDlst_snapShot_c::draw() {
-    #if TARGET_PC
+#if TARGET_PC
     GXSetTexCopySrc(0, 0, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
-    #else
+    GXSetTexCopyDst(mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), GX_TF_RGBA8, GX_TRUE);
+#else
     GXSetTexCopySrc(0, 0, FB_WIDTH, FB_HEIGHT);
-    #endif
     GXSetTexCopyDst(FB_WIDTH / 2, FB_HEIGHT / 2, GX_TF_RGBA8, GX_TRUE);
+#endif
     GXCopyTex(mDoGph_gInf_c::getFrameBufferTex(), GX_FALSE);
     GXPixModeSync();
 }
@@ -63,8 +64,14 @@ void dOvlpFd3_dlst_c::draw() {
     GXEnd();
 
     Mtx44 m;
+
+    #if TARGET_PC
+    C_MTXPerspective(m, 60.0f, 1.3571428f, 100.0f, 100000.0f);
+    #else
     C_MTXPerspective(m, 60.0f, mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getHeightF(), 100.0f,
                      100000.0f);
+    #endif
+
     GXSetProjection(m, GX_PERSPECTIVE);
 #ifdef TARGET_PC
     mDoGph_gInf_c::getFrameBufferTexObj()->reset();

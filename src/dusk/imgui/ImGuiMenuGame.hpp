@@ -12,21 +12,13 @@ namespace dusk {
     public:
         ImGuiMenuGame();
         void draw();
-        bool isBloomEnabled() { return m_graphicsSettings.m_enableBloom; }
-        bool isWaterProjectionOffsetEnabled() { return m_graphicsSettings.m_waterProjectionOffset; }
 
         void windowInputViewer();
         void windowControllerConfig();
 
-    private:
-        struct {
-            float m_masterVolume = 1.0f;
-            float m_mainMusicVolume = 1.0f;
-            float m_subMusicVolume = 1.0f;
-            float m_soundEffectsVolume = 1.0f;
-            float m_fanfareVolume = 1.0f;
-        } m_audioSettings;
+        static void ToggleFullscreen();
 
+    private:
         struct {
             int m_selectedPort = 0;
             bool m_isReading = false;
@@ -34,12 +26,6 @@ namespace dusk {
             PADAxisMapping* m_pendingAxisMapping = nullptr;
             int m_pendingPort = -1;
         } m_controllerConfig;
-
-        struct {
-            bool m_enableBloom = 1;
-            bool m_waterProjectionOffset = false;
-            bool m_fullscreen = false;
-        } m_graphicsSettings;
 
         bool m_showControllerConfig = false;
 

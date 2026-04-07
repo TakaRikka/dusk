@@ -4547,6 +4547,10 @@ public:
     /* 0x03848 */ cXyz* field_0x3848;
     /* 0x0384C */ cXyz* field_0x384c;
     /* 0x03850 */ daAlink_procFunc mpProcFunc;
+
+#if TARGET_PC
+    void handleQuickTransform();
+#endif
 };  // Size: 0x385C
 
 class daAlinkHIO_data_c : public JORReflexible {
@@ -8424,11 +8428,5 @@ static fopAc_ac_c* daAlink_searchLightBall(fopAc_ac_c* i_actor, void* i_data);
 inline daAlink_c* daAlink_getAlinkActorClass() {
     return (daAlink_c*)dComIfGp_getLinkPlayer();
 }
-
-#if TARGET_PC
-namespace dusk::tweaks {
-    extern bool FastIronBoots;
-}
-#endif
 
 #endif /* D_A_D_A_ALINK_H */

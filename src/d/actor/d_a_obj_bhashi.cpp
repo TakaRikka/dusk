@@ -285,7 +285,13 @@ bool Hahen_c::CheckCull() {
 
 bool Hahen_c::checkViewArea() {
     Vec proj;
+
+    #if TARGET_PC
+    mDoLib_project(&pos, &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
+    #else
     mDoLib_project(&pos, &proj);
+    #endif
+
     return (proj.x >= -50.0f && proj.x <= 658.0f) && (proj.y >= -50.0f && proj.y <= 498.0f);
 }
 

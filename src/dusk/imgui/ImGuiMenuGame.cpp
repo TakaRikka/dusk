@@ -1,41 +1,46 @@
 #include "fmt/format.h"
 #include "imgui.h"
-#include "aurora/gfx.h"
 
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuGame.hpp"
+#include "ImGuiConfig.hpp"
 #include <imgui_internal.h>
 
 #include "JSystem/JUtility/JUTGamePad.h"
-#include "d/actor/d_a_alink.h"
+#include "dusk/audio/DuskDsp.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
-#include "m_Do/m_Do_audio.h"
+#include "dusk/hotkeys.h"
+#include "dusk/settings.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include "m_Do/m_Do_graphic.h"
 
 namespace dusk {
+    void ImGuiMenuGame::ToggleFullscreen() {
+        getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
+        VISetWindowFullscreen(getSettings().video.enableFullscreen);
+        config::Save();
+    }
+
     ImGuiMenuGame::ImGuiMenuGame() {}
 
     void ImGuiMenuGame::draw() {
         if (ImGui::BeginMenu("Game")) {
-            if (ImGui::MenuItem("Reset", "Ctrl+R")) {
+            if (ImGui::MenuItem("Reset", hotkeys::DO_RESET)) {
                 JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
             }
 
             ImGui::Separator();
 
             if (ImGui::BeginMenu("Graphics")) {
-                if (ImGui::MenuItem("Toggle Fullscreen", "F11")) {
-                    m_graphicsSettings.m_fullscreen = !m_graphicsSettings.m_fullscreen;
-                    VISetWindowFullscreen(m_graphicsSettings.m_fullscreen);
+                if (ImGui::MenuItem("Toggle Fullscreen", hotkeys::TOGGLE_FULLSCREEN)) {
+                    ToggleFullscreen();
                 }
 
-                ImGui::Separator();
-
-                ImGui::Checkbox("Native Bloom", &m_graphicsSettings.m_enableBloom);
-                ImGui::Checkbox("Water Projection Offset", &m_graphicsSettings.m_waterProjectionOffset);
-                if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Adds GC-specific -0.01 transS offset\n"
-                                      "that causes ~6px ghost artifacts in water reflections");
+                if (ImGui::MenuItem("Default Window Size")) {
+                    getSettings().video.enableFullscreen.setValue(false);
+                    VISetWindowFullscreen(false);
+                    VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
+                    VICenterWindow();
                 }
 
                 ImGui::EndMenu();
@@ -43,28 +48,29 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Audio")) {
                 ImGui::Text("Master Volume");
-                ImGui::SliderFloat("##m_masterVolume", &m_audioSettings.m_masterVolume, 0.0f, 1.0f, "");
-
+                config::ImGuiSliderInt("##masterVolume", getSettings().audio.masterVolume, 0, 100);
+                config::ImGuiCheckbox("Enable Reverb", getSettings().audio.enableReverb);
                 /*
-                // TODO: implement additional settings
+                // TODO: Implement additional settings
                 ImGui::Text("Main Music Volume");
-                ImGui::SliderFloat("##m_mainMusicVolume", &m_audioSettings.m_mainMusicVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##mainMusicVolume", &getSettings().audio.mainMusicVolume, 0, 100);
 
                 ImGui::Text("Sub Music Volume");
-                ImGui::SliderFloat("##m_subMusicVolume", &m_audioSettings.m_subMusicVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##subMusicVolume", &getSettings().audio.subMusicVolume, 0, 100);
 
                 ImGui::Text("Sound Effects Volume");
-                ImGui::SliderFloat("##m_soundEffectsVolume", &m_audioSettings.m_soundEffectsVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##soundEffectsVolume", &getSettings().audio.soundEffectsVolume, 0, 100);
 
                 ImGui::Text("Fanfare Volume");
-                ImGui::SliderFloat("##m_fanfareVolume", &m_audioSettings.m_fanfareVolume, 0.0f, 1.0f, "");
+                ImGui::SliderFloat("##fanfareVolume", &getSettings().audio.fanfareVolume, 0, 100);
 
                 Z2AudioMgr* audioMgr = Z2AudioMgr::getInterface();
                 if (audioMgr != nullptr) {
                 }
                 */
 
-                audio::SetMasterVolume(m_audioSettings.m_masterVolume);
+                audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
+                audio::EnableReverb = getSettings().audio.enableReverb;
 
                 ImGui::EndMenu();
             }
@@ -76,35 +82,22 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
-            if (ImGui::BeginMenu("Tweaks")) {
-                ImGui::MenuItem("Fast iron boots", nullptr, &tweaks::FastIronBoots);
-                ImGui::EndMenu();
-            }
-
             ImGui::EndMenu();
         }
 
         windowInputViewer();
         windowControllerConfig();
-
-        if ((ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) && ImGui::IsKeyPressed(ImGuiKey_R)) {
-            JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
-        }
-
-        if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
-            m_graphicsSettings.m_fullscreen = !m_graphicsSettings.m_fullscreen;
-            VISetWindowFullscreen(m_graphicsSettings.m_fullscreen);
-        }
     }
 
     static void drawVirtualStick(const char* id, const ImVec2& stick) {
-        ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x + 5, ImGui::GetCursorPos().y));
+        float scale = ImGuiScale();
+        ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x + 5 * scale, ImGui::GetCursorPos().y));
 
-        ImGui::BeginChild(id, ImVec2(80, 80));
+        ImGui::BeginChild(id, ImVec2(80 * scale, 80 * scale));
         ImDrawList* dl = ImGui::GetWindowDrawList();
         ImVec2 p = ImGui::GetCursorScreenPos();
 
-        float radius = ImGui::GetCurrentContext()->CurrentDpiScale * 30.0f;
+        float radius = 30.0f * scale;
         ImVec2 pos = ImVec2(p.x + radius, p.y + radius);
 
         constexpr ImU32 stickGray = IM_COL32(150, 150, 150, 255);
@@ -112,7 +105,7 @@ namespace dusk {
         constexpr ImU32 red = IM_COL32(230, 0, 0, 255);
 
         dl->AddCircleFilled(pos, radius, stickGray, 8);
-        dl->AddCircleFilled(ImVec2(pos.x + stick.x * (radius), pos.y + -stick.y * (radius)), 3, red);
+        dl->AddCircleFilled(ImVec2(pos.x + stick.x * (radius), pos.y + -stick.y * (radius)), 3 * scale, red);
         ImGui::EndChild();
     }
 
@@ -153,12 +146,12 @@ namespace dusk {
             }
         }
 
+        float scale = ImGuiScale();
         ImGuiWindowFlags windowFlags =
             ImGuiWindowFlags_NoResize |
             ImGuiWindowFlags_AlwaysAutoResize;
 
         ImGui::SetNextWindowBgAlpha(0.65f);
-        ImGui::SetNextWindowSizeConstraints(ImVec2(850, 400), ImVec2(850, 400));
 
         if (!ImGui::Begin("Controller Config", &m_showControllerConfig, windowFlags)) {
             ImGui::End();
@@ -239,9 +232,9 @@ namespace dusk {
         }
 
         // buttons panel
-        constexpr float uiButtonSize = 40;
+        const float uiButtonSize = 40 * scale;
 
-        ImGuiBeginGroupPanel("Buttons", ImVec2(150, 20));
+        ImGuiBeginGroupPanel("Buttons", ImVec2(150 * scale, 20 * scale));
 
         u32 buttonCount;
         PADButtonMapping* btnMappingList = PADGetButtonMappings(m_controllerConfig.m_selectedPort, &buttonCount);
@@ -265,7 +258,7 @@ namespace dusk {
                     dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(btnMappingList[i].nativeButton), i);
                 }
                 bool pressed = ImGui::Button(dispName.c_str(),
-                    ImVec2(100.0f, 20.0f));
+                    ImVec2(100.0f * scale, 20.0f * scale));
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -282,7 +275,7 @@ namespace dusk {
         uint32_t axisCount;
         PADAxisMapping* axisMappingList = PADGetAxisMappings(m_controllerConfig.m_selectedPort, &axisCount);
 
-        ImGuiBeginGroupPanel("Triggers", ImVec2(150, 20));
+        ImGuiBeginGroupPanel("Triggers", ImVec2(150 * scale, 20 * scale));
 
         PADAxis triggers[] = {PAD_AXIS_TRIGGER_L, PAD_AXIS_TRIGGER_R};
         if (axisMappingList != nullptr) {
@@ -305,7 +298,7 @@ namespace dusk {
                     dispName = fmt::format("{0}##-{1}", PADGetNativeAxisName(axisMappingList[trigger].nativeAxis), trigger);
                 }
                 bool pressed = ImGui::Button(dispName.c_str(),
-                    ImVec2(100.0f, 20.0f));
+                    ImVec2(100.0f * scale, 20.0f * scale));
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -322,7 +315,7 @@ namespace dusk {
         int port = m_controllerConfig.m_selectedPort;
 
         // main stick panel
-        ImGuiBeginGroupPanel("Control Stick", ImVec2(150, 20));
+        ImGuiBeginGroupPanel("Control Stick", ImVec2(150 * scale, 20 * scale));
 
         drawVirtualStick("##mainStick", ImVec2{ mDoCPd_c::getStickX(port), mDoCPd_c::getStickY(port) });
 
@@ -359,7 +352,7 @@ namespace dusk {
                         dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(axisMappingList[axis].nativeButton), axis);
                     }
                 }
-                bool pressed = ImGui::Button(dispName.c_str(), ImVec2(100.0f, 20.0f));
+                bool pressed = ImGui::Button(dispName.c_str(), ImVec2(100.0f * scale, 20.0f * scale));
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -386,7 +379,7 @@ namespace dusk {
         ImGui::SameLine();
 
         // sub stick panel
-        ImGuiBeginGroupPanel("C Stick", ImVec2(150, 20));
+        ImGuiBeginGroupPanel("C Stick", ImVec2(150 * scale, 20 * scale));
 
         drawVirtualStick("##subStick", ImVec2{ mDoCPd_c::getSubStickX(port), mDoCPd_c::getSubStickY(port) });
 
@@ -423,7 +416,7 @@ namespace dusk {
                         dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(axisMappingList[axis].nativeButton), axis);
                     }
                 }
-                bool pressed = ImGui::Button(fmt::format("{0}##sub{1}", dispName, label).c_str(), ImVec2(100.0f, 20.0f));
+                bool pressed = ImGui::Button(fmt::format("{0}##sub{1}", dispName, label).c_str(), ImVec2(100.0f * scale, 20.0f * scale));
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -448,7 +441,7 @@ namespace dusk {
         ImGui::SameLine();
 
         // Triggers Panel
-        ImGuiBeginGroupPanel("Triggers", ImVec2(150, 20));
+        ImGuiBeginGroupPanel("Triggers", ImVec2(150 * scale, 20 * scale));
 
         if (deadZones != nullptr) {
             ImGui::Text("L Threshold");
@@ -474,7 +467,7 @@ namespace dusk {
         ImGui::SameLine();
 
         // Options panel
-        ImGuiBeginGroupPanel("Options", ImVec2(150, 20));
+        ImGuiBeginGroupPanel("Options", ImVec2(150 * scale, 20 * scale));
 
         if (deadZones != nullptr) {
             ImGui::Checkbox("Enable Dead Zones", &deadZones->useDeadzones);

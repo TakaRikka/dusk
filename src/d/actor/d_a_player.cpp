@@ -237,11 +237,7 @@ void* daPy_anmHeap_c::mallocBuffer() {
     return mBuffer;
 }
 
-#if TARGET_PC
 void daPy_anmHeap_c::createHeap(daPy_anmHeap_c::daAlinkHEAP_TYPE i_heapType, const char* name) {
-#else
-void daPy_anmHeap_c::createHeap(daPy_anmHeap_c::daAlinkHEAP_TYPE i_heapType, const char* name) {
-#endif
     u32 size;
 
     if (i_heapType == 4) {
@@ -255,6 +251,9 @@ void daPy_anmHeap_c::createHeap(daPy_anmHeap_c::daAlinkHEAP_TYPE i_heapType, con
     } else {
         size = 0xA0;
     }
+#if TARGET_PC
+    size *= 2;
+#endif
 
     char* tmpWork;
     mDoExt_transAnmBas* tmpTransBas;

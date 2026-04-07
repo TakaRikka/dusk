@@ -180,7 +180,12 @@ void daAlink_c::preKandelaarDraw() {
     mat_p->setTevColor(2, &color);
 
     cXyz proj;
+
+    #if TARGET_PC
+    mDoLib_project(&mKandelaarFlamePos, &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
+    #else
     mDoLib_project(&mKandelaarFlamePos, &proj);
+    #endif
 
     camera_process_class* camera_p = dComIfGp_getCamera(0);
     f32 trimHeight;

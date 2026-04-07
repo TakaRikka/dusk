@@ -34,7 +34,13 @@ void* JKRDecomp::run() {
     OSInitMessageQueue(&sMessageQueue, sMessageBuffer, 8);
     for (;;) {
         OSMessage message;
+#ifdef TARGET_PC
+        if (!OSReceiveMessage(&sMessageQueue, &message, OS_MESSAGE_BLOCK)) {
+            break;
+        }
+#else
         OSReceiveMessage(&sMessageQueue, &message, OS_MESSAGE_BLOCK);
+#endif
 
         JKRDecompCommand* command = (JKRDecompCommand*)message;
         decode(command->mSrcBuffer, command->mDstBuffer, command->mSrcLength, command->mDstLength);
@@ -57,6 +63,9 @@ void* JKRDecomp::run() {
             OSSendMessage(&command->mMessageQueue, (OSMessage)1, OS_MESSAGE_NOBLOCK);
         }
     }
+#ifdef TARGET_PC
+    return NULL;
+#endif
 }
 
 JKRDecompCommand* JKRDecomp::prepareCommand(u8* srcBuffer, u8* dstBuffer, u32 srcLength,

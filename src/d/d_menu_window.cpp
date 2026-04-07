@@ -39,13 +39,22 @@ public:
             GXSetTexCopySrc(0, 0, FB_WIDTH, FB_HEIGHT);
             #endif
 
+#if TARGET_PC
+            GXSetTexCopyDst(mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_ENABLE);
+#else
             GXSetTexCopyDst(FB_WIDTH / 2, FB_HEIGHT / 2, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_ENABLE);
+#endif
             GXCopyTex(mDoGph_gInf_c::getFrameBufferTex(), GX_FALSE);
             GXPixModeSync();
         } else {
             TGXTexObj tex;
+#if TARGET_PC
+            GXInitTexObj(&tex, mDoGph_gInf_c::getFrameBufferTex(), mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(),
+                        (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_CLAMP, GX_CLAMP, GX_FALSE);
+#else
             GXInitTexObj(&tex, mDoGph_gInf_c::getFrameBufferTex(), FB_WIDTH / 2, FB_HEIGHT / 2,
                         (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_CLAMP, GX_CLAMP, GX_FALSE);
+#endif
             GXInitTexObjLOD(&tex, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
             GXLoadTexObj(&tex, GX_TEXMAP0);
             GXSetNumChans(0);
@@ -1498,7 +1507,11 @@ void dMw_c::checkMemSize() {
 
         OS_REPORT("memory check ===> diff ==> %d, start ==> %d, now ==> %d\n", diff, mMemSize, now_size);
 
+#if TARGET_PC
+        if (diff > 0x40) {
+#else
         if (diff > 0x20) {
+#endif
             OSReport_Error("memory free error!!\n");
         }
         mMemSize = 0;

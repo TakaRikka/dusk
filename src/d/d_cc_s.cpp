@@ -9,8 +9,9 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_jnt_col.h"
 #include "f_op/f_op_actor_mng.h"
-
-#include "dusk/imgui/ImGuiConsole.hpp"
+#if TARGET_PC
+#include "dusk/settings.h"
+#endif
 
 class dCcS_HIO : public JORReflexible {
 public:
@@ -770,19 +771,19 @@ void dCcS::Draw() {
     #endif
 
 #if TARGET_PC
-#define IMGUI_TOGGLE_HIO_FLAG(status, flag) \
+#define DUSK_TOGGLE_HIO_FLAG(status, flag) \
         if (status) { \
             s_Hio.m_flags |= flag; \
         } else { \
             s_Hio.m_flags &= ~flag; \
         }
 
-    dusk::ImGuiMenuTools::CollisionViewSettings collisionViewSettings = dusk::g_imguiConsole.getCollisionViewSettings();
-    IMGUI_TOGGLE_HIO_FLAG(collisionViewSettings.m_enableAtView, dCcS_HIO::FLAG_AT_ON_e);
-    IMGUI_TOGGLE_HIO_FLAG(collisionViewSettings.m_enableTgView, dCcS_HIO::FLAG_TG_ON_e);
-    IMGUI_TOGGLE_HIO_FLAG(collisionViewSettings.m_enableCoView, dCcS_HIO::FLAG_CO_ON_e);
+    const auto& collisionViewSettings = dusk::getTransientSettings().collisionView;
+    DUSK_TOGGLE_HIO_FLAG(collisionViewSettings.enableAtView, dCcS_HIO::FLAG_AT_ON_e);
+    DUSK_TOGGLE_HIO_FLAG(collisionViewSettings.enableTgView, dCcS_HIO::FLAG_TG_ON_e);
+    DUSK_TOGGLE_HIO_FLAG(collisionViewSettings.enableCoView, dCcS_HIO::FLAG_CO_ON_e);
 
-    f32 view_opacity = 255 * (collisionViewSettings.m_colliderViewOpacity / 100.0f);
+    f32 view_opacity = 255 * (collisionViewSettings.colliderViewOpacity / 100.0f);
 #endif
 
     if (s_Hio.CheckAtOn()) {

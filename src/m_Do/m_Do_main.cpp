@@ -44,12 +44,14 @@
 #include <chrono>
 #include <thread>
 #include "SSystem/SComponent/c_API.h"
+#include "dusk/app_info.hpp"
 #include "dusk/dusk.h"
+#include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/logging.h"
-#include "dusk/time.h"
 #include "dusk/main.h"
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "version.h"
+#include "dusk/time.h"
 
 #include <aurora/aurora.h>
 #include <aurora/event.h>
@@ -57,7 +59,9 @@
 #include <aurora/dvd.h>
 #include <dolphin/dvd.h>
 
+#include "SDL3/SDL_filesystem.h"
 #include "cxxopts.hpp"
+#include "dusk/config.hpp"
 
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
@@ -108,14 +112,11 @@ s32 LOAD_COPYDATE(void*) {
 }
 
 AuroraInfo auroraInfo;
+const char* configPath;
 
 void main01(void) {
-    #if TARGET_PC
-    Limiter frameLimiter{};
-    #endif
-
     OS_REPORT("\x1b[m");
-    GXSetColorUpdate(GX_ENABLE);
+
     // 1. Setup
     mDoMch_Create();
     mDoGph_Create();
@@ -162,6 +163,9 @@ void main01(void) {
             case AURORA_WINDOW_RESIZED:
                 mDoGph_gInf_c::setWindowSize(event->windowSize);
                 break;
+            case AURORA_DISPLAY_SCALE_CHANGED:
+                dusk::ImGuiEngine_Initialize(event->windowSize.scale);
+                break;
             case AURORA_EXIT:
                 goto exit;
             }
@@ -193,10 +197,6 @@ void main01(void) {
         mDoAud_Execute();
 
         aurora_end_frame();
-
-        #if TARGET_PC
-        frameLimiter.Sleep(DUSK_FRAME_PERIOD);
-        #endif
     } while (true);
 
     exit:;
@@ -235,10 +235,55 @@ static AuroraBackend ParseAuroraBackend(const std::string& value) {
     exit(1);
 }
 
+static void aurora_imgui_init_callback(const AuroraWindowSize* size) {
+    dusk::ImGuiEngine_Initialize(size->scale);
+}
+
+static void ApplyCVarOverrides(const cxxopts::OptionValue& option) {
+    if (option.count() == 0) {
+        return;
+    }
+
+    const auto& cVars = option.as<std::vector<std::string>>();
+    for (const auto& cvarArg : cVars) {
+        const auto sep = cvarArg.find('=');
+        if (sep == std::string::npos) {
+            DuskLog.fatal("--cvar argument has no '=': '{}'", cvarArg);
+            continue;
+        }
+
+        const auto name = std::string_view(cvarArg).substr(0, sep);
+        const auto value = std::string_view(cvarArg).substr(sep + 1);
+
+        const auto cVar = dusk::config::GetConfigVar(name);
+        if (!cVar) {
+            DuskLog.fatal("Unknown --cvar name: '{}'", name);
+        }
+
+        try {
+            cVar->getImpl()->loadFromArg(*cVar, value);
+        } catch (const std::exception& e) {
+            DuskLog.fatal("Unable to parse: '{}': {}", value, e.what());
+        }
+    }
+}
+
+static const char* CalculateConfigPath() {
+    const auto result = SDL_GetPrefPath(dusk::OrgName, dusk::AppName);
+    if (!result) {
+        DuskLog.fatal("Unable to get PrefPath: {}", SDL_GetError());
+    }
+
+    return result;
+}
+
 // =========================================================================
 // PC ENTRY POINT
 // =========================================================================
 int game_main(int argc, char* argv[]) {
+    dusk::registerSettings();
+    dusk::config::FinishRegistration();
+
     cxxopts::ParseResult parsed_arg_options;
 
     try {
@@ -248,7 +293,8 @@ int game_main(int argc, char* argv[]) {
             ("l,log-level", "Log level from " + std::to_string(AuroraLogLevel::LOG_DEBUG) + " to " + std::to_string(AuroraLogLevel::LOG_FATAL), cxxopts::value<uint8_t>()->default_value("0"))
             ("h,help", "Print usage")
             ("dvd", "Path to DVD image file", cxxopts::value<std::string>()->default_value("game.iso"))
-            ("backend", "Graphics API backend to use (auto, d3d11, d3d12, metal, vulkan, opengl, opengles, webgpu, null)", cxxopts::value<std::string>()->default_value("auto"));
+            ("backend", "Graphics API backend to use (auto, d3d11, d3d12, metal, vulkan, opengl, opengles, webgpu, null)", cxxopts::value<std::string>()->default_value("auto"))
+            ("cvar", "Override configuration variables without modifying config", cxxopts::value<std::vector<std::string>>());
 
         arg_options.parse_positional({"dvd"});
         arg_options.positional_help("<dvd-image>");
@@ -267,19 +313,25 @@ int game_main(int argc, char* argv[]) {
         exit(1);
     }
 
+    configPath = CalculateConfigPath();
+
+    dusk::config::LoadFromUserPreferences();
+    ApplyCVarOverrides(parsed_arg_options["cvar"]);
+
     AuroraConfig config{};
-    config.appName = "Dusk";
+    config.appName = dusk::AppName;
+    config.configPath = configPath;
     config.windowPosX = -1;
     config.windowPosY = -1;
-    config.windowWidth = 608 * 2;
-    config.windowHeight = 448 * 2;
+    config.windowWidth = FB_WIDTH * 2;
+    config.windowHeight = FB_HEIGHT * 2;
     config.desiredBackend = ParseAuroraBackend(parsed_arg_options["backend"].as<std::string>());
-    config.configPath = ".";
     config.logCallback = &aurora_log_callback;
     config.logLevel = (AuroraLogLevel)parsed_arg_options["log-level"].as<uint8_t>();
     config.mem1Size = 256 * 1024 * 1024;
     config.mem2Size = 24 * 1024 * 1024;
     config.allowJoystickBackgroundEvents = true;
+    config.imGuiInitCallback = &aurora_imgui_init_callback;
 
     auroraInfo = aurora_initialize(argc, argv, &config);
 
@@ -318,7 +370,8 @@ int game_main(int argc, char* argv[]) {
     fflush(stdout);
     fflush(stderr);
 
-    dusk::IsShuttingDown = true;
+    // Notifies all CVs and causes threads to exit
+    OSResetSystem(OS_RESET_SHUTDOWN, 0, 0);
 
     aurora_shutdown();
 

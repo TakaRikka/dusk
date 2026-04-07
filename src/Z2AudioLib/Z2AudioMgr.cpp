@@ -155,7 +155,14 @@ void Z2AudioMgr::zeldaGFrameWork() {
     mSpeechMgr.framework();
     processSeFramework();
     processBgmFramework();
+
+    #if TARGET_PC
+    if (!dusk::getSettings().game.noLowHpSound) {
+        processHeartGaugeSound();
+    }
+    #else
     processHeartGaugeSound();
+    #endif
 
     #if DEBUG
     mDebugSys.debugframework();
