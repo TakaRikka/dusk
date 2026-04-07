@@ -427,7 +427,7 @@
         "x-windows-ci",
         "windows-arm64-msvc"
       ]
-    },
+    }
   ],
   "buildPresets": [
     {
@@ -597,6 +597,6 @@
       "targets": [
         "install"
       ]
-    },
+    }
   ]
 }
