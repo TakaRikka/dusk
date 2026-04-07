@@ -590,6 +590,15 @@ void dMenu_Collect2D_c::screenSet() {
     field_0x184[4][2] = 0x196;
     field_0x184[5][2] = 0x195;
     field_0x184[6][2] = 0;
+#if TARGET_PC // Since we allow changing wallet sizes, do something more robust.
+    if (dComIfGs_getWalletSize() == WALLET) {
+        field_0x184[0][3] = 0x199;
+    } else if (dComIfGs_getWalletSize() == BIG_WALLET) {
+        field_0x184[0][3] = 0x19a;
+    } else {
+        field_0x184[0][3] = 0x19b;
+    }
+#else
     if (dComIfGs_getRupeeMax() == WALLET_MAX) {
         field_0x184[0][3] = 0x199;
     } else if (dComIfGs_getRupeeMax() == BIG_WALLET_MAX) {
@@ -597,6 +606,7 @@ void dMenu_Collect2D_c::screenSet() {
     } else {
         field_0x184[0][3] = 0x19b;
     }
+#endif
     if (dComIfGs_getArrowMax() == QUIVER_MAX) {
         field_0x184[1][3] = 0x1b9;
     } else if (dComIfGs_getArrowMax() == BIG_QUIVER_MAX) {
@@ -757,7 +767,11 @@ void dMenu_Collect2D_c::screenSet() {
     setItemNameString(mCursorX, mCursorY);
     cursorPosSet();
     setArrowMaxNum(dComIfGs_getArrowMax());
+#if TARGET_PC
+    setWalletSizeNum(dComIfGs_getWalletSize());
+#else
     setWalletMaxNum(dComIfGs_getRupeeMax());
+#endif
     setSmellType();
     setHeartPiece();
     setPohMaxNum(dComIfGs_getPohSpiritNum());
@@ -1242,6 +1256,27 @@ void dMenu_Collect2D_c::setArrowMaxNum(u8 param_0) {
     }
 }
 
+#if TARGET_PC
+void dMenu_Collect2D_c::setWalletSizeNum(u16 i_walletSize) {
+    switch (i_walletSize) {
+    case WALLET:
+        mpScreen->search(MULTI_CHAR('item_1_0'))->show();
+        mpScreen->search(MULTI_CHAR('item_1_1'))->hide();
+        mpScreen->search(MULTI_CHAR('item_1_2'))->hide();
+        break;
+    case BIG_WALLET:
+        mpScreen->search(MULTI_CHAR('item_1_0'))->hide();
+        mpScreen->search(MULTI_CHAR('item_1_1'))->show();
+        mpScreen->search(MULTI_CHAR('item_1_2'))->hide();
+        break;
+    case GIANT_WALLET:
+        mpScreen->search(MULTI_CHAR('item_1_0'))->hide();
+        mpScreen->search(MULTI_CHAR('item_1_1'))->hide();
+        mpScreen->search(MULTI_CHAR('item_1_2'))->show();
+        break;
+    }
+}
+#else
 void dMenu_Collect2D_c::setWalletMaxNum(u16 i_walletSize) {
     switch (i_walletSize) {
     case 300:
@@ -1261,6 +1296,7 @@ void dMenu_Collect2D_c::setWalletMaxNum(u16 i_walletSize) {
         break;
     }
 }
+#endif
 
 void dMenu_Collect2D_c::setSmellType() {
     static const u64 smell_tag[5] = {
