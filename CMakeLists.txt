@@ -208,7 +208,7 @@ add_library(game_debug OBJECT ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES}
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 # game_base is for all other game code files
-add_library(game_base OBJECT ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES}
+add_library(game_base OBJECT ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES})
 
 target_compile_definitions(game_debug PRIVATE ${GAME_COMPILE_DEFS} $<$<CONFIG:Debug>:DEBUG=1>)
 target_compile_definitions(game_base PRIVATE ${GAME_COMPILE_DEFS} NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0)
