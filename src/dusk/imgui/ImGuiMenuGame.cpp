@@ -72,11 +72,11 @@ namespace dusk {
             if (ImGui::BeginMenu("Audio")) {
                 ImGui::Text("Master Volume");
                 if (config::ImGuiSliderInt("##masterVolume", getSettings().audio.masterVolume, 0, 100)) {
-                    dusk::audio::SetMasterVolume(dusk::getSettings().audio.masterVolume / 100.0f);
+                    dusk::audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
                 }
 
                 if (config::ImGuiCheckbox("Enable Reverb", getSettings().audio.enableReverb)) {
-                    dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);
+                    dusk::audio::SetEnableReverb(getSettings().audio.enableReverb);
                 }
                 /*
                 // TODO: Implement additional settings
