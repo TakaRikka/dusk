@@ -2292,6 +2292,7 @@ void dMeter_drawHIO_c::updateOnWide() {
     g_drawHIO = {}; // this might be a bad idea
 
     g_drawHIO.mMainHUDButtonsPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mMainHUDButtonsPosX);
+    g_drawHIO.mRingHUDButtonsPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mRingHUDButtonsPosX);
     g_drawHIO.mRupeeKeyPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mRupeeKeyPosX);
     g_drawHIO.mButtonCrossOFFPosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mButtonCrossOFFPosX);
     g_drawHIO.mButtonCrossONPosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mButtonCrossONPosX);
