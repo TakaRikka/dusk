@@ -54,7 +54,7 @@ namespace dusk {
                 }
 
                 bool lockAspect = getSettings().video.lockAspectRatio;
-                if (ImGui::Checkbox("Lock Aspect Ratio", &lockAspect)) {
+                if (ImGui::Checkbox("Force 4:3 Aspect Ratio", &lockAspect)) {
                     getSettings().video.lockAspectRatio.setValue(lockAspect);
 
                     if (lockAspect) {
