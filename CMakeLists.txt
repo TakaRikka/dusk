@@ -205,7 +205,6 @@ add_library(game_debug OBJECT ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES}
         src/dusk/audio/Adpcm.cpp
         src/dusk/audio/Adpcm.hpp
         src/dusk/audio/DspStub.cpp
-        src/dusk/imgui/ImGuiStubLog.cpp
         src/dusk/imgui/ImGuiAudio.cpp)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
