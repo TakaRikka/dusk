@@ -198,6 +198,7 @@ static const float INF = 2000000000.0f;
 
 #ifndef __MWERKS__
 #if __cplusplus
+#include <cmath>
 #include <math.h>
 using std::isnan;
 #endif
