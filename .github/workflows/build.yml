@@ -99,38 +99,6 @@ jobs:
             build/install/Dusk-*.AppImage
             build/install/debug.tar.*
 
-  build-android:
-    name: Build Android (arm64-v8a)
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          submodules: recursive
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get -y install ninja-build
-
-      - name: Setup sccache
-        uses: mozilla-actions/sccache-action@v0.0.9
-
-      - name: Set NDK version
-        run: echo "ANDROID_NDK_VERSION=$(ls $ANDROID_HOME/ndk | sort -V | tail -1)" >> $GITHUB_ENV
-
-      - name: Configure CMake
-        run: cmake --preset x-android-ci-arm64
-
-      - name: Build
-        run: cmake --build --preset x-android-ci-arm64
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v7
-        with:
-          name: dusk-${{env.DUSK_VERSION}}-android-arm64-v8a
-          path: build/x-android-ci-arm64/dusk
 
   build-macos:
     name: Build macOS (AppleClang universal)
