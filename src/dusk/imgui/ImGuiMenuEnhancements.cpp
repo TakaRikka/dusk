@@ -101,6 +101,11 @@ namespace dusk {
                     ImGui::SetTooltip("Allows you to transform even if NPCs are looking");
                 }
 
+                config::ImGuiCheckbox("Fast Spinner", getSettings().game.fastSpinner);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Speeds up Spinner movement when holding R.");
+                }
+
                 ImGui::EndMenu();
             }
 
