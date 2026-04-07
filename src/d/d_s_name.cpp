@@ -19,12 +19,6 @@
 #include "dusk/memory.h"
 #include "dusk/settings.h"
 
-#if TARGET_PC
-#define SHOW_TV_SETTINGS_SCREEN (this->mShowTvSettingsScreen)
-#else
-#define SHOW_TV_SETTINGS_SCREEN (1)
-#endif
-
 static dSn_HIO_c g_snHIO;
 
 #if VERSION == VERSION_GCN_PAL
@@ -300,13 +294,10 @@ void dScnName_c::FileSelectMain() {
 }
 
 void dScnName_c::FileSelectMainNormal() {
-#if TARGET_PC
-    mShowTvSettingsScreen = !dusk::getSettings().game.hideTvSettingsScreen;
-#endif
-
     switch(dFs_c->isSelectEnd()) {
     case 1:
-        if (SHOW_TV_SETTINGS_SCREEN) {
+        #if TARGET_PC
+        if (!dusk::getSettings().game.hideTvSettingsScreen) {
             mWaitTimer = 15;
             mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor);
             mDoGph_gInf_c::startFadeOut(15);
@@ -317,9 +308,16 @@ void dScnName_c::FileSelectMainNormal() {
         mProc = dScnName_PROC_FileSelectClose;
         field_0x420 = 1;
 
-        if (!SHOW_TV_SETTINGS_SCREEN) {
+        if (dusk::getSettings().game.hideTvSettingsScreen) {
             mDoAud_seStart(Z2SE_ENTER_GAME, NULL, 0, 0);
         }
+        #else
+        mWaitTimer = 15;
+        mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor);
+        mDoGph_gInf_c::startFadeOut(15);
+        mProc = dScnName_PROC_FileSelectClose;
+        field_0x420 = 1;
+        #endif
 
         break;
     }
@@ -329,7 +327,8 @@ void dScnName_c::FileSelectClose() {
     mWaitTimer--;
 
     if (mWaitTimer == 0) {
-        if (SHOW_TV_SETTINGS_SCREEN) {
+        #if TARGET_PC
+        if (!dusk::getSettings().game.hideTvSettingsScreen) {
             mProc = dScnName_PROC_BrightCheckOpen;
             mWaitTimer = 15;
             mDrawProc = 1;
@@ -340,6 +339,14 @@ void dScnName_c::FileSelectClose() {
             doPreLoadSetup();
             field_0x420 = 0;
         }
+        #else
+        mProc = dScnName_PROC_BrightCheckOpen;
+        mWaitTimer = 15;
+        mDrawProc = 1;
+        mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor);
+        mDoGph_gInf_c::startFadeIn(15);
+        field_0x420 = 0;
+        #endif
     }
 }
 

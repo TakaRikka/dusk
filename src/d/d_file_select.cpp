@@ -1193,8 +1193,8 @@ void dFile_select_c::menuSelect() {
 
 // Handles copy / start / delete actions depending on which menu is selected from menuSelect
 void dFile_select_c::menuSelectStart() {
-    #if TARGET_PC && !SHOW_TV_SETTINGS_SCREEN
-    if (mSelectMenuNum != 1) {
+    #if TARGET_PC
+    if (!dusk::getSettings().game.hideTvSettingsScreen || mSelectMenuNum != 1) {
         mDoAud_seStart(Z2SE_SY_CURSOR_OK, NULL, 0, 0);
     }
     #else
