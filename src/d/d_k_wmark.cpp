@@ -6,6 +6,7 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "d/d_k_wmark.h"
+#include "dusk/memory.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_player.h"
@@ -33,7 +34,7 @@ int dkWmark_c::create() {
         mColorType = this->parameters;
     }
 
-    mpHeap = mDoExt_createSolidHeapFromGameToCurrent(0x880, 0x20);
+    mpHeap = mDoExt_createSolidHeapFromGameToCurrent(HEAP_SIZE(0x880, 0x1100), 0x20);
     if (mpHeap != NULL) {
         JKRHEAP_NAME(mpHeap, "dkWmark_c::mpHeap");
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Alink", 0x23);

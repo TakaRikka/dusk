@@ -552,8 +552,16 @@ const tvSize l_tvSize[2] = {
     {808, 448},
 };
 
+#if TARGET_PC
+tvSize pc_tvSize = {608, 448};
+#endif
+
 void mDoGph_gInf_c::setTvSize() {
+#if TARGET_PC
+    const tvSize* tvsize = &pc_tvSize;
+#else
     const tvSize* tvsize = &l_tvSize[mWide];
+#endif
 
     m_width = tvsize->width;
     m_height = tvsize->height;
@@ -572,13 +580,28 @@ void mDoGph_gInf_c::setTvSize() {
     m_aspect = m_widthF / m_heightF;
     m_scale = m_aspect / 1.3571428f;
     m_invScale = 1.0f / m_scale;
+
+#if TARGET_PC
+    hudAspectScaleDown = 1.3571428f / mDoGph_gInf_c::getAspect();
+    hudAspectScaleUp = 1.0f / hudAspectScaleDown;
+#endif
 }
 
+#if TARGET_PC
+void mDoGph_gInf_c::onWide(f32 width, f32 height) {
+    mWide = TRUE;
+    pc_tvSize.width = width;
+    pc_tvSize.height = height;
+    setTvSize();
+    dMeter2Info_onWide2D();
+}
+#else
 void mDoGph_gInf_c::onWide() {
     mWide = TRUE;
     setTvSize();
     dMeter2Info_onWide2D();
 }
+#endif
 
 void mDoGph_gInf_c::offWide() {
     mWide = FALSE;
@@ -686,10 +709,16 @@ void mDoGph_gInf_c::setWideZoomLightProjection(Mtx& m) {
 #endif
 
 #if TARGET_PC
+f32 mDoGph_gInf_c::hudAspectScaleDown = 1.0f;
+f32 mDoGph_gInf_c::hudAspectScaleUp = 1.0f;
+
 void mDoGph_gInf_c::setWindowSize(AuroraWindowSize const& size) {
     JUTVideo::getManager()->setWindowSize(size);
     dComIfGp_setWindow(0, 0.0f, 0.0f, getWidth(), getHeight(), 0.0f, 1.0f, 0, 2);
     mFader->mBox.set(0, 0, getWidth(), getHeight());
+
+    f32 newWidth = (getWidth() / getHeight()) * 448.0f;
+    onWide(newWidth, 448.0f);
 }
 #endif
 
@@ -1285,7 +1314,13 @@ void mDoGph_gInf_c::bloom_c::draw() {
             GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3c);
             for (int texCoord = (int)GX_TEXCOORD1; texCoord < (int)GX_MAX_TEXCOORD; texCoord++) {
                 GXSetTexCoordGen((GXTexCoordID)texCoord, GX_TG_MTX2x4, GX_TG_TEX0, iVar11);
+
+                #if TARGET_PC
+                f32 dVar15 = mBlureSize * ((448.0f / getHeight()) / 6400.0f);
+                #else
                 f32 dVar15 = mBlureSize * (1.0f / 6400.0f);
+                #endif
+
                 mDoMtx_stack_c::transS((dVar15 * cM_scos(sVar10)) * getInvScale(),
                                        dVar15 * cM_ssin(sVar10), 0.0f);
                 GXLoadTexMtxImm(mDoMtx_stack_c::get(), iVar11, GX_MTX2x4);
@@ -2014,7 +2049,13 @@ int mDoGph_Painter() {
 
                 Mtx m2;
                 Mtx44 m;
+
+                #if TARGET_PC
+                C_MTXPerspective(m, AREG_F(8) + 60.0f, 1.3571428f, 1.0f, 100000.0f);
+                #else
                 C_MTXPerspective(m, AREG_F(8) + 60.0f, mDoGph_gInf_c::getAspect(), 1.0f, 100000.0f);
+                #endif
+
                 GXSetProjection(m, GX_PERSPECTIVE);
                 cXyz sp38c(0.0f, 0.0f, AREG_F(7) + -2.0f);
                 cXyz sp398(0.0f, 1.0f, 0.0f);

@@ -3,7 +3,14 @@
 
 #include <aurora/aurora.h>
 
+#include "aurora/gfx.h"
+
 extern AuroraInfo auroraInfo;
+extern const char* configPath;
+
+namespace dusk {
+    extern AuroraStats lastFrameAuroraStats;
+}
 
 constexpr u32 defaultWindowWidth = 608;
 constexpr u32 defaultWindowHeight = 448;

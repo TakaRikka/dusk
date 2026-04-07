@@ -16,6 +16,8 @@ namespace dusk {
         void windowInputViewer();
         void windowControllerConfig();
 
+        static void ToggleFullscreen();
+
     private:
         struct {
             int m_selectedPort = 0;

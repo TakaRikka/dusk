@@ -730,6 +730,9 @@ u8 var_r30 = fopAcM::HeapAdjustEntry;
 #endif
 
     u32 size = i_size & 0xFFFFFF;
+#if TARGET_PC
+    size *= 2;
+#endif
     bool result = fopAcM_entrySolidHeap_(i_actor, i_heapCallback, size);
 #if DEBUG
     fopAcM::HeapDummyCheck = var_r29;

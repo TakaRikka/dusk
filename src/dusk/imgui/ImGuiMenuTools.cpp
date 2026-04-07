@@ -7,10 +7,11 @@
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuTools.hpp"
 
-#include "m_Do/m_Do_main.h"
-#include "d/d_com_inf_game.h"
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_horse.h"
+#include "d/d_com_inf_game.h"
+#include "dusk/dusk.h"
+#include "m_Do/m_Do_main.h"
 
 namespace dusk {
     ImGuiMenuTools::ImGuiMenuTools() {}
@@ -18,7 +19,7 @@ namespace dusk {
     void ImGuiMenuTools::draw() {
         bool isToggleDevelopmentMode = false;
 
-        if (ImGui::BeginMenu("Tools")) {
+        if (ImGui::BeginMenu("Debug")) {
             if (ImGui::Checkbox("Development Mode", &m_isDevelopmentMode)) {
                 isToggleDevelopmentMode = true;
             }
@@ -49,8 +50,6 @@ namespace dusk {
             ImGui::MenuItem("Save Editor", nullptr, &m_showSaveEditor);
             ImGui::MenuItem("Audio Debug", hotkeys::SHOW_AUDIO_DEBUG, &m_showAudioDebug);
             ImGui::MenuItem("OSReport Force", nullptr, &OSReportReallyForceEnable);
-            ImGui::Separator();
-            ImGui::MenuItem("Enable Turbo Key", hotkeys::TURBO, &getSettings().game.enableTurboKeybind);
             ImGui::EndMenu();
         }
 
@@ -111,31 +110,31 @@ namespace dusk {
             }
             hasPrevious = true;
 
-            AuroraStats const* stats = aurora_get_stats();
+            const auto& stats = lastFrameAuroraStats;
 
             ImGuiStringViewText(
-                fmt::format(FMT_STRING("Queued pipelines:  {}\n"), stats->queuedPipelines));
+                fmt::format(FMT_STRING("Queued pipelines:  {}\n"), stats.queuedPipelines));
             ImGuiStringViewText(
-                fmt::format(FMT_STRING("Done pipelines:    {}\n"), stats->createdPipelines));
+                fmt::format(FMT_STRING("Done pipelines:    {}\n"), stats.createdPipelines));
             ImGuiStringViewText(
-                fmt::format(FMT_STRING("Draw call count:   {}\n"), stats->drawCallCount));
+                fmt::format(FMT_STRING("Draw call count:   {}\n"), stats.drawCallCount));
             ImGuiStringViewText(fmt::format(FMT_STRING("Merged draw calls: {}\n"),
-                stats->mergedDrawCallCount));
+                stats.mergedDrawCallCount));
             ImGuiStringViewText(fmt::format(FMT_STRING("Vertex size:       {}\n"),
-                BytesToString(stats->lastVertSize)));
+                BytesToString(stats.lastVertSize)));
             ImGuiStringViewText(fmt::format(FMT_STRING("Uniform size:      {}\n"),
-                BytesToString(stats->lastUniformSize)));
+                BytesToString(stats.lastUniformSize)));
             ImGuiStringViewText(fmt::format(FMT_STRING("Index size:        {}\n"),
-                BytesToString(stats->lastIndexSize)));
+                BytesToString(stats.lastIndexSize)));
             ImGuiStringViewText(fmt::format(FMT_STRING("Storage size:      {}\n"),
-                BytesToString(stats->lastStorageSize)));
+                BytesToString(stats.lastStorageSize)));
             ImGuiStringViewText(fmt::format(FMT_STRING("Tex upload size:   {}\n"),
-                BytesToString(stats->lastTextureUploadSize)));
+                BytesToString(stats.lastTextureUploadSize)));
             ImGuiStringViewText(fmt::format(
                 FMT_STRING("Total:             {}\n"),
-                BytesToString(stats->lastVertSize + stats->lastUniformSize +
-                    stats->lastIndexSize + stats->lastStorageSize +
-                    stats->lastTextureUploadSize)));
+                BytesToString(stats.lastVertSize + stats.lastUniformSize +
+                    stats.lastIndexSize + stats.lastStorageSize +
+                    stats.lastTextureUploadSize)));
 
             // TODO: persist to config
             ShowCornerContextMenu(m_debugOverlayCorner, m_cameraOverlayCorner);

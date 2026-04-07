@@ -2873,7 +2873,10 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, GXColor& param_2, u16
         sp_38++;
     }
 }
+
+#if !TARGET_PC
 #include "assets/l_mat2DL__d_a_grass.h"
+#endif
 
 void mDoExt_3DlineMat2_c::setMaterial() {
     j3dSys.reinitGX();

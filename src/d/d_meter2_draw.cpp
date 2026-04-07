@@ -564,6 +564,7 @@ void dMeter2Draw_c::exec(u32 i_status) {
         {
             mButtonsPosX = g_drawHIO.mMainHUDButtonsPosX;
             mButtonsPosY = g_drawHIO.mMainHUDButtonsPosY;
+
             mpButtonParent->paneTrans(g_drawHIO.mMainHUDButtonsPosX, g_drawHIO.mMainHUDButtonsPosY);
         }
 
@@ -1589,7 +1590,9 @@ void dMeter2Draw_c::drawKanteraScreen(u8 i_meterType) {
     mpMagicFrameR->move(field_0x59c[i_meterType], field_0x5a8[i_meterType]);
     mpMagicBase->resize(field_0x5b4[i_meterType], field_0x5c0[i_meterType]);
     mpMagicParent->scale(field_0x5cc[i_meterType], field_0x5d8[i_meterType]);
+
     mpMagicParent->paneTrans(field_0x5e4[i_meterType], field_0x5f0[i_meterType]);
+
     mpKanteraScreen->draw(0.0f, 0.0f, graf_ctx);
 }
 
@@ -1854,6 +1857,7 @@ void dMeter2Draw_c::drawLightDrop(u8 i_num, u8 i_needNum, f32 i_posX, f32 i_posY
     mLightDropVesselScale = i_vesselScale;
     mpLightDropParent->scale(mLightDropVesselScale * field_0x6f8,
                              mLightDropVesselScale * field_0x6f8);
+
     mpLightDropParent->paneTrans(i_posX, i_posY);
 }
 
@@ -2001,6 +2005,7 @@ void dMeter2Draw_c::drawRupee(s16 i_rupeeNum) {
 
     mpRupeeKeyParent->scale(g_drawHIO.mRupeeKeyScale * field_0x718,
                             g_drawHIO.mRupeeKeyScale * field_0x718);
+
     mpRupeeKeyParent->paneTrans(g_drawHIO.mRupeeKeyPosX, g_drawHIO.mRupeeKeyPosY);
 
     mpRupeeParent[0]->scale(g_drawHIO.mRupeeScale, g_drawHIO.mRupeeScale);
@@ -2582,6 +2587,7 @@ void dMeter2Draw_c::drawButtonCross(f32 i_posX, f32 i_posY) {
     mpButtonCrossParent->scale(g_drawHIO.mButtonCrossScale, g_drawHIO.mButtonCrossScale);
     mpTextI->scale(g_drawHIO.mButtonCrossTextScale, g_drawHIO.mButtonCrossTextScale);
     mpTextM->scale(g_drawHIO.mButtonCrossTextScale, g_drawHIO.mButtonCrossTextScale);
+
     mpButtonCrossParent->paneTrans(i_posX, i_posY);
 }
 

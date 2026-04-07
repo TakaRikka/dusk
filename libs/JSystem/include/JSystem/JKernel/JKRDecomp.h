@@ -48,6 +48,9 @@ private:
 
 public:
     static JKRDecomp* create(s32);
+#if TARGET_PC
+    static void destroy();
+#endif
     static JKRDecompCommand* prepareCommand(u8*, u8*, u32, u32, JKRDecompCommand::AsyncCallback);
     static void sendCommand(JKRDecompCommand*);
     static bool sync(JKRDecompCommand*, int);

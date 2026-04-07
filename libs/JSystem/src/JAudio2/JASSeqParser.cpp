@@ -884,6 +884,19 @@ s32 JASSeqParser::cmdPrintf(JASTrack* param_0, u32* param_1) {
 s32 JASSeqParser::execNoteOnGate(JASTrack* param_0, u32 param_1, u32 param_2, u32 param_3,
                                  u32 param_4) {
     JASSeqCtrl* seqCtrl = param_0->getSeqCtrl();
+    
+    int r31 = 0;
+
+#if TARGET_PC
+    // CodeWarrior on PPC allocates MSB-first for bit fields i think, which is stupid
+    // so in reality these are stored in bit 6 and 7 not but 0 and 1, do this to get around it
+    if (param_4 & 0x40) {
+        r31 |= 2;
+    }
+    if (param_4 & 0x80) {
+        r31 |= 1;
+    }
+#else
     // likely fake match, this may use some actual union defined somewhere else
     union {
         u8 val;
@@ -893,13 +906,13 @@ s32 JASSeqParser::execNoteOnGate(JASTrack* param_0, u32 param_1, u32 param_2, u3
         } bits;
     } tmp;
     tmp.val = param_4;
-    int r31 = 0;
     if (tmp.bits.bit1) {
         r31 |= 2;
     }
     if (tmp.bits.bit0) {
         r31 |= 1;
     }
+#endif
     if (param_3 == 0) {
         r31 |= 4;
     }

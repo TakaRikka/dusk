@@ -76,6 +76,12 @@ void dusk::audio::SetMasterVolume(const f32 value) {
     MasterVolume = value;
 }
 
+void dusk::audio::SetEnableReverb(const bool value) {
+    JASCriticalSection section;
+
+    EnableReverb = value;
+}
+
 void SDLCALL GetNewAudio(
     void*,
     SDL_AudioStream*,

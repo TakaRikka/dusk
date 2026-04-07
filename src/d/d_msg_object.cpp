@@ -1464,12 +1464,24 @@ void dMsgObject_c::fukiPosCalc(bool param_1) {
             fopAc_ac_c* player = dComIfGp_getPlayer(0);
             cXyz local_3c;
             cXyz cStack_48;
+
+            #if TARGET_PC
+            mDoLib_project(&player->eyePos, &cStack_48, {0, 0, FB_WIDTH, FB_HEIGHT});
+            #else
             mDoLib_project(&player->eyePos, &cStack_48);
+            #endif
+
             f32 temp;
             if ((field_0x100->pos == cXyz(0.0f, 0.0f, 0.0f))) {
                 temp = cStack_48.y;
             } else {
+
+                #if TARGET_PC
+                mDoLib_project(&field_0x100->pos, &local_3c, {0, 0, FB_WIDTH, FB_HEIGHT});
+                #else
                 mDoLib_project(&field_0x100->pos, &local_3c);
+                #endif
+
                 if (local_3c.x >= 0.0f && local_3c.x <= FB_WIDTH && local_3c.y >= 0.0f &&
                     local_3c.y <= FB_HEIGHT)
                 {

@@ -1,6 +1,7 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "d/d_kankyo.h"
+#include "dusk/memory.h"
 #ifdef __REVOLUTION_SDK__
 #include <revolution.h>
 #else
@@ -775,7 +776,7 @@ static void dKy_FiveSenses_fullthrottle_dark_static1() {
     particle_size.y = 1.0f;
     particle_size.z = 1.0f;
 
-    #if !PLATFORM_GCN
+    #if !PLATFORM_GCN || TARGET_PC
     particle_size.x *= mDoGph_gInf_c::getScale();
     #endif
 
@@ -1175,7 +1176,7 @@ static void undwater_init() {
     J3DModelData* modelData2 = (J3DModelData*)dComIfG_getObjectRes("Always", 0x1D);
     JUT_ASSERT(1867, modelData2 != NULL);
 
-    g_env_light.undwater_ef_heap = mDoExt_createSolidHeapFromGameToCurrent(0x600, 0x20);
+    g_env_light.undwater_ef_heap = mDoExt_createSolidHeapFromGameToCurrent(HEAP_SIZE(0x600, 0xC00), 0x20);
     JKRHEAP_NAME(g_env_light.undwater_ef_heap, "g_env_light.undwater_ef_heap");
 
     if (g_env_light.undwater_ef_heap != NULL) {
@@ -10977,7 +10978,11 @@ void dKy_depth_dist_set(void* process_p) {
 
         f32 var_f31 = sp24.abs(camera_p->view.lookat.eye);
         if (var_f31 < 2000.0f && var_f31 < kankyo->field_0x1268) {
+            #if TARGET_PC
+            mDoLib_project(&actor_p->eyePos, &sp30, {0, 0, FB_WIDTH, FB_HEIGHT});
+            #else
             mDoLib_project(&actor_p->eyePos, &sp30);
+            #endif
 
             if ((sp30.x >= 0.0f && sp30.x < FB_WIDTH) && (sp30.y >= 0.0f &&
                 #if DEBUG
