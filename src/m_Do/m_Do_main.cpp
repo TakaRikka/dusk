@@ -366,6 +366,8 @@ int game_main(int argc, char* argv[]) {
     fflush(stdout);
     fflush(stderr);
 
+    mDoMch_Destroy();
+
     // Notifies all CVs and causes threads to exit
     OSResetSystem(OS_RESET_SHUTDOWN, 0, 0);
 
