@@ -1,3 +1,4 @@
+#include "dusk/settings.h"
 #include "dusk/audio/DuskAudioSystem.h"
 
 #include <SDL3/SDL_init.h>
@@ -66,6 +67,9 @@ void dusk::audio::Initialize() {
     JASDSPChannel::initAll();
 
     JASPoolAllocObject_MultiThreaded<JASChannel>::newMemPool(0x48);
+
+    SetMasterVolume(dusk::getSettings().audio.masterVolume / 100.0f);
+    EnableReverb = dusk::getSettings().audio.enableReverb;
 
     SDL_ResumeAudioStreamDevice(PlaybackStream);
 }
