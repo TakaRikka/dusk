@@ -319,6 +319,8 @@ int game_main(int argc, char* argv[]) {
     AuroraConfig config{};
     config.appName = dusk::AppName;
     config.configPath = configPath;
+    config.vsync = dusk::getSettings().video.enableVsync;
+    config.startFullscreen = dusk::getSettings().video.enableFullscreen;
     config.windowPosX = -1;
     config.windowPosY = -1;
     config.windowWidth = FB_WIDTH * 2;

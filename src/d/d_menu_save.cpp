@@ -56,7 +56,11 @@ static dMs_HIO_c g_msHIO;
 
 dMs_HIO_c::dMs_HIO_c() {
     mDisplayWaitFrames = 15;
+    #if TARGET_PC
+    mCardWaitFrames = 0;
+    #else
     mCardWaitFrames = 90;
+    #endif
     mEffectDispFrames = 5;
     mCharSwitchFrames = 5;
     mSelectIcon = 5;

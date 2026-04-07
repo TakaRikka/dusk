@@ -1639,7 +1639,7 @@ u8 dMeter2Info_getPixel(f32 i_posX, f32 i_posY, f32 param_2, f32 param_3, f32 i_
 
     JUT_ASSERT(3074, *pixel < i_resTimg->numColors);
 
-    u16* palette_p = (u16*)((uintptr_t)i_resTimg + i_resTimg->paletteOffset);
+    BE(u16)* palette_p = (BE(u16)*)((uintptr_t)i_resTimg + i_resTimg->paletteOffset);
     u16 var_r24 = (u16)palette_p[*pixel];
     if (var_r24 & 0x8000) {
         return 1;

@@ -94,7 +94,7 @@ static void ClearMsgQueueMap() {
     map.clear();
 }
 
-void OSInitMessageQueue(OSMessageQueue* mq, void* msgArray, s32 msgCount) {
+void OSInitMessageQueue(OSMessageQueue* mq, OSMessage* msgArray, s32 msgCount) {
     if (!mq) return;
     mq->queueSend.head = mq->queueSend.tail = nullptr;
     mq->queueReceive.head = mq->queueReceive.tail = nullptr;
@@ -128,7 +128,7 @@ int OSSendMessage(OSMessageQueue* mq, void* msg, s32 flags) {
     return 1;
 }
 
-int OSReceiveMessage(OSMessageQueue* mq, void* msg, s32 flags) {
+BOOL OSReceiveMessage(OSMessageQueue* mq, OSMessage* msg, s32 flags) {
     if (!mq) return 0;
 
     PCMessageQueueData& data = GetMsgQueueData(mq);

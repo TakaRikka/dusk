@@ -70,7 +70,11 @@ dFs_HIO_c::dFs_HIO_c() {
     select_icon_appear_frames = 5;
     appear_display_wait_frames = 15;
     field_0x000d = 15;
+    #if TARGET_PC
+    card_wait_frames = 0;
+    #else
     card_wait_frames = 90;
+    #endif
     test_frame_counts[0] = 1.11f;
     test_frame_counts[1] = 1.11f;
     test_frame_counts[2] = 1.11f;

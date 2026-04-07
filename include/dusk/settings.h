@@ -15,6 +15,7 @@ struct UserSettings {
     struct {
         // Video
         ConfigVar<bool> enableFullscreen;
+        ConfigVar<bool> enableVsync;
     } video;
 
     struct {
@@ -58,6 +59,7 @@ struct UserSettings {
         // Cheats
         ConfigVar<bool> enableFastIronBoots;
         ConfigVar<bool> canTransformAnywhere;
+        ConfigVar<bool> fastSpinner;
 
         // Technical
         ConfigVar<bool> restoreWiiGlitches;

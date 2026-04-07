@@ -14,6 +14,8 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 
+#include <aurora/gfx.h>
+
 namespace dusk {
     void ImGuiMenuGame::ToggleFullscreen() {
         getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
@@ -34,6 +36,13 @@ namespace dusk {
             if (ImGui::BeginMenu("Graphics")) {
                 if (ImGui::MenuItem("Toggle Fullscreen", hotkeys::TOGGLE_FULLSCREEN)) {
                     ToggleFullscreen();
+                }
+
+                bool vsync = getSettings().video.enableVsync;
+                if (ImGui::Checkbox("Enable Vsync", &vsync)) {
+                    getSettings().video.enableVsync.setValue(vsync);
+                    aurora_enable_vsync(vsync);
+                    config::Save();
                 }
 
                 if (ImGui::MenuItem("Default Window Size")) {

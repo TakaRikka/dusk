@@ -10,11 +10,21 @@
 #include "d/actor/d_a_b_gnd.h"
 #include "d/d_com_inf_game.h"
 
+#if TARGET_PC
+#include "dusk/dvd_asset.hpp"
+static u8* l_Egnd_mantTEX_get()   { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", 0x1C00, 0x4000), true); return buf; }
+static u8* l_Egnd_mantTEX_U_get() { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", 0x5C00, 0x4000), true); return buf; }
+static u8* l_Egnd_mantPAL_get()   { alignas(32) static u8 buf[0x60];   static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", 0x9C00, 0x60),   true); return buf; }
+#define l_Egnd_mantTEX   (l_Egnd_mantTEX_get())
+#define l_Egnd_mantTEX_U (l_Egnd_mantTEX_U_get())
+#define l_Egnd_mantPAL   (l_Egnd_mantPAL_get())
+#else
 #include "assets/l_Egnd_mantTEX.h"
 
 #include "assets/l_Egnd_mantTEX_U.h"
 
 #include "assets/l_Egnd_mantPAL.h"
+#endif
 #include "d/d_s_play.h"
 
 static u32 l_pos[507] = {
@@ -239,20 +249,32 @@ static u32 l_texCoord[338] = {
     0x3F800000, 0x00000000,
 };
 
+#if TARGET_PC
+static u8* l_Egnd_mantDL_get() { alignas(32) static u8 buf[0x3EC]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", 0xA9A0, 0x3EC), true); return buf; }
+#define l_Egnd_mantDL (l_Egnd_mantDL_get())
+#else
 #include "assets/l_Egnd_mantDL.h"
+#endif
 
+#if !TARGET_PC
 static void* pal_d = (void*)&l_Egnd_mantPAL;
 
 static void* tex_d[2] = {
     (void*)&l_Egnd_mantTEX,
     (void*)&l_Egnd_mantTEX_U,
 };
+#endif
 
 static char lbl_277_bss_0;
 
 void daMant_packet_c::draw() {
+#if TARGET_PC
+    void* image = l_Egnd_mantTEX;
+    void* lut = l_Egnd_mantPAL;
+#else
     void* image = tex_d[0];
     void* lut = pal_d;
+#endif
 
     j3dSys.reinitGX();
     GXSetNumIndStages(0);

@@ -40,6 +40,9 @@ void daAlink_c::setOriginalHeap(JKRExpHeap** i_ppheap, u32 i_size) {
         u32 var_r29 = 0x90;
         u32 var_r28 = 0x10;
         u32 size = ROUND(i_size, 16);
+#if TARGET_PC
+        size *= 2;
+#endif
         JKRHeap* parent = mDoExt_getGameHeap();
 
         JKRExpHeap* heap = JKRExpHeap::create(size + (var_r29 + var_r28), parent, true);
