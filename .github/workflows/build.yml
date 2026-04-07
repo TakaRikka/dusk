@@ -166,6 +166,7 @@ jobs:
 
     env:
       BUILD_DIR: C:\build
+      SCCACHE_DIR: C:\sccache
 
     strategy:
       fail-fast: false
