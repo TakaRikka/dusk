@@ -23,11 +23,42 @@ option(DUSK_BUILD_WARNINGS "If off, compiler warnings will be suppressed")
 option(DUSK_SELECTED_OPT "If on, selected parts of the project will be compiled with optimizations on Debug, intending to make the game run at 30 FPS. Note for MSVC: you will need to remove '/RTC1' from your debug flags in CMake.")
 option(DUSK_MOVIE_SUPPORT "If on, compile against libjpeg-turbo to enable THP file decoding" ON)
 
-find_package(libjpeg-turbo)
-set(DUSK_MOVIE_SUPPORT_REAL ${DUSK_MOVIE_SUPPORT})
-if (DUSK_MOVIE_SUPPORT AND NOT libjpeg-turbo_FOUND)
-    message(WARNING "libjpeg-turbo not found but DUSK_MOVIE_SUPPORT set, movie playback will not be available!")
-    set(DUSK_MOVIE_SUPPORT_REAL OFF)
+if (DUSK_MOVIE_SUPPORT)
+    find_package(libjpeg-turbo QUIET)
+    if (libjpeg-turbo_FOUND)
+        message(STATUS "dusk: Using system libjpeg-turbo")
+    else ()
+        message(STATUS "dusk: Fetching libjpeg-turbo")
+        include(ExternalProject)
+        set(_jpeg_install_dir ${CMAKE_BINARY_DIR}/libjpeg-turbo-install)
+        if (WIN32)
+            set(_jpeg_lib ${_jpeg_install_dir}/lib/turbojpeg-static.lib)
+        else ()
+            set(_jpeg_lib ${_jpeg_install_dir}/lib/libturbojpeg.a)
+        endif ()
+        ExternalProject_Add(libjpeg-turbo-ext
+            URL https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/3.1.0.tar.gz
+            URL_HASH SHA256=35fec2e1ddfb05ecf6d93e50bc57c1e54bc81c16d611ddf6eff73fff266d8285
+            CMAKE_ARGS
+                -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                -DCMAKE_INSTALL_PREFIX=${_jpeg_install_dir}
+                -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+                -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+                -DCMAKE_C_COMPILER_LAUNCHER=${CMAKE_C_COMPILER_LAUNCHER}
+                -DCMAKE_MSVC_RUNTIME_LIBRARY=${CMAKE_MSVC_RUNTIME_LIBRARY}
+                -DENABLE_SHARED=OFF
+                -DWITH_TURBOJPEG=ON
+                -DWITH_JAVA=OFF
+            BUILD_BYPRODUCTS ${_jpeg_lib}
+        )
+        file(MAKE_DIRECTORY ${_jpeg_install_dir}/include)
+        add_library(libjpeg-turbo::turbojpeg-static STATIC IMPORTED GLOBAL)
+        set_target_properties(libjpeg-turbo::turbojpeg-static PROPERTIES
+            IMPORTED_LOCATION ${_jpeg_lib}
+            INTERFACE_INCLUDE_DIRECTORIES ${_jpeg_install_dir}/include
+        )
+        add_dependencies(libjpeg-turbo::turbojpeg-static libjpeg-turbo-ext)
+    endif ()
 endif ()
 
 if (CMAKE_SYSTEM_NAME STREQUAL Linux)
@@ -109,15 +140,9 @@ set(GAME_INCLUDE_DIRS
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
     aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json)
 
-if (DUSK_MOVIE_SUPPORT_REAL)
-  if (TARGET libjpeg-turbo::turbojpeg-static)
-    message(STATUS "dusk: Linking against libjpeg-turbo static library")
-    list(APPEND GAME_LIBS "libjpeg-turbo::turbojpeg-static")
-  else ()
-    message(STATUS "dusk: Linking against libjpeg-turbo shared library")
-    list(APPEND GAME_LIBS "libjpeg-turbo::turbojpeg")
-  endif ()
-  list(APPEND GAME_COMPILE_DEFS MOVIE_SUPPORT=1)
+if (DUSK_MOVIE_SUPPORT)
+    list(APPEND GAME_LIBS libjpeg-turbo::turbojpeg-static)
+    list(APPEND GAME_COMPILE_DEFS MOVIE_SUPPORT=1)
 endif ()
 
 # game_debug is for game code files that we know work when compiled with DEBUG=1
