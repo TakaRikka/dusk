@@ -5,6 +5,7 @@
 #include <gx.h>
 #include <stdint.h>
 #include <vi.h>
+#include "SDL3/SDL_timer.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -359,7 +360,11 @@ static void waitForTick(u32 p1, u16 p2) {
         static OSTime nextTick = OSGetTime();
         OSTime time = OSGetTime();
         while (time < nextTick) {
+#if TARGET_PC
+            SDL_DelayNS(OSTicksToMicroseconds(nextTick - time) * 1'000);
+#else
             JFWDisplay::getManager()->threadSleep((nextTick - time));
+#endif
             time = OSGetTime();
         }
         nextTick = time + p1;
