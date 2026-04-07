@@ -33,7 +33,7 @@ if (GIT_FOUND)
             OUTPUT_STRIP_TRAILING_WHITESPACE)
 
     # remove the git hash, then collapse a clean "-0" suffix only
-    string(REGEX REPLACE "-[^-]+(-dirty)?$" "\\1" DUSK_WC_DESCRIBE "${DUSK_WC_DESCRIBE}")
+    string(REGEX REPLACE "-[^-]+(-dirty|)$" "\\1" DUSK_WC_DESCRIBE "${DUSK_WC_DESCRIBE}")
     string(REGEX REPLACE "-0$" "" DUSK_WC_DESCRIBE "${DUSK_WC_DESCRIBE}")
 
     # defines DUSK_WC_BRANCH
