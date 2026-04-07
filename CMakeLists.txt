@@ -176,7 +176,8 @@ set(GAME_INCLUDE_DIRS
     libs/JSystem/include
     libs
     extern/aurora/include/dolphin
-    extern)
+    extern
+    ${CMAKE_BINARY_DIR})
 
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
     aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json)
