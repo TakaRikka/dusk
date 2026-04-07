@@ -432,7 +432,14 @@ void dDlst_GameOverScrnDraw_c::draw() {
         img_white.a = 255;
 
         mpBackImg->setBlackWhite(img_black, img_white);
+
+        #if TARGET_PC
+        mpBackImg->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
+                        mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), false, false,
+                        false);
+        #else
         mpBackImg->draw(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, false, false, false);
+        #endif
     } else {
         JUtility::TColor img_black;
         JUtility::TColor img_white;
@@ -447,7 +454,13 @@ void dDlst_GameOverScrnDraw_c::draw() {
         img_white.b = l_HIO.mWhite.b;
         img_white.a = l_HIO.mWhite.a;
 
+        #if TARGET_PC
+        mpBackImg->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
+                        mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), false, false,
+                        false);
+        #else
         mpBackImg->draw(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, false, false, false);
+        #endif
 
         static f32 offset[8] = {-138.0f, -96.0f, -56.0f, -18.0f, 42.0f, 75.0f, 110.0f, 143.0f};
 
