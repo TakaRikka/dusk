@@ -1,7 +1,7 @@
 #include "dusk/dvd_asset.hpp"
 #include "dusk/logging.h"
 #include "dusk/endian.h"
-#include "aurora/dvd.h"
+#include "dolphin/dvd.h"
 #include "DynamicLink.h"
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JKernel/JKRDvdRipper.h"
@@ -35,9 +35,9 @@ static bool EnsureDolParsed() {
     if (s_dolData) return true;
 
     s32 sz = 0;
-    const u8* p = aurora_dvd_get_dol(sz);
+    const u8* p = DVDGetDOLLocation(sz);
     if (!p || sz < 256) {
-        DuskLog.fatal("dvd_asset: aurora_dvd_get_dol failed (size={})", sz);
+        DuskLog.fatal("dvd_asset: DVDGetDOLLocation failed (size={})", sz);
         return false;
     }
     
