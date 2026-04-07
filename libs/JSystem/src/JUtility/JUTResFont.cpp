@@ -6,19 +6,39 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include <gx.h>
+#include "absl/container/node_hash_map.h"
+
+#if TARGET_PC
+struct GlyphTextures {
+    absl::node_hash_map<int, TGXTexObj> textures;
+};
+#endif
 
 JUTResFont::JUTResFont() {
+#if TARGET_PC
+    mGlyphTextures = new GlyphTextures();
+#endif
     initialize_state();
     JUTFont::initialize_state();
 }
 
 JUTResFont::JUTResFont(const ResFONT* pFont, JKRHeap* pHeap) {
+#if TARGET_PC
+    mGlyphTextures = new GlyphTextures();
+#endif
     initialize_state();
     JUTFont::initialize_state();
     initiate(pFont, pHeap);
 }
 
 JUTResFont::~JUTResFont() {
+#if TARGET_PC
+    for (auto& pair : mGlyphTextures->textures) {
+        pair.second.reset();
+    }
+    delete mGlyphTextures;
+#endif
+
     if (mValid) {
         delete_and_initialize();
         JUTFont::initialize_state();
@@ -414,12 +434,30 @@ void JUTResFont::loadImage(int code, GXTexMapID id){
         mWidth = cellCol * cellW;
         mHeight = cellRow * cellH;
 
+#if TARGET_PC
+        const auto found = mGlyphTextures->textures.find(code);
+        GXTexObj* texObj;
+        if (found == mGlyphTextures->textures.end()) {
+            texObj = &mGlyphTextures->textures[code];
+            void* pImg = &mpGlyphBlocks[i]->data[pageIdx * mpGlyphBlocks[i]->textureSize];
+            GXInitTexObj(texObj, pImg, mpGlyphBlocks[i]->textureWidth,
+                         mpGlyphBlocks[i]->textureHeight, (GXTexFmt)(u16)mpGlyphBlocks[i]->textureFormat,
+                         GX_CLAMP, GX_CLAMP, 0);
+
+            GXInitTexObjLOD(texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, 0U, 0U, GX_ANISO_1);
+        } else {
+            texObj = &found->second;
+        }
+
+        GXLoadTexObj(texObj, id);
+
+        // Gets used by some other code.
+        mTexPageIdx = pageIdx;
+        field_0x66 = i;
+#else
         if (pageIdx != mTexPageIdx || i != field_0x66)
         {
             void* pImg = &mpGlyphBlocks[i]->data[pageIdx * mpGlyphBlocks[i]->textureSize];
-#ifdef TARGET_PC
-            mTexObj.reset();
-#endif
             GXInitTexObj(&mTexObj, pImg, mpGlyphBlocks[i]->textureWidth,
                          mpGlyphBlocks[i]->textureHeight, (GXTexFmt)(u16)mpGlyphBlocks[i]->textureFormat,
                          GX_CLAMP, GX_CLAMP, 0);
@@ -430,6 +468,7 @@ void JUTResFont::loadImage(int code, GXTexMapID id){
         }
 
         GXLoadTexObj(&mTexObj, id);
+#endif
     }
 }
 
