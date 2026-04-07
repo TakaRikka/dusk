@@ -542,6 +542,10 @@ void renderingAmap_c::rendering(dDrawPath_c::poly_class const* i_poly) {
 bool renderingAmap_c::isDrawOutSideTrim() {
     bool rt = false;
 
+    #if TARGET_PC
+    return 0;
+    #endif
+
     if (getDispType() == 0 || getDispType() == 4 || getDispType() == 3 || getDispType() == 2 ||
         getDispType() == 5)
     {
