@@ -137,8 +137,8 @@ add_library(game_base OBJECT ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${JSYSTEM_FILES
         src/dusk/imgui/ImGuiStubLog.cpp
         src/dusk/imgui/ImGuiAudio.cpp)
 
-target_compile_definitions(game_debug PRIVATE ${GAME_COMPILE_DEFS} $<$<CONFIG:Debug>:DEBUG=1>)
-target_compile_definitions(game_base PRIVATE ${GAME_COMPILE_DEFS} NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0)
+target_compile_definitions(game_debug PRIVATE ${GAME_COMPILE_DEFS} $<$<CONFIG:Debug>:DEBUG=1> $<$<CONFIG:Debug>:PARTIAL_DEBUG=1>)
+target_compile_definitions(game_base PRIVATE ${GAME_COMPILE_DEFS} NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0 $<$<CONFIG:Debug>:PARTIAL_DEBUG=1>)
 
 # only apply PCH to game_base since not all headers are necessarily validated with DEBUG=1
 target_precompile_headers(game_base PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/include/dusk_pch.hpp>")
