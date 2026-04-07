@@ -1154,6 +1154,18 @@ int daE_PH_c::create() {
 
     int phase_state = dComIfG_resLoad(&mPhase, "E_PH");
     if (phase_state == cPhs_COMPLEATE_e) {
+
+#if TARGET_PC
+        // Due to our loads being so much faster, peahats can initialize *before* the camera.
+        // This breaks the peahat used for camera focus during transition to phase 2 of Argorok.
+        // as it caches incorrect camera parameters in its init.
+        if (auto cam = dComIfGp_getCamera(0)) {
+            if (cam->phase_request.mpHandlerTable != nullptr) {
+                return cPhs_INIT_e;
+            }
+        }
+#endif
+
         mAction = fopAcM_GetParam(this) & 0xF;
 
         if (dComIfGs_isZoneSwitch(2, fopAcM_GetRoomNo(this)) && mAction == 4) {
