@@ -35,7 +35,7 @@ static bool EnsureDolParsed() {
     if (s_dolData) return true;
 
     s32 sz = 0;
-    const u8* p = DVDGetDOLLocation(sz);
+    const u8* p = DVDGetDOLLocation(&sz);
     if (!p || sz < 256) {
         DuskLog.fatal("dvd_asset: DVDGetDOLLocation failed (size={})", sz);
         return false;
