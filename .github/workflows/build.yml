@@ -72,8 +72,6 @@ jobs:
   build-apple:
     name: Build Apple (${{matrix.name}})
     runs-on: macos-latest
-    if: ${{matrix.enabled}}
-
     strategy:
       fail-fast: false
       matrix:
@@ -82,17 +80,14 @@ jobs:
             platform: macos
             preset: x-macos-ci
             artifact_name: macos-appleclang-universal
-            enabled: true
-          - name: AppleClang iOS arm64
-            platform: ios
-            preset: x-ios-ci
-            artifact_name: ios-appleclang-arm64
-            enabled: false # TODO enable when CI is free
-          - name: AppleClang tvOS arm64
-            platform: tvos
-            preset: x-tvos-ci
-            artifact_name: tvos-appleclang-arm64
-            enabled: false # TODO enable when CI is free
+          # - name: AppleClang iOS arm64 # TODO enable when CI is free
+          #   platform: ios
+          #   preset: x-ios-ci
+          #   artifact_name: ios-appleclang-arm64
+          # - name: AppleClang tvOS arm64 # TODO enable when CI is free
+          #   platform: tvos
+          #   preset: x-tvos-ci
+          #   artifact_name: tvos-appleclang-arm64
 
     steps:
       - uses: actions/checkout@v6
