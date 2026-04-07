@@ -918,6 +918,10 @@ void dName_c::selectCursorMove() {
                                                                g_nmHIO.mSelCharScale);
     ((J2DTextBox*)mMojiIcon[mCharRow + mCharColumn * 5]->getPanePtr())
         ->setWhite(JUtility::TColor(0xC8, 0xC8, 0xC8, 0xFF));
+    
+    #if TARGET_PC
+    nameWide();
+    #endif
 
     Vec pos = mMojiIcon[mCharRow + mCharColumn * 5]->getGlobalVtxCenter(false, 0);
     mSelIcon->setPos(pos.x, pos.y, mMojiIcon[mCharRow + mCharColumn * 5]->getPanePtr(), true);
@@ -1281,7 +1285,58 @@ void dName_c::selectCursorPosSet(int row) {
     }
 }
 
+#if TARGET_PC
+void dName_c::nameWide() {
+    //Resize Select Icon
+    mSelIcon->setParam(0.82f * mDoGph_gInf_c::hudAspectScaleUp, 0.77f, 0.05f, 0.4f, 0.4f);
+
+    // List of Characters Box
+    static u64 l_tagName[65] = {
+        MULTI_CHAR('m_00_0'), MULTI_CHAR('m_00_1'), MULTI_CHAR('m_00_2'), MULTI_CHAR('m_00_3'), MULTI_CHAR('m_00_4'), MULTI_CHAR('m_01_0'), MULTI_CHAR('m_01_1'), MULTI_CHAR('m_01_2'), MULTI_CHAR('m_01_3'),
+        MULTI_CHAR('m_01_4'), MULTI_CHAR('m_02_0'), MULTI_CHAR('m_02_1'), MULTI_CHAR('m_02_2'), MULTI_CHAR('m_02_3'), MULTI_CHAR('m_02_4'), MULTI_CHAR('m03_0'),  MULTI_CHAR('m03_1'),  MULTI_CHAR('m03_2'),
+        MULTI_CHAR('m03_3'),  MULTI_CHAR('m03_4'),  MULTI_CHAR('m_04_0'), MULTI_CHAR('m_04_1'), MULTI_CHAR('m_04_2'), MULTI_CHAR('m_04_3'), MULTI_CHAR('m_04_4'), MULTI_CHAR('m_05_0'), MULTI_CHAR('m_05_1'),
+        MULTI_CHAR('m_05_2'), MULTI_CHAR('m_05_3'), MULTI_CHAR('m_05_4'), MULTI_CHAR('m_06_0'), MULTI_CHAR('m_06_1'), MULTI_CHAR('m_06_2'), MULTI_CHAR('m_06_3'), MULTI_CHAR('m_06_4'), MULTI_CHAR('m_07_0'),
+        MULTI_CHAR('m_07_1'), MULTI_CHAR('m_07_2'), MULTI_CHAR('m_07_3'), MULTI_CHAR('m_07_4'), MULTI_CHAR('m_08_0'), MULTI_CHAR('m_08_1'), MULTI_CHAR('m_08_2'), MULTI_CHAR('m_08_3'), MULTI_CHAR('m_08_4'),
+        MULTI_CHAR('m_09_0'), MULTI_CHAR('m_09_1'), MULTI_CHAR('m_09_2'), MULTI_CHAR('m_09_3'), MULTI_CHAR('m_09_4'), MULTI_CHAR('m_10_0'), MULTI_CHAR('m_10_1'), MULTI_CHAR('m_10_2'), MULTI_CHAR('m_10_3'),
+        MULTI_CHAR('m_10_4'), MULTI_CHAR('m_11_0'), MULTI_CHAR('m_11_1'), MULTI_CHAR('m_11_2'), MULTI_CHAR('m_11_3'), MULTI_CHAR('m_11_4'), MULTI_CHAR('m12_0'),  MULTI_CHAR('m12_1'),  MULTI_CHAR('m12_2'),
+        MULTI_CHAR('m12_3'),  MULTI_CHAR('m12_4'),
+    };
+
+    for (u32 i = 0; i < 65; i++) {
+        nameIn.NameInScr->search(l_tagName[i])->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    }
+
+    // "END" Text
+    nameIn.NameInScr->search(MULTI_CHAR('p_end_2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    nameIn.NameInScr->search(MULTI_CHAR('p_end_1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    nameIn.NameInScr->search(MULTI_CHAR('p_end_0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Letters being typed
+    static u64 l_nameTagName[8] = {
+        MULTI_CHAR('name_00'), MULTI_CHAR('name_01'), MULTI_CHAR('name_02'), MULTI_CHAR('name_03'), MULTI_CHAR('name_04'), MULTI_CHAR('name_05'), MULTI_CHAR('name_06'), MULTI_CHAR('name_07'),
+    };
+
+    for (u32 i = 0; i < 8; i++) {
+        nameIn.NameInScr->search(l_nameTagName[i])->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    }
+
+    // Underscores when typing below letters
+    static u64 l_nameCurTagName[8] = {
+        MULTI_CHAR('s__n_00'), MULTI_CHAR('s__n_01'), MULTI_CHAR('s__n_02'), MULTI_CHAR('s__n_03'), MULTI_CHAR('s__n_04'), MULTI_CHAR('s__n_05'), MULTI_CHAR('s__n_06'), MULTI_CHAR('s__n_07'),
+    };
+
+    for (u32 i = 0; i < 8; i++) {
+        nameIn.NameInScr->search(l_nameCurTagName[i])
+            ->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    }
+}
+#endif
+
 void dName_c::_draw() {
+    #if TARGET_PC
+    nameWide();
+    #endif
+
     dComIfGd_set2DOpa(&nameIn);
     dComIfGd_set2DOpa(mSelIcon);
 }
@@ -1484,7 +1539,12 @@ void dName_c::screenSet() {
 
     mSelIcon = JKR_NEW dSelect_cursor_c(0, 1.0f, NULL);
     JUT_ASSERT(0, mSelIcon != NULL);
+
+    #if TARGET_PC
+    mSelIcon->setParam(0.82f * mDoGph_gInf_c::hudAspectScaleUp, 0.77f, 0.05f, 0.4f, 0.4f);
+    #else
     mSelIcon->setParam(0.82f, 0.77f, 0.05f, 0.4f, 0.4f);
+    #endif
 
     Vec pos = mMojiIcon[mCharRow + mCharColumn * 5]->getGlobalVtxCenter(false, 0);
     mSelIcon->setPos(pos.x, pos.y, mMojiIcon[mCharRow + mCharColumn * 5]->getPanePtr(), true);

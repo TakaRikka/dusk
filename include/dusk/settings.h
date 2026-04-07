@@ -58,6 +58,7 @@ struct UserSettings {
         // Cheats
         ConfigVar<bool> enableFastIronBoots;
         ConfigVar<bool> canTransformAnywhere;
+        ConfigVar<bool> fastSpinner;
 
         // Technical
         ConfigVar<bool> restoreWiiGlitches;

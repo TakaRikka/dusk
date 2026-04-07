@@ -101,7 +101,7 @@ static thread_local OSThread* tls_currentThread = nullptr;
 
 static OSThread  sDefaultThread;
 static u8        sDefaultStack[64 * 1024];
-static u32       sDefaultStackEnd = OS_THREAD_STACK_MAGIC;
+static u8        sDefaultStackEnd = OS_THREAD_STACK_MAGIC;
 
 // Global interrupt mutex (coarse-grained lock replacing interrupt disable)
 // Lazy-initialized to avoid DLL static init crashes
@@ -237,7 +237,7 @@ int OSCreateThread(OSThread* thread, void* (*func)(void*), void* param,
 
     // Stack (stack points to TOP on GameCube)
     thread->stackBase = (u8*)stack;
-    thread->stackEnd  = (u32*)((uintptr_t)stack - stackSize);
+    thread->stackEnd  = (u8*)((uintptr_t)stack - stackSize);
     *thread->stackEnd = OS_THREAD_STACK_MAGIC;
 
     OSClearContext(&thread->context);
@@ -496,7 +496,7 @@ void OSDetachThread(OSThread* thread) {
     OSWakeupThread(&thread->queueJoin);
 }
 
-int OSJoinThread(OSThread* thread, void* val) {
+BOOL OSJoinThread(OSThread* thread, void** val) {
     if (!thread) return 0;
 
     if (!(thread->attr & OS_THREAD_ATTR_DETACH)) {

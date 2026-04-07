@@ -29,6 +29,11 @@ public:
 class dMenu_Collect2D_c : public dDlst_base_c {
 public:
     dMenu_Collect2D_c(JKRExpHeap*, STControl*, CSTControl*);
+
+    #if TARGET_PC
+    void menuCollectWide();
+    #endif
+
     void _create();
     void _delete();
     void initialize();

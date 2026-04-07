@@ -628,7 +628,13 @@ void dMeterMap_c::draw() {
         #endif
         mMapJ2DPicture->setAlpha(alpha);
 
+        #if TARGET_PC
+        mMapJ2DPicture->draw(mDoGph_gInf_c::ScaleHUDXLeft(drawPosX), drawPosY, sizeX, sizeY, false,
+                             false, false);
+        #else
         mMapJ2DPicture->draw(drawPosX, drawPosY, sizeX, sizeY, false, false, false);
+        #endif
+
         mMapJ2DPicture->calcMtx();
     }
 }

@@ -1507,7 +1507,11 @@ void dMw_c::checkMemSize() {
 
         OS_REPORT("memory check ===> diff ==> %d, start ==> %d, now ==> %d\n", diff, mMemSize, now_size);
 
+#if TARGET_PC
+        if (diff > 0x40) {
+#else
         if (diff > 0x20) {
+#endif
             OSReport_Error("memory free error!!\n");
         }
         mMemSize = 0;
