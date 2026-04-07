@@ -14,6 +14,7 @@ namespace dusk {
 class ImGuiConsole {
 public:
     ImGuiConsole();
+    void InitSettings();
     void UpdateSettings();
     void PreDraw();
     void PostDraw();

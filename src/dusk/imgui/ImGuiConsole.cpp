@@ -7,7 +7,6 @@
 
 #include "fmt/format.h"
 #include "imgui.h"
-#include "aurora/gfx.h"
 #include <imgui_internal.h>
 
 #include "ImGuiConsole.hpp"
@@ -16,6 +15,7 @@
 #include "dusk/config.hpp"
 #include "dusk/settings.h"
 #include "dusk/audio/DuskAudioSystem.h"
+#include "dusk/dusk.h"
 
 #if _WIN32
 #define NOMINMAX
@@ -179,14 +179,26 @@ namespace dusk {
 
     ImGuiConsole::ImGuiConsole() {}
 
+    void ImGuiConsole::InitSettings() {
+        bool lockAspect = getSettings().video.lockAspectRatio;
+        if (lockAspect) {
+            VILockAspectRatio(defaultAspectRatioW, defaultAspectRatioH);
+        } else {
+            VIUnlockAspectRatio();
+        }
+
+        dusk::audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
+        dusk::audio::SetEnableReverb(getSettings().audio.enableReverb);
+    }
+
     void ImGuiConsole::UpdateSettings() {
-        dusk::audio::SetMasterVolume(dusk::getSettings().audio.masterVolume / 100.0f);
-        dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);
         getTransientSettings().skipFrameRateLimit = getSettings().game.enableTurboKeybind && ImGui::IsKeyDown(ImGuiKey_Tab);
     }
 
     void ImGuiConsole::PreDraw() {
         if (!m_isLaunchInitialized) {
+            InitSettings();
+
             m_toasts.emplace_back("Press F1 to toggle menu"s, 5.f);
             m_isLaunchInitialized = true;
         }

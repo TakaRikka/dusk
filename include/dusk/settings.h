@@ -16,6 +16,7 @@ struct UserSettings {
         // Video
         ConfigVar<bool> enableFullscreen;
         ConfigVar<bool> enableVsync;
+        ConfigVar<bool> lockAspectRatio;
     } video;
 
     struct {
