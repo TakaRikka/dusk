@@ -14,6 +14,7 @@
 
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "dusk/config.hpp"
+#include "dusk/main.h"
 #include "dusk/settings.h"
 
 #if _WIN32
@@ -30,6 +31,21 @@ namespace dusk {
     void ImGuiStringViewText(std::string_view text) {
         // begin()/end() do not work on MSVC
         ImGui::TextUnformatted(text.data(), text.data() + text.size());
+    }
+
+    void ImGuiTextCenter(std::string_view text) {
+        ImGui::NewLine();
+        float fontSize = ImGui::CalcTextSize(text.data(), text.data() + text.size()).x;
+        ImGui::SameLine(ImGui::GetWindowSize().x / 2 - fontSize + fontSize / 2);
+        ImGuiStringViewText(text);
+    }
+
+    bool ImGuiButtonCenter(std::string_view text) {
+        ImGui::NewLine();
+        float fontSize = ImGui::CalcTextSize(text.data(), text.data() + text.size()).x;
+        fontSize += ImGui::GetStyle().FramePadding.x;
+        ImGui::SameLine(ImGui::GetWindowSize().x / 2 - fontSize + fontSize / 2);
+        return ImGui::Button(text.data());
     }
 
     std::string BytesToString(size_t bytes) {
@@ -196,7 +212,10 @@ namespace dusk {
             ImGuiMenuGame::ToggleFullscreen();
         }
 
-        if (CheckMenuViewToggle(ImGuiKey_F1, m_isHidden)) {
+        if (!dusk::IsGameLaunched) {
+            m_preLaunchWindow.draw();
+        }
+        else if (CheckMenuViewToggle(ImGuiKey_F1, m_isHidden)) {
             ShowToasts();
             return;
         }

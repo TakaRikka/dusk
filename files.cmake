@@ -1360,6 +1360,8 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiMenuTools.hpp
         src/dusk/imgui/ImGuiMenuEnhancements.cpp
         src/dusk/imgui/ImGuiMenuEnhancements.hpp
+        src/dusk/imgui/ImGuiPreLaunchWindow.cpp
+        src/dusk/imgui/ImGuiPreLaunchWindow.hpp
         src/dusk/imgui/ImGuiProcessOverlay.cpp
         src/dusk/imgui/ImGuiCameraOverlay.cpp
         src/dusk/imgui/ImGuiHeapOverlay.cpp

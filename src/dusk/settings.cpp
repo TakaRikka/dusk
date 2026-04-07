@@ -55,6 +55,11 @@ UserSettings g_userSettings = {
         // Controls
         .enableTurboKeybind {"game.enableTurboKeybind", true},
     },
+
+    .backend = {
+        .isoPath {"backend.isoPath", ""},
+        .skipPreLaunchUI {"backend.skipPreLaunchUI", false}
+    }
 };
 
 UserSettings& getSettings() {
@@ -97,6 +102,9 @@ void registerSettings() {
     Register(g_userSettings.game.midnasLamentNonStop);
     Register(g_userSettings.game.enableTurboKeybind);
     Register(g_userSettings.game.fastSpinner);
+
+    Register(g_userSettings.backend.isoPath);
+    Register(g_userSettings.backend.skipPreLaunchUI);
 }
 
 // Transient settings
