@@ -123,6 +123,28 @@
       ]
     },
     {
+      "name": "windows-arm64-msvc",
+      "displayName": "Windows ARM64 (MSVC)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "architecture": {
+        "value": "arm64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "cl",
+        "CMAKE_CXX_COMPILER": "cl",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [
+            "Windows"
+          ]
+        }
+      }
+    },
+    {
       "name": "windows-clang",
       "displayName": "Windows (Clang)",
       "inherits": [
@@ -398,6 +420,23 @@
         "x-windows-ci",
         "windows-clang"
       ]
+    },
+    {
+      "name": "x-windows-ci-arm64-msvc",
+      "inherits": [
+        "x-windows-ci",
+        "windows-arm64-msvc"
+      ]
+    },
+    {
+      "name": "x-android-ci-arm64",
+      "inherits": [
+        "android-arm64"
+      ],
+      "cacheVariables": {
+        "CMAKE_C_COMPILER_LAUNCHER": "sccache",
+        "CMAKE_CXX_COMPILER_LAUNCHER": "sccache"
+      }
     }
   ],
   "buildPresets": [
@@ -558,6 +597,24 @@
       "displayName": "(Internal) Windows CI Clang",
       "targets": [
         "install"
+      ]
+    },
+    {
+      "name": "x-windows-ci-arm64-msvc",
+      "configurePreset": "x-windows-ci-arm64-msvc",
+      "description": "(Internal) Windows CI MSVC arm64",
+      "displayName": "(Internal) Windows CI MSVC arm64",
+      "targets": [
+        "install"
+      ]
+    },
+    {
+      "name": "x-android-ci-arm64",
+      "configurePreset": "x-android-ci-arm64",
+      "description": "(Internal) Android CI arm64-v8a",
+      "displayName": "(Internal) Android CI arm64-v8a",
+      "targets": [
+        "dusk"
       ]
     }
   ]

@@ -60,6 +60,78 @@ jobs:
             build/install/Dusk-*.AppImage
             build/install/debug.tar.*
 
+  build-linux-arm64:
+    name: Build Linux (GCC aarch64)
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install ninja-build clang lld openssl libcurl4-openssl-dev \
+            zlib1g-dev libglu1-mesa-dev libdbus-1-dev libvulkan-dev libxi-dev libxrandr-dev libasound2-dev \
+            libpulse-dev libudev-dev libpng-dev libncurses5-dev libx11-xcb-dev libfreetype-dev \
+            libxinerama-dev libxcursor-dev python3-markupsafe libgtk-3-dev libssl-dev \
+            libxss-dev libfuse2
+
+      - name: Setup sccache
+        uses: mozilla-actions/sccache-action@v0.0.9
+
+      - name: Configure CMake
+        run: cmake --preset x-linux-ci-gcc
+
+      - name: Build
+        run: cmake --build --preset x-linux-ci-gcc
+
+      - name: Generate AppImage
+        run: ci/build-appimage.sh
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: dusk-${{env.DUSK_VERSION}}-linux-gcc-aarch64
+          path: |
+            build/install/Dusk-*.AppImage
+            build/install/debug.tar.*
+
+  build-android:
+    name: Build Android (arm64-v8a)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install ninja-build
+
+      - name: Setup sccache
+        uses: mozilla-actions/sccache-action@v0.0.9
+
+      - name: Set NDK version
+        run: echo "ANDROID_NDK_VERSION=$(ls $ANDROID_HOME/ndk | sort -V | tail -1)" >> $GITHUB_ENV
+
+      - name: Configure CMake
+        run: cmake --preset x-android-ci-arm64
+
+      - name: Build
+        run: cmake --build --preset x-android-ci-arm64
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: dusk-${{env.DUSK_VERSION}}-android-arm64-v8a
+          path: build/x-android-ci-arm64/dusk
+
   build-macos:
     name: Build macOS (AppleClang universal)
     runs-on: macos-latest
@@ -113,7 +185,7 @@ jobs:
         run: cmake --preset x-ios-ci
 
       - name: Build
-        run: cmake --build --preset x-ios-ci --target install
+        run: cmake --build --preset x-ios-ci
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
@@ -150,7 +222,7 @@ jobs:
         run: cmake --preset x-tvos-ci
 
       - name: Build
-        run: cmake --build --preset x-tvos-ci --target install
+        run: cmake --build --preset x-tvos-ci
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
@@ -209,6 +281,52 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: dusk-${{env.DUSK_VERSION}}-win32-${{matrix.preset}}-x86_64
+          path: |
+            ${{env.BUILD_DIR}}/install/*.exe
+            ${{env.BUILD_DIR}}/install/debug.7z
+
+  build-windows-arm64:
+    name: Build Windows (MSVC arm64)
+    runs-on: windows-11-arm
+
+    env:
+      BUILD_DIR: C:\build
+      SCCACHE_DIR: C:\sccache
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Enable Visual Studio environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: arm64
+
+      # msvc-dev-cmd sets VCPKG_ROOT, set it back
+      - name: Override VCPKG_ROOT
+        run: echo "VCPKG_ROOT=C:\vcpkg" >> $env:GITHUB_ENV
+
+      - name: Setup sccache
+        uses: mozilla-actions/sccache-action@v0.0.9
+
+      - name: Install dependencies
+        run: |
+          choco install ninja
+          vcpkg install zlib:arm64-windows-static bzip2:arm64-windows-static zstd:arm64-windows-static `
+            liblzma:arm64-windows-static freetype:arm64-windows-static
+
+      - name: Configure CMake
+        run: cmake --preset x-windows-ci-arm64-msvc
+
+      - name: Build
+        run: cmake --build --preset x-windows-ci-arm64-msvc
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: dusk-${{env.DUSK_VERSION}}-win32-msvc-arm64
           path: |
             ${{env.BUILD_DIR}}/install/*.exe
             ${{env.BUILD_DIR}}/install/debug.7z
