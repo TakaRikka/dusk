@@ -186,11 +186,12 @@ namespace dusk {
         } else {
             VIUnlockAspectRatio();
         }
+
+        dusk::audio::SetMasterVolume(dusk::getSettings().audio.masterVolume / 100.0f);
+        dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);
     }
 
     void ImGuiConsole::UpdateSettings() {
-        dusk::audio::SetMasterVolume(dusk::getSettings().audio.masterVolume / 100.0f);
-        dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);
         getTransientSettings().skipFrameRateLimit = getSettings().game.enableTurboKeybind && ImGui::IsKeyDown(ImGuiKey_Tab);
     }
 
