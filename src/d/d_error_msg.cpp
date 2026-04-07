@@ -15,22 +15,7 @@
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_graphic.h"
 
-#if TARGET_PC
-#include "dusk/dvd_asset.hpp"
-static const u8* black_tex_get()  { static u8 buf[0x40];    static bool _ = (dusk::LoadDolAsset(buf, 0x8037B140, 0x40),    true); return buf; }
-static const u8* msg_data_get()   { static u8 buf[0x260];   static bool _ = (dusk::LoadDolAsset(buf, 0x8037B180, 0x260),   true); return buf; }
-static const u8* font_data_get()  { static u8 buf[0x12260]; static bool _ = (dusk::LoadDolAsset(buf, 0x8037B3E0, 0x12260), true); return buf; }
-#define black_tex  (black_tex_get())
-#define msg_data   (msg_data_get())
-#define font_data  (font_data_get())
-#if VERSION == VERSION_GCN_PAL
-// TODO: find addreses for pal languages
-#define msg_data_ge ((const u8*)nullptr)
-#define msg_data_fr ((const u8*)nullptr)
-#define msg_data_sp ((const u8*)nullptr)
-#define msg_data_it ((const u8*)nullptr)
-#endif
-#else
+#if !TARGET_PC
 #include "assets/black_tex.h"
 #include "assets/msg_data.h"
 #if VERSION == VERSION_GCN_PAL
@@ -66,6 +51,7 @@ struct BMG_INF1 : JUTDataBlockHeader {
 #endif
 
 static void messageSet(u32 status, bool i_drawBg) {
+    #if !TARGET_PC
     BMG_INF1* inf1;
     const char* msg_p;
 
@@ -194,9 +180,11 @@ static void messageSet(u32 status, bool i_drawBg) {
     tpane.draw(x, y + 10.0f, FB_WIDTH, HBIND_LEFT);
     #endif
     #endif
+    #endif
 }
 
 void dDvdErrorMsg_c::draw(s32 status) {
+    #if !TARGET_PC
     JUtility::TColor backColor = g_clearColor;
     JFWDisplay::getManager()->setClearColor(backColor);
     mDoGph_gInf_c::beginRender();
@@ -224,6 +212,7 @@ void dDvdErrorMsg_c::draw(s32 status) {
 
     mDoGph_gInf_c::endRender();
     JFWDisplay::getManager()->resetFader();
+    #endif
 }
 
 bool dDvdErrorMsg_c::execute() {
@@ -254,16 +243,12 @@ bool dDvdErrorMsg_c::execute() {
 static u8 l_captureAlpha = 0xFF;
 
 static void drawCapture(u8 alpha) {
+    #if !TARGET_PC
     static bool l_texCopied = false;
 
     if (!l_texCopied) {
-#if TARGET_PC
-        GXSetTexCopySrc(0, 0, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
-        GXSetTexCopyDst(mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
-#else
         GXSetTexCopySrc(0, 0, FB_WIDTH, FB_HEIGHT);
         GXSetTexCopyDst(FB_WIDTH / 2, FB_HEIGHT / 2, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
-#endif
         GXCopyTex(mDoGph_gInf_c::getFrameBufferTex(), GX_FALSE);
         l_texCopied = true;
     }
@@ -273,9 +258,6 @@ static void drawCapture(u8 alpha) {
     GXSetAlphaUpdate(GX_FALSE);
     j3dSys.drawInit();
 
-#ifdef TARGET_PC
-    mDoGph_gInf_c::getFrameBufferTexObj()->reset();
-#endif
     GXInitTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), mDoGph_gInf_c::getFrameBufferTex(), FB_WIDTH / 2, FB_HEIGHT / 2, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(mDoGph_gInf_c::getFrameBufferTexObj(), GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), GX_TEXMAP0);
@@ -315,6 +297,7 @@ static void drawCapture(u8 alpha) {
     mDoGph_drawFilterQuad(1, 1);
     mDoGph_gInf_c::endRender();
     JFWDisplay::getManager()->resetFader();
+    #endif
 }
 
 bool dShutdownErrorMsg_c::execute() {
@@ -342,6 +325,5 @@ bool dShutdownErrorMsg_c::execute() {
             mDoRst_reset(1, 1, 1);
         }
     }
-
     return true;
 }
