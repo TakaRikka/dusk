@@ -15,6 +15,7 @@ struct UserSettings {
     struct {
         // Video
         ConfigVar<bool> enableFullscreen;
+        ConfigVar<bool> enableVsync;
     } video;
 
     struct {
