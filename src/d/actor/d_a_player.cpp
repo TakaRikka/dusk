@@ -374,11 +374,11 @@ static const u8* l_sightDL_get() {
     static bool _ = (
         dusk::LoadDolAsset(
             buf,
-            #if VERSION_GCN_PAL
+            #if VERSION == VERSION_GCN_PAL
             0x803BBDA0,
-            #elif VERSION_GCN_JPN
+            #elif VERSION == VERSION_GCN_JPN
             0x803B4220,
-            #elif VERSION_GCN_USA
+            #elif VERSION == VERSION_GCN_USA
             0x803BA0C0,
             #endif
             0x89
