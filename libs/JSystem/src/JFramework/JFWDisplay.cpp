@@ -377,6 +377,7 @@ static void waitForTick(u32 p1, u16 p2) {
                 msg = 0;
             }
         } while (((intptr_t)msg - (intptr_t)nextCount) < 0);
+        dusk::frameUsagePct = 100.0f;
         nextCount = (intptr_t)msg + uVar1;
     }
 }
