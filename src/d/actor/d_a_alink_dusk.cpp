@@ -6,9 +6,6 @@
 #include "m_Do/m_Do_audio.h"
 
 bool armorQuickToggleCooldown = false;
-bool armorQuickToggleInitiated = false;
-u32 armorQuickToggleCounter = 0;
-u32 armorQuickToggleInitiatedTimer = 0;
 u32 armorQuickToggleCooldownTimer = 0;
 
 void daAlink_c::handleArmorsQuickToggle() {
@@ -17,7 +14,7 @@ void daAlink_c::handleArmorsQuickToggle() {
         return;
     }
 
-    // Have magic and zora armors
+    // Have magic armor or zora armor
     if (!dComIfGs_isItemFirstBit(dItemNo_WEAR_ZORA_e) && !dComIfGs_isItemFirstBit(dItemNo_ARMOR_e)) {
         return;
     }
@@ -27,38 +24,30 @@ void daAlink_c::handleArmorsQuickToggle() {
         return;
     }
 
-    if (!armorQuickToggleCooldown && mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getTrigX(PAD_1) && armorQuickToggleCounter < 2)
-    {
-        mDoCPd_c::getCpadInfo(PAD_1).mPressedButtonFlags = 0;
-        armorQuickToggleInitiated = true;
-        armorQuickToggleCounter++;
-    }
-
-    if (armorQuickToggleInitiated) {
-        armorQuickToggleInitiatedTimer++;
-        if (armorQuickToggleInitiatedTimer >= 15) {
-            armorQuickToggleInitiated = false;
-            armorQuickToggleCooldown = true;
-            armorQuickToggleInitiatedTimer = 0;
-            armorQuickToggleCooldownTimer = 0;
-            setClothesChange(0);
-            mDoAud_seStart(Z2SE_SY_ITEM_SET_X, 0, 0, 0);
-            if (armorQuickToggleCounter == 1) {
-                if (dComIfGs_getSelectEquipClothes() != dItemNo_WEAR_ZORA_e) {
-                    dComIfGs_setSelectEquipClothes(dItemNo_WEAR_ZORA_e);
+    if (mDoCPd_c::getHoldR(PAD_1)) {
+        if (!armorQuickToggleCooldown) {
+            if (mDoCPd_c::getTrigLeft(PAD_1) || mDoCPd_c::getTrigRight(PAD_1)) {
+                armorQuickToggleCooldown = true;
+                armorQuickToggleCooldownTimer = 0;
+                setClothesChange(0);
+                mDoAud_seStart(Z2SE_SY_ITEM_SET_X, 0, 0, 0);
+                if (mDoCPd_c::getTrigLeft(PAD_1) && dComIfGs_isItemFirstBit(dItemNo_WEAR_ZORA_e)) {
+                    if (dComIfGs_getSelectEquipClothes() != dItemNo_WEAR_ZORA_e) {
+                        dComIfGs_setSelectEquipClothes(dItemNo_WEAR_ZORA_e);
+                    }
+                    else {
+                        dComIfGs_setSelectEquipClothes(dItemNo_WEAR_KOKIRI_e);
+                    }
+                } else if (mDoCPd_c::getTrigRight(PAD_1) && dComIfGs_isItemFirstBit(dItemNo_ARMOR_e)) {
+                    if (dComIfGs_getSelectEquipClothes() != dItemNo_ARMOR_e) {
+                        dComIfGs_setSelectEquipClothes(dItemNo_ARMOR_e);
+                    }
+                    else {
+                        dComIfGs_setSelectEquipClothes(dItemNo_WEAR_KOKIRI_e);
+                    }
                 }
-                else {
-                    dComIfGs_setSelectEquipClothes(dItemNo_WEAR_KOKIRI_e);
-                }
-            } else if (armorQuickToggleCounter == 2 && dComIfGs_isItemFirstBit(dItemNo_ARMOR_e)) {
-                if (dComIfGs_getSelectEquipClothes() != dItemNo_ARMOR_e) {
-                    dComIfGs_setSelectEquipClothes(dItemNo_ARMOR_e);
-                }
-                else {
-                    dComIfGs_setSelectEquipClothes(dItemNo_WEAR_KOKIRI_e);
-                }
+                mDoCPd_c::getCpadInfo(PAD_1).mPressedButtonFlags = 0;
             }
-            armorQuickToggleCounter = 0;
         }
     }
 
