@@ -7,8 +7,9 @@
 #include <imgui_internal.h>
 
 #include "JSystem/JUtility/JUTGamePad.h"
-#include "dusk/audio/DuskDsp.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
+#include "dusk/audio/DuskDsp.hpp"
+#include "dusk/dusk.h"
 #include "dusk/hotkeys.h"
 #include "dusk/settings.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -38,13 +39,6 @@ namespace dusk {
                     ToggleFullscreen();
                 }
 
-                bool vsync = getSettings().video.enableVsync;
-                if (ImGui::Checkbox("Enable Vsync", &vsync)) {
-                    getSettings().video.enableVsync.setValue(vsync);
-                    aurora_enable_vsync(vsync);
-                    config::Save();
-                }
-
                 if (ImGui::MenuItem("Default Window Size")) {
                     getSettings().video.enableFullscreen.setValue(false);
                     VISetWindowFullscreen(false);
@@ -52,13 +46,38 @@ namespace dusk {
                     VICenterWindow();
                 }
 
+                bool vsync = getSettings().video.enableVsync;
+                if (ImGui::Checkbox("Enable Vsync", &vsync)) {
+                    getSettings().video.enableVsync.setValue(vsync);
+                    aurora_enable_vsync(vsync);
+                    config::Save();
+                }
+
+                bool lockAspect = getSettings().video.lockAspectRatio;
+                if (ImGui::Checkbox("Force 4:3 Aspect Ratio", &lockAspect)) {
+                    getSettings().video.lockAspectRatio.setValue(lockAspect);
+
+                    if (lockAspect) {
+                        VILockAspectRatio(defaultAspectRatioW, defaultAspectRatioH);
+                    } else {
+                        VIUnlockAspectRatio();
+                    }
+
+                    config::Save();
+                }
+
                 ImGui::EndMenu();
             }
 
             if (ImGui::BeginMenu("Audio")) {
                 ImGui::Text("Master Volume");
-                config::ImGuiSliderInt("##masterVolume", getSettings().audio.masterVolume, 0, 100);
-                config::ImGuiCheckbox("Enable Reverb", getSettings().audio.enableReverb);
+                if (config::ImGuiSliderInt("##masterVolume", getSettings().audio.masterVolume, 0, 100)) {
+                    dusk::audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
+                }
+
+                if (config::ImGuiCheckbox("Enable Reverb", getSettings().audio.enableReverb)) {
+                    dusk::audio::SetEnableReverb(getSettings().audio.enableReverb);
+                }
                 /*
                 // TODO: Implement additional settings
                 ImGui::Text("Main Music Volume");
@@ -77,9 +96,6 @@ namespace dusk {
                 if (audioMgr != nullptr) {
                 }
                 */
-
-                audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
-                audio::EnableReverb = getSettings().audio.enableReverb;
 
                 ImGui::EndMenu();
             }

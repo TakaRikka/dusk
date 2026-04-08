@@ -596,7 +596,8 @@ void dMeterMap_c::_draw() {
 #if TARGET_PC
     // Optimization: don't draw map if it's off-screen/invisible.
     // Especially useful in debug builds on Hyrule field etc., it's slow!
-    if ((!mMapIsInside && mSlidePositionOffset == getDispPosOutSide_OffsetX()) || mMapAlpha == 0) {
+    // That +3 is an arbitrary bias to avoid rounding issues causing this to fail.
+    if ((!mMapIsInside && mSlidePositionOffset <= getDispPosOutSide_OffsetX() + 3) || mMapAlpha == 0) {
         return;
     }
 #endif

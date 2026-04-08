@@ -1010,3 +1010,9 @@ int mDoMch_Create() {
 
     return 1;
 }
+
+#if TARGET_PC
+void mDoMch_Destroy() {
+    JFWSystem::shutdown();
+}
+#endif

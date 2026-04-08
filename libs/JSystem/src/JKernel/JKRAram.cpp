@@ -42,6 +42,12 @@ JKRAram* JKRAram::create(u32 aram_audio_buffer_size, u32 aram_audio_graph_size, 
     return sAramObject;
 }
 
+#if TARGET_PC
+void JKRAram::destroy() {
+    JKRDecomp::destroy();
+}
+#endif
+
 OSMessage JKRAram::sMessageBuffer[4] = {
     NULL,
     NULL,

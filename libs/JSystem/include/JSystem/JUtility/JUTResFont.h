@@ -18,6 +18,10 @@ struct BlockHeader {
     BE(u32) size;
 };
 
+#if TARGET_PC
+struct GlyphTextures;
+#endif
+
 /**
 * @ingroup jsystem-jutility
 * 
@@ -64,7 +68,11 @@ public:
     // some types uncertain, may need to be fixed
     /* 0x1C */ int mWidth;
     /* 0x20 */ int mHeight;
+#if TARGET_PC
+    GlyphTextures* mGlyphTextures;
+#else
     /* 0x24 */ TGXTexObj mTexObj;
+#endif
     /* 0x44 */ int mTexPageIdx;
     /* 0x48 */ const ResFONT* mResFont;
     /* 0x4C */ ResFONT::INF1* mInf1Ptr;

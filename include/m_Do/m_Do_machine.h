@@ -15,6 +15,9 @@ void my_SysPrintHeap(char const*, void*, u32);
 void mDoMch_HeapCheckAll();
 void mDoMch_HeapFreeFillAll();
 int mDoMch_Create();
+#if TARGET_PC
+void mDoMch_Destroy();
+#endif
 
 extern GXRenderModeObj g_ntscZeldaProg;
 

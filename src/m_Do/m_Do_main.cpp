@@ -110,6 +110,7 @@ s32 LOAD_COPYDATE(void*) {
 }
 
 AuroraInfo auroraInfo;
+AuroraStats dusk::lastFrameAuroraStats;
 const char* configPath;
 
 void main01(void) {
@@ -182,6 +183,7 @@ void main01(void) {
         VIWaitForRetrace();
 
 #if TARGET_PC
+        dusk::lastFrameAuroraStats = *aurora_get_stats();
         if (!aurora_begin_frame()) {
             DuskLog.debug("aurora_begin_frame returned false, skipping draw this frame");
             continue;
@@ -323,8 +325,8 @@ int game_main(int argc, char* argv[]) {
     config.startFullscreen = dusk::getSettings().video.enableFullscreen;
     config.windowPosX = -1;
     config.windowPosY = -1;
-    config.windowWidth = FB_WIDTH * 2;
-    config.windowHeight = FB_HEIGHT * 2;
+    config.windowWidth = defaultWindowWidth * 2;
+    config.windowHeight = defaultWindowHeight * 2;
     config.desiredBackend = ParseAuroraBackend(parsed_arg_options["backend"].as<std::string>());
     config.logCallback = &aurora_log_callback;
     config.logLevel = (AuroraLogLevel)parsed_arg_options["log-level"].as<uint8_t>();
@@ -365,6 +367,8 @@ int game_main(int argc, char* argv[]) {
 
     fflush(stdout);
     fflush(stderr);
+
+    mDoMch_Destroy();
 
     // Notifies all CVs and causes threads to exit
     OSResetSystem(OS_RESET_SHUTDOWN, 0, 0);

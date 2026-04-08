@@ -7,6 +7,7 @@ UserSettings g_userSettings = {
     .video = {
         .enableFullscreen {"video.enableFullscreen", false},
         .enableVsync {"video.enableVsync", true},
+        .lockAspectRatio {"video.lockAspectRatio", false},
     },
 
     .audio = {
@@ -66,6 +67,7 @@ void registerSettings() {
     // Video
     Register(g_userSettings.video.enableFullscreen);
     Register(g_userSettings.video.enableVsync);
+    Register(g_userSettings.video.lockAspectRatio);
 
     // Audio
     Register(g_userSettings.audio.masterVolume);
