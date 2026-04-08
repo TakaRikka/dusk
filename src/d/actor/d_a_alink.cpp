@@ -18781,7 +18781,6 @@ int daAlink_c::execute() {
     handleArmorsQuickToggle();
     #endif
 
-
     return 1;
 }
 
