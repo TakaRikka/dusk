@@ -2,21 +2,25 @@
 
 #include "d/d_select_icon.h"
 #include "JSystem/J2DGraph/J2DAnimation.h"
+#include "dusk/frame_interpolation.h"
 
 dSi_HIO_c::dSi_HIO_c() {}
 
 void dSelect_icon_c::animation() {
     if (field_0x10->getAlpha() != 0) {
-        field_0x20 += field_0x2c;
-        if (field_0x20 >= field_0x1c->getFrameMax()) {
-            field_0x20 = 0.0f;
+        const u32 ui_advance_ticks = dusk::frame_interp::get_presentation_ui_advance_ticks();
+        for (u32 i = 0; i < ui_advance_ticks; ++i) {
+            field_0x20 += field_0x2c;
+            if (field_0x20 >= field_0x1c->getFrameMax()) {
+                field_0x20 = 0.0f;
+            }
+
+            field_0x28 += field_0x2c;
+            if (field_0x28 >= field_0x24->getFrameMax()) {
+                field_0x28 = 0.0f;
+            }
         }
         field_0x1c->setFrame(field_0x20);
-
-        field_0x28 += field_0x2c;
-        if (field_0x28 >= field_0x24->getFrameMax()) {
-            field_0x28 = 0.0f;
-        }
 
         field_0x24->setFrame(field_0x28);
         field_0x8->animation();

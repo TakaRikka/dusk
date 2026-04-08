@@ -37,6 +37,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
 #include "m_Do/m_Do_main.h"
+#include "dusk/frame_interpolation.h"
 #include "tracy/Tracy.hpp"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
@@ -465,33 +466,48 @@ void darwFilter(GXColor matColor) {
     GXEnd();
 }
 
-void mDoGph_gInf_c::calcFade() {
-    if (mDoGph_gInf_c::mFade != 0) {
-        mFadeRate += mFadeSpeed;
+static void mDoGph_AdvanceFadeState() {
+    if (mDoGph_gInf_c::isFade() != 0) {
+        f32 fade_rate = mDoGph_gInf_c::getFadeRate() + mDoGph_gInf_c::getFadeSpeed();
 
-        if (mFadeRate < 0.0f) {
-            mFadeRate = 0.0f;
-            mDoGph_gInf_c::mFade = 0;
-        } else {
-            if (mFadeRate > 1.0f) {
-                mFadeRate = 1.0f;
-            }
+        if (fade_rate < 0.0f) {
+            fade_rate = 0.0f;
+            mDoGph_gInf_c::offFade();
+        } else if (fade_rate > 1.0f) {
+            fade_rate = 1.0f;
         }
-        mFadeColor.a = 255.0f * mFadeRate;
+
+        mDoGph_gInf_c::setFadeRate(fade_rate);
+        mDoGph_gInf_c::getFadeColor().a = 255.0f * fade_rate;
     } else {
+        GXColor& fade_color = mDoGph_gInf_c::getFadeColor();
         if (dComIfG_getBrightness() != 255) {
-            mFadeColor.r = 0;
-            mFadeColor.g = 0;
-            mFadeColor.b = 0;
-            mFadeColor.a = 255 - dComIfG_getBrightness();
+            fade_color.r = 0;
+            fade_color.g = 0;
+            fade_color.b = 0;
+            fade_color.a = 255 - dComIfG_getBrightness();
         } else {
-            mFadeColor.a = 0;
+            fade_color.a = 0;
         }
     }
+}
 
-    if (mFadeColor.a != 0) {
-        darwFilter(mFadeColor);
+static void mDoGph_AdvanceFadeState(u32 tick_count) {
+    for (u32 i = 0; i < tick_count; ++i) {
+        mDoGph_AdvanceFadeState();
     }
+}
+
+static void mDoGph_DrawStoredFade() {
+    GXColor& fade_color = mDoGph_gInf_c::getFadeColor();
+    if (fade_color.a != 0) {
+        darwFilter(fade_color);
+    }
+}
+
+void mDoGph_gInf_c::calcFade() {
+    mDoGph_AdvanceFadeState();
+    mDoGph_DrawStoredFade();
 }
 
 #if PLATFORM_WII || PLATFORM_SHIELD
@@ -819,6 +835,7 @@ int mDoGph_AfterOfDraw() {
 
     JUTVideo::getManager()->setRenderMode(mDoMch_render_c::getRenderModeObj());
     mDoGph_gInf_c::endFrame();
+    dusk::frame_interp::notify_sim_tick_complete();
     return 1;
 }
 
@@ -1690,11 +1707,15 @@ int mDoGph_Painter() {
     dusk::g_imguiConsole.PreDraw();
 #endif
 
+    const u32 pending_ui_ticks = dusk::frame_interp::begin_presentation_ui_pass();
+
     #if DEBUG
     drawHeapMap();
     #endif
 
-    dComIfGp_particle_calcMenu();
+    for (u32 i = 0; i < pending_ui_ticks; ++i) {
+        dComIfGp_particle_calcMenu();
+    }
 
     JFWDisplay::getManager()->setFader(mDoGph_gInf_c::getFader());
     mDoGph_gInf_c::setClearColor(mDoGph_gInf_c::getBackColor());
@@ -2159,7 +2180,8 @@ int mDoGph_Painter() {
                 if (strcmp(dComIfGp_getStartStageName(), "F_SP127") != 0 &&
                     (mDoGph_gInf_c::isFade() & 0x80) == 0)
                 {
-                    mDoGph_gInf_c::calcFade();
+                    mDoGph_AdvanceFadeState(pending_ui_ticks);
+                    mDoGph_DrawStoredFade();
                 }
 
                 #if DEBUG
@@ -2224,7 +2246,9 @@ int mDoGph_Painter() {
     #endif
 
     GXSetClipMode(GX_CLIP_ENABLE);
-    dDlst_list_c::calcWipe();
+    for (u32 i = 0; i < pending_ui_ticks; ++i) {
+        dDlst_list_c::calcWipe();
+    }
     j3dSys.reinitGX();
 
     ortho.setOrtho(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
@@ -2274,7 +2298,8 @@ int mDoGph_Painter() {
 
         if (strcmp(dComIfGp_getStartStageName(), "F_SP127") == 0 || (mDoGph_gInf_c::isFade() & 0x80) != 0)
         {
-            mDoGph_gInf_c::calcFade();
+            mDoGph_AdvanceFadeState(pending_ui_ticks);
+            mDoGph_DrawStoredFade();
         }
 
         GX_DEBUG_GROUP(dComIfGp_particle_draw2DmenuFore, &draw_info3);
@@ -2310,6 +2335,7 @@ int mDoGph_Painter() {
 #endif
 
     mDoGph_gInf_c::endRender();
+    dusk::frame_interp::end_presentation_ui_pass();
 
     #if WIDESCREEN_SUPPORT
     mDoGph_gInf_c::offWideZoom();
