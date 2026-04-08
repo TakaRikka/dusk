@@ -85,6 +85,12 @@ static void dummy() {
 }
 
 inline int daDemo00_c::create() {
+    #if TARGET_PC
+    if (g_dComIfG_gameInfo.play.getEvent()->mEventId == 0x903) {
+        mDoGph_gInf_c::setTickRate(OS_TIMER_CLOCK / 27);
+    }
+    #endif
+
     dKy_tevstr_init(&tevStr, dComIfGp_roomControl_getStayNo(), 0xFF);
     tevStr.field_0x384 = 1;
     mSound.init(&eyePos, NULL, 10, 1);
