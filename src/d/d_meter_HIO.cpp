@@ -2293,7 +2293,10 @@ void dMeter_drawHIO_c::updateOnWide() {
 
     g_drawHIO.mMainHUDButtonsPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mMainHUDButtonsPosX);
     g_drawHIO.mRingHUDButtonsPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mRingHUDButtonsPosX);
+    g_drawHIO.mLightDrop.mVesselPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mLightDrop.mVesselPosX);
+    g_drawHIO.mLightDrop.mVesselTalkPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mLightDrop.mVesselTalkPosX);
     g_drawHIO.mRupeeKeyPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mRupeeKeyPosX);
+    g_drawHIO.mOxygenMeterPosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mOxygenMeterPosX);
     g_drawHIO.mButtonCrossOFFPosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mButtonCrossOFFPosX);
     g_drawHIO.mButtonCrossONPosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mButtonCrossONPosX);
     g_drawHIO.mLifeGaugePosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mLifeGaugePosX);
