@@ -5939,6 +5939,8 @@ void daAlink_c::setItemMatrix(int param_0) {
     modelCalc(mpLinkHatModel);
 
     if (checkEquipHeavyBoots()) {
+        Mtx boot_mtx;
+
         for (int i = 0; i < 2; i++) {
             mpLinkBootModels[i]->setBaseTRMtx(mpLinkModel->getBaseTRMtx());
             modelCalc(mpLinkBootModels[i]);
@@ -5949,9 +5951,12 @@ void daAlink_c::setItemMatrix(int param_0) {
         mpLinkBootModels[0]->setAnmMtx(3, mpLinkModel->getAnmMtx(0x15));
 
         mDoMtx_stack_c::XrotS(-0x8000);
-        mDoMtx_concat(mpLinkModel->getAnmMtx(0x18), mDoMtx_stack_c::get(), mpLinkBootModels[1]->getAnmMtx(1));
-        mDoMtx_concat(mpLinkModel->getAnmMtx(0x19), mDoMtx_stack_c::get(), mpLinkBootModels[1]->getAnmMtx(2));
-        mDoMtx_concat(mpLinkModel->getAnmMtx(0x1A), mDoMtx_stack_c::get(), mpLinkBootModels[1]->getAnmMtx(3));
+        mDoMtx_concat(mpLinkModel->getAnmMtx(0x18), mDoMtx_stack_c::get(), boot_mtx);
+        mpLinkBootModels[1]->setAnmMtx(1, boot_mtx);
+        mDoMtx_concat(mpLinkModel->getAnmMtx(0x19), mDoMtx_stack_c::get(), boot_mtx);
+        mpLinkBootModels[1]->setAnmMtx(2, boot_mtx);
+        mDoMtx_concat(mpLinkModel->getAnmMtx(0x1A), mDoMtx_stack_c::get(), boot_mtx);
+        mpLinkBootModels[1]->setAnmMtx(3, boot_mtx);
     }
 
     if (!checkNoResetFlg2(FLG2_STATUS_WINDOW_DRAW)) {
