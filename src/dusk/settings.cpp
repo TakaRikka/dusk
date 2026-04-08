@@ -48,6 +48,7 @@ UserSettings g_userSettings = {
         .enableFastIronBoots {"game.enableFastIronBoots", false},
         .canTransformAnywhere {"game.canTransformAnywhere", false},
         .fastSpinner {"game.fastSpinner", false},
+        .freeMagicArmor {"game.freeMagicArmor", false},
 
         // Technical
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
@@ -91,6 +92,7 @@ void registerSettings() {
     Register(g_userSettings.game.useWaterProjectionOffset);
     Register(g_userSettings.game.enableFastIronBoots);
     Register(g_userSettings.game.canTransformAnywhere);
+    Register(g_userSettings.game.freeMagicArmor);
     Register(g_userSettings.game.restoreWiiGlitches);
     Register(g_userSettings.game.noMissClimbing);
     Register(g_userSettings.game.noLowHpSound);
