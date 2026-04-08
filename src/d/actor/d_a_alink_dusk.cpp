@@ -15,7 +15,8 @@ void daAlink_c::handleArmorsQuickToggle() {
     }
 
     // Have magic armor or zora armor
-    if (!dComIfGs_isItemFirstBit(dItemNo_WEAR_ZORA_e) && !dComIfGs_isItemFirstBit(dItemNo_ARMOR_e)) {
+    if (!dComIfGs_isItemFirstBit(dItemNo_WEAR_ZORA_e) && !dComIfGs_isItemFirstBit(dItemNo_ARMOR_e))
+    {
         return;
     }
 
@@ -34,15 +35,15 @@ void daAlink_c::handleArmorsQuickToggle() {
                 if (mDoCPd_c::getTrigLeft(PAD_1) && dComIfGs_isItemFirstBit(dItemNo_WEAR_ZORA_e)) {
                     if (dComIfGs_getSelectEquipClothes() != dItemNo_WEAR_ZORA_e) {
                         dComIfGs_setSelectEquipClothes(dItemNo_WEAR_ZORA_e);
-                    }
-                    else {
+                    } else {
                         dComIfGs_setSelectEquipClothes(dItemNo_WEAR_KOKIRI_e);
                     }
-                } else if (mDoCPd_c::getTrigRight(PAD_1) && dComIfGs_isItemFirstBit(dItemNo_ARMOR_e)) {
+                } else if (mDoCPd_c::getTrigRight(PAD_1) &&
+                           dComIfGs_isItemFirstBit(dItemNo_ARMOR_e))
+                {
                     if (dComIfGs_getSelectEquipClothes() != dItemNo_ARMOR_e) {
                         dComIfGs_setSelectEquipClothes(dItemNo_ARMOR_e);
-                    }
-                    else {
+                    } else {
                         dComIfGs_setSelectEquipClothes(dItemNo_WEAR_KOKIRI_e);
                     }
                 }
