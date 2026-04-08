@@ -111,6 +111,7 @@ s32 LOAD_COPYDATE(void*) {
 
 AuroraInfo auroraInfo;
 AuroraStats dusk::lastFrameAuroraStats;
+float dusk::frameUsagePct = 0.0f;
 const char* configPath;
 
 void main01(void) {

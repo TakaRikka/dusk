@@ -10,6 +10,7 @@ extern const char* configPath;
 
 namespace dusk {
     extern AuroraStats lastFrameAuroraStats;
+    extern float frameUsagePct;
 }
 
 constexpr u32 defaultWindowWidth = 608;

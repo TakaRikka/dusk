@@ -13,6 +13,7 @@
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTProcBar.h"
 #include "aurora/aurora.h"
+#include "dusk/dusk.h"
 #include "dusk/gx_helper.h"
 #include "dusk/logging.h"
 #include "dusk/settings.h"
@@ -358,10 +359,12 @@ static void waitForTick(u32 p1, u16 p2) {
     {
         static OSTime nextTick = OSGetTime();
         OSTime time = OSGetTime();
+        OSTime waitTime = (nextTick > time) ? (nextTick - time) : 0;
         while (time < nextTick) {
             JFWDisplay::getManager()->threadSleep((nextTick - time));
             time = OSGetTime();
         }
+        dusk::frameUsagePct = 100.0f * (1.0f - (float)waitTime / (float)p1);
         nextTick = time + p1;
     } else {
         static u32 nextCount = VIGetRetraceCount();

@@ -97,6 +97,7 @@ namespace dusk {
             hasPrevious = true;
 
             ImGuiStringViewText(fmt::format(FMT_STRING("FPS: {:.2f}\n"), io.Framerate));
+            ImGuiStringViewText(fmt::format(FMT_STRING("Frame usage: {:.1f}%\n"), frameUsagePct));
 
             if (hasPrevious) {
                 ImGui::Separator();
