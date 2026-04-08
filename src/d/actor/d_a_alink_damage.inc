@@ -187,6 +187,11 @@ int daAlink_c::setDamagePoint(int i_dmgAmount, BOOL i_checkZoraMag, BOOL i_setDm
     }
 
     if (checkMagicArmorNoDamage()) {
+#if TARGET_PC
+        if(dusk::getSettings().game.freeMagicArmor) {
+            i_dmgAmount = 0;
+        }
+#endif
         dComIfGp_setItemRupeeCount(-i_dmgAmount * 10);
     } else
     #if DEBUG

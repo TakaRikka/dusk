@@ -62,6 +62,7 @@ struct UserSettings {
         ConfigVar<bool> enableFastIronBoots;
         ConfigVar<bool> canTransformAnywhere;
         ConfigVar<bool> fastSpinner;
+        ConfigVar<bool> freeMagicArmor;
 
         // Technical
         ConfigVar<bool> restoreWiiGlitches;
