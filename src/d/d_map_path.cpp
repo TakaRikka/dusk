@@ -19,7 +19,7 @@ constexpr u16 kMapResolutionMultiplier = 4;
 // Line widths are relative to the framebuffer size. Since we're rendering to a separate
 // framebuffer, we have to scale them accordingly. The original game used about half of the
 // EFB for the map rendering, so this is a reasonable approximation.
-constexpr u8 kMapLineWidthMultiplier = 2;
+constexpr u8 kMapLineWidthMultiplier = 1;
 #endif
 
 void dMpath_n::dTexObjAggregate_c::create() {
