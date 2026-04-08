@@ -16,6 +16,7 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_main.h"
 #include "f_op/f_op_overlap_mng.h"
+#include "dusk/frame_interpolation.h"
 #include "dusk/memory.h"
 #include "dusk/settings.h"
 
@@ -168,6 +169,8 @@ void dScnName_c::setView() {
                      camera->view.far_);
     mDoMtx_lookAt(camera->view.viewMtx, &camera->view.lookat.eye, &camera->view.lookat.center,
                   camera->view.bank);
+    dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(camera->view.viewMtx),
+                                             camera->view.viewMtx);
     cMtx_inverse(camera->view.viewMtx, camera->view.invViewMtx);
     MTXCopy(camera->view.viewMtx, camera->view.viewMtxNoTrans);
     camera->view.viewMtxNoTrans[0][3] = 0.0f;

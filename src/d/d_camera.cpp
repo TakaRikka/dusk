@@ -20,6 +20,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
+#include "dusk/frame_interpolation.h"
 #include <cmath>
 #include <cstring>
 
@@ -11040,6 +11041,8 @@ static int camera_draw(camera_process_class* i_this) {
     C_MTXPerspective(process->view.projMtx, process->view.fovy, process->view.aspect, process->view.near_, process->view.far_);
     mDoMtx_lookAt(process->view.viewMtx, &process->view.lookat.eye, &process->view.lookat.center,
                   &process->view.lookat.up, process->view.bank);
+    dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(process->view.viewMtx),
+                                             process->view.viewMtx);
 
 #if WIDESCREEN_SUPPORT
     mDoGph_gInf_c::setWideZoomProjection(process->view.projMtx);

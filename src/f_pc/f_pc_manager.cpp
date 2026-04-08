@@ -64,7 +64,8 @@ void fpcM_Management(fpcM_ManagementFunc i_preExecuteFn, fpcM_ManagementFunc i_p
                 l_dvdError = false;
             }
 
-            cAPIGph_Painter();
+            // FRAME INTERP NOTE: cAPIGph_Painter() has been moved to m_Do_main so that it runs every frame
+            // cAPIGph_Painter();
 
             if (!dPa_control_c::isStatus(1)) {
                 fpcDt_Handler();
@@ -153,4 +154,3 @@ void* fpcM_JudgeInLayer(fpc_ProcID i_layerID, fpcCtIt_JudgeFunc i_judgeFunc, voi
 
     return NULL;
 }
-

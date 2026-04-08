@@ -6,6 +6,7 @@
 
 #include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DFifo.h"
+#include "dusk/frame_interpolation.h"
 #include <dusk/logging.h>
 
 void J3DGDSetGenMode(u8 nTexGens, u8 nChans, u8 nTevs, u8 nInds,
@@ -613,6 +614,11 @@ void J3DGDSetFogRangeAdj(GXBool enable, u16 center, GXFogAdjTable* table) {
 }
 
 void J3DFifoLoadPosMtxImm(MtxP mtx, u32 id) {
+    Mtx patched;
+    if (dusk::frame_interp::lookup_replacement(mtx, patched)) {
+        mtx = patched;
+    }
+
     J3DFifoWriteXFCmdHdr(4 * id, 12);
     J3DGXCmd1f32ptr(&mtx[0][0]);
     J3DGXCmd1f32ptr(&mtx[0][1]);
@@ -629,6 +635,11 @@ void J3DFifoLoadPosMtxImm(MtxP mtx, u32 id) {
 }
 
 void J3DFifoLoadNrmMtxImm(MtxP mtx, u32 id) {
+    Mtx patched;
+    if (dusk::frame_interp::lookup_replacement(mtx, patched)) {
+        mtx = patched;
+    }
+
     J3DFifoWriteXFCmdHdr(id * 3 + 0x400, 9);
     J3DGXCmd1f32ptr(&mtx[0][0]);
     J3DGXCmd1f32ptr(&mtx[0][1]);
