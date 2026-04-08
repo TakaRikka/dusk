@@ -52,9 +52,11 @@ JFWDisplay::JFWDisplay(JKRHeap* p_heap, JUTXfb::EXfbNumber xfb_num, bool enableA
 }
 
 JFWDisplay::~JFWDisplay() {
+    /*
     if (JUTVideo::getManager() != NULL) {
         waitBlanking(2);
     }
+    */
     JUTProcBar::destroy();
     JUTXfb::destroyManager();
     mXfbManager = NULL;
@@ -240,7 +242,7 @@ void JFWDisplay::beginRender() {
         JUTProcBar::getManager()->idleStart();
     }
 
-    waitForTick(mTickRate, mFrameRate);
+    // waitForTick(mTickRate, mFrameRate);
     JUTVideo::getManager()->waitRetraceIfNeed();
 
     OSTick tick = OSGetTick();
