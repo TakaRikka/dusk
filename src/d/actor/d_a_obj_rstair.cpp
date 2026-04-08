@@ -313,8 +313,15 @@ int daObjRotStair_c::Draw() {
             J3DTexMtxInfo* texMtxInfo = &material->getTexGenBlock()->getTexMtx(0)->getTexMtxInfo();
             if (texMtxInfo != NULL) {
                 Mtx lightMtx;
+
+                #if TARGET_PC
+                C_MTXLightPerspective(lightMtx, dComIfGd_getView()->fovy,
+                                      dComIfGd_getView()->aspect, 1.0f, 1.0f, dusk::getSettings().game.useWaterProjectionOffset ? -0.01f : 0.0f, 0);
+                #else
                 C_MTXLightPerspective(lightMtx, dComIfGd_getView()->fovy,
                                       dComIfGd_getView()->aspect, 1.0f, 1.0f, -0.01f, 0);
+                #endif
+
                 #if WIDESCREEN_SUPPORT
                 mDoGph_gInf_c::setWideZoomLightProjection(lightMtx);
                 #endif

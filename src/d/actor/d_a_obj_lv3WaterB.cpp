@@ -27,8 +27,15 @@ static int daObj_Lv3waterB_Draw(obj_lv3WaterB_class* i_this) {
         J3DTexMtxInfo* tex_mtx_info = &material_p->getTexGenBlock()->getTexMtx(0)->getTexMtxInfo();
         if (tex_mtx_info != NULL) {
             Mtx m;
+
+            #if TARGET_PC
+            C_MTXLightPerspective(m, dComIfGd_getView()->fovy, dComIfGd_getView()->aspect, 1.0f, 1.0f,
+                dusk::getSettings().game.useWaterProjectionOffset ? -0.015f : 0.0f, 0.0f);
+            #else
             C_MTXLightPerspective(m, dComIfGd_getView()->fovy, dComIfGd_getView()->aspect, 1.0f,
                                   1.0f, -0.015f, 0.0f);
+            #endif
+
             #if WIDESCREEN_SUPPORT
             mDoGph_gInf_c::setWideZoomLightProjection(m);
             #endif

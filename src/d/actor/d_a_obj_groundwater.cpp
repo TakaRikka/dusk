@@ -300,11 +300,19 @@ int daGrdWater_c::Draw() {
         J3DTexMtxInfo* mtxInfo = &material->getTexGenBlock()->getTexMtx(0)->getTexMtxInfo();
         if (mtxInfo != NULL) {
             Mtx afStack_50;
+
+            #if TARGET_PC
+            C_MTXLightPerspective(afStack_50, dComIfGd_getView()->fovy, dComIfGd_getView()->aspect,
+                                  1.0f, 1.0f, dusk::getSettings().game.useWaterProjectionOffset ? -0.01f : 0.0f, 0.0f);
+            #else
             C_MTXLightPerspective(afStack_50, dComIfGd_getView()->fovy, dComIfGd_getView()->aspect,
                                   1.0f, 1.0f, -0.01f, 0.0f);
+            #endif
+
             #if WIDESCREEN_SUPPORT
             mDoGph_gInf_c::setWideZoomLightProjection(afStack_50);
             #endif
+
             mtxInfo->setEffectMtx(afStack_50);
             modelData2->simpleCalcMaterial(0, (MtxP)j3dDefaultMtx);
         }
