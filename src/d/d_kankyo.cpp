@@ -821,12 +821,20 @@ static void dKy_FiveSenses_fullthrottle_dark_static1() {
             }
 
             if (kankyo->senses_ef_emitter1 != NULL) {
+                #if TARGET_PC
+                kankyo->senses_ef_emitter1->setGlobalParticleScale(mDoGph_gInf_c::getScale(), 1.0f);
+                #endif
+
                 kankyo->senses_ef_emitter1->setGlobalTranslation(particle_pos.x, particle_pos.y,
                                                                  particle_pos.z);
                 kankyo->senses_ef_emitter1->setGlobalAlpha(kankyo->senses_effect_strength * 255.0f);
             }
 
             if (kankyo->senses_ef_emitter2 != NULL) {
+                #if TARGET_PC
+                kankyo->senses_ef_emitter2->setGlobalParticleScale(mDoGph_gInf_c::getScale(), 1.0f);
+                #endif
+
                 kankyo->senses_ef_emitter2->setGlobalTranslation(particle_pos.x, particle_pos.y,
                                                                  particle_pos.z);
 
