@@ -107,7 +107,7 @@ set(GAME_INCLUDE_DIRS
     extern)
 
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
-    aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json)
+    aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient)
 
 if (DUSK_MOVIE_SUPPORT_REAL)
   if (TARGET libjpeg-turbo::turbojpeg-static)

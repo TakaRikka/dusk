@@ -4041,6 +4041,7 @@ void dKyr_drawSnow(Mtx drawMtx, u8** tex) {
 }
 
 void dKyr_drawStar(Mtx drawMtx, u8** tex) {
+    ZoneScoped;
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     dKankyo_star_Packet* star_packet = g_env_light.mpStarPacket;
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);

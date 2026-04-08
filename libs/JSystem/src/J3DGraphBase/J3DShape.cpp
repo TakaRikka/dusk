@@ -3,13 +3,13 @@
 #include "JSystem/J3DGraphBase/J3DShape.h"
 
 #include <dolphin/gd.h>
+#include <gd.h>
+#include <gx.h>
 #include "JSystem/J3DGraphBase/J3DFifo.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "JSystem/J3DGraphBase/J3DVertex.h"
-#include "JSystem/J3DGraphBase/J3DFifo.h"
-#include <gx.h>
-#include <gd.h>
 #include "JSystem/JKernel/JKRHeap.h"
+#include "tracy/Tracy.hpp"
 
 void J3DGDSetVtxAttrFmtv(GXVtxFmt, GXVtxAttrFmtList const*, bool);
 void J3DFifoLoadPosMtxImm(Mtx, u32);
@@ -318,6 +318,7 @@ void J3DShape::setArrayAndBindPipeline() const {
 }
 
 void J3DShape::drawFast() const {
+    ZoneScoped;
     if (sOldVcdVatCmd != mVcdVatCmd) {
         GXCallDisplayList(mVcdVatCmd, kVcdVatDLSize);
         sOldVcdVatCmd = mVcdVatCmd;

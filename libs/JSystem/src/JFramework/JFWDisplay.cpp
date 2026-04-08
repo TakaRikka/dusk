@@ -18,6 +18,7 @@
 #include "dusk/logging.h"
 #include "dusk/settings.h"
 #include "global.h"
+#include "tracy/Tracy.hpp"
 
 void JFWDisplay::ctor_subroutine(bool enableAlpha) {
     mEnableAlpha = enableAlpha;
@@ -349,6 +350,7 @@ void JFWDisplay::waitBlanking(int param_0) {
 }
 
 static void waitForTick(u32 p1, u16 p2) {
+    ZoneScopedC(tracy::Color::DimGray);
     #if TARGET_PC
     if (dusk::getTransientSettings().skipFrameRateLimit) {
         p1 = OS_TIMER_CLOCK / 120;

@@ -8,22 +8,23 @@
 // weak data from it (unlike here).
 
 #include "d/d_particle.h"
-#include "d/d_jnt_col.h"
+#include <cstdio>
+#include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
+#include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
-#include "JSystem/J3DGraphBase/J3DMaterial.h"
-#include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
+#include "JSystem/JMath/JMATrigonometric.h"
 #include "JSystem/JParticle/JPAEmitterManager.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
-#include "JSystem/JMath/JMATrigonometric.h"
-#include "d/d_s_play.h"
-#include <cstdio>
-#include "d/d_com_inf_game.h"
-#include "m_Do/m_Do_lib.h"
-#include "m_Do/m_Do_graphic.h"
-#include "f_op/f_op_actor_mng.h"
-#include "d/actor/d_a_player.h"
 #include "SSystem/SComponent/c_math.h"
+#include "d/actor/d_a_player.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_jnt_col.h"
+#include "d/d_s_play.h"
+#include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_graphic.h"
+#include "m_Do/m_Do_lib.h"
+#include "tracy/Tracy.hpp"
 
 #ifndef __MWERKS__
 #include "dusk/math.h"
@@ -1325,6 +1326,7 @@ void dPa_control_c::cleanup() {
 }
 
 void dPa_control_c::calc3D() {
+    ZoneScoped;
     if (isStatus(2)) {
         offStatus(2);
     } else {
@@ -1336,12 +1338,14 @@ void dPa_control_c::calc3D() {
 }
 
 void dPa_control_c::calc2D() {
+    ZoneScoped;
     for (u8 i = 14; i <= 16; i++) {
         mEmitterMng->calc(i);
     }
 }
 
 void dPa_control_c::calcMenu() {
+    ZoneScoped;
     if (mEmitterMng != NULL) {
         for (u8 i = 17; i <= 18; i++) {
             mEmitterMng->calc(i);

@@ -1,14 +1,15 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
-#include "JSystem/J3DGraphBase/J3DPacket.h"
+#include <cstring>
+#include <os.h>
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
+#include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "JSystem/J3DGraphBase/J3DShapeMtx.h"
 #include "JSystem/JKernel/JKRHeap.h"
-#include <os.h>
-#include <cstring>
 #include "global.h"
+#include "tracy/Tracy.hpp"
 
 J3DError J3DDisplayListObj::newDisplayList(u32 maxSize) {
     mMaxSize = ALIGN_NEXT(maxSize, 0x20);
@@ -207,12 +208,13 @@ bool J3DMatPacket::isSame(J3DMatPacket* pOther) const {
 }
 
 void J3DMatPacket::draw() {
+    ZoneScoped;
 #if TARGET_PC 
     j3dSys.setTexture(mpTexture);
 #endif
     mpMaterial->load();
 
-#if TARGET_PC
+#if DEBUG && TARGET_PC
     if (mpMaterial->mMaterialName != nullptr) {
         char buf[64];
         snprintf(buf, sizeof(buf), "Mat: %s", mpMaterial->mMaterialName);
@@ -239,7 +241,7 @@ void J3DMatPacket::draw() {
 
     J3DShape::resetVcdVatCache();
 
-#if TARGET_PC
+#if DEBUG && TARGET_PC
     if (mpMaterial->mMaterialName != nullptr) {
         GXPopDebugGroup();
     }
@@ -388,6 +390,7 @@ void J3DShapePacket::draw() {
 }
 
 void J3DShapePacket::drawFast() {
+    ZoneScoped;
     if (!checkFlag(J3DShpFlag_Hidden) && mpShape != NULL) {
         prepareDraw();
 

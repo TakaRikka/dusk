@@ -14,6 +14,7 @@
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/endian.h"
 #include "global.h"
+#include "tracy/Tracy.hpp"
 
 using namespace dusk::audio;
 
@@ -133,6 +134,7 @@ static void MixSubframe(DspSubframe& dst, const DspSubframe& src) {
 }
 
 void dusk::audio::DspRender(OutputSubframe& subframe) {
+    ZoneScoped;
     if (DumpAudio != sDumpWasActive) {
         sDumpWasActive = DumpAudio;
         if (DumpAudio) {
