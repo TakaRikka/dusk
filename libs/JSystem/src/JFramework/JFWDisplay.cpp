@@ -5,6 +5,7 @@
 #include <gx.h>
 #include <stdint.h>
 #include <vi.h>
+#include "SDL3/SDL_timer.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -384,6 +385,12 @@ static void waitForTick(u32 p1, u16 p2) {
 
 JSUList<JFWAlarm> JFWAlarm::sList(false);
 
+#if TARGET_PC
+void JFWDisplay::threadSleep(s64 time) {
+    SDL_DelayNS(OSTicksToMicroseconds(time) * 1'000);
+}
+#else
+
 static void JFWThreadAlarmHandler(OSAlarm* p_alarm, OSContext* p_ctx) {
     JFWAlarm* alarm = static_cast<JFWAlarm*>(p_alarm);
     alarm->removeLink();
@@ -401,6 +408,7 @@ void JFWDisplay::threadSleep(s64 time) {
     OSSuspendThread(alarm.getThread());
     OSRestoreInterrupts(status);
 }
+#endif
 
 static void dummy() {
     JUTXfb::getManager()->setDisplayingXfbIndex(0);
