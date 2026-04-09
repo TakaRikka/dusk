@@ -52,6 +52,16 @@ namespace dusk::audio {
         f32 resamplePos;
         // last consumed sample from decodeBuf
         s16 resamplePrev;
+
+        // low pass previous state
+        f32 prev_lp_out;  // out[n-1]
+        f32 prev_lp_in;   // in[n-1]
+
+        // biquad state
+        f32 biq_in1; // in[n-1]
+        f32 biq_in2; // in[n-2]
+        f32 biq_out1; // out[n-1]
+        f32 biq_out2; // out[n-2]
     };
 
     extern ChannelAuxData ChannelAux[DSP_CHANNELS];
