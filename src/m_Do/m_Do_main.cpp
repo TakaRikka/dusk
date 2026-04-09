@@ -286,8 +286,8 @@ static constexpr PADDefaultMapping defaultPadMapping = {
         {SDL_GAMEPAD_BUTTON_NORTH, PAD_BUTTON_Y},
         {SDL_GAMEPAD_BUTTON_START, PAD_BUTTON_START},
         {SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER, PAD_TRIGGER_Z},
-        {NATIVE_BUTTON_INVALID, PAD_TRIGGER_L},
-        {NATIVE_BUTTON_INVALID, PAD_TRIGGER_R},
+        {PAD_NATIVE_BUTTON_INVALID, PAD_TRIGGER_L},
+        {PAD_NATIVE_BUTTON_INVALID, PAD_TRIGGER_R},
         {SDL_GAMEPAD_BUTTON_DPAD_UP, PAD_BUTTON_UP},
         {SDL_GAMEPAD_BUTTON_DPAD_DOWN, PAD_BUTTON_DOWN},
         {SDL_GAMEPAD_BUTTON_DPAD_LEFT, PAD_BUTTON_LEFT},
@@ -366,7 +366,8 @@ int game_main(int argc, char* argv[]) {
     config.mem2Size = 24 * 1024 * 1024;
     config.allowJoystickBackgroundEvents = true;
     config.imGuiInitCallback = &aurora_imgui_init_callback;
-    config.defaultPadMapping = &defaultPadMapping;
+
+    PADSetDefaultMapping(&defaultPadMapping);
 
     auroraInfo = aurora_initialize(argc, argv, &config);
 
