@@ -153,8 +153,13 @@ void mDoLib_project(Vec* src, Vec* dst, JGeometry::TBox2<f32> viewport) {
         xOffset = (0.5f * ((2.0f * viewport.i.x) + viewport.f.x)) - (int)(FB_WIDTH / 2);
         xSize = FB_WIDTH;
     } else {
+        #if TARGET_PC
+        xOffset = mDoGph_gInf_c::getMinXF();
+        xSize = viewport.f.x * mDoGph_gInf_c::hudAspectScaleUp;
+        #else
         xOffset = viewport.i.x;
         xSize = viewport.f.x;
+        #endif
     }
 
     if (viewport.i.y != 0.0f) {
