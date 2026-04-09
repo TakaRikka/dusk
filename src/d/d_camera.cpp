@@ -5022,7 +5022,11 @@ bool dCamera_c::lockonCamera(s32 param_0) {
     f32 sp160;
     cSAngle ang6 = ang3 - ang2;
     curveWeight = mCamSetup.CurveWeight();
+    #if AVOID_UB
+    f32 sp15C = 0.0f;
+    #else
     f32 sp15C;
+    #endif
     f32 sp158 = mPadInfo.mCStick.mLastPosX;
     if (mCamParam.Flag(param_0, 0x40)) {
         sp158 = 0.0f;
