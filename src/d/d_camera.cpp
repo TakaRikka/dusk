@@ -2417,10 +2417,18 @@ f32 dCamera_c::radiusActorInSight(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cX
     dDlst_window_c* window = get_window(field_0x0);
     scissor_class* scissor = window->getScissor();
     f32 var_f29 = cAngle::d2r(i_fovY) * 0.5f;
+#if TARGET_PC
+    view_port_class* viewport = window->getViewPort();
+    f32 var_f28 = (scissor->height - mTrimHeight * 2.0f) / viewport->height;
+    f32 sp34 = var_f29 * var_f28 * (mTrimHeight < 0.01f ? 0.95f : 1.0f);
+    var_f29 *= mWindowAspect;
+    var_f28 = scissor->width / viewport->width;
+#else
     f32 var_f28 = (scissor->height - mTrimHeight * 2.0f) / FB_HEIGHT;
     f32 sp34 = var_f29 * var_f28 * (mTrimHeight < 0.01f ? 0.95f : 1.0f);
     var_f29 *= mWindowAspect;
     var_f28 = scissor->width / FB_WIDTH;
+#endif
     f32 sp30 = var_f29 * var_f28 * 0.85f;
 
     cXyz pos1 = attentionPos(i_actor1);
