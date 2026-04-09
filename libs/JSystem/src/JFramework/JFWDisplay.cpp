@@ -203,6 +203,12 @@ void JFWDisplay::preGX() {
     }
 }
 
+static s32 s_faderSimSteps = -1;
+
+void JFWDisplay::setFaderSimSteps(u32 steps) {
+    s_faderSimSteps = static_cast<s32>(steps);
+}
+
 void JFWDisplay::endGX() {
     s32 bufferNum = JUTXfb::getManager()->getBufferNum();
     u16 width = JUTVideo::getManager()->getFbWidth();
@@ -213,7 +219,17 @@ void JFWDisplay::endGX() {
 
     if (mFader != NULL) {
         ortho.setPort();
-        mFader->control();
+        u32 advance_count = 1;
+        if (s_faderSimSteps >= 0) {
+            advance_count = static_cast<u32>(s_faderSimSteps);
+            s_faderSimSteps = -1;
+        }
+        for (u32 i = 0; i < advance_count; i++) {
+            mFader->advance();
+        }
+        if (mFader->getStatus() != 1) {
+            mFader->draw();
+        }
     }
     ortho.setPort();
     JUTDbPrint::getManager()->flush();

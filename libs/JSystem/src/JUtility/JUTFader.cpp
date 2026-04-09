@@ -17,26 +17,26 @@ JUTFader::JUTFader(int x, int y, int width, int height, JUtility::TColor pColor)
     mEStatus = UNKSTATUS_M1;
 }
 
-void JUTFader::control() {
+void JUTFader::advance() {
     if (0 <= mEStatus && mEStatus-- == 0) {
-		mStatus = field_0x24;
-	}
+        mStatus = field_0x24;
+    }
 
-	if (mStatus == 1) {
-		return;
-	}
+    if (mStatus == 1) {
+        return;
+    }
 
-	switch (mStatus) {
+    switch (mStatus) {
     case 0:
         mColor.a = 0xFF;
         break;
     case 2:
-    #if AVOID_UB
+#if AVOID_UB
         if (field_0x8 == 0) {
             mStatus = 1;
             break;
         }
-    #endif
+#endif
         mColor.a = 0xFF - ((++field_0xa * 0xFF) / field_0x8);
 
         if (field_0xa >= field_0x8) {
@@ -45,12 +45,12 @@ void JUTFader::control() {
 
         break;
     case 3:
-    #if AVOID_UB
+#if AVOID_UB
         if (field_0x8 == 0) {
             mStatus = 0;
             break;
         }
-    #endif
+#endif
         mColor.a = ((++field_0xa * 0xFF) / field_0x8);
 
         if (field_0xa >= field_0x8) {
@@ -58,8 +58,14 @@ void JUTFader::control() {
         }
 
         break;
-	}
-	draw();
+    }
+}
+
+void JUTFader::control() {
+    advance();
+    if (mStatus != 1) {
+        draw();
+    }
 }
 
 void JUTFader::draw() {

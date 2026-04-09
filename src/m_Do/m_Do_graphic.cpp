@@ -2334,6 +2334,7 @@ int mDoGph_Painter() {
     dusk::g_imguiConsole.PostDraw();
 #endif
 
+    JFWDisplay::getManager()->setFaderSimSteps(pending_ui_ticks);
     mDoGph_gInf_c::endRender();
     dusk::frame_interp::end_presentation_ui_pass();
 
