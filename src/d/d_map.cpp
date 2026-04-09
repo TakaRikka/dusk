@@ -539,10 +539,16 @@ void renderingAmap_c::rendering(dDrawPath_c::poly_class const* i_poly) {
     }
 }
 
+/* Enabling the following definition will modify the following function to
+ * make the map look worse for extra speed in the emulator, especially in large
+ * areas such as hyrule field.
+ */
+#define HYRULE_FIELD_SPEEDHACK
+
 bool renderingAmap_c::isDrawOutSideTrim() {
     bool rt = false;
 
-    #if TARGET_PC
+    #ifdef HYRULE_FIELD_SPEEDHACK
     return 0;
     #endif
 
