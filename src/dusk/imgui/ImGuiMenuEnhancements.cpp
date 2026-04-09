@@ -111,6 +111,11 @@ namespace dusk {
                     ImGui::SetTooltip("Speeds up Spinner movement when holding R.");
                 }
 
+                config::ImGuiCheckbox("Free Magic Armor", getSettings().game.freeMagicArmor);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Makes the magic armor work without rupees.");
+                }
+
                 ImGui::EndMenu();
             }
 
