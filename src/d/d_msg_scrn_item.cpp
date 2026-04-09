@@ -411,7 +411,7 @@ void dMsgScrnItem_c::drawSelf() {
 
     f32 globalPosX = mpTm_c[0]->getGlobalPosX();
     
-    #if WIDESCREEN_SUPPORT
+    #if WIDESCREEN_SUPPORT && !TARGET_PC
     if (mDoGph_gInf_c::isWide()) {
         drawOutFont(g_MsgObject_HIO_c.mBoxItemTextPosX + 7.0f + YREG_F(2),
                     g_MsgObject_HIO_c.mBoxItemTextPosY, 1.0f);

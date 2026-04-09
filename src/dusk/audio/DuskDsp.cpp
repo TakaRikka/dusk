@@ -9,6 +9,7 @@
 #include <span>
 
 #include "Adpcm.hpp"
+#include "freeverb/revmodel.hpp"
 #include "JSystem/JAudio2/JASDriverIF.h"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/endian.h"
@@ -17,6 +18,9 @@
 using namespace dusk::audio;
 
 ChannelAuxData dusk::audio::ChannelAux[DSP_CHANNELS] = {};
+
+static revmodel SharedReverb;
+static bool ReverbHasTail = false;
 
 static bool sDumpWasActive = false;
 static FILE* sChannelDumpFiles[DSP_CHANNELS] = {};
@@ -140,37 +144,37 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
 
     std::span channels(JASDsp::CH_BUF, DSP_CHANNELS);
 
+    DspSubframe reverbInputL = {};
+    DspSubframe reverbInputR = {};
+    bool anyReverbInput = false;
+
     for (int i = 0; i < channels.size(); i++) {
         auto& channel = channels[i];
         auto& channelAux = ChannelAux[i];
 
-        bool skipRender = false;
-
         if (!channel.mIsActive) {
-            skipRender = true;
+            continue;
         }
         else if (channel.mPauseFlag) {
             // Not really sure what the practical difference between pause and
             // deactivation is. Either avoids clearing state or allows the DSP to avoid popping?
-            skipRender = true;
+            continue;
         }
         else if (channel.mForcedStop) {
             channel.mIsFinished = true;
-            skipRender = true;
+            continue;
         }
         else if (channel.mWaveAramAddress == 0) {
             // I think these are oscillator channels? Not backed by audio.
             // No idea how to implement these yet, so skip them.
             channel.mIsFinished = true;
-            skipRender = true;
+            continue;
         }
+
+        ValidateChannel(channel);
 
         OutputSubframe channelSubframe = {};
-
-        if (!skipRender) {
-            ValidateChannel(channel);
-            RenderChannel(channel, channelAux, channelSubframe);
-        }
+        RenderChannel(channel, channelAux, channelSubframe);
 
         if (EnableReverb) {
             // scale the input to the reverb rather than using wet/dry on the output.
@@ -178,36 +182,39 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
             // so any tail always decays at the correct level regardless of mAutoMixerFxMix changes
             // prevents transients when the next sound starts playing with a different reverb level
             // 600.0f was pulled out of my ass and just sounds good enough for console
-            f32 inputGain = (!skipRender) ? (channel.mAutoMixerFxMix >> 8) / 600.0f : 0.0f;
-
-            OutputSubframe reverbSubframe = {};
-            for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
-                reverbSubframe.channels[0][j] = channelSubframe.channels[0][j] * inputGain;
-                reverbSubframe.channels[1][j] = channelSubframe.channels[1][j] * inputGain;
-            }
-
-            channelAux.reverb.processreplace(
-                reverbSubframe.channels[0].data(), reverbSubframe.channels[1].data(),
-                reverbSubframe.channels[0].data(), reverbSubframe.channels[1].data(),
-                DSP_SUBFRAME_SIZE, 1
-            );
-
-            for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
-                channelSubframe.channels[0][j] += reverbSubframe.channels[0][j];
-                channelSubframe.channels[1][j] += reverbSubframe.channels[1][j];
+            f32 inputGain = (channel.mAutoMixerFxMix >> 8) / 600.0f;
+            if (inputGain > 0) {
+                anyReverbInput = true;
+                for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
+                    reverbInputL[j] += channelSubframe.channels[0][j] * inputGain;
+                    reverbInputR[j] += channelSubframe.channels[1][j] * inputGain;
+                }
             }
         }
 
         if (DumpAudio && sChannelDumpFiles[i]) {
+            f32 interleaved[DSP_SUBFRAME_SIZE * 2];
             for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
-                fwrite(&channelSubframe.channels[0][j], sizeof(f32), 1, sChannelDumpFiles[i]);
-                fwrite(&channelSubframe.channels[1][j], sizeof(f32), 1, sChannelDumpFiles[i]);
+                interleaved[j * 2 + 0] = channelSubframe.channels[0][j];
+                interleaved[j * 2 + 1] = channelSubframe.channels[1][j];
             }
+            fwrite(interleaved, sizeof(f32), DSP_SUBFRAME_SIZE * 2, sChannelDumpFiles[i]);
         }
 
         for (int o = 0; o < subframe.channels.size(); o++) {
             MixSubframe(subframe.channels[o], channelSubframe.channels[o]);
         }
+    }
+
+    if (EnableReverb && (anyReverbInput || ReverbHasTail)) {
+        // Equivalent to -80 dBFS: rms = 1e-4, rms^2 = 1e-8, sumSq = 2 * N * 1e-8
+        constexpr f32 REVERB_ENERGY_EPSILON = 2.0f * DSP_SUBFRAME_SIZE * 1e-8f;
+        f32 wetEnergy = SharedReverb.processmix(
+            reverbInputL.data(), reverbInputR.data(),
+            subframe.channels[0].data(), subframe.channels[1].data(),
+            DSP_SUBFRAME_SIZE, 1, 1.0f
+        );
+        ReverbHasTail = wetEnergy >= REVERB_ENERGY_EPSILON;
     }
 
     for (auto& channel : subframe.channels) {
@@ -341,7 +348,7 @@ static void FillDecodeBuf(JASDsp::TChannel& channel, ChannelAuxData& aux, int ne
         }
 
         aux.decodeBufCount += ReadChannelSamplesChunk(
-            channel, aux, std::min(remainingDecodeSpace, needed - aux.decodeBufCount), 
+            channel, aux, std::min(remainingDecodeSpace, needed - aux.decodeBufCount),
             aux.decodeBuf + aux.decodeBufCount, remainingDecodeSpace
         );
     }
@@ -491,17 +498,17 @@ static void RenderChannel(
     }
 
     DspSubframe audioLoadBuffer = {};
-    f64 pos = channelAux.resamplePos;
+    f32 pos = channelAux.resamplePos;
     s16 prev = channelAux.resamplePrev;
     s16 next = channelAux.decodeBufCount > 0 ? channelAux.decodeBuf[0] : prev;
     int srcIdx = 0;
 
     // linear resampling and f32 conversion
     for (int i = 0; i < DSP_SUBFRAME_SIZE; i++) {
-        audioLoadBuffer[i] = static_cast<f32>(prev + pos * (next - prev)) / 32768.0f;
+        audioLoadBuffer[i] = (prev + pos * (next - prev)) / 32768.0f;
         pos += step;
-        while (pos >= 1.0) {
-            pos -= 1.0;
+        while (pos >= 1.0f) {
+            pos -= 1.0f;
             prev = next;
             srcIdx++;
             next = srcIdx < channelAux.decodeBufCount ? channelAux.decodeBuf[srcIdx] : prev;
@@ -529,16 +536,13 @@ static void RenderChannel(
 }
 
 void dusk::audio::DspInit() {
-    for (int i = 0; i < DSP_CHANNELS; i++) {
-        auto& channelAux = ChannelAux[i];
-        channelAux.reverb.setwet(1.0f);
-        channelAux.reverb.setdry(0.0f);
-        channelAux.reverb.setroomsize(0.5f);
-        channelAux.reverb.setdamp(0.7f);
-        channelAux.reverb.setwidth(1.0f);
-        channelAux.reverb.setmode(0.0f);
-        channelAux.reverb.mute();
-    }
+    SharedReverb.setwet(1.0f);
+    SharedReverb.setdry(0.0f);
+    SharedReverb.setroomsize(0.5f);
+    SharedReverb.setdamp(0.7f);
+    SharedReverb.setwidth(1.0f);
+    SharedReverb.setmode(0.0f);
+    SharedReverb.mute();
 }
 
 void dusk::audio::ApplyVolume(
@@ -549,15 +553,13 @@ void dusk::audio::ApplyVolume(
     assert(dst.size() >= src.size());
 
     if (startVolume == endVolume) {
-        for (int i = 0; i < src.size(); i++) {
+        for (int i = 0; i < (int)src.size(); i++) {
             dst[i] = src[i] * startVolume;
         }
     } else {
         const f32 step = (endVolume - startVolume) / static_cast<f32>(src.size());
-        auto curVolume = startVolume;
-        for (int i = 0; i < src.size(); i++) {
-            dst[i] = src[i] * curVolume;
-            curVolume += step;
+        for (int i = 0; i < (int)src.size(); i++) {
+            dst[i] = src[i] * (startVolume + i * step);
         }
     }
 }

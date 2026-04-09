@@ -5,6 +5,7 @@
 // This code is public domain
 
 #include "revmodel.hpp"
+#include "denormals.h"
 
 revmodel::revmodel()
 {
@@ -71,14 +72,17 @@ void revmodel::mute()
 	}
 }
 
-void revmodel::processreplace(float *inputL, float *inputR, float *outputL, float *outputR, long numsamples, int skip)
+float revmodel::processreplace(float *inputL, float *inputR, float *outputL, float *outputR, long numsamples, int skip, float inputGain)
 {
-	float outL,outR,input;
+	float outL,outR;
+	float wetSumSqL = 0.0f, wetSumSqR = 0.0f;
+	long totalSamples = numsamples;
+	auto savedCSR = denormals_enable();
 
 	while(numsamples-- > 0)
 	{
 		outL = outR = 0;
-		input = (*inputL + *inputR) * gain;
+		float input = (*inputL + *inputR) * gain * inputGain;
 
 		// Accumulate comb filters in parallel
 		for(int i=0; i<numcombs; i++)
@@ -93,10 +97,15 @@ void revmodel::processreplace(float *inputL, float *inputR, float *outputL, floa
 			outL = allpassL[i].process(outL);
 			outR = allpassR[i].process(outR);
 		}
+
+		float wetL = outL*wet1 + outR*wet2;
+		float wetR = outR*wet1 + outL*wet2;
+		wetSumSqL += wetL*wetL;
+		wetSumSqR += wetR*wetR;
 
 		// Calculate output REPLACING anything already there
-		*outputL = outL*wet1 + outR*wet2 + *inputL*dry;
-		*outputR = outR*wet1 + outL*wet2 + *inputR*dry;
+		*outputL = wetL + *inputL*dry;
+		*outputR = wetR + *inputR*dry;
 
 		// Increment sample pointers, allowing for interleave (if any)
 		inputL += skip;
@@ -104,16 +113,22 @@ void revmodel::processreplace(float *inputL, float *inputR, float *outputL, floa
 		outputL += skip;
 		outputR += skip;
 	}
+
+	denormals_restore(savedCSR);
+	return wetSumSqL + wetSumSqR;
 }
 
-void revmodel::processmix(float *inputL, float *inputR, float *outputL, float *outputR, long numsamples, int skip)
+float revmodel::processmix(float *inputL, float *inputR, float *outputL, float *outputR, long numsamples, int skip, float inputGain)
 {
-	float outL,outR,input;
+	float outL,outR;
+	float wetSumSqL = 0.0f, wetSumSqR = 0.0f;
+	long totalSamples = numsamples;
+	auto savedCSR = denormals_enable();
 
 	while(numsamples-- > 0)
 	{
 		outL = outR = 0;
-		input = (*inputL + *inputR) * gain;
+		float input = (*inputL + *inputR) * gain * inputGain;
 
 		// Accumulate comb filters in parallel
 		for(int i=0; i<numcombs; i++)
@@ -129,9 +144,14 @@ void revmodel::processmix(float *inputL, float *inputR, float *outputL, float *o
 			outR = allpassR[i].process(outR);
 		}
 
+		float wetL = outL*wet1 + outR*wet2;
+		float wetR = outR*wet1 + outL*wet2;
+		wetSumSqL += wetL*wetL;
+		wetSumSqR += wetR*wetR;
+
 		// Calculate output MIXING with anything already there
-		*outputL += outL*wet1 + outR*wet2 + *inputL*dry;
-		*outputR += outR*wet1 + outL*wet2 + *inputR*dry;
+		*outputL += wetL + *inputL*dry;
+		*outputR += wetR + *inputR*dry;
 
 		// Increment sample pointers, allowing for interleave (if any)
 		inputL += skip;
@@ -139,6 +159,9 @@ void revmodel::processmix(float *inputL, float *inputR, float *outputL, float *o
 		outputL += skip;
 		outputR += skip;
 	}
+
+	denormals_restore(savedCSR);
+	return wetSumSqL + wetSumSqR;
 }
 
 void revmodel::update()

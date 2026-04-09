@@ -47,3 +47,5 @@ compile_commands.json
 *.ini
 *.controller
 pipeline_cache.bin
+
+extract

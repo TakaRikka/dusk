@@ -52,6 +52,11 @@ namespace dusk {
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Hides the TV calibration screen shown when loading a save");
                 }
+                
+                config::ImGuiCheckbox("Instant Saves", getSettings().game.instantSaves);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Skip the delay when writing to the Memory Card");
+                }
 
                 ImGui::EndMenu();
             }
@@ -99,6 +104,16 @@ namespace dusk {
                 config::ImGuiCheckbox("Can Transform Anywhere", getSettings().game.canTransformAnywhere);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Allows you to transform even if NPCs are looking");
+                }
+
+                config::ImGuiCheckbox("Fast Spinner", getSettings().game.fastSpinner);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Speeds up Spinner movement when holding R.");
+                }
+
+                config::ImGuiCheckbox("Free Magic Armor", getSettings().game.freeMagicArmor);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Makes the magic armor work without rupees.");
                 }
 
                 ImGui::EndMenu();

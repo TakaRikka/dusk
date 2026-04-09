@@ -16,8 +16,8 @@ class revmodel
 public:
 					revmodel();
 			void	mute();
-			void	processmix(float *inputL, float *inputR, float *outputL, float *outputR, long numsamples, int skip);
-			void	processreplace(float *inputL, float *inputR, float *outputL, float *outputR, long numsamples, int skip);
+			float	processmix(float *inputL, float *inputR, float *outputL, float *outputR, long numsamples, int skip, float inputGain);
+			float	processreplace(float *inputL, float *inputR, float *outputL, float *outputR, long numsamples, int skip, float inputGain);
 			void	setroomsize(float value);
 			float	getroomsize();
 			void	setdamp(float value);

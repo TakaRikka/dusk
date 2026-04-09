@@ -2287,7 +2287,22 @@ dMeter_drawHIO_c::dMeter_drawHIO_c() {
 }
 
 #if WIDESCREEN_SUPPORT
-void dMeter_drawHIO_c::updateOnWide() {}
+void dMeter_drawHIO_c::updateOnWide() {
+#if TARGET_PC
+    g_drawHIO = {}; // this might be a bad idea
+
+    g_drawHIO.mMainHUDButtonsPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mMainHUDButtonsPosX);
+    g_drawHIO.mRingHUDButtonsPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mRingHUDButtonsPosX);
+    g_drawHIO.mLightDrop.mVesselPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mLightDrop.mVesselPosX);
+    g_drawHIO.mLightDrop.mVesselTalkPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mLightDrop.mVesselTalkPosX);
+    g_drawHIO.mRupeeKeyPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mRupeeKeyPosX);
+    g_drawHIO.mOxygenMeterPosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mOxygenMeterPosX);
+    g_drawHIO.mButtonCrossOFFPosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mButtonCrossOFFPosX);
+    g_drawHIO.mButtonCrossONPosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mButtonCrossONPosX);
+    g_drawHIO.mLifeGaugePosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mLifeGaugePosX);
+    g_drawHIO.mLanternMeterPosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mLanternMeterPosX);
+#endif
+}
 
 void dMeter_drawHIO_c::updateOffWide() {}
 #endif
@@ -3003,7 +3018,7 @@ void dMeter_drawHIO_c::updateFMsgDebug() {
 #endif
 
 dMeter_ringHIO_c::dMeter_ringHIO_c() {
-#if WIDESCREEN_SUPPORT
+#if WIDESCREEN_SUPPORT && !TARGET_PC
     updateOnWide();
 #else
     mRingRadiusH = 175.0f;

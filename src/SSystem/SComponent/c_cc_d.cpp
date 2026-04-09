@@ -6,6 +6,7 @@
 #include "SSystem/SComponent/c_cc_d.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include <cmath>
+#include "dusk/logging.h"
 
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
 
@@ -65,9 +66,23 @@ void cCcD_DivideArea::CalcDivideInfo(cCcD_DivideInfo* pDivideInfo, const cM3dGAa
         if (!mXDiffIsZero) {
             s32 var1 = mInvScaledXDiff * (aab.GetMinP()->x - GetMinP()->x);
             s32 var3 = mInvScaledXDiff * (aab.GetMaxP()->x - GetMinP()->x);
+#if TARGET_PC
+            // yDiv seems to be the problematic part here, but I clamped xDiv and zDiv too just in case.
+            // Unlike var1, var3 being greater than 31 isn't logged because it is every frame and the original code accounted for that.
+            // This goes for yDiv and zDiv as well.
+            if (var1 < 0 || var1 > 31) {
+                DuskLog.warn("CalcDivideInfo: xDiv var1 out of range: {}", var1);
+            }
+            if (var3 < 0) {
+                DuskLog.warn("CalcDivideInfo: xDiv var3 out of range: {}", var3);
+            }
+            var1 = var1 < 0 ? 0 : var1 > 31 ? 31 : var1;
+            var3 = var3 < 0 ? 0 : var3 > 31 ? 31 : var3;
+#else
             if (31 < var3) {
                 var3 = 31;
             }
+#endif
 
             xDivInfo = l_base[var3];
             if (0 < var1) {
@@ -81,9 +96,22 @@ void cCcD_DivideArea::CalcDivideInfo(cCcD_DivideInfo* pDivideInfo, const cM3dGAa
         if (!mYDiffIsZero) {
             s32 var1 = mInvScaledYDiff * (aab.GetMinP()->y - GetMinP()->y);
             s32 var3 = mInvScaledYDiff * (aab.GetMaxP()->y - GetMinP()->y);
+#if TARGET_PC
+            // When the Epona taming minigame starts as Wolf Link, yDiv var1 can be 32.
+            // When the Epona taming minigame ends, yDiv var1 and var3 can both be INT_MIN.
+            if (var1 < 0 || var1 > 31) {
+                DuskLog.warn("CalcDivideInfo: yDiv var1 out of range: {}", var1);
+            }
+            if (var3 < 0) {
+                DuskLog.warn("CalcDivideInfo: yDiv var3 out of range: {}", var3);
+            }
+            var1 = var1 < 0 ? 0 : var1 > 31 ? 31 : var1;
+            var3 = var3 < 0 ? 0 : var3 > 31 ? 31 : var3;
+#else
             if (31 < var3) {
                 var3 = 31;
             }
+#endif
 
             yDivInfo = l_base[var3];
             if (0 < var1) {
@@ -97,9 +125,20 @@ void cCcD_DivideArea::CalcDivideInfo(cCcD_DivideInfo* pDivideInfo, const cM3dGAa
         if (!mZDiffIsZero) {
             s32 var1 = mInvScaledZDiff * (aab.GetMinP()->z - GetMinP()->z);
             s32 var3 = mInvScaledZDiff * (aab.GetMaxP()->z - GetMinP()->z);
+#if TARGET_PC
+            if (var1 < 0 || var1 > 31) {
+                DuskLog.warn("CalcDivideInfo: zDiv var1 out of range: {}", var1);
+            }
+            if (var3 < 0) {
+                DuskLog.warn("CalcDivideInfo: zDiv var3 out of range: {}", var3);
+            }
+            var1 = var1 < 0 ? 0 : var1 > 31 ? 31 : var1;
+            var3 = var3 < 0 ? 0 : var3 > 31 ? 31 : var3;
+#else
             if (31 < var3) {
                 var3 = 31;
             }
+#endif
 
             zDivInfo = l_base[var3];
             if (0 < var1) {

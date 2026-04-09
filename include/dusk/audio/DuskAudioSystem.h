@@ -8,6 +8,8 @@ namespace dusk::audio {
      */
     void Initialize();
 
+    void SetEnableReverb(bool value);
+
     void SetMasterVolume(f32 value);
 
     u32 GetResetCount(int channelIdx);

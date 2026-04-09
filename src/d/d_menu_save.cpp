@@ -18,6 +18,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include "d/d_msg_scrn_explain.h"
+#include "dusk/settings.h"
 #include "JSystem/J2DGraph/J2DAnmLoader.h"
 #include "f_op/f_op_msg_mng.h"
 
@@ -384,7 +385,12 @@ void dMenu_save_c::screenSet() {
 
     mSelectedFile = dComIfGs_getDataNum();
     mSelIcon = JKR_NEW dSelect_cursor_c(0, 1.0f, NULL);
+
+    #if TARGET_PC
+    mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.94f, 0.03f, 0.7f, 0.7f);
+    #else
     mSelIcon->setParam(0.96f, 0.94f, 0.03f, 0.7f, 0.7f);
+    #endif
 
     Vec pos;
     pos = mpSelData[mSelectedFile]->getGlobalVtxCenter(false, 0);
@@ -1177,7 +1183,7 @@ void dMenu_save_c::cardFormatYesSel2Disp() {
     bool moveAnm = yesnoMenuMoveAnm();
 
     if (txtChangeAnm == true && moveAnm == true) {
-        mWaitTimer = g_msHIO.mCardWaitFrames;
+        mWaitTimer = dusk::getSettings().game.instantSaves ? 0 : g_msHIO.mCardWaitFrames;
         g_mDoMemCd_control.command_format();
         mMenuProc = PROC_MEMCARD_FORMAT;
     }
@@ -1249,7 +1255,7 @@ void dMenu_save_c::makeGameFileDisp() {
     bool ketteiDispAnm = ketteiTxtDispAnm();
 
     if (txtChangeAnm == true && moveAnm == true && ketteiDispAnm == true) {
-        mWaitTimer = g_msHIO.mCardWaitFrames;
+        mWaitTimer = dusk::getSettings().game.instantSaves ? 0 : g_msHIO.mCardWaitFrames;
         setInitSaveData();
         dataSave();
         mMenuProc = PROC_MEMCARD_MAKE_GAME_FILE;
@@ -1943,7 +1949,7 @@ void dMenu_save_c::saveMoveDisp() {
 
     if (headerTxtChanged == true && yesnoAnmComplete == true && ketteiAnmComplete == true &&
         modoruAnmComplete == 1 && check == 1) {
-        mWaitTimer = g_msHIO.mCardWaitFrames;
+        mWaitTimer = dusk::getSettings().game.instantSaves ? 0 : g_msHIO.mCardWaitFrames;
         dataWrite();
         mMenuProc = PROC_MEMCARD_DATA_SAVE_WAIT;
     }
@@ -1961,7 +1967,7 @@ void dMenu_save_c::saveMoveDisp2() {
 
     if (headerTxtChanged == true && dataMoveAnm == true && wakuAnmComplete == true &&
         ketteiAnmComplete == true && modoruAnmComplete == 1 && check == 1) {
-        mWaitTimer = g_msHIO.mCardWaitFrames;
+        mWaitTimer = dusk::getSettings().game.instantSaves ? 0 : g_msHIO.mCardWaitFrames;
         dataWrite();
         mMenuProc = PROC_MEMCARD_DATA_SAVE_WAIT;
     }
@@ -2516,7 +2522,12 @@ void dMenu_save_c::yesnoCursorShow() {
         Vec pos = mpNoYes[mYesNoCursor]->getGlobalVtxCenter(false, 0);
         mSelIcon->setPos(pos.x, pos.y, mpNoYes[mYesNoCursor]->getPanePtr(), true);
         mSelIcon->setAlphaRate(1.0f);
+
+        #if TARGET_PC
+        mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.84f, 0.06f, 0.5f, 0.5f);
+        #else
         mSelIcon->setParam(0.96f, 0.84f, 0.06f, 0.5f, 0.5f);
+        #endif
     }
 }
 
@@ -2664,7 +2675,12 @@ void dMenu_save_c::selFileCursorShow() {
     Vec pos = mpSelData[mSelectedFile]->getGlobalVtxCenter(false, 0);
     mSelIcon->setPos(pos.x, pos.y, mpSelData[mSelectedFile]->getPanePtr(), true);
     mSelIcon->setAlphaRate(1.0f);
+
+    #if TARGET_PC
+    mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.94f, 0.03f, 0.7f, 0.7f);
+    #else
     mSelIcon->setParam(0.96f, 0.94f, 0.03f, 0.7f, 0.7f);
+    #endif
 }
 
 void dMenu_save_c::yesnoWakuAlpahAnmInit(u8 yesnoIdx, u8 startAlpha, u8 endAlpha, u8 anmTimer) {
@@ -2763,6 +2779,43 @@ void dMenu_save_c::_draw() {
     }
 }
 
+#if TARGET_PC
+void dMenu_save_c::menuSaveWide() {
+    mSaveSel.Scr->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
+    mSaveSel.Scr->translate(mDoGph_gInf_c::getMinXF(), 0.0f);
+
+    mSaveSel.Scr->search(MULTI_CHAR('t_for'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('t_for1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    mSaveSel.Scr->search(MULTI_CHAR('w_btn_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    mSaveSel.Scr->search(MULTI_CHAR('w_n_bk00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('w_n_bk01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('w_n_bk02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    mSaveSel.Scr->search(MULTI_CHAR('w_dat_i0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('w_dat_i1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('w_dat_i2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    mSaveSel.Scr->search(MULTI_CHAR('w_no_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('f_no_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('w_yes_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('f_yes_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Spirals
+    mSaveSel.Scr->search(MULTI_CHAR('w_uzu00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('w_uzu01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('w_uzu02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('w_uzu03'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('w_uzu04'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('w_uzu05'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('w_uzu06'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('w_uzu07'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('w_uzu08'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSaveSel.Scr->search(MULTI_CHAR('w_uzu09'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+}
+#endif
+
 void dMenu_save_c::_draw2() {
     if (field_0x21a1 == 0) {
         if (mpScrnExplain != NULL) {
@@ -2770,6 +2823,10 @@ void dMenu_save_c::_draw2() {
         }
 
         if (mDisplayMenu) {
+            #if TARGET_PC
+            menuSaveWide();
+            #endif
+
             dComIfGd_set2DOpa(&mSaveSel);
 
             for (int i = 0; i < 3; i++) {

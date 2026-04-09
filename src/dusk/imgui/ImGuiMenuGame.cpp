@@ -7,11 +7,15 @@
 #include <imgui_internal.h>
 
 #include "JSystem/JUtility/JUTGamePad.h"
-#include "dusk/audio/DuskDsp.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
+#include "dusk/audio/DuskDsp.hpp"
+#include "dusk/dusk.h"
 #include "dusk/hotkeys.h"
 #include "dusk/settings.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include "m_Do/m_Do_graphic.h"
+
+#include <aurora/gfx.h>
 
 namespace dusk {
     void ImGuiMenuGame::ToggleFullscreen() {
@@ -35,13 +39,45 @@ namespace dusk {
                     ToggleFullscreen();
                 }
 
+                if (ImGui::MenuItem("Default Window Size")) {
+                    getSettings().video.enableFullscreen.setValue(false);
+                    VISetWindowFullscreen(false);
+                    VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
+                    VICenterWindow();
+                }
+
+                bool vsync = getSettings().video.enableVsync;
+                if (ImGui::Checkbox("Enable Vsync", &vsync)) {
+                    getSettings().video.enableVsync.setValue(vsync);
+                    aurora_enable_vsync(vsync);
+                    config::Save();
+                }
+
+                bool lockAspect = getSettings().video.lockAspectRatio;
+                if (ImGui::Checkbox("Force 4:3 Aspect Ratio", &lockAspect)) {
+                    getSettings().video.lockAspectRatio.setValue(lockAspect);
+
+                    if (lockAspect) {
+                        VILockAspectRatio(defaultAspectRatioW, defaultAspectRatioH);
+                    } else {
+                        VIUnlockAspectRatio();
+                    }
+
+                    config::Save();
+                }
+
                 ImGui::EndMenu();
             }
 
             if (ImGui::BeginMenu("Audio")) {
                 ImGui::Text("Master Volume");
-                config::ImGuiSliderInt("##masterVolume", getSettings().audio.masterVolume, 0, 100);
-                config::ImGuiCheckbox("Enable Reverb", getSettings().audio.enableReverb);
+                if (config::ImGuiSliderInt("##masterVolume", getSettings().audio.masterVolume, 0, 100)) {
+                    dusk::audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
+                }
+
+                if (config::ImGuiCheckbox("Enable Reverb", getSettings().audio.enableReverb)) {
+                    dusk::audio::SetEnableReverb(getSettings().audio.enableReverb);
+                }
                 /*
                 // TODO: Implement additional settings
                 ImGui::Text("Main Music Volume");
@@ -60,9 +96,6 @@ namespace dusk {
                 if (audioMgr != nullptr) {
                 }
                 */
-
-                audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
-                audio::EnableReverb = getSettings().audio.enableReverb;
 
                 ImGui::EndMenu();
             }
@@ -83,9 +116,9 @@ namespace dusk {
 
     static void drawVirtualStick(const char* id, const ImVec2& stick) {
         float scale = ImGuiScale();
-        ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x + 5 * scale, ImGui::GetCursorPos().y));
+        ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x + 45 * scale, ImGui::GetCursorPos().y + 10));
 
-        ImGui::BeginChild(id, ImVec2(80 * scale, 80 * scale));
+        ImGui::BeginChild(id, ImVec2(80 * scale, 80 * scale), 0, ImGuiWindowFlags_NoBackground);
         ImDrawList* dl = ImGui::GetWindowDrawList();
         ImVec2 p = ImGui::GetCursorScreenPos();
 
@@ -189,6 +222,7 @@ namespace dusk {
         // controller selection combo box
         bool changedController = false;
         int changedControllerIndex = 0;
+        ImGui::SetNextItemWidth(400.0f * scale);
         if (ImGui::BeginCombo("##ControllerDeviceList", currentName.c_str())) {
             for (int i = 0; const auto& name : controllerList) {
                 if (ImGui::Selectable(name.c_str(), currentName == name)) {
@@ -267,7 +301,7 @@ namespace dusk {
         uint32_t axisCount;
         PADAxisMapping* axisMappingList = PADGetAxisMappings(m_controllerConfig.m_selectedPort, &axisCount);
 
-        ImGuiBeginGroupPanel("Triggers", ImVec2(150 * scale, 20 * scale));
+        ImGuiBeginGroupPanel("Analog Triggers", ImVec2(150 * scale, 20 * scale));
 
         PADAxis triggers[] = {PAD_AXIS_TRIGGER_L, PAD_AXIS_TRIGGER_R};
         if (axisMappingList != nullptr) {
@@ -301,10 +335,33 @@ namespace dusk {
             }
         }
 
+        int port = m_controllerConfig.m_selectedPort;
+        PADDeadZones* deadZones = PADGetDeadZones(port);
+
+        if (deadZones != nullptr) {
+            ImGui::Text("L Threshold");
+            ImGui::SameLine();
+            {
+                float tmp = static_cast<float>(deadZones->leftTriggerActivationZone * 100.f) / 32767.f;
+                if (ImGui::DragFloat("##LThreshold", &tmp, 0.5f, 0.f, 100.f, "%.3f%%")) {
+                    deadZones->leftTriggerActivationZone = static_cast<u16>((tmp / 100.f) * 32767);
+                }
+            }
+        }
+
+        if (deadZones != nullptr) {
+            ImGui::Text("R Threshold");
+            ImGui::SameLine();
+            {
+                float tmp = static_cast<float>(deadZones->rightTriggerActivationZone * 100.f) / 32767.f;
+                if (ImGui::DragFloat("##RThreshold", &tmp, 0.5f, 0.f, 100.f, "%.3f%%")) {
+                    deadZones->rightTriggerActivationZone = static_cast<u16>((tmp / 100.f) * 32767);
+                }
+            }
+        }
+
         ImGuiEndGroupPanel();
         ImGui::SameLine();
-
-        int port = m_controllerConfig.m_selectedPort;
 
         // main stick panel
         ImGuiBeginGroupPanel("Control Stick", ImVec2(150 * scale, 20 * scale));
@@ -354,8 +411,6 @@ namespace dusk {
                 }
             }
         }
-
-        PADDeadZones* deadZones = PADGetDeadZones(port);
 
         if (deadZones != nullptr) {
             ImGui::Text("Dead Zone");
@@ -425,32 +480,6 @@ namespace dusk {
                 float tmp = static_cast<float>(deadZones->substickDeadZone * 100.f) / 32767.f;
                 if (ImGui::DragFloat("##subDeadZone", &tmp, 0.5f, 0.f, 100.f, "%.3f%%")) {
                     deadZones->substickDeadZone = static_cast<u16>((tmp / 100.f) * 32767);
-                }
-            }
-        }
-
-        ImGuiEndGroupPanel();
-        ImGui::SameLine();
-
-        // Triggers Panel
-        ImGuiBeginGroupPanel("Triggers", ImVec2(150 * scale, 20 * scale));
-
-        if (deadZones != nullptr) {
-            ImGui::Text("L Threshold");
-            {
-                float tmp = static_cast<float>(deadZones->leftTriggerActivationZone * 100.f) / 32767.f;
-                if (ImGui::DragFloat("##LThreshold", &tmp, 0.5f, 0.f, 100.f, "%.3f%%")) {
-                    deadZones->leftTriggerActivationZone = static_cast<u16>((tmp / 100.f) * 32767);
-                }
-            }
-        }
-        
-        if (deadZones != nullptr) {
-            ImGui::Text("R Threshold");
-            {
-                float tmp = static_cast<float>(deadZones->rightTriggerActivationZone * 100.f) / 32767.f;
-                if (ImGui::DragFloat("##RThreshold", &tmp, 0.5f, 0.f, 100.f, "%.3f%%")) {
-                    deadZones->rightTriggerActivationZone = static_cast<u16>((tmp / 100.f) * 32767);
                 }
             }
         }

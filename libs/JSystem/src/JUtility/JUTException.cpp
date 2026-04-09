@@ -101,6 +101,9 @@ JUTException* JUTException::create(JUTDirectPrint* directPrint) {
 OSMessage JUTException::sMessageBuffer[1] = {0};
 
 void* JUTException::run() {
+#ifdef TARGET_PC
+    return NULL;
+#else
     u32 msr = PPCMfmsr();
     msr &= ~0x0900;
     PPCMtmsr(msr);
@@ -132,6 +135,7 @@ void* JUTException::run() {
         sErrorManager->mDirectPrint->changeFrameBuffer(mFrameMemory);
         sErrorManager->printContext(error, context, r24, r23);
     }
+#endif
 }
 
 void* JUTException::sConsoleBuffer;
@@ -145,6 +149,7 @@ u32 JUTException::msr;
 u32 JUTException::fpscr;
 
 void JUTException::errorHandler(OSError error, OSContext* context, u32 param_3, u32 param_4) {
+#ifndef TARGET_PC
     msr = PPCMfmsr();
     fpscr = context->fpscr;
     OSFillFPUContext(context);
@@ -165,6 +170,7 @@ void JUTException::errorHandler(OSError error, OSContext* context, u32 param_3, 
     OSSendMessage(&sMessageQueue, &exCallbackObject, OS_MESSAGE_BLOCK);
     OSEnableScheduler();
     OSYieldThread();
+#endif
 }
 
 void JUTException::panic_f_va(char const* file, int line, char const* format, va_list args) {
@@ -234,6 +240,7 @@ void JUTException::showFloatSub(int index, f32 value) {
 }
 
 void JUTException::showFloat(OSContext* context) {
+#ifndef TARGET_PC
     if (!sConsole) {
         return;
     }
@@ -251,6 +258,7 @@ void JUTException::showFloat(OSContext* context) {
     sConsole->print(" ");
     showFloatSub(21, context->fpr[21]);
     sConsole->print("\n");
+#endif
 }
 
 bool JUTException::searchPartialModule(u32 address, u32* module_id, u32* section_id,
@@ -333,6 +341,7 @@ void JUTException::showStack(OSContext* context) {
 }
 
 void JUTException::showMainInfo(u16 error, OSContext* context, u32 dsisr, u32 dar) {
+#ifndef TARGET_PC
     if (!sConsole) {
         return;
     }
@@ -391,9 +400,11 @@ void JUTException::showMainInfo(u16 error, OSContext* context, u32 dsisr, u32 da
     }
     sConsole->print_f("SRR0:   %08XH   SRR1:%08XH\n", context->srr0, context->srr1);
     sConsole->print_f("DSISR:  %08XH   DAR: %08XH\n", dsisr, dar);
+#endif
 }
 
 void JUTException::showGPR(OSContext* context) {
+#ifndef TARGET_PC
     if (!sConsole) {
         return;
     }
@@ -404,6 +415,7 @@ void JUTException::showGPR(OSContext* context) {
                           context->gpr[i + 11], i + 22, context->gpr[i + 22]);
     }
     sConsole->print_f("R%02d:%08XH  R%02d:%08XH\n", 10, context->gpr[10], 21, context->gpr[21]);
+#endif
 }
 
 bool JUTException::showMapInfo_subroutine(u32 address, bool begin_with_newline) {
@@ -454,6 +466,7 @@ bool JUTException::showMapInfo_subroutine(u32 address, bool begin_with_newline) 
 }
 
 void JUTException::showGPRMap(OSContext* context) {
+#ifndef TARGET_PC
     if (!sConsole) {
         return;
     }
@@ -480,9 +493,11 @@ void JUTException::showGPRMap(OSContext* context) {
     if (!found_address_register) {
         sConsole->print("  no register which seem to address.\n");
     }
+#endif
 }
 
 void JUTException::showSRR0Map(OSContext* context) {
+#ifndef TARGET_PC
     if (!sConsole) {
         return;
     }
@@ -497,6 +512,7 @@ void JUTException::showSRR0Map(OSContext* context) {
         }
         JUTConsoleManager::getManager()->drawDirect(true);
     }
+#endif
 }
 
 void JUTException::printDebugInfo(JUTException::EInfoPage page, OSError error, OSContext* context,

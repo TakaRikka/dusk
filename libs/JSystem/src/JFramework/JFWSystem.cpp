@@ -116,3 +116,9 @@ void JFWSystem::init() {
     void* buffer = systemHeap->alloc(CSetUpParam::exConsoleBufferSize, 4);
     JUTException::createConsole(buffer, CSetUpParam::exConsoleBufferSize);
 }
+
+#if TARGET_PC
+void JFWSystem::shutdown() {
+    JKRAram::destroy();
+}
+#endif

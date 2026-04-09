@@ -6,7 +6,6 @@
 
 #ifndef _allpass_
 #define _allpass_
-#include "denormals.h"
 
 class allpass
 {
@@ -29,18 +28,12 @@ public:
 
 inline float allpass::process(float input)
 {
-	float output;
-	float bufout;
-	
-	bufout = buffer[bufidx];
-	undenormalise(bufout);
-	
-	output = -input + bufout;
+	float bufout = buffer[bufidx];
 	buffer[bufidx] = input + (bufout*feedback);
 
 	if(++bufidx>=bufsize) bufidx = 0;
 
-	return output;
+	return -input + bufout;
 }
 
 #endif//_allpass

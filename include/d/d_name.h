@@ -110,6 +110,11 @@ public:
     void menuCursorMove();
     void menuCursorMove2();
     void selectCursorPosSet(int);
+
+    #if TARGET_PC
+    void nameWide();
+    #endif
+
     void _draw();
     void screenSet();
     void displayInit();
