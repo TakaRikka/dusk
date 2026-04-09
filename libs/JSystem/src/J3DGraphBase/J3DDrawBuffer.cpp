@@ -8,6 +8,7 @@
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "JSystem/JKernel/JKRHeap.h"
+#include "tracy/Tracy.hpp"
 
 void J3DDrawBuffer::calcZRatio() {
     mZRatio = (mZFar - mZNear) / (f32)mEntryTableSize;
@@ -224,6 +225,7 @@ void J3DDrawBuffer::draw() const {
 }
 
 void J3DDrawBuffer::drawHead() const {
+    ZoneScoped;
     u32 size = mEntryTableSize;
     J3DPacket** buf = mpBuffer;
 
@@ -235,6 +237,7 @@ void J3DDrawBuffer::drawHead() const {
 }
 
 void J3DDrawBuffer::drawTail() const {
+    ZoneScoped;
     for (int i = mEntryTableSize - 1; i >= 0; i--) {
         for (J3DPacket* packet = mpBuffer[i]; packet != NULL; packet = packet->getNextPacket()) {
             packet->draw();

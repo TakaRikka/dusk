@@ -60,6 +60,7 @@
 #include "SDL3/SDL_filesystem.h"
 #include "cxxopts.hpp"
 #include "dusk/config.hpp"
+#include "tracy/Tracy.hpp"
 
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
@@ -198,6 +199,8 @@ void main01(void) {
         mDoAud_Execute();
 
         aurora_end_frame();
+
+        FrameMark;
     } while (true);
 
     exit:;

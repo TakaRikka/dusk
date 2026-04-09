@@ -17,6 +17,7 @@
 #include "dusk/settings.h"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/dusk.h"
+#include "tracy/Tracy.hpp"
 
 #if _WIN32
 #define NOMINMAX
@@ -200,6 +201,7 @@ namespace dusk {
     }
 
     void ImGuiConsole::PreDraw() {
+        ZoneScoped;
         if (!m_isLaunchInitialized) {
             InitSettings();
 

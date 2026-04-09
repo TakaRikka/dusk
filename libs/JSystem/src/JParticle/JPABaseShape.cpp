@@ -9,6 +9,8 @@
 #include <mtx.h>
 #include <gx.h>
 
+#include "tracy/Tracy.hpp"
+
 void JPASetPointSize(JPAEmitterWorkData* work) {
     GXSetPointSize((u8)(25.0f * work->mGlobalPtclScl.x), GX_TO_ONE);
 }
@@ -684,6 +686,8 @@ void JPADrawDirection(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
         return;
     }
 
+    ZoneScoped;
+
     JGeometry::TVec3<f32> local_6c;
     JGeometry::TVec3<f32> local_78;
     p_direction[param_0->mDirType](param_0, param_1, &local_6c);
@@ -728,6 +732,8 @@ void JPADrawRotDirection(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) 
     if (param_1->checkStatus(JPAPtclStts_Invisible)) {
         return;
     }
+
+    ZoneScoped;
 
     f32 sinRot = JMASSin(param_1->mRotateAngle);
     f32 cosRot = JMASCos(param_1->mRotateAngle);
@@ -779,6 +785,8 @@ void JPADrawDBillboard(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
         return;
     }
 
+    ZoneScoped;
+
     JGeometry::TVec3<f32> local_70;
     p_direction[param_0->mDirType](param_0, param_1, &local_70);
     JGeometry::TVec3<f32> aTStack_7c(param_0->mPosCamMtx[2][0], param_0->mPosCamMtx[2][1], param_0->mPosCamMtx[2][2]);
@@ -814,6 +822,8 @@ void JPADrawRotation(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
         return;
     }
 
+    ZoneScoped;
+
     f32 sinRot = JMASSin(param_1->mRotateAngle);
     f32 cosRot = JMASCos(param_1->mRotateAngle);
     f32 particleX = param_0->mGlobalPtclScl.x * param_1->mParticleScaleX;
@@ -835,6 +845,8 @@ void JPADrawPoint(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
         return;
     }
 
+    ZoneScoped;
+
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXBegin(GX_POINTS, GX_VTXFMT1, 1);
@@ -849,6 +861,8 @@ void JPADrawLine(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
     if (param_1->checkStatus(JPAPtclStts_Invisible)) {
         return;
     }
+
+    ZoneScoped;
 
     JGeometry::TVec3<f32> local_1c(param_1->mPosition);
     JGeometry::TVec3<f32> local_28;
@@ -883,6 +897,8 @@ JPANode<JPABaseParticle>* getPrev(JPANode<JPABaseParticle>* param_0) {
 typedef JPANode<JPABaseParticle>* (*getNodeFunc)(JPANode<JPABaseParticle>*);
 
 void JPADrawStripe(JPAEmitterWorkData* param_0) {
+    ZoneScoped;
+
     JPABaseShape* shape = param_0->mpRes->getBsp();
     u32 ptcl_num = param_0->mpAlivePtcl->getNum();
     if (ptcl_num < 2) {
@@ -969,6 +985,8 @@ void JPADrawStripe(JPAEmitterWorkData* param_0) {
 }
 
 void JPADrawStripeX(JPAEmitterWorkData* param_0) {
+    ZoneScoped;
+
     JPABaseShape* shape = param_0->mpRes->getBsp();
     u32 ptcl_num = param_0->mpAlivePtcl->getNum();
     if (ptcl_num < 2) {

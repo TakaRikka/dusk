@@ -8,6 +8,8 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include <gx.h>
 
+#include "tracy/Tracy.hpp"
+
 JPAEmitterManager::JPAEmitterManager(u32 i_ptclNum, u32 i_emtrNum, JKRHeap* pHeap, u8 i_gidMax,
                                      u8 i_ridMax) {
     emtrNum = i_emtrNum;
@@ -85,6 +87,7 @@ void JPAEmitterManager::calc(u8 group_id) {
 }
 
 void JPAEmitterManager::draw(JPADrawInfo const* drawInfo, u8 group_id) {
+    ZoneScoped;
     JUT_ASSERT(192, group_id < gidMax);
     drawInfo->getCamMtx(pWd->mPosCamMtx);
     drawInfo->getPrjMtx(pWd->mPrjMtx);

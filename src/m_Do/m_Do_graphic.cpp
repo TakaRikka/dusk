@@ -7,6 +7,9 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 
+#include <base/PPCArch.h>
+#include <cstring>
+#include "DynamicLink.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DPrint.h"
 #include "JSystem/JAWExtSystem/JAWExtSystem.h"
@@ -19,24 +22,22 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_menu_collect.h"
+#include "d/d_debug_viewer.h"
 #include "d/d_jcam_editor.h"
 #include "d/d_jpreviewer.h"
-#include <base/PPCArch.h>
+#include "d/d_menu_collect.h"
+#include "d/d_meter2_info.h"
+#include "d/d_s_play.h"
+#include "dusk/endian.h"
+#include "dusk/gx_helper.h"
+#include "dusk/logging.h"
 #include "f_ap/f_ap_game.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
 #include "m_Do/m_Do_main.h"
-#include "d/d_debug_viewer.h"
-#include "d/d_meter2_info.h"
-#include "d/d_s_play.h"
-#include "DynamicLink.h"
-#include <cstring>
-#include "dusk/endian.h"
-#include "dusk/logging.h"
-#include "dusk/gx_helper.h"
+#include "tracy/Tracy.hpp"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/sc.h>
@@ -348,6 +349,8 @@ void mDoGph_gInf_c::create() {
 static bool data_80450BE8;
 
 void mDoGph_gInf_c::beginRender() {
+    ZoneScoped;
+
     #if PLATFORM_WII || PLATFORM_SHIELD
     VISetTrapFilter(fapGmHIO_getTrapFilter() ? 1 : 0);
     VISetGamma((VIGamma)fapGmHIO_getGamma());
@@ -416,6 +419,7 @@ void mDoGph_gInf_c::fadeOut(f32 fadeSpeed) {
 }
 
 void darwFilter(GXColor matColor) {
+    ZoneScoped;
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE,
                   GX_AF_NONE);
@@ -834,6 +838,7 @@ void mDoGph_drawFilterQuad(s8 param_0, s8 param_1) {
 #endif
 
 static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_2) {
+    ZoneScoped;
     static GXColorS10 l_tevColor0 = {0, 0, 0, 0};
 
     if (daPy_getLinkPlayerActorClass() != NULL) {
@@ -1087,6 +1092,7 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
 }
 
 static void trimming(view_class* param_0, view_port_class* param_1) {
+    ZoneScoped;
     UNUSED(param_0);
 
     s16 y_orig = (int)param_1->y_orig & ~7;
@@ -1199,6 +1205,7 @@ void mDoGph_gInf_c::bloom_c::remove() {
 
 void mDoGph_gInf_c::bloom_c::draw() {
 #if TARGET_PC
+    ZoneScoped;
     if (!dusk::getSettings().game.enableBloom) {
         return;
     }
@@ -1473,6 +1480,7 @@ static void retry_captue_frame(view_class* param_0, view_port_class* param_1, in
 }
 
 static void motionBlure(view_class* param_0) {
+    ZoneScoped;
     if (g_env_light.is_blure) {
         GXLoadTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), GX_TEXMAP0);
         GXColor local_60;
@@ -1652,6 +1660,7 @@ static void captureScreenPerspDrawInfo(JPADrawInfo& info) {
 #endif
 
 static void drawItem3D() {
+    ZoneScoped;
     Mtx item_mtx;
     dMenu_Collect3D_c::setupItem3D(item_mtx);
 
@@ -1668,6 +1677,7 @@ static void drawItem3D() {
 }
 
 int mDoGph_Painter() {
+    ZoneScoped;
     // Diagnostic: log windowNum to track game state machine progress
     static bool sDiagLoggedWindow = false;
     if (!sDiagLoggedWindow) {

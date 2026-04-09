@@ -2,7 +2,9 @@
 
 #include <mutex>
 
-static std::recursive_mutex gAudioThreadMutex;
+#include "tracy/Tracy.hpp"
+
+static TracyLockable(std::recursive_mutex, gAudioThreadMutex);
 
 JASCriticalSection::JASCriticalSection() {
     gAudioThreadMutex.lock();
