@@ -158,10 +158,13 @@ namespace dusk {
         auto itemMin = ImGui::GetItemRectMin();
         auto itemMax = ImGui::GetItemRectMax();
 
+        float frameSpacingY = 8.0f;
+        float frameBottomPadding = 10.0f;
+
         ImVec2 halfFrame = ImVec2((frameHeight * 0.25f) * 0.5f, frameHeight * 0.5f);
         ImGui::GetWindowDrawList()->AddRect(
-            ImVec2(itemMin.x + halfFrame.x, itemMin.y + halfFrame.y),
-            ImVec2(itemMax.x - halfFrame.x, itemMax.y),
+            ImVec2(itemMin.x + halfFrame.x, itemMin.y + halfFrame.y + frameSpacingY),
+            ImVec2(itemMax.x - halfFrame.x, itemMax.y + frameBottomPadding),
             ImColor(ImGui::GetStyleColorVec4(ImGuiCol_Border)),
             halfFrame.x);
 
