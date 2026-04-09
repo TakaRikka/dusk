@@ -72,10 +72,6 @@ Recording g_previous_recording;
 std::vector<Path*> g_current_path;
 
 std::unordered_map<const Mtx*, MatrixValue> g_replacements;
-size_t g_lookup_hits = 0;
-size_t g_concat_lookup_hits = 0;
-size_t g_changed_replacements = 0;
-size_t g_unmatched_final_mtx = 0;
 
 inline void copy_matrix(const Mtx src, Mtx dst) {
     MTXCopy(src, dst);
@@ -190,9 +186,6 @@ void store_replacement(const Data& old_data, const Data& new_data, float step) {
     }
 
     auto& replacement = g_replacements[new_data.dest];
-    if (matrix_differs(old_data.matrix, new_data.matrix)) {
-        g_changed_replacements++;
-    }
     lerp_matrix(replacement.value, old_data.matrix, new_data.matrix, step);
 }
 
@@ -227,14 +220,7 @@ void interpolate_branch(const Path& old_path, const Path& new_path, float step) 
         }
 
         const Data* indexed_old_data = find_matching_data(old_path, op, index);
-        const Data* old_data = op == Op::FinalMtx
-                                   ? find_matching_final_mtx(old_final_mtx_lookup, *new_data)
-                                   : indexed_old_data;
-        if (op == Op::FinalMtx && old_data == nullptr &&
-            (!g_previous_recording.root.items.empty() || !g_previous_recording.root.children.empty()))
-        {
-            g_unmatched_final_mtx++;
-        }
+        const Data* old_data = op == Op::FinalMtx ? find_matching_final_mtx(old_final_mtx_lookup, *new_data) : indexed_old_data;
         if (op == Op::FinalMtx) {
             store_replacement(old_data != nullptr ? *old_data : *new_data, *new_data, step);
         }
@@ -261,10 +247,6 @@ bool has_recording_data(const Recording& recording) {
 
 void clear_replacements() {
     g_replacements.clear();
-    g_lookup_hits = 0;
-    g_concat_lookup_hits = 0;
-    g_changed_replacements = 0;
-    g_unmatched_final_mtx = 0;
 }
 
 }  // namespace
@@ -389,7 +371,6 @@ bool lookup_replacement(const void* source, Mtx out) {
         return false;
     }
 
-    g_lookup_hits++;
     copy_matrix(it->second.value, out);
     return true;
 }
@@ -409,7 +390,6 @@ bool lookup_concat_replacement(const void* lhs, const void* rhs, Mtx out) {
         return false;
     }
 
-    g_concat_lookup_hits++;
     concat_matrix(*resolved_lhs, *resolved_rhs, out);
     return true;
 }
