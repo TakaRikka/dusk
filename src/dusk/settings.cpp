@@ -63,7 +63,7 @@ UserSettings g_userSettings = {
         .isoPath {"backend.isoPath", ""},
         .graphicsBackend {"backend.graphicsBackend", "auto"},
         .skipPreLaunchUI {"backend.skipPreLaunchUI", false},
-        .showCompilingShaders{"backend.showCompilingShaders", false}
+        .showPipelineCompilation{"backend.showPipelineCompilation", false}
     }
 };
 
@@ -114,7 +114,7 @@ void registerSettings() {
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.graphicsBackend);
     Register(g_userSettings.backend.skipPreLaunchUI);
-    Register(g_userSettings.backend.showCompilingShaders);
+    Register(g_userSettings.backend.showPipelineCompilation);
 }
 
 // Transient settings
