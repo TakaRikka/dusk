@@ -411,7 +411,7 @@ void dMsgScrnItem_c::drawSelf() {
 
     f32 globalPosX = mpTm_c[0]->getGlobalPosX();
     
-    #if WIDESCREEN_SUPPORT
+    #if WIDESCREEN_SUPPORT && !TARGET_PC
     if (mDoGph_gInf_c::isWide()) {
         drawOutFont(g_MsgObject_HIO_c.mBoxItemTextPosX + 7.0f + YREG_F(2),
                     g_MsgObject_HIO_c.mBoxItemTextPosY, 1.0f);
@@ -557,11 +557,22 @@ void dMsgScrnItem_c::fukiPosCalc(u8 param_1) {
         cXyz local_70;
         cXyz cStack_7c;
         f32 f3;
+
+        #if TARGET_PC
+        mDoLib_project(&player->eyePos, &cStack_7c, {0, 0, FB_WIDTH, FB_HEIGHT});
+        #else
         mDoLib_project(&player->eyePos, &cStack_7c);
+        #endif
+
         if (iVar6->pos == cXyz(0.0f, 0.0f, 0.0f)) {
             f3 = cStack_7c.y;
         } else {
+            #if TARGET_PC
+            mDoLib_project(&iVar6->pos, &local_70, {0, 0, FB_WIDTH, FB_HEIGHT});
+            #else
             mDoLib_project(&iVar6->pos, &local_70);
+            #endif
+
             if (local_70.x >= 0.0f && local_70.x <= FB_WIDTH && local_70.y >= 0.0f &&
                 local_70.y <= FB_HEIGHT)
             {

@@ -1834,12 +1834,12 @@ void daMidna_c::setBckAnime(J3DAnmTransform* i_bck, int i_attr, f32 i_morf) {
         }
     } else {
         u8* buf = mBckHeap[0].getBuffer();
-        if (*(u32*)(buf + 0x1c) == 0xffffffff) {
+        if (*(BE(u32)*)(buf + 0x1c) == 0xffffffff) {
             offStateFlg1(FLG1_UNK_800);
             bas = NULL;
         } else {
             onStateFlg1(FLG1_UNK_800);
-            bas = mBckHeap[0].getBuffer() + *(u32*)(buf + 0x1c);
+            bas = mBckHeap[0].getBuffer() + *(BE(u32)*)(buf + 0x1c);
         }
     }
 
@@ -3046,12 +3046,17 @@ void daMidna_c::setMidnaNoDrawFlg() {
 
 BOOL daMidna_c::checkMetamorphoseEnableBase() {
     BOOL tmp;
-    if (
-        !daAlink_getAlinkActorClass()->checkMidnaRide() || (g_env_light.mEvilInitialized & 0x80) ||
+    if (!daAlink_getAlinkActorClass()->checkMidnaRide() || (g_env_light.mEvilInitialized & 0x80) ||
         /* dSv_event_flag_c::M_077 - Main Event - Get shadow crystal (can now transform) */
         !dComIfGs_isEventBit(0xD04) ||
+#if TARGET_PC
+        (fopAcIt_Judge((fopAcIt_JudgeFunc)daMidna_searchNpc, &tmp) &&
+         !dusk::getSettings().game.canTransformAnywhere)
+#else
         fopAcIt_Judge((fopAcIt_JudgeFunc)daMidna_searchNpc, &tmp)
-    ) {
+#endif
+    )
+    {
         return FALSE;
     }
     return TRUE;

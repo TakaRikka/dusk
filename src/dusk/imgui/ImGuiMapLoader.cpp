@@ -5,6 +5,7 @@
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuTools.hpp"
 #include "dusk/map_loader_definitions.h"
+#include "fmt/format.h"
 
 namespace dusk {
     void ImGuiMenuTools::ShowMapLoader() {
@@ -16,7 +17,6 @@ namespace dusk {
             ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
     
         ImGui::SetNextWindowBgAlpha(0.65f);
-        ImGui::SetNextWindowSizeConstraints(ImVec2(300, 0), ImVec2(FLT_MAX, FLT_MAX));
     
         if (!ImGui::Begin("Map Loader", &m_showMapLoader, windowFlags)) {
             ImGui::End();

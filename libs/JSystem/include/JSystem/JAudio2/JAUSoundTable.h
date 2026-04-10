@@ -12,9 +12,9 @@
 struct JAUSoundTableItem {
     u8 mPriority;
     u8 field_0x1;
-    u16 mResourceId;
-    u32 field_0x4;
-    f32 field_0x8;
+    BE(u16) mResourceId;
+    BE(u32) field_0x4;
+    BE(f32) field_0x8;
 };
 
 /**
@@ -149,6 +149,8 @@ struct JAUSoundTable : public JASGlobalInstance<JAUSoundTable> {
     void init(void const*);
     u8 getTypeID(JAISoundID) const;
     JAUSoundTableItem* getData(JAISoundID) const;
+    int getNumGroups_inSection(u8) const;
+    int getNumItems_inGroup(u8, u8) const;
 
     JAUSoundTableItem* getItem(JAUSoundTableGroup* group, int index) const {
         u32 offset = group->getItemOffset(index);

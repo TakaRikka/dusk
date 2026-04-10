@@ -32,22 +32,37 @@ public:
         if (getDrawFlag() == 1) {
             setDrawFlag();
             dComIfGp_onPauseFlag();
-            
+
             #if TARGET_PC
             GXSetTexCopySrc(0, 0, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
             #else
             GXSetTexCopySrc(0, 0, FB_WIDTH, FB_HEIGHT);
             #endif
 
+#if TARGET_PC
+            GXSetTexCopyDst(mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_ENABLE);
+#else
             GXSetTexCopyDst(FB_WIDTH / 2, FB_HEIGHT / 2, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_ENABLE);
+#endif
             GXCopyTex(mDoGph_gInf_c::getFrameBufferTex(), GX_FALSE);
             GXPixModeSync();
+#if TARGET_PC
+            // init mTexObj at capture time so the gpu ref survives window resizes
+            GXInitTexObj(&mTexObj, mDoGph_gInf_c::getFrameBufferTex(), mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(),
+                        (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_CLAMP, GX_CLAMP, GX_FALSE);
+            GXInitTexObjLOD(&mTexObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+#endif
         } else {
+#if TARGET_PC
+            // reuse the persistent mTexObj
+            GXLoadTexObj(&mTexObj, GX_TEXMAP0);
+#else
             TGXTexObj tex;
             GXInitTexObj(&tex, mDoGph_gInf_c::getFrameBufferTex(), FB_WIDTH / 2, FB_HEIGHT / 2,
                         (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_CLAMP, GX_CLAMP, GX_FALSE);
             GXInitTexObjLOD(&tex, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
             GXLoadTexObj(&tex, GX_TEXMAP0);
+#endif
             GXSetNumChans(0);
             GXSetNumTexGens(1);
             GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 60, GX_FALSE, 125);
@@ -110,6 +125,9 @@ private:
     /* 0x4 */ u8 mFlag;
     /* 0x5 */ u8 mAlpha;
     /* 0x6 */ u8 mTopFlag;
+#if TARGET_PC
+    TGXTexObj mTexObj;
+#endif
 };
 
 BOOL dMw_UP_TRIGGER() {
@@ -1498,7 +1516,11 @@ void dMw_c::checkMemSize() {
 
         OS_REPORT("memory check ===> diff ==> %d, start ==> %d, now ==> %d\n", diff, mMemSize, now_size);
 
+#if TARGET_PC
+        if (diff > 0x40) {
+#else
         if (diff > 0x20) {
+#endif
             OSReport_Error("memory free error!!\n");
         }
         mMemSize = 0;

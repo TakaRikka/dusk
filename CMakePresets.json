@@ -1,0 +1,603 @@
+{
+  "version": 2,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 25,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "debug",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDebugDLL"
+      }
+    },
+    {
+      "name": "relwithdebinfo",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded"
+      }
+    },
+    {
+      "name": "linux-default",
+      "displayName": "Linux (default)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [
+            "Linux"
+          ]
+        },
+        "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
+          "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
+        }
+      }
+    },
+    {
+      "name": "linux-default-debug",
+      "displayName": "Linux (default) Debug",
+      "inherits": [
+        "debug",
+        "linux-default"
+      ]
+    },
+    {
+      "name": "linux-default-relwithdebinfo",
+      "displayName": "Linux (default) RelWithDebInfo",
+      "inherits": [
+        "relwithdebinfo",
+        "linux-default"
+      ]
+    },
+    {
+      "name": "linux-clang",
+      "displayName": "Linux (Clang)",
+      "inherits": [
+        "linux-default"
+      ],
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    },
+    {
+      "name": "linux-clang-debug",
+      "displayName": "Linux (Clang) Debug",
+      "inherits": [
+        "debug",
+        "linux-clang"
+      ]
+    },
+    {
+      "name": "linux-clang-relwithdebinfo",
+      "displayName": "Linux (Clang) RelWithDebInfo",
+      "inherits": [
+        "relwithdebinfo",
+        "linux-clang"
+      ]
+    },
+    {
+      "name": "windows-msvc",
+      "displayName": "Windows (MSVC)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "cl",
+        "CMAKE_CXX_COMPILER": "cl",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [
+            "Windows"
+          ]
+        }
+      }
+    },
+    {
+      "name": "windows-msvc-debug",
+      "displayName": "Windows (MSVC) Debug",
+      "inherits": [
+        "debug",
+        "windows-msvc"
+      ]
+    },
+    {
+      "name": "windows-msvc-relwithdebinfo",
+      "displayName": "Windows (MSVC) RelWithDebInfo",
+      "inherits": [
+        "relwithdebinfo",
+        "windows-msvc"
+      ]
+    },
+    {
+      "name": "windows-arm64-msvc",
+      "displayName": "Windows ARM64 (MSVC)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "architecture": {
+        "value": "arm64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "cl",
+        "CMAKE_CXX_COMPILER": "cl",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install",
+        "AURORA_DAWN_PROVIDER": "vendor"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [
+            "Windows"
+          ]
+        }
+      }
+    },
+    {
+      "name": "windows-clang",
+      "displayName": "Windows (Clang)",
+      "inherits": [
+        "windows-msvc"
+      ],
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang-cl",
+        "CMAKE_CXX_COMPILER": "clang-cl",
+        "CMAKE_LINKER": "lld-link"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "intelliSenseMode": "windows-clang-x64"
+        }
+      }
+    },
+    {
+      "name": "windows-clang-debug",
+      "displayName": "Windows (Clang) Debug",
+      "inherits": [
+        "debug",
+        "windows-clang"
+      ]
+    },
+    {
+      "name": "windows-clang-relwithdebinfo",
+      "displayName": "Windows (Clang) RelWithDebInfo",
+      "inherits": [
+        "relwithdebinfo",
+        "windows-clang"
+      ]
+    },
+    {
+      "name": "macos-default",
+      "displayName": "macOS (default)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [
+            "macOS"
+          ]
+        }
+      }
+    },
+    {
+      "name": "macos-default-debug",
+      "displayName": "macOS (default) Debug",
+      "inherits": [
+        "debug",
+        "macos-default"
+      ]
+    },
+    {
+      "name": "macos-default-relwithdebinfo",
+      "displayName": "macOS (default) RelWithDebInfo",
+      "inherits": [
+        "relwithdebinfo",
+        "macos-default"
+      ]
+    },
+    {
+      "name": "ios-default",
+      "displayName": "iOS",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "inherits": [
+        "relwithdebinfo"
+      ],
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "ios.toolchain.cmake",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install",
+        "PLATFORM": "OS64",
+        "DEPLOYMENT_TARGET": "14.0",
+        "ENABLE_BITCODE": {
+          "type": "BOOL",
+          "value": false
+        },
+        "ENABLE_ARC": {
+          "type": "BOOL",
+          "value": false
+        },
+        "Rust_CARGO_TARGET": "aarch64-apple-ios",
+        "BUILD_SHARED_LIBS": {
+          "type": "BOOL",
+          "value": false
+        },
+        "CMAKE_DISABLE_FIND_PACKAGE_BZip2": {
+          "type": "BOOL",
+          "value": true
+        },
+        "CMAKE_DISABLE_FIND_PACKAGE_LibLZMA": {
+          "type": "BOOL",
+          "value": true
+        },
+        "CMAKE_DISABLE_FIND_PACKAGE_zstd": {
+          "type": "BOOL",
+          "value": true
+        },
+        "CMAKE_DISABLE_FIND_PACKAGE_Freetype": {
+          "type": "BOOL",
+          "value": true
+        }
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [
+            "macOS"
+          ]
+        }
+      }
+    },
+    {
+      "name": "tvos-default",
+      "displayName": "tvOS",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "inherits": [
+        "relwithdebinfo"
+      ],
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "ios.toolchain.cmake",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install",
+        "PLATFORM": "TVOS",
+        "DEPLOYMENT_TARGET": "14.5",
+        "ENABLE_BITCODE": {
+          "type": "BOOL",
+          "value": false
+        },
+        "Rust_CARGO_TARGET": "aarch64-apple-tvos",
+        "Rust_TOOLCHAIN": "nightly",
+        "BUILD_SHARED_LIBS": {
+          "type": "BOOL",
+          "value": false
+        },
+        "CMAKE_DISABLE_FIND_PACKAGE_BZip2": {
+          "type": "BOOL",
+          "value": true
+        },
+        "CMAKE_DISABLE_FIND_PACKAGE_LibLZMA": {
+          "type": "BOOL",
+          "value": true
+        },
+        "CMAKE_DISABLE_FIND_PACKAGE_zstd": {
+          "type": "BOOL",
+          "value": true
+        }
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [
+            "macOS"
+          ]
+        }
+      }
+    },
+    {
+      "name": "android-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "inherits": [
+        "relwithdebinfo"
+      ],
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install",
+        "CMAKE_TOOLCHAIN_FILE": "$env{ANDROID_HOME}/ndk/$env{ANDROID_NDK_VERSION}/build/cmake/android.toolchain.cmake",
+        "ANDROID_PLATFORM": "android-24"
+      }
+    },
+    {
+      "name": "android-arm64",
+      "displayName": "Android (arm64-v8a)",
+      "inherits": [
+        "android-base"
+      ],
+      "cacheVariables": {
+        "ANDROID_ABI": "arm64-v8a"
+      }
+    },
+    {
+      "name": "android-x86_64",
+      "displayName": "Android (x86_64)",
+      "inherits": [
+        "android-base"
+      ],
+      "cacheVariables": {
+        "ANDROID_ABI": "x86_64"
+      }
+    },
+    {
+      "name": "x-linux-ci",
+      "hidden": true,
+      "inherits": [
+        "relwithdebinfo"
+      ],
+      "cacheVariables": {
+        "CMAKE_C_COMPILER_LAUNCHER": "sccache",
+        "CMAKE_CXX_COMPILER_LAUNCHER": "sccache"
+      }
+    },
+    {
+      "name": "x-linux-ci-gcc",
+      "inherits": [
+        "x-linux-ci",
+        "linux-default"
+      ]
+    },
+    {
+      "name": "x-linux-ci-clang",
+      "inherits": [
+        "x-linux-ci",
+        "linux-clang"
+      ]
+    },
+    {
+      "name": "x-macos-ci",
+      "inherits": [
+        "macos-default-relwithdebinfo"
+      ],
+      "cacheVariables": {
+        "CMAKE_C_COMPILER_LAUNCHER": "sccache",
+        "CMAKE_CXX_COMPILER_LAUNCHER": "sccache"
+      }
+    },
+    {
+      "name": "x-ios-ci",
+      "inherits": [
+        "ios-default"
+      ],
+      "cacheVariables": {
+        "CMAKE_C_COMPILER_LAUNCHER": "sccache",
+        "CMAKE_CXX_COMPILER_LAUNCHER": "sccache"
+      }
+    },
+    {
+      "name": "x-tvos-ci",
+      "inherits": [
+        "tvos-default"
+      ],
+      "cacheVariables": {
+        "CMAKE_C_COMPILER_LAUNCHER": "sccache",
+        "CMAKE_CXX_COMPILER_LAUNCHER": "sccache"
+      }
+    },
+    {
+      "name": "x-windows-ci",
+      "hidden": true,
+      "inherits": [
+        "relwithdebinfo"
+      ],
+      "binaryDir": "$env{BUILD_DIR}",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "$env{BUILD_DIR}/install",
+        "CMAKE_C_COMPILER_LAUNCHER": "sccache",
+        "CMAKE_CXX_COMPILER_LAUNCHER": "sccache",
+        "CMAKE_MSVC_DEBUG_INFORMATION_FORMAT": "Embedded"
+      }
+    },
+    {
+      "name": "x-windows-ci-msvc",
+      "inherits": [
+        "x-windows-ci",
+        "windows-msvc"
+      ]
+    },
+    {
+      "name": "x-windows-ci-clang",
+      "inherits": [
+        "x-windows-ci",
+        "windows-clang"
+      ]
+    },
+    {
+      "name": "x-windows-ci-arm64-msvc",
+      "inherits": [
+        "x-windows-ci",
+        "windows-arm64-msvc"
+      ]
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "linux-default-debug",
+      "configurePreset": "linux-default-debug",
+      "description": "Linux (default) debug build",
+      "displayName": "Linux (default) Debug"
+    },
+    {
+      "name": "linux-default-relwithdebinfo",
+      "configurePreset": "linux-default-relwithdebinfo",
+      "description": "Linux (default) release build with debug info",
+      "displayName": "Linux (default) RelWithDebInfo"
+    },
+    {
+      "name": "linux-clang-debug",
+      "configurePreset": "linux-clang-debug",
+      "description": "Linux (Clang) debug build",
+      "displayName": "Linux (Clang) Debug"
+    },
+    {
+      "name": "linux-clang-relwithdebinfo",
+      "configurePreset": "linux-clang-relwithdebinfo",
+      "description": "Linux (Clang) release build with debug info",
+      "displayName": "Linux (Clang) RelWithDebInfo"
+    },
+    {
+      "name": "macos-default-debug",
+      "configurePreset": "macos-default-debug",
+      "description": "macOS debug build",
+      "displayName": "macOS Debug"
+    },
+    {
+      "name": "macos-default-relwithdebinfo",
+      "configurePreset": "macos-default-relwithdebinfo",
+      "description": "macOS release build with debug info",
+      "displayName": "macOS RelWithDebInfo"
+    },
+    {
+      "name": "ios-default",
+      "configurePreset": "ios-default",
+      "description": "iOS release build with debug info",
+      "displayName": "iOS RelWithDebInfo",
+      "targets": [
+        "dusk"
+      ]
+    },
+    {
+      "name": "tvos-default",
+      "configurePreset": "tvos-default",
+      "description": "tvOS release build with debug info",
+      "displayName": "tvOS RelWithDebInfo",
+      "targets": [
+        "dusk"
+      ]
+    },
+    {
+      "name": "android-arm64",
+      "configurePreset": "android-arm64",
+      "description": "Android arm64-v8a release build with debug info",
+      "displayName": "Android arm64-v8a RelWithDebInfo",
+      "targets": [
+        "dusk"
+      ]
+    },
+    {
+      "name": "android-x86_64",
+      "configurePreset": "android-x86_64",
+      "description": "Android x86_64 release build with debug info",
+      "displayName": "Android x86_64 RelWithDebInfo",
+      "targets": [
+        "dusk"
+      ]
+    },
+    {
+      "name": "windows-msvc-debug",
+      "configurePreset": "windows-msvc-debug",
+      "description": "Windows (MSVC) debug build",
+      "displayName": "Windows (MSVC) Debug"
+    },
+    {
+      "name": "windows-msvc-relwithdebinfo",
+      "configurePreset": "windows-msvc-relwithdebinfo",
+      "description": "Windows (MSVC) release build with debug info",
+      "displayName": "Windows (MSVC) RelWithDebInfo"
+    },
+    {
+      "name": "windows-clang-debug",
+      "configurePreset": "windows-clang-debug",
+      "description": "Windows (Clang) debug build",
+      "displayName": "Windows (Clang) Debug"
+    },
+    {
+      "name": "windows-clang-relwithdebinfo",
+      "configurePreset": "windows-clang-relwithdebinfo",
+      "description": "Windows (Clang) release build with debug info",
+      "displayName": "Windows (Clang) RelWithDebInfo"
+    },
+    {
+      "name": "x-linux-ci-gcc",
+      "configurePreset": "x-linux-ci-gcc",
+      "description": "(Internal) Linux CI GCC",
+      "displayName": "(Internal) Linux CI GCC",
+      "targets": [
+        "install"
+      ]
+    },
+    {
+      "name": "x-linux-ci-clang",
+      "configurePreset": "x-linux-ci-clang",
+      "description": "(Internal) Linux CI Clang",
+      "displayName": "(Internal) Linux CI Clang",
+      "targets": [
+        "install"
+      ]
+    },
+    {
+      "name": "x-macos-ci",
+      "configurePreset": "x-macos-ci",
+      "description": "(Internal) macOS CI",
+      "displayName": "(Internal) macOS CI",
+      "targets": [
+        "install"
+      ]
+    },
+    {
+      "name": "x-ios-ci",
+      "configurePreset": "x-ios-ci",
+      "description": "(Internal) iOS CI",
+      "displayName": "(Internal) iOS CI",
+      "targets": [
+        "install"
+      ]
+    },
+    {
+      "name": "x-tvos-ci",
+      "configurePreset": "x-tvos-ci",
+      "description": "(Internal) tvOS CI",
+      "displayName": "(Internal) tvOS CI",
+      "targets": [
+        "install"
+      ]
+    },
+    {
+      "name": "x-windows-ci-msvc",
+      "configurePreset": "x-windows-ci-msvc",
+      "description": "(Internal) Windows CI MSVC",
+      "displayName": "(Internal) Windows CI MSVC",
+      "targets": [
+        "install"
+      ]
+    },
+    {
+      "name": "x-windows-ci-clang",
+      "configurePreset": "x-windows-ci-clang",
+      "description": "(Internal) Windows CI Clang",
+      "displayName": "(Internal) Windows CI Clang",
+      "targets": [
+        "install"
+      ]
+    },
+    {
+      "name": "x-windows-ci-arm64-msvc",
+      "configurePreset": "x-windows-ci-arm64-msvc",
+      "description": "(Internal) Windows CI MSVC arm64",
+      "displayName": "(Internal) Windows CI MSVC arm64",
+      "targets": [
+        "install"
+      ]
+    }
+  ]
+}

@@ -730,6 +730,9 @@ u8 var_r30 = fopAcM::HeapAdjustEntry;
 #endif
 
     u32 size = i_size & 0xFFFFFF;
+#if TARGET_PC
+    size *= 2;
+#endif
     bool result = fopAcM_entrySolidHeap_(i_actor, i_heapCallback, size);
 #if DEBUG
     fopAcM::HeapDummyCheck = var_r29;
@@ -1019,10 +1022,15 @@ cull_sphere l_cullSizeSphere[fopAc_CULLSPHERE_MAX_e] = {
 
 s32 fopAcM_cullingCheck(fopAc_ac_c const* i_actor) {
     MtxP mtx_p;
+#if AVOID_UB
+    Mtx concat_mtx;
+#endif
     if (fopAcM_GetMtx(i_actor) == NULL) {
         mtx_p = j3dSys.getViewMtx();
     } else {
+#if !AVOID_UB
         Mtx concat_mtx;
+#endif
         cMtx_concat(j3dSys.getViewMtx(), fopAcM_GetMtx(i_actor), concat_mtx);
         mtx_p = concat_mtx;
     }

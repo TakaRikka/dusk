@@ -19,7 +19,7 @@ public:
     static SpkSoundHandle* getHandleSoundID(s32 soundNum);
     static SpkSoundHandle* start(s32 id, s32 chan);
     static SpkSoundHandle* startLevel(s32 id, s32 chan);
-    static s32 getName(s32 num);
+    static const char* getName(s32 num);
     static s32 getNumOfSound(void);
     static void stopAll(s32 chan, s32 msec);
     static void stop(s32 chan);

@@ -21,6 +21,9 @@
 #include "m_Do/m_Do_Reset.h"
 #include <cstdio>
 #include <cstring>
+
+#include "dusk/logging.h"
+#include "dusk/string.hpp"
 #if TARGET_PC
 #include <format>
 #include <fmt/ranges.h>
@@ -151,7 +154,14 @@ static int dStage_RoomKeepDoorInit(dStage_dt_c* i_stage, void* i_data, int entry
 }
 
 void dStage_startStage_c::set(const char* i_Name, s8 i_RoomNo, s16 i_Point, s8 i_Layer) {
+#if TARGET_PC
+    // UB fix.
+    if (mName != i_Name) {
+        dusk::SafeStringCopy(mName, i_Name);
+    }
+#else
     strcpy(mName, i_Name);
+#endif
     mRoomNo = i_RoomNo;
     mPoint = i_Point;
     mLayer = i_Layer;
@@ -382,6 +392,10 @@ static void dummy1(dStage_roomControl_c* roomControl) {
 }
 
 JKRExpHeap* dStage_roomControl_c::createMemoryBlock(int i_blockIdx, u32 i_heapSize) {
+    #if TARGET_PC
+    i_heapSize *= 2;
+    #endif
+
     if (mMemoryBlock[i_blockIdx] == NULL) {
         mMemoryBlock[i_blockIdx] = JKRCreateExpHeap(i_heapSize, mDoExt_getArchiveHeap(), false);
         JKRHEAP_NAMEF(mMemoryBlock[i_blockIdx], "Room control memory block %d", i_blockIdx);
@@ -2127,7 +2141,7 @@ static int dStage_pathInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
 
     i_stage->setPathInfo(path_c);
 
-    for (int i = 0; i < path_c->m_num; i++) {
+    for (int i = 0; i < path_c->num; i++) {
 #if TARGET_PC
         path->m_points.setBase(i_stage->getPntInf()->m_pnt_offset);
 #else
@@ -2156,7 +2170,7 @@ static int dStage_rpatInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, vo
     dPath* pPath = pStagePath->m_path;
 
     i_stage->setPath2Info(pStagePath);
-    for (s32 i = 0; i < pStagePath->m_num; pPath++, i++, (void)0) {
+    for (s32 i = 0; i < pStagePath->num; pPath++, i++, (void)0) {
 #if TARGET_PC
         pPath->m_points.setBase(i_stage->getPnt2Inf()->m_pnt_offset);
 #else

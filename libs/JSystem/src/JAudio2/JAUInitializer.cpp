@@ -15,6 +15,8 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JKernel/JKRThread.h"
 
+#include "dusk/audio/DuskAudioSystem.h"
+
 JAU_JASInitializer::JAU_JASInitializer() {
     audioMemory_ = 0;
     audioMemSize_ = 0;
@@ -27,7 +29,7 @@ JAU_JASInitializer::JAU_JASInitializer() {
 #endif
     dvdThreadPriority_ = 3;
     audioThreadPriority_ = 2;
-    field_0x1c = 0x80;
+    mJasTrackPoolSize = 0x80;
     dspLevel_ = 1.0f;
     aramBlockSize_ = 0x2760;
     aramChannelNum_ = 2;
@@ -54,13 +56,17 @@ void JAU_JASInitializer::initJASystem(JKRSolidHeap* heap) {
 
         JASKernel::setupAramHeap(audioMemory_, audioMemSize_);
 
-        JASTrack::newMemPool(field_0x1c);
+        JASTrack::newMemPool(mJasTrackPoolSize);
         if (field_0x20 > 0) {
             JASTrack::TChannelMgr::newMemPool(field_0x20);
         }
 
         JASDvd::createThread(dvdThreadPriority_, 0x80, 0x1000);
+#if TARGET_PC
+        dusk::audio::Initialize();
+#else
         JASAudioThread::create(audioThreadPriority_);
+#endif
         JKRThreadSwitch* threadSwitch = JKRThreadSwitch::getManager();
         if (threadSwitch) {
             if (dvdThreadId_ >= 0) {
@@ -80,33 +86,33 @@ void JAU_JASInitializer::initJASystem(JKRSolidHeap* heap) {
     }
 
     #if PLATFORM_SHIELD
-    JASDriver::setOutputMode(1);
+    JASDriver::setOutputMode(JAS_OUTPUT_STEREO);
     #else
     switch (OSGetSoundMode()) {
-    case 0:
-        JASDriver::setOutputMode(0);
+    case OS_SOUND_MODE_MONO:
+        JASDriver::setOutputMode(JAS_OUTPUT_MONO);
         break;
-    case 1:
-        JASDriver::setOutputMode(1);
+    case OS_SOUND_MODE_STEREO:
+        JASDriver::setOutputMode(JAS_OUTPUT_STEREO);
         break;
     }
     #endif
 }
 
 JAU_JAIInitializer::JAU_JAIInitializer() {
-    field_0x0 = 100;
-    field_0x4 = 4;
-    field_0x8 = 2;
-    field_0xc = 16;
+    mJaiSePoolSize = 100;
+    mJaiSeqPoolSize = 4;
+    mJaiStreamPoolSize = 2;
+    mJaiSoundChildPoolSize = 16;
 }
 
 // NONMATCHING JASPoolAllocObject<_> locations
 void JAU_JAIInitializer::initJAInterface() {
     s32 r30 = JASDram->getFreeSize();
-    JAIStream::newMemPool(field_0x8);
-    JAISeq::newMemPool(field_0x4);
-    JAISe::newMemPool(field_0x0);
-    JAISoundChild::newMemPool(field_0xc);
+    JAIStream::newMemPool(mJaiStreamPoolSize);
+    JAISeq::newMemPool(mJaiSeqPoolSize);
+    JAISe::newMemPool(mJaiSePoolSize);
+    JAISoundChild::newMemPool(mJaiSoundChildPoolSize);
     s32 r29 = JASDram->getFreeSize();
     OS_REPORT("JAU_JAIInitializer uses %d bytes\n", r30 - r29);
 }

@@ -13,11 +13,19 @@
 
 const u16 l_M_Hijiki00TEX__width = 31;
 const u16 l_M_Hijiki00TEX__height = 31;
-#include "assets/l_M_kusa05_RGBATEX.h"  // ALIGN 32
-
 const u16 l_M_kusa05_RGBATEX__width = 31;
 const u16 l_M_kusa05_RGBATEX__height = 31;
-#include "assets/l_M_Hijiki00TEX.h"  // ALIGN 32
+
+#if TARGET_PC
+#include "dusk/dvd_asset.hpp"
+static u8* l_M_kusa05_RGBATEX_get() { static u8 buf[0x800]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x7680, 0x800), true); return buf; }
+static u8* l_M_Hijiki00TEX_get()    { static u8 buf[0x800]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x7E80, 0x800), true); return buf; }
+#define l_M_kusa05_RGBATEX (l_M_kusa05_RGBATEX_get())
+#define l_M_Hijiki00TEX    (l_M_Hijiki00TEX_get())
+#else
+#include "assets/l_M_kusa05_RGBATEX.h"  // ALIGN 32
+#include "assets/l_M_Hijiki00TEX.h"     // ALIGN 32
+#endif
 
 static u8 l_pos[960] = {
     0x3F, 0x4A, 0x56, 0xEF, 0xC2, 0x20, 0x00, 0x00, 0x41, 0xFB, 0x17, 0xE4, 0x41, 0xAA, 0xBB, 0xEA,
@@ -102,6 +110,20 @@ static u8 l_texCoord[160] = {
     0x3F, 0x94, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00, 0xBD, 0xC0, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00,
 };
 
+#if TARGET_PC
+static u8* l_M_Kusa_9qDL_get()     { static u8 buf[0xCB]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8B00, 0xCB),  true); return buf; }
+static u8* l_M_Kusa_9q_cDL_get()   { static u8 buf[0xCB]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8BE0, 0xCB),  true); return buf; }
+static u8* l_M_TenGusaDL_get()     { static u8 buf[0xD4]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8CC0, 0xD4),  true); return buf; }
+static u8* l_Tengusa_matDL_get()   { static u8 buf[0xA8]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8DA0, 0xA8),  true); return buf; }
+static u8* l_kusa9q_matDL_get()    { static u8 buf[0xA8]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8E60, 0xA8),  true); return buf; }
+static u8* l_kusa9q_l4_matDL_get() { static u8 buf[0xA8]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8F20, 0xA8),  true); return buf; }
+#define l_M_Kusa_9qDL     (l_M_Kusa_9qDL_get())
+#define l_M_Kusa_9q_cDL   (l_M_Kusa_9q_cDL_get())
+#define l_M_TenGusaDL     (l_M_TenGusaDL_get())
+#define l_Tengusa_matDL   (l_Tengusa_matDL_get())
+#define l_kusa9q_matDL    (l_kusa9q_matDL_get())
+#define l_kusa9q_l4_matDL (l_kusa9q_l4_matDL_get())
+#else
 #include "assets/l_M_Kusa_9qDL.h"
 
 #include "assets/l_M_Kusa_9q_cDL.h"
@@ -117,6 +139,7 @@ l_kusa9q_matDL(l_M_kusa05_RGBATEX)
 
 #include "assets/l_kusa9q_l4_matDL.h"
 l_kusa9q_l4_matDL(l_M_kusa05_RGBATEX)
+#endif
 
 void dGrass_data_c::WorkCo(fopAc_ac_c* i_hitActor, u32 i_massFlg, int i_roomNo) {
     cXyz sp18;
@@ -536,10 +559,10 @@ void dGrass_packet_c::draw() {
 
     GXSetVtxDescv(l_vtxDescList);
     GXSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
-    GXSETARRAY(GX_VA_POS, mp_pos, sizeof(l_pos), sizeof(Vec));
-    GXSETARRAY(GX_VA_NRM, mp_normal, sizeof(l_normal), sizeof(Vec));
-    GXSETARRAY(GX_VA_CLR0, mp_colors, sizeof(l_color), sizeof(GXColor));
-    GXSETARRAY(GX_VA_TEX0, mp_texCoords, sizeof(l_texCoord), 8);
+    GXSETARRAY(GX_VA_POS, mp_pos, sizeof(l_pos), sizeof(Vec), true);
+    GXSETARRAY(GX_VA_NRM, mp_normal, sizeof(l_normal), sizeof(Vec), true);
+    GXSETARRAY(GX_VA_CLR0, mp_colors, sizeof(l_color), sizeof(GXColor), true);
+    GXSETARRAY(GX_VA_TEX0, mp_texCoords, sizeof(l_texCoord), 8, true);
 
     GXColorS10 spA0 = {0, 0, 0, 0};
     GXColorS10 sp98 = {0, 0, 0, 0};

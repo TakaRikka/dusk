@@ -132,7 +132,11 @@ void JASCalc::bzero(void* dest, u32 size) {
     }
 }
 
+#if AVOID_UB
+s16 const JASCalc::CUTOFF_TO_IIR_TABLE[129][4] = {
+#else
 s16 const JASCalc::CUTOFF_TO_IIR_TABLE[128][4] = {
+#endif
     0x0F5C, 0x0A3D, 0x4665, 0x1E73,
     0x0F5E, 0x0A3D, 0x4664, 0x1E73,
     0x0F63, 0x0A3C, 0x4661, 0x1E71,
@@ -261,6 +265,10 @@ s16 const JASCalc::CUTOFF_TO_IIR_TABLE[128][4] = {
     0x7C7A, 0x0052, 0x0233, 0x00F4,
     0x7E3B, 0x0029, 0x011B, 0x007A,
     0x7FFF, 0x0000, 0x0000, 0x0000,
+#if AVOID_UB
+    // Game OOB reads this in some cases.
+    0,0,0,0
+#endif
 };
 
 // currently required because of missing functions

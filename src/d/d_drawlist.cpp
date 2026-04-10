@@ -1398,11 +1398,20 @@ void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* pa
 }
 
 void dDlst_shadowControl_c::init() {
+#if TARGET_PC
+    // Increase shadow map resolution
+    static u16 l_realImageSize[2] = {1024, 512};
+#else
     static u16 l_realImageSize[2] = {192, 64};
+#endif
     for (int i = 0; i < 2; i++) {
         u16 size = l_realImageSize[i];
 
+#ifdef TARGET_PC
+        u32 buffer_size = 0x20; // No need to allocate memory for texture
+#else
         u32 buffer_size = GXGetTexBufferSize(size, size, 5, GX_DISABLE, 0);
+#endif
         field_0x15ef0[i] = JKR_NEW_ARRAY_ARGS(u8, buffer_size, 0x20);
         GXInitTexObj(&field_0x15eb0[i], field_0x15ef0[i], size, size, GX_TF_RGB5A3, GX_CLAMP,
                      GX_CLAMP, GX_DISABLE);
@@ -1467,11 +1476,18 @@ void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
     int tex = 0;
     u16 r27;
     u16 r26;
+#ifdef TARGET_PC
+    bool needsRestore = false;
+#endif
     for (; shadowReal; shadowReal = shadowReal->getZsortNext()) {
         if (shadowReal->isUse()) {
             if (r29 == 0) {
                 r27 = GXGetTexObjWidth(field_0x15eb0 + tex);
                 r26 = r27 * 2;
+#ifdef TARGET_PC
+                GXCreateFrameBuffer(r26, r26);
+                needsRestore = true;
+#endif
                 GXSetViewport(0.0f, 0.0f, r26, r26, 0.0f, 1.0f);
                 GXSetScissor(0, 0, r26, r26);
             }
@@ -1499,6 +1515,11 @@ void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
         GXPixModeSync();
         GXSetAlphaUpdate(GX_DISABLE);
     }
+#ifdef TARGET_PC
+    if (needsRestore) {
+        GXRestoreFrameBuffer();
+    }
+#endif
     GXSetClipMode(GX_CLIP_ENABLE);
     GXSetDither(GX_TRUE);
 }
@@ -1516,7 +1537,7 @@ void dDlst_shadowControl_c::draw(Mtx param_0) {
     dKy_GxFog_set();
 
     GXSetChanCtrl(GX_ALPHA0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSETARRAY(GX_VA_POS, l_shadowVolPos, sizeof(l_shadowVolPos), sizeof(l_shadowVolPos[0]));
+    GXSETARRAY(GX_VA_POS, l_shadowVolPos, sizeof(l_shadowVolPos), sizeof(l_shadowVolPos[0]), true);
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0);
     GXSetNumTevStages(1);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
@@ -1548,7 +1569,7 @@ void dDlst_shadowControl_c::draw(Mtx param_0) {
 
     GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB8, 0);
-    GXSETARRAY(GX_VA_POS, l_simpleShadowPos, sizeof(l_simpleShadowPos), sizeof(l_simpleShadowPos[0]));
+    GXSETARRAY(GX_VA_POS, l_simpleShadowPos, sizeof(l_simpleShadowPos), sizeof(l_simpleShadowPos[0]), true);
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
@@ -1636,7 +1657,7 @@ int dDlst_shadowControl_c::setReal(u32 param_1, s8 param_2, J3DModel* param_3, c
     u32 rv = pdVar12->set(mNextID, param_3, param_4, param_5, param_6, param_7, dVar17, dVar16);
     if (!rv) {
         return 0;
-    } 
+    }
     mRealNum++;
     if (pdVar10 == NULL) {
         if (pdVar11 == NULL) {
@@ -1860,6 +1881,12 @@ int dDlst_list_c::set(dDlst_base_c**& p_start, dDlst_base_c**& p_end, dDlst_base
 void dDlst_list_c::draw(dDlst_base_c** p_start, dDlst_base_c** p_end) {
     for (; p_start < p_end; p_start++) {
         dDlst_base_c* dlst = *p_start;
+
+#if DEBUG && TARGET_PC
+        char buf[64];
+        snprintf(buf, sizeof(buf), "%s::draw()", typeid(dlst).name());
+        GXScopedDebugGroup scope(buf);
+#endif
         dlst->draw();
     }
 }

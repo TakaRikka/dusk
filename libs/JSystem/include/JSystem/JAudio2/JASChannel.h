@@ -6,6 +6,7 @@
 #include "JSystem/JAudio2/JASOscillator.h"
 #include "JSystem/JAudio2/JASSoundParams.h"
 #include "JSystem/JAudio2/JASWaveInfo.h"
+#include "JSystem/JAudio2/JASDSPInterface.h"
 #include <os.h>
 
 struct JASDSPChannel;
@@ -45,6 +46,9 @@ public:
     /* 0x14 */ f32 mDolby;
 };
 
+#define CHANNEL_WAVE       0
+#define CHANNEL_OSCILLATOR 2
+
 /**
  * @ingroup jsystem-jaudio
  * 
@@ -52,7 +56,7 @@ public:
 class JASChannel : public JASPoolAllocObject_MultiThreaded<JASChannel> {
 public:
     typedef void (*Callback)(u32, JASChannel*, JASDsp::TChannel*, void*);
-    static const int BUSOUT_CPUCH = 6;
+    static const int BUSOUT_CPUCH = DSP_OUTPUT_CHANNELS;
     static const int OSC_NUM = 2;
 
     enum CallbackType {
@@ -75,7 +79,7 @@ public:
     };
 
     union MixConfig {
-        u16 whole;
+        BE(u16) whole;
         struct {
             u8 upper;
             u8 lower0 : 4;
@@ -153,10 +157,14 @@ public:
     /* 0xD4 */ u32 mKeySweepCount;
     /* 0xD8 */ u32 mSkipSamples;
     struct {
-        u32 field_0x0;
-        JASWaveInfo field_0x4;
+        u32 mChannelType; // CHANNEL_WAVE or CHANNEL_OSCILLATOR
+        JASWaveInfo mWaveInfo;
     } field_0xdc;
-    intptr_t field_0x104;
+    union {
+        u32 mWaveAramAddress;
+        u32 mOscillatorSomething;
+        u32 field_0x104;
+    };
 
     static OSMessageQueue sBankDisposeMsgQ;
     static OSMessage sBankDisposeMsg[16];

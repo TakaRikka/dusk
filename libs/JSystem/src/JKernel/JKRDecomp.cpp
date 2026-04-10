@@ -20,6 +20,15 @@ JKRDecomp* JKRDecomp::create(s32 priority) {
     return sDecompObject;
 }
 
+#if TARGET_PC
+void JKRDecomp::destroy() {
+    if (sDecompObject) {
+        OSSendMessage(&sMessageQueue, nullptr, OS_MESSAGE_NOBLOCK);
+        OSJoinThread(sDecompObject->getThreadRecord(), nullptr);
+    }
+}
+#endif
+
 OSMessage JKRDecomp::sMessageBuffer[8] = {0};
 
 OSMessageQueue JKRDecomp::sMessageQueue = {0};
@@ -37,6 +46,12 @@ void* JKRDecomp::run() {
         OSReceiveMessage(&sMessageQueue, &message, OS_MESSAGE_BLOCK);
 
         JKRDecompCommand* command = (JKRDecompCommand*)message;
+#if TARGET_PC
+        if (!command) {
+            break;
+        }
+#endif
+
         decode(command->mSrcBuffer, command->mDstBuffer, command->mSrcLength, command->mDstLength);
 
         if (command->field_0x20 != 0) {
@@ -57,6 +72,9 @@ void* JKRDecomp::run() {
             OSSendMessage(&command->mMessageQueue, (OSMessage)1, OS_MESSAGE_NOBLOCK);
         }
     }
+#ifdef TARGET_PC
+    return NULL;
+#endif
 }
 
 JKRDecompCommand* JKRDecomp::prepareCommand(u8* srcBuffer, u8* dstBuffer, u32 srcLength,

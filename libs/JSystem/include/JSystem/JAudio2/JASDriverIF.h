@@ -3,6 +3,10 @@
 
 #include "JSystem/JAudio2/JASCallback.h"
 
+#define JAS_OUTPUT_MONO     OS_SOUND_MODE_MONO
+#define JAS_OUTPUT_STEREO   OS_SOUND_MODE_STEREO
+#define JAS_OUTPUT_SURROUND 2
+
 typedef s32 (*DriverCallback)(void*);
 
 namespace JASDriver {

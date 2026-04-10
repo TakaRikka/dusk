@@ -18,6 +18,8 @@
 #include <os.h>
 #include <stdint.h>
 
+#include "tracy/Tracy.hpp"
+
 s16* JASDriver::sDmaDacBuffer[3];
 
 static u8 data_804507A8 = 3;
@@ -98,7 +100,10 @@ void JASDriver::setOutputRate(JASOutputRate param_0) {
         sSubFrames = 10;
         sDacRate = 48000.0f;
     }
+
+#if !TARGET_PC
     sDacRate *= 1.0008897f;
+#endif
 }
 
 const JASDriver::MixFunc JASDriver::sMixFuncs[4] = {
@@ -140,6 +145,7 @@ void JASDriver::updateDac() {
 }
 
 void JASDriver::updateDSP() {
+    ZoneScoped;
     JASProbe::start(3, "SFR-UPDATE");
     JASDsp::invalChannelAll();
 
@@ -149,6 +155,8 @@ void JASDriver::updateDSP() {
 
     JASPortCmd::execAllCommand();
     DSPSyncCallback();
+#if !TARGET_PC
+    // Safety kill code? Our audio engine isn't consistent enough and hits this incorrectly.
     static u32 old_time = 0;
     static u32 history[10] = {0x000F4240};
     u32 r28 = OSGetTick();
@@ -169,6 +177,7 @@ void JASDriver::updateDSP() {
         JASDSPChannel::killActiveChannel();
         #endif
     }
+#endif
     JASChannel::receiveBankDisposeMsg();
     JASDSPChannel::updateAll();
 
@@ -254,6 +263,10 @@ void JASDriver::finishDSPFrame() {
 }
 
 void JASDriver::registerMixCallback(MixCallback param_0, JASMixMode param_1) {
+#if TARGET_PC
+    JASCriticalSection section;
+#endif
+
     extMixCallback = param_0;
     sMixMode = param_1;
 }
@@ -271,11 +284,11 @@ u32 JASDriver::getSubFrames() {
 }
 
 u32 JASDriver::getDacSize() {
-    return sSubFrames * 0x50 * 2;
+    return sSubFrames * DSP_SUBFRAME_SIZE * 2;
 }
 
 u32 JASDriver::getFrameSamples() {
-    return sSubFrames * 0x50;
+    return sSubFrames * DSP_SUBFRAME_SIZE;
 }
 
 void JASDriver::mixMonoTrack(s16* buffer, u32 param_1, MixCallback param_2) {

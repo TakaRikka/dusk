@@ -5,14 +5,10 @@
 
 #include "m_Do/m_Do_DVDError.h"
 #include "JSystem/JKernel/JKRAssertHeap.h"
-#include <os.h>
+#include <dolphin/os.h>
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_Reset.h"
-
-// Added for the sleep workaround
-#include <chrono>
-#include <thread>
 
 #if PLATFORM_GCN
 const int stack_size = 3072;
@@ -29,24 +25,25 @@ static OSThread DvdErr_thread;
 static u8 DvdErr_stack[stack_size] ATTRIBUTE_ALIGN(16);
 #pragma pop
 
-// Alarm is not needed for the PC workaround
-// static OSAlarm Alarm;
+static OSAlarm Alarm;
 
 void mDoDvdErr_ThdInit() {
+#ifdef TARGET_PC
+    // Thread is not necessary on PC
+    return;
+#endif
+
     if (mDoDvdErr_initialized) {
         return;
     }
 
-    // OSTime time = OSGetTime(); // Unused in workaround
+    OSTime time = OSGetTime();
 
-    OSCreateThread(&DvdErr_thread, (void* (*)(void*))mDoDvdErr_Watch, NULL,
-                   DvdErr_stack + sizeof(DvdErr_stack), sizeof(DvdErr_stack),
-                   OSGetThreadPriority(OSGetCurrentThread()) - 3, 1);
+    OSCreateThread(&DvdErr_thread, (void*(*)(void*))mDoDvdErr_Watch, NULL, DvdErr_stack + sizeof(DvdErr_stack),
+                    sizeof(DvdErr_stack), OSGetThreadPriority(OSGetCurrentThread()) - 3, 1);
     OSResumeThread(&DvdErr_thread);
-
-    // PC Workaround: Disable Alarm logic. The thread will sleep itself.
-    // OSCreateAlarm(&Alarm);
-    // OSSetPeriodicAlarm(&Alarm, time, OS_BUS_CLOCK / 4, AlarmHandler);
+    OSCreateAlarm(&Alarm);
+    OSSetPeriodicAlarm(&Alarm, time, OS_BUS_CLOCK / 4, AlarmHandler);
 
     mDoDvdErr_initialized = true;
 }
@@ -54,16 +51,14 @@ void mDoDvdErr_ThdInit() {
 void mDoDvdErr_ThdCleanup() {
     if (mDoDvdErr_initialized) {
         OSCancelThread(&DvdErr_thread);
-        // OSCancelAlarm(&Alarm); // Disable Alarm cancel
+        OSCancelAlarm(&Alarm);
         mDoDvdErr_initialized = false;
     }
 }
 
 static void mDoDvdErr_Watch(void*) {
 #if PLATFORM_GCN
-#ifndef TARGET_PC
     OSDisableInterrupts();
-#endif
 #endif
     JKRThread(OSGetCurrentThread(), 0);
 
@@ -75,20 +70,10 @@ static void mDoDvdErr_Watch(void*) {
         if (status == DVD_STATE_FATAL_ERROR) {
             mDoDvdThd::suspend();
         }
-
-        // PC Workaround:
-        // Instead of suspending and waiting for an Alarm (which might not be implemented),
-        // we simply sleep for a short duration.
-        // OS_BUS_CLOCK / 4 corresponds to roughly 1/4th of a second on GC.
-        // We use 250ms here to simulate the periodic check.
-
-        // OSSuspendThread(&DvdErr_thread); // <-- Original causing deadlock without Alarm
-        std::this_thread::sleep_for(std::chrono::milliseconds(250));
-
+        OSSuspendThread(&DvdErr_thread);
     } while (true);
 }
 
 static void AlarmHandler(OSAlarm*, OSContext*) {
-    // This handler is no longer called in the PC workaround
     OSResumeThread(&DvdErr_thread);
 }

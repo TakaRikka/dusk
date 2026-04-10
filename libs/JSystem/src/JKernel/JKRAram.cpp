@@ -42,6 +42,12 @@ JKRAram* JKRAram::create(u32 aram_audio_buffer_size, u32 aram_audio_graph_size, 
     return sAramObject;
 }
 
+#if TARGET_PC
+void JKRAram::destroy() {
+    JKRDecomp::destroy();
+}
+#endif
+
 OSMessage JKRAram::sMessageBuffer[4] = {
     NULL,
     NULL,
@@ -94,7 +100,13 @@ void* JKRAram::run(void) {
     OSInitMessageQueue(&sMessageQueue, sMessageBuffer, 4);
     do {
         OSMessage msg;
+#ifdef TARGET_PC
+        if (!OSReceiveMessage(&sMessageQueue, &msg, OS_MESSAGE_BLOCK)) {
+            break;
+        }
+#else
         OSReceiveMessage(&sMessageQueue, &msg, OS_MESSAGE_BLOCK);
+#endif
         JKRAramCommand* message = (JKRAramCommand*)msg;
         int result = message->field_0x00;
         JKRAMCommand* command = (JKRAMCommand*)message->command;
@@ -106,6 +118,9 @@ void* JKRAram::run(void) {
             break;
         }
     } while (true);
+#ifdef TARGET_PC
+    return NULL;
+#endif
 }
 
 void JKRAram::checkOkAddress(u8* addr, u32 size, JKRAramBlock* block, u32 param_4) {

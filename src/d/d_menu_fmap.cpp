@@ -2278,7 +2278,7 @@ void dMenu_Fmap_c::decodeFieldMapData() {
     dMenuMapCommon_c::Stage_c* stage_data
         = (dMenuMapCommon_c::Stage_c*)(field_data + mpFieldDat->mStageDataOffset);
     mDataNumMax = stage_data->mCount;
-    mAllTitleName = *(u16*)(field_data + 0x16);
+    mAllTitleName = *(BE(u16)*)(field_data + 0x16);
     setTitleName(mAllTitleName);
     dMenu_Fmap_field_region_data_c::data* regions = region_data->mData;
     char tex_path[20];

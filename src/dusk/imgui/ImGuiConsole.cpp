@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <array>
 #include <numeric>
 #include <string_view>
@@ -6,14 +7,20 @@
 
 #include "fmt/format.h"
 #include "imgui.h"
-#include "aurora/gfx.h"
 #include <imgui_internal.h>
 
 #include "ImGuiConsole.hpp"
 
 #include "JSystem/JUtility/JUTGamePad.h"
+#include "SDL3/SDL_mouse.h"
+#include "dusk/config.hpp"
+#include "dusk/settings.h"
+#include "dusk/audio/DuskAudioSystem.h"
+#include "dusk/dusk.h"
+#include "tracy/Tracy.hpp"
 
 #if _WIN32
+#define NOMINMAX
 #include "Windows.h"
 #endif
 
@@ -21,6 +28,8 @@ using namespace std::string_literals;
 using namespace std::string_view_literals;
 
 namespace dusk {
+    float ImGuiScale() { return 1.0f; }
+
     void ImGuiStringViewText(std::string_view text) {
         // begin()/end() do not work on MSVC
         ImGui::TextUnformatted(text.data(), text.data() + text.size());
@@ -47,7 +56,7 @@ namespace dusk {
         ImVec2 workSize = viewport->WorkSize;
         ImVec2 windowPos;
         ImVec2 windowPosPivot;
-        constexpr float padding = 10.0f;
+        const float padding = 10.0f * ImGuiScale();
         windowPos.x = (corner & 1) != 0 ? (workPos.x + workSize.x - padding) : (workPos.x + padding);
         windowPos.y = (corner & 2) != 0 ? (workPos.y + workSize.y - padding) : (workPos.y + padding);
         windowPosPivot.x = (corner & 1) != 0 ? 1.0f : 0.0f;
@@ -150,10 +159,13 @@ namespace dusk {
         auto itemMin = ImGui::GetItemRectMin();
         auto itemMax = ImGui::GetItemRectMax();
 
+        float frameSpacingY = 8.0f;
+        float frameBottomPadding = 10.0f;
+
         ImVec2 halfFrame = ImVec2((frameHeight * 0.25f) * 0.5f, frameHeight * 0.5f);
         ImGui::GetWindowDrawList()->AddRect(
-            ImVec2(itemMin.x + halfFrame.x, itemMin.y + halfFrame.y),
-            ImVec2(itemMax.x - halfFrame.x, itemMax.y),
+            ImVec2(itemMin.x + halfFrame.x, itemMin.y + halfFrame.y + frameSpacingY),
+            ImVec2(itemMax.x - halfFrame.x, itemMax.y + frameBottomPadding),
             ImColor(ImGui::GetStyleColorVec4(ImGuiCol_Border)),
             halfFrame.x);
 
@@ -172,21 +184,76 @@ namespace dusk {
 
     ImGuiConsole::ImGuiConsole() {}
 
-    void ImGuiConsole::draw() {
+    void ImGuiConsole::InitSettings() {
+        bool lockAspect = getSettings().video.lockAspectRatio;
+        if (lockAspect) {
+            VILockAspectRatio(defaultAspectRatioW, defaultAspectRatioH);
+        } else {
+            VIUnlockAspectRatio();
+        }
+
+        dusk::audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
+        dusk::audio::SetEnableReverb(getSettings().audio.enableReverb);
+    }
+
+    void ImGuiConsole::UpdateSettings() {
+        getTransientSettings().skipFrameRateLimit = getSettings().game.enableTurboKeybind && ImGui::IsKeyDown(ImGuiKey_Tab);
+    }
+
+    void ImGuiConsole::PreDraw() {
+        ZoneScoped;
+        if (!m_isLaunchInitialized) {
+            InitSettings();
+
+            m_toasts.emplace_back("Press F1 to toggle menu"s, 5.f);
+            m_isLaunchInitialized = true;
+        }
+
+        UpdateSettings();
+        
+        if ((ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) &&
+            ImGui::IsKeyPressed(ImGuiKey_R))
+        {
+            JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
+        }
+
+        if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
+            ImGuiMenuGame::ToggleFullscreen();
+        }
+
         if (CheckMenuViewToggle(ImGuiKey_F1, m_isHidden)) {
+            ShowToasts();
+            ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+            SDL_HideCursor();
             return;
         }
 
+        ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouseCursorChange;
+        // Imgui will re-show cursor.
+
+        // TODO: we need to be able to render the menu bar & any overlays separately
+        // The code currently ties them all together, so hiding the menu hides all windows
+
         if (ImGui::BeginMainMenuBar()) {
             m_menuGame.draw();
+            m_menuEnhancements.draw();
+
+            // Keep always last
             m_menuTools.draw();
 
-            ImGui::SetCursorPosX(ImGui::GetWindowWidth() - 80.0f);
+            ImGui::SetCursorPosX(ImGui::GetWindowWidth() - 80.0f * ImGuiScale());
             ImGuiIO& io = ImGui::GetIO();
             ImGuiStringViewText(fmt::format(FMT_STRING("FPS: {:.2f}\n"), io.Framerate));
 
             ImGui::EndMainMenuBar();
         }
+
+        ShowToasts();
+    }
+
+    void ImGuiConsole::PostDraw() {
+        m_menuTools.afterDraw();
+        ShowPipelineProgress();
     }
 
     bool ImGuiConsole::CheckMenuViewToggle(ImGuiKey key, bool& active) {
@@ -219,105 +286,72 @@ namespace dusk {
             return "Null"sv;
         }
     }
-}
 
-class Limiter
-{
-    using delta_clock = std::chrono::high_resolution_clock;
-    using duration_t = std::chrono::nanoseconds;
-
-public:
-    void Reset()
-    {
-        m_oldTime = delta_clock::now();
-    }
-
-    void Sleep(duration_t targetFrameTime)
-    {
-        if (targetFrameTime.count() == 0)
-        {
+    void ImGuiConsole::ShowToasts() {
+        if (m_toasts.empty()) {
             return;
         }
+        auto& toast = m_toasts.front();
+        const float dt = ImGui::GetIO().DeltaTime;
+        toast.remain -= dt;
+        toast.current += dt;
 
-        auto start = delta_clock::now();
-        duration_t adjustedSleepTime = SleepTime(targetFrameTime);
-        if (adjustedSleepTime.count() > 0)
+        const ImGuiViewport* viewport = ImGui::GetMainViewport();
+        const ImVec2 workPos = viewport->WorkPos;
+        const ImVec2 workSize = viewport->WorkSize;
+        constexpr float padding = 10.0f;
+        const ImVec2 windowPos{workPos.x + workSize.x / 2, workPos.y + workSize.y - padding};
+        ImGui::SetNextWindowPos(windowPos, ImGuiCond_Always, ImVec2{0.5f, 1.f});
+
+        const float alpha = std::min({toast.remain, toast.current, 1.f});
+        ImGui::SetNextWindowBgAlpha(alpha * 0.65f);
+        ImVec4 textColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
+        textColor.w *= alpha;
+        ImVec4 borderColor = ImGui::GetStyleColorVec4(ImGuiCol_Border);
+        borderColor.w *= alpha;
+        ImGui::PushStyleColor(ImGuiCol_Text, textColor);
+        ImGui::PushStyleColor(ImGuiCol_Border, borderColor);
+        if (ImGui::Begin("Toast", nullptr,
+                         ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize |
+                             ImGuiWindowFlags_NoSavedSettings |
+                             ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav |
+                             ImGuiWindowFlags_NoMove))
         {
-            NanoSleep(adjustedSleepTime);
-            duration_t overslept = TimeSince(start) - adjustedSleepTime;
-            if (overslept < duration_t{ targetFrameTime })
-            {
-                m_overheadTimes[m_overheadTimeIdx] = overslept;
-                m_overheadTimeIdx = (m_overheadTimeIdx + 1) % m_overheadTimes.size();
-            }
+            ImGuiStringViewText(toast.message);
         }
-        Reset();
-    }
+        ImGui::End();
+        ImGui::PopStyleColor(2);
 
-    duration_t SleepTime(duration_t targetFrameTime)
-    {
-        const auto sleepTime = duration_t{ targetFrameTime } - TimeSince(m_oldTime);
-        m_overhead = std::accumulate(m_overheadTimes.begin(), m_overheadTimes.end(), duration_t{}) /
-            m_overheadTimes.size();
-        if (sleepTime > m_overhead)
-        {
-            return sleepTime - m_overhead;
+        if (toast.remain <= 0.f) {
+            m_toasts.pop_front();
         }
-        return duration_t{ 0 };
     }
 
-private:
-    delta_clock::time_point m_oldTime;
-    std::array<duration_t, 4> m_overheadTimes{};
-    size_t m_overheadTimeIdx = 0;
-    duration_t m_overhead = duration_t{ 0 };
-
-    duration_t TimeSince(delta_clock::time_point start)
-    {
-        return std::chrono::duration_cast<duration_t>(delta_clock::now() - start);
-    }
-
-#if _WIN32
-    bool m_initialized;
-    double m_countPerNs;
-
-    void NanoSleep(const duration_t duration)
-    {
-        if (!m_initialized)
-        {
-            LARGE_INTEGER freq;
-            QueryPerformanceFrequency(&freq);
-            m_countPerNs = static_cast<double>(freq.QuadPart) / 1000000000.0;
-            m_initialized = true;
+    void ImGuiConsole::ShowPipelineProgress() {
+        const auto* stats = aurora_get_stats();
+        const u32 queuedPipelines = stats->queuedPipelines;
+        if (queuedPipelines == 0) {
+            return;
         }
+        const u32 createdPipelines = stats->createdPipelines;
+        const u32 totalPipelines = queuedPipelines + createdPipelines;
 
-        DWORD ms = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
-        auto tickCount =
-            static_cast<LONGLONG>(static_cast<double>(duration.count()) * m_countPerNs);
-        LARGE_INTEGER count;
-        QueryPerformanceCounter(&count);
-        if (ms > 10)
-        {
-            // Adjust for Sleep overhead
-            ::Sleep(ms - 10);
-        }
-        auto end = count.QuadPart + tickCount;
-        do
-        {
-            QueryPerformanceCounter(&count);
-        } while (count.QuadPart < end);
+        const auto* viewport = ImGui::GetMainViewport();
+        const auto padding = viewport->WorkPos.y + 10.f;
+        const auto halfWidth = viewport->GetWorkCenter().x;
+        ImGui::SetNextWindowPos(ImVec2{halfWidth, padding}, ImGuiCond_Always, ImVec2{0.5f, 0.f});
+        ImGui::SetNextWindowSize(ImVec2{halfWidth, 0.f}, ImGuiCond_Always);
+        ImGui::SetNextWindowBgAlpha(0.65f);
+        ImGui::Begin("Pipelines", nullptr,
+                     ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoMove |
+                         ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing);
+        const auto percent = static_cast<float>(createdPipelines) / static_cast<float>(totalPipelines);
+        const auto progressStr = fmt::format("Processing pipelines: {} / {}", createdPipelines, totalPipelines);
+        const auto textSize = ImGui::CalcTextSize(progressStr.data(), progressStr.data() + progressStr.size());
+        ImGui::NewLine();
+        ImGui::SameLine(ImGui::GetWindowWidth() / 2.f - textSize.x + textSize.x / 2.f);
+        ImGuiStringViewText(progressStr);
+        ImGui::ProgressBar(percent);
+        ImGui::End();
     }
-#else
-    void NanoSleep(const duration_t duration)
-    {
-        std::this_thread::sleep_for(duration);
-    }
-#endif
-};
-
-static Limiter g_frameLimiter;
-void frame_limiter()
-{
-    g_frameLimiter.Sleep(
-        std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds{ 1 }) / 60);
 }

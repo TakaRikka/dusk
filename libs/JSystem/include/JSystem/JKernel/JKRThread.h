@@ -101,11 +101,22 @@ public:
         }
         return message;
     }
+#ifdef TARGET_PC
+    OSMessage waitMessageBlock(BOOL* received) {
+        OSMessage message;
+        BOOL rv = OSReceiveMessage(&mMessageQueue, &message, OS_MESSAGE_BLOCK);
+        if (received) {
+            *received = rv;
+        }
+        return message;
+    }
+#else
     OSMessage waitMessageBlock() {
         OSMessage message;
         OSReceiveMessage(&mMessageQueue, &message, OS_MESSAGE_BLOCK);
         return message;
     }
+#endif
     void jamMessageBlock(OSMessage message) {
         OSJamMessage(&mMessageQueue, message, OS_MESSAGE_BLOCK);
     }
@@ -132,6 +143,10 @@ public:
 
     static JSUList<JKRThread> sThreadList;
     // static u8 sThreadList[12];
+
+#if TARGET_PC
+    const char* mThreadName;
+#endif
 };
 
 class JKRIdleThread : public JKRThread {

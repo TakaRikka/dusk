@@ -302,12 +302,12 @@ bool dMeterMap_c::isEventRunCheck() {
 f32 dMeterMap_c::getMapDispEdgeLeftX_Layout() {
     #if (PLATFORM_WII || PLATFORM_SHIELD)
     if (mDoGph_gInf_c::isWide()) {
-        return g_meter_mapHIO.mWideBottomLeftX + field_0x28;
+        return g_meter_mapHIO.mWideBottomLeftX + mSlidePositionOffset;
     }
 
-    return g_meter_mapHIO.mNormalBottomLeftX + field_0x28;
+    return g_meter_mapHIO.mNormalBottomLeftX + mSlidePositionOffset;
     #else
-    return field_0x28 + 35;
+    return mSlidePositionOffset + 35;
     #endif
 }
 
@@ -349,14 +349,14 @@ s16 dMeterMap_c::getDispPosOutSide_OffsetX() {
 void dMeterMap_c::setDispPosInsideFlg_SE_On() {
     if (isEnableDispMapAndMapDispSizeTypeNo()) {
         dComIfGp_mapShow();
-        field_0x2d = 1;
+        mMapIsInside = 1;
         field_0x2e = 7;
     }
 }
 
 void dMeterMap_c::setDispPosOutsideFlg_SE_On() {
     dComIfGp_mapHide();
-    field_0x2d = 0;
+    mMapIsInside = 0;
     field_0x2e = 7;
 }
 
@@ -456,44 +456,44 @@ void dMeterMap_c::_create(J2DScreen* unused) {
     field_0x2a = 0;
 
     if (dComIfGp_checkMapShow()) {
-        field_0x2d = 1;
+        mMapIsInside = 1;
 
         if (!isEnableDispMapAndMapDispSizeTypeNo()) {
-            field_0x2d = 0;
+            mMapIsInside = 0;
         }
 
         if (!isMapOpenCheck()) {
-            field_0x2d = 0;
+            mMapIsInside = 0;
         }
     } else {
-        field_0x2d = 0;
+        mMapIsInside = 0;
     }
 
-    if (field_0x2d != 0) {
-        field_0x2d = 1;
-        field_0x28 = getDispPosInside_OffsetX();
+    if (mMapIsInside != 0) {
+        mMapIsInside = 1;
+        mSlidePositionOffset = getDispPosInside_OffsetX();
         dMeter2Info_setMapStatus(1);
     } else {
-        field_0x2d = 0;
-        field_0x28 = getDispPosOutSide_OffsetX();
+        mMapIsInside = 0;
+        mSlidePositionOffset = getDispPosOutSide_OffsetX();
         dMeter2Info_setMapStatus(0);
     }
 
     field_0x2e = 0;
-    field_0x28 = 0;
+    mSlidePositionOffset = 0;
     field_0x30 = 0;
                  /* dSv_event_flag_c::M_085 - Twilight Hyrule Field - Midna dialogue right before Boss Bug's Tear of Light appears */
     field_0x2b = dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[118]);
 }
 
 void dMeterMap_c::setDispPosOutSide() {
-    field_0x2d = 0;
-    field_0x28 = getDispPosOutSide_OffsetX();
+    mMapIsInside = 0;
+    mSlidePositionOffset = getDispPosOutSide_OffsetX();
 }
 
 void dMeterMap_c::setDispPosInSide() {
-    field_0x2d = 1;
-    field_0x28 = getDispPosInside_OffsetX();
+    mMapIsInside = 1;
+    mSlidePositionOffset = getDispPosInside_OffsetX();
 }
 
 void dMeterMap_c::_delete() {
@@ -506,7 +506,7 @@ void dMeterMap_c::_delete() {
     }
 
     if (isEnableDispMapAndMapDispSizeTypeNo()) {
-        if (field_0x2d != 0) {
+        if (mMapIsInside != 0) {
             dComIfGp_mapShow();
         } else {
             dComIfGp_mapHide();
@@ -548,16 +548,16 @@ void dMeterMap_c::_move(u32 param_0) {
         ctrlShowMap();
     }
 
-    if (field_0x2d != 0) {
-        if (field_0x28 != getDispPosInside_OffsetX()) {
-            if (!cLib_addCalcAngleS(&field_0x28, getDispPosInside_OffsetX(), 2, 60, 10)) {
+    if (mMapIsInside != 0) {
+        if (mSlidePositionOffset != getDispPosInside_OffsetX()) {
+            if (!cLib_addCalcAngleS(&mSlidePositionOffset, getDispPosInside_OffsetX(), 2, 60, 10)) {
                 #if DEBUG
                 cLib_checkBit<u8>((int)field_0x2e, 4);
                 #endif
             }
         }
     } else {
-        cLib_addCalcAngleS(&field_0x28, getDispPosOutSide_OffsetX(), 2, 60, 10);
+        cLib_addCalcAngleS(&mSlidePositionOffset, getDispPosOutSide_OffsetX(), 2, 60, 10);
     }
 
     Vec map_pos = dMapInfo_n::getMapPlayerPos();
@@ -579,8 +579,8 @@ void dMeterMap_c::_move(u32 param_0) {
     mSizeH = (s16)sizeH;
     #endif
 
-    field_0x18 = field_0x28 + getMapDispEdgeLeftX_Layout();
-    field_0x1c = getMapDispEdgeBottomY_Layout() - mSizeH;
+    mDrawPosX = mSlidePositionOffset + getMapDispEdgeLeftX_Layout();
+    mDrawPosY = getMapDispEdgeBottomY_Layout() - mSizeH;
 
     mMap->_move(map_pos.x, map_pos.z, stayNo, map_pos.y);
     field_0x30 = dComIfGp_event_runCheck();
@@ -609,8 +609,8 @@ void dMeterMap_c::draw() {
         graf->setup2D();
         f32 sizeX = mSizeW;
         f32 sizeY = mSizeH;
-        f32 tmp2 = field_0x18;
-        f32 tmp3 = field_0x1c;
+        f32 drawPosX = mDrawPosX;
+        f32 drawPosY = mDrawPosY;
 
         u8 alpha = mMapAlpha;
         #if DEBUG
@@ -620,7 +620,13 @@ void dMeterMap_c::draw() {
         #endif
         mMapJ2DPicture->setAlpha(alpha);
 
-        mMapJ2DPicture->draw(tmp2, tmp3, sizeX, sizeY, false, false, false);
+        #if TARGET_PC
+        mMapJ2DPicture->draw(mDoGph_gInf_c::ScaleHUDXLeft(drawPosX), drawPosY, sizeX, sizeY, false,
+                             false, false);
+        #else
+        mMapJ2DPicture->draw(drawPosX, drawPosY, sizeX, sizeY, false, false, false);
+        #endif
+
         mMapJ2DPicture->calcMtx();
     }
 }
@@ -640,7 +646,7 @@ void dMeterMap_c::ctrlShowMap() {
             dMeter2Info_getPauseStatus() == 2 || dMeter2Info_getPauseStatus() == 6)
         {
             #if !DEBUG
-            if (dMeter2Info_getMapStatus() == 0 && field_0x2d == 0) {
+            if (dMeter2Info_getMapStatus() == 0 && mMapIsInside == 0) {
                 setDispPosInsideFlg_SE_On();
                 Z2GetAudioMgr()->seStart(Z2SE_SY_MAP_OPEN_S, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
                                             -1.0f, 0);
@@ -653,7 +659,7 @@ void dMeterMap_c::ctrlShowMap() {
             #if DEBUG
                 dMeter2Info_getMapStatus() == 0 &&
             #else
-                dMeter2Info_getMapStatus() == 1 && field_0x2d != 0 &&
+                dMeter2Info_getMapStatus() == 1 && mMapIsInside != 0 &&
             #endif
                 isFmapScreen()
             ) {
@@ -690,7 +696,7 @@ void dMeterMap_c::ctrlShowMap() {
             dMeter2Info_resetPauseStatus();
             if (isDmapScreen()) {
                 #if !DEBUG
-                if (dMeter2Info_getMapStatus() == 0 && field_0x2d == 0) {
+                if (dMeter2Info_getMapStatus() == 0 && mMapIsInside == 0) {
                     setDispPosInsideFlg_SE_On();
                     Z2GetAudioMgr()->seStart(Z2SE_SY_MAP_OPEN_S, NULL, 0, 0, 1.0f, 1.0f,
                                                 -1.0f, -1.0f, 0);
@@ -703,7 +709,7 @@ void dMeterMap_c::ctrlShowMap() {
                 #if DEBUG
                     dMeter2Info_getMapStatus() == 0
                 #else
-                    dMeter2Info_getMapStatus() == 1 && field_0x2d != 0
+                    dMeter2Info_getMapStatus() == 1 && mMapIsInside != 0
                 #endif
                 ) {
                     dMeter2Info_setMapStatus(6);

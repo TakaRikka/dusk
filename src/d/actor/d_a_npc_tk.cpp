@@ -2014,7 +2014,7 @@ void daNPC_TK_c::executeWolfPerch() {
         mWolfPathData = dPath_GetRoomPath(mpPath1->m_nextID, fopAcM_GetRoomNo(this));
         JUT_ASSERT(2498, mWolfPathData != NULL);
 
-        field_0x6ea = mWolfPathData->field_0x6;
+        field_0x6ea = mWolfPathData->swbit;
         field_0x6e8 = mWolfPathData->field_0x4;
         field_0x6e9 = mWolfPathData->field_0x7;
         field_0x6d0.Init(mWolfPathData);
@@ -2518,7 +2518,7 @@ void daNPC_TK_c::executeResistanceDemo() {
                            0x200, 0x10);
         shape_angle.x = -current.angle.x;
 
-        cLib_addCalcAngleS(&current.angle.y, cLib_targetAngleY((Vec*)&current, &posWithOffset), 8,
+        cLib_addCalcAngleS(&current.angle.y, cLib_targetAngleY(&current.pos, &posWithOffset), 8,
                            0x400, 0x10);
         shape_angle.y = current.angle.y;
 

@@ -2,6 +2,7 @@
 #define JAUAUDIBLEPARAM_H
 
 #include <types.h>
+#include "dusk/endian.h"
 
 /**
  * @ingroup jsystem-jaudio
@@ -9,13 +10,13 @@
  */
 struct JAUAudibleParam {
     f32 getDopplerPower() const {
-        return (u32)((*(u8*)&field_0x0.raw >> 4) & 0xf) * (1.0f / 15.0f);
+        return field_0x0.bytes.b0_0 * (1.0f / 15.0f);
     }
 
     union {
         struct {
-            u16 f0;
-            u16 f1;
+            BE(u16) f0;
+            BE(u16) f1;
         } half;
         struct {
             u8 b0_0 : 4;
@@ -29,7 +30,7 @@ struct JAUAudibleParam {
             u8 b2;
             u8 b3;
         } bytes;
-        u32 raw;
+        BE(u32) raw;
     } field_0x0;
 };
 

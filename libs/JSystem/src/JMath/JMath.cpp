@@ -77,8 +77,6 @@ void JMAFastVECNormalize(__REGISTER const Vec* src, __REGISTER Vec* dst) {
     dst->y = src->y * length;
     dst->z = src->z * length;
 #endif  // clang-format on
-
-    OSPanic(__FILE__, __LINE__, "UNIMPLEMENTED");
 }
 
 void JMAVECScaleAdd(__REGISTER const Vec* vec1, __REGISTER const Vec* vec2, __REGISTER Vec* dst,

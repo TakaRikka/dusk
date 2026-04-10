@@ -1467,7 +1467,7 @@ static f32 l_ladderAnmBaseTransY = 102.00054168701172f;
 
 static dCcD_SrcCyl l_cylSrc = {
     {
-        {0, {{AT_TYPE_WOLF_ATTACK, 3, 0x1A}, {0xD8FFFDFF, 5}, 0x73}},
+        {0, {{(u32)AT_TYPE_WOLF_ATTACK, 3, 0x1A}, {0xD8FFFDFF, 5}, 0x73}},
         {dCcD_SE_WOLF_BITE, 3, 1, 0, {1}},
         {dCcD_SE_NONE, 6, 0, 0, {0}},
         {0},
@@ -7509,6 +7509,11 @@ void daAlink_c::setBlendMoveAnime(f32 i_morf) {
     f32 sp28 = mpHIO->mMove.m.mFootPositionRatio;
     BOOL sp24 = checkEventRun();
     BOOL sp20 = checkBootsMoveAnime(1);
+#if TARGET_PC
+    if (dusk::getSettings().game.enableFastIronBoots) {
+        sp20 = FALSE;
+    }
+#endif
 
     f32 var_f29;
 
@@ -9469,6 +9474,11 @@ void daAlink_c::setStickData() {
             } else {
                 mHeavySpeedMultiplier = mpHIO->mItem.mIronBoots.m.mInputFactor;
             }
+#if TARGET_PC
+            if (dusk::getSettings().game.enableFastIronBoots) {
+                mHeavySpeedMultiplier = 1.0f;
+            }
+#endif
             mStickValue *= mHeavySpeedMultiplier;
         } else if (checkBootsOrArmorHeavy()) {
             if (checkZoraWearAbility()) {
@@ -9476,6 +9486,11 @@ void daAlink_c::setStickData() {
             } else {
                 mHeavySpeedMultiplier = mpHIO->mItem.mIronBoots.m.mWaterInputFactor;
             }
+#if TARGET_PC
+            if (dusk::getSettings().game.enableFastIronBoots) {
+                mHeavySpeedMultiplier = 1.0f;
+            }
+#endif
             mStickValue *= mHeavySpeedMultiplier;
         } else if ((checkWolf() && field_0x2fbc == 11 && checkWaterPolygonUnder()) ||
                    mGndPolyAtt0 == 11)
@@ -12662,7 +12677,11 @@ void daAlink_c::setMagicArmorBrk(int i_status) {
 }
 
 BOOL daAlink_c::checkMagicArmorHeavy() const {
+#if TARGET_PC
+    return checkMagicArmorWearAbility() && (dComIfGs_getRupee() == 0 && !dusk::getSettings().game.freeMagicArmor);
+#else
     return checkMagicArmorWearAbility() && dComIfGs_getRupee() == 0;
+#endif
 }
 
 BOOL daAlink_c::checkBootsOrArmorHeavy() const {
@@ -18568,7 +18587,13 @@ int daAlink_c::execute() {
             field_0x372c = cXyz::Zero;
             field_0x2fb8 = 0;
 
+#if TARGET_PC
+            // This handles rupee drain and transitions between rupees/no rupees
+            // We can skip all of that if the magic armor doesn't use rupees
+            if (!dusk::getSettings().game.freeMagicArmor && checkMagicArmorWearAbility() && mClothesChangeWaitTimer == 0) {
+#else
             if (checkMagicArmorWearAbility() && mClothesChangeWaitTimer == 0) {
+#endif
                 if (checkMagicArmorNoDamage() && !checkEventRun()) {
                     if (field_0x2fc3 == 0) {
                         field_0x2fc3 = 10;

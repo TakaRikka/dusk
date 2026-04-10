@@ -27,6 +27,10 @@ JSUList<JKRAMCommand> JKRAramPiece::sAramPieceCommandList;
 
 OSMutex JKRAramPiece::mMutex;
 
+#if DEBUG && TARGET_PC
+volatile u8 forceRead;
+#endif
+
 JKRAMCommand* JKRAramPiece::orderAsync(int direction, uintptr_t source, uintptr_t destination, u32 length,
                                        JKRAramBlock* block, JKRAMCommand::AsyncCallback callback) {
     lock();
@@ -44,6 +48,12 @@ JKRAMCommand* JKRAramPiece::orderAsync(int direction, uintptr_t source, uintptr_
     JKRAMCommand* command =
         JKRAramPiece::prepareCommand(direction, source, destination, length, block, callback);
     message->setting(1, command);
+
+#if DEBUG && TARGET_PC
+    if (direction == ARAM_DIR_MRAM_TO_ARAM) {
+        forceRead = *reinterpret_cast<u8*>(source);
+    }
+#endif
 
     OSSendMessage(&JKRAram::sMessageQueue, message, OS_MESSAGE_BLOCK);
     if (command->mCallback != NULL) {

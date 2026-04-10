@@ -83,7 +83,11 @@ extern int __abs(int);
 void* __memcpy(void*, const void*, int);
 #endif
 
-#ifdef _MSVC_LANG
+#ifndef M_PI
+#define M_PI 3.14159265358979323846f
+#endif
+
+#if defined(_MSVC_LANG) && !defined(__clang__)
 inline int __builtin_clz(unsigned int v) {
     int count = 32;
     while (v != 0) {
@@ -94,7 +98,6 @@ inline int __builtin_clz(unsigned int v) {
 }
 
 #define COMPOUND_LITERAL(x)
-#define M_PI 3.14159265358979323846f
 #else
 
 #define COMPOUND_LITERAL(x) (x)
@@ -191,15 +194,12 @@ static const float INF = 2000000000.0f;
 #endif
 
 // potential fakematch?
-#if DEBUG
 #define FABSF fabsf
-#else
-#define FABSF std::fabsf
-#endif
 
 #ifndef __MWERKS__
 #if __cplusplus
 #include <cmath>
+#include <math.h>
 using std::isnan;
 #endif
 #endif
@@ -214,5 +214,7 @@ using std::isnan;
 #define IS_REF_NULL(r) (0)
 #define IS_REF_NONNULL(r) (1)
 #endif
+
+#define CRASH(msg, ...) OSPanic(__FILE__, __LINE__, "%s", msg, ##__VA_ARGS__)
 
 #endif

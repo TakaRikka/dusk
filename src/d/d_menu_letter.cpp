@@ -223,8 +223,13 @@ void dMenu_Letter_c::_draw() {
     f32 y1 = local_178.y;
     Vec local_184;
     local_184 = afStack_138.getGlobalVtx(field_0x1ec, &mtx, 3, false, 0);
+#if TARGET_PC
+    f32 dVar17 = mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getWidth();
+    f32 dVar16 = mDoGph_gInf_c::getHeightF() / mDoGph_gInf_c::getHeight();
+#else
     f32 dVar17 = mDoGph_gInf_c::getWidthF() / FB_WIDTH;
     f32 dVar16 = mDoGph_gInf_c::getHeightF() / FB_HEIGHT;
+#endif
     f32 fVar1 = (x1 - mDoGph_gInf_c::getMinXF()) / dVar17;
     f32 fVar2 = y1 / dVar16;
     grafContext->scissor(fVar1, fVar2,

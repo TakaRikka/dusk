@@ -495,8 +495,8 @@ int daE_ZS_c::CreateHeap() {
     return 1;
 }
 
-static void useHeapInit(fopAc_ac_c* i_this) {
-    static_cast<daE_ZS_c*>(i_this)->CreateHeap();
+static int useHeapInit(fopAc_ac_c* i_this) {
+    return static_cast<daE_ZS_c*>(i_this)->CreateHeap();
 }
 
 int daE_ZS_c::create() {
@@ -504,7 +504,7 @@ int daE_ZS_c::create() {
     int phase = dComIfG_resLoad(&mPhase, "E_ZS");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("E_ZS PARAM %x\n", fopAcM_GetParam(this));
-        if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)useHeapInit, 0xFC0)) {
+        if (!fopAcM_entrySolidHeap(this, useHeapInit, 0xFC0)) {
             return cPhs_ERROR_e;
         }
 

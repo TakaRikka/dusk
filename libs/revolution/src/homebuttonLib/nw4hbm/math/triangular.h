@@ -19,7 +19,7 @@ namespace nw4hbm {
 
         inline f32 TanFIdx(f32 fidx) {
             // They were just like "Ah fuck it we already got too many tables" haha lol
-            return std::tanf(fidx * convert::FIdx2Rad);
+            return tanf(fidx * convert::FIdx2Rad);
         }
 
         inline f32 CosRad(f32 rad) {

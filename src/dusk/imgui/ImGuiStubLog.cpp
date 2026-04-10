@@ -1,4 +1,5 @@
 #include <vector>
+#include <mutex>
 
 #include "dusk/logging.h"
 #include "imgui.h"
@@ -9,6 +10,7 @@ namespace dusk {
     static ImGuiTextBuffer StubLogBuffer;
     static std::vector<int> LineOffsets;
     static bool StubLogPaused;
+    static std::mutex StubLogMutex;
 
     const char* LogLevelName(const AuroraLogLevel level) {
         switch (level) {
@@ -32,16 +34,22 @@ namespace dusk {
             return;
         }
 
+        std::lock_guard lock(StubLogMutex);
+
+        if (StubLogBuffer.size() > 1024 * 1024) {
+            DuskLog.warn("Stub log FULL. Dropping logs!");
+            return;
+        }
+
         LineOffsets.push_back(StubLogBuffer.size());
         const auto levelName = LogLevelName(level);
         StubLogBuffer.appendf("[%s | %s] %s\n", levelName, module, message);
     }
 
-    static void ClearPastFrame();
-
     void ImGuiMenuTools::ShowStubLog() {
+        std::lock_guard lock(StubLogMutex);
+
         if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F5, m_showStubLog)) {
-            ClearPastFrame();
             return;
         }
 
@@ -56,7 +64,7 @@ namespace dusk {
 
             if (ImGui::BeginChild("scrolling")) {
                 ImGuiListClipper clipper;
-                clipper.Begin(LineOffsets.size());
+                clipper.Begin(static_cast<int>(LineOffsets.size()));
                 while (clipper.Step()) {
                     for (int idx = clipper.DisplayStart; idx < clipper.DisplayEnd; idx++) {
                         const char* lineStart = StubLogBuffer.begin() + LineOffsets[idx];
@@ -72,7 +80,6 @@ namespace dusk {
         }
 
         ImGui::End();
-        ClearPastFrame();
     }
 
     void ClearPastFrame() {
@@ -81,5 +88,11 @@ namespace dusk {
         }
         StubLogBuffer.clear();
         LineOffsets.clear();
+    }
+
+    void ImGuiMenuTools::afterDraw() {
+        std::lock_guard lock(StubLogMutex);
+
+        ClearPastFrame();
     }
 }

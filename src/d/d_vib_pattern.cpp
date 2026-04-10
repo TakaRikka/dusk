@@ -59,3 +59,30 @@ const vib_pattern dVibration_c::CQ_patt[VIBMODE_Q_MAX] = {
     /* VIBMODE_Q_POWER8 */ {4, 32, 0x6B6D6B6D},
     /* VIBMODE_Q_HORSE  */ {0, 27, 0x20201000},
 };
+
+const char* shock_names[VIBMODE_S_MAX] = {
+    "VIBMODE_S_CUSTOM",
+    "VIBMODE_S_POWER1",
+    "VIBMODE_S_POWER2",
+    "VIBMODE_S_POWER3",
+    "VIBMODE_S_POWER4",
+    "VIBMODE_S_POWER5",
+    "VIBMODE_S_POWER6",
+    "VIBMODE_S_POWER7",
+    "VIBMODE_S_POWER8",
+    "VIBMODE_S_DOKUTT",
+    "VIBMODE_S_FOR2D",
+};
+
+const char* quake_names[VIBMODE_Q_MAX] = {
+    "VIBMODE_Q_CUSTOM",
+    "VIBMODE_Q_POWER1",
+    "VIBMODE_Q_POWER2",
+    "VIBMODE_Q_POWER3",
+    "VIBMODE_Q_POWER4",
+    "VIBMODE_Q_POWER5",
+    "VIBMODE_Q_POWER6",
+    "VIBMODE_Q_POWER7",
+    "VIBMODE_Q_POWER8",
+    "VIBMODE_Q_HORSE",
+};

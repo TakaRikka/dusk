@@ -29,6 +29,10 @@
 #include "DynamicLink.h"
 #include "os_report.h"
 
+#if TARGET_PC
+#include <assert.h>
+#endif
+
 #if !PLATFORM_GCN
 #include <revolution/sc.h>
 #include <revolution/wpad.h>
@@ -588,6 +592,7 @@ void myExceptionCallback(u16, OSContext*, u32, u32) {
     VIFlush();
 }
 
+#ifndef TARGET_PC
 static void fault_callback_scroll(u16, OSContext* p_context, u32, u32) {
     JUTException* manager = JUTException::getManager();
     JUTConsole* exConsole = manager->getConsole();
@@ -710,6 +715,7 @@ static void fault_callback_scroll(u16, OSContext* p_context, u32, u32) {
         } while (true);
     } while (true);
 }
+#endif
 
 static void dummy_string() {
     DEAD_STRING("\x1B[32m%-24s = size=%d KB\n\x1B[m");
@@ -991,6 +997,11 @@ int mDoMch_Create() {
     GXSetVerifyCallback((GXVerifyCallback)&myGXVerifyCallback);
     #endif
     JKRDvdRipper::setSZSBufferSize(0x4000);
+#if TARGET_PC
+    JKRHeap* dvdHeap = JKRCreateExpHeap(0x10000, NULL, false);
+    assert(dvdHeap != NULL);
+    JKRDvdRipper::setHeap(dvdHeap);
+#endif
     JKRDvdAramRipper::setSZSBufferSize(0x4000);
     JKRAram::setSZSBufferSize(0x2000);
     mDoDvdThd::create(OSGetThreadPriority(OSGetCurrentThread()) - 2);
@@ -999,3 +1010,9 @@ int mDoMch_Create() {
 
     return 1;
 }
+
+#if TARGET_PC
+void mDoMch_Destroy() {
+    JFWSystem::shutdown();
+}
+#endif

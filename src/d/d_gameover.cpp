@@ -37,8 +37,13 @@ void dDlst_Gameover_CAPTURE_c::draw() {
     TGXTexObj tex_obj;
     Mtx44 m;
 
+#if TARGET_PC
+    GXSetTexCopySrc(0, 0, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
+    GXSetTexCopyDst(mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), GX_TF_RGB565, GX_TRUE);
+#else
     GXSetTexCopySrc(0, 0, FB_WIDTH, FB_HEIGHT);
-    GXSetTexCopyDst(FB_WIDTH / 2, FB_HEIGHT / 2, GX_TF_RGB565, 1);
+    GXSetTexCopyDst(FB_WIDTH / 2, FB_HEIGHT / 2, GX_TF_RGB565, GX_TRUE);
+#endif
     GXCopyTex(mDoGph_gInf_c::mZbufferTex, 0);
     GXPixModeSync();
     GXInitTexObj(&tex_obj, mDoGph_gInf_c::mFrameBufferTex, FB_WIDTH / 2, FB_HEIGHT / 2,
@@ -427,7 +432,14 @@ void dDlst_GameOverScrnDraw_c::draw() {
         img_white.a = 255;
 
         mpBackImg->setBlackWhite(img_black, img_white);
+
+        #if TARGET_PC
+        mpBackImg->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
+                        mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), false, false,
+                        false);
+        #else
         mpBackImg->draw(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, false, false, false);
+        #endif
     } else {
         JUtility::TColor img_black;
         JUtility::TColor img_white;
@@ -442,7 +454,13 @@ void dDlst_GameOverScrnDraw_c::draw() {
         img_white.b = l_HIO.mWhite.b;
         img_white.a = l_HIO.mWhite.a;
 
+        #if TARGET_PC
+        mpBackImg->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
+                        mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), false, false,
+                        false);
+        #else
         mpBackImg->draw(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, false, false, false);
+        #endif
 
         static f32 offset[8] = {-138.0f, -96.0f, -56.0f, -18.0f, 42.0f, 75.0f, 110.0f, 143.0f};
 

@@ -310,9 +310,9 @@ int daObjFan_c::Delete() {
     return 1;
 }
 
-static void daObjFan_create1st(daObjFan_c* param_0) {
+static int daObjFan_create1st(daObjFan_c* param_0) {
     fopAcM_ct(param_0, daObjFan_c);
-    param_0->create1st();
+    return param_0->create1st();
 }
 
 static int daObjFan_MoveBGDelete(daObjFan_c* param_0) {

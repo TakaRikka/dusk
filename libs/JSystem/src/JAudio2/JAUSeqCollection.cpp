@@ -4,39 +4,39 @@
 #include "JSystem/JUtility/JUTAssert.h"
 
 JAUSeqCollection::JAUSeqCollection() {
-    field_0x8 = NULL;
+    mHeader = NULL;
 }
 
 void JAUSeqCollection::init(void const* param_0) {
-    field_0x8 = (const JAUSeqCollectionData*)param_0;
-    if (field_0x8->field_0x0 != 0x53 || field_0x8->field_0x1 != 0x43) {
-        field_0x8 = NULL;
+    mHeader = (const JAUSeqCollectionData*)param_0;
+    if (mHeader->mMagic1 != 0x53 || mHeader->mMagic2 != 0x43) {
+        mHeader = NULL;
         return;
     }
 
-    field_0x0 = field_0x8->field_0x2;
-    field_0xc = field_0x8->field_0x4;
-    field_0x4 = &field_0x8->field_0x8;
+    mNumSoundCategories = mHeader->mNumSoundCategories;
+    mSectionSize = mHeader->mSectionSize;
+    mTableOffsets = mHeader->mTableOffsets;
 
 }
 
 bool JAUSeqCollection::getSeqData(int param_0, int param_1, JAISeqData* param_2) {
-    if (param_0 >= field_0x0) {
+    if (param_0 >= mNumSoundCategories) {
         return false;
     }
-    u32 r29 = field_0x4[param_0];
-    BE(u32)* puVar2 = (BE(u32)*)((u8*)field_0x8 + r29);
+    u32 r29 = mTableOffsets[param_0];
+    BE(u32)* puVar2 = (BE(u32)*)((u8*)mHeader + r29);
     if (param_1 >= puVar2[0]) {
         return false;
     }
-    param_2->set((void*)field_0x8, puVar2[param_1 + 1]);
+    param_2->set((void*)mHeader, puVar2[param_1 + 1]);
     return true;
 }
 
 bool JAUSeqCollection::getSeqDataRegion(JAISeqDataRegion* param_0) {
     if (isValid()) {
-        param_0->addr = (u8*)field_0x8;
-        param_0->size = field_0xc;
+        param_0->addr = (u8*)mHeader;
+        param_0->size = mSectionSize;
         return true;
     }
     return false;

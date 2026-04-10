@@ -14,22 +14,6 @@ buildType:
       long: Optimized, with debug symbols
       buildType: RelWithDebInfo
 
-platform:
-  default: win64
-  description: Target platform
-  choices:
-    win32:
-      short: Win32
-      long: Windows 32-bit (MSVC)
-      settings:
-        CMAKE_GENERATOR_PLATFORM: Win32
-
-    win64:
-      short: Win64
-      long: Windows 64-bit (MSVC)
-      settings:
-        CMAKE_GENERATOR_PLATFORM: x64
-
 tp_version:
   default: GZ2E01
   description: TP Version

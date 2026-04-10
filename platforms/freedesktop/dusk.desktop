@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Dusk
+GenericName=Dusk
+Comment=The Legend of Zelda: Twilight Princess
+Exec=dusk
+Icon=dusk
+Terminal=false
+Type=Application
+Categories=Graphics;3DGraphics;Game

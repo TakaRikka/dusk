@@ -5,9 +5,21 @@
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "SSystem/SComponent/c_counter.h"
 
+#if TARGET_PC
+const u16 l_J_Ohana00_64TEX__width = 64;
+const u16 l_J_Ohana00_64TEX__height = 64;
+#else
 const u16 l_J_Ohana00_64TEX__width = 63;
 const u16 l_J_Ohana00_64TEX__height = 63;
+#endif
+
+#if TARGET_PC
+#include "dusk/dvd_asset.hpp"
+static u8* l_J_Ohana00_64TEX_get() { static u8 buf[0x800]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x9060, 0x800), true); return buf; }
+#define l_J_Ohana00_64TEX (l_J_Ohana00_64TEX_get())
+#else
 #include "assets/l_J_Ohana00_64TEX.h"
+#endif
 
 static u8 l_flowerPos[708] = {
     0xC0, 0x8C, 0x2C, 0xF7, 0x42, 0x05, 0xBC, 0xDF, 0xC1, 0xA1, 0x00, 0x70, 0xBF, 0x50, 0x51, 0xB9,
@@ -72,8 +84,8 @@ static u8 l_flowerNormal[180] = {
     0x46, 0x54, 0x0D, 0x3C, 0x4B, 0xEE, 0x80, 0x3F, 0x7F, 0xF5, 0xF9, 0x3C, 0x49, 0x81, 0xBF,
 };
 
-static u8 l_flowerColor[8] = {
-    0xFF, 0xFF, 0xFF, 0xFF, 0xB2, 0xB2, 0xB2, 0xFF,
+static GXColor l_flowerColor[2] = {
+    {0xFF, 0xFF, 0xFF, 0xFF}, {0xB2, 0xB2, 0xB2, 0xFF}
 };
 
 static u8 l_flowerTexCoord[] = {
@@ -98,6 +110,16 @@ static u8 l_flowerTexCoord[] = {
     0x3E, 0xA7, 0x67, 0x4D, 0x3C, 0x14, 0x46, 0x74, 0x3E, 0xA7, 0x73, 0xE2, 0xBC, 0x2F, 0x46, 0xAA,
     0x3E, 0xA7, 0x72, 0xD6, 0xBD, 0x2F, 0x46, 0xAA};
 
+#if TARGET_PC
+static u8* l_J_hana00DL_get()   { static u8 buf[0x150]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x9D20, 0x150), true); return buf; }
+static u8* l_J_hana00_cDL_get() { static u8 buf[0xDE];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x9E80, 0xDE),  true); return buf; }
+static u8* l_matDL_get()        { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x9F60, 0x99),  true); return buf; }
+static u8* l_matLight4DL_get()  { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xA000, 0x99),  true); return buf; }
+#define l_J_hana00DL   (l_J_hana00DL_get())
+#define l_J_hana00_cDL (l_J_hana00_cDL_get())
+#define l_matDL        (l_matDL_get())
+#define l_matLight4DL  (l_matLight4DL_get())
+#else
 #include "assets/l_J_hana00DL.h"
 
 #include "assets/l_J_hana00_cDL.h"
@@ -107,10 +129,22 @@ l_matDL__d_a_grass(l_J_Ohana00_64TEX)
 
 #include "assets/l_matLight4DL.h"
 l_matLight4DL(l_J_Ohana00_64TEX)
+#endif
 
+#if TARGET_PC
+const u16 l_J_Ohana01_64128_0419TEX__width = 64;
+const u16 l_J_Ohana01_64128_0419TEX__height = 128;
+#else
 const u16 l_J_Ohana01_64128_0419TEX__width = 63;
 const u16 l_J_Ohana01_64128_0419TEX__height = 127;
+#endif
+
+#if TARGET_PC
+static u8* l_J_Ohana01_64128_0419TEX_get() { static u8 buf[0x1000]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xA0A0, 0x1000), true); return buf; }
+#define l_J_Ohana01_64128_0419TEX (l_J_Ohana01_64128_0419TEX_get())
+#else
 #include "assets/l_J_Ohana01_64128_0419TEX.h"
+#endif
 
 static u8 l_flowerPos2[1224] = {
     0x40, 0x25, 0x9F, 0x34, 0x42, 0xC2, 0x95, 0x72, 0xC1, 0x22, 0x34, 0x78, 0x41, 0x4D, 0xF9, 0x63,
@@ -213,8 +247,8 @@ static u8 l_flowerNormal2[288] = {
     0x3B, 0x76, 0x7B, 0x1C, 0x3B, 0x99, 0x6B, 0x76, 0x3F, 0x7F, 0xF5, 0xF9, 0xBC, 0x8A, 0x1D, 0xFC,
 };
 
-static u8 l_flowerColor2[8] = {
-    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xB2, 0xFF,
+static GXColor l_flowerColor2[2] = {
+    {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xB2, 0xFF}
 };
 
 static u8 l_flowerTexCoord2[] = {
@@ -237,6 +271,18 @@ static u8 l_flowerTexCoord2[] = {
     0x40, 0x1B, 0x7D, 0x52, 0x3F, 0x97, 0xF6, 0xBA, 0x40, 0x04, 0x26, 0x74, 0x3F, 0x80, 0x3F, 0x79,
     0x40, 0x1B, 0x7D, 0x52, 0x3F, 0x80, 0x3F, 0x79, 0x40, 0x1B, 0x7D, 0x52, 0x3F, 0x51, 0x10, 0x6F};
 
+#if TARGET_PC
+static u8* l_J_hana01DL_get()      { static u8 buf[0x138]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xB7C0, 0x138), true); return buf; }
+static u8* l_J_hana01_c_00DL_get() { static u8 buf[0xDE];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xB900, 0xDE),  true); return buf; }
+static u8* l_J_hana01_c_01DL_get() { static u8 buf[0x128]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xB9E0, 0x128), true); return buf; }
+static u8* l_mat2DL_get()          { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xBB20, 0x99),  true); return buf; }
+static u8* l_mat2Light4DL_get()    { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xBBC0, 0x99),  true); return buf; }
+#define l_J_hana01DL      (l_J_hana01DL_get())
+#define l_J_hana01_c_00DL (l_J_hana01_c_00DL_get())
+#define l_J_hana01_c_01DL (l_J_hana01_c_01DL_get())
+#define l_mat2DL          (l_mat2DL_get())
+#define l_mat2Light4DL    (l_mat2Light4DL_get())
+#else
 #include "assets/l_J_hana01DL.h"
 
 #include "assets/l_J_hana01_c_00DL.h"
@@ -248,6 +294,7 @@ l_mat2DL__d_a_grass(l_J_Ohana01_64128_0419TEX)
 
 #include "assets/l_mat2Light4DL.h"
 l_mat2Light4DL(l_J_Ohana01_64128_0419TEX)
+#endif
 
 void dFlower_data_c::WorkCo(fopAc_ac_c* i_hitActor, u32 i_massFlg, int i_roomNo) {
     cXyz sp8;
@@ -509,6 +556,42 @@ dFlower_packet_c::dFlower_packet_c() {
         unused += 0x2000;
     }
 
+#if TARGET_LITTLE_ENDIAN
+    static bool initialized = false;
+    if (!initialized) {
+        for (int i = 0; i < (ARRAY_SIZE(l_flowerPos) / sizeof(Vec)); i++) {
+            be_swap(((Vec*)l_flowerPos)[i]);
+        }
+        for (int i = 0; i < (ARRAY_SIZE(l_flowerTexCoord) / sizeof(Vec)); i++) {
+            be_swap(((Vec*)l_flowerTexCoord)[i]);
+        }
+        for (int i = 0; i < (ARRAY_SIZE(l_flowerPos2) / sizeof(Vec)); i++) {
+            be_swap(((Vec*)l_flowerPos2)[i]);
+        }
+        for (int i = 0; i < (ARRAY_SIZE(l_flowerTexCoord2) / sizeof(Vec)); i++) {
+            be_swap(((Vec*)l_flowerTexCoord2)[i]);
+        }
+        for (int i = 0; i < (ARRAY_SIZE(l_flowerNormal) / sizeof(Vec)); i++) {
+            be_swap(((Vec*)l_flowerNormal)[i]);
+        }
+        for (int i = 0; i < (ARRAY_SIZE(l_flowerNormal2) / sizeof(Vec)); i++) {
+            be_swap(((Vec*)l_flowerNormal2)[i]);
+        }
+        
+        initialized = true;
+    }
+#endif
+
+#if TARGET_PC
+    GXInitTexObj(&mTexObj_l_J_Ohana00_64TEX, l_J_Ohana00_64TEX,
+        l_J_Ohana00_64TEX__width, l_J_Ohana00_64TEX__height, GX_TF_CMPR, GX_MIRROR, GX_MIRROR, GX_FALSE
+    );
+
+    GXInitTexObj(&mTexObj_l_J_Ohana01_64128_0419TEX, l_J_Ohana01_64128_0419TEX,
+        l_J_Ohana01_64128_0419TEX__width, l_J_Ohana01_64128_0419TEX__height, GX_TF_CMPR, GX_MIRROR, GX_MIRROR, GX_FALSE
+    );
+#endif
+
     m_deleteRoom = &dFlower_packet_c::deleteRoom;
 
 #if AVOID_UB
@@ -531,10 +614,10 @@ void dFlower_packet_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXSETARRAY(GX_VA_POS, &l_flowerPos, sizeof(l_flowerPos), 0xC);
-    GXSETARRAY(GX_VA_NRM, &l_flowerNormal, sizeof(l_flowerNormal), 0xC);
-    GXSETARRAY(GX_VA_CLR0, &l_flowerColor, sizeof(l_flowerColor), 4);
-    GXSETARRAY(GX_VA_TEX0, &l_flowerTexCoord, sizeof(l_flowerTexCoord), 8);
+    GXSETARRAY(GX_VA_POS, &l_flowerPos, sizeof(l_flowerPos), sizeof(Vec), true);
+    GXSETARRAY(GX_VA_NRM, &l_flowerNormal, sizeof(l_flowerNormal), sizeof(Vec), true);
+    GXSETARRAY(GX_VA_CLR0, &l_flowerColor, sizeof(l_flowerColor), sizeof(GXColor), true);
+    GXSETARRAY(GX_VA_TEX0, &l_flowerTexCoord, sizeof(l_flowerTexCoord), 8, true);
 
     GXColor sp64;
     dFlower_room_c* sp5C = m_room;
@@ -562,9 +645,9 @@ void dFlower_packet_c::draw() {
             }
 
             if (sp4C <= 2) {
-                GXCallDisplayList(&l_matLight4DL, 0x80);
+                GXCallDisplayList(l_matLight4DL, 0x80);
             } else {
-                GXCallDisplayList(&l_matDL, 0x80);
+                GXCallDisplayList(l_matDL, 0x80);
             }
 
             GXSetTevColorS10(GX_TEVREG0, sp80);
@@ -615,10 +698,14 @@ void dFlower_packet_c::draw() {
                     GXLoadPosMtxImm(sp44->m_modelMtx, 0);
                     GXLoadNrmMtxImm(j3dSys.getViewMtx(), 0);
 
+#if TARGET_PC
+                GXLoadTexObj(&mTexObj_l_J_Ohana00_64TEX, GX_TEXMAP0);
+#endif
+
                     if (!cLib_checkBit<u8>(sp44->m_state, 8)) {
-                        GXCallDisplayList(&l_J_hana00DL, 0x140);
+                        GXCallDisplayList(l_J_hana00DL, 0x140);
                     } else {
-                        GXCallDisplayList(&l_J_hana00_cDL, 0xC0);
+                        GXCallDisplayList(l_J_hana00_cDL, 0xC0);
                     }
                 }
             }
@@ -626,10 +713,10 @@ void dFlower_packet_c::draw() {
         sp5C++;
     }
 
-    GXSETARRAY(GX_VA_POS, mp_pos, sizeof(l_flowerPos2), 0xC);
-    GXSETARRAY(GX_VA_NRM, &l_flowerNormal2, sizeof(l_flowerNormal2), 0xC);
-    GXSETARRAY(GX_VA_CLR0, mp_colors, sizeof(l_flowerColor2), 4);
-    GXSETARRAY(GX_VA_TEX0, mp_texCoords, sizeof(l_flowerTexCoord2), 8);
+    GXSETARRAY(GX_VA_POS, mp_pos, sizeof(l_flowerPos2), sizeof(Vec), true);
+    GXSETARRAY(GX_VA_NRM, &l_flowerNormal2, sizeof(l_flowerNormal2), sizeof(Vec), true);
+    GXSETARRAY(GX_VA_CLR0, mp_colors, sizeof(l_flowerColor2), sizeof(GXColor), true);
+    GXSETARRAY(GX_VA_TEX0, mp_texCoords, sizeof(l_flowerTexCoord2), 8, true);
 
     sp5C = m_room;
 
@@ -757,11 +844,15 @@ void dFlower_packet_c::draw() {
                     GXLoadPosMtxImm(sp34->m_modelMtx, 0);
                     GXLoadNrmMtxImm(j3dSys.getViewMtx(), 0);
 
+#if TARGET_PC
+                    GXLoadTexObj(&mTexObj_l_J_Ohana01_64128_0419TEX, GX_TEXMAP0);
+#endif
+
                     if (!cLib_checkBit<u8>(sp34->m_state, 8)) {
                         if (!cLib_checkBit<u8>(sp34->m_state, 0x10)) {
                             GXCallDisplayList(mp_Jhana01DL, m_Jhana01DL_size);
                         } else {
-                            GXCallDisplayList(&l_J_hana01_c_00DL, 0xC0);
+                            GXCallDisplayList(l_J_hana01_c_00DL, 0xC0);
                         }
                     } else {
                         GXCallDisplayList(mp_Jhana01_cDL, m_Jhana01_cDL_size);

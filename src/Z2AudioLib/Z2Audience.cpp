@@ -552,7 +552,11 @@ JAIAudible* Z2Audience::newAudible(const JGeometry::TVec3<f32>& pos, JAISoundID 
 }
 
 void Z2Audience::deleteAudible(JAIAudible* audible) {
+#if TARGET_PC
+    JKR_DELETE(static_cast<Z2Audible*>(audible));
+#else
     JKR_DELETE(audible);
+#endif
 }
 
 Z2Audible::~Z2Audible() {}
@@ -798,7 +802,7 @@ f32 Z2Audience::calcFxMix_(f32 param_0, int distVolBit) const {
 
 f32 Z2Audience::calcPitch_(Z2AudibleChannel* channel, const Z2Audible* audible, const Z2AudioCamera* camera) const {
     JAUAudibleParam audParam = *audible->getAudibleParam();
-    if ((*(u8*)&audParam.field_0x0.raw >> 4) & 0xf) {
+    if (audParam.field_0x0.bytes.b0_0) {
         JGeometry::TVec3<f32> aTStack_4c;
         aTStack_4c.normalize(channel->field_0x14.field_0x00);
         JAUAudibleParam audParam = *audible->getAudibleParam();

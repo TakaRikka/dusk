@@ -915,7 +915,12 @@ void dKydb_dungeonlight_draw() {
             rot.y = 0;
             dDbVw_drawCubeXlu(player->current.pos, size, rot, color);
 
+            #if TARGET_PC
+            mDoLib_project(&g_env_light.dungeonlight[i].mPosition, &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
+            #else
             mDoLib_project(&g_env_light.dungeonlight[i].mPosition, &proj);
+            #endif
+
             if (proj.x > 30.0f) {
                 proj.x -= 30.0f;
             }

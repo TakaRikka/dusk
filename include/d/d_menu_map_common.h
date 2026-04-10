@@ -75,9 +75,9 @@ public:
             /* 0x00 */ char mName[8];
             /* 0x08 */ u8 mRoomNo;
             /* 0x09 */ u8 mRegionNo;
-            /* 0x0A */ u16 mAreaName;
-            /* 0x0C */ f32 mOffsetX;
-            /* 0x10 */ f32 mOffsetZ;
+            /* 0x0A */ BE(u16) mAreaName;
+            /* 0x0C */ BE(f32) mOffsetX;
+            /* 0x10 */ BE(f32) mOffsetZ;
         };
 
         /* 0x0 */ u8 mCount;

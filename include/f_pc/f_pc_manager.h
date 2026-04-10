@@ -9,7 +9,11 @@
 #include "f_pc/f_pc_stdcreate_req.h"
 #include "f_pc/f_pc_searcher.h"
 
+#if TARGET_PC
+enum : u32 {
+#else
 enum {
+#endif
     fpcM_UNK_PROCESS_ID_e = 0xFFFFFFFE,
     fpcM_ERROR_PROCESS_ID_e = 0xFFFFFFFF,
 };

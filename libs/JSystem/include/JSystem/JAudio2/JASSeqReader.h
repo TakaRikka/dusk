@@ -3,6 +3,8 @@
 
 #include <types.h>
 
+#define JAS_SEQ_STACK_SIZE 8
+
 /**
  * @ingroup jsystem-jaudio
  * 
@@ -19,55 +21,55 @@ public:
     int readMidiValue();
 
     void jump(u32 param_1) {
-        field_0x04 = field_0x00 + param_1;
+        mCurPos = mBase + param_1;
     }
 
     void jump(void* param_1) {
-        field_0x04 = (u8*)param_1;
+        mCurPos = (u8*)param_1;
     }
 
     u32 get24(u32 param_0) const {
-        return (*(u32*)(field_0x00 + param_0 - 1)) & 0xffffff;
+        return (*(BE(u32)*)(mBase + param_0 - 1)) & 0xffffff;
     }
 
-    u32* getBase() { return (u32*)field_0x00; }
-    void* getAddr(u32 param_0) { return field_0x00 + param_0; }
-    u8 getByte(u32 param_0) const { return *(field_0x00 + param_0); }
-    u16 get16(u32 param_0) const { return *(u16*)(field_0x00 + param_0); }
-    u32 get32(u32 param_0) const { return *(u32*)(field_0x00 + param_0); }
-    u8* getCur() { return field_0x04; }
-    u32 readByte() { return *field_0x04++; }
+    u32* getBase() { return (u32*)mBase; }
+    void* getAddr(u32 param_0) { return mBase + param_0; }
+    u8 getByte(u32 param_0) const { return *(mBase + param_0); }
+    u16 get16(u32 param_0) const { return *(BE(u16)*)(mBase + param_0); }
+    u32 get32(u32 param_0) const { return *(BE(u32)*)(mBase + param_0); }
+    u8* getCur() { return mCurPos; }
+    u32 readByte() { return *mCurPos++; }
     u32 read16() {
 #ifdef __MWERKS__
-        return *((u16*)field_0x04)++;
+        return *((u16*)mCurPos)++;
 #else
-        u16* value = (u16*)field_0x04;
-        field_0x04 += 2;
+        BE(u16)* value = (BE(u16)*)mCurPos;
+        mCurPos += 2;
         return *value;
 #endif
     }
     u32 read24() {
-        field_0x04--;
+        mCurPos--;
 #ifdef __MWERKS__
-        return (*((u32*)field_0x04)++) & 0x00ffffff;
+        return (*((u32*)mCurPos)++) & 0x00ffffff;
 #else
-        u32* value = (u32*)field_0x04;
-        field_0x04 += 4;
+        BE(u32)* value = (BE(u32)*)mCurPos;
+        mCurPos += 4;
         return (*value) & 0x00ffffff;
 #endif
     }
     u16 getLoopCount() const { 
-        if (field_0x08 == 0) {
+        if (mCurStackDepth == 0) {
             return 0;
          } 
-         return field_0x2c[field_0x08 - 1]; 
+         return mLoopCount[mCurStackDepth - 1];
     }
 
-    /* 0x00 */ u8* field_0x00;
-    /* 0x04 */ u8* field_0x04;
-    /* 0x08 */ u32 field_0x08;
-    /* 0x0C */ u16* field_0x0c[8];
-    /* 0x2C */ u16 field_0x2c[8];
+    /* 0x00 */ u8* mBase;
+    /* 0x04 */ u8* mCurPos;
+    /* 0x08 */ u32 mCurStackDepth;
+    /* 0x0C */ u16* mReturnAddr[JAS_SEQ_STACK_SIZE];
+    /* 0x2C */ u16 mLoopCount[JAS_SEQ_STACK_SIZE];
 };
 
 #endif /* JASSEQREADER_H */

@@ -33,6 +33,9 @@ struct JFWSystem {
 
     static void firstInit();
     static void init();
+#if TARGET_PC
+    static void shutdown();
+#endif
 
     static JUTConsole* getSystemConsole() { return systemConsole; }
     static JKRExpHeap* getSystemHeap() { return systemHeap; }

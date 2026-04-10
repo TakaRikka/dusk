@@ -11,7 +11,9 @@
 #include <unordered_map>
 #include <memory>
 #include <dusk/logging.h>
+#include <dusk/main.h>
 
+#include "tracy/Tracy.hpp"
 
 #ifndef _WIN32
 #include <sys/time.h>
@@ -84,7 +86,17 @@ static PCMessageQueueData& GetMsgQueueData(OSMessageQueue* mq) {
     return *it->second;
 }
 
-void OSInitMessageQueue(OSMessageQueue* mq, void* msgArray, s32 msgCount) {
+static void ClearMsgQueueMap() {
+    std::lock_guard<std::mutex> lock(GetMsgQueueMapMutex());
+    auto& map = GetMsgQueueMap();
+    for (auto & [_, value] : map) {
+        value->cvReceive.notify_all();
+        value->cvSend.notify_all();
+    }
+    map.clear();
+}
+
+void OSInitMessageQueue(OSMessageQueue* mq, OSMessage* msgArray, s32 msgCount) {
     if (!mq) return;
     mq->queueSend.head = mq->queueSend.tail = nullptr;
     mq->queueReceive.head = mq->queueReceive.tail = nullptr;
@@ -104,7 +116,10 @@ int OSSendMessage(OSMessageQueue* mq, void* msg, s32 flags) {
     if (mq->usedCount >= mq->msgCount) {
         if (flags == OS_MESSAGE_NOBLOCK) return 0;
         // BLOCK: wait until space is available
-        data.cvSend.wait(lock, [mq]() { return mq->usedCount < mq->msgCount; });
+        data.cvSend.wait(lock, [mq] { return mq->usedCount < mq->msgCount || dusk::IsShuttingDown; });
+    }
+    if (dusk::IsShuttingDown) {
+        return 0;
     }
 
     s32 idx = (mq->firstIndex + mq->usedCount) % mq->msgCount;
@@ -115,7 +130,7 @@ int OSSendMessage(OSMessageQueue* mq, void* msg, s32 flags) {
     return 1;
 }
 
-int OSReceiveMessage(OSMessageQueue* mq, void* msg, s32 flags) {
+BOOL OSReceiveMessage(OSMessageQueue* mq, OSMessage* msg, s32 flags) {
     if (!mq) return 0;
 
     PCMessageQueueData& data = GetMsgQueueData(mq);
@@ -124,7 +139,10 @@ int OSReceiveMessage(OSMessageQueue* mq, void* msg, s32 flags) {
     if (mq->usedCount == 0) {
         if (flags == OS_MESSAGE_NOBLOCK) return 0;
         // BLOCK: wait until a message arrives
-        data.cvReceive.wait(lock, [mq]() { return mq->usedCount > 0; });
+        data.cvReceive.wait(lock, [mq] { return mq->usedCount > 0 || dusk::IsShuttingDown; });
+    }
+    if (dusk::IsShuttingDown) {
+        return 0;
     }
 
     if (msg) {
@@ -146,7 +164,10 @@ int OSJamMessage(OSMessageQueue* mq, void* msg, s32 flags) {
     if (mq->usedCount >= mq->msgCount) {
         if (flags == OS_MESSAGE_NOBLOCK) return 0;
         // BLOCK: wait until space is available
-        data.cvSend.wait(lock, [mq]() { return mq->usedCount < mq->msgCount; });
+        data.cvSend.wait(lock, [mq] { return mq->usedCount < mq->msgCount || dusk::IsShuttingDown; });
+    }
+    if (dusk::IsShuttingDown) {
+        return 0;
     }
 
     // Jam inserts at the front of the queue
@@ -185,8 +206,12 @@ BOOL OSGetResetButtonState() { return FALSE; }
 BOOL OSInitFont(OSFontHeader* fontData) { return FALSE; }
 BOOL OSLink(OSModuleInfo* newModule, void* bss) { return TRUE; }
 
+void ClearCondMap();
 void OSResetSystem(int reset, u32 resetCode, BOOL forceMenu) {
     OSReport("[PC] OSResetSystem called (reset=%d, code=%u)\n", reset, resetCode);
+    dusk::IsShuttingDown = true;
+    ClearMsgQueueMap();
+    ClearCondMap();
 }
 
 void OSSetStringTable(void* stringTable) {}
@@ -332,6 +357,7 @@ void VISetNextFrameBuffer(void* fb) {
 }
 
 void VIWaitForRetrace() {
+    ZoneScoped;
     sRetraceCount++;
     if (sVIPreRetraceCallback) {
         sVIPreRetraceCallback(sRetraceCount);
@@ -366,46 +392,6 @@ VIRetraceCallback VISetPreRetraceCallback(VIRetraceCallback cb) {
 }
 
 }  // extern "C"
-
-#pragma mark DSP
-#include <dolphin/dsp.h>
-extern "C" void __DSP_insert_task(DSPTaskInfo* task) {
-    STUB_LOG();
-}
-
-extern "C" void __DSP_boot_task(DSPTaskInfo*) {
-    STUB_LOG();
-}
-
-extern "C" void __DSP_exec_task(DSPTaskInfo*, DSPTaskInfo*) {
-    STUB_LOG();
-}
-
-extern "C" void __DSP_remove_task(DSPTaskInfo* task) {
-    STUB_LOG();
-}
-
-void DSPAssertInt(void) {
-    STUB_LOG();
-}
-u32 DSPCheckMailFromDSP(void) {
-    STUB_LOG();
-    return 0;
-}
-u32 DSPCheckMailToDSP(void) {
-    STUB_LOG();
-    return 0;
-}
-void DSPInit(void) {
-    STUB_LOG();
-}
-u32 DSPReadMailFromDSP(void) {
-    STUB_LOG();
-    return 0;
-}
-void DSPSendMailToDSP(u32 mail) {
-    STUB_LOG();
-}
 
 #pragma mark Z2Audio
 class Z2AudioCS {
@@ -1038,7 +1024,7 @@ f32 GXGetYScaleFactor(u16 efbHeight, u16 xfbHeight) {
 void GXInitTexCacheRegion(GXTexRegion* region, GXBool is_32b_mipmap, u32 tmem_even,
                           GXTexCacheSize size_even, u32 tmem_odd, GXTexCacheSize size_odd) {
     STUB_LOG();
-} 
+}
 // XXX, this should be some struct?
 // GXRenderModeObj GXNtsc480IntDf;
 //GXRenderModeObj GXNtsc480Int;
@@ -1079,22 +1065,15 @@ extern "C" void KPADEnableDPD(s32) {
 void LCDisable(void) {
     STUB_LOG();
 }
-void LCQueueWait(__REGISTER u32 len) {
-    STUB_LOG();
-}
-u32 LCStoreData(void* destAddr, void* srcAddr, u32 nBytes) {
-    STUB_LOG();
-    return 0;
-}
 
 #pragma mark PPC Arch
 // MSR stuff?
 void PPCHalt() {
-    STUB_LOG();
+    abort();
 }
 
 extern "C" void PPCSync(void) {
-    STUB_LOG();
+    // Does nothing on PC
 }
 
 u32 PPCMfhid2() {

@@ -321,6 +321,7 @@ int dMeter2Info_setNewLetterSender();
 bool dMeter2Info_isItemOpenCheck();
 bool dMeter2Info_isMapOpenCheck();
 s16 dMeter2Info_getNowLifeGauge();
+bool dMeter2Info_isNextStage(const char*, s16, s16, s16);
 
 #if WIDESCREEN_SUPPORT
 void dMeter2Info_onWide2D();
@@ -842,10 +843,6 @@ inline void dMeter2Info_offTempBit(int i_bit) {
 
 inline void dMeter2Info_onTempBit(int i_bit) {
     g_meter2_info.onTempBit(i_bit);
-}
-
-inline bool dMeter2Info_isNextStage(const char*, s16, s16, s16) {
-    return false;
 }
 
 inline void dMeter2Info_setFloatingMessage(u16 i_msgID, s16 i_msgTimer, bool i_wakuVisible) {

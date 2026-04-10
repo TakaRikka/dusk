@@ -127,12 +127,12 @@ SpkSoundHandle* Z2AudioCS::startLevel(s32 id, s32 chan) {
     return handle;
 }
 
-s32 Z2AudioCS::getName(s32 num) {
+const char* Z2AudioCS::getName(s32 num) {
     if (JASGlobalInstance<SpkSystem>::getInstance() == NULL) {
-        return 0;
+        return NULL;
     }
     if (JASGlobalInstance<SpkSystem>::getInstance()->getData() == NULL) {
-        return 0;
+        return NULL;
     }
 
     return JASGlobalInstance<SpkSystem>::getInstance()->getData()->getTableMgr().getName(num);

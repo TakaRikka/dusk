@@ -263,6 +263,11 @@ public:
     void setSaveData();
     void setInitSaveData();
     void _draw();
+
+    #if TARGET_PC
+    void menuSaveWide();
+    #endif
+
     void _draw2();
 
     virtual ~dMenu_save_c() {}

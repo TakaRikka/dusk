@@ -26,7 +26,7 @@ JASTaskThread::~JASTaskThread() {
 
 void* JASTaskThread::allocCallStack(JASThreadCallback callback, const void* msg, u32 msgSize) {
     ThreadMemPool* heap;
-    u32 size = msgSize + 8;
+    u32 size = msgSize + offsetof(JASThreadCallStack, msg);
     JASThreadCallStack *callStack = (JASThreadCallStack*) JASKernel::getCommandHeap()->alloc(size);
     if (callStack == NULL) {
         return NULL;
@@ -40,7 +40,7 @@ void* JASTaskThread::allocCallStack(JASThreadCallback callback, const void* msg,
 
 void* JASTaskThread::allocCallStack(JASThreadCallback callback, void* msg) {
     JASThreadCallStack *callStack;
-    callStack = (JASThreadCallStack*)JASKernel::getCommandHeap()->alloc(12);
+    callStack = (JASThreadCallStack*)JASKernel::getCommandHeap()->alloc(offsetof(JASThreadCallStack, msg) + sizeof(void*));
     if (callStack == NULL) {
         return NULL;
     }
@@ -85,7 +85,15 @@ void* JASTaskThread::run() {
     JASThreadCallStack* callstack;
     OSInitFastCast();
     do {
+#ifdef TARGET_PC
+        BOOL received = FALSE;
+        callstack = static_cast<JASThreadCallStack*>(waitMessageBlock(&received));
+        if (!received) {
+            break;
+        }
+#else
         callstack = static_cast<JASThreadCallStack*>(waitMessageBlock());
+#endif
         if (field_0x84) {
             OSSleepThread(&threadQueue_);
         }
@@ -98,6 +106,9 @@ void* JASTaskThread::run() {
 
         JASKernel::getCommandHeap()->free(callstack);
     } while (true);
+#ifdef TARGET_PC
+    return NULL;
+#endif
 }
 
 void JASTaskThread::pause(bool param_0) {

@@ -18,10 +18,10 @@ public:
     SpkTable(void);
     void setResource(void* res);
 
-    inline s32 getName(s32 num) {
+    inline const char* getName(s32 num) {
         JUT_ASSERT(0x35, num >= 0);
         JUT_ASSERT(0x36, num < mNumOfSound);
-        return *(mDataOffsets + num);
+        return (const char*)*(mDataOffsets + num);
     }
     inline s32 getNumOfSound() const { return mNumOfSound; }
     inline bool isValid(void) const { return mIsInitialized; }

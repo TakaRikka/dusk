@@ -274,9 +274,9 @@ void FlagCloth_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
-    GXSETARRAY(GX_VA_POS, getPos(), sizeof(mPositions), sizeof(cXyz));
-    GXSETARRAY(GX_VA_NRM, getNormal(), sizeof(mNormals), sizeof(cXyz));
-    GXSETARRAY(GX_VA_TEX0, mpTexCoord, sizeof(mpTexCoord), 8);
+    GXSETARRAY(GX_VA_POS, getPos(), sizeof(mPositions), sizeof(cXyz), true);
+    GXSETARRAY(GX_VA_NRM, getNormal(), sizeof(mNormals), sizeof(cXyz), true);
+    GXSETARRAY(GX_VA_TEX0, mpTexCoord, sizeof(l_texCoord), 8, true);
     GXSetZCompLoc(GX_FALSE);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GXLoadTexObj(&mTexObj, GX_TEXMAP0);
@@ -304,7 +304,7 @@ void FlagCloth_c::draw() {
     GXSetClipMode(GX_CLIP_ENABLE);
     GXSetCullMode(GX_CULL_BACK);
     GXCallDisplayList(l_pennant_flagDL, 0x80);
-    GXSETARRAY(GX_VA_NRM, getNormalBack(), sizeof(mNormalBacks), sizeof(cXyz));
+    GXSETARRAY(GX_VA_NRM, getNormalBack(), sizeof(mNormalBacks), sizeof(cXyz), true);
     GXSetCullMode(GX_CULL_FRONT);
     GXCallDisplayList(l_pennant_flagDL, 0x80);
     J3DShape::resetVcdVatCache();

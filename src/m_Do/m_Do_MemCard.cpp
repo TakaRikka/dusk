@@ -10,6 +10,8 @@
 #include "m_Do/m_Do_MemCardRWmng.h"
 #include "m_Do/m_Do_Reset.h"
 #include "os_report.h"
+#include "dusk/os.h"
+#include "dusk/main.h"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/nand.h>
@@ -102,10 +104,20 @@ void mDoMemCd_Ctrl_c::ThdInit() {
 void mDoMemCd_Ctrl_c::main() {
     do {
         OSLockMutex(&mMutex);
-        while (mCardCommand == COMM_NONE_e) {
+        while (mCardCommand == COMM_NONE_e
+#ifdef TARGET_PC
+            && !dusk::IsShuttingDown
+#endif
+        ) {
             OSWaitCond(&mCond, &mMutex);
         }
         OSUnlockMutex(&mMutex);
+
+#ifdef TARGET_PC
+        if (dusk::IsShuttingDown) {
+            break;
+        }
+#endif
 
         switch (mCardCommand) {
         #if PLATFORM_GCN || PLATFORM_WII
@@ -865,6 +877,10 @@ mDoMemCd_Ctrl_c g_mDoMemCd_control;
 
 static int mDoMemCd_main(void*) {
     JKRThread(OSGetCurrentThread(), 0);
+
+#if TARGET_PC
+    OSSetCurrentThreadName("MemCardThread");
+#endif
 
     JKRSetCurrentHeap(mDoExt_getAssertHeap());
 

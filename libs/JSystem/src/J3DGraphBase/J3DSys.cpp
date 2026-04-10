@@ -6,6 +6,7 @@
 #include "JSystem/J3DGraphBase/J3DTexture.h"
 #include "dusk/gx_helper.h"
 #include "global.h"
+#include "tracy/Tracy.hpp"
 
 J3DSys j3dSys;
 
@@ -17,7 +18,11 @@ Vec J3DSys::mParentS;
 
 J3DTexCoordScaleInfo J3DSys::sTexCoordScaleTable[8];
 
+#if TARGET_PC // Original game bug, array is too small.
+static u8 NullTexData[0x20] ATTRIBUTE_ALIGN(32) = {0};
+#else
 static u8 NullTexData[0x10] ATTRIBUTE_ALIGN(32) = {0};
+#endif
 
 static Mtx j3dIdentityMtx = {
     1.0f, 0.0f, 0.0f, 0.0f,
@@ -117,6 +122,8 @@ void J3DSys::setTexCacheRegion(GXTexCacheSize size) {
 }
 
 void J3DSys::drawInit() {
+    ZoneScoped;
+
     GXInvalidateVtxCache();
     GXSetCurrentMtx(GX_PNMTX0);
     GXSetCullMode(GX_CULL_BACK);
@@ -222,6 +229,7 @@ void J3DSys::drawInit() {
 }
 
 void J3DSys::reinitGX() {
+    ZoneScoped;
     reinitGenMode();
     reinitLighting();
     reinitTransform();

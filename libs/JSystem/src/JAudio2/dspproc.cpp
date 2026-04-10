@@ -20,10 +20,14 @@ static void setup_callback(u16 param_0) {
     flag = FALSE;
 }
 
-void DsetupTable(u32 param_0, u32 param_1, u32 param_2, u32 param_3, u32 param_4) {
+void DsetupTable(u32 channelCount, u32 channelBufferAddress, u32 param_2, u32 param_3, u32 param_4) {
+#if TARGET_PC
+    return;
+#endif
+
     u32 table[5];
-    table[0] = (param_0 & 0xFFFF) | 0x81000000;
-    table[1] = param_1;
+    table[0] = (channelCount & 0xFFFF) | 0x81000000;
+    table[1] = channelBufferAddress;
     table[2] = param_2;
     table[3] = param_3;
     table[4] = param_4;

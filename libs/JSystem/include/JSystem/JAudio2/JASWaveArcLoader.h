@@ -54,6 +54,8 @@ struct JASWaveArc : JASDisposer {
     virtual void onEraseDone() {}
 
     s32 getStatus() const { return mStatus; }
+    u32 getFileSize() const { return mFileLength; }
+    JASHeap* getHeap() { return &mHeap; }
 
     struct loadToAramCallbackParams {
         // not official struct name

@@ -87,8 +87,8 @@ s32 JAUDynamicSeqDataBlocks::getSeqData(JAISoundID param_0, JAISeqDataUser* para
 
     u8* seqData = mLoadedBlocks.getSeqData(param_0);
     if (seqData != NULL) {
-        param_2->field_0x0 = seqData;
-        param_2->field_0x4 = 0;
+        param_2->mBase = seqData;
+        param_2->mOffset = 0;
         return 2;
     }
 

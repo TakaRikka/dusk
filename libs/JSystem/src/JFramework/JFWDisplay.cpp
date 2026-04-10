@@ -5,6 +5,7 @@
 #include <gx.h>
 #include <stdint.h>
 #include <vi.h>
+#include "SDL3/SDL_timer.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -13,9 +14,12 @@
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTProcBar.h"
 #include "aurora/aurora.h"
+#include "dusk/dusk.h"
 #include "dusk/gx_helper.h"
 #include "dusk/logging.h"
+#include "dusk/settings.h"
 #include "global.h"
+#include "tracy/Tracy.hpp"
 
 void JFWDisplay::ctor_subroutine(bool enableAlpha) {
     mEnableAlpha = enableAlpha;
@@ -347,16 +351,23 @@ void JFWDisplay::waitBlanking(int param_0) {
 }
 
 static void waitForTick(u32 p1, u16 p2) {
-
+    ZoneScopedC(tracy::Color::DimGray);
+    #if TARGET_PC
+    if (dusk::getTransientSettings().skipFrameRateLimit) {
+        p1 = OS_TIMER_CLOCK / 120;
+    }
+    #endif
 
     if (p1 != 0)
     {
         static OSTime nextTick = OSGetTime();
         OSTime time = OSGetTime();
+        OSTime waitTime = (nextTick > time) ? (nextTick - time) : 0;
         while (time < nextTick) {
             JFWDisplay::getManager()->threadSleep((nextTick - time));
             time = OSGetTime();
         }
+        dusk::frameUsagePct = 100.0f * (1.0f - (float)waitTime / (float)p1);
         nextTick = time + p1;
     } else {
         static u32 nextCount = VIGetRetraceCount();
@@ -369,11 +380,18 @@ static void waitForTick(u32 p1, u16 p2) {
                 msg = 0;
             }
         } while (((intptr_t)msg - (intptr_t)nextCount) < 0);
+        dusk::frameUsagePct = 100.0f;
         nextCount = (intptr_t)msg + uVar1;
     }
 }
 
 JSUList<JFWAlarm> JFWAlarm::sList(false);
+
+#if TARGET_PC
+void JFWDisplay::threadSleep(s64 time) {
+    SDL_DelayNS(OSTicksToMicroseconds(time) * 1'000);
+}
+#else
 
 static void JFWThreadAlarmHandler(OSAlarm* p_alarm, OSContext* p_ctx) {
     JFWAlarm* alarm = static_cast<JFWAlarm*>(p_alarm);
@@ -392,6 +410,7 @@ void JFWDisplay::threadSleep(s64 time) {
     OSSuspendThread(alarm.getThread());
     OSRestoreInterrupts(status);
 }
+#endif
 
 static void dummy() {
     JUTXfb::getManager()->setDisplayingXfbIndex(0);

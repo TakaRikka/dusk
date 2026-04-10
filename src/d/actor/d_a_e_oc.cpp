@@ -189,8 +189,8 @@ int daE_OC_c::draw() {
     return 1;
 }
 
-static void daE_OC_Draw(daE_OC_c* i_this) {
-    i_this->draw();
+static int daE_OC_Draw(daE_OC_c* i_this) {
+    return i_this->draw();
 }
 
 daE_OC_c* E_OC_n::m_battle_oc;
@@ -2639,12 +2639,12 @@ int daE_OC_c::execute() {
     return 1;
 }
 
-static void daE_OC_Execute(daE_OC_c* i_this) {
-    i_this->execute();
+static int daE_OC_Execute(daE_OC_c* i_this) {
+    return i_this->execute();
 }
 
-static BOOL daE_OC_IsDelete(daE_OC_c* param_0) {
-    return TRUE;
+static int daE_OC_IsDelete(daE_OC_c* param_0) {
+    return 1;
 }
 
 int daE_OC_c::_delete() {
@@ -2662,9 +2662,9 @@ int daE_OC_c::_delete() {
     return 1;
 }
 
-static void daE_OC_Delete(daE_OC_c* i_this) {
+static int daE_OC_Delete(daE_OC_c* i_this) {
     fopAcM_RegisterDeleteID(i_this, "E_OC");
-    i_this->_delete();
+    return i_this->_delete();
 }
 
 int daE_OC_c::CreateHeap() {
@@ -2833,8 +2833,8 @@ cPhs_Step daE_OC_c::create() {
     return phase;
 }
 
-static void daE_OC_Create(daE_OC_c* i_this) {
-    i_this->create();
+static int daE_OC_Create(daE_OC_c* i_this) {
+    return i_this->create();
 }
 
 static actor_method_class l_daE_OC_Method = {

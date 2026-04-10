@@ -341,7 +341,6 @@ inline u8 twoValueLineInterpolation(u8 param_0, u8 param_1, f32 param_2) {
 }
 
 void renderingAmap_c::draw() {
-    #if REQUIRES_GX_LINES
     f32 tmp = ((f32)(g_Counter.mCounter0 % dMap_HIO_prm_res_dst_s::m_res->field_0x1aa) /
                (f32)dMap_HIO_prm_res_dst_s::m_res->field_0x1aa);
     tmp = tmp;
@@ -376,8 +375,7 @@ void renderingAmap_c::draw() {
                                   dMap_HIO_prm_res_dst_s::m_res->field_0x1a7, tmp);
     setAmapPaletteColor(0x2E, temp_r31, temp_r30, temp_r29, temp_r28);
 
-    renderingDAmap_c::draw();
-    #endif
+    GX_DEBUG_GROUP(renderingDAmap_c::draw);
 }
 
 int renderingAmap_c::getDispType() const {
@@ -541,8 +539,18 @@ void renderingAmap_c::rendering(dDrawPath_c::poly_class const* i_poly) {
     }
 }
 
+/* Enabling the following definition will modify the following function to
+ * make the map look worse for extra speed in the emulator, especially in large
+ * areas such as hyrule field.
+ */
+#define HYRULE_FIELD_SPEEDHACK
+
 bool renderingAmap_c::isDrawOutSideTrim() {
     bool rt = false;
+
+    #ifdef HYRULE_FIELD_SPEEDHACK
+    return 0;
+    #endif
 
     if (getDispType() == 0 || getDispType() == 4 || getDispType() == 3 || getDispType() == 2 ||
         getDispType() == 5)
@@ -1099,7 +1107,7 @@ void dMap_c::resCopy() {
     }
 }
 
-dMap_c::dMap_c(int param_0, int param_1, int param_2, int param_3) {
+dMap_c::dMap_c(int width, int height, int param_2, int param_3) {
     m_res_src = NULL;
     m_res = NULL;
     mResTIMG = NULL;
@@ -1171,8 +1179,8 @@ dMap_c::dMap_c(int param_0, int param_1, int param_2, int param_3) {
 
     resCopy();
 
-    mTexSizeX = param_0;
-    mTexSizeY = param_1;
+    mTexSizeX = width;
+    mTexSizeY = height;
 
     if (dMap_HIO_prm_res_dst_s::m_res->field_0x1ae > 0) {
         field_0x74 = dMap_HIO_prm_res_dst_s::m_res->field_0x1b0 / 6;

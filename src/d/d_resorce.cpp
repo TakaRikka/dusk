@@ -22,6 +22,7 @@
 
 #ifndef __MWERKS__
 #include "dusk/extras.h"
+#include "dusk/logging.h"
 #endif
 
 dRes_info_c::dRes_info_c() {
@@ -100,11 +101,13 @@ static void setIndirectTex(J3DModelData* i_modelData) {
         if (memcmp(textureName, "dummy", 6) == 0) {
             texture->setResTIMG(i, *mDoGph_gInf_c::getFrameBufferTimg());
         }
-#if !TARGET_PC
         if (memcmp(textureName, "Zbuffer", 8) == 0) {
+#if !TARGET_PC
             texture->setResTIMG(i, *mDoGph_gInf_c::getZbufferTimg());
-        }
+#else
+            DuskLog.warn("Zbuffer texture binding not yet supported");
 #endif
+        }
     }
 }
 

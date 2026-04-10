@@ -507,10 +507,6 @@ set(JSYSTEM_DEBUG_FILES
         libs/JSystem/src/JAudio2/JASDSPInterface.cpp
         libs/JSystem/src/JAudio2/JASDriverIF.cpp
         libs/JSystem/src/JAudio2/JASSoundParams.cpp
-        libs/JSystem/src/JAudio2/dspproc.cpp
-        libs/JSystem/src/JAudio2/dsptask.cpp
-        libs/JSystem/src/JAudio2/osdsp.cpp
-        libs/JSystem/src/JAudio2/osdsp_task.cpp
         libs/JSystem/src/JAudio2/JAIAudible.cpp
         libs/JSystem/src/JAudio2/JAIAudience.cpp
         libs/JSystem/src/JAudio2/JAISe.cpp
@@ -1336,20 +1332,34 @@ set(DOLPHIN_FILES
 
 set(DUSK_FILES
         include/dusk/endian_gx.hpp
+        include/dusk/config.hpp
+        include/dusk/dvd_asset.hpp
+        src/dusk/dvd_asset.cpp
+        src/d/actor/d_a_alink_dusk.cpp
         src/dusk/asserts.cpp
+        src/dusk/config.cpp
+        src/dusk/settings.cpp
         src/dusk/logging.cpp
+        src/dusk/layout.cpp
         src/dusk/stubs.cpp
         src/dusk/endian.cpp
         src/dusk/extras.c
         src/dusk/extras.cpp
+        src/dusk/io.cpp
         src/dusk/globals.cpp
+        src/dusk/settings.cpp
         #src/dusk/m_Do_ext_dusk.cpp
+        src/dusk/imgui/ImGuiConfig.hpp
         src/dusk/imgui/ImGuiConsole.hpp
         src/dusk/imgui/ImGuiConsole.cpp
+        src/dusk/imgui/ImGuiEngine.cpp
+        src/dusk/imgui/ImGuiEngine.hpp
         src/dusk/imgui/ImGuiMenuGame.cpp
         src/dusk/imgui/ImGuiMenuGame.hpp
         src/dusk/imgui/ImGuiMenuTools.cpp
         src/dusk/imgui/ImGuiMenuTools.hpp
+        src/dusk/imgui/ImGuiMenuEnhancements.cpp
+        src/dusk/imgui/ImGuiMenuEnhancements.hpp
         src/dusk/imgui/ImGuiProcessOverlay.cpp
         src/dusk/imgui/ImGuiCameraOverlay.cpp
         src/dusk/imgui/ImGuiHeapOverlay.cpp

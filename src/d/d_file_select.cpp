@@ -70,7 +70,11 @@ dFs_HIO_c::dFs_HIO_c() {
     select_icon_appear_frames = 5;
     appear_display_wait_frames = 15;
     field_0x000d = 15;
+    #if TARGET_PC
+    card_wait_frames = 0;
+    #else
     card_wait_frames = 90;
+    #endif
     test_frame_counts[0] = 1.11f;
     test_frame_counts[1] = 1.11f;
     test_frame_counts[2] = 1.11f;
@@ -1189,7 +1193,13 @@ void dFile_select_c::menuSelect() {
 
 // Handles copy / start / delete actions depending on which menu is selected from menuSelect
 void dFile_select_c::menuSelectStart() {
-    mDoAud_seStart(Z2SE_SY_CURSOR_OK, NULL, 0, 0);
+    #if TARGET_PC
+    if (!dusk::getSettings().game.hideTvSettingsScreen || mSelectMenuNum != 1) {
+        mDoAud_seStart(Z2SE_SY_CURSOR_OK, NULL, 0, 0);
+    }
+    #else
+        mDoAud_seStart(Z2SE_SY_CURSOR_OK, NULL, 0, 0);
+    #endif
 
     if (mSelectMenuNum == 1) {
         dComIfGs_setCardToMemory((u8*)mSaveData, mSelectNum);
@@ -2091,7 +2101,12 @@ void dFile_select_c::yesnoCursorShow() {
         Vec pos = mYnSelPane[field_0x0268]->getGlobalVtxCenter(0, 0);
         mSelIcon->setPos(pos.x, pos.y, mYnSelPane[field_0x0268]->getPanePtr(), true);
         mSelIcon->setAlphaRate(1.0f);
+
+        #if TARGET_PC
+        mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.84f, 0.06f, 0.5f, 0.5f);
+        #else
         mSelIcon->setParam(0.96f, 0.84f, 0.06f, 0.5f, 0.5f);
+        #endif
     }
 }
 
@@ -2243,7 +2258,12 @@ void dFile_select_c::YesNoCancelMove() {
                 mSelIcon->setPos(vtxCenter.x, vtxCenter.y,
                                  m3mSelPane[mSelectMenuNum]->getPanePtr(), true);
                 mSelIcon->setAlphaRate(1.0f);
+
+                #if TARGET_PC
+                mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.84f, 0.06f, 0.5f, 0.5f);
+                #else
                 mSelIcon->setParam(0.96f, 0.84f, 0.06f, 0.5f, 0.5f);
+                #endif
 
                 #if PLATFORM_WII || PLATFORM_SHIELD
                 field_0x4333 = mSelectMenuNum;
@@ -3126,7 +3146,13 @@ void dFile_select_c::screenSet() {
 
     mSelIcon = JKR_NEW dSelect_cursor_c(0, 1.0f, NULL);
     JUT_ASSERT(5209, mSelIcon != NULL);
+
+    #if TARGET_PC
+    mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.94f, 0.03f, 0.7f, 0.7f);
+    #else
     mSelIcon->setParam(0.96f, 0.94f, 0.03f, 0.7f, 0.7f);
+    #endif
+
     Vec vtxCenter;
     vtxCenter = mSelFilePanes[mSelectNum]->getGlobalVtxCenter(false, 0);
     mSelIcon->setPos(vtxCenter.x, vtxCenter.y, mSelFilePanes[mSelectNum]->getPanePtr(), true);
@@ -3257,7 +3283,13 @@ void dFile_select_c::screenSetCopySel() {
 
     mSelIcon2 = JKR_NEW dSelect_cursor_c(0, 1.0f, NULL);
     JUT_ASSERT(5406, mSelIcon2 != NULL);
+
+    #if TARGET_PC
+    mSelIcon2->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.94f, 0.03f, 0.7f, 0.7f);
+    #else
     mSelIcon2->setParam(0.96f, 0.94f, 0.03f, 0.7f, 0.7f);
+    #endif
+
     Vec center = mCpSelPane[0]->getGlobalVtxCenter(false, 0);
     mSelIcon2->setPos(center.x, center.y, mCpSelPane[0]->getPanePtr(), true);
     mSelIcon2->setAlphaRate(0.0f);
@@ -3647,7 +3679,12 @@ void dFile_select_c::selFileCursorShow() {
     Vec local_1c = mSelFilePanes[mSelectNum]->getGlobalVtxCenter(false, 0);
     mSelIcon->setPos(local_1c.x, local_1c.y, mSelFilePanes[mSelectNum]->getPanePtr(), true);
     mSelIcon->setAlphaRate(1.0f);
+
+    #if TARGET_PC
+    mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.94f, 0.03f, 0.7f, 0.7f);
+    #else
     mSelIcon->setParam(0.96f, 0.94f, 0.03f, 0.7f, 0.7f);
+    #endif
 }
 
 void dFile_select_c::menuWakuAlpahAnmInit(u8 i_idx, u8 param_1, u8 param_2, u8 param_3) {
@@ -3689,7 +3726,12 @@ void dFile_select_c::menuCursorShow() {
         Vec local_24 = m3mSelPane[mSelectMenuNum]->getGlobalVtxCenter(false, 0);
         mSelIcon->setPos(local_24.x, local_24.y, m3mSelPane[mSelectMenuNum]->getPanePtr(), true);
         mSelIcon->setAlphaRate(1.0f);
+
+        #if TARGET_PC
+        mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.84f, 0.06f, 0.5f, 0.5f);
+        #else
         mSelIcon->setParam(0.96f, 0.84f, 0.06f, 0.5f, 0.5f);
+        #endif
     }
 }
 
@@ -3731,7 +3773,74 @@ bool dFile_select_c::yesnoWakuAlpahAnm(u8 param_1) {
     return rv;
 }
 
+#if TARGET_PC
+void dFile_select_c::fileSelectWide() {
+    mYnSel.ScrYn->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
+    mYnSel.ScrYn->translate(mDoGph_gInf_c::getMinXF(), 0.0f);
+
+    mYnSel.ScrYn->search(MULTI_CHAR('w_no_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mYnSel.ScrYn->search(MULTI_CHAR('f_no_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mYnSel.ScrYn->search(MULTI_CHAR('w_yes_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mYnSel.ScrYn->search(MULTI_CHAR('f_yes_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    m3mSel.Scr3m->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
+    m3mSel.Scr3m->translate(mDoGph_gInf_c::getMinXF(), 0.0f);
+
+    m3mSel.Scr3m->search(MULTI_CHAR('w_sta'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    m3mSel.Scr3m->search(MULTI_CHAR('f_sta'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    m3mSel.Scr3m->search(MULTI_CHAR('w_del'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    m3mSel.Scr3m->search(MULTI_CHAR('f_del'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    m3mSel.Scr3m->search(MULTI_CHAR('w_cop_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    m3mSel.Scr3m->search(MULTI_CHAR('f_cop_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    fileSel.Scr->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
+    fileSel.Scr->translate(mDoGph_gInf_c::getMinXF(), 0.0f);
+
+    fileSel.Scr->search(MULTI_CHAR('t_for'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('t_for1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    fileSel.Scr->search(MULTI_CHAR('w_btn_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    fileSel.Scr->search(MULTI_CHAR('w_n_bk00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_n_bk01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_n_bk02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    fileSel.Scr->search(MULTI_CHAR('w_dat_i0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_dat_i1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_dat_i2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    mCpSel.Scr->search(MULTI_CHAR('w_dat_i1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mCpSel.Scr->search(MULTI_CHAR('w_dat_i2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mCpSel.Scr->search(MULTI_CHAR('w_n_bk01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mCpSel.Scr->search(MULTI_CHAR('w_n_bk02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    mSelDt.ScrDt->search(MULTI_CHAR('tate_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSelDt.ScrDt->search(MULTI_CHAR('tate_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSelDt.ScrDt->search(MULTI_CHAR('ken_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSelDt.ScrDt->search(MULTI_CHAR('ken_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSelDt.ScrDt->search(MULTI_CHAR('fuku_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSelDt.ScrDt->search(MULTI_CHAR('fuku_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mSelDt.ScrDt->search(MULTI_CHAR('fuku_n2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Spirals
+    fileSel.Scr->search(MULTI_CHAR('w_uzu00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_uzu01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_uzu02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_uzu03'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_uzu04'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_uzu05'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_uzu06'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_uzu07'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_uzu08'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_uzu09'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+}
+#endif
+
 void dFile_select_c::_draw() {
+    #if TARGET_PC
+    fileSelectWide();
+    #endif
+
     if (!mHasDrawn) {
         dComIfGd_set2DOpa(&fileSel);
 

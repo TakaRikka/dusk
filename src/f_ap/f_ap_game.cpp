@@ -1,26 +1,27 @@
 #include "f_ap/f_ap_game.h"
+#include <cstring>
+#include "DynamicLink.h"
+#include "JSystem/J3DGraphLoader/J3DModelLoader.h"
+#include "JSystem/J3DGraphLoader/J3DModelSaver.h"
+#include "JSystem/JHostIO/JORFile.h"
+#include "JSystem/JKernel/JKRAram.h"
+#include "JSystem/JKernel/JKRAramArchive.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTDbPrint.h"
 #include "SSystem/SComponent/c_counter.h"
+#include "d/actor/d_a_alink.h"
+#include "d/actor/d_a_grass.h"
+#include "d/actor/d_a_midna.h"
+#include "d/d_model.h"
+#include "d/d_tresure.h"
+#include "dusk/logging.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_draw_tag.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "f_op/f_op_scene_mng.h"
-#include "m_Do/m_Do_main.h"
 #include "m_Do/m_Do_graphic.h"
-#include "DynamicLink.h"
-#include "JSystem/JKernel/JKRSolidHeap.h"
-#include "JSystem/JKernel/JKRAram.h"
-#include "JSystem/JKernel/JKRAramArchive.h"
-#include "JSystem/JUtility/JUTDbPrint.h"
-#include "JSystem/JHostIO/JORFile.h"
-#include "JSystem/J3DGraphLoader/J3DModelLoader.h"
-#include "JSystem/J3DGraphLoader/J3DModelSaver.h"
-#include "d/actor/d_a_alink.h"
-#include "d/actor/d_a_midna.h"
-#include "d/d_model.h"
-#include "d/actor/d_a_grass.h"
-#include "d/d_tresure.h"
-#include <cstring>
-#include "dusk/logging.h"
+#include "m_Do/m_Do_main.h"
+#include "tracy/Tracy.hpp"
 
 fapGm_HIO_c::fapGm_HIO_c() {
     mUsingHostIO = true;
@@ -722,6 +723,7 @@ void fapGm_After() {
 }
 
 void fapGm_Execute() {
+    ZoneScoped;
     static u32 sExecCount = 0;
     if (sExecCount < 10 || (sExecCount % 300 == 0)) {
         DuskLog.debug("fapGm_Execute frame={}", sExecCount);
@@ -731,6 +733,24 @@ void fapGm_Execute() {
     #if DEBUG
     JUTDbPrint::getManager()->setCharColor(g_HIO.mColor);
     #endif
+
+#if TARGET_PC
+    if (mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getTrigY(PAD_1)) {
+        if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
+            dynamic_cast<daAlink_c*>(link)->handleQuickTransform();
+        }
+    }
+    
+    if (dusk::getSettings().game.fastSpinner && mDoCPd_c::getHoldR(PAD_1)) {
+        if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
+            auto spinnerActor = (fopAc_ac_c*)dynamic_cast<daAlink_c*>(link)->getSpinnerActor();
+            if (spinnerActor) {
+                if (spinnerActor->speedF < 60.f)
+                    spinnerActor->speedF += 2.f;
+            }
+        }
+    }
+#endif
 
     fpcM_Management(NULL, fapGm_After);
     cCt_Counter(0);

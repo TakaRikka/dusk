@@ -114,7 +114,14 @@ void dMenu_Fishing_c::_draw() {
     if (mpArchive) {
         J2DGrafContext* grafPort = dComIfGp_getCurrentGrafPort();
         mpBlackTex->setAlpha(0xff);
+
+        #if TARGET_PC
+        mpBlackTex->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
+                         mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), 0, 0, 0);
+        #else
         mpBlackTex->draw(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0, 0, 0);
+        #endif
+
         mpScreen->draw(0.0f, 0.0f, grafPort);
         mpIconScreen->draw(0.0f, 0.0f, grafPort);
     }

@@ -441,11 +441,22 @@ void dMsgScrnTalk_c::fukiPosCalc(u8 param_1) {
         cXyz local_70;
         cXyz cStack_7c;
         f32 f3y;
+
+        #if TARGET_PC
+        mDoLib_project(&player->eyePos, &cStack_7c, {0, 0, FB_WIDTH, FB_HEIGHT});
+        #else
         mDoLib_project(&player->eyePos, &cStack_7c);
+        #endif
+
         if (msgActor->pos == cXyz(0.0f, 0.0f, 0.0f)) {
             f3y = cStack_7c.y;
         } else {
-            mDoLib_project(&msgActor->pos, &local_70);
+            #if TARGET_PC
+            mDoLib_project(&msgActor->pos, &local_70, {0, 0, FB_WIDTH, FB_HEIGHT});
+            #else
+            mDoLib_project(&msgActor->pos, &local_70,);
+            #endif
+            
             if (local_70.x >= 0.0f && local_70.x <= 608.0f && local_70.y >= 0.0f &&
                 local_70.y <= 448.0f)
             {

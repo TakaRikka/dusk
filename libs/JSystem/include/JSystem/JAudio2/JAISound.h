@@ -5,6 +5,7 @@
 #include "JSystem/JAudio2/JAIAudible.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "global.h"
+#include "dusk/endian.h"
 #include <cstdint>
 
 class JAISound;
@@ -49,22 +50,28 @@ public:
 
     JAISoundID(const JAISoundID& other) { id_.composite_ = other.id_.composite_; };
 
+    JAISoundID(unsigned int sectionID, unsigned int groupID, unsigned int waveID) {
+        id_.info.type.parts.sectionID = sectionID;
+        id_.info.type.parts.groupID = groupID;
+        id_.info.waveID = waveID;
+    }
+
     JAISoundID() {}
 
     bool isAnonymous() const { return id_.composite_ == -1; }
     void setAnonymous() { id_.composite_ = -1; }
 
     union {
-        u32 composite_;
+        BE(u32) composite_;
         struct {
             union {
-                u16 value;
+                BE(u16) value;
                 struct {
                     u8 sectionID;
                     u8 groupID;
                 } parts;
             } type;
-            u16 waveID;
+            BE(u16) waveID;
         } info;
     } id_;
 };
@@ -321,6 +328,8 @@ public:
     void pause(bool param_0) {
         status_.field_0x0.flags.paused = param_0;
     }
+
+    bool isPaused() const { return status_.field_0x0.flags.paused; }
 
     void updateLifeTime(u32 lifeTime) {
         if (lifeTime > lifeTime_) {

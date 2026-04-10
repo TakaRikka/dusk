@@ -2462,12 +2462,12 @@ static void demo_camera(b_ob_class* i_this) {
                 i_this->mDemoCamCenterTarget.set(80.0f, -24093.0f, 160.0f);
                 i_this->mDemoCamEyeTarget.set(-447.0f, -22850.0f, -718.0f);
 
-                i_this->field_0x5cb4 = std::fabsf(i_this->mDemoCamEyeTarget.x - i_this->mDemoCamEye.x);
-                i_this->field_0x5cb8 = std::fabsf(i_this->mDemoCamEyeTarget.y - i_this->mDemoCamEye.y);
-                i_this->field_0x5cbc = std::fabsf(i_this->mDemoCamEyeTarget.z - i_this->mDemoCamEye.z);
-                i_this->field_0x5cc0 = std::fabsf(i_this->mDemoCamCenterTarget.x - i_this->mDemoCamCenter.x);
-                i_this->field_0x5cc4 = std::fabsf(i_this->mDemoCamCenterTarget.y - i_this->mDemoCamCenter.y);
-                i_this->field_0x5cc8 = std::fabsf(i_this->mDemoCamCenterTarget.z - i_this->mDemoCamCenter.z);
+                i_this->field_0x5cb4 = fabsf(i_this->mDemoCamEyeTarget.x - i_this->mDemoCamEye.x);
+                i_this->field_0x5cb8 = fabsf(i_this->mDemoCamEyeTarget.y - i_this->mDemoCamEye.y);
+                i_this->field_0x5cbc = fabsf(i_this->mDemoCamEyeTarget.z - i_this->mDemoCamEye.z);
+                i_this->field_0x5cc0 = fabsf(i_this->mDemoCamCenterTarget.x - i_this->mDemoCamCenter.x);
+                i_this->field_0x5cc4 = fabsf(i_this->mDemoCamCenterTarget.y - i_this->mDemoCamCenter.y);
+                i_this->field_0x5cc8 = fabsf(i_this->mDemoCamCenterTarget.z - i_this->mDemoCamCenter.z);
                 i_this->field_0x5cd0 = 0.0f;
 
                 daPy_getPlayerActorClass()->changeDemoMode(0x17, 0, 0, 0);
@@ -2590,12 +2590,12 @@ static void demo_camera(b_ob_class* i_this) {
         i_this->mDemoCamCenterTarget.set(-6378.0f, -21886.0f, 7150.0f);
         i_this->mDemoCamEyeTarget.set(-6961.0f, -21727.0f, 7278.0f);
 
-        i_this->field_0x5cb4 = std::fabsf(i_this->mDemoCamEyeTarget.x - i_this->mDemoCamEye.x);
-        i_this->field_0x5cb8 = std::fabsf(i_this->mDemoCamEyeTarget.y - i_this->mDemoCamEye.y);
-        i_this->field_0x5cbc = std::fabsf(i_this->mDemoCamEyeTarget.z - i_this->mDemoCamEye.z);
-        i_this->field_0x5cc0 = std::fabsf(i_this->mDemoCamCenterTarget.x - i_this->mDemoCamCenter.x);
-        i_this->field_0x5cc4 = std::fabsf(i_this->mDemoCamCenterTarget.y - i_this->mDemoCamCenter.y);
-        i_this->field_0x5cc8 = std::fabsf(i_this->mDemoCamCenterTarget.z - i_this->mDemoCamCenter.z);
+        i_this->field_0x5cb4 = fabsf(i_this->mDemoCamEyeTarget.x - i_this->mDemoCamEye.x);
+        i_this->field_0x5cb8 = fabsf(i_this->mDemoCamEyeTarget.y - i_this->mDemoCamEye.y);
+        i_this->field_0x5cbc = fabsf(i_this->mDemoCamEyeTarget.z - i_this->mDemoCamEye.z);
+        i_this->field_0x5cc0 = fabsf(i_this->mDemoCamCenterTarget.x - i_this->mDemoCamCenter.x);
+        i_this->field_0x5cc4 = fabsf(i_this->mDemoCamCenterTarget.y - i_this->mDemoCamCenter.y);
+        i_this->field_0x5cc8 = fabsf(i_this->mDemoCamCenterTarget.z - i_this->mDemoCamCenter.z);
         i_this->field_0x5cd0 = 0.0f;
 
         i_this->mDemoAction = 46;
@@ -2656,12 +2656,12 @@ static void demo_camera(b_ob_class* i_this) {
             i_this->mDemoCamCenterTarget.set(-2933.0f, -22626.0f, 6829.0f);
             i_this->mDemoCamEyeTarget.set(-3295.0f, -22459.0f, 7307.0f);
 
-            i_this->field_0x5cb4 = std::fabsf(i_this->mDemoCamEyeTarget.x - i_this->mDemoCamEye.x);
-            i_this->field_0x5cb8 = std::fabsf(i_this->mDemoCamEyeTarget.y - i_this->mDemoCamEye.y);
-            i_this->field_0x5cbc = std::fabsf(i_this->mDemoCamEyeTarget.z - i_this->mDemoCamEye.z);
-            i_this->field_0x5cc0 = std::fabsf(i_this->mDemoCamCenterTarget.x - i_this->mDemoCamCenter.x);
-            i_this->field_0x5cc4 = std::fabsf(i_this->mDemoCamCenterTarget.y - i_this->mDemoCamCenter.y);
-            i_this->field_0x5cc8 = std::fabsf(i_this->mDemoCamCenterTarget.z - i_this->mDemoCamCenter.z);
+            i_this->field_0x5cb4 = fabsf(i_this->mDemoCamEyeTarget.x - i_this->mDemoCamEye.x);
+            i_this->field_0x5cb8 = fabsf(i_this->mDemoCamEyeTarget.y - i_this->mDemoCamEye.y);
+            i_this->field_0x5cbc = fabsf(i_this->mDemoCamEyeTarget.z - i_this->mDemoCamEye.z);
+            i_this->field_0x5cc0 = fabsf(i_this->mDemoCamCenterTarget.x - i_this->mDemoCamCenter.x);
+            i_this->field_0x5cc4 = fabsf(i_this->mDemoCamCenterTarget.y - i_this->mDemoCamCenter.y);
+            i_this->field_0x5cc8 = fabsf(i_this->mDemoCamCenterTarget.z - i_this->mDemoCamCenter.z);
             i_this->field_0x5cd0 = 0.0f;
 
             i_this->mDemoAction = 48;

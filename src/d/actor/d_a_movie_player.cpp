@@ -14,21 +14,41 @@
 #pragma optimization_level 4
 #pragma optimize_for_size off
 
-#include "JSystem/JKernel/JKRExpHeap.h"
+#include <cstring>
+#include <span>
 #include "JSystem/JAudio2/JASAiCtrl.h"
 #include "JSystem/JAudio2/JASDriverIF.h"
-#include "d/actor/d_a_movie_player.h"
+#include "JSystem/JKernel/JKRExpHeap.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include "d/actor/d_a_movie_player.h"
+
+#include <cassert>
+
 #include "f_op/f_op_overlap_mng.h"
-#include <cstring>
 
 #include "dusk/gx_helper.h"
+#include "dusk/os.h"
+#include "dusk/layout.hpp"
+
+#include "JSystem/JAudio2/JASCriticalSection.h"
+
+#if MOVIE_SUPPORT
+#include "turbojpeg.h"
+#endif
 
 inline s32 daMP_NEXT_READ_SIZE(daMP_THPReadBuffer* readBuf) {
-    return *(s32*)readBuf->ptr;
+    return *(BE(s32)*)readBuf->ptr;
 }
 
-#ifdef __cplusplus
+#if TARGET_PC
+// idk what OS_THREAD_ATTR_DETACH does, and it stops OSThreadJoin()
+// probably the difference doesn't matter since we are using OS threads anyways.
+#define OS_THREAD_ATTR 0
+#else
+#define OS_THREAD_ATTR OS_THREAD_ATTR_DETACH
+#endif
+
+#if defined(__cplusplus) && !TARGET_PC
 extern "C" {
 #endif
 
@@ -196,6 +216,7 @@ static void __THPAudioInitialize(THPAudioDecodeInfo* info, u8* ptr) {
     info->encodeData++;
 }
 
+#if !TARGET_PC
 static u8 THPStatistics[1120] ATTRIBUTE_ALIGN(32);
 
 static THPHuffmanTab* Ydchuff ATTRIBUTE_ALIGN(32);
@@ -2562,8 +2583,109 @@ static void __THPHuffDecodeDCTCompV(__REGISTER THPFileInfo* info, THPCoeff* bloc
         }
     }
 }
+#else // !TARGET_PC
+
+static daMP_THPPlayer daMP_ActivePlayer;
+
+#if MOVIE_SUPPORT
+static std::vector<u8> FixedJpegData;
+static tjhandle JpegDecompressHandle;
+
+static const std::vector<u8>& FixJpeg(const std::span<u8> data) {
+    FixedJpegData.resize(0);
+    FixedJpegData.reserve(data.size());
+
+    size_t startOfScanLocation = 0;
+    for (; startOfScanLocation < data.size() - 1; startOfScanLocation++) {
+        if (data[startOfScanLocation] == 0xFF && data[startOfScanLocation + 1] == 0xDA) {
+            goto sosFound;
+        }
+    }
+
+    CRASH("Unable to find SOS marker!");
+
+    sosFound:
+
+    startOfScanLocation += 2; // TODO: Skip entire SOS header?
+
+    size_t endOfImage = data.size() - 1;
+    for (; endOfImage > startOfScanLocation; endOfImage--) {
+        if (data[endOfImage] == 0xFF && data[endOfImage + 1] == 0xD9) {
+            goto eoiFound;
+        }
+    }
+
+    CRASH("Unable to find EOI marker!");
+    eoiFound:
+
+    // Copy data before SOS
+    for (size_t i = 0; i < startOfScanLocation; i++) {
+        FixedJpegData.push_back(data[i]);
+    }
+
+    // Copy data inside SOS, fixing up lacking of "byte shuffling"
+    for (size_t i = startOfScanLocation; i < endOfImage; i++) {
+        u8 value = data[i];
+        FixedJpegData.push_back(value);
+        if (value == 0xFF) {
+            FixedJpegData.push_back(0x00);
+        }
+    }
+
+    // Copy data after SOS.
+    for (size_t i = endOfImage; i < data.size(); i++) {
+        FixedJpegData.push_back(data[i]);
+    }
+
+    return FixedJpegData;
+}
+
+static s32 THPVideoDecode(void* file, size_t fileSize, void* tileY, void* tileU, void* tileV, void*) {
+    assert(JpegDecompressHandle);
+
+    const auto handle = JpegDecompressHandle;
+    const auto fixedData = FixJpeg(std::span(static_cast<u8*>(file), fileSize));
+
+    auto ret = tj3DecompressHeader(handle, fixedData.data(), fixedData.size());
+    if (ret == -1) {
+        OSReport_Error("Parsing JPEG header failed: %s", tj3GetErrorStr(handle));
+        return 1;
+    }
+
+    if (tj3Get(handle, TJPARAM_JPEGWIDTH) != daMP_ActivePlayer.videoInfo.xSize) {
+        OSReport_Error("Invalid width in video frame!");
+        return 1;
+    }
+
+    if (tj3Get(handle, TJPARAM_JPEGHEIGHT) != daMP_ActivePlayer.videoInfo.ySize) {
+        OSReport_Error("Invalid height in video frame!");
+        return 1;
+    }
+
+    ret = tj3Set(handle, TJPARAM_SUBSAMP, TJSAMP_420);
+    if (ret != 0) {
+        OSReport_Error("Failed to set subsampling mode: %s", tj3GetErrorStr(handle));
+        return 1;
+    }
+
+    u8* planes[3] = {static_cast<u8*>(tileY), static_cast<u8*>(tileU), static_cast<u8*>(tileV)};
+    ret = tj3DecompressToYUVPlanes8(handle, fixedData.data(), fixedData.size(), planes, nullptr);
+    if (ret != 0) {
+        OSReport_Error("Image decompression failed: %s", tj3GetErrorStr(handle));
+        return 1;
+    }
+
+    return 0;
+}
+#else // MOVIE_SUPPORT
+static s32 THPVideoDecode(void*, size_t, void*, void*, void*, void*) {
+    return 1; // Immediate error.
+}
+#endif
+#endif
 
 static BOOL THPInit() {
+#if !TARGET_PC
     u8* base;
     base = (u8*)(0xE000 << 16);
 
@@ -2585,15 +2707,21 @@ static BOOL THPInit() {
     OSInitFastCast();
 
     __THPInitFlag = TRUE;
+#endif
     return TRUE;
 }
 
-#ifdef __cplusplus
+#if defined(__cplusplus) && !TARGET_PC
 }
 #endif
 
+#if !TARGET_PC // Defined earlier in file.
 static daMP_THPPlayer daMP_ActivePlayer;
+#endif
 
+#if TARGET_PC
+static BOOL ReadThreadCancelled;
+#endif
 static BOOL daMP_ReadThreadCreated;
 
 static OSMessageQueue daMP_FreeReadBufferQueue;
@@ -2648,12 +2776,23 @@ void daMP_ReadThreadStart() {
 
 void daMP_ReadThreadCancel() {
     if (daMP_ReadThreadCreated) {
+#if TARGET_PC
+        ReadThreadCancelled = TRUE;
+        OSReceiveMessage(&daMP_ReadedBufferQueue, nullptr, OS_MESSAGE_NOBLOCK);
+        OSSendMessage(&daMP_FreeReadBufferQueue, nullptr, OS_MESSAGE_NOBLOCK);
+        OSJoinThread(&daMP_ReadThread, nullptr);
+#else
         OSCancelThread(&daMP_ReadThread);
+#endif
         daMP_ReadThreadCreated = FALSE;
     }
 }
 
 void* daMP_Reader(void*) {
+#if TARGET_PC
+    OSSetCurrentThreadName("movie player reader");
+#endif
+
     daMP_THPReadBuffer* buf;
 	s32 curFrame;
 	s32 status;
@@ -2664,8 +2803,17 @@ void* daMP_Reader(void*) {
     offset = daMP_ActivePlayer.initOffset;
 	initReadSize = daMP_ActivePlayer.initReadSize;
 
+#if TARGET_PC
+	while (!ReadThreadCancelled) {
+#else
 	while (TRUE) {
+#endif
 		buf = (daMP_THPReadBuffer*)daMP_PopFreeReadBuffer();
+#if TARGET_PC
+	    if (!buf) {
+	        return nullptr;
+	    }
+#endif
 		status = DVDReadPrio(&daMP_ActivePlayer.fileInfo, buf->ptr, initReadSize, offset, 2);
 		if (status != initReadSize) {
 			if (status == -1)
@@ -2673,7 +2821,11 @@ void* daMP_Reader(void*) {
 			if (frame == 0)
 				daMP_PrepareReady(FALSE);
 
+#if TARGET_PC
+		    return nullptr;
+#else
 			OSSuspendThread(&daMP_ReadThread);
+#endif
 		}
 
 		buf->frameNumber = frame;
@@ -2686,20 +2838,35 @@ void* daMP_Reader(void*) {
 		if (curFrame == daMP_ActivePlayer.header.numFrames - 1) {
 			if (daMP_ActivePlayer.playFlag & 1)
 				offset = daMP_ActivePlayer.header.movieDataOffsets;
-			else
-				OSSuspendThread(&daMP_ReadThread);
+			else {
+#if TARGET_PC
+			    return nullptr;
+#else
+			    OSSuspendThread(&daMP_ReadThread);
+#endif
+			}
 		}
 
 		frame++;
 	}
+
+#if TARGET_PC
+    return nullptr;
+#endif
 }
 
 static u8 daMP_ReadThreadStack[0x2000];
 
+#if TARGET_PC
+static BOOL VideoThreadCancelled;
+#endif
 static BOOL daMP_VideoDecodeThreadCreated;
 
 static BOOL daMP_CreateReadThread(s32 param_0) {
-    if (!OSCreateThread(&daMP_ReadThread, daMP_Reader, 0, daMP_ReadThreadStack + sizeof(daMP_ReadThreadStack), sizeof(daMP_ReadThreadStack), param_0, 1)) {
+#if TARGET_PC
+    ReadThreadCancelled = FALSE;
+#endif
+    if (!OSCreateThread(&daMP_ReadThread, daMP_Reader, 0, daMP_ReadThreadStack + sizeof(daMP_ReadThreadStack), sizeof(daMP_ReadThreadStack), param_0, OS_THREAD_ATTR)) {
         OSReport("Can't create read thread\n");
         return FALSE;
     }
@@ -2751,19 +2918,30 @@ static BOOL daMP_First;
 static void daMP_VideoDecode(daMP_THPReadBuffer* readBuffer) {
     THPTextureSet* textureSet;
 	s32 i;
-	u32* tileOffsets;
+	BE(u32)* tileOffsets;
 	u8* tile;
 
-    tileOffsets = (u32*)(readBuffer->ptr + 8);
+    tileOffsets = (BE(u32)*)(readBuffer->ptr + 8);
 	tile = &readBuffer->ptr[daMP_ActivePlayer.compInfo.numComponents * 4] + 8;
 	textureSet = (THPTextureSet*)daMP_PopFreeTextureSet();
+
+#if TARGET_PC
+    if (textureSet == nullptr) {
+        return;
+    }
+#endif
 
     for (i = 0; i < daMP_ActivePlayer.compInfo.numComponents; i++) {
         switch (daMP_ActivePlayer.compInfo.frameComp[i]) {
 		case 0: {
 			if ((daMP_ActivePlayer.videoError = THPVideoDecode(
-			         tile, textureSet->ytexture, textureSet->utexture,
-			         textureSet->vtexture, daMP_ActivePlayer.thpWork))) {
+			        tile,
+#if TARGET_PC
+	                *tileOffsets,
+#endif
+			         textureSet->ytexture, textureSet->utexture,
+			         textureSet->vtexture,
+			         daMP_ActivePlayer.thpWork))) {
 				if (daMP_First) {
 					daMP_PrepareReady(FALSE);
 					daMP_First = FALSE;
@@ -2789,12 +2967,24 @@ static void daMP_VideoDecode(daMP_THPReadBuffer* readBuffer) {
 }
 
 static void* daMP_VideoDecoder(void* param_0) {
-    daMP_THPReadBuffer* thpBuffer;
+#if TARGET_PC
+    OSSetCurrentThreadName("movie video decoder");
+#endif
 
+    daMP_THPReadBuffer* thpBuffer;
+#if TARGET_PC
+	while (!VideoThreadCancelled) {
+#else
 	while (TRUE) {
+#endif
 		if (daMP_ActivePlayer.audioExist) {
 			for (; daMP_ActivePlayer.videoDecodeCount < 0;) {
 				thpBuffer = (daMP_THPReadBuffer*)daMP_PopReadedBuffer2();
+#if TARGET_PC
+			    if (thpBuffer == nullptr) {
+			        goto exit;
+			    }
+#endif
 				s32 remaining
 				    = ((thpBuffer->frameNumber + daMP_ActivePlayer.initReadFrame)
 				       % daMP_ActivePlayer.header.numFrames);
@@ -2814,12 +3004,26 @@ static void* daMP_VideoDecoder(void* param_0) {
 		else
 			thpBuffer = (daMP_THPReadBuffer*)daMP_PopReadedBuffer();
 
+#if TARGET_PC
+	    if (thpBuffer == nullptr) {
+	        goto exit;
+	    }
+#endif
+
 		daMP_VideoDecode(thpBuffer);
 		daMP_PushFreeReadBuffer(thpBuffer);
 	}
+#if TARGET_PC
+    exit:;
+    return nullptr;
+#endif
 }
 
 static void* daMP_VideoDecoderForOnMemory(void* param_0) {
+#if TARGET_PC
+    OSSetCurrentThreadName("movie video decoder");
+#endif
+
     daMP_THPReadBuffer readBuffer;
 	s32 readSize;
 	s32 frame;
@@ -2876,13 +3080,17 @@ static void* daMP_VideoDecoderForOnMemory(void* param_0) {
 }
 
 static BOOL daMP_CreateVideoDecodeThread(OSPriority prio, u8* param_1) {
+#if TARGET_PC
+    VideoThreadCancelled = FALSE;
+#endif
+
     if (param_1 != NULL) {
-        if (!OSCreateThread(&daMP_VideoDecodeThread, daMP_VideoDecoderForOnMemory, param_1, daMP_VideoDecodeThreadStack + sizeof(daMP_VideoDecodeThreadStack), sizeof(daMP_VideoDecodeThreadStack), prio, 1)) {
+        if (!OSCreateThread(&daMP_VideoDecodeThread, daMP_VideoDecoderForOnMemory, param_1, daMP_VideoDecodeThreadStack + sizeof(daMP_VideoDecodeThreadStack), sizeof(daMP_VideoDecodeThreadStack), prio, OS_THREAD_ATTR)) {
             OSReport("Can't create video decode thread\n");
             return FALSE;
         }
     } else {
-        if (!OSCreateThread(&daMP_VideoDecodeThread, daMP_VideoDecoder, NULL, daMP_VideoDecodeThreadStack + sizeof(daMP_VideoDecodeThreadStack), sizeof(daMP_VideoDecodeThreadStack), prio, 1)) {
+        if (!OSCreateThread(&daMP_VideoDecodeThread, daMP_VideoDecoder, NULL, daMP_VideoDecodeThreadStack + sizeof(daMP_VideoDecodeThreadStack), sizeof(daMP_VideoDecodeThreadStack), prio, OS_THREAD_ATTR)) {
             OSReport("Can't create video decode thread\n");
             return FALSE;
         }
@@ -2903,12 +3111,24 @@ static void daMP_VideoDecodeThreadStart() {
 
 void daMP_VideoDecodeThreadCancel() {
     if (daMP_VideoDecodeThreadCreated) {
+#if TARGET_PC
+        VideoThreadCancelled = TRUE;
+        // Push junk into the queues so the thread unblocks and can exit cleanly.
+        daMP_PushFreeTextureSet(nullptr);
+        daMP_PushReadedBuffer(nullptr);
+        daMP_PushReadedBuffer2(nullptr);
+        OSJoinThread(&daMP_VideoDecodeThread, nullptr);
+#else
         OSCancelThread(&daMP_VideoDecodeThread);
+#endif
         daMP_VideoDecodeThreadCreated = FALSE;
     }
 }
 
 static BOOL daMP_AudioDecodeThreadCreated;
+#if TARGET_PC
+static BOOL AudioThreadCancelled;
+#endif
 
 static OSThread daMP_AudioDecodeThread;
 
@@ -2944,12 +3164,17 @@ static void daMP_PushDecodedAudioBuffer(void* buffer) {
 static void daMP_AudioDecode(daMP_THPReadBuffer* readBuffer) {
     THPAudioBuffer* audioBuf;
 	s32 i;
-	u32* offsets;
+	BE(u32)* offsets;
 	u8* audioData;
 
-	offsets = (u32*)(readBuffer->ptr + 8);
+	offsets = (BE(u32)*)(readBuffer->ptr + 8);
 	audioData = &readBuffer->ptr[daMP_ActivePlayer.compInfo.numComponents * 4] + 8;
 	audioBuf = (THPAudioBuffer*)daMP_PopFreeAudioBuffer();
+#if TARGET_PC
+    if (!audioBuf) {
+        return;
+    }
+#endif
 
 	for (i = 0; i < daMP_ActivePlayer.compInfo.numComponents; i++) {
 		switch (daMP_ActivePlayer.compInfo.frameComp[i]) {
@@ -2969,16 +3194,34 @@ static void daMP_AudioDecode(daMP_THPReadBuffer* readBuffer) {
 }
 
 static void* daMP_AudioDecoder(void* param_0) {
+#if TARGET_PC
+    OSSetCurrentThreadName("movie audio decoder");
+#endif
+
     daMP_THPReadBuffer* buf;
 
+#if TARGET_PC
+    while (!AudioThreadCancelled) {
+#else
     while (TRUE) {
+#endif
         buf = (daMP_THPReadBuffer*)daMP_PopReadedBuffer();
+#if TARGET_PC
+        if (!buf) {
+            return nullptr;
+        }
+#endif
         daMP_AudioDecode(buf);
         daMP_PushReadedBuffer2(buf);
     }
+    return nullptr;
 }
 
 static void* daMP_AudioDecoderForOnMemory(void* param_0) {
+#if TARGET_PC
+    OSSetCurrentThreadName("movie audio decoder");
+#endif
+
     s32 size;
 	s32 readSize;
 	daMP_THPReadBuffer readBuffer;
@@ -2989,7 +3232,11 @@ static void* daMP_AudioDecoderForOnMemory(void* param_0) {
 	readBuffer.ptr = (u8*)param_0;
     frame = 0;
 
+#if TARGET_PC
+	while (!AudioThreadCancelled) {
+#else
 	while (TRUE) {
+#endif
 		readBuffer.frameNumber = frame;
 		daMP_AudioDecode(&readBuffer);
 
@@ -2999,7 +3246,11 @@ static void* daMP_AudioDecoderForOnMemory(void* param_0) {
 				readSize = *(s32*)readBuffer.ptr;
 				readBuffer.ptr = daMP_ActivePlayer.movieData;
 			} else {
+#if TARGET_PC
+			    return nullptr;
+#else
 				OSSuspendThread(&daMP_AudioDecodeThread);
+#endif
 			}
 		} else {
 			size = *(s32*)readBuffer.ptr;
@@ -3008,6 +3259,7 @@ static void* daMP_AudioDecoderForOnMemory(void* param_0) {
 		}
 		frame++;
 	}
+    return nullptr;
 }
 
 static OSMessage daMP_FreeAudioBufferMessage[3];
@@ -3015,13 +3267,16 @@ static OSMessage daMP_FreeAudioBufferMessage[3];
 static OSMessage daMP_DecodedAudioBufferMessage[3];
 
 static BOOL daMP_CreateAudioDecodeThread(OSPriority prio, u8* param_1) {
+#if TARGET_PC
+    AudioThreadCancelled = FALSE;
+#endif
     if (param_1 != NULL) {
-        if (!OSCreateThread(&daMP_AudioDecodeThread, daMP_AudioDecoderForOnMemory, param_1, daMP_AudioDecodeThreadStack + sizeof(daMP_AudioDecodeThreadStack), sizeof(daMP_AudioDecodeThreadStack), prio, 1)) {
+        if (!OSCreateThread(&daMP_AudioDecodeThread, daMP_AudioDecoderForOnMemory, param_1, daMP_AudioDecodeThreadStack + sizeof(daMP_AudioDecodeThreadStack), sizeof(daMP_AudioDecodeThreadStack), prio, OS_THREAD_ATTR)) {
             OS_REPORT("Can't create audio decode thread\n");
             return FALSE;
         }
     } else {
-        if (!OSCreateThread(&daMP_AudioDecodeThread, daMP_AudioDecoder, NULL, daMP_AudioDecodeThreadStack + sizeof(daMP_AudioDecodeThreadStack), sizeof(daMP_AudioDecodeThreadStack), prio, 1)) {
+        if (!OSCreateThread(&daMP_AudioDecodeThread, daMP_AudioDecoder, NULL, daMP_AudioDecodeThreadStack + sizeof(daMP_AudioDecodeThreadStack), sizeof(daMP_AudioDecodeThreadStack), prio, OS_THREAD_ATTR)) {
             OSReport("Can't create audio decode thread\n");
             return FALSE;
         }
@@ -3042,7 +3297,17 @@ void daMP_AudioDecodeThreadStart() {
 
 void daMP_AudioDecodeThreadCancel() {
     if (daMP_AudioDecodeThreadCreated) {
+#if TARGET_PC
+        AudioThreadCancelled = TRUE;
+        // Push junk into the queues so the thread unblocks and can exit cleanly.
+        OSSendMessage(&daMP_ReadedBufferQueue, nullptr, OS_MESSAGE_NOBLOCK);
+        daMP_PushFreeAudioBuffer(nullptr);
+        OSReceiveMessage(&daMP_ReadedBufferQueue2, nullptr, OS_MESSAGE_NOBLOCK);
+        OSReceiveMessage(&daMP_DecodedAudioBufferQueue, nullptr, OS_MESSAGE_NOBLOCK);
+        OSJoinThread(&daMP_AudioDecodeThread, nullptr);
+#else
         OSCancelThread(&daMP_AudioDecodeThread);
+#endif
         daMP_AudioDecodeThreadCreated = FALSE;
     }
 }
@@ -3077,8 +3342,13 @@ static void daMP_THPGXYuv2RgbSetup(const GXRenderModeObj* rmode) {
 	Mtx44 m;
 	Mtx e_m;
 
+#if TARGET_PC
+    w = JUTVideo::getManager()->getFbWidth();
+    h = JUTVideo::getManager()->getEfbHeight();
+#else
     w = rmode->fbWidth;
     h = rmode->efbHeight;
+#endif
     var_f31 = 0.0f;
 
     #if WIDESCREEN_SUPPORT
@@ -3168,18 +3438,25 @@ static void daMP_THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x,
     TGXTexObj tobj0;
     TGXTexObj tobj1;
     TGXTexObj tobj2;
+#if TARGET_PC
+#define FMT (GXTexFmt)GX_TF_R8_PC
+#else
+#define FMT GX_TF_I8
+#endif
 
-    GXInitTexObj(&tobj0, y_data, textureWidth, textureHeight, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(&tobj0, y_data, textureWidth, textureHeight, FMT, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&tobj0, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
     GXLoadTexObj(&tobj0, GX_TEXMAP0);
 
-    GXInitTexObj(&tobj1, u_data, textureWidth >> 1, textureHeight >> 1, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(&tobj1, u_data, textureWidth >> 1, textureHeight >> 1, FMT, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&tobj1, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
     GXLoadTexObj(&tobj1, GX_TEXMAP1);
 
-    GXInitTexObj(&tobj2, v_data, textureWidth >> 1, textureHeight >> 1, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(&tobj2, v_data, textureWidth >> 1, textureHeight >> 1, FMT, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&tobj2, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
     GXLoadTexObj(&tobj2, GX_TEXMAP2);
+
+#undef FMT
 
     GXBegin(GX_QUADS, GX_VTXFMT7, 4);
     GXPosition3s16(x, y, 0);
@@ -3191,6 +3468,12 @@ static void daMP_THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x,
     GXPosition3s16(x, y + polygonHeight, 0);
     GXTexCoord2u16(0, 1);
     GXEnd();
+
+#if TARGET_PC
+    GXDestroyTexObj(&tobj0);
+    GXDestroyTexObj(&tobj1);
+    GXDestroyTexObj(&tobj2);
+#endif
 }
 
 static u16 daMP_VolumeTable[] = {
@@ -3268,7 +3551,7 @@ static void daMP_MixAudio(s16* destination, s16*, u32 sample) {
 				if (r_mix > 32767)
 					r_mix = 32767;
 
-                if (JASDriver::getOutputMode() == 0) {
+                if (JASDriver::getOutputMode() == JAS_OUTPUT_MONO) {
                     l_mix = r_mix = ((r_mix >> 1) + (l_mix >> 1));
                     r_mix = (s16)r_mix;
                     l_mix = (s16)l_mix;
@@ -3495,6 +3778,13 @@ static BOOL daMP_THPPlayerOpen(char const* filename, BOOL onMemory) {
 }
 
 static BOOL daMP_THPPlayerClose() {
+#if TARGET_PC && MOVIE_SUPPORT
+    tj3Destroy(JpegDecompressHandle);
+    JpegDecompressHandle = nullptr;
+
+    FixedJpegData.clear();
+#endif
+
     if (daMP_ActivePlayer.open && daMP_ActivePlayer.state == 0) {
         daMP_ActivePlayer.open = 0;
         DVDClose(&daMP_ActivePlayer.fileInfo);
@@ -3546,6 +3836,11 @@ static BOOL daMP_THPPlayerSetBuffer(u8* buffer) {
 
 		ysize = ALIGN_NEXT(daMP_ActivePlayer.videoInfo.xSize * daMP_ActivePlayer.videoInfo.ySize, 32);
 		uvsize = ALIGN_NEXT(daMP_ActivePlayer.videoInfo.xSize * daMP_ActivePlayer.videoInfo.ySize / 4, 32);
+#if TARGET_PC
+	    assert(ysize >= tj3YUVPlaneSize(0, daMP_ActivePlayer.videoInfo.xSize, 0, daMP_ActivePlayer.videoInfo.ySize, TJSAMP_420));
+	    assert(uvsize >= tj3YUVPlaneSize(1, daMP_ActivePlayer.videoInfo.xSize, 0, daMP_ActivePlayer.videoInfo.ySize, TJSAMP_420));
+	    assert(uvsize >= tj3YUVPlaneSize(2, daMP_ActivePlayer.videoInfo.xSize, 0, daMP_ActivePlayer.videoInfo.ySize, TJSAMP_420));
+#endif
 
 		for (i = 0; i < ARRAY_SIZE(daMP_ActivePlayer.textureSet); i++) {
 			daMP_ActivePlayer.textureSet[i].ytexture = ptr;
@@ -3623,6 +3918,12 @@ static BOOL daMP_ProperTimingForGettingNextFrame() {
 		}
 	} else {
 		s32 frameRate = daMP_ActivePlayer.header.frameRate * 100.0f;
+#if TARGET_PC
+	    // DUSK HACK: We only fire retrace callbacks *half* as often as the game expects,
+	    // because we only run them once per frame, and normally there should be two scans
+	    // per game frame.
+	    frameRate *= 2;
+#endif
 		if (VIGetTvFormat() == VI_PAL) {
 			daMP_ActivePlayer.curCount = daMP_ActivePlayer.retaceCount * frameRate / 5000;
 		} else {
@@ -3951,6 +4252,9 @@ static BOOL daMP_THPPlayerSetVolume(s32 vol, s32 duration) {
 		if (duration < 0)
 			duration = 0;
 
+#if TARGET_PC
+	    JASCriticalSection section;
+#endif
 		interrupt = OSDisableInterrupts();
 
 		daMP_ActivePlayer.targetVolume = vol;
@@ -3994,11 +4298,14 @@ static BOOL daMP_ActivePlayer_Init(char const* moviePath) {
     daMP_THPPlayerGetVideoInfo(&daMP_videoInfo);
     daMP_THPPlayerGetAudioInfo(&daMP_audioInfo);
 
+#if !TARGET_PC
+    // Window can be resized during playback, update this during draw.
     u16 width = JUTVideo::getManager()->getRenderMode()->fbWidth;
     u16 height = JUTVideo::getManager()->getRenderMode()->efbHeight;
 
     daMP_DrawPosX = (width - daMP_videoInfo.xSize) >> 1;
     daMP_DrawPosY = (height - daMP_videoInfo.ySize) >> 1;
+#endif
 
     // "The memory needed for this THP movie is %d bytes\n"
     OS_REPORT("このＴＨＰムービーが必要なメモリは%dバイトです\n", daMP_THPPlayerCalcNeedMemory());
@@ -4014,6 +4321,15 @@ static BOOL daMP_ActivePlayer_Init(char const* moviePath) {
     }
 
     daMP_THPPlayerSetBuffer((u8*)daMP_buffer);
+
+#if TARGET_PC && MOVIE_SUPPORT
+    assert(JpegDecompressHandle == nullptr);
+    JpegDecompressHandle = tj3Init(TJINIT_DECOMPRESS);
+    if (JpegDecompressHandle == nullptr) {
+        OSReport_Error("Failed to create turbojpeg handle: %s", tj3GetErrorStr(nullptr));
+        return 0;
+    }
+#endif
 
     if (!daMP_THPPlayerPrepare(0, 0, daMP_audioInfo.sndNumTracks != 1 ? OSGetTick() % daMP_audioInfo.sndNumTracks : 0)) {
         OSReport("Fail to prepare\n");
@@ -4050,14 +4366,55 @@ static void daMP_ActivePlayer_Main() {
     }
 }
 
+#if TARGET_PC && 0
+#include "imgui.h"
+#endif
+
 static void daMP_ActivePlayer_Draw() {
-    int frame = daMP_THPPlayerDrawCurrentFrame(JUTVideo::getManager()->getRenderMode(), daMP_DrawPosX, daMP_DrawPosY, daMP_videoInfo.xSize, daMP_videoInfo.ySize);
+#if TARGET_PC
+    u16 width = JUTVideo::getManager()->getFbWidth();
+    u16 height = JUTVideo::getManager()->getEfbHeight();
+
+    const auto rect = dusk::LayoutRect::FitRectInRect(
+        width,
+        height,
+        static_cast<f32>(daMP_videoInfo.xSize),
+        static_cast<f32>(daMP_videoInfo.ySize));
+
+    daMP_DrawPosX = static_cast<u32>(rect.PosX);
+    daMP_DrawPosY = static_cast<u32>(rect.PosY);
+#endif
+
+    int frame = daMP_THPPlayerDrawCurrentFrame(
+        JUTVideo::getManager()->getRenderMode(),
+        daMP_DrawPosX, daMP_DrawPosY,
+#if TARGET_PC
+        static_cast<u32>(rect.Width()),
+        static_cast<u32>(rect.Height()));
+#else
+        daMP_videoInfo.xSize,
+        daMP_videoInfo.ySize);
+#endif
     daMP_THPPlayerDrawDone();
 
     if (!fopOvlpM_IsPeek() && frame > 0 && (cAPICPad_ANY_BUTTON(0) || !daMP_c::daMP_c_Get_MovieRestFrame())) {
         dComIfGp_event_reset();
         daMP_c::daMP_c_Set_PercentMovieVolume(0.0f);
     }
+
+#if TARGET_PC && 0
+    if (ImGui::Begin("Movie player")) {
+        ImGui::Text("daMP_ReadedBufferQueue: %d", daMP_ReadedBufferQueue.usedCount);
+        ImGui::Text("daMP_ReadedBufferQueue2: %d", daMP_ReadedBufferQueue2.usedCount);
+        ImGui::Text("daMP_FreeReadBufferQueue: %d", daMP_FreeReadBufferQueue.usedCount);
+        ImGui::Text("daMP_DecodedTextureSetQueue: %d", daMP_DecodedTextureSetQueue.usedCount);
+        ImGui::Text("daMP_FreeTextureSetQueue: %d", daMP_FreeTextureSetQueue.usedCount);
+        ImGui::Text("daMP_DecodedAudioBufferQueue: %d", daMP_DecodedAudioBufferQueue.usedCount);
+        ImGui::Text("daMP_FreeAudioBufferQueue: %d", daMP_FreeAudioBufferQueue.usedCount);
+    }
+
+    ImGui::End();
+#endif
 }
 
 static BOOL daMP_Fail_alloc;
@@ -4116,7 +4473,9 @@ int daMP_c::daMP_c_Get_arg_movieNo() {
 int daMP_c::daMP_c_Init() {
     JUT_ASSERT(9469, m_myObj == NULL);
 
+#if !TARGET_PC // We don't properly simulate retrace interval so this doesn't work.
     mDoGph_gInf_c::setFrameRate(1);
+#endif
     daMP_Fail_alloc = FALSE;
 
     int demoNo = daMP_c_Get_arg_demoNo();

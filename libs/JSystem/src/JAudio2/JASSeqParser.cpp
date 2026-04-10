@@ -813,9 +813,15 @@ s32 JASSeqParser::cmdDump(JASTrack* param_0, u32* param_1) {
 }
 
 s32 JASSeqParser::cmdPrintf(JASTrack* param_0, u32* param_1) {
+#if AVOID_UB
+    u8 stack_c[4] = {0};
+    u32 stack_10[4] = {0};
+    char buffer[128] = {0};
+#else
     u8 stack_c[4];
     u32 stack_10[4];
     char buffer[128];
+#endif
 
     JASSeqCtrl* seqCtrl = param_0->getSeqCtrl();
     u32 r30 = 0;
@@ -884,6 +890,19 @@ s32 JASSeqParser::cmdPrintf(JASTrack* param_0, u32* param_1) {
 s32 JASSeqParser::execNoteOnGate(JASTrack* param_0, u32 param_1, u32 param_2, u32 param_3,
                                  u32 param_4) {
     JASSeqCtrl* seqCtrl = param_0->getSeqCtrl();
+    
+    int r31 = 0;
+
+#if TARGET_PC
+    // CodeWarrior on PPC allocates MSB-first for bit fields i think, which is stupid
+    // so in reality these are stored in bit 6 and 7 not but 0 and 1, do this to get around it
+    if (param_4 & 0x40) {
+        r31 |= 2;
+    }
+    if (param_4 & 0x80) {
+        r31 |= 1;
+    }
+#else
     // likely fake match, this may use some actual union defined somewhere else
     union {
         u8 val;
@@ -893,13 +912,13 @@ s32 JASSeqParser::execNoteOnGate(JASTrack* param_0, u32 param_1, u32 param_2, u3
         } bits;
     } tmp;
     tmp.val = param_4;
-    int r31 = 0;
     if (tmp.bits.bit1) {
         r31 |= 2;
     }
     if (tmp.bits.bit0) {
         r31 |= 1;
     }
+#endif
     if (param_3 == 0) {
         r31 |= 4;
     }
@@ -950,7 +969,7 @@ s32 JASSeqParser::parseNoteOn(JASTrack* param_0, u8 param_1) {
     return 0;
 }
 
-s32 JASSeqParser::parseCommand(JASTrack* param_0, u8 cmd, u16 param_2) {
+s32 JASSeqParser::parseCommand(JASTrack* param_0, u8 cmd, u16 parameterTypesOverride) {
     JASSeqCtrl* seqCtrl = param_0->getSeqCtrl();
     CmdInfo* cmdInfo = NULL;
     if (cmd != 0xb0) {
@@ -959,32 +978,32 @@ s32 JASSeqParser::parseCommand(JASTrack* param_0, u8 cmd, u16 param_2) {
     } else {
         cmdInfo = &sExtCmdInfo[seqCtrl->readByte() & 0xff];
     }
-    u16 r28 = (u16)cmdInfo->field_0xe;
-    r28 |= param_2;
-    u32 stack_28[8];
-    for (int i = 0; i < cmdInfo->field_0xc; i++, r28 >>= 2) {
-        int r27 = 0;
-        switch (r28 & 3) {
+    u16 parameterTypes = (u16)cmdInfo->mParameterTypes;
+    parameterTypes |= parameterTypesOverride;
+    u32 args[8];
+    for (int i = 0; i < cmdInfo->mParameterCount; i++, parameterTypes >>= 2) {
+        int value = 0;
+        switch (parameterTypes & 3) {
         case 0:
-            r27 = (u8)seqCtrl->readByte();
+            value = (u8)seqCtrl->readByte();
             break;
         case 1:
-            r27 = (u16)seqCtrl->read16();
+            value = (u16)seqCtrl->read16();
             break;
         case 2:
-            r27 = seqCtrl->read24();
+            value = seqCtrl->read24();
             break;
         case 3:
-            r27 = readReg(param_0, (u8)seqCtrl->readByte());
+            value = readReg(param_0, (u8)seqCtrl->readByte());
             break;
         }
-        stack_28[i] = r27;
+        args[i] = value;
     }
-    s32 (JASSeqParser::*ptr)(JASTrack*, u32*) = cmdInfo->field_0x0;
+    s32 (JASSeqParser::*ptr)(JASTrack*, u32*) = cmdInfo->mHandler;
     if (!ptr) {
         return 0;
     }
-    return execCommand(param_0, ptr, cmdInfo->field_0xc, stack_28);
+    return execCommand(param_0, ptr, cmdInfo->mParameterCount, args);
 }
 
 s32 JASSeqParser::parseRegCommand(JASTrack* param_0, int param_1) {
@@ -1004,7 +1023,9 @@ s32 JASSeqParser::parseRegCommand(JASTrack* param_0, int param_1) {
 }
 
 s32 JASSeqParser::parse(JASTrack* param_0) {
-    u32 r31 = param_0->getSeqCtrl()->readByte();
+    JASSeqCtrl* ctrl = param_0->getSeqCtrl();
+    u32 base = ctrl->mReader.mCurPos - ctrl->mReader.mBase;
+    u32 r31 = ctrl->readByte();
     s32 r30 = 0;
     if ((r31 & 0x80) == 0) {
         r30 = parseNoteOn(param_0, r31);

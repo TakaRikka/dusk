@@ -42,4 +42,13 @@ typedef GXTexObjRAII TGXTexObj;
 typedef GXTexObj TGXTexObj;
 #endif
 
+struct GXScopedDebugGroup {
+    explicit GXScopedDebugGroup(const char* text) {
+        GXPushDebugGroup(text);
+    }
+    ~GXScopedDebugGroup() {
+        GXPopDebugGroup();
+    }
+};
+
 #endif  // DUSK_GX_HELPER_H

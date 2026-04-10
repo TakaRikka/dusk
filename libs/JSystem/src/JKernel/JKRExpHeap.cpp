@@ -214,9 +214,33 @@ void* JKRExpHeap::do_alloc(u32 size, int alignment) {
 #endif
 
 #if TARGET_PC
-    JUT_ASSERT_MSG_F(__LINE__, ptr != nullptr,
-        "Failed to alloc memory! (%s) (0x%X bytes).\n  Heap size: %u\n  Used size: %u",
-        this->getName(), size, getSize(), getTotalUsedSize());
+    if (!ptr) {
+        // Allocation failed.
+        OSReport_Error(
+            "Failed to alloc memory! (%s) (0x%X bytes).\n  Heap size: 0x%X\n  Used size: 0x%X\n",
+            this->getName(), size, getSize(), getTotalUsedSize());
+        OSReport_Error("Free block list as follows:\n");
+        OSReport_Error("Start    | End      | Size    \n");
+
+        int i = 0;
+        for (const CMemBlock* block = mHeadFreeList; block; block = block->mNext) {
+            if (block->mMagic) {
+                // Allocated, ignore.
+                continue;
+            }
+            if (i++ > 10) {
+                OSReport_Error("<more>\n");
+                break;
+            }
+
+            auto blockStart = (uintptr_t)block - (uintptr_t)mStart;
+            auto blockEnd = (uintptr_t)block + block->size - (uintptr_t)mStart;
+            auto blockSize = block->size;
+            OSReport_Error("%08X | %08X | %08X\n", (u32) blockStart, (u32) blockEnd, (u32) blockSize);
+        }
+
+        CRASH("Aborting due to allocation failure!");
+    }
 #else
     if (ptr == NULL) {
         JUTWarningConsole_f(":::cannot alloc memory (0x%x byte).\n", size);
@@ -472,7 +496,7 @@ void JKRExpHeap::do_freeAll() {
     JKRHeap::callAllDisposer();
     mHeadFreeList = (CMemBlock*)mStart;
     mTailFreeList = mHeadFreeList;
-    mHeadFreeList->initiate(NULL, NULL, mSize - 0x10, 0, 0);
+    mHeadFreeList->initiate(NULL, NULL, mSize - sizeof(CMemBlock), 0, 0);
     mHeadUsedList = NULL;
     mTailUsedList = NULL;
 #if DEBUG

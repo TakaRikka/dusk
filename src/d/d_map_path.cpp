@@ -14,6 +14,14 @@
 #include "m_Do/m_Do_lib.h"
 #include <cstring>
 
+#ifdef TARGET_PC
+constexpr u16 kMapResolutionMultiplier = 4;
+// Line widths are relative to the framebuffer size. Since we're rendering to a separate
+// framebuffer, we have to scale them accordingly. The original game used about half of the
+// EFB for the map rendering, so this is a reasonable approximation.
+constexpr u8 kMapLineWidthMultiplier = 2;
+#endif
+
 void dMpath_n::dTexObjAggregate_c::create() {
     static int const data[7] = {
         79, 80, 77, 78, 76, 81, 82,
@@ -234,7 +242,11 @@ void dDrawPath_c::rendering(dDrawPath_c::line_class const* p_line) {
         int width = getLineWidth(p_line->field_0x1);
 
         if (width > 0 && p_line->mDataNum >= 2) {
-            GXSetLineWidth(width, GX_TO_ZERO);
+#ifdef TARGET_PC
+            GXSetLineWidth(width * kMapLineWidthMultiplier, GX_TO_ZERO);
+#else
+            GXSetLineWidth(width * 2, GX_TO_ZERO);
+#endif
             GXSetTevColor(GX_TEVREG0, *getLineColor(p_line->field_0x0 & 0x3F, p_line->field_0x1));
             GXBegin(GX_LINESTRIP, GX_VTXFMT0, p_line->mDataNum);
 
@@ -292,11 +304,22 @@ void dDrawPath_c::rendering(dDrawPath_c::floor_class const* p_floor) {
     }
 }
 
+#ifdef TARGET_PC
+static u32 getRoomPosArraySize(const dDrawPath_c::room_class* room) {
+    if (room->mpFloor == NULL || room->mpFloatData == NULL || room->mFloorNum == 0) {
+        return 0;
+    }
+    const dDrawPath_c::group_class* firstGroup = room->mpFloor[0].mpGroup;
+    JUT_ASSERT(0, firstGroup != NULL);
+    JUT_ASSERT(0, (const u8*)firstGroup >= (const u8*)room->mpFloatData);
+    return (const u8*)firstGroup - (const u8*)room->mpFloatData;
+}
+#endif
+
 void dDrawPath_c::rendering(dDrawPath_c::room_class const* room) {
     JUT_ASSERT(1043, room != NULL);
     if (room != NULL) {
-        // TODO: FILL IN SIZE.
-        GXSETARRAY(GX_VA_POS, room->mpFloatData, 0, 8);
+        GXSetArray(GX_VA_POS, room->mpFloatData, getRoomPosArraySize(room), 8, false);
         floor_class* floor = room->mpFloor;
 
         if (floor != NULL) {
@@ -322,8 +345,14 @@ void dRenderingMap_c::makeResTIMG(ResTIMG* p_image, u16 width, u16 height, u8* p
                                   u8* p_palette, u16 param_5) const {
     p_image->format = GX_TF_C8;
     p_image->alphaEnabled = 2;
+#ifdef TARGET_PC
+    // Increase map render resolution
+    p_image->width = width * kMapResolutionMultiplier;
+    p_image->height = height * kMapResolutionMultiplier;
+#else
     p_image->width = width;
     p_image->height = height;
+#endif
     p_image->wrapS = GX_CLAMP;
     p_image->wrapT = GX_CLAMP;
     p_image->indexTexture = true;
@@ -346,13 +375,11 @@ void dRenderingMap_c::makeResTIMG(ResTIMG* p_image, u16 width, u16 height, u8* p
 void dRenderingMap_c::renderingMap() {
     preRenderingMap();
     if (isDrawPath()) {
-        #if REQUIRES_GX_LINES
         preDrawPath();
         beforeDrawPath();
         drawPath();
         afterDrawPath();
         postDrawPath();
-        #endif
     }
     postRenderingMap();
 }
@@ -403,8 +430,17 @@ void dRenderingFDAmap_c::drawBack() const {
 }
 
 void dRenderingFDAmap_c::preRenderingMap() {
+#ifdef TARGET_PC
+    // Increase map render resolution
+    const u16 w = mTexWidth * kMapResolutionMultiplier;
+    const u16 h = mTexHeight * kMapResolutionMultiplier;
+    GXCreateFrameBuffer(w, h);
+    GXSetViewport(0.0f, 0.0f, w, h, 0.0f, 1.0f);
+    GXSetScissor(0, 0, w, h);
+#else
     GXSetViewport(0.0f, 0.0f, mTexWidth, mTexHeight, 0.0f, 1.0f);
     GXSetScissor(0, 0, mTexWidth, mTexHeight);
+#endif
     GXSetNumChans(1);
     GXSetNumTevStages(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE,
@@ -431,9 +467,19 @@ void dRenderingFDAmap_c::preRenderingMap() {
 
 void dRenderingFDAmap_c::postRenderingMap() {
     GXSetCopyFilter(GX_FALSE, NULL, GX_FALSE, NULL);
+#ifdef TARGET_PC
+    // Increase map render resolution
+    const u16 w = mTexWidth * kMapResolutionMultiplier;
+    const u16 h = mTexHeight * kMapResolutionMultiplier;
+    GXSetTexCopySrc(0, 0, w, h);
+    GXSetTexCopyDst(w, h, GX_CTF_R8, GX_FALSE);
+    GXCopyTex(field_0x4, GX_TRUE);
+    GXRestoreFrameBuffer();
+#else
     GXSetTexCopySrc(0, 0, mTexWidth, mTexHeight);
     GXSetTexCopyDst(mTexWidth, mTexHeight, GX_CTF_R8, GX_FALSE);
     GXCopyTex(field_0x4, GX_TRUE);
+#endif
     GXPixModeSync();
     GXSetClipMode(GX_CLIP_ENABLE);
     GXSetDither(GX_TRUE);
@@ -446,7 +492,7 @@ dMpath_n::dTexObjAggregate_c dMpath_n::m_texObjAgg;
  * make the map look worse for extra speed in the emulator, especially in large
  * areas such as hyrule field.
  */
-// #define HYRULE_FIELD_SPEEDHACK
+#define HYRULE_FIELD_SPEEDHACK
 
 void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_line) {
     s32 width = getDecorationLineWidth(p_line->field_0x1);
@@ -465,15 +511,19 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
 
     BE(u16)* data_p = p_line->mpData;
     s32 data_num = p_line->mDataNum;
+#ifdef TARGET_PC
+    GXSetLineWidth(width * kMapLineWidthMultiplier, GX_TO_ZERO);
+    GXSetPointSize(width * kMapLineWidthMultiplier, GX_TO_ONE);
+#else
     GXSetLineWidth(width, GX_TO_ONE);
     GXSetPointSize(width, GX_TO_ONE);
+#endif
     GXColor lineColor = *getDecoLineColor(p_line->field_0x0 & 0x3f, p_line->field_0x1);
     GXSetTevColor(GX_TEVREG0, lineColor);
     lineColor.r = lineColor.r - 4;
     GXSetTevColor(GX_TEVREG1, lineColor);
 
     for (int i = 0; i < data_num; i++) {
-#if REQUIRES_GX_LINES
 #ifndef HYRULE_FIELD_SPEEDHACK
         if (i < data_num - 1) {
             GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
@@ -494,7 +544,7 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
         GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
 #endif
-#endif
+
         GXBegin(GX_POINTS, GX_VTXFMT0, 1);
         GXPosition1x16(data_p[0]);
         GXTexCoord2f32(0, 0);

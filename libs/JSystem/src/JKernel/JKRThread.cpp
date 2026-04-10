@@ -7,6 +7,10 @@
 #include "global.h"
 #include <stdint.h>
 
+#if TARGET_PC
+#include "dusk/os.h"
+#endif
+
 JSUList<JKRThread> JKRThread::sThreadList(0);
 
 void* JKRIdleThread::sThread;
@@ -84,10 +88,22 @@ void JKRThread::setCommon_heapSpecified(JKRHeap* heap, u32 stack_size, int param
     mThreadRecord = (OSThread*)JKRAllocFromHeap(mHeap, sizeof(OSThread), 0x20);
     JUT_ASSERT(168, mThreadRecord);
 
-    OSCreateThread(mThreadRecord, start, this, (u8*)mStackMemory + mStackSize, mStackSize, param_3, 1);
+#if TARGET_PC
+    OSCreateThread(mThreadRecord, start, this, (u8*)mStackMemory + mStackSize, mStackSize, param_3, 0);
+#else
+    OSCreateThread(mThreadRecord, start, this, (u8*)mStackMemory + mStackSize, mStackSize, param_3, OS_THREAD_ATTR_DETACH);
+#endif
 }
 
 void* JKRThread::start(void* thread) {
+#if TARGET_PC
+    auto& thd = *static_cast<JKRThread*>(thread);
+    if (thd.mThreadName == nullptr) {
+        thd.mThreadName = typeid(thd).name();
+    }
+    OSSetCurrentThreadName(thd.mThreadName);
+#endif
+
     return ((JKRThread*)thread)->run();
 }
 
@@ -297,7 +313,15 @@ void* JKRTask::run() {
     };
     OSInitFastCast();
     while (true) {
+#ifdef TARGET_PC
+        BOOL received = FALSE;
+        TaskMessage* msg = (TaskMessage*)waitMessageBlock(&received);
+        if (!received) {
+            break;
+        }
+#else
         TaskMessage* msg = (TaskMessage*)waitMessageBlock();
+#endif
         if (msg->field_0x0) {
             msg->field_0x0(msg->field_0x4);
             check();
@@ -307,6 +331,9 @@ void* JKRTask::run() {
         }
         msg->field_0x0 = NULL;
     }
+#ifdef TARGET_PC
+    return NULL;
+#endif
 }
 
 int JKRTask::check() {

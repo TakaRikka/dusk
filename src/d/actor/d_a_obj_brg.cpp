@@ -16,6 +16,8 @@
 #include "f_op/f_op_camera_mng.h"
 #include <cstring>
 
+#include "dusk/logging.h"
+
 static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* i_bgActor, fopAc_ac_c* i_rideActor) {
     obj_brg_class* a_this = (obj_brg_class*)i_bgActor;
 
@@ -588,8 +590,6 @@ static void cut_control2(obj_brg_class* i_this, br_s* i_part) {
 }
 
 static void himo_cut_control1(obj_brg_class* i_this, cXyz* param_1, f32 param_2) {
-    STUB_RET();
-
     cXyz sp74 = {};
     cXyz sp80 = {};
     cXyz sp8C = {};
@@ -1794,6 +1794,10 @@ static int daObj_Brg_Create(fopAc_ac_c* i_this) {
                 cXyz(334.0f, 85.0f, -16054.0f),
                 cXyz(334.0f, 150.0f, -16270.0f),
                 cXyz(334.0f, 216.0f, -16485.0f),
+#ifdef TARGET_PC
+                // Avoids out-of-bounds index (n=22)
+                cXyz(0.f, 0.f, 0.f),
+#endif
             };
 
             for (brno = 0; brno < a_this->field_0xb1ea; brno++) {

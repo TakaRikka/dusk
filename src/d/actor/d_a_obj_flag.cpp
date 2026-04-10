@@ -16,7 +16,7 @@ daObjFlag_c::M_attrs const daObjFlag_c::M_attr = {
 };
 
 void daObjFlag_c::create_init() {
-    field_0x5dc = (*(u32*)dComIfG_getObjectRes(daSetBgObj_c::getArcName(this), "spec.dat")) & 0xffff;
+    field_0x5dc = (*(BE(u32)*)dComIfG_getObjectRes(daSetBgObj_c::getArcName(this), "spec.dat")) & 0xffff;
     mPos = cXyz(current.pos.x, current.pos.y + field_0x5dc, current.pos.z);
     mFlagJoints[0].mRv = (short)(cM_rnd() * 65535.0f);
     mFlagJoints[1].mRv = (short)(cM_rnd() * 65535.0f);

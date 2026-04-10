@@ -16,6 +16,7 @@
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "global.h"
+#include "tracy/Tracy.hpp"
 
 JPAResource::JPAResource() {
     mpCalcEmitterFuncList = mpDrawEmitterFuncList = mpDrawEmitterChildFuncList = NULL;
@@ -782,6 +783,7 @@ bool JPAResource::calc(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
 }
 
 void JPAResource::draw(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
+    ZoneScoped;
     work->mpEmtr = emtr;
     work->mpRes = this;
     work->mDrawCount = 0;
@@ -798,6 +800,7 @@ void JPAResource::draw(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
 }
 
 void JPAResource::drawP(JPAEmitterWorkData* work) {
+    ZoneScoped;
     work->mpEmtr->clearStatus(0x80);
 
     work->mGlobalPtclScl.x = work->mpEmtr->mGlobalPScl.x * pBsp->getBaseSizeX();
@@ -860,6 +863,7 @@ void JPAResource::drawP(JPAEmitterWorkData* work) {
 }
 
 void JPAResource::drawC(JPAEmitterWorkData* work) {
+    ZoneScoped;
     work->mpEmtr->setStatus(0x80);
 
     if (pCsp->isScaleInherited()) {
@@ -932,8 +936,8 @@ void JPAResource::setPTev() {
     int center_offset = pEsp != NULL ? (pEsp->getScaleCenterX() + 3 * pEsp->getScaleCenterY()) * 0xC : 0x30;
     int pos_offset = center_offset + base_plane_type * 0x6C;
     int crd_offset = (pBsp->getTilingS() + 2 * pBsp->getTilingT()) * 8;
-    GXSETARRAY(GX_VA_POS, jpa_pos + pos_offset, ARRAY_SIZEU(jpa_pos) - pos_offset, 3);
-    GXSETARRAY(GX_VA_TEX0, jpa_crd + crd_offset, ARRAY_SIZEU(jpa_crd) - crd_offset, 2);
+    GXSETARRAY(GX_VA_POS, jpa_pos + pos_offset, ARRAY_SIZEU(jpa_pos) - pos_offset, 3, true);
+    GXSETARRAY(GX_VA_TEX0, jpa_crd + crd_offset, ARRAY_SIZEU(jpa_crd) - crd_offset, 2, true);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
 
     if (pEts != NULL) {
@@ -978,8 +982,8 @@ void JPAResource::setCTev(JPAEmitterWorkData* work) {
     int base_plane_type = (pCsp->getType() == 3 || pCsp->getType() == 7) ?
         pCsp->getBasePlaneType() : 0;
     int pos_offset = 0x30 + base_plane_type * 0x6C;
-    GXSETARRAY(GX_VA_POS, jpa_pos + pos_offset, ARRAY_SIZEU(jpa_pos) - pos_offset, 3);
-    GXSETARRAY(GX_VA_TEX0, jpa_crd, ARRAY_SIZEU(jpa_crd), 2);
+    GXSETARRAY(GX_VA_POS, jpa_pos + pos_offset, ARRAY_SIZEU(jpa_pos) - pos_offset, 3, true);
+    GXSETARRAY(GX_VA_TEX0, jpa_crd, ARRAY_SIZEU(jpa_crd), 2, true);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP1, GX_COLOR_NULL);
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
     GXSetTevDirect(GX_TEVSTAGE0);

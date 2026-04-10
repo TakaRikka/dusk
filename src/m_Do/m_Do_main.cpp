@@ -44,8 +44,13 @@
 #include <chrono>
 #include <thread>
 #include "SSystem/SComponent/c_API.h"
+#include "dusk/app_info.hpp"
 #include "dusk/dusk.h"
+#include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/logging.h"
+#include "dusk/main.h"
+#include "dusk/imgui/ImGuiConsole.hpp"
+#include "version.h"
 #include "dusk/time.h"
 
 #include <aurora/aurora.h>
@@ -54,7 +59,10 @@
 #include <aurora/dvd.h>
 #include <dolphin/dvd.h>
 
+#include "SDL3/SDL_filesystem.h"
 #include "cxxopts.hpp"
+#include "dusk/config.hpp"
+#include "tracy/Tracy.hpp"
 
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
@@ -72,6 +80,10 @@ const int audioHeapSize = 0x14D800;
 // LOAD_COPYDATE - PC Version
 // =========================================================================
 #define COPYDATE_PATH "/str/Final/Release/COPYDATE"
+
+#if TARGET_PC
+bool dusk::IsShuttingDown = false;
+#endif
 
 s32 LOAD_COPYDATE(void*) {
     char buffer[32];
@@ -101,14 +113,13 @@ s32 LOAD_COPYDATE(void*) {
 }
 
 AuroraInfo auroraInfo;
+AuroraStats dusk::lastFrameAuroraStats;
+float dusk::frameUsagePct = 0.0f;
+const char* configPath;
 
 void main01(void) {
-    #if TARGET_PC
-    Limiter frameLimiter{};
-    #endif
-
     OS_REPORT("\x1b[m");
-    GXSetColorUpdate(GX_ENABLE);
+
     // 1. Setup
     mDoMch_Create();
     mDoGph_Create();
@@ -155,6 +166,9 @@ void main01(void) {
             case AURORA_WINDOW_RESIZED:
                 mDoGph_gInf_c::setWindowSize(event->windowSize);
                 break;
+            case AURORA_DISPLAY_SCALE_CHANGED:
+                dusk::ImGuiEngine_Initialize(event->windowSize.scale);
+                break;
             case AURORA_EXIT:
                 goto exit;
             }
@@ -173,6 +187,7 @@ void main01(void) {
         VIWaitForRetrace();
 
 #if TARGET_PC
+        dusk::lastFrameAuroraStats = *aurora_get_stats();
         if (!aurora_begin_frame()) {
             DuskLog.debug("aurora_begin_frame returned false, skipping draw this frame");
             continue;
@@ -187,9 +202,7 @@ void main01(void) {
 
         aurora_end_frame();
 
-        #if TARGET_PC
-        frameLimiter.Sleep(DUSK_FRAME_PERIOD);
-        #endif
+        FrameMark;
     } while (true);
 
     exit:;
@@ -228,10 +241,86 @@ static AuroraBackend ParseAuroraBackend(const std::string& value) {
     exit(1);
 }
 
+static void aurora_imgui_init_callback(const AuroraWindowSize* size) {
+    dusk::ImGuiEngine_Initialize(size->scale);
+}
+
+static void ApplyCVarOverrides(const cxxopts::OptionValue& option) {
+    if (option.count() == 0) {
+        return;
+    }
+
+    const auto& cVars = option.as<std::vector<std::string>>();
+    for (const auto& cvarArg : cVars) {
+        const auto sep = cvarArg.find('=');
+        if (sep == std::string::npos) {
+            DuskLog.fatal("--cvar argument has no '=': '{}'", cvarArg);
+            continue;
+        }
+
+        const auto name = std::string_view(cvarArg).substr(0, sep);
+        const auto value = std::string_view(cvarArg).substr(sep + 1);
+
+        const auto cVar = dusk::config::GetConfigVar(name);
+        if (!cVar) {
+            DuskLog.fatal("Unknown --cvar name: '{}'", name);
+        }
+
+        try {
+            cVar->getImpl()->loadFromArg(*cVar, value);
+        } catch (const std::exception& e) {
+            DuskLog.fatal("Unable to parse: '{}': {}", value, e.what());
+        }
+    }
+}
+
+static const char* CalculateConfigPath() {
+    const auto result = SDL_GetPrefPath(dusk::OrgName, dusk::AppName);
+    if (!result) {
+        DuskLog.fatal("Unable to get PrefPath: {}", SDL_GetError());
+    }
+
+    return result;
+}
+
+static constexpr PADDefaultMapping defaultPadMapping = {
+    .buttons = {
+        {SDL_GAMEPAD_BUTTON_SOUTH, PAD_BUTTON_A},
+        {SDL_GAMEPAD_BUTTON_EAST, PAD_BUTTON_B},
+        {SDL_GAMEPAD_BUTTON_WEST, PAD_BUTTON_X},
+        {SDL_GAMEPAD_BUTTON_NORTH, PAD_BUTTON_Y},
+        {SDL_GAMEPAD_BUTTON_START, PAD_BUTTON_START},
+        {SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER, PAD_TRIGGER_Z},
+        {PAD_NATIVE_BUTTON_INVALID, PAD_TRIGGER_L},
+        {PAD_NATIVE_BUTTON_INVALID, PAD_TRIGGER_R},
+        {SDL_GAMEPAD_BUTTON_DPAD_UP, PAD_BUTTON_UP},
+        {SDL_GAMEPAD_BUTTON_DPAD_DOWN, PAD_BUTTON_DOWN},
+        {SDL_GAMEPAD_BUTTON_DPAD_LEFT, PAD_BUTTON_LEFT},
+        {SDL_GAMEPAD_BUTTON_DPAD_RIGHT, PAD_BUTTON_RIGHT},
+    },
+    .axes = {
+        {{SDL_GAMEPAD_AXIS_LEFTX, AXIS_SIGN_POSITIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_LEFT_X_POS},
+        {{SDL_GAMEPAD_AXIS_LEFTX, AXIS_SIGN_NEGATIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_LEFT_X_NEG},
+        // SDL's gamepad y-axis is inverted from GC's
+        {{SDL_GAMEPAD_AXIS_LEFTY, AXIS_SIGN_NEGATIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_LEFT_Y_POS},
+        {{SDL_GAMEPAD_AXIS_LEFTY, AXIS_SIGN_POSITIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_LEFT_Y_NEG},
+        {{SDL_GAMEPAD_AXIS_RIGHTX, AXIS_SIGN_POSITIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_RIGHT_X_POS},
+        {{SDL_GAMEPAD_AXIS_RIGHTX, AXIS_SIGN_NEGATIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_RIGHT_X_NEG},
+        // see above
+        {{SDL_GAMEPAD_AXIS_RIGHTY, AXIS_SIGN_NEGATIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_RIGHT_Y_POS},
+        {{SDL_GAMEPAD_AXIS_RIGHTY, AXIS_SIGN_POSITIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_RIGHT_Y_NEG},
+        {{SDL_GAMEPAD_AXIS_LEFT_TRIGGER, AXIS_SIGN_POSITIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_TRIGGER_L},
+        {{SDL_GAMEPAD_AXIS_RIGHT_TRIGGER, AXIS_SIGN_POSITIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_TRIGGER_R},
+    },
+};
+
 // =========================================================================
 // PC ENTRY POINT
 // =========================================================================
 int game_main(int argc, char* argv[]) {
+    dusk::registerSettings();
+    dusk::config::FinishRegistration();
+
     cxxopts::ParseResult parsed_arg_options;
 
     try {
@@ -241,7 +330,8 @@ int game_main(int argc, char* argv[]) {
             ("l,log-level", "Log level from " + std::to_string(AuroraLogLevel::LOG_DEBUG) + " to " + std::to_string(AuroraLogLevel::LOG_FATAL), cxxopts::value<uint8_t>()->default_value("0"))
             ("h,help", "Print usage")
             ("dvd", "Path to DVD image file", cxxopts::value<std::string>()->default_value("game.iso"))
-            ("backend", "Graphics API backend to use (auto, d3d11, d3d12, metal, vulkan, opengl, opengles, webgpu, null)", cxxopts::value<std::string>()->default_value("auto"));
+            ("backend", "Graphics API backend to use (auto, d3d11, d3d12, metal, vulkan, opengl, opengles, webgpu, null)", cxxopts::value<std::string>()->default_value("auto"))
+            ("cvar", "Override configuration variables without modifying config", cxxopts::value<std::vector<std::string>>());
 
         arg_options.parse_positional({"dvd"});
         arg_options.positional_help("<dvd-image>");
@@ -260,21 +350,35 @@ int game_main(int argc, char* argv[]) {
         exit(1);
     }
 
+    configPath = CalculateConfigPath();
+
+    dusk::config::LoadFromUserPreferences();
+    ApplyCVarOverrides(parsed_arg_options["cvar"]);
+
     AuroraConfig config{};
-    config.appName = "Dusk";
+    config.appName = dusk::AppName;
+    config.configPath = configPath;
+    config.vsync = dusk::getSettings().video.enableVsync;
+    config.startFullscreen = dusk::getSettings().video.enableFullscreen;
     config.windowPosX = -1;
     config.windowPosY = -1;
-    config.windowWidth = 608 * 2;
-    config.windowHeight = 448 * 2;
+    config.windowWidth = defaultWindowWidth * 2;
+    config.windowHeight = defaultWindowHeight * 2;
     config.desiredBackend = ParseAuroraBackend(parsed_arg_options["backend"].as<std::string>());
-    config.configPath = ".";
     config.logCallback = &aurora_log_callback;
     config.logLevel = (AuroraLogLevel)parsed_arg_options["log-level"].as<uint8_t>();
     config.mem1Size = 256 * 1024 * 1024;
     config.mem2Size = 24 * 1024 * 1024;
     config.allowJoystickBackgroundEvents = true;
+    config.imGuiInitCallback = &aurora_imgui_init_callback;
+
+    PADSetDefaultMapping(&defaultPadMapping);
 
     auroraInfo = aurora_initialize(argc, argv, &config);
+
+    VISetWindowTitle(
+        fmt::format("Dusk {} [{}]", DUSK_WC_DESCRIBE, dusk::backend_name(auroraInfo.backend))
+            .c_str());
 
     const auto& dvd_path = parsed_arg_options["dvd"].as<std::string>();
     DuskLog.info("Loading DVD image: {}", dvd_path);
@@ -306,6 +410,11 @@ int game_main(int argc, char* argv[]) {
 
     fflush(stdout);
     fflush(stderr);
+
+    mDoMch_Destroy();
+
+    // Notifies all CVs and causes threads to exit
+    OSResetSystem(OS_RESET_SHUTDOWN, 0, 0);
 
     aurora_shutdown();
 

@@ -4,12 +4,11 @@
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "m_Do/m_Do_mtx.h"
 #include "global.h"
-#include "dusk/logging.h"
 #if TARGET_PC
 #include <aurora/aurora.h>
 #endif
 
-#if WIDESCREEN_SUPPORT
+#if WIDESCREEN_SUPPORT && !TARGET_PC
 #define FB_WIDTH  (640)
 #define FB_HEIGHT (456)
 #else
@@ -100,9 +99,7 @@ public:
     }
 
     static int startFadeOut(int param_0) { return JFWDisplay::getManager()->startFadeOut(param_0); }
-    static int startFadeIn(int param_0) { 
-        DuskLog.debug("mDoGph_gInf_c::startFadeIn START");
-        return JFWDisplay::getManager()->startFadeIn(param_0); }
+    static int startFadeIn(int param_0) { return JFWDisplay::getManager()->startFadeIn(param_0); }
     static void setFadeColor(JUtility::TColor& color) { mFader->setColor(color); }
     static void setClearColor(JUtility::TColor color) { JFWDisplay::getManager()->setClearColor(color); }
     static void setBackColor(GXColor& color) { mBackColor = color; }
@@ -119,6 +116,13 @@ public:
     static BOOL isAutoForcus() { return mAutoForcus; }
     static void setTickRate(u32 rate) { JFWDisplay::getManager()->setTickRate(rate); }
     static void waitBlanking(int wait) { JFWDisplay::getManager()->waitBlanking(wait); }
+
+#if TARGET_PC
+    static f32 hudAspectScaleDown;
+    static f32 hudAspectScaleUp;
+    static f32 ScaleHUDXLeft(f32 baseX) { return getMinXF() + baseX; }
+    static f32 ScaleHUDXRight(f32 baseX) { return -getMinXF() + baseX; }
+#endif
 
     static void setBlureMtx(const Mtx m) {
         cMtx_copy(m, mBlureMtx);
@@ -269,7 +273,12 @@ public:
     #if WIDESCREEN_SUPPORT
     static void setTvSize();
 
+    #if TARGET_PC
+    static void onWide(f32 width, f32 height);
+    #else 
     static void onWide();
+    #endif
+
     static void offWide();
     static u8 isWide();
 
@@ -315,6 +324,12 @@ public:
     static JKRHeap* m_heap;
     #endif
 
+#if PLATFORM_WII || PLATFORM_SHIELD || TARGET_PC
+    static ResTIMG* m_fullFrameBufferTimg;
+    static void* m_fullFrameBufferTex;
+    static TGXTexObj m_fullFrameBufferTexObj;
+#endif
+
     #if PLATFORM_WII || PLATFORM_SHIELD
     static void resetDimming();
 
@@ -329,9 +344,6 @@ public:
     #if WIDESCREEN_SUPPORT
     static u8 mWide;
     static u8 mWideZoom;
-    static ResTIMG* m_fullFrameBufferTimg;
-    static void* m_fullFrameBufferTex;
-    static TGXTexObj m_fullFrameBufferTexObj;
 
     static f32 m_aspect;
     static f32 m_scale;
