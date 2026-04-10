@@ -217,7 +217,11 @@ set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::p
     aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient)
 
 if (DUSK_MOVIE_SUPPORT)
-    list(APPEND GAME_LIBS libjpeg-turbo::turbojpeg-static)
+    if (TARGET libjpeg-turbo::turbojpeg-static)
+        list(APPEND GAME_LIBS libjpeg-turbo::turbojpeg-static)
+    else ()
+        list(APPEND GAME_LIBS libjpeg-turbo::turbojpeg)
+    endif ()
     list(APPEND GAME_COMPILE_DEFS MOVIE_SUPPORT=1)
 endif ()
 
