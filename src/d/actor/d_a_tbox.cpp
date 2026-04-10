@@ -650,7 +650,7 @@ void daTbox_c::dropProcInit() {
         field_0x97c = false;
 
         f32 delta_y = pos.y - pnt1.y;
-        f32 abs_gravity = std::fabsf(fopAcM_GetGravity(this));
+        f32 abs_gravity = fabsf(fopAcM_GetGravity(this));
 
         var_f30 = JMAFastSqrt(2.0f * delta_y / abs_gravity);
         speedF = pos.absXZ(pnt1) / var_f30;

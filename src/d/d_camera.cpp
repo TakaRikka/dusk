@@ -2458,8 +2458,8 @@ f32 dCamera_c::radiusActorInSight(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cX
 
     int bVar2 = 0;
 
-    var_f29 = std::fabsf(cM_atan2f(pos1.x, -pos1.z));
-    var_f28 = std::fabsf(cM_atan2f(pos1.y, -pos1.z));
+    var_f29 = fabsf(cM_atan2f(pos1.x, -pos1.z));
+    var_f28 = fabsf(cM_atan2f(pos1.y, -pos1.z));
     if (var_f29 > sp30) {
         bVar2 |= 1;
     }
@@ -2467,8 +2467,8 @@ f32 dCamera_c::radiusActorInSight(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cX
         bVar2 |= 2;
     }
 
-    var_f29 = std::fabsf(cM_atan2f(pos2.x, -pos2.z));
-    var_f28 = std::fabsf(cM_atan2f(pos2.y, -pos2.z));
+    var_f29 = fabsf(cM_atan2f(pos2.x, -pos2.z));
+    var_f28 = fabsf(cM_atan2f(pos2.y, -pos2.z));
     if (var_f29 > sp30) {
         bVar2 |= 4;
     }
@@ -2493,25 +2493,25 @@ f32 dCamera_c::radiusActorInSight(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cX
 
     f32 var_f31;
     if (bVar2 & 1) {
-        var_f31 = pos1.z + std::fabsf(pos1.x) / local_12c;
+        var_f31 = pos1.z + fabsf(pos1.x) / local_12c;
         if (var_f31 > ret) {
             ret = var_f31;
         }
     }
     if (bVar2 & 2) {
-        var_f31 = pos1.z + std::fabsf(pos1.y) / local_130;
+        var_f31 = pos1.z + fabsf(pos1.y) / local_130;
         if (var_f31 > ret) {
             ret = var_f31;
         }
     }
     if (bVar2 & 4) {
-        var_f31 = pos2.z + std::fabsf(pos2.x) / local_12c;
+        var_f31 = pos2.z + fabsf(pos2.x) / local_12c;
         if (var_f31 > ret) {
             ret = var_f31;
         }
     }
     if (bVar2 & 8) {
-        var_f31 = pos2.z + std::fabsf(pos2.y) / local_130;
+        var_f31 = pos2.z + fabsf(pos2.y) / local_130;
         if (var_f31 > ret) {
             ret = var_f31;
         }
@@ -2799,7 +2799,7 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
             }
             wind_pow -= 0.3f;
             cSAngle angle = wind_globe.U() - mViewCache.mDirection.U();
-            mFovy += mCamSetup.WindShakeGap4Fvy() * cM_rndFX(wind_pow / 0.7f) * (1.0f - std::fabsf(angle.Norm()));
+            mFovy += mCamSetup.WindShakeGap4Fvy() * cM_rndFX(wind_pow / 0.7f) * (1.0f - fabsf(angle.Norm()));
 
 #if DEBUG
             dDbVw_Report(300, 180, "wind %f %f", wind_pow, angle.Norm());
@@ -2943,7 +2943,7 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                         cXyz cross;
                         f32 dot = VECDotProduct(normal1, normal2);
                         VECCrossProduct(normal1, normal2, &cross);
-                        if (chkCornerCos(dot) && std::fabsf(cross.y) > 0.5f
+                        if (chkCornerCos(dot) && fabsf(cross.y) > 0.5f
                                               && cBgW_CheckBWall(normal2->y)) {
                             var_r27 = 5;
                         } else {
@@ -3056,7 +3056,7 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                         field_0x96c += (1.0f - field_0x96c) * 0.1f;
                     }
                     if (sp0C || !(mMonitor.field_0xc < 5.0f)
-                              || !(std::fabsf(mPadInfo.mCStick.mLastPosX) < 0.05f)) {
+                              || !(fabsf(mPadInfo.mCStick.mLastPosX) < 0.05f)) {
                         field_0x968 = 0.2f;
                     } else {
                         field_0x968 *= mMonitor.field_0xc / 5.0f;
@@ -3999,7 +3999,7 @@ bool dCamera_c::chaseCamera(s32 param_0) {
             }
 
             cSAngle ang;
-            if ((chkFlag(0x100000) || sp1C || bVar6) && std::fabsf(mPadInfo.mCStick.mLastPosX) < 0.05f) {
+            if ((chkFlag(0x100000) || sp1C || bVar6) && fabsf(mPadInfo.mCStick.mLastPosX) < 0.05f) {
                 ang.Val(directionOf(mpPlayerActor).Inv());
             } else {
                 ang.Val(mViewCache.mDirection.U());
@@ -4014,13 +4014,13 @@ bool dCamera_c::chaseCamera(s32 param_0) {
             pos3 = pos;
             pos.y += dist;
             sp1AC = cXyz(mCenter - pos3).abs() * 8.0f;
-            sp1BC = std::fabsf(dist1 > sp1AC ? dist1 : sp1AC);
+            sp1BC = fabsf(dist1 > sp1AC ? dist1 : sp1AC);
 
             dist1 = val18 + (val17 - val18) * chase->field_0xa4;
-            sp1AC = std::fabsf(mFovy - dist1);
+            sp1AC = fabsf(mFovy - dist1);
             f32 sin = cSAngle(mFovy > dist1 ? mFovy : dist1).Sin();
             sp1AC = 100.0f * (sin * sin) * sp1AC;
-            sp1BC = std::fabsf(sp1BC > sp1AC ? sp1BC : sp1AC);
+            sp1BC = fabsf(sp1BC > sp1AC ? sp1BC : sp1AC);
             sp1BC *= 1.2f;
             sp1BC *= 0.00625f;
             chase->field_0x4 = (int)(JMAFastSqrt(sp1BC) * 2.2f) + 1;
@@ -4128,7 +4128,7 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         mViewCache.mCenter += (pos - mViewCache.mCenter) * rate;
 
         f32 dist = dCamMath::xyzHorizontalDistance(pos, chase->field_0x58);
-        if (dist < std::fabsf(vec.x > vec.z ? vec.x : vec.z) + 20.0f) {
+        if (dist < fabsf(vec.x > vec.z ? vec.x : vec.z) + 20.0f) {
             cXyz attention_pos = attentionPos(mpPlayerActor);
             attention_pos.y -= 15.0f;
             dBgS_CamLinChk lin_chk;
@@ -4294,7 +4294,7 @@ bool dCamera_c::chaseCamera(s32 param_0) {
                 cSAngle ang = -mViewCache.mDirection.U();
                 delta = dCamMath::xyzRotateY(delta, ang);
                 cXyz vec5 = delta;
-                if (std::fabsf(vec5.y) < 200.0f) {
+                if (fabsf(vec5.y) < 200.0f) {
                     vec5.y = 0.0f;
                     vec5.x *= 0.5f;
                     f32 sp16C = vec5.abs();
@@ -4415,17 +4415,17 @@ bool dCamera_c::chaseCamera(s32 param_0) {
     bool sp11 = false;
     f32 sp140 = 0.05f;
     f32 last_pos_x = mPadInfo.mCStick.mLastPosX;
-    f32 sp138 = std::fabsf(last_pos_x);
+    f32 sp138 = fabsf(last_pos_x);
     f32 sp134 = mPadInfo.mCStick.mLastPosY;
-    f32 sp130 = std::fabsf(sp134);
+    f32 sp130 = fabsf(sp134);
     f32 sp12C = 8.0f;
     f32 sp128 = 12.0f;
     chase->field_0x93 = false;
 
-    if (sp11 || (!mCamParam.Flag(param_0, 0x40) && std::fabsf(last_pos_x) > sp140)) {
+    if (sp11 || (!mCamParam.Flag(param_0, 0x40) && fabsf(last_pos_x) > sp140)) {
         chase->field_0xac += (dCamMath::rationalBezierRatio(last_pos_x, 0.5f) * sp12C - chase->field_0xac) * chase->field_0x4c;
         ang3 = globe.U() + cSAngle(chase->field_0xac);
-        sp148 = std::fabsf(last_pos_x) - 0.05f;
+        sp148 = fabsf(last_pos_x) - 0.05f;
         if (mCamSetup.CheckFlag(0x1000) && mFakeAngleSys.field_0x0 == 0) {
             setUSOAngle();
         }
@@ -4922,7 +4922,7 @@ bool dCamera_c::lockonCamera(s32 param_0) {
         sp0C = true;
     }
 
-    f32 fVar43 = 1.0f - std::fabsf(mPadInfo.mCStick.mLastPosY);
+    f32 fVar43 = 1.0f - fabsf(mPadInfo.mCStick.mLastPosY);
     f32 fVar44;
 
     if (bVar1) {
@@ -4981,12 +4981,12 @@ bool dCamera_c::lockonCamera(s32 param_0) {
     cSAngle u, v;
     cSAngle ang5 = globe.V() - lockon->field_0x34.V();
     if (sp0C) {
-        r = lockon->field_0x34.R() * 0.75f * std::fabsf(ang5.Cos());
+        r = lockon->field_0x34.R() * 0.75f * fabsf(ang5.Cos());
         u.Val(lockon->field_0x34.U() + (ang4 - lockon->field_0x34.U()) * lockon->field_0x58);
         v.Val(lockon->field_0x34.V() + ang5 * 0.05f);
     } else {
         r = lockon->field_0x34.R() + (sp184 - lockon->field_0x34.R()) *
-            lockon->field_0x54 * std::fabsf(ang5.Cos());
+            lockon->field_0x54 * fabsf(ang5.Cos());
         u.Val(lockon->field_0x34.U() + (ang4 - lockon->field_0x34.U()) * lockon->field_0x58);
         v.Val(lockon->field_0x34.V() + ang5 * lockon->field_0x58);
     }
@@ -5043,9 +5043,9 @@ bool dCamera_c::lockonCamera(s32 param_0) {
     }
 
     bool bVar3 = false;
-    if (std::fabsf(sp158) > 0.05f) {
+    if (fabsf(sp158) > 0.05f) {
         cSAngle ang = globe2.U() + cSAngle(dCamMath::rationalBezierRatio(sp158, 0.5f) * 7.5f);
-        sp15C = std::fabsf(sp158) - 0.05f;
+        sp15C = fabsf(sp158) - 0.05f;
         lockon->field_0x42 = ang;
         lockon->field_0x4c = 0.0f;
         bVar3 = true;
@@ -5109,7 +5109,7 @@ bool dCamera_c::lockonCamera(s32 param_0) {
         }
 
         ang6 = ang1.Inv() - mViewCache.mDirection.U();
-        if (std::fabsf(ang6.Degree()) < 2.0f && false) {
+        if (fabsf(ang6.Degree()) < 2.0f && false) {
             lockon->field_0x2a = true;
         }
         u2 += ang6 * sp15C * lockon->field_0x4c;
@@ -5137,7 +5137,7 @@ bool dCamera_c::lockonCamera(s32 param_0) {
     } else {
         lockon->field_0xc = 0;
         if (!mBG.field_0xc0.field_0x44 && !bVar1) {
-            v2 += (globe2.V() - v2) * fVar43 * std::fabsf(mViewCache.mDirection.V().Cos());
+            v2 += (globe2.V() - v2) * fVar43 * fabsf(mViewCache.mDirection.V().Cos());
         } else {
             cSAngle ang7 = lockon->field_0x34.V();
             ang7 *= cSAngle(lockon->field_0x34.U() - mViewCache.mDirection.U()).Cos();
@@ -5469,7 +5469,7 @@ bool dCamera_c::talktoCamera(s32 param_0) {
         if (talk->field_0x84 != 0) {
             talk->field_0x48 = 1;
         } else {
-            talk->field_0x48 = (int)(JMAFastSqrt(std::fabsf(mViewCache.mDirection.R() - talk->field_0x28.R())) / 2.0f);
+            talk->field_0x48 = (int)(JMAFastSqrt(fabsf(mViewCache.mDirection.R() - talk->field_0x28.R())) / 2.0f);
             if (talk->field_0x48 < 2) {
                 talk->field_0x48 = 2;
             }
@@ -5609,7 +5609,7 @@ bool dCamera_c::talktoCamera(s32 param_0) {
 
         for (i = 0; i < 36; i++) {
             sp26C = talk->field_0x28.U() - talk->field_0x30.U();
-            if (std::fabsf(sp26C.Degree()) < 10.0f) {
+            if (fabsf(sp26C.Degree()) < 10.0f) {
                 talk->field_0x28.U(talk->field_0x28.U() + sp270);
             } else {
                 if (!sp5B) {
@@ -7172,7 +7172,7 @@ bool dCamera_c::subjectCamera(s32 param_0) {
         f32 zoom_fovy = dCamMath::zoomFovy(val17 * 0.5f, tmp2) * 2.0f;
         mViewCache.mFovy += (zoom_fovy - mViewCache.mFovy) * val22;
         setComZoomScale(tmp2);
-        setComZoomForcus(1.0f - std::fabsf(sp88 - sp84) * -511.0f);
+        setComZoomForcus(1.0f - fabsf(sp88 - sp84) * -511.0f);
         if (check_owner_action(mPadID, 0x200000)) {
             setComStat(8);
         }
@@ -7263,12 +7263,12 @@ bool dCamera_c::magneCamera(s32 param_0) {
     cSAngle stack_238;
     if (mCurMode == 1) {
         stack_238 = sp54.Inv();
-    } else if (std::fabsf(cstick_x) > 0.05f) {
+    } else if (fabsf(cstick_x) > 0.05f) {
         stack_238 = magne->field_0x1c.U() + cSAngle(dCamMath::rationalBezierRatio(cstick_x, 0.5f) * 10.0f);
     } else {
         cSAngle stack_23c = sp54.Inv() - stack_230.U();
         f32 sin = stack_23c.Sin();
-        f32 tmp = std::fabsf(sin * mPadInfo.mMainStick.mLastValue);
+        f32 tmp = fabsf(sin * mPadInfo.mMainStick.mLastValue);
         f32 tmp2 = stack_23c.Cos() > 0.0f ? 8.0f : 4.0f;
         stack_238 = stack_230.U() + cSAngle(sin * tmp2 * dCamMath::rationalBezierRatio(tmp, 1.0f));
     }
@@ -7584,7 +7584,7 @@ bool dCamera_c::towerCamera(s32 param_0) {
             cXyz stack_21c = relationalPos(mpPlayerActor, &stack_210);
             f32 sp1A8 = cXyz(mEye - stack_21c).abs() - val7;
             f32 sp1A4 = cXyz(mCenter - stack_21c).abs() - val7;
-            f32 sp1A0 = std::fabsf(sp1A8 > sp1A4 ? sp1A8 : sp1A4);
+            f32 sp1A0 = fabsf(sp1A8 > sp1A4 ? sp1A8 : sp1A4);
             sp1A8 = heightOf(mpPlayerActor);
             sp1A0 /= (sp1A8 < 10.0f ? 10.0f : sp1A8);
             tower->field_0x4 = (int)(JMAFastSqrt(sp1A0) * sp220) + 1;
@@ -7706,9 +7706,9 @@ bool dCamera_c::towerCamera(s32 param_0) {
     cSAngle sp108;
     cSAngle sp104 = stack_454 + (stack_454 - stack_458) * sp188;
 
-    if (!mCamParam.Flag(param_0, 0x40) && std::fabsf(sp18C) > sp184) {
+    if (!mCamParam.Flag(param_0, 0x40) && fabsf(sp18C) > sp184) {
         cSAngle sp100 = mViewCache.mDirection.U() + cSAngle(dCamMath::rationalBezierRatio(sp18C, 0.5f) * sp180);
-        f32 sp17C = std::fabsf(sp18C) - sp184;
+        f32 sp17C = fabsf(sp18C) - sp184;
         sp108.Val(mViewCache.mDirection.U() + (sp100 - mViewCache.mDirection.U()) * sp17C);
         tower->field_0x6a = true;
         tower->field_0x78 += (0.8f - tower->field_0x78) * 0.05f;

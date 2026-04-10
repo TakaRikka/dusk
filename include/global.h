@@ -194,15 +194,12 @@ static const float INF = 2000000000.0f;
 #endif
 
 // potential fakematch?
-#if DEBUG
 #define FABSF fabsf
-#else
-#define FABSF std::fabsf
-#endif
 
 #ifndef __MWERKS__
 #if __cplusplus
 #include <cmath>
+#include <math.h>
 using std::isnan;
 #endif
 #endif

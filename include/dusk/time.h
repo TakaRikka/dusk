@@ -14,6 +14,7 @@
 #endif
 #include <Windows.h>
 #include <shellapi.h>
+#include <intrin.h>
 #endif
 
 #include "dusk/logging.h"
@@ -92,7 +93,11 @@ private:
     }
     do {
       QueryPerformanceCounter(&current);
-      _mm_pause(); // Yield CPU
+#if defined(_M_ARM64) || defined(_M_ARM)
+      __yield();
+#else
+      _mm_pause();
+#endif
     } while (current.QuadPart - start.QuadPart < ticksToWait);
   }
 #else
