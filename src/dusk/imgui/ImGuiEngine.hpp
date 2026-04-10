@@ -10,17 +10,18 @@ public:
     static ImFont* fontNormal;
     static ImFont* fontLarge;
     static ImFont* fontExtraLarge;
+    static ImFont* fontMono;
     static ImTextureID duskIcon;
 };
 
 void ImGuiEngine_Initialize(float scale);
 void ImGuiEngine_AddTextures();
 
-struct Icon {
+struct Image {
     std::unique_ptr<uint8_t[]> data;
     size_t size;
     uint32_t width;
     uint32_t height;
 };
-Icon GetIcon();
+Image GetImage(std::string_view path);
 }  // namespace dusk

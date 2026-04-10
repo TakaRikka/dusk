@@ -6,6 +6,7 @@
 #include <aurora/imgui.h>
 #include <cmath>
 #include <cstring>
+#include <fmt/format.h>
 #include <string>
 
 #include "dusk/logging.h"
@@ -33,21 +34,23 @@ bool AssetExists(const std::string& path) {
 ImFont* ImGuiEngine::fontNormal;
 ImFont* ImGuiEngine::fontLarge;
 ImFont* ImGuiEngine::fontExtraLarge;
+ImFont* ImGuiEngine::fontMono;
 ImTextureID ImGuiEngine::duskIcon = 0;
 
-inline ImFont* CreateFont(float size, bool hasFontFile,  const std::string& fontPath) {
-    ImGuiIO& io = ImGui::GetIO();
-
+inline ImFont* CreateFont(float size, const std::string& fontPath, std::string_view fontName) {
+    bool fontFileExists = !fontPath.empty() && AssetExists(fontPath);
     ImFontConfig fontConfig{};
     fontConfig.SizePixels = size;
-    snprintf(static_cast<char*>(fontConfig.Name), sizeof(fontConfig.Name),
-             "Noto Mono Regular, %dpx", static_cast<int>(fontConfig.SizePixels));
+    auto name = fmt::format_to_n(fontConfig.Name, sizeof(fontConfig.Name) - 1, "{}, {}px", fontName,
+                                 static_cast<int>(fontConfig.SizePixels));
+    *name.out = '\0';
+    const ImGuiIO& io = ImGui::GetIO();
     ImFont* outFont =
-        hasFontFile ?
+        fontFileExists ?
             io.Fonts->AddFontFromFileTTF(fontPath.c_str(), fontConfig.SizePixels, &fontConfig) :
             nullptr;
     if (outFont == nullptr) {
-        if (hasFontFile) {
+        if (fontFileExists) {
             DuskLog.warn("Failed to load font '{}': {}", fontPath, SDL_GetError());
         }
         outFont = io.Fonts->AddFontDefault(&fontConfig);
@@ -56,65 +59,38 @@ inline ImFont* CreateFont(float size, bool hasFontFile,  const std::string& font
 }
 
 void ImGuiEngine_Initialize(float scale) {
+    // Round font scale to nearest integer
+    scale = std::ceilf(scale);
+
     ImGui::GetCurrentContext();
     ImGuiIO& io = ImGui::GetIO();
     io.Fonts->Clear();
     io.FontGlobalScale = scale > 0.0f ? 1.0f / scale : 1.0f;
 
-    const std::string fontPath = GetAssetPath("NotoMono-Regular.ttf");
-    const bool hasFontFile = AssetExists(fontPath);
-
-    ImFontConfig fontConfig{};
-    fontConfig.SizePixels = std::floor(15.f * scale);
-    snprintf(static_cast<char*>(fontConfig.Name), sizeof(fontConfig.Name),
-             "Noto Mono Regular, %dpx", static_cast<int>(fontConfig.SizePixels));
     ImGuiEngine::fontNormal =
-        hasFontFile ?
-            io.Fonts->AddFontFromFileTTF(fontPath.c_str(), fontConfig.SizePixels, &fontConfig) :
-            nullptr;
-    if (ImGuiEngine::fontNormal == nullptr) {
-        if (hasFontFile) {
-            DuskLog.warn("Failed to load font '{}': {}", fontPath, SDL_GetError());
-        }
-        ImGuiEngine::fontNormal = io.Fonts->AddFontDefault(&fontConfig);
-    }
-
-    fontConfig.SizePixels = std::floor(26.f * scale);
-#ifdef IMGUI_ENABLE_FREETYPE
-    fontConfig.FontBuilderFlags |= ImGuiFreeTypeBuilderFlags_Bold;
-    snprintf(static_cast<char*>(fontConfig.Name), sizeof(fontConfig.Name), "Noto Mono Bold, %dpx",
-             static_cast<int>(fontConfig.SizePixels));
-#else
-    snprintf(static_cast<char*>(fontConfig.Name), sizeof(fontConfig.Name),
-             "Noto Mono Regular, %dpx", static_cast<int>(fontConfig.SizePixels));
-#endif
+        CreateFont(std::floor(18.f * scale), GetAssetPath("Inter-Regular.ttf"), "Inter Regular");
     ImGuiEngine::fontLarge =
-        hasFontFile ?
-            io.Fonts->AddFontFromFileTTF(fontPath.c_str(), fontConfig.SizePixels, &fontConfig) :
-            nullptr;
-    if (ImGuiEngine::fontLarge == nullptr) {
-        if (hasFontFile) {
-            DuskLog.warn("Failed to load font '{}': {}", fontPath, SDL_GetError());
-        }
-        ImGuiEngine::fontLarge = io.Fonts->AddFontDefault(&fontConfig);
-    }
-
-    ImGuiEngine::fontExtraLarge = CreateFont(std::floor(40.f * scale), hasFontFile, fontPath);
+        CreateFont(std::floor(26.f * scale), GetAssetPath("Inter-Regular.ttf"), "Inter Regular");
+    ImGuiEngine::fontExtraLarge =
+        CreateFont(std::floor(40.f * scale), GetAssetPath("Inter-Bold.ttf"), "Inter Bold");
+    ImGuiEngine::fontMono =
+        CreateFont(std::floor(16.f * scale), GetAssetPath("NotoMono-Regular.ttf"),
+                   "Noto Mono Regular");
 
     auto& style = ImGui::GetStyle();
     style = {};  // Reset sizes
     style.WindowPadding = ImVec2(15, 15);
     style.WindowRounding = 5.0f;
     style.FrameBorderSize = 1.f;
-    style.FramePadding = ImVec2(5, 5);
+    style.FramePadding = ImVec2(8, 5);
     style.FrameRounding = 4.0f;
     style.ItemSpacing = ImVec2(12, 8);
     style.ItemInnerSpacing = ImVec2(8, 6);
     style.IndentSpacing = 25.0f;
     style.ScrollbarSize = 15.0f;
     style.ScrollbarRounding = 9.0f;
-    style.GrabMinSize = 5.0f;
-    style.GrabRounding = 3.0f;
+    style.GrabMinSize = 20.0f;
+    style.GrabRounding = 5.0f;
     style.PopupBorderSize = 1.f;
     style.PopupRounding = 7.0;
     style.TabBorderSize = 1.f;
@@ -169,25 +145,23 @@ void ImGuiEngine_Initialize(float scale) {
     colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
     colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
     colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
-
 }
 
-Icon GetIcon() {
-    const std::string iconPath = GetAssetPath("icon.png");
-    if (!AssetExists(iconPath)) {
+Image GetImage(const std::string& path) {
+    if (!AssetExists(path)) {
         return {};
     }
 
-    SDL_Surface* loadedSurface = SDL_LoadPNG(iconPath.c_str());
+    SDL_Surface* loadedSurface = SDL_LoadPNG(path.c_str());
     if (loadedSurface == nullptr) {
-        DuskLog.warn("Failed to load icon '{}': {}", iconPath, SDL_GetError());
+        DuskLog.warn("Failed to load image '{}': {}", path, SDL_GetError());
         return {};
     }
 
     SDL_Surface* rgbaSurface = SDL_ConvertSurface(loadedSurface, SDL_PIXELFORMAT_RGBA32);
     SDL_DestroySurface(loadedSurface);
     if (rgbaSurface == nullptr) {
-        DuskLog.warn("Failed to convert icon '{}': {}", iconPath, SDL_GetError());
+        DuskLog.warn("Failed to convert image '{}': {}", path, SDL_GetError());
         return {};
     }
 
@@ -204,7 +178,7 @@ Icon GetIcon() {
     }
 
     SDL_DestroySurface(rgbaSurface);
-    return Icon{
+    return Image{
         std::move(ptr),
         size,
         iconWidth,
@@ -213,15 +187,13 @@ Icon GetIcon() {
 }
 
 void ImGuiEngine_AddTextures() {
-    if (ImGuiEngine::duskIcon != 0)
-        return;
-
-    auto icon = GetIcon();
-    if (icon.data == nullptr || icon.width == 0 || icon.height == 0) {
-        ImGuiEngine::duskIcon = 0;
-        return;
+    if (ImGuiEngine::duskIcon == 0) {
+        auto icon = GetImage(GetAssetPath("icon.png"));
+        if (icon.data == nullptr || icon.width == 0 || icon.height == 0) {
+            ImGuiEngine::duskIcon = 0;
+            return;
+        }
+        ImGuiEngine::duskIcon = aurora_imgui_add_texture(icon.width, icon.height, icon.data.get());
     }
-
-    ImGuiEngine::duskIcon = aurora_imgui_add_texture(icon.width, icon.height, icon.data.get());
 }
 }  // namespace dusk

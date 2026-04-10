@@ -5,6 +5,7 @@ class ImGuiPreLaunchWindow {
 private:
     int m_CurMenu = 0;
     bool m_IsFirstDraw = true;
+    std::string m_initialGraphicsBackend;
 
     bool isSelectedPathValid() const;
 

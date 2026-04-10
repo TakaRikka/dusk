@@ -19,10 +19,7 @@ namespace dusk {
 
 typedef void (ImGuiPreLaunchWindow::*drawFunc)();
 
-drawFunc drawTable[2] = {
-    &ImGuiPreLaunchWindow::drawMainMenu,
-    &ImGuiPreLaunchWindow::drawOptions
-};
+drawFunc drawTable[2] = {&ImGuiPreLaunchWindow::drawMainMenu, &ImGuiPreLaunchWindow::drawOptions};
 
 static constexpr std::array<SDL_DialogFileFilter, 2> skGameDiscFileFilters{{
     {"Game Disc Images", "iso;gcm;ciso;gcz;nfs;rvz;wbfs;wia;tgc"},
@@ -47,10 +44,7 @@ void fileDialogCallback(void* userdata, const char* const* filelist, [[maybe_unu
     }
 }
 
-
-ImGuiPreLaunchWindow::ImGuiPreLaunchWindow() {
-
-}
+ImGuiPreLaunchWindow::ImGuiPreLaunchWindow() = default;
 
 bool ImGuiPreLaunchWindow::isSelectedPathValid() const {
     return !m_selectedIsoPath.empty() && SDL_GetPathInfo(m_selectedIsoPath.c_str(), nullptr);
@@ -59,6 +53,7 @@ bool ImGuiPreLaunchWindow::isSelectedPathValid() const {
 void ImGuiPreLaunchWindow::draw() {
     if (m_IsFirstDraw) {
         m_selectedIsoPath = getSettings().backend.isoPath;
+        m_initialGraphicsBackend = getSettings().backend.graphicsBackend;
         m_IsFirstDraw = false;
     }
 
@@ -71,20 +66,23 @@ void ImGuiPreLaunchWindow::draw() {
 
     ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x, io.DisplaySize.y));
     ImGui::SetNextWindowPos(ImVec2(0, 0));
+    ImGui::SetNextWindowBgAlpha(0.65f);
 
-    ImGui::Begin("Pre Launch Window", nullptr, ImGuiWindowFlags_NoDecoration |
-        ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings |
-        ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoBringToFrontOnFocus);
+    ImGui::Begin("Pre Launch Window", nullptr,
+                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize |
+                     ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
+                     ImGuiWindowFlags_NoBringToFrontOnFocus);
 
     const auto& windowSize = ImGui::GetWindowSize();
 
     for (int i = 0; i < 5; i++)
         ImGui::NewLine();
 
-    float iconSize = 128.f;
+    float iconSize = 150.f;
     ImGui::SameLine(windowSize.x / 2 - iconSize + (iconSize / 2));
     if (ImGuiEngine::duskIcon != 0)
         ImGui::Image(ImGuiEngine::duskIcon, ImVec2{iconSize, iconSize});
+    ImGuiTextCenter("Twilit Realm presents");
     ImGui::PushFont(ImGuiEngine::fontExtraLarge);
     ImGuiTextCenter("Dusk");
     ImGui::PopFont();
@@ -96,27 +94,20 @@ void ImGuiPreLaunchWindow::draw() {
 
 void ImGuiPreLaunchWindow::drawMainMenu() {
     const auto& windowSize = ImGui::GetWindowSize();
-    static const char* popopModalLabel = "Skip Pre-Launch UI?";
     ImGui::SetCursorPosY(windowSize.y - 200);
 
     ImGui::PushFont(ImGuiEngine::fontLarge);
 
-    bool disabled = false;
     if (m_selectedIsoPath.empty() || !SDL_GetPathInfo(m_selectedIsoPath.c_str(), nullptr)) {
-        ImGui::BeginDisabled();
-        disabled = true;
-    }
-
-    if (ImGuiButtonCenter("Start Game")) {
-        if (!getSettings().backend.skipPreLaunchUI) {
-            ImGui::OpenPopup(popopModalLabel);
-        }else {
+        if (ImGuiButtonCenter("Select disc image...")) {
+            SDL_ShowOpenFileDialog(&fileDialogCallback, this, aurora::window::get_sdl_window(),
+                                   skGameDiscFileFilters.data(), int(skGameDiscFileFilters.size()),
+                                   nullptr, false);
+        }
+    } else {
+        if (ImGuiButtonCenter("Start game")) {
             dusk::IsGameLaunched = true;
         }
-    }
-
-    if (disabled) {
-        ImGui::EndDisabled();
     }
 
     if (ImGuiButtonCenter("Options")) {
@@ -124,24 +115,6 @@ void ImGuiPreLaunchWindow::drawMainMenu() {
     }
 
     ImGui::PopFont();
-
-    if (ImGui::BeginPopupModal(popopModalLabel, nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-        ImGui::Text("Would you like to skip this menu on future launches?");
-        ImGui::Separator();
-
-        if (ImGui::Button("Yes", ImVec2(120, 0))) {
-            getSettings().backend.skipPreLaunchUI.setValue(true);
-            config::Save();
-            ImGui::CloseCurrentPopup();
-            dusk::IsGameLaunched = true;
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("No", ImVec2(120, 0))) {
-            ImGui::CloseCurrentPopup();
-            dusk::IsGameLaunched = true;
-        }
-        ImGui::EndPopup();
-    }
 }
 
 void ImGuiPreLaunchWindow::drawOptions() {
@@ -160,12 +133,48 @@ void ImGuiPreLaunchWindow::drawOptions() {
     float childWidth = windowSize.x - 400;
 
     ImGui::SetCursorPosX(windowSize.x / 2 - (childWidth / 2));
-    if (ImGui::BeginChild("OptionsChild", ImVec2(childWidth, endCursorY - cursorY), ImGuiChildFlags_None, ImGuiWindowFlags_NoBackground)) {
+    if (ImGui::BeginChild("OptionsChild", ImVec2(childWidth, endCursorY - cursorY),
+                          ImGuiChildFlags_None, ImGuiWindowFlags_NoBackground))
+    {
         ImGui::InputText("Game ISO Path", &m_selectedIsoPath, ImGuiInputTextFlags_ReadOnly);
         ImGui::SameLine();
         if (ImGui::Button("Set")) {
-            SDL_ShowOpenFileDialog(&fileDialogCallback, this, aurora::window::get_sdl_window(), skGameDiscFileFilters.data(),
-                                   int(skGameDiscFileFilters.size()), nullptr, false);
+            SDL_ShowOpenFileDialog(&fileDialogCallback, this, aurora::window::get_sdl_window(),
+                                   skGameDiscFileFilters.data(), int(skGameDiscFileFilters.size()),
+                                   nullptr, false);
+        }
+
+        AuroraBackend configuredBackend = BACKEND_AUTO;
+        const std::string& configuredBackendId = getSettings().backend.graphicsBackend;
+        if (!try_parse_backend(configuredBackendId, configuredBackend)) {
+            configuredBackend = BACKEND_AUTO;
+        }
+
+        if (ImGui::BeginCombo("Graphics Backend", backend_name(configuredBackend).data())) {
+            if (ImGui::Selectable("Auto", configuredBackend == BACKEND_AUTO)) {
+                getSettings().backend.graphicsBackend.setValue("auto");
+                config::Save();
+            }
+
+            size_t backendCount = 0;
+            const AuroraBackend* availableBackends = aurora_get_available_backends(&backendCount);
+            for (size_t i = 0; i < backendCount; ++i) {
+                const AuroraBackend backend = availableBackends[i];
+                const bool isSelected = configuredBackend == backend;
+                if (ImGui::Selectable(backend_name(backend).data(), isSelected)) {
+                    getSettings().backend.graphicsBackend.setValue(
+                        std::string(backend_id(backend)));
+                    config::Save();
+                }
+                if (isSelected) {
+                    ImGui::SetItemDefaultFocus();
+                }
+            }
+
+            ImGui::EndCombo();
+        }
+        if (configuredBackendId != m_initialGraphicsBackend) {
+            ImGui::TextDisabled("Restart Required");
         }
         ImGui::EndChild();
     }
@@ -182,4 +191,4 @@ void ImGuiPreLaunchWindow::drawOptions() {
     ImGui::PopFont();
 }
 
-}
+}  // namespace dusk

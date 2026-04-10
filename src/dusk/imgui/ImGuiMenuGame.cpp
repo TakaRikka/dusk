@@ -17,6 +17,8 @@
 
 #include <aurora/gfx.h>
 
+#include "dusk/main.h"
+
 namespace dusk {
     void ImGuiMenuGame::ToggleFullscreen() {
         getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
@@ -28,12 +30,6 @@ namespace dusk {
 
     void ImGuiMenuGame::draw() {
         if (ImGui::BeginMenu("Game")) {
-            if (ImGui::MenuItem("Reset", hotkeys::DO_RESET)) {
-                JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
-            }
-
-            ImGui::Separator();
-
             if (ImGui::BeginMenu("Graphics")) {
                 if (ImGui::MenuItem("Toggle Fullscreen", hotkeys::TOGGLE_FULLSCREEN)) {
                     ToggleFullscreen();
@@ -113,11 +109,18 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
+            ImGui::Separator();
+
+            if (ImGui::MenuItem("Reset", hotkeys::DO_RESET)) {
+                JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
+            }
+
+            if (ImGui::MenuItem("Exit")) {
+                dusk::IsRunning = false;
+            }
+
             ImGui::EndMenu();
         }
-
-        windowInputViewer();
-        windowControllerConfig();
     }
 
     static void drawVirtualStick(const char* id, const ImVec2& stick) {
@@ -182,7 +185,7 @@ namespace dusk {
             ImGuiWindowFlags_NoResize |
             ImGuiWindowFlags_AlwaysAutoResize;
 
-        ImGui::SetNextWindowBgAlpha(0.65f);
+        // ImGui::SetNextWindowBgAlpha(0.65f);
 
         if (!ImGui::Begin("Controller Config", &m_showControllerConfig, windowFlags)) {
             ImGui::End();

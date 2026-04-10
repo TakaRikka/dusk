@@ -4,6 +4,7 @@
 #include <aurora/aurora.h>
 #include <deque>
 #include <string>
+#include <string_view>
 
 #include "ImGuiMenuEnhancements.hpp"
 #include "ImGuiMenuGame.hpp"
@@ -15,7 +16,6 @@ namespace dusk {
 class ImGuiConsole {
 public:
     ImGuiConsole();
-    void InitSettings();
     void UpdateSettings();
     void PreDraw();
     void PostDraw();
@@ -49,6 +49,8 @@ private:
 extern ImGuiConsole g_imguiConsole;
 
 std::string_view backend_name(AuroraBackend backend);
+std::string_view backend_id(AuroraBackend backend);
+bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend);
 std::string BytesToString(size_t bytes);
 void SetOverlayWindowLocation(int corner);
 bool ShowCornerContextMenu(int& corner, int avoidCorner);

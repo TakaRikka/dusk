@@ -16,7 +16,7 @@ namespace dusk {
         ImGuiWindowFlags windowFlags = ImGuiWindowFlags_AlwaysAutoResize |
             ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
     
-        ImGui::SetNextWindowBgAlpha(0.65f);
+        // ImGui::SetNextWindowBgAlpha(0.65f);
     
         if (!ImGui::Begin("Map Loader", &m_showMapLoader, windowFlags)) {
             ImGui::End();

@@ -73,6 +73,7 @@ struct UserSettings {
 
     struct {
         ConfigVar<std::string> isoPath;
+        ConfigVar<std::string> graphicsBackend;
         ConfigVar<bool> skipPreLaunchUI;
     } backend;
 };

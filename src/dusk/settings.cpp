@@ -61,6 +61,7 @@ UserSettings g_userSettings = {
 
     .backend = {
         .isoPath {"backend.isoPath", ""},
+        .graphicsBackend {"backend.graphicsBackend", "auto"},
         .skipPreLaunchUI {"backend.skipPreLaunchUI", false}
     }
 };
@@ -110,6 +111,7 @@ void registerSettings() {
     Register(g_userSettings.game.fastSpinner);
 
     Register(g_userSettings.backend.isoPath);
+    Register(g_userSettings.backend.graphicsBackend);
     Register(g_userSettings.backend.skipPreLaunchUI);
 }
 
