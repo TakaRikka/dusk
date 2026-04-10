@@ -1,9 +1,0 @@
-_prolog = .text:0x00000000; // type:function size:0x2C scope:global
-_epilog = .text:0x00000030; // type:function size:0x2C scope:global
-_unresolved = .text:0x00000060; // type:function size:0x4 scope:global
-daTagMagne_Delete__FP12daTagMagne_c = .text:0x00000070; // type:function size:0x14 scope:global
-daTagMagne_Create__FP10fopAc_ac_c = .text:0x00000090; // type:function size:0xC0 scope:global
-_ctors = .ctors:0x00000000; // type:label scope:global
-_dtors = .dtors:0x00000000; // type:label scope:global
-l_daTagMagne_Method = .data:0x00000000; // type:object size:0x20 scope:global
-g_profile_Tag_Magne = .data:0x00000020; // type:object size:0x30 scope:global
