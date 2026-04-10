@@ -10,6 +10,7 @@
 #include "f_ap/f_ap_game.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_main.h"
+#include "tracy/Tracy.hpp"
 
 JUTGamePad* mDoCPd_c::m_gamePad[4];
 
@@ -56,6 +57,7 @@ void mDoCPd_c::create() {
 }
 
 void mDoCPd_c::read() {
+    ZoneScoped;
     JUTGamePad::read();
 
     if (!mDoRst::isReset() && mDoRst::is3ButtonReset()) {

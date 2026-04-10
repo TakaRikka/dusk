@@ -165,7 +165,7 @@ public:
      * @param arg Arguments to forward to construct the default value.
      */
     template <typename... Args>
-    explicit ConfigVar(const char* name, Args&&... arg)
+    ConfigVar(const char* name, Args&&... arg)
         : ConfigVarBase(name, GetConfigImpl<T>()), defaultValue(std::forward<Args>(arg)...),
         value(), overrideValue() {}
 

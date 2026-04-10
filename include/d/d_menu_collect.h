@@ -50,7 +50,11 @@ public:
     void changeShield();
     void changeClothe();
     void setArrowMaxNum(u8);
+#if TARGET_PC
+    void setWalletSizeNum(u16);
+#else
     void setWalletMaxNum(u16);
+#endif
     void setSmellType();
     void setHeartPiece();
     void setPohMaxNum(u8);

@@ -813,9 +813,15 @@ s32 JASSeqParser::cmdDump(JASTrack* param_0, u32* param_1) {
 }
 
 s32 JASSeqParser::cmdPrintf(JASTrack* param_0, u32* param_1) {
+#if AVOID_UB
+    u8 stack_c[4] = {0};
+    u32 stack_10[4] = {0};
+    char buffer[128] = {0};
+#else
     u8 stack_c[4];
     u32 stack_10[4];
     char buffer[128];
+#endif
 
     JASSeqCtrl* seqCtrl = param_0->getSeqCtrl();
     u32 r30 = 0;

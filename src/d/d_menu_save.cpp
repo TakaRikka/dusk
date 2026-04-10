@@ -18,6 +18,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include "d/d_msg_scrn_explain.h"
+#include "dusk/settings.h"
 #include "JSystem/J2DGraph/J2DAnmLoader.h"
 #include "f_op/f_op_msg_mng.h"
 
@@ -56,11 +57,7 @@ static dMs_HIO_c g_msHIO;
 
 dMs_HIO_c::dMs_HIO_c() {
     mDisplayWaitFrames = 15;
-    #if TARGET_PC
-    mCardWaitFrames = 0;
-    #else
     mCardWaitFrames = 90;
-    #endif
     mEffectDispFrames = 5;
     mCharSwitchFrames = 5;
     mSelectIcon = 5;
@@ -1186,7 +1183,7 @@ void dMenu_save_c::cardFormatYesSel2Disp() {
     bool moveAnm = yesnoMenuMoveAnm();
 
     if (txtChangeAnm == true && moveAnm == true) {
-        mWaitTimer = g_msHIO.mCardWaitFrames;
+        mWaitTimer = dusk::getSettings().game.instantSaves ? 0 : g_msHIO.mCardWaitFrames;
         g_mDoMemCd_control.command_format();
         mMenuProc = PROC_MEMCARD_FORMAT;
     }
@@ -1258,7 +1255,7 @@ void dMenu_save_c::makeGameFileDisp() {
     bool ketteiDispAnm = ketteiTxtDispAnm();
 
     if (txtChangeAnm == true && moveAnm == true && ketteiDispAnm == true) {
-        mWaitTimer = g_msHIO.mCardWaitFrames;
+        mWaitTimer = dusk::getSettings().game.instantSaves ? 0 : g_msHIO.mCardWaitFrames;
         setInitSaveData();
         dataSave();
         mMenuProc = PROC_MEMCARD_MAKE_GAME_FILE;
@@ -1952,7 +1949,7 @@ void dMenu_save_c::saveMoveDisp() {
 
     if (headerTxtChanged == true && yesnoAnmComplete == true && ketteiAnmComplete == true &&
         modoruAnmComplete == 1 && check == 1) {
-        mWaitTimer = g_msHIO.mCardWaitFrames;
+        mWaitTimer = dusk::getSettings().game.instantSaves ? 0 : g_msHIO.mCardWaitFrames;
         dataWrite();
         mMenuProc = PROC_MEMCARD_DATA_SAVE_WAIT;
     }
@@ -1970,7 +1967,7 @@ void dMenu_save_c::saveMoveDisp2() {
 
     if (headerTxtChanged == true && dataMoveAnm == true && wakuAnmComplete == true &&
         ketteiAnmComplete == true && modoruAnmComplete == 1 && check == 1) {
-        mWaitTimer = g_msHIO.mCardWaitFrames;
+        mWaitTimer = dusk::getSettings().game.instantSaves ? 0 : g_msHIO.mCardWaitFrames;
         dataWrite();
         mMenuProc = PROC_MEMCARD_DATA_SAVE_WAIT;
     }

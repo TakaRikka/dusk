@@ -49,6 +49,8 @@
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
+#include "dusk/imgui/ImGuiConsole.hpp"
+#include "version.h"
 #include "dusk/time.h"
 
 #include <aurora/aurora.h>
@@ -61,6 +63,7 @@
 #include "cxxopts.hpp"
 #include "dusk/config.hpp"
 #include "dusk/imgui/ImGuiConsole.hpp"
+#include "tracy/Tracy.hpp"
 
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
@@ -112,6 +115,8 @@ s32 LOAD_COPYDATE(void*) {
 }
 
 AuroraInfo auroraInfo;
+AuroraStats dusk::lastFrameAuroraStats;
+float dusk::frameUsagePct = 0.0f;
 const char* configPath;
 
 AuroraWindowSize preLaunchUIWindowSize;
@@ -223,6 +228,7 @@ void main01(void) {
         VIWaitForRetrace();
 
 #if TARGET_PC
+        dusk::lastFrameAuroraStats = *aurora_get_stats();
         if (!aurora_begin_frame()) {
             DuskLog.debug("aurora_begin_frame returned false, skipping draw this frame");
             continue;
@@ -236,6 +242,8 @@ void main01(void) {
         mDoAud_Execute();
 
         aurora_end_frame();
+
+        FrameMark;
     } while (true);
 
     exit:;
@@ -317,6 +325,37 @@ static const char* CalculateConfigPath() {
     return result;
 }
 
+static constexpr PADDefaultMapping defaultPadMapping = {
+    .buttons = {
+        {SDL_GAMEPAD_BUTTON_SOUTH, PAD_BUTTON_A},
+        {SDL_GAMEPAD_BUTTON_EAST, PAD_BUTTON_B},
+        {SDL_GAMEPAD_BUTTON_WEST, PAD_BUTTON_X},
+        {SDL_GAMEPAD_BUTTON_NORTH, PAD_BUTTON_Y},
+        {SDL_GAMEPAD_BUTTON_START, PAD_BUTTON_START},
+        {SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER, PAD_TRIGGER_Z},
+        {PAD_NATIVE_BUTTON_INVALID, PAD_TRIGGER_L},
+        {PAD_NATIVE_BUTTON_INVALID, PAD_TRIGGER_R},
+        {SDL_GAMEPAD_BUTTON_DPAD_UP, PAD_BUTTON_UP},
+        {SDL_GAMEPAD_BUTTON_DPAD_DOWN, PAD_BUTTON_DOWN},
+        {SDL_GAMEPAD_BUTTON_DPAD_LEFT, PAD_BUTTON_LEFT},
+        {SDL_GAMEPAD_BUTTON_DPAD_RIGHT, PAD_BUTTON_RIGHT},
+    },
+    .axes = {
+        {{SDL_GAMEPAD_AXIS_LEFTX, AXIS_SIGN_POSITIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_LEFT_X_POS},
+        {{SDL_GAMEPAD_AXIS_LEFTX, AXIS_SIGN_NEGATIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_LEFT_X_NEG},
+        // SDL's gamepad y-axis is inverted from GC's
+        {{SDL_GAMEPAD_AXIS_LEFTY, AXIS_SIGN_NEGATIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_LEFT_Y_POS},
+        {{SDL_GAMEPAD_AXIS_LEFTY, AXIS_SIGN_POSITIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_LEFT_Y_NEG},
+        {{SDL_GAMEPAD_AXIS_RIGHTX, AXIS_SIGN_POSITIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_RIGHT_X_POS},
+        {{SDL_GAMEPAD_AXIS_RIGHTX, AXIS_SIGN_NEGATIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_RIGHT_X_NEG},
+        // see above
+        {{SDL_GAMEPAD_AXIS_RIGHTY, AXIS_SIGN_NEGATIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_RIGHT_Y_POS},
+        {{SDL_GAMEPAD_AXIS_RIGHTY, AXIS_SIGN_POSITIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_RIGHT_Y_NEG},
+        {{SDL_GAMEPAD_AXIS_LEFT_TRIGGER, AXIS_SIGN_POSITIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_TRIGGER_L},
+        {{SDL_GAMEPAD_AXIS_RIGHT_TRIGGER, AXIS_SIGN_POSITIVE}, SDL_GAMEPAD_BUTTON_INVALID, PAD_AXIS_TRIGGER_R},
+    },
+};
+
 // =========================================================================
 // PC ENTRY POINT
 // =========================================================================
@@ -365,8 +404,8 @@ int game_main(int argc, char* argv[]) {
     config.startFullscreen = dusk::getSettings().video.enableFullscreen;
     config.windowPosX = -1;
     config.windowPosY = -1;
-    config.windowWidth = FB_WIDTH * 2;
-    config.windowHeight = FB_HEIGHT * 2;
+    config.windowWidth = defaultWindowWidth * 2;
+    config.windowHeight = defaultWindowHeight * 2;
     config.desiredBackend = ParseAuroraBackend(parsed_arg_options["backend"].as<std::string>());
     config.logCallback = &aurora_log_callback;
     config.logLevel = (AuroraLogLevel)parsed_arg_options["log-level"].as<uint8_t>();
@@ -375,7 +414,13 @@ int game_main(int argc, char* argv[]) {
     config.allowJoystickBackgroundEvents = true;
     config.imGuiInitCallback = &aurora_imgui_init_callback;
 
+    PADSetDefaultMapping(&defaultPadMapping);
+
     auroraInfo = aurora_initialize(argc, argv, &config);
+
+    VISetWindowTitle(
+        fmt::format("Dusk {} [{}]", DUSK_WC_DESCRIBE, dusk::backend_name(auroraInfo.backend))
+            .c_str());
 
     // pre game launch ui main loop
     if (!launchUILoop()) {
@@ -422,6 +467,8 @@ int game_main(int argc, char* argv[]) {
 
     fflush(stdout);
     fflush(stderr);
+
+    mDoMch_Destroy();
 
     // Notifies all CVs and causes threads to exit
     OSResetSystem(OS_RESET_SHUTDOWN, 0, 0);

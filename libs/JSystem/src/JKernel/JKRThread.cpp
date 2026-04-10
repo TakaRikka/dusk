@@ -88,7 +88,11 @@ void JKRThread::setCommon_heapSpecified(JKRHeap* heap, u32 stack_size, int param
     mThreadRecord = (OSThread*)JKRAllocFromHeap(mHeap, sizeof(OSThread), 0x20);
     JUT_ASSERT(168, mThreadRecord);
 
-    OSCreateThread(mThreadRecord, start, this, (u8*)mStackMemory + mStackSize, mStackSize, param_3, 1);
+#if TARGET_PC
+    OSCreateThread(mThreadRecord, start, this, (u8*)mStackMemory + mStackSize, mStackSize, param_3, 0);
+#else
+    OSCreateThread(mThreadRecord, start, this, (u8*)mStackMemory + mStackSize, mStackSize, param_3, OS_THREAD_ATTR_DETACH);
+#endif
 }
 
 void* JKRThread::start(void* thread) {

@@ -22,6 +22,8 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include <cstdio>
 
+#include "tracy/Tracy.hpp"
+
 void fpcM_Draw(void* i_proc) {
     fpcDw_Execute((base_process_class*)i_proc);
 }
@@ -43,6 +45,7 @@ BOOL fpcM_IsCreating(fpc_ProcID i_id) {
 }
 
 void fpcM_Management(fpcM_ManagementFunc i_preExecuteFn, fpcM_ManagementFunc i_postExecuteFn) {
+    ZoneScoped;
     MtxInit();
     if (!fapGm_HIO_c::isCaptureScreen()) {
         dComIfGd_peekZdata();

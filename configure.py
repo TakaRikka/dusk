@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+print("You do not need to run configure.py for Dusk! This file is here to avoid conflicts with decomp.")
+print("Use CMake to configure your build instead.")
+exit(1)
+
 ###
 # Generates build files for the project.
 # This file also includes the project configuration,

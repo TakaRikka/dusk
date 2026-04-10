@@ -16,6 +16,7 @@
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "global.h"
+#include "tracy/Tracy.hpp"
 
 JPAResource::JPAResource() {
     mpCalcEmitterFuncList = mpDrawEmitterFuncList = mpDrawEmitterChildFuncList = NULL;
@@ -782,6 +783,7 @@ bool JPAResource::calc(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
 }
 
 void JPAResource::draw(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
+    ZoneScoped;
     work->mpEmtr = emtr;
     work->mpRes = this;
     work->mDrawCount = 0;
@@ -798,6 +800,7 @@ void JPAResource::draw(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
 }
 
 void JPAResource::drawP(JPAEmitterWorkData* work) {
+    ZoneScoped;
     work->mpEmtr->clearStatus(0x80);
 
     work->mGlobalPtclScl.x = work->mpEmtr->mGlobalPScl.x * pBsp->getBaseSizeX();
@@ -860,6 +863,7 @@ void JPAResource::drawP(JPAEmitterWorkData* work) {
 }
 
 void JPAResource::drawC(JPAEmitterWorkData* work) {
+    ZoneScoped;
     work->mpEmtr->setStatus(0x80);
 
     if (pCsp->isScaleInherited()) {

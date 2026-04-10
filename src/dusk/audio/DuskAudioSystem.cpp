@@ -14,6 +14,7 @@
 #include "DuskDsp.hpp"
 #include "JSystem/JAudio2/JASAudioThread.h"
 #include "JSystem/JAudio2/JASDriverIF.h"
+#include "tracy/Tracy.hpp"
 
 using namespace dusk::audio;
 
@@ -76,18 +77,31 @@ void dusk::audio::SetMasterVolume(const f32 value) {
     MasterVolume = value;
 }
 
+void dusk::audio::SetEnableReverb(const bool value) {
+    JASCriticalSection section;
+
+    EnableReverb = value;
+}
+
+#ifdef TRACY_ENABLE
+static auto FrameName = "GetNewAudio";
+#endif
+
 void SDLCALL GetNewAudio(
     void*,
     SDL_AudioStream*,
     int needed,
     int) {
+    FrameMarkStart(FrameName);
     while (needed > 0) {
         const int rendered = RenderNewAudioFrame();
         needed -= rendered;
     }
+    FrameMarkEnd(FrameName);
 }
 
 int RenderNewAudioFrame() {
+    ZoneScoped;
     JASCriticalSection section;
     const u32 countSubframes = JASDriver::getSubFrames();
 
@@ -114,6 +128,7 @@ static void InterleaveOutputData(const OutputSubframe& data, std::span<f32> targ
 }
 
 void RenderAudioSubframe() {
+    ZoneScoped;
     OutBuffer = {};
 
     JASDriver::updateDSP();

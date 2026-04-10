@@ -1,0 +1,206 @@
+name: Build
+
+on:
+  push:
+    paths-ignore:
+      - '*.md'
+      - '*LICENSE'
+  pull_request:
+
+env:
+  SCCACHE_GHA_ENABLED: "true"
+  RUSTC_WRAPPER: "sccache"
+
+jobs:
+  build-linux:
+    name: Build Linux (${{matrix.name}})
+    runs-on: ${{matrix.runner}}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: GCC x86_64
+            runner: ubuntu-latest
+            preset: gcc
+            artifact_arch: x86_64
+          - name: GCC aarch64
+            runner: ubuntu-24.04-arm
+            preset: gcc
+            artifact_arch: aarch64
+          # - name: Clang x86_64
+          #   runner: ubuntu-latest
+          #   preset: clang
+          #   artifact_arch: x86_64
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install ninja-build clang lld openssl libcurl4-openssl-dev \
+            zlib1g-dev libglu1-mesa-dev libdbus-1-dev libvulkan-dev libxi-dev libxrandr-dev libasound2-dev \
+            libpulse-dev libudev-dev libpng-dev libncurses5-dev libx11-xcb-dev libfreetype-dev \
+            libxinerama-dev libxcursor-dev python3-markupsafe libgtk-3-dev libssl-dev \
+            libxss-dev libfuse2
+
+      - name: Setup sccache
+        uses: mozilla-actions/sccache-action@v0.0.9
+
+      - name: Configure CMake
+        run: cmake --preset x-linux-ci-${{matrix.preset}}
+
+      - name: Build
+        run: cmake --build --preset x-linux-ci-${{matrix.preset}}
+
+      - name: Generate AppImage
+        run: ci/build-appimage.sh
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: dusk-${{env.DUSK_VERSION}}-linux-${{matrix.preset}}-${{matrix.artifact_arch}}
+          path: |
+            build/install/Dusk-*.AppImage
+            build/install/debug.tar.*
+
+
+  build-apple:
+    name: Build Apple (${{matrix.name}})
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: AppleClang macOS universal
+            platform: macos
+            preset: x-macos-ci
+            artifact_name: macos-appleclang-universal
+          # - name: AppleClang iOS arm64 # TODO enable when CI is free
+          #   platform: ios
+          #   preset: x-ios-ci
+          #   artifact_name: ios-appleclang-arm64
+          # - name: AppleClang tvOS arm64 # TODO enable when CI is free
+          #   platform: tvos
+          #   preset: x-tvos-ci
+          #   artifact_name: tvos-appleclang-arm64
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Update Homebrew
+        if: matrix.platform == 'tvos'
+        run: |
+          brew update
+          brew upgrade --formula
+
+      - name: Install dependencies
+        run: brew install cmake ninja
+
+      - name: Install markupsafe
+        if: matrix.platform == 'tvos'
+        run: pip3 install --break-system-packages markupsafe
+
+      - name: Install Rust iOS target
+        if: matrix.platform == 'ios'
+        run: rustup target add aarch64-apple-ios
+
+      - name: Install Rust tvOS target
+        if: matrix.platform == 'tvos'
+        run: |
+          rustup toolchain install nightly
+          rustup target add --toolchain nightly aarch64-apple-tvos
+
+      - name: Setup sccache
+        uses: mozilla-actions/sccache-action@v0.0.9
+
+      - name: Configure CMake
+        run: cmake --preset ${{matrix.preset}}
+
+      - name: Build
+        run: cmake --build --preset ${{matrix.preset}}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: dusk-${{env.DUSK_VERSION}}-${{matrix.artifact_name}}
+          path: |
+            build/install/Dusk.app
+            build/install/debug.tar.*
+
+  build-windows:
+    name: Build Windows (${{matrix.name}})
+    runs-on: ${{matrix.runner}}
+
+    env:
+      BUILD_DIR: C:\build
+      SCCACHE_DIR: C:\sccache
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: MSVC x86_64
+            runner: windows-latest
+            preset: msvc
+            msvc_arch: amd64
+            vcpkg_arch: x64
+            artifact_arch: x86_64
+          - name: MSVC arm64
+            runner: windows-11-arm
+            preset: arm64-msvc
+            msvc_arch: arm64
+            vcpkg_arch: arm64
+            artifact_arch: arm64
+          # - name: Clang x86_64
+          #   runner: windows-latest
+          #   preset: clang
+          #   msvc_arch: amd64
+          #   vcpkg_arch: x64
+          #   artifact_arch: x86_64
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Enable Visual Studio environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{matrix.msvc_arch}}
+
+      # msvc-dev-cmd sets VCPKG_ROOT, set it back
+      - name: Override VCPKG_ROOT
+        run: echo "VCPKG_ROOT=C:\vcpkg" >> $env:GITHUB_ENV
+
+      - name: Setup sccache
+        uses: mozilla-actions/sccache-action@v0.0.9
+
+      - name: Install dependencies
+        run: |
+          choco install ninja
+          vcpkg install zlib:${{matrix.vcpkg_arch}}-windows-static bzip2:${{matrix.vcpkg_arch}}-windows-static `
+            zstd:${{matrix.vcpkg_arch}}-windows-static liblzma:${{matrix.vcpkg_arch}}-windows-static `
+            freetype:${{matrix.vcpkg_arch}}-windows-static
+
+      - name: Configure CMake
+        run: cmake --preset x-windows-ci-${{matrix.preset}}
+
+      - name: Build
+        run: cmake --build --preset x-windows-ci-${{matrix.preset}}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: dusk-${{env.DUSK_VERSION}}-win32-msvc-${{matrix.artifact_arch}}
+          path: |
+            ${{env.BUILD_DIR}}/install/*.exe
+            ${{env.BUILD_DIR}}/install/debug.7z
