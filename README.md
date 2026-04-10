@@ -2,22 +2,22 @@
 
 ### Building
 #### Prerequisites
-* [CMake 3.30+](https://cmake.org)
+* [CMake 3.25+](https://cmake.org)
     * Windows: Install `CMake Tools` in Visual Studio
     * macOS: `brew install cmake`
 * [Python 3+](https://python.org)
     * Windows: [Microsoft Store](https://go.microsoft.com/fwlink?linkID=2082640)
         * Verify it's added to `%PATH%` by typing `python` in `cmd`.
     * macOS: `brew install python@3`
-* **[Windows]** [Visual Studio 2022 Community](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx)
+* **[Windows]** [Visual Studio 2026 Community](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx)
     * Select `C++ Development` and verify the following packages are included:
-        * `Windows 10 SDK`
+        * `Windows 11 SDK`
         * `CMake Tools`
         * `C++ Clang Compiler`
         * `C++ Clang-cl`
-* **[macOS]** [Xcode 11.5+](https://developer.apple.com/xcode/download/)
-* **[Linux]** Actively tested on Ubuntu 20.04, Arch Linux & derivatives.
-    * Ubuntu 20.04+ packages
+* **[macOS]** [Xcode 16.4+](https://developer.apple.com/xcode/download/)
+* **[Linux]** Actively tested on Ubuntu 24.04, Arch Linux & derivatives.
+    * Ubuntu 24.04+ packages
       ```
       build-essential curl git ninja-build clang lld zlib1g-dev libcurl4-openssl-dev \
       libglu1-mesa-dev libdbus-1-dev libvulkan-dev libxi-dev libxrandr-dev libasound2-dev libpulse-dev \
@@ -39,27 +39,57 @@
 #### Setup
 Clone and initialize the Dusk repository
 ```sh
-git clone --recursive https://github.com/TakaRikka/dusk.git
+git clone --recursive https://github.com/TwilitRealm/dusk.git
 cd dusk
 git pull
-git submodule update --recursive
+git submodule update --init --recursive
 ```
 
 #### Building
-**Visual Studio (Recommended for Windows)**
+
+**CLion (Windows / macOS / Linux)**
+
+Open the project directory in CLion. Enable the appropriate presets for your platform:
+
+![CLion](assets/clion.png)
+
+**Visual Studio (Windows)**
+
+Open the project directory in Visual Studio. The CMake configuration will be loaded automatically.
+
+**ninja (macOS)**
+
 ```sh
-cmake -B build/dusk -G "Visual Studio 17 2022" -A x64 # Win32 for 32bit
+cmake --preset macos-default-relwithdebinfo
+cmake --build --preset macos-default-relwithdebinfo
 ```
 
-**Visual Studio Code with ninja**
+Alternate presets available:
+- `macos-default-debug`: Clang, Debug
 
-Project has support for the CMakeTools extension with variants and has a debug launch target
+**ninja (Linux)**
 
-**ninja (Windows/macOS/Linux)**
 ```sh
-cmake -B build/dusk -GNinja
-ninja -C build/dusk
+cmake --preset linux-default-relwithdebinfo
+cmake --build --preset linux-default-relwithdebinfo
 ```
+
+Alternate presets available:
+- `linux-default-debug`: GCC, Debug
+- `linux-clang-relwithdebinfo`: Clang, RelWithDebInfo
+- `linux-clang-debug`: Clang, Debug
+
+**ninja (Windows)**
+
+```sh
+cmake --preset windows-msvc-relwithdebinfo
+cmake --build --preset windows-msvc-relwithdebinfo
+```
+
+Alternate presets available:
+- `windows-msvc-debug`: MSVC, Debug
+- `windows-clang-relwithdebinfo`: Clang-cl, RelWithDebInfo
+- `windows-clang-debug`: Clang-cl, Debug
 
 #### Running
 Pass the disc image as a positional argument. Supported formats: ISO (GCM), RVZ, WIA, WBFS, CISO, GCZ
