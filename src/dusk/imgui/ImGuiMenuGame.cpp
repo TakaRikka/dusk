@@ -16,11 +16,16 @@
 #include "m_Do/m_Do_graphic.h"
 
 #include <aurora/gfx.h>
+#if __APPLE__
+#include <TargetConditionals.h>
+#endif
 
 namespace dusk {
     void ImGuiMenuGame::ToggleFullscreen() {
+#if !__APPLE__ && !TARGET_OS_OSX
         getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
         VISetWindowFullscreen(getSettings().video.enableFullscreen);
+#endif
         config::Save();
     }
 
@@ -35,9 +40,11 @@ namespace dusk {
             ImGui::Separator();
 
             if (ImGui::BeginMenu("Graphics")) {
+#if !__APPLE__ && !TARGET_OS_OSX
                 if (ImGui::MenuItem("Toggle Fullscreen", hotkeys::TOGGLE_FULLSCREEN)) {
                     ToggleFullscreen();
                 }
+#endif
 
                 if (ImGui::MenuItem("Default Window Size")) {
                     getSettings().video.enableFullscreen.setValue(false);
