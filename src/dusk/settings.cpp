@@ -41,7 +41,7 @@ UserSettings g_userSettings = {
         // Graphics
         .enableBloom {"game.enableBloom", true},
         .useWaterProjectionOffset {"game.useWaterProjectionOffset", false},
-        .shadowScale{"game.shadowScale", 1},
+        .shadowScale {"game.shadowScale", 1},
 
         // Audio
         .noLowHpSound {"game.noLowHpSound", false},
