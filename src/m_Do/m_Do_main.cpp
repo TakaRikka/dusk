@@ -381,7 +381,7 @@ int game_main(int argc, char* argv[]) {
         arg_options.add_options()
             ("l,log-level", "Log level from " + std::to_string(AuroraLogLevel::LOG_DEBUG) + " to " + std::to_string(AuroraLogLevel::LOG_FATAL), cxxopts::value<uint8_t>()->default_value("0"))
             ("h,help", "Print usage")
-            ("dvd", "Path to DVD image file", cxxopts::value<std::string>()->default_value("game.iso"))
+            ("dvd", "Path to DVD image file", cxxopts::value<std::string>())
             ("backend", "Graphics API backend to use (auto, d3d12, metal, vulkan, null)", cxxopts::value<std::string>())
             ("cvar", "Override configuration variables without modifying config", cxxopts::value<std::vector<std::string>>());
 
@@ -441,25 +441,37 @@ int game_main(int argc, char* argv[]) {
     dusk::audio::SetMasterVolume(dusk::getSettings().audio.masterVolume / 100.0f);
     dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);
 
-    // pre game launch ui main loop
-    if (!launchUILoop()) {
-        aurora_shutdown();
-        return 0;
-    }
-
     std::string dvd_path;
+    bool dvd_opened = false;
     if (parsed_arg_options.count("dvd")) {
         dvd_path = parsed_arg_options["dvd"].as<std::string>();
-    } else {
+        DuskLog.info("Loading DVD image from command line: {}", dvd_path);
+        dvd_opened = aurora_dvd_open(dvd_path.c_str());
+        if (!dvd_opened) {
+            DuskLog.warn("Failed to open DVD image from command line: {}, opening prelaunch UI", dvd_path);
+        } else {
+            dusk::getSettings().backend.isoPath.setValue(dvd_path);
+            dusk::config::Save();
+            dusk::IsGameLaunched = true;
+        }
+    }
+
+    if (!dvd_opened) {
+        // pre game launch ui main loop
+        if (!launchUILoop()) {
+            aurora_shutdown();
+            return 0;
+        }
+
         dvd_path = dusk::getSettings().backend.isoPath;
 
         if (dvd_path.empty()) {
             DuskLog.fatal("No DVD image specified, unable to boot!");
         }
-    }
-    DuskLog.info("Loading DVD image: {}", dvd_path);
-    if (!aurora_dvd_open(dvd_path.c_str())) {
-        DuskLog.fatal("Failed to open DVD image: {}", dvd_path);
+        DuskLog.info("Loading DVD image: {}", dvd_path);
+        if (!aurora_dvd_open(dvd_path.c_str())) {
+            DuskLog.fatal("Failed to open DVD image: {}", dvd_path);
+        }
     }
 
     OSInit();
