@@ -4,6 +4,10 @@
 
 #include "tracy/Tracy.hpp"
 
+#if ANDROID
+#include "android/log.h"
+#endif
+
 bool StubLogEnabled = true;
 
 using namespace std::literals::string_view_literals;
@@ -32,6 +36,39 @@ static bool IsForStubLog(const char* message) {
     return false;
 }
 
+#if ANDROID
+void aurora_log_callback(AuroraLogLevel level, const char* module, const char* message,
+                         unsigned int len) {
+    ZoneScoped;
+    if (StubLogEnabled && level != LOG_FATAL && IsForStubLog(message)) {
+        dusk::SendToStubLog(level, module, message);
+        return;
+    }
+
+    int android_log_level = 0;
+    switch (level) {
+    case LOG_DEBUG:
+        android_log_level = ANDROID_LOG_DEBUG;
+        break;
+    case LOG_INFO:
+        android_log_level = ANDROID_LOG_INFO;
+        break;
+    case LOG_WARNING:
+        android_log_level = ANDROID_LOG_WARN;
+        break;
+    case LOG_ERROR:
+        android_log_level = ANDROID_LOG_ERROR;
+        break;
+    case LOG_FATAL:
+        android_log_level = ANDROID_LOG_FATAL;
+        break;
+    }
+    __android_log_print(android_log_level, module, "%s\n", message);
+    if (level == LOG_FATAL) {
+        abort();
+    }
+}
+#else
 void aurora_log_callback(AuroraLogLevel level, const char* module, const char* message,
                          unsigned int len) {
     ZoneScoped;
@@ -67,5 +104,7 @@ void aurora_log_callback(AuroraLogLevel level, const char* module, const char* m
         abort();
     }
 }
+#endif
+
 
 aurora::Module DuskLog("dusk");
