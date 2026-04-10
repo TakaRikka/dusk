@@ -75,6 +75,7 @@ struct UserSettings {
         ConfigVar<std::string> isoPath;
         ConfigVar<std::string> graphicsBackend;
         ConfigVar<bool> skipPreLaunchUI;
+        ConfigVar<bool> showPipelineCompilation;
     } backend;
 };
 
