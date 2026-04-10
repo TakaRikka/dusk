@@ -94,7 +94,7 @@ Alternate presets available:
 #### Running
 Pass the disc image as a positional argument. Supported formats: ISO (GCM), RVZ, WIA, WBFS, CISO, GCZ
 ```sh
-build/dusk/dusk /path/to/game.rvz
+build/{preset}/dusk /path/to/game.rvz
 ```
 If no path is specified, Dusk defaults to `game.iso` in the current working directory.
 
