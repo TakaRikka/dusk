@@ -1,8 +1,0 @@
-_prolog = .text:0x00000000; // type:function size:0x2C scope:global
-_epilog = .text:0x0000002C; // type:function size:0x2C scope:global
-_unresolved = .text:0x00000058; // type:function size:0x20 scope:global
-ModuleProlog = .text:0x00000078; // type:function size:0x14 scope:global
-ModuleEpilog = .text:0x0000008C; // type:function size:0x10 scope:global
-_ctors = .ctors:0x00000000; // type:label scope:global
-_dtors = .dtors:0x00000000; // type:label scope:global
-g_fpcPfLst_ProfileList = .data:0x00000000; // type:object size:0xC64 scope:global
