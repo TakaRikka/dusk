@@ -32,7 +32,9 @@
 #include "dusk/gx_helper.h"
 #include "dusk/logging.h"
 #include "f_ap/f_ap_game.h"
+#include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera_mng.h"
+#include "f_pc/f_pc_name.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
@@ -1678,6 +1680,13 @@ static void captureScreenPerspDrawInfo(JPADrawInfo& info) {
 
 static void drawItem3D() {
     ZoneScoped;
+    // FRAME INTERP NOTE: Title screen needs 0.0f while everything else that runs through this is -100.0f.
+    // Running presentation faster than logic revealed the problem. Thanks, Nintendo.
+    if (fopAcM_SearchByName(fpcNm_TITLE_e) != nullptr) {
+        dMenu_Collect3D_c::setViewPortOffsetY(0.0f);
+    } else {
+        dMenu_Collect3D_c::setViewPortOffsetY(-100.0f);
+    }
     Mtx item_mtx;
     dMenu_Collect3D_c::setupItem3D(item_mtx);
 

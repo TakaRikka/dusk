@@ -5,7 +5,6 @@
 #include "d/d_s_play.h"
 #include "d/d_demo.h"
 #include "d/d_pane_class_alpha.h"
-#include "d/d_menu_collect.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/d_com_inf_game.h"
@@ -159,8 +158,6 @@ int daTitle_c::Execute() {
     if (fopOvlpM_IsPeek()) {
         return 1;
     }
-
-    dMenu_Collect3D_c::setViewPortOffsetY(0.0f);
 
     if (mDoRst::isReset()) {
         return 1;
