@@ -4086,6 +4086,8 @@ void dKyr_drawStar(Mtx drawMtx, u8** tex) {
 #endif
 
     if (star_packet->mEffectNum != 0) {
+        IF_DUSK(GXPushDebugGroup("dKyr_drawStar"));
+
         if (strcmp(dComIfGp_getStartStageName(), "F_SP200") == 0 && dComIfG_play_c::getLayerNo(0) == 0) {
             gwolf_howl_stage = true;
         } else if (strcmp(dComIfGp_getStartStageName(), "F_SP127") == 0 ||
@@ -4128,23 +4130,27 @@ void dKyr_drawStar(Mtx drawMtx, u8** tex) {
         mDoLib_project(&moon_pos, &moon_proj);
         #endif
 
+        // Dusk optimization: we use vertex color rather than GX_TEVREG0 to set star color.
+        // This allows us to merge all the stars into a single draw.
         GXSetNumChans(1);
-        GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
+        GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, DUSK_IF_ELSE(GX_SRC_VTX, GX_SRC_REG), GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
         GXSetNumTexGens(0);
         GXSetNumTevStages(1);
         GXSetTevColor(GX_TEVREG0, color_reg0);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, DUSK_IF_ELSE(GX_CC_RASC, GX_CC_C0));
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, DUSK_IF_ELSE(GX_CA_RASA, GX_CA_A0));
         GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
         GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
         GXSetNumIndStages(0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+        IF_DUSK(GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0));
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+        IF_DUSK(GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT));
 
         Mtx rotMtx;
         MTXRotRad(rotMtx, 'Z', DEG_TO_RAD(rot));
@@ -4204,6 +4210,15 @@ void dKyr_drawStar(Mtx drawMtx, u8** tex) {
         int sp44 = 0;
         f32 var_f28 = 0.0f;
 
+#if TARGET_PC
+        // Dusk optimization: we submit a single large draw call, rather than a thousand.
+        u32 vertCount = 3 * star_packet->mEffectNum;
+        if (draw_mirrored) {
+            vertCount *= 2;
+        }
+        GXBegin(GX_TRIANGLES, GX_VTXFMT0, vertCount);
+#endif
+
         for (int i = 0; i < star_packet->mEffectNum; i++) {
             f32 var_f31;
             cXyz star_pos;
@@ -4254,7 +4269,7 @@ void dKyr_drawStar(Mtx drawMtx, u8** tex) {
                 color_reg0.a = 70.0f + ((i & 63) * 2);
             }
 
-            GXSetTevColor(GX_TEVREG0, color_reg0);
+            IF_NOT_DUSK(GXSetTevColor(GX_TEVREG0, color_reg0));
 
             cXyz sp68;
             cXyz sp5C;
@@ -4295,6 +4310,33 @@ void dKyr_drawStar(Mtx drawMtx, u8** tex) {
             }
 
             // if a star is too close to the moon then avoid drawing
+#if TARGET_PC
+            // Dusk optimization change: since we submit one large draw, we don't know the count of moon-hidden stars in advance.
+            // So, just set those to have zero alpha.
+            if (moon_dist_to_star <= moon_threshold) {
+                color_reg0.a = 0;
+            }
+
+            GXPosition3f32(sp68.x + (var_f31 * (pos[0].x - spBC.x)), sp68.y + (var_f31 * (pos[0].y - spBC.y)), sp68.z + (var_f31 * (pos[0].z - spBC.z)));
+            GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a);
+            GXPosition3f32(sp68.x + (var_f31 * (pos[1].x - spBC.x)), sp68.y + (var_f31 * (pos[1].y - spBC.y)), sp68.z + (var_f31 * (pos[1].z - spBC.z)));
+            GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a);
+            GXPosition3f32(sp68.x + (var_f31 * (pos[2].x - spBC.x)), sp68.y + (var_f31 * (pos[2].y - spBC.y)), sp68.z + (var_f31 * (pos[2].z - spBC.z)));
+            GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a);
+
+            if (draw_mirrored) {
+                sp5C.x = spBC.x + star_pos.x;
+                sp5C.y = spBC.y - star_pos.y;
+                sp5C.z = spBC.z + star_pos.z;
+
+                GXPosition3f32(sp5C.x + (var_f31 * (pos[0].x - spBC.x)), sp5C.y + (var_f31 * (pos[0].y - spBC.y)), sp5C.z + (var_f31 * (pos[0].z - spBC.z)));
+                GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a);
+                GXPosition3f32(sp5C.x + (var_f31 * (pos[1].x - spBC.x)), sp5C.y + (var_f31 * (pos[1].y - spBC.y)), sp5C.z + (var_f31 * (pos[1].z - spBC.z)));
+                GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a);
+                GXPosition3f32(sp5C.x + (var_f31 * (pos[2].x - spBC.x)), sp5C.y + (var_f31 * (pos[2].y - spBC.y)), sp5C.z + (var_f31 * (pos[2].z - spBC.z)));
+                GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a);
+            }
+#else
             if (moon_dist_to_star > moon_threshold) {
                 GXBegin(GX_TRIANGLES, GX_VTXFMT0, 3);
                 GXPosition3f32(sp68.x + (var_f31 * (pos[0].x - spBC.x)), sp68.y + (var_f31 * (pos[0].y - spBC.y)), sp68.z + (var_f31 * (pos[0].z - spBC.z)));
@@ -4314,7 +4356,13 @@ void dKyr_drawStar(Mtx drawMtx, u8** tex) {
                     GXEnd();
                 }
             }
+#endif
         }
+
+#if TARGET_PC
+        GXEnd();
+        GXPopDebugGroup();
+#endif
 
         J3DShape::resetVcdVatCache();
     }

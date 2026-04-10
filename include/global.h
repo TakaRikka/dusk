@@ -217,4 +217,15 @@ using std::isnan;
 
 #define CRASH(msg, ...) OSPanic(__FILE__, __LINE__, "%s", msg, ##__VA_ARGS__)
 
+// Some basic macros that are more convenient than putting down #if blocks for one-line changes.
+#if TARGET_PC
+#define IF_DUSK(statement) statement
+#define IF_NOT_DUSK(statement)
+#define DUSK_IF_ELSE(dusk, orig) dusk
+#else
+#define IF_DUSK(statement)
+#define IF_NOT_DUSK(statement) statement
+#define DUSK_IF_ELSE(dusk, orig) orig
+#endif
+
 #endif
