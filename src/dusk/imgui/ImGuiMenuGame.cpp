@@ -268,6 +268,7 @@ namespace dusk {
 
         // buttons panel
         const float uiButtonSize = 40 * scale;
+        ImVec2 btnSize(110.0f * scale, 30.0f * scale);
 
         ImGuiBeginGroupPanel("Buttons", ImVec2(150 * scale, 20 * scale));
 
@@ -290,10 +291,14 @@ namespace dusk {
                 if (m_controllerConfig.m_isReading && m_controllerConfig.m_pendingButtonMapping == &btnMappingList[i]) {
                     dispName = fmt::format("Press a Key...##{}", btnName);
                 } else {
-                    dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(btnMappingList[i].nativeButton), i);
+                    const char* nativeName = PADGetNativeButtonName(btnMappingList[i].nativeButton);
+                    if (nativeName == nullptr) {
+                        nativeName = "[unbound]";
+                    }
+                    dispName = fmt::format("{0}##-{1}", nativeName, i);
                 }
                 bool pressed = ImGui::Button(dispName.c_str(),
-                    ImVec2(100.0f * scale, 20.0f * scale));
+                    btnSize);
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -333,7 +338,7 @@ namespace dusk {
                     dispName = fmt::format("{0}##-{1}", PADGetNativeAxisName(axisMappingList[trigger].nativeAxis), trigger);
                 }
                 bool pressed = ImGui::Button(dispName.c_str(),
-                    ImVec2(100.0f * scale, 20.0f * scale));
+                    btnSize);
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -410,7 +415,7 @@ namespace dusk {
                         dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(axisMappingList[axis].nativeButton), axis);
                     }
                 }
-                bool pressed = ImGui::Button(dispName.c_str(), ImVec2(100.0f * scale, 20.0f * scale));
+                bool pressed = ImGui::Button(dispName.c_str(), btnSize);
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -472,7 +477,7 @@ namespace dusk {
                         dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(axisMappingList[axis].nativeButton), axis);
                     }
                 }
-                bool pressed = ImGui::Button(fmt::format("{0}##sub{1}", dispName, label).c_str(), ImVec2(100.0f * scale, 20.0f * scale));
+                bool pressed = ImGui::Button(fmt::format("{0}##sub{1}", dispName, label).c_str(), btnSize);
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;

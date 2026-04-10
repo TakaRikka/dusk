@@ -7,7 +7,7 @@
 
 namespace dusk {
     void TextCenter(const std::string& text) {
-        float font_size = ImGui::GetFontSize() * text.size() / 2;
+        float font_size = ImGui::CalcTextSize(text.c_str()).x;
         ImGui::SameLine(ImGui::GetWindowSize().x / 2 - font_size + (font_size / 2));
 
         ImGui::TextUnformatted(text.c_str());
