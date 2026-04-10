@@ -62,6 +62,7 @@
 #include "SDL3/SDL_filesystem.h"
 #include "cxxopts.hpp"
 #include "dusk/config.hpp"
+#include "dusk/imgui/ImGuiConsole.hpp"
 #include "tracy/Tracy.hpp"
 
 // --- GLOBALS ---
@@ -83,6 +84,7 @@ const int audioHeapSize = 0x14D800;
 
 #if TARGET_PC
 bool dusk::IsShuttingDown = false;
+bool dusk::IsGameLaunched = false;
 #endif
 
 s32 LOAD_COPYDATE(void*) {
@@ -116,6 +118,43 @@ AuroraInfo auroraInfo;
 AuroraStats dusk::lastFrameAuroraStats;
 float dusk::frameUsagePct = 0.0f;
 const char* configPath;
+
+AuroraWindowSize preLaunchUIWindowSize;
+
+bool launchUILoop() {
+    while (!dusk::IsGameLaunched) {
+        const AuroraEvent* event = aurora_update();
+        while (event != nullptr && event->type != AURORA_NONE) {
+            switch (event->type) {
+            case AURORA_WINDOW_RESIZED:
+                preLaunchUIWindowSize = event->windowSize;
+                break;
+            case AURORA_DISPLAY_SCALE_CHANGED:
+                dusk::ImGuiEngine_Initialize(event->windowSize.scale);
+                break;
+            case AURORA_EXIT:
+                return false;
+            }
+
+            event++;
+        }
+
+        if (!aurora_begin_frame()) {
+            DuskLog.debug("aurora_begin_frame returned false, skipping draw this frame");
+            continue;
+        }
+
+        dusk::g_imguiConsole.PreDraw();
+
+        dusk::g_imguiConsole.PostDraw();
+
+        aurora_end_frame();
+    }
+
+    DuskLog.info("Game Launched!");
+
+    return true;
+}
 
 void main01(void) {
     OS_REPORT("\x1b[m");
@@ -155,6 +194,8 @@ void main01(void) {
 
     OSReport("Entering Main Loop (main01)...\n");
 
+    if (preLaunchUIWindowSize.width != 0)
+        mDoGph_gInf_c::setWindowSize(preLaunchUIWindowSize);
 
     do {
         // 1. Update Window Events
@@ -243,6 +284,7 @@ static AuroraBackend ParseAuroraBackend(const std::string& value) {
 
 static void aurora_imgui_init_callback(const AuroraWindowSize* size) {
     dusk::ImGuiEngine_Initialize(size->scale);
+    dusk::ImGuiEngine_AddTextures();
 }
 
 static void ApplyCVarOverrides(const cxxopts::OptionValue& option) {
@@ -380,7 +422,22 @@ int game_main(int argc, char* argv[]) {
         fmt::format("Dusk {} [{}]", DUSK_WC_DESCRIBE, dusk::backend_name(auroraInfo.backend))
             .c_str());
 
-    const auto& dvd_path = parsed_arg_options["dvd"].as<std::string>();
+    // pre game launch ui main loop
+    if (!launchUILoop()) {
+        aurora_shutdown();
+        return 0;
+    }
+
+    std::string dvd_path;
+    if (parsed_arg_options.count("dvd")) {
+        dvd_path = parsed_arg_options["dvd"].as<std::string>();
+    }else {
+        dvd_path = dusk::getSettings().backend.isoPath;
+
+        if (dvd_path.empty()) {
+            DuskLog.fatal("No DVD image specified, unable to boot!");
+        }
+    }
     DuskLog.info("Loading DVD image: {}", dvd_path);
     if (!aurora_dvd_open(dvd_path.c_str())) {
         DuskLog.fatal("Failed to open DVD image: {}", dvd_path);

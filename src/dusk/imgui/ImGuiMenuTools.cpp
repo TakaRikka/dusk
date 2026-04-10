@@ -10,6 +10,7 @@
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_horse.h"
 #include "d/d_com_inf_game.h"
+#include "dusk/main.h"
 #include "dusk/dusk.h"
 #include "m_Do/m_Do_main.h"
 
@@ -40,15 +41,18 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
-            ImGui::MenuItem("Process Management", hotkeys::SHOW_PROCESS_MANAGEMENT, &m_showProcessManagement);
-            ImGui::MenuItem("Debug Overlay", hotkeys::SHOW_DEBUG_OVERLAY, &m_showDebugOverlay);
-            ImGui::MenuItem("Heap Viewer", hotkeys::SHOW_HEAP_VIEWER, &m_showHeapOverlay);
-            ImGui::MenuItem("Stub Log", hotkeys::SHOW_STUB_LOG, &m_showStubLog);
-            ImGui::MenuItem("Debug Camera", hotkeys::SHOW_CAMERA_DEBUG, &m_showCameraOverlay);
-            ImGui::MenuItem("Map Loader", nullptr, &m_showMapLoader);
-            ImGui::MenuItem("Player Info", nullptr, &m_showPlayerInfo);
-            ImGui::MenuItem("Save Editor", nullptr, &m_showSaveEditor);
-            ImGui::MenuItem("Audio Debug", hotkeys::SHOW_AUDIO_DEBUG, &m_showAudioDebug);
+            if (dusk::IsGameLaunched) {
+                ImGui::MenuItem("Process Management", hotkeys::SHOW_PROCESS_MANAGEMENT, &m_showProcessManagement);
+                ImGui::MenuItem("Debug Overlay", hotkeys::SHOW_DEBUG_OVERLAY, &m_showDebugOverlay);
+                ImGui::MenuItem("Heap Viewer", hotkeys::SHOW_HEAP_VIEWER, &m_showHeapOverlay);
+                ImGui::MenuItem("Stub Log", hotkeys::SHOW_STUB_LOG, &m_showStubLog);
+                ImGui::MenuItem("Debug Camera", hotkeys::SHOW_CAMERA_DEBUG, &m_showCameraOverlay);
+                ImGui::MenuItem("Map Loader", nullptr, &m_showMapLoader);
+                ImGui::MenuItem("Player Info", nullptr, &m_showPlayerInfo);
+                ImGui::MenuItem("Save Editor", nullptr, &m_showSaveEditor);
+                ImGui::MenuItem("Audio Debug", hotkeys::SHOW_AUDIO_DEBUG, &m_showAudioDebug);
+            }
+
             ImGui::MenuItem("OSReport Force", nullptr, &OSReportReallyForceEnable);
             ImGui::EndMenu();
         }

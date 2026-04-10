@@ -9,6 +9,7 @@ class ImGuiEngine {
 public:
     static ImFont* fontNormal;
     static ImFont* fontLarge;
+    static ImFont* fontExtraLarge;
     static ImTextureID duskIcon;
 };
 

@@ -8,6 +8,7 @@
 #include "ImGuiMenuEnhancements.hpp"
 #include "ImGuiMenuGame.hpp"
 #include "ImGuiMenuTools.hpp"
+#include "ImGuiPreLaunchWindow.hpp"
 #include "imgui.h"
 
 namespace dusk {
@@ -36,6 +37,7 @@ private:
 
     ImGuiMenuGame m_menuGame;
     ImGuiMenuEnhancements m_menuEnhancements;
+    ImGuiPreLaunchWindow m_preLaunchWindow;
 
     // Keep always last
     ImGuiMenuTools m_menuTools;
@@ -53,6 +55,8 @@ bool ShowCornerContextMenu(int& corner, int avoidCorner);
 void ImGuiStringViewText(std::string_view text);
 void ImGuiBeginGroupPanel(const char* name, const ImVec2& size);
 void ImGuiEndGroupPanel();
+void ImGuiTextCenter(std::string_view text);
+bool ImGuiButtonCenter(std::string_view text);
 float ImGuiScale();
 }  // namespace dusk
 

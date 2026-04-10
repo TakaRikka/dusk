@@ -32,7 +32,28 @@ bool AssetExists(const std::string& path) {
 
 ImFont* ImGuiEngine::fontNormal;
 ImFont* ImGuiEngine::fontLarge;
-ImTextureID ImGuiEngine::duskIcon;
+ImFont* ImGuiEngine::fontExtraLarge;
+ImTextureID ImGuiEngine::duskIcon = 0;
+
+inline ImFont* CreateFont(float size, bool hasFontFile,  const std::string& fontPath) {
+    ImGuiIO& io = ImGui::GetIO();
+
+    ImFontConfig fontConfig{};
+    fontConfig.SizePixels = size;
+    snprintf(static_cast<char*>(fontConfig.Name), sizeof(fontConfig.Name),
+             "Noto Mono Regular, %dpx", static_cast<int>(fontConfig.SizePixels));
+    ImFont* outFont =
+        hasFontFile ?
+            io.Fonts->AddFontFromFileTTF(fontPath.c_str(), fontConfig.SizePixels, &fontConfig) :
+            nullptr;
+    if (outFont == nullptr) {
+        if (hasFontFile) {
+            DuskLog.warn("Failed to load font '{}': {}", fontPath, SDL_GetError());
+        }
+        outFont = io.Fonts->AddFontDefault(&fontConfig);
+    }
+    return outFont;
+}
 
 void ImGuiEngine_Initialize(float scale) {
     ImGui::GetCurrentContext();
@@ -77,6 +98,8 @@ void ImGuiEngine_Initialize(float scale) {
         }
         ImGuiEngine::fontLarge = io.Fonts->AddFontDefault(&fontConfig);
     }
+
+    ImGuiEngine::fontExtraLarge = CreateFont(std::floor(40.f * scale), hasFontFile, fontPath);
 
     auto& style = ImGui::GetStyle();
     style = {};  // Reset sizes
@@ -190,6 +213,9 @@ Icon GetIcon() {
 }
 
 void ImGuiEngine_AddTextures() {
+    if (ImGuiEngine::duskIcon != 0)
+        return;
+
     auto icon = GetIcon();
     if (icon.data == nullptr || icon.width == 0 || icon.height == 0) {
         ImGuiEngine::duskIcon = 0;

@@ -107,6 +107,12 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
+            if (ImGui::BeginMenu("Misc")) {
+                config::ImGuiCheckbox("Skip Pre-Launch UI", getSettings().backend.skipPreLaunchUI);
+
+                ImGui::EndMenu();
+            }
+
             ImGui::EndMenu();
         }
 

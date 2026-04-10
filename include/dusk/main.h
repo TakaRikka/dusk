@@ -3,6 +3,7 @@
 
 namespace dusk {
     extern bool IsShuttingDown;
+    extern bool IsGameLaunched;
 }
 
 #endif  // DUSK_MAIN_H
