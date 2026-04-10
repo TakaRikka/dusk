@@ -95,6 +95,14 @@ option(DUSK_BUILD_WARNINGS "Enable compiler warnings (off by default)")
 option(DUSK_SELECTED_OPT "If on, selected parts of the project will be compiled with optimizations on Debug, intending to make the game run at 30 FPS. Note for MSVC: you will need to remove '/RTC1' from your debug flags in CMake.")
 option(DUSK_MOVIE_SUPPORT "If on, compile against libjpeg-turbo to enable THP file decoding" ON)
 
+if(ANDROID)
+    set(DUSK_MOVIE_SUPPORT OFF)
+    set(NOD_COMPRESS_BZIP2 OFF CACHE BOOL "" FORCE)
+    set(NOD_COMPRESS_LZMA OFF CACHE BOOL "" FORCE)
+    set(NOD_COMPRESS_ZLIB OFF CACHE BOOL "" FORCE)
+    set(NOD_COMPRESS_ZSTD OFF CACHE BOOL "" FORCE)
+endif ()
+
 if (DUSK_MOVIE_SUPPORT)
     find_package(libjpeg-turbo QUIET)
     if (libjpeg-turbo_FOUND)
@@ -258,10 +266,22 @@ add_library(game STATIC
     $<TARGET_OBJECTS:game_debug>)
 target_link_libraries(game PUBLIC ${GAME_LIBS})
 
-add_executable(dusk src/dusk/main.cpp)
+if(ANDROID)
+    add_library(dusk SHARED src/dusk/main.cpp)
+    set_target_properties(dusk PROPERTIES OUTPUT_NAME main)
+else ()
+    add_executable(dusk src/dusk/main.cpp)
+endif ()
+
 target_compile_definitions(dusk PRIVATE TARGET_PC AVOID_UB=1 VERSION=0)
 target_include_directories(dusk PRIVATE include)
 target_link_libraries(dusk PRIVATE game aurora::main)
+
+if (ANDROID)
+    # SDLActivity loads SDL_main via dlsym on Android. Since aurora::main is a static
+    # archive, force an undefined reference so the linker keeps the SDL_main object.
+    target_link_options(dusk PRIVATE "-Wl,-u,SDL_main")
+endif ()
 
 add_custom_command(TARGET dusk POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory

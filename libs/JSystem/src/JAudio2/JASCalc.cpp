@@ -33,7 +33,11 @@ void JASCalc::bcopyfast(const void* src, void* dest, u32 size) {
     }
 }
 
+#if ANDROID
+void JASCalc::_bcopy(const void* src, void* dest, u32 size) {
+#else
 void JASCalc::bcopy(const void* src, void* dest, u32 size) {
+#endif
     u32* usrc;
     u32* udest;
 
@@ -90,7 +94,11 @@ void JASCalc::bzerofast(void* dest, u32 size) {
     }
 }
 
+#if ANDROID
+void JASCalc::_bzero(void* dest, u32 size) {
+#else
 void JASCalc::bzero(void* dest, u32 size) {
+#endif
     u32* udest;
     u8* bdest = (u8*)dest;
     if ((size & 0x1f) == 0 && (reinterpret_cast<uintptr_t>(dest) & 0x1f) == 0) {

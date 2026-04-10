@@ -54,7 +54,7 @@ void *_memcpy(void* dest, void const* src, int n) {
 }
 
 void DCZeroRange(void* addr, uint32_t nBytes) {
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || ANDROID
     memset(addr, 0, nBytes);
 #else
     bzero(addr, nBytes);

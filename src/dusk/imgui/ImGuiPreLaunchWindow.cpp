@@ -98,7 +98,7 @@ void ImGuiPreLaunchWindow::drawMainMenu() {
 
     ImGui::PushFont(ImGuiEngine::fontLarge);
 
-    if (m_selectedIsoPath.empty() || !SDL_GetPathInfo(m_selectedIsoPath.c_str(), nullptr)) {
+    if (!isSelectedPathValid()) {
         if (ImGuiButtonCenter("Select disc image...")) {
             SDL_ShowOpenFileDialog(&fileDialogCallback, this, aurora::window::get_sdl_window(),
                                    skGameDiscFileFilters.data(), int(skGameDiscFileFilters.size()),
