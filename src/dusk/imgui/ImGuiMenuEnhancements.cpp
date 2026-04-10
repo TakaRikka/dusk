@@ -81,6 +81,11 @@ namespace dusk {
                                       "that causes ~6px ghost artifacts in water reflections");
                 }
 
+                config::ImGuiSliderInt("Shadow Quality", getSettings().game.shadowScale, 1, 8, "x%d");
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Enhances the shadow quality so they are less pixelated");
+                }
+
                 ImGui::EndMenu();
             }
 
