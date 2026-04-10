@@ -62,7 +62,8 @@ UserSettings g_userSettings = {
     .backend = {
         .isoPath {"backend.isoPath", ""},
         .graphicsBackend {"backend.graphicsBackend", "auto"},
-        .skipPreLaunchUI {"backend.skipPreLaunchUI", false}
+        .skipPreLaunchUI {"backend.skipPreLaunchUI", false},
+        .showPipelineCompilation{"backend.showPipelineCompilation", false}
     }
 };
 
@@ -113,6 +114,7 @@ void registerSettings() {
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.graphicsBackend);
     Register(g_userSettings.backend.skipPreLaunchUI);
+    Register(g_userSettings.backend.showPipelineCompilation);
 }
 
 // Transient settings
