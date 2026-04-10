@@ -366,10 +366,19 @@ static constexpr PADDefaultMapping defaultPadMapping = {
     },
 };
 
+static bool mainCalled = false;
+
 // =========================================================================
 // PC ENTRY POINT
 // =========================================================================
 int game_main(int argc, char* argv[]) {
+    // On iOS, when connected to an external monitor, SDLUIKitSceneDelegate scene:willConnectToSession:
+    // can call our main function again. Explicitly guard against this reinitialization.
+    if (mainCalled) {
+        return 0;
+    }
+    mainCalled = true;
+
     dusk::registerSettings();
     dusk::config::FinishRegistration();
 
