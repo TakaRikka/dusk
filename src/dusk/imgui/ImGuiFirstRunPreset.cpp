@@ -8,25 +8,13 @@
 
 namespace dusk {
 
-static void ApplyPresetVanilla() {
+static void ApplyPresetStandard() {
     auto& s = getSettings();
-    // todo: lock aspect ratio
+    s.video.lockAspectRatio.setValue(true);
 }
 
-static void ApplyPresetDefault() {
+static void ApplyPresetHD() {
     auto& s = getSettings();
-    // todo: unlock aspect ratio
-    // todo: instant saving
-    s.game.hideTvSettingsScreen.setValue(true);
-}
-
-static void ApplyPresetQoL() {
-    auto& s = getSettings();
-    // todo: unlock aspect ratio
-    // todo: instant saving
-    // todo: more save files
-    // todo: autosave
-    s.game.enableQuickTransform.setValue(true);
     s.game.hideTvSettingsScreen.setValue(true);
     s.game.noReturnRupees.setValue(true);
     s.game.disableRupeeCutscenes.setValue(true);
@@ -34,10 +22,8 @@ static void ApplyPresetQoL() {
     s.game.fastClimbing.setValue(true);
     s.game.noMissClimbing.setValue(true);
     s.game.fastTears.setValue(true);
-    s.game.noLowHpSound.setValue(true);
-    s.game.midnasLamentNonStop.setValue(true);
-    s.game.enableFastIronBoots.setValue(true);
-    s.game.canTransformAnywhere.setValue(true);
+    s.game.biggerWallets.setValue(true);
+    s.game.invertCameraXAxis.setValue(true);
 }
 
 // =========================================================================
@@ -69,30 +55,24 @@ void ImGuiFirstRunPreset::draw() {
 
     int chosen = -1;
 
-    if (ImGui::BeginTable("##presets", 5, ImGuiTableFlags_None)) {
+    if (ImGui::BeginTable("##presets", 3, ImGuiTableFlags_None)) {
         ImGui::TableSetupColumn(nullptr, ImGuiTableColumnFlags_WidthStretch);
         ImGui::TableSetupColumn(nullptr, ImGuiTableColumnFlags_WidthFixed, 16.0f * ImGuiScale());
         ImGui::TableSetupColumn(nullptr, ImGuiTableColumnFlags_WidthStretch);
-        ImGui::TableSetupColumn(nullptr, ImGuiTableColumnFlags_WidthFixed, 16.0f * ImGuiScale());
-        ImGui::TableSetupColumn(nullptr, ImGuiTableColumnFlags_WidthStretch);
+
 
         ImGui::TableNextRow();
 
         ImGui::PushFont(ImGuiEngine::fontLarge);
 
         ImGui::TableSetColumnIndex(0);
-        if (ImGui::Button("Vanilla##btn", ImVec2(ImGui::GetContentRegionAvail().x, 80.0f * ImGuiScale()))) {
+        if (ImGui::Button("Standard##btn", ImVec2(ImGui::GetContentRegionAvail().x, 80.0f * ImGuiScale()))) {
             chosen = 0;
         }
 
         ImGui::TableSetColumnIndex(2);
-        if (ImGui::Button("Default##btn", ImVec2(ImGui::GetContentRegionAvail().x, 80.0f * ImGuiScale()))) {
+        if (ImGui::Button("HD##btn", ImVec2(ImGui::GetContentRegionAvail().x, 80.0f * ImGuiScale()))) {
             chosen = 1;
-        }
-
-        ImGui::TableSetColumnIndex(4);
-        if (ImGui::Button("Quality of Life##btn", ImVec2(ImGui::GetContentRegionAvail().x, 80.0f * ImGuiScale()))) {
-            chosen = 2;
         }
 
         ImGui::PopFont();
@@ -101,23 +81,18 @@ void ImGuiFirstRunPreset::draw() {
 
         ImGui::TableSetColumnIndex(0);
         ImGui::Spacing();
-        ImGui::TextWrapped("All enhancements disabled. Plays closest to the original game; good for speedrunning or simple nostalgia!");
+        ImGui::TextWrapped("All enhancements disabled to match the GameCube version. Good for speedrunning or simple nostalgia!");
 
         ImGui::TableSetColumnIndex(2);
         ImGui::Spacing();
-        ImGui::TextWrapped("Some enhancements enabled, maintaining a vanilla feel. A good starting point for most players!");
-
-        ImGui::TableSetColumnIndex(4);
-        ImGui::Spacing();
-        ImGui::TextWrapped("Many quality of life enhancements enabled. Good for seasoned players!");
+        ImGui::TextWrapped("Some enhancements enabled to match the HD version. A good starting point for most players!");
 
         ImGui::EndTable();
     }
 
     if (chosen >= 0) {
-        if (chosen == 0) ApplyPresetVanilla();
-        if (chosen == 1) ApplyPresetDefault();
-        if (chosen == 2) ApplyPresetQoL();
+        if (chosen == 0) ApplyPresetStandard();
+        if (chosen == 1) ApplyPresetHD();
 
         getSettings().backend.wasPresetChosen.setValue(true);
         config::Save();
