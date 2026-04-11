@@ -19,10 +19,6 @@
 #include "SDL3/SDL_timer.h"
 #endif
 
-#include "dusk/logging.h"
-
-constexpr auto DUSK_FRAME_PERIOD = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::duration<double>(1001.0 / 30000.0));
-
 class Limiter {
   using delta_clock = std::chrono::high_resolution_clock;
   using duration_t = std::chrono::nanoseconds;
