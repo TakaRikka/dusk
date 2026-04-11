@@ -5585,7 +5585,7 @@ void dFile_select3D_c::toItem3Dpos(f32 param_0, f32 param_1, f32 param_2, cXyz* 
     Mtx adStack_98;
     Mtx auStack_c8;
     param_0 = (2.0f * ((param_0 - mDoGph_gInf_c::getMinXF()) / mDoGph_gInf_c::getWidthF()) - 1.0f);
-    param_1 = (2.0f * ((param_1 - -100.0f) / 448.0f) - 1.0f);
+    param_1 = (2.0f * ((param_1 - -100.0f) / FB_HEIGHT_BASE) - 1.0f);
     calcViewMtx(adStack_98);
     cMtx_inverse(adStack_98, auStack_c8);
     f32 tangent = std::tan(M_PI / 8.0f);

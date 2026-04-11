@@ -398,7 +398,7 @@ static int daE_TK2_Execute(e_tk2_class* i_this) {
     cXyz cStack_94;
     cXyz cStack_a0;
 
-    if (i_this->mExecuteState == 0x00) {
+    if (i_this->mActionTimer[3] == 0x00) {
         dBgS_ObjGndChk_Spl ground_check;
         cStack_94 = actor->current.pos;
         cStack_94.y += 200.0f;
@@ -602,7 +602,7 @@ static int daE_TK2_Create(fopAc_ac_c* actor) {
         i_this->mSound.init(&actor->current.pos, &actor->eyePos, 0x3, 0x1);
         i_this->mSound.setEnemyName("E_tk2");
         i_this->mAtInfo.mpSound = &i_this->mSound;
-        i_this->mExecuteState = 0x14;
+        i_this->mActionTimer[3] = 0x14;
         daE_TK2_Execute(i_this);
     }
     return phase;

@@ -104,12 +104,8 @@ public:
     /* 0x18 */ f32 mWindowPosX;
     /* 0x1C */ f32 mWindowPosY;
     /* 0x20 */ f32 mWindowScale;
-    /* 0x24 */ f32 mOptionTypeBGPosX[4];
-    /* 0x34 */ f32 mTVsettingPosX;
-    /* 0x38 */ f32 mPointerCalibrationPosX;
-    /* 0x3C */ f32 mOptionTypeBGPosY[4];
-    /* 0x4C */ f32 mTVsettingPosY;
-    /* 0x50 */ f32 mPointerCalibrationPosY;
+    /* 0x24 */ f32 mOptionTypeBGPosX[6];
+    /* 0x3C */ f32 mOptionTypeBGPosY[6];
     /* 0x54 */ f32 mBarScale[2]; // 0: mSelectBarScale | 1: mUnselectBarScale
     /* 0x5C */ f32 mBackgroundPosY;
     /* 0x60 */ f32 mArrowOffsetX;
@@ -547,8 +543,7 @@ public:
     /* 0x1C */ f32 mVesselTalkPosY;
     /* 0x20 */ f32 mVesselPosX_4x3;
     /* 0x24 */ f32 mVesselPosY_4x3;
-    /* 0x28 */ f32 mVesselAlpha[3];
-    /* 0x34 */ f32 mDropAlpha;
+    /* 0x28 */ f32 mVesselAlpha[4];
     /* 0x38 */ JUtility::TColor mDropOnColorWhite;
     /* 0x3C */ JUtility::TColor mDropOnColorBlack;
     /* 0x40 */ JUtility::TColor mDropOffColorWhite;

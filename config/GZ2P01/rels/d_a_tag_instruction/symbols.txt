@@ -1,9 +1,0 @@
-_prolog = .text:0x00000000; // type:function size:0x2C scope:global
-_epilog = .text:0x0000002C; // type:function size:0x2C scope:global
-_unresolved = .text:0x00000058; // type:function size:0x20 scope:global
-daTagInst_Create__FP10fopAc_ac_c = .text:0x00000078; // type:function size:0x50 scope:global
-daTagInst_Delete__FP11daTagInst_c = .text:0x000000C8; // type:function size:0x30 scope:global
-_ctors = .ctors:0x00000000; // type:label scope:global
-_dtors = .dtors:0x00000000; // type:label scope:global
-l_daTagInst_Method = .data:0x00000000; // type:object size:0x20 scope:global
-g_profile_Tag_Instruction = .data:0x00000020; // type:object size:0x30 scope:global

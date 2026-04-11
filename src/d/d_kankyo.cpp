@@ -10994,9 +10994,9 @@ void dKy_depth_dist_set(void* process_p) {
 
             if ((sp30.x >= 0.0f && sp30.x < FB_WIDTH) && (sp30.y >= 0.0f &&
                 #if DEBUG
-                sp30.y < 608.0f
+                sp30.y < FB_WIDTH_BASE
                 #else
-                sp30.y < 600.0f
+                sp30.y < (FB_WIDTH_BASE - 8)
                 #endif
             )) {
                 cXyz sp18;

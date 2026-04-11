@@ -20,7 +20,6 @@
 #include "f_pc/f_pc_pause.h"
 #include "f_pc/f_pc_priority.h"
 #include "m_Do/m_Do_controller_pad.h"
-#include <cstdio>
 
 #include "tracy/Tracy.hpp"
 
@@ -64,7 +63,14 @@ void fpcM_Management(fpcM_ManagementFunc i_preExecuteFn, fpcM_ManagementFunc i_p
                 l_dvdError = false;
             }
 
-            cAPIGph_Painter();
+#ifdef TARGET_PC
+            // Frame interpolation: call moved to m_Do_main
+            if (!dusk::getSettings().game.enableFrameInterpolation) {
+#endif
+                cAPIGph_Painter();
+#ifdef TARGET_PC
+            }
+#endif
 
             if (!dPa_control_c::isStatus(1)) {
                 fpcDt_Handler();
@@ -153,4 +159,3 @@ void* fpcM_JudgeInLayer(fpc_ProcID i_layerID, fpcCtIt_JudgeFunc i_judgeFunc, voi
 
     return NULL;
 }
-

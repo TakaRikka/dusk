@@ -53,6 +53,7 @@ struct UserSettings {
         // Graphics
         ConfigVar<bool> enableBloom;
         ConfigVar<bool> useWaterProjectionOffset;
+        ConfigVar<bool> enableFrameInterpolation;
 
         // Audio
         ConfigVar<bool> noLowHpSound;
@@ -70,6 +71,13 @@ struct UserSettings {
         // Controls
         ConfigVar<bool> enableTurboKeybind;
     } game;
+
+    struct {
+        ConfigVar<std::string> isoPath;
+        ConfigVar<std::string> graphicsBackend;
+        ConfigVar<bool> skipPreLaunchUI;
+        ConfigVar<bool> showPipelineCompilation;
+    } backend;
 };
 
 UserSettings& getSettings();

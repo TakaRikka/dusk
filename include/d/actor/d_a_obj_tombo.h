@@ -55,8 +55,7 @@ private:
     /* 0x710 */ bool mIsHitByBoomerang;
     /* 0x711 */ u8 mAction;
     /* 0x712 */ u8 field_0x712;
-    /* 0x714 */ s16 field_0x714[2];
-    /* 0x718 */ s16 field_0x718;
+    /* 0x714 */ s16 field_0x714[3];
     /* 0x71C */ f32 field_0x71c;
     /* 0x720 */ f32 field_0x720;
     /* 0x724 */ s16 field_0x724;

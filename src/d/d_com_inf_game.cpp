@@ -1018,7 +1018,7 @@ bool dComIfG_inf_c::baseCsr_c::navi_c::draw(f32 param_1, f32 param_2, u8 param_3
     f32 f27 = f31 - field_0x5c;
     field_0x58 = f29;
     field_0x5c = f31;
-    cXyz spdc(param_1 - 304.0f, param_2 - 224.0f, 0.0f);
+    cXyz spdc(param_1 - FB_WIDTH_BASE / 2, param_2 - FB_HEIGHT_BASE / 2, 0.0f);
 
     f32 target = param_3 != 0 ? 1.5f : 0.0f;
 

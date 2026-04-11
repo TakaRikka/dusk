@@ -1340,6 +1340,7 @@ set(DUSK_FILES
         src/dusk/config.cpp
         src/dusk/settings.cpp
         src/dusk/logging.cpp
+        src/dusk/frame_interpolation.cpp
         src/dusk/layout.cpp
         src/dusk/stubs.cpp
         src/dusk/endian.cpp
@@ -1360,6 +1361,8 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiMenuTools.hpp
         src/dusk/imgui/ImGuiMenuEnhancements.cpp
         src/dusk/imgui/ImGuiMenuEnhancements.hpp
+        src/dusk/imgui/ImGuiPreLaunchWindow.cpp
+        src/dusk/imgui/ImGuiPreLaunchWindow.hpp
         src/dusk/imgui/ImGuiProcessOverlay.cpp
         src/dusk/imgui/ImGuiCameraOverlay.cpp
         src/dusk/imgui/ImGuiHeapOverlay.cpp

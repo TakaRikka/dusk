@@ -18,6 +18,8 @@
 #include <aurora/gfx.h>
 #include <SDL3/SDL_gamepad.h>
 
+#include "dusk/main.h"
+
 namespace dusk {
     void ImGuiMenuGame::ToggleFullscreen() {
         getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
@@ -29,12 +31,6 @@ namespace dusk {
 
     void ImGuiMenuGame::draw() {
         if (ImGui::BeginMenu("Game")) {
-            if (ImGui::MenuItem("Reset", hotkeys::DO_RESET)) {
-                JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
-            }
-
-            ImGui::Separator();
-
             if (ImGui::BeginMenu("Graphics")) {
                 if (ImGui::MenuItem("Toggle Fullscreen", hotkeys::TOGGLE_FULLSCREEN)) {
                     ToggleFullscreen();
@@ -65,6 +61,14 @@ namespace dusk {
                     }
 
                     config::Save();
+                }
+
+                config::ImGuiCheckbox("Native Bloom", getSettings().game.enableBloom);
+
+                config::ImGuiCheckbox("Water Projection Offset", getSettings().game.useWaterProjectionOffset);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Adds GC-specific -0.01 transS offset\n"
+                                      "that causes ~6px ghost artifacts in water reflections.");
                 }
 
                 ImGui::EndMenu();
@@ -108,11 +112,25 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
+            if (ImGui::BeginMenu("Interface")) {
+                config::ImGuiCheckbox("Skip Pre-Launch UI", getSettings().backend.skipPreLaunchUI);
+                config::ImGuiCheckbox("Show Pipeline Compilation", getSettings().backend.showPipelineCompilation);
+
+                ImGui::EndMenu();
+            }
+
+            ImGui::Separator();
+
+            if (ImGui::MenuItem("Reset", hotkeys::DO_RESET)) {
+                JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
+            }
+
+            if (ImGui::MenuItem("Exit")) {
+                dusk::IsRunning = false;
+            }
+
             ImGui::EndMenu();
         }
-
-        windowInputViewer();
-        windowControllerConfig();
     }
 
     static void drawVirtualStick(const char* id, const ImVec2& stick) {
@@ -293,7 +311,7 @@ namespace dusk {
             ImGuiWindowFlags_NoResize |
             ImGuiWindowFlags_AlwaysAutoResize;
 
-        ImGui::SetNextWindowBgAlpha(0.65f);
+        // ImGui::SetNextWindowBgAlpha(0.65f);
 
         if (!ImGui::Begin("Controller Config", &m_showControllerConfig, windowFlags)) {
             ImGui::End();
@@ -376,6 +394,7 @@ namespace dusk {
 
         // buttons panel
         const float uiButtonSize = 40 * scale;
+        ImVec2 btnSize(110.0f * scale, 30.0f * scale);
 
         ImGuiBeginGroupPanel("Buttons", ImVec2(150 * scale, 20 * scale));
 
@@ -399,10 +418,14 @@ namespace dusk {
                 if (m_controllerConfig.m_isReading && m_controllerConfig.m_pendingButtonMapping == &btnMappingList[i]) {
                     dispName = fmt::format("Press a Key...##{}", btnName);
                 } else {
-                    dispName = fmt::format("{0}##-{1}", GetNameForGamepadButton(gamepad, btnMappingList[i].nativeButton), i);
+                    const char* nativeName = GetNameForGamepadButton(gamepad, btnMappingList[i].nativeButton);
+                    if (nativeName == nullptr) {
+                        nativeName = "[unbound]";
+                    }
+                    dispName = fmt::format("{0}##-{1}", nativeName, i);
                 }
                 bool pressed = ImGui::Button(dispName.c_str(),
-                    ImVec2(100.0f * scale, 20.0f * scale));
+                    btnSize);
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -442,7 +465,7 @@ namespace dusk {
                     dispName = fmt::format("{0}##-{1}", PADGetNativeAxisName(axisMappingList[trigger].nativeAxis), trigger);
                 }
                 bool pressed = ImGui::Button(dispName.c_str(),
-                    ImVec2(100.0f * scale, 20.0f * scale));
+                    btnSize);
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -519,7 +542,7 @@ namespace dusk {
                         dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(axisMappingList[axis].nativeButton), axis);
                     }
                 }
-                bool pressed = ImGui::Button(dispName.c_str(), ImVec2(100.0f * scale, 20.0f * scale));
+                bool pressed = ImGui::Button(dispName.c_str(), btnSize);
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -581,7 +604,7 @@ namespace dusk {
                         dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(axisMappingList[axis].nativeButton), axis);
                     }
                 }
-                bool pressed = ImGui::Button(fmt::format("{0}##sub{1}", dispName, label).c_str(), ImVec2(100.0f * scale, 20.0f * scale));
+                bool pressed = ImGui::Button(fmt::format("{0}##sub{1}", dispName, label).c_str(), btnSize);
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;

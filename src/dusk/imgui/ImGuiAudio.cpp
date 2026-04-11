@@ -253,3 +253,9 @@ void dusk::ImGuiMenuTools::ShowAudioDebug() {
 
     ImGui::End();
 }
+
+void dusk::ImGuiMenuTools::ShowSaveEditor() {
+    if (m_showSaveEditor) {
+        m_saveEditor.draw(m_showSaveEditor);
+    }
+}

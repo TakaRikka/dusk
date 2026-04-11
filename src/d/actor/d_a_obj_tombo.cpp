@@ -411,7 +411,7 @@ void daObjTOMBO_c::BoomChk() {
                 speedF = 5.0f;
                 field_0x71c = 5.0f;
                 mIsHitByBoomerang = false;
-                field_0x718 = 100;
+                field_0x714[2] = 100;
                 mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Tombo", 6), 2, 5.0f, 1.0f,
                                0.0f, -1.0f);
                 home.pos = current.pos;
@@ -422,7 +422,7 @@ void daObjTOMBO_c::BoomChk() {
                 mIsHitByBoomerang = false;
                 speedF = 5.0f;
                 field_0x71c = 5.0f;
-                field_0x718 = 100;
+                field_0x714[2] = 100;
                 mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Tombo", 6), 2, 5.0f, 1.0f,
                                          0.0f, -1.0f);
                 current.pos.y = old.pos.y = playerPos.y + 100.0f;
