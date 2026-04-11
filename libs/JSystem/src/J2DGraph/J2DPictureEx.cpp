@@ -78,9 +78,21 @@ bool J2DPictureEx::prepareTexture(u8 param_0) {
     return true;
 }
 
+#if TARGET_PC
+bool checkAlphaCull(const J2DPictureEx* pic) {
+    return pic->mColorAlpha == 0;
+}
+#endif
+
 void J2DPictureEx::drawSelf(f32 param_0, f32 param_1, f32 (*param_2)[3][4]) {
     GX_AND_TRACY_SCOPED("J2DPictureEx::drawSelf")
     if (mMaterial != NULL) {
+#if TARGET_PC
+        if (checkAlphaCull(this)) {
+            return;
+        }
+#endif
+
         mMaterial->setGX();
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
