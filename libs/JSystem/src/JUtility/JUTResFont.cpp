@@ -435,10 +435,10 @@ void JUTResFont::loadImage(int code, GXTexMapID id){
         mHeight = cellRow * cellH;
 
 #if TARGET_PC
-        const auto found = mGlyphTextures->textures.find(code);
+        const auto found = mGlyphTextures->textures.find(pageIdx);
         GXTexObj* texObj;
         if (found == mGlyphTextures->textures.end()) {
-            texObj = &mGlyphTextures->textures[code];
+            texObj = &mGlyphTextures->textures[pageIdx];
             void* pImg = &mpGlyphBlocks[i]->data[pageIdx * mpGlyphBlocks[i]->textureSize];
             GXInitTexObj(texObj, pImg, mpGlyphBlocks[i]->textureWidth,
                          mpGlyphBlocks[i]->textureHeight, (GXTexFmt)(u16)mpGlyphBlocks[i]->textureFormat,
