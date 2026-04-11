@@ -10,6 +10,10 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
+
+#include <typeindex>
+
+#include "absl/container/flat_hash_map.h"
 #include "d/d_s_play.h"
 #include "dusk/frame_interpolation.h"
 #include "dusk/gx_helper.h"
@@ -1923,14 +1927,32 @@ int dDlst_list_c::set(dDlst_base_c**& p_start, dDlst_base_c**& p_end, dDlst_base
     return 1;
 }
 
+#if TARGET_PC && (TRACY_ENABLE || PARTIAL_DEBUG)
+static absl::flat_hash_map<std::type_index, const char*> typeDrawNames;
+
+static const char* getTypeDrawName(dDlst_base_c* dlst) {
+    const auto& info = typeid(*dlst);
+    auto& elem = typeDrawNames[info];
+    if (elem) [[likely]] {
+        return elem;
+    }
+
+    const auto size = snprintf(nullptr, 0, "%s::draw()", info.name());
+    // Note: pointer is intentionally never freed, Tracy needs it.
+    const auto buf = static_cast<char*>(malloc(size+1));
+    snprintf(buf, size+1, "%s::draw()", info.name());
+    elem = buf;
+    return buf;
+}
+#endif
+
 void dDlst_list_c::draw(dDlst_base_c** p_start, dDlst_base_c** p_end) {
     for (; p_start < p_end; p_start++) {
         dDlst_base_c* dlst = *p_start;
 
-#if DEBUG && TARGET_PC
-        char buf[64];
-        snprintf(buf, sizeof(buf), "%s::draw()", typeid(dlst).name());
-        GXScopedDebugGroup scope(buf);
+#if TARGET_PC && (TRACY_ENABLE || PARTIAL_DEBUG)
+        const auto name = getTypeDrawName(dlst);
+        GX_AND_TRACY_SCOPED(name);
 #endif
         dlst->draw();
     }
