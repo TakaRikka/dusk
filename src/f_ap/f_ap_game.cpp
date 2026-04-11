@@ -723,6 +723,7 @@ void fapGm_After() {
     fopCamM_Management();
 }
 
+#ifdef TARGET_PC
 static void fapGm_Before() {
     dusk::frame_interp::begin_record();
 }
@@ -731,6 +732,7 @@ static void fapGm_AfterRecord() {
     dusk::frame_interp::end_record();
     fapGm_After();
 }
+#endif
 
 void fapGm_Execute() {
     ZoneScoped;
@@ -762,7 +764,11 @@ void fapGm_Execute() {
     }
 #endif
 
+#ifdef TARGET_PC
     fpcM_Management(fapGm_Before, fapGm_AfterRecord);
+#else
+    fpcM_ManagementFunc(NULL, fapGm_After);
+#endif
     cCt_Counter(0);
 }
 

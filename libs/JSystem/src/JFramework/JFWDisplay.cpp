@@ -234,6 +234,7 @@ void JFWDisplay::endGX() {
             }
         } else {
             mFader->control();
+            mFader->draw();
         }
 #else
         mFader->control();

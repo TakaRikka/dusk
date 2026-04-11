@@ -59,6 +59,11 @@ void JUTFader::control() {
 
         break;
     }
+
+#ifndef TARGET_PC
+    // Frame interpolation: draw call moved to JFWDisplay
+    draw();
+#endif
 }
 
 void JUTFader::draw() {

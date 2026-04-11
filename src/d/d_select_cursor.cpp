@@ -256,7 +256,6 @@ void dSelect_cursor_c::draw() {
 
 void dSelect_cursor_c::update() {
     f32 fVar1 = 1.0f;
-    const u32 ui_advance_ticks = dusk::frame_interp::get_presentation_ui_advance_ticks();
     if (field_0xb6 == 3) {
         fVar1 = 0.5f;
     }
@@ -272,7 +271,10 @@ void dSelect_cursor_c::update() {
     if (mUpdateFlag) {
         if (field_0x30) {
             if (chkPlayAnime(0)) {
+#ifdef TARGET_PC
+                const u32 ui_advance_ticks = dusk::frame_interp::get_presentation_ui_advance_ticks();
                 for (u32 tick = 0; tick < ui_advance_ticks; ++tick) {
+#endif
                     if (mNameIdx == 1) {
                         field_0x44 += mpCursorHIO->field_0x8 * fVar1;
                     } else {
@@ -282,7 +284,9 @@ void dSelect_cursor_c::update() {
                     if (field_0x44 >= field_0x30->getFrameMax()) {
                         field_0x44 -= field_0x30->getFrameMax();
                     }
+#ifdef TARGET_PC
                 }
+#endif
 
                 field_0x30->setFrame(field_0x44);
                 setBpkAnimation(field_0x30);
@@ -298,7 +302,10 @@ void dSelect_cursor_c::update() {
         for (int i = 0; i < 2; i++) {
             if (field_0x34[i]) {
                 if ((i == 0 && chkPlayAnime(2)) || (i == 1 && chkPlayAnime(3))) {
+#ifdef TARGET_PC
+                    const u32 ui_advance_ticks = dusk::frame_interp::get_presentation_ui_advance_ticks();
                     for (u32 tick = 0; tick < ui_advance_ticks; ++tick) {
+#endif
                         if (mNameIdx == 1) {
                             field_0x48[i] += mpCursorHIO->field_0x8 * fVar1;
                         } else {
@@ -307,7 +314,9 @@ void dSelect_cursor_c::update() {
                         if (field_0x48[i] >= field_0x34[i]->getFrameMax()) {
                             field_0x48[i] -= field_0x34[i]->getFrameMax();
                         }
+#ifdef TARGET_PC
                     }
+#endif
 
                     field_0x34[i]->setFrame(field_0x48[i]);
                 }
@@ -316,16 +325,21 @@ void dSelect_cursor_c::update() {
         }
 
         if (field_0x2C && chkPlayAnime(1)) {
+#ifdef TARGET_PC
+            const u32 ui_advance_ticks = dusk::frame_interp::get_presentation_ui_advance_ticks();
             for (u32 tick = 0; tick < ui_advance_ticks; ++tick) {
+#endif
                 if (mNameIdx == 1) {
-                        field_0x40 += mpCursorHIO->field_0x8 * fVar1;
-                    } else {
-                        field_0x40 += fVar1;
-                    }
-                    if (field_0x40 >= field_0x2C->getFrameMax()) {
-                        field_0x40 -= field_0x2C->getFrameMax();
-                    }
+                    field_0x40 += mpCursorHIO->field_0x8 * fVar1;
+                } else {
+                    field_0x40 += fVar1;
+                }
+                if (field_0x40 >= field_0x2C->getFrameMax()) {
+                    field_0x40 -= field_0x2C->getFrameMax();
+                }
+#ifdef TARGET_PC
             }
+#endif
 
             field_0x2C->setFrame(field_0x40);
             setBckAnimation(field_0x2C);
@@ -333,9 +347,14 @@ void dSelect_cursor_c::update() {
         }
 
         if (chkPlayAnime(1) && mNameIdx == 0) {
+#ifdef TARGET_PC
+            const u32 ui_advance_ticks = dusk::frame_interp::get_presentation_ui_advance_ticks();
             for (u32 tick = 0; tick < ui_advance_ticks; ++tick) {
+#endif
                 setCursorAnimation();
+#ifdef TARGET_PC
             }
+#endif
         }
 
         mpScreen->animation();

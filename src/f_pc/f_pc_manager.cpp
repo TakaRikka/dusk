@@ -64,8 +64,7 @@ void fpcM_Management(fpcM_ManagementFunc i_preExecuteFn, fpcM_ManagementFunc i_p
             }
 
 #ifdef TARGET_PC
-            // FRAME INTERP NOTE: cAPIGph_Painter() has been moved to m_Do_main
-            // so that it runs every frame
+            // Frame interpolation: call moved to m_Do_main
             if (!dusk::getSettings().game.enableFrameInterpolation) {
 #endif
                 cAPIGph_Painter();

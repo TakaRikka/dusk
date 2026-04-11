@@ -171,7 +171,6 @@ dMsgScrnLight_c::~dMsgScrnLight_c() {
 
 void dMsgScrnLight_c::draw(f32* i_anmFrame, f32 i_posX, f32 i_posY, f32 i_scaleX, f32 i_scaleY,
                            f32 i_alpha, u8 i_colorType) {
-    const u32 ui_advance_ticks = dusk::frame_interp::get_presentation_ui_advance_ticks();
     if (g_MsgScrnLight_HIO_c.mDebugON) {
         if (i_colorType < dMsgScrnLight_HIO_c::COLOR_MAX_e) {
             mpParent_c->setBlackWhite(JUtility::TColor(g_MsgScrnLight_HIO_c.mBlackR[i_colorType],
@@ -204,12 +203,17 @@ void dMsgScrnLight_c::draw(f32* i_anmFrame, f32 i_posX, f32 i_posY, f32 i_scaleX
     }
 
     if (mPlayAnim) {
+#ifdef TARGET_PC
+        const u32 ui_advance_ticks = dusk::frame_interp::get_presentation_ui_advance_ticks();
         for (u32 i = 0; i < ui_advance_ticks; ++i) {
+#endif
             *i_anmFrame += 1.0f;
             if (*i_anmFrame >= mpBck->getFrameMax()) {
                 *i_anmFrame = 0.0f;
             }
+#ifdef TARGET_PC
         }
+#endif
 
         mBckFrame = *i_anmFrame;
         mBpkFrame = *i_anmFrame;
@@ -221,17 +225,21 @@ void dMsgScrnLight_c::draw(f32* i_anmFrame, f32 i_posX, f32 i_posY, f32 i_scaleX
 void dMsgScrnLight_c::draw(f32* i_anmFrame, f32 i_posX, f32 i_posY, f32 i_scaleX, f32 i_scaleY,
                            f32 i_alpha, f32 i_anmRate, JUtility::TColor i_black,
                            JUtility::TColor i_white) {
-    const u32 ui_advance_ticks = dusk::frame_interp::get_presentation_ui_advance_ticks();
     mpParent_c->setBlackWhite(i_black, i_white);
 
     if (mPlayAnim) {
+#ifdef TARGET_PC
+        const u32 ui_advance_ticks = dusk::frame_interp::get_presentation_ui_advance_ticks();
         for (u32 i = 0; i < ui_advance_ticks; ++i) {
+#endif
             *i_anmFrame += i_anmRate;
 
             if (*i_anmFrame >= mpBck->getFrameMax()) {
                 *i_anmFrame = 0.0f;
             }
+#ifdef TARGET_PC
         }
+#endif
 
         mBckFrame = *i_anmFrame;
         mBpkFrame = *i_anmFrame;

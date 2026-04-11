@@ -253,6 +253,9 @@ void main01(void) {
         } else {
             accumulator = 0.0;
 
+            // Game Inputs
+            mDoCPd_c::read();
+
             // EXECUTE GAME LOGIC & RENDER
             // This calls mDoGph_Painter -> JFWDisplay -> GX Functions
             fapGm_Execute();
