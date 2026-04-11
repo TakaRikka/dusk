@@ -65,40 +65,38 @@ private:
 
 #if _WIN32
   void NanoSleep(const duration_t duration) {
-      static bool initialized = false;
-      static double countPerNs;
-      static size_t numSleeps = 0;
+    static bool initialized = false;
+    static double countPerNs;
+    static size_t numSleeps = 0;
 
-      // QueryPerformanceFrequency's result is constant, but calling it occasionally
-      // appears to stabilize QueryPerformanceCounter. Without it, the game drifts
-      // from 60hz to 144hz. (Cursed, but I suspect it's NVIDIA/G-SYNC related)
-      if (!initialized || numSleeps++ % 1000 == 0) {
-          LARGE_INTEGER freq;
-          if (QueryPerformanceFrequency(&freq) == 0) {
-              DuskLog.warn("QueryPerformanceFrequency failed: {}", GetLastError());
-              return;
-          }
-          countPerNs = static_cast<double>(freq.QuadPart) / 1e9;
-          initialized = true;
-          numSleeps = 0;
+    // QueryPerformanceFrequency's result is constant, but calling it occasionally
+    // appears to stabilize QueryPerformanceCounter. Without it, the game drifts
+    // from 60hz to 144hz. (Cursed, but I suspect it's NVIDIA/G-SYNC related)
+    if (!initialized || numSleeps++ % 1000 == 0) {
+      LARGE_INTEGER freq;
+      if (QueryPerformanceFrequency(&freq) == 0) {
+        DuskLog.warn("QueryPerformanceFrequency failed: {}", GetLastError());
+        return;
       }
+      countPerNs = static_cast<double>(freq.QuadPart) / 1e9;
+      initialized = true;
+      numSleeps = 0;
+    }
 
-      LARGE_INTEGER start, current;
-      QueryPerformanceCounter(&start);
-      LONGLONG ticksToWait = static_cast<LONGLONG>(duration.count() * countPerNs);
-      if (DWORD ms = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
-          ms > 1)
-      {
-          ::Sleep(ms - 1);
-      }
-      do {
-          QueryPerformanceCounter(&current);
+    LARGE_INTEGER start, current;
+    QueryPerformanceCounter(&start);
+    LONGLONG ticksToWait = static_cast<LONGLONG>(duration.count() * countPerNs);
+    if (DWORD ms = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count(); ms > 1) {
+      ::Sleep(ms - 1);
+    }
+    do {
+      QueryPerformanceCounter(&current);
 #if defined(_M_ARM64) || defined(_M_ARM)
-          __yield();
+      __yield();
 #else
-          _mm_pause();
+      _mm_pause();
 #endif
-      } while (current.QuadPart - start.QuadPart < ticksToWait);
+    } while (current.QuadPart - start.QuadPart < ticksToWait);
   }
 #else
   void NanoSleep(const duration_t duration) { SDL_DelayPrecise(duration.count()); }
