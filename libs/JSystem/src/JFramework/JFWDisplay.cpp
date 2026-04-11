@@ -17,6 +17,7 @@
 #include "dusk/gx_helper.h"
 #include "dusk/logging.h"
 #include "dusk/settings.h"
+#include "dusk/time.h"
 
 #include "SDL3/SDL_timer.h"
 #include "tracy/Tracy.hpp"
@@ -385,18 +386,12 @@ constexpr auto FRAME_PERIOD = std::chrono::duration_cast<std::chrono::nanosecond
     std::chrono::duration<double>(1001.0 / 30000.0));
 constexpr auto RETRACE_PERIOD = FRAME_PERIOD / 2;
 
-static void waitPrecise(Uint64& lastTime, Uint64 targetNs) {
-    const Uint64 now = SDL_GetTicksNS();
-    const Uint64 elapsed = now - lastTime;
-    if (elapsed < targetNs) {
-        const Uint64 sleepNs = targetNs - elapsed;
-        dusk::frameUsagePct =
-            100.0f * (1.0f - static_cast<float>(sleepNs) / static_cast<float>(targetNs));
-        SDL_DelayPrecise(sleepNs);
-    } else {
-        dusk::frameUsagePct = 100.0f;
-    }
-    lastTime = SDL_GetTicksNS();
+static void waitPrecise(Limiter& limiter, Uint64 targetNs) {
+    const auto ns = std::chrono::nanoseconds(targetNs);
+    const auto sleepTime = limiter.SleepTime(ns);
+    dusk::frameUsagePct =
+        100.0f * (1.0f - static_cast<float>(sleepTime.count()) / static_cast<float>(targetNs));
+    limiter.Sleep(ns);
 }
 #endif
 
@@ -413,8 +408,8 @@ static void waitForTick(u32 p1, u16 p2) {
 
     if (p1 != 0) {
 #if TARGET_PC
-        static Uint64 lastTime = SDL_GetTicksNS();
-        waitPrecise(lastTime, static_cast<Uint64>(OSTicksToMicroseconds(p1)) * 1000ULL);
+        static Limiter limiter;
+        waitPrecise(limiter, static_cast<Uint64>(OSTicksToMicroseconds(p1)) * 1000ULL);
 #else
         static OSTime nextTick = OSGetTime();
         OSTime time = OSGetTime();
@@ -427,8 +422,8 @@ static void waitForTick(u32 p1, u16 p2) {
     } else {
         u32 uVar1 = (p2 == 0) ? 1 : p2;
 #if TARGET_PC
-        static Uint64 lastTime = SDL_GetTicksNS();
-        waitPrecise(lastTime, static_cast<Uint64>((RETRACE_PERIOD * uVar1).count()));
+        static Limiter limiter;
+        waitPrecise(limiter, static_cast<Uint64>((RETRACE_PERIOD * uVar1).count()));
 #else
         static u32 nextCount = VIGetRetraceCount();
         OSMessage msg;
