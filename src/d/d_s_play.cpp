@@ -41,7 +41,6 @@
 
 #if TARGET_PC
 #include "dusk/memory.h"
-#include <dusk/config.hpp>
 #endif
 
 #if DEBUG
@@ -699,10 +698,6 @@ static BOOL l_pause;
 static f32 l_pauseFrame;
 static u8 lbl_8074CAE4;
 static u32 l_sceneChangeStartTick;
-#endif
-
-#if TARGET_PC
-BOOL firstTime = FALSE;
 #endif
 
 static int dScnPly_Execute(dScnPly_c* i_this) {

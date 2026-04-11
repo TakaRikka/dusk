@@ -162,7 +162,7 @@ int daTitle_c::Execute() {
     }
     #endif
 
-    #if PLATFORM_WII || PLATFORM_SHIELD
+#if PLATFORM_WII || PLATFORM_SHIELD
     mDoGph_gInf_c::resetDimming();
 #endif
 
