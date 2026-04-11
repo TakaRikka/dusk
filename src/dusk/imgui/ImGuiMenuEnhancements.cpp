@@ -14,48 +14,48 @@ namespace dusk {
 
                 config::ImGuiCheckbox("Bigger Wallets", getSettings().game.biggerWallets);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Wallet sizes are like in the HD version (500, 1000, 2000)");
+                    ImGui::SetTooltip("Wallet sizes are like in the HD version. (500, 1000, 2000)");
                 }
 
                 config::ImGuiCheckbox("No Rupee Returns", getSettings().game.noReturnRupees);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Always collect Rupees even if your Wallet is too full");
+                    ImGui::SetTooltip("Always collect Rupees even if your Wallet is too full.");
                 }
 
                 config::ImGuiCheckbox("Disable Rupee Cutscenes", getSettings().game.disableRupeeCutscenes);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Rupees won't play cutscenes after you've collected them the first time");
+                    ImGui::SetTooltip("Rupees won't play cutscenes after you've collected them the first time.");
                 }
 
                 config::ImGuiCheckbox("No Sword Recoil", getSettings().game.noSwordRecoil);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Link won't recoil when his sword hits walls");
+                    ImGui::SetTooltip("Link won't recoil when his sword hits walls.");
                 }
 
                 config::ImGuiCheckbox("Faster Climbing", getSettings().game.fastClimbing);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Quicker climbing on ladders and vines like the HD version");
+                    ImGui::SetTooltip("Quicker climbing on ladders and vines like the HD version.");
                 }
 
                 config::ImGuiCheckbox("No Climbing Miss Animation", getSettings().game.noMissClimbing);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Prevents Link from playing a struggle animation\n"
-                                      "when using the Clawshot on vines at a weird angle");
+                                      "when grabbing ledges or climbing on vines.");
                 }
 
                 config::ImGuiCheckbox("Faster Tears of Light", getSettings().game.fastTears);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Tears of Light dropped by Shadow Insects pop out faster like the HD version");
+                    ImGui::SetTooltip("Tears of Light dropped by Shadow Insects pop out faster like the HD version.");
                 }
 
                 config::ImGuiCheckbox("Hide TV Settings Screen", getSettings().game.hideTvSettingsScreen);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Hides the TV calibration screen shown when loading a save");
+                    ImGui::SetTooltip("Hides the TV calibration screen shown when loading a save.");
                 }
 
                 config::ImGuiCheckbox("Instant Saves", getSettings().game.instantSaves);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Skip the delay when writing to the Memory Card");
+                    ImGui::SetTooltip("Skip the delay when writing to the Memory Card.");
                 }
 
                 ImGui::EndMenu();
@@ -64,7 +64,7 @@ namespace dusk {
             if (ImGui::BeginMenu("Preferences")) {
                 config::ImGuiCheckbox("Mirror Mode", getSettings().game.enableMirrorMode);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Mirrors the world, matching the Wii version of the game");
+                    ImGui::SetTooltip("Mirrors the world, matching the Wii version of the game.");
                 }
 
                 config::ImGuiCheckbox("Invert Camera X Axis", getSettings().game.invertCameraXAxis);
@@ -91,12 +91,12 @@ namespace dusk {
             if (ImGui::BeginMenu("Audio")) {
                 config::ImGuiCheckbox("No Low HP Sound", getSettings().game.noLowHpSound);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Disable the beeping sound when having low health");
+                    ImGui::SetTooltip("Disable the beeping sound when having low health.");
                 }
 
                 config::ImGuiCheckbox("Non-Stop Midna's Lament", getSettings().game.midnasLamentNonStop);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Prevents enemy music while Midna's Lament is playing");
+                    ImGui::SetTooltip("Prevents enemy music while Midna's Lament is playing.");
                 }
 
                 ImGui::EndMenu();
@@ -107,7 +107,7 @@ namespace dusk {
 
                 config::ImGuiCheckbox("Can Transform Anywhere", getSettings().game.canTransformAnywhere);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Allows you to transform even if NPCs are looking");
+                    ImGui::SetTooltip("Allows you to transform even if NPCs are looking.");
                 }
 
                 config::ImGuiCheckbox("Fast Spinner", getSettings().game.fastSpinner);
@@ -128,7 +128,7 @@ namespace dusk {
 
                 config::ImGuiCheckbox("Instant Death", getSettings().game.instantDeath);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Any hit will instantly kill you");
+                    ImGui::SetTooltip("Any hit will instantly kill you.");
                 }
 
                 ImGui::EndMenu();
@@ -138,7 +138,7 @@ namespace dusk {
                 config::ImGuiCheckbox("Restore Wii 1.0 Glitches", getSettings().game.restoreWiiGlitches);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Restores patched glitches from Wii USA 1.0,\n"
-                                      "the first released version");
+                                      "the first released version.");
                 }
 
                 ImGui::EndMenu();
@@ -146,6 +146,10 @@ namespace dusk {
 
             if (ImGui::BeginMenu("Tools")) {
                 config::ImGuiCheckbox("Enable Turbo Key", getSettings().game.enableTurboKeybind);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Holding TAB will speed up the game.\n"
+                                      "This will not work with the \"Unlock Framerate\" enhancement.");
+                }
 
                 ImGui::EndMenu();
             }

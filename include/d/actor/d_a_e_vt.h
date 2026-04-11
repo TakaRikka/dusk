@@ -159,8 +159,7 @@ private:
     /* 0x00958 */ mDoExt_3DlineMat1_c mRope;
     /* 0x00994 */ cXyz field_0x994[100];
     /* 0x00E44 */ csXyz field_0xe44[100];
-    /* 0x0109C */ u8 mRopeCutStatus[10];
-    /* 0x010A6 */ u8 field_0x10A6[0x01100 - 0x010A6];
+    /* 0x0109C */ u8 mRopeCutStatus[100];
     /* 0x01100 */ u8 mDrawRopes;
     /* 0x01101 */ u8 field_0x1101[0x01104 - 0x01101];
     /* 0x01104 */ f32 field_0x1104[10];

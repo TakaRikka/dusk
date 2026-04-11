@@ -580,29 +580,29 @@ f32 mDoGph_gInf_c::m_scale = 1.0f;
 
 f32 mDoGph_gInf_c::m_invScale = 1.0f;
 
-int mDoGph_gInf_c::m_maxX = 608 - 1;
+int mDoGph_gInf_c::m_maxX = FB_WIDTH_BASE - 1;
 
-int mDoGph_gInf_c::m_maxY = 448 - 1;
+int mDoGph_gInf_c::m_maxY = FB_HEIGHT_BASE - 1;
 
-int mDoGph_gInf_c::m_width = 608;
+int mDoGph_gInf_c::m_width = FB_WIDTH_BASE;
 
-int mDoGph_gInf_c::m_height = 448;
+int mDoGph_gInf_c::m_height = FB_HEIGHT_BASE;
 
-f32 mDoGph_gInf_c::m_maxXF = 608.0f - 1;
+f32 mDoGph_gInf_c::m_maxXF = FB_WIDTH_BASE - 1;
 
-f32 mDoGph_gInf_c::m_maxYF = 448.0f - 1;
+f32 mDoGph_gInf_c::m_maxYF = FB_HEIGHT_BASE - 1;
 
-f32 mDoGph_gInf_c::m_widthF = 608.0f;
+f32 mDoGph_gInf_c::m_widthF = FB_WIDTH_BASE;
 
-f32 mDoGph_gInf_c::m_heightF = 448.0f;
+f32 mDoGph_gInf_c::m_heightF = FB_HEIGHT_BASE;
 
 struct tvSize {
     u16 width;
     u16 height;
 };
 const tvSize l_tvSize[2] = {
-    {608, 448},
-    {808, 448},
+    {FB_WIDTH_BASE, FB_HEIGHT_BASE},
+    {808, FB_HEIGHT_BASE},
 };
 
 #if TARGET_PC
@@ -618,8 +618,8 @@ void mDoGph_gInf_c::setTvSize() {
 
     m_width = tvsize->width;
     m_height = tvsize->height;
-    m_minX = -((m_width - 608) / 2);
-    m_minY = -((m_height - 448) / 2);
+    m_minX = -((m_width - FB_WIDTH_BASE) / 2);
+    m_minY = -((m_height - FB_HEIGHT_BASE) / 2);
     m_maxX = m_minX + m_width;
     m_maxY = m_minY + m_height;
 
@@ -2215,7 +2215,7 @@ int mDoGph_Painter() {
                 if (fapGmHIO_getParticle()) {
                     #if WIDESCREEN_SUPPORT
                     if (mDoGph_gInf_c::isWideZoom()) {
-                        ortho.setOrtho(0.0f, 0.0f, 608.0f, 448.0f, 100000.0f, -100000.0f);
+                        ortho.setOrtho(0.0f, 0.0f, FB_WIDTH_BASE, FB_HEIGHT_BASE, 100000.0f, -100000.0f);
                     } else
                     #endif
                     {
@@ -2226,8 +2226,8 @@ int mDoGph_Painter() {
                     ortho.setPort();
 
                     Mtx m3;
-                    MTXTrans(m3, FB_WIDTH / 2, FB_HEIGHT / 2, 0.0f);
-                    JPADrawInfo draw_info2(m3, 0.0f, FB_HEIGHT, 0.0f, FB_WIDTH);
+                    MTXTrans(m3, FB_WIDTH_BASE / 2, FB_HEIGHT_BASE / 2, 0.0f);
+                    JPADrawInfo draw_info2(m3, 0.0f, FB_HEIGHT_BASE, 0.0f, FB_WIDTH_BASE);
                     dComIfGp_particle_draw2Dgame(&draw_info2);
                 }
 
@@ -2329,9 +2329,9 @@ int mDoGph_Painter() {
         cMtx_copy(j3dSys.getViewMtx(), m4);
 
         Mtx m5;
-        MTXTrans(m5, FB_WIDTH / 2, FB_HEIGHT / 2, 0.0f);
+        MTXTrans(m5, FB_WIDTH_BASE / 2, FB_HEIGHT_BASE / 2, 0.0f);
 
-        JPADrawInfo draw_info3(m5, 0.0f, FB_HEIGHT, 0.0f, FB_WIDTH);
+        JPADrawInfo draw_info3(m5, 0.0f, FB_HEIGHT_BASE, 0.0f, FB_WIDTH_BASE);
 
         if (!dComIfGp_isPauseFlag()) {
             GX_DEBUG_GROUP(dComIfGp_particle_draw2Dback, &draw_info3);

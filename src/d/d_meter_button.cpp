@@ -1035,7 +1035,7 @@ void dMeterButton_c::screenInitButton() {
     }
 
     field_0x4b0 = 0;
-    mParentCenterX = (608.0f / 2) - mpParent->getInitCenterPosX();
+    mParentCenterX = (FB_WIDTH_BASE / 2.0f) - mpParent->getInitCenterPosX();
     paneTrans(mpParent, mParentCenterX, 0.0f, 0xFF);
 
     mpButtonA = JKR_NEW CPaneMgr(mpButtonScreen, MULTI_CHAR('abtn_n'), 2, NULL);

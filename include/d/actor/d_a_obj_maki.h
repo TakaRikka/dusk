@@ -28,11 +28,9 @@ public:
     /* 0x580 */ s16 field_0x580[2];
     /* 0x584*/  dCcD_Stts mStts;
     /* 0x5c0 */ dCcD_Sph mSph;
-    /* 0x6f8 */ u32 field_0x6f8[4];
-    /* 0x6fc */ u8 field_0x6fc[0x70c - 0x708]; // Undefined
+    /* 0x6f8 */ u32 field_0x6f8[5];
     /* 0x70c */ LIGHT_INFLUENCE mLightObj;
     /* 0x72c */ u8 field_0x72c;
-    /* 0x72d */ u8 field_0x72d[0x730 - 0x72d]; //Undefined
 };
 
 STATIC_ASSERT(sizeof(obj_maki_class) == 0x730);

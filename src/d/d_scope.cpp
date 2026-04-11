@@ -136,24 +136,24 @@ void dScope_c::draw() {
     u8 alpha = mAlpha * 255.0f;
 
     if (dComIfGp_checkPlayerStatus0(0, 0x1000)) {
-        J2DDrawLine(304.0f, mDoGph_gInf_c::getMinYF(), 304.0f, mDoGph_gInf_c::getMaxYF(),
-                    JUtility::TColor(255, 0, 0, alpha), 6);
-        J2DDrawLine(mDoGph_gInf_c::getMinXF(), 224.0f, mDoGph_gInf_c::getMaxXF(), 224.0f,
-                    JUtility::TColor(255, 0, 0, alpha), 6);
+        J2DDrawLine(FB_WIDTH_BASE / 2, mDoGph_gInf_c::getMinYF(), FB_WIDTH_BASE / 2,
+                    mDoGph_gInf_c::getMaxYF(), JUtility::TColor(255, 0, 0, alpha), 6);
+        J2DDrawLine(mDoGph_gInf_c::getMinXF(), FB_HEIGHT_BASE / 2, mDoGph_gInf_c::getMaxXF(),
+                    FB_HEIGHT_BASE / 2, JUtility::TColor(255, 0, 0, alpha), 6);
     }
 
     mpWipeTex->setAlpha(alpha);
     mpBlackTex->setAlpha(alpha);
 
-    f32 temp_f29 = 304.0f - temp_f31;
-    f32 temp_f28 = 304.0f + temp_f31;
-    f32 temp_f27 = 224.0f - temp_f30;
-    f32 temp_f26 = 224.0f + temp_f30;
+    f32 temp_f29 = FB_WIDTH_BASE / 2 - temp_f31;
+    f32 temp_f28 = FB_WIDTH_BASE / 2 + temp_f31;
+    f32 temp_f27 = FB_HEIGHT_BASE / 2 - temp_f30;
+    f32 temp_f26 = FB_HEIGHT_BASE / 2 + temp_f30;
 
     mpWipeTex->draw(temp_f29, temp_f27, temp_f31, temp_f30, false, false, false);
-    mpWipeTex->draw(304.0f, temp_f27, temp_f31, temp_f30, true, false, false);
-    mpWipeTex->draw(temp_f29, 224.0f, temp_f31, temp_f30, false, true, false);
-    mpWipeTex->draw(304.0f, 224.0f, temp_f31, temp_f30, true, true, false);
+    mpWipeTex->draw(FB_WIDTH_BASE / 2, temp_f27, temp_f31, temp_f30, true, false, false);
+    mpWipeTex->draw(temp_f29, FB_HEIGHT_BASE / 2, temp_f31, temp_f30, false, true, false);
+    mpWipeTex->draw(FB_WIDTH_BASE / 2, FB_HEIGHT_BASE / 2, temp_f31, temp_f30, true, true, false);
 
     mpBlackTex->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
                      mDoGph_gInf_c::getWidthF(), temp_f27 - mDoGph_gInf_c::getMinYF(), false, false,
