@@ -1083,7 +1083,7 @@ int dScnLogo_c::create() {
     #endif
 
     mDoGph_gInf_c::setTickRate(OS_TIMER_CLOCK / 60);
-    // mDoGph_gInf_c::waitBlanking(0);
+    mDoGph_gInf_c::waitBlanking(0);
 
     field_0x20a = 0;
 

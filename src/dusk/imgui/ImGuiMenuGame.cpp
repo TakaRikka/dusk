@@ -62,6 +62,14 @@ namespace dusk {
                     config::Save();
                 }
 
+                config::ImGuiCheckbox("Native Bloom", getSettings().game.enableBloom);
+
+                config::ImGuiCheckbox("Water Projection Offset", getSettings().game.useWaterProjectionOffset);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Adds GC-specific -0.01 transS offset\n"
+                                      "that causes ~6px ghost artifacts in water reflections");
+                }
+
                 ImGui::EndMenu();
             }
 

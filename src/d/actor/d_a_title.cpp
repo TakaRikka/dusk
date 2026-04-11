@@ -5,6 +5,7 @@
 #include "d/d_s_play.h"
 #include "d/d_demo.h"
 #include "d/d_pane_class_alpha.h"
+#include "d/d_menu_collect.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/d_com_inf_game.h"
@@ -121,7 +122,7 @@ static procFunc daTitleProc[6] = {
 
 int daTitle_c::create() {
     fopAcM_ct(this, daTitle_c);
-    
+
     int phase_state = dComIfG_resLoad(&mPhaseReq, l_arcName);
     if (phase_state != cPhs_COMPLEATE_e) {
         return phase_state;
@@ -151,13 +152,21 @@ int daTitle_c::createHeapCallBack(fopAc_ac_c* actor) {
 }
 
 int daTitle_c::Execute() {
-    #if PLATFORM_WII || PLATFORM_SHIELD
+#if PLATFORM_WII || PLATFORM_SHIELD
     mDoGph_gInf_c::resetDimming();
-    #endif
+#endif
 
     if (fopOvlpM_IsPeek()) {
         return 1;
     }
+
+#ifdef TARGET_PC
+    if (!dusk::getSettings().game.enableFrameInterpolation) {
+#endif
+        dMenu_Collect3D_c::setViewPortOffsetY(0.0f);
+#ifdef TARGET_PC
+    }
+#endif
 
     if (mDoRst::isReset()) {
         return 1;
@@ -166,9 +175,9 @@ int daTitle_c::Execute() {
     (this->*daTitleProc[mProcID])();
     KeyWaitAnm();
 
-    #if VERSION == VERSION_SHIELD_DEBUG
+#if VERSION == VERSION_SHIELD_DEBUG
     KeyWaitPosMove();
-    #endif
+#endif
 
     return 1;
 }
@@ -387,7 +396,7 @@ int daTitle_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, l_arcName);
     JKR_DELETE(mTitle.Scr);
     JKR_DELETE(field_0x600);
-    
+
     mpMount->getArchive()->removeResourceAll();
     JKRUnmountArchive(mpMount->getArchive());
     mpMount->destroy();

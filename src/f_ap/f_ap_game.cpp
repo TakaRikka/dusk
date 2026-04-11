@@ -734,13 +734,11 @@ static void fapGm_AfterRecord() {
 
 void fapGm_Execute() {
     ZoneScoped;
-    /*
     static u32 sExecCount = 0;
     if (sExecCount < 10 || (sExecCount % 300 == 0)) {
         DuskLog.debug("fapGm_Execute frame={}", sExecCount);
     }
     sExecCount++;
-    */
 
     #if DEBUG
     JUTDbPrint::getManager()->setCharColor(g_HIO.mColor);

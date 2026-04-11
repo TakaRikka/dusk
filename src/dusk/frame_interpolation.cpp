@@ -255,17 +255,18 @@ namespace dusk {
 namespace frame_interp {
 
 void ensure_initialized() {
-    if (s_initialized) {
-        return;
-    }
-
-    g_enabled = true;
+    g_enabled = getSettings().game.enableFrameInterpolation;
     s_initialized = true;
 }
 
 void begin_record() {
     ensure_initialized();
     if (!g_enabled) {
+        g_interpolating = false;
+        g_previous_recording = {};
+        g_current_recording = {};
+        g_current_path.clear();
+        clear_replacements();
         return;
     }
 
@@ -279,10 +280,6 @@ void begin_record() {
 }
 
 void end_record() {
-    if (!s_initialized) {
-        return;
-    }
-
     g_recording = false;
 }
 
@@ -318,6 +315,9 @@ uint32_t begin_presentation_ui_pass() {
 uint32_t get_presentation_ui_advance_ticks() {
     if (!s_initialized) {
         return 0;
+    }
+    if (!g_enabled) {
+        return 1;
     }
     return g_current_presentation_ui_ticks;
 }

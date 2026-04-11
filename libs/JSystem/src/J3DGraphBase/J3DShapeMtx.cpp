@@ -10,11 +10,15 @@
 
 u16 J3DShapeMtx::sMtxLoadCache[10];
 
+#ifdef TARGET_PC
 static void J3DFrameInterpConcat(MtxP lhs, MtxP rhs, Mtx out) {
     if (!dusk::frame_interp::lookup_concat_replacement(lhs, rhs, out)) {
         MTXConcat(lhs, rhs, out);
     }
 }
+#else
+#define J3DFrameInterpConcat MTXConcat
+#endif
 
 void J3DShapeMtx::resetMtxLoadCache() {
     sMtxLoadCache[0] =

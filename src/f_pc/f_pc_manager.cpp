@@ -20,7 +20,6 @@
 #include "f_pc/f_pc_pause.h"
 #include "f_pc/f_pc_priority.h"
 #include "m_Do/m_Do_controller_pad.h"
-#include <cstdio>
 
 #include "tracy/Tracy.hpp"
 
@@ -64,8 +63,15 @@ void fpcM_Management(fpcM_ManagementFunc i_preExecuteFn, fpcM_ManagementFunc i_p
                 l_dvdError = false;
             }
 
-            // FRAME INTERP NOTE: cAPIGph_Painter() has been moved to m_Do_main so that it runs every frame
-            // cAPIGph_Painter();
+#ifdef TARGET_PC
+            // FRAME INTERP NOTE: cAPIGph_Painter() has been moved to m_Do_main
+            // so that it runs every frame
+            if (!dusk::getSettings().game.enableFrameInterpolation) {
+#endif
+                cAPIGph_Painter();
+#ifdef TARGET_PC
+            }
+#endif
 
             if (!dPa_control_c::isStatus(1)) {
                 fpcDt_Handler();

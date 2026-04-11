@@ -450,6 +450,7 @@ void J3DModel::calc() {
         mCalcCallBack(this, 0);
     }
 
+#ifdef TARGET_PC
     for (u16 i = 0; i < mModelData->getJointNum(); ++i) {
         dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(getAnmMtx(i)), getAnmMtx(i));
     }
@@ -457,6 +458,7 @@ void J3DModel::calc() {
     for (u16 i = 0; i < mModelData->getWEvlpMtxNum(); ++i) {
         dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(getWeightAnmMtx(i)), getWeightAnmMtx(i));
     }
+#endif
 }
 
 void J3DModel::entry() {
@@ -493,13 +495,17 @@ void J3DModel::viewCalc() {
         if (getMtxCalcMode() == 2) {
             J3DCalcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx,
                                (MtxP)&mInternalView);
+#ifdef TARGET_PC
             dusk::frame_interp::record_final_mtx_raw(&mInternalView, mInternalView);
+#endif
         }
     } else if (isCpuSkinningOn()) {
         if (getMtxCalcMode() == 2) {
             J3DCalcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx,
                                (MtxP)&mInternalView);
+#ifdef TARGET_PC
             dusk::frame_interp::record_final_mtx_raw(&mInternalView, mInternalView);
+#endif
         }
     } else if (checkFlag(J3DMdlFlag_SkinPosCpu)) {
         mMtxBuffer->calcDrawMtx(getMtxCalcMode(), mBaseScale, mBaseTransformMtx);
@@ -520,9 +526,11 @@ void J3DModel::viewCalc() {
         DCStoreRange(getNrmMtxPtr(), mModelData->getDrawMtxNum() * sizeof(Mtx33));
     }
 
+#ifdef TARGET_PC
     for (u16 i = 0; i < mModelData->getDrawMtxNum(); ++i) {
         dusk::frame_interp::record_final_mtx_raw(&getDrawMtxPtr()[i], getDrawMtxPtr()[i]);
     }
+#endif
 
     prepareShapePackets();
 }

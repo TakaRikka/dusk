@@ -190,10 +190,12 @@ struct J3DSys {
     J3DShapePacket* getShapePacket() { return mShapePacket; }
 
     void setViewMtx(const Mtx m) {
+#ifdef TARGET_PC
         Mtx patched;
         if (dusk::frame_interp::lookup_replacement(m, patched)) {
             m = patched;
         }
+#endif
         MTXCopy(m, mViewMtx);
     }
 

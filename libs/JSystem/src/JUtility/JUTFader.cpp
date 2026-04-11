@@ -17,7 +17,7 @@ JUTFader::JUTFader(int x, int y, int width, int height, JUtility::TColor pColor)
     mEStatus = UNKSTATUS_M1;
 }
 
-void JUTFader::advance() {
+void JUTFader::control() {
     if (0 <= mEStatus && mEStatus-- == 0) {
         mStatus = field_0x24;
     }
@@ -58,13 +58,6 @@ void JUTFader::advance() {
         }
 
         break;
-    }
-}
-
-void JUTFader::control() {
-    advance();
-    if (mStatus != 1) {
-        draw();
     }
 }
 

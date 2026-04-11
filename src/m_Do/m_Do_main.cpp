@@ -233,24 +233,32 @@ void main01(void) {
 
         VIWaitForRetrace();
 
-#if TARGET_PC
         dusk::lastFrameAuroraStats = *aurora_get_stats();
         if (!aurora_begin_frame()) {
             DuskLog.debug("aurora_begin_frame returned false, skipping draw this frame");
             continue;
         }
-#endif
 
-        while (accumulator >= kSimStepSeconds) {
-            mDoCPd_c::read();
+        if (dusk::getSettings().game.enableFrameInterpolation) {
+            while (accumulator >= kSimStepSeconds) {
+                mDoCPd_c::read();
+                fapGm_Execute();
+                mDoAud_Execute();
+                accumulator -= kSimStepSeconds;
+            }
+
+            float interp_alpha = static_cast<float>(accumulator / kSimStepSeconds);
+            dusk::frame_interp::interpolate(interp_alpha);
+            cAPIGph_Painter();
+        } else {
+            accumulator = 0.0;
+
+            // EXECUTE GAME LOGIC & RENDER
+            // This calls mDoGph_Painter -> JFWDisplay -> GX Functions
             fapGm_Execute();
-            mDoAud_Execute();
-            accumulator -= kSimStepSeconds;
-        }
 
-        float interp_alpha = static_cast<float>(accumulator / kSimStepSeconds);
-        dusk::frame_interp::interpolate(interp_alpha);
-        cAPIGph_Painter();
+            mDoAud_Execute();
+        }
 
         aurora_end_frame();
 

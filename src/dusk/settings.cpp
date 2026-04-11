@@ -41,6 +41,7 @@ UserSettings g_userSettings = {
         // Graphics
         .enableBloom {"game.enableBloom", true},
         .useWaterProjectionOffset {"game.useWaterProjectionOffset", false},
+        .enableFrameInterpolation = {"game.enableFrameInterpolation", false},
 
         // Audio
         .noLowHpSound {"game.noLowHpSound", false},
@@ -110,6 +111,7 @@ void registerSettings() {
     Register(g_userSettings.game.midnasLamentNonStop);
     Register(g_userSettings.game.enableTurboKeybind);
     Register(g_userSettings.game.fastSpinner);
+    Register(g_userSettings.game.enableFrameInterpolation);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.graphicsBackend);

@@ -104,9 +104,11 @@ public:
     Vec* getBaseScale() { return &mBaseScale; }
     void setAnmMtx(int jointNo, Mtx m) {
         mMtxBuffer->setAnmMtx(jointNo, m);
+#ifdef TARGET_PC
         dusk::frame_interp::record_final_mtx_raw(
             reinterpret_cast<const Mtx*>(mMtxBuffer->getAnmMtx(jointNo)),
             mMtxBuffer->getAnmMtx(jointNo));
+#endif
     }
     MtxP getAnmMtx(int jointNo) { return mMtxBuffer->getAnmMtx(jointNo); }
     MtxP getWeightAnmMtx(int i) { return mMtxBuffer->getWeightAnmMtx(i); }
