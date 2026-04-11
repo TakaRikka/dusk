@@ -29,6 +29,7 @@
 #include "d/d_meter2_info.h"
 #include "d/d_s_play.h"
 #include "dusk/endian.h"
+#include "dusk/frame_interpolation.h"
 #include "dusk/gx_helper.h"
 #include "dusk/logging.h"
 #include "f_ap/f_ap_game.h"
@@ -39,7 +40,6 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
 #include "m_Do/m_Do_main.h"
-#include "dusk/frame_interpolation.h"
 #include "tracy/Tracy.hpp"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
@@ -1897,6 +1897,11 @@ int mDoGph_Painter() {
             j3dSys.setViewMtx(camera_p->view.viewMtx);
 #endif
             dKy_setLight();
+#if TARGET_PC
+            if (dusk::getSettings().game.enableFrameInterpolation) {
+                dKy_setLight_again();
+            }
+#endif
             GX_DEBUG_GROUP(dComIfGd_drawOpaListSky);
             GX_DEBUG_GROUP(dComIfGd_drawXluListSky);
 
