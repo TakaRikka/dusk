@@ -900,297 +900,312 @@ namespace dusk {
     }
 
     void ImGuiSaveEditor::drawCollectionTab() {
-        ImGuiBeginGroupPanel("Swords", { 240, 0 });
-        for (int i = 0; i < 4; i++) {
-            bool got = dComIfGs_isCollectSword((u8)i) != 0;
-            if (ImGui::Checkbox(fmt::format("{0}##sword_{1}", sSwordNames[i], i).c_str(), &got)) {
-                if (got) dComIfGs_setCollectSword((u8)i);
-                else     dComIfGs_offCollectSword((u8)i);
-            }
-        }
-        ImGuiEndGroupPanel();
-
-        ImGuiBeginGroupPanel("Shields", { 240, 0 });
-        for (int i = 0; i < 3; i++) {
-            bool got = dComIfGs_isCollectShield((u8)i) != 0;
-            if (ImGui::Checkbox(fmt::format("{0}##shield_{1}", sShieldNames[i], i).c_str(), &got)) {
-                if (got) dComIfGs_setCollectShield((u8)i);
-                else     dComIfGs_offCollectShield((u8)i);
-            }
-        }
-        ImGuiEndGroupPanel();
-
-        ImGuiBeginGroupPanel("Tunics", { 240, 0 });
-        {
-            bool ordonClothes = dComIfGs_isItemFirstBit(dItemNo_WEAR_CASUAL_e) != 0;
-            if (ImGui::Checkbox("Ordon Clothes##tunic_ordon", &ordonClothes)) {
-                setItemFirstBit(dItemNo_WEAR_CASUAL_e, ordonClothes);
+        if (ImGui::TreeNode("Equipment")) {
+            if (ImGui::TreeNode("Swords")) {
+                for (int i = 0; i < 4; i++) {
+                    bool got = dComIfGs_isCollectSword((u8)i) != 0;
+                    if (ImGui::Checkbox(fmt::format("{0}##sword_{1}", sSwordNames[i], i).c_str(), &got)) {
+                        if (got) dComIfGs_setCollectSword((u8)i);
+                        else     dComIfGs_offCollectSword((u8)i);
+                    }
+                }
+                ImGui::TreePop();
             }
 
-            bool greenTunic = dComIfGs_isCollectClothes(KOKIRI_CLOTHES_FLAG) != 0;
-            if (ImGui::Checkbox("Hero's Clothes##tunic_green", &greenTunic)) {
-                if (greenTunic) dComIfGs_setCollectClothes(KOKIRI_CLOTHES_FLAG);
-                else            dComIfGs_offCollectClothes(KOKIRI_CLOTHES_FLAG);
+            if (ImGui::TreeNode("Shields")) {
+                for (int i = 0; i < 3; i++) {
+                    bool got = dComIfGs_isCollectShield((u8)i) != 0;
+                    if (ImGui::Checkbox(fmt::format("{0}##shield_{1}", sShieldNames[i], i).c_str(), &got)) {
+                        if (got) dComIfGs_setCollectShield((u8)i);
+                        else     dComIfGs_offCollectShield((u8)i);
+                    }
+                }
+                ImGui::TreePop();
             }
 
-            bool zoraArmor = dComIfGs_isItemFirstBit(dItemNo_WEAR_ZORA_e) != 0;
-            if (ImGui::Checkbox("Zora Armor##tunic_zora", &zoraArmor)) {
-                setItemFirstBit(dItemNo_WEAR_ZORA_e, zoraArmor);
-            }
-
-            bool magicArmor = dComIfGs_isItemFirstBit(dItemNo_ARMOR_e) != 0;
-            if (ImGui::Checkbox("Magic Armor##tunic_magic", &magicArmor)) {
-                setItemFirstBit(dItemNo_ARMOR_e, magicArmor);
-            }
-        }
-        ImGuiEndGroupPanel();
-
-        ImGuiBeginGroupPanel("Fused Shadows", { 240, 0 });
-        for (int i = 0; i < 3; i++) {
-            bool got = dComIfGs_isCollectCrystal((u8)i) != 0;
-            if (ImGui::Checkbox(
-                    fmt::format("{0}##fs_{1}", sFusedShadowNames[i], i).c_str(), &got)) {
-                if (got) dComIfGs_onCollectCrystal((u8)i);
-                else     dComIfGs_offCollectCrystal((u8)i);
-            }
-        }
-        ImGui::Spacing();
-        if (ImGui::Button("All##fs_all")) {
-            for (int i = 0; i < 3; i++) dComIfGs_onCollectCrystal((u8)i);
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("None##fs_clear")) {
-            for (int i = 0; i < 3; i++) dComIfGs_offCollectCrystal((u8)i);
-        }
-        ImGuiEndGroupPanel();
-
-        ImGuiBeginGroupPanel("Mirror Shards", { 240, 0 });
-        for (int i = 0; i < 3; i++) {
-            u8 idx  = sMirrorShards[i].index;
-            bool got = dComIfGs_isCollectMirror(idx) != 0;
-            if (ImGui::Checkbox(
-                    fmt::format("{0}##ms_{1}", sMirrorShards[i].name, i).c_str(), &got)) {
-                if (got) dComIfGs_onCollectMirror(idx);
-                else     dComIfGs_offCollectMirror(idx);
-            }
-        }
-        ImGui::Spacing();
-        if (ImGui::Button("All##ms_all")) {
-            for (int i = 0; i < 3; i++) dComIfGs_onCollectMirror(sMirrorShards[i].index);
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("None##ms_clear")) {
-            for (int i = 0; i < 3; i++) dComIfGs_offCollectMirror(sMirrorShards[i].index);
-        }
-        ImGuiEndGroupPanel();
-
-        ImGuiBeginGroupPanel("Poe Souls", { 240, 0 });
-        int poeCount = dComIfGs_getPohSpiritNum();
-        ImGui::Text("Collected:");
-        ImGui::SameLine();
-        ImGui::SetNextItemWidth(100.0f);
-        if (ImGui::InputInt("##poe_count", &poeCount)) {
-            if (poeCount < 0) poeCount = 0;
-            if (poeCount > 60) poeCount = 60;
-            dComIfGs_setPohSpiritNum((u8)poeCount);
-        }
-        ImGui::SameLine();
-        ImGui::TextDisabled("/ 60");
-        ImGui::Spacing();
-        if (ImGui::Button("All 60##poe_all")) {
-            dComIfGs_setPohSpiritNum(60);
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Clear##poe_clear")) {
-            dComIfGs_setPohSpiritNum(0);
-        }
-        ImGuiEndGroupPanel();
-
-        ImGuiBeginGroupPanel("Golden Bugs", { 360, 0 });
-
-        if (ImGui::BeginTable("GoldenBugTable", 5,
-                              ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_RowBg)) {
-            ImGui::TableSetupColumn("Species");
-            ImGui::TableSetupColumn("Male");
-            ImGui::TableSetupColumn("Female");
-            ImGui::TableSetupColumn("M \xe2\x86\x92 Agitha");  // M → Agitha
-            ImGui::TableSetupColumn("F \xe2\x86\x92 Agitha");  // F → Agitha
-            ImGui::TableHeadersRow();
-
-            for (int species = 0; species < BUG_SPECIES_COUNT; species++) {
-                int maleIdx   = species * 2;
-                int femaleIdx = species * 2 + 1;
-                u8 maleItem   = sBugItemIds[maleIdx];
-                u8 femaleItem = sBugItemIds[femaleIdx];
-                u16 maleFlag   = sBugTurnInFlags[maleIdx];
-                u16 femaleFlag = sBugTurnInFlags[femaleIdx];
-
-                ImGui::TableNextRow();
-
-                ImGui::TableSetColumnIndex(0);
-                ImGui::TextUnformatted(sBugSpeciesNames[species]);
-
-                ImGui::TableSetColumnIndex(1);
-                bool maleOwned = dComIfGs_isItemFirstBit(maleItem) != 0;
-                if (ImGui::Checkbox(fmt::format("##bugM_own_{}", species).c_str(), &maleOwned)) {
-                    setItemFirstBit(maleItem, maleOwned);
+            if (ImGui::TreeNode("Tunics")) {
+                bool ordonClothes = dComIfGs_isItemFirstBit(dItemNo_WEAR_CASUAL_e) != 0;
+                if (ImGui::Checkbox("Ordon Clothes##tunic_ordon", &ordonClothes)) {
+                    setItemFirstBit(dItemNo_WEAR_CASUAL_e, ordonClothes);
                 }
 
-                ImGui::TableSetColumnIndex(2);
-                bool femaleOwned = dComIfGs_isItemFirstBit(femaleItem) != 0;
-                if (ImGui::Checkbox(fmt::format("##bugF_own_{}", species).c_str(), &femaleOwned)) {
-                    setItemFirstBit(femaleItem, femaleOwned);
+                bool greenTunic = dComIfGs_isCollectClothes(KOKIRI_CLOTHES_FLAG) != 0;
+                if (ImGui::Checkbox("Hero's Clothes##tunic_green", &greenTunic)) {
+                    if (greenTunic) dComIfGs_setCollectClothes(KOKIRI_CLOTHES_FLAG);
+                    else            dComIfGs_offCollectClothes(KOKIRI_CLOTHES_FLAG);
                 }
 
-                ImGui::TableSetColumnIndex(3);
-                bool maleGiven = dComIfGs_isEventBit(maleFlag) != 0;
-                if (ImGui::Checkbox(fmt::format("##bugM_giv_{}", species).c_str(), &maleGiven)) {
-                    setEventBit(maleFlag, maleGiven);
+                bool zoraArmor = dComIfGs_isItemFirstBit(dItemNo_WEAR_ZORA_e) != 0;
+                if (ImGui::Checkbox("Zora Armor##tunic_zora", &zoraArmor)) {
+                    setItemFirstBit(dItemNo_WEAR_ZORA_e, zoraArmor);
                 }
 
-                ImGui::TableSetColumnIndex(4);
-                bool femaleGiven = dComIfGs_isEventBit(femaleFlag) != 0;
-                if (ImGui::Checkbox(fmt::format("##bugF_giv_{}", species).c_str(), &femaleGiven)) {
-                    setEventBit(femaleFlag, femaleGiven);
+                bool magicArmor = dComIfGs_isItemFirstBit(dItemNo_ARMOR_e) != 0;
+                if (ImGui::Checkbox("Magic Armor##tunic_magic", &magicArmor)) {
+                    setItemFirstBit(dItemNo_ARMOR_e, magicArmor);
                 }
+                ImGui::TreePop();
             }
-
-            ImGui::EndTable();
-        }
-
-        ImGui::Spacing();
-        if (ImGui::Button("Collect All##bugs_all")) {
-            for (int i = 0; i < BUG_SPECIES_COUNT * 2; i++) {
-                dComIfGs_onItemFirstBit(sBugItemIds[i]);
-            }
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Clear All##bugs_clear")) {
-            for (int i = 0; i < BUG_SPECIES_COUNT * 2; i++) {
-                dComIfGs_offItemFirstBit(sBugItemIds[i]);
-                dComIfGs_offEventBit(sBugTurnInFlags[i]);
-            }
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Give All to Agitha##bugs_giveall")) {
-            for (int i = 0; i < BUG_SPECIES_COUNT * 2; i++) {
-                dComIfGs_onEventBit(sBugTurnInFlags[i]);
-            }
+            ImGui::TreePop();
         }
 
-        ImGuiEndGroupPanel();
+        if (ImGui::TreeNode("Key Items")) {
+            if (ImGui::TreeNode("Fused Shadows")) {
+                for (int i = 0; i < 3; i++) {
+                    bool got = dComIfGs_isCollectCrystal((u8)i) != 0;
+                    if (ImGui::Checkbox(
+                            fmt::format("{0}##fs_{1}", sFusedShadowNames[i], i).c_str(), &got)) {
+                        if (got) dComIfGs_onCollectCrystal((u8)i);
+                        else     dComIfGs_offCollectCrystal((u8)i);
+                    }
+                }
+                ImGui::Spacing();
+                if (ImGui::Button("All##fs_all")) {
+                    for (int i = 0; i < 3; i++) dComIfGs_onCollectCrystal((u8)i);
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("None##fs_clear")) {
+                    for (int i = 0; i < 3; i++) dComIfGs_offCollectCrystal((u8)i);
+                }
+                ImGui::TreePop();
+            }
 
-        ImGuiBeginGroupPanel("Hidden Skills", { 240, 0 });
-        for (int i = 0; i < HIDDEN_SKILL_COUNT; i++) {
-            bool learned = dComIfGs_isEventBit(sHiddenSkillFlags[i]) != 0;
-            if (ImGui::Checkbox(
-                    fmt::format("{0}##skill_{1}", sHiddenSkillNames[i], i).c_str(), &learned)) {
-                setEventBit(sHiddenSkillFlags[i], learned);
+            if (ImGui::TreeNode("Mirror Shards")) {
+                for (int i = 0; i < 3; i++) {
+                    u8 idx  = sMirrorShards[i].index;
+                    bool got = dComIfGs_isCollectMirror(idx) != 0;
+                    if (ImGui::Checkbox(
+                            fmt::format("{0}##ms_{1}", sMirrorShards[i].name, i).c_str(), &got)) {
+                        if (got) dComIfGs_onCollectMirror(idx);
+                        else     dComIfGs_offCollectMirror(idx);
+                    }
+                }
+                ImGui::Spacing();
+                if (ImGui::Button("All##ms_all")) {
+                    for (int i = 0; i < 3; i++) dComIfGs_onCollectMirror(sMirrorShards[i].index);
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("None##ms_clear")) {
+                    for (int i = 0; i < 3; i++) dComIfGs_offCollectMirror(sMirrorShards[i].index);
+                }
+                ImGui::TreePop();
             }
+            ImGui::TreePop();
         }
-        ImGui::Spacing();
-        if (ImGui::Button("Learn All##skills_all")) {
-            for (int i = 0; i < HIDDEN_SKILL_COUNT; i++) {
-                dComIfGs_onEventBit(sHiddenSkillFlags[i]);
-            }
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Forget All##skills_clear")) {
-            for (int i = 0; i < HIDDEN_SKILL_COUNT; i++) {
-                dComIfGs_offEventBit(sHiddenSkillFlags[i]);
-            }
-        }
-        ImGuiEndGroupPanel();
 
-        ImGuiBeginGroupPanel("Postman Letters", { 240, 0 });
-        for (int i = 0; i < LETTER_COUNT; i++) {
-            bool had = dComIfGs_isLetterGetFlag(i) != 0;
-            if (ImGui::Checkbox(
-                    fmt::format("{0}##letter_{1}", sLetterSenders[i], i).c_str(), &had)) {
-                setLetterGetFlag(i, had);
+        if (ImGui::TreeNode("Heart Pieces & Poe Souls")) {
+            if (ImGui::TreeNode("Poe Souls")) {
+                int poeCount = dComIfGs_getPohSpiritNum();
+                ImGui::Text("Collected:");
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(100.0f);
+                if (ImGui::InputInt("##poe_count", &poeCount)) {
+                    if (poeCount < 0) poeCount = 0;
+                    if (poeCount > 60) poeCount = 60;
+                    dComIfGs_setPohSpiritNum((u8)poeCount);
+                }
+                ImGui::SameLine();
+                ImGui::TextDisabled("/ 60");
+                ImGui::Spacing();
+                if (ImGui::Button("All 60##poe_all")) {
+                    dComIfGs_setPohSpiritNum(60);
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Clear##poe_clear")) {
+                    dComIfGs_setPohSpiritNum(0);
+                }
+                ImGui::TreePop();
             }
-        }
-        ImGui::Spacing();
-        if (ImGui::Button("Receive All##letters_all")) {
-            for (int i = 0; i < LETTER_COUNT; i++) setLetterGetFlag(i, true);
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Clear All##letters_clear")) {
-            for (int i = 0; i < LETTER_COUNT; i++) setLetterGetFlag(i, false);
-        }
-        ImGuiEndGroupPanel();
 
-        ImGuiBeginGroupPanel("Fishing Log", { 360, 0 });
-        {
-            dSv_fishing_info_c& fish = dComIfGs_getSaveData()->getPlayer().getFishingInfo();
-            if (ImGui::BeginTable("FishTable", 3,
+            if (ImGui::TreeNode("Heart Pieces")) {
+                int maxLife = dComIfGs_getMaxLife();
+                int hearts  = maxLife / 5;
+                int pieces  = maxLife % 5;
+                ImGui::Text("Max Life:");
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(160.0f);
+                if (ImGui::InputInt("##max_life", &maxLife, 1, 5)) {
+                    if (maxLife < 15)  maxLife = 15;
+                    if (maxLife > 100) maxLife = 100;
+                    dComIfGs_setMaxLife((u8)maxLife);
+                    u16 maxHealth = (dComIfGs_getMaxLife() / 5) * 4;
+                    if (dComIfGs_getLife() > maxHealth) {
+                        dComIfGs_setLife(maxHealth);
+                    }
+                }
+                ImGui::SameLine();
+                ImGui::TextDisabled("(%d hearts + %d pieces)", hearts, pieces);
+                ImGui::Spacing();
+                if (ImGui::Button("3 Hearts##hp_min")) {
+                    dComIfGs_setMaxLife(15);
+                    dComIfGs_setLife(12);
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("20 Hearts##hp_max")) {
+                    dComIfGs_setMaxLife(100);
+                    dComIfGs_setLife(80);
+                }
+                ImGui::TreePop();
+            }
+            ImGui::TreePop();
+        }
+
+        if (ImGui::TreeNode("Golden Bugs")) {
+            if (ImGui::BeginTable("GoldenBugTable", 5,
                                   ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_RowBg)) {
                 ImGui::TableSetupColumn("Species");
-                ImGui::TableSetupColumn("Caught");
-                ImGui::TableSetupColumn("Biggest (cm)");
+                ImGui::TableSetupColumn("Male");
+                ImGui::TableSetupColumn("Female");
+                ImGui::TableSetupColumn("M \xe2\x86\x92 Agitha");  // M → Agitha
+                ImGui::TableSetupColumn("F \xe2\x86\x92 Agitha");  // F → Agitha
                 ImGui::TableHeadersRow();
 
-                for (int i = 0; i < FISH_COUNT; i++) {
-                    u8 idx = sFishSpecies[i].index;
+                for (int species = 0; species < BUG_SPECIES_COUNT; species++) {
+                    int maleIdx   = species * 2;
+                    int femaleIdx = species * 2 + 1;
+                    u8 maleItem   = sBugItemIds[maleIdx];
+                    u8 femaleItem = sBugItemIds[femaleIdx];
+                    u16 maleFlag   = sBugTurnInFlags[maleIdx];
+                    u16 femaleFlag = sBugTurnInFlags[femaleIdx];
+
                     ImGui::TableNextRow();
 
                     ImGui::TableSetColumnIndex(0);
-                    ImGui::TextUnformatted(sFishSpecies[i].name);
+                    ImGui::TextUnformatted(sBugSpeciesNames[species]);
 
                     ImGui::TableSetColumnIndex(1);
-                    int count = dComIfGs_getFishNum(idx);
-                    ImGui::SetNextItemWidth(100.0f);
-                    if (ImGui::InputInt(fmt::format("##fish_c_{}", i).c_str(), &count, 1, 10)) {
-                        if (count < 0) count = 0;
-                        if (count > 999) count = 999;
-                        fish.mFishCount[idx] = (u16)count;
+                    bool maleOwned = dComIfGs_isItemFirstBit(maleItem) != 0;
+                    if (ImGui::Checkbox(fmt::format("##bugM_own_{}", species).c_str(), &maleOwned)) {
+                        setItemFirstBit(maleItem, maleOwned);
                     }
 
                     ImGui::TableSetColumnIndex(2);
-                    int size = dComIfGs_getFishSize(idx);
-                    ImGui::SetNextItemWidth(100.0f);
-                    if (ImGui::InputInt(fmt::format("##fish_s_{}", i).c_str(), &size, 1, 10)) {
-                        if (size < 0) size = 0;
-                        if (size > 255) size = 255;
-                        dComIfGs_setFishSize(idx, (u8)size);
+                    bool femaleOwned = dComIfGs_isItemFirstBit(femaleItem) != 0;
+                    if (ImGui::Checkbox(fmt::format("##bugF_own_{}", species).c_str(), &femaleOwned)) {
+                        setItemFirstBit(femaleItem, femaleOwned);
+                    }
+
+                    ImGui::TableSetColumnIndex(3);
+                    bool maleGiven = dComIfGs_isEventBit(maleFlag) != 0;
+                    if (ImGui::Checkbox(fmt::format("##bugM_giv_{}", species).c_str(), &maleGiven)) {
+                        setEventBit(maleFlag, maleGiven);
+                    }
+
+                    ImGui::TableSetColumnIndex(4);
+                    bool femaleGiven = dComIfGs_isEventBit(femaleFlag) != 0;
+                    if (ImGui::Checkbox(fmt::format("##bugF_giv_{}", species).c_str(), &femaleGiven)) {
+                        setEventBit(femaleFlag, femaleGiven);
                     }
                 }
+
                 ImGui::EndTable();
             }
-        }
-        ImGuiEndGroupPanel();
 
-        ImGuiBeginGroupPanel("Heart Pieces", { 360, 0 });
-        {
-            int maxLife = dComIfGs_getMaxLife();
-            int hearts  = maxLife / 5;
-            int pieces  = maxLife % 5;
-            ImGui::Text("Max Life:");
-            ImGui::SameLine();
-            ImGui::SetNextItemWidth(160.0f);
-            if (ImGui::InputInt("##max_life", &maxLife, 1, 5)) {
-                if (maxLife < 15)  maxLife = 15;
-                if (maxLife > 100) maxLife = 100;
-                dComIfGs_setMaxLife((u8)maxLife);
-                u16 maxHealth = (dComIfGs_getMaxLife() / 5) * 4;
-                if (dComIfGs_getLife() > maxHealth) {
-                    dComIfGs_setLife(maxHealth);
+            ImGui::Spacing();
+            if (ImGui::Button("Collect All##bugs_all")) {
+                for (int i = 0; i < BUG_SPECIES_COUNT * 2; i++) {
+                    dComIfGs_onItemFirstBit(sBugItemIds[i]);
                 }
             }
             ImGui::SameLine();
-            ImGui::TextDisabled("(%d hearts + %d pieces)", hearts, pieces);
-            ImGui::Spacing();
-            if (ImGui::Button("3 Hearts##hp_min")) {
-                dComIfGs_setMaxLife(15);
-                dComIfGs_setLife(12);
+            if (ImGui::Button("Clear All##bugs_clear")) {
+                for (int i = 0; i < BUG_SPECIES_COUNT * 2; i++) {
+                    dComIfGs_offItemFirstBit(sBugItemIds[i]);
+                    dComIfGs_offEventBit(sBugTurnInFlags[i]);
+                }
             }
             ImGui::SameLine();
-            if (ImGui::Button("20 Hearts##hp_max")) {
-                dComIfGs_setMaxLife(100);
-                dComIfGs_setLife(80);
+            if (ImGui::Button("Give All to Agitha##bugs_giveall")) {
+                for (int i = 0; i < BUG_SPECIES_COUNT * 2; i++) {
+                    dComIfGs_onEventBit(sBugTurnInFlags[i]);
+                }
             }
+            ImGui::TreePop();
         }
-        ImGuiEndGroupPanel();
+
+        if (ImGui::TreeNode("Hidden Skills")) {
+            for (int i = 0; i < HIDDEN_SKILL_COUNT; i++) {
+                bool learned = dComIfGs_isEventBit(sHiddenSkillFlags[i]) != 0;
+                if (ImGui::Checkbox(
+                        fmt::format("{0}##skill_{1}", sHiddenSkillNames[i], i).c_str(), &learned)) {
+                    setEventBit(sHiddenSkillFlags[i], learned);
+                }
+            }
+            ImGui::Spacing();
+            if (ImGui::Button("Learn All##skills_all")) {
+                for (int i = 0; i < HIDDEN_SKILL_COUNT; i++) {
+                    dComIfGs_onEventBit(sHiddenSkillFlags[i]);
+                }
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Forget All##skills_clear")) {
+                for (int i = 0; i < HIDDEN_SKILL_COUNT; i++) {
+                    dComIfGs_offEventBit(sHiddenSkillFlags[i]);
+                }
+            }
+            ImGui::TreePop();
+        }
+
+        if (ImGui::TreeNode("Collection Logs")) {
+            if (ImGui::TreeNode("Postman Letters")) {
+                for (int i = 0; i < LETTER_COUNT; i++) {
+                    bool had = dComIfGs_isLetterGetFlag(i) != 0;
+                    if (ImGui::Checkbox(
+                            fmt::format("{0}##letter_{1}", sLetterSenders[i], i).c_str(), &had)) {
+                        setLetterGetFlag(i, had);
+                    }
+                }
+                ImGui::Spacing();
+                if (ImGui::Button("Receive All##letters_all")) {
+                    for (int i = 0; i < LETTER_COUNT; i++) setLetterGetFlag(i, true);
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Clear All##letters_clear")) {
+                    for (int i = 0; i < LETTER_COUNT; i++) setLetterGetFlag(i, false);
+                }
+                ImGui::TreePop();
+            }
+
+            if (ImGui::TreeNode("Fishing Log")) {
+                dSv_fishing_info_c& fish = dComIfGs_getSaveData()->getPlayer().getFishingInfo();
+                if (ImGui::BeginTable("FishTable", 3,
+                                      ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_RowBg)) {
+                    ImGui::TableSetupColumn("Species");
+                    ImGui::TableSetupColumn("Caught");
+                    ImGui::TableSetupColumn("Biggest (cm)");
+                    ImGui::TableHeadersRow();
+
+                    for (int i = 0; i < FISH_COUNT; i++) {
+                        u8 idx = sFishSpecies[i].index;
+                        ImGui::TableNextRow();
+
+                        ImGui::TableSetColumnIndex(0);
+                        ImGui::TextUnformatted(sFishSpecies[i].name);
+
+                        ImGui::TableSetColumnIndex(1);
+                        int count = dComIfGs_getFishNum(idx);
+                        ImGui::SetNextItemWidth(100.0f);
+                        if (ImGui::InputInt(fmt::format("##fish_c_{}", i).c_str(), &count, 1, 10)) {
+                            if (count < 0) count = 0;
+                            if (count > 999) count = 999;
+                            fish.mFishCount[idx] = (u16)count;
+                        }
+
+                        ImGui::TableSetColumnIndex(2);
+                        int size = dComIfGs_getFishSize(idx);
+                        ImGui::SetNextItemWidth(100.0f);
+                        if (ImGui::InputInt(fmt::format("##fish_s_{}", i).c_str(), &size, 1, 10)) {
+                            if (size < 0) size = 0;
+                            if (size > 255) size = 255;
+                            dComIfGs_setFishSize(idx, (u8)size);
+                        }
+                    }
+                    ImGui::EndTable();
+                }
+                ImGui::TreePop();
+            }
+            ImGui::TreePop();
+        }
     }
 
     void drawFlagList(const char* id, BE(u32)& flags) {
