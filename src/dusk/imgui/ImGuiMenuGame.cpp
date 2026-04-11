@@ -103,8 +103,9 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
-            if (ImGui::BeginMenu("Misc")) {
+            if (ImGui::BeginMenu("Interface")) {
                 config::ImGuiCheckbox("Skip Pre-Launch UI", getSettings().backend.skipPreLaunchUI);
+                config::ImGuiCheckbox("Show Pipeline Compilation", getSettings().backend.showPipelineCompilation);
 
                 ImGui::EndMenu();
             }

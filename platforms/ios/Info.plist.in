@@ -75,5 +75,9 @@
       <integer>1</integer>
       <integer>2</integer>
     </array>
+    <key>UIApplicationSupportsIndirectInputEvents</key>
+    <true/>
+    <key>CADisableMinimumFrameDurationOnPhone</key>
+    <true/>
 </dict>
 </plist>
