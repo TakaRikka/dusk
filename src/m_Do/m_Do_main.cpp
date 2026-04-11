@@ -53,7 +53,6 @@
 #include "dusk/main.h"
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "version.h"
-#include "dusk/time.h"
 
 #include <aurora/aurora.h>
 #include <aurora/event.h>
