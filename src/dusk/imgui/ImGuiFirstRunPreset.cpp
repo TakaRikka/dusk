@@ -5,12 +5,14 @@
 #include "ImGuiEngine.hpp"
 #include "dusk/settings.h"
 #include "dusk/config.hpp"
+#include <dusk/dusk.h>
 
 namespace dusk {
 
 static void ApplyPresetStandard() {
     auto& s = getSettings();
     s.video.lockAspectRatio.setValue(true);
+    VILockAspectRatio(defaultAspectRatioW, defaultAspectRatioH);
 }
 
 static void ApplyPresetHD() {
