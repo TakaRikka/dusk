@@ -32,6 +32,12 @@ void daAlink_c::handleQuickTransform() {
 
     mDoCPd_c::getCpadInfo(PAD_1).mPressedButtonFlags = 0;
 
+    // Don't allow quick transform while in the STAR tent.
+    if (checkStageName("R_SP161")) {
+        Z2GetAudioMgr()->seStart(Z2SE_SYS_ERROR, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        return;
+    }
+
     // Ensure that the Z Button is not dimmed
     if (meterDrawPtr->getButtonZAlpha() != 1.f) {
         Z2GetAudioMgr()->seStart(Z2SE_SYS_ERROR, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
