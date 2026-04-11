@@ -278,6 +278,8 @@ J2DPane* J2DScreen::searchUserInfo(u64 tag) {
 }
 
 void J2DScreen::drawSelf(f32 param_0, f32 param_1, Mtx* param_2) {
+    GX_AND_TRACY_SCOPED("J2DScreen::drawSelf")
+
     JUtility::TColor color(mColor);
     u8 alpha = (color.a * mAlpha) / 255;
 

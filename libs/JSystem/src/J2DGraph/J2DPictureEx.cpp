@@ -79,6 +79,7 @@ bool J2DPictureEx::prepareTexture(u8 param_0) {
 }
 
 void J2DPictureEx::drawSelf(f32 param_0, f32 param_1, f32 (*param_2)[3][4]) {
+    GX_AND_TRACY_SCOPED("J2DPictureEx::drawSelf")
     if (mMaterial != NULL) {
         mMaterial->setGX();
         GXClearVtxDesc();
