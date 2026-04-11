@@ -87,7 +87,7 @@ namespace dusk {
 
                 config::ImGuiSliderInt("Shadow Resolution", getSettings().game.shadowResolutionMultiplier, 1, 8, "x%d");
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Improves the shadow resolution, making them higher quality");
+                    ImGui::SetTooltip("Improves the shadow resolution, making them higher quality.");
                 }
 
                 ImGui::EndMenu();
