@@ -454,11 +454,11 @@ void dMsgScrnTalk_c::fukiPosCalc(u8 param_1) {
             #if TARGET_PC
             mDoLib_project(&msgActor->pos, &local_70, {0, 0, FB_WIDTH, FB_HEIGHT});
             #else
-            mDoLib_project(&msgActor->pos, &local_70,);
+            mDoLib_project(&msgActor->pos, &local_70);
             #endif
-            
-            if (local_70.x >= 0.0f && local_70.x <= 608.0f && local_70.y >= 0.0f &&
-                local_70.y <= 448.0f)
+
+            if (local_70.x >= 0.0f && local_70.x <= FB_WIDTH_BASE && local_70.y >= 0.0f &&
+                local_70.y <= FB_HEIGHT_BASE)
             {
                 f3y = 0.5f * (cStack_7c.y + local_70.y);
             } else {
@@ -493,6 +493,9 @@ void dMsgScrnTalk_c::fukiPosCalc(u8 param_1) {
     field_0xf0 = 0.0f;
     field_0x488 = param_1;
     f32 dVar15;
+    // the magic numbers here are correlated with the framebuffer size, but
+    // were likely either chosen by hand or had multiple arithmetic
+    // operations applied which cannot easily be reverse engineered
     switch (field_0x488) {
     case 1:
         dVar15 = g_MsgObject_HIO_c.mBoxPos[2][0];

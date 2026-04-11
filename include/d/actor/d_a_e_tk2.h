@@ -39,8 +39,7 @@ public:
     /* 0x680 */ s16 mPlayerAngleY;
     /* 0x684 */ f32 mPlayerDistanceLimit;
     /* 0x688 */ u8 field24_0x688[2];
-    /* 0x68A */ s16 mActionTimer[3];
-    /* 0x690 */ s16 mExecuteState;
+    /* 0x68A */ s16 mActionTimer[4];
     /* 0x692 */ s16 mInvincibilityTimer;
     /* 0x694 */ s8 mAttentionOFF;
     /* 0x695 */ s8 mTKBallSpawned;

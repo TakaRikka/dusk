@@ -330,6 +330,9 @@ void dMenu_ItemExplain_c::draw(J2DOrthoGraph* i_graph) {
         mpInfoString->drawOutFontLocal((J2DTextBox*)mpInfoText->getPanePtr(), -1.0f);
         drawKantera();
         if (mpSelect_c != NULL) {
+            // the magic numbers here are correlated with the framebuffer size, but
+            // were likely either chosen by hand or had multiple arithmetic
+            // operations applied which cannot easily be reverse engineered
             mpSelect_c->translate(486.0f, 209.0f);
             mpSelect_c->draw(0.0f, 0.0f);
         }
