@@ -244,7 +244,7 @@ namespace dusk {
             return;
         }
 
-        if (!m_isLaunchInitialized) {
+        if (dusk::IsGameLaunched && !m_isLaunchInitialized) {
             m_toasts.emplace_back("Press F1 to toggle menu"s, 5.f);
             m_isLaunchInitialized = true;
         }
