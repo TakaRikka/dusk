@@ -523,7 +523,7 @@ void dSelect_cursor_c::setCursorAnimation() {
     }
 
     for (int i = 0; i < 4; i++) {
-        field_0x74[i] = mParam1 * (field_0x94[i] * ((1.0f - param3) + fVar2 * param3));
+        field_0x74[i] = mParam1 * (field_0x94[i] * ((1.0f - param3) + fVar2 * param3)) IF_DUSK(* mDoGph_gInf_c::hudAspectScaleUp);
         field_0x84[i] = mParam2 * (field_0xa4[i] * ((1.0f - param3) + fVar2 * param3));
     }
 

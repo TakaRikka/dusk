@@ -1100,23 +1100,11 @@ void dMenu_Collect2D_c::cursorPosSet() {
     Vec pos = mpSelPm[mCursorX][mCursorY]->getGlobalVtxCenter(false, 0);
     mpDrawCursor->setPos(pos.x, pos.y, mpSelPm[mCursorX][mCursorY]->getPanePtr(), false);
     if (mCursorY == 5) {
-        #if TARGET_PC
-        mpDrawCursor->setParam(1.1f * mDoGph_gInf_c::hudAspectScaleUp, 0.85f, 0.05f, 0.5f, 0.5f);
-        #else
         mpDrawCursor->setParam(1.1f, 0.85f, 0.05f, 0.5f, 0.5f);
-        #endif
     } else if (mCursorX == 6 && mCursorY == 0) {
-        #if TARGET_PC
-        mpDrawCursor->setParam(0.6f * mDoGph_gInf_c::hudAspectScaleUp, 0.85f, 0.03f, 0.6f, 0.6f);
-        #else
         mpDrawCursor->setParam(0.6f, 0.85f, 0.03f, 0.6f, 0.6f);
-        #endif
     } else {
-        #if TARGET_PC
-        mpDrawCursor->setParam(1.0f * mDoGph_gInf_c::hudAspectScaleUp, 1.0f, 0.1f, 0.7f, 0.7f);
-        #else
         mpDrawCursor->setParam(1.0f, 1.0f, 0.1f, 0.7f, 0.7f);
-        #endif
     }
 }
 
