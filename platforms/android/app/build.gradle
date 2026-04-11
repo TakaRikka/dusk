@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.axiodl.metaforce'
+    namespace 'com.twilitrealm.dusk'
     compileSdk 35
 
     defaultConfig {
-        applicationId 'com.axiodl.metaforce'
+        applicationId 'com.twilitrealm.dusk'
         minSdk 24
         targetSdk 35
         versionCode 1

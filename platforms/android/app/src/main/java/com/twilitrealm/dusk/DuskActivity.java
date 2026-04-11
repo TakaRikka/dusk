@@ -1,4 +1,4 @@
-package com.axiodl.metaforce;
+package com.twilitrealm.dusk;
 
 import android.content.Intent;
 
@@ -7,7 +7,7 @@ import org.libsdl.app.SDLActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MetaforceActivity extends SDLActivity {
+public class DuskActivity extends SDLActivity {
     private static String[] splitArgs(String raw) {
         List<String> out = new ArrayList<>();
         StringBuilder current = new StringBuilder();
@@ -65,12 +65,12 @@ public class MetaforceActivity extends SDLActivity {
     protected String[] getArguments() {
         Intent intent = getIntent();
         if (intent != null) {
-            String[] argv = intent.getStringArrayExtra("metaforce_argv");
+            String[] argv = intent.getStringArrayExtra("dusk_argv");
             if (argv != null && argv.length > 0) {
                 return argv;
             }
 
-            String rawArgs = intent.getStringExtra("metaforce_args");
+            String rawArgs = intent.getStringExtra("dusk_args");
             if (rawArgs != null) {
                 String trimmed = rawArgs.trim();
                 if (!trimmed.isEmpty()) {
@@ -78,7 +78,7 @@ public class MetaforceActivity extends SDLActivity {
                 }
             }
 
-            String discPath = intent.getStringExtra("metaforce_disc");
+            String discPath = intent.getStringExtra("dusk_disc");
             if (discPath != null && !discPath.isEmpty()) {
                 return new String[] { discPath };
             }

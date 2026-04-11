@@ -20,7 +20,7 @@
         android:enableOnBackInvokedCallback="false">
 
         <activity
-            android:name="com.axiodl.metaforce.MetaforceActivity"
+            android:name="com.twilitrealm.dusk.DuskActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="layoutDirection|locale|grammaticalGender|fontScale|fontWeightAdjustment|orientation|uiMode|screenLayout|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
             android:exported="true"

@@ -1,6 +1,6 @@
 # Android Shell
 
-This directory contains a minimal SDLActivity-based Android app wrapper for Metaforce.
+This directory contains a minimal SDLActivity-based Android app wrapper for Dusk.
 
 ## Prerequisites
 
@@ -66,12 +66,12 @@ Output APK:
 You can pass command-line args through the activity intent:
 
 ```bash
-adb shell am start -n com.axiodl.metaforce/.MetaforceActivity \
-  --es metaforce_args "'/sdcard/Download/Metroid Prime (USA).iso' --warp 2 17"
+adb shell am start -n com.twilitrealm.dusk/.DuskActivity \
+  --es dusk_args "'/sdcard/Download/The Legend of Zelda: Twilight Princess (USA).iso'"
 ```
 
 Supported extras:
 
-- `metaforce_args`: single shell-like argument string
-- `metaforce_argv`: string-array argv
-- `metaforce_disc`: compatibility shortcut (single ISO path)
+- `dusk_args`: single shell-like argument string
+- `dusk_argv`: string-array argv
+- `dusk_disc`: compatibility shortcut (single ISO path)
