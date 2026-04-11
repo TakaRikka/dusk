@@ -432,7 +432,13 @@ void dMenu_Fmap2DBack_c::draw() {
 
     if (field_0x122d) {
         mpMeterHaihai->drawHaihai(field_0x122d);
+#if TARGET_PC
+        if (!dusk::getSettings().game.enableFrameInterpolation) {
+            field_0x122d = 0;
+        }
+#else
         field_0x122d = 0;
+#endif
     }
 
     if (g_fmapHIO.mRangeCheck && !g_fmapHIO.mRangeCheckDrawPriority) {

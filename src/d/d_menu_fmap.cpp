@@ -1133,6 +1133,12 @@ void dMenu_Fmap_c::zoom_region_to_spot_proc() {
 void dMenu_Fmap_c::zoom_spot_to_region_init() {
     mZoomLevel = 10;
     field_0x1ec = 1.0f;
+#if TARGET_PC
+    // Frame interp note: field_0x122d used to be set every draw, causing flickering. Do it here instead.
+    if (dusk::getSettings().game.enableFrameInterpolation) {
+        mpDraw2DBack->resetScrollArrowMask();
+    }
+#endif
     Z2GetAudioMgr()->seStart(Z2SE_SY_MAP_ZOOMOUT, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
