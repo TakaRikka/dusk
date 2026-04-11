@@ -432,6 +432,8 @@ int game_main(int argc, char* argv[]) {
     config.mem2Size = 24 * 1024 * 1024;
     config.allowJoystickBackgroundEvents = true;
     config.imGuiInitCallback = &aurora_imgui_init_callback;
+    config.allowTextureReplacements = true;
+    config.allowTextureDumps = false;
 
     PADSetDefaultMapping(&defaultPadMapping);
 
