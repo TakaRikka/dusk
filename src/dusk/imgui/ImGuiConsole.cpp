@@ -411,7 +411,7 @@ namespace dusk {
     void ImGuiConsole::ShowPipelineProgress() {
         const auto* stats = aurora_get_stats();
         const u32 queuedPipelines = stats->queuedPipelines;
-        if (queuedPipelines == 0) {
+        if (queuedPipelines == 0 || !getSettings().backend.showPipelineCompilation) {
             return;
         }
         const u32 createdPipelines = stats->createdPipelines;

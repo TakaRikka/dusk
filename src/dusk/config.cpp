@@ -20,7 +20,7 @@ using json = nlohmann::json;
 aurora::Module DuskConfigLog("dusk::config");
 
 static absl::flat_hash_map<std::string_view, ConfigVarBase*> RegisteredConfigVars;
-static bool RegistrationDone;
+static bool RegistrationDone = false;
 
 static std::string GetConfigJsonPath() {
     return fmt::format("{}{}", configPath, ConfigFileName);

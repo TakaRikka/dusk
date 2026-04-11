@@ -1340,6 +1340,7 @@ set(DUSK_FILES
         src/dusk/config.cpp
         src/dusk/settings.cpp
         src/dusk/logging.cpp
+        src/dusk/frame_interpolation.cpp
         src/dusk/layout.cpp
         src/dusk/stubs.cpp
         src/dusk/endian.cpp

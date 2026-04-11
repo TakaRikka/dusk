@@ -20,6 +20,7 @@
 #include "JSystem/JUtility/JUTProcBar.h"
 #include "JSystem/JUtility/JUTReport.h"
 #include "SSystem/SComponent/c_counter.h"
+#include "SSystem/SComponent/c_API_graphic.h"
 #include "Z2AudioLib/Z2WolfHowlMgr.h"
 #include "c/c_dylink.h"
 #include "d/d_com_inf_game.h"
@@ -46,6 +47,7 @@
 #include "SSystem/SComponent/c_API.h"
 #include "dusk/app_info.hpp"
 #include "dusk/dusk.h"
+#include "dusk/frame_interpolation.h"
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
@@ -197,6 +199,11 @@ void main01(void) {
     if (preLaunchUIWindowSize.width != 0)
         mDoGph_gInf_c::setWindowSize(preLaunchUIWindowSize);
 
+    using clock = std::chrono::steady_clock;
+    constexpr double kSimStepSeconds = 1.0 / 30.0;
+    auto previous_time = clock::now();
+    double accumulator = kSimStepSeconds;
+
     do {
         // 1. Update Window Events
         const AuroraEvent* event = aurora_update();
@@ -219,27 +226,42 @@ void main01(void) {
 
         eventsDone:;
 
-        static u32 frame = 0;
-        frame++;
-
-        // Game Inputs
-        mDoCPd_c::read();
+        auto current_time = clock::now();
+        double frame_seconds = std::chrono::duration<double>(current_time - previous_time).count();
+        previous_time = current_time;
+        accumulator += frame_seconds;
 
         VIWaitForRetrace();
 
-#if TARGET_PC
         dusk::lastFrameAuroraStats = *aurora_get_stats();
         if (!aurora_begin_frame()) {
             DuskLog.debug("aurora_begin_frame returned false, skipping draw this frame");
             continue;
         }
-#endif
 
-        // EXECUTE GAME LOGIC & RENDER
-        // This calls mDoGph_Painter -> JFWDisplay -> GX Functions
-        fapGm_Execute();
+        if (dusk::getSettings().game.enableFrameInterpolation) {
+            while (accumulator >= kSimStepSeconds) {
+                mDoCPd_c::read();
+                fapGm_Execute();
+                mDoAud_Execute();
+                accumulator -= kSimStepSeconds;
+            }
 
-        mDoAud_Execute();
+            float interp_alpha = static_cast<float>(accumulator / kSimStepSeconds);
+            dusk::frame_interp::interpolate(interp_alpha);
+            cAPIGph_Painter();
+        } else {
+            accumulator = 0.0;
+
+            // Game Inputs
+            mDoCPd_c::read();
+
+            // EXECUTE GAME LOGIC & RENDER
+            // This calls mDoGph_Painter -> JFWDisplay -> GX Functions
+            fapGm_Execute();
+
+            mDoAud_Execute();
+        }
 
         aurora_end_frame();
 
@@ -366,10 +388,19 @@ static constexpr PADDefaultMapping defaultPadMapping = {
     },
 };
 
+static bool mainCalled = false;
+
 // =========================================================================
 // PC ENTRY POINT
 // =========================================================================
 int game_main(int argc, char* argv[]) {
+    // On iOS, when connected to an external monitor, SDLUIKitSceneDelegate scene:willConnectToSession:
+    // can call our main function again. Explicitly guard against this reinitialization.
+    if (mainCalled) {
+        return 0;
+    }
+    mainCalled = true;
+
     dusk::registerSettings();
     dusk::config::FinishRegistration();
 
@@ -381,7 +412,7 @@ int game_main(int argc, char* argv[]) {
         arg_options.add_options()
             ("l,log-level", "Log level from " + std::to_string(AuroraLogLevel::LOG_DEBUG) + " to " + std::to_string(AuroraLogLevel::LOG_FATAL), cxxopts::value<uint8_t>()->default_value("0"))
             ("h,help", "Print usage")
-            ("dvd", "Path to DVD image file", cxxopts::value<std::string>()->default_value("game.iso"))
+            ("dvd", "Path to DVD image file", cxxopts::value<std::string>())
             ("backend", "Graphics API backend to use (auto, d3d12, metal, vulkan, null)", cxxopts::value<std::string>())
             ("cvar", "Override configuration variables without modifying config", cxxopts::value<std::vector<std::string>>());
 
@@ -423,6 +454,8 @@ int game_main(int argc, char* argv[]) {
     config.mem2Size = 24 * 1024 * 1024;
     config.allowJoystickBackgroundEvents = true;
     config.imGuiInitCallback = &aurora_imgui_init_callback;
+    config.allowTextureReplacements = true;
+    config.allowTextureDumps = false;
 
     PADSetDefaultMapping(&defaultPadMapping);
 
@@ -441,25 +474,37 @@ int game_main(int argc, char* argv[]) {
     dusk::audio::SetMasterVolume(dusk::getSettings().audio.masterVolume / 100.0f);
     dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);
 
-    // pre game launch ui main loop
-    if (!launchUILoop()) {
-        aurora_shutdown();
-        return 0;
-    }
-
     std::string dvd_path;
+    bool dvd_opened = false;
     if (parsed_arg_options.count("dvd")) {
         dvd_path = parsed_arg_options["dvd"].as<std::string>();
-    } else {
+        DuskLog.info("Loading DVD image from command line: {}", dvd_path);
+        dvd_opened = aurora_dvd_open(dvd_path.c_str());
+        if (!dvd_opened) {
+            DuskLog.warn("Failed to open DVD image from command line: {}, opening prelaunch UI", dvd_path);
+        } else {
+            dusk::getSettings().backend.isoPath.setValue(dvd_path);
+            dusk::config::Save();
+            dusk::IsGameLaunched = true;
+        }
+    }
+
+    if (!dvd_opened) {
+        // pre game launch ui main loop
+        if (!launchUILoop()) {
+            aurora_shutdown();
+            return 0;
+        }
+
         dvd_path = dusk::getSettings().backend.isoPath;
 
         if (dvd_path.empty()) {
             DuskLog.fatal("No DVD image specified, unable to boot!");
         }
-    }
-    DuskLog.info("Loading DVD image: {}", dvd_path);
-    if (!aurora_dvd_open(dvd_path.c_str())) {
-        DuskLog.fatal("Failed to open DVD image: {}", dvd_path);
+        DuskLog.info("Loading DVD image: {}", dvd_path);
+        if (!aurora_dvd_open(dvd_path.c_str())) {
+            DuskLog.fatal("Failed to open DVD image: {}", dvd_path);
+        }
     }
 
     OSInit();

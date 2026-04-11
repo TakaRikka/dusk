@@ -53,6 +53,7 @@ struct UserSettings {
         // Graphics
         ConfigVar<bool> enableBloom;
         ConfigVar<bool> useWaterProjectionOffset;
+        ConfigVar<bool> enableFrameInterpolation;
         ConfigVar<int> shadowResolutionMultiplier;
 
         // Audio
@@ -76,6 +77,7 @@ struct UserSettings {
         ConfigVar<std::string> isoPath;
         ConfigVar<std::string> graphicsBackend;
         ConfigVar<bool> skipPreLaunchUI;
+        ConfigVar<bool> showPipelineCompilation;
     } backend;
 };
 

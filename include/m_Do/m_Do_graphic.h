@@ -237,6 +237,7 @@ public:
     static void* getZbufferTex() { return mZbufferTex; }
     static void setFadeRate(f32 rate) { mFadeRate = rate; }
     static f32 getFadeRate() { return mFadeRate; }
+    static f32 getFadeSpeed() { return mFadeSpeed; }
     static bloom_c* getBloom() { return &m_bloom; }
     static GXColor& getFadeColor() { return mFadeColor; }
     static GXColor& getBackColor() { return mBackColor; }

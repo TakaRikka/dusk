@@ -41,6 +41,7 @@ UserSettings g_userSettings = {
         // Graphics
         .enableBloom {"game.enableBloom", true},
         .useWaterProjectionOffset {"game.useWaterProjectionOffset", false},
+        .enableFrameInterpolation = {"game.enableFrameInterpolation", false},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
 
         // Audio
@@ -63,7 +64,8 @@ UserSettings g_userSettings = {
     .backend = {
         .isoPath {"backend.isoPath", ""},
         .graphicsBackend {"backend.graphicsBackend", "auto"},
-        .skipPreLaunchUI {"backend.skipPreLaunchUI", false}
+        .skipPreLaunchUI {"backend.skipPreLaunchUI", false},
+        .showPipelineCompilation{"backend.showPipelineCompilation", false}
     }
 };
 
@@ -111,10 +113,12 @@ void registerSettings() {
     Register(g_userSettings.game.midnasLamentNonStop);
     Register(g_userSettings.game.enableTurboKeybind);
     Register(g_userSettings.game.fastSpinner);
+    Register(g_userSettings.game.enableFrameInterpolation);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.graphicsBackend);
     Register(g_userSettings.backend.skipPreLaunchUI);
+    Register(g_userSettings.backend.showPipelineCompilation);
 }
 
 // Transient settings

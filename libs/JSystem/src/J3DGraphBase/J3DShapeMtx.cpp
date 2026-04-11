@@ -6,8 +6,19 @@
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DTexture.h"
+#include "dusk/frame_interpolation.h"
 
 u16 J3DShapeMtx::sMtxLoadCache[10];
+
+#ifdef TARGET_PC
+static void J3DFrameInterpConcat(MtxP lhs, MtxP rhs, Mtx out) {
+    if (!dusk::frame_interp::lookup_concat_replacement(lhs, rhs, out)) {
+        MTXConcat(lhs, rhs, out);
+    }
+}
+#else
+#define J3DFrameInterpConcat MTXConcat
+#endif
 
 void J3DShapeMtx::resetMtxLoadCache() {
     sMtxLoadCache[0] =
@@ -290,7 +301,7 @@ void J3DDifferedTexMtx::loadExecute(f32 const (*param_0)[4]) {
 
 void J3DShapeMtxConcatView::loadMtxConcatView_PNGP(int slot, u16 drw) const {
     Mtx m;
-    MTXConcat(*j3dSys.getShapePacket()->getBaseMtxPtr(), j3dSys.getModelDrawMtx(drw), m);
+    J3DFrameInterpConcat(*j3dSys.getShapePacket()->getBaseMtxPtr(), j3dSys.getModelDrawMtx(drw), m);
     J3DDifferedTexMtx::load(m);
     J3DFifoLoadPosMtxImm(m, slot * 3);
     loadNrmMtx(slot, drw, m);
@@ -298,7 +309,7 @@ void J3DShapeMtxConcatView::loadMtxConcatView_PNGP(int slot, u16 drw) const {
 
 void J3DShapeMtxConcatView::loadMtxConcatView_PCPU(int slot, u16 drw) const {
     Mtx m;
-    MTXConcat(*j3dSys.getShapePacket()->getBaseMtxPtr(), j3dSys.getModelDrawMtx(drw), m);
+    J3DFrameInterpConcat(*j3dSys.getShapePacket()->getBaseMtxPtr(), j3dSys.getModelDrawMtx(drw), m);
     J3DDifferedTexMtx::load(m);
     J3DFifoLoadPosMtxImm(*j3dSys.getShapePacket()->getBaseMtxPtr(), slot * 3);
     loadNrmMtx(slot, drw, m);
@@ -306,7 +317,7 @@ void J3DShapeMtxConcatView::loadMtxConcatView_PCPU(int slot, u16 drw) const {
 
 void J3DShapeMtxConcatView::loadMtxConcatView_NCPU(int slot, u16 drw) const {
     Mtx m;
-    MTXConcat(*j3dSys.getShapePacket()->getBaseMtxPtr(), j3dSys.getModelDrawMtx(drw), m);
+    J3DFrameInterpConcat(*j3dSys.getShapePacket()->getBaseMtxPtr(), j3dSys.getModelDrawMtx(drw), m);
     J3DDifferedTexMtx::load(m);
     J3DFifoLoadPosMtxImm(m, slot * 3);
     J3DFifoLoadNrmMtxImm(*j3dSys.getShapePacket()->getBaseMtxPtr(), slot * 3);
@@ -318,7 +329,7 @@ void J3DShapeMtxConcatView::loadMtxConcatView_NCPU(int slot, u16 drw) const {
 void J3DShapeMtxConcatView::loadMtxConcatView_PNCPU(int slot, u16 drw) const {
     if (J3DDifferedTexMtx::sTexGenBlock != NULL) {
         Mtx m;
-        MTXConcat(*j3dSys.getShapePacket()->getBaseMtxPtr(), j3dSys.getModelDrawMtx(drw), m);
+        J3DFrameInterpConcat(*j3dSys.getShapePacket()->getBaseMtxPtr(), j3dSys.getModelDrawMtx(drw), m);
         J3DDifferedTexMtx::loadExecute(m);
     }
 
@@ -331,7 +342,7 @@ void J3DShapeMtxConcatView::loadMtxConcatView_PNCPU(int slot, u16 drw) const {
 
 void J3DShapeMtxConcatView::loadMtxConcatView_PNGP_LOD(int slot, u16 drw) const {
     Mtx m;
-    MTXConcat(*j3dSys.getShapePacket()->getBaseMtxPtr(), j3dSys.getModelDrawMtx(drw), m);
+    J3DFrameInterpConcat(*j3dSys.getShapePacket()->getBaseMtxPtr(), j3dSys.getModelDrawMtx(drw), m);
     Mtx copy;
     j3dSys.getModel()->getModelData()->getInvJointMtx(drw).to_host(copy);
     MTXConcat(m, copy, m);
@@ -490,9 +501,11 @@ void J3DShapeMtxBBoardConcatView::load() const {
     u16 draw_mtx_index = j3dSys.getModel()->getModelData()->getDrawMtxIndex(mUseMtxIndex);
 
     if (j3dSys.getModel()->getModelData()->getDrawMtxFlag(mUseMtxIndex) == 0) {
-        MTXConcat(j3dSys.getViewMtx(), j3dSys.getModel()->getMtxBuffer()->getUserAnmMtx(draw_mtx_index), mtx);
+        J3DFrameInterpConcat(j3dSys.getViewMtx(),
+                             j3dSys.getModel()->getMtxBuffer()->getUserAnmMtx(draw_mtx_index), mtx);
     } else {
-        MTXConcat(j3dSys.getViewMtx(), j3dSys.getModel()->getWeightAnmMtx(draw_mtx_index), mtx);
+        J3DFrameInterpConcat(j3dSys.getViewMtx(),
+                             j3dSys.getModel()->getWeightAnmMtx(draw_mtx_index), mtx);
     }
 
     J3DCalcBBoardMtx(mtx);
@@ -521,9 +534,11 @@ void J3DShapeMtxYBBoardConcatView::load() const {
     u16 draw_mtx_index = j3dSys.getModel()->getModelData()->getDrawMtxIndex(mUseMtxIndex);
 
     if (j3dSys.getModel()->getModelData()->getDrawMtxFlag(mUseMtxIndex) == 0) {
-        MTXConcat(j3dSys.getViewMtx(), j3dSys.getModel()->getMtxBuffer()->getUserAnmMtx(draw_mtx_index), mtx1);
+        J3DFrameInterpConcat(j3dSys.getViewMtx(),
+                             j3dSys.getModel()->getMtxBuffer()->getUserAnmMtx(draw_mtx_index), mtx1);
     } else {
-        MTXConcat(j3dSys.getViewMtx(), j3dSys.getModel()->getWeightAnmMtx(draw_mtx_index), mtx1);
+        J3DFrameInterpConcat(j3dSys.getViewMtx(),
+                             j3dSys.getModel()->getWeightAnmMtx(draw_mtx_index), mtx1);
     }
 
     J3DCalcYBBoardMtx(mtx1);
