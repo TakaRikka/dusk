@@ -898,6 +898,9 @@ BOOL cDyl_IsLinked(s16 i_ProfName) {
 }
 
 BOOL cDyl_Unlink(s16 i_ProfName) {
+#if TARGET_PC
+    return FALSE;
+#else
     #if DEBUG
     cCc_Check();
     #endif
@@ -911,9 +914,13 @@ BOOL cDyl_Unlink(s16 i_ProfName) {
     }
 
     return FALSE;
+#endif
 }
 
 int cDyl_LinkASync(s16 i_ProfName) {
+#if TARGET_PC
+    return cPhs_COMPLEATE_e;
+#else
     #if DEBUG
     cCc_Check();
     #endif
@@ -953,6 +960,7 @@ int cDyl_LinkASync(s16 i_ProfName) {
     }
 
     return cPhs_COMPLEATE_e;
+#endif
 }
 
 static int cDyl_InitCallback(void* param_0) {
