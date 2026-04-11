@@ -468,6 +468,7 @@ void darwFilter(GXColor matColor) {
     GXEnd();
 }
 
+#ifdef TARGET_PC
 static void mDoGph_AdvanceFadeState() {
     if (mDoGph_gInf_c::isFade() != 0) {
         f32 fade_rate = mDoGph_gInf_c::getFadeRate() + mDoGph_gInf_c::getFadeSpeed();
@@ -511,6 +512,36 @@ void mDoGph_gInf_c::calcFade() {
     mDoGph_AdvanceFadeState();
     mDoGph_DrawStoredFade();
 }
+#else
+void mDoGph_gInf_c::calcFade() {
+    if (mDoGph_gInf_c::mFade != 0) {
+        mFadeRate += mFadeSpeed;
+
+        if (mFadeRate < 0.0f) {
+            mFadeRate = 0.0f;
+            mDoGph_gInf_c::mFade = 0;
+        } else {
+            if (mFadeRate > 1.0f) {
+                mFadeRate = 1.0f;
+            }
+        }
+        mFadeColor.a = 255.0f * mFadeRate;
+    } else {
+        if (dComIfG_getBrightness() != 255) {
+            mFadeColor.r = 0;
+            mFadeColor.g = 0;
+            mFadeColor.b = 0;
+            mFadeColor.a = 255 - dComIfG_getBrightness();
+        } else {
+            mFadeColor.a = 0;
+        }
+    }
+
+    if (mFadeColor.a != 0) {
+        darwFilter(mFadeColor);
+    }
+}
+#endif
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 u32 mDoGph_gInf_c::csr_c::m_blurID;
@@ -837,7 +868,9 @@ int mDoGph_AfterOfDraw() {
 
     JUTVideo::getManager()->setRenderMode(mDoMch_render_c::getRenderModeObj());
     mDoGph_gInf_c::endFrame();
+#ifdef TARGET_PC
     dusk::frame_interp::notify_sim_tick_complete();
+#endif
     return 1;
 }
 
@@ -1680,13 +1713,15 @@ static void captureScreenPerspDrawInfo(JPADrawInfo& info) {
 
 static void drawItem3D() {
     ZoneScoped;
-    // FRAME INTERP NOTE: Title screen needs 0.0f while everything else that runs through this is -100.0f.
+#ifdef TARGET_PC
+    // Frame interpolation: Title screen needs 0.0f while everything else that runs through this is -100.0f.
     // Running presentation faster than logic revealed the problem. Thanks, Nintendo.
     if (fopAcM_SearchByName(fpcNm_TITLE_e) != nullptr) {
         dMenu_Collect3D_c::setViewPortOffsetY(0.0f);
     } else {
         dMenu_Collect3D_c::setViewPortOffsetY(-100.0f);
     }
+#endif
     Mtx item_mtx;
     dMenu_Collect3D_c::setupItem3D(item_mtx);
 
@@ -1714,17 +1749,21 @@ int mDoGph_Painter() {
 
 #if TARGET_PC
     dusk::g_imguiConsole.PreDraw();
-#endif
 
     const u32 pending_ui_ticks = dusk::frame_interp::begin_presentation_ui_pass();
+#endif
 
     #if DEBUG
     drawHeapMap();
     #endif
 
+#ifdef TARGET_PC
     for (u32 i = 0; i < pending_ui_ticks; ++i) {
+#endif
         dComIfGp_particle_calcMenu();
+#ifdef TARGET_PC
     }
+#endif
 
     JFWDisplay::getManager()->setFader(mDoGph_gInf_c::getFader());
     mDoGph_gInf_c::setClearColor(mDoGph_gInf_c::getBackColor());
@@ -1810,9 +1849,13 @@ int mDoGph_Painter() {
             GXSetScissor(view_port->x_orig, view_port->y_orig, view_port->width,
                          view_port->height);
 
-            // FRAME INTERP NOTE: Call setViewMtx earlier so that it's interpolated in time for draw_info to use it
+#ifdef TARGET_PC
+            // Frame interpolation: Call setViewMtx earlier so that it's interpolated in time for draw_info to use it
             j3dSys.setViewMtx(camera_p->view.viewMtx);
             JPADrawInfo draw_info(j3dSys.getViewMtx(), camera_p->view.fovy, camera_p->view.aspect);
+#else
+            JPADrawInfo draw_info(camera_p->view.viewMtx, camera_p->view.fovy, camera_p->view.aspect);
+#endif
 
             #if WIDESCREEN_SUPPORT
             if (mDoGph_gInf_c::isWideZoom()) {
@@ -1850,6 +1893,9 @@ int mDoGph_Painter() {
 
             PPCSync();
 
+#ifndef TARGET_PC
+            j3dSys.setViewMtx(camera_p->view.viewMtx);
+#endif
             dKy_setLight();
             GX_DEBUG_GROUP(dComIfGd_drawOpaListSky);
             GX_DEBUG_GROUP(dComIfGd_drawXluListSky);
@@ -2190,8 +2236,12 @@ int mDoGph_Painter() {
                 if (strcmp(dComIfGp_getStartStageName(), "F_SP127") != 0 &&
                     (mDoGph_gInf_c::isFade() & 0x80) == 0)
                 {
+#ifdef TARGET_PC
                     mDoGph_AdvanceFadeState(pending_ui_ticks);
                     mDoGph_DrawStoredFade();
+#else
+                    mDoGph_gInf_c::calcFade();
+#endif
                 }
 
                 #if DEBUG
@@ -2256,9 +2306,13 @@ int mDoGph_Painter() {
     #endif
 
     GXSetClipMode(GX_CLIP_ENABLE);
+#ifdef TARGET_PC
     for (u32 i = 0; i < pending_ui_ticks; ++i) {
+#endif
         dDlst_list_c::calcWipe();
+#ifdef TARGET_PC
     }
+#endif
     j3dSys.reinitGX();
 
     ortho.setOrtho(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
@@ -2342,11 +2396,15 @@ int mDoGph_Painter() {
 
 #if TARGET_PC
     dusk::g_imguiConsole.PostDraw();
-#endif
 
     JFWDisplay::getManager()->setFaderSimSteps(pending_ui_ticks);
+#endif
+
     mDoGph_gInf_c::endRender();
+
+#ifdef TARGET_PC
     dusk::frame_interp::end_presentation_ui_pass();
+#endif
 
     #if WIDESCREEN_SUPPORT
     mDoGph_gInf_c::offWideZoom();
