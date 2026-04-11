@@ -2362,8 +2362,12 @@ int mDoGph_Painter() {
 
         if (strcmp(dComIfGp_getStartStageName(), "F_SP127") == 0 || (mDoGph_gInf_c::isFade() & 0x80) != 0)
         {
+#ifdef TARGET_PC
             mDoGph_AdvanceFadeState(pending_ui_ticks);
             mDoGph_DrawStoredFade();
+#else
+            mDoGph_gInf_c::calcFade();
+#endif
         }
 
         GX_DEBUG_GROUP(dComIfGp_particle_draw2DmenuFore, &draw_info3);
