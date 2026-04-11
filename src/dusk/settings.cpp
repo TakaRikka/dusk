@@ -65,7 +65,7 @@ UserSettings g_userSettings = {
         .graphicsBackend {"backend.graphicsBackend", "auto"},
         .skipPreLaunchUI {"backend.skipPreLaunchUI", false},
         .showPipelineCompilation {"backend.showPipelineCompilation", false},
-        .wasPresetChosen{"backend.wasPresetChosen", false}
+        .wasPresetChosen {"backend.wasPresetChosen", false}
     }
 };
 
