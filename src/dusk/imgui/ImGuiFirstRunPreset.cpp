@@ -5,12 +5,14 @@
 #include "ImGuiEngine.hpp"
 #include "dusk/settings.h"
 #include "dusk/config.hpp"
+#include <dusk/dusk.h>
 
 namespace dusk {
 
-static void ApplyPresetStandard() {
+static void ApplyPresetClassic() {
     auto& s = getSettings();
     s.video.lockAspectRatio.setValue(true);
+    VILockAspectRatio(defaultAspectRatioW, defaultAspectRatioH);
 }
 
 static void ApplyPresetHD() {
@@ -24,6 +26,16 @@ static void ApplyPresetHD() {
     s.game.fastTears.setValue(true);
     s.game.biggerWallets.setValue(true);
     s.game.invertCameraXAxis.setValue(true);
+}
+
+static void ApplyPresetDusk() {
+    ApplyPresetHD();
+
+    auto& s = getSettings();
+    s.game.enableQuickTransform.setValue(true);
+    s.game.instantSaves.setValue(true);
+    s.game.midnasLamentNonStop.setValue(true);
+    s.game.enableFrameInterpolation.setValue(true);
 }
 
 // =========================================================================
@@ -55,24 +67,31 @@ void ImGuiFirstRunPreset::draw() {
 
     int chosen = -1;
 
-    if (ImGui::BeginTable("##presets", 3, ImGuiTableFlags_None)) {
+    if (ImGui::BeginTable("##presets", 5, ImGuiTableFlags_None)) {
         ImGui::TableSetupColumn(nullptr, ImGuiTableColumnFlags_WidthStretch);
         ImGui::TableSetupColumn(nullptr, ImGuiTableColumnFlags_WidthFixed, 16.0f * ImGuiScale());
         ImGui::TableSetupColumn(nullptr, ImGuiTableColumnFlags_WidthStretch);
-
+        ImGui::TableSetupColumn(nullptr, ImGuiTableColumnFlags_WidthFixed, 16.0f * ImGuiScale());
+        ImGui::TableSetupColumn(nullptr, ImGuiTableColumnFlags_WidthStretch);
 
         ImGui::TableNextRow();
 
         ImGui::PushFont(ImGuiEngine::fontLarge);
 
         ImGui::TableSetColumnIndex(0);
-        if (ImGui::Button("Standard##btn", ImVec2(ImGui::GetContentRegionAvail().x, 80.0f * ImGuiScale()))) {
+        if (ImGui::Button("Classic##btn", ImVec2(ImGui::GetContentRegionAvail().x, 80.0f * ImGuiScale()))) {
             chosen = 0;
         }
 
         ImGui::TableSetColumnIndex(2);
         if (ImGui::Button("HD##btn", ImVec2(ImGui::GetContentRegionAvail().x, 80.0f * ImGuiScale()))) {
             chosen = 1;
+        }
+
+        ImGui::TableSetColumnIndex(4);
+        if (ImGui::Button("Dusk##btn", ImVec2(ImGui::GetContentRegionAvail().x, 80.0f * ImGuiScale())))
+        {
+            chosen = 2;
         }
 
         ImGui::PopFont();
@@ -87,12 +106,17 @@ void ImGuiFirstRunPreset::draw() {
         ImGui::Spacing();
         ImGui::TextWrapped("Some enhancements enabled to match the HD version. A good starting point for most players!");
 
+        ImGui::TableSetColumnIndex(4);
+        ImGui::Spacing();
+        ImGui::TextWrapped("More enhancements enabled than the HD preset. Veteran players will appreciate the additional tweaks!");
+
         ImGui::EndTable();
     }
 
     if (chosen >= 0) {
-        if (chosen == 0) ApplyPresetStandard();
+        if (chosen == 0) ApplyPresetClassic();
         if (chosen == 1) ApplyPresetHD();
+        if (chosen == 2) ApplyPresetDusk();
 
         getSettings().backend.wasPresetChosen.setValue(true);
         config::Save();

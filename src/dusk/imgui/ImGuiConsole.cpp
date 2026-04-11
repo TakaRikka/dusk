@@ -237,10 +237,8 @@ namespace dusk {
             m_preLaunchWindow.draw();
         }
 
-        if (!m_isLaunchInitialized && !getSettings().backend.wasPresetChosen) {
-            if (dusk::IsGameLaunched) {
-                m_firstRunPreset.draw();
-            }
+        if (!getSettings().backend.wasPresetChosen) {
+            m_firstRunPreset.draw();
             return;
         }
 
