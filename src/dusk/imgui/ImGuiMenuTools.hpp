@@ -22,6 +22,7 @@ namespace dusk {
 		void ShowMapLoader();
         void ShowPlayerInfo();
         void ShowAudioDebug();
+        void ShowSaveEditor();
 
     private:
 		bool m_showDebugOverlay = false;
@@ -51,8 +52,8 @@ namespace dusk {
 			bool showInternalNames = false;
 		} m_mapLoaderInfo;
 
-		bool m_isDevelopmentMode = false;
 		bool m_showPlayerInfo = false;
+		int m_playerInfoOverlayCorner = 1; // top-right
 
 		bool m_showSaveEditor = false;
         ImGuiSaveEditor m_saveEditor;

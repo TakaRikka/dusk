@@ -99,28 +99,28 @@ void dMeterHaihai_c::draw() {
     }
 
     if (direction & DIR_DOWN_e || i_forceDraw) {
-        mpParent->getPanePtr()->translate(x_pos[0] + 304.0f, y_pos[0] + 224.0f);
+        mpParent->getPanePtr()->translate(x_pos[0] + FB_WIDTH_BASE / 2, y_pos[0] + FB_HEIGHT_BASE / 2);
         mpParent->getPanePtr()->rotate(mpParent->getPanePtr()->getWidth() / 2,
                                        mpParent->getPanePtr()->getHeight() / 2, ROTATE_Z, 0.0f);
         mpHaihaiScreen->draw(0.0f, 0.0f, dComIfGp_getCurrentGrafPort());
     }
 
     if (direction & DIR_RIGHT_e || i_forceDraw) {
-        mpParent->getPanePtr()->translate(x_pos[1] + 304.0f, y_pos[1] + 224.0f);
+        mpParent->getPanePtr()->translate(x_pos[1] + FB_WIDTH_BASE / 2, y_pos[1] + FB_HEIGHT_BASE / 2);
         mpParent->getPanePtr()->rotate(mpParent->getPanePtr()->getWidth() / 2,
                                        mpParent->getPanePtr()->getHeight() / 2, ROTATE_Z, 90.0f);
         mpHaihaiScreen->draw(0.0f, 0.0f, dComIfGp_getCurrentGrafPort());
     }
 
     if (direction & DIR_UP_e || i_forceDraw) {
-        mpParent->getPanePtr()->translate(x_pos[0] + 304.0f, 224.0f - y_pos[0]);
+        mpParent->getPanePtr()->translate(x_pos[0] + FB_WIDTH_BASE / 2, FB_HEIGHT_BASE / 2 - y_pos[0]);
         mpParent->getPanePtr()->rotate(mpParent->getPanePtr()->getWidth() / 2,
                                        mpParent->getPanePtr()->getHeight() / 2, ROTATE_Z, 180.0f);
         mpHaihaiScreen->draw(0.0f, 0.0f, dComIfGp_getCurrentGrafPort());
     }
 
     if (direction & DIR_LEFT_e || i_forceDraw) {
-        mpParent->getPanePtr()->translate(304.0f - x_pos[1], y_pos[1] + 224.0f);
+        mpParent->getPanePtr()->translate(FB_WIDTH_BASE / 2 - x_pos[1], y_pos[1] + FB_HEIGHT_BASE / 2);
         mpParent->getPanePtr()->rotate(mpParent->getPanePtr()->getWidth() / 2,
                                        mpParent->getPanePtr()->getHeight() / 2, ROTATE_Z, 270.0f);
         mpHaihaiScreen->draw(0.0f, 0.0f, dComIfGp_getCurrentGrafPort());
@@ -128,8 +128,8 @@ void dMeterHaihai_c::draw() {
 }
 
 void dMeterHaihai_c::drawHaihai(u8 i_direction) {
-    f32 center_x = 304.0f;
-    f32 center_y = 224.0f;
+    f32 center_x = FB_WIDTH_BASE / 2;
+    f32 center_y = FB_HEIGHT_BASE / 2;
 
     if (mType == 1) {
         center_x += (3.0f + g_drawHIO.mScrollArrowCenterPosX);

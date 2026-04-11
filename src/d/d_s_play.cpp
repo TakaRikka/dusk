@@ -785,19 +785,7 @@ static int dScnPly_Execute(dScnPly_c* i_this) {
         dJprev_c::get()->update();
         #endif
 
-        #if TARGET_PC
-        if (dusk::config::IsConfigFileMissing()) {
-            firstTime = true;
-        } else if (firstTime) {
-            mDoAud_seStart(Z2SE_TITLE_ENTER, NULL, 0, 0);
-            JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
-            firstTime = false;
-        } else {
-            dDemo_c::update();
-        }
-        #else
         dDemo_c::update();
-        #endif
 
         #if DEBUG
         dJcame_c::get()->update();

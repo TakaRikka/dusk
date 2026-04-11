@@ -5,6 +5,7 @@
 #include <gx.h>
 #include <stdint.h>
 #include <vi.h>
+#include "SDL3/SDL_timer.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -18,6 +19,7 @@
 #include "dusk/logging.h"
 #include "dusk/settings.h"
 #include "global.h"
+#include "tracy/Tracy.hpp"
 
 void JFWDisplay::ctor_subroutine(bool enableAlpha) {
     mEnableAlpha = enableAlpha;
@@ -199,6 +201,14 @@ void JFWDisplay::preGX() {
     }
 }
 
+#ifdef TARGET_PC
+static s32 s_faderSimSteps = -1;
+
+void JFWDisplay::setFaderSimSteps(u32 steps) {
+    s_faderSimSteps = static_cast<s32>(steps);
+}
+#endif
+
 void JFWDisplay::endGX() {
     s32 bufferNum = JUTXfb::getManager()->getBufferNum();
     u16 width = JUTVideo::getManager()->getFbWidth();
@@ -209,7 +219,26 @@ void JFWDisplay::endGX() {
 
     if (mFader != NULL) {
         ortho.setPort();
+#ifdef TARGET_PC
+        if (dusk::getSettings().game.enableFrameInterpolation) {
+            u32 advance_count = 1;
+            if (s_faderSimSteps >= 0) {
+                advance_count = static_cast<u32>(s_faderSimSteps);
+                s_faderSimSteps = -1;
+            }
+            for (u32 i = 0; i < advance_count; i++) {
+                mFader->control();
+            }
+            if (mFader->getStatus() != 1) {
+                mFader->draw();
+            }
+        } else {
+            mFader->control();
+            mFader->draw();
+        }
+#else
         mFader->control();
+#endif
     }
     ortho.setPort();
     JUTDbPrint::getManager()->flush();
@@ -349,12 +378,16 @@ void JFWDisplay::waitBlanking(int param_0) {
 }
 
 static void waitForTick(u32 p1, u16 p2) {
-    #if TARGET_PC
+#if TARGET_PC
+    if (dusk::getSettings().game.enableFrameInterpolation) {
+        return;
+    }
     if (dusk::getTransientSettings().skipFrameRateLimit) {
         p1 = OS_TIMER_CLOCK / 120;
     }
-    #endif
+#endif
 
+    ZoneScopedC(tracy::Color::DimGray);
     if (p1 != 0)
     {
         static OSTime nextTick = OSGetTime();
@@ -384,6 +417,12 @@ static void waitForTick(u32 p1, u16 p2) {
 
 JSUList<JFWAlarm> JFWAlarm::sList(false);
 
+#if TARGET_PC
+void JFWDisplay::threadSleep(s64 time) {
+    SDL_DelayNS(OSTicksToMicroseconds(time) * 1'000);
+}
+#else
+
 static void JFWThreadAlarmHandler(OSAlarm* p_alarm, OSContext* p_ctx) {
     JFWAlarm* alarm = static_cast<JFWAlarm*>(p_alarm);
     alarm->removeLink();
@@ -401,6 +440,7 @@ void JFWDisplay::threadSleep(s64 time) {
     OSSuspendThread(alarm.getThread());
     OSRestoreInterrupts(status);
 }
+#endif
 
 static void dummy() {
     JUTXfb::getManager()->setDisplayingXfbIndex(0);

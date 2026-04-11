@@ -93,6 +93,7 @@ J2DTextBoxEx::~J2DTextBoxEx() {
 }
 
 void J2DTextBoxEx::drawSelf(f32 param_0, f32 param_1, Mtx* p_mtx) {
+    GX_AND_TRACY_SCOPED("J2DTextBoxEx::drawSelf")
     Mtx m;
 
     JUTFont* font = NULL;

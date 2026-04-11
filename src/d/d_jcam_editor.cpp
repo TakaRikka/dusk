@@ -1,11 +1,12 @@
 #include "d/d_jcam_editor.h"
+#include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_ext.h"
 
 dJcame_c* dJcame_c::m_myObj;
 
 dJcame_c::dJcame_c(const JStage::TSystem* i_system, f32 param_1, JUTGamePad& i_pad) {
-    mOrthoGraph = JKR_NEW J2DOrthoGraph(0.0f, 0.0f, 608.0f, 448.0f, -1.0f, 1.0f);
+    mOrthoGraph = JKR_NEW J2DOrthoGraph(0.0f, 0.0f, FB_WIDTH_BASE, FB_HEIGHT_BASE, -1.0f, 1.0f);
     mFont = JKR_NEW JUTResFont((ResFONT*)JUTResFONT_Ascfont_fix12, NULL);
     
     mHeap = JKRExpHeap::create(0x100000, JKRHeap::getRootHeap2(), false);

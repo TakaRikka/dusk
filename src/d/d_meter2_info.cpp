@@ -205,11 +205,11 @@ void dMeter2Info_c::init() {
     unk_0x5c = 0.0f;
     unk_0x60 = 1.0f;
     unk_0x64 = 30.0f;
-    unk_0x68 = 304.0f;
-    unk_0x6c = 224.0f;
+    unk_0x68 = FB_WIDTH_BASE / 2;
+    unk_0x6c = FB_HEIGHT_BASE / 2;
 
-    m2DWidth = 608.0f;
-    m2DHeight = 448.0f;
+    m2DWidth = FB_WIDTH_BASE;
+    m2DHeight = FB_HEIGHT_BASE;
     m2DPosH = 0.0f;
     m2DPosV = 0.0f;
     unk_0x80 = 0.0f;

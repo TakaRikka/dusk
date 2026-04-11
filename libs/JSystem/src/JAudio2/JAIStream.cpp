@@ -7,7 +7,7 @@
 #include "JSystem/JAudio2/JAIAudience.h"
 
 #if TARGET_PC
-#include <dusk/config.hpp>
+#include <dusk/settings.h>
 #endif
 
 static void JAIStream_JASAramStreamCallback_(u32 type, JASAramStream* aramStream, void* userData) {
@@ -39,12 +39,6 @@ JAIStream::JAIStream(JAIStreamMgr* streamMgr, JAISoundStrategyMgr<JAIStream>* so
 void JAIStream::JAIStreamMgr_startID_(JAISoundID id, s32 streamFileEntry,
                                       const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience,
                                       int category) {
-    #if TARGET_PC
-    if (dusk::config::IsConfigFileMissing()) {
-        return;
-    }
-    #endif
-
     field_0x298 = category;
     field_0x294 = streamFileEntry;
     start_JAISound_(id, posPtr, audience);

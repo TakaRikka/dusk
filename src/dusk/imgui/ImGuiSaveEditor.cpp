@@ -287,7 +287,7 @@ namespace dusk {
         ImGuiWindowFlags windowFlags =
             ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize;
 
-        ImGui::SetNextWindowBgAlpha(0.65f);
+        // ImGui::SetNextWindowBgAlpha(0.65f);
 
         if (ImGui::Begin("Save Editor", &open, windowFlags)) {
             if (ImGui::BeginTabBar("SaveEditorTabBar", ImGuiTabBarFlags_NoCloseWithMiddleMouseButton)) {

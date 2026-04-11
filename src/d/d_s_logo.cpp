@@ -1176,19 +1176,20 @@ void dScnLogo_c::logoInitWii() {
             break;
         }
 
-        width = 608;
-        height = 456;
+        // this uses the standard width but the widescreen height?
+        width = FB_WIDTH_BASE;
+        height = FB_HEIGHT;
     }
 
     JUT_ASSERT(2309, timg != NULL);
-    mStrapImg = JKR_NEW dDlst_2D_c(timg, 304 - (width / 2), 224 - (height / 2), width, height, 255);
+    mStrapImg = JKR_NEW dDlst_2D_c(timg, (FB_WIDTH_BASE / 2) - (width / 2), (FB_HEIGHT_BASE / 2) - (height / 2), width, height, 255);
 
     #if VERSION == VERSION_SHIELD
     timg = (ResTIMG*)dComIfG_getObjectRes("LogoUsWii", 5);
-    mNvLogo = JKR_NEW dDlst_2D_c(timg, 304 - (width / 2), 224 - (height / 2), width, height, 255);
+    mNvLogo = JKR_NEW dDlst_2D_c(timg, (FB_WIDTH_BASE / 2) - (width / 2), (FB_HEIGHT_BASE / 2) - (height / 2), width, height, 255);
 
     timg = (ResTIMG*)dComIfG_getObjectRes("LogoUsWii", 4);
-    mMocImg = JKR_NEW dDlst_2D_c(timg, 304 - (width / 2), 224 - (height / 2), width, height, 255);
+    mMocImg = JKR_NEW dDlst_2D_c(timg, (FB_WIDTH_BASE / 2) - (width / 2), (FB_HEIGHT_BASE / 2) - (height / 2), width, height, 255);
     #endif
 
     OS_REPORT("\x1b[32m%d archiveHeap->getTotalFreeSize %08x\n\x1b[m", 2316, archiveHeap->getTotalFreeSize());

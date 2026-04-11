@@ -118,8 +118,12 @@ void ImGuiFirstRunPreset::draw() {
         if (chosen == 0) ApplyPresetVanilla();
         if (chosen == 1) ApplyPresetDefault();
         if (chosen == 2) ApplyPresetQoL();
+
+        getSettings().backend.wasPresetChosen.setValue(true);
         config::Save();
+
         m_done = true;
+
         ImGui::CloseCurrentPopup();
     }
 

@@ -850,7 +850,7 @@ daAlink_FaceTexData const daAlink_c::m_faceTexDataTable[] = {
     {dRes_ID_ALANM_BTP_FDAM01_e, dRes_ID_ALANM_BTK_FFINISHA_e},
     {dRes_ID_ALANM_BTP_FFINISHA_e, dRes_ID_ALANM_BTK_FFINISHED_e},
     {dRes_ID_ALANM_BTP_FARELORD_e, dRes_ID_ALANM_BTK_FARELORD_e},
-    {dRes_ID_ALANM_BTP_FARELORDTAME_e, dRes_ID_ALANM_BTK_FARELORDTAME_e},       
+    {dRes_ID_ALANM_BTP_FARELORDTAME_e, dRes_ID_ALANM_BTK_FARELORDTAME_e},
     {dRes_ID_ALANM_BTP_FPUSHW_e, dRes_ID_ALANM_BTK_FPUSHW_e},
     {dRes_ID_ALANM_BTP_FPULLW_e, dRes_ID_ALANM_BTK_FPULLW_e},
     {dRes_ID_ALANM_BTP_FWAITST_e, dRes_ID_ALANM_BTK_FWAITST_e},
@@ -1001,7 +1001,7 @@ daAlink_FaceTexData const daAlink_c::m_faceTexDataTable[] = {
     {dRes_ID_ALANM_BTP_WL_FSWIMDIEA_e, dRes_ID_ALANM_BTK_WL_FA_e},
     {dRes_ID_ALANM_BTP_WL_FSWIMDIEP_e, dRes_ID_ALANM_BTK_WL_FA_e},
     {dRes_ID_ALANM_BTP_WL_FMDSHOCK_e, dRes_ID_ALANM_BTK_WL_FMDSHOCK_e},
-    {dRes_ID_ALANM_BTP_WL_FENTRANCE_e, dRes_ID_ALANM_BTK_WL_FENTRANCE_e},       
+    {dRes_ID_ALANM_BTP_WL_FENTRANCE_e, dRes_ID_ALANM_BTK_WL_FENTRANCE_e},
     {dRes_ID_ALANM_BTP_WL_FHOWLC_e, dRes_ID_ALANM_BTK_WL_FA_e},
     {dRes_ID_ALANM_BTP_WL_FC_e, dRes_ID_ALANM_BTK_WL_FA_e},
 };
@@ -4943,7 +4943,7 @@ int daAlink_c::create() {
         if (dComIfG_resLoad(&mShieldPhaseReq, mShieldArcName, mpShieldArcHeap) != cPhs_COMPLEATE_e) {
             return cPhs_INIT_e;
         }
-        
+
         u32 heapSize = 0x3E930;
         heapSize |= 0x80000000;
         heapSize |= 0x40000000;
@@ -5885,7 +5885,7 @@ void daAlink_c::setItemMatrix(int param_0) {
             || (mProcID == PROC_CUT_REVERSE && mProcVar2.field_0x300c != 0)
             || mProcID == PROC_GUARD_BREAK
             || (mEquipItem == 0x103 && !checkEndResetFlg1(ERFLG1_SHIELD_BACKBONE) && !checkModeFlg(0x400))
-            ) 
+            )
         {
             mShieldModel->setBaseTRMtx(mpLinkModel->getAnmMtx(mRightItemJntNo));
 
@@ -5949,9 +5949,23 @@ void daAlink_c::setItemMatrix(int param_0) {
         mpLinkBootModels[0]->setAnmMtx(3, mpLinkModel->getAnmMtx(0x15));
 
         mDoMtx_stack_c::XrotS(-0x8000);
-        mDoMtx_concat(mpLinkModel->getAnmMtx(0x18), mDoMtx_stack_c::get(), mpLinkBootModels[1]->getAnmMtx(1));
-        mDoMtx_concat(mpLinkModel->getAnmMtx(0x19), mDoMtx_stack_c::get(), mpLinkBootModels[1]->getAnmMtx(2));
-        mDoMtx_concat(mpLinkModel->getAnmMtx(0x1A), mDoMtx_stack_c::get(), mpLinkBootModels[1]->getAnmMtx(3));
+#ifdef TARGET_PC
+        if (dusk::getSettings().game.enableFrameInterpolation) {
+            Mtx boot_mtx;
+            mDoMtx_concat(mpLinkModel->getAnmMtx(0x18), mDoMtx_stack_c::get(), boot_mtx);
+            mpLinkBootModels[1]->setAnmMtx(1, boot_mtx);
+            mDoMtx_concat(mpLinkModel->getAnmMtx(0x19), mDoMtx_stack_c::get(), boot_mtx);
+            mpLinkBootModels[1]->setAnmMtx(2, boot_mtx);
+            mDoMtx_concat(mpLinkModel->getAnmMtx(0x1A), mDoMtx_stack_c::get(), boot_mtx);
+            mpLinkBootModels[1]->setAnmMtx(3, boot_mtx);
+        } else {
+#endif
+            mDoMtx_concat(mpLinkModel->getAnmMtx(0x18), mDoMtx_stack_c::get(), mpLinkBootModels[1]->getAnmMtx(1));
+            mDoMtx_concat(mpLinkModel->getAnmMtx(0x19), mDoMtx_stack_c::get(), mpLinkBootModels[1]->getAnmMtx(2));
+            mDoMtx_concat(mpLinkModel->getAnmMtx(0x1A), mDoMtx_stack_c::get(), mpLinkBootModels[1]->getAnmMtx(3));
+#ifdef TARGET_PC
+        }
+#endif
     }
 
     if (!checkNoResetFlg2(FLG2_STATUS_WINDOW_DRAW)) {
@@ -6279,7 +6293,7 @@ void daAlink_c::setWolfAtCollision() {
 
 void daAlink_c::resetAtCollision(BOOL param_0) {
     if (checkNoResetFlg0(FLG0_CUT_AT_FLG)) {
-        if (param_0 
+        if (param_0
             && !setSwordHitVibration(&mAtCps[0])
             && !setSwordHitVibration(&mAtCps[1])
             && !setSwordHitVibration(&mAtCps[2])
@@ -14055,7 +14069,7 @@ void daAlink_c::setMetamorphoseModel(BOOL i_isChangeToWolf) {
     JKRHeap* heap = setItemHeap();
 
     mHeldItemModel = initModel(loadAramBmd(dRes_ID_ALANM_BMD_AL_WF_e, 0x6000), 0);
-    
+
     if (!mItemBck.init(bck, FALSE, 2, 1.0f, 0, -1, false)) {
         JUT_ASSERT(20842, FALSE);
     }
@@ -16727,7 +16741,7 @@ int daAlink_c::procAutoJump() {
     #if VERSION == VERSION_SHIELD_DEBUG
     if (!checkStageName("F_SP115") && mGrabItemAcKeep.getActor() != NULL) {
         if ((fopAcM_GetName(mGrabItemAcKeep.getActor()) == fpcNm_NI_e && ((ni_class*)mGrabItemAcKeep.getActor())->checkGold() != TRUE) ||
-            (fopAcM_GetName(mGrabItemAcKeep.getActor()) == fpcNm_NPC_TKJ2_e)) 
+            (fopAcM_GetName(mGrabItemAcKeep.getActor()) == fpcNm_NPC_TKJ2_e))
         {
             mMaxSpeed = mpHIO->mAutoJump.m.mCuccoJumpMaxSpeed;
             field_0x3478 = mpHIO->mAutoJump.m.mCuccoFallMaxSpeed;

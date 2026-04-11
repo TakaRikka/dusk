@@ -12,6 +12,7 @@
 #include "d/d_debug_viewer.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_dvd_thread.h"
+#include "tracy/Tracy.hpp"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include "Z2AudioCS/Z2AudioCS.h"
@@ -157,6 +158,7 @@ static void mDoAud_Create() {
 
 void mDoAud_Execute() {
     DUSK_AUDIO_SKIP()
+    ZoneScoped;
 
     if (!mDoAud_zelAudio_c::isInitFlag()) {
         if (!mDoRst::isShutdown() && !mDoRst::isReturnToMenu()) {

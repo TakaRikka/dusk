@@ -14,9 +14,11 @@
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "SDL3/SDL_mouse.h"
 #include "dusk/config.hpp"
+#include "dusk/main.h"
 #include "dusk/settings.h"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/dusk.h"
+#include "tracy/Tracy.hpp"
 
 #if _WIN32
 #define NOMINMAX
@@ -32,6 +34,21 @@ namespace dusk {
     void ImGuiStringViewText(std::string_view text) {
         // begin()/end() do not work on MSVC
         ImGui::TextUnformatted(text.data(), text.data() + text.size());
+    }
+
+    void ImGuiTextCenter(std::string_view text) {
+        ImGui::NewLine();
+        float fontSize = ImGui::CalcTextSize(text.data(), text.data() + text.size()).x;
+        ImGui::SameLine(ImGui::GetWindowSize().x / 2 - fontSize + fontSize / 2);
+        ImGuiStringViewText(text);
+    }
+
+    bool ImGuiButtonCenter(std::string_view text) {
+        ImGui::NewLine();
+        float fontSize = ImGui::CalcTextSize(text.data(), text.data() + text.size()).x;
+        fontSize += ImGui::GetStyle().FramePadding.x;
+        ImGui::SameLine(ImGui::GetWindowSize().x / 2 - fontSize + fontSize / 2);
+        return ImGui::Button(text.data());
     }
 
     std::string BytesToString(size_t bytes) {
@@ -183,37 +200,15 @@ namespace dusk {
 
     ImGuiConsole::ImGuiConsole() {}
 
-    void ImGuiConsole::InitSettings() {
-        bool lockAspect = getSettings().video.lockAspectRatio;
-        if (lockAspect) {
-            VILockAspectRatio(defaultAspectRatioW, defaultAspectRatioH);
-        } else {
-            VIUnlockAspectRatio();
-        }
-
-        dusk::audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
-        dusk::audio::SetEnableReverb(getSettings().audio.enableReverb);
-    }
-
     void ImGuiConsole::UpdateSettings() {
         getTransientSettings().skipFrameRateLimit = getSettings().game.enableTurboKeybind && ImGui::IsKeyDown(ImGuiKey_Tab);
     }
 
     void ImGuiConsole::PreDraw() {
-        if (config::IsConfigFileMissing()) {
-            m_firstRunPreset.draw();
-            return;
-        }
-
-        if (!m_isLaunchInitialized) {
-            InitSettings();
-
-            m_toasts.emplace_back("Press F1 to toggle menu"s, 5.f);
-            m_isLaunchInitialized = true;
-        }
+        ZoneScoped;
 
         UpdateSettings();
-        
+
         if ((ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) &&
             ImGui::IsKeyPressed(ImGuiKey_R))
         {
@@ -224,24 +219,11 @@ namespace dusk {
             ImGuiMenuGame::ToggleFullscreen();
         }
 
-        if (CheckMenuViewToggle(ImGuiKey_F1, m_isHidden)) {
-            ShowToasts();
-            ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
-            SDL_HideCursor();
-            return;
-        }
+        bool showMenu = !dusk::IsGameLaunched || !CheckMenuViewToggle(ImGuiKey_F1, m_isHidden);
 
-        ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouseCursorChange;
-        // Imgui will re-show cursor.
-
-        // TODO: we need to be able to render the menu bar & any overlays separately
-        // The code currently ties them all together, so hiding the menu hides all windows
-
-        if (ImGui::BeginMainMenuBar()) {
+        if (showMenu && ImGui::BeginMainMenuBar()) {
             m_menuGame.draw();
             m_menuEnhancements.draw();
-
-            // Keep always last
             m_menuTools.draw();
 
             ImGui::SetCursorPosX(ImGui::GetWindowWidth() - 80.0f * ImGuiScale());
@@ -249,6 +231,46 @@ namespace dusk {
             ImGuiStringViewText(fmt::format(FMT_STRING("FPS: {:.2f}\n"), io.Framerate));
 
             ImGui::EndMainMenuBar();
+        }
+
+        if (!dusk::IsGameLaunched) {
+            m_preLaunchWindow.draw();
+        }
+
+        if (!m_isLaunchInitialized && !getSettings().backend.wasPresetChosen) {
+            if (dusk::IsGameLaunched) {
+                m_firstRunPreset.draw();
+            }
+            return;
+        }
+
+        if (!m_isLaunchInitialized) {
+            m_toasts.emplace_back("Press F1 to toggle menu"s, 5.f);
+            m_isLaunchInitialized = true;
+        }
+
+        m_menuGame.windowControllerConfig();
+        m_menuGame.windowInputViewer();
+        if (dusk::IsGameLaunched) {
+            m_menuTools.ShowDebugOverlay();
+            m_menuTools.ShowCameraOverlay();
+            m_menuTools.ShowProcessManager();
+            m_menuTools.ShowHeapOverlay();
+            m_menuTools.ShowStubLog();
+            m_menuTools.ShowMapLoader();
+            m_menuTools.ShowPlayerInfo();
+            m_menuTools.ShowAudioDebug();
+            m_menuTools.ShowSaveEditor();
+        }
+        DuskDebugPad(); // temporary, remove later
+
+        // Only show cursor when menu or any windows are open
+        if (showMenu || ImGui::GetIO().MetricsRenderWindows > 0) {
+            ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouseCursorChange;
+            // Imgui will re-show cursor.
+        } else {
+            ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+            SDL_HideCursor();
         }
 
         ShowToasts();
@@ -288,6 +310,70 @@ namespace dusk {
         case BACKEND_NULL:
             return "Null"sv;
         }
+    }
+
+    std::string_view backend_id(AuroraBackend backend) {
+        switch (backend) {
+        default:
+            return "auto"sv;
+        case BACKEND_D3D12:
+            return "d3d12"sv;
+        case BACKEND_D3D11:
+            return "d3d11"sv;
+        case BACKEND_METAL:
+            return "metal"sv;
+        case BACKEND_VULKAN:
+            return "vulkan"sv;
+        case BACKEND_OPENGL:
+            return "opengl"sv;
+        case BACKEND_OPENGLES:
+            return "opengles"sv;
+        case BACKEND_WEBGPU:
+            return "webgpu"sv;
+        case BACKEND_NULL:
+            return "null"sv;
+        }
+    }
+
+    bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
+        if (backend == "auto") {
+            outBackend = BACKEND_AUTO;
+            return true;
+        }
+        if (backend == "d3d11") {
+            outBackend = BACKEND_D3D11;
+            return true;
+        }
+        if (backend == "d3d12") {
+            outBackend = BACKEND_D3D12;
+            return true;
+        }
+        if (backend == "metal") {
+            outBackend = BACKEND_METAL;
+            return true;
+        }
+        if (backend == "vulkan") {
+            outBackend = BACKEND_VULKAN;
+            return true;
+        }
+        if (backend == "opengl") {
+            outBackend = BACKEND_OPENGL;
+            return true;
+        }
+        if (backend == "opengles") {
+            outBackend = BACKEND_OPENGLES;
+            return true;
+        }
+        if (backend == "webgpu") {
+            outBackend = BACKEND_WEBGPU;
+            return true;
+        }
+        if (backend == "null") {
+            outBackend = BACKEND_NULL;
+            return true;
+        }
+
+        return false;
     }
 
     void ImGuiConsole::ShowToasts() {
@@ -333,7 +419,7 @@ namespace dusk {
     void ImGuiConsole::ShowPipelineProgress() {
         const auto* stats = aurora_get_stats();
         const u32 queuedPipelines = stats->queuedPipelines;
-        if (queuedPipelines == 0) {
+        if (queuedPipelines == 0 || !getSettings().backend.showPipelineCompilation) {
             return;
         }
         const u32 createdPipelines = stats->createdPipelines;

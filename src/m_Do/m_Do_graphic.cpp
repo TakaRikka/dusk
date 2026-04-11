@@ -7,6 +7,9 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 
+#include <base/PPCArch.h>
+#include <cstring>
+#include "DynamicLink.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DPrint.h"
 #include "JSystem/JAWExtSystem/JAWExtSystem.h"
@@ -19,24 +22,25 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_menu_collect.h"
+#include "d/d_debug_viewer.h"
 #include "d/d_jcam_editor.h"
 #include "d/d_jpreviewer.h"
-#include <base/PPCArch.h>
+#include "d/d_menu_collect.h"
+#include "d/d_meter2_info.h"
+#include "d/d_s_play.h"
+#include "dusk/endian.h"
+#include "dusk/gx_helper.h"
+#include "dusk/logging.h"
 #include "f_ap/f_ap_game.h"
+#include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera_mng.h"
+#include "f_pc/f_pc_name.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
 #include "m_Do/m_Do_main.h"
-#include "d/d_debug_viewer.h"
-#include "d/d_meter2_info.h"
-#include "d/d_s_play.h"
-#include "DynamicLink.h"
-#include <cstring>
-#include "dusk/endian.h"
-#include "dusk/logging.h"
-#include "dusk/gx_helper.h"
+#include "dusk/frame_interpolation.h"
+#include "tracy/Tracy.hpp"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/sc.h>
@@ -348,6 +352,8 @@ void mDoGph_gInf_c::create() {
 static bool data_80450BE8;
 
 void mDoGph_gInf_c::beginRender() {
+    ZoneScoped;
+
     #if PLATFORM_WII || PLATFORM_SHIELD
     VISetTrapFilter(fapGmHIO_getTrapFilter() ? 1 : 0);
     VISetGamma((VIGamma)fapGmHIO_getGamma());
@@ -416,6 +422,7 @@ void mDoGph_gInf_c::fadeOut(f32 fadeSpeed) {
 }
 
 void darwFilter(GXColor matColor) {
+    ZoneScoped;
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE,
                   GX_AF_NONE);
@@ -461,6 +468,51 @@ void darwFilter(GXColor matColor) {
     GXEnd();
 }
 
+#ifdef TARGET_PC
+static void mDoGph_AdvanceFadeState() {
+    if (mDoGph_gInf_c::isFade() != 0) {
+        f32 fade_rate = mDoGph_gInf_c::getFadeRate() + mDoGph_gInf_c::getFadeSpeed();
+
+        if (fade_rate < 0.0f) {
+            fade_rate = 0.0f;
+            mDoGph_gInf_c::offFade();
+        } else if (fade_rate > 1.0f) {
+            fade_rate = 1.0f;
+        }
+
+        mDoGph_gInf_c::setFadeRate(fade_rate);
+        mDoGph_gInf_c::getFadeColor().a = 255.0f * fade_rate;
+    } else {
+        GXColor& fade_color = mDoGph_gInf_c::getFadeColor();
+        if (dComIfG_getBrightness() != 255) {
+            fade_color.r = 0;
+            fade_color.g = 0;
+            fade_color.b = 0;
+            fade_color.a = 255 - dComIfG_getBrightness();
+        } else {
+            fade_color.a = 0;
+        }
+    }
+}
+
+static void mDoGph_AdvanceFadeState(u32 tick_count) {
+    for (u32 i = 0; i < tick_count; ++i) {
+        mDoGph_AdvanceFadeState();
+    }
+}
+
+static void mDoGph_DrawStoredFade() {
+    GXColor& fade_color = mDoGph_gInf_c::getFadeColor();
+    if (fade_color.a != 0) {
+        darwFilter(fade_color);
+    }
+}
+
+void mDoGph_gInf_c::calcFade() {
+    mDoGph_AdvanceFadeState();
+    mDoGph_DrawStoredFade();
+}
+#else
 void mDoGph_gInf_c::calcFade() {
     if (mDoGph_gInf_c::mFade != 0) {
         mFadeRate += mFadeSpeed;
@@ -489,6 +541,7 @@ void mDoGph_gInf_c::calcFade() {
         darwFilter(mFadeColor);
     }
 }
+#endif
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 u32 mDoGph_gInf_c::csr_c::m_blurID;
@@ -527,29 +580,29 @@ f32 mDoGph_gInf_c::m_scale = 1.0f;
 
 f32 mDoGph_gInf_c::m_invScale = 1.0f;
 
-int mDoGph_gInf_c::m_maxX = 608 - 1;
+int mDoGph_gInf_c::m_maxX = FB_WIDTH_BASE - 1;
 
-int mDoGph_gInf_c::m_maxY = 448 - 1;
+int mDoGph_gInf_c::m_maxY = FB_HEIGHT_BASE - 1;
 
-int mDoGph_gInf_c::m_width = 608;
+int mDoGph_gInf_c::m_width = FB_WIDTH_BASE;
 
-int mDoGph_gInf_c::m_height = 448;
+int mDoGph_gInf_c::m_height = FB_HEIGHT_BASE;
 
-f32 mDoGph_gInf_c::m_maxXF = 608.0f - 1;
+f32 mDoGph_gInf_c::m_maxXF = FB_WIDTH_BASE - 1;
 
-f32 mDoGph_gInf_c::m_maxYF = 448.0f - 1;
+f32 mDoGph_gInf_c::m_maxYF = FB_HEIGHT_BASE - 1;
 
-f32 mDoGph_gInf_c::m_widthF = 608.0f;
+f32 mDoGph_gInf_c::m_widthF = FB_WIDTH_BASE;
 
-f32 mDoGph_gInf_c::m_heightF = 448.0f;
+f32 mDoGph_gInf_c::m_heightF = FB_HEIGHT_BASE;
 
 struct tvSize {
     u16 width;
     u16 height;
 };
 const tvSize l_tvSize[2] = {
-    {608, 448},
-    {808, 448},
+    {FB_WIDTH_BASE, FB_HEIGHT_BASE},
+    {808, FB_HEIGHT_BASE},
 };
 
 #if TARGET_PC
@@ -565,8 +618,8 @@ void mDoGph_gInf_c::setTvSize() {
 
     m_width = tvsize->width;
     m_height = tvsize->height;
-    m_minX = -((m_width - 608) / 2);
-    m_minY = -((m_height - 448) / 2);
+    m_minX = -((m_width - FB_WIDTH_BASE) / 2);
+    m_minY = -((m_height - FB_HEIGHT_BASE) / 2);
     m_maxX = m_minX + m_width;
     m_maxY = m_minY + m_height;
 
@@ -815,6 +868,9 @@ int mDoGph_AfterOfDraw() {
 
     JUTVideo::getManager()->setRenderMode(mDoMch_render_c::getRenderModeObj());
     mDoGph_gInf_c::endFrame();
+#ifdef TARGET_PC
+    dusk::frame_interp::notify_sim_tick_complete();
+#endif
     return 1;
 }
 
@@ -834,6 +890,7 @@ void mDoGph_drawFilterQuad(s8 param_0, s8 param_1) {
 #endif
 
 static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_2) {
+    ZoneScoped;
     static GXColorS10 l_tevColor0 = {0, 0, 0, 0};
 
     if (daPy_getLinkPlayerActorClass() != NULL) {
@@ -1087,6 +1144,7 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
 }
 
 static void trimming(view_class* param_0, view_port_class* param_1) {
+    ZoneScoped;
     UNUSED(param_0);
 
     s16 y_orig = (int)param_1->y_orig & ~7;
@@ -1199,6 +1257,7 @@ void mDoGph_gInf_c::bloom_c::remove() {
 
 void mDoGph_gInf_c::bloom_c::draw() {
 #if TARGET_PC
+    ZoneScoped;
     if (!dusk::getSettings().game.enableBloom) {
         return;
     }
@@ -1473,6 +1532,7 @@ static void retry_captue_frame(view_class* param_0, view_port_class* param_1, in
 }
 
 static void motionBlure(view_class* param_0) {
+    ZoneScoped;
     if (g_env_light.is_blure) {
         GXLoadTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), GX_TEXMAP0);
         GXColor local_60;
@@ -1652,6 +1712,16 @@ static void captureScreenPerspDrawInfo(JPADrawInfo& info) {
 #endif
 
 static void drawItem3D() {
+    ZoneScoped;
+#ifdef TARGET_PC
+    // Frame interpolation: Title screen needs 0.0f while everything else that runs through this is -100.0f.
+    // Running presentation faster than logic revealed the problem. Thanks, Nintendo.
+    if (fopAcM_SearchByName(fpcNm_TITLE_e) != nullptr) {
+        dMenu_Collect3D_c::setViewPortOffsetY(0.0f);
+    } else {
+        dMenu_Collect3D_c::setViewPortOffsetY(-100.0f);
+    }
+#endif
     Mtx item_mtx;
     dMenu_Collect3D_c::setupItem3D(item_mtx);
 
@@ -1668,6 +1738,7 @@ static void drawItem3D() {
 }
 
 int mDoGph_Painter() {
+    ZoneScoped;
     // Diagnostic: log windowNum to track game state machine progress
     static bool sDiagLoggedWindow = false;
     if (!sDiagLoggedWindow) {
@@ -1678,13 +1749,21 @@ int mDoGph_Painter() {
 
 #if TARGET_PC
     dusk::g_imguiConsole.PreDraw();
+
+    const u32 pending_ui_ticks = dusk::frame_interp::begin_presentation_ui_pass();
 #endif
 
     #if DEBUG
     drawHeapMap();
     #endif
 
-    dComIfGp_particle_calcMenu();
+#ifdef TARGET_PC
+    for (u32 i = 0; i < pending_ui_ticks; ++i) {
+#endif
+        dComIfGp_particle_calcMenu();
+#ifdef TARGET_PC
+    }
+#endif
 
     JFWDisplay::getManager()->setFader(mDoGph_gInf_c::getFader());
     mDoGph_gInf_c::setClearColor(mDoGph_gInf_c::getBackColor());
@@ -1770,7 +1849,13 @@ int mDoGph_Painter() {
             GXSetScissor(view_port->x_orig, view_port->y_orig, view_port->width,
                          view_port->height);
 
+#ifdef TARGET_PC
+            // Frame interpolation: Call setViewMtx earlier so that it's interpolated in time for draw_info to use it
+            j3dSys.setViewMtx(camera_p->view.viewMtx);
+            JPADrawInfo draw_info(j3dSys.getViewMtx(), camera_p->view.fovy, camera_p->view.aspect);
+#else
             JPADrawInfo draw_info(camera_p->view.viewMtx, camera_p->view.fovy, camera_p->view.aspect);
+#endif
 
             #if WIDESCREEN_SUPPORT
             if (mDoGph_gInf_c::isWideZoom()) {
@@ -1808,7 +1893,9 @@ int mDoGph_Painter() {
 
             PPCSync();
 
+#ifndef TARGET_PC
             j3dSys.setViewMtx(camera_p->view.viewMtx);
+#endif
             dKy_setLight();
             GX_DEBUG_GROUP(dComIfGd_drawOpaListSky);
             GX_DEBUG_GROUP(dComIfGd_drawXluListSky);
@@ -2128,7 +2215,7 @@ int mDoGph_Painter() {
                 if (fapGmHIO_getParticle()) {
                     #if WIDESCREEN_SUPPORT
                     if (mDoGph_gInf_c::isWideZoom()) {
-                        ortho.setOrtho(0.0f, 0.0f, 608.0f, 448.0f, 100000.0f, -100000.0f);
+                        ortho.setOrtho(0.0f, 0.0f, FB_WIDTH_BASE, FB_HEIGHT_BASE, 100000.0f, -100000.0f);
                     } else
                     #endif
                     {
@@ -2139,8 +2226,8 @@ int mDoGph_Painter() {
                     ortho.setPort();
 
                     Mtx m3;
-                    MTXTrans(m3, FB_WIDTH / 2, FB_HEIGHT / 2, 0.0f);
-                    JPADrawInfo draw_info2(m3, 0.0f, FB_HEIGHT, 0.0f, FB_WIDTH);
+                    MTXTrans(m3, FB_WIDTH_BASE / 2, FB_HEIGHT_BASE / 2, 0.0f);
+                    JPADrawInfo draw_info2(m3, 0.0f, FB_HEIGHT_BASE, 0.0f, FB_WIDTH_BASE);
                     dComIfGp_particle_draw2Dgame(&draw_info2);
                 }
 
@@ -2149,7 +2236,12 @@ int mDoGph_Painter() {
                 if (strcmp(dComIfGp_getStartStageName(), "F_SP127") != 0 &&
                     (mDoGph_gInf_c::isFade() & 0x80) == 0)
                 {
+#ifdef TARGET_PC
+                    mDoGph_AdvanceFadeState(pending_ui_ticks);
+                    mDoGph_DrawStoredFade();
+#else
                     mDoGph_gInf_c::calcFade();
+#endif
                 }
 
                 #if DEBUG
@@ -2214,7 +2306,13 @@ int mDoGph_Painter() {
     #endif
 
     GXSetClipMode(GX_CLIP_ENABLE);
-    dDlst_list_c::calcWipe();
+#ifdef TARGET_PC
+    for (u32 i = 0; i < pending_ui_ticks; ++i) {
+#endif
+        dDlst_list_c::calcWipe();
+#ifdef TARGET_PC
+    }
+#endif
     j3dSys.reinitGX();
 
     ortho.setOrtho(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
@@ -2231,9 +2329,9 @@ int mDoGph_Painter() {
         cMtx_copy(j3dSys.getViewMtx(), m4);
 
         Mtx m5;
-        MTXTrans(m5, FB_WIDTH / 2, FB_HEIGHT / 2, 0.0f);
+        MTXTrans(m5, FB_WIDTH_BASE / 2, FB_HEIGHT_BASE / 2, 0.0f);
 
-        JPADrawInfo draw_info3(m5, 0.0f, FB_HEIGHT, 0.0f, FB_WIDTH);
+        JPADrawInfo draw_info3(m5, 0.0f, FB_HEIGHT_BASE, 0.0f, FB_WIDTH_BASE);
 
         if (!dComIfGp_isPauseFlag()) {
             GX_DEBUG_GROUP(dComIfGp_particle_draw2Dback, &draw_info3);
@@ -2264,7 +2362,12 @@ int mDoGph_Painter() {
 
         if (strcmp(dComIfGp_getStartStageName(), "F_SP127") == 0 || (mDoGph_gInf_c::isFade() & 0x80) != 0)
         {
+#ifdef TARGET_PC
+            mDoGph_AdvanceFadeState(pending_ui_ticks);
+            mDoGph_DrawStoredFade();
+#else
             mDoGph_gInf_c::calcFade();
+#endif
         }
 
         GX_DEBUG_GROUP(dComIfGp_particle_draw2DmenuFore, &draw_info3);
@@ -2297,9 +2400,15 @@ int mDoGph_Painter() {
 
 #if TARGET_PC
     dusk::g_imguiConsole.PostDraw();
+
+    JFWDisplay::getManager()->setFaderSimSteps(pending_ui_ticks);
 #endif
 
     mDoGph_gInf_c::endRender();
+
+#ifdef TARGET_PC
+    dusk::frame_interp::end_presentation_ui_pass();
+#endif
 
     #if WIDESCREEN_SUPPORT
     mDoGph_gInf_c::offWideZoom();

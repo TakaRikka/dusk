@@ -17,6 +17,7 @@
 #include <memory>
 
 #include "JSystem/JKernel/JKRHeap.h"
+#include "common/TracySystem.hpp"
 #include "dusk/main.h"
 #include "dusk/os.h"
 
@@ -41,7 +42,7 @@ struct PCThreadData {
     bool suspended = false;
 
     ~PCThreadData() {
-        if (dusk::IsShuttingDown) {
+        if (dusk::IsShuttingDown && nativeThread.joinable()) {
             // Don't care about threads if we're shutting down.
             nativeThread.detach();
         }
@@ -667,6 +668,9 @@ void OSSetCurrentThreadName(const char* name) {
     // "Why is this current thread only?", you might ask?
     // Because macOS requires that. For some reason.
 
+#if TRACY_ENABLE
+    tracy::SetThreadName(name);
+#else
 #if _WIN32
     wchar_t buffer[256];
     const auto converted = MultiByteToWideChar(
@@ -686,6 +690,7 @@ void OSSetCurrentThreadName(const char* name) {
     }
 #elif __APPLE__
     pthread_setname_np(name);
+#endif
 #endif
 }
 

@@ -410,6 +410,8 @@ void J2DWindow::drawSelf(f32 param_0, f32 param_1) {
 }
 
 void J2DWindow::drawSelf(f32 param_0, f32 param_1, Mtx* param_2) {
+    GX_AND_TRACY_SCOPED("J2DWindow::drawSelf")
+
     JGeometry::TBox2<f32> stack_50(mBounds);
     stack_50.addPos(JGeometry::TVec2<f32>(param_0, param_1));
     if (stack_50.getWidth() >= field_0x140 && stack_50.getHeight() >= field_0x142) {

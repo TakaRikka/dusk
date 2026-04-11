@@ -8,7 +8,7 @@ namespace {
 template <typename T>
 class TPRIsEqual_pointer_ {
 public:
-    TPRIsEqual_pointer_<T>(const T* p) { this->p_ = p; }
+    TPRIsEqual_pointer_(const T* p) { this->p_ = p; }
 
     bool operator()(const T& rSrc) const { return &rSrc == this->p_; }
 

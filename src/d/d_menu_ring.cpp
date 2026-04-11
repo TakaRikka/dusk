@@ -87,16 +87,16 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     mPikariFlashingSpeed = 0.0f;
     if (mRingOrigin == 0) {
         mCenterPosX = 0.0f;
-        mCenterPosY = 448.0f;
+        mCenterPosY = FB_HEIGHT_BASE;
     } else if (mRingOrigin == 2) {
         mCenterPosX = 0.0f;
-        mCenterPosY = -448.0f;
+        mCenterPosY = -FB_HEIGHT_BASE;
     }
     if (mRingOrigin == 3) {
-        mCenterPosX = 608.0f;
+        mCenterPosX = FB_WIDTH_BASE;
         mCenterPosY = 0.0f;
     } else if (mRingOrigin == 1) {
-        mCenterPosX = -608.0f;
+        mCenterPosX = -FB_WIDTH_BASE;
         mCenterPosY = 0.0f;
     } else {
         mCenterPosX = 0.0f;
@@ -644,15 +644,15 @@ bool dMenu_Ring_c::isOpen() {
     mAlphaRate = (f32)mOpenCloseFrames / (f32)g_ringHIO.mOpenFrames;
     if (mRingOrigin == 0) {
         mCenterPosX = 0.0f;
-        mCenterPosY = (1.0f - mAlphaRate) * 448.0f;
+        mCenterPosY = (1.0f - mAlphaRate) * FB_HEIGHT_BASE;
     } else if (mRingOrigin == 2) {
         mCenterPosX = 0.0f;
-        mCenterPosY = (1.0f - mAlphaRate) * -448.0f;
+        mCenterPosY = (1.0f - mAlphaRate) * -FB_HEIGHT_BASE;
     } else if (mRingOrigin == 3) {
-        mCenterPosX = (1.0f - mAlphaRate) * 608.0f;
+        mCenterPosX = (1.0f - mAlphaRate) * FB_WIDTH_BASE;
         mCenterPosY = 0.0f;
     } else if (mRingOrigin == 1) {
-        mCenterPosX = (1.0f - mAlphaRate) * -608.0f;
+        mCenterPosX = (1.0f - mAlphaRate) * -FB_WIDTH_BASE;
         mCenterPosY = 0.0f;
     }
     if (mOpenCloseFrames >= g_ringHIO.mOpenFrames) { 
@@ -715,15 +715,15 @@ bool dMenu_Ring_c::isClose() {
     }
     if (mRingOrigin == 0) {
         mCenterPosX = 0.0f;
-        mCenterPosY = (1.0f - mAlphaRate) * -448.0f;
+        mCenterPosY = (1.0f - mAlphaRate) * -FB_HEIGHT_BASE;
     } else if (mRingOrigin == 2) {
         mCenterPosX = 0.0f;
-        mCenterPosY = (1.0f - mAlphaRate) * 448.0f;
+        mCenterPosY = (1.0f - mAlphaRate) * FB_HEIGHT_BASE;
     } else if (mRingOrigin == 3) {
-        mCenterPosX = (1.0f - mAlphaRate) * -608.0f;
+        mCenterPosX = (1.0f - mAlphaRate) * -FB_WIDTH_BASE;
         mCenterPosY = 0.0f;
     } else if (mRingOrigin == 1) {
-        mCenterPosX = (1.0f - mAlphaRate) * 608.0f;
+        mCenterPosX = (1.0f - mAlphaRate) * FB_WIDTH_BASE;
         mCenterPosY = 0.0f;
     }
     mpDrawCursor->setPos(mItemSlotPosX[mCurrentSlot] + mCenterPosX,
@@ -855,11 +855,11 @@ s16 dMenu_Ring_c::calcStickAngle(STControl* i_stick, u8 param_1) {
 }
 
 void dMenu_Ring_c::setRotate() {
-    clacEllipsePlotAverage(mItemsTotal, g_ringHIO.mItemRingPosX + 304.0f,
-                           g_ringHIO.mItemRingPosY + 224.0f);
+    clacEllipsePlotAverage(mItemsTotal, g_ringHIO.mItemRingPosX + FB_WIDTH_BASE / 2,
+                           g_ringHIO.mItemRingPosY + FB_HEIGHT_BASE / 2);
     for (int i = 0; i < mItemsTotal; i++) {
-        field_0x63e[i] = cM_atan2s(mItemSlotPosX[i] - (304.0f + g_ringHIO.mItemRingPosX),
-                                   mItemSlotPosY[i] - (224.0f + g_ringHIO.mItemRingPosY));
+        field_0x63e[i] = cM_atan2s(mItemSlotPosX[i] - (FB_WIDTH_BASE / 2 + g_ringHIO.mItemRingPosX),
+                                   mItemSlotPosY[i] - (FB_HEIGHT_BASE / 2 + g_ringHIO.mItemRingPosY));
     }
 }
 
@@ -1446,9 +1446,9 @@ void dMenu_Ring_c::stick_move_proc() {
             setStatus(field_0x6b2);
         } else {
             f32 itemRingPosX =
-                g_ringHIO.mItemRingPosX + 304.0f + mRingRadiusH * cM_ssin(field_0x66e);
+                g_ringHIO.mItemRingPosX + FB_WIDTH_BASE / 2 + mRingRadiusH * cM_ssin(field_0x66e);
             f32 itemRingPosY =
-                g_ringHIO.mItemRingPosY + 224.0f + mRingRadiusV * cM_scos(field_0x66e);
+                g_ringHIO.mItemRingPosY + FB_HEIGHT_BASE / 2 + mRingRadiusV * cM_scos(field_0x66e);
             mpDrawCursor->setPos(itemRingPosX, itemRingPosY);
         }
     }

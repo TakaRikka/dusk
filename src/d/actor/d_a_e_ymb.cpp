@@ -516,7 +516,7 @@ void daE_YMB_c::checkWaterPos() {
         field_0x6cc = wtr_pos;
         field_0x69c.y = wtr_pos + 1000.0f + l_HIO.fly_height_adjust;
 
-        UNUSED(std::fabsf(field_0x6cc - current.pos.y));
+        UNUSED(fabsf(field_0x6cc - current.pos.y));
         if (current.pos.y < (200.0f + field_0x6cc)) {
             if (field_0x715 == 0) {
                 setWaterEffect1();

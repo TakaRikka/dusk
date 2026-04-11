@@ -25,10 +25,7 @@ public:
     /* 0x1C */ f32 max_speed;               // 最大速度 - Maximum Speed
     /* 0x20 */ f32 spring_constant;         // バネ係数 - Spring Constant
     /* 0x24 */ f32 damp_coeff[1];           // 減衰係数 - Damp Coefficient
-    /* 0x28 */ f32 field_0x28[1];
-    /* 0x2C */ f32 field_0x2c;
-    /* 0x30 */ f32 field_0x30;
-    /* 0x34 */ f32 field_0x34;
+    /* 0x28 */ f32 field_0x28[4];
     /* 0x38 */ f32 vert_swing_width;        // 縦揺れ幅 - Vertical Swing Width
     /* 0x3C */ f32 shake_dist;              // 揺れ距離 - Shake Distance
     /* 0x40 */ f32 jump_dist;               // 跳ね距離 - Jump Distance

@@ -13,6 +13,8 @@
 #include <dusk/logging.h>
 #include <dusk/main.h>
 
+#include "tracy/Tracy.hpp"
+
 #ifndef _WIN32
 #include <sys/time.h>
 #include <time.h>
@@ -355,6 +357,7 @@ void VISetNextFrameBuffer(void* fb) {
 }
 
 void VIWaitForRetrace() {
+    ZoneScoped;
     sRetraceCount++;
     if (sVIPreRetraceCallback) {
         sVIPreRetraceCallback(sRetraceCount);

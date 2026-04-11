@@ -20,6 +20,7 @@
 #include "d/d_msg_class.h"
 #include "d/d_msg_object.h"
 #include "d/d_pane_class.h"
+#include "dusk/frame_interpolation.h"
 #include <cstring>
 
 dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap* mp_heap) {
@@ -636,38 +637,49 @@ void dMeter2Draw_c::draw() {
         if (field_0x756 >= 0) {
             var_f29 = g_drawHIO.mLightDrop.mDropPikariAnimSpeed_Completed;
             int temp_r5_2 = g_drawHIO.mLightDrop.mPikariInterval * 15;
+#ifdef TARGET_PC
+            // Set even if not advancing
+            var_f28 = g_drawHIO.mLightDrop.mPikariScaleComplete;
 
-            if (field_0x756 <= temp_r5_2) {
-                int temp_r4 = (field_0x756 % g_drawHIO.mLightDrop.mPikariInterval);
-                int temp_r3_5 = field_0x756 / g_drawHIO.mLightDrop.mPikariInterval;
+            const u32 ui_advance_ticks = dusk::frame_interp::get_presentation_ui_advance_ticks();
+            for (u32 tick = 0; tick < ui_advance_ticks; ++tick) {
+#endif
+                if (field_0x756 <= temp_r5_2) {
+                    int temp_r4 = (field_0x756 % g_drawHIO.mLightDrop.mPikariInterval);
+                    int temp_r3_5 = field_0x756 / g_drawHIO.mLightDrop.mPikariInterval;
 
-                if (temp_r4 == 0 && field_0x62c[temp_r3_5] == 0.0f) {
-                    field_0x62c[temp_r3_5] = 18.0f;
-                }
-
-                var_f28 = g_drawHIO.mLightDrop.mPikariScaleComplete;
-                field_0x756++;
-            } else {
-                int temp_r5_3 = temp_r5_2 + 1;
-
-                if (field_0x756 == temp_r5_3) {
-                    if (field_0x62c[15] == 0.0f) {
-                        field_0x756++;
+                    if (temp_r4 == 0 && field_0x62c[temp_r3_5] == 0.0f) {
+                        field_0x62c[temp_r3_5] = 18.0f;
                     }
 
                     var_f28 = g_drawHIO.mLightDrop.mPikariScaleComplete;
-                } else if (field_0x756 >= g_drawHIO.mLightDrop.field_0x54 + temp_r5_3) {
-                    for (int i = 0; i < 16; i++) {
-                        field_0x62c[i] = 18.0f - var_f29;
-                        field_0x66c[i] = 18.0f - g_drawHIO.mLightDrop.mPikariLoopAnimSpeed;
-                    }
-
-                    field_0x756 = -1;
-                } else {
                     field_0x756++;
+                } else {
+                    int temp_r5_3 = temp_r5_2 + 1;
+
+                    if (field_0x756 == temp_r5_3) {
+                        if (field_0x62c[15] == 0.0f) {
+                            field_0x756++;
+                        }
+                        var_f28 = g_drawHIO.mLightDrop.mPikariScaleComplete;
+                    } else if (field_0x756 >= g_drawHIO.mLightDrop.field_0x54 + temp_r5_3) {
+                        for (int i = 0; i < 16; i++) {
+                            field_0x62c[i] = 18.0f - var_f29;
+                            field_0x66c[i] = 18.0f - g_drawHIO.mLightDrop.mPikariLoopAnimSpeed;
+                        }
+
+                        field_0x756 = -1;
+#ifdef TARGET_PC
+                        break;
+#endif
+                    } else {
+                        field_0x756++;
+                    }
                 }
             }
+#ifdef TARGET_PC
         }
+#endif
 
         for (int i = 0; i < 16; i++) {
             if (field_0x66c[i] > 0.0f) {
@@ -1336,20 +1348,27 @@ void dMeter2Draw_c::drawPikari(f32 i_posX, f32 i_posY, f32* i_framep, f32 i_scal
     if (param_9 != 3 && param_9 != 4 && param_9 != 5 && dMsgObject_isTalkNowCheck()) {
         *i_framep = 0.0f;
     } else {
-        *i_framep += param_8;
-        if (*i_framep > var_f31) {
-            if (param_9 == 1 || param_9 == 2 || param_9 == 3) {
-                *i_framep = 18.0f;
-            } else {
-                *i_framep = 0.0f;
+#ifdef TARGET_PC
+        const u32 ui_advance_ticks = dusk::frame_interp::get_presentation_ui_advance_ticks();
+        for (u32 i = 0; i < ui_advance_ticks; ++i) {
+#endif
+            *i_framep += param_8;
+            if (*i_framep > var_f31) {
+                if (param_9 == 1 || param_9 == 2 || param_9 == 3) {
+                    *i_framep = 18.0f;
+                } else {
+                    *i_framep = 0.0f;
+                }
             }
-        }
 
-        if (*i_framep == 18.0f && param_9 == 1) {
-            mDoAud_seStart(Z2SE_NAVI_BLINK, NULL, 0, 0);
-        } else if (*i_framep == 18.0f && param_9 == 2) {
-            mDoAud_seStart(Z2SE_SY_ITEM_COMBINE_ICON, NULL, 0, 0);
+            if (*i_framep == 18.0f && param_9 == 1) {
+                mDoAud_seStart(Z2SE_NAVI_BLINK, NULL, 0, 0);
+            } else if (*i_framep == 18.0f && param_9 == 2) {
+                mDoAud_seStart(Z2SE_SY_ITEM_COMBINE_ICON, NULL, 0, 0);
+            }
+#ifdef TARGET_PC
         }
+#endif
 
         playPikariBckAnimation(*i_framep);
         playPikariBpkAnimation(*i_framep);
@@ -1543,6 +1562,7 @@ void dMeter2Draw_c::setAlphaLifeAnimeMax() {
 }
 
 void dMeter2Draw_c::drawKanteraScreen(u8 i_meterType) {
+    GX_AND_TRACY_SCOPED("drawKanteraScreen");
     J2DGrafContext* graf_ctx = dComIfGp_getCurrentGrafPort();
 
     mpMagicParent->setAlphaRate(mMeterAlphaRate[i_meterType]);

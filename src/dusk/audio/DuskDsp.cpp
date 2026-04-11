@@ -14,6 +14,7 @@
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/endian.h"
 #include "global.h"
+#include "tracy/Tracy.hpp"
 
 using namespace dusk::audio;
 
@@ -116,6 +117,14 @@ static void ResetChannel(JASDsp::TChannel& channel, ChannelAuxData& aux) {
     aux.resamplePos = 0.0;
     aux.resamplePrev = 0;
 
+    aux.prev_lp_out = 0.0f;
+    aux.prev_lp_in = 0.0f;
+
+    aux.biq_in1 = 0.0f;
+    aux.biq_in2 = 0.0f;
+    aux.biq_out1 = 0.0f;
+    aux.biq_out2 = 0.0f;
+
     for (auto& volume : aux.prevVolume) {
         volume = NAN;
     }
@@ -133,6 +142,7 @@ static void MixSubframe(DspSubframe& dst, const DspSubframe& src) {
 }
 
 void dusk::audio::DspRender(OutputSubframe& subframe) {
+    ZoneScoped;
     if (DumpAudio != sDumpWasActive) {
         sDumpWasActive = DumpAudio;
         if (DumpAudio) {
@@ -518,6 +528,38 @@ static void RenderChannel(
     // save resampler state for the next subframe, prevents popping on pitch change
     channelAux.resamplePos = pos;
     channelAux.resamplePrev = prev;
+
+    // IIR FILTER
+
+    // IIR part 1, low-pass: out[n] = (in[n] - in[n-1]) * (coeff/128) + out[n-1]
+    if (s16 coeff = channel.iir_filter_params[4]; coeff != 0) {
+        for (f32& sample : audioLoadBuffer) {
+            f32 out = std::clamp(
+                (sample - channelAux.prev_lp_in) * ((f32)coeff / 128.0f) + channelAux.prev_lp_out, -1.0f, 1.0f
+            );
+            
+            channelAux.prev_lp_in = sample;        // in[n-1]  = in[n]
+            sample = channelAux.prev_lp_out = out; // out[n-1] = out[n]
+        }
+    }
+
+    // IIR part 2, biquad: out[n] = (b1*in[n-1] + b2*in[n-2] + a1*out[n-1] + a2*out[n-2]) / 32768
+    if ((channel.mFilterMode & 0x20) != 0) {
+        for (f32& sample : audioLoadBuffer) {
+            f32 out = std::clamp((
+                channel.iir_filter_params[0] * channelAux.biq_in1  + // b1
+                channel.iir_filter_params[1] * channelAux.biq_in2  + // b2
+                channel.iir_filter_params[2] * channelAux.biq_out1 + // a1
+                channel.iir_filter_params[3] * channelAux.biq_out2   // a2
+            ) / 32768.0f, -1.0f, 1.0f);
+
+            // shift history, then store new input and output
+            channelAux.biq_in2 = channelAux.biq_in1;   // in[n-2]  = in[n-1]
+            channelAux.biq_in1 = sample;               // in[n-1]  = in[n]
+            channelAux.biq_out2 = channelAux.biq_out1; // out[n-2] = out[n-1]
+            sample = channelAux.biq_out1 = out;        // out[n-1] = out[n]
+        }
+    }
 
     // move any remaining samples in the decode buf to the beginning
     int remainingDecodeBuf = channelAux.decodeBufCount - srcIdx;
