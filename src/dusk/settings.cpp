@@ -57,14 +57,15 @@ UserSettings g_userSettings = {
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
 
         // Controls
-        .enableTurboKeybind {"game.enableTurboKeybind", true},
+        .enableTurboKeybind {"game.enableTurboKeybind", false},
     },
 
     .backend = {
         .isoPath {"backend.isoPath", ""},
         .graphicsBackend {"backend.graphicsBackend", "auto"},
         .skipPreLaunchUI {"backend.skipPreLaunchUI", false},
-        .showPipelineCompilation{"backend.showPipelineCompilation", false}
+        .showPipelineCompilation{"backend.showPipelineCompilation", false},
+        .wasPresetChosen{"backend.wasPresetChosen", false}
     }
 };
 
@@ -117,6 +118,7 @@ void registerSettings() {
     Register(g_userSettings.backend.graphicsBackend);
     Register(g_userSettings.backend.skipPreLaunchUI);
     Register(g_userSettings.backend.showPipelineCompilation);
+    Register(g_userSettings.backend.wasPresetChosen);
 }
 
 // Transient settings
