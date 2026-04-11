@@ -7,6 +7,8 @@
 
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
+#include "d/d_meter2_info.h"
+#include "d/d_save.h"
 
 #include <map>
 
@@ -280,6 +282,132 @@ namespace dusk {
         { dItemNo_NONE_e, {"None"} },
     };
 
+    static constexpr int BUG_SPECIES_COUNT = 12;
+
+    static const u8 sBugItemIds[BUG_SPECIES_COUNT * 2] = {
+        dItemNo_M_ANT_e,         dItemNo_F_ANT_e,
+        dItemNo_M_MAYFLY_e,      dItemNo_F_MAYFLY_e,
+        dItemNo_M_BEETLE_e,      dItemNo_F_BEETLE_e,
+        dItemNo_M_MANTIS_e,      dItemNo_F_MANTIS_e,
+        dItemNo_M_STAG_BEETLE_e, dItemNo_F_STAG_BEETLE_e,
+        dItemNo_M_DANGOMUSHI_e,  dItemNo_F_DANGOMUSHI_e,
+        dItemNo_M_BUTTERFLY_e,   dItemNo_F_BUTTERFLY_e,
+        dItemNo_M_LADYBUG_e,     dItemNo_F_LADYBUG_e,
+        dItemNo_M_SNAIL_e,       dItemNo_F_SNAIL_e,
+        dItemNo_M_NANAFUSHI_e,   dItemNo_F_NANAFUSHI_e,
+        dItemNo_M_GRASSHOPPER_e, dItemNo_F_GRASSHOPPER_e,
+        dItemNo_M_DRAGONFLY_e,   dItemNo_F_DRAGONFLY_e,
+    };
+
+    static const u16 sBugTurnInFlags[BUG_SPECIES_COUNT * 2] = {
+        dSv_event_flag_c::F_0421, dSv_event_flag_c::F_0422,
+        dSv_event_flag_c::F_0423, dSv_event_flag_c::F_0424,
+        dSv_event_flag_c::F_0401, dSv_event_flag_c::F_0402,
+        dSv_event_flag_c::F_0413, dSv_event_flag_c::F_0414,
+        dSv_event_flag_c::F_0405, dSv_event_flag_c::F_0406,
+        dSv_event_flag_c::F_0411, dSv_event_flag_c::F_0412,
+        dSv_event_flag_c::F_0403, dSv_event_flag_c::F_0404,
+        dSv_event_flag_c::F_0415, dSv_event_flag_c::F_0416,
+        dSv_event_flag_c::F_0417, dSv_event_flag_c::F_0418,
+        dSv_event_flag_c::F_0409, dSv_event_flag_c::F_0410,
+        dSv_event_flag_c::F_0407, dSv_event_flag_c::F_0408,
+        dSv_event_flag_c::F_0419, dSv_event_flag_c::F_0420,
+    };
+
+    static const char* sBugSpeciesNames[BUG_SPECIES_COUNT] = {
+        "Ant",      "Dayfly",  "Beetle",  "Mantis",
+        "Stag Beetle", "Pill Bug", "Butterfly", "Ladybug",
+        "Snail",    "Phasmid", "Grasshopper", "Dragonfly",
+    };
+
+    static constexpr int HIDDEN_SKILL_COUNT = 7;
+
+    static const u16 sHiddenSkillFlags[HIDDEN_SKILL_COUNT] = {
+        dSv_event_flag_c::F_0339, dSv_event_flag_c::F_0338,
+        dSv_event_flag_c::F_0340, dSv_event_flag_c::F_0341,
+        dSv_event_flag_c::F_0342, dSv_event_flag_c::F_0343,
+        dSv_event_flag_c::F_0344,
+    };
+
+    static const char* sHiddenSkillNames[HIDDEN_SKILL_COUNT] = {
+        "Ending Blow", "Shield Attack", "Back Slice", "Helm Splitter",
+        "Mortal Draw", "Jump Strike", "Great Spin",
+    };
+
+    static constexpr int LETTER_COUNT = 16;
+
+    static const char* sLetterSenders[LETTER_COUNT] = {
+        "Renado",        "Ooccoo 1", "Ooccoo 2",       "The Postman",
+        "Kakariko Goods", "Barnes 1", "Barnes 2",      "Barnes Bombs",
+        "Malo Mart",     "Telma",    "Purlo",          "From Jr.",
+        "Princess Agitha", "Lanayru Tourism", "Shad", "Yeta",
+    };
+
+    static constexpr int FISH_COUNT = 6;
+
+    static const struct {
+        u8 index;
+        const char* name;
+    } sFishSpecies[FISH_COUNT] = {
+        { 3, "Ordon Catfish" },
+        { 5, "Greengill"     },
+        { 4, "Reekfish"      },
+        { 0, "Hyrule Bass"   },
+        { 2, "Hylian Pike"   },
+        { 1, "Hylian Loach"  },
+    };
+
+    static const char* sSwordNames[4] = {
+        "Ordon Sword", "Master Sword", "Wooden Sword", "Light Sword",
+    };
+
+    static const char* sShieldNames[3] = {
+        "Wooden Shield", "Ordon Shield", "Hylian Shield",
+    };
+
+    static const char* sFusedShadowNames[3] = {
+        "Forest Temple",
+        "Goron Mines",
+        "Lakebed Temple",
+    };
+
+    static const struct {
+        u8 index;
+        const char* name;
+    } sMirrorShards[3] = {
+        { 1, "Snowpeak Ruins"  },
+        { 2, "Temple of Time"  },
+        { 3, "City in the Sky" },
+    };
+
+    static const struct {
+        u8 slot;
+        u8 item;
+    } sDefaultInventory[] = {
+        { SLOT_0,  dItemNo_BOOMERANG_e    },
+        { SLOT_1,  dItemNo_KANTERA_e      },
+        { SLOT_2,  dItemNo_SPINNER_e      },
+        { SLOT_3,  dItemNo_HVY_BOOTS_e    },
+        { SLOT_4,  dItemNo_BOW_e          },
+        { SLOT_5,  dItemNo_HAWK_EYE_e     },
+        { SLOT_6,  dItemNo_IRONBALL_e     },
+        { SLOT_8,  dItemNo_COPY_ROD_e     },
+        { SLOT_9,  dItemNo_HOOKSHOT_e     },
+        { SLOT_10, dItemNo_W_HOOKSHOT_e   },
+        { SLOT_11, dItemNo_EMPTY_BOTTLE_e },
+        { SLOT_12, dItemNo_EMPTY_BOTTLE_e },
+        { SLOT_13, dItemNo_EMPTY_BOTTLE_e },
+        { SLOT_14, dItemNo_EMPTY_BOTTLE_e },
+        { SLOT_15, dItemNo_NORMAL_BOMB_e  },
+        { SLOT_16, dItemNo_WATER_BOMB_e   },
+        { SLOT_17, dItemNo_POKE_BOMB_e    },
+        { SLOT_18, dItemNo_DUNGEON_EXIT_e },
+        { SLOT_20, dItemNo_FISHING_ROD_1_e},
+        { SLOT_21, dItemNo_HORSE_FLUTE_e  },
+        { SLOT_22, dItemNo_ANCIENT_DOCUMENT_e },
+        { SLOT_23, dItemNo_PACHINKO_e     },
+    };
+
     ImGuiSaveEditor::ImGuiSaveEditor() {}
 
     void ImGuiSaveEditor::draw(bool& open) {
@@ -307,7 +435,7 @@ namespace dusk {
                 }
 
                 if (ImGui::BeginTabItem("Collection")) {
-                    //DrawFlagsTab();
+                    drawCollectionTab();
                     ImGui::EndTabItem();
                 }
 
@@ -675,8 +803,29 @@ namespace dusk {
         }
     }
 
+    static u8 getSlotDefault(int slot) {
+        for (size_t i = 0; i < sizeof(sDefaultInventory) / sizeof(sDefaultInventory[0]); i++) {
+            if (sDefaultInventory[i].slot == slot) {
+                return sDefaultInventory[i].item;
+            }
+        }
+        return dItemNo_NONE_e;
+    }
+
     void ImGuiSaveEditor::drawInventoryTab() {
         dSv_player_item_c& item = dComIfGs_getSaveData()->getPlayer().getItem();
+
+        if (ImGui::Button("Default All##inv_default_all")) {
+            for (int slot = 0; slot < 24; slot++) {
+                dComIfGs_setItem(slot, getSlotDefault(slot));
+            }
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Clear All##inv_clear_all")) {
+            for (int slot = 0; slot < 24; slot++) {
+                dComIfGs_setItem(slot, dItemNo_NONE_e);
+            }
+        }
 
         ImGuiBeginGroupPanel("Items", { 200, 100 });
         for (int slot = 0; slot < 24; slot++) {
@@ -696,10 +845,352 @@ namespace dusk {
                 }
                 ImGui::EndCombo();
             }
+            ImGui::SameLine();
+            if (ImGui::SmallButton(fmt::format("Default##slot_d_{}", slot).c_str())) {
+                dComIfGs_setItem(slot, getSlotDefault(slot));
+            }
+            ImGui::SameLine();
+            if (ImGui::SmallButton(fmt::format("Clear##slot_c_{}", slot).c_str())) {
+                dComIfGs_setItem(slot, dItemNo_NONE_e);
+            }
         }
         ImGuiEndGroupPanel();
 
 
+    }
+
+    static inline void setItemFirstBit(u8 itemNo, bool owned) {
+        if (owned) {
+            dComIfGs_onItemFirstBit(itemNo);
+        } else {
+            dComIfGs_offItemFirstBit(itemNo);
+        }
+    }
+
+    static inline void setEventBit(u16 flag, bool on) {
+        if (on) {
+            dComIfGs_onEventBit(flag);
+        } else {
+            dComIfGs_offEventBit(flag);
+        }
+    }
+
+    static void setLetterGetFlag(int idx, bool received) {
+        dSv_letter_info_c& info = dComIfGs_getSaveData()->getPlayer().getLetterInfo();
+        if (received) {
+            if (dComIfGs_isLetterGetFlag(idx)) return;
+            dComIfGs_onLetterGetFlag(idx);
+            u8 slot = dMeter2Info_getRecieveLetterNum() - 1;
+            if (slot < 64) {
+                dComIfGs_setGetNumber(slot, (u8)(idx + 1));
+            }
+        } else {
+            if (!dComIfGs_isLetterGetFlag(idx)) return;
+            info.mLetterGetFlags[idx >> 5] &= ~(1u << (idx & 0x1F));
+            for (int j = 0; j < 64; j++) {
+                if (dComIfGs_getGetNumber(j) == idx + 1) {
+                    for (int k = j; k < 63; k++) {
+                        dComIfGs_setGetNumber(k, dComIfGs_getGetNumber(k + 1));
+                    }
+                    dComIfGs_setGetNumber(63, 0);
+                    break;
+                }
+            }
+        }
+    }
+
+    void ImGuiSaveEditor::drawCollectionTab() {
+        ImGuiBeginGroupPanel("Swords", { 240, 0 });
+        for (int i = 0; i < 4; i++) {
+            bool got = dComIfGs_isCollectSword((u8)i) != 0;
+            if (ImGui::Checkbox(fmt::format("{0}##sword_{1}", sSwordNames[i], i).c_str(), &got)) {
+                if (got) dComIfGs_setCollectSword((u8)i);
+                else     dComIfGs_offCollectSword((u8)i);
+            }
+        }
+        ImGuiEndGroupPanel();
+
+        ImGuiBeginGroupPanel("Shields", { 240, 0 });
+        for (int i = 0; i < 3; i++) {
+            bool got = dComIfGs_isCollectShield((u8)i) != 0;
+            if (ImGui::Checkbox(fmt::format("{0}##shield_{1}", sShieldNames[i], i).c_str(), &got)) {
+                if (got) dComIfGs_setCollectShield((u8)i);
+                else     dComIfGs_offCollectShield((u8)i);
+            }
+        }
+        ImGuiEndGroupPanel();
+
+        ImGuiBeginGroupPanel("Tunics", { 240, 0 });
+        {
+            bool ordonClothes = dComIfGs_isItemFirstBit(dItemNo_WEAR_CASUAL_e) != 0;
+            if (ImGui::Checkbox("Ordon Clothes##tunic_ordon", &ordonClothes)) {
+                setItemFirstBit(dItemNo_WEAR_CASUAL_e, ordonClothes);
+            }
+
+            bool greenTunic = dComIfGs_isCollectClothes(KOKIRI_CLOTHES_FLAG) != 0;
+            if (ImGui::Checkbox("Hero's Clothes##tunic_green", &greenTunic)) {
+                if (greenTunic) dComIfGs_setCollectClothes(KOKIRI_CLOTHES_FLAG);
+                else            dComIfGs_offCollectClothes(KOKIRI_CLOTHES_FLAG);
+            }
+
+            bool zoraArmor = dComIfGs_isItemFirstBit(dItemNo_WEAR_ZORA_e) != 0;
+            if (ImGui::Checkbox("Zora Armor##tunic_zora", &zoraArmor)) {
+                setItemFirstBit(dItemNo_WEAR_ZORA_e, zoraArmor);
+            }
+
+            bool magicArmor = dComIfGs_isItemFirstBit(dItemNo_ARMOR_e) != 0;
+            if (ImGui::Checkbox("Magic Armor##tunic_magic", &magicArmor)) {
+                setItemFirstBit(dItemNo_ARMOR_e, magicArmor);
+            }
+        }
+        ImGuiEndGroupPanel();
+
+        ImGuiBeginGroupPanel("Fused Shadows", { 240, 0 });
+        for (int i = 0; i < 3; i++) {
+            bool got = dComIfGs_isCollectCrystal((u8)i) != 0;
+            if (ImGui::Checkbox(
+                    fmt::format("{0}##fs_{1}", sFusedShadowNames[i], i).c_str(), &got)) {
+                if (got) dComIfGs_onCollectCrystal((u8)i);
+                else     dComIfGs_offCollectCrystal((u8)i);
+            }
+        }
+        ImGui::Spacing();
+        if (ImGui::Button("All##fs_all")) {
+            for (int i = 0; i < 3; i++) dComIfGs_onCollectCrystal((u8)i);
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("None##fs_clear")) {
+            for (int i = 0; i < 3; i++) dComIfGs_offCollectCrystal((u8)i);
+        }
+        ImGuiEndGroupPanel();
+
+        ImGuiBeginGroupPanel("Mirror Shards", { 240, 0 });
+        for (int i = 0; i < 3; i++) {
+            u8 idx  = sMirrorShards[i].index;
+            bool got = dComIfGs_isCollectMirror(idx) != 0;
+            if (ImGui::Checkbox(
+                    fmt::format("{0}##ms_{1}", sMirrorShards[i].name, i).c_str(), &got)) {
+                if (got) dComIfGs_onCollectMirror(idx);
+                else     dComIfGs_offCollectMirror(idx);
+            }
+        }
+        ImGui::Spacing();
+        if (ImGui::Button("All##ms_all")) {
+            for (int i = 0; i < 3; i++) dComIfGs_onCollectMirror(sMirrorShards[i].index);
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("None##ms_clear")) {
+            for (int i = 0; i < 3; i++) dComIfGs_offCollectMirror(sMirrorShards[i].index);
+        }
+        ImGuiEndGroupPanel();
+
+        ImGuiBeginGroupPanel("Poe Souls", { 240, 0 });
+        int poeCount = dComIfGs_getPohSpiritNum();
+        ImGui::Text("Collected:");
+        ImGui::SameLine();
+        ImGui::SetNextItemWidth(100.0f);
+        if (ImGui::InputInt("##poe_count", &poeCount)) {
+            if (poeCount < 0) poeCount = 0;
+            if (poeCount > 60) poeCount = 60;
+            dComIfGs_setPohSpiritNum((u8)poeCount);
+        }
+        ImGui::SameLine();
+        ImGui::TextDisabled("/ 60");
+        ImGui::Spacing();
+        if (ImGui::Button("All 60##poe_all")) {
+            dComIfGs_setPohSpiritNum(60);
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Clear##poe_clear")) {
+            dComIfGs_setPohSpiritNum(0);
+        }
+        ImGuiEndGroupPanel();
+
+        ImGuiBeginGroupPanel("Golden Bugs", { 360, 0 });
+
+        if (ImGui::BeginTable("GoldenBugTable", 5,
+                              ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_RowBg)) {
+            ImGui::TableSetupColumn("Species");
+            ImGui::TableSetupColumn("Male");
+            ImGui::TableSetupColumn("Female");
+            ImGui::TableSetupColumn("M \xe2\x86\x92 Agitha");  // M → Agitha
+            ImGui::TableSetupColumn("F \xe2\x86\x92 Agitha");  // F → Agitha
+            ImGui::TableHeadersRow();
+
+            for (int species = 0; species < BUG_SPECIES_COUNT; species++) {
+                int maleIdx   = species * 2;
+                int femaleIdx = species * 2 + 1;
+                u8 maleItem   = sBugItemIds[maleIdx];
+                u8 femaleItem = sBugItemIds[femaleIdx];
+                u16 maleFlag   = sBugTurnInFlags[maleIdx];
+                u16 femaleFlag = sBugTurnInFlags[femaleIdx];
+
+                ImGui::TableNextRow();
+
+                ImGui::TableSetColumnIndex(0);
+                ImGui::TextUnformatted(sBugSpeciesNames[species]);
+
+                ImGui::TableSetColumnIndex(1);
+                bool maleOwned = dComIfGs_isItemFirstBit(maleItem) != 0;
+                if (ImGui::Checkbox(fmt::format("##bugM_own_{}", species).c_str(), &maleOwned)) {
+                    setItemFirstBit(maleItem, maleOwned);
+                }
+
+                ImGui::TableSetColumnIndex(2);
+                bool femaleOwned = dComIfGs_isItemFirstBit(femaleItem) != 0;
+                if (ImGui::Checkbox(fmt::format("##bugF_own_{}", species).c_str(), &femaleOwned)) {
+                    setItemFirstBit(femaleItem, femaleOwned);
+                }
+
+                ImGui::TableSetColumnIndex(3);
+                bool maleGiven = dComIfGs_isEventBit(maleFlag) != 0;
+                if (ImGui::Checkbox(fmt::format("##bugM_giv_{}", species).c_str(), &maleGiven)) {
+                    setEventBit(maleFlag, maleGiven);
+                }
+
+                ImGui::TableSetColumnIndex(4);
+                bool femaleGiven = dComIfGs_isEventBit(femaleFlag) != 0;
+                if (ImGui::Checkbox(fmt::format("##bugF_giv_{}", species).c_str(), &femaleGiven)) {
+                    setEventBit(femaleFlag, femaleGiven);
+                }
+            }
+
+            ImGui::EndTable();
+        }
+
+        ImGui::Spacing();
+        if (ImGui::Button("Collect All##bugs_all")) {
+            for (int i = 0; i < BUG_SPECIES_COUNT * 2; i++) {
+                dComIfGs_onItemFirstBit(sBugItemIds[i]);
+            }
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Clear All##bugs_clear")) {
+            for (int i = 0; i < BUG_SPECIES_COUNT * 2; i++) {
+                dComIfGs_offItemFirstBit(sBugItemIds[i]);
+                dComIfGs_offEventBit(sBugTurnInFlags[i]);
+            }
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Give All to Agitha##bugs_giveall")) {
+            for (int i = 0; i < BUG_SPECIES_COUNT * 2; i++) {
+                dComIfGs_onEventBit(sBugTurnInFlags[i]);
+            }
+        }
+
+        ImGuiEndGroupPanel();
+
+        ImGuiBeginGroupPanel("Hidden Skills", { 240, 0 });
+        for (int i = 0; i < HIDDEN_SKILL_COUNT; i++) {
+            bool learned = dComIfGs_isEventBit(sHiddenSkillFlags[i]) != 0;
+            if (ImGui::Checkbox(
+                    fmt::format("{0}##skill_{1}", sHiddenSkillNames[i], i).c_str(), &learned)) {
+                setEventBit(sHiddenSkillFlags[i], learned);
+            }
+        }
+        ImGui::Spacing();
+        if (ImGui::Button("Learn All##skills_all")) {
+            for (int i = 0; i < HIDDEN_SKILL_COUNT; i++) {
+                dComIfGs_onEventBit(sHiddenSkillFlags[i]);
+            }
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Forget All##skills_clear")) {
+            for (int i = 0; i < HIDDEN_SKILL_COUNT; i++) {
+                dComIfGs_offEventBit(sHiddenSkillFlags[i]);
+            }
+        }
+        ImGuiEndGroupPanel();
+
+        ImGuiBeginGroupPanel("Postman Letters", { 240, 0 });
+        for (int i = 0; i < LETTER_COUNT; i++) {
+            bool had = dComIfGs_isLetterGetFlag(i) != 0;
+            if (ImGui::Checkbox(
+                    fmt::format("{0}##letter_{1}", sLetterSenders[i], i).c_str(), &had)) {
+                setLetterGetFlag(i, had);
+            }
+        }
+        ImGui::Spacing();
+        if (ImGui::Button("Receive All##letters_all")) {
+            for (int i = 0; i < LETTER_COUNT; i++) setLetterGetFlag(i, true);
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Clear All##letters_clear")) {
+            for (int i = 0; i < LETTER_COUNT; i++) setLetterGetFlag(i, false);
+        }
+        ImGuiEndGroupPanel();
+
+        ImGuiBeginGroupPanel("Fishing Log", { 360, 0 });
+        {
+            dSv_fishing_info_c& fish = dComIfGs_getSaveData()->getPlayer().getFishingInfo();
+            if (ImGui::BeginTable("FishTable", 3,
+                                  ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_RowBg)) {
+                ImGui::TableSetupColumn("Species");
+                ImGui::TableSetupColumn("Caught");
+                ImGui::TableSetupColumn("Biggest (cm)");
+                ImGui::TableHeadersRow();
+
+                for (int i = 0; i < FISH_COUNT; i++) {
+                    u8 idx = sFishSpecies[i].index;
+                    ImGui::TableNextRow();
+
+                    ImGui::TableSetColumnIndex(0);
+                    ImGui::TextUnformatted(sFishSpecies[i].name);
+
+                    ImGui::TableSetColumnIndex(1);
+                    int count = dComIfGs_getFishNum(idx);
+                    ImGui::SetNextItemWidth(100.0f);
+                    if (ImGui::InputInt(fmt::format("##fish_c_{}", i).c_str(), &count, 1, 10)) {
+                        if (count < 0) count = 0;
+                        if (count > 999) count = 999;
+                        fish.mFishCount[idx] = (u16)count;
+                    }
+
+                    ImGui::TableSetColumnIndex(2);
+                    int size = dComIfGs_getFishSize(idx);
+                    ImGui::SetNextItemWidth(100.0f);
+                    if (ImGui::InputInt(fmt::format("##fish_s_{}", i).c_str(), &size, 1, 10)) {
+                        if (size < 0) size = 0;
+                        if (size > 255) size = 255;
+                        dComIfGs_setFishSize(idx, (u8)size);
+                    }
+                }
+                ImGui::EndTable();
+            }
+        }
+        ImGuiEndGroupPanel();
+
+        ImGuiBeginGroupPanel("Heart Pieces", { 360, 0 });
+        {
+            int maxLife = dComIfGs_getMaxLife();
+            int hearts  = maxLife / 5;
+            int pieces  = maxLife % 5;
+            ImGui::Text("Max Life:");
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(160.0f);
+            if (ImGui::InputInt("##max_life", &maxLife, 1, 5)) {
+                if (maxLife < 15)  maxLife = 15;
+                if (maxLife > 100) maxLife = 100;
+                dComIfGs_setMaxLife((u8)maxLife);
+                u16 maxHealth = (dComIfGs_getMaxLife() / 5) * 4;
+                if (dComIfGs_getLife() > maxHealth) {
+                    dComIfGs_setLife(maxHealth);
+                }
+            }
+            ImGui::SameLine();
+            ImGui::TextDisabled("(%d hearts + %d pieces)", hearts, pieces);
+            ImGui::Spacing();
+            if (ImGui::Button("3 Hearts##hp_min")) {
+                dComIfGs_setMaxLife(15);
+                dComIfGs_setLife(12);
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("20 Hearts##hp_max")) {
+                dComIfGs_setMaxLife(100);
+                dComIfGs_setLife(80);
+            }
+        }
+        ImGuiEndGroupPanel();
     }
 
     void drawFlagList(const char* id, BE(u32)& flags) {
@@ -843,6 +1334,20 @@ namespace dusk {
         dSv_player_config_c& config = dComIfGs_getSaveData()->getPlayer().getConfig();
         ImGui::Checkbox("Enable Vibration", (bool*)&config.mVibration);
         if (ImGui::BeginCombo("Target Type", "Hold")) {
+            ImGui::EndCombo();
+        }
+
+        static const char* kSoundModeNames[] = { "Mono", "Stereo", "Surround" };
+        const char* current = (config.mSoundMode < 3) ? kSoundModeNames[config.mSoundMode]
+                                                      : "Unknown";
+        if (ImGui::BeginCombo("Sound", current)) {
+            for (u8 i = 0; i < 3; i++) {
+                bool selected = (config.mSoundMode == i);
+                if (ImGui::Selectable(kSoundModeNames[i], selected)) {
+                    config.mSoundMode = i;
+                }
+                if (selected) ImGui::SetItemDefaultFocus();
+            }
             ImGui::EndCombo();
         }
     }
