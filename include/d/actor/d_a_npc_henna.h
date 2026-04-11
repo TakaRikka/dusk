@@ -32,8 +32,7 @@ public:
     /* 0x620 */ s16 field_0x620;
     /* 0x624 */ mDoExt_McaMorf* mpMorf;
     /* 0x628 */ mDoExt_btkAnm* mpBtkAnms[3];
-    /* 0x634 */ mDoExt_btpAnm* mpBtpAnms[3];
-    /* 0x640 */ u8 field_0x640[0x654 - 0x640];
+    /* 0x634 */ mDoExt_btpAnm* mpBtpAnms[8];
     /* 0x654 */ s32 field_0x654;
     /* 0x658 */ s32 field_0x658;
     /* 0x65C */ s32 mAnmResIndex;
