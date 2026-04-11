@@ -54,6 +54,7 @@ struct UserSettings {
         ConfigVar<bool> enableBloom;
         ConfigVar<bool> useWaterProjectionOffset;
         ConfigVar<bool> enableFrameInterpolation;
+        ConfigVar<int> shadowResolutionMultiplier;
 
         // Audio
         ConfigVar<bool> noLowHpSound;

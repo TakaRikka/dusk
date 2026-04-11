@@ -1441,7 +1441,11 @@ void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* pa
 void dDlst_shadowControl_c::init() {
 #if TARGET_PC
     // Increase shadow map resolution
-    static u16 l_realImageSize[2] = {1024, 512};
+    u16 l_realImageSize[2] =
+    {
+        192 * dusk::getSettings().game.shadowResolutionMultiplier,
+        64 * dusk::getSettings().game.shadowResolutionMultiplier
+    };
 #else
     static u16 l_realImageSize[2] = {192, 64};
 #endif
@@ -1480,7 +1484,19 @@ void dDlst_shadowControl_c::reset() {
 #endif
 }
 
+#if TARGET_PC
+int lastShadowValue = 0;
+#endif
+
 void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
+    #if TARGET_PC
+    if (lastShadowValue != dusk::getSettings().game.shadowResolutionMultiplier) {
+        reset();
+        init();
+        lastShadowValue = dusk::getSettings().game.shadowResolutionMultiplier;
+    }
+    #endif
+
     static u8 l_matDL[] ATTRIBUTE_ALIGN(32) = {
         0x10, 0x00, 0x00, 0x10, 0x0E, 0x00, 0x00, 0x04, 0x00, 0x10, 0x00, 0x00, 0x10, 0x10,
         0x00, 0x00, 0x04, 0x00, 0x61, 0x28, 0x38, 0x00, 0x00, 0x61, 0xC0, 0x08, 0xFF, 0xF2,

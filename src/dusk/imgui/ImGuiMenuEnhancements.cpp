@@ -85,6 +85,11 @@ namespace dusk {
                     ImGui::SetTooltip("Uses inter-frame interpolation to enable higher frame rates.\nVisual artifacts, animation glitches, or instability may occur.");
                 }
 
+                config::ImGuiSliderInt("Shadow Resolution", getSettings().game.shadowResolutionMultiplier, 1, 8, "x%d");
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Improves the shadow resolution, making them higher quality.");
+                }
+
                 ImGui::EndMenu();
             }
 

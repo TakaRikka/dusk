@@ -42,6 +42,7 @@ UserSettings g_userSettings = {
         .enableBloom {"game.enableBloom", true},
         .useWaterProjectionOffset {"game.useWaterProjectionOffset", false},
         .enableFrameInterpolation = {"game.enableFrameInterpolation", false},
+        .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
 
         // Audio
         .noLowHpSound {"game.noLowHpSound", false},
@@ -103,6 +104,7 @@ void registerSettings() {
     Register(g_userSettings.game.invertCameraXAxis);
     Register(g_userSettings.game.enableBloom);
     Register(g_userSettings.game.useWaterProjectionOffset);
+    Register(g_userSettings.game.shadowResolutionMultiplier);
     Register(g_userSettings.game.enableFastIronBoots);
     Register(g_userSettings.game.canTransformAnywhere);
     Register(g_userSettings.game.freeMagicArmor);
