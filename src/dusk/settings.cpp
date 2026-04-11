@@ -64,7 +64,7 @@ UserSettings g_userSettings = {
         .isoPath {"backend.isoPath", ""},
         .graphicsBackend {"backend.graphicsBackend", "auto"},
         .skipPreLaunchUI {"backend.skipPreLaunchUI", false},
-        .showPipelineCompilation{"backend.showPipelineCompilation", false},
+        .showPipelineCompilation {"backend.showPipelineCompilation", false},
         .wasPresetChosen{"backend.wasPresetChosen", false}
     }
 };
