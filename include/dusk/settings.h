@@ -53,7 +53,7 @@ struct UserSettings {
         // Graphics
         ConfigVar<bool> enableBloom;
         ConfigVar<bool> useWaterProjectionOffset;
-        ConfigVar<int> shadowScale;
+        ConfigVar<int> shadowResolutionMultiplier;
 
         // Audio
         ConfigVar<bool> noLowHpSound;

@@ -1402,8 +1402,8 @@ void dDlst_shadowControl_c::init() {
     // Increase shadow map resolution
     u16 l_realImageSize[2] =
     {
-        192 * dusk::getSettings().game.shadowScale,
-        64 * dusk::getSettings().game.shadowScale
+        192 * dusk::getSettings().game.shadowResolutionMultiplier,
+        64 * dusk::getSettings().game.shadowResolutionMultiplier
     };
 #else
     static u16 l_realImageSize[2] = {192, 64};
@@ -1449,10 +1449,10 @@ int lastShadowValue = 0;
 
 void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
     #if TARGET_PC
-    if (lastShadowValue != dusk::getSettings().game.shadowScale) {
+    if (lastShadowValue != dusk::getSettings().game.shadowResolutionMultiplier) {
         reset();
         init();
-        lastShadowValue = dusk::getSettings().game.shadowScale;
+        lastShadowValue = dusk::getSettings().game.shadowResolutionMultiplier;
     }
     #endif
 
