@@ -9,11 +9,6 @@ void daAlink_c::handleQuickTransform() {
         return;
     }
 
-    // Ensure that link is not in a cutscene.
-    if (checkEventRun()) {
-        return;
-    }
-
     // Check to see if Link has the ability to transform.
     if (!dComIfGs_isEventBit(dSv_event_flag_c::M_077)) {
         return;
@@ -27,6 +22,12 @@ void daAlink_c::handleQuickTransform() {
 
     const auto meterDrawPtr = meterClassPtr->getMeterDrawPtr();
     if (!meterDrawPtr) {
+        return;
+    }
+
+    // Ensure that link is not in a cutscene.
+    if (checkEventRun()) {
+        Z2GetAudioMgr()->seStart(Z2SE_SYS_ERROR, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
         return;
     }
 
