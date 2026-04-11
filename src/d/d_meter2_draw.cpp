@@ -1562,6 +1562,7 @@ void dMeter2Draw_c::setAlphaLifeAnimeMax() {
 }
 
 void dMeter2Draw_c::drawKanteraScreen(u8 i_meterType) {
+    GX_AND_TRACY_SCOPED("drawKanteraScreen");
     J2DGrafContext* graf_ctx = dComIfGp_getCurrentGrafPort();
 
     mpMagicParent->setAlphaRate(mMeterAlphaRate[i_meterType]);

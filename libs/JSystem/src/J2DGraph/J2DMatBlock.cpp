@@ -1418,7 +1418,7 @@ bool J2DTevBlock8::insertTexture(u32 param_0, ResTIMG const* p_timg, JUTPalette*
         } else {
             texture->storeTIMG(p_timg, p_tlut);
         }
-        bool local_38[4];
+        bool local_38[8];
         for (u8 i = 0; i < 8; i++) {
             local_38[i] = (mUndeleteFlag & 1 << i) != 0;
         }

@@ -2708,7 +2708,7 @@ void dMenu_Collect3D_c::toItem3Dpos(f32 param_0, f32 param_1, f32 param_2, cXyz*
     Mtx auStack_c8;
     param_0 =
         (2.0f * ((param_0 - mDoGph_gInf_c::getMinXF()) / mDoGph_gInf_c::getWidthF()) - 1.0f);
-    param_1 = (2.0f * ((param_1 - -100.0f) / 448.0f) - 1.0f);
+    param_1 = (2.0f * ((param_1 - -100.0f) / FB_HEIGHT_BASE) - 1.0f);
     calcViewMtx(adStack_98);
     MTXInverse(adStack_98, auStack_c8);
     f32 tangent = tan(0.39269909262657166);

@@ -70,7 +70,7 @@ dMsgScrnExplain_c::dMsgScrnExplain_c(STControl* i_stick, u8 param_1, bool i_isUs
 
     mpTxScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(102, mpTxScreen != NULL);
-    field_0x48 = 608.0f;
+    field_0x48 = FB_WIDTH_BASE;
 
     if (param_1 == 1 || param_1 == 3) {
         #if PLATFORM_GCN
@@ -309,7 +309,7 @@ void dMsgScrnExplain_c::draw(J2DOrthoGraph* i_graf) {
     }
 
     if (mpBackTex != NULL) {
-        mpBackTex->draw(0.0f, 0.0f, 608.0f, 448.0f, false, false, false);
+        mpBackTex->draw(0.0f, 0.0f, FB_WIDTH_BASE, FB_HEIGHT_BASE, false, false, false);
     }
 
     if (field_0x66 != 2 && field_0x66 != 3) {
@@ -330,6 +330,9 @@ void dMsgScrnExplain_c::draw(J2DOrthoGraph* i_graf) {
     strcpy(((J2DTextBox*)mpTm_c[0]->getPanePtr())->getStringPtr(), string_buf);
 
     if (mpSelect_c != NULL && (field_0x64 == 1 || field_0x64 == 2)) {
+        // the magic numbers here are relative to the framebuffer size, but were likely
+        // either chosen by hand or had multiple arithmetic operations applied which
+        // cannot easily be reverse engineered
         f32 y_offset = 0.0f;
         if (field_0x66 == 2) {
             y_offset = -100.0f;
@@ -385,7 +388,7 @@ void dMsgScrnExplain_c::open_request_proc() {
 
 void dMsgScrnExplain_c::open_init() {
     field_0x5a = 0;
-    field_0x48 = 608.0f;
+    field_0x48 = FB_WIDTH_BASE;
     for (int i = 0; i < 2; i++) {
         mpRoot_c[i]->setAlphaRate(0.0f);
     }
@@ -403,7 +406,7 @@ void dMsgScrnExplain_c::open_proc() {
         }
     }
 
-    field_0x48 = 608.0f * getAlphaRatio();
+    field_0x48 = FB_WIDTH_BASE * getAlphaRatio();
     for (int i = 0; i < 2; i++) {
         mpRoot_c[i]->setAlphaRate(1.0f - getAlphaRatio());
     }
@@ -583,7 +586,7 @@ void dMsgScrnExplain_c::close_proc() {
         }
     }
 
-    field_0x48 = 608.0f * getAlphaRatio();
+    field_0x48 = FB_WIDTH_BASE * getAlphaRatio();
     for (int i = 0; i < 2; i++) {
         mpRoot_c[i]->setAlphaRate(1.0f - getAlphaRatio());
     }

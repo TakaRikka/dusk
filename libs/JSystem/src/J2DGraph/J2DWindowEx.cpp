@@ -122,6 +122,7 @@ J2DWindowEx::~J2DWindowEx() {
 }
 
 void J2DWindowEx::drawSelf(f32 param_0, f32 param_1, f32 (*param_2)[3][4]) {
+    GX_AND_TRACY_SCOPED("J2DWindowEx::drawSelf")
     JGeometry::TBox2<f32> aTStack_50(mBounds);
     Mtx auStack_40;
     aTStack_50.addPos(JGeometry::TVec2<f32>(param_0, param_1));

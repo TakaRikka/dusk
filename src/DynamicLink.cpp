@@ -14,6 +14,7 @@
 #include "os_report.h"
 #include "dusk/logging.h"
 
+#if !TARGET_PC
 DynamicModuleControlBase* DynamicModuleControlBase::mFirst;
 
 DynamicModuleControlBase* DynamicModuleControlBase::mLast;
@@ -139,6 +140,7 @@ DynamicModuleControl::DynamicModuleControl(char const* name) {
     mSize = 0;
     mAsyncLoadCallback = NULL;
 }
+#endif
 
 u32 DynamicModuleControl::sAllocBytes;
 
@@ -169,6 +171,7 @@ bool DynamicModuleControl::initialize() {
     return true;
 }
 
+#if !TARGET_PC
 bool DynamicModuleControl::callback(void* moduleControlPtr) {
     DynamicModuleControl* moduleControl = (DynamicModuleControl*)moduleControlPtr;
     return moduleControl->do_load();
@@ -484,3 +487,5 @@ extern "C" void ModuleDestructorsX(void (*const *dtors)()) {
         dtors++;
     }
 }
+
+#endif

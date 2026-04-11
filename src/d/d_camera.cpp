@@ -2180,9 +2180,9 @@ fopAc_ac_c* dCamera_c::getParamTargetActor(s32 param_0) {
     daAlink_c* player = daAlink_getAlinkActorClass();
 
     fopAc_ac_c* result;
-    u32* name = (u32*)(mCamTypeData[param_0].name + 16);
+    BE(u32)* name = (BE(u32)*)(mCamTypeData[param_0].name + 16);
     //name += 16;
-    switch (*name) {
+    switch ((u32)*name) {
     case '@LOC':
         result = dComIfGp_getAttention()->LockonTarget(0);
         break;

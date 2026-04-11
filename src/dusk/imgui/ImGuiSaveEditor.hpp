@@ -15,6 +15,7 @@ namespace dusk {
         void drawPlayerStatusTab();
         void drawLocationTab();
 		void drawInventoryTab();
+		void drawCollectionTab();
 		void drawFlagsTab();
 		void drawConfigTab();
 
