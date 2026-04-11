@@ -14,6 +14,7 @@
 #include <typeindex>
 
 #include "absl/container/flat_hash_map.h"
+#include "client/TracyScoped.hpp"
 #include "d/d_s_play.h"
 #include "dusk/frame_interpolation.h"
 #include "dusk/gx_helper.h"
@@ -1952,7 +1953,7 @@ void dDlst_list_c::draw(dDlst_base_c** p_start, dDlst_base_c** p_end) {
 
 #if TARGET_PC && (TRACY_ENABLE || PARTIAL_DEBUG)
         const auto name = getTypeDrawName(dlst);
-        GX_AND_TRACY_SCOPED(name);
+        GXScopedDebugGroup scope(name);
 #endif
         dlst->draw();
     }
