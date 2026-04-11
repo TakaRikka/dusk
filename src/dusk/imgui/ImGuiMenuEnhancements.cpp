@@ -52,7 +52,7 @@ namespace dusk {
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Hides the TV calibration screen shown when loading a save");
                 }
-                
+
                 config::ImGuiCheckbox("Instant Saves", getSettings().game.instantSaves);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Skip the delay when writing to the Memory Card");
@@ -73,12 +73,16 @@ namespace dusk {
             }
 
             if (ImGui::BeginMenu("Graphics")) {
-                config::ImGuiCheckbox("Native Bloom", getSettings().game.enableBloom);
+                config::ImGuiCheckbox("Unlock Framerate", getSettings().game.enableFrameInterpolation);
+                const bool frameInterpolationHovered = ImGui::IsItemHovered();
 
-                config::ImGuiCheckbox("Water Projection Offset", getSettings().game.useWaterProjectionOffset);
-                if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Adds GC-specific -0.01 transS offset\n"
-                                      "that causes ~6px ghost artifacts in water reflections");
+                ImGui::SameLine();
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.72f, 0.2f, 1.0f));
+                ImGui::TextUnformatted("[EXPERIMENTAL]");
+                ImGui::PopStyleColor();
+
+                if (frameInterpolationHovered || ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Uses inter-frame interpolation to enable higher frame rates.\nVisual artifacts, animation glitches, or instability may occur.");
                 }
 
                 ImGui::EndMenu();

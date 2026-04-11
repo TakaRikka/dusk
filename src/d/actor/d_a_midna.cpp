@@ -14,6 +14,7 @@
 #include "d/d_msg_object.h"
 #include "d/d_s_play.h"
 #include "d/d_debug_viewer.h"
+#include "dusk/frame_interpolation.h"
 
 static f32 dummy_lit_3777(int idx, u8 foo) {
     Vec dummy_vec = {0.0f, 0.0f, 0.0f};
@@ -1052,6 +1053,12 @@ void daMidna_c::setBodyPartMatrix() {
             mpModel->setAnmMtx(i, mpShadowModel->getAnmMtx(i));
         }
         mpModel->calcWeightEnvelopeMtx();
+#ifdef TARGET_PC
+        // Frame interpolation: Record weight envelopes for Midna here, as they are otherwise missed causing distortion
+        for (u16 i = 0; i < mpModel->getModelData()->getWEvlpMtxNum(); i++) {
+            dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(mpModel->getWeightAnmMtx(i)), mpModel->getWeightAnmMtx(i));
+        }
+#endif
     }
 
     mDoMtx_stack_c::transS(mpShadowModel->getAnmMtx(JNT_BACKBONE1)[0][3],

@@ -11,6 +11,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_s_play.h"
+#include "dusk/frame_interpolation.h"
 #include "dusk/gx_helper.h"
 #include "dusk/logging.h"
 #include "m_Do/m_Do_graphic.h"
@@ -1089,7 +1090,16 @@ void dDlst_shadowReal_c::draw() {
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetCurrentMtx(GX_PNMTX0);
-    GXLoadTexMtxImm(mReceiverProjMtx, GX_TEXMTX0, GX_MTX3x4);
+#ifdef TARGET_PC
+    Mtx receiver_proj_mtx;
+    if (dusk::frame_interp::lookup_replacement(&mReceiverProjMtx, receiver_proj_mtx)) {
+        GXLoadTexMtxImm(receiver_proj_mtx, GX_TEXMTX0, GX_MTX3x4);
+    } else {
+#endif
+        GXLoadTexMtxImm(mReceiverProjMtx, GX_TEXMTX0, GX_MTX3x4);
+#ifdef TARGET_PC
+    }
+#endif
     mShadowRealPoly.draw();
 }
 
@@ -1247,6 +1257,10 @@ u8 dDlst_shadowReal_c::setShadowRealMtx(cXyz* param_0, cXyz* param_1, f32 param_
     C_MTXOrtho(mRenderProjMtx, param_2, -param_2, -param_2, param_2, 1.0f, 10000.0f);
     C_MTXLightOrtho(mReceiverProjMtx, param_2, -param_2, -param_2, param_2, 0.5f, -0.5f, 0.5f, 0.5f);
     cMtx_concat(mReceiverProjMtx, mViewMtx, mReceiverProjMtx);
+#ifdef TARGET_PC
+    dusk::frame_interp::record_final_mtx_raw(&mViewMtx, mViewMtx);
+    dusk::frame_interp::record_final_mtx_raw(&mReceiverProjMtx, mReceiverProjMtx);
+#endif
     return r29;
 }
 
@@ -1309,13 +1323,31 @@ void dDlst_shadowSimple_c::draw() {
     GXSetTevColor(GX_TEVREG0, l_color);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXLoadPosMtxImm(mVolumeMtx, GX_PNMTX0);
+#ifdef TARGET_PC
+    Mtx volume_mtx;
+    if (dusk::frame_interp::lookup_replacement(&mVolumeMtx, volume_mtx)) {
+        GXLoadPosMtxImm(volume_mtx, GX_PNMTX0);
+    } else {
+#endif
+        GXLoadPosMtxImm(mVolumeMtx, GX_PNMTX0);
+#ifdef TARGET_PC
+    }
+#endif
     GXSetCurrentMtx(GX_PNMTX0);
     GXCallDisplayList(l_frontMat, 0x40);
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
     GXCallDisplayList(l_backSubMat, 0x20);
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
-    GXLoadPosMtxImm(mMtx, GX_PNMTX1);
+#ifdef TARGET_PC
+    Mtx shadow_mtx;
+    if (dusk::frame_interp::lookup_replacement(&mMtx, shadow_mtx)) {
+        GXLoadPosMtxImm(shadow_mtx, GX_PNMTX1);
+    } else {
+#endif
+        GXLoadPosMtxImm(mMtx, GX_PNMTX1);
+#ifdef TARGET_PC
+    }
+#endif
     GXSetCurrentMtx(GX_PNMTX1);
 
     if (mpTexObj != NULL) {
@@ -1394,6 +1426,10 @@ void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* pa
     mDoMtx_stack_c::YrotM(param_4);
     mDoMtx_stack_c::scaleM(param_2, 1.0f, param_2 * param_5);
     cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mMtx);
+#ifdef TARGET_PC
+    dusk::frame_interp::record_final_mtx_raw(&mVolumeMtx, mVolumeMtx);
+    dusk::frame_interp::record_final_mtx_raw(&mMtx, mMtx);
+#endif
     mpTexObj = param_6;
 }
 
@@ -1541,7 +1577,16 @@ void dDlst_shadowControl_c::draw(Mtx param_0) {
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0);
     GXSetNumTevStages(1);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXLoadPosMtxImm(param_0, GX_PNMTX0);
+#ifdef TARGET_PC
+    Mtx draw_mtx;
+    if (dusk::frame_interp::lookup_replacement(param_0, draw_mtx)) {
+        GXLoadPosMtxImm(draw_mtx, GX_PNMTX0);
+    } else {
+#endif
+        GXLoadPosMtxImm(param_0, GX_PNMTX0);
+#ifdef TARGET_PC
+    }
+#endif
     GXColor matColor = {0, 0, 0, 0x20};
     GXSetChanMatColor(GX_ALPHA0, matColor);
 

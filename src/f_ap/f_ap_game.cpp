@@ -14,6 +14,7 @@
 #include "d/actor/d_a_midna.h"
 #include "d/d_model.h"
 #include "d/d_tresure.h"
+#include "dusk/frame_interpolation.h"
 #include "dusk/logging.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_draw_tag.h"
@@ -722,6 +723,17 @@ void fapGm_After() {
     fopCamM_Management();
 }
 
+#ifdef TARGET_PC
+static void fapGm_Before() {
+    dusk::frame_interp::begin_record();
+}
+
+static void fapGm_AfterRecord() {
+    dusk::frame_interp::end_record();
+    fapGm_After();
+}
+#endif
+
 void fapGm_Execute() {
     ZoneScoped;
     static u32 sExecCount = 0;
@@ -752,7 +764,11 @@ void fapGm_Execute() {
     }
 #endif
 
-    fpcM_Management(NULL, fapGm_After);
+#ifdef TARGET_PC
+    fpcM_Management(fapGm_Before, fapGm_AfterRecord);
+#else
+    fpcM_ManagementFunc(NULL, fapGm_After);
+#endif
     cCt_Counter(0);
 }
 
