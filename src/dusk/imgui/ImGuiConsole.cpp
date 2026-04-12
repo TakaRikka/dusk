@@ -14,6 +14,7 @@
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "SDL3/SDL_mouse.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include "m_Do/m_Do_main.h"
 #include "dusk/config.hpp"
 #include "dusk/main.h"
 #include "dusk/settings.h"
@@ -204,16 +205,10 @@ namespace dusk {
     void ImGuiConsole::UpdateSettings() {
         getTransientSettings().skipFrameRateLimit = getSettings().game.enableTurboKeybind && ImGui::IsKeyDown(ImGuiKey_Tab);
 
-        if (getSettings().game.enableMoveLink) {
-            static bool comboHeld = false;
-            constexpr u32 combo = PAD_TRIGGER_L | PAD_TRIGGER_R | PAD_BUTTON_Y;
-            u32 rawHold = mDoCPd_c::getHold(PAD_1);
-            bool held = (rawHold & combo) == combo;
-            if (held && !comboHeld) {
-                getTransientSettings().moveLinkActive = !getTransientSettings().moveLinkActive;
-            }
-            comboHeld = held;
-        } else {
+        if (mDoMain::developmentMode == 1 && mDoCPd_c::getHoldL(PAD_1) && mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getTrigY(PAD_1)) {
+            getTransientSettings().moveLinkActive = !getTransientSettings().moveLinkActive;
+        }
+        if (mDoMain::developmentMode != 1) {
             getTransientSettings().moveLinkActive = false;
         }
     }

@@ -71,7 +71,6 @@ struct UserSettings {
 
         // Controls
         ConfigVar<bool> enableTurboKeybind;
-        ConfigVar<bool> enableMoveLink;
     } game;
 
     struct {

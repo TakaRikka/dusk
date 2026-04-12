@@ -59,7 +59,6 @@ UserSettings g_userSettings = {
 
         // Controls
         .enableTurboKeybind {"game.enableTurboKeybind", false},
-        .enableMoveLink {"game.enableMoveLink", false},
     },
 
     .backend = {
@@ -114,7 +113,6 @@ void registerSettings() {
     Register(g_userSettings.game.noLowHpSound);
     Register(g_userSettings.game.midnasLamentNonStop);
     Register(g_userSettings.game.enableTurboKeybind);
-    Register(g_userSettings.game.enableMoveLink);
     Register(g_userSettings.game.fastSpinner);
     Register(g_userSettings.game.enableFrameInterpolation);
 
