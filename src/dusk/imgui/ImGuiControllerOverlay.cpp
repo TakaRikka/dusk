@@ -5,6 +5,8 @@
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuGame.hpp"
 
+#include <SDL3/SDL.h>
+
 namespace dusk {
     void ImGuiMenuGame::windowInputViewer() {
         if (!m_showInputViewer) {
@@ -257,6 +259,34 @@ namespace dusk {
             size.x = 270 * scale;
             size.y = 130 * scale;
             ImGui::Dummy(size);
+
+            SDL_Gamepad* pad = SDL_GetGamepadFromPlayerIndex(0);
+            if (pad != nullptr && SDL_GamepadHasSensor(pad, SDL_SENSOR_GYRO)) {
+                ImGui::Separator();
+                ImGui::TextUnformatted("Gyro");
+
+                constexpr float kBarScale = 4.0f;
+                auto bar = [kBarScale](const char* label, float v) {
+                    const float a = std::fabs(v);
+                    const float t = std::min(1.f, a / kBarScale);
+                    char overlay[32];
+                    snprintf(overlay, sizeof(overlay), "%s %+.3f", label, v);
+                    ImGui::ProgressBar(t, ImVec2(-1, 0), overlay);
+                };
+
+                if (SDL_SetGamepadSensorEnabled(pad, SDL_SENSOR_GYRO, true)) {
+                    float gyro[3];
+                    if (SDL_GetGamepadSensorData(pad, SDL_SENSOR_GYRO, gyro, 3)) {
+                        bar("X", gyro[0]);
+                        bar("Y", gyro[1]);
+                        bar("Z", gyro[2]);
+                    }
+                } else {
+                    bar("X", 0.f);
+                    bar("Y", 0.f);
+                    bar("Z", 0.f);
+                }
+            }
 
             ShowCornerContextMenu(m_inputOverlayCorner, 0);
         }
