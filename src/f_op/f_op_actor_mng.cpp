@@ -1592,7 +1592,7 @@ fpc_ProcID fopAcM_createDemoItem(const cXyz* i_pos, int i_itemNo, int i_itemBitN
 
     #if TARGET_PC
     if (dusk::getSettings().game.noHeartDrops && isHeart(i_itemNo)) {
-        return NULL;
+        return fpcM_ERROR_PROCESS_ID_e;
     }
     #endif
 
@@ -1609,7 +1609,7 @@ fpc_ProcID fopAcM_createItemForBoss(const cXyz* i_pos, int i_itemNo, int i_roomN
                                     f32 i_speedY, int param_8) {
     #if TARGET_PC
     if (dusk::getSettings().game.noHeartDrops && isHeart(i_itemNo)) {
-        return NULL;
+        return fpcM_ERROR_PROCESS_ID_e;
     }
     #endif
 
@@ -1631,7 +1631,7 @@ fpc_ProcID fopAcM_createItemForMidBoss(const cXyz* i_pos, int i_itemNo, int i_ro
                                        int param_7) {
     #if TARGET_PC
     if (dusk::getSettings().game.noHeartDrops && isHeart(i_itemNo)) {
-        return NULL;
+        return fpcM_ERROR_PROCESS_ID_e;
     }
     #endif
 
