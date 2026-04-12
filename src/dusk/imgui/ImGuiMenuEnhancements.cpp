@@ -131,6 +131,12 @@ namespace dusk {
             if (ImGui::BeginMenu("Difficulty")) {
                 config::ImGuiSliderInt("Damage Multiplier", getSettings().game.damageMultiplier, 1, 8, "x%d");
 
+                config::ImGuiCheckbox("No Heart Drops", getSettings().game.noHeartDrops);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Hearts will never drop from enemies,\n"
+                                      "pots and various other places.");
+                }
+
                 config::ImGuiCheckbox("Instant Death", getSettings().game.instantDeath);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Any hit will instantly kill you.");

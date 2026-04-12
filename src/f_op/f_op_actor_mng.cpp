@@ -1631,6 +1631,12 @@ fpc_ProcID fopAcM_createItem(const cXyz* i_pos, int i_itemNo, int i_itemBitNo, i
     JUT_ASSERT(4067, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo < (dSv_info_c::DAN_ITEM + dSv_info_c::MEMORY_ITEM + dSv_info_c::ZONE_ITEM )) || i_itemBitNo == 255);
     // clang-format on
 
+    #if TARGET_PC
+    if (dusk::getSettings().game.noHeartDrops && isHeart(i_itemNo)) {
+        return fpcM_ERROR_PROCESS_ID_e;
+    }
+    #endif
+
     if (i_itemNo == dItemNo_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
@@ -1694,6 +1700,12 @@ fopAc_ac_c* fopAcM_fastCreateItem2(const cXyz* i_pos, int i_itemNo, int i_itemBi
     // clang-format off
     JUT_ASSERT(4202, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo < (dSv_info_c::DAN_ITEM + dSv_info_c::MEMORY_ITEM + dSv_info_c::ZONE_ITEM )) || i_itemBitNo == 255);
     // clang-format on
+
+    #if TARGET_PC
+    if (dusk::getSettings().game.noHeartDrops && isHeart(i_itemNo)) {
+        return NULL;
+    }
+    #endif
 
     csXyz item_angle(csXyz::Zero);
 
@@ -1761,6 +1773,12 @@ fopAc_ac_c* fopAcM_fastCreateItem(const cXyz* i_pos, int i_itemNo, int i_roomNo,
                                   f32* i_speedY, int i_itemBitNo, int param_9,
                                   createFunc i_createFunc) {
     JUT_ASSERT(4324, 0 <= i_itemNo && i_itemNo < 256);
+
+    #if TARGET_PC
+    if (dusk::getSettings().game.noHeartDrops && isHeart(i_itemNo)) {
+        return NULL;
+    }
+    #endif
     
     csXyz angle;
     if (i_itemNo == dItemNo_NONE_e) {

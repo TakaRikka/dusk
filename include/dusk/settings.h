@@ -40,6 +40,7 @@ struct UserSettings {
         ConfigVar<bool> disableRupeeCutscenes;
         ConfigVar<bool> noSwordRecoil;
         ConfigVar<int> damageMultiplier;
+        ConfigVar<bool> noHeartDrops;
         ConfigVar<bool> instantDeath;
         ConfigVar<bool> fastClimbing;
         ConfigVar<bool> noMissClimbing;
