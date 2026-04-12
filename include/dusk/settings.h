@@ -104,6 +104,7 @@ struct CollisionViewSettings {
 struct TransientSettings {
     CollisionViewSettings collisionView;
     bool skipFrameRateLimit;
+    bool moveLinkActive;
 };
 
 TransientSettings& getTransientSettings();

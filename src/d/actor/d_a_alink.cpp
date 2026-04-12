@@ -51,6 +51,7 @@
 #include "d/actor/d_a_ni.h"
 #include "d/d_s_play.h"
 
+#include "dusk/settings.h"
 #include "res/Object/Alink.h"
 #include <cstring>
 
@@ -18048,7 +18049,10 @@ int daAlink_c::execute() {
     }
 
     BOOL isTrigDebugMoveInput = FALSE;
-    #if DEBUG
+#if TARGET_PC
+    if (dusk::getTransientSettings().moveLinkActive && daPy_getPlayerActorClass() == this) {
+        isTrigDebugMoveInput = TRUE;
+#elif DEBUG
     if (daPy_getPlayerActorClass() == this && checkDebugMoveInput()) {
         isTrigDebugMoveInput = TRUE;
         if (l_debugMode) {
@@ -18059,6 +18063,8 @@ int daAlink_c::execute() {
     }
 
     if (l_debugMode) {
+#endif
+#if TARGET_PC || DEBUG
         if (checkModeFlg(0x400) && !checkBoardRide() && !checkSpinnerRide()) {
             if (checkCanoeRide()) {
                 setSyncCanoePos();
@@ -18067,17 +18073,28 @@ int daAlink_c::execute() {
             }
         } else {
             f32 moveSpeed;
+#if TARGET_PC
+            if (mDoCPd_c::getHoldZ(PAD_1)) {
+#else
             if (mDoCPd_c::getHoldLockR(PAD_1)) {
+#endif
                 moveSpeed = 100.0f;
             } else {
                 moveSpeed = 50.0f;
             }
 
+#if TARGET_PC
+            f32 cStickY = mDoCPd_c::getSubStickY(PAD_1);
+            if (cStickY > 0.3f || cStickY < -0.3f) {
+                current.pos.y += moveSpeed * cStickY;
+            }
+#else
             if (mDoCPd_c::getHoldY(PAD_1)) {
                 current.pos.y += moveSpeed;
             } else if (mDoCPd_c::getHoldX(PAD_1)) {
                 current.pos.y -= moveSpeed;
             }
+#endif
 
             current.pos.x += moveSpeed * mStickValue * cM_ssin(mMoveAngle);
             current.pos.z += moveSpeed * mStickValue * cM_scos(mMoveAngle);
@@ -18095,7 +18112,7 @@ int daAlink_c::execute() {
         setBodyPartPos();
         setAttentionPos();
     } else
-    #endif
+#endif
     {
         if (isTrigDebugMoveInput) {
             mItemButton = 0;
@@ -18563,9 +18580,11 @@ int daAlink_c::execute() {
             if (checkDeadHP()) {
                 eventInfo.offCondition(fopAcCnd_NOEXEC_e);
             } else
-            #if DEBUG
+#if TARGET_PC
+            if (!dusk::getTransientSettings().moveLinkActive)
+#elif DEBUG
             if (!l_debugMode)
-            #endif
+#endif
             {
                 if (!checkMagneBootsOn()) {
                     f32 gnd_nrm_y;
