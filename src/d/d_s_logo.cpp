@@ -480,13 +480,7 @@ void dScnLogo_c::warningInDraw() {
 
     if (mTimer == 0) {
         mExecCommand = EXEC_WARNING_DISP;
-
-        #if TARGET_PC
-        mTimer = dusk::getSettings().game.skipWarningScreen ? 30 : 3510;
-        #else
         mTimer = 3510;
-        #endif
-
         field_0x20e = 30;
         field_0x210 = field_0x20e;
         field_0x212 = 1;
@@ -553,13 +547,7 @@ void dScnLogo_c::nintendoOutDraw() {
 
     if (mTimer == 0) {
         mExecCommand = EXEC_DOLBY_IN;
-
-        #if TARGET_PC
-        mTimer = dusk::getSettings().game.skipWarningScreen ? 30 : 90;
-        #else
         mTimer = 90;
-        #endif
-
         mDoGph_gInf_c::startFadeIn(30);
     }
 }
