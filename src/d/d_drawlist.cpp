@@ -1440,11 +1440,12 @@ void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* pa
 
 void dDlst_shadowControl_c::init() {
 #if TARGET_PC
+    u16 resMult = dusk::getSettings().game.shadowResolutionMultiplier;
     // Increase shadow map resolution
     u16 l_realImageSize[2] =
     {
-        192 * dusk::getSettings().game.shadowResolutionMultiplier,
-        64 * dusk::getSettings().game.shadowResolutionMultiplier
+        static_cast<u16>(192 * resMult),
+        static_cast<u16>(64 * resMult)
     };
 #else
     static u16 l_realImageSize[2] = {192, 64};
