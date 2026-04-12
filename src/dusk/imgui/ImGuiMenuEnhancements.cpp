@@ -111,7 +111,7 @@ namespace dusk {
                 config::ImGuiCheckbox("Gyro Aim", getSettings().game.enableGyroAim);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Enables the gyroscope on supported controllers while aiming the\n"
-                                      "bow, boomerang, hookshot, copy rod, and iron ball.");
+                                      "Slingshot, Gale Boomerang, Hero's Bow, Clawshot(s), Ball and Chain, and Dominion Rod.");
                 }
 
                 config::ImGuiSliderFloat("Gyro Sensitivity", getSettings().game.gyroAimSensitivity, 0.25f, 4.0f, "%.2f");
