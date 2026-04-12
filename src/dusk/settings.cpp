@@ -50,6 +50,12 @@ UserSettings g_userSettings = {
         .noLowHpSound {"game.noLowHpSound", false},
         .midnasLamentNonStop {"game.midnasLamentNonStop", false},
 
+        // Input
+        .enableGyroAim {"game.enableGyroAim", false},
+        .gyroAimSensitivity {"game.gyroAimSensitivity", 1.0f},
+        .gyroAimInvertPitch {"game.gyroAimInvertPitch", false},
+        .gyroAimInvertYaw {"game.gyroAimInvertYaw", false},
+
         // Cheats
         .enableFastIronBoots {"game.enableFastIronBoots", false},
         .canTransformAnywhere {"game.canTransformAnywhere", false},
@@ -60,7 +66,7 @@ UserSettings g_userSettings = {
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
 
         // Controls
-        .enableTurboKeybind {"game.enableTurboKeybind", false},
+        .enableTurboKeybind {"game.enableTurboKeybind", false}
     },
 
     .backend = {
@@ -119,6 +125,10 @@ void registerSettings() {
     Register(g_userSettings.game.enableTurboKeybind);
     Register(g_userSettings.game.fastSpinner);
     Register(g_userSettings.game.enableFrameInterpolation);
+    Register(g_userSettings.game.enableGyroAim);
+    Register(g_userSettings.game.gyroAimSensitivity);
+    Register(g_userSettings.game.gyroAimInvertPitch);
+    Register(g_userSettings.game.gyroAimInvertYaw);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.graphicsBackend);

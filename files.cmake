@@ -1338,17 +1338,17 @@ set(DUSK_FILES
         src/d/actor/d_a_alink_dusk.cpp
         src/dusk/asserts.cpp
         src/dusk/config.cpp
-        src/dusk/settings.cpp
-        src/dusk/logging.cpp
-        src/dusk/frame_interpolation.cpp
-        src/dusk/layout.cpp
-        src/dusk/stubs.cpp
         src/dusk/endian.cpp
         src/dusk/extras.c
         src/dusk/extras.cpp
-        src/dusk/io.cpp
+        src/dusk/frame_interpolation.cpp
         src/dusk/globals.cpp
+        src/dusk/gyro_aim.cpp
+        src/dusk/io.cpp
+        src/dusk/layout.cpp
+        src/dusk/logging.cpp
         src/dusk/settings.cpp
+        src/dusk/stubs.cpp
         #src/dusk/m_Do_ext_dusk.cpp
         src/dusk/imgui/ImGuiConfig.hpp
         src/dusk/imgui/ImGuiConsole.hpp

@@ -10,6 +10,10 @@
 #include "d/actor/d_a_tag_mstop.h"
 #include "d/actor/d_a_tag_mhint.h"
 
+#if TARGET_PC
+#include "dusk/gyro_aim.h"
+#endif
+
 bool daAlink_c::checkNoSubjectModeCamera() {
     return dCam_getBody()->Type() == dCam_getBody()->GetCameraTypeFromCameraName("Rotary") ||
            dCam_getBody()->Type() == dCam_getBody()->GetCameraTypeFromCameraName("Rampart2") ||
@@ -124,6 +128,40 @@ BOOL daAlink_c::setBodyAngleToCamera() {
         } else {
             sp8 = mBodyAngle.x;
         }
+
+#if TARGET_PC
+        if (dusk::getSettings().game.enableGyroAim && checkGyroAimItemContext()) {
+            f32 gyro_scale = 1.0f;
+            if (checkWolfEyeUp()) {
+                gyro_scale *= 0.6f;
+            }
+
+            if (dComIfGp_checkPlayerStatus0(0, 0x200000)) {
+                gyro_scale /= dComIfGp_getCameraZoomScale(field_0x317c);
+            }
+
+            f32 gy_yaw = 0.f;
+            f32 gy_pitch = 0.f;
+            dusk::gyro_aim::consumeAimDeltas(gy_yaw, gy_pitch);
+            
+            if (dusk::getSettings().game.gyroAimInvertPitch) {
+                gy_pitch = -gy_pitch;
+            }
+            if (dusk::getSettings().game.gyroAimInvertYaw) {
+                gy_yaw = -gy_yaw;
+            }
+            if (dusk::getSettings().game.enableMirrorMode) {
+                gy_yaw = -gy_yaw;
+            }
+
+            shape_angle.y = shape_angle.y + cM_rad2s(gy_yaw * gyro_scale);
+            sp8 = sp8 + cM_rad2s(gy_pitch * gyro_scale);
+
+            if (checkNotItemSinkLimit() && sp8 > 0 && sp8 > mBodyAngle.x) {
+                sp8 = mBodyAngle.x;
+            }
+        }
+#endif
 
         if (checkNotItemSinkLimit() && sp8 > 0) {
             cLib_addCalcAngleS(&sp8, 0, 5, 0x1000, 0x400);

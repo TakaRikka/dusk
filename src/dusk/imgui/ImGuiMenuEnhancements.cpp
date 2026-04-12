@@ -112,6 +112,20 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
+            if (ImGui::BeginMenu("Input")) {
+                config::ImGuiCheckbox("Gyro Aim", getSettings().game.enableGyroAim);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Enables the gyroscope on supported controllers while aiming the\n"
+                                      "Slingshot, Gale Boomerang, Hero's Bow, Clawshot(s), Ball and Chain, and Dominion Rod.");
+                }
+
+                config::ImGuiSliderFloat("Gyro Sensitivity", getSettings().game.gyroAimSensitivity, 0.25f, 4.0f, "%.2f");
+                config::ImGuiCheckbox("Invert Gyro Pitch", getSettings().game.gyroAimInvertPitch);
+                config::ImGuiCheckbox("Invert Gyro Yaw", getSettings().game.gyroAimInvertYaw);
+
+                ImGui::EndMenu();
+            }
+
             if (ImGui::BeginMenu("Cheats")) {
                 config::ImGuiCheckbox("Fast Iron Boots", getSettings().game.enableFastIronBoots);
 

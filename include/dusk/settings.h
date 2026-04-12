@@ -62,6 +62,12 @@ struct UserSettings {
         ConfigVar<bool> noLowHpSound;
         ConfigVar<bool> midnasLamentNonStop;
 
+        // Input
+        ConfigVar<bool> enableGyroAim;
+        ConfigVar<float> gyroAimSensitivity;
+        ConfigVar<bool> gyroAimInvertPitch;
+        ConfigVar<bool> gyroAimInvertYaw;
+
         // Cheats
         ConfigVar<bool> enableFastIronBoots;
         ConfigVar<bool> canTransformAnywhere;
