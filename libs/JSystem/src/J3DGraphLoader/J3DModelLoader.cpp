@@ -242,7 +242,7 @@ void J3DModelLoader::setupBBoardInfo() {
         J3DMaterial* mesh = mpModelData->getJointNodePointer(i)->getMesh();
         if (mesh != NULL) {
             u32 shape_index = mesh->getShape()->getIndex();
-            u16* index_table = JSUConvertOffsetToPtr<u16>(mpShapeBlock,
+            BE(u16)* index_table = JSUConvertOffsetToPtr<BE(u16)>(mpShapeBlock,
                                                           (uintptr_t)mpShapeBlock->mpIndexTable);
             J3DShapeInitData* shape_init_data =
                 JSUConvertOffsetToPtr<J3DShapeInitData>(mpShapeBlock,

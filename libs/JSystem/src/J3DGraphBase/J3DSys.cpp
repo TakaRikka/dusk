@@ -6,6 +6,7 @@
 #include "JSystem/J3DGraphBase/J3DTexture.h"
 #include "dusk/gx_helper.h"
 #include "global.h"
+#include "tracy/Tracy.hpp"
 
 J3DSys j3dSys;
 
@@ -121,6 +122,8 @@ void J3DSys::setTexCacheRegion(GXTexCacheSize size) {
 }
 
 void J3DSys::drawInit() {
+    ZoneScoped;
+
     GXInvalidateVtxCache();
     GXSetCurrentMtx(GX_PNMTX0);
     GXSetCullMode(GX_CULL_BACK);
@@ -226,6 +229,7 @@ void J3DSys::drawInit() {
 }
 
 void J3DSys::reinitGX() {
+    ZoneScoped;
     reinitGenMode();
     reinitLighting();
     reinitTransform();

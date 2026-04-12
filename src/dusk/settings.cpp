@@ -6,6 +6,8 @@ namespace dusk {
 UserSettings g_userSettings = {
     .video = {
         .enableFullscreen {"video.enableFullscreen", false},
+        .enableVsync {"video.enableVsync", true},
+        .lockAspectRatio {"video.lockAspectRatio", false},
     },
 
     .audio = {
@@ -31,6 +33,7 @@ UserSettings g_userSettings = {
         .fastClimbing {"game.fastClimbing", false},
         .noMissClimbing {"game.noMissClimbing", false},
         .fastTears {"game.fastTears", false},
+        .instantSaves {"game.instantSaves", false},
 
         // Preferences
         .enableMirrorMode {"game.enableMirrorMode", false},
@@ -38,7 +41,9 @@ UserSettings g_userSettings = {
 
         // Graphics
         .enableBloom {"game.enableBloom", true},
-        .useWaterProjectionOffset {"game.useWaterProjectionOffset", false},
+        .enableWaterRefraction {"game.enableWaterRefraction", true},
+        .enableFrameInterpolation = {"game.enableFrameInterpolation", false},
+        .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
 
         // Audio
         .noLowHpSound {"game.noLowHpSound", false},
@@ -47,13 +52,23 @@ UserSettings g_userSettings = {
         // Cheats
         .enableFastIronBoots {"game.enableFastIronBoots", false},
         .canTransformAnywhere {"game.canTransformAnywhere", false},
+        .fastSpinner {"game.fastSpinner", false},
+        .freeMagicArmor {"game.freeMagicArmor", false},
 
         // Technical
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
 
         // Controls
-        .enableTurboKeybind {"game.enableTurboKeybind", true},
+        .enableTurboKeybind {"game.enableTurboKeybind", false},
     },
+
+    .backend = {
+        .isoPath {"backend.isoPath", ""},
+        .graphicsBackend {"backend.graphicsBackend", "auto"},
+        .skipPreLaunchUI {"backend.skipPreLaunchUI", false},
+        .showPipelineCompilation {"backend.showPipelineCompilation", false},
+        .wasPresetChosen {"backend.wasPresetChosen", false}
+    }
 };
 
 UserSettings& getSettings() {
@@ -63,6 +78,8 @@ UserSettings& getSettings() {
 void registerSettings() {
     // Video
     Register(g_userSettings.video.enableFullscreen);
+    Register(g_userSettings.video.enableVsync);
+    Register(g_userSettings.video.lockAspectRatio);
 
     // Audio
     Register(g_userSettings.audio.masterVolume);
@@ -84,17 +101,28 @@ void registerSettings() {
     Register(g_userSettings.game.instantDeath);
     Register(g_userSettings.game.fastClimbing);
     Register(g_userSettings.game.fastTears);
+    Register(g_userSettings.game.instantSaves);
     Register(g_userSettings.game.enableMirrorMode);
     Register(g_userSettings.game.invertCameraXAxis);
     Register(g_userSettings.game.enableBloom);
-    Register(g_userSettings.game.useWaterProjectionOffset);
+    Register(g_userSettings.game.enableWaterRefraction);
+    Register(g_userSettings.game.shadowResolutionMultiplier);
     Register(g_userSettings.game.enableFastIronBoots);
     Register(g_userSettings.game.canTransformAnywhere);
+    Register(g_userSettings.game.freeMagicArmor);
     Register(g_userSettings.game.restoreWiiGlitches);
     Register(g_userSettings.game.noMissClimbing);
     Register(g_userSettings.game.noLowHpSound);
     Register(g_userSettings.game.midnasLamentNonStop);
     Register(g_userSettings.game.enableTurboKeybind);
+    Register(g_userSettings.game.fastSpinner);
+    Register(g_userSettings.game.enableFrameInterpolation);
+
+    Register(g_userSettings.backend.isoPath);
+    Register(g_userSettings.backend.graphicsBackend);
+    Register(g_userSettings.backend.skipPreLaunchUI);
+    Register(g_userSettings.backend.showPipelineCompilation);
+    Register(g_userSettings.backend.wasPresetChosen);
 }
 
 // Transient settings

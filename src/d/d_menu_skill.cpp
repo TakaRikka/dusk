@@ -143,12 +143,26 @@ void dMenu_Skill_c::_draw() {
         J2DGrafContext* context = dComIfGp_getCurrentGrafPort();
         u8 alpha = mpBlackTex->mAlpha;
         mpBlackTex->setAlpha(0xff);
+
+        #if TARGET_PC
+        mpBlackTex->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
+                         mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), 0, 0, 0);
+        #else
         mpBlackTex->draw(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0, 0, 0);
+        #endif
+
         mpBlackTex->setAlpha(alpha);
         mpMenuScreen->draw(mPosX, 0.0f, context);
         mpDrawCursor->draw();
         if (mProcess == 1 || mProcess == 2 || mProcess == 3) {
+
+            #if TARGET_PC
+            mpBlackTex->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
+                             mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), 0, 0, 0);
+            #else
             mpBlackTex->draw(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0, 0, 0);
+            #endif
+
             mpLetterScreen->draw(0.0f, 0.0f, context);
             if (mStringID != 0) {
                 mpString->getString(mStringID, (J2DTextBox*)mpTextPane->getPanePtr(), NULL, NULL,

@@ -15,6 +15,8 @@ struct UserSettings {
     struct {
         // Video
         ConfigVar<bool> enableFullscreen;
+        ConfigVar<bool> enableVsync;
+        ConfigVar<bool> lockAspectRatio;
     } video;
 
     struct {
@@ -43,6 +45,7 @@ struct UserSettings {
         ConfigVar<bool> fastClimbing;
         ConfigVar<bool> noMissClimbing;
         ConfigVar<bool> fastTears;
+        ConfigVar<bool> instantSaves;
 
         // Preferences
         ConfigVar<bool> enableMirrorMode;
@@ -50,7 +53,9 @@ struct UserSettings {
 
         // Graphics
         ConfigVar<bool> enableBloom;
-        ConfigVar<bool> useWaterProjectionOffset;
+        ConfigVar<bool> enableWaterRefraction;
+        ConfigVar<bool> enableFrameInterpolation;
+        ConfigVar<int> shadowResolutionMultiplier;
 
         // Audio
         ConfigVar<bool> noLowHpSound;
@@ -59,6 +64,8 @@ struct UserSettings {
         // Cheats
         ConfigVar<bool> enableFastIronBoots;
         ConfigVar<bool> canTransformAnywhere;
+        ConfigVar<bool> fastSpinner;
+        ConfigVar<bool> freeMagicArmor;
 
         // Technical
         ConfigVar<bool> restoreWiiGlitches;
@@ -66,6 +73,14 @@ struct UserSettings {
         // Controls
         ConfigVar<bool> enableTurboKeybind;
     } game;
+
+    struct {
+        ConfigVar<std::string> isoPath;
+        ConfigVar<std::string> graphicsBackend;
+        ConfigVar<bool> skipPreLaunchUI;
+        ConfigVar<bool> showPipelineCompilation;
+        ConfigVar<bool> wasPresetChosen;
+    } backend;
 };
 
 UserSettings& getSettings();

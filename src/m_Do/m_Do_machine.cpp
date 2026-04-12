@@ -592,6 +592,7 @@ void myExceptionCallback(u16, OSContext*, u32, u32) {
     VIFlush();
 }
 
+#ifndef TARGET_PC
 static void fault_callback_scroll(u16, OSContext* p_context, u32, u32) {
     JUTException* manager = JUTException::getManager();
     JUTConsole* exConsole = manager->getConsole();
@@ -714,6 +715,7 @@ static void fault_callback_scroll(u16, OSContext* p_context, u32, u32) {
         } while (true);
     } while (true);
 }
+#endif
 
 static void dummy_string() {
     DEAD_STRING("\x1B[32m%-24s = size=%d KB\n\x1B[m");
@@ -1008,3 +1010,9 @@ int mDoMch_Create() {
 
     return 1;
 }
+
+#if TARGET_PC
+void mDoMch_Destroy() {
+    JFWSystem::shutdown();
+}
+#endif

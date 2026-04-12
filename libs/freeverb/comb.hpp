@@ -7,7 +7,6 @@
 #ifndef _comb_
 #define _comb_
 
-#include "denormals.h"
 
 class comb
 {
@@ -35,14 +34,9 @@ private:
 
 inline float comb::process(float input)
 {
-	float output;
-
-	output = buffer[bufidx];
-	undenormalise(output);
+	float output = buffer[bufidx];
 
 	filterstore = (output*damp2) + (filterstore*damp1);
-	undenormalise(filterstore);
-
 	buffer[bufidx] = input + (filterstore*feedback);
 
 	if(++bufidx>=bufsize) bufidx = 0;

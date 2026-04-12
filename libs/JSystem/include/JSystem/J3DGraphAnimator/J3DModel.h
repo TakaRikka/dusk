@@ -3,6 +3,7 @@
 
 #include "JSystem/J3DGraphAnimator/J3DSkinDeform.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
+#include "dusk/frame_interpolation.h"
 #include <types.h>
 
 enum J3DMdlFlag {
@@ -101,7 +102,14 @@ public:
     void setUserArea(uintptr_t area) { mUserArea = area; }
     uintptr_t getUserArea() const { return mUserArea; }
     Vec* getBaseScale() { return &mBaseScale; }
-    void setAnmMtx(int jointNo, Mtx m) { mMtxBuffer->setAnmMtx(jointNo, m); }
+    void setAnmMtx(int jointNo, Mtx m) {
+        mMtxBuffer->setAnmMtx(jointNo, m);
+#ifdef TARGET_PC
+        dusk::frame_interp::record_final_mtx_raw(
+            reinterpret_cast<const Mtx*>(mMtxBuffer->getAnmMtx(jointNo)),
+            mMtxBuffer->getAnmMtx(jointNo));
+#endif
+    }
     MtxP getAnmMtx(int jointNo) { return mMtxBuffer->getAnmMtx(jointNo); }
     MtxP getWeightAnmMtx(int i) { return mMtxBuffer->getWeightAnmMtx(i); }
     J3DSkinDeform* getSkinDeform() { return mSkinDeform; }

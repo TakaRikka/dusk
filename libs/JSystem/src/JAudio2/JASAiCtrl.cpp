@@ -18,6 +18,8 @@
 #include <os.h>
 #include <stdint.h>
 
+#include "tracy/Tracy.hpp"
+
 s16* JASDriver::sDmaDacBuffer[3];
 
 static u8 data_804507A8 = 3;
@@ -143,6 +145,7 @@ void JASDriver::updateDac() {
 }
 
 void JASDriver::updateDSP() {
+    ZoneScoped;
     JASProbe::start(3, "SFR-UPDATE");
     JASDsp::invalChannelAll();
 

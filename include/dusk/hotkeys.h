@@ -3,7 +3,11 @@
 
 namespace dusk::hotkeys {
 
+#if __APPLE__
+constexpr const char* DO_RESET = "Cmd+R";
+#else
 constexpr const char* DO_RESET = "Ctrl+R";
+#endif
 
 constexpr const char* TOGGLE_FULLSCREEN = "F11";
 

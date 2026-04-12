@@ -152,6 +152,9 @@ public:
     void setRegionCursor(u8 i_value) { mRegionCursor = i_value; }
     void setMapDrawFlag(bool i_flag) { mMapDrawFlag = i_flag; }
     void resetDrug() { field_0x1238 = 0; }
+#if TARGET_PC
+    void resetScrollArrowMask() { field_0x122d = 0; }
+#endif
 
     void offArrowDrawFlag() { mArrowDrawFlag = false; }
     void onArrowDrawFlag() { mArrowDrawFlag = true; }

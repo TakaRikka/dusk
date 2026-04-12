@@ -23,16 +23,11 @@ void OSSetCurrentContext(OSContext* context) {
 }
 
 void OSClearContext(OSContext* context) {
-    if (!context) return;
-    context->mode  = 0;
-    context->state = 0;
+    // No-op on PC
 }
 
 void OSInitContext(OSContext* context, u32 pc, u32 newsp) {
-    if (!context) return;
-    memset(context, 0, sizeof(OSContext));
-    context->srr0 = pc;
-    context->gpr[1] = newsp;
+    // No-op on PC
 }
 
 void OSDumpContext(OSContext* context) {

@@ -411,7 +411,7 @@ void dMsgScrnItem_c::drawSelf() {
 
     f32 globalPosX = mpTm_c[0]->getGlobalPosX();
     
-    #if WIDESCREEN_SUPPORT
+    #if WIDESCREEN_SUPPORT && !TARGET_PC
     if (mDoGph_gInf_c::isWide()) {
         drawOutFont(g_MsgObject_HIO_c.mBoxItemTextPosX + 7.0f + YREG_F(2),
                     g_MsgObject_HIO_c.mBoxItemTextPosY, 1.0f);
@@ -609,6 +609,9 @@ void dMsgScrnItem_c::fukiPosCalc(u8 param_1) {
     field_0x180 = 0.0f;
     field_0x19c = param_1;
     f32 yOffset;
+    // the magic numbers here are correlated with the framebuffer size, but
+    // were likely either chosen by hand or had multiple arithmetic
+    // operations applied which cannot easily be reverse engineered
     switch(field_0x19c) {
     case 1:
         yOffset = g_MsgObject_HIO_c.mBoxPos[2][3];

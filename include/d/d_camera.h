@@ -1154,7 +1154,7 @@ public:
     static engine_fn engine_tbl[];
 
     /* 0x000 */ camera_class* field_0x0;
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG // Ensure struct layout consistent in all TUs.
     cXyz dbg_field_0x04[16];
     s8 dbg_field_0xc4[0x10];
     u32 dbg_field_0xd4;

@@ -229,17 +229,17 @@ dMenu_Fmap_c::dMenu_Fmap_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     }
 
     if (i_panDirection == 1) {
-        mTransX = -608.0f;
+        mTransX = -FB_WIDTH_BASE;
         mTransY = 0.0f;
     } else if (i_panDirection == 3) {
-        mTransX = 608.0f;
+        mTransX = FB_WIDTH_BASE;
         mTransY = 0.0f;
     } else if (i_panDirection == 2) {
         mTransX = 0.0f;
-        mTransY = -448.0f;
+        mTransY = -FB_HEIGHT_BASE;
     } else if (i_panDirection == 0) {
         mTransX = 0.0f;
-        mTransY = 448.0f;
+        mTransY = FB_HEIGHT_BASE;
     } else {
         mTransX = 0.0f;
         mTransY = 0.0f;
@@ -1133,6 +1133,12 @@ void dMenu_Fmap_c::zoom_region_to_spot_proc() {
 void dMenu_Fmap_c::zoom_spot_to_region_init() {
     mZoomLevel = 10;
     field_0x1ec = 1.0f;
+#if TARGET_PC
+    // Frame interp note: field_0x122d used to be set every draw, causing flickering. Do it here instead.
+    if (dusk::getSettings().game.enableFrameInterpolation) {
+        mpDraw2DBack->resetScrollArrowMask();
+    }
+#endif
     Z2GetAudioMgr()->seStart(Z2SE_SY_MAP_ZOOMOUT, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
@@ -1705,17 +1711,17 @@ bool dMenu_Fmap_c::isOpen() {
     f32 ratio = (f32)mDisplayFrame / (f32)display_frame_num;
 
     if (mPanDirection == 1) {
-        mTransX = (1.0f - ratio) * -608.0f;
+        mTransX = (1.0f - ratio) * -FB_WIDTH_BASE;
         mTransY = 0.0f;
     } else if (mPanDirection == 3) {
-        mTransX = (1.0f - ratio) * 608.0f;
+        mTransX = (1.0f - ratio) * FB_WIDTH_BASE;
         mTransY = 0.0f;
     } else if (mPanDirection == 2) {
         mTransX = 0.0f;
-        mTransY = (1.0f - ratio) * -448.0f;
+        mTransY = (1.0f - ratio) * -FB_HEIGHT_BASE;
     } else if (mPanDirection == 0) {
         mTransX = 0.0f;
-        mTransY = (1.0f - ratio) * 448.0f;
+        mTransY = (1.0f - ratio) * FB_HEIGHT_BASE;
     }
 
     mAlphaRatio = ratio;
@@ -1755,17 +1761,17 @@ bool dMenu_Fmap_c::isClose() {
     }
 
     if (mPanDirection == 1) {
-        mTransX = (1.0f - ratio) * 608.0f;
+        mTransX = (1.0f - ratio) * FB_WIDTH_BASE;
         mTransY = 0.0f;
     } else if (mPanDirection == 3) {
-        mTransX = (1.0f - ratio) * -608.0f;
+        mTransX = (1.0f - ratio) * -FB_WIDTH_BASE;
         mTransY = 0.0f;
     } else if (mPanDirection == 2) {
         mTransX = 0.0f;
-        mTransY = (1.0f - ratio) * 448.0f;
+        mTransY = (1.0f - ratio) * FB_HEIGHT_BASE;
     } else if (mPanDirection == 0) {
         mTransX = 0.0f;
-        mTransY = (1.0f - ratio) * -448.0f;
+        mTransY = (1.0f - ratio) * -FB_HEIGHT_BASE;
     }
 
     mAlphaRatio = ratio;

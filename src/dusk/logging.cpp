@@ -2,6 +2,8 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "tracy/Tracy.hpp"
+
 bool StubLogEnabled = true;
 
 using namespace std::literals::string_view_literals;
@@ -32,6 +34,7 @@ static bool IsForStubLog(const char* message) {
 
 void aurora_log_callback(AuroraLogLevel level, const char* module, const char* message,
                          unsigned int len) {
+    ZoneScoped;
     if (StubLogEnabled && level != LOG_FATAL && IsForStubLog(message)) {
         dusk::SendToStubLog(level, module, message);
         return;

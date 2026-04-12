@@ -161,14 +161,31 @@ void dMenu_Insect_c::_draw() {
     if (mpArchive != NULL) {
         J2DGrafContext* grafPort = dComIfGp_getCurrentGrafPort();
         mpBlackTex->setAlpha(0xff);
+
+        #if TARGET_PC
+        mpBlackTex->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
+                         mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), 0, 0, 0);
+        #else
         mpBlackTex->draw(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0, 0, 0);
+        #endif
+
         mpScreen->draw(0.0f, 0.0f, grafPort);
         mpDrawCursor->draw();
         field_0xfc = mpExpParent->getAlphaRate() * 150.0f;
         mpBlackTex->setAlpha(field_0xfc);
+
+        #if TARGET_PC
+        mpBlackTex->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
+                         mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), 0, 0, 0);
+        #else
         mpBlackTex->draw(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0, 0, 0);
+        #endif
+
         mpExpScreen->draw(0.0f, 0.0f, grafPort);
         mpSelect_c->setOffsetX(g_drawHIO.mInsectListScreen.mConfirmOptionPosX_4x3);
+        // the magic numbers here are correlated with the framebuffer size, but
+        // were likely either chosen by hand or had multiple arithmetic
+        // operations applied which cannot easily be reverse engineered
         mpSelect_c->translate(g_drawHIO.mInsectListScreen.mConfirmOptionPosX_4x3 + 486.0f,
                               g_drawHIO.mInsectListScreen.mConfirmOptionPosY_4x3 + 209.0f);
         mpSelect_c->draw(0.0f, 0.0f);

@@ -4473,7 +4473,9 @@ int daMP_c::daMP_c_Get_arg_movieNo() {
 int daMP_c::daMP_c_Init() {
     JUT_ASSERT(9469, m_myObj == NULL);
 
+#if !TARGET_PC // We don't properly simulate retrace interval so this doesn't work.
     mDoGph_gInf_c::setFrameRate(1);
+#endif
     daMP_Fail_alloc = FALSE;
 
     int demoNo = daMP_c_Get_arg_demoNo();

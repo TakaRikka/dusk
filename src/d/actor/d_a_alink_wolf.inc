@@ -313,7 +313,12 @@ void daAlink_c::changeLink(int param_0) {
         mpLinkHandModel =
             initModel(static_cast<J3DModelData*>(dComIfG_getObjectRes(l_mArcName, "al_hands.bmd")), 0);
 
-        if (dComIfGs_getRupee() != 0) {
+#if TARGET_PC
+        if (dComIfGs_getRupee() != 0 || dusk::getSettings().game.freeMagicArmor)
+#else
+        if (dComIfGs_getRupee() != 0)
+#endif
+        {
             setMagicArmorBrk(1);
         } else {
             setMagicArmorBrk(0);
@@ -398,7 +403,11 @@ void daAlink_c::changeLink(int param_0) {
         field_0x06ec = field_0x064C->getMaterialNodePointer(1)->getShape();
         field_0x06f0 = field_0x064C->getMaterialNodePointer(2)->getShape();
 
+#if TARGET_PC
+        if (dComIfGs_getRupee() != 0 || dusk::getSettings().game.freeMagicArmor) {
+#else
         if (dComIfGs_getRupee() != 0) {
+#endif
             var_r27 = 4;
         } else {
             var_r27 = 5;

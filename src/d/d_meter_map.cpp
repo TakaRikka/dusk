@@ -593,14 +593,6 @@ void dMeterMap_c::_draw() {
         dComIfGd_set2DOpa(this);
     }
     #else
-#if TARGET_PC
-    // Optimization: don't draw map if it's off-screen/invisible.
-    // Especially useful in debug builds on Hyrule field etc., it's slow!
-    if ((!mMapIsInside && mSlidePositionOffset == getDispPosOutSide_OffsetX()) || mMapAlpha == 0) {
-        return;
-    }
-#endif
-
     mMap->_draw();
     dComIfGd_set2DOpa(this);
     #endif
@@ -628,7 +620,13 @@ void dMeterMap_c::draw() {
         #endif
         mMapJ2DPicture->setAlpha(alpha);
 
+        #if TARGET_PC
+        mMapJ2DPicture->draw(mDoGph_gInf_c::ScaleHUDXLeft(drawPosX), drawPosY, sizeX, sizeY, false,
+                             false, false);
+        #else
         mMapJ2DPicture->draw(drawPosX, drawPosY, sizeX, sizeY, false, false, false);
+        #endif
+
         mMapJ2DPicture->calcMtx();
     }
 }

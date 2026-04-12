@@ -7,11 +7,17 @@
 #include <imgui_internal.h>
 
 #include "JSystem/JUtility/JUTGamePad.h"
-#include "dusk/audio/DuskDsp.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
+#include "dusk/audio/DuskDsp.hpp"
+#include "dusk/dusk.h"
 #include "dusk/hotkeys.h"
 #include "dusk/settings.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include "m_Do/m_Do_graphic.h"
+
+#include <aurora/gfx.h>
+
+#include "dusk/main.h"
 
 namespace dusk {
     void ImGuiMenuGame::ToggleFullscreen() {
@@ -24,24 +30,54 @@ namespace dusk {
 
     void ImGuiMenuGame::draw() {
         if (ImGui::BeginMenu("Game")) {
-            if (ImGui::MenuItem("Reset", hotkeys::DO_RESET)) {
-                JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
-            }
-
-            ImGui::Separator();
-
             if (ImGui::BeginMenu("Graphics")) {
                 if (ImGui::MenuItem("Toggle Fullscreen", hotkeys::TOGGLE_FULLSCREEN)) {
                     ToggleFullscreen();
                 }
+
+                if (ImGui::MenuItem("Default Window Size")) {
+                    getSettings().video.enableFullscreen.setValue(false);
+                    VISetWindowFullscreen(false);
+                    VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
+                    VICenterWindow();
+                }
+
+                bool vsync = getSettings().video.enableVsync;
+                if (ImGui::Checkbox("Enable Vsync", &vsync)) {
+                    getSettings().video.enableVsync.setValue(vsync);
+                    aurora_enable_vsync(vsync);
+                    config::Save();
+                }
+
+                bool lockAspect = getSettings().video.lockAspectRatio;
+                if (ImGui::Checkbox("Force 4:3 Aspect Ratio", &lockAspect)) {
+                    getSettings().video.lockAspectRatio.setValue(lockAspect);
+
+                    if (lockAspect) {
+                        VILockAspectRatio(defaultAspectRatioW, defaultAspectRatioH);
+                    } else {
+                        VIUnlockAspectRatio();
+                    }
+
+                    config::Save();
+                }
+
+                config::ImGuiCheckbox("Native Bloom", getSettings().game.enableBloom);
+
+                config::ImGuiCheckbox("Enable Water Refraction", getSettings().game.enableWaterRefraction);
 
                 ImGui::EndMenu();
             }
 
             if (ImGui::BeginMenu("Audio")) {
                 ImGui::Text("Master Volume");
-                config::ImGuiSliderInt("##masterVolume", getSettings().audio.masterVolume, 0, 100);
-                config::ImGuiCheckbox("Enable Reverb", getSettings().audio.enableReverb);
+                if (config::ImGuiSliderInt("##masterVolume", getSettings().audio.masterVolume, 0, 100)) {
+                    dusk::audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
+                }
+
+                if (config::ImGuiCheckbox("Enable Reverb", getSettings().audio.enableReverb)) {
+                    dusk::audio::SetEnableReverb(getSettings().audio.enableReverb);
+                }
                 /*
                 // TODO: Implement additional settings
                 ImGui::Text("Main Music Volume");
@@ -61,9 +97,6 @@ namespace dusk {
                 }
                 */
 
-                audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
-                audio::EnableReverb = getSettings().audio.enableReverb;
-
                 ImGui::EndMenu();
             }
 
@@ -74,18 +107,32 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
+            if (ImGui::BeginMenu("Interface")) {
+                config::ImGuiCheckbox("Skip Pre-Launch UI", getSettings().backend.skipPreLaunchUI);
+                config::ImGuiCheckbox("Show Pipeline Compilation", getSettings().backend.showPipelineCompilation);
+
+                ImGui::EndMenu();
+            }
+
+            ImGui::Separator();
+
+            if (ImGui::MenuItem("Reset", hotkeys::DO_RESET)) {
+                JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
+            }
+
+            if (ImGui::MenuItem("Exit")) {
+                dusk::IsRunning = false;
+            }
+
             ImGui::EndMenu();
         }
-
-        windowInputViewer();
-        windowControllerConfig();
     }
 
     static void drawVirtualStick(const char* id, const ImVec2& stick) {
         float scale = ImGuiScale();
-        ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x + 5 * scale, ImGui::GetCursorPos().y));
+        ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x + 45 * scale, ImGui::GetCursorPos().y + 10));
 
-        ImGui::BeginChild(id, ImVec2(80 * scale, 80 * scale));
+        ImGui::BeginChild(id, ImVec2(80 * scale, 80 * scale), 0, ImGuiWindowFlags_NoBackground);
         ImDrawList* dl = ImGui::GetWindowDrawList();
         ImVec2 p = ImGui::GetCursorScreenPos();
 
@@ -143,7 +190,7 @@ namespace dusk {
             ImGuiWindowFlags_NoResize |
             ImGuiWindowFlags_AlwaysAutoResize;
 
-        ImGui::SetNextWindowBgAlpha(0.65f);
+        // ImGui::SetNextWindowBgAlpha(0.65f);
 
         if (!ImGui::Begin("Controller Config", &m_showControllerConfig, windowFlags)) {
             ImGui::End();
@@ -189,6 +236,7 @@ namespace dusk {
         // controller selection combo box
         bool changedController = false;
         int changedControllerIndex = 0;
+        ImGui::SetNextItemWidth(400.0f * scale);
         if (ImGui::BeginCombo("##ControllerDeviceList", currentName.c_str())) {
             for (int i = 0; const auto& name : controllerList) {
                 if (ImGui::Selectable(name.c_str(), currentName == name)) {
@@ -225,6 +273,7 @@ namespace dusk {
 
         // buttons panel
         const float uiButtonSize = 40 * scale;
+        ImVec2 btnSize(110.0f * scale, 30.0f * scale);
 
         ImGuiBeginGroupPanel("Buttons", ImVec2(150 * scale, 20 * scale));
 
@@ -247,10 +296,14 @@ namespace dusk {
                 if (m_controllerConfig.m_isReading && m_controllerConfig.m_pendingButtonMapping == &btnMappingList[i]) {
                     dispName = fmt::format("Press a Key...##{}", btnName);
                 } else {
-                    dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(btnMappingList[i].nativeButton), i);
+                    const char* nativeName = PADGetNativeButtonName(btnMappingList[i].nativeButton);
+                    if (nativeName == nullptr) {
+                        nativeName = "[unbound]";
+                    }
+                    dispName = fmt::format("{0}##-{1}", nativeName, i);
                 }
                 bool pressed = ImGui::Button(dispName.c_str(),
-                    ImVec2(100.0f * scale, 20.0f * scale));
+                    btnSize);
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -267,7 +320,7 @@ namespace dusk {
         uint32_t axisCount;
         PADAxisMapping* axisMappingList = PADGetAxisMappings(m_controllerConfig.m_selectedPort, &axisCount);
 
-        ImGuiBeginGroupPanel("Triggers", ImVec2(150 * scale, 20 * scale));
+        ImGuiBeginGroupPanel("Analog Triggers", ImVec2(150 * scale, 20 * scale));
 
         PADAxis triggers[] = {PAD_AXIS_TRIGGER_L, PAD_AXIS_TRIGGER_R};
         if (axisMappingList != nullptr) {
@@ -290,7 +343,7 @@ namespace dusk {
                     dispName = fmt::format("{0}##-{1}", PADGetNativeAxisName(axisMappingList[trigger].nativeAxis), trigger);
                 }
                 bool pressed = ImGui::Button(dispName.c_str(),
-                    ImVec2(100.0f * scale, 20.0f * scale));
+                    btnSize);
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -301,10 +354,33 @@ namespace dusk {
             }
         }
 
+        int port = m_controllerConfig.m_selectedPort;
+        PADDeadZones* deadZones = PADGetDeadZones(port);
+
+        if (deadZones != nullptr) {
+            ImGui::Text("L Threshold");
+            ImGui::SameLine();
+            {
+                float tmp = static_cast<float>(deadZones->leftTriggerActivationZone * 100.f) / 32767.f;
+                if (ImGui::DragFloat("##LThreshold", &tmp, 0.5f, 0.f, 100.f, "%.3f%%")) {
+                    deadZones->leftTriggerActivationZone = static_cast<u16>((tmp / 100.f) * 32767);
+                }
+            }
+        }
+
+        if (deadZones != nullptr) {
+            ImGui::Text("R Threshold");
+            ImGui::SameLine();
+            {
+                float tmp = static_cast<float>(deadZones->rightTriggerActivationZone * 100.f) / 32767.f;
+                if (ImGui::DragFloat("##RThreshold", &tmp, 0.5f, 0.f, 100.f, "%.3f%%")) {
+                    deadZones->rightTriggerActivationZone = static_cast<u16>((tmp / 100.f) * 32767);
+                }
+            }
+        }
+
         ImGuiEndGroupPanel();
         ImGui::SameLine();
-
-        int port = m_controllerConfig.m_selectedPort;
 
         // main stick panel
         ImGuiBeginGroupPanel("Control Stick", ImVec2(150 * scale, 20 * scale));
@@ -344,7 +420,7 @@ namespace dusk {
                         dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(axisMappingList[axis].nativeButton), axis);
                     }
                 }
-                bool pressed = ImGui::Button(dispName.c_str(), ImVec2(100.0f * scale, 20.0f * scale));
+                bool pressed = ImGui::Button(dispName.c_str(), btnSize);
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -354,8 +430,6 @@ namespace dusk {
                 }
             }
         }
-
-        PADDeadZones* deadZones = PADGetDeadZones(port);
 
         if (deadZones != nullptr) {
             ImGui::Text("Dead Zone");
@@ -408,7 +482,7 @@ namespace dusk {
                         dispName = fmt::format("{0}##-{1}", PADGetNativeButtonName(axisMappingList[axis].nativeButton), axis);
                     }
                 }
-                bool pressed = ImGui::Button(fmt::format("{0}##sub{1}", dispName, label).c_str(), ImVec2(100.0f * scale, 20.0f * scale));
+                bool pressed = ImGui::Button(fmt::format("{0}##sub{1}", dispName, label).c_str(), btnSize);
 
                 if (pressed) {
                     m_controllerConfig.m_isReading = true;
@@ -425,32 +499,6 @@ namespace dusk {
                 float tmp = static_cast<float>(deadZones->substickDeadZone * 100.f) / 32767.f;
                 if (ImGui::DragFloat("##subDeadZone", &tmp, 0.5f, 0.f, 100.f, "%.3f%%")) {
                     deadZones->substickDeadZone = static_cast<u16>((tmp / 100.f) * 32767);
-                }
-            }
-        }
-
-        ImGuiEndGroupPanel();
-        ImGui::SameLine();
-
-        // Triggers Panel
-        ImGuiBeginGroupPanel("Triggers", ImVec2(150 * scale, 20 * scale));
-
-        if (deadZones != nullptr) {
-            ImGui::Text("L Threshold");
-            {
-                float tmp = static_cast<float>(deadZones->leftTriggerActivationZone * 100.f) / 32767.f;
-                if (ImGui::DragFloat("##LThreshold", &tmp, 0.5f, 0.f, 100.f, "%.3f%%")) {
-                    deadZones->leftTriggerActivationZone = static_cast<u16>((tmp / 100.f) * 32767);
-                }
-            }
-        }
-        
-        if (deadZones != nullptr) {
-            ImGui::Text("R Threshold");
-            {
-                float tmp = static_cast<float>(deadZones->rightTriggerActivationZone * 100.f) / 32767.f;
-                if (ImGui::DragFloat("##RThreshold", &tmp, 0.5f, 0.f, 100.f, "%.3f%%")) {
-                    deadZones->rightTriggerActivationZone = static_cast<u16>((tmp / 100.f) * 32767);
                 }
             }
         }

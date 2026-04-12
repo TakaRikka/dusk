@@ -14,11 +14,10 @@
 #endif
 #include <Windows.h>
 #include <shellapi.h>
+#include <intrin.h>
+#else
+#include "SDL3/SDL_timer.h"
 #endif
-
-#include "dusk/logging.h"
-
-constexpr auto DUSK_FRAME_PERIOD = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::duration<double>(1001.0 / 30000.0));
 
 class Limiter {
   using delta_clock = std::chrono::high_resolution_clock;
@@ -92,11 +91,15 @@ private:
     }
     do {
       QueryPerformanceCounter(&current);
-      _mm_pause(); // Yield CPU
+#if defined(_M_ARM64) || defined(_M_ARM)
+      __yield();
+#else
+      _mm_pause();
+#endif
     } while (current.QuadPart - start.QuadPart < ticksToWait);
   }
 #else
-  void NanoSleep(const duration_t duration) { std::this_thread::sleep_for(duration); }
+  void NanoSleep(const duration_t duration) { SDL_DelayPrecise(duration.count()); }
 #endif
 };
 

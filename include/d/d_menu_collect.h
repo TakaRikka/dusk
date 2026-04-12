@@ -29,6 +29,11 @@ public:
 class dMenu_Collect2D_c : public dDlst_base_c {
 public:
     dMenu_Collect2D_c(JKRExpHeap*, STControl*, CSTControl*);
+
+    #if TARGET_PC
+    void menuCollectWide();
+    #endif
+
     void _create();
     void _delete();
     void initialize();
@@ -45,7 +50,11 @@ public:
     void changeShield();
     void changeClothe();
     void setArrowMaxNum(u8);
+#if TARGET_PC
+    void setWalletSizeNum(u16);
+#else
     void setWalletMaxNum(u16);
+#endif
     void setSmellType();
     void setHeartPiece();
     void setPohMaxNum(u8);

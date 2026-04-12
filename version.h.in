@@ -1,0 +1,20 @@
+#ifndef VERSION_H
+#define VERSION_H
+
+#define DUSK_WC_DESCRIBE "@DUSK_WC_DESCRIBE@"
+#define DUSK_VERSION_STRING "@DUSK_VERSION_STRING@"
+
+#define DUSK_WC_BRANCH "@DUSK_WC_BRANCH@"
+#define DUSK_WC_REVISION "@DUSK_WC_REVISION@"
+#define DUSK_WC_DATE "@DUSK_WC_DATE@"
+#define DUSK_BUILD_TYPE "@CMAKE_BUILD_TYPE@"
+
+#if defined(__x86_64__) || defined(_M_AMD64)
+#define DUSK_DLPACKAGE "dusk-@DUSK_WC_DESCRIBE@-@PLATFORM_NAME@-x86_64"
+#elif defined(__i386__) || defined(_M_IX86)
+#define DUSK_DLPACKAGE "dusk-@DUSK_WC_DESCRIBE@-@PLATFORM_NAME@-x86"
+#elif defined(__aarch64__) || defined(_M_ARM64)
+#define DUSK_DLPACKAGE "dusk-@DUSK_WC_DESCRIBE@-@PLATFORM_NAME@-arm64"
+#endif
+
+#endif

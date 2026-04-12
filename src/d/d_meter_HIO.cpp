@@ -197,11 +197,11 @@ void dMeter_drawOptionHIO_c::genMessage(JORMContext* mctx) {
     mctx->genSlider("位置Ｘ", &mOptionTypeBGPosX[3], -300.0f, 300.0f);
     mctx->genSlider("位置Ｙ", &mOptionTypeBGPosY[3], -300.0f, 300.0f);
     mctx->genLabel("*****テレビ画面の設定*****", 0);
-    mctx->genSlider("位置Ｘ", &mTVsettingPosX, -300.0f, 300.0f);
-    mctx->genSlider("位置Ｙ", &mTVsettingPosY, -300.0f, 300.0f);
+    mctx->genSlider("位置Ｘ", &mOptionTypeBGPosX[4], -300.0f, 300.0f);
+    mctx->genSlider("位置Ｙ", &mOptionTypeBGPosY[4], -300.0f, 300.0f);
     mctx->genLabel("*****キャリブレーション*****", 0);
-    mctx->genSlider("位置Ｘ", &mPointerCalibrationPosX, -300.0f, 300.0f);
-    mctx->genSlider("位置Ｙ", &mPointerCalibrationPosY, -300.0f, 300.0f);
+    mctx->genSlider("位置Ｘ", &mOptionTypeBGPosX[5], -300.0f, 300.0f);
+    mctx->genSlider("位置Ｙ", &mOptionTypeBGPosY[5], -300.0f, 300.0f);
     mctx->genLabel("*****設定確認*****", 0);
     mctx->genSlider("背景アルファ", &mBackgroundAlpha, 0, 255);
     mctx->genSlider("位置Ｙ", &mBackgroundPosY, -300.0f, 300.0f);
@@ -1493,7 +1493,7 @@ dMeter_drawLightDropHIO_c::dMeter_drawLightDropHIO_c() {
     mPikariInterval = 1;
     field_0x54 = 0xFFF1;
     mVesselAlpha[2] = 0.5f;
-    mDropAlpha = 1.0f;
+    mVesselAlpha[3] = 1.0f;
 
     mDropOnColorBlack.set(30, 255, 255, 0);
     mDropOnColorWhite.set(255, 255, 255, 255);
@@ -1554,7 +1554,7 @@ void dMeter_drawLightDropHIO_c::genMessage(JORMContext* mctx) {
     mctx->genSlider("位置調整Ｙ（会話）", &mVesselTalkPosY, -300.0f, 300.0f);
     mctx->genSlider("アルファ（会話）", &mVesselAlpha[1], 0.0f, 1.0f);
     mctx->genSlider("アルファ（器）", &mVesselAlpha[2], 0.0f, 1.0f);
-    mctx->genSlider("アルファ（雫）", &mDropAlpha, 0.0f, 1.0f);
+    mctx->genSlider("アルファ（雫）", &mVesselAlpha[3], 0.0f, 1.0f);
     mctx->genLabel("***光の器ゲット後***", 0);
     mctx->genSlider("拡大縮小", &mDropGetScale, 0.0f, 3.0f);
     mctx->genSlider("拡縮アニメフレーム数", &mDropGetScaleAnimFrameNum, 0, 30);
@@ -2287,7 +2287,22 @@ dMeter_drawHIO_c::dMeter_drawHIO_c() {
 }
 
 #if WIDESCREEN_SUPPORT
-void dMeter_drawHIO_c::updateOnWide() {}
+void dMeter_drawHIO_c::updateOnWide() {
+#if TARGET_PC
+    g_drawHIO = {}; // this might be a bad idea
+
+    g_drawHIO.mMainHUDButtonsPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mMainHUDButtonsPosX);
+    g_drawHIO.mRingHUDButtonsPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mRingHUDButtonsPosX);
+    g_drawHIO.mLightDrop.mVesselPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mLightDrop.mVesselPosX);
+    g_drawHIO.mLightDrop.mVesselTalkPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mLightDrop.mVesselTalkPosX);
+    g_drawHIO.mRupeeKeyPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mRupeeKeyPosX);
+    g_drawHIO.mOxygenMeterPosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mOxygenMeterPosX);
+    g_drawHIO.mButtonCrossOFFPosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mButtonCrossOFFPosX);
+    g_drawHIO.mButtonCrossONPosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mButtonCrossONPosX);
+    g_drawHIO.mLifeGaugePosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mLifeGaugePosX);
+    g_drawHIO.mLanternMeterPosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mLanternMeterPosX);
+#endif
+}
 
 void dMeter_drawHIO_c::updateOffWide() {}
 #endif
@@ -3003,7 +3018,7 @@ void dMeter_drawHIO_c::updateFMsgDebug() {
 #endif
 
 dMeter_ringHIO_c::dMeter_ringHIO_c() {
-#if WIDESCREEN_SUPPORT
+#if WIDESCREEN_SUPPORT && !TARGET_PC
     updateOnWide();
 #else
     mRingRadiusH = 175.0f;
@@ -3995,9 +4010,9 @@ void dMeter_fmapHIO_c::genMessage(JORMContext* mctx) {
     mctx->genSlider("リージョン拡大表示範囲", &mRegionZoomRange, 1000.0, 1000000.0);
     mctx->genCheckBox("表示基準領域枠表示", (u8*)&mDisplayReferenceArea, 0x1);
     mctx->genCheckBox("スクロール範囲を表示基準", (u8*)&field_0x308, 0x1);
-    mctx->genSlider("左上座標Ｘ", &mMapTopLeftPosX, 0.0, 608.0);
-    mctx->genSlider("左上座標Ｙ", &mMapTopLeftPosY, 0.0, 448.0);
-    mctx->genSlider("領域幅", &mMapScale, 0.0, 608.0);
+    mctx->genSlider("左上座標Ｘ", &mMapTopLeftPosX, 0.0, FB_WIDTH_BASE);
+    mctx->genSlider("左上座標Ｙ", &mMapTopLeftPosY, 0.0, FB_HEIGHT_BASE);
+    mctx->genSlider("領域幅", &mMapScale, 0.0, FB_WIDTH_BASE);
     mctx->genLabel("\n***　スクロール速度境界　***", 0);
     mctx->genSlider("０～遅", &mScrollSpeedSlowBound, 0.0, 1.0);
     mctx->genSlider("遅～速", &mScrollSpeedFastBound, 0.0, 1.0);

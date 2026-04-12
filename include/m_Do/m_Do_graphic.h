@@ -8,12 +8,14 @@
 #include <aurora/aurora.h>
 #endif
 
-#if WIDESCREEN_SUPPORT
+#define FB_WIDTH_BASE (608)
+#define FB_HEIGHT_BASE (448)
+#if WIDESCREEN_SUPPORT && !TARGET_PC
 #define FB_WIDTH  (640)
 #define FB_HEIGHT (456)
 #else
-#define FB_WIDTH  (608)
-#define FB_HEIGHT (448)
+#define FB_WIDTH  FB_WIDTH_BASE
+#define FB_HEIGHT FB_HEIGHT_BASE
 #endif
 
 int mDoGph_Create();
@@ -116,6 +118,13 @@ public:
     static BOOL isAutoForcus() { return mAutoForcus; }
     static void setTickRate(u32 rate) { JFWDisplay::getManager()->setTickRate(rate); }
     static void waitBlanking(int wait) { JFWDisplay::getManager()->waitBlanking(wait); }
+
+#if TARGET_PC
+    static f32 hudAspectScaleDown;
+    static f32 hudAspectScaleUp;
+    static f32 ScaleHUDXLeft(f32 baseX) { return getMinXF() + baseX; }
+    static f32 ScaleHUDXRight(f32 baseX) { return -getMinXF() + baseX; }
+#endif
 
     static void setBlureMtx(const Mtx m) {
         cMtx_copy(m, mBlureMtx);
@@ -230,6 +239,7 @@ public:
     static void* getZbufferTex() { return mZbufferTex; }
     static void setFadeRate(f32 rate) { mFadeRate = rate; }
     static f32 getFadeRate() { return mFadeRate; }
+    static f32 getFadeSpeed() { return mFadeSpeed; }
     static bloom_c* getBloom() { return &m_bloom; }
     static GXColor& getFadeColor() { return mFadeColor; }
     static GXColor& getBackColor() { return mBackColor; }
@@ -266,7 +276,12 @@ public:
     #if WIDESCREEN_SUPPORT
     static void setTvSize();
 
+    #if TARGET_PC
+    static void onWide(f32 width, f32 height);
+    #else
     static void onWide();
+    #endif
+
     static void offWide();
     static u8 isWide();
 

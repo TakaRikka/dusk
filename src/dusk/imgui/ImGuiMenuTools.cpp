@@ -7,20 +7,22 @@
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuTools.hpp"
 
+#include "ImGuiEngine.hpp"
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_horse.h"
 #include "d/d_com_inf_game.h"
+#include "dusk/dusk.h"
+#include "dusk/main.h"
 #include "m_Do/m_Do_main.h"
 
 namespace dusk {
     ImGuiMenuTools::ImGuiMenuTools() {}
 
     void ImGuiMenuTools::draw() {
-        bool isToggleDevelopmentMode = false;
-
         if (ImGui::BeginMenu("Debug")) {
-            if (ImGui::Checkbox("Development Mode", &m_isDevelopmentMode)) {
-                isToggleDevelopmentMode = true;
+            bool developmentMode = mDoMain::developmentMode == 1;
+            if (ImGui::Checkbox("Development Mode", &developmentMode)) {
+                mDoMain::developmentMode = developmentMode ? 1 : -1;
             }
 
             ImGui::Separator();
@@ -39,6 +41,10 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
+            if (!dusk::IsGameLaunched) {
+                ImGui::BeginDisabled();
+            }
+
             ImGui::MenuItem("Process Management", hotkeys::SHOW_PROCESS_MANAGEMENT, &m_showProcessManagement);
             ImGui::MenuItem("Debug Overlay", hotkeys::SHOW_DEBUG_OVERLAY, &m_showDebugOverlay);
             ImGui::MenuItem("Heap Viewer", hotkeys::SHOW_HEAP_VIEWER, &m_showHeapOverlay);
@@ -48,34 +54,22 @@ namespace dusk {
             ImGui::MenuItem("Player Info", nullptr, &m_showPlayerInfo);
             ImGui::MenuItem("Save Editor", nullptr, &m_showSaveEditor);
             ImGui::MenuItem("Audio Debug", hotkeys::SHOW_AUDIO_DEBUG, &m_showAudioDebug);
+
+            if (!dusk::IsGameLaunched) {
+                ImGui::EndDisabled();
+            }
+
             ImGui::MenuItem("OSReport Force", nullptr, &OSReportReallyForceEnable);
             ImGui::EndMenu();
         }
-
-        if (isToggleDevelopmentMode) {
-            mDoMain::developmentMode = m_isDevelopmentMode ? 1 : -1;
-        }
-
-        ShowDebugOverlay();
-        ShowCameraOverlay();
-        ShowProcessManager();
-        ShowHeapOverlay();
-        ShowStubLog();
-        ShowMapLoader();
-        ShowPlayerInfo();
-        ShowAudioDebug();
-
-        if (m_showSaveEditor) {
-            m_saveEditor.draw(m_showSaveEditor);
-        }
-
-        DuskDebugPad(); // temporary, remove later
     }
 
     void ImGuiMenuTools::ShowDebugOverlay() {
         if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F3, m_showDebugOverlay)) {
             return;
         }
+
+        ImGui::PushFont(ImGuiEngine::fontMono);
 
         ImGuiIO& io = ImGui::GetIO();
         ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDecoration |
@@ -89,56 +83,47 @@ namespace dusk {
 
         ImGui::SetNextWindowBgAlpha(0.65f);
         if (ImGui::Begin("Debug Overlay", nullptr, windowFlags)) {
-            bool hasPrevious = false;
-            if (hasPrevious) {
-                ImGui::Separator();
-            }
-            hasPrevious = true;
-
             ImGuiStringViewText(fmt::format(FMT_STRING("FPS: {:.2f}\n"), io.Framerate));
+            ImGuiStringViewText(fmt::format(FMT_STRING("Frame usage: {:.1f}%\n"), frameUsagePct));
 
-            if (hasPrevious) {
-                ImGui::Separator();
-            }
-            hasPrevious = true;
+            ImGui::Separator();
 
             ImGuiStringViewText(fmt::format(FMT_STRING("Backend: {}\n"), backend_name(aurora_get_backend())));
 
-            if (hasPrevious) {
-                ImGui::Separator();
-            }
-            hasPrevious = true;
+            ImGui::Separator();
 
-            AuroraStats const* stats = aurora_get_stats();
+            const auto& stats = lastFrameAuroraStats;
 
             ImGuiStringViewText(
-                fmt::format(FMT_STRING("Queued pipelines:  {}\n"), stats->queuedPipelines));
+                fmt::format(FMT_STRING("Queued pipelines:  {}\n"), stats.queuedPipelines));
             ImGuiStringViewText(
-                fmt::format(FMT_STRING("Done pipelines:    {}\n"), stats->createdPipelines));
+                fmt::format(FMT_STRING("Done pipelines:    {}\n"), stats.createdPipelines));
             ImGuiStringViewText(
-                fmt::format(FMT_STRING("Draw call count:   {}\n"), stats->drawCallCount));
+                fmt::format(FMT_STRING("Draw call count:   {}\n"), stats.drawCallCount));
             ImGuiStringViewText(fmt::format(FMT_STRING("Merged draw calls: {}\n"),
-                stats->mergedDrawCallCount));
+                stats.mergedDrawCallCount));
             ImGuiStringViewText(fmt::format(FMT_STRING("Vertex size:       {}\n"),
-                BytesToString(stats->lastVertSize)));
+                BytesToString(stats.lastVertSize)));
             ImGuiStringViewText(fmt::format(FMT_STRING("Uniform size:      {}\n"),
-                BytesToString(stats->lastUniformSize)));
+                BytesToString(stats.lastUniformSize)));
             ImGuiStringViewText(fmt::format(FMT_STRING("Index size:        {}\n"),
-                BytesToString(stats->lastIndexSize)));
+                BytesToString(stats.lastIndexSize)));
             ImGuiStringViewText(fmt::format(FMT_STRING("Storage size:      {}\n"),
-                BytesToString(stats->lastStorageSize)));
+                BytesToString(stats.lastStorageSize)));
             ImGuiStringViewText(fmt::format(FMT_STRING("Tex upload size:   {}\n"),
-                BytesToString(stats->lastTextureUploadSize)));
+                BytesToString(stats.lastTextureUploadSize)));
             ImGuiStringViewText(fmt::format(
                 FMT_STRING("Total:             {}\n"),
-                BytesToString(stats->lastVertSize + stats->lastUniformSize +
-                    stats->lastIndexSize + stats->lastStorageSize +
-                    stats->lastTextureUploadSize)));
+                BytesToString(stats.lastVertSize + stats.lastUniformSize +
+                    stats.lastIndexSize + stats.lastStorageSize +
+                    stats.lastTextureUploadSize)));
 
             // TODO: persist to config
             ShowCornerContextMenu(m_debugOverlayCorner, m_cameraOverlayCorner);
         }
         ImGui::End();
+
+        ImGui::PopFont();
     }
 
     void ImGuiMenuTools::ShowPlayerInfo() {
@@ -146,13 +131,20 @@ namespace dusk {
             return;
         }
 
-        ImGuiIO& io = ImGui::GetIO();
-        ImGuiWindowFlags windowFlags =
-            ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize;
+        ImGui::PushFont(ImGuiEngine::fontMono);
+
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDecoration |
+            ImGuiWindowFlags_AlwaysAutoResize |
+            ImGuiWindowFlags_NoFocusOnAppearing |
+            ImGuiWindowFlags_NoNav;
+        if (m_playerInfoOverlayCorner != -1) {
+            SetOverlayWindowLocation(m_playerInfoOverlayCorner);
+            windowFlags |= ImGuiWindowFlags_NoMove;
+        }
 
         ImGui::SetNextWindowBgAlpha(0.65f);
 
-        if (ImGui::Begin("Player Info", &m_showPlayerInfo, windowFlags)) {
+        if (ImGui::Begin("Player Info", nullptr, windowFlags)) {
             daAlink_c* player = (daAlink_c*)dComIfGp_getPlayer(0);
             daHorse_c* horse = dComIfGp_getHorseActor();
 
@@ -194,8 +186,11 @@ namespace dusk {
                 ? fmt::format("Speed: {0}\n", horse->speedF)
                 : "Speed: ?\n"
             );
+
+            ShowCornerContextMenu(m_playerInfoOverlayCorner, m_debugOverlayCorner);
         }
 
         ImGui::End();
+        ImGui::PopFont();
     }
 }

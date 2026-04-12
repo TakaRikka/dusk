@@ -310,7 +310,12 @@ void dMenu_ItemExplain_c::draw(J2DOrthoGraph* i_graph) {
         mpLabel->scale(g_ringHIO.mItemDescTitleScale, g_ringHIO.mItemDescTitleScale);
         mpLabel->paneTrans(g_ringHIO.mItemDescTitlePosX, g_ringHIO.mItemDescTitlePosY);
         if (mpBackTex != NULL) {
+            #if TARGET_PC
+            mpBackTex->draw(mDoGph_gInf_c::ScaleHUDXLeft(0.0f), 0.0f, mDoGph_gInf_c::getWidthF(),
+                            FB_HEIGHT, false, false, false);
+            #else
             mpBackTex->draw(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, false, false, false);
+            #endif
         }
         if (field_0xc8 != field_0xd0) {
             field_0xd0 = field_0xc8;
@@ -325,6 +330,9 @@ void dMenu_ItemExplain_c::draw(J2DOrthoGraph* i_graph) {
         mpInfoString->drawOutFontLocal((J2DTextBox*)mpInfoText->getPanePtr(), -1.0f);
         drawKantera();
         if (mpSelect_c != NULL) {
+            // the magic numbers here are correlated with the framebuffer size, but
+            // were likely either chosen by hand or had multiple arithmetic
+            // operations applied which cannot easily be reverse engineered
             mpSelect_c->translate(486.0f, 209.0f);
             mpSelect_c->draw(0.0f, 0.0f);
         }

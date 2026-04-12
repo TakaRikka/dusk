@@ -2234,7 +2234,13 @@ int dMsgFlow_c::event027(mesg_flow_node_event* i_flowNode_p, fopAc_ac_c* i_speak
     u16 prm0;
     getParam(&prm0, &prm1, i_flowNode_p->params);
 
+    // !@bug aParam8 is undersized; getParam always writes 4 bytes, stomping the
+    // 2 bytes past the buffer. Harmless on GC/Wii (MWCC stack layout absorbs it).
+#if AVOID_UB
+    u8 aParam8[4];
+#else
     u8 aParam8[2];
+#endif
     getParam(aParam8, i_flowNode_p->params);
 
     JUT_ASSERT(4509, (aParam8[0] >= 0 && aParam8[0] <= dSv_player_item_c::BOMB_BAG_MAX) || (aParam8[0] == 4));
