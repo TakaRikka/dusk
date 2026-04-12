@@ -1390,6 +1390,12 @@ fpc_ProcID fopAcM_createItemForPresentDemo(cXyz const* i_pos, int i_itemNo, u8 p
     JUT_ASSERT(3214, 0 <= i_itemNo && i_itemNo < 256);
     dComIfGp_event_setGtItm(i_itemNo);
 
+    #if TARGET_PC
+    if (dusk::getSettings().game.noHeartDrops && isHeart(i_itemNo)) {
+        return fpcM_ERROR_PROCESS_ID_e;
+    }
+    #endif
+
     if (i_itemNo == dItemNo_NONE_e) {
         OS_REPORT("プレゼントデモ用なのに「ハズレ」です！[%d]\n", i_itemNo); // Even though it is for a Present Demo, it is a 'Miss'!
         return fpcM_ERROR_PROCESS_ID_e;
@@ -1403,6 +1409,12 @@ fpc_ProcID fopAcM_createItemForTrBoxDemo(cXyz const* i_pos, int i_itemNo, int i_
    
    JUT_ASSERT(3259, 0 <= i_itemNo && i_itemNo < 256);
    dComIfGp_event_setGtItm(i_itemNo);
+
+    #if TARGET_PC
+    if (dusk::getSettings().game.noHeartDrops && isHeart(i_itemNo)) {
+        return fpcM_ERROR_PROCESS_ID_e;
+    }
+    #endif
 
     if (i_itemNo == dItemNo_NONE_e) {
         OS_REPORT("ゲットデモ用なのに「ハズレ」です！[%d]\n", i_itemNo); // Even though it is for a Get Demo, it is a 'Miss'!
@@ -1529,6 +1541,12 @@ fpc_ProcID fopAcM_createItemFromTable(cXyz const* i_pos, int i_itemNo, int i_ite
     JUT_ASSERT(3655, 0 <= i_itemNo && i_itemNo <= 255 && (-1 <= i_itemBitNo && i_itemBitNo < (dSv_info_c::DAN_ITEM + dSv_info_c::MEMORY_ITEM + dSv_info_c::ZONE_ITEM )) || i_itemBitNo == 255);
     // clang-format on
 
+    #if TARGET_PC
+    if (dusk::getSettings().game.noHeartDrops && isHeart(i_itemNo)) {
+        return fpcM_ERROR_PROCESS_ID_e;
+    }
+    #endif
+
     u8 tableNum;
     ItemTableList* tableList;
     tableList = (ItemTableList*)dComIfGp_getItemTable();
@@ -1572,6 +1590,12 @@ fpc_ProcID fopAcM_createDemoItem(const cXyz* i_pos, int i_itemNo, int i_itemBitN
     JUT_ASSERT(3824, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo < (dSv_info_c::DAN_ITEM + dSv_info_c::MEMORY_ITEM + dSv_info_c::ZONE_ITEM )) || i_itemBitNo == 255);
     // clang-format on
 
+    #if TARGET_PC
+    if (dusk::getSettings().game.noHeartDrops && isHeart(i_itemNo)) {
+        return NULL;
+    }
+    #endif
+
     if (i_itemNo == dItemNo_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
@@ -1583,6 +1607,12 @@ fpc_ProcID fopAcM_createDemoItem(const cXyz* i_pos, int i_itemNo, int i_itemBitN
 fpc_ProcID fopAcM_createItemForBoss(const cXyz* i_pos, int i_itemNo, int i_roomNo,
                                     const csXyz* i_angle, const cXyz* i_scale, f32 i_speedF,
                                     f32 i_speedY, int param_8) {
+    #if TARGET_PC
+    if (dusk::getSettings().game.noHeartDrops && isHeart(i_itemNo)) {
+        return NULL;
+    }
+    #endif
+
     int _ = -1;
     u32 params = 0xFFFF0000 | param_8 << 8 | (i_itemNo & 0xFF);
 
@@ -1599,6 +1629,12 @@ fpc_ProcID fopAcM_createItemForBoss(const cXyz* i_pos, int i_itemNo, int i_roomN
 fpc_ProcID fopAcM_createItemForMidBoss(const cXyz* i_pos, int i_itemNo, int i_roomNo,
                                        const csXyz* i_angle, const cXyz* i_scale, int param_6,
                                        int param_7) {
+    #if TARGET_PC
+    if (dusk::getSettings().game.noHeartDrops && isHeart(i_itemNo)) {
+        return NULL;
+    }
+    #endif
+
     UNUSED(i_angle);
     UNUSED(param_6);
     fpc_ProcID ret = -1;
@@ -1610,6 +1646,12 @@ fpc_ProcID fopAcM_createItemForMidBoss(const cXyz* i_pos, int i_itemNo, int i_ro
 fopAc_ac_c* fopAcM_createItemForDirectGet(const cXyz* i_pos, int i_itemNo, int i_roomNo,
                                           const csXyz* i_angle, const cXyz* i_scale, f32 i_speedF,
                                           f32 i_speedY) {
+    #if TARGET_PC
+    if (dusk::getSettings().game.noHeartDrops && isHeart(i_itemNo)) {
+        return NULL;
+    }
+    #endif
+
     fopAc_ac_c* item = fopAcM_fastCreateItem(i_pos, i_itemNo, i_roomNo, i_angle, i_scale, &i_speedF, &i_speedY, -1,
                                  0x7, NULL);
     fopAc_ac_c* ret = item;
@@ -1619,6 +1661,12 @@ fopAc_ac_c* fopAcM_createItemForDirectGet(const cXyz* i_pos, int i_itemNo, int i
 fopAc_ac_c* fopAcM_createItemForSimpleDemo(const cXyz* i_pos, int i_itemNo, int i_roomNo,
                                            const csXyz* i_angle, const cXyz* i_scale, f32 i_speedF,
                                            f32 i_speedY) {
+    #if TARGET_PC
+    if (dusk::getSettings().game.noHeartDrops && isHeart(i_itemNo)) {
+        return NULL;
+    }
+    #endif
+
     fopAc_ac_c* item = fopAcM_fastCreateItem(i_pos, i_itemNo, i_roomNo, i_angle, i_scale, &i_speedF, &i_speedY, -1,
                                  0x4, NULL);
     fopAc_ac_c* ret = item;
@@ -1773,12 +1821,6 @@ fopAc_ac_c* fopAcM_fastCreateItem(const cXyz* i_pos, int i_itemNo, int i_roomNo,
                                   f32* i_speedY, int i_itemBitNo, int param_9,
                                   createFunc i_createFunc) {
     JUT_ASSERT(4324, 0 <= i_itemNo && i_itemNo < 256);
-
-    #if TARGET_PC
-    if (dusk::getSettings().game.noHeartDrops && isHeart(i_itemNo)) {
-        return NULL;
-    }
-    #endif
     
     csXyz angle;
     if (i_itemNo == dItemNo_NONE_e) {
