@@ -51,6 +51,7 @@
 #include "d/actor/d_a_ni.h"
 #include "d/d_s_play.h"
 
+#include "dusk/settings.h"
 #include "res/Object/Alink.h"
 #include <cstring>
 
@@ -18048,17 +18049,9 @@ int daAlink_c::execute() {
     }
 
     BOOL isTrigDebugMoveInput = FALSE;
-    #if DEBUG
-    if (daPy_getPlayerActorClass() == this && checkDebugMoveInput()) {
-        isTrigDebugMoveInput = TRUE;
-        if (l_debugMode) {
-            l_debugMode = FALSE;
-        } else {
-            l_debugMode = TRUE;
-        }
-    }
 
-    if (l_debugMode) {
+    if (dusk::getTransientSettings().moveLinkActive && daPy_getPlayerActorClass() == this) {
+        isTrigDebugMoveInput = TRUE;
         if (checkModeFlg(0x400) && !checkBoardRide() && !checkSpinnerRide()) {
             if (checkCanoeRide()) {
                 setSyncCanoePos();
@@ -18067,16 +18060,15 @@ int daAlink_c::execute() {
             }
         } else {
             f32 moveSpeed;
-            if (mDoCPd_c::getHoldLockR(PAD_1)) {
+            if (mDoCPd_c::getHoldZ(PAD_1)) {
                 moveSpeed = 100.0f;
             } else {
                 moveSpeed = 50.0f;
             }
 
-            if (mDoCPd_c::getHoldY(PAD_1)) {
-                current.pos.y += moveSpeed;
-            } else if (mDoCPd_c::getHoldX(PAD_1)) {
-                current.pos.y -= moveSpeed;
+            f32 cStickY = mDoCPd_c::getSubStickY(PAD_1);
+            if (cStickY > 0.3f || cStickY < -0.3f) {
+                current.pos.y += moveSpeed * cStickY;
             }
 
             current.pos.x += moveSpeed * mStickValue * cM_ssin(mMoveAngle);
@@ -18094,9 +18086,7 @@ int daAlink_c::execute() {
 
         setBodyPartPos();
         setAttentionPos();
-    } else
-    #endif
-    {
+    } else {
         if (isTrigDebugMoveInput) {
             mItemButton = 0;
             mItemTrigger = 0;
@@ -18562,11 +18552,7 @@ int daAlink_c::execute() {
 
             if (checkDeadHP()) {
                 eventInfo.offCondition(fopAcCnd_NOEXEC_e);
-            } else
-            #if DEBUG
-            if (!l_debugMode)
-            #endif
-            {
+            } else if (!dusk::getTransientSettings().moveLinkActive) {
                 if (!checkMagneBootsOn()) {
                     f32 gnd_nrm_y;
                     if (mLinkAcch.ChkGroundHit()) {

@@ -156,6 +156,8 @@ namespace dusk {
                                       "This will not work with the \"Unlock Framerate\" enhancement.");
                 }
 
+                config::ImGuiCheckbox("Move Link (L+R+Y)", getSettings().game.enableMoveLink);
+
                 ImGui::EndMenu();
             }
 

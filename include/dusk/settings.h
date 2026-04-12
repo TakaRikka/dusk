@@ -71,6 +71,7 @@ struct UserSettings {
 
         // Controls
         ConfigVar<bool> enableTurboKeybind;
+        ConfigVar<bool> enableMoveLink;
     } game;
 
     struct {
@@ -102,6 +103,7 @@ struct CollisionViewSettings {
 struct TransientSettings {
     CollisionViewSettings collisionView;
     bool skipFrameRateLimit;
+    bool moveLinkActive;
 };
 
 TransientSettings& getTransientSettings();
