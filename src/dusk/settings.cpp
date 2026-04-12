@@ -40,7 +40,7 @@ UserSettings g_userSettings = {
 
         // Graphics
         .enableBloom {"game.enableBloom", true},
-        .useWaterProjectionOffset {"game.useWaterProjectionOffset", false},
+        .enableWaterRefraction {"game.enableWaterRefraction", true},
         .enableFrameInterpolation = {"game.enableFrameInterpolation", false},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
 
@@ -103,7 +103,7 @@ void registerSettings() {
     Register(g_userSettings.game.enableMirrorMode);
     Register(g_userSettings.game.invertCameraXAxis);
     Register(g_userSettings.game.enableBloom);
-    Register(g_userSettings.game.useWaterProjectionOffset);
+    Register(g_userSettings.game.enableWaterRefraction);
     Register(g_userSettings.game.shadowResolutionMultiplier);
     Register(g_userSettings.game.enableFastIronBoots);
     Register(g_userSettings.game.canTransformAnywhere);

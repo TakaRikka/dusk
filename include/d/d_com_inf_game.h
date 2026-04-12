@@ -4834,8 +4834,8 @@ inline void dComIfGd_drawXluListDark() {
 inline void dComIfGd_drawXluListInvisible() {
     ZoneScoped;
 #ifdef TARGET_PC
-    // FIXME: Water rendering hack for frame interpolation
-    if (!dusk::getSettings().game.enableFrameInterpolation) {
+    if (dusk::getSettings().game.enableWaterRefraction &&
+        !dusk::getSettings().game.enableFrameInterpolation) {
 #endif
         g_dComIfG_gameInfo.drawlist.drawXluListInvisible();
 #ifdef TARGET_PC
@@ -4845,7 +4845,14 @@ inline void dComIfGd_drawXluListInvisible() {
 
 inline void dComIfGd_drawOpaListInvisible() {
     ZoneScoped;
-    g_dComIfG_gameInfo.drawlist.drawOpaListInvisible();
+#ifdef TARGET_PC
+    if (dusk::getSettings().game.enableWaterRefraction &&
+        !dusk::getSettings().game.enableFrameInterpolation) {
+#endif
+        g_dComIfG_gameInfo.drawlist.drawOpaListInvisible();
+#ifdef TARGET_PC
+        }
+#endif
 }
 
 inline void dComIfGd_drawXluListZxlu() {

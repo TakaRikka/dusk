@@ -36,15 +36,8 @@ static int daObj_Tp_Draw(obj_tp_class* i_this) {
                         &material->getTexGenBlock()->getTexMtx(0)->getTexMtxInfo();
                     if (texMtxInfo != NULL) {
                         Mtx lightProjMtx;
-
-                        #if TARGET_PC
-                        C_MTXLightPerspective(lightProjMtx, dComIfGd_getView()->fovy,
-                                              dComIfGd_getView()->aspect, 1.0f, 1.0f, dusk::getSettings().game.useWaterProjectionOffset ? -0.01f : 0.0f, 0);
-                        #else
                         C_MTXLightPerspective(lightProjMtx, dComIfGd_getView()->fovy,
                                               dComIfGd_getView()->aspect, 1.0f, 1.0f, -0.01f, 0);
-                        #endif
-
                         #if WIDESCREEN_SUPPORT
                         mDoGph_gInf_c::setWideZoomLightProjection(lightProjMtx);
                         #endif

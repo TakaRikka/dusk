@@ -11393,11 +11393,7 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                             if (mat_name[6] == '2') {
                                 C_MTXLightPerspective(sp1D8, dComIfGd_getView()->fovy,
                                                       camera_p->view.aspect, 1.0f, 1.0f,
-#if TARGET_PC
-                                                      dusk::getSettings().game.useWaterProjectionOffset ? -0.01f : 0.0f, 0.0f);
-#else
                                                       -0.01f, 0.0f);
-#endif
                             } else {
                                 C_MTXLightPerspective(sp1D8, dComIfGd_getView()->fovy,
                                                       camera_p->view.aspect, 0.49f, -0.49f, 0.5f, 0.5f);

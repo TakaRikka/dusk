@@ -52,7 +52,7 @@ struct UserSettings {
 
         // Graphics
         ConfigVar<bool> enableBloom;
-        ConfigVar<bool> useWaterProjectionOffset;
+        ConfigVar<bool> enableWaterRefraction;
         ConfigVar<bool> enableFrameInterpolation;
         ConfigVar<int> shadowResolutionMultiplier;
 
