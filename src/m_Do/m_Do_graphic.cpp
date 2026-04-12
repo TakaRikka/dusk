@@ -2419,7 +2419,9 @@ int mDoGph_Painter() {
 #if TARGET_PC
     dusk::g_imguiConsole.PostDraw();
 
-    JFWDisplay::getManager()->setFaderSimSteps(pending_ui_ticks);
+    if (dusk::getSettings().game.enableFrameInterpolation) {
+        JFWDisplay::getManager()->setFaderSimSteps(pending_ui_ticks);
+    }
 #endif
 
     mDoGph_gInf_c::endRender();

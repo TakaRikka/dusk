@@ -16,6 +16,7 @@ public:
     };
 
     JUTFader(int, int, int, int, JUtility::TColor);
+    void advance();
     void control();
     void setStatus(JUTFader::EStatus, int);
 

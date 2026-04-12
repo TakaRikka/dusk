@@ -17,7 +17,7 @@ JUTFader::JUTFader(int x, int y, int width, int height, JUtility::TColor pColor)
     mEStatus = UNKSTATUS_M1;
 }
 
-void JUTFader::control() {
+void JUTFader::advance() {
     if (0 <= mEStatus && mEStatus-- == 0) {
         mStatus = field_0x24;
     }
@@ -59,9 +59,12 @@ void JUTFader::control() {
 
         break;
     }
+}
 
+void JUTFader::control() {
+    advance();
 #ifndef TARGET_PC
-    // Frame interpolation: draw call moved to JFWDisplay
+    // FRAME INTERP NOTE: Draw is called by JFWDisplay when interpolation is active
     draw();
 #endif
 }
