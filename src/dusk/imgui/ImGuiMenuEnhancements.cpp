@@ -53,6 +53,11 @@ namespace dusk {
                     ImGui::SetTooltip("Hides the TV calibration screen shown when loading a save.");
                 }
 
+                config::ImGuiCheckbox("Skip Warning Screen", getSettings().game.skipWarningScreen);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Skips the warning screen shown when loading the game.");
+                }
+
                 config::ImGuiCheckbox("Instant Saves", getSettings().game.instantSaves);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Skip the delay when writing to the Memory Card.");
