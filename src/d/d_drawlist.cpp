@@ -2017,3 +2017,13 @@ void dDlst_list_c::calcWipe() {
         dComIfGd_set2DXlu(&mWipeDlst);
     }
 }
+
+#if TARGET_PC
+void dDlst_list_c::refresh3DlineMats(const cXyz& eye) {
+    for (int i = 0; i < 3; i++) {
+        for (mDoExt_3DlineMat_c* mat = m3DLineMatSortPacket[i].getFirstMat(); mat != NULL; mat = mat->field_0x4) {
+            mat->refreshGeometryForPresentationEye(eye);
+        }
+    }
+}
+#endif

@@ -300,6 +300,10 @@ void interpolate(float step) {
     interpolate_branch(g_previous_recording.root, g_current_recording.root, g_step);
 }
 
+float get_interpolation_step() {
+    return g_step;
+}
+
 void notify_sim_tick_complete() {
     ensure_initialized();
     g_pending_presentation_ui_ticks++;
@@ -392,6 +396,13 @@ bool lookup_concat_replacement(const void* lhs, const void* rhs, Mtx out) {
 
     concat_matrix(*resolved_lhs, *resolved_rhs, out);
     return true;
+}
+
+// TODO: Is there already a built-in function for this?
+void camera_eye_from_view_mtx(MtxP view_mtx, cXyz* o_eye) {
+    o_eye->x = -(view_mtx[0][0] * view_mtx[0][3] + view_mtx[1][0] * view_mtx[1][3] + view_mtx[2][0] * view_mtx[2][3]);
+    o_eye->y = -(view_mtx[0][1] * view_mtx[0][3] + view_mtx[1][1] * view_mtx[1][3] + view_mtx[2][1] * view_mtx[2][3]);
+    o_eye->z = -(view_mtx[0][2] * view_mtx[0][3] + view_mtx[1][2] * view_mtx[1][3] + view_mtx[2][2] * view_mtx[2][3]);
 }
 
 }  // namespace frame_interp

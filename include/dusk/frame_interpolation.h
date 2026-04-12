@@ -6,6 +6,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+struct cXyz;
+
 #ifdef __cplusplus
 namespace dusk {
 namespace frame_interp {
@@ -15,6 +17,7 @@ void ensure_initialized();
 void begin_record();
 void end_record();
 void interpolate(float step);
+float get_interpolation_step();
 void notify_sim_tick_complete();
 uint32_t begin_presentation_ui_pass();
 uint32_t get_presentation_ui_advance_ticks();
@@ -26,6 +29,8 @@ void record_final_mtx_raw(const Mtx* dest, const Mtx src);
 
 bool lookup_replacement(const void* source, Mtx out);
 bool lookup_concat_replacement(const void* lhs, const void* rhs, Mtx out);
+
+void camera_eye_from_view_mtx(MtxP view_mtx, cXyz* o_eye);
 
 }  // namespace frame_interp
 }  // namespace dusk
