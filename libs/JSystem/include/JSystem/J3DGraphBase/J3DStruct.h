@@ -113,9 +113,6 @@ struct J3DFogInfo {
     bool operator==(J3DFogInfo&) const;
     J3DFogInfo& operator=(const J3DFogInfo&);
 
-    // TODO: Fog data should be converted from big endian (probably?)
-    // Not sure TP uses it.
-
     /* 0x00 */ u8 mType;
     /* 0x01 */ u8 mAdjEnable;
     /* 0x02 */ u16 mCenter;

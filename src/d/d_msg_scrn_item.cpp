@@ -609,6 +609,9 @@ void dMsgScrnItem_c::fukiPosCalc(u8 param_1) {
     field_0x180 = 0.0f;
     field_0x19c = param_1;
     f32 yOffset;
+    // the magic numbers here are correlated with the framebuffer size, but
+    // were likely either chosen by hand or had multiple arithmetic
+    // operations applied which cannot easily be reverse engineered
     switch(field_0x19c) {
     case 1:
         yOffset = g_MsgObject_HIO_c.mBoxPos[2][3];

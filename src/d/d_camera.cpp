@@ -20,6 +20,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
+#include "dusk/frame_interpolation.h"
 #include <cmath>
 #include <cstring>
 
@@ -2179,9 +2180,9 @@ fopAc_ac_c* dCamera_c::getParamTargetActor(s32 param_0) {
     daAlink_c* player = daAlink_getAlinkActorClass();
 
     fopAc_ac_c* result;
-    u32* name = (u32*)(mCamTypeData[param_0].name + 16);
+    BE(u32)* name = (BE(u32)*)(mCamTypeData[param_0].name + 16);
     //name += 16;
-    switch (*name) {
+    switch ((u32)*name) {
     case '@LOC':
         result = dComIfGp_getAttention()->LockonTarget(0);
         break;
@@ -11030,16 +11031,20 @@ static int camera_draw(camera_process_class* i_this) {
 
     int trim_height = body->TrimHeight();
 
-    #if TARGET_PC
+#if TARGET_PC
     trim_height *= viewport->height / FB_HEIGHT;
     window->setScissor(0.0f, trim_height, viewport->width, viewport->height - trim_height * 2.0f);
-    #else
+#else
     window->setScissor(0.0f, trim_height, FB_WIDTH, FB_HEIGHT - trim_height * 2.0f);
-    #endif
+#endif
 
     C_MTXPerspective(process->view.projMtx, process->view.fovy, process->view.aspect, process->view.near_, process->view.far_);
     mDoMtx_lookAt(process->view.viewMtx, &process->view.lookat.eye, &process->view.lookat.center,
                   &process->view.lookat.up, process->view.bank);
+#ifdef TARGET_PC
+    dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(process->view.viewMtx),
+                                             process->view.viewMtx);
+#endif
 
 #if WIDESCREEN_SUPPORT
     mDoGph_gInf_c::setWideZoomProjection(process->view.projMtx);

@@ -8,6 +8,7 @@
 #include "JSystem/J3DGraphBase/J3DShapeMtx.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/JKernel/JKRHeap.h"
+#include "dusk/frame_interpolation.h"
 
 #define J3D_ASSERTMSG(LINE, COND, MSG) JUT_ASSERT_MSG(LINE, (COND) != 0, MSG)
 #define J3D_WARN1(LINE, MSG, ARG1) JUT_WARN(LINE, MSG, ARG1)
@@ -448,6 +449,16 @@ void J3DModel::calc() {
     if (mCalcCallBack != NULL) {
         mCalcCallBack(this, 0);
     }
+
+#ifdef TARGET_PC
+    for (u16 i = 0; i < mModelData->getJointNum(); ++i) {
+        dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(getAnmMtx(i)), getAnmMtx(i));
+    }
+
+    for (u16 i = 0; i < mModelData->getWEvlpMtxNum(); ++i) {
+        dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(getWeightAnmMtx(i)), getWeightAnmMtx(i));
+    }
+#endif
 }
 
 void J3DModel::entry() {
@@ -484,11 +495,17 @@ void J3DModel::viewCalc() {
         if (getMtxCalcMode() == 2) {
             J3DCalcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx,
                                (MtxP)&mInternalView);
+#ifdef TARGET_PC
+            dusk::frame_interp::record_final_mtx_raw(&mInternalView, mInternalView);
+#endif
         }
     } else if (isCpuSkinningOn()) {
         if (getMtxCalcMode() == 2) {
             J3DCalcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx,
                                (MtxP)&mInternalView);
+#ifdef TARGET_PC
+            dusk::frame_interp::record_final_mtx_raw(&mInternalView, mInternalView);
+#endif
         }
     } else if (checkFlag(J3DMdlFlag_SkinPosCpu)) {
         mMtxBuffer->calcDrawMtx(getMtxCalcMode(), mBaseScale, mBaseTransformMtx);
@@ -508,6 +525,12 @@ void J3DModel::viewCalc() {
         DCStoreRangeNoSync(getDrawMtxPtr(), mModelData->getDrawMtxNum() * sizeof(Mtx));
         DCStoreRange(getNrmMtxPtr(), mModelData->getDrawMtxNum() * sizeof(Mtx33));
     }
+
+#ifdef TARGET_PC
+    for (u16 i = 0; i < mModelData->getDrawMtxNum(); ++i) {
+        dusk::frame_interp::record_final_mtx_raw(&getDrawMtxPtr()[i], getDrawMtxPtr()[i]);
+    }
+#endif
 
     prepareShapePackets();
 }

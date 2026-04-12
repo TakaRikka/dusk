@@ -1,25 +1,29 @@
 #include "JSystem/JSystem.h"  // IWYU pragma: keep
 
-#include <dolphin/gx.h>
-#include <dolphin/vi.h>
-#include <gx.h>
-#include <stdint.h>
-#include <vi.h>
-#include "SDL3/SDL_timer.h"
-#include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JFramework/JFWDisplay.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTProcBar.h"
-#include "aurora/aurora.h"
+#include <gx.h>
+#include <vi.h>
+#include "global.h"
+#include <stdint.h>
+
+#ifdef TARGET_PC
 #include "dusk/dusk.h"
 #include "dusk/gx_helper.h"
 #include "dusk/logging.h"
 #include "dusk/settings.h"
-#include "global.h"
+#include "dusk/time.h"
+
+#include "SDL3/SDL_timer.h"
 #include "tracy/Tracy.hpp"
+
+#include <chrono>
+#endif
 
 void JFWDisplay::ctor_subroutine(bool enableAlpha) {
     mEnableAlpha = enableAlpha;
@@ -201,6 +205,14 @@ void JFWDisplay::preGX() {
     }
 }
 
+#ifdef TARGET_PC
+static s32 s_faderSimSteps = -1;
+
+void JFWDisplay::setFaderSimSteps(u32 steps) {
+    s_faderSimSteps = static_cast<s32>(steps);
+}
+#endif
+
 void JFWDisplay::endGX() {
     s32 bufferNum = JUTXfb::getManager()->getBufferNum();
     u16 width = JUTVideo::getManager()->getFbWidth();
@@ -211,7 +223,26 @@ void JFWDisplay::endGX() {
 
     if (mFader != NULL) {
         ortho.setPort();
+#ifdef TARGET_PC
+        if (dusk::getSettings().game.enableFrameInterpolation) {
+            u32 advance_count = 1;
+            if (s_faderSimSteps >= 0) {
+                advance_count = static_cast<u32>(s_faderSimSteps);
+                s_faderSimSteps = -1;
+            }
+            for (u32 i = 0; i < advance_count; i++) {
+                mFader->control();
+            }
+            if (mFader->getStatus() != 1) {
+                mFader->draw();
+            }
+        } else {
+            mFader->control();
+            mFader->draw();
+        }
+#else
         mFader->control();
+#endif
     }
     ortho.setPort();
     JUTDbPrint::getManager()->flush();
@@ -350,49 +381,63 @@ void JFWDisplay::waitBlanking(int param_0) {
     }
 }
 
+#if TARGET_PC
+constexpr auto FRAME_PERIOD = std::chrono::duration_cast<std::chrono::nanoseconds>(
+    std::chrono::duration<double>(1001.0 / 30000.0));
+constexpr auto RETRACE_PERIOD = FRAME_PERIOD / 2;
+
+static void waitPrecise(Limiter& limiter, Uint64 targetNs) {
+    const auto sleepTime = limiter.SleepTime(std::chrono::nanoseconds(targetNs));
+    dusk::frameUsagePct =
+        100.0f * (1.0f - static_cast<float>(sleepTime.count()) / static_cast<float>(targetNs));
+    limiter.Sleep(std::chrono::nanoseconds(targetNs));
+}
+#endif
+
 static void waitForTick(u32 p1, u16 p2) {
-    ZoneScopedC(tracy::Color::DimGray);
-    #if TARGET_PC
+#if TARGET_PC
+    if (dusk::getSettings().game.enableFrameInterpolation) {
+        return;
+    }
     if (dusk::getTransientSettings().skipFrameRateLimit) {
         p1 = OS_TIMER_CLOCK / 120;
     }
-    #endif
+    ZoneScopedC(tracy::Color::DimGray);
+#endif
 
-    if (p1 != 0)
-    {
+    if (p1 != 0) {
+#if TARGET_PC
+        static Limiter limiter;
+        waitPrecise(limiter, static_cast<Uint64>(OSTicksToMicroseconds(p1)) * 1000ULL);
+#else
         static OSTime nextTick = OSGetTime();
         OSTime time = OSGetTime();
-        OSTime waitTime = (nextTick > time) ? (nextTick - time) : 0;
         while (time < nextTick) {
             JFWDisplay::getManager()->threadSleep((nextTick - time));
             time = OSGetTime();
         }
-        dusk::frameUsagePct = 100.0f * (1.0f - (float)waitTime / (float)p1);
         nextTick = time + p1;
+#endif
     } else {
-        static u32 nextCount = VIGetRetraceCount();
         u32 uVar1 = (p2 == 0) ? 1 : p2;
+#if TARGET_PC
+        static Limiter limiter;
+        waitPrecise(limiter, static_cast<Uint64>((RETRACE_PERIOD * uVar1).count()));
+#else
+        static u32 nextCount = VIGetRetraceCount();
         OSMessage msg;
         do {
             if (!OSReceiveMessage(JUTVideo::getManager()->getMessageQueue(), &msg,
-                                  OS_MESSAGE_BLOCK))
-            {
+                                  OS_MESSAGE_BLOCK)) {
                 msg = 0;
             }
         } while (((intptr_t)msg - (intptr_t)nextCount) < 0);
-        dusk::frameUsagePct = 100.0f;
         nextCount = (intptr_t)msg + uVar1;
+#endif
     }
 }
 
 JSUList<JFWAlarm> JFWAlarm::sList(false);
-
-#if TARGET_PC
-void JFWDisplay::threadSleep(s64 time) {
-    SDL_DelayNS(OSTicksToMicroseconds(time) * 1'000);
-}
-#else
-
 static void JFWThreadAlarmHandler(OSAlarm* p_alarm, OSContext* p_ctx) {
     JFWAlarm* alarm = static_cast<JFWAlarm*>(p_alarm);
     alarm->removeLink();
@@ -410,7 +455,6 @@ void JFWDisplay::threadSleep(s64 time) {
     OSSuspendThread(alarm.getThread());
     OSRestoreInterrupts(status);
 }
-#endif
 
 static void dummy() {
     JUTXfb::getManager()->setDisplayingXfbIndex(0);
@@ -450,7 +494,7 @@ void JFWDisplay::clearEfb(GXColor color) {
 
 void JFWDisplay::clearEfb(int param_0, int param_1, int param_2, int param_3, GXColor color) {
     STUB_RET();
-    
+
     u16 width;
     u16 height;
     Mtx44 mtx;

@@ -11,6 +11,8 @@
 #include "d/d_camera.h"
 #include "f_op/f_op_camera_mng.h"
 
+#include "dusk/frame_interpolation.h"
+
 const u16 l_M_Hijiki00TEX__width = 31;
 const u16 l_M_Hijiki00TEX__height = 31;
 const u16 l_M_kusa05_RGBATEX__width = 31;
@@ -751,7 +753,16 @@ void dGrass_packet_c::draw() {
                 GXSetChanAmbColor(GX_COLOR0A0, sp38);
 
                 if (!cLib_checkBit<u8>(var_r29->field_0x01, 2)) {
-                    GXLoadPosMtxImm(var_r29->m_modelMtx, 0);
+#ifdef TARGET_PC
+                    Mtx grass_mtx;
+                    if (dusk::frame_interp::lookup_replacement(reinterpret_cast<const void*>(&var_r29->m_modelMtx), grass_mtx)) {
+                        GXLoadPosMtxImm(grass_mtx, 0);
+                    } else {
+#endif
+                        GXLoadPosMtxImm(var_r29->m_modelMtx, 0);
+#ifdef TARGET_PC
+                    }
+#endif
                     GXLoadNrmMtxImm(j3dSys.getViewMtx(), 0);
                     if (var_r29->field_0x05 <= 3 || var_r29->field_0x05 >= 10) {
                         if (var_r29->field_0x02 < -1) {
@@ -1006,6 +1017,9 @@ void dGrass_packet_c::update() {
                     mDoMtx_stack_c::scaleM(scale, scale, scale);
                     cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), data_p->m_modelMtx);
                 }
+#ifdef TARGET_PC
+                dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(&data_p->m_modelMtx), data_p->m_modelMtx);
+#endif
             }
         }
         data_p++;

@@ -9,6 +9,7 @@
 #include "JSystem/JMath/JMath.h"
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "dusk/logging.h"
 
 J3DMaterialFactory::J3DMaterialFactory(J3DMaterialBlock const& i_block) {
     mMaterialNum = i_block.mMaterialNum;
@@ -656,7 +657,13 @@ J3DIndTexOrder J3DMaterialFactory::newIndTexOrder(int i_idx, int i_no) const {
 J3DIndTexMtx J3DMaterialFactory::newIndTexMtx(int i_idx, int i_no) const {
     J3DIndTexMtx dflt;
     if (mpIndInitData[i_idx].mEnabled == true) {
+#if TARGET_LITTLE_ENDIAN
+        J3DIndTexMtxInfo indTexMtxInfo = mpIndInitData[i_idx].mIndTexMtxInfo[i_no];
+        be_swap(indTexMtxInfo.field_0x0);
+        return indTexMtxInfo;
+#else
         return J3DIndTexMtx(mpIndInitData[i_idx].mIndTexMtxInfo[i_no]);
+#endif
     } else {
         return dflt;
     }
@@ -684,7 +691,19 @@ J3DFog J3DMaterialFactory::newFog(int i_idx) const {
     J3DFog fog;
     J3DMaterialInitData* mtl_init_data = &mpMaterialInitData[mpMaterialID[i_idx]];
     if (mtl_init_data->mFogIdx != 0xffff) {
+#if TARGET_LITTLE_ENDIAN
+        J3DFogInfo fogInfo = mpFogInfo[mtl_init_data->mFogIdx];
+        be_swap(fogInfo.mCenter);
+        be_swap(fogInfo.mStartZ);
+        be_swap(fogInfo.mEndZ);
+        be_swap(fogInfo.mNearZ);
+        be_swap(fogInfo.mFarZ);
+        for (int i = 0; i < 10; i++)
+            be_swap(fogInfo.mFogAdjTable.r[i]);
+        fog.setFogInfo(fogInfo);
+#else
         fog.setFogInfo(mpFogInfo[mtl_init_data->mFogIdx]);
+#endif
     }
     return fog;
 }

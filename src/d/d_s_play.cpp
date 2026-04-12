@@ -39,7 +39,9 @@
 #include "JSystem/JKernel/JKRAram.h"
 #include "JSystem/JKernel/JKRAramArchive.h"
 
+#if TARGET_PC
 #include "dusk/memory.h"
+#endif
 
 #if DEBUG
 #include "d/d_s_menu.h"

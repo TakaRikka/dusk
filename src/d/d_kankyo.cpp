@@ -10994,9 +10994,9 @@ void dKy_depth_dist_set(void* process_p) {
 
             if ((sp30.x >= 0.0f && sp30.x < FB_WIDTH) && (sp30.y >= 0.0f &&
                 #if DEBUG
-                sp30.y < 608.0f
+                sp30.y < FB_WIDTH_BASE
                 #else
-                sp30.y < 600.0f
+                sp30.y < (FB_WIDTH_BASE - 8)
                 #endif
             )) {
                 cXyz sp18;
@@ -11393,11 +11393,7 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                             if (mat_name[6] == '2') {
                                 C_MTXLightPerspective(sp1D8, dComIfGd_getView()->fovy,
                                                       camera_p->view.aspect, 1.0f, 1.0f,
-#if TARGET_PC
-                                                      dusk::getSettings().game.useWaterProjectionOffset ? -0.01f : 0.0f, 0.0f);
-#else
                                                       -0.01f, 0.0f);
-#endif
                             } else {
                                 C_MTXLightPerspective(sp1D8, dComIfGd_getView()->fovy,
                                                       camera_p->view.aspect, 0.49f, -0.49f, 0.5f, 0.5f);

@@ -17,6 +17,7 @@
 #include "d/d_msg_scrn_explain.h"
 #include "m_Do/m_Do_graphic.h"
 #include "d/actor/d_a_midna.h"
+#include "dusk/frame_interpolation.h"
 #include <cstring>
 
 dMenu_Fmap2DBack_c::dMenu_Fmap2DBack_c() {
@@ -390,11 +391,17 @@ void dMenu_Fmap2DBack_c::draw() {
                         (mArrowPos3DZ + control_ypos + fVar3) - fVar5, &mArrowPos2DX,
                         &mArrowPos2DY);
 
-        field_0x11e0 -= g_fmapHIO.mCursorSpeed;
+#ifdef TARGET_PC
+        for (u32 i = 0; i < dusk::frame_interp::get_presentation_ui_advance_ticks(); ++i) {
+#endif
+            field_0x11e0 -= g_fmapHIO.mCursorSpeed;
 
-        if (field_0x11e0 < 0.0f) {
-            field_0x11e0 += 360.0f;
+            if (field_0x11e0 < 0.0f) {
+                field_0x11e0 += 360.0f;
+            }
+#ifdef TARGET_PC
         }
+#endif
 
         mpPointParent->getPanePtr()->rotate(mpPointParent->getSizeX() / 2.0f,
                                             mpPointParent->getSizeY() / 2.0f, ROTATE_Z,
@@ -425,7 +432,13 @@ void dMenu_Fmap2DBack_c::draw() {
 
     if (field_0x122d) {
         mpMeterHaihai->drawHaihai(field_0x122d);
+#if TARGET_PC
+        if (!dusk::getSettings().game.enableFrameInterpolation) {
+            field_0x122d = 0;
+        }
+#else
         field_0x122d = 0;
+#endif
     }
 
     if (g_fmapHIO.mRangeCheck && !g_fmapHIO.mRangeCheckDrawPriority) {

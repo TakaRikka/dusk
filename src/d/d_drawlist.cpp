@@ -10,7 +10,13 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
+
+#include <typeindex>
+
+#include "absl/container/flat_hash_map.h"
+#include "client/TracyScoped.hpp"
 #include "d/d_s_play.h"
+#include "dusk/frame_interpolation.h"
 #include "dusk/gx_helper.h"
 #include "dusk/logging.h"
 #include "m_Do/m_Do_graphic.h"
@@ -1089,7 +1095,16 @@ void dDlst_shadowReal_c::draw() {
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetCurrentMtx(GX_PNMTX0);
-    GXLoadTexMtxImm(mReceiverProjMtx, GX_TEXMTX0, GX_MTX3x4);
+#ifdef TARGET_PC
+    Mtx receiver_proj_mtx;
+    if (dusk::frame_interp::lookup_replacement(&mReceiverProjMtx, receiver_proj_mtx)) {
+        GXLoadTexMtxImm(receiver_proj_mtx, GX_TEXMTX0, GX_MTX3x4);
+    } else {
+#endif
+        GXLoadTexMtxImm(mReceiverProjMtx, GX_TEXMTX0, GX_MTX3x4);
+#ifdef TARGET_PC
+    }
+#endif
     mShadowRealPoly.draw();
 }
 
@@ -1247,6 +1262,10 @@ u8 dDlst_shadowReal_c::setShadowRealMtx(cXyz* param_0, cXyz* param_1, f32 param_
     C_MTXOrtho(mRenderProjMtx, param_2, -param_2, -param_2, param_2, 1.0f, 10000.0f);
     C_MTXLightOrtho(mReceiverProjMtx, param_2, -param_2, -param_2, param_2, 0.5f, -0.5f, 0.5f, 0.5f);
     cMtx_concat(mReceiverProjMtx, mViewMtx, mReceiverProjMtx);
+#ifdef TARGET_PC
+    dusk::frame_interp::record_final_mtx_raw(&mViewMtx, mViewMtx);
+    dusk::frame_interp::record_final_mtx_raw(&mReceiverProjMtx, mReceiverProjMtx);
+#endif
     return r29;
 }
 
@@ -1309,13 +1328,31 @@ void dDlst_shadowSimple_c::draw() {
     GXSetTevColor(GX_TEVREG0, l_color);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXLoadPosMtxImm(mVolumeMtx, GX_PNMTX0);
+#ifdef TARGET_PC
+    Mtx volume_mtx;
+    if (dusk::frame_interp::lookup_replacement(&mVolumeMtx, volume_mtx)) {
+        GXLoadPosMtxImm(volume_mtx, GX_PNMTX0);
+    } else {
+#endif
+        GXLoadPosMtxImm(mVolumeMtx, GX_PNMTX0);
+#ifdef TARGET_PC
+    }
+#endif
     GXSetCurrentMtx(GX_PNMTX0);
     GXCallDisplayList(l_frontMat, 0x40);
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
     GXCallDisplayList(l_backSubMat, 0x20);
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
-    GXLoadPosMtxImm(mMtx, GX_PNMTX1);
+#ifdef TARGET_PC
+    Mtx shadow_mtx;
+    if (dusk::frame_interp::lookup_replacement(&mMtx, shadow_mtx)) {
+        GXLoadPosMtxImm(shadow_mtx, GX_PNMTX1);
+    } else {
+#endif
+        GXLoadPosMtxImm(mMtx, GX_PNMTX1);
+#ifdef TARGET_PC
+    }
+#endif
     GXSetCurrentMtx(GX_PNMTX1);
 
     if (mpTexObj != NULL) {
@@ -1394,13 +1431,21 @@ void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* pa
     mDoMtx_stack_c::YrotM(param_4);
     mDoMtx_stack_c::scaleM(param_2, 1.0f, param_2 * param_5);
     cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mMtx);
+#ifdef TARGET_PC
+    dusk::frame_interp::record_final_mtx_raw(&mVolumeMtx, mVolumeMtx);
+    dusk::frame_interp::record_final_mtx_raw(&mMtx, mMtx);
+#endif
     mpTexObj = param_6;
 }
 
 void dDlst_shadowControl_c::init() {
 #if TARGET_PC
     // Increase shadow map resolution
-    static u16 l_realImageSize[2] = {1024, 512};
+    u16 l_realImageSize[2] =
+    {
+        192 * dusk::getSettings().game.shadowResolutionMultiplier,
+        64 * dusk::getSettings().game.shadowResolutionMultiplier
+    };
 #else
     static u16 l_realImageSize[2] = {192, 64};
 #endif
@@ -1439,7 +1484,19 @@ void dDlst_shadowControl_c::reset() {
 #endif
 }
 
+#if TARGET_PC
+int lastShadowValue = 0;
+#endif
+
 void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
+    #if TARGET_PC
+    if (lastShadowValue != dusk::getSettings().game.shadowResolutionMultiplier) {
+        reset();
+        init();
+        lastShadowValue = dusk::getSettings().game.shadowResolutionMultiplier;
+    }
+    #endif
+
     static u8 l_matDL[] ATTRIBUTE_ALIGN(32) = {
         0x10, 0x00, 0x00, 0x10, 0x0E, 0x00, 0x00, 0x04, 0x00, 0x10, 0x00, 0x00, 0x10, 0x10,
         0x00, 0x00, 0x04, 0x00, 0x61, 0x28, 0x38, 0x00, 0x00, 0x61, 0xC0, 0x08, 0xFF, 0xF2,
@@ -1541,7 +1598,16 @@ void dDlst_shadowControl_c::draw(Mtx param_0) {
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0);
     GXSetNumTevStages(1);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXLoadPosMtxImm(param_0, GX_PNMTX0);
+#ifdef TARGET_PC
+    Mtx draw_mtx;
+    if (dusk::frame_interp::lookup_replacement(param_0, draw_mtx)) {
+        GXLoadPosMtxImm(draw_mtx, GX_PNMTX0);
+    } else {
+#endif
+        GXLoadPosMtxImm(param_0, GX_PNMTX0);
+#ifdef TARGET_PC
+    }
+#endif
     GXColor matColor = {0, 0, 0, 0x20};
     GXSetChanMatColor(GX_ALPHA0, matColor);
 
@@ -1878,14 +1944,32 @@ int dDlst_list_c::set(dDlst_base_c**& p_start, dDlst_base_c**& p_end, dDlst_base
     return 1;
 }
 
+#if TARGET_PC && (TRACY_ENABLE || PARTIAL_DEBUG)
+static absl::flat_hash_map<std::type_index, const char*> typeDrawNames;
+
+static const char* getTypeDrawName(dDlst_base_c* dlst) {
+    const auto& info = typeid(*dlst);
+    auto& elem = typeDrawNames[info];
+    if (elem) [[likely]] {
+        return elem;
+    }
+
+    const auto size = snprintf(nullptr, 0, "%s::draw()", info.name());
+    // Note: pointer is intentionally never freed, Tracy needs it.
+    const auto buf = static_cast<char*>(malloc(size+1));
+    snprintf(buf, size+1, "%s::draw()", info.name());
+    elem = buf;
+    return buf;
+}
+#endif
+
 void dDlst_list_c::draw(dDlst_base_c** p_start, dDlst_base_c** p_end) {
     for (; p_start < p_end; p_start++) {
         dDlst_base_c* dlst = *p_start;
 
-#if DEBUG && TARGET_PC
-        char buf[64];
-        snprintf(buf, sizeof(buf), "%s::draw()", typeid(dlst).name());
-        GXScopedDebugGroup scope(buf);
+#if TARGET_PC && (TRACY_ENABLE || PARTIAL_DEBUG)
+        const auto name = getTypeDrawName(dlst);
+        GXScopedDebugGroup scope(name);
 #endif
         dlst->draw();
     }
@@ -1933,3 +2017,13 @@ void dDlst_list_c::calcWipe() {
         dComIfGd_set2DXlu(&mWipeDlst);
     }
 }
+
+#if TARGET_PC
+void dDlst_list_c::refresh3DlineMats(const cXyz& eye) {
+    for (int i = 0; i < 3; i++) {
+        for (mDoExt_3DlineMat_c* mat = m3DLineMatSortPacket[i].getFirstMat(); mat != NULL; mat = mat->field_0x4) {
+            mat->refreshGeometryForPresentationEye(eye);
+        }
+    }
+}
+#endif

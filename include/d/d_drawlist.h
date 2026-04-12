@@ -435,6 +435,10 @@ public:
         m3DLineMatSortPacket[param_1->getMaterialID()].setMatDark(param_1);
     }
 
+#if TARGET_PC
+    void refresh3DlineMats(const cXyz& eye);
+#endif
+
     void peekZdata() { mPeekZ.peekData(); }
     void entryZSortListZxlu(J3DPacket* i_packet, cXyz& param_1) {
         entryZSortXluDrawList(mDrawBuffers[DB_LIST_Z_XLU], i_packet, param_1);

@@ -62,6 +62,10 @@ namespace dusk {
                     config::Save();
                 }
 
+                config::ImGuiCheckbox("Native Bloom", getSettings().game.enableBloom);
+
+                config::ImGuiCheckbox("Enable Water Refraction", getSettings().game.enableWaterRefraction);
+
                 ImGui::EndMenu();
             }
 

@@ -8,12 +8,14 @@
 #include <aurora/aurora.h>
 #endif
 
+#define FB_WIDTH_BASE (608)
+#define FB_HEIGHT_BASE (448)
 #if WIDESCREEN_SUPPORT && !TARGET_PC
 #define FB_WIDTH  (640)
 #define FB_HEIGHT (456)
 #else
-#define FB_WIDTH  (608)
-#define FB_HEIGHT (448)
+#define FB_WIDTH  FB_WIDTH_BASE
+#define FB_HEIGHT FB_HEIGHT_BASE
 #endif
 
 int mDoGph_Create();
@@ -237,6 +239,7 @@ public:
     static void* getZbufferTex() { return mZbufferTex; }
     static void setFadeRate(f32 rate) { mFadeRate = rate; }
     static f32 getFadeRate() { return mFadeRate; }
+    static f32 getFadeSpeed() { return mFadeSpeed; }
     static bloom_c* getBloom() { return &m_bloom; }
     static GXColor& getFadeColor() { return mFadeColor; }
     static GXColor& getBackColor() { return mBackColor; }
@@ -275,7 +278,7 @@ public:
 
     #if TARGET_PC
     static void onWide(f32 width, f32 height);
-    #else 
+    #else
     static void onWide();
     #endif
 

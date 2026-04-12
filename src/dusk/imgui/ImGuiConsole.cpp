@@ -206,10 +206,6 @@ namespace dusk {
 
     void ImGuiConsole::PreDraw() {
         ZoneScoped;
-        if (dusk::IsGameLaunched && !m_isLaunchInitialized) {
-            m_toasts.emplace_back("Press F1 to toggle menu"s, 5.f);
-            m_isLaunchInitialized = true;
-        }
 
         UpdateSettings();
 
@@ -239,6 +235,16 @@ namespace dusk {
 
         if (!dusk::IsGameLaunched) {
             m_preLaunchWindow.draw();
+        }
+
+        if (!getSettings().backend.wasPresetChosen) {
+            m_firstRunPreset.draw();
+            return;
+        }
+
+        if (dusk::IsGameLaunched && !m_isLaunchInitialized) {
+            m_toasts.emplace_back("Press F1 to toggle menu"s, 5.f);
+            m_isLaunchInitialized = true;
         }
 
         m_menuGame.windowControllerConfig();

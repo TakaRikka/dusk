@@ -511,6 +511,7 @@ void J2DPicture::drawSelf(f32 param_0, f32 param_1) {
 }
 
 void J2DPicture::drawSelf(f32 param_0, f32 param_1, Mtx* param_2) {
+    GX_AND_TRACY_SCOPED("J2DPicture::drawSelf")
     if (mTexture[0] != NULL && mTextureNum != 0) {
         drawFullSet(mGlobalBounds.i.x + param_0, mGlobalBounds.i.y + param_1,
                     getWidth(), getHeight(), param_2);
@@ -527,6 +528,7 @@ void J2DPicture::drawFullSet(f32 param_0, f32 param_1, f32 param_2, f32 param_3,
 
 void J2DPicture::draw(f32 x, f32 y, f32 width, f32 height, bool mirrorX, bool mirrorY,
                       bool rotate90) {
+    GX_AND_TRACY_SCOPED("J2DPicture::draw")
     if (isVisible() && mTextureNum != 0 && mTexture[0] != NULL) {
         f32 x2 = x + width;
         f32 y2 = y + height;

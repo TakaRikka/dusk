@@ -182,7 +182,9 @@ void JUTVideo::postRetraceProc(u32 retrace_count) {
         sManager->mPostCallback(retrace_count);
     }
 
+#ifndef TARGET_PC  // Not read by JFWDisplay waitForTick
     OSSendMessage(&sManager->mMessageQueue, (OSMessage)(uintptr_t)VIGetRetraceCount(), OS_MESSAGE_NOBLOCK);
+#endif
 }
 
 void JUTVideo::setRenderMode(GXRenderModeObj const* pObj) {

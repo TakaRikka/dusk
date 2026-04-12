@@ -20,6 +20,7 @@
 #include "JSystem/JUtility/JUTProcBar.h"
 #include "JSystem/JUtility/JUTReport.h"
 #include "SSystem/SComponent/c_counter.h"
+#include "SSystem/SComponent/c_API_graphic.h"
 #include "Z2AudioLib/Z2WolfHowlMgr.h"
 #include "c/c_dylink.h"
 #include "d/d_com_inf_game.h"
@@ -46,12 +47,12 @@
 #include "SSystem/SComponent/c_API.h"
 #include "dusk/app_info.hpp"
 #include "dusk/dusk.h"
+#include "dusk/frame_interpolation.h"
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "version.h"
-#include "dusk/time.h"
 
 #include <aurora/aurora.h>
 #include <aurora/event.h>
@@ -197,6 +198,11 @@ void main01(void) {
     if (preLaunchUIWindowSize.width != 0)
         mDoGph_gInf_c::setWindowSize(preLaunchUIWindowSize);
 
+    using clock = std::chrono::steady_clock;
+    constexpr double kSimStepSeconds = 1.0 / 30.0;
+    auto previous_time = clock::now();
+    double accumulator = kSimStepSeconds;
+
     do {
         // 1. Update Window Events
         const AuroraEvent* event = aurora_update();
@@ -219,27 +225,42 @@ void main01(void) {
 
         eventsDone:;
 
-        static u32 frame = 0;
-        frame++;
-
-        // Game Inputs
-        mDoCPd_c::read();
+        auto current_time = clock::now();
+        double frame_seconds = std::chrono::duration<double>(current_time - previous_time).count();
+        previous_time = current_time;
+        accumulator += frame_seconds;
 
         VIWaitForRetrace();
 
-#if TARGET_PC
         dusk::lastFrameAuroraStats = *aurora_get_stats();
         if (!aurora_begin_frame()) {
             DuskLog.debug("aurora_begin_frame returned false, skipping draw this frame");
             continue;
         }
-#endif
 
-        // EXECUTE GAME LOGIC & RENDER
-        // This calls mDoGph_Painter -> JFWDisplay -> GX Functions
-        fapGm_Execute();
+        if (dusk::getSettings().game.enableFrameInterpolation) {
+            while (accumulator >= kSimStepSeconds) {
+                mDoCPd_c::read();
+                fapGm_Execute();
+                mDoAud_Execute();
+                accumulator -= kSimStepSeconds;
+            }
 
-        mDoAud_Execute();
+            float interp_alpha = static_cast<float>(accumulator / kSimStepSeconds);
+            dusk::frame_interp::interpolate(interp_alpha);
+            cAPIGph_Painter();
+        } else {
+            accumulator = 0.0;
+
+            // Game Inputs
+            mDoCPd_c::read();
+
+            // EXECUTE GAME LOGIC & RENDER
+            // This calls mDoGph_Painter -> JFWDisplay -> GX Functions
+            fapGm_Execute();
+
+            mDoAud_Execute();
+        }
 
         aurora_end_frame();
 
