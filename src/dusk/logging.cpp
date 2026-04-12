@@ -6,6 +6,8 @@
 
 #if ANDROID
 #include "android/log.h"
+#include <vector>
+#include <sstream>
 #endif
 
 bool StubLogEnabled = true;
@@ -64,18 +66,10 @@ void aurora_log_callback(AuroraLogLevel level, const char* module, const char* m
         break;
     }
 
-    const char* start = message;
-    const char* end = message + len;
-    while (start < end) {
-        const char* newline = static_cast<const char*>(memchr(start, '\n', end - start));
-        if (!newline) {
-            __android_log_print(android_log_level, module, "%.*s", static_cast<int>(end - start), start);
-            break;
-        }
-        if (newline > start) {
-            __android_log_print(android_log_level, module, "%.*s", static_cast<int>(newline - start), start);
-        }
-        start = newline + 1;
+    std::stringstream msgStream(message);
+    std::string segment;
+    while(std::getline(msgStream, segment)) {
+        __android_log_print(android_log_level, module, "%s\n", segment.c_str());
     }
 
     if (level == LOG_FATAL) {
