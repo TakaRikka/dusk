@@ -18,6 +18,7 @@ static void ApplyPresetClassic() {
 static void ApplyPresetHD() {
     auto& s = getSettings();
     s.game.hideTvSettingsScreen.setValue(true);
+    s.game.skipWarningScreen.setValue(true);
     s.game.noReturnRupees.setValue(true);
     s.game.disableRupeeCutscenes.setValue(true);
     s.game.noSwordRecoil.setValue(true);
