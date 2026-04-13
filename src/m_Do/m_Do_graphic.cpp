@@ -1259,7 +1259,7 @@ void mDoGph_gInf_c::bloom_c::remove() {
 }
 
 #if TARGET_PC
-static void CopyToTexObj(GXTexObj* pDst, uintptr_t texID, int dstWidth, int dstHeight, GXTexFmt dstFmt = GX_TF_RGBA8) {
+static void CopyToTexObj(GXTexObj* pDst, uintptr_t texID, u16 dstWidth, u16 dstHeight, GXTexFmt dstFmt = GX_TF_RGBA8) {
     GXSetTexCopyDst(dstWidth, dstHeight, dstFmt, FALSE);
     GXCopyTex((void*)texID, false);
     GXInitTexObj(pDst, (void*)texID, dstWidth, dstHeight, dstFmt, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -1311,33 +1311,37 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         BlurPass0, BlurPassN = BlurPass0 + MaxDivNum,
         MaxTexNum,
     };
-    struct bloom_rect {
+    struct {
         u16 x;
         u16 y;
         u16 w;
         u16 h;
+    } divRects[MaxDivNum];
+    divRects[0] = {
+        0,
+        0,
+        static_cast<u16>(width),
+        static_cast<u16>(height),
     };
-    scissor_class divPorts[MaxDivNum];
-    divPorts[0] = {0.0f, 0.0f, 1.0f, 1.0f}; // full-size texture
-    divPorts[1] = {0.0f, 0.0f, 0.5f, 0.5f}; // bloom texture (wide enough, half-tall)
-    divPorts[2] = {0.5f, 0.0f, 0.25f, 0.25f};
-    for (int i = 3; i < ARRAY_SIZE(divPorts); i++) {
-        auto& port = divPorts[i];
-        auto const& prev = divPorts[i - 1];
-        port.x_orig = prev.x_orig;
-        port.y_orig = prev.y_orig + prev.height;
-        port.width = prev.width * 0.5f;
-        port.height = prev.height * 0.5f;
-    }
-
-    bloom_rect divRects[MaxDivNum];
-    for (int i = 0; i < ARRAY_SIZE(divPorts); i++) {
-        auto const& port = divPorts[i];
+    divRects[1] = {
+        0,
+        0,
+        static_cast<u16>(divRects[0].w / 2),
+        static_cast<u16>(divRects[0].h / 2),
+    };
+    divRects[2] = {
+        divRects[1].w,
+        0,
+        static_cast<u16>(divRects[1].w / 2),
+        static_cast<u16>(divRects[1].h / 2),
+    };
+    for (int i = 3; i < ARRAY_SIZE(divRects); i++) {
+        const auto& prev = divRects[i - 1];
         divRects[i] = {
-            static_cast<u16>(port.x_orig * width),
-            static_cast<u16>(port.y_orig * height),
-            static_cast<u16>(port.width * width),
-            static_cast<u16>(port.height * height),
+            prev.x,
+            static_cast<u16>(prev.y + prev.h),
+            static_cast<u16>(prev.w / 2),
+            static_cast<u16>(prev.h / 2),
         };
     }
 
