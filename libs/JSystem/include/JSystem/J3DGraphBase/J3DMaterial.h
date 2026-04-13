@@ -115,7 +115,7 @@ public:
     /* 0x14 */ u16 mIndex;
     /* 0x18 */ u32 mInvalid;
     /* 0x1C */ u32 field_0x1c;
-    /* 0x20 */ u32 mDiffFlag;
+    /* 0x20 */ u32 mMaterialID;
     /* 0x24 */ J3DColorBlock* mColorBlock;
     /* 0x28 */ J3DTexGenBlock* mTexGenBlock;
     /* 0x2C */ J3DTevBlock* mTevBlock;

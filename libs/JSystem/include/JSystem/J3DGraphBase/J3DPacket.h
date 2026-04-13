@@ -31,8 +31,6 @@ enum J3DDiffFlag {
     J3DDiffFlag_TevStageIndirect = 0x8000000,
     J3DDiffFlag_Fog              = 0x10000000,
     J3DDiffFlag_Blend            = 0x20000000,
-    J3DDiffFlag_Unk40000000      = 0x40000000,
-    J3DDiffFlag_Changed          = 0x80000000,
 };
 
 #define J3D_DIFF_LIGHTOBJNUM(n) ((n & 0xF) << 4)
@@ -309,9 +307,9 @@ public:
     }
 
     void setInitShapePacket(J3DShapePacket* packet) { mpInitShapePacket = packet; }
-    void setMaterialID(u32 id) { mDiffFlag = id; }
+    void setMaterialID(u32 id) { mMaterialID = id; }
     void setMaterialAnmID(J3DMaterialAnm* materialAnm) { mpMaterialAnm = materialAnm; }
-    BOOL isChanged() { return mDiffFlag & J3DDiffFlag_Changed; }
+    BOOL isChanged() { return mMaterialID & 0x80000000; }
     bool isEnabled_Diff() { return mpInitShapePacket->getDisplayListObj() != NULL; }
 
     virtual ~J3DMatPacket();
@@ -322,7 +320,7 @@ public:
     /* 0x28 */ J3DShapePacket* mpInitShapePacket;
     /* 0x2C */ J3DShapePacket* mpShapePacket;
     /* 0x30 */ J3DMaterial* mpMaterial;
-    /* 0x34 */ u32 mDiffFlag;
+    /* 0x34 */ u32 mMaterialID;
     /* 0x38 */ J3DTexture* mpTexture;
     /* 0x3C */ J3DMaterialAnm* mpMaterialAnm;
 };  // Size: 0x40

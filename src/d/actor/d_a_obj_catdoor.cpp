@@ -10,7 +10,7 @@
 
 static const char* l_arcName = "CatDoor";
 
-u32 const daObjCatDoor_c::M_attr = 0x001E0578;
+s16 const daObjCatDoor_c::M_attr[2] = {0x001E, 0x0578};
 
 daObjCatDoor_c::~daObjCatDoor_c() {
     if (mDoor1.bgw.ChkUsed()) {
@@ -71,7 +71,7 @@ int daObjCatDoor_c::execute() {
 }
 
 const s16* daObjCatDoor_c::attr() const {
-    return (const s16*)&daObjCatDoor_c::M_attr;
+    return daObjCatDoor_c::M_attr;
 }
 
 static int createSolidHeap(fopAc_ac_c* i_this) {

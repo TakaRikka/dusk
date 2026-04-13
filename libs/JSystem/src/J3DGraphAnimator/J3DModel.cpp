@@ -138,7 +138,7 @@ s32 J3DModel::createMatPacket(J3DModelData* pModelData, u32 mdlFlags) {
         matPacket->setInitShapePacket(shapePacket);
         matPacket->addShapePacket(shapePacket);
         matPacket->setTexture(pModelData->getTexture());
-        matPacket->setMaterialID(materialNode->mDiffFlag);
+        matPacket->setMaterialID(materialNode->mMaterialID);
 
         if (pModelData->getModelDataType() == 1) {
             matPacket->lock();
