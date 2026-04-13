@@ -1858,7 +1858,7 @@ int mDoGph_Painter() {
             JPADrawInfo draw_info(camera_p->view.viewMtx, camera_p->view.fovy, camera_p->view.aspect);
 #endif
 
-            #if WIDESCREEN_SUPPORT
+            #if 0 && WIDESCREEN_SUPPORT
             if (mDoGph_gInf_c::isWideZoom()) {
                 Mtx44 sp140;
                 draw_info.getPrjMtx(sp140);
