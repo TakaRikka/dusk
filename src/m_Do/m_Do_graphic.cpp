@@ -1259,7 +1259,7 @@ void mDoGph_gInf_c::bloom_c::remove() {
 }
 
 #if TARGET_PC
-static void CopyToTexObj(GXTexObj* pDst, uintptr_t texID, int dstWidth, int dstHeight, GXTexFmt dstFmt = GX_TF_RGBA8) {
+static void CopyToTexObj(GXTexObj* pDst, uintptr_t texID, u16 dstWidth, u16 dstHeight, GXTexFmt dstFmt = GX_TF_RGBA8) {
     GXSetTexCopyDst(dstWidth, dstHeight, dstFmt, FALSE);
     GXCopyTex((void*)texID, false);
     GXInitTexObj(pDst, (void*)texID, dstWidth, dstHeight, dstFmt, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -1311,35 +1311,58 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         BlurPass0, BlurPassN = BlurPass0 + MaxDivNum,
         MaxTexNum,
     };
-    scissor_class divPorts[MaxDivNum];
-    divPorts[0] = {0.0f, 0.0f, 1.0f, 1.0f}; // full-size texture
-    divPorts[1] = {0.0f, 0.0f, 0.5f, 0.5f}; // bloom texture (wide enough, half-tall)
-    divPorts[2] = {0.5f, 0.0f, 0.25f, 0.25f};
-    for (int i = 3; i < ARRAY_SIZE(divPorts); i++) {
-        auto& port = divPorts[i];
-        auto const& prev = divPorts[i - 1];
-        port.x_orig = prev.x_orig;
-        port.y_orig = prev.y_orig + prev.height;
-        port.width = prev.width * 0.5f;
-        port.height = prev.height * 0.5f;
+    struct {
+        u16 x;
+        u16 y;
+        u16 w;
+        u16 h;
+    } divRects[MaxDivNum];
+    divRects[0] = {
+        0,
+        0,
+        static_cast<u16>(width),
+        static_cast<u16>(height),
+    };
+    divRects[1] = {
+        0,
+        0,
+        static_cast<u16>(divRects[0].w / 2),
+        static_cast<u16>(divRects[0].h / 2),
+    };
+    divRects[2] = {
+        divRects[1].w,
+        0,
+        static_cast<u16>(divRects[1].w / 2),
+        static_cast<u16>(divRects[1].h / 2),
+    };
+    for (int i = 3; i < ARRAY_SIZE(divRects); i++) {
+        const auto& prev = divRects[i - 1];
+        divRects[i] = {
+            prev.x,
+            static_cast<u16>(prev.y + prev.h),
+            static_cast<u16>(prev.w / 2),
+            static_cast<u16>(prev.h / 2),
+        };
     }
 
     auto divCopySrc = [&](int divNo) {
-        auto const& port = divPorts[divNo];
-        GXSetTexCopySrc(port.x_orig * width, port.y_orig * height, port.width * width, port.height * height);
+        auto const& rect = divRects[divNo];
+        GXSetTexCopySrc(rect.x, rect.y, rect.w, rect.h);
     };
 
     TGXTexObj tmpTex[MaxTexNum];
     auto divCopyTex = [&](uintptr_t texNo, int divNo) -> GXTexObj * {
-        auto const& port = divPorts[divNo];
-        CopyToTexObj(&tmpTex[texNo], texNo, port.width * width, port.height * height);
+        auto const& rect = divRects[divNo];
+        CopyToTexObj(&tmpTex[texNo], texNo, rect.w, rect.h);
         return &tmpTex[texNo];
     };
     
     auto divQuad = [&](int divNo) {
-        auto const& port = divPorts[divNo];
-        f32 x0 = port.x_orig, y0 = port.y_orig;
-        f32 x1 = x0 + port.width, y1 = y0 + port.height;
+        auto const& rect = divRects[divNo];
+        f32 x0 = rect.x / width;
+        f32 y0 = rect.y / height;
+        f32 x1 = (rect.x + rect.w) / width;
+        f32 y1 = (rect.y + rect.h) / height;
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXPosition3f32(x0, y0, -5);
         GXTexCoord2s8(0, 0);
@@ -1409,18 +1432,16 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         // Setup blur filter TEV.
         GXSetNumTexGens(8);
 
-        auto SetupBlurMtx = [](float scale) {
             u32 texMtxID = GX_TEXMTX0;
             int angle = 0;
             for (int texCoord = (int)GX_TEXCOORD0; texCoord < (int)GX_MAX_TEXCOORD; texCoord++) {
                 GXSetTexCoordGen((GXTexCoordID)texCoord, GX_TG_MTX2x4, GX_TG_TEX0, texMtxID);
-                mDoMtx_stack_c::transS((scale * cM_scos(angle)) * getInvScale(),
-                                       scale * cM_ssin(angle), 0.0f);
+                mDoMtx_stack_c::transS((blurScale * cM_scos(angle)) * getInvScale(),
+                                       blurScale * cM_ssin(angle), 0.0f);
                 GXLoadTexMtxImm(mDoMtx_stack_c::get(), texMtxID, GX_MTX2x4);
                 texMtxID += 3;
                 angle += 0x2000;
             }
-        };
 
         GXSetNumTevStages(8);
         for (int stage = 0; stage < 8; stage++) {
@@ -1433,19 +1454,20 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         }
 
         // Successively downsample and apply blurs.
-        int divStart = 2;
-        int divNum = 6;
+        static int divStart = 2;
+        static int divNum = 6; // inclusive
 
-        // Distribute the brightness through each pass.
-        int totalNumPasses = (divNum - divStart) * 2; // down, up
-        float brightnessF32 = (mBlureRatio / 255.0f);
+        // The original mBlureRatio is multiplied into each sample, of which there are 8 samples originally.
+        // This is applied over two passes, the second one with an alpha of 25%; however, the clipping that this introduces is a bit integral to the look,
+        // so we do the same thing, letting it clip.
+        float brightnessF32 = (mBlureRatio * 16 / 255.0f);
+            
+        // Distribute the brightness through the total number of passes.
+        f32 totalNumPasses = (divNum - divStart + 1);
         float brightnessPerPass = 255.0f * powf(brightnessF32, 1.0f / totalNumPasses);
         GXSetTevColorS10(GX_TEVREG1, {0, 0, 0, s16(brightnessPerPass / 8)});
 
         for (int i = divStart; i < divNum; i++) {
-            float blurStrength = 1.0f + (i - divStart) * 5.0f;
-            SetupBlurMtx(blurScale * blurStrength);
-
             // Apply blur filter.
             divQuad(i);
 
@@ -1457,16 +1479,18 @@ void mDoGph_gInf_c::bloom_c::draw2() {
             GXLoadTexObj(blurTex, GX_TEXMAP0);
         }
 
-        // All the way down at the bottom. Instead of blurring the bottom layer by itself, we blur when going up to the next layer.
-        // The remaining upscales are all just normal alpha blending.
+        // All the way down at the bottom.
         divQuad(divNum);
 
         // Now successively alpha blend back up, don't blur anymore.
         GXSetNumTevStages(1);
-        GXSetTevColorS10(GX_TEVREG1, {0, 0, 0, s16(brightnessPerPass)});
+        GXSetTevColorS10(GX_TEVREG1, {0, 0, 0, s16(255)});
         GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-        GXSetBlendMode(GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_LO_OR);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_ONE, GX_LO_OR);
         for (int i = divNum; i > divStart; i--) {
+            float alpha = 255.0f * powf(0.25f, 1.0f / (divNum - i + 1));
+            GXSetTevColorS10(GX_TEVREG0, {0, 0, 0, s16(alpha)});
+
             divCopySrc(i);
             GXTexObj* upTex = divCopyTex(BlurPass0 + i, i);
             GXLoadTexObj(upTex, GX_TEXMAP0);
@@ -1500,13 +1524,11 @@ void mDoGph_gInf_c::bloom_c::draw2() {
 
 void mDoGph_gInf_c::bloom_c::draw() {
     ZoneScoped;
-    if (!dusk::getSettings().game.enableBloom) {
+    if (dusk::getSettings().game.bloomMode.getValue() == dusk::BloomMode::Dusk) {
+        draw2();
         return;
     }
-
-    static bool s_bloom2 = false;
-    if (s_bloom2) {
-        draw2();
+    if (dusk::getSettings().game.bloomMode.getValue() != dusk::BloomMode::Classic) {
         return;
     }
 
