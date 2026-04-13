@@ -39,6 +39,10 @@ enum Z2WolfHowlCurveID {
     Z2WOLFHOWL_NEWSONG2,
     Z2WOLFHOWL_NEWSONG3,
 
+    #if TARGET_PC
+    Z2WOLFHOWL_TIMESONG,
+    #endif
+
     Z2WOLFHOWL_MAX
 };
 

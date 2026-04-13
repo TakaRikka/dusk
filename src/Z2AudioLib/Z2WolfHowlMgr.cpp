@@ -115,7 +115,14 @@ static Z2WolfHowlLine sNewSong3[9] = {
     {HOWL_LINE_MID, 45},
 };
 
-static Z2WolfHowlData sGuideData[9] = {
+#if TARGET_PC
+static Z2WolfHowlLine sHowlTimeSong[6] = {
+    {HOWL_LINE_HIGH, 30}, {HOWL_LINE_LOW, 40}, {HOWL_LINE_MID, 30},
+    {HOWL_LINE_HIGH, 30}, {HOWL_LINE_LOW, 40}, {HOWL_LINE_MID, 30},
+};
+#endif
+
+static Z2WolfHowlData sGuideData[9 IF_DUSK(+1)] = {
     {ARRAY_SIZE(sHowlTobikusa), sHowlTobikusa},
     {ARRAY_SIZE(sHowlUmakusa), sHowlUmakusa},
     {ARRAY_SIZE(sHowlZeldaSong), sHowlZeldaSong},
@@ -125,6 +132,9 @@ static Z2WolfHowlData sGuideData[9] = {
     {ARRAY_SIZE(sNewSong1), sNewSong1},
     {ARRAY_SIZE(sNewSong2), sNewSong2},
     {ARRAY_SIZE(sNewSong3), sNewSong3},
+    #if TARGET_PC
+    {ARRAY_SIZE(sHowlTimeSong), sHowlTimeSong},
+    #endif
 };
 
 Z2WolfHowlMgr::Z2WolfHowlMgr() : JASGlobalInstance(true) {
@@ -356,6 +366,11 @@ void Z2WolfHowlMgr::setCorrectData(s8 curveID, Z2WolfHowlData* data) {
         cPitchCenter = 0.94387f;
         cPitchDown = 0.74915f;
         break;
+    case Z2WOLFHOWL_TIMESONG:
+        cPitchUp = 1.12246f;
+        cPitchCenter = 0.94387f;
+        cPitchDown = 0.74915f;
+        break;
     default:
         cPitchUp = 1.1892f;
         cPitchCenter = 1.0f;
@@ -400,7 +415,7 @@ u8 Z2WolfHowlMgr::getCorrectLineNum() {
     return 0;
 }
 
-static JAISoundID sCorrectPhrase[9] = {
+static JAISoundID sCorrectPhrase[9 IF_DUSK(+1)] = {
     Z2BGM_HOWL_TOBIKUSA,
     Z2BGM_HOWL_UMAKUSA,
     Z2BGM_HOWL_ZELDASONG,
@@ -410,9 +425,12 @@ static JAISoundID sCorrectPhrase[9] = {
     Z2BGM_NEW_01_HOWL,
     Z2BGM_NEW_02_HOWL,
     Z2BGM_NEW_03_HOWL,
+    #if TARGET_PC
+    0xFFFFFFFF,
+    #endif
 };
 
-static JAISoundID sWindStoneSound[9] = {
+static JAISoundID sWindStoneSound[9 IF_DUSK(+1)] = {
     0xFFFFFFFF,
     0xFFFFFFFF,
     Z2BGM_STONE_ZELDASONG,
@@ -422,9 +440,12 @@ static JAISoundID sWindStoneSound[9] = {
     Z2BGM_NEW_01_STONE,
     Z2BGM_NEW_02_STONE,
     Z2BGM_NEW_03_STONE,
+    #if TARGET_PC
+    0xFFFFFFFF,
+    #endif
 };
 
-static JAISoundID sCorrectDuo[9] = {
+static JAISoundID sCorrectDuo[9 IF_DUSK(+1)] = {
     0xFFFFFFFF,
     0xFFFFFFFF,
     0xFFFFFFFF,
@@ -434,6 +455,9 @@ static JAISoundID sCorrectDuo[9] = {
     Z2BGM_NEW_01_DUO,
     Z2BGM_NEW_02_DUO,
     Z2BGM_NEW_03_DUO,
+    #if TARGET_PC
+    0xFFFFFFFF,
+    #endif
 };
 
 s8 Z2WolfHowlMgr::checkLine() {
