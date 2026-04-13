@@ -16,6 +16,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_main.h"
 #include "dusk/config.hpp"
+#include "dusk/livesplit.h"
 #include "dusk/main.h"
 #include "dusk/settings.h"
 #include "dusk/audio/DuskAudioSystem.h"
@@ -36,6 +37,10 @@ namespace dusk {
     void ImGuiStringViewText(std::string_view text) {
         // begin()/end() do not work on MSVC
         ImGui::TextUnformatted(text.data(), text.data() + text.size());
+    }
+
+    void DuskToast(std::string_view message, float duration) {
+        g_imguiConsole.AddToast(message, duration);
     }
 
     void ImGuiTextCenter(std::string_view text) {
@@ -235,6 +240,8 @@ namespace dusk {
             m_menuEnhancements.draw();
             m_menuTools.draw();
 
+            m_menuSpeedrunTimer.draw();
+
             ImGui::SetCursorPosX(ImGui::GetWindowWidth() - 80.0f * ImGuiScale());
             ImGuiIO& io = ImGui::GetIO();
             ImGuiStringViewText(fmt::format(FMT_STRING("FPS: {:.2f}\n"), io.Framerate));
@@ -252,12 +259,26 @@ namespace dusk {
         }
 
         if (dusk::IsGameLaunched && !m_isLaunchInitialized) {
-            m_toasts.emplace_back("Press F1 to toggle menu"s, 5.f);
+            DuskToast("Press F1 to toggle menu"s);
             m_isLaunchInitialized = true;
+            if (getSettings().game.liveSplitEnabled) {
+                dusk::speedrun::connectLiveSplit();
+            }
         }
+
+        m_menuSpeedrunTimer.drawOverlay();
 
         m_menuGame.windowControllerConfig();
         m_menuGame.windowInputViewer();
+
+        if (getSettings().game.liveSplitEnabled) {
+            dusk::speedrun::updateLiveSplit();
+            if (dusk::speedrun::consumeConnectedEvent())
+                AddToast("LiveSplit connected");
+            else if (dusk::speedrun::consumeDisconnectedEvent())
+                AddToast("LiveSplit disconnected");
+        }
+
         if (dusk::IsGameLaunched) {
             m_menuTools.ShowDebugOverlay();
             m_menuTools.ShowCameraOverlay();
@@ -381,6 +402,10 @@ namespace dusk {
         }
 
         return false;
+    }
+
+    void ImGuiConsole::AddToast(std::string_view message, float duration) {
+        m_toasts.emplace_back(std::string(message), duration);
     }
 
     void ImGuiConsole::ShowToasts() {

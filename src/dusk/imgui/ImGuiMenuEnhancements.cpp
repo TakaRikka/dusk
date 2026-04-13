@@ -2,6 +2,8 @@
 
 #include "ImGuiMenuEnhancements.hpp"
 #include "ImGuiConfig.hpp"
+#include "ImGuiConsole.hpp"
+#include "dusk/livesplit.h"
 #include "dusk/settings.h"
 
 namespace dusk {
@@ -179,6 +181,22 @@ namespace dusk {
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Holding TAB will speed up the game.\n"
                                       "This will not work with the \"Unlock Framerate\" enhancement.");
+                }
+
+                bool prevSpeedrunTimer = getSettings().game.speedrunTimer;
+                config::ImGuiCheckbox("Speedrun Timer", getSettings().game.speedrunTimer);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Shows a speedrun timer in the menu bar.");
+                }
+                if ((bool)getSettings().game.speedrunTimer != prevSpeedrunTimer) {
+                    if (!getSettings().game.speedrunTimer) {
+                        getSettings().game.speedrunTimerOverlay.setValue(false);
+                        if (getSettings().game.liveSplitEnabled) {
+                            getSettings().game.liveSplitEnabled.setValue(false);
+                            dusk::speedrun::disconnectLiveSplit();
+                            DuskToast("LiveSplit disconnected", 3.f);
+                        }
+                    }
                 }
 
                 ImGui::EndMenu();

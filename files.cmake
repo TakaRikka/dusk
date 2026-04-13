@@ -1361,6 +1361,8 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiMenuTools.hpp
         src/dusk/imgui/ImGuiMenuEnhancements.cpp
         src/dusk/imgui/ImGuiMenuEnhancements.hpp
+        src/dusk/imgui/ImGuiMenuSpeedrunTimer.cpp
+        src/dusk/imgui/ImGuiMenuSpeedrunTimer.hpp
         src/dusk/imgui/ImGuiPreLaunchWindow.cpp
         src/dusk/imgui/ImGuiPreLaunchWindow.hpp
         src/dusk/imgui/ImGuiFirstRunPreset.hpp
@@ -1373,6 +1375,7 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiStubLog.cpp
         src/dusk/imgui/ImGuiMapLoader.cpp
         src/dusk/imgui/ImGuiSaveEditor.cpp
+        src/dusk/livesplit.cpp
         src/dusk/offset_ptr.cpp
         src/dusk/OSContext.cpp
         src/dusk/OSThread.cpp

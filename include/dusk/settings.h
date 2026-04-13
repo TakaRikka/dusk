@@ -79,6 +79,11 @@ struct UserSettings {
 
         // Controls
         ConfigVar<bool> enableTurboKeybind;
+
+        // Tools
+        ConfigVar<bool> speedrunTimer;
+        ConfigVar<bool> speedrunTimerOverlay;
+        ConfigVar<bool> liveSplitEnabled;
     } game;
 
     struct {

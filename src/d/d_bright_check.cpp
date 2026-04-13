@@ -9,6 +9,7 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "d/d_msg_string.h"
+#include "dusk/livesplit.h"
 #include "m_Do/m_Do_controller_pad.h"
 
 dBrightCheck_c::dBrightCheck_c(JKRArchive* i_archive) {
@@ -138,6 +139,9 @@ void dBrightCheck_c::modeWait() {}
 void dBrightCheck_c::modeMove() {
     if (mDoCPd_c::getTrigA(PAD_1) || mDoCPd_c::getTrigStart(PAD_1)) {
         mDoAud_seStart(Z2SE_ENTER_GAME, NULL, 0, 0);
+#ifdef TARGET_PC
+        dusk::speedrun::start();
+#endif
         mCompleteCheck = true;
         mMode = MODE_WAIT_e;
     }

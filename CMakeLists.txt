@@ -216,6 +216,10 @@ set(GAME_INCLUDE_DIRS
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
     aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient)
 
+if (WIN32)
+    list(APPEND GAME_LIBS Ws2_32)
+endif ()
+
 if (DUSK_MOVIE_SUPPORT)
     if (TARGET libjpeg-turbo::turbojpeg-static)
         list(APPEND GAME_LIBS libjpeg-turbo::turbojpeg-static)

@@ -9,6 +9,7 @@
 #include "ImGuiFirstRunPreset.hpp"
 #include "ImGuiMenuEnhancements.hpp"
 #include "ImGuiMenuGame.hpp"
+#include "ImGuiMenuSpeedrunTimer.hpp"
 #include "ImGuiMenuTools.hpp"
 #include "ImGuiPreLaunchWindow.hpp"
 #include "imgui.h"
@@ -22,6 +23,7 @@ public:
     void PostDraw();
 
 	static bool CheckMenuViewToggle(ImGuiKey key, bool& active);
+    void AddToast(std::string_view message, float duration = 3.f);
 
 private:
     struct Toast {
@@ -39,6 +41,7 @@ private:
     ImGuiFirstRunPreset m_firstRunPreset;
     ImGuiMenuGame m_menuGame;
     ImGuiMenuEnhancements m_menuEnhancements;
+    ImGuiMenuSpeedrunTimer m_menuSpeedrunTimer;
     ImGuiPreLaunchWindow m_preLaunchWindow;
 
     // Keep always last
@@ -57,6 +60,7 @@ std::string BytesToString(size_t bytes);
 void SetOverlayWindowLocation(int corner);
 bool ShowCornerContextMenu(int& corner, int avoidCorner);
 void ImGuiStringViewText(std::string_view text);
+void DuskToast(std::string_view message, float duration = 3.f);
 void ImGuiBeginGroupPanel(const char* name, const ImVec2& size);
 void ImGuiEndGroupPanel();
 void ImGuiTextCenter(std::string_view text);
