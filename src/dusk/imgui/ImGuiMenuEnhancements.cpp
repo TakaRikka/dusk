@@ -119,7 +119,8 @@ namespace dusk {
                                       "Slingshot, Gale Boomerang, Hero's Bow, Clawshot(s), Ball and Chain, and Dominion Rod.");
                 }
 
-                config::ImGuiSliderFloat("Gyro Sensitivity", getSettings().game.gyroAimSensitivity, 0.25f, 4.0f, "%.2f");
+                config::ImGuiSliderFloat("Gyro Pitch Sensitivity", getSettings().game.gyroAimSensitivityY, 0.25f, 4.0f, "%.2f");
+                config::ImGuiSliderFloat("Gyro Yaw Sensitivity", getSettings().game.gyroAimSensitivityX, 0.25f, 4.0f, "%.2f");
                 config::ImGuiCheckbox("Invert Gyro Pitch", getSettings().game.gyroAimInvertPitch);
                 config::ImGuiCheckbox("Invert Gyro Yaw", getSettings().game.gyroAimInvertYaw);
 

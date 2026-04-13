@@ -64,7 +64,8 @@ struct UserSettings {
 
         // Input
         ConfigVar<bool> enableGyroAim;
-        ConfigVar<float> gyroAimSensitivity;
+        ConfigVar<float> gyroAimSensitivityX;
+        ConfigVar<float> gyroAimSensitivityY;
         ConfigVar<bool> gyroAimInvertPitch;
         ConfigVar<bool> gyroAimInvertYaw;
 
