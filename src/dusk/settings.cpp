@@ -42,6 +42,7 @@ UserSettings g_userSettings = {
 
         // Graphics
         .bloomMode {"game.bloomMode", BloomMode::Classic},
+        .bloomMultiplier {"game.bloomMultiplier", 1.0f},
         .enableWaterRefraction {"game.enableWaterRefraction", true},
         .enableFrameInterpolation = {"game.enableFrameInterpolation", false},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
@@ -114,6 +115,7 @@ void registerSettings() {
     Register(g_userSettings.game.enableMirrorMode);
     Register(g_userSettings.game.invertCameraXAxis);
     Register(g_userSettings.game.bloomMode);
+    Register(g_userSettings.game.bloomMultiplier);
     Register(g_userSettings.game.enableWaterRefraction);
     Register(g_userSettings.game.shadowResolutionMultiplier);
     Register(g_userSettings.game.enableFastIronBoots);
