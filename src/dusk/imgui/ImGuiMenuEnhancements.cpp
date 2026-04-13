@@ -63,6 +63,11 @@ namespace dusk {
                     ImGui::SetTooltip("Skip the delay when writing to the Memory Card.");
                 }
 
+                config::ImGuiCheckbox("Time Stones", getSettings().game.timeStones);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Allows Wolf Link to use Howling Stones to set the time to midnight.");
+                }
+
                 ImGui::EndMenu();
             }
 

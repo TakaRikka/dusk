@@ -47,6 +47,7 @@ struct UserSettings {
         ConfigVar<bool> noMissClimbing;
         ConfigVar<bool> fastTears;
         ConfigVar<bool> instantSaves;
+        ConfigVar<bool> timeStones;
 
         // Preferences
         ConfigVar<bool> enableMirrorMode;

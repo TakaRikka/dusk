@@ -87,6 +87,9 @@ int daWindStone_c::execute() {
         exeModeMapDisp();
         break;
     case 2:
+        #if TARGET_PC
+        exeModeSetTime();
+        #endif
         break;
     }
     setModelMtx();
@@ -179,6 +182,16 @@ void daWindStone_c::exeModeMapDisp() {
         field_0x5c4 = 2;
     }
 }
+
+#if TARGET_PC
+void daWindStone_c::exeModeSetTime() {
+    attention_info.flags = 0;
+    if (!chkEveOccur() && chkWlfInRange() && dusk::getSettings().game.timeStones) {
+        attention_info.flags |= fopAc_AttnFlag_ETC_e;
+        attention_info.distances[fopAc_attn_ETC_e] = 65;
+    }
+}
+#endif
 
 bool daWindStone_c::chkMapDispMode() {
     if (fopAcM_isSwitch(this, getSwBit2())) {

@@ -27,6 +27,9 @@ public:
     bool chkEveOccur();
     void exeModeHowl();
     void exeModeMapDisp();
+    #if TARGET_PC
+    void exeModeSetTime();
+    #endif
     bool chkMapDispMode();
     u8 getGoldWolfIdx();
 

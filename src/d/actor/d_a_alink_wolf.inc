@@ -3868,18 +3868,35 @@ void daAlink_c::setWolfHowlNotHappen(int param_0) {
 }
 
 int daAlink_c::procWolfHowlDemoInit() {
-    if (!dComIfGp_event_compulsory(this, NULL, 0xFFFF)) {
-        return 0;
-    }
-
-    mDemo.setSpecialDemoType();
-
+    #if TARGET_PC
     s16 name;
     if (field_0x27f4 != NULL) {
         name = fopAcM_GetName(field_0x27f4);
     } else {
         name = fpcNm_ALINK_e;
     }
+
+    if (name == fpcNm_Obj_WindStone_e && !static_cast<daWindStone_c*>(field_0x27f4)->chkEveOccur() && dusk::getSettings().game.timeStones) {
+        Z2GetSeMgr()->seStart(Z2SE_READ_RIDDLE_B, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        dKy_instant_timechg(0.0f);
+        return 0;
+    }
+    #endif
+
+    if (!dComIfGp_event_compulsory(this, NULL, 0xFFFF)) {
+        return 0;
+    }
+
+    mDemo.setSpecialDemoType();
+
+    #if !TARGET_PC
+    s16 name;
+    if (field_0x27f4 != NULL) {
+        name = fopAcM_GetName(field_0x27f4);
+    } else {
+        name = fpcNm_ALINK_e;
+    }
+    #endif
 
     if (name == fpcNm_Tag_WaraHowl_e) {
         shape_angle.y = field_0x27f4->shape_angle.y;

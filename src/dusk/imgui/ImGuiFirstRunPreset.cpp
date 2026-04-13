@@ -37,6 +37,7 @@ static void ApplyPresetDusk() {
     s.game.instantSaves.setValue(true);
     s.game.midnasLamentNonStop.setValue(true);
     s.game.enableFrameInterpolation.setValue(true);
+    s.game.timeStones.setValue(true);
 }
 
 // =========================================================================
