@@ -11,6 +11,15 @@ namespace dusk {
         if (ImGui::BeginMenu("Enhancements")) {
             if (ImGui::BeginMenu("Quality of Life")) {
                 config::ImGuiCheckbox("Quick Transform (R+Y)", getSettings().game.enableQuickTransform);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Allows you to quickly transform between forms\n"
+                                      "without having to talk to Midna.");
+                }
+
+                config::ImGuiCheckbox("Sun's Song (R+X)", getSettings().game.sunsSong);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Allows Wolf Link to howl and change the time of day.");
+                }
 
                 config::ImGuiCheckbox("Bigger Wallets", getSettings().game.biggerWallets);
                 if (ImGui::IsItemHovered()) {
@@ -61,11 +70,6 @@ namespace dusk {
                 config::ImGuiCheckbox("Instant Saves", getSettings().game.instantSaves);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Skip the delay when writing to the Memory Card.");
-                }
-
-                config::ImGuiCheckbox("Time Stones", getSettings().game.timeStones);
-                if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Allows Wolf Link to use Howling Stones to set the time to midnight.");
                 }
 
                 ImGui::EndMenu();

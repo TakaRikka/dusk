@@ -3942,15 +3942,7 @@ int daAlink_c::procWolfHowlDemoInit() {
         } else if (name == fpcNm_TAG_HOWL_e) {
             mZ2WolfHowlMgr.setCorrectCurve(static_cast<daTag_Howl_c*>(field_0x27f4)->getCurveID());
         } else if (name == fpcNm_Obj_WindStone_e) {
-            #if TARGET_PC
-            if (!static_cast<daWindStone_c*>(field_0x27f4)->chkEveOccur() && dusk::getSettings().game.timeStones) {
-                mZ2WolfHowlMgr.setCorrectCurve(9);
-            } else {
-                mZ2WolfHowlMgr.setCorrectCurve(static_cast<daWindStone_c*>(field_0x27f4)->getTuneId());
-            }
-            #else
             mZ2WolfHowlMgr.setCorrectCurve(static_cast<daWindStone_c*>(field_0x27f4)->getTuneId());
-            #endif
             mProcVar0.field_0x3008 = static_cast<daWindStone_c*>(field_0x27f4)->getNextSceneId();
             mProcVar4.field_0x3010 = 1;
         } else if (name == fpcNm_Obj_SmWStone_e) {
@@ -3962,7 +3954,13 @@ int daAlink_c::procWolfHowlDemoInit() {
             mZ2WolfHowlMgr.setCorrectCurve(-1);
         }
     } else {
+        #if TARGET_PC
+        if (mZ2WolfHowlMgr.getCorrectCurveID() != 9) {
+            mZ2WolfHowlMgr.setCorrectCurve(-1);
+        }
+        #else
         mZ2WolfHowlMgr.setCorrectCurve(-1);
+        #endif
     }
 
     mNormalSpeed = 0.0f;
@@ -4100,17 +4098,22 @@ int daAlink_c::procWolfHowlDemo() {
             if (checkUnderMove0BckNoArcWolf(WANM_HOWL_END) || isSkipEdge) {
                 if (checkAnmEnd(frameCtrl_p) || isSkipEdge) {
                     if (mProcVar0.mHowlExitID >= 0) {
-                        #if TARGET_PC
-                        if (daAlink_getAlinkActorClass()->getCorrectCurveID() == 9) {
-                            g_env_light.time_change_rate = 1.0f;
-                            dComIfGp_event_reset();
-                            dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
-                            return 1;
-                        }
-                        #endif
                         dStage_changeScene(mProcVar0.mHowlExitID, 0.0f, 0, fopAcM_GetRoomNo(this),
                                            shape_angle.y, -1);
                     } else {
+                        #if TARGET_PC
+                        if (daAlink_getAlinkActorClass()->getCorrectCurveID() == 9) {
+                            if (dComIfGp_roomControl_getTimePass()) {
+                                g_env_light.time_change_rate = 1.0f;
+                                dComIfGp_event_reset();
+                                dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
+                            } else {
+                                setWolfHowlNotHappen(isSkipEdge);
+                            }
+                            return 1;
+                        }
+                        #endif
+
                         fopAc_ac_c* actor_p = NULL;
                         if (gwolf_p == NULL) {
                             fopAcIt_Executor((fopAcIt_ExecutorFunc)daAlink_searchWolfHowl,
