@@ -67,7 +67,7 @@ private:
     /* 0x790 */ s16 mRotSpeed;
 
 public:
-    static u32 const M_attr;
+    static s16 const M_attr[2];
 };
 
 #endif /* D_A_OBJ_CATDOOR_H */
