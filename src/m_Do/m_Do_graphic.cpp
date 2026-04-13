@@ -1501,13 +1501,11 @@ void mDoGph_gInf_c::bloom_c::draw2() {
 
 void mDoGph_gInf_c::bloom_c::draw() {
     ZoneScoped;
-    if (!dusk::getSettings().game.enableBloom) {
+    if (dusk::getSettings().game.bloomMode.getValue() == dusk::BloomMode::Dusk) {
+        draw2();
         return;
     }
-
-    static bool s_bloom2 = false;
-    if (s_bloom2) {
-        draw2();
+    if (dusk::getSettings().game.bloomMode.getValue() != dusk::BloomMode::Classic) {
         return;
     }
 
