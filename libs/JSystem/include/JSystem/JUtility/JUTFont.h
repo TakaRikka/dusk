@@ -5,6 +5,18 @@
 #include <cstring>
 #include "dusk/endian.h"
 
+#if TARGET_PC
+struct FontDrawContext {
+    int loadedBlock = -1;
+    int loadedPage = -1;
+};
+#define FONT_DRAW_CTX , FontDrawContext* context
+#define FONT_DRAW_CTX_ARG , context
+#else
+#define FONT_DRAW_CTX
+#define FONT_DRAW_CTX_ARG
+#endif
+
 /**
 * @ingroup jsystem-jutility
 * 
@@ -84,7 +96,12 @@ public:
 
     /* 0x0C */ virtual void setGX() = 0;
     /* 0x10 */ virtual void setGX(JUtility::TColor col1, JUtility::TColor col2) { setGX(); }
-    /* 0x14 */ virtual f32 drawChar_scale(f32 a1, f32 a2, f32 a3, f32 a4, int a5, bool a6) = 0;
+    /* 0x14 */ virtual f32 drawChar_scale(f32 a1, f32 a2, f32 a3, f32 a4, int a5, bool a6 FONT_DRAW_CTX) = 0;
+#if TARGET_PC
+    f32 drawChar_scale(f32 a1, f32 a2, f32 a3, f32 a4, int a5, bool a6) {
+        return drawChar_scale(a1, a2, a3, a4, a5, a6, nullptr);
+    }
+#endif
     /* 0x18 */ virtual int getLeading() const = 0;
     /* 0x1C */ virtual s32 getAscent() const = 0;
     /* 0x20 */ virtual s32 getDescent() const = 0;
@@ -96,6 +113,11 @@ public:
     /* 0x38 */ virtual int getFontType() const = 0;
     /* 0x3C */ virtual ResFONT* getResFont() const = 0;
     /* 0x40 */ virtual bool isLeadByte(int a1) const = 0;
+
+#if TARGET_PC
+    virtual void pushDrawState() = 0;
+    virtual void popDrawState() = 0;
+#endif
 
     static bool isLeadByte_1Byte(int b) {
         return false;
