@@ -60,7 +60,7 @@ inline ImFont* CreateFont(float size, const std::string& fontPath, std::string_v
 
 void ImGuiEngine_Initialize(float scale) {
     // Round font scale to nearest integer
-    scale = std::ceilf(scale);
+    scale = std::ceil(scale);
 
     ImGui::GetCurrentContext();
     ImGuiIO& io = ImGui::GetIO();
