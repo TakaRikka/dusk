@@ -5,15 +5,7 @@
 #include <cstring>
 
 #if TARGET_PC
-namespace {
-void endianSwapListData(const f32* data, u32 count) {
-    // const hack to swap endianness
-    f32* nonConstData = const_cast<f32*>(data);
-    for (int i = 0; i < count; i++) {
-        be_swap(nonConstData[i]);
-    }
-}
-}
+#include <vector>
 #endif
 
 namespace JStudio {
@@ -281,12 +273,14 @@ void TObject_list::prepare_data_(const data::TParse_TParagraph::TData& rData, TC
     const ListData* pContent = static_cast<const ListData*>(rData.pContent);
     ASSERT(pContent != NULL);
 
-#if TARGET_PC
-    endianSwapListData(pContent->_8, pContent->_4);
-#endif
-
     fnValue.data_setInterval(pContent->_0);
+#if TARGET_PC
+    mSwappedData.assign(pContent->_8, pContent->_8 + (u32)pContent->_4);
+    be_swap(mSwappedData.data(), pContent->_4);
+    fnValue.data_set(mSwappedData.data(), pContent->_4);
+#else
     fnValue.data_set(pContent->_8, pContent->_4);
+#endif
 }
 
 TObject_list_parameter::TObject_list_parameter(data::TParse_TBlock const& param_0)
@@ -303,9 +297,13 @@ void TObject_list_parameter::prepare_data_(const data::TParse_TParagraph::TData&
     ASSERT(pContent != NULL);
 
 #if TARGET_PC
-    endianSwapListData(pContent->_4, pContent->_0 * 2);
-#endif
+    u32 count = pContent->_0 * 2;
+    mSwappedData.assign(pContent->_4, pContent->_4 + count);
+    be_swap(mSwappedData.data(), count);
+    fnValue.data_set(mSwappedData.data(), pContent->_0);
+#else
     fnValue.data_set(pContent->_4, pContent->_0);
+#endif
 }
 
 TObject_hermite::TObject_hermite(data::TParse_TBlock const& param_0) : TObject(param_0, &fnValue) {}
@@ -323,8 +321,10 @@ void TObject_hermite::prepare_data_(const data::TParse_TParagraph::TData& rData,
 #if TARGET_PC
     u32 u = (pContent->_0 & 0xFFFFFFF);
     u32 uSize = (pContent->_0 >> 0x1C);
-    endianSwapListData(pContent->_4, u * uSize);
-    fnValue.data_set(pContent->_4, u, uSize);
+    u32 total = u * uSize;
+    mSwappedData.assign(pContent->_4, pContent->_4 + total);
+    be_swap(mSwappedData.data(), total);
+    fnValue.data_set(mSwappedData.data(), u, uSize);
 #else
     fnValue.data_set(pContent->_4, pContent->_0 & 0xFFFFFFF, pContent->_0 >> 0x1C);
 #endif

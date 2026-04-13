@@ -36,8 +36,14 @@ void* dBgWKCol::initKCollision(void* i_kclData) {
     be_swap(kcl->m_area_x_blocks_shift);
     be_swap(kcl->m_area_xy_blocks_shift);
 
-    // for (KC_PrismData* pw = p_prism; (uintptr_t)pw < (uintptr_t)p_block; pw++)
-    //     be_swap(*pw);
+    Vec* p_pos = kcl->m_pos_data;
+    Vec* p_nrm = kcl->m_nrm_data;
+    KC_PrismData* p_prism = kcl->m_prism_data;
+    BE(u32)* p_block = kcl->m_block_data;
+    for (Vec* pw = p_pos; pw < p_nrm; pw++)
+        be_swap(*pw);
+    for (Vec* pw = p_nrm; (uintptr_t)pw < (uintptr_t)p_prism + sizeof(Vec); pw++)
+        be_swap(*pw);
 
 #else
     ((KC_Header*)i_kclData)->m_pos_data = (Vec*)((uintptr_t)((KC_Header*)i_kclData) + (uintptr_t)((KC_Header*)i_kclData)->m_pos_data);
@@ -64,15 +70,8 @@ void dBgWKCol::create(void* pprism, void* plc) {
 }
 
 void dBgWKCol::getTriNrm(KC_PrismData* pkc, Vec** nrm) const {
-#if TARGET_PC
-    static Vec var_r31_v;
-    var_r31_v = m_pkc_head->m_nrm_data[pkc->fnrm_i];
-    be_swap(var_r31_v);
-    *nrm = &var_r31_v;
-#else
     Vec* var_r31 = &m_pkc_head->m_nrm_data[pkc->fnrm_i];
     *nrm = var_r31;
-#endif
 }
 
 bool dBgWKCol::ChkNotReady() const {
@@ -125,29 +124,12 @@ bool dBgWKCol::GetTriPnt(int poly_index, Vec* ppos, Vec* param_2, Vec* param_3) 
 
 bool dBgWKCol::GetTriPnt(KC_PrismData const* pd, Vec* ppos, Vec* param_3,
                          Vec* param_4) const {
-#if TARGET_PC
-    *ppos = m_pkc_head->m_pos_data[pd->pos_i];
-    be_swap(*ppos);
-    Vec face_nrm_v = m_pkc_head->m_nrm_data[pd->fnrm_i];
-    be_swap(face_nrm_v);
-    Vec* face_nrm = &face_nrm_v;
-    Vec edge_nrm1_v = m_pkc_head->m_nrm_data[pd->enrm1_i];
-    be_swap(edge_nrm1_v);
-    Vec* edge_nrm1 = &edge_nrm1_v;
-    Vec edge_nrm2_v = m_pkc_head->m_nrm_data[pd->enrm2_i];
-    be_swap(edge_nrm2_v);
-    Vec* edge_nrm2 = &edge_nrm2_v;
-    Vec edge_nrm3_v = m_pkc_head->m_nrm_data[pd->enrm3_i];
-    be_swap(edge_nrm3_v);
-    Vec* edge_nrm3 = &edge_nrm3_v;
-#else
     *ppos = m_pkc_head->m_pos_data[pd->pos_i];
 
     Vec* face_nrm = &m_pkc_head->m_nrm_data[pd->fnrm_i];
     Vec* edge_nrm1 = &m_pkc_head->m_nrm_data[pd->enrm1_i];
     Vec* edge_nrm2 = &m_pkc_head->m_nrm_data[pd->enrm2_i];
     Vec* edge_nrm3 = &m_pkc_head->m_nrm_data[pd->enrm3_i];
-#endif
 
     Vec sp64;
     PSVECCrossProduct(face_nrm, edge_nrm1, &sp64);
@@ -458,17 +440,8 @@ bool dBgWKCol::LineCheck(cBgS_LinChk* plinchk) {
                                 } else {
                                     while (*(++sp28) != 0) {
                                         KC_PrismData* sp20 = getPrismData(sp28[0]);
-                                #if TARGET_PC
-                                        Vec sp1C_v = m_pkc_head->m_nrm_data[sp20->fnrm_i];
-                                        be_swap(sp1C_v);
-                                        Vec* sp1C = &sp1C_v;
-                                        Vec sp18_v = m_pkc_head->m_pos_data[sp20->pos_i];
-                                        be_swap(sp18_v);
-                                        Vec* sp18 = &sp18_v;
-                                #else
                                         Vec* sp1C = &m_pkc_head->m_nrm_data[sp20->fnrm_i];
                                         Vec* sp18 = &m_pkc_head->m_pos_data[sp20->pos_i];
-                                #endif
 
                                         cXyz spE4;
                                         PSVECSubtract(&sp138, sp18, &spE4);
@@ -496,32 +469,13 @@ bool dBgWKCol::LineCheck(cBgS_LinChk* plinchk) {
                                             cXyz spB4;
                                             PSVECAdd(&spE4, &spC0, &spB4);
 
-#if TARGET_PC
-                                            Vec sp14_v = m_pkc_head->m_nrm_data[sp20->enrm1_i];
-                                            be_swap(sp14_v);
-                                            Vec* sp14 = &sp14_v;
-#else
                                             Vec* sp14 = &m_pkc_head->m_nrm_data[sp20->enrm1_i];
-#endif
 
                                             if (PSVECDotProduct(&spB4, sp14) <= 0.0075f) {
-#if TARGET_PC
-                                                Vec sp10_v = m_pkc_head->m_nrm_data[sp20->enrm2_i];
-                                                be_swap(sp10_v);
-                                                Vec* sp10 = &sp10_v;
-#else
                                                 Vec* sp10 = &m_pkc_head->m_nrm_data[sp20->enrm2_i];
-#endif
                                                 if (PSVECDotProduct(&spB4, sp10) <= 0.0075f) {
-#if TARGET_PC
-                                                    Vec spC_v =
-                                                        m_pkc_head->m_nrm_data[sp20->enrm3_i];
-                                                    be_swap(spC_v);
-                                                    Vec* spC = &spC_v;
-#else
                                                     Vec* spC =
                                                         &m_pkc_head->m_nrm_data[sp20->enrm3_i];
-#endif
                                                     f32 var_f26 = PSVECDotProduct(&spB4, spC);
                                                     if (var_f26 >= -0.0075f &&
                                                         var_f26 <= sp20->height + 0.0075f)
@@ -639,43 +593,18 @@ bool dBgWKCol::GroundCross(cBgS_GndChk* i_chk) {
 
         while (*++sp1C != 0) {
             KC_PrismData* sp18 = getPrismData(sp1C[0]);
-#if TARGET_PC
-            Vec sp14_v = m_pkc_head->m_nrm_data[sp18->fnrm_i];
-            be_swap(sp14_v);
-            Vec* sp14 = &sp14_v;
-#else
             Vec* sp14 = &m_pkc_head->m_nrm_data[sp18->fnrm_i];
-#endif
 
             if (!(sp14->y < 0.014f) && !cM3d_IsZero(sp14->y) && (!cBgW_CheckBWall(sp14->y) || i_chk->GetWallPrecheck())) {
-#if TARGET_PC
-                Vec sp10_v = m_pkc_head->m_pos_data[sp18->pos_i];
-                be_swap(sp10_v);
-                Vec* sp10 = &sp10_v;
-#else
                 Vec* sp10 = &m_pkc_head->m_pos_data[sp18->pos_i];
-#endif
                 sp4C.x = point_p->x - sp10->x;
                 sp4C.z = point_p->z - sp10->z;
                 sp4C.y = -(sp4C.x * sp14->x + sp4C.z * sp14->z) / sp14->y;
 
-#if TARGET_PC
-                Vec enrm1_v = m_pkc_head->m_nrm_data[sp18->enrm1_i];
-                be_swap(enrm1_v);
-                Vec enrm2_v = m_pkc_head->m_nrm_data[sp18->enrm2_i];
-                be_swap(enrm2_v);
-                if (!(PSVECDotProduct(&sp4C, &enrm1_v) > 0.0075f) &&
-                    !(PSVECDotProduct(&sp4C, &enrm2_v) > 0.0075f))
-                {
-                    Vec enrm3_v = m_pkc_head->m_nrm_data[sp18->enrm3_i];
-                    be_swap(enrm3_v);
-                    f32 var_f30 = PSVECDotProduct(&sp4C, &enrm3_v);
-#else
                 if (!(PSVECDotProduct(&sp4C, &m_pkc_head->m_nrm_data[sp18->enrm1_i]) > 0.0075f) &&
                     !(PSVECDotProduct(&sp4C, &m_pkc_head->m_nrm_data[sp18->enrm2_i]) > 0.0075f))
                 {
                     f32 var_f30 = PSVECDotProduct(&sp4C, &m_pkc_head->m_nrm_data[sp18->enrm3_i]);
-#endif
                     if (!(var_f30 > 0.0075f + sp18->height) && !(var_f30 < -0.0075f)) {
                         dBgPc sp64;
                         getPolyCode(sp1C[0], &sp64);
@@ -887,22 +816,6 @@ void dBgWKCol::ShdwDraw(cBgS_ShdwDraw* param_0) {
                                         if (!ChkShdwDrawThrough(&polyCode_sp108)) {
                                             prismData_sp20 = getPrismData(p_prismList[0]);
 
-#if TARGET_PC
-                                            sp11C[0] =
-                                                m_pkc_head->m_pos_data[prismData_sp20->pos_i];
-                                            be_swap(sp11C[0]);
-
-                                            Vec nrm1_sp1C_v = m_pkc_head->m_nrm_data[prismData_sp20->fnrm_i];
-                                            be_swap(nrm1_sp1C_v);
-                                            nrm1_sp1C = &nrm1_sp1C_v;
-                                            Vec nrm2_sp18_v = m_pkc_head->m_nrm_data[prismData_sp20->enrm1_i];
-                                            be_swap(nrm2_sp18_v);
-                                            nrm2_sp18 = &nrm2_sp18_v;
-
-                                            Vec unk_sp14_v = m_pkc_head->m_nrm_data[prismData_sp20->enrm3_i];
-                                            be_swap(unk_sp14_v);
-                                            unk_sp14 = &unk_sp14_v;
-#else
                                             sp11C[0] =
                                                 m_pkc_head->m_pos_data[prismData_sp20->pos_i];
 
@@ -913,7 +826,6 @@ void dBgWKCol::ShdwDraw(cBgS_ShdwDraw* param_0) {
 
                                             unk_sp14 = m_pkc_head->m_nrm_data +
                                                        prismData_sp20->enrm3_i;
-#endif
                                             PSVECCrossProduct(nrm1_sp1C, nrm2_sp18,
                                                               &cross1_spBC);
                                             f32 dot = PSVECDotProduct(&cross1_spBC, unk_sp14);
@@ -924,14 +836,8 @@ void dBgWKCol::ShdwDraw(cBgS_ShdwDraw* param_0) {
                                                          &sp11C[2]);
 
                                                 // Second edge direction
-#if TARGET_PC
-                                                Vec temp_sp10_v = m_pkc_head->m_nrm_data[prismData_sp20->enrm2_i];
-                                                be_swap(temp_sp10_v);
-                                                temp_sp10 = &temp_sp10_v;
-#else
                                                 temp_sp10 = m_pkc_head->m_nrm_data +
                                                             prismData_sp20->enrm2_i;
-#endif
                                                 PSVECCrossProduct(temp_sp10, nrm1_sp1C,
                                                                   &cross2_spB0);
                                                 f32 dot2 =
@@ -1081,13 +987,7 @@ void dBgWKCol::CaptPoly(dBgS_CaptPoly& i_captpoly) {
                             if (r28 != sp28) {
                                 while (*++r28 != 0) {
                                     KC_PrismData* spC = getPrismData(r28[0]);
-#if TARGET_PC
-                                    Vec sp8_v = m_pkc_head->m_nrm_data[spC->fnrm_i];
-                                    be_swap(sp8_v);
-                                    Vec* sp8 = &sp8_v;
-#else
                                     Vec* sp8 = &m_pkc_head->m_nrm_data[spC->fnrm_i];
-#endif
 
                                     dBgPc spD8;
                                     getPolyCode(r28[0], &spD8);
@@ -1271,13 +1171,7 @@ bool dBgWKCol::WallCorrectSort(dBgS_Acch* pwi) {
                 } else {
                     while (*++sp_c8 != 0) {
                         KC_PrismData* sp_c0 = (KC_PrismData*)getPrismData(*sp_c8);
-#if TARGET_PC
-                        Vec sp_bc_v = m_pkc_head->m_nrm_data[sp_c0->fnrm_i];
-                        be_swap(sp_bc_v);
-                        Vec* sp_bc = &sp_bc_v;
-#else
                         Vec* sp_bc = m_pkc_head->m_nrm_data + sp_c0->fnrm_i;
-#endif
                         if (!cBgW_CheckBGround(sp_bc->y)) {
                             f32 sp_b8 = JMAFastSqrt(sp_bc->x * sp_bc->x + sp_bc->z * sp_bc->z);
                             if (!cM3d_IsZero(sp_b8)) {
@@ -1380,13 +1274,7 @@ bool dBgWKCol::WallCorrectSort(dBgS_Acch* pwi) {
         }
         int sp_a0 = sp_a4->_4;
         KC_PrismData* sp_9c = (KC_PrismData*)getPrismData(sp_a0);
-#if TARGET_PC
-        Vec sp_98_v = m_pkc_head->m_nrm_data[sp_9c->fnrm_i];
-        be_swap(sp_98_v);
-        Vec* sp_98 = &sp_98_v;
-#else
         Vec* sp_98 = m_pkc_head->m_nrm_data + sp_9c->fnrm_i;
-#endif
         f32 sp_94 = JMAFastSqrt(sp_98->x * sp_98->x + sp_98->z * sp_98->z);
         cXyz sp_168;
         cXyz sp_15c;
@@ -1744,13 +1632,7 @@ bool dBgWKCol::WallCorrect(dBgS_Acch* pwi) {
 
                 while (*++p_prismlist != 0) {
                     KC_PrismData* sp9C = (KC_PrismData*)getPrismData(*p_prismlist);
-#if TARGET_PC
-                    Vec sp98_v = m_pkc_head->m_nrm_data[sp9C->fnrm_i];
-                    be_swap(sp98_v);
-                    Vec* sp98 = &sp98_v;
-#else
                     Vec* sp98 = m_pkc_head->m_nrm_data + sp9C->fnrm_i;
-#endif
                     if (cBgW_CheckBGround(sp98->y)) {
                         continue;
                     }
@@ -2047,48 +1929,15 @@ bool dBgWKCol::RoofChk(dBgS_RoofChk* param_0) {
 
         while (*++p_prismlist != 0) {
             sp1C = getPrismData(p_prismlist[0]);
-#if TARGET_PC
-            Vec sp18_v = m_pkc_head->m_nrm_data[sp1C->fnrm_i];
-            be_swap(sp18_v);
-            sp18 = &sp18_v;
-#else
             sp18 = m_pkc_head->m_nrm_data + sp1C->fnrm_i;
-#endif
             if (cBgW_CheckBRoof(sp18->y)) {
-#if TARGET_PC
-                Vec sp14_v = m_pkc_head->m_pos_data[sp1C->pos_i];
-                be_swap(sp14_v);
-                sp14 = &sp14_v;
-#else
                 sp14 = m_pkc_head->m_pos_data + sp1C->pos_i;
-#endif
 
                 cXyz sp5C;
                 sp5C.x = sp40->x - sp14->x;
                 sp5C.z = sp40->z - sp14->z;
                 sp5C.y = -(sp5C.x * sp18->x + sp5C.z * sp18->z) / sp18->y;
 
-#if TARGET_PC
-                Vec enrm1_v = m_pkc_head->m_nrm_data[sp1C->enrm1_i];
-                be_swap(enrm1_v);
-                if (PSVECDotProduct(&sp5C, &enrm1_v) >
-                    0.0075f)
-                {
-                    continue;
-                }
-
-                Vec enrm2_v = m_pkc_head->m_nrm_data[sp1C->enrm2_i];
-                be_swap(enrm2_v);
-                if (PSVECDotProduct(&sp5C,
-                                    &enrm2_v) > 0.0075f)
-                {
-                    continue;
-                }
-
-                Vec enrm3_v = m_pkc_head->m_nrm_data[sp1C->enrm3_i];
-                be_swap(enrm3_v);
-                f32 dot_f30 = PSVECDotProduct(&sp5C, &enrm3_v);
-#else
                 if (PSVECDotProduct(&sp5C, &m_pkc_head->m_nrm_data[sp1C->enrm1_i]) >
                     0.0075f)
                 {
@@ -2102,7 +1951,6 @@ bool dBgWKCol::RoofChk(dBgS_RoofChk* param_0) {
                 }
 
                 f32 dot_f30 = PSVECDotProduct(&sp5C, &m_pkc_head->m_nrm_data[sp1C->enrm3_i]);
-#endif
                 if (dot_f30 < -0.0075f || dot_f30 > sp1C->height + 0.0075f) {
                     continue;
                 }
@@ -2199,13 +2047,7 @@ bool dBgWKCol::SplGrpChk(dBgS_SplGrpChk* param_0) {
         BE(u16)* p_prismlist = (BE(u16)*)(block + (idx & 0x7fffffff));
         while (*++p_prismlist != 0) {
             KC_PrismData* sp18 = getPrismData(*p_prismlist);
-#if TARGET_PC
-            Vec sp14_v = m_pkc_head->m_nrm_data[sp18->fnrm_i];
-            be_swap(sp14_v);
-            Vec* sp14 = &sp14_v;
-#else
             Vec* sp14 = m_pkc_head->m_nrm_data + sp18->fnrm_i;
-#endif
             if (!(sp14->y <= 0.0f) && !cM3d_IsZero(sp14->y)) {
                 dBgPc sp64;
                 getPolyCode(*p_prismlist, &sp64);
@@ -2213,38 +2055,11 @@ bool dBgWKCol::SplGrpChk(dBgS_SplGrpChk* param_0) {
                 if (!chkPolyThrough(&sp64, param_0->GetPolyPassChk(),
                                     param_0->GetGrpPassChk(), sp4C))
                 {
-#if TARGET_PC
-                    Vec sp10_v = m_pkc_head->m_pos_data[sp18->pos_i];
-                    be_swap(sp10_v);
-                    Vec* sp10 = &sp10_v;
-#else
                     Vec* sp10 = m_pkc_head->m_pos_data + sp18->pos_i;
-#endif
                     cXyz sp40;
                     sp40.x = sp3C->x - sp10->x;
                     sp40.z = sp3C->z - sp10->z;
                     sp40.y = -(sp40.x * sp14->x + sp40.z * sp14->z) / sp14->y;
-#if TARGET_PC
-                    Vec enrm1_v = m_pkc_head->m_nrm_data[sp18->enrm1_i];
-                    be_swap(enrm1_v);
-                    if (PSVECDotProduct(&sp40, &enrm1_v) >
-                        0.0075f)
-                    {
-                        continue;
-                    }
-
-                    Vec enrm2_v = m_pkc_head->m_nrm_data[sp18->enrm2_i];
-                    be_swap(enrm2_v);
-                    if (PSVECDotProduct(&sp40, &enrm2_v) >
-                            0.0075f)
-                    {
-                        continue;
-                    }
-
-                    Vec enrm3_v = m_pkc_head->m_nrm_data[sp18->enrm3_i];
-                    be_swap(enrm3_v);
-                    f32 var_f30 = PSVECDotProduct(&sp40, &enrm3_v);
-#else
                     if (PSVECDotProduct(&sp40, &m_pkc_head->m_nrm_data[sp18->enrm1_i]) >
                         0.0075f)
                     {
@@ -2258,7 +2073,6 @@ bool dBgWKCol::SplGrpChk(dBgS_SplGrpChk* param_0) {
                     }
 
                     f32 var_f30 = PSVECDotProduct(&sp40, &m_pkc_head->m_nrm_data[sp18->enrm3_i]);
-#endif
                     if (var_f30 < -0.0075f || var_f30 > sp18->height + 0.0075f) {
                         continue;
                     }
@@ -2408,13 +2222,7 @@ bool dBgWKCol::SphChk(dBgS_SphChk* param_0, void* param_1) {
                 if (var_r28 != sp30) {
                     while (*++var_r28 != 0) {
                         KC_PrismData* sp14 = getPrismData(*var_r28);
-#if TARGET_PC
-                        Vec sp10_v = m_pkc_head->m_nrm_data[sp14->fnrm_i];
-                        be_swap(sp10_v);
-                        Vec* sp10 = &sp10_v;
-#else
                         Vec* sp10 = &m_pkc_head->m_nrm_data[sp14->fnrm_i];
-#endif
                         getPolyCode(*var_r28, &spD4);
                         cXyz sp90 = *sp10;
                         if (!chkPolyThrough(&spD4, param_0->GetPolyPassChk(),

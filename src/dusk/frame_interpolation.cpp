@@ -1,3 +1,4 @@
+#include "f_op/f_op_camera_mng.h"
 #include "dusk/frame_interpolation.h"
 
 #include <algorithm>
@@ -8,7 +9,6 @@
 #include <vector>
 
 namespace {
-
 enum class Op : uint8_t {
     OpenChild,
     FinalMtx,
@@ -88,6 +88,13 @@ inline void lerp_matrix(Mtx out, const Mtx lhs, const Mtx rhs, float step) {
             out[row][col] = lhs[row][col] * old_weight + rhs[row][col] * step;
         }
     }
+}
+
+inline void lerp_xyz(cXyz* out, const cXyz& lhs, const cXyz& rhs, float step) {
+    const float old_weight = 1.0f - step;
+    out->x = lhs.x * old_weight + rhs.x * step;
+    out->y = lhs.y * old_weight + rhs.y * step;
+    out->z = lhs.z * old_weight + rhs.z * step;
 }
 
 inline bool matrix_differs(const Mtx lhs, const Mtx rhs, float epsilon = 0.0001f) {
@@ -251,9 +258,7 @@ void clear_replacements() {
 
 }  // namespace
 
-namespace dusk {
-namespace frame_interp {
-
+namespace dusk::frame_interp {
 void ensure_initialized() {
     g_enabled = getSettings().game.enableFrameInterpolation;
     s_initialized = true;
@@ -405,5 +410,76 @@ void camera_eye_from_view_mtx(MtxP view_mtx, cXyz* o_eye) {
     o_eye->z = -(view_mtx[0][2] * view_mtx[0][3] + view_mtx[1][2] * view_mtx[1][3] + view_mtx[2][2] * view_mtx[2][3]);
 }
 
-}  // namespace frame_interp
-}  // namespace dusk
+namespace {
+struct CamSnap {
+    cXyz eye{};
+    cXyz center{};
+    cXyz up{};
+    s16 bank{};
+    f32 fovy{};
+    bool valid{};
+};
+
+CamSnap s_star_prev{};
+CamSnap s_star_curr{};
+
+static void copy_view_to_snap(CamSnap* dst, const view_class& v) {
+    dst->eye = v.lookat.eye;
+    dst->center = v.lookat.center;
+    dst->up = v.lookat.up;
+    dst->bank = v.bank;
+    dst->fovy = v.fovy;
+    dst->valid = true;
+}
+
+static void billboard_base_from_view(MtxP view_mtx, MtxP o_cam_billboard_base) {
+    Mtx rot;
+    MTXCopy(view_mtx, rot);
+    rot[0][3] = rot[1][3] = rot[2][3] = 0.0f;
+    MTXInverse(rot, o_cam_billboard_base);
+}
+}  // namespace
+
+void begin_record_camera() {
+    ::camera_process_class* cam = dComIfGp_getCamera(0);
+    if (cam == nullptr) {
+        return;
+    }
+    copy_view_to_snap(&s_star_prev, cam->view);
+}
+
+void record_camera(::camera_process_class* cam, int camera_id) {
+    if (!getSettings().game.enableFrameInterpolation || camera_id != 0 || cam == nullptr) {
+        return;
+    }
+    copy_view_to_snap(&s_star_curr, cam->view);
+}
+
+bool build_star_view(Mtx o_view, Mtx o_cam_billboard_base, cXyz* o_anchor_eye, float* o_fovy) {
+    if (!getSettings().game.enableFrameInterpolation || !s_star_prev.valid || !s_star_curr.valid) {
+        return false;
+    }
+
+    const f32 step = get_interpolation_step();
+    cXyz eye;
+    cXyz center;
+    cXyz up;
+    lerp_xyz(&eye, s_star_prev.eye, s_star_curr.eye, step);
+    lerp_xyz(&center, s_star_prev.center, s_star_curr.center, step);
+    lerp_xyz(&up, s_star_prev.up, s_star_curr.up, step);
+    if (!up.normalizeRS()) {
+        up = s_star_curr.up;
+        up.normalizeRS();
+    }
+
+    const f32 bank_rad = S2RAD(s_star_prev.bank) * (1.0f - step) + S2RAD(s_star_curr.bank) * step;
+    const s16 bank = cAngle::Radian_to_SAngle(bank_rad);
+
+    mDoMtx_lookAt(o_view, &eye, &center, &up, bank);
+    billboard_base_from_view(o_view, o_cam_billboard_base);
+
+    *o_anchor_eye = eye;
+    *o_fovy = s_star_prev.fovy + (s_star_curr.fovy - s_star_prev.fovy) * step;
+    return true;
+}
+}  // namespace dusk::frame_interp

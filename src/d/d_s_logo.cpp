@@ -480,7 +480,7 @@ void dScnLogo_c::warningInDraw() {
 
     if (mTimer == 0) {
         mExecCommand = EXEC_WARNING_DISP;
-        mTimer = 30;
+        mTimer = 3510;
         field_0x20e = 30;
         field_0x210 = field_0x20e;
         field_0x212 = 1;
@@ -547,7 +547,7 @@ void dScnLogo_c::nintendoOutDraw() {
 
     if (mTimer == 0) {
         mExecCommand = EXEC_DOLBY_IN;
-        mTimer = 30;
+        mTimer = 90;
         mDoGph_gInf_c::startFadeIn(30);
     }
 }
@@ -1104,12 +1104,26 @@ int dScnLogo_c::create() {
     checkProgSelect();
     if (field_0x20a != 0) {
         mExecCommand = EXEC_PROG_IN;
-        mTimer = 1;
+        #if TARGET_PC
+        mTimer = dusk::getSettings().game.skipWarningScreen ? 1 : 30;
+        #else
+        mTimer = 30;
+        #endif
         field_0x218 = getProgressiveMode();
     } else {
         #if TARGET_PC
-        mTimer = 0; // Possibly unnecessary but just in case
-        mExecCommand = EXEC_DVD_WAIT;
+        if (dusk::getSettings().game.skipWarningScreen) {
+            mTimer = 0;  // Possibly unnecessary but just in case
+            mExecCommand = EXEC_DVD_WAIT;
+        } else {
+            if (mDoRst::getWarningDispFlag()) {
+                mTimer = 90;
+                mExecCommand = EXEC_NINTENDO_IN;
+            } else {
+                mTimer = 120;
+                mExecCommand = EXEC_WARNING_IN;
+            }
+        }
         #else
         if (mDoRst::getWarningDispFlag()) {
             mTimer = 90;

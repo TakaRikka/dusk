@@ -48,6 +48,7 @@
 #include "dusk/app_info.hpp"
 #include "dusk/dusk.h"
 #include "dusk/frame_interpolation.h"
+#include "dusk/gyro_aim.h"
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
@@ -241,6 +242,9 @@ void main01(void) {
         if (dusk::getSettings().game.enableFrameInterpolation) {
             while (accumulator >= kSimStepSeconds) {
                 mDoCPd_c::read();
+                if (dusk::getSettings().game.enableGyroAim) {
+                    dusk::gyro_aim::read(static_cast<float>(kSimStepSeconds), dusk::gyro_aim::queryGyroAimItemContext());
+                }
                 fapGm_Execute();
                 mDoAud_Execute();
                 accumulator -= kSimStepSeconds;
@@ -254,6 +258,9 @@ void main01(void) {
 
             // Game Inputs
             mDoCPd_c::read();
+            if (dusk::getSettings().game.enableGyroAim) {
+                dusk::gyro_aim::read(static_cast<float>(frame_seconds), dusk::gyro_aim::queryGyroAimItemContext());
+            }
 
             // EXECUTE GAME LOGIC & RENDER
             // This calls mDoGph_Painter -> JFWDisplay -> GX Functions

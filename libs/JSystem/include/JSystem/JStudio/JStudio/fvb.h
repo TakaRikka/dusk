@@ -4,6 +4,9 @@
 #include "JSystem/JGadget/linklist.h"
 #include "JSystem/JStudio/JStudio/fvb-data-parse.h"
 #include "JSystem/JStudio/JStudio/object-id.h"
+#if TARGET_PC
+#include <vector>
+#endif
 
 namespace JStudio {
 namespace fvb {
@@ -126,6 +129,9 @@ public:
 
 private:
     TFunctionValue_list fnValue;
+#if TARGET_PC
+    std::vector<f32> mSwappedData;
+#endif
 };
 
 class TObject_list_parameter : public TObject {
@@ -141,6 +147,9 @@ public:
 
 private:
     TFunctionValue_list_parameter fnValue;
+#if TARGET_PC
+    std::vector<f32> mSwappedData;
+#endif
 };
 
 struct TObject_hermite : public TObject {
@@ -156,6 +165,9 @@ public:
 
 private:
     TFunctionValue_hermite fnValue;
+#if TARGET_PC
+    std::vector<f32> mSwappedData;
+#endif
 };
 
 }  // namespace fvb

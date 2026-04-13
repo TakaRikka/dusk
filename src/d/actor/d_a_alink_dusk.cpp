@@ -83,3 +83,32 @@ void daAlink_c::handleQuickTransform() {
     OSReport("Running quick transform!");
     procCoMetamorphoseInit();
 }
+
+bool daAlink_c::checkGyroAimItemContext() {
+    if (checkWolf()) {
+        return false;
+    }
+
+    switch (mProcID) {
+    case PROC_BOW_SUBJECT:
+    case PROC_BOOMERANG_SUBJECT:
+    case PROC_COPY_ROD_SUBJECT:
+    case PROC_HOOKSHOT_SUBJECT:
+    case PROC_SWIM_HOOKSHOT_SUBJECT:
+    case PROC_HORSE_BOW_SUBJECT:
+    case PROC_HORSE_BOOMERANG_SUBJECT:
+    case PROC_HORSE_HOOKSHOT_SUBJECT:
+    case PROC_CANOE_BOW_SUBJECT:
+    case PROC_CANOE_BOOMERANG_SUBJECT:
+    case PROC_CANOE_HOOKSHOT_SUBJECT:
+    case PROC_HOOKSHOT_ROOF_WAIT:
+    case PROC_HOOKSHOT_ROOF_SHOOT:
+    case PROC_HOOKSHOT_WALL_WAIT:
+    case PROC_HOOKSHOT_WALL_SHOOT:
+        return true;
+    case PROC_IRON_BALL_SUBJECT:
+        return itemButton() && mItemVar0.field_0x3018 == 2;
+    default:
+        return false;
+    }
+}

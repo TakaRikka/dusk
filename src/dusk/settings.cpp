@@ -23,11 +23,13 @@ UserSettings g_userSettings = {
         // Quality of Life
         .enableQuickTransform {"game.enableQuickTransform", false},
         .hideTvSettingsScreen {"game.hideTvSettingsScreen", false},
+        .skipWarningScreen {"game.skipWarningScreen", false},
         .biggerWallets {"game.biggerWallets", false},
         .noReturnRupees {"game.noReturnRupees", false},
         .disableRupeeCutscenes {"game.disableRupeeCutscenes", false},
         .noSwordRecoil {"game.noSwordRecoil", false},
         .damageMultiplier {"game.damageMultiplier", 1},
+        .noHeartDrops{"game.noHeartDrops", false},
         .instantDeath {"game.instantDeath", false},
         .fastClimbing {"game.fastClimbing", false},
         .noMissClimbing {"game.noMissClimbing", false},
@@ -48,6 +50,12 @@ UserSettings g_userSettings = {
         .noLowHpSound {"game.noLowHpSound", false},
         .midnasLamentNonStop {"game.midnasLamentNonStop", false},
 
+        // Input
+        .enableGyroAim {"game.enableGyroAim", false},
+        .gyroAimSensitivity {"game.gyroAimSensitivity", 1.0f},
+        .gyroAimInvertPitch {"game.gyroAimInvertPitch", false},
+        .gyroAimInvertYaw {"game.gyroAimInvertYaw", false},
+
         // Cheats
         .enableFastIronBoots {"game.enableFastIronBoots", false},
         .canTransformAnywhere {"game.canTransformAnywhere", false},
@@ -58,7 +66,7 @@ UserSettings g_userSettings = {
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
 
         // Controls
-        .enableTurboKeybind {"game.enableTurboKeybind", false},
+        .enableTurboKeybind {"game.enableTurboKeybind", false}
     },
 
     .backend = {
@@ -91,11 +99,13 @@ void registerSettings() {
     // Game
     Register(g_userSettings.game.enableQuickTransform);
     Register(g_userSettings.game.hideTvSettingsScreen);
+    Register(g_userSettings.game.skipWarningScreen);
     Register(g_userSettings.game.biggerWallets);
     Register(g_userSettings.game.noReturnRupees);
     Register(g_userSettings.game.disableRupeeCutscenes);
     Register(g_userSettings.game.noSwordRecoil);
     Register(g_userSettings.game.damageMultiplier);
+    Register(g_userSettings.game.noHeartDrops);
     Register(g_userSettings.game.instantDeath);
     Register(g_userSettings.game.fastClimbing);
     Register(g_userSettings.game.fastTears);
@@ -115,6 +125,10 @@ void registerSettings() {
     Register(g_userSettings.game.enableTurboKeybind);
     Register(g_userSettings.game.fastSpinner);
     Register(g_userSettings.game.enableFrameInterpolation);
+    Register(g_userSettings.game.enableGyroAim);
+    Register(g_userSettings.game.gyroAimSensitivity);
+    Register(g_userSettings.game.gyroAimInvertPitch);
+    Register(g_userSettings.game.gyroAimInvertYaw);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.graphicsBackend);

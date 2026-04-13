@@ -35,11 +35,13 @@ struct UserSettings {
         // QoL
         ConfigVar<bool> enableQuickTransform;
         ConfigVar<bool> hideTvSettingsScreen;
+        ConfigVar<bool> skipWarningScreen;
         ConfigVar<bool> biggerWallets;
         ConfigVar<bool> noReturnRupees;
         ConfigVar<bool> disableRupeeCutscenes;
         ConfigVar<bool> noSwordRecoil;
         ConfigVar<int> damageMultiplier;
+        ConfigVar<bool> noHeartDrops;
         ConfigVar<bool> instantDeath;
         ConfigVar<bool> fastClimbing;
         ConfigVar<bool> noMissClimbing;
@@ -59,6 +61,12 @@ struct UserSettings {
         // Audio
         ConfigVar<bool> noLowHpSound;
         ConfigVar<bool> midnasLamentNonStop;
+
+        // Input
+        ConfigVar<bool> enableGyroAim;
+        ConfigVar<float> gyroAimSensitivity;
+        ConfigVar<bool> gyroAimInvertPitch;
+        ConfigVar<bool> gyroAimInvertYaw;
 
         // Cheats
         ConfigVar<bool> enableFastIronBoots;
@@ -102,6 +110,7 @@ struct CollisionViewSettings {
 struct TransientSettings {
     CollisionViewSettings collisionView;
     bool skipFrameRateLimit;
+    bool moveLinkActive;
 };
 
 TransientSettings& getTransientSettings();
