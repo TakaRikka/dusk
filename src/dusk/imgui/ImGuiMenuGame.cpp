@@ -78,13 +78,14 @@ namespace dusk {
                     ImGui::EndCombo();
                 }
 
-                {
-                    float mult = getSettings().game.bloomMultiplier.getValue();
-                    if (ImGui::SliderFloat("Bloom Brightness", &mult, 0.0f, 1.0f, "%.2f")) {
-                        getSettings().game.bloomMultiplier.setValue(mult);
-                        config::Save();
-                    }
+                bool bloomOff = bloomMode == static_cast<int>(BloomMode::Off);
+                if (bloomOff) ImGui::BeginDisabled();
+                float mult = getSettings().game.bloomMultiplier.getValue();
+                if (ImGui::SliderFloat("Bloom Brightness", &mult, 0.0f, 1.0f, "%.2f")) {
+                    getSettings().game.bloomMultiplier.setValue(mult);
+                    config::Save();
                 }
+                if (bloomOff) ImGui::EndDisabled();
 
                 config::ImGuiCheckbox("Enable Water Refraction", getSettings().game.enableWaterRefraction);
 

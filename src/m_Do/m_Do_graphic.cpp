@@ -1620,7 +1620,12 @@ void mDoGph_gInf_c::bloom_c::draw() {
             GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
                             GX_TEVPREV);
             GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_OR);
-            GXColorS10 tevColor0 = {(s16)-mPoint, (s16)-mPoint, (s16)-mPoint, 0x40};
+#if TARGET_PC
+            s16 bloomAlpha = s16(0x40 * dusk::getSettings().game.bloomMultiplier.getValue());
+#else
+            s16 bloomAlpha = 0x40;
+#endif
+            GXColorS10 tevColor0 = {(s16)-mPoint, (s16)-mPoint, (s16)-mPoint, bloomAlpha};
             GXSetTevColorS10(GX_TEVREG0, tevColor0);
             GXColor tevColor1 = {mBlureRatio, mBlureRatio, mBlureRatio, mBlureRatio};
             GXSetTevColor(GX_TEVREG1, tevColor1);
