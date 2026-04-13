@@ -1409,18 +1409,16 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         // Setup blur filter TEV.
         GXSetNumTexGens(8);
 
-        auto SetupBlurMtx = [](float scale) {
             u32 texMtxID = GX_TEXMTX0;
             int angle = 0;
             for (int texCoord = (int)GX_TEXCOORD0; texCoord < (int)GX_MAX_TEXCOORD; texCoord++) {
                 GXSetTexCoordGen((GXTexCoordID)texCoord, GX_TG_MTX2x4, GX_TG_TEX0, texMtxID);
-                mDoMtx_stack_c::transS((scale * cM_scos(angle)) * getInvScale(),
-                                       scale * cM_ssin(angle), 0.0f);
+                mDoMtx_stack_c::transS((blurScale * cM_scos(angle)) * getInvScale(),
+                                       blurScale * cM_ssin(angle), 0.0f);
                 GXLoadTexMtxImm(mDoMtx_stack_c::get(), texMtxID, GX_MTX2x4);
                 texMtxID += 3;
                 angle += 0x2000;
             }
-        };
 
         GXSetNumTevStages(8);
         for (int stage = 0; stage < 8; stage++) {
@@ -1433,19 +1431,20 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         }
 
         // Successively downsample and apply blurs.
-        int divStart = 2;
-        int divNum = 6;
+        static int divStart = 2;
+        static int divNum = 6; // inclusive
 
-        // Distribute the brightness through each pass.
-        int totalNumPasses = (divNum - divStart) * 2; // down, up
-        float brightnessF32 = (mBlureRatio / 255.0f);
+        // The original mBlureRatio is multiplied into each sample, of which there are 8 samples originally.
+        // This is applied over two passes, the second one with an alpha of 25%; however, the clipping that this introduces is a bit integral to the look,
+        // so we do the same thing, letting it clip.
+        float brightnessF32 = (mBlureRatio * 16 / 255.0f);
+            
+        // Distribute the brightness through the total number of passes.
+        f32 totalNumPasses = (divNum - divStart + 1);
         float brightnessPerPass = 255.0f * powf(brightnessF32, 1.0f / totalNumPasses);
         GXSetTevColorS10(GX_TEVREG1, {0, 0, 0, s16(brightnessPerPass / 8)});
 
         for (int i = divStart; i < divNum; i++) {
-            float blurStrength = 1.0f + (i - divStart) * 5.0f;
-            SetupBlurMtx(blurScale * blurStrength);
-
             // Apply blur filter.
             divQuad(i);
 
@@ -1457,16 +1456,18 @@ void mDoGph_gInf_c::bloom_c::draw2() {
             GXLoadTexObj(blurTex, GX_TEXMAP0);
         }
 
-        // All the way down at the bottom. Instead of blurring the bottom layer by itself, we blur when going up to the next layer.
-        // The remaining upscales are all just normal alpha blending.
+        // All the way down at the bottom.
         divQuad(divNum);
 
         // Now successively alpha blend back up, don't blur anymore.
         GXSetNumTevStages(1);
-        GXSetTevColorS10(GX_TEVREG1, {0, 0, 0, s16(brightnessPerPass)});
+        GXSetTevColorS10(GX_TEVREG1, {0, 0, 0, s16(255)});
         GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-        GXSetBlendMode(GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_LO_OR);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_ONE, GX_LO_OR);
         for (int i = divNum; i > divStart; i--) {
+            float alpha = 255.0f * powf(0.25f, 1.0f / (divNum - i + 1));
+            GXSetTevColorS10(GX_TEVREG0, {0, 0, 0, s16(alpha)});
+
             divCopySrc(i);
             GXTexObj* upTex = divCopyTex(BlurPass0 + i, i);
             GXLoadTexObj(upTex, GX_TEXMAP0);
