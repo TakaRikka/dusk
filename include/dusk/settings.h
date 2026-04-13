@@ -10,7 +10,8 @@ using namespace config;
 enum class BloomMode : int {
     Off = 0,
     Classic = 1,
-    Dusk = 2,
+    HD = 2,
+    Dusk = 3,
 };
 
 namespace config {

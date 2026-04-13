@@ -62,7 +62,7 @@ namespace dusk {
                     config::Save();
                 }
 
-                constexpr const char* bloomModeNames[] = {"Off", "Classic", "Dusk"};
+                constexpr const char* bloomModeNames[] = {"Off", "Classic", "HD", "Dusk"};
                 int bloomMode = static_cast<int>(getSettings().game.bloomMode.getValue());
                 if (ImGui::BeginCombo("Bloom", bloomModeNames[bloomMode])) {
                     for (int i = 0; i < IM_ARRAYSIZE(bloomModeNames); i++) {

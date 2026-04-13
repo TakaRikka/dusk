@@ -1505,7 +1505,9 @@ void mDoGph_gInf_c::bloom_c::draw() {
         draw2();
         return;
     }
-    if (dusk::getSettings().game.bloomMode.getValue() != dusk::BloomMode::Classic) {
+    if (dusk::getSettings().game.bloomMode.getValue() != dusk::BloomMode::Classic &&
+        dusk::getSettings().game.bloomMode.getValue() != dusk::BloomMode::HD)
+    {
         return;
     }
 
@@ -1628,8 +1630,13 @@ void mDoGph_gInf_c::bloom_c::draw() {
             for (int texCoord = (int)GX_TEXCOORD1; texCoord < (int)GX_MAX_TEXCOORD; texCoord++) {
                 GXSetTexCoordGen((GXTexCoordID)texCoord, GX_TG_MTX2x4, GX_TG_TEX0, texMtxID);
                 
-                #if 0
-                f32 dVar15 = mBlureSize * ((448.0f / height) / 6400.0f);
+                #if TARGET_PC
+                f32 dVar15 = mBlureSize;
+                if (dusk::getSettings().game.bloomMode.getValue() == dusk::BloomMode::HD) {
+                    dVar15 *= ((448.0f / height) / 6400.0f);
+                } else {
+                    dVar15 *= (1.0f / 6400.0f);
+                }
                 #else
                 f32 dVar15 = mBlureSize * (1.0f / 6400.0f);
                 #endif

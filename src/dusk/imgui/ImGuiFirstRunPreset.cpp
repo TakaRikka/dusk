@@ -18,7 +18,7 @@ static void ApplyPresetClassic() {
 
 static void ApplyPresetHD() {
     auto& s = getSettings();
-    s.game.bloomMode.setValue(BloomMode::Classic);
+    s.game.bloomMode.setValue(BloomMode::HD);
     s.game.hideTvSettingsScreen.setValue(true);
     s.game.skipWarningScreen.setValue(true);
     s.game.noReturnRupees.setValue(true);
