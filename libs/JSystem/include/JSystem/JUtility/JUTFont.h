@@ -7,8 +7,7 @@
 
 #if TARGET_PC
 struct FontDrawContext {
-    int loadedBlock = -1;
-    int loadedPage = -1;
+    bool isTextureLoaded = false;
 };
 #define FONT_DRAW_CTX , FontDrawContext* context
 #define FONT_DRAW_CTX_ARG , context

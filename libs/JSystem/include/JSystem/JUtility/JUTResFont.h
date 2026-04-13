@@ -18,10 +18,6 @@ struct BlockHeader {
     BE(u32) size;
 };
 
-#if TARGET_PC
-struct GlyphTextures;
-#endif
-
 /**
 * @ingroup jsystem-jutility
 * 
@@ -91,6 +87,16 @@ public:
     /* 0x66 */ u16 field_0x66;
     /* 0x68 */ u16 mMaxCode;
     /* 0x6C */ const IsLeadByte_func* mIsLeadByte;
+
+#if TARGET_PC
+    // Dusk change: we use a single large texture for all characters.
+    // This enables better draw call merging, ideally enabling entire blocks of
+    // text to be one draw call.
+    TGXTexObj mJoinedTextureObject;
+    u16 mJoinedTextureHeight;
+
+    void initJoinedTexture();
+#endif
 };
 
 extern u8 const JUTResFONT_Ascfont_fix12[];
