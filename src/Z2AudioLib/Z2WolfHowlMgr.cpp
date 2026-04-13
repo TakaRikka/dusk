@@ -366,11 +366,13 @@ void Z2WolfHowlMgr::setCorrectData(s8 curveID, Z2WolfHowlData* data) {
         cPitchCenter = 0.94387f;
         cPitchDown = 0.74915f;
         break;
+    #if TARGET_PC
     case Z2WOLFHOWL_TIMESONG:
         cPitchUp = 1.12246f;
         cPitchCenter = 0.94387f;
         cPitchDown = 0.74915f;
         break;
+    #endif
     default:
         cPitchUp = 1.1892f;
         cPitchCenter = 1.0f;
