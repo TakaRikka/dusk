@@ -115,16 +115,7 @@ public:
         return pd;
     }
 
-    void getTri1Pos(KC_PrismData* pd, Vec** nrm) const {
-#if TARGET_PC
-        static Vec pos_v;
-        pos_v = m_pkc_head->m_pos_data[pd->pos_i];
-        be_swap(pos_v);
-        *nrm = &pos_v;
-#else
-        *nrm = &m_pkc_head->m_pos_data[pd->pos_i];
-#endif
-    }
+    void getTri1Pos(KC_PrismData* pd, Vec** nrm) const { *nrm = &m_pkc_head->m_pos_data[pd->pos_i]; }
 
 private:
     /* 0x18 */ KC_Header* m_pkc_head;
