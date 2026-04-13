@@ -1824,11 +1824,24 @@ static u16 const l_drawlistSize[21] = {
 };
 
 static u8 const l_nonSortId[9] = {
-    0x00, 0x01, 0x02, 0x04, 0x05, 0x06, 0x09, 0x12, 0x0D,
+    dDlst_list_c::DB_OPA_LIST_SKY,
+    dDlst_list_c::DB_XLU_LIST_SKY,
+    dDlst_list_c::DB_LIST_P0,
+    dDlst_list_c::DB_XLU_LIST_BG,
+    dDlst_list_c::DB_OPA_LIST_DARK_BG,
+    dDlst_list_c::DB_XLU_LIST_DARK_BG,
+    dDlst_list_c::DB_OPA_LIST_DARK,
+    dDlst_list_c::DB_LIST_2D_SCREEN,
+    dDlst_list_c::DB_OPA_LIST_ITEM3D,
 };
 
 static const u8 l_zSortId[6] = {
-    0x08, 0x0A, 0x0C, 0x0E, 0x10, 0x11,
+    dDlst_list_c::DB_XLU_LIST,
+    dDlst_list_c::DB_XLU_LIST_DARK,
+    dDlst_list_c::DB_LIST_FILTER,
+    dDlst_list_c::DB_XLU_LIST_ITEM3D,
+    dDlst_list_c::DB_XLU_LIST_INVISIBLE,
+    dDlst_list_c::DB_LIST_Z_XLU,
 };
 
 void dDlst_list_c::init() {

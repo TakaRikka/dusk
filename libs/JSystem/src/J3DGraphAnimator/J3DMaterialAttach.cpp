@@ -11,7 +11,7 @@ void J3DMaterialTable::clear() {
     mUniqueMatNum = 0;
     mMaterialNodePointer = NULL;
     mMaterialName = NULL;
-    field_0x10 = 0;
+    mMaterial = NULL;
     mTexture = NULL;
     mTextureName = NULL;
     field_0x1c = 0;
@@ -22,7 +22,7 @@ J3DMaterialTable::J3DMaterialTable() {
     mUniqueMatNum = 0;
     mMaterialNodePointer = NULL;
     mMaterialName = NULL;
-    field_0x10 = 0;
+    mMaterial = NULL;
     mTexture = NULL;
     mTextureName = NULL;
     field_0x1c = 0;

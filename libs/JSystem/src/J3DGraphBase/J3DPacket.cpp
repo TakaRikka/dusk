@@ -178,7 +178,7 @@ J3DMatPacket::J3DMatPacket() {
     mpInitShapePacket = NULL;
     mpShapePacket = NULL;
     mpMaterial = NULL;
-    mDiffFlag = 0xFFFFFFFF;
+    mMaterialID = 0xFFFFFFFF;
     mpTexture = NULL;
     mpMaterialAnm = NULL;
 }
@@ -204,7 +204,7 @@ void J3DMatPacket::endDiff() {
 
 bool J3DMatPacket::isSame(J3DMatPacket* pOther) const {
     J3D_ASSERT_NULLPTR(521, pOther != NULL);
-    return mDiffFlag == pOther->mDiffFlag && (mDiffFlag >> 31) == 0;
+    return mMaterialID == pOther->mMaterialID && (mMaterialID & 0x80000000) == 0;
 }
 
 void J3DMatPacket::draw() {
