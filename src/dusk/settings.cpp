@@ -39,6 +39,7 @@ UserSettings g_userSettings = {
         // Preferences
         .enableMirrorMode {"game.enableMirrorMode", false},
         .invertCameraXAxis {"game.invertCameraXAxis", false},
+        .reEquipOrdonClothes {"game.reEquipOrdonClothes", false},
 
         // Graphics
         .enableBloom {"game.enableBloom", true},
@@ -113,6 +114,7 @@ void registerSettings() {
     Register(g_userSettings.game.instantSaves);
     Register(g_userSettings.game.enableMirrorMode);
     Register(g_userSettings.game.invertCameraXAxis);
+    Register(g_userSettings.game.reEquipOrdonClothes);
     Register(g_userSettings.game.enableBloom);
     Register(g_userSettings.game.enableWaterRefraction);
     Register(g_userSettings.game.shadowResolutionMultiplier);

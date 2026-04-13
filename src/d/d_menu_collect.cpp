@@ -486,7 +486,7 @@ void dMenu_Collect2D_c::screenSet() {
     field_0x22d[0][2] = 0;
     field_0x22d[1][2] = 0;
     field_0x22d[2][2] = 0;
-    if (dComIfGs_getSelectEquipClothes() == dItemNo_WEAR_CASUAL_e) {
+    if (dComIfGs_getSelectEquipClothes() == dItemNo_WEAR_CASUAL_e IF_DUSK(&& !dComIfGs_isItemFirstBit(0x2F))) {
         field_0x22d[3][2] = 0;
         field_0x22d[4][2] = 0;
         field_0x22d[5][2] = 0;
@@ -1209,6 +1209,15 @@ void dMenu_Collect2D_c::changeClothe() {
             Z2GetAudioMgr()->seStart(Z2SE_SY_ITEM_SET_X, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
             dMeter2Info_set2DVibration();
         }
+        #if TARGET_PC
+        else if (dusk::getSettings().game.reEquipOrdonClothes) {
+            dMeter2Info_setCloth(dItemNo_WEAR_CASUAL_e, false);
+            setEquipItemFrameColorClothes(3);
+            daPy_getPlayerActorClass()->setClothesChange(0);
+            Z2GetAudioMgr()->seStart(Z2SE_SY_ITEM_SET_X, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            dMeter2Info_set2DVibration();
+        }
+        #endif
         break;
     case 4:
         if (dComIfGs_getSelectEquipClothes() != dItemNo_WEAR_ZORA_e) {

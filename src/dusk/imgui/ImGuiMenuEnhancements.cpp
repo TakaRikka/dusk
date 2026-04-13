@@ -74,6 +74,12 @@ namespace dusk {
 
                 config::ImGuiCheckbox("Invert Camera X Axis", getSettings().game.invertCameraXAxis);
 
+                config::ImGuiCheckbox("Re-Equip Ordon Clothes", getSettings().game.reEquipOrdonClothes);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Allows re-equipping the Ordon Clothes by pressing A\n"
+                                      "on the Hero's Clothes in the Collection screen.");
+                }
+
                 ImGui::EndMenu();
             }
 
