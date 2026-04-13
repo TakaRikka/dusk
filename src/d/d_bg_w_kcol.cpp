@@ -40,13 +40,10 @@ void* dBgWKCol::initKCollision(void* i_kclData) {
     Vec* p_nrm = kcl->m_nrm_data;
     KC_PrismData* p_prism = kcl->m_prism_data;
     BE(u32)* p_block = kcl->m_block_data;
-    int np = 0, nn = 0;
-    for (Vec* pw = p_pos; pw < p_nrm; pw++, np++)
+    for (Vec* pw = p_pos; pw < p_nrm; pw++)
         be_swap(*pw);
-    for (Vec* pw = p_nrm; (uintptr_t)pw < (uintptr_t)p_prism; pw++, nn++)
+    for (Vec* pw = p_nrm; (uintptr_t)pw < (uintptr_t)p_prism + sizeof(Vec); pw++)
         be_swap(*pw);
-    // for (KC_PrismData* pw = p_prism; (uintptr_t)pw < (uintptr_t)p_block; pw++)
-    //     be_swap(*pw);
 
 #else
     ((KC_Header*)i_kclData)->m_pos_data = (Vec*)((uintptr_t)((KC_Header*)i_kclData) + (uintptr_t)((KC_Header*)i_kclData)->m_pos_data);
