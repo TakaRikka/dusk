@@ -4397,22 +4397,31 @@ void daAlink_c::setSelectEquipItem(BOOL param_0) {
 #if TARGET_PC
                 if (field_0x06f0 != NULL)
 #endif
-                field_0x06f0->show();
+                {
+                    field_0x06f0->show();
+                }
+
                 if (!checkEquipHeavyBoots()) {
 #if TARGET_PC
                     if (field_0x06e4 != NULL)
 #endif
-                    field_0x06e4->show();
+                    {
+                        field_0x06e4->show();
+                    }
                 }
             } else {
 #if TARGET_PC
                 if (field_0x06f0 != NULL)
 #endif
-                field_0x06f0->hide();
+                {
+                    field_0x06f0->hide();
+                }
 #if TARGET_PC
                 if (field_0x06e4 != NULL)
 #endif
-                field_0x06e4->hide();
+                {
+                    field_0x06e4->hide();
+                }
             }
         }
 
@@ -19521,7 +19530,9 @@ int daAlink_c::draw() {
 #if TARGET_PC
             if (field_0x06f0 != NULL)
 #endif
-            field_0x06f0->hide();
+            {
+                field_0x06f0->hide();
+            }
 
 #if PLATFORM_SHIELD
             if (mProcID == PROC_HOOKSHOT_WALL_SHOOT || mProcID == PROC_HOOKSHOT_SUBJECT) {
@@ -19554,7 +19565,9 @@ int daAlink_c::draw() {
 #if TARGET_PC
                     if (field_0x06f0 != NULL)
 #endif
-                    field_0x06f0->hide();
+                    {
+                        field_0x06f0->hide();
+                    }
                 }
             }
 
@@ -19566,7 +19579,9 @@ int daAlink_c::draw() {
 #if TARGET_PC
                 if (field_0x06f0 != NULL)
 #endif
-                field_0x06f0->show();
+                {
+                    field_0x06f0->show();
+                }
             }
         }
 
