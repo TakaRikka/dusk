@@ -15,4 +15,4 @@ cp platforms/freedesktop/dusk.desktop build/appdir/usr/share/applications
 
 cd build/install
 VERSION="$DUSK_VERSION" NO_STRIP=1 "$RUNNER_WORKSPACE"/linuxdeploy-$(uname -m).AppImage \
-  --appdir "$GITHUB_WORKSPACE"/build/appdir --output appimage
+  -l /usr/lib/x86_64-linux-gnu/libusb-1.0.so --appdir "$GITHUB_WORKSPACE"/build/appdir --output appimage
