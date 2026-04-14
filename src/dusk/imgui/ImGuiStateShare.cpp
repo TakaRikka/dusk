@@ -79,7 +79,9 @@ bool ImGuiStateShare::pasteState() {
     pkt.stageName[7] = '\0';
 
     memcpy(&g_dComIfG_gameInfo.info, raw.data() + sizeof(pkt), sizeof(dSv_info_c));
-    dComIfGp_setNextStage(pkt.stageName, pkt.startPoint, pkt.roomNo, pkt.layer);
+
+    s16 spawnPoint = pkt.startPoint == -4 ? -1 : pkt.startPoint;
+    dComIfGp_setNextStage(pkt.stageName, spawnPoint, pkt.roomNo, pkt.layer);
     m_pendingInfo = g_dComIfG_gameInfo.info;
 
     m_statusMsg = fmt::format("Warping to {} room {} layer {}.", pkt.stageName, (int)pkt.roomNo, (int)pkt.layer);
