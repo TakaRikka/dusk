@@ -3,7 +3,6 @@
 
 #include "dusk/logging.h"
 #include "imgui.h"
-#include "ImGuiConsole.hpp"
 #include "ImGuiMenuTools.hpp"
 
 namespace dusk {
@@ -49,7 +48,7 @@ namespace dusk {
     void ImGuiMenuTools::ShowStubLog() {
         std::lock_guard lock(StubLogMutex);
 
-        if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F5, m_showStubLog)) {
+        if (!m_showStubLog) {
             return;
         }
 
