@@ -43,6 +43,8 @@
 #include <cstring>
 
 #include <chrono>
+#include <filesystem>
+#include <system_error>
 #include <thread>
 #include "SSystem/SComponent/c_API.h"
 #include "dusk/app_info.hpp"
@@ -366,6 +368,48 @@ static const char* CalculateConfigPath() {
     return result;
 }
 
+static void EnsureInitialPipelineCache(const char* configDir) {
+    if (configDir == nullptr) {
+        return;
+    }
+
+    const std::filesystem::path configPathFs(configDir);
+    const std::filesystem::path pipelineCachePath = configPathFs / "pipeline_cache.db";
+    if (std::filesystem::exists(pipelineCachePath)) {
+        return;
+    }
+
+    const char* basePath = SDL_GetBasePath();
+    if (basePath == nullptr) {
+        DuskLog.warn("Unable to resolve base path while seeding pipeline cache: {}", SDL_GetError());
+        return;
+    }
+
+    const std::filesystem::path initialPipelineCachePath =
+        std::filesystem::path(basePath) / "initial_pipeline_cache.db";
+    if (!std::filesystem::exists(initialPipelineCachePath)) {
+        DuskLog.info("No bundled initial pipeline cache found at '{}'", initialPipelineCachePath.string());
+        return;
+    }
+
+    std::error_code ec;
+    std::filesystem::create_directories(configPathFs, ec);
+    if (ec) {
+        DuskLog.warn("Failed to create config directory '{}' for pipeline cache: {}",
+                     configPathFs.string(), ec.message());
+        return;
+    }
+
+    std::filesystem::copy_file(initialPipelineCachePath, pipelineCachePath, std::filesystem::copy_options::none, ec);
+    if (ec) {
+        DuskLog.warn("Failed to seed pipeline cache from '{}' to '{}': {}",
+                     initialPipelineCachePath.string(), pipelineCachePath.string(), ec.message());
+        return;
+    }
+
+    DuskLog.info("Seeded pipeline cache from '{}'", initialPipelineCachePath.string());
+}
+
 static constexpr PADDefaultMapping defaultPadMapping = {
     .buttons = {
         {SDL_GAMEPAD_BUTTON_SOUTH, PAD_BUTTON_A},
@@ -444,10 +488,13 @@ int game_main(int argc, char* argv[]) {
     }
 
     configPath = CalculateConfigPath();
+    const auto startupLogLevel = static_cast<AuroraLogLevel>(parsed_arg_options["log-level"].as<uint8_t>());
+    dusk::InitializeFileLogging(configPath, startupLogLevel);
 
     dusk::config::LoadFromUserPreferences();
     ApplyCVarOverrides(parsed_arg_options["cvar"]);
     dusk::InitializeCrashReporting();
+    EnsureInitialPipelineCache(configPath);
 
     AuroraConfig config{};
     config.appName = dusk::AppName;
@@ -460,7 +507,7 @@ int game_main(int argc, char* argv[]) {
     config.windowHeight = defaultWindowHeight * 2;
     config.desiredBackend = ResolveDesiredBackend(parsed_arg_options);
     config.logCallback = &aurora_log_callback;
-    config.logLevel = (AuroraLogLevel)parsed_arg_options["log-level"].as<uint8_t>();
+    config.logLevel = startupLogLevel;
     config.mem1Size = 256 * 1024 * 1024;
     config.mem2Size = 24 * 1024 * 1024;
     config.allowJoystickBackgroundEvents = true;
@@ -542,6 +589,7 @@ int game_main(int argc, char* argv[]) {
     main01();
 
     dusk::ShutdownCrashReporting();
+    dusk::ShutdownFileLogging();
     fflush(stdout);
     fflush(stderr);
 

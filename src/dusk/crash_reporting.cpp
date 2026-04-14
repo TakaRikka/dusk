@@ -69,6 +69,13 @@ std::filesystem::path GetSentryDatabasePath() {
     return std::filesystem::path(configPath) / "sentry";
 }
 
+std::filesystem::path GetLogAttachmentPath() {
+    if (const char* logPath = GetLogFilePath()) {
+        return logPath;
+    }
+    return {};
+}
+
 std::filesystem::path GetCrashpadHandlerPath() {
     const char* basePath = SDL_GetBasePath();
     if (!basePath) {
@@ -111,6 +118,15 @@ void ConfigurePathOptions(sentry_options_t* options) {
         sentry_options_set_handler_path(options, handlerPathUtf8.c_str());
     }
 #endif
+
+    const auto logPath = GetLogAttachmentPath();
+    if (!logPath.empty()) {
+#if _WIN32
+        sentry_options_add_attachmentw(options, logPath.wstring().c_str());
+#else
+        sentry_options_add_attachment(options, logPath.string().c_str());
+#endif
+    }
 }
 #endif
 
