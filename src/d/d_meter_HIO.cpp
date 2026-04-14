@@ -2289,7 +2289,8 @@ dMeter_drawHIO_c::dMeter_drawHIO_c() {
 #if WIDESCREEN_SUPPORT
 void dMeter_drawHIO_c::updateOnWide() {
 #if TARGET_PC
-    g_drawHIO = {}; // this might be a bad idea
+    // Main HUD
+    g_drawHIO = {};
 
     g_drawHIO.mMainHUDButtonsPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mMainHUDButtonsPosX);
     g_drawHIO.mRingHUDButtonsPosX = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mRingHUDButtonsPosX);
@@ -2301,6 +2302,10 @@ void dMeter_drawHIO_c::updateOnWide() {
     g_drawHIO.mButtonCrossONPosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mButtonCrossONPosX);
     g_drawHIO.mLifeGaugePosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mLifeGaugePosX);
     g_drawHIO.mLanternMeterPosX = mDoGph_gInf_c::ScaleHUDXLeft(g_drawHIO.mLanternMeterPosX);
+
+    // River Canoe Minigame
+    g_drawHIO.mMiniGame.mCounterPosX[1] = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mMiniGame.mCounterPosX[1]);
+    g_drawHIO.mMiniGame.mIconPosX[1] = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mMiniGame.mIconPosX[1]);
 #endif
 }
 
