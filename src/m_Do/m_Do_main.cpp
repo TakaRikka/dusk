@@ -240,6 +240,8 @@ void main01(void) {
         }
 
         if (dusk::getSettings().game.enableFrameInterpolation) {
+            dusk::frame_interp::notify_presentation_frame();
+
             while (accumulator >= kSimStepSeconds) {
                 mDoCPd_c::read();
                 if (dusk::getSettings().game.enableGyroAim) {
