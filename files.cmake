@@ -1338,6 +1338,7 @@ set(DUSK_FILES
         src/d/actor/d_a_alink_dusk.cpp
         src/dusk/asserts.cpp
         src/dusk/config.cpp
+        src/dusk/crash_reporting.cpp
         src/dusk/endian.cpp
         src/dusk/extras.c
         src/dusk/extras.cpp

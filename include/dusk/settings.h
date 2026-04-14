@@ -103,6 +103,7 @@ struct UserSettings {
         ConfigVar<bool> skipPreLaunchUI;
         ConfigVar<bool> showPipelineCompilation;
         ConfigVar<bool> wasPresetChosen;
+        ConfigVar<bool> enableCrashReporting;
     } backend;
 };
 

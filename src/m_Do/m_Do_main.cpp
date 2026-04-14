@@ -46,6 +46,7 @@
 #include <thread>
 #include "SSystem/SComponent/c_API.h"
 #include "dusk/app_info.hpp"
+#include "dusk/crash_reporting.h"
 #include "dusk/dusk.h"
 #include "dusk/frame_interpolation.h"
 #include "dusk/gyro_aim.h"
@@ -446,6 +447,7 @@ int game_main(int argc, char* argv[]) {
 
     dusk::config::LoadFromUserPreferences();
     ApplyCVarOverrides(parsed_arg_options["cvar"]);
+    dusk::InitializeCrashReporting();
 
     AuroraConfig config{};
     config.appName = dusk::AppName;
@@ -501,6 +503,7 @@ int game_main(int argc, char* argv[]) {
     if (!dvd_opened) {
         // pre game launch ui main loop
         if (!launchUILoop()) {
+            dusk::ShutdownCrashReporting();
             aurora_shutdown();
             return 0;
         }
@@ -538,6 +541,7 @@ int game_main(int argc, char* argv[]) {
 
     main01();
 
+    dusk::ShutdownCrashReporting();
     fflush(stdout);
     fflush(stderr);
 

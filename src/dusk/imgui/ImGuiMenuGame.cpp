@@ -133,6 +133,9 @@ namespace dusk {
             if (ImGui::BeginMenu("Interface")) {
                 config::ImGuiCheckbox("Skip Pre-Launch UI", getSettings().backend.skipPreLaunchUI);
                 config::ImGuiCheckbox("Show Pipeline Compilation", getSettings().backend.showPipelineCompilation);
+#if DUSK_ENABLE_SENTRY_NATIVE
+                config::ImGuiCheckbox("Enable Crash Reporting", getSettings().backend.enableCrashReporting);
+#endif
 
                 ImGui::EndMenu();
             }
