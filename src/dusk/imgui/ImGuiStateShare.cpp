@@ -78,6 +78,11 @@ bool ImGuiStateShare::pasteState() {
     memcpy(&g_dComIfG_gameInfo.info, raw.data() + sizeof(pkt), sizeof(dSv_info_c));
 
     s16 spawnPoint = pkt.startPoint == -4 ? -1 : pkt.startPoint;
+    
+    if (spawnPoint == -1) {
+        dComIfGs_setRestartRoomParam(pkt.roomNo & 0x3F);
+    }
+
     dComIfGp_setNextStage(pkt.stageName, spawnPoint, pkt.roomNo, pkt.layer);
     m_pendingInfo = g_dComIfG_gameInfo.info;
 
