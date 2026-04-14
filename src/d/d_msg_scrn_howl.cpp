@@ -311,6 +311,17 @@ void dMsgScrnHowl_c::exec() {
     mpButtonIcon[1]->setAlphaRate(field_0x1994 * alphaRate);
     mpButtonText[0]->setAlphaRate(field_0x1998 * alphaRate);
     mpButtonText[1]->setAlphaRate(field_0x1998 * alphaRate);
+
+#if TARGET_PC
+    showCursor = true;
+    if (field_0x2798 == 0) {
+        if (mPlotTime != field_0x212c) {
+            field_0x212c = mPlotTime;
+        } else {
+            showCursor = false;
+        }
+    }
+#endif
 }
 
 void dMsgScrnHowl_c::drawSelf() {
@@ -494,20 +505,23 @@ void dMsgScrnHowl_c::drawWave() {
     grafContext->setScissor();
 #endif
 
+#if !TARGET_PC
     bool bVar5 = true;
     if (field_0x2798 == 0) {
         if (mPlotTime != field_0x212c) {
             field_0x212c = mPlotTime;
         } else {
-#if TARGET_PC
-            if (!dusk::getSettings().game.enableFrameInterpolation)
-#endif
-            {
-                bVar5 = false;
-            }
+            bVar5 = false;
         }
     }
-    if (bVar5) {
+#endif
+
+#if TARGET_PC
+    if (showCursor)
+#else
+    if (bVar5)
+#endif
+    {
         for (int iVar10 = 0; iVar10 < field_0x2128 - 1; iVar10++) {
             f32 local_54 = local_e0;
             f32 local_c8 = field_0x180[sVar14];
