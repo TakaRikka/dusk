@@ -2034,12 +2034,11 @@ int mDoGph_Painter() {
     #endif
 
 #ifdef TARGET_PC
-    for (u32 i = 0; i < pending_ui_ticks; ++i) {
+    for (u32 i = 0; i < pending_ui_ticks; ++i)
 #endif
+    {
         dComIfGp_particle_calcMenu();
-#ifdef TARGET_PC
     }
-#endif
 
     JFWDisplay::getManager()->setFader(mDoGph_gInf_c::getFader());
     mDoGph_gInf_c::setClearColor(mDoGph_gInf_c::getBackColor());
@@ -2599,13 +2598,12 @@ int mDoGph_Painter() {
     #endif
 
     GXSetClipMode(GX_CLIP_ENABLE);
-#ifdef TARGET_PC
-    for (u32 i = 0; i < pending_ui_ticks; ++i) {
+#if TARGET_PC
+    for (u32 i = 0; i < pending_ui_ticks; ++i)
 #endif
+    {
         dDlst_list_c::calcWipe();
-#ifdef TARGET_PC
     }
-#endif
     j3dSys.reinitGX();
 
     ortho.setOrtho(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
