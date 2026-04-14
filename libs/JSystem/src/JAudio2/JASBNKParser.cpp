@@ -69,7 +69,7 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
     JUT_ASSERT(145, list_chunk);
 
     u8* envt = JKR_NEW_ARRAY_ARGS(u8, envt_chunk->mSize, heap, 2);
-#if ANDROID
+#if TARGET_ANDROID
     JASCalc::_bcopy(envt_chunk->mData, envt, envt_chunk->mSize);
 #else
     JASCalc::bcopy(envt_chunk->mData, envt, envt_chunk->mSize);
@@ -219,7 +219,7 @@ JASBasicBank* JASBNKParser::Ver0::createBasicBank(void const* stream, JKRHeap* h
                             int size = endPtr - points;
                             JASOscillator::Point* table = JKR_NEW_ARRAY_ARGS(JASOscillator::Point, size, heap, 0);
                             JUT_ASSERT(396, table != NULL);
-#if ANDROID
+#if TARGET_ANDROID
                             JASCalc::_bcopy(points, table, size * sizeof(JASOscillator::Point));
 #else
                             JASCalc::bcopy(points, table, size * sizeof(JASOscillator::Point));
@@ -235,7 +235,7 @@ JASBasicBank* JASBNKParser::Ver0::createBasicBank(void const* stream, JKRHeap* h
                             int size = endPtr - points;
                             JASOscillator::Point* table = JKR_NEW_ARRAY_ARGS(JASOscillator::Point, size, heap, 0);
                             JUT_ASSERT(409, table != NULL);
-#if ANDROID
+#if TARGET_ANDROID
                             JASCalc::_bcopy(points, table, size * sizeof(JASOscillator::Point));
 #else
                             JASCalc::bcopy(points, table, size * sizeof(JASOscillator::Point));

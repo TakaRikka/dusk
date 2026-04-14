@@ -47,7 +47,7 @@ void fileDialogCallback(void* userdata, const char* const* filelist, [[maybe_unu
 ImGuiPreLaunchWindow::ImGuiPreLaunchWindow() = default;
 
 bool ImGuiPreLaunchWindow::isSelectedPathValid() const {
-#if ANDROID
+#if TARGET_ANDROID
     return !m_selectedIsoPath.empty(); // unsure why SDL_GetPathInfo doesnt work here
 #else
     return !m_selectedIsoPath.empty() && SDL_GetPathInfo(m_selectedIsoPath.c_str(), nullptr);

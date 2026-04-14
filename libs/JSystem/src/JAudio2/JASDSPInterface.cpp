@@ -434,7 +434,7 @@ void JASDsp::initBuffer() {
     JUT_ASSERT(354, CH_BUF);
     FX_BUF = JKR_NEW_ARRAY_ARGS(FxBuf, 4, JASDram, 0x20);
     JUT_ASSERT(356, FX_BUF);
-#if ANDROID
+#if TARGET_ANDROID
     JASCalc::_bzero(CH_BUF, sizeof(TChannel) * DSP_CHANNELS);
     JASCalc::_bzero(FX_BUF, sizeof(FxBuf) * 4);
 #else
@@ -465,7 +465,7 @@ int JASDsp::setFXLine(u8 param_0, s16* buffer, JASDsp::FxlineConfig_* param_2) {
     if (buffer != NULL && param_2 != NULL) {
         u32 bufsize = param_2->field_0xc * 0xa0;
         puVar3->field_0x4 = buffer;
-#if ANDROID
+#if TARGET_ANDROID
         JASCalc::_bzero(buffer, bufsize);
 #else
         JASCalc::bzero(buffer, bufsize);

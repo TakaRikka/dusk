@@ -33,7 +33,7 @@ void* JASTaskThread::allocCallStack(JASThreadCallback callback, const void* msg,
     }
 
     callStack->msgType_ = 1;
-#if ANDROID
+#if TARGET_ANDROID
     JASCalc::_bcopy(msg, callStack->msg.buffer, msgSize);
 #else
     JASCalc::bcopy(msg, callStack->msg.buffer, msgSize);

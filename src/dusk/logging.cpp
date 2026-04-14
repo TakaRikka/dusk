@@ -9,7 +9,7 @@
 
 #include "tracy/Tracy.hpp"
 
-#if ANDROID
+#if TARGET_ANDROID
 #include "android/log.h"
 #include <vector>
 #include <sstream>
@@ -97,7 +97,7 @@ static bool IsForStubLog(const char* message) {
     return false;
 }
 
-#if ANDROID
+#if TARGET_ANDROID
 void aurora_log_callback(AuroraLogLevel level, const char* module, const char* message,
                          unsigned int len) {
     ZoneScoped;

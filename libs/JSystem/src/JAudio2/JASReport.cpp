@@ -53,7 +53,7 @@ int JASReportCopyBuffer(char *param_1,int lines) {
             r30 = sLineMax - 1;
         }
         src = &sBuffer[r30 * 64];
-#if ANDROID
+#if TARGET_ANDROID
         JASCalc::_bcopy(src, dest, 64);
 #else
         JASCalc::bcopy(src, dest, 64);

@@ -33,7 +33,7 @@ void JASCalc::bcopyfast(const void* src, void* dest, u32 size) {
     }
 }
 
-#if ANDROID
+#if TARGET_ANDROID
 void JASCalc::_bcopy(const void* src, void* dest, u32 size) {
 #else
 void JASCalc::bcopy(const void* src, void* dest, u32 size) {
@@ -94,7 +94,7 @@ void JASCalc::bzerofast(void* dest, u32 size) {
     }
 }
 
-#if ANDROID
+#if TARGET_ANDROID
 void JASCalc::_bzero(void* dest, u32 size) {
 #else
 void JASCalc::bzero(void* dest, u32 size) {

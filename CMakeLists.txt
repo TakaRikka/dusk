@@ -301,6 +301,10 @@ if (MSVC)
     add_link_options("/INCREMENTAL")
 endif ()
 
+if(ANDROID)
+    list(APPEND GAME_COMPILE_DEFS TARGET_ANDROID=1)
+endif ()
+
 # game_debug is for game code files that we know work when compiled with DEBUG=1
 # Of course, if building a release build, this distinction is irrelevant
 add_library(game_debug OBJECT ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES}
