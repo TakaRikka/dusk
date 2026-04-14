@@ -146,6 +146,12 @@ concept ConfigValue =
 template <ConfigValue T>
 const ConfigImplBase* GetConfigImpl();
 
+template <typename T>
+struct ConfigEnumRange {
+    static constexpr auto min = std::numeric_limits<std::underlying_type_t<T>>::min();
+    static constexpr auto max = std::numeric_limits<std::underlying_type_t<T>>::max();
+};
+
 /**
  * \brief A CVar storing values.
  *
@@ -187,6 +193,11 @@ public:
         default:
             abort();
         }
+    }
+
+    [[nodiscard]] constexpr const T& getDefaultValue() const noexcept {
+        checkRegistered();
+        return defaultValue;
     }
 
     /**

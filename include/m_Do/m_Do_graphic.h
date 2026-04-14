@@ -31,6 +31,9 @@ public:
         void create();
         void remove();
         void draw();
+#if TARGET_PC
+        void draw2();
+#endif
 
         u8 getEnable() { return mEnable; }
         void setEnable(u8 i_enable) { mEnable = i_enable; }

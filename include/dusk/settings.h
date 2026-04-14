@@ -7,6 +7,20 @@ namespace dusk {
 
 using namespace config;
 
+enum class BloomMode : int {
+    Off = 0,
+    Classic = 1,
+    Dusk = 2,
+};
+
+namespace config {
+template <>
+struct ConfigEnumRange<BloomMode> {
+    static constexpr auto min = BloomMode::Off;
+    static constexpr auto max = BloomMode::Dusk;
+};
+}
+
 // Persistent user settings
 
 struct UserSettings {
@@ -53,7 +67,8 @@ struct UserSettings {
         ConfigVar<bool> invertCameraXAxis;
 
         // Graphics
-        ConfigVar<bool> enableBloom;
+        ConfigVar<BloomMode> bloomMode;
+        ConfigVar<float> bloomMultiplier;
         ConfigVar<bool> enableWaterRefraction;
         ConfigVar<bool> enableFrameInterpolation;
         ConfigVar<int> shadowResolutionMultiplier;
@@ -88,6 +103,7 @@ struct UserSettings {
         ConfigVar<bool> skipPreLaunchUI;
         ConfigVar<bool> showPipelineCompilation;
         ConfigVar<bool> wasPresetChosen;
+        ConfigVar<bool> enableCrashReporting;
     } backend;
 };
 

@@ -12,6 +12,27 @@ public:
     /* 0xf4 */ s16 angle;
 };
 
+class daObjCatDoor_Attr_c {
+public:
+    /* 0x0 */ s16 speed;
+    /* 0x2 */ s16 decay_rate;
+};
+
+class daObjCatDoor_Hio_c : public mDoHIO_entry_c {
+public:
+    daObjCatDoor_Hio_c();
+    ~daObjCatDoor_Hio_c();
+
+    void genMessage(JORMContext*);
+
+    void ct();
+    void dt();
+    void default_set();
+
+    /* 0x8 */ int field_0x8;
+    /* 0xC */ daObjCatDoor_Attr_c m_attr;
+};
+
 /**
  * @ingroup actors-objects
  * @class daObjCatDoor_c
@@ -24,7 +45,7 @@ class daObjCatDoor_c : public fopAc_ac_c {
 public:
     inline ~daObjCatDoor_c();
 
-    const s16* attr() const;
+    const daObjCatDoor_Attr_c* attr() const;
     void initBaseMtx();
     void setBaseMtx();
     void calcOpen();
@@ -45,7 +66,7 @@ public:
     }
 
     void setDoorOpen() {
-        mRotSpeed = attr()[1];
+        mRotSpeed = attr()->decay_rate;
         dBgW* bgw1 = &mDoor1.bgw;
         if (bgw1->ChkUsed()) {
             dComIfG_Bgsp().Release(bgw1);
@@ -67,7 +88,7 @@ private:
     /* 0x790 */ s16 mRotSpeed;
 
 public:
-    static s16 const M_attr[2];
+    static const daObjCatDoor_Attr_c M_attr;
 };
 
 #endif /* D_A_OBJ_CATDOOR_H */

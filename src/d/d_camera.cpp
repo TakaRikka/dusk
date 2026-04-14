@@ -20,13 +20,17 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
-#include "dusk/frame_interpolation.h"
 #include <cmath>
 #include <cstring>
 
 #if DEBUG
 #include "d/d_debug_pad.h"
 #include "d/d_debug_camera.h"
+#endif
+
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#include "dusk/logging.h"
 #endif
 
 namespace {
@@ -2047,6 +2051,18 @@ s32 dCamera_c::nextType(s32 i_curType) {
 
 bool dCamera_c::onTypeChange(s32 i_curType, s32 i_nextType) {
     daAlink_c* unusedPlayer = daAlink_getAlinkActorClass();
+
+#if TARGET_PC
+        const s32 event_type_id = specialType[CAM_TYPE_EVENT];
+        DuskLog.debug(
+            "frameInterp: onTypeChange {} -> {} (event_type_id={}, leaving_event={}, entering_event={})",
+            static_cast<int>(i_curType),
+            static_cast<int>(i_nextType),
+            static_cast<int>(event_type_id),
+            i_curType == event_type_id,
+            i_nextType == event_type_id
+        );
+#endif
 
     if (i_curType == specialType[CAM_TYPE_EVENT]) {
         if (mCamSetup.CheckFlag(0x4000)) {
@@ -10159,6 +10175,26 @@ bool dCamera_c::eventCamera(s32 param_0) {
 #if DEBUG
         OS_REPORT("camera: event: cut [%s]\n",
                               ActionNames[var_r29]);
+#endif
+
+#if TARGET_PC
+        if (dusk::getSettings().game.enableFrameInterpolation) {
+            switch (var_r29) {
+                case 3:
+                case 4:
+                case 5:
+                case 12:
+                    dusk::frame_interp::request_presentation_sync();
+                    break;
+                default:
+                    DuskLog.debug(
+                        "frameInterp: presentation sync not requested for ZEV event [{}] (staff idx {})",
+                        static_cast<const char*>(ActionNames[var_r29]),
+                        static_cast<int>(mEventData.mStaffIdx)
+                    );
+                    break;
+            }
+        }
 #endif
 
         if (getEvFloatData(&sp28, "KeepDist") != 0 && mViewCache.mDirection.R() < sp28)

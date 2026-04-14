@@ -88,7 +88,7 @@
       "name": "windows-msvc",
       "displayName": "Windows (MSVC)",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "binaryDir": "${sourceDir}/build/${presetName}",
       "architecture": {
         "value": "x64",
         "strategy": "external"
@@ -96,7 +96,7 @@
       "cacheVariables": {
         "CMAKE_C_COMPILER": "cl",
         "CMAKE_CXX_COMPILER": "cl",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install"
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install"
       },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -126,7 +126,7 @@
       "name": "windows-arm64-msvc",
       "displayName": "Windows ARM64 (MSVC)",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "binaryDir": "${sourceDir}/build/${presetName}",
       "architecture": {
         "value": "arm64",
         "strategy": "external"
@@ -134,7 +134,7 @@
       "cacheVariables": {
         "CMAKE_C_COMPILER": "cl",
         "CMAKE_CXX_COMPILER": "cl",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install",
         "AURORA_DAWN_PROVIDER": "vendor"
       },
       "vendor": {

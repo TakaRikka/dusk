@@ -41,7 +41,8 @@ UserSettings g_userSettings = {
         .invertCameraXAxis {"game.invertCameraXAxis", false},
 
         // Graphics
-        .enableBloom {"game.enableBloom", true},
+        .bloomMode {"game.bloomMode", BloomMode::Classic},
+        .bloomMultiplier {"game.bloomMultiplier", 1.0f},
         .enableWaterRefraction {"game.enableWaterRefraction", true},
         .enableFrameInterpolation = {"game.enableFrameInterpolation", false},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
@@ -75,7 +76,8 @@ UserSettings g_userSettings = {
         .graphicsBackend {"backend.graphicsBackend", "auto"},
         .skipPreLaunchUI {"backend.skipPreLaunchUI", false},
         .showPipelineCompilation {"backend.showPipelineCompilation", false},
-        .wasPresetChosen {"backend.wasPresetChosen", false}
+        .wasPresetChosen {"backend.wasPresetChosen", false},
+        .enableCrashReporting {"backend.enableCrashReporting", true}
     }
 };
 
@@ -113,7 +115,8 @@ void registerSettings() {
     Register(g_userSettings.game.instantSaves);
     Register(g_userSettings.game.enableMirrorMode);
     Register(g_userSettings.game.invertCameraXAxis);
-    Register(g_userSettings.game.enableBloom);
+    Register(g_userSettings.game.bloomMode);
+    Register(g_userSettings.game.bloomMultiplier);
     Register(g_userSettings.game.enableWaterRefraction);
     Register(g_userSettings.game.shadowResolutionMultiplier);
     Register(g_userSettings.game.enableFastIronBoots);
@@ -137,6 +140,7 @@ void registerSettings() {
     Register(g_userSettings.backend.skipPreLaunchUI);
     Register(g_userSettings.backend.showPipelineCompilation);
     Register(g_userSettings.backend.wasPresetChosen);
+    Register(g_userSettings.backend.enableCrashReporting);
 }
 
 // Transient settings

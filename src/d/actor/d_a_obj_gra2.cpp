@@ -539,7 +539,7 @@ const char* daObj_GrA_c::getResName() {
 
 u8 daObj_GrA_c::getMode() {
     u32 uVar1 = fopAcM_GetParam(this) >> 28 & 3;
-    strcpy(&field_0x744, "Obj_grA");
+    strcpy(field_0x744, "Obj_grA");
 
     switch (uVar1) {
         case 1:
