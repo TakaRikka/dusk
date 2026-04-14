@@ -18,6 +18,11 @@
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "m_Do/m_Do_graphic.h"
 
+#ifdef TARGET_PC
+#include "dusk/frame_interpolation.h"
+#include "dusk/settings.h"
+#endif
+
 class daTit_HIO_c : public JORReflexible {
 public:
     daTit_HIO_c();
@@ -343,6 +348,12 @@ void daTitle_c::fastLogoDispInit() {
     field_0x604 = 0;
     mWaitTimer = 30;
     mProcID = 5;
+
+#ifdef TARGET_PC
+    if (dusk::getSettings().game.enableFrameInterpolation) {
+        dusk::frame_interp::request_presentation_sync();
+    }
+#endif
 }
 
 void daTitle_c::fastLogoDisp() {

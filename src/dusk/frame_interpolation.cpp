@@ -65,7 +65,6 @@ bool g_recording = false;
 bool g_interpolating = false;
 bool g_sync_presentation = false;
 uint32_t g_presentation_counter = 0;
-uint32_t g_presentation_sync_end = 0;
 
 float g_step = 0.0f;
 uint32_t g_pending_presentation_ui_ticks = 0;
@@ -280,10 +279,7 @@ void begin_record() {
         return;
     }
 
-    if (g_sync_presentation && g_presentation_counter > g_presentation_sync_end) {
-        g_sync_presentation = false;
-    }
-
+    g_sync_presentation = false;
     g_previous_recording = std::move(g_current_recording);
     g_current_recording = {};
     g_current_path.clear();
@@ -320,7 +316,6 @@ void request_presentation_sync() {
         return;
     }
     g_sync_presentation = true;
-    g_presentation_sync_end = g_presentation_counter + 1;
 }
 
 bool presentation_sync_active() {
