@@ -23,6 +23,20 @@
       }
     },
     {
+      "name": "ci",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_C_COMPILER_LAUNCHER": "sccache",
+        "CMAKE_CXX_COMPILER_LAUNCHER": "sccache",
+        "DUSK_ENABLE_SENTRY_NATIVE": {
+          "type": "BOOL",
+          "value": true
+        },
+        "DUSK_SENTRY_DSN": "$env{SENTRY_DSN}",
+        "DUSK_SENTRY_ENVIRONMENT": "production"
+      }
+    },
+    {
       "name": "linux-default",
       "displayName": "Linux (default)",
       "generator": "Ninja",
@@ -343,12 +357,9 @@
       "name": "x-linux-ci",
       "hidden": true,
       "inherits": [
-        "relwithdebinfo"
-      ],
-      "cacheVariables": {
-        "CMAKE_C_COMPILER_LAUNCHER": "sccache",
-        "CMAKE_CXX_COMPILER_LAUNCHER": "sccache"
-      }
+        "relwithdebinfo",
+        "ci"
+      ]
     },
     {
       "name": "x-linux-ci-gcc",
@@ -367,12 +378,9 @@
     {
       "name": "x-macos-ci",
       "inherits": [
-        "macos-default-relwithdebinfo"
-      ],
-      "cacheVariables": {
-        "CMAKE_C_COMPILER_LAUNCHER": "sccache",
-        "CMAKE_CXX_COMPILER_LAUNCHER": "sccache"
-      }
+        "macos-default-relwithdebinfo",
+        "ci"
+      ]
     },
     {
       "name": "x-ios-ci",
@@ -398,14 +406,16 @@
       "name": "x-windows-ci",
       "hidden": true,
       "inherits": [
-        "relwithdebinfo"
+        "relwithdebinfo",
+        "ci"
       ],
-      "binaryDir": "$env{BUILD_DIR}",
       "cacheVariables": {
-        "CMAKE_INSTALL_PREFIX": "$env{BUILD_DIR}/install",
-        "CMAKE_C_COMPILER_LAUNCHER": "sccache",
-        "CMAKE_CXX_COMPILER_LAUNCHER": "sccache",
-        "CMAKE_MSVC_DEBUG_INFORMATION_FORMAT": "Embedded"
+        "CMAKE_MSVC_DEBUG_INFORMATION_FORMAT": "Embedded",
+        "CMAKE_TOOLCHAIN_FILE": {
+          "type": "FILEPATH",
+          "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+        },
+        "VCPKG_TARGET_TRIPLET": "x64-windows"
       }
     },
     {
