@@ -310,6 +310,9 @@ private:
     /* 0x03410 */ dDlst_shadowReal_c mReal[8];
     /* 0x15EB0 */ TGXTexObj mShadowTexObj[2];
     /* 0x15EF0 */ void* mShadowTexData[2];
+    #if TARGET_PC
+    int mTexResScale;
+    #endif
 };
 
 class dDlst_window_c {

@@ -1440,16 +1440,17 @@ void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* pa
 
 void dDlst_shadowControl_c::init() {
 #if TARGET_PC
-    u16 resMult = dusk::getSettings().game.shadowResolutionMultiplier;
+    mTexResScale = dusk::getSettings().game.shadowResolutionMultiplier;
     // Increase shadow map resolution
     u16 l_realImageSize[2] =
     {
-        static_cast<u16>(192 * resMult),
-        static_cast<u16>(64 * resMult)
+        static_cast<u16>(192 * mTexResScale),
+        static_cast<u16>(64 * mTexResScale)
     };
 #else
     static u16 l_realImageSize[2] = {192, 64};
 #endif
+
     for (int i = 0; i < 2; i++) {
         u16 size = l_realImageSize[i];
 
@@ -1458,7 +1459,10 @@ void dDlst_shadowControl_c::init() {
 #else
         u32 buffer_size = GXGetTexBufferSize(size, size, 5, GX_DISABLE, 0);
 #endif
+        delete mShadowTexData[i];
         mShadowTexData[i] = JKR_NEW_ARRAY_ARGS(u8, buffer_size, 0x20);
+
+        mShadowTexObj[i].reset();
         GXInitTexObj(&mShadowTexObj[i], mShadowTexData[i], size, size, GX_TF_RGB5A3, GX_CLAMP,
                      GX_CLAMP, GX_DISABLE);
         GXInitTexObjLOD(&mShadowTexObj[i], GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE,
@@ -1479,25 +1483,13 @@ void dDlst_shadowControl_c::reset() {
     mRealNum = 0;
     field_0x4 = NULL;
 
-#ifdef TARGET_PC
-    for (int i = 0; i < ARRAY_SIZE(mShadowTexObj); i++)
-        mShadowTexObj[i].reset();
+#if TARGET_PC
+    if (mTexResScale != dusk::getSettings().game.shadowResolutionMultiplier)
+        init();
 #endif
 }
 
-#if TARGET_PC
-int lastShadowValue = 0;
-#endif
-
 void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
-    #if TARGET_PC
-    if (lastShadowValue != dusk::getSettings().game.shadowResolutionMultiplier) {
-        reset();
-        init();
-        lastShadowValue = dusk::getSettings().game.shadowResolutionMultiplier;
-    }
-    #endif
-
     static u8 l_matDL[] ATTRIBUTE_ALIGN(32) = {
         0x10, 0x00, 0x00, 0x10, 0x0E, 0x00, 0x00, 0x04, 0x00, 0x10, 0x00, 0x00, 0x10, 0x10,
         0x00, 0x00, 0x04, 0x00, 0x61, 0x28, 0x38, 0x00, 0x00, 0x61, 0xC0, 0x08, 0xFF, 0xF2,
