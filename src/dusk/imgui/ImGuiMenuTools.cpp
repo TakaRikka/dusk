@@ -53,6 +53,7 @@ namespace dusk {
             ImGui::MenuItem("Map Loader", nullptr, &m_showMapLoader);
             ImGui::MenuItem("Player Info", nullptr, &m_showPlayerInfo);
             ImGui::MenuItem("Save Editor", nullptr, &m_showSaveEditor);
+            ImGui::MenuItem("State Share", hotkeys::SHOW_STATE_SHARE, &m_showStateShare);
             ImGui::MenuItem("Audio Debug", hotkeys::SHOW_AUDIO_DEBUG, &m_showAudioDebug);
 
             if (!dusk::IsGameLaunched) {
