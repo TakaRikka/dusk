@@ -13,7 +13,11 @@ JASBasicInst::JASBasicInst() {
     mPitch = 1.0;
     mKeymapCount = 0;
     mKeymap = NULL;
+#if TARGET_ANDROID
+    JASCalc::_bzero(field_0xc, sizeof(field_0xc));
+#else
     JASCalc::bzero(field_0xc, sizeof(field_0xc));
+#endif
 }
 
 JASBasicInst::~JASBasicInst() {

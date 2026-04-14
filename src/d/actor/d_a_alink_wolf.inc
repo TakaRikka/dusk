@@ -3954,7 +3954,13 @@ int daAlink_c::procWolfHowlDemoInit() {
             mZ2WolfHowlMgr.setCorrectCurve(-1);
         }
     } else {
+        #if TARGET_PC
+        if (mZ2WolfHowlMgr.getCorrectCurveID() != 9) {
+            mZ2WolfHowlMgr.setCorrectCurve(-1);
+        }
+        #else
         mZ2WolfHowlMgr.setCorrectCurve(-1);
+        #endif
     }
 
     mNormalSpeed = 0.0f;
@@ -4095,6 +4101,19 @@ int daAlink_c::procWolfHowlDemo() {
                         dStage_changeScene(mProcVar0.mHowlExitID, 0.0f, 0, fopAcM_GetRoomNo(this),
                                            shape_angle.y, -1);
                     } else {
+                        #if TARGET_PC
+                        if (daAlink_getAlinkActorClass()->getCorrectCurveID() == 9) {
+                            if (dComIfGp_roomControl_getTimePass()) {
+                                g_env_light.time_change_rate = 1.0f;
+                                dComIfGp_event_reset();
+                                dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
+                            } else {
+                                setWolfHowlNotHappen(isSkipEdge);
+                            }
+                            return 1;
+                        }
+                        #endif
+
                         fopAc_ac_c* actor_p = NULL;
                         if (gwolf_p == NULL) {
                             fopAcIt_Executor((fopAcIt_ExecutorFunc)daAlink_searchWolfHowl,

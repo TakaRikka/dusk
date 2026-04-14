@@ -47,7 +47,11 @@ void fileDialogCallback(void* userdata, const char* const* filelist, [[maybe_unu
 ImGuiPreLaunchWindow::ImGuiPreLaunchWindow() = default;
 
 bool ImGuiPreLaunchWindow::isSelectedPathValid() const {
+#if TARGET_ANDROID
+    return !m_selectedIsoPath.empty(); // unsure why SDL_GetPathInfo doesnt work here
+#else
     return !m_selectedIsoPath.empty() && SDL_GetPathInfo(m_selectedIsoPath.c_str(), nullptr);
+#endif
 }
 
 void ImGuiPreLaunchWindow::draw() {
@@ -80,12 +84,20 @@ void ImGuiPreLaunchWindow::draw() {
 
     float iconSize = 150.f;
     ImGui::SameLine(windowSize.x / 2 - iconSize + (iconSize / 2));
-    if (ImGuiEngine::duskIcon != 0)
-        ImGui::Image(ImGuiEngine::duskIcon, ImVec2{iconSize, iconSize});
+    if (ImGuiEngine::orgIcon != 0) {
+        ImGui::Image(ImGuiEngine::orgIcon, ImVec2{iconSize, iconSize});
+    }
     ImGuiTextCenter("Twilit Realm presents");
-    ImGui::PushFont(ImGuiEngine::fontExtraLarge);
-    ImGuiTextCenter("Dusk");
-    ImGui::PopFont();
+    if (ImGuiEngine::duskLogo) {
+        ImGui::NewLine();
+        float width = iconSize * 2.5f;
+        ImGui::SameLine(windowSize.x / 2 - width + (width / 2));
+        ImGui::Image(ImGuiEngine::duskLogo, ImVec2{width, iconSize});
+    } else {
+        ImGui::PushFont(ImGuiEngine::fontExtraLarge);
+        ImGuiTextCenter("Dusk");
+        ImGui::PopFont();
+    }
 
     (this->*drawTable[m_CurMenu])();
 
@@ -98,7 +110,7 @@ void ImGuiPreLaunchWindow::drawMainMenu() {
 
     ImGui::PushFont(ImGuiEngine::fontLarge);
 
-    if (m_selectedIsoPath.empty() || !SDL_GetPathInfo(m_selectedIsoPath.c_str(), nullptr)) {
+    if (!isSelectedPathValid()) {
         if (ImGuiButtonCenter("Select disc image...")) {
             SDL_ShowOpenFileDialog(&fileDialogCallback, this, aurora::window::get_sdl_window(),
                                    skGameDiscFileFilters.data(), int(skGameDiscFileFilters.size()),

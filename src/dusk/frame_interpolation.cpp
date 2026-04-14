@@ -63,6 +63,10 @@ bool s_initialized = false;
 bool g_enabled = false;
 bool g_recording = false;
 bool g_interpolating = false;
+bool g_sync_presentation = false;
+uint32_t g_presentation_counter = 0;
+uint32_t g_presentation_sync_end = 0;
+
 float g_step = 0.0f;
 uint32_t g_pending_presentation_ui_ticks = 0;
 uint32_t g_current_presentation_ui_ticks = 0;
@@ -235,7 +239,7 @@ void interpolate_branch(const Path& old_path, const Path& new_path, float step) 
 }
 
 const Mtx* resolve_replacement(const Mtx* source, Mtx* scratch) {
-    if (!g_interpolating || source == nullptr) {
+    if (!g_interpolating || source == nullptr || dusk::frame_interp::presentation_sync_active()) {
         return source;
     }
 
@@ -268,11 +272,16 @@ void begin_record() {
     ensure_initialized();
     if (!g_enabled) {
         g_interpolating = false;
+        g_sync_presentation = false;
         g_previous_recording = {};
         g_current_recording = {};
         g_current_path.clear();
         clear_replacements();
         return;
+    }
+
+    if (g_sync_presentation && g_presentation_counter > g_presentation_sync_end) {
+        g_sync_presentation = false;
     }
 
     g_previous_recording = std::move(g_current_recording);
@@ -292,21 +301,38 @@ void interpolate(float step) {
     ensure_initialized();
     clear_replacements();
     g_step = std::clamp(step, 0.0f, 1.0f);
-    g_interpolating = g_enabled && !g_recording && has_recording_data(g_current_recording);
+    g_interpolating = g_enabled && !g_recording && !g_sync_presentation && has_recording_data(g_current_recording);
     if (!g_interpolating) {
         return;
     }
+    const Path& old_root = has_recording_data(g_previous_recording) ? g_previous_recording.root : g_current_recording.root;
+    interpolate_branch(old_root, g_current_recording.root, g_step);
+}
 
-    if (!has_recording_data(g_previous_recording)) {
-        interpolate_branch(g_current_recording.root, g_current_recording.root, g_step);
+void notify_presentation_frame() {
+    ensure_initialized();
+    ++g_presentation_counter;
+}
+
+void request_presentation_sync() {
+    ensure_initialized();
+    if (!g_enabled) {
         return;
     }
+    g_sync_presentation = true;
+    g_presentation_sync_end = g_presentation_counter + 1;
+}
 
-    interpolate_branch(g_previous_recording.root, g_current_recording.root, g_step);
+bool presentation_sync_active() {
+    if (!s_initialized || !g_enabled) {
+        return false;
+    }
+    return g_sync_presentation;
 }
 
 float get_interpolation_step() {
-    return g_step;
+    ensure_initialized();
+    return presentation_sync_active() ? 1.0f : g_step;
 }
 
 void notify_sim_tick_complete() {
@@ -371,7 +397,7 @@ void record_final_mtx_raw(const Mtx* dest, const Mtx src) {
 }
 
 bool lookup_replacement(const void* source, Mtx out) {
-    if (!s_initialized || !g_interpolating || source == nullptr) {
+    if (presentation_sync_active() || !g_interpolating || source == nullptr) {
         return false;
     }
 
@@ -385,7 +411,7 @@ bool lookup_replacement(const void* source, Mtx out) {
 }
 
 bool lookup_concat_replacement(const void* lhs, const void* rhs, Mtx out) {
-    if (!s_initialized || !g_interpolating || lhs == nullptr || rhs == nullptr) {
+    if (presentation_sync_active() || !g_interpolating || lhs == nullptr || rhs == nullptr) {
         return false;
     }
 
@@ -393,9 +419,7 @@ bool lookup_concat_replacement(const void* lhs, const void* rhs, Mtx out) {
     Mtx rhs_scratch;
     const Mtx* resolved_lhs = resolve_replacement(reinterpret_cast<const Mtx*>(lhs), &lhs_scratch);
     const Mtx* resolved_rhs = resolve_replacement(reinterpret_cast<const Mtx*>(rhs), &rhs_scratch);
-    if (resolved_lhs == reinterpret_cast<const Mtx*>(lhs) &&
-        resolved_rhs == reinterpret_cast<const Mtx*>(rhs))
-    {
+    if (resolved_lhs == reinterpret_cast<const Mtx*>(lhs) && resolved_rhs == reinterpret_cast<const Mtx*>(rhs)) {
         return false;
     }
 

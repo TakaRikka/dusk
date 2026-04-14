@@ -290,6 +290,7 @@ namespace dusk {
             m_menuTools.ShowAudioDebug();
             m_menuTools.ShowSaveEditor();
         }
+        m_menuTools.ShowStateShare();
         DuskDebugPad(); // temporary, remove later
 
         // Only show cursor when menu or any windows are open

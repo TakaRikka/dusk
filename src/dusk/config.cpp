@@ -5,6 +5,7 @@
 
 #include "aurora/lib/logging.hpp"
 #include "dusk/io.hpp"
+#include "dusk/settings.h"
 
 #include <limits>
 #include <string>
@@ -37,9 +38,24 @@ const ConfigImplBase* ConfigVarBase::getImpl() const noexcept {
     return impl;
 }
 
+template <typename T>
+static T sanitizeEnumValue(const ConfigVar<T>& cVar, T value) {
+    if constexpr (std::is_enum_v<T>) {
+        using Underlying = std::underlying_type_t<T>;
+        const Underlying raw = static_cast<Underlying>(value);
+        const Underlying min = static_cast<Underlying>(ConfigEnumRange<T>::min);
+        const Underlying max = static_cast<Underlying>(ConfigEnumRange<T>::max);
+        if (raw < min || raw > max) {
+            return cVar.getDefaultValue();
+        }
+    }
+
+    return value;
+}
+
 template<ConfigValue T>
 void ConfigImpl<T>::loadFromJson(ConfigVar<T>& cVar, const json& jsonValue) {
-    cVar.setValue(jsonValue.get<T>(), false);
+    cVar.setValue(sanitizeEnumValue(cVar, jsonValue.get<T>()), false);
 }
 
 template<ConfigValue T>
@@ -85,6 +101,28 @@ static void loadFromArgImpl(ConfigVar<std::string>& cVar, const std::string_view
     cVar.setOverrideValue(std::string(stringValue));
 }
 
+template<ConfigValue T> requires std::is_enum_v<T>
+static void loadFromArgImpl(ConfigVar<T>& cVar, const std::string_view stringValue) {
+    using Underlying = std::underlying_type_t<T>;
+    const std::string str(stringValue);
+
+    if constexpr (std::is_signed_v<Underlying>) {
+        const auto result = std::stoll(str);
+        if (result >= std::numeric_limits<Underlying>::min() && result <= std::numeric_limits<Underlying>::max()) {
+            cVar.setOverrideValue(sanitizeEnumValue(cVar, static_cast<T>(result)));
+        } else {
+            throw std::out_of_range("Value is too large");
+        }
+    } else {
+        const auto result = std::stoull(str);
+        if (result <= std::numeric_limits<Underlying>::max()) {
+            cVar.setOverrideValue(sanitizeEnumValue(cVar, static_cast<T>(result)));
+        } else {
+            throw std::out_of_range("Value is too large");
+        }
+    }
+}
+
 template<ConfigValue T>
 void ConfigImpl<T>::loadFromArg(ConfigVar<T>& cVar, const std::string_view stringValue) {
     loadFromArgImpl(cVar, stringValue);
@@ -115,6 +153,7 @@ namespace dusk::config {
     template class ConfigImpl<f32>;
     template class ConfigImpl<f64>;
     template class ConfigImpl<std::string>;
+    template class ConfigImpl<dusk::BloomMode>;
 }
 
 void dusk::config::Register(ConfigVarBase& configVar) {

@@ -4394,13 +4394,34 @@ void daAlink_c::setSelectEquipItem(BOOL param_0) {
     if (mClothesChangeWaitTimer == 0) {
         if (checkZoraWearAbility()) {
             if (checkZoraWearMaskDraw()) {
-                field_0x06f0->show();
+#if TARGET_PC
+                if (field_0x06f0 != NULL)
+#endif
+                {
+                    field_0x06f0->show();
+                }
+
                 if (!checkEquipHeavyBoots()) {
-                    field_0x06e4->show();
+#if TARGET_PC
+                    if (field_0x06e4 != NULL)
+#endif
+                    {
+                        field_0x06e4->show();
+                    }
                 }
             } else {
-                field_0x06f0->hide();
-                field_0x06e4->hide();
+#if TARGET_PC
+                if (field_0x06f0 != NULL)
+#endif
+                {
+                    field_0x06f0->hide();
+                }
+#if TARGET_PC
+                if (field_0x06e4 != NULL)
+#endif
+                {
+                    field_0x06e4->hide();
+                }
             }
         }
 
@@ -19295,11 +19316,20 @@ void daAlink_c::setWaterDropColor(const J3DGXColorS10* i_color) {
 
     if (!checkNoResetFlg2(FLG2_UNK_80000)) {
         if (checkZoraWearAbility()) {
+#if TARGET_PC
+            if (field_0x064C->getMaterialNum() >= 14)
+#endif
+            {
             field_0x064C->getMaterialNodePointer(13)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(0)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(1)->setTevColor(1, i_color);
             mpLinkHatModel->getModelData()->getMaterialNodePointer(1)->setTevColor(1, i_color);
+            }
         } else if (checkMagicArmorWearAbility()) {
+#if TARGET_PC
+            if (field_0x064C->getMaterialNum() >= 12)
+#endif
+            {
             field_0x064C->getMaterialNodePointer(11)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(10)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(9)->setTevColor(1, i_color);
@@ -19307,11 +19337,21 @@ void daAlink_c::setWaterDropColor(const J3DGXColorS10* i_color) {
             field_0x064C->getMaterialNodePointer(6)->setTevColor(1, i_color);
             mpLinkHatModel->getModelData()->getMaterialNodePointer(2)->setTevColor(1, i_color);
             mpLinkHatModel->getModelData()->getMaterialNodePointer(1)->setTevColor(1, i_color);
+            }
         } else if (checkCasualWearFlg()) {
+#if TARGET_PC
+            if (field_0x064C->getMaterialNum() >= 8)
+#endif
+            {
             field_0x064C->getMaterialNodePointer(7)->setTevColor(1, i_color);
             mpLinkHatModel->getModelData()->getMaterialNodePointer(0)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(5)->setTevColor(1, var_r31);
+            }
         } else {
+#if TARGET_PC
+            if (field_0x064C->getMaterialNum() >= 18)
+#endif
+            {
             field_0x064C->getMaterialNodePointer(17)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(9)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(0)->setTevColor(1, i_color);
@@ -19321,6 +19361,7 @@ void daAlink_c::setWaterDropColor(const J3DGXColorS10* i_color) {
             field_0x064C->getMaterialNodePointer(16)->setTevColor(1, var_r31);
             field_0x064C->getMaterialNodePointer(15)->setTevColor(1, var_r31);
             field_0x064C->getMaterialNodePointer(14)->setTevColor(1, var_r31);
+            }
         }
     }
 }
@@ -19506,7 +19547,12 @@ int daAlink_c::draw() {
                 field_0x06e8->hide();
             }
 
-            field_0x06f0->hide();
+#if TARGET_PC
+            if (field_0x06f0 != NULL)
+#endif
+            {
+                field_0x06f0->hide();
+            }
 
 #if PLATFORM_SHIELD
             if (mProcID == PROC_HOOKSHOT_WALL_SHOOT || mProcID == PROC_HOOKSHOT_SUBJECT) {
@@ -19536,7 +19582,12 @@ int daAlink_c::draw() {
                 }
 
                 if (!checkZoraWearMaskDraw() && checkZoraWearAbility()) {
-                    field_0x06f0->hide();
+#if TARGET_PC
+                    if (field_0x06f0 != NULL)
+#endif
+                    {
+                        field_0x06f0->hide();
+                    }
                 }
             }
 
@@ -19545,7 +19596,12 @@ int daAlink_c::draw() {
             }
 
             if (checkZoraWearMaskDraw() || !checkZoraWearAbility()) {
-                field_0x06f0->show();
+#if TARGET_PC
+                if (field_0x06f0 != NULL)
+#endif
+                {
+                    field_0x06f0->show();
+                }
             }
         }
 

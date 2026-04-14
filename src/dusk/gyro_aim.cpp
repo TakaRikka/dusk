@@ -61,9 +61,8 @@ void read(float dt, bool context_active) {
     float yaw_rate = apply_deadband(s_smooth_gy);
     float pitch_rate = apply_deadband(s_smooth_gx);
 
-    const float sens = dusk::getSettings().game.gyroAimSensitivity;
-    s_pending_yaw_rad += yaw_rate * dt * sens;
-    s_pending_pitch_rad += pitch_rate * dt * sens;
+    s_pending_yaw_rad += yaw_rate * dt * dusk::getSettings().game.gyroAimSensitivityX;
+    s_pending_pitch_rad += pitch_rate * dt * dusk::getSettings().game.gyroAimSensitivityY;
 }
 
 void consumeAimDeltas(float& out_yaw_rad, float& out_pitch_rad) {

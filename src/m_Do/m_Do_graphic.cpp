@@ -1232,12 +1232,12 @@ void mDoGph_drawFilterQuad(s8 param_0, s8 param_1) {
 void mDoGph_gInf_c::bloom_c::create() {
     if (m_buffer == NULL) {
 #ifdef TARGET_PC
-        u32 size = 0x20; // No need to allocate memory for texture
+        m_buffer = (void*)1;
 #else
         u32 size = GXGetTexBufferSize(FB_WIDTH / 2, FB_HEIGHT / 2, GX_TF_RGBA8, GX_FALSE, 0);
-#endif
         m_buffer = mDoExt_getArchiveHeap()->alloc(size, -32);
         JUT_ASSERT(1621, m_buffer != NULL);
+#endif
 
         mEnable = false;
         mMode = 0;
@@ -1249,20 +1249,289 @@ void mDoGph_gInf_c::bloom_c::create() {
 }
 
 void mDoGph_gInf_c::bloom_c::remove() {
+#if !TARGET_PC
     if (m_buffer != NULL) {
         mDoExt_getArchiveHeap()->free(m_buffer);
         m_buffer = NULL;
     }
+#endif
     mMonoColor.a = 0;
 }
 
-void mDoGph_gInf_c::bloom_c::draw() {
 #if TARGET_PC
+static void CopyToTexObj(GXTexObj* pDst, uintptr_t texID, u16 dstWidth, u16 dstHeight, GXTexFmt dstFmt = GX_TF_RGBA8) {
+    GXSetTexCopyDst(dstWidth, dstHeight, dstFmt, FALSE);
+    GXCopyTex((void*)texID, false);
+    GXInitTexObj(pDst, (void*)texID, dstWidth, dstHeight, dstFmt, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(pDst, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+}
+
+void mDoGph_gInf_c::bloom_c::draw2() {
     ZoneScoped;
-    if (!dusk::getSettings().game.enableBloom) {
+    // if (!dusk::getSettings().game.enableBloom) {
+    //     return;
+    // }
+
+    bool enabled = mEnable;
+    if (mMonoColor.a == 0 && !enabled)
+        return;
+
+    f32 width = mDoGph_gInf_c::getWidth();
+    f32 height = mDoGph_gInf_c::getHeight();
+
+    GXLoadTexObj(getFrameBufferTexObj(), GX_TEXMAP0);
+    GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_RED, GX_CH_RED, GX_CH_GREEN);
+    GXSetTevSwapModeTable(GX_TEV_SWAP3, GX_CH_BLUE, GX_CH_BLUE, GX_CH_BLUE, GX_CH_ALPHA);
+    GXSetZCompLoc(1);
+    GXSetZMode(0, GX_ALWAYS, 0);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+    GXSetFogRangeAdj(0, 0, 0);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetDither(1);
+    Mtx44 ortho;
+    C_MTXOrtho(ortho, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
+    GXLoadPosMtxImm(cMtx_getIdentity(), 0);
+    GXSetProjection(ortho, GX_ORTHOGRAPHIC);
+    GXSetCurrentMtx(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S8, 0);
+
+    // Set up viewports for our pyramid.
+    enum { MaxDivNum = 10 };
+    enum {
+        Pass0,
+        FinalPass,
+        BlurPass0, BlurPassN = BlurPass0 + MaxDivNum,
+        MaxTexNum,
+    };
+    struct {
+        u16 x;
+        u16 y;
+        u16 w;
+        u16 h;
+    } divRects[MaxDivNum];
+    divRects[0] = {
+        0,
+        0,
+        static_cast<u16>(width),
+        static_cast<u16>(height),
+    };
+    divRects[1] = {
+        0,
+        0,
+        static_cast<u16>(divRects[0].w / 2),
+        static_cast<u16>(divRects[0].h / 2),
+    };
+    divRects[2] = {
+        divRects[1].w,
+        0,
+        static_cast<u16>(divRects[1].w / 2),
+        static_cast<u16>(divRects[1].h / 2),
+    };
+    for (int i = 3; i < ARRAY_SIZE(divRects); i++) {
+        const auto& prev = divRects[i - 1];
+        divRects[i] = {
+            prev.x,
+            static_cast<u16>(prev.y + prev.h),
+            static_cast<u16>(prev.w / 2),
+            static_cast<u16>(prev.h / 2),
+        };
+    }
+
+    auto divCopySrc = [&](int divNo) {
+        auto const& rect = divRects[divNo];
+        GXSetTexCopySrc(rect.x, rect.y, rect.w, rect.h);
+    };
+
+    TGXTexObj tmpTex[MaxTexNum];
+    auto divCopyTex = [&](uintptr_t texNo, int divNo) -> GXTexObj * {
+        auto const& rect = divRects[divNo];
+        CopyToTexObj(&tmpTex[texNo], texNo, rect.w, rect.h);
+        return &tmpTex[texNo];
+    };
+    
+    auto divQuad = [&](int divNo) {
+        auto const& rect = divRects[divNo];
+        f32 x0 = rect.x / width;
+        f32 y0 = rect.y / height;
+        f32 x1 = (rect.x + rect.w) / width;
+        f32 y1 = (rect.y + rect.h) / height;
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        GXPosition3f32(x0, y0, -5);
+        GXTexCoord2s8(0, 0);
+        GXPosition3f32(x1, y0, -5);
+        GXTexCoord2s8(1, 0);
+        GXPosition3f32(x1, y1, -5);
+        GXTexCoord2s8(1, 1);
+        GXPosition3f32(x0, y1, -5);
+        GXTexCoord2s8(0, 1);
+        GXEnd();
+    };
+
+    if (mMonoColor.a != 0) {
+        GXSetNumTevStages(1);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_C2, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A2);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP1, GX_TEV_SWAP1);
+        GXSetTevColor(GX_TEVREG2, mMonoColor);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_OR);
+        divQuad(0);
+    }
+
+    if (enabled) {
+        GXCreateFrameBuffer(width * 0.75f, height * 0.5f);
+        GXSetViewport(0.0f, 0.0f, width, height, 0.1f, 1.0f); // use oversized viewport to make the math easier
+
+        GXSetNumTevStages(3);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_TEXC, GX_CC_TEXA, GX_CC_HALF, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP1, GX_TEV_SWAP1);
+        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_TEXC, GX_CC_CPREV, GX_CC_HALF, GX_CC_C0);
+        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP3, GX_TEV_SWAP3);
+        GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+        GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_OR);
+        GXColorS10 tevColor0 = {(s16)-mPoint, (s16)-mPoint, (s16)-mPoint, 0x40};
+        GXSetTevColorS10(GX_TEVREG0, tevColor0);
+        GXPixModeSync();
+
+        // Create thresholded 1/2 image.
+        divQuad(1);
+
+        GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_RED, GX_CH_RED, GX_CH_ALPHA);
+        GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
+        GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+
+        // Downsample and filter from 1/2 EFB into 1/4.
+        divCopySrc(1);
+        GXTexObj* texPass0 = divCopyTex(Pass0, 2);
+        GXLoadTexObj(texPass0, GX_TEXMAP0);
+
+        f32 blurScale = mBlureSize * ((448.0f / getHeight()) / 6400.0f);
+
+        // Setup blur filter TEV.
+        GXSetNumTexGens(8);
+
+            u32 texMtxID = GX_TEXMTX0;
+            int angle = 0;
+            for (int texCoord = (int)GX_TEXCOORD0; texCoord < (int)GX_MAX_TEXCOORD; texCoord++) {
+                GXSetTexCoordGen((GXTexCoordID)texCoord, GX_TG_MTX2x4, GX_TG_TEX0, texMtxID);
+                mDoMtx_stack_c::transS((blurScale * cM_scos(angle)) * getInvScale(),
+                                       blurScale * cM_ssin(angle), 0.0f);
+                GXLoadTexMtxImm(mDoMtx_stack_c::get(), texMtxID, GX_MTX2x4);
+                texMtxID += 3;
+                angle += 0x2000;
+            }
+
+        GXSetNumTevStages(8);
+        for (int stage = 0; stage < 8; stage++) {
+            GXTevStageID tevStage = (GXTevStageID)stage;
+            GXSetTevOrder(tevStage, (GXTexCoordID)stage, GX_TEXMAP0, GX_COLOR_NULL);
+            GXSetTevColorIn(tevStage, GX_CC_ZERO, GX_CC_TEXC, GX_CC_A1, stage == 0 ? GX_CC_ZERO : GX_CC_CPREV);
+            GXSetTevColorOp(tevStage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaIn(tevStage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+            GXSetTevAlphaOp(tevStage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        }
+
+        // Successively downsample and apply blurs.
+        static int divStart = 2;
+        static int divNum = 6; // inclusive
+
+        // The original mBlureRatio is multiplied into each sample, of which there are 8 samples originally.
+        // This is applied over two passes, the second one with an alpha of 25%; however, the clipping that this introduces is a bit integral to the look,
+        // so we do the same thing, letting it clip.
+        float brightnessF32 = (mBlureRatio * 16 / 255.0f);
+            
+        // Distribute the brightness through the total number of passes.
+        f32 totalNumPasses = (divNum - divStart + 1);
+        float brightnessPerPass = 255.0f * powf(brightnessF32, 1.0f / totalNumPasses);
+        GXSetTevColorS10(GX_TEVREG1, {0, 0, 0, s16(brightnessPerPass / 8)});
+
+        for (int i = divStart; i < divNum; i++) {
+            // Apply blur filter.
+            divQuad(i);
+
+            // Copy to next layer.
+            divCopySrc(i);
+
+            // Set up for the next pass down.
+            GXTexObj * blurTex = divCopyTex(BlurPass0 + i, i + 1);
+            GXLoadTexObj(blurTex, GX_TEXMAP0);
+        }
+
+        // All the way down at the bottom.
+        divQuad(divNum);
+
+        // Now successively alpha blend back up, don't blur anymore.
+        GXSetNumTevStages(1);
+        GXSetTevColorS10(GX_TEVREG1, {0, 0, 0, s16(255)});
+        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_ONE, GX_LO_OR);
+        for (int i = divNum; i > divStart; i--) {
+            float alpha = 255.0f * powf(0.25f * dusk::getSettings().game.bloomMultiplier.getValue(), 1.0f / (divNum - i + 1));
+            GXSetTevColorS10(GX_TEVREG0, {0, 0, 0, s16(alpha)});
+
+            divCopySrc(i);
+            GXTexObj* upTex = divCopyTex(BlurPass0 + i, i);
+            GXLoadTexObj(upTex, GX_TEXMAP0);
+            divQuad(i - 1);
+        }
+
+        // Now that we've upsampled and filtered our final bloom, copy 1/4 buffer.
+        divCopySrc(2);
+        GXTexObj* texFinal = divCopyTex(FinalPass, 2);
+        GXLoadTexObj(texFinal, GX_TEXMAP0);
+
+        GXRestoreFrameBuffer();
+        GXSetViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f);
+
+        // Now blend our bloom into the real FB.
+        GXSetTevColor(GX_TEVREG0, mBlendColor);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_C0, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetBlendMode(GX_BM_BLEND, mMode == 1 ? GX_BL_INVDSTCLR : GX_BL_ONE, GX_BL_SRCALPHA,
+                       GX_LO_OR);
+        GXPixModeSync();
+        GXInvalidateTexAll();
+        divQuad(0);
+    }
+}
+#endif
+
+void mDoGph_gInf_c::bloom_c::draw() {
+    ZoneScoped;
+    if (dusk::getSettings().game.bloomMode.getValue() == dusk::BloomMode::Dusk) {
+        draw2();
         return;
     }
-#endif
+    if (dusk::getSettings().game.bloomMode.getValue() != dusk::BloomMode::Classic) {
+        return;
+    }
+
     bool enabled = mEnable && m_buffer != NULL;
     if (mMonoColor.a != 0 || enabled) {
 #if TARGET_PC
@@ -1351,7 +1620,12 @@ void mDoGph_gInf_c::bloom_c::draw() {
             GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
                             GX_TEVPREV);
             GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_OR);
-            GXColorS10 tevColor0 = {(s16)-mPoint, (s16)-mPoint, (s16)-mPoint, 0x40};
+#if TARGET_PC
+            s16 bloomAlpha = s16(0x40 * dusk::getSettings().game.bloomMultiplier.getValue());
+#else
+            s16 bloomAlpha = 0x40;
+#endif
+            GXColorS10 tevColor0 = {(s16)-mPoint, (s16)-mPoint, (s16)-mPoint, bloomAlpha};
             GXSetTevColorS10(GX_TEVREG0, tevColor0);
             GXColor tevColor1 = {mBlureRatio, mBlureRatio, mBlureRatio, mBlureRatio};
             GXSetTevColor(GX_TEVREG1, tevColor1);
@@ -1376,24 +1650,24 @@ void mDoGph_gInf_c::bloom_c::draw() {
             GXLoadTexObj(&tmp_tex1, GX_TEXMAP0);
 
             GXSetNumTexGens(8);
-            u32 iVar11 = 0x1e;
-            int sVar10 = 0;
-            GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3c);
+            u32 texMtxID = GX_TEXMTX0;
+            int angle = 0;
+            GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
             for (int texCoord = (int)GX_TEXCOORD1; texCoord < (int)GX_MAX_TEXCOORD; texCoord++) {
-                GXSetTexCoordGen((GXTexCoordID)texCoord, GX_TG_MTX2x4, GX_TG_TEX0, iVar11);
-
+                GXSetTexCoordGen((GXTexCoordID)texCoord, GX_TG_MTX2x4, GX_TG_TEX0, texMtxID);
+                
                 #if TARGET_PC
-                f32 dVar15 = mBlureSize * ((448.0f / getHeight()) / 6400.0f);
+                f32 dVar15 = mBlureSize * ((448.0f / height) / 6400.0f);
                 #else
                 f32 dVar15 = mBlureSize * (1.0f / 6400.0f);
                 #endif
 
-                mDoMtx_stack_c::transS((dVar15 * cM_scos(sVar10)) * getInvScale(),
-                                       dVar15 * cM_ssin(sVar10), 0.0f);
-                GXLoadTexMtxImm(mDoMtx_stack_c::get(), iVar11, GX_MTX2x4);
+                mDoMtx_stack_c::transS((dVar15 * cM_scos(angle)) * getInvScale(),
+                                       dVar15 * cM_ssin(angle), 0.0f);
+                GXLoadTexMtxImm(mDoMtx_stack_c::get(), texMtxID, GX_MTX2x4);
 
-                iVar11 += 3;
-                sVar10 += 0x2492;
+                texMtxID += 3;
+                angle += 0x2492;
             }
             GXSetNumTevStages(8);
             GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);

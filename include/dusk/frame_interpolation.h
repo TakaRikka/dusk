@@ -20,6 +20,11 @@ void begin_record();
 void end_record();
 void interpolate(float step);
 float get_interpolation_step();
+
+void notify_presentation_frame();
+void request_presentation_sync();
+bool presentation_sync_active();
+
 void notify_sim_tick_complete();
 uint32_t begin_presentation_ui_pass();
 uint32_t get_presentation_ui_advance_ticks();

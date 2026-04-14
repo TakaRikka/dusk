@@ -13,6 +13,15 @@ namespace dusk {
         if (ImGui::BeginMenu("Enhancements")) {
             if (ImGui::BeginMenu("Quality of Life")) {
                 config::ImGuiCheckbox("Quick Transform (R+Y)", getSettings().game.enableQuickTransform);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Allows you to quickly transform between forms\n"
+                                      "without having to talk to Midna.");
+                }
+
+                config::ImGuiCheckbox("Sun's Song (R+X)", getSettings().game.sunsSong);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Allows Wolf Link to howl and change the time of day.");
+                }
 
                 config::ImGuiCheckbox("Bigger Wallets", getSettings().game.biggerWallets);
                 if (ImGui::IsItemHovered()) {
@@ -121,7 +130,8 @@ namespace dusk {
                                       "Slingshot, Gale Boomerang, Hero's Bow, Clawshot(s), Ball and Chain, and Dominion Rod.");
                 }
 
-                config::ImGuiSliderFloat("Gyro Sensitivity", getSettings().game.gyroAimSensitivity, 0.25f, 4.0f, "%.2f");
+                config::ImGuiSliderFloat("Gyro Pitch Sensitivity", getSettings().game.gyroAimSensitivityY, 0.25f, 4.0f, "%.2f");
+                config::ImGuiSliderFloat("Gyro Yaw Sensitivity", getSettings().game.gyroAimSensitivityX, 0.25f, 4.0f, "%.2f");
                 config::ImGuiCheckbox("Invert Gyro Pitch", getSettings().game.gyroAimInvertPitch);
                 config::ImGuiCheckbox("Invert Gyro Yaw", getSettings().game.gyroAimInvertYaw);
 
