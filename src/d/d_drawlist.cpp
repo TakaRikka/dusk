@@ -1459,7 +1459,7 @@ void dDlst_shadowControl_c::init() {
 #else
         u32 buffer_size = GXGetTexBufferSize(size, size, 5, GX_DISABLE, 0);
 #endif
-        delete mShadowTexData[i];
+        JKR_DELETE_ARRAY(mShadowTexData[i]);
         mShadowTexData[i] = JKR_NEW_ARRAY_ARGS(u8, buffer_size, 0x20);
 
         mShadowTexObj[i].reset();

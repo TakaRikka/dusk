@@ -11,6 +11,15 @@ namespace dusk {
         if (ImGui::BeginMenu("Enhancements")) {
             if (ImGui::BeginMenu("Quality of Life")) {
                 config::ImGuiCheckbox("Quick Transform (R+Y)", getSettings().game.enableQuickTransform);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Allows you to quickly transform between forms\n"
+                                      "without having to talk to Midna.");
+                }
+
+                config::ImGuiCheckbox("Sun's Song (R+X)", getSettings().game.sunsSong);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Allows Wolf Link to howl and change the time of day.");
+                }
 
                 config::ImGuiCheckbox("Bigger Wallets", getSettings().game.biggerWallets);
                 if (ImGui::IsItemHovered()) {
