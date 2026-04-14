@@ -80,12 +80,20 @@ void ImGuiPreLaunchWindow::draw() {
 
     float iconSize = 150.f;
     ImGui::SameLine(windowSize.x / 2 - iconSize + (iconSize / 2));
-    if (ImGuiEngine::duskIcon != 0)
-        ImGui::Image(ImGuiEngine::duskIcon, ImVec2{iconSize, iconSize});
+    if (ImGuiEngine::orgIcon != 0) {
+        ImGui::Image(ImGuiEngine::orgIcon, ImVec2{iconSize, iconSize});
+    }
     ImGuiTextCenter("Twilit Realm presents");
-    ImGui::PushFont(ImGuiEngine::fontExtraLarge);
-    ImGuiTextCenter("Dusk");
-    ImGui::PopFont();
+    if (ImGuiEngine::duskLogo) {
+        ImGui::NewLine();
+        float width = iconSize * 2.5f;
+        ImGui::SameLine(windowSize.x / 2 - width + (width / 2));
+        ImGui::Image(ImGuiEngine::duskLogo, ImVec2{width, iconSize});
+    } else {
+        ImGui::PushFont(ImGuiEngine::fontExtraLarge);
+        ImGuiTextCenter("Dusk");
+        ImGui::PopFont();
+    }
 
     (this->*drawTable[m_CurMenu])();
 
