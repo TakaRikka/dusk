@@ -10,11 +10,17 @@
 #define DUSK_BUILD_TYPE "@CMAKE_BUILD_TYPE@"
 
 #if defined(__x86_64__) || defined(_M_AMD64)
-#define DUSK_DLPACKAGE "dusk-@DUSK_WC_DESCRIBE@-@PLATFORM_NAME@-x86_64"
+#define DUSK_ARCH "x86_64"
 #elif defined(__i386__) || defined(_M_IX86)
-#define DUSK_DLPACKAGE "dusk-@DUSK_WC_DESCRIBE@-@PLATFORM_NAME@-x86"
+#define DUSK_ARCH "x86"
 #elif defined(__aarch64__) || defined(_M_ARM64)
-#define DUSK_DLPACKAGE "dusk-@DUSK_WC_DESCRIBE@-@PLATFORM_NAME@-arm64"
+#define DUSK_ARCH "arm64"
 #endif
+
+#define DUSK_PLATFORM_NAME "@PLATFORM_NAME@"
+#define DUSK_DLPACKAGE "dusk-@DUSK_WC_DESCRIBE@-" DUSK_PLATFORM_NAME "-" DUSK_ARCH
+
+#define DUSK_SENTRY_DSN "@DUSK_SENTRY_DSN@"
+#define DUSK_SENTRY_ENVIRONMENT "@DUSK_SENTRY_ENVIRONMENT@"
 
 #endif

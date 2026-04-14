@@ -2,7 +2,11 @@
 
 #include "JSystem/JStudio/JStudio/jstudio-object.h"
 
+#if TARGET_PC
 #include "dusk/audio.h"
+#include "dusk/frame_interpolation.h"
+#include "dusk/settings.h"
+#endif
 
 namespace JStudio {
 namespace {
@@ -650,10 +654,25 @@ value_or_fun:
     return;
 
 value:
+#if TARGET_PC
+    if (dusk::getSettings().game.enableFrameInterpolation && u <= 5 &&
+        (operation == data::UNK_0x2 || operation == data::UNK_0x3 || operation == data::UNK_0x12))
+    {
+        dusk::frame_interp::request_presentation_sync();
+    }
+#endif
     adaptor->adaptor_setVariableValue(control, u, operation, param_2, param_3);
     return;
 
 value_n:
+#if TARGET_PC
+    if (dusk::getSettings().game.enableFrameInterpolation &&
+        (pN == TAdaptor_camera::sauVariableValue_3_POSITION_XYZ || pN == TAdaptor_camera::sauVariableValue_3_TARGET_POSITION_XYZ) &&
+        (operation == data::UNK_0x2 || operation == data::UNK_0x3 || operation == data::UNK_0x12))
+    {
+        dusk::frame_interp::request_presentation_sync();
+    }
+#endif
     adaptor->adaptor_setVariableValue_n(control, pN, u, operation, param_2, param_3);
     return;
 

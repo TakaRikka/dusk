@@ -158,6 +158,7 @@ void ImGuiEngine_Initialize(float scale) {
 
 Image GetImage(const std::string& path) {
     if (!AssetExists(path)) {
+        DuskLog.warn("Image '{}' does not exist", path);
         return {};
     }
 

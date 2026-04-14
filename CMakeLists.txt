@@ -48,12 +48,17 @@ else ()
     message(STATUS "Unable to find git, commit information will not be available")
 endif ()
 
-if (DUSK_WC_DESCRIBE)
-    string(REGEX REPLACE "v([0-9]+)\.([0-9]+)\.([0-9]+)\-([0-9]+).*" "\\1.\\2.\\3.\\4" DUSK_VERSION_STRING "${DUSK_WC_DESCRIBE}")
-    string(REGEX REPLACE "v([0-9]+)\.([0-9]+)\.([0-9]+).*" "\\1.\\2.\\3" DUSK_SHORT_VERSION_STRING "${DUSK_WC_DESCRIBE}")
+if (DUSK_WC_DESCRIBE MATCHES "^v([0-9]+)\\.([0-9]+)\\.([0-9]+)(-([0-9]+).*)?$")
+    set(DUSK_SHORT_VERSION_STRING "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}.${CMAKE_MATCH_3}")
+    if (CMAKE_MATCH_5)
+        set(DUSK_VERSION_STRING "${DUSK_SHORT_VERSION_STRING}.${CMAKE_MATCH_5}")
+    else ()
+        set(DUSK_VERSION_STRING "${DUSK_SHORT_VERSION_STRING}.0")
+    endif ()
 else ()
     set(DUSK_WC_DESCRIBE "UNKNOWN-VERSION")
-    set(DUSK_VERSION_STRING "0.0.0")
+    set(DUSK_VERSION_STRING "0.0.0.0")
+    set(DUSK_SHORT_VERSION_STRING "0.0.0")
 endif ()
 
 # Add version information to CI environment variables
@@ -94,6 +99,10 @@ add_subdirectory(libs/freeverb)
 option(DUSK_BUILD_WARNINGS "Enable compiler warnings (off by default)")
 option(DUSK_SELECTED_OPT "If on, selected parts of the project will be compiled with optimizations on Debug, intending to make the game run at 30 FPS. Note for MSVC: you will need to remove '/RTC1' from your debug flags in CMake.")
 option(DUSK_MOVIE_SUPPORT "If on, compile against libjpeg-turbo to enable THP file decoding" ON)
+
+option(DUSK_ENABLE_SENTRY_NATIVE "Enable sentry-native crash reporting support" OFF)
+set(DUSK_SENTRY_DSN "" CACHE STRING "Sentry DSN")
+set(DUSK_SENTRY_ENVIRONMENT "development" CACHE STRING "Sentry environment")
 
 if (DUSK_MOVIE_SUPPORT)
     find_package(libjpeg-turbo QUIET)
@@ -148,21 +157,23 @@ elseif (APPLE)
     set(CMAKE_INSTALL_RPATH "$ORIGIN")
     set(CMAKE_BUILD_RPATH "$ORIGIN")
 elseif (MSVC)
-    add_compile_options(/bigobj)
-    add_compile_options(/Zc:strictStrings-)
-    add_compile_options(/MP)
-    add_compile_options(/FS)
+    add_compile_options(
+        $<$<COMPILE_LANGUAGE:C,CXX>:/bigobj>
+        $<$<COMPILE_LANGUAGE:C,CXX>:/Zc:strictStrings->
+        $<$<COMPILE_LANGUAGE:C,CXX>:/MP>
+        $<$<COMPILE_LANGUAGE:C,CXX>:/FS>
+    )
 
     if (NOT DUSK_BUILD_WARNINGS)
-        add_compile_options(/W0)
+        add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/W0>)
     else ()
         # Disable warnings
-        add_compile_options(/wd4068) # unknown pragma
-        add_compile_options(/wd4291) # no matching delete operator, leaks if exception thrown
+        add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/wd4068>) # unknown pragma
+        add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/wd4291>) # no matching delete operator, leaks if exception thrown
         # Only show warnings once
-        add_compile_options(/wo4244) # narrowing conversion, possible data loss
+        add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/wo4244>) # narrowing conversion, possible data loss
     endif ()
-    add_compile_options(/utf-8)
+    add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/utf-8>)
 endif ()
 
 
@@ -182,6 +193,46 @@ FetchContent_Declare(json
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 FetchContent_MakeAvailable(cxxopts json)
+
+if (DUSK_ENABLE_SENTRY_NATIVE)
+    message(STATUS "dusk: Fetching sentry-native")
+    set(SENTRY_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+    set(SENTRY_BACKEND crashpad CACHE STRING "" FORCE)
+    if (WIN32)
+        set(SENTRY_TRANSPORT winhttp CACHE STRING "" FORCE)
+    endif ()
+    set(SENTRY_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set(SENTRY_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(SENTRY_BUILD_BENCHMARKS OFF CACHE BOOL "" FORCE)
+    FetchContent_Declare(sentry_native
+        GIT_REPOSITORY https://github.com/getsentry/sentry-native.git
+        GIT_TAG 0.13.6
+        GIT_SHALLOW TRUE
+        GIT_PROGRESS TRUE
+        GIT_SUBMODULES_RECURSE TRUE
+    )
+    if (NOT sentry_native_POPULATED)
+        FetchContent_Populate(sentry_native)
+        set(_dusk_skip_install_rules ${CMAKE_SKIP_INSTALL_RULES})
+        set(CMAKE_SKIP_INSTALL_RULES ON)
+        add_subdirectory(${sentry_native_SOURCE_DIR} ${sentry_native_BINARY_DIR} EXCLUDE_FROM_ALL)
+        set(CMAKE_SKIP_INSTALL_RULES ${_dusk_skip_install_rules})
+    endif ()
+endif ()
+
+if (CMAKE_SYSTEM_NAME STREQUAL Windows)
+    set(PLATFORM_NAME win32)
+elseif (CMAKE_SYSTEM_NAME STREQUAL Darwin)
+    if (IOS)
+        set(PLATFORM_NAME ios)
+    elseif (TVOS)
+        set(PLATFORM_NAME tvos)
+    else ()
+        set(PLATFORM_NAME macos)
+    endif ()
+else ()
+    string(TOLOWER CMAKE_SYSTEM_NAME PLATFORM_NAME)
+endif ()
 
 configure_file(${CMAKE_SOURCE_DIR}/version.h.in ${CMAKE_BINARY_DIR}/version.h)
 
@@ -221,6 +272,11 @@ set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::p
     aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient)
 
 list(APPEND GAME_LIBS libzstd_static)
+
+if (DUSK_ENABLE_SENTRY_NATIVE)
+    list(APPEND GAME_LIBS sentry)
+    list(APPEND GAME_COMPILE_DEFS DUSK_ENABLE_SENTRY_NATIVE=1 SENTRY_BUILD_STATIC=1)
+endif ()
 
 if (DUSK_MOVIE_SUPPORT)
     if (TARGET libjpeg-turbo::turbojpeg-static)
@@ -274,6 +330,9 @@ add_executable(dusk src/dusk/main.cpp)
 target_compile_definitions(dusk PRIVATE TARGET_PC AVOID_UB=1 VERSION=0)
 target_include_directories(dusk PRIVATE include)
 target_link_libraries(dusk PRIVATE game aurora::main)
+if (TARGET crashpad_handler)
+    add_dependencies(dusk crashpad_handler)
+endif ()
 
 add_custom_command(TARGET dusk POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory

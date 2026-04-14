@@ -76,7 +76,8 @@ UserSettings g_userSettings = {
         .graphicsBackend {"backend.graphicsBackend", "auto"},
         .skipPreLaunchUI {"backend.skipPreLaunchUI", false},
         .showPipelineCompilation {"backend.showPipelineCompilation", false},
-        .wasPresetChosen {"backend.wasPresetChosen", false}
+        .wasPresetChosen {"backend.wasPresetChosen", false},
+        .enableCrashReporting {"backend.enableCrashReporting", true}
     }
 };
 
@@ -139,6 +140,7 @@ void registerSettings() {
     Register(g_userSettings.backend.skipPreLaunchUI);
     Register(g_userSettings.backend.showPipelineCompilation);
     Register(g_userSettings.backend.wasPresetChosen);
+    Register(g_userSettings.backend.enableCrashReporting);
 }
 
 // Transient settings
