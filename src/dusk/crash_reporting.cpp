@@ -76,8 +76,6 @@ std::filesystem::path GetCrashpadHandlerPath() {
     }
 
     const std::filesystem::path handlerDir(basePath);
-    SDL_free(const_cast<char*>(basePath));
-
 #if _WIN32
     return handlerDir / "crashpad_handler.exe";
 #else
