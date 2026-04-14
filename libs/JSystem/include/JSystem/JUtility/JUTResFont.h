@@ -18,10 +18,6 @@ struct BlockHeader {
     BE(u32) size;
 };
 
-#if TARGET_PC
-struct GlyphTextures;
-#endif
-
 /**
 * @ingroup jsystem-jutility
 * 
@@ -31,7 +27,7 @@ public:
     virtual ~JUTResFont();
     virtual void setGX();
     virtual void setGX(JUtility::TColor, JUtility::TColor);
-    virtual f32 drawChar_scale(f32, f32, f32, f32, int, bool);
+    virtual f32 drawChar_scale(f32, f32, f32, f32, int, bool FONT_DRAW_CTX);
     virtual int getLeading() const;
     virtual s32 getAscent() const;
     virtual s32 getDescent() const;
@@ -43,7 +39,7 @@ public:
     virtual int getFontType() const;
     virtual ResFONT* getResFont() const;
     virtual bool isLeadByte(int) const;
-    virtual void loadImage(int, GXTexMapID);
+    virtual void loadImage(int, GXTexMapID FONT_DRAW_CTX);
     virtual void setBlock();
 
     JUTResFont(ResFONT const*, JKRHeap*);
@@ -53,9 +49,14 @@ public:
     bool initiate(ResFONT const*, JKRHeap*);
     bool protected_initiate(ResFONT const*, JKRHeap*);
     void countBlock();
-    void loadFont(int, GXTexMapID, JUTFont::TWidth*);
+    void loadFont(int, GXTexMapID, JUTFont::TWidth* FONT_DRAW_CTX);
     int getFontCode(int) const;
     int convertSjis(int, BE(u16)*) const;
+
+#if TARGET_PC
+    void pushDrawState() override;
+    void popDrawState() override;
+#endif
 
     inline void delete_and_initialize() {
         deleteMemBlocks_ResFont();
@@ -86,6 +87,16 @@ public:
     /* 0x66 */ u16 field_0x66;
     /* 0x68 */ u16 mMaxCode;
     /* 0x6C */ const IsLeadByte_func* mIsLeadByte;
+
+#if TARGET_PC
+    // Dusk change: we use a single large texture for all characters.
+    // This enables better draw call merging, ideally enabling entire blocks of
+    // text to be one draw call.
+    TGXTexObj mJoinedTextureObject;
+    u16 mJoinedTextureHeight;
+
+    void initJoinedTexture();
+#endif
 };
 
 extern u8 const JUTResFONT_Ascfont_fix12[];

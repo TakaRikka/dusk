@@ -211,6 +211,11 @@ f32 J2DPrint::parse(const u8* pString, int length, int param_2, u16* param_3,
     local_bc.a = local_bc.a * alpha / 0xFF;
     mFont->setGradColor(local_b8, field_0x22 ? local_bc : local_b8);
 
+#if TARGET_PC
+    FontDrawContext context;
+    mFont->pushDrawState();
+#endif
+
     do {
         bool b2ByteCharacter = false;
         bool r25;
@@ -312,9 +317,9 @@ f32 J2DPrint::parse(const u8* pString, int length, int param_2, u16* param_3,
                 } else {
                     if (param_6) {
                         if (param_3 != NULL) {
-                            mFont->drawChar_scale(mCursorH + (s16)param_3[someIndex], mCursorV, (s32)mScaleX, (s32)mScaleY, iCharacter, true);
+                            mFont->drawChar_scale(mCursorH + (s16)param_3[someIndex], mCursorV, (s32)mScaleX, (s32)mScaleY, iCharacter, true IF_DUSK_ARG(&context));
                         } else {
-                            mFont->drawChar_scale(mCursorH, mCursorV, (s32)mScaleX, (s32)mScaleY, iCharacter, true);
+                            mFont->drawChar_scale(mCursorH, mCursorV, (s32)mScaleX, (s32)mScaleY, iCharacter, true IF_DUSK_ARG(&context));
                         }
                     }
                     mCursorH += field_0x34;
@@ -352,6 +357,8 @@ f32 J2DPrint::parse(const u8* pString, int length, int param_2, u16* param_3,
 
         iCharacter = *(pString++);
     } while (true);
+
+    IF_DUSK(mFont->popDrawState());
 
     if (param_3 != NULL) {
         param_3[someIndex] = 0xFFFF;

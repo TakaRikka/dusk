@@ -19316,11 +19316,20 @@ void daAlink_c::setWaterDropColor(const J3DGXColorS10* i_color) {
 
     if (!checkNoResetFlg2(FLG2_UNK_80000)) {
         if (checkZoraWearAbility()) {
+#if TARGET_PC
+            if (field_0x064C->getMaterialNum() >= 14)
+#endif
+            {
             field_0x064C->getMaterialNodePointer(13)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(0)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(1)->setTevColor(1, i_color);
             mpLinkHatModel->getModelData()->getMaterialNodePointer(1)->setTevColor(1, i_color);
+            }
         } else if (checkMagicArmorWearAbility()) {
+#if TARGET_PC
+            if (field_0x064C->getMaterialNum() >= 12)
+#endif
+            {
             field_0x064C->getMaterialNodePointer(11)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(10)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(9)->setTevColor(1, i_color);
@@ -19328,11 +19337,21 @@ void daAlink_c::setWaterDropColor(const J3DGXColorS10* i_color) {
             field_0x064C->getMaterialNodePointer(6)->setTevColor(1, i_color);
             mpLinkHatModel->getModelData()->getMaterialNodePointer(2)->setTevColor(1, i_color);
             mpLinkHatModel->getModelData()->getMaterialNodePointer(1)->setTevColor(1, i_color);
+            }
         } else if (checkCasualWearFlg()) {
+#if TARGET_PC
+            if (field_0x064C->getMaterialNum() >= 8)
+#endif
+            {
             field_0x064C->getMaterialNodePointer(7)->setTevColor(1, i_color);
             mpLinkHatModel->getModelData()->getMaterialNodePointer(0)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(5)->setTevColor(1, var_r31);
+            }
         } else {
+#if TARGET_PC
+            if (field_0x064C->getMaterialNum() >= 18)
+#endif
+            {
             field_0x064C->getMaterialNodePointer(17)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(9)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(0)->setTevColor(1, i_color);
@@ -19342,6 +19361,7 @@ void daAlink_c::setWaterDropColor(const J3DGXColorS10* i_color) {
             field_0x064C->getMaterialNodePointer(16)->setTevColor(1, var_r31);
             field_0x064C->getMaterialNodePointer(15)->setTevColor(1, var_r31);
             field_0x064C->getMaterialNodePointer(14)->setTevColor(1, var_r31);
+            }
         }
     }
 }
