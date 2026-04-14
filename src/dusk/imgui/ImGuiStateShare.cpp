@@ -26,14 +26,11 @@ struct StateSharePacket {
 static constexpr size_t PACKET_TOTAL = sizeof(StateSharePacket) + sizeof(dSv_info_c);
 
 void ImGuiStateShare::copyState() {
-    dSv_restart_c& restart = g_dComIfG_gameInfo.info.getRestart();
-
     StateSharePacket pkt = {};
-    if (const char* s = g_dComIfG_gameInfo.play.getLastPlayStageName())
-        strncpy(pkt.stageName, s, 7);
-    pkt.roomNo     = restart.getRoomNo();
+    strncpy(pkt.stageName, dComIfGp_getStartStageName(), 7);
+    pkt.roomNo     = dComIfGp_getStartStageRoomNo();
     pkt.layer      = dComIfGp_getStartStageLayer();
-    pkt.startPoint = restart.getStartPoint();
+    pkt.startPoint = dComIfGp_getStartStagePoint();
 
     std::string raw(PACKET_TOTAL, '\0');
     memcpy(raw.data(), &pkt, sizeof(pkt));
