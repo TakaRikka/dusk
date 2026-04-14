@@ -308,8 +308,8 @@ private:
     /* 0x0000C */ dDlst_shadowSimple_c mSimple[128];
     /* 0x0340C */ int mNextID;
     /* 0x03410 */ dDlst_shadowReal_c mReal[8];
-    /* 0x15EB0 */ TGXTexObj field_0x15eb0[2];
-    /* 0x15EF0 */ void* field_0x15ef0[2];
+    /* 0x15EB0 */ TGXTexObj mShadowTexObj[2];
+    /* 0x15EF0 */ void* mShadowTexData[2];
 };
 
 class dDlst_window_c {

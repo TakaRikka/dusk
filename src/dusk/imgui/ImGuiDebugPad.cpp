@@ -47,4 +47,15 @@ void DuskDebugPad() {
         pad.mMainStickValue = 1.0f;
         pad.mMainStickAngle = -0x4000;
     }
+
+    if (ImGui::IsKeyDown(ImGuiKey_Q)) {
+        pad.mTriggerLeft = 1.0;
+        pad.mTrigLockL = 1;
+        pad.mHoldLockL = 1;
+    }
+    if (ImGui::IsKeyDown(ImGuiKey_E)) {
+        pad.mTriggerRight = 1.0;
+        pad.mTrigLockR = 1;
+        pad.mHoldLockR = 1;
+    }
 }

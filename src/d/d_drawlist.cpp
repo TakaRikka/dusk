@@ -1458,10 +1458,10 @@ void dDlst_shadowControl_c::init() {
 #else
         u32 buffer_size = GXGetTexBufferSize(size, size, 5, GX_DISABLE, 0);
 #endif
-        field_0x15ef0[i] = JKR_NEW_ARRAY_ARGS(u8, buffer_size, 0x20);
-        GXInitTexObj(&field_0x15eb0[i], field_0x15ef0[i], size, size, GX_TF_RGB5A3, GX_CLAMP,
+        mShadowTexData[i] = JKR_NEW_ARRAY_ARGS(u8, buffer_size, 0x20);
+        GXInitTexObj(&mShadowTexObj[i], mShadowTexData[i], size, size, GX_TF_RGB5A3, GX_CLAMP,
                      GX_CLAMP, GX_DISABLE);
-        GXInitTexObjLOD(&field_0x15eb0[i], GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE,
+        GXInitTexObjLOD(&mShadowTexObj[i], GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE,
                         GX_FALSE, GX_ANISO_1);
     }
 }
@@ -1480,8 +1480,8 @@ void dDlst_shadowControl_c::reset() {
     field_0x4 = NULL;
 
 #ifdef TARGET_PC
-    field_0x15eb0[0].reset();
-    field_0x15eb0[1].reset();
+    for (int i = 0; i < ARRAY_SIZE(mShadowTexObj); i++)
+        mShadowTexObj[i].reset();
 #endif
 }
 
@@ -1530,7 +1530,7 @@ void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
     j3dSys.setDrawModeOpaTexEdge();
     J3DShape::resetVcdVatCache();
     dDlst_shadowReal_c* shadowReal = field_0x4;
-    int r29 = 0;
+    int chan = 0;
     int tex = 0;
     u16 r27;
     u16 r26;
@@ -1539,8 +1539,8 @@ void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
 #endif
     for (; shadowReal; shadowReal = shadowReal->getZsortNext()) {
         if (shadowReal->isUse()) {
-            if (r29 == 0) {
-                r27 = GXGetTexObjWidth(field_0x15eb0 + tex);
+            if (chan == 0) {
+                r27 = GXGetTexObjWidth(&mShadowTexObj[tex]);
                 r26 = r27 * 2;
 #ifdef TARGET_PC
                 GXCreateFrameBuffer(r26, r26);
@@ -1549,27 +1549,27 @@ void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
                 GXSetViewport(0.0f, 0.0f, r26, r26, 0.0f, 1.0f);
                 GXSetScissor(0, 0, r26, r26);
             }
-            GXSetTevColor(GX_TEVREG0, l_imageDrawColor[r29]);
-            if (r29 == 3) {
+            GXSetTevColor(GX_TEVREG0, l_imageDrawColor[chan]);
+            if (chan == 3) {
                 GXSetColorUpdate(GX_DISABLE);
                 GXSetAlphaUpdate(GX_ENABLE);
             }
             shadowReal->imageDraw(param_0);
-            r29 = (r29 + 1) % 4;
-            if (r29 == 0) {
+            chan = (chan + 1) % 4;
+            if (chan == 0) {
                 GXSetTexCopySrc(0, 0, r26, r26);
                 GXSetTexCopyDst(r27, r27, GX_TF_RGB5A3, GX_TRUE);
                 GXSetColorUpdate(GX_ENABLE);
-                GXCopyTex(field_0x15ef0[tex++], GX_TRUE);
+                GXCopyTex(mShadowTexData[tex++], GX_TRUE);
                 GXPixModeSync();
                 GXSetAlphaUpdate(GX_DISABLE);
             }
         }
     }
-    if (r29) {
+    if (chan) {
         GXSetTexCopySrc(0, 0, r26, r26);
         GXSetTexCopyDst(r27, r27, GX_TF_RGB5A3, GX_TRUE);
-        GXCopyTex(field_0x15ef0[tex], GX_TRUE);
+        GXCopyTex(mShadowTexData[tex], GX_TRUE);
         GXPixModeSync();
         GXSetAlphaUpdate(GX_DISABLE);
     }
@@ -1621,7 +1621,7 @@ void dDlst_shadowControl_c::draw(Mtx param_0) {
     for (int i2 = 0, i3 = 0; real != NULL; real = real->getZsortNext()) {
         if (real->isUse()) {
             if (i2 == 0) {
-                TGXTexObj* obj = &field_0x15eb0[i3];
+                TGXTexObj* obj = &mShadowTexObj[i3];
                 i3++;
 
                 GXLoadTexObj(obj, GX_TEXMAP0);
