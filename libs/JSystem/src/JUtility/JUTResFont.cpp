@@ -6,26 +6,13 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include <gx.h>
-#include "absl/container/node_hash_map.h"
-
-#if TARGET_PC
-struct GlyphTextures {
-    absl::node_hash_map<int, TGXTexObj> textures;
-};
-#endif
 
 JUTResFont::JUTResFont() {
-#if TARGET_PC
-    mGlyphTextures = new GlyphTextures();
-#endif
     initialize_state();
     JUTFont::initialize_state();
 }
 
 JUTResFont::JUTResFont(const ResFONT* pFont, JKRHeap* pHeap) {
-#if TARGET_PC
-    mGlyphTextures = new GlyphTextures();
-#endif
     initialize_state();
     JUTFont::initialize_state();
     initiate(pFont, pHeap);
@@ -33,10 +20,7 @@ JUTResFont::JUTResFont(const ResFONT* pFont, JKRHeap* pHeap) {
 
 JUTResFont::~JUTResFont() {
 #if TARGET_PC
-    for (auto& pair : mGlyphTextures->textures) {
-        pair.second.reset();
-    }
-    delete mGlyphTextures;
+    mJoinedTextureObject.reset();
 #endif
 
     if (mValid) {
@@ -70,6 +54,33 @@ bool JUTResFont::initiate(const ResFONT* pFont, JKRHeap* pHeap) {
     return true;
 }
 
+#if TARGET_PC
+void JUTResFont::initJoinedTexture() {
+    if (mGly1BlockNum != 1) {
+        CRASH("mGly1BlockNum must be 1!");
+    }
+
+    const auto& block = *mpGlyphBlocks[0];
+    if (block.textureWidth % 8 != 0 || block.textureHeight % 8 != 0) {
+        // Idk how the GameCube's tiling texture format works so this is a safety check.
+        CRASH("Texture size not divisible!");
+    }
+
+    int pageCount = 0;
+    u32 pageNumCells = block.numRows * block.numColumns;
+    for (u32 code = block.startCode; code < block.endCode; code += pageNumCells) {
+        pageCount += 1;
+    }
+
+    mJoinedTextureHeight = block.textureHeight * pageCount;
+    GXInitTexObj(&mJoinedTextureObject, block.data, block.textureWidth,
+       mJoinedTextureHeight, static_cast<GXTexFmt>(block.textureFormat.host()),
+       GX_CLAMP, GX_CLAMP, false);
+
+    GXInitTexObjLOD(&mJoinedTextureObject, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, 0U, 0U, GX_ANISO_1);
+}
+#endif
+
 bool JUTResFont::protected_initiate(const ResFONT* pFont, JKRHeap* pHeap) {
     void** p;
     delete_and_initialize();
@@ -100,8 +111,10 @@ bool JUTResFont::protected_initiate(const ResFONT* pFont, JKRHeap* pHeap) {
         mpMapBlocks = JKR_NEW_ARRAY_ARGS(ResFONT::MAP1*, mMap1BlockNum, p);
     }
     setBlock();
-    return true;
 
+    IF_DUSK(initJoinedTexture());
+
+    return true;
 }
 
 void JUTResFont::countBlock() {
@@ -231,14 +244,14 @@ void JUTResFont::setGX(JUtility::TColor col1, JUtility::TColor col2) {
 }
 
 f32 JUTResFont::drawChar_scale(f32 pos_x, f32 pos_y, f32 scale_x, f32 scale_y, int str_int,
-                               bool flag) {
+                               bool flag FONT_DRAW_CTX) {
     f32 x1;
     f32 x2;
     f32 y1;
 
     JUT_ASSERT(378, mValid);
     JUTFont::TWidth width;
-    loadFont(str_int, GX_TEXMAP0, &width);
+    loadFont(str_int, GX_TEXMAP0, &width FONT_DRAW_CTX_ARG);
 
     if ((mFixed) || (!flag)) {
         x1 = pos_x;
@@ -258,15 +271,26 @@ f32 JUTResFont::drawChar_scale(f32 pos_x, f32 pos_y, f32 scale_x, f32 scale_y, i
     f32 y2 = getDescent() * (scale_y / getHeight()) + pos_y;
 
     u16 texW  = mpGlyphBlocks[field_0x66]->textureWidth;
+#if TARGET_PC
+    u16 texH  = mJoinedTextureHeight;
+#else
     u16 texH  = mpGlyphBlocks[field_0x66]->textureHeight;
+#endif
     u16 cellW = mpGlyphBlocks[field_0x66]->cellWidth;
+
     u16 cellH = mpGlyphBlocks[field_0x66]->cellHeight;
     s32 u1 = (mWidth * 0x8000) / texW;
     s32 v1 = (mHeight * 0x8000) / texH;
     s32 u2 = ((mWidth + cellW) * 0x8000) / texW;
     s32 v2 = ((mHeight + cellH) * 0x8000) / texH;
 
+#if TARGET_PC
+    if (!context) {
+        pushDrawState();
+    }
+#else
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+#endif
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
     // Bottom Left
@@ -290,18 +314,33 @@ f32 JUTResFont::drawChar_scale(f32 pos_x, f32 pos_y, f32 scale_x, f32 scale_y, i
     GXTexCoord2u16(u1, v2);
     GXEnd();
 
+#if TARGET_PC
+    if (!context) {
+        popDrawState();
+    }
+#else
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
-
+#endif
     return retval;
 }
 
-void JUTResFont::loadFont(int code, GXTexMapID texMapID, JUTFont::TWidth* pDstWidth) {
+#if TARGET_PC
+void JUTResFont::pushDrawState() {
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+}
+
+void JUTResFont::popDrawState() {
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
+}
+#endif
+
+void JUTResFont::loadFont(int code, GXTexMapID texMapID, JUTFont::TWidth* pDstWidth FONT_DRAW_CTX) {
     if (pDstWidth != 0) {
         getWidthEntry(code, pDstWidth);
     }
 
     int fontCode = getFontCode(code);
-    loadImage(fontCode, texMapID);
+    loadImage(fontCode, texMapID FONT_DRAW_CTX_ARG);
 }
 
 void JUTResFont::getWidthEntry(int code, JUTFont::TWidth* i_width) const {
@@ -403,7 +442,7 @@ int JUTResFont::getFontCode(int chr) const {
     return ret;
 }
 
-void JUTResFont::loadImage(int code, GXTexMapID id){
+void JUTResFont::loadImage(int code, GXTexMapID id FONT_DRAW_CTX){
     int i = 0;
     for (; i < mGly1BlockNum; i++)
     {
@@ -435,21 +474,14 @@ void JUTResFont::loadImage(int code, GXTexMapID id){
         mHeight = cellRow * cellH;
 
 #if TARGET_PC
-        const auto found = mGlyphTextures->textures.find(pageIdx);
-        GXTexObj* texObj;
-        if (found == mGlyphTextures->textures.end()) {
-            texObj = &mGlyphTextures->textures[pageIdx];
-            void* pImg = &mpGlyphBlocks[i]->data[pageIdx * mpGlyphBlocks[i]->textureSize];
-            GXInitTexObj(texObj, pImg, mpGlyphBlocks[i]->textureWidth,
-                         mpGlyphBlocks[i]->textureHeight, (GXTexFmt)(u16)mpGlyphBlocks[i]->textureFormat,
-                         GX_CLAMP, GX_CLAMP, 0);
+        mHeight += texH * pageIdx;
 
-            GXInitTexObjLOD(texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, 0U, 0U, GX_ANISO_1);
-        } else {
-            texObj = &found->second;
+        if (!context || !context->isTextureLoaded) {
+            GXLoadTexObj(&mJoinedTextureObject, id);
+            if (context) {
+                context->isTextureLoaded = true;
+            }
         }
-
-        GXLoadTexObj(texObj, id);
 
         // Gets used by some other code.
         mTexPageIdx = pageIdx;
