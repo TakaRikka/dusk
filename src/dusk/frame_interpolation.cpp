@@ -28,6 +28,7 @@ struct Data {
     size_t child_index = 0;
     Mtx matrix{};
     const Mtx* dest = nullptr;
+    uint64_t stable_tag = 0;
 };
 
 struct Path;
@@ -46,6 +47,8 @@ struct Path {
     std::vector<ChildBucket> children;
     std::vector<OpBucket> ops;
     std::vector<std::pair<Op, size_t>> items;
+    Label draw_scope{};
+    uint32_t simple_shadow_pair_seq = 0;
 };
 
 struct Recording {
@@ -57,6 +60,7 @@ struct MatrixValue {
 };
 
 using FinalMtxLookup = std::unordered_map<const Mtx*, const Data*>;
+using FinalMtxLookupTagged = std::unordered_map<uint64_t, const Data*>;
 
 bool s_initialized = false;
 
@@ -142,8 +146,9 @@ const OpBucket* find_op_bucket(const Path& path, Op op) {
     return &*it;
 }
 
-void build_final_mtx_lookup(const Path& path, FinalMtxLookup& lookup) {
-    lookup.clear();
+void build_final_mtx_lookups(const Path& path, FinalMtxLookup& dest_lookup, FinalMtxLookupTagged& tag_lookup) {
+    dest_lookup.clear();
+    tag_lookup.clear();
 
     const OpBucket* bucket = find_op_bucket(path, Op::FinalMtx);
     if (bucket == nullptr) {
@@ -151,10 +156,12 @@ void build_final_mtx_lookup(const Path& path, FinalMtxLookup& lookup) {
     }
 
     for (const Data& data : bucket->values) {
-        if (data.dest == nullptr) {
-            continue;
+        if (data.dest != nullptr) {
+            dest_lookup[data.dest] = &data;
         }
-        lookup[data.dest] = &data;
+        if (data.stable_tag != 0) {
+            tag_lookup[data.stable_tag] = &data;
+        }
     }
 }
 
@@ -201,7 +208,8 @@ void store_replacement(const Data& old_data, const Data& new_data, float step) {
 
 void interpolate_branch(const Path& old_path, const Path& new_path, float step) {
     FinalMtxLookup old_final_mtx_lookup;
-    build_final_mtx_lookup(old_path, old_final_mtx_lookup);
+    FinalMtxLookupTagged old_final_mtx_lookup_tagged;
+    build_final_mtx_lookups(old_path, old_final_mtx_lookup, old_final_mtx_lookup_tagged);
 
     for (const auto& item : new_path.items) {
         const Op op = item.first;
@@ -230,7 +238,17 @@ void interpolate_branch(const Path& old_path, const Path& new_path, float step) 
         }
 
         const Data* indexed_old_data = find_matching_data(old_path, op, index);
-        const Data* old_data = op == Op::FinalMtx ? find_matching_final_mtx(old_final_mtx_lookup, *new_data) : indexed_old_data;
+        const Data* old_data = nullptr;
+        if (op == Op::FinalMtx) {
+            if (new_data->stable_tag != 0) {
+                const auto it = old_final_mtx_lookup_tagged.find(new_data->stable_tag);
+                old_data = it != old_final_mtx_lookup_tagged.end() ? it->second : nullptr;
+            } else {
+                old_data = find_matching_final_mtx(old_final_mtx_lookup, *new_data);
+            }
+        } else {
+            old_data = indexed_old_data;
+        }
         if (op == Op::FinalMtx) {
             store_replacement(old_data != nullptr ? *old_data : *new_data, *new_data, step);
         }
@@ -370,7 +388,9 @@ void open_child(const void* key, int32_t id) {
     data.child_label = label;
     data.child_index = siblings.size();
     siblings.emplace_back(std::make_unique<Path>());
-    g_current_path.push_back(siblings.back().get());
+    Path* const child = siblings.back().get();
+    child->draw_scope = label;
+    g_current_path.push_back(child);
 }
 
 void close_child() {
@@ -388,6 +408,18 @@ void record_final_mtx_raw(const Mtx* dest, const Mtx src) {
 
     Data& data = append_op(Op::FinalMtx);
     data.dest = dest;
+    data.stable_tag = 0;
+    copy_matrix(src, data.matrix);
+}
+
+void record_final_mtx_raw_tagged(const Mtx* dest, const Mtx src, uint64_t stable_tag) {
+    if (!s_initialized || !g_recording || dest == nullptr) {
+        return;
+    }
+
+    Data& data = append_op(Op::FinalMtx);
+    data.dest = dest;
+    data.stable_tag = stable_tag;
     copy_matrix(src, data.matrix);
 }
 
@@ -500,5 +532,21 @@ bool build_star_view(Mtx o_view, Mtx o_cam_billboard_base, cXyz* o_anchor_eye, f
     *o_anchor_eye = eye;
     *o_fovy = s_star_prev.fovy + (s_star_curr.fovy - s_star_prev.fovy) * step;
     return true;
+}
+
+uint64_t alloc_simple_shadow_pair_base() {
+    if (!s_initialized || !g_recording || g_current_path.size() <= 1) {
+        return 0;
+    }
+
+    Path* const scope = g_current_path.back();
+    const uint64_t h = static_cast<uint64_t>(reinterpret_cast<uintptr_t>(scope->draw_scope.key));
+    const uint32_t lo = scope->simple_shadow_pair_seq;
+    scope->simple_shadow_pair_seq += 2;
+    uint64_t tag0 = (h << 17) ^ (static_cast<uint64_t>(lo) << 1u);
+    if (tag0 == 0) {
+        tag0 = 2;
+    }
+    return tag0;
 }
 }  // namespace dusk::frame_interp

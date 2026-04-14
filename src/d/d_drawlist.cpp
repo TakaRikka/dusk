@@ -1,27 +1,28 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include <cstdio>
 #include "JSystem/J2DGraph/J2DAnimation.h"
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "SSystem/SComponent/c_bg_s_shdw_draw.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
-
-#include <typeindex>
-
-#include "absl/container/flat_hash_map.h"
-#include "client/TracyScoped.hpp"
 #include "d/d_s_play.h"
-#include "dusk/frame_interpolation.h"
-#include "dusk/gx_helper.h"
-#include "dusk/logging.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_mtx.h"
+
+#if TARGET_PC
+#include <cstdio>
+#include <typeindex>
+#include "JSystem/JKernel/JKRHeap.h"
+#include "absl/container/flat_hash_map.h"
+#include "client/TracyScoped.hpp"
+#include "dusk/frame_interpolation.h"
+#include "dusk/gx_helper.h"
+#include "dusk/logging.h"
+#endif
 
 class dDlst_2Dm_c {
 public:
@@ -1432,8 +1433,14 @@ void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* pa
     mDoMtx_stack_c::scaleM(param_2, 1.0f, param_2 * param_5);
     cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mMtx);
 #ifdef TARGET_PC
-    dusk::frame_interp::record_final_mtx_raw(&mVolumeMtx, mVolumeMtx);
-    dusk::frame_interp::record_final_mtx_raw(&mMtx, mMtx);
+    const uint64_t shadow_tag_base = dusk::frame_interp::alloc_simple_shadow_pair_base();
+    if (shadow_tag_base != 0) {
+        dusk::frame_interp::record_final_mtx_raw_tagged(&mVolumeMtx, mVolumeMtx, shadow_tag_base);
+        dusk::frame_interp::record_final_mtx_raw_tagged(&mMtx, mMtx, shadow_tag_base + 1u);
+    } else {
+        dusk::frame_interp::record_final_mtx_raw(&mVolumeMtx, mVolumeMtx);
+        dusk::frame_interp::record_final_mtx_raw(&mMtx, mMtx);
+    }
 #endif
     mpTexObj = param_6;
 }
