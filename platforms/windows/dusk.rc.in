@@ -1,0 +1,38 @@
+#include <windows.h>
+#include <winver.h>
+
+IDI_MAIN_ICON ICON "@DUSK_WINDOWS_ICON_ICO@"
+1 RT_MANIFEST "@DUSK_WINDOWS_MANIFEST@"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,@PROJECT_VERSION_TWEAK@
+ PRODUCTVERSION @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,@PROJECT_VERSION_TWEAK@
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS VS_FF_DEBUG
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", "@DUSK_COMPANY_NAME@\0"
+            VALUE "FileDescription", "@DUSK_FILE_DESCRIPTION@\0"
+            VALUE "FileVersion", "@DUSK_VERSION_STRING@\0"
+            VALUE "InternalName", "dusk\0"
+            VALUE "LegalCopyright", "@DUSK_COPYRIGHT@\0"
+            VALUE "OriginalFilename", "dusk.exe\0"
+            VALUE "ProductName", "@DUSK_PRODUCT_NAME@\0"
+            VALUE "ProductVersion", "@DUSK_VERSION_STRING@\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1200
+    END
+END

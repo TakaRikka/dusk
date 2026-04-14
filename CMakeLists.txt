@@ -191,6 +191,10 @@ include(files.cmake)
 
 set(DUSK_BUNDLE_NAME Dusk)
 set(DUSK_BUNDLE_IDENTIFIER dev.decomp.dusk)
+set(DUSK_COMPANY_NAME "Twilit Realm")
+set(DUSK_FILE_DESCRIPTION "Dusk")
+set(DUSK_PRODUCT_NAME "Dusk")
+set(DUSK_COPYRIGHT "Copyright (C) Twilit Realm contributors")
 set(DUSK_GAME_NAME "GZ2E")
 set(DUSK_GAME_VERSION "01")
 set(DUSK_TP_VERSION ${DUSK_GAME_NAME}${DUSK_GAME_VERSION})
@@ -275,6 +279,35 @@ add_custom_command(TARGET dusk POST_BUILD
         "$<TARGET_FILE_DIR:dusk>/res"
     COMMENT "Copying resources"
 )
+
+if (WIN32)
+    set(DUSK_WINDOWS_RESOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/platforms/windows)
+    set(DUSK_WINDOWS_ICON_PNG ${CMAKE_CURRENT_SOURCE_DIR}/res/icon.png)
+    set(DUSK_WINDOWS_ICON_ICO ${CMAKE_CURRENT_BINARY_DIR}/dusk.ico)
+    set(DUSK_WINDOWS_RC ${CMAKE_CURRENT_BINARY_DIR}/dusk.rc)
+    set(DUSK_WINDOWS_MANIFEST ${CMAKE_CURRENT_BINARY_DIR}/dusk.manifest)
+
+    add_custom_command(
+            OUTPUT ${DUSK_WINDOWS_ICON_ICO}
+            COMMAND powershell -ExecutionPolicy Bypass -File
+            ${DUSK_WINDOWS_RESOURCE_DIR}/Create-IcoFromPng.ps1
+            -InputPng ${DUSK_WINDOWS_ICON_PNG}
+            -OutputIco ${DUSK_WINDOWS_ICON_ICO}
+            DEPENDS ${DUSK_WINDOWS_ICON_PNG} ${DUSK_WINDOWS_RESOURCE_DIR}/Create-IcoFromPng.ps1
+            VERBATIM
+            COMMENT "Generating Windows icon"
+    )
+
+    configure_file(${DUSK_WINDOWS_RESOURCE_DIR}/dusk.manifest.in ${DUSK_WINDOWS_MANIFEST} @ONLY)
+    configure_file(${DUSK_WINDOWS_RESOURCE_DIR}/dusk.rc.in ${DUSK_WINDOWS_RC} @ONLY)
+
+    target_sources(dusk PRIVATE ${DUSK_WINDOWS_ICON_ICO} ${DUSK_WINDOWS_RC})
+    set_target_properties(dusk PROPERTIES WIN32_EXECUTABLE TRUE)
+
+    if (MSVC)
+        target_link_options(dusk PRIVATE /MANIFEST:NO)
+    endif ()
+endif ()
 
 if (APPLE)
     if (IOS)
@@ -364,6 +397,8 @@ if (TARGET crashpad_handler)
     list(APPEND EXTRA_TARGETS crashpad_handler)
 endif ()
 install(TARGETS ${BINARY_TARGETS} ${EXTRA_TARGETS} DESTINATION ${CMAKE_INSTALL_PREFIX})
+aurora_install_runtime_dlls(dusk ${CMAKE_INSTALL_PREFIX})
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/res DESTINATION ${CMAKE_INSTALL_PREFIX})
 if (CMAKE_BUILD_TYPE STREQUAL Debug OR CMAKE_BUILD_TYPE STREQUAL RelWithDebInfo)
     set(DEBUG_FILES_LIST "")
     foreach (target IN LISTS BINARY_TARGETS EXTRA_TARGETS)
