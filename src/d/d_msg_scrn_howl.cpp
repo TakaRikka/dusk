@@ -19,6 +19,10 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "Z2AudioLib/Z2WolfHowlMgr.h"
 
+#if TARGET_PC
+#include "dusk/settings.h"
+#endif
+
 // POSIX already defines a macro with this name, but we know that this specific name is
 // used in TP based on assertion messages. This redefinition is scoped to this TU which
 // is unlikely to ever actually need the POSIX define, so we can just redefine it.
@@ -495,7 +499,12 @@ void dMsgScrnHowl_c::drawWave() {
         if (mPlotTime != field_0x212c) {
             field_0x212c = mPlotTime;
         } else {
-            bVar5 = false;
+#if TARGET_PC
+            if (!dusk::getSettings().game.enableFrameInterpolation)
+#endif
+            {
+                bVar5 = false;
+            }
         }
     }
     if (bVar5) {
