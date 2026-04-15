@@ -64,13 +64,12 @@ void fpcM_Management(fpcM_ManagementFunc i_preExecuteFn, fpcM_ManagementFunc i_p
             }
 
 #ifdef TARGET_PC
-            // Frame interpolation: call moved to m_Do_main
-            if (!dusk::getSettings().game.enableFrameInterpolation) {
+            // FRAME INTERP NOTE: Called in m_Do_main when interp is enabled
+            if (!dusk::getSettings().game.enableFrameInterpolation || dusk::getTransientSettings().skipFrameRateLimit)
 #endif
+            {
                 cAPIGph_Painter();
-#ifdef TARGET_PC
             }
-#endif
 
             if (!dPa_control_c::isStatus(1)) {
                 fpcDt_Handler();

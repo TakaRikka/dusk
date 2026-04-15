@@ -40,6 +40,7 @@ UserSettings g_userSettings = {
         // Preferences
         .enableMirrorMode {"game.enableMirrorMode", false},
         .invertCameraXAxis {"game.invertCameraXAxis", false},
+        .disableMainHUD {"game.disableMainHUD", false},
 
         // Graphics
         .bloomMode {"game.bloomMode", BloomMode::Classic},
@@ -117,6 +118,7 @@ void registerSettings() {
     Register(g_userSettings.game.sunsSong);
     Register(g_userSettings.game.enableMirrorMode);
     Register(g_userSettings.game.invertCameraXAxis);
+    Register(g_userSettings.game.disableMainHUD);
     Register(g_userSettings.game.bloomMode);
     Register(g_userSettings.game.bloomMultiplier);
     Register(g_userSettings.game.enableWaterRefraction);

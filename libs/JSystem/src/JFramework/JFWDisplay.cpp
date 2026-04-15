@@ -393,7 +393,7 @@ static void waitPrecise(Limiter& limiter, Uint64 targetNs) {
 
 static void waitForTick(u32 p1, u16 p2) {
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation) {
+    if (dusk::getSettings().game.enableFrameInterpolation && !dusk::getTransientSettings().skipFrameRateLimit) {
         return;
     }
     if (dusk::getTransientSettings().skipFrameRateLimit) {

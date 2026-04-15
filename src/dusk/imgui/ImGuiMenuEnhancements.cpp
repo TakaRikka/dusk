@@ -83,6 +83,12 @@ namespace dusk {
 
                 config::ImGuiCheckbox("Invert Camera X Axis", getSettings().game.invertCameraXAxis);
 
+                config::ImGuiCheckbox("Disable Main HUD", getSettings().game.disableMainHUD);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Disables the main HUD of the game.\n"
+                                      "Useful for recording or a more immersive experience!");
+                }
+
                 ImGui::EndMenu();
             }
 
@@ -185,10 +191,9 @@ namespace dusk {
             }
 
             if (ImGui::BeginMenu("Tools")) {
-                config::ImGuiCheckbox("Enable Turbo Key", getSettings().game.enableTurboKeybind);
+                config::ImGuiCheckbox("Turbo Key", getSettings().game.enableTurboKeybind);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Holding TAB will speed up the game.\n"
-                                      "This will not work with the \"Unlock Framerate\" enhancement.");
+                    ImGui::SetTooltip("Hold TAB to increase game speed by up to 4x.");
                 }
 
                 ImGui::EndMenu();
