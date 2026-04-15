@@ -17,6 +17,7 @@ namespace dusk {
 		void drawInventoryTab();
 		void drawCollectionTab();
 		void drawFlagsTab();
+        void drawMinigameTab();
 		void drawConfigTab();
 
 	private:

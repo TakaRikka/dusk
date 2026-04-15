@@ -268,6 +268,11 @@ int daBalloon2D_c::draw() {
 int daBalloon2D_c::execute() {
     setAllAlpha();
     setComboAlpha();
+
+    #if TARGET_PC
+    updateOnWide();
+    #endif
+
     setHIO(false);
     return 1;
 }
@@ -278,6 +283,15 @@ void daBalloon2D_c::drawMeter() {
     drawAddScore();
 }
 
+#if TARGET_PC
+void daBalloon2D_c::updateOnWide() {
+    // Combo HUD
+    l_HOSTIO = {};
+
+    l_HOSTIO.m.m2DNumberCombo2PosX = mDoGph_gInf_c::ScaleHUDXRight(l_HOSTIO.m.m2DNumberCombo2PosX);
+    l_HOSTIO.m.mAdjustmentToggle = 1;
+}
+#endif
 
 void daBalloon2D_c::setComboCount(u8 size, u8 comboNum) {
     if (mComboNum != comboNum) {

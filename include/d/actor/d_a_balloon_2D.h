@@ -44,6 +44,9 @@ public:
     int draw();
     int execute();
     void drawMeter();
+    #if TARGET_PC
+    void updateOnWide();
+    #endif
     void setComboCount(u8, u8);
     void setScoreCount(u32);
     void addScoreCount(cXyz*, u32, u8);

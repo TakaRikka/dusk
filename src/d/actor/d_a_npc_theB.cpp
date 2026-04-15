@@ -239,6 +239,17 @@ cPhs_Step daNpcTheB_c::create() {
     fopAcM_ct(this, daNpcTheB_c);
 
     cPhs_Step phase = dComIfG_resLoad(&mPhase, l_arcName);
+#if TARGET_PC
+    // !@bug On PC (and presumably the WiiU version) during the wagon escort,
+    // Telma's main() can queue the PERSONAL_COMBAT_INTRO (Telma's initial dialog when the escort starts)
+    // before Link's create() sets getPlayer(0), so demoCheck drops the event and the dialog never shows up
+    if (phase == cPhs_COMPLEATE_e && dComIfGp_getPlayer(0) == NULL &&
+        strcmp(dComIfGp_getStartStageName(), "F_SP121") == 0 &&
+        dComIfG_play_c::getLayerNo(0) == 3)
+    {
+        return cPhs_INIT_e;
+    }
+#endif
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x2CB0)) {
             return cPhs_ERROR_e;

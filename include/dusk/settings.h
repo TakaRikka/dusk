@@ -66,6 +66,7 @@ struct UserSettings {
         // Preferences
         ConfigVar<bool> enableMirrorMode;
         ConfigVar<bool> invertCameraXAxis;
+        ConfigVar<bool> disableMainHUD;
 
         // Graphics
         ConfigVar<BloomMode> bloomMode;

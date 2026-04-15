@@ -15,6 +15,12 @@ namespace dusk {
                     ImGui::SetTooltip("Mirrors the world horizontally, matching the Wii version of the game.");
                 }
 
+                config::ImGuiCheckbox("Disable Main HUD", getSettings().game.disableMainHUD);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Disables the main HUD of the game.\n"
+                                      "Useful for recording or a more immersive experience!");
+                }
+
                 ImGui::SeparatorText("Difficulty");
 
                 config::ImGuiSliderInt("Damage Multiplier", getSettings().game.damageMultiplier, 1, 8, "x%d");
