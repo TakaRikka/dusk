@@ -215,7 +215,15 @@ int daDsh_c::create() {
 
     mType = getType();
 
+#ifdef TARGET_PC
+    const char* l_resName[] = {l_arcName[mType], ""};
+#else
+    // !@bug By making this static, it is only initialized the first time it runs
+    // If gates that use other arcs are loaded later (without restarting the game)
+    // this array never gets updated and will load the incorrect arc
+    // That causes daDsh_c::CreateHeap to fail getting model data and the gate to never load
     static const char* l_resName[] = {l_arcName[mType], ""};
+#endif
 
     int phase = mResLoader.load(l_resName, NULL);
     if (phase == cPhs_COMPLEATE_e) {
