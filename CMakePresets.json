@@ -380,7 +380,39 @@
       "inherits": [
         "macos-default-relwithdebinfo",
         "ci"
-      ]
+      ],
+      "cacheVariables": {
+        "AURORA_DAWN_PROVIDER": "vendor",
+        "AURORA_NOD_PROVIDER": "vendor",
+        "CMAKE_DISABLE_FIND_PACKAGE_PkgConfig": {
+          "type": "BOOL",
+          "value": true
+        },
+        "CMAKE_OSX_DEPLOYMENT_TARGET": "11.0",
+        "CMAKE_IGNORE_PREFIX_PATH": "/opt/homebrew",
+        "DUSK_MOVIE_SUPPORT": {
+          "type": "BOOL",
+          "value": false
+        }
+      }
+    },
+    {
+      "name": "x-macos-ci-arm64",
+      "inherits": [
+        "x-macos-ci"
+      ],
+      "cacheVariables": {
+        "CMAKE_OSX_ARCHITECTURES": "arm64"
+      }
+    },
+    {
+      "name": "x-macos-ci-x86_64",
+      "inherits": [
+        "x-macos-ci"
+      ],
+      "cacheVariables": {
+        "CMAKE_OSX_ARCHITECTURES": "x86_64"
+      }
     },
     {
       "name": "x-ios-ci",
@@ -389,7 +421,11 @@
       ],
       "cacheVariables": {
         "CMAKE_C_COMPILER_LAUNCHER": "sccache",
-        "CMAKE_CXX_COMPILER_LAUNCHER": "sccache"
+        "CMAKE_CXX_COMPILER_LAUNCHER": "sccache",
+        "DUSK_MOVIE_SUPPORT": {
+          "type": "BOOL",
+          "value": false
+        }
       }
     },
     {
@@ -399,7 +435,11 @@
       ],
       "cacheVariables": {
         "CMAKE_C_COMPILER_LAUNCHER": "sccache",
-        "CMAKE_CXX_COMPILER_LAUNCHER": "sccache"
+        "CMAKE_CXX_COMPILER_LAUNCHER": "sccache",
+        "DUSK_MOVIE_SUPPORT": {
+          "type": "BOOL",
+          "value": false
+        }
       }
     },
     {
@@ -556,10 +596,19 @@
       ]
     },
     {
-      "name": "x-macos-ci",
-      "configurePreset": "x-macos-ci",
-      "description": "(Internal) macOS CI",
-      "displayName": "(Internal) macOS CI",
+      "name": "x-macos-ci-arm64",
+      "configurePreset": "x-macos-ci-arm64",
+      "description": "(Internal) macOS CI arm64",
+      "displayName": "(Internal) macOS CI arm64",
+      "targets": [
+        "install"
+      ]
+    },
+    {
+      "name": "x-macos-ci-x86_64",
+      "configurePreset": "x-macos-ci-x86_64",
+      "description": "(Internal) macOS CI x86_64",
+      "displayName": "(Internal) macOS CI x86_64",
       "targets": [
         "install"
       ]
@@ -567,8 +616,8 @@
     {
       "name": "x-ios-ci",
       "configurePreset": "x-ios-ci",
-      "description": "(Internal) iOS CI",
-      "displayName": "(Internal) iOS CI",
+      "description": "(Internal) iOS CI arm64",
+      "displayName": "(Internal) iOS CI arm64",
       "targets": [
         "install"
       ]
@@ -576,8 +625,8 @@
     {
       "name": "x-tvos-ci",
       "configurePreset": "x-tvos-ci",
-      "description": "(Internal) tvOS CI",
-      "displayName": "(Internal) tvOS CI",
+      "description": "(Internal) tvOS CI arm64",
+      "displayName": "(Internal) tvOS CI arm64",
       "targets": [
         "install"
       ]

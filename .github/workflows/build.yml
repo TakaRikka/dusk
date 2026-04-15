@@ -81,10 +81,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: AppleClang macOS universal
+          - name: AppleClang macOS arm64
             platform: macos
-            preset: x-macos-ci
-            artifact_name: macos-appleclang-universal
+            preset: x-macos-ci-arm64
+            artifact_name: macos-appleclang-arm64
+          - name: AppleClang macOS x86_64
+            platform: macos
+            preset: x-macos-ci-x86_64
+            artifact_name: macos-appleclang-x86_64
           - name: AppleClang iOS arm64
             platform: ios
             preset: x-ios-ci

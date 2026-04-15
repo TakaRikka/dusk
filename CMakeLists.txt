@@ -401,43 +401,45 @@ endif ()
 if (APPLE)
     if (IOS)
         set(DUSK_RESOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/platforms/ios)
-        set(DUSK_INFO_PLIST ${DUSK_RESOURCE_DIR}/Info.plist.in)
-        file(GLOB_RECURSE DUSK_RESOURCE_FILES "${DUSK_RESOURCE_DIR}/Base.lproj/*")
+    elseif (TVOS)
+        set(DUSK_RESOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/platforms/tvos)
+    else ()
+        set(DUSK_RESOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/platforms/macos)
     endif ()
-    if (IOS OR TVOS)
-        target_sources(dusk PRIVATE ${DUSK_RESOURCE_FILES})
-        foreach (FILE ${DUSK_RESOURCE_FILES})
-            file(RELATIVE_PATH NEW_FILE "${DUSK_RESOURCE_DIR}" ${FILE})
-            get_filename_component(NEW_FILE_PATH ${NEW_FILE} DIRECTORY)
-            set_property(SOURCE ${FILE} PROPERTY MACOSX_PACKAGE_LOCATION "Resources/${NEW_FILE_PATH}")
-        endforeach ()
-        set_target_properties(
-            dusk PROPERTIES
-            MACOSX_BUNDLE TRUE
-            MACOSX_BUNDLE_BUNDLE_NAME ${DUSK_BUNDLE_NAME}
-            MACOSX_BUNDLE_GUI_IDENTIFIER ${DUSK_BUNDLE_IDENTIFIER}
-            MACOSX_BUNDLE_BUNDLE_VERSION ${DUSK_VERSION_STRING}
-            MACOSX_BUNDLE_SHORT_VERSION_STRING ${DUSK_SHORT_VERSION_STRING}
-            OUTPUT_NAME dusk
-            XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "YES"
-            XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "YES"
+    set(DUSK_INFO_PLIST ${DUSK_RESOURCE_DIR}/Info.plist.in)
+    file(GLOB_RECURSE DUSK_RESOURCE_FILES "${DUSK_RESOURCE_DIR}/Base.lproj/*")
+    target_sources(dusk PRIVATE ${DUSK_RESOURCE_FILES})
+    foreach (FILE ${DUSK_RESOURCE_FILES})
+        file(RELATIVE_PATH NEW_FILE "${DUSK_RESOURCE_DIR}" ${FILE})
+        get_filename_component(NEW_FILE_PATH ${NEW_FILE} DIRECTORY)
+        set_property(SOURCE ${FILE} PROPERTY MACOSX_PACKAGE_LOCATION "Resources/${NEW_FILE_PATH}")
+    endforeach ()
+    set_target_properties(
+        dusk PROPERTIES
+        MACOSX_BUNDLE TRUE
+        MACOSX_BUNDLE_BUNDLE_NAME ${DUSK_BUNDLE_NAME}
+        MACOSX_BUNDLE_GUI_IDENTIFIER ${DUSK_BUNDLE_IDENTIFIER}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${DUSK_VERSION_STRING}
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${DUSK_SHORT_VERSION_STRING}
+        OUTPUT_NAME dusk
+        XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "YES"
+        XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "YES"
+    )
+    if (CMAKE_GENERATOR STREQUAL "Xcode")
+        set_target_properties(dusk PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${DUSK_INFO_PLIST})
+    elseif (DEFINED DUSK_INFO_PLIST)
+        set(MACOSX_BUNDLE_EXECUTABLE_NAME dusk)
+        set(MACOSX_BUNDLE_GUI_IDENTIFIER ${DUSK_BUNDLE_IDENTIFIER})
+        set(MACOSX_BUNDLE_BUNDLE_NAME ${DUSK_BUNDLE_NAME})
+        set(MACOSX_BUNDLE_BUNDLE_VERSION ${DUSK_VERSION_STRING})
+        set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${DUSK_SHORT_VERSION_STRING})
+        set(DUSK_GENERATED_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/dusk.Info.plist)
+        configure_file(${DUSK_INFO_PLIST} ${DUSK_GENERATED_INFO_PLIST})
+        add_custom_command(
+            TARGET dusk POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different ${DUSK_GENERATED_INFO_PLIST} $<TARGET_FILE_DIR:dusk>/Info.plist
+            VERBATIM
         )
-        if (CMAKE_GENERATOR STREQUAL "Xcode")
-            set_target_properties(dusk PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${DUSK_INFO_PLIST})
-        elseif (DEFINED DUSK_INFO_PLIST)
-            set(MACOSX_BUNDLE_EXECUTABLE_NAME dusk)
-            set(MACOSX_BUNDLE_GUI_IDENTIFIER ${DUSK_BUNDLE_IDENTIFIER})
-            set(MACOSX_BUNDLE_BUNDLE_NAME ${DUSK_BUNDLE_NAME})
-            set(MACOSX_BUNDLE_BUNDLE_VERSION ${DUSK_VERSION_STRING})
-            set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${DUSK_SHORT_VERSION_STRING})
-            set(DUSK_GENERATED_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/dusk.Info.plist)
-            configure_file(${DUSK_INFO_PLIST} ${DUSK_GENERATED_INFO_PLIST})
-            add_custom_command(
-                TARGET dusk POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different ${DUSK_GENERATED_INFO_PLIST} $<TARGET_FILE_DIR:dusk>/Info.plist
-                VERBATIM
-            )
-        endif ()
     endif ()
 endif ()
 
