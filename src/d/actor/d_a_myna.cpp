@@ -363,6 +363,18 @@ int daMyna_c::destroy() {
         mpMorf->stopZelAnime();
     }
 
+#ifdef TARGET_PC
+    // !@bug d_a_myna.rel unload used to zero these file-statics; with static linking they dangle across scenes.
+    daMyna_LightActor = NULL;
+    daMyna_evtTagActor0 = NULL;
+    daMyna_evtTagActor1 = NULL;
+    daMyna_actor_count = 0;
+    for (int i = 0; i < 10; i++) {
+        daMyna_targetActor[i] = NULL;
+        daMyna_subActor[i] = NULL;
+    }
+#endif
+
 #if DEBUG
     l_HOSTIO.removeHIO();
 #endif
