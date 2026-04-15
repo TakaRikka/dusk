@@ -829,8 +829,8 @@ namespace dusk {
 
         ImGuiBeginGroupPanel("Items", { 200, 100 });
         for (int slot = 0; slot < 24; slot++) {
-            ImGui::Text("Slot %02d: ", slot);
-            ImGui::SameLine();
+            ImGui::Text("Slot %02d (%s): ", slot, itemMap.find(getSlotDefault(slot))->second.m_name.c_str());
+            ImGui::SameLine(240.0f);
             if (ImGui::BeginCombo(fmt::format("##ItemComboBox{}", slot).c_str(), itemMap.find(item.mItems[slot])->second.m_name.c_str())) {
                 if (ImGui::Selectable("None")) {
                     dComIfGs_setItem(slot, dItemNo_NONE_e);
@@ -902,27 +902,42 @@ namespace dusk {
     void ImGuiSaveEditor::drawCollectionTab() {
         if (ImGui::TreeNode("Equipment")) {
             if (ImGui::TreeNode("Swords")) {
+                static u8 sword_list[] = {
+                    dItemNo_SWORD_e,
+                    dItemNo_MASTER_SWORD_e,
+                    dItemNo_WOOD_STICK_e,
+                    dItemNo_LIGHT_SWORD_e,
+                };
+
                 for (int i = 0; i < 4; i++) {
-                    bool got = dComIfGs_isCollectSword((u8)i) != 0;
+                    bool got = dComIfGs_isItemFirstBit(sword_list[i]) != 0;
                     if (ImGui::Checkbox(fmt::format("{0}##sword_{1}", sSwordNames[i], i).c_str(), &got)) {
-                        if (got) dComIfGs_setCollectSword((u8)i);
-                        else     dComIfGs_offCollectSword((u8)i);
+                        if (got) dComIfGs_onItemFirstBit(sword_list[i]);
+                        else     dComIfGs_offItemFirstBit(sword_list[i]);
                     }
                 }
                 ImGui::TreePop();
             }
 
             if (ImGui::TreeNode("Shields")) {
+                static u8 shield_list[] = {
+                    dItemNo_SHIELD_e,
+                    dItemNo_WOOD_SHIELD_e,
+                    dItemNo_HYLIA_SHIELD_e,
+                };
+
                 for (int i = 0; i < 3; i++) {
-                    bool got = dComIfGs_isCollectShield((u8)i) != 0;
+                    bool got = dComIfGs_isItemFirstBit(shield_list[i]) != 0;
                     if (ImGui::Checkbox(fmt::format("{0}##shield_{1}", sShieldNames[i], i).c_str(), &got)) {
-                        if (got) dComIfGs_setCollectShield((u8)i);
-                        else     dComIfGs_offCollectShield((u8)i);
+                        if (got) dComIfGs_onItemFirstBit(shield_list[i]);
+                        else     dComIfGs_offItemFirstBit(shield_list[i]);
                     }
                 }
                 ImGui::TreePop();
             }
 
+            // TODO: the game checks if you're in ranch clothes, and if so won't display any other tunics in the menu
+            // find a way to deal with this later
             if (ImGui::TreeNode("Tunics")) {
                 bool ordonClothes = dComIfGs_isItemFirstBit(dItemNo_WEAR_CASUAL_e) != 0;
                 if (ImGui::Checkbox("Ordon Clothes##tunic_ordon", &ordonClothes)) {
@@ -1235,7 +1250,7 @@ namespace dusk {
         }
         ImGuiEndGroupPanel();
 
-        ImVec2 cursor = ImGui::GetCursorPos();
+        ImVec2 start_cursor = ImGui::GetCursorPos();
 
         ImGui::SameLine();
 
@@ -1245,13 +1260,17 @@ namespace dusk {
         }
         ImGuiEndGroupPanel();
 
-        ImGui::SetCursorPos(cursor);
+        ImVec2 cursor = ImGui::GetCursorPos();
+
+        ImGui::SetCursorPos(start_cursor);
 
         ImGuiBeginGroupPanel("Item", { 100, 100 });
         for (int j = 0; j < 1; j++) {
             drawFlagList(fmt::format("##_item{}", j).c_str(), membit.mItem[j]);
         }
         ImGuiEndGroupPanel();
+
+        ImGui::SetCursorPos({ start_cursor.x, cursor.y });
     }
 
     void ImGuiSaveEditor::drawFlagsTab() {
@@ -1328,7 +1347,7 @@ namespace dusk {
             dSv_event_c& event = dComIfGs_getSaveData()->mEvent;
             for (int e = 0; e < 255; e++) {
                 ImGui::Text("%03d ", e);
-                ImGui::SameLine();
+                ImGui::SameLine(80.0f);
                 for (int i = 7; i >= 0; i--) {
                     bool flag = event.mEvent[e] & (1 << i);
                     if (ImGui::Checkbox(fmt::format("##event{0}{1}", e, i).c_str(), &flag)) {
@@ -1348,7 +1367,15 @@ namespace dusk {
     void ImGuiSaveEditor::drawConfigTab() {
         dSv_player_config_c& config = dComIfGs_getSaveData()->getPlayer().getConfig();
         ImGui::Checkbox("Enable Vibration", (bool*)&config.mVibration);
-        if (ImGui::BeginCombo("Target Type", "Hold")) {
+
+        static const char* kTargetTypeNames[] = {"Hold", "Switch"};
+        if (ImGui::BeginCombo("Target Type", kTargetTypeNames[config.mAttentionType])) {
+            if (ImGui::Selectable("Hold")) {
+                config.mAttentionType = 0;
+            }
+            if (ImGui::Selectable("Switch")) {
+                config.mAttentionType = 1;
+            }
             ImGui::EndCombo();
         }
 
