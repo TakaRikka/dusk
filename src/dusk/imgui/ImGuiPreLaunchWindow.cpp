@@ -7,6 +7,7 @@
 #include "ImGuiConsole.hpp"
 #include "dusk/main.h"
 #include "dusk/settings.h"
+#include "../iso_validate.hpp"
 
 #include <SDL3/SDL_dialog.h>
 #include <SDL3/SDL_error.h>
@@ -26,15 +27,42 @@ static constexpr std::array<SDL_DialogFileFilter, 2> skGameDiscFileFilters{{
     {"All Files", "*"},
 }};
 
+static std::string ShowIsoInvalidError(const iso::ValidationError code) {
+    using namespace std::literals::string_literals;
+
+    switch (code) {
+    case iso::ValidationError::IOError:
+        return "Unknown IO error occurred"s;
+    case iso::ValidationError::InvalidImage:
+        return "Unable to interpret selected file as a disc image"s;
+    case iso::ValidationError::WrongGame:
+        return "Selected disc image is for a different game"s;
+    case iso::ValidationError::WrongVersion:
+        return "Selected disc image is for an unsupported version of the game. Only North American GameCube (NTSC/GZ2E01) is supported at this time."s;
+    case iso::ValidationError::ExecutableMismatch:
+        return "Selected disc image contains modified executable files."s;
+    default:
+        return "Unknown error"s;
+    }
+}
+
 void fileDialogCallback(void* userdata, const char* const* filelist, [[maybe_unused]] int filter) {
     auto* self = static_cast<ImGuiPreLaunchWindow*>(userdata);
+    self->m_errorString.clear();
     if (filelist != nullptr) {
         if (filelist[0] == nullptr) {
             // Cancelled
             self->m_selectedIsoPath.clear();
         } else {
-            self->m_selectedIsoPath = filelist[0];
-            getSettings().backend.isoPath.setValue(self->m_selectedIsoPath);
+            const auto path = filelist[0];
+            const auto ret = iso::validate(path);
+            if (ret != iso::ValidationError::Success) {
+                self->m_selectedIsoPath.clear();
+                self->m_errorString = std::move(ShowIsoInvalidError(ret));
+                return;
+            }
+            self->m_selectedIsoPath = path;
+            getSettings().backend.isoPath.setValue(path);
             config::Save();
         }
     } else {
@@ -111,6 +139,10 @@ void ImGuiPreLaunchWindow::drawMainMenu() {
     ImGui::PushFont(ImGuiEngine::fontLarge);
 
     if (!isSelectedPathValid()) {
+        if (!m_errorString.empty()) {
+            ImGuiTextCenter(m_errorString);
+        }
+
         if (ImGuiButtonCenter("Select disc image...")) {
             SDL_ShowOpenFileDialog(&fileDialogCallback, this, aurora::window::get_sdl_window(),
                                    skGameDiscFileFilters.data(), int(skGameDiscFileFilters.size()),
@@ -148,6 +180,10 @@ void ImGuiPreLaunchWindow::drawOptions() {
     if (ImGui::BeginChild("OptionsChild", ImVec2(childWidth, endCursorY - cursorY),
                           ImGuiChildFlags_None, ImGuiWindowFlags_NoBackground))
     {
+        if (!m_errorString.empty()) {
+            ImGuiTextCenter(m_errorString);
+        }
+
         ImGui::InputText("Game ISO Path", &m_selectedIsoPath, ImGuiInputTextFlags_ReadOnly);
         ImGui::SameLine();
         if (ImGui::Button("Set")) {
