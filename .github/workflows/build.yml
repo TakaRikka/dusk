@@ -106,7 +106,9 @@ jobs:
 
       - name: Install Rust iOS target
         if: matrix.platform == 'ios'
-        run: rustup target add aarch64-apple-ios
+        run: |
+          rustup toolchain install stable
+          rustup target add aarch64-apple-ios
 
       - name: Install Rust tvOS target
         if: matrix.platform == 'tvos'
