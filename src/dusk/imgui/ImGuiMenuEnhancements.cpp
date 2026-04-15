@@ -83,6 +83,12 @@ namespace dusk {
 
                 config::ImGuiCheckbox("Invert Camera X Axis", getSettings().game.invertCameraXAxis);
 
+                config::ImGuiCheckbox("Disable Main HUD", getSettings().game.disableMainHUD);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Disables the main HUD of the game.\n"
+                                      "Useful for recording or a more immersive experience!");
+                }
+
                 ImGui::EndMenu();
             }
 
