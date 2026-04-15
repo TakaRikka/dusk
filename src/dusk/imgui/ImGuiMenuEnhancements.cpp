@@ -149,8 +149,7 @@ namespace dusk {
 
                 config::ImGuiCheckbox("Turbo Key", getSettings().game.enableTurboKeybind);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Holding TAB will speed up the game.\n"
-                                      "This will not work with the \"Unlock Framerate\" enhancement.");
+                    ImGui::SetTooltip("Hold TAB to increase game speed by up to 4x.");
                 }
 
                 ImGui::EndMenu();
