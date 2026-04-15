@@ -10,6 +10,8 @@ namespace dusk {
     void ImGuiMenuEnhancements::draw() {
         if (ImGui::BeginMenu("Enhancements")) {
             if (ImGui::BeginMenu("Gameplay")) {
+                ImGui::SeparatorText("Preferences");
+
                 config::ImGuiCheckbox("Mirror Mode", getSettings().game.enableMirrorMode);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Mirrors the world horizontally, matching the Wii version of the game.");
