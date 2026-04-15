@@ -4549,6 +4549,7 @@ public:
     /* 0x03850 */ daAlink_procFunc mpProcFunc;
 
 #if TARGET_PC
+    void handleGamepadColor();
     void handleWolfHowl();
     void handleQuickTransform();
     bool checkGyroAimItemContext();

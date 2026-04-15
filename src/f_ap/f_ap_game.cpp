@@ -748,6 +748,10 @@ void fapGm_Execute() {
     #endif
 
 #if TARGET_PC
+    if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
+        dynamic_cast<daAlink_c*>(link)->handleGamepadColor();
+    }
+
     if (mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getTrigX(PAD_1)) {
         if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
             dynamic_cast<daAlink_c*>(link)->handleWolfHowl();
