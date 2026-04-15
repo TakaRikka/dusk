@@ -8,8 +8,9 @@ on:
   pull_request:
 
 env:
-  SCCACHE_GHA_ENABLED: "true"
+  # SCCACHE_GHA_ENABLED: "true"
   RUSTC_WRAPPER: "sccache"
+  SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
 jobs:
   build-linux:
@@ -21,13 +22,13 @@ jobs:
       matrix:
         include:
           - name: GCC x86_64
-            runner: ubuntu-latest
+            runner: [self-hosted, Linux]
             preset: gcc
             artifact_arch: x86_64
-          - name: GCC aarch64
-            runner: ubuntu-24.04-arm
-            preset: gcc
-            artifact_arch: aarch64
+          # - name: GCC aarch64
+          #   runner: ubuntu-24.04-arm
+          #   preset: gcc
+          #   artifact_arch: aarch64
           # - name: Clang x86_64
           #   runner: ubuntu-latest
           #   preset: clang
@@ -40,16 +41,21 @@ jobs:
           submodules: recursive
 
       - name: Install dependencies
+        if: 'false' # disabled for self-hosted
         run: |
           sudo apt-get update
           sudo apt-get -y install ninja-build clang lld openssl libcurl4-openssl-dev \
             zlib1g-dev libglu1-mesa-dev libdbus-1-dev libvulkan-dev libxi-dev libxrandr-dev libasound2-dev \
             libpulse-dev libudev-dev libpng-dev libncurses5-dev libx11-xcb-dev libfreetype-dev \
             libxinerama-dev libxcursor-dev python3-markupsafe libgtk-3-dev libssl-dev \
-            libxss-dev libfuse2
+            libxss-dev libfuse2 libusb-1.0-0-dev libdecor-0-dev libpipewire-0.3-dev libunwind-dev
 
       - name: Setup sccache
+        if: 'false' # disabled for self-hosted
         uses: mozilla-actions/sccache-action@v0.0.9
+
+      - name: Print sccache stats
+        run: sccache --show-stats
 
       - name: Configure CMake
         run: cmake --preset x-linux-ci-${{matrix.preset}}
@@ -68,9 +74,9 @@ jobs:
             build/install/Dusk-*.AppImage
             build/install/debug.tar.*
 
-
   build-apple:
     name: Build Apple (${{matrix.name}})
+    if: 'false' # TODO enable when CI is free
     runs-on: macos-latest
     strategy:
       fail-fast: false
@@ -80,14 +86,14 @@ jobs:
             platform: macos
             preset: x-macos-ci
             artifact_name: macos-appleclang-universal
-          # - name: AppleClang iOS arm64 # TODO enable when CI is free
-          #   platform: ios
-          #   preset: x-ios-ci
-          #   artifact_name: ios-appleclang-arm64
-          # - name: AppleClang tvOS arm64 # TODO enable when CI is free
-          #   platform: tvos
-          #   preset: x-tvos-ci
-          #   artifact_name: tvos-appleclang-arm64
+          - name: AppleClang iOS arm64
+            platform: ios
+            preset: x-ios-ci
+            artifact_name: ios-appleclang-arm64
+          - name: AppleClang tvOS arm64
+            platform: tvos
+            preset: x-tvos-ci
+            artifact_name: tvos-appleclang-arm64
 
     steps:
       - uses: actions/checkout@v6
@@ -139,26 +145,22 @@ jobs:
     name: Build Windows (${{matrix.name}})
     runs-on: ${{matrix.runner}}
 
-    env:
-      BUILD_DIR: C:\build
-      SCCACHE_DIR: C:\sccache
-
     strategy:
       fail-fast: false
       matrix:
         include:
           - name: MSVC x86_64
-            runner: windows-latest
+            runner: [self-hosted, Windows]
             preset: msvc
             msvc_arch: amd64
             vcpkg_arch: x64
             artifact_arch: x86_64
-          - name: MSVC arm64
-            runner: windows-11-arm
-            preset: arm64-msvc
-            msvc_arch: arm64
-            vcpkg_arch: arm64
-            artifact_arch: arm64
+          # - name: MSVC arm64
+          #   runner: windows-11-arm
+          #   preset: arm64-msvc
+          #   msvc_arch: arm64
+          #   vcpkg_arch: arm64
+          #   artifact_arch: arm64
           # - name: Clang x86_64
           #   runner: windows-latest
           #   preset: clang
@@ -185,11 +187,10 @@ jobs:
         uses: mozilla-actions/sccache-action@v0.0.9
 
       - name: Install dependencies
+        if: 'false' # disabled for self-hosted
         run: |
           choco install ninja
-          vcpkg install zlib:${{matrix.vcpkg_arch}}-windows-static bzip2:${{matrix.vcpkg_arch}}-windows-static `
-            zstd:${{matrix.vcpkg_arch}}-windows-static liblzma:${{matrix.vcpkg_arch}}-windows-static `
-            freetype:${{matrix.vcpkg_arch}}-windows-static
+          vcpkg install freetype:${{matrix.vcpkg_arch}}-windows-static zstd:${{matrix.vcpkg_arch}}-windows-static
 
       - name: Configure CMake
         run: cmake --preset x-windows-ci-${{matrix.preset}}
@@ -202,5 +203,7 @@ jobs:
         with:
           name: dusk-${{env.DUSK_VERSION}}-win32-msvc-${{matrix.artifact_arch}}
           path: |
-            ${{env.BUILD_DIR}}/install/*.exe
-            ${{env.BUILD_DIR}}/install/debug.7z
+            build/install/*.exe
+            build/install/*.dll
+            build/install/res/
+            build/install/debug.7z

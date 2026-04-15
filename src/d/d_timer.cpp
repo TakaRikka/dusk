@@ -23,6 +23,10 @@
 #include "m_Do/m_Do_lib.h"
 #include <cstring>
 
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#endif
+
 static int dTimer_createStart2D(s32 param_0, u16 param_1);
 
 int dTimer_c::_create() {
@@ -1336,27 +1340,42 @@ void dDlst_TimerScrnDraw_c::draw() {
     f32 temp = (f32)g_drawHIO.mMiniGame.mGetInTextAlphaFrames +
                ((f32)g_drawHIO.mMiniGame.mGetInTextWaitFrames + 60.0f);
 
+#if TARGET_PC
+    const u32 pending_ui_ticks = dusk::frame_interp::get_presentation_ui_advance_ticks();
+#else
+    const u32 pending_ui_ticks = 1u;
+#endif
+
     for (int i = 0; i < 51; i++) {
-        if (m_getin_info[i].bck_frame > 0.0f && m_getin_info[i].bck_frame < temp) {
-            f32 var_f29 = 1.0f;
+        for (u32 tick = 0; tick < pending_ui_ticks; tick++) {
+            if (!(m_getin_info[i].bck_frame > 0.0f && m_getin_info[i].bck_frame < temp)) {
+                break;
+            }
 
             if (m_getin_info[i].bck_frame < 60.0f) {
                 m_getin_info[i].bck_frame += g_drawHIO.mMiniGame.mGetInTextAnimSpeed;
                 if (m_getin_info[i].bck_frame > 60.0f) {
                     m_getin_info[i].bck_frame = 60.0f;
                 }
-
-                playBckAnimation(m_getin_info[i].bck_frame);
-            } else if (m_getin_info[i].bck_frame < g_drawHIO.mMiniGame.mGetInTextWaitFrames + 60.0f)
-            {
+            } else if (m_getin_info[i].bck_frame < g_drawHIO.mMiniGame.mGetInTextWaitFrames + 60.0f) {
                 m_getin_info[i].bck_frame++;
-                playBckAnimation(60.0f);
             } else if (m_getin_info[i].bck_frame < temp) {
                 m_getin_info[i].bck_frame++;
-                playBckAnimation(60.0f);
+            }
+        }
 
+        if (m_getin_info[i].bck_frame > 0.0f && m_getin_info[i].bck_frame < temp) {
+            f32 var_f29 = 1.0f;
+            if (m_getin_info[i].bck_frame >= g_drawHIO.mMiniGame.mGetInTextWaitFrames + 60.0f &&
+                m_getin_info[i].bck_frame < temp) {
                 var_f29 = acc(g_drawHIO.mMiniGame.mGetInTextAlphaFrames,
                               temp - m_getin_info[i].bck_frame, 0);
+            }
+
+            if (m_getin_info[i].bck_frame < 60.0f) {
+                playBckAnimation(m_getin_info[i].bck_frame);
+            } else {
+                playBckAnimation(60.0f);
             }
 
             mpGetInParent->setAlphaRate(var_f29);
@@ -1388,8 +1407,7 @@ void dDlst_TimerScrnDraw_c::draw() {
                         m_getin_info[i].pikari_frame =
                             18.0f - g_drawHIO.mMiniGame.mGetInPikariAnimSpeed;
                     }
-                } else if (m_getin_info[i].bck_frame > g_drawHIO.mMiniGame.mStartPikariAppearFrames)
-                {
+                } else if (m_getin_info[i].bck_frame > g_drawHIO.mMiniGame.mStartPikariAppearFrames) {
                     m_getin_info[i].pikari_frame =
                         18.0f - g_drawHIO.mMiniGame.mStartPikariAnimSpeed;
                 }

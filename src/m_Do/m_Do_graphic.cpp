@@ -28,10 +28,6 @@
 #include "d/d_menu_collect.h"
 #include "d/d_meter2_info.h"
 #include "d/d_s_play.h"
-#include "dusk/endian.h"
-#include "dusk/frame_interpolation.h"
-#include "dusk/gx_helper.h"
-#include "dusk/logging.h"
 #include "f_ap/f_ap_game.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera_mng.h"
@@ -52,8 +48,12 @@
 
 #if TARGET_PC
 #include "d/actor/d_a_horse.h"
-#include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/dusk.h"
+#include "dusk/endian.h"
+#include "dusk/frame_interpolation.h"
+#include "dusk/gx_helper.h"
+#include "dusk/imgui/ImGuiConsole.hpp"
+#include "dusk/logging.h"
 #endif
 
 class mDoGph_HIO_c : public JORReflexible {
@@ -1989,12 +1989,13 @@ static void captureScreenPerspDrawInfo(JPADrawInfo& info) {
 static void drawItem3D() {
     ZoneScoped;
 #ifdef TARGET_PC
-    // Frame interpolation: Title screen needs 0.0f while everything else that runs through this is -100.0f.
-    // Running presentation faster than logic revealed the problem. Thanks, Nintendo.
-    if (fopAcM_SearchByName(fpcNm_TITLE_e) != nullptr) {
-        dMenu_Collect3D_c::setViewPortOffsetY(0.0f);
-    } else {
-        dMenu_Collect3D_c::setViewPortOffsetY(-100.0f);
+    if (dusk::getSettings().game.enableFrameInterpolation) {
+        // FRAME INTERP NOTE: Title screen needs 0.0f while everything else that runs through this is -100.0f.
+        if (fopAcM_SearchByName(fpcNm_TITLE_e) != nullptr) {
+            dMenu_Collect3D_c::setViewPortOffsetY(0.0f);
+        } else {
+            dMenu_Collect3D_c::setViewPortOffsetY(-100.0f);
+        }
     }
 #endif
     Mtx item_mtx;
@@ -2033,12 +2034,11 @@ int mDoGph_Painter() {
     #endif
 
 #ifdef TARGET_PC
-    for (u32 i = 0; i < pending_ui_ticks; ++i) {
+    for (u32 i = 0; i < pending_ui_ticks; ++i)
 #endif
+    {
         dComIfGp_particle_calcMenu();
-#ifdef TARGET_PC
     }
-#endif
 
     JFWDisplay::getManager()->setFader(mDoGph_gInf_c::getFader());
     mDoGph_gInf_c::setClearColor(mDoGph_gInf_c::getBackColor());
@@ -2598,13 +2598,12 @@ int mDoGph_Painter() {
     #endif
 
     GXSetClipMode(GX_CLIP_ENABLE);
-#ifdef TARGET_PC
-    for (u32 i = 0; i < pending_ui_ticks; ++i) {
+#if TARGET_PC
+    for (u32 i = 0; i < pending_ui_ticks; ++i)
 #endif
+    {
         dDlst_list_c::calcWipe();
-#ifdef TARGET_PC
     }
-#endif
     j3dSys.reinitGX();
 
     ortho.setOrtho(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),

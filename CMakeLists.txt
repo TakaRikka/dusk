@@ -113,7 +113,7 @@ set(DUSK_SENTRY_DSN "" CACHE STRING "Sentry DSN")
 set(DUSK_SENTRY_ENVIRONMENT "development" CACHE STRING "Sentry environment")
 
 if (DUSK_MOVIE_SUPPORT)
-    find_package(libjpeg-turbo QUIET)
+    find_package(libjpeg-turbo 3.0 CONFIG QUIET)
     if (libjpeg-turbo_FOUND)
         message(STATUS "dusk: Using system libjpeg-turbo")
     else ()
@@ -297,8 +297,12 @@ endif ()
 
 # Edit & Continue
 if (MSVC)
-    add_compile_options("/ZI")
-    add_link_options("/INCREMENTAL")
+    if (CMAKE_MSVC_DEBUG_INFORMATION_FORMAT STREQUAL "" AND CMAKE_BUILD_TYPE STREQUAL Debug)
+        set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "EditAndContinue")
+    endif ()
+    if (CMAKE_MSVC_DEBUG_INFORMATION_FORMAT STREQUAL "EditAndContinue")
+        add_link_options("/INCREMENTAL")
+    endif ()
 endif ()
 
 if(ANDROID)
