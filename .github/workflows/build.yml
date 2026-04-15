@@ -76,8 +76,7 @@ jobs:
 
   build-apple:
     name: Build Apple (${{matrix.name}})
-    if: 'false' # TODO enable when CI is free
-    runs-on: macos-latest
+    runs-on: [self-hosted, macOS]
     strategy:
       fail-fast: false
       matrix:
@@ -90,10 +89,10 @@ jobs:
             platform: ios
             preset: x-ios-ci
             artifact_name: ios-appleclang-arm64
-          - name: AppleClang tvOS arm64
-            platform: tvos
-            preset: x-tvos-ci
-            artifact_name: tvos-appleclang-arm64
+          # - name: AppleClang tvOS arm64
+          #   platform: tvos
+          #   preset: x-tvos-ci
+          #   artifact_name: tvos-appleclang-arm64
 
     steps:
       - uses: actions/checkout@v6
@@ -101,18 +100,9 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
-      - name: Update Homebrew
-        if: matrix.platform == 'tvos'
-        run: |
-          brew update
-          brew upgrade --formula
-
       - name: Install dependencies
+        if: 'false'
         run: brew install cmake ninja
-
-      - name: Install markupsafe
-        if: matrix.platform == 'tvos'
-        run: pip3 install --break-system-packages markupsafe
 
       - name: Install Rust iOS target
         if: matrix.platform == 'ios'
