@@ -445,7 +445,7 @@ namespace dusk {
                 }
 
                 if (ImGui::BeginTabItem("Minigame")) {
-                    //DrawFlagsTab();
+                    drawMinigameTab();
                     ImGui::EndTabItem();
                 }
 
@@ -856,7 +856,27 @@ namespace dusk {
         }
         ImGuiEndGroupPanel();
 
+        dSv_player_item_record_c& itemRecord = dComIfGs_getSaveData()->getPlayer().getItemRecord();
+        dSv_player_item_max_c& itemMax = dComIfGs_getSaveData()->getPlayer().getItemMax();
 
+        ImGuiBeginGroupPanel("Item Max Capacities", { 200, 100 });
+        ImGui::InputScalar("Arrows Max", ImGuiDataType_U8, &itemMax.mItemMax[0]);
+        ImGui::InputScalar("Normal Bombs Max", ImGuiDataType_U8, &itemMax.mItemMax[1]);
+        ImGui::InputScalar("Water Bombs Max", ImGuiDataType_U8, &itemMax.mItemMax[2]);
+        ImGui::InputScalar("Bomblings Max", ImGuiDataType_U8, &itemMax.mItemMax[3]);
+        ImGuiEndGroupPanel();
+
+        ImGuiBeginGroupPanel("Item Amounts", { 200, 100 });
+        ImGui::InputScalar("Arrows Amount", ImGuiDataType_U8, &itemRecord.mArrowNum);
+        ImGui::InputScalar("Slingshot Amount", ImGuiDataType_U8, &itemRecord.mPachinkoNum);
+        ImGui::InputScalar("Bomb Bag 1 Amount", ImGuiDataType_U8, &itemRecord.mBombNum[0]);
+        ImGui::InputScalar("Bomb Bag 2 Amount", ImGuiDataType_U8, &itemRecord.mBombNum[1]);
+        ImGui::InputScalar("Bomb Bag 3 Amount", ImGuiDataType_U8, &itemRecord.mBombNum[2]);
+        ImGui::InputScalar("Bottle 1 Amount", ImGuiDataType_U8, &itemRecord.mBottleNum[0]);
+        ImGui::InputScalar("Bottle 2 Amount", ImGuiDataType_U8, &itemRecord.mBottleNum[1]);
+        ImGui::InputScalar("Bottle 3 Amount", ImGuiDataType_U8, &itemRecord.mBottleNum[2]);
+        ImGui::InputScalar("Bottle 4 Amount", ImGuiDataType_U8, &itemRecord.mBottleNum[3]);
+        ImGuiEndGroupPanel();
     }
 
     static inline void setItemFirstBit(u8 itemNo, bool owned) {
@@ -1362,6 +1382,13 @@ namespace dusk {
             }
             ImGui::TreePop();
         }
+    }
+
+    void ImGuiSaveEditor::drawMinigameTab() {
+        dSv_MiniGame_c& minigame = dComIfGs_getSaveData()->getMiniGame();
+        InputScalarBE("STAR Game Time (Milliseconds)", ImGuiDataType_U32, &minigame.mHookGameTime);
+        InputScalarBE("Snowboard Race Time (Milliseconds)", ImGuiDataType_U32, &minigame.mRaceGameTime);
+        InputScalarBE("Fruit-Pop-Flight Score", ImGuiDataType_U32, &minigame.mBalloonScore);
     }
 
     void ImGuiSaveEditor::drawConfigTab() {
