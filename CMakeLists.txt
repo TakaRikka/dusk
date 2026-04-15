@@ -362,12 +362,14 @@ if (ANDROID)
     target_link_options(dusk PRIVATE "-Wl,-u,SDL_main")
 endif ()
 
-add_custom_command(TARGET dusk POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_SOURCE_DIR}/res"
-        "$<TARGET_FILE_DIR:dusk>/res"
-    COMMENT "Copying resources"
-)
+if (NOT APPLE)
+    add_custom_command(TARGET dusk POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_SOURCE_DIR}/res"
+            "$<TARGET_FILE_DIR:dusk>/res"
+        COMMENT "Copying resources"
+    )
+endif ()
 
 if (WIN32)
     set(DUSK_WINDOWS_RESOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/platforms/windows)
@@ -408,9 +410,16 @@ if (APPLE)
     endif ()
     set(DUSK_INFO_PLIST ${DUSK_RESOURCE_DIR}/Info.plist.in)
     file(GLOB_RECURSE DUSK_RESOURCE_FILES "${DUSK_RESOURCE_DIR}/Base.lproj/*")
+    file(GLOB_RECURSE DUSK_APP_RESOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/res/*")
     target_sources(dusk PRIVATE ${DUSK_RESOURCE_FILES})
+    target_sources(dusk PRIVATE ${DUSK_APP_RESOURCE_FILES})
     foreach (FILE ${DUSK_RESOURCE_FILES})
         file(RELATIVE_PATH NEW_FILE "${DUSK_RESOURCE_DIR}" ${FILE})
+        get_filename_component(NEW_FILE_PATH ${NEW_FILE} DIRECTORY)
+        set_property(SOURCE ${FILE} PROPERTY MACOSX_PACKAGE_LOCATION "Resources/${NEW_FILE_PATH}")
+    endforeach ()
+    foreach (FILE ${DUSK_APP_RESOURCE_FILES})
+        file(RELATIVE_PATH NEW_FILE "${CMAKE_CURRENT_SOURCE_DIR}" ${FILE})
         get_filename_component(NEW_FILE_PATH ${NEW_FILE} DIRECTORY)
         set_property(SOURCE ${FILE} PROPERTY MACOSX_PACKAGE_LOCATION "Resources/${NEW_FILE_PATH}")
     endforeach ()
@@ -421,7 +430,7 @@ if (APPLE)
         MACOSX_BUNDLE_GUI_IDENTIFIER ${DUSK_BUNDLE_IDENTIFIER}
         MACOSX_BUNDLE_BUNDLE_VERSION ${DUSK_VERSION_STRING}
         MACOSX_BUNDLE_SHORT_VERSION_STRING ${DUSK_SHORT_VERSION_STRING}
-        OUTPUT_NAME dusk
+        OUTPUT_NAME Dusk
         XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "YES"
         XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "YES"
     )
@@ -489,7 +498,9 @@ if (TARGET crashpad_handler)
 endif ()
 install(TARGETS ${BINARY_TARGETS} ${EXTRA_TARGETS} DESTINATION ${CMAKE_INSTALL_PREFIX})
 aurora_install_runtime_dlls(dusk ${CMAKE_INSTALL_PREFIX})
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/res DESTINATION ${CMAKE_INSTALL_PREFIX})
+if (NOT APPLE)
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/res DESTINATION ${CMAKE_INSTALL_PREFIX})
+endif ()
 if (CMAKE_BUILD_TYPE STREQUAL Debug OR CMAKE_BUILD_TYPE STREQUAL RelWithDebInfo)
     set(DEBUG_FILES_LIST "")
     foreach (target IN LISTS BINARY_TARGETS EXTRA_TARGETS)

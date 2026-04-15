@@ -411,7 +411,8 @@
         "x-macos-ci"
       ],
       "cacheVariables": {
-        "CMAKE_OSX_ARCHITECTURES": "x86_64"
+        "CMAKE_OSX_ARCHITECTURES": "x86_64",
+        "Rust_CARGO_TARGET": "x86_64-apple-darwin"
       }
     },
     {
