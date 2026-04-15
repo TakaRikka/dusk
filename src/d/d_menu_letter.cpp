@@ -452,7 +452,7 @@ void dMenu_Letter_c::wait_move() {
 
 void dMenu_Letter_c::slide_right_init() {
     field_0x358 = -field_0x1ec->getWidth() * mDoGph_gInf_c::getInvScale();
-    field_0x35c = field_0x1ec->getWidth() * mDoGph_gInf_c::getInvScale();
+    field_0x35c = field_0x1ec->getWidth() IF_NOT_DUSK(* mDoGph_gInf_c::getInvScale());
     changePageLight();
     copyDMYMenu();
     setAButtonString(0);
@@ -469,7 +469,7 @@ void dMenu_Letter_c::slide_right_move() {
 
 void dMenu_Letter_c::slide_left_init() {
     field_0x358 = field_0x1ec->getWidth() * mDoGph_gInf_c::getInvScale();
-    field_0x35c = -field_0x1ec->getWidth() * mDoGph_gInf_c::getInvScale();
+    field_0x35c = -field_0x1ec->getWidth() IF_NOT_DUSK(* mDoGph_gInf_c::getInvScale());
     changePageLight();
     copyDMYMenu();
     setAButtonString(0);

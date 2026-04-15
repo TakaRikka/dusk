@@ -110,6 +110,10 @@ struct dMsgScrnHowl_c : public dMsgScrnBase_c {
     /* 0x27A0 */ f32 field_0x27a0;
     /* 0x27A4 */ f32 field_0x27a4;
     /* 0x27A8 */ f32 field_0x27a8;
+
+#if TARGET_PC
+    u8 showCursor;
+#endif
 };
 
 #endif /* MSG_SCRN_D_MSG_SCRN_HOWL_H */

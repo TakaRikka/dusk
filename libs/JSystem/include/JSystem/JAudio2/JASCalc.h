@@ -11,9 +11,17 @@
 struct JASCalc {
     static void imixcopy(const s16*, const s16*, s16*, u32);
     static void bcopyfast(const void* src, void* dest, u32 size);
+#if TARGET_ANDROID
+    static void _bcopy(const void* src, void* dest, u32 size);
+#else
     static void bcopy(const void* src, void* dest, u32 size);
+#endif
     static void bzerofast(void* dest, u32 size);
+#if TARGET_ANDROID
+    static void _bzero(void* dest, u32 size);
+#else
     static void bzero(void* dest, u32 size);
+#endif
     static f32 pow2(f32);
 
     template <typename A, typename B>

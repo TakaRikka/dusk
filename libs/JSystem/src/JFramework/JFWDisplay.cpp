@@ -224,20 +224,17 @@ void JFWDisplay::endGX() {
     if (mFader != NULL) {
         ortho.setPort();
 #ifdef TARGET_PC
-        if (dusk::getSettings().game.enableFrameInterpolation) {
-            u32 advance_count = 1;
-            if (s_faderSimSteps >= 0) {
-                advance_count = static_cast<u32>(s_faderSimSteps);
-                s_faderSimSteps = -1;
-            }
-            for (u32 i = 0; i < advance_count; i++) {
-                mFader->control();
-            }
-            if (mFader->getStatus() != 1) {
-                mFader->draw();
-            }
+        u32 advance_count = 1;
+        if (dusk::getSettings().game.enableFrameInterpolation && s_faderSimSteps >= 0) {
+            advance_count = static_cast<u32>(s_faderSimSteps);
+            s_faderSimSteps = -1;
         } else {
-            mFader->control();
+            s_faderSimSteps = -1;
+        }
+        for (u32 i = 0; i < advance_count; i++) {
+            mFader->advance();
+        }
+        if (mFader->getStatus() != 1) {
             mFader->draw();
         }
 #else
@@ -396,7 +393,7 @@ static void waitPrecise(Limiter& limiter, Uint64 targetNs) {
 
 static void waitForTick(u32 p1, u16 p2) {
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation) {
+    if (dusk::getSettings().game.enableFrameInterpolation && !dusk::getTransientSettings().skipFrameRateLimit) {
         return;
     }
     if (dusk::getTransientSettings().skipFrameRateLimit) {

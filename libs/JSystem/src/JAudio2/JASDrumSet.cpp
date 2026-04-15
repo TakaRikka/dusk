@@ -18,7 +18,11 @@ void JASDrumSet::newPercArray(u8 num, JKRHeap* heap) {
         JUT_ASSERT(39, num <= 128);
         mPercNumMax = num;
         mPercArray = JKR_NEW_ARRAY_ARGS(TPerc*, mPercNumMax, heap, 0);
+#if TARGET_ANDROID
+        JASCalc::_bzero(mPercArray, mPercNumMax * sizeof(TPerc*));
+#else
         JASCalc::bzero(mPercArray, mPercNumMax * sizeof(TPerc*));
+#endif
     }
 }
 

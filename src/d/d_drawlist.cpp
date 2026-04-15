@@ -1,27 +1,28 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include <cstdio>
 #include "JSystem/J2DGraph/J2DAnimation.h"
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "SSystem/SComponent/c_bg_s_shdw_draw.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
-
-#include <typeindex>
-
-#include "absl/container/flat_hash_map.h"
-#include "client/TracyScoped.hpp"
 #include "d/d_s_play.h"
-#include "dusk/frame_interpolation.h"
-#include "dusk/gx_helper.h"
-#include "dusk/logging.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_mtx.h"
+
+#if TARGET_PC
+#include <cstdio>
+#include <typeindex>
+#include "JSystem/JKernel/JKRHeap.h"
+#include "absl/container/flat_hash_map.h"
+#include "client/TracyScoped.hpp"
+#include "dusk/frame_interpolation.h"
+#include "dusk/gx_helper.h"
+#include "dusk/logging.h"
+#endif
 
 class dDlst_2Dm_c {
 public:
@@ -1432,23 +1433,31 @@ void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* pa
     mDoMtx_stack_c::scaleM(param_2, 1.0f, param_2 * param_5);
     cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mMtx);
 #ifdef TARGET_PC
-    dusk::frame_interp::record_final_mtx_raw(&mVolumeMtx, mVolumeMtx);
-    dusk::frame_interp::record_final_mtx_raw(&mMtx, mMtx);
+    const uint64_t shadow_tag_base = dusk::frame_interp::alloc_simple_shadow_pair_base();
+    if (shadow_tag_base != 0) {
+        dusk::frame_interp::record_final_mtx_raw_tagged(&mVolumeMtx, mVolumeMtx, shadow_tag_base);
+        dusk::frame_interp::record_final_mtx_raw_tagged(&mMtx, mMtx, shadow_tag_base + 1u);
+    } else {
+        dusk::frame_interp::record_final_mtx_raw(&mVolumeMtx, mVolumeMtx);
+        dusk::frame_interp::record_final_mtx_raw(&mMtx, mMtx);
+    }
 #endif
     mpTexObj = param_6;
 }
 
 void dDlst_shadowControl_c::init() {
 #if TARGET_PC
+    mTexResScale = dusk::getSettings().game.shadowResolutionMultiplier;
     // Increase shadow map resolution
     u16 l_realImageSize[2] =
     {
-        192 * dusk::getSettings().game.shadowResolutionMultiplier,
-        64 * dusk::getSettings().game.shadowResolutionMultiplier
+        static_cast<u16>(192 * mTexResScale),
+        static_cast<u16>(64 * mTexResScale)
     };
 #else
     static u16 l_realImageSize[2] = {192, 64};
 #endif
+
     for (int i = 0; i < 2; i++) {
         u16 size = l_realImageSize[i];
 
@@ -1457,10 +1466,13 @@ void dDlst_shadowControl_c::init() {
 #else
         u32 buffer_size = GXGetTexBufferSize(size, size, 5, GX_DISABLE, 0);
 #endif
-        field_0x15ef0[i] = JKR_NEW_ARRAY_ARGS(u8, buffer_size, 0x20);
-        GXInitTexObj(&field_0x15eb0[i], field_0x15ef0[i], size, size, GX_TF_RGB5A3, GX_CLAMP,
+        JKR_DELETE_ARRAY(mShadowTexData[i]);
+        mShadowTexData[i] = JKR_NEW_ARRAY_ARGS(u8, buffer_size, 0x20);
+
+        mShadowTexObj[i].reset();
+        GXInitTexObj(&mShadowTexObj[i], mShadowTexData[i], size, size, GX_TF_RGB5A3, GX_CLAMP,
                      GX_CLAMP, GX_DISABLE);
-        GXInitTexObjLOD(&field_0x15eb0[i], GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE,
+        GXInitTexObjLOD(&mShadowTexObj[i], GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE,
                         GX_FALSE, GX_ANISO_1);
     }
 }
@@ -1478,25 +1490,13 @@ void dDlst_shadowControl_c::reset() {
     mRealNum = 0;
     field_0x4 = NULL;
 
-#ifdef TARGET_PC
-    field_0x15eb0[0].reset();
-    field_0x15eb0[1].reset();
+#if TARGET_PC
+    if (mTexResScale != dusk::getSettings().game.shadowResolutionMultiplier)
+        init();
 #endif
 }
 
-#if TARGET_PC
-int lastShadowValue = 0;
-#endif
-
 void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
-    #if TARGET_PC
-    if (lastShadowValue != dusk::getSettings().game.shadowResolutionMultiplier) {
-        reset();
-        init();
-        lastShadowValue = dusk::getSettings().game.shadowResolutionMultiplier;
-    }
-    #endif
-
     static u8 l_matDL[] ATTRIBUTE_ALIGN(32) = {
         0x10, 0x00, 0x00, 0x10, 0x0E, 0x00, 0x00, 0x04, 0x00, 0x10, 0x00, 0x00, 0x10, 0x10,
         0x00, 0x00, 0x04, 0x00, 0x61, 0x28, 0x38, 0x00, 0x00, 0x61, 0xC0, 0x08, 0xFF, 0xF2,
@@ -1529,7 +1529,7 @@ void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
     j3dSys.setDrawModeOpaTexEdge();
     J3DShape::resetVcdVatCache();
     dDlst_shadowReal_c* shadowReal = field_0x4;
-    int r29 = 0;
+    int chan = 0;
     int tex = 0;
     u16 r27;
     u16 r26;
@@ -1538,8 +1538,8 @@ void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
 #endif
     for (; shadowReal; shadowReal = shadowReal->getZsortNext()) {
         if (shadowReal->isUse()) {
-            if (r29 == 0) {
-                r27 = GXGetTexObjWidth(field_0x15eb0 + tex);
+            if (chan == 0) {
+                r27 = GXGetTexObjWidth(&mShadowTexObj[tex]);
                 r26 = r27 * 2;
 #ifdef TARGET_PC
                 GXCreateFrameBuffer(r26, r26);
@@ -1548,27 +1548,27 @@ void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
                 GXSetViewport(0.0f, 0.0f, r26, r26, 0.0f, 1.0f);
                 GXSetScissor(0, 0, r26, r26);
             }
-            GXSetTevColor(GX_TEVREG0, l_imageDrawColor[r29]);
-            if (r29 == 3) {
+            GXSetTevColor(GX_TEVREG0, l_imageDrawColor[chan]);
+            if (chan == 3) {
                 GXSetColorUpdate(GX_DISABLE);
                 GXSetAlphaUpdate(GX_ENABLE);
             }
             shadowReal->imageDraw(param_0);
-            r29 = (r29 + 1) % 4;
-            if (r29 == 0) {
+            chan = (chan + 1) % 4;
+            if (chan == 0) {
                 GXSetTexCopySrc(0, 0, r26, r26);
                 GXSetTexCopyDst(r27, r27, GX_TF_RGB5A3, GX_TRUE);
                 GXSetColorUpdate(GX_ENABLE);
-                GXCopyTex(field_0x15ef0[tex++], GX_TRUE);
+                GXCopyTex(mShadowTexData[tex++], GX_TRUE);
                 GXPixModeSync();
                 GXSetAlphaUpdate(GX_DISABLE);
             }
         }
     }
-    if (r29) {
+    if (chan) {
         GXSetTexCopySrc(0, 0, r26, r26);
         GXSetTexCopyDst(r27, r27, GX_TF_RGB5A3, GX_TRUE);
-        GXCopyTex(field_0x15ef0[tex], GX_TRUE);
+        GXCopyTex(mShadowTexData[tex], GX_TRUE);
         GXPixModeSync();
         GXSetAlphaUpdate(GX_DISABLE);
     }
@@ -1620,7 +1620,7 @@ void dDlst_shadowControl_c::draw(Mtx param_0) {
     for (int i2 = 0, i3 = 0; real != NULL; real = real->getZsortNext()) {
         if (real->isUse()) {
             if (i2 == 0) {
-                TGXTexObj* obj = &field_0x15eb0[i3];
+                TGXTexObj* obj = &mShadowTexObj[i3];
                 i3++;
 
                 GXLoadTexObj(obj, GX_TEXMAP0);
@@ -1823,11 +1823,24 @@ static u16 const l_drawlistSize[21] = {
 };
 
 static u8 const l_nonSortId[9] = {
-    0x00, 0x01, 0x02, 0x04, 0x05, 0x06, 0x09, 0x12, 0x0D,
+    dDlst_list_c::DB_OPA_LIST_SKY,
+    dDlst_list_c::DB_XLU_LIST_SKY,
+    dDlst_list_c::DB_LIST_P0,
+    dDlst_list_c::DB_XLU_LIST_BG,
+    dDlst_list_c::DB_OPA_LIST_DARK_BG,
+    dDlst_list_c::DB_XLU_LIST_DARK_BG,
+    dDlst_list_c::DB_OPA_LIST_DARK,
+    dDlst_list_c::DB_LIST_2D_SCREEN,
+    dDlst_list_c::DB_OPA_LIST_ITEM3D,
 };
 
 static const u8 l_zSortId[6] = {
-    0x08, 0x0A, 0x0C, 0x0E, 0x10, 0x11,
+    dDlst_list_c::DB_XLU_LIST,
+    dDlst_list_c::DB_XLU_LIST_DARK,
+    dDlst_list_c::DB_LIST_FILTER,
+    dDlst_list_c::DB_XLU_LIST_ITEM3D,
+    dDlst_list_c::DB_XLU_LIST_INVISIBLE,
+    dDlst_list_c::DB_LIST_Z_XLU,
 };
 
 void dDlst_list_c::init() {

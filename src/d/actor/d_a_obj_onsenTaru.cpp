@@ -277,6 +277,11 @@ void daOnsTaru_c::mode_init_drop() {
     cLib_offBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
     gravity = -7.0f;
     mMode = MODE_DROP_e;
+
+    #if TARGET_PC
+    // TODO: figure out why this is needed and where exactly the UB happens
+    mCcStts.ClrCcMove();
+    #endif
 }
 
 void daOnsTaru_c::mode_proc_drop() {

@@ -4550,7 +4550,9 @@ public:
 
 #if TARGET_PC
     void handleArmorsQuickToggle();
+    void handleWolfHowl();
     void handleQuickTransform();
+    bool checkGyroAimItemContext();
 #endif
 };  // Size: 0x385C
 

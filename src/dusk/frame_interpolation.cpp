@@ -1,3 +1,4 @@
+#include "f_op/f_op_camera_mng.h"
 #include "dusk/frame_interpolation.h"
 
 #include <algorithm>
@@ -8,7 +9,6 @@
 #include <vector>
 
 namespace {
-
 enum class Op : uint8_t {
     OpenChild,
     FinalMtx,
@@ -28,6 +28,7 @@ struct Data {
     size_t child_index = 0;
     Mtx matrix{};
     const Mtx* dest = nullptr;
+    uint64_t stable_tag = 0;
 };
 
 struct Path;
@@ -46,6 +47,8 @@ struct Path {
     std::vector<ChildBucket> children;
     std::vector<OpBucket> ops;
     std::vector<std::pair<Op, size_t>> items;
+    Label draw_scope{};
+    uint32_t simple_shadow_pair_seq = 0;
 };
 
 struct Recording {
@@ -57,12 +60,16 @@ struct MatrixValue {
 };
 
 using FinalMtxLookup = std::unordered_map<const Mtx*, const Data*>;
+using FinalMtxLookupTagged = std::unordered_map<uint64_t, const Data*>;
 
 bool s_initialized = false;
 
 bool g_enabled = false;
 bool g_recording = false;
 bool g_interpolating = false;
+bool g_sync_presentation = false;
+uint32_t g_presentation_counter = 0;
+
 float g_step = 0.0f;
 uint32_t g_pending_presentation_ui_ticks = 0;
 uint32_t g_current_presentation_ui_ticks = 0;
@@ -88,6 +95,13 @@ inline void lerp_matrix(Mtx out, const Mtx lhs, const Mtx rhs, float step) {
             out[row][col] = lhs[row][col] * old_weight + rhs[row][col] * step;
         }
     }
+}
+
+inline void lerp_xyz(cXyz* out, const cXyz& lhs, const cXyz& rhs, float step) {
+    const float old_weight = 1.0f - step;
+    out->x = lhs.x * old_weight + rhs.x * step;
+    out->y = lhs.y * old_weight + rhs.y * step;
+    out->z = lhs.z * old_weight + rhs.z * step;
 }
 
 inline bool matrix_differs(const Mtx lhs, const Mtx rhs, float epsilon = 0.0001f) {
@@ -132,8 +146,9 @@ const OpBucket* find_op_bucket(const Path& path, Op op) {
     return &*it;
 }
 
-void build_final_mtx_lookup(const Path& path, FinalMtxLookup& lookup) {
-    lookup.clear();
+void build_final_mtx_lookups(const Path& path, FinalMtxLookup& dest_lookup, FinalMtxLookupTagged& tag_lookup) {
+    dest_lookup.clear();
+    tag_lookup.clear();
 
     const OpBucket* bucket = find_op_bucket(path, Op::FinalMtx);
     if (bucket == nullptr) {
@@ -141,10 +156,12 @@ void build_final_mtx_lookup(const Path& path, FinalMtxLookup& lookup) {
     }
 
     for (const Data& data : bucket->values) {
-        if (data.dest == nullptr) {
-            continue;
+        if (data.dest != nullptr) {
+            dest_lookup[data.dest] = &data;
         }
-        lookup[data.dest] = &data;
+        if (data.stable_tag != 0) {
+            tag_lookup[data.stable_tag] = &data;
+        }
     }
 }
 
@@ -191,7 +208,8 @@ void store_replacement(const Data& old_data, const Data& new_data, float step) {
 
 void interpolate_branch(const Path& old_path, const Path& new_path, float step) {
     FinalMtxLookup old_final_mtx_lookup;
-    build_final_mtx_lookup(old_path, old_final_mtx_lookup);
+    FinalMtxLookupTagged old_final_mtx_lookup_tagged;
+    build_final_mtx_lookups(old_path, old_final_mtx_lookup, old_final_mtx_lookup_tagged);
 
     for (const auto& item : new_path.items) {
         const Op op = item.first;
@@ -220,7 +238,17 @@ void interpolate_branch(const Path& old_path, const Path& new_path, float step) 
         }
 
         const Data* indexed_old_data = find_matching_data(old_path, op, index);
-        const Data* old_data = op == Op::FinalMtx ? find_matching_final_mtx(old_final_mtx_lookup, *new_data) : indexed_old_data;
+        const Data* old_data = nullptr;
+        if (op == Op::FinalMtx) {
+            if (new_data->stable_tag != 0) {
+                const auto it = old_final_mtx_lookup_tagged.find(new_data->stable_tag);
+                old_data = it != old_final_mtx_lookup_tagged.end() ? it->second : nullptr;
+            } else {
+                old_data = find_matching_final_mtx(old_final_mtx_lookup, *new_data);
+            }
+        } else {
+            old_data = indexed_old_data;
+        }
         if (op == Op::FinalMtx) {
             store_replacement(old_data != nullptr ? *old_data : *new_data, *new_data, step);
         }
@@ -228,7 +256,7 @@ void interpolate_branch(const Path& old_path, const Path& new_path, float step) 
 }
 
 const Mtx* resolve_replacement(const Mtx* source, Mtx* scratch) {
-    if (!g_interpolating || source == nullptr) {
+    if (!g_interpolating || source == nullptr || dusk::frame_interp::presentation_sync_active()) {
         return source;
     }
 
@@ -251,9 +279,7 @@ void clear_replacements() {
 
 }  // namespace
 
-namespace dusk {
-namespace frame_interp {
-
+namespace dusk::frame_interp {
 void ensure_initialized() {
     g_enabled = getSettings().game.enableFrameInterpolation;
     s_initialized = true;
@@ -263,6 +289,7 @@ void begin_record() {
     ensure_initialized();
     if (!g_enabled) {
         g_interpolating = false;
+        g_sync_presentation = false;
         g_previous_recording = {};
         g_current_recording = {};
         g_current_path.clear();
@@ -270,6 +297,7 @@ void begin_record() {
         return;
     }
 
+    g_sync_presentation = false;
     g_previous_recording = std::move(g_current_recording);
     g_current_recording = {};
     g_current_path.clear();
@@ -287,21 +315,37 @@ void interpolate(float step) {
     ensure_initialized();
     clear_replacements();
     g_step = std::clamp(step, 0.0f, 1.0f);
-    g_interpolating = g_enabled && !g_recording && has_recording_data(g_current_recording);
+    g_interpolating = g_enabled && !g_recording && !g_sync_presentation && has_recording_data(g_current_recording);
     if (!g_interpolating) {
         return;
     }
+    const Path& old_root = has_recording_data(g_previous_recording) ? g_previous_recording.root : g_current_recording.root;
+    interpolate_branch(old_root, g_current_recording.root, g_step);
+}
 
-    if (!has_recording_data(g_previous_recording)) {
-        interpolate_branch(g_current_recording.root, g_current_recording.root, g_step);
+void notify_presentation_frame() {
+    ensure_initialized();
+    ++g_presentation_counter;
+}
+
+void request_presentation_sync() {
+    ensure_initialized();
+    if (!g_enabled) {
         return;
     }
+    g_sync_presentation = true;
+}
 
-    interpolate_branch(g_previous_recording.root, g_current_recording.root, g_step);
+bool presentation_sync_active() {
+    if (!s_initialized || !g_enabled) {
+        return false;
+    }
+    return g_sync_presentation;
 }
 
 float get_interpolation_step() {
-    return g_step;
+    ensure_initialized();
+    return presentation_sync_active() ? 1.0f : g_step;
 }
 
 void notify_sim_tick_complete() {
@@ -344,7 +388,9 @@ void open_child(const void* key, int32_t id) {
     data.child_label = label;
     data.child_index = siblings.size();
     siblings.emplace_back(std::make_unique<Path>());
-    g_current_path.push_back(siblings.back().get());
+    Path* const child = siblings.back().get();
+    child->draw_scope = label;
+    g_current_path.push_back(child);
 }
 
 void close_child() {
@@ -362,11 +408,23 @@ void record_final_mtx_raw(const Mtx* dest, const Mtx src) {
 
     Data& data = append_op(Op::FinalMtx);
     data.dest = dest;
+    data.stable_tag = 0;
+    copy_matrix(src, data.matrix);
+}
+
+void record_final_mtx_raw_tagged(const Mtx* dest, const Mtx src, uint64_t stable_tag) {
+    if (!s_initialized || !g_recording || dest == nullptr) {
+        return;
+    }
+
+    Data& data = append_op(Op::FinalMtx);
+    data.dest = dest;
+    data.stable_tag = stable_tag;
     copy_matrix(src, data.matrix);
 }
 
 bool lookup_replacement(const void* source, Mtx out) {
-    if (!s_initialized || !g_interpolating || source == nullptr) {
+    if (presentation_sync_active() || !g_interpolating || source == nullptr) {
         return false;
     }
 
@@ -380,7 +438,7 @@ bool lookup_replacement(const void* source, Mtx out) {
 }
 
 bool lookup_concat_replacement(const void* lhs, const void* rhs, Mtx out) {
-    if (!s_initialized || !g_interpolating || lhs == nullptr || rhs == nullptr) {
+    if (presentation_sync_active() || !g_interpolating || lhs == nullptr || rhs == nullptr) {
         return false;
     }
 
@@ -388,9 +446,7 @@ bool lookup_concat_replacement(const void* lhs, const void* rhs, Mtx out) {
     Mtx rhs_scratch;
     const Mtx* resolved_lhs = resolve_replacement(reinterpret_cast<const Mtx*>(lhs), &lhs_scratch);
     const Mtx* resolved_rhs = resolve_replacement(reinterpret_cast<const Mtx*>(rhs), &rhs_scratch);
-    if (resolved_lhs == reinterpret_cast<const Mtx*>(lhs) &&
-        resolved_rhs == reinterpret_cast<const Mtx*>(rhs))
-    {
+    if (resolved_lhs == reinterpret_cast<const Mtx*>(lhs) && resolved_rhs == reinterpret_cast<const Mtx*>(rhs)) {
         return false;
     }
 
@@ -405,5 +461,92 @@ void camera_eye_from_view_mtx(MtxP view_mtx, cXyz* o_eye) {
     o_eye->z = -(view_mtx[0][2] * view_mtx[0][3] + view_mtx[1][2] * view_mtx[1][3] + view_mtx[2][2] * view_mtx[2][3]);
 }
 
-}  // namespace frame_interp
-}  // namespace dusk
+namespace {
+struct CamSnap {
+    cXyz eye{};
+    cXyz center{};
+    cXyz up{};
+    s16 bank{};
+    f32 fovy{};
+    bool valid{};
+};
+
+CamSnap s_star_prev{};
+CamSnap s_star_curr{};
+
+static void copy_view_to_snap(CamSnap* dst, const view_class& v) {
+    dst->eye = v.lookat.eye;
+    dst->center = v.lookat.center;
+    dst->up = v.lookat.up;
+    dst->bank = v.bank;
+    dst->fovy = v.fovy;
+    dst->valid = true;
+}
+
+static void billboard_base_from_view(MtxP view_mtx, MtxP o_cam_billboard_base) {
+    Mtx rot;
+    MTXCopy(view_mtx, rot);
+    rot[0][3] = rot[1][3] = rot[2][3] = 0.0f;
+    MTXInverse(rot, o_cam_billboard_base);
+}
+}  // namespace
+
+void begin_record_camera() {
+    ::camera_process_class* cam = dComIfGp_getCamera(0);
+    if (cam == nullptr) {
+        return;
+    }
+    copy_view_to_snap(&s_star_prev, cam->view);
+}
+
+void record_camera(::camera_process_class* cam, int camera_id) {
+    if (!getSettings().game.enableFrameInterpolation || camera_id != 0 || cam == nullptr) {
+        return;
+    }
+    copy_view_to_snap(&s_star_curr, cam->view);
+}
+
+bool build_star_view(Mtx o_view, Mtx o_cam_billboard_base, cXyz* o_anchor_eye, float* o_fovy) {
+    if (!getSettings().game.enableFrameInterpolation || !s_star_prev.valid || !s_star_curr.valid) {
+        return false;
+    }
+
+    const f32 step = get_interpolation_step();
+    cXyz eye;
+    cXyz center;
+    cXyz up;
+    lerp_xyz(&eye, s_star_prev.eye, s_star_curr.eye, step);
+    lerp_xyz(&center, s_star_prev.center, s_star_curr.center, step);
+    lerp_xyz(&up, s_star_prev.up, s_star_curr.up, step);
+    if (!up.normalizeRS()) {
+        up = s_star_curr.up;
+        up.normalizeRS();
+    }
+
+    const f32 bank_rad = S2RAD(s_star_prev.bank) * (1.0f - step) + S2RAD(s_star_curr.bank) * step;
+    const s16 bank = cAngle::Radian_to_SAngle(bank_rad);
+
+    mDoMtx_lookAt(o_view, &eye, &center, &up, bank);
+    billboard_base_from_view(o_view, o_cam_billboard_base);
+
+    *o_anchor_eye = eye;
+    *o_fovy = s_star_prev.fovy + (s_star_curr.fovy - s_star_prev.fovy) * step;
+    return true;
+}
+
+uint64_t alloc_simple_shadow_pair_base() {
+    if (!s_initialized || !g_recording || g_current_path.size() <= 1) {
+        return 0;
+    }
+
+    Path* const scope = g_current_path.back();
+    const uint64_t h = static_cast<uint64_t>(reinterpret_cast<uintptr_t>(scope->draw_scope.key));
+    const uint32_t lo = scope->simple_shadow_pair_seq;
+    scope->simple_shadow_pair_seq += 2;
+    uint64_t tag0 = (h << 17) ^ (static_cast<uint64_t>(lo) << 1u);
+    if (tag0 == 0) {
+        tag0 = 2;
+    }
+    return tag0;
+}
+}  // namespace dusk::frame_interp

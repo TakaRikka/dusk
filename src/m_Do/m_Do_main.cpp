@@ -43,11 +43,15 @@
 #include <cstring>
 
 #include <chrono>
+#include <filesystem>
+#include <system_error>
 #include <thread>
 #include "SSystem/SComponent/c_API.h"
 #include "dusk/app_info.hpp"
+#include "dusk/crash_reporting.h"
 #include "dusk/dusk.h"
 #include "dusk/frame_interpolation.h"
+#include "dusk/gyro_aim.h"
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
@@ -198,9 +202,8 @@ void main01(void) {
     if (preLaunchUIWindowSize.width != 0)
         mDoGph_gInf_c::setWindowSize(preLaunchUIWindowSize);
 
-    using clock = std::chrono::steady_clock;
     constexpr double kSimStepSeconds = 1.0 / 30.0;
-    auto previous_time = clock::now();
+    auto previous_time = std::chrono::steady_clock::now();
     double accumulator = kSimStepSeconds;
 
     do {
@@ -225,7 +228,7 @@ void main01(void) {
 
         eventsDone:;
 
-        auto current_time = clock::now();
+        auto current_time = std::chrono::steady_clock::now();
         double frame_seconds = std::chrono::duration<double>(current_time - previous_time).count();
         previous_time = current_time;
         accumulator += frame_seconds;
@@ -238,22 +241,27 @@ void main01(void) {
             continue;
         }
 
-        if (dusk::getSettings().game.enableFrameInterpolation) {
+        if (dusk::getSettings().game.enableFrameInterpolation && !dusk::getTransientSettings().skipFrameRateLimit) {
+            dusk::frame_interp::notify_presentation_frame();
             while (accumulator >= kSimStepSeconds) {
                 mDoCPd_c::read();
+                if (dusk::getSettings().game.enableGyroAim) {
+                    dusk::gyro_aim::read(static_cast<float>(kSimStepSeconds), dusk::gyro_aim::queryGyroAimItemContext());
+                }
                 fapGm_Execute();
                 mDoAud_Execute();
                 accumulator -= kSimStepSeconds;
             }
-
-            float interp_alpha = static_cast<float>(accumulator / kSimStepSeconds);
-            dusk::frame_interp::interpolate(interp_alpha);
+            dusk::frame_interp::interpolate(static_cast<float>(accumulator / kSimStepSeconds));
             cAPIGph_Painter();
         } else {
             accumulator = 0.0;
-
+            
             // Game Inputs
             mDoCPd_c::read();
+            if (dusk::getSettings().game.enableGyroAim) {
+                dusk::gyro_aim::read(static_cast<float>(frame_seconds), dusk::gyro_aim::queryGyroAimItemContext());
+            }
 
             // EXECUTE GAME LOGIC & RENDER
             // This calls mDoGph_Painter -> JFWDisplay -> GX Functions
@@ -356,6 +364,48 @@ static const char* CalculateConfigPath() {
     return result;
 }
 
+static void EnsureInitialPipelineCache(const char* configDir) {
+    if (configDir == nullptr) {
+        return;
+    }
+
+    const std::filesystem::path configPathFs(configDir);
+    const std::filesystem::path pipelineCachePath = configPathFs / "pipeline_cache.db";
+    if (std::filesystem::exists(pipelineCachePath)) {
+        return;
+    }
+
+    const char* basePath = SDL_GetBasePath();
+    if (basePath == nullptr) {
+        DuskLog.warn("Unable to resolve base path while seeding pipeline cache: {}", SDL_GetError());
+        return;
+    }
+
+    const std::filesystem::path initialPipelineCachePath =
+        std::filesystem::path(basePath) / "initial_pipeline_cache.db";
+    if (!std::filesystem::exists(initialPipelineCachePath)) {
+        DuskLog.info("No bundled initial pipeline cache found at '{}'", initialPipelineCachePath.string());
+        return;
+    }
+
+    std::error_code ec;
+    std::filesystem::create_directories(configPathFs, ec);
+    if (ec) {
+        DuskLog.warn("Failed to create config directory '{}' for pipeline cache: {}",
+                     configPathFs.string(), ec.message());
+        return;
+    }
+
+    std::filesystem::copy_file(initialPipelineCachePath, pipelineCachePath, std::filesystem::copy_options::none, ec);
+    if (ec) {
+        DuskLog.warn("Failed to seed pipeline cache from '{}' to '{}': {}",
+                     initialPipelineCachePath.string(), pipelineCachePath.string(), ec.message());
+        return;
+    }
+
+    DuskLog.info("Seeded pipeline cache from '{}'", initialPipelineCachePath.string());
+}
+
 static constexpr PADDefaultMapping defaultPadMapping = {
     .buttons = {
         {SDL_GAMEPAD_BUTTON_SOUTH, PAD_BUTTON_A},
@@ -411,6 +461,7 @@ int game_main(int argc, char* argv[]) {
         arg_options.add_options()
             ("l,log-level", "Log level from " + std::to_string(AuroraLogLevel::LOG_DEBUG) + " to " + std::to_string(AuroraLogLevel::LOG_FATAL), cxxopts::value<uint8_t>()->default_value("0"))
             ("h,help", "Print usage")
+            ("console", "Show the Windows console window for logs", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
             ("dvd", "Path to DVD image file", cxxopts::value<std::string>())
             ("backend", "Graphics API backend to use (auto, d3d12, metal, vulkan, null)", cxxopts::value<std::string>())
             ("cvar", "Override configuration variables without modifying config", cxxopts::value<std::vector<std::string>>());
@@ -433,9 +484,13 @@ int game_main(int argc, char* argv[]) {
     }
 
     configPath = CalculateConfigPath();
+    const auto startupLogLevel = static_cast<AuroraLogLevel>(parsed_arg_options["log-level"].as<uint8_t>());
+    dusk::InitializeFileLogging(configPath, startupLogLevel);
 
     dusk::config::LoadFromUserPreferences();
     ApplyCVarOverrides(parsed_arg_options["cvar"]);
+    dusk::InitializeCrashReporting();
+    EnsureInitialPipelineCache(configPath);
 
     AuroraConfig config{};
     config.appName = dusk::AppName;
@@ -448,7 +503,7 @@ int game_main(int argc, char* argv[]) {
     config.windowHeight = defaultWindowHeight * 2;
     config.desiredBackend = ResolveDesiredBackend(parsed_arg_options);
     config.logCallback = &aurora_log_callback;
-    config.logLevel = (AuroraLogLevel)parsed_arg_options["log-level"].as<uint8_t>();
+    config.logLevel = startupLogLevel;
     config.mem1Size = 256 * 1024 * 1024;
     config.mem2Size = 24 * 1024 * 1024;
     config.allowJoystickBackgroundEvents = true;
@@ -491,6 +546,7 @@ int game_main(int argc, char* argv[]) {
     if (!dvd_opened) {
         // pre game launch ui main loop
         if (!launchUILoop()) {
+            dusk::ShutdownCrashReporting();
             aurora_shutdown();
             return 0;
         }
@@ -528,6 +584,8 @@ int game_main(int argc, char* argv[]) {
 
     main01();
 
+    dusk::ShutdownCrashReporting();
+    dusk::ShutdownFileLogging();
     fflush(stdout);
     fflush(stderr);
 

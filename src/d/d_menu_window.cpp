@@ -48,13 +48,20 @@ public:
             GXPixModeSync();
 #if TARGET_PC
             // init mTexObj at capture time so the gpu ref survives window resizes
-            GXInitTexObj(&mTexObj, mDoGph_gInf_c::getFrameBufferTex(), mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(),
+            mCaptureWidth = mDoGph_gInf_c::getWidth();
+            mCaptureHeight = mDoGph_gInf_c::getHeight();
+            GXInitTexObj(&mTexObj, mDoGph_gInf_c::getFrameBufferTex(), mCaptureWidth, mCaptureHeight,
                         (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_CLAMP, GX_CLAMP, GX_FALSE);
             GXInitTexObjLOD(&mTexObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
 #endif
         } else {
 #if TARGET_PC
-            // reuse the persistent mTexObj
+            // If the window was resized since capture, force a re-capture at the new size
+            if (mCaptureWidth != (u16)mDoGph_gInf_c::getWidth() ||
+                mCaptureHeight != (u16)mDoGph_gInf_c::getHeight()) {
+                mFlag = 1;
+                return;
+            }
             GXLoadTexObj(&mTexObj, GX_TEXMAP0);
 #else
             TGXTexObj tex;
@@ -112,6 +119,10 @@ public:
         mFlag = 0;
         mAlpha = 255;
         mTopFlag = 0;
+#if TARGET_PC
+        mCaptureWidth = 0;
+        mCaptureHeight = 0;
+#endif
     }
 
     void setCaptureFlag() { mFlag = 1; }
@@ -126,6 +137,8 @@ private:
     /* 0x5 */ u8 mAlpha;
     /* 0x6 */ u8 mTopFlag;
 #if TARGET_PC
+    u16 mCaptureWidth;
+    u16 mCaptureHeight;
     TGXTexObj mTexObj;
 #endif
 };

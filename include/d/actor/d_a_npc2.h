@@ -119,8 +119,7 @@ public:
 
 public:
     /* 0x56C */ dBgS_ObjAcch mAcch;
-    /* 0x744 */ char field_0x744;
-    /* 0x745 */ u8 field_0x745[0x74c - 0x745];
+    /* 0x744 */ char field_0x744[8];
     /* 0x74C */ request_of_phase_process_class mPhase;
     /* 0x754 */ mDoExt_McaMorfSO* mpModelMorf;
     /* 0x758 */ Z2Creature mSound;

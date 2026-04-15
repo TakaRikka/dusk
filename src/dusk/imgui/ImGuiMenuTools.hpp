@@ -6,6 +6,7 @@
 
 #include "imgui.h"
 #include "ImGuiSaveEditor.hpp"
+#include "ImGuiStateShare.hpp"
 
 namespace dusk {
     class ImGuiMenuTools {
@@ -23,6 +24,7 @@ namespace dusk {
         void ShowPlayerInfo();
         void ShowAudioDebug();
         void ShowSaveEditor();
+        void ShowStateShare();
 
     private:
 		bool m_showDebugOverlay = false;
@@ -57,6 +59,9 @@ namespace dusk {
 
 		bool m_showSaveEditor = false;
         ImGuiSaveEditor m_saveEditor;
+
+        bool m_showStateShare = false;
+        ImGuiStateShare m_stateShare;
     };
 }
 

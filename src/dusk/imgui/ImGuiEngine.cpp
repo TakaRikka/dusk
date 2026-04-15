@@ -29,13 +29,22 @@ bool AssetExists(const std::string& path) {
     SDL_PathInfo pathInfo{};
     return SDL_GetPathInfo(path.c_str(), &pathInfo) && pathInfo.type == SDL_PATHTYPE_FILE;
 }
+
+ImTextureID AddTexture(const char* assetName) {
+    auto image = GetImage(GetAssetPath(assetName));
+    if (image.data == nullptr || image.width == 0 || image.height == 0) {
+        return 0;
+    }
+    return aurora_imgui_add_texture(image.width, image.height, image.data.get());
+}
 }  // namespace
 
 ImFont* ImGuiEngine::fontNormal;
 ImFont* ImGuiEngine::fontLarge;
 ImFont* ImGuiEngine::fontExtraLarge;
 ImFont* ImGuiEngine::fontMono;
-ImTextureID ImGuiEngine::duskIcon = 0;
+ImTextureID ImGuiEngine::orgIcon = 0;
+ImTextureID ImGuiEngine::duskLogo = 0;
 
 inline ImFont* CreateFont(float size, const std::string& fontPath, std::string_view fontName) {
     bool fontFileExists = !fontPath.empty() && AssetExists(fontPath);
@@ -60,7 +69,7 @@ inline ImFont* CreateFont(float size, const std::string& fontPath, std::string_v
 
 void ImGuiEngine_Initialize(float scale) {
     // Round font scale to nearest integer
-    scale = std::ceilf(scale);
+    scale = std::ceil(scale);
 
     ImGui::GetCurrentContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -149,6 +158,7 @@ void ImGuiEngine_Initialize(float scale) {
 
 Image GetImage(const std::string& path) {
     if (!AssetExists(path)) {
+        DuskLog.warn("Image '{}' does not exist", path);
         return {};
     }
 
@@ -187,13 +197,11 @@ Image GetImage(const std::string& path) {
 }
 
 void ImGuiEngine_AddTextures() {
-    if (ImGuiEngine::duskIcon == 0) {
-        auto icon = GetImage(GetAssetPath("icon.png"));
-        if (icon.data == nullptr || icon.width == 0 || icon.height == 0) {
-            ImGuiEngine::duskIcon = 0;
-            return;
-        }
-        ImGuiEngine::duskIcon = aurora_imgui_add_texture(icon.width, icon.height, icon.data.get());
+    if (ImGuiEngine::orgIcon == 0) {
+        ImGuiEngine::orgIcon = AddTexture("org-icon.png");
+    }
+    if (ImGuiEngine::duskLogo == 0) {
+        ImGuiEngine::duskLogo = AddTexture("logo.png");
     }
 }
 }  // namespace dusk

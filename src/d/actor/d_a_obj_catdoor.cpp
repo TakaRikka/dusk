@@ -10,35 +10,38 @@
 
 static const char* l_arcName = "CatDoor";
 
-u32 const daObjCatDoor_c::M_attr = 0x001E0578;
+const daObjCatDoor_Attr_c daObjCatDoor_c::M_attr = {
+    30,
+    1400,
+};
 
 daObjCatDoor_c::~daObjCatDoor_c() {
     if (mDoor1.bgw.ChkUsed()) {
         dComIfG_Bgsp().Release(&mDoor1.bgw);
     }
+
     if (mDoor2.bgw.ChkUsed()) {
         dComIfG_Bgsp().Release(&mDoor2.bgw);
     }
+
     dComIfG_resDelete(&mPhaseReq, l_arcName);
 }
 
 int daObjCatDoor_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
+    JUT_ASSERT(174, modelData != NULL);
 
-    ASSERT(modelData != NULL);
     mDoor1.pmodel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
     mDoor2.pmodel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
     if (mDoor1.pmodel == NULL || mDoor2.pmodel == NULL) {
         return 0;
     }
 
-    cBgD_t* cbgd = (cBgD_t*)dComIfG_getObjectRes(l_arcName, 7);
-    if (mDoor1.bgw.Set(cbgd, 1, &mDoor1.mtx)) {
+    if (mDoor1.bgw.Set((cBgD_t*)dComIfG_getObjectRes(l_arcName, 7), 1, &mDoor1.mtx)) {
         return 0;
     }
 
-    cBgD_t* cbgd2 = (cBgD_t*)dComIfG_getObjectRes(l_arcName, 7);
-    if (mDoor2.bgw.Set(cbgd2, 1, &mDoor2.mtx)) {
+    if (mDoor2.bgw.Set((cBgD_t*)dComIfG_getObjectRes(l_arcName, 7), 1, &mDoor2.mtx)) {
         return 0;
     }
 
@@ -48,9 +51,9 @@ int daObjCatDoor_c::createHeap() {
 int daObjCatDoor_c::draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
 
-        fopAc_ac_c* p1 = static_cast<fopAc_ac_c*>(this);
-        g_env_light.setLightTevColorType_MAJI(mDoor1.pmodel, &p1->tevStr);
-        g_env_light.setLightTevColorType_MAJI(mDoor2.pmodel, &p1->tevStr);
+    fopAc_ac_c* actor = (fopAc_ac_c*)this;
+    g_env_light.setLightTevColorType_MAJI(mDoor1.pmodel, &actor->tevStr);
+    g_env_light.setLightTevColorType_MAJI(mDoor2.pmodel, &actor->tevStr);
 
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mDoor1.pmodel);
@@ -60,22 +63,22 @@ int daObjCatDoor_c::draw() {
 }
 
 int daObjCatDoor_c::execute() {
-    if (dComIfGs_isSwitch(fopAcM_GetParam(this) & 0xFF, fopAcM_GetHomeRoomNo(this)) ||
-        mRotSpeed == 0)
-    {
+    if (fopAcM_isSwitch(this, getSwitchNo()) || mRotSpeed == 0) {
         return 1;
     }
+
     calcOpen();
     setBaseMtx();
     return 1;
 }
 
-const s16* daObjCatDoor_c::attr() const {
-    return (const s16*)&daObjCatDoor_c::M_attr;
+const daObjCatDoor_Attr_c* daObjCatDoor_c::attr() const {
+    return &daObjCatDoor_c::M_attr;
 }
 
-static int createSolidHeap(fopAc_ac_c* i_this) {
-    return static_cast<daObjCatDoor_c*>(i_this)->createHeap();
+static int createSolidHeap(fopAc_ac_c* actor) {
+    daObjCatDoor_c* i_this = (daObjCatDoor_c*)actor;
+    return i_this->createHeap();
 }
 
 int daObjCatDoor_c::create() {
@@ -84,7 +87,7 @@ int daObjCatDoor_c::create() {
     int phase_state = dComIfG_resLoad(&mPhaseReq, l_arcName);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createSolidHeap, 0x2520)) {
-            phase_state = cPhs_ERROR_e;
+            return cPhs_ERROR_e;
         } else {
             create_init();
         }
@@ -93,7 +96,8 @@ int daObjCatDoor_c::create() {
 }
 
 void daObjCatDoor_c::create_init() {
-    ASSERT(getSwitchNo() != 0xff);
+    JUT_ASSERT(295, getSwitchNo() != 0xff);
+
     fopAcM_setCullSizeBox(this, -200.0f, 0.0f, -20.0f, 200.0f, 260.0f, 100.0f);
     if (fopAcM_isSwitch(this, getSwitchNo())) {
         mDoor1.angle = 0x8800;
@@ -106,37 +110,40 @@ void daObjCatDoor_c::create_init() {
         mDoor2.bgw.SetRoomId(fopAcM_GetRoomNo(this));
         dComIfG_Bgsp().Regist(&mDoor2.bgw, this);
     }
+
     initBaseMtx();
 }
 
 void daObjCatDoor_c::initBaseMtx() {
-    cullMtx = mMtx;
+    fopAcM_SetMtx(this, mMtx);
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_YrotM(mDoMtx_stack_c::get(), shape_angle.y);
-    mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    cMtx_copy(mDoMtx_stack_c::get(), mMtx);
     setBaseMtx();
 }
 
 void daObjCatDoor_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_YrotM(mDoMtx_stack_c::get(), shape_angle.y);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+
     for (int i = 0; i < 2; i++) {
         daObjCatDoor_Door_c* door = i == 0 ? &mDoor1 : &mDoor2;
         f32 xOff = i == 0 ? -97.0f : 97.0f;
         s16 rot = i == 0 ? door->angle : s16(door->angle + 0x8000);
+
         mDoMtx_stack_c::push();
         mDoMtx_stack_c::transM(xOff, 0.0, 0.0);
-        mDoMtx_YrotM(mDoMtx_stack_c::get(), (s16)rot);
-        mDoMtx_copy(mDoMtx_stack_c::get(), door->pmodel->mBaseTransformMtx);
-        mDoMtx_copy(mDoMtx_stack_c::get(), door->mtx);
+        mDoMtx_stack_c::YrotM((s16)rot);
+        door->pmodel->setBaseTRMtx(mDoMtx_stack_c::get());
+        cMtx_copy(mDoMtx_stack_c::get(), door->mtx);
         door->bgw.Move();
         mDoMtx_stack_c::pop();
     }
 }
 
 void daObjCatDoor_c::calcOpen() {
-    s16 prev = mRotSpeed;
-    int res = cLib_chaseS(&mRotSpeed, 0, *attr());
+    s16 prev = (s16)mRotSpeed;
+    int res = cLib_chaseS(&mRotSpeed, 0, attr()->speed);
     for (int i = 0; i < 2; i++) {
         daObjCatDoor_Door_c* door = i == 0 ? &mDoor1 : &mDoor2;
         if (i == 0) {
@@ -159,20 +166,20 @@ static int daObjCatDoor_Execute(daObjCatDoor_c* i_this) {
     return static_cast<daObjCatDoor_c*>(i_this)->execute();
 }
 
-static BOOL daObjCatDoor_IsDelete(daObjCatDoor_c* i_this) {
-    return TRUE;
+static int daObjCatDoor_IsDelete(daObjCatDoor_c* i_this) {
+    return 1;
 }
 
 static int daObjCatDoor_Delete(daObjCatDoor_c* i_this) {
-    fopAcM_GetID(i_this);
+    fpc_ProcID id = fopAcM_GetID(i_this);
     i_this->~daObjCatDoor_c();
     return 1;
 }
 
-static int daObjCatDoor_Create(fopAc_ac_c* i_this) {
-    fopAcM_GetID(i_this);
-    daObjCatDoor_c* a_this = static_cast<daObjCatDoor_c*>(i_this);
-    return a_this->create();
+static int daObjCatDoor_Create(fopAc_ac_c* actor) {
+    daObjCatDoor_c* i_this = (daObjCatDoor_c*)actor;
+    fpc_ProcID id = fopAcM_GetID(actor);
+    return i_this->create();
 }
 
 static actor_method_class l_daObjCatDoor_Method = {

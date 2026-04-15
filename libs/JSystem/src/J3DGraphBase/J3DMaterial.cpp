@@ -176,7 +176,7 @@ void J3DMaterial::initialize() {
     mMaterialMode = 1;
     mIndex = -1;
     mInvalid = 0;
-    mDiffFlag = 0;
+    mMaterialID = 0;
     mColorBlock = NULL;
     mTexGenBlock = NULL;
     mTevBlock = NULL;
@@ -207,7 +207,7 @@ void J3DMaterial::makeDisplayList_private(J3DDisplayListObj* pDLObj) {
 
 void J3DMaterial::makeDisplayList() {
     if (!j3dSys.getMatPacket()->isLocked()) {
-        j3dSys.getMatPacket()->mDiffFlag = mDiffFlag;
+        j3dSys.getMatPacket()->setMaterialID(mMaterialID);
         makeDisplayList_private(j3dSys.getMatPacket()->getDisplayListObj());
     }
 }
@@ -238,7 +238,7 @@ void J3DMaterial::loadSharedDL() {
 }
 
 void J3DMaterial::patch() {
-    j3dSys.getMatPacket()->mDiffFlag = mDiffFlag;
+    j3dSys.getMatPacket()->setMaterialID(mMaterialID);
     j3dSys.getMatPacket()->beginPatch();
     mTevBlock->patch();
     mColorBlock->patch();
@@ -323,8 +323,8 @@ void J3DMaterial::copy(J3DMaterial* pOther) {
 }
 
 void J3DMaterial::reset() {
-    if ((~mDiffFlag & J3DDiffFlag_Changed) == 0) {
-        mDiffFlag &= ~J3DDiffFlag_Changed;
+    if ((~mMaterialID & 0x80000000) == 0) {
+        mMaterialID &= ~0x80000000;
         mMaterialMode = mpOrigMaterial->mMaterialMode;
         mInvalid = mpOrigMaterial->mInvalid;
         mMaterialAnm = NULL;
@@ -333,8 +333,8 @@ void J3DMaterial::reset() {
 }
 
 void J3DMaterial::change() {
-    if ((mDiffFlag & (J3DDiffFlag_Changed | J3DDiffFlag_Unk40000000)) == 0) {
-        mDiffFlag |= J3DDiffFlag_Changed;
+    if ((mMaterialID & 0xC0000000) == 0) {
+        mMaterialID |= 0x80000000;
         mMaterialAnm = NULL;
     }
 }

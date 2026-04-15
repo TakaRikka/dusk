@@ -256,6 +256,9 @@ void daObjFchain_shape_c::draw() {
     j3dSys.setVtxPos(modelData->getVtxPosArray(), modelData->getVtxNum());
     j3dSys.setVtxNrm(modelData->getVtxNrmArray(), modelData->getNrmNum());
     j3dSys.setVtxCol(modelData->getVtxColorArray(0), modelData->getColNum());
+#if TARGET_PC
+    j3dSys.setTexture(modelData->getTexture());
+#endif
     J3DShape::resetVcdVatCache();
     material->loadSharedDL();
     material->getShape()->loadPreDrawSetting();

@@ -7,6 +7,20 @@ namespace dusk {
 
 using namespace config;
 
+enum class BloomMode : int {
+    Off = 0,
+    Classic = 1,
+    Dusk = 2,
+};
+
+namespace config {
+template <>
+struct ConfigEnumRange<BloomMode> {
+    static constexpr auto min = BloomMode::Off;
+    static constexpr auto max = BloomMode::Dusk;
+};
+}
+
 // Persistent user settings
 
 struct UserSettings {
@@ -36,23 +50,28 @@ struct UserSettings {
         ConfigVar<bool> enableArmorsQuickToggle;
         ConfigVar<bool> enableQuickTransform;
         ConfigVar<bool> hideTvSettingsScreen;
+        ConfigVar<bool> skipWarningScreen;
         ConfigVar<bool> biggerWallets;
         ConfigVar<bool> noReturnRupees;
         ConfigVar<bool> disableRupeeCutscenes;
         ConfigVar<bool> noSwordRecoil;
         ConfigVar<int> damageMultiplier;
+        ConfigVar<bool> noHeartDrops;
         ConfigVar<bool> instantDeath;
         ConfigVar<bool> fastClimbing;
         ConfigVar<bool> noMissClimbing;
         ConfigVar<bool> fastTears;
         ConfigVar<bool> instantSaves;
+        ConfigVar<bool> sunsSong;
 
         // Preferences
         ConfigVar<bool> enableMirrorMode;
         ConfigVar<bool> invertCameraXAxis;
+        ConfigVar<bool> disableMainHUD;
 
         // Graphics
-        ConfigVar<bool> enableBloom;
+        ConfigVar<BloomMode> bloomMode;
+        ConfigVar<float> bloomMultiplier;
         ConfigVar<bool> enableWaterRefraction;
         ConfigVar<bool> enableFrameInterpolation;
         ConfigVar<int> shadowResolutionMultiplier;
@@ -60,6 +79,13 @@ struct UserSettings {
         // Audio
         ConfigVar<bool> noLowHpSound;
         ConfigVar<bool> midnasLamentNonStop;
+
+        // Input
+        ConfigVar<bool> enableGyroAim;
+        ConfigVar<float> gyroAimSensitivityX;
+        ConfigVar<float> gyroAimSensitivityY;
+        ConfigVar<bool> gyroAimInvertPitch;
+        ConfigVar<bool> gyroAimInvertYaw;
 
         // Cheats
         ConfigVar<bool> enableFastIronBoots;
@@ -80,6 +106,7 @@ struct UserSettings {
         ConfigVar<bool> skipPreLaunchUI;
         ConfigVar<bool> showPipelineCompilation;
         ConfigVar<bool> wasPresetChosen;
+        ConfigVar<bool> enableCrashReporting;
     } backend;
 };
 
@@ -103,6 +130,7 @@ struct CollisionViewSettings {
 struct TransientSettings {
     CollisionViewSettings collisionView;
     bool skipFrameRateLimit;
+    bool moveLinkActive;
 };
 
 TransientSettings& getTransientSettings();

@@ -12,12 +12,15 @@ namespace dusk {
 static void ApplyPresetClassic() {
     auto& s = getSettings();
     s.video.lockAspectRatio.setValue(true);
+    s.game.bloomMode.setValue(BloomMode::Classic);
     VILockAspectRatio(defaultAspectRatioW, defaultAspectRatioH);
 }
 
 static void ApplyPresetHD() {
     auto& s = getSettings();
+    s.game.bloomMode.setValue(BloomMode::Classic);
     s.game.hideTvSettingsScreen.setValue(true);
+    s.game.skipWarningScreen.setValue(true);
     s.game.noReturnRupees.setValue(true);
     s.game.disableRupeeCutscenes.setValue(true);
     s.game.noSwordRecoil.setValue(true);
@@ -36,6 +39,8 @@ static void ApplyPresetDusk() {
     s.game.instantSaves.setValue(true);
     s.game.midnasLamentNonStop.setValue(true);
     s.game.enableFrameInterpolation.setValue(true);
+    s.game.sunsSong.setValue(true);
+    s.game.bloomMode.setValue(BloomMode::Dusk);
 }
 
 // =========================================================================

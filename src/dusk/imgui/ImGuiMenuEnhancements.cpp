@@ -16,6 +16,15 @@ namespace dusk {
                 }
 
                 config::ImGuiCheckbox("Quick Transform (R+Y)", getSettings().game.enableQuickTransform);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Allows you to quickly transform between forms\n"
+                                      "without having to talk to Midna.");
+                }
+
+                config::ImGuiCheckbox("Sun's Song (R+X)", getSettings().game.sunsSong);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Allows Wolf Link to howl and change the time of day.");
+                }
 
                 config::ImGuiCheckbox("Bigger Wallets", getSettings().game.biggerWallets);
                 if (ImGui::IsItemHovered()) {
@@ -58,6 +67,11 @@ namespace dusk {
                     ImGui::SetTooltip("Hides the TV calibration screen shown when loading a save.");
                 }
 
+                config::ImGuiCheckbox("Skip Warning Screen", getSettings().game.skipWarningScreen);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Skips the warning screen shown when loading the game.");
+                }
+
                 config::ImGuiCheckbox("Instant Saves", getSettings().game.instantSaves);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Skip the delay when writing to the Memory Card.");
@@ -73,6 +87,12 @@ namespace dusk {
                 }
 
                 config::ImGuiCheckbox("Invert Camera X Axis", getSettings().game.invertCameraXAxis);
+
+                config::ImGuiCheckbox("Disable Main HUD", getSettings().game.disableMainHUD);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Disables the main HUD of the game.\n"
+                                      "Useful for recording or a more immersive experience!");
+                }
 
                 ImGui::EndMenu();
             }
@@ -112,6 +132,21 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
+            if (ImGui::BeginMenu("Input")) {
+                config::ImGuiCheckbox("Gyro Aim", getSettings().game.enableGyroAim);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Enables the gyroscope on supported controllers while aiming the\n"
+                                      "Slingshot, Gale Boomerang, Hero's Bow, Clawshot(s), Ball and Chain, and Dominion Rod.");
+                }
+
+                config::ImGuiSliderFloat("Gyro Pitch Sensitivity", getSettings().game.gyroAimSensitivityY, 0.25f, 4.0f, "%.2f");
+                config::ImGuiSliderFloat("Gyro Yaw Sensitivity", getSettings().game.gyroAimSensitivityX, 0.25f, 4.0f, "%.2f");
+                config::ImGuiCheckbox("Invert Gyro Pitch", getSettings().game.gyroAimInvertPitch);
+                config::ImGuiCheckbox("Invert Gyro Yaw", getSettings().game.gyroAimInvertYaw);
+
+                ImGui::EndMenu();
+            }
+
             if (ImGui::BeginMenu("Cheats")) {
                 config::ImGuiCheckbox("Fast Iron Boots", getSettings().game.enableFastIronBoots);
 
@@ -136,6 +171,12 @@ namespace dusk {
             if (ImGui::BeginMenu("Difficulty")) {
                 config::ImGuiSliderInt("Damage Multiplier", getSettings().game.damageMultiplier, 1, 8, "x%d");
 
+                config::ImGuiCheckbox("No Heart Drops", getSettings().game.noHeartDrops);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Hearts will never drop from enemies,\n"
+                                      "pots and various other places.");
+                }
+
                 config::ImGuiCheckbox("Instant Death", getSettings().game.instantDeath);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Any hit will instantly kill you.");
@@ -155,10 +196,9 @@ namespace dusk {
             }
 
             if (ImGui::BeginMenu("Tools")) {
-                config::ImGuiCheckbox("Enable Turbo Key", getSettings().game.enableTurboKeybind);
+                config::ImGuiCheckbox("Turbo Key", getSettings().game.enableTurboKeybind);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Holding TAB will speed up the game.\n"
-                                      "This will not work with the \"Unlock Framerate\" enhancement.");
+                    ImGui::SetTooltip("Hold TAB to increase game speed by up to 4x.");
                 }
 
                 ImGui::EndMenu();

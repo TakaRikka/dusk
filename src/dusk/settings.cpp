@@ -24,23 +24,28 @@ UserSettings g_userSettings = {
         .enableArmorsQuickToggle {"game.enableArmorsQuickToggle", false},
         .enableQuickTransform {"game.enableQuickTransform", false},
         .hideTvSettingsScreen {"game.hideTvSettingsScreen", false},
+        .skipWarningScreen {"game.skipWarningScreen", false},
         .biggerWallets {"game.biggerWallets", false},
         .noReturnRupees {"game.noReturnRupees", false},
         .disableRupeeCutscenes {"game.disableRupeeCutscenes", false},
         .noSwordRecoil {"game.noSwordRecoil", false},
         .damageMultiplier {"game.damageMultiplier", 1},
+        .noHeartDrops{"game.noHeartDrops", false},
         .instantDeath {"game.instantDeath", false},
         .fastClimbing {"game.fastClimbing", false},
         .noMissClimbing {"game.noMissClimbing", false},
         .fastTears {"game.fastTears", false},
         .instantSaves {"game.instantSaves", false},
+        .sunsSong {"game.sunsSong", false},
 
         // Preferences
         .enableMirrorMode {"game.enableMirrorMode", false},
         .invertCameraXAxis {"game.invertCameraXAxis", false},
+        .disableMainHUD {"game.disableMainHUD", false},
 
         // Graphics
-        .enableBloom {"game.enableBloom", true},
+        .bloomMode {"game.bloomMode", BloomMode::Classic},
+        .bloomMultiplier {"game.bloomMultiplier", 1.0f},
         .enableWaterRefraction {"game.enableWaterRefraction", true},
         .enableFrameInterpolation = {"game.enableFrameInterpolation", false},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
@@ -48,6 +53,13 @@ UserSettings g_userSettings = {
         // Audio
         .noLowHpSound {"game.noLowHpSound", false},
         .midnasLamentNonStop {"game.midnasLamentNonStop", false},
+
+        // Input
+        .enableGyroAim {"game.enableGyroAim", false},
+        .gyroAimSensitivityX {"game.gyroAimSensitivityX", 1.0f},
+        .gyroAimSensitivityY {"game.gyroAimSensitivityY", 1.0f},
+        .gyroAimInvertPitch {"game.gyroAimInvertPitch", false},
+        .gyroAimInvertYaw {"game.gyroAimInvertYaw", false},
 
         // Cheats
         .enableFastIronBoots {"game.enableFastIronBoots", false},
@@ -59,7 +71,7 @@ UserSettings g_userSettings = {
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
 
         // Controls
-        .enableTurboKeybind {"game.enableTurboKeybind", false},
+        .enableTurboKeybind {"game.enableTurboKeybind", false}
     },
 
     .backend = {
@@ -67,7 +79,8 @@ UserSettings g_userSettings = {
         .graphicsBackend {"backend.graphicsBackend", "auto"},
         .skipPreLaunchUI {"backend.skipPreLaunchUI", false},
         .showPipelineCompilation {"backend.showPipelineCompilation", false},
-        .wasPresetChosen {"backend.wasPresetChosen", false}
+        .wasPresetChosen {"backend.wasPresetChosen", false},
+        .enableCrashReporting {"backend.enableCrashReporting", true}
     }
 };
 
@@ -93,18 +106,23 @@ void registerSettings() {
     Register(g_userSettings.game.enableArmorsQuickToggle);
     Register(g_userSettings.game.enableQuickTransform);
     Register(g_userSettings.game.hideTvSettingsScreen);
+    Register(g_userSettings.game.skipWarningScreen);
     Register(g_userSettings.game.biggerWallets);
     Register(g_userSettings.game.noReturnRupees);
     Register(g_userSettings.game.disableRupeeCutscenes);
     Register(g_userSettings.game.noSwordRecoil);
     Register(g_userSettings.game.damageMultiplier);
+    Register(g_userSettings.game.noHeartDrops);
     Register(g_userSettings.game.instantDeath);
     Register(g_userSettings.game.fastClimbing);
     Register(g_userSettings.game.fastTears);
     Register(g_userSettings.game.instantSaves);
+    Register(g_userSettings.game.sunsSong);
     Register(g_userSettings.game.enableMirrorMode);
     Register(g_userSettings.game.invertCameraXAxis);
-    Register(g_userSettings.game.enableBloom);
+    Register(g_userSettings.game.disableMainHUD);
+    Register(g_userSettings.game.bloomMode);
+    Register(g_userSettings.game.bloomMultiplier);
     Register(g_userSettings.game.enableWaterRefraction);
     Register(g_userSettings.game.shadowResolutionMultiplier);
     Register(g_userSettings.game.enableFastIronBoots);
@@ -117,12 +135,18 @@ void registerSettings() {
     Register(g_userSettings.game.enableTurboKeybind);
     Register(g_userSettings.game.fastSpinner);
     Register(g_userSettings.game.enableFrameInterpolation);
+    Register(g_userSettings.game.enableGyroAim);
+    Register(g_userSettings.game.gyroAimSensitivityX);
+    Register(g_userSettings.game.gyroAimSensitivityY);
+    Register(g_userSettings.game.gyroAimInvertPitch);
+    Register(g_userSettings.game.gyroAimInvertYaw);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.graphicsBackend);
     Register(g_userSettings.backend.skipPreLaunchUI);
     Register(g_userSettings.backend.showPipelineCompilation);
     Register(g_userSettings.backend.wasPresetChosen);
+    Register(g_userSettings.backend.enableCrashReporting);
 }
 
 // Transient settings

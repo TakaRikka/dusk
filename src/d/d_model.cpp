@@ -11,6 +11,9 @@ void dMdl_c::draw() {
     j3dSys.setVtxCol(mpModelData->getVtxColorArray(0), mpModelData->getColNum());
     J3DShape::resetVcdVatCache();
 
+#if TARGET_PC
+    j3dSys.setTexture(mpModelData->getTexture());
+#endif
     J3DShape* shape = mpModelData->getMaterialNodePointer(mMaterialId)->getShape();
     mpModelData->getMaterialNodePointer(mMaterialId)->loadSharedDL();
     shape->loadPreDrawSetting();

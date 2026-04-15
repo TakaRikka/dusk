@@ -51,6 +51,7 @@
 #include "d/actor/d_a_ni.h"
 #include "d/d_s_play.h"
 
+#include "dusk/settings.h"
 #include "res/Object/Alink.h"
 #include <cstring>
 
@@ -4393,13 +4394,34 @@ void daAlink_c::setSelectEquipItem(BOOL param_0) {
     if (mClothesChangeWaitTimer == 0) {
         if (checkZoraWearAbility()) {
             if (checkZoraWearMaskDraw()) {
-                field_0x06f0->show();
+#if TARGET_PC
+                if (field_0x06f0 != NULL)
+#endif
+                {
+                    field_0x06f0->show();
+                }
+
                 if (!checkEquipHeavyBoots()) {
-                    field_0x06e4->show();
+#if TARGET_PC
+                    if (field_0x06e4 != NULL)
+#endif
+                    {
+                        field_0x06e4->show();
+                    }
                 }
             } else {
-                field_0x06f0->hide();
-                field_0x06e4->hide();
+#if TARGET_PC
+                if (field_0x06f0 != NULL)
+#endif
+                {
+                    field_0x06f0->hide();
+                }
+#if TARGET_PC
+                if (field_0x06e4 != NULL)
+#endif
+                {
+                    field_0x06e4->hide();
+                }
             }
         }
 
@@ -18048,7 +18070,10 @@ int daAlink_c::execute() {
     }
 
     BOOL isTrigDebugMoveInput = FALSE;
-    #if DEBUG
+#if TARGET_PC
+    if (dusk::getTransientSettings().moveLinkActive && daPy_getPlayerActorClass() == this) {
+        isTrigDebugMoveInput = TRUE;
+#elif DEBUG
     if (daPy_getPlayerActorClass() == this && checkDebugMoveInput()) {
         isTrigDebugMoveInput = TRUE;
         if (l_debugMode) {
@@ -18059,6 +18084,8 @@ int daAlink_c::execute() {
     }
 
     if (l_debugMode) {
+#endif
+#if TARGET_PC || DEBUG
         if (checkModeFlg(0x400) && !checkBoardRide() && !checkSpinnerRide()) {
             if (checkCanoeRide()) {
                 setSyncCanoePos();
@@ -18067,17 +18094,28 @@ int daAlink_c::execute() {
             }
         } else {
             f32 moveSpeed;
+#if TARGET_PC
+            if (mDoCPd_c::getHoldZ(PAD_1)) {
+#else
             if (mDoCPd_c::getHoldLockR(PAD_1)) {
+#endif
                 moveSpeed = 100.0f;
             } else {
                 moveSpeed = 50.0f;
             }
 
+#if TARGET_PC
+            f32 cStickY = mDoCPd_c::getSubStickY(PAD_1);
+            if (cStickY > 0.3f || cStickY < -0.3f) {
+                current.pos.y += moveSpeed * cStickY;
+            }
+#else
             if (mDoCPd_c::getHoldY(PAD_1)) {
                 current.pos.y += moveSpeed;
             } else if (mDoCPd_c::getHoldX(PAD_1)) {
                 current.pos.y -= moveSpeed;
             }
+#endif
 
             current.pos.x += moveSpeed * mStickValue * cM_ssin(mMoveAngle);
             current.pos.z += moveSpeed * mStickValue * cM_scos(mMoveAngle);
@@ -18095,7 +18133,7 @@ int daAlink_c::execute() {
         setBodyPartPos();
         setAttentionPos();
     } else
-    #endif
+#endif
     {
         if (isTrigDebugMoveInput) {
             mItemButton = 0;
@@ -18563,9 +18601,11 @@ int daAlink_c::execute() {
             if (checkDeadHP()) {
                 eventInfo.offCondition(fopAcCnd_NOEXEC_e);
             } else
-            #if DEBUG
+#if TARGET_PC
+            if (!dusk::getTransientSettings().moveLinkActive)
+#elif DEBUG
             if (!l_debugMode)
-            #endif
+#endif
             {
                 if (!checkMagneBootsOn()) {
                     f32 gnd_nrm_y;
@@ -19280,11 +19320,20 @@ void daAlink_c::setWaterDropColor(const J3DGXColorS10* i_color) {
 
     if (!checkNoResetFlg2(FLG2_UNK_80000)) {
         if (checkZoraWearAbility()) {
+#if TARGET_PC
+            if (field_0x064C->getMaterialNum() >= 14)
+#endif
+            {
             field_0x064C->getMaterialNodePointer(13)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(0)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(1)->setTevColor(1, i_color);
             mpLinkHatModel->getModelData()->getMaterialNodePointer(1)->setTevColor(1, i_color);
+            }
         } else if (checkMagicArmorWearAbility()) {
+#if TARGET_PC
+            if (field_0x064C->getMaterialNum() >= 12)
+#endif
+            {
             field_0x064C->getMaterialNodePointer(11)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(10)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(9)->setTevColor(1, i_color);
@@ -19292,11 +19341,21 @@ void daAlink_c::setWaterDropColor(const J3DGXColorS10* i_color) {
             field_0x064C->getMaterialNodePointer(6)->setTevColor(1, i_color);
             mpLinkHatModel->getModelData()->getMaterialNodePointer(2)->setTevColor(1, i_color);
             mpLinkHatModel->getModelData()->getMaterialNodePointer(1)->setTevColor(1, i_color);
+            }
         } else if (checkCasualWearFlg()) {
+#if TARGET_PC
+            if (field_0x064C->getMaterialNum() >= 8)
+#endif
+            {
             field_0x064C->getMaterialNodePointer(7)->setTevColor(1, i_color);
             mpLinkHatModel->getModelData()->getMaterialNodePointer(0)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(5)->setTevColor(1, var_r31);
+            }
         } else {
+#if TARGET_PC
+            if (field_0x064C->getMaterialNum() >= 18)
+#endif
+            {
             field_0x064C->getMaterialNodePointer(17)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(9)->setTevColor(1, i_color);
             field_0x064C->getMaterialNodePointer(0)->setTevColor(1, i_color);
@@ -19306,6 +19365,7 @@ void daAlink_c::setWaterDropColor(const J3DGXColorS10* i_color) {
             field_0x064C->getMaterialNodePointer(16)->setTevColor(1, var_r31);
             field_0x064C->getMaterialNodePointer(15)->setTevColor(1, var_r31);
             field_0x064C->getMaterialNodePointer(14)->setTevColor(1, var_r31);
+            }
         }
     }
 }
@@ -19491,7 +19551,12 @@ int daAlink_c::draw() {
                 field_0x06e8->hide();
             }
 
-            field_0x06f0->hide();
+#if TARGET_PC
+            if (field_0x06f0 != NULL)
+#endif
+            {
+                field_0x06f0->hide();
+            }
 
 #if PLATFORM_SHIELD
             if (mProcID == PROC_HOOKSHOT_WALL_SHOOT || mProcID == PROC_HOOKSHOT_SUBJECT) {
@@ -19521,7 +19586,12 @@ int daAlink_c::draw() {
                 }
 
                 if (!checkZoraWearMaskDraw() && checkZoraWearAbility()) {
-                    field_0x06f0->hide();
+#if TARGET_PC
+                    if (field_0x06f0 != NULL)
+#endif
+                    {
+                        field_0x06f0->hide();
+                    }
                 }
             }
 
@@ -19530,7 +19600,12 @@ int daAlink_c::draw() {
             }
 
             if (checkZoraWearMaskDraw() || !checkZoraWearAbility()) {
-                field_0x06f0->show();
+#if TARGET_PC
+                if (field_0x06f0 != NULL)
+#endif
+                {
+                    field_0x06f0->show();
+                }
             }
         }
 

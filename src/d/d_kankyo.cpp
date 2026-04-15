@@ -1540,7 +1540,20 @@ void dScnKy_env_light_c::setDaytime() {
                     }
 
                     if (dComIfGp_roomControl_getTimePass() && !field_0x130a && temp_r29) {
+                        #if TARGET_PC
+                        f32 prev = daytime;
+                        #endif
+
                         daytime += time_change_rate;
+
+                        #if TARGET_PC
+                        if (time_change_rate == 1.0f &&
+                            (std::fmod(daytime - 90.0f + 360.0f, 360.0f) < std::fmod(prev - 90.0f + 360.0f, 360.0f) ||
+                             std::fmod(daytime - 285.0f + 360.0f, 360.0f) < std::fmod(prev - 285.0f + 360.0f, 360.0f)))
+                        {
+                            g_env_light.time_change_rate = 0.012f;
+                        }
+                        #endif
 
                         // Stage is Fishing Pond or Hena's Hut
                         if (!strcmp(dComIfGp_getStartStageName(), "F_SP127") ||
