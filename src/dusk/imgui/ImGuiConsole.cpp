@@ -40,9 +40,15 @@ namespace dusk {
 
     void ImGuiTextCenter(std::string_view text) {
         ImGui::NewLine();
-        float fontSize = ImGui::CalcTextSize(text.data(), text.data() + text.size()).x;
+        float fontSize = ImGui::CalcTextSize(
+            text.data(),
+            text.data() + text.size(),
+            false,
+            ImGui::GetWindowSize().x).x;
         ImGui::SameLine(ImGui::GetWindowSize().x / 2 - fontSize + fontSize / 2);
+        ImGui::PushTextWrapPos(ImGui::GetWindowSize().x);
         ImGuiStringViewText(text);
+        ImGui::PopTextWrapPos();
     }
 
     bool ImGuiButtonCenter(std::string_view text) {
