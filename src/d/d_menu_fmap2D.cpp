@@ -1393,6 +1393,15 @@ void dMenu_Fmap2DBack_c::regionTextureDraw() {
             if (uVar10 != uVar9) {
                 bool b = 0;
                 f32 v = mTransX + (dVar14 + (mRegionMinMapX[uVar10] + field_0xf0c[uVar10]));
+                
+                #if TARGET_PC
+                if (dusk::getSettings().game.enableMirrorMode) {
+                    b = true;
+                    v = getMirrorPosX(mTransX + (dVar14 + (mRegionMinMapX[uVar10] + field_0xf0c[uVar10])),
+                                      mRegionMapSizeX[uVar10] * mZoom * 0.5f);
+                }
+                #endif
+
                 mpAreaTex[uVar10]->draw(
                     v, mTransZ + (dVar13 + (mRegionMinMapY[uVar10] + field_0xf2c[uVar10])),
                     mRegionMapSizeX[uVar10] * mZoom, mRegionMapSizeY[uVar10] * mZoom, b, false,
@@ -1400,6 +1409,15 @@ void dMenu_Fmap2DBack_c::regionTextureDraw() {
             } else {
                 bool b = 0;
                 f32 v = mTransX + (dVar14 + (mRegionMinMapX[uVar9] + field_0xf0c[uVar9]));
+
+                #if TARGET_PC
+                if (dusk::getSettings().game.enableMirrorMode) {
+                    b = true;
+                    v = getMirrorPosX(mTransX + (dVar14 + (mRegionMinMapX[uVar9] + field_0xf0c[uVar9])),
+                                      mRegionMapSizeX[uVar9] * mZoom * 0.5f);
+                }
+                #endif
+
                 mpAreaTex[uVar9]->draw(
                     v, mTransZ + (dVar13 + (mRegionMinMapY[uVar9] + field_0xf2c[uVar9])),
                     mRegionMapSizeX[uVar9] * mZoom, mRegionMapSizeY[uVar9] * mZoom, b, false,
