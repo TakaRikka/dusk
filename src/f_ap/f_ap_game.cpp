@@ -725,7 +725,6 @@ void fapGm_After() {
 
 #ifdef TARGET_PC
 static void fapGm_Before() {
-    dusk::frame_interp::begin_record_camera();
     dusk::frame_interp::begin_record();
 }
 

@@ -2229,13 +2229,11 @@ int mDoGph_Painter() {
 
 #if TARGET_PC
             if (dusk::getSettings().game.enableFrameInterpolation) {
-                cXyz pres_eye;
-                dusk::frame_interp::camera_eye_from_view_mtx(j3dSys.getViewMtx(), &pres_eye);
                 // FRAME INTERP NOTE: Currently only recalculating points for Epona's reins. Need a more global solution.
                 if (daHorse_c* horse = dComIfGp_getHorseActor()) {
                     horse->lerpControlPoints(dusk::frame_interp::get_interpolation_step());
                 }
-                g_dComIfG_gameInfo.drawlist.refresh3DlineMats(pres_eye);
+                g_dComIfG_gameInfo.drawlist.refresh3DlineMats(camera_p->view.lookat.eye);
             }
 #endif
 

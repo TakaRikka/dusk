@@ -1,12 +1,7 @@
-#include "f_op/f_op_camera_mng.h"
 #include "dusk/frame_interpolation.h"
 
-#include <algorithm>
-#include <cmath>
-#include <cstdint>
 #include <memory>
-#include <unordered_map>
-#include <vector>
+#include "f_op/f_op_camera_mng.h"
 
 namespace {
 enum class Op : uint8_t {
@@ -80,6 +75,36 @@ std::vector<Path*> g_current_path;
 
 std::unordered_map<const Mtx*, MatrixValue> g_replacements;
 
+struct CameraSnapshot {
+    cXyz eye{};
+    cXyz center{};
+    cXyz up{};
+    s16 bank{};
+    f32 fovy{};
+    f32 aspect{};
+    f32 near_{};
+    f32 far_{};
+    bool valid{};
+};
+
+CameraSnapshot s_cam_prev{};
+CameraSnapshot s_cam_curr{};
+
+view_class s_presentation_view_backup{};
+int s_presentation_depth = 0;
+
+void copy_view_to_snap(CameraSnapshot* dst, const view_class& v) {
+    dst->eye = v.lookat.eye;
+    dst->center = v.lookat.center;
+    dst->up = v.lookat.up;
+    dst->bank = v.bank;
+    dst->fovy = v.fovy;
+    dst->aspect = v.aspect;
+    dst->near_ = v.near_;
+    dst->far_ = v.far_;
+    dst->valid = true;
+}
+
 inline void copy_matrix(const Mtx src, Mtx dst) {
     MTXCopy(src, dst);
 }
@@ -102,6 +127,12 @@ inline void lerp_xyz(cXyz* out, const cXyz& lhs, const cXyz& rhs, float step) {
     out->x = lhs.x * old_weight + rhs.x * step;
     out->y = lhs.y * old_weight + rhs.y * step;
     out->z = lhs.z * old_weight + rhs.z * step;
+}
+
+static s16 lerp_bank(s16 a, s16 b, f32 t) {
+    const f32 ra = S2RAD(a);
+    const f32 d = remainderf(S2RAD(b) - ra, 2.0f * static_cast<f32>(M_PI));
+    return cAngle::Radian_to_SAngle(ra + d * t);
 }
 
 inline bool matrix_differs(const Mtx lhs, const Mtx rhs, float epsilon = 0.0001f) {
@@ -287,6 +318,7 @@ void ensure_initialized() {
 
 void begin_record() {
     ensure_initialized();
+
     if (!g_enabled) {
         g_interpolating = false;
         g_sync_presentation = false;
@@ -294,6 +326,8 @@ void begin_record() {
         g_current_recording = {};
         g_current_path.clear();
         clear_replacements();
+        s_cam_prev.valid = false;
+        s_cam_curr.valid = false;
         return;
     }
 
@@ -305,6 +339,15 @@ void begin_record() {
     g_recording = true;
     g_interpolating = false;
     clear_replacements();
+
+    ::camera_process_class* cam = dComIfGp_getCamera(0);
+    if (cam == nullptr) {
+        s_cam_prev.valid = false;
+        s_cam_curr.valid = false;
+        return;
+    } else {
+        copy_view_to_snap(&s_cam_prev, cam->view);
+    }
 }
 
 void end_record() {
@@ -454,84 +497,126 @@ bool lookup_concat_replacement(const void* lhs, const void* rhs, Mtx out) {
     return true;
 }
 
-// TODO: Is there already a built-in function for this?
-void camera_eye_from_view_mtx(MtxP view_mtx, cXyz* o_eye) {
-    o_eye->x = -(view_mtx[0][0] * view_mtx[0][3] + view_mtx[1][0] * view_mtx[1][3] + view_mtx[2][0] * view_mtx[2][3]);
-    o_eye->y = -(view_mtx[0][1] * view_mtx[0][3] + view_mtx[1][1] * view_mtx[1][3] + view_mtx[2][1] * view_mtx[2][3]);
-    o_eye->z = -(view_mtx[0][2] * view_mtx[0][3] + view_mtx[1][2] * view_mtx[1][3] + view_mtx[2][2] * view_mtx[2][3]);
-}
-
-namespace {
-struct CamSnap {
-    cXyz eye{};
-    cXyz center{};
-    cXyz up{};
-    s16 bank{};
-    f32 fovy{};
-    bool valid{};
-};
-
-CamSnap s_star_prev{};
-CamSnap s_star_curr{};
-
-static void copy_view_to_snap(CamSnap* dst, const view_class& v) {
-    dst->eye = v.lookat.eye;
-    dst->center = v.lookat.center;
-    dst->up = v.lookat.up;
-    dst->bank = v.bank;
-    dst->fovy = v.fovy;
-    dst->valid = true;
-}
-
-static void billboard_base_from_view(MtxP view_mtx, MtxP o_cam_billboard_base) {
-    Mtx rot;
-    MTXCopy(view_mtx, rot);
-    rot[0][3] = rot[1][3] = rot[2][3] = 0.0f;
-    MTXInverse(rot, o_cam_billboard_base);
-}
-}  // namespace
-
-void begin_record_camera() {
-    ::camera_process_class* cam = dComIfGp_getCamera(0);
-    if (cam == nullptr) {
-        return;
-    }
-    copy_view_to_snap(&s_star_prev, cam->view);
-}
-
 void record_camera(::camera_process_class* cam, int camera_id) {
-    if (!getSettings().game.enableFrameInterpolation || camera_id != 0 || cam == nullptr) {
+    if (!g_enabled || camera_id != 0 || cam == nullptr) {
         return;
     }
-    copy_view_to_snap(&s_star_curr, cam->view);
+    copy_view_to_snap(&s_cam_curr, cam->view);
 }
 
-bool build_star_view(Mtx o_view, Mtx o_cam_billboard_base, cXyz* o_anchor_eye, float* o_fovy) {
-    if (!getSettings().game.enableFrameInterpolation || !s_star_prev.valid || !s_star_curr.valid) {
-        return false;
+void begin_presentation_camera() {
+    ensure_initialized();
+    if (!g_enabled) {
+        return;
     }
+    if (s_presentation_depth > 0) {
+        s_presentation_depth++;
+        return;
+    }
+    if (!s_cam_prev.valid || !s_cam_curr.valid) {
+        return;
+    }
+
+    view_class* const view = dComIfGd_getView();
+    if (view == nullptr) {
+        return;
+    }
+
+    std::memcpy(&s_presentation_view_backup, view, sizeof(view_class));
 
     const f32 step = get_interpolation_step();
     cXyz eye;
     cXyz center;
     cXyz up;
-    lerp_xyz(&eye, s_star_prev.eye, s_star_curr.eye, step);
-    lerp_xyz(&center, s_star_prev.center, s_star_curr.center, step);
-    lerp_xyz(&up, s_star_prev.up, s_star_curr.up, step);
+    lerp_xyz(&eye, s_cam_prev.eye, s_cam_curr.eye, step);
+    lerp_xyz(&center, s_cam_prev.center, s_cam_curr.center, step);
+    lerp_xyz(&up, s_cam_prev.up, s_cam_curr.up, step);
     if (!up.normalizeRS()) {
-        up = s_star_curr.up;
+        up = s_cam_curr.up;
         up.normalizeRS();
     }
 
-    const f32 bank_rad = S2RAD(s_star_prev.bank) * (1.0f - step) + S2RAD(s_star_curr.bank) * step;
-    const s16 bank = cAngle::Radian_to_SAngle(bank_rad);
+    view->lookat.eye = eye;
+    view->lookat.center = center;
+    view->lookat.up = up;
+    view->bank = lerp_bank(s_cam_prev.bank, s_cam_curr.bank, step);
+    view->fovy = s_cam_prev.fovy + (s_cam_curr.fovy - s_cam_prev.fovy) * step;
+    view->aspect = s_cam_prev.aspect + (s_cam_curr.aspect - s_cam_prev.aspect) * step;
+    view->near_ = s_cam_prev.near_ + (s_cam_curr.near_ - s_cam_prev.near_) * step;
+    view->far_ = s_cam_prev.far_ + (s_cam_curr.far_ - s_cam_prev.far_) * step;
 
-    mDoMtx_lookAt(o_view, &eye, &center, &up, bank);
-    billboard_base_from_view(o_view, o_cam_billboard_base);
+    // FRAME INTERP TODO: Largely copied from d_camera's camera_draw function from this point, got any better ideas?
+    C_MTXPerspective(view->projMtx, view->fovy, view->aspect, view->near_, view->far_);
+    mDoMtx_lookAt(view->viewMtx, &view->lookat.eye, &view->lookat.center, &view->lookat.up, view->bank);
+#if WIDESCREEN_SUPPORT
+    mDoGph_gInf_c::setWideZoomProjection(view->projMtx);
+#endif
+    j3dSys.setViewMtx(view->viewMtx);
+    cMtx_inverse(view->viewMtx, view->invViewMtx);
 
-    *o_anchor_eye = eye;
-    *o_fovy = s_star_prev.fovy + (s_star_curr.fovy - s_star_prev.fovy) * step;
-    return true;
+    bool camera_attention_status = dComIfGp_getCameraAttentionStatus(0) & 0x80;
+    Z2GetAudience()->setAudioCamera(view->viewMtx, view->lookat.eye, view->lookat.center, view->fovy, view->aspect, camera_attention_status, 0, false);
+
+    dBgS_GndChk gndchk;
+    gndchk.OnWaterGrp();
+    gndchk.SetPos(&view->lookat.eye);
+    f32 cross = dComIfG_Bgsp().GroundCross(&gndchk);
+    if (cross != -G_CM3D_F_INF) {
+        if (dComIfG_Bgsp().ChkGrpInf(gndchk, 0x100)) {
+            mDoAud_getCameraMapInfo(6);
+        } else {
+            mDoAud_getCameraMapInfo(dComIfG_Bgsp().GetMtrlSndId(gndchk));
+        }
+        mDoAud_setCameraGroupInfo(dComIfG_Bgsp().GetGrpSoundId(gndchk));
+        Vec spDC;
+        spDC.x = view->lookat.eye.x;
+        spDC.y = cross;
+        spDC.z = view->lookat.eye.z;
+        Z2AudioMgr::getInterface()->setCameraPolygonPos(&spDC);
+    } else {
+        Z2AudioMgr::getInterface()->setCameraPolygonPos(nullptr);
+    }
+
+    MTXCopy(view->viewMtx, view->viewMtxNoTrans);
+    view->viewMtxNoTrans[0][3] = 0.0f;
+    view->viewMtxNoTrans[1][3] = 0.0f;
+    view->viewMtxNoTrans[2][3] = 0.0f;
+    cMtx_concatProjView(view->projMtx, view->viewMtx, view->projViewMtx);
+
+    f32 far_;
+    f32 var_f30;
+    if (dComIfGp_getCameraAttentionStatus(0) & 8) {
+        far_ = view->far_;
+    } else {
+#if DEBUG
+        if (g_envHIO.mOther.mAdjustCullFar != 0) {
+            var_f30 = g_envHIO.mOther.mCullFarValue;
+        } else
+#endif
+        {
+            var_f30 = dStage_stagInfo_GetCullPoint(dComIfGp_getStageStagInfo());
+        }
+        far_ = var_f30;
+    }
+
+    mDoLib_clipper::setup(view->fovy, view->aspect, view->near_, far_);
+
+    s_presentation_depth = 1;
+}
+
+void end_presentation_camera() {
+    if (s_presentation_depth == 0) {
+        return;
+    }
+    s_presentation_depth--;
+    if (s_presentation_depth > 0) {
+        return;
+    }
+
+    view_class* const view = dComIfGd_getView();
+    if (view != nullptr) {
+        std::memcpy(view, &s_presentation_view_backup, sizeof(view_class));
+    }
 }
 
 uint64_t alloc_simple_shadow_pair_base() {

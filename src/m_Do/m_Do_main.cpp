@@ -253,7 +253,10 @@ void main01(void) {
                 accumulator -= kSimStepSeconds;
             }
             dusk::frame_interp::interpolate(static_cast<float>(accumulator / kSimStepSeconds));
-            cAPIGph_Painter();
+            {
+                dusk::frame_interp::PresentationCameraScope presentation_camera;
+                cAPIGph_Painter();
+            }
         } else {
             accumulator = 0.0;
             
