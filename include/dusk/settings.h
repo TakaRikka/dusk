@@ -82,11 +82,13 @@ struct UserSettings {
         // Input
         ConfigVar<bool> enableGyroAim;
         ConfigVar<bool> enableGyroRollgoal;
-        ConfigVar<float> gyroAimSensitivityX;
-        ConfigVar<float> gyroAimSensitivityY;
-        ConfigVar<float> gyroRollgoalSensitivity;
-        ConfigVar<bool> gyroAimInvertPitch;
-        ConfigVar<bool> gyroAimInvertYaw;
+        ConfigVar<float> gyroSensitivityX;
+        ConfigVar<float> gyroSensitivityY;
+        ConfigVar<float> gyroSensitivityRollgoal;
+        ConfigVar<float> gyroSmoothing;
+        ConfigVar<float> gyroDeadband;
+        ConfigVar<bool> gyroInvertPitch;
+        ConfigVar<bool> gyroInvertYaw;
 
         // Cheats
         ConfigVar<bool> enableFastIronBoots;

@@ -56,11 +56,13 @@ UserSettings g_userSettings = {
         // Input
         .enableGyroAim {"game.enableGyroAim", false},
         .enableGyroRollgoal {"game.enableGyroRollgoal", false},
-        .gyroAimSensitivityX {"game.gyroAimSensitivityX", 1.0f},
-        .gyroAimSensitivityY {"game.gyroAimSensitivityY", 1.0f},
-        .gyroRollgoalSensitivity {"game.gyroRollgoalSensitivity", 1.0f},
-        .gyroAimInvertPitch {"game.gyroAimInvertPitch", false},
-        .gyroAimInvertYaw {"game.gyroAimInvertYaw", false},
+        .gyroSensitivityX {"game.gyroSensitivityX", 1.0f},
+        .gyroSensitivityY {"game.gyroSensitivityY", 1.0f},
+        .gyroSensitivityRollgoal {"game.gyroSensitivityRollgoal", 1.0f},
+        .gyroSmoothing {"game.gyroSmoothing", 0.65f},
+        .gyroDeadband {"game.gyroDeadband", 0.04f},
+        .gyroInvertPitch {"game.gyroInvertPitch", false},
+        .gyroInvertYaw {"game.gyroInvertYaw", false},
 
         // Cheats
         .enableFastIronBoots {"game.enableFastIronBoots", false},
@@ -137,11 +139,13 @@ void registerSettings() {
     Register(g_userSettings.game.enableFrameInterpolation);
     Register(g_userSettings.game.enableGyroAim);
     Register(g_userSettings.game.enableGyroRollgoal);
-    Register(g_userSettings.game.gyroAimSensitivityX);
-    Register(g_userSettings.game.gyroAimSensitivityY);
-    Register(g_userSettings.game.gyroRollgoalSensitivity);
-    Register(g_userSettings.game.gyroAimInvertPitch);
-    Register(g_userSettings.game.gyroAimInvertYaw);
+    Register(g_userSettings.game.gyroSensitivityX);
+    Register(g_userSettings.game.gyroSensitivityY);
+    Register(g_userSettings.game.gyroSensitivityRollgoal);
+    Register(g_userSettings.game.gyroDeadband);
+    Register(g_userSettings.game.gyroSmoothing);
+    Register(g_userSettings.game.gyroInvertPitch);
+    Register(g_userSettings.game.gyroInvertYaw);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.graphicsBackend);
