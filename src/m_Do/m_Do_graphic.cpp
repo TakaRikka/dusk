@@ -1344,6 +1344,11 @@ void mDoGph_gInf_c::bloom_c::draw2() {
             static_cast<u16>(prev.h / 2),
         };
     }
+    for (int i = 0; i < ARRAY_SIZE(divRects); i++) {
+        auto & rect = divRects[i];
+        if (rect.w == 0) rect.w = 1;
+        if (rect.h == 0) rect.h = 1;
+    }
 
     auto divCopySrc = [&](int divNo) {
         auto const& rect = divRects[divNo];
