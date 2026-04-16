@@ -1503,7 +1503,6 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         GXLoadTexObj(texFinal, GX_TEXMAP0);
 
         GXRestoreFrameBuffer();
-        GXSetViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f);
 
         // Now blend our bloom into the real FB.
         GXSetTevColor(GX_TEVREG0, mBlendColor);
