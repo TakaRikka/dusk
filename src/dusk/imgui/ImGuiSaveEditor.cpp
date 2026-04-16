@@ -815,46 +815,66 @@ namespace dusk {
     void ImGuiSaveEditor::drawInventoryTab() {
         dSv_player_item_c& item = dComIfGs_getSaveData()->getPlayer().getItem();
 
-        if (ImGui::Button("Default All##inv_default_all")) {
-            for (int slot = 0; slot < 24; slot++) {
-                dComIfGs_setItem(slot, getSlotDefault(slot));
+        if (ImGui::TreeNode("Item Wheel")) {
+            if (ImGui::Button("Default All##inv_default_all")) {
+                for (int slot = 0; slot < 24; slot++) {
+                    dComIfGs_setItem(slot, getSlotDefault(slot));
+                }
             }
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Clear All##inv_clear_all")) {
-            for (int slot = 0; slot < 24; slot++) {
-                dComIfGs_setItem(slot, dItemNo_NONE_e);
-            }
-        }
-
-        ImGuiBeginGroupPanel("Items", { 200, 100 });
-        for (int slot = 0; slot < 24; slot++) {
-            ImGui::Text("Slot %02d (%s): ", slot, itemMap.find(getSlotDefault(slot))->second.m_name.c_str());
-            ImGui::SameLine(240.0f);
-            if (ImGui::BeginCombo(fmt::format("##ItemComboBox{}", slot).c_str(), itemMap.find(item.mItems[slot])->second.m_name.c_str())) {
-                if (ImGui::Selectable("None")) {
+            ImGui::SameLine();
+            if (ImGui::Button("Clear All##inv_clear_all")) {
+                for (int slot = 0; slot < 24; slot++) {
                     dComIfGs_setItem(slot, dItemNo_NONE_e);
                 }
+            }
 
-                for (int i = 0; i < 254; i++) {
-                    if (itemMap.find(i)->second.m_type != ITEMTYPE_EQUIP_e) continue;
-
-                    if (ImGui::Selectable(fmt::format("{0}##item_{1}{2}", itemMap.find(i)->second.m_name, slot, i).c_str())) {
-                        dComIfGs_setItem(slot, itemMap.find(i)->first);
+            ImGuiBeginGroupPanel("Items", { 200, 100 });
+            for (int slot = 0; slot < 24; slot++) {
+                ImGui::Text("Slot %02d (%s): ", slot, itemMap.find(getSlotDefault(slot))->second.m_name.c_str());
+                ImGui::SameLine(240.0f);
+                if (ImGui::BeginCombo(fmt::format("##ItemComboBox{}", slot).c_str(), itemMap.find(item.mItems[slot])->second.m_name.c_str())) {
+                    if (ImGui::Selectable("None")) {
+                        dComIfGs_setItem(slot, dItemNo_NONE_e);
                     }
+
+                    for (int i = 0; i < 254; i++) {
+                        if (itemMap.find(i)->second.m_type != ITEMTYPE_EQUIP_e) continue;
+
+                        if (ImGui::Selectable(fmt::format("{0}##item_{1}{2}", itemMap.find(i)->second.m_name, slot, i).c_str())) {
+                            dComIfGs_setItem(slot, itemMap.find(i)->first);
+                        }
+                    }
+                    ImGui::EndCombo();
                 }
-                ImGui::EndCombo();
+                ImGui::SameLine();
+                if (ImGui::SmallButton(fmt::format("Default##slot_d_{}", slot).c_str())) {
+                    dComIfGs_setItem(slot, getSlotDefault(slot));
+                }
+                ImGui::SameLine();
+                if (ImGui::SmallButton(fmt::format("Clear##slot_c_{}", slot).c_str())) {
+                    dComIfGs_setItem(slot, dItemNo_NONE_e);
+                }
             }
-            ImGui::SameLine();
-            if (ImGui::SmallButton(fmt::format("Default##slot_d_{}", slot).c_str())) {
-                dComIfGs_setItem(slot, getSlotDefault(slot));
-            }
-            ImGui::SameLine();
-            if (ImGui::SmallButton(fmt::format("Clear##slot_c_{}", slot).c_str())) {
-                dComIfGs_setItem(slot, dItemNo_NONE_e);
-            }
+            ImGuiEndGroupPanel();
+
+            ImGui::TreePop();
         }
-        ImGuiEndGroupPanel();
+
+        if (ImGui::TreeNode("Get Item Flags")) {
+            for (int i = 0; i < 254; i++) {
+                if (itemMap.find(i)->second.m_name == "Reserved") continue;
+
+                bool flag = dComIfGs_isItemFirstBit(i);
+                if (ImGui::Checkbox(fmt::format("{0}##item_{1}", itemMap.find(i)->second.m_name, i).c_str(), &flag)) {
+                    if (flag)
+                        dComIfGs_onItemFirstBit(i);
+                    else
+                        dComIfGs_offItemFirstBit(i);
+                }
+            }
+
+            ImGui::TreePop();
+        }
 
         dSv_player_item_record_c& itemRecord = dComIfGs_getSaveData()->getPlayer().getItemRecord();
         dSv_player_item_max_c& itemMax = dComIfGs_getSaveData()->getPlayer().getItemMax();
