@@ -1263,6 +1263,16 @@ namespace dusk {
         }
     }
 
+    static inline void genDungeonItemCheckbox(dSv_memBit_c& membit, const char* label, int flag) {
+        bool tempFlag = membit.isDungeonItem(flag);
+        if (ImGui::Checkbox(label, &tempFlag)) {
+            if (tempFlag)
+                membit.onDungeonItem(flag);
+            else
+                membit.offDungeonItem(flag);
+        }
+    }
+
     void genMembitFlags(const char* id, dSv_memBit_c& membit) {
         ImGuiBeginGroupPanel("Chest", { 100, 100 });
         for (int j = 0; j < 2; j++) {
@@ -1270,7 +1280,7 @@ namespace dusk {
         }
         ImGuiEndGroupPanel();
 
-        ImVec2 start_cursor = ImGui::GetCursorPos();
+        ImVec2 post_tbox_cursor = ImGui::GetCursorPos();
 
         ImGui::SameLine();
 
@@ -1280,9 +1290,9 @@ namespace dusk {
         }
         ImGuiEndGroupPanel();
 
-        ImVec2 cursor = ImGui::GetCursorPos();
+        ImVec2 post_switch_cursor = ImGui::GetCursorPos();
 
-        ImGui::SetCursorPos(start_cursor);
+        ImGui::SetCursorPos(post_tbox_cursor);
 
         ImGuiBeginGroupPanel("Item", { 100, 100 });
         for (int j = 0; j < 1; j++) {
@@ -1290,7 +1300,28 @@ namespace dusk {
         }
         ImGuiEndGroupPanel();
 
-        ImGui::SetCursorPos({ start_cursor.x, cursor.y });
+        ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.0f);
+
+        genDungeonItemCheckbox(membit, "Got Map", dSv_memBit_c::MAP);
+        ImGui::SameLine(230.0f);
+        genDungeonItemCheckbox(membit, "Got Compass", dSv_memBit_c::COMPASS);
+
+        genDungeonItemCheckbox(membit, "Got Boss Key", dSv_memBit_c::BOSS_KEY);
+        ImGui::SameLine(230.0f);
+        genDungeonItemCheckbox(membit, "Saw Boss Demo", dSv_memBit_c::STAGE_BOSS_DEMO);
+
+        genDungeonItemCheckbox(membit, "Got Heart Container", dSv_memBit_c::STAGE_LIFE);
+        ImGui::SameLine(230.0f);
+        genDungeonItemCheckbox(membit, "Defeated Boss", dSv_memBit_c::STAGE_BOSS_ENEMY);
+
+        genDungeonItemCheckbox(membit, "Defeated Miniboss", dSv_memBit_c::STAGE_BOSS_ENEMY_2);
+        ImGui::SameLine(230.0f);
+        genDungeonItemCheckbox(membit, "Got Ooccoo", dSv_memBit_c::OOCCOO_NOTE);
+
+        int keyTemp = membit.getKeyNum();
+        if (ImGui::SliderInt("Keys", &keyTemp, 0, 5)) {
+            membit.setKeyNum(keyTemp);
+        }
     }
 
     void ImGuiSaveEditor::drawFlagsTab() {
@@ -1298,15 +1329,18 @@ namespace dusk {
             dSv_memBit_c& membit = g_dComIfG_gameInfo.info.mMemory.mBit;
             genMembitFlags("##TempSceneFlags", membit);
 
-            int stageNo = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
-            if (ImGui::Button("Save##SaveTempFlags")) {
-                dComIfGs_putSave(stageNo);
-            }
+            stage_stag_info_class* pstag = dComIfGp_getStageStagInfo();
+            if (pstag != nullptr) {
+                int stageNo = dStage_stagInfo_GetSaveTbl(pstag);
+                if (ImGui::Button("Save##SaveTempFlags")) {
+                    dComIfGs_putSave(stageNo);
+                }
 
-            ImGui::SameLine();
+                ImGui::SameLine();
 
-            if (ImGui::Button("Load##LoadSaveFlags")) {
-                dComIfGs_getSave(stageNo);
+                if (ImGui::Button("Load##LoadSaveFlags")) {
+                    dComIfGs_getSave(stageNo);
+                }
             }
 
             ImGui::TreePop();
@@ -1319,7 +1353,7 @@ namespace dusk {
                 "Faron",
                 "Eldin",
                 "Lanayru",
-                "Unknown",
+                "Reserved",
                 "Hyrule Field",
                 "Sacred Grove",
                 "Snowpeak",
