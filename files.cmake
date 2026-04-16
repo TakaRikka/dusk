@@ -1344,7 +1344,7 @@ set(DUSK_FILES
         src/dusk/extras.cpp
         src/dusk/frame_interpolation.cpp
         src/dusk/globals.cpp
-        src/dusk/gyro_aim.cpp
+        src/dusk/gyro.cpp
         src/dusk/io.cpp
         src/dusk/layout.cpp
         src/dusk/logging.cpp

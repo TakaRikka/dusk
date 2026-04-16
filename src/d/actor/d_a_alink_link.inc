@@ -11,7 +11,7 @@
 #include "d/actor/d_a_tag_mhint.h"
 
 #if TARGET_PC
-#include "dusk/gyro_aim.h"
+#include "dusk/gyro.h"
 #endif
 
 bool daAlink_c::checkNoSubjectModeCamera() {
@@ -142,7 +142,7 @@ BOOL daAlink_c::setBodyAngleToCamera() {
 
             f32 gy_yaw = 0.f;
             f32 gy_pitch = 0.f;
-            dusk::gyro_aim::consumeAimDeltas(gy_yaw, gy_pitch);
+            dusk::gyro::consumeAimDeltas(gy_yaw, gy_pitch);
             
             if (dusk::getSettings().game.gyroAimInvertPitch) {
                 gy_pitch = -gy_pitch;

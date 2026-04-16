@@ -55,8 +55,10 @@ UserSettings g_userSettings = {
 
         // Input
         .enableGyroAim {"game.enableGyroAim", false},
+        .enableGyroRollgoal {"game.enableGyroRollgoal", false},
         .gyroAimSensitivityX {"game.gyroAimSensitivityX", 1.0f},
         .gyroAimSensitivityY {"game.gyroAimSensitivityY", 1.0f},
+        .gyroRollgoalSensitivity {"game.gyroRollgoalSensitivity", 1.0f},
         .gyroAimInvertPitch {"game.gyroAimInvertPitch", false},
         .gyroAimInvertYaw {"game.gyroAimInvertYaw", false},
 
@@ -134,8 +136,10 @@ void registerSettings() {
     Register(g_userSettings.game.fastSpinner);
     Register(g_userSettings.game.enableFrameInterpolation);
     Register(g_userSettings.game.enableGyroAim);
+    Register(g_userSettings.game.enableGyroRollgoal);
     Register(g_userSettings.game.gyroAimSensitivityX);
     Register(g_userSettings.game.gyroAimSensitivityY);
+    Register(g_userSettings.game.gyroRollgoalSensitivity);
     Register(g_userSettings.game.gyroAimInvertPitch);
     Register(g_userSettings.game.gyroAimInvertYaw);
 

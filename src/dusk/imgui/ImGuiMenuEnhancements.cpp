@@ -148,10 +148,29 @@ namespace dusk {
                                       "Slingshot, Gale Boomerang, Hero's Bow, Clawshot(s), Ball and Chain, and Dominion Rod.");
                 }
 
-                config::ImGuiSliderFloat("Gyro Pitch Sensitivity", getSettings().game.gyroAimSensitivityY, 0.25f, 4.0f, "%.2f");
-                config::ImGuiSliderFloat("Gyro Yaw Sensitivity", getSettings().game.gyroAimSensitivityX, 0.25f, 4.0f, "%.2f");
-                config::ImGuiCheckbox("Invert Gyro Pitch", getSettings().game.gyroAimInvertPitch);
-                config::ImGuiCheckbox("Invert Gyro Yaw", getSettings().game.gyroAimInvertYaw);
+                config::ImGuiCheckbox("Gyro Rollgoal", getSettings().game.enableGyroRollgoal);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Enables the gyroscope on supported controllers to\n"
+                                      "tilt the Rollgoal table in Hena's Cabin.");
+                }
+
+                if (getSettings().game.enableGyroAim) {
+                    config::ImGuiSliderFloat("Gyro Pitch Sensitivity", getSettings().game.gyroAimSensitivityY, 0.25f, 4.0f, "%.2f");
+                    config::ImGuiSliderFloat("Gyro Yaw Sensitivity", getSettings().game.gyroAimSensitivityX, 0.25f, 4.0f, "%.2f");
+                }
+
+                if (getSettings().game.enableGyroRollgoal) {
+                    config::ImGuiSliderFloat("Rollgoal Sensitivity", getSettings().game.gyroRollgoalSensitivity, 0.25f, 4.0f, "%.2f");
+                    if (ImGui::IsItemHovered()) {
+                        ImGui::SetTooltip("Additional multiplier for scaling how strongly\n"
+                                        "the gyroscope affects the Rollgoal table.");
+                    }
+                }
+
+                if (getSettings().game.enableGyroAim) {
+                    config::ImGuiCheckbox("Invert Gyro Pitch", getSettings().game.gyroAimInvertPitch);
+                    config::ImGuiCheckbox("Invert Gyro Yaw", getSettings().game.gyroAimInvertYaw);
+                }
 
                 ImGui::SeparatorText("Tools");
 
