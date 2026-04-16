@@ -1390,7 +1390,7 @@ void mDoGph_gInf_c::bloom_c::draw2() {
 
     if (enabled) {
         GXCreateFrameBuffer(width * 0.75f, height * 0.5f);
-        GXSetViewport(0.0f, 0.0f, width, height, 0.1f, 1.0f); // use oversized viewport to make the math easier
+        GXSetViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f); // use oversized viewport to make the math easier
 
         GXSetNumTevStages(3);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
@@ -1432,16 +1432,16 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         // Setup blur filter TEV.
         GXSetNumTexGens(8);
 
-            u32 texMtxID = GX_TEXMTX0;
-            int angle = 0;
-            for (int texCoord = (int)GX_TEXCOORD0; texCoord < (int)GX_MAX_TEXCOORD; texCoord++) {
-                GXSetTexCoordGen((GXTexCoordID)texCoord, GX_TG_MTX2x4, GX_TG_TEX0, texMtxID);
-                mDoMtx_stack_c::transS((blurScale * cM_scos(angle)) * getInvScale(),
-                                       blurScale * cM_ssin(angle), 0.0f);
-                GXLoadTexMtxImm(mDoMtx_stack_c::get(), texMtxID, GX_MTX2x4);
-                texMtxID += 3;
-                angle += 0x2000;
-            }
+        u32 texMtxID = GX_TEXMTX0;
+        int angle = 0;
+        for (int texCoord = (int)GX_TEXCOORD0; texCoord < (int)GX_MAX_TEXCOORD; texCoord++) {
+            GXSetTexCoordGen((GXTexCoordID)texCoord, GX_TG_MTX2x4, GX_TG_TEX0, texMtxID);
+            mDoMtx_stack_c::transS((blurScale * cM_scos(angle)) * getInvScale(),
+                                   blurScale * cM_ssin(angle), 0.0f);
+            GXLoadTexMtxImm(mDoMtx_stack_c::get(), texMtxID, GX_MTX2x4);
+            texMtxID += 3;
+            angle += 0x2000;
+        }
 
         GXSetNumTevStages(8);
         for (int stage = 0; stage < 8; stage++) {
