@@ -1499,9 +1499,6 @@ static int phase_4(dScnPly_c* i_this) {
     }
 
     if (preLoadNo < 0) {
-        #if TARGET_PC
-        triggerAutoSave();
-        #endif
         return cPhs_COMPLEATE_e;
     }
 

@@ -326,10 +326,6 @@ int dStage_roomControl_c::loadRoom(int roomCount, u8* rooms, bool param_2) {
     if (!r26) {
         return FALSE;
     }
-
-    #if TARGET_PC
-    triggerAutoSave();
-    #endif
     
     for (int i = 0; i < roomCount; i++) {
         int roomNo = dStage_roomRead_dt_c_GetLoadRoomIndex(rooms[i]);
