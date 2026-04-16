@@ -1493,7 +1493,7 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_ONE, GX_LO_OR);
         for (int i = divNum; i > divStart; i--) {
-            float alpha = 255.0f * powf(0.25f * dusk::getSettings().game.bloomMultiplier.getValue(), 1.0f / (divNum - i + 1));
+            float alpha = 255.0f * powf(0.25f * dusk::getSettings().game.bloomMultiplier.getValue(), 1.0f / (i - divStart + 1));
             GXSetTevColorS10(GX_TEVREG0, {0, 0, 0, s16(alpha)});
 
             divCopySrc(i);
