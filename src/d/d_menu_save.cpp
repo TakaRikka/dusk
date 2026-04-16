@@ -1326,9 +1326,6 @@ void dMenu_save_c::memCardDataLoadWait() {
 }
 
 void dMenu_save_c::dataWrite() {
-    int stageNo = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
-
-    dComIfGs_putSave(stageNo);
     dComIfGs_setMemoryToCard(mSaveBuffer, mSelectedFile);
     mDoMemCdRWm_SetCheckSumGameData(mSaveBuffer, mSelectedFile);
 

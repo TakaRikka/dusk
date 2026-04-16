@@ -28,9 +28,7 @@
 #include <dusk/imgui/ImGuiConsole.hpp>
 #include <m_Do/m_Do_MemCardRWmng.h>
 #include <m_Do/m_Do_MemCard.h>
-#include <d/d_file_select.h>
 #endif
-#include <d/d_s_logo.h>
 
 fapGm_HIO_c::fapGm_HIO_c() {
     mUsingHostIO = true;
