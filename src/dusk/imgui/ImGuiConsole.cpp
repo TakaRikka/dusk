@@ -267,7 +267,7 @@ namespace dusk {
         }
 
         if (dusk::IsGameLaunched && !m_isLaunchInitialized) {
-            m_toasts.emplace_back("Press F1 to toggle menu"s, 2.5f);
+            ShowToast("Press F1 to toggle menu", 2.5f);
             m_isLaunchInitialized = true;
         }
 
@@ -399,6 +399,10 @@ namespace dusk {
         }
 
         return false;
+    }
+
+    void ImGuiConsole::ShowToast(std::string text, float time) {
+        m_toasts.emplace_back(text, time);
     }
 
     void ImGuiConsole::ShowToasts() {

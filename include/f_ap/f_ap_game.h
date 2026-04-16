@@ -14,6 +14,16 @@ void fapGm_After();
 void fapGm_Create();
 void fapGm_Execute();
 
+#if TARGET_PC
+void noAutoSave();
+void triggerAutoSave();
+void updateAutoSave();
+void enterAutoSave();
+void autoSaving();
+void waitingForWrite();
+void endAutoSave();
+#endif
+
 class fapGm_HIO_c : public JORReflexible {
 public:
     fapGm_HIO_c();
