@@ -14,6 +14,10 @@
 #include "d/d_s_play.h"
 #include "Z2AudioLib/Z2Instances.h"
 
+#if TARGET_PC
+#include "dusk/gyro.h"
+#endif
+
 enum koro2_parts {
     KORO2_PART_BOX = 1,
     KORO2_PART_CURVE_A_U_L,
@@ -723,6 +727,14 @@ static void koro2_game(fshop_class* i_this) {
         cLib_addCalcAngleS2(&i_this->field_0x4020.x, 0, 2, 0x200);
         cLib_addCalcAngleS2(&i_this->field_0x4020.z, 0, 2, 0x200);
     case 2:
+#if TARGET_PC
+        if (dusk::getSettings().game.enableGyroRollgoal) {
+            if (!dusk::gyro::get_sensor_keep_alive()) {
+                dusk::gyro::set_sensor_keep_alive(true);
+            }
+        }
+#endif
+
         actor->scale.x = 10.0f;
         if (i_this->field_0x4010 == 2) {
             static f32 old_stick_x = 0.0f;
@@ -739,6 +751,11 @@ static void koro2_game(fshop_class* i_this) {
 
             old_stick_x = mDoCPd_c::getSubStickX(PAD_1);
             cLib_addCalcAngleS2(&i_this->field_0x4060, i_this->field_0x4062, 4, 0x1000);
+#if TARGET_PC
+            if (dusk::getSettings().game.enableGyroRollgoal) {
+                dusk::gyro::rollgoalTick(true, i_this->field_0x4060);
+            }
+#endif
             cMtx_YrotS(*calc_mtx, -i_this->field_0x4060);
 
             sp5C.x = mDoCPd_c::getStickX3D(PAD_1);
@@ -765,9 +782,26 @@ static void koro2_game(fshop_class* i_this) {
                 reg_f30 = 0.0f;
             }
 
+#if TARGET_PC
+            if (dusk::getSettings().game.enableGyroRollgoal) {
+                s16 rg_add_x;
+                s16 rg_add_z;
+                dusk::gyro::rollgoalTableOffset(rg_add_x, rg_add_z);
+                s16 tgt_x = static_cast<s16>(reg_f30 * (-6000.0f + JREG_F(7))) + rg_add_x;
+                s16 tgt_z = static_cast<s16>(reg_f31 * (-6000.0f + JREG_F(8))) + rg_add_z;
+                cLib_addCalcAngleS2(&i_this->field_0x4020.x, tgt_x, 4, 0x200);
+                cLib_addCalcAngleS2(&i_this->field_0x4020.z, tgt_z, 4, 0x200);
+            }
+#else
             cLib_addCalcAngleS2(&i_this->field_0x4020.x, reg_f30 * (-6000.0f + JREG_F(7)), 4, 0x200);
             cLib_addCalcAngleS2(&i_this->field_0x4020.z, reg_f31 * (-6000.0f + JREG_F(8)), 4, 0x200);
+#endif
         }
+#if TARGET_PC
+        if (i_this->field_0x4010 != 2) {
+            dusk::gyro::rollgoalTick(false, i_this->field_0x4060);
+        }
+#endif
         break;
     }
 
@@ -1144,6 +1178,12 @@ static int daFshop_Delete(fshop_class* i_this) {
             }
         }
     }
+
+#if TARGET_PC
+    if (dusk::getSettings().game.enableGyroRollgoal) {
+        dusk::gyro::set_sensor_keep_alive(false);
+    }
+#endif
 
     return 1;
 }
