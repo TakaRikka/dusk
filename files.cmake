@@ -1344,7 +1344,7 @@ set(DUSK_FILES
         src/dusk/extras.cpp
         src/dusk/frame_interpolation.cpp
         src/dusk/globals.cpp
-        src/dusk/gyro_aim.cpp
+        src/dusk/gyro.cpp
         src/dusk/io.cpp
         src/dusk/layout.cpp
         src/dusk/logging.cpp
@@ -1358,6 +1358,8 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiEngine.hpp
         src/dusk/imgui/ImGuiMenuGame.cpp
         src/dusk/imgui/ImGuiMenuGame.hpp
+        src/dusk/imgui/ImGuiBloomWindow.cpp
+        src/dusk/imgui/ImGuiBloomWindow.hpp
         src/dusk/imgui/ImGuiMenuTools.cpp
         src/dusk/imgui/ImGuiMenuTools.hpp
         src/dusk/imgui/ImGuiMenuEnhancements.cpp
@@ -1376,6 +1378,7 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiSaveEditor.cpp
         src/dusk/imgui/ImGuiStateShare.hpp
         src/dusk/imgui/ImGuiStateShare.cpp
+        src/dusk/iso_validate.cpp
         src/dusk/offset_ptr.cpp
         src/dusk/OSContext.cpp
         src/dusk/OSThread.cpp

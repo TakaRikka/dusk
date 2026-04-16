@@ -6,7 +6,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-struct cXyz;
 class camera_process_class;
 
 #ifdef __cplusplus
@@ -15,7 +14,6 @@ namespace frame_interp {
 
 void ensure_initialized();
 
-void begin_record_camera();
 void begin_record();
 void end_record();
 void interpolate(float step);
@@ -39,8 +37,17 @@ void record_final_mtx_raw_tagged(const Mtx* dest, const Mtx src, uint64_t stable
 bool lookup_replacement(const void* source, Mtx out);
 bool lookup_concat_replacement(const void* lhs, const void* rhs, Mtx out);
 
-void camera_eye_from_view_mtx(MtxP view_mtx, cXyz* o_eye);
-bool build_star_view(Mtx o_view, Mtx o_cam_billboard_base, cXyz* o_anchor_eye, float* o_fovy);
+void begin_presentation_camera();
+void end_presentation_camera();
+
+struct PresentationCameraScope {
+    PresentationCameraScope() { begin_presentation_camera(); }
+    ~PresentationCameraScope() { end_presentation_camera(); }
+    PresentationCameraScope(const PresentationCameraScope&) = delete;
+    PresentationCameraScope& operator=(const PresentationCameraScope&) = delete;
+    PresentationCameraScope(PresentationCameraScope&&) = delete;
+    PresentationCameraScope& operator=(PresentationCameraScope&&) = delete;
+};
 
 uint64_t alloc_simple_shadow_pair_base();
 }  // namespace frame_interp

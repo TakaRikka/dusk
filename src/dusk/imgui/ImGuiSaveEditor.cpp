@@ -445,7 +445,7 @@ namespace dusk {
                 }
 
                 if (ImGui::BeginTabItem("Minigame")) {
-                    //DrawFlagsTab();
+                    drawMinigameTab();
                     ImGui::EndTabItem();
                 }
 
@@ -815,48 +815,88 @@ namespace dusk {
     void ImGuiSaveEditor::drawInventoryTab() {
         dSv_player_item_c& item = dComIfGs_getSaveData()->getPlayer().getItem();
 
-        if (ImGui::Button("Default All##inv_default_all")) {
-            for (int slot = 0; slot < 24; slot++) {
-                dComIfGs_setItem(slot, getSlotDefault(slot));
+        if (ImGui::TreeNode("Item Wheel")) {
+            if (ImGui::Button("Default All##inv_default_all")) {
+                for (int slot = 0; slot < 24; slot++) {
+                    dComIfGs_setItem(slot, getSlotDefault(slot));
+                }
             }
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Clear All##inv_clear_all")) {
-            for (int slot = 0; slot < 24; slot++) {
-                dComIfGs_setItem(slot, dItemNo_NONE_e);
-            }
-        }
-
-        ImGuiBeginGroupPanel("Items", { 200, 100 });
-        for (int slot = 0; slot < 24; slot++) {
-            ImGui::Text("Slot %02d: ", slot);
             ImGui::SameLine();
-            if (ImGui::BeginCombo(fmt::format("##ItemComboBox{}", slot).c_str(), itemMap.find(item.mItems[slot])->second.m_name.c_str())) {
-                if (ImGui::Selectable("None")) {
+            if (ImGui::Button("Clear All##inv_clear_all")) {
+                for (int slot = 0; slot < 24; slot++) {
                     dComIfGs_setItem(slot, dItemNo_NONE_e);
                 }
+            }
 
-                for (int i = 0; i < 254; i++) {
-                    if (itemMap.find(i)->second.m_type != ITEMTYPE_EQUIP_e) continue;
-
-                    if (ImGui::Selectable(fmt::format("{0}##item_{1}{2}", itemMap.find(i)->second.m_name, slot, i).c_str())) {
-                        dComIfGs_setItem(slot, itemMap.find(i)->first);
+            ImGuiBeginGroupPanel("Items", { 200, 100 });
+            for (int slot = 0; slot < 24; slot++) {
+                ImGui::Text("Slot %02d (%s): ", slot, itemMap.find(getSlotDefault(slot))->second.m_name.c_str());
+                ImGui::SameLine(240.0f);
+                if (ImGui::BeginCombo(fmt::format("##ItemComboBox{}", slot).c_str(), itemMap.find(item.mItems[slot])->second.m_name.c_str())) {
+                    if (ImGui::Selectable("None")) {
+                        dComIfGs_setItem(slot, dItemNo_NONE_e);
                     }
+
+                    for (int i = 0; i < 254; i++) {
+                        if (itemMap.find(i)->second.m_type != ITEMTYPE_EQUIP_e) continue;
+
+                        if (ImGui::Selectable(fmt::format("{0}##item_{1}{2}", itemMap.find(i)->second.m_name, slot, i).c_str())) {
+                            dComIfGs_setItem(slot, itemMap.find(i)->first);
+                        }
+                    }
+                    ImGui::EndCombo();
                 }
-                ImGui::EndCombo();
+                ImGui::SameLine();
+                if (ImGui::SmallButton(fmt::format("Default##slot_d_{}", slot).c_str())) {
+                    dComIfGs_setItem(slot, getSlotDefault(slot));
+                }
+                ImGui::SameLine();
+                if (ImGui::SmallButton(fmt::format("Clear##slot_c_{}", slot).c_str())) {
+                    dComIfGs_setItem(slot, dItemNo_NONE_e);
+                }
             }
-            ImGui::SameLine();
-            if (ImGui::SmallButton(fmt::format("Default##slot_d_{}", slot).c_str())) {
-                dComIfGs_setItem(slot, getSlotDefault(slot));
-            }
-            ImGui::SameLine();
-            if (ImGui::SmallButton(fmt::format("Clear##slot_c_{}", slot).c_str())) {
-                dComIfGs_setItem(slot, dItemNo_NONE_e);
-            }
+            ImGuiEndGroupPanel();
+
+            ImGui::TreePop();
         }
+
+        if (ImGui::TreeNode("Get Item Flags")) {
+            for (int i = 0; i < 254; i++) {
+                if (itemMap.find(i)->second.m_name == "Reserved") continue;
+
+                bool flag = dComIfGs_isItemFirstBit(i);
+                if (ImGui::Checkbox(fmt::format("{0}##item_{1}", itemMap.find(i)->second.m_name, i).c_str(), &flag)) {
+                    if (flag)
+                        dComIfGs_onItemFirstBit(i);
+                    else
+                        dComIfGs_offItemFirstBit(i);
+                }
+            }
+
+            ImGui::TreePop();
+        }
+
+        dSv_player_item_record_c& itemRecord = dComIfGs_getSaveData()->getPlayer().getItemRecord();
+        dSv_player_item_max_c& itemMax = dComIfGs_getSaveData()->getPlayer().getItemMax();
+
+        ImGuiBeginGroupPanel("Item Max Capacities", { 200, 100 });
+        ImGui::InputScalar("Arrows Max", ImGuiDataType_U8, &itemMax.mItemMax[0]);
+        ImGui::InputScalar("Normal Bombs Max", ImGuiDataType_U8, &itemMax.mItemMax[1]);
+        ImGui::InputScalar("Water Bombs Max", ImGuiDataType_U8, &itemMax.mItemMax[2]);
+        ImGui::InputScalar("Bomblings Max", ImGuiDataType_U8, &itemMax.mItemMax[3]);
         ImGuiEndGroupPanel();
 
-
+        ImGuiBeginGroupPanel("Item Amounts", { 200, 100 });
+        ImGui::InputScalar("Arrows Amount", ImGuiDataType_U8, &itemRecord.mArrowNum);
+        ImGui::InputScalar("Slingshot Amount", ImGuiDataType_U8, &itemRecord.mPachinkoNum);
+        ImGui::InputScalar("Bomb Bag 1 Amount", ImGuiDataType_U8, &itemRecord.mBombNum[0]);
+        ImGui::InputScalar("Bomb Bag 2 Amount", ImGuiDataType_U8, &itemRecord.mBombNum[1]);
+        ImGui::InputScalar("Bomb Bag 3 Amount", ImGuiDataType_U8, &itemRecord.mBombNum[2]);
+        ImGui::InputScalar("Bottle 1 Amount", ImGuiDataType_U8, &itemRecord.mBottleNum[0]);
+        ImGui::InputScalar("Bottle 2 Amount", ImGuiDataType_U8, &itemRecord.mBottleNum[1]);
+        ImGui::InputScalar("Bottle 3 Amount", ImGuiDataType_U8, &itemRecord.mBottleNum[2]);
+        ImGui::InputScalar("Bottle 4 Amount", ImGuiDataType_U8, &itemRecord.mBottleNum[3]);
+        ImGuiEndGroupPanel();
     }
 
     static inline void setItemFirstBit(u8 itemNo, bool owned) {
@@ -902,27 +942,42 @@ namespace dusk {
     void ImGuiSaveEditor::drawCollectionTab() {
         if (ImGui::TreeNode("Equipment")) {
             if (ImGui::TreeNode("Swords")) {
+                static u8 sword_list[] = {
+                    dItemNo_SWORD_e,
+                    dItemNo_MASTER_SWORD_e,
+                    dItemNo_WOOD_STICK_e,
+                    dItemNo_LIGHT_SWORD_e,
+                };
+
                 for (int i = 0; i < 4; i++) {
-                    bool got = dComIfGs_isCollectSword((u8)i) != 0;
+                    bool got = dComIfGs_isItemFirstBit(sword_list[i]) != 0;
                     if (ImGui::Checkbox(fmt::format("{0}##sword_{1}", sSwordNames[i], i).c_str(), &got)) {
-                        if (got) dComIfGs_setCollectSword((u8)i);
-                        else     dComIfGs_offCollectSword((u8)i);
+                        if (got) dComIfGs_onItemFirstBit(sword_list[i]);
+                        else     dComIfGs_offItemFirstBit(sword_list[i]);
                     }
                 }
                 ImGui::TreePop();
             }
 
             if (ImGui::TreeNode("Shields")) {
+                static u8 shield_list[] = {
+                    dItemNo_SHIELD_e,
+                    dItemNo_WOOD_SHIELD_e,
+                    dItemNo_HYLIA_SHIELD_e,
+                };
+
                 for (int i = 0; i < 3; i++) {
-                    bool got = dComIfGs_isCollectShield((u8)i) != 0;
+                    bool got = dComIfGs_isItemFirstBit(shield_list[i]) != 0;
                     if (ImGui::Checkbox(fmt::format("{0}##shield_{1}", sShieldNames[i], i).c_str(), &got)) {
-                        if (got) dComIfGs_setCollectShield((u8)i);
-                        else     dComIfGs_offCollectShield((u8)i);
+                        if (got) dComIfGs_onItemFirstBit(shield_list[i]);
+                        else     dComIfGs_offItemFirstBit(shield_list[i]);
                     }
                 }
                 ImGui::TreePop();
             }
 
+            // TODO: the game checks if you're in ranch clothes, and if so won't display any other tunics in the menu
+            // find a way to deal with this later
             if (ImGui::TreeNode("Tunics")) {
                 bool ordonClothes = dComIfGs_isItemFirstBit(dItemNo_WEAR_CASUAL_e) != 0;
                 if (ImGui::Checkbox("Ordon Clothes##tunic_ordon", &ordonClothes)) {
@@ -1228,6 +1283,16 @@ namespace dusk {
         }
     }
 
+    static inline void genDungeonItemCheckbox(dSv_memBit_c& membit, const char* label, int flag) {
+        bool tempFlag = membit.isDungeonItem(flag);
+        if (ImGui::Checkbox(label, &tempFlag)) {
+            if (tempFlag)
+                membit.onDungeonItem(flag);
+            else
+                membit.offDungeonItem(flag);
+        }
+    }
+
     void genMembitFlags(const char* id, dSv_memBit_c& membit) {
         ImGuiBeginGroupPanel("Chest", { 100, 100 });
         for (int j = 0; j < 2; j++) {
@@ -1235,7 +1300,7 @@ namespace dusk {
         }
         ImGuiEndGroupPanel();
 
-        ImVec2 cursor = ImGui::GetCursorPos();
+        ImVec2 post_tbox_cursor = ImGui::GetCursorPos();
 
         ImGui::SameLine();
 
@@ -1245,13 +1310,38 @@ namespace dusk {
         }
         ImGuiEndGroupPanel();
 
-        ImGui::SetCursorPos(cursor);
+        ImVec2 post_switch_cursor = ImGui::GetCursorPos();
+
+        ImGui::SetCursorPos(post_tbox_cursor);
 
         ImGuiBeginGroupPanel("Item", { 100, 100 });
         for (int j = 0; j < 1; j++) {
             drawFlagList(fmt::format("##_item{}", j).c_str(), membit.mItem[j]);
         }
         ImGuiEndGroupPanel();
+
+        ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.0f);
+
+        genDungeonItemCheckbox(membit, "Got Map", dSv_memBit_c::MAP);
+        ImGui::SameLine(230.0f);
+        genDungeonItemCheckbox(membit, "Got Compass", dSv_memBit_c::COMPASS);
+
+        genDungeonItemCheckbox(membit, "Got Boss Key", dSv_memBit_c::BOSS_KEY);
+        ImGui::SameLine(230.0f);
+        genDungeonItemCheckbox(membit, "Saw Boss Demo", dSv_memBit_c::STAGE_BOSS_DEMO);
+
+        genDungeonItemCheckbox(membit, "Got Heart Container", dSv_memBit_c::STAGE_LIFE);
+        ImGui::SameLine(230.0f);
+        genDungeonItemCheckbox(membit, "Defeated Boss", dSv_memBit_c::STAGE_BOSS_ENEMY);
+
+        genDungeonItemCheckbox(membit, "Defeated Miniboss", dSv_memBit_c::STAGE_BOSS_ENEMY_2);
+        ImGui::SameLine(230.0f);
+        genDungeonItemCheckbox(membit, "Got Ooccoo", dSv_memBit_c::OOCCOO_NOTE);
+
+        int keyTemp = membit.getKeyNum();
+        if (ImGui::SliderInt("Keys", &keyTemp, 0, 5)) {
+            membit.setKeyNum(keyTemp);
+        }
     }
 
     void ImGuiSaveEditor::drawFlagsTab() {
@@ -1259,15 +1349,18 @@ namespace dusk {
             dSv_memBit_c& membit = g_dComIfG_gameInfo.info.mMemory.mBit;
             genMembitFlags("##TempSceneFlags", membit);
 
-            int stageNo = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
-            if (ImGui::Button("Save##SaveTempFlags")) {
-                dComIfGs_putSave(stageNo);
-            }
+            stage_stag_info_class* pstag = dComIfGp_getStageStagInfo();
+            if (pstag != nullptr) {
+                int stageNo = dStage_stagInfo_GetSaveTbl(pstag);
+                if (ImGui::Button("Save##SaveTempFlags")) {
+                    dComIfGs_putSave(stageNo);
+                }
 
-            ImGui::SameLine();
+                ImGui::SameLine();
 
-            if (ImGui::Button("Load##LoadSaveFlags")) {
-                dComIfGs_getSave(stageNo);
+                if (ImGui::Button("Load##LoadSaveFlags")) {
+                    dComIfGs_getSave(stageNo);
+                }
             }
 
             ImGui::TreePop();
@@ -1280,7 +1373,7 @@ namespace dusk {
                 "Faron",
                 "Eldin",
                 "Lanayru",
-                "Unknown",
+                "Reserved",
                 "Hyrule Field",
                 "Sacred Grove",
                 "Snowpeak",
@@ -1328,7 +1421,7 @@ namespace dusk {
             dSv_event_c& event = dComIfGs_getSaveData()->mEvent;
             for (int e = 0; e < 255; e++) {
                 ImGui::Text("%03d ", e);
-                ImGui::SameLine();
+                ImGui::SameLine(80.0f);
                 for (int i = 7; i >= 0; i--) {
                     bool flag = event.mEvent[e] & (1 << i);
                     if (ImGui::Checkbox(fmt::format("##event{0}{1}", e, i).c_str(), &flag)) {
@@ -1345,10 +1438,25 @@ namespace dusk {
         }
     }
 
+    void ImGuiSaveEditor::drawMinigameTab() {
+        dSv_MiniGame_c& minigame = dComIfGs_getSaveData()->getMiniGame();
+        InputScalarBE("STAR Game Time (Milliseconds)", ImGuiDataType_U32, &minigame.mHookGameTime);
+        InputScalarBE("Snowboard Race Time (Milliseconds)", ImGuiDataType_U32, &minigame.mRaceGameTime);
+        InputScalarBE("Fruit-Pop-Flight Score", ImGuiDataType_U32, &minigame.mBalloonScore);
+    }
+
     void ImGuiSaveEditor::drawConfigTab() {
         dSv_player_config_c& config = dComIfGs_getSaveData()->getPlayer().getConfig();
         ImGui::Checkbox("Enable Vibration", (bool*)&config.mVibration);
-        if (ImGui::BeginCombo("Target Type", "Hold")) {
+
+        static const char* kTargetTypeNames[] = {"Hold", "Switch"};
+        if (ImGui::BeginCombo("Target Type", kTargetTypeNames[config.mAttentionType])) {
+            if (ImGui::Selectable("Hold")) {
+                config.mAttentionType = 0;
+            }
+            if (ImGui::Selectable("Switch")) {
+                config.mAttentionType = 1;
+            }
             ImGui::EndCombo();
         }
 

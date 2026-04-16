@@ -51,7 +51,7 @@
 #include "dusk/crash_reporting.h"
 #include "dusk/dusk.h"
 #include "dusk/frame_interpolation.h"
-#include "dusk/gyro_aim.h"
+#include "dusk/gyro.h"
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
@@ -245,23 +245,22 @@ void main01(void) {
             dusk::frame_interp::notify_presentation_frame();
             while (accumulator >= kSimStepSeconds) {
                 mDoCPd_c::read();
-                if (dusk::getSettings().game.enableGyroAim) {
-                    dusk::gyro_aim::read(static_cast<float>(kSimStepSeconds), dusk::gyro_aim::queryGyroAimItemContext());
-                }
+                dusk::gyro::read(kSimStepSeconds);
                 fapGm_Execute();
                 mDoAud_Execute();
                 accumulator -= kSimStepSeconds;
             }
             dusk::frame_interp::interpolate(static_cast<float>(accumulator / kSimStepSeconds));
-            cAPIGph_Painter();
+            {
+                dusk::frame_interp::PresentationCameraScope presentation_camera;
+                cAPIGph_Painter();
+            }
         } else {
             accumulator = 0.0;
             
             // Game Inputs
             mDoCPd_c::read();
-            if (dusk::getSettings().game.enableGyroAim) {
-                dusk::gyro_aim::read(static_cast<float>(frame_seconds), dusk::gyro_aim::queryGyroAimItemContext());
-            }
+            dusk::gyro::read(frame_seconds);
 
             // EXECUTE GAME LOGIC & RENDER
             // This calls mDoGph_Painter -> JFWDisplay -> GX Functions

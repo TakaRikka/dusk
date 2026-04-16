@@ -11079,7 +11079,6 @@ static int camera_draw(camera_process_class* i_this) {
                   &process->view.lookat.up, process->view.bank);
 #ifdef TARGET_PC
     dusk::frame_interp::record_camera(process, camera_id);
-    dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(process->view.viewMtx), process->view.viewMtx);
 #endif
 
 #if WIDESCREEN_SUPPORT

@@ -30,6 +30,7 @@ namespace dusk {
         bool m_showControllerConfig = false;
 
         bool m_showInputViewer = false;
+        bool m_showInputViewerGyro = false;
         int m_inputOverlayCorner = 3;
         std::string m_controllerName;
     };
