@@ -234,22 +234,31 @@ namespace dusk {
             ImGuiMenuGame::ToggleFullscreen();
         }
 
-        bool showMenu = !dusk::IsGameLaunched || !CheckMenuViewToggle(ImGuiKey_F1, m_isHidden);
+        if (!dusk::IsGameLaunched) {
+            m_preLaunchWindow.draw();
+        }
+        
+        m_isHidden = getSettings().backend.duskMenuOpen;
+        CheckMenuViewToggle(ImGuiKey_F1, m_isHidden);
 
-        if (showMenu && ImGui::BeginMainMenuBar()) {
+        if (dusk::IsGameLaunched) {
+            if (getSettings().backend.duskMenuOpen != m_isHidden) {
+                m_isHidden = !getSettings().backend.duskMenuOpen;
+                getSettings().backend.duskMenuOpen.setValue(m_isHidden);
+                config::Save();
+            }
+        }
+
+        if ((!dusk::IsGameLaunched || getSettings().backend.duskMenuOpen) && ImGui::BeginMainMenuBar()) {
             m_menuGame.draw();
             m_menuEnhancements.draw();
             m_menuTools.draw();
 
-            ImGui::SetCursorPosX(ImGui::GetWindowWidth() - 80.0f * ImGuiScale());
+            ImGui::SetCursorPosX(ImGui::GetWindowWidth() - 100.0f * ImGuiScale());
             ImGuiIO& io = ImGui::GetIO();
             ImGuiStringViewText(fmt::format(FMT_STRING("FPS: {:.2f}\n"), io.Framerate));
 
             ImGui::EndMainMenuBar();
-        }
-
-        if (!dusk::IsGameLaunched) {
-            m_preLaunchWindow.draw();
         }
 
         if (!getSettings().backend.wasPresetChosen) {
@@ -258,7 +267,7 @@ namespace dusk {
         }
 
         if (dusk::IsGameLaunched && !m_isLaunchInitialized) {
-            m_toasts.emplace_back("Press F1 to toggle menu"s, 5.f);
+            m_toasts.emplace_back("Press F1 to toggle menu"s, 2.5f);
             m_isLaunchInitialized = true;
         }
 
@@ -280,7 +289,8 @@ namespace dusk {
         DuskDebugPad(); // temporary, remove later
 
         // Only show cursor when menu or any windows are open
-        if (showMenu || ImGui::GetIO().MetricsRenderWindows > 0) {
+        if ((!dusk::IsGameLaunched || getSettings().backend.duskMenuOpen) || ImGui::GetIO().MetricsRenderWindows > 0)
+        {
             ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouseCursorChange;
             // Imgui will re-show cursor.
         } else {

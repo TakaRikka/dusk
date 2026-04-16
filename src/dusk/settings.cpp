@@ -83,7 +83,8 @@ UserSettings g_userSettings = {
         .skipPreLaunchUI {"backend.skipPreLaunchUI", false},
         .showPipelineCompilation {"backend.showPipelineCompilation", false},
         .wasPresetChosen {"backend.wasPresetChosen", false},
-        .enableCrashReporting {"backend.enableCrashReporting", true}
+        .enableCrashReporting {"backend.enableCrashReporting", true},
+        .duskMenuOpen {"backend.duskMenuOpen", false}
     }
 };
 
@@ -153,6 +154,7 @@ void registerSettings() {
     Register(g_userSettings.backend.showPipelineCompilation);
     Register(g_userSettings.backend.wasPresetChosen);
     Register(g_userSettings.backend.enableCrashReporting);
+    Register(g_userSettings.backend.duskMenuOpen);
 }
 
 // Transient settings
