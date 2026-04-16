@@ -215,7 +215,16 @@ int daDsh_c::create() {
 
     mType = getType();
 
+#ifdef TARGET_PC
+    const char* l_resName[] = {l_arcName[mType], ""};
+#else
+    // !@bug By making this static, it is only initialized the first time it runs
+    // If gate types that use other arcs are loaded later (without reloading the code)
+    // this array never gets updated and will load the incorrect arc
+    // On GC/Wii, REL loading causes this to reset/reinitialize so the bug is avoided
+    // but TPHD is all statically linked so daDsh_c::CreateHeap fails to get model data and the gate unloads
     static const char* l_resName[] = {l_arcName[mType], ""};
+#endif
 
     int phase = mResLoader.load(l_resName, NULL);
     if (phase == cPhs_COMPLEATE_e) {
