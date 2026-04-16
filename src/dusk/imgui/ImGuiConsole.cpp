@@ -271,6 +271,7 @@ namespace dusk {
             m_menuTools.ShowHeapOverlay();
             m_menuTools.ShowStubLog();
             m_menuTools.ShowMapLoader();
+            m_menuTools.ShowBloomWindow();
             m_menuTools.ShowPlayerInfo();
             m_menuTools.ShowAudioDebug();
             m_menuTools.ShowSaveEditor();

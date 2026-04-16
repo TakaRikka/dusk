@@ -33,6 +33,7 @@
 #include <cstdlib>
 #include <cstring>
 #if TARGET_PC
+#include "dusk/imgui/ImGuiBloomWindow.hpp"
 #include "dusk/settings.h"
 #endif
 
@@ -2577,6 +2578,10 @@ void dScnKy_env_light_c::setLight() {
 
                 mDoGph_gInf_c::getBloom()->setMode(mode);
             }
+
+#if TARGET_PC
+            dusk::ApplyBloomOverride();
+#endif
 
             f32 var_f30;
             if (dKy_Outdoor_check() == true) {
