@@ -461,6 +461,14 @@ if (APPLE)
     )
 endif ()
 
+if (IOS)
+    find_library(UIKIT_FRAMEWORK UIKit REQUIRED)
+    find_library(UNIFORM_TYPE_IDENTIFIERS_FRAMEWORK UniformTypeIdentifiers REQUIRED)
+    target_sources(dusk PRIVATE src/dusk/ios/FileSelectDialog.m)
+    set_source_files_properties(src/dusk/ios/FileSelectDialog.m PROPERTIES COMPILE_FLAGS -fobjc-arc)
+    target_link_libraries(dusk PRIVATE ${UIKIT_FRAMEWORK} ${UNIFORM_TYPE_IDENTIFIERS_FRAMEWORK})
+endif ()
+
 include(extern/aurora/cmake/AuroraCopyRuntimeDLLs.cmake)
 aurora_copy_runtime_dlls(dusk)
 

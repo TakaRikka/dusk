@@ -133,6 +133,9 @@ bool launchUILoop() {
         const AuroraEvent* event = aurora_update();
         while (event != nullptr && event->type != AURORA_NONE) {
             switch (event->type) {
+            case AURORA_SDL_EVENT:
+                dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
+                break;
             case AURORA_WINDOW_RESIZED:
                 preLaunchUIWindowSize = event->windowSize;
                 break;
@@ -213,6 +216,9 @@ void main01(void) {
             switch (event->type) {
             case AURORA_NONE:
                 goto eventsDone;
+            case AURORA_SDL_EVENT:
+                dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
+                break;
             case AURORA_WINDOW_RESIZED:
                 mDoGph_gInf_c::setWindowSize(event->windowSize);
                 break;
