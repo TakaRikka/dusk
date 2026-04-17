@@ -1,6 +1,7 @@
 #include "fmt/format.h"
 #include "imgui.h"
 
+#include "ImGuiEngine.hpp"
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuGame.hpp"
 #include "ImGuiConfig.hpp"
@@ -32,15 +33,17 @@ namespace dusk {
     void ImGuiMenuGame::draw() {
         if (ImGui::BeginMenu("Game")) {
             if (ImGui::BeginMenu("Graphics")) {
-                if (ImGui::MenuItem("Toggle Fullscreen", hotkeys::TOGGLE_FULLSCREEN)) {
-                    ToggleFullscreen();
-                }
+                if (!IsMobile) {
+                    if (ImGui::MenuItem("Toggle Fullscreen", hotkeys::TOGGLE_FULLSCREEN)) {
+                        ToggleFullscreen();
+                    }
 
-                if (ImGui::MenuItem("Default Window Size")) {
-                    getSettings().video.enableFullscreen.setValue(false);
-                    VISetWindowFullscreen(false);
-                    VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
-                    VICenterWindow();
+                    if (ImGui::MenuItem("Default Window Size")) {
+                        getSettings().video.enableFullscreen.setValue(false);
+                        VISetWindowFullscreen(false);
+                        VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
+                        VICenterWindow();
+                    }
                 }
 
                 bool vsync = getSettings().video.enableVsync;
@@ -147,7 +150,7 @@ namespace dusk {
                 JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
             }
 
-            if (ImGui::MenuItem("Exit")) {
+            if (!IsMobile && ImGui::MenuItem("Exit")) {
                 dusk::IsRunning = false;
             }
 

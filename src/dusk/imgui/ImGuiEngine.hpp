@@ -25,4 +25,10 @@ struct Image {
     uint32_t height;
 };
 Image GetImage(const std::string& path);
+
+#if (defined(__APPLE__) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST) || defined(__ANDROID__)
+inline constexpr bool IsMobile = true;
+#else
+inline constexpr bool IsMobile = false;
+#endif
 }  // namespace dusk
