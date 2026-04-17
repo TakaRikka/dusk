@@ -111,7 +111,7 @@ static int daNpc_Inko_Execute(npc_inko_class* i_this) {
 
     f32 var_f31;
     
-    #if TARGET_PC
+    #if AVOID_UB
     var_f31 = 0.0f;
     #endif
     if (i_this->field_0x598 == 0) {
