@@ -1482,6 +1482,9 @@ void dSv_restart_c::setRoom(const cXyz& i_position, s16 i_angleY, s8 i_roomNo) {
     mRoomNo = i_roomNo;
     mRoomPos = i_position;
     mRoomAngleY = i_angleY;
+    #if TARGET_PC
+    triggerAutoSave();
+    #endif
 }
 
 void dSv_turnRestart_c::set(const cXyz& i_position, s16 i_angleY, s8 param_3, u32 i_param) {
