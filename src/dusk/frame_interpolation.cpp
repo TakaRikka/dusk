@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "f_op/f_op_camera_mng.h"
+#include "m_Do/m_Do_graphic.h"
 
 namespace {
 enum class Op : uint8_t {
@@ -84,6 +85,7 @@ struct CameraSnapshot {
     f32 aspect{};
     f32 near_{};
     f32 far_{};
+    bool wideZoom{};
     bool valid{};
 };
 
@@ -347,6 +349,9 @@ void begin_record() {
         return;
     } else {
         copy_view_to_snap(&s_cam_prev, cam->view);
+#if WIDESCREEN_SUPPORT
+        s_cam_prev.wideZoom = s_cam_curr.valid ? s_cam_curr.wideZoom : false;
+#endif
     }
 }
 
@@ -502,6 +507,9 @@ void record_camera(::camera_process_class* cam, int camera_id) {
         return;
     }
     copy_view_to_snap(&s_cam_curr, cam->view);
+#if WIDESCREEN_SUPPORT
+    s_cam_curr.wideZoom = mDoGph_gInf_c::isWideZoom();
+#endif
 }
 
 void begin_presentation_camera() {
@@ -544,6 +552,13 @@ void begin_presentation_camera() {
     view->aspect = s_cam_prev.aspect + (s_cam_curr.aspect - s_cam_prev.aspect) * step;
     view->near_ = s_cam_prev.near_ + (s_cam_curr.near_ - s_cam_prev.near_) * step;
     view->far_ = s_cam_prev.far_ + (s_cam_curr.far_ - s_cam_prev.far_) * step;
+
+    // FRAME INTERP TODO: It might be better if I rewired the game to not clear this flag until the next sim frame, but I don't care enough to right now
+#if WIDESCREEN_SUPPORT
+    if (mDoGph_gInf_c::isWide() && !mDoGph_gInf_c::isWideZoom() && step >= 0.5f ? s_cam_curr.wideZoom : s_cam_prev.wideZoom) {
+        mDoGph_gInf_c::onWideZoom();
+    }
+#endif
 
     // FRAME INTERP TODO: Largely copied from d_camera's camera_draw function from this point, got any better ideas?
     C_MTXPerspective(view->projMtx, view->fovy, view->aspect, view->near_, view->far_);
@@ -600,6 +615,10 @@ void begin_presentation_camera() {
     }
 
     mDoLib_clipper::setup(view->fovy, view->aspect, view->near_, far_);
+
+#if WIDESCREEN_SUPPORT
+    mDoGph_gInf_c::offWideZoom();
+#endif
 
     s_presentation_depth = 1;
 }
