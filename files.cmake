@@ -1343,6 +1343,8 @@ set(DUSK_FILES
         src/dusk/endian.cpp
         src/dusk/extras.c
         src/dusk/extras.cpp
+        src/dusk/file_select.cpp
+        src/dusk/file_select.hpp
         src/dusk/frame_interpolation.cpp
         src/dusk/globals.cpp
         src/dusk/gyro.cpp
