@@ -766,9 +766,6 @@ void updateAutoSave() {
 }
 
 void writeAutoSave() {
-    int stageNo = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
-
-    dComIfGs_putSave(stageNo);
     dComIfGs_setMemoryToCard(mSaveBuffer, dComIfGs_getDataNum());
     mDoMemCdRWm_SetCheckSumGameData(mSaveBuffer, dComIfGs_getDataNum());
 
