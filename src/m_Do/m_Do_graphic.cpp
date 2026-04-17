@@ -47,6 +47,8 @@
 #endif
 
 #if TARGET_PC
+#include <SDL3/SDL_video.h>
+#include "aurora/lib/window.hpp"
 #include "d/actor/d_a_horse.h"
 #include "dusk/dusk.h"
 #include "dusk/endian.h"
@@ -636,8 +638,9 @@ void mDoGph_gInf_c::setTvSize() {
     m_invScale = 1.0f / m_scale;
 
 #if TARGET_PC
-    hudAspectScaleDown = 1.3571428f / mDoGph_gInf_c::getAspect();
-    hudAspectScaleUp = 1.0f / hudAspectScaleDown;
+    updateSafeAreaBounds();
+    hudAspectScaleUp = getSafeWidthF() / FB_WIDTH_BASE;
+    hudAspectScaleDown = FB_WIDTH_BASE / getSafeWidthF();
 #endif
 }
 
@@ -765,6 +768,88 @@ void mDoGph_gInf_c::setWideZoomLightProjection(Mtx& m) {
 #if TARGET_PC
 f32 mDoGph_gInf_c::hudAspectScaleDown = 1.0f;
 f32 mDoGph_gInf_c::hudAspectScaleUp = 1.0f;
+f32 mDoGph_gInf_c::m_safeMinXF = 0.0f;
+f32 mDoGph_gInf_c::m_safeMinYF = 0.0f;
+f32 mDoGph_gInf_c::m_safeMaxXF = FB_WIDTH_BASE;
+f32 mDoGph_gInf_c::m_safeMaxYF = FB_HEIGHT_BASE;
+f32 mDoGph_gInf_c::m_safeWidthF = FB_WIDTH_BASE;
+f32 mDoGph_gInf_c::m_safeHeightF = FB_HEIGHT_BASE;
+
+void mDoGph_gInf_c::updateSafeAreaBounds() {
+    m_safeMinXF = m_minXF;
+    m_safeMinYF = m_minYF;
+    m_safeMaxXF = m_maxXF;
+    m_safeMaxYF = m_maxYF;
+    m_safeWidthF = m_widthF;
+    m_safeHeightF = m_heightF;
+
+    SDL_Window* window = aurora::window::get_sdl_window();
+    if (window == NULL) {
+        return;
+    }
+
+    const AuroraWindowSize windowSize = aurora::window::get_window_size();
+    const f32 windowWidth = static_cast<f32>(windowSize.width);
+    const f32 windowHeight = static_cast<f32>(windowSize.height);
+    if (windowWidth <= 0.0f || windowHeight <= 0.0f) {
+        return;
+    }
+
+    SDL_Rect safeRect{};
+    if (!SDL_GetWindowSafeArea(window, &safeRect)) {
+        return;
+    }
+
+    if (windowSize.native_fb_width == 0 || windowSize.native_fb_height == 0 ||
+        windowSize.fb_width == 0 || windowSize.fb_height == 0)
+    {
+        return;
+    }
+
+    const f32 nativeScaleX = static_cast<f32>(windowSize.native_fb_width) / windowWidth;
+    const f32 nativeScaleY = static_cast<f32>(windowSize.native_fb_height) / windowHeight;
+
+    const f32 safeLeft = static_cast<f32>(safeRect.x) * nativeScaleX;
+    const f32 safeTop = static_cast<f32>(safeRect.y) * nativeScaleY;
+    const f32 safeRight = static_cast<f32>(safeRect.x + safeRect.w) * nativeScaleX;
+    const f32 safeBottom = static_cast<f32>(safeRect.y + safeRect.h) * nativeScaleY;
+
+    const f32 viewportLeft =
+        (static_cast<f32>(windowSize.native_fb_width) - static_cast<f32>(windowSize.fb_width)) *
+        0.5f;
+    const f32 viewportTop =
+        (static_cast<f32>(windowSize.native_fb_height) - static_cast<f32>(windowSize.fb_height)) *
+        0.5f;
+    const f32 viewportRight = viewportLeft + static_cast<f32>(windowSize.fb_width);
+    const f32 viewportBottom = viewportTop + static_cast<f32>(windowSize.fb_height);
+
+    const f32 leftInset = std::max(0.0f, safeLeft - viewportLeft) *
+                          (m_widthF / static_cast<f32>(windowSize.fb_width));
+    const f32 topInset = std::max(0.0f, safeTop - viewportTop) *
+                         (m_heightF / static_cast<f32>(windowSize.fb_height));
+    const f32 rightInset = std::max(0.0f, viewportRight - safeRight) *
+                           (m_widthF / static_cast<f32>(windowSize.fb_width));
+    const f32 bottomInset = std::max(0.0f, viewportBottom - safeBottom) *
+                            (m_heightF / static_cast<f32>(windowSize.fb_height));
+
+    const f32 safeMinXF = m_minXF + leftInset;
+    const f32 safeMinYF = m_minYF + topInset;
+    const f32 safeMaxXF = m_maxXF - rightInset;
+    const f32 safeMaxYF = m_maxYF - bottomInset;
+    const f32 safeWidthF = safeMaxXF - safeMinXF;
+    const f32 safeHeightF = safeMaxYF - safeMinYF;
+
+    if (safeWidthF <= 0.0f || safeHeightF <= 0.0f) {
+        return;
+    }
+
+    m_safeMinXF = safeMinXF;
+    m_safeMinYF = safeMinYF;
+    m_safeMaxXF = safeMaxXF;
+    m_safeMaxYF = safeMaxYF;
+    m_safeWidthF = safeWidthF;
+    m_safeHeightF = safeHeightF;
+}
 
 void mDoGph_gInf_c::setWindowSize(AuroraWindowSize const& size) {
     JUTVideo::getManager()->setWindowSize(size);

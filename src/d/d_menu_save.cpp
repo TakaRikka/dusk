@@ -2782,7 +2782,7 @@ void dMenu_save_c::_draw() {
 #if TARGET_PC
 void dMenu_save_c::menuSaveWide() {
     mSaveSel.Scr->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
-    mSaveSel.Scr->translate(mDoGph_gInf_c::getMinXF(), 0.0f);
+    mSaveSel.Scr->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
 
     mSaveSel.Scr->search(MULTI_CHAR('t_for'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     mSaveSel.Scr->search(MULTI_CHAR('t_for1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);

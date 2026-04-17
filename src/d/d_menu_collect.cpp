@@ -99,7 +99,7 @@ dMenu_Collect2D_c::~dMenu_Collect2D_c() {
 void dMenu_Collect2D_c::menuCollectWide() {
     // Main Canvas
     mpScreen->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
-    mpScreen->translate(mDoGph_gInf_c::getMinXF(), 0.0f);
+    mpScreen->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
 
     // Pieces of Heart
     mpScreen->search(MULTI_CHAR('heart_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
@@ -182,7 +182,7 @@ void dMenu_Collect2D_c::_create() {
     }
 
     #if TARGET_PC
-    mpScreenIcon->translate(-mDoGph_gInf_c::getMinXF(), 0.0f);
+    mpScreenIcon->translate(-mDoGph_gInf_c::getSafeMinXF(), 0.0f);
     #endif
 
     dPaneClass_showNullPane(mpScreenIcon);
@@ -2706,8 +2706,14 @@ void dMenu_Collect3D_c::setupItem3D(Mtx param_0) {
 void dMenu_Collect3D_c::toItem3Dpos(f32 param_0, f32 param_1, f32 param_2, cXyz* param_3) {
     Mtx adStack_98;
     Mtx auStack_c8;
+#if TARGET_PC
+    param_0 =
+        (2.0f * ((param_0 - mDoGph_gInf_c::getSafeMinXF()) / mDoGph_gInf_c::getSafeWidthF()) -
+         1.0f);
+#else
     param_0 =
         (2.0f * ((param_0 - mDoGph_gInf_c::getMinXF()) / mDoGph_gInf_c::getWidthF()) - 1.0f);
+#endif
     param_1 = (2.0f * ((param_1 - -100.0f) / FB_HEIGHT_BASE) - 1.0f);
     calcViewMtx(adStack_98);
     MTXInverse(adStack_98, auStack_c8);
