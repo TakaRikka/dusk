@@ -68,6 +68,9 @@ endif()
 message(STATUS "Dusk version set to ${DUSK_WC_DESCRIBE}")
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 project(dusk LANGUAGES C CXX VERSION ${DUSK_VERSION_STRING})
+if (APPLE)
+    enable_language(OBJC)
+endif ()
 if (APPLE AND NOT TVOS AND CMAKE_SYSTEM_NAME STREQUAL tvOS)
     # ios.toolchain.cmake hack for SDL
     set(TVOS ON)
@@ -125,19 +128,37 @@ if (DUSK_MOVIE_SUPPORT)
         else ()
             set(_jpeg_lib ${_jpeg_install_dir}/lib/libturbojpeg.a)
         endif ()
+        set(_jpeg_cmake_args
+            -DCMAKE_INSTALL_PREFIX=${_jpeg_install_dir}
+            -DENABLE_SHARED=OFF
+            -DWITH_TURBOJPEG=ON
+            -DWITH_JAVA=OFF
+        )
+        if (CMAKE_TOOLCHAIN_FILE)
+            get_filename_component(_jpeg_toolchain_file "${CMAKE_TOOLCHAIN_FILE}" ABSOLUTE BASE_DIR "${CMAKE_SOURCE_DIR}")
+            list(APPEND _jpeg_cmake_args -DCMAKE_TOOLCHAIN_FILE=${_jpeg_toolchain_file})
+        endif ()
+        set(_jpeg_passthrough_vars
+            CMAKE_BUILD_TYPE
+            CMAKE_C_COMPILER
+            CMAKE_C_COMPILER_LAUNCHER
+            CMAKE_MAKE_PROGRAM
+            CMAKE_MSVC_RUNTIME_LIBRARY
+            CMAKE_OSX_ARCHITECTURES
+            DEPLOYMENT_TARGET
+            ENABLE_ARC
+            ENABLE_BITCODE
+            PLATFORM
+        )
+        foreach(_var IN LISTS _jpeg_passthrough_vars)
+            if (DEFINED ${_var})
+                list(APPEND _jpeg_cmake_args -D${_var}=${${_var}})
+            endif ()
+        endforeach ()
         ExternalProject_Add(libjpeg-turbo-ext
             URL https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/3.1.0.tar.gz
             URL_HASH SHA256=35fec2e1ddfb05ecf6d93e50bc57c1e54bc81c16d611ddf6eff73fff266d8285
-            CMAKE_ARGS
-                -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-                -DCMAKE_INSTALL_PREFIX=${_jpeg_install_dir}
-                -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
-                -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-                -DCMAKE_C_COMPILER_LAUNCHER=${CMAKE_C_COMPILER_LAUNCHER}
-                -DCMAKE_MSVC_RUNTIME_LIBRARY=${CMAKE_MSVC_RUNTIME_LIBRARY}
-                -DENABLE_SHARED=OFF
-                -DWITH_TURBOJPEG=ON
-                -DWITH_JAVA=OFF
+            CMAKE_ARGS ${_jpeg_cmake_args}
             BUILD_BYPRODUCTS ${_jpeg_lib}
         )
         file(MAKE_DIRECTORY ${_jpeg_install_dir}/include)
@@ -249,7 +270,7 @@ include(files.cmake)
 # TODO: version handling for res includes
 
 set(DUSK_BUNDLE_NAME Dusk)
-set(DUSK_BUNDLE_IDENTIFIER dev.decomp.dusk)
+set(DUSK_BUNDLE_IDENTIFIER dev.twilitrealm.dusk)
 set(DUSK_COMPANY_NAME "Twilit Realm")
 set(DUSK_FILE_DESCRIPTION "Dusk")
 set(DUSK_PRODUCT_NAME "Dusk")
@@ -277,7 +298,7 @@ set(GAME_INCLUDE_DIRS
     ${CMAKE_BINARY_DIR})
 
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
-    aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient)
+    aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt)
 
 list(APPEND GAME_LIBS libzstd_static)
 
@@ -409,7 +430,10 @@ if (APPLE)
         set(DUSK_RESOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/platforms/macos)
     endif ()
     set(DUSK_INFO_PLIST ${DUSK_RESOURCE_DIR}/Info.plist.in)
-    file(GLOB_RECURSE DUSK_RESOURCE_FILES "${DUSK_RESOURCE_DIR}/Base.lproj/*")
+    file(GLOB_RECURSE DUSK_RESOURCE_FILES
+        "${DUSK_RESOURCE_DIR}/Assets.car"
+        "${DUSK_RESOURCE_DIR}/Base.lproj/*"
+        "${DUSK_RESOURCE_DIR}/Dusk.icns")
     file(GLOB_RECURSE DUSK_APP_RESOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/res/*")
     target_sources(dusk PRIVATE ${DUSK_RESOURCE_FILES})
     target_sources(dusk PRIVATE ${DUSK_APP_RESOURCE_FILES})
@@ -430,26 +454,11 @@ if (APPLE)
         MACOSX_BUNDLE_GUI_IDENTIFIER ${DUSK_BUNDLE_IDENTIFIER}
         MACOSX_BUNDLE_BUNDLE_VERSION ${DUSK_VERSION_STRING}
         MACOSX_BUNDLE_SHORT_VERSION_STRING ${DUSK_SHORT_VERSION_STRING}
+        MACOSX_BUNDLE_INFO_PLIST ${DUSK_INFO_PLIST}
         OUTPUT_NAME Dusk
         XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "YES"
         XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "YES"
     )
-    if (CMAKE_GENERATOR STREQUAL "Xcode")
-        set_target_properties(dusk PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${DUSK_INFO_PLIST})
-    elseif (DEFINED DUSK_INFO_PLIST)
-        set(MACOSX_BUNDLE_EXECUTABLE_NAME dusk)
-        set(MACOSX_BUNDLE_GUI_IDENTIFIER ${DUSK_BUNDLE_IDENTIFIER})
-        set(MACOSX_BUNDLE_BUNDLE_NAME ${DUSK_BUNDLE_NAME})
-        set(MACOSX_BUNDLE_BUNDLE_VERSION ${DUSK_VERSION_STRING})
-        set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${DUSK_SHORT_VERSION_STRING})
-        set(DUSK_GENERATED_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/dusk.Info.plist)
-        configure_file(${DUSK_INFO_PLIST} ${DUSK_GENERATED_INFO_PLIST})
-        add_custom_command(
-            TARGET dusk POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different ${DUSK_GENERATED_INFO_PLIST} $<TARGET_FILE_DIR:dusk>/Info.plist
-            VERBATIM
-        )
-    endif ()
 endif ()
 
 include(extern/aurora/cmake/AuroraCopyRuntimeDLLs.cmake)
@@ -522,18 +531,22 @@ if (CMAKE_BUILD_TYPE STREQUAL Debug OR CMAKE_BUILD_TYPE STREQUAL RelWithDebInfo)
         endif ()
         list(APPEND DEBUG_FILES_LIST "${output_name}")
     endforeach ()
-    if (WIN32)
-        list(TRANSFORM DEBUG_FILES_LIST APPEND ".pdb")
-        list(JOIN DEBUG_FILES_LIST " " DEBUG_FILES)
-        install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND 7z a -t7z \"${CMAKE_INSTALL_PREFIX}/debug.7z\" ${DEBUG_FILES})")
-    elseif (APPLE)
-        list(TRANSFORM DEBUG_FILES_LIST APPEND ".dSYM")
-        list(JOIN DEBUG_FILES_LIST " " DEBUG_FILES)
-        install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND tar acfv \"${CMAKE_INSTALL_PREFIX}/debug.tar.xz\" ${DEBUG_FILES})")
-    elseif (UNIX)
-        list(TRANSFORM DEBUG_FILES_LIST APPEND ".dbg")
-        list(JOIN DEBUG_FILES_LIST " " DEBUG_FILES)
-        install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND tar -I \"xz -9 -T0\" -cvf \"${CMAKE_INSTALL_PREFIX}/debug.tar.xz\" ${DEBUG_FILES})")
+    # This is a terrible hack to only run this on CI
+    # until I turn this into a script or something
+    if(DEFINED ENV{GITHUB_ENV})
+        if (WIN32)
+            list(TRANSFORM DEBUG_FILES_LIST APPEND ".pdb")
+            list(JOIN DEBUG_FILES_LIST " " DEBUG_FILES)
+            install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND 7z a -t7z \"${CMAKE_INSTALL_PREFIX}/debug.7z\" ${DEBUG_FILES})")
+        elseif (APPLE)
+            list(TRANSFORM DEBUG_FILES_LIST APPEND ".dSYM")
+            list(JOIN DEBUG_FILES_LIST " " DEBUG_FILES)
+            install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND tar acfv \"${CMAKE_INSTALL_PREFIX}/debug.tar.xz\" ${DEBUG_FILES})")
+        elseif (UNIX)
+            list(TRANSFORM DEBUG_FILES_LIST APPEND ".dbg")
+            list(JOIN DEBUG_FILES_LIST " " DEBUG_FILES)
+            install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND tar -I \"xz -9 -T0\" -cvf \"${CMAKE_INSTALL_PREFIX}/debug.tar.xz\" ${DEBUG_FILES})")
+        endif ()
     endif ()
 endif ()
 foreach (target IN LISTS BINARY_TARGETS)
