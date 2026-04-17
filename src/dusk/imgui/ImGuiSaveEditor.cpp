@@ -4,6 +4,7 @@
 
 #include "ImGuiConsole.hpp"
 #include "ImGuiSaveEditor.hpp"
+#include "ImGuiEventFlags.hpp"
 
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
@@ -815,46 +816,66 @@ namespace dusk {
     void ImGuiSaveEditor::drawInventoryTab() {
         dSv_player_item_c& item = dComIfGs_getSaveData()->getPlayer().getItem();
 
-        if (ImGui::Button("Default All##inv_default_all")) {
-            for (int slot = 0; slot < 24; slot++) {
-                dComIfGs_setItem(slot, getSlotDefault(slot));
+        if (ImGui::TreeNode("Item Wheel")) {
+            if (ImGui::Button("Default All##inv_default_all")) {
+                for (int slot = 0; slot < 24; slot++) {
+                    dComIfGs_setItem(slot, getSlotDefault(slot));
+                }
             }
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Clear All##inv_clear_all")) {
-            for (int slot = 0; slot < 24; slot++) {
-                dComIfGs_setItem(slot, dItemNo_NONE_e);
-            }
-        }
-
-        ImGuiBeginGroupPanel("Items", { 200, 100 });
-        for (int slot = 0; slot < 24; slot++) {
-            ImGui::Text("Slot %02d (%s): ", slot, itemMap.find(getSlotDefault(slot))->second.m_name.c_str());
-            ImGui::SameLine(240.0f);
-            if (ImGui::BeginCombo(fmt::format("##ItemComboBox{}", slot).c_str(), itemMap.find(item.mItems[slot])->second.m_name.c_str())) {
-                if (ImGui::Selectable("None")) {
+            ImGui::SameLine();
+            if (ImGui::Button("Clear All##inv_clear_all")) {
+                for (int slot = 0; slot < 24; slot++) {
                     dComIfGs_setItem(slot, dItemNo_NONE_e);
                 }
+            }
 
-                for (int i = 0; i < 254; i++) {
-                    if (itemMap.find(i)->second.m_type != ITEMTYPE_EQUIP_e) continue;
-
-                    if (ImGui::Selectable(fmt::format("{0}##item_{1}{2}", itemMap.find(i)->second.m_name, slot, i).c_str())) {
-                        dComIfGs_setItem(slot, itemMap.find(i)->first);
+            ImGuiBeginGroupPanel("Items", { 200, 100 });
+            for (int slot = 0; slot < 24; slot++) {
+                ImGui::Text("Slot %02d (%s): ", slot, itemMap.find(getSlotDefault(slot))->second.m_name.c_str());
+                ImGui::SameLine(240.0f);
+                if (ImGui::BeginCombo(fmt::format("##ItemComboBox{}", slot).c_str(), itemMap.find(item.mItems[slot])->second.m_name.c_str())) {
+                    if (ImGui::Selectable("None")) {
+                        dComIfGs_setItem(slot, dItemNo_NONE_e);
                     }
+
+                    for (int i = 0; i < 254; i++) {
+                        if (itemMap.find(i)->second.m_type != ITEMTYPE_EQUIP_e) continue;
+
+                        if (ImGui::Selectable(fmt::format("{0}##item_{1}{2}", itemMap.find(i)->second.m_name, slot, i).c_str())) {
+                            dComIfGs_setItem(slot, itemMap.find(i)->first);
+                        }
+                    }
+                    ImGui::EndCombo();
                 }
-                ImGui::EndCombo();
+                ImGui::SameLine();
+                if (ImGui::SmallButton(fmt::format("Default##slot_d_{}", slot).c_str())) {
+                    dComIfGs_setItem(slot, getSlotDefault(slot));
+                }
+                ImGui::SameLine();
+                if (ImGui::SmallButton(fmt::format("Clear##slot_c_{}", slot).c_str())) {
+                    dComIfGs_setItem(slot, dItemNo_NONE_e);
+                }
             }
-            ImGui::SameLine();
-            if (ImGui::SmallButton(fmt::format("Default##slot_d_{}", slot).c_str())) {
-                dComIfGs_setItem(slot, getSlotDefault(slot));
-            }
-            ImGui::SameLine();
-            if (ImGui::SmallButton(fmt::format("Clear##slot_c_{}", slot).c_str())) {
-                dComIfGs_setItem(slot, dItemNo_NONE_e);
-            }
+            ImGuiEndGroupPanel();
+
+            ImGui::TreePop();
         }
-        ImGuiEndGroupPanel();
+
+        if (ImGui::TreeNode("Get Item Flags")) {
+            for (int i = 0; i < 254; i++) {
+                if (itemMap.find(i)->second.m_name == "Reserved") continue;
+
+                bool flag = dComIfGs_isItemFirstBit(i);
+                if (ImGui::Checkbox(fmt::format("{0}##item_{1}", itemMap.find(i)->second.m_name, i).c_str(), &flag)) {
+                    if (flag)
+                        dComIfGs_onItemFirstBit(i);
+                    else
+                        dComIfGs_offItemFirstBit(i);
+                }
+            }
+
+            ImGui::TreePop();
+        }
 
         dSv_player_item_record_c& itemRecord = dComIfGs_getSaveData()->getPlayer().getItemRecord();
         dSv_player_item_max_c& itemMax = dComIfGs_getSaveData()->getPlayer().getItemMax();
@@ -1263,6 +1284,16 @@ namespace dusk {
         }
     }
 
+    static inline void genDungeonItemCheckbox(dSv_memBit_c& membit, const char* label, int flag) {
+        bool tempFlag = membit.isDungeonItem(flag);
+        if (ImGui::Checkbox(label, &tempFlag)) {
+            if (tempFlag)
+                membit.onDungeonItem(flag);
+            else
+                membit.offDungeonItem(flag);
+        }
+    }
+
     void genMembitFlags(const char* id, dSv_memBit_c& membit) {
         ImGuiBeginGroupPanel("Chest", { 100, 100 });
         for (int j = 0; j < 2; j++) {
@@ -1270,7 +1301,7 @@ namespace dusk {
         }
         ImGuiEndGroupPanel();
 
-        ImVec2 start_cursor = ImGui::GetCursorPos();
+        ImVec2 post_tbox_cursor = ImGui::GetCursorPos();
 
         ImGui::SameLine();
 
@@ -1280,9 +1311,9 @@ namespace dusk {
         }
         ImGuiEndGroupPanel();
 
-        ImVec2 cursor = ImGui::GetCursorPos();
+        ImVec2 post_switch_cursor = ImGui::GetCursorPos();
 
-        ImGui::SetCursorPos(start_cursor);
+        ImGui::SetCursorPos(post_tbox_cursor);
 
         ImGuiBeginGroupPanel("Item", { 100, 100 });
         for (int j = 0; j < 1; j++) {
@@ -1290,7 +1321,28 @@ namespace dusk {
         }
         ImGuiEndGroupPanel();
 
-        ImGui::SetCursorPos({ start_cursor.x, cursor.y });
+        ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.0f);
+
+        genDungeonItemCheckbox(membit, "Got Map", dSv_memBit_c::MAP);
+        ImGui::SameLine(230.0f);
+        genDungeonItemCheckbox(membit, "Got Compass", dSv_memBit_c::COMPASS);
+
+        genDungeonItemCheckbox(membit, "Got Boss Key", dSv_memBit_c::BOSS_KEY);
+        ImGui::SameLine(230.0f);
+        genDungeonItemCheckbox(membit, "Saw Boss Demo", dSv_memBit_c::STAGE_BOSS_DEMO);
+
+        genDungeonItemCheckbox(membit, "Got Heart Container", dSv_memBit_c::STAGE_LIFE);
+        ImGui::SameLine(230.0f);
+        genDungeonItemCheckbox(membit, "Defeated Boss", dSv_memBit_c::STAGE_BOSS_ENEMY);
+
+        genDungeonItemCheckbox(membit, "Defeated Miniboss", dSv_memBit_c::STAGE_BOSS_ENEMY_2);
+        ImGui::SameLine(230.0f);
+        genDungeonItemCheckbox(membit, "Got Ooccoo", dSv_memBit_c::OOCCOO_NOTE);
+
+        int keyTemp = membit.getKeyNum();
+        if (ImGui::SliderInt("Keys", &keyTemp, 0, 5)) {
+            membit.setKeyNum(keyTemp);
+        }
     }
 
     void ImGuiSaveEditor::drawFlagsTab() {
@@ -1298,15 +1350,18 @@ namespace dusk {
             dSv_memBit_c& membit = g_dComIfG_gameInfo.info.mMemory.mBit;
             genMembitFlags("##TempSceneFlags", membit);
 
-            int stageNo = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
-            if (ImGui::Button("Save##SaveTempFlags")) {
-                dComIfGs_putSave(stageNo);
-            }
+            stage_stag_info_class* pstag = dComIfGp_getStageStagInfo();
+            if (pstag != nullptr) {
+                int stageNo = dStage_stagInfo_GetSaveTbl(pstag);
+                if (ImGui::Button("Save##SaveTempFlags")) {
+                    dComIfGs_putSave(stageNo);
+                }
 
-            ImGui::SameLine();
+                ImGui::SameLine();
 
-            if (ImGui::Button("Load##LoadSaveFlags")) {
-                dComIfGs_getSave(stageNo);
+                if (ImGui::Button("Load##LoadSaveFlags")) {
+                    dComIfGs_getSave(stageNo);
+                }
             }
 
             ImGui::TreePop();
@@ -1319,7 +1374,7 @@ namespace dusk {
                 "Faron",
                 "Eldin",
                 "Lanayru",
-                "Unknown",
+                "Reserved",
                 "Hyrule Field",
                 "Sacred Grove",
                 "Snowpeak",
@@ -1365,20 +1420,130 @@ namespace dusk {
 
         if (ImGui::TreeNode("Event Flags")) {
             dSv_event_c& event = dComIfGs_getSaveData()->mEvent;
-            for (int e = 0; e < 255; e++) {
-                ImGui::Text("%03d ", e);
-                ImGui::SameLine(80.0f);
-                for (int i = 7; i >= 0; i--) {
-                    bool flag = event.mEvent[e] & (1 << i);
-                    if (ImGui::Checkbox(fmt::format("##event{0}{1}", e, i).c_str(), &flag)) {
-                        if (flag)
-                            event.mEvent[e] |= (1 << i);
-                        else
-                            event.mEvent[e] &= ~(1 << i);
+
+            static ImGuiTextFilter filter;
+            filter.Draw(); // Search bar
+
+            ImVec2 flagTableSize = {700, 400};
+            if (ImGui::BeginTable("Events", 4,
+                                  ImGuiTableFlags_ScrollY | ImGuiTableFlags_ScrollX | ImGuiTableFlags_Sortable,
+                                  flagTableSize))
+            {
+                ImGui::TableSetupScrollFreeze(0, 1);
+                constexpr int COLUMN_FLAG = 0, COLUMN_NAME = 1, COLUMN_LOC = 2, COLUMN_DESC = 3;
+                ImGui::TableSetupColumn("Flag");
+                ImGui::TableSetupColumn("Name");
+                ImGui::TableSetupColumn("Location");
+                ImGui::TableSetupColumn("Description");
+                ImGui::TableHeadersRow();
+
+                // if we're sorting by whether the flag is set or not, 
+                // we want to re-sort whenever a flag updates, which means every frame cuz we don't know when it changes.
+                // otherwise only re-sort when the sort is dirty
+                if (auto* sort = ImGui::TableGetSortSpecs();
+                    sort != nullptr && sort->SpecsCount > 0 &&
+                    (sort->SpecsDirty || sort->Specs[0].ColumnIndex == COLUMN_FLAG))
+                {
+                    auto column = sort->Specs->ColumnIndex;
+                    const auto cmp = [&](const duskImguiEventFlagEntry& l,
+                                         const duskImguiEventFlagEntry& r) -> bool {
+                        switch (column) {
+                        case COLUMN_FLAG:
+                            return (bool)event.isEventBit(l.flagID) <
+                                   (bool)event.isEventBit(r.flagID);
+                        case COLUMN_NAME:
+                            return l.flagName < r.flagName;
+                        case COLUMN_LOC:
+                            return l.location < r.location;
+                        case COLUMN_DESC:
+                            return l.description < r.description;
+                        }
+                        return false;
+                    };
+
+                    const auto direction = sort->Specs[0].SortDirection;
+
+                    if (direction == ImGuiSortDirection_Ascending) {
+                        std::sort(std::begin(duskImguiEventFlags), std::end(duskImguiEventFlags), cmp);
+                    } else {
+                        std::sort(std::rbegin(duskImguiEventFlags), std::rend(duskImguiEventFlags), cmp);
                     }
-                    ImGui::SameLine();
+                    sort->SpecsDirty = false;
                 }
-                ImGui::NewLine();
+                
+                for (const auto& e : duskImguiEventFlags) {
+                    if (!filter.PassFilter((e.location + "\n" + e.description + "\n" + e.flagName).c_str())) 
+                    {
+                        continue;
+                    }
+
+                    ImGui::TableNextRow();
+                    ImGui::TableNextColumn();
+                    bool flag = event.getEventReg(e.flagID);
+                    if (ImGui::Checkbox(("##" + e.flagName).c_str(), &flag)) {
+                        if (flag) {
+                            event.onEventBit(e.flagID);
+                        } else {
+                            event.offEventBit(e.flagID);
+                        }
+                    }
+
+                    ImGui::TableNextColumn();
+                    ImGui::Text(e.flagName.c_str());
+                    ImGui::TableNextColumn();
+                    ImGui::Text(e.location.c_str());
+                    ImGui::TableNextColumn();
+                    ImGui::Text(e.description.c_str());
+                }
+                ImGui::EndTable();
+            }
+
+            // event values that are stored as u8s in the event flags
+            for (const auto& e : duskImguiU8Events) {
+                int v = event.mEvent[e.byteInd];
+                if (ImGui::InputInt(e.description, &v)) {
+                    v = std::clamp(v, 0, 0xff);
+                    event.mEvent[e.byteInd] = (u8)v;
+                }
+            }            
+
+            // event values that are stored as u16s in the event flags
+            for (const auto& e : duskImguiU16Events) {
+                int v = (event.mEvent[e.byteInd] << 8) | event.mEvent[e.byteInd + 1];
+                if (ImGui::InputInt(e.description, &v)) {
+                    v = std::clamp(v, 0, 0xffff);
+                    event.mEvent[e.byteInd] = (u8)(v >> 8);
+                    event.mEvent[e.byteInd + 1] = (u8)v;
+                }
+            }            
+
+            // event values that are stored as swapped u16s in the event flags
+            for (const auto& e : duskImguiSwappedU16Events) {
+                int v = (event.mEvent[e.byteInd + 1] << 8) | event.mEvent[e.byteInd];
+                if (ImGui::InputInt(e.description, &v)) {
+                    v = std::clamp(v, 0, 0xffff);
+                    event.mEvent[e.byteInd + 1] = (u8)(v >> 8);
+                    event.mEvent[e.byteInd] = (u8)v;
+                }
+            }
+
+            if (ImGui::TreeNode("Event Matrix")) {
+                for (int e = 0; e < 255; e++) {
+                    ImGui::Text("%03d ", e);
+                    ImGui::SameLine(80.0f);
+                    for (int i = 7; i >= 0; i--) {
+                        bool flag = event.mEvent[e] & (1 << i);
+                        if (ImGui::Checkbox(fmt::format("##event{0}{1}", e, i).c_str(), &flag)) {
+                            if (flag)
+                                event.mEvent[e] |= (1 << i);
+                            else
+                                event.mEvent[e] &= ~(1 << i);
+                        }
+                        ImGui::SameLine();
+                    }
+                    ImGui::NewLine();
+                }
+                ImGui::TreePop();
             }
             ImGui::TreePop();
         }

@@ -147,7 +147,7 @@ void dBrightCheck_c::modeMove() {
 void dBrightCheck_c::brightCheckWide() {
     // Main Canvas
     mBrightCheck.Scr->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
-    mBrightCheck.Scr->translate(mDoGph_gInf_c::getMinXF(), 0.0f);
+    mBrightCheck.Scr->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
 
     // Right Square
     mBrightCheck.Scr->search(MULTI_CHAR('fuchi_1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);

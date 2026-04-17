@@ -54,7 +54,7 @@ namespace dusk {
             ImGui::MenuItem("State Share", hotkeys::SHOW_STATE_SHARE, &m_showStateShare);
             ImGui::MenuItem("Debug Camera", hotkeys::SHOW_DEBUG_CAMERA, &m_showCameraOverlay);
             ImGui::MenuItem("Audio Debug", hotkeys::SHOW_AUDIO_DEBUG, &m_showAudioDebug);
-            
+            ImGui::MenuItem("Bloom", nullptr, &m_showBloomWindow);
             ImGui::MenuItem("Stub Log", nullptr, &m_showStubLog);
 
             if (!dusk::IsGameLaunched) {

@@ -1334,6 +1334,7 @@ set(DUSK_FILES
         include/dusk/endian_gx.hpp
         include/dusk/config.hpp
         include/dusk/dvd_asset.hpp
+        include/dusk/scope_guard.hpp
         src/dusk/dvd_asset.cpp
         src/d/actor/d_a_alink_dusk.cpp
         src/dusk/asserts.cpp
@@ -1342,9 +1343,11 @@ set(DUSK_FILES
         src/dusk/endian.cpp
         src/dusk/extras.c
         src/dusk/extras.cpp
+        src/dusk/file_select.cpp
+        src/dusk/file_select.hpp
         src/dusk/frame_interpolation.cpp
         src/dusk/globals.cpp
-        src/dusk/gyro_aim.cpp
+        src/dusk/gyro.cpp
         src/dusk/io.cpp
         src/dusk/layout.cpp
         src/dusk/logging.cpp
@@ -1358,6 +1361,8 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiEngine.hpp
         src/dusk/imgui/ImGuiMenuGame.cpp
         src/dusk/imgui/ImGuiMenuGame.hpp
+        src/dusk/imgui/ImGuiBloomWindow.cpp
+        src/dusk/imgui/ImGuiBloomWindow.hpp
         src/dusk/imgui/ImGuiMenuTools.cpp
         src/dusk/imgui/ImGuiMenuTools.hpp
         src/dusk/imgui/ImGuiMenuEnhancements.cpp
@@ -1376,6 +1381,7 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiSaveEditor.cpp
         src/dusk/imgui/ImGuiStateShare.hpp
         src/dusk/imgui/ImGuiStateShare.cpp
+        src/dusk/iso_validate.cpp
         src/dusk/offset_ptr.cpp
         src/dusk/OSContext.cpp
         src/dusk/OSThread.cpp

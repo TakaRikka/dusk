@@ -1,6 +1,7 @@
 #include "fmt/format.h"
 #include "imgui.h"
 
+#include "ImGuiEngine.hpp"
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuGame.hpp"
 #include "ImGuiConfig.hpp"
@@ -32,15 +33,17 @@ namespace dusk {
     void ImGuiMenuGame::draw() {
         if (ImGui::BeginMenu("Game")) {
             if (ImGui::BeginMenu("Graphics")) {
-                if (ImGui::MenuItem("Toggle Fullscreen", hotkeys::TOGGLE_FULLSCREEN)) {
-                    ToggleFullscreen();
-                }
+                if (!IsMobile) {
+                    if (ImGui::MenuItem("Toggle Fullscreen", hotkeys::TOGGLE_FULLSCREEN)) {
+                        ToggleFullscreen();
+                    }
 
-                if (ImGui::MenuItem("Default Window Size")) {
-                    getSettings().video.enableFullscreen.setValue(false);
-                    VISetWindowFullscreen(false);
-                    VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
-                    VICenterWindow();
+                    if (ImGui::MenuItem("Default Window Size")) {
+                        getSettings().video.enableFullscreen.setValue(false);
+                        VISetWindowFullscreen(false);
+                        VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
+                        VICenterWindow();
+                    }
                 }
 
                 bool vsync = getSettings().video.enableVsync;
@@ -147,7 +150,7 @@ namespace dusk {
                 JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
             }
 
-            if (ImGui::MenuItem("Exit")) {
+            if (!IsMobile && ImGui::MenuItem("Exit")) {
                 dusk::IsRunning = false;
             }
 
@@ -304,6 +307,7 @@ namespace dusk {
                 m_controllerConfig.m_pendingButtonMapping = nullptr;
                 m_controllerConfig.m_pendingPort = -1;
                 PADBlockInput(false);
+                PADSerializeMappings();
             }
         }
 
@@ -316,6 +320,7 @@ namespace dusk {
                 m_controllerConfig.m_pendingAxisMapping = nullptr;
                 m_controllerConfig.m_pendingPort = -1;
                 PADBlockInput(false);
+                PADSerializeMappings();
             } else {
                 auto nativeButton = PADGetNativeButtonPressed(m_controllerConfig.m_pendingPort);
                 if (nativeButton != -1) {
@@ -324,6 +329,7 @@ namespace dusk {
                     m_controllerConfig.m_pendingAxisMapping = nullptr;
                     m_controllerConfig.m_pendingPort = -1;
                     PADBlockInput(false);
+                    PADSerializeMappings();
                 }
             }
         }
@@ -400,11 +406,6 @@ namespace dusk {
                 // if "None" selected
                 PADClearPort(m_controllerConfig.m_selectedPort);
             }
-        }
-
-        // save mappings button
-        ImGui::SameLine();
-        if (ImGui::Button("Save")) {
             PADSerializeMappings();
         }
 
@@ -412,6 +413,7 @@ namespace dusk {
         ImGui::SameLine();
         if (ImGui::Button("Default")) {
             PADRestoreDefaultMapping(m_controllerConfig.m_selectedPort);
+            PADSerializeMappings();
         }
 
         // buttons panel
@@ -508,6 +510,7 @@ namespace dusk {
                 float tmp = static_cast<float>(deadZones->leftTriggerActivationZone * 100.f) / 32767.f;
                 if (ImGui::DragFloat("##LThreshold", &tmp, 0.5f, 0.f, 100.f, "%.3f%%")) {
                     deadZones->leftTriggerActivationZone = static_cast<u16>((tmp / 100.f) * 32767);
+                    PADSerializeMappings();
                 }
             }
         }
@@ -519,6 +522,7 @@ namespace dusk {
                 float tmp = static_cast<float>(deadZones->rightTriggerActivationZone * 100.f) / 32767.f;
                 if (ImGui::DragFloat("##RThreshold", &tmp, 0.5f, 0.f, 100.f, "%.3f%%")) {
                     deadZones->rightTriggerActivationZone = static_cast<u16>((tmp / 100.f) * 32767);
+                    PADSerializeMappings();
                 }
             }
         }
@@ -581,6 +585,7 @@ namespace dusk {
                 float tmp = static_cast<float>(deadZones->stickDeadZone * 100.f) / 32767.f;
                 if (ImGui::DragFloat("##mainDeadZone", &tmp, 0.5f, 0.f, 100.f, "%.3f%%")) {
                     deadZones->stickDeadZone = static_cast<u16>((tmp / 100.f) * 32767);
+                    PADSerializeMappings();
                 }
             }
         }
@@ -643,6 +648,7 @@ namespace dusk {
                 float tmp = static_cast<float>(deadZones->substickDeadZone * 100.f) / 32767.f;
                 if (ImGui::DragFloat("##subDeadZone", &tmp, 0.5f, 0.f, 100.f, "%.3f%%")) {
                     deadZones->substickDeadZone = static_cast<u16>((tmp / 100.f) * 32767);
+                    PADSerializeMappings();
                 }
             }
         }
@@ -654,8 +660,12 @@ namespace dusk {
         ImGuiBeginGroupPanel("Options", ImVec2(150 * scale, 20 * scale));
 
         if (deadZones != nullptr) {
-            ImGui::Checkbox("Enable Dead Zones", &deadZones->useDeadzones);
-            ImGui::Checkbox("Emulate Triggers", &deadZones->emulateTriggers);
+            if (ImGui::Checkbox("Enable Dead Zones", &deadZones->useDeadzones)) {
+                PADSerializeMappings();
+            }
+            if (ImGui::Checkbox("Emulate Triggers", &deadZones->emulateTriggers)) {
+                PADSerializeMappings();
+            }
         }
 
         ImGuiEndGroupPanel();

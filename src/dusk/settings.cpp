@@ -36,6 +36,7 @@ UserSettings g_userSettings = {
         .noMissClimbing {"game.noMissClimbing", false},
         .fastTears {"game.fastTears", false},
         .instantSaves {"game.instantSaves", false},
+        .instantText {"game.instantText", false},
         .sunsSong {"game.sunsSong", false},
 
         // Preferences
@@ -56,10 +57,14 @@ UserSettings g_userSettings = {
 
         // Input
         .enableGyroAim {"game.enableGyroAim", false},
-        .gyroAimSensitivityX {"game.gyroAimSensitivityX", 1.0f},
-        .gyroAimSensitivityY {"game.gyroAimSensitivityY", 1.0f},
-        .gyroAimInvertPitch {"game.gyroAimInvertPitch", false},
-        .gyroAimInvertYaw {"game.gyroAimInvertYaw", false},
+        .enableGyroRollgoal {"game.enableGyroRollgoal", false},
+        .gyroSensitivityX {"game.gyroSensitivityX", 1.0f},
+        .gyroSensitivityY {"game.gyroSensitivityY", 1.0f},
+        .gyroSensitivityRollgoal {"game.gyroSensitivityRollgoal", 1.0f},
+        .gyroSmoothing {"game.gyroSmoothing", 0.65f},
+        .gyroDeadband {"game.gyroDeadband", 0.04f},
+        .gyroInvertPitch {"game.gyroInvertPitch", false},
+        .gyroInvertYaw {"game.gyroInvertYaw", false},
 
         // Cheats
         .enableFastIronBoots {"game.enableFastIronBoots", false},
@@ -80,7 +85,8 @@ UserSettings g_userSettings = {
         .skipPreLaunchUI {"backend.skipPreLaunchUI", false},
         .showPipelineCompilation {"backend.showPipelineCompilation", false},
         .wasPresetChosen {"backend.wasPresetChosen", false},
-        .enableCrashReporting {"backend.enableCrashReporting", true}
+        .enableCrashReporting {"backend.enableCrashReporting", true},
+        .duskMenuOpen {"backend.duskMenuOpen", false}
     }
 };
 
@@ -117,6 +123,7 @@ void registerSettings() {
     Register(g_userSettings.game.fastClimbing);
     Register(g_userSettings.game.fastTears);
     Register(g_userSettings.game.instantSaves);
+    Register(g_userSettings.game.instantText);
     Register(g_userSettings.game.sunsSong);
     Register(g_userSettings.game.enableMirrorMode);
     Register(g_userSettings.game.invertCameraXAxis);
@@ -136,10 +143,14 @@ void registerSettings() {
     Register(g_userSettings.game.fastSpinner);
     Register(g_userSettings.game.enableFrameInterpolation);
     Register(g_userSettings.game.enableGyroAim);
-    Register(g_userSettings.game.gyroAimSensitivityX);
-    Register(g_userSettings.game.gyroAimSensitivityY);
-    Register(g_userSettings.game.gyroAimInvertPitch);
-    Register(g_userSettings.game.gyroAimInvertYaw);
+    Register(g_userSettings.game.enableGyroRollgoal);
+    Register(g_userSettings.game.gyroSensitivityX);
+    Register(g_userSettings.game.gyroSensitivityY);
+    Register(g_userSettings.game.gyroSensitivityRollgoal);
+    Register(g_userSettings.game.gyroDeadband);
+    Register(g_userSettings.game.gyroSmoothing);
+    Register(g_userSettings.game.gyroInvertPitch);
+    Register(g_userSettings.game.gyroInvertYaw);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.graphicsBackend);
@@ -147,6 +158,7 @@ void registerSettings() {
     Register(g_userSettings.backend.showPipelineCompilation);
     Register(g_userSettings.backend.wasPresetChosen);
     Register(g_userSettings.backend.enableCrashReporting);
+    Register(g_userSettings.backend.duskMenuOpen);
 }
 
 // Transient settings

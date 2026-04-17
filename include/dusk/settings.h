@@ -62,6 +62,7 @@ struct UserSettings {
         ConfigVar<bool> noMissClimbing;
         ConfigVar<bool> fastTears;
         ConfigVar<bool> instantSaves;
+        ConfigVar<bool> instantText;
         ConfigVar<bool> sunsSong;
 
         // Preferences
@@ -82,10 +83,14 @@ struct UserSettings {
 
         // Input
         ConfigVar<bool> enableGyroAim;
-        ConfigVar<float> gyroAimSensitivityX;
-        ConfigVar<float> gyroAimSensitivityY;
-        ConfigVar<bool> gyroAimInvertPitch;
-        ConfigVar<bool> gyroAimInvertYaw;
+        ConfigVar<bool> enableGyroRollgoal;
+        ConfigVar<float> gyroSensitivityX;
+        ConfigVar<float> gyroSensitivityY;
+        ConfigVar<float> gyroSensitivityRollgoal;
+        ConfigVar<float> gyroSmoothing;
+        ConfigVar<float> gyroDeadband;
+        ConfigVar<bool> gyroInvertPitch;
+        ConfigVar<bool> gyroInvertYaw;
 
         // Cheats
         ConfigVar<bool> enableFastIronBoots;
@@ -107,6 +112,7 @@ struct UserSettings {
         ConfigVar<bool> showPipelineCompilation;
         ConfigVar<bool> wasPresetChosen;
         ConfigVar<bool> enableCrashReporting;
+        ConfigVar<bool> duskMenuOpen;
     } backend;
 };
 

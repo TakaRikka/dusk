@@ -3776,7 +3776,7 @@ bool dFile_select_c::yesnoWakuAlpahAnm(u8 param_1) {
 #if TARGET_PC
 void dFile_select_c::fileSelectWide() {
     mYnSel.ScrYn->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
-    mYnSel.ScrYn->translate(mDoGph_gInf_c::getMinXF(), 0.0f);
+    mYnSel.ScrYn->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
 
     mYnSel.ScrYn->search(MULTI_CHAR('w_no_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     mYnSel.ScrYn->search(MULTI_CHAR('f_no_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
@@ -3784,7 +3784,7 @@ void dFile_select_c::fileSelectWide() {
     mYnSel.ScrYn->search(MULTI_CHAR('f_yes_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
 
     m3mSel.Scr3m->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
-    m3mSel.Scr3m->translate(mDoGph_gInf_c::getMinXF(), 0.0f);
+    m3mSel.Scr3m->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
 
     m3mSel.Scr3m->search(MULTI_CHAR('w_sta'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     m3mSel.Scr3m->search(MULTI_CHAR('f_sta'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
@@ -3794,7 +3794,7 @@ void dFile_select_c::fileSelectWide() {
     m3mSel.Scr3m->search(MULTI_CHAR('f_cop_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
 
     fileSel.Scr->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
-    fileSel.Scr->translate(mDoGph_gInf_c::getMinXF(), 0.0f);
+    fileSel.Scr->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
 
     fileSel.Scr->search(MULTI_CHAR('t_for'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     fileSel.Scr->search(MULTI_CHAR('t_for1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
@@ -5584,7 +5584,13 @@ void dFile_select3D_c::createMirrorModel() {
 void dFile_select3D_c::toItem3Dpos(f32 param_0, f32 param_1, f32 param_2, cXyz* param_3) {
     Mtx adStack_98;
     Mtx auStack_c8;
+#if TARGET_PC
+    param_0 =
+        (2.0f * ((param_0 - mDoGph_gInf_c::getSafeMinXF()) / mDoGph_gInf_c::getSafeWidthF()) -
+         1.0f);
+#else
     param_0 = (2.0f * ((param_0 - mDoGph_gInf_c::getMinXF()) / mDoGph_gInf_c::getWidthF()) - 1.0f);
+#endif
     param_1 = (2.0f * ((param_1 - -100.0f) / FB_HEIGHT_BASE) - 1.0f);
     calcViewMtx(adStack_98);
     cMtx_inverse(adStack_98, auStack_c8);
@@ -5601,4 +5607,3 @@ void dFile_select3D_c::calcViewMtx(Mtx param_0) {
     cXyz pos2(0.0f, 1.0f, 0.0f);
     cMtx_lookAt(param_0, &pos1, &cXyz::Zero, &pos2, 0);
 }
-

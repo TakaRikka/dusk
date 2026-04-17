@@ -456,6 +456,12 @@ void dRenderingFDAmap_c::preRenderingMap() {
     GXSetClipMode(GX_CLIP_ENABLE);
     setTevSettingNonTextureDirectColor();
     f32 right = field_0x8 * 0.5f;
+#if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        right = field_0x8 * -0.5f;
+    }
+#endif
+
     f32 top = field_0xc * 0.5f;
     Mtx44 matrix;
     C_MTXOrtho(matrix, top, -top, -right, right, 0.0f, 10000.0f);

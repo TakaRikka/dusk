@@ -47,6 +47,8 @@
 #endif
 
 #if TARGET_PC
+#include <SDL3/SDL_video.h>
+#include "aurora/lib/window.hpp"
 #include "d/actor/d_a_horse.h"
 #include "dusk/dusk.h"
 #include "dusk/endian.h"
@@ -636,8 +638,9 @@ void mDoGph_gInf_c::setTvSize() {
     m_invScale = 1.0f / m_scale;
 
 #if TARGET_PC
-    hudAspectScaleDown = 1.3571428f / mDoGph_gInf_c::getAspect();
-    hudAspectScaleUp = 1.0f / hudAspectScaleDown;
+    updateSafeAreaBounds();
+    hudAspectScaleUp = getSafeWidthF() / FB_WIDTH_BASE;
+    hudAspectScaleDown = FB_WIDTH_BASE / getSafeWidthF();
 #endif
 }
 
@@ -765,6 +768,88 @@ void mDoGph_gInf_c::setWideZoomLightProjection(Mtx& m) {
 #if TARGET_PC
 f32 mDoGph_gInf_c::hudAspectScaleDown = 1.0f;
 f32 mDoGph_gInf_c::hudAspectScaleUp = 1.0f;
+f32 mDoGph_gInf_c::m_safeMinXF = 0.0f;
+f32 mDoGph_gInf_c::m_safeMinYF = 0.0f;
+f32 mDoGph_gInf_c::m_safeMaxXF = FB_WIDTH_BASE;
+f32 mDoGph_gInf_c::m_safeMaxYF = FB_HEIGHT_BASE;
+f32 mDoGph_gInf_c::m_safeWidthF = FB_WIDTH_BASE;
+f32 mDoGph_gInf_c::m_safeHeightF = FB_HEIGHT_BASE;
+
+void mDoGph_gInf_c::updateSafeAreaBounds() {
+    m_safeMinXF = m_minXF;
+    m_safeMinYF = m_minYF;
+    m_safeMaxXF = m_maxXF;
+    m_safeMaxYF = m_maxYF;
+    m_safeWidthF = m_widthF;
+    m_safeHeightF = m_heightF;
+
+    SDL_Window* window = aurora::window::get_sdl_window();
+    if (window == NULL) {
+        return;
+    }
+
+    const AuroraWindowSize windowSize = aurora::window::get_window_size();
+    const f32 windowWidth = static_cast<f32>(windowSize.width);
+    const f32 windowHeight = static_cast<f32>(windowSize.height);
+    if (windowWidth <= 0.0f || windowHeight <= 0.0f) {
+        return;
+    }
+
+    SDL_Rect safeRect{};
+    if (!SDL_GetWindowSafeArea(window, &safeRect)) {
+        return;
+    }
+
+    if (windowSize.native_fb_width == 0 || windowSize.native_fb_height == 0 ||
+        windowSize.fb_width == 0 || windowSize.fb_height == 0)
+    {
+        return;
+    }
+
+    const f32 nativeScaleX = static_cast<f32>(windowSize.native_fb_width) / windowWidth;
+    const f32 nativeScaleY = static_cast<f32>(windowSize.native_fb_height) / windowHeight;
+
+    const f32 safeLeft = static_cast<f32>(safeRect.x) * nativeScaleX;
+    const f32 safeTop = static_cast<f32>(safeRect.y) * nativeScaleY;
+    const f32 safeRight = static_cast<f32>(safeRect.x + safeRect.w) * nativeScaleX;
+    const f32 safeBottom = static_cast<f32>(safeRect.y + safeRect.h) * nativeScaleY;
+
+    const f32 viewportLeft =
+        (static_cast<f32>(windowSize.native_fb_width) - static_cast<f32>(windowSize.fb_width)) *
+        0.5f;
+    const f32 viewportTop =
+        (static_cast<f32>(windowSize.native_fb_height) - static_cast<f32>(windowSize.fb_height)) *
+        0.5f;
+    const f32 viewportRight = viewportLeft + static_cast<f32>(windowSize.fb_width);
+    const f32 viewportBottom = viewportTop + static_cast<f32>(windowSize.fb_height);
+
+    const f32 leftInset = std::max(0.0f, safeLeft - viewportLeft) *
+                          (m_widthF / static_cast<f32>(windowSize.fb_width));
+    const f32 topInset = std::max(0.0f, safeTop - viewportTop) *
+                         (m_heightF / static_cast<f32>(windowSize.fb_height));
+    const f32 rightInset = std::max(0.0f, viewportRight - safeRight) *
+                           (m_widthF / static_cast<f32>(windowSize.fb_width));
+    const f32 bottomInset = std::max(0.0f, viewportBottom - safeBottom) *
+                            (m_heightF / static_cast<f32>(windowSize.fb_height));
+
+    const f32 safeMinXF = m_minXF + leftInset;
+    const f32 safeMinYF = m_minYF + topInset;
+    const f32 safeMaxXF = m_maxXF - rightInset;
+    const f32 safeMaxYF = m_maxYF - bottomInset;
+    const f32 safeWidthF = safeMaxXF - safeMinXF;
+    const f32 safeHeightF = safeMaxYF - safeMinYF;
+
+    if (safeWidthF <= 0.0f || safeHeightF <= 0.0f) {
+        return;
+    }
+
+    m_safeMinXF = safeMinXF;
+    m_safeMinYF = safeMinYF;
+    m_safeMaxXF = safeMaxXF;
+    m_safeMaxYF = safeMaxYF;
+    m_safeWidthF = safeWidthF;
+    m_safeHeightF = safeHeightF;
+}
 
 void mDoGph_gInf_c::setWindowSize(AuroraWindowSize const& size) {
     JUTVideo::getManager()->setWindowSize(size);
@@ -1344,6 +1429,11 @@ void mDoGph_gInf_c::bloom_c::draw2() {
             static_cast<u16>(prev.h / 2),
         };
     }
+    for (int i = 0; i < ARRAY_SIZE(divRects); i++) {
+        auto & rect = divRects[i];
+        if (rect.w == 0) rect.w = 1;
+        if (rect.h == 0) rect.h = 1;
+    }
 
     auto divCopySrc = [&](int divNo) {
         auto const& rect = divRects[divNo];
@@ -1390,7 +1480,7 @@ void mDoGph_gInf_c::bloom_c::draw2() {
 
     if (enabled) {
         GXCreateFrameBuffer(width * 0.75f, height * 0.5f);
-        GXSetViewport(0.0f, 0.0f, width, height, 0.1f, 1.0f); // use oversized viewport to make the math easier
+        GXSetViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f); // use oversized viewport to make the math easier
 
         GXSetNumTevStages(3);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
@@ -1432,16 +1522,16 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         // Setup blur filter TEV.
         GXSetNumTexGens(8);
 
-            u32 texMtxID = GX_TEXMTX0;
-            int angle = 0;
-            for (int texCoord = (int)GX_TEXCOORD0; texCoord < (int)GX_MAX_TEXCOORD; texCoord++) {
-                GXSetTexCoordGen((GXTexCoordID)texCoord, GX_TG_MTX2x4, GX_TG_TEX0, texMtxID);
-                mDoMtx_stack_c::transS((blurScale * cM_scos(angle)) * getInvScale(),
-                                       blurScale * cM_ssin(angle), 0.0f);
-                GXLoadTexMtxImm(mDoMtx_stack_c::get(), texMtxID, GX_MTX2x4);
-                texMtxID += 3;
-                angle += 0x2000;
-            }
+        u32 texMtxID = GX_TEXMTX0;
+        int angle = 0;
+        for (int texCoord = (int)GX_TEXCOORD0; texCoord < (int)GX_MAX_TEXCOORD; texCoord++) {
+            GXSetTexCoordGen((GXTexCoordID)texCoord, GX_TG_MTX2x4, GX_TG_TEX0, texMtxID);
+            mDoMtx_stack_c::transS((blurScale * cM_scos(angle)) * getInvScale(),
+                                   blurScale * cM_ssin(angle), 0.0f);
+            GXLoadTexMtxImm(mDoMtx_stack_c::get(), texMtxID, GX_MTX2x4);
+            texMtxID += 3;
+            angle += 0x2000;
+        }
 
         GXSetNumTevStages(8);
         for (int stage = 0; stage < 8; stage++) {
@@ -1488,7 +1578,7 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_ONE, GX_LO_OR);
         for (int i = divNum; i > divStart; i--) {
-            float alpha = 255.0f * powf(0.25f * dusk::getSettings().game.bloomMultiplier.getValue(), 1.0f / (divNum - i + 1));
+            float alpha = 255.0f * powf(0.25f * dusk::getSettings().game.bloomMultiplier.getValue(), 1.0f / (i - divStart + 1));
             GXSetTevColorS10(GX_TEVREG0, {0, 0, 0, s16(alpha)});
 
             divCopySrc(i);
@@ -1503,7 +1593,6 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         GXLoadTexObj(texFinal, GX_TEXMAP0);
 
         GXRestoreFrameBuffer();
-        GXSetViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f);
 
         // Now blend our bloom into the real FB.
         GXSetTevColor(GX_TEVREG0, mBlendColor);
@@ -2229,13 +2318,11 @@ int mDoGph_Painter() {
 
 #if TARGET_PC
             if (dusk::getSettings().game.enableFrameInterpolation) {
-                cXyz pres_eye;
-                dusk::frame_interp::camera_eye_from_view_mtx(j3dSys.getViewMtx(), &pres_eye);
                 // FRAME INTERP NOTE: Currently only recalculating points for Epona's reins. Need a more global solution.
                 if (daHorse_c* horse = dComIfGp_getHorseActor()) {
                     horse->lerpControlPoints(dusk::frame_interp::get_interpolation_step());
                 }
-                g_dComIfG_gameInfo.drawlist.refresh3DlineMats(pres_eye);
+                g_dComIfG_gameInfo.drawlist.refresh3DlineMats(camera_p->view.lookat.eye);
             }
 #endif
 
