@@ -65,6 +65,11 @@ namespace dusk {
                     ImGui::SetTooltip("Skip the delay when writing to the Memory Card.");
                 }
 
+                config::ImGuiCheckbox("Hold B for Instant Text", getSettings().game.instantText);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Make text scroll immediately by holding B.");
+                }
+
                 config::ImGuiCheckbox("No Climbing Miss Animation", getSettings().game.noMissClimbing);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Prevents Link from playing a struggle animation\n"
