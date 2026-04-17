@@ -1,7 +1,3 @@
-//
-// Created by carlw on 4/17/2026.
-//
-
 #ifndef DUSK_SCOPE_GUARD_HPP
 #define DUSK_SCOPE_GUARD_HPP
 
