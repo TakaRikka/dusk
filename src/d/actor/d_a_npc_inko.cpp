@@ -110,6 +110,10 @@ static int daNpc_Inko_Execute(npc_inko_class* i_this) {
     }
 
     f32 var_f31;
+    
+    #if AVOID_UB
+    var_f31 = 0.0f;
+    #endif
     if (i_this->field_0x598 == 0) {
         if (i_this->field_0x59c[1] == 0) {
             i_this->field_0x59c[1] = 30.0f + cM_rndF(70.0f);
