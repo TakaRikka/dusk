@@ -202,9 +202,9 @@ void main01(void) {
     if (preLaunchUIWindowSize.width != 0)
         mDoGph_gInf_c::setWindowSize(preLaunchUIWindowSize);
 
-    constexpr double kSimStepSeconds = 1.0 / 30.0;
+    constexpr float kSimStepSeconds = 1.0 / 30.0;
     auto previous_time = std::chrono::steady_clock::now();
-    double accumulator = kSimStepSeconds;
+    float accumulator = kSimStepSeconds;
 
     do {
         // 1. Update Window Events
@@ -229,7 +229,7 @@ void main01(void) {
         eventsDone:;
 
         auto current_time = std::chrono::steady_clock::now();
-        double frame_seconds = std::chrono::duration<double>(current_time - previous_time).count();
+        float frame_seconds = std::chrono::duration<float>(current_time - previous_time).count();
         previous_time = current_time;
         accumulator += frame_seconds;
 
@@ -243,12 +243,12 @@ void main01(void) {
 
         if (dusk::getSettings().game.enableFrameInterpolation && !dusk::getTransientSettings().skipFrameRateLimit) {
             dusk::frame_interp::notify_presentation_frame();
-            while (accumulator >= kSimStepSeconds) {
+            if (accumulator >= kSimStepSeconds) {
                 mDoCPd_c::read();
                 dusk::gyro::read(kSimStepSeconds);
                 fapGm_Execute();
                 mDoAud_Execute();
-                accumulator -= kSimStepSeconds;
+                accumulator = 0.0f;
             }
             dusk::frame_interp::interpolate(static_cast<float>(accumulator / kSimStepSeconds));
             {
@@ -256,7 +256,7 @@ void main01(void) {
                 cAPIGph_Painter();
             }
         } else {
-            accumulator = 0.0;
+            accumulator = 0.0f;
             
             // Game Inputs
             mDoCPd_c::read();
