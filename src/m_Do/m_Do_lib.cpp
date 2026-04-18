@@ -108,6 +108,12 @@ void mDoLib_project(Vec* src, Vec* dst) {
     }
 
     dst->x = ((0.5f + (multVec.x * calcFloat)) * xSize) + xOffset;
+    #if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        dst->x = ((0.5f + (-multVec.x * calcFloat)) * xSize) + xOffset;
+    }
+    #endif
+
     dst->y = ((0.5f + (multVec.y * (-calcFloat))) * ySize) + yOffset;
 }
 
@@ -171,6 +177,12 @@ void mDoLib_project(Vec* src, Vec* dst, JGeometry::TBox2<f32> viewport) {
     }
 
     dst->x = ((0.5f + (multVec.x * calcFloat)) * xSize) + xOffset;
+    #if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        dst->x = ((0.5f + (-multVec.x * calcFloat)) * xSize) + xOffset;
+    }
+    #endif
+
     dst->y = ((0.5f + (multVec.y * (-calcFloat))) * ySize) + yOffset;
 }
 #endif

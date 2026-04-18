@@ -1,103 +1,59 @@
-## Dusk
+![DuskLogo](res/logo-mascot.webp)
 
-### Building
-#### Prerequisites
-* [CMake 3.25+](https://cmake.org)
-    * Windows: Install `CMake Tools` in Visual Studio
-    * macOS: `brew install cmake`
-* [Python 3+](https://python.org)
-    * Windows: [Microsoft Store](https://go.microsoft.com/fwlink?linkID=2082640)
-        * Verify it's added to `%PATH%` by typing `python` in `cmd`.
-    * macOS: `brew install python@3`
-* **[Windows]** [Visual Studio 2026 Community](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx)
-    * Select `C++ Development` and verify the following packages are included:
-        * `Windows 11 SDK`
-        * `CMake Tools`
-        * `C++ Clang Compiler`
-        * `C++ Clang-cl`
-* **[macOS]** [Xcode 16.4+](https://developer.apple.com/xcode/download/)
-* **[Linux]** Actively tested on Ubuntu 24.04, Arch Linux & derivatives.
-    * Ubuntu 24.04+ packages
-      ```
-      build-essential curl git ninja-build clang lld zlib1g-dev libcurl4-openssl-dev \
-      libglu1-mesa-dev libdbus-1-dev libvulkan-dev libxi-dev libxrandr-dev libasound2-dev libpulse-dev \
-      libudev-dev libpng-dev libncurses5-dev cmake libx11-xcb-dev python3 python-is-python3 \
-      libclang-dev libfreetype-dev libxinerama-dev libxcursor-dev python3-markupsafe libgtk-3-dev \
-      libxss-dev libxtst-dev
-      ```
-     * Arch Linux packages
-       ```
-       base-devel cmake ninja llvm vulkan-headers python python-markupsafe clang lld alsa-lib libpulse libxrandr freetype2
-       ```
-     * Fedora packages
-       ```
-       cmake vulkan-headers ninja-build clang-devel llvm-devel libpng-devel
-       ```
-         * It's also important that you install the developer tools and libraries
-           ```
-           sudo dnf groupinstall "Development Tools" "Development Libraries"
-           ```
-#### Setup
-Clone and initialize the Dusk repository
-```sh
-git clone --recursive https://github.com/TwilitRealm/dusk.git
-cd dusk
-git pull
-git submodule update --init --recursive
-```
+- ### **[Official Website](https://twilitrealm.dev)**
+- ### **[Discord](https://discord.gg/QACynxeyna)**
 
-#### Building
+# Setup
+**⚠️Dusk does NOT provide any copyrighted assets. You must provide your own copy of the game.**
 
-**CLion (Windows / macOS / Linux)**
+### 1. Verify your ROM dump
+First make sure your dump of the game is clean and supported by Dusk. You can do this by checking the sha1 hash of your dump against this list of supported versions.
 
-Open the project directory in CLion. Enable the appropriate presets for your platform:
+| Version      | sha1 hash                                |
+| ------------ | ---------------------------------------- |
+| GameCube USA | 75edd3ddff41f125d1b4ce1a40378f1b565519e7 |
 
-![CLion](assets/clion.png)
+### 2. Download [Dusk](https://github.com/TwilitRealm/dusk/releases)
 
-**Visual Studio (Windows)**
+### 3. Setup the game
+#### Windows
+- Extract the zip folder
+- Place your dump of the game into the same folder where you extracted to
+- Launch `dusk.exe`
 
-Open the project directory in Visual Studio. The CMake configuration will be loaded automatically.
+#### macOS
+- TODO
 
-**ninja (macOS)**
+#### Linux
+- TODO
 
-```sh
-cmake --preset macos-default-relwithdebinfo
-cmake --build --preset macos-default-relwithdebinfo
-```
+#### iOS
+- TODO
 
-Alternate presets available:
-- `macos-default-debug`: Clang, Debug
+#### android
+- TODO
 
-**ninja (Linux)**
+# Building
+If you'd like to build Dusk from source, please read the [build instructions](docs/building.md).
 
-```sh
-cmake --preset linux-default-relwithdebinfo
-cmake --build --preset linux-default-relwithdebinfo
-```
+# Credits
+- Taka
+- encounter
+- Antidote
+- caseif
+- CraftyBoss
+- crowell
+- dooplecks
+- gymnast86
+- Irastris
+- kipcode66
+- Lars
+- LunarSoap
+- Maddie
+- MelonSpeedruns
+- Pheenoh
+- PJB
+- Roeming
+- YunataSavior
 
-Alternate presets available:
-- `linux-default-debug`: GCC, Debug
-- `linux-clang-relwithdebinfo`: Clang, RelWithDebInfo
-- `linux-clang-debug`: Clang, Debug
-
-**ninja (Windows)**
-
-```sh
-cmake --preset windows-msvc-relwithdebinfo
-cmake --build --preset windows-msvc-relwithdebinfo
-```
-
-Alternate presets available:
-- `windows-msvc-debug`: MSVC, Debug
-- `windows-clang-relwithdebinfo`: Clang-cl, RelWithDebInfo
-- `windows-clang-debug`: Clang-cl, Debug
-
-#### Running
-Pass the disc image as a positional argument. Supported formats: ISO (GCM), RVZ, WIA, WBFS, CISO, GCZ
-```sh
-build/{preset}/dusk /path/to/game.rvz
-```
-If no path is specified, Dusk defaults to `game.iso` in the current working directory.
-
-#### 30 FPS on Debug
-When compiled fully in a Debug the game runs too slowly to hit playable 30 FPS. To avoid this, you can set a CMake cache variable to optimize specific critical files without hampering debuggability in the rest of the program: `-DDUSK_SELECTED_OPT=ON`. When building for MSVC (Windows) you must also modify `CMAKE_CXX_FLAGS_DEBUG` and `CMAKE_C_FLAGS_DEBUG` to remove `/RTC1` from the flags, like so: `-DCMAKE_CXX_FLAGS_DEBUG="/MDd /Zi /Ob0 /Od" -DCMAKE_C_FLAGS_DEBUG="/MDd /Zi /Ob0 /Od"`
+Special thanks to the TP Decomp team, the GC/Wii Decomp community, the Aurora developers, and the TP speedrunning community.
