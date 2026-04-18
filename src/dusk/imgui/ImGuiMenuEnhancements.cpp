@@ -20,7 +20,6 @@ namespace dusk {
                 DrawColorEdit("Oxygen Meter Bottom", s_meterColorsOverride.oxygen1CustomBottom);
                 DrawColorEdit("Oxygen Meter Top (Low)", s_meterColorsOverride.oxygen2CustomTop);
                 DrawColorEdit("Oxygen Meter Bottom (Low)", s_meterColorsOverride.oxygen2CustomBottom);
-                
 
                 if (ImGui::MenuItem("Reset Meter Colors to default")) {
                     s_meterColorsOverride.lanternCustomTop = {230, 170, 0, 255};
