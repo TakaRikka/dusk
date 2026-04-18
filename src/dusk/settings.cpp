@@ -35,6 +35,7 @@ UserSettings g_userSettings = {
         .noMissClimbing {"game.noMissClimbing", false},
         .fastTears {"game.fastTears", false},
         .instantSaves {"game.instantSaves", false},
+        .instantText {"game.instantText", false},
         .sunsSong {"game.sunsSong", false},
 
         // Preferences
@@ -121,6 +122,7 @@ void registerSettings() {
     Register(g_userSettings.game.fastClimbing);
     Register(g_userSettings.game.fastTears);
     Register(g_userSettings.game.instantSaves);
+    Register(g_userSettings.game.instantText);
     Register(g_userSettings.game.sunsSong);
     Register(g_userSettings.game.enableMirrorMode);
     Register(g_userSettings.game.invertCameraXAxis);

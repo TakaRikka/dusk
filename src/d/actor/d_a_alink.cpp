@@ -4258,6 +4258,12 @@ int daAlink_c::createHeap() {
         return 0;
     }
 
+#if TARGET_PC
+    // lets try to zero-initialize the arrays instead of having garbage values
+    std::memset(sp1C, 0, sizeof(J3DTransformInfo) * sp38);
+    std::memset(sp30, 0, sizeof(Quaternion) * sp38);
+#endif
+
     field_0x2060 = JKR_NEW mDoExt_MtxCalcOldFrame(sp1C, sp30);
     if (field_0x2060 == NULL) {
         return 0;

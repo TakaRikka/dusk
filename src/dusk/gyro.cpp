@@ -35,7 +35,7 @@ bool s_sensor_keep_alive = false;
 bool get_sensor_keep_alive() { return s_sensor_keep_alive; }
 void set_sensor_keep_alive(bool value) { s_sensor_keep_alive = value; }
 
-bool queryGyroAimItemContext() {
+bool queryGyroAimContext() {
     if (!static_cast<bool>(dusk::getSettings().game.enableGyroAim)) {
         return false;
     }
@@ -45,11 +45,11 @@ bool queryGyroAimItemContext() {
         return false;
     }
 
-    return link->checkGyroAimItemContext() && dComIfGp_checkCameraAttentionStatus(link->field_0x317c, 0x10);
+    return link->checkGyroAimContext() && dComIfGp_checkCameraAttentionStatus(link->field_0x317c, 0x10);
 }
 
 void read(float dt) {
-    if (!s_sensor_keep_alive && !(dusk::getSettings().game.enableGyroAim && queryGyroAimItemContext())) {
+    if (!s_sensor_keep_alive && !queryGyroAimContext()) {
         if (s_sensor_enabled) {
             PADSetSensorEnabled(PAD_CHAN0, PAD_SENSOR_GYRO, FALSE);
             s_sensor_enabled = false;

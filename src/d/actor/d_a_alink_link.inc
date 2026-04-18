@@ -130,7 +130,7 @@ BOOL daAlink_c::setBodyAngleToCamera() {
         }
 
 #if TARGET_PC
-        if (dusk::getSettings().game.enableGyroAim && checkGyroAimItemContext()) {
+        if (dusk::getSettings().game.enableGyroAim && checkGyroAimContext()) {
             f32 gyro_scale = 1.0f;
             if (checkWolfEyeUp()) {
                 gyro_scale *= 0.6f;

@@ -61,6 +61,7 @@ struct UserSettings {
         ConfigVar<bool> noMissClimbing;
         ConfigVar<bool> fastTears;
         ConfigVar<bool> instantSaves;
+        ConfigVar<bool> instantText;
         ConfigVar<bool> sunsSong;
 
         // Preferences

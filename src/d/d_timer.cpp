@@ -1341,75 +1341,70 @@ void dDlst_TimerScrnDraw_c::draw() {
                ((f32)g_drawHIO.mMiniGame.mGetInTextWaitFrames + 60.0f);
 
 #if TARGET_PC
-    const u32 pending_ui_ticks = dusk::frame_interp::get_presentation_ui_advance_ticks();
-#else
-    const u32 pending_ui_ticks = 1u;
+    if (dusk::frame_interp::get_ui_tick_pending())
 #endif
-
-    for (int i = 0; i < 51; i++) {
-        for (u32 tick = 0; tick < pending_ui_ticks; tick++) {
-            if (!(m_getin_info[i].bck_frame > 0.0f && m_getin_info[i].bck_frame < temp)) {
-                break;
-            }
-
-            if (m_getin_info[i].bck_frame < 60.0f) {
-                m_getin_info[i].bck_frame += g_drawHIO.mMiniGame.mGetInTextAnimSpeed;
-                if (m_getin_info[i].bck_frame > 60.0f) {
-                    m_getin_info[i].bck_frame = 60.0f;
-                }
-            } else if (m_getin_info[i].bck_frame < g_drawHIO.mMiniGame.mGetInTextWaitFrames + 60.0f) {
-                m_getin_info[i].bck_frame++;
-            } else if (m_getin_info[i].bck_frame < temp) {
-                m_getin_info[i].bck_frame++;
-            }
-        }
-
-        if (m_getin_info[i].bck_frame > 0.0f && m_getin_info[i].bck_frame < temp) {
-            f32 var_f29 = 1.0f;
-            if (m_getin_info[i].bck_frame >= g_drawHIO.mMiniGame.mGetInTextWaitFrames + 60.0f &&
-                m_getin_info[i].bck_frame < temp) {
-                var_f29 = acc(g_drawHIO.mMiniGame.mGetInTextAlphaFrames,
-                              temp - m_getin_info[i].bck_frame, 0);
-            }
-
-            if (m_getin_info[i].bck_frame < 60.0f) {
-                playBckAnimation(m_getin_info[i].bck_frame);
-            } else {
-                playBckAnimation(60.0f);
-            }
-
-            mpGetInParent->setAlphaRate(var_f29);
-
-            if (g_drawHIO.mMiniGame.mGetInTextLocation == 1) {
-                mpGetInRoot->translate(m_getin_info[i].pos_x + g_drawHIO.mMiniGame.mGetInTextPosX,
-                                       m_getin_info[i].pos_y + g_drawHIO.mMiniGame.mGetInTextPosY);
-            } else {
-                f32 temp_f2 = m_getin_info[i].bck_frame - 40.0f;
-                f32 var_f3 = ((temp_f2 * 0.5f) * temp_f2) * 0.15f;
-                if (i == 0) {
-                    var_f3 = 0.0f;
-                }
-
-                mpGetInRoot->paneTrans(
-                    m_getin_info[i].pos_x + g_drawHIO.mMiniGame.mGetInTextPosX,
-                    (m_getin_info[i].pos_y + g_drawHIO.mMiniGame.mGetInTextPosY) - var_f3);
-            }
-
-            mpGetInRoot->scale(g_drawHIO.mMiniGame.mGetInTextSizeX,
-                               g_drawHIO.mMiniGame.mGetInTextSizeY);
-            mpGetInScreen->draw(0.0f, 0.0f, graf_ctx);
-
-            if (m_getin_info[i].pikari_frame > 0.0f) {
-                drawPikari(i);
-            } else if (m_getin_info[i].pikari_frame == -1.0f) {
-                if (m_getin_info[i].field_0xc == 0) {
-                    if (m_getin_info[i].bck_frame > g_drawHIO.mMiniGame.mGetInPikariAppearFrames) {
-                        m_getin_info[i].pikari_frame =
-                            18.0f - g_drawHIO.mMiniGame.mGetInPikariAnimSpeed;
+    {
+        for (int i = 0; i < 51; i++) {
+            if (m_getin_info[i].bck_frame > 0.0f && m_getin_info[i].bck_frame < temp) {
+                if (m_getin_info[i].bck_frame < 60.0f) {
+                    m_getin_info[i].bck_frame += g_drawHIO.mMiniGame.mGetInTextAnimSpeed;
+                    if (m_getin_info[i].bck_frame > 60.0f) {
+                        m_getin_info[i].bck_frame = 60.0f;
                     }
-                } else if (m_getin_info[i].bck_frame > g_drawHIO.mMiniGame.mStartPikariAppearFrames) {
-                    m_getin_info[i].pikari_frame =
-                        18.0f - g_drawHIO.mMiniGame.mStartPikariAnimSpeed;
+                } else if (m_getin_info[i].bck_frame < g_drawHIO.mMiniGame.mGetInTextWaitFrames + 60.0f) {
+                    m_getin_info[i].bck_frame++;
+                } else if (m_getin_info[i].bck_frame < temp) {
+                    m_getin_info[i].bck_frame++;
+                }
+            }
+
+            if (m_getin_info[i].bck_frame > 0.0f && m_getin_info[i].bck_frame < temp) {
+                f32 var_f29 = 1.0f;
+                if (m_getin_info[i].bck_frame >= g_drawHIO.mMiniGame.mGetInTextWaitFrames + 60.0f &&
+                    m_getin_info[i].bck_frame < temp) {
+                    var_f29 = acc(g_drawHIO.mMiniGame.mGetInTextAlphaFrames,
+                                temp - m_getin_info[i].bck_frame, 0);
+                }
+
+                if (m_getin_info[i].bck_frame < 60.0f) {
+                    playBckAnimation(m_getin_info[i].bck_frame);
+                } else {
+                    playBckAnimation(60.0f);
+                }
+
+                mpGetInParent->setAlphaRate(var_f29);
+
+                if (g_drawHIO.mMiniGame.mGetInTextLocation == 1) {
+                    mpGetInRoot->translate(m_getin_info[i].pos_x + g_drawHIO.mMiniGame.mGetInTextPosX,
+                                        m_getin_info[i].pos_y + g_drawHIO.mMiniGame.mGetInTextPosY);
+                } else {
+                    f32 temp_f2 = m_getin_info[i].bck_frame - 40.0f;
+                    f32 var_f3 = ((temp_f2 * 0.5f) * temp_f2) * 0.15f;
+                    if (i == 0) {
+                        var_f3 = 0.0f;
+                    }
+
+                    mpGetInRoot->paneTrans(
+                        m_getin_info[i].pos_x + g_drawHIO.mMiniGame.mGetInTextPosX,
+                        (m_getin_info[i].pos_y + g_drawHIO.mMiniGame.mGetInTextPosY) - var_f3);
+                }
+
+                mpGetInRoot->scale(g_drawHIO.mMiniGame.mGetInTextSizeX,
+                                g_drawHIO.mMiniGame.mGetInTextSizeY);
+                mpGetInScreen->draw(0.0f, 0.0f, graf_ctx);
+
+                if (m_getin_info[i].pikari_frame > 0.0f) {
+                    drawPikari(i);
+                } else if (m_getin_info[i].pikari_frame == -1.0f) {
+                    if (m_getin_info[i].field_0xc == 0) {
+                        if (m_getin_info[i].bck_frame > g_drawHIO.mMiniGame.mGetInPikariAppearFrames) {
+                            m_getin_info[i].pikari_frame =
+                                18.0f - g_drawHIO.mMiniGame.mGetInPikariAnimSpeed;
+                        }
+                    } else if (m_getin_info[i].bck_frame > g_drawHIO.mMiniGame.mStartPikariAppearFrames) {
+                        m_getin_info[i].pikari_frame =
+                            18.0f - g_drawHIO.mMiniGame.mStartPikariAnimSpeed;
+                    }
                 }
             }
         }

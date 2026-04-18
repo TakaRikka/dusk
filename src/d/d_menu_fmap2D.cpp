@@ -379,16 +379,15 @@ void dMenu_Fmap2DBack_c::draw() {
                         &mArrowPos2DY);
 
 #ifdef TARGET_PC
-        for (u32 i = 0; i < dusk::frame_interp::get_presentation_ui_advance_ticks(); ++i) {
+        if (dusk::frame_interp::get_ui_tick_pending())
 #endif
+        {
             field_0x11e0 -= g_fmapHIO.mCursorSpeed;
 
             if (field_0x11e0 < 0.0f) {
                 field_0x11e0 += 360.0f;
             }
-#ifdef TARGET_PC
         }
-#endif
 
         mpPointParent->getPanePtr()->rotate(mpPointParent->getSizeX() / 2.0f,
                                             mpPointParent->getSizeY() / 2.0f, ROTATE_Z,

@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "f_op/f_op_camera_mng.h"
+#include "m_Do/m_Do_graphic.h"
 
 namespace {
 enum class Op : uint8_t {
@@ -63,11 +64,9 @@ bool g_enabled = false;
 bool g_recording = false;
 bool g_interpolating = false;
 bool g_sync_presentation = false;
-uint32_t g_presentation_counter = 0;
 
 float g_step = 0.0f;
-uint32_t g_pending_presentation_ui_ticks = 0;
-uint32_t g_current_presentation_ui_ticks = 0;
+bool g_ui_tick_pending = false;
 
 Recording g_current_recording;
 Recording g_previous_recording;
@@ -84,6 +83,7 @@ struct CameraSnapshot {
     f32 aspect{};
     f32 near_{};
     f32 far_{};
+    bool wideZoom{};
     bool valid{};
 };
 
@@ -347,6 +347,9 @@ void begin_record() {
         return;
     } else {
         copy_view_to_snap(&s_cam_prev, cam->view);
+#if WIDESCREEN_SUPPORT
+        s_cam_prev.wideZoom = s_cam_curr.valid ? s_cam_curr.wideZoom : false;
+#endif
     }
 }
 
@@ -364,11 +367,6 @@ void interpolate(float step) {
     }
     const Path& old_root = has_recording_data(g_previous_recording) ? g_previous_recording.root : g_current_recording.root;
     interpolate_branch(old_root, g_current_recording.root, g_step);
-}
-
-void notify_presentation_frame() {
-    ensure_initialized();
-    ++g_presentation_counter;
 }
 
 void request_presentation_sync() {
@@ -391,33 +389,14 @@ float get_interpolation_step() {
     return presentation_sync_active() ? 1.0f : g_step;
 }
 
-void notify_sim_tick_complete() {
+void set_ui_tick_pending(bool value) {
+    if (g_ui_tick_pending == value) { return; }
+    g_ui_tick_pending = value;
+}
+
+bool get_ui_tick_pending() {
     ensure_initialized();
-    g_pending_presentation_ui_ticks++;
-}
-
-uint32_t begin_presentation_ui_pass() {
-    ensure_initialized();
-    g_current_presentation_ui_ticks = g_pending_presentation_ui_ticks;
-    g_pending_presentation_ui_ticks = 0;
-    return g_current_presentation_ui_ticks;
-}
-
-uint32_t get_presentation_ui_advance_ticks() {
-    if (!s_initialized) {
-        return 0;
-    }
-    if (!g_enabled) {
-        return 1;
-    }
-    return g_current_presentation_ui_ticks;
-}
-
-void end_presentation_ui_pass() {
-    if (!s_initialized) {
-        return;
-    }
-    g_current_presentation_ui_ticks = 0;
+    return g_enabled ? g_ui_tick_pending : true;
 }
 
 void open_child(const void* key, int32_t id) {
@@ -502,6 +481,9 @@ void record_camera(::camera_process_class* cam, int camera_id) {
         return;
     }
     copy_view_to_snap(&s_cam_curr, cam->view);
+#if WIDESCREEN_SUPPORT
+    s_cam_curr.wideZoom = mDoGph_gInf_c::isWideZoom();
+#endif
 }
 
 void begin_presentation_camera() {
@@ -544,6 +526,13 @@ void begin_presentation_camera() {
     view->aspect = s_cam_prev.aspect + (s_cam_curr.aspect - s_cam_prev.aspect) * step;
     view->near_ = s_cam_prev.near_ + (s_cam_curr.near_ - s_cam_prev.near_) * step;
     view->far_ = s_cam_prev.far_ + (s_cam_curr.far_ - s_cam_prev.far_) * step;
+
+    // FRAME INTERP TODO: It might be better if I rewired the game to not clear this flag until the next sim frame, but I don't care enough to right now
+#if WIDESCREEN_SUPPORT
+    if (mDoGph_gInf_c::isWide() && !mDoGph_gInf_c::isWideZoom() && step >= 0.5f ? s_cam_curr.wideZoom : s_cam_prev.wideZoom) {
+        mDoGph_gInf_c::onWideZoom();
+    }
+#endif
 
     // FRAME INTERP TODO: Largely copied from d_camera's camera_draw function from this point, got any better ideas?
     C_MTXPerspective(view->projMtx, view->fovy, view->aspect, view->near_, view->far_);
@@ -600,6 +589,10 @@ void begin_presentation_camera() {
     }
 
     mDoLib_clipper::setup(view->fovy, view->aspect, view->near_, far_);
+
+#if WIDESCREEN_SUPPORT
+    mDoGph_gInf_c::offWideZoom();
+#endif
 
     s_presentation_depth = 1;
 }

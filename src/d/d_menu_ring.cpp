@@ -29,6 +29,10 @@
 
 #include <cstdio>
 
+#if TARGET_PC
+#include "dusk/game_clock.h"
+#endif
+
 typedef void (dMenu_Ring_c::*initFunc)();
 static initFunc stick_init[] = {
     /* STATUS_WAIT          */ &dMenu_Ring_c::stick_wait_init,
@@ -183,6 +187,9 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     }
     for (int i = 0; i < 4; i++) {
         field_0x674[i] = 0;
+#if TARGET_PC
+        mSelectItemSlideElapsed[i] = 0.0f;
+#endif
         field_0x518[i] = 0.0f;
         field_0x528[i] = 0.0f;
         field_0x538[i] = 0.0f;
@@ -1022,6 +1029,9 @@ void dMenu_Ring_c::setJumpItem(bool i_useVibrationM) {
             field_0x6b8[0] != dComIfGs_getMixItemIndex(0))
         {
             field_0x674[0] = 1;
+#if TARGET_PC
+            mSelectItemSlideElapsed[0] = 0.0f;
+#endif
         }
     } else if (field_0x6b3 == 1) {
         field_0x538[0] = g_ringHIO.mUnselectItemScale;
@@ -1030,6 +1040,9 @@ void dMenu_Ring_c::setJumpItem(bool i_useVibrationM) {
             field_0x6b8[1] != dComIfGs_getMixItemIndex(1))
         {
             field_0x674[1] = 1;
+#if TARGET_PC
+            mSelectItemSlideElapsed[1] = 0.0f;
+#endif
         }
     }
     if (field_0x674[0] == 1) {
@@ -1520,7 +1533,15 @@ void dMenu_Ring_c::setSelectItem(int i_idx, u8 i_itemNo) {
 void dMenu_Ring_c::drawSelectItem() {
     for (int i = 0; i < 4; i++) {
         if (field_0x674[i] != 0) {
+#if TARGET_PC
+            mSelectItemSlideElapsed[i] += dusk::game_clock::consume_interval(this);
+            const f32 u = std::min(mSelectItemSlideElapsed[i] / dusk::game_clock::period_for_original_frames(10.0f), 1.0f);
+            if (u >= 1.0f) {
+                setSelectItemForce(i);
+            } else {
+#else
             if (field_0x674[i] < 10) {
+#endif
                 f32 initSizeX = dMeter2Info_getMeterItemPanePtr(i)->getInitSizeX() * 1.7f;
                 f32 initSizeY = dMeter2Info_getMeterItemPanePtr(i)->getInitSizeY() * 1.7f;
                 f32 initScaleX = dMeter2Info_getMeterItemPanePtr(i)->getInitScaleX();
@@ -1528,7 +1549,11 @@ void dMenu_Ring_c::drawSelectItem() {
                 Vec pos = dMeter2Info_getMeterItemPanePtr(i)->getGlobalVtxCenter(
                     dMeter2Info_getMeterItemPanePtr(i)->mPane, true, 0);
 
+#if TARGET_PC
+                f32 fVar14 = 0.1f + 0.8f * u;
+#else
                 f32 fVar14 = field_0x674[i] / 10.0f;
+#endif
                 if (field_0x6cd != 0xff) {
                     fVar14 = 1.0f - fVar14;
                 }
@@ -1549,9 +1574,11 @@ void dMenu_Ring_c::drawSelectItem() {
                                                     0);
                     }
                 }
+#if !TARGET_PC
                 field_0x674[i]++;
             } else {
                 setSelectItemForce(i);
+#endif
             }
         }
     }
@@ -1562,6 +1589,9 @@ void dMenu_Ring_c::setSelectItemForce(int i_idx) {
         if (field_0x674[i_idx] != 0) {
             dComIfGs_setSelectItemIndex(i_idx, field_0x6b4[i_idx]);
             field_0x674[i_idx] = 0;
+#if TARGET_PC
+            mSelectItemSlideElapsed[i_idx] = 0.0f;
+#endif
         }
     } else if (field_0x674[i_idx] != 0) {
         for (int i = 0; i < 2; i++) {
@@ -1569,6 +1599,9 @@ void dMenu_Ring_c::setSelectItemForce(int i_idx) {
             dComIfGs_setSelectItemIndex(i, field_0x6b4[i]);
         }
         field_0x674[i_idx] = 0;
+#if TARGET_PC
+        mSelectItemSlideElapsed[i_idx] = 0.0f;
+#endif
     }
 }
 

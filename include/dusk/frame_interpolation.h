@@ -19,14 +19,12 @@ void end_record();
 void interpolate(float step);
 float get_interpolation_step();
 
-void notify_presentation_frame();
 void request_presentation_sync();
 bool presentation_sync_active();
 
-void notify_sim_tick_complete();
-uint32_t begin_presentation_ui_pass();
-uint32_t get_presentation_ui_advance_ticks();
-void end_presentation_ui_pass();
+// TODO: These should be phased out as UI is progressively updated to use game_clock
+void set_ui_tick_pending(bool value);
+bool get_ui_tick_pending();
 
 void open_child(const void* key, int32_t id);
 void close_child();
