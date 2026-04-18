@@ -43,6 +43,8 @@ namespace dusk {
 
 		bool m_showMapLoader = false;
 
+		bool m_showMeterColors = false;
+
         bool m_showBloomWindow = false;
 
         bool m_showAudioDebug = false;
