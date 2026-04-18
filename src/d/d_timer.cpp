@@ -23,9 +23,7 @@
 #include "m_Do/m_Do_lib.h"
 #include <cstring>
 
-#if TARGET_PC
 #include "dusk/frame_interpolation.h"
-#endif
 
 static int dTimer_createStart2D(s32 param_0, u16 param_1);
 
@@ -1340,11 +1338,11 @@ void dDlst_TimerScrnDraw_c::draw() {
     f32 temp = (f32)g_drawHIO.mMiniGame.mGetInTextAlphaFrames +
                ((f32)g_drawHIO.mMiniGame.mGetInTextWaitFrames + 60.0f);
 
+    for (int i = 0; i < 51; i++) {
 #if TARGET_PC
-    if (dusk::frame_interp::get_ui_tick_pending())
+        if (dusk::frame_interp::get_ui_tick_pending())
 #endif
-    {
-        for (int i = 0; i < 51; i++) {
+        {
             if (m_getin_info[i].bck_frame > 0.0f && m_getin_info[i].bck_frame < temp) {
                 if (m_getin_info[i].bck_frame < 60.0f) {
                     m_getin_info[i].bck_frame += g_drawHIO.mMiniGame.mGetInTextAnimSpeed;
@@ -1357,45 +1355,50 @@ void dDlst_TimerScrnDraw_c::draw() {
                     m_getin_info[i].bck_frame++;
                 }
             }
+        }
 
-            if (m_getin_info[i].bck_frame > 0.0f && m_getin_info[i].bck_frame < temp) {
-                f32 var_f29 = 1.0f;
-                if (m_getin_info[i].bck_frame >= g_drawHIO.mMiniGame.mGetInTextWaitFrames + 60.0f &&
-                    m_getin_info[i].bck_frame < temp) {
-                    var_f29 = acc(g_drawHIO.mMiniGame.mGetInTextAlphaFrames,
-                                temp - m_getin_info[i].bck_frame, 0);
+        if (m_getin_info[i].bck_frame > 0.0f && m_getin_info[i].bck_frame < temp) {
+            f32 var_f29 = 1.0f;
+            if (m_getin_info[i].bck_frame >= g_drawHIO.mMiniGame.mGetInTextWaitFrames + 60.0f &&
+                m_getin_info[i].bck_frame < temp) {
+                var_f29 = acc(g_drawHIO.mMiniGame.mGetInTextAlphaFrames,
+                            temp - m_getin_info[i].bck_frame, 0);
+            }
+
+            if (m_getin_info[i].bck_frame < 60.0f) {
+                playBckAnimation(m_getin_info[i].bck_frame);
+            } else {
+                playBckAnimation(60.0f);
+            }
+
+            mpGetInParent->setAlphaRate(var_f29);
+
+            if (g_drawHIO.mMiniGame.mGetInTextLocation == 1) {
+                mpGetInRoot->translate(m_getin_info[i].pos_x + g_drawHIO.mMiniGame.mGetInTextPosX,
+                                    m_getin_info[i].pos_y + g_drawHIO.mMiniGame.mGetInTextPosY);
+            } else {
+                f32 temp_f2 = m_getin_info[i].bck_frame - 40.0f;
+                f32 var_f3 = ((temp_f2 * 0.5f) * temp_f2) * 0.15f;
+                if (i == 0) {
+                    var_f3 = 0.0f;
                 }
 
-                if (m_getin_info[i].bck_frame < 60.0f) {
-                    playBckAnimation(m_getin_info[i].bck_frame);
-                } else {
-                    playBckAnimation(60.0f);
-                }
+                mpGetInRoot->paneTrans(
+                    m_getin_info[i].pos_x + g_drawHIO.mMiniGame.mGetInTextPosX,
+                    (m_getin_info[i].pos_y + g_drawHIO.mMiniGame.mGetInTextPosY) - var_f3);
+            }
 
-                mpGetInParent->setAlphaRate(var_f29);
+            mpGetInRoot->scale(g_drawHIO.mMiniGame.mGetInTextSizeX,
+                            g_drawHIO.mMiniGame.mGetInTextSizeY);
+            mpGetInScreen->draw(0.0f, 0.0f, graf_ctx);
 
-                if (g_drawHIO.mMiniGame.mGetInTextLocation == 1) {
-                    mpGetInRoot->translate(m_getin_info[i].pos_x + g_drawHIO.mMiniGame.mGetInTextPosX,
-                                        m_getin_info[i].pos_y + g_drawHIO.mMiniGame.mGetInTextPosY);
-                } else {
-                    f32 temp_f2 = m_getin_info[i].bck_frame - 40.0f;
-                    f32 var_f3 = ((temp_f2 * 0.5f) * temp_f2) * 0.15f;
-                    if (i == 0) {
-                        var_f3 = 0.0f;
-                    }
-
-                    mpGetInRoot->paneTrans(
-                        m_getin_info[i].pos_x + g_drawHIO.mMiniGame.mGetInTextPosX,
-                        (m_getin_info[i].pos_y + g_drawHIO.mMiniGame.mGetInTextPosY) - var_f3);
-                }
-
-                mpGetInRoot->scale(g_drawHIO.mMiniGame.mGetInTextSizeX,
-                                g_drawHIO.mMiniGame.mGetInTextSizeY);
-                mpGetInScreen->draw(0.0f, 0.0f, graf_ctx);
-
-                if (m_getin_info[i].pikari_frame > 0.0f) {
-                    drawPikari(i);
-                } else if (m_getin_info[i].pikari_frame == -1.0f) {
+            if (m_getin_info[i].pikari_frame > 0.0f) {
+                drawPikari(i);
+            } else if (m_getin_info[i].pikari_frame == -1.0f) {
+#if TARGET_PC
+                if (dusk::frame_interp::get_ui_tick_pending())
+#endif
+                {
                     if (m_getin_info[i].field_0xc == 0) {
                         if (m_getin_info[i].bck_frame > g_drawHIO.mMiniGame.mGetInPikariAppearFrames) {
                             m_getin_info[i].pikari_frame =
