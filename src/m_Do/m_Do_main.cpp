@@ -248,8 +248,8 @@ void main01(void) {
         }
 
         if (dusk::getSettings().game.enableFrameInterpolation && !dusk::getTransientSettings().skipFrameRateLimit) {
-            dusk::frame_interp::notify_presentation_frame();
             if (accumulator >= kSimStepSeconds) {
+                dusk::frame_interp::set_ui_tick_pending(true);
                 mDoCPd_c::read();
                 dusk::gyro::read(kSimStepSeconds);
                 fapGm_Execute();
@@ -261,7 +261,9 @@ void main01(void) {
                 dusk::frame_interp::PresentationCameraScope presentation_camera;
                 cAPIGph_Painter();
             }
+            dusk::frame_interp::set_ui_tick_pending(false);
         } else {
+            dusk::frame_interp::set_ui_tick_pending(true);
             accumulator = 0.0f;
             
             // Game Inputs

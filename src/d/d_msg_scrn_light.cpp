@@ -204,16 +204,14 @@ void dMsgScrnLight_c::draw(f32* i_anmFrame, f32 i_posX, f32 i_posY, f32 i_scaleX
 
     if (mPlayAnim) {
 #ifdef TARGET_PC
-        const u32 ui_advance_ticks = dusk::frame_interp::get_presentation_ui_advance_ticks();
-        for (u32 i = 0; i < ui_advance_ticks; ++i) {
+        if (dusk::frame_interp::get_ui_tick_pending())
 #endif
+        {
             *i_anmFrame += 1.0f;
             if (*i_anmFrame >= mpBck->getFrameMax()) {
                 *i_anmFrame = 0.0f;
             }
-#ifdef TARGET_PC
         }
-#endif
 
         mBckFrame = *i_anmFrame;
         mBpkFrame = *i_anmFrame;
@@ -229,17 +227,15 @@ void dMsgScrnLight_c::draw(f32* i_anmFrame, f32 i_posX, f32 i_posY, f32 i_scaleX
 
     if (mPlayAnim) {
 #ifdef TARGET_PC
-        const u32 ui_advance_ticks = dusk::frame_interp::get_presentation_ui_advance_ticks();
-        for (u32 i = 0; i < ui_advance_ticks; ++i) {
+        if (dusk::frame_interp::get_ui_tick_pending())
 #endif
+        {
             *i_anmFrame += i_anmRate;
 
             if (*i_anmFrame >= mpBck->getFrameMax()) {
                 *i_anmFrame = 0.0f;
             }
-#ifdef TARGET_PC
         }
-#endif
 
         mBckFrame = *i_anmFrame;
         mBpkFrame = *i_anmFrame;
