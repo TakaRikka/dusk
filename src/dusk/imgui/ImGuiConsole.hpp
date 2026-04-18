@@ -77,6 +77,8 @@ void ImGuiEndGroupPanel();
 void ImGuiTextCenter(std::string_view text);
 bool ImGuiButtonCenter(std::string_view text);
 float ImGuiScale();
+u8 ClampToByte(int value);
+void DrawColorEdit(const char* label, GXColor& color);
 }  // namespace dusk
 
 void DuskDebugPad();
