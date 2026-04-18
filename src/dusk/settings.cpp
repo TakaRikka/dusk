@@ -67,6 +67,15 @@ UserSettings g_userSettings = {
         .gyroInvertYaw {"game.gyroInvertYaw", false},
 
         // Cheats
+        .infiniteHearts {"game.infiniteHearts", false},
+        .infiniteArrows{"game.infiniteArrows", false},
+        .infiniteBombs{"game.infiniteBombs", false},
+        .infiniteOil{"game.infiniteOil", false},
+        .infiniteOxygen{"game.infiniteOxygen", false},
+        .infiniteRupees{"game.infiniteRupees", false},
+        .moonJump{"game.moonJump", false},
+        .superClawshot{"game.superClawshot", false},
+        .alwaysGreatspin{"game.alwaysGreatspin", false},
         .enableFastIronBoots {"game.enableFastIronBoots", false},
         .canTransformAnywhere {"game.canTransformAnywhere", false},
         .fastSpinner {"game.fastSpinner", false},
@@ -141,6 +150,15 @@ void registerSettings() {
     Register(g_userSettings.game.midnasLamentNonStop);
     Register(g_userSettings.game.enableTurboKeybind);
     Register(g_userSettings.game.fastSpinner);
+    Register(g_userSettings.game.infiniteHearts);
+    Register(g_userSettings.game.infiniteArrows);
+    Register(g_userSettings.game.infiniteBombs);
+    Register(g_userSettings.game.infiniteOil);
+    Register(g_userSettings.game.infiniteOxygen);
+    Register(g_userSettings.game.infiniteRupees);
+    Register(g_userSettings.game.moonJump);
+    Register(g_userSettings.game.superClawshot);
+    Register(g_userSettings.game.alwaysGreatspin);
     Register(g_userSettings.game.enableFrameInterpolation);
     Register(g_userSettings.game.enableGyroAim);
     Register(g_userSettings.game.enableGyroRollgoal);

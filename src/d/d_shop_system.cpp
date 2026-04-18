@@ -1568,10 +1568,22 @@ BOOL dShopSystem_c::checkShopOpen() {
 }
 
 bool dShopSystem_c::checkLeftTrigger(STControl* i_stick) {
+#if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        return i_stick->checkRightTrigger();
+    }
+#endif
+
     return i_stick->checkLeftTrigger();
 }
 
 bool dShopSystem_c::checkRightTrigger(STControl* i_stick) {
+#if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        return i_stick->checkLeftTrigger();
+    }
+#endif
+
     return i_stick->checkRightTrigger();
 }
 

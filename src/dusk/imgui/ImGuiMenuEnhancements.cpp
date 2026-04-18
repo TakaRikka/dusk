@@ -202,6 +202,16 @@ namespace dusk {
             ImGui::Separator();
 
             if (ImGui::BeginMenu("Cheats")) {
+                config::ImGuiCheckbox("Infinite Hearts", getSettings().game.infiniteHearts);
+                config::ImGuiCheckbox("Infinite Arrows", getSettings().game.infiniteArrows);
+                config::ImGuiCheckbox("Infinite Bombs", getSettings().game.infiniteBombs);
+                config::ImGuiCheckbox("Infinite Oil", getSettings().game.infiniteOil);
+                config::ImGuiCheckbox("Infinite Oxygen", getSettings().game.infiniteOxygen);
+                config::ImGuiCheckbox("Infinite Rupees", getSettings().game.infiniteRupees);
+                config::ImGuiCheckbox("Moon Jump (R+A)", getSettings().game.moonJump);
+                config::ImGuiCheckbox("Super Clawshot", getSettings().game.superClawshot);
+                config::ImGuiCheckbox("Always Greatspin", getSettings().game.alwaysGreatspin);
+
                 config::ImGuiCheckbox("Fast Iron Boots", getSettings().game.enableFastIronBoots);
 
                 config::ImGuiCheckbox("Can Transform Anywhere", getSettings().game.canTransformAnywhere);
