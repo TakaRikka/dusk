@@ -116,12 +116,7 @@ void dKyr_lenzflare_move() {
     cXyz vect;
     cXyz proj;
     cXyz center;
-
-    #if TARGET_PC
-    mDoLib_project(lenz_packet->mPositions, &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
-    #else
     mDoLib_project(lenz_packet->mPositions, &proj);
-    #endif
 
     center.x = FB_WIDTH / 2;
     center.y = FB_HEIGHT / 2;
@@ -221,12 +216,7 @@ void dKyr_sun_move() {
         }
 
         cXyz proj;
-
-        #if TARGET_PC
-        mDoLib_project(sun_packet->mPos, &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
-        #else
         mDoLib_project(sun_packet->mPos, &proj);
-        #endif
 
         for (int i = 0; i < 5; i++) {
             cXyz chkpnt = proj;
@@ -4127,11 +4117,7 @@ void dKyr_drawStar(Mtx drawMtx, u8** tex) {
             }
         }
 
-#if TARGET_PC
-        mDoLib_project(&moon_pos, &moon_proj, {0, 0, FB_WIDTH, FB_HEIGHT});
-#else
         mDoLib_project(&moon_pos, &moon_proj);
-#endif
 
         // Dusk optimization: we use vertex color rather than GX_TEVREG0 to set star color.
         // This allows us to merge all the stars into a single draw.
@@ -4280,11 +4266,7 @@ void dKyr_drawStar(Mtx drawMtx, u8** tex) {
             sp68.y = spBC.y + star_pos.y;
             sp68.z = spBC.z + star_pos.z;
 
-            #if TARGET_PC
-            mDoLib_project(&sp68, &star_proj, {0, 0, FB_WIDTH, FB_HEIGHT});
-            #else
             mDoLib_project(&sp68, &star_proj);
-            #endif
 
             moon_proj.z = 0.0f;
             star_proj.z = 0.0f;
@@ -4699,11 +4681,7 @@ void drawVrkumo(Mtx drawMtx, GXColor& color, u8** tex) {
     }
 
     if (g_env_light.daytime > 105.0f && g_env_light.daytime < 240.0f && !dComIfGp_event_runCheck() && sun_packet != NULL && sun_packet->mSunAlpha > 0.0f) {
-        #if TARGET_PC
-        mDoLib_project(&sun_packet->mPos[0], &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
-        #else
         mDoLib_project(&sun_packet->mPos[0], &proj);
-        #endif
         if (proj.x > 0.0f && proj.x < FB_WIDTH && proj.y > spC4 && proj.y < (458.0f - spC4)) {
             pass = 0;
         }
@@ -4968,12 +4946,7 @@ void drawVrkumo(Mtx drawMtx, GXColor& color, u8** tex) {
                                 x = 100.0f;
                                 y = 100.0f;
                                 z = 100.0f;
-
-                                #if TARGET_PC
-                                mDoLib_project(&spF0, &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
-                                #else
                                 mDoLib_project(&spF0, &proj);
-                                #endif
 
                                 if (proj.x > -x && proj.x < (FB_WIDTH + x) && proj.y > -y && proj.y < (458.0f + z)) {
                                     break;
@@ -5023,12 +4996,7 @@ void drawVrkumo(Mtx drawMtx, GXColor& color, u8** tex) {
                                     x = 100.0f;
                                     y = 100.0f;
                                     z = 100.0f;
-
-                                    #if TARGET_PC
-                                    mDoLib_project(&spE4, &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
-                                    #else
                                     mDoLib_project(&spE4, &proj);
-                                    #endif
 
                                     if (proj.x > -x && proj.x < (FB_WIDTH + x) && proj.y > -y && proj.y < (458.0f + z)) {
                                         break;
@@ -6068,13 +6036,7 @@ static void dKyr_evil_draw2(Mtx drawMtx, u8** tex) {
                         sp34.x = 80.0f;
                         sp34.y = 80.0f;
                         sp34.z = 80.0f;
-
-                        #if TARGET_PC
-                        mDoLib_project(&sp7C, &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
-                        #else
                         mDoLib_project(&sp7C, &proj);
-                        #endif
-
                         if (!(proj.x > -sp34.x) || !(proj.x < (FB_WIDTH + sp34.x)) ||
                             !(proj.y > -sp34.y) || !(proj.y < (458.0f + sp34.z)))
                         {
@@ -6299,12 +6261,7 @@ void dKyr_evil_draw(Mtx drawMtx, u8** tex) {
                         sp44.y = 80.0f;
                         sp44.z = 80.0f;
 
-                        #if TARGET_PC
-                        mDoLib_project(&spA4, &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
-                        #else
                         mDoLib_project(&spA4, &proj);
-                        #endif
-
                         if (!(proj.x > -sp44.x) || !(proj.x < (FB_WIDTH + sp44.x)) ||
                             !(proj.y > -sp44.y) || !(proj.y < (458.0f + sp44.z)))
                         {

@@ -499,13 +499,7 @@ void daObjARI_c::Z_BufferChk() {
     cXyz vec2, vec1;
     vec1 = current.pos;
     vec1.y += 20.0f;
-
-    #if TARGET_PC
-    mDoLib_project(&vec1, &vec2, {0, 0, FB_WIDTH, FB_HEIGHT});
-    #else
     mDoLib_project(&vec1, &vec2);
-    #endif
-
     f32 trim_height;
     camera_process_class* camera = dComIfGp_getCamera(0);
     if (camera != NULL) {

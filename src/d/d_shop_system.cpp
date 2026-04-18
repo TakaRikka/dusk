@@ -855,11 +855,7 @@ int dShopSystem_c::seq_wait(fopAc_ac_c* param_0, dMsgFlow_c* param_1) {
 }
 
 inline void pos3Dto2D(Vec* a, Vec* b) {
-#if TARGET_PC
-    mDoLib_project(a, b, {0, 0, FB_WIDTH, FB_HEIGHT});
-#else
     mDoLib_project(a, b);
-#endif
 }
 
 int dShopSystem_c::seq_start(fopAc_ac_c* actor, dMsgFlow_c* i_flow) {
