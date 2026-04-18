@@ -13,7 +13,7 @@ static void ApplyPresetClassic() {
     auto& s = getSettings();
     s.video.lockAspectRatio.setValue(true);
     s.game.bloomMode.setValue(BloomMode::Classic);
-    VILockAspectRatio(defaultAspectRatioW, defaultAspectRatioH);
+    AuroraSetViewportPolicy(AURORA_VIEWPORT_FIT);
 }
 
 static void ApplyPresetHD() {

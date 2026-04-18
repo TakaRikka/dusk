@@ -48,6 +48,7 @@ UserSettings g_userSettings = {
         .bloomMultiplier {"game.bloomMultiplier", 1.0f},
         .enableWaterRefraction {"game.enableWaterRefraction", true},
         .enableFrameInterpolation = {"game.enableFrameInterpolation", false},
+        .internalResolutionScale {"game.internalResolutionScale", 0},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
 
         // Audio
@@ -138,6 +139,7 @@ void registerSettings() {
     Register(g_userSettings.game.bloomMode);
     Register(g_userSettings.game.bloomMultiplier);
     Register(g_userSettings.game.enableWaterRefraction);
+    Register(g_userSettings.game.internalResolutionScale);
     Register(g_userSettings.game.shadowResolutionMultiplier);
     Register(g_userSettings.game.enableFastIronBoots);
     Register(g_userSettings.game.canTransformAnywhere);

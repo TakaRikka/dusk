@@ -74,6 +74,7 @@ struct UserSettings {
         ConfigVar<float> bloomMultiplier;
         ConfigVar<bool> enableWaterRefraction;
         ConfigVar<bool> enableFrameInterpolation;
+        ConfigVar<int> internalResolutionScale;
         ConfigVar<int> shadowResolutionMultiplier;
 
         // Audio

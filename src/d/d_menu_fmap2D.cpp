@@ -276,18 +276,14 @@ void dMenu_Fmap2DBack_c::draw() {
     u32 scissorLeft, scissorTop, scissorWidth, scissorHeight;
     GXGetScissor(&scissorLeft, &scissorTop, &scissorWidth, &scissorHeight);
 
-#if TARGET_PC
-    grafPort->scissor(mTransX, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
-#else
     grafPort->scissor(mTransX, 0.0f, FB_WIDTH, FB_HEIGHT);
-#endif
     grafPort->setScissor();
 
     mpBackTex->setBlackWhite(field_0x1208, field_0x120c);
     mpBackTex->setAlpha(mAlphaRate * 255.0f * g_fmapHIO.mBackgroundAlpha);
     mpBackTex->draw(mTransX + mDoGph_gInf_c::getMinXF(),
-                    mTransZ + mDoGph_gInf_c::getMinYF(), mDoGph_gInf_c::getWidth(),
-                    mDoGph_gInf_c::getHeight(), false, false, false);
+                    mTransZ + mDoGph_gInf_c::getMinYF(), mDoGph_gInf_c::getWidthF(),
+                    mDoGph_gInf_c::getHeightF(), false, false, false);
 
     mpBackScreen->draw(mTransX, mTransZ, grafPort);
     mpBaseScreen->draw(mTransX, mTransZ, grafPort);
@@ -297,13 +293,8 @@ void dMenu_Fmap2DBack_c::draw() {
 
     Vec vec2 = mpMapArea->getGlobalVtx(&mtx, 3, false, 0);
 
-#if TARGET_PC
-    f32 width = mDoGph_gInf_c::getWidthF() /  mDoGph_gInf_c::getWidth();
-    f32 height = mDoGph_gInf_c::getHeightF() / mDoGph_gInf_c::getHeight();
-#else
     f32 width = mDoGph_gInf_c::getWidthF() /  FB_WIDTH;
     f32 height = mDoGph_gInf_c::getHeightF() / FB_HEIGHT;
-#endif
 
     grafPort->scissor(mTransX + ((vec1.x - mDoGph_gInf_c::getMinXF()) / width),
                       mTransZ + (vec1.y / height), (vec2.x - vec1.x) / width,
@@ -360,11 +351,7 @@ void dMenu_Fmap2DBack_c::draw() {
         drawDebugRegionArea();
     }
 
-#if TARGET_PC
-    grafPort->scissor(scissorLeft, scissorTop, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
-#else
     grafPort->scissor(scissorLeft, scissorTop, scissorWidth, scissorHeight);
-#endif
     grafPort->setScissor();
 
     if (isArrowDrawFlag()) {
@@ -2579,11 +2566,7 @@ void dMenu_Fmap2DTop_c::draw() {
     J2DOrthoGraph* ctx = static_cast<J2DOrthoGraph*>(dComIfGp_getCurrentGrafPort());
     ctx->setup2D();
     GXGetScissor(&scissor_left, &scissor_top, &scissor_width, &scissor_height);
-#if TARGET_PC
-    ctx->scissor(mTransX, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
-#else
     ctx->scissor(mTransX, 0.0f, FB_WIDTH, FB_HEIGHT);
-#endif
     ctx->setScissor();
     mpTitleScreen->draw(mTransX, mTransY, ctx);
     ctx->scissor(scissor_left, scissor_top, scissor_width, scissor_height);

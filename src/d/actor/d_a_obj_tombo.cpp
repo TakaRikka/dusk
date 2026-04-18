@@ -504,13 +504,7 @@ void daObjTOMBO_c::Z_BufferChk() {
     cXyz cStack_68;
     cStack_68 = current.pos;
     cStack_68.y += 20.0f;
-
-    #if TARGET_PC
-    mDoLib_project(&cStack_68, &local_5c, {0, 0, FB_WIDTH, FB_HEIGHT});
-    #else
     mDoLib_project(&cStack_68, &local_5c);
-    #endif
-
     camera_process_class* pCamera = dComIfGp_getCamera(0);
     f32 trimHeight;
     if (pCamera != NULL) {

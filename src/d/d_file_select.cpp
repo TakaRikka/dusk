@@ -3870,15 +3870,9 @@ void dFile_select_c::_draw() {
         dComIfGd_set2DOpa(mSelIcon2);
 
         #if PLATFORM_GCN
-        #if TARGET_PC
-        mpFadePict->draw(0, 0,
-                           mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), false, false,
-                           false);
-        #else
         mpFadePict->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
                            mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), false, false,
                            false);
-        #endif
         #endif
     }
 }
