@@ -23,7 +23,7 @@
 #include "dusk/frame_interpolation.h"
 #include <cstring>
 #if TARGET_PC
-#include "dusk/imgui/ImGuiBloomWindow.hpp"
+#include "dusk/settings.h"
 #endif
 
 dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap* mp_heap) {
