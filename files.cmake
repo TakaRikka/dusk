@@ -1346,6 +1346,7 @@ set(DUSK_FILES
         src/dusk/file_select.cpp
         src/dusk/file_select.hpp
         src/dusk/frame_interpolation.cpp
+        src/dusk/game_clock.cpp
         src/dusk/globals.cpp
         src/dusk/gyro.cpp
         src/dusk/io.cpp

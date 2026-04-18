@@ -290,6 +290,12 @@ BOOL daAlink_c::checkHookshotStickBG(cBgS_PolyInfo& i_polyinfo) {
     }
     #endif
 
+    #if TARGET_PC
+    if (dusk::getSettings().game.superClawshot) {
+        return TRUE;
+    }
+    #endif
+
     if (dComIfG_Bgsp().ChkPolyHSStick(i_polyinfo)) {
         dBgW_Base* bgw_p = dComIfG_Bgsp().GetBgWBasePointer(i_polyinfo);
         if (bgw_p != NULL && bgw_p->ChkPushPullOk()) {
@@ -447,6 +453,12 @@ void daAlink_c::setHookshotSight() {
     } else {
         max_length = mpHIO->mItem.mHookshot.m.mMaxLength;
     }
+
+    #if TARGET_PC
+    if (dusk::getSettings().game.superClawshot) {
+        max_length = 69420.0f;
+    }
+    #endif
 
     BOOL line_cross = checkSightLine(max_length, &sight_pos);
 
@@ -890,6 +902,14 @@ void daAlink_c::setHookshotPos() {
         max_length = mpHIO->mItem.mHookshot.m.mMaxLength;
     }
 
+    #if TARGET_PC
+    if (dusk::getSettings().game.superClawshot) {
+        return_speed = 2870.0f;
+        shoot_speed = 2870.0f;
+        max_length = 69420.0f;
+    }
+    #endif
+
     if (mItemMode == HS_MODE_RETURN_e) {
         if (targetAc_p != NULL) {
             if (checkLv7BossRoom()) {
@@ -898,6 +918,12 @@ void daAlink_c::setHookshotPos() {
                 return_speed = mpHIO->mItem.mHookshot.m.mStickReturnSpeed;
             }
         }
+
+        #if TARGET_PC
+        if (dusk::getSettings().game.superClawshot) {
+            return_speed = 500.0f;
+        }
+        #endif
 
         if (checkModeFlg(0x400)) {
             return_speed += current.pos.abs(field_0x3798);
@@ -1547,6 +1573,12 @@ int daAlink_c::procHookshotFly() {
         mProcVar0.field_0x3008 = 0;
         f32 temp_f31 = field_0x37d4.abs();
         f32 temp_f30 = mpHIO->mItem.mHookshot.m.mStickReturnSpeed + spAC.abs(mHookshotTopPos);
+
+        #if TARGET_PC
+        if (dusk::getSettings().game.superClawshot) {
+            temp_f30 = 500.0f + spAC.abs(mHookshotTopPos);
+        }
+        #endif
 
         if (temp_f31 < temp_f30 || mProcVar1.field_0x300a == 0) {
             setHookshotReturnEnd();

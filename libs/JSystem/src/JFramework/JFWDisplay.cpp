@@ -205,14 +205,6 @@ void JFWDisplay::preGX() {
     }
 }
 
-#ifdef TARGET_PC
-static s32 s_faderSimSteps = -1;
-
-void JFWDisplay::setFaderSimSteps(u32 steps) {
-    s_faderSimSteps = static_cast<s32>(steps);
-}
-#endif
-
 void JFWDisplay::endGX() {
     s32 bufferNum = JUTXfb::getManager()->getBufferNum();
     u16 width = JUTVideo::getManager()->getFbWidth();
@@ -224,14 +216,7 @@ void JFWDisplay::endGX() {
     if (mFader != NULL) {
         ortho.setPort();
 #ifdef TARGET_PC
-        u32 advance_count = 1;
-        if (dusk::getSettings().game.enableFrameInterpolation && s_faderSimSteps >= 0) {
-            advance_count = static_cast<u32>(s_faderSimSteps);
-            s_faderSimSteps = -1;
-        } else {
-            s_faderSimSteps = -1;
-        }
-        for (u32 i = 0; i < advance_count; i++) {
+        if (dusk::frame_interp::get_ui_tick_pending()) {
             mFader->advance();
         }
         if (mFader->getStatus() != 1) {
