@@ -21,7 +21,6 @@ namespace dusk {
 		void ShowHeapOverlay();
 		void ShowStubLog();
 		void ShowMapLoader();
-		void ShowMeterColorsWindow();
         void ShowBloomWindow();
         void ShowPlayerInfo();
         void ShowAudioDebug();
@@ -42,8 +41,6 @@ namespace dusk {
 		bool m_showStubLog = false;
 
 		bool m_showMapLoader = false;
-
-		bool m_showMeterColors = false;
 
         bool m_showBloomWindow = false;
 
