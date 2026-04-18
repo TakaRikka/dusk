@@ -22,6 +22,7 @@ float get_interpolation_step();
 void request_presentation_sync();
 bool presentation_sync_active();
 
+// TODO: These should be phased out as UI is progressively updated to use game_clock
 void set_ui_tick_pending(bool value);
 bool get_ui_tick_pending();
 

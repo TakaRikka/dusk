@@ -42,7 +42,6 @@
 #include "SSystem/SComponent/c_counter.h"
 #include <cstring>
 
-#include <chrono>
 #include <filesystem>
 #include <system_error>
 #include <thread>
@@ -51,6 +50,7 @@
 #include "dusk/crash_reporting.h"
 #include "dusk/dusk.h"
 #include "dusk/frame_interpolation.h"
+#include "dusk/game_clock.h"
 #include "dusk/gyro.h"
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/logging.h"
@@ -205,9 +205,7 @@ void main01(void) {
     if (preLaunchUIWindowSize.width != 0)
         mDoGph_gInf_c::setWindowSize(preLaunchUIWindowSize);
 
-    constexpr float kSimStepSeconds = 1.0 / 30.0;
-    auto previous_time = std::chrono::steady_clock::now();
-    float accumulator = kSimStepSeconds;
+    dusk::game_clock::ensure_initialized();
 
     do {
         // 1. Update Window Events
@@ -234,10 +232,7 @@ void main01(void) {
 
         eventsDone:;
 
-        auto current_time = std::chrono::steady_clock::now();
-        float frame_seconds = std::chrono::duration<float>(current_time - previous_time).count();
-        previous_time = current_time;
-        accumulator += frame_seconds;
+        const dusk::game_clock::MainLoopPacer pacing = dusk::game_clock::advance_main_loop();
 
         VIWaitForRetrace();
 
@@ -247,16 +242,16 @@ void main01(void) {
             continue;
         }
 
-        if (dusk::getSettings().game.enableFrameInterpolation && !dusk::getTransientSettings().skipFrameRateLimit) {
-            if (accumulator >= kSimStepSeconds) {
+        if (pacing.is_interpolating) {
+            if (pacing.do_sim_tick) {
                 dusk::frame_interp::set_ui_tick_pending(true);
                 mDoCPd_c::read();
-                dusk::gyro::read(kSimStepSeconds);
+                dusk::gyro::read(pacing.sim_pace);
                 fapGm_Execute();
                 mDoAud_Execute();
-                accumulator = 0.0f;
+                dusk::game_clock::reset_accumulator();
             }
-            dusk::frame_interp::interpolate(static_cast<float>(accumulator / kSimStepSeconds));
+            dusk::frame_interp::interpolate(pacing.interpolation_step);
             {
                 dusk::frame_interp::PresentationCameraScope presentation_camera;
                 cAPIGph_Painter();
@@ -264,11 +259,10 @@ void main01(void) {
             dusk::frame_interp::set_ui_tick_pending(false);
         } else {
             dusk::frame_interp::set_ui_tick_pending(true);
-            accumulator = 0.0f;
-            
+
             // Game Inputs
             mDoCPd_c::read();
-            dusk::gyro::read(frame_seconds);
+            dusk::gyro::read(pacing.presentation_dt_seconds);
 
             // EXECUTE GAME LOGIC & RENDER
             // This calls mDoGph_Painter -> JFWDisplay -> GX Functions
