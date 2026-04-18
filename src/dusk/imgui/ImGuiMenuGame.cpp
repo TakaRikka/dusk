@@ -17,9 +17,33 @@
 #include "m_Do/m_Do_graphic.h"
 
 #include <aurora/gfx.h>
+#include <aurora/lib/logging.hpp>
 #include <SDL3/SDL_gamepad.h>
+#include <SDL3/SDL_misc.h>
 
 #include "dusk/main.h"
+
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
+#if defined(_WIN32) || (defined(__APPLE__) && !TARGET_OS_IOS && !TARGET_OS_MACCATALYST) || (defined(__linux__) && !defined(__ANDROID__))
+#define DUSK_CAN_OPEN_DATA_FOLDER 1
+
+namespace fs = std::filesystem;
+
+static void OpenDataFolder() {
+    const std::string path = fs::absolute(fs::path(aurora::g_config.configPath)).generic_string();
+#if defined(_WIN32)
+    const std::string url = std::string("file:///") + path;
+#else
+    const std::string url = std::string("file://") + path;
+#endif
+    (void)SDL_OpenURL(url.c_str());
+}
+#else
+#define DUSK_CAN_OPEN_DATA_FOLDER 0
+#endif
 
 namespace dusk {
     void ImGuiMenuGame::ToggleFullscreen() {
@@ -143,6 +167,14 @@ namespace dusk {
 
                 ImGui::EndMenu();
             }
+
+            ImGui::Separator();
+
+#if DUSK_CAN_OPEN_DATA_FOLDER
+            if (ImGui::MenuItem("Open Data Folder")) {
+                OpenDataFolder();
+            }
+#endif
 
             ImGui::Separator();
 
