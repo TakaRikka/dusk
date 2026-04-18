@@ -1463,7 +1463,7 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         GXTexObj* texPass0 = divCopyTex(Pass0, 2);
         GXLoadTexObj(texPass0, GX_TEXMAP0);
 
-        f32 blurScale = mBlureSize * ((448.0f / getHeight()) / 6400.0f);
+        f32 blurScale = mBlureSize * ((448.0f / height) / 6400.0f);
 
         // Setup blur filter TEV.
         GXSetNumTexGens(8);
