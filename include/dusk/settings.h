@@ -92,6 +92,15 @@ struct UserSettings {
         ConfigVar<bool> gyroInvertYaw;
 
         // Cheats
+        ConfigVar<bool> infiniteHearts;
+        ConfigVar<bool> infiniteArrows;
+        ConfigVar<bool> infiniteBombs;
+        ConfigVar<bool> infiniteOil;
+        ConfigVar<bool> infiniteOxygen;
+        ConfigVar<bool> infiniteRupees;
+        ConfigVar<bool> moonJump;
+        ConfigVar<bool> superClawshot;
+        ConfigVar<bool> alwaysGreatspin;
         ConfigVar<bool> enableFastIronBoots;
         ConfigVar<bool> canTransformAnywhere;
         ConfigVar<bool> fastSpinner;
