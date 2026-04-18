@@ -22,7 +22,7 @@
 #include "d/d_pane_class.h"
 #include "dusk/frame_interpolation.h"
 #include <cstring>
-#if Target_PC
+#if TARGET_PC
 #include "dusk/imgui/ImGuiBloomWindow.hpp"
 #endif
 
