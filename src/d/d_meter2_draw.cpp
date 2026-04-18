@@ -22,6 +22,9 @@
 #include "d/d_pane_class.h"
 #include "dusk/frame_interpolation.h"
 #include <cstring>
+#if Target_PC
+#include "dusk/imgui/ImGuiBloomWindow.hpp"
+#endif
 
 dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap* mp_heap) {
     OS_REPORT("enter dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap *mp_heap)\n");
@@ -1566,15 +1569,25 @@ void dMeter2Draw_c::drawKanteraScreen(u8 i_meterType) {
         mpMagicMeter->setBlackWhite(black, mpMagicMeter->getInitWhite());
         setAlphaMagicChange(true);
     } else if (i_meterType == 1) {
+        #if TARGET_PC
+        mpMagicMeter->setBlackWhite(JUtility::TColor(dusk::s_meterColorsOverride.lanternCustomBottom),
+                                    JUtility::TColor(dusk::s_meterColorsOverride.lanternCustomTop));
+        #else
         mpMagicMeter->setBlackWhite(JUtility::TColor(255, 255, 140, 255),
                                     JUtility::TColor(230, 170, 0, 255));
+        #endif
         setAlphaKanteraChange(true);
     } else if (i_meterType == 2) {
         f32 oxygen_percent = (f32)dComIfGp_getOxygen() / (f32)dComIfGp_getMaxOxygen();
 
         if (oxygen_percent <= 0.25f) {
+            #if TARGET_PC
+            mpMagicMeter->setBlackWhite(JUtility::TColor(dusk::s_meterColorsOverride.oxygen2CustomBottom),
+                                        JUtility::TColor(dusk::s_meterColorsOverride.oxygen2CustomTop));
+            #else
             mpMagicMeter->setBlackWhite(JUtility::TColor(255, 100, 100, 255),
                                         JUtility::TColor(255, 10, 10, 255));
+            #endif
             playOxygenBpkAnimation(mpOxygenBpk[0]);
 
             if (mMeterAlphaRate[i_meterType] > 0.0f) {
@@ -1582,8 +1595,13 @@ void dMeter2Draw_c::drawKanteraScreen(u8 i_meterType) {
                                               -1.0f, -1.0f, 0);
             }
         } else if (oxygen_percent <= 0.5f) {
+            #if TARGET_PC
+            mpMagicMeter->setBlackWhite(JUtility::TColor(dusk::s_meterColorsOverride.oxygen1CustomBottom),
+                                        JUtility::TColor(dusk::s_meterColorsOverride.oxygen1CustomTop));
+            #else
             mpMagicMeter->setBlackWhite(JUtility::TColor(200, 200, 255, 255),
                                         JUtility::TColor(80, 180, 255, 255));
+            #endif
             playOxygenBpkAnimation(mpOxygenBpk[1]);
 
             if (mMeterAlphaRate[i_meterType] > 0.0f) {
@@ -1591,8 +1609,13 @@ void dMeter2Draw_c::drawKanteraScreen(u8 i_meterType) {
                                               -1.0f, -1.0f, 0);
             }
         } else {
+            #if TARGET_PC
+            mpMagicMeter->setBlackWhite(JUtility::TColor(dusk::s_meterColorsOverride.oxygen1CustomBottom),
+                                        JUtility::TColor(dusk::s_meterColorsOverride.oxygen1CustomTop));
+            #else
             mpMagicMeter->setBlackWhite(JUtility::TColor(200, 200, 255, 255),
                                         JUtility::TColor(80, 180, 255, 255));
+            #endif
         }
 
         setAlphaOxygenChange(true);
