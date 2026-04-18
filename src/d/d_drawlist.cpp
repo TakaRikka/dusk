@@ -1544,9 +1544,10 @@ void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
 #ifdef TARGET_PC
                 GXCreateFrameBuffer(r26, r26);
                 needsRestore = true;
-#endif
+#else
                 GXSetViewport(0.0f, 0.0f, r26, r26, 0.0f, 1.0f);
                 GXSetScissor(0, 0, r26, r26);
+#endif
             }
             GXSetTevColor(GX_TEVREG0, l_imageDrawColor[chan]);
             if (chan == 3) {
