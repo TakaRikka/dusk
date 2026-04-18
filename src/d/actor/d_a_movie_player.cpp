@@ -3342,13 +3342,8 @@ static void daMP_THPGXYuv2RgbSetup(const GXRenderModeObj* rmode) {
 	Mtx44 m;
 	Mtx e_m;
 
-#if TARGET_PC
-    w = JUTVideo::getManager()->getFbWidth();
-    h = JUTVideo::getManager()->getEfbHeight();
-#else
     w = rmode->fbWidth;
     h = rmode->efbHeight;
-#endif
     var_f31 = 0.0f;
 
     #if WIDESCREEN_SUPPORT

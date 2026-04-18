@@ -2688,12 +2688,7 @@ u8 dMenu_Collect3D_c::getMaskMdlVisible() {
 f32 dMenu_Collect3D_c::mViewOffsetY = -100.0f;
 
 void dMenu_Collect3D_c::setupItem3D(Mtx param_0) {
-#if TARGET_PC
-    f32 scaleFactor = mDoGph_gInf_c::getHeight() / FB_HEIGHT;
-    GXSetViewport(0.0f, mViewOffsetY * scaleFactor, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), 0.0f, 1.0f);
-#else
     GXSetViewport(0.0f, mViewOffsetY, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f);
-#endif
     mViewOffsetY = -100.0f;
     Mtx44 projection;
     C_MTXPerspective(projection, 45.0f, mDoGph_gInf_c::getAspect(), 1.0f, 100000.0f);

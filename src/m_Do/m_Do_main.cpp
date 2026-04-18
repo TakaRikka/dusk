@@ -126,8 +126,6 @@ AuroraStats dusk::lastFrameAuroraStats;
 float dusk::frameUsagePct = 0.0f;
 const char* configPath;
 
-AuroraWindowSize preLaunchUIWindowSize;
-
 bool launchUILoop() {
     while (dusk::IsRunning && !dusk::IsGameLaunched) {
         const AuroraEvent* event = aurora_update();
@@ -135,9 +133,6 @@ bool launchUILoop() {
             switch (event->type) {
             case AURORA_SDL_EVENT:
                 dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
-                break;
-            case AURORA_WINDOW_RESIZED:
-                preLaunchUIWindowSize = event->windowSize;
                 break;
             case AURORA_DISPLAY_SCALE_CHANGED:
                 dusk::ImGuiEngine_Initialize(event->windowSize.scale);
@@ -202,9 +197,6 @@ void main01(void) {
 
     OSReport("Entering Main Loop (main01)...\n");
 
-    if (preLaunchUIWindowSize.width != 0)
-        mDoGph_gInf_c::setWindowSize(preLaunchUIWindowSize);
-
     constexpr float kSimStepSeconds = 1.0 / 30.0;
     auto previous_time = std::chrono::steady_clock::now();
     float accumulator = kSimStepSeconds;
@@ -218,9 +210,6 @@ void main01(void) {
                 goto eventsDone;
             case AURORA_SDL_EVENT:
                 dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
-                break;
-            case AURORA_WINDOW_RESIZED:
-                mDoGph_gInf_c::setWindowSize(event->windowSize);
                 break;
             case AURORA_DISPLAY_SCALE_CHANGED:
                 dusk::ImGuiEngine_Initialize(event->windowSize.scale);
@@ -246,6 +235,8 @@ void main01(void) {
             DuskLog.debug("aurora_begin_frame returned false, skipping draw this frame");
             continue;
         }
+
+        mDoGph_gInf_c::updateRenderSize();
 
         if (dusk::getSettings().game.enableFrameInterpolation && !dusk::getTransientSettings().skipFrameRateLimit) {
             dusk::frame_interp::notify_presentation_frame();
@@ -525,10 +516,11 @@ int game_main(int argc, char* argv[]) {
         .c_str());
 
     if (dusk::getSettings().video.lockAspectRatio) {
-        VILockAspectRatio(defaultAspectRatioW, defaultAspectRatioH);
+        AuroraSetViewportPolicy(AURORA_VIEWPORT_FIT);
     } else {
-        VIUnlockAspectRatio();
+        AuroraSetViewportPolicy(AURORA_VIEWPORT_STRETCH);
     }
+    VISetFrameBufferScale(dusk::getSettings().game.internalResolutionScale.getValue());
 
     dusk::audio::SetMasterVolume(dusk::getSettings().audio.masterVolume / 100.0f);
     dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);

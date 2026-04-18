@@ -21,6 +21,14 @@
 
 #include "dusk/main.h"
 
+namespace {
+constexpr int kInternalResolutionScaleMax = 12;
+}  // namespace
+
+namespace aurora::gx {
+extern bool enableLodBias;
+}
+
 namespace dusk {
     void ImGuiMenuGame::ToggleFullscreen() {
         getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
@@ -58,12 +66,32 @@ namespace dusk {
                     getSettings().video.lockAspectRatio.setValue(lockAspect);
 
                     if (lockAspect) {
-                        VILockAspectRatio(defaultAspectRatioW, defaultAspectRatioH);
+                        AuroraSetViewportPolicy(AURORA_VIEWPORT_FIT);
                     } else {
-                        VIUnlockAspectRatio();
+                        AuroraSetViewportPolicy(AURORA_VIEWPORT_STRETCH);
                     }
 
                     config::Save();
+                }
+
+                u32 internalResolutionWidth = 0;
+                u32 internalResolutionHeight = 0;
+                AuroraGetRenderSize(&internalResolutionWidth, &internalResolutionHeight);
+                ImGui::TextDisabled("Current internal resolution: %ux%u", internalResolutionWidth,
+                                    internalResolutionHeight);
+
+                int scale = std::clamp(getSettings().game.internalResolutionScale.getValue(), 0,
+                                       kInternalResolutionScaleMax);
+                if (ImGui::SliderInt("Internal Resolution", &scale, 0, kInternalResolutionScaleMax,
+                                     scale == 0 ? "Auto" : "%dx"))
+                {
+                    getSettings().game.internalResolutionScale.setValue(scale);
+                    VISetFrameBufferScale(static_cast<float>(scale));
+                    config::Save();
+                }
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Auto renders at the native window resolution.\n"
+                                      "Higher values scale the game's internal framebuffer.");
                 }
 
                 constexpr const char* bloomModeNames[] = {"Off", "Classic", "Dusk"};
@@ -92,6 +120,8 @@ namespace dusk {
                 if (bloomOff) ImGui::EndDisabled();
 
                 config::ImGuiCheckbox("Enable Water Refraction", getSettings().game.enableWaterRefraction);
+
+                ImGui::Checkbox("Enable LOD Bias", &aurora::gx::enableLodBias);
 
                 ImGui::EndMenu();
             }

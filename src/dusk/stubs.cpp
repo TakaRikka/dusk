@@ -332,14 +332,6 @@ static VIRetraceCallback sVIPostRetraceCallback = NULL;
 
 extern "C" {
 
-void VIConfigure(const GXRenderModeObj* rm) {
-    STUB_LOG();
-}
-
-void VIConfigurePan(u16 xOrg, u16 yOrg, u16 width, u16 height) {
-    STUB_LOG();
-}
-
 u32 VIGetRetraceCount() {
     return sRetraceCount;
 }
