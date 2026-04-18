@@ -3,14 +3,33 @@
 #include "ImGuiMenuEnhancements.hpp"
 #include "ImGuiConfig.hpp"
 #include "dusk/settings.h"
+#include "ImGuiConsole.hpp"
 
 namespace dusk {
+    MeterColorsOverride s_meterColorsOverride;
     ImGuiMenuEnhancements::ImGuiMenuEnhancements() {}
 
     void ImGuiMenuEnhancements::draw() {
         if (ImGui::BeginMenu("Enhancements")) {
             if (ImGui::BeginMenu("Gameplay")) {
                 ImGui::SeparatorText("Preferences");
+
+                DrawColorEdit("Lantern Meter Top", s_meterColorsOverride.lanternCustomTop);
+                DrawColorEdit("Lantern Meter Bottom", s_meterColorsOverride.lanternCustomBottom);
+                DrawColorEdit("Oxygen Meter Top", s_meterColorsOverride.oxygen1CustomTop);
+                DrawColorEdit("Oxygen Meter Bottom", s_meterColorsOverride.oxygen1CustomBottom);
+                DrawColorEdit("Oxygen Meter Top (Low)", s_meterColorsOverride.oxygen2CustomTop);
+                DrawColorEdit("Oxygen Meter Bottom (Low)", s_meterColorsOverride.oxygen2CustomBottom);
+                
+
+                if (ImGui::MenuItem("Reset Meter Colors to default")) {
+                    s_meterColorsOverride.lanternCustomTop = {230, 170, 0, 255};
+                    s_meterColorsOverride.lanternCustomBottom = {255, 255, 140, 255};
+                    s_meterColorsOverride.oxygen1CustomTop = {80, 180, 255, 255};
+                    s_meterColorsOverride.oxygen1CustomBottom = {200, 200, 255, 255};
+                    s_meterColorsOverride.oxygen2CustomTop = {255, 10, 10, 255};
+                    s_meterColorsOverride.oxygen2CustomBottom = {255, 100, 100, 255};
+                }
 
                 config::ImGuiCheckbox("Mirror Mode", getSettings().game.enableMirrorMode);
                 if (ImGui::IsItemHovered()) {
