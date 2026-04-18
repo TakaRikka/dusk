@@ -5,8 +5,10 @@
 #include "ImGuiBloomWindow.hpp"
 #include "ImGuiMenuTools.hpp"
 #include "m_Do/m_Do_graphic.h"
+#include "d/d_meter2_draw.h"
 
 namespace dusk {
+MeterColorsOverride s_meterColorsOverride;
 namespace {
 struct BloomOverride {
     bool enabled = false;
@@ -20,6 +22,15 @@ struct BloomOverride {
 };
 
 BloomOverride s_bloomOverride;
+
+void ResetToDefaultMeterColors() {
+    s_meterColorsOverride.lanternCustomTop = {230, 170, 0, 255};
+    s_meterColorsOverride.lanternCustomBottom = {255, 255, 140, 255};
+    s_meterColorsOverride.oxygen1CustomBottom = {200, 200, 255, 255};
+    s_meterColorsOverride.oxygen1CustomTop = {80, 180, 255, 255};
+    s_meterColorsOverride.oxygen2CustomBottom = {255, 100, 100, 255};
+    s_meterColorsOverride.oxygen2CustomTop = {255, 10, 10, 255};
+}
 
 void SyncFromCurrentBloom() {
     mDoGph_gInf_c::bloom_c* bloom = mDoGph_gInf_c::getBloom();
@@ -122,5 +133,34 @@ void DrawBloomWindow(bool& open) {
 
 void ImGuiMenuTools::ShowBloomWindow() {
     DrawBloomWindow(m_showBloomWindow);
+}
+
+void DrawMeterColorsWindow(bool& open) {
+    if (!open) {
+        return;
+    }
+
+    if (!ImGui::Begin("Meter Colors", &open)) {
+        ImGui::End();
+        return;
+    }
+
+    ImGui::SeparatorText("Lantern Meter");
+    DrawColorEdit("Lantern Top", s_meterColorsOverride.lanternCustomTop);
+    DrawColorEdit("Lantern Bottom", s_meterColorsOverride.lanternCustomBottom);
+    ImGui::SeparatorText("Oxygen Meter (Full)");
+    DrawColorEdit("Oxygen Top", s_meterColorsOverride.oxygen1CustomTop);
+    DrawColorEdit("Oxygen Bottom", s_meterColorsOverride.oxygen1CustomBottom);
+    ImGui::SeparatorText("Oxygen Meter (Low)");
+    DrawColorEdit("Oxygen Top (Low)", s_meterColorsOverride.oxygen2CustomTop);
+    DrawColorEdit("Oxygen Bottom (Low)", s_meterColorsOverride.oxygen2CustomBottom);
+    if (ImGui::MenuItem("Reset meter colors to default")) {
+        ResetToDefaultMeterColors();
+    }
+    ImGui::End();
+}
+
+void ImGuiMenuTools::ShowMeterColorsWindow() {
+    DrawMeterColorsWindow(m_showMeterColors);
 }
 }  // namespace dusk
