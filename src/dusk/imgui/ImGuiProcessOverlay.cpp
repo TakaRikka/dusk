@@ -9,53 +9,109 @@
 #include "f_pc/f_pc_layer_iter.h"
 #include "f_pc/f_pc_leaf.h"
 #include "f_pc/f_pc_node.h"
+#include "d/d_debug_viewer.h"
 #include "imgui.h"
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuTools.hpp"
 #include "imgui_internal.h"
 
 namespace dusk {
-    bool showTreeRecursive;
+    static bool BeginProcTable() {
+        static ImGuiTableFlags table_flags =
+            ImGuiTableFlags_BordersV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_Resizable |
+            ImGuiTableFlags_RowBg | ImGuiTableFlags_NoBordersInBody;
+
+        if (ImGui::BeginTable("proc_table", 7)) {
+            ImGui::TableSetupColumn("ID", ImGuiTableColumnFlags_WidthFixed, 128);
+            ImGui::TableSetupColumn("En", ImGuiTableColumnFlags_WidthFixed, 32);
+            ImGui::TableSetupColumn("Vs", ImGuiTableColumnFlags_WidthFixed, 32);
+            ImGui::TableSetupColumn("ProcName");
+            ImGui::TableSetupColumn("Param", ImGuiTableColumnFlags_WidthFixed, 128);
+            ImGui::TableSetupColumn("Pi", ImGuiTableColumnFlags_WidthFixed, 64);
+            ImGui::TableSetupColumn("DwPi", ImGuiTableColumnFlags_WidthFixed, 64);
+            ImGui::TableHeadersRow();
+            return true;
+        }
+        return false;
+    }
 
     static int ShowProcess(void* p, void*) {
         auto proc = static_cast<base_process_class*>(p);
 
-        char buf[64];
-        snprintf(buf, sizeof(buf), "%d", proc->id);
+        ImGui::TableNextRow();
+        ImGui::PushID(proc);
+        bool pending = proc->create_req != nullptr;
+        if (pending)
+            ImGui::PushStyleColor(ImGuiCol_Text, {255, 200, 0, 255});
+        ImGui::TableNextColumn();
 
-        ImVec2 avail = ImGui::GetContentRegionAvail();
+        char id_buf[32];
+        sprintf(id_buf, "%d", proc->id);
 
-        ImVec2 vec = { avail.x, 0 };
-        if (ImGui::BeginChild(buf, vec, ImGuiChildFlags_Border | ImGuiChildFlags_AutoResizeY)) {
-            ImGui::Text("[%d] %s", proc->id, GetProcName(proc->profname));
-            ImGui::Text("init_state: %d, create_phase: %d", proc->state.init_state, proc->state.create_phase);
+        int flags = ImGuiTreeNodeFlags_SpanAllColumns;
+        bool isLayer = fpcBs_Is_JustOfType(g_fpcNd_type, proc->subtype);
+        if (isLayer) {
+            flags |= ImGuiTreeNodeFlags_DefaultOpen;
+        } else {
+            flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+        }
 
-            const char* ofTypeName = "unknown";
-            if (proc->subtype == g_fpcNd_type) {
-                ofTypeName = "Node";
-            }
-            else if (proc->subtype == g_fpcLf_type) {
-                ofTypeName = "Leaf";
-            }
+        bool open = ImGui::TreeNodeEx(id_buf, flags);
+        fopAc_ac_c* ac = fopAcM_IsActor(proc) ? (fopAc_ac_c*)proc : nullptr;
+        if (ac != nullptr && ImGui::IsItemHovered()) {
+            fopAcM_DrawCullingBox(ac, {0, 255, 255, 255});
+        }
 
-            ImGui::Text("OfType: %d (%s), layer: %d", proc->subtype, ofTypeName, proc->layer_tag.layer->layer_id);
+        ImGui::TableNextColumn();
+        bool enable = !fpcM_IsPause(proc, 1);
+        if (ImGui::Checkbox("##enable", &enable)) {
+            if (enable)
+                fpcM_PauseDisable(proc, 1);
+            else
+                fpcM_PauseEnable(proc, 1);
+        }
 
-            if (proc->create_req != nullptr) {
-                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Pending create request");
-            }
-
-            if (showTreeRecursive) {
-                if (fpcBs_Is_JustOfType(g_fpcNd_type, proc->subtype)) {
-                    auto procNode = static_cast<process_node_class*>(p);
-
-                    ImGui::Text("Owns layer %d", procNode->layer.layer_id);
-
-                    fpcLyIt_OnlyHere(&procNode->layer, ShowProcess, nullptr);
-                }
+        ImGui::TableNextColumn();
+        if (fpcBs_Is_JustOfType(g_fpcLf_type, proc->subtype)) {
+            leafdraw_class* lf = (leafdraw_class*)proc;
+            bool vis = lf->unk_0xBC == 0;
+            if (ImGui::Checkbox("##visible", &vis)) {
+                if (vis)
+                    lf->unk_0xBC = 0;
+                else
+                    lf->unk_0xBC = 1;
             }
         }
 
-        ImGui::EndChild();
+        ImGui::TableNextColumn();
+        ImGui::Text("%s", ac != nullptr ? fopAcM_getProcNameString(ac) : GetProcName(proc->profname));
+
+        ImGui::TableNextColumn();
+        if (proc->profname == fpcNm_ROOM_SCENE_e) {
+            ImGui::Text("Room %d", proc->parameters);
+        } else {
+            ImGui::Text("%08x", proc->parameters);
+        }
+
+        ImGui::TableNextColumn();
+        ImGui::Text("%d", proc->priority.current_info.list_id);
+
+        ImGui::TableNextColumn();
+        if (fpcBs_Is_JustOfType(g_fpcLf_type, proc->subtype)) {
+            ImGui::Text("%d", fpcM_DrawPriority(proc));
+        } else {
+            ImGui::Text("--");
+        }
+
+        if (isLayer && open) {
+            auto procNode = static_cast<process_node_class*>(p);
+            fpcLyIt_OnlyHere(&procNode->layer, ShowProcess, nullptr);
+            ImGui::TreePop();
+        }
+
+        if (pending)
+            ImGui::PopStyleColor(1);
+        ImGui::PopID();
         return 1;
     }
 
@@ -76,15 +132,11 @@ namespace dusk {
 
         if (ImGui::Begin("Processes", &m_showProcessManagement)) {
             if (ImGui::BeginTabBar("Tabs")) {
-                showTreeRecursive = true;
                 if (ImGui::BeginTabItem("Tree")) {
-                    fpcLyIt_OnlyHere(fpcLy_RootLayer(), ShowProcess, nullptr);
-                    ImGui::EndTabItem();
-                }
-
-                showTreeRecursive = false;
-                if (ImGui::BeginTabItem("All layers")) {
-                    fpcLyIt_All(ShowProcess, nullptr);
+                    if (BeginProcTable()) {
+                        fpcLyIt_OnlyHere(fpcLy_RootLayer(), ShowProcess, nullptr);
+                        ImGui::EndTable();
+                    }
                     ImGui::EndTabItem();
                 }
 
