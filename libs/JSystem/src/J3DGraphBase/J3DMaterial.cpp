@@ -265,7 +265,7 @@ void J3DMaterial::diff(u32 diffFlags) {
 }
 
 void J3DMaterial::calc(f32 const (*param_0)[4]) {
-    if (j3dSys.checkFlag(0x40000000)) {
+    if (j3dSys.checkFlag(J3DSysFlag_PostTexMtx)) {
         mTexGenBlock->calcPostTexMtx(param_0);
     } else {
         mTexGenBlock->calc(param_0);
@@ -276,7 +276,7 @@ void J3DMaterial::calc(f32 const (*param_0)[4]) {
 }
 
 void J3DMaterial::calcDiffTexMtx(f32 const (*param_0)[4]) {
-    if (j3dSys.checkFlag(0x40000000)) {
+    if (j3dSys.checkFlag(J3DSysFlag_PostTexMtx)) {
         mTexGenBlock->calcPostTexMtxWithoutViewMtx(param_0);
     } else {
         mTexGenBlock->calcWithoutViewMtx(param_0);
@@ -288,7 +288,7 @@ void J3DMaterial::setCurrentMtx() {
 }
 
 void J3DMaterial::calcCurrentMtx() {
-    if (!j3dSys.checkFlag(0x40000000)) {
+    if (!j3dSys.checkFlag(J3DSysFlag_PostTexMtx)) {
         mCurrentMtx.setCurrentTexMtx(
             getTexCoord(0)->getTexGenMtx(),
             getTexCoord(1)->getTexGenMtx(),
