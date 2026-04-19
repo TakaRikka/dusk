@@ -293,11 +293,6 @@ void J3DModel::calcMaterial() {
 
         material->calc(getAnmMtx(material->getJoint()->getJntNo()));
     }
-
-#if TARGET_PC
-    if (mModelData->needsInterpCallBack())
-        dusk::frame_interp::add_interpolation_callback(&J3DModel::interp_callback, this);
-#endif
 }
 
 void J3DModel::calcDiffTexMtx() {
@@ -500,6 +495,11 @@ void J3DModel::entry() {
             joint->entryIn();
         }
     }
+
+#if TARGET_PC
+    if (mModelData->needsInterpCallBack())
+        dusk::frame_interp::add_interpolation_callback(&J3DModel::interp_callback, this);
+#endif
 }
 
 void J3DModel::viewCalc() {

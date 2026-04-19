@@ -383,6 +383,8 @@ bool J3DMaterial::needsInterpCallBack() const {
             case J3DTexMtxMode_EnvmapBasic:
             case J3DTexMtxMode_EnvmapOld:
             case J3DTexMtxMode_Envmap:
+            case J3DTexMtxMode_ProjmapBasic:
+            case J3DTexMtxMode_Projmap:
             case J3DTexMtxMode_ViewProjmap:
             case J3DTexMtxMode_ViewProjmapBasic:
                 return true;
