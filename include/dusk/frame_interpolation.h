@@ -1,5 +1,4 @@
-#ifndef DUSK_FRAME_INTERP_H
-#define DUSK_FRAME_INTERP_H
+#pragma once
 
 #include <dolphin/mtx.h>
 #include <stdbool.h>
@@ -7,6 +6,7 @@
 #include <stdint.h>
 
 class camera_process_class;
+class view_class;
 
 #ifdef __cplusplus
 namespace dusk {
@@ -16,7 +16,8 @@ void ensure_initialized();
 
 void begin_record();
 void end_record();
-void interpolate(float step);
+void begin_frame(bool is_sim_frame, float step);
+void interpolate();
 float get_interpolation_step();
 
 void request_presentation_sync();
@@ -29,14 +30,14 @@ void set_ui_tick_pending(bool value);
 bool get_ui_tick_pending();
 
 void record_camera(::camera_process_class* cam, int camera_id);
+void interp_view(::view_class* view);
 void record_final_mtx(Mtx m, const void *key);
 void record_final_mtx(Mtx m);
 
 bool lookup_replacement(const void* key, Mtx out);
 bool lookup_concat_replacement(const void* lhs, const void* rhs, Mtx out);
 
-typedef void (*InterpolationCallBack)(void* pUserWork);
-void reset_interpolation_callbacks();
+typedef void (*InterpolationCallBack)(bool isSimFrame, void* pUserWork);
 // call on a sim tick, will get called during presentation
 void add_interpolation_callback(InterpolationCallBack pCallBack, void* pUserWork);
 
@@ -54,6 +55,4 @@ struct PresentationCameraScope {
 
 }  // namespace frame_interp
 }  // namespace dusk
-#endif
-
 #endif

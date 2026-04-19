@@ -234,8 +234,8 @@ void main01(void) {
         mDoGph_gInf_c::updateRenderSize();
 
         if (pacing.is_interpolating) {
+            dusk::frame_interp::begin_frame(pacing.do_sim_tick, pacing.interpolation_step);
             if (pacing.do_sim_tick) {
-                dusk::frame_interp::reset_interpolation_callbacks();
                 dusk::frame_interp::set_ui_tick_pending(true);
                 mDoCPd_c::read();
                 dusk::gyro::read(pacing.sim_pace);
@@ -243,7 +243,7 @@ void main01(void) {
                 mDoAud_Execute();
                 dusk::game_clock::reset_accumulator();
             }
-            dusk::frame_interp::interpolate(pacing.interpolation_step);
+            dusk::frame_interp::interpolate();
             {
                 dusk::frame_interp::PresentationCameraScope presentation_camera;
                 cAPIGph_Painter();

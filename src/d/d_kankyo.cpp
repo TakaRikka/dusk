@@ -35,6 +35,7 @@
 #if TARGET_PC
 #include "dusk/imgui/ImGuiBloomWindow.hpp"
 #include "dusk/settings.h"
+#include "dusk/frame_interpolation.h"
 #endif
 
 static void GxXFog_set();
@@ -8105,11 +8106,23 @@ void dKankyo_HIO_c::genMessage(JORMContext* mctx) {
 
 #endif
 
+#if TARGET_PC
+static void interp_callback(bool isSimFrame, void* pUserWork) {
+    if (!isSimFrame) {
+        g_env_light.drawKankyo();
+    }
+}
+#endif
+
 void dScnKy_env_light_c::drawKankyo() {
     setSunpos();
     SetBaseLight();
     setLight();
     dKy_setLight_nowroom(g_env_light.PrevCol);
+
+#if TARGET_PC
+    dusk::frame_interp::add_interpolation_callback(interp_callback, nullptr);
+#endif
 }
 
 void dKy_undwater_filter_draw() {

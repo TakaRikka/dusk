@@ -19,6 +19,7 @@ bool g_interpolating = false;
 bool g_sync_presentation = false;
 
 float g_step = 0.0f;
+bool g_is_sim_frame = false;
 bool g_ui_tick_pending = false;
 
 Recording g_current_recording;
@@ -141,6 +142,14 @@ bool is_enabled() {
     return g_enabled;
 }
 
+void begin_frame(bool is_sim_frame, float step) {
+    g_is_sim_frame = is_sim_frame;
+    g_step = std::clamp(step, 0.0f, 1.0f);
+    if (is_sim_frame) {
+        s_interpolationCallBackWork.clear();
+    }
+}
+
 void begin_record() {
     ensure_initialized();
 
@@ -167,11 +176,6 @@ void begin_record() {
         s_cam_prev.valid = false;
         s_cam_curr.valid = false;
         return;
-    } else {
-        copy_view_to_snap(&s_cam_prev, cam->view);
-#if WIDESCREEN_SUPPORT
-        s_cam_prev.wideZoom = s_cam_curr.valid ? s_cam_curr.wideZoom : false;
-#endif
     }
 }
 
@@ -179,10 +183,9 @@ void end_record() {
     g_recording = false;
 }
 
-void interpolate(float step) {
+void interpolate() {
     ensure_initialized();
     clear_replacements();
-    g_step = std::clamp(step, 0.0f, 1.0f);
     g_interpolating = g_enabled && !g_recording && !g_sync_presentation && has_recording_data(g_current_recording);
     if (!g_interpolating) {
         return;
@@ -274,25 +277,56 @@ void record_camera(::camera_process_class* cam, int camera_id) {
     if (!g_enabled || camera_id != 0 || cam == nullptr) {
         return;
     }
+    s_cam_prev = std::move(s_cam_curr);
     copy_view_to_snap(&s_cam_curr, cam->view);
 #if WIDESCREEN_SUPPORT
     s_cam_curr.wideZoom = mDoGph_gInf_c::isWideZoom();
 #endif
 }
 
+void interp_view(::view_class* view) {
+    const f32 step = get_interpolation_step();
+    cXyz eye;
+    cXyz center;
+    cXyz up;
+    lerp_xyz(&eye, s_cam_prev.eye, s_cam_curr.eye, step);
+    lerp_xyz(&center, s_cam_prev.center, s_cam_curr.center, step);
+    lerp_xyz(&up, s_cam_prev.up, s_cam_curr.up, step);
+    if (!up.normalizeRS()) {
+        up = s_cam_curr.up;
+        up.normalizeRS();
+    }
+
+    view->lookat.eye = eye;
+    view->lookat.center = center;
+    view->lookat.up = up;
+    view->bank = lerp_bank(s_cam_prev.bank, s_cam_curr.bank, step);
+    view->fovy = s_cam_prev.fovy + (s_cam_curr.fovy - s_cam_prev.fovy) * step;
+    view->aspect = s_cam_prev.aspect + (s_cam_curr.aspect - s_cam_prev.aspect) * step;
+    view->near_ = s_cam_prev.near_ + (s_cam_curr.near_ - s_cam_prev.near_) * step;
+    view->far_ = s_cam_prev.far_ + (s_cam_curr.far_ - s_cam_prev.far_) * step;
+
+    // FRAME INTERP TODO: It might be better if I rewired the game to not clear this flag until the
+    // next sim frame, but I don't care enough to right now
+#if WIDESCREEN_SUPPORT
+    if (mDoGph_gInf_c::isWide() && !mDoGph_gInf_c::isWideZoom() && step >= 0.5f ?
+            s_cam_curr.wideZoom :
+            s_cam_prev.wideZoom)
+    {
+        mDoGph_gInf_c::onWideZoom();
+    }
+#endif
+}
+
 static void run_interpolation_callbacks() {
     for (size_t i = 0; i < s_interpolationCallBackWork.size(); i++) {
         auto const& work = s_interpolationCallBackWork[i];
-        work.pCallBack(work.pUserWork);
+        work.pCallBack(g_is_sim_frame, work.pUserWork);
     }
 }
 
-void reset_interpolation_callbacks() {
-    s_interpolationCallBackWork.clear();
-}
-
 void add_interpolation_callback(InterpolationCallBack pCallBack, void* pUserWork) {
-    if (!is_enabled() || s_presentation_depth > 0)
+    if (!is_enabled() || s_presentation_depth > 0 || !g_is_sim_frame)
         return;
 
     s_interpolationCallBackWork.emplace_back(pCallBack, pUserWork);
@@ -317,34 +351,7 @@ void begin_presentation_camera() {
     }
 
     std::memcpy(&s_presentation_view_backup, view, sizeof(view_class));
-
-    const f32 step = get_interpolation_step();
-    cXyz eye;
-    cXyz center;
-    cXyz up;
-    lerp_xyz(&eye, s_cam_prev.eye, s_cam_curr.eye, step);
-    lerp_xyz(&center, s_cam_prev.center, s_cam_curr.center, step);
-    lerp_xyz(&up, s_cam_prev.up, s_cam_curr.up, step);
-    if (!up.normalizeRS()) {
-        up = s_cam_curr.up;
-        up.normalizeRS();
-    }
-
-    view->lookat.eye = eye;
-    view->lookat.center = center;
-    view->lookat.up = up;
-    view->bank = lerp_bank(s_cam_prev.bank, s_cam_curr.bank, step);
-    view->fovy = s_cam_prev.fovy + (s_cam_curr.fovy - s_cam_prev.fovy) * step;
-    view->aspect = s_cam_prev.aspect + (s_cam_curr.aspect - s_cam_prev.aspect) * step;
-    view->near_ = s_cam_prev.near_ + (s_cam_curr.near_ - s_cam_prev.near_) * step;
-    view->far_ = s_cam_prev.far_ + (s_cam_curr.far_ - s_cam_prev.far_) * step;
-
-    // FRAME INTERP TODO: It might be better if I rewired the game to not clear this flag until the next sim frame, but I don't care enough to right now
-#if WIDESCREEN_SUPPORT
-    if (mDoGph_gInf_c::isWide() && !mDoGph_gInf_c::isWideZoom() && step >= 0.5f ? s_cam_curr.wideZoom : s_cam_prev.wideZoom) {
-        mDoGph_gInf_c::onWideZoom();
-    }
-#endif
+    interp_view(view);
 
     // FRAME INTERP TODO: Largely copied from d_camera's camera_draw function from this point, got any better ideas?
     C_MTXPerspective(view->projMtx, view->fovy, view->aspect, view->near_, view->far_);
