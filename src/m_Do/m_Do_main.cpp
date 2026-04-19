@@ -239,6 +239,7 @@ void main01(void) {
             if (pacing.do_sim_tick) {
                 dusk::frame_interp::set_ui_tick_pending(true);
                 mDoCPd_c::read();
+                DuskDebugPad();
                 dusk::gyro::read(pacing.sim_pace);
                 fapGm_Execute();
                 mDoAud_Execute();

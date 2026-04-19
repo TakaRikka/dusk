@@ -700,13 +700,13 @@ void dFlower_packet_c::draw() {
 #ifdef TARGET_PC
                     Mtx flower_mtx;
                     if (dusk::frame_interp::lookup_replacement(reinterpret_cast<const void*>(&sp44->m_modelMtx), flower_mtx)) {
+                        
                         GXLoadPosMtxImm(flower_mtx, 0);
-                    } else {
+                    } else
 #endif
+                    {
                         GXLoadPosMtxImm(sp44->m_modelMtx, 0);
-#ifdef TARGET_PC
                     }
-#endif
                     GXLoadNrmMtxImm(j3dSys.getViewMtx(), 0);
 
 #if TARGET_PC
@@ -855,6 +855,7 @@ void dFlower_packet_c::draw() {
 #ifdef TARGET_PC
                     Mtx flower_mtx;
                     if (dusk::frame_interp::lookup_replacement(reinterpret_cast<const void*>(&sp34->m_modelMtx), flower_mtx)) {
+                        cMtx_concat(j3dSys.getViewMtx(), flower_mtx, flower_mtx);
                         GXLoadPosMtxImm(flower_mtx, 0);
                     } else {
 #endif
@@ -994,7 +995,7 @@ void dFlower_packet_c::update() {
                 mDoMtx_stack_c::scaleM(temp_f31, temp_f31, temp_f31);
                 cMtx_concat(j3dSys.getViewMtx(), temp_r28, data_p->m_modelMtx);
 #ifdef TARGET_PC
-                dusk::frame_interp::record_final_mtx(data_p->m_modelMtx);
+                dusk::frame_interp::record_final_mtx(mDoMtx_stack_c::get(), data_p->m_modelMtx);
 #endif
             }
         }
