@@ -65,7 +65,7 @@ void fpcM_Management(fpcM_ManagementFunc i_preExecuteFn, fpcM_ManagementFunc i_p
 
 #ifdef TARGET_PC
             // FRAME INTERP NOTE: Called in m_Do_main when interp is enabled
-            if (!dusk::getSettings().game.enableFrameInterpolation || dusk::getTransientSettings().skipFrameRateLimit)
+            if (!dusk::frame_interp::is_enabled())
 #endif
             {
                 cAPIGph_Painter();

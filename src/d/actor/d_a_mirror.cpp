@@ -13,6 +13,9 @@
 #include <gf/GFGeometry.h>
 #include <gf/GFLight.h>
 #include "m_Do/m_Do_lib.h"
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#endif
 
 #ifndef __MWERKS__
 #include "dusk/math.h"
@@ -441,7 +444,12 @@ void dMirror_packet_c::draw() {
     }
 
     mDoLib_clipper::resetFar();
-    reset();
+#if TARGET_PC
+    if (!dusk::frame_interp::is_sim_frame())
+#endif
+    {
+        reset();
+    }
 }
 
 daMirror_c::daMirror_c() {

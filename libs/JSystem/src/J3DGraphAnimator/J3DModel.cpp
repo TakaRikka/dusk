@@ -98,10 +98,12 @@ s32 J3DModel::entryModelData(J3DModelData* pModelData, u32 mdlFlags, u32 mtxNum)
 }
 
 #if TARGET_PC
-void J3DModel::interp_callback(void* pUserWork) {
+void J3DModel::interp_callback(bool isSimFrame, void* pUserWork) {
     J3DModel* i_this = static_cast<J3DModel*>(pUserWork);
-    i_this->calcMaterial();
-    i_this->diff();
+    if (!isSimFrame) {
+        i_this->calcMaterial();
+        i_this->diff();
+    }
 }
 #endif
 
@@ -465,11 +467,11 @@ void J3DModel::calc() {
 
 #ifdef TARGET_PC
     for (u16 i = 0; i < mModelData->getJointNum(); ++i) {
-        dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(getAnmMtx(i)), getAnmMtx(i));
+        dusk::frame_interp::record_final_mtx(getAnmMtx(i));
     }
 
     for (u16 i = 0; i < mModelData->getWEvlpMtxNum(); ++i) {
-        dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(getWeightAnmMtx(i)), getWeightAnmMtx(i));
+        dusk::frame_interp::record_final_mtx(getWeightAnmMtx(i));
     }
 #endif
 }
@@ -509,7 +511,7 @@ void J3DModel::viewCalc() {
             J3DCalcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx,
                                (MtxP)&mInternalView);
 #ifdef TARGET_PC
-            dusk::frame_interp::record_final_mtx_raw(&mInternalView, mInternalView);
+            dusk::frame_interp::record_final_mtx(mInternalView);
 #endif
         }
     } else if (isCpuSkinningOn()) {
@@ -517,7 +519,7 @@ void J3DModel::viewCalc() {
             J3DCalcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx,
                                (MtxP)&mInternalView);
 #ifdef TARGET_PC
-            dusk::frame_interp::record_final_mtx_raw(&mInternalView, mInternalView);
+            dusk::frame_interp::record_final_mtx(mInternalView);
 #endif
         }
     } else if (checkFlag(J3DMdlFlag_SkinPosCpu)) {
@@ -541,7 +543,7 @@ void J3DModel::viewCalc() {
 
 #ifdef TARGET_PC
     for (u16 i = 0; i < mModelData->getDrawMtxNum(); ++i) {
-        dusk::frame_interp::record_final_mtx_raw(&getDrawMtxPtr()[i], getDrawMtxPtr()[i]);
+        dusk::frame_interp::record_final_mtx(getDrawMtxPtr()[i]);
     }
 #endif
 

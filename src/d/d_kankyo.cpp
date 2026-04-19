@@ -35,6 +35,7 @@
 #if TARGET_PC
 #include "dusk/imgui/ImGuiBloomWindow.hpp"
 #include "dusk/settings.h"
+#include "dusk/frame_interpolation.h"
 #endif
 
 static void GxXFog_set();
@@ -8250,6 +8251,10 @@ static int dKy_Delete(sub_kankyo__class* i_this) {
 static int dKy_Create(void* i_this) {
     kankyo_class* kankyo = (kankyo_class*)i_this;
     BOOL next_time_set = false;
+
+#if TARGET_PC
+    kankyo->base.draw_interp_frame = true;
+#endif
 
     stage_envr_info_class* stage_envr_p = dComIfGp_getStageEnvrInfo();
     if (stage_envr_p != NULL && dComIfGp_getStartStageRoomNo() != -1) {

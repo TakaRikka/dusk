@@ -1096,16 +1096,7 @@ void dDlst_shadowReal_c::draw() {
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetCurrentMtx(GX_PNMTX0);
-#ifdef TARGET_PC
-    Mtx receiver_proj_mtx;
-    if (dusk::frame_interp::lookup_replacement(&mReceiverProjMtx, receiver_proj_mtx)) {
-        GXLoadTexMtxImm(receiver_proj_mtx, GX_TEXMTX0, GX_MTX3x4);
-    } else {
-#endif
-        GXLoadTexMtxImm(mReceiverProjMtx, GX_TEXMTX0, GX_MTX3x4);
-#ifdef TARGET_PC
-    }
-#endif
+    GXLoadTexMtxImm(mReceiverProjMtx, GX_TEXMTX0, GX_MTX3x4);
     mShadowRealPoly.draw();
 }
 
@@ -1263,13 +1254,8 @@ u8 dDlst_shadowReal_c::setShadowRealMtx(cXyz* param_0, cXyz* param_1, f32 param_
     C_MTXOrtho(mRenderProjMtx, param_2, -param_2, -param_2, param_2, 1.0f, 10000.0f);
     C_MTXLightOrtho(mReceiverProjMtx, param_2, -param_2, -param_2, param_2, 0.5f, -0.5f, 0.5f, 0.5f);
     cMtx_concat(mReceiverProjMtx, mViewMtx, mReceiverProjMtx);
-#ifdef TARGET_PC
-    dusk::frame_interp::record_final_mtx_raw(&mViewMtx, mViewMtx);
-    dusk::frame_interp::record_final_mtx_raw(&mReceiverProjMtx, mReceiverProjMtx);
-#endif
     return r29;
 }
-
 
 u32 dDlst_shadowReal_c::set(u32 i_key, J3DModel* i_model, cXyz* param_2, f32 param_3, f32 param_4,
                             dKy_tevstr_c* param_5, f32 i_cameraZ, f32 param_7) {
@@ -1292,6 +1278,7 @@ u32 dDlst_shadowReal_c::set(u32 i_key, J3DModel* i_model, cXyz* param_2, f32 par
         }
 
         field_0x1 = setShadowRealMtx(&sp60, param_2, param_3, param_4, param_7, param_5);
+
         if (!field_0x1) {
             return 0;
         }
@@ -1331,14 +1318,14 @@ void dDlst_shadowSimple_c::draw() {
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
 #ifdef TARGET_PC
     Mtx volume_mtx;
-    if (dusk::frame_interp::lookup_replacement(&mVolumeMtx, volume_mtx)) {
+    if (dusk::frame_interp::lookup_replacement(mVolumeMtxKey, volume_mtx)) {
+        cMtx_concat(j3dSys.getViewMtx(), volume_mtx, volume_mtx);
         GXLoadPosMtxImm(volume_mtx, GX_PNMTX0);
-    } else {
+    } else
 #endif
+    {
         GXLoadPosMtxImm(mVolumeMtx, GX_PNMTX0);
-#ifdef TARGET_PC
     }
-#endif
     GXSetCurrentMtx(GX_PNMTX0);
     GXCallDisplayList(l_frontMat, 0x40);
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
@@ -1346,14 +1333,14 @@ void dDlst_shadowSimple_c::draw() {
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
 #ifdef TARGET_PC
     Mtx shadow_mtx;
-    if (dusk::frame_interp::lookup_replacement(&mMtx, shadow_mtx)) {
+    if (dusk::frame_interp::lookup_replacement(mMtxKey, shadow_mtx)) {
+        cMtx_concat(j3dSys.getViewMtx(), shadow_mtx, shadow_mtx);
         GXLoadPosMtxImm(shadow_mtx, GX_PNMTX1);
-    } else {
+    } else
 #endif
+    {
         GXLoadPosMtxImm(mMtx, GX_PNMTX1);
-#ifdef TARGET_PC
     }
-#endif
     GXSetCurrentMtx(GX_PNMTX1);
 
     if (mpTexObj != NULL) {
@@ -1383,6 +1370,12 @@ void dDlst_shadowSimple_c::draw() {
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
 }
 
+#if TARGET_PC
+static const void* getInterpKey(const void* base, int idx) {
+    return reinterpret_cast<const void*>(reinterpret_cast<uintptr_t>(base) ^ idx);
+}
+#endif
+
 void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3,
                                    s16 param_4, f32 param_5, TGXTexObj* param_6) {
     if (param_5 < 0.0f) {
@@ -1406,6 +1399,10 @@ void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* pa
     mDoMtx_stack_c::transS(param_0->x, param_1 + f30, param_0->z);
     mDoMtx_stack_c::YrotM(param_4);
     mDoMtx_stack_c::scaleM(param_2, f30 + f30 + 16.0f, param_2 * param_5);
+#if TARGET_PC
+    mVolumeMtxKey = getInterpKey(param_0, 0x1);
+    dusk::frame_interp::record_final_mtx(mDoMtx_stack_c::get(), mVolumeMtxKey);
+#endif
     cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mVolumeMtx);
     f32 f31 = JMAFastSqrt(1.0f - param_3->x * param_3->x);
     f32 f29;
@@ -1431,17 +1428,11 @@ void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* pa
     mDoMtx_stack_c::get()[2][3] = param_0->z;
     mDoMtx_stack_c::YrotM(param_4);
     mDoMtx_stack_c::scaleM(param_2, 1.0f, param_2 * param_5);
-    cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mMtx);
 #ifdef TARGET_PC
-    const uint64_t shadow_tag_base = dusk::frame_interp::alloc_simple_shadow_pair_base();
-    if (shadow_tag_base != 0) {
-        dusk::frame_interp::record_final_mtx_raw_tagged(&mVolumeMtx, mVolumeMtx, shadow_tag_base);
-        dusk::frame_interp::record_final_mtx_raw_tagged(&mMtx, mMtx, shadow_tag_base + 1u);
-    } else {
-        dusk::frame_interp::record_final_mtx_raw(&mVolumeMtx, mVolumeMtx);
-        dusk::frame_interp::record_final_mtx_raw(&mMtx, mMtx);
-    }
+    mMtxKey = getInterpKey(param_0, 0x2);
+    dusk::frame_interp::record_final_mtx(mDoMtx_stack_c::get(), mMtxKey);
 #endif
+    cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mMtx);
     mpTexObj = param_6;
 }
 

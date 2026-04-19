@@ -71,6 +71,7 @@
 #include "dusk/settings.h"
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "tracy/Tracy.hpp"
+#include "f_pc/f_pc_draw.h"
 
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
@@ -250,21 +251,26 @@ void main01(void) {
 
         mDoGph_gInf_c::updateRenderSize();
 
+        dusk::frame_interp::begin_frame(pacing.is_interpolating, pacing.do_sim_tick, pacing.interpolation_step);
         if (pacing.is_interpolating) {
             if (pacing.do_sim_tick) {
-                dusk::frame_interp::reset_interpolation_callbacks();
                 dusk::frame_interp::set_ui_tick_pending(true);
                 mDoCPd_c::read();
+                DuskDebugPad();
                 dusk::gyro::read(pacing.sim_pace);
                 fapGm_Execute();
                 mDoAud_Execute();
                 dusk::game_clock::reset_accumulator();
             }
-            dusk::frame_interp::interpolate(pacing.interpolation_step);
-            {
-                dusk::frame_interp::PresentationCameraScope presentation_camera;
-                cAPIGph_Painter();
+            dusk::frame_interp::interpolate();
+            dusk::frame_interp::begin_presentation_camera();
+            if (!pacing.do_sim_tick) {
+                // run draw functions for anything specially marked to handle interp on non-sim
+                // ticks
+                fpcM_DrawIterater((fpcM_DrawIteraterFunc)fpcM_Draw);
             }
+            cAPIGph_Painter();
+            dusk::frame_interp::end_presentation_camera();
             dusk::frame_interp::set_ui_tick_pending(false);
         } else {
             dusk::frame_interp::set_ui_tick_pending(true);
