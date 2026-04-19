@@ -342,8 +342,13 @@ void dMenu_Fmap2DBack_c::draw() {
         scrollAreaDraw();
     }
 
-    blinkMove(30);
-    moveLightDropAnime();
+#ifdef TARGET_PC
+    if (dusk::frame_interp::get_ui_tick_pending())
+#endif
+    {
+        blinkMove(30);
+        moveLightDropAnime();
+    }
     setCenterPosX(field_0x11dc, 1);
     drawIcon(mTransX, mTransZ, mAlphaRate, field_0xfa8 * mSpotTextureFadeAlpha);
 
