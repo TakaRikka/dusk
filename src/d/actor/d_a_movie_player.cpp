@@ -4378,6 +4378,8 @@ static void daMP_ActivePlayer_Draw() {
 
     daMP_DrawPosX = static_cast<u32>(rect.PosX);
     daMP_DrawPosY = static_cast<u32>(rect.PosY);
+
+    daMP_THPPlayerSetVolume((dusk::getSettings().audio.masterVolume / 100.0f) * 127.0f, 0);
 #endif
 
     int frame = daMP_THPPlayerDrawCurrentFrame(
