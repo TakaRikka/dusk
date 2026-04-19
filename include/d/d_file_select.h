@@ -10,6 +10,7 @@
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 
 class dFile_info_c;
+class J2DPicture;
 
 class dDlst_FileSel_c : public dDlst_base_c {
 public:
@@ -111,6 +112,14 @@ public:
     virtual ~dDlst_FileSel3m_c() { JKR_DELETE(Scr3m); }
 
     /* 0x04 */ J2DScreen* Scr3m;
+};
+
+class dDlst_FileSelFade_c : public dDlst_base_c {
+public:
+    void draw();
+    virtual ~dDlst_FileSelFade_c() {}
+
+    /* 0x04 */ J2DPicture* mpPict;
 };
 
 class dFs_HIO_c : public JORReflexible {
@@ -676,6 +685,9 @@ public:
     #if PLATFORM_GCN
     /* 0x2378 */ J2DPicture* mpFadePict;
     #endif
+#ifdef TARGET_PC
+    dDlst_FileSelFade_c mFadeDlst;
+#endif
 
     #if PLATFORM_WII || PLATFORM_SHIELD
     /* 0x2376 */ u8 field_0x2376[SAVEFILE_SIZE];
@@ -684,6 +696,10 @@ public:
     #endif
 };
 
+#ifdef TARGET_PC
+STATIC_ASSERT(sizeof(dFile_select_c) == 0x237C + sizeof(dDlst_FileSelFade_c));
+#else
 STATIC_ASSERT(sizeof(dFile_select_c) == 0x237C);
+#endif
 
 #endif /* D_FILE_D_FILE_SELECT_H */

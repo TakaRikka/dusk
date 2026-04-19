@@ -3204,6 +3204,9 @@ void dFile_select_c::screenSet() {
                                 timg, NULL);
     mpFadePict->setBlackWhite(black, white);
     mpFadePict->setAlpha(0);
+#ifdef TARGET_PC
+    mFadeDlst.mpPict = mpFadePict;
+#endif
     #endif
 }
 
@@ -3870,9 +3873,13 @@ void dFile_select_c::_draw() {
         dComIfGd_set2DOpa(mSelIcon2);
 
         #if PLATFORM_GCN
+        #if TARGET_PC
+        dComIfGd_set2DOpaTop(&mFadeDlst);
+        #else
         mpFadePict->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
                            mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), false, false,
                            false);
+        #endif
         #endif
     }
 }
@@ -3916,6 +3923,13 @@ void dDlst_FileSel3m_c::draw() {
     J2DGrafContext* graf = dComIfGp_getCurrentGrafPort();
     Scr3m->draw(0.0f, 0.0f, graf);
 }
+
+#ifdef TARGET_PC
+void dDlst_FileSelFade_c::draw() {
+    mpPict->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
+                 mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), false, false, false);
+}
+#endif
 
 void dFile_select_c::errorMoveAnmInitSet(int param_1, int param_2) {
     mErrorMsgPane->setAnimation(field_0x0090);
