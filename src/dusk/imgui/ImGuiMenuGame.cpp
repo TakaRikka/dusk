@@ -194,6 +194,9 @@ namespace dusk {
 #if DUSK_ENABLE_SENTRY_NATIVE
                 config::ImGuiCheckbox("Enable Crash Reporting", getSettings().backend.enableCrashReporting);
 #endif
+                if (!IsMobile) {
+                    config::ImGuiCheckbox("Pause on Focus Lost", getSettings().game.pauseOnFocusLost);
+                }
 
                 ImGui::EndMenu();
             }

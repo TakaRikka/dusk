@@ -42,6 +42,7 @@ UserSettings g_userSettings = {
         .enableMirrorMode {"game.enableMirrorMode", false},
         .invertCameraXAxis {"game.invertCameraXAxis", false},
         .disableMainHUD {"game.disableMainHUD", false},
+        .pauseOnFocusLost {"game.pauseOnFocusLost", false},
 
         // Graphics
         .bloomMode {"game.bloomMode", BloomMode::Classic},
@@ -136,6 +137,7 @@ void registerSettings() {
     Register(g_userSettings.game.enableMirrorMode);
     Register(g_userSettings.game.invertCameraXAxis);
     Register(g_userSettings.game.disableMainHUD);
+    Register(g_userSettings.game.pauseOnFocusLost);
     Register(g_userSettings.game.bloomMode);
     Register(g_userSettings.game.bloomMultiplier);
     Register(g_userSettings.game.enableWaterRefraction);
