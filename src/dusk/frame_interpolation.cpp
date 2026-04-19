@@ -133,6 +133,7 @@ void begin_frame(bool enabled, bool is_sim_frame, float step) {
     g_step = std::clamp(step, 0.0f, 1.0f);
     if (is_sim_frame) {
         s_interpolationCallBackWork.clear();
+        s_cam_prev = std::move(s_cam_curr);
     }
 }
 
@@ -271,7 +272,6 @@ void record_camera(::camera_process_class* cam, int camera_id) {
     if (!g_enabled || camera_id != 0 || cam == nullptr) {
         return;
     }
-    s_cam_prev = std::move(s_cam_curr);
     copy_view_to_snap(&s_cam_curr, cam->view);
 #if WIDESCREEN_SUPPORT
     s_cam_curr.wideZoom = mDoGph_gInf_c::isWideZoom();
