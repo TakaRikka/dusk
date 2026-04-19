@@ -34,7 +34,11 @@ dMirror_packet_c::dMirror_packet_c() {
 }
 
 void dMirror_packet_c::reset() {
+#if TARGET_PC
+    mbReset = true;
+#else
     mModelCount = 0;
+#endif
 }
 
 void dMirror_packet_c::calcMinMax() {
@@ -76,6 +80,13 @@ void dMirror_packet_c::calcMinMax() {
 }
 
 int dMirror_packet_c::entryModel(J3DModel* i_model) {
+#if TARGET_PC
+    if (mbReset) {
+        mModelCount = 0;
+        mbReset = false;
+    }
+#endif
+
     if (mModelCount >= 0x40) {
         return 0;
     }
@@ -444,12 +455,7 @@ void dMirror_packet_c::draw() {
     }
 
     mDoLib_clipper::resetFar();
-#if TARGET_PC
-    if (!dusk::frame_interp::is_sim_frame())
-#endif
-    {
-        reset();
-    }
+    reset();
 }
 
 daMirror_c::daMirror_c() {
