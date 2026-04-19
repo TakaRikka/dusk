@@ -7063,6 +7063,15 @@ bool dCamera_c::subjectCamera(s32 param_0) {
     }
 
     cXyz sp1E0(val0, val2, val1);
+
+#if TARGET_PC
+    f32 aspect = mDoGph_gInf_c::getAspect();
+    f32 baseAspect = FB_WIDTH / FB_HEIGHT;
+    if (aspect > baseAspect) {
+        sp1E0.z += (aspect - baseAspect) * 4;
+    }
+#endif
+
     sp1D4 = dCamMath::xyzRotateX(sp1E0, angle_x);
     sp1E0 = dCamMath::xyzRotateY(sp1D4, angle_y);
     f32 sp6C = sp12 ? 40.0f : 0.0f;
