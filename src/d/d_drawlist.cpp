@@ -1318,7 +1318,7 @@ void dDlst_shadowSimple_c::draw() {
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
 #ifdef TARGET_PC
     Mtx volume_mtx;
-    if (dusk::frame_interp::lookup_replacement(&mVolumeMtx, volume_mtx)) {
+    if (dusk::frame_interp::lookup_replacement(mVolumeMtxKey, volume_mtx)) {
         GXLoadPosMtxImm(volume_mtx, GX_PNMTX0);
     } else {
 #endif
@@ -1333,7 +1333,7 @@ void dDlst_shadowSimple_c::draw() {
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
 #ifdef TARGET_PC
     Mtx shadow_mtx;
-    if (dusk::frame_interp::lookup_replacement(&mMtx, shadow_mtx)) {
+    if (dusk::frame_interp::lookup_replacement(mMtxKey, shadow_mtx)) {
         GXLoadPosMtxImm(shadow_mtx, GX_PNMTX1);
     } else {
 #endif
@@ -1369,6 +1369,12 @@ void dDlst_shadowSimple_c::draw() {
     GXCallDisplayList(l_clearMat, 0x40);
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
 }
+
+#if TARGET_PC
+static const void* getInterpKey(const void* base, int idx) {
+    return reinterpret_cast<const void*>(reinterpret_cast<uintptr_t>(base) ^ idx);
+}
+#endif
 
 void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3,
                                    s16 param_4, f32 param_5, TGXTexObj* param_6) {
@@ -1420,8 +1426,10 @@ void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* pa
     mDoMtx_stack_c::scaleM(param_2, 1.0f, param_2 * param_5);
     cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mMtx);
 #ifdef TARGET_PC
-    dusk::frame_interp::record_final_mtx(mVolumeMtx);
-    dusk::frame_interp::record_final_mtx(mMtx);
+    mVolumeMtxKey = getInterpKey(param_0, 0x1);
+    mMtxKey = getInterpKey(param_0, 0x2);
+    dusk::frame_interp::record_final_mtx(mVolumeMtx, mVolumeMtxKey);
+    dusk::frame_interp::record_final_mtx(mMtx, mMtxKey);
 #endif
     mpTexObj = param_6;
 }

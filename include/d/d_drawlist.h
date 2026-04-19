@@ -209,6 +209,10 @@ public:
     /* 0x04 */ TGXTexObj* mpTexObj;
     /* 0x08 */ Mtx mVolumeMtx;
     /* 0x38 */ Mtx mMtx;
+#if TARGET_PC
+    const void* mVolumeMtxKey;
+    const void* mMtxKey;
+#endif
 };  // Size: 0x68
 
 struct cBgD_Vtx_t;
