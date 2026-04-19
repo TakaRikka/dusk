@@ -25,7 +25,7 @@ typedef struct leafdraw_class : base_process_class {
 #endif
     /* 0xB8 */ leafdraw_method_class* leaf_methods;
     /* 0xBC */ s8 unk_0xBC;
-    /* 0xBD */ u8 unk_0xBD;
+    /* 0xBD */ u8 draw_interp_frame;
     /* 0xBE */ draw_priority_class draw_priority;
 } leafdraw_class;
 

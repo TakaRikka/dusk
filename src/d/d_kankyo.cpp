@@ -8106,23 +8106,11 @@ void dKankyo_HIO_c::genMessage(JORMContext* mctx) {
 
 #endif
 
-#if TARGET_PC
-static void interp_callback(bool isSimFrame, void* pUserWork) {
-    if (!isSimFrame) {
-        g_env_light.drawKankyo();
-    }
-}
-#endif
-
 void dScnKy_env_light_c::drawKankyo() {
     setSunpos();
     SetBaseLight();
     setLight();
     dKy_setLight_nowroom(g_env_light.PrevCol);
-
-#if TARGET_PC
-    dusk::frame_interp::add_interpolation_callback(interp_callback, nullptr);
-#endif
 }
 
 void dKy_undwater_filter_draw() {
@@ -8263,6 +8251,10 @@ static int dKy_Delete(sub_kankyo__class* i_this) {
 static int dKy_Create(void* i_this) {
     kankyo_class* kankyo = (kankyo_class*)i_this;
     BOOL next_time_set = false;
+
+#if TARGET_PC
+    kankyo->base.draw_interp_frame = true;
+#endif
 
     stage_envr_info_class* stage_envr_p = dComIfGp_getStageEnvrInfo();
     if (stage_envr_p != NULL && dComIfGp_getStartStageRoomNo() != -1) {

@@ -53,16 +53,6 @@ struct InterpolationCallBackWork {
 
 std::vector<InterpolationCallBackWork> s_interpolationCallBackWork;
 
-void set_enabled(bool enabled) {
-    if (g_enabled == enabled)
-        return;
-
-    g_enabled = enabled;
-
-    if (!g_enabled)
-        s_interpolationCallBackWork.clear();
-}
-
 void copy_view_to_snap(CameraSnapshot* dst, const view_class& v) {
     dst->eye = v.lookat.eye;
     dst->center = v.lookat.center;
@@ -134,20 +124,24 @@ void clear_replacements() {
 
 namespace dusk::frame_interp {
 void ensure_initialized() {
-    set_enabled(getSettings().game.enableFrameInterpolation);
     s_initialized = true;
+}
+
+void begin_frame(bool enabled, bool is_sim_frame, float step) {
+    g_enabled = enabled;
+    g_is_sim_frame = is_sim_frame;
+    g_step = std::clamp(step, 0.0f, 1.0f);
+    if (is_sim_frame) {
+        s_interpolationCallBackWork.clear();
+    }
 }
 
 bool is_enabled() {
     return g_enabled;
 }
 
-void begin_frame(bool is_sim_frame, float step) {
-    g_is_sim_frame = is_sim_frame;
-    g_step = std::clamp(step, 0.0f, 1.0f);
-    if (is_sim_frame) {
-        s_interpolationCallBackWork.clear();
-    }
+bool is_sim_frame() {
+    return g_is_sim_frame;
 }
 
 void begin_record() {
@@ -285,6 +279,12 @@ void record_camera(::camera_process_class* cam, int camera_id) {
 }
 
 void interp_view(::view_class* view) {
+    if (!g_enabled)
+        return;
+
+    if (!s_cam_prev.valid || !s_cam_curr.valid)
+        return;
+
     const f32 step = get_interpolation_step();
     cXyz eye;
     cXyz center;
