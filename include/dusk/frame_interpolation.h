@@ -46,15 +46,6 @@ void add_interpolation_callback(InterpolationCallBack pCallBack, void* pUserWork
 void begin_presentation_camera();
 void end_presentation_camera();
 
-struct PresentationCameraScope {
-    PresentationCameraScope() { begin_presentation_camera(); }
-    ~PresentationCameraScope() { end_presentation_camera(); }
-    PresentationCameraScope(const PresentationCameraScope&) = delete;
-    PresentationCameraScope& operator=(const PresentationCameraScope&) = delete;
-    PresentationCameraScope(PresentationCameraScope&&) = delete;
-    PresentationCameraScope& operator=(PresentationCameraScope&&) = delete;
-};
-
 }  // namespace frame_interp
 }  // namespace dusk
 #endif

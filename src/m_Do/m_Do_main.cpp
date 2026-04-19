@@ -243,15 +243,16 @@ void main01(void) {
                 fapGm_Execute();
                 mDoAud_Execute();
                 dusk::game_clock::reset_accumulator();
-            } else {
-                // run draw functions for anything specially marked to handle interp on non-sim ticks
-                fpcM_DrawIterater((fpcM_DrawIteraterFunc)fpcM_Draw);
             }
             dusk::frame_interp::interpolate();
-            {
-                dusk::frame_interp::PresentationCameraScope presentation_camera;
-                cAPIGph_Painter();
+            dusk::frame_interp::begin_presentation_camera();
+            if (!pacing.do_sim_tick) {
+                // run draw functions for anything specially marked to handle interp on non-sim
+                // ticks
+                fpcM_DrawIterater((fpcM_DrawIteraterFunc)fpcM_Draw);
             }
+            cAPIGph_Painter();
+            dusk::frame_interp::end_presentation_camera();
             dusk::frame_interp::set_ui_tick_pending(false);
         } else {
             dusk::frame_interp::set_ui_tick_pending(true);
