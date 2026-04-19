@@ -49,9 +49,10 @@ namespace dusk {
         ImGui::SeparatorText("Free-look Data");
 
         static float eyeYawDeg = 0.0f;
-        static float moveSpeed = 10000.0f;
+        static float moveSpeed = 5000.0f;
         static float rotSpeed = 5.0f;
         static cXyz freeLookPos = cXyz::Zero;
+        static bool freeLookActive = false;
 
         bool changed = false;
 
@@ -91,7 +92,17 @@ namespace dusk {
             changed = true;
         }
 
-        if (changed) {
+        if (!freeLookActive && changed) {
+            freeLookPos += dCam->Center();
+            freeLookActive = true;
+        }
+
+        if (ImGui::IsKeyDown(ImGuiKey_R)) {
+            freeLookPos = cXyz::Zero;
+            freeLookActive = false;
+        }
+
+        if (freeLookActive) {
             dCam->Reset(freeLookPos, freeLookPos + (frontDir * 100.0f));
         }
 
