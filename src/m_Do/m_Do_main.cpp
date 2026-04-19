@@ -68,6 +68,7 @@
 #include "cxxopts.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/config.hpp"
+#include "dusk/settings.h"
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "tracy/Tracy.hpp"
 
@@ -92,6 +93,7 @@ const int audioHeapSize = 0x14D800;
 bool dusk::IsRunning = true;
 bool dusk::IsShuttingDown = false;
 bool dusk::IsGameLaunched = false;
+bool dusk::IsFocusPaused = false;
 #endif
 
 s32 LOAD_COPYDATE(void*) {
@@ -208,6 +210,16 @@ void main01(void) {
                 goto eventsDone;
             case AURORA_SDL_EVENT:
                 dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
+                if (event->sdl.type == SDL_EVENT_WINDOW_FOCUS_LOST &&
+                    dusk::getSettings().game.pauseOnFocusLost) {
+                    dusk::IsFocusPaused = true;
+                    dusk::audio::SetPaused(true);
+                } else if (event->sdl.type == SDL_EVENT_WINDOW_FOCUS_GAINED &&
+                           dusk::IsFocusPaused) {
+                    dusk::IsFocusPaused = false;
+                    dusk::audio::SetPaused(false);
+                    dusk::game_clock::reset_frame_timer();
+                }
                 break;
             case AURORA_DISPLAY_SCALE_CHANGED:
                 dusk::ImGuiEngine_Initialize(event->windowSize.scale);
@@ -220,6 +232,11 @@ void main01(void) {
         }
 
         eventsDone:;
+
+        if (dusk::IsFocusPaused) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(16));
+            continue;
+        }
 
         const dusk::game_clock::MainLoopPacer pacing = dusk::game_clock::advance_main_loop();
 

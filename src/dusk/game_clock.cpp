@@ -29,6 +29,11 @@ void reset_accumulator() {
     s_sim_accumulator = 0.0f;
 }
 
+void reset_frame_timer() {
+    s_previous_sample = clock::now();
+    s_sim_accumulator = 0.0f;
+}
+
 MainLoopPacer advance_main_loop() {
     ensure_initialized();
 
