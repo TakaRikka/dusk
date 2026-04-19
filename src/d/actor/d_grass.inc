@@ -1018,7 +1018,7 @@ void dGrass_packet_c::update() {
                     cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), data_p->m_modelMtx);
                 }
 #ifdef TARGET_PC
-                dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(&data_p->m_modelMtx), data_p->m_modelMtx);
+                dusk::frame_interp::record_final_mtx(data_p->m_modelMtx);
 #endif
             }
         }

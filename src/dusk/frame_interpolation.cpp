@@ -1,62 +1,15 @@
 #include "dusk/frame_interpolation.h"
 
 #include <memory>
+#include "mtx.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_graphic.h"
 
 namespace {
-enum class Op : uint8_t {
-    OpenChild,
-    FinalMtx,
-};
-
-struct Label {
-    const void* key = nullptr;
-    int32_t id = 0;
-
-    bool operator==(const Label& other) const {
-        return key == other.key && id == other.id;
-    }
-};
-
-struct Data {
-    Label child_label{};
-    size_t child_index = 0;
-    Mtx matrix{};
-    const Mtx* dest = nullptr;
-    uint64_t stable_tag = 0;
-};
-
-struct Path;
-
-struct ChildBucket {
-    Label label{};
-    std::vector<std::unique_ptr<Path>> nodes;
-};
-
-struct OpBucket {
-    Op op = Op::OpenChild;
-    std::vector<Data> values;
-};
-
-struct Path {
-    std::vector<ChildBucket> children;
-    std::vector<OpBucket> ops;
-    std::vector<std::pair<Op, size_t>> items;
-    Label draw_scope{};
-    uint32_t simple_shadow_pair_seq = 0;
-};
 
 struct Recording {
-    Path root;
+    std::unordered_map<uintptr_t, Mtx> matrix_values;
 };
-
-struct MatrixValue {
-    Mtx value;
-};
-
-using FinalMtxLookup = std::unordered_map<const Mtx*, const Data*>;
-using FinalMtxLookupTagged = std::unordered_map<uint64_t, const Data*>;
 
 bool s_initialized = false;
 
@@ -70,9 +23,8 @@ bool g_ui_tick_pending = false;
 
 Recording g_current_recording;
 Recording g_previous_recording;
-std::vector<Path*> g_current_path;
 
-std::unordered_map<const Mtx*, MatrixValue> g_replacements;
+std::unordered_map<uintptr_t, Mtx> g_replacements;
 
 struct CameraSnapshot {
     cXyz eye{};
@@ -122,14 +74,6 @@ void copy_view_to_snap(CameraSnapshot* dst, const view_class& v) {
     dst->valid = true;
 }
 
-inline void copy_matrix(const Mtx src, Mtx dst) {
-    MTXCopy(src, dst);
-}
-
-inline void concat_matrix(const Mtx lhs, const Mtx rhs, Mtx out) {
-    MTXConcat(lhs, rhs, out);
-}
-
 inline void lerp_matrix(Mtx out, const Mtx lhs, const Mtx rhs, float step) {
     const float old_weight = 1.0f - step;
     for (size_t row = 0; row < 3; ++row) {
@@ -163,162 +107,22 @@ inline bool matrix_differs(const Mtx lhs, const Mtx rhs, float epsilon = 0.0001f
     return false;
 }
 
-Data& append_op(Op op) {
-    auto& items = g_current_path.back()->items;
-    auto& buckets = g_current_path.back()->ops;
-    auto it = std::find_if(buckets.begin(), buckets.end(),
-                           [op](const OpBucket& bucket) { return bucket.op == op; });
-    if (it == buckets.end()) {
-        buckets.push_back({op, {}});
-        it = buckets.end() - 1;
-    }
-    items.emplace_back(op, it->values.size());
-    return it->values.emplace_back();
-}
-
-const Data* find_matching_data(const Path& path, Op op, size_t index) {
-    auto it = std::find_if(path.ops.begin(), path.ops.end(),
-                           [op](const OpBucket& bucket) { return bucket.op == op; });
-    if (it == path.ops.end() || index >= it->values.size()) {
-        return nullptr;
-    }
-    return &it->values[index];
-}
-
-const OpBucket* find_op_bucket(const Path& path, Op op) {
-    auto it = std::find_if(path.ops.begin(), path.ops.end(),
-                           [op](const OpBucket& bucket) { return bucket.op == op; });
-    if (it == path.ops.end()) {
-        return nullptr;
-    }
-    return &*it;
-}
-
-void build_final_mtx_lookups(const Path& path, FinalMtxLookup& dest_lookup, FinalMtxLookupTagged& tag_lookup) {
-    dest_lookup.clear();
-    tag_lookup.clear();
-
-    const OpBucket* bucket = find_op_bucket(path, Op::FinalMtx);
-    if (bucket == nullptr) {
-        return;
-    }
-
-    for (const Data& data : bucket->values) {
-        if (data.dest != nullptr) {
-            dest_lookup[data.dest] = &data;
-        }
-        if (data.stable_tag != 0) {
-            tag_lookup[data.stable_tag] = &data;
-        }
-    }
-}
-
-const Data* find_matching_final_mtx(const FinalMtxLookup& lookup, const Data& new_data) {
-    if (new_data.dest == nullptr) {
-        return nullptr;
-    }
-
-    auto it = lookup.find(new_data.dest);
-    if (it == lookup.end()) {
-        return nullptr;
-    }
-    return it->second;
-}
-
-ChildBucket& get_child_bucket(Path& path, const Label& label) {
-    auto it = std::find_if(path.children.begin(), path.children.end(),
-                           [&label](const ChildBucket& bucket) { return bucket.label == label; });
-    if (it == path.children.end()) {
-        path.children.push_back({});
-        it = path.children.end() - 1;
-        it->label = label;
-    }
-    return *it;
-}
-
-const ChildBucket* find_child_bucket(const Path& path, const Label& label) {
-    auto it = std::find_if(path.children.begin(), path.children.end(),
-                           [&label](const ChildBucket& bucket) { return bucket.label == label; });
-    if (it == path.children.end()) {
-        return nullptr;
-    }
-    return &*it;
-}
-
-void store_replacement(const Data& old_data, const Data& new_data, float step) {
-    if (new_data.dest == nullptr) {
-        return;
-    }
-
-    auto& replacement = g_replacements[new_data.dest];
-    lerp_matrix(replacement.value, old_data.matrix, new_data.matrix, step);
-}
-
-void interpolate_branch(const Path& old_path, const Path& new_path, float step) {
-    FinalMtxLookup old_final_mtx_lookup;
-    FinalMtxLookupTagged old_final_mtx_lookup_tagged;
-    build_final_mtx_lookups(old_path, old_final_mtx_lookup, old_final_mtx_lookup_tagged);
-
-    for (const auto& item : new_path.items) {
-        const Op op = item.first;
-        const size_t index = item.second;
-        const Data* new_data = find_matching_data(new_path, op, index);
-        if (new_data == nullptr) {
-            continue;
-        }
-
-        if (op == Op::OpenChild) {
-            const ChildBucket* new_children = find_child_bucket(new_path, new_data->child_label);
-            if (new_children == nullptr || new_data->child_index >= new_children->nodes.size())
-            {
-                continue;
-            }
-
-            const Path& new_child = *new_children->nodes[new_data->child_index];
-            const ChildBucket* old_children = find_child_bucket(old_path, new_data->child_label);
-            if (old_children != nullptr && new_data->child_index < old_children->nodes.size())
-            {
-                interpolate_branch(*old_children->nodes[new_data->child_index], new_child, step);
-            } else {
-                interpolate_branch(new_child, new_child, step);
-            }
-            continue;
-        }
-
-        const Data* indexed_old_data = find_matching_data(old_path, op, index);
-        const Data* old_data = nullptr;
-        if (op == Op::FinalMtx) {
-            if (new_data->stable_tag != 0) {
-                const auto it = old_final_mtx_lookup_tagged.find(new_data->stable_tag);
-                old_data = it != old_final_mtx_lookup_tagged.end() ? it->second : nullptr;
-            } else {
-                old_data = find_matching_final_mtx(old_final_mtx_lookup, *new_data);
-            }
-        } else {
-            old_data = indexed_old_data;
-        }
-        if (op == Op::FinalMtx) {
-            store_replacement(old_data != nullptr ? *old_data : *new_data, *new_data, step);
-        }
-    }
-}
-
 const Mtx* resolve_replacement(const Mtx* source, Mtx* scratch) {
     if (!g_interpolating || source == nullptr || dusk::frame_interp::presentation_sync_active()) {
         return source;
     }
 
-    auto it = g_replacements.find(source);
+    auto it = g_replacements.find(reinterpret_cast<uintptr_t>(source));
     if (it == g_replacements.end()) {
         return source;
     }
 
-    copy_matrix(it->second.value, *scratch);
+    MTXCopy(it->second, *scratch);
     return scratch;
 }
 
 bool has_recording_data(const Recording& recording) {
-    return !recording.root.items.empty() || !recording.root.children.empty();
+    return !recording.matrix_values.empty();
 }
 
 void clear_replacements() {
@@ -345,7 +149,6 @@ void begin_record() {
         g_sync_presentation = false;
         g_previous_recording = {};
         g_current_recording = {};
-        g_current_path.clear();
         clear_replacements();
         s_cam_prev.valid = false;
         s_cam_curr.valid = false;
@@ -355,8 +158,6 @@ void begin_record() {
     g_sync_presentation = false;
     g_previous_recording = std::move(g_current_recording);
     g_current_recording = {};
-    g_current_path.clear();
-    g_current_path.push_back(&g_current_recording.root);
     g_recording = true;
     g_interpolating = false;
     clear_replacements();
@@ -386,8 +187,13 @@ void interpolate(float step) {
     if (!g_interpolating) {
         return;
     }
-    const Path& old_root = has_recording_data(g_previous_recording) ? g_previous_recording.root : g_current_recording.root;
-    interpolate_branch(old_root, g_current_recording.root, g_step);
+    for (auto const& old : g_previous_recording.matrix_values) {
+        if (auto it = g_current_recording.matrix_values.find(old.first);
+            it != g_current_recording.matrix_values.end())
+        {
+            lerp_matrix(g_replacements[old.first], old.second, it->second, g_step);
+        }
+    }
 }
 
 void request_presentation_sync() {
@@ -420,63 +226,30 @@ bool get_ui_tick_pending() {
     return g_enabled ? g_ui_tick_pending : true;
 }
 
-void open_child(const void* key, int32_t id) {
-    if (!s_initialized || !g_recording) {
+void record_final_mtx(Mtx m, const void* key) {
+    if (!s_initialized || !g_recording || m == nullptr) {
         return;
     }
 
-    Label label{key, id};
-    auto& siblings = get_child_bucket(*g_current_path.back(), label).nodes;
-    Data& data = append_op(Op::OpenChild);
-    data.child_label = label;
-    data.child_index = siblings.size();
-    siblings.emplace_back(std::make_unique<Path>());
-    Path* const child = siblings.back().get();
-    child->draw_scope = label;
-    g_current_path.push_back(child);
+    auto& it = g_current_recording.matrix_values[reinterpret_cast<uintptr_t>(key)];
+    MTXCopy(m, it);
 }
 
-void close_child() {
-    if (!s_initialized || !g_recording || g_current_path.size() <= 1) {
-        return;
-    }
-
-    g_current_path.pop_back();
+void record_final_mtx(Mtx m) {
+    record_final_mtx(m, m);
 }
 
-void record_final_mtx_raw(const Mtx* dest, const Mtx src) {
-    if (!s_initialized || !g_recording || dest == nullptr) {
-        return;
-    }
-
-    Data& data = append_op(Op::FinalMtx);
-    data.dest = dest;
-    data.stable_tag = 0;
-    copy_matrix(src, data.matrix);
-}
-
-void record_final_mtx_raw_tagged(const Mtx* dest, const Mtx src, uint64_t stable_tag) {
-    if (!s_initialized || !g_recording || dest == nullptr) {
-        return;
-    }
-
-    Data& data = append_op(Op::FinalMtx);
-    data.dest = dest;
-    data.stable_tag = stable_tag;
-    copy_matrix(src, data.matrix);
-}
-
-bool lookup_replacement(const void* source, Mtx out) {
-    if (presentation_sync_active() || !g_interpolating || source == nullptr) {
+bool lookup_replacement(const void* key, Mtx out) {
+    if (presentation_sync_active() || !g_interpolating || key == nullptr) {
         return false;
     }
 
-    auto it = g_replacements.find(reinterpret_cast<const Mtx*>(source));
+    auto it = g_replacements.find(reinterpret_cast<uintptr_t>(key));
     if (it == g_replacements.end()) {
         return false;
     }
 
-    copy_matrix(it->second.value, out);
+    MTXCopy(it->second, out);
     return true;
 }
 
@@ -493,7 +266,7 @@ bool lookup_concat_replacement(const void* lhs, const void* rhs, Mtx out) {
         return false;
     }
 
-    concat_matrix(*resolved_lhs, *resolved_rhs, out);
+    MTXConcat(*resolved_lhs, *resolved_rhs, out);
     return true;
 }
 
@@ -651,21 +424,5 @@ void end_presentation_camera() {
     if (view != nullptr) {
         std::memcpy(view, &s_presentation_view_backup, sizeof(view_class));
     }
-}
-
-uint64_t alloc_simple_shadow_pair_base() {
-    if (!s_initialized || !g_recording || g_current_path.size() <= 1) {
-        return 0;
-    }
-
-    Path* const scope = g_current_path.back();
-    const uint64_t h = static_cast<uint64_t>(reinterpret_cast<uintptr_t>(scope->draw_scope.key));
-    const uint32_t lo = scope->simple_shadow_pair_seq;
-    scope->simple_shadow_pair_seq += 2;
-    uint64_t tag0 = (h << 17) ^ (static_cast<uint64_t>(lo) << 1u);
-    if (tag0 == 0) {
-        tag0 = 2;
-    }
-    return tag0;
 }
 }  // namespace dusk::frame_interp

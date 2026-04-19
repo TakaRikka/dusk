@@ -26,13 +26,7 @@ int fpcDw_Execute(base_process_class* i_proc) {
         }
     
         fpcLy_SetCurrentLayer(i_proc->layer_tag.layer);
-#ifdef TARGET_PC
-        dusk::frame_interp::open_child(i_proc, 0);
-#endif
         ret = draw_func(i_proc);
-#ifdef TARGET_PC
-        dusk::frame_interp::close_child();
-#endif
         fpcLy_SetCurrentLayer(save_layer);
         return ret;
     }
