@@ -23,6 +23,10 @@ public:
     void syncJ3DSysPointers() const;
     void syncJ3DSysFlags() const;
 
+#if TARGET_PC
+    bool needsInterpCallBack() const;
+#endif
+
     virtual ~J3DModelData() {}
 
     void simpleCalcMaterial(Mtx mtx) { simpleCalcMaterial(0, mtx); }

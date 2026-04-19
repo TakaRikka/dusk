@@ -79,6 +79,10 @@ public:
     virtual void viewCalc();
     virtual ~J3DModel() {}
 
+#if TARGET_PC
+    static void interp_callback(void* pUserWork);
+#endif
+
     J3DModelData* getModelData() { return mModelData; }
 
     void onFlag(u32 flag) { mFlags |= flag; }

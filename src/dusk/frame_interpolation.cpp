@@ -93,6 +93,23 @@ CameraSnapshot s_cam_curr{};
 view_class s_presentation_view_backup{};
 int s_presentation_depth = 0;
 
+struct InterpolationCallBackWork {
+    dusk::frame_interp::InterpolationCallBack pCallBack;
+    void* pUserWork;
+};
+
+std::vector<InterpolationCallBackWork> s_interpolationCallBackWork;
+
+void set_enabled(bool enabled) {
+    if (g_enabled == enabled)
+        return;
+
+    g_enabled = enabled;
+
+    if (!g_enabled)
+        s_interpolationCallBackWork.clear();
+}
+
 void copy_view_to_snap(CameraSnapshot* dst, const view_class& v) {
     dst->eye = v.lookat.eye;
     dst->center = v.lookat.center;
@@ -312,8 +329,12 @@ void clear_replacements() {
 
 namespace dusk::frame_interp {
 void ensure_initialized() {
-    g_enabled = getSettings().game.enableFrameInterpolation;
+    set_enabled(getSettings().game.enableFrameInterpolation);
     s_initialized = true;
+}
+
+bool is_enabled() {
+    return g_enabled;
 }
 
 void begin_record() {
@@ -486,6 +507,24 @@ void record_camera(::camera_process_class* cam, int camera_id) {
 #endif
 }
 
+static void run_interpolation_callbacks() {
+    for (size_t i = 0; i < s_interpolationCallBackWork.size(); i++) {
+        auto const& work = s_interpolationCallBackWork[i];
+        work.pCallBack(work.pUserWork);
+    }
+}
+
+void reset_interpolation_callbacks() {
+    s_interpolationCallBackWork.clear();
+}
+
+void add_interpolation_callback(InterpolationCallBack pCallBack, void* pUserWork) {
+    if (!is_enabled() || s_presentation_depth > 0)
+        return;
+
+    s_interpolationCallBackWork.emplace_back(pCallBack, pUserWork);
+}
+
 void begin_presentation_camera() {
     ensure_initialized();
     if (!g_enabled) {
@@ -589,12 +628,14 @@ void begin_presentation_camera() {
     }
 
     mDoLib_clipper::setup(view->fovy, view->aspect, view->near_, far_);
-
+    
 #if WIDESCREEN_SUPPORT
     mDoGph_gInf_c::offWideZoom();
 #endif
 
     s_presentation_depth = 1;
+
+    run_interpolation_callbacks();
 }
 
 void end_presentation_camera() {

@@ -235,6 +235,7 @@ void main01(void) {
 
         if (pacing.is_interpolating) {
             if (pacing.do_sim_tick) {
+                dusk::frame_interp::reset_interpolation_callbacks();
                 dusk::frame_interp::set_ui_tick_pending(true);
                 mDoCPd_c::read();
                 dusk::gyro::read(pacing.sim_pace);

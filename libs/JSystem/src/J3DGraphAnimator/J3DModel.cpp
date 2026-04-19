@@ -97,6 +97,14 @@ s32 J3DModel::entryModelData(J3DModelData* pModelData, u32 mdlFlags, u32 mtxNum)
     return kJ3DError_Success;
 }
 
+#if TARGET_PC
+void J3DModel::interp_callback(void* pUserWork) {
+    J3DModel* i_this = static_cast<J3DModel*>(pUserWork);
+    i_this->calcMaterial();
+    i_this->diff();
+}
+#endif
+
 s32 J3DModel::createShapePacket(J3DModelData* pModelData) {
     J3D_ASSERTMSG(173, pModelData != NULL, "Error : null pointer.");
 
@@ -283,6 +291,11 @@ void J3DModel::calcMaterial() {
 
         material->calc(getAnmMtx(material->getJoint()->getJntNo()));
     }
+
+#if TARGET_PC
+    if (mModelData->needsInterpCallBack())
+        dusk::frame_interp::add_interpolation_callback(&J3DModel::interp_callback, this);
+#endif
 }
 
 void J3DModel::calcDiffTexMtx() {

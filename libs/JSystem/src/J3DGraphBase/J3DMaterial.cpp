@@ -371,6 +371,28 @@ s32 J3DMaterial::newSingleSharedDisplayList(u32 dlSize) {
     return kJ3DError_Success;
 }
 
+#if TARGET_PC
+bool J3DMaterial::needsInterpCallBack() const {
+    for (int i = 0, n = getTexGenNum(); i < n; i++) {
+        J3DTexMtx* pTexMtx = mTexGenBlock->getTexMtx(i);
+        if (pTexMtx != NULL) {
+            u32 texMtxMode = pTexMtx->getTexMtxInfo().mInfo & 0x3f;
+
+            // uses j3dSys.getViewMtx()
+            switch (texMtxMode) {
+            case J3DTexMtxMode_EnvmapBasic:
+            case J3DTexMtxMode_EnvmapOld:
+            case J3DTexMtxMode_Envmap:
+            case J3DTexMtxMode_ViewProjmap:
+            case J3DTexMtxMode_ViewProjmapBasic:
+                return true;
+            }
+        }
+    }
+    return false;
+}
+#endif
+
 void J3DPatchedMaterial::initialize() {
     J3DMaterial::initialize();
 }

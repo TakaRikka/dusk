@@ -22,6 +22,8 @@ float get_interpolation_step();
 void request_presentation_sync();
 bool presentation_sync_active();
 
+bool is_enabled();
+
 // TODO: These should be phased out as UI is progressively updated to use game_clock
 void set_ui_tick_pending(bool value);
 bool get_ui_tick_pending();
@@ -34,6 +36,11 @@ void record_final_mtx_raw_tagged(const Mtx* dest, const Mtx src, uint64_t stable
 
 bool lookup_replacement(const void* source, Mtx out);
 bool lookup_concat_replacement(const void* lhs, const void* rhs, Mtx out);
+
+typedef void (*InterpolationCallBack)(void* pUserWork);
+void reset_interpolation_callbacks();
+// call on a sim tick, will get called during presentation
+void add_interpolation_callback(InterpolationCallBack pCallBack, void* pUserWork);
 
 void begin_presentation_camera();
 void end_presentation_camera();
