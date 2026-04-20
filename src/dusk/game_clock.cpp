@@ -26,7 +26,9 @@ void ensure_initialized() {
 
 void reset_accumulator() {
     ensure_initialized();
-    s_sim_accumulator = 0.0f;
+    s_sim_accumulator -= sim_pace();
+    if (s_sim_accumulator < 0.0f)
+        s_sim_accumulator = 0.0f;
 }
 
 void reset_frame_timer() {
