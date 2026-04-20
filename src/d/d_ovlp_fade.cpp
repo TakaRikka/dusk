@@ -26,8 +26,8 @@ static void dOvlpFd_startFadeIn(int param_0) {
     JUTFader* fader = JFWDisplay::getManager()->getFader();
     JUT_ASSERT(0, fader != NULL);
 
-    fader->setStatus(JUTFader::UNKSTATUS_0, 0);
-    fader->setStatus(JUTFader::UNKSTATUS_0, -1);
+    fader->setStatus(JUTFader::None, 0);
+    fader->setStatus(JUTFader::None, -1);
     fader->startFadeIn(param_0);
 }
 

@@ -6601,13 +6601,14 @@ static int daE_RD_Execute(e_rd_class* i_this) {
                 1.2f,
             };
 
+            #if AVOID_UB
+            s16 x = 0;
+            s16 y = 0;
+            #endif
             for (int i = 0; i < 2; i++) {
                 MtxPush();
+                #if !AVOID_UB
                 s16 x, y;
-
-                #if AVOID_UB
-                x = 0;
-                y = 0;
                 #endif
 
                 if (i == 0) {

@@ -18,6 +18,7 @@ typedef struct process_node_class {
     /* 0x0BC */ layer_class layer;
     /* 0x0E8 */ node_list_class layer_nodelist[16];
     /* 0x1A8 */ s8 unk_0x1A8;
+    /* 0x1A9 */ s8 draw_interp_frame;
 } process_node_class;
 
 typedef struct node_process_profile_definition {

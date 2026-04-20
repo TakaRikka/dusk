@@ -224,13 +224,7 @@ void daObjCRVFENCE_c::NormalAction() {
 
 bool daObjCRVFENCE_c::checkViewArea(cXyz* param_1) {
     Vec sp24;
-
-    #if TARGET_PC
-    mDoLib_project(param_1, &sp24, {0, 0, FB_WIDTH, FB_HEIGHT});
-    #else
     mDoLib_project(param_1, &sp24);
-    #endif
-
     bool rv = false;
     bool bVar1 = false;
 

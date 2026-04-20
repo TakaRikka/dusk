@@ -68,8 +68,10 @@
 #include "cxxopts.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/config.hpp"
+#include "dusk/settings.h"
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "tracy/Tracy.hpp"
+#include "f_pc/f_pc_draw.h"
 
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
@@ -92,6 +94,7 @@ const int audioHeapSize = 0x14D800;
 bool dusk::IsRunning = true;
 bool dusk::IsShuttingDown = false;
 bool dusk::IsGameLaunched = false;
+bool dusk::IsFocusPaused = false;
 #endif
 
 s32 LOAD_COPYDATE(void*) {
@@ -126,8 +129,6 @@ AuroraStats dusk::lastFrameAuroraStats;
 float dusk::frameUsagePct = 0.0f;
 const char* configPath;
 
-AuroraWindowSize preLaunchUIWindowSize;
-
 bool launchUILoop() {
     while (dusk::IsRunning && !dusk::IsGameLaunched) {
         const AuroraEvent* event = aurora_update();
@@ -135,9 +136,6 @@ bool launchUILoop() {
             switch (event->type) {
             case AURORA_SDL_EVENT:
                 dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
-                break;
-            case AURORA_WINDOW_RESIZED:
-                preLaunchUIWindowSize = event->windowSize;
                 break;
             case AURORA_DISPLAY_SCALE_CHANGED:
                 dusk::ImGuiEngine_Initialize(event->windowSize.scale);
@@ -202,9 +200,6 @@ void main01(void) {
 
     OSReport("Entering Main Loop (main01)...\n");
 
-    if (preLaunchUIWindowSize.width != 0)
-        mDoGph_gInf_c::setWindowSize(preLaunchUIWindowSize);
-
     dusk::game_clock::ensure_initialized();
 
     do {
@@ -216,9 +211,16 @@ void main01(void) {
                 goto eventsDone;
             case AURORA_SDL_EVENT:
                 dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
-                break;
-            case AURORA_WINDOW_RESIZED:
-                mDoGph_gInf_c::setWindowSize(event->windowSize);
+                if (event->sdl.type == SDL_EVENT_WINDOW_FOCUS_LOST &&
+                    dusk::getSettings().game.pauseOnFocusLost) {
+                    dusk::IsFocusPaused = true;
+                    dusk::audio::SetPaused(true);
+                } else if (event->sdl.type == SDL_EVENT_WINDOW_FOCUS_GAINED &&
+                           dusk::IsFocusPaused) {
+                    dusk::IsFocusPaused = false;
+                    dusk::audio::SetPaused(false);
+                    dusk::game_clock::reset_frame_timer();
+                }
                 break;
             case AURORA_DISPLAY_SCALE_CHANGED:
                 dusk::ImGuiEngine_Initialize(event->windowSize.scale);
@@ -232,6 +234,11 @@ void main01(void) {
 
         eventsDone:;
 
+        if (dusk::IsFocusPaused) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(16));
+            continue;
+        }
+
         const dusk::game_clock::MainLoopPacer pacing = dusk::game_clock::advance_main_loop();
 
         VIWaitForRetrace();
@@ -242,20 +249,28 @@ void main01(void) {
             continue;
         }
 
+        mDoGph_gInf_c::updateRenderSize();
+
+        dusk::frame_interp::begin_frame(pacing.is_interpolating, pacing.do_sim_tick, pacing.interpolation_step);
         if (pacing.is_interpolating) {
             if (pacing.do_sim_tick) {
                 dusk::frame_interp::set_ui_tick_pending(true);
                 mDoCPd_c::read();
+                DuskDebugPad();
                 dusk::gyro::read(pacing.sim_pace);
                 fapGm_Execute();
                 mDoAud_Execute();
                 dusk::game_clock::reset_accumulator();
             }
-            dusk::frame_interp::interpolate(pacing.interpolation_step);
-            {
-                dusk::frame_interp::PresentationCameraScope presentation_camera;
-                cAPIGph_Painter();
+            dusk::frame_interp::interpolate();
+            dusk::frame_interp::begin_presentation_camera();
+            if (!pacing.do_sim_tick) {
+                // run draw functions for anything specially marked to handle interp on non-sim
+                // ticks
+                fpcM_DrawIterater((fpcM_DrawIteraterFunc)fpcM_Draw);
             }
+            cAPIGph_Painter();
+            dusk::frame_interp::end_presentation_camera();
             dusk::frame_interp::set_ui_tick_pending(false);
         } else {
             dusk::frame_interp::set_ui_tick_pending(true);
@@ -521,10 +536,11 @@ int game_main(int argc, char* argv[]) {
         .c_str());
 
     if (dusk::getSettings().video.lockAspectRatio) {
-        VILockAspectRatio(defaultAspectRatioW, defaultAspectRatioH);
+        AuroraSetViewportPolicy(AURORA_VIEWPORT_FIT);
     } else {
-        VIUnlockAspectRatio();
+        AuroraSetViewportPolicy(AURORA_VIEWPORT_STRETCH);
     }
+    VISetFrameBufferScale(dusk::getSettings().game.internalResolutionScale.getValue());
 
     dusk::audio::SetMasterVolume(dusk::getSettings().audio.masterVolume / 100.0f);
     dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);

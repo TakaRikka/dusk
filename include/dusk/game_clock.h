@@ -8,6 +8,7 @@ namespace game_clock {
 
 void ensure_initialized();
 void reset_accumulator();
+void reset_frame_timer();
 
 constexpr float sim_pace() { return 1.0f / 30.0f; }
 constexpr float period_for_original_frames(float frame_count) { return frame_count * sim_pace(); }

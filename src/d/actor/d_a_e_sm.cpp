@@ -1362,13 +1362,7 @@ void daE_SM_c::E_SM_C_Hook() {
 
 bool daE_SM_c::CheckViewArea() {
     Vec vec;
-
-    #if TARGET_PC
-    mDoLib_project(&current.pos, &vec, {0, 0, FB_WIDTH, FB_HEIGHT});
-    #else
     mDoLib_project(&current.pos, &vec);
-    #endif
-
     bool rv = false;
 
     if (vec.x >= 0.0f && vec.x <= FB_WIDTH && vec.y >= 0.0f && vec.y <= FB_HEIGHT) {

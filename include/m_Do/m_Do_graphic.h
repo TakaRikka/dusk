@@ -286,12 +286,7 @@ public:
     #if WIDESCREEN_SUPPORT
     static void setTvSize();
 
-    #if TARGET_PC
-    static void onWide(f32 width, f32 height);
-    #else
     static void onWide();
-    #endif
-
     static void offWide();
     static u8 isWide();
 
@@ -304,7 +299,7 @@ public:
     #endif
 
     #if TARGET_PC
-    static void setWindowSize(AuroraWindowSize const& size);
+    static void updateRenderSize();
     #endif
 
     static TGXTexObj mFrameBufferTexObj;

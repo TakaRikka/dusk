@@ -32,15 +32,9 @@ public:
         if (getDrawFlag() == 1) {
             setDrawFlag();
             dComIfGp_onPauseFlag();
-
-            #if TARGET_PC
-            GXSetTexCopySrc(0, 0, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
-            #else
             GXSetTexCopySrc(0, 0, FB_WIDTH, FB_HEIGHT);
-            #endif
-
 #if TARGET_PC
-            GXSetTexCopyDst(mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_ENABLE);
+            GXSetTexCopyDst(FB_WIDTH, FB_HEIGHT, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_DISABLE);
 #else
             GXSetTexCopyDst(FB_WIDTH / 2, FB_HEIGHT / 2, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_ENABLE);
 #endif
@@ -48,17 +42,17 @@ public:
             GXPixModeSync();
 #if TARGET_PC
             // init mTexObj at capture time so the gpu ref survives window resizes
-            mCaptureWidth = mDoGph_gInf_c::getWidth();
-            mCaptureHeight = mDoGph_gInf_c::getHeight();
-            GXInitTexObj(&mTexObj, mDoGph_gInf_c::getFrameBufferTex(), mCaptureWidth, mCaptureHeight,
+            mCaptureWidth = JUTVideo::getManager()->getRenderWidth();
+            mCaptureHeight = JUTVideo::getManager()->getRenderHeight();
+            GXInitTexObj(&mTexObj, mDoGph_gInf_c::getFrameBufferTex(), FB_WIDTH / 2, FB_HEIGHT / 2,
                         (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_CLAMP, GX_CLAMP, GX_FALSE);
             GXInitTexObjLOD(&mTexObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
 #endif
         } else {
 #if TARGET_PC
             // If the window was resized since capture, force a re-capture at the new size
-            if (mCaptureWidth != (u16)mDoGph_gInf_c::getWidth() ||
-                mCaptureHeight != (u16)mDoGph_gInf_c::getHeight()) {
+            if (mCaptureWidth != JUTVideo::getManager()->getRenderWidth() ||
+                mCaptureHeight != JUTVideo::getManager()->getRenderHeight()) {
                 mFlag = 1;
                 return;
             }
@@ -137,8 +131,8 @@ private:
     /* 0x5 */ u8 mAlpha;
     /* 0x6 */ u8 mTopFlag;
 #if TARGET_PC
-    u16 mCaptureWidth;
-    u16 mCaptureHeight;
+    u32 mCaptureWidth;
+    u32 mCaptureHeight;
     TGXTexObj mTexObj;
 #endif
 };
@@ -705,7 +699,7 @@ void dMw_c::collect_open_proc() {
         dMeter2Info_set2DVibrationM();
     }
 
-    if (mDoGph_gInf_c::getFader()->getStatus() == JUTFader::UNKSTATUS_0) {
+    if (mDoGph_gInf_c::getFader()->getStatus() == JUTFader::None) {
         mMenuProc = COLLECT_MOVE;
     }
 }
@@ -920,7 +914,7 @@ void dMw_c::collect_letter_move_proc() {
 }
 
 void dMw_c::collect_letter_close_proc() {
-    if (mDoGph_gInf_c::getFader()->getStatus() == JUTFader::UNKSTATUS_0) {
+    if (mDoGph_gInf_c::getFader()->getStatus() == JUTFader::None) {
         mMenuProc = COLLECT_MOVE;
     }
 }
@@ -952,7 +946,7 @@ void dMw_c::collect_fishing_move_proc() {
 }
 
 void dMw_c::collect_fishing_close_proc() {
-    if (mDoGph_gInf_c::getFader()->getStatus() == JUTFader::UNKSTATUS_0) {
+    if (mDoGph_gInf_c::getFader()->getStatus() == JUTFader::None) {
         mMenuProc = COLLECT_MOVE;
     }
 }
@@ -983,7 +977,7 @@ void dMw_c::collect_skill_move_proc() {
 }
 
 void dMw_c::collect_skill_close_proc() {
-    if (mDoGph_gInf_c::getFader()->getStatus() == JUTFader::UNKSTATUS_0) {
+    if (mDoGph_gInf_c::getFader()->getStatus() == JUTFader::None) {
         mMenuProc = COLLECT_MOVE;
     }
 }
@@ -1014,13 +1008,13 @@ void dMw_c::collect_insect_move_proc() {
 }
 
 void dMw_c::collect_insect_close_proc() {
-    if (mDoGph_gInf_c::getFader()->getStatus() == JUTFader::UNKSTATUS_0) {
+    if (mDoGph_gInf_c::getFader()->getStatus() == JUTFader::None) {
         mMenuProc = COLLECT_MOVE;
     }
 }
 
 void dMw_c::insect_open_proc() {
-    if (mDoGph_gInf_c::getFader()->getStatus() == JUTFader::UNKSTATUS_0) {
+    if (mDoGph_gInf_c::getFader()->getStatus() == JUTFader::None) {
         field_0x152 = 0;
         dComIfGp_setHeapLockFlag(1);
         dMw_insect_create(1);
@@ -1056,7 +1050,7 @@ void dMw_c::insect_move_proc() {
 }
 
 void dMw_c::insect_close_proc() {
-    if (mDoGph_gInf_c::getFader()->getStatus() == JUTFader::UNKSTATUS_0) {
+    if (mDoGph_gInf_c::getFader()->getStatus() == JUTFader::None) {
         mMenuProc = NO_MENU;
     }
 }

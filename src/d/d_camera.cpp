@@ -7063,6 +7063,15 @@ bool dCamera_c::subjectCamera(s32 param_0) {
     }
 
     cXyz sp1E0(val0, val2, val1);
+
+#if TARGET_PC
+    f32 aspect = mDoGph_gInf_c::getAspect();
+    f32 baseAspect = FB_WIDTH / FB_HEIGHT;
+    if (aspect > baseAspect) {
+        sp1E0.z += (aspect - baseAspect) * 4;
+    }
+#endif
+
     sp1D4 = dCamMath::xyzRotateX(sp1E0, angle_x);
     sp1E0 = dCamMath::xyzRotateY(sp1D4, angle_y);
     f32 sp6C = sp12 ? 40.0f : 0.0f;
@@ -11009,6 +11018,15 @@ static int camera_execute(camera_process_class* i_this) {
     i_this->mCamera.CalcTrimSize();
 
     store(i_this);
+
+#ifdef TARGET_PC
+    // record new camera for our sim frame
+    dusk::frame_interp::record_camera(i_this, get_camera_id(i_this));
+    // interpolate the view now so that this sim frame's view matrix matches what
+    // we'll be rendering with later
+    dusk::frame_interp::interp_view(&i_this->view);
+#endif
+
     view_setup(i_this);
     return 1;
 }
@@ -11077,9 +11095,6 @@ static int camera_draw(camera_process_class* i_this) {
     C_MTXPerspective(process->view.projMtx, process->view.fovy, process->view.aspect, process->view.near_, process->view.far_);
     mDoMtx_lookAt(process->view.viewMtx, &process->view.lookat.eye, &process->view.lookat.center,
                   &process->view.lookat.up, process->view.bank);
-#ifdef TARGET_PC
-    dusk::frame_interp::record_camera(process, camera_id);
-#endif
 
 #if WIDESCREEN_SUPPORT
     mDoGph_gInf_c::setWideZoomProjection(process->view.projMtx);

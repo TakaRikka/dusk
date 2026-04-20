@@ -141,7 +141,7 @@ void dDlst_heapMap_c::draw() {
     f32 var_f29 = field_0x10 - field_0x8;
     f32 sp4C = field_0x14 - field_0xc;
     f32 sp48 = var_f29 * sp4C;
-    
+
     uintptr_t start_addr = (uintptr_t)m_heap->getStartAddr();
     uintptr_t end_addr = (uintptr_t)m_heap->getEndAddr();
     u32 sp40 = end_addr - start_addr;
@@ -156,7 +156,7 @@ void dDlst_heapMap_c::draw() {
         f32 var_f30 = (f32)sp38 * sp3C;
         uintptr_t sp34 = (uintptr_t)block - start_addr;
         f32 sp30 = (f32)sp34 * sp3C;
-        
+
         f32 var_f28 = std::floor(sp30 / var_f29);
 
         f32 sp2C = sp30 - (var_f29 * var_f28);
@@ -562,21 +562,16 @@ struct tvSize {
     u16 width;
     u16 height;
 };
-const tvSize l_tvSize[2] = {
+#ifndef TARGET_PC
+const
+#endif
+tvSize l_tvSize[2] = {
     {FB_WIDTH_BASE, FB_HEIGHT_BASE},
     {808, FB_HEIGHT_BASE},
 };
 
-#if TARGET_PC
-tvSize pc_tvSize = {608, 448};
-#endif
-
 void mDoGph_gInf_c::setTvSize() {
-#if TARGET_PC
-    const tvSize* tvsize = &pc_tvSize;
-#else
     const tvSize* tvsize = &l_tvSize[mWide];
-#endif
 
     m_width = tvsize->width;
     m_height = tvsize->height;
@@ -603,21 +598,11 @@ void mDoGph_gInf_c::setTvSize() {
 #endif
 }
 
-#if TARGET_PC
-void mDoGph_gInf_c::onWide(f32 width, f32 height) {
-    mWide = TRUE;
-    pc_tvSize.width = width;
-    pc_tvSize.height = height;
-    setTvSize();
-    dMeter2Info_onWide2D();
-}
-#else
 void mDoGph_gInf_c::onWide() {
     mWide = TRUE;
     setTvSize();
     dMeter2Info_onWide2D();
 }
-#endif
 
 void mDoGph_gInf_c::offWide() {
     mWide = FALSE;
@@ -759,8 +744,11 @@ void mDoGph_gInf_c::updateSafeAreaBounds() {
         return;
     }
 
+    u32 renderWidth = 0;
+    u32 renderHeight = 0;
+    AuroraGetRenderSize(&renderWidth, &renderHeight);
     if (windowSize.native_fb_width == 0 || windowSize.native_fb_height == 0 ||
-        windowSize.fb_width == 0 || windowSize.fb_height == 0)
+        renderWidth == 0 || renderHeight == 0)
     {
         return;
     }
@@ -773,23 +761,25 @@ void mDoGph_gInf_c::updateSafeAreaBounds() {
     const f32 safeRight = static_cast<f32>(safeRect.x + safeRect.w) * nativeScaleX;
     const f32 safeBottom = static_cast<f32>(safeRect.y + safeRect.h) * nativeScaleY;
 
-    const f32 viewportLeft =
-        (static_cast<f32>(windowSize.native_fb_width) - static_cast<f32>(windowSize.fb_width)) *
-        0.5f;
-    const f32 viewportTop =
-        (static_cast<f32>(windowSize.native_fb_height) - static_cast<f32>(windowSize.fb_height)) *
-        0.5f;
-    const f32 viewportRight = viewportLeft + static_cast<f32>(windowSize.fb_width);
-    const f32 viewportBottom = viewportTop + static_cast<f32>(windowSize.fb_height);
+    f32 viewportWidth = static_cast<f32>(windowSize.native_fb_width);
+    f32 viewportHeight = static_cast<f32>(windowSize.native_fb_height);
+    const f32 targetAspect = viewportWidth / viewportHeight;
+    const f32 contentAspect = static_cast<f32>(renderWidth) / static_cast<f32>(renderHeight);
+    if (targetAspect > contentAspect) {
+        viewportWidth = std::max(1.0f, std::round(viewportHeight * contentAspect));
+    } else if (targetAspect < contentAspect) {
+        viewportHeight = std::max(1.0f, std::round(viewportWidth / contentAspect));
+    }
 
-    const f32 leftInset = std::max(0.0f, safeLeft - viewportLeft) *
-                          (m_widthF / static_cast<f32>(windowSize.fb_width));
-    const f32 topInset = std::max(0.0f, safeTop - viewportTop) *
-                         (m_heightF / static_cast<f32>(windowSize.fb_height));
-    const f32 rightInset = std::max(0.0f, viewportRight - safeRight) *
-                           (m_widthF / static_cast<f32>(windowSize.fb_width));
-    const f32 bottomInset = std::max(0.0f, viewportBottom - safeBottom) *
-                            (m_heightF / static_cast<f32>(windowSize.fb_height));
+    const f32 viewportLeft = (static_cast<f32>(windowSize.native_fb_width) - viewportWidth) * 0.5f;
+    const f32 viewportTop = (static_cast<f32>(windowSize.native_fb_height) - viewportHeight) * 0.5f;
+    const f32 viewportRight = viewportLeft + viewportWidth;
+    const f32 viewportBottom = viewportTop + viewportHeight;
+
+    const f32 leftInset = std::max(0.0f, safeLeft - viewportLeft) * (m_widthF / viewportWidth);
+    const f32 topInset = std::max(0.0f, safeTop - viewportTop) * (m_heightF / viewportHeight);
+    const f32 rightInset = std::max(0.0f, viewportRight - safeRight) * (m_widthF / viewportWidth);
+    const f32 bottomInset = std::max(0.0f, viewportBottom - safeBottom) * (m_heightF / viewportHeight);
 
     const f32 safeMinXF = m_minXF + leftInset;
     const f32 safeMinYF = m_minYF + topInset;
@@ -810,13 +800,13 @@ void mDoGph_gInf_c::updateSafeAreaBounds() {
     m_safeHeightF = safeHeightF;
 }
 
-void mDoGph_gInf_c::setWindowSize(AuroraWindowSize const& size) {
-    JUTVideo::getManager()->setWindowSize(size);
-    dComIfGp_setWindow(0, 0.0f, 0.0f, getWidth(), getHeight(), 0.0f, 1.0f, 0, 2);
-    mFader->mBox.set(0, 0, getWidth(), getHeight());
-
-    f32 newWidth = (getWidth() / getHeight()) * 448.0f;
-    onWide(newWidth, 448.0f);
+void mDoGph_gInf_c::updateRenderSize() {
+    u32 width, height;
+    AuroraGetRenderSize(&width, &height);
+    JUTVideo::getManager()->setRenderSize(width, height);
+    l_tvSize[1].width = static_cast<u16>(static_cast<float>(width) / static_cast<float>(height) *
+                                         static_cast<float>(l_tvSize[1].height));
+    onWide();
 }
 #endif
 
@@ -952,7 +942,7 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
                 GXProject(param_0->lookat.center.x, param_0->lookat.center.y,
                         param_0->lookat.center.z, param_0->viewMtx, sp4C, sp34, &sp1C, &sp18,
                         &sp14);
-                
+
                 param_2 = (0xFF0000 - (int)(16777215.0f * sp14)) >> 8;
                 param_2 = cLib_minMaxLimit<int>(param_2, -0x400, 0);
             }
@@ -1317,8 +1307,8 @@ void mDoGph_gInf_c::bloom_c::draw2() {
     if (mMonoColor.a == 0 && !enabled)
         return;
 
-    f32 width = mDoGph_gInf_c::getWidth();
-    f32 height = mDoGph_gInf_c::getHeight();
+    f32 width = JUTVideo::getManager()->getRenderWidth();
+    f32 height = JUTVideo::getManager()->getRenderHeight();
 
     GXLoadTexObj(getFrameBufferTexObj(), GX_TEXMAP0);
     GXSetNumChans(0);
@@ -1402,7 +1392,7 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         CopyToTexObj(&tmpTex[texNo], texNo, rect.w, rect.h);
         return &tmpTex[texNo];
     };
-    
+
     auto divQuad = [&](int divNo) {
         auto const& rect = divRects[divNo];
         f32 x0 = rect.x / width;
@@ -1435,8 +1425,8 @@ void mDoGph_gInf_c::bloom_c::draw2() {
     }
 
     if (enabled) {
-        GXCreateFrameBuffer(width * 0.75f, height * 0.5f);
-        GXSetViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f); // use oversized viewport to make the math easier
+        GXCreateFrameBuffer(divRects[2].x + divRects[2].w, divRects[1].y + divRects[1].h);
+        GXSetViewportRender(0.0f, 0.0f, width, height, 0.0f, 1.0f); // use oversized viewport to make the math easier
 
         GXSetNumTevStages(3);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
@@ -1473,7 +1463,7 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         GXTexObj* texPass0 = divCopyTex(Pass0, 2);
         GXLoadTexObj(texPass0, GX_TEXMAP0);
 
-        f32 blurScale = mBlureSize * ((448.0f / getHeight()) / 6400.0f);
+        f32 blurScale = mBlureSize * ((448.0f / height) / 6400.0f);
 
         // Setup blur filter TEV.
         GXSetNumTexGens(8);
@@ -1507,7 +1497,7 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         // This is applied over two passes, the second one with an alpha of 25%; however, the clipping that this introduces is a bit integral to the look,
         // so we do the same thing, letting it clip.
         float brightnessF32 = (mBlureRatio * 16 / 255.0f);
-            
+
         // Distribute the brightness through the total number of passes.
         f32 totalNumPasses = (divNum - divStart + 1);
         float brightnessPerPass = 255.0f * powf(brightnessF32, 1.0f / totalNumPasses);
@@ -1579,13 +1569,8 @@ void mDoGph_gInf_c::bloom_c::draw() {
 
     bool enabled = mEnable && m_buffer != NULL;
     if (mMonoColor.a != 0 || enabled) {
-#if TARGET_PC
-        f32 width = mDoGph_gInf_c::getWidth();
-        f32 height = mDoGph_gInf_c::getHeight();
-#else
         f32 width = FB_WIDTH;
         f32 height = FB_HEIGHT;
-#endif
         GXSetViewport(0.0f, 0.0f, width, height, 0.0f, 1.0f);
         GXSetScissor(0, 0, width, height);
 
@@ -1700,7 +1685,7 @@ void mDoGph_gInf_c::bloom_c::draw() {
             GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
             for (int texCoord = (int)GX_TEXCOORD1; texCoord < (int)GX_MAX_TEXCOORD; texCoord++) {
                 GXSetTexCoordGen((GXTexCoordID)texCoord, GX_TG_MTX2x4, GX_TG_TEX0, texMtxID);
-                
+
                 #if TARGET_PC
                 f32 dVar15 = mBlureSize * ((448.0f / height) / 6400.0f);
                 #else
@@ -1841,7 +1826,7 @@ static void retry_captue_frame(view_class* param_0, view_port_class* param_1, in
         var_r23 = height >> 1;
         GXSetTexCopySrc(x_orig, y_orig_pos, width, height);
 #ifdef TARGET_PC
-        GXSetTexCopyDst(width, height, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
+        GXSetTexCopyDst(width, height, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_FALSE);
 #else
         GXSetTexCopyDst(var_r24, var_r23, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
 #endif
@@ -2097,8 +2082,7 @@ int mDoGph_Painter() {
     j3dSys.drawInit();
     GXSetDither(GX_ENABLE);
 
-    J2DOrthoGraph ortho(0.0f, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), -1.0f,
-                        1.0f);
+    J2DOrthoGraph ortho(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, -1.0f, 1.0f);
     ortho.setOrtho(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
                    mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(),
                    -1.0f, 1.0f);
@@ -2144,13 +2128,8 @@ int mDoGph_Painter() {
                 view_port_class new_port;
                 new_port.x_orig = 0.0f;
                 new_port.y_orig = 0.0f;
-            #if TARGET_PC
-                new_port.width = mDoGph_gInf_c::getWidth();
-                new_port.height = mDoGph_gInf_c::getHeight();
-            #else
                 new_port.width = FB_WIDTH;
                 new_port.height = FB_HEIGHT;
-            #endif
                 new_port.near_z = view_port->near_z;
                 new_port.far_z = view_port->far_z;
                 new_port.scissor = view_port->scissor;
@@ -2204,7 +2183,7 @@ int mDoGph_Painter() {
             dComIfGp_setCurrentView(&camera_p->view);
             dComIfGp_setCurrentViewport(view_port);
             GXSetProjection(camera_p->view.projMtx, GX_PERSPECTIVE);
-            
+
             #if DEBUG
             captureScreenSetProjection(camera_p->view.projMtx);
             #endif
@@ -2281,7 +2260,7 @@ int mDoGph_Painter() {
 #endif
 
             GX_DEBUG_GROUP(dComIfGd_drawOpaListPacket);
-            
+
             #if DEBUG
             // "drawing up to special-use drawing (Opaque) except J3D (Rendering)"
             fapGm_HIO_c::stopCpuTimer("Ｊ３Ｄ以外などの特殊用（不透明）描画まで（レンダリング）");
@@ -2363,7 +2342,7 @@ int mDoGph_Painter() {
                         GX_DEBUG_GROUP(dComIfGd_drawXluListInvisible);
                     }
                 }
-                
+
 
                 #if DEBUG
                 // "drawing up to projection (Translucent)"
@@ -2467,12 +2446,8 @@ int mDoGph_Painter() {
                     retry_captue_frame(&camera_p->view, view_port,
                                        dComIfGp_getCameraZoomForcus(camera_id));
                 }
-                
-                #if TARGET_PC
-                GXSetViewport(0.0f, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), 0.0f, 1.0f);
-                #else
+
                 GXSetViewport(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f);
-                #endif
 
                 Mtx m2;
                 Mtx44 m;

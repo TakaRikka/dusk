@@ -13,11 +13,10 @@
 #include "m_Do/m_Do_graphic.h"
 
 void dDlst_snapShot_c::draw() {
-#if TARGET_PC
-    GXSetTexCopySrc(0, 0, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
-    GXSetTexCopyDst(mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), GX_TF_RGBA8, GX_TRUE);
-#else
     GXSetTexCopySrc(0, 0, FB_WIDTH, FB_HEIGHT);
+#if TARGET_PC
+    GXSetTexCopyDst(FB_WIDTH, FB_HEIGHT, GX_TF_RGBA8, GX_FALSE);
+#else
     GXSetTexCopyDst(FB_WIDTH / 2, FB_HEIGHT / 2, GX_TF_RGBA8, GX_TRUE);
 #endif
     GXCopyTex(mDoGph_gInf_c::getFrameBufferTex(), GX_FALSE);
@@ -25,13 +24,8 @@ void dDlst_snapShot_c::draw() {
 }
 
 void dOvlpFd3_dlst_c::draw() {
-#if TARGET_PC
-    GXSetViewport(0.0f, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), 0.0f, 1.0f);
-    GXSetScissor(0, 0, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
-#else
     GXSetViewport(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f);
     GXSetScissor(0, 0, FB_WIDTH, FB_HEIGHT);
-#endif
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGB, GX_RGBA4, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -112,19 +106,6 @@ void dOvlpFd3_dlst_c::draw() {
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
-    #if TARGET_PC
-    GXPosition2s16(-FB_WIDTH / 2, FB_HEIGHT / 2);
-    GXTexCoord2s8(0, 0);
-
-    GXPosition2s16(FB_WIDTH / 2, FB_HEIGHT / 2);
-    GXTexCoord2s8(1, 0);
-
-    GXPosition2s16(FB_WIDTH / 2, -FB_HEIGHT / 2);
-    GXTexCoord2s8(1, 1);
-
-    GXPosition2s16(-FB_WIDTH / 2, -FB_HEIGHT / 2);
-    GXTexCoord2s8(0, 1);
-    #else
     GXPosition2s16(-mDoGph_gInf_c::getWidth() / 2, mDoGph_gInf_c::getHeight() / 2);
     GXTexCoord2s8(0, 0);
 
@@ -136,7 +117,6 @@ void dOvlpFd3_dlst_c::draw() {
 
     GXPosition2s16(-mDoGph_gInf_c::getWidth() / 2, -mDoGph_gInf_c::getHeight() / 2);
     GXTexCoord2s8(0, 1);
-    #endif
 
     GXEnd();
 

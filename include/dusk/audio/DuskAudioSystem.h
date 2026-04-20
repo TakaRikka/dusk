@@ -12,6 +12,8 @@ namespace dusk::audio {
 
     void SetMasterVolume(f32 value);
 
+    void SetPaused(bool paused);
+
     u32 GetResetCount(int channelIdx);
 
     f32 VolumeFromU16(u16 value);

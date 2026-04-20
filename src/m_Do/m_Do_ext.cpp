@@ -25,6 +25,7 @@
 #include <cstdio>
 #include <cstring>
 #include "dusk/logging.h"
+#include "dusk/frame_interpolation.h"
 
 u8 mDoExt::CurrentHeapAdjustVerbose;
 u8 mDoExt::HeapAdjustVerbose;
@@ -349,6 +350,11 @@ void mDoExt_modelUpdateDL(J3DModel* i_model) {
 }
 
 void mDoExt_modelEntryDL(J3DModel* i_model) {
+#if TARGET_PC
+    if (!dusk::frame_interp::is_sim_frame())
+        return;
+#endif
+
     modelMtxErrorCheck(i_model);
 
     J3DModelData* model_data = i_model->getModelData();

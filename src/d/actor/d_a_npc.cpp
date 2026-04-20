@@ -2694,12 +2694,7 @@ BOOL daNpcT_chkActorInScreen(fopAc_ac_c* i_ActorP, f32 param_1, f32 param_2, f32
         }
 
         for (int i = 0; i < 8; i++) {
-            #if TARGET_PC
-            mDoLib_project(&pos_array[i], &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
-            #else
             mDoLib_project(&pos_array[i], &proj);
-            #endif
-
             if (0.0f < proj.x && proj.x < FB_WIDTH && 0.0f < proj.y && proj.y < FB_HEIGHT) {
                 continue;
             }
