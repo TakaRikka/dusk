@@ -271,6 +271,30 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
             u32 filesize = pHeader->size;
             u8* pSection = ((u8*)pHeader) + filepos;
 
+            #if TARGET_PC
+            // patch bug in the original game where filepos would be incremented by the next section's size rather than the current section size.
+            // in certain scenarios this would read past the end of the file, incrementing filepos by 0 in an infinite loop
+            while (filepos < filesize) {
+                switch (((bmg_section_t*)pSection)->magic) {
+                case 'FLW1':
+                    break;
+                case 'FLI1':
+                    break;
+                case 'INF1':
+                    pInfoBlock = (bmg_section_t*)pSection;
+                    break;
+                case 'DAT1':
+                    pMsgDataBlock = pSection;
+                    break;
+                case 'STR1':
+                    pStrAttributeBlock = (str1_section_t*)pSection;
+                    break;
+                }
+
+                filepos += ((bmg_section_t*)pSection)->size;
+                pSection += ((bmg_section_t*)pSection)->size;
+            }
+            #else
             for (; filepos < filesize; filepos += ((bmg_section_t*)pSection)->size) {
                 switch (((bmg_section_t*)pSection)->magic) {
                 case 'FLW1':
@@ -289,6 +313,7 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
                 }
                 pSection += ((bmg_section_t*)pSection)->size;
             }
+            #endif
 
             // This section is weird. The debug seems like entriesStr is outside the condition
             // but the normal build doesn't really work with that. Same for pInfoBlock->entries.
