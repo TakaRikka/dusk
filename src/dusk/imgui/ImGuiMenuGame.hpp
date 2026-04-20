@@ -19,6 +19,13 @@ namespace dusk {
         static void ToggleFullscreen();
 
     private:
+        void drawAudioMenu();
+        void drawInputMenu();
+        void drawGraphicsMenu();
+        void drawGameplayMenu();
+        void drawCheatsMenu();
+        void drawInterfaceMenu();
+
         struct {
             int m_selectedPort = 0;
             bool m_isReading = false;

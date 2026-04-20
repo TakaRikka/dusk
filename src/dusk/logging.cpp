@@ -168,14 +168,14 @@ void aurora_log_callback(AuroraLogLevel level, const char* module, const char* m
 
 aurora::Module DuskLog("dusk");
 
-void dusk::InitializeFileLogging(const char* configDir, AuroraLogLevel logLevel) {
+void dusk::InitializeFileLogging(const std::filesystem::path& configDir, AuroraLogLevel logLevel) {
     std::lock_guard lock(g_logMutex);
-    if (g_logFile != nullptr || configDir == nullptr) {
+    if (g_logFile != nullptr || configDir.empty()) {
         return;
     }
 
     std::error_code ec;
-    const std::filesystem::path logsDir = std::filesystem::path(configDir) / "logs";
+    const std::filesystem::path logsDir = configDir / "logs";
     std::filesystem::create_directories(logsDir, ec);
     if (ec) {
         std::fprintf(stderr, "[WARNING | dusk] Failed to create log directory '%s': %s\n",
