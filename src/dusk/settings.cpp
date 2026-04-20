@@ -29,7 +29,7 @@ UserSettings g_userSettings = {
         .disableRupeeCutscenes {"game.disableRupeeCutscenes", false},
         .noSwordRecoil {"game.noSwordRecoil", false},
         .damageMultiplier {"game.damageMultiplier", 1},
-        .noHeartDrops{"game.noHeartDrops", false},
+        .noHeartDrops {"game.noHeartDrops", false},
         .instantDeath {"game.instantDeath", false},
         .fastClimbing {"game.fastClimbing", false},
         .noMissClimbing {"game.noMissClimbing", false},
@@ -37,6 +37,7 @@ UserSettings g_userSettings = {
         .instantSaves {"game.instantSaves", false},
         .instantText {"game.instantText", false},
         .sunsSong {"game.sunsSong", false},
+        .autoSave {"game.autoSave", false},
 
         // Preferences
         .enableMirrorMode {"game.enableMirrorMode", false},
@@ -48,7 +49,7 @@ UserSettings g_userSettings = {
         .bloomMode {"game.bloomMode", BloomMode::Classic},
         .bloomMultiplier {"game.bloomMultiplier", 1.0f},
         .disableWaterRefraction {"game.disableWaterRefraction", false},
-        .enableFrameInterpolation = {"game.enableFrameInterpolation", false},
+        .enableFrameInterpolation {"game.enableFrameInterpolation", false},
         .internalResolutionScale {"game.internalResolutionScale", 0},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
 
@@ -69,14 +70,14 @@ UserSettings g_userSettings = {
 
         // Cheats
         .infiniteHearts {"game.infiniteHearts", false},
-        .infiniteArrows{"game.infiniteArrows", false},
-        .infiniteBombs{"game.infiniteBombs", false},
-        .infiniteOil{"game.infiniteOil", false},
-        .infiniteOxygen{"game.infiniteOxygen", false},
-        .infiniteRupees{"game.infiniteRupees", false},
-        .moonJump{"game.moonJump", false},
-        .superClawshot{"game.superClawshot", false},
-        .alwaysGreatspin{"game.alwaysGreatspin", false},
+        .infiniteArrows {"game.infiniteArrows", false},
+        .infiniteBombs {"game.infiniteBombs", false},
+        .infiniteOil {"game.infiniteOil", false},
+        .infiniteOxygen {"game.infiniteOxygen", false},
+        .infiniteRupees {"game.infiniteRupees", false},
+        .moonJump {"game.moonJump", false},
+        .superClawshot {"game.superClawshot", false},
+        .alwaysGreatspin {"game.alwaysGreatspin", false},
         .enableFastIronBoots {"game.enableFastIronBoots", false},
         .canTransformAnywhere {"game.canTransformAnywhere", false},
         .fastSpinner {"game.fastSpinner", false},
@@ -134,6 +135,7 @@ void registerSettings() {
     Register(g_userSettings.game.instantSaves);
     Register(g_userSettings.game.instantText);
     Register(g_userSettings.game.sunsSong);
+    Register(g_userSettings.game.autoSave);
     Register(g_userSettings.game.enableMirrorMode);
     Register(g_userSettings.game.invertCameraXAxis);
     Register(g_userSettings.game.disableMainHUD);

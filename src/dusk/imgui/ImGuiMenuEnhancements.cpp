@@ -65,6 +65,18 @@ namespace dusk {
                     ImGui::SetTooltip("Skip the delay when writing to the Memory Card.");
                 }
 
+                config::ImGuiCheckbox("Autosave", getSettings().game.autoSave);
+                const bool autoSaveHovered = ImGui::IsItemHovered();
+                ImGui::SameLine();
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.72f, 0.2f, 1.0f));
+                ImGui::TextUnformatted("[EXPERIMENTAL]");
+                ImGui::PopStyleColor();
+                if (autoSaveHovered || ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip(
+                        "Automatically saves the game when going to new areas,\n"
+                        "getting an item, or opening a dungeon door.");
+                }
+
                 config::ImGuiCheckbox("Hold B for Instant Text", getSettings().game.instantText);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Make text scroll immediately by holding B.");

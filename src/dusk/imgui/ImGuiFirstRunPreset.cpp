@@ -41,6 +41,7 @@ static void ApplyPresetDusk() {
     s.game.enableFrameInterpolation.setValue(true);
     s.game.sunsSong.setValue(true);
     s.game.bloomMode.setValue(BloomMode::Dusk);
+    s.game.autoSave.setValue(true);
 }
 
 // =========================================================================

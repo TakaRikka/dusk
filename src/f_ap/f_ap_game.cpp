@@ -755,7 +755,7 @@ static AutoSaveFuncs AutoSaveFuncsProc[] = {
 void noAutoSave() {}
 
 void triggerAutoSave() {
-    if (mAutoSaveProc == 0 && strcmp(dComIfGp_getStartStageName(), "F_SP102") != 0 && dComIfGp_getStartStageLayer() != 0)
+    if (dusk::getSettings().game.autoSave && mAutoSaveProc == 0 && strcmp(dComIfGp_getStartStageName(), "F_SP102") != 0 && dComIfGp_getStartStageLayer() != 0)
     {
         mAutoSaveProc = 1;
     }

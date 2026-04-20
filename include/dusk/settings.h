@@ -63,6 +63,7 @@ struct UserSettings {
         ConfigVar<bool> instantSaves;
         ConfigVar<bool> instantText;
         ConfigVar<bool> sunsSong;
+        ConfigVar<bool> autoSave;
 
         // Preferences
         ConfigVar<bool> enableMirrorMode;
