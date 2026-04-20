@@ -3812,6 +3812,16 @@ void dFile_select_c::fileSelectWide() {
     fileSel.Scr->search(MULTI_CHAR('w_uzu07'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     fileSel.Scr->search(MULTI_CHAR('w_uzu08'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     fileSel.Scr->search(MULTI_CHAR('w_uzu09'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    #if TARGET_PC
+    if (mSelIcon) {
+        mSelIcon->refreshAspectScale();
+    }
+    
+    if (mSelIcon2) {
+        mSelIcon2->refreshAspectScale();
+    }
+    #endif
 }
 #endif
 

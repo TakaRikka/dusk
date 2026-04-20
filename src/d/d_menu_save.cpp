@@ -2801,6 +2801,12 @@ void dMenu_save_c::menuSaveWide() {
     mSaveSel.Scr->search(MULTI_CHAR('w_uzu07'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     mSaveSel.Scr->search(MULTI_CHAR('w_uzu08'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     mSaveSel.Scr->search(MULTI_CHAR('w_uzu09'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    
+    #if TARGET_PC
+    if (mSelIcon) {
+        mSelIcon->refreshAspectScale();
+    }
+    #endif
 }
 #endif
 

@@ -164,11 +164,22 @@ void dMenu_Collect2D_c::menuCollectWide() {
 
     // Item Description Text
     mpScreen->search(MULTI_CHAR('infotxtn'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    #if TARGET_PC
+    if (mpDrawCursor) {
+        mpDrawCursor->refreshAspectScale();
+    }
+    #endif
 }
 #endif
 
 void dMenu_Collect2D_c::_create() {
     mpHeap->getTotalFreeSize();
+
+    #if TARGET_PC
+    mpDrawCursor = NULL;
+    #endif
+
     mpScreen = JKR_NEW J2DScreen();
     mpScreen->setPriority("zelda_collect_soubi_screen.blo", 0x1020000,
                           dComIfGp_getCollectResArchive());

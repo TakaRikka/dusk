@@ -1288,7 +1288,11 @@ void dName_c::selectCursorPosSet(int row) {
 #if TARGET_PC
 void dName_c::nameWide() {
     //Resize Select Icon
-    mSelIcon->setParam(0.82f, 0.77f, 0.05f, 0.4f, 0.4f);
+    #if TARGET_PC
+    if (mSelIcon) {
+        mSelIcon->refreshAspectScale();
+    }
+    #endif
 
     // List of Characters Box
     static u64 l_tagName[65] = {
