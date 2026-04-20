@@ -358,7 +358,10 @@
       "inherits": [
         "relwithdebinfo",
         "ci"
-      ]
+      ],
+      "cacheVariables": {
+        "AURORA_SDL3_PROVIDER": "vendor"
+      }
     },
     {
       "name": "x-linux-ci-gcc",
