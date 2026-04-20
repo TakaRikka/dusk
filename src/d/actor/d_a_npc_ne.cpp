@@ -18,6 +18,7 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "c/c_damagereaction.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include "dusk/frame_interpolation.h"
 #include <cstring>
 
 static home_path_pnt home_path[38] = {
@@ -2655,6 +2656,9 @@ static void demo_camera(npc_ne_class* i_this) {
         i_this->mCameraFovY = 55.0f;
         camera->mCamera.SetTrimSize(3);
         daPy_getPlayerActorClass()->changeOriginalDemo();
+#ifdef TARGET_PC
+        dusk::frame_interp::request_presentation_sync();
+#endif
         // fallthrough
 
     case 2:
@@ -2683,6 +2687,9 @@ static void demo_camera(npc_ne_class* i_this) {
         if (i_this->mDemoCounter == 0) {
             i_this->mCameraCenter1.set(387.0f, 133.0f, -866.0f);
             i_this->mCameraEye1.set(284.0f, 208.0f, -585.0f);
+#ifdef TARGET_PC
+            dusk::frame_interp::request_presentation_sync();
+#endif
         }
 
         if (i_this->mDemoCounter == 12) {
@@ -2719,6 +2726,9 @@ static void demo_camera(npc_ne_class* i_this) {
         i_this->mCameraFovY = 45.0f;
         camera->mCamera.SetTrimSize(3);
         daPy_getPlayerActorClass()->changeOriginalDemo();
+#ifdef TARGET_PC
+        dusk::frame_interp::request_presentation_sync();
+#endif
         // fallthrough
 
     case 11:
@@ -2799,8 +2809,14 @@ static void demo_camera(npc_ne_class* i_this) {
                     MtxPosition(&vec, &i_this->mCameraEye2);
                     i_this->mCameraEye2 += player->current.pos;
                     player->changeDemoParam2(2);
+#ifdef TARGET_PC
+                    dusk::frame_interp::request_presentation_sync();
+#endif
                 } else if (i_this->mDemoCounter == 120) {
                     player->changeDemoParam2(0);
+#ifdef TARGET_PC
+                    dusk::frame_interp::request_presentation_sync();
+#endif
                 }
             }
         }
@@ -2853,6 +2869,9 @@ static void demo_camera(npc_ne_class* i_this) {
                 i_this->mCameraCenter1 = _this->current.pos;
                 i_this->mCameraCenter1.y += 20.0f;
                 i_this->mCameraFovY = 55.0f;
+#ifdef TARGET_PC
+                dusk::frame_interp::request_presentation_sync();
+#endif
             }
 
             camera->mCamera.Set(i_this->mCameraCenter1, i_this->mCameraEye1,

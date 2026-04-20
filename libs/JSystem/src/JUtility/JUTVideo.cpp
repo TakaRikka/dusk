@@ -205,7 +205,8 @@ void JUTVideo::setRenderMode(GXRenderModeObj const* pObj) {
 void JUTVideo::waitRetraceIfNeed() {}
 
 #if TARGET_PC
-void JUTVideo::setWindowSize(AuroraWindowSize const& size) {
-    m_WindowSize = size;
+void JUTVideo::setRenderSize(u32 width, u32 height) {
+    mRenderWidth = width;
+    mRenderHeight = height;
 }
 #endif

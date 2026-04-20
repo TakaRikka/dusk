@@ -1418,12 +1418,7 @@ static int phase_4(dScnPly_c* i_this) {
         dComIfGp_setPlayerPtr(i, NULL);
     }
 
-#if TARGET_PC
-    dComIfGp_setWindow(0, 0.0f, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), 0.0f,
-                       1.0f, 0, 2);
-#else
     dComIfGp_setWindow(0, 0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f, 0, 2);
-#endif
     dComIfGp_setCameraInfo(0, NULL, 0, 0, -1);
     dComIfGd_setWindow(NULL);
     dComIfGd_setViewport(NULL);

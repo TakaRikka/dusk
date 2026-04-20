@@ -6,6 +6,10 @@
 #include "f_pc/f_pc_leaf.h"
 #include "f_pc/f_pc_debug_sv.h"
 
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#endif
+
 s16 fpcLf_GetPriority(const leafdraw_class* i_leaf) {
     return fpcDwPi_Get(&i_leaf->draw_priority);
 }
@@ -16,6 +20,11 @@ int fpcLf_DrawMethod(leafdraw_method_class* i_methods, void* i_process) {
 
 int fpcLf_Draw(leafdraw_class* i_leaf) {
     int ret = 0;
+#if TARGET_PC
+    if (!i_leaf->draw_interp_frame && !dusk::frame_interp::is_sim_frame()) {
+        return ret;
+    }
+#endif
     if (i_leaf->unk_0xBC == 0) {
         ret = fpcLf_DrawMethod(i_leaf->leaf_methods, i_leaf);
     }
@@ -56,6 +65,9 @@ int fpcLf_Create(leafdraw_class* i_leaf) {
         LEAFDRAW_BASE(i_leaf).subtype = fpcBs_MakeOfType(&g_fpcLf_type);
         fpcDwPi_Init(&i_leaf->draw_priority, pprofile->priority);
         i_leaf->unk_0xBC = 0;
+#if TARGET_PC
+        i_leaf->draw_interp_frame = false;
+#endif
     }
 
     int ret = fpcMtd_Create(&i_leaf->leaf_methods->base, i_leaf);

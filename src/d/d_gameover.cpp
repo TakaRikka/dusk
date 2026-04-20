@@ -37,11 +37,10 @@ void dDlst_Gameover_CAPTURE_c::draw() {
     TGXTexObj tex_obj;
     Mtx44 m;
 
-#if TARGET_PC
-    GXSetTexCopySrc(0, 0, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
-    GXSetTexCopyDst(mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), GX_TF_RGB565, GX_TRUE);
-#else
     GXSetTexCopySrc(0, 0, FB_WIDTH, FB_HEIGHT);
+#if TARGET_PC
+    GXSetTexCopyDst(FB_WIDTH, FB_HEIGHT, GX_TF_RGB565, GX_FALSE);
+#else
     GXSetTexCopyDst(FB_WIDTH / 2, FB_HEIGHT / 2, GX_TF_RGB565, GX_TRUE);
 #endif
     GXCopyTex(mDoGph_gInf_c::mZbufferTex, 0);

@@ -79,12 +79,14 @@ struct UserSettings {
         ConfigVar<bool> enableMirrorMode;
         ConfigVar<bool> invertCameraXAxis;
         ConfigVar<bool> disableMainHUD;
+        ConfigVar<bool> pauseOnFocusLost;
 
         // Graphics
         ConfigVar<BloomMode> bloomMode;
         ConfigVar<float> bloomMultiplier;
         ConfigVar<bool> enableWaterRefraction;
         ConfigVar<bool> enableFrameInterpolation;
+        ConfigVar<int> internalResolutionScale;
         ConfigVar<int> shadowResolutionMultiplier;
 
         // Audio

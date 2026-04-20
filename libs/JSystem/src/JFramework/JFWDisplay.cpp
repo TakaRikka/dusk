@@ -219,7 +219,7 @@ void JFWDisplay::endGX() {
         if (dusk::frame_interp::get_ui_tick_pending()) {
             mFader->advance();
         }
-        if (mFader->getStatus() != 1) {
+        if (mFader->getStatus() != JUTFader::Wait) {
             mFader->draw();
         }
 #else
