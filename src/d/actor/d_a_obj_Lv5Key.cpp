@@ -170,7 +170,7 @@ void daObjLv5Key_c::Fall(int param_0) {
 
         OS_REPORT("FALL SPD = %f\n", speed.y);
 
-        if (mAcch.ChkGroundHit() IF_DUSK(|| current.pos.y < 1000.0f)) {
+        if (mAcch.ChkGroundHit() IF_DUSK(|| current.pos.abs(home.pos) > 200.0f)) {
             fopAcM_GetSpeed(this);
             fopAcM_SetSpeedF(this, 4.0f);
             fopAcM_SetSpeed(this, 0.0f, 22.0f, 0.0f);
@@ -192,7 +192,7 @@ void daObjLv5Key_c::Fall(int param_0) {
         mAcch.CrrPos(dComIfG_Bgsp());
         current.pos.y = prev_y;
 
-        if (mAcch.ChkGroundHit() IF_DUSK(|| current.pos.y < 1000.0f)) {
+        if (mAcch.ChkGroundHit() IF_DUSK(|| current.pos.abs(home.pos) > 200.0f)) {
             setAction(&daObjLv5Key_c::Land, 1);
         }
     }
