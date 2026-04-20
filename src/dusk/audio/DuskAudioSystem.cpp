@@ -77,6 +77,14 @@ void dusk::audio::SetMasterVolume(const f32 value) {
     MasterVolume = value;
 }
 
+void dusk::audio::SetPaused(const bool paused) {
+    if (paused) {
+        SDL_PauseAudioStreamDevice(PlaybackStream);
+    } else {
+        SDL_ResumeAudioStreamDevice(PlaybackStream);
+    }
+}
+
 void dusk::audio::SetEnableReverb(const bool value) {
     JASCriticalSection section;
 

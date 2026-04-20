@@ -17,6 +17,7 @@
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/config.hpp"
 #include "dusk/dusk.h"
+#include "dusk/frame_interpolation.h"
 #include "dusk/main.h"
 #include "dusk/settings.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -281,7 +282,7 @@ namespace dusk {
     void ImGuiConsole::UpdateSettings() {
         getTransientSettings().skipFrameRateLimit = getSettings().game.enableTurboKeybind && ImGui::IsKeyDown(ImGuiKey_Tab);
 
-        if (mDoMain::developmentMode == 1 && mDoCPd_c::getHoldL(PAD_1) && mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getTrigY(PAD_1)) {
+        if (dusk::frame_interp::get_ui_tick_pending() && mDoMain::developmentMode == 1 && (mDoCPd_c::getHold(PAD_1) & (PAD_TRIGGER_R | PAD_TRIGGER_L)) == (PAD_TRIGGER_R | PAD_TRIGGER_L) && mDoCPd_c::getTrigY(PAD_1)) {
             getTransientSettings().moveLinkActive = !getTransientSettings().moveLinkActive;
         }
         if (mDoMain::developmentMode != 1) {
@@ -368,10 +369,16 @@ namespace dusk {
         m_menuTools.ShowStateShare();
         DuskDebugPad(); // temporary, remove later
 
-        // Only show cursor when menu or any windows are open
-        if (showMenu || ImGui::GetIO().MetricsRenderWindows > 0) {
-            ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouseCursorChange;
-            // Imgui will re-show cursor.
+        // Hide mouse cursor if the F1 menu is not open and the cursor is idle for 3 seconds.
+        ImGuiIO& io = ImGui::GetIO();
+        if (showMenu) {
+            mouseHideTimer = 0.0f;
+            ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouseCursorChange; // Imgui will re-show cursor.
+        } else if (io.MouseDelta.x != 0.0f || io.MouseDelta.y != 0.0f) {
+            mouseHideTimer = 0.0f;
+            ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouseCursorChange; // Imgui will re-show cursor.
+        } else if (mouseHideTimer <= 3.0f) {
+            mouseHideTimer += ImGui::GetIO().DeltaTime;
         } else {
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
             SDL_HideCursor();

@@ -40,6 +40,8 @@ private:
                                                               remain(duration) {}
     };
 
+    float mouseHideTimer = 0.0f;
+
     bool m_isHidden = true;
     bool m_isLaunchInitialized = false;
     bool m_touchTapActive = false;

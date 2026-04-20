@@ -855,11 +855,7 @@ int dShopSystem_c::seq_wait(fopAc_ac_c* param_0, dMsgFlow_c* param_1) {
 }
 
 inline void pos3Dto2D(Vec* a, Vec* b) {
-#if TARGET_PC
-    mDoLib_project(a, b, {0, 0, FB_WIDTH, FB_HEIGHT});
-#else
     mDoLib_project(a, b);
-#endif
 }
 
 int dShopSystem_c::seq_start(fopAc_ac_c* actor, dMsgFlow_c* i_flow) {
@@ -1572,10 +1568,22 @@ BOOL dShopSystem_c::checkShopOpen() {
 }
 
 bool dShopSystem_c::checkLeftTrigger(STControl* i_stick) {
+#if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        return i_stick->checkRightTrigger();
+    }
+#endif
+
     return i_stick->checkLeftTrigger();
 }
 
 bool dShopSystem_c::checkRightTrigger(STControl* i_stick) {
+#if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        return i_stick->checkLeftTrigger();
+    }
+#endif
+
     return i_stick->checkRightTrigger();
 }
 

@@ -265,7 +265,7 @@ void J3DMaterial::diff(u32 diffFlags) {
 }
 
 void J3DMaterial::calc(f32 const (*param_0)[4]) {
-    if (j3dSys.checkFlag(0x40000000)) {
+    if (j3dSys.checkFlag(J3DSysFlag_PostTexMtx)) {
         mTexGenBlock->calcPostTexMtx(param_0);
     } else {
         mTexGenBlock->calc(param_0);
@@ -276,7 +276,7 @@ void J3DMaterial::calc(f32 const (*param_0)[4]) {
 }
 
 void J3DMaterial::calcDiffTexMtx(f32 const (*param_0)[4]) {
-    if (j3dSys.checkFlag(0x40000000)) {
+    if (j3dSys.checkFlag(J3DSysFlag_PostTexMtx)) {
         mTexGenBlock->calcPostTexMtxWithoutViewMtx(param_0);
     } else {
         mTexGenBlock->calcWithoutViewMtx(param_0);
@@ -288,7 +288,7 @@ void J3DMaterial::setCurrentMtx() {
 }
 
 void J3DMaterial::calcCurrentMtx() {
-    if (!j3dSys.checkFlag(0x40000000)) {
+    if (!j3dSys.checkFlag(J3DSysFlag_PostTexMtx)) {
         mCurrentMtx.setCurrentTexMtx(
             getTexCoord(0)->getTexGenMtx(),
             getTexCoord(1)->getTexGenMtx(),
@@ -370,6 +370,30 @@ s32 J3DMaterial::newSingleSharedDisplayList(u32 dlSize) {
 
     return kJ3DError_Success;
 }
+
+#if TARGET_PC
+bool J3DMaterial::needsInterpCallBack() const {
+    for (int i = 0, n = getTexGenNum(); i < n; i++) {
+        J3DTexMtx* pTexMtx = mTexGenBlock->getTexMtx(i);
+        if (pTexMtx != NULL) {
+            u32 texMtxMode = pTexMtx->getTexMtxInfo().mInfo & 0x3f;
+
+            // uses j3dSys.getViewMtx()
+            switch (texMtxMode) {
+            case J3DTexMtxMode_EnvmapBasic:
+            case J3DTexMtxMode_EnvmapOld:
+            case J3DTexMtxMode_Envmap:
+            case J3DTexMtxMode_ProjmapBasic:
+            case J3DTexMtxMode_Projmap:
+            case J3DTexMtxMode_ViewProjmap:
+            case J3DTexMtxMode_ViewProjmapBasic:
+                return true;
+            }
+        }
+    }
+    return false;
+}
+#endif
 
 void J3DPatchedMaterial::initialize() {
     J3DMaterial::initialize();

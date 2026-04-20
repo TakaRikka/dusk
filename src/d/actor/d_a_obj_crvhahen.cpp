@@ -137,13 +137,7 @@ void daObjCRVHAHEN_c::CheckCull() {
 
 bool daObjCRVHAHEN_c::checkViewArea(cXyz* i_this) {
     Vec proj;
-
-    #if TARGET_PC
-    mDoLib_project(i_this, &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
-    #else
     mDoLib_project(i_this, &proj);
-    #endif
-
     bool ret = false;
 
     if (proj.x >= 0.0f && proj.x <= FB_WIDTH && proj.y >= 0.0f && proj.y <= FB_HEIGHT) {

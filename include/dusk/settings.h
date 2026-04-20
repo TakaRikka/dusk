@@ -61,18 +61,21 @@ struct UserSettings {
         ConfigVar<bool> noMissClimbing;
         ConfigVar<bool> fastTears;
         ConfigVar<bool> instantSaves;
+        ConfigVar<bool> instantText;
         ConfigVar<bool> sunsSong;
 
         // Preferences
         ConfigVar<bool> enableMirrorMode;
         ConfigVar<bool> invertCameraXAxis;
         ConfigVar<bool> disableMainHUD;
+        ConfigVar<bool> pauseOnFocusLost;
 
         // Graphics
         ConfigVar<BloomMode> bloomMode;
         ConfigVar<float> bloomMultiplier;
-        ConfigVar<bool> enableWaterRefraction;
+        ConfigVar<bool> disableWaterRefraction;
         ConfigVar<bool> enableFrameInterpolation;
+        ConfigVar<int> internalResolutionScale;
         ConfigVar<int> shadowResolutionMultiplier;
 
         // Audio
@@ -91,6 +94,15 @@ struct UserSettings {
         ConfigVar<bool> gyroInvertYaw;
 
         // Cheats
+        ConfigVar<bool> infiniteHearts;
+        ConfigVar<bool> infiniteArrows;
+        ConfigVar<bool> infiniteBombs;
+        ConfigVar<bool> infiniteOil;
+        ConfigVar<bool> infiniteOxygen;
+        ConfigVar<bool> infiniteRupees;
+        ConfigVar<bool> moonJump;
+        ConfigVar<bool> superClawshot;
+        ConfigVar<bool> alwaysGreatspin;
         ConfigVar<bool> enableFastIronBoots;
         ConfigVar<bool> canTransformAnywhere;
         ConfigVar<bool> fastSpinner;

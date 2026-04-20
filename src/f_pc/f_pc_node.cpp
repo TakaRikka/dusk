@@ -7,6 +7,13 @@
 #include "f_pc/f_pc_layer_iter.h"
 #include "f_pc/f_pc_debug_sv.h"
 
+#if TARGET_PC
+#include "f_op/f_op_draw_iter.h"
+#include "f_pc/f_pc_manager.h"
+
+#include "dusk/frame_interpolation.h"
+#endif
+
 int fpcNd_DrawMethod(nodedraw_method_class* i_method_class, void* i_data) {
     return fpcMtd_Method(i_method_class->draw_method, i_data);
 }
@@ -18,7 +25,17 @@ int fpcNd_Draw(process_node_class* i_procNode) {
     if (i_procNode->unk_0x1A8 == 0) {
         layer_class* save_layer = fpcLy_CurrentLayer();
         fpcLy_SetCurrentLayer(&var_r28->layer);
-        ret = fpcNd_DrawMethod(i_procNode->nodedraw_method, i_procNode);
+#if TARGET_PC
+        if (!i_procNode->draw_interp_frame && !dusk::frame_interp::is_sim_frame()) {
+            for (create_tag_class* i = fopDwIt_Begin(); i != NULL; i = fopDwIt_Next(i)) {
+                void* process = i->mpTagData;
+                fpcM_Draw(process);
+            }
+        } else
+#endif
+        {
+            ret = fpcNd_DrawMethod(i_procNode->nodedraw_method, i_procNode);
+        }
         fpcLy_SetCurrentLayer(save_layer);
     }
 

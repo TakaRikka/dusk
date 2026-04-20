@@ -65,6 +65,11 @@ namespace dusk {
                     ImGui::SetTooltip("Skip the delay when writing to the Memory Card.");
                 }
 
+                config::ImGuiCheckbox("Hold B for Instant Text", getSettings().game.instantText);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Make text scroll immediately by holding B.");
+                }
+
                 config::ImGuiCheckbox("No Climbing Miss Animation", getSettings().game.noMissClimbing);
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("Prevents Link from playing a struggle animation\n"
@@ -144,8 +149,10 @@ namespace dusk {
 
                 config::ImGuiCheckbox("Gyro Aim", getSettings().game.enableGyroAim);
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Enables the gyroscope on supported controllers while aiming the\n"
-                                      "Slingshot, Gale Boomerang, Hero's Bow, Clawshot(s), Ball and Chain, and Dominion Rod.");
+                    ImGui::SetTooltip("Enables the gyroscope on supported controllers\n"
+                                      "while in look mode (C-Up) and while aiming the\n"
+                                      "Slingshot, Gale Boomerang, Hero's Bow, Clawshot(s),\n"
+                                      "Ball and Chain, and Dominion Rod.");
                 }
 
                 config::ImGuiCheckbox("Gyro Rollgoal", getSettings().game.enableGyroRollgoal);
@@ -195,6 +202,16 @@ namespace dusk {
             ImGui::Separator();
 
             if (ImGui::BeginMenu("Cheats")) {
+                config::ImGuiCheckbox("Infinite Hearts", getSettings().game.infiniteHearts);
+                config::ImGuiCheckbox("Infinite Arrows", getSettings().game.infiniteArrows);
+                config::ImGuiCheckbox("Infinite Bombs", getSettings().game.infiniteBombs);
+                config::ImGuiCheckbox("Infinite Oil", getSettings().game.infiniteOil);
+                config::ImGuiCheckbox("Infinite Oxygen", getSettings().game.infiniteOxygen);
+                config::ImGuiCheckbox("Infinite Rupees", getSettings().game.infiniteRupees);
+                config::ImGuiCheckbox("Moon Jump (R+A)", getSettings().game.moonJump);
+                config::ImGuiCheckbox("Super Clawshot", getSettings().game.superClawshot);
+                config::ImGuiCheckbox("Always Greatspin", getSettings().game.alwaysGreatspin);
+
                 config::ImGuiCheckbox("Fast Iron Boots", getSettings().game.enableFastIronBoots);
 
                 config::ImGuiCheckbox("Can Transform Anywhere", getSettings().game.canTransformAnywhere);

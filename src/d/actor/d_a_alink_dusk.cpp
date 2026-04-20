@@ -143,12 +143,14 @@ void daAlink_c::handleQuickTransform() {
     procCoMetamorphoseInit();
 }
 
-bool daAlink_c::checkGyroAimItemContext() {
-    if (checkWolf()) {
-        return false;
-    }
-
+bool daAlink_c::checkGyroAimContext() {
     switch (mProcID) {
+    case PROC_SUBJECTIVITY:
+    case PROC_SWIM_SUBJECTIVITY:
+    case PROC_HORSE_SUBJECTIVITY:
+    case PROC_CANOE_SUBJECTIVITY:
+    case PROC_BOARD_SUBJECTIVITY:
+    case PROC_WOLF_ROPE_SUBJECTIVITY:
     case PROC_BOW_SUBJECT:
     case PROC_BOOMERANG_SUBJECT:
     case PROC_COPY_ROD_SUBJECT:

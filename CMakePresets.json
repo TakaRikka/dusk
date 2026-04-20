@@ -148,8 +148,7 @@
       "cacheVariables": {
         "CMAKE_C_COMPILER": "cl",
         "CMAKE_CXX_COMPILER": "cl",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install",
-        "AURORA_DAWN_PROVIDER": "vendor"
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install"
       },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -359,7 +358,10 @@
       "inherits": [
         "relwithdebinfo",
         "ci"
-      ]
+      ],
+      "cacheVariables": {
+        "AURORA_SDL3_PROVIDER": "vendor"
+      }
     },
     {
       "name": "x-linux-ci-gcc",
@@ -382,7 +384,6 @@
         "ci"
       ],
       "cacheVariables": {
-        "AURORA_DAWN_PROVIDER": "vendor",
         "AURORA_NOD_PROVIDER": "vendor",
         "CMAKE_DISABLE_FIND_PACKAGE_PkgConfig": {
           "type": "BOOL",

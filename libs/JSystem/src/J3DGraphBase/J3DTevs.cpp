@@ -37,9 +37,9 @@ void loadTexCoordGens(u32 texGenNum, J3DTexCoord* texCoords) {
     var_r28 = 61;
     J3DGDWriteXFCmdHdr(GX_XF_REG_DUALTEX0, texGenNum);
 
-    if (j3dSys.checkFlag(0x40000000)) {
+    if (j3dSys.checkFlag(J3DSysFlag_PostTexMtx)) {
         for (int i = 0; i < texGenNum; i++) {
-            if (texCoords[i].getTexGenMtx() != 60) {
+            if (texCoords[i].getTexGenMtx() != GX_IDENTITY) {
                 var_r28 = i * 3;
             } else {
                 var_r28 = 61;

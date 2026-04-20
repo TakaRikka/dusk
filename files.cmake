@@ -1334,6 +1334,7 @@ set(DUSK_FILES
         include/dusk/endian_gx.hpp
         include/dusk/config.hpp
         include/dusk/dvd_asset.hpp
+        include/dusk/scope_guard.hpp
         src/dusk/dvd_asset.cpp
         src/d/actor/d_a_alink_dusk.cpp
         src/dusk/asserts.cpp
@@ -1345,6 +1346,7 @@ set(DUSK_FILES
         src/dusk/file_select.cpp
         src/dusk/file_select.hpp
         src/dusk/frame_interpolation.cpp
+        src/dusk/game_clock.cpp
         src/dusk/globals.cpp
         src/dusk/gyro.cpp
         src/dusk/io.cpp
@@ -1385,4 +1387,5 @@ set(DUSK_FILES
         src/dusk/OSContext.cpp
         src/dusk/OSThread.cpp
         src/dusk/OSMutex.cpp
+        src/dusk/discord_presence.cpp
 )

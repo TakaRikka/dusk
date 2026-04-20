@@ -42,7 +42,6 @@
 #include "SSystem/SComponent/c_counter.h"
 #include <cstring>
 
-#include <chrono>
 #include <filesystem>
 #include <system_error>
 #include <thread>
@@ -51,6 +50,7 @@
 #include "dusk/crash_reporting.h"
 #include "dusk/dusk.h"
 #include "dusk/frame_interpolation.h"
+#include "dusk/game_clock.h"
 #include "dusk/gyro.h"
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/logging.h"
@@ -68,8 +68,11 @@
 #include "cxxopts.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/config.hpp"
+#include "dusk/settings.h"
 #include "dusk/imgui/ImGuiConsole.hpp"
+#include "dusk/discord_presence.hpp"
 #include "tracy/Tracy.hpp"
+#include "f_pc/f_pc_draw.h"
 
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
@@ -92,6 +95,7 @@ const int audioHeapSize = 0x14D800;
 bool dusk::IsRunning = true;
 bool dusk::IsShuttingDown = false;
 bool dusk::IsGameLaunched = false;
+bool dusk::IsFocusPaused = false;
 #endif
 
 s32 LOAD_COPYDATE(void*) {
@@ -126,8 +130,6 @@ AuroraStats dusk::lastFrameAuroraStats;
 float dusk::frameUsagePct = 0.0f;
 const char* configPath;
 
-AuroraWindowSize preLaunchUIWindowSize;
-
 bool launchUILoop() {
     while (dusk::IsRunning && !dusk::IsGameLaunched) {
         const AuroraEvent* event = aurora_update();
@@ -135,9 +137,6 @@ bool launchUILoop() {
             switch (event->type) {
             case AURORA_SDL_EVENT:
                 dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
-                break;
-            case AURORA_WINDOW_RESIZED:
-                preLaunchUIWindowSize = event->windowSize;
                 break;
             case AURORA_DISPLAY_SCALE_CHANGED:
                 dusk::ImGuiEngine_Initialize(event->windowSize.scale);
@@ -202,12 +201,7 @@ void main01(void) {
 
     OSReport("Entering Main Loop (main01)...\n");
 
-    if (preLaunchUIWindowSize.width != 0)
-        mDoGph_gInf_c::setWindowSize(preLaunchUIWindowSize);
-
-    constexpr float kSimStepSeconds = 1.0 / 30.0;
-    auto previous_time = std::chrono::steady_clock::now();
-    float accumulator = kSimStepSeconds;
+    dusk::game_clock::ensure_initialized();
 
     do {
         // 1. Update Window Events
@@ -218,9 +212,16 @@ void main01(void) {
                 goto eventsDone;
             case AURORA_SDL_EVENT:
                 dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
-                break;
-            case AURORA_WINDOW_RESIZED:
-                mDoGph_gInf_c::setWindowSize(event->windowSize);
+                if (event->sdl.type == SDL_EVENT_WINDOW_FOCUS_LOST &&
+                    dusk::getSettings().game.pauseOnFocusLost) {
+                    dusk::IsFocusPaused = true;
+                    dusk::audio::SetPaused(true);
+                } else if (event->sdl.type == SDL_EVENT_WINDOW_FOCUS_GAINED &&
+                           dusk::IsFocusPaused) {
+                    dusk::IsFocusPaused = false;
+                    dusk::audio::SetPaused(false);
+                    dusk::game_clock::reset_frame_timer();
+                }
                 break;
             case AURORA_DISPLAY_SCALE_CHANGED:
                 dusk::ImGuiEngine_Initialize(event->windowSize.scale);
@@ -234,10 +235,12 @@ void main01(void) {
 
         eventsDone:;
 
-        auto current_time = std::chrono::steady_clock::now();
-        float frame_seconds = std::chrono::duration<float>(current_time - previous_time).count();
-        previous_time = current_time;
-        accumulator += frame_seconds;
+        if (dusk::IsFocusPaused) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(16));
+            continue;
+        }
+
+        const dusk::game_clock::MainLoopPacer pacing = dusk::game_clock::advance_main_loop();
 
         VIWaitForRetrace();
 
@@ -247,26 +250,35 @@ void main01(void) {
             continue;
         }
 
-        if (dusk::getSettings().game.enableFrameInterpolation && !dusk::getTransientSettings().skipFrameRateLimit) {
-            dusk::frame_interp::notify_presentation_frame();
-            if (accumulator >= kSimStepSeconds) {
+        mDoGph_gInf_c::updateRenderSize();
+
+        dusk::frame_interp::begin_frame(pacing.is_interpolating, pacing.do_sim_tick, pacing.interpolation_step);
+        if (pacing.is_interpolating) {
+            if (pacing.do_sim_tick) {
+                dusk::frame_interp::set_ui_tick_pending(true);
                 mDoCPd_c::read();
-                dusk::gyro::read(kSimStepSeconds);
+                DuskDebugPad();
+                dusk::gyro::read(pacing.sim_pace);
                 fapGm_Execute();
                 mDoAud_Execute();
-                accumulator = 0.0f;
+                dusk::game_clock::reset_accumulator();
             }
-            dusk::frame_interp::interpolate(static_cast<float>(accumulator / kSimStepSeconds));
-            {
-                dusk::frame_interp::PresentationCameraScope presentation_camera;
-                cAPIGph_Painter();
+            dusk::frame_interp::interpolate();
+            dusk::frame_interp::begin_presentation_camera();
+            if (!pacing.do_sim_tick) {
+                // run draw functions for anything specially marked to handle interp on non-sim
+                // ticks
+                fpcM_DrawIterater((fpcM_DrawIteraterFunc)fpcM_Draw);
             }
+            cAPIGph_Painter();
+            dusk::frame_interp::end_presentation_camera();
+            dusk::frame_interp::set_ui_tick_pending(false);
         } else {
-            accumulator = 0.0f;
-            
+            dusk::frame_interp::set_ui_tick_pending(true);
+
             // Game Inputs
             mDoCPd_c::read();
-            dusk::gyro::read(frame_seconds);
+            dusk::gyro::read(pacing.presentation_dt_seconds);
 
             // EXECUTE GAME LOGIC & RENDER
             // This calls mDoGph_Painter -> JFWDisplay -> GX Functions
@@ -278,6 +290,11 @@ void main01(void) {
         aurora_end_frame();
 
         FrameMark;
+
+#ifdef DUSK_DISCORD_RPC
+        dusk::discord::RunCallbacks();
+        dusk::discord::UpdatePresence();
+#endif
     } while (dusk::IsRunning);
 
     exit:;
@@ -520,15 +537,20 @@ int game_main(int argc, char* argv[]) {
 
     auroraInfo = aurora_initialize(argc, argv, &config);
 
+#ifdef DUSK_DISCORD_RPC
+    dusk::discord::Initialize();
+#endif
+
     VISetWindowTitle(
         fmt::format("Dusk {} [{}]", DUSK_WC_DESCRIBE, dusk::backend_name(auroraInfo.backend))
         .c_str());
 
     if (dusk::getSettings().video.lockAspectRatio) {
-        VILockAspectRatio(defaultAspectRatioW, defaultAspectRatioH);
+        AuroraSetViewportPolicy(AURORA_VIEWPORT_FIT);
     } else {
-        VIUnlockAspectRatio();
+        AuroraSetViewportPolicy(AURORA_VIEWPORT_STRETCH);
     }
+    VISetFrameBufferScale(dusk::getSettings().game.internalResolutionScale.getValue());
 
     dusk::audio::SetMasterVolume(dusk::getSettings().audio.masterVolume / 100.0f);
     dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);
@@ -552,6 +574,9 @@ int game_main(int argc, char* argv[]) {
         // pre game launch ui main loop
         if (!launchUILoop()) {
             dusk::ShutdownCrashReporting();
+#ifdef DUSK_DISCORD_RPC
+            dusk::discord::Shutdown();
+#endif
             aurora_shutdown();
             return 0;
         }
@@ -599,6 +624,9 @@ int game_main(int argc, char* argv[]) {
     // Notifies all CVs and causes threads to exit
     OSResetSystem(OS_RESET_SHUTDOWN, 0, 0);
 
+#ifdef DUSK_DISCORD_RPC
+    dusk::discord::Shutdown();
+#endif
     aurora_shutdown();
 
     return 0;

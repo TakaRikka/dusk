@@ -17,9 +17,41 @@
 #include "m_Do/m_Do_graphic.h"
 
 #include <aurora/gfx.h>
+#include <aurora/lib/logging.hpp>
 #include <SDL3/SDL_gamepad.h>
+#include <SDL3/SDL_misc.h>
 
 #include "dusk/main.h"
+
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
+#if defined(_WIN32) || (defined(__APPLE__) && !TARGET_OS_IOS && !TARGET_OS_MACCATALYST) || (defined(__linux__) && !defined(__ANDROID__))
+#define DUSK_CAN_OPEN_DATA_FOLDER 1
+
+namespace fs = std::filesystem;
+
+static void OpenDataFolder() {
+    const std::string path = fs::absolute(fs::path(aurora::g_config.configPath)).generic_string();
+#if defined(_WIN32)
+    const std::string url = std::string("file:///") + path;
+#else
+    const std::string url = std::string("file://") + path;
+#endif
+    (void)SDL_OpenURL(url.c_str());
+}
+#else
+#define DUSK_CAN_OPEN_DATA_FOLDER 0
+#endif
+
+namespace {
+constexpr int kInternalResolutionScaleMax = 12;
+}  // namespace
+
+namespace aurora::gx {
+extern bool enableLodBias;
+}
 
 namespace dusk {
     void ImGuiMenuGame::ToggleFullscreen() {
@@ -58,12 +90,32 @@ namespace dusk {
                     getSettings().video.lockAspectRatio.setValue(lockAspect);
 
                     if (lockAspect) {
-                        VILockAspectRatio(defaultAspectRatioW, defaultAspectRatioH);
+                        AuroraSetViewportPolicy(AURORA_VIEWPORT_FIT);
                     } else {
-                        VIUnlockAspectRatio();
+                        AuroraSetViewportPolicy(AURORA_VIEWPORT_STRETCH);
                     }
 
                     config::Save();
+                }
+
+                u32 internalResolutionWidth = 0;
+                u32 internalResolutionHeight = 0;
+                AuroraGetRenderSize(&internalResolutionWidth, &internalResolutionHeight);
+                ImGui::TextDisabled("Current internal resolution: %ux%u", internalResolutionWidth,
+                                    internalResolutionHeight);
+
+                int scale = std::clamp(getSettings().game.internalResolutionScale.getValue(), 0,
+                                       kInternalResolutionScaleMax);
+                if (ImGui::SliderInt("Internal Resolution", &scale, 0, kInternalResolutionScaleMax,
+                                     scale == 0 ? "Auto" : "%dx"))
+                {
+                    getSettings().game.internalResolutionScale.setValue(scale);
+                    VISetFrameBufferScale(static_cast<float>(scale));
+                    config::Save();
+                }
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Auto renders at the native window resolution.\n"
+                                      "Higher values scale the game's internal framebuffer.");
                 }
 
                 constexpr const char* bloomModeNames[] = {"Off", "Classic", "Dusk"};
@@ -91,7 +143,7 @@ namespace dusk {
                 }
                 if (bloomOff) ImGui::EndDisabled();
 
-                config::ImGuiCheckbox("Enable Water Refraction", getSettings().game.enableWaterRefraction);
+                ImGui::Checkbox("Enable LOD Bias", &aurora::gx::enableLodBias);
 
                 ImGui::EndMenu();
             }
@@ -140,9 +192,20 @@ namespace dusk {
 #if DUSK_ENABLE_SENTRY_NATIVE
                 config::ImGuiCheckbox("Enable Crash Reporting", getSettings().backend.enableCrashReporting);
 #endif
+                if (!IsMobile) {
+                    config::ImGuiCheckbox("Pause on Focus Lost", getSettings().game.pauseOnFocusLost);
+                }
 
                 ImGui::EndMenu();
             }
+
+            ImGui::Separator();
+
+#if DUSK_CAN_OPEN_DATA_FOLDER
+            if (ImGui::MenuItem("Open Data Folder")) {
+                OpenDataFolder();
+            }
+#endif
 
             ImGui::Separator();
 

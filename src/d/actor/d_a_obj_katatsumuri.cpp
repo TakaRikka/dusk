@@ -611,13 +611,7 @@ void daObjKAT_c::Z_BufferChk() {
     cXyz curWithOff;
     curWithOff = current.pos;
     curWithOff.y += 20.0f;
-
-    #if TARGET_PC
-    mDoLib_project(&curWithOff, &projected, {0, 0, FB_WIDTH, FB_HEIGHT});
-    #else
     mDoLib_project(&curWithOff, &projected);
-    #endif
-
     camera_process_class* camera = dComIfGp_getCamera(0);
     f32 unkFloat1;
     if (camera != NULL) {
