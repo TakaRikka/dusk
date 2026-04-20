@@ -555,11 +555,23 @@ void dMenu_Option_c::_draw() {
         #endif
 
         mpBlackTex->setAlpha(0xff);
+
+#if TARGET_PC
+        mpBlackTex->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(), mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), 0, 0, 0);
+#else
         mpBlackTex->draw(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0, 0, 0);
+#endif
+
         mpBackScreen->draw(0.0f, 0.0f, ctx);
         f32 alpha = (f32)g_drawHIO.mOptionScreen.mBackgroundAlpha * (f32)field_0x374;
         mpBlackTex->setAlpha(alpha);
+
+#if TARGET_PC
+        mpBlackTex->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(), mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), 0, 0, 0);
+#else
         mpBlackTex->draw(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0, 0, 0);
+#endif
+
         mpScreen->draw(0.0f, 0.0f, ctx);
         mpClipScreen->draw(0.0f, 0.0f, ctx);
 #if TARGET_PC
