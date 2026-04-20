@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <cmath>
 #include <unordered_map>
 
 namespace dusk {
@@ -26,7 +27,7 @@ void ensure_initialized() {
 
 void reset_accumulator() {
     ensure_initialized();
-    s_sim_accumulator = 0.0f;
+    s_sim_accumulator = fmodf(s_sim_accumulator, sim_pace());
 }
 
 void reset_frame_timer() {
