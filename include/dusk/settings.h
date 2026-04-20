@@ -73,7 +73,7 @@ struct UserSettings {
         // Graphics
         ConfigVar<BloomMode> bloomMode;
         ConfigVar<float> bloomMultiplier;
-        ConfigVar<bool> enableWaterRefraction;
+        ConfigVar<bool> disableWaterRefraction;
         ConfigVar<bool> enableFrameInterpolation;
         ConfigVar<int> internalResolutionScale;
         ConfigVar<int> shadowResolutionMultiplier;
