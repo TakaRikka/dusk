@@ -408,10 +408,8 @@ void begin_presentation_camera() {
     }
 
     mDoLib_clipper::setup(view->fovy, view->aspect, view->near_, far_);
-    
-#if WIDESCREEN_SUPPORT
-    mDoGph_gInf_c::offWideZoom();
-#endif
+
+    // FRAME INTERP NOTE: Removed the call to offWideZoom that was here, it causes problems with presentation during cutscenes.
 
     s_presentation_depth = 1;
 
