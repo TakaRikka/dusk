@@ -2102,11 +2102,7 @@ void dFile_select_c::yesnoCursorShow() {
         mSelIcon->setPos(pos.x, pos.y, mYnSelPane[field_0x0268]->getPanePtr(), true);
         mSelIcon->setAlphaRate(1.0f);
 
-        #if TARGET_PC
-        mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.84f, 0.06f, 0.5f, 0.5f);
-        #else
         mSelIcon->setParam(0.96f, 0.84f, 0.06f, 0.5f, 0.5f);
-        #endif
     }
 }
 
@@ -2259,11 +2255,7 @@ void dFile_select_c::YesNoCancelMove() {
                                  m3mSelPane[mSelectMenuNum]->getPanePtr(), true);
                 mSelIcon->setAlphaRate(1.0f);
 
-                #if TARGET_PC
-                mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.84f, 0.06f, 0.5f, 0.5f);
-                #else
                 mSelIcon->setParam(0.96f, 0.84f, 0.06f, 0.5f, 0.5f);
-                #endif
 
                 #if PLATFORM_WII || PLATFORM_SHIELD
                 field_0x4333 = mSelectMenuNum;
@@ -3147,11 +3139,7 @@ void dFile_select_c::screenSet() {
     mSelIcon = JKR_NEW dSelect_cursor_c(0, 1.0f, NULL);
     JUT_ASSERT(5209, mSelIcon != NULL);
 
-    #if TARGET_PC
-    mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.94f, 0.03f, 0.7f, 0.7f);
-    #else
     mSelIcon->setParam(0.96f, 0.94f, 0.03f, 0.7f, 0.7f);
-    #endif
 
     Vec vtxCenter;
     vtxCenter = mSelFilePanes[mSelectNum]->getGlobalVtxCenter(false, 0);
@@ -3287,11 +3275,7 @@ void dFile_select_c::screenSetCopySel() {
     mSelIcon2 = JKR_NEW dSelect_cursor_c(0, 1.0f, NULL);
     JUT_ASSERT(5406, mSelIcon2 != NULL);
 
-    #if TARGET_PC
-    mSelIcon2->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.94f, 0.03f, 0.7f, 0.7f);
-    #else
     mSelIcon2->setParam(0.96f, 0.94f, 0.03f, 0.7f, 0.7f);
-    #endif
 
     Vec center = mCpSelPane[0]->getGlobalVtxCenter(false, 0);
     mSelIcon2->setPos(center.x, center.y, mCpSelPane[0]->getPanePtr(), true);
@@ -3683,11 +3667,7 @@ void dFile_select_c::selFileCursorShow() {
     mSelIcon->setPos(local_1c.x, local_1c.y, mSelFilePanes[mSelectNum]->getPanePtr(), true);
     mSelIcon->setAlphaRate(1.0f);
 
-    #if TARGET_PC
-    mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.94f, 0.03f, 0.7f, 0.7f);
-    #else
     mSelIcon->setParam(0.96f, 0.94f, 0.03f, 0.7f, 0.7f);
-    #endif
 }
 
 void dFile_select_c::menuWakuAlpahAnmInit(u8 i_idx, u8 param_1, u8 param_2, u8 param_3) {
@@ -3730,11 +3710,7 @@ void dFile_select_c::menuCursorShow() {
         mSelIcon->setPos(local_24.x, local_24.y, m3mSelPane[mSelectMenuNum]->getPanePtr(), true);
         mSelIcon->setAlphaRate(1.0f);
 
-        #if TARGET_PC
-        mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.84f, 0.06f, 0.5f, 0.5f);
-        #else
         mSelIcon->setParam(0.96f, 0.84f, 0.06f, 0.5f, 0.5f);
-        #endif
     }
 }
 

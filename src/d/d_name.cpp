@@ -1288,7 +1288,7 @@ void dName_c::selectCursorPosSet(int row) {
 #if TARGET_PC
 void dName_c::nameWide() {
     //Resize Select Icon
-    mSelIcon->setParam(0.82f * mDoGph_gInf_c::hudAspectScaleUp, 0.77f, 0.05f, 0.4f, 0.4f);
+    mSelIcon->setParam(0.82f, 0.77f, 0.05f, 0.4f, 0.4f);
 
     // List of Characters Box
     static u64 l_tagName[65] = {
@@ -1540,11 +1540,7 @@ void dName_c::screenSet() {
     mSelIcon = JKR_NEW dSelect_cursor_c(0, 1.0f, NULL);
     JUT_ASSERT(0, mSelIcon != NULL);
 
-    #if TARGET_PC
-    mSelIcon->setParam(0.82f * mDoGph_gInf_c::hudAspectScaleUp, 0.77f, 0.05f, 0.4f, 0.4f);
-    #else
     mSelIcon->setParam(0.82f, 0.77f, 0.05f, 0.4f, 0.4f);
-    #endif
 
     Vec pos = mMojiIcon[mCharRow + mCharColumn * 5]->getGlobalVtxCenter(false, 0);
     mSelIcon->setPos(pos.x, pos.y, mMojiIcon[mCharRow + mCharColumn * 5]->getPanePtr(), true);
