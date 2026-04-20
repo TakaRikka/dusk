@@ -47,7 +47,7 @@ UserSettings g_userSettings = {
         // Graphics
         .bloomMode {"game.bloomMode", BloomMode::Classic},
         .bloomMultiplier {"game.bloomMultiplier", 1.0f},
-        .enableWaterRefraction {"game.enableWaterRefraction", true},
+        .disableWaterRefraction {"game.disableWaterRefraction", false},
         .enableFrameInterpolation = {"game.enableFrameInterpolation", false},
         .internalResolutionScale {"game.internalResolutionScale", 0},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
@@ -140,7 +140,7 @@ void registerSettings() {
     Register(g_userSettings.game.pauseOnFocusLost);
     Register(g_userSettings.game.bloomMode);
     Register(g_userSettings.game.bloomMultiplier);
-    Register(g_userSettings.game.enableWaterRefraction);
+    Register(g_userSettings.game.disableWaterRefraction);
     Register(g_userSettings.game.internalResolutionScale);
     Register(g_userSettings.game.shadowResolutionMultiplier);
     Register(g_userSettings.game.enableFastIronBoots);

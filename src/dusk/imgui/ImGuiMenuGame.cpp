@@ -143,8 +143,6 @@ namespace dusk {
                 }
                 if (bloomOff) ImGui::EndDisabled();
 
-                config::ImGuiCheckbox("Enable Water Refraction", getSettings().game.enableWaterRefraction);
-
                 ImGui::Checkbox("Enable LOD Bias", &aurora::gx::enableLodBias);
 
                 ImGui::EndMenu();

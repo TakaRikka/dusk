@@ -2,6 +2,7 @@
 #include "imgui.h"
 #include "aurora/gfx.h"
 
+#include "ImGuiConfig.hpp"
 #include "dusk/hotkeys.h"
 #include "dusk/settings.h"
 #include "ImGuiConsole.hpp"
@@ -28,6 +29,15 @@ namespace dusk {
             ImGui::Separator();
 
             auto& collisionView = getTransientSettings().collisionView;
+            if (ImGui::BeginMenu("Graphics Settings")) {
+                bool disableWaterRefraction = getSettings().game.disableWaterRefraction;
+                if (ImGui::Checkbox("Disable Water Refraction", &disableWaterRefraction)) {
+                    getSettings().game.disableWaterRefraction.setValue(disableWaterRefraction);
+                    config::Save();
+                }
+                ImGui::EndMenu();
+            }
+
             if (ImGui::BeginMenu("Collision View")) {
                 ImGui::Checkbox("Enable Terrain view", &collisionView.enableTerrainView);
                 ImGui::Checkbox("Enable wireframe view", &collisionView.enableWireframe);
