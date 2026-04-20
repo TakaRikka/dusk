@@ -17,6 +17,10 @@
 #include <cstdio>
 #include <cstring>
 
+#if TARGET_PC
+#include <f_ap/f_ap_game.h>
+#endif
+
 char* daDoor20_c::getStopBmdName() {
     switch (door_param2_c::getKind(this)) {
         case 3:
@@ -196,6 +200,7 @@ void daDoor20_c::setEventPrm() {
     } else {
         roomNo = FRoomNo;
     }
+
     if (dComIfGp_roomControl_checkStatusFlag(roomNo, 1)) {
         if (door_param2_c::getKind(this) == 9) {
             if (daPy_py_c::checkNowWolf()) {
@@ -564,6 +569,11 @@ int daDoor20_c::openEnd(int param_1) {
         openEnd_1();
         break;
     }
+
+    #if TARGET_PC
+    triggerAutoSave();
+    #endif
+
     return 1;
 }
 
