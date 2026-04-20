@@ -316,6 +316,48 @@ if (DUSK_MOVIE_SUPPORT)
     list(APPEND GAME_COMPILE_DEFS MOVIE_SUPPORT=1)
 endif ()
 
+option(DUSK_ENABLE_DISCORD_RPC "Enable Discord Rich Presence support" ON)
+if (DUSK_ENABLE_DISCORD_RPC AND NOT ANDROID AND NOT IOS AND NOT TVOS)
+
+    FetchContent_Populate(discord_rpc
+        URL https://github.com/discord/discord-rpc/archive/refs/tags/v3.4.0.tar.gz
+        URL_HASH SHA256=e13427019027acd187352dacba6c65953af66fdf3c35fcf38fc40b454a9d7855
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    )
+    # RapidJSON is a git submodule absent from the discord-rpc tarball; fetch separately.
+    FetchContent_Populate(rapidjson
+        URL https://github.com/Tencent/rapidjson/archive/refs/tags/v1.1.0.tar.gz
+        URL_HASH SHA256=bf7ced29704a1e696fbccf2a2b4ea068e7774fa37f6d7dd4039d0787f8bed98e
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    )
+
+    if (NOT TARGET discord-rpc)
+        set(_drpc ${discord_rpc_SOURCE_DIR}/src)
+        set(_drpc_src
+            ${_drpc}/discord_rpc.cpp
+            ${_drpc}/rpc_connection.cpp
+            ${_drpc}/serialization.cpp
+        )
+        if (WIN32)
+            list(APPEND _drpc_src ${_drpc}/connection_win.cpp ${_drpc}/discord_register_win.cpp)
+        elseif (APPLE)
+            list(APPEND _drpc_src ${_drpc}/connection_unix.cpp ${_drpc}/discord_register_osx.cpp)
+        else ()
+            list(APPEND _drpc_src ${_drpc}/connection_unix.cpp ${_drpc}/discord_register_linux.cpp)
+        endif ()
+        add_library(discord-rpc STATIC ${_drpc_src})
+        target_include_directories(discord-rpc PUBLIC
+            ${discord_rpc_SOURCE_DIR}/include
+            ${rapidjson_SOURCE_DIR}/include
+        )
+        if (UNIX)
+            target_link_libraries(discord-rpc PUBLIC pthread)
+        endif ()
+    endif ()
+    list(APPEND GAME_LIBS discord-rpc)
+    list(APPEND GAME_COMPILE_DEFS DUSK_DISCORD_RPC=1)
+endif ()
+
 # Edit & Continue
 if (MSVC)
     if ("${CMAKE_MSVC_DEBUG_INFORMATION_FORMAT}" STREQUAL "" AND CMAKE_BUILD_TYPE STREQUAL "Debug")
