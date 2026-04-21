@@ -165,6 +165,8 @@ namespace dusk {
 
             ImGui::Checkbox("Enable LOD Bias", &aurora::gx::enableLodBias);
 
+            config::ImGuiCheckbox("Enable Depth of Field", getSettings().game.enableDepthOfField);
+
             ImGui::EndMenu();
         }
     }

@@ -77,6 +77,7 @@ struct UserSettings {
         ConfigVar<bool> enableFrameInterpolation;
         ConfigVar<int> internalResolutionScale;
         ConfigVar<int> shadowResolutionMultiplier;
+        ConfigVar<bool> enableDepthOfField;
 
         // Audio
         ConfigVar<bool> noLowHpSound;
