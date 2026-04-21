@@ -984,7 +984,36 @@ void dMenu_DmapBg_c::update() {
             JUT_ASSERT(2323, mpBackTexture != NULL);
 
             void* spec = mpArchive->getResource("spec/spec.dat");
+            #if TARGET_PC
+            struct dmap_spec {
+                /* 0x00 */ BE(f32) field_0x0;
+                /* 0x04 */ BE(f32) field_0x4;
+                /* 0x08 */ BE(f32) field_0x8;
+                /* 0x0C */ u8 field_0xc;
+                /* 0x0D */ u8 field_0xd;
+                /* 0x0E */ u8 field_0xe;
+                /* 0x0F */ u8 field_0xf;
+                /* 0x10 */ u8 field_0x10;
+                /* 0x11 */ u8 field_0x11;
+                /* 0x12 */ u8 field_0x12;
+                /* 0x13 */ u8 field_0x13;
+            };
+            dmap_spec* dspec = (dmap_spec*)spec;
+
+            field_0xd80 = dspec->field_0x0;
+            field_0xd84 = dspec->field_0x4;
+            field_0xd88 = dspec->field_0x8;
+            field_0xd8c = dspec->field_0xc;
+            field_0xd8d = dspec->field_0xd;
+            field_0xd8e = dspec->field_0xe;
+            field_0xd8f = dspec->field_0xf;
+            field_0xd90 = dspec->field_0x10;
+            field_0xd91 = dspec->field_0x11;
+            field_0xd92 = dspec->field_0x12;
+            field_0xd93 = dspec->field_0x13;
+            #else
             memcpy(&field_0xd80, spec, 20);
+            #endif
         }
     }
 
