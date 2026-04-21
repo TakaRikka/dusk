@@ -399,12 +399,6 @@ target_include_directories(game_base PRIVATE ${GAME_INCLUDE_DIRS})
 target_link_libraries(game_debug PRIVATE ${GAME_LIBS})
 target_link_libraries(game_base PRIVATE ${GAME_LIBS})
 
-# Combined game library
-add_library(game STATIC
-    $<TARGET_OBJECTS:game_base>
-    $<TARGET_OBJECTS:game_debug>)
-target_link_libraries(game PUBLIC ${GAME_LIBS})
-
 if(ANDROID)
     add_library(dusk SHARED src/dusk/main.cpp)
     set_target_properties(dusk PROPERTIES OUTPUT_NAME main)
@@ -414,7 +408,7 @@ endif ()
 
 target_compile_definitions(dusk PRIVATE TARGET_PC AVOID_UB=1 VERSION=0)
 target_include_directories(dusk PRIVATE include)
-target_link_libraries(dusk PRIVATE game aurora::main)
+target_link_libraries(dusk PRIVATE game_base game_debug aurora::main)
 if (TARGET crashpad_handler)
     add_dependencies(dusk crashpad_handler)
 endif ()

@@ -15,7 +15,6 @@ set(DOLZEL_FILES
         src/m_Do/m_Do_DVDError.cpp
         src/m_Do/m_Do_MemCard.cpp
         src/m_Do/m_Do_MemCardRWmng.cpp
-        src/m_Do/m_Do_machine_exception.cpp
         src/m_Do/m_Do_hostIO.cpp
         src/c/c_damagereaction.cpp
         src/c/c_dylink.cpp
