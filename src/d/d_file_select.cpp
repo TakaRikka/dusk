@@ -70,11 +70,7 @@ dFs_HIO_c::dFs_HIO_c() {
     select_icon_appear_frames = 5;
     appear_display_wait_frames = 15;
     field_0x000d = 15;
-    #if TARGET_PC
-    card_wait_frames = 0;
-    #else
     card_wait_frames = 90;
-    #endif
     test_frame_counts[0] = 1.11f;
     test_frame_counts[1] = 1.11f;
     test_frame_counts[2] = 1.11f;
@@ -2367,7 +2363,7 @@ void dFile_select_c::CommandExec() {
         break;
     }
 
-    mWaitTimer = g_fsHIO.card_wait_frames;
+    mWaitTimer = IF_DUSK(dusk::getSettings().game.instantSaves ? 0 :) g_fsHIO.card_wait_frames;
 }
 
 void dFile_select_c::DataEraseWait() {
@@ -4759,7 +4755,7 @@ void dFile_select_c::MemCardFormatYesSel2Disp() {
     bool isErrorTxtChange = errorTxtChangeAnm();
     bool isYnMenuMove = yesnoMenuMoveAnm();
     if (isErrorTxtChange == true && isYnMenuMove == true) {
-        mWaitTimer = g_fsHIO.card_wait_frames;
+        mWaitTimer = IF_DUSK(dusk::getSettings().game.instantSaves ? 0 :) g_fsHIO.card_wait_frames;
         mDoMemCd_Format();
         mCardCheckProc = MEMCARDCHECKPROC_FORMAT;
     }
@@ -4830,7 +4826,7 @@ void dFile_select_c::MemCardMakeGameFileSelDisp() {
 
     if (isErrorTxtChange == true && isYnMenuMove == true && isKetteiTxtDisp == true) {
         if (field_0x0268 != 0) {
-            mWaitTimer = g_fsHIO.card_wait_frames;
+            mWaitTimer = IF_DUSK(dusk::getSettings().game.instantSaves ? 0 :) g_fsHIO.card_wait_frames;
             setInitSaveData();
             dataSave();
             mCardCheckProc = MEMCARDCHECKPROC_MAKE_GAMEFILE;
