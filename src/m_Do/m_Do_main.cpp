@@ -66,13 +66,15 @@
 
 #include "SDL3/SDL_filesystem.h"
 #include "cxxopts.hpp"
+#include "d/actor/d_a_movie_player.h"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/config.hpp"
-#include "dusk/settings.h"
 #include "dusk/imgui/ImGuiConsole.hpp"
+#include "dusk/settings.h"
 #include "dusk/discord_presence.hpp"
 #include "tracy/Tracy.hpp"
 #include "f_pc/f_pc_draw.h"
+#include "tracy/Tracy.hpp"
 
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
@@ -613,6 +615,8 @@ int game_main(int argc, char* argv[]) {
 
 
     main01();
+
+    dusk::MoviePlayerShutdown();
 
     dusk::ShutdownCrashReporting();
     dusk::ShutdownFileLogging();
