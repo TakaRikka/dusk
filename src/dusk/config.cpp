@@ -10,7 +10,7 @@
 #include <limits>
 #include <string>
 
-#include "dusk/dusk.h"
+#include "dusk/main.h"
 
 using namespace dusk::config;
 
@@ -24,7 +24,7 @@ static absl::flat_hash_map<std::string_view, ConfigVarBase*> RegisteredConfigVar
 static bool RegistrationDone = false;
 
 static std::string GetConfigJsonPath() {
-    return fmt::format("{}{}", configPath, ConfigFileName);
+    return (dusk::ConfigPath / ConfigFileName).string();
 }
 
 ConfigVarBase::ConfigVarBase(const char* name, const ConfigImplBase* impl) : name(name), registered(false), layer(ConfigVarLayer::Default), impl(impl) {
