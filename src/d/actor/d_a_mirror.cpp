@@ -30,6 +30,10 @@ static char* l_arcName = "Mirror";
 static char* l_arcName2 = "MR-Table";
 
 dMirror_packet_c::dMirror_packet_c() {
+#ifdef TARGET_PC
+    GXInitTexObj(&mTexObj, nullptr, 0, 0, static_cast<GXTexFmt>(-1), GX_MAX_TEXWRAPMODE,
+                 GX_MAX_TEXWRAPMODE, GX_FALSE);
+#endif
     reset();
 }
 
