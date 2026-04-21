@@ -15,7 +15,6 @@ set(DOLZEL_FILES
         src/m_Do/m_Do_DVDError.cpp
         src/m_Do/m_Do_MemCard.cpp
         src/m_Do/m_Do_MemCardRWmng.cpp
-        src/m_Do/m_Do_machine_exception.cpp
         src/m_Do/m_Do_hostIO.cpp
         src/c/c_damagereaction.cpp
         src/c/c_dylink.cpp
@@ -1366,8 +1365,6 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiBloomWindow.hpp
         src/dusk/imgui/ImGuiMenuTools.cpp
         src/dusk/imgui/ImGuiMenuTools.hpp
-        src/dusk/imgui/ImGuiMenuEnhancements.cpp
-        src/dusk/imgui/ImGuiMenuEnhancements.hpp
         src/dusk/imgui/ImGuiPreLaunchWindow.cpp
         src/dusk/imgui/ImGuiPreLaunchWindow.hpp
         src/dusk/imgui/ImGuiFirstRunPreset.hpp

@@ -16,10 +16,58 @@
 #include "dusk/main.h"
 #include "m_Do/m_Do_main.h"
 
+#include <aurora/lib/internal.hpp>
+#include <SDL3/SDL_misc.h>
+
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
+#if defined(_WIN32) || (defined(__APPLE__) && !TARGET_OS_IOS && !TARGET_OS_MACCATALYST) || (defined(__linux__) && !defined(__ANDROID__))
+#define DUSK_CAN_OPEN_DATA_FOLDER 1
+
+namespace fs = std::filesystem;
+
+static void OpenDataFolder() {
+    const std::string path = fs::absolute(dusk::ConfigPath).generic_string();
+#if defined(_WIN32)
+    const std::string url = std::string("file:///") + path;
+#else
+    const std::string url = std::string("file://") + path;
+#endif
+    (void)SDL_OpenURL(url.c_str());
+}
+#else
+#define DUSK_CAN_OPEN_DATA_FOLDER 0
+#endif
+
 namespace dusk {
     ImGuiMenuTools::ImGuiMenuTools() {}
 
     void ImGuiMenuTools::draw() {
+        if (ImGui::BeginMenu("Tools")) {
+            if (!dusk::IsGameLaunched) {
+                ImGui::BeginDisabled();
+            }
+
+            ImGui::MenuItem("Save Editor", hotkeys::SHOW_SAVE_EDITOR, &m_showSaveEditor);
+            ImGui::MenuItem("Map Loader", hotkeys::SHOW_MAP_LOADER, &m_showMapLoader);
+            ImGui::MenuItem("State Share", hotkeys::SHOW_STATE_SHARE, &m_showStateShare);
+
+            if (!dusk::IsGameLaunched) {
+                ImGui::EndDisabled();
+            }
+
+#if DUSK_CAN_OPEN_DATA_FOLDER
+            ImGui::Separator();
+            if (ImGui::MenuItem("Open Data Folder")) {
+                OpenDataFolder();
+            }
+#endif
+
+            ImGui::EndMenu();
+        }
+
         if (ImGui::BeginMenu("Debug")) {
             bool developmentMode = mDoMain::developmentMode == 1;
             if (ImGui::Checkbox("Development Mode", &developmentMode)) {
@@ -59,9 +107,6 @@ namespace dusk {
             ImGui::MenuItem("Debug Overlay", hotkeys::SHOW_DEBUG_OVERLAY, &m_showDebugOverlay);
             ImGui::MenuItem("Heap Viewer", hotkeys::SHOW_HEAP_VIEWER, &m_showHeapOverlay);
             ImGui::MenuItem("Player Info", hotkeys::SHOW_PLAYER_INFO, &m_showPlayerInfo);
-            ImGui::MenuItem("Save Editor", hotkeys::SHOW_SAVE_EDITOR, &m_showSaveEditor);     
-            ImGui::MenuItem("Map Loader", hotkeys::SHOW_MAP_LOADER, &m_showMapLoader);
-            ImGui::MenuItem("State Share", hotkeys::SHOW_STATE_SHARE, &m_showStateShare);
             ImGui::MenuItem("Debug Camera", hotkeys::SHOW_DEBUG_CAMERA, &m_showCameraOverlay);
             ImGui::MenuItem("Audio Debug", hotkeys::SHOW_AUDIO_DEBUG, &m_showAudioDebug);
             ImGui::MenuItem("Bloom", nullptr, &m_showBloomWindow);
@@ -96,7 +141,9 @@ namespace dusk {
         ImGui::SetNextWindowBgAlpha(0.65f);
         if (ImGui::Begin("Debug Overlay", nullptr, windowFlags)) {
             ImGuiStringViewText(fmt::format(FMT_STRING("FPS: {:.2f}\n"), io.Framerate));
-            ImGuiStringViewText(fmt::format(FMT_STRING("Frame usage: {:.1f}%\n"), frameUsagePct));
+            if (frameUsagePct > 0.f) {
+                ImGuiStringViewText(fmt::format(FMT_STRING("Frame usage: {:.1f}%\n"), frameUsagePct));
+            }
 
             ImGui::Separator();
 

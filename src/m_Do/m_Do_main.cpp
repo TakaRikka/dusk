@@ -66,13 +66,15 @@
 
 #include "SDL3/SDL_filesystem.h"
 #include "cxxopts.hpp"
+#include "d/actor/d_a_movie_player.h"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/config.hpp"
-#include "dusk/settings.h"
 #include "dusk/imgui/ImGuiConsole.hpp"
+#include "dusk/settings.h"
 #include "dusk/discord_presence.hpp"
 #include "tracy/Tracy.hpp"
 #include "f_pc/f_pc_draw.h"
+#include "tracy/Tracy.hpp"
 
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
@@ -96,6 +98,7 @@ bool dusk::IsRunning = true;
 bool dusk::IsShuttingDown = false;
 bool dusk::IsGameLaunched = false;
 bool dusk::IsFocusPaused = false;
+std::filesystem::path dusk::ConfigPath;
 #endif
 
 s32 LOAD_COPYDATE(void*) {
@@ -128,7 +131,6 @@ s32 LOAD_COPYDATE(void*) {
 AuroraInfo auroraInfo;
 AuroraStats dusk::lastFrameAuroraStats;
 float dusk::frameUsagePct = 0.0f;
-const char* configPath;
 
 bool launchUILoop() {
     while (dusk::IsRunning && !dusk::IsGameLaunched) {
@@ -377,7 +379,7 @@ static void ApplyCVarOverrides(const cxxopts::OptionValue& option) {
     }
 }
 
-static const char* CalculateConfigPath() {
+static std::filesystem::path CalculateConfigPath() {
     const auto result = SDL_GetPrefPath(dusk::OrgName, dusk::AppName);
     if (!result) {
         DuskLog.fatal("Unable to get PrefPath: {}", SDL_GetError());
@@ -386,13 +388,12 @@ static const char* CalculateConfigPath() {
     return result;
 }
 
-static void EnsureInitialPipelineCache(const char* configDir) {
-    if (configDir == nullptr) {
+static void EnsureInitialPipelineCache(const std::filesystem::path& configDir) {
+    if (configDir.empty()) {
         return;
     }
 
-    const std::filesystem::path configPathFs(configDir);
-    const std::filesystem::path pipelineCachePath = configPathFs / "pipeline_cache.db";
+    const std::filesystem::path pipelineCachePath = configDir / "pipeline_cache.db";
     if (std::filesystem::exists(pipelineCachePath)) {
         return;
     }
@@ -411,10 +412,10 @@ static void EnsureInitialPipelineCache(const char* configDir) {
     }
 
     std::error_code ec;
-    std::filesystem::create_directories(configPathFs, ec);
+    std::filesystem::create_directories(configDir, ec);
     if (ec) {
         DuskLog.warn("Failed to create config directory '{}' for pipeline cache: {}",
-                     configPathFs.string(), ec.message());
+                     configDir.string(), ec.message());
         return;
     }
 
@@ -505,37 +506,38 @@ int game_main(int argc, char* argv[]) {
         exit(1);
     }
 
-    configPath = CalculateConfigPath();
+    dusk::ConfigPath = CalculateConfigPath();
     const auto startupLogLevel = static_cast<AuroraLogLevel>(parsed_arg_options["log-level"].as<uint8_t>());
-    dusk::InitializeFileLogging(configPath, startupLogLevel);
+    dusk::InitializeFileLogging(dusk::ConfigPath, startupLogLevel);
 
     dusk::config::LoadFromUserPreferences();
     ApplyCVarOverrides(parsed_arg_options["cvar"]);
     dusk::InitializeCrashReporting();
-    EnsureInitialPipelineCache(configPath);
-
-    AuroraConfig config{};
-    config.appName = dusk::AppName;
-    config.configPath = configPath;
-    config.vsync = dusk::getSettings().video.enableVsync;
-    config.startFullscreen = dusk::getSettings().video.enableFullscreen;
-    config.windowPosX = -1;
-    config.windowPosY = -1;
-    config.windowWidth = defaultWindowWidth * 2;
-    config.windowHeight = defaultWindowHeight * 2;
-    config.desiredBackend = ResolveDesiredBackend(parsed_arg_options);
-    config.logCallback = &aurora_log_callback;
-    config.logLevel = startupLogLevel;
-    config.mem1Size = 256 * 1024 * 1024;
-    config.mem2Size = 24 * 1024 * 1024;
-    config.allowJoystickBackgroundEvents = true;
-    config.imGuiInitCallback = &aurora_imgui_init_callback;
-    config.allowTextureReplacements = true;
-    config.allowTextureDumps = false;
-
+    EnsureInitialPipelineCache(dusk::ConfigPath);
     PADSetDefaultMapping(&defaultPadMapping);
 
-    auroraInfo = aurora_initialize(argc, argv, &config);
+    {
+        const auto configPathString = dusk::ConfigPath.string();
+        AuroraConfig config{};
+        config.appName = dusk::AppName;
+        config.configPath = configPathString.c_str();
+        config.vsync = dusk::getSettings().video.enableVsync;
+        config.startFullscreen = dusk::getSettings().video.enableFullscreen;
+        config.windowPosX = -1;
+        config.windowPosY = -1;
+        config.windowWidth = defaultWindowWidth * 2;
+        config.windowHeight = defaultWindowHeight * 2;
+        config.desiredBackend = ResolveDesiredBackend(parsed_arg_options);
+        config.logCallback = &aurora_log_callback;
+        config.logLevel = startupLogLevel;
+        config.mem1Size = 256 * 1024 * 1024;
+        config.mem2Size = 24 * 1024 * 1024;
+        config.allowJoystickBackgroundEvents = true;
+        config.imGuiInitCallback = &aurora_imgui_init_callback;
+        config.allowTextureReplacements = true;
+        config.allowTextureDumps = false;
+        auroraInfo = aurora_initialize(argc, argv, &config);
+    }
 
 #ifdef DUSK_DISCORD_RPC
     dusk::discord::Initialize();
@@ -613,6 +615,8 @@ int game_main(int argc, char* argv[]) {
 
 
     main01();
+
+    dusk::MoviePlayerShutdown();
 
     dusk::ShutdownCrashReporting();
     dusk::ShutdownFileLogging();

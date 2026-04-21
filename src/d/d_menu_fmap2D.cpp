@@ -1769,14 +1769,19 @@ void dMenu_Fmap2DBack_c::calcBlink() {
                                  t * (g_fmapHIO.mMapBlink[i + 1].mUnselectedRegion.mBlinkSpeed -
                                       g_fmapHIO.mMapBlink[i].mUnselectedRegion.mBlinkSpeed);
 
-    field_0x1218++;
-    if (field_0x1218 >= selected_blink_speed) {
-        field_0x1218 = 0;
-    }
+#if TARGET_PC
+    if (dusk::frame_interp::get_ui_tick_pending())
+#endif
+    {
+        field_0x1218++;
+        if (field_0x1218 >= selected_blink_speed) {
+            field_0x1218 = 0;
+        }
 
-    field_0x121a++;
-    if (field_0x121a >= unselected_blink_speed) {
-        field_0x121a = 0;
+        field_0x121a++;
+        if (field_0x121a >= unselected_blink_speed) {
+            field_0x121a = 0;
+        }
     }
 
     f32 t_selected = 0.0f;

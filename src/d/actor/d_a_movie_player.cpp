@@ -4580,3 +4580,12 @@ actor_process_profile_definition g_profile_MOVIE_PLAYER = {
 };
 
 AUDIO_INSTANCES;
+
+#if TARGET_PC
+void dusk::MoviePlayerShutdown() {
+    // We need to cleanly shut down the threads to avoid crashes on shutdown.
+    if (daMP_c::m_myObj) {
+        daMP_c::m_myObj->daMP_c_Finish();
+    }
+}
+#endif
