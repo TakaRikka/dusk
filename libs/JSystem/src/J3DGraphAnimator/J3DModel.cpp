@@ -97,6 +97,16 @@ s32 J3DModel::entryModelData(J3DModelData* pModelData, u32 mdlFlags, u32 mtxNum)
     return kJ3DError_Success;
 }
 
+#if TARGET_PC
+void J3DModel::interp_callback(bool isSimFrame, void* pUserWork) {
+    J3DModel* i_this = static_cast<J3DModel*>(pUserWork);
+    if (!isSimFrame) {
+        i_this->calcMaterial();
+        i_this->diff();
+    }
+}
+#endif
+
 s32 J3DModel::createShapePacket(J3DModelData* pModelData) {
     J3D_ASSERTMSG(173, pModelData != NULL, "Error : null pointer.");
 
@@ -452,11 +462,11 @@ void J3DModel::calc() {
 
 #ifdef TARGET_PC
     for (u16 i = 0; i < mModelData->getJointNum(); ++i) {
-        dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(getAnmMtx(i)), getAnmMtx(i));
+        dusk::frame_interp::record_final_mtx(getAnmMtx(i));
     }
 
     for (u16 i = 0; i < mModelData->getWEvlpMtxNum(); ++i) {
-        dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(getWeightAnmMtx(i)), getWeightAnmMtx(i));
+        dusk::frame_interp::record_final_mtx(getWeightAnmMtx(i));
     }
 #endif
 }
@@ -485,6 +495,11 @@ void J3DModel::entry() {
             joint->entryIn();
         }
     }
+
+#if TARGET_PC
+    if (mModelData->needsInterpCallBack())
+        dusk::frame_interp::add_interpolation_callback(&J3DModel::interp_callback, this);
+#endif
 }
 
 void J3DModel::viewCalc() {
@@ -496,7 +511,7 @@ void J3DModel::viewCalc() {
             J3DCalcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx,
                                (MtxP)&mInternalView);
 #ifdef TARGET_PC
-            dusk::frame_interp::record_final_mtx_raw(&mInternalView, mInternalView);
+            dusk::frame_interp::record_final_mtx(mInternalView);
 #endif
         }
     } else if (isCpuSkinningOn()) {
@@ -504,7 +519,7 @@ void J3DModel::viewCalc() {
             J3DCalcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx,
                                (MtxP)&mInternalView);
 #ifdef TARGET_PC
-            dusk::frame_interp::record_final_mtx_raw(&mInternalView, mInternalView);
+            dusk::frame_interp::record_final_mtx(mInternalView);
 #endif
         }
     } else if (checkFlag(J3DMdlFlag_SkinPosCpu)) {
@@ -528,7 +543,7 @@ void J3DModel::viewCalc() {
 
 #ifdef TARGET_PC
     for (u16 i = 0; i < mModelData->getDrawMtxNum(); ++i) {
-        dusk::frame_interp::record_final_mtx_raw(&getDrawMtxPtr()[i], getDrawMtxPtr()[i]);
+        dusk::frame_interp::record_final_mtx(getDrawMtxPtr()[i]);
     }
 #endif
 

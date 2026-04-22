@@ -214,13 +214,7 @@ void daObjHHASHI_c::CheckCull() {
 
 bool daObjHHASHI_c::checkViewArea(int param_1) {
     Vec local_20;
-
-    #if TARGET_PC
-    mDoLib_project(&field_0x5b0[param_1], &local_20, {0, 0, FB_WIDTH, FB_HEIGHT});
-    #else
     mDoLib_project(&field_0x5b0[param_1], &local_20);
-    #endif
-
     bool rv = false;
     if (local_20.x >= 0.0f && local_20.x <= FB_WIDTH && local_20.y >= 0.0f && local_20.y <= FB_HEIGHT) {
         rv = true;

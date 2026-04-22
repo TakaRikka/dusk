@@ -4,13 +4,13 @@
 #include "ImGuiEngine.hpp"
 #include "ImGuiPreLaunchWindow.hpp"
 
+#include "../file_select.hpp"
+#include "../iso_validate.hpp"
 #include "ImGuiConsole.hpp"
 #include "dusk/main.h"
 #include "dusk/settings.h"
-#include "../iso_validate.hpp"
 
 #include <SDL3/SDL_dialog.h>
-#include <SDL3/SDL_error.h>
 #include <SDL3/SDL_filesystem.h>
 
 #include "aurora/lib/internal.hpp"
@@ -46,30 +46,22 @@ static std::string ShowIsoInvalidError(const iso::ValidationError code) {
     }
 }
 
-void fileDialogCallback(void* userdata, const char* const* filelist, [[maybe_unused]] int filter) {
+void fileDialogCallback(void* userdata, const char* path, const char* error) {
     auto* self = static_cast<ImGuiPreLaunchWindow*>(userdata);
-    self->m_errorString.clear();
-    if (filelist != nullptr) {
-        if (filelist[0] == nullptr) {
-            // Cancelled
-            self->m_selectedIsoPath.clear();
-        } else {
-            const auto path = filelist[0];
-            const auto ret = iso::validate(path);
-            if (ret != iso::ValidationError::Success) {
-                self->m_selectedIsoPath.clear();
-                self->m_errorString = std::move(ShowIsoInvalidError(ret));
-                return;
-            }
-            self->m_selectedIsoPath = path;
-            getSettings().backend.isoPath.setValue(path);
-            config::Save();
-        }
-    } else {
-        // Error occurred
+    if (error != nullptr) {
         self->m_selectedIsoPath.clear();
-        self->m_errorString = fmt::format("File dialog error: {}", SDL_GetError());
+        self->m_errorString = fmt::format("File dialog error: {}", error);
+        return;
     }
+
+    if (path == nullptr) {
+        self->m_selectedIsoPath.clear();
+        return;
+    }
+
+    self->m_selectedIsoPath = path;
+    getSettings().backend.isoPath.setValue(self->m_selectedIsoPath);
+    config::Save();
 }
 
 ImGuiPreLaunchWindow::ImGuiPreLaunchWindow() = default;
@@ -144,9 +136,9 @@ void ImGuiPreLaunchWindow::drawMainMenu() {
         }
 
         if (ImGuiButtonCenter("Select disc image...")) {
-            SDL_ShowOpenFileDialog(&fileDialogCallback, this, aurora::window::get_sdl_window(),
-                                   skGameDiscFileFilters.data(), int(skGameDiscFileFilters.size()),
-                                   nullptr, false);
+            ShowFileSelect(&fileDialogCallback, this, aurora::window::get_sdl_window(),
+                           skGameDiscFileFilters.data(), int(skGameDiscFileFilters.size()), nullptr,
+                           false);
         }
     } else {
         if (ImGuiButtonCenter("Start game")) {
@@ -187,9 +179,9 @@ void ImGuiPreLaunchWindow::drawOptions() {
         ImGui::InputText("Game ISO Path", &m_selectedIsoPath, ImGuiInputTextFlags_ReadOnly);
         ImGui::SameLine();
         if (ImGui::Button("Set")) {
-            SDL_ShowOpenFileDialog(&fileDialogCallback, this, aurora::window::get_sdl_window(),
-                                   skGameDiscFileFilters.data(), int(skGameDiscFileFilters.size()),
-                                   nullptr, false);
+            ShowFileSelect(&fileDialogCallback, this, aurora::window::get_sdl_window(),
+                           skGameDiscFileFilters.data(), int(skGameDiscFileFilters.size()), nullptr,
+                           false);
         }
 
         AuroraBackend configuredBackend = BACKEND_AUTO;

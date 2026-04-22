@@ -68,6 +68,9 @@ endif()
 message(STATUS "Dusk version set to ${DUSK_WC_DESCRIBE}")
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 project(dusk LANGUAGES C CXX VERSION ${DUSK_VERSION_STRING})
+if (APPLE)
+    enable_language(OBJC)
+endif ()
 if (APPLE AND NOT TVOS AND CMAKE_SYSTEM_NAME STREQUAL tvOS)
     # ios.toolchain.cmake hack for SDL
     set(TVOS ON)
@@ -125,19 +128,37 @@ if (DUSK_MOVIE_SUPPORT)
         else ()
             set(_jpeg_lib ${_jpeg_install_dir}/lib/libturbojpeg.a)
         endif ()
+        set(_jpeg_cmake_args
+            -DCMAKE_INSTALL_PREFIX=${_jpeg_install_dir}
+            -DENABLE_SHARED=OFF
+            -DWITH_TURBOJPEG=ON
+            -DWITH_JAVA=OFF
+        )
+        if (CMAKE_TOOLCHAIN_FILE)
+            get_filename_component(_jpeg_toolchain_file "${CMAKE_TOOLCHAIN_FILE}" ABSOLUTE BASE_DIR "${CMAKE_SOURCE_DIR}")
+            list(APPEND _jpeg_cmake_args -DCMAKE_TOOLCHAIN_FILE=${_jpeg_toolchain_file})
+        endif ()
+        set(_jpeg_passthrough_vars
+            CMAKE_BUILD_TYPE
+            CMAKE_C_COMPILER
+            CMAKE_C_COMPILER_LAUNCHER
+            CMAKE_MAKE_PROGRAM
+            CMAKE_MSVC_RUNTIME_LIBRARY
+            CMAKE_OSX_ARCHITECTURES
+            DEPLOYMENT_TARGET
+            ENABLE_ARC
+            ENABLE_BITCODE
+            PLATFORM
+        )
+        foreach(_var IN LISTS _jpeg_passthrough_vars)
+            if (DEFINED ${_var})
+                list(APPEND _jpeg_cmake_args -D${_var}=${${_var}})
+            endif ()
+        endforeach ()
         ExternalProject_Add(libjpeg-turbo-ext
             URL https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/3.1.0.tar.gz
             URL_HASH SHA256=35fec2e1ddfb05ecf6d93e50bc57c1e54bc81c16d611ddf6eff73fff266d8285
-            CMAKE_ARGS
-                -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-                -DCMAKE_INSTALL_PREFIX=${_jpeg_install_dir}
-                -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
-                -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-                -DCMAKE_C_COMPILER_LAUNCHER=${CMAKE_C_COMPILER_LAUNCHER}
-                -DCMAKE_MSVC_RUNTIME_LIBRARY=${CMAKE_MSVC_RUNTIME_LIBRARY}
-                -DENABLE_SHARED=OFF
-                -DWITH_TURBOJPEG=ON
-                -DWITH_JAVA=OFF
+            CMAKE_ARGS ${_jpeg_cmake_args}
             BUILD_BYPRODUCTS ${_jpeg_lib}
         )
         file(MAKE_DIRECTORY ${_jpeg_install_dir}/include)
@@ -249,7 +270,7 @@ include(files.cmake)
 # TODO: version handling for res includes
 
 set(DUSK_BUNDLE_NAME Dusk)
-set(DUSK_BUNDLE_IDENTIFIER dev.decomp.dusk)
+set(DUSK_BUNDLE_IDENTIFIER dev.twilitrealm.dusk)
 set(DUSK_COMPANY_NAME "Twilit Realm")
 set(DUSK_FILE_DESCRIPTION "Dusk")
 set(DUSK_PRODUCT_NAME "Dusk")
@@ -277,7 +298,7 @@ set(GAME_INCLUDE_DIRS
     ${CMAKE_BINARY_DIR})
 
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
-    aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient)
+    aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt)
 
 list(APPEND GAME_LIBS libzstd_static)
 
@@ -295,9 +316,51 @@ if (DUSK_MOVIE_SUPPORT)
     list(APPEND GAME_COMPILE_DEFS MOVIE_SUPPORT=1)
 endif ()
 
+option(DUSK_ENABLE_DISCORD_RPC "Enable Discord Rich Presence support" ON)
+if (DUSK_ENABLE_DISCORD_RPC AND NOT ANDROID AND NOT IOS AND NOT TVOS)
+
+    FetchContent_Populate(discord_rpc
+        URL https://github.com/discord/discord-rpc/archive/refs/tags/v3.4.0.tar.gz
+        URL_HASH SHA256=e13427019027acd187352dacba6c65953af66fdf3c35fcf38fc40b454a9d7855
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    )
+    # RapidJSON is a git submodule absent from the discord-rpc tarball; fetch separately.
+    FetchContent_Populate(rapidjson
+        URL https://github.com/Tencent/rapidjson/archive/refs/tags/v1.1.0.tar.gz
+        URL_HASH SHA256=bf7ced29704a1e696fbccf2a2b4ea068e7774fa37f6d7dd4039d0787f8bed98e
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    )
+
+    if (NOT TARGET discord-rpc)
+        set(_drpc ${discord_rpc_SOURCE_DIR}/src)
+        set(_drpc_src
+            ${_drpc}/discord_rpc.cpp
+            ${_drpc}/rpc_connection.cpp
+            ${_drpc}/serialization.cpp
+        )
+        if (WIN32)
+            list(APPEND _drpc_src ${_drpc}/connection_win.cpp ${_drpc}/discord_register_win.cpp)
+        elseif (APPLE)
+            list(APPEND _drpc_src ${_drpc}/connection_unix.cpp ${_drpc}/discord_register_osx.m)
+        else ()
+            list(APPEND _drpc_src ${_drpc}/connection_unix.cpp ${_drpc}/discord_register_linux.cpp)
+        endif ()
+        add_library(discord-rpc STATIC ${_drpc_src})
+        target_include_directories(discord-rpc PUBLIC
+            ${discord_rpc_SOURCE_DIR}/include
+            ${rapidjson_SOURCE_DIR}/include
+        )
+        if (UNIX)
+            target_link_libraries(discord-rpc PUBLIC pthread)
+        endif ()
+    endif ()
+    list(APPEND GAME_LIBS discord-rpc)
+    list(APPEND GAME_COMPILE_DEFS DUSK_DISCORD_RPC=1)
+endif ()
+
 # Edit & Continue
 if (MSVC)
-    if (CMAKE_MSVC_DEBUG_INFORMATION_FORMAT STREQUAL "" AND CMAKE_BUILD_TYPE STREQUAL Debug)
+    if ("${CMAKE_MSVC_DEBUG_INFORMATION_FORMAT}" STREQUAL "" AND CMAKE_BUILD_TYPE STREQUAL "Debug")
         set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "EditAndContinue")
     endif ()
     if (CMAKE_MSVC_DEBUG_INFORMATION_FORMAT STREQUAL "EditAndContinue")
@@ -336,12 +399,6 @@ target_include_directories(game_base PRIVATE ${GAME_INCLUDE_DIRS})
 target_link_libraries(game_debug PRIVATE ${GAME_LIBS})
 target_link_libraries(game_base PRIVATE ${GAME_LIBS})
 
-# Combined game library
-add_library(game STATIC
-    $<TARGET_OBJECTS:game_base>
-    $<TARGET_OBJECTS:game_debug>)
-target_link_libraries(game PUBLIC ${GAME_LIBS})
-
 if(ANDROID)
     add_library(dusk SHARED src/dusk/main.cpp)
     set_target_properties(dusk PROPERTIES OUTPUT_NAME main)
@@ -351,7 +408,7 @@ endif ()
 
 target_compile_definitions(dusk PRIVATE TARGET_PC AVOID_UB=1 VERSION=0)
 target_include_directories(dusk PRIVATE include)
-target_link_libraries(dusk PRIVATE game aurora::main)
+target_link_libraries(dusk PRIVATE game_base game_debug aurora::main)
 if (TARGET crashpad_handler)
     add_dependencies(dusk crashpad_handler)
 endif ()
@@ -362,12 +419,14 @@ if (ANDROID)
     target_link_options(dusk PRIVATE "-Wl,-u,SDL_main")
 endif ()
 
-add_custom_command(TARGET dusk POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_SOURCE_DIR}/res"
-        "$<TARGET_FILE_DIR:dusk>/res"
-    COMMENT "Copying resources"
-)
+if (NOT APPLE)
+    add_custom_command(TARGET dusk POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_SOURCE_DIR}/res"
+            "$<TARGET_FILE_DIR:dusk>/res"
+        COMMENT "Copying resources"
+    )
+endif ()
 
 if (WIN32)
     set(DUSK_WINDOWS_RESOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/platforms/windows)
@@ -401,44 +460,49 @@ endif ()
 if (APPLE)
     if (IOS)
         set(DUSK_RESOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/platforms/ios)
-        set(DUSK_INFO_PLIST ${DUSK_RESOURCE_DIR}/Info.plist.in)
-        file(GLOB_RECURSE DUSK_RESOURCE_FILES "${DUSK_RESOURCE_DIR}/Base.lproj/*")
+    elseif (TVOS)
+        set(DUSK_RESOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/platforms/tvos)
+    else ()
+        set(DUSK_RESOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/platforms/macos)
     endif ()
-    if (IOS OR TVOS)
-        target_sources(dusk PRIVATE ${DUSK_RESOURCE_FILES})
-        foreach (FILE ${DUSK_RESOURCE_FILES})
-            file(RELATIVE_PATH NEW_FILE "${DUSK_RESOURCE_DIR}" ${FILE})
-            get_filename_component(NEW_FILE_PATH ${NEW_FILE} DIRECTORY)
-            set_property(SOURCE ${FILE} PROPERTY MACOSX_PACKAGE_LOCATION "Resources/${NEW_FILE_PATH}")
-        endforeach ()
-        set_target_properties(
-            dusk PROPERTIES
-            MACOSX_BUNDLE TRUE
-            MACOSX_BUNDLE_BUNDLE_NAME ${DUSK_BUNDLE_NAME}
-            MACOSX_BUNDLE_GUI_IDENTIFIER ${DUSK_BUNDLE_IDENTIFIER}
-            MACOSX_BUNDLE_BUNDLE_VERSION ${DUSK_VERSION_STRING}
-            MACOSX_BUNDLE_SHORT_VERSION_STRING ${DUSK_SHORT_VERSION_STRING}
-            OUTPUT_NAME dusk
-            XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "YES"
-            XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "YES"
-        )
-        if (CMAKE_GENERATOR STREQUAL "Xcode")
-            set_target_properties(dusk PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${DUSK_INFO_PLIST})
-        elseif (DEFINED DUSK_INFO_PLIST)
-            set(MACOSX_BUNDLE_EXECUTABLE_NAME dusk)
-            set(MACOSX_BUNDLE_GUI_IDENTIFIER ${DUSK_BUNDLE_IDENTIFIER})
-            set(MACOSX_BUNDLE_BUNDLE_NAME ${DUSK_BUNDLE_NAME})
-            set(MACOSX_BUNDLE_BUNDLE_VERSION ${DUSK_VERSION_STRING})
-            set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${DUSK_SHORT_VERSION_STRING})
-            set(DUSK_GENERATED_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/dusk.Info.plist)
-            configure_file(${DUSK_INFO_PLIST} ${DUSK_GENERATED_INFO_PLIST})
-            add_custom_command(
-                TARGET dusk POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different ${DUSK_GENERATED_INFO_PLIST} $<TARGET_FILE_DIR:dusk>/Info.plist
-                VERBATIM
-            )
-        endif ()
-    endif ()
+    set(DUSK_INFO_PLIST ${DUSK_RESOURCE_DIR}/Info.plist.in)
+    file(GLOB_RECURSE DUSK_RESOURCE_FILES
+        "${DUSK_RESOURCE_DIR}/Assets.car"
+        "${DUSK_RESOURCE_DIR}/Base.lproj/*"
+        "${DUSK_RESOURCE_DIR}/Dusk.icns")
+    file(GLOB_RECURSE DUSK_APP_RESOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/res/*")
+    target_sources(dusk PRIVATE ${DUSK_RESOURCE_FILES})
+    target_sources(dusk PRIVATE ${DUSK_APP_RESOURCE_FILES})
+    foreach (FILE ${DUSK_RESOURCE_FILES})
+        file(RELATIVE_PATH NEW_FILE "${DUSK_RESOURCE_DIR}" ${FILE})
+        get_filename_component(NEW_FILE_PATH ${NEW_FILE} DIRECTORY)
+        set_property(SOURCE ${FILE} PROPERTY MACOSX_PACKAGE_LOCATION "Resources/${NEW_FILE_PATH}")
+    endforeach ()
+    foreach (FILE ${DUSK_APP_RESOURCE_FILES})
+        file(RELATIVE_PATH NEW_FILE "${CMAKE_CURRENT_SOURCE_DIR}" ${FILE})
+        get_filename_component(NEW_FILE_PATH ${NEW_FILE} DIRECTORY)
+        set_property(SOURCE ${FILE} PROPERTY MACOSX_PACKAGE_LOCATION "Resources/${NEW_FILE_PATH}")
+    endforeach ()
+    set_target_properties(
+        dusk PROPERTIES
+        MACOSX_BUNDLE TRUE
+        MACOSX_BUNDLE_BUNDLE_NAME ${DUSK_BUNDLE_NAME}
+        MACOSX_BUNDLE_GUI_IDENTIFIER ${DUSK_BUNDLE_IDENTIFIER}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${DUSK_VERSION_STRING}
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${DUSK_SHORT_VERSION_STRING}
+        MACOSX_BUNDLE_INFO_PLIST ${DUSK_INFO_PLIST}
+        OUTPUT_NAME Dusk
+        XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "YES"
+        XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "YES"
+    )
+endif ()
+
+if (IOS)
+    find_library(UIKIT_FRAMEWORK UIKit REQUIRED)
+    find_library(UNIFORM_TYPE_IDENTIFIERS_FRAMEWORK UniformTypeIdentifiers REQUIRED)
+    target_sources(dusk PRIVATE src/dusk/ios/FileSelectDialog.m)
+    set_source_files_properties(src/dusk/ios/FileSelectDialog.m PROPERTIES COMPILE_FLAGS -fobjc-arc)
+    target_link_libraries(dusk PRIVATE ${UIKIT_FRAMEWORK} ${UNIFORM_TYPE_IDENTIFIERS_FRAMEWORK})
 endif ()
 
 include(extern/aurora/cmake/AuroraCopyRuntimeDLLs.cmake)
@@ -487,7 +551,9 @@ if (TARGET crashpad_handler)
 endif ()
 install(TARGETS ${BINARY_TARGETS} ${EXTRA_TARGETS} DESTINATION ${CMAKE_INSTALL_PREFIX})
 aurora_install_runtime_dlls(dusk ${CMAKE_INSTALL_PREFIX})
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/res DESTINATION ${CMAKE_INSTALL_PREFIX})
+if (NOT APPLE)
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/res DESTINATION ${CMAKE_INSTALL_PREFIX})
+endif ()
 if (CMAKE_BUILD_TYPE STREQUAL Debug OR CMAKE_BUILD_TYPE STREQUAL RelWithDebInfo)
     set(DEBUG_FILES_LIST "")
     foreach (target IN LISTS BINARY_TARGETS EXTRA_TARGETS)
@@ -509,18 +575,22 @@ if (CMAKE_BUILD_TYPE STREQUAL Debug OR CMAKE_BUILD_TYPE STREQUAL RelWithDebInfo)
         endif ()
         list(APPEND DEBUG_FILES_LIST "${output_name}")
     endforeach ()
-    if (WIN32)
-        list(TRANSFORM DEBUG_FILES_LIST APPEND ".pdb")
-        list(JOIN DEBUG_FILES_LIST " " DEBUG_FILES)
-        install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND 7z a -t7z \"${CMAKE_INSTALL_PREFIX}/debug.7z\" ${DEBUG_FILES})")
-    elseif (APPLE)
-        list(TRANSFORM DEBUG_FILES_LIST APPEND ".dSYM")
-        list(JOIN DEBUG_FILES_LIST " " DEBUG_FILES)
-        install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND tar acfv \"${CMAKE_INSTALL_PREFIX}/debug.tar.xz\" ${DEBUG_FILES})")
-    elseif (UNIX)
-        list(TRANSFORM DEBUG_FILES_LIST APPEND ".dbg")
-        list(JOIN DEBUG_FILES_LIST " " DEBUG_FILES)
-        install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND tar -I \"xz -9 -T0\" -cvf \"${CMAKE_INSTALL_PREFIX}/debug.tar.xz\" ${DEBUG_FILES})")
+    # This is a terrible hack to only run this on CI
+    # until I turn this into a script or something
+    if(DEFINED ENV{GITHUB_ENV})
+        if (WIN32)
+            list(TRANSFORM DEBUG_FILES_LIST APPEND ".pdb")
+            list(JOIN DEBUG_FILES_LIST " " DEBUG_FILES)
+            install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND 7z a -t7z \"${CMAKE_INSTALL_PREFIX}/debug.7z\" ${DEBUG_FILES})")
+        elseif (APPLE)
+            list(TRANSFORM DEBUG_FILES_LIST APPEND ".dSYM")
+            list(JOIN DEBUG_FILES_LIST " " DEBUG_FILES)
+            install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND tar acfv \"${CMAKE_INSTALL_PREFIX}/debug.tar.xz\" ${DEBUG_FILES})")
+        elseif (UNIX)
+            list(TRANSFORM DEBUG_FILES_LIST APPEND ".dbg")
+            list(JOIN DEBUG_FILES_LIST " " DEBUG_FILES)
+            install(CODE "execute_process(WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}\" COMMAND tar -I \"xz -9 -T0\" -cvf \"${CMAKE_INSTALL_PREFIX}/debug.tar.xz\" ${DEBUG_FILES})")
+        endif ()
     endif ()
 endif ()
 foreach (target IN LISTS BINARY_TARGETS)

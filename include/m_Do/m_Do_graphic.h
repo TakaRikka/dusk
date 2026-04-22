@@ -125,8 +125,15 @@ public:
 #if TARGET_PC
     static f32 hudAspectScaleDown;
     static f32 hudAspectScaleUp;
-    static f32 ScaleHUDXLeft(f32 baseX) { return getMinXF() + baseX; }
-    static f32 ScaleHUDXRight(f32 baseX) { return -getMinXF() + baseX; }
+    static void updateSafeAreaBounds();
+    static f32 getSafeMinXF() { return m_safeMinXF; }
+    static f32 getSafeMinYF() { return m_safeMinYF; }
+    static f32 getSafeWidthF() { return m_safeWidthF; }
+    static f32 getSafeHeightF() { return m_safeHeightF; }
+    static f32 getSafeMaxXF() { return m_safeMaxXF; }
+    static f32 getSafeMaxYF() { return m_safeMaxYF; }
+    static f32 ScaleHUDXLeft(f32 baseX) { return getSafeMinXF() + baseX; }
+    static f32 ScaleHUDXRight(f32 baseX) { return getSafeMaxXF() - FB_WIDTH_BASE + baseX; }
 #endif
 
     static void setBlureMtx(const Mtx m) {
@@ -279,12 +286,7 @@ public:
     #if WIDESCREEN_SUPPORT
     static void setTvSize();
 
-    #if TARGET_PC
-    static void onWide(f32 width, f32 height);
-    #else
     static void onWide();
-    #endif
-
     static void offWide();
     static u8 isWide();
 
@@ -297,7 +299,7 @@ public:
     #endif
 
     #if TARGET_PC
-    static void setWindowSize(AuroraWindowSize const& size);
+    static void updateRenderSize();
     #endif
 
     static TGXTexObj mFrameBufferTexObj;
@@ -369,6 +371,15 @@ public:
     static int m_height;
     static f32 m_heightF;
     static f32 m_widthF;
+
+    #if TARGET_PC
+    static f32 m_safeMinXF;
+    static f32 m_safeMinYF;
+    static f32 m_safeMaxXF;
+    static f32 m_safeMaxYF;
+    static f32 m_safeWidthF;
+    static f32 m_safeHeightF;
+    #endif
     #endif
 };
 

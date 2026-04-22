@@ -6,7 +6,7 @@
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${command:cmake.launchTargetPath}",
-            "args": ["-l", "1", "--dvd", "${workspaceRoot}/orig/GZ2E01/GZ2E01.iso"],
+            "args": ["-l", "1", "--dvd", "${workspaceRoot}/orig/GZ2E01/GZ2E01.iso", "--console"],
             "MIMode": "gdb",
             "miDebuggerPath": "gdb",
             "symbolSearchPath": "${command:cmake.launchTargetPath}",

@@ -4552,7 +4552,7 @@ public:
     void handleGamepadColor();
     void handleWolfHowl();
     void handleQuickTransform();
-    bool checkGyroAimItemContext();
+    bool checkGyroAimContext();
 #endif
 };  // Size: 0x385C
 

@@ -70,11 +70,7 @@ dFs_HIO_c::dFs_HIO_c() {
     select_icon_appear_frames = 5;
     appear_display_wait_frames = 15;
     field_0x000d = 15;
-    #if TARGET_PC
-    card_wait_frames = 0;
-    #else
     card_wait_frames = 90;
-    #endif
     test_frame_counts[0] = 1.11f;
     test_frame_counts[1] = 1.11f;
     test_frame_counts[2] = 1.11f;
@@ -2102,11 +2098,7 @@ void dFile_select_c::yesnoCursorShow() {
         mSelIcon->setPos(pos.x, pos.y, mYnSelPane[field_0x0268]->getPanePtr(), true);
         mSelIcon->setAlphaRate(1.0f);
 
-        #if TARGET_PC
-        mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.84f, 0.06f, 0.5f, 0.5f);
-        #else
         mSelIcon->setParam(0.96f, 0.84f, 0.06f, 0.5f, 0.5f);
-        #endif
     }
 }
 
@@ -2259,11 +2251,7 @@ void dFile_select_c::YesNoCancelMove() {
                                  m3mSelPane[mSelectMenuNum]->getPanePtr(), true);
                 mSelIcon->setAlphaRate(1.0f);
 
-                #if TARGET_PC
-                mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.84f, 0.06f, 0.5f, 0.5f);
-                #else
                 mSelIcon->setParam(0.96f, 0.84f, 0.06f, 0.5f, 0.5f);
-                #endif
 
                 #if PLATFORM_WII || PLATFORM_SHIELD
                 field_0x4333 = mSelectMenuNum;
@@ -2375,7 +2363,7 @@ void dFile_select_c::CommandExec() {
         break;
     }
 
-    mWaitTimer = g_fsHIO.card_wait_frames;
+    mWaitTimer = IF_DUSK(dusk::getSettings().game.instantSaves ? 0 :) g_fsHIO.card_wait_frames;
 }
 
 void dFile_select_c::DataEraseWait() {
@@ -3147,11 +3135,7 @@ void dFile_select_c::screenSet() {
     mSelIcon = JKR_NEW dSelect_cursor_c(0, 1.0f, NULL);
     JUT_ASSERT(5209, mSelIcon != NULL);
 
-    #if TARGET_PC
-    mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.94f, 0.03f, 0.7f, 0.7f);
-    #else
     mSelIcon->setParam(0.96f, 0.94f, 0.03f, 0.7f, 0.7f);
-    #endif
 
     Vec vtxCenter;
     vtxCenter = mSelFilePanes[mSelectNum]->getGlobalVtxCenter(false, 0);
@@ -3204,6 +3188,9 @@ void dFile_select_c::screenSet() {
                                 timg, NULL);
     mpFadePict->setBlackWhite(black, white);
     mpFadePict->setAlpha(0);
+#ifdef TARGET_PC
+    mFadeDlst.mpPict = mpFadePict;
+#endif
     #endif
 }
 
@@ -3284,11 +3271,7 @@ void dFile_select_c::screenSetCopySel() {
     mSelIcon2 = JKR_NEW dSelect_cursor_c(0, 1.0f, NULL);
     JUT_ASSERT(5406, mSelIcon2 != NULL);
 
-    #if TARGET_PC
-    mSelIcon2->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.94f, 0.03f, 0.7f, 0.7f);
-    #else
     mSelIcon2->setParam(0.96f, 0.94f, 0.03f, 0.7f, 0.7f);
-    #endif
 
     Vec center = mCpSelPane[0]->getGlobalVtxCenter(false, 0);
     mSelIcon2->setPos(center.x, center.y, mCpSelPane[0]->getPanePtr(), true);
@@ -3680,11 +3663,7 @@ void dFile_select_c::selFileCursorShow() {
     mSelIcon->setPos(local_1c.x, local_1c.y, mSelFilePanes[mSelectNum]->getPanePtr(), true);
     mSelIcon->setAlphaRate(1.0f);
 
-    #if TARGET_PC
-    mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.94f, 0.03f, 0.7f, 0.7f);
-    #else
     mSelIcon->setParam(0.96f, 0.94f, 0.03f, 0.7f, 0.7f);
-    #endif
 }
 
 void dFile_select_c::menuWakuAlpahAnmInit(u8 i_idx, u8 param_1, u8 param_2, u8 param_3) {
@@ -3727,11 +3706,7 @@ void dFile_select_c::menuCursorShow() {
         mSelIcon->setPos(local_24.x, local_24.y, m3mSelPane[mSelectMenuNum]->getPanePtr(), true);
         mSelIcon->setAlphaRate(1.0f);
 
-        #if TARGET_PC
-        mSelIcon->setParam(0.96f * mDoGph_gInf_c::hudAspectScaleUp, 0.84f, 0.06f, 0.5f, 0.5f);
-        #else
         mSelIcon->setParam(0.96f, 0.84f, 0.06f, 0.5f, 0.5f);
-        #endif
     }
 }
 
@@ -3776,7 +3751,7 @@ bool dFile_select_c::yesnoWakuAlpahAnm(u8 param_1) {
 #if TARGET_PC
 void dFile_select_c::fileSelectWide() {
     mYnSel.ScrYn->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
-    mYnSel.ScrYn->translate(mDoGph_gInf_c::getMinXF(), 0.0f);
+    mYnSel.ScrYn->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
 
     mYnSel.ScrYn->search(MULTI_CHAR('w_no_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     mYnSel.ScrYn->search(MULTI_CHAR('f_no_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
@@ -3784,7 +3759,7 @@ void dFile_select_c::fileSelectWide() {
     mYnSel.ScrYn->search(MULTI_CHAR('f_yes_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
 
     m3mSel.Scr3m->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
-    m3mSel.Scr3m->translate(mDoGph_gInf_c::getMinXF(), 0.0f);
+    m3mSel.Scr3m->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
 
     m3mSel.Scr3m->search(MULTI_CHAR('w_sta'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     m3mSel.Scr3m->search(MULTI_CHAR('f_sta'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
@@ -3794,7 +3769,7 @@ void dFile_select_c::fileSelectWide() {
     m3mSel.Scr3m->search(MULTI_CHAR('f_cop_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
 
     fileSel.Scr->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
-    fileSel.Scr->translate(mDoGph_gInf_c::getMinXF(), 0.0f);
+    fileSel.Scr->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
 
     fileSel.Scr->search(MULTI_CHAR('t_for'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     fileSel.Scr->search(MULTI_CHAR('t_for1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
@@ -3833,6 +3808,16 @@ void dFile_select_c::fileSelectWide() {
     fileSel.Scr->search(MULTI_CHAR('w_uzu07'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     fileSel.Scr->search(MULTI_CHAR('w_uzu08'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     fileSel.Scr->search(MULTI_CHAR('w_uzu09'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    #if TARGET_PC
+    if (mSelIcon) {
+        mSelIcon->refreshAspectScale();
+    }
+    
+    if (mSelIcon2) {
+        mSelIcon2->refreshAspectScale();
+    }
+    #endif
 }
 #endif
 
@@ -3871,9 +3856,7 @@ void dFile_select_c::_draw() {
 
         #if PLATFORM_GCN
         #if TARGET_PC
-        mpFadePict->draw(0, 0,
-                           mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), false, false,
-                           false);
+        dComIfGd_set2DOpaTop(&mFadeDlst);
         #else
         mpFadePict->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
                            mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), false, false,
@@ -3922,6 +3905,13 @@ void dDlst_FileSel3m_c::draw() {
     J2DGrafContext* graf = dComIfGp_getCurrentGrafPort();
     Scr3m->draw(0.0f, 0.0f, graf);
 }
+
+#ifdef TARGET_PC
+void dDlst_FileSelFade_c::draw() {
+    mpPict->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
+                 mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), false, false, false);
+}
+#endif
 
 void dFile_select_c::errorMoveAnmInitSet(int param_1, int param_2) {
     mErrorMsgPane->setAnimation(field_0x0090);
@@ -4765,7 +4755,7 @@ void dFile_select_c::MemCardFormatYesSel2Disp() {
     bool isErrorTxtChange = errorTxtChangeAnm();
     bool isYnMenuMove = yesnoMenuMoveAnm();
     if (isErrorTxtChange == true && isYnMenuMove == true) {
-        mWaitTimer = g_fsHIO.card_wait_frames;
+        mWaitTimer = IF_DUSK(dusk::getSettings().game.instantSaves ? 0 :) g_fsHIO.card_wait_frames;
         mDoMemCd_Format();
         mCardCheckProc = MEMCARDCHECKPROC_FORMAT;
     }
@@ -4836,7 +4826,7 @@ void dFile_select_c::MemCardMakeGameFileSelDisp() {
 
     if (isErrorTxtChange == true && isYnMenuMove == true && isKetteiTxtDisp == true) {
         if (field_0x0268 != 0) {
-            mWaitTimer = g_fsHIO.card_wait_frames;
+            mWaitTimer = IF_DUSK(dusk::getSettings().game.instantSaves ? 0 :) g_fsHIO.card_wait_frames;
             setInitSaveData();
             dataSave();
             mCardCheckProc = MEMCARDCHECKPROC_MAKE_GAMEFILE;
@@ -5584,7 +5574,13 @@ void dFile_select3D_c::createMirrorModel() {
 void dFile_select3D_c::toItem3Dpos(f32 param_0, f32 param_1, f32 param_2, cXyz* param_3) {
     Mtx adStack_98;
     Mtx auStack_c8;
+#if TARGET_PC
+    param_0 =
+        (2.0f * ((param_0 - mDoGph_gInf_c::getSafeMinXF()) / mDoGph_gInf_c::getSafeWidthF()) -
+         1.0f);
+#else
     param_0 = (2.0f * ((param_0 - mDoGph_gInf_c::getMinXF()) / mDoGph_gInf_c::getWidthF()) - 1.0f);
+#endif
     param_1 = (2.0f * ((param_1 - -100.0f) / FB_HEIGHT_BASE) - 1.0f);
     calcViewMtx(adStack_98);
     cMtx_inverse(adStack_98, auStack_c8);
@@ -5601,4 +5597,3 @@ void dFile_select3D_c::calcViewMtx(Mtx param_0) {
     cXyz pos2(0.0f, 1.0f, 0.0f);
     cMtx_lookAt(param_0, &pos1, &cXyz::Zero, &pos2, 0);
 }
-

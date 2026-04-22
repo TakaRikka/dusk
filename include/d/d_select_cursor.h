@@ -47,6 +47,10 @@ public:
         mPositionY = y;
     }
 
+#ifdef TARGET_PC
+    void refreshAspectScale();
+#endif
+
     void onUpdateFlag() { mUpdateFlag = true; }
 
     void resetUpdateFlag() { mUpdateFlag = false; }
@@ -79,6 +83,9 @@ private:
     /* 0x58 */ f32 mPositionX;
     /* 0x5C */ f32 mPositionY;
     /* 0x60 */ f32 mParam1;
+#ifdef TARGET_PC
+    f32 mBaseParam1;
+#endif
     /* 0x64 */ f32 mParam2;
     /* 0x68 */ f32 mParam3;
     /* 0x6C */ f32 mParam4;

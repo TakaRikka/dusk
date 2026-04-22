@@ -19,6 +19,13 @@ namespace dusk {
         static void ToggleFullscreen();
 
     private:
+        void drawAudioMenu();
+        void drawInputMenu();
+        void drawGraphicsMenu();
+        void drawGameplayMenu();
+        void drawCheatsMenu();
+        void drawInterfaceMenu();
+
         struct {
             int m_selectedPort = 0;
             bool m_isReading = false;
@@ -30,6 +37,7 @@ namespace dusk {
         bool m_showControllerConfig = false;
 
         bool m_showInputViewer = false;
+        bool m_showInputViewerGyro = false;
         int m_inputOverlayCorner = 3;
         std::string m_controllerName;
     };

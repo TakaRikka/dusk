@@ -99,7 +99,7 @@ dMenu_Collect2D_c::~dMenu_Collect2D_c() {
 void dMenu_Collect2D_c::menuCollectWide() {
     // Main Canvas
     mpScreen->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
-    mpScreen->translate(mDoGph_gInf_c::getMinXF(), 0.0f);
+    mpScreen->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
 
     // Pieces of Heart
     mpScreen->search(MULTI_CHAR('heart_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
@@ -164,11 +164,22 @@ void dMenu_Collect2D_c::menuCollectWide() {
 
     // Item Description Text
     mpScreen->search(MULTI_CHAR('infotxtn'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    #if TARGET_PC
+    if (mpDrawCursor) {
+        mpDrawCursor->refreshAspectScale();
+    }
+    #endif
 }
 #endif
 
 void dMenu_Collect2D_c::_create() {
     mpHeap->getTotalFreeSize();
+
+    #if TARGET_PC
+    mpDrawCursor = NULL;
+    #endif
+
     mpScreen = JKR_NEW J2DScreen();
     mpScreen->setPriority("zelda_collect_soubi_screen.blo", 0x1020000,
                           dComIfGp_getCollectResArchive());
@@ -182,7 +193,7 @@ void dMenu_Collect2D_c::_create() {
     }
 
     #if TARGET_PC
-    mpScreenIcon->translate(-mDoGph_gInf_c::getMinXF(), 0.0f);
+    mpScreenIcon->translate(-mDoGph_gInf_c::getSafeMinXF(), 0.0f);
     #endif
 
     dPaneClass_showNullPane(mpScreenIcon);
@@ -1100,23 +1111,11 @@ void dMenu_Collect2D_c::cursorPosSet() {
     Vec pos = mpSelPm[mCursorX][mCursorY]->getGlobalVtxCenter(false, 0);
     mpDrawCursor->setPos(pos.x, pos.y, mpSelPm[mCursorX][mCursorY]->getPanePtr(), false);
     if (mCursorY == 5) {
-        #if TARGET_PC
-        mpDrawCursor->setParam(1.1f * mDoGph_gInf_c::hudAspectScaleUp, 0.85f, 0.05f, 0.5f, 0.5f);
-        #else
         mpDrawCursor->setParam(1.1f, 0.85f, 0.05f, 0.5f, 0.5f);
-        #endif
     } else if (mCursorX == 6 && mCursorY == 0) {
-        #if TARGET_PC
-        mpDrawCursor->setParam(0.6f * mDoGph_gInf_c::hudAspectScaleUp, 0.85f, 0.03f, 0.6f, 0.6f);
-        #else
         mpDrawCursor->setParam(0.6f, 0.85f, 0.03f, 0.6f, 0.6f);
-        #endif
     } else {
-        #if TARGET_PC
-        mpDrawCursor->setParam(1.0f * mDoGph_gInf_c::hudAspectScaleUp, 1.0f, 0.1f, 0.7f, 0.7f);
-        #else
         mpDrawCursor->setParam(1.0f, 1.0f, 0.1f, 0.7f, 0.7f);
-        #endif
     }
 }
 
@@ -2688,12 +2687,7 @@ u8 dMenu_Collect3D_c::getMaskMdlVisible() {
 f32 dMenu_Collect3D_c::mViewOffsetY = -100.0f;
 
 void dMenu_Collect3D_c::setupItem3D(Mtx param_0) {
-#if TARGET_PC
-    f32 scaleFactor = mDoGph_gInf_c::getHeight() / FB_HEIGHT;
-    GXSetViewport(0.0f, mViewOffsetY * scaleFactor, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight(), 0.0f, 1.0f);
-#else
     GXSetViewport(0.0f, mViewOffsetY, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f);
-#endif
     mViewOffsetY = -100.0f;
     Mtx44 projection;
     C_MTXPerspective(projection, 45.0f, mDoGph_gInf_c::getAspect(), 1.0f, 100000.0f);
@@ -2706,8 +2700,14 @@ void dMenu_Collect3D_c::setupItem3D(Mtx param_0) {
 void dMenu_Collect3D_c::toItem3Dpos(f32 param_0, f32 param_1, f32 param_2, cXyz* param_3) {
     Mtx adStack_98;
     Mtx auStack_c8;
+#if TARGET_PC
+    param_0 =
+        (2.0f * ((param_0 - mDoGph_gInf_c::getSafeMinXF()) / mDoGph_gInf_c::getSafeWidthF()) -
+         1.0f);
+#else
     param_0 =
         (2.0f * ((param_0 - mDoGph_gInf_c::getMinXF()) / mDoGph_gInf_c::getWidthF()) - 1.0f);
+#endif
     param_1 = (2.0f * ((param_1 - -100.0f) / FB_HEIGHT_BASE) - 1.0f);
     calcViewMtx(adStack_98);
     MTXInverse(adStack_98, auStack_c8);

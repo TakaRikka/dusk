@@ -33,6 +33,9 @@ public:
     void copy(J3DMaterial*);
     s32 newSharedDisplayList(u32);
     s32 newSingleSharedDisplayList(u32);
+#if TARGET_PC
+    bool needsInterpCallBack() const;
+#endif
 
     virtual void calc(f32 const (*)[4]);
     virtual void calcDiffTexMtx(f32 const (*)[4]);
@@ -46,7 +49,6 @@ public:
     virtual void change();
 
     J3DMaterial() { initialize(); }
-    ~J3DMaterial() {}
     J3DMaterial* getNext() { return mNext; }
     J3DShape* getShape() { return mShape; }
     J3DTevBlock* getTevBlock() { return mTevBlock; }

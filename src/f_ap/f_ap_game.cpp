@@ -725,13 +725,72 @@ void fapGm_After() {
 
 #ifdef TARGET_PC
 static void fapGm_Before() {
-    dusk::frame_interp::begin_record_camera();
     dusk::frame_interp::begin_record();
 }
 
 static void fapGm_AfterRecord() {
     dusk::frame_interp::end_record();
     fapGm_After();
+}
+
+static void duskExecute() {
+    if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
+        dynamic_cast<daAlink_c*>(link)->handleGamepadColor();
+    }
+    
+    if (mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getTrigX(PAD_1)) {
+        if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
+            dynamic_cast<daAlink_c*>(link)->handleWolfHowl();
+        }
+    }
+
+    if ((mDoCPd_c::getHold(PAD_1) & (PAD_TRIGGER_R | PAD_TRIGGER_L)) == PAD_TRIGGER_R && mDoCPd_c::getTrigY(PAD_1)) {
+        if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
+            dynamic_cast<daAlink_c*>(link)->handleQuickTransform();
+        }
+    }
+
+    if (dusk::getSettings().game.moonJump && (mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getHoldA(PAD_1))) {
+        if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
+            link->speed.y = 56.0f;
+        }
+    }
+
+    if (dusk::getSettings().game.fastSpinner && mDoCPd_c::getHoldR(PAD_1)) {
+        if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
+            auto spinnerActor = (fopAc_ac_c*)dynamic_cast<daAlink_c*>(link)->getSpinnerActor();
+            if (spinnerActor) {
+                if (spinnerActor->speedF < 60.f)
+                    spinnerActor->speedF += 2.f;
+            }
+        }
+    }
+
+    if (dusk::getSettings().game.infiniteHearts) {
+        dComIfGs_setLife((dComIfGs_getMaxLife() / 5) * 4);
+    }
+
+    if (dusk::getSettings().game.infiniteArrows) {
+        dComIfGs_setArrowNum(dComIfGs_getArrowMax());
+    }
+
+    if (dusk::getSettings().game.infiniteBombs) {
+        dComIfGs_setBombNum(0, 99);
+        dComIfGs_setBombNum(1, 99);
+        dComIfGs_setBombNum(2, 99);
+    }
+
+    if (dusk::getSettings().game.infiniteOil) {
+        dComIfGs_setOil(dComIfGs_getMaxOil());
+    }
+
+    if (dusk::getSettings().game.infiniteRupees) {
+        dComIfGs_setRupee(9999);
+    }
+
+    if (dusk::getSettings().game.infiniteOxygen) {
+        dComIfGp_setOxygen(dComIfGp_getMaxOxygen());
+    }
 }
 #endif
 
@@ -748,31 +807,7 @@ void fapGm_Execute() {
     #endif
 
 #if TARGET_PC
-    if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
-        dynamic_cast<daAlink_c*>(link)->handleGamepadColor();
-    }
-
-    if (mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getTrigX(PAD_1)) {
-        if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
-            dynamic_cast<daAlink_c*>(link)->handleWolfHowl();
-        }
-    }
-
-    if (mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getTrigY(PAD_1)) {
-        if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
-            dynamic_cast<daAlink_c*>(link)->handleQuickTransform();
-        }
-    }
-    
-    if (dusk::getSettings().game.fastSpinner && mDoCPd_c::getHoldR(PAD_1)) {
-        if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
-            auto spinnerActor = (fopAc_ac_c*)dynamic_cast<daAlink_c*>(link)->getSpinnerActor();
-            if (spinnerActor) {
-                if (spinnerActor->speedF < 60.f)
-                    spinnerActor->speedF += 2.f;
-            }
-        }
-    }
+    duskExecute();
 #endif
 
 #ifdef TARGET_PC

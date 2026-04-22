@@ -84,6 +84,15 @@ void J3DModelData::simpleCalcMaterial(u16 idx, Mtx param_1) {
     }
 }
 
+#if TARGET_PC
+bool J3DModelData::needsInterpCallBack() const {
+    for (u16 i = 0, n = getMaterialNum(); i < n; i++)
+        if (getMaterialNodePointer(i)->needsInterpCallBack())
+            return true;
+    return false;
+}
+#endif
+
 void J3DModelData::syncJ3DSysPointers() const {
     j3dSys.setTexture(getTexture());
     j3dSys.setVtxPos(getVtxPosArray(), getVtxNum());

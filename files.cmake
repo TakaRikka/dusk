@@ -15,7 +15,6 @@ set(DOLZEL_FILES
         src/m_Do/m_Do_DVDError.cpp
         src/m_Do/m_Do_MemCard.cpp
         src/m_Do/m_Do_MemCardRWmng.cpp
-        src/m_Do/m_Do_machine_exception.cpp
         src/m_Do/m_Do_hostIO.cpp
         src/c/c_damagereaction.cpp
         src/c/c_dylink.cpp
@@ -1334,6 +1333,7 @@ set(DUSK_FILES
         include/dusk/endian_gx.hpp
         include/dusk/config.hpp
         include/dusk/dvd_asset.hpp
+        include/dusk/scope_guard.hpp
         src/dusk/dvd_asset.cpp
         src/d/actor/d_a_alink_dusk.cpp
         src/dusk/asserts.cpp
@@ -1342,9 +1342,12 @@ set(DUSK_FILES
         src/dusk/endian.cpp
         src/dusk/extras.c
         src/dusk/extras.cpp
+        src/dusk/file_select.cpp
+        src/dusk/file_select.hpp
         src/dusk/frame_interpolation.cpp
+        src/dusk/game_clock.cpp
         src/dusk/globals.cpp
-        src/dusk/gyro_aim.cpp
+        src/dusk/gyro.cpp
         src/dusk/io.cpp
         src/dusk/layout.cpp
         src/dusk/logging.cpp
@@ -1358,10 +1361,10 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiEngine.hpp
         src/dusk/imgui/ImGuiMenuGame.cpp
         src/dusk/imgui/ImGuiMenuGame.hpp
+        src/dusk/imgui/ImGuiBloomWindow.cpp
+        src/dusk/imgui/ImGuiBloomWindow.hpp
         src/dusk/imgui/ImGuiMenuTools.cpp
         src/dusk/imgui/ImGuiMenuTools.hpp
-        src/dusk/imgui/ImGuiMenuEnhancements.cpp
-        src/dusk/imgui/ImGuiMenuEnhancements.hpp
         src/dusk/imgui/ImGuiPreLaunchWindow.cpp
         src/dusk/imgui/ImGuiPreLaunchWindow.hpp
         src/dusk/imgui/ImGuiFirstRunPreset.hpp
@@ -1381,4 +1384,5 @@ set(DUSK_FILES
         src/dusk/OSContext.cpp
         src/dusk/OSThread.cpp
         src/dusk/OSMutex.cpp
+        src/dusk/discord_presence.cpp
 )

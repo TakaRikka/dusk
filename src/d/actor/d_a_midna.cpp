@@ -1054,9 +1054,9 @@ void daMidna_c::setBodyPartMatrix() {
         }
         mpModel->calcWeightEnvelopeMtx();
 #ifdef TARGET_PC
-        // Frame interpolation: Record weight envelopes for Midna here, as they are otherwise missed causing distortion
+        // FRAME INTERP NOTE: Record weight envelopes for Midna here, as they are otherwise missed causing distortion
         for (u16 i = 0; i < mpModel->getModelData()->getWEvlpMtxNum(); i++) {
-            dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(mpModel->getWeightAnmMtx(i)), mpModel->getWeightAnmMtx(i));
+            dusk::frame_interp::record_final_mtx(mpModel->getWeightAnmMtx(i));
         }
 #endif
     }

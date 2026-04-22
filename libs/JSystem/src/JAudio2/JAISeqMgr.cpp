@@ -120,11 +120,19 @@ void JAISeqMgr::mixOut() {
 }
 
 JAISeq* JAISeqMgr::beginStartSeq_() {
-    JAISeq* seq = JKR_NEW JAISeq(this, field_0x10);
+#ifdef TARGET_PC
+    if (JAISeq::getFreeMemCount() == 0) {
+        JUT_WARN(273, "%s", "JASPoolAllocObject::<JAISeq>::operator new failed .\n");
+        return NULL;
+    }
+    return JKR_NEW JAISeq(this, field_0x10);
+#else
+    JAISeq* seq = new JAISeq(this, field_0x10);
     if (seq == NULL) {
         JUT_WARN(273, "%s", "JASPoolAllocObject::<JAISeq>::operator new failed .\n");
     }
     return seq;
+#endif
 }
 
 bool JAISeqMgr::endStartSeq_(JAISeq* seq, JAISoundHandle* handle) {

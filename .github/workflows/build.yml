@@ -67,6 +67,7 @@ jobs:
         run: ci/build-appimage.sh
 
       - name: Upload artifacts
+        if: startsWith(github.event.ref, 'refs/tags/v')
         uses: actions/upload-artifact@v7
         with:
           name: dusk-${{env.DUSK_VERSION}}-linux-${{matrix.preset}}-${{matrix.artifact_arch}}
@@ -76,24 +77,27 @@ jobs:
 
   build-apple:
     name: Build Apple (${{matrix.name}})
-    if: 'false' # TODO enable when CI is free
-    runs-on: macos-latest
+    runs-on: [self-hosted, macOS]
     strategy:
       fail-fast: false
       matrix:
         include:
-          - name: AppleClang macOS universal
+          - name: AppleClang macOS arm64
             platform: macos
-            preset: x-macos-ci
-            artifact_name: macos-appleclang-universal
-          - name: AppleClang iOS arm64
-            platform: ios
-            preset: x-ios-ci
-            artifact_name: ios-appleclang-arm64
-          - name: AppleClang tvOS arm64
-            platform: tvos
-            preset: x-tvos-ci
-            artifact_name: tvos-appleclang-arm64
+            preset: x-macos-ci-arm64
+            artifact_name: macos-appleclang-arm64
+          # - name: AppleClang macOS x86_64
+          #   platform: macos
+          #   preset: x-macos-ci-x86_64
+          #   artifact_name: macos-appleclang-x86_64
+          # - name: AppleClang iOS arm64
+          #   platform: ios
+          #   preset: x-ios-ci
+          #   artifact_name: ios-appleclang-arm64
+          # - name: AppleClang tvOS arm64
+          #   platform: tvos
+          #   preset: x-tvos-ci
+          #   artifact_name: tvos-appleclang-arm64
 
     steps:
       - uses: actions/checkout@v6
@@ -101,28 +105,27 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
-      - name: Update Homebrew
-        if: matrix.platform == 'tvos'
-        run: |
-          brew update
-          brew upgrade --formula
-
       - name: Install dependencies
+        if: 'false'
         run: brew install cmake ninja
-
-      - name: Install markupsafe
-        if: matrix.platform == 'tvos'
-        run: pip3 install --break-system-packages markupsafe
 
       - name: Install Rust iOS target
         if: matrix.platform == 'ios'
-        run: rustup target add aarch64-apple-ios
+        run: |
+          rustup toolchain install stable
+          rustup target add aarch64-apple-ios
 
       - name: Install Rust tvOS target
         if: matrix.platform == 'tvos'
         run: |
           rustup toolchain install nightly
           rustup target add --toolchain nightly aarch64-apple-tvos
+
+      - name: Install Rust x86_64 macOS target
+        if: endsWith(matrix.preset, 'x86_64')
+        run: |
+          rustup toolchain install stable
+          rustup target add x86_64-apple-darwin
 
       - name: Setup sccache
         uses: mozilla-actions/sccache-action@v0.0.9
@@ -134,6 +137,7 @@ jobs:
         run: cmake --build --preset ${{matrix.preset}}
 
       - name: Upload artifacts
+        if: startsWith(github.event.ref, 'refs/tags/v')
         uses: actions/upload-artifact@v7
         with:
           name: dusk-${{env.DUSK_VERSION}}-${{matrix.artifact_name}}
@@ -199,6 +203,7 @@ jobs:
         run: cmake --build --preset x-windows-ci-${{matrix.preset}}
 
       - name: Upload artifacts
+        if: startsWith(github.event.ref, 'refs/tags/v')
         uses: actions/upload-artifact@v7
         with:
           name: dusk-${{env.DUSK_VERSION}}-win32-msvc-${{matrix.artifact_arch}}

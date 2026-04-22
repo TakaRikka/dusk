@@ -117,8 +117,8 @@ static Z2WolfHowlLine sNewSong3[9] = {
 
 #if TARGET_PC
 static Z2WolfHowlLine sHowlTimeSong[6] = {
-    {HOWL_LINE_MID, 20}, {HOWL_LINE_LOW, 20}, {HOWL_LINE_HIGH, 40},
-    {HOWL_LINE_MID, 20}, {HOWL_LINE_LOW, 20}, {HOWL_LINE_HIGH, 40},
+    {HOWL_LINE_MID, 15}, {HOWL_LINE_LOW, 15}, {HOWL_LINE_HIGH, 30},
+    {HOWL_LINE_MID, 15}, {HOWL_LINE_LOW, 15}, {HOWL_LINE_HIGH, 30},
 };
 #endif
 
@@ -368,9 +368,9 @@ void Z2WolfHowlMgr::setCorrectData(s8 curveID, Z2WolfHowlData* data) {
         break;
     #if TARGET_PC
     case Z2WOLFHOWL_TIMESONG:
-        cPitchUp = 1.259906f;
-        cPitchCenter = 0.94387f;
-        cPitchDown = 0.840885f;
+        cPitchUp = 1.3348f;
+        cPitchCenter = 1.0f;
+        cPitchDown = 0.7937f;
         break;
     #endif
     default:
