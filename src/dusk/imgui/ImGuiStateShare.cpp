@@ -341,7 +341,7 @@ void ImGuiStateShare::draw(bool& open) {
 
     // Toolbar
     if (!gameRunning) { ImGui::BeginDisabled(); }
-    if (ImGui::Button("Current")) {
+    if (ImGui::Button("Save")) {
         SavedStateEntry entry;
         entry.name    = fmt::format("State {}", m_states.size() + 1);
         entry.encoded = encodeCurrentState();
