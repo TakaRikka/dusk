@@ -1155,6 +1155,9 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
             GXSetProjection(ortho, GX_ORTHOGRAPHIC);
             GXSetCurrentMtx(0);
 
+#ifdef TARGET_PC
+            if (dusk::getSettings().game.enableDepthOfField)
+#endif
             if (l_tevColor0.a > -255 && sp8 == 1) {
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                 GXPosition3s16(x_orig, y_orig_pos, -5);

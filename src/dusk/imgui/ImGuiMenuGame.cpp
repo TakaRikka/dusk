@@ -67,13 +67,15 @@ namespace dusk {
                     ToggleFullscreen();
                 }
 
-                if (ImGui::MenuItem("Restore Default Window Size")) {
+                if (ImGui::Button("Restore Default Window Size")) {
                     getSettings().video.enableFullscreen.setValue(false);
                     VISetWindowFullscreen(false);
                     VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
                     VICenterWindow();
                 }
             }
+
+            ImGui::Separator();
 
             bool vsync = getSettings().video.enableVsync;
             if (ImGui::Checkbox("Enable VSync", &vsync)) {
@@ -162,6 +164,8 @@ namespace dusk {
             }
 
             ImGui::Checkbox("Enable LOD Bias", &aurora::gx::enableLodBias);
+
+            config::ImGuiCheckbox("Enable Depth of Field", getSettings().game.enableDepthOfField);
 
             ImGui::EndMenu();
         }
@@ -312,14 +316,14 @@ namespace dusk {
 
     void ImGuiMenuGame::drawAudioMenu() {
         if (ImGui::BeginMenu("Audio")) {
+
+            ImGui::SeparatorText("Volume");
+
             ImGui::Text("Master Volume");
             if (config::ImGuiSliderInt("##masterVolume", getSettings().audio.masterVolume, 0, 100)) {
                 dusk::audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
             }
 
-            if (config::ImGuiCheckbox("Enable Reverb", getSettings().audio.enableReverb)) {
-                dusk::audio::SetEnableReverb(getSettings().audio.enableReverb);
-            }
             /*
             // TODO: Implement additional settings
             ImGui::Text("Main Music Volume");
@@ -338,6 +342,13 @@ namespace dusk {
             if (audioMgr != nullptr) {
             }
             */
+
+            ImGui::SeparatorText("Effects");
+
+            if (config::ImGuiCheckbox("Enable Reverb", getSettings().audio.enableReverb)) {
+                dusk::audio::SetEnableReverb(getSettings().audio.enableReverb);
+            }
+
 
             ImGui::SeparatorText("Tweaks");
 
@@ -359,7 +370,11 @@ namespace dusk {
         if (ImGui::BeginMenu("Input")) {
             ImGui::SeparatorText("Controller");
 
-            ImGui::MenuItem("Configure Controller", nullptr, &m_showControllerConfig);
+            if (ImGui::Button("Configure Controller")){
+                m_showControllerConfig = !m_showControllerConfig;
+            }
+
+            ImGui::SeparatorText("Camera");
 
             config::ImGuiCheckbox("Invert Camera X Axis", getSettings().game.invertCameraXAxis);
 
