@@ -1,16 +1,25 @@
 #include "dusk/gyro.h"
 #include "d/actor/d_a_alink.h"
+#include <cmath>
 
 namespace dusk::gyro {
 namespace {
 constexpr s32   kRollgoalTableMaxOffset = 6500;
 constexpr float kGyroEmaAlphaMin = 0.05f;
 constexpr float kGyroEmaAlphaMax = 1.0f;
+// Smooth gravity separately so the yaw/roll blend doesn't twitch with raw accel noise.
+constexpr float kGravityEmaAlpha = 0.1f;
+constexpr float kMinGravityProjection = 0.2f;
+// Let roll contribute more strongly as the pad approaches an upright posture.
+constexpr float kRollAimBoostMax = 2.0f;
 
 bool  s_sensor_enabled        = false;
+bool  s_accel_enabled         = false;
 float s_smooth_gx             = 0.0f;
 float s_smooth_gy             = 0.0f;
 float s_smooth_gz             = 0.0f;
+float s_gravity_y             = 0.0f;
+float s_gravity_z             = 0.0f;
 float s_yaw_rad               = 0.0f;
 float s_pitch_rad             = 0.0f;
 float s_roll_rad              = 0.0f;
@@ -19,6 +28,7 @@ s32   s_rollgoal_az           = 0;
 
 void reset_filter_state() {
     s_smooth_gx = s_smooth_gy = s_smooth_gz = 0.0f;
+    s_gravity_y = s_gravity_z = 0.0f;
     s_yaw_rad = s_pitch_rad = s_roll_rad = 0.0f;
     s_rollgoal_ax = s_rollgoal_az = 0;
 }
@@ -54,6 +64,10 @@ void read(float dt) {
             PADSetSensorEnabled(PAD_CHAN0, PAD_SENSOR_GYRO, FALSE);
             s_sensor_enabled = false;
         }
+        if (s_accel_enabled) {
+            PADSetSensorEnabled(PAD_CHAN0, PAD_SENSOR_ACCEL, FALSE);
+            s_accel_enabled = false;
+        }
         reset_filter_state();
         return;
     }
@@ -68,6 +82,13 @@ void read(float dt) {
         s_sensor_enabled = true;
     }
 
+    if (!s_accel_enabled && PADHasSensor(PAD_CHAN0, PAD_SENSOR_ACCEL) &&
+        PADSetSensorEnabled(PAD_CHAN0, PAD_SENSOR_ACCEL, TRUE))
+    {
+        // We only need accel for the gravity-aware yaw/roll mix.
+        s_accel_enabled = true;
+    }
+
     f32 gyro[3];
     if (!PADGetSensorData(PAD_CHAN0, PAD_SENSOR_GYRO, gyro, 3)) {
         return;
@@ -80,9 +101,34 @@ void read(float dt) {
     s_smooth_gy += smooth_alpha * (gyro[1] - s_smooth_gy);
     s_smooth_gz += smooth_alpha * (gyro[2] - s_smooth_gz);
 
-    s_pitch_rad = -apply_deadband(s_smooth_gx, deadband) * dt * dusk::getSettings().game.gyroSensitivityX;
-    s_yaw_rad   = apply_deadband(s_smooth_gy, deadband) * dt * dusk::getSettings().game.gyroSensitivityY;
-    s_roll_rad  = apply_deadband(s_smooth_gz, deadband) * dt * dusk::getSettings().game.gyroSensitivityX; // GYRO NOTE: Exposing Z sensitivity seems unusual, so I'm just using X
+    const float pitch_rate = apply_deadband(s_smooth_gx, deadband);
+    const float yaw_rate = apply_deadband(s_smooth_gy, deadband);
+    const float roll_rate = apply_deadband(s_smooth_gz, deadband);
+
+    s_pitch_rad = -pitch_rate * dt * dusk::getSettings().game.gyroSensitivityX;
+    s_roll_rad  = roll_rate * dt * dusk::getSettings().game.gyroSensitivityX; // GYRO NOTE: Exposing Z sensitivity seems unusual, so I'm just using X
+
+    float horizontal_rate = yaw_rate;
+    if (s_accel_enabled) {
+        f32 accel[3];
+        if (PADGetSensorData(PAD_CHAN0, PAD_SENSOR_ACCEL, accel, 3)) {
+            s_gravity_y += kGravityEmaAlpha * (accel[1] - s_gravity_y);
+            s_gravity_z += kGravityEmaAlpha * (accel[2] - s_gravity_z);
+
+            // Project gravity onto the controller's yaw/roll plane to infer which axis
+            // should dominate horizontal aim at the current pitch.
+            const float gravity_yz_len = std::sqrt((s_gravity_y * s_gravity_y) + (s_gravity_z * s_gravity_z));
+            if (gravity_yz_len >= kMinGravityProjection) {
+                const float yaw_weight = s_gravity_y / gravity_yz_len;
+                const float roll_mix = std::fabs(s_gravity_z) / gravity_yz_len;
+                const float roll_weight = s_gravity_z / gravity_yz_len;
+                const float roll_boost = 1.0f + (roll_mix * (kRollAimBoostMax - 1.0f));
+                horizontal_rate = (yaw_rate * yaw_weight) + (roll_rate * roll_weight * roll_boost);
+            }
+        }
+    }
+
+    s_yaw_rad = horizontal_rate * dt * dusk::getSettings().game.gyroSensitivityY;
 
     s_pitch_rad = dusk::getSettings().game.gyroInvertPitch ? -s_pitch_rad : s_pitch_rad;
     s_yaw_rad = dusk::getSettings().game.gyroInvertYaw ? -s_yaw_rad : s_yaw_rad;
