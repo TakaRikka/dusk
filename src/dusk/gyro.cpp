@@ -15,11 +15,15 @@ constexpr float kRollAimBoostMax = 2.0f;
 
 bool  s_sensor_enabled        = false;
 bool  s_accel_enabled         = false;
+bool  s_was_aiming            = false;
+bool  s_have_gravity_baseline = false;
 float s_smooth_gx             = 0.0f;
 float s_smooth_gy             = 0.0f;
 float s_smooth_gz             = 0.0f;
 float s_gravity_y             = 0.0f;
 float s_gravity_z             = 0.0f;
+float s_baseline_gravity_y    = 0.0f;
+float s_baseline_gravity_z    = 0.0f;
 float s_yaw_rad               = 0.0f;
 float s_pitch_rad             = 0.0f;
 float s_roll_rad              = 0.0f;
@@ -29,6 +33,9 @@ s32   s_rollgoal_az           = 0;
 void reset_filter_state() {
     s_smooth_gx = s_smooth_gy = s_smooth_gz = 0.0f;
     s_gravity_y = s_gravity_z = 0.0f;
+    s_baseline_gravity_y = s_baseline_gravity_z = 0.0f;
+    s_was_aiming = false;
+    s_have_gravity_baseline = false;
     s_yaw_rad = s_pitch_rad = s_roll_rad = 0.0f;
     s_rollgoal_ax = s_rollgoal_az = 0;
 }
@@ -59,7 +66,12 @@ bool queryGyroAimContext() {
 }
 
 void read(float dt) {
-    if (!s_sensor_keep_alive && !queryGyroAimContext()) {
+    const bool aim_active = queryGyroAimContext();
+    const bool aim_just_started = aim_active && !s_was_aiming;
+    const bool aim_just_ended = !aim_active && s_was_aiming;
+    s_was_aiming = aim_active;
+
+    if (!s_sensor_keep_alive && !aim_active) {
         if (s_sensor_enabled) {
             PADSetSensorEnabled(PAD_CHAN0, PAD_SENSOR_GYRO, FALSE);
             s_sensor_enabled = false;
@@ -70,6 +82,12 @@ void read(float dt) {
         }
         reset_filter_state();
         return;
+    }
+
+    if (aim_just_started || aim_just_ended) {
+        s_gravity_y = s_gravity_z = 0.0f;
+        s_baseline_gravity_y = s_baseline_gravity_z = 0.0f;
+        s_have_gravity_baseline = false;
     }
 
     if (!s_sensor_enabled) {
@@ -109,19 +127,35 @@ void read(float dt) {
     s_roll_rad  = roll_rate * dt * dusk::getSettings().game.gyroSensitivityX; // GYRO NOTE: Exposing Z sensitivity seems unusual, so I'm just using X
 
     float horizontal_rate = yaw_rate;
-    if (s_accel_enabled) {
+    if (aim_active && s_accel_enabled) {
         f32 accel[3];
         if (PADGetSensorData(PAD_CHAN0, PAD_SENSOR_ACCEL, accel, 3)) {
-            s_gravity_y += kGravityEmaAlpha * (accel[1] - s_gravity_y);
-            s_gravity_z += kGravityEmaAlpha * (accel[2] - s_gravity_z);
+            if (!s_have_gravity_baseline) {
+                s_gravity_y = accel[1];
+                s_gravity_z = accel[2];
+            } else {
+                s_gravity_y += kGravityEmaAlpha * (accel[1] - s_gravity_y);
+                s_gravity_z += kGravityEmaAlpha * (accel[2] - s_gravity_z);
+            }
 
-            // Project gravity onto the controller's yaw/roll plane to infer which axis
-            // should dominate horizontal aim at the current pitch.
+            // Compare the current gravity projection against the gravity vector from
+            // aim start so the user's resting hold angle becomes the neutral baseline.
             const float gravity_yz_len = std::sqrt((s_gravity_y * s_gravity_y) + (s_gravity_z * s_gravity_z));
             if (gravity_yz_len >= kMinGravityProjection) {
-                const float yaw_weight = s_gravity_y / gravity_yz_len;
-                const float roll_mix = std::fabs(s_gravity_z) / gravity_yz_len;
-                const float roll_weight = s_gravity_z / gravity_yz_len;
+                const float current_gravity_y = s_gravity_y / gravity_yz_len;
+                const float current_gravity_z = s_gravity_z / gravity_yz_len;
+
+                if (!s_have_gravity_baseline) {
+                    s_baseline_gravity_y = current_gravity_y;
+                    s_baseline_gravity_z = current_gravity_z;
+                    s_have_gravity_baseline = true;
+                }
+
+                const float yaw_weight =
+                    (s_baseline_gravity_y * current_gravity_y) + (s_baseline_gravity_z * current_gravity_z);
+                const float roll_weight =
+                    (s_baseline_gravity_y * current_gravity_z) - (s_baseline_gravity_z * current_gravity_y);
+                const float roll_mix = std::fabs(roll_weight);
                 const float roll_boost = 1.0f + (roll_mix * (kRollAimBoostMax - 1.0f));
                 horizontal_rate = (yaw_rate * yaw_weight) + (roll_rate * roll_weight * roll_boost);
             }
