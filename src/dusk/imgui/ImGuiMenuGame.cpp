@@ -289,9 +289,7 @@ namespace dusk {
             config::ImGuiCheckbox("Infinite Oxygen", getSettings().game.infiniteOxygen);
             config::ImGuiCheckbox("Infinite Rupees", getSettings().game.infiniteRupees);
             config::ImGuiCheckbox("Items Don't Despawn", getSettings().game.enableIndefiniteItemDrops);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Items Don't Despawn Unless You Load A Different Room In Which Case They Do But Even Under Some Circumstances They Don't, It Is Quite Rare Though");
-            }
+            ImGui::SetItemTooltip("Items Don't Despawn Unless You Load A Different Room In Which Case They Do But Even Under Some Circumstances They Don't, It Is Quite Rare Though");
 
             ImGui::SeparatorText("Abilities");
             config::ImGuiCheckbox("Moon Jump (R+A)", getSettings().game.moonJump);
