@@ -742,12 +742,8 @@ float lerpSpeed = 0.0f;
 const cXyz duskColor = {50, 50, -50};
 const cXyz noColor = {0, 0, 0};
 
-float lerp(float a, float b, float t) {
-    return a + t * (b - a);
-}
-
 cXyz LerpColor(cXyz a, cXyz b, float t) {
-    return {lerp(a.x, b.x, t), lerp(a.y, b.y, t), lerp(a.z, b.z, t)};
+    return {std::lerp(a.x, b.x, t), std::lerp(a.y, b.y, t), std::lerp(a.z, b.z, t)};
 }
 
 void FadeLED(cXyz newColor, float speed) {
