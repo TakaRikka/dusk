@@ -153,11 +153,6 @@ bool ImGuiStateShare::applyEncodedState(const std::string& encoded, const std::s
         dComIfGs_setRestartRoomParam(pkt.roomNo & 0x3F);
     }
 
-    DuskLog.info("StateShare: applying {} state - stage={} room={} layer={} point={} lastSceneMode={}",
-        isFull ? "full" : "partial",
-        pkt.stageName, (int)pkt.roomNo, (int)pkt.layer, (int)spawnPoint,
-        dComIfGs_getLastSceneMode());
-
     dComIfGp_setNextStage(pkt.stageName, spawnPoint, pkt.roomNo, pkt.layer);
 
     if (name.empty()) {
@@ -176,11 +171,9 @@ void ImGuiStateShare::tickPendingApply() {
         return;
     }
     if (m_pendingInfo.has_value()) {
-        DuskLog.info("StateShare: tickPendingApply full - lastSceneMode={}", dComIfGs_getLastSceneMode());
         g_dComIfG_gameInfo.info = *m_pendingInfo;
         m_pendingInfo.reset();
     } else {
-        DuskLog.info("StateShare: tickPendingApply partial - lastSceneMode={}", dComIfGs_getLastSceneMode());
         g_dComIfG_gameInfo.info.mSavedata = *m_pendingSavedata;
         m_pendingSavedata.reset();
     }
