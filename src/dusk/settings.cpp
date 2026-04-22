@@ -21,7 +21,6 @@ UserSettings g_userSettings = {
 
     .game = {
         // Quality of Life
-        .enableIndefiniteItemDrops {"game.enableIndefiniteItemDrops", false},
         .enableQuickTransform {"game.enableQuickTransform", false},
         .hideTvSettingsScreen {"game.hideTvSettingsScreen", false},
         .skipWarningScreen {"game.skipWarningScreen", false},
@@ -76,6 +75,7 @@ UserSettings g_userSettings = {
         .infiniteOil{"game.infiniteOil", false},
         .infiniteOxygen{"game.infiniteOxygen", false},
         .infiniteRupees{"game.infiniteRupees", false},
+        .enableIndefiniteItemDrops {"game.enableIndefiniteItemDrops", false},
         .moonJump{"game.moonJump", false},
         .superClawshot{"game.superClawshot", false},
         .alwaysGreatspin{"game.alwaysGreatspin", false},
@@ -121,7 +121,6 @@ void registerSettings() {
     Register(g_userSettings.audio.enableReverb);
 
     // Game
-    Register(g_userSettings.game.enableIndefiniteItemDrops);
     Register(g_userSettings.game.enableQuickTransform);
     Register(g_userSettings.game.hideTvSettingsScreen);
     Register(g_userSettings.game.skipWarningScreen);
@@ -162,6 +161,7 @@ void registerSettings() {
     Register(g_userSettings.game.infiniteOil);
     Register(g_userSettings.game.infiniteOxygen);
     Register(g_userSettings.game.infiniteRupees);
+    Register(g_userSettings.game.enableIndefiniteItemDrops);
     Register(g_userSettings.game.moonJump);
     Register(g_userSettings.game.superClawshot);
     Register(g_userSettings.game.alwaysGreatspin);
