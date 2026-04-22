@@ -275,6 +275,11 @@ namespace dusk {
                 ImGui::SetTooltip("Transform instantly by pressing R and Y simultaneously.");
             }
 
+            config::ImGuiCheckbox("Indefinite Item Drops", getSettings().game.enableIndefiniteItemDrops);
+            if (ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("Item drops don't disappear after a certain amount of time");
+            }
+
             ImGui::EndMenu();
         }
     }

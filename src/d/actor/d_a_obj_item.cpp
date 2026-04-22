@@ -390,6 +390,9 @@ void daItem_c::procMainNormal() {
         cLib_chaseF(&scale.z, mItemScale.z, step_z);
     }
 
+    #if TARGET_PC
+    if (!dusk::getSettings().game.enableIndefiniteItemDrops) {
+    #endif
     if (mWaitTimer == 0) {
         if (mDisappearTimer == 0) {
             deleteItem();
@@ -399,6 +402,9 @@ void daItem_c::procMainNormal() {
             changeDraw();
         }
     }
+    #if TARGET_PC
+    }
+    #endif
 
     mCcCyl.SetC(current.pos);
     dComIfG_Ccsp()->Set(&mCcCyl);

@@ -47,6 +47,7 @@ struct UserSettings {
 
     struct {
         // QoL
+        ConfigVar<bool> enableIndefiniteItemDrops;
         ConfigVar<bool> enableQuickTransform;
         ConfigVar<bool> hideTvSettingsScreen;
         ConfigVar<bool> skipWarningScreen;

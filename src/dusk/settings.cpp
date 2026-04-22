@@ -21,6 +21,7 @@ UserSettings g_userSettings = {
 
     .game = {
         // Quality of Life
+        .enableIndefiniteItemDrops {"game.enableIndefiniteItemDrops", false},
         .enableQuickTransform {"game.enableQuickTransform", false},
         .hideTvSettingsScreen {"game.hideTvSettingsScreen", false},
         .skipWarningScreen {"game.skipWarningScreen", false},
@@ -120,6 +121,7 @@ void registerSettings() {
     Register(g_userSettings.audio.enableReverb);
 
     // Game
+    Register(g_userSettings.game.enableIndefiniteItemDrops);
     Register(g_userSettings.game.enableQuickTransform);
     Register(g_userSettings.game.hideTvSettingsScreen);
     Register(g_userSettings.game.skipWarningScreen);
