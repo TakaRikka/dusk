@@ -1064,9 +1064,16 @@ int daItem_c::CountTimer() {
     if (checkCountTimer()) {
         if (mWaitTimer > 0) {
             mWaitTimer--;
-        } else if (mDisappearTimer > 0) {
+        }
+        #if TARGET_PC
+        else if (!dusk::getSettings().game.enableIndefiniteItemDrops && mDisappearTimer > 0) {
             mDisappearTimer--;
         }
+        #else
+        else if (mDisappearTimer > 0) {
+            mDisappearTimer--;
+        }
+        #endif
     }
 
     cLib_calcTimer<u8>(&mBoomWindTgTimer);
