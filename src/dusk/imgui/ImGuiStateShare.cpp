@@ -10,7 +10,11 @@
 #include "d/d_com_inf_game.h"
 #include "dusk/main.h"
 #include "dusk/io.hpp"
+#include "dusk/logging.h"
+#include "../file_select.hpp"
+#include "aurora/lib/window.hpp"
 
+#include <unordered_set>
 #include <zstd.h>
 
 namespace dusk {
@@ -27,8 +31,20 @@ struct StateSharePacket {
 };
 #pragma pack(pop)
 
-static constexpr size_t PACKET_TOTAL = sizeof(StateSharePacket) + sizeof(dSv_info_c);
+static constexpr size_t PACKET_TOTAL     = sizeof(StateSharePacket) + sizeof(dSv_info_c);
+static constexpr size_t PACKET_SAVE_ONLY = sizeof(StateSharePacket) + sizeof(dSv_save_c);
 static constexpr auto STATES_FILENAME = "states.json";
+
+static bool ValidateEncodedState(const std::string&);
+
+void ImGuiStateShare::onMergeFileSelected(void* userdata, const char* path, const char* /*error*/) {
+    auto* self = static_cast<ImGuiStateShare*>(userdata);
+    if (path != nullptr) {
+        self->m_pendingMergePath = path;
+    }
+}
+
+
 
 static std::string GetStatesFilePath() {
     return (dusk::ConfigPath / STATES_FILENAME).string();
@@ -64,7 +80,7 @@ void ImGuiStateShare::loadStatesFile() {
 void ImGuiStateShare::saveStatesFile() {
     json j = json::array();
     for (const auto& s : m_states) {
-        j.push_back({{"name", s.name}, {"data", s.encoded}});
+        j.push_back(json{{"name", s.name}, {"data", s.encoded}});
     }
     try {
         io::FileStream::WriteAllText(GetStatesFilePath().c_str(), j.dump(2));
@@ -99,7 +115,14 @@ bool ImGuiStateShare::applyEncodedState(const std::string& encoded, const std::s
     }
 
     unsigned long long dSize = ZSTD_getFrameContentSize(decoded.data(), decoded.size());
-    if (dSize == ZSTD_CONTENTSIZE_ERROR || dSize == ZSTD_CONTENTSIZE_UNKNOWN || dSize < PACKET_TOTAL) {
+    if (dSize == ZSTD_CONTENTSIZE_ERROR || dSize == ZSTD_CONTENTSIZE_UNKNOWN) {
+        m_statusMsg = "Not a valid state string.";
+        return false;
+    }
+
+    const bool isFull    = (dSize == PACKET_TOTAL);
+    const bool isPartial = (dSize == PACKET_SAVE_ONLY);
+    if (!isFull && !isPartial) {
         m_statusMsg = "Not a valid state string.";
         return false;
     }
@@ -115,15 +138,27 @@ bool ImGuiStateShare::applyEncodedState(const std::string& encoded, const std::s
     memcpy(&pkt, raw.data(), sizeof(pkt));
     pkt.stageName[7] = '\0';
 
-    memcpy(&g_dComIfG_gameInfo.info, raw.data() + sizeof(pkt), sizeof(dSv_info_c));
+    if (isFull) {
+        memcpy(&g_dComIfG_gameInfo.info, raw.data() + sizeof(pkt), sizeof(dSv_info_c));
+        m_pendingInfo = g_dComIfG_gameInfo.info;
+        m_pendingSavedata.reset();
+    } else {
+        memcpy(&g_dComIfG_gameInfo.info.mSavedata, raw.data() + sizeof(pkt), sizeof(dSv_save_c));
+        m_pendingSavedata = g_dComIfG_gameInfo.info.mSavedata;
+        m_pendingInfo.reset();
+    }
 
     s16 spawnPoint = pkt.startPoint == -4 ? -1 : pkt.startPoint;
     if (spawnPoint == -1) {
         dComIfGs_setRestartRoomParam(pkt.roomNo & 0x3F);
     }
 
+    DuskLog.info("StateShare: applying {} state - stage={} room={} layer={} point={} lastSceneMode={}",
+        isFull ? "full" : "partial",
+        pkt.stageName, (int)pkt.roomNo, (int)pkt.layer, (int)spawnPoint,
+        dComIfGs_getLastSceneMode());
+
     dComIfGp_setNextStage(pkt.stageName, spawnPoint, pkt.roomNo, pkt.layer);
-    m_pendingInfo = g_dComIfG_gameInfo.info;
 
     if (name.empty()) {
         m_statusMsg = fmt::format("{} room {} layer {}.", pkt.stageName, (int)pkt.roomNo, (int)pkt.layer);
@@ -134,11 +169,21 @@ bool ImGuiStateShare::applyEncodedState(const std::string& encoded, const std::s
 }
 
 void ImGuiStateShare::tickPendingApply() {
-    if (!m_pendingInfo.has_value() || dComIfGp_isEnableNextStage()) {
+    if (!m_pendingInfo.has_value() && !m_pendingSavedata.has_value()) {
         return;
     }
-    g_dComIfG_gameInfo.info = *m_pendingInfo;
-    m_pendingInfo.reset();
+    if (dComIfGp_isEnableNextStage()) {
+        return;
+    }
+    if (m_pendingInfo.has_value()) {
+        DuskLog.info("StateShare: tickPendingApply full - lastSceneMode={}", dComIfGs_getLastSceneMode());
+        g_dComIfG_gameInfo.info = *m_pendingInfo;
+        m_pendingInfo.reset();
+    } else {
+        DuskLog.info("StateShare: tickPendingApply partial - lastSceneMode={}", dComIfGs_getLastSceneMode());
+        g_dComIfG_gameInfo.info.mSavedata = *m_pendingSavedata;
+        m_pendingSavedata.reset();
+    }
     dComIfGp_offOxygenShowFlag();
     dComIfGp_setMaxOxygen(600);
     dComIfGp_setOxygen(600);
@@ -150,7 +195,55 @@ static bool ValidateEncodedState(const std::string& encoded) {
         return false;
     }
     unsigned long long dSize = ZSTD_getFrameContentSize(decoded.data(), decoded.size());
-    return dSize != ZSTD_CONTENTSIZE_ERROR && dSize != ZSTD_CONTENTSIZE_UNKNOWN && dSize >= PACKET_TOTAL;
+    return dSize == PACKET_TOTAL || dSize == PACKET_SAVE_ONLY;
+}
+
+void ImGuiStateShare::mergeFromFile(const std::string& path) {
+    try {
+        auto data = io::FileStream::ReadAllBytes(path.c_str());
+        auto j = json::parse(data);
+        if (!j.is_array()) {
+            m_statusMsg = "File does not contain a JSON array.";
+            return;
+        }
+
+        std::unordered_set<std::string> existingNames;
+        for (const auto& s : m_states) {
+            existingNames.insert(s.name);
+        }
+
+        int added   = 0;
+        int skipped = 0;
+        for (const auto& entry : j) {
+            if (!entry.contains("name") || !entry.contains("data")) {
+                ++skipped;
+                continue;
+            }
+            const std::string name    = entry["name"].get<std::string>();
+            const std::string encoded = entry["data"].get<std::string>();
+            if (!ValidateEncodedState(encoded)) {
+                ++skipped;
+                continue;
+            }
+            if (existingNames.count(name)) {
+                ++skipped;
+                continue;
+            }
+            SavedStateEntry s;
+            s.name    = name;
+            s.encoded = encoded;
+            existingNames.insert(s.name);
+            m_states.push_back(std::move(s));
+            ++added;
+        }
+
+        if (added > 0) {
+            saveStatesFile();
+        }
+        m_statusMsg = fmt::format("Merged: {} added, {} skipped.", added, skipped);
+    } catch (const std::exception& e) {
+        m_statusMsg = fmt::format("Failed to load file: {}", e.what());
+    }
 }
 
 void ImGuiStateShare::draw(bool& open) {
@@ -160,6 +253,11 @@ void ImGuiStateShare::draw(bool& open) {
 
     if (!m_loaded) {
         loadStatesFile();
+    }
+
+    if (!m_pendingMergePath.empty()) {
+        mergeFromFile(m_pendingMergePath);
+        m_pendingMergePath.clear();
     }
 
     if (!open) {
@@ -243,7 +341,7 @@ void ImGuiStateShare::draw(bool& open) {
 
     // Toolbar
     if (!gameRunning) { ImGui::BeginDisabled(); }
-    if (ImGui::Button("Save Current")) {
+    if (ImGui::Button("Current")) {
         SavedStateEntry entry;
         entry.name    = fmt::format("State {}", m_states.size() + 1);
         entry.encoded = encodeCurrentState();
@@ -271,6 +369,12 @@ void ImGuiStateShare::draw(bool& open) {
                 m_statusMsg = fmt::format("Imported as '{}'.", m_states.back().name);
             }
         }
+    }
+
+    ImGui::SameLine();
+    if (ImGui::Button("Load Pack")) {
+        static constexpr SDL_DialogFileFilter filter = {"State pack", "json"};
+        ShowFileSelect(&onMergeFileSelected, this, aurora::window::get_sdl_window(), &filter, 1, nullptr, false);
     }
 
     if (!m_states.empty()) {

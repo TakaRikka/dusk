@@ -23,13 +23,17 @@ private:
     void tickPendingApply();
     void loadStatesFile();
     void saveStatesFile();
+    void mergeFromFile(const std::string& path);
+    static void onMergeFileSelected(void* userdata, const char* path, const char* error);
 
     std::vector<SavedStateEntry> m_states;
     std::string m_statusMsg;
-    std::optional<dSv_info_c> m_pendingInfo;
+    std::optional<dSv_info_c>  m_pendingInfo;
+    std::optional<dSv_save_c>  m_pendingSavedata;
     int m_renamingIndex = -1;
     char m_renameBuffer[128] = {};
     bool m_loaded = false;
+    std::string m_pendingMergePath;
 };
 
 }
