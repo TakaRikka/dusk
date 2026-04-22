@@ -139,6 +139,9 @@ void ImGuiStateShare::tickPendingApply() {
     }
     g_dComIfG_gameInfo.info = *m_pendingInfo;
     m_pendingInfo.reset();
+    dComIfGp_offOxygenShowFlag();
+    dComIfGp_setMaxOxygen(600);
+    dComIfGp_setOxygen(600);
 }
 
 static bool ValidateEncodedState(const std::string& encoded) {
