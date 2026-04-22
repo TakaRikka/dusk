@@ -351,8 +351,13 @@ void mDoExt_modelUpdateDL(J3DModel* i_model) {
 
 void mDoExt_modelEntryDL(J3DModel* i_model) {
 #if TARGET_PC
-    if (!dusk::frame_interp::is_sim_frame())
+    if (!dusk::frame_interp::is_sim_frame()) {
+        // FRAME INTERP NOTE: This fixes issue #355 where some lights would flicker.
+        // This is likely better solved by updating J3DMaterial::needsInterpCallBack,
+        // but it's unclear what exactly needs to be added.
+        i_model->diff();
         return;
+    }
 #endif
 
     modelMtxErrorCheck(i_model);
