@@ -242,8 +242,6 @@ void main01(void) {
             continue;
         }
 
-        const dusk::game_clock::MainLoopPacer pacing = dusk::game_clock::advance_main_loop();
-
         VIWaitForRetrace();
 
         dusk::lastFrameAuroraStats = *aurora_get_stats();
@@ -254,28 +252,33 @@ void main01(void) {
 
         mDoGph_gInf_c::updateRenderSize();
 
-        dusk::frame_interp::begin_frame(pacing.is_interpolating, pacing.do_sim_tick, pacing.interpolation_step);
+        const auto pacing = dusk::game_clock::advance_main_loop();
         if (pacing.is_interpolating) {
-            if (pacing.do_sim_tick) {
+            if (pacing.sim_ticks_to_run > 0) {
+                dusk::frame_interp::begin_frame(true, true, 0.0f);
                 dusk::frame_interp::set_ui_tick_pending(true);
-                mDoCPd_c::read();
-                DuskDebugPad();
-                dusk::gyro::read(pacing.sim_pace);
-                fapGm_Execute();
-                mDoAud_Execute();
-                dusk::game_clock::reset_accumulator();
+                for (int sim_tick = 0; sim_tick < pacing.sim_ticks_to_run; ++sim_tick) {
+                    dusk::frame_interp::begin_sim_tick();
+                    mDoCPd_c::read();
+                    DuskDebugPad();
+                    dusk::gyro::read(pacing.sim_pace);
+                    fapGm_Execute();
+                    mDoAud_Execute();
+                    dusk::game_clock::commit_sim_tick();
+                }
             }
+
+            dusk::frame_interp::begin_frame(true, false,
+                                            dusk::game_clock::sample_interpolation_step());
             dusk::frame_interp::interpolate();
             dusk::frame_interp::begin_presentation_camera();
-            if (!pacing.do_sim_tick) {
-                // run draw functions for anything specially marked to handle interp on non-sim
-                // ticks
-                fpcM_DrawIterater((fpcM_DrawIteraterFunc)fpcM_Draw);
-            }
+            // run draw functions for anything specially marked to handle interp
+            fpcM_DrawIterater((fpcM_DrawIteraterFunc)fpcM_Draw);
             cAPIGph_Painter();
             dusk::frame_interp::end_presentation_camera();
             dusk::frame_interp::set_ui_tick_pending(false);
         } else {
+            dusk::frame_interp::begin_frame(false, true, 0.0f);
             dusk::frame_interp::set_ui_tick_pending(true);
 
             // Game Inputs
