@@ -5,14 +5,16 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstdio>
+#include <cstring>
 #include <span>
 
 #include "Adpcm.hpp"
 #include "freeverb/revmodel.hpp"
-#include "JSystem/JAudio2/JASDriverIF.h"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/endian.h"
+#include "dusk/logging.h"
 #include "global.h"
 #include "tracy/Tracy.hpp"
 
@@ -95,6 +97,13 @@ static void RenderChannel(
     ChannelAuxData& channelAux,
     OutputSubframe& subframe);
 
+static void RenderOutputChannel(
+    const JASDsp::TChannel& sourceChannel,
+    ChannelAuxData& aux,
+    OutputChannel outputChannel,
+    const std::span<f32> inputSamples,
+    OutputSubframe& fullOutputSubframe);
+
 /**
  * Converts a pitch value on a DSP channel to a sample rate.
  */
@@ -116,6 +125,8 @@ static void ResetChannel(JASDsp::TChannel& channel, ChannelAuxData& aux) {
     aux.decodeBufCount = 0;
     aux.resamplePos = 0.0;
     aux.resamplePrev = 0;
+
+    aux.oscPhase = 0;
 
     aux.prev_lp_out = 0.0f;
     aux.prev_lp_in = 0.0f;
@@ -141,6 +152,119 @@ static void MixSubframe(DspSubframe& dst, const DspSubframe& src) {
     }
 }
 
+enum class OscType : u16 {
+    SQUARE_WAVE_PW_50        = 0,
+    SAW_WAVE                 = 1,
+    SQUARE_WAVE_PW_25        = 3,
+    TRIANGLE_WAVE            = 4,
+    // idk what 5 and 6 are
+    SINE_WAVE                = 7,
+    // idk what 8 and 9 are
+    SINE_WAVE_VAR_STEP       = 10,
+    EVOLVING_HARMONIC        = 11,
+    EVOLVING_RAMP            = 12,
+};
+
+static s16 gEvolvingHarmonic[64];
+
+static void GenerateEvolvingHarmonic() {
+    static bool initialized = false;
+    if (!initialized) {
+        gEvolvingHarmonic[62] = 8191;
+        gEvolvingHarmonic[63] = 16383;
+        initialized = true;
+    }
+
+    u32 prev2 = (u32)gEvolvingHarmonic[62];
+    u32 prev1 = (u32)gEvolvingHarmonic[63];
+
+    for (int i = 0; i < 64; i += 2) {
+        u32 cur = (u32)gEvolvingHarmonic[i];
+        gEvolvingHarmonic[i] = (s16)((s32)(prev2 * prev1 - (cur << 16)) >> 16);
+        prev2 = prev1;
+        prev1 = cur;
+
+        cur = (u32)gEvolvingHarmonic[i + 1];
+        gEvolvingHarmonic[i + 1] = (s16)((s32)(2u * (prev2 * prev1 + (cur << 16))) >> 16);
+        prev2 = prev1;
+        prev1 = cur;
+    }
+}
+
+
+static void RenderOscChannel(
+    JASDsp::TChannel& channel,
+    ChannelAuxData& channelAux,
+    OutputSubframe& subframe) {
+    if (channel.mResetFlag)
+        ResetChannel(channel, channelAux);
+
+    const u32 pitch = channel.mPitch;
+    DspSubframe buf = {};
+    const auto oscType = static_cast<OscType>(channel.mBytesPerBlock);
+
+    switch (oscType) {
+    case OscType::SQUARE_WAVE_PW_50: {
+        std::generate(buf.begin(), buf.end(), [&] {
+            f32 s = channelAux.oscPhase < 0x8000u ? 0.5f : -0.5f;
+            channelAux.oscPhase += pitch >> 1;
+            return s;
+        });
+        break;
+    }
+    case OscType::SQUARE_WAVE_PW_25: {
+        std::generate(buf.begin(), buf.end(), [&] {
+            f32 s = channelAux.oscPhase < 0x4000u ? 0.5f : -0.5f;
+            channelAux.oscPhase += pitch >> 1;
+            return s;
+        });
+        break;
+    }
+    case OscType::SAW_WAVE:
+    case OscType::EVOLVING_RAMP: {
+        std::generate(buf.begin(), buf.end(), [&] {
+            f32 s = (f32)(s16)channelAux.oscPhase / 32768.0f;
+            channelAux.oscPhase += pitch >> 1;
+            return s;
+        });
+        break;
+    }
+    case OscType::SINE_WAVE:
+    case OscType::SINE_WAVE_VAR_STEP: {
+        std::generate(buf.begin(), buf.end(), [&] {
+            f32 s = sinf((f32)channelAux.oscPhase * (2.0f * M_PI / 65536.0f)) * 0.5f;
+            channelAux.oscPhase += pitch >> 1;
+            return s;
+        });
+        break;
+    }
+    case OscType::TRIANGLE_WAVE: {
+        std::generate(buf.begin(), buf.end(), [&] {
+            f32 s = 0.5f - fabsf((f32)(s16)channelAux.oscPhase / 32768.0f);
+            channelAux.oscPhase += pitch >> 1;
+            return s;
+        });
+        break;
+    }
+    case OscType::EVOLVING_HARMONIC: {
+        std::generate(buf.begin(), buf.end(), [&] {
+            f32 s = gEvolvingHarmonic[channelAux.oscPhase >> 10] / 32768.0f;
+            channelAux.oscPhase += pitch >> 1;
+            return s;
+        });
+        break;
+    }
+    default:
+        DuskLog.error("RenderOscChannel: unimplemented oscillator type {}", channel.mBytesPerBlock);
+        break;
+    }
+
+    auto samples = std::span(buf).subspan(0, DSP_SUBFRAME_SIZE);
+    RenderOutputChannel(channel, channelAux, OutputChannel::LEFT,  samples, subframe);
+    RenderOutputChannel(channel, channelAux, OutputChannel::RIGHT, samples, subframe);
+}
+
+
 void dusk::audio::DspRender(OutputSubframe& subframe) {
     ZoneScoped;
     if (DumpAudio != sDumpWasActive) {
@@ -151,6 +275,8 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
             CloseChannelDumpFiles();
         }
     }
+
+    GenerateEvolvingHarmonic();
 
     std::span channels(JASDsp::CH_BUF, DSP_CHANNELS);
 
@@ -174,17 +300,14 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
             channel.mIsFinished = true;
             continue;
         }
-        else if (channel.mWaveAramAddress == 0) {
-            // I think these are oscillator channels? Not backed by audio.
-            // No idea how to implement these yet, so skip them.
-            channel.mIsFinished = true;
-            continue;
-        }
-
-        ValidateChannel(channel);
 
         OutputSubframe channelSubframe = {};
-        RenderChannel(channel, channelAux, channelSubframe);
+        if (channel.mWaveAramAddress == 0) {
+            RenderOscChannel(channel, channelAux, channelSubframe);
+        } else {
+            ValidateChannel(channel);
+            RenderChannel(channel, channelAux, channelSubframe);
+        }
 
         if (EnableReverb) {
             // scale the input to the reverb rather than using wet/dry on the output.
