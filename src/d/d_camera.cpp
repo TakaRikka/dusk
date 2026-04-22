@@ -844,6 +844,7 @@ void dCamera_c::updatePad() {
     }
     temp1 = sp68;
 
+    /*
     if (mCamTypeData[mCurType].field_0x18[temp1][4] < 0) {
         sp6B = false;
         if (mGear == -1) {
@@ -896,6 +897,7 @@ void dCamera_c::updatePad() {
             mCStickYHoldCount = 0;
         }
     }
+    */
 
     field_0x223 = 0;
     mCameraInputActive = 0;
@@ -4604,6 +4606,26 @@ bool dCamera_c::chaseCamera(s32 param_0) {
 
     sp110 = mViewCache.mDirection.R();
     mViewCache.mDirection.R(mViewCache.mDirection.R() + (fVar55 - mViewCache.mDirection.R()) * chase->field_0x74);
+
+    cXyz camMovement = {mPadInfo.mCStick.mLastPosX, mPadInfo.mCStick.mLastPosY, 0.0f};
+    f32 magnitude = sqrt(mPadInfo.mCStick.mLastPosX * mPadInfo.mCStick.mLastPosX +
+                         mPadInfo.mCStick.mLastPosY * mPadInfo.mCStick.mLastPosY);
+
+    if (mPadInfo.mCStick.mLastPosX != 0 || mPadInfo.mCStick.mLastPosY != 0) {
+        camMovement = camMovement.normalize();
+        chase->xAngle += camMovement.x * magnitude * 5.0f;
+        chase->yAngle += camMovement.y * magnitude * 5.0f;
+    }
+
+    if (chase->yAngle > 80.0f) {
+        chase->yAngle = 80.0f;
+    } else if (chase->yAngle < -35.0f) {
+        chase->yAngle = -35.0f;
+    }
+
+    mViewCache.mDirection.mAzimuth = cSAngle(chase->xAngle);
+    mViewCache.mDirection.mInclination = cSAngle(chase->yAngle);
+
     chase->field_0x64 = mViewCache.mCenter + mViewCache.mDirection.Xyz();
     mViewCache.mEye = chase->field_0x64;
 

@@ -273,6 +273,8 @@ public:
         /* 0xA4 */ f32 field_0xa4;
         /* 0xA8 */ int field_0xa8;
         /* 0xAC */ f32 field_0xac;
+        f32 xAngle;
+        f32 yAngle;
     };
 
     struct LockOnData {
