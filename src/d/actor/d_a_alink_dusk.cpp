@@ -5,9 +5,10 @@
 #include "d/d_meter2_info.h"
 
 cXyz currentGamepadColor = {0, 0, 0};
+cXyz currentGamepadFlashColor = {0, 0, 0};
 cXyz finalGamepadColor = {0, 0, 0};
 float lerpSpeed = 0.0f;
-const cXyz duskColor = {30, 30, -30};
+const cXyz duskColor = {45, 45, -45};
 
 const cXyz heartColor1 = {255, 0, 0};
 const cXyz heartColor2 = {155, 5, 5};
@@ -46,17 +47,20 @@ void daAlink_c::handleGamepadColor() {
         setColor = true;
     }
 
-    u8 linkHp = Z2GetLink()->getLinkHp();
-    if (linkHp <= 2) {
-        FadeLED(heartColor1, 2.0f);
-        setColor = true;
-    } else if (linkHp <= 4) {
-        FadeLED(heartColor2, 2.0f);
-        setColor = true;
-    } else if (linkHp <= 6) {
-        FadeLED(heartColor3, 2.0f);
-        setColor = true;
+    if (!checkEventRun()) {
+        u8 linkHp = Z2GetLink()->getLinkHp();
+        if (linkHp <= 2) {
+            FadeLED(heartColor1, 2.0f);
+            setColor = true;
+        } else if (linkHp <= 4) {
+            FadeLED(heartColor2, 2.0f);
+            setColor = true;
+        } else if (linkHp <= 6) {
+            FadeLED(heartColor3, 2.0f);
+            setColor = true;
+        }
     }
+
 
     if (!setColor) {
         if (checkWolf()) {
@@ -92,6 +96,8 @@ void daAlink_c::handleGamepadColor() {
         AddGamepadCurrentColor(duskColor);
     }
 
+    AddGamepadCurrentColor(currentGamepadFlashColor);
+
     if (finalGamepadColor.x > 255)
         finalGamepadColor.x = 255;
     if (finalGamepadColor.x < 0)
@@ -108,7 +114,8 @@ void daAlink_c::handleGamepadColor() {
         finalGamepadColor.z = 0;
 
     currentGamepadColor = LerpColor(currentGamepadColor, finalGamepadColor, lerpSpeed);
-    PADSetColor(PAD_1, (u8)currentGamepadColor.x, (u8)currentGamepadColor.y, (u8)currentGamepadColor.z);
+    PADSetColor(PAD_CHAN0, (u8)currentGamepadColor.x, (u8)currentGamepadColor.y,
+                (u8)currentGamepadColor.z);
 }
 
 void daAlink_c::handleWolfHowl() {
