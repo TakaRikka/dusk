@@ -17,6 +17,7 @@ std::unordered_map<uintptr_t, clock::time_point> s_interval_last_sample;
 
 constexpr clock::duration kSimPeriodDuration =
     std::chrono::duration_cast<clock::duration>(std::chrono::duration<float>(sim_pace()));
+constexpr clock::duration kAbnormalGapResetThreshold = std::chrono::milliseconds(250);
 constexpr int kMaxSimTicksPerFrame = 2;
 
 void ensure_initialized() {
@@ -30,14 +31,15 @@ void ensure_initialized() {
 
 void reset_frame_timer() {
     s_previous_sample = clock::now();
-    s_current_snapshot_time = s_previous_sample;
+    s_current_snapshot_time = s_previous_sample - kSimPeriodDuration;
 }
 
 MainLoopPacer advance_main_loop() {
     ensure_initialized();
 
     const clock::time_point now = clock::now();
-    const float presentation_dt = std::chrono::duration<float>(now - s_previous_sample).count();
+    const clock::duration frame_gap = now - s_previous_sample;
+    const float presentation_dt = std::chrono::duration<float>(frame_gap).count();
     s_previous_sample = now;
 
     MainLoopPacer out{};
@@ -51,6 +53,12 @@ MainLoopPacer advance_main_loop() {
     if (!should_interpolate) {
         s_current_snapshot_time = now;
         out.sim_ticks_to_run = 1;
+        return out;
+    }
+
+    if (frame_gap > kAbnormalGapResetThreshold) {
+        s_current_snapshot_time = now - kSimPeriodDuration;
+        out.sim_ticks_to_run = 0;
         return out;
     }
 
