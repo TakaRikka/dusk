@@ -3,7 +3,7 @@
 
 namespace dusk::gyro {
 namespace {
-constexpr s32   kRollgoalTableMaxOffset = 12000;
+constexpr s32   kRollgoalTableMaxOffset = 6500;
 constexpr float kGyroEmaAlphaMin = 0.05f;
 constexpr float kGyroEmaAlphaMax = 1.0f;
 
