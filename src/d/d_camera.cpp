@@ -800,6 +800,10 @@ void dCamera_c::updatePad() {
         }
 
         mLockLActive = 1;
+
+        #if TARGET_PC
+        mCamParam.mManualMode = 0;
+        #endif
     } else {
         mLockLJustActivated = 0;
         mLockLActive = 0;
@@ -844,13 +848,18 @@ void dCamera_c::updatePad() {
     }
     temp1 = sp68;
 
-    /*
     if (mCamTypeData[mCurType].field_0x18[temp1][4] < 0) {
         sp6B = false;
         if (mGear == -1) {
             mGear = 0;
         }
     }
+
+    #if TARGET_PC
+    if (mCamParam.mManualMode) {
+        return;
+    }
+    #endif
 
     if ((var_r30 != 1 && var_r30 != 8 && var_r30 != 7) || mCamParam.Flag(mCamStyle, 0x80)) {
         sp6C = false;
@@ -897,7 +906,6 @@ void dCamera_c::updatePad() {
             mCStickYHoldCount = 0;
         }
     }
-    */
 
     field_0x223 = 0;
     mCameraInputActive = 0;
@@ -1169,6 +1177,13 @@ bool dCamera_c::Run() {
         }
     } else {
         sp0F = (this->*engine_tbl[mCamParam.Algorythmn(mCamStyle)])(mCamStyle);
+
+        #if TARGET_PC
+        if (mCamParam.Algorythmn(mCamStyle) != 1) {
+            mCamParam.mManualMode = 0;
+        }
+        #endif
+
         field_0x170++;
         field_0x160++;
         mCurCamStyleTimer++;
@@ -4607,24 +4622,34 @@ bool dCamera_c::chaseCamera(s32 param_0) {
     sp110 = mViewCache.mDirection.R();
     mViewCache.mDirection.R(mViewCache.mDirection.R() + (fVar55 - mViewCache.mDirection.R()) * chase->field_0x74);
 
+    #if TARGET_PC
     cXyz camMovement = {mPadInfo.mCStick.mLastPosX, mPadInfo.mCStick.mLastPosY, 0.0f};
     f32 magnitude = sqrt(mPadInfo.mCStick.mLastPosX * mPadInfo.mCStick.mLastPosX +
                          mPadInfo.mCStick.mLastPosY * mPadInfo.mCStick.mLastPosY);
 
     if (mPadInfo.mCStick.mLastPosX != 0 || mPadInfo.mCStick.mLastPosY != 0) {
+        if (!mCamParam.mManualMode) {
+            mCamParam.mManualMode = 1;
+            chase->xAngle = mViewCache.mDirection.mAzimuth.Degree();
+            chase->yAngle = mViewCache.mDirection.mInclination.Degree();
+        }
+
         camMovement = camMovement.normalize();
         chase->xAngle += camMovement.x * magnitude * 5.0f;
         chase->yAngle += camMovement.y * magnitude * 5.0f;
     }
 
-    if (chase->yAngle > 80.0f) {
-        chase->yAngle = 80.0f;
-    } else if (chase->yAngle < -35.0f) {
-        chase->yAngle = -35.0f;
-    }
+    if (mCamParam.mManualMode) {
+        if (chase->yAngle > 80.0f) {
+            chase->yAngle = 80.0f;
+        } else if (chase->yAngle < -35.0f) {
+            chase->yAngle = -35.0f;
+        }
 
-    mViewCache.mDirection.mAzimuth = cSAngle(chase->xAngle);
-    mViewCache.mDirection.mInclination = cSAngle(chase->yAngle);
+        mViewCache.mDirection.mAzimuth = cSAngle(chase->xAngle);
+        mViewCache.mDirection.mInclination = cSAngle(chase->yAngle);
+    }
+    #endif
 
     chase->field_0x64 = mViewCache.mCenter + mViewCache.mDirection.Xyz();
     mViewCache.mEye = chase->field_0x64;
