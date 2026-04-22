@@ -1,13 +1,8 @@
-#ifndef DUSK_GAME_CLOCK_H
-#define DUSK_GAME_CLOCK_H
+#pragma once
 
-#include <stddef.h>
-
-namespace dusk {
-namespace game_clock {
+namespace dusk::game_clock {
 
 void ensure_initialized();
-void reset_accumulator();
 void reset_frame_timer();
 
 constexpr float sim_pace() { return 1.0f / 30.0f; }
@@ -18,16 +13,14 @@ constexpr float ui_initial_dt() { return 1.0f / 60.0f; }
 struct MainLoopPacer {
     float presentation_dt_seconds;
     bool is_interpolating;
-    bool do_sim_tick;
-    float interpolation_step;
+    int sim_ticks_to_run;
     float sim_pace;
 };
 
 MainLoopPacer advance_main_loop();
+void commit_sim_tick();
+float sample_interpolation_step();
 
 float consume_interval(const void* consumer);
 
-}  // namespace game_clock
-}  // namespace dusk
-
-#endif  // DUSK_GAME_CLOCK_H
+} // namespace dusk::game_clock

@@ -5,34 +5,32 @@
 #include <cmath>
 #include <unordered_map>
 
-namespace dusk {
-namespace game_clock {
+namespace dusk::game_clock {
 
 using clock = std::chrono::steady_clock;
 
 bool s_initialized = false;
 clock::time_point s_previous_sample{};
-float s_sim_accumulator = 0.0f;
+clock::time_point s_current_snapshot_time{};
 
 std::unordered_map<uintptr_t, clock::time_point> s_interval_last_sample;
+
+constexpr clock::duration kSimPeriodDuration =
+    std::chrono::duration_cast<clock::duration>(std::chrono::duration<float>(sim_pace()));
+constexpr int kMaxSimTicksPerFrame = 2;
 
 void ensure_initialized() {
     if (s_initialized) {
         return;
     }
     s_previous_sample = clock::now();
-    s_sim_accumulator = sim_pace();
+    s_current_snapshot_time = s_previous_sample;
     s_initialized = true;
-}
-
-void reset_accumulator() {
-    ensure_initialized();
-    s_sim_accumulator = fmodf(s_sim_accumulator, sim_pace());
 }
 
 void reset_frame_timer() {
     s_previous_sample = clock::now();
-    s_sim_accumulator = 0.0f;
+    s_current_snapshot_time = s_previous_sample;
 }
 
 MainLoopPacer advance_main_loop() {
@@ -42,25 +40,41 @@ MainLoopPacer advance_main_loop() {
     const float presentation_dt = std::chrono::duration<float>(now - s_previous_sample).count();
     s_previous_sample = now;
 
-    s_sim_accumulator += presentation_dt;
-
     MainLoopPacer out{};
     out.presentation_dt_seconds = presentation_dt;
 
-    const bool should_interpolate = dusk::getSettings().game.enableFrameInterpolation && !dusk::getTransientSettings().skipFrameRateLimit;
+    const bool should_interpolate = dusk::getSettings().game.enableFrameInterpolation &&
+                                    !dusk::getTransientSettings().skipFrameRateLimit;
     out.is_interpolating = should_interpolate;
     out.sim_pace = sim_pace();
 
     if (!should_interpolate) {
-        s_sim_accumulator = 0.0f;
-        out.do_sim_tick = true;
-        out.interpolation_step = 0.0f;
-        return out;
-    } else {
-        out.do_sim_tick = s_sim_accumulator >= sim_pace();
-        out.interpolation_step = out.do_sim_tick ? 0.0f : s_sim_accumulator / sim_pace();
+        s_current_snapshot_time = now;
+        out.sim_ticks_to_run = 1;
         return out;
     }
+
+    int sim_ticks_to_run = 0;
+    clock::time_point projected_snapshot_time = s_current_snapshot_time;
+    const clock::time_point render_time = now - kSimPeriodDuration;
+    while (sim_ticks_to_run < kMaxSimTicksPerFrame && projected_snapshot_time < render_time) {
+        projected_snapshot_time += kSimPeriodDuration;
+        sim_ticks_to_run++;
+    }
+    out.sim_ticks_to_run = sim_ticks_to_run;
+    return out;
+}
+
+void commit_sim_tick() {
+    ensure_initialized();
+    s_current_snapshot_time += kSimPeriodDuration;
+}
+
+float sample_interpolation_step() {
+    ensure_initialized();
+    const float step =
+        std::chrono::duration<float>(clock::now() - s_current_snapshot_time).count() / sim_pace();
+    return std::clamp(step, 0.0f, 1.0f);
 }
 
 float consume_interval(const void* consumer) {
@@ -78,5 +92,4 @@ float consume_interval(const void* consumer) {
     return dt;
 }
 
-}  // namespace game_clock
-}  // namespace dusk
+}  // namespace dusk::game_clock
