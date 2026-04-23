@@ -469,6 +469,12 @@ u8 OSGetLanguage() {
 }
 
 static void LanguageInit() {
+    // Keep language at 0 (English) if not on a PAL disk.
+    // Doubt this matters, but avoid funky shit.
+    if (!dusk::version::isRegionPal()) {
+        return;
+    }
+
     // Cache this to avoid funky shenanigans.
     selectedLanguage = static_cast<u8>(dusk::getSettings().game.language.getValue());
 }

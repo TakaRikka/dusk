@@ -21,6 +21,8 @@ namespace dusk::version {
 
     GameVersion getGameVersion();
 
+    const DVDDiskID& getDiskID();
+
     void init();
 
     template<typename T>

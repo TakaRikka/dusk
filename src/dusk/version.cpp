@@ -7,9 +7,9 @@ namespace dusk::version {
 using namespace std::string_view_literals;
 
 static GameVersion gameVersion;
+static DVDDiskID diskId;
 
 void init() {
-    DVDDiskID diskId;
     if (!DVDLowReadDiskID(&diskId, nullptr)) {
         DuskLog.fatal("DVDLowReadDiskID failed to return instantly.");
     }
@@ -57,6 +57,10 @@ bool isRegionPal() {
 
 GameVersion getGameVersion() {
     return gameVersion;
+}
+
+const DVDDiskID& getDiskID() {
+    return diskId;
 }
 
 }  // namespace dusk::version
