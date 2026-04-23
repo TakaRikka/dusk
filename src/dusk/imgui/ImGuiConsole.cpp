@@ -309,6 +309,10 @@ namespace dusk {
             ImGuiMenuGame::ToggleFullscreen();
         }
 
+        if (ImGui::IsKeyPressed(ImGuiKey_Backslash)) {
+            getSettings().game.disableMainHUD.setValue(!getSettings().game.disableMainHUD);
+        }
+
         if (!dusk::IsGameLaunched) {
             m_preLaunchWindow.draw();
         }

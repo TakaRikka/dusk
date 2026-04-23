@@ -24,9 +24,10 @@
 #include "d/actor/d_a_horse.h"
 #include <cstring>
 
+#if TARGET_PC
 #include "dusk/memory.h"
-
-#include "dusk/memory.h"
+#include "dusk/settings.h"
+#endif
 
 int dMeter2_c::_create() {
     stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
@@ -422,7 +423,11 @@ void dMeter2_c::setLifeZero() {
 }
 
 void dMeter2_c::checkStatus() {
-    mStatus = 0xFFFFFFFF;
+#if TARGET_PC
+    mStatus = dusk::getSettings().game.disableMainHUD ? 0xFFFFFFFF : 0;
+#else
+    mStatus = 0;
+#endif
 
     field_0x12c = field_0x128;
 
