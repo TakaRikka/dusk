@@ -194,7 +194,7 @@ namespace dusk {
             
             config::ImGuiCheckbox("Enable Rotating Link Doll", getSettings().game.enableLinkDollRotation);
             if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Enables Rotating Link in the collection menu with the C-Stick");
+                ImGui::SetTooltip("Enables rotating Link in the collection menu with the C-Stick");
             }
 
             ImGui::SeparatorText("Difficulty");
