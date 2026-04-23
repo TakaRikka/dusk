@@ -1179,6 +1179,7 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
 }
 
 static void trimming(view_class* param_0, view_port_class* param_1) {
+    return;
     ZoneScoped;
     UNUSED(param_0);
 
