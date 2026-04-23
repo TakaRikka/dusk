@@ -276,6 +276,7 @@ void ImGuiStateShare::draw(bool& open) {
     }
 
     const bool gameRunning = dusk::IsGameLaunched;
+    const bool loadInProgress = dusk::getTransientSettings().stateShareLoadActive;
 
     const float rowH  = ImGui::GetTextLineHeightWithSpacing();
     const float listH = rowH * 8 + ImGui::GetStyle().FramePadding.y * 2;
@@ -316,11 +317,11 @@ void ImGuiStateShare::draw(bool& open) {
         }
 
         ImGui::SameLine();
-        if (!gameRunning) { ImGui::BeginDisabled(); }
+        if (!gameRunning || loadInProgress) { ImGui::BeginDisabled(); }
         if (ImGui::Button("Load")) {
             applyEncodedState(m_states[i].encoded, m_states[i].name);
         }
-        if (!gameRunning) { ImGui::EndDisabled(); }
+        if (!gameRunning || loadInProgress) { ImGui::EndDisabled(); }
 
         ImGui::SameLine();
         if (ImGui::Button("Copy")) {
