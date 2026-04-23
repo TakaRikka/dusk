@@ -69,6 +69,8 @@ struct UserSettings {
         ConfigVar<bool> invertCameraXAxis;
         ConfigVar<bool> disableMainHUD;
         ConfigVar<bool> pauseOnFocusLost;
+        ConfigVar<bool> enableLinkDollRotation;
+
 
         // Graphics
         ConfigVar<BloomMode> bloomMode;
