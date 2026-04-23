@@ -303,6 +303,7 @@ void dMsgScrnTalk_c::exec() {
 }
 
 void dMsgScrnTalk_c::drawSelf() {
+    return;
     J2DGrafContext* grafContext[1];
     grafContext[0] = dComIfGp_getCurrentGrafPort();
     grafContext[0]->setup2D();

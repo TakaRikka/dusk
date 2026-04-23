@@ -57,12 +57,14 @@ void dMsgScrnBase_c::init() {
 }
 
 void dMsgScrnBase_c::multiDraw() {
+    return;
     if (field_0x48 != NULL) {
         dComIfGd_set2DOpa(field_0x48);
     }
 }
 
 void dMsgScrnBase_c::draw() {
+    return;
     J2DGrafContext* ctx = dComIfGp_getCurrentGrafPort();
 
     ctx->setup2D();
@@ -72,10 +74,12 @@ void dMsgScrnBase_c::draw() {
 }
 
 void dMsgScrnBase_c::drawSelf() {
+    return;
     drawOutFont(0.0f, 0.0f, 1.0f);
 }
 
 void dMsgScrnBase_c::drawOutFont(f32 param_0, f32 param_1, f32 param_2) {
+    return;
     mpOutFont->draw(NULL, param_0, param_1, param_2);
 }
 

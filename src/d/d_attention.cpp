@@ -1422,6 +1422,7 @@ int dAttention_c::Run() {
 }
 
 void dAttention_c::Draw() {
+    return;
     if (mAttParam.CheckFlag(dAttParam_c::EFlag_ARROW_OFF)) {
         draw[0].field_0x173 = 3;
         draw[1].field_0x173 = 3;

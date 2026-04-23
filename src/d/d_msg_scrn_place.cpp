@@ -127,6 +127,7 @@ void dMsgScrnPlace_c::exec() {
 }
 
 void dMsgScrnPlace_c::drawSelf() {
+    return;
     J2DGrafContext* grafContext = dComIfGp_getCurrentGrafPort();
     grafContext->setup2D();
     drawOutFont(0.0f, 0.0f, 1.0f);

@@ -65,6 +65,7 @@ dMsgScrnArrow_c::~dMsgScrnArrow_c() {
 }
 
 void dMsgScrnArrow_c::draw() {
+    return;
     J2DGrafContext* graf_ctx = dComIfGp_getCurrentGrafPort();
     mpScreen->draw(0.0f, 0.0f, graf_ctx);
 }

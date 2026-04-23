@@ -176,6 +176,7 @@ void dMsgScrnKanban_c::exec() {
 }
 
 void dMsgScrnKanban_c::draw() {
+    return;
     J2DGrafContext* grafContext = dComIfGp_getCurrentGrafPort();
     grafContext->setup2D();
     mpScreen->draw(0.0f, 0.0f, grafContext);

@@ -422,13 +422,7 @@ void dMeter2_c::setLifeZero() {
 }
 
 void dMeter2_c::checkStatus() {
-    mStatus = 0;
-
-    #if TARGET_PC
-    if (dusk::getSettings().game.disableMainHUD) {
-        mStatus |= 0xF0000000;
-    }
-    #endif
+    mStatus = 0xFFFFFFFF;
 
     field_0x12c = field_0x128;
 
