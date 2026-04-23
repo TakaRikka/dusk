@@ -48,6 +48,9 @@ public:
     }
 
 #ifdef TARGET_PC
+    f32 getPositionX() const { return mPositionX; }
+    f32 getPositionY() const { return mPositionY; }
+
     void refreshAspectScale();
 #endif
 
