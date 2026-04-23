@@ -64,6 +64,9 @@ BOOL JUTGamePad::init() {
 void JUTGamePad::clear() {
     mButtonReset.mReset = false;
     field_0xa8 = 1;
+#if TARGET_PC
+    mResetHoldFrameCount = 0;
+#endif
 }
 
 PADStatus JUTGamePad::mPadStatus[4];
@@ -219,11 +222,19 @@ void JUTGamePad::update() {
             mButtonReset.mReset = false;
         } else if (!JUTGamePad::C3ButtonReset::sResetOccurred) {
             if (mButtonReset.mReset == true) {
+#if TARGET_PC
+                checkResetCallback(++mResetHoldFrameCount * (OS_TIMER_CLOCK / 30));
+#else
                 OSTime hold_time = OSGetTime() - mResetHoldStartTime;
                 checkResetCallback(hold_time);
+#endif
             } else {
                 mButtonReset.mReset = true;
+#if TARGET_PC
+                mResetHoldFrameCount = 0;
+#else
                 mResetHoldStartTime = OSGetTime();
+#endif
             }
         }
 

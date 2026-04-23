@@ -16,6 +16,7 @@ void ensure_initialized();
 
 void begin_record();
 void end_record();
+void begin_sim_tick();
 void begin_frame(bool enabled, bool is_sim_frame, float step);
 void interpolate();
 float get_interpolation_step();

@@ -263,6 +263,9 @@ public:
     /* 0x9C */ u8 field_0x9c[4];
     /* 0xA0 */ OSTime mResetHoldStartTime;
     /* 0xA8 */ u8 field_0xa8;
+#if TARGET_PC
+    u32 mResetHoldFrameCount;
+#endif
 };
 
 /**

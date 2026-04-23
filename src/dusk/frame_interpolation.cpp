@@ -127,14 +127,20 @@ void ensure_initialized() {
     s_initialized = true;
 }
 
+void begin_sim_tick() {
+    ensure_initialized();
+    if (!g_enabled) {
+        return;
+    }
+
+    s_interpolationCallBackWork.clear();
+    s_cam_prev = std::move(s_cam_curr);
+}
+
 void begin_frame(bool enabled, bool is_sim_frame, float step) {
     g_enabled = enabled;
     g_is_sim_frame = is_sim_frame;
     g_step = std::clamp(step, 0.0f, 1.0f);
-    if (is_sim_frame) {
-        s_interpolationCallBackWork.clear();
-        s_cam_prev = std::move(s_cam_curr);
-    }
 }
 
 bool is_enabled() {

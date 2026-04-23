@@ -85,6 +85,8 @@ struct UserSettings {
         ConfigVar<bool> invertCameraXAxis;
         ConfigVar<bool> disableMainHUD;
         ConfigVar<bool> pauseOnFocusLost;
+        ConfigVar<bool> enableLinkDollRotation;
+
 
         // Graphics
         ConfigVar<BloomMode> bloomMode;
@@ -93,6 +95,7 @@ struct UserSettings {
         ConfigVar<bool> enableFrameInterpolation;
         ConfigVar<int> internalResolutionScale;
         ConfigVar<int> shadowResolutionMultiplier;
+        ConfigVar<bool> enableDepthOfField;
 
         // Audio
         ConfigVar<bool> noLowHpSound;
@@ -116,6 +119,7 @@ struct UserSettings {
         ConfigVar<bool> infiniteOil;
         ConfigVar<bool> infiniteOxygen;
         ConfigVar<bool> infiniteRupees;
+        ConfigVar<bool> enableIndefiniteItemDrops;
         ConfigVar<bool> moonJump;
         ConfigVar<bool> superClawshot;
         ConfigVar<bool> alwaysGreatspin;
@@ -163,6 +167,7 @@ struct TransientSettings {
     CollisionViewSettings collisionView;
     bool skipFrameRateLimit;
     bool moveLinkActive;
+    bool stateShareLoadActive;
 };
 
 TransientSettings& getTransientSettings();

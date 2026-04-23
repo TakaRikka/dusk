@@ -206,6 +206,11 @@ private:
     /* 0x6D3 */ u8 field_0x6d3;
 #if TARGET_PC
     f32 mSelectItemSlideElapsed[4];
+    f32 mCursorInterpPrevX;
+    f32 mCursorInterpPrevY;
+    f32 mCursorInterpCurrX;
+    f32 mCursorInterpCurrY;
+    bool mCursorInterpInit;
 #endif
 };
 

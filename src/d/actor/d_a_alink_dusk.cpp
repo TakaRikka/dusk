@@ -154,6 +154,7 @@ bool daAlink_c::checkGyroAimContext() {
     case PROC_BOW_SUBJECT:
     case PROC_BOOMERANG_SUBJECT:
     case PROC_COPY_ROD_SUBJECT:
+    case PROC_HAWK_SUBJECT:
     case PROC_HOOKSHOT_SUBJECT:
     case PROC_SWIM_HOOKSHOT_SUBJECT:
     case PROC_HORSE_BOW_SUBJECT:

@@ -185,6 +185,13 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
         field_0x682 = 0xc000;
         break;
     }
+#if TARGET_PC
+    mCursorInterpPrevX = 0.0f;
+    mCursorInterpPrevY = 0.0f;
+    mCursorInterpCurrX = 0.0f;
+    mCursorInterpCurrY = 0.0f;
+    mCursorInterpInit = false;
+#endif
     for (int i = 0; i < 4; i++) {
         field_0x674[i] = 0;
 #if TARGET_PC
@@ -631,6 +638,34 @@ void dMenu_Ring_c::_draw() {
     } else {
         drawSelectItem();
         drawItem2();
+#if TARGET_PC
+        if (dusk::frame_interp::is_enabled() && mAlphaRate >= 1.0f) {
+            f32 cursorX = mpDrawCursor->getPositionX();
+            f32 cursorY = mpDrawCursor->getPositionY();
+
+            if (dusk::frame_interp::get_ui_tick_pending()) {
+                mCursorInterpPrevX = mCursorInterpCurrX;
+                mCursorInterpPrevY = mCursorInterpCurrY;
+                mCursorInterpCurrX = cursorX;
+                mCursorInterpCurrY = cursorY;
+
+                if (!mCursorInterpInit) {
+                    mCursorInterpPrevX = mCursorInterpCurrX;
+                    mCursorInterpPrevY = mCursorInterpCurrY;
+                    mCursorInterpInit = true;
+                }
+            }
+            if (mCursorInterpInit) {
+                const f32 step = dusk::frame_interp::get_interpolation_step();
+                mpDrawCursor->setPos(
+                    mCursorInterpPrevX + (mCursorInterpCurrX - mCursorInterpPrevX) * step,
+                    mCursorInterpPrevY + (mCursorInterpCurrY - mCursorInterpPrevY) * step
+                );
+            }
+        } else {
+            mCursorInterpInit = false;
+        }
+#endif
         mpDrawCursor->draw();
         mpItemExplain->trans(mCenterPosX, mCenterPosY);
         mpItemExplain->draw((J2DOrthoGraph*)grafPort);

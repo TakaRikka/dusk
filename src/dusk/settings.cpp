@@ -45,6 +45,7 @@ UserSettings g_userSettings = {
         .invertCameraXAxis {"game.invertCameraXAxis", false},
         .disableMainHUD {"game.disableMainHUD", false},
         .pauseOnFocusLost {"game.pauseOnFocusLost", false},
+        .enableLinkDollRotation = {"game.enableLinkDollRotation", false },
 
         // Graphics
         .bloomMode {"game.bloomMode", BloomMode::Classic},
@@ -53,6 +54,7 @@ UserSettings g_userSettings = {
         .enableFrameInterpolation = {"game.enableFrameInterpolation", false},
         .internalResolutionScale {"game.internalResolutionScale", 0},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
+        .enableDepthOfField {"game.enableDepthOfField", true},
 
         // Audio
         .noLowHpSound {"game.noLowHpSound", false},
@@ -76,6 +78,7 @@ UserSettings g_userSettings = {
         .infiniteOil{"game.infiniteOil", false},
         .infiniteOxygen{"game.infiniteOxygen", false},
         .infiniteRupees{"game.infiniteRupees", false},
+        .enableIndefiniteItemDrops {"game.enableIndefiniteItemDrops", false},
         .moonJump{"game.moonJump", false},
         .superClawshot{"game.superClawshot", false},
         .alwaysGreatspin{"game.alwaysGreatspin", false},
@@ -146,10 +149,12 @@ void registerSettings() {
     Register(g_userSettings.game.disableWaterRefraction);
     Register(g_userSettings.game.internalResolutionScale);
     Register(g_userSettings.game.shadowResolutionMultiplier);
+    Register(g_userSettings.game.enableDepthOfField);
     Register(g_userSettings.game.enableFastIronBoots);
     Register(g_userSettings.game.canTransformAnywhere);
     Register(g_userSettings.game.freeMagicArmor);
     Register(g_userSettings.game.restoreWiiGlitches);
+    Register(g_userSettings.game.enableLinkDollRotation);
     Register(g_userSettings.game.noMissClimbing);
     Register(g_userSettings.game.noLowHpSound);
     Register(g_userSettings.game.midnasLamentNonStop);
@@ -161,6 +166,7 @@ void registerSettings() {
     Register(g_userSettings.game.infiniteOil);
     Register(g_userSettings.game.infiniteOxygen);
     Register(g_userSettings.game.infiniteRupees);
+    Register(g_userSettings.game.enableIndefiniteItemDrops);
     Register(g_userSettings.game.moonJump);
     Register(g_userSettings.game.superClawshot);
     Register(g_userSettings.game.alwaysGreatspin);

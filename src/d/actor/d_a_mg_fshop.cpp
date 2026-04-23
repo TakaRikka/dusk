@@ -761,6 +761,11 @@ static void koro2_game(fshop_class* i_this) {
             sp5C.x = mDoCPd_c::getStickX3D(PAD_1);
             sp5C.y = 0.0f;
             sp5C.z = mDoCPd_c::getStickY(PAD_1);
+#if TARGET_PC
+            if (dusk::getSettings().game.enableMirrorMode) {
+                sp5C.x = -sp5C.x;
+            }
+#endif
             MtxPosition(&sp5C, &sp68);
 
             f32 reg_f31 = sp68.x;
@@ -782,20 +787,15 @@ static void koro2_game(fshop_class* i_this) {
                 reg_f30 = 0.0f;
             }
 
+            s16 gyro_ax = 0;
+            s16 gyro_az = 0;
 #if TARGET_PC
             if (dusk::getSettings().game.enableGyroRollgoal) {
-                s16 rg_add_x;
-                s16 rg_add_z;
-                dusk::gyro::rollgoalTableOffset(rg_add_x, rg_add_z);
-                s16 tgt_x = static_cast<s16>(reg_f30 * (-6000.0f + JREG_F(7))) + rg_add_x;
-                s16 tgt_z = static_cast<s16>(reg_f31 * (-6000.0f + JREG_F(8))) + rg_add_z;
-                cLib_addCalcAngleS2(&i_this->field_0x4020.x, tgt_x, 4, 0x200);
-                cLib_addCalcAngleS2(&i_this->field_0x4020.z, tgt_z, 4, 0x200);
+                dusk::gyro::rollgoalTableOffset(gyro_ax, gyro_az);
             }
-#else
-            cLib_addCalcAngleS2(&i_this->field_0x4020.x, reg_f30 * (-6000.0f + JREG_F(7)), 4, 0x200);
-            cLib_addCalcAngleS2(&i_this->field_0x4020.z, reg_f31 * (-6000.0f + JREG_F(8)), 4, 0x200);
 #endif
+            cLib_addCalcAngleS2(&i_this->field_0x4020.x, reg_f30 * (-6000.0f + JREG_F(7)) + gyro_ax, 4, 0x200);
+            cLib_addCalcAngleS2(&i_this->field_0x4020.z, reg_f31 * (-6000.0f + JREG_F(8)) + gyro_az, 4, 0x200);
         }
 #if TARGET_PC
         if (i_this->field_0x4010 != 2) {
