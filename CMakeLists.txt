@@ -281,7 +281,7 @@ set(DUSK_TP_VERSION ${DUSK_GAME_NAME}${DUSK_GAME_VERSION})
 
 message(STATUS "dusk: Game Version: ${DUSK_TP_VERSION}")
 
-source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${JSYSTEM_FILES} ${JSYSTEM_DEBUG_FILES} ${REL_FILES})
+source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${REL_FILES})
 source_group("dusk" FILES ${DUSK_FILES})
 
 set(GAME_COMPILE_DEFS TARGET_PC WIDESCREEN_SUPPORT=1 AVOID_UB=1 VERSION=0
@@ -374,7 +374,7 @@ endif ()
 
 # game_debug is for game code files that we know work when compiled with DEBUG=1
 # Of course, if building a release build, this distinction is irrelevant
-add_library(game_debug OBJECT ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES}
+add_library(game_debug OBJECT ${SSYSTEM_FILES}
         src/dusk/audio/DuskAudioSystem.cpp
         src/dusk/audio/JASCriticalSection.cpp
         src/dusk/audio/DuskDsp.cpp
@@ -383,10 +383,20 @@ add_library(game_debug OBJECT ${JSYSTEM_DEBUG_FILES} ${SSYSTEM_FILES}
         src/dusk/imgui/ImGuiAudio.cpp)
 
 # game_base is for all other game code files
-add_library(game_base OBJECT ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES})
+add_library(game_base OBJECT ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${REL_FILES} ${DUSK_FILES} ${DOLPHIN_FILES})
 
 target_compile_definitions(game_debug PRIVATE ${GAME_COMPILE_DEFS} $<$<CONFIG:Debug>:DEBUG=1> $<$<CONFIG:Debug>:PARTIAL_DEBUG=1>)
 target_compile_definitions(game_base PRIVATE ${GAME_COMPILE_DEFS} NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0 $<$<CONFIG:Debug>:PARTIAL_DEBUG=1>)
+
+foreach(jsystem_lib IN LISTS JSYSTEM_LIBRARIES)
+    target_compile_definitions(${jsystem_lib} PRIVATE
+            ${GAME_COMPILE_DEFS}
+            $<$<CONFIG:Debug>:DEBUG=1>
+            $<$<CONFIG:Debug>:PARTIAL_DEBUG=1>
+    )
+    target_include_directories(${jsystem_lib} PRIVATE ${GAME_INCLUDE_DIRS})
+    target_link_libraries(${jsystem_lib} PRIVATE ${GAME_LIBS})
+endforeach()
 
 # only apply PCH to game_base since not all headers are necessarily validated with DEBUG=1
 target_precompile_headers(game_base PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/include/dusk_pch.hpp>")
@@ -408,7 +418,7 @@ endif ()
 
 target_compile_definitions(dusk PRIVATE TARGET_PC AVOID_UB=1 VERSION=0)
 target_include_directories(dusk PRIVATE include)
-target_link_libraries(dusk PRIVATE game_base game_debug aurora::main)
+target_link_libraries(dusk PRIVATE game_base game_debug aurora::main ${JSYSTEM_LIBRARIES})
 if (TARGET crashpad_handler)
     add_dependencies(dusk crashpad_handler)
 endif ()

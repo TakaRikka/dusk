@@ -314,7 +314,7 @@ set(SSYSTEM_FILES
         src/SSystem/SStandard/s_basic.cpp
 )
 
-set(JSYSTEM_DEBUG_FILES
+add_library(JSystem_JParticle STATIC
         libs/JSystem/src/JParticle/JPAResourceManager.cpp
         libs/JSystem/src/JParticle/JPAResource.cpp
         libs/JSystem/src/JParticle/JPABaseShape.cpp
@@ -330,10 +330,19 @@ set(JSYSTEM_DEBUG_FILES
         libs/JSystem/src/JParticle/JPAEmitter.cpp
         libs/JSystem/src/JParticle/JPAParticle.cpp
         libs/JSystem/src/JParticle/JPAMath.cpp
+)
+
+add_library(JSystem_JFramework STATIC
         libs/JSystem/src/JFramework/JFWSystem.cpp
         libs/JSystem/src/JFramework/JFWDisplay.cpp
+)
+
+add_library(JSystem_J3DU STATIC
         libs/JSystem/src/J3DU/J3DUClipper.cpp
         libs/JSystem/src/J3DU/J3DUDL.cpp
+)
+
+add_library(JSystem_JKernel STATIC
         libs/JSystem/src/JKernel/JKRHeap.cpp
         libs/JSystem/src/JKernel/JKRExpHeap.cpp
         libs/JSystem/src/JKernel/JKRSolidHeap.cpp
@@ -359,14 +368,23 @@ set(JSYSTEM_DEBUG_FILES
         libs/JSystem/src/JKernel/JKRDvdRipper.cpp
         libs/JSystem/src/JKernel/JKRDvdAramRipper.cpp
         libs/JSystem/src/JKernel/JKRDecomp.cpp
+)
+
+add_library(JSystem_JMath STATIC
         libs/JSystem/src/JMath/JMath.cpp
         libs/JSystem/src/JMath/random.cpp
         libs/JSystem/src/JMath/JMATrigonometric.cpp
+)
+
+add_library(JSystem_JSupport STATIC
         libs/JSystem/src/JSupport/JSUList.cpp
         libs/JSystem/src/JSupport/JSUInputStream.cpp
         libs/JSystem/src/JSupport/JSUOutputStream.cpp
         libs/JSystem/src/JSupport/JSUMemoryStream.cpp
         libs/JSystem/src/JSupport/JSUFileStream.cpp
+)
+
+add_library(JSystem_JUtility STATIC
         libs/JSystem/src/JUtility/JUTCacheFont.cpp
         libs/JSystem/src/JUtility/JUTResource.cpp
         libs/JSystem/src/JUtility/JUTTexture.cpp
@@ -387,6 +405,9 @@ set(JSYSTEM_DEBUG_FILES
         libs/JSystem/src/JUtility/JUTConsole.cpp
         libs/JSystem/src/JUtility/JUTDirectFile.cpp
         libs/JSystem/src/JUtility/JUTFontData_Ascfont_fix12.cpp
+)
+
+add_library(JSystem_JStage STATIC
         libs/JSystem/src/JStage/JSGActor.cpp
         libs/JSystem/src/JStage/JSGAmbientLight.cpp
         libs/JSystem/src/JStage/JSGCamera.cpp
@@ -394,6 +415,9 @@ set(JSYSTEM_DEBUG_FILES
         libs/JSystem/src/JStage/JSGLight.cpp
         libs/JSystem/src/JStage/JSGObject.cpp
         libs/JSystem/src/JStage/JSGSystem.cpp
+)
+
+add_library(JSystem_J2DGraph STATIC
         libs/JSystem/src/J2DGraph/J2DGrafContext.cpp
         libs/JSystem/src/J2DGraph/J2DOrthoGraph.cpp
         libs/JSystem/src/J2DGraph/J2DTevs.cpp
@@ -412,6 +436,9 @@ set(JSYSTEM_DEBUG_FILES
         libs/JSystem/src/J2DGraph/J2DAnmLoader.cpp
         libs/JSystem/src/J2DGraph/J2DAnimation.cpp
         libs/JSystem/src/J2DGraph/J2DManage.cpp
+)
+
+add_library(JSystem_J3DGraphBase STATIC
         libs/JSystem/src/J3DGraphBase/J3DGD.cpp
         libs/JSystem/src/J3DGraphBase/J3DSys.cpp
         libs/JSystem/src/J3DGraphBase/J3DVertex.cpp
@@ -426,6 +453,9 @@ set(JSYSTEM_DEBUG_FILES
         libs/JSystem/src/J3DGraphBase/J3DTevs.cpp
         libs/JSystem/src/J3DGraphBase/J3DDrawBuffer.cpp
         libs/JSystem/src/J3DGraphBase/J3DStruct.cpp
+)
+
+add_library(JSystem_J3DGraphAnimator STATIC
         libs/JSystem/src/J3DGraphAnimator/J3DShapeTable.cpp
         libs/JSystem/src/J3DGraphAnimator/J3DJointTree.cpp
         libs/JSystem/src/J3DGraphAnimator/J3DModelData.cpp
@@ -437,6 +467,9 @@ set(JSYSTEM_DEBUG_FILES
         libs/JSystem/src/J3DGraphAnimator/J3DCluster.cpp
         libs/JSystem/src/J3DGraphAnimator/J3DJoint.cpp
         libs/JSystem/src/J3DGraphAnimator/J3DMaterialAttach.cpp
+)
+
+add_library(JSystem_J3DGraphLoader STATIC
         libs/JSystem/src/J3DGraphLoader/J3DMaterialFactory.cpp
         libs/JSystem/src/J3DGraphLoader/J3DMaterialFactory_v21.cpp
         libs/JSystem/src/J3DGraphLoader/J3DClusterLoader.cpp
@@ -445,6 +478,9 @@ set(JSYSTEM_DEBUG_FILES
         libs/JSystem/src/J3DGraphLoader/J3DJointFactory.cpp
         libs/JSystem/src/J3DGraphLoader/J3DShapeFactory.cpp
         libs/JSystem/src/J3DGraphLoader/J3DAnmLoader.cpp
+)
+
+add_library(JSystem_JStudio STATIC
         libs/JSystem/src/JStudio/JStudio/ctb.cpp
         libs/JSystem/src/JStudio/JStudio/ctb-data.cpp
         libs/JSystem/src/JStudio/JStudio/functionvalue.cpp
@@ -459,6 +495,9 @@ set(JSYSTEM_DEBUG_FILES
         libs/JSystem/src/JStudio/JStudio/stb.cpp
         libs/JSystem/src/JStudio/JStudio/stb-data-parse.cpp
         libs/JSystem/src/JStudio/JStudio/stb-data.cpp
+)
+
+add_library(JSystem_JStudio_JStage STATIC
         libs/JSystem/src/JStudio/JStudio_JStage/control.cpp
         libs/JSystem/src/JStudio/JStudio_JStage/object.cpp
         libs/JSystem/src/JStudio/JStudio_JStage/object-actor.cpp
@@ -466,10 +505,19 @@ set(JSYSTEM_DEBUG_FILES
         libs/JSystem/src/JStudio/JStudio_JStage/object-camera.cpp
         libs/JSystem/src/JStudio/JStudio_JStage/object-fog.cpp
         libs/JSystem/src/JStudio/JStudio_JStage/object-light.cpp
+)
+
+add_library(JSystem_JStudio_JAudio2 STATIC
         libs/JSystem/src/JStudio/JStudio_JAudio2/control.cpp
         libs/JSystem/src/JStudio/JStudio_JAudio2/object-sound.cpp
+)
+
+add_library(JSystem_JStudio_JParticle STATIC
         libs/JSystem/src/JStudio/JStudio_JParticle/control.cpp
         libs/JSystem/src/JStudio/JStudio_JParticle/object-particle.cpp
+)
+
+add_library(JSystem_JAudio2 STATIC
         libs/JSystem/src/JAudio2/JASCalc.cpp
         libs/JSystem/src/JAudio2/JASTaskThread.cpp
         libs/JSystem/src/JAudio2/JASDvdThread.cpp
@@ -534,22 +582,34 @@ set(JSYSTEM_DEBUG_FILES
         libs/JSystem/src/JAudio2/JAUSoundAnimator.cpp
         libs/JSystem/src/JAudio2/JAUSoundTable.cpp
         libs/JSystem/src/JAudio2/JAUStreamFileTable.cpp
+)
+
+add_library(JSystem_JMessage STATIC
         libs/JSystem/src/JMessage/control.cpp
         libs/JSystem/src/JMessage/data.cpp
         libs/JSystem/src/JMessage/processor.cpp
         libs/JSystem/src/JMessage/resource.cpp
         libs/JSystem/src/JMessage/locale.cpp
+)
+
+add_library(JSystem_JGadget STATIC
         libs/JSystem/src/JGadget/binary.cpp
         libs/JSystem/src/JGadget/define.cpp
         libs/JSystem/src/JGadget/linklist.cpp
         libs/JSystem/src/JGadget/search.cpp
         libs/JSystem/src/JGadget/std-vector.cpp
+)
+
+add_library(JSystem_JAHostIO STATIC
         libs/JSystem/src/JAHostIO/JAHFrameNode.cpp
         libs/JSystem/src/JAHostIO/JAHioMessage.cpp
         libs/JSystem/src/JAHostIO/JAHioMgr.cpp
         libs/JSystem/src/JAHostIO/JAHioNode.cpp
         libs/JSystem/src/JAHostIO/JAHioUtil.cpp
         libs/JSystem/src/JAHostIO/JAHVirtualNode.cpp
+)
+
+add_library(JSystem_JHostIO STATIC
         libs/JSystem/src/JHostIO/JORFile.cpp
         libs/JSystem/src/JHostIO/JORHostInfo.cpp
         libs/JSystem/src/JHostIO/JORMessageBox.cpp
@@ -559,7 +619,28 @@ set(JSYSTEM_DEBUG_FILES
         libs/JSystem/src/JHostIO/JHIMccBuf.cpp
 )
 
-set(JSYSTEM_FILES
+set(JSYSTEM_LIBRARIES
+        JSystem_JParticle
+        JSystem_JFramework
+        JSystem_J3DU
+        JSystem_JKernel
+        JSystem_JMath
+        JSystem_JSupport
+        JSystem_JUtility
+        JSystem_JStage
+        JSystem_J2DGraph
+        JSystem_J3DGraphBase
+        JSystem_J3DGraphAnimator
+        JSystem_J3DGraphLoader
+        JSystem_JStudio
+        JSystem_JStudio_JStage
+        JSystem_JStudio_JAudio2
+        JSystem_JStudio_JParticle
+        JSystem_JAudio2
+        JSystem_JMessage
+        JSystem_JGadget
+        JSystem_JAHostIO
+        JSystem_JHostIO
 )
 
 set(REL_FILES
@@ -1341,7 +1422,6 @@ set(DUSK_FILES
         src/dusk/crash_reporting.cpp
         src/dusk/endian.cpp
         src/dusk/extras.c
-        src/dusk/extras.cpp
         src/dusk/file_select.cpp
         src/dusk/file_select.hpp
         src/dusk/frame_interpolation.cpp
