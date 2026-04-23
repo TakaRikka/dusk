@@ -390,6 +390,9 @@ void daItem_c::procMainNormal() {
         cLib_chaseF(&scale.z, mItemScale.z, step_z);
     }
 
+    #if TARGET_PC
+    if (!dusk::getSettings().game.enableIndefiniteItemDrops) {
+    #endif
     if (mWaitTimer == 0) {
         if (mDisappearTimer == 0) {
             deleteItem();
@@ -399,6 +402,9 @@ void daItem_c::procMainNormal() {
             changeDraw();
         }
     }
+    #if TARGET_PC
+    }
+    #endif
 
     mCcCyl.SetC(current.pos);
     dComIfG_Ccsp()->Set(&mCcCyl);
@@ -1058,9 +1064,16 @@ int daItem_c::CountTimer() {
     if (checkCountTimer()) {
         if (mWaitTimer > 0) {
             mWaitTimer--;
-        } else if (mDisappearTimer > 0) {
+        }
+        #if TARGET_PC
+        else if (!dusk::getSettings().game.enableIndefiniteItemDrops && mDisappearTimer > 0) {
             mDisappearTimer--;
         }
+        #else
+        else if (mDisappearTimer > 0) {
+            mDisappearTimer--;
+        }
+        #endif
     }
 
     cLib_calcTimer<u8>(&mBoomWindTgTimer);
