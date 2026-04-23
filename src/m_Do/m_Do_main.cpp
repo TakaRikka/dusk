@@ -68,11 +68,12 @@
 #include "cxxopts.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/config.hpp"
-#include "dusk/settings.h"
-#include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/discord_presence.hpp"
-#include "tracy/Tracy.hpp"
+#include "dusk/imgui/ImGuiConsole.hpp"
+#include "dusk/settings.h"
+#include "dusk/version.hpp"
 #include "f_pc/f_pc_draw.h"
+#include "tracy/Tracy.hpp"
 
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
@@ -461,6 +462,17 @@ static constexpr PADDefaultMapping defaultPadMapping = {
 
 static bool mainCalled = false;
 
+static u8 selectedLanguage;
+
+u8 OSGetLanguage() {
+    return selectedLanguage;
+}
+
+static void LanguageInit() {
+    // Cache this to avoid funky shenanigans.
+    selectedLanguage = static_cast<u8>(dusk::getSettings().game.language.getValue());
+}
+
 // =========================================================================
 // PC ENTRY POINT
 // =========================================================================
@@ -591,6 +603,9 @@ int game_main(int argc, char* argv[]) {
             DuskLog.fatal("Failed to open DVD image: {}", dvd_path);
         }
     }
+
+    dusk::version::init();
+    LanguageInit();
 
     OSInit();
 

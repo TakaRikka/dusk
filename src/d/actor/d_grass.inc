@@ -20,8 +20,9 @@ const u16 l_M_kusa05_RGBATEX__height = 31;
 
 #if TARGET_PC
 #include "dusk/dvd_asset.hpp"
-static u8* l_M_kusa05_RGBATEX_get() { static u8 buf[0x800]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x7680, 0x800), true); return buf; }
-static u8* l_M_Hijiki00TEX_get()    { static u8 buf[0x800]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x7E80, 0x800), true); return buf; }
+using GameVersion = dusk::version::GameVersion;
+static u8* l_M_kusa05_RGBATEX_get() { static u8 buf[0x800]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x7680}, {GameVersion::GcnPal, 0x7680}}, 0x800), true); return buf; }
+static u8* l_M_Hijiki00TEX_get()    { static u8 buf[0x800]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x7E80}, {GameVersion::GcnPal, 0x7E80}}, 0x800), true); return buf; }
 #define l_M_kusa05_RGBATEX (l_M_kusa05_RGBATEX_get())
 #define l_M_Hijiki00TEX    (l_M_Hijiki00TEX_get())
 #else
@@ -113,12 +114,14 @@ static u8 l_texCoord[160] = {
 };
 
 #if TARGET_PC
-static u8* l_M_Kusa_9qDL_get()     { static u8 buf[0xCB]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8B00, 0xCB),  true); return buf; }
-static u8* l_M_Kusa_9q_cDL_get()   { static u8 buf[0xCB]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8BE0, 0xCB),  true); return buf; }
-static u8* l_M_TenGusaDL_get()     { static u8 buf[0xD4]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8CC0, 0xD4),  true); return buf; }
-static u8* l_Tengusa_matDL_get()   { static u8 buf[0xA8]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8DA0, 0xA8),  true); return buf; }
-static u8* l_kusa9q_matDL_get()    { static u8 buf[0xA8]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8E60, 0xA8),  true); return buf; }
-static u8* l_kusa9q_l4_matDL_get() { static u8 buf[0xA8]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8F20, 0xA8),  true); return buf; }
+using GameVersion = dusk::version::GameVersion;
+
+static u8* l_M_Kusa_9qDL_get()     { static u8 buf[0xCB]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x8B00}, {GameVersion::GcnPal, 0x8B00}}, 0xCB),  true); return buf; }
+static u8* l_M_Kusa_9q_cDL_get()   { static u8 buf[0xCB]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x8BE0}, {GameVersion::GcnPal, 0x8BE0}}, 0xCB),  true); return buf; }
+static u8* l_M_TenGusaDL_get()     { static u8 buf[0xD4]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x8CC0}, {GameVersion::GcnPal, 0x8CC0}}, 0xD4),  true); return buf; }
+static u8* l_Tengusa_matDL_get()   { static u8 buf[0xA8]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x8DA0}, {GameVersion::GcnPal, 0x8DA0}}, 0xA8),  true); return buf; }
+static u8* l_kusa9q_matDL_get()    { static u8 buf[0xA8]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x8E60}, {GameVersion::GcnPal, 0x8E60}}, 0xA8),  true); return buf; }
+static u8* l_kusa9q_l4_matDL_get() { static u8 buf[0xA8]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x8F20}, {GameVersion::GcnPal, 0x8F20}}, 0xA8),  true); return buf; }
 #define l_M_Kusa_9qDL     (l_M_Kusa_9qDL_get())
 #define l_M_Kusa_9q_cDL   (l_M_Kusa_9q_cDL_get())
 #define l_M_TenGusaDL     (l_M_TenGusaDL_get())

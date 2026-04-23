@@ -1388,4 +1388,5 @@ set(DUSK_FILES
         src/dusk/OSThread.cpp
         src/dusk/OSMutex.cpp
         src/dusk/discord_presence.cpp
+        src/dusk/version.cpp
 )
