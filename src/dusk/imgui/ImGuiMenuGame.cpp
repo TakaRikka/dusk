@@ -191,6 +191,11 @@ namespace dusk {
                 ImGui::SetTooltip("Restores patched glitches from Wii USA 1.0,\n"
                                   "the first released version.");
             }
+            
+            config::ImGuiCheckbox("Enable Rotating Link Doll", getSettings().game.enableLinkDollRotation);
+            if (ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("Enables Rotating Link in the collection menu");
+            }
 
             ImGui::SeparatorText("Difficulty");
 
