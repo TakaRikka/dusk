@@ -18,6 +18,7 @@
 #include "dusk/logging.h"
 #include "dusk/settings.h"
 #include "dusk/time.h"
+#include "f_op/f_op_overlap_mng.h"
 
 #include "SDL3/SDL_timer.h"
 #include "tracy/Tracy.hpp"
@@ -385,6 +386,13 @@ static void waitForTick(u32 p1, u16 p2) {
     if (dusk::getTransientSettings().skipFrameRateLimit) {
         p1 = OS_TIMER_CLOCK / 120;
     }
+    
+    #if TARGET_PC
+    if (fopOvlpM_IsPeek() && dusk::getTransientSettings().stateShareLoadActive) {
+        return;
+    }
+    #endif
+
     ZoneScopedC(tracy::Color::DimGray);
 #endif
 

@@ -11,6 +11,7 @@
 #include "dusk/main.h"
 #include "dusk/io.hpp"
 #include "dusk/logging.h"
+#include "dusk/settings.h"
 #include "../file_select.hpp"
 #include "aurora/lib/window.hpp"
 
@@ -153,7 +154,8 @@ bool ImGuiStateShare::applyEncodedState(const std::string& encoded, const std::s
         dComIfGs_setRestartRoomParam(pkt.roomNo & 0x3F);
     }
 
-    dComIfGp_setNextStage(pkt.stageName, spawnPoint, pkt.roomNo, pkt.layer);
+    dusk::getTransientSettings().stateShareLoadActive = true;
+    dComIfGp_setNextStage(pkt.stageName, spawnPoint, pkt.roomNo, pkt.layer, 0.0f, 0, 1, 0, 0, 1, 3);
 
     if (name.empty()) {
         m_statusMsg = fmt::format("{} room {} layer {}.", pkt.stageName, (int)pkt.roomNo, (int)pkt.layer);
@@ -180,6 +182,7 @@ void ImGuiStateShare::tickPendingApply() {
     dComIfGp_offOxygenShowFlag();
     dComIfGp_setMaxOxygen(600);
     dComIfGp_setOxygen(600);
+    dusk::getTransientSettings().stateShareLoadActive = false;
 }
 
 static bool ValidateEncodedState(const std::string& encoded) {
@@ -258,7 +261,7 @@ void ImGuiStateShare::draw(bool& open) {
     }
 
     ImGui::SetNextWindowSizeConstraints(ImVec2(400, 0), ImVec2(FLT_MAX, FLT_MAX));
-    if (!ImGui::Begin("State Share", &open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav)) {
+    if (!ImGui::Begin("State Manager", &open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav)) {
         ImGui::End();
         return;
     }
