@@ -63,7 +63,7 @@ daTit_HIO_c::daTit_HIO_c() {
     mPSScaleX = 1.0f;
     mPSScaleY = 1.0f;
 
-    #if VERSION == VERSION_GCN_PAL
+    #if TARGET_PC || VERSION == VERSION_GCN_PAL
     switch (OSGetLanguage()) {
     case OS_LANGUAGE_ENGLISH:
     case OS_LANGUAGE_GERMAN:

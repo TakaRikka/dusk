@@ -1029,7 +1029,7 @@ void dSv_player_config_c::init() {
     mAttentionType = 0;
     mVibration = 1;
 
-#if DEBUG
+#if DEBUG // DUSK VERSION SUPPORT: This field isn't used, so we can ignore it.
     mLanguage = SCGetLanguage();
 #elif REGION_PAL || VERSION >= VERSION_WII_USA_R2
     mLanguage = OSGetLanguage();
