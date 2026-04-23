@@ -1,20 +1,24 @@
 #ifndef DUSK_VERSION_HPP
 #define DUSK_VERSION_HPP
 
+/**
+ * Functionality for switching game behavior based on the loaded game version (e.g. PAL/JPN, GC/Wii)
+ */
 namespace dusk::version {
     enum class GameVersion : u8 {
-        GcnUsa,
-        GcnPal,
-        GcnJpn,
-        WiiUsaRev0,
-        WiiUsa,
-        WiiPal,
-        WiiJpn,
-        WiiKor,
+        GcnUsa = VERSION_GCN_USA,
+        GcnPal = VERSION_GCN_PAL,
+        GcnJpn = VERSION_GCN_JPN,
+        WiiUsaRev0 = VERSION_WII_USA_R0,
+        WiiUsa = VERSION_WII_USA_R2,
+        WiiPal = VERSION_WII_PAL,
+        WiiJpn = VERSION_WII_JPN,
+        WiiKor = VERSION_WII_KOR,
     };
 
     bool isGcn();
     bool isWii();
+    bool isPalOrAtLeastWiiR2();
 
     bool isRegionPal();
     bool isRegionJpn();

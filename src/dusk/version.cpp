@@ -6,10 +6,13 @@ namespace dusk::version {
 
 using namespace std::string_view_literals;
 
+static bool versionInitialized;
 static GameVersion gameVersion;
 static DVDDiskID diskId;
 
 void init() {
+    versionInitialized = true;
+
     if (!DVDLowReadDiskID(&diskId, nullptr)) {
         DuskLog.fatal("DVDLowReadDiskID failed to return instantly.");
     }
@@ -34,28 +37,36 @@ void init() {
 }
 
 bool isGcn() {
-    return gameVersion == GameVersion::GcnUsa
-        || gameVersion == GameVersion::GcnPal
-        || gameVersion == GameVersion::GcnJpn;
+    return getGameVersion() == GameVersion::GcnUsa
+        || getGameVersion() == GameVersion::GcnPal
+        || getGameVersion() == GameVersion::GcnJpn;
 }
 
 bool isWii() {
-    return gameVersion == GameVersion::WiiUsaRev0
-        || gameVersion == GameVersion::WiiUsa
-        || gameVersion == GameVersion::WiiPal
-        || gameVersion == GameVersion::WiiJpn
-        || gameVersion == GameVersion::WiiKor;
+    return getGameVersion() == GameVersion::WiiUsaRev0
+        || getGameVersion() == GameVersion::WiiUsa
+        || getGameVersion() == GameVersion::WiiPal
+        || getGameVersion() == GameVersion::WiiJpn
+        || getGameVersion() == GameVersion::WiiKor;
+}
+
+bool isPalOrAtLeastWiiR2() {
+    return getGameVersion() == GameVersion::GcnPal || getGameVersion() >= GameVersion::WiiUsa;
 }
 
 bool isRegionJpn() {
-    return gameVersion == GameVersion::WiiJpn || gameVersion == GameVersion::GcnJpn;
+    return getGameVersion() == GameVersion::WiiJpn || getGameVersion() == GameVersion::GcnJpn;
 }
 
 bool isRegionPal() {
-    return gameVersion == GameVersion::WiiPal || gameVersion == GameVersion::GcnPal;
+    return getGameVersion() == GameVersion::WiiPal || getGameVersion() == GameVersion::GcnPal;
 }
 
 GameVersion getGameVersion() {
+    if (!versionInitialized) {
+        abort();
+    }
+
     return gameVersion;
 }
 
