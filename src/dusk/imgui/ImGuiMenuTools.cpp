@@ -210,7 +210,7 @@ namespace dusk {
             ImGui::Text("Link");
             ImGuiStringViewText(
                 player != nullptr
-                ? fmt::format("Position: {: .2f}, {: .2f}, {: .2f}\n", player->current.pos.x, player->current.pos.y, player->current.pos.z)
+                ? fmt::format("Position: {: .4f}, {: .4f}, {: .4f}\n", player->current.pos.x, player->current.pos.y, player->current.pos.z)
                 : "Position: ?, ?, ?\n"
             );
 
@@ -222,7 +222,7 @@ namespace dusk {
 
             ImGuiStringViewText(
                 player != nullptr
-                ? fmt::format("Speed: {0}\n", player->speedF)
+                ? fmt::format("Speed: {: .4f}\n", player->speedF)
                 : "Speed: ?\n"
             );
 
@@ -230,7 +230,7 @@ namespace dusk {
             ImGui::Text("Epona");
             ImGuiStringViewText(
                 horse != nullptr
-                ? fmt::format("Position: {: .2f}, {: .2f}, {: .2f}\n", horse->current.pos.x, horse->current.pos.y, horse->current.pos.z)
+                ? fmt::format("Position: {: .4f}, {: .4f}, {: .4f}\n", horse->current.pos.x, horse->current.pos.y, horse->current.pos.z)
                 : "Position: ?, ?, ?\n"
             );
 
@@ -242,7 +242,7 @@ namespace dusk {
 
             ImGuiStringViewText(
                 horse != nullptr
-                ? fmt::format("Speed: {0}\n", horse->speedF)
+                ? fmt::format("Speed: {: .4f}\n", horse->speedF)
                 : "Speed: ?\n"
             );
 
