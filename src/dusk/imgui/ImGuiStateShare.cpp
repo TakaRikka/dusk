@@ -12,6 +12,7 @@
 #include "dusk/io.hpp"
 #include "dusk/logging.h"
 #include "dusk/settings.h"
+#include "f_op/f_op_overlap_mng.h"
 #include "../file_select.hpp"
 #include "aurora/lib/window.hpp"
 
@@ -155,6 +156,7 @@ bool ImGuiStateShare::applyEncodedState(const std::string& encoded, const std::s
     }
 
     dusk::getTransientSettings().stateShareLoadActive = true;
+    m_stateSharePeekSeen = false;
     dComIfGp_setNextStage(pkt.stageName, spawnPoint, pkt.roomNo, pkt.layer, 0.0f, 0, 1, 0, 0, 1, 3);
 
     if (name.empty()) {
@@ -182,7 +184,6 @@ void ImGuiStateShare::tickPendingApply() {
     dComIfGp_offOxygenShowFlag();
     dComIfGp_setMaxOxygen(600);
     dComIfGp_setOxygen(600);
-    dusk::getTransientSettings().stateShareLoadActive = false;
 }
 
 static bool ValidateEncodedState(const std::string& encoded) {
@@ -245,6 +246,14 @@ void ImGuiStateShare::mergeFromFile(const std::string& path) {
 void ImGuiStateShare::draw(bool& open) {
     if (dusk::IsGameLaunched) {
         tickPendingApply();
+        if (dusk::getTransientSettings().stateShareLoadActive) {
+            if (fopOvlpM_IsPeek()) {
+                m_stateSharePeekSeen = true;
+            } else if (m_stateSharePeekSeen) {
+                dusk::getTransientSettings().stateShareLoadActive = false;
+                m_stateSharePeekSeen = false;
+            }
+        }
     }
 
     if (!m_loaded) {

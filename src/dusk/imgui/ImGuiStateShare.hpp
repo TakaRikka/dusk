@@ -33,6 +33,7 @@ private:
     int m_renamingIndex = -1;
     char m_renameBuffer[128] = {};
     bool m_loaded = false;
+    bool m_stateSharePeekSeen = false;
     std::string m_pendingMergePath;
 };
 
