@@ -1,9 +1,10 @@
 #ifndef DUSK_TIME_H
 #define DUSK_TIME_H
 
-#include <chrono>
-#include <numeric>
 #include <array>
+#include <numeric>
+
+#include "SDL3/SDL_timer.h"
 
 #ifdef _WIN32
 #ifndef WIN32_LEAN_AND_MEAN
@@ -15,28 +16,26 @@
 #include <Windows.h>
 #include <shellapi.h>
 #include <intrin.h>
-#else
-#include "SDL3/SDL_timer.h"
 #endif
 
 class Limiter {
-  using delta_clock = std::chrono::high_resolution_clock;
-  using duration_t = std::chrono::nanoseconds;
-
 public:
-  void Reset() { m_oldTime = delta_clock::now(); }
+  using duration_t = Uint64;
+
+  void Reset() { m_oldTime = SDL_GetTicksNS(); }
 
   void Sleep(duration_t targetFrameTime) {
-    if (targetFrameTime.count() == 0) {
+    if (targetFrameTime == 0) {
       return;
     }
 
-    auto start = delta_clock::now();
+    const Uint64 start = SDL_GetTicksNS();
     duration_t adjustedSleepTime = SleepTime(targetFrameTime);
-    if (adjustedSleepTime.count() > 0) {
+    if (adjustedSleepTime > 0) {
       NanoSleep(adjustedSleepTime);
-      duration_t overslept = TimeSince(start) - adjustedSleepTime;
-      if (overslept < duration_t{targetFrameTime}) {
+      const duration_t elapsed = TimeSince(start);
+      const duration_t overslept = elapsed > adjustedSleepTime ? elapsed - adjustedSleepTime : 0;
+      if (overslept < targetFrameTime) {
         m_overheadTimes[m_overheadTimeIdx] = overslept;
         m_overheadTimeIdx = (m_overheadTimeIdx + 1) % m_overheadTimes.size();
       }
@@ -45,23 +44,23 @@ public:
   }
 
   duration_t SleepTime(duration_t targetFrameTime) {
-    const auto sleepTime = duration_t{targetFrameTime} - TimeSince(m_oldTime);
-    m_overhead = std::accumulate(m_overheadTimes.begin(), m_overheadTimes.end(), duration_t{}) / m_overheadTimes.size();
+    const duration_t elapsed = TimeSince(m_oldTime);
+    const duration_t sleepTime = elapsed < targetFrameTime ? targetFrameTime - elapsed : 0;
+    m_overhead = std::accumulate(m_overheadTimes.begin(), m_overheadTimes.end(), duration_t{0}) /
+                 m_overheadTimes.size();
     if (sleepTime > m_overhead) {
       return sleepTime - m_overhead;
     }
-    return duration_t{0};
+    return 0;
   }
 
 private:
-  delta_clock::time_point m_oldTime;
+  Uint64 m_oldTime = 0;
   std::array<duration_t, 4> m_overheadTimes{};
   size_t m_overheadTimeIdx = 0;
-  duration_t m_overhead = duration_t{0};
+  duration_t m_overhead = 0;
 
-  duration_t TimeSince(delta_clock::time_point start) {
-    return std::chrono::duration_cast<duration_t>(delta_clock::now() - start);
-  }
+  duration_t TimeSince(Uint64 start) const { return SDL_GetTicksNS() - start; }
 
 #if _WIN32
   void NanoSleep(const duration_t duration) {
@@ -85,9 +84,10 @@ private:
 
     LARGE_INTEGER start, current;
     QueryPerformanceCounter(&start);
-    LONGLONG ticksToWait = static_cast<LONGLONG>(duration.count() * countPerNs);
-    if (DWORD ms = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count(); ms > 1) {
-      ::Sleep(ms - 1);
+    const LONGLONG ticksToWait = static_cast<LONGLONG>(duration * countPerNs);
+    const Uint64 ms = duration / 1'000'000ULL;
+    if (ms > 1) {
+      ::Sleep(static_cast<DWORD>(ms - 1));
     }
     do {
       QueryPerformanceCounter(&current);
@@ -99,7 +99,7 @@ private:
     } while (current.QuadPart - start.QuadPart < ticksToWait);
   }
 #else
-  void NanoSleep(const duration_t duration) { SDL_DelayPrecise(duration.count()); }
+  void NanoSleep(const duration_t duration) { SDL_DelayPrecise(duration); }
 #endif
 };
 

@@ -368,11 +368,11 @@ constexpr auto FRAME_PERIOD = std::chrono::duration_cast<std::chrono::nanosecond
     std::chrono::duration<double>(1001.0 / 30000.0));
 constexpr auto RETRACE_PERIOD = FRAME_PERIOD / 2;
 
-static void waitPrecise(Limiter& limiter, Uint64 targetNs) {
-    const auto sleepTime = limiter.SleepTime(std::chrono::nanoseconds(targetNs));
+static void waitPrecise(Limiter& limiter, Limiter::duration_t targetNs) {
+    const auto sleepTime = limiter.SleepTime(targetNs);
     dusk::frameUsagePct =
-        100.0f * (1.0f - static_cast<float>(sleepTime.count()) / static_cast<float>(targetNs));
-    limiter.Sleep(std::chrono::nanoseconds(targetNs));
+        100.0f * (1.0f - static_cast<float>(sleepTime) / static_cast<float>(targetNs));
+    limiter.Sleep(targetNs);
 }
 #endif
 
