@@ -10,28 +10,19 @@
 First make sure your dump of the game is clean and supported by Dusk. You can do this by checking the sha1 hash of your dump against this list of supported versions.
 
 | Version      | sha1 hash                                |
-| ------------ | ---------------------------------------- |
+|--------------| ---------------------------------------- |
 | GameCube USA | 75edd3ddff41f125d1b4ce1a40378f1b565519e7 |
+| GameCube PAL | 2601822a488eeb86fb89db16ca8f29c2c953e1ca |
 
 ### 2. Download [Dusk](https://github.com/TwilitRealm/dusk/releases)
 
 ### 3. Setup the game
-#### Windows
 - Extract the zip folder
-- Place your dump of the game into the same folder where you extracted to
-- Launch `dusk.exe`
+- Launch Dusk
+- Select Options, then set the ISO Path to your supported game dump
+- Press Start Game to play!
 
-#### macOS
-- TODO
-
-#### Linux
-- TODO
-
-#### iOS
-- TODO
-
-#### android
-- TODO
+![DuskOptions](assets/dusk_options.png)
 
 # Building
 If you'd like to build Dusk from source, please read the [build instructions](docs/building.md).
