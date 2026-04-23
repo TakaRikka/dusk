@@ -210,6 +210,10 @@ private:
     f32 mCursorInterpPrevY;
     f32 mCursorInterpCurrX;
     f32 mCursorInterpCurrY;
+    s16 mCursorInterpPrevAngle;
+    s16 mCursorInterpCurrAngle;
+    bool mCursorInterpPrevAngular;
+    bool mCursorInterpCurrAngular;
     bool mCursorInterpInit;
 #endif
 };
