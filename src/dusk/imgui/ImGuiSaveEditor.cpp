@@ -10,6 +10,7 @@
 #include "d/d_item_data.h"
 #include "d/d_meter2_info.h"
 #include "d/d_save.h"
+#include "d/actor/d_a_player.h"
 
 #include <map>
 
@@ -579,20 +580,21 @@ namespace dusk {
 
 
         if (ImGui::BeginCombo("Clothes", itemMap.find(statusA.mSelectEquip[0])->second.m_name.c_str())) {
-            if (ImGui::Selectable("None")) {
-                statusA.mSelectEquip[0] = dItemNo_NONE_e;
-            }
             if (ImGui::Selectable("Ordon Clothes")) {
-                statusA.mSelectEquip[0] = dItemNo_WEAR_CASUAL_e;
+                dMeter2Info_setCloth(dItemNo_WEAR_CASUAL_e, false);
+                daPy_getPlayerActorClass()->setClothesChange(0);
             }
             if (ImGui::Selectable("Hero's Clothes")) {
-                statusA.mSelectEquip[0] = dItemNo_WEAR_KOKIRI_e;
+                dMeter2Info_setCloth(dItemNo_WEAR_KOKIRI_e, false);
+                daPy_getPlayerActorClass()->setClothesChange(0);
             }
             if (ImGui::Selectable("Zora Armor")) {
-                statusA.mSelectEquip[0] = dItemNo_WEAR_ZORA_e;
+                dMeter2Info_setCloth(dItemNo_WEAR_ZORA_e, false);
+                daPy_getPlayerActorClass()->setClothesChange(0);
             }
             if (ImGui::Selectable("Magic Armor")) {
-                statusA.mSelectEquip[0] = dItemNo_ARMOR_e;
+                dMeter2Info_setCloth(dItemNo_ARMOR_e, false);
+                daPy_getPlayerActorClass()->setClothesChange(0);
             }
             ImGui::EndCombo();
         }
