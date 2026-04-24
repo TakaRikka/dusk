@@ -599,6 +599,13 @@ int daMirror_c::execute() {
         return 1;
     }
 
+#if TARGET_PC
+    if (mPacket.mbReset) {
+        mPacket.mModelCount = 0;
+        mPacket.mbReset = false;
+    }
+#endif
+
     daPy_py_c* player = daPy_getLinkPlayerActorClass();
     JUT_ASSERT(0, player != NULL);
 
