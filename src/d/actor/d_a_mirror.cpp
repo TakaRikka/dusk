@@ -84,13 +84,6 @@ void dMirror_packet_c::calcMinMax() {
 }
 
 int dMirror_packet_c::entryModel(J3DModel* i_model) {
-#if TARGET_PC
-    if (mbReset) {
-        mModelCount = 0;
-        mbReset = false;
-    }
-#endif
-
     if (mModelCount >= 0x40) {
         return 0;
     }
