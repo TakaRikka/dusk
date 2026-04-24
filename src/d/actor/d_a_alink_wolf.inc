@@ -149,6 +149,23 @@ void daAlink_c::changeWolf() {
 
     mpLinkModel = initModel(static_cast<J3DModelData*>(dComIfG_getObjectRes(l_wArcName, 14)), 0x20200);
 
+#ifdef TARGET_PC
+    // Update Wolf Link's eye maxLOD to prevent the eyes from disappearing
+    {
+        J3DTexture* tex = mpLinkModel->getModelData()->getTexture();
+        JUTNameTab* nametable = mpLinkModel->getModelData()->getTextureName();
+        if (tex != nullptr && nametable != nullptr) {
+            for (u16 i = 0; i < tex->getNum(); i++) {
+                const char* tex_name = nametable->getName(i);
+                if (tex_name != NULL && strcmp(tex_name, "wl_eyeball") == 0) {
+                    ResTIMG* timg = tex->getResTIMG(i);
+                    timg->maxLOD = 0;
+                }
+            }
+        }
+    }
+#endif
+
     J3DModelData* chainModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_wArcName, 15));
     for (u16 i = 0; i < 4; i++) {
         mpWlChainModels[i] = initModel(chainModelData, 0);
@@ -161,6 +178,23 @@ void daAlink_c::changeWolf() {
         initModel(static_cast<J3DModelData*>(dComIfG_getObjectRes(l_wArcName, 6)), 0x1000000);
     mpWlMidnaHairModel =
         initModelEnv(static_cast<J3DModelData*>(dComIfG_getObjectRes(l_wArcName, 11)), 0x1000000);
+
+#ifdef TARGET_PC
+    // Update Midna's eye maxLOD to prevent the eyes from disappearing
+    {
+        J3DTexture* tex = mpWlMidnaModel->getModelData()->getTexture();
+        JUTNameTab* nametable = mpWlMidnaModel->getModelData()->getTextureName();
+        if (tex != nullptr && nametable != nullptr) {
+            for (u16 i = 0; i < tex->getNum(); i++) {
+                const char* tex_name = nametable->getName(i);
+                if (tex_name != NULL && strcmp(tex_name, "midona_eyeball") == 0) {
+                    ResTIMG* timg = tex->getResTIMG(i);
+                    timg->maxLOD = 0;
+                }
+            }
+        }
+    }
+#endif
 
     mpDMidnaBrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_wArcName, 18));
     mpDMidnaBrk->searchUpdateMaterialID(mpWlMidnaModel->getModelData());
