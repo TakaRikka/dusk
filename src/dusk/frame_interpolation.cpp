@@ -292,12 +292,20 @@ void interp_view(::view_class* view) {
         return;
 
     const f32 step = get_interpolation_step();
+    const bool is_cam_curr_authoritative = g_is_sim_frame && step <= 0.0f;
+
     cXyz eye;
     cXyz center;
     cXyz up;
-    lerp_xyz(&eye, s_cam_prev.eye, s_cam_curr.eye, step);
-    lerp_xyz(&center, s_cam_prev.center, s_cam_curr.center, step);
-    lerp_xyz(&up, s_cam_prev.up, s_cam_curr.up, step);
+    if (is_cam_curr_authoritative) {
+        eye = s_cam_curr.eye;
+        center = s_cam_curr.center;
+        up = s_cam_curr.up;
+    } else {
+        lerp_xyz(&eye, s_cam_prev.eye, s_cam_curr.eye, step);
+        lerp_xyz(&center, s_cam_prev.center, s_cam_curr.center, step);
+        lerp_xyz(&up, s_cam_prev.up, s_cam_curr.up, step);
+    }
     if (!up.normalizeRS()) {
         up = s_cam_curr.up;
         up.normalizeRS();
@@ -306,19 +314,25 @@ void interp_view(::view_class* view) {
     view->lookat.eye = eye;
     view->lookat.center = center;
     view->lookat.up = up;
-    view->bank = lerp_bank(s_cam_prev.bank, s_cam_curr.bank, step);
-    view->fovy = s_cam_prev.fovy + (s_cam_curr.fovy - s_cam_prev.fovy) * step;
-    view->aspect = s_cam_prev.aspect + (s_cam_curr.aspect - s_cam_prev.aspect) * step;
-    view->near_ = s_cam_prev.near_ + (s_cam_curr.near_ - s_cam_prev.near_) * step;
-    view->far_ = s_cam_prev.far_ + (s_cam_curr.far_ - s_cam_prev.far_) * step;
+    if (is_cam_curr_authoritative) {
+        view->bank = s_cam_curr.bank;
+        view->fovy = s_cam_curr.fovy;
+        view->aspect = s_cam_curr.aspect;
+        view->near_ = s_cam_curr.near_;
+        view->far_ = s_cam_curr.far_;
+    } else {
+        view->bank = lerp_bank(s_cam_prev.bank, s_cam_curr.bank, step);
+        view->fovy = s_cam_prev.fovy + (s_cam_curr.fovy - s_cam_prev.fovy) * step;
+        view->aspect = s_cam_prev.aspect + (s_cam_curr.aspect - s_cam_prev.aspect) * step;
+        view->near_ = s_cam_prev.near_ + (s_cam_curr.near_ - s_cam_prev.near_) * step;
+        view->far_ = s_cam_prev.far_ + (s_cam_curr.far_ - s_cam_prev.far_) * step;
+    }
 
     // FRAME INTERP TODO: It might be better if I rewired the game to not clear this flag until the
     // next sim frame, but I don't care enough to right now
 #if WIDESCREEN_SUPPORT
-    if (mDoGph_gInf_c::isWide() && !mDoGph_gInf_c::isWideZoom() && step >= 0.5f ?
-            s_cam_curr.wideZoom :
-            s_cam_prev.wideZoom)
-    {
+    const f32 wide_step = is_cam_curr_authoritative ? 1.0f : step;
+    if (mDoGph_gInf_c::isWide() && !mDoGph_gInf_c::isWideZoom() && wide_step >= 0.5f ? s_cam_curr.wideZoom : s_cam_prev.wideZoom) {
         mDoGph_gInf_c::onWideZoom();
     }
 #endif
