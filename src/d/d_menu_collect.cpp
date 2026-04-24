@@ -2399,6 +2399,13 @@ void dMenu_Collect3D_c::_move(u8 param_0, u8 param_1) {
         posZ = 550.0f;
     }
     toItem3Dpos(linkPos.x, posY, posZ, &itemPos);
+
+#if TARGET_PC
+    if (dusk::getSettings().game.enableLinkDollRotation) {
+        const f32 angle = mDoCPd_c::getSubStickX3D(PAD_1) * 2048;
+        ANGLE_ADD(mLinkAngle, angle);
+    } else
+#endif
     if (param_0 == 0 && param_1 == 0) {
         f32 temp = 450.0f;
         ANGLE_ADD(mLinkAngle, temp);

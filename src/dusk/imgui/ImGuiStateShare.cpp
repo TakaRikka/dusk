@@ -11,6 +11,8 @@
 #include "dusk/main.h"
 #include "dusk/io.hpp"
 #include "dusk/logging.h"
+#include "dusk/settings.h"
+#include "f_op/f_op_overlap_mng.h"
 #include "../file_select.hpp"
 #include "aurora/lib/window.hpp"
 
@@ -153,7 +155,9 @@ bool ImGuiStateShare::applyEncodedState(const std::string& encoded, const std::s
         dComIfGs_setRestartRoomParam(pkt.roomNo & 0x3F);
     }
 
-    dComIfGp_setNextStage(pkt.stageName, spawnPoint, pkt.roomNo, pkt.layer);
+    dusk::getTransientSettings().stateShareLoadActive = true;
+    m_stateSharePeekSeen = false;
+    dComIfGp_setNextStage(pkt.stageName, spawnPoint, pkt.roomNo, pkt.layer, 0.0f, 0, 1, 0, 0, 1, 3);
 
     if (name.empty()) {
         m_statusMsg = fmt::format("{} room {} layer {}.", pkt.stageName, (int)pkt.roomNo, (int)pkt.layer);
@@ -242,6 +246,14 @@ void ImGuiStateShare::mergeFromFile(const std::string& path) {
 void ImGuiStateShare::draw(bool& open) {
     if (dusk::IsGameLaunched) {
         tickPendingApply();
+        if (dusk::getTransientSettings().stateShareLoadActive) {
+            if (fopOvlpM_IsPeek()) {
+                m_stateSharePeekSeen = true;
+            } else if (m_stateSharePeekSeen) {
+                dusk::getTransientSettings().stateShareLoadActive = false;
+                m_stateSharePeekSeen = false;
+            }
+        }
     }
 
     if (!m_loaded) {
@@ -258,12 +270,13 @@ void ImGuiStateShare::draw(bool& open) {
     }
 
     ImGui::SetNextWindowSizeConstraints(ImVec2(400, 0), ImVec2(FLT_MAX, FLT_MAX));
-    if (!ImGui::Begin("State Share", &open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav)) {
+    if (!ImGui::Begin("State Manager", &open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav)) {
         ImGui::End();
         return;
     }
 
     const bool gameRunning = dusk::IsGameLaunched;
+    const bool loadInProgress = dusk::getTransientSettings().stateShareLoadActive;
 
     const float rowH  = ImGui::GetTextLineHeightWithSpacing();
     const float listH = rowH * 8 + ImGui::GetStyle().FramePadding.y * 2;
@@ -304,11 +317,11 @@ void ImGuiStateShare::draw(bool& open) {
         }
 
         ImGui::SameLine();
-        if (!gameRunning) { ImGui::BeginDisabled(); }
+        if (!gameRunning || loadInProgress) { ImGui::BeginDisabled(); }
         if (ImGui::Button("Load")) {
             applyEncodedState(m_states[i].encoded, m_states[i].name);
         }
-        if (!gameRunning) { ImGui::EndDisabled(); }
+        if (!gameRunning || loadInProgress) { ImGui::EndDisabled(); }
 
         ImGui::SameLine();
         if (ImGui::Button("Copy")) {

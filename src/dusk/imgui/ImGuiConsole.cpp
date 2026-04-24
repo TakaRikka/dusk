@@ -305,6 +305,10 @@ namespace dusk {
             ImGuiMenuGame::ToggleFullscreen();
         }
 
+        if (ImGui::IsKeyPressed(ImGuiKey_Escape) && getSettings().video.enableFullscreen) {
+            ImGuiMenuGame::ToggleFullscreen();
+        }
+
         if (!dusk::IsGameLaunched) {
             m_preLaunchWindow.draw();
         }

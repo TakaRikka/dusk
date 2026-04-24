@@ -43,6 +43,7 @@ UserSettings g_userSettings = {
         .invertCameraXAxis {"game.invertCameraXAxis", false},
         .disableMainHUD {"game.disableMainHUD", false},
         .pauseOnFocusLost {"game.pauseOnFocusLost", false},
+        .enableLinkDollRotation = {"game.enableLinkDollRotation", false },
 
         // Graphics
         .bloomMode {"game.bloomMode", BloomMode::Classic},
@@ -98,7 +99,8 @@ UserSettings g_userSettings = {
         .showPipelineCompilation {"backend.showPipelineCompilation", false},
         .wasPresetChosen {"backend.wasPresetChosen", false},
         .enableCrashReporting {"backend.enableCrashReporting", true},
-        .duskMenuOpen {"backend.duskMenuOpen", false}
+        .duskMenuOpen {"backend.duskMenuOpen", false},
+        .cardFileType {"backend.cardFileType", static_cast<int>(CARD_GCIFOLDER)}
     }
 };
 
@@ -150,6 +152,7 @@ void registerSettings() {
     Register(g_userSettings.game.canTransformAnywhere);
     Register(g_userSettings.game.freeMagicArmor);
     Register(g_userSettings.game.restoreWiiGlitches);
+    Register(g_userSettings.game.enableLinkDollRotation);
     Register(g_userSettings.game.noMissClimbing);
     Register(g_userSettings.game.noLowHpSound);
     Register(g_userSettings.game.midnasLamentNonStop);
@@ -183,6 +186,7 @@ void registerSettings() {
     Register(g_userSettings.backend.wasPresetChosen);
     Register(g_userSettings.backend.enableCrashReporting);
     Register(g_userSettings.backend.duskMenuOpen);
+    Register(g_userSettings.backend.cardFileType);
 }
 
 // Transient settings

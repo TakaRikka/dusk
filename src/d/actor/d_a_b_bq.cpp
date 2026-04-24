@@ -2059,7 +2059,15 @@ static void demo_camera(b_bq_class* i_this) {
                 for (int i = 0; i < 5; i++) {
                     static u16 g_e_i[] = {0x83EB, 0x83EC, 0x83ED, 0x83EE, 0x83EF};
 
-                    dComIfGp_particle_set(g_e_i[i], &pos, NULL, NULL);
+                    #if TARGET_PC
+                    if (i == 0) {
+                        static const cXyz effWideScale = {mDoGph_gInf_c::getAspect(), 1.0f, 1.0f};
+                        dComIfGp_particle_set(g_e_i[i], &pos, NULL, &effWideScale);
+                    } else
+                    #endif
+                    {
+                        dComIfGp_particle_set(g_e_i[i], &pos, NULL, NULL);
+                    }
                 }
 
                 i_this->mSound.startCreatureSound(Z2SE_EN_BOSS_CONVERGE, 0, 0);

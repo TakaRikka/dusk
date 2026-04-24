@@ -185,6 +185,17 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
         field_0x682 = 0xc000;
         break;
     }
+#if TARGET_PC
+    mCursorInterpPrevX = 0.0f;
+    mCursorInterpPrevY = 0.0f;
+    mCursorInterpCurrX = 0.0f;
+    mCursorInterpCurrY = 0.0f;
+    mCursorInterpPrevAngle = 0;
+    mCursorInterpCurrAngle = 0;
+    mCursorInterpPrevAngular = false;
+    mCursorInterpCurrAngular = false;
+    mCursorInterpInit = false;
+#endif
     for (int i = 0; i < 4; i++) {
         field_0x674[i] = 0;
 #if TARGET_PC
@@ -631,7 +642,71 @@ void dMenu_Ring_c::_draw() {
     } else {
         drawSelectItem();
         drawItem2();
+#if TARGET_PC
+        f32 simX = 0.0f;
+        f32 simY = 0.0f;
+        bool restoreSimPos = false;
+        if (dusk::frame_interp::is_enabled() && mAlphaRate >= 1.0f) {
+            simX = mpDrawCursor->getPositionX();
+            simY = mpDrawCursor->getPositionY();
+
+            const bool isAngular = (mStatus == STATUS_MOVE) && !mDirectSelectActive;
+
+            if (dusk::frame_interp::get_ui_tick_pending()) {
+                mCursorInterpPrevX = mCursorInterpCurrX;
+                mCursorInterpPrevY = mCursorInterpCurrY;
+                mCursorInterpPrevAngle = mCursorInterpCurrAngle;
+                mCursorInterpPrevAngular = mCursorInterpCurrAngular;
+
+                mCursorInterpCurrX = simX;
+                mCursorInterpCurrY = simY;
+                mCursorInterpCurrAngle = field_0x66e;
+                mCursorInterpCurrAngular = isAngular;
+
+                // reset prev = curr for first render pass or 
+                // when angle modes prev/curr differ
+                // to prevent arrival jitter
+                if (!mCursorInterpInit ||
+                    mCursorInterpPrevAngular != mCursorInterpCurrAngular) {
+                    mCursorInterpPrevX = mCursorInterpCurrX;
+                    mCursorInterpPrevY = mCursorInterpCurrY;
+                    mCursorInterpPrevAngle = mCursorInterpCurrAngle;
+                    mCursorInterpPrevAngular = mCursorInterpCurrAngular;
+                    mCursorInterpInit = true;
+                }
+            }
+            if (mCursorInterpInit) {
+                const f32 step = dusk::frame_interp::get_interpolation_step();
+                if (mCursorInterpPrevAngular && mCursorInterpCurrAngular) {
+                    const s16 delta = mCursorInterpCurrAngle - mCursorInterpPrevAngle;
+                    const s16 lerpedAngle = mCursorInterpPrevAngle + (s16)(delta * step);
+
+                    // yoinked from stick_move_proc()
+                    const f32 x = g_ringHIO.mItemRingPosX + FB_WIDTH_BASE / 2 +
+                                  mRingRadiusH * cM_ssin(lerpedAngle);
+                    const f32 y = g_ringHIO.mItemRingPosY + FB_HEIGHT_BASE / 2 +
+                                  mRingRadiusV * cM_scos(lerpedAngle);
+                    mpDrawCursor->setPos(x, y);
+                } else {
+                    mpDrawCursor->setPos(
+                        mCursorInterpPrevX + (mCursorInterpCurrX - mCursorInterpPrevX) * step,
+                        mCursorInterpPrevY + (mCursorInterpCurrY - mCursorInterpPrevY) * step
+                    );
+                }
+                restoreSimPos = true;
+            }
+        } else {
+            mCursorInterpInit = false;
+        }
+#endif
         mpDrawCursor->draw();
+#if TARGET_PC
+        // prevents offsetting at destination on the next frame
+        // since stick_wait_proc doesn't call setPos and we clobbered mPositionX/Y
+        if (restoreSimPos) {
+            mpDrawCursor->setPos(simX, simY);
+        }
+#endif
         mpItemExplain->trans(mCenterPosX, mCenterPosY);
         mpItemExplain->draw((J2DOrthoGraph*)grafPort);
         drawFlag0();
