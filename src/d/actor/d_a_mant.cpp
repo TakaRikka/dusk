@@ -16,9 +16,9 @@
 
 using GameVersion = dusk::version::GameVersion;
 
-static u8* l_Egnd_mantTEX_get()   { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x1C00}}, 0x4000), true); return buf; }
-static u8* l_Egnd_mantTEX_U_get() { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x5C00}}, 0x4000), true); return buf; }
-static u8* l_Egnd_mantPAL_get()   { alignas(32) static u8 buf[0x60];   static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x9C00}}, 0x60),   true); return buf; }
+static u8* l_Egnd_mantTEX_get()   { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x1C00}, {GameVersion::GcnPal, 0x1C00}}, 0x4000), true); return buf; }
+static u8* l_Egnd_mantTEX_U_get() { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x5C00}, {GameVersion::GcnPal, 0x5C00}}, 0x4000), true); return buf; }
+static u8* l_Egnd_mantPAL_get()   { alignas(32) static u8 buf[0x60];   static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x9C00}, {GameVersion::GcnPal, 0x9C00}}, 0x60),   true); return buf; }
 #define l_Egnd_mantTEX   (l_Egnd_mantTEX_get())
 #define l_Egnd_mantTEX_U (l_Egnd_mantTEX_U_get())
 #define l_Egnd_mantPAL   (l_Egnd_mantPAL_get())
