@@ -155,6 +155,7 @@ namespace dusk::config {
     template class ConfigImpl<std::string>;
     template class ConfigImpl<dusk::BloomMode>;
     template class ConfigImpl<dusk::GameLanguage>;
+    template class ConfigImpl<dusk::DiscVerificationResult>;
 }
 
 void dusk::config::Register(ConfigVarBase& configVar) {

@@ -12,6 +12,7 @@
 
 #include <SDL3/SDL_dialog.h>
 #include <SDL3/SDL_filesystem.h>
+#include <thread>
 
 #include "aurora/lib/internal.hpp"
 #include "aurora/lib/window.hpp"
@@ -35,18 +36,22 @@ static std::string ShowIsoInvalidError(const iso::ValidationError code) {
     using namespace std::literals::string_literals;
 
     switch (code) {
+    case iso::ValidationError::Success:
+        return "Disc image successfully verified."s;
     case iso::ValidationError::IOError:
-        return "Unknown IO error occurred"s;
+        return "An unknown I/O error occurred."s;
     case iso::ValidationError::InvalidImage:
-        return "Unable to interpret selected file as a disc image"s;
+        return "Unable to interpret the selected file as a disc image."s;
     case iso::ValidationError::WrongGame:
-        return "Selected disc image is for a different game"s;
+        return "The selected disc image is for a different game."s;
     case iso::ValidationError::WrongVersion:
-        return "Selected disc image is for an unsupported version of the game. Only North American GameCube (NTSC/GZ2E01) is supported at this time."s;
-    case iso::ValidationError::ExecutableMismatch:
-        return "Selected disc image contains modified executable files."s;
+        return "The selected disc image is for an unsupported version of the game."s;
+    case iso::ValidationError::DiscHashMismatch:
+        return "The selected disc image doesn't match known fingerprint."s;
+    case iso::ValidationError::Cancelled:
+        return "Disc verification cancelled."s;
     default:
-        return "Unknown error"s;
+        return "An unknown error occurred."s;
     }
 }
 
@@ -77,14 +82,34 @@ void fileDialogCallback(void* userdata, const char* path, const char* error) {
     self->m_selectedIsoPath = path;
     self->m_isPal = iso::isPal(path);
     getSettings().backend.isoPath.setValue(self->m_selectedIsoPath);
+    getSettings().backend.discVerificationResult.setValue(DiscVerificationResult::NotChecked);
     config::Save();
+
+    auto& dv = self->m_discVerification;
+    dv.status = {};
+    dv.task = std::thread([self, &dv]() {
+        dv.isRunning = true;
+        dv.error = iso::validate(self->m_selectedIsoPath.c_str(), dv.status);
+        dv.isRunning = false;
+
+        if (dv.error == iso::ValidationError::Success) {
+            getSettings().backend.discVerificationResult.setValue(DiscVerificationResult::Passed);
+        } else { 
+            dv.shouldOpenReport = true;
+            if (dv.error != iso::ValidationError::Cancelled) {
+                getSettings().backend.discVerificationResult.setValue(DiscVerificationResult::Failed);
+            }
+        }
+        config::Save();
+    });
+    dv.task.detach();
 }
 
 ImGuiPreLaunchWindow::ImGuiPreLaunchWindow() = default;
 
 bool ImGuiPreLaunchWindow::isSelectedPathValid() const {
 #if TARGET_ANDROID
-    return !m_selectedIsoPath.empty(); // unsure why SDL_GetPathInfo doesnt work here
+    return !m_selectedIsoPath.empty();  // unsure why SDL_GetPathInfo doesnt work here
 #else
     return !m_selectedIsoPath.empty() && SDL_GetPathInfo(m_selectedIsoPath.c_str(), nullptr);
 #endif
@@ -139,6 +164,8 @@ void ImGuiPreLaunchWindow::draw() {
     (this->*drawTable[m_CurMenu])();
 
     ImGui::End();
+
+    drawDiscVerification();
 }
 
 void ImGuiPreLaunchWindow::drawMainMenu() {
@@ -170,6 +197,61 @@ void ImGuiPreLaunchWindow::drawMainMenu() {
     ImGui::PopFont();
 }
 
+void ImGuiPreLaunchWindow::drawDiscVerification() {
+    if (m_discVerification.isRunning && !ImGui::IsPopupOpen("DiscVerifyProgress")) {
+        ImGui::OpenPopup("DiscVerifyProgress");
+    }
+
+    if (ImGui::BeginPopupModal("DiscVerifyProgress", nullptr,
+                               ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
+                                   ImGuiWindowFlags_NoSavedSettings |
+                                   ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        ImGui::Text("Verifying disc image...");
+        const auto bytesTotal = m_discVerification.status.bytesTotal;
+        if (bytesTotal != 0) {
+            const auto percent = static_cast<float>(m_discVerification.status.bytesRead) /
+                                 static_cast<float>(bytesTotal);
+            ImGui::ProgressBar(percent);
+        }
+
+        if (ImGui::Button("Cancel")) {
+            m_discVerification.status.shouldCancel = true;
+        }
+
+        if (!m_discVerification.isRunning) {
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::EndPopup();
+    }
+
+    if (m_discVerification.shouldOpenReport && !ImGui::IsPopupOpen("DiscVerifyReport")) {
+        ImGui::OpenPopup("DiscVerifyReport");
+    }
+
+    if (ImGui::BeginPopupModal("DiscVerifyReport", nullptr,
+                               ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
+                                   ImGuiWindowFlags_NoSavedSettings |
+                                   ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        auto error = m_discVerification.error;
+        ImGui::Text("%s", ShowIsoInvalidError(error).c_str());
+        if (error == iso::ValidationError::Cancelled ||
+            error == iso::ValidationError::DiscHashMismatch ||
+            error == iso::ValidationError::WrongVersion)
+        {
+            ImGui::Text("You may experience issues during gameplay.");
+        }
+
+        if (ImGuiButtonCenter("OK")) {
+            m_discVerification.shouldOpenReport = false;
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+}
+
 void ImGuiPreLaunchWindow::drawOptions() {
     const auto& windowSize = ImGui::GetWindowSize();
 
@@ -199,6 +281,20 @@ void ImGuiPreLaunchWindow::drawOptions() {
             ShowFileSelect(&fileDialogCallback, this, aurora::window::get_sdl_window(),
                            skGameDiscFileFilters.data(), int(skGameDiscFileFilters.size()), nullptr,
                            false);
+        }
+
+        ImGui::Text("Disc verification:");
+        ImGui::SameLine();
+        switch (getSettings().backend.discVerificationResult.getValue()) {
+            case dusk::DiscVerificationResult::NotChecked:
+                ImGui::TextColored(ImVec4(0.322f, 0.322f, 0.322f, 1.0f), "not checked");
+                break;
+            case dusk::DiscVerificationResult::Failed:
+                ImGui::TextColored(ImVec4(0.906f, 0.f, 0.0435f, 1.0f), "failed");
+                break;
+            case dusk::DiscVerificationResult::Passed:
+                ImGui::TextColored(ImVec4(0.f, 0.651f, 0.239f, 1.0f), "passed");
+                break;
         }
 
         if (m_isPal) {

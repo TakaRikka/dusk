@@ -106,6 +106,7 @@ UserSettings g_userSettings = {
 
     .backend = {
         .isoPath {"backend.isoPath", ""},
+        .discVerificationResult {"backend.discVerificationReuslt", DiscVerificationResult::NotChecked},
         .graphicsBackend {"backend.graphicsBackend", "auto"},
         .skipPreLaunchUI {"backend.skipPreLaunchUI", false},
         .showPipelineCompilation {"backend.showPipelineCompilation", false},
@@ -201,6 +202,7 @@ void registerSettings() {
     Register(g_userSettings.game.freeCamera);
 
     Register(g_userSettings.backend.isoPath);
+    Register(g_userSettings.backend.discVerificationResult);
     Register(g_userSettings.backend.graphicsBackend);
     Register(g_userSettings.backend.skipPreLaunchUI);
     Register(g_userSettings.backend.showPipelineCompilation);

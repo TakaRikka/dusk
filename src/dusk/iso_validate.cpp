@@ -2,29 +2,69 @@
 
 #include <nod.h>
 #include <span>
+#include <unordered_map>
 
 #include "SDL3/SDL_iostream.h"
 
+namespace {
+
+constexpr uint8_t hex_nibble_to_u8(char c) {
+    if (c >= '0' && c <= '9')
+        return c - '0';
+    if (c >= 'a' && c <= 'f')
+        return c - 'a' + 10;
+    if (c >= 'A' && c <= 'F')
+        return c - 'A' + 10;
+    throw std::invalid_argument("invalid hex character");
+}
+
+constexpr uint64_t parse_u64_hex(std::string_view s) {
+    if (s.size() != 16)
+        throw std::invalid_argument("expected 16 hex chars for uint64");
+
+    uint64_t value = 0;
+    for (char c : s) {
+        value = (value << 4) | hex_nibble_to_u8(c);
+    }
+    return value;
+}
+
+constexpr XXH128_hash_t parse_xxh128(std::string_view hex) {
+    if (hex.size() != 32)
+        throw std::invalid_argument("expected 32 hex chars for XXH128");
+
+    return XXH128_hash_t{
+        .low64 = parse_u64_hex(hex.substr(16, 16)),
+        .high64 = parse_u64_hex(hex.substr(0, 16)),
+    };
+}
+
+}  // namespace
+
 namespace dusk::iso {
 
-constexpr const char* TP_GAME_IDS[] = {
-    "GZ2E01", // GCN USA
-    "GZ2P01", // GCN PAL
-    "GZ2J01", // GCN JPN
-    "RZDE01", // Wii USA
-    "RZDP01", // Wii PAL
-    "RZDJ01", // Wii JPN
-    "RZDK01", // Wii KOR
+struct KnownDisc {
+    XXH128_hash_t hash{};
+    bool supported = false;
+
+    constexpr KnownDisc() = default;
+    constexpr KnownDisc(const std::string_view hex_hash)
+        : hash(parse_xxh128(hex_hash)), supported(true) {}
+};
+
+const std::unordered_map<std::string, const KnownDisc> KNOWN_DISCS = {
+    {"GZ2E01", {"14e886f08e548a000afde98a3195e788"}},  // GCN USA
+    {"GZ2P01", {"9ef597588b0035ca9e91b333fa9a8a7e"}},  // GCN PAL
+    {"GZ2J01", {}},                                    // GCN JPN
+    {"RZDE01", {}},                                    // Wii USA
+    {"RZDP01", {}},                                    // Wii PAL
+    {"RZDJ01", {}},                                    // Wii JPN
+    {"RZDK01", {}},                                    // Wii KOR
 };
 
 constexpr const char* PAL_GAME_IDS[] = {
     "GZ2P01", // GCN PAL
     "RZDP01", // Wii PAL
-};
-
-constexpr const char* SUPPORTED_TP_GAME_IDS[] = {
-    "GZ2E01", // GCN USA
-    "GZ2P01", // GCN PAL
 };
 
 template <size_t N>
@@ -41,8 +81,7 @@ constexpr bool matches(const char (&id)[6], const char* const (&valid)[N]) {
 struct NodHandleWrapper {
     NodHandle* handle;
 
-    NodHandleWrapper() : handle(nullptr) {
-    }
+    NodHandleWrapper() : handle(nullptr) {}
 
     ~NodHandleWrapper() {
         if (handle != nullptr) {
@@ -97,11 +136,39 @@ void StreamClose(void* user_data) {
     SDL_CloseIO(io);
 }
 
-ValidationError validate(const char* path) {
+ValidationError verify_disc(NodHandle* disc, VerificationStatus& status) {
+    const auto hashState = XXH3_createState();
+    XXH3_128bits_reset(hashState);
+
+    while (!status.shouldCancel) {
+        size_t bytesAvail;
+        const auto buf = nod_buf_read(disc, &bytesAvail);
+        if (!bytesAvail)
+            break;
+
+        XXH3_128bits_update(hashState, buf, bytesAvail);
+
+        status.bytesRead += bytesAvail;
+        nod_buf_consume(disc, bytesAvail);
+    }
+
+    if (status.shouldCancel) {
+        return ValidationError::Cancelled;
+    }
+
+    const auto hash = XXH3_128bits_digest(hashState);
+    if (!XXH128_isEqual(hash, status.knownDisc->hash)) {
+        return ValidationError::DiscHashMismatch;
+    }
+
+    return ValidationError::Success;
+}
+
+ValidationError validate(const char* path, VerificationStatus& status) {
     NodHandleWrapper disc;
 
     const auto sdlStream = SDL_IOFromFile(path, "rb");
-    const NodDiscStream nod_stream {
+    const NodDiscStream nod_stream{
         .user_data = sdlStream,
         .read_at = StreamReadAt,
         .stream_len = StreamLength,
@@ -113,22 +180,30 @@ ValidationError validate(const char* path) {
         return convertNodError(result);
     }
 
+    status.bytesTotal = nod_disc_size(disc.handle);
+
     NodDiscHeader header{};
     result = nod_disc_header(disc.handle, &header);
     if (result != NOD_RESULT_OK) {
         return convertNodError(result);
     }
 
-    if (!matches(header.game_id, TP_GAME_IDS)) {
+    const auto it = KNOWN_DISCS.find(std::string(header.game_id, 6));
+
+    if (it == KNOWN_DISCS.end()) {
         return ValidationError::WrongGame;
     }
 
-    if (!matches(header.game_id, SUPPORTED_TP_GAME_IDS)) {
+    auto& knownDisc = it->second;
+    status.knownDisc = &knownDisc;
+
+    if (!knownDisc.supported) {
         return ValidationError::WrongVersion;
     }
 
-    return ValidationError::Success;
+    return verify_disc(disc.handle, status);
 }
+
 bool isPal(const char* path) {
     NodHandleWrapper disc;
 

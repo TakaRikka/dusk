@@ -21,6 +21,12 @@ enum class GameLanguage : u8 {
     Italian = OS_LANGUAGE_ITALIAN,
 };
 
+enum class DiscVerificationResult : s8 {
+    NotChecked = -1,
+    Failed = 0,
+    Passed = 1,
+};
+
 namespace config {
 template <>
 struct ConfigEnumRange<BloomMode> {
@@ -32,6 +38,12 @@ template <>
 struct ConfigEnumRange<GameLanguage> {
     static constexpr auto min = GameLanguage::English;
     static constexpr auto max = GameLanguage::Italian;
+};
+
+template <>
+struct ConfigEnumRange<DiscVerificationResult> {
+    static constexpr auto min = DiscVerificationResult::NotChecked;
+    static constexpr auto max = DiscVerificationResult::Passed;
 };
 }
 
@@ -147,6 +159,7 @@ struct UserSettings {
 
     struct {
         ConfigVar<std::string> isoPath;
+        ConfigVar<DiscVerificationResult> discVerificationResult;
         ConfigVar<std::string> graphicsBackend;
         ConfigVar<bool> skipPreLaunchUI;
         ConfigVar<bool> showPipelineCompilation;
