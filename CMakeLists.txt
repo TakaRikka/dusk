@@ -391,8 +391,7 @@ set(GAME_DEBUG_FILES
 set_source_files_properties(
         ${GAME_DEBUG_FILES}
         PROPERTIES
-        $<$<CONFIG:Debug>:DEBUG=1>
-        $<$<CONFIG:Debug>:PARTIAL_DEBUG=1>
+        COMPILE_DEFINITIONS "$<$<CONFIG:Debug>:DEBUG=1>;$<$<CONFIG:Debug>:PARTIAL_DEBUG=1>"
 )
 
 # game_base is for all other game code files
@@ -406,10 +405,7 @@ set(GAME_BASE_FILES
 set_source_files_properties(
         ${GAME_BASE_FILES}
         PROPERTIES
-        NDEBUG=1
-        NDEBUG_DEFINED=1
-        DEBUG_DEFINED=0
-        $<$<CONFIG:Debug>:PARTIAL_DEBUG=1>
+        COMPILE_DEFINITIONS "NDEBUG=1;NDEBUG_DEFINED=1;DEBUG_DEFINED=0;$<$<CONFIG:Debug>:PARTIAL_DEBUG=1>"
 )
 
 foreach(jsystem_lib IN LISTS JSYSTEM_LIBRARIES)
