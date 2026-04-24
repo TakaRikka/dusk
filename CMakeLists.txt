@@ -398,6 +398,13 @@ foreach(jsystem_lib IN LISTS JSYSTEM_LIBRARIES)
     target_link_libraries(${jsystem_lib} PRIVATE ${GAME_LIBS})
 endforeach()
 
+set(JSYSTEM_LINK_LIBRARIES ${JSYSTEM_LIBRARIES})
+if (CMAKE_CXX_LINK_GROUP_USING_RESCAN_SUPPORTED OR CMAKE_LINK_GROUP_USING_RESCAN_SUPPORTED)
+    # GNU ld resolves static archives in a single left-to-right pass. The split
+    # JSystem libraries reference each other, so they need a RESCAN group there.
+    set(JSYSTEM_LINK_LIBRARIES "$<LINK_GROUP:RESCAN,${JSYSTEM_LIBRARIES}>")
+endif ()
+
 # only apply PCH to game_base since not all headers are necessarily validated with DEBUG=1
 target_precompile_headers(game_base PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/include/dusk_pch.hpp>")
 
@@ -418,7 +425,7 @@ endif ()
 
 target_compile_definitions(dusk PRIVATE TARGET_PC AVOID_UB=1 VERSION=0)
 target_include_directories(dusk PRIVATE include)
-target_link_libraries(dusk PRIVATE game_base game_debug aurora::main ${JSYSTEM_LIBRARIES})
+target_link_libraries(dusk PRIVATE game_base game_debug aurora::main ${JSYSTEM_LINK_LIBRARIES})
 if (TARGET crashpad_handler)
     add_dependencies(dusk crashpad_handler)
 endif ()

@@ -83,7 +83,7 @@ extern void __dcbf(void*, int);
 extern void __dcbz(void*, int);
 extern void __sync();
 extern int __abs(int);
-#if defined(__GNUC__) || defined(__clang__)
+#if defined(__has_builtin) && __has_builtin(__builtin_memcpy)
 #define __memcpy __builtin_memcpy
 #else
 #define __memcpy memcpy
