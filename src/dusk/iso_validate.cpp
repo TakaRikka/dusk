@@ -1,48 +1,94 @@
 #include "iso_validate.hpp"
 
 #include <nod.h>
-#include <span>
 
 #include "SDL3/SDL_iostream.h"
 
+namespace {
+
+constexpr uint8_t hex_nibble_to_u8(char c) {
+    if (c >= '0' && c <= '9')
+        return c - '0';
+    if (c >= 'a' && c <= 'f')
+        return c - 'a' + 10;
+    if (c >= 'A' && c <= 'F')
+        return c - 'A' + 10;
+    throw std::invalid_argument("invalid hex character");
+}
+
+constexpr uint64_t parse_u64_hex(std::string_view s) {
+    if (s.size() != 16)
+        throw std::invalid_argument("expected 16 hex chars for uint64");
+
+    uint64_t value = 0;
+    for (char c : s) {
+        value = (value << 4) | hex_nibble_to_u8(c);
+    }
+    return value;
+}
+
+constexpr XXH128_hash_t parse_xxh128(std::string_view hex) {
+    if (hex.size() != 32)
+        throw std::invalid_argument("expected 32 hex chars for XXH128");
+
+    return XXH128_hash_t{
+        .low64 = parse_u64_hex(hex.substr(16, 16)),
+        .high64 = parse_u64_hex(hex.substr(0, 16)),
+    };
+}
+
+}  // namespace
+
 namespace dusk::iso {
 
-constexpr const char* TP_GAME_IDS[] = {
-    "GZ2E01", // GCN USA
-    "GZ2P01", // GCN PAL
-    "GZ2J01", // GCN JPN
-    "RZDE01", // Wii USA
-    "RZDP01", // Wii PAL
-    "RZDJ01", // Wii JPN
-    "RZDK01", // Wii KOR
+enum class Platform : u8 {
+    GameCube,
+    Wii,
 };
 
-constexpr const char* PAL_GAME_IDS[] = {
-    "GZ2P01", // GCN PAL
-    "RZDP01", // Wii PAL
+enum class Region : u8 {
+    NorthAmerica,
+    Europe,
+    Japan,
+    Korea,
 };
 
-constexpr const char* SUPPORTED_TP_GAME_IDS[] = {
-    "GZ2E01", // GCN USA
-    "GZ2P01", // GCN PAL
+struct KnownDisc {
+    std::string_view id;
+    Platform platform;
+    Region region;
+    bool supported = false;
+    XXH128_hash_t hash{};
+
+    constexpr KnownDisc(std::string_view id, Platform platform, Region region)
+        : id(id), platform(platform), region(region) {}
+    constexpr KnownDisc(std::string_view id, Platform platform, Region region,
+                        const std::string_view hash)
+        : id(id), platform(platform), region(region), supported(true), hash(parse_xxh128(hash)) {}
 };
 
-template <size_t N>
-constexpr bool matches(const char (&id)[6], const char* const (&valid)[N]) {
-    for (auto elem : valid) {
-        if (strncmp(id, elem, 6) == 0) {
-            return true;
-        }
+constexpr auto KNOWN_DISCS = std::to_array<KnownDisc>({
+    {"GZ2E01", Platform::GameCube, Region::NorthAmerica, "14e886f08e548a000afde98a3195e788"},
+    {"GZ2J01", Platform::GameCube, Region::Japan},
+    {"GZ2P01", Platform::GameCube, Region::Europe, "9ef597588b0035ca9e91b333fa9a8a7e"},
+    {"RZDE01", Platform::Wii, Region::NorthAmerica},
+    {"RZDJ01", Platform::Wii, Region::Japan},
+    {"RZDK01", Platform::Wii, Region::Korea},
+    {"RZDP01", Platform::Wii, Region::Europe},
+});
+
+constexpr const KnownDisc* find_disc(std::string_view id) {
+    for (const auto& disc : KNOWN_DISCS) {
+        if (disc.id == id)
+            return &disc;
     }
-
-    return false;
+    return nullptr;
 }
 
 struct NodHandleWrapper {
     NodHandle* handle;
 
-    NodHandleWrapper() : handle(nullptr) {
-    }
+    NodHandleWrapper() : handle(nullptr) {}
 
     ~NodHandleWrapper() {
         if (handle != nullptr) {
@@ -97,7 +143,35 @@ void StreamClose(void* user_data) {
     SDL_CloseIO(io);
 }
 
-ValidationError validate(const char* path) {
+ValidationError verify_disc(NodHandle* disc, VerificationStatus& status) {
+    const auto hashState = XXH3_createState();
+    XXH3_128bits_reset(hashState);
+
+    while (!status.shouldCancel) {
+        size_t bytesAvail;
+        const auto buf = nod_buf_read(disc, &bytesAvail);
+        if (!bytesAvail)
+            break;
+
+        XXH3_128bits_update(hashState, buf, bytesAvail);
+
+        status.bytesRead += bytesAvail;
+        nod_buf_consume(disc, bytesAvail);
+    }
+
+    if (status.shouldCancel) {
+        return ValidationError::Cancelled;
+    }
+
+    const auto hash = XXH3_128bits_digest(hashState);
+    if (!XXH128_isEqual(hash, status.knownDisc->hash)) {
+        return ValidationError::DiscHashMismatch;
+    }
+
+    return ValidationError::Success;
+}
+
+ValidationError validate(const char* path, VerificationStatus& status) {
     NodHandleWrapper disc;
 
     const auto sdlStream = SDL_IOFromFile(path, "rb");
@@ -117,22 +191,29 @@ ValidationError validate(const char* path) {
         return convertNodError(result);
     }
 
+    status.bytesTotal = nod_disc_size(disc.handle);
+
     NodDiscHeader header{};
     result = nod_disc_header(disc.handle, &header);
     if (result != NOD_RESULT_OK) {
         return convertNodError(result);
     }
 
-    if (!matches(header.game_id, TP_GAME_IDS)) {
+    const auto knownDisc = find_disc(std::string_view(header.game_id, 6));
+
+    if (!knownDisc) {
         return ValidationError::WrongGame;
     }
 
-    if (!matches(header.game_id, SUPPORTED_TP_GAME_IDS)) {
+    status.knownDisc = knownDisc;
+
+    if (!knownDisc->supported) {
         return ValidationError::WrongVersion;
     }
 
-    return ValidationError::Success;
+    return verify_disc(disc.handle, status);
 }
+
 bool isPal(const char* path) {
     NodHandleWrapper disc;
 
@@ -148,7 +229,9 @@ bool isPal(const char* path) {
         .close = StreamClose,
     };
 
-    if (nod_disc_open_stream(&nod_stream, nullptr, &disc.handle) != NOD_RESULT_OK || disc.handle == nullptr) {
+    if (nod_disc_open_stream(&nod_stream, nullptr, &disc.handle) != NOD_RESULT_OK ||
+        disc.handle == nullptr)
+    {
         return false;
     }
 
@@ -157,6 +240,8 @@ bool isPal(const char* path) {
         return false;
     }
 
-    return matches(header.game_id, PAL_GAME_IDS);
+    const auto knownDisc = find_disc(std::string_view(header.game_id, 6));
+
+    return knownDisc && knownDisc->region == Region::Europe;
 }
 }  // namespace dusk::iso
