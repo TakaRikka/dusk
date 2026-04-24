@@ -1491,11 +1491,11 @@ namespace dusk {
                     }
 
                     ImGui::TableNextColumn();
-                    ImGui::Text(e.flagName.c_str());
+                    ImGuiStringViewText(e.flagName);
                     ImGui::TableNextColumn();
-                    ImGui::Text(e.location.c_str());
+                    ImGuiStringViewText(e.location);
                     ImGui::TableNextColumn();
-                    ImGui::Text(e.description.c_str());
+                    ImGuiStringViewText(e.description);
                 }
                 ImGui::EndTable();
             }

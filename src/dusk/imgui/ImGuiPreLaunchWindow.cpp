@@ -229,7 +229,7 @@ void ImGuiPreLaunchWindow::drawOptions() {
         }
         auto curFileType = (CARDFileType)getSettings().backend.cardFileType.getValue();
 
-        if (ImGui::BeginCombo("Save File Type", card_type_name(curFileType).data())) {\
+        if (ImGui::BeginCombo("Save File Type", card_type_name(curFileType).data())) {
 
             if (ImGui::Selectable("GCI Folder", curFileType == CARD_GCIFOLDER)) {
                 getSettings().backend.cardFileType.setValue(CARD_GCIFOLDER);
