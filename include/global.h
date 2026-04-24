@@ -73,6 +73,9 @@
 #endif
 
 #ifndef __MWERKS__
+#ifdef __cplusplus
+extern "C" {
+#endif
 // Silence clangd errors about MWCC PPC intrinsics by declaring them here.
 extern int __cntlzw(unsigned int);
 extern int __rlwimi(int, int, int, int, int);
@@ -80,7 +83,14 @@ extern void __dcbf(void*, int);
 extern void __dcbz(void*, int);
 extern void __sync();
 extern int __abs(int);
-void* __memcpy(void*, const void*, int);
+#if defined(__has_builtin) && __has_builtin(__builtin_memcpy)
+#define __memcpy __builtin_memcpy
+#else
+#define __memcpy memcpy
+#endif
+#ifdef __cplusplus
+}
+#endif
 #endif
 
 #ifndef M_PI

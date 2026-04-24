@@ -23,6 +23,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_main.h"
 #include "tracy/Tracy.hpp"
+#include <dusk/gamepad_color.h>
 
 fapGm_HIO_c::fapGm_HIO_c() {
     mUsingHostIO = true;
@@ -734,6 +735,8 @@ static void fapGm_AfterRecord() {
 }
 
 static void duskExecute() {
+    handleGamepadColor();
+    
     if (mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getTrigX(PAD_1)) {
         if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
             dynamic_cast<daAlink_c*>(link)->handleWolfHowl();

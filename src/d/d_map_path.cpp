@@ -237,6 +237,13 @@ void dDrawPath_c::rendering(dDrawPath_c::line_class const* p_line) {
     if (isDrawType(p_line->field_0x0)) {
         int width = getLineWidth(p_line->field_0x1);
 
+        #if TARGET_PC
+        f32 height = JUTVideo::getManager()->getRenderHeight() / 448.0f;
+        if (height > 1.0f) {
+            width /= 2;
+        }
+        #endif
+
         if (width > 0 && p_line->mDataNum >= 2) {
             GXSetLineWidth(width, GX_TO_ZERO);
             GXSetTevColor(GX_TEVREG0, *getLineColor(p_line->field_0x0 & 0x3F, p_line->field_0x1));

@@ -190,6 +190,10 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     mCursorInterpPrevY = 0.0f;
     mCursorInterpCurrX = 0.0f;
     mCursorInterpCurrY = 0.0f;
+    mCursorInterpPrevAngle = 0;
+    mCursorInterpCurrAngle = 0;
+    mCursorInterpPrevAngular = false;
+    mCursorInterpCurrAngular = false;
     mCursorInterpInit = false;
 #endif
     for (int i = 0; i < 4; i++) {
@@ -639,34 +643,70 @@ void dMenu_Ring_c::_draw() {
         drawSelectItem();
         drawItem2();
 #if TARGET_PC
+        f32 simX = 0.0f;
+        f32 simY = 0.0f;
+        bool restoreSimPos = false;
         if (dusk::frame_interp::is_enabled() && mAlphaRate >= 1.0f) {
-            f32 cursorX = mpDrawCursor->getPositionX();
-            f32 cursorY = mpDrawCursor->getPositionY();
+            simX = mpDrawCursor->getPositionX();
+            simY = mpDrawCursor->getPositionY();
+
+            const bool isAngular = (mStatus == STATUS_MOVE) && !mDirectSelectActive;
 
             if (dusk::frame_interp::get_ui_tick_pending()) {
                 mCursorInterpPrevX = mCursorInterpCurrX;
                 mCursorInterpPrevY = mCursorInterpCurrY;
-                mCursorInterpCurrX = cursorX;
-                mCursorInterpCurrY = cursorY;
+                mCursorInterpPrevAngle = mCursorInterpCurrAngle;
+                mCursorInterpPrevAngular = mCursorInterpCurrAngular;
 
-                if (!mCursorInterpInit) {
+                mCursorInterpCurrX = simX;
+                mCursorInterpCurrY = simY;
+                mCursorInterpCurrAngle = field_0x66e;
+                mCursorInterpCurrAngular = isAngular;
+
+                // reset prev = curr for first render pass or 
+                // when angle modes prev/curr differ
+                // to prevent arrival jitter
+                if (!mCursorInterpInit ||
+                    mCursorInterpPrevAngular != mCursorInterpCurrAngular) {
                     mCursorInterpPrevX = mCursorInterpCurrX;
                     mCursorInterpPrevY = mCursorInterpCurrY;
+                    mCursorInterpPrevAngle = mCursorInterpCurrAngle;
+                    mCursorInterpPrevAngular = mCursorInterpCurrAngular;
                     mCursorInterpInit = true;
                 }
             }
             if (mCursorInterpInit) {
                 const f32 step = dusk::frame_interp::get_interpolation_step();
-                mpDrawCursor->setPos(
-                    mCursorInterpPrevX + (mCursorInterpCurrX - mCursorInterpPrevX) * step,
-                    mCursorInterpPrevY + (mCursorInterpCurrY - mCursorInterpPrevY) * step
-                );
+                if (mCursorInterpPrevAngular && mCursorInterpCurrAngular) {
+                    const s16 delta = mCursorInterpCurrAngle - mCursorInterpPrevAngle;
+                    const s16 lerpedAngle = mCursorInterpPrevAngle + (s16)(delta * step);
+
+                    // yoinked from stick_move_proc()
+                    const f32 x = g_ringHIO.mItemRingPosX + FB_WIDTH_BASE / 2 +
+                                  mRingRadiusH * cM_ssin(lerpedAngle);
+                    const f32 y = g_ringHIO.mItemRingPosY + FB_HEIGHT_BASE / 2 +
+                                  mRingRadiusV * cM_scos(lerpedAngle);
+                    mpDrawCursor->setPos(x, y);
+                } else {
+                    mpDrawCursor->setPos(
+                        mCursorInterpPrevX + (mCursorInterpCurrX - mCursorInterpPrevX) * step,
+                        mCursorInterpPrevY + (mCursorInterpCurrY - mCursorInterpPrevY) * step
+                    );
+                }
+                restoreSimPos = true;
             }
         } else {
             mCursorInterpInit = false;
         }
 #endif
         mpDrawCursor->draw();
+#if TARGET_PC
+        // prevents offsetting at destination on the next frame
+        // since stick_wait_proc doesn't call setPos and we clobbered mPositionX/Y
+        if (restoreSimPos) {
+            mpDrawCursor->setPos(simX, simY);
+        }
+#endif
         mpItemExplain->trans(mCenterPosX, mCenterPosY);
         mpItemExplain->draw((J2DOrthoGraph*)grafPort);
         drawFlag0();
