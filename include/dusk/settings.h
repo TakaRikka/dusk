@@ -127,6 +127,7 @@ struct UserSettings {
         ConfigVar<bool> wasPresetChosen;
         ConfigVar<bool> enableCrashReporting;
         ConfigVar<bool> duskMenuOpen;
+        ConfigVar<int> cardFileType;
     } backend;
 };
 

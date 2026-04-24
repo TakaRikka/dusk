@@ -46,6 +46,17 @@ static std::string ShowIsoInvalidError(const iso::ValidationError code) {
     }
 }
 
+static std::string_view card_type_name(CARDFileType type) {
+    switch (type) {
+    case CARD_GCIFOLDER:
+        return "GCI Folder"sv;
+    case CARD_RAWIMAGE:
+        return "Card Image"sv;
+    default:
+        return ""sv;
+    }
+}
+
 void fileDialogCallback(void* userdata, const char* path, const char* error) {
     auto* self = static_cast<ImGuiPreLaunchWindow*>(userdata);
     if (error != nullptr) {
@@ -216,6 +227,23 @@ void ImGuiPreLaunchWindow::drawOptions() {
         if (configuredBackendId != m_initialGraphicsBackend) {
             ImGui::TextDisabled("Restart Required");
         }
+        auto curFileType = (CARDFileType)getSettings().backend.cardFileType.getValue();
+
+        if (ImGui::BeginCombo("Save File Type", card_type_name(curFileType).data())) {\
+
+            if (ImGui::Selectable("GCI Folder", curFileType == CARD_GCIFOLDER)) {
+                getSettings().backend.cardFileType.setValue(CARD_GCIFOLDER);
+                config::Save();
+            }
+
+            if (ImGui::Selectable("Card Image", curFileType == CARD_RAWIMAGE)) {
+                getSettings().backend.cardFileType.setValue(CARD_RAWIMAGE);
+                config::Save();
+            }
+
+            ImGui::EndCombo();
+        }
+
         ImGui::EndChild();
     }
 
