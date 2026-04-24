@@ -2855,7 +2855,7 @@ void* daMP_Reader(void*) {
 #endif
 }
 
-static u8 daMP_ReadThreadStack[0x2000];
+static u8 daMP_ReadThreadStack[DUSK_IF_ELSE(8, 0x2000)];
 
 #if TARGET_PC
 static BOOL VideoThreadCancelled;
@@ -2880,7 +2880,7 @@ static BOOL daMP_CreateReadThread(s32 param_0) {
 
 static OSThread daMP_VideoDecodeThread;
 
-static u8 daMP_VideoDecodeThreadStack[0x64000];
+static u8 daMP_VideoDecodeThreadStack[DUSK_IF_ELSE(8, 0x64000)];
 
 static OSMessageQueue daMP_FreeTextureSetQueue;
 
@@ -3132,7 +3132,7 @@ static BOOL AudioThreadCancelled;
 
 static OSThread daMP_AudioDecodeThread;
 
-static u8 daMP_AudioDecodeThreadStack[0x64000];
+static u8 daMP_AudioDecodeThreadStack[DUSK_IF_ELSE(8, 0x64000)];
 
 static OSMessageQueue daMP_FreeAudioBufferQueue;
 
@@ -4580,3 +4580,12 @@ actor_process_profile_definition g_profile_MOVIE_PLAYER = {
 };
 
 AUDIO_INSTANCES;
+
+#if TARGET_PC
+void dusk::MoviePlayerShutdown() {
+    // We need to cleanly shut down the threads to avoid crashes on shutdown.
+    if (daMP_c::m_myObj) {
+        daMP_c::m_myObj->daMP_c_Finish();
+    }
+}
+#endif

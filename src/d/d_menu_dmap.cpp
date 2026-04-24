@@ -21,6 +21,7 @@
 #include "d/d_msg_string.h"
 #include "d/d_meter_haihai.h"
 #include "d/d_menu_window.h"
+#include "dusk/settings.h"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
@@ -945,9 +946,15 @@ void dMenu_DmapBg_c::draw() {
         mpMeterHaihai->drawHaihai(field_0xdda,
             x1 + (local_224.x + local_218.x) / 2,
             y1 + (local_224.y + local_218.y) / 2,
-            -35.0f + (local_224.x - local_218.x), 
+            -35.0f + (local_224.x - local_218.x),
             -35.0f + (local_224.y - local_218.y));
+#if TARGET_PC
+        if (!dusk::getSettings().game.enableFrameInterpolation) {
+            field_0xdda = 0;
+        }
+#else
         field_0xdda = 0;
+#endif
     }
 
     dMenu_Dmap_c::myclass->drawFloorScreenTop(mFloorScreen, field_0xd94, field_0xd98, grafContext);
@@ -984,7 +991,36 @@ void dMenu_DmapBg_c::update() {
             JUT_ASSERT(2323, mpBackTexture != NULL);
 
             void* spec = mpArchive->getResource("spec/spec.dat");
+            #if TARGET_PC
+            struct dmap_spec {
+                /* 0x00 */ BE(f32) field_0x0;
+                /* 0x04 */ BE(f32) field_0x4;
+                /* 0x08 */ BE(f32) field_0x8;
+                /* 0x0C */ u8 field_0xc;
+                /* 0x0D */ u8 field_0xd;
+                /* 0x0E */ u8 field_0xe;
+                /* 0x0F */ u8 field_0xf;
+                /* 0x10 */ u8 field_0x10;
+                /* 0x11 */ u8 field_0x11;
+                /* 0x12 */ u8 field_0x12;
+                /* 0x13 */ u8 field_0x13;
+            };
+            dmap_spec* dspec = (dmap_spec*)spec;
+
+            field_0xd80 = dspec->field_0x0;
+            field_0xd84 = dspec->field_0x4;
+            field_0xd88 = dspec->field_0x8;
+            field_0xd8c = dspec->field_0xc;
+            field_0xd8d = dspec->field_0xd;
+            field_0xd8e = dspec->field_0xe;
+            field_0xd8f = dspec->field_0xf;
+            field_0xd90 = dspec->field_0x10;
+            field_0xd91 = dspec->field_0x11;
+            field_0xd92 = dspec->field_0x12;
+            field_0xd93 = dspec->field_0x13;
+            #else
             memcpy(&field_0xd80, spec, 20);
+            #endif
         }
     }
 
@@ -2545,6 +2581,11 @@ void dMenu_Dmap_c::zoomIn_proc() {
 }
 
 void dMenu_Dmap_c::zoomOut_init_proc() {
+#if TARGET_PC
+    if (dusk::getSettings().game.enableFrameInterpolation) {
+        mpDrawBg->resetScrollArrowMask();
+    }
+#endif
     Z2GetAudioMgr()->seStart(Z2SE_SY_MAP_ZOOMOUT, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
     mMapCtrl->initZoomOut(10);
     mpDrawBg->iconScaleAnmInit(1.0f, 0.0f, 10);

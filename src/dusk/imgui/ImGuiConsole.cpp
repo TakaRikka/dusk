@@ -305,6 +305,10 @@ namespace dusk {
             ImGuiMenuGame::ToggleFullscreen();
         }
 
+        if (ImGui::IsKeyPressed(ImGuiKey_Escape) && getSettings().video.enableFullscreen) {
+            ImGuiMenuGame::ToggleFullscreen();
+        }
+
         if (!dusk::IsGameLaunched) {
             m_preLaunchWindow.draw();
         }
@@ -319,9 +323,11 @@ namespace dusk {
             }
         }
 
+        // The menu bar renders with ImGuiCol_WindowBg behind it. We just want ImGuiCol_MenuBarBg,
+        // so make the window bg fully transparent temporarily
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
         if (showMenu && ImGui::BeginMainMenuBar()) {
             m_menuGame.draw();
-            m_menuEnhancements.draw();
             m_menuTools.draw();
 
             const auto fpsLabel =
@@ -336,6 +342,7 @@ namespace dusk {
 
             ImGui::EndMainMenuBar();
         }
+        ImGui::PopStyleColor();
 
         if (!getSettings().backend.wasPresetChosen) {
             m_firstRunPreset.draw();

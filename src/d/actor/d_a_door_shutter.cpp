@@ -19,6 +19,7 @@
 
 #if TARGET_PC
 #include <f_ap/f_ap_game.h>
+#include <dusk/autosave.h>
 #endif
 
 char* daDoor20_c::getStopBmdName() {

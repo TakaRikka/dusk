@@ -1029,15 +1029,8 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
                                     GX_FALSE, 0);
             }
 
-            #if TARGET_PC
-            // use full size for pc for higher quality background elements
-            u16 halfWidth = width;
-            u16 halfHeight = height;
-            #else
             u16 halfWidth = width >> 1;
             u16 halfHeight = height >> 1;
-            #endif
-
             GXRenderModeObj* sp24 = JUTGetVideoManager()->getRenderMode();
             GXSetCopyFilter(GX_FALSE, NULL, GX_TRUE, sp24->vfilter);
             GXSetTexCopySrc(x_orig, y_orig_pos, width, height);
@@ -1155,6 +1148,9 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
             GXSetProjection(ortho, GX_ORTHOGRAPHIC);
             GXSetCurrentMtx(0);
 
+#ifdef TARGET_PC
+            if (dusk::getSettings().game.enableDepthOfField)
+#endif
             if (l_tevColor0.a > -255 && sp8 == 1) {
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                 GXPosition3s16(x_orig, y_orig_pos, -5);

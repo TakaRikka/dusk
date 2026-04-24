@@ -9,7 +9,6 @@
 #include <SDL3/SDL_touch.h>
 
 #include "ImGuiFirstRunPreset.hpp"
-#include "ImGuiMenuEnhancements.hpp"
 #include "ImGuiMenuGame.hpp"
 #include "ImGuiMenuTools.hpp"
 #include "ImGuiPreLaunchWindow.hpp"
@@ -54,7 +53,6 @@ private:
 
     ImGuiFirstRunPreset m_firstRunPreset;
     ImGuiMenuGame m_menuGame;
-    ImGuiMenuEnhancements m_menuEnhancements;
     ImGuiPreLaunchWindow m_preLaunchWindow;
 
     // Keep always last

@@ -41,6 +41,7 @@
 
 #if TARGET_PC
 #include "dusk/memory.h"
+#include <dusk/autosave.h>
 #endif
 
 #if DEBUG

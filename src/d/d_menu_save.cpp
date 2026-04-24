@@ -18,6 +18,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include "d/d_msg_scrn_explain.h"
+#include "dusk/frame_interpolation.h"
 #include "dusk/settings.h"
 #include "JSystem/J2DGraph/J2DAnmLoader.h"
 #include "f_op/f_op_msg_mng.h"
@@ -715,7 +716,9 @@ void dMenu_save_c::_move() {
         }
 
         (this->*MenuSaveProc[mMenuProc])();
+#if !TARGET_PC
         saveSelAnm();
+#endif
 
         if (mWarning != NULL) {
             mWarning->_move();
@@ -732,36 +735,46 @@ void dMenu_save_c::saveSelAnm() {
 }
 
 void dMenu_save_c::selFileWakuAnm() {
-    mFileWakuAnmFrame += 2;
-    if (mFileWakuAnmFrame >= mpFileWakuAnm->getFrameMax()) {
-        mFileWakuAnmFrame -= mpFileWakuAnm->getFrameMax();
+#if TARGET_PC
+    if (dusk::frame_interp::get_ui_tick_pending())
+#endif
+    {
+        mFileWakuAnmFrame += 2;
+        if (mFileWakuAnmFrame >= mpFileWakuAnm->getFrameMax()) {
+            mFileWakuAnmFrame -= mpFileWakuAnm->getFrameMax();
+        }
+
+        mFileWakuRotAnmFrame += 2;
+        if (mFileWakuRotAnmFrame >= mpFileWakuRotAnm->getFrameMax()) {
+            mFileWakuRotAnmFrame -= mpFileWakuRotAnm->getFrameMax();
+        }
     }
     mpFileWakuAnm->setFrame(mFileWakuAnmFrame);
-
-    mFileWakuRotAnmFrame += 2;
-    if (mFileWakuRotAnmFrame >= mpFileWakuRotAnm->getFrameMax()) {
-        mFileWakuRotAnmFrame -= mpFileWakuRotAnm->getFrameMax();
-    }
     mpFileWakuRotAnm->setFrame(mFileWakuRotAnmFrame);
 }
 
 void dMenu_save_c::bookIconAnm() {
-    field_0x154 += 2;
-    if (field_0x154 >= field_0x150->getFrameMax()) {
-        field_0x154 -= field_0x150->getFrameMax();
+#if TARGET_PC
+    if (dusk::frame_interp::get_ui_tick_pending())
+#endif
+    {
+        field_0x154 += 2;
+        if (field_0x154 >= field_0x150->getFrameMax()) {
+            field_0x154 -= field_0x150->getFrameMax();
+        }
+
+        field_0x15c += 2;
+        if (field_0x15c >= field_0x158->getFrameMax()) {
+            field_0x15c -= field_0x158->getFrameMax();
+        }
+
+        field_0x164 += 2;
+        if (field_0x164 >= field_0x160->getFrameMax()) {
+            field_0x164 -= field_0x160->getFrameMax();
+        }
     }
     field_0x150->setFrame(field_0x154);
-
-    field_0x15c += 2;
-    if (field_0x15c >= field_0x158->getFrameMax()) {
-        field_0x15c -= field_0x158->getFrameMax();
-    }
     field_0x158->setFrame(field_0x15c);
-
-    field_0x164 += 2;
-    if (field_0x164 >= field_0x160->getFrameMax()) {
-        field_0x164 -= field_0x160->getFrameMax();
-    }
     field_0x160->setFrame(field_0x164);
 }
 
@@ -2809,6 +2822,9 @@ void dMenu_save_c::menuSaveWide() {
 
 void dMenu_save_c::_draw2() {
     if (field_0x21a1 == 0) {
+#if TARGET_PC
+        saveSelAnm();
+#endif
         if (mpScrnExplain != NULL) {
             dComIfGd_set2DOpa(&mMenuSaveExplain);
         }

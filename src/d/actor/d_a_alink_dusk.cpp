@@ -41,7 +41,7 @@ void daAlink_c::handleWolfHowl() {
             return;
         }
 
-        bool canTransform = false;
+        bool canHowl = false;
 
         if (mLinkAcch.ChkGroundHit() && !checkModeFlg(MODE_PLAYER_FLY) && !checkMagneBootsOn()) {
             if (!checkForestOldCentury()) {
@@ -52,10 +52,15 @@ void daAlink_c::handleWolfHowl() {
                          (checkEventRun() || getMidnaActor()->checkMetamorphoseEnable()) &&
                          (checkModeFlg(4) || dComIfGp_checkPlayerStatus0(0, 0x10))))
                     {
-                        canTransform = true;
+                        canHowl = true;
                     }
                 }
             }
+        }
+
+        if (!canHowl) {
+            Z2GetAudioMgr()->seStart(Z2SE_SYS_ERROR, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            return;
         }
 
         getWolfHowlMgrP()->setCorrectCurve(9);
@@ -154,6 +159,7 @@ bool daAlink_c::checkGyroAimContext() {
     case PROC_BOW_SUBJECT:
     case PROC_BOOMERANG_SUBJECT:
     case PROC_COPY_ROD_SUBJECT:
+    case PROC_HAWK_SUBJECT:
     case PROC_HOOKSHOT_SUBJECT:
     case PROC_SWIM_HOOKSHOT_SUBJECT:
     case PROC_HORSE_BOW_SUBJECT:

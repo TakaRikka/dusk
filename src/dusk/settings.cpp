@@ -44,6 +44,7 @@ UserSettings g_userSettings = {
         .invertCameraXAxis {"game.invertCameraXAxis", false},
         .disableMainHUD {"game.disableMainHUD", false},
         .pauseOnFocusLost {"game.pauseOnFocusLost", false},
+        .enableLinkDollRotation = {"game.enableLinkDollRotation", false },
 
         // Graphics
         .bloomMode {"game.bloomMode", BloomMode::Classic},
@@ -52,6 +53,7 @@ UserSettings g_userSettings = {
         .enableFrameInterpolation {"game.enableFrameInterpolation", false},
         .internalResolutionScale {"game.internalResolutionScale", 0},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
+        .enableDepthOfField {"game.enableDepthOfField", true},
 
         // Audio
         .noLowHpSound {"game.noLowHpSound", false},
@@ -70,14 +72,15 @@ UserSettings g_userSettings = {
 
         // Cheats
         .infiniteHearts {"game.infiniteHearts", false},
-        .infiniteArrows {"game.infiniteArrows", false},
-        .infiniteBombs {"game.infiniteBombs", false},
-        .infiniteOil {"game.infiniteOil", false},
-        .infiniteOxygen {"game.infiniteOxygen", false},
-        .infiniteRupees {"game.infiniteRupees", false},
-        .moonJump {"game.moonJump", false},
-        .superClawshot {"game.superClawshot", false},
-        .alwaysGreatspin {"game.alwaysGreatspin", false},
+        .infiniteArrows{"game.infiniteArrows", false},
+        .infiniteBombs{"game.infiniteBombs", false},
+        .infiniteOil{"game.infiniteOil", false},
+        .infiniteOxygen{"game.infiniteOxygen", false},
+        .infiniteRupees{"game.infiniteRupees", false},
+        .enableIndefiniteItemDrops {"game.enableIndefiniteItemDrops", false},
+        .moonJump{"game.moonJump", false},
+        .superClawshot{"game.superClawshot", false},
+        .alwaysGreatspin{"game.alwaysGreatspin", false},
         .enableFastIronBoots {"game.enableFastIronBoots", false},
         .canTransformAnywhere {"game.canTransformAnywhere", false},
         .fastSpinner {"game.fastSpinner", false},
@@ -97,7 +100,8 @@ UserSettings g_userSettings = {
         .showPipelineCompilation {"backend.showPipelineCompilation", false},
         .wasPresetChosen {"backend.wasPresetChosen", false},
         .enableCrashReporting {"backend.enableCrashReporting", true},
-        .duskMenuOpen {"backend.duskMenuOpen", false}
+        .duskMenuOpen {"backend.duskMenuOpen", false},
+        .cardFileType {"backend.cardFileType", static_cast<int>(CARD_GCIFOLDER)}
     }
 };
 
@@ -145,10 +149,12 @@ void registerSettings() {
     Register(g_userSettings.game.disableWaterRefraction);
     Register(g_userSettings.game.internalResolutionScale);
     Register(g_userSettings.game.shadowResolutionMultiplier);
+    Register(g_userSettings.game.enableDepthOfField);
     Register(g_userSettings.game.enableFastIronBoots);
     Register(g_userSettings.game.canTransformAnywhere);
     Register(g_userSettings.game.freeMagicArmor);
     Register(g_userSettings.game.restoreWiiGlitches);
+    Register(g_userSettings.game.enableLinkDollRotation);
     Register(g_userSettings.game.noMissClimbing);
     Register(g_userSettings.game.noLowHpSound);
     Register(g_userSettings.game.midnasLamentNonStop);
@@ -160,6 +166,7 @@ void registerSettings() {
     Register(g_userSettings.game.infiniteOil);
     Register(g_userSettings.game.infiniteOxygen);
     Register(g_userSettings.game.infiniteRupees);
+    Register(g_userSettings.game.enableIndefiniteItemDrops);
     Register(g_userSettings.game.moonJump);
     Register(g_userSettings.game.superClawshot);
     Register(g_userSettings.game.alwaysGreatspin);
@@ -181,6 +188,7 @@ void registerSettings() {
     Register(g_userSettings.backend.wasPresetChosen);
     Register(g_userSettings.backend.enableCrashReporting);
     Register(g_userSettings.backend.duskMenuOpen);
+    Register(g_userSettings.backend.cardFileType);
 }
 
 // Transient settings

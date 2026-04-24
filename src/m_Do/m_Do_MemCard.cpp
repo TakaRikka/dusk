@@ -77,6 +77,8 @@ static OSThread MemCardThread;
 
 void mDoMemCd_Ctrl_c::ThdInit() {
     #if !PLATFORM_SHIELD
+    CARDSetLoadType((CARDFileType)dusk::getSettings().backend.cardFileType.getValue());
+
     CARDInit(DUSK_GAME_NAME, DUSK_GAME_VERSION);
     #endif
 

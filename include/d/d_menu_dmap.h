@@ -103,6 +103,10 @@ public:
         field_0xd98 = param_1;
     }
 
+#if TARGET_PC
+    void resetScrollArrowMask() { field_0xdda = 0; }
+#endif
+
     /* 0xC98 */ JKRExpHeap* mpHeap;
     /* 0xC9C */ JKRExpHeap* mpTalkHeap;
     /* 0xCA0 */ STControl* mpStick;
