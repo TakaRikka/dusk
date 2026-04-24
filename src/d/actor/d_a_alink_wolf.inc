@@ -342,6 +342,26 @@ void daAlink_c::changeLink(int param_0) {
             initModel(static_cast<J3DModelData*>(dComIfG_getObjectRes(mArcName, "zl_face.bmd")), 0x20200);
     }
 
+#ifdef TARGET_PC
+    // Update Adult Link's eye maxLOD to prevent the eyes from disappearing
+    {
+        J3DTexture* tex = mpLinkFaceModel->getModelData()->getTexture();
+        JUTNameTab* nametable = mpLinkFaceModel->getModelData()->getTextureName();
+        if (tex != nullptr && nametable != nullptr) {
+            for (u16 i = 0; i < tex->getNum(); i++) {
+                const char* tex_name = nametable->getName(i);
+                if (tex_name != nullptr &&
+                    (strcmp(tex_name, "al_eyeball") == 0 || strcmp(tex_name, "highlight02") == 0 ||
+                     strcmp(tex_name, "eye_kage01") == 0))
+                {
+                    ResTIMG* timg = tex->getResTIMG(i);
+                    timg->maxLOD = 0;
+                }
+            }
+        }
+    }
+#endif
+
     modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(mArcName, "al_bootsH.bmd"));
     u16 i;
     for (i = 0; i < 2; i++) {
