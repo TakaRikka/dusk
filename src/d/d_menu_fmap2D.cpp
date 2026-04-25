@@ -276,18 +276,14 @@ void dMenu_Fmap2DBack_c::draw() {
     u32 scissorLeft, scissorTop, scissorWidth, scissorHeight;
     GXGetScissor(&scissorLeft, &scissorTop, &scissorWidth, &scissorHeight);
 
-#if TARGET_PC
-    grafPort->scissor(mTransX, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
-#else
     grafPort->scissor(mTransX, 0.0f, FB_WIDTH, FB_HEIGHT);
-#endif
     grafPort->setScissor();
 
     mpBackTex->setBlackWhite(field_0x1208, field_0x120c);
     mpBackTex->setAlpha(mAlphaRate * 255.0f * g_fmapHIO.mBackgroundAlpha);
     mpBackTex->draw(mTransX + mDoGph_gInf_c::getMinXF(),
-                    mTransZ + mDoGph_gInf_c::getMinYF(), mDoGph_gInf_c::getWidth(),
-                    mDoGph_gInf_c::getHeight(), false, false, false);
+                    mTransZ + mDoGph_gInf_c::getMinYF(), mDoGph_gInf_c::getWidthF(),
+                    mDoGph_gInf_c::getHeightF(), false, false, false);
 
     mpBackScreen->draw(mTransX, mTransZ, grafPort);
     mpBaseScreen->draw(mTransX, mTransZ, grafPort);
@@ -297,13 +293,8 @@ void dMenu_Fmap2DBack_c::draw() {
 
     Vec vec2 = mpMapArea->getGlobalVtx(&mtx, 3, false, 0);
 
-#if TARGET_PC
-    f32 width = mDoGph_gInf_c::getWidthF() /  mDoGph_gInf_c::getWidth();
-    f32 height = mDoGph_gInf_c::getHeightF() / mDoGph_gInf_c::getHeight();
-#else
     f32 width = mDoGph_gInf_c::getWidthF() /  FB_WIDTH;
     f32 height = mDoGph_gInf_c::getHeightF() / FB_HEIGHT;
-#endif
 
     grafPort->scissor(mTransX + ((vec1.x - mDoGph_gInf_c::getMinXF()) / width),
                       mTransZ + (vec1.y / height), (vec2.x - vec1.x) / width,
@@ -351,8 +342,13 @@ void dMenu_Fmap2DBack_c::draw() {
         scrollAreaDraw();
     }
 
-    blinkMove(30);
-    moveLightDropAnime();
+#ifdef TARGET_PC
+    if (dusk::frame_interp::get_ui_tick_pending())
+#endif
+    {
+        blinkMove(30);
+        moveLightDropAnime();
+    }
     setCenterPosX(field_0x11dc, 1);
     drawIcon(mTransX, mTransZ, mAlphaRate, field_0xfa8 * mSpotTextureFadeAlpha);
 
@@ -360,11 +356,7 @@ void dMenu_Fmap2DBack_c::draw() {
         drawDebugRegionArea();
     }
 
-#if TARGET_PC
-    grafPort->scissor(scissorLeft, scissorTop, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
-#else
     grafPort->scissor(scissorLeft, scissorTop, scissorWidth, scissorHeight);
-#endif
     grafPort->setScissor();
 
     if (isArrowDrawFlag()) {
@@ -392,16 +384,15 @@ void dMenu_Fmap2DBack_c::draw() {
                         &mArrowPos2DY);
 
 #ifdef TARGET_PC
-        for (u32 i = 0; i < dusk::frame_interp::get_presentation_ui_advance_ticks(); ++i) {
+        if (dusk::frame_interp::get_ui_tick_pending())
 #endif
+        {
             field_0x11e0 -= g_fmapHIO.mCursorSpeed;
 
             if (field_0x11e0 < 0.0f) {
                 field_0x11e0 += 360.0f;
             }
-#ifdef TARGET_PC
         }
-#endif
 
         mpPointParent->getPanePtr()->rotate(mpPointParent->getSizeX() / 2.0f,
                                             mpPointParent->getSizeY() / 2.0f, ROTATE_Z,
@@ -1778,14 +1769,19 @@ void dMenu_Fmap2DBack_c::calcBlink() {
                                  t * (g_fmapHIO.mMapBlink[i + 1].mUnselectedRegion.mBlinkSpeed -
                                       g_fmapHIO.mMapBlink[i].mUnselectedRegion.mBlinkSpeed);
 
-    field_0x1218++;
-    if (field_0x1218 >= selected_blink_speed) {
-        field_0x1218 = 0;
-    }
+#if TARGET_PC
+    if (dusk::frame_interp::get_ui_tick_pending())
+#endif
+    {
+        field_0x1218++;
+        if (field_0x1218 >= selected_blink_speed) {
+            field_0x1218 = 0;
+        }
 
-    field_0x121a++;
-    if (field_0x121a >= unselected_blink_speed) {
-        field_0x121a = 0;
+        field_0x121a++;
+        if (field_0x121a >= unselected_blink_speed) {
+            field_0x121a = 0;
+        }
     }
 
     f32 t_selected = 0.0f;
@@ -2580,11 +2576,7 @@ void dMenu_Fmap2DTop_c::draw() {
     J2DOrthoGraph* ctx = static_cast<J2DOrthoGraph*>(dComIfGp_getCurrentGrafPort());
     ctx->setup2D();
     GXGetScissor(&scissor_left, &scissor_top, &scissor_width, &scissor_height);
-#if TARGET_PC
-    ctx->scissor(mTransX, 0.0f, mDoGph_gInf_c::getWidth(), mDoGph_gInf_c::getHeight());
-#else
     ctx->scissor(mTransX, 0.0f, FB_WIDTH, FB_HEIGHT);
-#endif
     ctx->setScissor();
     mpTitleScreen->draw(mTransX, mTransY, ctx);
     ctx->scissor(scissor_left, scissor_top, scissor_width, scissor_height);

@@ -43,10 +43,6 @@ struct mDoLib_clipper {
 };
 
 void mDoLib_project(Vec* src, Vec* dst);
-#if TARGET_PC
-void mDoLib_project(Vec* src, Vec* dst, JGeometry::TBox2<f32> viewport);
-#endif
-
 u32 mDoLib_setResTimgObj(ResTIMG const* res, TGXTexObj* o_texObj, u32 tlut_name,
                           GXTlutObj* o_tlutObj);
 void mDoLib_pos2camera(Vec* src, Vec* dst);

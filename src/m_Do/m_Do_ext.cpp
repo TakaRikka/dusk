@@ -25,6 +25,7 @@
 #include <cstdio>
 #include <cstring>
 #include "dusk/logging.h"
+#include "dusk/frame_interpolation.h"
 
 u8 mDoExt::CurrentHeapAdjustVerbose;
 u8 mDoExt::HeapAdjustVerbose;
@@ -349,6 +350,16 @@ void mDoExt_modelUpdateDL(J3DModel* i_model) {
 }
 
 void mDoExt_modelEntryDL(J3DModel* i_model) {
+#if TARGET_PC
+    if (!dusk::frame_interp::is_sim_frame()) {
+        // FRAME INTERP NOTE: This fixes issue #355 where some lights would flicker.
+        // This is likely better solved by updating J3DMaterial::needsInterpCallBack,
+        // but it's unclear what exactly needs to be added.
+        i_model->diff();
+        return;
+    }
+#endif
+
     modelMtxErrorCheck(i_model);
 
     J3DModelData* model_data = i_model->getModelData();
@@ -2383,8 +2394,8 @@ void mDoExt_3DlineMat0_c::draw() {
     int var_r26 = (field_0x14 << 1) & 0xFFFF;
 
     for (int i = 0; i < field_0x10; i++) {
-        GXSETARRAY(GX_VA_POS, field_0x18->field_0x8[field_0x16], sizeof(cXyz) * var_r26, sizeof(cXyz), true);
-        GXSETARRAY(GX_VA_NRM, field_0x18->field_0x10[field_0x16], 3 * var_r26, 3, true);
+        GXSETARRAY(GX_VA_POS, var_r28->field_0x8[field_0x16], sizeof(cXyz) * var_r26, sizeof(cXyz), true);
+        GXSETARRAY(GX_VA_NRM, var_r28->field_0x10[field_0x16], 3 * var_r26, 3, true);
 
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, var_r26);
         for (u16 j = 0; j < (u16)var_r26; j++) {

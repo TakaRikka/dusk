@@ -1,23 +1,28 @@
 #ifndef DUSK_IMGUI_HPP
 #define DUSK_IMGUI_HPP
 
-#include <aurora/aurora.h>
 #include <deque>
 #include <string>
 #include <string_view>
 
+#include <aurora/aurora.h>
+#include <SDL3/SDL_touch.h>
+
 #include "ImGuiFirstRunPreset.hpp"
-#include "ImGuiMenuEnhancements.hpp"
 #include "ImGuiMenuGame.hpp"
 #include "ImGuiMenuSpeedrunTimer.hpp"
 #include "ImGuiMenuTools.hpp"
 #include "ImGuiPreLaunchWindow.hpp"
 #include "imgui.h"
 
+union SDL_Event;
+struct ImGuiWindow;
+
 namespace dusk {
 class ImGuiConsole {
 public:
     ImGuiConsole();
+    void HandleSDLEvent(const SDL_Event& event);
     void UpdateSettings();
     void PreDraw();
     void PostDraw();
@@ -34,13 +39,20 @@ private:
                                                               remain(duration) {}
     };
 
+    float mouseHideTimer = 0.0f;
+
     bool m_isHidden = true;
     bool m_isLaunchInitialized = false;
+    bool m_touchTapActive = false;
+    bool m_touchTapMoved = false;
+    SDL_FingerID m_touchTapFingerId = 0;
+    ImVec2 m_touchTapStartPos = {};
+    ImGuiWindow* m_dragScrollWindow = nullptr;
+    ImVec2 m_dragScrollLastMousePos = {};
     std::deque<Toast> m_toasts;
 
     ImGuiFirstRunPreset m_firstRunPreset;
     ImGuiMenuGame m_menuGame;
-    ImGuiMenuEnhancements m_menuEnhancements;
     ImGuiMenuSpeedrunTimer m_menuSpeedrunTimer;
     ImGuiPreLaunchWindow m_preLaunchWindow;
 
@@ -49,6 +61,7 @@ private:
 
     void ShowToasts();
     void ShowPipelineProgress();
+    void UpdateDragScroll();
 };
 
 extern ImGuiConsole g_imguiConsole;

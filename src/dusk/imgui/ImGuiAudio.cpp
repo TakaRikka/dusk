@@ -209,7 +209,7 @@ static void ShowAllJAISeqs() {
 }
 
 void dusk::ImGuiMenuTools::ShowAudioDebug() {
-    if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F7, m_showAudioDebug)) {
+    if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F10, m_showAudioDebug)) {
         return;
     }
 
@@ -255,7 +255,8 @@ void dusk::ImGuiMenuTools::ShowAudioDebug() {
 }
 
 void dusk::ImGuiMenuTools::ShowSaveEditor() {
-    if (m_showSaveEditor) {
-        m_saveEditor.draw(m_showSaveEditor);
+    if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F6, m_showSaveEditor)) {
+        return;
     }
+    m_saveEditor.draw(m_showSaveEditor);
 }

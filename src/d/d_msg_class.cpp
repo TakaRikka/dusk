@@ -12,6 +12,10 @@
 #include "d/d_lib.h"
 #include "JSystem/JUtility/JUTFont.h"
 
+#if TARGET_PC
+#include "dusk/scope_guard.hpp"
+#endif
+
 #if REGION_JPN
 #define CHAR_CODE_MALE_ICON 0x8189
 #define CHAR_CODE_FEMALE_ICON 0x818A
@@ -1918,6 +1922,11 @@ void jmessage_tSequenceProcessor::do_begin(void const* pEntry, char const* pszTe
 
     pReference->resetReference();
     field_0xb5 = 0;
+#if TARGET_PC
+    if (dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)) {
+        field_0xb2 = 1;
+    }
+#endif
 }
 
 void jmessage_tSequenceProcessor::do_end() {
@@ -1977,6 +1986,13 @@ bool jmessage_tSequenceProcessor::do_isReady() {
         return 0;
     }
     #endif
+
+#if TARGET_PC
+    if (dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)) {
+        field_0xb2 = 1;
+        pReference->setSendTimer(0);
+    }
+#endif
 
     if (dComIfGp_checkMesgBgm()) {
         bool isItemMusicPlaying = true;
@@ -2153,6 +2169,18 @@ void jmessage_tSequenceProcessor::do_character(int iCharacter) {
 
 bool jmessage_tSequenceProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_size) {
     jmessage_tReference* pReference = (jmessage_tReference*)getReference();
+
+#if TARGET_PC
+    // This class runs the lambda function when it goes out of scope. We want to run
+    // this code after the switch statement and this saves us from having to litter
+    // the switch statement with IF_DUSK before every return.
+    auto instantTextRun = SimpleScopeGuard([&]() {
+        if (dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)) {
+            field_0xb2 = 1;
+            pReference->setSendTimer(0);
+        }
+    });
+#endif
 
     switch (i_tag & 0xFF0000) {
     case MSGTAG_GROUP(1): {

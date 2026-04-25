@@ -5,7 +5,7 @@
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuGame.hpp"
 
-#include <SDL3/SDL.h>
+#include <dolphin/pad.h>
 
 namespace dusk {
     void ImGuiMenuGame::windowInputViewer() {
@@ -260,31 +260,33 @@ namespace dusk {
             size.y = 130 * scale;
             ImGui::Dummy(size);
 
-            SDL_Gamepad* pad = SDL_GetGamepadFromPlayerIndex(0);
-            if (pad != nullptr && SDL_GamepadHasSensor(pad, SDL_SENSOR_GYRO)) {
+            if (PADHasSensor(PAD_1, PAD_SENSOR_GYRO) == TRUE) {
                 ImGui::Separator();
-                ImGui::TextUnformatted("Gyro");
+                ImGui::Checkbox("Gyro Values", &m_showInputViewerGyro);
+                if (m_showInputViewerGyro) {
+                    ImGui::TextUnformatted("Gyro");
 
-                constexpr float kBarScale = 4.0f;
-                auto bar = [kBarScale](const char* label, float v) {
-                    const float a = std::fabs(v);
-                    const float t = std::min(1.f, a / kBarScale);
-                    char overlay[32];
-                    snprintf(overlay, sizeof(overlay), "%s %+.3f", label, v);
-                    ImGui::ProgressBar(t, ImVec2(-1, 0), overlay);
-                };
+                    constexpr float kBarScale = 4.0f;
+                    auto bar = [kBarScale](const char* label, float v) {
+                        const float a = std::fabs(v);
+                        const float t = std::min(1.f, a / kBarScale);
+                        char overlay[32];
+                        snprintf(overlay, sizeof(overlay), "%s %+.3f", label, v);
+                        ImGui::ProgressBar(t, ImVec2(-1, 0), overlay);
+                    };
 
-                if (SDL_SetGamepadSensorEnabled(pad, SDL_SENSOR_GYRO, true)) {
-                    float gyro[3];
-                    if (SDL_GetGamepadSensorData(pad, SDL_SENSOR_GYRO, gyro, 3)) {
-                        bar("X", gyro[0]);
-                        bar("Y", gyro[1]);
-                        bar("Z", gyro[2]);
+                    if (PADSetSensorEnabled(PAD_1, PAD_SENSOR_GYRO, TRUE) == TRUE) {
+                        f32 gyro[3];
+                        if (PADGetSensorData(PAD_1, PAD_SENSOR_GYRO, gyro, 3) == TRUE) {
+                            bar("X", gyro[0]);
+                            bar("Y", gyro[1]);
+                            bar("Z", gyro[2]);
+                        }
+                    } else {
+                        bar("X", 0.f);
+                        bar("Y", 0.f);
+                        bar("Z", 0.f);
                     }
-                } else {
-                    bar("X", 0.f);
-                    bar("Y", 0.f);
-                    bar("Z", 0.f);
                 }
             }
 

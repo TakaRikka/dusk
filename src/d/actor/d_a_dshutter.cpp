@@ -215,7 +215,15 @@ int daDsh_c::create() {
 
     mType = getType();
 
+    // !@bug Static-init only runs once, so slot 0 keeps the first mType's arc name forever.
+    // GC/Wii dodges this via REL reload; TPHD is statically linked so later gates of a
+    // different type load the wrong arc and CreateHeap fails. The storage must stay static
+    // because mResLoader.load holds the pointer past create(), so we just overwrite slot 0
+    // each call instead.
     static const char* l_resName[] = {l_arcName[mType], ""};
+#ifdef TARGET_PC
+    l_resName[0] = l_arcName[mType];
+#endif
 
     int phase = mResLoader.load(l_resName, NULL);
     if (phase == cPhs_COMPLEATE_e) {

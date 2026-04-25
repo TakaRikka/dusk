@@ -37,18 +37,40 @@ void daAlink_c::setCrawlMoveDirectionArrow() {
     }
 
     if (field_0x3198 & 4) {
-        if (!bvar) {
-            direction |= data_80452F38;
-        } else {
-            direction |= data_80452F39;
+        #if TARGET_PC
+        if (dusk::getSettings().game.enableMirrorMode) {
+            if (!bvar) {
+                direction |= data_80452F39;
+            } else {
+                direction |= data_80452F38;
+            }
+        } else
+        #endif
+        {
+            if (!bvar) {
+                direction |= data_80452F38;
+            } else {
+                direction |= data_80452F39;
+            }
         }
     }
 
     if (field_0x3198 & 8) {
-        if (!bvar) {
-            direction |= data_80452F39;
-        } else {
-            direction |= data_80452F38;
+        #if TARGET_PC
+        if (dusk::getSettings().game.enableMirrorMode) {
+            if (!bvar) {
+                direction |= data_80452F38;
+            } else {
+                direction |= data_80452F39;
+            }
+        } else
+        #endif
+        {
+            if (!bvar) {
+                direction |= data_80452F39;
+            } else {
+                direction |= data_80452F38;
+            }
         }
     }
 

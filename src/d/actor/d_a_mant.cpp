@@ -12,6 +12,7 @@
 
 #if TARGET_PC
 #include "dusk/dvd_asset.hpp"
+#include "dusk/frame_interpolation.h"
 static u8* l_Egnd_mantTEX_get()   { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", 0x1C00, 0x4000), true); return buf; }
 static u8* l_Egnd_mantTEX_U_get() { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", 0x5C00, 0x4000), true); return buf; }
 static u8* l_Egnd_mantPAL_get()   { alignas(32) static u8 buf[0x60];   static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", 0x9C00, 0x60),   true); return buf; }
@@ -267,6 +268,37 @@ static void* tex_d[2] = {
 
 static char lbl_277_bss_0;
 
+#if TARGET_PC
+static void mant_build_anchor_frame(const cXyz& anchor_a, const cXyz& anchor_b, Mtx out) {
+    cXyz axis_x = anchor_b - anchor_a;
+    if (!axis_x.normalizeRS()) {
+        axis_x = cXyz::BaseX;
+    }
+
+    cXyz helper = fabsf(axis_x.y) > 0.95f ? cXyz::BaseZ : cXyz::BaseY;
+    cXyz axis_z = axis_x.getCrossProduct(helper);
+    if (!axis_z.normalizeRS()) {
+        axis_z = cXyz::BaseZ;
+    }
+
+    cXyz axis_y = axis_z.getCrossProduct(axis_x);
+    if (!axis_y.normalizeRS()) {
+        axis_y = cXyz::BaseY;
+    }
+
+    const cXyz center = anchor_a + ((anchor_b - anchor_a) * 0.5f);
+
+    const cXyz col[3] = { axis_x, axis_y, axis_z };
+    const f32 t[3] = { center.x, center.y, center.z };
+    for (int r = 0; r < 3; ++r) {
+        out[r][0] = (&col[0].x)[r];
+        out[r][1] = (&col[1].x)[r];
+        out[r][2] = (&col[2].x)[r];
+        out[r][3] = t[r];
+    }
+}
+#endif
+
 void daMant_packet_c::draw() {
 #if TARGET_PC
     void* image = l_Egnd_mantTEX;
@@ -290,8 +322,72 @@ void daMant_packet_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
 
+#if TARGET_PC
+    cXyz* draw_pos = &this->mNrm[0][0];
+    {
+        const u8 curr_buffer = this->field_0x74;
+        const cXyz* curr_pos = &this->mPos[curr_buffer][0];
+        const MtxP curr_frame = curr_buffer == 0 ? this->mMtx : this->mMtx2;
+
+        Mtx curr_frame_inverse;
+        MTXInverse(curr_frame, curr_frame_inverse);
+
+        const u8 prev_buffer = curr_buffer ^ 1;
+        const cXyz* prev_pos = &this->mPos[prev_buffer][0];
+        Mtx prev_frame_inverse;
+        MTXInverse(prev_buffer == 0 ? this->mMtx : this->mMtx2, prev_frame_inverse);
+
+        Mtx presented_frame;
+        MTXCopy(curr_frame, presented_frame);
+
+        mant_class* mant_p = reinterpret_cast<mant_class*>(reinterpret_cast<u8*>(this) - offsetof(mant_class, field_0x0570));
+        if (mant_p != NULL) {
+            b_gnd_class* parent = (b_gnd_class*)fopAcM_SearchByID(mant_p->parentActorID);
+            if (parent != NULL && parent->mpModelMorf != NULL) {
+                J3DModel* model = parent->mpModelMorf->getModel();
+                if (model != NULL) {
+                    MtxP src34 = model->getAnmMtx(34);
+                    MtxP src25 = model->getAnmMtx(25);
+                    Mtx joint_34_scratch;
+                    Mtx joint_25_scratch;
+                    MtxP joint_34 = dusk::frame_interp::lookup_replacement(src34, joint_34_scratch) ? joint_34_scratch : src34;
+                    MtxP joint_25 = dusk::frame_interp::lookup_replacement(src25, joint_25_scratch) ? joint_25_scratch : src25;
+
+                    cXyz presented_anchor_a;
+                    cXyz presented_anchor_b;
+                    cXyz local_offset;
+
+                    MTXCopy(joint_34, *calc_mtx);
+                    local_offset.set(10.0f, 5.0f, -17.0f);
+                    MtxPosition(&local_offset, &presented_anchor_a);
+
+                    MTXCopy(joint_25, *calc_mtx);
+                    local_offset.set(10.0f, 5.0f, 17.0f);
+                    MtxPosition(&local_offset, &presented_anchor_b);
+
+                    mant_build_anchor_frame(presented_anchor_a, presented_anchor_b, presented_frame);
+                }
+            }
+        }
+
+        const f32 step = dusk::frame_interp::get_interpolation_step();
+        for (int i = 0; i < 169; ++i) {
+            cXyz curr_local;
+            MTXMultVec(curr_frame_inverse, &curr_pos[i], &curr_local);
+
+            cXyz prev_local;
+            MTXMultVec(prev_frame_inverse, &prev_pos[i], &prev_local);
+            cXyz local = prev_local + ((curr_local - prev_local) * step);
+
+            MTXMultVec(presented_frame, &local, &draw_pos[i]);
+        }
+    }
+    GXSETARRAY(GX_VA_POS, draw_pos, sizeof(mNrm[0]), 12, true);
+    GXSETARRAY(GX_VA_NRM, &l_normal, sizeof(l_normal), 12, false);
+#else
     GXSETARRAY(GX_VA_POS, this->getPos(), sizeof(mPos[0]), 12, true);
     GXSETARRAY(GX_VA_NRM, this->getNrm(), sizeof(mNrm[0]), 12, true);
+#endif
     GXSETARRAY(GX_VA_TEX0, &l_texCoord, sizeof(l_texCoord), 8, false); // TODO: set to true when converted to float literals
 
     GXSetZCompLoc(0);
@@ -329,9 +425,14 @@ void daMant_packet_c::draw() {
 
     GXSetCullMode(GX_CULL_BACK);
 
-    GXLoadPosMtxImm(this->mMtx, GX_PNMTX0);
     Mtx MStack_54;
+#if TARGET_PC
+    GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
+    cMtx_inverseTranspose(j3dSys.getViewMtx(), MStack_54);
+#else
+    GXLoadPosMtxImm(this->mMtx, GX_PNMTX0);
     cMtx_inverseTranspose(this->mMtx, MStack_54);
+#endif
 
     GXLoadNrmMtxImm(MStack_54, GX_PNMTX0);
     GXCallDisplayList(l_Egnd_mantDL, 0x3e0);
@@ -347,8 +448,13 @@ void daMant_packet_c::draw() {
     GXSetTevKColor(GX_KCOLOR0, COMPOUND_LITERAL(GXColor){0, 0, 0, 0});
 
     GXSetCullMode(GX_CULL_FRONT);
+#if TARGET_PC
+    GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
+    cMtx_inverseTranspose(j3dSys.getViewMtx(), MStack_54);
+#else
     GXLoadPosMtxImm(this->mMtx2, GX_PNMTX0);
     cMtx_inverseTranspose(this->mMtx2, MStack_54);
+#endif
 
     GXLoadNrmMtxImm(MStack_54, GX_PNMTX0);
     GXCallDisplayList(l_Egnd_mantDL, 0x3e0);
@@ -360,11 +466,13 @@ void daMant_packet_c::draw() {
 static int daMant_Draw(mant_class* i_this) {
     g_env_light.settingTevStruct(0, &i_this->current.pos, &i_this->tevStr);
 
+#if !TARGET_PC
     MtxTrans(0.0f, 0.0f, 0.0f, 0.0f);
 
     cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, i_this->field_0x0570.getMtx());
 
     cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, i_this->field_0x0570.getMtx2());
+#endif
 
     i_this->field_0x0570.setTevStr(&i_this->tevStr);
 
@@ -635,8 +743,13 @@ static void mant_v_calc(mant_class* i_this) {
 }
 
 static void mant_move(mant_class* i_this) {
+#if TARGET_PC
+    u8 uVar1 = i_this->field_0x0570.field_0x74 ^ 1;
+    cXyz* pcVar5 = &i_this->field_0x0570.mPos[uVar1][0];
+#else
     u8 uVar1 = i_this->field_0x0570.field_0x74;
     cXyz* pcVar5 = i_this->field_0x0570.getPos();
+#endif
     mant_v_calc(i_this);
     for (int i = 0; i < 13; i++) {
         for (int j = 0; j < 13; j++) {
@@ -644,7 +757,12 @@ static void mant_move(mant_class* i_this) {
         }
     }
 
+#if TARGET_PC
+    mant_build_anchor_frame(i_this->field_0x3928[0], i_this->field_0x3928[1], uVar1 == 0 ? i_this->field_0x0570.mMtx : i_this->field_0x0570.mMtx2);
+    i_this->field_0x0570.field_0x74 = uVar1;
+#else
     DCStoreRangeNoSync(i_this->field_0x0570.getPos(), 0x7ec);
+#endif
 }
 
 static int mant_cut_type;

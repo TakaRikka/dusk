@@ -16,10 +16,6 @@
 
 #ifdef TARGET_PC
 constexpr u16 kMapResolutionMultiplier = 4;
-// Line widths are relative to the framebuffer size. Since we're rendering to a separate
-// framebuffer, we have to scale them accordingly. The original game used about half of the
-// EFB for the map rendering, so this is a reasonable approximation.
-constexpr u8 kMapLineWidthMultiplier = 2;
 #endif
 
 void dMpath_n::dTexObjAggregate_c::create() {
@@ -241,12 +237,15 @@ void dDrawPath_c::rendering(dDrawPath_c::line_class const* p_line) {
     if (isDrawType(p_line->field_0x0)) {
         int width = getLineWidth(p_line->field_0x1);
 
+        #if TARGET_PC
+        f32 height = JUTVideo::getManager()->getRenderHeight() / 448.0f;
+        if (height > 1.0f) {
+            width /= 2;
+        }
+        #endif
+
         if (width > 0 && p_line->mDataNum >= 2) {
-#ifdef TARGET_PC
-            GXSetLineWidth(width * kMapLineWidthMultiplier, GX_TO_ZERO);
-#else
-            GXSetLineWidth(width * 2, GX_TO_ZERO);
-#endif
+            GXSetLineWidth(width, GX_TO_ZERO);
             GXSetTevColor(GX_TEVREG0, *getLineColor(p_line->field_0x0 & 0x3F, p_line->field_0x1));
             GXBegin(GX_LINESTRIP, GX_VTXFMT0, p_line->mDataNum);
 
@@ -435,8 +434,12 @@ void dRenderingFDAmap_c::preRenderingMap() {
     const u16 w = mTexWidth * kMapResolutionMultiplier;
     const u16 h = mTexHeight * kMapResolutionMultiplier;
     GXCreateFrameBuffer(w, h);
-    GXSetViewport(0.0f, 0.0f, w, h, 0.0f, 1.0f);
-    GXSetScissor(0, 0, w, h);
+    // Set logical viewport dimensions
+    GXSetViewport(0.0f, 0.0f, mTexWidth, mTexHeight, 0.0f, 1.0f);
+    GXSetScissor(0, 0, mTexWidth, mTexHeight);
+    // Set render viewport dimensions
+    GXSetViewportRender(0.0f, 0.0f, w, h, 0.0f, 1.0f);
+    GXSetScissorRender(0, 0, w, h);
 #else
     GXSetViewport(0.0f, 0.0f, mTexWidth, mTexHeight, 0.0f, 1.0f);
     GXSetScissor(0, 0, mTexWidth, mTexHeight);
@@ -456,6 +459,12 @@ void dRenderingFDAmap_c::preRenderingMap() {
     GXSetClipMode(GX_CLIP_ENABLE);
     setTevSettingNonTextureDirectColor();
     f32 right = field_0x8 * 0.5f;
+#if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        right = field_0x8 * -0.5f;
+    }
+#endif
+
     f32 top = field_0xc * 0.5f;
     Mtx44 matrix;
     C_MTXOrtho(matrix, top, -top, -right, right, 0.0f, 10000.0f);
@@ -511,13 +520,8 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
 
     BE(u16)* data_p = p_line->mpData;
     s32 data_num = p_line->mDataNum;
-#ifdef TARGET_PC
-    GXSetLineWidth(width * kMapLineWidthMultiplier, GX_TO_ZERO);
-    GXSetPointSize(width * kMapLineWidthMultiplier, GX_TO_ONE);
-#else
     GXSetLineWidth(width, GX_TO_ONE);
     GXSetPointSize(width, GX_TO_ONE);
-#endif
     GXColor lineColor = *getDecoLineColor(p_line->field_0x0 & 0x3f, p_line->field_0x1);
     GXSetTevColor(GX_TEVREG0, lineColor);
     lineColor.r = lineColor.r - 4;

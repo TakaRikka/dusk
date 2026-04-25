@@ -421,13 +421,7 @@ void daPy_sightPacket_c::draw() {
 
 void daPy_sightPacket_c::setSight() {
     Vec proj;
-    
-    #if TARGET_PC
-    mDoLib_project(&mPos, &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
-    #else
     mDoLib_project(&mPos, &proj);
-    #endif
-
     mDoMtx_stack_c::transS(proj.x, proj.y, proj.z);
     mDoMtx_stack_c::scaleM(32.0f, 32.0f, 32.0f);
     mDoMtx_copy(mDoMtx_stack_c::get(), mProjMtx);

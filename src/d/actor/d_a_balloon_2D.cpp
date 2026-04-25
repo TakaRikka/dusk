@@ -268,6 +268,11 @@ int daBalloon2D_c::draw() {
 int daBalloon2D_c::execute() {
     setAllAlpha();
     setComboAlpha();
+
+    #if TARGET_PC
+    updateOnWide();
+    #endif
+
     setHIO(false);
     return 1;
 }
@@ -278,6 +283,15 @@ void daBalloon2D_c::drawMeter() {
     drawAddScore();
 }
 
+#if TARGET_PC
+void daBalloon2D_c::updateOnWide() {
+    // Combo HUD
+    l_HOSTIO = {};
+
+    l_HOSTIO.m.m2DNumberCombo2PosX = mDoGph_gInf_c::ScaleHUDXRight(l_HOSTIO.m.m2DNumberCombo2PosX);
+    l_HOSTIO.m.mAdjustmentToggle = 1;
+}
+#endif
 
 void daBalloon2D_c::setComboCount(u8 size, u8 comboNum) {
     if (mComboNum != comboNum) {
@@ -304,11 +318,7 @@ void daBalloon2D_c::addScoreCount(cXyz* param_1, u32 param_2, u8 param_3) {
         field_0x5f8[current].field_0xf = field_0x5f8[prev].field_0xf;
     }
     cXyz acStack_2c;
-    #if TARGET_PC
-    mDoLib_project(param_1, &acStack_2c, { 0, 0, FB_WIDTH, FB_HEIGHT });
-    #else
     mDoLib_project(param_1, &acStack_2c);
-    #endif
     field_0x5f8[0].field_0x0.set(acStack_2c);
     field_0x5f8[0].field_0xc = param_2;
     field_0x5f8[0].field_0xe = 60;

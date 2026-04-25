@@ -487,19 +487,31 @@ public:
         }
     }
     char* getPlayerName() const { return const_cast<char*>(mPlayerName); }
-    void setPlayerName(const char* i_name) { strcpy(mPlayerName, i_name); }
+    void setPlayerName(const char* i_name) {
+#if AVOID_UB
+        strncpy(mPlayerName, i_name, sizeof(mPlayerName) - 1);
+        mPlayerName[sizeof(mPlayerName) - 1] = '\0';
+#else
+        strcpy(mPlayerName, i_name);
+#endif
+    }
     char* getHorseName() const { return const_cast<char*>(mHorseName); }
-    void setHorseName(const char* i_name) { strcpy(mHorseName, i_name); }
+    void setHorseName(const char* i_name) {
+#if AVOID_UB
+        strncpy(mHorseName, i_name, sizeof(mHorseName) - 1);
+        mHorseName[sizeof(mHorseName) - 1] = '\0';
+#else
+        strcpy(mHorseName, i_name);
+#endif
+    }
     u8 getClearCount() const { return mClearCount; }
 
     /* 0x00 */ BE(u64) unk0;
     /* 0x08 */ BE(s64) mTotalTime;
     /* 0x10 */ BE(u16) unk16;
     /* 0x12 */ BE(u16) mDeathCount;
-    /* 0x14 */ char mPlayerName[16];
-    /* 0x24 */ u8 unk36;
-    /* 0x25 */ char mHorseName[16];
-    /* 0x35 */ u8 unk53;
+    /* 0x14 */ char mPlayerName[17];
+    /* 0x25 */ char mHorseName[17];
     /* 0x36 */ u8 mClearCount;
     /* 0x37 */ u8 unk55[5];
 };  // Size: 0x40

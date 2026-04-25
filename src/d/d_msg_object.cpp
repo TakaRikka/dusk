@@ -28,6 +28,10 @@
 #include "m_Do/m_Do_lib.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 
+#if TARGET_PC
+#include "dusk/settings.h"
+#endif
+
 static void dMsgObject_addFundRaising(s16 param_0);
 static void dMsgObject_addTotalPayment(s16 param_0);
 
@@ -1464,24 +1468,12 @@ void dMsgObject_c::fukiPosCalc(bool param_1) {
             fopAc_ac_c* player = dComIfGp_getPlayer(0);
             cXyz local_3c;
             cXyz cStack_48;
-
-            #if TARGET_PC
-            mDoLib_project(&player->eyePos, &cStack_48, {0, 0, FB_WIDTH, FB_HEIGHT});
-            #else
             mDoLib_project(&player->eyePos, &cStack_48);
-            #endif
-
             f32 temp;
             if ((field_0x100->pos == cXyz(0.0f, 0.0f, 0.0f))) {
                 temp = cStack_48.y;
             } else {
-
-                #if TARGET_PC
-                mDoLib_project(&field_0x100->pos, &local_3c, {0, 0, FB_WIDTH, FB_HEIGHT});
-                #else
                 mDoLib_project(&field_0x100->pos, &local_3c);
-                #endif
-
                 if (local_3c.x >= 0.0f && local_3c.x <= FB_WIDTH && local_3c.y >= 0.0f &&
                     local_3c.y <= FB_HEIGHT)
                 {
@@ -1566,7 +1558,8 @@ u8 dMsgObject_c::isSend() {
         if (pRef->getSendFlag() == 5) {
             if (getStatusLocal() == 21) {
                 setButtonStatusLocal();
-                if (mDoCPd_c::getTrigA(0) != 0 || mDoCPd_c::getTrigB(0) != 0) {
+                if (IF_DUSK((dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)) ||)
+                    mDoCPd_c::getTrigA(0) != 0 || mDoCPd_c::getTrigB(0) != 0) {
                     return 2;
                 }
                 return 0;
@@ -1585,7 +1578,8 @@ u8 dMsgObject_c::isSend() {
         }
         if (pRef->getSendFlag() == 2) {
             setButtonStatusLocal();
-            if (mDoCPd_c::getTrigA(0) != 0 || mDoCPd_c::getTrigB(0) != 0) {
+            if (IF_DUSK((dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)) ||)
+                mDoCPd_c::getTrigA(0) != 0 || mDoCPd_c::getTrigB(0) != 0) {
                 return 2;
             }
         }
@@ -1598,7 +1592,8 @@ u8 dMsgObject_c::isSend() {
                 return 2;
             }
         } else {
-            if (mDoCPd_c::getTrigA(0) != 0 || mDoCPd_c::getTrigB(0) != 0) {
+            if (IF_DUSK((dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)) ||)
+                mDoCPd_c::getTrigA(0) != 0 || mDoCPd_c::getTrigB(0) != 0) {
                 return 2;
             }
             if (mesgCancelButton) {

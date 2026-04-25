@@ -33,24 +33,16 @@ public:
     static void postRetraceProc(u32);
     static void drawDoneCallback();
 
-    u16 getFbWidth() const {
-        #if TARGET_PC
-        return m_WindowSize.fb_width;
-        #else
-        return mRenderObj->fbWidth;
-        #endif
-    }
-    u16 getEfbHeight() const {
-        #if TARGET_PC
-        return m_WindowSize.fb_height;
-        #else
-        return mRenderObj->efbHeight;
-        #endif
-    }
+    u16 getFbWidth() const { return mRenderObj->fbWidth; }
+    u16 getEfbHeight() const { return mRenderObj->efbHeight; }
     void getBounds(u16& width, u16& height) const {
         width = (u16)getFbWidth();
         height = (u16)getEfbHeight();
     }
+#ifdef TARGET_PC
+    u32 getRenderWidth() const { return mRenderWidth; }
+    u32 getRenderHeight() const { return mRenderHeight; }
+#endif
     u16 getXfbHeight() const { return u16(mRenderObj->xfbHeight); }
     u8 isAntiAliasing() const { return u8(mRenderObj->aa); }
     Pattern getSamplePattern() const { return mRenderObj->sample_pattern; }
@@ -63,7 +55,7 @@ public:
 
     GXRenderModeObj* getRenderMode() const { return mRenderObj; }
 #if TARGET_PC
-    void setWindowSize(AuroraWindowSize const& size);
+    void setRenderSize(u32 width, u32 height);
 #endif
 
 private:
@@ -89,7 +81,8 @@ private:
 
 #if TARGET_PC
 public:
-    AuroraWindowSize m_WindowSize;
+    u32 mRenderWidth;
+    u32 mRenderHeight;
 #endif
 };
 

@@ -265,7 +265,7 @@ int daObjDrop_c::modeParentWait() {
         mModeAction = 1;
 
 #if TARGET_PC
-        mModeTimer = dusk::getSettings().game.fastTears && dComIfGp_event_getMode() == 0 ? 20 : 40;
+        mModeTimer = dusk::getSettings().game.fastTears && dComIfGp_event_getMode() == 0 ? 0 : 40;
         if (dusk::getSettings().game.fastTears && dComIfGp_event_getMode() == 0) {
             current.pos.y += 100.0f;
         } else {
@@ -285,7 +285,7 @@ int daObjDrop_c::modeParentWait() {
     case 2:
         createBodyEffect();
 #if TARGET_PC
-        mModeTimer = dusk::getSettings().game.fastTears && dComIfGp_event_getMode() == 0 ? 5 : 45;
+        mModeTimer = dusk::getSettings().game.fastTears && dComIfGp_event_getMode() == 0 ? 0 : 45;
 #else
         mModeTimer = 45;
 #endif

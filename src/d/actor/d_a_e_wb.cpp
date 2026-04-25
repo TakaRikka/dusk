@@ -18,6 +18,8 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include "res/Object/Always.h"
+#include "dusk/dusk.h"
+#include "dusk/frame_interpolation.h"
 #include <cstring>
 
 
@@ -183,6 +185,30 @@ static s8 lbl_244_bss_47;
 static bool hio_set;
 
 static daE_WB_HIO_c l_HIO;
+
+#if TARGET_PC
+static void e_wb_rein_interp_callback(bool isSimFrame, void* pUserWork) {
+    e_wb_class* i_this = (e_wb_class*)pUserWork;
+    if (!i_this->himo_interp_prev_valid || !i_this->himo_interp_curr_valid) {
+        return;
+    }
+    const f32 alpha = dusk::frame_interp::get_interpolation_step();
+    for (int r = 0; r < 2; r++) {
+        cXyz* dst = i_this->himo_mat[r].getPos(0);
+        for (int i = 0; i < 16; i++) {
+            const cXyz& p0 = i_this->himo_mat_interp_prev[r][i];
+            const cXyz& p1 = i_this->himo_mat_interp_curr[r][i];
+            dst[i] = p0 + (p1 - p0) * alpha;
+        }
+    }
+    cXyz* dst = i_this->himo_tex.getPos(0);
+    for (int i = 0; i < 2; i++) {
+        const cXyz& p0 = i_this->himo_tex_interp_prev[i];
+        const cXyz& p1 = i_this->himo_tex_interp_curr[i];
+        dst[i] = p0 + (p1 - p0) * alpha;
+    }
+}
+#endif
 
 static void himo_control1(e_wb_class* i_this, cXyz* i_pos, int i_no, s8 param_3) {
     fopEn_enemy_c* enemy = &i_this->enemy;
@@ -508,6 +534,21 @@ static int daE_WB_Draw(e_wb_class* i_this) {
         dComIfGd_set3DlineMat(&i_this->himo_mat[1]);
         i_this->himo_tex.update(2, l_color, &actor->tevStr);
         dComIfGd_set3DlineMat(&i_this->himo_tex);
+#if TARGET_PC
+        if (dusk::getSettings().game.enableFrameInterpolation) {
+            if (i_this->himo_interp_curr_valid) {
+                memcpy(i_this->himo_mat_interp_prev, i_this->himo_mat_interp_curr, sizeof(i_this->himo_mat_interp_curr));
+                memcpy(i_this->himo_tex_interp_prev, i_this->himo_tex_interp_curr, sizeof(i_this->himo_tex_interp_curr));
+                i_this->himo_interp_prev_valid = true;
+            }
+            for (int r = 0; r < 2; r++) {
+                memcpy(i_this->himo_mat_interp_curr[r], i_this->himo_mat[r].getPos(0), 16 * sizeof(cXyz));
+            }
+            memcpy(i_this->himo_tex_interp_curr, i_this->himo_tex.getPos(0), 2 * sizeof(cXyz));
+            i_this->himo_interp_curr_valid = true;
+            dusk::frame_interp::add_interpolation_callback(&e_wb_rein_interp_callback, i_this);
+        }
+#endif
     }
 
     return 1;
@@ -3726,6 +3767,9 @@ static void demo_camera(e_wb_class* i_this) {
         boss = (e_rdb_class*)fopAcM_SearchByName(fpcNm_E_RDB_e);
     }
     cXyz mae, ato, eye, center;
+#if TARGET_PC
+    const s16 entry_demo_mode = i_this->demo_mode;
+#endif
 
     switch (i_this->demo_mode) {
     case 1: {
@@ -4255,6 +4299,9 @@ static void demo_camera(e_wb_class* i_this) {
 
         if (i_this->demo_timer == 325) {
             fpcM_Search(s_wbZrevise_sub, i_this);
+#if TARGET_PC
+            i_this->demo_cam_sync_ticks = 2;
+#endif
         }
 
         if (i_this->demo_timer == 335) {
@@ -4495,6 +4542,9 @@ static void demo_camera(e_wb_class* i_this) {
             i_this->demo_cam_way_spd.z = fabsf(i_this->demo_cam_way.z - i_this->demo_cam_ctr.z);
             i_this->demo_cam_morf = 0;
             pla->setPlayerPosAndAngle(&pla->current.pos, pla->shape_angle.y - 4000, 0);
+#if TARGET_PC
+            dusk::frame_interp::request_presentation_sync();
+#endif
         }
         if (i_this->demo_timer == 345) {
             daPy_getPlayerActorClass()->setThrowDamage(boss->enemy.shape_angle.y - 8000 + TREG_S(8),
@@ -4741,6 +4791,9 @@ static void demo_camera(e_wb_class* i_this) {
                     i_this->demo_cam_eye.x += 300.0f + VREG_F(8);
                     i_this->demo_cam_eye.y += 150.0f + VREG_F(9);
                     i_this->demo_cam_eye.z -= 1400.0f + VREG_F(10);
+#if TARGET_PC
+                    dusk::frame_interp::request_presentation_sync();
+#endif
                 }
             } else {
                 i_this->demo_cam_eye = enemy->current.pos;
@@ -4996,6 +5049,15 @@ static void demo_camera(e_wb_class* i_this) {
             }
         }
     }
+#if TARGET_PC
+    if (entry_demo_mode != i_this->demo_mode) {
+        i_this->demo_cam_sync_ticks = 2;
+    }
+    if (i_this->demo_cam_sync_ticks > 0) {
+        dusk::frame_interp::request_presentation_sync();
+        i_this->demo_cam_sync_ticks--;
+    }
+#endif
 }
 
 static void anm_se_eff_set(e_wb_class* i_this) {

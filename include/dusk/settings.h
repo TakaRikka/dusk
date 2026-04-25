@@ -61,18 +61,25 @@ struct UserSettings {
         ConfigVar<bool> noMissClimbing;
         ConfigVar<bool> fastTears;
         ConfigVar<bool> instantSaves;
+        ConfigVar<bool> instantText;
         ConfigVar<bool> sunsSong;
 
         // Preferences
         ConfigVar<bool> enableMirrorMode;
         ConfigVar<bool> invertCameraXAxis;
+        ConfigVar<bool> disableMainHUD;
+        ConfigVar<bool> pauseOnFocusLost;
+        ConfigVar<bool> enableLinkDollRotation;
+
 
         // Graphics
         ConfigVar<BloomMode> bloomMode;
         ConfigVar<float> bloomMultiplier;
-        ConfigVar<bool> enableWaterRefraction;
+        ConfigVar<bool> disableWaterRefraction;
         ConfigVar<bool> enableFrameInterpolation;
+        ConfigVar<int> internalResolutionScale;
         ConfigVar<int> shadowResolutionMultiplier;
+        ConfigVar<bool> enableDepthOfField;
 
         // Audio
         ConfigVar<bool> noLowHpSound;
@@ -80,12 +87,26 @@ struct UserSettings {
 
         // Input
         ConfigVar<bool> enableGyroAim;
-        ConfigVar<float> gyroAimSensitivityX;
-        ConfigVar<float> gyroAimSensitivityY;
-        ConfigVar<bool> gyroAimInvertPitch;
-        ConfigVar<bool> gyroAimInvertYaw;
+        ConfigVar<bool> enableGyroRollgoal;
+        ConfigVar<float> gyroSensitivityX;
+        ConfigVar<float> gyroSensitivityY;
+        ConfigVar<float> gyroSensitivityRollgoal;
+        ConfigVar<float> gyroSmoothing;
+        ConfigVar<float> gyroDeadband;
+        ConfigVar<bool> gyroInvertPitch;
+        ConfigVar<bool> gyroInvertYaw;
 
         // Cheats
+        ConfigVar<bool> infiniteHearts;
+        ConfigVar<bool> infiniteArrows;
+        ConfigVar<bool> infiniteBombs;
+        ConfigVar<bool> infiniteOil;
+        ConfigVar<bool> infiniteOxygen;
+        ConfigVar<bool> infiniteRupees;
+        ConfigVar<bool> enableIndefiniteItemDrops;
+        ConfigVar<bool> moonJump;
+        ConfigVar<bool> superClawshot;
+        ConfigVar<bool> alwaysGreatspin;
         ConfigVar<bool> enableFastIronBoots;
         ConfigVar<bool> canTransformAnywhere;
         ConfigVar<bool> fastSpinner;
@@ -110,6 +131,8 @@ struct UserSettings {
         ConfigVar<bool> showPipelineCompilation;
         ConfigVar<bool> wasPresetChosen;
         ConfigVar<bool> enableCrashReporting;
+        ConfigVar<bool> duskMenuOpen;
+        ConfigVar<int> cardFileType;
     } backend;
 };
 
@@ -134,6 +157,7 @@ struct TransientSettings {
     CollisionViewSettings collisionView;
     bool skipFrameRateLimit;
     bool moveLinkActive;
+    bool stateShareLoadActive;
 };
 
 TransientSettings& getTransientSettings();

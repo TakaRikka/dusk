@@ -19,6 +19,10 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "Z2AudioLib/Z2WolfHowlMgr.h"
 
+#if TARGET_PC
+#include "dusk/settings.h"
+#endif
+
 // POSIX already defines a macro with this name, but we know that this specific name is
 // used in TP based on assertion messages. This redefinition is scoped to this TU which
 // is unlikely to ever actually need the POSIX define, so we can just redefine it.
@@ -307,6 +311,17 @@ void dMsgScrnHowl_c::exec() {
     mpButtonIcon[1]->setAlphaRate(field_0x1994 * alphaRate);
     mpButtonText[0]->setAlphaRate(field_0x1998 * alphaRate);
     mpButtonText[1]->setAlphaRate(field_0x1998 * alphaRate);
+
+#if TARGET_PC
+    showCursor = true;
+    if (field_0x2798 == 0) {
+        if (mPlotTime != field_0x212c) {
+            field_0x212c = mPlotTime;
+        } else {
+            showCursor = false;
+        }
+    }
+#endif
 }
 
 void dMsgScrnHowl_c::drawSelf() {
@@ -490,6 +505,7 @@ void dMsgScrnHowl_c::drawWave() {
     grafContext->setScissor();
 #endif
 
+#if !TARGET_PC
     bool bVar5 = true;
     if (field_0x2798 == 0) {
         if (mPlotTime != field_0x212c) {
@@ -498,7 +514,14 @@ void dMsgScrnHowl_c::drawWave() {
             bVar5 = false;
         }
     }
-    if (bVar5) {
+#endif
+
+#if TARGET_PC
+    if (showCursor)
+#else
+    if (bVar5)
+#endif
+    {
         for (int iVar10 = 0; iVar10 < field_0x2128 - 1; iVar10++) {
             f32 local_54 = local_e0;
             f32 local_c8 = field_0x180[sVar14];
@@ -584,17 +607,10 @@ void dMsgScrnHowl_c::drawGuide() {
     J2DGrafContext* grafContext = dComIfGp_getCurrentGrafPort();
     Vec local_b0 = field_0x128;
     Vec local_bc = field_0x140;
-#if TARGET_PC
-    grafContext->scissor(
-        (local_b0.x - mDoGph_gInf_c::getMinXF()) / (mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getWidth()),
-        field_0x2118, (local_bc.x - local_b0.x) / (mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getWidth()),
-        field_0x2120);
-#else
     grafContext->scissor(
         (local_b0.x - mDoGph_gInf_c::getMinXF()) / (mDoGph_gInf_c::getWidthF() / FB_WIDTH),
         field_0x2118, (local_bc.x - local_b0.x) / (mDoGph_gInf_c::getWidthF() / FB_WIDTH),
         field_0x2120);
-#endif
     grafContext->setScissor();
     f32 local_cc = mpLineH[0]->getGlobalPosX();
     s16 sVar12 = 0;
@@ -722,19 +738,11 @@ void dMsgScrnHowl_c::drawGuide2() {
     }
     Vec local_58 = field_0x128;
     Vec local_64 = field_0x140;
-#if TARGET_PC
-    f32 local_70 = mDoGph_gInf_c::getHeightF() / mDoGph_gInf_c::getHeight();
-    grafContext->scissor(
-        (local_58.x - mDoGph_gInf_c::getMinXF()) / (mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getWidth()),
-        field_0x2118, (local_64.x - local_58.x) / (mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getWidth()),
-        field_0x2120);
-#else
     f32 local_70 = mDoGph_gInf_c::getHeightF() / mDoGph_gInf_c::getHeight();
     grafContext->scissor(
         (local_58.x - mDoGph_gInf_c::getMinXF()) / (mDoGph_gInf_c::getWidthF() / FB_WIDTH),
         field_0x2118, (local_64.x - local_58.x) / (mDoGph_gInf_c::getWidthF() / FB_WIDTH),
         field_0x2120);
-#endif
     grafContext->setScissor();
     f32 local_74 = mpLineH[0]->getGlobalPosX();
     s16 local_134 = 0;
@@ -836,15 +844,9 @@ void dMsgScrnHowl_c::drawEffect() {
     Vec vec1 = field_0x128;
     Vec vec2 = field_0x140;
     mDoGph_gInf_c::getHeightF();
-#if TARGET_PC
-    grafContext->scissor(
-        (vec1.x - mDoGph_gInf_c::getMinXF()) / (mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getWidth()), field_0x2118,
-        12.0f + ((vec2.x - vec1.x) / (mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getWidth())), field_0x2120);
-#else
     grafContext->scissor(
         (vec1.x - mDoGph_gInf_c::getMinXF()) / (mDoGph_gInf_c::getWidthF() / FB_WIDTH), field_0x2118,
         12.0f + ((vec2.x - vec1.x) / (mDoGph_gInf_c::getWidthF() / FB_WIDTH)), field_0x2120);
-#endif
     grafContext->setScissor();
     u8 timer = daAlink_getAlinkActorClass()->getWolfHowlMgrP()->getReleaseTimer();
     u8 screenAlpha = mpScreen->search(MULTI_CHAR('line00'))->getAlpha();

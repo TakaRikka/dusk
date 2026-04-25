@@ -201,13 +201,7 @@ void daObjGOMIKABE_c::CheckCull() {
 
 bool daObjGOMIKABE_c::checkViewArea(cXyz param_1) {
     Vec local_24;
-
-    #if TARGET_PC
-    mDoLib_project(&param_1, &local_24, {0, 0, FB_WIDTH, FB_HEIGHT});
-    #else
     mDoLib_project(&param_1, &local_24);
-    #endif
-
     bool rv = false;
     if (local_24.x >= 0.0f && local_24.x <= FB_WIDTH && local_24.y >= 0.0f && local_24.y <= FB_HEIGHT) {
         rv = true;

@@ -79,6 +79,10 @@ public:
     virtual void viewCalc();
     virtual ~J3DModel() {}
 
+#if TARGET_PC
+    static void interp_callback(bool isSimFrame, void* pUserWork);
+#endif
+
     J3DModelData* getModelData() { return mModelData; }
 
     void onFlag(u32 flag) { mFlags |= flag; }
@@ -105,9 +109,7 @@ public:
     void setAnmMtx(int jointNo, Mtx m) {
         mMtxBuffer->setAnmMtx(jointNo, m);
 #ifdef TARGET_PC
-        dusk::frame_interp::record_final_mtx_raw(
-            reinterpret_cast<const Mtx*>(mMtxBuffer->getAnmMtx(jointNo)),
-            mMtxBuffer->getAnmMtx(jointNo));
+        dusk::frame_interp::record_final_mtx(mMtxBuffer->getAnmMtx(jointNo));
 #endif
     }
     MtxP getAnmMtx(int jointNo) { return mMtxBuffer->getAnmMtx(jointNo); }
