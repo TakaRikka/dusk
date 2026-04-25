@@ -62,6 +62,11 @@ bool isRegionPal() {
     return getGameVersion() == GameVersion::WiiPal || getGameVersion() == GameVersion::GcnPal;
 }
 
+bool isRegionUsa() {
+    return getGameVersion() == GameVersion::WiiUsa || getGameVersion() == GameVersion::WiiUsaRev0
+        || getGameVersion() == GameVersion::GcnUsa;
+}
+
 GameVersion getGameVersion() {
     if (!versionInitialized) {
         abort();

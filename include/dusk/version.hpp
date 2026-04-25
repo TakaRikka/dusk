@@ -22,6 +22,7 @@ namespace dusk::version {
 
     bool isRegionPal();
     bool isRegionJpn();
+    bool isRegionUsa();
 
     GameVersion getGameVersion();
 
