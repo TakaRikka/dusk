@@ -343,6 +343,11 @@ public:
     /* 0x624 */ f32 mMidonaPosX;
     /* 0x628 */ f32 mMidonaPosY;
     /* 0x62C */ f32 mMidonaScale;
+
+#ifdef TARGET_PC
+    bool mWasListen[2];
+    bool mWasRepeat[2];
+#endif
 };
 
 #endif /* D_METER_D_METER_BUTTON_H */

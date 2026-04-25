@@ -368,8 +368,22 @@ void dMeterButton_c::draw() {
             }
 
             if (var_r3) {
+#ifdef TARGET_PC
+                if (dusk::frame_interp::get_ui_tick_pending()) {
+                    mWasListen[i] = var_r22;
+                    mWasRepeat[i] = var_r23;
+                } else {
+                    var_r22 = mWasListen[i];
+                    var_r23 = mWasRepeat[i];
+                }
+#endif
                 if (var_r22) {
-                    if (field_0x2e8[i] == 18.0f) {
+#ifdef TARGET_PC
+                    if (field_0x2e8[i] == 18.0f && dusk::frame_interp::get_ui_tick_pending())
+#else
+                    if (field_0x2e8[i] == 18.0f)
+#endif
+                    {
                         mDoAud_seStart(Z2SE_SY_HINT_BUTTON_BLINK, NULL, 0, 0);
                     }
 
