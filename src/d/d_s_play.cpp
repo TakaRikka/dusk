@@ -748,7 +748,9 @@ static int dScnPly_Execute(dScnPly_c* i_this) {
     }
 
     #if TARGET_PC
-    if (!fopOvlpM_IsPeek() && !dComIfG_resetToOpening(i_this) && !dComIfGp_isEnableNextStage() && shouldAutoSave == FALSE) {
+    if (!dComIfGp_event_runCheck() && !fopOvlpM_IsPeek() && !dComIfG_resetToOpening(i_this) &&
+        !dComIfGp_isEnableNextStage() && shouldAutoSave == FALSE)
+    {
         triggerAutoSave();
         shouldAutoSave = TRUE;
     }
