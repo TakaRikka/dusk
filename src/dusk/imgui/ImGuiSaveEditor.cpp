@@ -1530,7 +1530,9 @@ namespace dusk {
                 }
                 
                 for (const auto& e : duskImguiEventFlags) {
-                    if (!filter.PassFilter((e.location + "\n" + e.description + "\n" + e.flagName).c_str())) 
+                    if (!filter.PassFilter(e.location.c_str()) &&
+                        !filter.PassFilter(e.description.c_str()) &&
+                        !filter.PassFilter(e.flagName.c_str()))
                     {
                         continue;
                     }
