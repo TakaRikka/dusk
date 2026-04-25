@@ -131,6 +131,11 @@ static void daE_SM2_interp_callback(bool isSimFrame, void* pUserWork) {
 
 static int daE_SM2_Draw(e_sm2_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->enemy;
+
+#if TARGET_PC
+    dusk::frame_interp::add_interpolation_callback(&daE_SM2_interp_callback, i_this);
+#endif
+
     g_env_light.settingTevStruct(0, &actor->current.pos, &actor->tevStr);
 
     J3DModel* model;
@@ -174,10 +179,6 @@ static int daE_SM2_Draw(e_sm2_class* i_this) {
         g_env_light.setLightTevColorType_MAJI(model, &actor->tevStr);
         i_this->pieceInvisModel.entryDL(NULL);
     }
-
-#if TARGET_PC
-    dusk::frame_interp::add_interpolation_callback(&daE_SM2_interp_callback, i_this);
-#endif
 
     return 1;
 }
