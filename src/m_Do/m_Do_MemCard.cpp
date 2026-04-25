@@ -12,6 +12,7 @@
 #include "os_report.h"
 #include "dusk/os.h"
 #include "dusk/main.h"
+#include "dusk/version.hpp"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/nand.h>
@@ -79,7 +80,11 @@ void mDoMemCd_Ctrl_c::ThdInit() {
     #if !PLATFORM_SHIELD
     CARDSetLoadType((CARDFileType)dusk::getSettings().backend.cardFileType.getValue());
 
-    CARDInit(DUSK_GAME_NAME, DUSK_GAME_VERSION);
+    char version[5] = {};
+    char maker[3] = {};
+    std::memcpy(version, dusk::version::getDiskID().gameName, 4);
+    std::memcpy(maker, dusk::version::getDiskID().company, 2);
+    CARDInit(version, maker);
     #endif
 
     mCopyToPos = 0;
