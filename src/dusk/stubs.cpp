@@ -1020,10 +1020,6 @@ void GXInitTexCacheRegion(GXTexRegion* region, GXBool is_32b_mipmap, u32 tmem_ev
 // XXX, this should be some struct?
 // GXRenderModeObj GXNtsc480IntDf;
 //GXRenderModeObj GXNtsc480Int;
-void GXPeekZ(u16 x, u16 y, u32* z) {
-    STUB_LOG();
-    *z = 0;
-}
 void GXReadXfRasMetric(u32* xf_wait_in, u32* xf_wait_out, u32* ras_busy, u32* clocks) {
     STUB_LOG();
     *xf_wait_in = 0;
