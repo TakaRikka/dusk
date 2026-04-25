@@ -14,6 +14,10 @@
 #include "f_op/f_op_camera_mng.h"
 #include <cstring>
 
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#endif
+
 class daE_SM2_HIO_c : public fOpAcm_HIO_entry_c {
 public:
     daE_SM2_HIO_c();
@@ -76,6 +80,55 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
+#if TARGET_PC
+static void daE_SM2_interp_callback(bool isSimFrame, void* pUserWork) {
+    e_sm2_class* i_this = static_cast<e_sm2_class*>(pUserWork);
+    if (i_this == NULL) {
+        return;
+    }
+
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->enemy;
+    g_env_light.settingTevStruct(0, &actor->current.pos, &actor->tevStr);
+
+    if (!i_this->isPiece) {
+        if (i_this->modelMorf == NULL) {
+            return;
+        }
+        J3DModel* model = i_this->modelMorf->getModel();
+        if (model == NULL) {
+            return;
+        }
+        g_env_light.setLightTevColorType_MAJI(model, &actor->tevStr);
+
+        J3DMaterial* material = model->getModelData()->getMaterialNodePointer(0);
+        material->getTevKColor(1)->r = i_this->color_R;
+        material->getTevKColor(1)->g = i_this->color_G;
+        material->getTevKColor(1)->b = i_this->color_B;
+        material->getTevKColor(1)->a = 217.0f * i_this->color_alpha;
+
+        if (i_this->pbtk != NULL) {
+            i_this->pbtk->entry(model->getModelData());
+        }
+    } else {
+        if (i_this->pieceModelMorf == NULL) {
+            return;
+        }
+        J3DModel* model = i_this->pieceModelMorf->getModel();
+        if (model == NULL) {
+            return;
+        }
+
+        J3DMaterial* material = model->getModelData()->getMaterialNodePointer(0);
+        material->getTevKColor(1)->r = i_this->color_R;
+        material->getTevKColor(1)->g = i_this->color_G;
+        material->getTevKColor(1)->b = i_this->color_B;
+        material->getTevKColor(1)->a = 217.0f * i_this->color_alpha;
+
+        g_env_light.setLightTevColorType_MAJI(model, &actor->tevStr);
+    }
+}
+#endif
+
 static int daE_SM2_Draw(e_sm2_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->enemy;
     g_env_light.settingTevStruct(0, &actor->current.pos, &actor->tevStr);
@@ -121,6 +174,10 @@ static int daE_SM2_Draw(e_sm2_class* i_this) {
         g_env_light.setLightTevColorType_MAJI(model, &actor->tevStr);
         i_this->pieceInvisModel.entryDL(NULL);
     }
+
+#if TARGET_PC
+    dusk::frame_interp::add_interpolation_callback(&daE_SM2_interp_callback, i_this);
+#endif
 
     return 1;
 }
