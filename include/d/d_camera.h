@@ -1026,6 +1026,9 @@ public:
     bool colosseumCamera(s32);
     bool test1Camera(s32);
     bool test2Camera(s32);
+    #if TARGET_PC
+    bool freeCamera();
+    #endif
     bool towerCamera(s32);
     bool hookshotCamera(s32);
     bool railCamera(s32);

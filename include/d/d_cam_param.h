@@ -143,9 +143,11 @@ public:
     /* 0x20 */ JORFile mFile;
 #endif
 
-    #if TARGET_PC
+#if TARGET_PC
     /* 0x24 */ u8 mManualMode;
-    #endif
+    /* 0x25 */ f32 freeXAngle;
+    /* 0x29 */ f32 freeYAngle;
+#endif
 
     u32 Id(s32 i_style) { return mCamStyleData[i_style].field_0x0; }
     int Algorythmn(s32 i_style) { return mCamStyleData[i_style].field_0x4; }

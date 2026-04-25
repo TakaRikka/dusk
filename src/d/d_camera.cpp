@@ -837,6 +837,12 @@ void dCamera_c::updatePad() {
     mHoldB = mDoCPd_c::getHoldB(mPadID) ? true : false;
     mTrigB = mDoCPd_c::getTrigB(mPadID) ? true : false;
 
+    #if TARGET_PC
+    if (mCamParam.mManualMode) {
+        return;
+    }
+    #endif
+
     bool sp6B = true;
     bool sp6C = true;
     int temp1;
@@ -854,12 +860,6 @@ void dCamera_c::updatePad() {
             mGear = 0;
         }
     }
-
-    #if TARGET_PC
-    if (mCamParam.mManualMode) {
-        return;
-    }
-    #endif
 
     if ((var_r30 != 1 && var_r30 != 8 && var_r30 != 7) || mCamParam.Flag(mCamStyle, 0x80)) {
         sp6C = false;
@@ -4628,37 +4628,12 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         chase->field_0x74 = 1.0f;
     }
 
+    #if TARGET_PC
+    freeCamera();
+    #endif
+
     sp110 = mViewCache.mDirection.R();
     mViewCache.mDirection.R(mViewCache.mDirection.R() + (fVar55 - mViewCache.mDirection.R()) * chase->field_0x74);
-
-    #if TARGET_PC
-    cXyz camMovement = {mPadInfo.mCStick.mLastPosX, mPadInfo.mCStick.mLastPosY, 0.0f};
-    f32 magnitude = sqrt(mPadInfo.mCStick.mLastPosX * mPadInfo.mCStick.mLastPosX +
-                         mPadInfo.mCStick.mLastPosY * mPadInfo.mCStick.mLastPosY);
-
-    if (mPadInfo.mCStick.mLastPosX != 0 || mPadInfo.mCStick.mLastPosY != 0) {
-        if (!mCamParam.mManualMode) {
-            mCamParam.mManualMode = 1;
-            chase->xAngle = mViewCache.mDirection.mAzimuth.Degree();
-            chase->yAngle = mViewCache.mDirection.mInclination.Degree();
-        }
-
-        camMovement = camMovement.normalize();
-        chase->xAngle += camMovement.x * magnitude * 5.0f;
-        chase->yAngle += camMovement.y * magnitude * 5.0f;
-    }
-
-    if (mCamParam.mManualMode) {
-        if (chase->yAngle > 80.0f) {
-            chase->yAngle = 80.0f;
-        } else if (chase->yAngle < -35.0f) {
-            chase->yAngle = -35.0f;
-        }
-
-        mViewCache.mDirection.mAzimuth = cSAngle(chase->xAngle);
-        mViewCache.mDirection.mInclination = cSAngle(chase->yAngle);
-    }
-    #endif
 
     chase->field_0x64 = mViewCache.mCenter + mViewCache.mDirection.Xyz();
     mViewCache.mEye = chase->field_0x64;
@@ -7499,6 +7474,33 @@ bool dCamera_c::test1Camera(s32 param_0) {
 bool dCamera_c::test2Camera(s32 param_0) {
     return false;
 }
+
+#if TARGET_PC
+bool dCamera_c::freeCamera() {
+    cXyz camMovement = {mPadInfo.mCStick.mLastPosX, mPadInfo.mCStick.mLastPosY, 0.0f};
+    f32 magnitude = sqrt(mPadInfo.mCStick.mLastPosX * mPadInfo.mCStick.mLastPosX + mPadInfo.mCStick.mLastPosY * mPadInfo.mCStick.mLastPosY);
+
+    if (mPadInfo.mCStick.mLastPosX != 0 || mPadInfo.mCStick.mLastPosY != 0) {
+        if (!mCamParam.mManualMode) {
+            mCamParam.mManualMode = 1;
+            mCamParam.freeXAngle = mViewCache.mDirection.mAzimuth.Degree();
+            mCamParam.freeYAngle = mViewCache.mDirection.mInclination.Degree();
+        }
+
+        camMovement = camMovement.normalize();
+        mCamParam.freeXAngle += camMovement.x * magnitude * 5.0f;
+        mCamParam.freeYAngle += camMovement.y * magnitude * 5.0f;
+    }
+
+    if (mCamParam.mManualMode) {
+        mCamParam.freeYAngle = std::clamp(mCamParam.freeYAngle, -35.0f, 80.0f);
+        mViewCache.mDirection.mAzimuth = cSAngle(mCamParam.freeXAngle);
+        mViewCache.mDirection.mInclination = cSAngle(mCamParam.freeYAngle);
+    }
+
+    return mCamParam.mManualMode;
+}
+#endif
 
 bool dCamera_c::towerCamera(s32 param_0) {
     cSAngle stack_444 = cSAngle(mCamSetup.ChargeLatitude());
