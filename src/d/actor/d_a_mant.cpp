@@ -256,7 +256,7 @@ static u32 l_texCoord[338] = {
 #if TARGET_PC
 using GameVersion = dusk::version::GameVersion;
 
-static u8* l_Egnd_mantDL_get() { alignas(32) static u8 buf[0x3EC]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0xA9A0}}, 0x3EC), true); return buf; }
+static u8* l_Egnd_mantDL_get() { alignas(32) static u8 buf[0x3EC]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0xA9A0}, {GameVersion::GcnPal, 0xA9A0}}, 0x3EC), true); return buf; }
 #define l_Egnd_mantDL (l_Egnd_mantDL_get())
 #else
 #include "assets/l_Egnd_mantDL.h"
