@@ -40,7 +40,6 @@ UserSettings g_userSettings = {
 
         // Preferences
         .enableMirrorMode {"game.enableMirrorMode", false},
-        .invertCameraXAxis {"game.invertCameraXAxis", false},
         .disableMainHUD {"game.disableMainHUD", false},
         .pauseOnFocusLost {"game.pauseOnFocusLost", false},
         .enableLinkDollRotation = {"game.enableLinkDollRotation", false },
@@ -68,6 +67,10 @@ UserSettings g_userSettings = {
         .gyroDeadband {"game.gyroDeadband", 0.04f},
         .gyroInvertPitch {"game.gyroInvertPitch", false},
         .gyroInvertYaw {"game.gyroInvertYaw", false},
+        .freeCamera {"game.freeCamera", false},
+        .invertCameraXAxis {"game.invertCameraXAxis", false},
+        .invertCameraYAxis {"game.invertCameraYAxis", false},
+        .freeCameraSensitivity {"game.freeCameraSensitivity", 1.0f},
 
         // Cheats
         .infiniteHearts {"game.infiniteHearts", false},
@@ -140,6 +143,8 @@ void registerSettings() {
     Register(g_userSettings.game.sunsSong);
     Register(g_userSettings.game.enableMirrorMode);
     Register(g_userSettings.game.invertCameraXAxis);
+    Register(g_userSettings.game.invertCameraYAxis);
+    Register(g_userSettings.game.freeCameraSensitivity);
     Register(g_userSettings.game.disableMainHUD);
     Register(g_userSettings.game.pauseOnFocusLost);
     Register(g_userSettings.game.bloomMode);
@@ -178,6 +183,7 @@ void registerSettings() {
     Register(g_userSettings.game.gyroSmoothing);
     Register(g_userSettings.game.gyroInvertPitch);
     Register(g_userSettings.game.gyroInvertYaw);
+    Register(g_userSettings.game.freeCamera);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.graphicsBackend);

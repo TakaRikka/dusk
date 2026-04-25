@@ -29,6 +29,7 @@ static void ApplyPresetHD() {
     s.game.fastTears.setValue(true);
     s.game.biggerWallets.setValue(true);
     s.game.invertCameraXAxis.setValue(true);
+    s.game.freeCamera.setValue(true);
 }
 
 static void ApplyPresetDusk() {

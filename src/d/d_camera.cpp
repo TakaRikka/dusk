@@ -3097,7 +3097,7 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                     }
 
                     #if TARGET_PC
-                    if (!mCamParam.mManualMode) {
+                    if (!dusk::getSettings().game.freeCamera || !mCamParam.mManualMode) {
                     #endif
 
                     f32 tmp = field_0x96c * (mIsWolf == 1 ? 30.0f : 30.0f);
@@ -4628,12 +4628,12 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         chase->field_0x74 = 1.0f;
     }
 
+    sp110 = mViewCache.mDirection.R();
+    mViewCache.mDirection.R(mViewCache.mDirection.R() + (fVar55 - mViewCache.mDirection.R()) * chase->field_0x74);
+
     #if TARGET_PC
     freeCamera();
     #endif
-
-    sp110 = mViewCache.mDirection.R();
-    mViewCache.mDirection.R(mViewCache.mDirection.R() + (fVar55 - mViewCache.mDirection.R()) * chase->field_0x74);
 
     chase->field_0x64 = mViewCache.mCenter + mViewCache.mDirection.Xyz();
     mViewCache.mEye = chase->field_0x64;
@@ -7477,6 +7477,11 @@ bool dCamera_c::test2Camera(s32 param_0) {
 
 #if TARGET_PC
 bool dCamera_c::freeCamera() {
+    if (!dusk::getSettings().game.freeCamera) {
+        mCamParam.mManualMode = 0;
+        return false;
+    }
+
     cXyz camMovement = {mPadInfo.mCStick.mLastPosX, mPadInfo.mCStick.mLastPosY, 0.0f};
     f32 magnitude = sqrt(mPadInfo.mCStick.mLastPosX * mPadInfo.mCStick.mLastPosX + mPadInfo.mCStick.mLastPosY * mPadInfo.mCStick.mLastPosY);
 
@@ -7488,14 +7493,17 @@ bool dCamera_c::freeCamera() {
         }
 
         camMovement = camMovement.normalize();
-        mCamParam.freeXAngle += camMovement.x * magnitude * 5.0f;
-        mCamParam.freeYAngle += camMovement.y * magnitude * 5.0f;
+        camMovement.x *= (dusk::getSettings().game.invertCameraXAxis ? 1.0f : -1.0f) * dusk::getSettings().game.freeCameraSensitivity * 4.0f;
+        camMovement.y *= (dusk::getSettings().game.invertCameraYAxis ? 1.0f : -1.0f) * dusk::getSettings().game.freeCameraSensitivity * 4.0f;
+        mCamParam.freeXAngle += camMovement.x * magnitude * dusk::getSettings().game.freeCameraSensitivity;
+        mCamParam.freeYAngle += camMovement.y * magnitude * dusk::getSettings().game.freeCameraSensitivity;
     }
 
     if (mCamParam.mManualMode) {
-        mCamParam.freeYAngle = std::clamp(mCamParam.freeYAngle, -35.0f, 80.0f);
+        mCamParam.freeYAngle = std::clamp(mCamParam.freeYAngle, -35.0f, 60.0f);
         mViewCache.mDirection.mAzimuth = cSAngle(mCamParam.freeXAngle);
         mViewCache.mDirection.mInclination = cSAngle(mCamParam.freeYAngle);
+        mViewCache.mDirection.mRadius = std::clamp(mCamParam.freeYAngle * 15.0f, 300.0f, 10000.0f);
     }
 
     return mCamParam.mManualMode;
