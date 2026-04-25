@@ -102,11 +102,7 @@ static void setIndirectTex(J3DModelData* i_modelData) {
             texture->setResTIMG(i, *mDoGph_gInf_c::getFrameBufferTimg());
         }
         if (memcmp(textureName, "Zbuffer", 8) == 0) {
-#if !TARGET_PC
             texture->setResTIMG(i, *mDoGph_gInf_c::getZbufferTimg());
-#else
-            DuskLog.warn("Zbuffer texture binding not yet supported");
-#endif
         }
     }
 }

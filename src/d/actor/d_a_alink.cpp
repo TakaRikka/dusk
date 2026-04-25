@@ -18936,11 +18936,20 @@ void daAlink_c::setDrawHand() {
     mpLinkHandModel->setBaseTRMtx(mpLinkModel->getBaseTRMtx());
     mpLinkHandModel->calc();
 
+#if TARGET_PC
+    // FRAME INTERP NOTE: Always set these, otherwise the hands occasionally zip to origin.
+    // Doing it regardless of interpolation being active seems harmless.
+    mpLinkHandModel->setAnmMtx(1, mpLinkModel->getAnmMtx(9));
+    mpLinkHandModel->setAnmMtx(2, mpLinkModel->getAnmMtx(0xE));
+#endif
+
     if (var_r30 == 0xFE || var_r30 == 0xFB) {
         field_0x06d0 = field_0x06d8;
     } else {
         field_0x06d0 = mpLinkHandModel->getModelData()->getMaterialNodePointer(var_r30)->getShape();
+#if !TARGET_PC
         mpLinkHandModel->setAnmMtx(1, mpLinkModel->getAnmMtx(9));
+#endif
     }
 
     if (var_r30 == 0xFB) {
@@ -18959,7 +18968,9 @@ void daAlink_c::setDrawHand() {
         field_0x06d4 = field_0x06dc;
     } else {
         field_0x06d4 = mpLinkHandModel->getModelData()->getMaterialNodePointer(var_r29)->getShape();
+#if !TARGET_PC
         mpLinkHandModel->setAnmMtx(2, mpLinkModel->getAnmMtx(0xE));
+#endif
     }
 
     if (var_r29 == 0xFB) {
