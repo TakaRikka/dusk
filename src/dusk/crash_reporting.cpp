@@ -167,7 +167,6 @@ void InitializeCrashReporting() {
 
     sentry_set_tag("git_branch", DUSK_WC_BRANCH);
     sentry_set_tag("build_type", DUSK_BUILD_TYPE);
-    sentry_set_tag("tp_version", DUSK_TP_VERSION);
     g_sentryInitialized = true;
 
     DuskLog.info("Initialized Sentry crash reporting");

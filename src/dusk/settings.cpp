@@ -20,6 +20,8 @@ UserSettings g_userSettings = {
     },
 
     .game = {
+        .language { "game.language", GameLanguage::English },
+
         // Quality of Life
         .enableQuickTransform {"game.enableQuickTransform", false},
         .hideTvSettingsScreen {"game.hideTvSettingsScreen", false},
@@ -123,6 +125,7 @@ void registerSettings() {
     Register(g_userSettings.audio.enableReverb);
 
     // Game
+    Register(g_userSettings.game.language);
     Register(g_userSettings.game.enableQuickTransform);
     Register(g_userSettings.game.hideTvSettingsScreen);
     Register(g_userSettings.game.skipWarningScreen);

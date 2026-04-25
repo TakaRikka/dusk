@@ -22,6 +22,10 @@ typedef void (ImGuiPreLaunchWindow::*drawFunc)();
 
 drawFunc drawTable[2] = {&ImGuiPreLaunchWindow::drawMainMenu, &ImGuiPreLaunchWindow::drawOptions};
 
+static constexpr std::array<const char*, 5> skLanguageNames = {
+    "English", "German", "French", "Spanish", "Italian"
+};
+
 static constexpr std::array<SDL_DialogFileFilter, 2> skGameDiscFileFilters{{
     {"Game Disc Images", "iso;gcm;ciso;gcz;nfs;rvz;wbfs;wia;tgc"},
     {"All Files", "*"},
@@ -193,6 +197,20 @@ void ImGuiPreLaunchWindow::drawOptions() {
             ShowFileSelect(&fileDialogCallback, this, aurora::window::get_sdl_window(),
                            skGameDiscFileFilters.data(), int(skGameDiscFileFilters.size()), nullptr,
                            false);
+        }
+
+        // TODO: Only show if PAL disc selected?
+        // Language selection
+        auto selectedLanguage = getSettings().game.language.getValue();
+        if (ImGui::BeginCombo("Language", skLanguageNames[static_cast<u8>(selectedLanguage)])) {
+            for (u8 i = 0; i < skLanguageNames.size(); ++i) {
+                if (ImGui::Selectable(skLanguageNames[i])) {
+                    getSettings().game.language.setValue(static_cast<GameLanguage>(i));
+                    config::Save();
+                }
+            }
+
+            ImGui::EndCombo();
         }
 
         AuroraBackend configuredBackend = BACKEND_AUTO;

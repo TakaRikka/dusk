@@ -1,21 +1,22 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
+#include "JSystem/J2DGraph/J2DScreen.h"
+#include "JSystem/J2DGraph/J2DTextBox.h"
+#include "JSystem/JKernel/JKRExpHeap.h"
+#include "JSystem/JKernel/JKRMemArchive.h"
 #include "d/actor/d_a_title.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_demo.h"
+#include "d/d_menu_collect.h"
+#include "d/d_pane_class_alpha.h"
 #include "d/d_s_logo.h"
 #include "d/d_s_play.h"
-#include "d/d_demo.h"
-#include "d/d_pane_class_alpha.h"
-#include "d/d_menu_collect.h"
+#include "dusk/version.hpp"
+#include "f_op/f_op_msg_mng.h"
+#include "f_op/f_op_overlap_mng.h"
+#include "f_op/f_op_scene_mng.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_controller_pad.h"
-#include "d/d_com_inf_game.h"
-#include "JSystem/JKernel/JKRExpHeap.h"
-#include "f_op/f_op_overlap_mng.h"
-#include "f_op/f_op_msg_mng.h"
-#include "f_op/f_op_scene_mng.h"
-#include "JSystem/J2DGraph/J2DScreen.h"
-#include "JSystem/JKernel/JKRMemArchive.h"
-#include "JSystem/J2DGraph/J2DTextBox.h"
 #include "m_Do/m_Do_graphic.h"
 
 #ifdef TARGET_PC
@@ -49,7 +50,10 @@ static u8 const lit_3772[12] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-#if VERSION == VERSION_GCN_PAL
+#if TARGET_PC
+using namespace dusk::version;
+#define l_arcName versionSelect<const char*>({{GameVersion::GcnPal, "TitlePal"}}, "Title")
+#elif VERSION == VERSION_GCN_PAL
 static char const l_arcName[] = "TitlePal";
 #else
 static char const l_arcName[] = "Title";
@@ -59,7 +63,7 @@ daTit_HIO_c::daTit_HIO_c() {
     mPSScaleX = 1.0f;
     mPSScaleY = 1.0f;
 
-    #if VERSION == VERSION_GCN_PAL
+    #if TARGET_PC || VERSION == VERSION_GCN_PAL
     switch (OSGetLanguage()) {
     case OS_LANGUAGE_ENGLISH:
     case OS_LANGUAGE_GERMAN:
