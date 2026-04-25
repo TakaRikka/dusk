@@ -789,6 +789,10 @@ void dFlower_packet_c::draw() {
 
                 GXColor sp28;
 
+                #if AVOID_UB
+                sp28 = {1, 1, 1, 1};
+                #endif
+
                 //u8 sp26, sp25, sp24;
                 GXColor sp24;
                 sp24.r = -0.4f * temp_r29->AmbCol.r * var_f29;
