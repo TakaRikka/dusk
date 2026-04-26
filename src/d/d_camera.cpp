@@ -7502,7 +7502,7 @@ bool dCamera_c::freeCamera() {
         mCamParam.freeYAngle = std::clamp(mCamParam.freeYAngle, -35.0f, 60.0f);
         mViewCache.mDirection.mAzimuth = cSAngle(mCamParam.freeXAngle);
         mViewCache.mDirection.mInclination = cSAngle(mCamParam.freeYAngle);
-        mViewCache.mDirection.mRadius = std::clamp(mCamParam.freeYAngle * 15.0f, 300.0f, 10000.0f);
+        mViewCache.mDirection.mRadius = std::clamp((mCamParam.freeYAngle + 35.0f) * 10.0f, 300.0f, 10000.0f);
     }
 
     return mCamParam.mManualMode;
