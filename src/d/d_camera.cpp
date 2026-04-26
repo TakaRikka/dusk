@@ -7493,10 +7493,9 @@ bool dCamera_c::freeCamera() {
         }
 
         camMovement = camMovement.normalize();
-        camMovement.x *= (dusk::getSettings().game.invertCameraXAxis ? 1.0f : -1.0f) * dusk::getSettings().game.freeCameraSensitivity * 4.0f;
-        camMovement.y *= (dusk::getSettings().game.invertCameraYAxis ? 1.0f : -1.0f) * dusk::getSettings().game.freeCameraSensitivity * 4.0f;
-        mCamParam.freeXAngle += camMovement.x * magnitude * dusk::getSettings().game.freeCameraSensitivity;
-        mCamParam.freeYAngle += camMovement.y * magnitude * dusk::getSettings().game.freeCameraSensitivity;
+        camMovement.y *= dusk::getSettings().game.invertCameraYAxis ? 1.0f : -1.0f;
+        mCamParam.freeXAngle += camMovement.x * magnitude * dusk::getSettings().game.freeCameraSensitivity * 4.0f;
+        mCamParam.freeYAngle += camMovement.y * magnitude * dusk::getSettings().game.freeCameraSensitivity * 4.0f;
     }
 
     if (mCamParam.mManualMode) {

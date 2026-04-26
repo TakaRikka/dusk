@@ -193,7 +193,7 @@ void ImGuiPreLaunchWindow::drawOptions() {
 
         ImGui::InputText("Game ISO Path", &m_selectedIsoPath, ImGuiInputTextFlags_ReadOnly);
         ImGui::SameLine();
-        if (ImGui::Button("Set")) {
+        if (ImGui::Button(m_selectedIsoPath == "" ? "Set" : "Change")) {
             ShowFileSelect(&fileDialogCallback, this, aurora::window::get_sdl_window(),
                            skGameDiscFileFilters.data(), int(skGameDiscFileFilters.size()), nullptr,
                            false);
