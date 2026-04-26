@@ -965,7 +965,7 @@ namespace dusk {
         ImGui::SameLine();
 
         // Options panel
-        ImGuiBeginGroupPanel("Options", ImVec2(150 * scale, 20 * scale));
+        ImGuiBeginGroupPanel("Options", ImVec2(150 * scale, -1));
 
         if (deadZones != nullptr) {
             if (ImGui::Checkbox("Enable Dead Zones", &deadZones->useDeadzones)) {
@@ -975,7 +975,24 @@ namespace dusk {
                 PADSerializeMappings();
             }
         }
-
+        
+        if (PADSupportsRumbleIntensity(m_controllerConfig.m_selectedPort)) {
+            ImGuiBeginGroupPanel("Rumble Intensity", ImVec2(150 * scale, -1));
+            u16 low;
+            u16 high;
+            (void)PADGetRumbleIntensity(m_controllerConfig.m_selectedPort, &low, &high);
+            float fLow = static_cast<float>(low / 32767) * 100.f;
+            bool changed = ImGui::SliderFloat("Low", &fLow, 0.f, 100.f, "%.0f%%");
+            float fHigh = static_cast<float>(high / 32767) * 100.f;
+            changed |= ImGui::SliderFloat("High", &fHigh, 0.f, 100.f, "%.0f%%");
+            if (changed) {
+                PADSetRumbleIntensity(m_controllerConfig.m_selectedPort,
+                    static_cast<u16>((fLow / 100.f) * 32767),
+                    static_cast<u16>((fHigh / 100.f) * 32767));
+                PADSerializeMappings();
+            }
+            ImGuiEndGroupPanel();
+        }
         ImGuiEndGroupPanel();
 
         ImGui::End();
