@@ -145,8 +145,9 @@ void dBrightCheck_c::modeMove() {
 
         if (dusk::getSettings().game.speedrunMode && !dusk::getSettings().game.hideTvSettingsScreen) {
             // start a new run if a run isn't already in progress
-            if (!dusk::g_imguiConsole.isSpeedrunStart()) {
-                dusk::g_imguiConsole.startSpeedrun();
+            if (!dusk::m_speedrunInfo.m_isRunStarted) {
+                dusk::ImGuiMenuGame::resetForSpeedrunMode();
+                dusk::m_speedrunInfo.startRun();
             }
         }
 #endif

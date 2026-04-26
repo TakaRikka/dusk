@@ -1051,6 +1051,8 @@ namespace dusk {
         getSettings().game.enableTurboKeybind.setValue(false);
     }
 
+    SpeedrunInfo m_speedrunInfo;
+
     void ImGuiMenuGame::drawSpeedrunTimerOverlay() {
         if (!getSettings().game.speedrunMode) {
             return;
@@ -1058,10 +1060,7 @@ namespace dusk {
 
         // L+R+A+Start to reset timer
         if (mDoCPd_c::getHoldL(PAD_1) && mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getHoldA(PAD_1) && mDoCPd_c::getTrigStart(PAD_1)) {
-            m_speedrunInfo.m_endTimestamp = 0;
-            m_speedrunInfo.m_startTimestamp = 0;
-            m_speedrunInfo.m_totalLoadTime = 0;
-            m_speedrunInfo.m_isRunStarted = false;
+            m_speedrunInfo.reset();
         }
 
         // L+R+A+Z to manually stop timer
@@ -1091,9 +1090,13 @@ namespace dusk {
             ImGui::SameLine(60.0f);
             ImGuiStringViewText(GetFormattedTime(elapsedTime));
 
+            if (!m_speedrunInfo.m_isPauseIGT) {
+                m_speedrunInfo.m_igtTimer = elapsedTime - m_speedrunInfo.m_totalLoadTime;
+            }
+
             ImGui::Text("IGT");
             ImGui::SameLine(60.0f);
-            ImGuiStringViewText(GetFormattedTime(elapsedTime - m_speedrunInfo.m_totalLoadTime));
+            ImGuiStringViewText(GetFormattedTime(m_speedrunInfo.m_igtTimer));
         }
         ImGui::End();
     }

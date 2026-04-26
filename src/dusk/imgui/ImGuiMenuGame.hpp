@@ -8,6 +8,39 @@
 #include "imgui.h"
 
 namespace dusk {
+    struct SpeedrunInfo {
+        void startRun() {
+            m_isRunStarted = true;
+            m_startTimestamp = OSGetTime();
+        }
+
+        void stopRun() {
+            m_isRunStarted = false;
+            m_endTimestamp = OSGetTime() - m_startTimestamp;
+        }
+
+        void reset() {
+            m_isRunStarted = false;
+            m_startTimestamp = 0;
+            m_endTimestamp = 0;
+            m_isPauseIGT = false;
+            m_loadStartTimestamp = 0;
+            m_totalLoadTime = 0;
+            m_igtTimer = 0;
+        }
+
+        bool m_isRunStarted = false;
+        OSTime m_startTimestamp = 0;
+        OSTime m_endTimestamp = 0;
+
+        bool m_isPauseIGT = false;
+        OSTime m_loadStartTimestamp = 0;
+        OSTime m_totalLoadTime = 0;
+        OSTime m_igtTimer = 0;
+    };
+
+    extern SpeedrunInfo m_speedrunInfo;
+
     class ImGuiMenuGame {
     public:
         ImGuiMenuGame();
@@ -20,17 +53,6 @@ namespace dusk {
         static void ToggleFullscreen();
 
         static void resetForSpeedrunMode();
-        bool isRunStarted() const { return m_speedrunInfo.m_isRunStarted; }
-        void startRun() {
-            resetForSpeedrunMode();
-            m_speedrunInfo.m_isRunStarted = true;
-            m_speedrunInfo.m_startTimestamp = OSGetTime();
-        }
-        void stopRun() {
-            m_speedrunInfo.m_isRunStarted = false;
-            m_speedrunInfo.m_endTimestamp = OSGetTime() - m_speedrunInfo.m_startTimestamp;
-        }
-        void incTotalLoadTime(OSTime time) { m_speedrunInfo.m_totalLoadTime += time; }
 
     private:
         void drawAudioMenu();
@@ -55,13 +77,7 @@ namespace dusk {
         int m_inputOverlayCorner = 3;
         std::string m_controllerName;
 
-        struct {
-            bool m_showTimerWindow = false;
-            bool m_isRunStarted = false;
-            OSTime m_startTimestamp = 0;
-            OSTime m_endTimestamp = 0;
-            OSTime m_totalLoadTime = 0;
-        } m_speedrunInfo;
+        bool m_showTimerWindow = false;
     };
 }
 

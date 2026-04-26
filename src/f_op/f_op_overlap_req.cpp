@@ -7,6 +7,8 @@
 #include "f_op/f_op_overlap_req.h"
 #include "f_pc/f_pc_manager.h"
 
+#include "dusk/imgui/ImGuiMenuGame.hpp"
+
 void fopOvlpReq_SetPeektime(overlap_request_class*, u16);
 
 static int fopOvlpReq_phase_Done(overlap_request_class* i_overlapReq) {
@@ -16,6 +18,16 @@ static int fopOvlpReq_phase_Done(overlap_request_class* i_overlapReq) {
         i_overlapReq->peektime = 0;
         i_overlapReq->field_0x8 = 0;
         i_overlapReq->field_0xc = 0;
+
+        #if TARGET_PC
+        if (dusk::getSettings().game.speedrunMode) {
+            if (dusk::m_speedrunInfo.m_isRunStarted) {
+                dusk::m_speedrunInfo.m_isPauseIGT = false;
+                dusk::m_speedrunInfo.m_totalLoadTime += OSGetTime() - dusk::m_speedrunInfo.m_loadStartTimestamp;
+                dusk::m_speedrunInfo.m_loadStartTimestamp = OSGetTime();
+            }
+        }
+        #endif
         return cPhs_NEXT_e;
     }
 
@@ -81,6 +93,14 @@ static int fopOvlpReq_phase_Create(overlap_request_class* i_overlapReq) {
     fpcLy_SetCurrentLayer(i_overlapReq->layer);
     i_overlapReq->request_id =
         fpcM_Create(i_overlapReq->procname, NULL, NULL);
+
+#if TARGET_PC
+    if (dusk::m_speedrunInfo.m_isRunStarted) {
+        dusk::m_speedrunInfo.m_isPauseIGT = true;
+        dusk::m_speedrunInfo.m_loadStartTimestamp = OSGetTime();
+    }
+#endif
+
     return cPhs_NEXT_e;
 }
 

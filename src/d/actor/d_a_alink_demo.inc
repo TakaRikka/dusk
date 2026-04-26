@@ -4009,8 +4009,8 @@ int daAlink_c::procGanonFinishInit() {
 
 #if TARGET_PC
     if (dusk::getSettings().game.speedrunMode) {
-        if (dusk::g_imguiConsole.isSpeedrunStart()) {
-            dusk::g_imguiConsole.stopSpeedrun();
+        if (dusk::m_speedrunInfo.m_isRunStarted) {
+            dusk::m_speedrunInfo.stopRun();
         }
     }
 #endif

@@ -29,11 +29,6 @@ public:
 	static bool CheckMenuViewToggle(ImGuiKey key, bool& active);
     void AddToast(std::string_view message, float duration = 3.f);
 
-    bool isSpeedrunStart() const { return m_menuGame.isRunStarted(); }
-    void startSpeedrun() { m_menuGame.startRun(); }
-    void stopSpeedrun() { m_menuGame.stopRun(); }
-    void incSpeedrunTotalLoadTime(OSTime time) { m_menuGame.incTotalLoadTime(time); }
-
 private:
     struct Toast {
         std::string message;
