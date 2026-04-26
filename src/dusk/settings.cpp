@@ -55,6 +55,7 @@ UserSettings g_userSettings = {
         .internalResolutionScale {"game.internalResolutionScale", 0},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
         .enableDepthOfField {"game.enableDepthOfField", true},
+        .enableMapBackground {"game.enableMapBackground", true},
 
         // Audio
         .noLowHpSound {"game.noLowHpSound", false},
@@ -157,6 +158,7 @@ void registerSettings() {
     Register(g_userSettings.game.internalResolutionScale);
     Register(g_userSettings.game.shadowResolutionMultiplier);
     Register(g_userSettings.game.enableDepthOfField);
+    Register(g_userSettings.game.enableMapBackground);
     Register(g_userSettings.game.enableFastIronBoots);
     Register(g_userSettings.game.canTransformAnywhere);
     Register(g_userSettings.game.freeMagicArmor);

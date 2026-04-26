@@ -96,6 +96,7 @@ struct UserSettings {
         ConfigVar<int> internalResolutionScale;
         ConfigVar<int> shadowResolutionMultiplier;
         ConfigVar<bool> enableDepthOfField;
+        ConfigVar<bool> enableMapBackground;
 
         // Audio
         ConfigVar<bool> noLowHpSound;

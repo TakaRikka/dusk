@@ -167,6 +167,8 @@ namespace dusk {
 
             config::ImGuiCheckbox("Enable Depth of Field", getSettings().game.enableDepthOfField);
 
+            config::ImGuiCheckbox("Enable Mini-Map Shadows", getSettings().game.enableMapBackground);
+
             ImGui::EndMenu();
         }
     }
