@@ -46,5 +46,6 @@ If you'd like to build Dusk from source, please read the [build instructions](do
 - PJB
 - Roeming
 - YunataSavior
+- Captain Kitty Cat
 
 Special thanks to the TP Decomp team, the GC/Wii Decomp community, the Aurora developers, and the TP speedrunning community.
