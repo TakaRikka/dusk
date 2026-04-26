@@ -4,13 +4,14 @@
  */
 
 #include "f_op/f_op_scene_req.h"
+#include <cstdio>
+#include "dusk/imgui/ImGuiConsole.hpp"
+#include "dusk/logging.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_scene_pause.h"
 #include "f_pc/f_pc_executor.h"
 #include "f_pc/f_pc_manager.h"
-#include <cstdio>
-#include "dusk/logging.h"
 
 static cPhs_Step fopScnRq_phase_ClearOverlap(scene_request_class* i_sceneReq) {
     return fopOvlpM_ClearOfReq() == 1 ? cPhs_NEXT_e : cPhs_INIT_e;

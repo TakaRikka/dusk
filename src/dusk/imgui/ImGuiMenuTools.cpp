@@ -50,9 +50,13 @@ namespace dusk {
                 ImGui::BeginDisabled();
             }
 
+            ImGui::BeginDisabled(getSettings().game.speedrunMode);
+
             ImGui::MenuItem("Save Editor", hotkeys::SHOW_SAVE_EDITOR, &m_showSaveEditor);
             ImGui::MenuItem("Map Loader", hotkeys::SHOW_MAP_LOADER, &m_showMapLoader);
             ImGui::MenuItem("State Share", hotkeys::SHOW_STATE_SHARE, &m_showStateShare);
+
+            ImGui::EndDisabled();
 
             if (!dusk::IsGameLaunched) {
                 ImGui::EndDisabled();
@@ -71,6 +75,8 @@ namespace dusk {
         }
 
         if (ImGui::BeginMenu("Debug")) {
+            ImGui::BeginDisabled(getSettings().game.speedrunMode);
+
             bool developmentMode = mDoMain::developmentMode == 1;
             if (ImGui::Checkbox("Development Mode", &developmentMode)) {
                 mDoMain::developmentMode = developmentMode ? 1 : -1;
@@ -119,6 +125,9 @@ namespace dusk {
             }
 
             ImGui::MenuItem("OSReport Force", nullptr, &OSReportReallyForceEnable);
+
+            ImGui::EndDisabled();
+
             ImGui::EndMenu();
         }
     }

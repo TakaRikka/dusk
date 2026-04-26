@@ -96,7 +96,11 @@ UserSettings g_userSettings = {
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
 
         // Controls
-        .enableTurboKeybind {"game.enableTurboKeybind", false}
+        .enableTurboKeybind {"game.enableTurboKeybind", false},
+
+        // Tools
+        .speedrunMode {"game.speedrunMode", false},
+        .liveSplitEnabled {"game.liveSplitEnabled", false}
     },
 
     .backend = {
@@ -169,6 +173,8 @@ void registerSettings() {
     Register(g_userSettings.game.noLowHpSound);
     Register(g_userSettings.game.midnasLamentNonStop);
     Register(g_userSettings.game.enableTurboKeybind);
+    Register(g_userSettings.game.speedrunMode);
+    Register(g_userSettings.game.liveSplitEnabled);
     Register(g_userSettings.game.fastSpinner);
     Register(g_userSettings.game.infiniteHearts);
     Register(g_userSettings.game.infiniteArrows);

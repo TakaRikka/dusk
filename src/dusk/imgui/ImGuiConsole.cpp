@@ -19,6 +19,7 @@
 #include "dusk/config.hpp"
 #include "dusk/dusk.h"
 #include "dusk/frame_interpolation.h"
+#include "dusk/livesplit.h"
 #include "dusk/main.h"
 #include "dusk/settings.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -63,6 +64,10 @@ namespace dusk {
     void ImGuiStringViewText(std::string_view text) {
         // begin()/end() do not work on MSVC
         ImGui::TextUnformatted(text.data(), text.data() + text.size());
+    }
+
+    void DuskToast(std::string_view message, float duration) {
+        g_imguiConsole.AddToast(message, duration);
     }
 
     void ImGuiTextCenter(std::string_view text) {
@@ -365,13 +370,26 @@ namespace dusk {
                                       "Press F1 to toggle menu"s,
                                   2.5f);
             m_isLaunchInitialized = true;
+            if (getSettings().game.liveSplitEnabled) {
+                dusk::speedrun::connectLiveSplit();
+            }
         }
 
         UpdateDragScroll();
 
         m_menuGame.windowControllerConfig();
         m_menuGame.windowInputViewer();
-        if (dusk::IsGameLaunched) {
+        m_menuGame.drawSpeedrunTimerOverlay();
+
+        if (getSettings().game.liveSplitEnabled) {
+            dusk::speedrun::updateLiveSplit();
+            if (dusk::speedrun::consumeConnectedEvent())
+                AddToast("LiveSplit connected");
+            else if (dusk::speedrun::consumeDisconnectedEvent())
+                AddToast("LiveSplit disconnected");
+        }
+
+        if (dusk::IsGameLaunched && !dusk::getSettings().game.speedrunMode) {
             m_menuTools.ShowDebugOverlay();
             m_menuTools.ShowCameraOverlay();
             m_menuTools.ShowProcessManager();
@@ -382,8 +400,8 @@ namespace dusk {
             m_menuTools.ShowPlayerInfo();
             m_menuTools.ShowAudioDebug();
             m_menuTools.ShowSaveEditor();
+            m_menuTools.ShowStateShare();
         }
-        m_menuTools.ShowStateShare();
         m_menuTools.ShowAchievements();
         DuskDebugPad(); // temporary, remove later
 
@@ -554,6 +572,10 @@ namespace dusk {
         }
 
         return false;
+    }
+
+    void ImGuiConsole::AddToast(std::string_view message, float duration) {
+        m_toasts.emplace_back(std::string(message), duration);
     }
 
     void ImGuiConsole::ShowToasts() {

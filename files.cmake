@@ -1464,6 +1464,7 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiAchievements.cpp
         src/dusk/achievements.cpp
         src/dusk/iso_validate.cpp
+        src/dusk/livesplit.cpp
         src/dusk/offset_ptr.cpp
         src/dusk/OSContext.cpp
         src/dusk/OSThread.cpp

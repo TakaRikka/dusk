@@ -306,6 +306,10 @@ if (DUSK_ENABLE_SENTRY_NATIVE)
     list(APPEND GAME_COMPILE_DEFS DUSK_ENABLE_SENTRY_NATIVE=1 SENTRY_BUILD_STATIC=1)
 endif ()
 
+if (WIN32)
+    list(APPEND GAME_LIBS Ws2_32)
+endif ()
+
 if (DUSK_MOVIE_SUPPORT)
     if (TARGET libjpeg-turbo::turbojpeg-static)
         list(APPEND GAME_LIBS libjpeg-turbo::turbojpeg-static)

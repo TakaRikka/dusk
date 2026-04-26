@@ -138,6 +138,10 @@ struct UserSettings {
 
         // Controls
         ConfigVar<bool> enableTurboKeybind;
+
+        // Tools
+        ConfigVar<bool> speedrunMode;
+        ConfigVar<bool> liveSplitEnabled;
     } game;
 
     struct {

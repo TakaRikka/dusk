@@ -12,11 +12,14 @@
 #include "dusk/main.h"
 #include "dusk/hotkeys.h"
 #include "dusk/settings.h"
+#include "dusk/livesplit.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 
 #include <aurora/gfx.h>
 #include <SDL3/SDL_gamepad.h>
+
+#include "m_Do/m_Do_main.h"
 
 namespace {
 constexpr int kInternalResolutionScaleMax = 12;
@@ -201,6 +204,7 @@ namespace dusk {
 
             ImGui::SeparatorText("Difficulty");
 
+            ImGui::BeginDisabled(getSettings().game.speedrunMode);
             config::ImGuiSliderInt("Damage Multiplier", getSettings().game.damageMultiplier, 1, 8, "x%d");
 
             config::ImGuiCheckbox("Instant Death", getSettings().game.instantDeath);
@@ -213,6 +217,7 @@ namespace dusk {
                 ImGui::SetTooltip("Hearts will never drop from enemies,\n"
                                   "pots and various other places.");
             }
+            ImGui::EndDisabled();
 
             ImGui::SeparatorText("Quality of Life");
 
@@ -282,12 +287,39 @@ namespace dusk {
                 ImGui::SetTooltip("Transform instantly by pressing R and Y simultaneously.");
             }
 
+            ImGui::SeparatorText("Speedrunning");
+            if (config::ImGuiCheckbox("Speedrun Mode", getSettings().game.speedrunMode)) {
+                resetForSpeedrunMode();
+            }
+            if (ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("Enables Speedrunning options, while restricting certain gameplay modifiers.");
+            }
+
+            ImGui::BeginDisabled(!getSettings().game.speedrunMode);
+            bool prevLiveSplit = getSettings().game.liveSplitEnabled;
+            config::ImGuiCheckbox("LiveSplit Connection", getSettings().game.liveSplitEnabled);
+            if (ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("Connect to LiveSplit server on localhost:16834.");
+            }
+            ImGui::EndDisabled();
+
+            if ((bool)getSettings().game.liveSplitEnabled != prevLiveSplit) {
+                if (getSettings().game.liveSplitEnabled) {
+                    dusk::speedrun::connectLiveSplit();
+                } else {
+                    dusk::speedrun::disconnectLiveSplit();
+                    DuskToast("LiveSplit disconnected", 3.f);
+                }
+            }
+
             ImGui::EndMenu();
         }
     }
 
     void ImGuiMenuGame::drawCheatsMenu() {
         if (ImGui::BeginMenu("Cheats")) {
+            ImGui::BeginDisabled(getSettings().game.speedrunMode);
+
             ImGui::SeparatorText("Resources");
             config::ImGuiCheckbox("Infinite Hearts", getSettings().game.infiniteHearts);
             config::ImGuiCheckbox("Infinite Arrows", getSettings().game.infiniteArrows);
@@ -295,8 +327,8 @@ namespace dusk {
             config::ImGuiCheckbox("Infinite Oil", getSettings().game.infiniteOil);
             config::ImGuiCheckbox("Infinite Oxygen", getSettings().game.infiniteOxygen);
             config::ImGuiCheckbox("Infinite Rupees", getSettings().game.infiniteRupees);
-            config::ImGuiCheckbox("Items Don't Despawn", getSettings().game.enableIndefiniteItemDrops);
-            ImGui::SetItemTooltip("Items Don't Despawn Unless You Load A Different Room In Which Case They Do But Even Under Some Circumstances They Don't, It Is Quite Rare Though");
+            config::ImGuiCheckbox("No Item Timer", getSettings().game.enableIndefiniteItemDrops);
+            ImGui::SetItemTooltip("Item drops such as Rupees, Hearts, etc. will never disappear after they drop.");
 
             ImGui::SeparatorText("Abilities");
             config::ImGuiCheckbox("Moon Jump (R+A)", getSettings().game.moonJump);
@@ -318,6 +350,8 @@ namespace dusk {
             if (ImGui::IsItemHovered()) {
                 ImGui::SetTooltip("Makes the magic armor work without rupees.");
             }
+
+            ImGui::EndDisabled();
 
             ImGui::EndMenu();
         }
@@ -441,10 +475,12 @@ namespace dusk {
 
             ImGui::SeparatorText("Tools");
 
+            ImGui::BeginDisabled(getSettings().game.speedrunMode);
             config::ImGuiCheckbox("Turbo Key", getSettings().game.enableTurboKeybind);
             if (ImGui::IsItemHovered()) {
                 ImGui::SetTooltip("Hold TAB to increase game speed by up to 4x.");
             }
+            ImGui::EndDisabled();
 
             ImGui::Checkbox("Show Input Viewer", &m_showInputViewer);
 
@@ -1001,6 +1037,90 @@ namespace dusk {
         }
         ImGuiEndGroupPanel();
 
+        ImGui::End();
+    }
+
+    static std::string GetFormattedTime(OSTime ticks) {
+        OSCalendarTime time;
+        OSTicksToCalendarTime(ticks, &time);
+
+        return fmt::format("{0:02}:{1:02}:{2:02}.{3:03}", time.hour, time.min, time.sec, time.msec);
+    }
+
+    void ImGuiMenuGame::resetForSpeedrunMode() {
+        // reset settings that should be off for speedrun mode
+        mDoMain::developmentMode = -1;
+
+        getSettings().game.damageMultiplier.setValue(1);
+        getSettings().game.instantDeath.setValue(false);
+        getSettings().game.noHeartDrops.setValue(false);
+
+        getSettings().game.infiniteHearts.setValue(false);
+        getSettings().game.infiniteArrows.setValue(false);
+        getSettings().game.infiniteBombs.setValue(false);
+        getSettings().game.infiniteOil.setValue(false);
+        getSettings().game.infiniteOxygen.setValue(false);
+        getSettings().game.infiniteRupees.setValue(false);
+        getSettings().game.enableIndefiniteItemDrops.setValue(false);
+
+        getSettings().game.moonJump.setValue(false);
+        getSettings().game.superClawshot.setValue(false);
+        getSettings().game.alwaysGreatspin.setValue(false);
+        getSettings().game.enableFastIronBoots.setValue(false);
+        getSettings().game.canTransformAnywhere.setValue(false);
+        getSettings().game.fastSpinner.setValue(false);
+        getSettings().game.freeMagicArmor.setValue(false);
+
+        getSettings().game.enableTurboKeybind.setValue(false);
+    }
+
+    SpeedrunInfo m_speedrunInfo;
+
+    void ImGuiMenuGame::drawSpeedrunTimerOverlay() {
+        if (!getSettings().game.speedrunMode) {
+            return;
+        }
+
+        // L+R+A+Start to reset timer
+        if (mDoCPd_c::getHoldL(PAD_1) && mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getHoldA(PAD_1) && mDoCPd_c::getTrigStart(PAD_1)) {
+            m_speedrunInfo.reset();
+        }
+
+        // L+R+A+Z to manually stop timer
+        if (mDoCPd_c::getHoldL(PAD_1) && mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getHoldA(PAD_1) && mDoCPd_c::getTrigZ(PAD_1)) {
+            if (m_speedrunInfo.m_isRunStarted) {
+                m_speedrunInfo.m_endTimestamp = OSGetTime() - m_speedrunInfo.m_startTimestamp;
+                m_speedrunInfo.m_isRunStarted = false;
+            }
+        }
+
+        ImGui::SetNextWindowBgAlpha(0.65f);
+        ImGuiWindowFlags flags =
+            ImGuiWindowFlags_NoResize
+            | ImGuiWindowFlags_NoDocking
+            | ImGuiWindowFlags_NoTitleBar
+            | ImGuiWindowFlags_NoScrollbar;
+
+        if (ImGui::Begin("##SpeedrunTimerWindow", nullptr, flags)) {
+            OSTime elapsedTime = 0;
+            if (m_speedrunInfo.m_isRunStarted) {
+                elapsedTime = OSGetTime() - m_speedrunInfo.m_startTimestamp;
+            } else if (m_speedrunInfo.m_endTimestamp != 0) {
+                elapsedTime = m_speedrunInfo.m_endTimestamp;
+            }
+
+            ImGui::Text("RTA");
+            ImGui::SameLine(60.0f);
+            ImGuiStringViewText(GetFormattedTime(elapsedTime));
+
+            if (!m_speedrunInfo.m_isPauseIGT) {
+                m_speedrunInfo.m_igtTimer = elapsedTime - m_speedrunInfo.m_totalLoadTime;
+            }
+
+            ImGui::Text("IGT");
+            ImGui::SameLine(60.0f);
+            ImGuiStringViewText(GetFormattedTime(m_speedrunInfo.m_igtTimer));
+        }
         ImGui::End();
     }
 }
