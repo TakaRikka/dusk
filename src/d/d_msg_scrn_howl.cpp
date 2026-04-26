@@ -20,6 +20,7 @@
 #include "Z2AudioLib/Z2WolfHowlMgr.h"
 
 #if TARGET_PC
+#include "dusk/frame_interpolation.h"
 #include "dusk/settings.h"
 #endif
 
@@ -580,9 +581,14 @@ void dMsgScrnHowl_c::drawWave() {
                 f17 = local_60;
                 f18 = local_64;
             } else {
-                field_0x2134++;
-                if (field_0x2134 > 30) {
-                    field_0x2134 = 0;
+#if TARGET_PC
+                if (dusk::frame_interp::get_ui_tick_pending())
+#endif
+                {
+                    field_0x2134++;
+                    if (field_0x2134 > 30) {
+                        field_0x2134 = 0;
+                    }
                 }
                 if (field_0x2134 < 15) {
                     local_dc = field_0x2134 / 15.0f;
