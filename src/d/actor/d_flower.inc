@@ -7,13 +7,8 @@
 
 #include "dusk/frame_interpolation.h"
 
-#if TARGET_PC
-const u16 l_J_Ohana00_64TEX__width = 64;
-const u16 l_J_Ohana00_64TEX__height = 64;
-#else
 const u16 l_J_Ohana00_64TEX__width = 63;
 const u16 l_J_Ohana00_64TEX__height = 63;
-#endif
 
 #if TARGET_PC
 #include "dusk/dvd_asset.hpp"
@@ -136,13 +131,8 @@ l_matDL__d_a_grass(l_J_Ohana00_64TEX)
 l_matLight4DL(l_J_Ohana00_64TEX)
 #endif
 
-#if TARGET_PC
-const u16 l_J_Ohana01_64128_0419TEX__width = 64;
-const u16 l_J_Ohana01_64128_0419TEX__height = 128;
-#else
 const u16 l_J_Ohana01_64128_0419TEX__width = 63;
 const u16 l_J_Ohana01_64128_0419TEX__height = 127;
-#endif
 
 #if TARGET_PC
 using GameVersion = dusk::version::GameVersion;
@@ -592,11 +582,11 @@ dFlower_packet_c::dFlower_packet_c() {
 
 #if TARGET_PC
     GXInitTexObj(&mTexObj_l_J_Ohana00_64TEX, l_J_Ohana00_64TEX,
-        l_J_Ohana00_64TEX__width, l_J_Ohana00_64TEX__height, GX_TF_CMPR, GX_MIRROR, GX_MIRROR, GX_FALSE
+        l_J_Ohana00_64TEX__width + 1, l_J_Ohana00_64TEX__height + 1, GX_TF_CMPR, GX_MIRROR, GX_MIRROR, GX_FALSE
     );
 
     GXInitTexObj(&mTexObj_l_J_Ohana01_64128_0419TEX, l_J_Ohana01_64128_0419TEX,
-        l_J_Ohana01_64128_0419TEX__width, l_J_Ohana01_64128_0419TEX__height, GX_TF_CMPR, GX_MIRROR, GX_MIRROR, GX_FALSE
+        l_J_Ohana01_64128_0419TEX__width + 1, l_J_Ohana01_64128_0419TEX__height + 1, GX_TF_CMPR, GX_MIRROR, GX_MIRROR, GX_FALSE
     );
 #endif
 

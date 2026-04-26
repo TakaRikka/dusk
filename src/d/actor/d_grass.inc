@@ -494,11 +494,11 @@ dGrass_packet_c::dGrass_packet_c() {
 
 #if TARGET_PC
     GXInitTexObj(&mTexObj_l_M_kusa05_RGBATEX, l_M_kusa05_RGBATEX,
-        l_M_kusa05_RGBATEX__width, l_M_kusa05_RGBATEX__height, GX_TF_RGB5A3, GX_REPEAT, GX_CLAMP, GX_FALSE
+        l_M_kusa05_RGBATEX__width + 1, l_M_kusa05_RGBATEX__height + 1, GX_TF_RGB5A3, GX_REPEAT, GX_CLAMP, GX_FALSE
     );
 
     GXInitTexObj(&mTexObj_l_M_Hijiki00TEX, l_M_Hijiki00TEX,
-        l_M_Hijiki00TEX__width, l_M_Hijiki00TEX__height, GX_TF_RGB5A3, GX_REPEAT, GX_CLAMP, GX_FALSE
+        l_M_Hijiki00TEX__width + 1, l_M_Hijiki00TEX__height + 1, GX_TF_RGB5A3, GX_REPEAT, GX_CLAMP, GX_FALSE
     );
 #endif
 
@@ -646,18 +646,14 @@ void dGrass_packet_c::draw() {
             }
 
             if (var_r29->field_0x05 <= 3 || var_r29->field_0x05 >= 10) {
-#if TARGET_PC
-                GXLoadTexObj(&mTexObj_l_M_kusa05_RGBATEX, GX_TEXMAP0);
-#endif
+                IF_DUSK(GXLoadTexObj(&mTexObj_l_M_kusa05_RGBATEX, GX_TEXMAP0));
                 if (sp48 <= 3) {
                     GXCallDisplayList(mp_kusa9q_14_DL, m_kusa9q_DL_14_size);
                 } else {
                     GXCallDisplayList(mp_kusa9q_DL, m_kusa9q_DL_size);
                 }
             } else {
-#if TARGET_PC
-                GXLoadTexObj(&mTexObj_l_M_Hijiki00TEX, GX_TEXMAP0);
-#endif
+                IF_DUSK(GXLoadTexObj(&mTexObj_l_M_Hijiki00TEX, GX_TEXMAP0));
                 GXCallDisplayList(l_Tengusa_matDL, 0xA0);
             }
 
@@ -683,12 +679,14 @@ void dGrass_packet_c::draw() {
 
             while (var_r29 != NULL) {
                 if (var_r29->field_0x05 <= 3 || var_r29->field_0x05 >= 10) {
+                    IF_DUSK(GXLoadTexObj(&mTexObj_l_M_kusa05_RGBATEX, GX_TEXMAP0));
                     if (sp48 <= 2) {
                         GXCallDisplayList(mp_kusa9q_14_DL, m_kusa9q_DL_14_size);
                     } else {
                         GXCallDisplayList(mp_kusa9q_DL, m_kusa9q_DL_size);
                     }
                 } else {
+                    IF_DUSK(GXLoadTexObj(&mTexObj_l_M_Hijiki00TEX, GX_TEXMAP0));
                     GXCallDisplayList(l_Tengusa_matDL, 0xA0);
                 }
 
