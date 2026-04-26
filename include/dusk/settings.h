@@ -82,7 +82,6 @@ struct UserSettings {
 
         // Preferences
         ConfigVar<bool> enableMirrorMode;
-        ConfigVar<bool> invertCameraXAxis;
         ConfigVar<bool> disableMainHUD;
         ConfigVar<bool> pauseOnFocusLost;
         ConfigVar<bool> enableLinkDollRotation;
@@ -112,6 +111,10 @@ struct UserSettings {
         ConfigVar<float> gyroDeadband;
         ConfigVar<bool> gyroInvertPitch;
         ConfigVar<bool> gyroInvertYaw;
+        ConfigVar<bool> freeCamera;
+        ConfigVar<bool> invertCameraXAxis;
+        ConfigVar<bool> invertCameraYAxis;
+        ConfigVar<float> freeCameraSensitivity;
 
         // Cheats
         ConfigVar<bool> infiniteHearts;

@@ -800,6 +800,10 @@ void dCamera_c::updatePad() {
         }
 
         mLockLActive = 1;
+
+        #if TARGET_PC
+        mCamParam.mManualMode = 0;
+        #endif
     } else {
         mLockLJustActivated = 0;
         mLockLActive = 0;
@@ -832,6 +836,12 @@ void dCamera_c::updatePad() {
     mTrigZ = mDoCPd_c::getTrigZ(mPadID) ? true : false;
     mHoldB = mDoCPd_c::getHoldB(mPadID) ? true : false;
     mTrigB = mDoCPd_c::getTrigB(mPadID) ? true : false;
+
+    #if TARGET_PC
+    if (mCamParam.mManualMode) {
+        return;
+    }
+    #endif
 
     bool sp6B = true;
     bool sp6C = true;
@@ -1167,6 +1177,13 @@ bool dCamera_c::Run() {
         }
     } else {
         sp0F = (this->*engine_tbl[mCamParam.Algorythmn(mCamStyle)])(mCamStyle);
+
+        #if TARGET_PC
+        if (mCamParam.Algorythmn(mCamStyle) != 1) {
+            mCamParam.mManualMode = 0;
+        }
+        #endif
+
         field_0x170++;
         field_0x160++;
         mCurCamStyleTimer++;
@@ -3078,6 +3095,11 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                     } else {
                         field_0x968 *= mMonitor.field_0xc / 5.0f;
                     }
+
+                    #if TARGET_PC
+                    if (!dusk::getSettings().game.freeCamera || !mCamParam.mManualMode) {
+                    #endif
+
                     f32 tmp = field_0x96c * (mIsWolf == 1 ? 30.0f : 30.0f);
                     center += vec3.norm() * (tmp * globe.V().Sin());
                     cSGlobe globe2(vec2 - center);
@@ -3090,6 +3112,10 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                     if (lineBGCheck(&center, &vec, &lin_chk1, i_flags)) {
                         vec = lin_chk1.GetCross();
                     }
+
+                    #if TARGET_PC
+                    }
+                    #endif
 
 #if DEBUG
                     if (mCamSetup.CheckFlag(0x8000)) {
@@ -4604,6 +4630,11 @@ bool dCamera_c::chaseCamera(s32 param_0) {
 
     sp110 = mViewCache.mDirection.R();
     mViewCache.mDirection.R(mViewCache.mDirection.R() + (fVar55 - mViewCache.mDirection.R()) * chase->field_0x74);
+
+    #if TARGET_PC
+    freeCamera();
+    #endif
+
     chase->field_0x64 = mViewCache.mCenter + mViewCache.mDirection.Xyz();
     mViewCache.mEye = chase->field_0x64;
 
@@ -7443,6 +7474,41 @@ bool dCamera_c::test1Camera(s32 param_0) {
 bool dCamera_c::test2Camera(s32 param_0) {
     return false;
 }
+
+#if TARGET_PC
+bool dCamera_c::freeCamera() {
+    if (!dusk::getSettings().game.freeCamera) {
+        mCamParam.mManualMode = 0;
+        return false;
+    }
+
+    cXyz camMovement = {mPadInfo.mCStick.mLastPosX, mPadInfo.mCStick.mLastPosY, 0.0f};
+    f32 magnitude = sqrt(mPadInfo.mCStick.mLastPosX * mPadInfo.mCStick.mLastPosX + mPadInfo.mCStick.mLastPosY * mPadInfo.mCStick.mLastPosY);
+
+    if (mPadInfo.mCStick.mLastPosX != 0 || mPadInfo.mCStick.mLastPosY != 0) {
+        if (!mCamParam.mManualMode) {
+            mCamParam.mManualMode = 1;
+            mCamParam.freeXAngle = mViewCache.mDirection.mAzimuth.Degree();
+            mCamParam.freeYAngle = mViewCache.mDirection.mInclination.Degree();
+        }
+
+        camMovement = camMovement.normalize();
+        camMovement.x *= (dusk::getSettings().game.invertCameraXAxis ? 1.0f : -1.0f) * dusk::getSettings().game.freeCameraSensitivity * 4.0f;
+        camMovement.y *= (dusk::getSettings().game.invertCameraYAxis ? 1.0f : -1.0f) * dusk::getSettings().game.freeCameraSensitivity * 4.0f;
+        mCamParam.freeXAngle += camMovement.x * magnitude * dusk::getSettings().game.freeCameraSensitivity;
+        mCamParam.freeYAngle += camMovement.y * magnitude * dusk::getSettings().game.freeCameraSensitivity;
+    }
+
+    if (mCamParam.mManualMode) {
+        mCamParam.freeYAngle = std::clamp(mCamParam.freeYAngle, -35.0f, 60.0f);
+        mViewCache.mDirection.mAzimuth = cSAngle(mCamParam.freeXAngle);
+        mViewCache.mDirection.mInclination = cSAngle(mCamParam.freeYAngle);
+        mViewCache.mDirection.mRadius = std::clamp(mCamParam.freeYAngle * 15.0f, 300.0f, 10000.0f);
+    }
+
+    return mCamParam.mManualMode;
+}
+#endif
 
 bool dCamera_c::towerCamera(s32 param_0) {
     cSAngle stack_444 = cSAngle(mCamSetup.ChargeLatitude());

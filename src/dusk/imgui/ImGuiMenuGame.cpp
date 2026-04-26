@@ -383,7 +383,15 @@ namespace dusk {
 
             ImGui::SeparatorText("Camera");
 
-            config::ImGuiCheckbox("Invert Camera X Axis", getSettings().game.invertCameraXAxis);
+            config::ImGuiCheckbox("Free Camera", getSettings().game.freeCamera);
+
+            if (getSettings().game.freeCamera) {
+                config::ImGuiCheckbox("Invert Camera X Axis", getSettings().game.invertCameraXAxis);
+                config::ImGuiCheckbox("Invert Camera Y Axis", getSettings().game.invertCameraYAxis);
+                config::ImGuiSliderFloat("Free Camera Sensitivity", getSettings().game.freeCameraSensitivity, 0.5f, 2.0f, "%.1f");
+            } else {
+                config::ImGuiCheckbox("Invert Camera X Axis", getSettings().game.invertCameraXAxis);
+            }
 
             ImGui::SeparatorText("Gyro");
 
