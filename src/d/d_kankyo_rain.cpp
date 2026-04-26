@@ -5962,6 +5962,8 @@ static void dKyr_evil_draw2(Mtx drawMtx, u8** tex) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
     if (evil_packet != NULL) {
+        IF_DUSK(GXPushDebugGroup("dKyr_evil_draw2"));
+
         j3dSys.reinitGX();
         if (dComIfGd_getView() != NULL) {
             MTXInverse(dComIfGd_getView()->viewMtxNoTrans, camMtx);
@@ -6162,6 +6164,8 @@ static void dKyr_evil_draw2(Mtx drawMtx, u8** tex) {
             }
         }
 
+        IF_DUSK(GXPopDebugGroup());
+
         GXSetClipMode(GX_CLIP_ENABLE);
         J3DShape::resetVcdVatCache();
     }
@@ -6199,6 +6203,8 @@ void dKyr_evil_draw(Mtx drawMtx, u8** tex) {
     f32 sp60 = fabsf(cM_ssin(g_Counter.mCounter0 * 215));
 
     if (evil_packet != NULL) {
+        IF_DUSK(GXPushDebugGroup("dKyr_evil_draw"));
+
         j3dSys.reinitGX();
         if (dComIfGd_getView() != NULL) {
             MTXInverse(dComIfGd_getView()->viewMtxNoTrans, camMtx);
@@ -6231,8 +6237,8 @@ void dKyr_evil_draw(Mtx drawMtx, u8** tex) {
 
         GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBA4, 8);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_RGBA4, 8);
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
@@ -6254,6 +6260,19 @@ void dKyr_evil_draw(Mtx drawMtx, u8** tex) {
         GXSetCullMode(GX_CULL_NONE);
         GXSetClipMode(GX_CLIP_DISABLE);
         GXSetNumIndStages(0);
+
+#if TARGET_PC
+        // move color_reg0 to vtx for perf
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+        GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+        GXSetNumChans(1);
+        GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_RASC, GX_CC_TEXC, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_TEXA, GX_CA_RASA, GX_CA_ZERO);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+#endif
 
         dComIfG_Ccsp()->PrepareMass();
 
@@ -6373,7 +6392,7 @@ void dKyr_evil_draw(Mtx drawMtx, u8** tex) {
                             color_reg0.b = (115.0f * sp28) + (15.0f * fabsf(sp2C - sp64));
                         }
 
-                        GXSetTevColor(GX_TEVREG0, color_reg0);
+                        IF_NOT_DUSK(GXSetTevColor(GX_TEVREG0, color_reg0));
                         GXSetTevColor(GX_TEVREG1, color_reg1);
 
                         spC8 = spA4;
@@ -6412,18 +6431,24 @@ void dKyr_evil_draw(Mtx drawMtx, u8** tex) {
 
                         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                         GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
+                        IF_DUSK(GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a));
                         GXTexCoord2s16(0, 0);
                         GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
+                        IF_DUSK(GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a));
                         GXTexCoord2s16(0xFF, 0);
                         GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
+                        IF_DUSK(GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a));
                         GXTexCoord2s16(0xFF, 0xFF);
                         GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
+                        IF_DUSK(GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a));
                         GXTexCoord2s16(0, 0xFF);
                         GXEnd();
                     }
                 }
             }
         }
+
+        IF_DUSK(GXPopDebugGroup());
 
         J3DShape::resetVcdVatCache();
         GXSetClipMode(GX_CLIP_ENABLE);
