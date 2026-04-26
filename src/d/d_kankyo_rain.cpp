@@ -5986,7 +5986,12 @@ static void dKyr_evil_draw2(Mtx drawMtx, u8** tex) {
         TGXTexObj texobj;
         dKyr_set_btitex(&texobj, (ResTIMG*)tex[1]);
 
-        rot += 0.7f;
+#if TARGET_PC
+        if (dusk::frame_interp::get_ui_tick_pending())
+#endif
+        {
+            rot += 0.7f;
+        }
         MTXRotRad(rotMtx, 'Z', DEG_TO_RAD(rot));
         MTXConcat(camMtx, rotMtx, camMtx);
 
@@ -6037,7 +6042,14 @@ static void dKyr_evil_draw2(Mtx drawMtx, u8** tex) {
                         sp34.y = 80.0f;
                         sp34.z = 80.0f;
                         mDoLib_project(&sp7C, &proj);
-                        if (!(proj.x > -sp34.x) || !(proj.x < (FB_WIDTH + sp34.x)) ||
+#if TARGET_PC
+                        f32 cullMinX = mDoGph_gInf_c::getSafeMinXF() - sp34.x;
+                        f32 cullMaxX = mDoGph_gInf_c::getSafeMinXF() + mDoGph_gInf_c::getSafeWidthF() + sp34.x;
+#else
+                        f32 cullMinX = -sp34.x;
+                        f32 cullMaxX = FB_WIDTH + sp34.x;
+#endif
+                        if (!(proj.x > cullMinX) || !(proj.x < cullMaxX) ||
                             !(proj.y > -sp34.y) || !(proj.y < (458.0f + sp34.z)))
                         {
                             continue;
@@ -6208,7 +6220,12 @@ void dKyr_evil_draw(Mtx drawMtx, u8** tex) {
         TGXTexObj texobj;
         dKyr_set_btitex(&texobj, (ResTIMG*)tex[0]);
 
-        rot += 1.0f;
+#if TARGET_PC
+        if (dusk::frame_interp::get_ui_tick_pending())
+#endif
+        {
+            rot += 1.0f;
+        }
         MTXRotRad(rotMtx, 'Z', DEG_TO_RAD(rot));
         MTXConcat(camMtx, rotMtx, camMtx);
 
@@ -6262,7 +6279,14 @@ void dKyr_evil_draw(Mtx drawMtx, u8** tex) {
                         sp44.z = 80.0f;
 
                         mDoLib_project(&spA4, &proj);
-                        if (!(proj.x > -sp44.x) || !(proj.x < (FB_WIDTH + sp44.x)) ||
+#if TARGET_PC
+                        f32 cullMinX = mDoGph_gInf_c::getSafeMinXF() - sp44.x;
+                        f32 cullMaxX = mDoGph_gInf_c::getSafeMinXF() + mDoGph_gInf_c::getSafeWidthF() + sp44.x;
+#else
+                        f32 cullMinX = -sp44.x;
+                        f32 cullMaxX = FB_WIDTH + sp44.x;
+#endif
+                        if (!(proj.x > cullMinX) || !(proj.x < cullMaxX) ||
                             !(proj.y > -sp44.y) || !(proj.y < (458.0f + sp44.z)))
                         {
                             continue;
