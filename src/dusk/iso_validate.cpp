@@ -19,6 +19,7 @@ constexpr const char* TP_GAME_IDS[] = {
 
 constexpr const char* SUPPORTED_TP_GAME_IDS[] = {
     "GZ2E01", // GCN USA
+    "GZ2P01", // GCN PAL
 };
 
 template <size_t N>

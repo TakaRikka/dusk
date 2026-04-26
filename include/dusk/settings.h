@@ -13,11 +13,25 @@ enum class BloomMode : int {
     Dusk = 2,
 };
 
+enum class GameLanguage : u8 {
+    English = OS_LANGUAGE_ENGLISH,
+    German = OS_LANGUAGE_GERMAN,
+    French = OS_LANGUAGE_FRENCH,
+    Spanish = OS_LANGUAGE_SPANISH,
+    Italian = OS_LANGUAGE_ITALIAN,
+};
+
 namespace config {
 template <>
 struct ConfigEnumRange<BloomMode> {
     static constexpr auto min = BloomMode::Off;
     static constexpr auto max = BloomMode::Dusk;
+};
+
+template <>
+struct ConfigEnumRange<GameLanguage> {
+    static constexpr auto min = GameLanguage::English;
+    static constexpr auto max = GameLanguage::Italian;
 };
 }
 
@@ -46,6 +60,8 @@ struct UserSettings {
     // Game settings
 
     struct {
+        ConfigVar<GameLanguage> language;
+
         // QoL
         ConfigVar<bool> enableQuickTransform;
         ConfigVar<bool> hideTvSettingsScreen;
@@ -66,10 +82,10 @@ struct UserSettings {
 
         // Preferences
         ConfigVar<bool> enableMirrorMode;
-        ConfigVar<bool> invertCameraXAxis;
         ConfigVar<bool> disableMainHUD;
         ConfigVar<bool> pauseOnFocusLost;
         ConfigVar<bool> enableLinkDollRotation;
+        ConfigVar<bool> enableAchievementNotifications;
 
 
         // Graphics
@@ -95,6 +111,10 @@ struct UserSettings {
         ConfigVar<float> gyroDeadband;
         ConfigVar<bool> gyroInvertPitch;
         ConfigVar<bool> gyroInvertYaw;
+        ConfigVar<bool> freeCamera;
+        ConfigVar<bool> invertCameraXAxis;
+        ConfigVar<bool> invertCameraYAxis;
+        ConfigVar<float> freeCameraSensitivity;
 
         // Cheats
         ConfigVar<bool> infiniteHearts;

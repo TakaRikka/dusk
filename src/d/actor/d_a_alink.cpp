@@ -5877,6 +5877,11 @@ void daAlink_c::setItemMatrix(int param_0) {
     modelCalc(mSheathModel);
 
     int var_r26;
+
+    #if AVOID_UB
+    var_r26 = 0;
+    #endif
+
     if (!checkNoResetFlg3(FLG3_UNK_4000000)) {
         if (mEquipItem == 0x103 || param_0 != 0) {
             mSwordModel->setBaseTRMtx(mpLinkModel->getAnmMtx(mLeftItemJntNo));

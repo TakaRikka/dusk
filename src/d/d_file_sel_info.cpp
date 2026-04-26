@@ -14,6 +14,8 @@
 #include <cstdio>
 #include <cstring>
 
+#include "dusk/version.hpp"
+
 dFile_info_c::dFile_info_c(JKRArchive* i_archive, u8 param_1) {
     mArchive = i_archive;
     field_0x22 = param_1;
@@ -169,7 +171,18 @@ void dFile_info_c::setSaveDate(dSv_save_c* i_savedata) {
     OSCalendarTime time;
     OSTicksToCalendarTime(i_savedata->getPlayer().getPlayerStatusB().getDateIpl(), &time);
 
-    #if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
+    #if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        sprintf(mSaveDate, "%d.%02d.%02d %02d:%02d", time.year, time.mon + 1, time.mday,
+            time.hour, time.min);
+    } else if (dusk::version::isRegionPal() && dComIfGs_getPalLanguage() != dSv_player_config_c::LANGUAGE_ENGLISH) {
+        sprintf(mSaveDate, "%02d/%02d/%d %02d:%02d", time.mday, time.mon + 1, time.year, time.hour,
+            time.min);
+    } else {
+        sprintf(mSaveDate, "%02d/%02d/%d %02d:%02d", time.mon + 1, time.mday, time.year, time.hour,
+            time.min);
+    }
+    #elif (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
     sprintf(mSaveDate, "%d.%02d.%02d %02d:%02d", time.year, time.mon + 1, time.mday,
             time.hour, time.min);
     #elif VERSION == VERSION_GCN_PAL

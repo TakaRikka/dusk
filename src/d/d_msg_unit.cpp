@@ -334,11 +334,11 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
             vals[1] = ((dMsgUnit_inf1_section_t*)pInfoBlock)->entries[i_type].endFrame;
 #endif
 
-#if REGION_PAL
+#if TARGET_PC || REGION_PAL
             if (i_value == 1 ||
                 (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_FRENCH &&
                     i_value == 0)) {
-#elif !REGION_USA
+#elif !REGION_USA // Dusk TODO: What? This checks for Spanish when *not* PAL or USA?
             if (i_value == 1 ||
                 (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_SPANISH &&
                     i_value == 0)) {

@@ -62,6 +62,8 @@ namespace dusk {
                 ImGui::EndDisabled();
             }
 
+            ImGui::MenuItem("Achievements", nullptr, &m_showAchievements);
+
 #if DUSK_CAN_OPEN_DATA_FOLDER
             ImGui::Separator();
             if (ImGui::MenuItem("Open Data Folder")) {
@@ -260,5 +262,13 @@ namespace dusk {
 
         ImGui::End();
         ImGui::PopFont();
+    }
+
+    void ImGuiMenuTools::ShowAchievements() {
+        m_achievementsWindow.draw(m_showAchievements);
+    }
+
+    void ImGuiMenuTools::notifyAchievement(std::string name) {
+        m_achievementsWindow.notify(std::move(name));
     }
 }

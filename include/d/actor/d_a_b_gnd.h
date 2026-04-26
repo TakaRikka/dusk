@@ -188,6 +188,15 @@ public:
     /* 0x273C */ f32 mKankyoBlend;
     /* 0x2740 */ u8 field_0x2740;
     /* 0x2744 */ dMsgFlow_c mMsgFlow;
+#if TARGET_PC
+    cXyz mReinsInterpPrev[2][16];
+    cXyz mReinsInterpCurr[2][16];
+    cXyz mReinsTexInterpPrev[2];
+    cXyz mReinsTexInterpCurr[2];
+    bool mReinsInterpPrevValid;
+    bool mReinsInterpCurrValid;
+    s8 mDemoCamSyncTicks;
+#endif
 };
 
 STATIC_ASSERT(sizeof(b_gnd_class) == 0x2790);

@@ -80,8 +80,19 @@ static s32 DolVaToFileOffset(u32 va) {
     return -1;
 }
 
-bool LoadDolAsset(void* dst, u32 virtualAddress, s32 size) {
-    s32 fileOffset = DolVaToFileOffset(virtualAddress);
+static u32 GetOffsetForVersion(std::initializer_list<OffsetVersion> version) {
+    const auto gameVersion = dusk::version::getGameVersion();
+    for (auto elem : version) {
+        if (elem.mGameVersion == gameVersion) {
+            return elem.mOffset;
+        }
+    }
+
+    DuskLog.fatal("Unable to find offset for this game version!");
+}
+
+bool LoadDolAsset(void* dst, std::initializer_list<OffsetVersion> virtualAddress, s32 size) {
+    s32 fileOffset = DolVaToFileOffset(GetOffsetForVersion(virtualAddress));
     if (fileOffset < 0) {
         return false;
     }
@@ -95,13 +106,16 @@ bool LoadDolAsset(void* dst, u32 virtualAddress, s32 size) {
     return true;
 }
 
-bool LoadRelAsset(void* dst, const char* dvdPath, s32 offset, s32 size) {
-    void* p = JKRDvdRipper::loadToMainRAM(dvdPath, (u8*)dst, EXPAND_SWITCH_UNKNOWN1, (u32)size, nullptr, JKRDvdRipper::ALLOC_DIRECTION_FORWARD, (u32)offset, nullptr, nullptr);
-    if (!p) DuskLog.fatal("dvd_asset: failed to load {} (offset={:#x} size={:#x})", dvdPath, offset, size);
+bool LoadRelAsset(void* dst, const char* dvdPath, std::initializer_list<OffsetVersion> offset, s32 size) {
+    auto resOffset = GetOffsetForVersion(offset);
+    void* p = JKRDvdRipper::loadToMainRAM(dvdPath, (u8*)dst, EXPAND_SWITCH_UNKNOWN1, (u32)size, nullptr, JKRDvdRipper::ALLOC_DIRECTION_FORWARD, resOffset, nullptr, nullptr);
+    if (!p) DuskLog.fatal("dvd_asset: failed to load {} (offset={:#x} size={:#x})", dvdPath, resOffset, size);
     return p != nullptr;
 }
 
-bool LoadArchivedRelAsset(void* dst, u32 memType, const char* relFileName, s32 offset, s32 size) {
+bool LoadArchivedRelAsset(void* dst, u32 memType, const char* relFileName, std::initializer_list<OffsetVersion> offset, s32 size) {
+    auto resOffset = GetOffsetForVersion(offset);
+
     // On TARGET_PC, cDyl_InitCallback skips DynamicModuleControl::initialize() due to static linking
     // Mount RELS.arc on first use so sArchive is available
     static bool s_mountAttempted = false;
@@ -118,7 +132,7 @@ bool LoadArchivedRelAsset(void* dst, u32 memType, const char* relFileName, s32 o
         DuskLog.fatal("dvd_asset: {} not found in RELS archive", relFileName); return false;
     }
 
-    std::memcpy(dst, rel + offset, size);
+    std::memcpy(dst, rel + resOffset, size);
     return true;
 }
 
