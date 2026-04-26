@@ -44,6 +44,7 @@ UserSettings g_userSettings = {
         .disableMainHUD {"game.disableMainHUD", false},
         .pauseOnFocusLost {"game.pauseOnFocusLost", false},
         .enableLinkDollRotation = {"game.enableLinkDollRotation", false },
+        .enableAchievementNotifications {"game.enableAchievementNotifications", false},
 
         // Graphics
         .bloomMode {"game.bloomMode", BloomMode::Classic},
@@ -153,6 +154,7 @@ void registerSettings() {
     Register(g_userSettings.game.freeMagicArmor);
     Register(g_userSettings.game.restoreWiiGlitches);
     Register(g_userSettings.game.enableLinkDollRotation);
+    Register(g_userSettings.game.enableAchievementNotifications);
     Register(g_userSettings.game.noMissClimbing);
     Register(g_userSettings.game.noLowHpSound);
     Register(g_userSettings.game.midnasLamentNonStop);
