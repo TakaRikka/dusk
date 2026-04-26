@@ -14,6 +14,7 @@
 #include "SDL3/SDL_events.h"
 #include "SDL3/SDL_mouse.h"
 #include "aurora/lib/window.hpp"
+#include "dusk/achievements.h"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/config.hpp"
 #include "dusk/dusk.h"
@@ -295,6 +296,15 @@ namespace dusk {
 
         UpdateSettings();
 
+        AchievementSystem::get().tick();
+        while (AchievementSystem::get().hasPendingUnlock()) {
+            if (getSettings().game.enableAchievementNotifications) {
+                m_menuTools.notifyAchievement(AchievementSystem::get().consumePendingUnlock());
+            } else {
+                AchievementSystem::get().consumePendingUnlock();
+            }
+        }
+
         if ((ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) &&
             ImGui::IsKeyPressed(ImGuiKey_R))
         {
@@ -374,6 +384,7 @@ namespace dusk {
             m_menuTools.ShowSaveEditor();
         }
         m_menuTools.ShowStateShare();
+        m_menuTools.ShowAchievements();
         DuskDebugPad(); // temporary, remove later
 
         // Hide mouse cursor if the F1 menu is not open and the cursor is idle for 3 seconds.

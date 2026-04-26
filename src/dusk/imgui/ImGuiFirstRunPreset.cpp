@@ -35,6 +35,7 @@ static void ApplyPresetDusk() {
     ApplyPresetHD();
 
     auto& s = getSettings();
+    s.game.enableAchievementNotifications.setValue(true);
     s.game.enableQuickTransform.setValue(true);
     s.game.instantSaves.setValue(true);
     s.game.midnasLamentNonStop.setValue(true);

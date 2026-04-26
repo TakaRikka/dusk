@@ -444,6 +444,7 @@ namespace dusk {
 
     void ImGuiMenuGame::drawInterfaceMenu() {
         if (ImGui::BeginMenu("Interface")) {
+            config::ImGuiCheckbox("Achievement Notifications", getSettings().game.enableAchievementNotifications);
             config::ImGuiCheckbox("Skip Pre-Launch UI", getSettings().backend.skipPreLaunchUI);
             config::ImGuiCheckbox("Show Pipeline Compilation", getSettings().backend.showPipelineCompilation);
 #if DUSK_ENABLE_SENTRY_NATIVE

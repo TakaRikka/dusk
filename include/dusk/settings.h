@@ -86,6 +86,7 @@ struct UserSettings {
         ConfigVar<bool> disableMainHUD;
         ConfigVar<bool> pauseOnFocusLost;
         ConfigVar<bool> enableLinkDollRotation;
+        ConfigVar<bool> enableAchievementNotifications;
 
 
         // Graphics
