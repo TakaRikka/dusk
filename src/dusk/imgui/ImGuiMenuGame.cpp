@@ -981,16 +981,20 @@ namespace dusk {
             u16 low;
             u16 high;
             (void)PADGetRumbleIntensity(m_controllerConfig.m_selectedPort, &low, &high);
-            float fLow = static_cast<float>(low / 32767) * 100.f;
+            float fLow = (static_cast<float>(low) / 32767.f) * 100.f;
             bool changed = ImGui::SliderFloat("Low", &fLow, 0.f, 100.f, "%.0f%%");
-            float fHigh = static_cast<float>(high / 32767) * 100.f;
+            float fHigh = (static_cast<float>(high) / 32767.f) * 100.f;
             changed |= ImGui::SliderFloat("High", &fHigh, 0.f, 100.f, "%.0f%%");
             if (changed) {
                 PADSetRumbleIntensity(m_controllerConfig.m_selectedPort,
-                    static_cast<u16>((fLow / 100.f) * 32767),
-                    static_cast<u16>((fHigh / 100.f) * 32767));
+                    static_cast<u16>((fLow / 100) * 32767),
+                    static_cast<u16>((fHigh / 100) * 32767));
                 PADSerializeMappings();
             }
+            if (ImGui::Button(fmt::format("{0}...##rumbleTest", m_controllerConfig.m_isRumbling ? "Stop": "Test").c_str(), {-1, 0})) {
+                PADControlMotor(m_controllerConfig.m_selectedPort, !m_controllerConfig.m_isRumbling ? PAD_MOTOR_RUMBLE : PAD_MOTOR_STOP_HARD);
+                m_controllerConfig.m_isRumbling ^= 1;
+            } 
             ImGuiEndGroupPanel();
         }
         ImGuiEndGroupPanel();
