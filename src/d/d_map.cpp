@@ -13,6 +13,9 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
+#if TARGET_PC
+#include <dolphin/gx/GXExtra.h>
+#endif
 #include <cstring>
 
 #if DEBUG
@@ -1215,6 +1218,9 @@ void dMap_c::changeTextureSize(int param_1, int param_2, int param_3) {
 
 void dMap_c::_remove() {
     if (mImage_p != NULL) {
+#if TARGET_PC
+        GXDestroyCopyTex(mImage_p);
+#endif
         JKR_DELETE_ARRAY(mImage_p);
         mImage_p = NULL;
     }
