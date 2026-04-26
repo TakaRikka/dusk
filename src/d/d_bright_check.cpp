@@ -10,6 +10,7 @@
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "d/d_msg_string.h"
 #include "dusk/livesplit.h"
+#include "dusk/imgui/ImGuiConsole.hpp"
 #include "m_Do/m_Do_controller_pad.h"
 
 dBrightCheck_c::dBrightCheck_c(JKRArchive* i_archive) {
@@ -141,6 +142,13 @@ void dBrightCheck_c::modeMove() {
         mDoAud_seStart(Z2SE_ENTER_GAME, NULL, 0, 0);
 #ifdef TARGET_PC
         dusk::speedrun::start();
+
+        if (dusk::getSettings().game.speedrunMode && !dusk::getSettings().game.hideTvSettingsScreen) {
+            // start a new run if a run isn't already in progress
+            if (!dusk::g_imguiConsole.isSpeedrunStart()) {
+                dusk::g_imguiConsole.startSpeedrun();
+            }
+        }
 #endif
         mCompleteCheck = true;
         mMode = MODE_WAIT_e;

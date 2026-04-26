@@ -10,7 +10,6 @@
 
 #include "ImGuiFirstRunPreset.hpp"
 #include "ImGuiMenuGame.hpp"
-#include "ImGuiMenuSpeedrunTimer.hpp"
 #include "ImGuiMenuTools.hpp"
 #include "ImGuiPreLaunchWindow.hpp"
 #include "imgui.h"
@@ -29,6 +28,11 @@ public:
 
 	static bool CheckMenuViewToggle(ImGuiKey key, bool& active);
     void AddToast(std::string_view message, float duration = 3.f);
+
+    bool isSpeedrunStart() const { return m_menuGame.isRunStarted(); }
+    void startSpeedrun() { m_menuGame.startRun(); }
+    void stopSpeedrun() { m_menuGame.stopRun(); }
+    void incSpeedrunTotalLoadTime(OSTime time) { m_menuGame.incTotalLoadTime(time); }
 
 private:
     struct Toast {
@@ -53,7 +57,6 @@ private:
 
     ImGuiFirstRunPreset m_firstRunPreset;
     ImGuiMenuGame m_menuGame;
-    ImGuiMenuSpeedrunTimer m_menuSpeedrunTimer;
     ImGuiPreLaunchWindow m_preLaunchWindow;
 
     // Keep always last

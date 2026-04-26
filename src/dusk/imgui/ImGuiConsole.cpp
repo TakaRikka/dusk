@@ -334,7 +334,6 @@ namespace dusk {
         if (showMenu && ImGui::BeginMainMenuBar()) {
             m_menuGame.draw();
             m_menuTools.draw();
-            m_menuSpeedrunTimer.draw();
 
             const auto fpsLabel =
                 fmt::format(FMT_STRING("FPS: {:.2f}\n"), ImGui::GetIO().Framerate);
@@ -366,12 +365,11 @@ namespace dusk {
             }
         }
 
-        m_menuSpeedrunTimer.drawOverlay();
-
         UpdateDragScroll();
 
         m_menuGame.windowControllerConfig();
         m_menuGame.windowInputViewer();
+        m_menuGame.drawSpeedrunTimerOverlay();
 
         if (getSettings().game.liveSplitEnabled) {
             dusk::speedrun::updateLiveSplit();
@@ -381,7 +379,7 @@ namespace dusk {
                 AddToast("LiveSplit disconnected");
         }
 
-        if (dusk::IsGameLaunched) {
+        if (dusk::IsGameLaunched && !dusk::getSettings().game.speedrunMode) {
             m_menuTools.ShowDebugOverlay();
             m_menuTools.ShowCameraOverlay();
             m_menuTools.ShowProcessManager();
@@ -392,8 +390,9 @@ namespace dusk {
             m_menuTools.ShowPlayerInfo();
             m_menuTools.ShowAudioDebug();
             m_menuTools.ShowSaveEditor();
+            m_menuTools.ShowStateShare();
         }
-        m_menuTools.ShowStateShare();
+
         DuskDebugPad(); // temporary, remove later
 
         // Hide mouse cursor if the F1 menu is not open and the cursor is idle for 3 seconds.

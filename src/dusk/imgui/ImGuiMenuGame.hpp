@@ -15,8 +15,22 @@ namespace dusk {
 
         void windowInputViewer();
         void windowControllerConfig();
+        void drawSpeedrunTimerOverlay();
 
         static void ToggleFullscreen();
+
+        static void resetForSpeedrunMode();
+        bool isRunStarted() const { return m_speedrunInfo.m_isRunStarted; }
+        void startRun() {
+            resetForSpeedrunMode();
+            m_speedrunInfo.m_isRunStarted = true;
+            m_speedrunInfo.m_startTimestamp = OSGetTime();
+        }
+        void stopRun() {
+            m_speedrunInfo.m_isRunStarted = false;
+            m_speedrunInfo.m_endTimestamp = OSGetTime() - m_speedrunInfo.m_startTimestamp;
+        }
+        void incTotalLoadTime(OSTime time) { m_speedrunInfo.m_totalLoadTime += time; }
 
     private:
         void drawAudioMenu();
@@ -40,6 +54,14 @@ namespace dusk {
         bool m_showInputViewerGyro = false;
         int m_inputOverlayCorner = 3;
         std::string m_controllerName;
+
+        struct {
+            bool m_showTimerWindow = false;
+            bool m_isRunStarted = false;
+            OSTime m_startTimestamp = 0;
+            OSTime m_endTimestamp = 0;
+            OSTime m_totalLoadTime = 0;
+        } m_speedrunInfo;
     };
 }
 

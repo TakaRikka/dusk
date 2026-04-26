@@ -4,13 +4,14 @@
  */
 
 #include "f_op/f_op_scene_req.h"
+#include <cstdio>
+#include "dusk/imgui/ImGuiConsole.hpp"
+#include "dusk/logging.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_scene_pause.h"
 #include "f_pc/f_pc_executor.h"
 #include "f_pc/f_pc_manager.h"
-#include <cstdio>
-#include "dusk/logging.h"
 
 static cPhs_Step fopScnRq_phase_ClearOverlap(scene_request_class* i_sceneReq) {
     return fopOvlpM_ClearOfReq() == 1 ? cPhs_NEXT_e : cPhs_INIT_e;
@@ -39,6 +40,10 @@ static cPhs_Step fopScnRq_phase_IsDoneOverlap(scene_request_class* i_sceneReq) {
 
 static BOOL l_fopScnRq_IsUsingOfOverlap;
 
+#if TARGET_PC
+static OSTime l_fopScnRq_StartTime = 0;
+#endif
+
 static cPhs_Step fopScnRq_phase_Done(scene_request_class* i_sceneReq) {
     
     if (i_sceneReq->create_request.parameters != 1) {
@@ -48,6 +53,14 @@ static cPhs_Step fopScnRq_phase_Done(scene_request_class* i_sceneReq) {
     }
 
     l_fopScnRq_IsUsingOfOverlap = FALSE;
+    #if TARGET_PC
+    if (dusk::getSettings().game.speedrunMode) {
+        if (dusk::g_imguiConsole.isSpeedrunStart()) {
+            dusk::g_imguiConsole.incSpeedrunTotalLoadTime(OSGetTime() - l_fopScnRq_StartTime);
+        }
+    }
+    #endif
+
     return cPhs_NEXT_e;
 }
 
@@ -88,6 +101,10 @@ static scene_request_class* fopScnRq_FadeRequest(s16 i_procname, u16 i_peektime)
         req = fopOvlpM_Request(i_procname, i_peektime);
         if (req != NULL) {
             l_fopScnRq_IsUsingOfOverlap = TRUE;
+
+            #if TARGET_PC
+            l_fopScnRq_StartTime = OSGetTime();
+            #endif
         }
     }
 

@@ -23,6 +23,7 @@
 #include "d/actor/d_a_npc_tkc.h"
 #include <cstring>
 
+#include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/settings.h"
 
 BOOL daAlink_c::checkEventRun() const {
@@ -4005,6 +4006,15 @@ int daAlink_c::procGanonFinishInit() {
 
     field_0x37c8 = current.pos;
     onEndResetFlg1(ERFLG1_SHIELD_BACKBONE);
+
+#if TARGET_PC
+    if (dusk::getSettings().game.speedrunMode) {
+        if (dusk::g_imguiConsole.isSpeedrunStart()) {
+            dusk::g_imguiConsole.stopSpeedrun();
+        }
+    }
+#endif
+
     return 1;
 }
 

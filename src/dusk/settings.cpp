@@ -92,8 +92,7 @@ UserSettings g_userSettings = {
         .enableTurboKeybind {"game.enableTurboKeybind", false},
 
         // Tools
-        .speedrunTimer {"game.speedrunTimer", false},
-        .speedrunTimerOverlay {"game.speedrunTimerOverlay", false},
+        .speedrunMode {"game.speedrunMode", false},
         .liveSplitEnabled {"game.liveSplitEnabled", false}
     },
 
@@ -162,8 +161,7 @@ void registerSettings() {
     Register(g_userSettings.game.noLowHpSound);
     Register(g_userSettings.game.midnasLamentNonStop);
     Register(g_userSettings.game.enableTurboKeybind);
-    Register(g_userSettings.game.speedrunTimer);
-    Register(g_userSettings.game.speedrunTimerOverlay);
+    Register(g_userSettings.game.speedrunMode);
     Register(g_userSettings.game.liveSplitEnabled);
     Register(g_userSettings.game.fastSpinner);
     Register(g_userSettings.game.infiniteHearts);
