@@ -1464,6 +1464,8 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiAchievements.cpp
         src/dusk/ui/button.hpp
         src/dusk/ui/button.cpp
+        src/dusk/ui/control_surface.hpp
+        src/dusk/ui/control_surface.cpp
         src/dusk/ui/disc_state.hpp
         src/dusk/ui/disc_state.cpp
         src/dusk/ui/element.hpp

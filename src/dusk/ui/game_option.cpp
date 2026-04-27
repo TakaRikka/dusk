@@ -1,5 +1,6 @@
 #include "game_option.hpp"
 
+#include "control_surface.hpp"
 #include "element.hpp"
 #include "focus_border.hpp"
 #include "label.hpp"
@@ -166,10 +167,8 @@ void GameOption::apply_style() {
     }
 
     const bool active = m_hovered || m_focused;
-    m_element->SetProperty("background-color", active ? theme::rgba(theme::Primary, 52) :
-                                                        theme::rgba(theme::Primary, 0));
-    m_element->SetProperty("border-color", active ? theme::rgba(theme::Primary, 220) :
-                                                    theme::rgba(theme::ElevatedBorder, 42));
+    apply_control_surface_style(m_element, control_surface_style(ControlSurfaceTone::Quiet),
+                                active);
     m_element->SetProperty("color",
                            active ? theme::rgba(theme::TextActive) : theme::rgba(theme::TextDim));
     m_title->SetProperty("color",

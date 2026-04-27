@@ -1,5 +1,6 @@
 #include "button.hpp"
 
+#include "control_surface.hpp"
 #include "element.hpp"
 #include "focus_border.hpp"
 #include "label.hpp"
@@ -12,15 +13,15 @@
 namespace dusk::ui {
 namespace {
 
-theme::Color variant_color(ButtonVariant variant) {
+ControlSurfaceTone control_surface_tone(ButtonVariant variant) {
     switch (variant) {
     case ButtonVariant::Primary:
-        return theme::Primary;
+        return ControlSurfaceTone::Primary;
     case ButtonVariant::Secondary:
-        return theme::Secondary;
+        return ControlSurfaceTone::Secondary;
     case ButtonVariant::Quiet:
     default:
-        return theme::Elevated;
+        return ControlSurfaceTone::Quiet;
     }
 }
 
@@ -103,11 +104,11 @@ void Button::ProcessEvent(Rml::Event& event) {
         apply_style();
         break;
     case Rml::EventId::Mouseover:
-        m_focused = true;
+        m_hovered = true;
         apply_style();
         break;
     case Rml::EventId::Mouseout:
-        m_focused = false;
+        m_hovered = false;
         apply_style();
         break;
     default:
@@ -135,23 +136,8 @@ void Button::apply_style() {
     }
 
     const bool active = m_hovered || m_focused;
-    const bool isBasic = m_variant == ButtonVariant::Quiet;
-    const Color color = variant_color(m_variant);
-
-    int borderOpacity = isBasic ? 0 : 190;
-    int backgroundOpacity = isBasic ? 0 : 28;
-    int backgroundHoverOpacity = 116;
-    int borderHoverOpacity = isBasic ? backgroundHoverOpacity : 255;
-
-    if (m_variant == ButtonVariant::Quiet) {
-        backgroundHoverOpacity = 68;
-        borderHoverOpacity = 150;
-    }
-
-    m_element->SetProperty("border-color",
-                           rgba(color, active ? borderHoverOpacity : borderOpacity));
-    m_element->SetProperty("background-color",
-                           rgba(color, active ? backgroundHoverOpacity : backgroundOpacity));
+    apply_control_surface_style(m_element, control_surface_style(control_surface_tone(m_variant)),
+                                active);
     m_element->SetProperty("color", rgba(active ? TextActive : Text));
     m_label->SetProperty("color", rgba(active ? TextActive : Text));
     set_focus_border_visible(m_element, m_focused);
