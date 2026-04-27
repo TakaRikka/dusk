@@ -85,6 +85,10 @@ void fileDialogCallback(void* userdata, const char* path, const char* error) {
     getSettings().backend.discVerificationResult.setValue(DiscVerificationResult::NotChecked);
     config::Save();
 
+    if (self->m_selectedIsoPath.empty()) {
+        return;
+    }
+
     auto& dv = self->m_discVerification;
     dv.status = {};
     dv.task = std::thread([self, &dv]() {
