@@ -1462,6 +1462,26 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiStateShare.cpp
         src/dusk/imgui/ImGuiAchievements.hpp
         src/dusk/imgui/ImGuiAchievements.cpp
+        src/dusk/ui/button.hpp
+        src/dusk/ui/button.cpp
+        src/dusk/ui/disc_state.hpp
+        src/dusk/ui/disc_state.cpp
+        src/dusk/ui/element.hpp
+        src/dusk/ui/element.cpp
+        src/dusk/ui/focus_border.hpp
+        src/dusk/ui/focus_border.cpp
+        src/dusk/ui/game_option.hpp
+        src/dusk/ui/game_option.cpp
+        src/dusk/ui/label.hpp
+        src/dusk/ui/label.cpp
+        src/dusk/ui/prelaunch_layout.hpp
+        src/dusk/ui/prelaunch_layout.cpp
+        src/dusk/ui/prelaunch_screen.hpp
+        src/dusk/ui/prelaunch_screen.cpp
+        src/dusk/ui/theme.hpp
+        src/dusk/ui/theme.cpp
+        src/dusk/ui/ui.hpp
+        src/dusk/ui/ui.cpp
         src/dusk/achievements.cpp
         src/dusk/iso_validate.cpp
         src/dusk/livesplit.cpp

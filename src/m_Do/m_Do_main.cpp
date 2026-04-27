@@ -56,6 +56,7 @@
 #include "dusk/logging.h"
 #include "dusk/main.h"
 #include "dusk/imgui/ImGuiConsole.hpp"
+#include "dusk/ui/prelaunch_screen.hpp"
 #include "version.h"
 
 #include <aurora/aurora.h>
@@ -134,17 +135,23 @@ AuroraStats dusk::lastFrameAuroraStats;
 float dusk::frameUsagePct = 0.0f;
 
 bool launchUILoop() {
+    const bool useRmlPrelaunch = dusk::ui::prelaunch::initialize();
+
     while (dusk::IsRunning && !dusk::IsGameLaunched) {
         const AuroraEvent* event = aurora_update();
         while (event != nullptr && event->type != AURORA_NONE) {
             switch (event->type) {
             case AURORA_SDL_EVENT:
+                if (useRmlPrelaunch) {
+                    dusk::ui::prelaunch::handle_event(event->sdl);
+                }
                 dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
                 break;
             case AURORA_DISPLAY_SCALE_CHANGED:
                 dusk::ImGuiEngine_Initialize(event->windowSize.scale);
                 break;
             case AURORA_EXIT:
+                dusk::ui::prelaunch::shutdown();
                 return false;
             }
 
@@ -156,12 +163,18 @@ bool launchUILoop() {
             continue;
         }
 
+        if (useRmlPrelaunch) {
+            dusk::ui::prelaunch::update();
+        }
+
         dusk::g_imguiConsole.PreDraw();
 
         dusk::g_imguiConsole.PostDraw();
 
         aurora_end_frame();
     }
+
+    dusk::ui::prelaunch::shutdown();
 
     return dusk::IsRunning;
 }

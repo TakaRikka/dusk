@@ -22,6 +22,7 @@
 #include "dusk/livesplit.h"
 #include "dusk/main.h"
 #include "dusk/settings.h"
+#include "dusk/ui/prelaunch_screen.hpp"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_main.h"
 #include "tracy/Tracy.hpp"
@@ -339,7 +340,7 @@ namespace dusk {
             ImGuiMenuGame::ToggleFullscreen();
         }
 
-        if (!dusk::IsGameLaunched) {
+        if (!dusk::IsGameLaunched && !dusk::ui::prelaunch::is_active()) {
             m_preLaunchWindow.draw();
         }
 
