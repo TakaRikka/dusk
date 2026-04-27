@@ -216,6 +216,8 @@ namespace dusk {
             ImGui::BeginDisabled(getSettings().game.speedrunMode);
             config::ImGuiSliderInt("Damage Multiplier", getSettings().game.damageMultiplier, 1, 8, "x%d");
 
+            config::ImGuiCheckbox("Hyper Enemies", getSettings().game.hyperEnemies);
+
             config::ImGuiCheckbox("Instant Death", getSettings().game.instantDeath);
             if (ImGui::IsItemHovered()) {
                 ImGui::SetTooltip("Any hit will instantly kill you.");
@@ -1122,6 +1124,7 @@ namespace dusk {
         getSettings().game.damageMultiplier.setValue(1);
         getSettings().game.instantDeath.setValue(false);
         getSettings().game.noHeartDrops.setValue(false);
+        getSettings().game.hyperEnemies.setValue(false);
 
         getSettings().game.infiniteHearts.setValue(false);
         getSettings().game.infiniteArrows.setValue(false);
