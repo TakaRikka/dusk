@@ -68,17 +68,17 @@ std::string iso_validation_error_message(iso::ValidationError code) {
     case iso::ValidationError::InvalidImage:
         return "Unable to interpret selected file as a disc image";
     case iso::ValidationError::WrongGame:
-        return "Selected disc is for a different game";
+        return "Disc is for a different game";
     case iso::ValidationError::WrongVersion:
-        return "Selected disc is for an unsupported version. Only NTSC & PAL GameCube are "
+        return "Disc is for an unsupported version. Only NTSC & PAL GameCube are "
                "supported at this time";
     case iso::ValidationError::ExecutableMismatch:
-        return "Selected disc image contains modified executable files.";
+        return "Disc contains modified executable files";
     case iso::ValidationError::Success:
         return {};
     case iso::ValidationError::Unknown:
     default:
-        return "Unknown disc image validation error";
+        return "Unknown disc validation error";
     }
 }
 
@@ -400,16 +400,22 @@ private:
         return {};
     }
 
-    std::string disc_state_text() const {
-        if (!m_errorString.empty()) {
-            return m_errorString;
-        }
-
-        if (is_selected_path_valid()) {
+    std::string selected_disc_text() const {
+        if (!m_selectedIsoPath.empty()) {
             return display_path(m_selectedIsoPath);
         }
 
-        return "No disc image selected";
+        return "Select a disc...";
+    }
+
+    std::string disc_status_text() const {
+        if (!m_errorString.empty()) {
+            return m_errorString;
+        }
+        if (is_selected_path_valid()) {
+            return fmt::format("Disc region: {}", m_isPal ? "PAL" : "NTSC");
+        }
+        return {};
     }
 
     bool should_use_compact_layout() const {
@@ -472,9 +478,9 @@ private:
     void add_disc_control(Rml::Element* parent) {
         const std::string idString("select-disc");
         m_focusIds.push_back(idString);
-        m_discState =
-            std::make_unique<DiscState>(parent, idString, disc_state_text(), !m_errorString.empty(),
-                                        [this, idString] { queue_activation(idString); });
+        m_discState = std::make_unique<DiscState>(
+            parent, idString, selected_disc_text(), disc_status_text(), !m_errorString.empty(),
+            [this, idString] { queue_activation(idString); });
     }
 
     void build_main(Rml::Element* screen) {

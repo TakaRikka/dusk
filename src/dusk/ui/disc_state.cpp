@@ -11,9 +11,10 @@
 
 namespace dusk::ui {
 
-DiscState::DiscState(Rml::Element* parent, std::string_view id, std::string_view text, bool error,
+DiscState::DiscState(Rml::Element* parent, std::string_view id, std::string_view text,
+                     std::string_view statusText, bool statusIsError,
                      std::function<void()> pressedCallback)
-    : m_pressedCallback(std::move(pressedCallback)), m_error(error) {
+    : m_pressedCallback(std::move(pressedCallback)), m_statusIsError(statusIsError) {
     using namespace theme;
 
     m_element = append(parent, "button", id);
@@ -39,11 +40,6 @@ DiscState::DiscState(Rml::Element* parent, std::string_view id, std::string_view
 
     add_focus_border(m_element, BorderRadiusSmall);
 
-    m_label = add_label(m_element, error ? "Disc Error" : "Selected Disc", LabelStyle::Annotation);
-    set_props(m_label, {
-                           {"pointer-events", "none"},
-                       });
-
     m_value = add_label(m_element, text, LabelStyle::Body);
     set_props(m_value, {
                            {"overflow", "hidden"},
@@ -51,6 +47,14 @@ DiscState::DiscState(Rml::Element* parent, std::string_view id, std::string_view
                            {"white-space", "nowrap"},
                            {"pointer-events", "none"},
                        });
+
+    if (!statusText.empty()) {
+        m_status = add_label(m_element, statusText, LabelStyle::Annotation);
+        set_props(m_status, {
+                                {"pointer-events", "none"},
+                                {"white-space", "normal"},
+                            });
+    }
 
     m_element->AddEventListener(Rml::EventId::Click, this);
     m_element->AddEventListener(Rml::EventId::Focus, this);
@@ -117,16 +121,18 @@ void DiscState::apply_style() {
     }
 
     const bool active = m_hovered || m_focused;
-    const Color accent = m_error ? Danger : Primary;
+    const Color accent = m_statusIsError ? Danger : Primary;
 
-    m_element->SetProperty("background-color", rgba(accent, active ? 52 : (m_error ? 32 : 20)));
-    m_element->SetProperty("border-color", rgba(accent, active ? 220 : (m_error ? 190 : 120)));
+    m_element->SetProperty("background-color",
+                           rgba(accent, active ? 52 : (m_statusIsError ? 32 : 20)));
+    m_element->SetProperty("border-color",
+                           rgba(accent, active ? 220 : (m_statusIsError ? 190 : 120)));
     m_element->SetProperty("color", rgba(active ? TextActive : Text));
 
-    m_label->SetProperty("color", rgba(m_error ? Danger : (active ? TextActive : TextDim),
-                                       m_error ? 220 : (active ? TextActive.a : TextDim.a)));
-    m_value->SetProperty("color", rgba(m_error ? Danger : (active ? TextActive : Text),
-                                       m_error ? 255 : (active ? TextActive.a : Text.a)));
+    m_value->SetProperty("color", rgba(active ? TextActive : Text));
+    if (m_status != nullptr) {
+        m_status->SetProperty("color", rgba(m_statusIsError ? Danger : TextDim));
+    }
     set_focus_border_visible(m_element, m_focused);
 }
 
