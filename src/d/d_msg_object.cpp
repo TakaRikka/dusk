@@ -24,9 +24,15 @@
 #include "f_op/f_op_msg_mng.h"
 #include <cstdio>
 #include <cstring>
+
+#include "JSystem/JKernel/JKRExpHeap.h"
+#include "dusk/version.hpp"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_lib.h"
-#include "JSystem/JKernel/JKRExpHeap.h"
+
+#if TARGET_PC
+#include "dusk/settings.h"
+#endif
 
 static void dMsgObject_addFundRaising(s16 param_0);
 static void dMsgObject_addTotalPayment(s16 param_0);
@@ -1464,24 +1470,12 @@ void dMsgObject_c::fukiPosCalc(bool param_1) {
             fopAc_ac_c* player = dComIfGp_getPlayer(0);
             cXyz local_3c;
             cXyz cStack_48;
-
-            #if TARGET_PC
-            mDoLib_project(&player->eyePos, &cStack_48, {0, 0, FB_WIDTH, FB_HEIGHT});
-            #else
             mDoLib_project(&player->eyePos, &cStack_48);
-            #endif
-
             f32 temp;
             if ((field_0x100->pos == cXyz(0.0f, 0.0f, 0.0f))) {
                 temp = cStack_48.y;
             } else {
-
-                #if TARGET_PC
-                mDoLib_project(&field_0x100->pos, &local_3c, {0, 0, FB_WIDTH, FB_HEIGHT});
-                #else
                 mDoLib_project(&field_0x100->pos, &local_3c);
-                #endif
-
                 if (local_3c.x >= 0.0f && local_3c.x <= FB_WIDTH && local_3c.y >= 0.0f &&
                     local_3c.y <= FB_HEIGHT)
                 {
@@ -1566,7 +1560,8 @@ u8 dMsgObject_c::isSend() {
         if (pRef->getSendFlag() == 5) {
             if (getStatusLocal() == 21) {
                 setButtonStatusLocal();
-                if (mDoCPd_c::getTrigA(0) != 0 || mDoCPd_c::getTrigB(0) != 0) {
+                if (IF_DUSK((dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)) ||)
+                    mDoCPd_c::getTrigA(0) != 0 || mDoCPd_c::getTrigB(0) != 0) {
                     return 2;
                 }
                 return 0;
@@ -1585,7 +1580,8 @@ u8 dMsgObject_c::isSend() {
         }
         if (pRef->getSendFlag() == 2) {
             setButtonStatusLocal();
-            if (mDoCPd_c::getTrigA(0) != 0 || mDoCPd_c::getTrigB(0) != 0) {
+            if (IF_DUSK((dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)) ||)
+                mDoCPd_c::getTrigA(0) != 0 || mDoCPd_c::getTrigB(0) != 0) {
                 return 2;
             }
         }
@@ -1598,7 +1594,8 @@ u8 dMsgObject_c::isSend() {
                 return 2;
             }
         } else {
-            if (mDoCPd_c::getTrigA(0) != 0 || mDoCPd_c::getTrigB(0) != 0) {
+            if (IF_DUSK((dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)) ||)
+                mDoCPd_c::getTrigA(0) != 0 || mDoCPd_c::getTrigB(0) != 0) {
                 return 2;
             }
             if (mesgCancelButton) {
@@ -1648,7 +1645,30 @@ void dMsgObject_c::readMessageGroupLocal(mDoDvdThd_mountXArchive_c** p_arcMount)
     #else
 #if TARGET_PC
     // Original game UB
-    snprintf(arcName, sizeof(arcName), "/res/Msgus/bmgres%d.arc", msgGroup);
+
+    if (dusk::version::isRegionPal()) {
+        switch (dComIfGs_getPalLanguage()) {
+        case dSv_player_config_c::LANGUAGE_GERMAN:
+            snprintf(arcName, sizeof(arcName), "/res/Msgde/bmgres%d.arc", msgGroup);
+            break;
+        case dSv_player_config_c::LANGUAGE_FRENCH:
+            snprintf(arcName, sizeof(arcName), "/res/Msgfr/bmgres%d.arc", msgGroup);
+            break;
+        case dSv_player_config_c::LANGUAGE_SPANISH:
+            snprintf(arcName, sizeof(arcName), "/res/Msgsp/bmgres%d.arc", msgGroup);
+            break;
+        case dSv_player_config_c::LANGUAGE_ITALIAN:
+            snprintf(arcName, sizeof(arcName), "/res/Msgit/bmgres%d.arc", msgGroup);
+            break;
+        default:
+            snprintf(arcName, sizeof(arcName), "/res/Msguk/bmgres%d.arc", msgGroup);
+        }
+    } else if (dusk::version::isRegionJpn()) {
+        snprintf(arcName, sizeof(arcName), "/res/Msgjp/bmgres%d.arc", msgGroup);
+    } else {
+        snprintf(arcName, sizeof(arcName), "/res/Msgus/bmgres%d.arc", msgGroup);
+    }
+
 #else
     sprintf(arcName, "/res/Msgus/bmgres%d.arc", msgGroup);
 #endif

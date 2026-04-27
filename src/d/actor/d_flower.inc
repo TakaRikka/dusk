@@ -7,17 +7,13 @@
 
 #include "dusk/frame_interpolation.h"
 
-#if TARGET_PC
-const u16 l_J_Ohana00_64TEX__width = 64;
-const u16 l_J_Ohana00_64TEX__height = 64;
-#else
 const u16 l_J_Ohana00_64TEX__width = 63;
 const u16 l_J_Ohana00_64TEX__height = 63;
-#endif
 
 #if TARGET_PC
 #include "dusk/dvd_asset.hpp"
-static u8* l_J_Ohana00_64TEX_get() { static u8 buf[0x800]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x9060, 0x800), true); return buf; }
+using GameVersion = dusk::version::GameVersion;
+static u8* l_J_Ohana00_64TEX_get() { static u8 buf[0x800]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x9060}, {GameVersion::GcnPal, 0x9060}}, 0x800), true); return buf; }
 #define l_J_Ohana00_64TEX (l_J_Ohana00_64TEX_get())
 #else
 #include "assets/l_J_Ohana00_64TEX.h"
@@ -113,10 +109,12 @@ static u8 l_flowerTexCoord[] = {
     0x3E, 0xA7, 0x72, 0xD6, 0xBD, 0x2F, 0x46, 0xAA};
 
 #if TARGET_PC
-static u8* l_J_hana00DL_get()   { static u8 buf[0x150]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x9D20, 0x150), true); return buf; }
-static u8* l_J_hana00_cDL_get() { static u8 buf[0xDE];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x9E80, 0xDE),  true); return buf; }
-static u8* l_matDL_get()        { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x9F60, 0x99),  true); return buf; }
-static u8* l_matLight4DL_get()  { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xA000, 0x99),  true); return buf; }
+using GameVersion = dusk::version::GameVersion;
+
+static u8* l_J_hana00DL_get()   { static u8 buf[0x150]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x9D20}, {GameVersion::GcnPal, 0x9D20}}, 0x150), true); return buf; }
+static u8* l_J_hana00_cDL_get() { static u8 buf[0xDE];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x9E80}, {GameVersion::GcnPal, 0x9E80}}, 0xDE),  true); return buf; }
+static u8* l_matDL_get()        { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x9F60}, {GameVersion::GcnPal, 0x9F60}}, 0x99),  true); return buf; }
+static u8* l_matLight4DL_get()  { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0xA000}, {GameVersion::GcnPal, 0xA000}}, 0x99),  true); return buf; }
 #define l_J_hana00DL   (l_J_hana00DL_get())
 #define l_J_hana00_cDL (l_J_hana00_cDL_get())
 #define l_matDL        (l_matDL_get())
@@ -133,16 +131,12 @@ l_matDL__d_a_grass(l_J_Ohana00_64TEX)
 l_matLight4DL(l_J_Ohana00_64TEX)
 #endif
 
-#if TARGET_PC
-const u16 l_J_Ohana01_64128_0419TEX__width = 64;
-const u16 l_J_Ohana01_64128_0419TEX__height = 128;
-#else
 const u16 l_J_Ohana01_64128_0419TEX__width = 63;
 const u16 l_J_Ohana01_64128_0419TEX__height = 127;
-#endif
 
 #if TARGET_PC
-static u8* l_J_Ohana01_64128_0419TEX_get() { static u8 buf[0x1000]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xA0A0, 0x1000), true); return buf; }
+using GameVersion = dusk::version::GameVersion;
+static u8* l_J_Ohana01_64128_0419TEX_get() { static u8 buf[0x1000]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0xA0A0}, {GameVersion::GcnPal, 0xA0A0}}, 0x1000), true); return buf; }
 #define l_J_Ohana01_64128_0419TEX (l_J_Ohana01_64128_0419TEX_get())
 #else
 #include "assets/l_J_Ohana01_64128_0419TEX.h"
@@ -274,11 +268,13 @@ static u8 l_flowerTexCoord2[] = {
     0x40, 0x1B, 0x7D, 0x52, 0x3F, 0x80, 0x3F, 0x79, 0x40, 0x1B, 0x7D, 0x52, 0x3F, 0x51, 0x10, 0x6F};
 
 #if TARGET_PC
-static u8* l_J_hana01DL_get()      { static u8 buf[0x138]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xB7C0, 0x138), true); return buf; }
-static u8* l_J_hana01_c_00DL_get() { static u8 buf[0xDE];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xB900, 0xDE),  true); return buf; }
-static u8* l_J_hana01_c_01DL_get() { static u8 buf[0x128]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xB9E0, 0x128), true); return buf; }
-static u8* l_mat2DL_get()          { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xBB20, 0x99),  true); return buf; }
-static u8* l_mat2Light4DL_get()    { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0xBBC0, 0x99),  true); return buf; }
+using GameVersion = dusk::version::GameVersion;
+
+static u8* l_J_hana01DL_get()      { static u8 buf[0x138]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0xB7C0}, {GameVersion::GcnPal, 0xB7C0}}, 0x138), true); return buf; }
+static u8* l_J_hana01_c_00DL_get() { static u8 buf[0xDE];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0xB900}, {GameVersion::GcnPal, 0xB900}}, 0xDE),  true); return buf; }
+static u8* l_J_hana01_c_01DL_get() { static u8 buf[0x128]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0xB9E0}, {GameVersion::GcnPal, 0xB9E0}}, 0x128), true); return buf; }
+static u8* l_mat2DL_get()          { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0xBB20}, {GameVersion::GcnPal, 0xBB20}}, 0x99),  true); return buf; }
+static u8* l_mat2Light4DL_get()    { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0xBBC0}, {GameVersion::GcnPal, 0xBBC0}}, 0x99),  true); return buf; }
 #define l_J_hana01DL      (l_J_hana01DL_get())
 #define l_J_hana01_c_00DL (l_J_hana01_c_00DL_get())
 #define l_J_hana01_c_01DL (l_J_hana01_c_01DL_get())
@@ -586,11 +582,11 @@ dFlower_packet_c::dFlower_packet_c() {
 
 #if TARGET_PC
     GXInitTexObj(&mTexObj_l_J_Ohana00_64TEX, l_J_Ohana00_64TEX,
-        l_J_Ohana00_64TEX__width, l_J_Ohana00_64TEX__height, GX_TF_CMPR, GX_MIRROR, GX_MIRROR, GX_FALSE
+        l_J_Ohana00_64TEX__width + 1, l_J_Ohana00_64TEX__height + 1, GX_TF_CMPR, GX_MIRROR, GX_MIRROR, GX_FALSE
     );
 
     GXInitTexObj(&mTexObj_l_J_Ohana01_64128_0419TEX, l_J_Ohana01_64128_0419TEX,
-        l_J_Ohana01_64128_0419TEX__width, l_J_Ohana01_64128_0419TEX__height, GX_TF_CMPR, GX_MIRROR, GX_MIRROR, GX_FALSE
+        l_J_Ohana01_64128_0419TEX__width + 1, l_J_Ohana01_64128_0419TEX__height + 1, GX_TF_CMPR, GX_MIRROR, GX_MIRROR, GX_FALSE
     );
 #endif
 
@@ -699,14 +695,14 @@ void dFlower_packet_c::draw() {
                 if (!cLib_checkBit<u8>(sp44->m_state, 4) && !cLib_checkBit<u8>(sp44->m_state, 0x40)) {
 #ifdef TARGET_PC
                     Mtx flower_mtx;
-                    if (dusk::frame_interp::lookup_replacement(reinterpret_cast<const void*>(&sp44->m_modelMtx), flower_mtx)) {
+                    if (dusk::frame_interp::lookup_replacement(&sp44->m_modelMtx, flower_mtx)) {
+                        cMtx_concat(j3dSys.getViewMtx(), flower_mtx, flower_mtx);
                         GXLoadPosMtxImm(flower_mtx, 0);
-                    } else {
+                    } else
 #endif
+                    {
                         GXLoadPosMtxImm(sp44->m_modelMtx, 0);
-#ifdef TARGET_PC
                     }
-#endif
                     GXLoadNrmMtxImm(j3dSys.getViewMtx(), 0);
 
 #if TARGET_PC
@@ -789,6 +785,10 @@ void dFlower_packet_c::draw() {
 
                 GXColor sp28;
 
+                #if AVOID_UB
+                sp28 = {1, 1, 1, 1};
+                #endif
+
                 //u8 sp26, sp25, sp24;
                 GXColor sp24;
                 sp24.r = -0.4f * temp_r29->AmbCol.r * var_f29;
@@ -854,20 +854,18 @@ void dFlower_packet_c::draw() {
                 if (!cLib_checkBit<u8>(sp34->m_state, 4) && cLib_checkBit<u8>(sp34->m_state, 0x40)) {
 #ifdef TARGET_PC
                     Mtx flower_mtx;
-                    if (dusk::frame_interp::lookup_replacement(reinterpret_cast<const void*>(&sp34->m_modelMtx), flower_mtx)) {
+                    if (dusk::frame_interp::lookup_replacement(&sp34->m_modelMtx, flower_mtx)) {
+                        cMtx_concat(j3dSys.getViewMtx(), flower_mtx, flower_mtx);
                         GXLoadPosMtxImm(flower_mtx, 0);
-                    } else {
+                    } else
 #endif
+                    {
                         GXLoadPosMtxImm(sp34->m_modelMtx, 0);
-#ifdef TARGET_PC
                     }
-#endif
                     GXLoadNrmMtxImm(j3dSys.getViewMtx(), 0);
-
 #if TARGET_PC
                     GXLoadTexObj(&mTexObj_l_J_Ohana01_64128_0419TEX, GX_TEXMAP0);
 #endif
-
                     if (!cLib_checkBit<u8>(sp34->m_state, 8)) {
                         if (!cLib_checkBit<u8>(sp34->m_state, 0x10)) {
                             GXCallDisplayList(mp_Jhana01DL, m_Jhana01DL_size);
@@ -994,7 +992,7 @@ void dFlower_packet_c::update() {
                 mDoMtx_stack_c::scaleM(temp_f31, temp_f31, temp_f31);
                 cMtx_concat(j3dSys.getViewMtx(), temp_r28, data_p->m_modelMtx);
 #ifdef TARGET_PC
-                dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(&data_p->m_modelMtx), data_p->m_modelMtx);
+                dusk::frame_interp::record_final_mtx(temp_r28, data_p->m_modelMtx);
 #endif
             }
         }

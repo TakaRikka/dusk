@@ -215,15 +215,14 @@ int daDsh_c::create() {
 
     mType = getType();
 
-#ifdef TARGET_PC
-    const char* l_resName[] = {l_arcName[mType], ""};
-#else
-    // !@bug By making this static, it is only initialized the first time it runs
-    // If gate types that use other arcs are loaded later (without reloading the code)
-    // this array never gets updated and will load the incorrect arc
-    // On GC/Wii, REL loading causes this to reset/reinitialize so the bug is avoided
-    // but TPHD is all statically linked so daDsh_c::CreateHeap fails to get model data and the gate unloads
+    // !@bug Static-init only runs once, so slot 0 keeps the first mType's arc name forever.
+    // GC/Wii dodges this via REL reload; TPHD is statically linked so later gates of a
+    // different type load the wrong arc and CreateHeap fails. The storage must stay static
+    // because mResLoader.load holds the pointer past create(), so we just overwrite slot 0
+    // each call instead.
     static const char* l_resName[] = {l_arcName[mType], ""};
+#ifdef TARGET_PC
+    l_resName[0] = l_arcName[mType];
 #endif
 
     int phase = mResLoader.load(l_resName, NULL);

@@ -337,13 +337,7 @@ void daBoomerang_sight_c::setSight(const cXyz* i_pos, int i_no) {
         }
 
         Vec proj;
-
-        #if TARGET_PC
-        mDoLib_project(&m_pos[i_no], &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
-        #else
         mDoLib_project(&m_pos[i_no], &proj);
-        #endif
-
         m_proj_posX[i_no] = proj.x;
         m_proj_posY[i_no] = proj.y;
     }

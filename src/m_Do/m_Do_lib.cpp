@@ -95,8 +95,13 @@ void mDoLib_project(Vec* src, Vec* dst) {
         xOffset = (0.5f * ((2.0f * viewPort->x_orig) + viewPort->width)) - (int)(FB_WIDTH / 2);
         xSize = FB_WIDTH;
     } else {
+#if TARGET_PC
+        xOffset = mDoGph_gInf_c::getSafeMinXF();
+        xSize = viewPort->width * mDoGph_gInf_c::hudAspectScaleUp;
+#else
         xOffset = viewPort->x_orig;
         xSize = viewPort->width;
+#endif
     }
 
     if (viewPort->y_orig != 0.0f) {
@@ -108,72 +113,14 @@ void mDoLib_project(Vec* src, Vec* dst) {
     }
 
     dst->x = ((0.5f + (multVec.x * calcFloat)) * xSize) + xOffset;
+    #if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        dst->x = ((0.5f + (-multVec.x * calcFloat)) * xSize) + xOffset;
+    }
+    #endif
+
     dst->y = ((0.5f + (multVec.y * (-calcFloat))) * ySize) + yOffset;
 }
-
-
-#if TARGET_PC
-void mDoLib_project(Vec* src, Vec* dst, JGeometry::TBox2<f32> viewport) {
-    if (dComIfGd_getView() == NULL) {
-        dst->x = 0.0f;
-        dst->y = 0.0f;
-        dst->z = 0.0f;
-        return;
-    }
-
-    { int unused; }
-
-    Vec multVec;
-    cMtx_multVec(*dComIfGd_getProjViewMtx(), src, &multVec);
-
-    f32 calcFloat = (src->x * (*dComIfGd_getProjViewMtx())[3][0]) +
-                    (src->y * (*dComIfGd_getProjViewMtx())[3][1]) +
-                    (src->z * (*dComIfGd_getProjViewMtx())[3][2]) +
-                    (*dComIfGd_getProjViewMtx())[3][3];
-    if (multVec.z >= 0.0f) {
-        multVec.z = 0.0f;
-    }
-    if (calcFloat <= 0.0f) {
-        if (calcFloat == 0.0f) {
-            dst->z = multVec.z * 500000.0f;
-        } else {
-            dst->z = multVec.z * (0.5f / calcFloat);
-        }
-        calcFloat = 500000.0f;
-    } else {
-        calcFloat = 0.5f / calcFloat;
-        dst->z = multVec.z * calcFloat;
-    }
-
-    f32 xOffset;
-    f32 yOffset;
-    f32 xSize;
-    f32 ySize;
-    if (viewport.i.x != 0.0f) {
-        xOffset = (0.5f * ((2.0f * viewport.i.x) + viewport.f.x)) - (int)(FB_WIDTH / 2);
-        xSize = FB_WIDTH;
-    } else {
-        #if TARGET_PC
-        xOffset = mDoGph_gInf_c::getMinXF();
-        xSize = viewport.f.x * mDoGph_gInf_c::hudAspectScaleUp;
-        #else
-        xOffset = viewport.i.x;
-        xSize = viewport.f.x;
-        #endif
-    }
-
-    if (viewport.i.y != 0.0f) {
-        yOffset = (0.5f * ((2.0f * viewport.i.y) + viewport.f.y)) - (int)(FB_HEIGHT / 2);
-        ySize = FB_HEIGHT;
-    } else {
-        yOffset = viewport.i.y;
-        ySize = viewport.f.y;
-    }
-
-    dst->x = ((0.5f + (multVec.x * calcFloat)) * xSize) + xOffset;
-    dst->y = ((0.5f + (multVec.y * (-calcFloat))) * ySize) + yOffset;
-}
-#endif
 
 void mDoLib_pos2camera(Vec* src, Vec* dst) {
     if (dComIfGd_getView() == NULL) {

@@ -517,13 +517,7 @@ void daObjKAM_c::Z_BufferChk() {
     cXyz currentOffset;
     currentOffset = current.pos;
     currentOffset.y += 20.0f;
-
-    #if TARGET_PC
-    mDoLib_project(&currentOffset, &currentProj, {0, 0, FB_WIDTH, FB_HEIGHT});
-    #else
     mDoLib_project(&currentOffset, &currentProj);
-    #endif
-
     camera_process_class* camera = dComIfGp_getCamera(0);
     f32 cameraHeight;
     if (camera != NULL) {

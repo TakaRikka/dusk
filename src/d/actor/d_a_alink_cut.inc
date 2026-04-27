@@ -817,6 +817,12 @@ BOOL daAlink_c::checkDownAttackState() {
 }
 
 BOOL daAlink_c::checkCutLargeTurnState() const {
+    #if TARGET_PC
+    if (dusk::getSettings().game.alwaysGreatspin) {
+        return TRUE;
+    }
+    #endif
+
     return ((dComIfGs_isEventBit(dSv_event_flag_c::F_0344) || checkNoResetFlg3(FLG3_TRANING_CUT_LARGE_TURN))
             && dComIfGs_getLife() == dComIfGs_getMaxLifeGauge()
             )

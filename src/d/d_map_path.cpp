@@ -16,10 +16,6 @@
 
 #ifdef TARGET_PC
 constexpr u16 kMapResolutionMultiplier = 4;
-// Line widths are relative to the framebuffer size. Since we're rendering to a separate
-// framebuffer, we have to scale them accordingly. The original game used about half of the
-// EFB for the map rendering, so this is a reasonable approximation.
-constexpr u8 kMapLineWidthMultiplier = 2;
 #endif
 
 void dMpath_n::dTexObjAggregate_c::create() {
@@ -241,12 +237,15 @@ void dDrawPath_c::rendering(dDrawPath_c::line_class const* p_line) {
     if (isDrawType(p_line->field_0x0)) {
         int width = getLineWidth(p_line->field_0x1);
 
+        #if TARGET_PC
+        f32 height = JUTVideo::getManager()->getRenderHeight() / 448.0f;
+        if (height > 1.0f) {
+            width /= 2;
+        }
+        #endif
+
         if (width > 0 && p_line->mDataNum >= 2) {
-#ifdef TARGET_PC
-            GXSetLineWidth(width * kMapLineWidthMultiplier, GX_TO_ZERO);
-#else
-            GXSetLineWidth(width * 2, GX_TO_ZERO);
-#endif
+            GXSetLineWidth(width, GX_TO_ZERO);
             GXSetTevColor(GX_TEVREG0, *getLineColor(p_line->field_0x0 & 0x3F, p_line->field_0x1));
             GXBegin(GX_LINESTRIP, GX_VTXFMT0, p_line->mDataNum);
 
@@ -435,8 +434,12 @@ void dRenderingFDAmap_c::preRenderingMap() {
     const u16 w = mTexWidth * kMapResolutionMultiplier;
     const u16 h = mTexHeight * kMapResolutionMultiplier;
     GXCreateFrameBuffer(w, h);
-    GXSetViewport(0.0f, 0.0f, w, h, 0.0f, 1.0f);
-    GXSetScissor(0, 0, w, h);
+    // Set logical viewport dimensions
+    GXSetViewport(0.0f, 0.0f, mTexWidth, mTexHeight, 0.0f, 1.0f);
+    GXSetScissor(0, 0, mTexWidth, mTexHeight);
+    // Set render viewport dimensions
+    GXSetViewportRender(0.0f, 0.0f, w, h, 0.0f, 1.0f);
+    GXSetScissorRender(0, 0, w, h);
 #else
     GXSetViewport(0.0f, 0.0f, mTexWidth, mTexHeight, 0.0f, 1.0f);
     GXSetScissor(0, 0, mTexWidth, mTexHeight);
@@ -494,12 +497,6 @@ void dRenderingFDAmap_c::postRenderingMap() {
 
 dMpath_n::dTexObjAggregate_c dMpath_n::m_texObjAgg;
 
-/* Enabling the following definition will modify the following function to
- * make the map look worse for extra speed in the emulator, especially in large
- * areas such as hyrule field.
- */
-#define HYRULE_FIELD_SPEEDHACK
-
 void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_line) {
     s32 width = getDecorationLineWidth(p_line->field_0x1);
     if (width <= 0) {
@@ -517,20 +514,39 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
 
     BE(u16)* data_p = p_line->mpData;
     s32 data_num = p_line->mDataNum;
-#ifdef TARGET_PC
-    GXSetLineWidth(width * kMapLineWidthMultiplier, GX_TO_ZERO);
-    GXSetPointSize(width * kMapLineWidthMultiplier, GX_TO_ONE);
-#else
     GXSetLineWidth(width, GX_TO_ONE);
     GXSetPointSize(width, GX_TO_ONE);
-#endif
     GXColor lineColor = *getDecoLineColor(p_line->field_0x0 & 0x3f, p_line->field_0x1);
     GXSetTevColor(GX_TEVREG0, lineColor);
     lineColor.r = lineColor.r - 4;
     GXSetTevColor(GX_TEVREG1, lineColor);
 
+#if TARGET_PC
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_KONST);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXBegin(GX_LINESTRIP, GX_VTXFMT0, 2 * (data_num - 1));
+    for (int i = 0; i < data_num - 1; i++) {
+        GXPosition1x16(data_p[i]);
+        GXTexCoord2f32(0, 0);
+        GXPosition1x16(data_p[i + 1]);
+        GXTexCoord2f32(0, 0);
+    }
+    GXEnd();
+
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_KONST, GX_CC_TEXC, GX_CC_C1);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXBegin(GX_POINTS, GX_VTXFMT0, data_num);
     for (int i = 0; i < data_num; i++) {
-#ifndef HYRULE_FIELD_SPEEDHACK
+        GXPosition1x16(data_p[i]);
+        GXTexCoord2f32(0, 0);
+    }
+    GXEnd();
+#else
+    for (int i = 0; i < data_num; i++) {
         if (i < data_num - 1) {
             GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
             GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
@@ -549,7 +565,6 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
         GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-#endif
 
         GXBegin(GX_POINTS, GX_VTXFMT0, 1);
         GXPosition1x16(data_p[0]);
@@ -557,6 +572,7 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
         GXEnd();
         data_p++;
     }
+#endif
 
     setTevSettingNonTextureDirectColor();
     GXClearVtxDesc();

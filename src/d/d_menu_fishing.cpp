@@ -16,6 +16,8 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
+#include "dusk/version.hpp"
+
 typedef void (dMenu_Fishing_c::*initFunc)();
 initFunc map_init_process[] = {
     &dMenu_Fishing_c::wait_init,
@@ -135,9 +137,9 @@ bool dMenu_Fishing_c::isSync() {
 }
 
 void dMenu_Fishing_c::init() {
-    #if VERSION == VERSION_GCN_PAL
+    #if TARGET_PC || VERSION == VERSION_GCN_PAL
     BOOL isEnglish = FALSE;
-    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH) {
+    if (dusk::version::isRegionUsa() || (dusk::version::isRegionPal() && dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH)) {
         isEnglish = TRUE;
     }
     #endif
@@ -145,7 +147,7 @@ void dMenu_Fishing_c::init() {
     for (int i = 0; i < MAX_FINDABLE_FISHES; i++) {
         if (dComIfGs_getFishNum(i) != 0) {
             // Fish has been caught once, display it along with it's params
-            #if VERSION == VERSION_GCN_PAL
+            #if TARGET_PC || VERSION == VERSION_GCN_PAL
             if (isEnglish) {
                 setFishParam(i, dComIfGs_getFishNum(i), dComIfGs_getFishSize(i) / 2.54f);
             } else {

@@ -204,6 +204,18 @@ private:
     /* 0x6D1 */ u8 field_0x6d1;
     /* 0x6D2 */ u8 field_0x6d2;
     /* 0x6D3 */ u8 field_0x6d3;
+#if TARGET_PC
+    f32 mSelectItemSlideElapsed[4];
+    f32 mCursorInterpPrevX;
+    f32 mCursorInterpPrevY;
+    f32 mCursorInterpCurrX;
+    f32 mCursorInterpCurrY;
+    s16 mCursorInterpPrevAngle;
+    s16 mCursorInterpCurrAngle;
+    bool mCursorInterpPrevAngular;
+    bool mCursorInterpCurrAngular;
+    bool mCursorInterpInit;
+#endif
 };
 
 #endif /* D_MENU_D_MENU_RING_H */

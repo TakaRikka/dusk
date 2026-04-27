@@ -2855,7 +2855,7 @@ void* daMP_Reader(void*) {
 #endif
 }
 
-static u8 daMP_ReadThreadStack[0x2000];
+static u8 daMP_ReadThreadStack[DUSK_IF_ELSE(8, 0x2000)];
 
 #if TARGET_PC
 static BOOL VideoThreadCancelled;
@@ -2880,7 +2880,7 @@ static BOOL daMP_CreateReadThread(s32 param_0) {
 
 static OSThread daMP_VideoDecodeThread;
 
-static u8 daMP_VideoDecodeThreadStack[0x64000];
+static u8 daMP_VideoDecodeThreadStack[DUSK_IF_ELSE(8, 0x64000)];
 
 static OSMessageQueue daMP_FreeTextureSetQueue;
 
@@ -3132,7 +3132,7 @@ static BOOL AudioThreadCancelled;
 
 static OSThread daMP_AudioDecodeThread;
 
-static u8 daMP_AudioDecodeThreadStack[0x64000];
+static u8 daMP_AudioDecodeThreadStack[DUSK_IF_ELSE(8, 0x64000)];
 
 static OSMessageQueue daMP_FreeAudioBufferQueue;
 
@@ -3342,13 +3342,8 @@ static void daMP_THPGXYuv2RgbSetup(const GXRenderModeObj* rmode) {
 	Mtx44 m;
 	Mtx e_m;
 
-#if TARGET_PC
-    w = JUTVideo::getManager()->getFbWidth();
-    h = JUTVideo::getManager()->getEfbHeight();
-#else
     w = rmode->fbWidth;
     h = rmode->efbHeight;
-#endif
     var_f31 = 0.0f;
 
     #if WIDESCREEN_SUPPORT
@@ -4383,6 +4378,8 @@ static void daMP_ActivePlayer_Draw() {
 
     daMP_DrawPosX = static_cast<u32>(rect.PosX);
     daMP_DrawPosY = static_cast<u32>(rect.PosY);
+
+    daMP_THPPlayerSetVolume((dusk::getSettings().audio.masterVolume / 100.0f) * 127.0f, 0);
 #endif
 
     int frame = daMP_THPPlayerDrawCurrentFrame(
@@ -4583,3 +4580,12 @@ actor_process_profile_definition g_profile_MOVIE_PLAYER = {
 };
 
 AUDIO_INSTANCES;
+
+#if TARGET_PC
+void dusk::MoviePlayerShutdown() {
+    // We need to cleanly shut down the threads to avoid crashes on shutdown.
+    if (daMP_c::m_myObj) {
+        daMP_c::m_myObj->daMP_c_Finish();
+    }
+}
+#endif

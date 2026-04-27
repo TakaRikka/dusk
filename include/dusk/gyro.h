@@ -3,11 +3,11 @@
 
 namespace dusk::gyro {
 void read(float dt);
-void consumeAimDeltas(float& out_yaw_rad, float& out_pitch_rad);
-bool queryGyroAimItemContext();
+void getAimDeltas(float& out_yaw, float& out_pitch);
+bool queryGyroAimContext();
 
 void rollgoalTick(bool play_active, s16 camera_yaw);
-void rollgoalTableOffset(s16& out_add_x, s16& out_add_z);
+void rollgoalTableOffset(s16& out_ax, s16& out_az);
 
 extern bool s_sensor_keep_alive;
 bool get_sensor_keep_alive();

@@ -1677,7 +1677,16 @@ static void demo_camera(e_fm_class* i_this) {
         cXyz spBC(0.0f, 0.0f, 0.0f);
         for (int i = 0; i < 4; i++) {
             static u16 g_e_i[] = {0x847B, 0x847C, 0x847D, 0x847E};
-            dComIfGp_particle_set(g_e_i[i], &spBC, NULL, NULL);
+
+            #if TARGET_PC
+            if (i == 0) {
+                static const cXyz effWideScale = {mDoGph_gInf_c::getAspect(), 1.0f, 1.0f};
+                dComIfGp_particle_set(g_e_i[i], &spBC, NULL, &effWideScale);
+            } else
+            #endif
+            {
+                dComIfGp_particle_set(g_e_i[i], &spBC, NULL, NULL);
+            }
         }
 
         i_this->mDemoCamFovy = 55.0f + NREG_F(10);

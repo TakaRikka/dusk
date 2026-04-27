@@ -3,6 +3,7 @@
 #include "dusk/app_info.hpp"
 #include "dusk/dusk.h"
 #include "dusk/logging.h"
+#include "dusk/main.h"
 #include "dusk/settings.h"
 #include "version.h"
 
@@ -66,7 +67,7 @@ std::string GetReleaseName() {
 }
 
 std::filesystem::path GetSentryDatabasePath() {
-    return std::filesystem::path(configPath) / "sentry";
+    return dusk::ConfigPath / "sentry";
 }
 
 std::filesystem::path GetLogAttachmentPath() {
@@ -166,7 +167,6 @@ void InitializeCrashReporting() {
 
     sentry_set_tag("git_branch", DUSK_WC_BRANCH);
     sentry_set_tag("build_type", DUSK_BUILD_TYPE);
-    sentry_set_tag("tp_version", DUSK_TP_VERSION);
     g_sentryInitialized = true;
 
     DuskLog.info("Initialized Sentry crash reporting");

@@ -1972,7 +1972,12 @@ void dPa_light8PcallBack::draw(JPABaseEmitter* param_1, JPABaseParticle* param_2
     JGeometry::TVec3<f32> local_154;
     JGeometry::TVec3<f32> local_160;
     JGeometry::TVec3<f32> local_16c;
-    dPa_setWindPower(param_2);
+#if TARGET_PC
+    if (dusk::frame_interp::is_sim_frame())
+#endif
+    {
+        dPa_setWindPower(param_2);
+    }
     MTXIdentity(local_60);
     MTXIdentity(auStack_90);
     param_2->getBaseAxis(&local_10c);

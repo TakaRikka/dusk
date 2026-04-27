@@ -3,23 +3,27 @@
 #include <numeric>
 #include <string_view>
 #include <chrono>
-#include <thread>
 
-#include "fmt/format.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include "imgui.h"
 #include <imgui_internal.h>
 
+#include "fmt/format.h"
 #include "ImGuiConsole.hpp"
-
 #include "JSystem/JUtility/JUTGamePad.h"
+#include "SDL3/SDL_events.h"
 #include "SDL3/SDL_mouse.h"
-#include "m_Do/m_Do_controller_pad.h"
-#include "m_Do/m_Do_main.h"
+#include "aurora/lib/window.hpp"
+#include "dusk/achievements.h"
+#include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/config.hpp"
+#include "dusk/dusk.h"
+#include "dusk/frame_interpolation.h"
+#include "dusk/livesplit.h"
 #include "dusk/main.h"
 #include "dusk/settings.h"
-#include "dusk/audio/DuskAudioSystem.h"
-#include "dusk/dusk.h"
+#include "m_Do/m_Do_controller_pad.h"
+#include "m_Do/m_Do_main.h"
 #include "tracy/Tracy.hpp"
 
 #if _WIN32
@@ -30,12 +34,40 @@
 using namespace std::string_literals;
 using namespace std::string_view_literals;
 
+namespace {
+ImVec2 TouchEventToScreenPos(const SDL_TouchFingerEvent& touch) {
+    const AuroraWindowSize size = aurora::window::get_window_size();
+    return ImVec2{
+        touch.x * static_cast<float>(size.width),
+        touch.y * static_cast<float>(size.height),
+    };
+}
+
+ImGuiWindow* FindDragScrollWindow(ImGuiWindow* window) {
+    while (window != nullptr) {
+        const bool canScrollX = window->ScrollMax.x > 0.0f;
+        const bool canScrollY = window->ScrollMax.y > 0.0f;
+        const bool canScrollWithMouse = (window->Flags & (ImGuiWindowFlags_NoScrollWithMouse |
+                                                          ImGuiWindowFlags_NoMouseInputs)) == 0;
+        if ((canScrollX || canScrollY) && canScrollWithMouse) {
+            return window;
+        }
+        window = window->ParentWindow;
+    }
+    return nullptr;
+}
+}  // namespace
+
 namespace dusk {
     float ImGuiScale() { return 1.0f; }
 
     void ImGuiStringViewText(std::string_view text) {
         // begin()/end() do not work on MSVC
         ImGui::TextUnformatted(text.data(), text.data() + text.size());
+    }
+
+    void DuskToast(std::string_view message, float duration) {
+        g_imguiConsole.AddToast(message, duration);
     }
 
     void ImGuiTextCenter(std::string_view text) {
@@ -208,10 +240,55 @@ namespace dusk {
 
     ImGuiConsole::ImGuiConsole() {}
 
+    void ImGuiConsole::HandleSDLEvent(const SDL_Event& event) {
+        if (!IsGameLaunched) {
+            return;
+        }
+
+        switch (event.type) {
+        case SDL_EVENT_FINGER_DOWN:
+            if (!m_touchTapActive) {
+                m_touchTapActive = true;
+                m_touchTapMoved = false;
+                m_touchTapFingerId = event.tfinger.fingerID;
+                m_touchTapStartPos = TouchEventToScreenPos(event.tfinger);
+            }
+            break;
+        case SDL_EVENT_FINGER_MOTION:
+            if (m_touchTapActive && m_touchTapFingerId == event.tfinger.fingerID) {
+                const auto currentPos = TouchEventToScreenPos(event.tfinger);
+                const auto delta = currentPos - m_touchTapStartPos;
+                if (ImLengthSqr(delta) > 144.0f) {
+                    m_touchTapMoved = true;
+                }
+            }
+            break;
+        case SDL_EVENT_FINGER_UP:
+            if (m_touchTapActive && m_touchTapFingerId == event.tfinger.fingerID) {
+                const bool shouldToggle =
+                    !m_touchTapMoved && (m_isHidden || !ImGui::GetIO().WantCaptureMouse);
+                m_touchTapActive = false;
+                m_touchTapMoved = false;
+                if (shouldToggle) {
+                    m_isHidden = !m_isHidden;
+                    getSettings().backend.duskMenuOpen.setValue(!m_isHidden);
+                    Save();
+                }
+            }
+            break;
+        case SDL_EVENT_FINGER_CANCELED:
+            m_touchTapActive = false;
+            m_touchTapMoved = false;
+            break;
+        default:
+            break;
+        }
+    }
+
     void ImGuiConsole::UpdateSettings() {
         getTransientSettings().skipFrameRateLimit = getSettings().game.enableTurboKeybind && ImGui::IsKeyDown(ImGuiKey_Tab);
 
-        if (mDoMain::developmentMode == 1 && mDoCPd_c::getHoldL(PAD_1) && mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getTrigY(PAD_1)) {
+        if (dusk::frame_interp::get_ui_tick_pending() && mDoMain::developmentMode == 1 && (mDoCPd_c::getHold(PAD_1) & (PAD_TRIGGER_R | PAD_TRIGGER_L)) == (PAD_TRIGGER_R | PAD_TRIGGER_L) && mDoCPd_c::getTrigY(PAD_1)) {
             getTransientSettings().moveLinkActive = !getTransientSettings().moveLinkActive;
         }
         if (mDoMain::developmentMode != 1) {
@@ -224,6 +301,15 @@ namespace dusk {
 
         UpdateSettings();
 
+        AchievementSystem::get().tick();
+        while (AchievementSystem::get().hasPendingUnlock()) {
+            if (getSettings().game.enableAchievementNotifications) {
+                m_menuTools.notifyAchievement(AchievementSystem::get().consumePendingUnlock());
+            } else {
+                AchievementSystem::get().consumePendingUnlock();
+            }
+        }
+
         if ((ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) &&
             ImGui::IsKeyPressed(ImGuiKey_R))
         {
@@ -234,23 +320,44 @@ namespace dusk {
             ImGuiMenuGame::ToggleFullscreen();
         }
 
-        bool showMenu = !dusk::IsGameLaunched || !CheckMenuViewToggle(ImGuiKey_F1, m_isHidden);
-
-        if (showMenu && ImGui::BeginMainMenuBar()) {
-            m_menuGame.draw();
-            m_menuEnhancements.draw();
-            m_menuTools.draw();
-
-            ImGui::SetCursorPosX(ImGui::GetWindowWidth() - 80.0f * ImGuiScale());
-            ImGuiIO& io = ImGui::GetIO();
-            ImGuiStringViewText(fmt::format(FMT_STRING("FPS: {:.2f}\n"), io.Framerate));
-
-            ImGui::EndMainMenuBar();
+        if (ImGui::IsKeyPressed(ImGuiKey_Escape) && getSettings().video.enableFullscreen) {
+            ImGuiMenuGame::ToggleFullscreen();
         }
 
         if (!dusk::IsGameLaunched) {
             m_preLaunchWindow.draw();
         }
+
+        m_isHidden = !getSettings().backend.duskMenuOpen;
+        bool showMenu = !dusk::IsGameLaunched || !CheckMenuViewToggle(ImGuiKey_F1, m_isHidden);
+        if (dusk::IsGameLaunched) {
+            const bool menuOpen = !m_isHidden;
+            if (getSettings().backend.duskMenuOpen != menuOpen) {
+                getSettings().backend.duskMenuOpen.setValue(menuOpen);
+                Save();
+            }
+        }
+
+        // The menu bar renders with ImGuiCol_WindowBg behind it. We just want ImGuiCol_MenuBarBg,
+        // so make the window bg fully transparent temporarily
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+        if (showMenu && ImGui::BeginMainMenuBar()) {
+            m_menuGame.draw();
+            m_menuTools.draw();
+
+            const auto fpsLabel =
+                fmt::format(FMT_STRING("FPS: {:.2f}\n"), ImGui::GetIO().Framerate);
+            const auto fpsSize =
+                ImGui::CalcTextSize(fpsLabel.data(), fpsLabel.data() + fpsLabel.size());
+            ImGui::SetCursorPosX(
+                ImMax(ImGui::GetCursorPosX(), ImGui::GetWindowWidth() -
+                                                  ImGui::GetStyle().DisplaySafeAreaPadding.x -
+                                                  fpsSize.x - ImGui::GetStyle().ItemSpacing.x));
+            ImGuiStringViewText(fpsLabel);
+
+            ImGui::EndMainMenuBar();
+        }
+        ImGui::PopStyleColor();
 
         if (!getSettings().backend.wasPresetChosen) {
             m_firstRunPreset.draw();
@@ -258,13 +365,31 @@ namespace dusk {
         }
 
         if (dusk::IsGameLaunched && !m_isLaunchInitialized) {
-            m_toasts.emplace_back("Press F1 to toggle menu"s, 5.f);
+            m_toasts.emplace_back(ImGui::GetIO().MouseSource == ImGuiMouseSource_TouchScreen ?
+                                      "Tap to toggle menu"s :
+                                      "Press F1 to toggle menu"s,
+                                  2.5f);
             m_isLaunchInitialized = true;
+            if (getSettings().game.liveSplitEnabled) {
+                dusk::speedrun::connectLiveSplit();
+            }
         }
+
+        UpdateDragScroll();
 
         m_menuGame.windowControllerConfig();
         m_menuGame.windowInputViewer();
-        if (dusk::IsGameLaunched) {
+        m_menuGame.drawSpeedrunTimerOverlay();
+
+        if (getSettings().game.liveSplitEnabled) {
+            dusk::speedrun::updateLiveSplit();
+            if (dusk::speedrun::consumeConnectedEvent())
+                AddToast("LiveSplit connected");
+            else if (dusk::speedrun::consumeDisconnectedEvent())
+                AddToast("LiveSplit disconnected");
+        }
+
+        if (dusk::IsGameLaunched && !dusk::getSettings().game.speedrunMode) {
             m_menuTools.ShowDebugOverlay();
             m_menuTools.ShowCameraOverlay();
             m_menuTools.ShowProcessManager();
@@ -275,14 +400,21 @@ namespace dusk {
             m_menuTools.ShowPlayerInfo();
             m_menuTools.ShowAudioDebug();
             m_menuTools.ShowSaveEditor();
+            m_menuTools.ShowStateShare();
         }
-        m_menuTools.ShowStateShare();
+        m_menuTools.ShowAchievements();
         DuskDebugPad(); // temporary, remove later
 
-        // Only show cursor when menu or any windows are open
-        if (showMenu || ImGui::GetIO().MetricsRenderWindows > 0) {
-            ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouseCursorChange;
-            // Imgui will re-show cursor.
+        // Hide mouse cursor if the F1 menu is not open and the cursor is idle for 3 seconds.
+        ImGuiIO& io = ImGui::GetIO();
+        if (showMenu) {
+            mouseHideTimer = 0.0f;
+            ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouseCursorChange; // Imgui will re-show cursor.
+        } else if (io.MouseDelta.x != 0.0f || io.MouseDelta.y != 0.0f) {
+            mouseHideTimer = 0.0f;
+            ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouseCursorChange; // Imgui will re-show cursor.
+        } else if (mouseHideTimer <= 3.0f) {
+            mouseHideTimer += ImGui::GetIO().DeltaTime;
         } else {
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
             SDL_HideCursor();
@@ -294,6 +426,57 @@ namespace dusk {
     void ImGuiConsole::PostDraw() {
         m_menuTools.afterDraw();
         ShowPipelineProgress();
+    }
+
+    void ImGuiConsole::UpdateDragScroll() {
+        ImGuiContext& g = *ImGui::GetCurrentContext();
+        ImGuiIO& io = ImGui::GetIO();
+
+        if (io.MouseSource != ImGuiMouseSource_TouchScreen) {
+            m_dragScrollWindow = nullptr;
+            return;
+        }
+
+        if (!ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+            m_dragScrollWindow = nullptr;
+            return;
+        }
+
+        if (io.WantTextInput || (g.ActiveId != 0 && g.InputTextState.ID == g.ActiveId)) {
+            m_dragScrollWindow = nullptr;
+            return;
+        }
+
+        if (!ImGui::IsMouseDragging(ImGuiMouseButton_Left, io.MouseDragThreshold)) {
+            return;
+        }
+
+        if (m_dragScrollWindow == nullptr) {
+            ImGuiWindow* hoveredWindow = nullptr;
+            ImGuiWindow* hoveredWindowUnderMovingWindow = nullptr;
+            ImGui::FindHoveredWindowEx(io.MousePos, false, &hoveredWindow,
+                                       &hoveredWindowUnderMovingWindow);
+            m_dragScrollWindow = FindDragScrollWindow(hoveredWindow);
+            m_dragScrollLastMousePos = io.MousePos;
+        }
+
+        if (m_dragScrollWindow == nullptr) {
+            return;
+        }
+
+        const auto mouseDelta = io.MousePos - m_dragScrollLastMousePos;
+        m_dragScrollLastMousePos = io.MousePos;
+
+        if (mouseDelta.x != 0.0f && m_dragScrollWindow->ScrollMax.x > 0.0f) {
+            ImGui::SetScrollX(m_dragScrollWindow,
+                              ImClamp(m_dragScrollWindow->Scroll.x - mouseDelta.x, 0.0f,
+                                      m_dragScrollWindow->ScrollMax.x));
+        }
+        if (mouseDelta.y != 0.0f && m_dragScrollWindow->ScrollMax.y > 0.0f) {
+            ImGui::SetScrollY(m_dragScrollWindow,
+                              ImClamp(m_dragScrollWindow->Scroll.y - mouseDelta.y, 0.0f,
+                                      m_dragScrollWindow->ScrollMax.y));
+        }
     }
 
     bool ImGuiConsole::CheckMenuViewToggle(ImGuiKey key, bool& active) {
@@ -389,6 +572,10 @@ namespace dusk {
         }
 
         return false;
+    }
+
+    void ImGuiConsole::AddToast(std::string_view message, float duration) {
+        m_toasts.emplace_back(std::string(message), duration);
     }
 
     void ImGuiConsole::ShowToasts() {

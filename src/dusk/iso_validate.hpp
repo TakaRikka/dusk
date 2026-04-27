@@ -13,6 +13,7 @@ namespace dusk::iso {
     };
 
     ValidationError validate(const char* path);
+    bool isPal(const char* path);
 }
 
 #endif  // DUSK_ISO_VALIDATE_HPP

@@ -12,6 +12,7 @@
 #include "os_report.h"
 #include "dusk/os.h"
 #include "dusk/main.h"
+#include "dusk/version.hpp"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/nand.h>
@@ -77,18 +78,25 @@ static OSThread MemCardThread;
 
 void mDoMemCd_Ctrl_c::ThdInit() {
     #if !PLATFORM_SHIELD
-    CARDInit(DUSK_GAME_NAME, DUSK_GAME_VERSION);
+    CARDSetLoadType((CARDFileType)dusk::getSettings().backend.cardFileType.getValue());
+
+    char version[5] = {};
+    char maker[3] = {};
+    std::memcpy(version, dusk::version::getDiskID().gameName, 4);
+    std::memcpy(maker, dusk::version::getDiskID().company, 2);
+    CARDInit(version, maker);
     #endif
 
     mCopyToPos = 0;
     mProbeStat = 2;
     mCardState = CARD_STATE_NO_CARD_e;
 
-    #if TARGET_PC
-    mCardState = CARD_STATE_READY_e;
-    #endif
-
+#if TARGET_PC
+    mCardCommand = COMM_ATTACH_e;
+#else
     mCardCommand = COMM_NONE_e;
+#endif
+
     mChannel = SLOT_A;
 
     OSInitMutex(&mMutex);

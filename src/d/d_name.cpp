@@ -8,8 +8,14 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include <cstdio>
 #include <cstring>
+
 #include "JSystem/J2DGraph/J2DAnmLoader.h"
+#include "dusk/version.hpp"
 #include "f_op/f_op_msg_mng.h"
+
+static bool isPalOrJpn() {
+    return dusk::version::isRegionPal() || dusk::version::isRegionJpn();
+}
 
 static const char* l_mojiHira[65] = {
     "あ", "い", "う", "え", "お", "か", "き", "く", "け", "こ", "さ", "し", "す",
@@ -66,20 +72,46 @@ static const char* l_mojiEisu[65] = {
     "X", "k", "x", ",", "L", "Y", "l", "y", ".", "M", "Z", "m", "z", " ",
 };
 
-#if REGION_PAL
-static char* l_mojiEisuPal_1[65] = {
+#if TARGET_PC
+// The game normally mutates this string list to fill in the real character codes.
+// That can't work on a modern platform, so instead I've filled them out ahead of time.
+static const char* l_mojiEisuPal_1[65] = {
+    "A", "N", "\xC0", "\xCF", "1", "B", "O", "\xC1", "\xD0", "2", "C", "P", "\xC2", "\xD1", "3", "D", "Q",
+    "\xC3", "\xD2", "4", "E", "R", "\xC4", "\xD3", "5", "F", "S", "\xC5", "\xD4", "6", "G", "T", "\xC6", "\xD5",
+    "7", "H", "U", "\xC7", "\xD6", "8", "I", "V", "\xC8", "\xD7", "9", "J", "W", "\xC9", "\xD8", "0", "K",
+    "X", "\xCA", "\xD9", ",", "L", "Y", "\xCB", "\xDA", ".", "M", "Z", "\xCC", "\xDB", " ",
+};
+
+static const char* l_mojiEisuPal_2[65] = {
+    "a", "n", "\xE0", "\xEF", "1", "b", "o", "\xE1", "\xF0", "2", "c", "p", "\xE2", "\xF1", "3", "d", "q",
+    "\xE3", "\xF2", "4", "e", "r", "\xE4", "\xF3", "5", "f", "s", "\xE5", "\xF4", "6", "g", "t", "\xE6",
+    "\xF5", "7", "h", "u", "\xE7", "\xF6", "8", "i", "v", "\xE8", "\xF7", "9", "j", "w", "\xE9", "\xF8", "0",
+    "k", "x", "\xEA", "\xF9", ",", "l", "y", "\xEB", "\xFA", ".", "m", "z", "\xEC", "\xFB", " ",
+};
+#elif REGION_PAL
+static const char* l_mojiEisuPal_1[65] = {
     "A", "N", "AA", "BB", "1", "B", "O", "CC", "DD", "2", "C", "P", "EE", "FF", "3", "D", "Q",
     "GG", "HH", "4", "E", "R", "II", "JJ", "5", "F", "S", "KK", "LL", "6", "G", "T", "MM", "NN",
     "7", "H", "U", "OO", "PP", "8", "I", "V", "QQ", "RR", "9", "J", "W", "SS", "TT", "0", "K",
     "X", "UU", "VV", ",", "L", "Y", "WW", "XX", ".", "M", "Z", "YY", "ZZ", " ",
 };
 
-static char* l_mojiEisuPal_2[65] = {
+static const char* l_mojiEisuPal_2[65] = {
     "a", "n", "aa", "bb", "1", "b", "o", "cc", "dd", "2", "c", "p", "ee", "ff", "3", "d", "q",
     "gg", "hh", "4", "e", "r", "ii", "jj", "5", "f", "s", "kk", "ll", "6", "g", "t", "mm",
     "nn", "7", "h", "u", "oo", "pp", "8", "i", "v", "qq", "rr", "9", "j", "w", "ss", "tt", "0",
     "k", "x", "uu", "vv", ",", "l", "y", "ww", "xx", ".", "m", "z", "yy", "zz", " ",
 };
+#endif
+
+#if TARGET_PC
+// '　' (full-width space)
+#define SPACE_MAYBE_FULL (dusk::version::isRegionJpn() ? '\x81\x40' : ' ')
+#elif REGION_JPN
+// '　' (full-width space)
+#define SPACE_MAYBE_FULL '\x81\x40'
+#else
+#define SPACE_MAYBE_FULL ' '
 #endif
 
 static dNm_HIO_c g_nmHIO;
@@ -163,13 +195,18 @@ void dName_c::init() {
     field_0x2ac = mSelProc;
     field_0x2ad = mSelProc;
     field_0x2ae = field_0x2ac;
-    #if REGION_PAL || REGION_JPN
+    #if TARGET_PC
+    mMojiSet = isPalOrJpn() ? MOJI_HIRA : MOJI_EIGO;
+    #elif REGION_PAL || REGION_JPN
     mMojiSet = MOJI_HIRA;
     #else
     mMojiSet = MOJI_EIGO;
     #endif
     mPrevMojiSet = 255;
-    #if REGION_PAL || REGION_JPN
+    #if TARGET_PC
+    mSelMenu = isPalOrJpn() ? MENU_HIRA : MENU_END;
+    mPrevSelMenu = isPalOrJpn() ? MENU_HIRA : MENU_END;
+    #elif REGION_PAL || REGION_JPN
     mSelMenu = MENU_HIRA;
     mPrevSelMenu = MENU_HIRA;
     #else
@@ -187,7 +224,8 @@ void dName_c::initial() {
         mNextNameStr[0] = 0;
     }
 
-    #if REGION_PAL || REGION_JPN
+    #if TARGET_PC || REGION_PAL || REGION_JPN
+    IF_DUSK_BLOCK(isPalOrJpn())
     if (mSelProc == PROC_MOJI_SELECT) {
         mMenuIcon[mMojiSet]->scale(g_nmHIO.mMenuScale, g_nmHIO.mMenuScale);
         mMenuText[mMojiSet]->setWhite(JUtility::TColor(0xC8, 0xC8, 0xC8, 0xFF));
@@ -196,6 +234,7 @@ void dName_c::initial() {
             mMenuText[mPrevMojiSet]->setWhite(JUtility::TColor(0x96, 0x96, 0x96, 0xFF));
         }
     }
+    IF_DUSK_BLOCK_END
     #endif
 }
 
@@ -230,8 +269,8 @@ void dName_c::_move() {
     stick->checkTrigger();
     (this->*SelProc[mSelProc])();
 
-    #if REGION_PAL || REGION_JPN
-    if (mDoCPd_c::getTrigY(PAD_1)) {
+    #if TARGET_PC || REGION_PAL || REGION_JPN
+    if (IF_DUSK(isPalOrJpn() &&) mDoCPd_c::getTrigY(PAD_1)) {
         mDoAud_seStart(Z2SE_SY_DUMMY, 0, 0, 0);
         mPrevMojiSet = mMojiSet;
         mMojiSet++;
@@ -245,8 +284,8 @@ void dName_c::_move() {
         mojiListChange();
     } else {
     #endif
-    #if REGION_JPN
-    if (mDoCPd_c::getTrigX(PAD_1)) {
+    #if TARGET_PC || REGION_JPN
+    if (IF_DUSK(dusk::version::isRegionJpn() &&) mDoCPd_c::getTrigX(PAD_1)) {
         if (mCurPos != 0) {
             if (mojiChange(mCurPos - 1) == 1) {
                 mDoAud_seStart(Z2SE_SY_DUMMY, 0, 0, 0);
@@ -283,12 +322,14 @@ void dName_c::_move() {
             backSpace();
         }
     } else if (mDoCPd_c::getTrigStart(PAD_1)) {
+#define EIGO_OR_END DUSK_IF_ELSE((dusk::version::isRegionPal() ? MENU_EIGO : MENU_END), MENU_END)
+
         #if REGION_PAL
         if ((mSelProc != PROC_MENU_SELECT || mSelMenu != MENU_EIGO) &&
             (mSelProc == PROC_MENU_SELECT || mSelProc == PROC_MOJI_SELECT))
         {
         #else
-        if ((mSelProc != PROC_MENU_SELECT || mSelMenu != MENU_END) &&
+        if ((mSelProc != PROC_MENU_SELECT || mSelMenu != EIGO_OR_END) &&
             (mSelProc == PROC_MENU_SELECT || mSelProc == PROC_MOJI_SELECT))
         {
         #endif
@@ -297,7 +338,7 @@ void dName_c::_move() {
             #if REGION_PAL
             mSelMenu = MENU_EIGO;
             #else
-            mSelMenu = MENU_END;
+            mSelMenu = EIGO_OR_END;
             #endif
 
             switch (mSelProc) {
@@ -314,10 +355,10 @@ void dName_c::_move() {
             }
         }
     }
-    #if REGION_JPN
+    #if TARGET_PC || REGION_JPN
     }
     #endif
-    #if REGION_PAL || REGION_JPN
+    #if TARGET_PC || REGION_PAL || REGION_JPN
     }
     #endif
 
@@ -327,10 +368,9 @@ void dName_c::_move() {
 int dName_c::nameCheck() {
     for (int i = 8, len = 7; i > 0; i--) {
         #if REGION_JPN
-        // '　' (full-width space)
         if (mChrInfo[len].mCharacter != ' ' && mChrInfo[len].mCharacter != '\x81\x40') {
         #else
-        if (mChrInfo[len].mCharacter != ' ') {
+        if (mChrInfo[len].mCharacter != ' ' IF_DUSK(&& (!dusk::version::isRegionJpn() || mChrInfo[len].mCharacter != '\x81\x40'))) {
         #endif
             return len + 1;
         }
@@ -344,8 +384,8 @@ void dName_c::playNameSet(int nameLength) {
     char* str = mInputStr;
 
     for (int i = 0; i < nameLength; i++) {
-        #if REGION_JPN
-        if (mChrInfo[i].mMojiSet == 2) {
+        #if TARGET_PC || REGION_JPN
+        if (!dusk::version::isRegionJpn() || mChrInfo[i].mMojiSet == 2) {
             *str = mChrInfo[i].mCharacter;
             str += 1;
         } else {
@@ -727,7 +767,34 @@ int dName_c::getMoji() {
     int result = -1;
     const char* moji;
 
-    #if REGION_PAL
+    #if TARGET_PC
+    if (dusk::version::isRegionPal()) {
+        switch (mMojiSet) {
+        case MOJI_HIRA:
+            moji = l_mojiEisuPal_1[mCharRow + mCharColumn * 5];
+            break;
+        case MOJI_KATA:
+            moji = l_mojiEisuPal_2[mCharRow + mCharColumn * 5];
+            break;
+        default:
+            abort();
+        }
+    } else {
+        switch (mMojiSet) {
+        case MOJI_HIRA:
+            moji = l_mojiHira[mCharRow + mCharColumn * 5];
+            break;
+        case MOJI_KATA:
+            moji = l_mojikata[mCharRow + mCharColumn * 5];
+            break;
+        case MOJI_EIGO:
+            moji = l_mojiEisu[mCharRow + mCharColumn * 5];
+            break;
+        default:
+            abort();
+        }
+    }
+    #elif REGION_PAL
     switch (mMojiSet) {
     case MOJI_HIRA:
         moji = l_mojiEisuPal_1[mCharRow + mCharColumn * 5];
@@ -750,7 +817,17 @@ int dName_c::getMoji() {
     }
     #endif
 
-    #if REGION_JPN
+    #if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        if (*(u8*)moji >> 4 == 0x8 || *(u8*)moji >> 4 == 0x9) {
+            result = *(u16*)moji;
+        } else {
+            result = *moji;
+        }
+    } else {
+        result = *moji;
+    }
+    #elif REGION_JPN
     if (*(u8*)moji >> 4 == 0x8 || *(u8*)moji >> 4 == 0x9) {
         result = *(u16*)moji;
     } else {
@@ -763,6 +840,14 @@ int dName_c::getMoji() {
     return result;
 }
 
+#if TARGET_PC
+#define CHAR_TRUNC(val) (dusk::version::isRegionPal() ? val & 0xFF : val)
+#elif REGION_PAL
+#define CHAR_TRUNC(val) (val & 0xFF)
+#else
+#define CHAR_TRUNC(val) val
+#endif
+
 void dName_c::setMoji(int moji) {
     if (mCurPos == 8 || nameCheck() == 8) {
         mDoAud_seStart(Z2SE_SYS_ERROR, NULL, 0, 0);
@@ -771,24 +856,14 @@ void dName_c::setMoji(int moji) {
 
         s32 notEmpty = false;
         for (int i = mCurPos; i < 8; i++) {
-            #if REGION_JPN
-            // '　' (full-width space)
-            if (mChrInfo[i].mCharacter != '\x81\x40') {
-            #else
-            if (mChrInfo[i].mCharacter != ' ') {
-            #endif
+            if (mChrInfo[i].mCharacter != SPACE_MAYBE_FULL) {
                 notEmpty = true;
                 break;
             }
         }
 
         if (notEmpty) {
-            #if REGION_JPN
-            // '　' (full-width space)
-            if (mChrInfo[7].mCharacter == '\x81\x40') {
-            #else
-            if (mChrInfo[7].mCharacter == ' ') {
-            #endif
+            if (mChrInfo[7].mCharacter == SPACE_MAYBE_FULL) {
                 for (int i = 6; i >= mCurPos; i--) {
                     mChrInfo[i + 1] = mChrInfo[i];
                 }
@@ -797,11 +872,7 @@ void dName_c::setMoji(int moji) {
                 mChrInfo[mCurPos].mRow = mCharRow;
                 mChrInfo[mCurPos].mMojiSet = mMojiSet;
                 mChrInfo[mCurPos].field_0x3 = 1;
-                #if REGION_PAL
-                mChrInfo[mCurPos].mCharacter = moji & 0xFF;
-                #else
-                mChrInfo[mCurPos].mCharacter = moji;
-                #endif
+                mChrInfo[mCurPos].mCharacter = CHAR_TRUNC(moji);
 
                 if (mCurPos != 8) {
                     mLastCurPos = mCurPos;
@@ -814,11 +885,7 @@ void dName_c::setMoji(int moji) {
             mChrInfo[mCurPos].mRow = mCharRow;
             mChrInfo[mCurPos].mMojiSet = mMojiSet;
             mChrInfo[mCurPos].field_0x3 = 1;
-            #if REGION_PAL
-            mChrInfo[mCurPos].mCharacter = moji & 0xFF;
-            #else
-            mChrInfo[mCurPos].mCharacter = moji;
-            #endif
+            mChrInfo[mCurPos].mCharacter = CHAR_TRUNC(moji);
 
             if (mCurPos != 8) {
                 mLastCurPos = mCurPos;
@@ -844,13 +911,8 @@ void dName_c::setNameText() {
                         "CR\x1b"
                         "CC[000000]\x1bGM[0]%c\x1bHM\x1b"
                         "CC[ffffff]\x1bGM[0]%c",
-                        #if REGION_PAL
-                        (u8)mChrInfo[i].mCharacter & 0xFF,
-                        (u8)mChrInfo[i].mCharacter & 0xFF
-                        #else
-                        (u8)mChrInfo[i].mCharacter,
-                        (u8)mChrInfo[i].mCharacter
-                        #endif
+                        CHAR_TRUNC((u8)mChrInfo[i].mCharacter),
+                        CHAR_TRUNC((u8)mChrInfo[i].mCharacter)
                 );
             #if REGION_JPN
             } else {
@@ -889,7 +951,29 @@ void dName_c::nameCursorMove() {
 
 void dName_c::selectCursorMove() {
     int idx;
-    #if REGION_PAL
+    #if TARGET_PC
+    if (dusk::version::isRegionPal()) {
+        if (mCharColumn < 3) {
+            idx = 0;
+        } else if (mCharColumn < 6) {
+            idx = 1;
+        } else if (mCharColumn >= 6) {
+            idx = 2;
+        }
+    } else if (dusk::version::isRegionJpn()) {
+        if (mCharColumn < 3) {
+            idx = 0;
+        } else if (mCharColumn < 6) {
+            idx = 1;
+        } else if (mCharColumn < 8) {
+            idx = 2;
+        } else if (mCharColumn >= 8) {
+            idx = 3;
+        }
+    } else {
+        idx = 3;
+    }
+    #elif REGION_PAL
     if (mCharColumn < 3) {
         idx = 0;
     } else if (mCharColumn < 6) {
@@ -930,7 +1014,36 @@ void dName_c::selectCursorMove() {
 
 void dName_c::menuCursorPosSet() {
     mPrevSelMenu = mSelMenu;
-    #if REGION_PAL
+    #if TARGET_PC
+    if (dusk::version::isRegionPal()) {
+        if (mCharColumn < 3) {
+            mSelMenu = MENU_HIRA;
+        } else if (mCharColumn < 6) {
+            mSelMenu = MENU_KATA;
+        } else if (mCharColumn >= 6) {
+            mSelMenu = MENU_EIGO;
+        }
+    } else if (dusk::version::isRegionJpn()) {
+        if (mCharColumn < 3) {
+            mSelMenu = MENU_HIRA;
+            return;
+        }
+        if (mCharColumn < 6) {
+            mSelMenu = MENU_KATA;
+            return;
+        }
+        if (mCharColumn < 8) {
+            mSelMenu = MENU_EIGO;
+            return;
+        }
+        if (mCharColumn >= 8) {
+            mSelMenu = MENU_END;
+            return;
+        }
+    } else {
+        mSelMenu = MENU_END;
+    }
+    #elif REGION_PAL
     if (mCharColumn < 3) {
         mSelMenu = MENU_HIRA;
     } else if (mCharColumn < 6) {
@@ -961,28 +1074,28 @@ void dName_c::menuCursorPosSet() {
 }
 
 void dName_c::MenuSelect() {
-    #if REGION_PAL || REGION_JPN
-    if (stick->checkRightTrigger()) {
+    #if TARGET_PC || REGION_PAL || REGION_JPN
+    if (isPalOrJpn() && stick->checkRightTrigger()) {
         mDoAud_seStart(Z2SE_SY_CURSOR_OPTION, NULL, 0, 0);
         mPrevSelMenu = mSelMenu;
         mSelMenu++;
         #if REGION_PAL
         if (mSelMenu > MENU_EIGO) {
         #else
-        if (mSelMenu > MENU_END) {
+        if (mSelMenu > EIGO_OR_END) {
         #endif
             mSelMenu = MENU_HIRA;
         }
         MenuSelectAnmInit();
         mSelProc = PROC_MENU_SEL_ANM;
-    } else if (stick->checkLeftTrigger()) {
+    } else if (isPalOrJpn() && stick->checkLeftTrigger()) {
         mDoAud_seStart(Z2SE_SY_CURSOR_OPTION, NULL, 0, 0);
         mPrevSelMenu = mSelMenu;
         if (mSelMenu == MENU_HIRA) {
             #if REGION_JPN
             mSelMenu = MENU_END;
             #else
-            mSelMenu = MENU_EIGO;
+            mSelMenu = dusk::version::isRegionJpn() ? MENU_END : MENU_EIGO;
             #endif
         } else {
             mSelMenu--;
@@ -1009,7 +1122,7 @@ void dName_c::MenuSelect() {
             #if REGION_PAL
             if (mSelMenu == MENU_EIGO) {
             #else
-            if (mSelMenu == MENU_END) {
+            if (mSelMenu == EIGO_OR_END) {
             #endif
                 if (nameCheck() != 0) {
                     mDoAud_seStart(Z2SE_SY_NAME_OK, NULL, 0, 0);
@@ -1024,7 +1137,7 @@ void dName_c::MenuSelect() {
             #if REGION_PAL
             if (mSelMenu == MENU_EIGO) {
             #else
-            if (mSelMenu == MENU_END) {
+            if (mSelMenu == EIGO_OR_END) {
             #endif
                 if (nameCheck() != 0) {
                     mDoAud_seStart(Z2SE_SY_NAME_OK, NULL, 0, 0);
@@ -1067,9 +1180,11 @@ void dName_c::MenuSelectAnm2() {
     if (canMove == true) {
         if (prevMenu_i != mojiSet_i) {
             mMenuText[prevMenu_i]->setWhite(JUtility::TColor(0x96, 0x96, 0x96, 0xFF));
-            #if REGION_PAL || REGION_JPN
+            #if TARGET_PC || REGION_PAL || REGION_JPN
+            IF_DUSK_BLOCK(isPalOrJpn())
             mMenuIcon[mojiSet_i]->scale(g_nmHIO.mMenuScale, g_nmHIO.mMenuScale);
             mMenuText[mojiSet_i]->setWhite(JUtility::TColor(0xC8, 0xC8, 0xC8, 0xFF));
+            IF_DUSK_BLOCK_END
             #endif
         }
         selectCursorMove();
@@ -1081,6 +1196,11 @@ void dName_c::MenuSelectAnm2() {
 void dName_c::MenuSelectAnm3() {}
 
 void dName_c::menuAbtnSelect() {
+#if TARGET_PC
+    if (dusk::version::isRegionPal() && mSelMenu == MENU_EIGO) {
+        goto pal_eigo;
+    }
+#endif
     switch (mSelMenu) {
     case MENU_HIRA:
     case MENU_KATA:
@@ -1098,6 +1218,7 @@ void dName_c::menuAbtnSelect() {
     #else
     case MENU_END:
     #endif
+        IF_DUSK(pal_eigo:)
         int nameNum = nameCheck();
         if (nameNum != 0) {
             playNameSet(nameNum);
@@ -1116,44 +1237,33 @@ void dName_c::backSpace() {
     if (mCurPos != 0) {
         mDoAud_seStart(Z2SE_SY_NAME_DELETE, NULL, 0, 0);
 
-        #if REGION_JPN
-        // '　' (full-width space)
-        if (mCurPos == 8 && mChrInfo[7].mCharacter != '\x81\x40') {
-        #else
-        if (mCurPos == 8 && mChrInfo[7].mCharacter != ' ') {
-        #endif
+        if (mCurPos == 8 && mChrInfo[7].mCharacter != SPACE_MAYBE_FULL) {
             mChrInfo[7].mColumn = 7;
             mChrInfo[7].mRow = 1;
-            #if REGION_PAL || REGION_JPN
+            #if TARGET_PC
+            mChrInfo[7].mMojiSet = isPalOrJpn() ? MOJI_HIRA : MOJI_EIGO;
+            #elif REGION_PAL || REGION_JPN
             mChrInfo[7].mMojiSet = MOJI_HIRA;
             #else
             mChrInfo[7].mMojiSet = MOJI_EIGO;
             #endif
             mChrInfo[7].field_0x3 = 1;
-            #if REGION_JPN
-            // '　' (full-width space)
-            mChrInfo[7].mCharacter = '\x81\x40';
-            #else
-            mChrInfo[7].mCharacter = ' ';
-            #endif
+            mChrInfo[7].mCharacter = SPACE_MAYBE_FULL;
         } else {
             for (int i = mCurPos - 1; i < 7; i++) {
                 mChrInfo[i] = mChrInfo[i + 1];
             }
             mChrInfo[7].mColumn = 7;
             mChrInfo[7].mRow = 1;
-            #if REGION_PAL || REGION_JPN
+#if TARGET_PC
+            mChrInfo[7].mMojiSet = isPalOrJpn() ? MOJI_HIRA : MOJI_EIGO;
+#elif REGION_PAL || REGION_JPN
             mChrInfo[7].mMojiSet = MOJI_HIRA;
             #else
             mChrInfo[7].mMojiSet = MOJI_EIGO;
             #endif
             mChrInfo[7].field_0x3 = 1;
-            #if REGION_JPN
-            // '　' (full-width space)
-            mChrInfo[7].mCharacter = '\x81\x40';
-            #else
-            mChrInfo[7].mCharacter = ' ';
-            #endif
+            mChrInfo[7].mCharacter = SPACE_MAYBE_FULL;
         }
 
         setNameText();
@@ -1164,7 +1274,31 @@ void dName_c::backSpace() {
 }
 
 void dName_c::mojiListChange() {
-    #if REGION_PAL
+    #if TARGET_PC
+    const char** mojiSet;
+    if (dusk::version::isRegionPal()) {
+        switch (mMojiSet) {
+        case MOJI_HIRA:
+            mojiSet = l_mojiEisuPal_1;
+            break;
+        case MOJI_KATA:
+            mojiSet = l_mojiEisuPal_2;
+            break;
+        }
+    } else {
+        switch (mMojiSet) {
+        case MOJI_HIRA:
+            mojiSet = l_mojiHira;
+            break;
+        case MOJI_KATA:
+            mojiSet = l_mojikata;
+            break;
+        case MOJI_EIGO:
+            mojiSet = l_mojiEisu;
+            break;
+        }
+    }
+    #elif REGION_PAL
     char** mojiSet;
 
     switch (mMojiSet) {
@@ -1212,7 +1346,8 @@ void dName_c::mojiListChange() {
         strcpy(mMojiText[i], buf);
     }
 
-    #if REGION_PAL || REGION_JPN
+    #if TARGET_PC || REGION_PAL || REGION_JPN
+    IF_DUSK_BLOCK(isPalOrJpn())
     if (mSelProc == PROC_MOJI_SELECT) {
         mMenuIcon[mMojiSet]->scale(g_nmHIO.mMenuScale, g_nmHIO.mMenuScale);
         mMenuText[mMojiSet]->setWhite(JUtility::TColor(0xC8, 0xC8, 0xC8, 0xFF));
@@ -1221,6 +1356,7 @@ void dName_c::mojiListChange() {
             mMenuText[mPrevMojiSet]->setWhite(JUtility::TColor(0x96, 0x96, 0x96, 0xFF));
         }
     }
+    IF_DUSK_BLOCK_END
     #endif
 }
 
@@ -1241,9 +1377,11 @@ void dName_c::menuCursorMove2() {
     if (menu_i != mojiSet_i) {
         mMenuIcon[menu_i]->scale(g_nmHIO.mMenuScale, g_nmHIO.mMenuScale);
         mMenuText[menu_i]->setWhite(JUtility::TColor(0xC8, 0xC8, 0xC8, 0xFF));
-        #if REGION_PAL || REGION_JPN
+        #if TARGET_PC || REGION_PAL || REGION_JPN
+        IF_DUSK_BLOCK(isPalOrJpn())
         mMenuIcon[mojiSet_i]->scale(1.0f, 1.0f);
         mMenuText[mojiSet_i]->setWhite(JUtility::TColor(0x96, 0x96, 0x96, 0xFF));
+        IF_DUSK_BLOCK_END
         #endif
     }
 
@@ -1265,7 +1403,9 @@ void dName_c::selectCursorPosSet(int row) {
             mCharColumn = 3;
             break;
         case MENU_EIGO:
-            #if REGION_PAL
+            #if TARGET_PC
+            mCharColumn = dusk::version::isRegionPal() ? 8 : 6;
+            #elif REGION_PAL
             mCharColumn = 8;
             #else
             mCharColumn = 6;
@@ -1288,7 +1428,11 @@ void dName_c::selectCursorPosSet(int row) {
 #if TARGET_PC
 void dName_c::nameWide() {
     //Resize Select Icon
-    mSelIcon->setParam(0.82f * mDoGph_gInf_c::hudAspectScaleUp, 0.77f, 0.05f, 0.4f, 0.4f);
+    #if TARGET_PC
+    if (mSelIcon) {
+        mSelIcon->refreshAspectScale();
+    }
+    #endif
 
     // List of Characters Box
     static u64 l_tagName[65] = {
@@ -1477,9 +1621,11 @@ void dName_c::screenSet() {
         #endif
     }
 
-    #if !(REGION_PAL || REGION_JPN)
+    #if TARGET_PC || !(REGION_PAL || REGION_JPN)
+    IF_DUSK_BLOCK(!isPalOrJpn())
     mMenuIcon[0]->hide();
     mMenuIcon[1]->hide();
+    IF_DUSK_BLOCK_END
     #endif
     mMojiPane = nameIn.NameInScr->search(MULTI_CHAR('moji_n'));
 
@@ -1497,25 +1643,28 @@ void dName_c::screenSet() {
         ((J2DTextBox*)nameTagPane[i])->setFont(nameIn.font);
         ((J2DTextBox*)nameTagPane[i])->setString(72, "");
         ((J2DTextBox*)nameTagPane[i])->setWhite(JUtility::TColor(0xC8, 0xC8, 0xC8, 0xFF));
-        #if REGION_PAL
+        #if TARGET_PC || REGION_PAL
+        IF_DUSK_BLOCK(dusk::version::isRegionPal())
         ((J2DTextBox*)nameTagPane[i])->resize(24.0f, 23.0f);
+        IF_DUSK_BLOCK_END
         #endif
         mNameText[i] = ((J2DTextBox*)nameTagPane[i])->getStringPtr();
     }
 
-    #if REGION_PAL
+    #if REGION_PAL // DUSK version note: this code mutates strings. We just edit the table.
+    IF_DUSK_BLOCK(dusk::version::isRegionPal())
     int idx = 2;
 
-    static u8 palMoji00[13] = {
+    static const u8 palMoji00[13] = {
         0xC0, 0xC1, 0xC2, 0xC4, 0xC6, 0xC7, 0xC8, 0xC9, 0xCA, 0xCB, 0xCC, 0xCD, 0xCE,
     };
-    static u8 palMoji01[13] = {
+    static const u8 palMoji01[13] = {
         0xCF, 0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0xD6, 0x8C, 0xD9, 0xDA, 0xDB, 0xDC, 0x2D,
     };
-    static u8 palMoji10[13] = {
+    static const u8 palMoji10[13] = {
         0xE0, 0xE1, 0xE2, 0xE4, 0xE6, 0xE7, 0xE8, 0xE9, 0xEA, 0xEB, 0xEC, 0xED, 0xEE,
     };
-    static u8 palMoji11[13] = {
+    static const u8 palMoji11[13] = {
         0xEF, 0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF6, 0x9C, 0xF9, 0xFA, 0xFB, 0xFC, 0xDF,
     };
 
@@ -1532,6 +1681,7 @@ void dName_c::screenSet() {
         l_mojiEisuPal_2[idx + 1][0] = palMoji11[i];
         l_mojiEisuPal_2[idx + 1][1] = 0;
     }
+    IF_DUSK_BLOCK_END
     #endif
 
     mCharColumn = 0;
@@ -1540,11 +1690,7 @@ void dName_c::screenSet() {
     mSelIcon = JKR_NEW dSelect_cursor_c(0, 1.0f, NULL);
     JUT_ASSERT(0, mSelIcon != NULL);
 
-    #if TARGET_PC
-    mSelIcon->setParam(0.82f * mDoGph_gInf_c::hudAspectScaleUp, 0.77f, 0.05f, 0.4f, 0.4f);
-    #else
     mSelIcon->setParam(0.82f, 0.77f, 0.05f, 0.4f, 0.4f);
-    #endif
 
     Vec pos = mMojiIcon[mCharRow + mCharColumn * 5]->getGlobalVtxCenter(false, 0);
     mSelIcon->setPos(pos.x, pos.y, mMojiIcon[mCharRow + mCharColumn * 5]->getPanePtr(), true);
@@ -1574,18 +1720,15 @@ void dName_c::displayInit() {
         mNameCursor[i]->hide();
         mChrInfo[i].mColumn = 7;
         mChrInfo[i].mRow = 1;
-        #if REGION_PAL || REGION_JPN
+        #if TARGET_PC
+        mChrInfo[i].mMojiSet = isPalOrJpn() ? MOJI_HIRA : MOJI_EIGO;
+        #elif REGION_PAL || REGION_JPN
         mChrInfo[i].mMojiSet = MOJI_HIRA;
         #else
         mChrInfo[i].mMojiSet = MOJI_EIGO;
         #endif
         mChrInfo[i].field_0x3 = 1;
-        #if REGION_JPN
-        // '　' (full-width space)
-        mChrInfo[i].mCharacter = '\x81\x40';
-        #else
-        mChrInfo[i].mCharacter = ' ';
-        #endif
+        mChrInfo[i].mCharacter = SPACE_MAYBE_FULL;
     }
 
     mIsInputEnd = false;
@@ -1596,7 +1739,63 @@ void dName_c::NameStrSet() {
 
     int i = 0;
     while (*moji != 0) {
-        #if REGION_PAL
+        #if TARGET_PC
+        if (dusk::version::isRegionPal()) {
+            mChrInfo[i].mCharacter = static_cast<u8>(*moji);
+
+            for (int j = 0; j < 65; j++) {
+                if (mChrInfo[i].mCharacter == *(u8*)l_mojiEisuPal_1[j] ||
+                    mChrInfo[i].mCharacter == *(u16*)l_mojiEisuPal_2[j])
+                {
+                    mChrInfo[i].mColumn = j / 5;
+                    mChrInfo[i].mRow = j % 5;
+                    mChrInfo[i].mMojiSet = MOJI_HIRA;
+                    break;
+                }
+            }
+            moji++;
+            i++;
+        } else {
+            if (*(u8*)moji >> 4 == 8 || *(u8*)moji >> 4 == 9) {
+                mChrInfo[i].mCharacter = *(u16*)moji;
+
+                for (int j = 0; j < 65; j++) {
+                    if (mChrInfo[i].mCharacter == *(u16*)l_mojiHira[j] ||
+                        mChrInfo[i].mCharacter == *(u16*)l_mojiHira2[j] ||
+                        mChrInfo[i].mCharacter == *(u16*)l_mojiHira3[j])
+                    {
+                        mChrInfo[i].mColumn = j / 5;
+                        mChrInfo[i].mRow = j % 5;
+                        mChrInfo[i].mMojiSet = MOJI_HIRA;
+                        break;
+                    } else if (mChrInfo[i].mCharacter == *(u16*)l_mojikata[j] ||
+                               mChrInfo[i].mCharacter == *(u16*)l_mojikata2[j] ||
+                               mChrInfo[i].mCharacter == *(u16*)l_mojikata3[j])
+                    {
+                        mChrInfo[i].mColumn = j / 5;
+                        mChrInfo[i].mRow = j % 5;
+                        mChrInfo[i].mMojiSet = MOJI_KATA;
+                        break;
+                    }
+                }
+                moji += 2;
+                i++;
+            } else {
+                mChrInfo[i].mCharacter = *moji;
+
+                for (int j = 0; j < 65; j++) {
+                    if (mChrInfo[i].mCharacter == *(u8*)l_mojiEisu[j]) {
+                        mChrInfo[i].mColumn = j / 5;
+                        mChrInfo[i].mRow = j % 5;
+                        mChrInfo[i].mMojiSet = MOJI_EIGO;
+                        break;
+                    }
+                }
+                moji++;
+                i++;
+            }
+        }
+        #elif REGION_PAL
         mChrInfo[i].mCharacter = static_cast<u8>(*moji);
 
         for (int j = 0; j < 65; j++) {
@@ -1669,7 +1868,9 @@ s32 dName_c::getMenuPosIdx(u8 selPos) {
         result = 1;
         break;
     case 2:
-        #if REGION_PAL
+        #if TARGET_PC
+        result = dusk::version::isRegionPal() ? 3 : 2;
+        #elif REGION_PAL
         result = 3;
         #else
         result = 2;

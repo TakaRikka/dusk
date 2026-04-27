@@ -623,6 +623,11 @@ int daBg_c::create() {
 
     dComIfGp_roomControl_onStatusFlag(roomNo, 0x10);
     OS_REPORT("<BG> room%d\n", roomNo);
+
+#if TARGET_PC
+    draw_interp_frame = true;
+#endif
+
     return cPhs_COMPLEATE_e;
 }
 

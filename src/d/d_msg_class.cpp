@@ -12,6 +12,10 @@
 #include "d/d_lib.h"
 #include "JSystem/JUtility/JUTFont.h"
 
+#if TARGET_PC
+#include "dusk/scope_guard.hpp"
+#endif
+
 #if REGION_JPN
 #define CHAR_CODE_MALE_ICON 0x8189
 #define CHAR_CODE_FEMALE_ICON 0x818A
@@ -303,7 +307,7 @@ static u8 getOutFontNumberType(int param_0) {
     }
 }
 
-#if VERSION == VERSION_GCN_PAL
+#if TARGET_PC || VERSION == VERSION_GCN_PAL
 static void setPlayerName(char* i_player_name, u8 param_2) {
     if (param_2 != 0) {
         strcpy(i_player_name, dComIfGs_getPlayerName());
@@ -1481,7 +1485,7 @@ bool jmessage_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_siz
         char buffer[40];
         switch (i_tag & 0xFF00FFFF) {
         case MSGTAG_PLAYER_GENITIV:
-            #if VERSION == VERSION_GCN_PAL
+            #if TARGET_PC || VERSION == VERSION_GCN_PAL
             if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setPlayerName(buffer, 1);
             } else {
@@ -1491,7 +1495,7 @@ bool jmessage_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_siz
             push_word(buffer);
             return true;
         case MSGTAG_HORSE_GENITIV:
-            #if VERSION == VERSION_GCN_PAL
+            #if TARGET_PC || VERSION == VERSION_GCN_PAL
             if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setHorseName(buffer, 1);
             } else {
@@ -1918,6 +1922,11 @@ void jmessage_tSequenceProcessor::do_begin(void const* pEntry, char const* pszTe
 
     pReference->resetReference();
     field_0xb5 = 0;
+#if TARGET_PC
+    if (dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)) {
+        field_0xb2 = 1;
+    }
+#endif
 }
 
 void jmessage_tSequenceProcessor::do_end() {
@@ -1977,6 +1986,13 @@ bool jmessage_tSequenceProcessor::do_isReady() {
         return 0;
     }
     #endif
+
+#if TARGET_PC
+    if (dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)) {
+        field_0xb2 = 1;
+        pReference->setSendTimer(0);
+    }
+#endif
 
     if (dComIfGp_checkMesgBgm()) {
         bool isItemMusicPlaying = true;
@@ -2153,6 +2169,18 @@ void jmessage_tSequenceProcessor::do_character(int iCharacter) {
 
 bool jmessage_tSequenceProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_size) {
     jmessage_tReference* pReference = (jmessage_tReference*)getReference();
+
+#if TARGET_PC
+    // This class runs the lambda function when it goes out of scope. We want to run
+    // this code after the switch statement and this saves us from having to litter
+    // the switch statement with IF_DUSK before every return.
+    auto instantTextRun = SimpleScopeGuard([&]() {
+        if (dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)) {
+            field_0xb2 = 1;
+            pReference->setSendTimer(0);
+        }
+    });
+#endif
 
     switch (i_tag & 0xFF0000) {
     case MSGTAG_GROUP(1): {
@@ -4242,7 +4270,7 @@ bool jmessage_string_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u3
         char buffer[40];
         switch (i_tag & 0xFF00FFFF) {
         case MSGTAG_PLAYER_GENITIV:
-            #if VERSION == VERSION_GCN_PAL
+            #if TARGET_PC || VERSION == VERSION_GCN_PAL
             if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setPlayerName(buffer, 1);
             } else {
@@ -4253,7 +4281,7 @@ bool jmessage_string_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u3
             stack_pushCurrent(buffer);
             break;
         case MSGTAG_HORSE_GENITIV:
-            #if VERSION == VERSION_GCN_PAL
+            #if TARGET_PC || VERSION == VERSION_GCN_PAL
             if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setHorseName(buffer, 1);
             } else {
@@ -4850,7 +4878,7 @@ bool jmessage_string_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, 
         char buffer[40];
         switch (i_tag & 0xFF00FFFF) {
         case MSGTAG_PLAYER_GENITIV:
-            #if VERSION == VERSION_GCN_PAL
+            #if TARGET_PC || VERSION == VERSION_GCN_PAL
             if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setPlayerName(buffer, 1);
             } else {
@@ -4861,7 +4889,7 @@ bool jmessage_string_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, 
             push_word(buffer);
             break;
         case MSGTAG_HORSE_GENITIV:
-            #if VERSION == VERSION_GCN_PAL
+            #if TARGET_PC || VERSION == VERSION_GCN_PAL
             if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setHorseName(buffer, 1);
             } else {

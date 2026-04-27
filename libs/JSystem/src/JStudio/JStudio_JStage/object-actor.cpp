@@ -314,10 +314,17 @@ void JStudio_JStage::TAdaptor_actor::getJSG_SRT_(JStudio::TControl const* pContr
 }
 
 void JStudio_JStage::TAdaptor_actor::TVVOutput_ANIMATION_FRAME_::operator()(
-    f32 param_1, JStudio::TAdaptor* adaptor) const {
+    f32 param_1, JStudio::TAdaptor* adaptor) const {    
+#if TARGET_PC
+    TAdaptor_actor* actor_adaptor = static_cast<TAdaptor_actor*>(adaptor);
+    JStage::TActor* actor = actor_adaptor->get_pJSG_();
+    // field_0x8 is always hardcoded to either 305 or 309
+    u32 idx = (field_0x8 == 305) ? actor_adaptor->field_0x130 : actor_adaptor->field_0x134;
+#else
     JStage::TActor* actor = static_cast<TAdaptor_actor*>(adaptor)->get_pJSG_();
     // not sure what this bit is
     u32 idx = *(u32*)(((uintptr_t)adaptor - 1) + field_0x8);
+#endif
     u8 idx_lowBytes  = idx;
     u8 idx_highBytes = idx >> 8;
 

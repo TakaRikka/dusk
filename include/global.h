@@ -73,6 +73,9 @@
 #endif
 
 #ifndef __MWERKS__
+#ifdef __cplusplus
+extern "C" {
+#endif
 // Silence clangd errors about MWCC PPC intrinsics by declaring them here.
 extern int __cntlzw(unsigned int);
 extern int __rlwimi(int, int, int, int, int);
@@ -80,7 +83,14 @@ extern void __dcbf(void*, int);
 extern void __dcbz(void*, int);
 extern void __sync();
 extern int __abs(int);
-void* __memcpy(void*, const void*, int);
+#if defined(__has_builtin) && __has_builtin(__builtin_memcpy)
+#define __memcpy __builtin_memcpy
+#else
+#define __memcpy memcpy
+#endif
+#ifdef __cplusplus
+}
+#endif
 #endif
 
 #ifndef M_PI
@@ -220,12 +230,16 @@ using std::isnan;
 // Some basic macros that are more convenient than putting down #if blocks for one-line changes.
 #if TARGET_PC
 #define IF_DUSK(statement) statement
+#define IF_DUSK_BLOCK(cond) if (cond) {
+#define IF_DUSK_BLOCK_END }
 #define IF_DUSK_ARG(expr) , expr
 #define IF_NOT_DUSK(statement)
 #define DUSK_IF_ELSE(dusk, orig) dusk
 #else
 #define IF_DUSK(statement)
 #define IF_DUSK_ARG(expr)
+#define IF_DUSK_BLOCK(cond)
+#define IF_DUSK_BLOCK_END
 #define IF_NOT_DUSK(statement) statement
 #define DUSK_IF_ELSE(dusk, orig) orig
 #endif

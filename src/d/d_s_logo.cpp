@@ -24,6 +24,7 @@
 #include "JSystem/JUtility/JUTConsole.h"
 
 #include "dusk/logging.h"
+#include "dusk/version.hpp"
 
 #if !PLATFORM_GCN
 #include <revolution/os.h>
@@ -44,7 +45,12 @@ struct homeBtnData {
 };
 #endif
 
-#if VERSION == VERSION_SHIELD
+#if TARGET_PC
+using namespace dusk::version;
+
+#define LOGO_ARC versionSelect<const char*>({{GameVersion::GcnJpn, "Logo"}, {GameVersion::GcnPal, "LogoPal"}}, "LogoUs")
+#define MSG_PATH versionSelect<const char*>({{GameVersion::GcnJpn, "/res/Msgjp/bmgres.arc"}}, "/res/Msgus/bmgres.arc")
+#elif VERSION == VERSION_SHIELD
 #define LOGO_ARC "LogoUs"
 #define MSG_PATH  "/res/Msgcn/bmgres.arc"
 #elif VERSION == VERSION_GCN_JPN
@@ -789,7 +795,13 @@ dScnLogo_c::~dScnLogo_c() {
     JKR_DELETE(mProgressiveNo);
     JKR_DELETE(mProgressiveSel);
 
-    #if VERSION == VERSION_GCN_PAL
+    #if TARGET_PC
+    if (getGameVersion() == GameVersion::GcnPal) {
+        mpPalLogoResCommand->getArchive()->removeResourceAll();
+        mpPalLogoResCommand->getArchive()->unmount();
+        mpPalLogoResCommand->destroy();
+    }
+    #elif VERSION == VERSION_GCN_PAL
     mpPalLogoResCommand->getArchive()->removeResourceAll();
     mpPalLogoResCommand->getArchive()->unmount();
     mpPalLogoResCommand->destroy();
@@ -951,7 +963,8 @@ static int phase_0(dScnLogo_c* i_this) {
     JUT_ASSERT(1528, i_this->mLogo01Heap != NULL);
     JKRHEAP_NAME(i_this->mLogo01Heap, "Logo01");
 
-    #if VERSION == VERSION_GCN_PAL
+    #if TARGET_PC || VERSION == VERSION_GCN_PAL
+    IF_DUSK_BLOCK(getGameVersion() == GameVersion::GcnPal)
     switch (i_this->getPalLanguage()) {
     case 1:
         i_this->mpPalLogoResCommand = mDoDvdThd_mountArchive_c::create("/res/Layout/LogoPalGm.arc", 0, NULL);
@@ -970,6 +983,7 @@ static int phase_0(dScnLogo_c* i_this) {
         i_this->mpPalLogoResCommand = mDoDvdThd_mountArchive_c::create("/res/Layout/LogoPalUk.arc", 0, NULL);
         break;
     }
+    IF_DUSK_BLOCK_END
     #endif
 
     #if PLATFORM_WII || PLATFORM_SHIELD
@@ -990,7 +1004,8 @@ static int phase_1(dScnLogo_c* i_this) {
     }
     #endif
 
-    #if VERSION == VERSION_GCN_PAL
+    #if TARGET_PC || VERSION == VERSION_GCN_PAL
+    IF_DUSK_BLOCK(getGameVersion() == GameVersion::GcnPal)
     if (!mDoDvdThd::SyncWidthSound) {
         return cPhs_INIT_e;
     }
@@ -998,6 +1013,7 @@ static int phase_1(dScnLogo_c* i_this) {
     if (!i_this->mpPalLogoResCommand->sync()) {
         return cPhs_INIT_e;
     }
+    IF_DUSK_BLOCK_END
     #endif
 
     int rt;
@@ -1237,7 +1253,113 @@ void dScnLogo_c::logoInitGC() {
     ResTIMG* dolbyImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 3);
     mDolbyLogo = JKR_NEW dDlst_2D_c(dolbyImg, 189, 150, 232, 112, 255);
 
-#if VERSION == VERSION_GCN_PAL
+#if TARGET_PC
+    if (getGameVersion() == GameVersion::GcnPal) {
+        u8 language = getPalLanguage();
+        if (language >= 5) {
+            language = 0;
+        }
+
+        static const char* choice[] = {
+            "50_60_choice_eng.bti",
+            "50_60_choice_ger.bti",
+            "50_60_choice_fra.bti",
+            "50_60_choice_spa.bti",
+            "50_60_choice_ita.bti",
+        };
+
+        static const char* yes[] = {
+            "60_set_eng.bti",
+            "60_set_ger.bti",
+            "60_set_fra.bti",
+            "60_set_spa.bti",
+            "60_set_ita.bti",
+        };
+
+        static const char* no[] = {
+            "50_set_eng.bti",
+            "50_set_ger.bti",
+            "50_set_fra.bti",
+            "50_set_spa.bti",
+            "50_set_ita.bti",
+        };
+
+        static const char* prog[] = {
+            "progressive_pro.bti",
+            "progressive_pro_gm.bti",
+            "progressive_pro_fr.bti",
+            "progressive_pro_sp.bti",
+            "progressive_pro_it.bti",
+        };
+
+        static const char* intr[] = {
+            "progressive_inter.bti",
+            "progressive_inter_gm.bti",
+            "progressive_inter_fr.bti",
+            "progressive_inter_sp.bti",
+            "progressive_inter_it.bti",
+        };
+
+        static const char* warning[] = {
+            "warning.bti",
+            "warning_gm.bti",
+            "warning_fr.bti",
+            "warning_sp.bti",
+            "warning_it.bti",
+        };
+
+        static const char* warningPs[] = {
+            "warning_pstart.bti",
+            "warning_pstart_gm.bti",
+            "warning_pstart_fr.bti",
+            "warning_pstart_sp.bti",
+            "warning_pstart_it.bti",
+        };
+
+        ResTIMG* warningImg = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', warning[language]);
+        mWarning = JKR_NEW dDlst_2D_c(warningImg, 0, 0, FB_WIDTH, FB_HEIGHT, 255);
+
+        ResTIMG* warnStartImg = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', warningPs[language]);
+        mWarningStart = JKR_NEW dDlst_2D_c(warnStartImg, 0, 359, FB_WIDTH, 48, 255);
+
+        ResTIMG* progChoiceImg = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', choice[language]);
+        mProgressiveChoice = JKR_NEW dDlst_2D_c(progChoiceImg, 113, 143, 416, 210, 255);
+
+        ResTIMG* progYesImg = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', yes[language]);
+        mProgressiveYes = JKR_NEW dDlst_2D_c(progYesImg, 121, 352, 200, 72, 255);
+        mProgressiveYes->getPicture()->setWhite(JUtility::TColor(160, 160, 160, 255));
+
+        ResTIMG* progNoImg = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', no[language]);
+        mProgressiveNo = JKR_NEW dDlst_2D_c(progNoImg, 320, 352, 200, 72, 255);
+        mProgressiveNo->getPicture()->setWhite(JUtility::TColor(160, 160, 160, 255));
+
+        mProgressivePro = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', prog[language]);
+        mProgressiveInter = (ResTIMG*)mpPalLogoResCommand->getArchive()->getResource('DAT ', intr[language]);
+        mProgressiveSel = JKR_NEW dDlst_2D_c(mProgressivePro, 153, 309, 336, 88, 255);
+    } else {
+        ResTIMG* warningImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 10);
+        mWarning = JKR_NEW dDlst_2D_c(warningImg, 0, 0, FB_WIDTH, FB_HEIGHT, 255);
+
+        ResTIMG* warnStartImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 11);
+        mWarningStart = JKR_NEW dDlst_2D_c(warnStartImg, 0, 359, FB_WIDTH, 48, 255);
+
+        ResTIMG* progChoiceImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 5);
+        mProgressiveChoice = JKR_NEW dDlst_2D_c(progChoiceImg, 113, 281, 416, 72, 255);
+
+        ResTIMG* progYesImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 9);
+        mProgressiveYes = JKR_NEW dDlst_2D_c(progYesImg, 211, 372, 80, 32, 255);
+        mProgressiveYes->getPicture()->setWhite(JUtility::TColor(160, 160, 160, 255));
+
+        ResTIMG* progNoImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 7);
+        mProgressiveNo = JKR_NEW dDlst_2D_c(progNoImg, 350, 372, 80, 32, 255);
+        mProgressiveNo->getPicture()->setWhite(JUtility::TColor(160, 160, 160, 255));
+
+        mProgressivePro = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 8);
+        mProgressiveInter = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 6);
+        mProgressiveSel = JKR_NEW dDlst_2D_c(mProgressivePro, 153, 309, 336, 88, 255);
+    }
+
+#elif VERSION == VERSION_GCN_PAL
     u8 language = getPalLanguage();
     if (language >= 5) {
         language = 0;
@@ -1395,7 +1517,30 @@ void dScnLogo_c::dvdDataLoad() {
     mpButtonCommand = aramMount(BUTTON_RES_PATH, mDoExt_getJ2dHeap());
     mpCardIconCommand = aramMount(ICON_RES_PATH, mDoExt_getJ2dHeap());
 
-    #if VERSION == VERSION_GCN_PAL
+    #if TARGET_PC
+    if (getGameVersion() == GameVersion::GcnPal) {
+        switch (getPalLanguage()) {
+        case 1:
+            mpBmgResCommand = onMemMount("/res/Msgde/bmgres.arc");
+            break;
+        case 2:
+            mpBmgResCommand = onMemMount("/res/Msgfr/bmgres.arc");
+            break;
+        case 3:
+            mpBmgResCommand = onMemMount("/res/Msgsp/bmgres.arc");
+            break;
+        case 4:
+            mpBmgResCommand = onMemMount("/res/Msgit/bmgres.arc");
+            break;
+        case 0:
+        default:
+            mpBmgResCommand = onMemMount("/res/Msguk/bmgres.arc");
+            break;
+        }
+    } else {
+        mpBmgResCommand = onMemMount(MSG_PATH);
+    }
+    #elif VERSION == VERSION_GCN_PAL
     switch (getPalLanguage()) {
     case 1:
         mpBmgResCommand = onMemMount("/res/Msgde/bmgres.arc");
@@ -1435,7 +1580,10 @@ void dScnLogo_c::dvdDataLoad() {
     mpMsgResCommand[1] = aramMount(MSG_RES1_PATH, mDoExt_getJ2dHeap());
     mpMsgResCommand[2] = aramMount(MSG_RES2_PATH, mDoExt_getJ2dHeap());
     mpMsgResCommand[3] = aramMount(MSG_RES3_PATH, mDoExt_getJ2dHeap());
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+    const auto res4Path = versionSelect<const char*>({{GameVersion::GcnJpn, "/res/Layout/msgres04.arc"}}, "/res/Layout/msgres04F.arc");
+    mpMsgResCommand[4] = aramMount( res4Path, mDoExt_getJ2dHeap());
+#elif VERSION == VERSION_GCN_JPN
     mpMsgResCommand[4] = aramMount("/res/Layout/msgres04.arc", mDoExt_getJ2dHeap());
 #else
     mpMsgResCommand[4] = aramMount("/res/Layout/msgres04F.arc", mDoExt_getJ2dHeap());
@@ -1445,7 +1593,23 @@ void dScnLogo_c::dvdDataLoad() {
 
     mpMain2DCommand = onMemMount(MAIN2D_PATH);
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+    const auto fontResPath = versionSelect<const char*>(
+        {
+            {GameVersion::GcnJpn, "/res/Fontjp/fontres.arc"},
+            {GameVersion::GcnPal, "/res/Fonteu/fontres.arc"},
+        }, "/res/Fontus/fontres.arc");
+    const auto fontRubyPath = versionSelect<const char*>(
+        {
+            {GameVersion::GcnJpn, "/res/Fontjp/rubyres.arc"},
+            {GameVersion::GcnPal, "/res/Fonteu/rubyres.arc"},
+        }, "/res/Fontus/rubyres.arc");
+
+    // Note: GCN_JPN mounts this archive as tail instead of head.
+    // I'm guessing this is fine since we have more RAM.
+    mpFontResCommand = onMemMount(fontResPath);
+    mpRubyResCommand = onMemMount(fontRubyPath);
+#elif VERSION == VERSION_GCN_JPN
     mpFontResCommand = mDoDvdThd_mountXArchive_c::create("/res/Fontjp/fontres.arc", 1, JKRArchive::MOUNT_MEM, NULL);
     mpRubyResCommand = onMemMount("/res/Fontjp/rubyres.arc");
 #elif VERSION == VERSION_GCN_PAL
@@ -1545,7 +1709,7 @@ static int dScnLogo_IsDelete(dScnLogo_c* i_this) {
     return 1;
 }
 
-#if VERSION == VERSION_GCN_PAL || PLATFORM_WII || PLATFORM_SHIELD
+#if TARGET_PC || VERSION == VERSION_GCN_PAL || PLATFORM_WII || PLATFORM_SHIELD
 u8 dScnLogo_c::getPalLanguage() {
     u8 language;
 

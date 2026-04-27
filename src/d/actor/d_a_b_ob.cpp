@@ -2725,7 +2725,16 @@ static void demo_camera(b_ob_class* i_this) {
 
             for (int i = 0; i < 5; i++) {
                 static u16 ex_eff[] = {dPa_RM(ID_ZI_S_OI_CONVERGE_FILTER), dPa_RM(ID_ZI_S_OI_CONVERGE_FILTEROUT), dPa_RM(ID_ZI_S_OI_CONVERGE_HIDE), dPa_RM(ID_ZI_S_OI_CONVERGE_POLYGON_A), dPa_RM(ID_ZI_S_OI_CONVERGE_POLYGON_B)};
-                dComIfGp_particle_set(ex_eff[i], &room_pos, NULL, &sc);
+
+                #if TARGET_PC
+                if (i == 0) {
+                    static const cXyz effWideScale = {mDoGph_gInf_c::getAspect() * 10.0f, 10.0f, 10.0f};
+                    dComIfGp_particle_set(ex_eff[i], &room_pos, NULL, &effWideScale);
+                } else
+                #endif
+                {
+                    dComIfGp_particle_set(ex_eff[i], &room_pos, NULL, &sc);
+                }
             }
 
             i_this->mDemoCamEye.set(-4820.0f, -18600.0f, -510.0f);

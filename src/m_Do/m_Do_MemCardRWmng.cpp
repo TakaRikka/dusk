@@ -11,6 +11,8 @@
 #include <cstdio>
 #include <cstring>
 
+#include "dusk/version.hpp"
+
 #if VERSION == VERSION_GCN_JPN
 #define HEADER_TITLE   "ゼルダの伝説 ﾄﾜｲﾗｲﾄﾌﾟﾘﾝｾｽ"
 #define HEADER_COMMENT "%d月%d日のセーブデータです"
@@ -313,12 +315,44 @@ s32 mDoMemCdRWm_StoreBannerNAND(NANDFileInfo* file) {
 #endif
 
 static void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
+#if !TARGET_PC
     snprintf(header->mTitle, sizeof(header->mTitle), HEADER_TITLE);
+#endif
 
     OSCalendarTime time;
     OSTicksToCalendarTime(OSGetTime(), &time);
 
-#if VERSION == VERSION_GCN_PAL
+#if TARGET_PC
+    if (dusk::version::isRegionPal()) {
+        snprintf(header->mTitle, sizeof(header->mTitle), HEADER_TITLE);
+
+        switch (dComIfGs_getPalLanguage()) {
+        case dSv_player_config_c::LANGUAGE_ENGLISH:
+            snprintf(header->mComment, sizeof(header->mComment), "%d/%d Save Data", time.mon + 1, time.mday);
+            break;
+        case dSv_player_config_c::LANGUAGE_GERMAN:
+            snprintf(header->mComment, sizeof(header->mComment), "%d/%d Spielstand", time.mday, time.mon + 1);
+            break;
+        case dSv_player_config_c::LANGUAGE_FRENCH:
+            snprintf(header->mComment, sizeof(header->mComment), "Donn%ces de jeu %d/%d", 0xE9, time.mday, time.mon + 1);
+            break;
+        case dSv_player_config_c::LANGUAGE_SPANISH:
+            snprintf(header->mComment, sizeof(header->mComment), "Datos guardados el %d/%d", time.mday, time.mon + 1);
+            break;
+        case dSv_player_config_c::LANGUAGE_ITALIAN:
+            snprintf(header->mComment, sizeof(header->mComment), "Dati salvati: %d/%d", time.mday, time.mon + 1);
+            break;
+        }
+    } else if (dusk::version::isRegionUsa()) {
+        snprintf(header->mTitle, sizeof(header->mTitle), HEADER_TITLE);
+
+        snprintf(header->mComment, sizeof(header->mComment), HEADER_COMMENT, time.mon + 1, time.mday);
+    } else {
+        // TODO JPN SHIFT-JIS
+        // snprintf(header->mTitle, sizeof(header->mTitle), "ゼルダの伝説 ﾄﾜｲﾗｲﾄﾌﾟﾘﾝｾｽ");
+        // snprintf(header->mComment, sizeof(header->mComment), "%d月%d日のセーブデータです", time.mon + 1, time.mday);
+    }
+#elif VERSION == VERSION_GCN_PAL
     switch (dComIfGs_getPalLanguage()) {
     case dSv_player_config_c::LANGUAGE_ENGLISH:
         snprintf(header->mComment, sizeof(header->mComment), "%d/%d Save Data", time.mon + 1, time.mday);

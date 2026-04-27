@@ -369,18 +369,17 @@ JKRHeap* daPy_anmHeap_c::setAnimeHeap() {
 #if !PLATFORM_WII
 #if TARGET_PC
 #include "dusk/dvd_asset.hpp"
+using GameVersion = dusk::version::GameVersion;
 static const u8* l_sightDL_get() { 
     static u8 buf[0x89];
     static bool _ = (
         dusk::LoadDolAsset(
             buf,
-            #if VERSION == VERSION_GCN_PAL
-            0x803BBDA0,
-            #elif VERSION == VERSION_GCN_JPN
-            0x803B4220,
-            #elif VERSION == VERSION_GCN_USA
-            0x803BA0C0,
-            #endif
+{
+            {GameVersion::GcnUsa, 0x803BA0C0},
+            {GameVersion::GcnPal, 0x803BBDA0},
+            {GameVersion::GcnJpn, 0x803B4220}
+            },
             0x89
         ),
         true
@@ -421,13 +420,7 @@ void daPy_sightPacket_c::draw() {
 
 void daPy_sightPacket_c::setSight() {
     Vec proj;
-    
-    #if TARGET_PC
-    mDoLib_project(&mPos, &proj, {0, 0, FB_WIDTH, FB_HEIGHT});
-    #else
     mDoLib_project(&mPos, &proj);
-    #endif
-
     mDoMtx_stack_c::transS(proj.x, proj.y, proj.z);
     mDoMtx_stack_c::scaleM(32.0f, 32.0f, 32.0f);
     mDoMtx_copy(mDoMtx_stack_c::get(), mProjMtx);

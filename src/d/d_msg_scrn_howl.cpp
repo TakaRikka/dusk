@@ -20,6 +20,7 @@
 #include "Z2AudioLib/Z2WolfHowlMgr.h"
 
 #if TARGET_PC
+#include "dusk/frame_interpolation.h"
 #include "dusk/settings.h"
 #endif
 
@@ -580,9 +581,14 @@ void dMsgScrnHowl_c::drawWave() {
                 f17 = local_60;
                 f18 = local_64;
             } else {
-                field_0x2134++;
-                if (field_0x2134 > 30) {
-                    field_0x2134 = 0;
+#if TARGET_PC
+                if (dusk::frame_interp::get_ui_tick_pending())
+#endif
+                {
+                    field_0x2134++;
+                    if (field_0x2134 > 30) {
+                        field_0x2134 = 0;
+                    }
                 }
                 if (field_0x2134 < 15) {
                     local_dc = field_0x2134 / 15.0f;
@@ -607,17 +613,10 @@ void dMsgScrnHowl_c::drawGuide() {
     J2DGrafContext* grafContext = dComIfGp_getCurrentGrafPort();
     Vec local_b0 = field_0x128;
     Vec local_bc = field_0x140;
-#if TARGET_PC
-    grafContext->scissor(
-        (local_b0.x - mDoGph_gInf_c::getMinXF()) / (mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getWidth()),
-        field_0x2118, (local_bc.x - local_b0.x) / (mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getWidth()),
-        field_0x2120);
-#else
     grafContext->scissor(
         (local_b0.x - mDoGph_gInf_c::getMinXF()) / (mDoGph_gInf_c::getWidthF() / FB_WIDTH),
         field_0x2118, (local_bc.x - local_b0.x) / (mDoGph_gInf_c::getWidthF() / FB_WIDTH),
         field_0x2120);
-#endif
     grafContext->setScissor();
     f32 local_cc = mpLineH[0]->getGlobalPosX();
     s16 sVar12 = 0;
@@ -745,19 +744,11 @@ void dMsgScrnHowl_c::drawGuide2() {
     }
     Vec local_58 = field_0x128;
     Vec local_64 = field_0x140;
-#if TARGET_PC
-    f32 local_70 = mDoGph_gInf_c::getHeightF() / mDoGph_gInf_c::getHeight();
-    grafContext->scissor(
-        (local_58.x - mDoGph_gInf_c::getMinXF()) / (mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getWidth()),
-        field_0x2118, (local_64.x - local_58.x) / (mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getWidth()),
-        field_0x2120);
-#else
     f32 local_70 = mDoGph_gInf_c::getHeightF() / mDoGph_gInf_c::getHeight();
     grafContext->scissor(
         (local_58.x - mDoGph_gInf_c::getMinXF()) / (mDoGph_gInf_c::getWidthF() / FB_WIDTH),
         field_0x2118, (local_64.x - local_58.x) / (mDoGph_gInf_c::getWidthF() / FB_WIDTH),
         field_0x2120);
-#endif
     grafContext->setScissor();
     f32 local_74 = mpLineH[0]->getGlobalPosX();
     s16 local_134 = 0;
@@ -859,15 +850,9 @@ void dMsgScrnHowl_c::drawEffect() {
     Vec vec1 = field_0x128;
     Vec vec2 = field_0x140;
     mDoGph_gInf_c::getHeightF();
-#if TARGET_PC
-    grafContext->scissor(
-        (vec1.x - mDoGph_gInf_c::getMinXF()) / (mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getWidth()), field_0x2118,
-        12.0f + ((vec2.x - vec1.x) / (mDoGph_gInf_c::getWidthF() / mDoGph_gInf_c::getWidth())), field_0x2120);
-#else
     grafContext->scissor(
         (vec1.x - mDoGph_gInf_c::getMinXF()) / (mDoGph_gInf_c::getWidthF() / FB_WIDTH), field_0x2118,
         12.0f + ((vec2.x - vec1.x) / (mDoGph_gInf_c::getWidthF() / FB_WIDTH)), field_0x2120);
-#endif
     grafContext->setScissor();
     u8 timer = daAlink_getAlinkActorClass()->getWolfHowlMgrP()->getReleaseTimer();
     u8 screenAlpha = mpScreen->search(MULTI_CHAR('line00'))->getAlpha();

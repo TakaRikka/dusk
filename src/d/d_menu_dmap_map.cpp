@@ -11,6 +11,9 @@
 #include "d/d_menu_dmap_map.h"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_graphic.h"
+#if TARGET_PC
+#include <dolphin/gx/GXExtra.h>
+#endif
 
 struct dMdm_HIO_prm_res_dst_s {
     static void* m_res;
@@ -291,6 +294,9 @@ void dMenu_DmapMap_c::_create(u16 param_0, u16 param_1, u16 param_2, u16 param_3
 void dMenu_DmapMap_c::_delete() {
     for (int i = 0; i < 2; i++) {
         if (mMapImage_p[i] != NULL) {
+#if TARGET_PC
+            GXDestroyCopyTex(mMapImage_p[i]);
+#endif
             JKR_DELETE_ARRAY(mMapImage_p[i]);
         }
 

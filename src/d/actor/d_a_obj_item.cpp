@@ -16,6 +16,10 @@
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_mtx.h"
 
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#endif
+
 static f32 Reflect(cXyz* i_vec, cBgS_PolyInfo const& i_polyinfo, f32 i_scale) {
     cM3dGPla plane;
 
@@ -30,6 +34,27 @@ static f32 Reflect(cXyz* i_vec, cBgS_PolyInfo const& i_polyinfo, f32 i_scale) {
 
     return 0.0f;
 }
+
+#if TARGET_PC
+static void d_a_obj_item_interp_callback(bool isSimFrame, void* pUserWork) {
+    daItem_c* item = static_cast<daItem_c*>(pUserWork);
+    if (item == NULL || item->mpModel == NULL || !item->chkDraw()) {
+        return;
+    }
+    item->setTevStr();
+    if (item->mpBrkAnm != NULL) {
+        s8 tevFrm = item->getTevFrm();
+        if (tevFrm != -1) {
+            item->mpBrkAnm->entry(item->mpModel->getModelData(), tevFrm);
+        } else {
+            item->mpBrkAnm->entry(item->mpModel->getModelData());
+        }
+    }
+    if (item->chkFlag(4)) {
+        fopAcM_setEffectMtx(item, item->mpModel->getModelData());
+    }
+}
+#endif
 
 const daItemBase_data& daItemBase_c::getData() {
     return m_data;
@@ -353,6 +378,10 @@ int daItem_c::_daItem_draw() {
         return 1;
     }
 
+#if TARGET_PC
+    dusk::frame_interp::add_interpolation_callback(&d_a_obj_item_interp_callback, this);
+#endif
+
     if (chkDraw()) {
         return DrawBase();
     }
@@ -390,6 +419,9 @@ void daItem_c::procMainNormal() {
         cLib_chaseF(&scale.z, mItemScale.z, step_z);
     }
 
+    #if TARGET_PC
+    if (!dusk::getSettings().game.enableIndefiniteItemDrops) {
+    #endif
     if (mWaitTimer == 0) {
         if (mDisappearTimer == 0) {
             deleteItem();
@@ -399,6 +431,9 @@ void daItem_c::procMainNormal() {
             changeDraw();
         }
     }
+    #if TARGET_PC
+    }
+    #endif
 
     mCcCyl.SetC(current.pos);
     dComIfG_Ccsp()->Set(&mCcCyl);
@@ -1058,9 +1093,16 @@ int daItem_c::CountTimer() {
     if (checkCountTimer()) {
         if (mWaitTimer > 0) {
             mWaitTimer--;
-        } else if (mDisappearTimer > 0) {
+        }
+        #if TARGET_PC
+        else if (!dusk::getSettings().game.enableIndefiniteItemDrops && mDisappearTimer > 0) {
             mDisappearTimer--;
         }
+        #else
+        else if (mDisappearTimer > 0) {
+            mDisappearTimer--;
+        }
+        #endif
     }
 
     cLib_calcTimer<u8>(&mBoomWindTgTimer);

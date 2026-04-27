@@ -101,10 +101,6 @@ public:
 
     void setDrawDoneMethod(EDrawDone drawDone) { mDrawDoneMethod = drawDone; }
     void setFader(JUTFader* fader) { mFader = fader; }
-#ifdef TARGET_PC
-    // For frame interpolation
-    void setFaderSimSteps(u32 steps);
-#endif
     void resetFader() { setFader(NULL); }
     JUTFader* getFader() const { return mFader; }
     void setClearColor(JUtility::TColor color) { mClearColor = color; }

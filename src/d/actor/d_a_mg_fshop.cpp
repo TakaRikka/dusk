@@ -5,14 +5,15 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
+#include "Z2AudioLib/Z2Instances.h"
+#include "d/actor/d_a_mg_fish.h"
 #include "d/actor/d_a_mg_fshop.h"
 #include "d/actor/d_a_npc_henna.h"
-#include "d/actor/d_a_mg_fish.h"
 #include "d/actor/d_a_player.h"
-#include "f_op/f_op_camera_mng.h"
-#include "d/d_timer.h"
 #include "d/d_s_play.h"
-#include "Z2AudioLib/Z2Instances.h"
+#include "d/d_timer.h"
+#include "dusk/version.hpp"
+#include "f_op/f_op_camera_mng.h"
 
 #if TARGET_PC
 #include "dusk/gyro.h"
@@ -761,6 +762,11 @@ static void koro2_game(fshop_class* i_this) {
             sp5C.x = mDoCPd_c::getStickX3D(PAD_1);
             sp5C.y = 0.0f;
             sp5C.z = mDoCPd_c::getStickY(PAD_1);
+#if TARGET_PC
+            if (dusk::getSettings().game.enableMirrorMode) {
+                sp5C.x = -sp5C.x;
+            }
+#endif
             MtxPosition(&sp5C, &sp68);
 
             f32 reg_f31 = sp68.x;
@@ -782,20 +788,15 @@ static void koro2_game(fshop_class* i_this) {
                 reg_f30 = 0.0f;
             }
 
+            s16 gyro_ax = 0;
+            s16 gyro_az = 0;
 #if TARGET_PC
             if (dusk::getSettings().game.enableGyroRollgoal) {
-                s16 rg_add_x;
-                s16 rg_add_z;
-                dusk::gyro::rollgoalTableOffset(rg_add_x, rg_add_z);
-                s16 tgt_x = static_cast<s16>(reg_f30 * (-6000.0f + JREG_F(7))) + rg_add_x;
-                s16 tgt_z = static_cast<s16>(reg_f31 * (-6000.0f + JREG_F(8))) + rg_add_z;
-                cLib_addCalcAngleS2(&i_this->field_0x4020.x, tgt_x, 4, 0x200);
-                cLib_addCalcAngleS2(&i_this->field_0x4020.z, tgt_z, 4, 0x200);
+                dusk::gyro::rollgoalTableOffset(gyro_ax, gyro_az);
             }
-#else
-            cLib_addCalcAngleS2(&i_this->field_0x4020.x, reg_f30 * (-6000.0f + JREG_F(7)), 4, 0x200);
-            cLib_addCalcAngleS2(&i_this->field_0x4020.z, reg_f31 * (-6000.0f + JREG_F(8)), 4, 0x200);
 #endif
+            cLib_addCalcAngleS2(&i_this->field_0x4020.x, reg_f30 * (-6000.0f + JREG_F(7)) + gyro_ax, 4, 0x200);
+            cLib_addCalcAngleS2(&i_this->field_0x4020.z, reg_f31 * (-6000.0f + JREG_F(8)) + gyro_az, 4, 0x200);
         }
 #if TARGET_PC
         if (i_this->field_0x4010 != 2) {
@@ -1742,7 +1743,18 @@ static int daFshop_Create(fopAc_ac_c* actor) {
         fopAcM_createChild(fpcNm_FSHOP_e, fopAcM_GetID(actor), 0xFFFFFF23, &actor->current.pos, fopAcM_GetRoomNo(actor), NULL, NULL, -1, NULL);
 
         u8 sp10;
-#if VERSION == VERSION_GCN_PAL || VERSION == VERSION_WII_PAL
+#if TARGET_PC
+        if (dusk::version::isRegionPal()) {
+            if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH) {
+                sp10 = 2;
+            } else {
+                sp10 = 0;
+            }
+        } else {
+            sp10 = 1;
+        }
+
+#elif VERSION == VERSION_GCN_PAL || VERSION == VERSION_WII_PAL
         if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH) {
             sp10 = 2;
         } else {

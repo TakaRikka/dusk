@@ -130,7 +130,7 @@ BOOL daAlink_c::setBodyAngleToCamera() {
         }
 
 #if TARGET_PC
-        if (dusk::getSettings().game.enableGyroAim && checkGyroAimItemContext()) {
+        if (dusk::getSettings().game.enableGyroAim && checkGyroAimContext()) {
             f32 gyro_scale = 1.0f;
             if (checkWolfEyeUp()) {
                 gyro_scale *= 0.6f;
@@ -142,17 +142,7 @@ BOOL daAlink_c::setBodyAngleToCamera() {
 
             f32 gy_yaw = 0.f;
             f32 gy_pitch = 0.f;
-            dusk::gyro::consumeAimDeltas(gy_yaw, gy_pitch);
-            
-            if (dusk::getSettings().game.gyroAimInvertPitch) {
-                gy_pitch = -gy_pitch;
-            }
-            if (dusk::getSettings().game.gyroAimInvertYaw) {
-                gy_yaw = -gy_yaw;
-            }
-            if (dusk::getSettings().game.enableMirrorMode) {
-                gy_yaw = -gy_yaw;
-            }
+            dusk::gyro::getAimDeltas(gy_yaw, gy_pitch);
 
             shape_angle.y = shape_angle.y + cM_rad2s(gy_yaw * gyro_scale);
             sp8 = sp8 + cM_rad2s(gy_pitch * gyro_scale);

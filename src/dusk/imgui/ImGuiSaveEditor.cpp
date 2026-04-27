@@ -4,11 +4,13 @@
 
 #include "ImGuiConsole.hpp"
 #include "ImGuiSaveEditor.hpp"
+#include "ImGuiEventFlags.hpp"
 
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
 #include "d/d_meter2_info.h"
 #include "d/d_save.h"
+#include "d/actor/d_a_player.h"
 
 #include <map>
 
@@ -578,20 +580,21 @@ namespace dusk {
 
 
         if (ImGui::BeginCombo("Clothes", itemMap.find(statusA.mSelectEquip[0])->second.m_name.c_str())) {
-            if (ImGui::Selectable("None")) {
-                statusA.mSelectEquip[0] = dItemNo_NONE_e;
-            }
             if (ImGui::Selectable("Ordon Clothes")) {
-                statusA.mSelectEquip[0] = dItemNo_WEAR_CASUAL_e;
+                dMeter2Info_setCloth(dItemNo_WEAR_CASUAL_e, false);
+                daPy_getPlayerActorClass()->setClothesChange(0);
             }
             if (ImGui::Selectable("Hero's Clothes")) {
-                statusA.mSelectEquip[0] = dItemNo_WEAR_KOKIRI_e;
+                dMeter2Info_setCloth(dItemNo_WEAR_KOKIRI_e, false);
+                daPy_getPlayerActorClass()->setClothesChange(0);
             }
             if (ImGui::Selectable("Zora Armor")) {
-                statusA.mSelectEquip[0] = dItemNo_WEAR_ZORA_e;
+                dMeter2Info_setCloth(dItemNo_WEAR_ZORA_e, false);
+                daPy_getPlayerActorClass()->setClothesChange(0);
             }
             if (ImGui::Selectable("Magic Armor")) {
-                statusA.mSelectEquip[0] = dItemNo_ARMOR_e;
+                dMeter2Info_setCloth(dItemNo_ARMOR_e, false);
+                daPy_getPlayerActorClass()->setClothesChange(0);
             }
             ImGui::EndCombo();
         }
@@ -1344,6 +1347,51 @@ namespace dusk {
         }
     }
 
+    template <typename T>
+    concept FlagIter = requires(T t) {
+        ++t;
+        --t;
+        t + 1;
+        t < t;
+        { t->flagID } -> std::convertible_to<u16>;
+    };
+
+    template <typename T>
+    concept FlagTester = requires(T t, u16 flagID) {
+        { t(flagID) } -> std::convertible_to<bool>;
+    };
+
+    static void sortByFlags(FlagIter auto begin, FlagIter auto end, FlagTester auto&& flagTester) {
+        if (begin == end) return;
+
+        FlagIter auto fullEnd = end;
+
+        // We want to find the location of where we can swap our `On` flags to.
+        // We're gonna put the `Off` bits first, and the `On` bits last. 0 < 1
+        // We can achieve this by skipping all the `On` bits at the end.
+
+        // backtrack until we find a bit that is off
+        while (begin < --end && flagTester(end->flagID)) {
+            // move the end pointer back while we find on bits
+        }
+
+        // end should now be pointing to a bit that is off
+        while (begin < end) {
+            // if there's a flag that's on
+            if (flagTester(begin->flagID)) {
+                // move it to the end
+                std::rotate(begin, begin + 1, fullEnd);
+                // move back the end of where we're checking
+                --end;
+                // begin will now point to the next piece of data
+                // because we've rotated the data >= begin to the left
+            } else {
+                // not on, check next flag
+                ++begin;
+            }
+        }
+    }
+
     void ImGuiSaveEditor::drawFlagsTab() {
         if (ImGui::TreeNode("Current Region Flags")) {
             dSv_memBit_c& membit = g_dComIfG_gameInfo.info.mMemory.mBit;
@@ -1419,20 +1467,141 @@ namespace dusk {
 
         if (ImGui::TreeNode("Event Flags")) {
             dSv_event_c& event = dComIfGs_getSaveData()->mEvent;
-            for (int e = 0; e < 255; e++) {
-                ImGui::Text("%03d ", e);
-                ImGui::SameLine(80.0f);
-                for (int i = 7; i >= 0; i--) {
-                    bool flag = event.mEvent[e] & (1 << i);
-                    if (ImGui::Checkbox(fmt::format("##event{0}{1}", e, i).c_str(), &flag)) {
-                        if (flag)
-                            event.mEvent[e] |= (1 << i);
-                        else
-                            event.mEvent[e] &= ~(1 << i);
+
+            static ImGuiTextFilter filter;
+            filter.Draw(); // Search bar
+
+            ImVec2 flagTableSize = {700, 400};
+            if (ImGui::BeginTable("Events", 4,
+                                  ImGuiTableFlags_ScrollY | ImGuiTableFlags_ScrollX | ImGuiTableFlags_Sortable,
+                                  flagTableSize))
+            {
+                ImGui::TableSetupScrollFreeze(0, 1);
+                constexpr int COLUMN_FLAG = 0, COLUMN_NAME = 1, COLUMN_LOC = 2, COLUMN_DESC = 3;
+                ImGui::TableSetupColumn("Flag");
+                ImGui::TableSetupColumn("Name");
+                ImGui::TableSetupColumn("Location");
+                ImGui::TableSetupColumn("Description");
+                ImGui::TableHeadersRow();
+
+                // if we're sorting by whether the flag is set or not, 
+                // we want to re-sort whenever a flag updates, which means every frame cuz we don't know when it changes.
+                // otherwise only re-sort when the sort is dirty
+                if (auto* sort = ImGui::TableGetSortSpecs();
+                    sort != nullptr && sort->SpecsCount > 0 &&
+                    (sort->SpecsDirty || sort->Specs[0].ColumnIndex == COLUMN_FLAG))
+                {
+                    const auto column = sort->Specs[0].ColumnIndex;
+                    const auto direction = sort->Specs[0].SortDirection;
+
+                    // if we're sorting by flags, do special sort, regular sort is bad for sorting bools
+                    // it can swap values that are the same, and that causes constant reordering
+                    if (column == COLUMN_FLAG) {
+                        const auto testEventFunc = [&event](u16 flag) -> bool { return event.isEventBit(flag); };
+
+                        if (direction == ImGuiSortDirection_Ascending) {
+                            sortByFlags(std::begin(duskImguiEventFlags),
+                                        std::end(duskImguiEventFlags), testEventFunc);
+                        } else {
+                            sortByFlags(std::rbegin(duskImguiEventFlags),
+                                        std::rend(duskImguiEventFlags), testEventFunc);
+                        }
+                    } else {
+                        const auto cmp = [column](const duskImguiEventFlagEntry& l,
+                                                  const duskImguiEventFlagEntry& r) -> bool {
+                            switch (column) {
+                            case COLUMN_NAME: return l.flagName < r.flagName;
+                            case COLUMN_LOC:  return l.location < r.location;
+                            case COLUMN_DESC: return l.description < r.description;
+                            default:          return false;
+                            }
+                        };
+
+                        if (direction == ImGuiSortDirection_Ascending) {
+                            std::sort(std::begin(duskImguiEventFlags),
+                                      std::end(duskImguiEventFlags), cmp);
+                        } else {
+                            std::sort(std::rbegin(duskImguiEventFlags),
+                                      std::rend(duskImguiEventFlags), cmp);
+                        }
                     }
-                    ImGui::SameLine();
+
+                    sort->SpecsDirty = false;
                 }
-                ImGui::NewLine();
+                
+                for (const auto& e : duskImguiEventFlags) {
+                    if (!filter.PassFilter((e.location + "\n" + e.description + "\n" + e.flagName).c_str())) 
+                    {
+                        continue;
+                    }
+
+                    ImGui::TableNextRow();
+                    ImGui::TableNextColumn();
+                    bool flag = event.getEventReg(e.flagID);
+                    if (ImGui::Checkbox(("##" + e.flagName).c_str(), &flag)) {
+                        if (flag) {
+                            event.onEventBit(e.flagID);
+                        } else {
+                            event.offEventBit(e.flagID);
+                        }
+                    }
+
+                    ImGui::TableNextColumn();
+                    ImGuiStringViewText(e.flagName);
+                    ImGui::TableNextColumn();
+                    ImGuiStringViewText(e.location);
+                    ImGui::TableNextColumn();
+                    ImGuiStringViewText(e.description);
+                }
+                ImGui::EndTable();
+            }
+
+            // event values that are stored as u8s in the event flags
+            for (const auto& e : duskImguiU8Events) {
+                int v = event.mEvent[e.byteInd];
+                if (ImGui::InputInt(e.description, &v)) {
+                    v = std::clamp(v, 0, 0xff);
+                    event.mEvent[e.byteInd] = (u8)v;
+                }
+            }            
+
+            // event values that are stored as u16s in the event flags
+            for (const auto& e : duskImguiU16Events) {
+                int v = (event.mEvent[e.byteInd] << 8) | event.mEvent[e.byteInd + 1];
+                if (ImGui::InputInt(e.description, &v)) {
+                    v = std::clamp(v, 0, 0xffff);
+                    event.mEvent[e.byteInd] = (u8)(v >> 8);
+                    event.mEvent[e.byteInd + 1] = (u8)v;
+                }
+            }            
+
+            // event values that are stored as swapped u16s in the event flags
+            for (const auto& e : duskImguiSwappedU16Events) {
+                int v = (event.mEvent[e.byteInd + 1] << 8) | event.mEvent[e.byteInd];
+                if (ImGui::InputInt(e.description, &v)) {
+                    v = std::clamp(v, 0, 0xffff);
+                    event.mEvent[e.byteInd + 1] = (u8)(v >> 8);
+                    event.mEvent[e.byteInd] = (u8)v;
+                }
+            }
+
+            if (ImGui::TreeNode("Event Matrix")) {
+                for (int e = 0; e < 255; e++) {
+                    ImGui::Text("%03d ", e);
+                    ImGui::SameLine(80.0f);
+                    for (int i = 7; i >= 0; i--) {
+                        bool flag = event.mEvent[e] & (1 << i);
+                        if (ImGui::Checkbox(fmt::format("##event{0}{1}", e, i).c_str(), &flag)) {
+                            if (flag)
+                                event.mEvent[e] |= (1 << i);
+                            else
+                                event.mEvent[e] &= ~(1 << i);
+                        }
+                        ImGui::SameLine();
+                    }
+                    ImGui::NewLine();
+                }
+                ImGui::TreePop();
             }
             ImGui::TreePop();
         }

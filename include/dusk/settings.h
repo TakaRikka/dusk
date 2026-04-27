@@ -13,11 +13,25 @@ enum class BloomMode : int {
     Dusk = 2,
 };
 
+enum class GameLanguage : u8 {
+    English = OS_LANGUAGE_ENGLISH,
+    German = OS_LANGUAGE_GERMAN,
+    French = OS_LANGUAGE_FRENCH,
+    Spanish = OS_LANGUAGE_SPANISH,
+    Italian = OS_LANGUAGE_ITALIAN,
+};
+
 namespace config {
 template <>
 struct ConfigEnumRange<BloomMode> {
     static constexpr auto min = BloomMode::Off;
     static constexpr auto max = BloomMode::Dusk;
+};
+
+template <>
+struct ConfigEnumRange<GameLanguage> {
+    static constexpr auto min = GameLanguage::English;
+    static constexpr auto max = GameLanguage::Italian;
 };
 }
 
@@ -46,6 +60,8 @@ struct UserSettings {
     // Game settings
 
     struct {
+        ConfigVar<GameLanguage> language;
+
         // QoL
         ConfigVar<bool> enableQuickTransform;
         ConfigVar<bool> hideTvSettingsScreen;
@@ -61,19 +77,26 @@ struct UserSettings {
         ConfigVar<bool> noMissClimbing;
         ConfigVar<bool> fastTears;
         ConfigVar<bool> instantSaves;
+        ConfigVar<bool> instantText;
         ConfigVar<bool> sunsSong;
 
         // Preferences
         ConfigVar<bool> enableMirrorMode;
-        ConfigVar<bool> invertCameraXAxis;
         ConfigVar<bool> disableMainHUD;
+        ConfigVar<bool> pauseOnFocusLost;
+        ConfigVar<bool> enableLinkDollRotation;
+        ConfigVar<bool> enableAchievementNotifications;
+
 
         // Graphics
         ConfigVar<BloomMode> bloomMode;
         ConfigVar<float> bloomMultiplier;
-        ConfigVar<bool> enableWaterRefraction;
+        ConfigVar<bool> disableWaterRefraction;
         ConfigVar<bool> enableFrameInterpolation;
+        ConfigVar<int> internalResolutionScale;
         ConfigVar<int> shadowResolutionMultiplier;
+        ConfigVar<bool> enableDepthOfField;
+        ConfigVar<bool> enableMapBackground;
 
         // Audio
         ConfigVar<bool> noLowHpSound;
@@ -82,13 +105,29 @@ struct UserSettings {
         // Input
         ConfigVar<bool> enableGyroAim;
         ConfigVar<bool> enableGyroRollgoal;
-        ConfigVar<float> gyroAimSensitivityX;
-        ConfigVar<float> gyroAimSensitivityY;
-        ConfigVar<float> gyroRollgoalSensitivity;
-        ConfigVar<bool> gyroAimInvertPitch;
-        ConfigVar<bool> gyroAimInvertYaw;
+        ConfigVar<float> gyroSensitivityX;
+        ConfigVar<float> gyroSensitivityY;
+        ConfigVar<float> gyroSensitivityRollgoal;
+        ConfigVar<float> gyroSmoothing;
+        ConfigVar<float> gyroDeadband;
+        ConfigVar<bool> gyroInvertPitch;
+        ConfigVar<bool> gyroInvertYaw;
+        ConfigVar<bool> freeCamera;
+        ConfigVar<bool> invertCameraXAxis;
+        ConfigVar<bool> invertCameraYAxis;
+        ConfigVar<float> freeCameraSensitivity;
 
         // Cheats
+        ConfigVar<bool> infiniteHearts;
+        ConfigVar<bool> infiniteArrows;
+        ConfigVar<bool> infiniteBombs;
+        ConfigVar<bool> infiniteOil;
+        ConfigVar<bool> infiniteOxygen;
+        ConfigVar<bool> infiniteRupees;
+        ConfigVar<bool> enableIndefiniteItemDrops;
+        ConfigVar<bool> moonJump;
+        ConfigVar<bool> superClawshot;
+        ConfigVar<bool> alwaysGreatspin;
         ConfigVar<bool> enableFastIronBoots;
         ConfigVar<bool> canTransformAnywhere;
         ConfigVar<bool> fastSpinner;
@@ -99,6 +138,10 @@ struct UserSettings {
 
         // Controls
         ConfigVar<bool> enableTurboKeybind;
+
+        // Tools
+        ConfigVar<bool> speedrunMode;
+        ConfigVar<bool> liveSplitEnabled;
     } game;
 
     struct {
@@ -108,6 +151,8 @@ struct UserSettings {
         ConfigVar<bool> showPipelineCompilation;
         ConfigVar<bool> wasPresetChosen;
         ConfigVar<bool> enableCrashReporting;
+        ConfigVar<bool> duskMenuOpen;
+        ConfigVar<int> cardFileType;
     } backend;
 };
 
@@ -132,6 +177,7 @@ struct TransientSettings {
     CollisionViewSettings collisionView;
     bool skipFrameRateLimit;
     bool moveLinkActive;
+    bool stateShareLoadActive;
 };
 
 TransientSettings& getTransientSettings();

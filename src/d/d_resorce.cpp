@@ -102,11 +102,7 @@ static void setIndirectTex(J3DModelData* i_modelData) {
             texture->setResTIMG(i, *mDoGph_gInf_c::getFrameBufferTimg());
         }
         if (memcmp(textureName, "Zbuffer", 8) == 0) {
-#if !TARGET_PC
             texture->setResTIMG(i, *mDoGph_gInf_c::getZbufferTimg());
-#else
-            DuskLog.warn("Zbuffer texture binding not yet supported");
-#endif
         }
     }
 }
@@ -296,7 +292,11 @@ J3DModelData* dRes_info_c::loaderBasicBmd(u32 i_tag, void* i_data) {
         addWarpMaterial(modelData);
     }
 
-    if (i_tag == 'BMDR' || i_tag == 'BMWR') {
+    // FRAME INTERP NOTE: Always create shared DL buffers so we can use J3DMaterial::diff()
+#ifndef TARGET_PC
+    if (i_tag == 'BMDR' || i_tag == 'BMWR')
+#endif
+    {
         s32 result = modelData->newSharedDisplayList(J3DMdlFlag_UseSingleDL);
         if (result != kJ3DError_Success) {
             return NULL;

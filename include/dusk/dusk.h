@@ -6,7 +6,6 @@
 #include "aurora/gfx.h"
 
 extern AuroraInfo auroraInfo;
-extern const char* configPath;
 
 namespace dusk {
     extern AuroraStats lastFrameAuroraStats;

@@ -20,8 +20,9 @@ const u16 l_M_kusa05_RGBATEX__height = 31;
 
 #if TARGET_PC
 #include "dusk/dvd_asset.hpp"
-static u8* l_M_kusa05_RGBATEX_get() { static u8 buf[0x800]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x7680, 0x800), true); return buf; }
-static u8* l_M_Hijiki00TEX_get()    { static u8 buf[0x800]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x7E80, 0x800), true); return buf; }
+using GameVersion = dusk::version::GameVersion;
+static u8* l_M_kusa05_RGBATEX_get() { static u8 buf[0x800]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x7680}, {GameVersion::GcnPal, 0x7680}}, 0x800), true); return buf; }
+static u8* l_M_Hijiki00TEX_get()    { static u8 buf[0x800]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x7E80}, {GameVersion::GcnPal, 0x7E80}}, 0x800), true); return buf; }
 #define l_M_kusa05_RGBATEX (l_M_kusa05_RGBATEX_get())
 #define l_M_Hijiki00TEX    (l_M_Hijiki00TEX_get())
 #else
@@ -113,12 +114,14 @@ static u8 l_texCoord[160] = {
 };
 
 #if TARGET_PC
-static u8* l_M_Kusa_9qDL_get()     { static u8 buf[0xCB]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8B00, 0xCB),  true); return buf; }
-static u8* l_M_Kusa_9q_cDL_get()   { static u8 buf[0xCB]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8BE0, 0xCB),  true); return buf; }
-static u8* l_M_TenGusaDL_get()     { static u8 buf[0xD4]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8CC0, 0xD4),  true); return buf; }
-static u8* l_Tengusa_matDL_get()   { static u8 buf[0xA8]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8DA0, 0xA8),  true); return buf; }
-static u8* l_kusa9q_matDL_get()    { static u8 buf[0xA8]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8E60, 0xA8),  true); return buf; }
-static u8* l_kusa9q_l4_matDL_get() { static u8 buf[0xA8]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", 0x8F20, 0xA8),  true); return buf; }
+using GameVersion = dusk::version::GameVersion;
+
+static u8* l_M_Kusa_9qDL_get()     { static u8 buf[0xCB]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x8B00}, {GameVersion::GcnPal, 0x8B00}}, 0xCB),  true); return buf; }
+static u8* l_M_Kusa_9q_cDL_get()   { static u8 buf[0xCB]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x8BE0}, {GameVersion::GcnPal, 0x8BE0}}, 0xCB),  true); return buf; }
+static u8* l_M_TenGusaDL_get()     { static u8 buf[0xD4]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x8CC0}, {GameVersion::GcnPal, 0x8CC0}}, 0xD4),  true); return buf; }
+static u8* l_Tengusa_matDL_get()   { static u8 buf[0xA8]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x8DA0}, {GameVersion::GcnPal, 0x8DA0}}, 0xA8),  true); return buf; }
+static u8* l_kusa9q_matDL_get()    { static u8 buf[0xA8]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x8E60}, {GameVersion::GcnPal, 0x8E60}}, 0xA8),  true); return buf; }
+static u8* l_kusa9q_l4_matDL_get() { static u8 buf[0xA8]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x8F20}, {GameVersion::GcnPal, 0x8F20}}, 0xA8),  true); return buf; }
 #define l_M_Kusa_9qDL     (l_M_Kusa_9qDL_get())
 #define l_M_Kusa_9q_cDL   (l_M_Kusa_9q_cDL_get())
 #define l_M_TenGusaDL     (l_M_TenGusaDL_get())
@@ -491,11 +494,11 @@ dGrass_packet_c::dGrass_packet_c() {
 
 #if TARGET_PC
     GXInitTexObj(&mTexObj_l_M_kusa05_RGBATEX, l_M_kusa05_RGBATEX,
-        l_M_kusa05_RGBATEX__width, l_M_kusa05_RGBATEX__height, GX_TF_RGB5A3, GX_REPEAT, GX_CLAMP, GX_FALSE
+        l_M_kusa05_RGBATEX__width + 1, l_M_kusa05_RGBATEX__height + 1, GX_TF_RGB5A3, GX_REPEAT, GX_CLAMP, GX_FALSE
     );
 
     GXInitTexObj(&mTexObj_l_M_Hijiki00TEX, l_M_Hijiki00TEX,
-        l_M_Hijiki00TEX__width, l_M_Hijiki00TEX__height, GX_TF_RGB5A3, GX_REPEAT, GX_CLAMP, GX_FALSE
+        l_M_Hijiki00TEX__width + 1, l_M_Hijiki00TEX__height + 1, GX_TF_RGB5A3, GX_REPEAT, GX_CLAMP, GX_FALSE
     );
 #endif
 
@@ -643,18 +646,14 @@ void dGrass_packet_c::draw() {
             }
 
             if (var_r29->field_0x05 <= 3 || var_r29->field_0x05 >= 10) {
-#if TARGET_PC
-                GXLoadTexObj(&mTexObj_l_M_kusa05_RGBATEX, GX_TEXMAP0);
-#endif
+                IF_DUSK(GXLoadTexObj(&mTexObj_l_M_kusa05_RGBATEX, GX_TEXMAP0));
                 if (sp48 <= 3) {
                     GXCallDisplayList(mp_kusa9q_14_DL, m_kusa9q_DL_14_size);
                 } else {
                     GXCallDisplayList(mp_kusa9q_DL, m_kusa9q_DL_size);
                 }
             } else {
-#if TARGET_PC
-                GXLoadTexObj(&mTexObj_l_M_Hijiki00TEX, GX_TEXMAP0);
-#endif
+                IF_DUSK(GXLoadTexObj(&mTexObj_l_M_Hijiki00TEX, GX_TEXMAP0));
                 GXCallDisplayList(l_Tengusa_matDL, 0xA0);
             }
 
@@ -680,12 +679,14 @@ void dGrass_packet_c::draw() {
 
             while (var_r29 != NULL) {
                 if (var_r29->field_0x05 <= 3 || var_r29->field_0x05 >= 10) {
+                    IF_DUSK(GXLoadTexObj(&mTexObj_l_M_kusa05_RGBATEX, GX_TEXMAP0));
                     if (sp48 <= 2) {
                         GXCallDisplayList(mp_kusa9q_14_DL, m_kusa9q_DL_14_size);
                     } else {
                         GXCallDisplayList(mp_kusa9q_DL, m_kusa9q_DL_size);
                     }
                 } else {
+                    IF_DUSK(GXLoadTexObj(&mTexObj_l_M_Hijiki00TEX, GX_TEXMAP0));
                     GXCallDisplayList(l_Tengusa_matDL, 0xA0);
                 }
 
@@ -756,13 +757,13 @@ void dGrass_packet_c::draw() {
 #ifdef TARGET_PC
                     Mtx grass_mtx;
                     if (dusk::frame_interp::lookup_replacement(reinterpret_cast<const void*>(&var_r29->m_modelMtx), grass_mtx)) {
+                        cMtx_concat(j3dSys.getViewMtx(), grass_mtx, grass_mtx);
                         GXLoadPosMtxImm(grass_mtx, 0);
-                    } else {
+                    } else
 #endif
+                    {
                         GXLoadPosMtxImm(var_r29->m_modelMtx, 0);
-#ifdef TARGET_PC
                     }
-#endif
                     GXLoadNrmMtxImm(j3dSys.getViewMtx(), 0);
                     if (var_r29->field_0x05 <= 3 || var_r29->field_0x05 >= 10) {
                         if (var_r29->field_0x02 < -1) {
@@ -1018,7 +1019,7 @@ void dGrass_packet_c::update() {
                     cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), data_p->m_modelMtx);
                 }
 #ifdef TARGET_PC
-                dusk::frame_interp::record_final_mtx_raw(reinterpret_cast<const Mtx*>(&data_p->m_modelMtx), data_p->m_modelMtx);
+                dusk::frame_interp::record_final_mtx(mDoMtx_stack_c::get(), data_p->m_modelMtx);
 #endif
             }
         }

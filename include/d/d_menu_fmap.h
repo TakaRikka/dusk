@@ -75,7 +75,9 @@ public:
         /* 0x8 */ BE(u16) mAreaName;
         /* 0xA */ u8 mCount;
 #ifdef _MSVC_LANG
-        u8* __get_mRoomNos() const { return (u8*)(this + 1); }
+        // Room numbers start at offset 0xB (right after mCount), NOT at sizeof(data)=12.
+        // (u8*)(this+1) would give offset 12 because MSVC sizeof=12; use &mCount+1 instead.
+        u8* __get_mRoomNos() const { return (u8*)&mCount + 1; }
         __declspec(property(get = __get_mRoomNos)) u8* mRoomNos;
 #else
         /* 0xB */ u8 mRoomNos[0];

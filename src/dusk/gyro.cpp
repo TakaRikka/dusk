@@ -1,33 +1,47 @@
 #include "dusk/gyro.h"
 #include "d/actor/d_a_alink.h"
+#include <cmath>
 
 namespace dusk::gyro {
 namespace {
-// TODO: Make deadband and smoothing configurable
-constexpr float kDeadbandRadS           = 0.04f;
-constexpr float kSmoothAlpha            = 0.35f;
-constexpr s32   kRollgoalTableMaxOffset = 12000;
+constexpr s32   kRollgoalTableMaxOffset = 6500;
+constexpr float kGyroEmaAlphaMin = 0.05f;
+constexpr float kGyroEmaAlphaMax = 1.0f;
+// Smooth gravity separately so the yaw/roll blend doesn't twitch with raw accel noise.
+constexpr float kGravityEmaAlpha = 0.1f;
+constexpr float kMinGravityProjection = 0.2f;
+// Let roll contribute more strongly as the pad approaches an upright posture.
+constexpr float kRollAimBoostMax = 2.0f;
 
 bool  s_sensor_enabled        = false;
+bool  s_accel_enabled         = false;
+bool  s_was_aiming            = false;
+bool  s_have_gravity_baseline = false;
 float s_smooth_gx             = 0.0f;
 float s_smooth_gy             = 0.0f;
 float s_smooth_gz             = 0.0f;
+float s_gravity_y             = 0.0f;
+float s_gravity_z             = 0.0f;
+float s_baseline_gravity_y    = 0.0f;
+float s_baseline_gravity_z    = 0.0f;
 float s_yaw_rad               = 0.0f;
-float s_yaw_rad_pending       = 0.0f;
 float s_pitch_rad             = 0.0f;
-float s_pitch_rad_pending     = 0.0f;
 float s_roll_rad              = 0.0f;
 s32   s_rollgoal_ax           = 0;
 s32   s_rollgoal_az           = 0;
 
 void reset_filter_state() {
     s_smooth_gx = s_smooth_gy = s_smooth_gz = 0.0f;
-    s_yaw_rad_pending = s_pitch_rad_pending = s_roll_rad = 0.0f;
+    s_gravity_y = s_gravity_z = 0.0f;
+    s_baseline_gravity_y = s_baseline_gravity_z = 0.0f;
+    s_was_aiming = false;
+    s_have_gravity_baseline = false;
+    s_yaw_rad = s_pitch_rad = s_roll_rad = 0.0f;
     s_rollgoal_ax = s_rollgoal_az = 0;
 }
 
-float apply_deadband(float v) {
-    if (v > -kDeadbandRadS && v < kDeadbandRadS) {
+float apply_deadband(float v, float deadband_rad_s) {
+    if (v > -deadband_rad_s && v < deadband_rad_s) {
         return 0.0f;
     }
     return v;
@@ -35,11 +49,10 @@ float apply_deadband(float v) {
 }  // namespace
 
 bool s_sensor_keep_alive = false;
-
 bool get_sensor_keep_alive() { return s_sensor_keep_alive; }
 void set_sensor_keep_alive(bool value) { s_sensor_keep_alive = value; }
 
-bool queryGyroAimItemContext() {
+bool queryGyroAimContext() {
     if (!static_cast<bool>(dusk::getSettings().game.enableGyroAim)) {
         return false;
     }
@@ -49,17 +62,32 @@ bool queryGyroAimItemContext() {
         return false;
     }
 
-    return link->checkGyroAimItemContext() && dComIfGp_checkCameraAttentionStatus(link->field_0x317c, 0x10);
+    return link->checkGyroAimContext() && dComIfGp_checkCameraAttentionStatus(link->field_0x317c, 0x10);
 }
 
 void read(float dt) {
-    if (!s_sensor_keep_alive && !(dusk::getSettings().game.enableGyroAim && queryGyroAimItemContext())) {
+    const bool aim_active = queryGyroAimContext();
+    const bool aim_just_started = aim_active && !s_was_aiming;
+    const bool aim_just_ended = !aim_active && s_was_aiming;
+    s_was_aiming = aim_active;
+
+    if (!s_sensor_keep_alive && !aim_active) {
         if (s_sensor_enabled) {
             PADSetSensorEnabled(PAD_CHAN0, PAD_SENSOR_GYRO, FALSE);
             s_sensor_enabled = false;
         }
+        if (s_accel_enabled) {
+            PADSetSensorEnabled(PAD_CHAN0, PAD_SENSOR_ACCEL, FALSE);
+            s_accel_enabled = false;
+        }
         reset_filter_state();
         return;
+    }
+
+    if (aim_just_started || aim_just_ended) {
+        s_gravity_y = s_gravity_z = 0.0f;
+        s_baseline_gravity_y = s_baseline_gravity_z = 0.0f;
+        s_have_gravity_baseline = false;
     }
 
     if (!s_sensor_enabled) {
@@ -72,27 +100,78 @@ void read(float dt) {
         s_sensor_enabled = true;
     }
 
+    if (!s_accel_enabled && PADHasSensor(PAD_CHAN0, PAD_SENSOR_ACCEL) &&
+        PADSetSensorEnabled(PAD_CHAN0, PAD_SENSOR_ACCEL, TRUE))
+    {
+        // We only need accel for the gravity-aware yaw/roll mix.
+        s_accel_enabled = true;
+    }
+
     f32 gyro[3];
     if (!PADGetSensorData(PAD_CHAN0, PAD_SENSOR_GYRO, gyro, 3)) {
         return;
     }
 
-    s_smooth_gx += kSmoothAlpha * (gyro[0] - s_smooth_gx);
-    s_smooth_gy += kSmoothAlpha * (gyro[1] - s_smooth_gy);
-    s_smooth_gz += kSmoothAlpha * (gyro[2] - s_smooth_gz);
+    const float smooth_alpha = kGyroEmaAlphaMax + dusk::getSettings().game.gyroSmoothing * (kGyroEmaAlphaMin - kGyroEmaAlphaMax);
+    const float deadband = dusk::getSettings().game.gyroDeadband;
 
-    s_pitch_rad = apply_deadband(s_smooth_gx) * dt * dusk::getSettings().game.gyroAimSensitivityX;
-    s_yaw_rad   = apply_deadband(s_smooth_gy) * dt * dusk::getSettings().game.gyroAimSensitivityY;
-    s_roll_rad  = apply_deadband(s_smooth_gz) * dt * dusk::getSettings().game.gyroAimSensitivityX; // GYRO NOTE: Exposing Z sensitivity seems unusual, so I'm just using X
+    s_smooth_gx += smooth_alpha * (gyro[0] - s_smooth_gx);
+    s_smooth_gy += smooth_alpha * (gyro[1] - s_smooth_gy);
+    s_smooth_gz += smooth_alpha * (gyro[2] - s_smooth_gz);
 
-    s_pitch_rad_pending += s_pitch_rad;
-    s_yaw_rad_pending += s_yaw_rad;
+    const float pitch_rate = apply_deadband(s_smooth_gx, deadband);
+    const float yaw_rate = apply_deadband(s_smooth_gy, deadband);
+    const float roll_rate = apply_deadband(s_smooth_gz, deadband);
+
+    s_pitch_rad = -pitch_rate * dt * dusk::getSettings().game.gyroSensitivityX;
+    s_roll_rad  = roll_rate * dt * dusk::getSettings().game.gyroSensitivityX; // GYRO NOTE: Exposing Z sensitivity seems unusual, so I'm just using X
+
+    float horizontal_rate = yaw_rate;
+    if (aim_active && s_accel_enabled) {
+        f32 accel[3];
+        if (PADGetSensorData(PAD_CHAN0, PAD_SENSOR_ACCEL, accel, 3)) {
+            if (!s_have_gravity_baseline) {
+                s_gravity_y = accel[1];
+                s_gravity_z = accel[2];
+            } else {
+                s_gravity_y += kGravityEmaAlpha * (accel[1] - s_gravity_y);
+                s_gravity_z += kGravityEmaAlpha * (accel[2] - s_gravity_z);
+            }
+
+            // Compare the current gravity projection against the gravity vector from
+            // aim start so the user's resting hold angle becomes the neutral baseline.
+            const float gravity_yz_len = std::sqrt((s_gravity_y * s_gravity_y) + (s_gravity_z * s_gravity_z));
+            if (gravity_yz_len >= kMinGravityProjection) {
+                const float current_gravity_y = s_gravity_y / gravity_yz_len;
+                const float current_gravity_z = s_gravity_z / gravity_yz_len;
+
+                if (!s_have_gravity_baseline) {
+                    s_baseline_gravity_y = current_gravity_y;
+                    s_baseline_gravity_z = current_gravity_z;
+                    s_have_gravity_baseline = true;
+                }
+
+                const float yaw_weight =
+                    (s_baseline_gravity_y * current_gravity_y) + (s_baseline_gravity_z * current_gravity_z);
+                const float roll_weight =
+                    (s_baseline_gravity_y * current_gravity_z) - (s_baseline_gravity_z * current_gravity_y);
+                const float roll_mix = std::fabs(roll_weight);
+                const float roll_boost = 1.0f + (roll_mix * (kRollAimBoostMax - 1.0f));
+                horizontal_rate = (yaw_rate * yaw_weight) + (roll_rate * roll_weight * roll_boost);
+            }
+        }
+    }
+
+    s_yaw_rad = horizontal_rate * dt * dusk::getSettings().game.gyroSensitivityY;
+
+    s_pitch_rad = dusk::getSettings().game.gyroInvertPitch ? -s_pitch_rad : s_pitch_rad;
+    s_yaw_rad = dusk::getSettings().game.gyroInvertYaw ? -s_yaw_rad : s_yaw_rad;
+    s_yaw_rad = dusk::getSettings().game.enableMirrorMode ? -s_yaw_rad : s_yaw_rad;
 }
 
-void consumeAimDeltas(float& out_yaw_rad, float& out_pitch_rad) {
-    out_yaw_rad = s_yaw_rad_pending;
-    out_pitch_rad = s_pitch_rad_pending;
-    s_yaw_rad_pending = s_pitch_rad_pending = 0.0f;
+void getAimDeltas(float& out_yaw, float& out_pitch) {
+    out_yaw = s_yaw_rad;
+    out_pitch = s_pitch_rad;
 }
 
 void rollgoalTick(bool play_active, s16 camera_yaw) {
@@ -101,13 +180,14 @@ void rollgoalTick(bool play_active, s16 camera_yaw) {
         return;
     }
 
-    const float pitch_rad = s_pitch_rad * dusk::getSettings().game.gyroRollgoalSensitivity;
-    const float roll_rad = s_roll_rad * dusk::getSettings().game.gyroRollgoalSensitivity;
+    float pitch_rad = -s_pitch_rad * dusk::getSettings().game.gyroSensitivityRollgoal;
+    float roll_rad = s_roll_rad * dusk::getSettings().game.gyroSensitivityRollgoal;
+    roll_rad = dusk::getSettings().game.enableMirrorMode ? -roll_rad : roll_rad;
 
     s_rollgoal_az += cM_rad2s(roll_rad);
     cXyz in(roll_rad, 0.0f, pitch_rad);
     cXyz out;
-    cMtx_YrotS(*calc_mtx, static_cast<s16>(-camera_yaw));
+    cMtx_YrotS(*calc_mtx, -camera_yaw);
     MtxPosition(&in, &out);
 
     s_rollgoal_ax += cM_rad2s(out.z);
@@ -116,8 +196,8 @@ void rollgoalTick(bool play_active, s16 camera_yaw) {
     s_rollgoal_az = std::clamp(s_rollgoal_az, -kRollgoalTableMaxOffset, kRollgoalTableMaxOffset);
 }
 
-void rollgoalTableOffset(s16& out_add_x, s16& out_add_z) {
-    out_add_x = static_cast<s16>(s_rollgoal_ax);
-    out_add_z = static_cast<s16>(s_rollgoal_az);
+void rollgoalTableOffset(s16& out_ax, s16& out_az) {
+    out_ax = static_cast<s16>(s_rollgoal_ax);
+    out_az = static_cast<s16>(s_rollgoal_az);
 }
 }  // namespace dusk::gyro
