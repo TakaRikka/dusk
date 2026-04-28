@@ -111,6 +111,7 @@ void ImGuiAchievements::draw(bool& open) {
         {AchievementCategory::Collection, "Collection", ImVec4(0.3f, 0.85f, 0.4f, 1.0f)},
         {AchievementCategory::Challenge, "Challenge", ImVec4(1.0f, 0.65f, 0.15f, 1.0f)},
         {AchievementCategory::Minigame, "Minigame", ImVec4(0.5f, 0.85f, 1.0f, 1.0f)},
+        {AchievementCategory::Misc, "Misc", ImVec4(0.65f, 0.65f, 0.65f, 1.0f)},
         {AchievementCategory::Glitched, "Glitched", ImVec4(0.75f, 0.4f, 1.0f, 1.0f)},
     };
 

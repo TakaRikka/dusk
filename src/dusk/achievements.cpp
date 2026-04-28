@@ -8,6 +8,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_demo.h"
 #include "f_pc/f_pc_name.h"
+#include "f_op/f_op_actor_mng.h"
 
 #include <filesystem>
 #include <algorithm>
@@ -275,6 +276,21 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         },
         {
             {
+                "friendly_fire",
+                "Friendly Fire",
+                "Get hit by your own cannonball.",
+                AchievementCategory::Misc,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                if (AchievementSystem::get().hasSignal("iron_ball_hit_player")) {
+                    a.progress = 1;
+                }
+            },
+            {}
+        },
+        {
+            {
                 "back_in_time",
                 "Back in Time",
                 "Perform the Back in Time glitch to play on the title screen.",
@@ -441,6 +457,14 @@ void AchievementSystem::clearAll() {
     save();
 }
 
+void AchievementSystem::signal(const char* key) {
+    m_signals.insert(key);
+}
+
+bool AchievementSystem::hasSignal(const char* key) const {
+    return m_signals.count(key) > 0;
+}
+
 void AchievementSystem::clearOne(const char* key) {
     for (auto& e : m_entries) {
         if (std::string(e.achievement.key) == key) {
@@ -485,6 +509,7 @@ void AchievementSystem::tick() {
     for (auto& e : m_entries) {
         processEntry(e);
     }
+    m_signals.clear();
     if (m_dirty) {
         save();
         m_dirty = false;
