@@ -158,6 +158,8 @@ Window::Window(Rml::Element* parent, std::string_view id, std::function<void()> 
         {"border-radius", dp(BorderRadiusMedium)},
         {"border-color", rgba(ElevatedBorder)},
         {"background-color", rgba(WindowSurface)},
+        {"backdrop-filter", "blur(5dp)"},
+        {"box-shadow", "0 0 25dp 5dp"},
         {"overflow", "hidden"},
     });
 

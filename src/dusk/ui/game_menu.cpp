@@ -281,7 +281,6 @@ private:
                               {"justify-content", "center"},
                               {"box-sizing", "border-box"},
                               {"padding", "32dp"},
-                              {"background-color", rgba(ModalOverlay)},
                           });
         return screen;
     }

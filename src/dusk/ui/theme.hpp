@@ -12,7 +12,6 @@ struct Color {
 };
 
 inline constexpr Color Background1{12, 18, 17, 255};
-inline constexpr Color ModalOverlay{12, 18, 17, 229};
 inline constexpr Color Text{225, 236, 231, 255};
 inline constexpr Color TextActive{248, 255, 251, 255};
 inline constexpr Color TextDim{160, 191, 182, 255};
