@@ -7488,7 +7488,9 @@ bool dCamera_c::freeCamera() {
         mCamParam.freeYAngle += camMovement.y * magnitude * dusk::getSettings().game.freeCameraSensitivity * 4.0f;
     }
 
-    if (!mCamParam.mManualMode) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+    if (!mCamParam.mManualMode || player == nullptr) {
         return false;
     }
 
@@ -7501,7 +7503,7 @@ bool dCamera_c::freeCamera() {
     f32 currentLerp = (mCamParam.freeYAngle - minYAngle) / (maxAngle - minYAngle);
     mViewCache.mDirection.mRadius = std::lerp(200.0f, 1000.0f, currentLerp);
 
-    cXyz finalCenter = mpPlayerActor->current.pos;
+    cXyz finalCenter = player->current.pos;
     finalCenter.y += mIsWolf ? 90.0f : 100.0f;
     mViewCache.mCenter = finalCenter;
 
