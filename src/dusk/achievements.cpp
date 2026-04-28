@@ -48,6 +48,21 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         },
         {
             {
+                "plumm_max",
+                "Thank You Berry Much",
+                "Score 61,454 points in the Plumm minigame.",
+                AchievementCategory::Minigame,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                if (dComIfGs_getBalloonScore() >= 61454) {
+                    a.progress = 1;
+                }
+            },
+            {}
+        },
+        {
+            {
                 "rollgoal_8",
                 "Rollgoal Novice",
                 "Complete the first 8 rollgoal stages.",
