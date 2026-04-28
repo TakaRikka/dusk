@@ -65,7 +65,7 @@ static Rml::Property rml_number(float value) {
     return Rml::Property(value, Rml::Unit::NUMBER);
 }
 
-static Rml::Property rml_string(std::string_view value) {
-    return Rml::Property(Rml::String(value), Rml::Unit::STRING);
+static Rml::Property rml_string(Rml::String value) {
+    return Rml::Property(std::move(value), Rml::Unit::STRING);
 }
 }  // namespace dusk::ui
