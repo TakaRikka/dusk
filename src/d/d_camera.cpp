@@ -7476,12 +7476,7 @@ bool dCamera_c::freeCamera() {
     f32 magnitude = sqrt(mPadInfo.mCStick.mLastPosX * mPadInfo.mCStick.mLastPosX + mPadInfo.mCStick.mLastPosY * mPadInfo.mCStick.mLastPosY);
 
     if (mPadInfo.mCStick.mLastPosX != 0 || mPadInfo.mCStick.mLastPosY != 0) {
-        if (!mCamParam.mManualMode) {
-            mCamParam.mManualMode = 1;
-            mCamParam.freeXAngle = mViewCache.mDirection.mAzimuth.Degree();
-            mCamParam.freeYAngle = mViewCache.mDirection.mInclination.Degree();
-        }
-
+        mCamParam.mManualMode = 1;
         camMovement = camMovement.normalize();
         camMovement.y *= dusk::getSettings().game.invertCameraYAxis ? 1.0f : -1.0f;
         mCamParam.freeXAngle += camMovement.x * magnitude * dusk::getSettings().game.freeCameraSensitivity * 4.0f;
@@ -7489,7 +7484,6 @@ bool dCamera_c::freeCamera() {
     }
 
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-
     if (!mCamParam.mManualMode || player == nullptr) {
         return false;
     }
