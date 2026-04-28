@@ -1,8 +1,6 @@
 #include "iso_validate.hpp"
 
 #include <nod.h>
-#include <span>
-#include <unordered_map>
 
 #include "SDL3/SDL_iostream.h"
 
@@ -56,27 +54,36 @@ enum class Region : u8 {
 };
 
 struct KnownDisc {
-    XXH128_hash_t hash{};
-    bool supported = false;
+    std::string_view id;
     Platform platform;
     Region region;
+    bool supported = false;
+    XXH128_hash_t hash{};
 
-    constexpr KnownDisc(Platform platform, Region region) : platform(platform), region(region) {}
-    constexpr KnownDisc(Platform platform, Region region, const std::string_view hash)
-        : hash(parse_xxh128(hash)), supported(true), platform(platform), region(region) {}
+    constexpr KnownDisc(std::string_view id, Platform platform, Region region)
+        : id(id), platform(platform), region(region) {}
+    constexpr KnownDisc(std::string_view id, Platform platform, Region region,
+                        const std::string_view hash)
+        : id(id), platform(platform), region(region), supported(true), hash(parse_xxh128(hash)) {}
 };
 
-const std::unordered_map<std::string, const KnownDisc> KNOWN_DISCS = {
-    {"GZ2E01",
-     {Platform::GameCube, Region::NorthAmerica, "14e886f08e548a000afde98a3195e788"}},  // GCN USA
-    {"GZ2P01",
-     {Platform::GameCube, Region::Europe, "9ef597588b0035ca9e91b333fa9a8a7e"}},  // GCN PAL
-    {"GZ2J01", {Platform::GameCube, Region::Japan}},                             // GCN JPN
-    {"RZDE01", {Platform::Wii, Region::NorthAmerica}},                           // Wii USA
-    {"RZDP01", {Platform::Wii, Region::Europe}},                                 // Wii PAL
-    {"RZDJ01", {Platform::Wii, Region::Japan}},                                  // Wii JPN
-    {"RZDK01", {Platform::Wii, Region::Korea}},                                  // Wii KOR
+constexpr std::array KNOWN_DISCS = {
+    KnownDisc{"GZ2E01", Platform::GameCube, Region::NorthAmerica, "14e886f08e548a000afde98a3195e788"},
+    KnownDisc{"GZ2J01", Platform::GameCube, Region::Japan},
+    KnownDisc{"GZ2P01", Platform::GameCube, Region::Europe, "9ef597588b0035ca9e91b333fa9a8a7e"},
+    KnownDisc{"RZDE01", Platform::Wii, Region::NorthAmerica},
+    KnownDisc{"RZDJ01", Platform::Wii, Region::Japan},
+    KnownDisc{"RZDK01", Platform::Wii, Region::Korea},
+    KnownDisc{"RZDP01", Platform::Wii, Region::Europe},
 };
+
+constexpr const KnownDisc* find_disc(std::string_view id) {
+    for (const auto& disc : KNOWN_DISCS) {
+        if (disc.id == id)
+            return &disc;
+    }
+    return nullptr;
+}
 
 struct NodHandleWrapper {
     NodHandle* handle;
@@ -188,16 +195,15 @@ ValidationError validate(const char* path, VerificationStatus& status) {
         return convertNodError(result);
     }
 
-    const auto it = KNOWN_DISCS.find(std::string(header.game_id, 6));
+    const auto knownDisc = find_disc(std::string_view(header.game_id, 6));
 
-    if (it == KNOWN_DISCS.end()) {
+    if (!knownDisc) {
         return ValidationError::WrongGame;
     }
 
-    auto& knownDisc = it->second;
-    status.knownDisc = &knownDisc;
+    status.knownDisc = knownDisc;
 
-    if (!knownDisc.supported) {
+    if (!knownDisc->supported) {
         return ValidationError::WrongVersion;
     }
 
@@ -230,8 +236,8 @@ bool isPal(const char* path) {
         return false;
     }
 
-    const auto it = KNOWN_DISCS.find(std::string(header.game_id, 6));
+    const auto knownDisc = find_disc(std::string_view(header.game_id, 6));
 
-    return it != KNOWN_DISCS.end() && it->second.region == Region::Europe;
+    return knownDisc && knownDisc->region == Region::Europe;
 }
 }  // namespace dusk::iso
