@@ -1,0 +1,19 @@
+<rml>
+<head>
+    <title>Window</title>
+    <link type="text/rcss" href="window.rcss" />
+</head>
+<body data-model="window">
+    <div class="window">
+        <div class="tab-bar">
+            <button class="tab"
+                data-for="tab, i : tabs"
+                data-class-active="i == active_tab"
+                data-event-click="set_active_tab(i)">
+                {{ tab.label }}
+            </button>
+        </div>
+        <div id="content" class="content"></div>
+    </div>
+</body>
+</rml>
