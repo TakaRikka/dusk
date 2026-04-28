@@ -1472,6 +1472,8 @@ set(DUSK_FILES
         src/dusk/ui/element.cpp
         src/dusk/ui/focus_border.hpp
         src/dusk/ui/focus_border.cpp
+        src/dusk/ui/game_menu.hpp
+        src/dusk/ui/game_menu.cpp
         src/dusk/ui/game_option.hpp
         src/dusk/ui/game_option.cpp
         src/dusk/ui/label.hpp
