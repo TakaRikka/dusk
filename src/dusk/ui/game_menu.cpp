@@ -522,7 +522,7 @@ private:
                    getSettings().video.lockAspectRatio,
                    [](bool enabled) { AuroraSetViewportPolicy(enabled ? AURORA_VIEWPORT_FIT : AURORA_VIEWPORT_STRETCH); });
         
-        add_toggle(scroll, "vsync", "Enable VSync",
+        add_toggle(scroll, "vsync", "VSync",
                    getSettings().video.enableVsync,
                    [](bool enabled) { aurora_enable_vsync(enabled); });
         
@@ -536,6 +536,9 @@ private:
             add_bloom_brightness_row(scroll);
         }
 
+        add_toggle(scroll, "depth-of-field", "Depth of Field",
+                   getSettings().game.enableDepthOfField);
+
         add_section_header(scroll, "Developer Options");
 
         const std::string lodValue = aurora::gx::enableLodBias ? "On" : "Off";
@@ -543,15 +546,13 @@ private:
             aurora::gx::enableLodBias = !aurora::gx::enableLodBias;
             m_needsRebuild = true;
         };
-        auto lodOption = std::make_unique<GameOption>(scroll, "lod-bias", "Enable LOD Bias",
+        auto lodOption = std::make_unique<GameOption>(scroll, "lod-bias", "LOD Bias",
                                                       lodValue, std::string_view{},
                                                       queue_activate("lod-bias"));
         register_row(Row{"lod-bias", lodMutate, [lodMutate](int) { lodMutate(); }},
                      std::move(lodOption));
 
-        add_toggle(scroll, "depth-of-field", "Enable Depth of Field",
-                   getSettings().game.enableDepthOfField);
-        add_toggle(scroll, "minimap-shadows", "Enable Mini-Map Shadows",
+        add_toggle(scroll, "minimap-shadows", "Mini-Map Shadows",
                    getSettings().game.enableMapBackground);
     }
 
