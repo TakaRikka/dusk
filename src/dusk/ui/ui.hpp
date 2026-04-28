@@ -1,29 +1,17 @@
 #pragma once
 
-#include <RmlUi/Core/Input.h>
 #include <SDL3/SDL_events.h>
+
+#include <filesystem>
 
 namespace dusk::ui {
 
-enum class MenuAction {
-    None,
-    Accept,
-    Back,
-    Toggle,
-    TabLeft,
-    TabRight,
-};
+bool initialize() noexcept;
+void shutdown() noexcept;
 
-bool initialize();
-void shutdown();
+void handle_event(const SDL_Event& event) noexcept;
+void update() noexcept;
 
-bool is_active();
-void set_active(bool active);
-
-void handle_event(const SDL_Event& event);
-void update();
-
-Rml::Input::KeyIdentifier key_for_menu_action(MenuAction action);
-MenuAction menu_action_from_key(Rml::Input::KeyIdentifier key);
+std::filesystem::path resource_path(const std::filesystem::path& filename) noexcept;
 
 }  // namespace dusk::ui

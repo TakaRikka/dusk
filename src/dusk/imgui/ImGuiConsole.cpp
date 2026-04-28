@@ -22,8 +22,6 @@
 #include "dusk/livesplit.h"
 #include "dusk/main.h"
 #include "dusk/settings.h"
-#include "dusk/ui/game_menu.hpp"
-#include "dusk/ui/prelaunch_screen.hpp"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_main.h"
 #include "tracy/Tracy.hpp"
@@ -341,14 +339,14 @@ namespace dusk {
             ImGuiMenuGame::ToggleFullscreen();
         }
 
-        if (!dusk::IsGameLaunched && !dusk::ui::prelaunch::is_active()) {
+        if (!dusk::IsGameLaunched) {
             m_preLaunchWindow.draw();
         }
 
         m_isHidden = !getSettings().backend.duskMenuOpen;
         if (dusk::IsGameLaunched) {
             if (ImGui::IsKeyPressed(ImGuiKey_F1)) {
-                dusk::ui::game_menu::toggle();
+                m_isHidden = !m_isHidden;
             }
             if (ImGui::IsKeyPressed(ImGuiKey_GamepadBack)) {
                 m_isHidden = !m_isHidden;
