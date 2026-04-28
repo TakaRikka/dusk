@@ -376,6 +376,24 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 }
             },
             {}
+        },
+        {
+            {
+                "email-me",
+                "Email Me",
+                "Read a letter during the Dark Beast Ganon fight.",
+                AchievementCategory::Misc,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+
+                void* dbgExists = fopAcM_SearchByName(fpcNm_B_MGN_e);
+                if(dbgExists && AchievementSystem::get().hasSignal("open_letter")) {
+                    a.progress = 1;
+                }
+                
+            },
+            {}
         }
     };
 }
