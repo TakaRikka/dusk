@@ -76,8 +76,8 @@ void ImGuiAchievements::draw(bool& open) {
         return;
     }
 
-    ImGui::SetNextWindowSizeConstraints(ImVec2(640, 200), ImVec2(800, 900));
-    ImGui::SetNextWindowSize(ImVec2(640, 480), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSizeConstraints(ImVec2(800, 200), ImVec2(1280, 900));
+    ImGui::SetNextWindowSize(ImVec2(800, 480), ImGuiCond_FirstUseEver);
     
     if (!ImGui::Begin(
         "Achievements", &open,
