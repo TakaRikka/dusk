@@ -1484,6 +1484,8 @@ set(DUSK_FILES
         src/dusk/ui/theme.cpp
         src/dusk/ui/ui.hpp
         src/dusk/ui/ui.cpp
+        src/dusk/ui/window.hpp
+        src/dusk/ui/window.cpp
         src/dusk/achievements.cpp
         src/dusk/iso_validate.cpp
         src/dusk/livesplit.cpp

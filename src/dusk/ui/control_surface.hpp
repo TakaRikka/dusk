@@ -7,11 +7,11 @@ class Element;
 }
 
 namespace dusk::ui {
-
 enum class ControlSurfaceTone {
     Primary,
     Secondary,
     Quiet,
+    Window,
 };
 
 struct ControlSurfaceStyle {
@@ -23,7 +23,5 @@ struct ControlSurfaceStyle {
 };
 
 ControlSurfaceStyle control_surface_style(ControlSurfaceTone tone);
-void apply_control_surface_style(Rml::Element* element, const ControlSurfaceStyle& style,
-                                 bool active);
-
+void apply_control_surface_style(Rml::Element* element, const ControlSurfaceStyle& style, bool active);
 }  // namespace dusk::ui

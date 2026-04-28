@@ -25,9 +25,18 @@ inline constexpr Color ElevatedBorder{160, 191, 182, 96};
 inline constexpr Color Transparent{0, 0, 0, 0};
 inline constexpr Color Danger{192, 30, 24, 255};
 
+inline constexpr Color WindowSurface{21, 22, 16, 178};
+inline constexpr Color WindowTitleOverlay{217, 217, 217, 26};
+inline constexpr Color WindowDivider{146, 135, 91, 255};
+inline constexpr Color WindowAccent{194, 164, 45, 255};
+inline constexpr Color WindowAccentSoft{204, 184, 119, 255};
+inline constexpr Color WindowItemSurface{17, 16, 10, 128};
+inline constexpr Color WindowGlyph{224, 219, 200, 255};
+inline constexpr float WindowTabBarHeight = 66.0f;
+
 inline constexpr float BorderRadiusSmall = 8.0f;
 inline constexpr float BorderRadiusMedium = 12.0f;
-inline constexpr float BorderWidth = 1.1f;
+inline constexpr float BorderWidth = 2.0f;
 
 std::string rgba(Color color, int opacity = -1);
 std::string dp(float value);
