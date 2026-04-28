@@ -67,6 +67,21 @@ constexpr int kShadowResolutionMax = 8;
 constexpr std::array<float, 5> kBloomMultiplierStops{0.0f, 0.25f, 0.50f, 0.75f, 1.00f};
 constexpr std::array<const char*, 3> kBloomModeNames{"Off", "Classic", "Dusk"};
 
+// TODO: Needs more spacing for newlines
+static const char* get_description_for_item(std::string_view id) {
+    if (id == "internal-resolution") {
+        return "Auto renders at the native window resolution.\nHigher values scale the internal framebuffer.";
+    }
+    if (id == "shadow-resolution") {
+        return "Improves the shadow resolution, making them higher quality.";
+    }
+    if (id == "frame-interp") {
+        return "Uses inter-frame interpolation to enable higher frame rates.\nVisual artifacts, animation glitches, or instability may occur.";
+    }
+
+    return "No description found.";
+}
+
 struct Row {
     std::string id;
     std::function<void()> activate;
@@ -170,6 +185,7 @@ public:
         }
 
         ui::update();
+        sync_description_pane();
     }
 
     void ProcessEvent(Rml::Event& event) override {
@@ -199,6 +215,8 @@ private:
     bool m_requestClose = false;
     bool m_needsRebuild = false;
     std::string m_pendingTabId;
+    Rml::Element* m_descriptionElement = nullptr;
+    Rml::Element* m_lastDescriptionSyncFocus = nullptr;
 
     Row* find_row(std::string_view id) {
         for (auto& row : m_rows) {
@@ -229,6 +247,8 @@ private:
         m_options.clear();
         m_rows.clear();
         m_focusIds.clear();
+        m_descriptionElement = nullptr;
+        m_lastDescriptionSyncFocus = nullptr;
         m_window.reset();
         m_document->Close();
         m_document = nullptr;
@@ -466,7 +486,7 @@ private:
 
         add_section_header(scroll, "Display");
 
-        // RMLUI TODO: Replace this with a Display Mode toggle.
+        // TODO: Replace this with a Display Mode toggle.
         add_toggle(scroll, "fullscreen", "Toggle Fullscreen",
                    getSettings().video.enableFullscreen,
                    [](bool enabled) { VISetWindowFullscreen(enabled); });
@@ -553,10 +573,12 @@ private:
     }
 
     void build_body() {
+        m_window->set_right_pane_visible(m_tab == Tab::Graphics);
         Rml::Element* body = m_window->body();
         switch (m_tab) {
         case Tab::Graphics:
             build_graphics_tab(body);
+            build_description_pane();
             break;
         default:
             build_placeholder_tab(body, kTabs[static_cast<size_t>(m_tab)].label);
@@ -602,6 +624,7 @@ private:
         m_document->Show();
 
         focus_id(preferredFocus.empty() ? first_focus_id() : preferredFocus);
+        sync_description_pane();
     }
 
     void request_close() { m_requestClose = true; }

@@ -266,6 +266,22 @@ Window::Window(Rml::Element* parent, std::string_view id, std::function<void()> 
         {"overflow-y", "auto"},
     });
 
+    m_rightPane = append(m_contentRow, "div");
+    set_props(m_rightPane, {
+                                {"display", "none"},
+                                {"flex-direction", "column"},
+                                {"box-sizing", "border-box"},
+                                {"min-width", "0"},
+                                {"min-height", "0"},
+                                {"padding-top", "24dp"},
+                                {"padding-bottom", "24dp"},
+                                {"padding-right", "24dp"},
+                                {"padding-left", "8dp"},
+                                {"align-items", "flex-start"},
+                                {"overflow-y", "auto"},
+                            });
+
+    apply_pane_layout();
     apply_close_style();
 }
 

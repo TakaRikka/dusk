@@ -67,12 +67,16 @@ private:
     Rml::Element* m_tabBar = nullptr;
     Rml::Element* m_tabStrip = nullptr;
     Rml::Element* m_closeButton = nullptr;
-    Rml::Element* m_body = nullptr;
+    Rml::Element* m_contentRow = nullptr;
+    Rml::Element* m_leftPane = nullptr;
+    Rml::Element* m_rightPane = nullptr;
+    bool m_rightPaneVisible = false;
     std::function<void()> m_closeCallback;
     std::vector<std::unique_ptr<WindowTab> > m_tabs;
     bool m_closeHovered = false;
     bool m_closeFocused = false;
 
     void apply_close_style();
+    void apply_pane_layout();
 };
 }  // namespace dusk::ui
