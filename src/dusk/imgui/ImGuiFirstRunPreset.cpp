@@ -30,6 +30,7 @@ static void ApplyPresetHD() {
     s.game.biggerWallets.setValue(true);
     s.game.invertCameraXAxis.setValue(true);
     s.game.freeCamera.setValue(true);
+    s.game.no2ndFishForCat.setValue(true);
 }
 
 static void ApplyPresetDusk() {

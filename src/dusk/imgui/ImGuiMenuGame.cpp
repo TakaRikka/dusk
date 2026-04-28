@@ -267,6 +267,11 @@ namespace dusk {
                 ImGui::SetTooltip("Link won't recoil when his sword hits walls.");
             }
 
+            config::ImGuiCheckbox("No 2nd Fish for Cat", getSettings().game.no2ndFishForCat);
+            if (ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("Only need to fish once for Sera's cat to return.");
+            }
+
             config::ImGuiCheckbox("Skip TV Settings Screen", getSettings().game.hideTvSettingsScreen);
             if (ImGui::IsItemHovered()) {
                 ImGui::SetTooltip("Skip the TV calibration screen shown when loading a save.");

@@ -956,7 +956,7 @@ static void npc_ne_tame(npc_ne_class* i_this) {
         i_this->mpMorf->setPlaySpeed(i_this->mAnmSpeed);
 
             /* dSv_event_flag_c::F_0470 - Fishing Pond - Reserved for fishing */
-        if (dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[470])) {
+        if (IF_DUSK(dusk::getSettings().game.no2ndFishForCat) || dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[470])) {
             if (fpcEx_Search(s_fish_sub, _this) != NULL) {
                 i_this->mAction = npc_ne_class::ACT_HOME;
                 i_this->mMode = 10;
@@ -2948,8 +2948,7 @@ static int daNpc_Ne_Execute(npc_ne_class* i_this) {
 
     if (i_this->mWantsFish && (i_this->mCounter & 0xf) == 0) {
             /* dSv_event_flag_c::F_0470 - Fishing Pond - Reserved for fishing */
-        if (dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[470])
-                                    && i_this->mDistToTarget < 1500.0f) {
+        if ((IF_DUSK(dusk::getSettings().game.no2ndFishForCat) || dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[470])) && i_this->mDistToTarget < 1500.0f) {
             if (fopAcM_SearchByName(fpcNm_MG_ROD_e) != NULL) {
                 i_this->mNoFollow = false;
             } else {
