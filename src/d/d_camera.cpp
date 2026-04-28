@@ -3089,10 +3089,6 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                         field_0x968 *= mMonitor.field_0xc / 5.0f;
                     }
 
-                    #if TARGET_PC
-                    if (!dusk::getSettings().game.freeCamera || !mCamParam.mManualMode) {
-                    #endif
-
                     f32 tmp = field_0x96c * (mIsWolf == 1 ? 30.0f : 30.0f);
                     center += vec3.norm() * (tmp * globe.V().Sin());
                     cSGlobe globe2(vec2 - center);
@@ -3105,10 +3101,6 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                     if (lineBGCheck(&center, &vec, &lin_chk1, i_flags)) {
                         vec = lin_chk1.GetCross();
                     }
-
-                    #if TARGET_PC
-                    }
-                    #endif
 
 #if DEBUG
                     if (mCamSetup.CheckFlag(0x8000)) {
