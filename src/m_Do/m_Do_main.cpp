@@ -56,6 +56,7 @@
 #include "dusk/logging.h"
 #include "dusk/main.h"
 #include "dusk/imgui/ImGuiConsole.hpp"
+#include "dusk/ui/game_menu.hpp"
 #include "dusk/ui/prelaunch_screen.hpp"
 #include "version.h"
 
@@ -70,7 +71,6 @@
 #include "d/actor/d_a_movie_player.h"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/config.hpp"
-#include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/settings.h"
 #include "dusk/version.hpp"
 #include "dusk/discord_presence.hpp"
@@ -145,10 +145,10 @@ bool launchUILoop() {
                 if (useRmlPrelaunch) {
                     dusk::ui::prelaunch::handle_event(event->sdl);
                 }
-                dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
+                // dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
                 break;
             case AURORA_DISPLAY_SCALE_CHANGED:
-                dusk::ImGuiEngine_Initialize(event->windowSize.scale);
+                // dusk::ImGuiEngine_Initialize(event->windowSize.scale);
                 break;
             case AURORA_EXIT:
                 dusk::ui::prelaunch::shutdown();
@@ -166,10 +166,6 @@ bool launchUILoop() {
         if (useRmlPrelaunch) {
             dusk::ui::prelaunch::update();
         }
-
-        dusk::g_imguiConsole.PreDraw();
-
-        dusk::g_imguiConsole.PostDraw();
 
         aurora_end_frame();
     }
@@ -218,6 +214,7 @@ void main01(void) {
     OSReport("Entering Main Loop (main01)...\n");
 
     dusk::game_clock::ensure_initialized();
+    dusk::ui::game_menu::initialize();
 
     do {
         // 1. Update Window Events
@@ -227,7 +224,7 @@ void main01(void) {
             case AURORA_NONE:
                 goto eventsDone;
             case AURORA_SDL_EVENT:
-                dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
+                dusk::ui::game_menu::handle_event(event->sdl);
                 if (event->sdl.type == SDL_EVENT_WINDOW_FOCUS_LOST &&
                     dusk::getSettings().game.pauseOnFocusLost) {
                     dusk::IsFocusPaused = true;
@@ -238,9 +235,6 @@ void main01(void) {
                     dusk::audio::SetPaused(false);
                     dusk::game_clock::reset_frame_timer();
                 }
-                break;
-            case AURORA_DISPLAY_SCALE_CHANGED:
-                dusk::ImGuiEngine_Initialize(event->windowSize.scale);
                 break;
             case AURORA_EXIT:
                 goto exit;
@@ -265,6 +259,8 @@ void main01(void) {
         }
 
         mDoGph_gInf_c::updateRenderSize();
+
+        dusk::ui::game_menu::update();
 
         const auto pacing = dusk::game_clock::advance_main_loop();
         if (pacing.is_interpolating) {
@@ -317,6 +313,7 @@ void main01(void) {
     } while (dusk::IsRunning);
 
     exit:;
+    dusk::ui::game_menu::shutdown();
 }
 
 static bool IsBackendAvailable(AuroraBackend backend) {
@@ -360,11 +357,6 @@ static AuroraBackend ResolveDesiredBackend(const cxxopts::ParseResult& parsedArg
     }
 
     return desiredBackend;
-}
-
-static void aurora_imgui_init_callback(const AuroraWindowSize* size) {
-    dusk::ImGuiEngine_Initialize(size->scale);
-    dusk::ImGuiEngine_AddTextures();
 }
 
 static void ApplyCVarOverrides(const cxxopts::OptionValue& option) {
@@ -567,7 +559,6 @@ int game_main(int argc, char* argv[]) {
         config.mem1Size = 256 * 1024 * 1024;
         config.mem2Size = 24 * 1024 * 1024;
         config.allowJoystickBackgroundEvents = true;
-        config.imGuiInitCallback = &aurora_imgui_init_callback;
         config.allowTextureReplacements = true;
         config.allowTextureDumps = false;
         auroraInfo = aurora_initialize(argc, argv, &config);

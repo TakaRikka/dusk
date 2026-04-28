@@ -22,6 +22,7 @@
 #include "dusk/livesplit.h"
 #include "dusk/main.h"
 #include "dusk/settings.h"
+#include "dusk/ui/game_menu.hpp"
 #include "dusk/ui/prelaunch_screen.hpp"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_main.h"
@@ -347,7 +348,7 @@ namespace dusk {
         m_isHidden = !getSettings().backend.duskMenuOpen;
         if (dusk::IsGameLaunched) {
             if (ImGui::IsKeyPressed(ImGuiKey_F1)) {
-                m_isHidden = !m_isHidden;
+                dusk::ui::game_menu::toggle();
             }
             if (ImGui::IsKeyPressed(ImGuiKey_GamepadBack)) {
                 m_isHidden = !m_isHidden;
