@@ -21,9 +21,6 @@
 #include "d/d_lib.h"
 #include "d/d_debug_viewer.h"
 #include "f_op/f_op_kankyo_mng.h"
-#ifdef TARGET_PC
-#include "dusk/achievements.h"
-#endif
 
 static const cM3dGCylS l_cyl_info[] = {
     { 0.0f, 0.0f, 0.0f, 30.0f, 100.0f },
@@ -3584,12 +3581,6 @@ bool daObjCarry_c::cc_damage_proc_ironball() {
             }
         }
     }
-
-#ifdef TARGET_PC
-    if (mCannon && mCyl.ChkAtHit() && mCyl.GetAtHitAc() == daPy_getPlayerActorClass()) {
-        dusk::AchievementSystem::get().signal("iron_ball_hit_player");
-    }
-#endif
 
     return var_r26;
 }
