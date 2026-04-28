@@ -41,7 +41,6 @@ private:
     float mouseHideTimer = 0.0f;
 
     bool m_isHidden = true;
-    bool m_focusMenuBar = false;
     bool m_isLaunchInitialized = false;
     bool m_touchTapActive = false;
     bool m_touchTapMoved = false;

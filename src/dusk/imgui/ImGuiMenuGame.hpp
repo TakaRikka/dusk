@@ -68,9 +68,6 @@ namespace dusk {
             PADButtonMapping* m_pendingButtonMapping = nullptr;
             PADAxisMapping* m_pendingAxisMapping = nullptr;
             int m_pendingPort = -1;
-            bool m_waitForInputRelease = false;
-            bool m_suppressRemapActivationUntilRelease = false;
-            int m_suppressRemapActivationPort = -1;
             bool m_isRumbling = false;
         } m_controllerConfig;
 
