@@ -15,7 +15,8 @@ class Element;
 namespace dusk::ui {
 class WindowTab : public Rml::EventListener {
 public:
-    WindowTab(Rml::Element* parent, std::string_view id, std::string_view label, std::function<void()> selectedCallback);
+    WindowTab(Rml::Element* parent, std::string_view id, std::string_view label,
+        std::function<void()> selectedCallback);
     ~WindowTab() override;
 
     WindowTab(const WindowTab&) = delete;
@@ -58,7 +59,8 @@ public:
 
     Rml::Element* tab_strip() const { return m_tabStrip; }
 
-    WindowTab* add_tab(std::string_view id, std::string_view label, std::function<void()> selectedCallback);
+    WindowTab* add_tab(
+        std::string_view id, std::string_view label, std::function<void()> selectedCallback);
     void set_selected_tab(std::string_view id);
     std::string selected_tab_id() const;
 

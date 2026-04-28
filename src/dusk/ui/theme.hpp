@@ -1,8 +1,11 @@
 #pragma once
 
+#include <RmlUi/Core/Property.h>
+
 #include <string>
 
-namespace dusk::ui::theme {
+namespace dusk::ui {
+namespace theme {
 
 struct Color {
     int r = 255;
@@ -37,7 +40,32 @@ inline constexpr float BorderRadiusSmall = 8.0f;
 inline constexpr float BorderRadiusMedium = 12.0f;
 inline constexpr float BorderWidth = 2.0f;
 
-std::string rgba(Color color, int opacity = -1);
-std::string dp(float value);
+}  // namespace theme
 
-}  // namespace dusk::ui::theme
+static Rml::Property rml_color(theme::Color color, int opacity = -1) {
+    if (opacity >= 0) {
+        color.a = std::clamp(opacity, 0, 255);
+    }
+    return Rml::Property(Rml::Colourb(color.r, color.g, color.b, color.a), Rml::Unit::COLOUR);
+}
+
+static Rml::Property rml_dp(float value) {
+    return Rml::Property(value, Rml::Unit::DP);
+}
+
+static Rml::Property rml_percent(float value) {
+    return Rml::Property(value, Rml::Unit::PERCENT);
+}
+
+static Rml::Property rml_px(float value) {
+    return Rml::Property(value, Rml::Unit::PX);
+}
+
+static Rml::Property rml_number(float value) {
+    return Rml::Property(value, Rml::Unit::NUMBER);
+}
+
+static Rml::Property rml_string(std::string_view value) {
+    return Rml::Property(Rml::String(value), Rml::Unit::STRING);
+}
+}  // namespace dusk::ui

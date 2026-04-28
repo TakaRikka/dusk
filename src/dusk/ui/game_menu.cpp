@@ -70,13 +70,15 @@ constexpr std::array<const char*, 3> kBloomModeNames{"Off", "Classic", "Dusk"};
 // TODO: Needs more spacing for newlines
 static const char* get_description_for_item(std::string_view id) {
     if (id == "internal-resolution") {
-        return "Auto renders at the native window resolution.\nHigher values scale the internal framebuffer.";
+        return "Auto renders at the native window resolution.\nHigher values scale the internal "
+               "framebuffer.";
     }
     if (id == "shadow-resolution") {
         return "Improves the shadow resolution, making them higher quality.";
     }
     if (id == "frame-interp") {
-        return "Uses inter-frame interpolation to enable higher frame rates.\nVisual artifacts, animation glitches, or instability may occur.";
+        return "Uses inter-frame interpolation to enable higher frame rates.\nVisual artifacts, "
+               "animation glitches, or instability may occur.";
     }
 
     return "No description found.";
@@ -257,66 +259,74 @@ private:
     void style_document(Rml::ElementDocument* document) {
         using namespace theme;
         set_props(document, {
-                                {"width", "100%"},
-                                {"height", "100%"},
-                                {"margin", "0"},
-                                {"padding", "0"},
-                                {"font-family", "Inter"},
-                                {"color", rgba(Text)},
+                                {Rml::PropertyId::Width, rml_percent(100.0f)},
+                                {Rml::PropertyId::Height, rml_percent(100.0f)},
+                                {Rml::PropertyId::MarginTop, rml_px(0.0f)},
+                                {Rml::PropertyId::MarginRight, rml_px(0.0f)},
+                                {Rml::PropertyId::MarginBottom, rml_px(0.0f)},
+                                {Rml::PropertyId::MarginLeft, rml_px(0.0f)},
+                                {Rml::PropertyId::PaddingTop, rml_px(0.0f)},
+                                {Rml::PropertyId::PaddingRight, rml_px(0.0f)},
+                                {Rml::PropertyId::PaddingBottom, rml_px(0.0f)},
+                                {Rml::PropertyId::PaddingLeft, rml_px(0.0f)},
+                                {Rml::PropertyId::FontFamily, rml_string("Inter")},
+                                {Rml::PropertyId::Color, rml_color(Text)},
                             });
     }
 
     Rml::Element* add_screen() {
         using namespace theme;
-        auto* screen = append(m_document, "div", "game-menu-screen");
-        set_props(screen, {
-                              {"display", "flex"},
-                              {"position", "absolute"},
-                              {"left", "0"},
-                              {"top", "0"},
-                              {"right", "0"},
-                              {"bottom", "0"},
-                              {"flex-direction", "column"},
-                              {"align-items", "center"},
-                              {"justify-content", "center"},
-                              {"box-sizing", "border-box"},
-                              {"padding", "32dp"},
-                          });
-        return screen;
+        return append(m_document, "div", "game-menu-screen",
+            {
+                {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+                {Rml::PropertyId::Position, Rml::Style::Position::Absolute},
+                {Rml::PropertyId::Left, rml_px(0.0f)},
+                {Rml::PropertyId::Top, rml_px(0.0f)},
+                {Rml::PropertyId::Right, rml_px(0.0f)},
+                {Rml::PropertyId::Bottom, rml_px(0.0f)},
+                {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Column},
+                {Rml::PropertyId::AlignItems, Rml::Style::AlignItems::Center},
+                {Rml::PropertyId::JustifyContent, Rml::Style::JustifyContent::Center},
+                {Rml::PropertyId::BoxSizing, Rml::Style::BoxSizing::BorderBox},
+                {Rml::PropertyId::PaddingTop, rml_dp(32.0f)},
+                {Rml::PropertyId::PaddingRight, rml_dp(32.0f)},
+                {Rml::PropertyId::PaddingBottom, rml_dp(32.0f)},
+                {Rml::PropertyId::PaddingLeft, rml_dp(32.0f)},
+            });
     }
 
     Rml::Element* add_section_header(Rml::Element* parent, std::string_view title) {
-        auto* row = append(parent, "div");
-        set_props(row, {
-                           {"display", "flex"},
-                           {"flex-direction", "row"},
-                           {"align-items", "center"},
-                           {"width", "100%"},
-                           {"padding-top", "8dp"},
-                           {"padding-bottom", "4dp"},
-                       });
+        auto* row = append(parent, "div", {},
+            {
+                {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+                {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Row},
+                {Rml::PropertyId::AlignItems, Rml::Style::AlignItems::Center},
+                {Rml::PropertyId::Width, rml_percent(100.0f)},
+                {Rml::PropertyId::PaddingTop, rml_dp(8.0f)},
+                {Rml::PropertyId::PaddingBottom, rml_dp(4.0f)},
+            });
         auto* label = add_label(row, title, LabelStyle::Annotation);
         set_props(label, {
-                             {"font-size", "14dp"},
-                             {"letter-spacing", "3dp"},
-                             {"color", theme::rgba(theme::WindowAccentSoft)},
-                             {"flex-shrink", "0"},
+                             {Rml::PropertyId::FontSize, rml_dp(14.0f)},
+                             {Rml::PropertyId::LetterSpacing, rml_dp(3.0f)},
+                             {Rml::PropertyId::Color, rml_color(theme::WindowAccentSoft)},
+                             {Rml::PropertyId::FlexShrink, rml_number(0.0f)},
                          });
         return row;
     }
 
     Rml::Element* add_scroll_body(Rml::Element* parent) {
-        auto* scroll = append(parent, "div");
-        set_props(scroll, {
-                              {"display", "flex"},
-                              {"flex-direction", "column"},
-                              {"width", "100%"},
-                              {"flex-grow", "1"},
-                              {"min-height", "0"},
-                              {"gap", "8dp"},
-                              {"overflow-y", "auto"},
-                          });
-        return scroll;
+        return append(parent, "div", {},
+            {
+                {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+                {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Column},
+                {Rml::PropertyId::Width, rml_percent(100.0f)},
+                {Rml::PropertyId::FlexGrow, rml_number(1.0f)},
+                {Rml::PropertyId::MinHeight, rml_px(0.0f)},
+                {Rml::PropertyId::RowGap, rml_dp(8.0f)},
+                {Rml::PropertyId::ColumnGap, rml_dp(8.0f)},
+                {Rml::PropertyId::OverflowY, Rml::Style::Overflow::Auto},
+            });
     }
 
     std::function<void()> queue_activate(std::string id) {
@@ -330,8 +340,8 @@ private:
     }
 
     void add_toggle(Rml::Element* parent, std::string id, std::string_view title,
-                    config::ConfigVar<bool>& var, std::function<void(bool)> sideEffect = {},
-                    std::string_view detail = {}) {
+        config::ConfigVar<bool>& var, std::function<void(bool)> sideEffect = {},
+        std::string_view detail = {}) {
         auto mutate = [this, &var, sideEffect = std::move(sideEffect)] {
             const bool next = !var.getValue();
             var.setValue(next);
@@ -342,27 +352,26 @@ private:
             m_needsRebuild = true;
         };
         const std::string_view valueText = var.getValue() ? "On" : "Off";
-        auto option = std::make_unique<GameOption>(parent, id, title, valueText, detail,
-                                                   queue_activate(id));
+        auto option =
+            std::make_unique<GameOption>(parent, id, title, valueText, detail, queue_activate(id));
         register_row(Row{id, mutate, [mutate](int) { mutate(); }}, std::move(option));
     }
 
     void add_action(Rml::Element* parent, std::string id, std::string_view title,
-                    std::function<void()> action, std::string_view valueText = ">",
-                    std::string_view detail = {}) {
+        std::function<void()> action, std::string_view valueText = ">",
+        std::string_view detail = {}) {
         auto mutate = [this, action = std::move(action)] {
             action();
             m_needsRebuild = true;
         };
-        auto option = std::make_unique<GameOption>(parent, id, title, valueText, detail,
-                                                   queue_activate(id));
+        auto option =
+            std::make_unique<GameOption>(parent, id, title, valueText, detail, queue_activate(id));
         register_row(Row{id, mutate, {}}, std::move(option));
     }
 
     template <typename T>
     void add_cycle_row(Rml::Element* parent, std::string id, std::string_view title,
-                       std::string_view valueText, std::string_view detail,
-                       std::function<void(int)> cycle) {
+        std::string_view valueText, std::string_view detail, std::function<void(int)> cycle) {
         auto mutate = [this, cycle] {
             cycle(1);
             m_needsRebuild = true;
@@ -371,15 +380,14 @@ private:
             cycle(direction);
             m_needsRebuild = true;
         };
-        auto option = std::make_unique<GameOption>(parent, id, title, valueText, detail,
-                                                   queue_activate(id));
+        auto option =
+            std::make_unique<GameOption>(parent, id, title, valueText, detail, queue_activate(id));
         register_row(Row{id, mutate, cycleWithRebuild}, std::move(option));
     }
 
     void add_int_cycle(Rml::Element* parent, std::string id, std::string_view title,
-                       config::ConfigVar<int>& var, int minValue, int maxValue,
-                       std::function<std::string(int)> formatter,
-                       std::function<void(int)> sideEffect = {}) {
+        config::ConfigVar<int>& var, int minValue, int maxValue,
+        std::function<std::string(int)> formatter, std::function<void(int)> sideEffect = {}) {
         const int current = std::clamp(var.getValue(), minValue, maxValue);
         const std::string valueText = formatter(current);
         auto cycle = [&var, minValue, maxValue, sideEffect = std::move(sideEffect)](int dir) {
@@ -400,11 +408,11 @@ private:
 
     void add_bloom_mode_row(Rml::Element* parent) {
         auto& var = getSettings().game.bloomMode;
-        const int current = std::clamp(static_cast<int>(var.getValue()), 0,
-                                       static_cast<int>(kBloomModeNames.size() - 1));
+        const int current = std::clamp(
+            static_cast<int>(var.getValue()), 0, static_cast<int>(kBloomModeNames.size() - 1));
         const std::string_view valueText = kBloomModeNames[static_cast<size_t>(current)];
         auto cycle = [&var](int dir) {
-            const int count = static_cast<int>(kBloomModeNames.size());
+            const int count = kBloomModeNames.size();
             int next = static_cast<int>(var.getValue()) + dir;
             next = (next % count + count) % count;
             var.setValue(static_cast<BloomMode>(next));
@@ -427,15 +435,15 @@ private:
                     closest = i;
                 }
             }
-            const int count = static_cast<int>(kBloomMultiplierStops.size());
+            const int count = kBloomMultiplierStops.size();
             const int next = (closest + dir + count) % count;
             var.setValue(kBloomMultiplierStops[next]);
             Save();
         };
         const std::string_view detail =
             getSettings().game.bloomMode.getValue() == BloomMode::Off ? "Bloom is disabled" : "";
-        add_cycle_row<int>(parent, "bloom-brightness", "Bloom Brightness", valueText, detail,
-                           std::move(cycle));
+        add_cycle_row<int>(
+            parent, "bloom-brightness", "Bloom Brightness", valueText, detail, std::move(cycle));
     }
 
     void build_description_pane() {
@@ -446,15 +454,17 @@ private:
             return;
         }
         m_descriptionElement = append_text(right, "p", " ", "option-description");
-        set_props(m_descriptionElement, {{"color", theme::rgba(theme::TextActive)},
-            {"font-size", "20dp"},
-            {"line-height", "1.45em"},
-            {"text-align", "left"},
-            {"align-self", "stretch"},
-            {"width", "100%"},
-            {"box-sizing", "border-box"},
-            {"white-space", "pre-line"},
-        });
+        set_props(m_descriptionElement,
+            {
+                {Rml::PropertyId::Color, rml_color(theme::TextActive)},
+                {Rml::PropertyId::FontSize, rml_dp(20.0f)},
+                {Rml::PropertyId::LineHeight, Rml::Property(1.45f, Rml::Unit::EM)},
+                {Rml::PropertyId::TextAlign, Rml::Style::TextAlign::Left},
+                {Rml::PropertyId::AlignSelf, Rml::Style::AlignSelf::Stretch},
+                {Rml::PropertyId::Width, rml_percent(100.0f)},
+                {Rml::PropertyId::BoxSizing, Rml::Style::BoxSizing::BorderBox},
+                {Rml::PropertyId::WhiteSpace, Rml::Style::WhiteSpace::Preline},
+            });
     }
 
     void sync_description_pane() {
@@ -486,20 +496,23 @@ private:
         add_section_header(scroll, "Display");
 
         // TODO: Replace this with a Display Mode toggle.
-        add_toggle(scroll, "fullscreen", "Toggle Fullscreen",
-                   getSettings().video.enableFullscreen,
-                   [](bool enabled) { VISetWindowFullscreen(enabled); });
-        
+        add_toggle(scroll, "fullscreen", "Toggle Fullscreen", getSettings().video.enableFullscreen,
+            [](bool enabled) { VISetWindowFullscreen(enabled); });
+
         u32 internalWidth = 0;
         u32 internalHeight = 0;
         AuroraGetRenderSize(&internalWidth, &internalHeight);
         const std::string detail = fmt::format("Current: {}x{}", internalWidth, internalHeight);
 
-        const int currentScale = std::clamp(getSettings().game.internalResolutionScale.getValue(), 0, kInternalResolutionScaleMax);
-        const std::string scaleValue = currentScale == 0 ? std::string("Auto") : fmt::format("{}x", currentScale);
+        const int currentScale = std::clamp(
+            getSettings().game.internalResolutionScale.getValue(), 0, kInternalResolutionScaleMax);
+        const std::string scaleValue =
+            currentScale == 0 ? std::string("Auto") : fmt::format("{}x", currentScale);
 
         auto scaleCycle = [](int dir) {
-            int next = std::clamp(getSettings().game.internalResolutionScale.getValue(), 0, kInternalResolutionScaleMax) + dir;
+            int next = std::clamp(getSettings().game.internalResolutionScale.getValue(), 0,
+                           kInternalResolutionScaleMax) +
+                       dir;
             if (next < 0) {
                 next = kInternalResolutionScaleMax;
             } else if (next > kInternalResolutionScaleMax) {
@@ -511,22 +524,22 @@ private:
         };
 
         add_cycle_row<int>(scroll, "internal-resolution", "Internal Resolution", scaleValue, detail,
-                            std::move(scaleCycle));
-        
+            std::move(scaleCycle));
+
         add_int_cycle(scroll, "shadow-resolution", "Shadow Resolution",
-                      getSettings().game.shadowResolutionMultiplier, 1, kShadowResolutionMax,
-                      [](int v) { return fmt::format("x{}", v); });
-                      
+            getSettings().game.shadowResolutionMultiplier, 1, kShadowResolutionMax,
+            [](int v) { return fmt::format("x{}", v); });
+
         add_toggle(scroll, "lock-aspect", "Force 4:3 Aspect Ratio",
-                   getSettings().video.lockAspectRatio,
-                   [](bool enabled) { AuroraSetViewportPolicy(enabled ? AURORA_VIEWPORT_FIT : AURORA_VIEWPORT_STRETCH); });
-        
-        add_toggle(scroll, "vsync", "VSync",
-                   getSettings().video.enableVsync,
-                   [](bool enabled) { aurora_enable_vsync(enabled); });
-        
+            getSettings().video.lockAspectRatio, [](bool enabled) {
+                AuroraSetViewportPolicy(enabled ? AURORA_VIEWPORT_FIT : AURORA_VIEWPORT_STRETCH);
+            });
+
+        add_toggle(scroll, "vsync", "VSync", getSettings().video.enableVsync,
+            [](bool enabled) { aurora_enable_vsync(enabled); });
+
         add_toggle(scroll, "frame-interp", "Unlock Framerate",
-                   getSettings().game.enableFrameInterpolation, {}, "Experimental");
+            getSettings().game.enableFrameInterpolation, {}, "Experimental");
 
         add_section_header(scroll, "Post-Processing");
 
@@ -535,8 +548,8 @@ private:
             add_bloom_brightness_row(scroll);
         }
 
-        add_toggle(scroll, "depth-of-field", "Depth of Field",
-                   getSettings().game.enableDepthOfField);
+        add_toggle(
+            scroll, "depth-of-field", "Depth of Field", getSettings().game.enableDepthOfField);
 
         add_section_header(scroll, "Developer Options");
 
@@ -545,31 +558,34 @@ private:
             aurora::gx::enableLodBias = !aurora::gx::enableLodBias;
             m_needsRebuild = true;
         };
-        auto lodOption = std::make_unique<GameOption>(scroll, "lod-bias", "LOD Bias",
-                                                      lodValue, std::string_view{},
-                                                      queue_activate("lod-bias"));
-        register_row(Row{"lod-bias", lodMutate, [lodMutate](int) { lodMutate(); }},
-                     std::move(lodOption));
+        auto lodOption = std::make_unique<GameOption>(scroll, "lod-bias", "LOD Bias", lodValue,
+            std::string_view{}, queue_activate("lod-bias"));
+        register_row(
+            Row{"lod-bias", lodMutate, [lodMutate](int) { lodMutate(); }}, std::move(lodOption));
 
-        add_toggle(scroll, "minimap-shadows", "Mini-Map Shadows",
-                   getSettings().game.enableMapBackground);
+        add_toggle(
+            scroll, "minimap-shadows", "Mini-Map Shadows", getSettings().game.enableMapBackground);
     }
 
     void build_placeholder_tab(Rml::Element* body, std::string_view tabLabel) {
-        auto* wrap = append(body, "div");
-        set_props(wrap, {
-                            {"display", "flex"},
-                            {"flex-direction", "column"},
-                            {"align-items", "center"},
-                            {"justify-content", "center"},
-                            {"width", "100%"},
-                            {"flex-grow", "1"},
-                            {"gap", "12dp"},
-                        });
+        auto* wrap = append(body, "div", {},
+            {
+                {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+                {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Column},
+                {Rml::PropertyId::AlignItems, Rml::Style::AlignItems::Center},
+                {Rml::PropertyId::JustifyContent, Rml::Style::JustifyContent::Center},
+                {Rml::PropertyId::Width, rml_percent(100.0f)},
+                {Rml::PropertyId::FlexGrow, rml_number(1.0f)},
+                {Rml::PropertyId::RowGap, rml_dp(12.0f)},
+                {Rml::PropertyId::ColumnGap, rml_dp(12.0f)},
+            });
         auto* heading = add_label(wrap, tabLabel, LabelStyle::Large);
-        set_props(heading, {{"text-align", "center"}});
+        set_props(heading, {{Rml::PropertyId::TextAlign, Rml::Style::TextAlign::Center}});
         auto* sub = add_label(wrap, "Not yet ported.", LabelStyle::Body);
-        set_props(sub, {{"text-align", "center"}, {"color", theme::rgba(theme::TextDim)}});
+        set_props(sub, {
+                           {Rml::PropertyId::TextAlign, Rml::Style::TextAlign::Center},
+                           {Rml::PropertyId::Color, rml_color(theme::TextDim)},
+                       });
     }
 
     void build_body() {
@@ -630,7 +646,7 @@ private:
     void request_close() { m_requestClose = true; }
 
     void switch_tab(int direction) {
-        const int count = static_cast<int>(kTabs.size());
+        const int count = kTabs.size();
         const int next = (static_cast<int>(m_tab) + direction + count) % count;
         m_pendingTabId = kTabs[static_cast<size_t>(next)].id;
     }

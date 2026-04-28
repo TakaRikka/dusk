@@ -12,47 +12,57 @@
 namespace dusk::ui {
 
 DiscState::DiscState(Rml::Element* parent, std::string_view id, std::string_view text,
-                     std::string_view statusText, bool statusIsError,
-                     std::function<void()> pressedCallback)
+    std::string_view statusText, bool statusIsError, std::function<void()> pressedCallback)
     : m_pressedCallback(std::move(pressedCallback)), m_statusIsError(statusIsError) {
     using namespace theme;
 
-    m_element = append(parent, "button", id);
-    set_props(m_element, {
-                             {"display", "flex"},
-                             {"position", "relative"},
-                             {"flex-direction", "column"},
-                             {"align-items", "stretch"},
-                             {"gap", "6dp"},
-                             {"width", "100%"},
-                             {"box-sizing", "border-box"},
-                             {"padding", "14dp 16dp"},
-                             {"border-width", dp(BorderWidth)},
-                             {"border-radius", dp(BorderRadiusSmall)},
-                             {"cursor", "pointer"},
-                             {"tab-index", "auto"},
-                             {"nav-up", "auto"},
-                             {"nav-down", "auto"},
-                             {"nav-left", "auto"},
-                             {"nav-right", "auto"},
-                             {"font-family", "Inter"},
-                         });
+    m_element = append(parent, "button", id,
+        {
+            {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+            {Rml::PropertyId::Position, Rml::Style::Position::Relative},
+            {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Column},
+            {Rml::PropertyId::AlignItems, Rml::Style::AlignItems::Stretch},
+            {Rml::PropertyId::RowGap, rml_dp(6.0f)},
+            {Rml::PropertyId::ColumnGap, rml_dp(6.0f)},
+            {Rml::PropertyId::Width, rml_percent(100.0f)},
+            {Rml::PropertyId::BoxSizing, Rml::Style::BoxSizing::BorderBox},
+            {Rml::PropertyId::PaddingTop, rml_dp(14.0f)},
+            {Rml::PropertyId::PaddingRight, rml_dp(16.0f)},
+            {Rml::PropertyId::PaddingBottom, rml_dp(14.0f)},
+            {Rml::PropertyId::PaddingLeft, rml_dp(16.0f)},
+            {Rml::PropertyId::BorderTopWidth, rml_dp(BorderWidth)},
+            {Rml::PropertyId::BorderRightWidth, rml_dp(BorderWidth)},
+            {Rml::PropertyId::BorderBottomWidth, rml_dp(BorderWidth)},
+            {Rml::PropertyId::BorderLeftWidth, rml_dp(BorderWidth)},
+            {Rml::PropertyId::BorderTopLeftRadius, rml_dp(BorderRadiusSmall)},
+            {Rml::PropertyId::BorderTopRightRadius, rml_dp(BorderRadiusSmall)},
+            {Rml::PropertyId::BorderBottomRightRadius, rml_dp(BorderRadiusSmall)},
+            {Rml::PropertyId::BorderBottomLeftRadius, rml_dp(BorderRadiusSmall)},
+            {Rml::PropertyId::Cursor, rml_string("pointer")},
+            {Rml::PropertyId::TabIndex, Rml::Style::TabIndex::Auto},
+            {Rml::PropertyId::NavUp, Rml::Style::Nav::Auto},
+            {Rml::PropertyId::NavDown, Rml::Style::Nav::Auto},
+            {Rml::PropertyId::NavLeft, Rml::Style::Nav::Auto},
+            {Rml::PropertyId::NavRight, Rml::Style::Nav::Auto},
+            {Rml::PropertyId::FontFamily, rml_string("Inter")},
+        });
 
     add_focus_border(m_element, BorderRadiusSmall);
 
     m_value = add_label(m_element, text, LabelStyle::Body);
     set_props(m_value, {
-                           {"overflow", "hidden"},
-                           {"text-overflow", "ellipsis"},
-                           {"white-space", "nowrap"},
-                           {"pointer-events", "none"},
+                           {Rml::PropertyId::OverflowX, Rml::Style::Overflow::Hidden},
+                           {Rml::PropertyId::OverflowY, Rml::Style::Overflow::Hidden},
+                           {Rml::PropertyId::TextOverflow, Rml::Style::TextOverflow::Ellipsis},
+                           {Rml::PropertyId::WhiteSpace, Rml::Style::WhiteSpace::Nowrap},
+                           {Rml::PropertyId::PointerEvents, Rml::Style::PointerEvents::None},
                        });
 
     if (!statusText.empty()) {
         m_status = add_label(m_element, statusText, LabelStyle::Annotation);
         set_props(m_status, {
-                                {"pointer-events", "none"},
-                                {"white-space", "normal"},
+                                {Rml::PropertyId::PointerEvents, Rml::Style::PointerEvents::None},
+                                {Rml::PropertyId::WhiteSpace, Rml::Style::WhiteSpace::Normal},
                             });
     }
 
@@ -123,15 +133,19 @@ void DiscState::apply_style() {
     const bool active = m_hovered || m_focused;
     const Color accent = m_statusIsError ? Danger : Primary;
 
-    m_element->SetProperty("background-color",
-                           rgba(accent, active ? 52 : (m_statusIsError ? 32 : 20)));
-    m_element->SetProperty("border-color",
-                           rgba(accent, active ? 220 : (m_statusIsError ? 190 : 120)));
-    m_element->SetProperty("color", rgba(active ? TextActive : Text));
+    m_element->SetProperty(Rml::PropertyId::BackgroundColor,
+        rml_color(accent, active ? 52 : (m_statusIsError ? 32 : 20)));
+    const auto borderColor = rml_color(accent, active ? 220 : (m_statusIsError ? 190 : 120));
+    m_element->SetProperty(Rml::PropertyId::BorderTopColor, borderColor);
+    m_element->SetProperty(Rml::PropertyId::BorderRightColor, borderColor);
+    m_element->SetProperty(Rml::PropertyId::BorderBottomColor, borderColor);
+    m_element->SetProperty(Rml::PropertyId::BorderLeftColor, borderColor);
+    m_element->SetProperty(Rml::PropertyId::Color, rml_color(active ? TextActive : Text));
 
-    m_value->SetProperty("color", rgba(active ? TextActive : Text));
+    m_value->SetProperty(Rml::PropertyId::Color, rml_color(active ? TextActive : Text));
     if (m_status != nullptr) {
-        m_status->SetProperty("color", rgba(m_statusIsError ? Danger : TextDim));
+        m_status->SetProperty(
+            Rml::PropertyId::Color, rml_color(m_statusIsError ? Danger : TextDim));
     }
     set_focus_border_visible(m_element, m_focused);
 }

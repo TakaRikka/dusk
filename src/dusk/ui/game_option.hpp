@@ -15,8 +15,7 @@ namespace dusk::ui {
 class GameOption : public Rml::EventListener {
 public:
     GameOption(Rml::Element* parent, std::string_view id, std::string_view title,
-               std::string_view value, std::string_view detail,
-               std::function<void()> pressedCallback);
+        std::string_view value, std::string_view detail, std::function<void()> pressedCallback);
     ~GameOption() override;
 
     GameOption(const GameOption&) = delete;

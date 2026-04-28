@@ -1,59 +1,69 @@
 #include "window.hpp"
 #include "element.hpp"
 #include "focus_border.hpp"
-#include "label.hpp"
 #include "theme.hpp"
 
 #include <RmlUi/Core.h>
+#include <RmlUi/Core/PropertyDictionary.h>
+#include <RmlUi/Core/StyleSheetSpecification.h>
+
+#include <algorithm>
 
 namespace dusk::ui {
-WindowTab::WindowTab(Rml::Element* parent, std::string_view id, std::string_view label, std::function<void()> selectedCallback) : m_selectedCallback(std::move(selectedCallback)) {
+
+WindowTab::WindowTab(Rml::Element* parent, std::string_view id, std::string_view label,
+    std::function<void()> selectedCallback)
+    : m_selectedCallback(std::move(selectedCallback)) {
     using namespace theme;
 
-    m_element = append(parent, "button", id);
-    set_props(m_element, {
-        {"display", "flex"},
-        {"position", "relative"},
-        {"flex-direction", "column"},
-        {"align-items", "center"},
-        {"justify-content", "center"},
-        {"box-sizing", "border-box"},
-        {"height", "100%"},
-        {"padding-left", "20dp"},
-        {"padding-right", "20dp"},
-        {"background-color", rgba(Transparent)},
-        {"border-width", "0"},
-        {"cursor", "pointer"},
-        {"tab-index", "auto"},
-        {"nav-up", "auto"},
-        {"nav-down", "auto"},
-        {"nav-left", "auto"},
-        {"nav-right", "auto"},
-        {"font-family", "Inter"},
-    });
+    m_element = append(parent, "button", id,
+        {
+            {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+            {Rml::PropertyId::Position, Rml::Style::Position::Relative},
+            {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Column},
+            {Rml::PropertyId::AlignItems, Rml::Style::AlignItems::Center},
+            {Rml::PropertyId::JustifyContent, Rml::Style::JustifyContent::Center},
+            {Rml::PropertyId::BoxSizing, Rml::Style::BoxSizing::BorderBox},
+            {Rml::PropertyId::Height, rml_percent(100.0f)},
+            {Rml::PropertyId::PaddingLeft, rml_dp(20.0f)},
+            {Rml::PropertyId::PaddingRight, rml_dp(20.0f)},
+            {Rml::PropertyId::BackgroundColor, rml_color(Transparent)},
+            {Rml::PropertyId::BorderTopWidth, rml_px(0.0f)},
+            {Rml::PropertyId::BorderRightWidth, rml_px(0.0f)},
+            {Rml::PropertyId::BorderBottomWidth, rml_px(0.0f)},
+            {Rml::PropertyId::BorderLeftWidth, rml_px(0.0f)},
+            {Rml::PropertyId::Cursor, rml_string("pointer")},
+            {Rml::PropertyId::TabIndex, Rml::Style::TabIndex::Auto},
+            {Rml::PropertyId::NavUp, Rml::Style::Nav::Auto},
+            {Rml::PropertyId::NavDown, Rml::Style::Nav::Auto},
+            {Rml::PropertyId::NavLeft, Rml::Style::Nav::Auto},
+            {Rml::PropertyId::NavRight, Rml::Style::Nav::Auto},
+            {Rml::PropertyId::FontFamily, rml_string("Inter")},
+        });
 
     add_focus_border(m_element, BorderRadiusSmall);
 
-    m_label = append_text(m_element, "span", label);
-    apply_label_style(m_label, LabelStyle::Body);
-    set_props(m_label, {
-        {"pointer-events", "none"},
-        {"font-size", "20dp"},
-        {"letter-spacing", "1dp"},
-        {"font-weight", "700"},
-        {"text-align", "center"},
-    });
+    m_label = append(m_element, "span", {},
+        {
+            {Rml::PropertyId::PointerEvents, Rml::Style::PointerEvents::None},
+            {Rml::PropertyId::FontSize, rml_dp(20.0f)},
+            {Rml::PropertyId::LetterSpacing, rml_dp(1.0f)},
+            {Rml::PropertyId::FontWeight, Rml::Style::FontWeight::Bold},
+            {Rml::PropertyId::TextAlign, Rml::Style::TextAlign::Center},
+            {Rml::PropertyId::Color, rml_color(Text)},
+        });
+    set_text(m_label, label);
 
-    m_indicator = append(m_element, "div");
-    set_props(m_indicator, {
-        {"position", "absolute"},
-        {"left", "0"},
-        {"right", "0"},
-        {"bottom", dp(-BorderWidth)},
-        {"height", dp(2.0f)},
-        {"background-color", rgba(WindowAccent, 0)},
-        {"pointer-events", "none"},
-    });
+    m_indicator = append(m_element, "div", {},
+        {
+            {Rml::PropertyId::Position, Rml::Style::Position::Absolute},
+            {Rml::PropertyId::Left, rml_px(0.0f)},
+            {Rml::PropertyId::Right, rml_px(0.0f)},
+            {Rml::PropertyId::Bottom, rml_dp(-BorderWidth)},
+            {Rml::PropertyId::Height, rml_dp(2.0f)},
+            {Rml::PropertyId::BackgroundColor, rml_color(WindowAccent, 0)},
+            {Rml::PropertyId::PointerEvents, Rml::Style::PointerEvents::None},
+        });
 
     m_element->AddEventListener(Rml::EventId::Click, this);
     m_element->AddEventListener(Rml::EventId::Focus, this);
@@ -134,93 +144,116 @@ void WindowTab::apply_style() {
         textOpacity = 110;
     }
     const Color textColor = m_selected ? TextActive : Text;
-    m_label->SetProperty("color", rgba(textColor, textOpacity));
+    m_label->SetProperty(Rml::PropertyId::Color, rml_color(textColor, textOpacity));
 
     if (m_indicator != nullptr) {
         const int indicatorOpacity = m_selected ? 255 : (active ? 96 : 0);
-        m_indicator->SetProperty("background-color", rgba(WindowAccent, indicatorOpacity));
+        m_indicator->SetProperty(
+            Rml::PropertyId::BackgroundColor, rml_color(WindowAccent, indicatorOpacity));
     }
 
     set_focus_border_visible(m_element, m_focused);
 }
 
-Window::Window(Rml::Element* parent, std::string_view id, std::function<void()> closeCallback) : m_closeCallback(std::move(closeCallback)) {
+Window::Window(Rml::Element* parent, std::string_view id, std::function<void()> closeCallback)
+    : m_closeCallback(std::move(closeCallback)) {
     using namespace theme;
 
-    m_element = append(parent, "div", id);
+    m_element = append(parent, "div", id,
+        {
+            {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+            {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Column},
+            {Rml::PropertyId::BoxSizing, Rml::Style::BoxSizing::BorderBox},
+            {Rml::PropertyId::Width, rml_percent(100.0f)},
+            {Rml::PropertyId::MaxWidth, rml_dp(1088.0f)},
+            {Rml::PropertyId::BorderTopWidth, rml_dp(BorderWidth)},
+            {Rml::PropertyId::BorderRightWidth, rml_dp(BorderWidth)},
+            {Rml::PropertyId::BorderBottomWidth, rml_dp(BorderWidth)},
+            {Rml::PropertyId::BorderLeftWidth, rml_dp(BorderWidth)},
+            {Rml::PropertyId::BorderTopLeftRadius, rml_dp(BorderRadiusMedium)},
+            {Rml::PropertyId::BorderTopRightRadius, rml_dp(BorderRadiusMedium)},
+            {Rml::PropertyId::BorderBottomRightRadius, rml_dp(BorderRadiusMedium)},
+            {Rml::PropertyId::BorderBottomLeftRadius, rml_dp(BorderRadiusMedium)},
+            {Rml::PropertyId::BorderTopColor, rml_color(ElevatedBorder)},
+            {Rml::PropertyId::BorderRightColor, rml_color(ElevatedBorder)},
+            {Rml::PropertyId::BorderBottomColor, rml_color(ElevatedBorder)},
+            {Rml::PropertyId::BorderLeftColor, rml_color(ElevatedBorder)},
+            {Rml::PropertyId::BackgroundColor, rml_color(WindowSurface)},
+            {Rml::PropertyId::OverflowX, Rml::Style::Overflow::Hidden},
+            {Rml::PropertyId::OverflowY, Rml::Style::Overflow::Hidden},
+        });
     set_props(m_element, {
-        {"display", "flex"},
-        {"flex-direction", "column"},
-        {"box-sizing", "border-box"},
-        {"width", "100%"},
-        {"max-width", "1088dp"},
-        {"border-width", dp(BorderWidth)},
-        {"border-radius", dp(BorderRadiusMedium)},
-        {"border-color", rgba(ElevatedBorder)},
-        {"background-color", rgba(WindowSurface)},
-        {"backdrop-filter", "blur(5dp)"},
-        {"box-shadow", "0 0 25dp 5dp"},
-        {"overflow", "hidden"},
-    });
+                             {"backdrop-filter", "blur(5dp)"},
+                             {"box-shadow", "0 0 25dp 5dp"},
+                         });
 
-    m_tabBar = append(m_element, "div");
-    set_props(m_tabBar, {
-        {"display", "flex"},
-        {"position", "relative"},
-        {"flex-direction", "row"},
-        {"align-items", "center"},
-        {"box-sizing", "border-box"},
-        {"width", "100%"},
-        {"height", dp(WindowTabBarHeight)},
-        {"min-height", dp(WindowTabBarHeight)},
-        {"padding-left", "12dp"},
-        {"padding-right", "12dp"},
-        {"gap", "4dp"},
-        {"background-color", rgba(WindowTitleOverlay)},
-        {"border-bottom-width", dp(BorderWidth * 1.5f)},
-        {"border-bottom-color", rgba(WindowDivider)},
-    });
+    m_tabBar = append(m_element, "div", {},
+        {
+            {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+            {Rml::PropertyId::Position, Rml::Style::Position::Relative},
+            {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Row},
+            {Rml::PropertyId::AlignItems, Rml::Style::AlignItems::Center},
+            {Rml::PropertyId::BoxSizing, Rml::Style::BoxSizing::BorderBox},
+            {Rml::PropertyId::Width, rml_percent(100.0f)},
+            {Rml::PropertyId::Height, rml_dp(WindowTabBarHeight)},
+            {Rml::PropertyId::MinHeight, rml_dp(WindowTabBarHeight)},
+            {Rml::PropertyId::PaddingLeft, rml_dp(12.0f)},
+            {Rml::PropertyId::PaddingRight, rml_dp(12.0f)},
+            {Rml::PropertyId::RowGap, rml_dp(4.0f)},
+            {Rml::PropertyId::ColumnGap, rml_dp(4.0f)},
+            {Rml::PropertyId::BackgroundColor, rml_color(WindowTitleOverlay)},
+            {Rml::PropertyId::BorderBottomWidth, rml_dp(BorderWidth * 1.5f)},
+            {Rml::PropertyId::BorderBottomColor, rml_color(WindowDivider)},
+        });
 
-    m_tabStrip = append(m_tabBar, "div");
-    set_props(m_tabStrip, {
-        {"display", "flex"},
-        {"flex-direction", "row"},
-        {"align-items", "stretch"},
-        {"justify-content", "flex-start"},
-        {"flex-grow", "1"},
-        {"flex-shrink", "1"},
-        {"min-width", "0"},
-        {"height", "100%"},
-        {"gap", "4dp"},
-    });
+    m_tabStrip = append(m_tabBar, "div", {},
+        {
+            {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+            {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Row},
+            {Rml::PropertyId::AlignItems, Rml::Style::AlignItems::Stretch},
+            {Rml::PropertyId::JustifyContent, Rml::Style::JustifyContent::FlexStart},
+            {Rml::PropertyId::FlexGrow, rml_number(1.0f)},
+            {Rml::PropertyId::FlexShrink, rml_number(1.0f)},
+            {Rml::PropertyId::MinWidth, rml_px(0.0f)},
+            {Rml::PropertyId::Height, rml_percent(100.0f)},
+            {Rml::PropertyId::RowGap, rml_dp(4.0f)},
+            {Rml::PropertyId::ColumnGap, rml_dp(4.0f)},
+        });
 
     const std::string closeId = id.empty() ? std::string{} : std::string(id) + "-close";
-    m_closeButton = append(m_tabBar, "button", closeId);
-    set_props(m_closeButton, {
-        {"display", "flex"},
-        {"position", "relative"},
-        {"align-items", "center"},
-        {"justify-content", "center"},
-        {"box-sizing", "border-box"},
-        {"width", "36dp"},
-        {"height", "36dp"},
-        {"flex-shrink", "0"},
-        {"border-width", "0"},
-        {"border-radius", dp(BorderRadiusSmall)},
-        {"background-color", rgba(Transparent)},
-        {"cursor", "pointer"},
-        {"tab-index", "auto"},
-        {"font-family", "Inter"},
-    });
+    m_closeButton = append(m_tabBar, "button", closeId,
+        {
+            {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+            {Rml::PropertyId::Position, Rml::Style::Position::Relative},
+            {Rml::PropertyId::AlignItems, Rml::Style::AlignItems::Center},
+            {Rml::PropertyId::JustifyContent, Rml::Style::JustifyContent::Center},
+            {Rml::PropertyId::BoxSizing, Rml::Style::BoxSizing::BorderBox},
+            {Rml::PropertyId::Width, rml_dp(36.0f)},
+            {Rml::PropertyId::Height, rml_dp(36.0f)},
+            {Rml::PropertyId::FlexShrink, rml_number(0.0f)},
+            {Rml::PropertyId::BorderTopWidth, rml_px(0.0f)},
+            {Rml::PropertyId::BorderRightWidth, rml_px(0.0f)},
+            {Rml::PropertyId::BorderBottomWidth, rml_px(0.0f)},
+            {Rml::PropertyId::BorderLeftWidth, rml_px(0.0f)},
+            {Rml::PropertyId::BorderTopLeftRadius, rml_dp(BorderRadiusSmall)},
+            {Rml::PropertyId::BorderTopRightRadius, rml_dp(BorderRadiusSmall)},
+            {Rml::PropertyId::BorderBottomRightRadius, rml_dp(BorderRadiusSmall)},
+            {Rml::PropertyId::BorderBottomLeftRadius, rml_dp(BorderRadiusSmall)},
+            {Rml::PropertyId::BackgroundColor, rml_color(Transparent)},
+            {Rml::PropertyId::Cursor, rml_string("pointer")},
+            {Rml::PropertyId::TabIndex, Rml::Style::TabIndex::Auto},
+            {Rml::PropertyId::FontFamily, rml_string("Inter")},
+        });
     add_focus_border(m_closeButton, BorderRadiusSmall);
 
-    auto* closeGlyph = append_text(m_closeButton, "span", "\xc3\x97");
-    set_props(closeGlyph, {
-        {"font-size", "22dp"},
-        {"font-weight", "400"},
-        {"color", rgba(WindowGlyph)},
-        {"pointer-events", "none"},
-    });
+    auto* closeGlyph = append(m_closeButton, "span", {},
+        {
+            {Rml::PropertyId::FontSize, rml_dp(22.0f)},
+            {Rml::PropertyId::FontWeight, Rml::Style::FontWeight::Normal},
+            {Rml::PropertyId::Color, rml_color(WindowGlyph)},
+            {Rml::PropertyId::PointerEvents, Rml::Style::PointerEvents::None},
+        });
+    set_text(closeGlyph, "\xc3\x97");
 
     m_closeButton->AddEventListener(Rml::EventId::Click, this);
     m_closeButton->AddEventListener(Rml::EventId::Focus, this);
@@ -228,60 +261,65 @@ Window::Window(Rml::Element* parent, std::string_view id, std::function<void()> 
     m_closeButton->AddEventListener(Rml::EventId::Mouseover, this);
     m_closeButton->AddEventListener(Rml::EventId::Mouseout, this);
 
-    m_contentRow = append(m_element, "div");
-    set_props(m_contentRow, {
-        {"display", "flex"},
-        {"flex-direction", "row"},
-        {"align-items", "stretch"},
-        {"box-sizing", "border-box"},
-        {"width", "100%"},
-        {"flex-grow", "1"},
-        {"flex-shrink", "1"},
-        {"min-height", "0"},
-        {"min-width", "0"},
-        {"gap", "20dp"},
-    });
+    m_contentRow = append(m_element, "div", {},
+        {
+            {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+            {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Row},
+            {Rml::PropertyId::AlignItems, Rml::Style::AlignItems::Stretch},
+            {Rml::PropertyId::BoxSizing, Rml::Style::BoxSizing::BorderBox},
+            {Rml::PropertyId::Width, rml_percent(100.0f)},
+            {Rml::PropertyId::FlexGrow, rml_number(1.0f)},
+            {Rml::PropertyId::FlexShrink, rml_number(1.0f)},
+            {Rml::PropertyId::MinHeight, rml_px(0.0f)},
+            {Rml::PropertyId::MinWidth, rml_px(0.0f)},
+            {Rml::PropertyId::RowGap, rml_dp(20.0f)},
+            {Rml::PropertyId::ColumnGap, rml_dp(20.0f)},
+        });
 
-    m_leftPane = append(m_contentRow, "div");
-    set_props(m_leftPane, {
-        {"display", "flex"},
-        {"flex-direction", "column"},
-        {"box-sizing", "border-box"},
-        {"min-width", "0"},
-        {"min-height", "0"},
-        {"padding", "24dp"},
-        {"gap", "12dp"},
-    });
+    m_leftPane = append(m_contentRow, "div", {},
+        {
+            {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+            {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Column},
+            {Rml::PropertyId::BoxSizing, Rml::Style::BoxSizing::BorderBox},
+            {Rml::PropertyId::MinWidth, rml_px(0.0f)},
+            {Rml::PropertyId::MinHeight, rml_px(0.0f)},
+            {Rml::PropertyId::PaddingTop, rml_dp(24.0f)},
+            {Rml::PropertyId::PaddingRight, rml_dp(24.0f)},
+            {Rml::PropertyId::PaddingBottom, rml_dp(24.0f)},
+            {Rml::PropertyId::PaddingLeft, rml_dp(24.0f)},
+            {Rml::PropertyId::RowGap, rml_dp(12.0f)},
+            {Rml::PropertyId::ColumnGap, rml_dp(12.0f)},
+        });
 
-    m_rightPane = append(m_contentRow, "div");
-    set_props(m_rightPane, {
-        {"display", "none"},
-        {"flex-direction", "column"},
-        {"box-sizing", "border-box"},
-        {"min-width", "0"},
-        {"min-height", "0"},
-        {"padding-top", "24dp"},
-        {"padding-bottom", "24dp"},
-        {"padding-right", "24dp"},
-        {"padding-left", "8dp"},
-        {"align-items", "flex-start"},
-        {"overflow-y", "auto"},
-    });
+    m_rightPane = append(m_contentRow, "div", {},
+        {
+            {Rml::PropertyId::Display, Rml::Style::Display::None},
+            {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Column},
+            {Rml::PropertyId::BoxSizing, Rml::Style::BoxSizing::BorderBox},
+            {Rml::PropertyId::MinWidth, rml_px(0.0f)},
+            {Rml::PropertyId::MinHeight, rml_px(0.0f)},
+            {Rml::PropertyId::PaddingTop, rml_dp(24.0f)},
+            {Rml::PropertyId::PaddingBottom, rml_dp(24.0f)},
+            {Rml::PropertyId::PaddingRight, rml_dp(24.0f)},
+            {Rml::PropertyId::PaddingLeft, rml_dp(8.0f)},
+            {Rml::PropertyId::AlignItems, Rml::Style::AlignItems::FlexStart},
+            {Rml::PropertyId::OverflowY, Rml::Style::Overflow::Auto},
+        });
 
-    m_rightPane = append(m_contentRow, "div");
-    set_props(m_rightPane, {
-                                {"display", "none"},
-                                {"flex-direction", "column"},
-                                {"box-sizing", "border-box"},
-                                {"min-width", "0"},
-                                {"min-height", "0"},
-                                {"padding-top", "24dp"},
-                                {"padding-bottom", "24dp"},
-                                {"padding-right", "24dp"},
-                                {"padding-left", "8dp"},
-                                {"align-items", "flex-start"},
-                                {"overflow-y", "auto"},
-                            });
+    m_rightPane = append(m_contentRow, "div", {},
+        {
+            {Rml::PropertyId::Display, Rml::Style::Display::None},
+            {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Column},
+            {Rml::PropertyId::BoxSizing, Rml::Style::BoxSizing::BorderBox},
+            {Rml::PropertyId::MinWidth, rml_px(0.0f)},
+            {Rml::PropertyId::MinHeight, rml_px(0.0f)},
+            {Rml::PropertyId::PaddingTop, rml_dp(24.0f)},
+            {Rml::PropertyId::PaddingBottom, rml_dp(24.0f)},
+            {Rml::PropertyId::PaddingRight, rml_dp(24.0f)},
+            {Rml::PropertyId::PaddingLeft, rml_dp(8.0f)},
+            {Rml::PropertyId::AlignItems, Rml::Style::AlignItems::FlexStart},
+            {Rml::PropertyId::OverflowY, Rml::Style::Overflow::Auto},
+        });
 
     apply_pane_layout();
     apply_close_style();
@@ -332,7 +370,8 @@ void Window::ProcessEvent(Rml::Event& event) {
     }
 }
 
-WindowTab* Window::add_tab(std::string_view id, std::string_view label, std::function<void()> selectedCallback) {
+WindowTab* Window::add_tab(
+    std::string_view id, std::string_view label, std::function<void()> selectedCallback) {
     if (m_tabStrip == nullptr) {
         return nullptr;
     }
@@ -382,24 +421,31 @@ void Window::apply_pane_layout() {
 
     if (m_rightPaneVisible) {
         set_props(m_leftPane, {
-            {"display", "flex"},
-            {"flex", "1 1 0"},
-            {"min-width", "0"},
-        });
+                                  {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+                                  {Rml::PropertyId::FlexGrow, rml_number(1.0f)},
+                                  {Rml::PropertyId::FlexShrink, rml_number(1.0f)},
+                                  {Rml::PropertyId::FlexBasis, rml_px(0.0f)},
+                                  {Rml::PropertyId::MinWidth, rml_px(0.0f)},
+                              });
         set_props(m_rightPane, {
-            {"display", "flex"},
-            {"flex", "0 0 40%"},
-            {"min-width", "0"},
-        });
+                                   {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+                                   {Rml::PropertyId::FlexGrow, rml_number(0.0f)},
+                                   {Rml::PropertyId::FlexShrink, rml_number(0.0f)},
+                                   {Rml::PropertyId::FlexBasis, rml_percent(40.0f)},
+                                   {Rml::PropertyId::MinWidth, rml_px(0.0f)},
+                               });
     } else {
-        set_props(m_leftPane, {
-            {"display", "flex"},
-            {"flex", "1 1 auto"},
-            {"width", "100%"},
-        });
+        set_props(
+            m_leftPane, {
+                            {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+                            {Rml::PropertyId::FlexGrow, rml_number(1.0f)},
+                            {Rml::PropertyId::FlexShrink, rml_number(1.0f)},
+                            {Rml::PropertyId::FlexBasis, Rml::Style::LengthPercentageAuto::Auto},
+                            {Rml::PropertyId::Width, rml_percent(100.0f)},
+                        });
         set_props(m_rightPane, {
-            {"display", "none"},
-        });
+                                   {Rml::PropertyId::Display, Rml::Style::Display::None},
+                               });
     }
 }
 
@@ -411,7 +457,8 @@ void Window::apply_close_style() {
     }
 
     const bool active = m_closeHovered || m_closeFocused;
-    m_closeButton->SetProperty("background-color", active ? rgba(WindowAccent, 56) : rgba(Transparent));
+    m_closeButton->SetProperty(Rml::PropertyId::BackgroundColor,
+        active ? rml_color(WindowAccent, 56) : rml_color(Transparent));
     set_focus_border_visible(m_closeButton, m_closeFocused);
 }
 }  // namespace dusk::ui

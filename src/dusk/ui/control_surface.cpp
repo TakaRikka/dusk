@@ -41,12 +41,20 @@ ControlSurfaceStyle control_surface_style(ControlSurfaceTone tone) {
     }
 }
 
-void apply_control_surface_style(Rml::Element* element, const ControlSurfaceStyle& style, bool active) {
+void apply_control_surface_style(
+    Rml::Element* element, const ControlSurfaceStyle& style, bool active) {
     if (element == nullptr) {
         return;
     }
 
-    element->SetProperty("border-color", active ? theme::rgba(style.accent, style.activeBorderOpacity) : theme::rgba(theme::ElevatedBorder, style.inactiveBorderOpacity));
-    element->SetProperty("background-color", theme::rgba(style.accent, active ? style.activeBackgroundOpacity : style.inactiveBackgroundOpacity));
+    const auto borderColor = active ? rml_color(style.accent, style.activeBorderOpacity) :
+                                      rml_color(theme::ElevatedBorder, style.inactiveBorderOpacity);
+    element->SetProperty(Rml::PropertyId::BorderLeftColor, borderColor);
+    element->SetProperty(Rml::PropertyId::BorderRightColor, borderColor);
+    element->SetProperty(Rml::PropertyId::BorderTopColor, borderColor);
+    element->SetProperty(Rml::PropertyId::BorderBottomColor, borderColor);
+    element->SetProperty(Rml::PropertyId::BackgroundColor,
+        rml_color(style.accent,
+            active ? style.activeBackgroundOpacity : style.inactiveBackgroundOpacity));
 }
 }  // namespace dusk::ui

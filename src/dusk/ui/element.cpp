@@ -34,7 +34,8 @@ std::string escape(std::string_view text) {
     return result;
 }
 
-Rml::Element* append(Rml::Element* parent, std::string_view tag, std::string_view id) {
+Rml::Element* append(Rml::Element* parent, std::string_view tag, std::string_view id,
+    std::initializer_list<std::pair<Rml::PropertyId, Rml::Property> > properties) {
     if (parent == nullptr) {
         return nullptr;
     }
@@ -52,11 +53,13 @@ Rml::Element* append(Rml::Element* parent, std::string_view tag, std::string_vie
     if (!id.empty()) {
         rawChild->SetId(std::string(id));
     }
-    return parent->AppendChild(std::move(child));
+    Rml::Element* appended = parent->AppendChild(std::move(child));
+    set_props(appended, properties);
+    return appended;
 }
 
-Rml::Element* append_text(Rml::Element* parent, std::string_view tag, std::string_view text,
-                          std::string_view id) {
+Rml::Element* append_text(
+    Rml::Element* parent, std::string_view tag, std::string_view text, std::string_view id) {
     Rml::Element* element = append(parent, tag, id);
     set_text(element, text);
     return element;
@@ -69,12 +72,22 @@ void set_text(Rml::Element* element, std::string_view text) {
 }
 
 void set_props(Rml::Element* element,
-               std::initializer_list<std::pair<std::string_view, std::string_view> > properties) {
+    std::initializer_list<std::pair<std::string_view, std::string_view> > properties) {
     if (element == nullptr) {
         return;
     }
     for (const auto& [name, value] : properties) {
         element->SetProperty(std::string(name), std::string(value));
+    }
+}
+
+void set_props(Rml::Element* element,
+    std::initializer_list<std::pair<Rml::PropertyId, Rml::Property> > properties) {
+    if (element == nullptr) {
+        return;
+    }
+    for (const auto& [name, value] : properties) {
+        element->SetProperty(name, value);
     }
 }
 

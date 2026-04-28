@@ -21,7 +21,7 @@ enum class ButtonVariant {
 class Button : public Rml::EventListener {
 public:
     Button(Rml::Element* parent, std::string_view id, std::string_view text, ButtonVariant variant,
-           std::function<void()> pressedCallback);
+        std::function<void()> pressedCallback);
     ~Button() override;
 
     Button(const Button&) = delete;

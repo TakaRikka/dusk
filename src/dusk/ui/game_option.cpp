@@ -13,89 +13,104 @@
 namespace dusk::ui {
 
 GameOption::GameOption(Rml::Element* parent, std::string_view id, std::string_view title,
-                       std::string_view value, std::string_view detail,
-                       std::function<void()> pressedCallback)
+    std::string_view value, std::string_view detail, std::function<void()> pressedCallback)
     : m_pressedCallback(std::move(pressedCallback)) {
     using namespace theme;
 
-    m_element = append(parent, "button", id);
-    set_props(m_element, {
-                             {"display", "flex"},
-                             {"position", "relative"},
-                             {"flex-direction", "row"},
-                             {"align-items", "center"},
-                             {"justify-content", "space-between"},
-                             {"box-sizing", "border-box"},
-                             {"gap", "16dp"},
-                             {"width", "100%"},
-                             {"height", "auto"},
-                             {"padding", "16dp"},
-                             {"border-width", dp(BorderWidth)},
-                             {"border-radius", dp(BorderRadiusSmall)},
-                             {"background-color", rgba(Transparent)},
-                             {"border-color", rgba(ElevatedBorder, 0)},
-                             {"color", rgba(TextDim)},
-                             {"cursor", "pointer"},
-                             {"tab-index", "auto"},
-                             {"nav-up", "auto"},
-                             {"nav-down", "auto"},
-                             {"nav-left", "auto"},
-                             {"nav-right", "auto"},
-                             {"opacity", "1"},
-                             {"font-family", "Inter"},
-                         });
+    m_element = append(parent, "button", id,
+        {
+            {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+            {Rml::PropertyId::Position, Rml::Style::Position::Relative},
+            {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Row},
+            {Rml::PropertyId::AlignItems, Rml::Style::AlignItems::Center},
+            {Rml::PropertyId::JustifyContent, Rml::Style::JustifyContent::SpaceBetween},
+            {Rml::PropertyId::BoxSizing, Rml::Style::BoxSizing::BorderBox},
+            {Rml::PropertyId::RowGap, rml_dp(16.0f)},
+            {Rml::PropertyId::ColumnGap, rml_dp(16.0f)},
+            {Rml::PropertyId::Width, rml_percent(100.0f)},
+            {Rml::PropertyId::PaddingTop, rml_dp(16.0f)},
+            {Rml::PropertyId::PaddingRight, rml_dp(16.0f)},
+            {Rml::PropertyId::PaddingBottom, rml_dp(16.0f)},
+            {Rml::PropertyId::PaddingLeft, rml_dp(16.0f)},
+            {Rml::PropertyId::BorderTopWidth, rml_dp(BorderWidth)},
+            {Rml::PropertyId::BorderRightWidth, rml_dp(BorderWidth)},
+            {Rml::PropertyId::BorderBottomWidth, rml_dp(BorderWidth)},
+            {Rml::PropertyId::BorderLeftWidth, rml_dp(BorderWidth)},
+            {Rml::PropertyId::BorderTopLeftRadius, rml_dp(BorderRadiusSmall)},
+            {Rml::PropertyId::BorderTopRightRadius, rml_dp(BorderRadiusSmall)},
+            {Rml::PropertyId::BorderBottomRightRadius, rml_dp(BorderRadiusSmall)},
+            {Rml::PropertyId::BorderBottomLeftRadius, rml_dp(BorderRadiusSmall)},
+            {Rml::PropertyId::BackgroundColor, rml_color(Transparent)},
+            {Rml::PropertyId::BorderTopColor, rml_color(ElevatedBorder, 0)},
+            {Rml::PropertyId::BorderRightColor, rml_color(ElevatedBorder, 0)},
+            {Rml::PropertyId::BorderBottomColor, rml_color(ElevatedBorder, 0)},
+            {Rml::PropertyId::BorderLeftColor, rml_color(ElevatedBorder, 0)},
+            {Rml::PropertyId::Color, rml_color(TextDim)},
+            {Rml::PropertyId::Cursor, rml_string("pointer")},
+            {Rml::PropertyId::TabIndex, Rml::Style::TabIndex::Auto},
+            {Rml::PropertyId::NavUp, Rml::Style::Nav::Auto},
+            {Rml::PropertyId::NavDown, Rml::Style::Nav::Auto},
+            {Rml::PropertyId::NavLeft, Rml::Style::Nav::Auto},
+            {Rml::PropertyId::NavRight, Rml::Style::Nav::Auto},
+            {Rml::PropertyId::Opacity, rml_number(1.0f)},
+            {Rml::PropertyId::FontFamily, rml_string("Inter")},
+        });
 
     add_focus_border(m_element, BorderRadiusSmall);
 
-    auto* left = append(m_element, "div");
-    set_props(left, {
-                        {"display", "flex"},
-                        {"flex-direction", "column"},
-                        {"gap", "4dp"},
-                        {"min-width", "0"},
-                        {"width", "0"},
-                        {"flex-grow", "1"},
-                        {"flex-shrink", "1"},
-                        {"pointer-events", "none"},
-                    });
+    auto* left = append(m_element, "div", {},
+        {
+            {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+            {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Column},
+            {Rml::PropertyId::RowGap, rml_dp(4.0f)},
+            {Rml::PropertyId::ColumnGap, rml_dp(4.0f)},
+            {Rml::PropertyId::MinWidth, rml_px(0.0f)},
+            {Rml::PropertyId::Width, rml_px(0.0f)},
+            {Rml::PropertyId::FlexGrow, rml_number(1.0f)},
+            {Rml::PropertyId::FlexShrink, rml_number(1.0f)},
+            {Rml::PropertyId::PointerEvents, Rml::Style::PointerEvents::None},
+        });
 
     m_title = add_label(left, title, LabelStyle::Large);
     set_props(m_title, {
-                           {"color", rgba(TextDim)},
-                           {"font-size", "28dp"},
-                           {"letter-spacing", "1dp"},
+                           {Rml::PropertyId::Color, rml_color(TextDim)},
+                           {Rml::PropertyId::FontSize, rml_dp(28.0f)},
+                           {Rml::PropertyId::LetterSpacing, rml_dp(1.0f)},
                        });
 
     if (!value.empty() || !detail.empty()) {
-        auto* right = append(m_element, "div");
-        set_props(right, {
-                             {"display", "flex"},
-                             {"flex-direction", "column"},
-                             {"align-items", "flex-end"},
-                             {"justify-content", "center"},
-                             {"gap", "4dp"},
-                             {"min-width", "170dp"},
-                             {"max-width", "48%"},
-                             {"flex-shrink", "0"},
-                             {"pointer-events", "none"},
-                         });
+        auto* right = append(m_element, "div", {},
+            {
+                {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+                {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Column},
+                {Rml::PropertyId::AlignItems, Rml::Style::AlignItems::FlexEnd},
+                {Rml::PropertyId::JustifyContent, Rml::Style::JustifyContent::Center},
+                {Rml::PropertyId::RowGap, rml_dp(4.0f)},
+                {Rml::PropertyId::ColumnGap, rml_dp(4.0f)},
+                {Rml::PropertyId::MinWidth, rml_dp(170.0f)},
+                {Rml::PropertyId::MaxWidth, rml_percent(48.0f)},
+                {Rml::PropertyId::FlexShrink, rml_number(0.0f)},
+                {Rml::PropertyId::PointerEvents, Rml::Style::PointerEvents::None},
+            });
 
         if (!value.empty()) {
             m_value = add_label(right, value, LabelStyle::Body);
-            set_props(m_value, {
-                                   {"color", rgba(TextDim)},
-                                   {"text-align", "right"},
-                                   {"overflow", "hidden"},
-                                   {"text-overflow", "ellipsis"},
-                                   {"white-space", "nowrap"},
-                               });
+            set_props(
+                m_value, {
+                             {Rml::PropertyId::Color, rml_color(TextDim)},
+                             {Rml::PropertyId::TextAlign, Rml::Style::TextAlign::Right},
+                             {Rml::PropertyId::OverflowX, Rml::Style::Overflow::Hidden},
+                             {Rml::PropertyId::OverflowY, Rml::Style::Overflow::Hidden},
+                             {Rml::PropertyId::TextOverflow, Rml::Style::TextOverflow::Ellipsis},
+                             {Rml::PropertyId::WhiteSpace, Rml::Style::WhiteSpace::Nowrap},
+                         });
         }
 
         if (!detail.empty()) {
             m_detail = add_label(right, detail, LabelStyle::Annotation);
             set_props(m_detail, {
-                                    {"color", rgba(TextDim)},
-                                    {"text-align", "right"},
+                                    {Rml::PropertyId::Color, rml_color(TextDim)},
+                                    {Rml::PropertyId::TextAlign, Rml::Style::TextAlign::Right},
                                 });
         }
     }
@@ -167,18 +182,18 @@ void GameOption::apply_style() {
     }
 
     const bool active = m_hovered || m_focused;
-    apply_control_surface_style(m_element, control_surface_style(ControlSurfaceTone::Quiet),
-                                active);
-    m_element->SetProperty("color",
-                           active ? theme::rgba(theme::TextActive) : theme::rgba(theme::TextDim));
-    m_title->SetProperty("color",
-                         active ? theme::rgba(theme::TextActive) : theme::rgba(theme::TextDim));
+    apply_control_surface_style(
+        m_element, control_surface_style(ControlSurfaceTone::Quiet), active);
+    m_element->SetProperty(
+        Rml::PropertyId::Color, rml_color(active ? theme::TextActive : theme::TextDim));
+    m_title->SetProperty(
+        Rml::PropertyId::Color, rml_color(active ? theme::TextActive : theme::TextDim));
     if (m_value != nullptr) {
-        m_value->SetProperty("color",
-                             active ? theme::rgba(theme::TextActive) : theme::rgba(theme::TextDim));
+        m_value->SetProperty(
+            Rml::PropertyId::Color, rml_color(active ? theme::TextActive : theme::TextDim));
     }
     if (m_detail != nullptr) {
-        m_detail->SetProperty("color", theme::rgba(theme::TextDim));
+        m_detail->SetProperty(Rml::PropertyId::Color, rml_color(theme::TextDim));
     }
     set_focus_border_visible(m_element, m_focused);
 }

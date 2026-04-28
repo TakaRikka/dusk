@@ -89,8 +89,8 @@ Rml::Input::KeyIdentifier key_from_gamepad_button(Uint8 button) {
     }
 }
 
-Rml::Input::KeyIdentifier key_from_gamepad_axis(const SDL_GamepadAxisEvent& event,
-                                                float axisValue) {
+Rml::Input::KeyIdentifier key_from_gamepad_axis(
+    const SDL_GamepadAxisEvent& event, float axisValue) {
     switch (event.axis) {
     case SDL_GAMEPAD_AXIS_LEFTX:
         return axisValue < 0.0f ? Rml::Input::KI_LEFT : Rml::Input::KI_RIGHT;

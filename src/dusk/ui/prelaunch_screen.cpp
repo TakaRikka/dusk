@@ -53,7 +53,11 @@ struct BackendChoice {
 };
 
 constexpr std::array<const char*, 5> kLanguageNames = {
-    "English", "German", "French", "Spanish", "Italian",
+    "English",
+    "German",
+    "French",
+    "Spanish",
+    "Italian",
 };
 
 constexpr std::array<SDL_DialogFileFilter, 2> kGameDiscFileFilters{{
@@ -217,7 +221,7 @@ std::string display_path(std::string_view path) {
 std::vector<BackendChoice> backend_choices() {
     std::vector<BackendChoice> choices;
     choices.push_back({BACKEND_AUTO, std::string(backend_id(BACKEND_AUTO)),
-                       std::string(backend_name(BACKEND_AUTO))});
+        std::string(backend_name(BACKEND_AUTO))});
 
     size_t backendCount = 0;
     const AuroraBackend* availableBackends = aurora_get_available_backends(&backendCount);
@@ -458,8 +462,8 @@ private:
         m_requestedCycleDirection = direction;
     }
 
-    void add_button_control(Rml::Element* parent, std::string_view id, std::string_view text,
-                            ButtonVariant variant) {
+    void add_button_control(
+        Rml::Element* parent, std::string_view id, std::string_view text, ButtonVariant variant) {
         const std::string idString(id);
         m_focusIds.push_back(idString);
         m_buttons.push_back(std::make_unique<Button>(
@@ -467,20 +471,19 @@ private:
     }
 
     void add_option_control(Rml::Element* parent, std::string_view id, std::string_view title,
-                            std::string_view value, std::string_view detail) {
+        std::string_view value, std::string_view detail) {
         const std::string idString(id);
         m_focusIds.push_back(idString);
-        m_options.push_back(
-            std::make_unique<GameOption>(parent, idString, title, value, detail,
-                                         [this, idString] { queue_activation(idString); }));
+        m_options.push_back(std::make_unique<GameOption>(parent, idString, title, value, detail,
+            [this, idString] { queue_activation(idString); }));
     }
 
     void add_disc_control(Rml::Element* parent) {
         const std::string idString("select-disc");
         m_focusIds.push_back(idString);
-        m_discState = std::make_unique<DiscState>(
-            parent, idString, selected_disc_text(), disc_status_text(), !m_errorString.empty(),
-            [this, idString] { queue_activation(idString); });
+        m_discState =
+            std::make_unique<DiscState>(parent, idString, selected_disc_text(), disc_status_text(),
+                !m_errorString.empty(), [this, idString] { queue_activation(idString); });
     }
 
     void build_main(Rml::Element* screen) {
@@ -525,7 +528,7 @@ private:
         if (m_isPal) {
             const auto selectedLanguage = getSettings().game.language.getValue();
             add_option_control(panel, "language", "Language",
-                               kLanguageNames[static_cast<u8>(selectedLanguage)], "");
+                kLanguageNames[static_cast<u8>(selectedLanguage)], "");
         }
 
         const AuroraBackend backend = configured_backend();
@@ -533,8 +536,8 @@ private:
             getSettings().backend.graphicsBackend.getValue() != m_initialGraphicsBackend ?
                 "Restart required" :
                 "";
-        add_option_control(panel, "graphics-backend", "Graphics Backend", backend_name(backend),
-                           restartDetail);
+        add_option_control(
+            panel, "graphics-backend", "Graphics Backend", backend_name(backend), restartDetail);
 
         const auto fileType =
             static_cast<CARDFileType>(getSettings().backend.cardFileType.getValue());
@@ -556,7 +559,7 @@ private:
         for (size_t i = 0; i < kLanguageNames.size(); ++i) {
             const std::string id = fmt::format("language-{}", i);
             add_option_control(panel, id, kLanguageNames[i],
-                               i == static_cast<size_t>(selectedLanguage) ? "Current" : "", "");
+                i == static_cast<size_t>(selectedLanguage) ? "Current" : "", "");
         }
 
         add_button_control(panel, "back", "Back", ButtonVariant::Quiet);
@@ -574,8 +577,8 @@ private:
         const std::string currentBackendId = configured_backend_id();
         for (const BackendChoice& choice : backend_choices()) {
             const std::string id = "backend-" + choice.id;
-            add_option_control(panel, id, choice.name,
-                               choice.id == currentBackendId ? "Current" : "", "");
+            add_option_control(
+                panel, id, choice.name, choice.id == currentBackendId ? "Current" : "", "");
         }
 
         add_button_control(panel, "back", "Back", ButtonVariant::Quiet);
@@ -593,9 +596,9 @@ private:
         const auto fileType =
             static_cast<CARDFileType>(getSettings().backend.cardFileType.getValue());
         add_option_control(panel, "save-gci-folder", "GCI Folder",
-                           fileType == CARD_GCIFOLDER ? "Current" : "", "");
-        add_option_control(panel, "save-card-image", "Card Image",
-                           fileType == CARD_RAWIMAGE ? "Current" : "", "");
+            fileType == CARD_GCIFOLDER ? "Current" : "", "");
+        add_option_control(
+            panel, "save-card-image", "Card Image", fileType == CARD_RAWIMAGE ? "Current" : "", "");
 
         add_button_control(panel, "back", "Back", ButtonVariant::Quiet);
     }
@@ -783,7 +786,7 @@ private:
 
     void show_file_select() {
         ShowFileSelect(&file_dialog_callback, this, aurora::window::get_sdl_window(),
-                       kGameDiscFileFilters.data(), kGameDiscFileFilters.size(), nullptr, false);
+            kGameDiscFileFilters.data(), kGameDiscFileFilters.size(), nullptr, false);
     }
 
     void activate(std::string_view id) {
@@ -893,8 +896,8 @@ private:
         }
 
         if (id == "save-gci-folder" || id == "save-card-image") {
-            getSettings().backend.cardFileType.setValue(id == "save-gci-folder" ? CARD_GCIFOLDER :
-                                                                                  CARD_RAWIMAGE);
+            getSettings().backend.cardFileType.setValue(
+                id == "save-gci-folder" ? CARD_GCIFOLDER : CARD_RAWIMAGE);
             Save();
             m_view = View::Options;
             m_pendingFocusId = "save-file-type";

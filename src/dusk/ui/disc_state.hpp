@@ -15,8 +15,7 @@ namespace dusk::ui {
 class DiscState : public Rml::EventListener {
 public:
     DiscState(Rml::Element* parent, std::string_view id, std::string_view text,
-              std::string_view statusText, bool statusIsError,
-              std::function<void()> pressedCallback);
+        std::string_view statusText, bool statusIsError, std::function<void()> pressedCallback);
     ~DiscState() override;
 
     DiscState(const DiscState&) = delete;

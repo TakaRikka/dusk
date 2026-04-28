@@ -10,28 +10,36 @@ void apply_label_style(Rml::Element* element, LabelStyle style) {
 
     switch (style) {
     case LabelStyle::Annotation:
-        set_props(element, {{"font-size", "18dp"},
-                            {"letter-spacing", "2dp"},
-                            {"font-weight", "400"},
-                            {"color", rgba(TextDim)}});
+        set_props(element, {
+                               {Rml::PropertyId::FontSize, rml_dp(18.0f)},
+                               {Rml::PropertyId::LetterSpacing, rml_dp(2.0f)},
+                               {Rml::PropertyId::FontWeight, Rml::Style::FontWeight::Normal},
+                               {Rml::PropertyId::Color, rml_color(TextDim)},
+                           });
         break;
     case LabelStyle::Body:
-        set_props(element, {{"font-size", "20dp"},
-                            {"letter-spacing", "0"},
-                            {"font-weight", "400"},
-                            {"color", rgba(Text)}});
+        set_props(element, {
+                               {Rml::PropertyId::FontSize, rml_dp(20.0f)},
+                               {Rml::PropertyId::LetterSpacing, rml_px(0.0f)},
+                               {Rml::PropertyId::FontWeight, Rml::Style::FontWeight::Normal},
+                               {Rml::PropertyId::Color, rml_color(Text)},
+                           });
         break;
     case LabelStyle::Medium:
-        set_props(element, {{"font-size", "28dp"},
-                            {"letter-spacing", "3dp"},
-                            {"font-weight", "700"},
-                            {"color", rgba(Text)}});
+        set_props(element, {
+                               {Rml::PropertyId::FontSize, rml_dp(28.0f)},
+                               {Rml::PropertyId::LetterSpacing, rml_dp(3.0f)},
+                               {Rml::PropertyId::FontWeight, Rml::Style::FontWeight::Bold},
+                               {Rml::PropertyId::Color, rml_color(Text)},
+                           });
         break;
     case LabelStyle::Large:
-        set_props(element, {{"font-size", "36dp"},
-                            {"letter-spacing", "4dp"},
-                            {"font-weight", "700"},
-                            {"color", rgba(Text)}});
+        set_props(element, {
+                               {Rml::PropertyId::FontSize, rml_dp(36.0f)},
+                               {Rml::PropertyId::LetterSpacing, rml_dp(4.0f)},
+                               {Rml::PropertyId::FontWeight, Rml::Style::FontWeight::Bold},
+                               {Rml::PropertyId::Color, rml_color(Text)},
+                           });
         break;
     }
 }

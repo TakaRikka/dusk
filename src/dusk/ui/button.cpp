@@ -28,43 +28,49 @@ ControlSurfaceTone control_surface_tone(ButtonVariant variant) {
 }  // namespace
 
 Button::Button(Rml::Element* parent, std::string_view id, std::string_view text,
-               ButtonVariant variant, std::function<void()> pressedCallback)
+    ButtonVariant variant, std::function<void()> pressedCallback)
     : m_variant(variant), m_pressedCallback(std::move(pressedCallback)) {
     using namespace theme;
 
-    m_element = append(parent, "button", id);
-    set_props(m_element, {
-                             {"display", "flex"},
-                             {"position", "relative"},
-                             {"flex-direction", "row"},
-                             {"align-items", "center"},
-                             {"justify-content", "center"},
-                             {"box-sizing", "border-box"},
-                             {"width", "100%"},
-                             {"height", "68dp"},
-                             {"min-height", "68dp"},
-                             {"max-height", "68dp"},
-                             {"padding-left", "22dp"},
-                             {"padding-right", "22dp"},
-                             {"border-width", dp(BorderWidth)},
-                             {"border-radius", dp(BorderRadiusMedium)},
-                             {"cursor", "pointer"},
-                             {"tab-index", "auto"},
-                             {"nav-up", "auto"},
-                             {"nav-down", "auto"},
-                             {"nav-left", "auto"},
-                             {"nav-right", "auto"},
-                             {"opacity", "1"},
-                             {"font-family", "Inter"},
-                             {"color", rgba(Text)},
-                         });
+    m_element = append(parent, "button", id,
+        {
+            {Rml::PropertyId::Display, Rml::Style::Display::Flex},
+            {Rml::PropertyId::Position, Rml::Style::Position::Relative},
+            {Rml::PropertyId::FlexDirection, Rml::Style::FlexDirection::Row},
+            {Rml::PropertyId::AlignItems, Rml::Style::AlignItems::Center},
+            {Rml::PropertyId::JustifyContent, Rml::Style::JustifyContent::Center},
+            {Rml::PropertyId::BoxSizing, Rml::Style::BoxSizing::BorderBox},
+            {Rml::PropertyId::Width, rml_percent(100.0f)},
+            {Rml::PropertyId::Height, rml_dp(68.0f)},
+            {Rml::PropertyId::MinHeight, rml_dp(68.0f)},
+            {Rml::PropertyId::MaxHeight, rml_dp(68.0f)},
+            {Rml::PropertyId::PaddingLeft, rml_dp(22.0f)},
+            {Rml::PropertyId::PaddingRight, rml_dp(22.0f)},
+            {Rml::PropertyId::BorderTopWidth, rml_dp(BorderWidth)},
+            {Rml::PropertyId::BorderRightWidth, rml_dp(BorderWidth)},
+            {Rml::PropertyId::BorderBottomWidth, rml_dp(BorderWidth)},
+            {Rml::PropertyId::BorderLeftWidth, rml_dp(BorderWidth)},
+            {Rml::PropertyId::BorderTopLeftRadius, rml_dp(BorderRadiusMedium)},
+            {Rml::PropertyId::BorderTopRightRadius, rml_dp(BorderRadiusMedium)},
+            {Rml::PropertyId::BorderBottomRightRadius, rml_dp(BorderRadiusMedium)},
+            {Rml::PropertyId::BorderBottomLeftRadius, rml_dp(BorderRadiusMedium)},
+            {Rml::PropertyId::Cursor, rml_string("pointer")},
+            {Rml::PropertyId::TabIndex, Rml::Style::TabIndex::Auto},
+            {Rml::PropertyId::NavUp, Rml::Style::Nav::Auto},
+            {Rml::PropertyId::NavDown, Rml::Style::Nav::Auto},
+            {Rml::PropertyId::NavLeft, Rml::Style::Nav::Auto},
+            {Rml::PropertyId::NavRight, Rml::Style::Nav::Auto},
+            {Rml::PropertyId::Opacity, rml_number(1.0f)},
+            {Rml::PropertyId::FontFamily, rml_string("Inter")},
+            {Rml::PropertyId::Color, rml_color(Text)},
+        });
 
     add_focus_border(m_element, BorderRadiusMedium);
     m_label = append_text(m_element, "span", text);
     apply_label_style(m_label, LabelStyle::Medium);
     set_props(m_label, {
-                           {"pointer-events", "none"},
-                           {"text-align", "center"},
+                           {Rml::PropertyId::PointerEvents, Rml::Style::PointerEvents::None},
+                           {Rml::PropertyId::TextAlign, Rml::Style::TextAlign::Center},
                        });
 
     m_element->AddEventListener(Rml::EventId::Click, this);
@@ -136,10 +142,10 @@ void Button::apply_style() {
     }
 
     const bool active = m_hovered || m_focused;
-    apply_control_surface_style(m_element, control_surface_style(control_surface_tone(m_variant)),
-                                active);
-    m_element->SetProperty("color", rgba(active ? TextActive : Text));
-    m_label->SetProperty("color", rgba(active ? TextActive : Text));
+    apply_control_surface_style(
+        m_element, control_surface_style(control_surface_tone(m_variant)), active);
+    m_element->SetProperty(Rml::PropertyId::Color, rml_color(active ? TextActive : Text));
+    m_label->SetProperty(Rml::PropertyId::Color, rml_color(active ? TextActive : Text));
     set_focus_border_visible(m_element, m_focused);
 }
 
