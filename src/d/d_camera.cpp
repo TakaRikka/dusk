@@ -10049,6 +10049,10 @@ bool dCamera_c::oneSideCamera(s32 param_1) {
 }
 
 bool dCamera_c::eventCamera(s32 param_0) {
+    #if TARGET_PC
+    mCamParam.mManualMode = 0;
+    #endif
+
     char sp90[12];
 
     UNUSED(param_0);
