@@ -291,6 +291,43 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         },
         {
             {
+                "long_jump_attack",
+                "Long Jump Attack",
+                "Travel more than 20 meters in a single jump attack before landing.",
+                AchievementCategory::Misc,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                static bool inJump = false;
+                static float startX = 0.0f, startZ = 0.0f;
+
+                const auto* link = static_cast<const daAlink_c*>(daPy_getPlayerActorClass());
+                if (link == nullptr) {
+                    inJump = false;
+                    return;
+                }
+
+                if (!inJump) {
+                    if (link->mProcID == daAlink_c::PROC_CUT_JUMP) {
+                        inJump = true;
+                        startX = link->current.pos.x;
+                        startZ = link->current.pos.z;
+                    }
+                } else if (link->mProcID == daAlink_c::PROC_CUT_JUMP_LAND) {
+                    inJump = false;
+                    const float dx = link->current.pos.x - startX;
+                    const float dz = link->current.pos.z - startZ;
+                    if (dx * dx + dz * dz >= 2000.0f * 2000.0f) {
+                        a.progress = 1;
+                    }
+                } else if (link->mProcID != daAlink_c::PROC_CUT_JUMP) {
+                    inJump = false;
+                }
+            },
+            {}
+        },
+        {
+            {
                 "back_in_time",
                 "Back in Time",
                 "Perform the Back in Time glitch to play on the title screen.",
