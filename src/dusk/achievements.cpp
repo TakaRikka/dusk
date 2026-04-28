@@ -412,7 +412,6 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             },
             {}
         }
-
     };
 }
 
