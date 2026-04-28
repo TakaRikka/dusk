@@ -43,40 +43,40 @@ constexpr XXH128_hash_t parse_xxh128(std::string_view hex) {
 
 namespace dusk::iso {
 
+enum class Platform : u8 {
+    GameCube,
+    Wii,
+};
+
+enum class Region : u8 {
+    NorthAmerica,
+    Europe,
+    Japan,
+    Korea,
+};
+
 struct KnownDisc {
     XXH128_hash_t hash{};
     bool supported = false;
+    Platform platform;
+    Region region;
 
-    constexpr KnownDisc() = default;
-    constexpr KnownDisc(const std::string_view hex_hash)
-        : hash(parse_xxh128(hex_hash)), supported(true) {}
+    constexpr KnownDisc(Platform platform, Region region) : platform(platform), region(region) {}
+    constexpr KnownDisc(Platform platform, Region region, const std::string_view hash)
+        : hash(parse_xxh128(hash)), supported(true), platform(platform), region(region) {}
 };
 
 const std::unordered_map<std::string, const KnownDisc> KNOWN_DISCS = {
-    {"GZ2E01", {"14e886f08e548a000afde98a3195e788"}},  // GCN USA
-    {"GZ2P01", {"9ef597588b0035ca9e91b333fa9a8a7e"}},  // GCN PAL
-    {"GZ2J01", {}},                                    // GCN JPN
-    {"RZDE01", {}},                                    // Wii USA
-    {"RZDP01", {}},                                    // Wii PAL
-    {"RZDJ01", {}},                                    // Wii JPN
-    {"RZDK01", {}},                                    // Wii KOR
+    {"GZ2E01",
+     {Platform::GameCube, Region::NorthAmerica, "14e886f08e548a000afde98a3195e788"}},  // GCN USA
+    {"GZ2P01",
+     {Platform::GameCube, Region::Europe, "9ef597588b0035ca9e91b333fa9a8a7e"}},  // GCN PAL
+    {"GZ2J01", {Platform::GameCube, Region::Japan}},                             // GCN JPN
+    {"RZDE01", {Platform::Wii, Region::NorthAmerica}},                           // Wii USA
+    {"RZDP01", {Platform::Wii, Region::Europe}},                                 // Wii PAL
+    {"RZDJ01", {Platform::Wii, Region::Japan}},                                  // Wii JPN
+    {"RZDK01", {Platform::Wii, Region::Korea}},                                  // Wii KOR
 };
-
-constexpr const char* PAL_GAME_IDS[] = {
-    "GZ2P01", // GCN PAL
-    "RZDP01", // Wii PAL
-};
-
-template <size_t N>
-constexpr bool matches(const char (&id)[6], const char* const (&valid)[N]) {
-    for (auto elem : valid) {
-        if (strncmp(id, elem, 6) == 0) {
-            return true;
-        }
-    }
-
-    return false;
-}
 
 struct NodHandleWrapper {
     NodHandle* handle;
@@ -219,7 +219,9 @@ bool isPal(const char* path) {
         .close = StreamClose,
     };
 
-    if (nod_disc_open_stream(&nod_stream, nullptr, &disc.handle) != NOD_RESULT_OK || disc.handle == nullptr) {
+    if (nod_disc_open_stream(&nod_stream, nullptr, &disc.handle) != NOD_RESULT_OK ||
+        disc.handle == nullptr)
+    {
         return false;
     }
 
@@ -228,6 +230,8 @@ bool isPal(const char* path) {
         return false;
     }
 
-    return matches(header.game_id, PAL_GAME_IDS);
+    const auto it = KNOWN_DISCS.find(std::string(header.game_id, 6));
+
+    return it != KNOWN_DISCS.end() && it->second.region == Region::Europe;
 }
 }  // namespace dusk::iso
