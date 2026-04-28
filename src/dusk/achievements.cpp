@@ -426,6 +426,18 @@ void AchievementSystem::clearAll() {
     save();
 }
 
+void AchievementSystem::clearOne(const char* key) {
+    for (auto& e : m_entries) {
+        if (std::string(e.achievement.key) == key) {
+            e.achievement.progress = 0;
+            e.achievement.unlocked = false;
+            e.extra = {};
+            break;
+        }
+    }
+    save();
+}
+
 void AchievementSystem::processEntry(Entry& e) {
     if (e.achievement.unlocked) {
         return;

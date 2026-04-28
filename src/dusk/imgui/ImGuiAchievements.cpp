@@ -131,7 +131,7 @@ void ImGuiAchievements::draw(bool& open) {
                 continue;
             }
 
-            const std::string tabLabel = fmt::format("{} ({}/{})", catInfo.label, catUnlocked, catTotal);
+            const std::string tabLabel = fmt::format("{} ({}/{})###{}", catInfo.label, catUnlocked, catTotal, catInfo.label);
             
             ImGui::PushStyleColor(ImGuiCol_Text, catInfo.color);
             const bool tabOpen = ImGui::BeginTabItem(tabLabel.c_str());
@@ -152,6 +152,7 @@ void ImGuiAchievements::draw(bool& open) {
                         continue;
                     }
                     ImGui::PushID(a.key);
+                    ImGui::BeginGroup();
 
                     ImGui::PushStyleColor(
                         ImGuiCol_Text,
@@ -188,6 +189,21 @@ void ImGuiAchievements::draw(bool& open) {
                         );
                         ImGui::ProgressBar(fraction, ImVec2(-1.0f, 0.0f), overlay.c_str());
                         ImGui::PopStyleColor();
+                    }
+
+                    ImGui::EndGroup();
+
+                    if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+                        ImGui::OpenPopup("##ctx");
+                    }
+
+                    if (ImGui::BeginPopup("##ctx")) {
+                        ImGui::TextDisabled("%s", a.name);
+                        ImGui::Separator();
+                        if (ImGui::MenuItem("Clear Achievement")) {
+                            AchievementSystem::get().clearOne(a.key);
+                        }
+                        ImGui::EndPopup();
                     }
 
                     ImGui::Spacing();

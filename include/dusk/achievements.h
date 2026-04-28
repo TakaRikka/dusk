@@ -40,6 +40,7 @@ public:
     void save();
     void tick();
     void clearAll();
+    void clearOne(const char* key);
 
     std::vector<Achievement> getAchievements() const;
     bool hasPendingUnlock() const { return !m_pendingUnlocks.empty(); }
