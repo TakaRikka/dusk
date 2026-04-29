@@ -44,33 +44,34 @@ void dMpath_n::dTexObjAggregate_c::create() {
         const auto center = kMapCircleSize / 2.0f;
         const auto radiusSq = center * center;
         const auto blocksAcross = kMapCircleSize >> 3;
+        const auto totalPixels = sizeof(hqCircleData);
 
-        for (u16 y = 0; y < kMapCircleSize; y++) {
-            for (u16 x = 0; x < kMapCircleSize; x++) {
-                // swizzle raster order to I8 blocks
-                auto blockX = x >> 3;
-                auto blockY = y >> 2;
-                auto blockIdx = (blockY * blocksAcross) + blockX;
+        for (size_t i = 0; i < totalPixels; i++) {
+            // 8x4 block swizzling for I8
+            const auto blockIdx = i >> 5;
+            const auto localIdx = i & 31;
 
-                auto localX = x & 7;
-                auto localY = y & 3;
-                auto localIdx = (localY << 3) + localX;
+            const auto blockY = blockIdx / blocksAcross;
+            const auto blockX = blockIdx % blocksAcross;
 
-                auto finalOffset = (blockIdx << 5) + localIdx;
+            const auto localY = localIdx >> 3;
+            const auto localX = localIdx & 7;
 
-                auto dx = (x + 0.5f) - center;
-                auto dy = (y + 0.5f) - center;
+            const auto x = (blockX << 3) + localX;
+            const auto y = (blockY << 2) + localY;
 
-                // the original texture is in I4 format and uses 1 to indicate if inside the circle
-                // so we scale to I8 range: 255 / 15 = 17
-                hqCircleData[finalOffset] = (dx * dx + dy * dy < radiusSq) ? 17 : 0;
-            }
+            const auto dx = (x + 0.5f) - center;
+            const auto dy = (y + 0.5f) - center;
+
+            // the original texture is in I4 format and uses 1 to indicate if inside the circle
+            // so we scale to I8 range: 255 / 15 = 17
+            hqCircleData[i] = (dx * dx + dy * dy < radiusSq) ? 17 : 0;
         }
         hqCircleDrawn = true;
     }
 
     GXInitTexObj(hqCircle, hqCircleData, kMapCircleSize, kMapCircleSize, GX_TF_I8, GX_CLAMP,
-        GX_CLAMP, GX_FALSE);
+                 GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(hqCircle, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     mp_texObj[6] = hqCircle;
 #endif
