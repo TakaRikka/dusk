@@ -16,6 +16,7 @@
 
 #ifdef TARGET_PC
 constexpr u16 kMapResolutionMultiplier = 4;
+constexpr u16 kMapCircleSize = 16 * kMapResolutionMultiplier;
 #endif
 
 void dMpath_n::dTexObjAggregate_c::create() {
@@ -32,6 +33,47 @@ void dMpath_n::dTexObjAggregate_c::create() {
         JUT_ASSERT(74, image->magFilter == GX_NEAR);
         mDoLib_setResTimgObj(image, mp_texObj[lp1], 0, NULL);
     }
+
+#if TARGET_PC
+    auto hqCircle = JKR_NEW TGXTexObj();
+
+    static bool hqCircleDrawn = false;
+    static u8 hqCircleData[kMapCircleSize * kMapCircleSize];
+
+    if (!hqCircleDrawn) {
+        const auto center = kMapCircleSize / 2.0f;
+        const auto radiusSq = center * center;
+        const auto blocksAcross = kMapCircleSize >> 3;
+
+        for (u16 y = 0; y < kMapCircleSize; y++) {
+            for (u16 x = 0; x < kMapCircleSize; x++) {
+                // swizzle raster order to I8 blocks
+                auto blockX = x >> 3;
+                auto blockY = y >> 2;
+                auto blockIdx = (blockY * blocksAcross) + blockX;
+
+                auto localX = x & 7;
+                auto localY = y & 3;
+                auto localIdx = (localY << 3) + localX;
+
+                auto finalOffset = (blockIdx << 5) + localIdx;
+
+                auto dx = (x + 0.5f) - center;
+                auto dy = (y + 0.5f) - center;
+
+                // the original texture is in I4 format and uses 1 to indicate if inside the circle
+                // so we scale to I8 range: 255 / 15 = 17
+                hqCircleData[finalOffset] = (dx * dx + dy * dy < radiusSq) ? 17 : 0;
+            }
+        }
+        hqCircleDrawn = true;
+    }
+
+    GXInitTexObj(hqCircle, hqCircleData, kMapCircleSize, kMapCircleSize, GX_TF_I8, GX_CLAMP,
+        GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(hqCircle, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    mp_texObj[6] = hqCircle;
+#endif
 }
 
 void dMpath_n::dTexObjAggregate_c::remove() {
