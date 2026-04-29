@@ -38,11 +38,7 @@ dMirror_packet_c::dMirror_packet_c() {
 }
 
 void dMirror_packet_c::reset() {
-#if TARGET_PC
-    mbReset = true;
-#else
     mModelCount = 0;
-#endif
 }
 
 void dMirror_packet_c::calcMinMax() {
@@ -592,13 +588,6 @@ int daMirror_c::execute() {
         return 1;
     }
 
-#if TARGET_PC
-    if (mPacket.mbReset) {
-        mPacket.mModelCount = 0;
-        mPacket.mbReset = false;
-    }
-#endif
-
     daPy_py_c* player = daPy_getLinkPlayerActorClass();
     JUT_ASSERT(0, player != NULL);
 
@@ -613,7 +602,32 @@ int daMirror_c::execute() {
     return 1;
 }
 
+#if TARGET_PC
+static void daMirror_interp_callback(bool isSimFrame, void* pUserWork) {
+    daMirror_c* mirror = static_cast<daMirror_c*>(pUserWork);
+    if (mirror == NULL || mirror->mpModel == NULL) {
+        return;
+    }
+
+    if (mirror != daMirror_c::m_myObj) {
+        return;
+    }
+
+    if (mirror->mpModel != NULL) {
+        g_env_light.settingTevStruct(0x10, &mirror->current.pos, &mirror->tevStr);
+        g_env_light.setLightTevColorType(mirror->mpModel, &mirror->tevStr);
+        mDoExt_modelUpdateDL(mirror->mpModel);
+    }
+
+    dComIfGd_getOpaListBG()->entryImm(&mirror->mPacket, 0);
+}
+#endif
+
 int daMirror_c::draw() {
+#if TARGET_PC
+    dusk::frame_interp::add_interpolation_callback(&daMirror_interp_callback, this);
+#endif
+
     if (this != daMirror_c::m_myObj) {
         return 1;
     }
