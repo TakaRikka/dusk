@@ -408,6 +408,41 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 }
             },
             {}
+        },
+        {
+            {
+                "email_me",
+                "Email Me",
+                "Read a letter during the Dark Beast Ganon fight.",
+                AchievementCategory::Misc,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                void* dbgExists = fopAcM_SearchByName(fpcNm_B_MGN_e);
+                if (dbgExists && AchievementSystem::get().hasSignal("open_letter")) {
+                    a.progress = 1;
+                }
+            },
+            {}
+        },
+        {
+            {
+                "heavy-hitter",
+                "Heavy Hitter",
+                "Wear the Iron Boots during the end credits.",
+                AchievementCategory::Misc,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                const auto* link = static_cast<const daAlink_c*>(daPy_getPlayerActorClass());
+                if (link == nullptr || link->mProcID != daAlink_c::PROC_GANON_FINISH) {
+                    return;
+                }
+                if (daPy_getPlayerActorClass()->checkEquipHeavyBoots()) {
+                    a.progress = 1;
+                }
+            },
+            {}
         }
     };
 }
