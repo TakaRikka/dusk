@@ -67,15 +67,15 @@ struct KnownDisc {
         : id(id), platform(platform), region(region), supported(true), hash(parse_xxh128(hash)) {}
 };
 
-constexpr std::array KNOWN_DISCS = {
-    KnownDisc{"GZ2E01", Platform::GameCube, Region::NorthAmerica, "14e886f08e548a000afde98a3195e788"},
-    KnownDisc{"GZ2J01", Platform::GameCube, Region::Japan},
-    KnownDisc{"GZ2P01", Platform::GameCube, Region::Europe, "9ef597588b0035ca9e91b333fa9a8a7e"},
-    KnownDisc{"RZDE01", Platform::Wii, Region::NorthAmerica},
-    KnownDisc{"RZDJ01", Platform::Wii, Region::Japan},
-    KnownDisc{"RZDK01", Platform::Wii, Region::Korea},
-    KnownDisc{"RZDP01", Platform::Wii, Region::Europe},
-};
+constexpr auto KNOWN_DISCS = std::to_array<KnownDisc>({
+    {"GZ2E01", Platform::GameCube, Region::NorthAmerica, "14e886f08e548a000afde98a3195e788"},
+    {"GZ2J01", Platform::GameCube, Region::Japan},
+    {"GZ2P01", Platform::GameCube, Region::Europe, "9ef597588b0035ca9e91b333fa9a8a7e"},
+    {"RZDE01", Platform::Wii, Region::NorthAmerica},
+    {"RZDJ01", Platform::Wii, Region::Japan},
+    {"RZDK01", Platform::Wii, Region::Korea},
+    {"RZDP01", Platform::Wii, Region::Europe},
+});
 
 constexpr const KnownDisc* find_disc(std::string_view id) {
     for (const auto& disc : KNOWN_DISCS) {
