@@ -77,6 +77,23 @@ body {
     border-right: 1dp #92875B;
 }
 
+.window .content .pane.detail-pane {
+    gap: 16dp;
+}
+
+.window .content .detail-value {
+    padding: 12dp 16dp;
+    border-radius: 12dp;
+    background-color: rgba(17, 16, 10, 20%);
+    box-shadow: rgba(146, 135, 91, 25%) 0 0 0 1dp;
+    font-size: 20dp;
+}
+
+.window .content .detail-controls {
+    display: flex;
+    gap: 12dp;
+}
+
 .section-heading {
     font-weight: bold;
     text-transform: uppercase;

@@ -25,10 +25,74 @@ bool setup_window_model(Rml::Context* context, WindowModel& model, Rml::DataMode
 
     constructor.Bind("active_tab", &model.activeTab);
     constructor.Bind("tabs", &model.tabs);
+    constructor.Bind("active_selection", &model.activeSelection);
     constructor.BindEventCallback("set_active_tab", &WindowModel::set_active_tab, &model);
+    constructor.BindEventCallback("set_active_selection", &WindowModel::set_active_selection, &model);
+    constructor.BindEventCallback("window_action", &WindowModel::handle_action, &model);
 
     handle = constructor.GetModelHandle();
     return true;
+}
+
+Rml::ElementDocument* get_document_from_event(Rml::Event& event) {
+    auto* currentElem = event.GetCurrentElement();
+    if (currentElem == nullptr) {
+        return nullptr;
+    }
+    return currentElem->GetOwnerDocument();
+}
+
+Rml::Element* get_content_element(Rml::ElementDocument* document) {
+    if (document == nullptr) {
+        return nullptr;
+    }
+    return document->GetElementById("content");
+}
+
+void clear_children(Rml::Element* element) {
+    if (element == nullptr) {
+        return;
+    }
+    while (element->GetNumChildren() > 0) {
+        element->RemoveChild(element->GetFirstChild());
+    }
+}
+
+void ensure_tab_selection_state(WindowModel& model) {
+    if (model.tabSelections.size() < model.tabs.size()) {
+        model.tabSelections.resize(model.tabs.size());
+    }
+    if (model.activeTab < 0 || model.activeTab >= static_cast<int>(model.tabs.size())) {
+        model.activeTab = 0;
+    }
+    if (model.tabs.empty()) {
+        model.activeSelection.clear();
+        return;
+    }
+
+    Rml::String& tabSelection = model.tabSelections[model.activeTab];
+    if (tabSelection.empty()) {
+        tabSelection = model.tabs[model.activeTab].defaultSelection;
+    }
+    model.activeSelection = tabSelection;
+}
+
+void render_active_tab_content(WindowModel& model, Rml::ElementDocument* document) {
+    auto* content = get_content_element(document);
+    if (content == nullptr) {
+        return;
+    }
+
+    clear_children(content);
+    if (model.tabs.empty()) {
+        return;
+    }
+
+    ensure_tab_selection_state(model);
+    const WindowTab& tab = model.tabs[model.activeTab];
+    if (tab.setContent) {
+        tab.setContent(content, model.activeSelection);
+    }
 }
 
 }  // namespace
@@ -45,27 +109,43 @@ void WindowModel::set_active_tab(
     }
 
     activeTab = tabIndex;
+    ensure_tab_selection_state(*this);
     model.DirtyVariable("active_tab");
+    model.DirtyVariable("active_selection");
+    render_active_tab_content(*this, get_document_from_event(event));
+}
 
-    // Replace window content with new tab content
-    auto* currentElem = event.GetCurrentElement();
-    if (currentElem == nullptr) {
+void WindowModel::set_active_selection(
+    Rml::DataModelHandle model, Rml::Event& event, const Rml::VariantList& arguments) {
+    if (arguments.empty() || tabs.empty()) {
         return;
     }
-    auto* doc = currentElem->GetOwnerDocument();
-    if (doc == nullptr) {
+
+    const Rml::String selection = arguments[0].Get<Rml::String>();
+    ensure_tab_selection_state(*this);
+    if (activeSelection == selection) {
         return;
     }
-    auto* content = doc->GetElementById("content");
-    if (content == nullptr) {
+
+    activeSelection = selection;
+    tabSelections[activeTab] = selection;
+    model.DirtyVariable("active_selection");
+    render_active_tab_content(*this, get_document_from_event(event));
+}
+
+void WindowModel::handle_action(
+    Rml::DataModelHandle model, Rml::Event& event, const Rml::VariantList& arguments) {
+    bool shouldRerender = true;
+    if (actionHandler) {
+        shouldRerender = actionHandler(arguments);
+    }
+    if (!shouldRerender) {
         return;
     }
-    while (content->GetNumChildren() > 0) {
-        content->RemoveChild(content->GetFirstChild());
-    }
-    if (tabs[tabIndex].setContent) {
-        tabs[tabIndex].setContent(content);
-    }
+
+    model.DirtyVariable("active_tab");
+    model.DirtyVariable("active_selection");
+    render_active_tab_content(*this, get_document_from_event(event));
 }
 
 Window::Window(WindowModel model) : mModel(std::move(model)) {
@@ -73,12 +153,20 @@ Window::Window(WindowModel model) : mModel(std::move(model)) {
     if (context == nullptr) {
         return;
     }
+
     setup_window_model(context, mModel, mModelHandle);
+
     mDocument = context->LoadDocument("res/rml/window.rml");
     if (mDocument == nullptr) {
         return;
     }
-    mModel.tabs[0].setContent(mDocument->GetElementById("content"));
+
+    ensure_tab_selection_state(mModel);
+    render_active_tab();
+}
+
+void Window::render_active_tab() noexcept {
+    render_active_tab_content(mModel, mDocument);
 }
 
 Window::~Window() {
