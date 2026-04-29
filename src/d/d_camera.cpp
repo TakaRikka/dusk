@@ -4199,6 +4199,11 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         chase->field_0x8 -= chase->field_0xc;
         chase->field_0x8c = 0;
         chase->field_0x90 = false;
+
+        #if TARGET_PC
+        freeCamera();
+        #endif
+
         return true;
     }
 
