@@ -1175,13 +1175,13 @@ bool dCamera_c::Run() {
             clrFlag(0x200000);
         }
     } else {
-        sp0F = (this->*engine_tbl[mCamParam.Algorythmn(mCamStyle)])(mCamStyle);
-
         #if TARGET_PC
         if (mCamParam.Algorythmn(mCamStyle) != 1) {
             mCamParam.mManualMode = 0;
         }
         #endif
+
+        sp0F = (this->*engine_tbl[mCamParam.Algorythmn(mCamStyle)])(mCamStyle);
 
         field_0x170++;
         field_0x160++;
@@ -7474,7 +7474,8 @@ bool dCamera_c::test2Camera(s32 param_0) {
 
 #if TARGET_PC
 bool dCamera_c::freeCamera() {
-    if (!dusk::getSettings().game.freeCamera) {
+    if (!dusk::getSettings().game.freeCamera || mCamStyle == 70)
+    {
         mCamParam.mManualMode = 0;
         return false;
     }
