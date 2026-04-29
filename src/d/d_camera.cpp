@@ -3512,12 +3512,6 @@ void dCamera_c::checkGroundInfo() {
 }
 
 bool dCamera_c::chaseCamera(s32 param_0) {
-#if TARGET_PC
-    if (freeCamera()) {
-        return 1;
-    }
-#endif
-
     static f32 JumpCushion = 0.9f;
     f32 charge_latitude = mCamSetup.ChargeLatitude();
     int charge_timer = mCamSetup.ChargeTimer();
@@ -4636,6 +4630,9 @@ bool dCamera_c::chaseCamera(s32 param_0) {
     if (chase->field_0x1c != 0) {
         chase->field_0x1c--;
     }
+
+    freeCamera();
+
     return true;
 }
 
@@ -7469,8 +7466,10 @@ bool dCamera_c::freeCamera() {
         return false;
     }
 
-    mCamParam.freeXAngle = mViewCache.mDirection.mAzimuth.Degree();
-    mCamParam.freeYAngle = mViewCache.mDirection.mInclination.Degree();
+    if (!mCamParam.mManualMode) {
+        mCamParam.freeXAngle = mViewCache.mDirection.mAzimuth.Degree();
+        mCamParam.freeYAngle = mViewCache.mDirection.mInclination.Degree();
+    }
 
     cXyz camMovement = {mPadInfo.mCStick.mLastPosX, mPadInfo.mCStick.mLastPosY, 0.0f};
     f32 magnitude = sqrt(mPadInfo.mCStick.mLastPosX * mPadInfo.mCStick.mLastPosX + mPadInfo.mCStick.mLastPosY * mPadInfo.mCStick.mLastPosY);
@@ -7488,23 +7487,15 @@ bool dCamera_c::freeCamera() {
         return false;
     }
 
-    f32 minYAngle = -10.0f;
+    f32 minYAngle = -30.0f;
     f32 maxAngle = 50.0f;
 
     mCamParam.freeYAngle = std::clamp(mCamParam.freeYAngle, minYAngle, maxAngle);
     mViewCache.mDirection.mAzimuth = cSAngle(mCamParam.freeXAngle);
     mViewCache.mDirection.mInclination = cSAngle(mCamParam.freeYAngle);
-    f32 currentLerp = (mCamParam.freeYAngle - minYAngle) / (maxAngle - minYAngle);
-    mViewCache.mDirection.mRadius = std::lerp(200.0f, 1000.0f, currentLerp);
 
-    cXyz finalCenter = player->current.pos;
-    finalCenter.y += mIsWolf ? 90.0f : 100.0f;
-    mViewCache.mCenter = finalCenter;
-
-    cXyz finalEye = finalCenter + mViewCache.mDirection.Xyz();
+    cXyz finalEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
     mViewCache.mEye = finalEye;
-
-    mViewCache.mFovy = 60.0f;
 
     return true;
 }
