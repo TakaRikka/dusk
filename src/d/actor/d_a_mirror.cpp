@@ -84,6 +84,13 @@ void dMirror_packet_c::calcMinMax() {
 }
 
 int dMirror_packet_c::entryModel(J3DModel* i_model) {
+#if TARGET_PC
+    if (mbReset) {
+        mModelCount = 0;
+        mbReset = false;
+    }
+#endif
+
     if (mModelCount >= 0x40) {
         return 0;
     }
@@ -591,13 +598,6 @@ int daMirror_c::execute() {
 
         return 1;
     }
-
-#if TARGET_PC
-    if (mPacket.mbReset) {
-        mPacket.mModelCount = 0;
-        mPacket.mbReset = false;
-    }
-#endif
 
     daPy_py_c* player = daPy_getLinkPlayerActorClass();
     JUT_ASSERT(0, player != NULL);
