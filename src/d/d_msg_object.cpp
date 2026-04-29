@@ -34,6 +34,7 @@
 #include "dusk/settings.h"
 #include <vector>
 #include <array>
+#include <algorithm>
 #endif
 
 static void dMsgObject_addFundRaising(s16 param_0);
