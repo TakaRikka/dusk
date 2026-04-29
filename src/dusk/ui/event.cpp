@@ -13,6 +13,7 @@ ScopedEventListener::ScopedEventListener(
 ScopedEventListener::~ScopedEventListener() {
     if (mElement != nullptr) {
         mElement->RemoveEventListener(mEvent, this, mCapture);
+        mElement = nullptr;
     }
 }
 

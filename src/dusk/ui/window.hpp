@@ -5,6 +5,7 @@
 
 #include "button.hpp"
 #include "component.hpp"
+#include "ui.hpp"
 
 namespace dusk::ui {
 
@@ -27,11 +28,14 @@ public:
     void hide();
 
     void update();
-    void set_active_tab(int index);
+    bool set_active_tab(int index);
 
 protected:
     void add_tab(const Rml::String& title, TabBuilder builder);
     void clear_content() noexcept;
+    bool focus_active_tab() noexcept;
+    bool handle_tab_bar_nav(Rml::Event& event, NavCommand cmd) noexcept;
+    bool handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept;
 
     template <typename T, typename... Args>
     requires std::is_base_of_v<Component, T> T& add_child(Args&&... args) {
@@ -45,6 +49,7 @@ protected:
     std::vector<Tab> mTabs;
     std::vector<std::unique_ptr<Component> > mContentComponents;
     int mSelectedTabIndex = 0;
+    std::unique_ptr<ScopedEventListener> mKeyListener;
 };
 
 }  // namespace dusk::ui

@@ -14,6 +14,11 @@ public:
         Rml::Element* element, Rml::EventId event, Callback callback, bool capture = false);
     ~ScopedEventListener() override;
 
+    ScopedEventListener(const ScopedEventListener&) = delete;
+    ScopedEventListener& operator=(const ScopedEventListener&) = delete;
+    ScopedEventListener(ScopedEventListener&&) = delete;
+    ScopedEventListener& operator=(ScopedEventListener&&) = delete;
+
     void ProcessEvent(Rml::Event& event) override;
     void OnDetach(Rml::Element* element) override;
 

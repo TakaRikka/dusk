@@ -24,6 +24,15 @@ Button::Button(Rml::Element* parent, ButtonProps props, const Rml::String& class
             mProps.onPressed(event);
         }
     });
+    listen(mRoot, Rml::EventId::Keydown, [this](Rml::Event& event) {
+        const auto cmd = map_nav_event(event);
+        if (cmd == NavCommand::Confirm) {
+            if (mProps.onPressed) {
+                mProps.onPressed(event);
+            }
+            event.StopPropagation();
+        }
+    });
 }
 
 void Button::set_text(const Rml::String& text) {

@@ -173,7 +173,7 @@ bool handle_editor_action(const Rml::VariantList& arguments) {
 
 EditorWindow::EditorWindow() {
     add_tab("Player Status", [this](Rml::Element* content) {
-        auto& leftPane = add_child<Pane>(content);
+        auto& leftPane = add_child<Pane>(content, Pane::Direction::Vertical);
         leftPane.add_section("Player");
         leftPane.add_select_button({
             .key = "Player Name",
@@ -207,7 +207,7 @@ EditorWindow::EditorWindow() {
             .selected = false,
         });
 
-        auto& rightPane = add_child<Pane>(content);
+        auto& rightPane = add_child<Pane>(content, Pane::Direction::Vertical);
         rightPane.add_button({
             .text = "Hello, world!",
         });

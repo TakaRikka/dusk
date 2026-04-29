@@ -23,15 +23,11 @@ public:
     Component& operator=(const Component&) = delete;
 
     virtual void update();
+    virtual bool focus();
 
     void listen(Rml::Element* element, Rml::EventId event, ScopedEventListener::Callback callback,
         bool capture = false);
-
-    Rml::Element* root() const { return mRoot; }
-
-protected:
-    static Rml::Element* append(Rml::Element* parent, const Rml::String& tag);
-    void clear_children();
+    bool contains(Rml::Element* element) const;
 
     template <typename T, typename... Args>
     requires std::is_base_of_v<Component, T> T& add_child(Args&&... args) {
@@ -40,6 +36,12 @@ protected:
         mChildren.emplace_back(std::move(child));
         return ref;
     }
+
+    Rml::Element* root() const { return mRoot; }
+
+protected:
+    static Rml::Element* append(Rml::Element* parent, const Rml::String& tag);
+    void clear_children();
 
     Rml::Element* mRoot = nullptr;
     std::vector<std::unique_ptr<Component> > mChildren;

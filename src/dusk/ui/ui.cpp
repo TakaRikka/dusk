@@ -97,4 +97,29 @@ std::string escape(std::string_view str) noexcept {
     return result;
 }
 
+NavCommand map_nav_event(const Rml::Event& event) noexcept {
+    const auto key = static_cast<Rml::Input::KeyIdentifier>(
+        event.GetParameter<int>("key_identifier", Rml::Input::KI_UNKNOWN));
+    switch (key) {
+    case Rml::Input::KeyIdentifier::KI_UP:
+        return NavCommand::Up;
+    case Rml::Input::KeyIdentifier::KI_DOWN:
+        return NavCommand::Down;
+    case Rml::Input::KeyIdentifier::KI_LEFT:
+        return NavCommand::Left;
+    case Rml::Input::KeyIdentifier::KI_RIGHT:
+        return NavCommand::Right;
+    case Rml::Input::KeyIdentifier::KI_ESCAPE:
+        return NavCommand::Cancel;
+    case Rml::Input::KeyIdentifier::KI_RETURN:
+        return NavCommand::Confirm;
+    case Rml::Input::KeyIdentifier::KI_NEXT:
+        return NavCommand::Next;
+    case Rml::Input::KeyIdentifier::KI_PRIOR:
+        return NavCommand::Previous;
+    default:
+        return NavCommand::None;
+    }
+}
+
 }  // namespace dusk::ui

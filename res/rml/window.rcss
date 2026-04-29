@@ -13,6 +13,11 @@ body {
     color: #E0DBC8;
 }
 
+button {
+    cursor: pointer;
+    focus: auto;
+}
+
 .window {
     max-width: 1088dp;
     max-height: 768dp;
@@ -40,22 +45,25 @@ body {
     padding: 0 24dp;
     line-height: 64dp;
     opacity: 0.25;
-    tab-index: auto;
-    nav: horizontal;
-    focus: auto;
+    decorator: vertical-gradient(#c2a42d00 #c2a42d00);
+    transition: decorator 0.1s linear-in-out, opacity 0.1s linear-in-out;
 }
 
 .window .tab-bar .tab.selected {
     opacity: 1;
     border-bottom: 4dp #C2A42D;
     font-effect: glow(0dp 4dp 0dp 4dp black);
-    decorator: linear-gradient(to bottom, rgba(194, 164, 45, 0%) 0%, rgba(194, 164, 45, 15%) 100%);
 }
 
-.window .tab-bar .tab:focus-visible {
+.window .tab-bar .tab:focus-visible,
+.window .tab-bar .tab:hover {
     opacity: 1;
     font-effect: glow(0dp 4dp 0dp 4dp black);
-    decorator: linear-gradient(to bottom, rgba(194, 164, 45, 0%) 0%, rgba(194, 164, 45, 15%) 100%);
+    decorator: vertical-gradient(#c2a42d00 #c2a42d26);
+}
+
+.window .tab-bar .tab:active {
+    decorator: vertical-gradient(#c2a42d10 #c2a42d40);
 }
 
 .window .content {
@@ -112,7 +120,7 @@ body {
     transition: background-color 0.1s linear-in-out, opacity 0.1s linear-in-out;
 }
 
-.button.active, .button:hover {
+.button.active, .button:hover, .button:focus-visible {
     background-color: rgba(204, 184, 119, 20%);
     box-shadow: #C2A42D 0 0 0 2dp;
 }
@@ -135,7 +143,7 @@ body {
     transition: background-color 0.1s linear-in-out, opacity 0.1s linear-in-out;
 }
 
-.select-button.active, .select-button:hover {
+.select-button.active, .select-button:hover, .select-button:focus-visible {
     background-color: rgba(204, 184, 119, 20%);
     box-shadow: #C2A42D 0 0 0 2dp;
 }

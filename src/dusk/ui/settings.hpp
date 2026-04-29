@@ -8,4 +8,4 @@ public:
     SettingsWindow();
 };
 
-}
+}  // namespace dusk::ui

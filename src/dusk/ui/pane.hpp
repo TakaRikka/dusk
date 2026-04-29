@@ -8,7 +8,14 @@ namespace dusk::ui {
 
 class Pane : public Component {
 public:
-    explicit Pane(Rml::Element* parent);
+    enum class Direction {
+        Vertical,
+        Horizontal,
+    };
+
+    explicit Pane(Rml::Element* parent, Direction direction, const Rml::String& className = "pane");
+
+    bool focus() override;
 
     Rml::Element* add_section(const Rml::String& text);
     Button& add_button(Button::Props props) { return add_child<Button>(mRoot, std::move(props)); }
@@ -17,6 +24,9 @@ public:
     }
     Rml::Element* add_text(const Rml::String& text);
     void clear();
+
+private:
+    Direction mDirection;
 };
 
 }  // namespace dusk::ui
