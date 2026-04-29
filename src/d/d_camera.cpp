@@ -1177,6 +1177,12 @@ bool dCamera_c::Run() {
     } else {
         sp0F = (this->*engine_tbl[mCamParam.Algorythmn(mCamStyle)])(mCamStyle);
 
+        #if TARGET_PC
+        if (mCamParam.Algorythmn(mCamStyle) != 1) {
+            mCamParam.mManualMode = 0;
+        }
+        #endif
+
         field_0x170++;
         field_0x160++;
         mCurCamStyleTimer++;
@@ -4631,7 +4637,9 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         chase->field_0x1c--;
     }
 
+    #if TARGET_PC
     freeCamera();
+    #endif
 
     return true;
 }
@@ -7478,8 +7486,8 @@ bool dCamera_c::freeCamera() {
         mCamParam.mManualMode = 1;
         camMovement = camMovement.normalize();
         camMovement.y *= dusk::getSettings().game.invertCameraYAxis ? 1.0f : -1.0f;
-        mCamParam.freeXAngle += camMovement.x * magnitude * dusk::getSettings().game.freeCameraSensitivity * 4.0f;
-        mCamParam.freeYAngle += camMovement.y * magnitude * dusk::getSettings().game.freeCameraSensitivity * 4.0f;
+        mCamParam.freeXAngle += camMovement.x * magnitude * dusk::getSettings().game.freeCameraSensitivity * 5.0f;
+        mCamParam.freeYAngle += camMovement.y * magnitude * dusk::getSettings().game.freeCameraSensitivity * 5.0f;
     }
 
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -10040,10 +10048,6 @@ bool dCamera_c::oneSideCamera(s32 param_1) {
 }
 
 bool dCamera_c::eventCamera(s32 param_0) {
-    #if TARGET_PC
-    mCamParam.mManualMode = 0;
-    #endif
-
     char sp90[12];
 
     UNUSED(param_0);
