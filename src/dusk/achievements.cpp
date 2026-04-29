@@ -335,18 +335,13 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 false, 0, 0, false
             },
             [](Achievement& a, json&) {
-                static int titleNoDemoFrames = 0;
                 if (fopAcM_SearchByName(fpcNm_TITLE_e) == nullptr) {
-                    titleNoDemoFrames = 0;
                     return;
                 }
-                const auto* link = static_cast<const daAlink_c*>(daPy_getPlayerActorClass());
-                if (link != nullptr && dDemo_c::getMode() == 0) {
-                    if (++titleNoDemoFrames >= 60) {
+                const auto* player = static_cast<const daPy_py_c*>(daPy_getPlayerActorClass());
+
+                if (player != nullptr && player->mDemo.getDemoMode() == 1) {
                         a.progress = 1;
-                    }
-                } else {
-                    titleNoDemoFrames = 0;
                 }
             },
             {}
