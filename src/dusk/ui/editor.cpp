@@ -4,32 +4,14 @@
 
 #include "fmt/format.h"
 
+#include "aurora/lib/dolphin/gd/gd.hpp"
+#include "button.hpp"
+#include "pane.hpp"
+#include "select_button.hpp"
+
 namespace dusk::ui {
 namespace {
-
-const Rml::String kLocationContent = R"RML(
-<div class="pane">
-    <div class="section-heading">Save Location</div>
-    <button class="select-button">
-        <div class="key">Stage</div>
-        <div class="value">F_SP108</div>
-    </button>
-    <button class="select-button">
-        <div class="key">Room</div>
-        <div class="value">1</div>
-    </button>
-    <button class="select-button">
-        <div class="key">Spawn ID</div>
-        <div class="value">0</div>
-    </button>
-    <div class="section-heading">Horse Location</div>
-    <button class="select-button">
-        <div class="key">Position</div>
-        <div class="value">34814, -260, -41181</div>
-    </button>
-</div>
-<div class="pane"></div>
-)RML";
+aurora::Module Log{"dusk::ui::editor"};
 
 bool has_save_data() {
     return dComIfGs_getSaveData() != nullptr;
@@ -44,14 +26,14 @@ dSv_player_status_a_c* get_player_status() {
 
 Rml::String get_player_name() {
     if (!has_save_data()) {
-        return nullptr;
+        return "Link";
     }
     return dComIfGs_getPlayerName();
 }
 
 Rml::String get_horse_name() {
     if (!has_save_data()) {
-        return nullptr;
+        return "Epona";
     }
     return dComIfGs_getHorseName();
 }
@@ -79,19 +61,17 @@ Rml::String value_for_player_selection(const Rml::String& selection) {
     return "Unknown";
 }
 
-Rml::String make_select_row(std::string_view key, std::string_view label, const Rml::String& value, const Rml::String& activeSelection) {
+Rml::String make_select_row(std::string_view key, std::string_view label, const Rml::String& value,
+    const Rml::String& activeSelection) {
     const char* selectedClass = key == activeSelection ? " selected" : "";
     return fmt::format(
         "<button class=\"select-button{0}\" data-event-click=\"set_active_selection('{1}')\">"
         "<div class=\"key\">{2}</div><div class=\"value\">{3}</div></button>",
-        selectedClass,
-        key,
-        label,
-        value
-    );
+        selectedClass, key, label, value);
 }
 
-Rml::String make_numeric_detail(std::string_view label, std::string_view decAction, std::string_view incAction) {
+Rml::String make_numeric_detail(
+    std::string_view label, std::string_view decAction, std::string_view incAction) {
     return fmt::format(
         "<div class=\"pane detail-pane\">"
         "<div class=\"section-heading\">{0}</div>"
@@ -100,15 +80,13 @@ Rml::String make_numeric_detail(std::string_view label, std::string_view decActi
         "<button class=\"button\" data-event-click=\"window_action('{2}')\">+1</button>"
         "</div>"
         "</div>",
-        label,
-        decAction,
-        incAction
-    );
+        label, decAction, incAction);
 }
 
 template <typename TValue>
 void adjust_u16(TValue& value, int delta, u16 minValue, u16 maxValue) {
-    const int nextValue = std::clamp(static_cast<int>(value) + delta, static_cast<int>(minValue), static_cast<int>(maxValue));
+    const int nextValue = std::clamp(
+        static_cast<int>(value) + delta, static_cast<int>(minValue), static_cast<int>(maxValue));
     value = static_cast<u16>(nextValue);
 }
 
@@ -116,9 +94,12 @@ void render_player_status_tab(Rml::Element* content, const Rml::String& activeSe
     Rml::String leftPane = R"RML(<div class="pane"><div class="section-heading">Player</div>)RML";
     leftPane += make_select_row("player_name", "Player Name", get_player_name(), activeSelection);
     leftPane += make_select_row("horse_name", "Horse Name", get_horse_name(), activeSelection);
-    leftPane += make_select_row("max_health", "Max Health", value_for_player_selection("max_health"), activeSelection);
-    leftPane += make_select_row("health", "Health", value_for_player_selection("health"), activeSelection);
-    leftPane += make_select_row("max_oil", "Max Oil", value_for_player_selection("max_oil"), activeSelection);
+    leftPane += make_select_row(
+        "max_health", "Max Health", value_for_player_selection("max_health"), activeSelection);
+    leftPane +=
+        make_select_row("health", "Health", value_for_player_selection("health"), activeSelection);
+    leftPane += make_select_row(
+        "max_oil", "Max Oil", value_for_player_selection("max_oil"), activeSelection);
     leftPane += make_select_row("oil", "Oil", value_for_player_selection("oil"), activeSelection);
     leftPane += "</div>";
 
@@ -190,19 +171,71 @@ bool handle_editor_action(const Rml::VariantList& arguments) {
 
 }  // namespace
 
-EditorWindow::EditorWindow()
-    : Window({.tabs = {
-        {"Player Status",
-            "player_name",
-            [](Rml::Element* content, const Rml::String& activeSelection) { render_player_status_tab(content, activeSelection);
-        }},
-        {"Location",
-            "",
-            [](Rml::Element* content, const Rml::String&) { Rml::Factory::InstanceElementText(content, kLocationContent);
-        }},
-        {"Inventory"},
-    },
-    .actionHandler = handle_editor_action
-}){}
+EditorWindow::EditorWindow() {
+    add_tab("Player Status", [this](Rml::Element* content) {
+        auto& leftPane = add_child<Pane>(content);
+        leftPane.add_section("Player");
+        leftPane.add_select_button({
+            .key = "Player Name",
+            .getValue = get_player_name,
+        });
+        leftPane.add_select_button({
+            .key = "Horse Name",
+            .getValue = get_horse_name,
+        });
+        leftPane.add_select_button({
+            .key = "Max Health",
+            .getValue = [] { return value_for_player_selection("max_health"); },
+        });
+        leftPane.add_select_button({
+            .key = "Max Oil",
+            .getValue = [] { return value_for_player_selection("max_oil"); },
+        });
+        leftPane.add_select_button({
+            .key = "Oil",
+            .getValue = [] { return value_for_player_selection("oil"); },
+        });
+        leftPane.add_section("Equipment");
+        leftPane.add_select_button({
+            .key = "Equip X",
+            .value = "TODO",
+            .selected = true,
+        });
+        leftPane.add_select_button({
+            .key = "Equip Y",
+            .value = "TODO",
+            .selected = false,
+        });
+
+        auto& rightPane = add_child<Pane>(content);
+        rightPane.add_button({
+            .text = "Hello, world!",
+        });
+    });
+
+    add_tab("Location", [this](Rml::Element* content) {
+        // TODO
+    });
+
+    add_tab("Inventory", [this](Rml::Element* content) {
+        // TODO
+    });
+
+    add_tab("Collection", [this](Rml::Element* content) {
+        // TODO
+    });
+
+    add_tab("Flags", [this](Rml::Element* content) {
+        // TODO
+    });
+
+    add_tab("Minigame", [this](Rml::Element* content) {
+        // TODO
+    });
+
+    add_tab("Config", [this](Rml::Element* content) {
+        // TODO
+    });
+}
 
 }  // namespace dusk::ui

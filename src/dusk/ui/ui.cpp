@@ -6,6 +6,8 @@
 
 #include <filesystem>
 
+#include "window.hpp"
+
 namespace dusk::ui {
 namespace {
 
@@ -13,12 +15,13 @@ void load_font(const char* filename, bool fallback = false) {
     Rml::LoadFontFace(resource_path(filename).string(), fallback);
 }
 
+bool sInitialized = false;
+std::vector<std::unique_ptr<Window> > sWindows;
+
 }  // namespace
 
-static bool s_initialized = false;
-
 bool initialize() noexcept {
-    if (s_initialized) {
+    if (sInitialized) {
         return true;
     }
     if (!aurora::rmlui::is_initialized()) {
@@ -29,20 +32,33 @@ bool initialize() noexcept {
     load_font("FiraSansCondensed-Regular.ttf");
     load_font("FiraSansCondensed-Bold.ttf");
 
-    s_initialized = true;
+    sInitialized = true;
     return true;
 }
 
 void shutdown() noexcept {
-    s_initialized = false;
+    sWindows.clear();
+    sInitialized = false;
 }
 
 void handle_event(const SDL_Event& event) noexcept {
     // TODO
 }
 
-void update() noexcept {
+Window& add_window(std::unique_ptr<Window> window) noexcept {
+    Window& ret = *window;
+    sWindows.push_back(std::move(window));
+    return ret;
+}
+
+void remove_window(Window& window) noexcept {
     // TODO
+}
+
+void update() noexcept {
+    for (const auto& window : sWindows) {
+        window->update();
+    }
 }
 
 std::filesystem::path resource_path(const std::filesystem::path& filename) noexcept {
@@ -51,6 +67,34 @@ std::filesystem::path resource_path(const std::filesystem::path& filename) noexc
         return std::filesystem::path("res") / filename;
     }
     return std::filesystem::path(basePath) / "res" / filename;
+}
+
+std::string escape(std::string_view str) noexcept {
+    std::string result;
+    result.reserve(str.size());
+    for (const char c : str) {
+        switch (c) {
+        case '&':
+            result += "&amp;";
+            break;
+        case '<':
+            result += "&lt;";
+            break;
+        case '>':
+            result += "&gt;";
+            break;
+        case '"':
+            result += "&quot;";
+            break;
+        case '\'':
+            result += "&apos;";
+            break;
+        default:
+            result += c;
+            break;
+        }
+    }
+    return result;
 }
 
 }  // namespace dusk::ui

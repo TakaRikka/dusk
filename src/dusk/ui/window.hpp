@@ -3,43 +3,48 @@
 #include <RmlUi/Core/DataModelHandle.h>
 #include <RmlUi/Core/ElementDocument.h>
 
+#include "button.hpp"
+#include "component.hpp"
+
 namespace dusk::ui {
-
-struct WindowTab {
-    Rml::String label;
-    Rml::String defaultSelection;
-    std::function<void(Rml::Element*, const Rml::String&)> setContent;
-};
-
-struct WindowModel {
-    int activeTab = 0;
-    Rml::String activeSelection;
-    std::vector<WindowTab> tabs;
-    std::vector<Rml::String> tabSelections;
-    std::function<bool(const Rml::VariantList&)> actionHandler;
-
-    void set_active_tab(
-        Rml::DataModelHandle model, Rml::Event& event, const Rml::VariantList& arguments);
-    void set_active_selection(
-        Rml::DataModelHandle model, Rml::Event& event, const Rml::VariantList& arguments);
-    void handle_action(
-        Rml::DataModelHandle model, Rml::Event& event, const Rml::VariantList& arguments);
-};
 
 class Window {
 public:
-    Window(WindowModel model);
+    using TabBuilder = std::function<void(Rml::Element*)>;
+    struct Tab {
+        Rml::String title;
+        std::unique_ptr<Button> button;
+        TabBuilder builder;
+    };
+
+    Window();
     ~Window();
+
+    Window(const Window&) = delete;
+    Window& operator=(const Window&) = delete;
 
     void show();
     void hide();
 
-private:
-    void render_active_tab() noexcept;
+    void update();
+    void set_active_tab(int index);
 
-    WindowModel mModel;
-    Rml::DataModelHandle mModelHandle;
+protected:
+    void add_tab(const Rml::String& title, TabBuilder builder);
+    void clear_content() noexcept;
+
+    template <typename T, typename... Args>
+    requires std::is_base_of_v<Component, T> T& add_child(Args&&... args) {
+        auto child = std::make_unique<T>(std::forward<Args>(args)...);
+        T& ref = *child;
+        mContentComponents.emplace_back(std::move(child));
+        return ref;
+    }
+
     Rml::ElementDocument* mDocument = nullptr;
+    std::vector<Tab> mTabs;
+    std::vector<std::unique_ptr<Component> > mContentComponents;
+    int mSelectedTabIndex = 0;
 };
 
 }  // namespace dusk::ui

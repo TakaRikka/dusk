@@ -1462,8 +1462,20 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiStateShare.cpp
         src/dusk/imgui/ImGuiAchievements.hpp
         src/dusk/imgui/ImGuiAchievements.cpp
+        src/dusk/ui/button.cpp
+        src/dusk/ui/button.hpp
+        src/dusk/ui/component.cpp
+        src/dusk/ui/component.hpp
         src/dusk/ui/editor.cpp
         src/dusk/ui/editor.hpp
+        src/dusk/ui/event.cpp
+        src/dusk/ui/event.hpp
+        src/dusk/ui/pane.cpp
+        src/dusk/ui/pane.hpp
+        src/dusk/ui/select_button.cpp
+        src/dusk/ui/select_button.hpp
+        src/dusk/ui/settings.cpp
+        src/dusk/ui/settings.hpp
         src/dusk/ui/ui.hpp
         src/dusk/ui/ui.cpp
         src/dusk/ui/window.hpp

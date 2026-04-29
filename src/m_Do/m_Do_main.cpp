@@ -79,6 +79,8 @@
 #include "tracy/Tracy.hpp"
 #include <RmlUi/Core.h>
 
+#include "dusk/ui/settings.hpp"
+
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
 OSTime mDoMain::sPowerOnTime;
@@ -587,8 +589,10 @@ int game_main(int argc, char* argv[]) {
     dusk::ui::initialize();
 
     // TODO: just for testing
-    dusk::ui::EditorWindow editorWindow;
-    editorWindow.show();
+    auto& editorWindow = dusk::ui::add_window(std::make_unique<dusk::ui::EditorWindow>());
+    // editorWindow.show();
+    auto& settingsWindow = dusk::ui::add_window(std::make_unique<dusk::ui::SettingsWindow>());
+    settingsWindow.show();
 
     std::string dvd_path;
     bool dvd_opened = false;

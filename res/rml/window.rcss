@@ -45,7 +45,7 @@ body {
     focus: auto;
 }
 
-.window .tab-bar .tab.active {
+.window .tab-bar .tab.selected {
     opacity: 1;
     border-bottom: 4dp #C2A42D;
     font-effect: glow(0dp 4dp 0dp 4dp black);
