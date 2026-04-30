@@ -5,6 +5,7 @@
 #include <string>
 
 #include "imgui.h"
+#include "ImGuiAchievements.hpp"
 #include "ImGuiSaveEditor.hpp"
 #include "ImGuiStateShare.hpp"
 
@@ -26,6 +27,8 @@ namespace dusk {
         void ShowAudioDebug();
         void ShowSaveEditor();
         void ShowStateShare();
+        void ShowAchievements();
+        void notifyAchievement(std::string name);
 
     private:
 		bool m_showDebugOverlay = false;
@@ -65,6 +68,9 @@ namespace dusk {
 
         bool m_showStateShare = false;
         ImGuiStateShare m_stateShare;
+
+        bool m_showAchievements = false;
+        ImGuiAchievements m_achievementsWindow;
     };
 }
 

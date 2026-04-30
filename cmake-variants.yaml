@@ -13,13 +13,3 @@ buildType:
       short: RelWithDebInfo
       long: Optimized, with debug symbols
       buildType: RelWithDebInfo
-
-tp_version:
-  default: GZ2E01
-  description: TP Version
-  choices:
-    GZ2E01:
-      short: GZ2E01
-      long: GZ2E01
-      settings:
-        DUSK_TP_VERSION: GZ2E01

@@ -13,9 +13,12 @@
 #if TARGET_PC
 #include "dusk/dvd_asset.hpp"
 #include "dusk/frame_interpolation.h"
-static u8* l_Egnd_mantTEX_get()   { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", 0x1C00, 0x4000), true); return buf; }
-static u8* l_Egnd_mantTEX_U_get() { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", 0x5C00, 0x4000), true); return buf; }
-static u8* l_Egnd_mantPAL_get()   { alignas(32) static u8 buf[0x60];   static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", 0x9C00, 0x60),   true); return buf; }
+
+using GameVersion = dusk::version::GameVersion;
+
+static u8* l_Egnd_mantTEX_get()   { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x1C00}, {GameVersion::GcnPal, 0x1C00}}, 0x4000), true); return buf; }
+static u8* l_Egnd_mantTEX_U_get() { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x5C00}, {GameVersion::GcnPal, 0x5C00}}, 0x4000), true); return buf; }
+static u8* l_Egnd_mantPAL_get()   { alignas(32) static u8 buf[0x60];   static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x9C00}, {GameVersion::GcnPal, 0x9C00}}, 0x60),   true); return buf; }
 #define l_Egnd_mantTEX   (l_Egnd_mantTEX_get())
 #define l_Egnd_mantTEX_U (l_Egnd_mantTEX_U_get())
 #define l_Egnd_mantPAL   (l_Egnd_mantPAL_get())
@@ -251,7 +254,9 @@ static u32 l_texCoord[338] = {
 };
 
 #if TARGET_PC
-static u8* l_Egnd_mantDL_get() { alignas(32) static u8 buf[0x3EC]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", 0xA9A0, 0x3EC), true); return buf; }
+using GameVersion = dusk::version::GameVersion;
+
+static u8* l_Egnd_mantDL_get() { alignas(32) static u8 buf[0x3EC]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0xA9A0}, {GameVersion::GcnPal, 0xA9A0}}, 0x3EC), true); return buf; }
 #define l_Egnd_mantDL (l_Egnd_mantDL_get())
 #else
 #include "assets/l_Egnd_mantDL.h"

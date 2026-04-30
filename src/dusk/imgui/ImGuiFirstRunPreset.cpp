@@ -29,12 +29,15 @@ static void ApplyPresetHD() {
     s.game.fastTears.setValue(true);
     s.game.biggerWallets.setValue(true);
     s.game.invertCameraXAxis.setValue(true);
+    s.game.freeCamera.setValue(true);
+    s.game.no2ndFishForCat.setValue(true);
 }
 
 static void ApplyPresetDusk() {
     ApplyPresetHD();
 
     auto& s = getSettings();
+    s.game.enableAchievementNotifications.setValue(true);
     s.game.enableQuickTransform.setValue(true);
     s.game.instantSaves.setValue(true);
     s.game.midnasLamentNonStop.setValue(true);

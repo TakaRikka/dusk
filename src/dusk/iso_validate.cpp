@@ -17,8 +17,14 @@ constexpr const char* TP_GAME_IDS[] = {
     "RZDK01", // Wii KOR
 };
 
+constexpr const char* PAL_GAME_IDS[] = {
+    "GZ2P01", // GCN PAL
+    "RZDP01", // Wii PAL
+};
+
 constexpr const char* SUPPORTED_TP_GAME_IDS[] = {
     "GZ2E01", // GCN USA
+    "GZ2P01", // GCN PAL
 };
 
 template <size_t N>
@@ -122,5 +128,31 @@ ValidationError validate(const char* path) {
     }
 
     return ValidationError::Success;
+}
+bool isPal(const char* path) {
+    NodHandleWrapper disc;
+
+    const auto sdlStream = SDL_IOFromFile(path, "rb");
+    if (sdlStream == nullptr) {
+        return false;
+    }
+
+    const NodDiscStream nod_stream{
+        .user_data = sdlStream,
+        .read_at = StreamReadAt,
+        .stream_len = StreamLength,
+        .close = StreamClose,
+    };
+
+    if (nod_disc_open_stream(&nod_stream, nullptr, &disc.handle) != NOD_RESULT_OK || disc.handle == nullptr) {
+        return false;
+    }
+
+    NodDiscHeader header{};
+    if (nod_disc_header(disc.handle, &header) != NOD_RESULT_OK) {
+        return false;
+    }
+
+    return matches(header.game_id, PAL_GAME_IDS);
 }
 }  // namespace dusk::iso

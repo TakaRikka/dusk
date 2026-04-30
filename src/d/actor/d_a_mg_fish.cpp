@@ -22,6 +22,7 @@
 #include "d/d_s_play.h"
 #include "d/d_vibration.h"
 #include "f_op/f_op_kankyo_mng.h"
+#include "dusk/version.hpp"
 #include <cstring>
 
 #define ANM_MG_FISH_MOUTH_CLOSE     4
@@ -3230,7 +3231,17 @@ static int daMg_Fish_Execute(mg_fish_class* i_this) {
 
     daPy_py_c* player = daPy_getPlayerActorClass();
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        lit_1008 = 0;
+    } else if (dusk::version::isRegionPal()) {
+        if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH) {
+            lit_1008 = 2;
+        } else {
+            lit_1008 = 0;
+        }
+    }
+#elif VERSION == VERSION_GCN_JPN
     lit_1008 = 0;
 #elif VERSION == VERSION_GCN_PAL
     if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH) {
@@ -3843,7 +3854,19 @@ static int daMg_Fish_Create(fopAc_ac_c* i_this) {
         a_this->mResName = "O_gD_bott";
     }
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        lit_1008 = 0;
+    } else if (dusk::version::isRegionPal()) {
+        if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH) {
+            lit_1008 = 2;
+        } else {
+            lit_1008 = 0;
+        }
+    } else {
+        lit_1008 = 1;
+    }
+#elif VERSION == VERSION_GCN_JPN
     lit_1008 = 0;
 #elif VERSION == VERSION_GCN_PAL
     if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH) {

@@ -468,9 +468,20 @@ s16 cLib_targetAngleX(cXyz const* lhs, cXyz const* rhs) {
 void cLib_offsetPos(cXyz* pdest, cXyz const* psrc, s16 angle, cXyz const* vec) {
     f32 cos = cM_scos(angle);
     f32 sin = cM_ssin(angle);
+    // MWCC loads vec members into registers before writing to pdest; other compilers may not,
+    // which corrupts results when pdest and vec alias the same memory.
+#if !__MWERKS__
+    f32 vx = vec->x;
+    f32 vy = vec->y;
+    f32 vz = vec->z;
+    pdest->x = psrc->x + (vx * cos + vz * sin);
+    pdest->y = psrc->y + vy;
+    pdest->z = psrc->z + (vz * cos - vx * sin);
+#else
     pdest->x = psrc->x + (vec->x * cos + vec->z * sin);
     pdest->y = psrc->y + vec->y;
     pdest->z = psrc->z + (vec->z * cos - vec->x * sin);
+#endif
 }
 
 /**

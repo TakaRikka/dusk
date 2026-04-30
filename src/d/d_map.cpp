@@ -13,6 +13,9 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
+#if TARGET_PC
+#include <dolphin/gx/GXExtra.h>
+#endif
 #include <cstring>
 
 #if DEBUG
@@ -539,17 +542,14 @@ void renderingAmap_c::rendering(dDrawPath_c::poly_class const* i_poly) {
     }
 }
 
-/* Enabling the following definition will modify the following function to
- * make the map look worse for extra speed in the emulator, especially in large
- * areas such as hyrule field.
- */
-#define HYRULE_FIELD_SPEEDHACK
 
 bool renderingAmap_c::isDrawOutSideTrim() {
     bool rt = false;
 
-    #ifdef HYRULE_FIELD_SPEEDHACK
-    return 0;
+    #if TARGET_PC
+    if (!dusk::getSettings().game.enableMapBackground) {
+        return 0;
+    }
     #endif
 
     if (getDispType() == 0 || getDispType() == 4 || getDispType() == 3 || getDispType() == 2 ||
@@ -1218,6 +1218,9 @@ void dMap_c::changeTextureSize(int param_1, int param_2, int param_3) {
 
 void dMap_c::_remove() {
     if (mImage_p != NULL) {
+#if TARGET_PC
+        GXDestroyCopyTex(mImage_p);
+#endif
         JKR_DELETE_ARRAY(mImage_p);
         mImage_p = NULL;
     }

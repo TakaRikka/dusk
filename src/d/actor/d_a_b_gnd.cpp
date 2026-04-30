@@ -17,6 +17,9 @@
 
 #include "Z2AudioLib/Z2Instances.h"
 
+#include "dusk/frame_interpolation.h"
+#include "dusk/settings.h"
+
 class daB_GND_HIO_c : public JORReflexible {
 public:
     daB_GND_HIO_c();
@@ -279,6 +282,30 @@ static int h_nodeCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
+#if TARGET_PC
+static void b_gnd_rein_interp_callback(bool isSimFrame, void* pUserWork) {
+    b_gnd_class* i_this = (b_gnd_class*)pUserWork;
+    if (!i_this->mReinsInterpPrevValid || !i_this->mReinsInterpCurrValid) {
+        return;
+    }
+    const f32 alpha = dusk::frame_interp::get_interpolation_step();
+    for (int r = 0; r < 2; r++) {
+        cXyz* dst = i_this->mHorseReins[r].getPos(0);
+        for (int i = 0; i < 16; i++) {
+            const cXyz& p0 = i_this->mReinsInterpPrev[r][i];
+            const cXyz& p1 = i_this->mReinsInterpCurr[r][i];
+            dst[i] = p0 + (p1 - p0) * alpha;
+        }
+    }
+    cXyz* dst = i_this->field_0x21e8.getPos(0);
+    for (int i = 0; i < 2; i++) {
+        const cXyz& p0 = i_this->mReinsTexInterpPrev[i];
+        const cXyz& p1 = i_this->mReinsTexInterpCurr[i];
+        dst[i] = p0 + (p1 - p0) * alpha;
+    }
+}
+#endif
+
 static int daB_GND_Draw(b_gnd_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     
@@ -366,6 +393,21 @@ static int daB_GND_Draw(b_gnd_class* i_this) {
 
         i_this->field_0x21e8.update(2, l_color, &a_this->tevStr);
         dComIfGd_set3DlineMat(&i_this->field_0x21e8);
+#if TARGET_PC
+        if (dusk::getSettings().game.enableFrameInterpolation) {
+            if (i_this->mReinsInterpCurrValid) {
+                memcpy(i_this->mReinsInterpPrev, i_this->mReinsInterpCurr, sizeof(i_this->mReinsInterpCurr));
+                memcpy(i_this->mReinsTexInterpPrev, i_this->mReinsTexInterpCurr, sizeof(i_this->mReinsTexInterpCurr));
+                i_this->mReinsInterpPrevValid = true;
+            }
+            for (int r = 0; r < 2; r++) {
+                memcpy(i_this->mReinsInterpCurr[r], i_this->mHorseReins[r].getPos(0), 16 * sizeof(cXyz));
+            }
+            memcpy(i_this->mReinsTexInterpCurr, i_this->field_0x21e8.getPos(0), 2 * sizeof(cXyz));
+            i_this->mReinsInterpCurrValid = true;
+            dusk::frame_interp::add_interpolation_callback(&b_gnd_rein_interp_callback, i_this);
+        }
+#endif
     }
     
     return 1;
@@ -1189,10 +1231,16 @@ static void b_gnd_h_end(b_gnd_class* i_this) {
 
             if (i_this->mDemoCamMode < 32) {
                 i_this->mDemoCamMode = 32;
+#if TARGET_PC
+                i_this->mDemoCamSyncTicks = 2;
+#endif
             } else {
                 i_this->mDemoCamMode = 34;
                 i_this->mDemoCamTimer = 0;
                 i_this->mMoveMode = 2;
+#if TARGET_PC
+                i_this->mDemoCamSyncTicks = 2;
+#endif
             }
         }
         break;
@@ -2887,6 +2935,9 @@ static void demo_camera(b_gnd_class* i_this) {
     cXyz spF0;
 
     s8 sp8 = false;
+#if TARGET_PC
+    const s16 entry_demo_cam_mode = i_this->mDemoCamMode;
+#endif
     switch (i_this->mDemoCamMode) {
     case 0:
         break;
@@ -3725,6 +3776,15 @@ static void demo_camera(b_gnd_class* i_this) {
             i_this->mDemoCamTimer = 10000;
         }
     }
+#if TARGET_PC
+    if (entry_demo_cam_mode != i_this->mDemoCamMode) {
+        i_this->mDemoCamSyncTicks = 2;
+    }
+    if (i_this->mDemoCamSyncTicks > 0) {
+        dusk::frame_interp::request_presentation_sync();
+        i_this->mDemoCamSyncTicks--;
+    }
+#endif
 }
 
 static void anm_se_set(b_gnd_class* i_this) {

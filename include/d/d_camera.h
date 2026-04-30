@@ -273,6 +273,8 @@ public:
         /* 0xA4 */ f32 field_0xa4;
         /* 0xA8 */ int field_0xa8;
         /* 0xAC */ f32 field_0xac;
+        f32 xAngle;
+        f32 yAngle;
     };
 
     struct LockOnData {
@@ -1024,6 +1026,9 @@ public:
     bool colosseumCamera(s32);
     bool test1Camera(s32);
     bool test2Camera(s32);
+    #if TARGET_PC
+    bool freeCamera();
+    #endif
     bool towerCamera(s32);
     bool hookshotCamera(s32);
     bool railCamera(s32);

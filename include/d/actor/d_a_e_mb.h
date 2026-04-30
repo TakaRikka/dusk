@@ -44,6 +44,12 @@ public:
     /* 0x88C */ u8 field_0x88C[0x8C8 - 0x88C];
     /* 0x8C8 */ s8 field_0x8c8;
     /* 0x8C9 */ u8 mInitHIO;
+#if TARGET_PC
+    cXyz mRopeInterpPrev[16];
+    cXyz mRopeInterpCurr[16];
+    bool mRopeInterpPrevValid;
+    bool mRopeInterpCurrValid;
+#endif
 };
 
 STATIC_ASSERT(sizeof(e_mb_class) == 0x8cc);

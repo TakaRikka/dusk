@@ -71,6 +71,7 @@
 #include "dusk/config.hpp"
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/settings.h"
+#include "dusk/version.hpp"
 #include "dusk/discord_presence.hpp"
 #include "tracy/Tracy.hpp"
 #include "f_pc/f_pc_draw.h"
@@ -465,6 +466,23 @@ static constexpr PADDefaultMapping defaultPadMapping = {
 
 static bool mainCalled = false;
 
+static u8 selectedLanguage;
+
+u8 OSGetLanguage() {
+    return selectedLanguage;
+}
+
+static void LanguageInit() {
+    // Keep language at 0 (English) if not on a PAL disk.
+    // Doubt this matters, but avoid funky shit.
+    if (!dusk::version::isRegionPal()) {
+        return;
+    }
+
+    // Cache this to avoid funky shenanigans.
+    selectedLanguage = static_cast<u8>(dusk::getSettings().game.language.getValue());
+}
+
 // =========================================================================
 // PC ENTRY POINT
 // =========================================================================
@@ -596,6 +614,9 @@ int game_main(int argc, char* argv[]) {
             DuskLog.fatal("Failed to open DVD image: {}", dvd_path);
         }
     }
+
+    dusk::version::init();
+    LanguageInit();
 
     OSInit();
 

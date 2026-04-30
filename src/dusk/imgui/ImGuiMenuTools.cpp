@@ -50,13 +50,19 @@ namespace dusk {
                 ImGui::BeginDisabled();
             }
 
+            ImGui::BeginDisabled(getSettings().game.speedrunMode);
+
             ImGui::MenuItem("Save Editor", hotkeys::SHOW_SAVE_EDITOR, &m_showSaveEditor);
             ImGui::MenuItem("Map Loader", hotkeys::SHOW_MAP_LOADER, &m_showMapLoader);
             ImGui::MenuItem("State Share", hotkeys::SHOW_STATE_SHARE, &m_showStateShare);
 
+            ImGui::EndDisabled();
+
             if (!dusk::IsGameLaunched) {
                 ImGui::EndDisabled();
             }
+
+            ImGui::MenuItem("Achievements", nullptr, &m_showAchievements);
 
 #if DUSK_CAN_OPEN_DATA_FOLDER
             ImGui::Separator();
@@ -69,6 +75,8 @@ namespace dusk {
         }
 
         if (ImGui::BeginMenu("Debug")) {
+            ImGui::BeginDisabled(getSettings().game.speedrunMode);
+
             bool developmentMode = mDoMain::developmentMode == 1;
             if (ImGui::Checkbox("Development Mode", &developmentMode)) {
                 mDoMain::developmentMode = developmentMode ? 1 : -1;
@@ -117,6 +125,9 @@ namespace dusk {
             }
 
             ImGui::MenuItem("OSReport Force", nullptr, &OSReportReallyForceEnable);
+
+            ImGui::EndDisabled();
+
             ImGui::EndMenu();
         }
     }
@@ -251,5 +262,13 @@ namespace dusk {
 
         ImGui::End();
         ImGui::PopFont();
+    }
+
+    void ImGuiMenuTools::ShowAchievements() {
+        m_achievementsWindow.draw(m_showAchievements);
+    }
+
+    void ImGuiMenuTools::notifyAchievement(std::string name) {
+        m_achievementsWindow.notify(std::move(name));
     }
 }

@@ -1030,15 +1030,8 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
                                     GX_FALSE, 0);
             }
 
-            #if TARGET_PC
-            // use full size for pc for higher quality background elements
-            u16 halfWidth = width;
-            u16 halfHeight = height;
-            #else
             u16 halfWidth = width >> 1;
             u16 halfHeight = height >> 1;
-            #endif
-
             GXRenderModeObj* sp24 = JUTGetVideoManager()->getRenderMode();
             GXSetCopyFilter(GX_FALSE, NULL, GX_TRUE, sp24->vfilter);
             GXSetTexCopySrc(x_orig, y_orig_pos, width, height);
@@ -2159,6 +2152,7 @@ int mDoGph_Painter() {
             // FRAME INTERP NOTE: Call setViewMtx earlier so that it's interpolated in time for draw_info to use it
             j3dSys.setViewMtx(camera_p->view.viewMtx);
             JPADrawInfo draw_info(j3dSys.getViewMtx(), camera_p->view.fovy, camera_p->view.aspect);
+            mDoGph_gInf_c::setWideZoomLightProjection(draw_info.mPrjMtx);
 #else
             JPADrawInfo draw_info(camera_p->view.viewMtx, camera_p->view.fovy, camera_p->view.aspect);
 #endif

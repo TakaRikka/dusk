@@ -317,6 +317,12 @@ int dMeter2_c::_execute() {
 }
 
 int dMeter2_c::_draw() {
+    #if TARGET_PC
+    if (dusk::getSettings().game.disableMainHUD) {
+        return 1;
+    }
+    #endif
+
     if (mpMap != NULL) {
         mpMap->_draw();
     }
@@ -423,11 +429,7 @@ void dMeter2_c::setLifeZero() {
 }
 
 void dMeter2_c::checkStatus() {
-#if TARGET_PC
-    mStatus = dusk::getSettings().game.disableMainHUD ? 0xFFFFFFFF : 0;
-#else
     mStatus = 0;
-#endif
 
     field_0x12c = field_0x128;
 
