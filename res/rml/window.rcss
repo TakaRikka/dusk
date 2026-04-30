@@ -165,6 +165,7 @@ scrollbarhorizontal sliderbar {
 }
 
 .section-heading {
+    font-family: "Fira Sans Condensed";
     font-weight: bold;
     text-transform: uppercase;
     font-size: 22dp;
