@@ -36,6 +36,7 @@ UserSettings g_userSettings = {
         .fastClimbing {"game.fastClimbing", false},
         .noMissClimbing {"game.noMissClimbing", false},
         .fastTears {"game.fastTears", false},
+        .no2ndFishForCat {"game.no2ndFishForCat", false},
         .instantSaves {"game.instantSaves", false},
         .instantText {"game.instantText", false},
         .sunsSong {"game.sunsSong", false},
@@ -147,6 +148,7 @@ void registerSettings() {
     Register(g_userSettings.game.instantDeath);
     Register(g_userSettings.game.fastClimbing);
     Register(g_userSettings.game.fastTears);
+    Register(g_userSettings.game.no2ndFishForCat);
     Register(g_userSettings.game.instantSaves);
     Register(g_userSettings.game.instantText);
     Register(g_userSettings.game.sunsSong);

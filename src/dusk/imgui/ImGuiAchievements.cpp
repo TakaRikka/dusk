@@ -76,8 +76,8 @@ void ImGuiAchievements::draw(bool& open) {
         return;
     }
 
-    ImGui::SetNextWindowSizeConstraints(ImVec2(640, 200), ImVec2(800, 900));
-    ImGui::SetNextWindowSize(ImVec2(640, 480), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSizeConstraints(ImVec2(800, 200), ImVec2(1280, 900));
+    ImGui::SetNextWindowSize(ImVec2(800, 480), ImGuiCond_FirstUseEver);
     
     if (!ImGui::Begin(
         "Achievements", &open,
@@ -111,6 +111,7 @@ void ImGuiAchievements::draw(bool& open) {
         {AchievementCategory::Collection, "Collection", ImVec4(0.3f, 0.85f, 0.4f, 1.0f)},
         {AchievementCategory::Challenge, "Challenge", ImVec4(1.0f, 0.65f, 0.15f, 1.0f)},
         {AchievementCategory::Minigame, "Minigame", ImVec4(0.5f, 0.85f, 1.0f, 1.0f)},
+        {AchievementCategory::Misc, "Misc", ImVec4(0.65f, 0.65f, 0.65f, 1.0f)},
         {AchievementCategory::Glitched, "Glitched", ImVec4(0.75f, 0.4f, 1.0f, 1.0f)},
     };
 
@@ -131,7 +132,7 @@ void ImGuiAchievements::draw(bool& open) {
                 continue;
             }
 
-            const std::string tabLabel = fmt::format("{} ({}/{})", catInfo.label, catUnlocked, catTotal);
+            const std::string tabLabel = fmt::format("{} ({}/{})###{}", catInfo.label, catUnlocked, catTotal, catInfo.label);
             
             ImGui::PushStyleColor(ImGuiCol_Text, catInfo.color);
             const bool tabOpen = ImGui::BeginTabItem(tabLabel.c_str());
@@ -152,6 +153,7 @@ void ImGuiAchievements::draw(bool& open) {
                         continue;
                     }
                     ImGui::PushID(a.key);
+                    ImGui::BeginGroup();
 
                     ImGui::PushStyleColor(
                         ImGuiCol_Text,
@@ -188,6 +190,21 @@ void ImGuiAchievements::draw(bool& open) {
                         );
                         ImGui::ProgressBar(fraction, ImVec2(-1.0f, 0.0f), overlay.c_str());
                         ImGui::PopStyleColor();
+                    }
+
+                    ImGui::EndGroup();
+
+                    if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+                        ImGui::OpenPopup("##ctx");
+                    }
+
+                    if (ImGui::BeginPopup("##ctx")) {
+                        ImGui::TextDisabled("%s", a.name);
+                        ImGui::Separator();
+                        if (ImGui::MenuItem("Clear Achievement")) {
+                            AchievementSystem::get().clearOne(a.key);
+                        }
+                        ImGui::EndPopup();
                     }
 
                     ImGui::Spacing();

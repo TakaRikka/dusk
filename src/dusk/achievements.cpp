@@ -8,6 +8,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_demo.h"
 #include "f_pc/f_pc_name.h"
+#include "f_op/f_op_actor_mng.h"
 
 #include <filesystem>
 #include <algorithm>
@@ -41,6 +42,21 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             [](Achievement& a, json&) {
                 const auto* link = static_cast<const daAlink_c*>(daPy_getPlayerActorClass());
                 if (link != nullptr && link->mProcID == daAlink_c::PROC_GANON_FINISH) {
+                    a.progress = 1;
+                }
+            },
+            {}
+        },
+        {
+            {
+                "plumm_max",
+                "Thank You Berry Much",
+                "Score 61,454 points in the Plumm minigame.",
+                AchievementCategory::Minigame,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                if (dComIfGs_getBalloonScore() >= 61454) {
                     a.progress = 1;
                 }
             },
@@ -260,6 +276,58 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         },
         {
             {
+                "friendly_fire",
+                "Friendly Fire",
+                "Get hit by your own cannonball.",
+                AchievementCategory::Misc,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                if (AchievementSystem::get().hasSignal("iron_ball_hit_player")) {
+                    a.progress = 1;
+                }
+            },
+            {}
+        },
+        {
+            {
+                "long_jump_attack",
+                "Long Jump Attack",
+                "Travel more than 20 meters in a single jump attack before landing.",
+                AchievementCategory::Misc,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                static bool inJump = false;
+                static float startX = 0.0f, startZ = 0.0f;
+
+                const auto* link = static_cast<const daAlink_c*>(daPy_getPlayerActorClass());
+                if (link == nullptr) {
+                    inJump = false;
+                    return;
+                }
+
+                if (!inJump) {
+                    if (link->mProcID == daAlink_c::PROC_CUT_JUMP) {
+                        inJump = true;
+                        startX = link->current.pos.x;
+                        startZ = link->current.pos.z;
+                    }
+                } else if (link->mProcID == daAlink_c::PROC_CUT_JUMP_LAND) {
+                    inJump = false;
+                    const float dx = link->current.pos.x - startX;
+                    const float dz = link->current.pos.z - startZ;
+                    if (dx * dx + dz * dz >= 2000.0f * 2000.0f) {
+                        a.progress = 1;
+                    }
+                } else if (link->mProcID != daAlink_c::PROC_CUT_JUMP) {
+                    inJump = false;
+                }
+            },
+            {}
+        },
+        {
+            {
                 "back_in_time",
                 "Back in Time",
                 "Perform the Back in Time glitch to play on the title screen.",
@@ -267,18 +335,13 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 false, 0, 0, false
             },
             [](Achievement& a, json&) {
-                static int titleNoDemoFrames = 0;
                 if (fopAcM_SearchByName(fpcNm_TITLE_e) == nullptr) {
-                    titleNoDemoFrames = 0;
                     return;
                 }
-                const auto* link = static_cast<const daAlink_c*>(daPy_getPlayerActorClass());
-                if (link != nullptr && dDemo_c::getMode() == 0) {
-                    if (++titleNoDemoFrames >= 60) {
+                const auto* player = static_cast<const daPy_py_c*>(daPy_getPlayerActorClass());
+
+                if (player != nullptr && player->mDemo.getDemoMode() == 1) {
                         a.progress = 1;
-                    }
-                } else {
-                    titleNoDemoFrames = 0;
                 }
             },
             {}
@@ -341,6 +404,41 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 }
                 const int64_t ticks = (static_cast<int64_t>(OSGetTime()) - dComIfGs_getSaveStartTime()) + dComIfGs_getSaveTotalTime();
                 if (ticks / OS_TIMER_CLOCK < 4 * 3600) {
+                    a.progress = 1;
+                }
+            },
+            {}
+        },
+        {
+            {
+                "email_me",
+                "Email Me",
+                "Read a letter during the Dark Beast Ganon fight.",
+                AchievementCategory::Misc,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                void* dbgExists = fopAcM_SearchByName(fpcNm_B_MGN_e);
+                if (dbgExists && AchievementSystem::get().hasSignal("open_letter")) {
+                    a.progress = 1;
+                }
+            },
+            {}
+        },
+        {
+            {
+                "heavy-hitter",
+                "Heavy Hitter",
+                "Wear the Iron Boots during the end credits.",
+                AchievementCategory::Misc,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                const auto* link = static_cast<const daAlink_c*>(daPy_getPlayerActorClass());
+                if (link == nullptr || link->mProcID != daAlink_c::PROC_GANON_FINISH) {
+                    return;
+                }
+                if (daPy_getPlayerActorClass()->checkEquipHeavyBoots()) {
                     a.progress = 1;
                 }
             },
@@ -426,6 +524,26 @@ void AchievementSystem::clearAll() {
     save();
 }
 
+void AchievementSystem::signal(const char* key) {
+    m_signals.insert(key);
+}
+
+bool AchievementSystem::hasSignal(const char* key) const {
+    return m_signals.count(key) > 0;
+}
+
+void AchievementSystem::clearOne(const char* key) {
+    for (auto& e : m_entries) {
+        if (std::string(e.achievement.key) == key) {
+            e.achievement.progress = 0;
+            e.achievement.unlocked = false;
+            e.extra = {};
+            break;
+        }
+    }
+    save();
+}
+
 void AchievementSystem::processEntry(Entry& e) {
     if (e.achievement.unlocked) {
         return;
@@ -458,6 +576,7 @@ void AchievementSystem::tick() {
     for (auto& e : m_entries) {
         processEntry(e);
     }
+    m_signals.clear();
     if (m_dirty) {
         save();
         m_dirty = false;

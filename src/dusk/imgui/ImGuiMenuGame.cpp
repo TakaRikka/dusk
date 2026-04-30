@@ -23,15 +23,6 @@
 
 namespace {
 constexpr int kInternalResolutionScaleMax = 12;
-
-bool is_controller_neutral(int port) {
-    if (port < 0) {
-        return true;
-    }
-
-    return PADGetNativeButtonPressed(port) == -1 &&
-           PADGetNativeAxisPulled(port).nativeAxis == -1;
-}
 }  // namespace
 
 namespace aurora::gx {
@@ -205,7 +196,7 @@ namespace dusk {
                 ImGui::SetTooltip("Restores patched glitches from Wii USA 1.0,\n"
                                   "the first released version.");
             }
-
+            
             config::ImGuiCheckbox("Enable Rotating Link Doll", getSettings().game.enableLinkDollRotation);
             if (ImGui::IsItemHovered()) {
                 ImGui::SetTooltip("Enables rotating Link in the collection menu with the C-Stick");
@@ -274,6 +265,11 @@ namespace dusk {
             config::ImGuiCheckbox("No Sword Recoil", getSettings().game.noSwordRecoil);
             if (ImGui::IsItemHovered()) {
                 ImGui::SetTooltip("Link won't recoil when his sword hits walls.");
+            }
+
+            config::ImGuiCheckbox("No 2nd Fish for Cat", getSettings().game.no2ndFishForCat);
+            if (ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("Only need to fish once for Sera's cat to return.");
             }
 
             config::ImGuiCheckbox("Skip TV Settings Screen", getSettings().game.hideTvSettingsScreen);
@@ -651,90 +647,39 @@ namespace dusk {
 
     void ImGuiMenuGame::windowControllerConfig() {
         if (!m_showControllerConfig) {
-            if (m_controllerConfig.m_isReading ||
-                m_controllerConfig.m_suppressRemapActivationUntilRelease)
-            {
-                m_controllerConfig.m_isReading = false;
-                m_controllerConfig.m_pendingButtonMapping = nullptr;
-                m_controllerConfig.m_pendingAxisMapping = nullptr;
-                m_controllerConfig.m_pendingPort = -1;
-                m_controllerConfig.m_waitForInputRelease = false;
-                m_controllerConfig.m_suppressRemapActivationUntilRelease = false;
-                m_controllerConfig.m_suppressRemapActivationPort = -1;
-                PADBlockInput(false);
-            }
             return;
         }
 
-        bool suppressRemapActivationThisFrame = m_controllerConfig.m_suppressRemapActivationUntilRelease;
-        if (m_controllerConfig.m_suppressRemapActivationUntilRelease &&
-            is_controller_neutral(m_controllerConfig.m_suppressRemapActivationPort))
-        {
-            m_controllerConfig.m_suppressRemapActivationUntilRelease = false;
-            m_controllerConfig.m_suppressRemapActivationPort = -1;
-            PADBlockInput(false);
-        }
-
-        if ((m_controllerConfig.m_pendingButtonMapping != nullptr ||
-             m_controllerConfig.m_pendingAxisMapping != nullptr) &&
-            m_controllerConfig.m_waitForInputRelease)
-        {
-            m_controllerConfig.m_waitForInputRelease =
-                !is_controller_neutral(m_controllerConfig.m_pendingPort);
-        }
-
         // if pending for a button mapping, check to set new input
-        if (m_controllerConfig.m_pendingButtonMapping != nullptr &&
-            !m_controllerConfig.m_waitForInputRelease)
-        {
+        if (m_controllerConfig.m_pendingButtonMapping != nullptr) {
             s32 nativeButton = PADGetNativeButtonPressed(m_controllerConfig.m_pendingPort);
             if (nativeButton != -1) {
-                const int suppressPort = m_controllerConfig.m_pendingPort;
                 m_controllerConfig.m_pendingButtonMapping->nativeButton = nativeButton;
                 m_controllerConfig.m_pendingButtonMapping = nullptr;
                 m_controllerConfig.m_pendingPort = -1;
-                m_controllerConfig.m_isReading = false;
-                m_controllerConfig.m_waitForInputRelease = false;
-                m_controllerConfig.m_suppressRemapActivationUntilRelease = true;
-                m_controllerConfig.m_suppressRemapActivationPort = suppressPort;
-                suppressRemapActivationThisFrame = true;
-                PADBlockInput(true);
+                PADBlockInput(false);
                 PADSerializeMappings();
             }
         }
 
         // if pending for an axis mapping, check to set new input
-        if (m_controllerConfig.m_pendingAxisMapping != nullptr &&
-            !m_controllerConfig.m_waitForInputRelease)
-        {
+        if (m_controllerConfig.m_pendingAxisMapping != nullptr) {
             auto nativeAxis = PADGetNativeAxisPulled(m_controllerConfig.m_pendingPort);
             if (nativeAxis.nativeAxis != -1) {
-                const int suppressPort = m_controllerConfig.m_pendingPort;
                 m_controllerConfig.m_pendingAxisMapping->nativeAxis = nativeAxis;
                 m_controllerConfig.m_pendingAxisMapping->nativeButton = -1;
                 m_controllerConfig.m_pendingAxisMapping = nullptr;
                 m_controllerConfig.m_pendingPort = -1;
-                m_controllerConfig.m_isReading = false;
-                m_controllerConfig.m_waitForInputRelease = false;
-                m_controllerConfig.m_suppressRemapActivationUntilRelease = true;
-                m_controllerConfig.m_suppressRemapActivationPort = suppressPort;
-                suppressRemapActivationThisFrame = true;
-                PADBlockInput(true);
+                PADBlockInput(false);
                 PADSerializeMappings();
             } else {
                 auto nativeButton = PADGetNativeButtonPressed(m_controllerConfig.m_pendingPort);
                 if (nativeButton != -1) {
-                    const int suppressPort = m_controllerConfig.m_pendingPort;
                     m_controllerConfig.m_pendingAxisMapping->nativeAxis = {-1, AXIS_SIGN_POSITIVE};
                     m_controllerConfig.m_pendingAxisMapping->nativeButton = nativeButton;
                     m_controllerConfig.m_pendingAxisMapping = nullptr;
                     m_controllerConfig.m_pendingPort = -1;
-                    m_controllerConfig.m_isReading = false;
-                    m_controllerConfig.m_waitForInputRelease = false;
-                    m_controllerConfig.m_suppressRemapActivationUntilRelease = true;
-                    m_controllerConfig.m_suppressRemapActivationPort = suppressPort;
-                    suppressRemapActivationThisFrame = true;
-                    PADBlockInput(true);
+                    PADBlockInput(false);
                     PADSerializeMappings();
                 }
             }
@@ -770,10 +715,6 @@ namespace dusk {
             m_controllerConfig.m_pendingButtonMapping = nullptr;
             m_controllerConfig.m_pendingAxisMapping = nullptr;
             m_controllerConfig.m_pendingPort = -1;
-            m_controllerConfig.m_waitForInputRelease = false;
-            m_controllerConfig.m_isReading = false;
-            m_controllerConfig.m_suppressRemapActivationUntilRelease = false;
-            m_controllerConfig.m_suppressRemapActivationPort = -1;
             PADBlockInput(false);
         }
 
@@ -850,7 +791,7 @@ namespace dusk {
 
                 std::string dispName;
                 if (m_controllerConfig.m_isReading && m_controllerConfig.m_pendingButtonMapping == &btnMappingList[i]) {
-                    dispName = fmt::format("{}##{}", m_controllerConfig.m_waitForInputRelease ? "Release..." : "Press a Key...", btnName);
+                    dispName = fmt::format("Press a Key...##{}", btnName);
                 } else {
                     const char* nativeName = GetNameForGamepadButton(gamepad, btnMappingList[i].nativeButton);
                     if (nativeName == nullptr) {
@@ -861,11 +802,10 @@ namespace dusk {
                 bool pressed = ImGui::Button(dispName.c_str(),
                     btnSize);
 
-                if (pressed && !m_controllerConfig.m_isReading && !suppressRemapActivationThisFrame) {
+                if (pressed) {
                     m_controllerConfig.m_isReading = true;
                     m_controllerConfig.m_pendingPort = m_controllerConfig.m_selectedPort;
                     m_controllerConfig.m_pendingButtonMapping = &btnMappingList[i];
-                    m_controllerConfig.m_waitForInputRelease = true;
                     PADBlockInput(true);
                 }
             }
@@ -895,18 +835,17 @@ namespace dusk {
 
                 std::string dispName;
                 if (m_controllerConfig.m_isReading && m_controllerConfig.m_pendingAxisMapping == &axisMappingList[trigger]) {
-                    dispName = fmt::format("{}##{}", m_controllerConfig.m_waitForInputRelease ? "Release..." : "Press a Key...", axisName);
+                    dispName = fmt::format("Press a Key...##{}", axisName);
                 } else {
                     dispName = fmt::format("{0}##-{1}", PADGetNativeAxisName(axisMappingList[trigger].nativeAxis), trigger);
                 }
                 bool pressed = ImGui::Button(dispName.c_str(),
                     btnSize);
 
-                if (pressed && !m_controllerConfig.m_isReading && !suppressRemapActivationThisFrame) {
+                if (pressed) {
                     m_controllerConfig.m_isReading = true;
                     m_controllerConfig.m_pendingPort = m_controllerConfig.m_selectedPort;
                     m_controllerConfig.m_pendingAxisMapping = &axisMappingList[trigger];
-                    m_controllerConfig.m_waitForInputRelease = true;
                     PADBlockInput(true);
                 }
             }
@@ -963,7 +902,7 @@ namespace dusk {
 
                 std::string dispName;
                 if (m_controllerConfig.m_isReading && m_controllerConfig.m_pendingAxisMapping == &axisMappingList[axis]) {
-                    dispName = fmt::format("{}##{}", m_controllerConfig.m_waitForInputRelease ? "Release..." : "Press a Key...", label);
+                    dispName = fmt::format("Press a Key...##{}", label);
                 } else {
                     if (axisMappingList[axis].nativeAxis.nativeAxis != -1) {
                         const char* signStr;
@@ -982,11 +921,10 @@ namespace dusk {
                 }
                 bool pressed = ImGui::Button(dispName.c_str(), btnSize);
 
-                if (pressed && !m_controllerConfig.m_isReading && !suppressRemapActivationThisFrame) {
+                if (pressed) {
                     m_controllerConfig.m_isReading = true;
                     m_controllerConfig.m_pendingPort = m_controllerConfig.m_selectedPort;
                     m_controllerConfig.m_pendingAxisMapping = &axisMappingList[axis];
-                    m_controllerConfig.m_waitForInputRelease = true;
                     PADBlockInput(true);
                 }
             }
@@ -1027,7 +965,7 @@ namespace dusk {
 
                 std::string dispName;
                 if (m_controllerConfig.m_isReading && m_controllerConfig.m_pendingAxisMapping == &axisMappingList[axis]) {
-                    dispName = fmt::format("{}##sub{}", m_controllerConfig.m_waitForInputRelease ? "Release..." : "Press a Key...", label);
+                    dispName = fmt::format("Press a Key...##sub{}", label);
                 } else {
                     if (axisMappingList[axis].nativeAxis.nativeAxis != -1) {
                         const char* signStr;
@@ -1046,11 +984,10 @@ namespace dusk {
                 }
                 bool pressed = ImGui::Button(fmt::format("{0}##sub{1}", dispName, label).c_str(), btnSize);
 
-                if (pressed && !m_controllerConfig.m_isReading && !suppressRemapActivationThisFrame) {
+                if (pressed) {
                     m_controllerConfig.m_isReading = true;
                     m_controllerConfig.m_pendingPort = m_controllerConfig.m_selectedPort;
                     m_controllerConfig.m_pendingAxisMapping = &axisMappingList[axis];
-                    m_controllerConfig.m_waitForInputRelease = true;
                     PADBlockInput(true);
                 }
             }
@@ -1081,7 +1018,7 @@ namespace dusk {
                 PADSerializeMappings();
             }
         }
-
+        
         if (PADSupportsRumbleIntensity(m_controllerConfig.m_selectedPort)) {
             ImGuiBeginGroupPanel("Rumble Intensity", ImVec2(150 * scale, -1));
             u16 low;
@@ -1100,7 +1037,7 @@ namespace dusk {
             if (ImGui::Button(fmt::format("{0}...##rumbleTest", m_controllerConfig.m_isRumbling ? "Stop": "Test").c_str(), {-1, 0})) {
                 PADControlMotor(m_controllerConfig.m_selectedPort, !m_controllerConfig.m_isRumbling ? PAD_MOTOR_RUMBLE : PAD_MOTOR_STOP_HARD);
                 m_controllerConfig.m_isRumbling ^= 1;
-            }
+            } 
             ImGuiEndGroupPanel();
         }
         ImGuiEndGroupPanel();

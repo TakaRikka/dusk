@@ -18,6 +18,10 @@ enum {
 };
 
 void daAlink_c::hsChainShape_c::draw() {
+    if (dusk::getSettings().game.superClawshot) {
+        return;
+    }
+
     static const int dummy = 0;
 
     daAlink_c* alink = (daAlink_c*)getUserArea();
