@@ -3355,8 +3355,8 @@ inline MultiByteAreaFlag CoOMultiByteFlags[] = {
 };
 
 struct AreaFlagIter {
-    std::span<EventAreaFlags> span;
-    std::span<MultiByteAreaFlag> span;
+    std::span<EventAreaFlags> bitFlags;
+    std::span<MultiByteAreaFlag> multibyteFlags;
 };
 
 inline std::map<uint8_t, AreaFlagIter> areaFlagLookup = 
