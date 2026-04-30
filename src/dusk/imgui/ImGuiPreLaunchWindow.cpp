@@ -22,6 +22,10 @@ typedef void (ImGuiPreLaunchWindow::*drawFunc)();
 
 drawFunc drawTable[2] = {&ImGuiPreLaunchWindow::drawMainMenu, &ImGuiPreLaunchWindow::drawOptions};
 
+static constexpr std::array<const char*, 5> skLanguageNames = {
+    "English", "German", "French", "Spanish", "Italian"
+};
+
 static constexpr std::array<SDL_DialogFileFilter, 2> skGameDiscFileFilters{{
     {"Game Disc Images", "iso;gcm;ciso;gcz;nfs;rvz;wbfs;wia;tgc"},
     {"All Files", "*"},
@@ -71,6 +75,7 @@ void fileDialogCallback(void* userdata, const char* path, const char* error) {
     }
 
     self->m_selectedIsoPath = path;
+    self->m_isPal = iso::isPal(path);
     getSettings().backend.isoPath.setValue(self->m_selectedIsoPath);
     config::Save();
 }
@@ -88,6 +93,7 @@ bool ImGuiPreLaunchWindow::isSelectedPathValid() const {
 void ImGuiPreLaunchWindow::draw() {
     if (m_IsFirstDraw) {
         m_selectedIsoPath = getSettings().backend.isoPath;
+        m_isPal = !m_selectedIsoPath.empty() && iso::isPal(m_selectedIsoPath.c_str());
         m_initialGraphicsBackend = getSettings().backend.graphicsBackend;
         m_IsFirstDraw = false;
     }
@@ -189,10 +195,24 @@ void ImGuiPreLaunchWindow::drawOptions() {
 
         ImGui::InputText("Game ISO Path", &m_selectedIsoPath, ImGuiInputTextFlags_ReadOnly);
         ImGui::SameLine();
-        if (ImGui::Button("Set")) {
+        if (ImGui::Button(m_selectedIsoPath == "" ? "Set" : "Change")) {
             ShowFileSelect(&fileDialogCallback, this, aurora::window::get_sdl_window(),
                            skGameDiscFileFilters.data(), int(skGameDiscFileFilters.size()), nullptr,
                            false);
+        }
+
+        if (m_isPal) {
+            auto selectedLanguage = getSettings().game.language.getValue();
+            if (ImGui::BeginCombo("Language", skLanguageNames[static_cast<u8>(selectedLanguage)])) {
+                for (u8 i = 0; i < skLanguageNames.size(); ++i) {
+                    if (ImGui::Selectable(skLanguageNames[i])) {
+                        getSettings().game.language.setValue(static_cast<GameLanguage>(i));
+                        config::Save();
+                    }
+                }
+
+                ImGui::EndCombo();
+            }
         }
 
         AuroraBackend configuredBackend = BACKEND_AUTO;

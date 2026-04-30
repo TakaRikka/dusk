@@ -80,6 +80,6 @@ void waitingForWrite() {
 }
 
 void endAutoSave() {
-    dusk::g_imguiConsole.ShowToast("Saving...", 2.0f);
+    dusk::g_imguiConsole.AddToast("Saving...", 2.0f);
     mAutoSaveProc = 0;
 }

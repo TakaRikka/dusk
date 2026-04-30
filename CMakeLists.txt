@@ -280,22 +280,16 @@ set(DUSK_COMPANY_NAME "Twilit Realm")
 set(DUSK_FILE_DESCRIPTION "Dusk")
 set(DUSK_PRODUCT_NAME "Dusk")
 set(DUSK_COPYRIGHT "Copyright (C) Twilit Realm contributors")
-set(DUSK_GAME_NAME "GZ2E")
-set(DUSK_GAME_VERSION "01")
-set(DUSK_TP_VERSION ${DUSK_GAME_NAME}${DUSK_GAME_VERSION})
-
-message(STATUS "dusk: Game Version: ${DUSK_TP_VERSION}")
 
 source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${REL_FILES})
 source_group("dusk" FILES ${DUSK_FILES})
 
-set(GAME_COMPILE_DEFS TARGET_PC WIDESCREEN_SUPPORT=1 AVOID_UB=1 VERSION=0
-    DUSK_TP_VERSION="${DUSK_TP_VERSION}" DUSK_GAME_NAME="${DUSK_GAME_NAME}" DUSK_GAME_VERSION="${DUSK_GAME_VERSION}")
+set(GAME_COMPILE_DEFS TARGET_PC WIDESCREEN_SUPPORT=1 AVOID_UB=1 VERSION=0)
 
 set(GAME_INCLUDE_DIRS
     include
     src
-    assets/${DUSK_TP_VERSION}
+    assets/GZ2E01 # TODO: make this dynamic if needed?
     libs/JSystem/include
     libs
     extern/aurora/include/dolphin
@@ -310,6 +304,10 @@ list(APPEND GAME_LIBS libzstd_static)
 if (DUSK_ENABLE_SENTRY_NATIVE)
     list(APPEND GAME_LIBS sentry)
     list(APPEND GAME_COMPILE_DEFS DUSK_ENABLE_SENTRY_NATIVE=1 SENTRY_BUILD_STATIC=1)
+endif ()
+
+if (WIN32)
+    list(APPEND GAME_LIBS Ws2_32)
 endif ()
 
 if (DUSK_MOVIE_SUPPORT)

@@ -15,6 +15,7 @@
 #include "d/d_model.h"
 #include "d/d_tresure.h"
 #include "dusk/frame_interpolation.h"
+#include "dusk/livesplit.h"
 #include "dusk/logging.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_draw_tag.h"
@@ -821,6 +822,9 @@ void fapGm_Execute() {
 #endif
 
     cCt_Counter(0);
+#ifdef TARGET_PC
+    dusk::speedrun::onGameFrame();
+#endif
 }
 
 fapGm_HIO_c g_HIO;

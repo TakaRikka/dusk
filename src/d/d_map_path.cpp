@@ -16,6 +16,7 @@
 
 #ifdef TARGET_PC
 constexpr u16 kMapResolutionMultiplier = 4;
+constexpr u16 kMapCircleSize = 16 * kMapResolutionMultiplier;
 #endif
 
 void dMpath_n::dTexObjAggregate_c::create() {
@@ -32,6 +33,48 @@ void dMpath_n::dTexObjAggregate_c::create() {
         JUT_ASSERT(74, image->magFilter == GX_NEAR);
         mDoLib_setResTimgObj(image, mp_texObj[lp1], 0, NULL);
     }
+
+#if TARGET_PC
+    auto hqCircle = JKR_NEW TGXTexObj();
+
+    static bool hqCircleDrawn = false;
+    static u8 hqCircleData[kMapCircleSize * kMapCircleSize];
+
+    if (!hqCircleDrawn) {
+        const auto center = kMapCircleSize / 2.0f;
+        const auto radiusSq = center * center;
+        const auto blocksAcross = kMapCircleSize >> 3;
+        const auto totalPixels = sizeof(hqCircleData);
+
+        for (size_t i = 0; i < totalPixels; i++) {
+            // 8x4 block swizzling for I8
+            const auto blockIdx = i >> 5;
+            const auto localIdx = i & 31;
+
+            const auto blockY = blockIdx / blocksAcross;
+            const auto blockX = blockIdx % blocksAcross;
+
+            const auto localY = localIdx >> 3;
+            const auto localX = localIdx & 7;
+
+            const auto x = (blockX << 3) + localX;
+            const auto y = (blockY << 2) + localY;
+
+            const auto dx = (x + 0.5f) - center;
+            const auto dy = (y + 0.5f) - center;
+
+            // the original texture is in I4 format and uses 1 to indicate if inside the circle
+            // so we scale to I8 range: 255 / 15 = 17
+            hqCircleData[i] = (dx * dx + dy * dy < radiusSq) ? 17 : 0;
+        }
+        hqCircleDrawn = true;
+    }
+
+    GXInitTexObj(hqCircle, hqCircleData, kMapCircleSize, kMapCircleSize, GX_TF_I8, GX_CLAMP,
+                 GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(hqCircle, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    mp_texObj[6] = hqCircle;
+#endif
 }
 
 void dMpath_n::dTexObjAggregate_c::remove() {
@@ -497,12 +540,6 @@ void dRenderingFDAmap_c::postRenderingMap() {
 
 dMpath_n::dTexObjAggregate_c dMpath_n::m_texObjAgg;
 
-/* Enabling the following definition will modify the following function to
- * make the map look worse for extra speed in the emulator, especially in large
- * areas such as hyrule field.
- */
-#define HYRULE_FIELD_SPEEDHACK
-
 void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_line) {
     s32 width = getDecorationLineWidth(p_line->field_0x1);
     if (width <= 0) {
@@ -527,8 +564,32 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
     lineColor.r = lineColor.r - 4;
     GXSetTevColor(GX_TEVREG1, lineColor);
 
+#if TARGET_PC
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_KONST);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXBegin(GX_LINESTRIP, GX_VTXFMT0, 2 * (data_num - 1));
+    for (int i = 0; i < data_num - 1; i++) {
+        GXPosition1x16(data_p[i]);
+        GXTexCoord2f32(0, 0);
+        GXPosition1x16(data_p[i + 1]);
+        GXTexCoord2f32(0, 0);
+    }
+    GXEnd();
+
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_KONST, GX_CC_TEXC, GX_CC_C1);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXBegin(GX_POINTS, GX_VTXFMT0, data_num);
     for (int i = 0; i < data_num; i++) {
-#ifndef HYRULE_FIELD_SPEEDHACK
+        GXPosition1x16(data_p[i]);
+        GXTexCoord2f32(0, 0);
+    }
+    GXEnd();
+#else
+    for (int i = 0; i < data_num; i++) {
         if (i < data_num - 1) {
             GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
             GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
@@ -547,7 +608,6 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
         GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-#endif
 
         GXBegin(GX_POINTS, GX_VTXFMT0, 1);
         GXPosition1x16(data_p[0]);
@@ -555,6 +615,7 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
         GXEnd();
         data_p++;
     }
+#endif
 
     setTevSettingNonTextureDirectColor();
     GXClearVtxDesc();

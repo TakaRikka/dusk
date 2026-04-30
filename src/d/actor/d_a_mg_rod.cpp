@@ -25,6 +25,8 @@
 #include <cmath>
 #include <cstring>
 
+#include "dusk/version.hpp"
+
 class dmg_rod_HIO_c : public JORReflexible {
 public:
     dmg_rod_HIO_c();
@@ -5734,10 +5736,22 @@ static void play_camera_u(dmg_rod_class* i_this) {
 static int dmg_rod_Execute(dmg_rod_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
+    #if TARGET_PC
+    if (dusk::version::isPalOrAtLeastWiiR2()) {
+        if (dComIfGs_getPalLanguage() == 0) {
+            data_804BBBD4 = 2;
+        } else {
+            data_804BBBD4 = 0;
+        }
+    } else if (dusk::version::isRegionJpn()) {
+        data_804BBBD4 = 0;
+    } else {
+        data_804BBBD4 = 1;
+    }
     //TODO: It seems possible that dComIfGs_getPalLanguage returns a constant value for non-PAL
     //      versions (causing the first block to be elided), and it's also possible that the value
     //      being compared against is an enum value with per-version definitions.
-    #if VERSION == VERSION_SHIELD_DEBUG
+    #elif VERSION == VERSION_SHIELD_DEBUG
     if (dComIfGs_getPalLanguage() == 1) {
         data_804BBBD4 = 2;
     } else {
@@ -6303,7 +6317,19 @@ static int dmg_rod_Create(fopAc_ac_c* i_this) {
         heap_size = 0xC9A0;
     }
 
-    #if VERSION == VERSION_SHIELD_DEBUG
+    #if TARGET_PC
+    if (dusk::version::isPalOrAtLeastWiiR2()) {
+        if (dComIfGs_getPalLanguage() == 0) {
+            data_804BBBD4 = 2;
+        } else {
+            data_804BBBD4 = 0;
+        }
+    } else if (dusk::version::isRegionJpn()) {
+        data_804BBBD4 = 0;
+    } else {
+        data_804BBBD4 = 1;
+    }
+    #elif VERSION == VERSION_SHIELD_DEBUG
     if (dComIfGs_getPalLanguage() == 1) {
         data_804BBBD4 = 2;
     } else {

@@ -1461,10 +1461,15 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiSaveEditor.cpp
         src/dusk/imgui/ImGuiStateShare.hpp
         src/dusk/imgui/ImGuiStateShare.cpp
+        src/dusk/imgui/ImGuiAchievements.hpp
+        src/dusk/imgui/ImGuiAchievements.cpp
+        src/dusk/achievements.cpp
         src/dusk/iso_validate.cpp
+        src/dusk/livesplit.cpp
         src/dusk/offset_ptr.cpp
         src/dusk/OSContext.cpp
         src/dusk/OSThread.cpp
         src/dusk/OSMutex.cpp
         src/dusk/discord_presence.cpp
+        src/dusk/version.cpp
 )

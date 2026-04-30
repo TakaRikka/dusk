@@ -307,7 +307,7 @@ static u8 getOutFontNumberType(int param_0) {
     }
 }
 
-#if VERSION == VERSION_GCN_PAL
+#if TARGET_PC || VERSION == VERSION_GCN_PAL
 static void setPlayerName(char* i_player_name, u8 param_2) {
     if (param_2 != 0) {
         strcpy(i_player_name, dComIfGs_getPlayerName());
@@ -1485,7 +1485,7 @@ bool jmessage_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_siz
         char buffer[40];
         switch (i_tag & 0xFF00FFFF) {
         case MSGTAG_PLAYER_GENITIV:
-            #if VERSION == VERSION_GCN_PAL
+            #if TARGET_PC || VERSION == VERSION_GCN_PAL
             if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setPlayerName(buffer, 1);
             } else {
@@ -1495,7 +1495,7 @@ bool jmessage_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_siz
             push_word(buffer);
             return true;
         case MSGTAG_HORSE_GENITIV:
-            #if VERSION == VERSION_GCN_PAL
+            #if TARGET_PC || VERSION == VERSION_GCN_PAL
             if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setHorseName(buffer, 1);
             } else {
@@ -1987,13 +1987,6 @@ bool jmessage_tSequenceProcessor::do_isReady() {
     }
     #endif
 
-#if TARGET_PC
-    if (dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)) {
-        field_0xb2 = 1;
-        pReference->setSendTimer(0);
-    }
-#endif
-
     if (dComIfGp_checkMesgBgm()) {
         bool isItemMusicPlaying = true;
         if (mDoAud_checkPlayingSubBgmFlag() != Z2BGM_ITEM_GET &&
@@ -2066,7 +2059,7 @@ bool jmessage_tSequenceProcessor::do_isReady() {
             case 0:
             case 5:
             case 6:
-                if (mDoCPd_c::getTrigA(PAD_1) || field_0xb2 != 0) {
+                if (mDoCPd_c::getTrigA(PAD_1) || field_0xb2 != 0 IF_DUSK(|| (dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)))) {
                     field_0xa4 = 0;
                     pReference->onBatchFlag();
                     pReference->setCharCnt(D_MSG_CLASS_CHAR_CNT_MAX);
@@ -4270,7 +4263,7 @@ bool jmessage_string_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u3
         char buffer[40];
         switch (i_tag & 0xFF00FFFF) {
         case MSGTAG_PLAYER_GENITIV:
-            #if VERSION == VERSION_GCN_PAL
+            #if TARGET_PC || VERSION == VERSION_GCN_PAL
             if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setPlayerName(buffer, 1);
             } else {
@@ -4281,7 +4274,7 @@ bool jmessage_string_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u3
             stack_pushCurrent(buffer);
             break;
         case MSGTAG_HORSE_GENITIV:
-            #if VERSION == VERSION_GCN_PAL
+            #if TARGET_PC || VERSION == VERSION_GCN_PAL
             if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setHorseName(buffer, 1);
             } else {
@@ -4878,7 +4871,7 @@ bool jmessage_string_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, 
         char buffer[40];
         switch (i_tag & 0xFF00FFFF) {
         case MSGTAG_PLAYER_GENITIV:
-            #if VERSION == VERSION_GCN_PAL
+            #if TARGET_PC || VERSION == VERSION_GCN_PAL
             if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setPlayerName(buffer, 1);
             } else {
@@ -4889,7 +4882,7 @@ bool jmessage_string_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, 
             push_word(buffer);
             break;
         case MSGTAG_HORSE_GENITIV:
-            #if VERSION == VERSION_GCN_PAL
+            #if TARGET_PC || VERSION == VERSION_GCN_PAL
             if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setHorseName(buffer, 1);
             } else {

@@ -16,6 +16,8 @@
 #include <cstdio>
 #include <cstring>
 
+#include "dusk/version.hpp"
+
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/sc.h>
 #include <revolution/wpad.h>
@@ -1035,7 +1037,7 @@ void dSv_player_config_c::init() {
     mAttentionType = 0;
     mVibration = 1;
 
-#if DEBUG
+#if DEBUG // DUSK VERSION SUPPORT: This field isn't used, so we can ignore it.
     mLanguage = SCGetLanguage();
 #elif REGION_PAL || VERSION >= VERSION_WII_USA_R2
     mLanguage = OSGetLanguage();
@@ -1080,7 +1082,8 @@ void dSv_player_config_c::setVibration(u8 i_status) {
 }
 
 u8 dSv_player_config_c::getPalLanguage() const {
-#if VERSION == VERSION_GCN_PAL
+#if TARGET_PC || VERSION == VERSION_GCN_PAL
+    IF_DUSK_BLOCK(dusk::version::getGameVersion() == dusk::version::GameVersion::GcnPal)
     switch (OSGetLanguage()) {
     case 0:
         return LANGUAGE_ENGLISH;
@@ -1093,6 +1096,7 @@ u8 dSv_player_config_c::getPalLanguage() const {
     case 4:
         return LANGUAGE_ITALIAN;
     }
+    IF_DUSK_BLOCK_END
 #elif VERSION >= VERSION_WII_USA_R0
     switch (SCGetLanguage()) {
     case 1:

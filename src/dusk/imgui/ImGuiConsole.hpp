@@ -26,9 +26,8 @@ public:
     void PreDraw();
     void PostDraw();
 
-    void ShowToast(std::string, float);
-
 	static bool CheckMenuViewToggle(ImGuiKey key, bool& active);
+    void AddToast(std::string_view message, float duration = 3.f);
 
 private:
     struct Toast {
@@ -72,6 +71,7 @@ std::string BytesToString(size_t bytes);
 void SetOverlayWindowLocation(int corner);
 bool ShowCornerContextMenu(int& corner, int avoidCorner);
 void ImGuiStringViewText(std::string_view text);
+void DuskToast(std::string_view message, float duration = 3.f);
 void ImGuiBeginGroupPanel(const char* name, const ImVec2& size);
 void ImGuiEndGroupPanel();
 void ImGuiTextCenter(std::string_view text);

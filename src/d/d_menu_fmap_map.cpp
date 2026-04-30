@@ -8,6 +8,9 @@
 #include "d/d_debug_viewer.h"
 #include "d/d_menu_fmap_map.h"
 #include "m_Do/m_Do_graphic.h"
+#if TARGET_PC
+#include <dolphin/gx/GXExtra.h>
+#endif
 #include <cstring>
 
 static u8 twoValueLineInterpolation(u8 i_value1, u8 i_value2, f32 i_param) {
@@ -494,6 +497,9 @@ void dMenu_FmapMap_c::_delete() {
         mResTIMG = NULL;
     }
     if (mMapImage_p != NULL) {
+#if TARGET_PC
+        GXDestroyCopyTex(mMapImage_p);
+#endif
         JKR_DELETE_ARRAY(mMapImage_p);
         mMapImage_p = NULL;
     }

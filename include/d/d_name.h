@@ -89,7 +89,7 @@ public:
     void MojiSelectAnm3();
     int mojiChange(u8);
     void selectMojiSet();
-    #if REGION_JPN
+    #if TARGET_PC || REGION_JPN
     int checkDakuon(int, u8);
     int setDakuon(int, u8);
     #endif

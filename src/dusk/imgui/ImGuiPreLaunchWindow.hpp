@@ -18,5 +18,6 @@ public:
 
     std::string m_selectedIsoPath;
     std::string m_errorString;
+    bool m_isPal = false;
 };
 }  // namespace dusk

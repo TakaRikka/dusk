@@ -24,12 +24,17 @@
 #include "f_op/f_op_msg_mng.h"
 #include <cstdio>
 #include <cstring>
+
+#include "JSystem/JKernel/JKRExpHeap.h"
+#include "dusk/version.hpp"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_lib.h"
-#include "JSystem/JKernel/JKRExpHeap.h"
 
 #if TARGET_PC
 #include "dusk/settings.h"
+#include <vector>
+#include <array>
+#include <algorithm>
 #endif
 
 static void dMsgObject_addFundRaising(s16 param_0);
@@ -1592,7 +1597,7 @@ u8 dMsgObject_c::isSend() {
                 return 2;
             }
         } else {
-            if (IF_DUSK((dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)) ||)
+            if (IF_DUSK((dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0) && !isShopItemMessage()) ||)
                 mDoCPd_c::getTrigA(0) != 0 || mDoCPd_c::getTrigB(0) != 0) {
                 return 2;
             }
@@ -1643,7 +1648,30 @@ void dMsgObject_c::readMessageGroupLocal(mDoDvdThd_mountXArchive_c** p_arcMount)
     #else
 #if TARGET_PC
     // Original game UB
-    snprintf(arcName, sizeof(arcName), "/res/Msgus/bmgres%d.arc", msgGroup);
+
+    if (dusk::version::isRegionPal()) {
+        switch (dComIfGs_getPalLanguage()) {
+        case dSv_player_config_c::LANGUAGE_GERMAN:
+            snprintf(arcName, sizeof(arcName), "/res/Msgde/bmgres%d.arc", msgGroup);
+            break;
+        case dSv_player_config_c::LANGUAGE_FRENCH:
+            snprintf(arcName, sizeof(arcName), "/res/Msgfr/bmgres%d.arc", msgGroup);
+            break;
+        case dSv_player_config_c::LANGUAGE_SPANISH:
+            snprintf(arcName, sizeof(arcName), "/res/Msgsp/bmgres%d.arc", msgGroup);
+            break;
+        case dSv_player_config_c::LANGUAGE_ITALIAN:
+            snprintf(arcName, sizeof(arcName), "/res/Msgit/bmgres%d.arc", msgGroup);
+            break;
+        default:
+            snprintf(arcName, sizeof(arcName), "/res/Msguk/bmgres%d.arc", msgGroup);
+        }
+    } else if (dusk::version::isRegionJpn()) {
+        snprintf(arcName, sizeof(arcName), "/res/Msgjp/bmgres%d.arc", msgGroup);
+    } else {
+        snprintf(arcName, sizeof(arcName), "/res/Msgus/bmgres%d.arc", msgGroup);
+    }
+
 #else
     sprintf(arcName, "/res/Msgus/bmgres%d.arc", msgGroup);
 #endif
@@ -1840,6 +1868,40 @@ bool dMsgObject_c::isTalkMessage() {
     }
     return true;
 }
+
+#if TARGET_PC
+bool dMsgObject_c::isShopItemMessage() {
+
+    // Probably a better way to do this than just listing every message id, but this works for now
+    // Note: Keep contents sorted so we can use binary search
+    const auto shopMsgIds = std::to_array<std::vector<s16>>({
+        {},
+        // zel_01.bmg - Seras Shop
+        {7001, 7003, 7004, 7005, 7006, 7007, 7008, 7009, 7010, 7013, 7014, 7022, 7023, 7028, 7029,
+            7044, 7045, 7053},
+        // zel_02.bmg - Kakariko Shops
+        {5251, 5253, 5254, 5256, 5258, 5259, 5653, 5654, 5656, 5660, 5661, 5664, 5665, 5697, 5698,
+            5699, 5803, 5804, 5806, 5810, 5811, 5812, 5814, 5821, 5823, 5824, 5987, 5988, 5989, 5990,
+            5991, 5992, 5993, 5994, 5995, 5996, 5997, 5998, 5999},
+        // zel_03.bmg - Death Mountain Shop
+        {5303, 5304, 5306, 5310, 5311, 5314, 5315, 5322, 5323, 5324, 5496, 5497, 5498, 5499},
+        // zel_04.bmg - Castle Town Shops
+        {5407, 5408, 5409, 5410, 5411, 5412, 5413, 5414, 5415, 5416, 5417, 5418, 5419, 5420, 5431,
+            5432, 5433, 5434, 5435, 5436, 5437, 5438, 5439, 5440, 5441, 5444, 5449, 5450, 5451, 5452,
+            5462},
+        // zel_05.bmg - Oocca Shop
+        {9428, 9429, 9430, 9431, 9432, 9437, 9443, 9448, 9449, 9451, 9459}
+    });
+
+    u16 id = mMessageID;
+    s16 group = dMsgObject_getGroupID();
+    if (group < shopMsgIds.size()) {
+        return std::ranges::binary_search(shopMsgIds[group], id);
+    }
+    return false;
+
+}
+#endif
 
 const char* dMsgObject_c::getSmellName() {
     JMSMesgInfo_c* info_header_p = (JMSMesgInfo_c*)((char*)mpMsgRes + 0x20);

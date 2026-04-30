@@ -1347,6 +1347,51 @@ namespace dusk {
         }
     }
 
+    template <typename T>
+    concept FlagIter = requires(T t) {
+        ++t;
+        --t;
+        t + 1;
+        t < t;
+        { t->flagID } -> std::convertible_to<u16>;
+    };
+
+    template <typename T>
+    concept FlagTester = requires(T t, u16 flagID) {
+        { t(flagID) } -> std::convertible_to<bool>;
+    };
+
+    static void sortByFlags(FlagIter auto begin, FlagIter auto end, FlagTester auto&& flagTester) {
+        if (begin == end) return;
+
+        FlagIter auto fullEnd = end;
+
+        // We want to find the location of where we can swap our `On` flags to.
+        // We're gonna put the `Off` bits first, and the `On` bits last. 0 < 1
+        // We can achieve this by skipping all the `On` bits at the end.
+
+        // backtrack until we find a bit that is off
+        while (begin < --end && flagTester(end->flagID)) {
+            // move the end pointer back while we find on bits
+        }
+
+        // end should now be pointing to a bit that is off
+        while (begin < end) {
+            // if there's a flag that's on
+            if (flagTester(begin->flagID)) {
+                // move it to the end
+                std::rotate(begin, begin + 1, fullEnd);
+                // move back the end of where we're checking
+                --end;
+                // begin will now point to the next piece of data
+                // because we've rotated the data >= begin to the left
+            } else {
+                // not on, check next flag
+                ++begin;
+            }
+        }
+    }
+
     void ImGuiSaveEditor::drawFlagsTab() {
         if (ImGui::TreeNode("Current Region Flags")) {
             dSv_memBit_c& membit = g_dComIfG_gameInfo.info.mMemory.mBit;
@@ -1446,30 +1491,41 @@ namespace dusk {
                     sort != nullptr && sort->SpecsCount > 0 &&
                     (sort->SpecsDirty || sort->Specs[0].ColumnIndex == COLUMN_FLAG))
                 {
-                    auto column = sort->Specs->ColumnIndex;
-                    const auto cmp = [&](const duskImguiEventFlagEntry& l,
-                                         const duskImguiEventFlagEntry& r) -> bool {
-                        switch (column) {
-                        case COLUMN_FLAG:
-                            return (bool)event.isEventBit(l.flagID) <
-                                   (bool)event.isEventBit(r.flagID);
-                        case COLUMN_NAME:
-                            return l.flagName < r.flagName;
-                        case COLUMN_LOC:
-                            return l.location < r.location;
-                        case COLUMN_DESC:
-                            return l.description < r.description;
-                        }
-                        return false;
-                    };
-
+                    const auto column = sort->Specs[0].ColumnIndex;
                     const auto direction = sort->Specs[0].SortDirection;
 
-                    if (direction == ImGuiSortDirection_Ascending) {
-                        std::sort(std::begin(duskImguiEventFlags), std::end(duskImguiEventFlags), cmp);
+                    // if we're sorting by flags, do special sort, regular sort is bad for sorting bools
+                    // it can swap values that are the same, and that causes constant reordering
+                    if (column == COLUMN_FLAG) {
+                        const auto testEventFunc = [&event](u16 flag) -> bool { return event.isEventBit(flag); };
+
+                        if (direction == ImGuiSortDirection_Ascending) {
+                            sortByFlags(std::begin(duskImguiEventFlags),
+                                        std::end(duskImguiEventFlags), testEventFunc);
+                        } else {
+                            sortByFlags(std::rbegin(duskImguiEventFlags),
+                                        std::rend(duskImguiEventFlags), testEventFunc);
+                        }
                     } else {
-                        std::sort(std::rbegin(duskImguiEventFlags), std::rend(duskImguiEventFlags), cmp);
+                        const auto cmp = [column](const duskImguiEventFlagEntry& l,
+                                                  const duskImguiEventFlagEntry& r) -> bool {
+                            switch (column) {
+                            case COLUMN_NAME: return l.flagName < r.flagName;
+                            case COLUMN_LOC:  return l.location < r.location;
+                            case COLUMN_DESC: return l.description < r.description;
+                            default:          return false;
+                            }
+                        };
+
+                        if (direction == ImGuiSortDirection_Ascending) {
+                            std::sort(std::begin(duskImguiEventFlags),
+                                      std::end(duskImguiEventFlags), cmp);
+                        } else {
+                            std::sort(std::rbegin(duskImguiEventFlags),
+                                      std::rend(duskImguiEventFlags), cmp);
+                        }
                     }
+
                     sort->SpecsDirty = false;
                 }
                 

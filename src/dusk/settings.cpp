@@ -20,6 +20,8 @@ UserSettings g_userSettings = {
     },
 
     .game = {
+        .language { "game.language", GameLanguage::English },
+
         // Quality of Life
         .enableQuickTransform {"game.enableQuickTransform", false},
         .hideTvSettingsScreen {"game.hideTvSettingsScreen", false},
@@ -34,6 +36,7 @@ UserSettings g_userSettings = {
         .fastClimbing {"game.fastClimbing", false},
         .noMissClimbing {"game.noMissClimbing", false},
         .fastTears {"game.fastTears", false},
+        .no2ndFishForCat {"game.no2ndFishForCat", false},
         .instantSaves {"game.instantSaves", false},
         .instantText {"game.instantText", false},
         .sunsSong {"game.sunsSong", false},
@@ -41,10 +44,10 @@ UserSettings g_userSettings = {
 
         // Preferences
         .enableMirrorMode {"game.enableMirrorMode", false},
-        .invertCameraXAxis {"game.invertCameraXAxis", false},
         .disableMainHUD {"game.disableMainHUD", false},
         .pauseOnFocusLost {"game.pauseOnFocusLost", false},
         .enableLinkDollRotation = {"game.enableLinkDollRotation", false },
+        .enableAchievementNotifications {"game.enableAchievementNotifications", false},
 
         // Graphics
         .bloomMode {"game.bloomMode", BloomMode::Classic},
@@ -54,6 +57,7 @@ UserSettings g_userSettings = {
         .internalResolutionScale {"game.internalResolutionScale", 0},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
         .enableDepthOfField {"game.enableDepthOfField", true},
+        .enableMapBackground {"game.enableMapBackground", true},
 
         // Audio
         .noLowHpSound {"game.noLowHpSound", false},
@@ -69,6 +73,10 @@ UserSettings g_userSettings = {
         .gyroDeadband {"game.gyroDeadband", 0.04f},
         .gyroInvertPitch {"game.gyroInvertPitch", false},
         .gyroInvertYaw {"game.gyroInvertYaw", false},
+        .freeCamera {"game.freeCamera", false},
+        .invertCameraXAxis {"game.invertCameraXAxis", false},
+        .invertCameraYAxis {"game.invertCameraYAxis", false},
+        .freeCameraSensitivity {"game.freeCameraSensitivity", 1.0f},
 
         // Cheats
         .infiniteHearts {"game.infiniteHearts", false},
@@ -90,7 +98,11 @@ UserSettings g_userSettings = {
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
 
         // Controls
-        .enableTurboKeybind {"game.enableTurboKeybind", false}
+        .enableTurboKeybind {"game.enableTurboKeybind", false},
+
+        // Tools
+        .speedrunMode {"game.speedrunMode", false},
+        .liveSplitEnabled {"game.liveSplitEnabled", false}
     },
 
     .backend = {
@@ -124,6 +136,7 @@ void registerSettings() {
     Register(g_userSettings.audio.enableReverb);
 
     // Game
+    Register(g_userSettings.game.language);
     Register(g_userSettings.game.enableQuickTransform);
     Register(g_userSettings.game.hideTvSettingsScreen);
     Register(g_userSettings.game.skipWarningScreen);
@@ -136,12 +149,15 @@ void registerSettings() {
     Register(g_userSettings.game.instantDeath);
     Register(g_userSettings.game.fastClimbing);
     Register(g_userSettings.game.fastTears);
+    Register(g_userSettings.game.no2ndFishForCat);
     Register(g_userSettings.game.instantSaves);
     Register(g_userSettings.game.instantText);
     Register(g_userSettings.game.sunsSong);
     Register(g_userSettings.game.autoSave);
     Register(g_userSettings.game.enableMirrorMode);
     Register(g_userSettings.game.invertCameraXAxis);
+    Register(g_userSettings.game.invertCameraYAxis);
+    Register(g_userSettings.game.freeCameraSensitivity);
     Register(g_userSettings.game.disableMainHUD);
     Register(g_userSettings.game.pauseOnFocusLost);
     Register(g_userSettings.game.bloomMode);
@@ -150,15 +166,19 @@ void registerSettings() {
     Register(g_userSettings.game.internalResolutionScale);
     Register(g_userSettings.game.shadowResolutionMultiplier);
     Register(g_userSettings.game.enableDepthOfField);
+    Register(g_userSettings.game.enableMapBackground);
     Register(g_userSettings.game.enableFastIronBoots);
     Register(g_userSettings.game.canTransformAnywhere);
     Register(g_userSettings.game.freeMagicArmor);
     Register(g_userSettings.game.restoreWiiGlitches);
     Register(g_userSettings.game.enableLinkDollRotation);
+    Register(g_userSettings.game.enableAchievementNotifications);
     Register(g_userSettings.game.noMissClimbing);
     Register(g_userSettings.game.noLowHpSound);
     Register(g_userSettings.game.midnasLamentNonStop);
     Register(g_userSettings.game.enableTurboKeybind);
+    Register(g_userSettings.game.speedrunMode);
+    Register(g_userSettings.game.liveSplitEnabled);
     Register(g_userSettings.game.fastSpinner);
     Register(g_userSettings.game.infiniteHearts);
     Register(g_userSettings.game.infiniteArrows);
@@ -180,6 +200,7 @@ void registerSettings() {
     Register(g_userSettings.game.gyroSmoothing);
     Register(g_userSettings.game.gyroInvertPitch);
     Register(g_userSettings.game.gyroInvertYaw);
+    Register(g_userSettings.game.freeCamera);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.graphicsBackend);
