@@ -1,13 +1,67 @@
 #include "window.hpp"
 
 #include <RmlUi/Core.h>
+#include <SDL3/SDL_video.h>
 
+#include "aurora/lib/window.hpp"
 #include "aurora/rmlui.hpp"
 #include "button.hpp"
 #include "magic_enum.hpp"
 #include "ui.hpp"
 
+#include <algorithm>
+#include <cmath>
+
 namespace dusk::ui {
+namespace {
+
+float base_body_padding(Rml::Context* context) noexcept {
+    if (context == nullptr) {
+        return 64.0f;
+    }
+    const float dpRatio = std::max(context->GetDensityIndependentPixelRatio(), 0.001f);
+    const float heightDp = static_cast<float>(context->GetDimensions().y) / dpRatio;
+    if (heightDp <= 640.0f) {
+        return 16.0f * dpRatio;
+    }
+    return 64.0f * dpRatio;
+}
+
+Window::Insets safe_area_insets(Rml::Context* context) noexcept {
+    if (context == nullptr) {
+        return {};
+    }
+
+    auto* window = aurora::window::get_sdl_window();
+    if (window == nullptr) {
+        return {};
+    }
+
+    const AuroraWindowSize windowSize = aurora::window::get_window_size();
+    if (windowSize.width == 0 || windowSize.height == 0) {
+        return {};
+    }
+
+    SDL_Rect safeRect{};
+    if (!SDL_GetWindowSafeArea(window, &safeRect)) {
+        return {};
+    }
+
+    const Rml::Vector2i contextSize = context->GetDimensions();
+    const float scaleX = static_cast<float>(contextSize.x) / static_cast<float>(windowSize.width);
+    const float scaleY = static_cast<float>(contextSize.y) / static_cast<float>(windowSize.height);
+
+    const float safeRight = static_cast<float>(safeRect.x + safeRect.w);
+    const float safeBottom = static_cast<float>(safeRect.y + safeRect.h);
+    return {
+        .top = std::max(0.0f, static_cast<float>(safeRect.y)) * scaleY,
+        .right = std::max(0.0f, static_cast<float>(windowSize.width) - safeRight) * scaleX,
+        .bottom = std::max(0.0f, static_cast<float>(windowSize.height) - safeBottom) * scaleY,
+        .left = std::max(0.0f, static_cast<float>(safeRect.x)) * scaleX,
+    };
+}
+
+}  // namespace
 
 Window::Window() {
     auto* context = aurora::rmlui::get_context();
@@ -74,9 +128,39 @@ void Window::hide() {
 }
 
 void Window::update() {
+    update_safe_area();
     for (const auto& component : mContentComponents) {
         component->update();
     }
+}
+
+void Window::update_safe_area() noexcept {
+    if (mDocument == nullptr) {
+        return;
+    }
+
+    Rml::Context* context = mDocument->GetContext();
+    const float basePadding = base_body_padding(context);
+    Insets safeInsets = safe_area_insets(context);
+    safeInsets = {
+        std::round(std::max(basePadding, safeInsets.top)),
+        std::round(std::max(basePadding, safeInsets.right)),
+        std::round(std::max(basePadding, safeInsets.bottom)),
+        std::round(std::max(basePadding, safeInsets.left)),
+    };
+    if (safeInsets == mBodyPadding) {
+        return;
+    }
+
+    mBodyPadding = safeInsets;
+    mDocument->SetProperty(
+        Rml::PropertyId::PaddingTop, Rml::Property(safeInsets.top, Rml::Unit::PX));
+    mDocument->SetProperty(
+        Rml::PropertyId::PaddingRight, Rml::Property(safeInsets.right, Rml::Unit::PX));
+    mDocument->SetProperty(
+        Rml::PropertyId::PaddingBottom, Rml::Property(safeInsets.bottom, Rml::Unit::PX));
+    mDocument->SetProperty(
+        Rml::PropertyId::PaddingLeft, Rml::Property(safeInsets.left, Rml::Unit::PX));
 }
 
 bool Window::set_active_tab(int index) {

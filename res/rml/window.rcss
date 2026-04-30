@@ -46,6 +46,8 @@ button {
     display: flex;
     flex: 0 0 64dp;
     height: 64dp;
+    min-width: 0;
+    overflow: auto hidden;
     background-color: rgba(217, 217, 217, 10%);
     font-family: "Fira Sans Condensed";
     font-weight: bold;
@@ -55,9 +57,11 @@ button {
 }
 
 .window .tab-bar .tab {
+    flex: 0 0 auto;
     padding: 0 24dp;
     line-height: 64dp;
     opacity: 0.25;
+    white-space: nowrap;
     decorator: vertical-gradient(#c2a42d00 #c2a42d00);
     transition: decorator 0.1s linear-in-out, opacity 0.1s linear-in-out;
 }
@@ -142,6 +146,22 @@ scrollbarvertical sliderbar {
 scrollbarvertical sliderbar:hover,
 scrollbarvertical sliderbar:active {
     background-color: rgba(194, 164, 45, 80%);
+}
+
+scrollbarhorizontal {
+    height: 0;
+}
+
+scrollbarhorizontal sliderarrowdec,
+scrollbarhorizontal sliderarrowinc {
+    width: 0;
+    height: 0;
+}
+
+scrollbarhorizontal slidertrack,
+scrollbarhorizontal sliderbar {
+    width: 0;
+    height: 0;
 }
 
 .section-heading {

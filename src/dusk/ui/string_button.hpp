@@ -24,12 +24,14 @@ protected:
     virtual void set_value(Rml::String value) = 0;
 
 private:
+    void focus_input();
     void stop_editing(bool commit = true, bool refocusRoot = false);
 
     Rml::ElementFormControlInput* mInputElem = nullptr;
     std::vector<std::unique_ptr<ScopedEventListener> > mInputListeners;
     Rml::String mType;
     int mMaxLength;
+    int mPendingInputFocusFrames = 0;
     bool mPendingStopEditing = false;
     bool mPendingCommit = true;
     bool mPendingRefocusRoot = false;

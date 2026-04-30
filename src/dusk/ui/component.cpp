@@ -17,7 +17,7 @@ bool Component::focus() {
     if (mRoot->Focus(true)) {
         mRoot->ScrollIntoView(Rml::ScrollIntoViewOptions{
             Rml::ScrollAlignment::Center,
-            Rml::ScrollAlignment::Nearest,
+            Rml::ScrollAlignment::Center,
             Rml::ScrollBehavior::Smooth,
             Rml::ScrollParentage::Closest,
         });

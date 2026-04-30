@@ -1,5 +1,7 @@
 #include "string_button.hpp"
 
+#include <aurora/rmlui.hpp>
+
 namespace dusk::ui {
 
 BaseStringButton::BaseStringButton(Rml::Element* parent, Props props)
@@ -11,6 +13,12 @@ BaseStringButton::BaseStringButton(Rml::Element* parent, Props props)
 void BaseStringButton::update() {
     if (mPendingStopEditing) {
         stop_editing(mPendingCommit, mPendingRefocusRoot);
+    }
+    if (mPendingInputFocusFrames > 0) {
+        --mPendingInputFocusFrames;
+        if (mPendingInputFocusFrames == 0) {
+            focus_input();
+        }
     }
     ControlledSelectButton::update();
 }
@@ -37,10 +45,9 @@ void BaseStringButton::start_editing() {
     // Hide value element
     mValueElem->SetProperty(Rml::PropertyId::Visibility, Rml::Style::Visibility::Hidden);
 
-    // Focus and select text within input
-    mInputElem->Focus(true);
-    const int end = static_cast<int>(Rml::StringUtilities::LengthUTF8(mInputElem->GetValue()));
-    mInputElem->SetSelectionRange(0, end);
+    // RmlUi lays out the new input during render. Wait one full frame before focusing it so
+    // mobile keyboard placement gets a valid caret rectangle.
+    mPendingInputFocusFrames = 2;
 
     // Mark button as selected to indicate "active"
     set_selected(true);
@@ -84,11 +91,26 @@ bool BaseStringButton::handle_nav_command(NavCommand cmd) {
     return false;
 }
 
-void BaseStringButton::stop_editing(bool commit, bool refocusRoot) {
+void BaseStringButton::focus_input() {
     if (mInputElem == nullptr) {
         return;
     }
+
+    aurora::rmlui::set_input_type(
+        mType == "number" ? aurora::rmlui::InputType::Number : aurora::rmlui::InputType::Text);
+
+    if (mInputElem->Focus(true)) {
+        const int end = static_cast<int>(Rml::StringUtilities::LengthUTF8(mInputElem->GetValue()));
+        mInputElem->SetSelectionRange(0, end);
+    }
+}
+
+void BaseStringButton::stop_editing(bool commit, bool refocusRoot) {
     mPendingStopEditing = false;
+    mPendingInputFocusFrames = 0;
+    if (mInputElem == nullptr) {
+        return;
+    }
     if (commit) {
         set_value(mInputElem->GetValue());
     }

@@ -17,6 +17,17 @@ public:
         std::unique_ptr<Button> button;
         TabBuilder builder;
     };
+    struct Insets {
+        float top = 0.0f;
+        float right = 0.0f;
+        float bottom = 0.0f;
+        float left = 0.0f;
+
+        bool operator==(const Insets& other) const noexcept {
+            return top == other.top && right == other.right && bottom == other.bottom &&
+                   left == other.left;
+        }
+    };
 
     Window();
     ~Window();
@@ -32,6 +43,7 @@ public:
 
 protected:
     void add_tab(const Rml::String& title, TabBuilder builder);
+    void update_safe_area() noexcept;
     void clear_content() noexcept;
     bool focus_active_tab() noexcept;
     bool handle_tab_bar_nav(Rml::Event& event, NavCommand cmd) noexcept;
@@ -48,6 +60,7 @@ protected:
     Rml::ElementDocument* mDocument = nullptr;
     std::vector<Tab> mTabs;
     std::vector<std::unique_ptr<Component> > mContentComponents;
+    Insets mBodyPadding;
     int mSelectedTabIndex = 0;
     std::unique_ptr<ScopedEventListener> mKeyListener;
 };
