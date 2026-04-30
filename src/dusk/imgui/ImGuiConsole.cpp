@@ -366,9 +366,9 @@ namespace dusk {
 
         if (dusk::IsGameLaunched && !m_isLaunchInitialized) {
             AddToast(ImGui::GetIO().MouseSource == ImGuiMouseSource_TouchScreen ?
-                                      "Tap to toggle menu" :
-                                      "Press F1 to toggle menu",
-                                  	  2.5f);
+                                      "Tap to toggle menu"s :
+                                      "Press F1 to toggle menu"s,
+                                  2.5f);
             m_isLaunchInitialized = true;
             if (getSettings().game.liveSplitEnabled) {
                 dusk::speedrun::connectLiveSplit();
