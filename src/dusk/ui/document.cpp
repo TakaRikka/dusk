@@ -64,6 +64,13 @@ void Document::listen(Rml::Element* element, Rml::EventId event,
         std::make_unique<ScopedEventListener>(element, event, std::move(callback), capture));
 }
 
+bool Document::can_destroy() const {
+    if (mDocument == nullptr) {
+        return true;
+    }
+    return *mDocument->GetProperty(Rml::PropertyId::Visibility) == Rml::Style::Visibility::Hidden;
+}
+
 bool Document::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     return false;
 }

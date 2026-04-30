@@ -24,6 +24,8 @@ public:
         listen(mDocument, event, std::move(callback), capture);
     }
 
+    bool can_destroy() const;
+
 protected:
     virtual bool handle_nav_command(Rml::Event& event, NavCommand cmd);
 

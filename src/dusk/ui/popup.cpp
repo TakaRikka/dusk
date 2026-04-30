@@ -19,11 +19,13 @@ Popup::Popup() : Document("res/rml/popup.rml"), mRoot(mDocument->GetElementById(
         // TODO
     });
     mTabBar->add_tab("Editor", [] { push_document(std::make_unique<EditorWindow>()); });
-    mTabBar->add_tab("Reset", [] {
+    mTabBar->add_tab("Reset", [this] {
         // TODO
+        mTabBar->set_active_tab(-1);
     });
-    mTabBar->add_tab("Exit", [] {
+    mTabBar->add_tab("Exit", [this] {
         // TODO
+        mTabBar->set_active_tab(-1);
     });
 
     // Hide document after transition completion

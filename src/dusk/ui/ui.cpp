@@ -18,7 +18,12 @@ void load_font(const char* filename, bool fallback = false) {
 }
 
 bool sInitialized = false;
-std::vector<std::unique_ptr<Document> > sDocuments;
+
+struct OpenDocument {
+    std::unique_ptr<Document> doc;
+    bool pendingDestroy = false;
+};
+std::vector<OpenDocument> sDocuments;
 
 }  // namespace
 
@@ -52,7 +57,7 @@ Document& push_document(std::unique_ptr<Document> doc, bool show) noexcept {
         doc->hide();
     }
     Document& ret = *doc;
-    sDocuments.push_back(std::move(doc));
+    sDocuments.push_back({std::move(doc)});
     if (show) {
         ret.show();
     }
@@ -60,23 +65,35 @@ Document& push_document(std::unique_ptr<Document> doc, bool show) noexcept {
 }
 
 void pop_document() noexcept {
-    sDocuments.pop_back();
+    for (auto it = sDocuments.rbegin(); it != sDocuments.rend(); ++it) {
+        if (!it->pendingDestroy) {
+            it->doc->hide();
+            it->pendingDestroy = true;
+            break;
+        }
+    }
     if (auto* doc = top_document()) {
         doc->show();
     }
 }
 
 Document* top_document() noexcept {
-    if (sDocuments.empty()) {
-        return nullptr;
+    for (auto it = sDocuments.rbegin(); it != sDocuments.rend(); ++it) {
+        if (!it->pendingDestroy) {
+            return it->doc.get();
+        }
     }
-    return sDocuments.back().get();
+    return nullptr;
 }
 
 void update() noexcept {
-    for (const auto& doc : sDocuments) {
-        doc->update();
+    for (size_t i = 0; i < sDocuments.size(); ++i) {
+        sDocuments[i].doc->update();
     }
+    sDocuments.erase(
+        std::remove_if(sDocuments.begin(), sDocuments.end(),
+            [](const OpenDocument& doc) { return doc.pendingDestroy && doc.doc->can_destroy(); }),
+        sDocuments.end());
 }
 
 std::filesystem::path resource_path(const std::filesystem::path& filename) noexcept {
