@@ -92,9 +92,6 @@ std::string escape(std::string_view str) noexcept {
         case '"':
             result += "&quot;";
             break;
-        case '\'':
-            result += "&apos;";
-            break;
         default:
             result += c;
             break;
