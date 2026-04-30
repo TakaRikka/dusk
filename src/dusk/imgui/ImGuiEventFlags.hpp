@@ -3108,209 +3108,171 @@ struct MultiByteAreaFlag
 {
 	// flags treated as bool, shift left after checking bool
     const char* name;
-	uint16_t flags[2];
+    std::array<uint16_t, 2> flags;
     std::map<uint8_t, const char*> enumValues;
 };
+constexpr uint16_t AREA_FLAG_NONE = 0;
 
-inline MultiByteAreaFlag ForestTempleWormRoomPosition = 
-{
-    "Worm Room position",
-	{ 0x0D3C },
-    {
-        {0x0, "on totem",			},
-        {0x8, "north",				},
-        {0x7, "north north east",	},
-        {0x6, "north east",			},
-        {0x5, "east north east",	},
-        {0x4, "east",				},
-        {0x3, "east south east",	},
-        {0x2, "south south east",	},
-        {0x1, "south",				},
-        {0xF, "south south west",	},
-        {0xE, "south west",			},
-        {0xD, "west south west",	},
-        {0xC, "west",				},
-        {0xA, "west north west",	},
-        {0xB, "north west",			},
-        {0x9, "north north west",	},
-    },
+inline MultiByteAreaFlag ForestTempleMultiByteFlags[] =
+{ 
+	{
+		"Worm Room position",
+		{ 0x0D3C, AREA_FLAG_NONE },
+		{
+			{ 0x0, "On Totem",			},
+			{ 0x8, "North",				},
+			{ 0x7, "North North East",	},
+			{ 0x6, "North East",		},
+			{ 0x5, "East North East",	},
+			{ 0x4, "East",				},
+			{ 0x3, "East South East",	},
+			{ 0x2, "South South East",	},
+			{ 0x1, "South",				},
+			{ 0xF, "South South West",	},
+			{ 0xE, "South West",		},
+			{ 0xD, "West South West",	},
+			{ 0xC, "West",				},
+			{ 0xA, "West North West",	},
+			{ 0xB, "North West",		},
+			{ 0x9, "North North West",	},
+		},
+	}
 };
 
-inline MultiByteAreaFlag SPR_Courtyard1FCannon = {
-    "Courtyard First Floor Cannon",
-    { 0x1160 },
-    {
-		{1, "north"},
-		{0, "south"},
-		{2, "east"},
-		{3, "west"}
+inline const std::map<uint8_t, const char*> _SPRIceBlockPuzzleLocations = 
+{
+	{ 0x0C, "(-2,  2)" },
+    { 0x0B, "(-1,  2)" },
+    { 0x0A, "( 0,  2)" },
+    { 0x09, "( 1,  2)" },
+    { 0x08, "( 2,  2)" },
+
+	{ 0x0D, "(-2,  1)" },
+    { 0x14, "(-1,  1)" },
+    { 0x15, "( 0,  1)" },
+    { 0x16, "( 1,  1)" },
+    { 0x07, "( 2,  1)" },
+
+	{ 0x0E, "(-2,  0)" },
+    { 0x17, "(-1,  0)" },
+    { 0x1A, "( 0,  0)" },
+    { 0x17, "( 1,  0)" },
+    { 0x06, "( 2,  0)" },
+
+	{ 0x0F, "(-2, -1)" },
+    { 0x12, "(-1, -1)" },
+    { 0x19, "( 0, -1)" },
+    { 0x18, "( 1, -1)" },
+    { 0x05, "( 2, -1)" },
+
+	{ 0x10, "(-2, -2)" },
+    { 0x11, "(-1, -2)" },
+    { 0x02, "( 0, -2)" },
+    { 0x03, "( 1, -2)" },
+    { 0x04, "( 2, -2)" },
+
+	{ 0x01, "( 0, -3)" },
+};
+
+inline MultiByteAreaFlag SPRMultiByteFlags[] = {
+	{
+		"Courtyard First Floor Cannon",
+		{ 0x1160, AREA_FLAG_NONE },
+		{
+			{ 1, "North" },
+			{ 0, "South" },
+			{ 2, "East"  },
+			{ 3, "West"  }
+		},
 	},
-};
-
-inline MultiByteAreaFlag SPR_Courtyard2FCannon = 
-{
-    "Courtyard Second Floor Cannon",
-    { 0x1001, 0x1180 },
-    {
-        {3, "north east"},
-        {0, "south east"},
-        {2, "south west"},
-        {1, "north west"},
+	{
+		"Courtyard Second Floor Cannon",
+		{ 0x1001, 0x1180 },
+		{
+			{ 3, "North East" },
+			{ 0, "South East" },
+			{ 2, "South West" },
+			{ 1, "North West" },
+		},
 	},
-};
-
-inline MultiByteAreaFlag SPR_FreezardCageRoomCannon = {
-    "Freezard Cage Room Cannon",
-    { 0x1203 },
-    {
-        {0, "north"},
-        {2, "east"},
-        {1, "south"},
-        {3, "west"},
-    },
-};
-
-inline MultiByteAreaFlag SPR_NorthWestRoomCannon = {
-    "North West Room Cannon",
-    { 0x0C0C },
-    {
-        {3, "north"},
-        {0, "east"},
-        {2, "south"},
-        {1, "west"},
-    },
-};
-
-inline const std::map<uint8_t, const char*> _IceBlockPuzzleLocations = 
-{
-	{0x0C, "(-2,  2)"},
-    {0x0B, "(-1,  2)"},
-    {0x0A, "( 0,  2)"},
-    {0x09, "( 1,  2)"},
-    {0x08, "( 2,  2)"},
-
-	{0x0D, "(-2,  1)"},
-    {0x14, "(-1,  1)"},
-    {0x15, "( 0,  1)"},
-    {0x16, "( 1,  1)"},
-    {0x07, "( 2,  1)"},
-
-    {0x0E, "(-2,  0)"},
-    {0x17, "(-1,  0)"},
-    {0x1A, "( 0,  0)"},
-    {0x17, "( 1,  0)"},
-    {0x06, "( 2,  0)"},
-
-	{0x0F, "(-2, -1)"},
-    {0x12, "(-1, -1)"},
-    {0x19, "( 0, -1)"},
-    {0x18, "( 1, -1)"},
-    {0x05, "( 2, -1)"},
-	
-	{0x10, "(-2, -2)"},
-    {0x11, "(-1, -2)"},
-    {0x02, "( 0, -2)"},
-    {0x03, "( 1, -2)"},
-    {0x04, "( 2, -2)"},
-    
-	{0x01, "( 0, -3)"},
-};
-
-inline MultiByteAreaFlag SPR_IcePuzzleBlock1 = {
-	"Ice Block 1 Location",
-	{ 0x0F1F },
-	_IceBlockPuzzleLocations
-};
-
-inline MultiByteAreaFlag SPR_IcePuzzleBlock2 = {
-	"Ice Block 2 Location",
-	{ 0x08F8 },
-	_IceBlockPuzzleLocations
-};
-
-inline MultiByteAreaFlag SPR_IcePuzzleBlock3 = {
-	"Ice Block 2 Location",
-	{ 0x0807, 0x09C0 },
-	_IceBlockPuzzleLocations
+	{
+		"Freezard Cage Room Cannon",
+		{ 0x1203, AREA_FLAG_NONE },
+		{
+			{ 0, "North" },
+			{ 2, "East"  },
+			{ 1, "South" },
+			{ 3, "West"  },
+		},
+	},
+	{
+		"North West Room Cannon",
+		{ 0x0C0C, AREA_FLAG_NONE },
+		{
+			{ 3, "North" },
+			{ 0, "East"  },
+			{ 2, "South" },
+			{ 1, "West"  },
+		},
+	},
+	{
+		"Ice Block 1 Location",
+		{ 0x0F1F, AREA_FLAG_NONE },
+		_SPRIceBlockPuzzleLocations
+	},
+	{
+		"Ice Block 2 Location",
+		{ 0x08F8, AREA_FLAG_NONE },
+		_SPRIceBlockPuzzleLocations
+	},
+	{
+		"Ice Block 2 Location",
+		{ 0x0807, 0x09C0 },
+		_SPRIceBlockPuzzleLocations
+	}
 };
 
 inline const std::map<uint8_t, const char*> _CoOBlockPuzzle1Locations = {
-    {0xB, "(-1,  2)"},
-    {0xC, "( 0,  2)"},
-    {0x1, "( 1,  2)"},
-
-	{0xA, "(-1,  1)"},
-    {0xD, "( 0,  1)"},
-    {0x2, "( 1,  1)"},
-
-	{0x9, "(-1,  0)"},
-    {0xE, "( 0,  0)"},
-    {0x3, "( 1,  0)"},
-
-	{0x8, "(-1, -1)"},
-    {0xF, "( 0, -1)"},
-    {0x4, "( 1, -1)"},
-
-	{0x7, "(-1, -2)"},
-    {0x6, "( 0, -2)"},
-    {0x5, "( 1, -2)"},
-};
-
-inline MultiByteAreaFlag CoOPuzzle1Block1 = {
-	"Puzzle 1 Block 1 Location",
-	{ 0x0907, 0x0A80 },
-	_CoOBlockPuzzle1Locations
-};
-
-inline MultiByteAreaFlag CoOPuzzle1Block2 = {
-	"Puzzle 1 Block 2 Location",
-	{ 0x0A3C },
-	_CoOBlockPuzzle1Locations
-};
-
-inline MultiByteAreaFlag CoOPuzzle1Block3 = {
-	"Puzzle 1 Block 3 Location",
-	{ 0x0B0F },
-	_CoOBlockPuzzle1Locations
+    { 0x0B, "(-1,  2)" },
+    { 0x0C, "( 0,  2)" },
+    { 0x01, "( 1,  2)" },
+	  			  
+	{ 0x0A, "(-1,  1)" },
+    { 0x0D, "( 0,  1)" },
+    { 0x02, "( 1,  1)" },
+	  			  
+	{ 0x09, "(-1,  0)" },
+    { 0x0E, "( 0,  0)" },
+    { 0x03, "( 1,  0)" },
+	  			  
+	{ 0x08, "(-1, -1)" },
+    { 0x0F, "( 0, -1)" },
+    { 0x04, "( 1, -1)" },
+	  			  
+	{ 0x07, "(-1, -2)" },
+    { 0x06, "( 0, -2)" },
+    { 0x05, "( 1, -2)" },
 };
 
 inline const std::map<uint8_t, const char*> _CoOBlockPuzzle2Locations = {
-    {0x1, "(-1,  2)"},
-    {0x2, "( 0,  2)"},
-    {0x3, "( 1,  2)"},
-
-	{0xC, "(-1,  1)"},
-    {0xD, "( 0,  1)"},
-    {0x4, "( 1,  1)"},
-    {0x5, "( 2,  1)"},
-
-	{0xB, "(-1,  0)"},
-    {0xE, "( 0,  0)"},
-    {0xF, "( 1,  0)"},
-    {0x6, "( 2,  0)"},
-
-	{0xA, "(-1, -1)"},
-    {0x9, "( 0, -1)"},
-    {0x8, "( 1, -1)"},
-    {0x7, "( 2, -1)"},
-};
-
-inline MultiByteAreaFlag CoOPuzzle2Block1 = {
-	"Puzzle 2 Block 1 Location",
-	{ 0x08F0 },
-	_CoOBlockPuzzle2Locations
-};
-
-inline MultiByteAreaFlag CoOPuzzle2Block2 = {
-	"Puzzle 2 Block 2 Location",
-	{ 0x080F },
-	_CoOBlockPuzzle2Locations
-};
-
-inline MultiByteAreaFlag CoOPuzzle2Block3 = {
-	"Puzzle 2 Block 3 Location",
-	{ 0x09F0 },
-	_CoOBlockPuzzle2Locations
+    { 0x01, "(-1,  2)" },
+    { 0x02, "( 0,  2)" },
+    { 0x03, "( 1,  2)" },
+	  			  
+	{ 0x0C, "(-1,  1)" },
+    { 0x0D, "( 0,  1)" },
+    { 0x04, "( 1,  1)" },
+    { 0x05, "( 2,  1)" },
+	  				  
+	{ 0x0B, "(-1,  0)" },
+    { 0x0E, "( 0,  0)" },
+    { 0x0F, "( 1,  0)" },
+    { 0x06, "( 2,  0)" },
+	  		  
+	{ 0x0A, "(-1, -1)" },
+    { 0x09, "( 0, -1)" },
+    { 0x08, "( 1, -1)" },
+    { 0x07, "( 2, -1)" },
 };
 
 inline const std::map<uint8_t, const char*> _CoOBlockPuzzle3Locations = {
@@ -3345,55 +3307,86 @@ inline const std::map<uint8_t, const char*> _CoOBlockPuzzle3Locations = {
     { 0x09, "( 2, -2)" },
 };
 
-inline MultiByteAreaFlag CoOPuzzle3Block1 = {
-	"Puzzle 3 Block 1 Location",
-	{ 0x0E7C },
-	_CoOBlockPuzzle3Locations
-};
-
-inline MultiByteAreaFlag CoOPuzzle3Block2 = {
-	"Puzzle 3 Block 2 Location",
-	{ 0x0E03, 0x0FE0 },
-	_CoOBlockPuzzle3Locations
-};
-
-inline MultiByteAreaFlag CoOPuzzle3Block3 = {
-	"Puzzle 3 Block 3 Location",
-	{ 0x0F1F },
-	_CoOBlockPuzzle3Locations
+inline MultiByteAreaFlag CoOMultiByteFlags[] = {
+	{
+		"Puzzle 1 Block 1 Location",
+		{ 0x0907, 0x0A80 },
+		_CoOBlockPuzzle1Locations
+	},
+	{
+		"Puzzle 1 Block 2 Location",
+		{ 0x0A3C, AREA_FLAG_NONE },
+		_CoOBlockPuzzle1Locations
+	},
+	{
+		"Puzzle 1 Block 3 Location",
+		{ 0x0B0F, AREA_FLAG_NONE },
+		_CoOBlockPuzzle1Locations
+	},
+	{
+		"Puzzle 2 Block 1 Location",
+		{ 0x08F0, AREA_FLAG_NONE },
+		_CoOBlockPuzzle2Locations
+	},
+	{
+		"Puzzle 2 Block 2 Location",
+		{ 0x080F, AREA_FLAG_NONE },
+		_CoOBlockPuzzle2Locations
+	},
+	{
+		"Puzzle 2 Block 3 Location",
+		{ 0x09F0, AREA_FLAG_NONE },
+		_CoOBlockPuzzle2Locations
+	},
+	{
+		"Puzzle 3 Block 1 Location",
+		{ 0x0E7C, AREA_FLAG_NONE },
+		_CoOBlockPuzzle3Locations
+	},
+	{
+		"Puzzle 3 Block 2 Location",
+		{ 0x0E03, 0x0FE0 },
+		_CoOBlockPuzzle3Locations
+	},
+	{
+		"Puzzle 3 Block 3 Location",
+		{ 0x0F1F, AREA_FLAG_NONE },
+		_CoOBlockPuzzle3Locations
+	}
 };
 
 struct AreaFlagIter {
-    template <typename T>
-    AreaFlagIter(T t) : span(t) {}
     std::span<EventAreaFlags> span;
+    std::span<MultiByteAreaFlag> span;
 };
 
 inline std::map<uint8_t, AreaFlagIter> areaFlagLookup = 
 {
-    { 0x00, eventAreaFlagsOrdon },
-    { 0x01, eventAreaFlagsSewer },
-    { 0x02, eventAreaFlagsFaron },
-    { 0x03, eventAreaFlagsEldin },
-    { 0x04, eventAreaFlagsLanayru },
-    { 0x06, eventAreaFlagsHyruleField },
-    { 0x07, eventAreaFlagsSacredGrove },
-    { 0x08, eventAreaFlagsSnowpeak },
-    { 0x09, eventAreaFlagsCastleTown },
-    { 0x0A, eventAreaFlagsGerudoDesert },
-    { 0x0B, eventAreaFlagsFishingPond },
-    { 0x10, eventAreaFlagsFT },
-    { 0x11, eventAreaFlagsGM },
-    { 0x12, eventAreaFlagsLBT },
-    { 0x13, eventAreaFlagsAG },
-    { 0x14, eventAreaFlagsSPR },
-    { 0x15, eventAreaFlagsToT },
-    { 0x16, eventAreaFlagsCitS },
-    { 0x17, eventAreaFlagsPoT },
-    { 0x18, eventAreaFlagsHC },
-    { 0x19, eventAreaFlagsCoO },
-    { 0x1A, eventAreaFlagsLHLC },
-    { 0x1B, eventAreaFlagsGrotto },
+    { 0x00, AreaFlagIter{ eventAreaFlagsOrdon,			{} } },
+    { 0x01, AreaFlagIter{ eventAreaFlagsSewer,			{} } },
+    { 0x02, AreaFlagIter{ eventAreaFlagsFaron,			{} } },
+    { 0x03, AreaFlagIter{ eventAreaFlagsEldin,			{} } },
+    { 0x04, AreaFlagIter{ eventAreaFlagsLanayru,		{} } },
+    // 5 unused
+    { 0x06, AreaFlagIter{ eventAreaFlagsHyruleField,	{} } },
+    { 0x07, AreaFlagIter{ eventAreaFlagsSacredGrove,	{} } },
+    { 0x08, AreaFlagIter{ eventAreaFlagsSnowpeak,		{} } },
+    { 0x09, AreaFlagIter{ eventAreaFlagsCastleTown,		{} } },
+    { 0x0A, AreaFlagIter{ eventAreaFlagsGerudoDesert,	{} } },
+    { 0x0B, AreaFlagIter{ eventAreaFlagsFishingPond,	{} } },
+    // C-F unused
+    { 0x10, AreaFlagIter{ eventAreaFlagsFT,				ForestTempleMultiByteFlags } },
+    { 0x11, AreaFlagIter{ eventAreaFlagsGM,				{} } },
+    { 0x12, AreaFlagIter{ eventAreaFlagsLBT,			{} } },
+    { 0x13, AreaFlagIter{ eventAreaFlagsAG,				{} } },
+    { 0x14, AreaFlagIter{ eventAreaFlagsSPR,			SPRMultiByteFlags } },
+    { 0x15, AreaFlagIter{ eventAreaFlagsToT,			{} } },
+    { 0x16, AreaFlagIter{ eventAreaFlagsCitS,			{} } },
+    { 0x17, AreaFlagIter{ eventAreaFlagsPoT,			{} } },
+    { 0x18, AreaFlagIter{ eventAreaFlagsHC,				{} } },
+    { 0x19, AreaFlagIter{ eventAreaFlagsCoO,			CoOMultiByteFlags } },
+    { 0x1A, AreaFlagIter{ eventAreaFlagsLHLC,			{} } },
+    { 0x1B, AreaFlagIter{ eventAreaFlagsGrotto,			{} } },
 };
 
 #endif  // !DUSK_IMGUI_EVENTFLAGS_HPP
