@@ -9,7 +9,6 @@
 #include "ui.hpp"
 
 namespace dusk::ui {
-static aurora::Module Log{"dusk::ui::window"};
 
 Window::Window() {
     auto* context = aurora::rmlui::get_context();
@@ -115,6 +114,7 @@ void Window::add_tab(const Rml::String& title, TabBuilder builder) {
     });
     if (index == mSelectedTabIndex && builder) {
         builder(mDocument->GetElementById("content"));
+        focus_active_tab();
     }
 }
 
@@ -176,6 +176,7 @@ bool Window::handle_tab_bar_nav(Rml::Event& event, NavCommand cmd) noexcept {
     }
     return false;
 }
+
 bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
     if (cmd == NavCommand::Up || cmd == NavCommand::Cancel) {
         return focus_active_tab();

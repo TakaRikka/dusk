@@ -9,6 +9,8 @@
 #include "pane.hpp"
 #include "select_button.hpp"
 
+#include <charconv>
+
 namespace dusk::ui {
 namespace {
 aurora::Module Log{"dusk::ui::editor"};
@@ -26,16 +28,24 @@ dSv_player_status_a_c* get_player_status() {
 
 Rml::String get_player_name() {
     if (!has_save_data()) {
-        return "Link";
+        return "";
     }
     return dComIfGs_getPlayerName();
 }
 
+void set_player_name(Rml::String name) {
+    dComIfGs_setPlayerName(name.c_str());
+}
+
 Rml::String get_horse_name() {
     if (!has_save_data()) {
-        return "Epona";
+        return "";
     }
     return dComIfGs_getHorseName();
+}
+
+void set_horse_name(Rml::String name) {
+    dComIfGs_setHorseName(name.c_str());
 }
 
 Rml::String value_for_player_selection(const Rml::String& selection) {
@@ -171,43 +181,275 @@ bool handle_editor_action(const Rml::VariantList& arguments) {
 
 }  // namespace
 
+class ControlledSelectButton : public SelectButton {
+public:
+    ControlledSelectButton(Rml::Element* parent, Props props)
+        : SelectButton(parent, std::move(props)) {}
+
+    void update() override {
+        set_disabled(is_disabled());
+        set_value_label(format_value());
+        SelectButton::update();
+    }
+
+protected:
+    virtual Rml::String format_value() = 0;
+    virtual bool is_disabled() { return false; }
+};
+
+class BaseStringButton : public ControlledSelectButton {
+public:
+    struct Props {
+        Rml::String key;
+        Rml::String type = "text";
+        int maxLength = -1;
+    };
+
+    BaseStringButton(Rml::Element* parent, Props props)
+        : ControlledSelectButton(parent, {std::move(props.key)}), mType(std::move(props.type)),
+          mMaxLength(props.maxLength) {
+        mInputListeners.reserve(3);
+    }
+
+    void update() override {
+        if (mPendingStopEditing) {
+            stop_editing(mPendingCommit, mPendingRefocusRoot);
+        }
+        ControlledSelectButton::update();
+    }
+
+    void start_editing() {
+        if (mInputElem != nullptr) {
+            return;
+        }
+        auto* doc = mRoot->GetOwnerDocument();
+        auto elemPtr = doc->CreateElement("input");
+        mInputElem = rmlui_dynamic_cast<Rml::ElementFormControlInput*>(elemPtr.get());
+        if (mInputElem == nullptr) {
+            return;
+        }
+        mInputElem->SetAttribute("type", mType);
+        mInputElem->SetAttribute("value", format_value());
+        if (mMaxLength > -1) {
+            mInputElem->SetAttribute("maxlength", mMaxLength);
+        }
+        mRoot->AppendChild(std::move(elemPtr));
+        mValueElem->SetProperty(Rml::PropertyId::Visibility, Rml::Style::Visibility::Hidden);
+        mInputElem->Focus(true);
+        const int end = static_cast<int>(Rml::StringUtilities::LengthUTF8(mInputElem->GetValue()));
+        mInputElem->SetSelectionRange(0, end);
+        set_selected(true);
+        mInputListeners.emplace_back(std::make_unique<ScopedEventListener>(
+            mInputElem, Rml::EventId::Keydown, [this](Rml::Event& event) {
+                const auto cmd = map_nav_event(event);
+                if (cmd == NavCommand::Confirm) {
+                    request_stop_editing(true, true);
+                    event.StopImmediatePropagation();
+                } else if (cmd == NavCommand::Cancel) {
+                    request_stop_editing(false, true);
+                    event.StopImmediatePropagation();
+                }
+            }));
+        mInputListeners.emplace_back(std::make_unique<ScopedEventListener>(
+            mInputElem, Rml::EventId::Click, [](Rml::Event& event) { event.StopPropagation(); }));
+        mInputListeners.emplace_back(std::make_unique<ScopedEventListener>(mInputElem,
+            Rml::EventId::Blur, [this](Rml::Event&) { request_stop_editing(true, false); }));
+    }
+
+    void request_stop_editing(bool commit, bool refocusRoot) {
+        mPendingStopEditing = true;
+        mPendingCommit = commit;
+        mPendingRefocusRoot = refocusRoot;
+    }
+
+protected:
+    bool handle_nav_command(NavCommand cmd) override {
+        if (cmd == NavCommand::Confirm) {
+            if (mInputElem == nullptr) {
+                start_editing();
+            } else {
+                request_stop_editing(true, true);
+            }
+            return true;
+        } else if (cmd == NavCommand::Cancel) {
+            request_stop_editing(false, true);
+            return true;
+        }
+        return false;
+    }
+
+    virtual void set_value(Rml::String value) = 0;
+
+private:
+    void stop_editing(bool commit = true, bool refocusRoot = false) {
+        if (mInputElem == nullptr) {
+            return;
+        }
+        mPendingStopEditing = false;
+        if (commit) {
+            set_value(mInputElem->GetValue());
+        }
+        mInputListeners.clear();
+        mRoot->RemoveChild(mInputElem);
+        mInputElem = nullptr;
+        mValueElem->SetProperty(Rml::PropertyId::Visibility, Rml::Style::Visibility::Visible);
+        set_selected(false);
+        if (refocusRoot) {
+            mRoot->Focus(true);
+        }
+    }
+
+    Rml::ElementFormControlInput* mInputElem = nullptr;
+    std::vector<std::unique_ptr<ScopedEventListener> > mInputListeners;
+    Rml::String mType;
+    int mMaxLength;
+    bool mPendingStopEditing = false;
+    bool mPendingCommit = true;
+    bool mPendingRefocusRoot = false;
+};
+
+class StringButton : public BaseStringButton {
+public:
+    struct Props {
+        Rml::String key;
+        std::function<Rml::String()> getValue;
+        std::function<void(Rml::String)> setValue;
+        int maxLength = -1;
+    };
+
+    StringButton(Rml::Element* parent, Props props)
+        : BaseStringButton(parent,
+              {
+                  .key = std::move(props.key),
+                  .maxLength = props.maxLength,
+              }),
+          mGetValue(std::move(props.getValue)), mSetValue(std::move(props.setValue)) {}
+
+protected:
+    Rml::String format_value() override { return mGetValue(); }
+    void set_value(Rml::String value) override {
+        if (mSetValue) {
+            mSetValue(std::move(value));
+        }
+    }
+
+private:
+    std::function<Rml::String()> mGetValue;
+    std::function<void(Rml::String)> mSetValue;
+};
+
+struct IntSelectProps {
+    Rml::String key;
+    std::function<int()> getValue;
+    std::function<void(int)> setValue;
+    int min = 0;
+    int max = INT_MAX;
+    int step = 1;
+};
+
+class IntSelectButton : public BaseStringButton {
+public:
+    using Props = IntSelectProps;
+
+    IntSelectButton(Rml::Element* parent, Props props)
+        : BaseStringButton(parent, {.key = std::move(props.key), .type = "number"}),
+          mGetValue(std::move(props.getValue)), mSetValue(std::move(props.setValue)),
+          mMin(props.min), mMax(props.max), mStep(props.step) {}
+
+protected:
+    Rml::String format_value() override { return fmt::to_string(mGetValue()); }
+    void set_value(Rml::String value) override {
+        if (!mSetValue) {
+            return;
+        }
+
+        int parsedValue = 0;
+        const char* begin = value.data();
+        const char* end = begin + value.size();
+        const auto result = std::from_chars(begin, end, parsedValue);
+        if (result.ec != std::errc() || result.ptr != end) {
+            return;
+        }
+
+        mSetValue(std::clamp(parsedValue, mMin, mMax));
+    }
+
+    bool handle_nav_command(NavCommand cmd) override {
+        if (cmd == NavCommand::Left) {
+            mSetValue(std::clamp(mGetValue() - mStep, mMin, mMax));
+            return true;
+        } else if (cmd == NavCommand::Right) {
+            mSetValue(std::clamp(mGetValue() + mStep, mMin, mMax));
+            return true;
+        }
+        return BaseStringButton::handle_nav_command(cmd);
+    }
+
+private:
+    std::function<int()> mGetValue;
+    std::function<void(int)> mSetValue;
+    int mMin;
+    int mMax;
+    int mStep;
+};
+
 EditorWindow::EditorWindow() {
     add_tab("Player Status", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Direction::Vertical);
+        auto& rightPane = add_child<Pane>(content, Pane::Direction::Vertical);
+
         leftPane.add_section("Player");
-        leftPane.add_select_button({
-            .key = "Player Name",
-            .getValue = get_player_name,
-        });
-        leftPane.add_select_button({
-            .key = "Horse Name",
-            .getValue = get_horse_name,
-        });
-        leftPane.add_select_button({
-            .key = "Max Health",
-            .getValue = [] { return value_for_player_selection("max_health"); },
-        });
-        leftPane.add_select_button({
-            .key = "Max Oil",
-            .getValue = [] { return value_for_player_selection("max_oil"); },
-        });
-        leftPane.add_select_button({
-            .key = "Oil",
-            .getValue = [] { return value_for_player_selection("oil"); },
-        });
+        leftPane.add_child<StringButton>(leftPane.root(), StringButton::Props{
+                                                              .key = "Player Name",
+                                                              .getValue = get_player_name,
+                                                              .setValue = set_player_name,
+                                                              .maxLength = 16,
+                                                          });
+        leftPane.add_child<StringButton>(leftPane.root(), StringButton::Props{
+                                                              .key = "Horse Name",
+                                                              .getValue = get_horse_name,
+                                                              .setValue = set_horse_name,
+                                                              .maxLength = 16,
+                                                          });
+        leftPane.add_child<IntSelectButton>(leftPane.root(),
+            IntSelectButton::Props{
+                .key = "Max Health",
+                .getValue = [] { return get_player_status()->getMaxLife(); },
+                .setValue = [](int value) { return get_player_status()->setMaxLife(value); },
+                .max = UINT16_MAX, // TODO: actual max
+            });
+        leftPane.add_child<IntSelectButton>(leftPane.root(),
+            IntSelectButton::Props{
+                .key = "Health",
+                .getValue = [] { return get_player_status()->getLife(); },
+                .setValue = [](int value) { return get_player_status()->setLife(value); },
+                .max = UINT16_MAX, // TODO: actual max
+            });
+        leftPane.add_child<IntSelectButton>(leftPane.root(),
+            IntSelectButton::Props{
+                .key = "Max Oil",
+                .getValue = [] { return get_player_status()->getMaxOil(); },
+                .setValue = [](int value) { return get_player_status()->setMaxOil(value); },
+                .max = UINT16_MAX, // TODO: actual max
+            });
+        leftPane.add_child<IntSelectButton>(leftPane.root(),
+            IntSelectButton::Props{
+                .key = "Oil",
+                .getValue = [] { return get_player_status()->getOil(); },
+                .setValue = [](int value) { return get_player_status()->setOil(value); },
+                .max = UINT16_MAX, // TODO: actual max
+            });
+
         leftPane.add_section("Equipment");
         leftPane.add_select_button({
             .key = "Equip X",
             .value = "TODO",
-            .selected = true,
         });
         leftPane.add_select_button({
             .key = "Equip Y",
             .value = "TODO",
-            .selected = false,
         });
 
-        auto& rightPane = add_child<Pane>(content, Pane::Direction::Vertical);
         rightPane.add_button({
             .text = "Hello, world!",
         });

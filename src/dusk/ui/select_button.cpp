@@ -23,17 +23,29 @@ SelectButton::SelectButton(Rml::Element* parent, Props props) : Component(create
     mValueElem->SetClass("value", true);
     update_props(std::move(props));
     listen(mRoot, Rml::EventId::Click, [this](Rml::Event& event) {
-        if (mProps.onPressed) {
-            mProps.onPressed(*this, event);
+        if (mProps.disabled) {
+            return;
+        }
+        if (handle_nav_command(NavCommand::Confirm)) {
+            event.StopPropagation();
+        }
+    });
+    listen(mRoot, Rml::EventId::Keydown, [this](Rml::Event& event) {
+        if (mProps.disabled) {
+            return;
+        }
+        const auto cmd = map_nav_event(event);
+        if (cmd != NavCommand::None && handle_nav_command(cmd)) {
+            event.StopPropagation();
         }
     });
 }
 
-void SelectButton::update() {
-    if (mProps.getValue) {
-        set_value(mProps.getValue());
+bool SelectButton::focus() {
+    if (mProps.disabled) {
+        return false;
     }
-    Component::update();
+    return Component::focus();
 }
 
 void SelectButton::set_selected(bool selected) {
@@ -43,7 +55,21 @@ void SelectButton::set_selected(bool selected) {
     }
 }
 
-void SelectButton::set_value(const Rml::String& value) {
+void SelectButton::set_disabled(bool disabled) {
+    if (mProps.disabled != disabled) {
+        if (disabled) {
+            mRoot->SetAttribute("disabled", "");
+            mRoot->SetPseudoClass("disabled", true);
+            mRoot->Blur();
+        } else {
+            mRoot->RemoveAttribute("disabled");
+            mRoot->SetPseudoClass("disabled", false);
+        }
+        mProps.disabled = disabled;
+    }
+}
+
+void SelectButton::set_value_label(const Rml::String& value) {
     if (mProps.value != value) {
         mValueElem->SetInnerRML(escape(value));
         mProps.value = value;
@@ -54,9 +80,18 @@ void SelectButton::update_props(Props props) {
     if (mProps.key != props.key) {
         mKeyElem->SetInnerRML(escape(props.key));
     }
-    set_value(props.value);
+    set_value_label(props.value);
     set_selected(props.selected);
+    set_disabled(props.disabled);
     mProps = std::move(props);
+}
+
+bool SelectButton::handle_nav_command(NavCommand cmd) {
+    if (cmd == NavCommand::Confirm) {
+        set_selected(!get_selected());
+        return true;
+    }
+    return false;
 }
 
 }  // namespace dusk::ui

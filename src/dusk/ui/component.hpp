@@ -5,6 +5,7 @@
 #include <RmlUi/Core.h>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace Rml {
@@ -27,6 +28,9 @@ public:
 
     void listen(Rml::Element* element, Rml::EventId event, ScopedEventListener::Callback callback,
         bool capture = false);
+    void listen(Rml::EventId event, ScopedEventListener::Callback callback, bool capture = false) {
+        listen(mRoot, event, std::move(callback), capture);
+    }
     bool contains(Rml::Element* element) const;
 
     template <typename T, typename... Args>

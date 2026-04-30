@@ -120,12 +120,15 @@ button {
     transition: background-color 0.1s linear-in-out, opacity 0.1s linear-in-out;
 }
 
-.button.active, .button:hover, .button:focus-visible {
+.button:not(:disabled).active,
+.button:not(:disabled):hover,
+.button:not(:disabled):focus-visible {
     background-color: rgba(204, 184, 119, 20%);
     box-shadow: #C2A42D 0 0 0 2dp;
 }
 
-.button.selected, .button:active {
+.button:not(:disabled).selected,
+.button:not(:disabled):active {
     opacity: 1;
     background-color: rgba(204, 184, 119, 40%);
     box-shadow: #C2A42D 0 0 0 2dp;
@@ -143,15 +146,23 @@ button {
     transition: background-color 0.1s linear-in-out, opacity 0.1s linear-in-out;
 }
 
-.select-button.active, .select-button:hover, .select-button:focus-visible {
+.select-button:not(:disabled).active,
+.select-button:not(:disabled):hover,
+.select-button:not(:disabled):focus-visible {
     background-color: rgba(204, 184, 119, 20%);
     box-shadow: #C2A42D 0 0 0 2dp;
 }
 
-.select-button.selected, .select-button:active {
+.select-button:not(:disabled).selected,
+.select-button:not(:disabled):active {
     opacity: 1;
     background-color: rgba(204, 184, 119, 40%);
     box-shadow: #C2A42D 0 0 0 2dp;
+}
+
+.select-button:disabled {
+    opacity: 0.35;
+    cursor: default;
 }
 
 .select-button .key {
@@ -159,9 +170,15 @@ button {
     font-weight: bold;
     font-size: 18dp;
     text-transform: uppercase;
+    flex: 1 0 auto;
 }
 
 .select-button .value {
     margin-left: auto;
+    font-size: 20dp;
+}
+
+.select-button input {
+    text-align: right;
     font-size: 20dp;
 }
