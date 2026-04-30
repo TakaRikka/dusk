@@ -586,15 +586,9 @@ int game_main(int argc, char* argv[]) {
 
     dusk::audio::SetMasterVolume(dusk::getSettings().audio.masterVolume / 100.0f);
     dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);
-    dusk::ui::initialize();
 
-    // TODO: just for testing
-    // auto& editorWindow = dusk::ui::add_document(std::make_unique<dusk::ui::EditorWindow>());
-    // editorWindow.show();
-    // auto& settingsWindow = dusk::ui::add_document(std::make_unique<dusk::ui::SettingsWindow>());
-    // settingsWindow.show();
-    auto& popup = dusk::ui::add_document(std::make_unique<dusk::ui::Popup>());
-    popup.show();
+    dusk::ui::initialize();
+    dusk::ui::push_document(std::make_unique<dusk::ui::Popup>(), false);
 
     std::string dvd_path;
     bool dvd_opened = false;

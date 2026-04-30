@@ -124,6 +124,10 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
             return mContentComponents.front()->focus();
         }
     }
+    if (cmd == NavCommand::Cancel) {
+        pop_document();
+        return true;
+    }
     return mTabBar->handle_nav_command(event, cmd);
 }
 

@@ -2,13 +2,9 @@
 
 #include "button.hpp"
 #include "document.hpp"
-
-#include <chrono>
-#include <memory>
-#include <optional>
-#include <vector>
-
 #include "tab_bar.hpp"
+
+#include <memory>
 
 namespace dusk::ui {
 
@@ -21,7 +17,6 @@ public:
 
     void show() override;
     void hide() override;
-    void update() override;
     bool focus() override;
 
     void toggle();
@@ -35,7 +30,6 @@ private:
     std::unique_ptr<TabBar> mTabBar;
     std::unique_ptr<Button> mCloseButton;
     bool mVisible = false;
-    std::optional<std::chrono::steady_clock::time_point> mHideDeadline;
 };
 
 }  // namespace dusk::ui

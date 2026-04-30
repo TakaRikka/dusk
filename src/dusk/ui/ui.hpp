@@ -32,8 +32,9 @@ void shutdown() noexcept;
 void handle_event(const SDL_Event& event) noexcept;
 void update() noexcept;
 
-Document& add_document(std::unique_ptr<Document> doc) noexcept;
-void remove_document(Document& doc) noexcept;
+Document& push_document(std::unique_ptr<Document> doc, bool show = true) noexcept;
+void pop_document() noexcept;
+Document* top_document() noexcept;
 
 Popup& add_popup(std::unique_ptr<Popup> popup) noexcept;
 

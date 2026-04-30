@@ -29,11 +29,11 @@ button {
     border-bottom: 2dp #92875B;
     backdrop-filter: blur(5dp);
     transform: translateY(0);
-    transition: transform 0.5s cubic-in-out, opacity 0.5s cubic-in-out;
+    transition: transform 0.2s cubic-in-out;
 }
 
 .popup.popup-hidden {
-    transform: translateY(-100%);
+    transform: translateY(-64dp);
 }
 
 .popup .tab-bar {

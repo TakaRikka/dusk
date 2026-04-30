@@ -58,6 +58,15 @@ void TabBar::add_tab(const Rml::String& title, TabCallback callback) {
 }
 
 bool TabBar::set_active_tab(int index) {
+    if (index == -1) {
+        // Clear currently selected tab
+        for (int i = 0; i < static_cast<int>(mTabs.size()); ++i) {
+            mTabs[i].button.set_selected(false);
+        }
+        mProps.selectedTabIndex = -1;
+        return true;
+    }
+
     if (index < 0 || index >= mTabs.size() || index == mProps.selectedTabIndex) {
         return false;
     }

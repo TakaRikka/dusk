@@ -47,18 +47,30 @@ void handle_event(const SDL_Event& event) noexcept {
     // TODO
 }
 
-Document& add_document(std::unique_ptr<Document> doc) noexcept {
+Document& push_document(std::unique_ptr<Document> doc, bool show) noexcept {
+    if (auto* doc = top_document()) {
+        doc->hide();
+    }
     Document& ret = *doc;
     sDocuments.push_back(std::move(doc));
+    if (show) {
+        ret.show();
+    }
     return ret;
 }
 
-void remove_document(Document& doc) noexcept {
-    const auto it = std::find_if(sDocuments.begin(), sDocuments.end(),
-        [&doc](const std::unique_ptr<Document>& current) { return current.get() == &doc; });
-    if (it != sDocuments.end()) {
-        sDocuments.erase(it);
+void pop_document() noexcept {
+    sDocuments.pop_back();
+    if (auto* doc = top_document()) {
+        doc->show();
     }
+}
+
+Document* top_document() noexcept {
+    if (sDocuments.empty()) {
+        return nullptr;
+    }
+    return sDocuments.back().get();
 }
 
 void update() noexcept {

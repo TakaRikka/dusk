@@ -4,6 +4,6 @@
     <link type="text/rcss" href="popup.rcss" />
 </head>
 <body>
-    <div id="popup" class="popup"></div>
+    <div id="popup" class="popup popup-hidden"></div>
 </body>
 </rml>
