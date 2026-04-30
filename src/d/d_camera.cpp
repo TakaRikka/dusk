@@ -1481,7 +1481,7 @@ void dCamera_c::CalcTrimSize() {
             mTrimHeight += -mTrimHeight * 0.25f;
             break;
         case 2:
-#if 0 && WIDESCREEN_SUPPORT
+#if !TARGET_PC && WIDESCREEN_SUPPORT
             if (mDoGph_gInf_c::isWide() && mDoGph_gInf_c::isWideZoom()) {
                 mTrimHeight += (16.0f - mTrimHeight) * 0.25f;
                 break;
