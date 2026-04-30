@@ -91,6 +91,10 @@ public:
     void calcCursor();
     void drawCursor();
 
+    #if TARGET_PC
+    void dMapBgWide();
+    #endif
+
     void setDPDFloorSelCurPos(s8 i_pos) { field_0xdd6 = i_pos; }
 
     f32 getMapWidth() { return mMapWidth; }
