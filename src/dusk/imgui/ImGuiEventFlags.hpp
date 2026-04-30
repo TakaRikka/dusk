@@ -3359,7 +3359,7 @@ struct AreaFlagIter {
     std::span<MultiByteAreaFlag> multibyteFlags;
 };
 
-inline std::map<uint8_t, AreaFlagIter> areaFlagLookup = 
+inline std::map<uint8_t, AreaFlagIter> imguiAreaFlagLookup = 
 {
     { 0x00, AreaFlagIter{ eventAreaFlagsOrdon,			{} } },
     { 0x01, AreaFlagIter{ eventAreaFlagsSewer,			{} } },
