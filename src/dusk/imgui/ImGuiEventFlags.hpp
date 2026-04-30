@@ -2724,7 +2724,6 @@ inline EventAreaFlags eventAreaFlagsSacredGrove[] =
 	{ 0x17, 0x40, 0x1740, "Transition to day after Skull Kid" },
 	{ 0x17, 0x20, 0x1720, "dark beasts spawned" },
 	{ 0x17, 0x10, 0x1710, "Sacred Grove Portal (removes statue blocking door of time (to past)" },
-	{ 0x17, 0x08, 0x1708, "Randomizer: remove statue to past" },
 };
 
 inline EventAreaFlags eventAreaFlagsSewer[] =
