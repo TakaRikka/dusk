@@ -1499,11 +1499,12 @@ namespace dusk {
             const auto byteIndex = getByteIndexFromFlag(flag);
 
             const uint16_t startingMask = std::bit_floor(bitInds);
-            uint16_t valueMask = 1 << getValueSize(flag);
+            uint16_t valueMask = 1 << (getValueSize(flag) - 1);
 
-            for (uint16_t mask = startingMask; (bitInds & mask) != 0; mask >>= 1) {
-                SetFlag(makeEventFlag(byteIndex, bitInds & mask), (val & valueMask) != 0);
-                valueMask >>= 1;
+            for (uint16_t bitIndexMask = startingMask; (bitInds & bitIndexMask) != 0;
+                 bitIndexMask >>= 1, valueMask >>= 1)
+            {
+                SetFlag(makeEventFlag(byteIndex, bitInds & bitIndexMask), (val & valueMask) != 0);
             }
         };
 
@@ -1611,6 +1612,27 @@ namespace dusk {
             }
             ImGui::EndTable();
         }
+
+        for (const auto& multiByteFlag : areaFlags.multibyteFlags) {
+            auto flagValue = LoadSpreadMultiByte(multiByteFlag.flags[0], multiByteFlag.flags[1]); 
+
+            const char* currentVal = "UNKNOWN";
+
+            auto enumValIter = multiByteFlag.enumValues.find(flagValue);
+            if (enumValIter != multiByteFlag.enumValues.end()) {
+                currentVal = enumValIter->second;
+            }
+
+            if (ImGui::BeginCombo(multiByteFlag.name, currentVal)) {
+                for (const auto& [val, name] : multiByteFlag.enumValues) {
+                    if (ImGui::Selectable(name)) {
+                        SetSpreadMultiByte(multiByteFlag.flags[0], multiByteFlag.flags[1], val);
+                    }
+                }
+                ImGui::EndCombo();
+            }
+        }
+
         genCommonAreaFlags(membit);
     }
 
