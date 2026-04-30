@@ -58,6 +58,8 @@
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/ui/ui.hpp"
 #include "dusk/ui/editor.hpp"
+#include "dusk/ui/popup.hpp"
+#include "dusk/ui/settings.hpp"
 #include "version.h"
 
 #include <aurora/aurora.h>
@@ -78,8 +80,6 @@
 #include "f_pc/f_pc_draw.h"
 #include "tracy/Tracy.hpp"
 #include <RmlUi/Core.h>
-
-#include "dusk/ui/settings.hpp"
 
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
@@ -590,9 +590,11 @@ int game_main(int argc, char* argv[]) {
 
     // TODO: just for testing
     auto& editorWindow = dusk::ui::add_window(std::make_unique<dusk::ui::EditorWindow>());
-    editorWindow.show();
+    // editorWindow.show();
     auto& settingsWindow = dusk::ui::add_window(std::make_unique<dusk::ui::SettingsWindow>());
     // settingsWindow.show();
+    auto& popup = dusk::ui::add_popup(std::make_unique<dusk::ui::Popup>(settingsWindow, editorWindow));
+    popup.show();
 
     std::string dvd_path;
     bool dvd_opened = false;

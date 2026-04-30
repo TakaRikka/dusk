@@ -1,0 +1,11 @@
+<rml>
+<head>
+    <title>Popup</title>
+    <link type="text/rcss" href="popup.rcss" />
+</head>
+<body>
+    <div id="popup" class="popup">
+        <div id="tab-bar" class="tab-bar"></div>
+    </div>
+</body>
+</rml>

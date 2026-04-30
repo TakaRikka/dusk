@@ -1470,16 +1470,21 @@ set(DUSK_FILES
         src/dusk/ui/editor.hpp
         src/dusk/ui/event.cpp
         src/dusk/ui/event.hpp
+        src/dusk/ui/nav_types.hpp
         src/dusk/ui/number_button.cpp
         src/dusk/ui/number_button.hpp
         src/dusk/ui/pane.cpp
         src/dusk/ui/pane.hpp
+        src/dusk/ui/popup.cpp
+        src/dusk/ui/popup.hpp
         src/dusk/ui/select_button.cpp
         src/dusk/ui/select_button.hpp
         src/dusk/ui/settings.cpp
         src/dusk/ui/settings.hpp
         src/dusk/ui/string_button.cpp
         src/dusk/ui/string_button.hpp
+        src/dusk/ui/tab_button.cpp
+        src/dusk/ui/tab_button.hpp
         src/dusk/ui/ui.hpp
         src/dusk/ui/ui.cpp
         src/dusk/ui/window.hpp

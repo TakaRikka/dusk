@@ -5,7 +5,7 @@
 
 #include "button.hpp"
 #include "component.hpp"
-#include "ui.hpp"
+#include "nav_types.hpp"
 
 namespace dusk::ui {
 
@@ -37,6 +37,8 @@ public:
 
     void show();
     void hide();
+
+    void focus_for_input() noexcept;
 
     void update();
     bool set_active_tab(int index);

@@ -5,8 +5,8 @@
 
 #include "aurora/lib/window.hpp"
 #include "aurora/rmlui.hpp"
-#include "button.hpp"
 #include "magic_enum.hpp"
+#include "tab_button.hpp"
 #include "ui.hpp"
 
 #include <algorithm>
@@ -127,6 +127,15 @@ void Window::hide() {
     }
 }
 
+void Window::focus_for_input() noexcept {
+    if (!mContentComponents.empty()) {
+        if (mContentComponents.front()->focus()) {
+            return;
+        }
+    }
+    focus_active_tab();
+}
+
 void Window::update() {
     update_safe_area();
     for (const auto& component : mContentComponents) {
@@ -170,9 +179,12 @@ bool Window::set_active_tab(int index) {
     const auto& tab = mTabs[index];
     if (tab.button->focus()) {
         clear_content();
-        for (int i = 0; i < mTabs.size(); i++) {
-            mTabs[i].button->set_selected(i == index);
+        std::vector<Button*> buttons;
+        buttons.reserve(mTabs.size());
+        for (auto& tab : mTabs) {
+            buttons.push_back(tab.button.get());
         }
+        set_selected_tab(buttons, index);
         mSelectedTabIndex = index;
         if (tab.builder) {
             tab.builder(mDocument->GetElementById("content"));
@@ -190,13 +202,10 @@ void Window::add_tab(const Rml::String& title, TabBuilder builder) {
     auto* tabBar = mDocument->GetElementById("tab-bar");
     mTabs.emplace_back(Tab{
         .title = title,
-        .button = std::make_unique<Button>(tabBar,
-            Button::Props{
-                .text = title,
-                .onPressed = [this, index](Rml::Event&) { set_active_tab(index); },
-                .selected = index == mSelectedTabIndex,
-            },
-            "tab"),
+        .button = create_tab_button(
+            tabBar, title, index == mSelectedTabIndex, [this, index](Rml::Event&) {
+                set_active_tab(index);
+            }),
         .builder = std::move(builder),
     });
     if (index == mSelectedTabIndex) {

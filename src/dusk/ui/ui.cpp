@@ -6,6 +6,7 @@
 
 #include <filesystem>
 
+#include "popup.hpp"
 #include "window.hpp"
 
 namespace dusk::ui {
@@ -17,6 +18,7 @@ void load_font(const char* filename, bool fallback = false) {
 
 bool sInitialized = false;
 std::vector<std::unique_ptr<Window> > sWindows;
+std::unique_ptr<Popup> sPopup;
 
 }  // namespace
 
@@ -37,6 +39,7 @@ bool initialize() noexcept {
 }
 
 void shutdown() noexcept {
+    sPopup.reset();
     sWindows.clear();
     sInitialized = false;
 }
@@ -55,9 +58,17 @@ void remove_window(Window& window) noexcept {
     // TODO
 }
 
+Popup& add_popup(std::unique_ptr<Popup> popupMenu) noexcept {
+    sPopup = std::move(popupMenu);
+    return *sPopup;
+}
+
 void update() noexcept {
     for (const auto& window : sWindows) {
         window->update();
+    }
+    if (sPopup != nullptr) {
+        sPopup->update();
     }
 }
 
