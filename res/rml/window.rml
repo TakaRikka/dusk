@@ -4,9 +4,6 @@
     <link type="text/rcss" href="window.rcss" />
 </head>
 <body>
-    <div id="window" class="window">
-        <div id="tab-bar" class="tab-bar"></div>
-        <div id="content" class="content"></div>
-    </div>
+    <div id="window" class="window"></div>
 </body>
 </rml>

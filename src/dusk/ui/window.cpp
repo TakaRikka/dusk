@@ -3,7 +3,6 @@
 #include "aurora/lib/window.hpp"
 #include "aurora/rmlui.hpp"
 #include "magic_enum.hpp"
-#include "tab_button.hpp"
 #include "ui.hpp"
 
 #include <algorithm>
@@ -26,7 +25,17 @@ float base_body_padding(Rml::Context* context) noexcept {
 
 }  // namespace
 
-Window::Window() : Document("res/rml/window.rml") {
+Window::Window() : Document("res/rml/window.rml"), mRoot(mDocument->GetElementById("window")) {
+    mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
+                                                  .selectedTabIndex = 0,
+                                                  .autoSelect = true,
+                                              });
+
+    auto elem = mDocument->CreateElement("div");
+    elem->SetAttribute("id", "content");
+    elem->SetClass("content", true);
+    mContentRoot = mRoot->AppendChild(std::move(elem));
+
     listen(Rml::EventId::Keydown, [this](Rml::Event& event) {
         // 1-9 for quick switching tabs
         const auto key = static_cast<Rml::Input::KeyIdentifier>(
@@ -80,60 +89,27 @@ void Window::update_safe_area() noexcept {
 }
 
 bool Window::set_active_tab(int index) {
-    if (index < 0 || index >= mTabs.size() || index == mSelectedTabIndex) {
-        return false;
-    }
-    const auto& tab = mTabs[index];
-    if (tab.button->focus()) {
-        clear_content();
-        std::vector<Button*> buttons;
-        buttons.reserve(mTabs.size());
-        for (auto& tab : mTabs) {
-            buttons.push_back(tab.button.get());
-        }
-        set_selected_tab(buttons, index);
-        mSelectedTabIndex = index;
-        if (tab.builder) {
-            tab.builder(mDocument->GetElementById("content"));
-        }
-        return true;
-    }
-    return false;
+    return mTabBar->set_active_tab(index);
 }
 
 void Window::add_tab(const Rml::String& title, TabBuilder builder) {
-    const int index = static_cast<int>(mTabs.size());
-    if (index == mSelectedTabIndex && builder) {
-        builder(mDocument->GetElementById("content"));
-    }
-    auto* tabBar = mDocument->GetElementById("tab-bar");
-    mTabs.emplace_back(Tab{
-        .title = title,
-        .button = create_tab_button(
-            tabBar, title, index == mSelectedTabIndex, [this, index](Rml::Event&) {
-                set_active_tab(index);
-            }),
-        .builder = std::move(builder),
+    mTabBar->add_tab(title, [this, builder = std::move(builder)] {
+        clear_content();
+        if (builder) {
+            builder(mContentRoot);
+        }
     });
 }
 
 void Window::clear_content() noexcept {
     mContentComponents.clear();
-    auto* content = mDocument->GetElementById("content");
-    while (content->GetNumChildren() != 0) {
-        content->RemoveChild(content->GetFirstChild());
+    while (mContentRoot->GetNumChildren() != 0) {
+        mContentRoot->RemoveChild(mContentRoot->GetFirstChild());
     }
 }
 
 bool Window::focus() {
-    if (mTabs.empty()) {
-        return false;
-    }
-    int i = mSelectedTabIndex;
-    if (i < 0 || i >= mTabs.size()) {
-        i = 0;
-    }
-    return mTabs[i].button->focus();
+    return mTabBar->focus();
 }
 
 bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
@@ -143,53 +119,12 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
             return true;
         }
     }
-    if (handle_tab_bar_nav(event, cmd)) {
-        return true;
-    }
-    return false;
-}
-
-bool Window::handle_tab_bar_nav(Rml::Event& event, NavCommand cmd) noexcept {
-    if (cmd == NavCommand::Down) {
-        if (!mContentComponents.empty()) {
-            return mContentComponents.front()->focus();
-        }
-    } else if (cmd == NavCommand::Left || cmd == NavCommand::Right || cmd == NavCommand::Next ||
-               cmd == NavCommand::Previous)
-    {
-        bool isNext = cmd == NavCommand::Right || cmd == NavCommand::Next;
-        int currentComponent = -1;
-        for (int i = 0; i < mTabs.size(); ++i) {
-            if (mTabs[i].button->contains(event.GetTargetElement())) {
-                currentComponent = i;
-                break;
-            }
-        }
-        int direction = isNext ? 1 : -1;
-        int i = currentComponent + direction;
-        if (currentComponent == -1) {
-            // If the container itself is focused and right is pressed, focus the first element
-            if (isNext) {
-                i = 0;
-            } else {
-                // Otherwise, allow event to bubble
-                return false;
-            }
-        }
-        while (i >= 0 && i < static_cast<int>(mTabs.size())) {
-            if (set_active_tab(i)) {
-                return true;
-            }
-            i += direction;
-        }
-    } else if (cmd == NavCommand::Cancel) {
-        // TODO: close window
-    } else if (cmd == NavCommand::Confirm) {
+    if (cmd == NavCommand::Confirm || cmd == NavCommand::Down) {
         if (!mContentComponents.empty()) {
             return mContentComponents.front()->focus();
         }
     }
-    return false;
+    return mTabBar->handle_nav_command(event, cmd);
 }
 
 bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {

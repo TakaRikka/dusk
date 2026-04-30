@@ -3,8 +3,9 @@
 #include "button.hpp"
 #include "component.hpp"
 #include "document.hpp"
-#include "ui.hpp"
 #include "nav_types.hpp"
+#include "tab_bar.hpp"
+#include "ui.hpp"
 
 namespace dusk::ui {
 
@@ -31,7 +32,6 @@ protected:
     void update_safe_area() noexcept;
     void clear_content() noexcept;
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;
-    bool handle_tab_bar_nav(Rml::Event& event, NavCommand cmd) noexcept;
     bool handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept;
 
     template <typename T, typename... Args>
@@ -42,11 +42,11 @@ protected:
         return ref;
     }
 
-    std::vector<Tab> mTabs;
+    Rml::Element* mRoot;
+    Rml::Element* mContentRoot;
+    std::unique_ptr<TabBar> mTabBar;
     std::vector<std::unique_ptr<Component> > mContentComponents;
     Insets mBodyPadding;
-    int mSelectedTabIndex = 0;
-    std::unique_ptr<ScopedEventListener> mKeyListener;
 };
 
 }  // namespace dusk::ui

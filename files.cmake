@@ -1485,12 +1485,12 @@ set(DUSK_FILES
         src/dusk/ui/settings.hpp
         src/dusk/ui/string_button.cpp
         src/dusk/ui/string_button.hpp
-        src/dusk/ui/tab_button.cpp
-        src/dusk/ui/tab_button.hpp
-        src/dusk/ui/ui.hpp
+        src/dusk/ui/tab_bar.cpp
+        src/dusk/ui/tab_bar.hpp
         src/dusk/ui/ui.cpp
-        src/dusk/ui/window.hpp
+        src/dusk/ui/ui.hpp
         src/dusk/ui/window.cpp
+        src/dusk/ui/window.hpp
         src/dusk/achievements.cpp
         src/dusk/iso_validate.cpp
         src/dusk/livesplit.cpp
