@@ -4,9 +4,10 @@
 #include <SDL3/SDL_filesystem.h>
 #include <aurora/rmlui.hpp>
 
+#include <algorithm>
 #include <filesystem>
 
-#include "popup.hpp"
+#include "aurora/lib/window.hpp"
 #include "window.hpp"
 
 namespace dusk::ui {
@@ -17,8 +18,7 @@ void load_font(const char* filename, bool fallback = false) {
 }
 
 bool sInitialized = false;
-std::vector<std::unique_ptr<Window> > sWindows;
-std::unique_ptr<Popup> sPopup;
+std::vector<std::unique_ptr<Document> > sDocuments;
 
 }  // namespace
 
@@ -39,8 +39,7 @@ bool initialize() noexcept {
 }
 
 void shutdown() noexcept {
-    sPopup.reset();
-    sWindows.clear();
+    sDocuments.clear();
     sInitialized = false;
 }
 
@@ -48,27 +47,23 @@ void handle_event(const SDL_Event& event) noexcept {
     // TODO
 }
 
-Window& add_window(std::unique_ptr<Window> window) noexcept {
-    Window& ret = *window;
-    sWindows.push_back(std::move(window));
+Document& add_document(std::unique_ptr<Document> doc) noexcept {
+    Document& ret = *doc;
+    sDocuments.push_back(std::move(doc));
     return ret;
 }
 
-void remove_window(Window& window) noexcept {
-    // TODO
-}
-
-Popup& add_popup(std::unique_ptr<Popup> popupMenu) noexcept {
-    sPopup = std::move(popupMenu);
-    return *sPopup;
+void remove_document(Document& doc) noexcept {
+    const auto it = std::find_if(sDocuments.begin(), sDocuments.end(),
+        [&doc](const std::unique_ptr<Document>& current) { return current.get() == &doc; });
+    if (it != sDocuments.end()) {
+        sDocuments.erase(it);
+    }
 }
 
 void update() noexcept {
-    for (const auto& window : sWindows) {
-        window->update();
-    }
-    if (sPopup != nullptr) {
-        sPopup->update();
+    for (const auto& doc : sDocuments) {
+        doc->update();
     }
 }
 
@@ -131,6 +126,40 @@ NavCommand map_nav_event(const Rml::Event& event) noexcept {
     default:
         return NavCommand::None;
     }
+}
+
+Insets safe_area_insets(Rml::Context* context) noexcept {
+    if (context == nullptr) {
+        return {};
+    }
+
+    auto* window = aurora::window::get_sdl_window();
+    if (window == nullptr) {
+        return {};
+    }
+
+    const AuroraWindowSize windowSize = aurora::window::get_window_size();
+    if (windowSize.width == 0 || windowSize.height == 0) {
+        return {};
+    }
+
+    SDL_Rect safeRect{};
+    if (!SDL_GetWindowSafeArea(window, &safeRect)) {
+        return {};
+    }
+
+    const Rml::Vector2i contextSize = context->GetDimensions();
+    const float scaleX = static_cast<float>(contextSize.x) / static_cast<float>(windowSize.width);
+    const float scaleY = static_cast<float>(contextSize.y) / static_cast<float>(windowSize.height);
+
+    const float safeRight = static_cast<float>(safeRect.x + safeRect.w);
+    const float safeBottom = static_cast<float>(safeRect.y + safeRect.h);
+    return {
+        .top = std::max(0.0f, static_cast<float>(safeRect.y)) * scaleY,
+        .right = std::max(0.0f, static_cast<float>(windowSize.width) - safeRight) * scaleX,
+        .bottom = std::max(0.0f, static_cast<float>(windowSize.height) - safeBottom) * scaleY,
+        .left = std::max(0.0f, static_cast<float>(safeRect.x)) * scaleX,
+    };
 }
 
 }  // namespace dusk::ui

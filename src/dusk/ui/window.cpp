@@ -1,8 +1,5 @@
 #include "window.hpp"
 
-#include <RmlUi/Core.h>
-#include <SDL3/SDL_video.h>
-
 #include "aurora/lib/window.hpp"
 #include "aurora/rmlui.hpp"
 #include "magic_enum.hpp"
@@ -27,113 +24,22 @@ float base_body_padding(Rml::Context* context) noexcept {
     return 64.0f * dpRatio;
 }
 
-Window::Insets safe_area_insets(Rml::Context* context) noexcept {
-    if (context == nullptr) {
-        return {};
-    }
-
-    auto* window = aurora::window::get_sdl_window();
-    if (window == nullptr) {
-        return {};
-    }
-
-    const AuroraWindowSize windowSize = aurora::window::get_window_size();
-    if (windowSize.width == 0 || windowSize.height == 0) {
-        return {};
-    }
-
-    SDL_Rect safeRect{};
-    if (!SDL_GetWindowSafeArea(window, &safeRect)) {
-        return {};
-    }
-
-    const Rml::Vector2i contextSize = context->GetDimensions();
-    const float scaleX = static_cast<float>(contextSize.x) / static_cast<float>(windowSize.width);
-    const float scaleY = static_cast<float>(contextSize.y) / static_cast<float>(windowSize.height);
-
-    const float safeRight = static_cast<float>(safeRect.x + safeRect.w);
-    const float safeBottom = static_cast<float>(safeRect.y + safeRect.h);
-    return {
-        .top = std::max(0.0f, static_cast<float>(safeRect.y)) * scaleY,
-        .right = std::max(0.0f, static_cast<float>(windowSize.width) - safeRight) * scaleX,
-        .bottom = std::max(0.0f, static_cast<float>(windowSize.height) - safeBottom) * scaleY,
-        .left = std::max(0.0f, static_cast<float>(safeRect.x)) * scaleX,
-    };
-}
-
 }  // namespace
 
-Window::Window() {
-    auto* context = aurora::rmlui::get_context();
-    if (context == nullptr) {
-        return;
-    }
-
-    mDocument = context->LoadDocument("res/rml/window.rml");
-    if (mDocument == nullptr) {
-        return;
-    }
-
-    mKeyListener = std::make_unique<ScopedEventListener>(
-        mDocument, Rml::EventId::Keydown, [this](Rml::Event& event) {
-            // 1-9 for quick switching tabs
-            const auto key = static_cast<Rml::Input::KeyIdentifier>(
-                event.GetParameter<int>("key_identifier", Rml::Input::KI_UNKNOWN));
-            if (key >= Rml::Input::KeyIdentifier::KI_1 && key <= Rml::Input::KeyIdentifier::KI_9) {
-                if (set_active_tab(key - Rml::Input::KeyIdentifier::KI_1)) {
-                    if (!mContentComponents.empty()) {
-                        mContentComponents.front()->focus();
-                    }
-                    event.StopPropagation();
-                    return;
+Window::Window() : Document("res/rml/window.rml") {
+    listen(Rml::EventId::Keydown, [this](Rml::Event& event) {
+        // 1-9 for quick switching tabs
+        const auto key = static_cast<Rml::Input::KeyIdentifier>(
+            event.GetParameter<int>("key_identifier", Rml::Input::KI_UNKNOWN));
+        if (key >= Rml::Input::KeyIdentifier::KI_1 && key <= Rml::Input::KeyIdentifier::KI_9) {
+            if (set_active_tab(key - Rml::Input::KeyIdentifier::KI_1)) {
+                if (!mContentComponents.empty()) {
+                    mContentComponents.front()->focus();
                 }
+                event.StopPropagation();
             }
-
-            const auto cmd = map_nav_event(event);
-            if (cmd == NavCommand::None) {
-                return;
-            }
-            auto* target = event.GetTargetElement();
-            if (cmd == NavCommand::Next || cmd == NavCommand::Previous ||
-                target->Closest(".tab-bar")) {
-                if (handle_tab_bar_nav(event, cmd)) {
-                    event.StopPropagation();
-                }
-            } else if (target->Closest(".content")) {
-                if (handle_content_nav(event, cmd)) {
-                    event.StopPropagation();
-                }
-            }
-        });
-}
-
-Window::~Window() {
-    auto* context = aurora::rmlui::get_context();
-    if (context != nullptr && mDocument != nullptr) {
-        context->UnloadDocument(mDocument);
-        mDocument = nullptr;
-    }
-}
-
-void Window::show() {
-    if (mDocument != nullptr) {
-        mDocument->Show();
-    }
-}
-
-void Window::hide() {
-    if (mDocument != nullptr) {
-        mDocument->Hide();
-    }
-}
-
-void Window::focus_for_input() noexcept {
-    if (!mContentComponents.empty()) {
-        if (mContentComponents.front()->focus()) {
-            return;
         }
-    }
-    focus_active_tab();
+    });
 }
 
 void Window::update() {
@@ -141,6 +47,7 @@ void Window::update() {
     for (const auto& component : mContentComponents) {
         component->update();
     }
+    Document::update();
 }
 
 void Window::update_safe_area() noexcept {
@@ -208,9 +115,6 @@ void Window::add_tab(const Rml::String& title, TabBuilder builder) {
             }),
         .builder = std::move(builder),
     });
-    if (index == mSelectedTabIndex) {
-        focus_active_tab();
-    }
 }
 
 void Window::clear_content() noexcept {
@@ -221,7 +125,7 @@ void Window::clear_content() noexcept {
     }
 }
 
-bool Window::focus_active_tab() noexcept {
+bool Window::focus() {
     if (mTabs.empty()) {
         return false;
     }
@@ -230,6 +134,19 @@ bool Window::focus_active_tab() noexcept {
         i = 0;
     }
     return mTabs[i].button->focus();
+}
+
+bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
+    auto* target = event.GetTargetElement();
+    if (cmd != NavCommand::Next && cmd != NavCommand::Previous && target->Closest(".content")) {
+        if (handle_content_nav(event, cmd)) {
+            return true;
+        }
+    }
+    if (handle_tab_bar_nav(event, cmd)) {
+        return true;
+    }
+    return false;
 }
 
 bool Window::handle_tab_bar_nav(Rml::Event& event, NavCommand cmd) noexcept {
@@ -277,7 +194,7 @@ bool Window::handle_tab_bar_nav(Rml::Event& event, NavCommand cmd) noexcept {
 
 bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
     if (cmd == NavCommand::Up || cmd == NavCommand::Cancel) {
-        return focus_active_tab();
+        return focus();
     } else if (cmd == NavCommand::Left || cmd == NavCommand::Right) {
         int currentComponent = -1;
         for (int i = 0; i < mContentComponents.size(); ++i) {

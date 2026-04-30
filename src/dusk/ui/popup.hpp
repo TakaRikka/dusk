@@ -1,8 +1,7 @@
 #pragma once
 
-#include <RmlUi/Core/ElementDocument.h>
-
 #include "button.hpp"
+#include "document.hpp"
 #include "event.hpp"
 
 #include <chrono>
@@ -12,36 +11,33 @@
 
 namespace dusk::ui {
 
-class Window;
-
-class Popup {
+class Popup : public Document {
 public:
-    Popup(Window& settingsWindow, Window& editorWindow);
-    ~Popup();
+    Popup();
 
     Popup(const Popup&) = delete;
     Popup& operator=(const Popup&) = delete;
 
-    void show();
-    void hide();
+    void show() override;
+    void hide() override;
+    void update() override;
+
     void toggle();
     bool is_visible() const;
-    void update() noexcept;
+
+protected:
+    bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;
 
 private:
     void set_selected_tab(int index);
     bool focus_tab(int index);
 
-    Window& mSettingsWindow;
-    Window& mEditorWindow;
-    Rml::ElementDocument* mDocument = nullptr;
     std::vector<std::unique_ptr<Button> > mTabs;
     std::vector<std::function<void()> > mTabActions;
     std::unique_ptr<Button> mCloseButton;
     int mSelectedTabIndex = 0;
     bool mVisible = false;
     std::optional<std::chrono::steady_clock::time_point> mHideDeadline;
-    std::unique_ptr<ScopedEventListener> mKeyListener;
 };
 
 }  // namespace dusk::ui

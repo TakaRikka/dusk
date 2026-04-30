@@ -589,11 +589,11 @@ int game_main(int argc, char* argv[]) {
     dusk::ui::initialize();
 
     // TODO: just for testing
-    auto& editorWindow = dusk::ui::add_window(std::make_unique<dusk::ui::EditorWindow>());
+    // auto& editorWindow = dusk::ui::add_document(std::make_unique<dusk::ui::EditorWindow>());
     // editorWindow.show();
-    auto& settingsWindow = dusk::ui::add_window(std::make_unique<dusk::ui::SettingsWindow>());
+    // auto& settingsWindow = dusk::ui::add_document(std::make_unique<dusk::ui::SettingsWindow>());
     // settingsWindow.show();
-    auto& popup = dusk::ui::add_popup(std::make_unique<dusk::ui::Popup>(settingsWindow, editorWindow));
+    auto& popup = dusk::ui::add_document(std::make_unique<dusk::ui::Popup>());
     popup.show();
 
     std::string dvd_path;
