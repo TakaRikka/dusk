@@ -1348,7 +1348,10 @@ namespace dusk {
             drawFlagList(fmt::format("##_item{}", j).c_str(), membit.mItem[j]);
         }
         ImGuiEndGroupPanel();
-        genCommonAreaFlags(membit);
+        ImVec2 post_item_custor = ImGui::GetCursorPos();
+
+        ImGui::SetCursorPos({post_item_custor.x, post_switch_cursor.y});
+        // genCommonAreaFlags(membit);
     }
 
     template <typename T>
@@ -1437,19 +1440,13 @@ namespace dusk {
 
         const auto LoadFlag = [&membit](uint16_t flag) -> bool {            
             const auto byteIndex = getByteIndexFromFlag(flag);
-            static_assert((0x1580 - switchConvert) == 0xd80);
 
             if (byteIndex < validTbox) {
-                uint16_t newFlag = flag - tboxConvert;
-                return membit.isTbox(eventFlagToAreaFlag(newFlag));
-            }
-            if (byteIndex < validSwitch) {
-                uint16_t newFlag = flag - switchConvert;
-                return membit.isSwitch(eventFlagToAreaFlag(newFlag));
-            }
-            if (byteIndex < validItem) {
-                uint16_t newFlag = flag - itemConvert;
-                return membit.isItem(eventFlagToAreaFlag(newFlag));
+                return membit.isTbox(eventFlagToAreaFlag(flag - tboxConvert));
+            } else if (byteIndex < validSwitch) {
+                return membit.isSwitch(eventFlagToAreaFlag(flag - switchConvert));
+            } else if (byteIndex < validItem) {
+                return membit.isItem(eventFlagToAreaFlag(flag - itemConvert));
             }
             return false;
         };
@@ -1459,21 +1456,17 @@ namespace dusk {
             if (set) {
                 if (byteIndex < validTbox) {
                     membit.onTbox(eventFlagToAreaFlag(flag - tboxConvert));
-                }
-                if (byteIndex < validSwitch) {
+                } else if (byteIndex < validSwitch) {
                     membit.onSwitch(eventFlagToAreaFlag(flag - switchConvert));
-                }
-                if (byteIndex < validItem) {
+                } else if (byteIndex < validItem) {
                     membit.onItem(eventFlagToAreaFlag(flag - itemConvert));
                 }
             } else {
                 if (byteIndex < validTbox) {
                     membit.offTbox(eventFlagToAreaFlag(flag - tboxConvert));
-                }
-                if (byteIndex < validSwitch) {
+                } else if (byteIndex < validSwitch) {
                     membit.offSwitch(eventFlagToAreaFlag(flag - switchConvert));
-                }
-                if (byteIndex < validItem) {
+                } else if (byteIndex < validItem) {
                     membit.offItem(eventFlagToAreaFlag(flag - itemConvert));
                 }
             }
@@ -1485,9 +1478,11 @@ namespace dusk {
 
             const uint16_t startingMask = std::bit_floor(bitInds);
             uint8_t val = 0;
-            for (uint16_t mask = startingMask; (bitInds & mask) != 0; mask >>= 1) {
+            for (uint16_t bitIndexMask = startingMask; (bitInds & bitIndexMask) != 0;
+                 bitIndexMask >>= 1)
+            {
                 val <<= 1;
-                if (LoadFlag(makeEventFlag(byteIndex, bitInds & mask))) {
+                if (LoadFlag(makeEventFlag(byteIndex, bitInds & bitIndexMask))) {
                     val |= 1;
                 }
             }
@@ -1601,7 +1596,7 @@ namespace dusk {
                 ImGui::TableNextRow();
                 ImGui::TableNextColumn();
                 bool flag = LoadFlag(e.flagID);
-                if (ImGui::Checkbox("##", &flag)) {
+                if (ImGui::Checkbox(fmt::format("##_unused_area_flag_{}", e.flagID).c_str(), &flag)) {
                     SetFlag(e.flagID, flag);
                 }
 

@@ -3154,7 +3154,7 @@ inline const std::map<uint8_t, const char*> _SPRIceBlockPuzzleLocations =
     { 0x07, "( 2,  1)" },
 
 	{ 0x0E, "(-2,  0)" },
-    { 0x17, "(-1,  0)" },
+    { 0x13, "(-1,  0)" },
     { 0x1A, "( 0,  0)" },
     { 0x17, "( 1,  0)" },
     { 0x06, "( 2,  0)" },
