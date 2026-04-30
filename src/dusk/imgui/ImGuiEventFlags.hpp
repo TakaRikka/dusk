@@ -3107,7 +3107,8 @@ struct MultiByteAreaFlag
 {
 	// flags treated as bool, shift left after checking bool
     const char* name;
-    std::array<uint16_t, 2> flags;
+    uint16_t highOrderflag;
+    uint16_t lowOrderflag;
     std::map<uint8_t, const char*> enumValues;
 };
 constexpr uint16_t AREA_FLAG_NONE = 0;
@@ -3116,7 +3117,7 @@ inline MultiByteAreaFlag ForestTempleMultiByteFlags[] =
 { 
 	{
 		"Worm Room position",
-		{ 0x0D3C, AREA_FLAG_NONE },
+		 0x0D3C, AREA_FLAG_NONE,
 		{
 			{ 0x0, "On Totem",			},
 			{ 0x8, "North",				},
@@ -3177,7 +3178,7 @@ inline const std::map<uint8_t, const char*> _SPRIceBlockPuzzleLocations =
 inline MultiByteAreaFlag SPRMultiByteFlags[] = {
 	{
 		"Courtyard First Floor Cannon",
-		{ 0x1160, AREA_FLAG_NONE },
+		0x1160, AREA_FLAG_NONE,
 		{
 			{ 1, "North" },
 			{ 0, "South" },
@@ -3187,7 +3188,7 @@ inline MultiByteAreaFlag SPRMultiByteFlags[] = {
 	},
 	{
 		"Courtyard Second Floor Cannon",
-		{ 0x1001, 0x1180 },
+		0x1001, 0x1180,
 		{
 			{ 3, "North East" },
 			{ 0, "South East" },
@@ -3197,7 +3198,7 @@ inline MultiByteAreaFlag SPRMultiByteFlags[] = {
 	},
 	{
 		"Freezard Cage Room Cannon",
-		{ 0x1203, AREA_FLAG_NONE },
+		0x1203, AREA_FLAG_NONE,
 		{
 			{ 0, "North" },
 			{ 2, "East"  },
@@ -3207,7 +3208,7 @@ inline MultiByteAreaFlag SPRMultiByteFlags[] = {
 	},
 	{
 		"North West Room Cannon",
-		{ 0x0C0C, AREA_FLAG_NONE },
+		0x0C0C, AREA_FLAG_NONE,
 		{
 			{ 3, "North" },
 			{ 0, "East"  },
@@ -3217,17 +3218,17 @@ inline MultiByteAreaFlag SPRMultiByteFlags[] = {
 	},
 	{
 		"Ice Block 1 Location",
-		{ 0x0F1F, AREA_FLAG_NONE },
+		0x0F1F, AREA_FLAG_NONE,
 		_SPRIceBlockPuzzleLocations
 	},
 	{
 		"Ice Block 2 Location",
-		{ 0x08F8, AREA_FLAG_NONE },
+		0x08F8, AREA_FLAG_NONE,
 		_SPRIceBlockPuzzleLocations
 	},
 	{
 		"Ice Block 3 Location",
-		{ 0x0807, 0x09C0 },
+		0x0807, 0x09C0,
 		_SPRIceBlockPuzzleLocations
 	}
 };
@@ -3313,47 +3314,47 @@ inline const std::map<uint8_t, const char*> _CoOBlockPuzzle3Locations = {
 inline MultiByteAreaFlag CoOMultiByteFlags[] = {
 	{
 		"Puzzle 1 Block 1 Location",
-		{ 0x0907, 0x0A80 },
+		0x0907, 0x0A80,
 		_CoOBlockPuzzle1Locations
 	},
 	{
 		"Puzzle 1 Block 2 Location",
-		{ 0x0A3C, AREA_FLAG_NONE },
+		0x0A3C, AREA_FLAG_NONE,
 		_CoOBlockPuzzle1Locations
 	},
 	{
 		"Puzzle 1 Block 3 Location",
-		{ 0x0B0F, AREA_FLAG_NONE },
+		0x0B0F, AREA_FLAG_NONE,
 		_CoOBlockPuzzle1Locations
 	},
 	{
 		"Puzzle 2 Block 1 Location",
-		{ 0x08F0, AREA_FLAG_NONE },
+		0x08F0, AREA_FLAG_NONE,
 		_CoOBlockPuzzle2Locations
 	},
 	{
 		"Puzzle 2 Block 2 Location",
-		{ 0x080F, AREA_FLAG_NONE },
+		0x080F, AREA_FLAG_NONE,
 		_CoOBlockPuzzle2Locations
 	},
 	{
 		"Puzzle 2 Block 3 Location",
-		{ 0x09F0, AREA_FLAG_NONE },
+		0x09F0, AREA_FLAG_NONE,
 		_CoOBlockPuzzle2Locations
 	},
 	{
 		"Puzzle 3 Block 1 Location",
-		{ 0x0E7C, AREA_FLAG_NONE },
+		0x0E7C, AREA_FLAG_NONE,
 		_CoOBlockPuzzle3Locations
 	},
 	{
 		"Puzzle 3 Block 2 Location",
-		{ 0x0E03, 0x0FE0 },
+		0x0E03, 0x0FE0,
 		_CoOBlockPuzzle3Locations
 	},
 	{
 		"Puzzle 3 Block 3 Location",
-		{ 0x0F1F, AREA_FLAG_NONE },
+		0x0F1F, AREA_FLAG_NONE,
 		_CoOBlockPuzzle3Locations
 	}
 };

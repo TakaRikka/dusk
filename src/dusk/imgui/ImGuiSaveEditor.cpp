@@ -1609,7 +1609,7 @@ namespace dusk {
         }
 
         for (const auto& multiByteFlag : areaFlags.multibyteFlags) {
-            auto flagValue = LoadSpreadMultiByte(multiByteFlag.flags[0], multiByteFlag.flags[1]); 
+            auto flagValue = LoadSpreadMultiByte(multiByteFlag.highOrderflag, multiByteFlag.lowOrderflag); 
 
             const char* currentVal = "UNKNOWN";
 
@@ -1621,7 +1621,7 @@ namespace dusk {
             if (ImGui::BeginCombo(multiByteFlag.name, currentVal)) {
                 for (const auto& [val, name] : multiByteFlag.enumValues) {
                     if (ImGui::Selectable(name)) {
-                        SetSpreadMultiByte(multiByteFlag.flags[0], multiByteFlag.flags[1], val);
+                        SetSpreadMultiByte(multiByteFlag.highOrderflag, multiByteFlag.lowOrderflag, val);
                     }
                 }
                 ImGui::EndCombo();
