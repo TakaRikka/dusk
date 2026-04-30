@@ -94,4 +94,10 @@ bool SelectButton::handle_nav_command(NavCommand cmd) {
     return false;
 }
 
+void ControlledSelectButton::update() {
+    set_disabled(is_disabled());
+    set_value_label(format_value());
+    SelectButton::update();
+}
+
 }  // namespace dusk::ui

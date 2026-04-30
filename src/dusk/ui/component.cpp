@@ -1,9 +1,6 @@
 #include "component.hpp"
 
-#include "aurora/lib/dolphin/gd/gd.hpp"
-
 namespace dusk::ui {
-static aurora::Module Log{"dusk::ui::component"};
 
 Component::Component(Rml::Element* root) : mRoot(root) {}
 
