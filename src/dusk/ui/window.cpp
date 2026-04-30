@@ -41,7 +41,8 @@ Window::Window() {
                 return;
             }
             auto* target = event.GetTargetElement();
-            if (target->Closest(".tab-bar")) {
+            if (cmd == NavCommand::Next || cmd == NavCommand::Previous ||
+                target->Closest(".tab-bar")) {
                 if (handle_tab_bar_nav(event, cmd)) {
                     event.StopPropagation();
                 }
@@ -142,7 +143,10 @@ bool Window::handle_tab_bar_nav(Rml::Event& event, NavCommand cmd) noexcept {
         if (!mContentComponents.empty()) {
             return mContentComponents.front()->focus();
         }
-    } else if (cmd == NavCommand::Left || cmd == NavCommand::Right) {
+    } else if (cmd == NavCommand::Left || cmd == NavCommand::Right || cmd == NavCommand::Next ||
+               cmd == NavCommand::Previous)
+    {
+        bool isNext = cmd == NavCommand::Right || cmd == NavCommand::Next;
         int currentComponent = -1;
         for (int i = 0; i < mTabs.size(); ++i) {
             if (mTabs[i].button->contains(event.GetTargetElement())) {
@@ -150,11 +154,11 @@ bool Window::handle_tab_bar_nav(Rml::Event& event, NavCommand cmd) noexcept {
                 break;
             }
         }
-        int direction = cmd == NavCommand::Right ? 1 : -1;
+        int direction = isNext ? 1 : -1;
         int i = currentComponent + direction;
         if (currentComponent == -1) {
             // If the container itself is focused and right is pressed, focus the first element
-            if (cmd == NavCommand::Right) {
+            if (isNext) {
                 i = 0;
             } else {
                 // Otherwise, allow event to bubble
