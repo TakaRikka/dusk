@@ -1424,7 +1424,7 @@ namespace dusk {
             // also our byte index has to become a u32 index
             
             // dividing byte index by sizeof(u32) gets us the u32 index
-            // but in big endian, the first byte sequencially is 24 bits we have to skip
+            // but in big endian, the first byte is the highest order byte of the u32
             // so we skip 24 bytes for the first byte, 16 for the second, etc
             // essentially (3 - (x % 4)), reversing the modulus, 0=3, 1=2
             auto bitsToSkip = 8 * ((sizeof(u32) - 1) - (byteInd % sizeof(u32)));
