@@ -7091,10 +7091,12 @@ bool dCamera_c::subjectCamera(s32 param_0) {
     cXyz sp1E0(val0, val2, val1);
 
 #if TARGET_PC
-    f32 aspect = mDoGph_gInf_c::getAspect();
-    f32 baseAspect = FB_WIDTH / FB_HEIGHT;
-    if (aspect > baseAspect) {
-        sp1E0.z += (aspect - baseAspect) * 4;
+    if (sp13) {
+        f32 aspect = mDoGph_gInf_c::getAspect();
+        f32 baseAspect = FB_WIDTH / FB_HEIGHT;
+        if (aspect > baseAspect) {
+            sp1E0.z += (aspect - baseAspect) * 4;
+        }
     }
 #endif
 
