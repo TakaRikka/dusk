@@ -1438,7 +1438,7 @@ namespace dusk {
         constexpr uint16_t switchConvert = sizeof(membit.mTbox) << 8;
         constexpr uint16_t itemConvert = switchConvert + (sizeof(membit.mItem) << 8);
 
-        const auto LoadFlag = [&membit](uint16_t flag) -> bool {            
+        const auto LoadFlag = [&](uint16_t flag) -> bool {            
             const auto byteIndex = getByteIndexFromFlag(flag);
 
             if (byteIndex < validTbox) {
@@ -1451,7 +1451,7 @@ namespace dusk {
             return false;
         };
 
-        const auto SetFlag = [&membit](uint16_t flag, bool set) -> void {
+        const auto SetFlag = [&](uint16_t flag, bool set) -> void {
             const auto byteIndex = getByteIndexFromFlag(flag);
             if (set) {
                 if (byteIndex < validTbox) {
