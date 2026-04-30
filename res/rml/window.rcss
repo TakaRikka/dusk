@@ -19,6 +19,9 @@ button {
 }
 
 .window {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
     max-width: 1088dp;
     max-height: 768dp;
     margin: auto;
@@ -30,8 +33,18 @@ button {
     background-color: rgba(21, 22, 16, 90%);
 }
 
+@media (max-height: 640dp) {
+    body {
+        padding: 16dp;
+    }
+    .window {
+        box-shadow: none;
+    }
+}
+
 .window .tab-bar {
     display: flex;
+    flex: 0 0 64dp;
     height: 64dp;
     background-color: rgba(217, 217, 217, 10%);
     font-family: "Fira Sans Condensed";
@@ -68,7 +81,10 @@ button {
 
 .window .content {
     display: flex;
-    height: 100%;
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .window .content .pane {
@@ -76,30 +92,56 @@ button {
     flex-flow: column;
     flex: 1 1 0;
     height: 100%;
+    min-width: 0;
+    min-height: 0;
     padding: 24dp;
+    padding-bottom: 0dp;
     gap: 8dp;
-    overflow: auto;
+    overflow: hidden auto;
 }
 
 .window .content .pane:not(:last-of-type) {
     border-right: 1dp #92875B;
 }
 
-.window .content .pane.detail-pane {
-    gap: 16dp;
+.window .content .pane > * {
+    flex: 0 0 auto;
 }
 
-.window .content .detail-value {
-    padding: 12dp 16dp;
-    border-radius: 12dp;
-    background-color: rgba(17, 16, 10, 20%);
-    box-shadow: rgba(146, 135, 91, 25%) 0 0 0 1dp;
-    font-size: 20dp;
+.window .content .pane > .spacer {
+    display: block;
+    /* Completes the 24dp bottom inset after the pane's 8dp gap. */
+    flex: 0 0 16dp;
+    height: 16dp;
+    pointer-events: none;
 }
 
-.window .content .detail-controls {
-    display: flex;
-    gap: 12dp;
+scrollbarvertical {
+    width: 8dp;
+}
+
+scrollbarvertical sliderarrowdec,
+scrollbarvertical sliderarrowinc {
+    width: 0;
+    height: 0;
+}
+
+scrollbarvertical slidertrack {
+    width: 8dp;
+    background-color: rgba(224, 219, 200, 5%);
+    border-radius: 2dp;
+}
+
+scrollbarvertical sliderbar {
+    width: 8dp;
+    min-height: 24dp;
+    background-color: rgba(224, 219, 200, 45%);
+    border-radius: 2dp;
+}
+
+scrollbarvertical sliderbar:hover,
+scrollbarvertical sliderbar:active {
+    background-color: rgba(194, 164, 45, 80%);
 }
 
 .section-heading {
@@ -107,6 +149,10 @@ button {
     text-transform: uppercase;
     font-size: 22dp;
     opacity: 0.25;
+}
+
+.section-heading:not(:first-of-type) {
+    padding-top: 12dp;
 }
 
 .button {

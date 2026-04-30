@@ -16,6 +16,7 @@ public:
     explicit Pane(Rml::Element* parent, Direction direction, const Rml::String& className = "pane");
 
     bool focus() override;
+    void update() override;
 
     Rml::Element* add_section(const Rml::String& text);
     Button& add_button(Button::Props props) { return add_child<Button>(mRoot, std::move(props)); }
@@ -23,10 +24,13 @@ public:
         return add_child<SelectButton>(mRoot, std::move(props));
     }
     Rml::Element* add_text(const Rml::String& text);
+    Rml::Element* add_rml(const Rml::String& rml);
+    void finalize();
     void clear();
 
 private:
     Direction mDirection;
+    bool finalized = false;
 };
 
 }  // namespace dusk::ui

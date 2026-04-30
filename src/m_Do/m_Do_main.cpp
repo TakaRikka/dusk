@@ -590,9 +590,9 @@ int game_main(int argc, char* argv[]) {
 
     // TODO: just for testing
     auto& editorWindow = dusk::ui::add_window(std::make_unique<dusk::ui::EditorWindow>());
-    editorWindow.show();
+    // editorWindow.show();
     auto& settingsWindow = dusk::ui::add_window(std::make_unique<dusk::ui::SettingsWindow>());
-    // settingsWindow.show();
+    settingsWindow.show();
 
     std::string dvd_path;
     bool dvd_opened = false;

@@ -15,6 +15,12 @@ void Component::update() {
 bool Component::focus() {
     // Can we focus self?
     if (mRoot->Focus(true)) {
+        mRoot->ScrollIntoView(Rml::ScrollIntoViewOptions{
+            Rml::ScrollAlignment::Center,
+            Rml::ScrollAlignment::Nearest,
+            Rml::ScrollBehavior::Smooth,
+            Rml::ScrollParentage::Closest,
+        });
         return true;
     }
     // Otherwise, try to focus a child

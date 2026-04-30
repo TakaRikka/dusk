@@ -2,7 +2,6 @@
 
 #include <RmlUi/Core.h>
 
-#include "aurora/lib/logging.hpp"
 #include "aurora/rmlui.hpp"
 #include "button.hpp"
 #include "magic_enum.hpp"
@@ -184,10 +183,6 @@ bool Window::handle_tab_bar_nav(Rml::Event& event, NavCommand cmd) noexcept {
 bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
     if (cmd == NavCommand::Up || cmd == NavCommand::Cancel) {
         return focus_active_tab();
-    } else if (cmd == NavCommand::Down) {
-        if (!mContentComponents.empty()) {
-            return mContentComponents.front()->focus();
-        }
     } else if (cmd == NavCommand::Left || cmd == NavCommand::Right) {
         int currentComponent = -1;
         for (int i = 0; i < mContentComponents.size(); ++i) {

@@ -38,16 +38,10 @@ Pane::Pane(Rml::Element* parent, Direction direction, const Rml::String& classNa
                 break;
             }
         }
-        int i = focusedChild + direction;
         if (focusedChild == -1) {
-            // If the container itself is focused and next is pressed, focus the first element
-            if (direction == 1) {
-                i = 0;
-            } else {
-                // Otherwise, allow event to bubble
-                return;
-            }
+            return;
         }
+        int i = focusedChild + direction;
         while (i >= 0 && i < static_cast<int>(mChildren.size())) {
             if (mChildren[i]->focus()) {
                 event.StopPropagation();
@@ -56,6 +50,11 @@ Pane::Pane(Rml::Element* parent, Direction direction, const Rml::String& classNa
             i += direction;
         }
     });
+}
+
+void Pane::update() {
+    finalize();
+    Component::update();
 }
 
 bool Pane::focus() {
@@ -80,8 +79,29 @@ Rml::Element* Pane::add_text(const Rml::String& text) {
     return elem;
 }
 
+Rml::Element* Pane::add_rml(const Rml::String& rml) {
+    auto* elem = append(mRoot, "div");
+    elem->SetInnerRML(rml);
+    return elem;
+}
+
+void Pane::finalize() {
+    if (finalized) {
+        return;
+    }
+    finalized = true;
+
+    // Append spacer element to the bottom. RmlUi does not properly handle
+    // padding-bottom or margin-bottom on a scrollable flex container, so
+    // we need to create a fake spacer with an actual layout height to get
+    // padding at the bottom of a scrollable container.
+    auto* elem = append(mRoot, "div");
+    elem->SetClass("spacer", true);
+}
+
 void Pane::clear() {
     clear_children();
+    finalized = false;
 }
 
 }  // namespace dusk::ui
