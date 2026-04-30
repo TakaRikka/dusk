@@ -1404,7 +1404,9 @@ namespace dusk {
         constexpr auto makeMask             = [](uint8_t size) -> uint16_t              { return (1 << size) - 1; };
         constexpr auto getByteIndexFromFlag = [](uint16_t f) -> uint8_t                 { return f >> 8; };
         constexpr auto getBitMaskFromFlag   = [](uint16_t f) -> uint8_t                 { return f & 0xff; };
-        constexpr auto getValueSize         = [](uint16_t f) -> uint8_t                 { return std::popcount(getBitMaskFromFlag(f)); };
+        constexpr auto getValueSize = [getBitMaskFromFlag](uint16_t f) -> uint8_t {
+            return std::popcount(getBitMaskFromFlag(f));
+        };
         
         constexpr auto makeEventFlag = [](uint8_t byteIndex, uint8_t bitIndices) -> uint16_t {
             return (byteIndex << 8) | bitIndices;
