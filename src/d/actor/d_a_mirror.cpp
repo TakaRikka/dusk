@@ -40,6 +40,7 @@ dMirror_packet_c::dMirror_packet_c() {
 void dMirror_packet_c::reset() {
 #if TARGET_PC
     mbReset = true;
+    mbHadEntry = false;
 #else
     mModelCount = 0;
 #endif
@@ -96,6 +97,9 @@ int dMirror_packet_c::entryModel(J3DModel* i_model) {
     }
 
     mModels[mModelCount++] = i_model;
+#if TARGET_PC
+    mbHadEntry = true;
+#endif
     return 1;
 }
 
@@ -624,6 +628,12 @@ int daMirror_c::draw() {
         mDoExt_modelUpdateDL(mpModel);
     }
 
+#if TARGET_PC
+    if (mPacket.mbReset && !mPacket.mbHadEntry) {
+        mPacket.mModelCount = 0;
+    }
+    mPacket.mbHadEntry = true;
+#endif
     dComIfGd_getOpaListBG()->entryImm(&mPacket, 0);
     return 1;
 }

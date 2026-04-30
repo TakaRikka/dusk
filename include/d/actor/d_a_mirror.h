@@ -27,6 +27,7 @@ public:
     /* 0x17C */ cXyz mViewScale;
 #if TARGET_PC
     bool mbReset = false;
+    bool mbHadEntry = false;
 #endif
 };
 
