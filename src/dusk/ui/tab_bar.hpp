@@ -29,11 +29,11 @@ public:
     void add_tab(const Rml::String& title, TabCallback callback);
     bool set_active_tab(int index);
     bool focus_tab(int index);
-    int tab_containing(Rml::Element* element) const;
-    int count() const { return mTabs.size(); }
     bool handle_nav_command(Rml::Event& event, NavCommand cmd);
 
 private:
+    int tab_containing(Rml::Element* element) const;
+
     Props mProps;
     std::vector<Tab> mTabs;
 };

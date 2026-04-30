@@ -79,8 +79,7 @@ bool TabBar::focus_tab(int index) {
     if (index < 0 || index >= mTabs.size() || index == mProps.selectedTabIndex) {
         return false;
     }
-    const auto& tab = mTabs[index];
-    return tab.button.focus();
+    return mTabs[index].button.focus();
 }
 
 int TabBar::tab_containing(Rml::Element* element) const {
