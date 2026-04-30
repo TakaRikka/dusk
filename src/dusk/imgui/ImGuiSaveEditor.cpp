@@ -1410,7 +1410,7 @@ namespace dusk {
             return (byteIndex << 8) | bitIndices;
         };
 
-        constexpr auto eventFlagToAreaFlag = [](uint16_t areaFlag) -> int {
+        const auto eventFlagToAreaFlag = [&](uint16_t areaFlag) -> int {
             auto byteInd = getByteIndexFromFlag(areaFlag);
             constexpr size_t areaIndexSize = 5;
             // if we're looking at 0x580, that would be byte 5, and check if 0x80 is set on that byte
