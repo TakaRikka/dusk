@@ -336,7 +336,8 @@ static int fopAc_Execute(void* i_this) {
             #endif
 
             #if TARGET_PC
-            if (actor->group == fopAc_ENEMY_e && dusk::getSettings().game.hyperEnemies) {
+            if (dusk::getSettings().game.hyperEnemies && actor->group == fopAc_ENEMY_e && !dComIfGp_event_runCheck())
+            {
                 fpcMtd_Execute((process_method_class*)actor->sub_method, actor);
             }
             #endif
