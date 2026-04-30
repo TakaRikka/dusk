@@ -184,6 +184,9 @@ bool Window::set_active_tab(int index) {
 
 void Window::add_tab(const Rml::String& title, TabBuilder builder) {
     const int index = static_cast<int>(mTabs.size());
+    if (index == mSelectedTabIndex && builder) {
+        builder(mDocument->GetElementById("content"));
+    }
     auto* tabBar = mDocument->GetElementById("tab-bar");
     mTabs.emplace_back(Tab{
         .title = title,
@@ -196,8 +199,7 @@ void Window::add_tab(const Rml::String& title, TabBuilder builder) {
             "tab"),
         .builder = std::move(builder),
     });
-    if (index == mSelectedTabIndex && builder) {
-        builder(mDocument->GetElementById("content"));
+    if (index == mSelectedTabIndex) {
         focus_active_tab();
     }
 }
