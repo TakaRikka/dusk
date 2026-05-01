@@ -7,10 +7,10 @@
 #include "dusk/config.hpp"
 #include "dusk/livesplit.h"
 #include "m_Do/m_Do_main.h"
+#include "overlay.hpp"
 #include "pane.hpp"
 #include "ui.hpp"
 
-#include <algorithm>
 #include <climits>
 
 namespace dusk::ui {
@@ -170,6 +170,68 @@ private:
     int mStep;
     Rml::String mPrefix;
     Rml::String mSuffix;
+};
+
+class ConfigOverlaySelect : public ConfigSelect<int> {
+public:
+    struct Props {
+        Rml::String key;
+        ConfigVar<int>* value;
+        GraphicsOption option;
+        Rml::String title;
+        int min = 0;
+        int max = 0;
+        Rml::String helpText;
+        Pane* rightPane = nullptr;
+        std::function<bool()> isDisabled;
+    };
+
+    ConfigOverlaySelect(Rml::Element* parent, Props props)
+        : ConfigSelect<int>(parent,
+              {
+                  .key = std::move(props.key),
+                  .value = props.value,
+                  .onChange = {},
+                  .isDisabled = std::move(props.isDisabled),
+                  .helpText = std::move(props.helpText),
+                  .rightPane = props.rightPane,
+              }),
+          mOption(props.option), mTitle(std::move(props.title)), mValueMin(props.min),
+          mValueMax(props.max) {}
+
+protected:
+    Rml::String get_value() override {
+        return format_graphics_setting_value(mOption, mVar->getValue());
+    }
+
+    bool handle_nav_command(NavCommand cmd) override {
+        if (cmd == NavCommand::Confirm) {
+            open_overlay();
+            return true;
+        }
+        return false;
+    }
+
+private:
+    void open_overlay() {
+        auto* openerDocument = mRoot != nullptr ? mRoot->GetOwnerDocument() : nullptr;
+        if (openerDocument != nullptr) {
+            openerDocument->Hide();
+        }
+        auto& overlay = push_document(std::make_unique<Overlay>(OverlayProps{
+            .option = mOption,
+            .title = mTitle,
+            .helpText = mHelpText,
+            .valueMin = mValueMin,
+            .valueMax = mValueMax,
+            .openerDocument = openerDocument,
+        }));
+    }
+
+    GraphicsOption mOption;
+    Rml::String mTitle;
+    int mValueMin = 0;
+    int mValueMax = 0;
 };
 
 SettingsWindow::SettingsWindow() {
@@ -421,7 +483,32 @@ SettingsWindow::SettingsWindow() {
                              });
 
         leftPane.add_section("Resolution");
-        // TODO: Internal Resolution
+        leftPane.add_child<ConfigOverlaySelect>(leftPane.root(),
+            ConfigOverlaySelect::Props{
+                .key = "Internal Resolution",
+                .value = &getSettings().game.internalResolutionScale,
+                .option = GraphicsOption::InternalResolution,
+                .title = "Internal Resolution",
+                .min = 0,
+                .max = 12,
+                .helpText =
+                    "Configure the resolution used for rendering the game. Higher values are more "
+                    "demanding on your graphics hardware.",
+                .rightPane = &rightPane,
+            });
+        leftPane.add_child<ConfigOverlaySelect>(leftPane.root(),
+            ConfigOverlaySelect::Props{
+                .key = "Shadow Resolution",
+                .value = &getSettings().game.shadowResolutionMultiplier,
+                .option = GraphicsOption::ShadowResolution,
+                .title = "Shadow Resolution",
+                .min = 1,
+                .max = 8,
+                .helpText =
+                    "Configure the shadow-map resolution. Higher values improve shadow quality but "
+                    "increase GPU and memory usage.",
+                .rightPane = &rightPane,
+            });
 
         leftPane.add_section("Post-Processing");
         // TODO: Bloom
