@@ -34,11 +34,6 @@ body {
     filter: opacity(1);
 }
 
-button {
-    cursor: pointer;
-    focus: auto;
-}
-
 .overlay {
     width: 100%;
     max-width: 1216dp;
@@ -83,8 +78,8 @@ button {
 }
 
 .divider {
-    margin: 2dp 0;
-    border-top: 2dp rgba(217, 217, 217, 50%);
+    margin: 1dp 0;
+    border-top: 1dp rgba(217, 217, 217, 50%);
 }
 
 .footer {
@@ -92,19 +87,6 @@ button {
     justify-content: space-between;
     align-items: center;
     gap: 24dp;
-}
-
-.footer > div {
-    flex: 1 1 0;
-    display: flex;
-}
-
-#return {
-    justify-content: flex-start;
-}
-
-#reset {
-    justify-content: flex-end;
 }
 
 footer-button {
@@ -121,6 +103,7 @@ footer-button {
     text-transform: uppercase;
     color: #FFFFFF;
     opacity: 1;
+    cursor: pointer;
 }
 
 footer-button.return {
@@ -160,4 +143,5 @@ footer-button.reset {
     border: 0;
     background-color: transparent;
     opacity: 1;
+    cursor: pointer;
 }

@@ -16,6 +16,7 @@ namespace {
 const Rml::String kDocumentSource = R"RML(
 <rml>
 <head>
+    <link type="text/rcss" href="res/rml/tabbing.rcss" />
     <link type="text/rcss" href="res/rml/popup.rcss" />
 </head>
 <body>

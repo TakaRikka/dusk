@@ -26,6 +26,7 @@ float base_body_padding(Rml::Context* context) noexcept {
 const Rml::String kDocumentSource = R"RML(
 <rml>
 <head>
+    <link type="text/rcss" href="res/rml/tabbing.rcss" />
     <link type="text/rcss" href="res/rml/window.rcss" />
 </head>
 <body>

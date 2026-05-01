@@ -47,44 +47,17 @@ window[open] {
 }
 
 window tab-bar {
-    display: flex;
     flex: 0 0 64dp;
     height: 64dp;
-    min-width: 0;
-    overflow: auto hidden;
     background-color: rgba(217, 217, 217, 10%);
     font-family: "Fira Sans Condensed";
     font-weight: bold;
     font-size: 18dp;
-    text-transform: uppercase;
     border-bottom: 2dp #92875B;
 }
 
 window tab-bar tab {
-    flex: 0 0 auto;
-    padding: 0 24dp;
-    line-height: 64dp;
     opacity: 0.25;
-    white-space: nowrap;
-    decorator: vertical-gradient(#c2a42d00 #c2a42d00);
-    transition: decorator 0.1s linear-in-out, opacity 0.1s linear-in-out;
-}
-
-window tab-bar tab:selected {
-    opacity: 1;
-    border-bottom: 4dp #C2A42D;
-    font-effect: glow(0dp 4dp 0dp 4dp black);
-}
-
-window tab-bar tab:focus-visible,
-window tab-bar tab:hover {
-    opacity: 1;
-    font-effect: glow(0dp 4dp 0dp 4dp black);
-    decorator: vertical-gradient(#c2a42d00 #c2a42d26);
-}
-
-window tab-bar tab:active {
-    decorator: vertical-gradient(#c2a42d10 #c2a42d40);
 }
 
 window content {
@@ -126,6 +99,7 @@ window content pane > spacer {
 
 scrollbarvertical {
     width: 8dp;
+    margin: 8dp;
 }
 
 scrollbarvertical sliderarrowdec,
@@ -136,8 +110,6 @@ scrollbarvertical sliderarrowinc {
 
 scrollbarvertical slidertrack {
     width: 8dp;
-    background-color: rgba(224, 219, 200, 5%);
-    border-radius: 2dp;
 }
 
 scrollbarvertical sliderbar {
@@ -145,6 +117,7 @@ scrollbarvertical sliderbar {
     min-height: 24dp;
     background-color: rgba(224, 219, 200, 45%);
     border-radius: 2dp;
+    transition: background-color 0.2s cubic-in-out;
 }
 
 scrollbarvertical sliderbar:hover,

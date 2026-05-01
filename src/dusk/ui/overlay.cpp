@@ -26,10 +26,7 @@ const Rml::String kDocumentSource = R"RML(
             </div>
             <div id="description" class="description"></div>
             <div class="divider"></div>
-            <div class="footer">
-                <div id="return"></div>
-                <div id="reset"></div>
-            </div>
+            <div id="footer" class="footer"></div>
         </div>
     </div>
 </body>
@@ -183,14 +180,12 @@ Overlay::Overlay(OverlayProps props)
             });
     }
 
-    if (auto* returnParent = mDocument->GetElementById("return")) {
-        auto& returnButton =
-            add_component<Button>(returnParent, "Return", "footer-button").on_pressed(pop_document);
+    if (auto* footer = mDocument->GetElementById("footer")) {
+        auto& returnButton = add_component<Button>(footer, "\xE2\x86\x90 Return", "footer-button")
+                                                   .on_pressed(pop_document);
         returnButton.root()->SetClass("return", true);
-    }
-    if (auto* resetParent = mDocument->GetElementById("reset")) {
-        auto& resetButton = add_component<Button>(resetParent, "Reset to default", "footer-button")
-                                .on_pressed([this] { reset_default(); });
+        auto& resetButton = add_component<Button>(footer, "Reset to default", "footer-button")
+                                                  .on_pressed([this] { reset_default(); });
         resetButton.root()->SetClass("reset", true);
     }
 
