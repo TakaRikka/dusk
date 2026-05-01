@@ -99,7 +99,7 @@ window content pane > spacer {
 
 scrollbarvertical {
     width: 8dp;
-    margin: 8dp;
+    margin: 4dp 4dp 4dp 0;
 }
 
 scrollbarvertical sliderarrowdec,
