@@ -40,6 +40,8 @@ private:
 enum class GraphicsOption {
     InternalResolution,
     ShadowResolution,
+    BloomMode,
+    BloomMultiplier,
 };
 
 Rml::String format_graphics_setting_value(GraphicsOption option, int value);
@@ -50,6 +52,7 @@ struct OverlayProps {
     Rml::String helpText;
     int valueMin = 0;
     int valueMax = 0;
+    int defaultValue = 0;
 };
 
 class Overlay : public Document {
@@ -78,6 +81,7 @@ private:
     GraphicsOption mOption;
     int mValueMin = 0;
     int mValueMax = 0;
+    int mDefaultValue = 0;
     std::vector<std::unique_ptr<Component> > mComponents;
     Rml::Element* mRoot;
     bool mDismissed = false;

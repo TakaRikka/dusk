@@ -13,6 +13,8 @@
 #include "pane.hpp"
 #include "ui.hpp"
 
+#include <algorithm>
+
 namespace dusk::ui {
 namespace {
 
@@ -48,6 +50,16 @@ const Rml::String kInternalResolutionHelpText =
 const Rml::String kShadowResolutionHelpText =
     "Configure the shadow-map resolution. Higher values improve shadow quality but increase GPU "
     "and memory usage.";
+const Rml::String kBloomHelpText =
+    "Configure the post-processing bloom effect. Classic uses the original bloom pass; Dusk uses "
+    "a higher-quality bloom pass.";
+const Rml::String kBloomBrightnessHelpText =
+    "Configure bloom intensity. Higher values make bright areas glow more strongly.";
+
+int bloom_multiplier_percent() {
+    return std::clamp(
+        static_cast<int>(getSettings().game.bloomMultiplier.getValue() * 100.0f + 0.5f), 0, 100);
+}
 
 struct ConfigBoolProps {
     Rml::String key;
@@ -335,6 +347,7 @@ SettingsWindow::SettingsWindow() {
                         .helpText = kInternalResolutionHelpText,
                         .valueMin = 0,
                         .valueMax = 12,
+                        .defaultValue = 0,
                     }));
                     return true;
                 }
@@ -360,8 +373,9 @@ SettingsWindow::SettingsWindow() {
                         .option = GraphicsOption::ShadowResolution,
                         .title = "Shadow Resolution",
                         .helpText = kShadowResolutionHelpText,
-                        .valueMin = 0,
+                        .valueMin = 1,
                         .valueMax = 8,
+                        .defaultValue = 1,
                     }));
                     return true;
                 }
@@ -373,8 +387,65 @@ SettingsWindow::SettingsWindow() {
             });
 
         leftPane.add_section("Post-Processing");
-        // TODO: Bloom
-        // TODO: Bloom Brightness
+        leftPane
+            .add_select_button({
+                .key = "Bloom",
+                .getValue =
+                    [] {
+                        return format_graphics_setting_value(GraphicsOption::BloomMode,
+                            static_cast<int>(getSettings().game.bloomMode.getValue()));
+                    },
+            })
+            .on_nav_command([](Rml::Event&, NavCommand cmd) {
+                if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
+                    cmd == NavCommand::Right) {
+                    push_document(std::make_unique<Overlay>(OverlayProps{
+                        .option = GraphicsOption::BloomMode,
+                        .title = "Bloom",
+                        .helpText = kBloomHelpText,
+                        .valueMin = static_cast<int>(BloomMode::Off),
+                        .valueMax = static_cast<int>(BloomMode::Dusk),
+                        .defaultValue = static_cast<int>(BloomMode::Classic),
+                    }));
+                    return true;
+                }
+                return false;
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                rightPane.clear();
+                rightPane.add_text(kBloomHelpText);
+            });
+        leftPane
+            .add_select_button({
+                .key = "Bloom Brightness",
+                .getValue =
+                    [] {
+                        return format_graphics_setting_value(
+                            GraphicsOption::BloomMultiplier, bloom_multiplier_percent());
+                    },
+                .isDisabled = [] {
+                    return getSettings().game.bloomMode.getValue() == BloomMode::Off;
+                },
+            })
+            .on_nav_command([](Rml::Event&, NavCommand cmd) {
+                if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
+                    cmd == NavCommand::Right) {
+                    push_document(std::make_unique<Overlay>(OverlayProps{
+                        .option = GraphicsOption::BloomMultiplier,
+                        .title = "Bloom Brightness",
+                        .helpText = kBloomBrightnessHelpText,
+                        .valueMin = 0,
+                        .valueMax = 100,
+                        .defaultValue = 100,
+                    }));
+                    return true;
+                }
+                return false;
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                rightPane.clear();
+                rightPane.add_text(kBloomBrightnessHelpText);
+            });
 
         leftPane.add_section("Rendering");
         config_bool_select(leftPane, rightPane, getSettings().game.enableFrameInterpolation,

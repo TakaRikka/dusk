@@ -7,6 +7,7 @@
 #include "dusk/config.hpp"
 #include "dusk/settings.h"
 
+#include <algorithm>
 #include <string>
 
 namespace dusk::ui {
@@ -39,6 +40,12 @@ int get_value(GraphicsOption option) {
         return getSettings().game.internalResolutionScale.getValue();
     case GraphicsOption::ShadowResolution:
         return getSettings().game.shadowResolutionMultiplier.getValue();
+    case GraphicsOption::BloomMode:
+        return static_cast<int>(getSettings().game.bloomMode.getValue());
+    case GraphicsOption::BloomMultiplier:
+        return std::clamp(
+            static_cast<int>(getSettings().game.bloomMultiplier.getValue() * 100.0f + 0.5f), 0,
+            100);
     }
     return 0;
 }
@@ -51,6 +58,14 @@ void set_value(GraphicsOption option, int value) {
         break;
     case GraphicsOption::ShadowResolution:
         getSettings().game.shadowResolutionMultiplier.setValue(value);
+        break;
+    case GraphicsOption::BloomMode:
+        getSettings().game.bloomMode.setValue(
+            static_cast<BloomMode>(std::clamp(value, static_cast<int>(BloomMode::Off),
+                static_cast<int>(BloomMode::Dusk))));
+        break;
+    case GraphicsOption::BloomMultiplier:
+        getSettings().game.bloomMultiplier.setValue(std::clamp(value, 0, 100) / 100.0f);
         break;
     }
     config::Save();
@@ -150,13 +165,25 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
         }
     case GraphicsOption::ShadowResolution:
         return fmt::format("{}x", value);
+    case GraphicsOption::BloomMode:
+        switch (static_cast<BloomMode>(value)) {
+        case BloomMode::Off:
+            return "Off";
+        case BloomMode::Classic:
+            return "Classic";
+        case BloomMode::Dusk:
+            return "Dusk";
+        }
+        break;
+    case GraphicsOption::BloomMultiplier:
+        return fmt::format("{}%", value);
     }
     return "";
 }
 
 Overlay::Overlay(OverlayProps props)
     : Document(kDocumentSource), mOption(props.option), mValueMin(props.valueMin),
-      mValueMax(props.valueMax) {
+      mValueMax(props.valueMax), mDefaultValue(props.defaultValue) {
     if (mDocument == nullptr) {
         return;
     }
@@ -236,7 +263,7 @@ bool Overlay::handle_nav_command(Rml::Event& event, NavCommand cmd) {
 }
 
 void Overlay::reset_default() {
-    set_value(mOption, mValueMin);
+    set_value(mOption, mDefaultValue);
 }
 
 }  // namespace dusk::ui
