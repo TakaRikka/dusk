@@ -16,7 +16,7 @@ Rml::Element* createRoot(Rml::Element* parent, const Rml::String& tagName) {
 }  // namespace
 
 Button::Button(Rml::Element* parent, Props props, const Rml::String& tagName)
-    : Component(createRoot(parent, tagName)) {
+    : FluentComponent(createRoot(parent, tagName)) {
     update_props(std::move(props));
 }
 
@@ -27,19 +27,12 @@ void Button::set_text(const Rml::String& text) {
     }
 }
 
-void Button::set_selected(bool selected) {
-    if (mProps.selected != selected) {
-        mRoot->SetPseudoClass("selected", selected);
-        mProps.selected = selected;
-    }
-}
-
 Button& Button::on_pressed(ButtonCallback callback) {
     if (!callback) {
         return *this;
     }
-    listen(mRoot, Rml::EventId::Click, [callback](Rml::Event&) { callback(); });
-    listen(mRoot, Rml::EventId::Keydown, [callback = std::move(callback)](Rml::Event& event) {
+    listen(Rml::EventId::Click, [callback](Rml::Event&) { callback(); });
+    listen(Rml::EventId::Keydown, [callback = std::move(callback)](Rml::Event& event) {
         const auto cmd = map_nav_event(event);
         if (cmd == NavCommand::Confirm) {
             callback();
@@ -51,7 +44,6 @@ Button& Button::on_pressed(ButtonCallback callback) {
 
 void Button::update_props(Props props) {
     set_text(props.text);
-    set_selected(props.selected);
     mProps = std::move(props);
 }
 
@@ -60,6 +52,13 @@ void ControlledButton::update() {
         set_selected(mIsSelected());
     }
     Button::update();
+}
+
+bool ControlledButton::selected() const {
+    if (mIsSelected) {
+        return mIsSelected();
+    }
+    return Button::selected();
 }
 
 }  // namespace dusk::ui

@@ -5,11 +5,15 @@
 
 #include "button.hpp"
 #include "d/actor/d_a_player.h"
+#include "d/d_kankyo.h"
 #include "d/d_meter2_info.h"
 #include "number_button.hpp"
 #include "pane.hpp"
 #include "select_button.hpp"
 #include "string_button.hpp"
+
+#include <algorithm>
+#include <bit>
 
 namespace dusk::ui {
 namespace {
@@ -23,6 +27,13 @@ dSv_player_status_a_c* get_player_status() {
         return nullptr;
     }
     return &dComIfGs_getSaveData()->getPlayer().getPlayerStatusA();
+}
+
+dSv_player_status_b_c* get_player_status_b() {
+    if (!has_save_data()) {
+        return nullptr;
+    }
+    return &dComIfGs_getSaveData()->getPlayer().getPlayerStatusB();
 }
 
 Rml::String get_player_name() {
@@ -328,6 +339,31 @@ Rml::String item_label_for_slot(u8 slot) {
     return fmt::format("Slot {0} ({1})", slot, get_item_name(id));
 }
 
+constexpr std::array<Rml::String, 3> walletSizeNames = {
+    "Normal",
+    "Big",
+    "Giant",
+};
+
+constexpr std::array<Rml::String, 2> formNames = {
+    "Human",
+    "Wolf",
+};
+
+constexpr float kDaytimeUnitsPerHour = 15.0f;
+
+float daytime_from_clock(int hour, int minute) {
+    hour = std::clamp(hour, 0, 23);
+    minute = std::clamp(minute, 0, 59);
+    return (hour * kDaytimeUnitsPerHour) + (minute / 60.0f * kDaytimeUnitsPerHour);
+}
+
+void set_clock_time(int hour, int minute) {
+    if (auto* statusB = get_player_status_b()) {
+        statusB->setTime(daytime_from_clock(hour, minute));
+    }
+}
+
 }  // namespace
 
 EditorWindow::EditorWindow() {
@@ -343,7 +379,7 @@ EditorWindow::EditorWindow() {
                 .setValue = set_player_name,
                 .maxLength = 16,
             })
-            .on_hover([&rightPane](Rml::Event&) { rightPane.clear(); });
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
         leftPane
             .add_child<StringButton>(StringButton::Props{
                 .key = "Horse Name",
@@ -351,8 +387,7 @@ EditorWindow::EditorWindow() {
                 .setValue = set_horse_name,
                 .maxLength = 16,
             })
-            .on_hover([&rightPane](Rml::Event&) { rightPane.clear(); });
-        ;
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
         leftPane
             .add_child<NumberButton>(NumberButton::Props{
                 .key = "Max Health",
@@ -360,7 +395,7 @@ EditorWindow::EditorWindow() {
                 .setValue = [](int value) { return get_player_status()->setMaxLife(value); },
                 .max = UINT16_MAX,  // TODO: actual max
             })
-            .on_hover([&rightPane](Rml::Event&) { rightPane.clear(); });
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
         leftPane
             .add_child<NumberButton>(NumberButton::Props{
                 .key = "Health",
@@ -368,7 +403,7 @@ EditorWindow::EditorWindow() {
                 .setValue = [](int value) { return get_player_status()->setLife(value); },
                 .max = UINT16_MAX,  // TODO: actual max
             })
-            .on_hover([&rightPane](Rml::Event&) { rightPane.clear(); });
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
         leftPane
             .add_child<NumberButton>(NumberButton::Props{
                 .key = "Rupees",
@@ -376,7 +411,7 @@ EditorWindow::EditorWindow() {
                 .setValue = [](int value) { return get_player_status()->setRupee(value); },
                 .max = get_player_status()->getRupeeMax(),
             })
-            .on_hover([&rightPane](Rml::Event&) { rightPane.clear(); });
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
         leftPane
             .add_child<NumberButton>(NumberButton::Props{
                 .key = "Max Oil",
@@ -384,7 +419,7 @@ EditorWindow::EditorWindow() {
                 .setValue = [](int value) { return get_player_status()->setMaxOil(value); },
                 .max = UINT16_MAX,  // TODO: actual max
             })
-            .on_hover([&rightPane](Rml::Event&) { rightPane.clear(); });
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
         leftPane
             .add_child<NumberButton>(NumberButton::Props{
                 .key = "Oil",
@@ -392,7 +427,7 @@ EditorWindow::EditorWindow() {
                 .setValue = [](int value) { return get_player_status()->setOil(value); },
                 .max = UINT16_MAX,  // TODO: actual max
             })
-            .on_hover([&rightPane](Rml::Event&) { rightPane.clear(); });
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
 
         leftPane.add_section("Equipment");
         const auto genSelectItemComboBox = [&leftPane, &rightPane](
@@ -402,14 +437,15 @@ EditorWindow::EditorWindow() {
                     .key = label,
                     .getValue = [&selectItemData] { return item_label_for_slot(selectItemData); },
                 })
-                .on_hover([&rightPane, &selectItemData](Rml::Event&) {
+                .on_focus([&rightPane, &selectItemData](Rml::Event&) {
                     rightPane.clear();
                     rightPane.add_button(
                         {
                             .text = "None",
-                            .isSelected = [&selectItemData] { return selectItemData == 0xFF; },
+                            .isSelected =
+                                [&selectItemData] { return selectItemData == dItemNo_NONE_e; },
                         },
-                        [&selectItemData] { selectItemData = 0xFF; });
+                        [&selectItemData] { selectItemData = dItemNo_NONE_e; });
                     for (int i = 0; i < 24; i++) {
                         rightPane.add_button(
                             {
@@ -430,7 +466,7 @@ EditorWindow::EditorWindow() {
                 .key = "Clothes",
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[0]); },
             })
-            .on_hover([&rightPane](Rml::Event&) {
+            .on_focus([&rightPane](Rml::Event&) {
                 rightPane.clear();
                 const auto addOption = [&rightPane](u8 id) {
                     rightPane.add_button(
@@ -449,6 +485,164 @@ EditorWindow::EditorWindow() {
                 addOption(dItemNo_WEAR_ZORA_e);
                 addOption(dItemNo_ARMOR_e);
             });
+        leftPane
+            .add_select_button({
+                .key = "Sword",
+                .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[1]); },
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                rightPane.clear();
+                const auto addOption = [&rightPane](u8 id) {
+                    rightPane.add_button(
+                        {
+                            .text = get_item_name(id),
+                            .isSelected =
+                                [id] { return get_player_status()->mSelectEquip[1] == id; },
+                        },
+                        [id] { get_player_status()->mSelectEquip[1] = id; });
+                };
+                addOption(dItemNo_NONE_e);
+                addOption(dItemNo_WOOD_STICK_e);
+                addOption(dItemNo_SWORD_e);
+                addOption(dItemNo_MASTER_SWORD_e);
+                addOption(dItemNo_LIGHT_SWORD_e);
+            });
+        leftPane
+            .add_select_button({
+                .key = "Shield",
+                .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[2]); },
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                rightPane.clear();
+                const auto addOption = [&rightPane](u8 id) {
+                    rightPane.add_button(
+                        {
+                            .text = get_item_name(id),
+                            .isSelected =
+                                [id] { return get_player_status()->mSelectEquip[2] == id; },
+                        },
+                        [id] { get_player_status()->mSelectEquip[2] = id; });
+                };
+                addOption(dItemNo_NONE_e);
+                addOption(dItemNo_SHIELD_e);
+                addOption(dItemNo_WOOD_SHIELD_e);
+                addOption(dItemNo_HYLIA_SHIELD_e);
+            });
+        leftPane
+            .add_select_button({
+                .key = "Scent",
+                .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[3]); },
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                rightPane.clear();
+                const auto addOption = [&rightPane](u8 id) {
+                    rightPane.add_button(
+                        {
+                            .text = get_item_name(id),
+                            .isSelected =
+                                [id] { return get_player_status()->mSelectEquip[3] == id; },
+                        },
+                        [id] { get_player_status()->mSelectEquip[3] = id; });
+                };
+                addOption(dItemNo_NONE_e);
+                addOption(dItemNo_SMELL_CHILDREN_e);
+                addOption(dItemNo_SMELL_YELIA_POUCH_e);
+                addOption(dItemNo_SMELL_POH_e);
+                addOption(dItemNo_SMELL_FISH_e);
+                addOption(dItemNo_SMELL_MEDICINE_e);
+            });
+        leftPane
+            .add_select_button({
+                .key = "Wallet Size",
+                .getValue = [] { return walletSizeNames[get_player_status()->getWalletSize()]; },
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                rightPane.clear();
+                for (int i = 0; i < walletSizeNames.size(); ++i) {
+                    rightPane.add_button(
+                        {
+                            .text = walletSizeNames[i],
+                            .isSelected = [i] { return get_player_status()->getWalletSize() == i; },
+                        },
+                        [i] { get_player_status()->setWalletSize(i); });
+                }
+            });
+        leftPane
+            .add_select_button({
+                .key = "Form",
+                .getValue = [] { return formNames[get_player_status()->getTransformStatus()]; },
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                rightPane.clear();
+                for (int i = 0; i < formNames.size(); ++i) {
+                    rightPane.add_button(
+                        {
+                            .text = formNames[i],
+                            .isSelected =
+                                [i] { return get_player_status()->getTransformStatus() == i; },
+                        },
+                        [i] { get_player_status()->setTransformStatus(i); });
+                }
+            });
+
+        leftPane.add_section("World");
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Day",
+                .getValue = [] { return get_player_status_b()->getDate(); },
+                .setValue =
+                    [](int value) { get_player_status_b()->setDate(static_cast<u16>(value)); },
+                .max = UINT16_MAX,
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Hour",
+                .getValue = [] { return dKy_getdaytime_hour(); },
+                .setValue = [](int value) { set_clock_time(value, dKy_getdaytime_minute()); },
+                .max = 23,
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Minute",
+                .getValue = [] { return dKy_getdaytime_minute(); },
+                .setValue = [](int value) { set_clock_time(dKy_getdaytime_hour(), value); },
+                .max = 59,
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Transform Level",
+                .getValue =
+                    [] {
+                        return std::popcount(static_cast<unsigned>(
+                            get_player_status_b()->mTransformLevelFlag & 0x7));
+                    },
+                .setValue =
+                    [](int value) {
+                        get_player_status_b()->mTransformLevelFlag =
+                            static_cast<u8>((1u << value) - 1u);
+                    },
+                .max = 3,
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Twilight Clear Level",
+                .getValue =
+                    [] {
+                        return std::popcount(static_cast<unsigned>(
+                            get_player_status_b()->mDarkClearLevelFlag & 0x7));
+                    },
+                .setValue =
+                    [](int value) {
+                        get_player_status_b()->mDarkClearLevelFlag =
+                            static_cast<u8>((1u << value) - 1u);
+                    },
+                .max = 3,
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
     });
 
     add_tab("Location", [this](Rml::Element* content) {

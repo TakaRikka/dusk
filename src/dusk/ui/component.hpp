@@ -26,15 +26,13 @@ public:
     virtual void update();
     virtual bool focus();
 
+    virtual bool selected() const { return mRoot->IsPseudoClassSet("selected"); }
+    virtual void set_selected(bool selected);
+    virtual bool disabled() const { return mRoot->IsPseudoClassSet("disabled"); }
+    virtual void set_disabled(bool disabled);
+
     void listen(Rml::Element* element, Rml::EventId event, ScopedEventListener::Callback callback,
         bool capture = false);
-    void listen(Rml::EventId event, ScopedEventListener::Callback callback, bool capture = false) {
-        listen(mRoot, event, std::move(callback), capture);
-    }
-    void on_hover(ScopedEventListener::Callback callback) {
-        listen(Rml::EventId::Mouseover, callback);
-        listen(Rml::EventId::Focus, std::move(callback));
-    }
     bool contains(Rml::Element* element) const;
 
     template <typename T, typename... Args>
@@ -46,7 +44,6 @@ public:
     }
 
     Rml::Element* root() const { return mRoot; }
-    bool selected() const { return mRoot->IsPseudoClassSet("selected"); }
 
 protected:
     static Rml::Element* append(Rml::Element* parent, const Rml::String& tag);
@@ -55,6 +52,29 @@ protected:
     Rml::Element* mRoot = nullptr;
     std::vector<std::unique_ptr<Component> > mChildren;
     std::vector<std::unique_ptr<ScopedEventListener> > mListeners;
+};
+
+template <class Derived>
+class FluentComponent : public Component {
+public:
+    using Component::Component;
+
+    Derived& listen(
+        Rml::EventId event, ScopedEventListener::Callback callback, bool capture = false) {
+        Component::listen(mRoot, event, std::move(callback), capture);
+        return static_cast<Derived&>(*this);
+    }
+
+    Derived& on_hover(ScopedEventListener::Callback callback) {
+        listen(Rml::EventId::Mouseover, callback);
+        listen(Rml::EventId::Focus, std::move(callback));
+        return static_cast<Derived&>(*this);
+    }
+
+    Derived& on_focus(ScopedEventListener::Callback callback) {
+        listen(Rml::EventId::Focus, std::move(callback));
+        return static_cast<Derived&>(*this);
+    }
 };
 
 }  // namespace dusk::ui

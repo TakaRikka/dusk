@@ -5,24 +5,23 @@
 
 namespace dusk::ui {
 
-class SelectButton : public Component {
+class SelectButton : public FluentComponent<SelectButton> {
 public:
     struct Props {
         Rml::String key;
         Rml::String value;
-        bool selected = false;
-        bool disabled = false;
     };
 
     SelectButton(Rml::Element* parent, Props props);
 
-    bool focus() override;
-
-    void set_selected(bool selected);
-    bool get_selected() const { return mProps.selected; }
-    void set_disabled(bool disabled);
-    bool get_disabled() const { return mProps.disabled; }
     void set_value_label(const Rml::String& value);
+
+    SelectButton& on_selected(std::function<void(bool)> callback) {
+        listen(Rml::EventId::Change, [callback = std::move(callback)](Rml::Event& event) {
+            callback(event.GetParameter("selected", false));
+        });
+        return *this;
+    }
 
 protected:
     void update_props(Props props);
@@ -52,15 +51,10 @@ public:
         Rml::String key;
         std::function<Rml::String()> getValue;
         std::function<bool()> isDisabled;
-        bool selected = false;
     };
 
     ControlledSelectButton(Rml::Element* parent, Props props)
-        : BaseControlledSelectButton(parent,
-              BaseControlledSelectButton::Props{
-                  .key = std::move(props.key),
-                  .selected = props.selected,
-              }),
+        : BaseControlledSelectButton(parent, {std::move(props.key)}),
           mGetValue(std::move(props.getValue)), mIsDisabled(std::move(props.isDisabled)) {}
 
 protected:

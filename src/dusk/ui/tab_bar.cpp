@@ -12,7 +12,7 @@ Rml::Element* createRoot(Rml::Element* parent) {
 }  // namespace
 
 TabBar::TabBar(Rml::Element* parent, Props props)
-    : Component(createRoot(parent)), mProps(std::move(props)) {
+    : FluentComponent(createRoot(parent)), mProps(std::move(props)) {
     listen(Rml::EventId::Keydown, [this](Rml::Event& event) {
         const auto cmd = map_nav_event(event);
         if (cmd != NavCommand::None && handle_nav_command(event, cmd)) {
@@ -43,14 +43,14 @@ void TabBar::add_tab(const Rml::String& title, TabCallback callback) {
     if (selected && callback) {
         callback();
     }
+    auto& button = add_child<Button>(Button::Props{title}, "tab");
+    button.on_pressed([this, index] { set_active_tab(index); });
+    if (selected) {
+        button.set_selected(true);
+    }
     mTabs.emplace_back(Tab{
         .title = title,
-        .button = add_child<Button>(
-            Button::Props{
-                .text = title,
-                .selected = selected,
-            },
-            "tab").on_pressed([this, index] { set_active_tab(index); }),
+        .button = button,
         .callback = std::move(callback),
     });
 }

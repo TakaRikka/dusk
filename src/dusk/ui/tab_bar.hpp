@@ -14,7 +14,7 @@ struct Tab {
     TabCallback callback;
 };
 
-class TabBar : public Component {
+class TabBar : public FluentComponent<TabBar> {
 public:
     struct Props {
         std::function<void()> onClose;

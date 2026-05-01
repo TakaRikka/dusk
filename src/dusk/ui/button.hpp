@@ -6,11 +6,10 @@ namespace dusk::ui {
 
 using ButtonCallback = std::function<void()>;
 
-class Button : public Component {
+class Button : public FluentComponent<Button> {
 public:
     struct Props {
         Rml::String text;
-        bool selected = false;
     };
 
     Button(Rml::Element* parent, Props props, const Rml::String& tagName = "button");
@@ -18,7 +17,6 @@ public:
         : Button(parent, Props{std::move(text)}, tagName) {}
 
     void set_text(const Rml::String& text);
-    void set_selected(bool selected);
     Button& on_pressed(ButtonCallback callback);
 
     const Rml::String& get_text() const { return mProps.text; }
@@ -37,10 +35,11 @@ public:
     };
 
     ControlledButton(Rml::Element* parent, Props props, const Rml::String& tagName = "button")
-        : Button(parent, Button::Props{std::move(props.text)}, tagName),
+        : Button(parent, {std::move(props.text)}, tagName),
           mIsSelected(std::move(props.isSelected)) {}
 
     void update() override;
+    bool selected() const override;
 
 private:
     std::function<bool()> mIsSelected;

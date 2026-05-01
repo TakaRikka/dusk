@@ -10,6 +10,8 @@
 
 #include <chrono>
 
+#include "dusk/main.h"
+
 namespace dusk::ui {
 namespace {
 
@@ -35,13 +37,10 @@ Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("pop
     });
     mTabBar->add_tab("Editor", [] { push_document(std::make_unique<EditorWindow>()); });
     mTabBar->add_tab("Reset", [this] {
-        // TODO
+        JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
         mTabBar->set_active_tab(-1);
     });
-    mTabBar->add_tab("Exit", [this] {
-        // TODO
-        mTabBar->set_active_tab(-1);
-    });
+    mTabBar->add_tab("Exit", [] { IsRunning = false; });
 
     // Hide document after transition completion
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {

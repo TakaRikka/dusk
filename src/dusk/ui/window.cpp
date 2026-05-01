@@ -3,6 +3,7 @@
 #include "aurora/lib/window.hpp"
 #include "aurora/rmlui.hpp"
 #include "magic_enum.hpp"
+#include "pane.hpp"
 #include "ui.hpp"
 
 #include <algorithm>
@@ -68,6 +69,22 @@ Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("w
             !mVisible)
         {
             Document::hide();
+        }
+    });
+
+    // If an item is selected in a pane, focus the next pane in the tree
+    listen(mRoot, Rml::EventId::Change, [this](Rml::Event& event) {
+        if (event.GetParameter("selected", false)) {
+            int paneIndex = -1;
+            for (int i = 0; i < mContentComponents.size(); i++) {
+                if (mContentComponents[i]->contains(event.GetTargetElement())) {
+                    paneIndex = i;
+                    break;
+                }
+            }
+            if (paneIndex >= 0 && paneIndex < mContentComponents.size() - 1) {
+                mContentComponents[paneIndex + 1]->focus();
+            }
         }
     });
 }
@@ -176,7 +193,27 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
 }
 
 bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
-    if (cmd == NavCommand::Up || cmd == NavCommand::Cancel) {
+    if (cmd == NavCommand::Up) {
+        return focus();
+    } else if (cmd == NavCommand::Cancel) {
+        int currentComponent = -1;
+        for (int i = 0; i < mContentComponents.size(); ++i) {
+            if (mContentComponents[i]->contains(event.GetTargetElement())) {
+                currentComponent = i;
+                break;
+            }
+        }
+        for (; currentComponent > 0; --currentComponent) {
+            if (mContentComponents[currentComponent - 1]->focus()) {
+                // When returning to a previous pane, deselect the item after focusing
+                if (auto* pane =
+                        dynamic_cast<Pane*>(mContentComponents[currentComponent - 1].get()))
+                {
+                    pane->set_selected_item(-1);
+                }
+                return true;
+            }
+        }
         return focus();
     } else if (cmd == NavCommand::Left || cmd == NavCommand::Right) {
         int currentComponent = -1;
@@ -193,7 +230,15 @@ bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
                 return mContentComponents.front()->focus();
             }
         } else if (i >= 0 && i < mContentComponents.size()) {
-            return mContentComponents[i]->focus();
+            if (mContentComponents[i]->focus()) {
+                if (direction == -1) {
+                    // When returning to a previous pane, deselect the item after focusing
+                    if (auto* pane = dynamic_cast<Pane*>(mContentComponents[i].get())) {
+                        pane->set_selected_item(-1);
+                    }
+                }
+                return true;
+            }
         }
     }
     return false;

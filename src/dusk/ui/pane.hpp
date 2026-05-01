@@ -6,7 +6,7 @@
 
 namespace dusk::ui {
 
-class Pane : public Component {
+class Pane : public FluentComponent<Pane> {
 public:
     enum class Direction {
         Vertical,
@@ -18,13 +18,22 @@ public:
     bool focus() override;
     void update() override;
 
+    void set_selected_item(int index);
+
     Rml::Element* add_section(const Rml::String& text);
-    ControlledButton& add_button(ControlledButton::Props props, ButtonCallback callback) {
-        return static_cast<ControlledButton&>(
-            add_child<ControlledButton>(std::move(props)).on_pressed(std::move(callback)));
+    ControlledButton& add_button(ControlledButton::Props props, ButtonCallback callback = {}) {
+        auto& btn = add_child<ControlledButton>(std::move(props));
+        if (callback) {
+            btn.on_pressed(std::move(callback));
+        }
+        return btn;
     }
-    Button& add_button(Rml::String text, ButtonCallback callback) {
-        return add_child<Button>(std::move(text)).on_pressed(std::move(callback));
+    Button& add_button(Rml::String text, ButtonCallback callback = {}) {
+        auto& btn = add_child<Button>(std::move(text));
+        if (callback) {
+            btn.on_pressed(std::move(callback));
+        }
+        return btn;
     }
     ControlledSelectButton& add_select_button(ControlledSelectButton::Props props) {
         return add_child<ControlledSelectButton>(std::move(props));
@@ -37,6 +46,7 @@ public:
 private:
     Direction mDirection;
     bool finalized = false;
+    int mSelectedItem = -1;
 };
 
 }  // namespace dusk::ui
