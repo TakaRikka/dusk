@@ -15,7 +15,7 @@ Rml::Element* createRoot(Rml::Element* parent, const Rml::String& tagName) {
 
 }  // namespace
 
-Button::Button(Rml::Element* parent, ButtonProps props, const Rml::String& tagName)
+Button::Button(Rml::Element* parent, Props props, const Rml::String& tagName)
     : Component(createRoot(parent, tagName)) {
     update_props(std::move(props));
 }
@@ -53,6 +53,13 @@ void Button::update_props(Props props) {
     set_text(props.text);
     set_selected(props.selected);
     mProps = std::move(props);
+}
+
+void ControlledButton::update() {
+    if (mIsSelected) {
+        set_selected(mIsSelected());
+    }
+    Button::update();
 }
 
 }  // namespace dusk::ui

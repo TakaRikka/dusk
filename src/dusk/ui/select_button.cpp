@@ -91,10 +91,24 @@ bool SelectButton::handle_nav_command(NavCommand cmd) {
     return false;
 }
 
-void ControlledSelectButton::update() {
+void BaseControlledSelectButton::update() {
     set_disabled(is_disabled());
     set_value_label(format_value());
     SelectButton::update();
+}
+
+Rml::String ControlledSelectButton::format_value() {
+    if (!mGetValue) {
+        return "";
+    }
+    return mGetValue();
+}
+
+bool ControlledSelectButton::is_disabled() {
+    if (!mIsDisabled) {
+        return false;
+    }
+    return mIsDisabled();
 }
 
 }  // namespace dusk::ui

@@ -4,6 +4,8 @@
 #include <fmt/format.h>
 
 #include "button.hpp"
+#include "d/actor/d_a_player.h"
+#include "d/d_meter2_info.h"
 #include "number_button.hpp"
 #include "pane.hpp"
 #include "select_button.hpp"
@@ -395,14 +397,23 @@ EditorWindow::EditorWindow() {
             leftPane
                 .add_select_button({
                     .key = label,
-                    .value = item_label_for_slot(selectItemData),
+                    .getValue = [&selectItemData] { return item_label_for_slot(selectItemData); },
                 })
                 .on_hover([&rightPane, &selectItemData](Rml::Event&) {
                     rightPane.clear();
-                    rightPane.add_button("None", [&selectItemData] { selectItemData = 0xFF; });
+                    rightPane.add_button(
+                        {
+                            .text = "None",
+                            .isSelected = [&selectItemData] { return selectItemData == 0xFF; },
+                        },
+                        [&selectItemData] { selectItemData = 0xFF; });
                     for (int i = 0; i < 24; i++) {
                         rightPane.add_button(
-                            item_label_for_slot(i), [i, &selectItemData] { selectItemData = i; });
+                            {
+                                .text = item_label_for_slot(i),
+                                .isSelected = [i, &selectItemData] { return selectItemData == i; },
+                            },
+                            [i, &selectItemData] { selectItemData = i; });
                     }
                 });
         };
@@ -410,6 +421,34 @@ EditorWindow::EditorWindow() {
         genSelectItemComboBox("Equip Y", get_player_status()->mSelectItem[1]);
         genSelectItemComboBox("Combo Equip X", get_player_status()->mMixItem[0]);
         genSelectItemComboBox("Combo Equip Y", get_player_status()->mMixItem[1]);
+
+        leftPane
+            .add_select_button({
+                .key = "Clothes",
+                .getValue =
+                    [] {
+                        return itemMap.find(get_player_status()->mSelectEquip[0])->second.m_name;
+                    },
+            })
+            .on_hover([&rightPane](Rml::Event&) {
+                rightPane.clear();
+                const auto addOption = [&rightPane](const Rml::String& name, u8 id) {
+                    rightPane.add_button(
+                        {
+                            .text = name,
+                            .isSelected =
+                                [id] { return get_player_status()->mSelectEquip[0] == id; },
+                        },
+                        [id] {
+                            dMeter2Info_setCloth(id, false);
+                            daPy_getPlayerActorClass()->setClothesChange(0);
+                        });
+                };
+                addOption("Ordon Clothes", dItemNo_WEAR_CASUAL_e);
+                addOption("Hero's Clothes", dItemNo_WEAR_KOKIRI_e);
+                addOption("Zora Armor", dItemNo_WEAR_ZORA_e);
+                addOption("Magic Armor", dItemNo_ARMOR_e);
+            });
     });
 
     add_tab("Location", [this](Rml::Element* content) {

@@ -5,7 +5,7 @@
 namespace dusk::ui {
 
 BaseStringButton::BaseStringButton(Rml::Element* parent, Props props)
-    : ControlledSelectButton(parent, {std::move(props.key)}), mType(std::move(props.type)),
+    : BaseControlledSelectButton(parent, {std::move(props.key)}), mType(std::move(props.type)),
       mMaxLength(props.maxLength) {
     mInputListeners.reserve(3);
 }
@@ -20,7 +20,7 @@ void BaseStringButton::update() {
             focus_input();
         }
     }
-    ControlledSelectButton::update();
+    BaseControlledSelectButton::update();
 }
 
 void BaseStringButton::start_editing() {

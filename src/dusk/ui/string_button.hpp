@@ -6,7 +6,7 @@
 
 namespace dusk::ui {
 
-class BaseStringButton : public ControlledSelectButton {
+class BaseStringButton : public BaseControlledSelectButton {
 public:
     struct Props {
         Rml::String key;

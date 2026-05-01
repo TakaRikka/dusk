@@ -34,9 +34,9 @@ protected:
     std::function<void()> mOnHover;
 };
 
-class ControlledSelectButton : public SelectButton {
+class BaseControlledSelectButton : public SelectButton {
 public:
-    ControlledSelectButton(Rml::Element* parent, Props props)
+    BaseControlledSelectButton(Rml::Element* parent, Props props)
         : SelectButton(parent, std::move(props)) {}
 
     void update() override;
@@ -44,6 +44,31 @@ public:
 protected:
     virtual Rml::String format_value() = 0;
     virtual bool is_disabled() { return false; }
+};
+
+class ControlledSelectButton : public BaseControlledSelectButton {
+public:
+    struct Props {
+        Rml::String key;
+        std::function<Rml::String()> getValue;
+        std::function<bool()> isDisabled;
+        bool selected = false;
+    };
+
+    ControlledSelectButton(Rml::Element* parent, Props props)
+        : BaseControlledSelectButton(parent,
+              BaseControlledSelectButton::Props{
+                  .key = std::move(props.key),
+                  .selected = props.selected,
+              }),
+          mGetValue(std::move(props.getValue)), mIsDisabled(std::move(props.isDisabled)) {}
+
+protected:
+    Rml::String format_value() override;
+    bool is_disabled() override;
+
+    std::function<Rml::String()> mGetValue;
+    std::function<bool()> mIsDisabled;
 };
 
 }  // namespace dusk::ui
