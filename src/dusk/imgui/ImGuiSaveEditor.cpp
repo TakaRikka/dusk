@@ -13,6 +13,7 @@
 #include "d/actor/d_a_player.h"
 
 #include <map>
+#include <bit>
 
 namespace dusk {
     enum ItemType {
@@ -1295,8 +1296,33 @@ namespace dusk {
                 membit.offDungeonItem(flag);
         }
     }
+    
+    static void genCommonAreaFlags(dSv_memBit_c& membit) {
+        ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.0f);
 
-    void genMembitFlags(const char* id, dSv_memBit_c& membit) {
+        genDungeonItemCheckbox(membit, "Got Map", dSv_memBit_c::MAP);
+        ImGui::SameLine(230.0f);
+        genDungeonItemCheckbox(membit, "Got Compass", dSv_memBit_c::COMPASS);
+
+        genDungeonItemCheckbox(membit, "Got Boss Key", dSv_memBit_c::BOSS_KEY);
+        ImGui::SameLine(230.0f);
+        genDungeonItemCheckbox(membit, "Saw Boss Demo", dSv_memBit_c::STAGE_BOSS_DEMO);
+
+        genDungeonItemCheckbox(membit, "Got Heart Container", dSv_memBit_c::STAGE_LIFE);
+        ImGui::SameLine(230.0f);
+        genDungeonItemCheckbox(membit, "Defeated Boss", dSv_memBit_c::STAGE_BOSS_ENEMY);
+
+        genDungeonItemCheckbox(membit, "Defeated Miniboss", dSv_memBit_c::STAGE_BOSS_ENEMY_2);
+        ImGui::SameLine(230.0f);
+        genDungeonItemCheckbox(membit, "Got Ooccoo", dSv_memBit_c::OOCCOO_NOTE);
+
+        int keyTemp = membit.getKeyNum();
+        if (ImGui::SliderInt("Keys", &keyTemp, 0, 5)) {
+            membit.setKeyNum(keyTemp);
+        }
+    }
+
+    static void genMembitFlags(const char* id, dSv_memBit_c& membit) {
         ImGuiBeginGroupPanel("Chest", { 100, 100 });
         for (int j = 0; j < 2; j++) {
             drawFlagList(fmt::format("##_tbox{}", j).c_str(), membit.mTbox[j]);
@@ -1322,29 +1348,10 @@ namespace dusk {
             drawFlagList(fmt::format("##_item{}", j).c_str(), membit.mItem[j]);
         }
         ImGuiEndGroupPanel();
+        ImVec2 post_item_custor = ImGui::GetCursorPos();
 
-        ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.0f);
-
-        genDungeonItemCheckbox(membit, "Got Map", dSv_memBit_c::MAP);
-        ImGui::SameLine(230.0f);
-        genDungeonItemCheckbox(membit, "Got Compass", dSv_memBit_c::COMPASS);
-
-        genDungeonItemCheckbox(membit, "Got Boss Key", dSv_memBit_c::BOSS_KEY);
-        ImGui::SameLine(230.0f);
-        genDungeonItemCheckbox(membit, "Saw Boss Demo", dSv_memBit_c::STAGE_BOSS_DEMO);
-
-        genDungeonItemCheckbox(membit, "Got Heart Container", dSv_memBit_c::STAGE_LIFE);
-        ImGui::SameLine(230.0f);
-        genDungeonItemCheckbox(membit, "Defeated Boss", dSv_memBit_c::STAGE_BOSS_ENEMY);
-
-        genDungeonItemCheckbox(membit, "Defeated Miniboss", dSv_memBit_c::STAGE_BOSS_ENEMY_2);
-        ImGui::SameLine(230.0f);
-        genDungeonItemCheckbox(membit, "Got Ooccoo", dSv_memBit_c::OOCCOO_NOTE);
-
-        int keyTemp = membit.getKeyNum();
-        if (ImGui::SliderInt("Keys", &keyTemp, 0, 5)) {
-            membit.setKeyNum(keyTemp);
-        }
+        ImGui::SetCursorPos({post_item_custor.x, post_switch_cursor.y});
+        // genCommonAreaFlags(membit);
     }
 
     template <typename T>
@@ -1392,74 +1399,326 @@ namespace dusk {
         }
     }
 
-    void ImGuiSaveEditor::drawFlagsTab() {
-        if (ImGui::TreeNode("Current Region Flags")) {
-            dSv_memBit_c& membit = g_dComIfG_gameInfo.info.mMemory.mBit;
-            genMembitFlags("##TempSceneFlags", membit);
+    
+    static void genAreaFlagTable(uint8_t areaIndex, dSv_memBit_c& membit) {
+        constexpr auto makeMask             = [](uint8_t size) -> uint16_t              { return (1 << size) - 1; };
+        constexpr auto getByteIndexFromFlag = [](uint16_t f) -> uint8_t                 { return f >> 8; };
+        constexpr auto getBitMaskFromFlag   = [](uint16_t f) -> uint8_t                 { return f & 0xff; };
+        constexpr auto getValueSize = [getBitMaskFromFlag](uint16_t f) -> uint8_t {
+            return std::popcount(getBitMaskFromFlag(f));
+        };
+        
+        constexpr auto makeEventFlag = [](uint8_t byteIndex, uint8_t bitIndices) -> uint16_t {
+            return (byteIndex << 8) | bitIndices;
+        };
 
-            stage_stag_info_class* pstag = dComIfGp_getStageStagInfo();
-            if (pstag != nullptr) {
-                int stageNo = dStage_stagInfo_GetSaveTbl(pstag);
-                if (ImGui::Button("Save##SaveTempFlags")) {
-                    dComIfGs_putSave(stageNo);
+        const auto eventFlagToAreaFlag = [&](uint16_t areaFlag) -> int {
+            auto byteInd = getByteIndexFromFlag(areaFlag);
+            constexpr size_t areaIndexSize = 5;
+            // if we're looking at 0x580, that would be byte 5, and check if 0x80 is set on that byte
+            // the event flags are structured differently than area flags
+            // B is byte index, b is the flag mask to check
+            // event flags are BBBBBBBB bbbbbbbb
+            // for area flags, they check bitIndex, not mask, i is index
+            // also area uses u32 index, not byte index
+            // area flags are BBBiiiii
+            // so we need to convert from bit mask to index
+            // also our byte index has to become a u32 index
+            
+            // dividing byte index by sizeof(u32) gets us the u32 index
+            // but in big endian, the first byte is the highest order byte of the u32
+            // so we skip 24 bytes for the first byte, 16 for the second, etc
+            // essentially (3 - (x % 4)), reversing the modulus, 0=3, 1=2
+            auto bitsToSkip = 8 * ((sizeof(u32) - 1) - (byteInd % sizeof(u32)));
+            return ((byteInd / sizeof(u32)) << areaIndexSize) | ((std::countr_zero(areaFlag) + bitsToSkip) & makeMask(areaIndexSize));
+        };
+
+        constexpr uint8_t validTbox = sizeof(membit.mTbox);
+        constexpr uint8_t validSwitch = validTbox + sizeof(membit.mSwitch);
+        constexpr uint8_t validItem = validSwitch + sizeof(membit.mItem);
+        constexpr uint16_t tboxConvert = 0;
+        constexpr uint16_t switchConvert = sizeof(membit.mTbox) << 8;
+        constexpr uint16_t itemConvert = switchConvert + (sizeof(membit.mItem) << 8);
+
+        const auto LoadFlag = [&](uint16_t flag) -> bool {            
+            const auto byteIndex = getByteIndexFromFlag(flag);
+
+            if (byteIndex < validTbox) {
+                return membit.isTbox(eventFlagToAreaFlag(flag - tboxConvert));
+            } else if (byteIndex < validSwitch) {
+                return membit.isSwitch(eventFlagToAreaFlag(flag - switchConvert));
+            } else if (byteIndex < validItem) {
+                return membit.isItem(eventFlagToAreaFlag(flag - itemConvert));
+            }
+            return false;
+        };
+
+        const auto SetFlag = [&](uint16_t flag, bool set) -> void {
+            const auto byteIndex = getByteIndexFromFlag(flag);
+            if (set) {
+                if (byteIndex < validTbox) {
+                    membit.onTbox(eventFlagToAreaFlag(flag - tboxConvert));
+                } else if (byteIndex < validSwitch) {
+                    membit.onSwitch(eventFlagToAreaFlag(flag - switchConvert));
+                } else if (byteIndex < validItem) {
+                    membit.onItem(eventFlagToAreaFlag(flag - itemConvert));
                 }
-
-                ImGui::SameLine();
-
-                if (ImGui::Button("Load##LoadSaveFlags")) {
-                    dComIfGs_getSave(stageNo);
+            } else {
+                if (byteIndex < validTbox) {
+                    membit.offTbox(eventFlagToAreaFlag(flag - tboxConvert));
+                } else if (byteIndex < validSwitch) {
+                    membit.offSwitch(eventFlagToAreaFlag(flag - switchConvert));
+                } else if (byteIndex < validItem) {
+                    membit.offItem(eventFlagToAreaFlag(flag - itemConvert));
                 }
             }
+        };
 
+        const auto LoadMultiByteFlag = [&](uint16_t flag) -> uint8_t {
+            const auto bitInds = getBitMaskFromFlag(flag);
+            const auto byteIndex = getByteIndexFromFlag(flag);
+
+            const uint16_t startingMask = std::bit_floor(bitInds);
+            uint8_t val = 0;
+            for (uint16_t bitIndexMask = startingMask; (bitInds & bitIndexMask) != 0;
+                 bitIndexMask >>= 1)
+            {
+                val <<= 1;
+                if (LoadFlag(makeEventFlag(byteIndex, bitInds & bitIndexMask))) {
+                    val |= 1;
+                }
+            }
+            return val;
+        };
+
+        const auto SetMultiByteFlag = [&](uint16_t flag, uint8_t val) -> void {
+            const auto bitInds = getBitMaskFromFlag(flag);
+            const auto byteIndex = getByteIndexFromFlag(flag);
+
+            const uint16_t startingMask = std::bit_floor(bitInds);
+            uint16_t valueMask = 1 << (getValueSize(flag) - 1);
+
+            for (uint16_t bitIndexMask = startingMask; (bitInds & bitIndexMask) != 0;
+                 bitIndexMask >>= 1, valueMask >>= 1)
+            {
+                SetFlag(makeEventFlag(byteIndex, bitInds & bitIndexMask), (val & valueMask) != 0);
+            }
+        };
+
+        const auto LoadSpreadMultiByte = [&](uint16_t high, uint16_t low) -> uint8_t {
+            if (low == AREA_FLAG_NONE)
+                return LoadMultiByteFlag(high);
+            return (LoadMultiByteFlag(high) << getValueSize(low)) | LoadMultiByteFlag(low);
+        };
+
+        const auto SetSpreadMultiByte = [&](uint16_t high, uint16_t low, uint8_t value) -> void {
+            if (low == AREA_FLAG_NONE)
+                return SetMultiByteFlag(high, value);
+            const auto lowerSize = getValueSize(low);
+            SetMultiByteFlag(high, value >> lowerSize);
+            SetMultiByteFlag(low, value & makeMask(lowerSize));
+        };
+
+        auto iter = imguiAreaFlagLookup.find(areaIndex);
+        if (iter == imguiAreaFlagLookup.end()) return;
+
+        auto& areaFlags = iter->second;
+
+        static ImGuiTextFilter filter;
+        filter.Draw();  // Search bar
+
+        ImVec2 flagTableSize = {700, 400};
+        if (ImGui::BeginTable("Area Flags", 3,
+                              ImGuiTableFlags_ScrollY | ImGuiTableFlags_ScrollX |
+                                  ImGuiTableFlags_Sortable,
+                              flagTableSize))
+        {
+            ImGui::TableSetupScrollFreeze(0, 1);
+            constexpr int COLUMN_FLAG = 0, COLUMN_BIT = 1, COLUMN_DESC = 2;
+            ImGui::TableSetupColumn("Flag");
+            ImGui::TableSetupColumn("Byte:Bit");
+            ImGui::TableSetupColumn("Description");
+            ImGui::TableHeadersRow();
+
+            // if we're sorting by whether the flag is set or not,
+            // we want to re-sort whenever a flag updates, which means every frame cuz we don't
+            // know when it changes. otherwise only re-sort when the sort is dirty
+            if (auto* sort = ImGui::TableGetSortSpecs();
+                sort != nullptr && sort->SpecsCount > 0 &&
+                (sort->SpecsDirty || sort->Specs[0].ColumnIndex == COLUMN_FLAG))
+            {
+                const auto column = sort->Specs[0].ColumnIndex;
+                const auto direction = sort->Specs[0].SortDirection;
+
+                // if we're sorting by flags, do special sort, regular sort is bad for sorting
+                // bools it can swap values that are the same, and that causes constant
+                // reordering
+                if (column == COLUMN_FLAG) {
+                    if (direction == ImGuiSortDirection_Ascending) {
+                        sortByFlags(std::begin(areaFlags.bitFlags), std::end(areaFlags.bitFlags),
+                                    LoadFlag);
+                    } else {
+                        sortByFlags(std::rbegin(areaFlags.bitFlags), std::rend(areaFlags.bitFlags),
+                                    LoadFlag);
+                    }
+                } else {
+                    const auto cmp = [column](const EventAreaFlags& l,
+                                              const EventAreaFlags& r) -> bool {
+                        switch (column) {
+                        case COLUMN_DESC:
+                            return l.description < r.description;
+                        case COLUMN_BIT:
+                            return l.flagID < r.flagID;
+                        }
+                        return false;
+                    };
+
+                    if (direction == ImGuiSortDirection_Ascending) {
+                        std::sort(std::begin(areaFlags.bitFlags), std::end(areaFlags.bitFlags),
+                                  cmp);
+                    } else {
+                        std::sort(std::rbegin(areaFlags.bitFlags), std::rend(areaFlags.bitFlags),
+                                  cmp);
+                    }
+                }
+
+                sort->SpecsDirty = false;
+            }
+
+            for (const auto& e : areaFlags.bitFlags) {
+                std::string formattedBitLocation =
+                    fmt::format("{0:02X}:{1:02X}", e.byteIndex, e.bitIndex);
+
+                if (!filter.PassFilter(e.description.c_str()) &&
+                    !filter.PassFilter(formattedBitLocation.c_str()))
+                {
+                    continue;
+                }
+
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn();
+                bool flag = LoadFlag(e.flagID);
+                if (ImGui::Checkbox(fmt::format("##_unused_area_flag_{}", e.flagID).c_str(), &flag)) {
+                    SetFlag(e.flagID, flag);
+                }
+
+                ImGui::TableNextColumn();
+                ImGui::TextUnformatted(formattedBitLocation.c_str());
+                ImGui::TableNextColumn();
+                ImGui::TextUnformatted(e.description.c_str());
+            }
+            ImGui::EndTable();
+        }
+
+        for (const auto& multiByteFlag : areaFlags.multibyteFlags) {
+            auto flagValue = LoadSpreadMultiByte(multiByteFlag.highOrderflag, multiByteFlag.lowOrderflag); 
+
+            const char* currentVal = "UNKNOWN";
+
+            auto enumValIter = multiByteFlag.enumValues.find(flagValue);
+            if (enumValIter != multiByteFlag.enumValues.end()) {
+                currentVal = enumValIter->second;
+            }
+
+            if (ImGui::BeginCombo(multiByteFlag.name, currentVal)) {
+                for (const auto& [val, name] : multiByteFlag.enumValues) {
+                    if (ImGui::Selectable(name)) {
+                        SetSpreadMultiByte(multiByteFlag.highOrderflag, multiByteFlag.lowOrderflag, val);
+                    }
+                }
+                ImGui::EndCombo();
+            }
+        }
+
+        genCommonAreaFlags(membit);
+    }
+
+    static void drawCurrentRegionFlags()
+    {
+        dSv_memBit_c& membit = g_dComIfG_gameInfo.info.mMemory.mBit;
+        auto* stageData = dComIfGp_getStageStagInfo();
+        if (!stageData)
+            return;
+        uint8_t stageIndex = dStage_stagInfo_GetSaveTbl(stageData);
+
+        genAreaFlagTable(stageIndex, membit);
+
+        if (ImGui::TreeNode("Flag Matrix")) {
+            genMembitFlags("##TempSceneFlags", membit);
+            ImGui::TreePop();
+        }
+
+        stage_stag_info_class* pstag = dComIfGp_getStageStagInfo();
+        if (pstag != nullptr) {
+            int stageNo = dStage_stagInfo_GetSaveTbl(pstag);
+            if (ImGui::Button("Save##SaveTempFlags")) {
+                dComIfGs_putSave(stageNo);
+            }
+
+            ImGui::SameLine();
+
+            if (ImGui::Button("Load##LoadSaveFlags")) {
+                dComIfGs_getSave(stageNo);
+            }
+        }
+    }
+
+    void ImGuiSaveEditor::drawFlagsTab() {
+        if (ImGui::TreeNode("Current Region Flags")) {
+            drawCurrentRegionFlags();
             ImGui::TreePop();
         }
 
         if (ImGui::TreeNode("Region Saved Flags")) {
-            static std::array<const char*, 27> regionNames = {
-                "Ordon",
-                "Hyrule Sewers",
-                "Faron",
-                "Eldin",
-                "Lanayru",
-                "Reserved",
-                "Hyrule Field",
-                "Sacred Grove",
-                "Snowpeak",
-                "Castle Town",
-                "Gerudo Desert",
-                "Fishing Pond",
-                "Reserved",
-                "Reserved",
-                "Reserved",
-                "Reserved",
-                "Forest Temple",
-                "Goron Mines",
-                "Lakebed Temple",
-                "Arbiter's Grounds",
-                "Snowpeak Ruins",
-                "Temple of Time",
-                "City in the Sky",
-                "Palace of Twilight",
-                "Hyrule Castle",
-                "Caves",
-                "Grottos",
+            static const std::map<uint8_t, const char*> regionNames = {
+                { 0x00, "Ordon"               },
+                { 0x01, "Hyrule Sewers"       },
+                { 0x02, "Faron"               },
+                { 0x03, "Eldin"               },
+                { 0x04, "Lanayru"             },
+                { 0x06, "Hyrule Field"        },
+                { 0x07, "Sacred Grove"        },
+                { 0x08, "Snowpeak"            },
+                { 0x09, "Castle Town"         },
+                { 0x0A, "Gerudo Desert"       },
+                { 0x0B, "Fishing Pond"        },
+                { 0x10, "Forest Temple"       },
+                { 0x11, "Goron Mines"         },
+                { 0x12, "Lakebed Temple"      },
+                { 0x13, "Arbiter's Grounds"   },
+                { 0x14, "Snowpeak Ruins"      },
+                { 0x15, "Temple of Time"      },
+                { 0x16, "City in the Sky"     },
+                { 0x17, "Palace of Twilight"  },
+                { 0x18, "Hyrule Castle"       },
+                { 0x19, "Caves"               },
+                { 0x1A, "Lake Hylia Long Cave"},
+                { 0x1B, "Grottos"             }
             };
 
-            if (ImGui::BeginCombo("Region", regionNames[m_selectedRegion])) {
-                for (int i = 0; i < regionNames.size(); i++) {
-                    if (strcmp(regionNames[i], "Reserved") == 0) continue;
+            if (m_selectedRegion.name == nullptr)
+            {
+                const auto& firstRegion = *regionNames.find(0);
+                m_selectedRegion = { firstRegion.first, firstRegion.second };
+            }
 
-                    if (ImGui::Selectable(regionNames[i])) {
-                        m_selectedRegion = i;
+            if (ImGui::BeginCombo("Region", m_selectedRegion.name)) {
+                for (const auto& [id, name] : regionNames) {
+                    if (ImGui::Selectable(name)) {
+                        m_selectedRegion = {id, name};
                     }
                 }
-
                 ImGui::EndCombo();
             }
 
-            dSv_memBit_c* membit = &dComIfGs_getSaveData()->mSave[m_selectedRegion].mBit;
-            if (membit != nullptr) {
-                genMembitFlags("##SaveSceneFlags", *membit);
+            dSv_memBit_c& membit = dComIfGs_getSaveData()->mSave[m_selectedRegion.id].mBit;
+
+            genAreaFlagTable(m_selectedRegion.id, membit);
+            
+            if (ImGui::TreeNode("Flag Matrix")) {
+                genMembitFlags("##SaveSceneFlags", membit);
+
+                ImGui::TreePop();
             }
 
             ImGui::TreePop();
@@ -1530,7 +1789,9 @@ namespace dusk {
                 }
                 
                 for (const auto& e : duskImguiEventFlags) {
-                    if (!filter.PassFilter((e.location + "\n" + e.description + "\n" + e.flagName).c_str())) 
+                    if (!filter.PassFilter(e.location.c_str()) &&
+                        !filter.PassFilter(e.description.c_str()) &&
+                        !filter.PassFilter(e.flagName.c_str()))
                     {
                         continue;
                     }
