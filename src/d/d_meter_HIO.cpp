@@ -2306,6 +2306,10 @@ void dMeter_drawHIO_c::updateOnWide() {
     // River Canoe Minigame
     g_drawHIO.mMiniGame.mCounterPosX[1] = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mMiniGame.mCounterPosX[1]);
     g_drawHIO.mMiniGame.mIconPosX[1] = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mMiniGame.mIconPosX[1]);
+
+    // Bulblin Count in Hidden Village
+    g_drawHIO.mMiniGame.mCounterPosX[2] = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mMiniGame.mCounterPosX[2]);
+    g_drawHIO.mMiniGame.mIconPosX[2] = mDoGph_gInf_c::ScaleHUDXRight(g_drawHIO.mMiniGame.mIconPosX[2]);
 #endif
 }
 
