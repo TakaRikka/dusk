@@ -31,11 +31,15 @@ public:
     void listen(Rml::EventId event, ScopedEventListener::Callback callback, bool capture = false) {
         listen(mRoot, event, std::move(callback), capture);
     }
+    void on_hover(ScopedEventListener::Callback callback) {
+        listen(Rml::EventId::Mouseover, callback);
+        listen(Rml::EventId::Focus, std::move(callback));
+    }
     bool contains(Rml::Element* element) const;
 
     template <typename T, typename... Args>
     requires std::is_base_of_v<Component, T> T& add_child(Args&&... args) {
-        auto child = std::make_unique<T>(std::forward<Args>(args)...);
+        auto child = std::make_unique<T>(mRoot, std::forward<Args>(args)...);
         T& ref = *child;
         mChildren.emplace_back(std::move(child));
         return ref;

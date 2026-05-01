@@ -18,20 +18,6 @@ Rml::Element* createRoot(Rml::Element* parent, const Rml::String& tagName) {
 Button::Button(Rml::Element* parent, ButtonProps props, const Rml::String& tagName)
     : Component(createRoot(parent, tagName)) {
     update_props(std::move(props));
-    listen(mRoot, Rml::EventId::Click, [this](Rml::Event& event) {
-        if (mProps.onPressed) {
-            mProps.onPressed(event);
-        }
-    });
-    listen(mRoot, Rml::EventId::Keydown, [this](Rml::Event& event) {
-        const auto cmd = map_nav_event(event);
-        if (cmd == NavCommand::Confirm) {
-            if (mProps.onPressed) {
-                mProps.onPressed(event);
-            }
-            event.StopPropagation();
-        }
-    });
 }
 
 void Button::set_text(const Rml::String& text) {
@@ -46,6 +32,21 @@ void Button::set_selected(bool selected) {
         mRoot->SetClass("selected", selected);
         mProps.selected = selected;
     }
+}
+
+Button& Button::on_pressed(ButtonCallback callback) {
+    if (!callback) {
+        return *this;
+    }
+    listen(mRoot, Rml::EventId::Click, [callback](Rml::Event&) { callback(); });
+    listen(mRoot, Rml::EventId::Keydown, [callback = std::move(callback)](Rml::Event& event) {
+        const auto cmd = map_nav_event(event);
+        if (cmd == NavCommand::Confirm) {
+            callback();
+            event.StopPropagation();
+        }
+    });
+    return *this;
 }
 
 void Button::update_props(Props props) {

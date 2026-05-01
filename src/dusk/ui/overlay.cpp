@@ -1,8 +1,8 @@
 #include "overlay.hpp"
 
-#include <fmt/format.h>
 #include <dolphin/gx/GXAurora.h>
 #include <dolphin/vi.h>
+#include <fmt/format.h>
 
 #include "dusk/config.hpp"
 #include "dusk/settings.h"
@@ -38,23 +38,23 @@ const Rml::String kDocumentSource = R"RML(
 
 int get_value(GraphicsOption option) {
     switch (option) {
-        case GraphicsOption::InternalResolution:
-            return getSettings().game.internalResolutionScale.getValue();
-        case GraphicsOption::ShadowResolution:
-            return getSettings().game.shadowResolutionMultiplier.getValue();
+    case GraphicsOption::InternalResolution:
+        return getSettings().game.internalResolutionScale.getValue();
+    case GraphicsOption::ShadowResolution:
+        return getSettings().game.shadowResolutionMultiplier.getValue();
     }
     return 0;
 }
 
 void set_value(GraphicsOption option, int value) {
     switch (option) {
-        case GraphicsOption::InternalResolution:
-            getSettings().game.internalResolutionScale.setValue(value);
-            VISetFrameBufferScale(static_cast<float>(value));
-            break;
-        case GraphicsOption::ShadowResolution:
-            getSettings().game.shadowResolutionMultiplier.setValue(value);
-            break;
+    case GraphicsOption::InternalResolution:
+        getSettings().game.internalResolutionScale.setValue(value);
+        VISetFrameBufferScale(static_cast<float>(value));
+        break;
+    case GraphicsOption::ShadowResolution:
+        getSettings().game.shadowResolutionMultiplier.setValue(value);
+        break;
     }
     config::Save();
 }
@@ -67,8 +67,8 @@ Rml::Element* create_stepped_carousel_root(Rml::Element* parent) {
     return parent->AppendChild(std::move(root));
 }
 
-Rml::Element* create_stepped_carousel_arrow(Rml::Element* parent, const Rml::String& className,
-    const Rml::String& label) {
+Rml::Element* create_stepped_carousel_arrow(
+    Rml::Element* parent, const Rml::String& className, const Rml::String& label) {
     auto* doc = parent->GetOwnerDocument();
     auto button = doc->CreateElement("button");
     button->SetClass("stepped-carousel-arrow", true);
@@ -86,8 +86,10 @@ SteppedCarousel::SteppedCarousel(Rml::Element* parent, Props props)
     mValueElem->SetClass("stepped-carousel-value", true);
     Rml::Element* nextElem = create_stepped_carousel_arrow(mRoot, "next", ">");
 
-    listen(prevElem, Rml::EventId::Click, [this](Rml::Event&) { handle_nav_command(NavCommand::Left); });
-    listen(nextElem, Rml::EventId::Click, [this](Rml::Event&) { handle_nav_command(NavCommand::Right); });
+    listen(prevElem, Rml::EventId::Click,
+        [this](Rml::Event&) { handle_nav_command(NavCommand::Left); });
+    listen(nextElem, Rml::EventId::Click,
+        [this](Rml::Event&) { handle_nav_command(NavCommand::Right); });
     listen(mRoot, Rml::EventId::Keydown, [this](Rml::Event& event) {
         const auto cmd = map_nav_event(event);
         if (cmd != NavCommand::None && handle_nav_command(cmd)) {
@@ -128,8 +130,8 @@ bool SteppedCarousel::handle_nav_command(NavCommand cmd) {
 
 void SteppedCarousel::apply(int value) {
     const int nextValue = std::clamp(value, mProps.min, mProps.max);
-    const int currentValue = std::clamp(mProps.getValue ? mProps.getValue()
-                                                              : 0, mProps.min, mProps.max);
+    const int currentValue =
+        std::clamp(mProps.getValue ? mProps.getValue() : 0, mProps.min, mProps.max);
     if (nextValue == currentValue) {
         return;
     }
@@ -156,9 +158,7 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
 }
 
 Overlay::Overlay(OverlayProps props)
-    : Document(kDocumentSource),
-      mOption(props.option),
-      mValueMin(props.valueMin),
+    : Document(kDocumentSource), mOption(props.option), mValueMin(props.valueMin),
       mValueMax(props.valueMax) {
     if (mDocument == nullptr) {
         return;
@@ -176,36 +176,21 @@ Overlay::Overlay(OverlayProps props)
                 .min = mValueMin,
                 .max = mValueMax,
                 .step = 1,
-                .getValue = [this] {
-                    return get_value(mOption);
-                },
-                .onChange = [this](int value) {
-                    set_value(mOption, value);
-                },
-                .formatValue = [this](int value) {
-                    return format_graphics_setting_value(mOption, value);
-                },
+                .getValue = [this] { return get_value(mOption); },
+                .onChange = [this](int value) { set_value(mOption, value); },
+                .formatValue =
+                    [this](int value) { return format_graphics_setting_value(mOption, value); },
             });
     }
 
     if (auto* returnParent = mDocument->GetElementById("return")) {
         auto& returnButton =
-            add_component<Button>(returnParent,
-                Button::Props{
-                    .text = "Return",
-                    .onPressed = [this](Rml::Event&) { pop_document(); },
-                }, "footer-button"
-            );
+            add_component<Button>(returnParent, "Return", "footer-button").on_pressed(pop_document);
         returnButton.root()->SetClass("return", true);
     }
     if (auto* resetParent = mDocument->GetElementById("reset")) {
-        auto& resetButton =
-            add_component<Button>(resetParent,
-                Button::Props{
-                    .text = "Reset to default",
-                    .onPressed = [this](Rml::Event&) { reset_default(); },
-                }, "footer-button"
-            );
+        auto& resetButton = add_component<Button>(resetParent, "Reset to default", "footer-button")
+                                .on_pressed([this] { reset_default(); });
         resetButton.root()->SetClass("reset", true);
     }
 

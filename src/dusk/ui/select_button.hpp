@@ -31,6 +31,7 @@ protected:
     Props mProps;
     Rml::Element* mKeyElem = nullptr;
     Rml::Element* mValueElem = nullptr;
+    std::function<void()> mOnHover;
 };
 
 class ControlledSelectButton : public SelectButton {

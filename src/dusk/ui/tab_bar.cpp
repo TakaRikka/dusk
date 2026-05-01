@@ -45,13 +45,12 @@ void TabBar::add_tab(const Rml::String& title, TabCallback callback) {
     }
     mTabs.emplace_back(Tab{
         .title = title,
-        .button = add_child<Button>(mRoot,
+        .button = add_child<Button>(
             Button::Props{
                 .text = title,
-                .onPressed = [this, index](Rml::Event&) { set_active_tab(index); },
                 .selected = selected,
             },
-            "tab"),
+            "tab").on_pressed([this, index] { set_active_tab(index); }),
         .callback = std::move(callback),
     });
 }

@@ -235,42 +235,38 @@ SettingsWindow::SettingsWindow() {
         auto& rightPane = add_child<Pane>(content, Pane::Direction::Vertical);
 
         leftPane.add_section("Volume");
-        leftPane.add_child<ConfigIntSelect>(leftPane.root(),
-            ConfigIntSelect::Props{
-                .key = "Master Volume",
-                .value = &getSettings().audio.masterVolume,
-                .onChange = [](int value) { audio::SetMasterVolume(value / 100.f); },
-                .helpText = "Adjusts the volume of all sounds in the game.",
-                .rightPane = &rightPane,
-                .max = 100,
-                .suffix = "%",
-            });
+        leftPane.add_child<ConfigIntSelect>(ConfigIntSelect::Props{
+            .key = "Master Volume",
+            .value = &getSettings().audio.masterVolume,
+            .onChange = [](int value) { audio::SetMasterVolume(value / 100.f); },
+            .helpText = "Adjusts the volume of all sounds in the game.",
+            .rightPane = &rightPane,
+            .max = 100,
+            .suffix = "%",
+        });
 
         leftPane.add_section("Effects");
-        leftPane.add_child<ConfigBoolSelect>(
-            leftPane.root(), ConfigBoolSelect::Props{
-                                 .key = "Enable Reverb",
-                                 .value = &getSettings().audio.enableReverb,
-                                 .onChange = [](bool value) { audio::SetEnableReverb(value); },
-                                 .helpText = "Enables the reverb effect in game audio.",
-                                 .rightPane = &rightPane,
-                             });
+        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
+            .key = "Enable Reverb",
+            .value = &getSettings().audio.enableReverb,
+            .onChange = [](bool value) { audio::SetEnableReverb(value); },
+            .helpText = "Enables the reverb effect in game audio.",
+            .rightPane = &rightPane,
+        });
 
         leftPane.add_section("Tweaks");
-        leftPane.add_child<ConfigBoolSelect>(
-            leftPane.root(), ConfigBoolSelect::Props{
-                                 .key = "No Low HP Sound",
-                                 .value = &getSettings().game.noLowHpSound,
-                                 .helpText = "Disable the beeping sound when having low health.",
-                                 .rightPane = &rightPane,
-                             });
-        leftPane.add_child<ConfigBoolSelect>(leftPane.root(),
-            ConfigBoolSelect::Props{
-                .key = "Non-Stop Midna's Lament",
-                .value = &getSettings().game.midnasLamentNonStop,
-                .helpText = "Prevents enemy music while Midna's Lament is playing.",
-                .rightPane = &rightPane,
-            });
+        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
+            .key = "No Low HP Sound",
+            .value = &getSettings().game.noLowHpSound,
+            .helpText = "Disable the beeping sound when having low health.",
+            .rightPane = &rightPane,
+        });
+        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
+            .key = "Non-Stop Midna's Lament",
+            .value = &getSettings().game.midnasLamentNonStop,
+            .helpText = "Prevents enemy music while Midna's Lament is playing.",
+            .rightPane = &rightPane,
+        });
     });
 
     add_tab("Cheats", [this](Rml::Element* content) {
@@ -279,14 +275,13 @@ SettingsWindow::SettingsWindow() {
 
         auto addCheat = [&](const Rml::String& key, ConfigVar<bool>& value,
                             const Rml::String& helpText) {
-            leftPane.add_child<ConfigBoolSelect>(
-                leftPane.root(), ConfigBoolSelect::Props{
-                                     .key = key,
-                                     .value = &value,
-                                     .isDisabled = [] { return getSettings().game.speedrunMode; },
-                                     .helpText = helpText,
-                                     .rightPane = &rightPane,
-                                 });
+            leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
+                .key = key,
+                .value = &value,
+                .isDisabled = [] { return getSettings().game.speedrunMode; },
+                .helpText = helpText,
+                .rightPane = &rightPane,
+            });
         };
 
         leftPane.add_section("Resources");
@@ -325,24 +320,23 @@ SettingsWindow::SettingsWindow() {
 
         auto addOption = [&](const Rml::String& key, ConfigVar<bool>& value,
                              const Rml::String& helpText) {
-            leftPane.add_child<ConfigBoolSelect>(leftPane.root(), ConfigBoolSelect::Props{
-                                                                      .key = key,
-                                                                      .value = &value,
-                                                                      .helpText = helpText,
-                                                                      .rightPane = &rightPane,
-                                                                  });
+            leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
+                .key = key,
+                .value = &value,
+                .helpText = helpText,
+                .rightPane = &rightPane,
+            });
         };
 
         auto addSpeedrunDisabledOption = [&](const Rml::String& key, ConfigVar<bool>& value,
                                              const Rml::String& helpText) {
-            leftPane.add_child<ConfigBoolSelect>(
-                leftPane.root(), ConfigBoolSelect::Props{
-                                     .key = key,
-                                     .value = &value,
-                                     .isDisabled = [] { return getSettings().game.speedrunMode; },
-                                     .helpText = helpText,
-                                     .rightPane = &rightPane,
-                                 });
+            leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
+                .key = key,
+                .value = &value,
+                .isDisabled = [] { return getSettings().game.speedrunMode; },
+                .helpText = helpText,
+                .rightPane = &rightPane,
+            });
         };
 
         leftPane.add_section("General");
@@ -357,17 +351,16 @@ SettingsWindow::SettingsWindow() {
             "Enables rotating Link in the collection menu with the C-Stick.");
 
         leftPane.add_section("Difficulty");
-        leftPane.add_child<ConfigIntSelect>(
-            leftPane.root(), ConfigIntSelect::Props{
-                                 .key = "Damage Multiplier",
-                                 .value = &getSettings().game.damageMultiplier,
-                                 .isDisabled = [] { return getSettings().game.speedrunMode; },
-                                 .helpText = "Multiplies incoming damage.",
-                                 .rightPane = &rightPane,
-                                 .min = 1,
-                                 .max = 8,
-                                 .prefix = "x",
-                             });
+        leftPane.add_child<ConfigIntSelect>(ConfigIntSelect::Props{
+            .key = "Damage Multiplier",
+            .value = &getSettings().game.damageMultiplier,
+            .isDisabled = [] { return getSettings().game.speedrunMode; },
+            .helpText = "Multiplies incoming damage.",
+            .rightPane = &rightPane,
+            .min = 1,
+            .max = 8,
+            .prefix = "x",
+        });
         addSpeedrunDisabledOption(
             "Instant Death", getSettings().game.instantDeath, "Any hit will instantly kill you.");
         addSpeedrunDisabledOption("No Heart Drops", getSettings().game.noHeartDrops,
@@ -403,31 +396,29 @@ SettingsWindow::SettingsWindow() {
             "Transform instantly by pressing R and Y simultaneously.");
 
         leftPane.add_section("Speedrunning");
-        leftPane.add_child<ConfigBoolSelect>(leftPane.root(),
-            ConfigBoolSelect::Props{
-                .key = "Speedrun Mode",
-                .value = &getSettings().game.speedrunMode,
-                .onChange = [](bool) { reset_for_speedrun_mode(); },
-                .helpText = "Enables speedrunning options while restricting certain "
-                            "gameplay modifiers.",
-                .rightPane = &rightPane,
-            });
-        leftPane.add_child<ConfigBoolSelect>(
-            leftPane.root(), ConfigBoolSelect::Props{
-                                 .key = "LiveSplit Connection",
-                                 .value = &getSettings().game.liveSplitEnabled,
-                                 .onChange =
-                                     [](bool enabled) {
-                                         if (enabled) {
-                                             speedrun::connectLiveSplit();
-                                         } else {
-                                             speedrun::disconnectLiveSplit();
-                                         }
-                                     },
-                                 .isDisabled = [] { return !getSettings().game.speedrunMode; },
-                                 .helpText = "Connect to LiveSplit server on localhost:16834.",
-                                 .rightPane = &rightPane,
-                             });
+        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
+            .key = "Speedrun Mode",
+            .value = &getSettings().game.speedrunMode,
+            .onChange = [](bool) { reset_for_speedrun_mode(); },
+            .helpText = "Enables speedrunning options while restricting certain "
+                        "gameplay modifiers.",
+            .rightPane = &rightPane,
+        });
+        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
+            .key = "LiveSplit Connection",
+            .value = &getSettings().game.liveSplitEnabled,
+            .onChange =
+                [](bool enabled) {
+                    if (enabled) {
+                        speedrun::connectLiveSplit();
+                    } else {
+                        speedrun::disconnectLiveSplit();
+                    }
+                },
+            .isDisabled = [] { return !getSettings().game.speedrunMode; },
+            .helpText = "Connect to LiveSplit server on localhost:16834.",
+            .rightPane = &rightPane,
+        });
     });
 
     add_tab("Graphics", [this](Rml::Element* content) {
@@ -436,99 +427,82 @@ SettingsWindow::SettingsWindow() {
 
         leftPane.add_section("Display");
 
-        leftPane.add_button({
-            .text = "Toggle Fullscreen",
-            .onPressed =
-                [](Rml::Event&) {
-                    getSettings().video.enableFullscreen.setValue(
-                        !getSettings().video.enableFullscreen);
-                    VISetWindowFullscreen(getSettings().video.enableFullscreen);
-                    config::Save();
-                },
+        leftPane.add_button("Toggle Fullscreen", [] {
+            getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
+            VISetWindowFullscreen(getSettings().video.enableFullscreen);
+            config::Save();
         });
-        leftPane.add_button({
-            .text = "Restore Default Window Size",
-            .onPressed =
-                [](Rml::Event&) {
-                    getSettings().video.enableFullscreen.setValue(false);
-                    VISetWindowFullscreen(false);
-                    VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
-                    VICenterWindow();
-                },
+        leftPane.add_button("Restore Default Window Size", [] {
+            getSettings().video.enableFullscreen.setValue(false);
+            VISetWindowFullscreen(false);
+            VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
+            VICenterWindow();
         });
-        leftPane.add_child<ConfigBoolSelect>(leftPane.root(),
-            ConfigBoolSelect::Props{
-                .key = "Enable VSync",
-                .value = &getSettings().video.enableVsync,
-                .onChange = [](bool value) { aurora_enable_vsync(value); },
-                .helpText = "Synchronizes the frame rate to your monitor's refresh rate.",
-                .rightPane = &rightPane,
-            });
-        leftPane.add_child<ConfigBoolSelect>(
-            leftPane.root(), ConfigBoolSelect::Props{
-                                 .key = "Lock 4:3 Aspect Ratio",
-                                 .value = &getSettings().video.lockAspectRatio,
-                                 .onChange =
-                                     [](bool value) {
-                                         AuroraSetViewportPolicy(
-                                             value ? AURORA_VIEWPORT_FIT : AURORA_VIEWPORT_STRETCH);
-                                     },
-                                 .helpText = "Lock the game's aspect ratio to the original.",
-                                 .rightPane = &rightPane,
-                             });
+        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
+            .key = "Enable VSync",
+            .value = &getSettings().video.enableVsync,
+            .onChange = [](bool value) { aurora_enable_vsync(value); },
+            .helpText = "Synchronizes the frame rate to your monitor's refresh rate.",
+            .rightPane = &rightPane,
+        });
+        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
+            .key = "Lock 4:3 Aspect Ratio",
+            .value = &getSettings().video.lockAspectRatio,
+            .onChange =
+                [](bool value) {
+                    AuroraSetViewportPolicy(value ? AURORA_VIEWPORT_FIT : AURORA_VIEWPORT_STRETCH);
+                },
+            .helpText = "Lock the game's aspect ratio to the original.",
+            .rightPane = &rightPane,
+        });
 
         leftPane.add_section("Resolution");
-        leftPane.add_child<ConfigOverlaySelect>(leftPane.root(),
-            ConfigOverlaySelect::Props{
-                .key = "Internal Resolution",
-                .value = &getSettings().game.internalResolutionScale,
-                .option = GraphicsOption::InternalResolution,
-                .title = "Internal Resolution",
-                .min = 0,
-                .max = 12,
-                .helpText =
-                    "Configure the resolution used for rendering the game. Higher values are more "
-                    "demanding on your graphics hardware.",
-                .rightPane = &rightPane,
-            });
-        leftPane.add_child<ConfigOverlaySelect>(leftPane.root(),
-            ConfigOverlaySelect::Props{
-                .key = "Shadow Resolution",
-                .value = &getSettings().game.shadowResolutionMultiplier,
-                .option = GraphicsOption::ShadowResolution,
-                .title = "Shadow Resolution",
-                .min = 1,
-                .max = 8,
-                .helpText =
-                    "Configure the shadow-map resolution. Higher values improve shadow quality but "
-                    "increase GPU and memory usage.",
-                .rightPane = &rightPane,
-            });
+        leftPane.add_child<ConfigOverlaySelect>(ConfigOverlaySelect::Props{
+            .key = "Internal Resolution",
+            .value = &getSettings().game.internalResolutionScale,
+            .option = GraphicsOption::InternalResolution,
+            .title = "Internal Resolution",
+            .min = 0,
+            .max = 12,
+            .helpText =
+                "Configure the resolution used for rendering the game. Higher values are more "
+                "demanding on your graphics hardware.",
+            .rightPane = &rightPane,
+        });
+        leftPane.add_child<ConfigOverlaySelect>(ConfigOverlaySelect::Props{
+            .key = "Shadow Resolution",
+            .value = &getSettings().game.shadowResolutionMultiplier,
+            .option = GraphicsOption::ShadowResolution,
+            .title = "Shadow Resolution",
+            .min = 1,
+            .max = 8,
+            .helpText =
+                "Configure the shadow-map resolution. Higher values improve shadow quality but "
+                "increase GPU and memory usage.",
+            .rightPane = &rightPane,
+        });
 
         leftPane.add_section("Post-Processing");
         // TODO: Bloom
         // TODO: Bloom Brightness
 
         leftPane.add_section("Rendering");
-        leftPane.add_child<ConfigBoolSelect>(leftPane.root(),
-            ConfigBoolSelect::Props{
-                .key = "Unlock Framerate",
-                .value = &getSettings().game.enableFrameInterpolation,
-                .helpText =
-                    "Uses inter-frame interpolation to enable higher frame rates.<br/><br/>Visual "
-                    "artifacts, animation glitches, or instability may occur.",
-                .rightPane = &rightPane,
-            });
-        leftPane.add_child<ConfigBoolSelect>(
-            leftPane.root(), ConfigBoolSelect::Props{
-                                 .key = "Enable Depth of Field",
-                                 .value = &getSettings().game.enableDepthOfField,
-                             });
-        leftPane.add_child<ConfigBoolSelect>(
-            leftPane.root(), ConfigBoolSelect::Props{
-                                 .key = "Enable Mini-Map Shadows",
-                                 .value = &getSettings().game.enableMapBackground,
-                             });
+        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
+            .key = "Unlock Framerate",
+            .value = &getSettings().game.enableFrameInterpolation,
+            .helpText =
+                "Uses inter-frame interpolation to enable higher frame rates.<br/><br/>Visual "
+                "artifacts, animation glitches, or instability may occur.",
+            .rightPane = &rightPane,
+        });
+        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
+            .key = "Enable Depth of Field",
+            .value = &getSettings().game.enableDepthOfField,
+        });
+        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
+            .key = "Enable Mini-Map Shadows",
+            .value = &getSettings().game.enableMapBackground,
+        });
     });
 }
 
