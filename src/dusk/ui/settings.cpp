@@ -61,6 +61,14 @@ int bloom_multiplier_percent() {
         static_cast<int>(getSettings().game.bloomMultiplier.getValue() * 100.0f + 0.5f), 0, 100);
 }
 
+int float_setting_percent(ConfigVar<float>& var) {
+    return static_cast<int>(var.getValue() * 100.0f + 0.5f);
+}
+
+bool gyro_enabled() {
+    return getSettings().game.enableGyroAim || getSettings().game.enableGyroRollgoal;
+}
+
 struct ConfigBoolProps {
     Rml::String key;
     Rml::String helpText;
@@ -92,6 +100,42 @@ SelectButton& config_bool_select(
             rightPane.add_rml(helpText);
         });
 }
+
+SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<float>& var,
+    Rml::String key, Rml::String helpText, int min, int max, int step = 5,
+    std::function<bool()> isDisabled = {}) {
+    return leftPane
+        .add_child<NumberButton>(NumberButton::Props{
+            .key = std::move(key),
+            .getValue = [&var] { return float_setting_percent(var); },
+            .setValue =
+                [&var, min, max](int value) {
+                    var.setValue(std::clamp(value, min, max) / 100.0f);
+                    config::Save();
+                },
+            .isDisabled = std::move(isDisabled),
+            .min = min,
+            .max = max,
+            .step = step,
+            .suffix = "%",
+        })
+        .on_focus([&rightPane, helpText = std::move(helpText)](Rml::Event&) {
+            rightPane.clear();
+            rightPane.add_text(helpText);
+        });
+}
+
+class ControllerConfigWindow : public Window {
+public:
+    ControllerConfigWindow() {
+        for (int i = 0; i < 4; ++i) {
+            add_tab(fmt::format("Port {}", i + 1), [this](Rml::Element* content) {
+                auto& pane = add_child<Pane>(content, Pane::Type::Controlled);
+                pane.add_section("Coming soon");
+            });
+        }
+    }
+};
 
 }  // namespace
 
@@ -261,6 +305,8 @@ SettingsWindow::SettingsWindow() {
             "Always collect Rupees even if your Wallet is too full.");
         addOption("No Sword Recoil", getSettings().game.noSwordRecoil,
             "Link will not recoil when his sword hits walls.");
+        addOption("No 2nd Fish for Cat", getSettings().game.no2ndFishForCat,
+            "Skip needing to catch a second fish for Sera's cat.");
         addOption("Skip TV Settings Screen", getSettings().game.hideTvSettingsScreen,
             "Skips the TV calibration screen shown when loading a save.");
         addOption("Skip Warning Screen", getSettings().game.skipWarningScreen,
@@ -294,18 +340,85 @@ SettingsWindow::SettingsWindow() {
             });
     });
 
+    add_tab("Input", [this](Rml::Element* content) {
+        auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
+        auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
+
+        auto addOption = [&](const Rml::String& key, ConfigVar<bool>& value,
+                             const Rml::String& helpText, std::function<bool()> isDisabled = {}) {
+            config_bool_select(leftPane, rightPane, value,
+                {
+                    .key = key,
+                    .helpText = helpText,
+                    .isDisabled = std::move(isDisabled),
+                });
+        };
+
+        leftPane.add_section("Controller");
+        leftPane.add_button("Configure Controller")
+            .on_pressed([] { push_document(std::make_unique<ControllerConfigWindow>()); })
+            .on_focus([&rightPane](Rml::Event&) {
+                rightPane.clear();
+                rightPane.add_text("Open controller binding configuration.");
+            });
+
+        leftPane.add_section("Camera");
+        addOption("Free Camera", getSettings().game.freeCamera,
+            "Enables twin-stick camera control, letting the C-Stick move the camera vertically as "
+            "well as horizontally.");
+        addOption("Invert Camera X Axis", getSettings().game.invertCameraXAxis,
+            "Invert horizontal camera movement.");
+        addOption("Invert Camera Y Axis", getSettings().game.invertCameraYAxis,
+            "Invert vertical camera movement when Free Camera is enabled.",
+            [] { return !getSettings().game.freeCamera; });
+        config_percent_select(leftPane, rightPane, getSettings().game.freeCameraSensitivity,
+            "Free Camera Sensitivity", "Adjusts twin-stick camera sensitivity.", 50, 200, 5,
+            [] { return !getSettings().game.freeCamera; });
+
+        leftPane.add_section("Gyro");
+        addOption("Gyro Aim", getSettings().game.enableGyroAim,
+            "Enables gyro aiming on supported controllers while in look mode and while aiming "
+            "items.");
+        addOption("Gyro Rollgoal", getSettings().game.enableGyroRollgoal,
+            "Enables gyro controls for Rollgoal in Hena's Cabin.");
+        config_percent_select(leftPane, rightPane, getSettings().game.gyroSensitivityY,
+            "Gyro Pitch Sensitivity", "Controls vertical gyro aiming sensitivity.", 25, 400, 5,
+            [] { return !gyro_enabled(); });
+        config_percent_select(leftPane, rightPane, getSettings().game.gyroSensitivityX,
+            "Gyro Yaw Sensitivity", "Controls horizontal gyro aiming sensitivity.", 25, 400, 5,
+            [] { return !gyro_enabled(); });
+        config_percent_select(leftPane, rightPane, getSettings().game.gyroSensitivityRollgoal,
+            "Rollgoal Sensitivity", "Controls how strongly gyro input tilts the Rollgoal table.",
+            25, 400, 5, [] { return !getSettings().game.enableGyroRollgoal; });
+        config_percent_select(leftPane, rightPane, getSettings().game.gyroDeadband, "Gyro Deadband",
+            "Ignores small gyro movement to reduce drift and jitter.", 0, 50, 1,
+            [] { return !gyro_enabled(); });
+        config_percent_select(leftPane, rightPane, getSettings().game.gyroSmoothing,
+            "Gyro Smoothing", "Higher values smooth gyro input over time.", 0, 100, 1,
+            [] { return !gyro_enabled(); });
+        addOption("Invert Gyro Pitch", getSettings().game.gyroInvertPitch,
+            "Invert vertical gyro aiming.", [] { return !gyro_enabled(); });
+        addOption("Invert Gyro Yaw", getSettings().game.gyroInvertYaw,
+            "Invert horizontal gyro aiming.", [] { return !gyro_enabled(); });
+
+        leftPane.add_section("Tools");
+        addOption("Turbo Key", getSettings().game.enableTurboKeybind,
+            "Hold Tab to increase game speed by up to 4x.",
+            [] { return getSettings().game.speedrunMode; });
+    });
+
     add_tab("Graphics", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Display");
 
-        leftPane.add_button("Toggle Fullscreen", [] {
+        leftPane.add_button("Toggle Fullscreen").on_pressed([] {
             getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
             VISetWindowFullscreen(getSettings().video.enableFullscreen);
             config::Save();
         });
-        leftPane.add_button("Restore Default Window Size", [] {
+        leftPane.add_button("Restore Default Window Size").on_pressed([] {
             getSettings().video.enableFullscreen.setValue(false);
             VISetWindowFullscreen(false);
             VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
@@ -423,9 +536,8 @@ SettingsWindow::SettingsWindow() {
                         return format_graphics_setting_value(
                             GraphicsOption::BloomMultiplier, bloom_multiplier_percent());
                     },
-                .isDisabled = [] {
-                    return getSettings().game.bloomMode.getValue() == BloomMode::Off;
-                },
+                .isDisabled =
+                    [] { return getSettings().game.bloomMode.getValue() == BloomMode::Off; },
             })
             .on_nav_command([](Rml::Event&, NavCommand cmd) {
                 if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||

@@ -178,14 +178,14 @@ void populate_stage_picker(Pane& pane, std::function<Rml::String()> getStageFile
     for (const auto& region : gameRegions) {
         pane.add_section(region.regionName);
         for (const auto& map : region.maps) {
-            pane.add_button(
-                {
-                    .text = stage_option_label(map),
-                    .isSelected = [getStageFile,
-                                      stageFile =
-                                          map.mapFile] { return getStageFile() == stageFile; },
-                },
-                [setStageFile, stageFile = map.mapFile] { setStageFile(stageFile); });
+            pane.add_button({
+                                .text = stage_option_label(map),
+                                .isSelected =
+                                    [getStageFile, stageFile = map.mapFile] {
+                                        return getStageFile() == stageFile;
+                                    },
+                            })
+                .on_pressed([setStageFile, stageFile = map.mapFile] { setStageFile(stageFile); });
         }
     }
 }
@@ -740,12 +740,12 @@ struct ToggleEntry {
 void populate_toggle_group(Pane& pane, const std::vector<ToggleEntry>& entries) {
     pane.clear();
     pane.add_section("Actions");
-    pane.add_button("Select All", [entries] {
+    pane.add_button("Select All").on_pressed([entries] {
         for (const auto& entry : entries) {
             entry.setSelected(true);
         }
     });
-    pane.add_button("Select None", [entries] {
+    pane.add_button("Select None").on_pressed([entries] {
         for (const auto& entry : entries) {
             entry.setSelected(false);
         }
@@ -753,12 +753,11 @@ void populate_toggle_group(Pane& pane, const std::vector<ToggleEntry>& entries) 
 
     pane.add_section("Items");
     for (const auto& entry : entries) {
-        pane.add_button(
-            {
-                .text = entry.text,
-                .isSelected = entry.isSelected,
-            },
-            [isSelected = entry.isSelected, setSelected = entry.setSelected] {
+        pane.add_button({
+                            .text = entry.text,
+                            .isSelected = entry.isSelected,
+                        })
+            .on_pressed([isSelected = entry.isSelected, setSelected = entry.setSelected] {
                 setSelected(!isSelected());
             });
     }
@@ -878,64 +877,63 @@ void set_all_item_first_bits(bool owned) {
 void populate_item_slot_picker(Pane& pane, int slot) {
     pane.clear();
     pane.add_section("Actions");
-    pane.add_button(fmt::format("Default ({})", get_item_name(get_slot_default(slot))),
-        [slot] { dComIfGs_setItem(slot, get_slot_default(slot)); });
+    pane.add_button(fmt::format("Default ({})", get_item_name(get_slot_default(slot))))
+        .on_pressed([slot] { dComIfGs_setItem(slot, get_slot_default(slot)); });
 
     pane.add_section("Items");
     pane.add_button(
-        {
-            .text = "None",
-            .isSelected = [slot] { return get_player_item()->mItems[slot] == dItemNo_NONE_e; },
-        },
-        [slot] { dComIfGs_setItem(slot, dItemNo_NONE_e); });
+            {
+                .text = "None",
+                .isSelected = [slot] { return get_player_item()->mItems[slot] == dItemNo_NONE_e; },
+            })
+        .on_pressed([slot] { dComIfGs_setItem(slot, dItemNo_NONE_e); });
     for (const auto& [itemId, item] : itemMap) {
         if (item.m_type != ITEMTYPE_EQUIP_e) {
             continue;
         }
-        pane.add_button(
-            {
+        pane
+            .add_button({
                 .text = item.m_name,
                 .isSelected = [slot, itemId] { return get_player_item()->mItems[slot] == itemId; },
-            },
-            [slot, itemId] { dComIfGs_setItem(slot, static_cast<u8>(itemId)); });
+            })
+            .on_pressed([slot, itemId] { dComIfGs_setItem(slot, static_cast<u8>(itemId)); });
     }
 }
 
 void populate_item_flag_picker(Pane& pane) {
     pane.clear();
     pane.add_section("Actions");
-    pane.add_button("Select All", [] { set_all_item_first_bits(true); });
-    pane.add_button("Clear None", [] { set_all_item_first_bits(false); });
+    pane.add_button("Select All").on_pressed([] { set_all_item_first_bits(true); });
+    pane.add_button("Clear None").on_pressed([] { set_all_item_first_bits(false); });
 
     pane.add_section("Items");
     for (const auto& [itemId, item] : itemMap) {
         if (!can_edit_item_first_bit(itemId, item)) {
             continue;
         }
-        pane.add_button(
-            {
+        pane
+            .add_button({
                 .text = item.m_name,
                 .isSelected = [itemId] { return dComIfGs_isItemFirstBit(static_cast<u8>(itemId)); },
-            },
-            [itemId] { toggle_item_first_bit(static_cast<u8>(itemId)); });
+            })
+            .on_pressed([itemId] { toggle_item_first_bit(static_cast<u8>(itemId)); });
     }
 }
 
 void populate_select_item_picker(Pane& pane, u8& selectItemData) {
     pane.clear();
     pane.add_button(
-        {
-            .text = "None",
-            .isSelected = [&selectItemData] { return selectItemData == dItemNo_NONE_e; },
-        },
-        [&selectItemData] { selectItemData = dItemNo_NONE_e; });
-    for (int i = 0; i < 24; i++) {
-        pane.add_button(
             {
-                .text = item_label_for_slot(i),
-                .isSelected = [i, &selectItemData] { return selectItemData == i; },
-            },
-            [i, &selectItemData] { selectItemData = i; });
+                .text = "None",
+                .isSelected = [&selectItemData] { return selectItemData == dItemNo_NONE_e; },
+            })
+        .on_pressed([&selectItemData] { selectItemData = dItemNo_NONE_e; });
+    for (int i = 0; i < 24; i++) {
+        pane.add_button({
+                            .text = item_label_for_slot(i),
+                            .isSelected = [i, &selectItemData] { return selectItemData == i; },
+                        })
+            .on_pressed([i, &selectItemData] { selectItemData = i; });
     }
 }
 
@@ -943,11 +941,11 @@ void populate_select_clothes_picker(Pane& pane) {
     pane.clear();
     const auto addOption = [&pane](u8 id) {
         pane.add_button(
-            {
-                .text = get_item_name(id),
-                .isSelected = [id] { return get_player_status()->mSelectEquip[0] == id; },
-            },
-            [id] {
+                {
+                    .text = get_item_name(id),
+                    .isSelected = [id] { return get_player_status()->mSelectEquip[0] == id; },
+                })
+            .on_pressed([id] {
                 dMeter2Info_setCloth(id, false);
                 daPy_getPlayerActorClass()->setClothesChange(0);
             });
@@ -962,12 +960,11 @@ template <size_t Size>
 void populate_select_equip_picker(Pane& pane, u8& equip, const std::array<u8, Size>& entries) {
     pane.clear();
     const auto addOption = [&pane, &equip](u8 id) {
-        pane.add_button(
-            {
-                .text = get_item_name(id),
-                .isSelected = [id, &equip] { return equip == id; },
-            },
-            [id, &equip] { equip = id; });
+        pane.add_button({
+                            .text = get_item_name(id),
+                            .isSelected = [id, &equip] { return equip == id; },
+                        })
+            .on_pressed([id, &equip] { equip = id; });
     };
     addOption(dItemNo_NONE_e);
     for (const auto item : entries) {
@@ -984,12 +981,11 @@ constexpr std::array<Rml::String, 3> walletSizeNames = {
 void populate_wallet_picker(Pane& pane) {
     pane.clear();
     for (int i = 0; i < walletSizeNames.size(); ++i) {
-        pane.add_button(
-            {
-                .text = walletSizeNames[i],
-                .isSelected = [i] { return get_player_status()->getWalletSize() == i; },
-            },
-            [i] { get_player_status()->setWalletSize(i); });
+        pane.add_button({
+                            .text = walletSizeNames[i],
+                            .isSelected = [i] { return get_player_status()->getWalletSize() == i; },
+                        })
+            .on_pressed([i] { get_player_status()->setWalletSize(i); });
     }
 }
 
@@ -1002,23 +998,22 @@ void populate_form_picker(Pane& pane) {
     pane.clear();
     for (int i = 0; i < formNames.size(); ++i) {
         pane.add_button(
-            {
-                .text = formNames[i],
-                .isSelected = [i] { return get_player_status()->getTransformStatus() == i; },
-            },
-            [i] { get_player_status()->setTransformStatus(i); });
+                {
+                    .text = formNames[i],
+                    .isSelected = [i] { return get_player_status()->getTransformStatus() == i; },
+                })
+            .on_pressed([i] { get_player_status()->setTransformStatus(i); });
     }
 }
 
 void add_toggle_button(Pane& pane, ToggleEntry entry) {
     auto isSelected = std::move(entry.isSelected);
     auto setSelected = std::move(entry.setSelected);
-    pane.add_button(
-        {
-            .text = entry.text,
-            .isSelected = isSelected,
-        },
-        [isSelected, setSelected] { setSelected(!isSelected()); });
+    pane.add_button({
+                        .text = entry.text,
+                        .isSelected = isSelected,
+                    })
+        .on_pressed([isSelected, setSelected] { setSelected(!isSelected()); });
 }
 
 template <size_t Size>
@@ -1131,8 +1126,8 @@ void populate_collect_clothes_picker(Pane& pane) {
 void populate_poe_souls_picker(Pane& pane) {
     pane.clear();
     pane.add_section("Actions");
-    pane.add_button("All 60", [] { dComIfGs_setPohSpiritNum(60); });
-    pane.add_button("Clear", [] { dComIfGs_setPohSpiritNum(0); });
+    pane.add_button("All 60").on_pressed([] { dComIfGs_setPohSpiritNum(60); });
+    pane.add_button("Clear").on_pressed([] { dComIfGs_setPohSpiritNum(0); });
 
     pane.add_section("Value");
     pane.add_child<NumberButton>(NumberButton::Props{
@@ -1147,11 +1142,11 @@ void populate_poe_souls_picker(Pane& pane) {
 void populate_max_life_picker(Pane& pane) {
     pane.clear();
     pane.add_section("Actions");
-    pane.add_button("3 Hearts", [] {
+    pane.add_button("3 Hearts").on_pressed([] {
         dComIfGs_setMaxLife(15);
         dComIfGs_setLife(12);
     });
-    pane.add_button("20 Hearts", [] {
+    pane.add_button("20 Hearts").on_pressed([] {
         dComIfGs_setMaxLife(100);
         dComIfGs_setLife(80);
     });
@@ -1257,12 +1252,12 @@ Rml::String sound_mode_label() {
 void populate_target_type_picker(Pane& pane) {
     pane.clear();
     for (u8 type = 0; type < targetTypeNames.size(); ++type) {
-        pane.add_button(
-            {
+        pane
+            .add_button({
                 .text = targetTypeNames[type],
                 .isSelected = [type] { return get_player_config()->getAttentionType() == type; },
-            },
-            [type] { get_player_config()->setAttentionType(type); });
+            })
+            .on_pressed([type] { get_player_config()->setAttentionType(type); });
     }
 }
 
@@ -1270,11 +1265,11 @@ void populate_sound_mode_picker(Pane& pane) {
     pane.clear();
     for (u8 mode = 0; mode < soundModeNames.size(); ++mode) {
         pane.add_button(
-            {
-                .text = soundModeNames[mode],
-                .isSelected = [mode] { return get_player_config()->getSound() == mode; },
-            },
-            [mode] { get_player_config()->setSound(mode); });
+                {
+                    .text = soundModeNames[mode],
+                    .isSelected = [mode] { return get_player_config()->getSound() == mode; },
+                })
+            .on_pressed([mode] { get_player_config()->setSound(mode); });
     }
 }
 
@@ -1595,23 +1590,21 @@ EditorWindow::EditorWindow() {
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Item Wheel");
-        leftPane
-            .add_button("Default All",
-                [&rightPane] {
-                    for (int slot = 0; slot < 24; ++slot) {
-                        dComIfGs_setItem(slot, get_slot_default(slot));
-                    }
-                    rightPane.clear();
-                })
+        leftPane.add_button("Default All")
+            .on_pressed([&rightPane] {
+                for (int slot = 0; slot < 24; ++slot) {
+                    dComIfGs_setItem(slot, get_slot_default(slot));
+                }
+                rightPane.clear();
+            })
             .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_button("Clear All",
-                [&rightPane] {
-                    for (int slot = 0; slot < 24; ++slot) {
-                        dComIfGs_setItem(slot, dItemNo_NONE_e);
-                    }
-                    rightPane.clear();
-                })
+        leftPane.add_button("Clear All")
+            .on_pressed([&rightPane] {
+                for (int slot = 0; slot < 24; ++slot) {
+                    dComIfGs_setItem(slot, dItemNo_NONE_e);
+                }
+                rightPane.clear();
+            })
             .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
         for (int slot = 0; slot < 24; ++slot) {
             leftPane

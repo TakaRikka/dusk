@@ -21,20 +21,10 @@ public:
     void set_selected_item(int index);
 
     Rml::Element* add_section(const Rml::String& text);
-    ControlledButton& add_button(ControlledButton::Props props, ButtonCallback callback = {}) {
-        auto& btn = add_child<ControlledButton>(std::move(props));
-        if (callback) {
-            btn.on_pressed(std::move(callback));
-        }
-        return btn;
+    ControlledButton& add_button(ControlledButton::Props props) {
+        return add_child<ControlledButton>(std::move(props));
     }
-    Button& add_button(Rml::String text, ButtonCallback callback = {}) {
-        auto& btn = add_child<Button>(std::move(text));
-        if (callback) {
-            btn.on_pressed(std::move(callback));
-        }
-        return btn;
-    }
+    Button& add_button(Rml::String text) { return add_child<Button>(std::move(text)); }
     ControlledSelectButton& add_select_button(ControlledSelectButton::Props props) {
         return add_child<ControlledSelectButton>(std::move(props));
     }
