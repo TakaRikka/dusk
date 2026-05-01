@@ -18,7 +18,7 @@ Pane::Pane(Rml::Element* parent, Direction direction)
     listen(Rml::EventId::Keydown, [this](Rml::Event& event) {
         const auto cmd = map_nav_event(event);
 
-        // If
+        // If navigating to the next pane, select the focused item
         if ((mDirection == Direction::Vertical && cmd == NavCommand::Right) ||
             (mDirection == Direction::Horizontal && cmd == NavCommand::Down))
         {

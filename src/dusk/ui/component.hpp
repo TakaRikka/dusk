@@ -65,15 +65,13 @@ public:
         return static_cast<Derived&>(*this);
     }
 
-    Derived& on_hover(ScopedEventListener::Callback callback) {
-        listen(Rml::EventId::Mouseover, callback);
-        listen(Rml::EventId::Focus, std::move(callback));
-        return static_cast<Derived&>(*this);
-    }
-
     Derived& on_focus(ScopedEventListener::Callback callback) {
-        listen(Rml::EventId::Focus, std::move(callback));
-        return static_cast<Derived&>(*this);
+        return listen(
+            Rml::EventId::Focus, [this, callback = std::move(callback)](Rml::Event& event) {
+                if (!disabled()) {
+                    callback(event);
+                }
+            });
     }
 };
 

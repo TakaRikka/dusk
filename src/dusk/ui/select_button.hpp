@@ -17,10 +17,9 @@ public:
     void set_value_label(const Rml::String& value);
 
     SelectButton& on_selected(std::function<void(bool)> callback) {
-        listen(Rml::EventId::Change, [callback = std::move(callback)](Rml::Event& event) {
+        return listen(Rml::EventId::Change, [callback = std::move(callback)](Rml::Event& event) {
             callback(event.GetParameter("selected", false));
         });
-        return *this;
     }
 
 protected:
@@ -42,7 +41,6 @@ public:
 
 protected:
     virtual Rml::String format_value() = 0;
-    virtual bool is_disabled() { return false; }
 };
 
 class ControlledSelectButton : public BaseControlledSelectButton {
@@ -57,9 +55,10 @@ public:
         : BaseControlledSelectButton(parent, {std::move(props.key)}),
           mGetValue(std::move(props.getValue)), mIsDisabled(std::move(props.isDisabled)) {}
 
+    bool disabled() const override;
+
 protected:
     Rml::String format_value() override;
-    bool is_disabled() override;
 
     std::function<Rml::String()> mGetValue;
     std::function<bool()> mIsDisabled;

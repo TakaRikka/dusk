@@ -7,6 +7,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_kankyo.h"
 #include "d/d_meter2_info.h"
+#include "dusk/map_loader_definitions.h"
 #include "number_button.hpp"
 #include "pane.hpp"
 #include "select_button.hpp"
@@ -14,6 +15,11 @@
 
 #include <algorithm>
 #include <bit>
+#include <cctype>
+#include <cstdlib>
+#include <cstring>
+#include <functional>
+#include <limits>
 
 namespace dusk::ui {
 namespace {
@@ -34,6 +40,108 @@ dSv_player_status_b_c* get_player_status_b() {
         return nullptr;
     }
     return &dComIfGs_getSaveData()->getPlayer().getPlayerStatusB();
+}
+
+dSv_player_return_place_c* get_player_return_place() {
+    if (!has_save_data()) {
+        return nullptr;
+    }
+    return &dComIfGs_getSaveData()->getPlayer().getPlayerReturnPlace();
+}
+
+dSv_horse_place_c* get_horse_place() {
+    if (!has_save_data()) {
+        return nullptr;
+    }
+    return &dComIfGs_getSaveData()->getPlayer().getHorsePlace();
+}
+
+template <size_t Size>
+Rml::String fixed_string(const char (&value)[Size]) {
+    size_t length = 0;
+    while (length < Size && value[length] != '\0') {
+        ++length;
+    }
+    return Rml::String(value, length);
+}
+
+template <size_t Size>
+void set_fixed_string(char (&dest)[Size], const Rml::String& value) {
+    std::memset(dest, 0, Size);
+    std::memcpy(dest, value.data(), std::min(value.size(), Size - 1));
+}
+
+void skip_whitespace(const char*& cursor) {
+    while (std::isspace(static_cast<unsigned char>(*cursor))) {
+        ++cursor;
+    }
+}
+
+bool parse_float_token(const char*& cursor, float& parsedValue) {
+    skip_whitespace(cursor);
+    char* end = nullptr;
+    parsedValue = std::strtof(cursor, &end);
+    if (end == cursor) {
+        return false;
+    }
+    cursor = end;
+    skip_whitespace(cursor);
+    return true;
+}
+
+bool consume_comma(const char*& cursor) {
+    skip_whitespace(cursor);
+    if (*cursor != ',') {
+        return false;
+    }
+    ++cursor;
+    return true;
+}
+
+bool parse_vec3(const Rml::String& value, float& x, float& y, float& z) {
+    const char* cursor = value.c_str();
+    if (!parse_float_token(cursor, x) || !consume_comma(cursor) || !parse_float_token(cursor, y) ||
+        !consume_comma(cursor) || !parse_float_token(cursor, z))
+    {
+        return false;
+    }
+    skip_whitespace(cursor);
+    return *cursor == '\0';
+}
+
+Rml::String stage_option_label(const MapEntry& map) {
+    // TODO: option to show internal name?
+    // return fmt::format("{} ({})", map.mapName, map.mapFile);
+    return map.mapName;
+}
+
+Rml::String stage_label_for_file(const Rml::String& stageFile) {
+    for (const auto& region : gameRegions) {
+        for (const auto& map : region.maps) {
+            if (stageFile == map.mapFile) {
+                return stage_option_label(map);
+            }
+        }
+    }
+    return stageFile;
+}
+
+void populate_stage_picker(Pane& pane, std::function<Rml::String()> getStageFile,
+    std::function<void(const char*)> setStageFile) {
+    pane.clear();
+    for (const auto& region : gameRegions) {
+        pane.add_section(region.regionName);
+        for (const auto& map : region.maps) {
+            pane.add_button(
+                {
+                    .text = stage_option_label(map),
+                    .isSelected = [getStageFile,
+                                      stageFile =
+                                          map.mapFile] { return getStageFile() == stageFile; },
+                },
+                [setStageFile, stageFile = map.mapFile] { setStageFile(stageFile); });
+        }
+    }
 }
 
 Rml::String get_player_name() {
@@ -646,7 +754,113 @@ EditorWindow::EditorWindow() {
     });
 
     add_tab("Location", [this](Rml::Element* content) {
-        // TODO
+        auto& leftPane = add_child<Pane>(content, Pane::Direction::Vertical);
+        auto& rightPane = add_child<Pane>(content, Pane::Direction::Vertical);
+
+        leftPane.add_section("Save Location");
+        leftPane
+            .add_select_button({
+                .key = "Stage",
+                .getValue =
+                    [] {
+                        return stage_label_for_file(fixed_string(get_player_return_place()->mName));
+                    },
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                populate_stage_picker(
+                    rightPane, [] { return fixed_string(get_player_return_place()->mName); },
+                    [](const char* stageFile) {
+                        set_fixed_string(get_player_return_place()->mName, Rml::String(stageFile));
+                    });
+            })
+            .set_disabled(true);
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Room",
+                .getValue = [] { return get_player_return_place()->mRoomNo; },
+                .setValue =
+                    [](int value) { get_player_return_place()->mRoomNo = static_cast<s8>(value); },
+                .min = std::numeric_limits<s8>::min(),
+                .max = std::numeric_limits<s8>::max(),
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Spawn ID",
+                .getValue = [] { return get_player_return_place()->mPlayerStatus; },
+                .setValue =
+                    [](int value) {
+                        get_player_return_place()->mPlayerStatus = static_cast<u8>(value);
+                    },
+                .max = std::numeric_limits<u8>::max(),
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+
+        leftPane.add_section("Horse Location");
+        leftPane
+            .add_child<StringButton>(StringButton::Props{
+                .key = "Horse Position",
+                .getValue =
+                    [] {
+                        const auto* horsePlace = get_horse_place();
+                        return fmt::format("{}, {}, {}", static_cast<float>(horsePlace->mPos.x),
+                            static_cast<float>(horsePlace->mPos.y),
+                            static_cast<float>(horsePlace->mPos.z));
+                    },
+                .setValue =
+                    [](Rml::String value) {
+                        float x = 0.0f;
+                        float y = 0.0f;
+                        float z = 0.0f;
+                        if (parse_vec3(value, x, y, z)) {
+                            auto* horsePlace = get_horse_place();
+                            horsePlace->mPos.x = x;
+                            horsePlace->mPos.y = y;
+                            horsePlace->mPos.z = z;
+                        }
+                    },
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Horse Angle",
+                .getValue = [] { return get_horse_place()->mAngleY; },
+                .setValue = [](int value) { get_horse_place()->mAngleY = static_cast<s16>(value); },
+                .min = std::numeric_limits<s16>::min(),
+                .max = std::numeric_limits<s16>::max(),
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane
+            .add_select_button({
+                .key = "Horse Stage",
+                .getValue =
+                    [] { return stage_label_for_file(fixed_string(get_horse_place()->mName)); },
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                populate_stage_picker(
+                    rightPane, [] { return fixed_string(get_horse_place()->mName); },
+                    [](const char* stageFile) {
+                        set_fixed_string(get_horse_place()->mName, Rml::String(stageFile));
+                    });
+            })
+            .set_disabled(true);
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Horse Room",
+                .getValue = [] { return get_horse_place()->mRoomNo; },
+                .setValue = [](int value) { get_horse_place()->mRoomNo = static_cast<s8>(value); },
+                .min = std::numeric_limits<s8>::min(),
+                .max = std::numeric_limits<s8>::max(),
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Horse Spawn ID",
+                .getValue = [] { return get_horse_place()->mSpawnId; },
+                .setValue = [](int value) { get_horse_place()->mSpawnId = static_cast<u8>(value); },
+                .max = std::numeric_limits<u8>::max(),
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
     });
 
     add_tab("Inventory", [this](Rml::Element* content) {
