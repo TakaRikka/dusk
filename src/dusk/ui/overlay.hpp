@@ -56,6 +56,8 @@ class Overlay : public Document {
 public:
     explicit Overlay(OverlayProps props);
 
+    void show() override;
+    void hide() override;
     void update() override;
     bool focus() override;
 
@@ -71,13 +73,13 @@ private:
         return ref;
     }
 
-    void dismiss();
     void reset_default();
 
     GraphicsOption mOption;
     int mValueMin = 0;
     int mValueMax = 0;
     std::vector<std::unique_ptr<Component> > mComponents;
+    Rml::Element* mRoot;
     bool mDismissed = false;
 };
 

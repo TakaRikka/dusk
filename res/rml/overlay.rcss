@@ -24,8 +24,14 @@ body {
     flex-direction: column;
     justify-content: flex-end;
     align-items: stretch;
-    decorator: linear-gradient(0deg, #151610F2 0%, #151610CC 60%, #00000000 100%);
+    decorator: vertical-gradient(#00000000 #151610F2);
     padding: 48dp 0 40dp 0;
+    filter: opacity(0);
+    transition: filter 0.2s linear-in-out;
+}
+
+.overlay-root[open] {
+    filter: opacity(1);
 }
 
 button {

@@ -18,7 +18,7 @@ const Rml::String kDocumentSource = R"RML(
     <link type="text/rcss" href="res/rml/overlay.rcss" />
 </head>
 <body>
-    <div class="overlay-root">
+    <div id="root" class="overlay-root">
         <div class="overlay">
             <div class="header">
                 <div id="title"></div>
@@ -193,7 +193,7 @@ Overlay::Overlay(OverlayProps props)
             add_component<Button>(returnParent,
                 Button::Props{
                     .text = "Return",
-                    .onPressed = [this](Rml::Event&) { dismiss(); },
+                    .onPressed = [this](Rml::Event&) { pop_document(); },
                 }, "footer-button"
             );
         returnButton.root()->SetClass("return", true);
@@ -208,6 +208,27 @@ Overlay::Overlay(OverlayProps props)
             );
         resetButton.root()->SetClass("reset", true);
     }
+
+    // Hide document after transition completion
+    mRoot = mDocument->GetElementById("root");
+    listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
+        if (event.GetTargetElement() == mRoot &&
+            *mRoot->GetProperty(Rml::PropertyId::Visibility) == Rml::Style::Visibility::Visible &&
+            mDismissed)
+        {
+            Document::hide();
+        }
+    });
+}
+
+void Overlay::show() {
+    Document::show();
+    mRoot->SetAttribute("open", "");
+}
+
+void Overlay::hide() {
+    mRoot->RemoveAttribute("open");
+    mDismissed = true;
 }
 
 void Overlay::update() {
@@ -228,18 +249,10 @@ bool Overlay::focus() {
 
 bool Overlay::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (cmd == NavCommand::Cancel) {
-        dismiss();
+        pop_document();
         return true;
     }
     return Document::handle_nav_command(event, cmd);
-}
-
-void Overlay::dismiss() {
-    if (mDismissed) {
-        return;
-    }
-    mDismissed = true;
-    pop_document();
 }
 
 void Overlay::reset_default() {
