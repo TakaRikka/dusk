@@ -35,8 +35,13 @@ Document::~Document() {
 
 void Document::show() {
     if (mDocument != nullptr) {
-        mDocument->Show();
-        focus();
+        // Attempt to preserve the previously focused element
+        mDocument->Show(Rml::ModalFlag::None, Rml::FocusFlag::Keep);
+        // If nothing is focused, let the document decide the initial focus
+        auto* leaf = mDocument->GetFocusLeafNode();
+        if (leaf == nullptr || leaf == mDocument) {
+            focus();
+        }
     }
 }
 
