@@ -70,7 +70,7 @@ window tab-bar tab {
     transition: decorator 0.1s linear-in-out, opacity 0.1s linear-in-out;
 }
 
-window tab-bar tab.selected {
+window tab-bar tab:selected {
     opacity: 1;
     border-bottom: 4dp #C2A42D;
     font-effect: glow(0dp 4dp 0dp 4dp black);
@@ -193,14 +193,13 @@ button {
     focus: auto;
 }
 
-button:not(:disabled).active,
 button:not(:disabled):hover,
 button:not(:disabled):focus-visible {
     background-color: rgba(204, 184, 119, 20%);
     box-shadow: #C2A42D 0 0 0 2dp;
 }
 
-button:not(:disabled).selected,
+button:not(:disabled):selected,
 button:not(:disabled):active {
     opacity: 1;
     background-color: rgba(204, 184, 119, 40%);
@@ -221,14 +220,13 @@ select-button {
     focus: auto;
 }
 
-select-button:not(:disabled).active,
 select-button:not(:disabled):hover,
 select-button:not(:disabled):focus-visible {
     background-color: rgba(204, 184, 119, 20%);
     box-shadow: #C2A42D 0 0 0 2dp;
 }
 
-select-button:not(:disabled).selected,
+select-button:not(:disabled):selected,
 select-button:not(:disabled):active {
     opacity: 1;
     background-color: rgba(204, 184, 119, 40%);

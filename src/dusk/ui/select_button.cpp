@@ -47,7 +47,7 @@ bool SelectButton::focus() {
 
 void SelectButton::set_selected(bool selected) {
     if (mProps.selected != selected) {
-        mRoot->SetClass("selected", selected);
+        mRoot->SetPseudoClass("selected", selected);
         mProps.selected = selected;
     }
 }

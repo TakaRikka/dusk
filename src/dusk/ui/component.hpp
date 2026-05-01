@@ -46,6 +46,7 @@ public:
     }
 
     Rml::Element* root() const { return mRoot; }
+    bool selected() const { return mRoot->IsPseudoClassSet("selected"); }
 
 protected:
     static Rml::Element* append(Rml::Element* parent, const Rml::String& tag);

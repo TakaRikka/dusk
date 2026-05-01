@@ -57,6 +57,12 @@ void Pane::update() {
 }
 
 bool Pane::focus() {
+    // If there's a selected child, focus that
+    for (const auto& child : mChildren) {
+        if (child->selected() && child->focus()) {
+            return true;
+        }
+    }
     for (const auto& child : mChildren) {
         if (child->focus()) {
             return true;

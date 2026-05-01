@@ -55,7 +55,7 @@ popup tab-bar tab {
     transition: decorator 0.1s linear-in-out, opacity 0.1s linear-in-out;
 }
 
-popup tab-bar tab.selected {
+popup tab-bar tab:selected {
     opacity: 1;
     border-bottom: 4dp #C2A42D;
     font-effect: glow(0dp 4dp 0dp 4dp black);
