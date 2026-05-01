@@ -22,6 +22,7 @@ public:
 protected:
     bool handle_nav_command(NavCommand cmd) override;
     virtual void set_value(Rml::String value) = 0;
+    virtual Rml::String input_value() { return format_value(); }
 
 private:
     void focus_input();

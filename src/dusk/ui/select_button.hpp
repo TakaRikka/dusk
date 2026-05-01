@@ -16,12 +16,6 @@ public:
 
     void set_value_label(const Rml::String& value);
 
-    SelectButton& on_selected(std::function<void(bool)> callback) {
-        return listen(Rml::EventId::Change, [callback = std::move(callback)](Rml::Event& event) {
-            callback(event.GetParameter("selected", false));
-        });
-    }
-
 protected:
     void update_props(Props props);
     virtual bool handle_nav_command(NavCommand cmd);

@@ -20,23 +20,7 @@ SelectButton::SelectButton(Rml::Element* parent, Props props)
     mKeyElem = append(mRoot, "key");
     mValueElem = append(mRoot, "value");
     update_props(std::move(props));
-    listen(Rml::EventId::Click, [this](Rml::Event& event) {
-        if (disabled()) {
-            return;
-        }
-        if (handle_nav_command(NavCommand::Confirm)) {
-            event.StopPropagation();
-        }
-    });
-    listen(Rml::EventId::Keydown, [this](Rml::Event& event) {
-        if (disabled()) {
-            return;
-        }
-        const auto cmd = map_nav_event(event);
-        if (cmd != NavCommand::None && handle_nav_command(cmd)) {
-            event.StopPropagation();
-        }
-    });
+    on_nav_command([this](Rml::Event&, NavCommand cmd) { return handle_nav_command(cmd); });
 }
 
 void SelectButton::set_value_label(const Rml::String& value) {
@@ -56,7 +40,7 @@ void SelectButton::update_props(Props props) {
 
 bool SelectButton::handle_nav_command(NavCommand cmd) {
     if (cmd == NavCommand::Confirm) {
-        set_selected(!selected());
+        mRoot->DispatchEvent(Rml::EventId::Submit, {});
         return true;
     }
     return false;

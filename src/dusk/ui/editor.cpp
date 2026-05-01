@@ -3,6 +3,7 @@
 #include <RmlUi/Core.h>
 #include <fmt/format.h>
 
+#include "bool_button.hpp"
 #include "button.hpp"
 #include "d/actor/d_a_player.h"
 #include "d/d_kankyo.h"
@@ -1899,17 +1900,12 @@ EditorWindow::EditorWindow() {
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Options");
-        // TODO: replace with generic bool component based on ConfigBoolSelect
         leftPane
-            .add_button(
-                {
-                    .text = "Enable Vibration",
-                    .isSelected = [] { return get_player_config()->getVibration() != 0; },
-                },
-                [] {
-                    const bool enabled = get_player_config()->getVibration() != 0;
-                    get_player_config()->setVibration(enabled ? 0 : 1);
-                })
+            .add_child<BoolButton>(BoolButton::Props{
+                .key = "Enable Vibration",
+                .getValue = [] { return get_player_config()->getVibration() != 0; },
+                .setValue = [](bool value) { get_player_config()->setVibration(value); },
+            })
             .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
         leftPane
             .add_select_button({

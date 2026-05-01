@@ -36,7 +36,7 @@ void BaseStringButton::start_editing() {
         return;
     }
     mInputElem->SetAttribute("type", mType);
-    mInputElem->SetAttribute("value", format_value());
+    mInputElem->SetAttribute("value", input_value());
     if (mMaxLength > -1) {
         mInputElem->SetAttribute("maxlength", mMaxLength);
     }
@@ -49,8 +49,9 @@ void BaseStringButton::start_editing() {
     // mobile keyboard placement gets a valid caret rectangle.
     mPendingInputFocusFrames = 2;
 
-    // Mark button as selected to indicate "active"
-    set_selected(true);
+    // Dispatch a submit event so the pane can handle item selection
+    // However, mark it as "handled" to ensure that we don't steal focus away
+    mRoot->DispatchEvent(Rml::EventId::Submit, {{"handled", Rml::Variant{true}}});
 
     // Register input listeners
     mInputListeners.emplace_back(std::make_unique<ScopedEventListener>(
@@ -85,8 +86,10 @@ bool BaseStringButton::handle_nav_command(NavCommand cmd) {
         }
         return true;
     } else if (cmd == NavCommand::Cancel) {
-        request_stop_editing(false, true);
-        return true;
+        if (mInputElem != nullptr) {
+            request_stop_editing(false, true);
+            return true;
+        }
     }
     return false;
 }

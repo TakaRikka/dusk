@@ -31,13 +31,13 @@ Button& Button::on_pressed(ButtonCallback callback) {
     if (!callback) {
         return *this;
     }
-    listen(Rml::EventId::Click, [callback](Rml::Event&) { callback(); });
-    listen(Rml::EventId::Keydown, [callback = std::move(callback)](Rml::Event& event) {
-        const auto cmd = map_nav_event(event);
+    // TODO: convert this to a FluentComponent method?
+    on_nav_command([callback = std::move(callback)](Rml::Event&, NavCommand cmd) {
         if (cmd == NavCommand::Confirm) {
             callback();
-            event.StopPropagation();
+            return true;
         }
+        return false;
     });
     return *this;
 }

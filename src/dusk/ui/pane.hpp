@@ -46,7 +46,6 @@ public:
 private:
     Type mType;
     bool finalized = false;
-    int mSelectedItem = -1;
 };
 
 }  // namespace dusk::ui

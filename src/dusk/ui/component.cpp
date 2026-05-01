@@ -43,7 +43,6 @@ void Component::set_selected(bool value) {
         return;
     }
     mRoot->SetPseudoClass("selected", value);
-    mRoot->DispatchEvent(Rml::EventId::Change, {{"selected", Rml::Variant{value}}});
 }
 
 void Component::set_disabled(bool value) {

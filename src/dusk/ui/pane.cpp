@@ -64,27 +64,18 @@ Pane::Pane(Rml::Element* parent, Type type) : FluentComponent(createRoot(parent)
     });
 
     if (type == Type::Controlled) {
-        // Listen for selection change events
-        listen(Rml::EventId::Change, [this](Rml::Event& event) {
-            const auto it = std::find_if(event.GetParameters().begin(), event.GetParameters().end(),
-                [](const auto& param) { return param.first == "selected"; });
-            if (it != event.GetParameters().end()) {
-                const auto selected = it->second.Get<bool>();
-                int childIndex = -1;
-                for (int i = 0; i < mChildren.size(); ++i) {
-                    if (event.GetTargetElement() == mChildren[i]->root()) {
-                        childIndex = i;
-                    }
+        // For controlled panes, handle SelectButton Submit events for item selection
+        listen(Rml::EventId::Submit, [this](Rml::Event& event) {
+            int childIndex = -1;
+            for (int i = 0; i < mChildren.size(); ++i) {
+                if (event.GetTargetElement() == mChildren[i]->root()) {
+                    childIndex = i;
                 }
-                if (childIndex != -1) {
-                    if (selected) {
-                        set_selected_item(childIndex);
-                    } else if (childIndex == mSelectedItem) {
-                        set_selected_item(-1);
-                    }
-                } else {
-                    set_selected_item(-1);
-                }
+            }
+            set_selected_item(childIndex);
+            // If the selection was handled locally, don't allow it to bubble up to window
+            if (event.GetParameter("handled", false)) {
+                event.StopPropagation();
             }
         });
     }
@@ -96,17 +87,11 @@ void Pane::update() {
 }
 
 void Pane::set_selected_item(int index) {
-    if (mSelectedItem == index) {
+    if (mType == Type::Uncontrolled) {
         return;
     }
-    if (mSelectedItem >= 0 && mSelectedItem < mChildren.size()) {
-        mChildren[mSelectedItem]->set_selected(false);
-    }
-    if (index >= 0 && index < mChildren.size()) {
-        mSelectedItem = index;
-        mChildren[index]->set_selected(true);
-    } else {
-        mSelectedItem = -1;
+    for (int i = 0; i < mChildren.size(); ++i) {
+        mChildren[i]->set_selected(i == index);
     }
 }
 
@@ -117,6 +102,7 @@ bool Pane::focus() {
             return true;
         }
     }
+    // Otherwise, focus the first focusable child
     for (const auto& child : mChildren) {
         if (child->focus()) {
             return true;

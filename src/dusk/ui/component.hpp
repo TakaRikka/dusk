@@ -1,6 +1,7 @@
 #pragma once
 
 #include "event.hpp"
+#include "ui.hpp"
 
 #include <RmlUi/Core.h>
 
@@ -72,6 +73,24 @@ public:
                     callback(event);
                 }
             });
+    }
+
+    Derived& on_nav_command(std::function<bool(Rml::Event&, NavCommand)> callback) {
+        listen(Rml::EventId::Click, [this, callback](Rml::Event& event) {
+            if (!disabled() && callback(event, NavCommand::Confirm)) {
+                event.StopPropagation();
+            }
+        });
+        listen(Rml::EventId::Keydown, [this, callback = std::move(callback)](Rml::Event& event) {
+            if (disabled()) {
+                return;
+            }
+            const auto cmd = map_nav_event(event);
+            if (cmd != NavCommand::None && callback(event, cmd)) {
+                event.StopPropagation();
+            }
+        });
+        return static_cast<Derived&>(*this);
     }
 };
 

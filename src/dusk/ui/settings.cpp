@@ -3,15 +3,15 @@
 #include <fmt/format.h>
 
 #include "aurora/gfx.h"
+#include "bool_button.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/config.hpp"
 #include "dusk/livesplit.h"
 #include "m_Do/m_Do_main.h"
+#include "number_button.hpp"
 #include "overlay.hpp"
 #include "pane.hpp"
 #include "ui.hpp"
-
-#include <climits>
 
 namespace dusk::ui {
 namespace {
@@ -42,192 +42,46 @@ void reset_for_speedrun_mode() {
     getSettings().game.enableTurboKeybind.setValue(false);
 }
 
-}  // namespace
+const Rml::String kInternalResolutionHelpText =
+    "Configure the resolution used for rendering the game. Higher values are more demanding on "
+    "your graphics hardware.";
+const Rml::String kShadowResolutionHelpText =
+    "Configure the shadow-map resolution. Higher values improve shadow quality but increase GPU "
+    "and memory usage.";
 
-template <typename T>
-struct ConfigProps {
+struct ConfigBoolProps {
     Rml::String key;
-    ConfigVar<T>* value;
-    std::function<void(T)> onChange;
-    std::function<bool()> isDisabled;
     Rml::String helpText;
-    Pane* rightPane = nullptr;
+    std::function<void(bool)> onChange;
+    std::function<bool()> isDisabled;
 };
 
-template <typename T>
-class ConfigSelect : public SelectButton {
-public:
-    using Props = ConfigProps<T>;
+SelectButton& config_bool_select(
+    Pane& leftPane, Pane& rightPane, ConfigVar<bool>& var, ConfigBoolProps props) {
+    return leftPane
+        .add_child<BoolButton>(BoolButton::Props{
+            .key = std::move(props.key),
+            .getValue = [&var] { return var.getValue(); },
+            .setValue =
+                [&var, callback = std::move(props.onChange)](bool value) {
+                    if (value == var.getValue()) {
+                        return;
+                    }
+                    var.setValue(value);
+                    config::Save();
+                    if (callback) {
+                        callback(value);
+                    }
+                },
+            .isDisabled = std::move(props.isDisabled),
+        })
+        .on_focus([&rightPane, helpText = std::move(props.helpText)](Rml::Event&) {
+            rightPane.clear();
+            rightPane.add_rml(helpText);
+        });
+}
 
-    ConfigSelect(Rml::Element* parent, Props props)
-        : SelectButton(parent, {std::move(props.key)}), mVar(props.value),
-          mOnChange(std::move(props.onChange)), mIsDisabled(std::move(props.isDisabled)),
-          mHelpText(std::move(props.helpText)), mRightPane(props.rightPane) {
-        if (!mHelpText.empty() && mRightPane != nullptr) {
-            listen(Rml::EventId::Focus, [this](Rml::Event&) {
-                mRightPane->clear();
-                mRightPane->add_rml(mHelpText);
-            });
-            listen(Rml::EventId::Mouseover, [this](Rml::Event&) {
-                mRightPane->clear();
-                mRightPane->add_rml(mHelpText);
-            });
-        }
-    }
-
-    void update() override {
-        if (mIsDisabled) {
-            set_disabled(mIsDisabled());
-        }
-        set_value_label(get_value());
-        SelectButton::update();
-    }
-
-protected:
-    virtual Rml::String get_value() = 0;
-
-    void set_value(T newValue) {
-        if (mVar->getValue() == newValue) {
-            return;
-        }
-        mVar->setValue(newValue);
-        if (mOnChange) {
-            mOnChange(newValue);
-        }
-        config::Save();
-    }
-
-    ConfigVar<T>* mVar;
-    std::function<void(T)> mOnChange;
-    std::function<bool()> mIsDisabled;
-    Rml::String mHelpText;
-    Pane* mRightPane;
-};
-
-class ConfigBoolSelect : public ConfigSelect<bool> {
-public:
-    ConfigBoolSelect(Rml::Element* parent, Props props) : ConfigSelect(parent, std::move(props)) {}
-
-protected:
-    Rml::String get_value() override { return mVar->getValue() ? "On" : "Off"; }
-    bool handle_nav_command(NavCommand cmd) override {
-        if (cmd == NavCommand::Confirm || cmd == NavCommand::Left || cmd == NavCommand::Right) {
-            set_value(!mVar->getValue());
-            return true;
-        }
-        return false;
-    }
-};
-
-class ConfigIntSelect : public ConfigSelect<int> {
-public:
-    struct Props {
-        Rml::String key;
-        ConfigVar<int>* value;
-        std::function<void(int)> onChange;
-        std::function<bool()> isDisabled;
-        Rml::String helpText;
-        Pane* rightPane = nullptr;
-        int min = 0;
-        int max = INT_MAX;
-        int step = 1;
-        Rml::String prefix;
-        Rml::String suffix;
-    };
-
-    ConfigIntSelect(Rml::Element* parent, Props props)
-        : ConfigSelect(parent,
-              {
-                  .key = std::move(props.key),
-                  .value = props.value,
-                  .onChange = std::move(props.onChange),
-                  .isDisabled = std::move(props.isDisabled),
-                  .helpText = std::move(props.helpText),
-                  .rightPane = props.rightPane,
-              }),
-          mMin(props.min), mMax(props.max), mStep(props.step), mPrefix(std::move(props.prefix)),
-          mSuffix(std::move(props.suffix)) {}
-
-protected:
-    Rml::String get_value() override {
-        return fmt::format("{}{}{}", mPrefix, mVar->getValue(), mSuffix);
-    }
-
-    bool handle_nav_command(NavCommand cmd) override {
-        if (cmd == NavCommand::Left) {
-            set_value(std::clamp(mVar->getValue() - mStep, mMin, mMax));
-            return true;
-        } else if (cmd == NavCommand::Right) {
-            set_value(std::clamp(mVar->getValue() + mStep, mMin, mMax));
-            return true;
-        }
-        return false;
-    }
-
-private:
-    int mMin;
-    int mMax;
-    int mStep;
-    Rml::String mPrefix;
-    Rml::String mSuffix;
-};
-
-class ConfigOverlaySelect : public ConfigSelect<int> {
-public:
-    struct Props {
-        Rml::String key;
-        ConfigVar<int>* value;
-        GraphicsOption option;
-        Rml::String title;
-        int min = 0;
-        int max = 0;
-        Rml::String helpText;
-        Pane* rightPane = nullptr;
-        std::function<bool()> isDisabled;
-    };
-
-    ConfigOverlaySelect(Rml::Element* parent, Props props)
-        : ConfigSelect<int>(parent,
-              {
-                  .key = std::move(props.key),
-                  .value = props.value,
-                  .onChange = {},
-                  .isDisabled = std::move(props.isDisabled),
-                  .helpText = std::move(props.helpText),
-                  .rightPane = props.rightPane,
-              }),
-          mOption(props.option), mTitle(std::move(props.title)), mValueMin(props.min),
-          mValueMax(props.max) {}
-
-protected:
-    Rml::String get_value() override {
-        return format_graphics_setting_value(mOption, mVar->getValue());
-    }
-
-    bool handle_nav_command(NavCommand cmd) override {
-        if (cmd == NavCommand::Confirm) {
-            open_overlay();
-            return true;
-        }
-        return false;
-    }
-
-private:
-    void open_overlay() {
-        push_document(std::make_unique<Overlay>(OverlayProps{
-            .option = mOption,
-            .title = mTitle,
-            .helpText = mHelpText,
-            .valueMin = mValueMin,
-            .valueMax = mValueMax,
-        }));
-    }
-
-    GraphicsOption mOption;
-    Rml::String mTitle;
-    int mValueMin = 0;
-    int mValueMax = 0;
-};
+}  // namespace
 
 SettingsWindow::SettingsWindow() {
     add_tab("Audio", [this](Rml::Element* content) {
@@ -235,38 +89,43 @@ SettingsWindow::SettingsWindow() {
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Volume");
-        leftPane.add_child<ConfigIntSelect>(ConfigIntSelect::Props{
-            .key = "Master Volume",
-            .value = &getSettings().audio.masterVolume,
-            .onChange = [](int value) { audio::SetMasterVolume(value / 100.f); },
-            .helpText = "Adjusts the volume of all sounds in the game.",
-            .rightPane = &rightPane,
-            .max = 100,
-            .suffix = "%",
-        });
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Master Volume",
+                .getValue = [] { return getSettings().audio.masterVolume.getValue(); },
+                .setValue =
+                    [](int value) {
+                        getSettings().audio.masterVolume.setValue(value);
+                        config::Save();
+                        audio::SetMasterVolume(value / 100.f);
+                    },
+                .max = 100,
+                .suffix = "%",
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                rightPane.clear();
+                rightPane.add_text("Adjusts the volume of all sounds in the game.");
+            });
 
         leftPane.add_section("Effects");
-        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
-            .key = "Enable Reverb",
-            .value = &getSettings().audio.enableReverb,
-            .onChange = [](bool value) { audio::SetEnableReverb(value); },
-            .helpText = "Enables the reverb effect in game audio.",
-            .rightPane = &rightPane,
-        });
+        config_bool_select(leftPane, rightPane, getSettings().audio.enableReverb,
+            {
+                .key = "Enable Reverb",
+                .helpText = "Enables the reverb effect in game audio.",
+                .onChange = [](bool value) { audio::SetEnableReverb(value); },
+            });
 
         leftPane.add_section("Tweaks");
-        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
-            .key = "No Low HP Sound",
-            .value = &getSettings().game.noLowHpSound,
-            .helpText = "Disable the beeping sound when having low health.",
-            .rightPane = &rightPane,
-        });
-        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
-            .key = "Non-Stop Midna's Lament",
-            .value = &getSettings().game.midnasLamentNonStop,
-            .helpText = "Prevents enemy music while Midna's Lament is playing.",
-            .rightPane = &rightPane,
-        });
+        config_bool_select(leftPane, rightPane, getSettings().game.noLowHpSound,
+            {
+                .key = "No Low HP Sound",
+                .helpText = "Disable the beeping sound when having low health.",
+            });
+        config_bool_select(leftPane, rightPane, getSettings().game.midnasLamentNonStop,
+            {
+                .key = "Non-Stop Midna's Lament",
+                .helpText = "Prevents enemy music while Midna's Lament is playing.",
+            });
     });
 
     add_tab("Cheats", [this](Rml::Element* content) {
@@ -275,13 +134,12 @@ SettingsWindow::SettingsWindow() {
 
         auto addCheat = [&](const Rml::String& key, ConfigVar<bool>& value,
                             const Rml::String& helpText) {
-            leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
-                .key = key,
-                .value = &value,
-                .isDisabled = [] { return getSettings().game.speedrunMode; },
-                .helpText = helpText,
-                .rightPane = &rightPane,
-            });
+            config_bool_select(leftPane, rightPane, value,
+                {
+                    .key = key,
+                    .helpText = helpText,
+                    .isDisabled = [] { return getSettings().game.speedrunMode; },
+                });
         };
 
         leftPane.add_section("Resources");
@@ -320,23 +178,20 @@ SettingsWindow::SettingsWindow() {
 
         auto addOption = [&](const Rml::String& key, ConfigVar<bool>& value,
                              const Rml::String& helpText) {
-            leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
-                .key = key,
-                .value = &value,
-                .helpText = helpText,
-                .rightPane = &rightPane,
-            });
+            config_bool_select(leftPane, rightPane, value,
+                {
+                    .key = key,
+                    .helpText = helpText,
+                });
         };
-
         auto addSpeedrunDisabledOption = [&](const Rml::String& key, ConfigVar<bool>& value,
                                              const Rml::String& helpText) {
-            leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
-                .key = key,
-                .value = &value,
-                .isDisabled = [] { return getSettings().game.speedrunMode; },
-                .helpText = helpText,
-                .rightPane = &rightPane,
-            });
+            config_bool_select(leftPane, rightPane, value,
+                {
+                    .key = key,
+                    .helpText = helpText,
+                    .isDisabled = [] { return getSettings().game.speedrunMode; },
+                });
         };
 
         leftPane.add_section("General");
@@ -351,16 +206,24 @@ SettingsWindow::SettingsWindow() {
             "Enables rotating Link in the collection menu with the C-Stick.");
 
         leftPane.add_section("Difficulty");
-        leftPane.add_child<ConfigIntSelect>(ConfigIntSelect::Props{
-            .key = "Damage Multiplier",
-            .value = &getSettings().game.damageMultiplier,
-            .isDisabled = [] { return getSettings().game.speedrunMode; },
-            .helpText = "Multiplies incoming damage.",
-            .rightPane = &rightPane,
-            .min = 1,
-            .max = 8,
-            .prefix = "x",
-        });
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Damage Multiplier",
+                .getValue = [] { return getSettings().game.damageMultiplier.getValue(); },
+                .setValue =
+                    [](int value) {
+                        getSettings().game.damageMultiplier.setValue(value);
+                        config::Save();
+                    },
+                .isDisabled = [] { return getSettings().game.speedrunMode; },
+                .min = 1,
+                .max = 8,
+                .prefix = "x",
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                rightPane.clear();
+                rightPane.add_text("Multiplies incoming damage.");
+            });
         addSpeedrunDisabledOption(
             "Instant Death", getSettings().game.instantDeath, "Any hit will instantly kill you.");
         addSpeedrunDisabledOption("No Heart Drops", getSettings().game.noHeartDrops,
@@ -396,29 +259,27 @@ SettingsWindow::SettingsWindow() {
             "Transform instantly by pressing R and Y simultaneously.");
 
         leftPane.add_section("Speedrunning");
-        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
-            .key = "Speedrun Mode",
-            .value = &getSettings().game.speedrunMode,
-            .onChange = [](bool) { reset_for_speedrun_mode(); },
-            .helpText = "Enables speedrunning options while restricting certain "
-                        "gameplay modifiers.",
-            .rightPane = &rightPane,
-        });
-        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
-            .key = "LiveSplit Connection",
-            .value = &getSettings().game.liveSplitEnabled,
-            .onChange =
-                [](bool enabled) {
-                    if (enabled) {
-                        speedrun::connectLiveSplit();
-                    } else {
-                        speedrun::disconnectLiveSplit();
-                    }
-                },
-            .isDisabled = [] { return !getSettings().game.speedrunMode; },
-            .helpText = "Connect to LiveSplit server on localhost:16834.",
-            .rightPane = &rightPane,
-        });
+        config_bool_select(leftPane, rightPane, getSettings().game.speedrunMode,
+            {
+                .key = "Speedrun Mode",
+                .helpText =
+                    "Enables speedrunning options while restricting certain gameplay modifiers.",
+                .onChange = [](bool) { reset_for_speedrun_mode(); },
+            });
+        config_bool_select(leftPane, rightPane, getSettings().game.liveSplitEnabled,
+            {
+                .key = "LiveSplit Connection",
+                .helpText = "Connect to LiveSplit server on localhost:16834.",
+                .onChange =
+                    [](bool enabled) {
+                        if (enabled) {
+                            speedrun::connectLiveSplit();
+                        } else {
+                            speedrun::disconnectLiveSplit();
+                        }
+                    },
+                .isDisabled = [] { return !getSettings().game.speedrunMode; },
+            });
     });
 
     add_tab("Graphics", [this](Rml::Element* content) {
@@ -438,71 +299,99 @@ SettingsWindow::SettingsWindow() {
             VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
             VICenterWindow();
         });
-        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
-            .key = "Enable VSync",
-            .value = &getSettings().video.enableVsync,
-            .onChange = [](bool value) { aurora_enable_vsync(value); },
-            .helpText = "Synchronizes the frame rate to your monitor's refresh rate.",
-            .rightPane = &rightPane,
-        });
-        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
-            .key = "Lock 4:3 Aspect Ratio",
-            .value = &getSettings().video.lockAspectRatio,
-            .onChange =
-                [](bool value) {
-                    AuroraSetViewportPolicy(value ? AURORA_VIEWPORT_FIT : AURORA_VIEWPORT_STRETCH);
-                },
-            .helpText = "Lock the game's aspect ratio to the original.",
-            .rightPane = &rightPane,
-        });
+        config_bool_select(leftPane, rightPane, getSettings().video.enableVsync,
+            {
+                .key = "Enable VSync",
+                .helpText = "Synchronizes the frame rate to your monitor's refresh rate.",
+                .onChange = [](bool value) { aurora_enable_vsync(value); },
+            });
+        config_bool_select(leftPane, rightPane, getSettings().video.lockAspectRatio,
+            {
+                .key = "Lock 4:3 Aspect Ratio",
+                .helpText = "Lock the game's aspect ratio to the original.",
+                .onChange =
+                    [](bool value) {
+                        AuroraSetViewportPolicy(
+                            value ? AURORA_VIEWPORT_FIT : AURORA_VIEWPORT_STRETCH);
+                    },
+            });
 
         leftPane.add_section("Resolution");
-        leftPane.add_child<ConfigOverlaySelect>(ConfigOverlaySelect::Props{
-            .key = "Internal Resolution",
-            .value = &getSettings().game.internalResolutionScale,
-            .option = GraphicsOption::InternalResolution,
-            .title = "Internal Resolution",
-            .min = 0,
-            .max = 12,
-            .helpText =
-                "Configure the resolution used for rendering the game. Higher values are more "
-                "demanding on your graphics hardware.",
-            .rightPane = &rightPane,
-        });
-        leftPane.add_child<ConfigOverlaySelect>(ConfigOverlaySelect::Props{
-            .key = "Shadow Resolution",
-            .value = &getSettings().game.shadowResolutionMultiplier,
-            .option = GraphicsOption::ShadowResolution,
-            .title = "Shadow Resolution",
-            .min = 1,
-            .max = 8,
-            .helpText =
-                "Configure the shadow-map resolution. Higher values improve shadow quality but "
-                "increase GPU and memory usage.",
-            .rightPane = &rightPane,
-        });
+        leftPane
+            .add_select_button({
+                .key = "Internal Resolution",
+                .getValue =
+                    [] {
+                        return format_graphics_setting_value(GraphicsOption::InternalResolution,
+                            getSettings().game.internalResolutionScale.getValue());
+                    },
+            })
+            .on_nav_command([](Rml::Event&, NavCommand cmd) {
+                if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
+                    cmd == NavCommand::Right) {
+                    push_document(std::make_unique<Overlay>(OverlayProps{
+                        .option = GraphicsOption::InternalResolution,
+                        .title = "Internal Resolution",
+                        .helpText = kInternalResolutionHelpText,
+                        .valueMin = 0,
+                        .valueMax = 12,
+                    }));
+                    return true;
+                }
+                return false;
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                rightPane.clear();
+                rightPane.add_text(kInternalResolutionHelpText);
+            });
+        leftPane
+            .add_select_button({
+                .key = "Shadow Resolution",
+                .getValue =
+                    [] {
+                        return format_graphics_setting_value(GraphicsOption::ShadowResolution,
+                            getSettings().game.shadowResolutionMultiplier.getValue());
+                    },
+            })
+            .on_nav_command([](Rml::Event&, NavCommand cmd) {
+                if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
+                    cmd == NavCommand::Right) {
+                    push_document(std::make_unique<Overlay>(OverlayProps{
+                        .option = GraphicsOption::ShadowResolution,
+                        .title = "Shadow Resolution",
+                        .helpText = kShadowResolutionHelpText,
+                        .valueMin = 0,
+                        .valueMax = 8,
+                    }));
+                    return true;
+                }
+                return false;
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                rightPane.clear();
+                rightPane.add_text(kShadowResolutionHelpText);
+            });
 
         leftPane.add_section("Post-Processing");
         // TODO: Bloom
         // TODO: Bloom Brightness
 
         leftPane.add_section("Rendering");
-        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
-            .key = "Unlock Framerate",
-            .value = &getSettings().game.enableFrameInterpolation,
-            .helpText =
-                "Uses inter-frame interpolation to enable higher frame rates.<br/><br/>Visual "
-                "artifacts, animation glitches, or instability may occur.",
-            .rightPane = &rightPane,
-        });
-        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
-            .key = "Enable Depth of Field",
-            .value = &getSettings().game.enableDepthOfField,
-        });
-        leftPane.add_child<ConfigBoolSelect>(ConfigBoolSelect::Props{
-            .key = "Enable Mini-Map Shadows",
-            .value = &getSettings().game.enableMapBackground,
-        });
+        config_bool_select(leftPane, rightPane, getSettings().game.enableFrameInterpolation,
+            {
+                .key = "Unlock Framerate",
+                .helpText =
+                    "Uses inter-frame interpolation to enable higher frame rates.<br/><br/>Visual "
+                    "artifacts, animation glitches, or instability may occur.",
+            });
+        config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
+            {
+                .key = "Enable Depth of Field",
+            });
+        config_bool_select(leftPane, rightPane, getSettings().game.enableMapBackground,
+            {
+                .key = "Enable Mini-Map Shadows",
+            });
     });
 }
 

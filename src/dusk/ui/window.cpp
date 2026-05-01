@@ -73,18 +73,16 @@ Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("w
     });
 
     // If an item is selected in a pane, focus the next pane in the tree
-    listen(mRoot, Rml::EventId::Change, [this](Rml::Event& event) {
-        if (event.GetParameter("selected", false)) {
-            int paneIndex = -1;
-            for (int i = 0; i < mContentComponents.size(); i++) {
-                if (mContentComponents[i]->contains(event.GetTargetElement())) {
-                    paneIndex = i;
-                    break;
-                }
+    listen(mRoot, Rml::EventId::Submit, [this](Rml::Event& event) {
+        int paneIndex = -1;
+        for (int i = 0; i < mContentComponents.size(); i++) {
+            if (mContentComponents[i]->contains(event.GetTargetElement())) {
+                paneIndex = i;
+                break;
             }
-            if (paneIndex >= 0 && paneIndex < mContentComponents.size() - 1) {
-                mContentComponents[paneIndex + 1]->focus();
-            }
+        }
+        if (paneIndex >= 0 && paneIndex < mContentComponents.size() - 1) {
+            mContentComponents[paneIndex + 1]->focus();
         }
     });
 }

@@ -39,6 +39,7 @@ Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("pop
     mTabBar->add_tab("Reset", [this] {
         JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
         mTabBar->set_active_tab(-1);
+        hide();
     });
     mTabBar->add_tab("Exit", [] { IsRunning = false; });
 
