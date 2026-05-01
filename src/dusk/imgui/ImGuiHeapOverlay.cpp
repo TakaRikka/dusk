@@ -180,9 +180,9 @@ namespace dusk {
     void ShowHeapDetailed(JKRHeap* heap, OpenHeapData& data, bool& open) {
         char title[128];
         const char* name = data.Safe ? heap->getName() : "INVALID";
-        snprintf(title, sizeof(title), "Heap %s##%p", heap->getName(), static_cast<const void*>(heap));
+        snprintf(title, sizeof(title), "Heap %s##%p", name, static_cast<const void*>(heap));
 
-        if (!ImGui::Begin(name, &open)) {
+        if (!ImGui::Begin(title, &open)) {
             ImGui::End();
             return;
         }
@@ -195,7 +195,7 @@ namespace dusk {
 
         heap->lock();
 
-        ImGui::Text("Name: %s", heap->getName());
+        ImGui::Text("Name: %s", name);
         const auto size = BytesToString(heap->getSize());
         const auto freeSize = BytesToString(heap->getFreeSize());
         ImGui::Text("Size: %08X (%s), free: %08X (%s)", heap->getSize(), size.c_str(), heap->getFreeSize(), freeSize.c_str());

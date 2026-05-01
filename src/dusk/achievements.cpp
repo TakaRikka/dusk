@@ -335,18 +335,13 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 false, 0, 0, false
             },
             [](Achievement& a, json&) {
-                static int titleNoDemoFrames = 0;
                 if (fopAcM_SearchByName(fpcNm_TITLE_e) == nullptr) {
-                    titleNoDemoFrames = 0;
                     return;
                 }
-                const auto* link = static_cast<const daAlink_c*>(daPy_getPlayerActorClass());
-                if (link != nullptr && dDemo_c::getMode() == 0) {
-                    if (++titleNoDemoFrames >= 60) {
+                const auto* player = static_cast<const daPy_py_c*>(daPy_getPlayerActorClass());
+
+                if (player != nullptr && player->mDemo.getDemoMode() == 1) {
                         a.progress = 1;
-                    }
-                } else {
-                    titleNoDemoFrames = 0;
                 }
             },
             {}
@@ -409,6 +404,41 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 }
                 const int64_t ticks = (static_cast<int64_t>(OSGetTime()) - dComIfGs_getSaveStartTime()) + dComIfGs_getSaveTotalTime();
                 if (ticks / OS_TIMER_CLOCK < 4 * 3600) {
+                    a.progress = 1;
+                }
+            },
+            {}
+        },
+        {
+            {
+                "email_me",
+                "Email Me",
+                "Read a letter during the Dark Beast Ganon fight.",
+                AchievementCategory::Misc,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                void* dbgExists = fopAcM_SearchByName(fpcNm_B_MGN_e);
+                if (dbgExists && AchievementSystem::get().hasSignal("open_letter")) {
+                    a.progress = 1;
+                }
+            },
+            {}
+        },
+        {
+            {
+                "heavy-hitter",
+                "Heavy Hitter",
+                "Wear the Iron Boots during the end credits.",
+                AchievementCategory::Misc,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                const auto* link = static_cast<const daAlink_c*>(daPy_getPlayerActorClass());
+                if (link == nullptr || link->mProcID != daAlink_c::PROC_GANON_FINISH) {
+                    return;
+                }
+                if (daPy_getPlayerActorClass()->checkEquipHeavyBoots()) {
                     a.progress = 1;
                 }
             },

@@ -1987,13 +1987,6 @@ bool jmessage_tSequenceProcessor::do_isReady() {
     }
     #endif
 
-#if TARGET_PC
-    if (dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)) {
-        field_0xb2 = 1;
-        pReference->setSendTimer(0);
-    }
-#endif
-
     if (dComIfGp_checkMesgBgm()) {
         bool isItemMusicPlaying = true;
         if (mDoAud_checkPlayingSubBgmFlag() != Z2BGM_ITEM_GET &&
@@ -2066,7 +2059,7 @@ bool jmessage_tSequenceProcessor::do_isReady() {
             case 0:
             case 5:
             case 6:
-                if (mDoCPd_c::getTrigA(PAD_1) || field_0xb2 != 0) {
+                if (mDoCPd_c::getTrigA(PAD_1) || field_0xb2 != 0 IF_DUSK(|| (dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)))) {
                     field_0xa4 = 0;
                     pReference->onBatchFlag();
                     pReference->setCharCnt(D_MSG_CLASS_CHAR_CNT_MAX);

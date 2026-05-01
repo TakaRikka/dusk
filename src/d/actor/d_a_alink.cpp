@@ -4962,13 +4962,16 @@ int daAlink_c::create() {
 
         setArcName(checkWolf());
         setOriginalHeap(&mpArcHeap, 0xA2800);
+        JKRHEAP_NAME(mpArcHeap, "Alink ArcHeap");
         if (dComIfG_resLoad(&mPhaseReq, mArcName, mpArcHeap) != cPhs_COMPLEATE_e) {
             return cPhs_INIT_e;
         }
 
         setShieldArcName();
         setOriginalHeap(&mpShieldArcHeap, 0x7000);
-        if (dComIfG_resLoad(&mShieldPhaseReq, mShieldArcName, mpShieldArcHeap) != cPhs_COMPLEATE_e) {
+        JKRHEAP_NAME(mpShieldArcHeap, "Alink ShieldArcHeap");
+        if (dComIfG_resLoad(&mShieldPhaseReq, mShieldArcName, mpShieldArcHeap) != cPhs_COMPLEATE_e)
+        {
             return cPhs_INIT_e;
         }
 

@@ -1487,7 +1487,7 @@ void dCamera_c::CalcTrimSize() {
             mTrimHeight += -mTrimHeight * 0.25f;
             break;
         case 2:
-#if WIDESCREEN_SUPPORT
+#if !TARGET_PC && WIDESCREEN_SUPPORT
             if (mDoGph_gInf_c::isWide() && mDoGph_gInf_c::isWideZoom()) {
                 mTrimHeight += (16.0f - mTrimHeight) * 0.25f;
                 break;
@@ -11154,12 +11154,25 @@ static int camera_draw(camera_process_class* i_this) {
     }
 #endif
 
-    int trim_height = body->TrimHeight();
-
 #if TARGET_PC
+    auto trim_height = body->TrimHeight();
+
+    if (mDoGph_gInf_c::isWideZoom()) {
+        const auto target_ar = FB_WIDTH / (FB_HEIGHT - trim_height * 2.0f);
+        const auto current_ar = mDoGph_gInf_c::m_safeWidthF / mDoGph_gInf_c::m_safeHeightF;
+
+        if (current_ar < target_ar) {
+            trim_height = FB_HEIGHT / 2.0f * (1.0f - current_ar / target_ar);
+        } else {
+            trim_height = 0.0f;
+        }
+    }
+
     trim_height *= viewport->height / FB_HEIGHT;
     window->setScissor(0.0f, trim_height, viewport->width, viewport->height - trim_height * 2.0f);
 #else
+    int trim_height = body->TrimHeight();
+
     window->setScissor(0.0f, trim_height, FB_WIDTH, FB_HEIGHT - trim_height * 2.0f);
 #endif
 
