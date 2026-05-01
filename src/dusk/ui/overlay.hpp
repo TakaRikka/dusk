@@ -50,7 +50,6 @@ struct OverlayProps {
     Rml::String helpText;
     int valueMin = 0;
     int valueMax = 0;
-    Rml::ElementDocument* openerDocument = nullptr;
 };
 
 class Overlay : public Document {
@@ -78,7 +77,6 @@ private:
     GraphicsOption mOption;
     int mValueMin = 0;
     int mValueMax = 0;
-    Rml::ElementDocument* mOpenerDocument = nullptr;
     std::vector<std::unique_ptr<Component> > mComponents;
     bool mDismissed = false;
 };

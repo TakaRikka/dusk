@@ -214,17 +214,12 @@ protected:
 
 private:
     void open_overlay() {
-        auto* openerDocument = mRoot != nullptr ? mRoot->GetOwnerDocument() : nullptr;
-        if (openerDocument != nullptr) {
-            openerDocument->Hide();
-        }
-        auto& overlay = push_document(std::make_unique<Overlay>(OverlayProps{
+        push_document(std::make_unique<Overlay>(OverlayProps{
             .option = mOption,
             .title = mTitle,
             .helpText = mHelpText,
             .valueMin = mValueMin,
             .valueMax = mValueMax,
-            .openerDocument = openerDocument,
         }));
     }
 

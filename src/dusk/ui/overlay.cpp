@@ -135,8 +135,7 @@ Overlay::Overlay(OverlayProps props)
     : Document("res/rml/overlay.rml"),
       mOption(props.option),
       mValueMin(props.valueMin),
-      mValueMax(props.valueMax),
-      mOpenerDocument(props.openerDocument) {
+      mValueMax(props.valueMax) {
     if (mDocument == nullptr) {
         return;
     }
@@ -216,10 +215,7 @@ void Overlay::dismiss() {
         return;
     }
     mDismissed = true;
-    if (mOpenerDocument != nullptr) {
-        mOpenerDocument->Show();
-    }
-    hide();
+    pop_document();
 }
 
 void Overlay::reset_default() {
