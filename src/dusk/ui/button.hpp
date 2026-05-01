@@ -14,7 +14,7 @@ class Button : public Component {
 public:
     using Props = ButtonProps;
 
-    Button(Rml::Element* parent, ButtonProps props, const Rml::String& className = "button");
+    Button(Rml::Element* parent, ButtonProps props, const Rml::String& tagName = "button");
 
     void set_text(const Rml::String& text);
     void set_selected(bool selected);

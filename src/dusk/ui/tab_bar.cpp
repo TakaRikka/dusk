@@ -5,8 +5,7 @@ namespace {
 
 Rml::Element* createRoot(Rml::Element* parent) {
     auto* doc = parent->GetOwnerDocument();
-    auto elem = doc->CreateElement("div");
-    elem->SetClass("tab-bar", true);
+    auto elem = doc->CreateElement("tab-bar");
     return parent->AppendChild(std::move(elem));
 }
 

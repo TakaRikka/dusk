@@ -7,17 +7,16 @@
 namespace dusk::ui {
 namespace {
 
-Rml::Element* createRoot(Rml::Element* parent, const Rml::String& className) {
+Rml::Element* createRoot(Rml::Element* parent, const Rml::String& tagName) {
     auto* doc = parent->GetOwnerDocument();
-    auto elem = doc->CreateElement("button");
-    elem->SetClass(className, true);
+    auto elem = doc->CreateElement(tagName);
     return parent->AppendChild(std::move(elem));
 }
 
 }  // namespace
 
-Button::Button(Rml::Element* parent, ButtonProps props, const Rml::String& className)
-    : Component(createRoot(parent, className)) {
+Button::Button(Rml::Element* parent, ButtonProps props, const Rml::String& tagName)
+    : Component(createRoot(parent, tagName)) {
     update_props(std::move(props));
     listen(mRoot, Rml::EventId::Click, [this](Rml::Event& event) {
         if (mProps.onPressed) {

@@ -23,17 +23,27 @@ float base_body_padding(Rml::Context* context) noexcept {
     return 64.0f * dpRatio;
 }
 
+const Rml::String kDocumentSource = R"RML(
+<rml>
+<head>
+    <link type="text/rcss" href="res/rml/window.rcss" />
+</head>
+<body>
+    <window id="window"></window>
+</body>
+</rml>
+)RML";
+
 }  // namespace
 
-Window::Window() : Document("res/rml/window.rml"), mRoot(mDocument->GetElementById("window")) {
+Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("window")) {
     mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
                                                   .selectedTabIndex = 0,
                                                   .autoSelect = true,
                                               });
 
-    auto elem = mDocument->CreateElement("div");
+    auto elem = mDocument->CreateElement("content");
     elem->SetAttribute("id", "content");
-    elem->SetClass("content", true);
     mContentRoot = mRoot->AppendChild(std::move(elem));
 
     listen(Rml::EventId::Keydown, [this](Rml::Event& event) {
@@ -49,6 +59,39 @@ Window::Window() : Document("res/rml/window.rml"), mRoot(mDocument->GetElementBy
             }
         }
     });
+
+    // Hide document after transition completion
+    listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
+        if (event.GetTargetElement() == mRoot &&
+            *mRoot->GetProperty(Rml::PropertyId::Visibility) == Rml::Style::Visibility::Visible &&
+            !mVisible)
+        {
+            Document::hide();
+        }
+    });
+}
+
+void Window::show() {
+    if (mVisible) {
+        return;
+    }
+
+    Document::show();
+    mRoot->SetAttribute("open", "");
+    mVisible = true;
+}
+
+void Window::hide() {
+    if (mDocument == nullptr) {
+        mVisible = false;
+        return;
+    }
+    if (!mVisible) {
+        return;
+    }
+
+    mRoot->RemoveAttribute("open");
+    mVisible = false;
 }
 
 void Window::update() {
@@ -114,7 +157,7 @@ bool Window::focus() {
 
 bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     auto* target = event.GetTargetElement();
-    if (cmd != NavCommand::Next && cmd != NavCommand::Previous && target->Closest(".content")) {
+    if (cmd != NavCommand::Next && cmd != NavCommand::Previous && target->Closest("content")) {
         if (handle_content_nav(event, cmd)) {
             return true;
         }

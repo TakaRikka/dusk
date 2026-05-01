@@ -7,7 +7,7 @@ namespace dusk::ui {
 
 class Document {
 public:
-    Document(const Rml::String& path);
+    Document(const Rml::String& source);
     virtual ~Document();
 
     Document(const Document&) = delete;

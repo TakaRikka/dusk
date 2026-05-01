@@ -13,7 +13,7 @@ public:
         Horizontal,
     };
 
-    explicit Pane(Rml::Element* parent, Direction direction, const Rml::String& className = "pane");
+    explicit Pane(Rml::Element* parent, Direction direction);
 
     bool focus() override;
     void update() override;

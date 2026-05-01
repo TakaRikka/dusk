@@ -13,12 +13,7 @@ body {
     color: #E0DBC8;
 }
 
-button {
-    cursor: pointer;
-    focus: auto;
-}
-
-.window {
+window {
     display: flex;
     flex-flow: column;
     height: 100%;
@@ -31,18 +26,27 @@ button {
     backdrop-filter: blur(5dp);
     box-shadow: 0 0 25dp 5dp;
     background-color: rgba(21, 22, 16, 90%);
+    filter: opacity(0);
+    transform: scale(0.9);
+    transform-origin: center;
+    transition: filter transform 0.2s cubic-in-out;
+}
+
+window[open] {
+    filter: opacity(1);
+    transform: scale(1);
 }
 
 @media (max-height: 640dp) {
     body {
         padding: 16dp;
     }
-    .window {
+    window {
         box-shadow: none;
     }
 }
 
-.window .tab-bar {
+window tab-bar {
     display: flex;
     flex: 0 0 64dp;
     height: 64dp;
@@ -56,7 +60,7 @@ button {
     border-bottom: 2dp #92875B;
 }
 
-.window .tab-bar .tab {
+window tab-bar tab {
     flex: 0 0 auto;
     padding: 0 24dp;
     line-height: 64dp;
@@ -66,24 +70,24 @@ button {
     transition: decorator 0.1s linear-in-out, opacity 0.1s linear-in-out;
 }
 
-.window .tab-bar .tab.selected {
+window tab-bar tab.selected {
     opacity: 1;
     border-bottom: 4dp #C2A42D;
     font-effect: glow(0dp 4dp 0dp 4dp black);
 }
 
-.window .tab-bar .tab:focus-visible,
-.window .tab-bar .tab:hover {
+window tab-bar tab:focus-visible,
+window tab-bar tab:hover {
     opacity: 1;
     font-effect: glow(0dp 4dp 0dp 4dp black);
     decorator: vertical-gradient(#c2a42d00 #c2a42d26);
 }
 
-.window .tab-bar .tab:active {
+window tab-bar tab:active {
     decorator: vertical-gradient(#c2a42d10 #c2a42d40);
 }
 
-.window .content {
+window content {
     display: flex;
     flex: 1 1 0;
     min-width: 0;
@@ -91,7 +95,7 @@ button {
     overflow: hidden;
 }
 
-.window .content .pane {
+window content pane {
     display: flex;
     flex-flow: column;
     flex: 1 1 0;
@@ -104,15 +108,15 @@ button {
     overflow: hidden auto;
 }
 
-.window .content .pane:not(:last-of-type) {
+window content pane:not(:last-of-type) {
     border-right: 1dp #92875B;
 }
 
-.window .content .pane > * {
+window content pane > * {
     flex: 0 0 auto;
 }
 
-.window .content .pane > .spacer {
+window content pane > spacer {
     display: block;
     /* Completes the 24dp bottom inset after the pane's 8dp gap. */
     flex: 0 0 16dp;
@@ -176,7 +180,7 @@ scrollbarhorizontal sliderbar {
     padding-top: 12dp;
 }
 
-.button {
+button {
     text-align: center;
     background-color: rgba(17, 16, 10, 20%);
     opacity: 0.9;
@@ -185,23 +189,25 @@ scrollbarhorizontal sliderbar {
     box-shadow: rgba(146, 135, 91, 25%) 0 0 0 1dp;
     font-size: 20dp;
     transition: background-color 0.1s linear-in-out, opacity 0.1s linear-in-out;
+    cursor: pointer;
+    focus: auto;
 }
 
-.button:not(:disabled).active,
-.button:not(:disabled):hover,
-.button:not(:disabled):focus-visible {
+button:not(:disabled).active,
+button:not(:disabled):hover,
+button:not(:disabled):focus-visible {
     background-color: rgba(204, 184, 119, 20%);
     box-shadow: #C2A42D 0 0 0 2dp;
 }
 
-.button:not(:disabled).selected,
-.button:not(:disabled):active {
+button:not(:disabled).selected,
+button:not(:disabled):active {
     opacity: 1;
     background-color: rgba(204, 184, 119, 40%);
     box-shadow: #C2A42D 0 0 0 2dp;
 }
 
-.select-button {
+select-button {
     display: flex;
     align-items: center;
     gap: 8dp;
@@ -211,28 +217,30 @@ scrollbarhorizontal sliderbar {
     border-radius: 14dp;
     box-shadow: rgba(146, 135, 91, 25%) 0 0 0 1dp;
     transition: background-color 0.1s linear-in-out, opacity 0.1s linear-in-out;
+    cursor: pointer;
+    focus: auto;
 }
 
-.select-button:not(:disabled).active,
-.select-button:not(:disabled):hover,
-.select-button:not(:disabled):focus-visible {
+select-button:not(:disabled).active,
+select-button:not(:disabled):hover,
+select-button:not(:disabled):focus-visible {
     background-color: rgba(204, 184, 119, 20%);
     box-shadow: #C2A42D 0 0 0 2dp;
 }
 
-.select-button:not(:disabled).selected,
-.select-button:not(:disabled):active {
+select-button:not(:disabled).selected,
+select-button:not(:disabled):active {
     opacity: 1;
     background-color: rgba(204, 184, 119, 40%);
     box-shadow: #C2A42D 0 0 0 2dp;
 }
 
-.select-button:disabled {
+select-button:disabled {
     opacity: 0.35;
     cursor: default;
 }
 
-.select-button .key {
+select-button key {
     font-family: "Fira Sans Condensed";
     font-weight: bold;
     font-size: 18dp;
@@ -240,12 +248,12 @@ scrollbarhorizontal sliderbar {
     flex: 1 0 auto;
 }
 
-.select-button .value {
+select-button value {
     margin-left: auto;
     font-size: 20dp;
 }
 
-.select-button input {
+select-button input {
     text-align: right;
     font-size: 20dp;
 }

@@ -9,18 +9,15 @@ namespace {
 
 Rml::Element* createRoot(Rml::Element* parent) {
     auto* doc = parent->GetOwnerDocument();
-    auto elem = doc->CreateElement("button");
-    elem->SetClass("select-button", true);
+    auto elem = doc->CreateElement("select-button");
     return parent->AppendChild(std::move(elem));
 }
 
 }  // namespace
 
 SelectButton::SelectButton(Rml::Element* parent, Props props) : Component(createRoot(parent)) {
-    mKeyElem = append(mRoot, "div");
-    mKeyElem->SetClass("key", true);
-    mValueElem = append(mRoot, "div");
-    mValueElem->SetClass("value", true);
+    mKeyElem = append(mRoot, "key");
+    mValueElem = append(mRoot, "value");
     update_props(std::move(props));
     listen(mRoot, Rml::EventId::Click, [this](Rml::Event& event) {
         if (mProps.disabled) {

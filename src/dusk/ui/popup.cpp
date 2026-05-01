@@ -11,8 +11,22 @@
 #include <chrono>
 
 namespace dusk::ui {
+namespace {
 
-Popup::Popup() : Document("res/rml/popup.rml"), mRoot(mDocument->GetElementById("popup")) {
+const Rml::String kDocumentSource = R"RML(
+<rml>
+<head>
+    <link type="text/rcss" href="res/rml/popup.rcss" />
+</head>
+<body>
+    <popup id="popup"></div>
+</body>
+</rml>
+)RML";
+
+}
+
+Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("popup")) {
     mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{.autoSelect = false});
     mTabBar->add_tab("Settings", [] { push_document(std::make_unique<SettingsWindow>()); });
     mTabBar->add_tab("Warp", [] {
@@ -48,7 +62,7 @@ void Popup::show() {
     }
 
     Document::show();
-    mRoot->SetClass("popup-hidden", false);
+    mRoot->SetAttribute("open", "");
     mTabBar->set_active_tab(-1);
     mVisible = true;
 }
@@ -62,7 +76,7 @@ void Popup::hide() {
         return;
     }
 
-    mRoot->SetClass("popup-hidden", true);
+    mRoot->RemoveAttribute("open");
     mVisible = false;
 }
 

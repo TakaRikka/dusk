@@ -87,8 +87,8 @@ Document* top_document() noexcept {
 }
 
 void update() noexcept {
-    for (size_t i = 0; i < sDocuments.size(); ++i) {
-        sDocuments[i].doc->update();
+    for (const auto& doc : sDocuments) {
+        doc.doc->update();
     }
     sDocuments.erase(
         std::remove_if(sDocuments.begin(), sDocuments.end(),

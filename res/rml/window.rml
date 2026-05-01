@@ -1,9 +1,0 @@
-<rml>
-<head>
-    <title>Window</title>
-    <link type="text/rcss" href="window.rcss" />
-</head>
-<body>
-    <div id="window" class="window"></div>
-</body>
-</rml>

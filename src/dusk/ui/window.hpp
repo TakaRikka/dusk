@@ -23,6 +23,8 @@ public:
     Window(const Window&) = delete;
     Window& operator=(const Window&) = delete;
 
+    void show() override;
+    void hide() override;
     void update() override;
     bool focus() override;
     bool set_active_tab(int index);
@@ -47,6 +49,7 @@ protected:
     std::unique_ptr<TabBar> mTabBar;
     std::vector<std::unique_ptr<Component> > mContentComponents;
     Insets mBodyPadding;
+    bool mVisible = false;
 };
 
 }  // namespace dusk::ui

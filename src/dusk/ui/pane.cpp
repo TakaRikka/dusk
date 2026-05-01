@@ -5,17 +5,16 @@
 namespace dusk::ui {
 namespace {
 
-Rml::Element* createRoot(Rml::Element* parent, const Rml::String& className) {
+Rml::Element* createRoot(Rml::Element* parent) {
     auto* doc = parent->GetOwnerDocument();
-    auto elem = doc->CreateElement("div");
-    elem->SetClass(className, true);
+    auto elem = doc->CreateElement("pane");
     return parent->AppendChild(std::move(elem));
 }
 
 }  // namespace
 
-Pane::Pane(Rml::Element* parent, Direction direction, const Rml::String& className)
-    : Component(createRoot(parent, className)), mDirection(direction) {
+Pane::Pane(Rml::Element* parent, Direction direction)
+    : Component(createRoot(parent)), mDirection(direction) {
     listen(mRoot, Rml::EventId::Keydown, [this](Rml::Event& event) {
         const auto cmd = map_nav_event(event);
         int direction = 0;
@@ -95,8 +94,7 @@ void Pane::finalize() {
     // padding-bottom or margin-bottom on a scrollable flex container, so
     // we need to create a fake spacer with an actual layout height to get
     // padding at the bottom of a scrollable container.
-    auto* elem = append(mRoot, "div");
-    elem->SetClass("spacer", true);
+    append(mRoot, "spacer");
 }
 
 void Pane::clear() {

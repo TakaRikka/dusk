@@ -6,17 +6,17 @@
 namespace dusk::ui {
 namespace {
 
-Rml::ElementDocument* load_document(const Rml::String& path) {
+Rml::ElementDocument* load_document(const Rml::String& source) {
     auto* context = aurora::rmlui::get_context();
     if (context == nullptr) {
         return nullptr;
     }
-    return context->LoadDocument(path);
+    return context->LoadDocumentFromMemory(source);
 }
 
 }  // namespace
 
-Document::Document(const Rml::String& path) : mDocument(load_document(path)) {
+Document::Document(const Rml::String& source) : mDocument(load_document(source)) {
     listen(Rml::EventId::Keydown, [this](Rml::Event& event) {
         const auto cmd = map_nav_event(event);
         if (cmd != NavCommand::None && handle_nav_command(event, cmd)) {
