@@ -101,7 +101,7 @@ button {
     justify-content: flex-end;
 }
 
-.footer-button {
+footer-button {
     display: block;
     width: 100%;
     max-width: 220dp;
@@ -117,11 +117,11 @@ button {
     opacity: 1;
 }
 
-.footer-button.return {
+footer-button.return {
     text-align: left;
 }
 
-.footer-button.reset {
+footer-button.reset {
     text-align: right;
 }
 
