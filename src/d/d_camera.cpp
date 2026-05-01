@@ -7474,6 +7474,10 @@ bool dCamera_c::test2Camera(s32 param_0) {
 
 #if TARGET_PC
 bool dCamera_c::freeCamera() {
+    if (dusk::getSettings().game.freeCamera && mGear == 1) {
+        mGear = 0;
+    }
+
     if (!dusk::getSettings().game.freeCamera || mCamStyle == 70)
     {
         mCamParam.mManualMode = 0;
