@@ -8,12 +8,12 @@ namespace dusk::ui {
 
 class Pane : public FluentComponent<Pane> {
 public:
-    enum class Direction {
-        Vertical,
-        Horizontal,
+    enum class Type {
+        Controlled,
+        Uncontrolled,
     };
 
-    explicit Pane(Rml::Element* parent, Direction direction);
+    explicit Pane(Rml::Element* parent, Type type);
 
     bool focus() override;
     void update() override;
@@ -44,7 +44,7 @@ public:
     void clear();
 
 private:
-    Direction mDirection;
+    Type mType;
     bool finalized = false;
     int mSelectedItem = -1;
 };

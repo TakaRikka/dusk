@@ -231,8 +231,8 @@ private:
 
 SettingsWindow::SettingsWindow() {
     add_tab("Audio", [this](Rml::Element* content) {
-        auto& leftPane = add_child<Pane>(content, Pane::Direction::Vertical);
-        auto& rightPane = add_child<Pane>(content, Pane::Direction::Vertical);
+        auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
+        auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Volume");
         leftPane.add_child<ConfigIntSelect>(ConfigIntSelect::Props{
@@ -270,8 +270,8 @@ SettingsWindow::SettingsWindow() {
     });
 
     add_tab("Cheats", [this](Rml::Element* content) {
-        auto& leftPane = add_child<Pane>(content, Pane::Direction::Vertical);
-        auto& rightPane = add_child<Pane>(content, Pane::Direction::Vertical);
+        auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
+        auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         auto addCheat = [&](const Rml::String& key, ConfigVar<bool>& value,
                             const Rml::String& helpText) {
@@ -315,8 +315,8 @@ SettingsWindow::SettingsWindow() {
     });
 
     add_tab("Gameplay", [this](Rml::Element* content) {
-        auto& leftPane = add_child<Pane>(content, Pane::Direction::Vertical);
-        auto& rightPane = add_child<Pane>(content, Pane::Direction::Vertical);
+        auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
+        auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         auto addOption = [&](const Rml::String& key, ConfigVar<bool>& value,
                              const Rml::String& helpText) {
@@ -422,8 +422,8 @@ SettingsWindow::SettingsWindow() {
     });
 
     add_tab("Graphics", [this](Rml::Element* content) {
-        auto& leftPane = add_child<Pane>(content, Pane::Direction::Vertical);
-        auto& rightPane = add_child<Pane>(content, Pane::Direction::Vertical);
+        auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
+        auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Display");
 

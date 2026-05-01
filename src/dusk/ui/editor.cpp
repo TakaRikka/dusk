@@ -14,12 +14,13 @@
 #include "string_button.hpp"
 
 #include <algorithm>
+#include <array>
 #include <bit>
 #include <cctype>
-#include <cstdlib>
-#include <cstring>
 #include <functional>
 #include <limits>
+#include <map>
+#include <string>
 
 namespace dusk::ui {
 namespace {
@@ -54,6 +55,27 @@ dSv_horse_place_c* get_horse_place() {
         return nullptr;
     }
     return &dComIfGs_getSaveData()->getPlayer().getHorsePlace();
+}
+
+dSv_player_item_c* get_player_item() {
+    if (!has_save_data()) {
+        return nullptr;
+    }
+    return &dComIfGs_getSaveData()->getPlayer().getItem();
+}
+
+dSv_player_item_record_c* get_player_item_record() {
+    if (!has_save_data()) {
+        return nullptr;
+    }
+    return &dComIfGs_getSaveData()->getPlayer().getItemRecord();
+}
+
+dSv_player_item_max_c* get_player_item_max() {
+    if (!has_save_data()) {
+        return nullptr;
+    }
+    return &dComIfGs_getSaveData()->getPlayer().getItemMax();
 }
 
 template <size_t Size>
@@ -436,7 +458,11 @@ std::map<int, itemInfo> itemMap = {
 };
 
 Rml::String get_item_name(u8 id) {
-    return itemMap.find(id)->second.m_name;
+    const auto it = itemMap.find(id);
+    if (it == itemMap.end()) {
+        return fmt::format("Item {}", id);
+    }
+    return it->second.m_name;
 }
 
 Rml::String item_label_for_slot(u8 slot) {
@@ -445,6 +471,116 @@ Rml::String item_label_for_slot(u8 slot) {
     }
     const auto id = dComIfGs_getSaveData()->getPlayer().getItem().mItems[slot];
     return fmt::format("Slot {0} ({1})", slot, get_item_name(id));
+}
+
+struct DefaultInventoryEntry {
+    u8 slot;
+    u8 item;
+};
+
+constexpr std::array<DefaultInventoryEntry, 22> defaultInventory = {
+    DefaultInventoryEntry{SLOT_0, dItemNo_BOOMERANG_e},
+    DefaultInventoryEntry{SLOT_1, dItemNo_KANTERA_e},
+    DefaultInventoryEntry{SLOT_2, dItemNo_SPINNER_e},
+    DefaultInventoryEntry{SLOT_3, dItemNo_HVY_BOOTS_e},
+    DefaultInventoryEntry{SLOT_4, dItemNo_BOW_e},
+    DefaultInventoryEntry{SLOT_5, dItemNo_HAWK_EYE_e},
+    DefaultInventoryEntry{SLOT_6, dItemNo_IRONBALL_e},
+    DefaultInventoryEntry{SLOT_8, dItemNo_COPY_ROD_e},
+    DefaultInventoryEntry{SLOT_9, dItemNo_HOOKSHOT_e},
+    DefaultInventoryEntry{SLOT_10, dItemNo_W_HOOKSHOT_e},
+    DefaultInventoryEntry{SLOT_11, dItemNo_EMPTY_BOTTLE_e},
+    DefaultInventoryEntry{SLOT_12, dItemNo_EMPTY_BOTTLE_e},
+    DefaultInventoryEntry{SLOT_13, dItemNo_EMPTY_BOTTLE_e},
+    DefaultInventoryEntry{SLOT_14, dItemNo_EMPTY_BOTTLE_e},
+    DefaultInventoryEntry{SLOT_15, dItemNo_NORMAL_BOMB_e},
+    DefaultInventoryEntry{SLOT_16, dItemNo_WATER_BOMB_e},
+    DefaultInventoryEntry{SLOT_17, dItemNo_POKE_BOMB_e},
+    DefaultInventoryEntry{SLOT_18, dItemNo_DUNGEON_EXIT_e},
+    DefaultInventoryEntry{SLOT_20, dItemNo_FISHING_ROD_1_e},
+    DefaultInventoryEntry{SLOT_21, dItemNo_HORSE_FLUTE_e},
+    DefaultInventoryEntry{SLOT_22, dItemNo_ANCIENT_DOCUMENT_e},
+    DefaultInventoryEntry{SLOT_23, dItemNo_PACHINKO_e},
+};
+
+u8 get_slot_default(int slot) {
+    for (const auto& entry : defaultInventory) {
+        if (entry.slot == slot) {
+            return entry.item;
+        }
+    }
+    return dItemNo_NONE_e;
+}
+
+void set_item_first_bit(u8 itemNo, bool owned) {
+    if (owned) {
+        dComIfGs_onItemFirstBit(itemNo);
+    } else {
+        dComIfGs_offItemFirstBit(itemNo);
+    }
+}
+
+void toggle_item_first_bit(u8 itemNo) {
+    set_item_first_bit(itemNo, !dComIfGs_isItemFirstBit(itemNo));
+}
+
+bool can_edit_item_first_bit(int itemId, const itemInfo& item) {
+    return itemId < 254 && item.m_name != "Reserved";
+}
+
+void set_all_item_first_bits(bool owned) {
+    for (const auto& [itemId, item] : itemMap) {
+        if (!can_edit_item_first_bit(itemId, item)) {
+            continue;
+        }
+        set_item_first_bit(static_cast<u8>(itemId), owned);
+    }
+}
+
+void populate_item_slot_picker(Pane& pane, int slot) {
+    pane.clear();
+    pane.add_section("Actions");
+    pane.add_button(fmt::format("Default ({})", get_item_name(get_slot_default(slot))),
+        [slot] { dComIfGs_setItem(slot, get_slot_default(slot)); });
+
+    pane.add_section("Items");
+    pane.add_button(
+        {
+            .text = "None",
+            .isSelected = [slot] { return get_player_item()->mItems[slot] == dItemNo_NONE_e; },
+        },
+        [slot] { dComIfGs_setItem(slot, dItemNo_NONE_e); });
+    for (const auto& [itemId, item] : itemMap) {
+        if (item.m_type != ITEMTYPE_EQUIP_e) {
+            continue;
+        }
+        pane.add_button(
+            {
+                .text = item.m_name,
+                .isSelected = [slot, itemId] { return get_player_item()->mItems[slot] == itemId; },
+            },
+            [slot, itemId] { dComIfGs_setItem(slot, static_cast<u8>(itemId)); });
+    }
+}
+
+void populate_item_flag_picker(Pane& pane) {
+    pane.clear();
+    pane.add_section("Actions");
+    pane.add_button("Select All", [] { set_all_item_first_bits(true); });
+    pane.add_button("Clear None", [] { set_all_item_first_bits(false); });
+
+    pane.add_section("Items");
+    for (const auto& [itemId, item] : itemMap) {
+        if (!can_edit_item_first_bit(itemId, item)) {
+            continue;
+        }
+        pane.add_button(
+            {
+                .text = item.m_name,
+                .isSelected = [itemId] { return dComIfGs_isItemFirstBit(static_cast<u8>(itemId)); },
+            },
+            [itemId] { toggle_item_first_bit(static_cast<u8>(itemId)); });
+    }
 }
 
 constexpr std::array<Rml::String, 3> walletSizeNames = {
@@ -476,8 +612,8 @@ void set_clock_time(int hour, int minute) {
 
 EditorWindow::EditorWindow() {
     add_tab("Player Status", [this](Rml::Element* content) {
-        auto& leftPane = add_child<Pane>(content, Pane::Direction::Vertical);
-        auto& rightPane = add_child<Pane>(content, Pane::Direction::Vertical);
+        auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
+        auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Player");
         leftPane
@@ -754,8 +890,8 @@ EditorWindow::EditorWindow() {
     });
 
     add_tab("Location", [this](Rml::Element* content) {
-        auto& leftPane = add_child<Pane>(content, Pane::Direction::Vertical);
-        auto& rightPane = add_child<Pane>(content, Pane::Direction::Vertical);
+        auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
+        auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Save Location");
         leftPane
@@ -864,9 +1000,132 @@ EditorWindow::EditorWindow() {
     });
 
     add_tab("Inventory", [this](Rml::Element* content) {
-        // TODO
-    });
+        auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
+        auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
+        leftPane.add_section("Item Wheel");
+        leftPane
+            .add_button("Default All",
+                [&rightPane] {
+                    for (int slot = 0; slot < 24; ++slot) {
+                        dComIfGs_setItem(slot, get_slot_default(slot));
+                    }
+                    rightPane.clear();
+                })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane
+            .add_button("Clear All",
+                [&rightPane] {
+                    for (int slot = 0; slot < 24; ++slot) {
+                        dComIfGs_setItem(slot, dItemNo_NONE_e);
+                    }
+                    rightPane.clear();
+                })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        for (int slot = 0; slot < 24; ++slot) {
+            leftPane
+                .add_select_button({
+                    .key = fmt::format("Slot {0:02d}", slot),
+                    .getValue = [slot] { return get_item_name(get_player_item()->mItems[slot]); },
+                })
+                .on_focus([&rightPane, slot](
+                              Rml::Event&) { populate_item_slot_picker(rightPane, slot); });
+        }
+
+        leftPane.add_section("Amounts");
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Arrows Amount",
+                .getValue = [] { return get_player_item_record()->mArrowNum; },
+                .setValue =
+                    [](int value) { get_player_item_record()->mArrowNum = static_cast<u8>(value); },
+                .max = std::numeric_limits<u8>::max(),
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Slingshot Amount",
+                .getValue = [] { return get_player_item_record()->mPachinkoNum; },
+                .setValue =
+                    [](int value) {
+                        get_player_item_record()->mPachinkoNum = static_cast<u8>(value);
+                    },
+                .max = std::numeric_limits<u8>::max(),
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        for (int bag = 0; bag < 3; ++bag) {
+            leftPane
+                .add_child<NumberButton>(NumberButton::Props{
+                    .key = fmt::format("Bomb Bag {} Amount", bag + 1),
+                    .getValue = [bag] { return get_player_item_record()->mBombNum[bag]; },
+                    .setValue =
+                        [bag](int value) {
+                            get_player_item_record()->mBombNum[bag] = static_cast<u8>(value);
+                        },
+                    .max = std::numeric_limits<u8>::max(),
+                })
+                .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        }
+        for (int bottle = 0; bottle < 4; ++bottle) {
+            leftPane
+                .add_child<NumberButton>(NumberButton::Props{
+                    .key = fmt::format("Bottle {} Amount", bottle + 1),
+                    .getValue = [bottle] { return get_player_item_record()->mBottleNum[bottle]; },
+                    .setValue =
+                        [bottle](int value) {
+                            get_player_item_record()->mBottleNum[bottle] = static_cast<u8>(value);
+                        },
+                    .max = std::numeric_limits<u8>::max(),
+                })
+                .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        }
+
+        leftPane.add_section("Capacities");
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Arrows Max",
+                .getValue = [] { return get_player_item_max()->mItemMax[0]; },
+                .setValue =
+                    [](int value) { get_player_item_max()->mItemMax[0] = static_cast<u8>(value); },
+                .max = std::numeric_limits<u8>::max(),
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Normal Bombs Max",
+                .getValue = [] { return get_player_item_max()->mItemMax[1]; },
+                .setValue =
+                    [](int value) { get_player_item_max()->mItemMax[1] = static_cast<u8>(value); },
+                .max = std::numeric_limits<u8>::max(),
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Water Bombs Max",
+                .getValue = [] { return get_player_item_max()->mItemMax[2]; },
+                .setValue =
+                    [](int value) { get_player_item_max()->mItemMax[2] = static_cast<u8>(value); },
+                .max = std::numeric_limits<u8>::max(),
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Bomblings Max",
+                .getValue = [] { return get_player_item_max()->mItemMax[3]; },
+                .setValue =
+                    [](int value) { get_player_item_max()->mItemMax[3] = static_cast<u8>(value); },
+                .max = std::numeric_limits<u8>::max(),
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+
+        leftPane.add_section("Flags");
+        leftPane
+            .add_select_button({
+                .key = "Obtained Items",
+                .getValue = [] { return "Edit"; },
+            })
+            .on_focus([&rightPane](Rml::Event&) { populate_item_flag_picker(rightPane); });
+    });
     add_tab("Collection", [this](Rml::Element* content) {
         // TODO
     });

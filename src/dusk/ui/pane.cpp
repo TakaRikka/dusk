@@ -13,15 +13,12 @@ Rml::Element* createRoot(Rml::Element* parent) {
 
 }  // namespace
 
-Pane::Pane(Rml::Element* parent, Direction direction)
-    : FluentComponent(createRoot(parent)), mDirection(direction) {
+Pane::Pane(Rml::Element* parent, Type type) : FluentComponent(createRoot(parent)), mType(type) {
     listen(Rml::EventId::Keydown, [this](Rml::Event& event) {
         const auto cmd = map_nav_event(event);
 
         // If navigating to the next pane, select the focused item
-        if ((mDirection == Direction::Vertical && cmd == NavCommand::Right) ||
-            (mDirection == Direction::Horizontal && cmd == NavCommand::Down))
-        {
+        if (mType == Type::Controlled && cmd == NavCommand::Right) {
             auto* target = event.GetTargetElement();
             int focusedChild = -1;
             for (size_t i = 0; i < mChildren.size(); ++i) {
@@ -38,13 +35,9 @@ Pane::Pane(Rml::Element* parent, Direction direction)
         }
 
         int direction = 0;
-        if ((mDirection == Direction::Vertical && cmd == NavCommand::Down) ||
-            (mDirection == Direction::Horizontal && cmd == NavCommand::Right))
-        {
+        if (cmd == NavCommand::Down) {
             direction = 1;
-        } else if ((mDirection == Direction::Vertical && cmd == NavCommand::Up) ||
-                   (mDirection == Direction::Horizontal && cmd == NavCommand::Left))
-        {
+        } else if (cmd == NavCommand::Up) {
             direction = -1;
         } else {
             return;
@@ -70,29 +63,31 @@ Pane::Pane(Rml::Element* parent, Direction direction)
         }
     });
 
-    // Listen for selection change events
-    listen(Rml::EventId::Change, [this](Rml::Event& event) {
-        const auto it = std::find_if(event.GetParameters().begin(), event.GetParameters().end(),
-            [](const auto& param) { return param.first == "selected"; });
-        if (it != event.GetParameters().end()) {
-            const auto selected = it->second.Get<bool>();
-            int childIndex = -1;
-            for (int i = 0; i < mChildren.size(); ++i) {
-                if (event.GetTargetElement() == mChildren[i]->root()) {
-                    childIndex = i;
+    if (type == Type::Controlled) {
+        // Listen for selection change events
+        listen(Rml::EventId::Change, [this](Rml::Event& event) {
+            const auto it = std::find_if(event.GetParameters().begin(), event.GetParameters().end(),
+                [](const auto& param) { return param.first == "selected"; });
+            if (it != event.GetParameters().end()) {
+                const auto selected = it->second.Get<bool>();
+                int childIndex = -1;
+                for (int i = 0; i < mChildren.size(); ++i) {
+                    if (event.GetTargetElement() == mChildren[i]->root()) {
+                        childIndex = i;
+                    }
                 }
-            }
-            if (childIndex != -1) {
-                if (selected) {
-                    set_selected_item(childIndex);
-                } else if (childIndex == mSelectedItem) {
+                if (childIndex != -1) {
+                    if (selected) {
+                        set_selected_item(childIndex);
+                    } else if (childIndex == mSelectedItem) {
+                        set_selected_item(-1);
+                    }
+                } else {
                     set_selected_item(-1);
                 }
-            } else {
-                set_selected_item(-1);
             }
-        }
-    });
+        });
+    }
 }
 
 void Pane::update() {
@@ -116,16 +111,11 @@ void Pane::set_selected_item(int index) {
 }
 
 bool Pane::focus() {
-    // Update selected child
-    for (int i = 0; i < mChildren.size(); ++i) {
-        if (mChildren[i]->selected()) {
-            mSelectedItem = i;
+    // Focus the first selected child
+    for (const auto& child : mChildren) {
+        if (child->selected() && child->focus()) {
+            return true;
         }
-    }
-    // If there's a selected child, focus that
-    if (mSelectedItem >= 0 && mSelectedItem < mChildren.size() && mChildren[mSelectedItem]->focus())
-    {
-        return true;
     }
     for (const auto& child : mChildren) {
         if (child->focus()) {
