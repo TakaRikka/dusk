@@ -999,6 +999,7 @@ int mDoMch_Create() {
     JKRDvdRipper::setSZSBufferSize(0x4000);
 #if TARGET_PC
     JKRHeap* dvdHeap = JKRCreateExpHeap(0x10000, NULL, false);
+    JKRHEAP_NAME(dvdHeap, "dvdHeap");
     assert(dvdHeap != NULL);
     JKRDvdRipper::setHeap(dvdHeap);
 #endif
