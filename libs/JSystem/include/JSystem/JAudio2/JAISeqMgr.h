@@ -59,6 +59,9 @@ public:
     bool isActive() const { return mSeqList.getNumLinks() != 0; }
     int getNumActiveSeqs() const { return mSeqList.getNumLinks(); }
     void pause(bool paused) { mActivity.field_0x0.flags.flag2 = paused; }
+    #if TARGET_PC
+    JSUList<JAISeq>* getSeqList() { return &mSeqList; }
+    #endif
 
 private:
     /* 0x08 */ JAIAudience* mAudience;

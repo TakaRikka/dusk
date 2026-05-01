@@ -68,6 +68,7 @@
 #include "cxxopts.hpp"
 #include "d/actor/d_a_movie_player.h"
 #include "dusk/audio/DuskAudioSystem.h"
+#include "dusk/audio/DuskDsp.hpp"
 #include "dusk/config.hpp"
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/settings.h"
@@ -577,6 +578,7 @@ int game_main(int argc, char* argv[]) {
 
     dusk::audio::SetMasterVolume(dusk::getSettings().audio.masterVolume / 100.0f);
     dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);
+    dusk::audio::EnableHrtf = dusk::getSettings().audio.enableHrtf;
 
     std::string dvd_path;
     bool dvd_opened = false;

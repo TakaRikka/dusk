@@ -133,4 +133,6 @@ namespace dusk::audio {
     extern f32 PrevMasterVolume;
     extern bool EnableReverb;
     extern bool DumpAudio;
+    extern bool EnableHrtf;
+    extern f32 HrtfGain;
 }

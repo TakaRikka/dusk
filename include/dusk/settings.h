@@ -55,6 +55,7 @@ struct UserSettings {
         ConfigVar<int> soundEffectsVolume;
         ConfigVar<int> fanfareVolume;
         ConfigVar<bool> enableReverb;
+        ConfigVar<bool> enableHrtf;
     } audio;
 
     // Game settings
