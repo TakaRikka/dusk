@@ -21,6 +21,8 @@
 #include <limits>
 #include <map>
 #include <string>
+#include <utility>
+#include <vector>
 
 namespace dusk::ui {
 namespace {
@@ -76,6 +78,27 @@ dSv_player_item_max_c* get_player_item_max() {
         return nullptr;
     }
     return &dComIfGs_getSaveData()->getPlayer().getItemMax();
+}
+
+dSv_fishing_info_c* get_player_fishing_info() {
+    if (!has_save_data()) {
+        return nullptr;
+    }
+    return &dComIfGs_getSaveData()->getPlayer().getFishingInfo();
+}
+
+dSv_MiniGame_c* get_minigame() {
+    if (!has_save_data()) {
+        return nullptr;
+    }
+    return &dComIfGs_getSaveData()->getMiniGame();
+}
+
+dSv_player_config_c* get_player_config() {
+    if (!has_save_data()) {
+        return nullptr;
+    }
+    return &dComIfGs_getSaveData()->getPlayer().getConfig();
 }
 
 template <size_t Size>
@@ -473,6 +496,138 @@ Rml::String item_label_for_slot(u8 slot) {
     return fmt::format("Slot {0} ({1})", slot, get_item_name(id));
 }
 
+struct NamedIndexEntry {
+    const char* name;
+    u8 index;
+};
+
+struct NamedFlagEntry {
+    const char* name;
+    u16 flag;
+};
+
+struct BugSpeciesEntry {
+    const char* name;
+    u8 maleItem;
+    u8 femaleItem;
+    u16 maleTurnInFlag;
+    u16 femaleTurnInFlag;
+};
+
+struct FishSpeciesEntry {
+    const char* name;
+    u8 index;
+};
+
+constexpr std::array<u8, 4> swordEntries = {
+    dItemNo_SWORD_e,
+    dItemNo_MASTER_SWORD_e,
+    dItemNo_WOOD_STICK_e,
+    dItemNo_LIGHT_SWORD_e,
+};
+
+constexpr std::array<u8, 3> shieldEntries = {
+    dItemNo_SHIELD_e,
+    dItemNo_WOOD_SHIELD_e,
+    dItemNo_HYLIA_SHIELD_e,
+};
+
+constexpr std::array<u8, 5> smellEntries = {
+    dItemNo_SMELL_CHILDREN_e,
+    dItemNo_SMELL_YELIA_POUCH_e,
+    dItemNo_SMELL_POH_e,
+    dItemNo_SMELL_FISH_e,
+    dItemNo_SMELL_MEDICINE_e,
+};
+
+constexpr std::array fusedShadowEntries = {
+    NamedIndexEntry{"Forest Temple", 0},
+    NamedIndexEntry{"Goron Mines", 1},
+    NamedIndexEntry{"Lakebed Temple", 2},
+};
+
+constexpr std::array mirrorShardEntries = {
+    NamedIndexEntry{"Snowpeak Ruins", 1},
+    NamedIndexEntry{"Temple of Time", 2},
+    NamedIndexEntry{"City in the Sky", 3},
+};
+
+constexpr std::array bugSpeciesEntries = {
+    BugSpeciesEntry{"Ant", dItemNo_M_ANT_e, dItemNo_F_ANT_e, dSv_event_flag_c::F_0421,
+        dSv_event_flag_c::F_0422},
+    BugSpeciesEntry{"Dayfly", dItemNo_M_MAYFLY_e, dItemNo_F_MAYFLY_e, dSv_event_flag_c::F_0423,
+        dSv_event_flag_c::F_0424},
+    BugSpeciesEntry{"Beetle", dItemNo_M_BEETLE_e, dItemNo_F_BEETLE_e, dSv_event_flag_c::F_0401,
+        dSv_event_flag_c::F_0402},
+    BugSpeciesEntry{"Mantis", dItemNo_M_MANTIS_e, dItemNo_F_MANTIS_e, dSv_event_flag_c::F_0413,
+        dSv_event_flag_c::F_0414},
+    BugSpeciesEntry{"Stag Beetle", dItemNo_M_STAG_BEETLE_e, dItemNo_F_STAG_BEETLE_e,
+        dSv_event_flag_c::F_0405, dSv_event_flag_c::F_0406},
+    BugSpeciesEntry{"Pill Bug", dItemNo_M_DANGOMUSHI_e, dItemNo_F_DANGOMUSHI_e,
+        dSv_event_flag_c::F_0411, dSv_event_flag_c::F_0412},
+    BugSpeciesEntry{"Butterfly", dItemNo_M_BUTTERFLY_e, dItemNo_F_BUTTERFLY_e,
+        dSv_event_flag_c::F_0403, dSv_event_flag_c::F_0404},
+    BugSpeciesEntry{"Ladybug", dItemNo_M_LADYBUG_e, dItemNo_F_LADYBUG_e, dSv_event_flag_c::F_0415,
+        dSv_event_flag_c::F_0416},
+    BugSpeciesEntry{"Snail", dItemNo_M_SNAIL_e, dItemNo_F_SNAIL_e, dSv_event_flag_c::F_0417,
+        dSv_event_flag_c::F_0418},
+    BugSpeciesEntry{"Phasmid", dItemNo_M_NANAFUSHI_e, dItemNo_F_NANAFUSHI_e,
+        dSv_event_flag_c::F_0409, dSv_event_flag_c::F_0410},
+    BugSpeciesEntry{"Grasshopper", dItemNo_M_GRASSHOPPER_e, dItemNo_F_GRASSHOPPER_e,
+        dSv_event_flag_c::F_0407, dSv_event_flag_c::F_0408},
+    BugSpeciesEntry{"Dragonfly", dItemNo_M_DRAGONFLY_e, dItemNo_F_DRAGONFLY_e,
+        dSv_event_flag_c::F_0419, dSv_event_flag_c::F_0420},
+};
+
+constexpr std::array<NamedFlagEntry, 7> hiddenSkillEntries = {
+    NamedFlagEntry{"Ending Blow", dSv_event_flag_c::F_0339},
+    NamedFlagEntry{"Shield Attack", dSv_event_flag_c::F_0338},
+    NamedFlagEntry{"Back Slice", dSv_event_flag_c::F_0340},
+    NamedFlagEntry{"Helm Splitter", dSv_event_flag_c::F_0341},
+    NamedFlagEntry{"Mortal Draw", dSv_event_flag_c::F_0342},
+    NamedFlagEntry{"Jump Strike", dSv_event_flag_c::F_0343},
+    NamedFlagEntry{"Great Spin", dSv_event_flag_c::F_0344},
+};
+
+constexpr std::array<const char*, 16> letterSenders = {
+    "Renado",
+    "Ooccoo 1",
+    "Ooccoo 2",
+    "The Postman",
+    "Kakariko Goods",
+    "Barnes 1",
+    "Barnes 2",
+    "Barnes Bombs",
+    "Malo Mart",
+    "Telma",
+    "Purlo",
+    "From Jr.",
+    "Princess Agitha",
+    "Lanayru Tourism",
+    "Shad",
+    "Yeta",
+};
+
+constexpr std::array<FishSpeciesEntry, 6> fishSpeciesEntries = {
+    FishSpeciesEntry{"Ordon Catfish", 3},
+    FishSpeciesEntry{"Greengill", 5},
+    FishSpeciesEntry{"Reekfish", 4},
+    FishSpeciesEntry{"Hyrule Bass", 0},
+    FishSpeciesEntry{"Hylian Pike", 2},
+    FishSpeciesEntry{"Hylian Loach", 1},
+};
+
+constexpr std::array<const char*, 2> targetTypeNames = {
+    "Hold",
+    "Switch",
+};
+
+constexpr std::array<const char*, 3> soundModeNames = {
+    "Mono",
+    "Stereo",
+    "Surround",
+};
+
 struct DefaultInventoryEntry {
     u8 slot;
     u8 item;
@@ -522,6 +677,188 @@ void set_item_first_bit(u8 itemNo, bool owned) {
 
 void toggle_item_first_bit(u8 itemNo) {
     set_item_first_bit(itemNo, !dComIfGs_isItemFirstBit(itemNo));
+}
+
+void set_event_bit(u16 flag, bool enabled) {
+    if (enabled) {
+        dComIfGs_onEventBit(flag);
+    } else {
+        dComIfGs_offEventBit(flag);
+    }
+}
+
+void set_letter_get_flag(int index, bool received) {
+    if (received) {
+        if (dComIfGs_isLetterGetFlag(index)) {
+            return;
+        }
+        dComIfGs_onLetterGetFlag(index);
+        const u8 slot = dMeter2Info_getRecieveLetterNum() - 1;
+        if (slot < 64) {
+            dComIfGs_setGetNumber(slot, static_cast<u8>(index + 1));
+        }
+    } else {
+        if (!dComIfGs_isLetterGetFlag(index)) {
+            return;
+        }
+        auto& info = dComIfGs_getSaveData()->getPlayer().getLetterInfo();
+        info.mLetterGetFlags[index >> 5] &= ~(1u << (index & 0x1F));
+        for (int slot = 0; slot < 64; ++slot) {
+            if (dComIfGs_getGetNumber(slot) != index + 1) {
+                continue;
+            }
+            for (int nextSlot = slot; nextSlot < 63; ++nextSlot) {
+                dComIfGs_setGetNumber(nextSlot, dComIfGs_getGetNumber(nextSlot + 1));
+            }
+            dComIfGs_setGetNumber(63, 0);
+            break;
+        }
+    }
+}
+
+void set_max_life(int maxLife) {
+    maxLife = std::clamp(maxLife, 15, 100);
+    dComIfGs_setMaxLife(static_cast<u8>(maxLife));
+    const u16 maxHealth = (dComIfGs_getMaxLife() / 5) * 4;
+    if (dComIfGs_getLife() > maxHealth) {
+        dComIfGs_setLife(maxHealth);
+    }
+}
+
+Rml::String max_life_label() {
+    const int maxLife = dComIfGs_getMaxLife();
+    return fmt::format("{} hearts + {} pieces", maxLife / 5, maxLife % 5);
+}
+
+struct ToggleEntry {
+    Rml::String text;
+    std::function<bool()> isSelected;
+    std::function<void(bool)> setSelected;
+};
+
+void populate_toggle_group(Pane& pane, const std::vector<ToggleEntry>& entries) {
+    pane.clear();
+    pane.add_section("Actions");
+    pane.add_button("Select All", [entries] {
+        for (const auto& entry : entries) {
+            entry.setSelected(true);
+        }
+    });
+    pane.add_button("Select None", [entries] {
+        for (const auto& entry : entries) {
+            entry.setSelected(false);
+        }
+    });
+
+    pane.add_section("Items");
+    for (const auto& entry : entries) {
+        pane.add_button(
+            {
+                .text = entry.text,
+                .isSelected = entry.isSelected,
+            },
+            [isSelected = entry.isSelected, setSelected = entry.setSelected] {
+                setSelected(!isSelected());
+            });
+    }
+}
+
+template <size_t Size>
+int count_item_first_bits(const std::array<u8, Size>& entries) {
+    int count = 0;
+    for (const auto item : entries) {
+        if (dComIfGs_isItemFirstBit(item)) {
+            ++count;
+        }
+    }
+    return count;
+}
+
+template <size_t Size>
+int count_event_bits(const std::array<NamedFlagEntry, Size>& entries) {
+    int count = 0;
+    for (const auto& entry : entries) {
+        if (dComIfGs_isEventBit(entry.flag)) {
+            ++count;
+        }
+    }
+    return count;
+}
+
+template <size_t Size>
+int count_collect_crystals(const std::array<NamedIndexEntry, Size>& entries) {
+    int count = 0;
+    for (const auto& entry : entries) {
+        if (dComIfGs_isCollectCrystal(entry.index)) {
+            ++count;
+        }
+    }
+    return count;
+}
+
+template <size_t Size>
+int count_collect_mirrors(const std::array<NamedIndexEntry, Size>& entries) {
+    int count = 0;
+    for (const auto& entry : entries) {
+        if (dComIfGs_isCollectMirror(entry.index)) {
+            ++count;
+        }
+    }
+    return count;
+}
+
+Rml::String count_label(int count, int total) {
+    return fmt::format("{} / {}", count, total);
+}
+
+int count_clothing() {
+    int count = 0;
+    if (dComIfGs_isItemFirstBit(dItemNo_WEAR_CASUAL_e)) {
+        ++count;
+    }
+    if (dComIfGs_isCollectClothes(KOKIRI_CLOTHES_FLAG)) {
+        ++count;
+    }
+    if (dComIfGs_isItemFirstBit(dItemNo_WEAR_ZORA_e)) {
+        ++count;
+    }
+    if (dComIfGs_isItemFirstBit(dItemNo_ARMOR_e)) {
+        ++count;
+    }
+    return count;
+}
+
+int count_letters() {
+    int count = 0;
+    for (int index = 0; index < letterSenders.size(); ++index) {
+        if (dComIfGs_isLetterGetFlag(index)) {
+            ++count;
+        }
+    }
+    return count;
+}
+
+Rml::String bug_species_label(const BugSpeciesEntry& bug) {
+    int owned = 0;
+    int given = 0;
+    if (dComIfGs_isItemFirstBit(bug.maleItem)) {
+        ++owned;
+    }
+    if (dComIfGs_isItemFirstBit(bug.femaleItem)) {
+        ++owned;
+    }
+    if (dComIfGs_isEventBit(bug.maleTurnInFlag)) {
+        ++given;
+    }
+    if (dComIfGs_isEventBit(bug.femaleTurnInFlag)) {
+        ++given;
+    }
+    return fmt::format("{} / 2 owned, {} / 2 given", owned, given);
+}
+
+Rml::String fish_species_label(const FishSpeciesEntry& fish) {
+    return fmt::format(
+        "{} caught, {} cm", dComIfGs_getFishNum(fish.index), dComIfGs_getFishSize(fish.index));
 }
 
 bool can_edit_item_first_bit(int itemId, const itemInfo& item) {
@@ -583,16 +920,362 @@ void populate_item_flag_picker(Pane& pane) {
     }
 }
 
+void populate_select_item_picker(Pane& pane, u8& selectItemData) {
+    pane.clear();
+    pane.add_button(
+        {
+            .text = "None",
+            .isSelected = [&selectItemData] { return selectItemData == dItemNo_NONE_e; },
+        },
+        [&selectItemData] { selectItemData = dItemNo_NONE_e; });
+    for (int i = 0; i < 24; i++) {
+        pane.add_button(
+            {
+                .text = item_label_for_slot(i),
+                .isSelected = [i, &selectItemData] { return selectItemData == i; },
+            },
+            [i, &selectItemData] { selectItemData = i; });
+    }
+}
+
+void populate_select_clothes_picker(Pane& pane) {
+    pane.clear();
+    const auto addOption = [&pane](u8 id) {
+        pane.add_button(
+            {
+                .text = get_item_name(id),
+                .isSelected = [id] { return get_player_status()->mSelectEquip[0] == id; },
+            },
+            [id] {
+                dMeter2Info_setCloth(id, false);
+                daPy_getPlayerActorClass()->setClothesChange(0);
+            });
+    };
+    addOption(dItemNo_WEAR_CASUAL_e);
+    addOption(dItemNo_WEAR_KOKIRI_e);
+    addOption(dItemNo_WEAR_ZORA_e);
+    addOption(dItemNo_ARMOR_e);
+}
+
+template <size_t Size>
+void populate_select_equip_picker(Pane& pane, u8& equip, const std::array<u8, Size>& entries) {
+    pane.clear();
+    const auto addOption = [&pane, &equip](u8 id) {
+        pane.add_button(
+            {
+                .text = get_item_name(id),
+                .isSelected = [id, &equip] { return equip == id; },
+            },
+            [id, &equip] { equip = id; });
+    };
+    addOption(dItemNo_NONE_e);
+    for (const auto item : entries) {
+        addOption(item);
+    }
+}
+
 constexpr std::array<Rml::String, 3> walletSizeNames = {
     "Normal",
     "Big",
     "Giant",
 };
 
+void populate_wallet_picker(Pane& pane) {
+    pane.clear();
+    for (int i = 0; i < walletSizeNames.size(); ++i) {
+        pane.add_button(
+            {
+                .text = walletSizeNames[i],
+                .isSelected = [i] { return get_player_status()->getWalletSize() == i; },
+            },
+            [i] { get_player_status()->setWalletSize(i); });
+    }
+}
+
 constexpr std::array<Rml::String, 2> formNames = {
     "Human",
     "Wolf",
 };
+
+void populate_form_picker(Pane& pane) {
+    pane.clear();
+    for (int i = 0; i < formNames.size(); ++i) {
+        pane.add_button(
+            {
+                .text = formNames[i],
+                .isSelected = [i] { return get_player_status()->getTransformStatus() == i; },
+            },
+            [i] { get_player_status()->setTransformStatus(i); });
+    }
+}
+
+void add_toggle_button(Pane& pane, ToggleEntry entry) {
+    auto isSelected = std::move(entry.isSelected);
+    auto setSelected = std::move(entry.setSelected);
+    pane.add_button(
+        {
+            .text = entry.text,
+            .isSelected = isSelected,
+        },
+        [isSelected, setSelected] { setSelected(!isSelected()); });
+}
+
+template <size_t Size>
+std::vector<ToggleEntry> item_toggle_entries(const std::array<u8, Size>& entries) {
+    std::vector<ToggleEntry> toggles;
+    toggles.reserve(entries.size());
+    for (const auto item : entries) {
+        toggles.push_back({
+            .text = get_item_name(item),
+            .isSelected = [item] { return dComIfGs_isItemFirstBit(item); },
+            .setSelected = [item](bool selected) { set_item_first_bit(item, selected); },
+        });
+    }
+    return toggles;
+}
+
+template <size_t Size>
+std::vector<ToggleEntry> event_toggle_entries(const std::array<NamedFlagEntry, Size>& entries) {
+    std::vector<ToggleEntry> toggles;
+    toggles.reserve(entries.size());
+    for (const auto& [name, flag] : entries) {
+        toggles.push_back({
+            .text = name,
+            .isSelected = [flag] { return dComIfGs_isEventBit(flag); },
+            .setSelected = [flag](bool selected) { set_event_bit(flag, selected); },
+        });
+    }
+    return toggles;
+}
+
+template <size_t Size>
+std::vector<ToggleEntry> collect_crystal_toggle_entries(
+    const std::array<NamedIndexEntry, Size>& entries) {
+    std::vector<ToggleEntry> toggles;
+    toggles.reserve(entries.size());
+    for (const auto& [name, index] : entries) {
+        toggles.push_back({
+            .text = name,
+            .isSelected = [index] { return dComIfGs_isCollectCrystal(index); },
+            .setSelected =
+                [index](bool selected) {
+                    if (selected) {
+                        dComIfGs_onCollectCrystal(index);
+                    } else {
+                        dComIfGs_offCollectCrystal(index);
+                    }
+                },
+        });
+    }
+    return toggles;
+}
+
+template <size_t Size>
+std::vector<ToggleEntry> collect_mirror_toggle_entries(
+    const std::array<NamedIndexEntry, Size>& entries) {
+    std::vector<ToggleEntry> toggles;
+    toggles.reserve(entries.size());
+    for (const auto& [name, index] : entries) {
+        toggles.push_back({
+            .text = name,
+            .isSelected = [index] { return dComIfGs_isCollectMirror(index); },
+            .setSelected =
+                [index](bool selected) {
+                    if (selected) {
+                        dComIfGs_onCollectMirror(index);
+                    } else {
+                        dComIfGs_offCollectMirror(index);
+                    }
+                },
+        });
+    }
+    return toggles;
+}
+
+void populate_collect_clothes_picker(Pane& pane) {
+    populate_toggle_group(pane,
+        {
+            ToggleEntry{
+                .text = "Ordon Clothes",
+                .isSelected = [] { return dComIfGs_isItemFirstBit(dItemNo_WEAR_CASUAL_e); },
+                .setSelected =
+                    [](bool selected) { set_item_first_bit(dItemNo_WEAR_CASUAL_e, selected); },
+            },
+            ToggleEntry{
+                .text = "Hero's Clothes",
+                .isSelected = [] { return dComIfGs_isCollectClothes(KOKIRI_CLOTHES_FLAG); },
+                .setSelected =
+                    [](bool selected) {
+                        if (selected) {
+                            dComIfGs_setCollectClothes(KOKIRI_CLOTHES_FLAG);
+                        } else {
+                            dComIfGs_offCollectClothes(KOKIRI_CLOTHES_FLAG);
+                        }
+                    },
+            },
+            ToggleEntry{
+                .text = "Zora Armor",
+                .isSelected = [] { return dComIfGs_isItemFirstBit(dItemNo_WEAR_ZORA_e); },
+                .setSelected =
+                    [](bool selected) { set_item_first_bit(dItemNo_WEAR_ZORA_e, selected); },
+            },
+            ToggleEntry{
+                .text = "Magic Armor",
+                .isSelected = [] { return dComIfGs_isItemFirstBit(dItemNo_ARMOR_e); },
+                .setSelected = [](bool selected) { set_item_first_bit(dItemNo_ARMOR_e, selected); },
+            },
+        });
+}
+
+void populate_poe_souls_picker(Pane& pane) {
+    pane.clear();
+    pane.add_section("Actions");
+    pane.add_button("All 60", [] { dComIfGs_setPohSpiritNum(60); });
+    pane.add_button("Clear", [] { dComIfGs_setPohSpiritNum(0); });
+
+    pane.add_section("Value");
+    pane.add_child<NumberButton>(NumberButton::Props{
+        .key = "Collected",
+        .getValue = [] { return dComIfGs_getPohSpiritNum(); },
+        .setValue =
+            [](int value) { dComIfGs_setPohSpiritNum(static_cast<u8>(std::clamp(value, 0, 60))); },
+        .max = 60,
+    });
+}
+
+void populate_max_life_picker(Pane& pane) {
+    pane.clear();
+    pane.add_section("Actions");
+    pane.add_button("3 Hearts", [] {
+        dComIfGs_setMaxLife(15);
+        dComIfGs_setLife(12);
+    });
+    pane.add_button("20 Hearts", [] {
+        dComIfGs_setMaxLife(100);
+        dComIfGs_setLife(80);
+    });
+
+    pane.add_section("Value");
+    pane.add_child<NumberButton>(NumberButton::Props{
+        .key = "Max Life",
+        .getValue = [] { return dComIfGs_getMaxLife(); },
+        .setValue = [](int value) { set_max_life(value); },
+        .min = 15,
+        .max = 100,
+    });
+}
+
+void populate_bug_species_picker(Pane& pane, const BugSpeciesEntry& bug) {
+    pane.clear();
+    pane.add_section("Owned");
+    add_toggle_button(
+        pane, {
+                  .text = fmt::format("Male {}", bug.name),
+                  .isSelected = [item = bug.maleItem] { return dComIfGs_isItemFirstBit(item); },
+                  .setSelected = [item = bug.maleItem](
+                                     bool selected) { set_item_first_bit(item, selected); },
+              });
+    add_toggle_button(
+        pane, {
+                  .text = fmt::format("Female {}", bug.name),
+                  .isSelected = [item = bug.femaleItem] { return dComIfGs_isItemFirstBit(item); },
+                  .setSelected = [item = bug.femaleItem](
+                                     bool selected) { set_item_first_bit(item, selected); },
+              });
+
+    pane.add_section("Given to Agitha");
+    add_toggle_button(
+        pane, {
+                  .text = fmt::format("Male {}", bug.name),
+                  .isSelected = [flag = bug.maleTurnInFlag] { return dComIfGs_isEventBit(flag); },
+                  .setSelected = [flag = bug.maleTurnInFlag](
+                                     bool selected) { set_event_bit(flag, selected); },
+              });
+    add_toggle_button(
+        pane, {
+                  .text = fmt::format("Female {}", bug.name),
+                  .isSelected = [flag = bug.femaleTurnInFlag] { return dComIfGs_isEventBit(flag); },
+                  .setSelected = [flag = bug.femaleTurnInFlag](
+                                     bool selected) { set_event_bit(flag, selected); },
+              });
+}
+
+void populate_letters_picker(Pane& pane) {
+    std::vector<ToggleEntry> toggles;
+    toggles.reserve(letterSenders.size());
+    for (int index = 0; index < letterSenders.size(); ++index) {
+        toggles.push_back({
+            .text = letterSenders[index],
+            .isSelected = [index] { return dComIfGs_isLetterGetFlag(index); },
+            .setSelected = [index](bool selected) { set_letter_get_flag(index, selected); },
+        });
+    }
+    populate_toggle_group(pane, toggles);
+}
+
+void populate_fish_species_picker(Pane& pane, const FishSpeciesEntry& fish) {
+    pane.clear();
+    pane.add_section(fish.name);
+    pane.add_child<NumberButton>(NumberButton::Props{
+        .key = "Caught",
+        .getValue = [index = fish.index] { return dComIfGs_getFishNum(index); },
+        .setValue =
+            [index = fish.index](int value) {
+                get_player_fishing_info()->mFishCount[index] =
+                    static_cast<u16>(std::clamp(value, 0, 999));
+            },
+        .max = 999,
+    });
+    pane.add_child<NumberButton>(NumberButton::Props{
+        .key = "Biggest",
+        .getValue = [index = fish.index] { return dComIfGs_getFishSize(index); },
+        .setValue =
+            [index = fish.index](int value) {
+                dComIfGs_setFishSize(index, static_cast<u8>(std::clamp(value, 0, 255)));
+            },
+        .max = 255,
+    });
+}
+
+Rml::String target_type_label() {
+    const auto type = get_player_config()->getAttentionType();
+    if (type >= targetTypeNames.size()) {
+        return fmt::format("Unknown ({})", type);
+    }
+    return targetTypeNames[type];
+}
+
+Rml::String sound_mode_label() {
+    const auto mode = get_player_config()->getSound();
+    if (mode >= soundModeNames.size()) {
+        return fmt::format("Unknown ({})", mode);
+    }
+    return soundModeNames[mode];
+}
+
+void populate_target_type_picker(Pane& pane) {
+    pane.clear();
+    for (u8 type = 0; type < targetTypeNames.size(); ++type) {
+        pane.add_button(
+            {
+                .text = targetTypeNames[type],
+                .isSelected = [type] { return get_player_config()->getAttentionType() == type; },
+            },
+            [type] { get_player_config()->setAttentionType(type); });
+    }
+}
+
+void populate_sound_mode_picker(Pane& pane) {
+    pane.clear();
+    for (u8 mode = 0; mode < soundModeNames.size(); ++mode) {
+        pane.add_button(
+            {
+                .text = soundModeNames[mode],
+                .isSelected = [mode] { return get_player_config()->getSound() == mode; },
+            },
+            [mode] { get_player_config()->setSound(mode); });
+    }
+}
 
 constexpr float kDaytimeUnitsPerHour = 15.0f;
 
@@ -682,22 +1365,7 @@ EditorWindow::EditorWindow() {
                     .getValue = [&selectItemData] { return item_label_for_slot(selectItemData); },
                 })
                 .on_focus([&rightPane, &selectItemData](Rml::Event&) {
-                    rightPane.clear();
-                    rightPane.add_button(
-                        {
-                            .text = "None",
-                            .isSelected =
-                                [&selectItemData] { return selectItemData == dItemNo_NONE_e; },
-                        },
-                        [&selectItemData] { selectItemData = dItemNo_NONE_e; });
-                    for (int i = 0; i < 24; i++) {
-                        rightPane.add_button(
-                            {
-                                .text = item_label_for_slot(i),
-                                .isSelected = [i, &selectItemData] { return selectItemData == i; },
-                            },
-                            [i, &selectItemData] { selectItemData = i; });
-                    }
+                    populate_select_item_picker(rightPane, selectItemData);
                 });
         };
         genSelectItemComboBox("Equip X", get_player_status()->mSelectItem[0]);
@@ -710,46 +1378,15 @@ EditorWindow::EditorWindow() {
                 .key = "Clothes",
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[0]); },
             })
-            .on_focus([&rightPane](Rml::Event&) {
-                rightPane.clear();
-                const auto addOption = [&rightPane](u8 id) {
-                    rightPane.add_button(
-                        {
-                            .text = get_item_name(id),
-                            .isSelected =
-                                [id] { return get_player_status()->mSelectEquip[0] == id; },
-                        },
-                        [id] {
-                            dMeter2Info_setCloth(id, false);
-                            daPy_getPlayerActorClass()->setClothesChange(0);
-                        });
-                };
-                addOption(dItemNo_WEAR_CASUAL_e);
-                addOption(dItemNo_WEAR_KOKIRI_e);
-                addOption(dItemNo_WEAR_ZORA_e);
-                addOption(dItemNo_ARMOR_e);
-            });
+            .on_focus([&rightPane](Rml::Event&) { populate_select_clothes_picker(rightPane); });
         leftPane
             .add_select_button({
                 .key = "Sword",
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[1]); },
             })
             .on_focus([&rightPane](Rml::Event&) {
-                rightPane.clear();
-                const auto addOption = [&rightPane](u8 id) {
-                    rightPane.add_button(
-                        {
-                            .text = get_item_name(id),
-                            .isSelected =
-                                [id] { return get_player_status()->mSelectEquip[1] == id; },
-                        },
-                        [id] { get_player_status()->mSelectEquip[1] = id; });
-                };
-                addOption(dItemNo_NONE_e);
-                addOption(dItemNo_WOOD_STICK_e);
-                addOption(dItemNo_SWORD_e);
-                addOption(dItemNo_MASTER_SWORD_e);
-                addOption(dItemNo_LIGHT_SWORD_e);
+                populate_select_equip_picker(
+                    rightPane, get_player_status()->mSelectEquip[1], swordEntries);
             });
         leftPane
             .add_select_button({
@@ -757,20 +1394,8 @@ EditorWindow::EditorWindow() {
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[2]); },
             })
             .on_focus([&rightPane](Rml::Event&) {
-                rightPane.clear();
-                const auto addOption = [&rightPane](u8 id) {
-                    rightPane.add_button(
-                        {
-                            .text = get_item_name(id),
-                            .isSelected =
-                                [id] { return get_player_status()->mSelectEquip[2] == id; },
-                        },
-                        [id] { get_player_status()->mSelectEquip[2] = id; });
-                };
-                addOption(dItemNo_NONE_e);
-                addOption(dItemNo_SHIELD_e);
-                addOption(dItemNo_WOOD_SHIELD_e);
-                addOption(dItemNo_HYLIA_SHIELD_e);
+                populate_select_equip_picker(
+                    rightPane, get_player_status()->mSelectEquip[2], shieldEntries);
             });
         leftPane
             .add_select_button({
@@ -778,56 +1403,21 @@ EditorWindow::EditorWindow() {
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[3]); },
             })
             .on_focus([&rightPane](Rml::Event&) {
-                rightPane.clear();
-                const auto addOption = [&rightPane](u8 id) {
-                    rightPane.add_button(
-                        {
-                            .text = get_item_name(id),
-                            .isSelected =
-                                [id] { return get_player_status()->mSelectEquip[3] == id; },
-                        },
-                        [id] { get_player_status()->mSelectEquip[3] = id; });
-                };
-                addOption(dItemNo_NONE_e);
-                addOption(dItemNo_SMELL_CHILDREN_e);
-                addOption(dItemNo_SMELL_YELIA_POUCH_e);
-                addOption(dItemNo_SMELL_POH_e);
-                addOption(dItemNo_SMELL_FISH_e);
-                addOption(dItemNo_SMELL_MEDICINE_e);
+                populate_select_equip_picker(
+                    rightPane, get_player_status()->mSelectEquip[3], smellEntries);
             });
         leftPane
             .add_select_button({
                 .key = "Wallet Size",
                 .getValue = [] { return walletSizeNames[get_player_status()->getWalletSize()]; },
             })
-            .on_focus([&rightPane](Rml::Event&) {
-                rightPane.clear();
-                for (int i = 0; i < walletSizeNames.size(); ++i) {
-                    rightPane.add_button(
-                        {
-                            .text = walletSizeNames[i],
-                            .isSelected = [i] { return get_player_status()->getWalletSize() == i; },
-                        },
-                        [i] { get_player_status()->setWalletSize(i); });
-                }
-            });
+            .on_focus([&rightPane](Rml::Event&) { populate_wallet_picker(rightPane); });
         leftPane
             .add_select_button({
                 .key = "Form",
                 .getValue = [] { return formNames[get_player_status()->getTransformStatus()]; },
             })
-            .on_focus([&rightPane](Rml::Event&) {
-                rightPane.clear();
-                for (int i = 0; i < formNames.size(); ++i) {
-                    rightPane.add_button(
-                        {
-                            .text = formNames[i],
-                            .isSelected =
-                                [i] { return get_player_status()->getTransformStatus() == i; },
-                        },
-                        [i] { get_player_status()->setTransformStatus(i); });
-                }
-            });
+            .on_focus([&rightPane](Rml::Event&) { populate_form_picker(rightPane); });
 
         leftPane.add_section("World");
         leftPane
@@ -1127,7 +1717,125 @@ EditorWindow::EditorWindow() {
             .on_focus([&rightPane](Rml::Event&) { populate_item_flag_picker(rightPane); });
     });
     add_tab("Collection", [this](Rml::Element* content) {
-        // TODO
+        auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
+        auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
+
+        leftPane.add_section("Equipment");
+        leftPane
+            .add_select_button({
+                .key = "Swords",
+                .getValue =
+                    [] {
+                        return count_label(
+                            count_item_first_bits(swordEntries), swordEntries.size());
+                    },
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                populate_toggle_group(rightPane, item_toggle_entries(swordEntries));
+            });
+        leftPane
+            .add_select_button({
+                .key = "Shields",
+                .getValue =
+                    [] {
+                        return count_label(
+                            count_item_first_bits(shieldEntries), shieldEntries.size());
+                    },
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                populate_toggle_group(rightPane, item_toggle_entries(shieldEntries));
+            });
+        leftPane
+            .add_select_button({
+                .key = "Clothing",
+                .getValue = [] { return count_label(count_clothing(), 4); },
+            })
+            .on_focus([&rightPane](Rml::Event&) { populate_collect_clothes_picker(rightPane); });
+
+        leftPane.add_section("Key Items");
+        leftPane
+            .add_select_button({
+                .key = "Fused Shadows",
+                .getValue =
+                    [] {
+                        return count_label(
+                            count_collect_crystals(fusedShadowEntries), fusedShadowEntries.size());
+                    },
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                populate_toggle_group(
+                    rightPane, collect_crystal_toggle_entries(fusedShadowEntries));
+            });
+        leftPane
+            .add_select_button({
+                .key = "Mirror Shards",
+                .getValue =
+                    [] {
+                        return count_label(
+                            count_collect_mirrors(mirrorShardEntries), mirrorShardEntries.size());
+                    },
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                populate_toggle_group(rightPane, collect_mirror_toggle_entries(mirrorShardEntries));
+            });
+
+        leftPane.add_section("Health & Souls");
+        leftPane
+            .add_select_button({
+                .key = "Poe Souls",
+                .getValue = [] { return fmt::format("{} / 60", dComIfGs_getPohSpiritNum()); },
+            })
+            .on_focus([&rightPane](Rml::Event&) { populate_poe_souls_picker(rightPane); });
+        leftPane
+            .add_select_button({
+                .key = "Max Life",
+                .getValue = [] { return max_life_label(); },
+            })
+            .on_focus([&rightPane](Rml::Event&) { populate_max_life_picker(rightPane); });
+
+        leftPane.add_section("Golden Bugs");
+        for (const auto& bug : bugSpeciesEntries) {
+            leftPane
+                .add_select_button({
+                    .key = bug.name,
+                    .getValue = [bug] { return bug_species_label(bug); },
+                })
+                .on_focus([&rightPane, bug](
+                              Rml::Event&) { populate_bug_species_picker(rightPane, bug); });
+        }
+
+        leftPane.add_section("Skills");
+        leftPane
+            .add_select_button({
+                .key = "Hidden Skills",
+                .getValue =
+                    [] {
+                        return count_label(
+                            count_event_bits(hiddenSkillEntries), hiddenSkillEntries.size());
+                    },
+            })
+            .on_focus([&rightPane](Rml::Event&) {
+                populate_toggle_group(rightPane, event_toggle_entries(hiddenSkillEntries));
+            });
+
+        leftPane.add_section("Logs");
+        leftPane
+            .add_select_button({
+                .key = "Postman Letters",
+                .getValue = [] { return count_label(count_letters(), letterSenders.size()); },
+            })
+            .on_focus([&rightPane](Rml::Event&) { populate_letters_picker(rightPane); });
+
+        leftPane.add_section("Fishing Log");
+        for (const auto& fish : fishSpeciesEntries) {
+            leftPane
+                .add_select_button({
+                    .key = fish.name,
+                    .getValue = [fish] { return fish_species_label(fish); },
+                })
+                .on_focus([&rightPane, fish](
+                              Rml::Event&) { populate_fish_species_picker(rightPane, fish); });
+        }
     });
 
     add_tab("Flags", [this](Rml::Element* content) {
@@ -1135,11 +1843,86 @@ EditorWindow::EditorWindow() {
     });
 
     add_tab("Minigame", [this](Rml::Element* content) {
-        // TODO
+        auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
+        auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
+
+        leftPane.add_section("Records");
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "STAR Game Time (ms)",
+                .getValue =
+                    [] {
+                        return static_cast<int>(std::min<u32>(
+                            get_minigame()->getHookGameTime(), std::numeric_limits<int>::max()));
+                    },
+                .setValue =
+                    [](int value) {
+                        get_minigame()->setHookGameTime(static_cast<u32>(std::max(0, value)));
+                    },
+                .max = std::numeric_limits<int>::max(),
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Snowboard Race Time (ms)",
+                .getValue =
+                    [] {
+                        return static_cast<int>(std::min<u32>(
+                            get_minigame()->getRaceGameTime(), std::numeric_limits<int>::max()));
+                    },
+                .setValue =
+                    [](int value) {
+                        get_minigame()->setRaceGameTime(static_cast<u32>(std::max(0, value)));
+                    },
+                .max = std::numeric_limits<int>::max(),
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane
+            .add_child<NumberButton>(NumberButton::Props{
+                .key = "Fruit-Pop-Flight Score",
+                .getValue =
+                    [] {
+                        return static_cast<int>(std::min<u32>(
+                            get_minigame()->getBalloonScore(), std::numeric_limits<int>::max()));
+                    },
+                .setValue =
+                    [](int value) {
+                        get_minigame()->setBalloonScore(static_cast<u32>(std::max(0, value)));
+                    },
+                .max = std::numeric_limits<int>::max(),
+            })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
     });
 
     add_tab("Config", [this](Rml::Element* content) {
-        // TODO
+        auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
+        auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
+
+        leftPane.add_section("Options");
+        // TODO: replace with generic bool component based on ConfigBoolSelect
+        leftPane
+            .add_button(
+                {
+                    .text = "Enable Vibration",
+                    .isSelected = [] { return get_player_config()->getVibration() != 0; },
+                },
+                [] {
+                    const bool enabled = get_player_config()->getVibration() != 0;
+                    get_player_config()->setVibration(enabled ? 0 : 1);
+                })
+            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane
+            .add_select_button({
+                .key = "Target Type",
+                .getValue = [] { return target_type_label(); },
+            })
+            .on_focus([&rightPane](Rml::Event&) { populate_target_type_picker(rightPane); });
+        leftPane
+            .add_select_button({
+                .key = "Sound",
+                .getValue = [] { return sound_mode_label(); },
+            })
+            .on_focus([&rightPane](Rml::Event&) { populate_sound_mode_picker(rightPane); });
     });
 }
 
