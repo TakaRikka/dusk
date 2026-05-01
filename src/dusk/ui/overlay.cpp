@@ -12,6 +12,30 @@
 namespace dusk::ui {
 namespace {
 
+const Rml::String kDocumentSource = R"RML(
+<rml>
+<head>
+    <link type="text/rcss" href="res/rml/overlay.rcss" />
+</head>
+<body>
+    <div class="overlay-root">
+        <div class="overlay">
+            <div class="header">
+                <div id="title"></div>
+                <div id="carousel-container" class="carousel-container"></div>
+            </div>
+            <div id="description" class="description"></div>
+            <div class="divider"></div>
+            <div class="footer">
+                <div id="return"></div>
+                <div id="reset"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</rml>
+)RML";
+
 int get_value(GraphicsOption option) {
     switch (option) {
         case GraphicsOption::InternalResolution:
@@ -132,7 +156,7 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
 }
 
 Overlay::Overlay(OverlayProps props)
-    : Document("res/rml/overlay.rml"),
+    : Document(kDocumentSource),
       mOption(props.option),
       mValueMin(props.valueMin),
       mValueMax(props.valueMax) {
