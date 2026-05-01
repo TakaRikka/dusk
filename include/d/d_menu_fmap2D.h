@@ -81,6 +81,10 @@ public:
     void calcDrawPriority();
     void setArrowPosAxis(f32, f32);
 
+    #if TARGET_PC
+    void fMapBackWide();
+    #endif
+
     virtual void draw();
     virtual ~dMenu_Fmap2DBack_c();
 
@@ -329,6 +333,10 @@ public:
     bool checkWarpAcceptCannon();
     void setHIO(bool);
     bool isWarpAccept();
+
+    #if TARGET_PC
+    void fMapTopWide();
+    #endif
 
     virtual void draw();
     virtual ~dMenu_Fmap2DTop_c();
