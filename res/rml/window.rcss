@@ -199,7 +199,11 @@ button:not(:disabled):focus-visible {
     box-shadow: #C2A42D 0 0 0 2dp;
 }
 
-button:not(:disabled):selected,
+button:not(:disabled):selected {
+    opacity: 1;
+    background-color: rgba(204, 184, 119, 40%);
+}
+
 button:not(:disabled):active {
     opacity: 1;
     background-color: rgba(204, 184, 119, 40%);
@@ -226,7 +230,11 @@ select-button:not(:disabled):focus-visible {
     box-shadow: #C2A42D 0 0 0 2dp;
 }
 
-select-button:not(:disabled):selected,
+select-button:not(:disabled):selected {
+    opacity: 1;
+    background-color: rgba(204, 184, 119, 40%);
+}
+
 select-button:not(:disabled):active {
     opacity: 1;
     background-color: rgba(204, 184, 119, 40%);
