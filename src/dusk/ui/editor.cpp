@@ -316,13 +316,16 @@ std::map<int, itemInfo> itemMap = {
     {dItemNo_NONE_e, {"None"}},
 };
 
+Rml::String get_item_name(u8 id) {
+    return itemMap.find(id)->second.m_name;
+}
+
 Rml::String item_label_for_slot(u8 slot) {
     if (slot == 0xFF) {
         return "None";
     }
-    auto& item = dComIfGs_getSaveData()->getPlayer().getItem();
-    auto itemNo = item.mItems[slot];
-    return fmt::format("Slot {0} ({1})", slot, itemMap.find(itemNo)->second.m_name);
+    const auto id = dComIfGs_getSaveData()->getPlayer().getItem().mItems[slot];
+    return fmt::format("Slot {0} ({1})", slot, get_item_name(id));
 }
 
 }  // namespace
@@ -425,17 +428,14 @@ EditorWindow::EditorWindow() {
         leftPane
             .add_select_button({
                 .key = "Clothes",
-                .getValue =
-                    [] {
-                        return itemMap.find(get_player_status()->mSelectEquip[0])->second.m_name;
-                    },
+                .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[0]); },
             })
             .on_hover([&rightPane](Rml::Event&) {
                 rightPane.clear();
-                const auto addOption = [&rightPane](const Rml::String& name, u8 id) {
+                const auto addOption = [&rightPane](u8 id) {
                     rightPane.add_button(
                         {
-                            .text = name,
+                            .text = get_item_name(id),
                             .isSelected =
                                 [id] { return get_player_status()->mSelectEquip[0] == id; },
                         },
@@ -444,10 +444,10 @@ EditorWindow::EditorWindow() {
                             daPy_getPlayerActorClass()->setClothesChange(0);
                         });
                 };
-                addOption("Ordon Clothes", dItemNo_WEAR_CASUAL_e);
-                addOption("Hero's Clothes", dItemNo_WEAR_KOKIRI_e);
-                addOption("Zora Armor", dItemNo_WEAR_ZORA_e);
-                addOption("Magic Armor", dItemNo_ARMOR_e);
+                addOption(dItemNo_WEAR_CASUAL_e);
+                addOption(dItemNo_WEAR_KOKIRI_e);
+                addOption(dItemNo_WEAR_ZORA_e);
+                addOption(dItemNo_ARMOR_e);
             });
     });
 
