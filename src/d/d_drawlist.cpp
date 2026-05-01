@@ -22,6 +22,10 @@
 #include "dusk/frame_interpolation.h"
 #include "dusk/gx_helper.h"
 #include "dusk/logging.h"
+
+static const void* getInterpKey(const void* base, int idx) {
+    return reinterpret_cast<const void*>(reinterpret_cast<uintptr_t>(base) ^ idx);
+}
 #endif
 
 class dDlst_2Dm_c {
@@ -1062,7 +1066,15 @@ void dDlst_shadowReal_c::reset() {
 }
 
 void dDlst_shadowReal_c::imageDraw(Mtx param_0) {
-    GXSetProjection(mRenderProjMtx, GX_ORTHOGRAPHIC);
+#ifdef TARGET_PC
+    Mtx render_proj_mtx;
+    if (dusk::frame_interp::lookup_replacement(getInterpKey(mpModels[0], 2), render_proj_mtx)) {
+        GXSetProjection(render_proj_mtx, GX_ORTHOGRAPHIC);
+    } else
+#endif
+    {
+        GXSetProjection(mRenderProjMtx, GX_ORTHOGRAPHIC);
+    }
     JUT_ASSERT(1916, mModelNum);
     J3DModelData* model_data;
     J3DModel** models = mpModels;
@@ -1075,7 +1087,15 @@ void dDlst_shadowReal_c::imageDraw(Mtx param_0) {
         for (u16 j = 0; j < model_data->getShapeNum(); j++) {
             if (!model_data->getShapeNodePointer(j)->checkFlag(1)) {
                 shape_pkt = (*models)->getShapePacket(j);
-                shape_pkt->setBaseMtxPtr(&mViewMtx);
+#ifdef TARGET_PC
+                Mtx view_mtx;
+                if (dusk::frame_interp::lookup_replacement(getInterpKey(mpModels[0], 1), view_mtx)) {
+                    shape_pkt->setBaseMtxPtr(&view_mtx);
+                } else
+#endif
+                {
+                    shape_pkt->setBaseMtxPtr(&mViewMtx);
+                }
                 shape_pkt->drawFast();
                 shape_pkt->setBaseMtxPtr((Mtx*)param_0);
             }
@@ -1096,7 +1116,18 @@ void dDlst_shadowReal_c::draw() {
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetCurrentMtx(GX_PNMTX0);
-    GXLoadTexMtxImm(mReceiverProjMtx, GX_TEXMTX0, GX_MTX3x4);
+#ifdef TARGET_PC
+    Mtx view_mtx, recv_proj_mtx;
+    const auto have_view_mtx = dusk::frame_interp::lookup_replacement(getInterpKey(mpModels[0], 1), view_mtx);
+    const auto have_recv_proj_mtx = dusk::frame_interp::lookup_replacement(getInterpKey(mpModels[0], 3), recv_proj_mtx);
+    if (have_view_mtx && have_recv_proj_mtx) {
+        cMtx_concat(recv_proj_mtx, view_mtx, recv_proj_mtx);
+        GXLoadTexMtxImm(recv_proj_mtx, GX_TEXMTX0, GX_MTX3x4);
+    } else
+#endif
+    {
+        GXLoadTexMtxImm(mReceiverProjMtx, GX_TEXMTX0, GX_MTX3x4);
+    }
     mShadowRealPoly.draw();
 }
 
@@ -1253,6 +1284,13 @@ u8 dDlst_shadowReal_c::setShadowRealMtx(cXyz* param_0, cXyz* param_1, f32 param_
     cMtx_lookAt(mViewMtx, &local_64, param_1, 0);
     C_MTXOrtho(mRenderProjMtx, param_2, -param_2, -param_2, param_2, 1.0f, 10000.0f);
     C_MTXLightOrtho(mReceiverProjMtx, param_2, -param_2, -param_2, param_2, 0.5f, -0.5f, 0.5f, 0.5f);
+    
+#ifdef TARGET_PC
+    const auto keybase = mpModels[0];
+    dusk::frame_interp::record_final_mtx(mViewMtx, getInterpKey(keybase, 1));
+    dusk::frame_interp::record_final_mtx(mRenderProjMtx, getInterpKey(keybase, 2));
+    dusk::frame_interp::record_final_mtx(mReceiverProjMtx, getInterpKey(keybase, 3));
+#endif
     cMtx_concat(mReceiverProjMtx, mViewMtx, mReceiverProjMtx);
     return r29;
 }
@@ -1277,6 +1315,10 @@ u32 dDlst_shadowReal_c::set(u32 i_key, J3DModel* i_model, cXyz* param_2, f32 par
             }
         }
 
+#ifdef TARGET_PC
+        // provide a stable key for interpolation
+        mpModels[0] = i_model;
+#endif
         field_0x1 = setShadowRealMtx(&sp60, param_2, param_3, param_4, param_7, param_5);
 
         if (!field_0x1) {
@@ -1369,12 +1411,6 @@ void dDlst_shadowSimple_c::draw() {
     GXCallDisplayList(l_clearMat, 0x40);
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
 }
-
-#if TARGET_PC
-static const void* getInterpKey(const void* base, int idx) {
-    return reinterpret_cast<const void*>(reinterpret_cast<uintptr_t>(base) ^ idx);
-}
-#endif
 
 void dDlst_shadowSimple_c::set(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3,
                                    s16 param_4, f32 param_5, TGXTexObj* param_6) {
