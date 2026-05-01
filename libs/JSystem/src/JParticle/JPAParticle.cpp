@@ -273,7 +273,7 @@ bool JPABaseParticle::calc_p(JPAEmitterWorkData* work) {
     work->mRotType = pBsp->getRotType();
     work->mDLType = pBsp->getType() == 4 || pBsp->getType() == 8;
     work->mPlaneType = work->mDLType ? 2 : pBsp->getBasePlaneType();
-    interp(work, work->mpRes->mpDrawParticleFuncList[0]);
+    interp(work, (void const*)work->mpRes->mpDrawParticleFuncList[0]);
 #endif
 
     return false;
@@ -332,7 +332,7 @@ bool JPABaseParticle::calc_c(JPAEmitterWorkData* work) {
     work->mRotType = pCsp->getRotType();
     work->mDLType = pCsp->getType() == 4 || pCsp->getType() == 8;
     work->mPlaneType = work->mDLType ? 2 : pCsp->getBasePlaneType();
-    interp(work, work->mpRes->mpDrawParticleChildFuncList[0]);
+    interp(work, (void const*)work->mpRes->mpDrawParticleChildFuncList[0]);
 #endif
 
     return false;
