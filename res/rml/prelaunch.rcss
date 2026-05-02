@@ -94,7 +94,7 @@ hero img {
     decorator: horizontal-gradient(#00000000 #00000000);
 }
 
-#menu-list button[anim-done] {
+#menu-list button.anim-done {
     transition: decorator color 0.1s linear-in-out;
 }
 

@@ -145,7 +145,7 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         }
         if (target == mDocument && !mDocument->HasAttribute("open")) {
             Document::hide();
-        } else if (target->GetTagName() == "button") {
+        } else if (target->GetTagName() == "button" && !target->IsClassSet("anim-done")) {
             target->SetClass("anim-done", true);
         }
     });
