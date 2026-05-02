@@ -1,7 +1,7 @@
 
 set(DOLZEL_FILES
         src/m_Do/m_Do_main.cpp
-        src/m_Do/m_Do_printf.cpp
+        #src/m_Do/m_Do_printf.cpp
         src/m_Do/m_Do_audio.cpp
         src/m_Do/m_Do_controller_pad.cpp
         #src/m_Do/m_Re_controller_pad.cpp
@@ -1467,6 +1467,7 @@ set(DUSK_FILES
         src/dusk/livesplit.cpp
         src/dusk/offset_ptr.cpp
         src/dusk/OSContext.cpp
+        src/dusk/OSReport.cpp
         src/dusk/OSThread.cpp
         src/dusk/OSMutex.cpp
         src/dusk/discord_presence.cpp

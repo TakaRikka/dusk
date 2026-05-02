@@ -222,21 +222,24 @@ void* JKRExpHeap::do_alloc(u32 size, int alignment) {
         OSReport_Error("Free block list as follows:\n");
         OSReport_Error("Start    | End      | Size    \n");
 
-        int i = 0;
         for (const CMemBlock* block = mHeadFreeList; block; block = block->mNext) {
             if (block->mMagic) {
                 // Allocated, ignore.
                 continue;
-            }
-            if (i++ > 10) {
-                OSReport_Error("<more>\n");
-                break;
             }
 
             auto blockStart = (uintptr_t)block - (uintptr_t)mStart;
             auto blockEnd = (uintptr_t)block + block->size - (uintptr_t)mStart;
             auto blockSize = block->size;
             OSReport_Error("%08X | %08X | %08X\n", (u32) blockStart, (u32) blockEnd, (u32) blockSize);
+        }
+
+        OSReport_Error("Child heaps as follows:\n");
+        OSReport_Error("Start    | End      | Name    \n");
+
+        const JSUTree<JKRHeap>& tree = getHeapTree();
+        for (JSUTreeIterator iter(tree.getFirstChild()); iter != tree.getEndChild(); ++iter) {
+            OSReport_Error("%08X | %08X | %s\n", iter->getStartAddr(), iter->getEndAddr(), iter->getName());
         }
 
         CRASH("Aborting due to allocation failure!");

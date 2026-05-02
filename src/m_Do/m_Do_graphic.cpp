@@ -2041,11 +2041,12 @@ static void drawItem3D() {
 
 int mDoGph_Painter() {
     ZoneScoped;
+
     // Diagnostic: log windowNum to track game state machine progress
     static bool sDiagLoggedWindow = false;
     if (!sDiagLoggedWindow) {
         int wn = dComIfGp_getWindowNum();
-        DuskLog.debug("mDoGph_Painter: windowNum={}", wn);
+        // DuskLog.debug("mDoGph_Painter: windowNum={}", wn);
         if (wn != 0) sDiagLoggedWindow = true;
     }
 
