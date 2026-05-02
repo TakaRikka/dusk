@@ -14,7 +14,7 @@ void noAutoSave() {}
 
 void triggerAutoSave() {
     if (dusk::getSettings().game.autoSave && mAutoSaveProc == 0 &&
-        strcmp(dComIfGp_getStartStageName(), "F_SP102") != 0 && dComIfGp_getStartStageLayer() != 0)
+        strcmp(dComIfGp_getStartStageName(), "F_SP102") != 0)
     {
         mAutoSaveProc = 1;
     }
@@ -25,6 +25,9 @@ void updateAutoSave() {
 }
 
 void writeAutoSave() {
+    int stageNo = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
+
+    dComIfGs_putSave(stageNo);
     dComIfGs_setMemoryToCard(mSaveBuffer, dComIfGs_getDataNum());
     mDoMemCdRWm_SetCheckSumGameData(mSaveBuffer, dComIfGs_getDataNum());
 

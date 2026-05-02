@@ -702,7 +702,7 @@ static u32 l_sceneChangeStartTick;
 #endif
 
 #if TARGET_PC
-static BOOL shouldAutoSave;
+static BOOL autoSaved;
 #endif
 
 static int dScnPly_Execute(dScnPly_c* i_this) {
@@ -749,10 +749,10 @@ static int dScnPly_Execute(dScnPly_c* i_this) {
 
     #if TARGET_PC
     if (!dComIfGp_event_runCheck() && !fopOvlpM_IsPeek() && !dComIfG_resetToOpening(i_this) &&
-        !dComIfGp_isEnableNextStage() && shouldAutoSave == FALSE)
+        !dComIfGp_isEnableNextStage() && autoSaved == FALSE)
     {
         triggerAutoSave();
-        shouldAutoSave = TRUE;
+        autoSaved = TRUE;
     }
     #endif
 
@@ -1609,7 +1609,7 @@ static int dScnPly_Create(scene_class* i_this) {
     int phase_state = dComLbG_PhaseHandler(&a_this->field_0x1c4, l_method, a_this);
 
     #if TARGET_PC
-    shouldAutoSave = FALSE;
+    autoSaved = FALSE;
     #endif
 
     return phase_state;
