@@ -1,0 +1,238 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    padding: 64dp;
+    font-family: "Fira Sans";
+    font-weight: normal;
+    font-style: normal;
+    font-size: 15dp;
+    color: #E0DBC8;
+}
+
+window {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    max-width: 1088dp;
+    max-height: 768dp;
+    margin: auto;
+    border-radius: 14dp;
+    overflow: hidden;
+    border: 2dp #92875B;
+    backdrop-filter: blur(5dp);
+    box-shadow: 0 0 25dp 5dp;
+    background-color: rgba(21, 22, 16, 90%);
+    filter: opacity(0);
+    transform: scale(0.9);
+    transform-origin: center;
+    transition: filter transform 0.2s cubic-in-out;
+}
+
+window[open] {
+    filter: opacity(1);
+    transform: scale(1);
+}
+
+@media (max-height: 640dp) {
+    body {
+        padding: 16dp;
+    }
+    window {
+        box-shadow: none;
+    }
+}
+
+window tab-bar {
+    flex: 0 0 64dp;
+    height: 64dp;
+    background-color: rgba(217, 217, 217, 10%);
+    font-family: "Fira Sans Condensed";
+    font-weight: bold;
+    font-size: 18dp;
+    border-bottom: 2dp #92875B;
+}
+
+window tab-bar tab {
+    opacity: 0.25;
+}
+
+window content {
+    display: flex;
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+window content pane {
+    display: flex;
+    flex-flow: column;
+    flex: 1 1 0;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: 24dp;
+    padding-bottom: 0dp;
+    gap: 8dp;
+    overflow: hidden auto;
+}
+
+window content pane:not(:last-of-type) {
+    border-right: 1dp #92875B;
+}
+
+window content pane > * {
+    flex: 0 0 auto;
+}
+
+window content pane > spacer {
+    display: block;
+    /* Completes the 24dp bottom inset after the pane's 8dp gap. */
+    flex: 0 0 16dp;
+    height: 16dp;
+    pointer-events: none;
+}
+
+scrollbarvertical {
+    width: 8dp;
+    margin: 4dp 4dp 4dp 0;
+}
+
+scrollbarvertical sliderarrowdec,
+scrollbarvertical sliderarrowinc {
+    width: 0;
+    height: 0;
+}
+
+scrollbarvertical slidertrack {
+    width: 8dp;
+}
+
+scrollbarvertical sliderbar {
+    width: 8dp;
+    min-height: 24dp;
+    background-color: rgba(224, 219, 200, 45%);
+    border-radius: 2dp;
+    transition: background-color 0.2s cubic-in-out;
+}
+
+scrollbarvertical sliderbar:hover,
+scrollbarvertical sliderbar:active {
+    background-color: rgba(194, 164, 45, 80%);
+}
+
+scrollbarhorizontal {
+    height: 0;
+}
+
+scrollbarhorizontal sliderarrowdec,
+scrollbarhorizontal sliderarrowinc {
+    width: 0;
+    height: 0;
+}
+
+scrollbarhorizontal slidertrack,
+scrollbarhorizontal sliderbar {
+    width: 0;
+    height: 0;
+}
+
+.section-heading {
+    font-family: "Fira Sans Condensed";
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 22dp;
+    opacity: 0.25;
+}
+
+.section-heading:not(:first-of-type) {
+    padding-top: 12dp;
+}
+
+button {
+    text-align: center;
+    background-color: rgba(17, 16, 10, 20%);
+    opacity: 0.9;
+    padding: 8dp 16dp;
+    border-radius: 14dp;
+    box-shadow: rgba(146, 135, 91, 25%) 0 0 0 1dp;
+    font-size: 20dp;
+    transition: background-color 0.1s linear-in-out, opacity 0.1s linear-in-out;
+    cursor: pointer;
+    focus: auto;
+}
+
+button:not(:disabled):hover,
+button:not(:disabled):focus-visible {
+    background-color: rgba(204, 184, 119, 20%);
+    box-shadow: #C2A42D 0 0 0 2dp;
+}
+
+button:not(:disabled):selected {
+    opacity: 1;
+    background-color: rgba(204, 184, 119, 40%);
+}
+
+button:not(:disabled):active {
+    opacity: 1;
+    background-color: rgba(204, 184, 119, 40%);
+    box-shadow: #C2A42D 0 0 0 2dp;
+}
+
+select-button {
+    display: flex;
+    align-items: center;
+    gap: 8dp;
+    background-color: rgba(17, 16, 10, 20%);
+    opacity: 0.9;
+    padding: 8dp 16dp;
+    border-radius: 14dp;
+    box-shadow: rgba(146, 135, 91, 25%) 0 0 0 1dp;
+    transition: background-color 0.1s linear-in-out, opacity 0.1s linear-in-out;
+    cursor: pointer;
+    focus: auto;
+}
+
+select-button:not(:disabled):hover,
+select-button:not(:disabled):focus-visible {
+    background-color: rgba(204, 184, 119, 20%);
+    box-shadow: #C2A42D 0 0 0 2dp;
+}
+
+select-button:not(:disabled):selected {
+    opacity: 1;
+    background-color: rgba(204, 184, 119, 40%);
+}
+
+select-button:not(:disabled):active {
+    opacity: 1;
+    background-color: rgba(204, 184, 119, 40%);
+    box-shadow: #C2A42D 0 0 0 2dp;
+}
+
+select-button:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+select-button key {
+    font-family: "Fira Sans Condensed";
+    font-weight: bold;
+    font-size: 18dp;
+    text-transform: uppercase;
+    flex: 1 0 auto;
+}
+
+select-button value {
+    margin-left: auto;
+    font-size: 20dp;
+}
+
+select-button input {
+    text-align: right;
+    font-size: 20dp;
+}

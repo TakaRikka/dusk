@@ -324,18 +324,18 @@ namespace dusk {
             ImGuiMenuGame::ToggleFullscreen();
         }
 
-        if (!dusk::IsGameLaunched) {
-            m_preLaunchWindow.draw();
-        }
+        // if (!dusk::IsGameLaunched) {
+        //     m_preLaunchWindow.draw();
+        // }
 
         m_isHidden = !getSettings().backend.duskMenuOpen;
-        bool showMenu = !dusk::IsGameLaunched || !CheckMenuViewToggle(ImGuiKey_F1, m_isHidden);
-        if (dusk::IsGameLaunched) {
-            const bool menuOpen = !m_isHidden;
-            if (getSettings().backend.duskMenuOpen != menuOpen) {
-                getSettings().backend.duskMenuOpen.setValue(menuOpen);
-                Save();
-            }
+        if (ImGui::GetIO().KeyShift && ImGui::IsKeyPressed(ImGuiKey_F1)) {
+            m_isHidden = !m_isHidden;
+        }
+        bool showMenu = !m_isHidden;
+        if (getSettings().backend.duskMenuOpen != showMenu) {
+            getSettings().backend.duskMenuOpen.setValue(showMenu);
+            Save();
         }
 
         // The menu bar renders with ImGuiCol_WindowBg behind it. We just want ImGuiCol_MenuBarBg,

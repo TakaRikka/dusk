@@ -1,4 +1,4 @@
-![DuskLogo](res/logo-mascot.webp)
+![DuskLogo](res/logo-mascot.png)
 
 - ### **[Official Website](https://twilitrealm.dev)**
 - ### **[Discord](https://discord.gg/QACynxeyna)**

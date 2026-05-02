@@ -101,6 +101,10 @@ ValidationError validate(const char* path) {
     NodHandleWrapper disc;
 
     const auto sdlStream = SDL_IOFromFile(path, "rb");
+    if (sdlStream == nullptr) {
+        return ValidationError::IOError;
+    }
+
     const NodDiscStream nod_stream {
         .user_data = sdlStream,
         .read_at = StreamReadAt,

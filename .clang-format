@@ -2,7 +2,7 @@
 Language: Cpp
 Standard: C++03
 AccessModifierOffset: -4
-AlignAfterOpenBracket: Align
+AlignAfterOpenBracket: DontAlign
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
 AlignOperands:   true
