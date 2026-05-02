@@ -11,9 +11,27 @@ body {
     color: #FFFFFF;
     background-color: #000000;
     decorator: image(../prelaunch-bg.png cover left center);
+    filter: opacity(0);
+    transition: filter 1s 0.1s linear-in-out;
 }
 
-.menu {
+body[open] {
+    filter: opacity(1);
+}
+
+content {
+    display: block;
+    width: 100%;
+    height: 100%;
+    filter: opacity(0);
+    transition: filter 0.2s linear-in-out;
+}
+
+content[open] {
+    filter: opacity(1);
+}
+
+menu {
     position: absolute;
     left: 96dp;
     top: 50%;
@@ -28,7 +46,7 @@ body {
     gap: 48dp;
 }
 
-.hero {
+hero {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -36,7 +54,7 @@ body {
     gap: 8dp;
 }
 
-.hero img {
+hero img {
     width: 100%;
 }
 
@@ -86,7 +104,7 @@ body {
     decorator: horizontal-gradient(#FEE685FF #FEE68500);
 }
 
-.disk-status {
+disk-status {
     position: absolute;
     left: 96dp;
     bottom: 72dp;
@@ -95,7 +113,7 @@ body {
     gap: 8dp;
 }
 
-.version-info {
+version-info {
     position: absolute;
     right: 96dp;
     bottom: 72dp;

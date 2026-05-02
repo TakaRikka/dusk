@@ -7,9 +7,9 @@
 #include "dusk/ui/prelaunch_options.hpp"
 #include "version.h"
 
-#include <aurora/lib/window.hpp>
 #include <SDL3/SDL_dialog.h>
 #include <SDL3/SDL_filesystem.h>
+#include <aurora/lib/window.hpp>
 
 namespace dusk::ui {
 namespace {
@@ -20,26 +20,28 @@ const Rml::String kDocumentSource = R"RML(
     <link type="text/rcss" href="res/rml/prelaunch.rcss" />
 </head>
 <body>
-    <div class="menu">
-        <div class="hero intro-item delay-0">
-            <div class="eyebrow"><span>Twilit Realm</span> presents</div>
-            <img src="res/logo-mascot.png" />
-        </div>
-        <div id="menu-list" />
-    </div>
-    <div class="disk-status intro-item delay-4">
-        <span id="status" class="status" />
-        <span id="detail" class="detail" />
-    </div>
-    <div class="version-info intro-item delay-5">
-        <div class="version">Version <span id="version-text"></span></div>
-        <div class="update"><span>Update available!</span> Download</div>
-    </div>
+    <content id="root" open>
+        <menu>
+            <hero class="intro-item delay-0">
+                <div class="eyebrow"><span>Twilit Realm</span> presents</div>
+                <img src="res/logo-mascot.png" />
+            </hero>
+            <div id="menu-list" />
+        </menu>
+        <disk-status class="intro-item delay-4">
+            <span id="status" class="status" />
+            <span id="detail" class="detail" />
+        </disk-status>
+        <version-info class="intro-item delay-5">
+            <div class="version">Version <span id="version-text"></span></div>
+            <div class="update"><span>Update available!</span> Download</div>
+        </version-info>
+    </content>
 </body>
 </rml>
 )RML";
 
-static constexpr std::array<SDL_DialogFileFilter, 2> kDiscFileFilters{{
+constexpr std::array<SDL_DialogFileFilter, 2> kDiscFileFilters{{
     {"Game Disc Images", "iso;gcm;ciso;gcz;nfs;rvz;wbfs;wia;tgc"},
     {"All Files", "*"},
 }};
@@ -87,7 +89,8 @@ void ensure_initialized() noexcept {
 }
 
 bool is_selected_path_valid() noexcept {
-    return !prelaunch_state().selectedIsoPath.empty() && SDL_GetPathInfo(prelaunch_state().selectedIsoPath.c_str(), nullptr);
+    return !prelaunch_state().selectedIsoPath.empty() &&
+           SDL_GetPathInfo(prelaunch_state().selectedIsoPath.c_str(), nullptr);
 }
 
 void open_iso_picker() noexcept {
@@ -104,24 +107,26 @@ void apply_intro_animation(Rml::Element* element, const char* delay_class) {
     element->SetClass(delay_class, true);
 }
 
-Prelaunch::Prelaunch() : Document(kDocumentSource) {
+Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementById("root")) {
     ensure_initialized();
 
     if (auto* menuList = mDocument->GetElementById("menu-list")) {
         const bool hasValidPath = is_selected_path_valid();
-        mMenuButtons.push_back(std::make_unique<Button>(menuList, hasValidPath ? "Start Game" : "Select Disk Image"));
+        mMenuButtons.push_back(
+            std::make_unique<Button>(menuList, hasValidPath ? "Start Game" : "Select Disk Image"));
         mMenuButtons.back()->on_pressed([] {
             if (!is_selected_path_valid()) {
                 open_iso_picker();
                 return;
             }
-            pop_document();
             IsGameLaunched = true;
+            pop_document();
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-1");
 
         mMenuButtons.push_back(std::make_unique<Button>(menuList, "Options"));
-        mMenuButtons.back()->on_pressed([] { push_document(std::make_unique<PrelaunchOptions>());});
+        mMenuButtons.back()->on_pressed(
+            [] { push_document(std::make_unique<PrelaunchOptions>()); });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-2");
 
         mMenuButtons.push_back(std::make_unique<Button>(menuList, "Quit To Desktop"));
@@ -129,48 +134,35 @@ Prelaunch::Prelaunch() : Document(kDocumentSource) {
         apply_intro_animation(mMenuButtons.back()->root(), "delay-3");
     }
 
-    listen(Rml::EventId::Keydown, [this](Rml::Event& event) {
-        const auto cmd = map_nav_event(event);
-
-        int direction = 0;
-        if (cmd == NavCommand::Down) {
-            direction = 1;
-        } else if (cmd == NavCommand::Up) {
-            direction = -1;
-        } else {
-            return;
-        }
-        auto* target = event.GetTargetElement();
-        int focusedButton = -1;
-        for (size_t i = 0; i < mMenuButtons.size(); ++i) {
-            if (mMenuButtons[i]->contains(target)) {
-                focusedButton = i;
-                break;
-            }
-        }
-        if (focusedButton == -1) {
-            return;
-        }
-        int i = focusedButton + direction;
-        while (i >= 0 && i < mMenuButtons.size()) {
-            if (mMenuButtons[i]->focus()) {
-                event.StopPropagation();
-                break;
-            }
-            i += direction;
-        }
-    });
-
     mDiscStatus = mDocument->GetElementById("status");
     mDiscDetail = mDocument->GetElementById("detail");
     mVersion = mDocument->GetElementById("version-text");
 
     listen(mDocument, Rml::EventId::Transitionend, [this](Rml::Event& event) {
         auto* target = event.GetTargetElement();
-        if (target != nullptr && target->GetTagName() == "button") {
+        if (target == nullptr) {
+            return;
+        }
+        if (target == mDocument && !mDocument->HasAttribute("open")) {
+            Document::hide();
+        } else if (target->GetTagName() == "button") {
             target->SetClass("anim-done", true);
         }
     });
+}
+
+void Prelaunch::show() {
+    Document::show();
+    mDocument->SetAttribute("open", "");
+    mRoot->SetAttribute("open", "");
+}
+
+void Prelaunch::hide() {
+    if (IsGameLaunched) {
+        mDocument->RemoveAttribute("open");
+    } else {
+        mRoot->RemoveAttribute("open");
+    }
 }
 
 void Prelaunch::update() {
@@ -223,7 +215,35 @@ bool Prelaunch::focus() {
     return mMenuButtons[0]->focus();
 }
 
+bool Prelaunch::visible() const {
+    return mDocument->HasAttribute("open") && mRoot->HasAttribute("open");
+}
+
 bool Prelaunch::handle_nav_command(Rml::Event& event, NavCommand cmd) {
+    int direction = 0;
+    if (cmd == NavCommand::Down) {
+        direction = 1;
+    } else if (cmd == NavCommand::Up) {
+        direction = -1;
+    } else {
+        return false;
+    }
+    auto* target = event.GetTargetElement();
+    int focusedButton = -1;
+    for (size_t i = 0; i < mMenuButtons.size(); ++i) {
+        if (mMenuButtons[i]->contains(target)) {
+            focusedButton = i;
+            break;
+        }
+    }
+    int i = (focusedButton + direction) % mMenuButtons.size();
+    while (i >= 0 && i < mMenuButtons.size()) {
+        if (mMenuButtons[i]->focus()) {
+            event.StopPropagation();
+            return true;
+        }
+        i += direction;
+    }
     return false;
 }
 

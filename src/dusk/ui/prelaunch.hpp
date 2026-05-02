@@ -13,8 +13,11 @@ class Prelaunch : public Document {
 public:
     Prelaunch();
 
+    void show() override;
+    void hide() override;
     void update() override;
     bool focus() override;
+    bool visible() const override;
 
 protected:
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;
@@ -22,6 +25,7 @@ protected:
 private:
     bool mEntranceAnimationStarted = false;
     std::vector<std::unique_ptr<Button>> mMenuButtons;
+    Rml::Element* mRoot = nullptr;
     Rml::Element* mDiscStatus = nullptr;
     Rml::Element* mDiscDetail = nullptr;
     Rml::Element* mVersion = nullptr;

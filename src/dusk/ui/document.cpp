@@ -17,7 +17,7 @@ Rml::ElementDocument* load_document(const Rml::String& source) {
 }  // namespace
 
 Document::Document(const Rml::String& source) : mDocument(load_document(source)) {
-    // Block keydown events while hidden (except for Menu)
+    // Block events while hidden (except for Menu command)
     listen(
         Rml::EventId::Keydown,
         [this](Rml::Event& event) {
@@ -27,6 +27,15 @@ Document::Document(const Rml::String& source) : mDocument(load_document(source))
             }
         },
         true);
+    const auto blockUnlessVisible = [this](Rml::Event& event) {
+        if (!visible()) {
+            event.StopImmediatePropagation();
+        }
+    };
+    listen(Rml::EventId::Mouseover, blockUnlessVisible, true);
+    listen(Rml::EventId::Click, blockUnlessVisible, true);
+    listen(Rml::EventId::Scroll, blockUnlessVisible, true);
+    listen(Rml::EventId::Focus, blockUnlessVisible, true);
 
     listen(Rml::EventId::Keydown, [this](Rml::Event& event) {
         const auto cmd = map_nav_event(event);
