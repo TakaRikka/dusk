@@ -158,7 +158,7 @@ Rml::Input::KeyIdentifier map_raw_gamepad_button(SDL_GamepadButton button) noexc
     case SDL_GAMEPAD_BUTTON_SOUTH:
         return Rml::Input::KI_RETURN;
     case SDL_GAMEPAD_BUTTON_BACK:
-        return Rml::Input::KI_PAUSE;
+        return Rml::Input::KI_F1;
     case SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER:
         return Rml::Input::KI_NEXT;
     case SDL_GAMEPAD_BUTTON_LEFT_SHOULDER:
@@ -171,7 +171,7 @@ Rml::Input::KeyIdentifier map_raw_gamepad_button(SDL_GamepadButton button) noexc
 Rml::Input::KeyIdentifier map_raw_button_alias(SDL_GamepadButton button) noexcept {
     switch (button) {
     case SDL_GAMEPAD_BUTTON_BACK:
-        return Rml::Input::KI_PAUSE;
+        return Rml::Input::KI_F1;
     case SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER:
         return Rml::Input::KI_NEXT;
     case SDL_GAMEPAD_BUTTON_LEFT_SHOULDER:
@@ -274,7 +274,7 @@ bool find_event_pad_button(
 Rml::Input::KeyIdentifier map_gamepad_button(const SDL_GamepadButtonEvent& event) noexcept {
     const auto nativeButton = static_cast<SDL_GamepadButton>(event.button);
     if (nativeButton == SDL_GAMEPAD_BUTTON_BACK) {
-        return Rml::Input::KI_PAUSE;
+        return Rml::Input::KI_F1;
     }
 
     u32 port = 0;
@@ -458,7 +458,7 @@ void process_axis_direction(
     if (chorded) {
         consume_menu_chord(port, context);
     }
-    const auto key = chorded ? Rml::Input::KI_PAUSE : map_gamepad_axis(event, sign);
+    const auto key = chorded ? Rml::Input::KI_F1 : map_gamepad_axis(event, sign);
     if (key == Rml::Input::KI_UNKNOWN) {
         return;
     }
@@ -532,7 +532,7 @@ void handle_event(const SDL_Event& event) noexcept {
         if (chorded) {
             consume_menu_chord(port, *context);
         }
-        const auto key = chorded ? Rml::Input::KI_PAUSE : map_gamepad_button(event.gbutton);
+        const auto key = chorded ? Rml::Input::KI_F1 : map_gamepad_button(event.gbutton);
         if (key != Rml::Input::KI_UNKNOWN) {
             bool deferred = false;
             if (repeat != nullptr) {

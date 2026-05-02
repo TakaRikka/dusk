@@ -329,7 +329,10 @@ namespace dusk {
         }
 
         m_isHidden = !getSettings().backend.duskMenuOpen;
-        bool showMenu = !dusk::IsGameLaunched || !CheckMenuViewToggle(ImGuiKey_F1, m_isHidden);
+        if (ImGui::GetIO().KeyShift && ImGui::IsKeyPressed(ImGuiKey_F1)) {
+            m_isHidden = !m_isHidden;
+        }
+        bool showMenu = !dusk::IsGameLaunched || !m_isHidden;
         if (dusk::IsGameLaunched) {
             const bool menuOpen = !m_isHidden;
             if (getSettings().backend.duskMenuOpen != menuOpen) {

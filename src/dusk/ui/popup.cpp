@@ -81,7 +81,7 @@ bool Popup::visible() const {
 
 bool Popup::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (cmd == NavCommand::Cancel) {
-        toggle();
+        hide();
         return true;
     }
     return Document::handle_nav_command(event, cmd);

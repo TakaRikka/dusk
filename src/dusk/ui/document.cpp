@@ -23,7 +23,7 @@ Document::Document(const Rml::String& source) : mDocument(load_document(source))
         [this](Rml::Event& event) {
             const auto cmd = map_nav_event(event);
             if (cmd != NavCommand::Menu && !visible()) {
-                event.StopPropagation();
+                event.StopImmediatePropagation();
             }
         },
         true);

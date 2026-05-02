@@ -167,8 +167,8 @@ NavCommand map_nav_event(const Rml::Event& event) noexcept {
         return NavCommand::Cancel;
     case Rml::Input::KeyIdentifier::KI_RETURN:
         return NavCommand::Confirm;
-    case Rml::Input::KeyIdentifier::KI_PAUSE:
-        return NavCommand::Menu;
+    case Rml::Input::KeyIdentifier::KI_F1:
+        return event.GetParameter<int>("shift_key", 0) ? NavCommand::None : NavCommand::Menu;
     case Rml::Input::KeyIdentifier::KI_NEXT:
         return NavCommand::Next;
     case Rml::Input::KeyIdentifier::KI_PRIOR:
