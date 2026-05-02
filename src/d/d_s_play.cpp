@@ -41,6 +41,7 @@
 
 #if TARGET_PC
 #include "dusk/memory.h"
+#include <dusk/autosave.h>
 #endif
 
 #if DEBUG
@@ -700,6 +701,10 @@ static u8 lbl_8074CAE4;
 static u32 l_sceneChangeStartTick;
 #endif
 
+#if TARGET_PC
+static BOOL autoSaved;
+#endif
+
 static int dScnPly_Execute(dScnPly_c* i_this) {
     #if DEBUG
     fapGm_HIO_c::startCpuTimer();
@@ -741,6 +746,15 @@ static int dScnPly_Execute(dScnPly_c* i_this) {
             return 1;
         }
     }
+
+    #if TARGET_PC
+    if (!dComIfGp_event_runCheck() && !fopOvlpM_IsPeek() && !dComIfG_resetToOpening(i_this) &&
+        !dComIfGp_isEnableNextStage() && autoSaved == FALSE)
+    {
+        triggerAutoSave();
+        autoSaved = TRUE;
+    }
+    #endif
 
     dKy_itudemo_se();
 
@@ -1593,6 +1607,11 @@ static int dScnPly_Create(scene_class* i_this) {
 
     dScnPly_c* a_this = (dScnPly_c*)i_this;
     int phase_state = dComLbG_PhaseHandler(&a_this->field_0x1c4, l_method, a_this);
+
+    #if TARGET_PC
+    autoSaved = FALSE;
+    #endif
+
     return phase_state;
 }
 

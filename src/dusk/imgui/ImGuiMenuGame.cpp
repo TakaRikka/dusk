@@ -121,6 +121,17 @@ namespace dusk {
                 ImGui::SetTooltip("Tears of Light dropped by Shadow Insects pop out faster like the HD version.");
             }
 
+            config::ImGuiCheckbox("Autosave", getSettings().game.autoSave);
+            const bool autoSaveHovered = ImGui::IsItemHovered();
+            ImGui::SameLine();
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.72f, 0.2f, 1.0f));
+            ImGui::TextUnformatted("[EXPERIMENTAL]");
+            ImGui::PopStyleColor();
+            if (autoSaveHovered || ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("Autosaves the game when going to a new area,\n"
+                                  "opening a dungeon door, or getting a new item.");
+            }
+
             config::ImGuiCheckbox("Instant Saves", getSettings().game.instantSaves);
             if (ImGui::IsItemHovered()) {
                 ImGui::SetTooltip("Skip the delay when writing to the Memory Card.");

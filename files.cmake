@@ -1429,6 +1429,7 @@ set(DUSK_FILES
         src/dusk/globals.cpp
         src/dusk/gyro.cpp
 		src/dusk/gamepad_color.cpp
+		src/dusk/autosave.cpp
         src/dusk/io.cpp
         src/dusk/layout.cpp
         src/dusk/logging.cpp

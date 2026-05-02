@@ -365,7 +365,7 @@ namespace dusk {
         }
 
         if (dusk::IsGameLaunched && !m_isLaunchInitialized) {
-            m_toasts.emplace_back(ImGui::GetIO().MouseSource == ImGuiMouseSource_TouchScreen ?
+            AddToast(ImGui::GetIO().MouseSource == ImGuiMouseSource_TouchScreen ?
                                       "Tap to toggle menu"s :
                                       "Press F1 to toggle menu"s,
                                   4.f);
