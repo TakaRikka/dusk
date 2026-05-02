@@ -343,6 +343,29 @@ int daMidna_c::initInvModel(u16 i_resNo, J3DModel** i_modelP, mDoExt_invisibleMo
         return 0;
     }
 
+#if TARGET_PC
+    // disable LOD for shadow midna's eye and rebake the texture
+    J3DModelData* eyeModelData = mpMorf->getModel()->getModelData();
+    J3DTexture* tex = eyeModelData->getTexture();
+    JUTNameTab* nametable = eyeModelData->getTextureName();
+    if (tex != NULL && nametable != NULL) {
+        for (u16 i = 0; i < tex->getNum(); i++) {
+            const char* name = nametable->getName(i);
+            if (name != NULL && strcmp(name, "midona_eye") == 0) {
+                ResTIMG* timg = tex->getResTIMG(i);
+                timg->minLOD = 0;
+                timg->maxLOD = 0;
+                timg->LODBias = 0;
+                timg->mipmapCount = 1;
+                timg->mipmapEnabled = 0;
+                timg->minFilter = GX_LINEAR;
+                tex->loadGXTexObj(i);
+                break;
+            }
+        }
+    }
+#endif
+
     return 1;
 }
 
