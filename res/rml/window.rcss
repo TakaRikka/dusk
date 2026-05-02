@@ -79,6 +79,7 @@ window content pane {
     padding-bottom: 0dp;
     gap: 8dp;
     overflow: hidden auto;
+    font-size: 20dp;
 }
 
 window content pane:not(:last-of-type) {
