@@ -29,7 +29,6 @@ namespace dusk {
 
     void ImGuiMenuGame::draw() {
         if (ImGui::BeginMenu("Settings")) {
-            drawCheatsMenu();
             drawGameplayMenu();
             drawInputMenu();
             drawInterfaceMenu();
@@ -199,47 +198,6 @@ namespace dusk {
                     DuskToast("LiveSplit disconnected", 3.f);
                 }
             }
-
-            ImGui::EndMenu();
-        }
-    }
-
-    void ImGuiMenuGame::drawCheatsMenu() {
-        if (ImGui::BeginMenu("Cheats")) {
-            ImGui::BeginDisabled(getSettings().game.speedrunMode);
-
-            ImGui::SeparatorText("Resources");
-            config::ImGuiCheckbox("Infinite Hearts", getSettings().game.infiniteHearts);
-            config::ImGuiCheckbox("Infinite Arrows", getSettings().game.infiniteArrows);
-            config::ImGuiCheckbox("Infinite Bombs", getSettings().game.infiniteBombs);
-            config::ImGuiCheckbox("Infinite Oil", getSettings().game.infiniteOil);
-            config::ImGuiCheckbox("Infinite Oxygen", getSettings().game.infiniteOxygen);
-            config::ImGuiCheckbox("Infinite Rupees", getSettings().game.infiniteRupees);
-            config::ImGuiCheckbox("No Item Timer", getSettings().game.enableIndefiniteItemDrops);
-            ImGui::SetItemTooltip("Item drops such as Rupees, Hearts, etc. will never disappear after they drop.");
-
-            ImGui::SeparatorText("Abilities");
-            config::ImGuiCheckbox("Moon Jump (R+A)", getSettings().game.moonJump);
-            config::ImGuiCheckbox("Super Clawshot", getSettings().game.superClawshot);
-            config::ImGuiCheckbox("Always Greatspin", getSettings().game.alwaysGreatspin);
-            config::ImGuiCheckbox("Fast Iron Boots", getSettings().game.enableFastIronBoots);
-
-            config::ImGuiCheckbox("Can Transform Anywhere", getSettings().game.canTransformAnywhere);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Allows you to transform even if NPCs are looking.");
-            }
-
-            config::ImGuiCheckbox("Fast Spinner", getSettings().game.fastSpinner);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Speeds up Spinner movement when holding R.");
-            }
-
-            config::ImGuiCheckbox("Free Magic Armor", getSettings().game.freeMagicArmor);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Makes the magic armor work without rupees.");
-            }
-
-            ImGui::EndDisabled();
 
             ImGui::EndMenu();
         }
