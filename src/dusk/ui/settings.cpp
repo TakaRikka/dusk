@@ -5,6 +5,7 @@
 #include "aurora/gfx.h"
 #include "bool_button.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
+#include "dusk/audio/DuskDsp.hpp"
 #include "dusk/config.hpp"
 #include "dusk/livesplit.h"
 #include "m_Do/m_Do_main.h"
@@ -144,6 +145,7 @@ SettingsWindow::SettingsWindow() {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
+        // TODO: Individual sliders for Main Music, Sub Music, Sound Effects, and Fanfare.
         leftPane.add_section("Volume");
         leftPane
             .add_child<NumberButton>(NumberButton::Props{
@@ -169,6 +171,12 @@ SettingsWindow::SettingsWindow() {
                 .key = "Enable Reverb",
                 .helpText = "Enables the reverb effect in game audio.",
                 .onChange = [](bool value) { audio::SetEnableReverb(value); },
+            });
+        config_bool_select(leftPane, rightPane, getSettings().audio.enableHrtf,
+            {
+                .key = "Enable Spatial Sound",
+                .helpText = "Emulate surround sound via HRTF. Recommended only for use with headphones!",
+                .onChange = [](bool value) { audio::EnableHrtf = value; },
             });
 
         leftPane.add_section("Tweaks");

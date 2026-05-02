@@ -55,7 +55,6 @@ namespace dusk {
         static void resetForSpeedrunMode();
 
     private:
-        void drawAudioMenu();
         void drawInputMenu();
         void drawGameplayMenu();
         void drawCheatsMenu();

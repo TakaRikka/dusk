@@ -14,16 +14,9 @@
 #include "dusk/settings.h"
 #include "dusk/livesplit.h"
 #include "m_Do/m_Do_controller_pad.h"
-#include "m_Do/m_Do_graphic.h"
-
-#include <aurora/gfx.h>
-#include <SDL3/SDL_gamepad.h>
-
 #include "m_Do/m_Do_main.h"
 
-namespace {
-constexpr int kInternalResolutionScaleMax = 12;
-}  // namespace
+#include <SDL3/SDL_gamepad.h>
 
 namespace dusk {
     void ImGuiMenuGame::ToggleFullscreen() {
@@ -36,7 +29,6 @@ namespace dusk {
 
     void ImGuiMenuGame::draw() {
         if (ImGui::BeginMenu("Settings")) {
-            drawAudioMenu();
             drawCheatsMenu();
             drawGameplayMenu();
             drawInputMenu();
@@ -248,64 +240,6 @@ namespace dusk {
             }
 
             ImGui::EndDisabled();
-
-            ImGui::EndMenu();
-        }
-    }
-
-    void ImGuiMenuGame::drawAudioMenu() {
-        if (ImGui::BeginMenu("Audio")) {
-
-            ImGui::SeparatorText("Volume");
-
-            ImGui::Text("Master Volume");
-            if (config::ImGuiSliderInt("##masterVolume", getSettings().audio.masterVolume, 0, 100)) {
-                dusk::audio::SetMasterVolume(getSettings().audio.masterVolume / 100.0f);
-            }
-
-            /*
-            // TODO: Implement additional settings
-            ImGui::Text("Main Music Volume");
-            ImGui::SliderFloat("##mainMusicVolume", &getSettings().audio.mainMusicVolume, 0, 100);
-
-            ImGui::Text("Sub Music Volume");
-            ImGui::SliderFloat("##subMusicVolume", &getSettings().audio.subMusicVolume, 0, 100);
-
-            ImGui::Text("Sound Effects Volume");
-            ImGui::SliderFloat("##soundEffectsVolume", &getSettings().audio.soundEffectsVolume, 0, 100);
-
-            ImGui::Text("Fanfare Volume");
-            ImGui::SliderFloat("##fanfareVolume", &getSettings().audio.fanfareVolume, 0, 100);
-
-            Z2AudioMgr* audioMgr = Z2AudioMgr::getInterface();
-            if (audioMgr != nullptr) {
-            }
-            */
-
-            ImGui::SeparatorText("Effects");
-
-            if (config::ImGuiCheckbox("Enable Reverb", getSettings().audio.enableReverb)) {
-                dusk::audio::SetEnableReverb(getSettings().audio.enableReverb);
-            }
-
-            if (config::ImGuiCheckbox("Spatial Sound", getSettings().audio.enableHrtf)) {
-                dusk::audio::EnableHrtf = getSettings().audio.enableHrtf;
-            }
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Emulate surround sound via HRTF (for headphone use only)!");
-            }
-
-            ImGui::SeparatorText("Tweaks");
-
-            config::ImGuiCheckbox("No Low HP Sound", getSettings().game.noLowHpSound);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Disable the beeping sound when having low health.");
-            }
-
-            config::ImGuiCheckbox("Non-Stop Midna's Lament", getSettings().game.midnasLamentNonStop);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Prevents enemy music while Midna's Lament is playing.");
-            }
 
             ImGui::EndMenu();
         }
