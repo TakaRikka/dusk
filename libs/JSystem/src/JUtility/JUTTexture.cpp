@@ -27,7 +27,7 @@ void JUTTexture::storeTIMG(ResTIMG const* param_0, u8 param_1) {
             mTexData = (void*)((intptr_t)mTexInfo + 0x20);
         }
 
-        field_0x2c = NULL;
+        mPalette = NULL;
         mTlutName = 0;
         mWrapS = mTexInfo->wrapS;
         mWrapT = mTexInfo->wrapT;
@@ -95,7 +95,7 @@ void JUTTexture::storeTIMG(ResTIMG const* param_0, JUTPalette* param_1, GXTlut p
     }
     mEmbPalette = param_1;
     setEmbPaletteDelFlag(false);
-    field_0x2c = NULL;
+    mPalette = NULL;
     if (param_1 != NULL) {
         mTlutName = param_2;
         if (param_2 != param_1->getTlutName()) {
@@ -120,11 +120,11 @@ void JUTTexture::storeTIMG(ResTIMG const* param_0, JUTPalette* param_1, GXTlut p
 void JUTTexture::attachPalette(JUTPalette* param_0) {
     if (mTexInfo->indexTexture) {
         if (param_0 == NULL && mEmbPalette != NULL) {
-            field_0x2c = mEmbPalette;
+            mPalette = mEmbPalette;
         } else {
-            field_0x2c = param_0;
+            mPalette = param_0;
         }
-        initTexObj(field_0x2c->getTlutName());
+        initTexObj(mPalette->getTlutName());
     }
 }
 
@@ -133,9 +133,9 @@ void JUTTexture::init() {
         initTexObj();
     } else {
         if (mEmbPalette != NULL) {
-            field_0x2c = mEmbPalette;
+            mPalette = mEmbPalette;
 
-            initTexObj(field_0x2c->getTlutName());
+            initTexObj(mPalette->getTlutName());
         } else {
             OS_REPORT("This texture is CI-Format, but EmbPalette is NULL.\n");
         }
@@ -179,8 +179,8 @@ void JUTTexture::initTexObj(GXTlut param_0) {
 }
 
 void JUTTexture::load(GXTexMapID param_0) {
-    if (field_0x2c) {
-        field_0x2c->load();
+    if (mPalette) {
+        mPalette->load();
     }
     GXLoadTexObj(&mTexObj, param_0);
 }

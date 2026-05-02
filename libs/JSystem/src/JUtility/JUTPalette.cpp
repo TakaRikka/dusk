@@ -38,3 +38,9 @@ bool JUTPalette::load() {
 
     return check;
 }
+
+#if TARGET_PC
+void JUTPalette::dataUploaded() {
+    GXInitTlutObjData(&mTlutObj, (void*)mColorTable);
+}
+#endif
