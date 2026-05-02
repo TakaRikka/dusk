@@ -34,6 +34,8 @@ void update() noexcept;
 
 Document& push_document(std::unique_ptr<Document> doc, bool show = true) noexcept;
 void pop_document() noexcept;
+void toggle_top_document() noexcept;
+bool any_document_visible() noexcept;
 Document* top_document() noexcept;
 
 Popup& add_popup(std::unique_ptr<Popup> popup) noexcept;

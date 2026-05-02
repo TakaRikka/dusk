@@ -66,7 +66,7 @@ Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("w
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
         if (event.GetTargetElement() == mRoot &&
             *mRoot->GetProperty(Rml::PropertyId::Visibility) == Rml::Style::Visibility::Visible &&
-            !mVisible)
+            !mRoot->HasAttribute("open"))
         {
             Document::hide();
         }
@@ -88,26 +88,13 @@ Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("w
 }
 
 void Window::show() {
-    if (mVisible) {
-        return;
-    }
-
     Document::show();
     mRoot->SetAttribute("open", "");
-    mVisible = true;
 }
 
 void Window::hide() {
-    if (mDocument == nullptr) {
-        mVisible = false;
-        return;
-    }
-    if (!mVisible) {
-        return;
-    }
-
     mRoot->RemoveAttribute("open");
-    mVisible = false;
+    // Document will be hidden after transition
 }
 
 void Window::update() {
@@ -171,6 +158,10 @@ bool Window::focus() {
     return mTabBar->focus();
 }
 
+bool Window::visible() const {
+    return mRoot->HasAttribute("open");
+}
+
 bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     auto* target = event.GetTargetElement();
     if (cmd != NavCommand::Next && cmd != NavCommand::Previous && target->Closest("content")) {
@@ -187,7 +178,10 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
         pop_document();
         return true;
     }
-    return mTabBar->handle_nav_command(event, cmd);
+    if (mTabBar->handle_nav_command(event, cmd)) {
+        return true;
+    }
+    return Document::handle_nav_command(event, cmd);
 }
 
 bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {

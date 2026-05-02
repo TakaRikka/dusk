@@ -17,6 +17,17 @@ Rml::ElementDocument* load_document(const Rml::String& source) {
 }  // namespace
 
 Document::Document(const Rml::String& source) : mDocument(load_document(source)) {
+    // Block keydown events while hidden (except for Menu)
+    listen(
+        Rml::EventId::Keydown,
+        [this](Rml::Event& event) {
+            const auto cmd = map_nav_event(event);
+            if (cmd != NavCommand::Menu && !visible()) {
+                event.StopPropagation();
+            }
+        },
+        true);
+
     listen(Rml::EventId::Keydown, [this](Rml::Event& event) {
         const auto cmd = map_nav_event(event);
         if (cmd != NavCommand::None && handle_nav_command(event, cmd)) {
@@ -76,7 +87,18 @@ bool Document::can_destroy() const {
     return *mDocument->GetProperty(Rml::PropertyId::Visibility) == Rml::Style::Visibility::Hidden;
 }
 
+bool Document::visible() const {
+    if (mDocument == nullptr) {
+        return false;
+    }
+    return *mDocument->GetProperty(Rml::PropertyId::Visibility) == Rml::Style::Visibility::Visible;
+}
+
 bool Document::handle_nav_command(Rml::Event& event, NavCommand cmd) {
+    if (cmd == NavCommand::Menu) {
+        toggle_top_document();
+        return true;
+    }
     return false;
 }
 

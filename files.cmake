@@ -1474,6 +1474,8 @@ set(DUSK_FILES
         src/dusk/ui/editor.hpp
         src/dusk/ui/event.cpp
         src/dusk/ui/event.hpp
+        src/dusk/ui/input.cpp
+        src/dusk/ui/input.hpp
         src/dusk/ui/nav_types.hpp
         src/dusk/ui/number_button.cpp
         src/dusk/ui/number_button.hpp

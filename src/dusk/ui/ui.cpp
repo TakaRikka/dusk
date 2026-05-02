@@ -8,6 +8,7 @@
 #include <filesystem>
 
 #include "aurora/lib/window.hpp"
+#include "input.hpp"
 #include "window.hpp"
 
 namespace dusk::ui {
@@ -45,11 +46,9 @@ bool initialize() noexcept {
 
 void shutdown() noexcept {
     sDocuments.clear();
+    reset_input_state();
+    release_input_block();
     sInitialized = false;
-}
-
-void handle_event(const SDL_Event& event) noexcept {
-    // TODO
 }
 
 Document& push_document(std::unique_ptr<Document> doc, bool show) noexcept {
@@ -61,6 +60,7 @@ Document& push_document(std::unique_ptr<Document> doc, bool show) noexcept {
     if (show) {
         ret.show();
     }
+    sync_input_block();
     return ret;
 }
 
@@ -75,6 +75,26 @@ void pop_document() noexcept {
     if (auto* doc = top_document()) {
         doc->show();
     }
+    sync_input_block();
+}
+
+void toggle_top_document() noexcept {
+    auto* doc = top_document();
+    if (doc == nullptr) {
+        return;
+    }
+
+    if (doc->visible()) {
+        doc->hide();
+    } else {
+        doc->show();
+    }
+    sync_input_block();
+}
+
+bool any_document_visible() noexcept {
+    return std::any_of(sDocuments.begin(), sDocuments.end(),
+        [](const OpenDocument& doc) { return doc.doc != nullptr && doc.doc->visible(); });
 }
 
 Document* top_document() noexcept {
@@ -87,6 +107,7 @@ Document* top_document() noexcept {
 }
 
 void update() noexcept {
+    update_input();
     for (const auto& doc : sDocuments) {
         doc.doc->update();
     }
@@ -94,6 +115,7 @@ void update() noexcept {
         std::remove_if(sDocuments.begin(), sDocuments.end(),
             [](const OpenDocument& doc) { return doc.pendingDestroy && doc.doc->can_destroy(); }),
         sDocuments.end());
+    sync_input_block();
 }
 
 std::filesystem::path resource_path(const std::filesystem::path& filename) noexcept {
@@ -145,6 +167,8 @@ NavCommand map_nav_event(const Rml::Event& event) noexcept {
         return NavCommand::Cancel;
     case Rml::Input::KeyIdentifier::KI_RETURN:
         return NavCommand::Confirm;
+    case Rml::Input::KeyIdentifier::KI_PAUSE:
+        return NavCommand::Menu;
     case Rml::Input::KeyIdentifier::KI_NEXT:
         return NavCommand::Next;
     case Rml::Input::KeyIdentifier::KI_PRIOR:

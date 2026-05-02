@@ -12,6 +12,7 @@ enum class NavCommand {
     Previous,  // L1
     Confirm,   // A
     Cancel,    // B
+    Menu,      // Back/Minus, or R + Start
 };
 
 }  // namespace dusk::ui

@@ -27,6 +27,7 @@ public:
     void hide() override;
     void update() override;
     bool focus() override;
+    bool visible() const override;
     bool set_active_tab(int index);
 
 protected:

@@ -17,6 +17,7 @@ public:
     virtual void hide();
     virtual void update();
     virtual bool focus();
+    virtual bool visible() const;
 
     void listen(Rml::Element* element, Rml::EventId event, ScopedEventListener::Callback callback,
         bool capture = false);

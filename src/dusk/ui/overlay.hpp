@@ -63,6 +63,7 @@ public:
     void hide() override;
     void update() override;
     bool focus() override;
+    bool visible() const override;
 
 protected:
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;

@@ -60,9 +60,8 @@ void set_value(GraphicsOption option, int value) {
         getSettings().game.shadowResolutionMultiplier.setValue(value);
         break;
     case GraphicsOption::BloomMode:
-        getSettings().game.bloomMode.setValue(
-            static_cast<BloomMode>(std::clamp(value, static_cast<int>(BloomMode::Off),
-                static_cast<int>(BloomMode::Dusk))));
+        getSettings().game.bloomMode.setValue(static_cast<BloomMode>(std::clamp(
+            value, static_cast<int>(BloomMode::Off), static_cast<int>(BloomMode::Dusk))));
         break;
     case GraphicsOption::BloomMultiplier:
         getSettings().game.bloomMultiplier.setValue(std::clamp(value, 0, 100) / 100.0f);
@@ -209,10 +208,12 @@ Overlay::Overlay(OverlayProps props)
 
     if (auto* footer = mDocument->GetElementById("footer")) {
         auto& returnButton = add_component<Button>(footer, "\xE2\x86\x90 Return", "footer-button")
-                                                   .on_pressed(pop_document);
+                                 .on_pressed(pop_document);
         returnButton.root()->SetClass("return", true);
-        auto& resetButton = add_component<Button>(footer, "Reset to default", "footer-button")
-                                                  .on_pressed([this] { reset_default(); });
+        auto& resetButton =
+            add_component<Button>(footer, "Reset to default", "footer-button").on_pressed([this] {
+                reset_default();
+            });
         resetButton.root()->SetClass("reset", true);
     }
 
@@ -221,7 +222,7 @@ Overlay::Overlay(OverlayProps props)
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
         if (event.GetTargetElement() == mRoot &&
             *mRoot->GetProperty(Rml::PropertyId::Visibility) == Rml::Style::Visibility::Visible &&
-            mDismissed)
+            !mRoot->HasAttribute("open"))
         {
             Document::hide();
         }
@@ -235,7 +236,6 @@ void Overlay::show() {
 
 void Overlay::hide() {
     mRoot->RemoveAttribute("open");
-    mDismissed = true;
 }
 
 void Overlay::update() {
@@ -252,6 +252,10 @@ bool Overlay::focus() {
         }
     }
     return false;
+}
+
+bool Overlay::visible() const {
+    return mRoot->HasAttribute("open");
 }
 
 bool Overlay::handle_nav_command(Rml::Event& event, NavCommand cmd) {

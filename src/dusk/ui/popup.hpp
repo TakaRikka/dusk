@@ -18,9 +18,9 @@ public:
     void show() override;
     void hide() override;
     bool focus() override;
+    bool visible() const override;
 
     void toggle();
-    bool is_visible() const;
 
 protected:
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;

@@ -47,7 +47,7 @@ Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("pop
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
         if (event.GetTargetElement() == mRoot &&
             *mRoot->GetProperty(Rml::PropertyId::Visibility) == Rml::Style::Visibility::Visible &&
-            !mVisible)
+            !mRoot->HasAttribute("open"))
         {
             Document::hide();
         }
@@ -58,39 +58,25 @@ Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("pop
 }
 
 void Popup::show() {
-    if (mDocument == nullptr || mVisible) {
-        return;
-    }
-
     Document::show();
     mRoot->SetAttribute("open", "");
     mTabBar->set_active_tab(-1);
-    mVisible = true;
 }
 
 void Popup::hide() {
-    if (mDocument == nullptr) {
-        mVisible = false;
-        return;
-    }
-    if (!mVisible) {
-        return;
-    }
-
     mRoot->RemoveAttribute("open");
-    mVisible = false;
 }
 
 void Popup::toggle() {
-    if (is_visible()) {
+    if (visible()) {
         hide();
     } else {
         show();
     }
 }
 
-bool Popup::is_visible() const {
-    return mVisible;
+bool Popup::visible() const {
+    return mRoot->HasAttribute("open");
 }
 
 bool Popup::handle_nav_command(Rml::Event& event, NavCommand cmd) {
@@ -98,7 +84,7 @@ bool Popup::handle_nav_command(Rml::Event& event, NavCommand cmd) {
         toggle();
         return true;
     }
-    return false;
+    return Document::handle_nav_command(event, cmd);
 }
 
 bool Popup::focus() {
