@@ -1,5 +1,7 @@
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuTools.hpp"
+#include <cmath>
+#include "JSystem/JAudio2/JAISeq.h"
 #include "JSystem/JAudio2/JAISeMgr.h"
 #include "JSystem/JAudio2/JAISeqMgr.h"
 #include "JSystem/JAudio2/JAIStreamMgr.h"
@@ -14,6 +16,24 @@ static std::array<u8, DSP_CHANNELS> channelSortIndices = {};
 static std::array<u32, DSP_CHANNELS> lastResetCounts = {};
 
 static bool sortUpdateCount = true;
+
+static void DrawDirectionGauge(float pan, float dolby) {
+    constexpr float R    = 20.0f;
+    constexpr float SIZE = R * 2.0f + 4.0f;
+
+    ImVec2 origin = ImGui::GetCursorScreenPos();
+    ImGui::Dummy(ImVec2(SIZE, SIZE));
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    ImVec2 c = ImVec2(origin.x + SIZE * 0.5f, origin.y + SIZE * 0.5f);
+
+    dl->AddCircle(c, R, IM_COL32(90, 90, 90, 255), 32);
+
+    float dx = (pan - 0.5f) * 2.0f;
+    float dy = dolby * 2.0f - 1.0f;
+    float len = sqrtf(dx * dx + dy * dy);
+    if (len > 1.0f) { dx /= len; dy /= len; }
+    dl->AddLine(c, ImVec2(c.x + dx * R, c.y + dy * R), IM_COL32(255, 200, 50, 255), 1.5f);
+}
 
 static void DisplayDspChannel(int i) {
     using namespace dusk::audio;
@@ -52,8 +72,10 @@ static void DisplayDspChannel(int i) {
             auto fxMix = (channel.mAutoMixerFxMix >> 8) / 127.5f;
             auto volume = VolumeFromU16(channel.mAutoMixerVolume);
             auto pitch = channel.mPitch / 4096.0f;
+            DrawDirectionGauge(pan, dolby);
+            ImGui::SameLine();
             ImGui::Text(
-                "Auto mixer active (pan: %f, dolby: %f, fx: %f, volume: %f, pitch %f)",
+                "pan: %.2f  dolby: %.2f\nfx: %.2f  vol: %.2f  pitch: %.2f",
                 pan, dolby, fxMix, volume, pitch);
         } else {
             ImGui::Text(
@@ -183,6 +205,10 @@ static void ShowAllJAISes() {
             if (ImGui::Button("Pause All")) {
                 category->pause(true);
             }
+            ImGui::SameLine();
+            if (ImGui::Button("Resume All")) {
+                category->pause(false);
+            }
 
             for (auto seLink = category->getSeList()->getFirst(); seLink != nullptr; seLink = seLink->getNext()) {
                 const auto se = seLink->getObject();
@@ -196,6 +222,33 @@ static void ShowAllJAISes() {
 }
 
 
+static void ShowSeqTracks(JAISeq& seq) {
+    JASTrack& root = seq.inner_.outputTrack;
+
+    for (int group = 0; group < 2; group++) {
+        JASTrack* groupTrack = root.getChild(group);
+        if (groupTrack == nullptr) {
+            continue;
+        }
+
+        for (int j = 0; j < JASTrack::MAX_CHILDREN; j++) {
+            JASTrack* track = groupTrack->getChild(j);
+            if (track == nullptr) {
+                continue;
+            }
+
+            int trackIdx = group * 16 + j;
+            char label[64];
+            snprintf(label, sizeof(label), "Track %d (bank %hu, prog %hu)##%p",
+                trackIdx, track->getBankNumber(), track->getProgNumber(), track);
+            bool muted = track->mFlags.mute;
+            if (ImGui::Checkbox(label, &muted)) {
+                track->mute(muted);
+            }
+        }
+    }
+}
+
 static void ShowAllJAISeqs() {
     auto& mgr = *JAISeqMgr::getInstance();
 
@@ -205,6 +258,26 @@ static void ShowAllJAISeqs() {
     ImGui::SameLine();
     if (ImGui::Button("Unpause")) {
         mgr.pause(false);
+    }
+
+    ImGui::Text("Active sequences: %d", mgr.getNumActiveSeqs());
+
+    auto* seqList = mgr.getSeqList();
+    for (auto* link = seqList->getFirst(); link != nullptr; link = link->getNext()) {
+        JAISeq* seq = link->getObject();
+        if (seq == nullptr) {
+            continue;
+        }
+
+        char buf[32];
+        snprintf(buf, sizeof(buf), "%p", seq);
+
+        if (ImGui::BeginChild(buf, ImVec2(), ImGuiChildFlags_Border | ImGuiChildFlags_AutoResizeY)) {
+            ImGui::Text("Seq [%p]", seq);
+            ShowSeqTracks(*seq);
+        }
+
+        ImGui::EndChild();
     }
 }
 
