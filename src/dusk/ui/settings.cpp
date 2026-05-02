@@ -207,21 +207,24 @@ SettingsWindow::SettingsWindow() {
         };
 
         leftPane.add_section("Resources");
-        addCheat("Infinite Hearts", getSettings().game.infiniteHearts, "Keeps your health full.");
-        addCheat(
-            "Infinite Arrows", getSettings().game.infiniteArrows, "Keeps your arrow count full.");
-        addCheat("Infinite Bombs", getSettings().game.infiniteBombs, "Keeps all bomb bags full.");
-        addCheat("Infinite Oil", getSettings().game.infiniteOil, "Keeps your lantern oil full.");
+        addCheat("Infinite Hearts", getSettings().game.infiniteHearts,
+            "Keeps your health full.");
+        addCheat("Infinite Arrows", getSettings().game.infiniteArrows,
+            "Keeps your arrow count full.");
+        addCheat("Infinite Bombs", getSettings().game.infiniteBombs,
+            "Keeps all bomb bags full.");
+        addCheat("Infinite Oil", getSettings().game.infiniteOil,
+            "Keeps your lantern oil full.");
         addCheat("Infinite Oxygen", getSettings().game.infiniteOxygen,
             "Keeps your underwater oxygen meter full.");
-        addCheat(
-            "Infinite Rupees", getSettings().game.infiniteRupees, "Keeps your rupee count full.");
+        addCheat("Infinite Rupees", getSettings().game.infiniteRupees,
+            "Keeps your rupee count full.");
         addCheat("No Item Timer", getSettings().game.enableIndefiniteItemDrops,
             "Item drops such as rupees and hearts will never disappear after they drop.");
 
         leftPane.add_section("Abilities");
-        addCheat(
-            "Moon Jump (R+A)", getSettings().game.moonJump, "Hold R and A to rise into the air.");
+        addCheat("Moon Jump (R+A)", getSettings().game.moonJump,
+            "Hold R and A to rise into the air.");
         addCheat("Super Clawshot", getSettings().game.superClawshot,
             "Extends clawshot behavior beyond the normal game rules.");
         addCheat("Always Greatspin", getSettings().game.alwaysGreatspin,
@@ -288,8 +291,8 @@ SettingsWindow::SettingsWindow() {
                 rightPane.clear();
                 rightPane.add_text("Multiplies incoming damage.");
             });
-        addSpeedrunDisabledOption(
-            "Instant Death", getSettings().game.instantDeath, "Any hit will instantly kill you.");
+        addSpeedrunDisabledOption("Instant Death", getSettings().game.instantDeath,
+            "Any hit will instantly kill you.");
         addSpeedrunDisabledOption("No Heart Drops", getSettings().game.noHeartDrops,
             "Hearts will never drop from enemies, pots, and various other places.");
 
@@ -302,13 +305,16 @@ SettingsWindow::SettingsWindow() {
             "Quicker climbing on ladders and vines like the HD version.");
         addOption("Faster Tears of Light", getSettings().game.fastTears,
             "Tears of Light dropped by Shadow Insects pop out faster like the HD version.");
+        addOption("Autosave", getSettings().game.autoSave,
+            "Autosaves the game when going to a new area, opening a dungeon door, or getting "
+            "a new item.<br/><br/>This feature is currently experimental, use at your own risk.");
         addOption("Instant Saves", getSettings().game.instantSaves,
             "Skips the delay when writing to the Memory Card.");
         addOption("Hold B for Instant Text", getSettings().game.instantText,
             "Makes text scroll immediately by holding B.");
         addOption("No Climbing Miss Animation", getSettings().game.noMissClimbing,
-            "Prevents Link from playing a struggle animation when grabbing ledges or climbing on "
-            "vines.");
+            "Prevents Link from playing a struggle animation when grabbing ledges or "
+            "climbing on vines.");
         addOption("No Rupee Returns", getSettings().game.noReturnRupees,
             "Always collect Rupees even if your Wallet is too full.");
         addOption("No Sword Recoil", getSettings().game.noSwordRecoil,

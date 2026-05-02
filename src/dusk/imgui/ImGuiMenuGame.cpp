@@ -3,17 +3,10 @@
 
 #include "ImGuiEngine.hpp"
 #include "ImGuiConsole.hpp"
-#include "ImGuiMenuGame.hpp"
 #include "ImGuiConfig.hpp"
 
-#include "JSystem/JUtility/JUTGamePad.h"
-#include "dusk/audio/DuskAudioSystem.h"
-#include "dusk/audio/DuskDsp.hpp"
 #include "dusk/main.h"
 #include "dusk/hotkeys.h"
-#include "dusk/settings.h"
-#include "dusk/livesplit.h"
-#include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_main.h"
 
 #include <SDL3/SDL_gamepad.h>
@@ -29,7 +22,6 @@ namespace dusk {
 
     void ImGuiMenuGame::draw() {
         if (ImGui::BeginMenu("Settings")) {
-            drawGameplayMenu();
             drawInputMenu();
             drawInterfaceMenu();
 
@@ -41,162 +33,6 @@ namespace dusk {
 
             if (!IsMobile && ImGui::MenuItem("Exit")) {
                 dusk::IsRunning = false;
-            }
-
-            ImGui::EndMenu();
-        }
-    }
-
-    void ImGuiMenuGame::drawGameplayMenu() {
-        if (ImGui::BeginMenu("Gameplay")) {
-            ImGui::SeparatorText("General");
-
-            config::ImGuiCheckbox("Mirror Mode", getSettings().game.enableMirrorMode);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Mirrors the world horizontally, matching the Wii version of the game.");
-            }
-
-            config::ImGuiCheckbox("Disable Main HUD", getSettings().game.disableMainHUD);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Disables the main HUD of the game.\n"
-                                  "Useful for recording or a more immersive experience!");
-            }
-
-            config::ImGuiCheckbox("Restore Wii 1.0 Glitches", getSettings().game.restoreWiiGlitches);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Restores patched glitches from Wii USA 1.0,\n"
-                                  "the first released version.");
-            }
-            
-            config::ImGuiCheckbox("Enable Rotating Link Doll", getSettings().game.enableLinkDollRotation);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Enables rotating Link in the collection menu with the C-Stick");
-            }
-
-            ImGui::SeparatorText("Difficulty");
-
-            ImGui::BeginDisabled(getSettings().game.speedrunMode);
-            config::ImGuiSliderInt("Damage Multiplier", getSettings().game.damageMultiplier, 1, 8, "x%d");
-
-            config::ImGuiCheckbox("Instant Death", getSettings().game.instantDeath);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Any hit will instantly kill you.");
-            }
-
-            config::ImGuiCheckbox("No Heart Drops", getSettings().game.noHeartDrops);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Hearts will never drop from enemies,\n"
-                                  "pots and various other places.");
-            }
-            ImGui::EndDisabled();
-
-            ImGui::SeparatorText("Quality of Life");
-
-            config::ImGuiCheckbox("Bigger Wallets", getSettings().game.biggerWallets);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Wallet sizes are like in the HD version. (500, 1000, 2000)");
-            }
-
-            config::ImGuiCheckbox("Disable Rupee Cutscenes", getSettings().game.disableRupeeCutscenes);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Rupees won't play cutscenes after you've collected them the first time.");
-            }
-
-            config::ImGuiCheckbox("Faster Climbing", getSettings().game.fastClimbing);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Quicker climbing on ladders and vines like the HD version.");
-            }
-
-            config::ImGuiCheckbox("Faster Tears of Light", getSettings().game.fastTears);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Tears of Light dropped by Shadow Insects pop out faster like the HD version.");
-            }
-
-            config::ImGuiCheckbox("Autosave", getSettings().game.autoSave);
-            const bool autoSaveHovered = ImGui::IsItemHovered();
-            ImGui::SameLine();
-            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.72f, 0.2f, 1.0f));
-            ImGui::TextUnformatted("[EXPERIMENTAL]");
-            ImGui::PopStyleColor();
-            if (autoSaveHovered || ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Autosaves the game when going to a new area,\n"
-                                  "opening a dungeon door, or getting a new item.");
-            }
-
-            config::ImGuiCheckbox("Instant Saves", getSettings().game.instantSaves);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Skip the delay when writing to the Memory Card.");
-            }
-
-            config::ImGuiCheckbox("Hold B for Instant Text", getSettings().game.instantText);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Make text scroll immediately by holding B.");
-            }
-
-            config::ImGuiCheckbox("No Climbing Miss Animation", getSettings().game.noMissClimbing);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Prevents Link from playing a struggle animation\n"
-                                  "when grabbing ledges or climbing on vines.");
-            }
-
-            config::ImGuiCheckbox("No Rupee Returns", getSettings().game.noReturnRupees);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Always collect Rupees even if your Wallet is too full.");
-            }
-
-            config::ImGuiCheckbox("No Sword Recoil", getSettings().game.noSwordRecoil);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Link won't recoil when his sword hits walls.");
-            }
-
-            config::ImGuiCheckbox("No 2nd Fish for Cat", getSettings().game.no2ndFishForCat);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Only need to fish once for Sera's cat to return.");
-            }
-
-            config::ImGuiCheckbox("Skip TV Settings Screen", getSettings().game.hideTvSettingsScreen);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Skip the TV calibration screen shown when loading a save.");
-            }
-
-            config::ImGuiCheckbox("Skip Warning Screen", getSettings().game.skipWarningScreen);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Skip the warning screen shown when starting the game.");
-            }
-
-            config::ImGuiCheckbox("Sun's Song (R+X)", getSettings().game.sunsSong);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Allows Wolf Link to howl and change the time of day.");
-            }
-
-            config::ImGuiCheckbox("Quick Transform (R+Y)", getSettings().game.enableQuickTransform);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Transform instantly by pressing R and Y simultaneously.");
-            }
-
-            ImGui::SeparatorText("Speedrunning");
-            if (config::ImGuiCheckbox("Speedrun Mode", getSettings().game.speedrunMode)) {
-                resetForSpeedrunMode();
-            }
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Enables Speedrunning options, while restricting certain gameplay modifiers.");
-            }
-
-            ImGui::BeginDisabled(!getSettings().game.speedrunMode);
-            bool prevLiveSplit = getSettings().game.liveSplitEnabled;
-            config::ImGuiCheckbox("LiveSplit Connection", getSettings().game.liveSplitEnabled);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Connect to LiveSplit server on localhost:16834.");
-            }
-            ImGui::EndDisabled();
-
-            if ((bool)getSettings().game.liveSplitEnabled != prevLiveSplit) {
-                if (getSettings().game.liveSplitEnabled) {
-                    dusk::speedrun::connectLiveSplit();
-                } else {
-                    dusk::speedrun::disconnectLiveSplit();
-                    DuskToast("LiveSplit disconnected", 3.f);
-                }
             }
 
             ImGui::EndMenu();

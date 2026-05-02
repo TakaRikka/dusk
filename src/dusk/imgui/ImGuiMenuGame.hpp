@@ -56,7 +56,6 @@ namespace dusk {
 
     private:
         void drawInputMenu();
-        void drawGameplayMenu();
         void drawInterfaceMenu();
 
         struct {
