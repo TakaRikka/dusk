@@ -59,6 +59,7 @@
 #include "dusk/ui/ui.hpp"
 #include "dusk/ui/editor.hpp"
 #include "dusk/ui/popup.hpp"
+#include "dusk/ui/prelaunch.hpp"
 #include "dusk/ui/settings.hpp"
 #include "version.h"
 
@@ -161,8 +162,9 @@ bool launchUILoop() {
             continue;
         }
 
-        dusk::g_imguiConsole.PreDraw();
+        dusk::ui::update();
 
+        dusk::g_imguiConsole.PreDraw();
         dusk::g_imguiConsole.PostDraw();
 
         aurora_end_frame();
@@ -588,7 +590,6 @@ int game_main(int argc, char* argv[]) {
     dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);
 
     dusk::ui::initialize();
-    dusk::ui::push_document(std::make_unique<dusk::ui::Popup>(), false);
 
     std::string dvd_path;
     bool dvd_opened = false;
@@ -606,6 +607,8 @@ int game_main(int argc, char* argv[]) {
     }
 
     if (!dvd_opened) {
+        dusk::ui::push_document(std::make_unique<dusk::ui::Prelaunch>(), true);
+
         // pre game launch ui main loop
         if (!launchUILoop()) {
             dusk::ShutdownCrashReporting();
@@ -626,6 +629,8 @@ int game_main(int argc, char* argv[]) {
             DuskLog.fatal("Failed to open DVD image: {}", dvd_path);
         }
     }
+
+    dusk::ui::push_document(std::make_unique<dusk::ui::Popup>(), false);
 
     dusk::version::init();
     LanguageInit();
