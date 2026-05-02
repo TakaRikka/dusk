@@ -62,6 +62,16 @@ void daObj_Balloon_c::saveBestScore() {
     dComIfGp_setMessageCountNumber(m_balloon_score);
 }
 
+#if TARGET_PC
+static void minigameReset() {
+    // !@bug d_a_obj_balloon.rel unload used to zero these file-statics; with static linking they dangle across scenes.
+    m_combo_type = 0xFFFFFFFF;
+    m_combo_count = 0;
+    m_combo_next_score = 0;
+    m_balloon_score = 0;
+}
+#endif
+
 static u8 hio_set;
 
 static daObj_Balloon_HIO_c l_HIO;
@@ -205,13 +215,6 @@ int daObj_Balloon_c::_delete() {
     Z2GetAudioMgr()->seStop(Z2SE_OBJ_WATERMILL_ROUND, 0);
     if (mHIOInit) {
         hio_set = false;
-#ifdef TARGET_PC
-        // !@bug d_a_obj_balloon.rel unload used to zero these file-statics; with static linking they dangle across scenes.
-        m_combo_type = 0xFFFFFFFF;
-        m_combo_count = 0;
-        m_combo_next_score = 0;
-        m_balloon_score = 0;
-#endif
     }
     return 1;
 }
@@ -253,6 +256,7 @@ int daObj_Balloon_c::create() {
         }
 
         if (!hio_set) {
+            IF_DUSK(minigameReset());
             mHIOInit = true;
             hio_set = true;
             l_HIO.field_0x04 = -1;

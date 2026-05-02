@@ -59,8 +59,7 @@ void dScissorBegin_packet_c::draw() {
     }
 
     if (sp50 >= 4) {
-        IF_DUSK(GXSetColorUpdate(GX_FALSE));
-        IF_NOT_DUSK(GXSetScissor(FB_WIDTH + 1, FB_HEIGHT + 1, 0, 0));
+        GXSetScissor(FB_WIDTH + 1, FB_HEIGHT + 1, 0, 0);
         return;
     }
 
@@ -171,8 +170,7 @@ void dScissorBegin_packet_c::draw() {
     }
 
     if (spBC.z < 0.0f || var_f31 > sp6C || sp7C < sp70 || var_f30 > sp64 || sp78 < sp68) {
-        IF_DUSK(GXSetColorUpdate(GX_FALSE));
-        IF_NOT_DUSK(GXSetScissor(FB_WIDTH + 1, FB_HEIGHT + 1, 0, 0));
+        GXSetScissor(FB_WIDTH + 1, FB_HEIGHT + 1, 0, 0);
     } else {
         var_f31 = cLib_minLimit<f32>(var_f31, sp70);
         sp7C = cLib_maxLimit<f32>(sp7C, sp6C);
@@ -189,7 +187,6 @@ void dScissorEnd_packet_c::draw() {
     #endif
 
     GXSetScissor(l_scissor[0], l_scissor[1], l_scissor[2], l_scissor[3]);
-    IF_DUSK(GXSetColorUpdate(GX_TRUE));
 }
 
 static int createSolidHeap(fopAc_ac_c* i_this) {
