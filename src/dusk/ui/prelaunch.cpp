@@ -96,7 +96,7 @@ bool is_selected_path_valid() noexcept {
 void open_iso_picker() noexcept {
     ensure_initialized();
     ShowFileSelect(&file_dialog_callback, nullptr, aurora::window::get_sdl_window(),
-        kDiscFileFilters.data(), static_cast<int>(kDiscFileFilters.size()), nullptr, false);
+        kDiscFileFilters.data(), kDiscFileFilters.size(), nullptr, false);
 }
 
 void apply_intro_animation(Rml::Element* element, const char* delay_class) {
@@ -200,7 +200,7 @@ void Prelaunch::update() {
     if (mDiscDetail != nullptr) {
         if (hasValidPath) {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::Block);
-            mDiscDetail->SetInnerRML(prelaunch_state().isPal ? "GameCube • PAL" : "GameCube • USA");
+            mDiscDetail->SetInnerRML(state.isPal ? "GameCube • PAL" : "GameCube • USA");
         } else {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::None);
         }
@@ -234,13 +234,13 @@ bool Prelaunch::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     }
     auto* target = event.GetTargetElement();
     int focusedButton = -1;
-    for (size_t i = 0; i < mMenuButtons.size(); ++i) {
+    for (int i = 0; i < mMenuButtons.size(); ++i) {
         if (mMenuButtons[i]->contains(target)) {
             focusedButton = i;
             break;
         }
     }
-    int i = (focusedButton + direction) % mMenuButtons.size();
+    int i = (focusedButton + direction) % static_cast<int>(mMenuButtons.size());
     while (i >= 0 && i < mMenuButtons.size()) {
         if (mMenuButtons[i]->focus()) {
             event.StopPropagation();

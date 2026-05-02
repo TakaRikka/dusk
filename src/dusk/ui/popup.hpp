@@ -31,6 +31,7 @@ private:
     std::unique_ptr<TabBar> mTabBar;
     std::unique_ptr<Button> mCloseButton;
     Insets mTabBarPadding;
+    float mTopMargin = 0.f;
 };
 
 }  // namespace dusk::ui

@@ -3,15 +3,14 @@
 #include <RmlUi/Core.h>
 
 #include "aurora/rmlui.hpp"
+#include "dusk/main.h"
 #include "editor.hpp"
+#include "imgui.h"
 #include "settings.hpp"
 #include "ui.hpp"
 #include "window.hpp"
 
 #include <chrono>
-
-#include "dusk/main.h"
-
 #include <cmath>
 
 namespace dusk::ui {
@@ -47,7 +46,9 @@ Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("pop
 
     // Hide document after transition completion
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
-        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") && Document::visible()) {
+        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") &&
+            Document::visible())
+        {
             Document::hide(mPendingClose);
         }
     });
@@ -77,6 +78,14 @@ void Popup::update() {
 void Popup::update_safe_area() noexcept {
     if (mDocument == nullptr || mTabBar == nullptr) {
         return;
+    }
+
+    // Avoid ImGui menu bar if shown
+    if (const auto* viewport = ImGui::GetMainViewport();
+        viewport != nullptr && mTopMargin != viewport->WorkPos.y)
+    {
+        mTopMargin = viewport->WorkPos.y;
+        mRoot->SetProperty(Rml::PropertyId::MarginTop, Rml::Property(mTopMargin, Rml::Unit::DP));
     }
 
     Rml::Context* context = mDocument->GetContext();
