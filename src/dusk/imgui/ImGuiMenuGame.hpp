@@ -57,7 +57,6 @@ namespace dusk {
     private:
         void drawAudioMenu();
         void drawInputMenu();
-        void drawGraphicsMenu();
         void drawGameplayMenu();
         void drawCheatsMenu();
         void drawInterfaceMenu();

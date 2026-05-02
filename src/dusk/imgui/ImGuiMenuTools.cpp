@@ -41,6 +41,10 @@ static void OpenDataFolder() {
 #define DUSK_CAN_OPEN_DATA_FOLDER 0
 #endif
 
+namespace aurora::gx {
+extern bool enableLodBias;
+}
+
 namespace dusk {
     ImGuiMenuTools::ImGuiMenuTools() {}
 
@@ -91,6 +95,7 @@ namespace dusk {
                     getSettings().game.disableWaterRefraction.setValue(disableWaterRefraction);
                     config::Save();
                 }
+                ImGui::Checkbox("Enable LOD Bias", &aurora::gx::enableLodBias);
                 ImGui::EndMenu();
             }
 

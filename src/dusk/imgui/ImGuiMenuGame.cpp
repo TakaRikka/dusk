@@ -25,10 +25,6 @@ namespace {
 constexpr int kInternalResolutionScaleMax = 12;
 }  // namespace
 
-namespace aurora::gx {
-extern bool enableLodBias;
-}
-
 namespace dusk {
     void ImGuiMenuGame::ToggleFullscreen() {
         getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
@@ -43,7 +39,6 @@ namespace dusk {
             drawAudioMenu();
             drawCheatsMenu();
             drawGameplayMenu();
-            drawGraphicsMenu();
             drawInputMenu();
             drawInterfaceMenu();
 
@@ -56,121 +51,6 @@ namespace dusk {
             if (!IsMobile && ImGui::MenuItem("Exit")) {
                 dusk::IsRunning = false;
             }
-
-            ImGui::EndMenu();
-        }
-    }
-
-    void ImGuiMenuGame::drawGraphicsMenu() {
-        if (ImGui::BeginMenu("Graphics")) {
-            ImGui::SeparatorText("Display");
-
-            if (!IsMobile) {
-                if (ImGui::MenuItem("Toggle Fullscreen", hotkeys::TOGGLE_FULLSCREEN)) {
-                    ToggleFullscreen();
-                }
-
-                if (ImGui::Button("Restore Default Window Size")) {
-                    getSettings().video.enableFullscreen.setValue(false);
-                    VISetWindowFullscreen(false);
-                    VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
-                    VICenterWindow();
-                }
-            }
-
-            ImGui::Separator();
-
-            bool vsync = getSettings().video.enableVsync;
-            if (ImGui::Checkbox("Enable VSync", &vsync)) {
-                getSettings().video.enableVsync.setValue(vsync);
-                aurora_enable_vsync(vsync);
-                config::Save();
-            }
-
-            bool lockAspect = getSettings().video.lockAspectRatio;
-            if (ImGui::Checkbox("Force 4:3 Aspect Ratio", &lockAspect)) {
-                getSettings().video.lockAspectRatio.setValue(lockAspect);
-
-                if (lockAspect) {
-                    AuroraSetViewportPolicy(AURORA_VIEWPORT_FIT);
-                } else {
-                    AuroraSetViewportPolicy(AURORA_VIEWPORT_STRETCH);
-                }
-
-                config::Save();
-            }
-
-            ImGui::SeparatorText("Resolution");
-
-            u32 internalResolutionWidth = 0;
-            u32 internalResolutionHeight = 0;
-            AuroraGetRenderSize(&internalResolutionWidth, &internalResolutionHeight);
-            ImGui::TextDisabled("Current internal resolution: %ux%u", internalResolutionWidth,
-                                internalResolutionHeight);
-
-            int scale = std::clamp(getSettings().game.internalResolutionScale.getValue(), 0,
-                                   kInternalResolutionScaleMax);
-            if (ImGui::SliderInt("Internal Resolution", &scale, 0, kInternalResolutionScaleMax,
-                                 scale == 0 ? "Auto" : "%dx"))
-            {
-                getSettings().game.internalResolutionScale.setValue(scale);
-                VISetFrameBufferScale(static_cast<float>(scale));
-                config::Save();
-            }
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Auto renders at the native window resolution.\n"
-                                  "Higher values scale the game's internal framebuffer.");
-            }
-
-            config::ImGuiSliderInt("Shadow Resolution", getSettings().game.shadowResolutionMultiplier, 1, 8, "x%d");
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Improves the shadow resolution, making them higher quality.");
-            }
-
-            ImGui::SeparatorText("Post-Processing");
-
-            constexpr const char* bloomModeNames[] = {"Off", "Classic", "Dusk"};
-            int bloomMode = static_cast<int>(getSettings().game.bloomMode.getValue());
-            if (ImGui::BeginCombo("Bloom", bloomModeNames[bloomMode])) {
-                for (int i = 0; i < IM_ARRAYSIZE(bloomModeNames); i++) {
-                    const bool selected = bloomMode == i;
-                    if (ImGui::Selectable(bloomModeNames[i], selected)) {
-                        getSettings().game.bloomMode.setValue(static_cast<BloomMode>(i));
-                        config::Save();
-                    }
-                    if (selected) {
-                        ImGui::SetItemDefaultFocus();
-                    }
-                }
-                ImGui::EndCombo();
-            }
-
-            bool bloomOff = bloomMode == static_cast<int>(BloomMode::Off);
-            if (bloomOff) ImGui::BeginDisabled();
-            float mult = getSettings().game.bloomMultiplier.getValue();
-            if (ImGui::SliderFloat("Bloom Brightness", &mult, 0.0f, 1.0f, "%.2f")) {
-                getSettings().game.bloomMultiplier.setValue(mult);
-                config::Save();
-            }
-            if (bloomOff) ImGui::EndDisabled();
-
-            ImGui::SeparatorText("Rendering");
-
-            config::ImGuiCheckbox("Unlock Framerate", getSettings().game.enableFrameInterpolation);
-            const bool frameInterpolationHovered = ImGui::IsItemHovered();
-            ImGui::SameLine();
-            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.72f, 0.2f, 1.0f));
-            ImGui::TextUnformatted("[EXPERIMENTAL]");
-            ImGui::PopStyleColor();
-            if (frameInterpolationHovered || ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Uses inter-frame interpolation to enable higher frame rates.\nVisual artifacts, animation glitches, or instability may occur.");
-            }
-
-            ImGui::Checkbox("Enable LOD Bias", &aurora::gx::enableLodBias);
-
-            config::ImGuiCheckbox("Enable Depth of Field", getSettings().game.enableDepthOfField);
-
-            config::ImGuiCheckbox("Enable Mini-Map Shadows", getSettings().game.enableMapBackground);
 
             ImGui::EndMenu();
         }
