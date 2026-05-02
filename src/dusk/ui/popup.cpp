@@ -12,6 +12,8 @@
 
 #include "dusk/main.h"
 
+#include <cmath>
+
 namespace dusk::ui {
 namespace {
 
@@ -65,6 +67,36 @@ void Popup::show() {
 
 void Popup::hide() {
     mRoot->RemoveAttribute("open");
+}
+
+void Popup::update() {
+    update_safe_area();
+    Document::update();
+}
+
+void Popup::update_safe_area() noexcept {
+    if (mDocument == nullptr || mTabBar == nullptr) {
+        return;
+    }
+
+    Rml::Context* context = mDocument->GetContext();
+    Insets safeInsets = safe_area_insets(context);
+    safeInsets = {
+        0.0f,
+        std::round(safeInsets.right),
+        0.0f,
+        std::round(safeInsets.left),
+    };
+    if (safeInsets == mTabBarPadding) {
+        return;
+    }
+
+    mTabBarPadding = safeInsets;
+    auto* tabBar = mTabBar->root();
+    tabBar->SetProperty(
+        Rml::PropertyId::PaddingRight, Rml::Property(safeInsets.right, Rml::Unit::PX));
+    tabBar->SetProperty(
+        Rml::PropertyId::PaddingLeft, Rml::Property(safeInsets.left, Rml::Unit::PX));
 }
 
 void Popup::toggle() {

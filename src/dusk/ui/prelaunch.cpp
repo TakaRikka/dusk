@@ -110,7 +110,7 @@ Prelaunch::Prelaunch() : Document(kDocumentSource) {
     if (auto* menuList = mDocument->GetElementById("menu-list")) {
         const bool hasValidPath = is_selected_path_valid();
         mMenuButtons.push_back(std::make_unique<Button>(menuList, hasValidPath ? "Start Game" : "Select Disk Image"));
-        mMenuButtons.back()->on_pressed([this] {
+        mMenuButtons.back()->on_pressed([] {
             if (!is_selected_path_valid()) {
                 open_iso_picker();
                 return;
@@ -224,7 +224,7 @@ bool Prelaunch::focus() {
 }
 
 bool Prelaunch::handle_nav_command(Rml::Event& event, NavCommand cmd) {
-    return Document::handle_nav_command(event, cmd);
+    return false;
 }
 
 }  // namespace dusk::ui

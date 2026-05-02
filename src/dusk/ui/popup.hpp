@@ -17,6 +17,7 @@ public:
 
     void show() override;
     void hide() override;
+    void update() override;
     bool focus() override;
     bool visible() const override;
 
@@ -26,9 +27,12 @@ protected:
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;
 
 private:
+    void update_safe_area() noexcept;
+
     Rml::Element* mRoot;
     std::unique_ptr<TabBar> mTabBar;
     std::unique_ptr<Button> mCloseButton;
+    Insets mTabBarPadding;
     bool mVisible = false;
 };
 
