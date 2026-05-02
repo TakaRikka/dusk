@@ -972,7 +972,7 @@ void populate_select_equip_picker(Pane& pane, u8& equip, const std::array<u8, Si
     }
 }
 
-constexpr std::array<Rml::String, 3> walletSizeNames = {
+static const std::array<Rml::String, 3> walletSizeNames = {
     "Normal",
     "Big",
     "Giant",
@@ -989,7 +989,7 @@ void populate_wallet_picker(Pane& pane) {
     }
 }
 
-constexpr std::array<Rml::String, 2> formNames = {
+static const std::array<Rml::String, 2> formNames = {
     "Human",
     "Wolf",
 };
