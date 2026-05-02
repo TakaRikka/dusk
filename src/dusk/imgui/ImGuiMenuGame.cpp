@@ -408,6 +408,12 @@ namespace dusk {
                 dusk::audio::SetEnableReverb(getSettings().audio.enableReverb);
             }
 
+            if (config::ImGuiCheckbox("Spatial Sound", getSettings().audio.enableHrtf)) {
+                dusk::audio::EnableHrtf = getSettings().audio.enableHrtf;
+            }
+            if (ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("Emulate surround sound via HRTF (for headphone use only)!");
+            }
 
             ImGui::SeparatorText("Tweaks");
 

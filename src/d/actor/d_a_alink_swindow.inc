@@ -46,7 +46,6 @@ void daAlink_c::setOriginalHeap(JKRExpHeap** i_ppheap, u32 i_size) {
         JKRHeap* parent = mDoExt_getGameHeap();
 
         JKRExpHeap* heap = JKRExpHeap::create(size + (var_r29 + var_r28), parent, true);
-        JKRHEAP_NAME(heap, "Alink original");
         *i_ppheap = heap;
     }
 }

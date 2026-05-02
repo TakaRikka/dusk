@@ -207,4 +207,11 @@ void JPARegistAlphaEnv(JPAEmitterWorkData*, JPABaseParticle*);
 void JPARegistPrmAlpha(JPAEmitterWorkData*, JPABaseParticle*);
 void JPARegistPrmAlphaEnv(JPAEmitterWorkData*, JPABaseParticle*);
 
+#if TARGET_PC
+void JPAInterpBillboard(JPAEmitterWorkData*, JPABaseParticle*);
+void JPAInterpRotBillboard(JPAEmitterWorkData*, JPABaseParticle*);
+void JPAInterpDirection(JPAEmitterWorkData*, JPABaseParticle*);
+void JPAInterpRotDirection(JPAEmitterWorkData*, JPABaseParticle*);
+#endif
+
 #endif /* JPABASESHAPE_H */

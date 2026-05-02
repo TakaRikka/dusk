@@ -856,7 +856,46 @@ void dMenu_DmapBg_c::decGoldFrameAlphaRate() {
     setGoldFrameAlphaRate(rate);
 }
 
+void dMenu_DmapBg_c::dMapBgWide() {
+    // Scale Base HUD
+    mBaseScreen->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
+    mBaseScreen->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
+
+    // Boss Key, Compass & Map icons
+    mBaseScreen->search(MULTI_CHAR('key_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBaseScreen->search(MULTI_CHAR('con_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBaseScreen->search(MULTI_CHAR('map_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Text Header
+    mBaseScreen->search(MULTI_CHAR('t_t00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mBaseScreen->search(MULTI_CHAR('f_t_00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // C Button
+    mBaseScreen->search(MULTI_CHAR('c_btn2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Scale Buttons HUD
+    mButtonScreen->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
+    mButtonScreen->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
+
+    // Buttons
+    mButtonScreen->search(MULTI_CHAR('cont_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // C Button
+    mButtonScreen->search(MULTI_CHAR('c_btn'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mButtonScreen->search(MULTI_CHAR('c_text_s'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mButtonScreen->search(MULTI_CHAR('c_text'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mButtonScreen->search(MULTI_CHAR('f_text_s'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mButtonScreen->search(MULTI_CHAR('f_text'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+    // Decorations
+    mButtonScreen->search(MULTI_CHAR('kazari_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+}
+
 void dMenu_DmapBg_c::draw() {
+    #if TARGET_PC
+    dMapBgWide();
+    #endif
+
     u32 scissor_left;
     u32 scissor_top;
     u32 scissor_width;

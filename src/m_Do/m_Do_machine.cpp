@@ -753,9 +753,11 @@ void myGXVerifyCallback(GXWarningLevel param_1, u32 param_2, const char* param_3
 #endif
 
 int mDoMch_Create() {
+#if !TARGET_PC // We want crash logs.
     if (mDoMain::developmentMode == 0 || !(OSGetConsoleType() & 0x10000000)) {
         OSReportDisable();
     }
+#endif
 
     JKRHeap::setDefaultDebugFill(mDoMch::mDebugFill);
     #if DEBUG
@@ -999,6 +1001,7 @@ int mDoMch_Create() {
     JKRDvdRipper::setSZSBufferSize(0x4000);
 #if TARGET_PC
     JKRHeap* dvdHeap = JKRCreateExpHeap(0x10000, NULL, false);
+    JKRHEAP_NAME(dvdHeap, "dvdHeap");
     assert(dvdHeap != NULL);
     JKRDvdRipper::setHeap(dvdHeap);
 #endif

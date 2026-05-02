@@ -1,6 +1,9 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JAudio2/JASChannel.h"
+#if TARGET_PC
+#include "dusk/audio/DuskDsp.hpp"
+#endif
 #include "JSystem/JAudio2/JASAiCtrl.h"
 #include "JSystem/JAudio2/JASCalc.h"
 #include "JSystem/JAudio2/JASDriverIF.h"
@@ -170,7 +173,12 @@ void JASChannel::updateEffectorParam(JASDsp::TChannel* i_channel, u16* i_mixerVo
 
     f32 pan = 0.5f;
     f32 dolby = 0.0f;
-    switch (JASDriver::getOutputMode()) {
+#if TARGET_PC
+    u32 effectiveOutputMode = dusk::audio::EnableHrtf ? JAS_OUTPUT_SURROUND : JASDriver::getOutputMode();
+#else
+    u32 effectiveOutputMode = JASDriver::getOutputMode();
+#endif
+    switch (effectiveOutputMode) {
     case JAS_OUTPUT_MONO:
         break;
     case JAS_OUTPUT_STEREO:

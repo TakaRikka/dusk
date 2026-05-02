@@ -48,6 +48,20 @@ f32 dusk::audio::MasterVolume = 1.0f;
 f32 dusk::audio::PrevMasterVolume = 1.0f;
 bool dusk::audio::EnableReverb = true;
 bool dusk::audio::DumpAudio = false;
+bool dusk::audio::EnableHrtf = false;
+f32 dusk::audio::HrtfGain = 0.5f;
+
+
+// 3dB at 5kHz.
+static constexpr f32 HRTF_LP_K     = 0.75f;
+static constexpr f32 HRTF_ALLPASS_G = 0.3f;
+// Front never drops below (1 - HRTF_EXTRACT_MAX).
+static constexpr f32 HRTF_EXTRACT_MAX = 0.6f;
+
+static f32 sHrtfLp1    = 0.0f;
+static f32 sHrtfLp2    = 0.0f;
+static f32 sHrtfApIn1  = 0.0f;
+static f32 sHrtfApOut1 = 0.0f;
 
 /**
  * Validate that a DSP channel's format is actually something we know how to play.
@@ -283,6 +297,9 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
     DspSubframe reverbInputR = {};
     bool anyReverbInput = false;
 
+    DspSubframe surroundBus = {};
+    bool anySurroundInput = false;
+
     for (int i = 0; i < channels.size(); i++) {
         auto& channel = channels[i];
         auto& channelAux = ChannelAux[i];
@@ -324,6 +341,21 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
             }
         }
 
+        if (EnableHrtf && channel.mAutoMixerBeenSet) {
+            f32 dolby = (channel.mAutoMixerPanDolby & 0xFF) / 127.0f;
+            if (dolby > 0.0f) {
+                anySurroundInput = true;
+                f32 extract = dolby * HRTF_EXTRACT_MAX;
+                f32 frontScale = 1.0f - extract;
+                for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
+                    f32 mono = (channelSubframe.channels[0][j] + channelSubframe.channels[1][j]) * 0.5f;
+                    surroundBus[j] += mono * extract;
+                    channelSubframe.channels[0][j] *= frontScale;
+                    channelSubframe.channels[1][j] *= frontScale;
+                }
+            }
+        }
+
         if (DumpAudio && sChannelDumpFiles[i]) {
             f32 interleaved[DSP_SUBFRAME_SIZE * 2];
             for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
@@ -347,6 +379,28 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
             DSP_SUBFRAME_SIZE, 1, 1.0f
         );
         ReverbHasTail = wetEnergy >= REVERB_ENERGY_EPSILON;
+    }
+
+    if (EnableHrtf && anySurroundInput) {
+        // Two-pole LPF: -12 dB/oct above 3 kHz
+        for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
+            sHrtfLp1 = (1.0f - HRTF_LP_K) * sHrtfLp1 + HRTF_LP_K * surroundBus[j];
+            sHrtfLp2 = (1.0f - HRTF_LP_K) * sHrtfLp2 + HRTF_LP_K * sHrtfLp1;
+            surroundBus[j] = sHrtfLp2;
+        }
+
+        // Mix into L and R
+        // L gets the filtered signal directly; R gets it allpass for mild decorrelation
+        for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
+            f32 s = surroundBus[j];
+
+            subframe.channels[0][j] += s * HrtfGain;
+
+            f32 r = -HRTF_ALLPASS_G * s + sHrtfApIn1 + HRTF_ALLPASS_G * sHrtfApOut1;
+            sHrtfApIn1  = s;
+            sHrtfApOut1 = r;
+            subframe.channels[1][j] += r * HrtfGain;
+        }
     }
 
     for (auto& channel : subframe.channels) {
