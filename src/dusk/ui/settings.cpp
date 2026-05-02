@@ -391,8 +391,9 @@ SettingsWindow::SettingsWindow() {
 
         leftPane.add_section("Gyro");
         addOption("Gyro Aim", getSettings().game.enableGyroAim,
-            "Enables gyro aiming on supported controllers while in look mode and while aiming "
-            "items.");
+            "Enables gyro controls while in look mode, aiming a hawk, and aiming "
+            "supported items.<br/><br/>Supported items include the Slingshot, Gale Boomerang, "
+            "Hero's Bow, Clawshot(s), Ball and Chain, and Dominion Rod.");
         addOption("Gyro Rollgoal", getSettings().game.enableGyroRollgoal,
             "Enables gyro controls for Rollgoal in Hena's Cabin.");
         config_percent_select(leftPane, rightPane, getSettings().game.gyroSensitivityY,

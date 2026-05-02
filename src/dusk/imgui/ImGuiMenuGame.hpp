@@ -55,7 +55,6 @@ namespace dusk {
         static void resetForSpeedrunMode();
 
     private:
-        void drawInputMenu();
         void drawInterfaceMenu();
 
         struct {

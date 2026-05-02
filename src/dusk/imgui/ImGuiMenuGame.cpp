@@ -22,7 +22,13 @@ namespace dusk {
 
     void ImGuiMenuGame::draw() {
         if (ImGui::BeginMenu("Settings")) {
-            drawInputMenu();
+            // TODO: Remove this once Controller Config exists in RmlUi
+            if (ImGui::Button("Configure Controller")){
+                m_showControllerConfig = !m_showControllerConfig;
+            }
+
+            ImGui::Checkbox("Show Input Viewer", &m_showInputViewer);
+
             drawInterfaceMenu();
 
             ImGui::Separator();
@@ -34,85 +40,6 @@ namespace dusk {
             if (!IsMobile && ImGui::MenuItem("Exit")) {
                 dusk::IsRunning = false;
             }
-
-            ImGui::EndMenu();
-        }
-    }
-
-    void ImGuiMenuGame::drawInputMenu() {
-        if (ImGui::BeginMenu("Input")) {
-            ImGui::SeparatorText("Controller");
-
-            if (ImGui::Button("Configure Controller")){
-                m_showControllerConfig = !m_showControllerConfig;
-            }
-
-            ImGui::SeparatorText("Camera");
-
-            config::ImGuiCheckbox("Free Camera", getSettings().game.freeCamera);
-
-            if (getSettings().game.freeCamera) {
-                config::ImGuiCheckbox("Invert Camera X Axis", getSettings().game.invertCameraXAxis);
-                config::ImGuiCheckbox("Invert Camera Y Axis", getSettings().game.invertCameraYAxis);
-                config::ImGuiSliderFloat("Free Camera Sensitivity", getSettings().game.freeCameraSensitivity, 0.5f, 2.0f, "%.1f");
-            } else {
-                config::ImGuiCheckbox("Invert Camera X Axis", getSettings().game.invertCameraXAxis);
-            }
-
-            ImGui::SeparatorText("Gyro");
-
-            config::ImGuiCheckbox("Gyro Aim", getSettings().game.enableGyroAim);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Enables the gyroscope on supported controllers\n"
-                                  "while in look mode (C-Up) and while aiming the\n"
-                                  "Slingshot, Gale Boomerang, Hero's Bow, Clawshot(s),\n"
-                                  "Ball and Chain, and Dominion Rod.");
-            }
-
-            config::ImGuiCheckbox("Gyro Rollgoal", getSettings().game.enableGyroRollgoal);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Enables the gyroscope on supported controllers to\n"
-                                  "tilt the Rollgoal table in Hena's Cabin.");
-            }
-
-            if (getSettings().game.enableGyroAim || getSettings().game.enableGyroRollgoal) {
-                config::ImGuiSliderFloat("Gyro Pitch Sensitivity", getSettings().game.gyroSensitivityY, 0.25f, 4.0f, "%.2f");
-                config::ImGuiSliderFloat("Gyro Yaw Sensitivity", getSettings().game.gyroSensitivityX, 0.25f, 4.0f, "%.2f");
-
-                if (getSettings().game.enableGyroRollgoal) {
-                    config::ImGuiSliderFloat("Rollgoal Sensitivity", getSettings().game.gyroSensitivityRollgoal, 0.25f, 4.0f, "%.2f");
-                    if (ImGui::IsItemHovered()) {
-                        ImGui::SetTooltip("Additional multiplier for scaling how strongly\n"
-                                          "the gyroscope affects the Rollgoal table.");
-                    }
-                }
-
-                config::ImGuiSliderFloat("Gyro Deadband", getSettings().game.gyroDeadband, 0.0f, 0.5f, "%.3f");
-                if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Angular rates below this magnitude are treated as zero,\n"
-                                      "reducing drift and jitter when the controller is still.");
-                }
-
-                config::ImGuiSliderFloat("Gyro Smoothing", getSettings().game.gyroSmoothing, 0.0f, 1.0f, "%.2f");
-                if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Low values track raw gyro input more closely,\n"
-                                      "while higher values smooth out input over time.");
-                }
-
-                config::ImGuiCheckbox("Invert Gyro Pitch", getSettings().game.gyroInvertPitch);
-                config::ImGuiCheckbox("Invert Gyro Yaw", getSettings().game.gyroInvertYaw);
-            }
-
-            ImGui::SeparatorText("Tools");
-
-            ImGui::BeginDisabled(getSettings().game.speedrunMode);
-            config::ImGuiCheckbox("Turbo Key", getSettings().game.enableTurboKeybind);
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Hold TAB to increase game speed by up to 4x.");
-            }
-            ImGui::EndDisabled();
-
-            ImGui::Checkbox("Show Input Viewer", &m_showInputViewer);
 
             ImGui::EndMenu();
         }
