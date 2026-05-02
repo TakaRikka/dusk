@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <filesystem>
+#include <ranges>
 
 #include "aurora/lib/window.hpp"
 #include "input.hpp"
@@ -19,12 +20,7 @@ void load_font(const char* filename, bool fallback = false) {
 }
 
 bool sInitialized = false;
-
-struct OpenDocument {
-    std::unique_ptr<Document> doc;
-    bool pendingDestroy = false;
-};
-std::vector<OpenDocument> sDocuments;
+std::vector<std::unique_ptr<Document> > sDocuments;
 
 }  // namespace
 
@@ -54,8 +50,8 @@ void shutdown() noexcept {
 }
 
 Document& push_document(std::unique_ptr<Document> doc, bool show) noexcept {
-    if (auto* doc = top_document()) {
-        doc->hide();
+    if (auto* top = top_document()) {
+        top->hide(false);
     }
     Document& ret = *doc;
     sDocuments.push_back({std::move(doc)});
@@ -66,29 +62,8 @@ Document& push_document(std::unique_ptr<Document> doc, bool show) noexcept {
     return ret;
 }
 
-void pop_document() noexcept {
-    for (auto it = sDocuments.rbegin(); it != sDocuments.rend(); ++it) {
-        if (!it->pendingDestroy) {
-            it->doc->hide();
-            it->pendingDestroy = true;
-            break;
-        }
-    }
+void show_top_document() noexcept {
     if (auto* doc = top_document()) {
-        doc->show();
-    }
-    sync_input_block();
-}
-
-void toggle_top_document() noexcept {
-    auto* doc = top_document();
-    if (doc == nullptr) {
-        return;
-    }
-
-    if (doc->visible()) {
-        doc->hide();
-    } else {
         doc->show();
     }
     sync_input_block();
@@ -96,13 +71,13 @@ void toggle_top_document() noexcept {
 
 bool any_document_visible() noexcept {
     return std::any_of(sDocuments.begin(), sDocuments.end(),
-        [](const OpenDocument& doc) { return doc.doc != nullptr && doc.doc->visible(); });
+        [](const auto& doc) { return doc && doc->visible(); });
 }
 
 Document* top_document() noexcept {
-    for (auto it = sDocuments.rbegin(); it != sDocuments.rend(); ++it) {
-        if (!it->pendingDestroy) {
-            return it->doc.get();
+    for (auto& doc : std::views::reverse(sDocuments)) {
+        if (!doc->closed() && !doc->pending_close()) {
+            return doc.get();
         }
     }
     return nullptr;
@@ -111,12 +86,11 @@ Document* top_document() noexcept {
 void update() noexcept {
     update_input();
     for (const auto& doc : sDocuments) {
-        doc.doc->update();
+        doc->update();
     }
-    sDocuments.erase(
-        std::remove_if(sDocuments.begin(), sDocuments.end(),
-            [](const OpenDocument& doc) { return doc.pendingDestroy && doc.doc->can_destroy(); }),
-        sDocuments.end());
+    const auto [first, last] =
+        std::ranges::remove_if(sDocuments, [](const auto& doc) { return doc->closed(); });
+    sDocuments.erase(first, last);
     sync_input_block();
 }
 

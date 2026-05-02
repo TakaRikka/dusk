@@ -60,7 +60,7 @@ public:
     explicit Overlay(OverlayProps props);
 
     void show() override;
-    void hide() override;
+    void hide(bool close) override;
     void update() override;
     bool focus() override;
     bool visible() const override;
@@ -85,7 +85,6 @@ private:
     int mDefaultValue = 0;
     std::vector<std::unique_ptr<Component> > mComponents;
     Rml::Element* mRoot;
-    bool mDismissed = false;
 };
 
 }  // namespace dusk::ui

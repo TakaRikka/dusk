@@ -14,7 +14,7 @@ public:
     Document& operator=(const Document&) = delete;
 
     virtual void show();
-    virtual void hide();
+    virtual void hide(bool close);
     virtual void update();
     virtual bool focus();
     virtual bool visible() const;
@@ -24,14 +24,28 @@ public:
     void listen(Rml::EventId event, ScopedEventListener::Callback callback, bool capture = false) {
         listen(mDocument, event, std::move(callback), capture);
     }
+    void toggle() {
+        if (visible()) {
+            hide(false);
+        } else {
+            show();
+        }
+    }
+    void pop() {
+        hide(true);
+        show_top_document();
+    }
 
-    bool can_destroy() const;
+    bool pending_close() const { return mPendingClose; }
+    bool closed() const { return mClosed; }
 
 protected:
     virtual bool handle_nav_command(Rml::Event& event, NavCommand cmd);
 
     Rml::ElementDocument* mDocument;
     std::vector<std::unique_ptr<ScopedEventListener> > mListeners;
+    bool mPendingClose = false;
+    bool mClosed = false;
 };
 
 }  // namespace dusk::ui

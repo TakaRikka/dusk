@@ -33,8 +33,7 @@ void handle_event(const SDL_Event& event) noexcept;
 void update() noexcept;
 
 Document& push_document(std::unique_ptr<Document> doc, bool show = true) noexcept;
-void pop_document() noexcept;
-void toggle_top_document() noexcept;
+void show_top_document() noexcept;
 bool any_document_visible() noexcept;
 Document* top_document() noexcept;
 

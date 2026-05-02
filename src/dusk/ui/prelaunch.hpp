@@ -14,7 +14,7 @@ public:
     Prelaunch();
 
     void show() override;
-    void hide() override;
+    void hide(bool close) override;
     void update() override;
     bool focus() override;
     bool visible() const override;

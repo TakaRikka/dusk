@@ -208,7 +208,7 @@ Overlay::Overlay(OverlayProps props)
 
     if (auto* footer = mDocument->GetElementById("footer")) {
         auto& returnButton = add_component<Button>(footer, "\xE2\x86\x90 Return", "footer-button")
-                                 .on_pressed(pop_document);
+                                 .on_pressed([this] { pop(); });
         returnButton.root()->SetClass("return", true);
         auto& resetButton =
             add_component<Button>(footer, "Reset to default", "footer-button").on_pressed([this] {
@@ -220,11 +220,10 @@ Overlay::Overlay(OverlayProps props)
     // Hide document after transition completion
     mRoot = mDocument->GetElementById("root");
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
-        if (event.GetTargetElement() == mRoot &&
-            *mRoot->GetProperty(Rml::PropertyId::Visibility) == Rml::Style::Visibility::Visible &&
-            !mRoot->HasAttribute("open"))
+        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") &&
+            Document::visible())
         {
-            Document::hide();
+            Document::hide(mPendingClose);
         }
     });
 }
@@ -234,8 +233,11 @@ void Overlay::show() {
     mRoot->SetAttribute("open", "");
 }
 
-void Overlay::hide() {
+void Overlay::hide(bool close) {
     mRoot->RemoveAttribute("open");
+    if (close) {
+        mPendingClose = true;
+    }
 }
 
 void Overlay::update() {
@@ -260,7 +262,7 @@ bool Overlay::visible() const {
 
 bool Overlay::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (cmd == NavCommand::Cancel) {
-        pop_document();
+        pop();
         return true;
     }
     return Document::handle_nav_command(event, cmd);

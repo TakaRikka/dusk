@@ -64,11 +64,8 @@ Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("w
 
     // Hide document after transition completion
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
-        if (event.GetTargetElement() == mRoot &&
-            *mRoot->GetProperty(Rml::PropertyId::Visibility) == Rml::Style::Visibility::Visible &&
-            !mRoot->HasAttribute("open"))
-        {
-            Document::hide();
+        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") && Document::visible()) {
+            Document::hide(mPendingClose);
         }
     });
 
@@ -92,9 +89,9 @@ void Window::show() {
     mRoot->SetAttribute("open", "");
 }
 
-void Window::hide() {
+void Window::hide(bool close) {
     mRoot->RemoveAttribute("open");
-    // Document will be hidden after transition
+    mPendingClose = close;
 }
 
 void Window::update() {
@@ -175,7 +172,7 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
         }
     }
     if (cmd == NavCommand::Cancel) {
-        pop_document();
+        pop();
         return true;
     }
     if (mTabBar->handle_nav_command(event, cmd)) {

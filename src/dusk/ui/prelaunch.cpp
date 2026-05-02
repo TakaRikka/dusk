@@ -114,13 +114,13 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         const bool hasValidPath = is_selected_path_valid();
         mMenuButtons.push_back(
             std::make_unique<Button>(menuList, hasValidPath ? "Start Game" : "Select Disk Image"));
-        mMenuButtons.back()->on_pressed([] {
+        mMenuButtons.back()->on_pressed([this] {
             if (!is_selected_path_valid()) {
                 open_iso_picker();
                 return;
             }
             IsGameLaunched = true;
-            pop_document();
+            hide(true);
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-1");
 
@@ -144,7 +144,7 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
             return;
         }
         if (target == mDocument && !mDocument->HasAttribute("open")) {
-            Document::hide();
+            Document::hide(true);
         } else if (target->GetTagName() == "button" && !target->IsClassSet("anim-done")) {
             target->SetClass("anim-done", true);
         }
@@ -157,8 +157,12 @@ void Prelaunch::show() {
     mRoot->SetAttribute("open", "");
 }
 
-void Prelaunch::hide() {
-    if (IsGameLaunched) {
+void Prelaunch::hide(bool close) {
+    if (close) {
+        if (!mEntranceAnimationStarted) {
+            // Close document immediately
+            Document::hide(true);
+        }
         mDocument->RemoveAttribute("open");
     } else {
         mRoot->RemoveAttribute("open");
@@ -169,16 +173,16 @@ void Prelaunch::update() {
     ensure_initialized();
     refresh_path_state();
 
-    if (!mEntranceAnimationStarted && mDocument != nullptr) {
-        mDocument->SetClass("animate-in", true);
-        mEntranceAnimationStarted = true;
-    }
-
     auto& state = prelaunch_state();
     const bool hasValidPath = is_selected_path_valid();
     if (hasValidPath && getSettings().backend.skipPreLaunchUI) {
-        pop_document();
+        hide(true);
         IsGameLaunched = true;
+    }
+
+    if (!mEntranceAnimationStarted && mDocument != nullptr) {
+        mDocument->SetClass("animate-in", true);
+        mEntranceAnimationStarted = true;
     }
 
     if (!mMenuButtons.empty()) {

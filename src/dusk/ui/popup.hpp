@@ -16,12 +16,10 @@ public:
     Popup& operator=(const Popup&) = delete;
 
     void show() override;
-    void hide() override;
+    void hide(bool close) override;
     void update() override;
     bool focus() override;
     bool visible() const override;
-
-    void toggle();
 
 protected:
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;
@@ -33,7 +31,6 @@ private:
     std::unique_ptr<TabBar> mTabBar;
     std::unique_ptr<Button> mCloseButton;
     Insets mTabBarPadding;
-    bool mVisible = false;
 };
 
 }  // namespace dusk::ui

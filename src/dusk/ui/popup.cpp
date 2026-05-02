@@ -41,17 +41,14 @@ Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("pop
     mTabBar->add_tab("Reset", [this] {
         JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
         mTabBar->set_active_tab(-1);
-        hide();
+        hide(false);
     });
     mTabBar->add_tab("Exit", [] { IsRunning = false; });
 
     // Hide document after transition completion
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
-        if (event.GetTargetElement() == mRoot &&
-            *mRoot->GetProperty(Rml::PropertyId::Visibility) == Rml::Style::Visibility::Visible &&
-            !mRoot->HasAttribute("open"))
-        {
-            Document::hide();
+        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") && Document::visible()) {
+            Document::hide(mPendingClose);
         }
     });
 
@@ -65,8 +62,11 @@ void Popup::show() {
     mTabBar->set_active_tab(-1);
 }
 
-void Popup::hide() {
+void Popup::hide(bool close) {
     mRoot->RemoveAttribute("open");
+    if (close) {
+        mPendingClose = true;
+    }
 }
 
 void Popup::update() {
@@ -99,21 +99,13 @@ void Popup::update_safe_area() noexcept {
         Rml::PropertyId::PaddingLeft, Rml::Property(safeInsets.left, Rml::Unit::PX));
 }
 
-void Popup::toggle() {
-    if (visible()) {
-        hide();
-    } else {
-        show();
-    }
-}
-
 bool Popup::visible() const {
     return mRoot->HasAttribute("open");
 }
 
 bool Popup::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (cmd == NavCommand::Cancel) {
-        hide();
+        hide(false);
         return true;
     }
     return Document::handle_nav_command(event, cmd);

@@ -35,7 +35,6 @@ Document::Document(const Rml::String& source) : mDocument(load_document(source))
     listen(Rml::EventId::Mouseover, blockUnlessVisible, true);
     listen(Rml::EventId::Click, blockUnlessVisible, true);
     listen(Rml::EventId::Scroll, blockUnlessVisible, true);
-    listen(Rml::EventId::Focus, blockUnlessVisible, true);
 
     listen(Rml::EventId::Keydown, [this](Rml::Event& event) {
         const auto cmd = map_nav_event(event);
@@ -65,9 +64,12 @@ void Document::show() {
     }
 }
 
-void Document::hide() {
+void Document::hide(bool close) {
     if (mDocument != nullptr) {
         mDocument->Hide();
+    }
+    if (close) {
+        mClosed = true;
     }
 }
 
@@ -89,13 +91,6 @@ void Document::listen(Rml::Element* element, Rml::EventId event,
         std::make_unique<ScopedEventListener>(element, event, std::move(callback), capture));
 }
 
-bool Document::can_destroy() const {
-    if (mDocument == nullptr) {
-        return true;
-    }
-    return *mDocument->GetProperty(Rml::PropertyId::Visibility) == Rml::Style::Visibility::Hidden;
-}
-
 bool Document::visible() const {
     if (mDocument == nullptr) {
         return false;
@@ -105,7 +100,7 @@ bool Document::visible() const {
 
 bool Document::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (cmd == NavCommand::Menu) {
-        toggle_top_document();
+        toggle();
         return true;
     }
     return false;
