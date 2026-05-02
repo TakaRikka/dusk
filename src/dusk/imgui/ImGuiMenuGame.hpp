@@ -55,8 +55,6 @@ namespace dusk {
         static void resetForSpeedrunMode();
 
     private:
-        void drawInterfaceMenu();
-
         struct {
             int m_selectedPort = 0;
             bool m_isReading = false;

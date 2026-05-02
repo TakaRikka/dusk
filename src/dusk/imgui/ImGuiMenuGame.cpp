@@ -29,34 +29,6 @@ namespace dusk {
 
             ImGui::Checkbox("Show Input Viewer", &m_showInputViewer);
 
-            drawInterfaceMenu();
-
-            ImGui::Separator();
-
-            if (ImGui::MenuItem("Reset", hotkeys::DO_RESET)) {
-                JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
-            }
-
-            if (!IsMobile && ImGui::MenuItem("Exit")) {
-                dusk::IsRunning = false;
-            }
-
-            ImGui::EndMenu();
-        }
-    }
-
-    void ImGuiMenuGame::drawInterfaceMenu() {
-        if (ImGui::BeginMenu("Interface")) {
-            config::ImGuiCheckbox("Achievement Notifications", getSettings().game.enableAchievementNotifications);
-            config::ImGuiCheckbox("Skip Pre-Launch UI", getSettings().backend.skipPreLaunchUI);
-            config::ImGuiCheckbox("Show Pipeline Compilation", getSettings().backend.showPipelineCompilation);
-#if DUSK_ENABLE_SENTRY_NATIVE
-            config::ImGuiCheckbox("Enable Crash Reporting", getSettings().backend.enableCrashReporting);
-#endif
-            if (!IsMobile) {
-                config::ImGuiCheckbox("Pause on Focus Lost", getSettings().game.pauseOnFocusLost);
-            }
-
             ImGui::EndMenu();
         }
     }

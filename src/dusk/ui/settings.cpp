@@ -7,6 +7,7 @@
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/audio/DuskDsp.hpp"
 #include "dusk/config.hpp"
+#include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/livesplit.h"
 #include "m_Do/m_Do_main.h"
 #include "number_button.hpp"
@@ -455,6 +456,11 @@ SettingsWindow::SettingsWindow() {
                             value ? AURORA_VIEWPORT_FIT : AURORA_VIEWPORT_STRETCH);
                     },
             });
+        config_bool_select(leftPane, rightPane, getSettings().game.pauseOnFocusLost,
+            {
+                .key = "Pause on Focus Lost",
+                .isDisabled = [] { return IsMobile; },
+            });
 
         leftPane.add_section("Resolution");
         leftPane
@@ -589,6 +595,39 @@ SettingsWindow::SettingsWindow() {
         config_bool_select(leftPane, rightPane, getSettings().game.enableMapBackground,
             {
                 .key = "Enable Mini-Map Shadows",
+            });
+    });
+
+    // TODO: Reorganize all of this?
+    add_tab("Interface", [this](Rml::Element* content) {
+        auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
+        auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
+
+        config_bool_select(leftPane, rightPane, getSettings().game.enableAchievementNotifications,
+            {
+                .key = "Enable Achievement Notifications",
+                .helpText = "Display a toast when an achievement is unlocked.",
+            });
+#if DUSK_ENABLE_SENTRY_NATIVE
+        config_bool_select(leftPane, rightPane, getSettings().backend.enableCrashReporting,
+            {
+                .key = "Enable Crash Reporting",
+                .helpText = "Enable automatic reporting of crashes to the developers.<br/><br/>"
+                "Submissions include logs which may contain sensitive information. Refrain from "
+                "enabling reporting if you do not agree with the following inclusions:<br/><br/> "
+                "- Operating System<br/>- CPU Architecture<br/>- GPU Model & Driver Version<br/>"
+                "- Account Username"
+            });
+#endif
+        leftPane.add_section("Advanced");
+        config_bool_select(leftPane, rightPane, getSettings().backend.skipPreLaunchUI,
+            {
+                .key = "Skip Pre-Launch UI",
+            });
+        config_bool_select(leftPane, rightPane, getSettings().backend.showPipelineCompilation,
+            {
+                .key = "Show Pipeline Compilation",
+                .helpText = "Show an overlay when shaders are being compiled for your hardware."
             });
     });
 }
