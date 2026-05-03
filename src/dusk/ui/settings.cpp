@@ -1,9 +1,8 @@
 #include "settings.hpp"
 
-#include <fmt/format.h>
-
 #include "aurora/gfx.h"
 #include "bool_button.hpp"
+#include "controller_config.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/audio/DuskDsp.hpp"
 #include "dusk/config.hpp"
@@ -126,18 +125,6 @@ SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<f
             rightPane.add_text(helpText);
         });
 }
-
-class ControllerConfigWindow : public Window {
-public:
-    ControllerConfigWindow() {
-        for (int i = 0; i < 4; ++i) {
-            add_tab(fmt::format("Port {}", i + 1), [this](Rml::Element* content) {
-                auto& pane = add_child<Pane>(content, Pane::Type::Controlled);
-                pane.add_section("Coming soon");
-            });
-        }
-    }
-};
 
 }  // namespace
 
