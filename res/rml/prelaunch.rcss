@@ -9,15 +9,38 @@ body {
     font-weight: normal;
     font-size: 20dp;
     color: #FFFFFF;
-    background-color: #000000;
-    decorator: image(../prelaunch-bg.png cover left center);
     filter: opacity(0);
     transition: filter 1s 0.2s linear-in-out;
     z-index: -1;
 }
 
+.gradient {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* The color gradient from the Figma bands really badly. A fully black gradient does as well, but not as badly. */
+    decorator: horizontal-gradient(#000000FF #00000000);
+}
+
+.background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    decorator: image(../prelaunch-bg.png cover left center);
+    opacity: 0;
+    transition: opacity 1s linear-in-out;
+}
+
 body[open] {
     filter: opacity(1);
+}
+
+body[open] .background {
+    opacity: 1;
+}
+
+body.disc-ready .background {
+    opacity: 0;
 }
 
 content {

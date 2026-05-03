@@ -1,5 +1,6 @@
 #include "prelaunch.hpp"
 
+#include "popup.hpp"
 #include "dusk/config.hpp"
 #include "dusk/file_select.hpp"
 #include "dusk/iso_validate.hpp"
@@ -20,6 +21,8 @@ const Rml::String kDocumentSource = R"RML(
     <link type="text/rcss" href="res/rml/prelaunch.rcss" />
 </head>
 <body>
+    <div class="gradient" />
+    <div class="background" />
     <content id="root" open>
         <menu>
             <hero class="intro-item delay-0">
@@ -123,6 +126,7 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
                 return;
             }
             IsGameLaunched = true;
+            push_document(std::make_unique<Popup>(), false);
             hide(true);
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-1");
@@ -166,8 +170,6 @@ void Prelaunch::hide(bool close) {
             Document::hide(true);
         }
         mDocument->RemoveAttribute("open");
-    } else {
-        mRoot->RemoveAttribute("open");
     }
 }
 
@@ -177,8 +179,11 @@ void Prelaunch::update() {
 
     auto& state = prelaunch_state();
     const bool hasValidPath = is_selected_path_valid();
-    if (hasValidPath && getSettings().backend.skipPreLaunchUI) {
-        hide(true);
+    mDocument->SetClass("disc-ready", hasValidPath);
+    if (hasValidPath) {
+        if (getSettings().backend.skipPreLaunchUI) {
+            hide(true);
+        }
         IsGameLaunched = true;
     }
 

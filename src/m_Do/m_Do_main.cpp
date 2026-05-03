@@ -608,17 +608,24 @@ int game_main(int argc, char* argv[]) {
     }
 
     if (!dvd_opened) {
-        dusk::ui::push_document(std::make_unique<dusk::ui::Prelaunch>(), true);
+        if (!dusk::getSettings().backend.skipPreLaunchUI) {
+            dusk::ui::push_document(std::make_unique<dusk::ui::Prelaunch>(), true);
 
-        // pre game launch ui main loop
-        if (!launchUILoop()) {
-            dusk::ShutdownCrashReporting();
+            // pre game launch ui main loop
+            if (!launchUILoop()) {
+                dusk::ShutdownCrashReporting();
 #ifdef DUSK_DISCORD_RPC
-            dusk::discord::Shutdown();
+                dusk::discord::Shutdown();
 #endif
-            dusk::ui::shutdown();
-            aurora_shutdown();
-            return 0;
+                dusk::ui::shutdown();
+                aurora_shutdown();
+                return 0;
+            }
+        } else {
+            dusk::ui::push_document(std::make_unique<dusk::ui::Popup>(), false);
+            if (!dusk::getSettings().backend.wasPresetChosen) {
+                dusk::ui::push_document(std::make_unique<dusk::ui::PresetWindow>());
+            }
         }
 
         dvd_path = dusk::getSettings().backend.isoPath;
@@ -630,11 +637,8 @@ int game_main(int argc, char* argv[]) {
         if (!aurora_dvd_open(dvd_path.c_str())) {
             DuskLog.fatal("Failed to open DVD image: {}", dvd_path);
         }
-    }
 
-    dusk::ui::push_document(std::make_unique<dusk::ui::Popup>(), false);
-    if (!dusk::getSettings().backend.wasPresetChosen) {
-        dusk::ui::push_document(std::make_unique<dusk::ui::PresetWindow>());
+        dusk::IsGameLaunched = true;
     }
 
     dusk::version::init();
