@@ -119,6 +119,7 @@ struct UserSettings {
         ConfigVar<bool> invertCameraXAxis;
         ConfigVar<bool> invertCameraYAxis;
         ConfigVar<float> freeCameraSensitivity;
+        ConfigVar<bool> debugFlyCam;
 
         // Cheats
         ConfigVar<bool> infiniteHearts;

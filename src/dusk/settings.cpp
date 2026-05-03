@@ -78,6 +78,7 @@ UserSettings g_userSettings = {
         .invertCameraXAxis {"game.invertCameraXAxis", false},
         .invertCameraYAxis {"game.invertCameraYAxis", false},
         .freeCameraSensitivity {"game.freeCameraSensitivity", 1.0f},
+        .debugFlyCam {"game.debugFlyCam", false},
 
         // Cheats
         .infiniteHearts {"game.infiniteHearts", false},
@@ -203,6 +204,7 @@ void registerSettings() {
     Register(g_userSettings.game.gyroInvertPitch);
     Register(g_userSettings.game.gyroInvertYaw);
     Register(g_userSettings.game.freeCamera);
+    Register(g_userSettings.game.debugFlyCam);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.graphicsBackend);

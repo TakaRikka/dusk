@@ -601,6 +601,7 @@ namespace dusk {
         getSettings().game.freeMagicArmor.setValue(false);
 
         getSettings().game.enableTurboKeybind.setValue(false);
+        getSettings().game.debugFlyCam.setValue(false);
     }
 
     SpeedrunInfo m_speedrunInfo;

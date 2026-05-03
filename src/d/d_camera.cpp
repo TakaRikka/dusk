@@ -1040,6 +1040,11 @@ void dCamera_c::debugDrawInit() {
 bool dCamera_c::Run() {
 #if TARGET_PC
     ResetView();
+    if (executeDebugFlyCam()) {
+        mFrameCounter++;
+        mTicks++;
+        return true;
+    }
 #endif
 
     daAlink_c* link = daAlink_getAlinkActorClass();
@@ -7474,7 +7479,99 @@ bool dCamera_c::test2Camera(s32 param_0) {
     return false;
 }
 
+static constexpr f32 FLYCAM_SPEED = 0.5f;
+static constexpr f32 FLYCAM_FAST_SPEED = 4.0f;
+static constexpr f32 FLYCAM_ROTATION_SPEED = 0.002f;
+static constexpr f32 FLYCAM_TRIGGER_DEADZONE = 20.0f;
+
 #if TARGET_PC
+bool dCamera_c::executeDebugFlyCam() {
+    if (!dusk::getSettings().game.debugFlyCam) {
+        if (mDebugFlyCam.initialized) {
+            deactivateDebugFlyCam();
+        }
+        return false;
+    }
+
+    dEvt_control_c* event = dComIfGp_getEvent();
+    if (event == nullptr) {
+        return false;
+    }
+
+    event->mEventStatus = 1;
+    dComIfGp_getEventManager().setCameraPlay(1);
+
+    if (!mDebugFlyCam.initialized) {
+        mDebugFlyCam.savedCenter = mCenter;
+        mDebugFlyCam.savedEye = mEye;
+        mDebugFlyCam.savedFovy = mFovy;
+        mDebugFlyCam.savedBank = mBank;
+
+        f32 dx = mCenter.x - mEye.x;
+        f32 dy = mCenter.y - mEye.y;
+        f32 dz = mCenter.z - mEye.z;
+        mDebugFlyCam.yaw = atan2f(dz, dx);
+        f32 horizontal = sqrtf(dx * dx + dz * dz);
+        mDebugFlyCam.pitch = atan2f(dy, horizontal);
+
+        mDebugFlyCam.initialized = true;
+    }
+
+    interface_of_controller_pad& pad = mDoCPd_c::getCpadInfo(0);
+    f32 stickY = pad.mMainStickPosY * 72.0f;
+    f32 stickX = pad.mMainStickPosX * 72.0f;
+    f32 cStickY = pad.mCStickPosY * 59.0f;
+    f32 cStickX = pad.mCStickPosX * 59.0f;
+    f32 trigL = pad.mTriggerLeft * 150.0f;
+    f32 trigR = pad.mTriggerRight * 150.0f;
+
+    f32 verticalDisp = 0.0f;
+    if (trigR >= FLYCAM_TRIGGER_DEADZONE) {
+        verticalDisp += trigR;
+    }
+    if (trigL >= FLYCAM_TRIGGER_DEADZONE) {
+        verticalDisp -= trigL;
+    }
+
+    f32 moveDy = stickY * sinf(mDebugFlyCam.pitch) + verticalDisp;
+    f32 moveDx = stickY * cosf(mDebugFlyCam.yaw) * cosf(mDebugFlyCam.pitch) - stickX * sinf(mDebugFlyCam.yaw);
+    f32 moveDz = stickY * sinf(mDebugFlyCam.yaw) * cosf(mDebugFlyCam.pitch) + stickX * cosf(mDebugFlyCam.yaw);
+
+    f32 speed = mDoCPd_c::getHoldZ(PAD_1) ? FLYCAM_FAST_SPEED : FLYCAM_SPEED;
+
+    mEye.x += speed * moveDx;
+    mEye.y += speed * moveDy;
+    mEye.z += speed * moveDz;
+
+    static constexpr f32 FLYCAM_TARGET_DIST = 100.0f;
+    mCenter.x = mEye.x + cosf(mDebugFlyCam.yaw) * cosf(mDebugFlyCam.pitch) * FLYCAM_TARGET_DIST;
+    mCenter.z = mEye.z + sinf(mDebugFlyCam.yaw) * cosf(mDebugFlyCam.pitch) * FLYCAM_TARGET_DIST;
+    mCenter.y = mEye.y + sinf(mDebugFlyCam.pitch) * FLYCAM_TARGET_DIST;
+
+    Reset(mCenter, mEye);
+
+    f32 yawInput = dusk::getSettings().game.invertCameraXAxis ? cStickX : -cStickX;
+    mDebugFlyCam.yaw += yawInput * FLYCAM_ROTATION_SPEED;
+    mDebugFlyCam.yaw = fmodf(mDebugFlyCam.yaw + 2.0f * (f32)M_PI, 2.0f * (f32)M_PI);
+
+    f32 maxPitch = (f32)M_PI / 2.0f - 0.1f;
+    f32 minPitch = -(f32)M_PI / 2.0f + 0.1f;
+    mDebugFlyCam.pitch = std::clamp(mDebugFlyCam.pitch + cStickY * FLYCAM_ROTATION_SPEED, minPitch, maxPitch);
+
+    return true;
+}
+
+void dCamera_c::deactivateDebugFlyCam() {
+    Reset(mDebugFlyCam.savedCenter, mDebugFlyCam.savedEye, mDebugFlyCam.savedFovy, mDebugFlyCam.savedBank.Val());
+
+    dEvt_control_c* event = dComIfGp_getEvent();
+    if (event != nullptr) {
+        event->mEventStatus = 0;
+    }
+    dComIfGp_getEventManager().setCameraPlay(0);
+    mDebugFlyCam.initialized = false;
+}
+
 bool dCamera_c::freeCamera() {
     if (dusk::getSettings().game.freeCamera && mGear == 1) {
         mGear = 0;
