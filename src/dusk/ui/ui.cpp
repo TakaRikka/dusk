@@ -10,6 +10,7 @@
 
 #include "aurora/lib/window.hpp"
 #include "input.hpp"
+#include "prelaunch.hpp"
 #include "window.hpp"
 
 namespace dusk::ui {
@@ -71,6 +72,14 @@ void show_top_document() noexcept {
 bool any_document_visible() noexcept {
     return std::any_of(sDocuments.begin(), sDocuments.end(),
         [](const auto& doc) { return doc && doc->visible(); });
+}
+
+bool prelaunch_document_visible() noexcept {
+    return std::any_of(sDocuments.begin(), sDocuments.end(), [](const auto& doc) {
+        if (!doc) { return false; }
+        const auto* prelaunch = dynamic_cast<const Prelaunch*>(doc.get());
+        return prelaunch != nullptr && prelaunch->visible();
+    });
 }
 
 Document* top_document() noexcept {

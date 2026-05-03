@@ -40,8 +40,9 @@
 #include "JSystem/JKernel/JKRAramArchive.h"
 
 #if TARGET_PC
+#include "dusk/autosave.h"
 #include "dusk/memory.h"
-#include <dusk/autosave.h>
+#include "dusk/ui/ui.hpp"
 #endif
 
 #if DEBUG
@@ -794,7 +795,13 @@ static int dScnPly_Execute(dScnPly_c* i_this) {
         dJprev_c::get()->update();
         #endif
 
+#if TARGET_PC
+        if (!dusk::ui::prelaunch_document_visible()) {
+            dDemo_c::update();
+        }
+#else
         dDemo_c::update();
+#endif
 
         #if DEBUG
         dJcame_c::get()->update();
