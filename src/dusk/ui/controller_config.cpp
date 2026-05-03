@@ -6,6 +6,7 @@
 #include "select_button.hpp"
 
 #include <SDL3/SDL_gamepad.h>
+#include <SDL3/SDL_keyboard.h>
 #include <fmt/format.h>
 
 #include <array>
@@ -191,6 +192,14 @@ bool input_neutral(int port) {
         return true;
     }
     return PADGetNativeButtonPressed(port) == -1 && PADGetNativeAxisPulled(port).nativeAxis == -1;
+}
+
+// A Keydown event with KI_ESCAPE may have been dispatched from the controller bindings,
+// so instead poll the keyboard input directly for Escape-to-unbind
+bool keyboard_escape_pressed() {
+    int keyCount = 0;
+    const bool* keys = SDL_GetKeyboardState(&keyCount);
+    return keys != nullptr && SDL_SCANCODE_ESCAPE < keyCount && keys[SDL_SCANCODE_ESCAPE];
 }
 
 }  // namespace
@@ -532,6 +541,11 @@ void ControllerConfigWindow::poll_pending_binding() {
         return;
     }
 
+    if (keyboard_escape_pressed()) {
+        unmap_pending_binding();
+        return;
+    }
+
     if (!mPendingBindingArmed) {
         if (pending_input_neutral()) {
             mPendingBindingArmed = true;
@@ -544,12 +558,7 @@ void ControllerConfigWindow::poll_pending_binding() {
         if (nativeButton != -1) {
             const int completedPort = mPendingPort;
             mPendingButtonMapping->nativeButton = static_cast<u32>(nativeButton);
-            mPendingButtonMapping = nullptr;
-            mPendingPort = -1;
-            mPendingBindingArmed = false;
-            mSuppressNavigationUntilNeutral = true;
-            mSuppressNavigationPort = completedPort;
-            PADSerializeMappings();
+            finish_pending_binding(completedPort);
         }
         return;
     }
@@ -560,12 +569,7 @@ void ControllerConfigWindow::poll_pending_binding() {
             const int completedPort = mPendingPort;
             mPendingAxisMapping->nativeAxis = nativeAxis;
             mPendingAxisMapping->nativeButton = -1;
-            mPendingAxisMapping = nullptr;
-            mPendingPort = -1;
-            mPendingBindingArmed = false;
-            mSuppressNavigationUntilNeutral = true;
-            mSuppressNavigationPort = completedPort;
-            PADSerializeMappings();
+            finish_pending_binding(completedPort);
             return;
         }
 
@@ -574,14 +578,35 @@ void ControllerConfigWindow::poll_pending_binding() {
             const int completedPort = mPendingPort;
             mPendingAxisMapping->nativeAxis = {-1, AXIS_SIGN_POSITIVE};
             mPendingAxisMapping->nativeButton = nativeButton;
-            mPendingAxisMapping = nullptr;
-            mPendingPort = -1;
-            mPendingBindingArmed = false;
-            mSuppressNavigationUntilNeutral = true;
-            mSuppressNavigationPort = completedPort;
-            PADSerializeMappings();
+            finish_pending_binding(completedPort);
         }
     }
+}
+
+void ControllerConfigWindow::finish_pending_binding(int completedPort) {
+    mPendingButtonMapping = nullptr;
+    mPendingAxisMapping = nullptr;
+    mPendingPort = -1;
+    mPendingBindingArmed = false;
+    mSuppressNavigationUntilNeutral = true;
+    mSuppressNavigationPort = completedPort;
+    PADSerializeMappings();
+}
+
+void ControllerConfigWindow::unmap_pending_binding() {
+    if (mPendingButtonMapping == nullptr && mPendingAxisMapping == nullptr) {
+        return;
+    }
+
+    const int completedPort = mPendingPort;
+    if (mPendingButtonMapping != nullptr) {
+        mPendingButtonMapping->nativeButton = PAD_NATIVE_BUTTON_INVALID;
+    }
+    if (mPendingAxisMapping != nullptr) {
+        mPendingAxisMapping->nativeAxis = {-1, AXIS_SIGN_POSITIVE};
+        mPendingAxisMapping->nativeButton = -1;
+    }
+    finish_pending_binding(completedPort);
 }
 
 bool ControllerConfigWindow::capture_active() const {

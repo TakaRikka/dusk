@@ -25,6 +25,8 @@ private:
     void render_page(class Pane& pane, int port, Page page);
     void refresh_controller_page();
     void poll_pending_binding();
+    void finish_pending_binding(int completedPort);
+    void unmap_pending_binding();
     bool capture_active() const;
     bool pending_input_neutral() const;
     Rml::String pending_button_label() const;
