@@ -22,10 +22,11 @@ static bool checkEnabled() {
 }
 
 static std::string FormatToString(const char* msg, va_list list) {
-    int ret = vsnprintf(nullptr, 0, msg, list) + 1;
+    int ret = vsnprintf(nullptr, 0, msg, list);
     if (ret <= 0) {
         return {};
     }
+    ++ret;
     std::unique_ptr<char[]> buf(new char[ret]);
     vsnprintf(buf.get(), ret, msg, list);
     buf[ret - 1] = '\0';
