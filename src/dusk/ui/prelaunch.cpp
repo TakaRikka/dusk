@@ -119,7 +119,7 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
     if (auto* menuList = mDocument->GetElementById("menu-list")) {
         const bool hasValidPath = is_selected_path_valid();
         mMenuButtons.push_back(
-            std::make_unique<Button>(menuList, hasValidPath ? "Start Game" : "Select Disc Image"));
+            std::make_unique<Button>(menuList, hasValidPath ? "Play" : "Select Disc Image"));
         mMenuButtons.back()->on_pressed([this] {
             if (!is_selected_path_valid()) {
                 open_iso_picker();
@@ -193,7 +193,7 @@ void Prelaunch::update() {
     }
 
     if (!mMenuButtons.empty()) {
-        mMenuButtons[0]->set_text(hasValidPath ? "Start Game" : "Select Disc Image");
+        mMenuButtons[0]->set_text(hasValidPath ? "Play" : "Select Disc Image");
     }
 
     const auto discStatusLabel = mDiscStatus->GetElementById("disc-status-label");
