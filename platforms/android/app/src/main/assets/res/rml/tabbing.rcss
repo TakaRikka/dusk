@@ -1,0 +1,33 @@
+tab-bar {
+    display: flex;
+    min-width: 0;
+    overflow: auto hidden;
+    text-transform: uppercase;
+}
+
+tab-bar tab {
+    flex: 0 0 auto;
+    padding: 0 24dp;
+    line-height: 64dp;
+    white-space: nowrap;
+    decorator: vertical-gradient(#c2a42d00 #c2a42d00);
+    transition: decorator 0.1s linear-in-out, opacity 0.1s linear-in-out;
+    cursor: pointer;
+}
+
+tab-bar tab:selected {
+    opacity: 1;
+    border-bottom: 4dp #C2A42D;
+    font-effect: glow(0dp 4dp 0dp 4dp black);
+}
+
+tab-bar tab:focus-visible,
+tab-bar tab:hover {
+    opacity: 1;
+    font-effect: glow(0dp 4dp 0dp 4dp black);
+    decorator: vertical-gradient(#c2a42d00 #c2a42d26);
+}
+
+tab-bar tab:active {
+    decorator: vertical-gradient(#c2a42d10 #c2a42d40);
+}

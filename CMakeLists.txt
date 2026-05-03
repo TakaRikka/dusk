@@ -273,6 +273,14 @@ configure_file(${CMAKE_SOURCE_DIR}/version.h.in ${CMAKE_BINARY_DIR}/version.h)
 
 include(files.cmake)
 
+if(ANDROID)
+    # add android-specific files here
+    list(APPEND DUSK_FILES
+            src/dusk/android/JavaWrapperFuncs.cpp
+            src/dusk/android/ImGuiAndroidFileAccess.cpp
+    )
+endif ()
+
 # TODO: version handling for res includes
 
 set(DUSK_BUNDLE_NAME Dusk)
@@ -373,7 +381,13 @@ if (MSVC)
 endif ()
 
 if(ANDROID)
-    list(APPEND GAME_COMPILE_DEFS TARGET_ANDROID=1)
+    list(APPEND GAME_COMPILE_DEFS
+            TARGET_ANDROID=1
+    )
+
+    # We have specific changes needed for imgui to get it to load from android asset directory
+    target_include_directories(imgui PRIVATE src/dusk/android)
+    target_compile_definitions(imgui PRIVATE IMGUI_USER_CONFIG="android_imgui_config.h")
 endif ()
 
 # game_debug is for game code files that we know work when compiled with DEBUG=1

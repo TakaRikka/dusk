@@ -16,6 +16,10 @@
 #include "aurora/lib/internal.hpp"
 #include "aurora/lib/window.hpp"
 
+#if TARGET_ANDROID
+#include "dusk/android/JavaWrapperFuncs.hpp"
+#endif
+
 namespace dusk {
 
 typedef void (ImGuiPreLaunchWindow::*drawFunc)();
@@ -78,13 +82,20 @@ void fileDialogCallback(void* userdata, const char* path, const char* error) {
     self->m_isPal = iso::isPal(path);
     getSettings().backend.isoPath.setValue(self->m_selectedIsoPath);
     config::Save();
+
+#if TARGET_ANDROID
+    // store path permissions
+    android::takeUriPermissions(self->m_selectedIsoPath);
+    self->m_isPathPermitted = true;
+#endif
 }
 
 ImGuiPreLaunchWindow::ImGuiPreLaunchWindow() = default;
 
 bool ImGuiPreLaunchWindow::isSelectedPathValid() const {
 #if TARGET_ANDROID
-    return !m_selectedIsoPath.empty(); // unsure why SDL_GetPathInfo doesnt work here
+    // unsure why SDL_GetPathInfo doesnt work here, but we need to check permissions anyway
+    return !m_selectedIsoPath.empty() && m_isPathPermitted;
 #else
     return !m_selectedIsoPath.empty() && SDL_GetPathInfo(m_selectedIsoPath.c_str(), nullptr);
 #endif
@@ -95,6 +106,9 @@ void ImGuiPreLaunchWindow::draw() {
         m_selectedIsoPath = getSettings().backend.isoPath;
         m_isPal = !m_selectedIsoPath.empty() && iso::isPal(m_selectedIsoPath.c_str());
         m_initialGraphicsBackend = getSettings().backend.graphicsBackend;
+#if TARGET_ANDROID
+        m_isPathPermitted = !m_selectedIsoPath.empty() && android::checkUriPermissions(m_selectedIsoPath.c_str());
+#endif
         m_IsFirstDraw = false;
     }
 

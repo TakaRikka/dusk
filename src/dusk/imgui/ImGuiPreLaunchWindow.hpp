@@ -19,5 +19,8 @@ public:
     std::string m_selectedIsoPath;
     std::string m_errorString;
     bool m_isPal = false;
+#if TARGET_ANDROID
+    bool m_isPathPermitted = false;
+#endif
 };
 }  // namespace dusk

@@ -72,6 +72,7 @@
 #include "SDL3/SDL_filesystem.h"
 #include "cxxopts.hpp"
 #include "d/actor/d_a_movie_player.h"
+#include "dusk/android/JavaWrapperFuncs.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/audio/DuskDsp.hpp"
 #include "dusk/config.hpp"
@@ -607,6 +608,11 @@ int game_main(int argc, char* argv[]) {
             dusk::IsGameLaunched = true;
         }
     }
+
+#if TARGET_ANDROID
+    // setup JNI method ptrs
+    dusk::android::setupMethods();
+#endif
 
     if (!dvd_opened) {
         dusk::ui::push_document(std::make_unique<dusk::ui::Prelaunch>(), true);

@@ -11,6 +11,10 @@
 #include <SDL3/SDL_filesystem.h>
 #include <aurora/lib/window.hpp>
 
+#if TARGET_ANDROID
+#include "dusk/android/JavaWrapperFuncs.hpp"
+#endif
+
 namespace dusk::ui {
 namespace {
 
@@ -60,6 +64,12 @@ void file_dialog_callback(void*, const char* path, const char* error) {
     refresh_path_state();
     getSettings().backend.isoPath.setValue(state.selectedIsoPath);
     config::Save();
+
+#if TARGET_ANDROID
+    // store path permissions
+    android::takeUriPermissions(state.selectedIsoPath);
+    state.isIsoPermitted = true;
+#endif
 }
 
 }  // namespace
@@ -86,11 +96,19 @@ void ensure_initialized() noexcept {
     state.errorString.clear();
     state.initialized = true;
     refresh_path_state();
+
+#if TARGET_ANDROID
+    state.isIsoPermitted = !state.selectedIsoPath.empty() && android::checkUriPermissions(state.selectedIsoPath.c_str());
+#endif
 }
 
 bool is_selected_path_valid() noexcept {
+#if TARGET_ANDROID
+    return !prelaunch_state().selectedIsoPath.empty() && prelaunch_state().isIsoPermitted;
+#else
     return !prelaunch_state().selectedIsoPath.empty() &&
            SDL_GetPathInfo(prelaunch_state().selectedIsoPath.c_str(), nullptr);
+#endif
 }
 
 void open_iso_picker() noexcept {

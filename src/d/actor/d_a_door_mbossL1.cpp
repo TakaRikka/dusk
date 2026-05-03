@@ -5,15 +5,16 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
-#include "d/actor/d_a_door_mbossL1.h"
-#include "d/actor/d_a_obj_stopper.h"
-#include "d/actor/d_a_obj_keyhole.h"
-#include "d/d_door_param2.h"
-#include "d/d_com_inf_game.h"
-#include "d/actor/d_a_player.h"
-#include "f_op/f_op_actor_mng.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_math.h"
+#include "d/actor/d_a_door_mbossL1.h"
+#include "d/actor/d_a_obj_keyhole.h"
+#include "d/actor/d_a_obj_stopper.h"
+#include "d/actor/d_a_player.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_door_param2.h"
+#include "dusk/logging.h"
+#include "f_op/f_op_actor_mng.h"
 
 static int getNowLevel(fopAc_ac_c* i_this) {
     return static_cast<daMBdoorL1_c*>(i_this)->argument;
@@ -1317,8 +1318,12 @@ int daMBdoorL1_c::checkArea() {
     if (fabsf(local_48.z) > 110.0f) {
         return 0;
     }
-    
+
+#if TARGET_ANDROID
+    if ((s16)((s32)fabs(angle - 0x7fff - player->current.angle.y) & 0xFFFF) > 0x4000) {
+#else
     if ((s16)fabs((f64)(angle - 0x7fff - player->current.angle.y)) > 0x4000) {
+#endif
         return 0;
     } else {
         return 1;

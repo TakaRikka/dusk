@@ -39,6 +39,9 @@ struct PrelaunchState {
     std::string initialGraphicsBackend;
     bool isPal = false;
     bool initialized = false;
+#if TARGET_ANDROID
+    bool isIsoPermitted = false;
+#endif
 };
 
 PrelaunchState& prelaunch_state() noexcept;
