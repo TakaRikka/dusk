@@ -859,7 +859,7 @@ int mDoMch_Create() {
 #endif
     archiveHeapSize *= 2;
     j2dHeapSize *= 2;
-    gameHeapSize *= 20;
+    gameHeapSize *= 20; // NOTE: increased from 2 to 20 to try to solve heap alloc crashes. maybe do a better fix later
 #endif
 
     JFWSystem::setSysHeapSize(arenaSize);
