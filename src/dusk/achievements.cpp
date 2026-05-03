@@ -60,9 +60,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                     a.progress = 1;
                 }
             },
-            {
-
-            }
+            {}
         },
         {
             {
