@@ -5,6 +5,7 @@
 #include "dusk/file_select.hpp"
 #include "dusk/iso_validate.hpp"
 #include "dusk/main.h"
+#include "dusk/settings.h"
 #include "dusk/ui/prelaunch_options.hpp"
 #include "version.h"
 
@@ -113,6 +114,13 @@ void apply_intro_animation(Rml::Element* element, const char* delay_class) {
     element->SetClass(delay_class, true);
 }
 
+void try_apply_mirrored_layout(Rml::Element* body) {
+    if (body == nullptr) {
+        return;
+    }
+    body->SetClass("mirrored", getSettings().game.enableMirrorMode.getValue());
+}
+
 Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementById("root")) {
     ensure_initialized();
 
@@ -143,6 +151,8 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
     mDiscStatus = mDocument->GetElementById("disc-status");
     mDiscDetail = mDocument->GetElementById("disc-version");
     mVersion = mDocument->GetElementById("version-text");
+
+    try_apply_mirrored_layout(mDocument);
 
     listen(mDocument, Rml::EventId::Transitionend, [this](Rml::Event& event) {
         auto* target = event.GetTargetElement();
@@ -176,6 +186,7 @@ void Prelaunch::hide(bool close) {
 void Prelaunch::update() {
     ensure_initialized();
     refresh_path_state();
+    try_apply_mirrored_layout(mDocument);
 
     auto& state = prelaunch_state();
     const bool hasValidPath = is_selected_path_valid();

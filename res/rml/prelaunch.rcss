@@ -22,6 +22,10 @@ body {
     decorator: horizontal-gradient(#000000FF #00000000);
 }
 
+body.mirrored .gradient {
+    decorator: horizontal-gradient(#00000000 #000000FF);
+}
+
 .background {
     position: absolute;
     width: 100%;
@@ -58,6 +62,7 @@ content[open] {
 menu {
     position: absolute;
     left: 96dp;
+    right: auto;
     top: 50%;
     transform: translateY(-50%);
     /* Scale based on a reference screen width, 428/1216 */
@@ -70,12 +75,21 @@ menu {
     gap: 48dp;
 }
 
+body.mirrored menu {
+    left: auto;
+    right: 96dp;
+}
+
 hero {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     gap: 8dp;
+}
+
+body.mirrored hero {
+    align-items: flex-end;
 }
 
 hero img {
@@ -102,6 +116,7 @@ hero img {
     display: flex;
     flex-direction: column;
     gap: 12dp;
+    align-items: flex-start;
 }
 
 #menu-list button {
@@ -109,6 +124,7 @@ hero img {
     height: 54dp;
     padding: 8dp 16dp;
     border-radius: 8dp;
+    text-align: left;
     text-transform: uppercase;
     font-family: "Fira Sans Condensed";
     font-size: 32dp;
@@ -128,25 +144,53 @@ hero img {
     decorator: horizontal-gradient(#FEE685FF #FEE68500);
 }
 
+body.mirrored #menu-list {
+    align-items: flex-end;
+}
+
+body.mirrored #menu-list button {
+    text-align: right;
+}
+
+body.mirrored #menu-list button:hover,
+body.mirrored #menu-list button:focus-visible {
+    decorator: horizontal-gradient(#FEE68500 #FEE685FF);
+}
+
 disc-info {
     position: absolute;
     left: 96dp;
+    right: auto;
     bottom: 72dp;
     display: flex;
     flex-direction: column;
     gap: 12dp;
     font-size: 24dp;
+    text-align: left;
+}
+
+body.mirrored disk-status {
+    left: auto;
+    right: 96dp;
+    text-align: right;
 }
 
 version-info {
     position: absolute;
     right: 96dp;
+    left: auto;
     bottom: 72dp;
     display: flex;
     flex-direction: column;
     gap: 12dp;
     text-align: right;
     font-size: 24dp;
+}
+
+body.mirrored version-info {
+    right: auto;
+    left: 96dp;
+    text-align: left;
 }
 
 #disc-status {
