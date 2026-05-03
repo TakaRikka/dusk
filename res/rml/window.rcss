@@ -233,6 +233,10 @@ select-button value {
     font-size: 20dp;
 }
 
+select-button value.modified {
+    font-weight: bold;
+}
+
 select-button input {
     text-align: right;
     font-size: 20dp;

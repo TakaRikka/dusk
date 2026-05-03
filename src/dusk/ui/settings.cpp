@@ -81,8 +81,7 @@ struct ConfigBoolProps {
 SelectButton& config_bool_select(
     Pane& leftPane, Pane& rightPane, ConfigVar<bool>& var, ConfigBoolProps props) {
     return leftPane
-        .add_child<BoolButton>(BoolButton::Props{
-            .key = std::move(props.key),
+        .add_child<BoolButton>(BoolButton::Props{.key = std::move(props.key),
             .getValue = [&var] { return var.getValue(); },
             .setValue =
                 [&var, callback = std::move(props.onChange)](bool value) {
@@ -96,7 +95,7 @@ SelectButton& config_bool_select(
                     }
                 },
             .isDisabled = std::move(props.isDisabled),
-        })
+            .isModified = [&var] { return var.getValue() != var.getDefaultValue(); }})
         .on_focus([&rightPane, helpText = std::move(props.helpText)](Rml::Event&) {
             rightPane.clear();
             rightPane.add_rml(helpText);
@@ -116,6 +115,7 @@ SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<f
                     config::Save();
                 },
             .isDisabled = std::move(isDisabled),
+            .isModified = [&var] { return var.getValue() != var.getDefaultValue(); },
             .min = min,
             .max = max,
             .step = step,
@@ -157,6 +157,11 @@ SettingsWindow::SettingsWindow() {
                         getSettings().audio.masterVolume.setValue(value);
                         config::Save();
                         audio::SetMasterVolume(value / 100.f);
+                    },
+                .isModified =
+                    [] {
+                        return getSettings().audio.masterVolume.getValue() !=
+                               getSettings().audio.masterVolume.getDefaultValue();
                     },
                 .max = 100,
                 .suffix = "%",
@@ -284,6 +289,11 @@ SettingsWindow::SettingsWindow() {
                         config::Save();
                     },
                 .isDisabled = [] { return getSettings().game.speedrunMode; },
+                .isModified =
+                    [] {
+                        return getSettings().game.damageMultiplier.getValue() !=
+                               getSettings().game.damageMultiplier.getDefaultValue();
+                    },
                 .min = 1,
                 .max = 8,
                 .prefix = "x",
@@ -471,6 +481,11 @@ SettingsWindow::SettingsWindow() {
                         return format_graphics_setting_value(GraphicsOption::InternalResolution,
                             getSettings().game.internalResolutionScale.getValue());
                     },
+                .isModified =
+                    [] {
+                        return getSettings().game.internalResolutionScale.getValue() !=
+                               getSettings().game.internalResolutionScale.getDefaultValue();
+                    },
             })
             .on_nav_command([](Rml::Event&, NavCommand cmd) {
                 if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
@@ -498,6 +513,11 @@ SettingsWindow::SettingsWindow() {
                     [] {
                         return format_graphics_setting_value(GraphicsOption::ShadowResolution,
                             getSettings().game.shadowResolutionMultiplier.getValue());
+                    },
+                .isModified =
+                    [] {
+                        return getSettings().game.shadowResolutionMultiplier.getValue() !=
+                               getSettings().game.shadowResolutionMultiplier.getDefaultValue();
                     },
             })
             .on_nav_command([](Rml::Event&, NavCommand cmd) {
@@ -529,6 +549,11 @@ SettingsWindow::SettingsWindow() {
                         return format_graphics_setting_value(GraphicsOption::BloomMode,
                             static_cast<int>(getSettings().game.bloomMode.getValue()));
                     },
+                .isModified =
+                    [] {
+                        return getSettings().game.bloomMode.getValue() !=
+                               getSettings().game.bloomMode.getDefaultValue();
+                    },
             })
             .on_nav_command([](Rml::Event&, NavCommand cmd) {
                 if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
@@ -559,6 +584,11 @@ SettingsWindow::SettingsWindow() {
                     },
                 .isDisabled =
                     [] { return getSettings().game.bloomMode.getValue() == BloomMode::Off; },
+                .isModified =
+                    [] {
+                        return getSettings().game.bloomMultiplier.getValue() !=
+                               getSettings().game.bloomMultiplier.getDefaultValue();
+                    },
             })
             .on_nav_command([](Rml::Event&, NavCommand cmd) {
                 if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
@@ -619,7 +649,6 @@ SettingsWindow::SettingsWindow() {
                 "- Account Username"
             });
 #endif
-        leftPane.add_section("Advanced");
         config_bool_select(leftPane, rightPane, getSettings().backend.skipPreLaunchUI,
             {
                 .key = "Skip Pre-Launch UI",

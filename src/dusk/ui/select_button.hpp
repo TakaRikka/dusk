@@ -10,10 +10,13 @@ public:
     struct Props {
         Rml::String key;
         Rml::String value;
+        bool modified = false;
     };
 
     SelectButton(Rml::Element* parent, Props props);
 
+    virtual bool modified() const;
+    void set_modified(bool value);
     void set_value_label(const Rml::String& value);
 
 protected:
@@ -23,7 +26,6 @@ protected:
     Props mProps;
     Rml::Element* mKeyElem = nullptr;
     Rml::Element* mValueElem = nullptr;
-    std::function<void()> mOnHover;
 };
 
 class BaseControlledSelectButton : public SelectButton {
@@ -43,12 +45,15 @@ public:
         Rml::String key;
         std::function<Rml::String()> getValue;
         std::function<bool()> isDisabled;
+        std::function<bool()> isModified;
     };
 
     ControlledSelectButton(Rml::Element* parent, Props props)
         : BaseControlledSelectButton(parent, {std::move(props.key)}),
-          mGetValue(std::move(props.getValue)), mIsDisabled(std::move(props.isDisabled)) {}
+          mGetValue(std::move(props.getValue)), mIsDisabled(std::move(props.isDisabled)),
+          mIsModified(std::move(props.isModified)) {}
 
+    bool modified() const override;
     bool disabled() const override;
 
 protected:
@@ -56,6 +61,7 @@ protected:
 
     std::function<Rml::String()> mGetValue;
     std::function<bool()> mIsDisabled;
+    std::function<bool()> mIsModified;
 };
 
 }  // namespace dusk::ui

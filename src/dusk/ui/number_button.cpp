@@ -8,8 +8,16 @@ namespace dusk::ui {
 NumberButton::NumberButton(Rml::Element* parent, Props props)
     : BaseStringButton(parent, {.key = std::move(props.key), .type = "number"}),
       mGetValue(std::move(props.getValue)), mSetValue(std::move(props.setValue)),
-      mIsDisabled(std::move(props.isDisabled)), mMin(props.min), mMax(props.max), mStep(props.step),
-      mPrefix(std::move(props.prefix)), mSuffix(std::move(props.suffix)) {}
+      mIsDisabled(std::move(props.isDisabled)), mIsModified(std::move(props.isModified)),
+      mMin(props.min), mMax(props.max), mStep(props.step), mPrefix(std::move(props.prefix)),
+      mSuffix(std::move(props.suffix)) {}
+
+bool NumberButton::modified() const {
+    if (mIsModified) {
+        return mIsModified();
+    }
+    return BaseStringButton::modified();
+}
 
 bool NumberButton::disabled() const {
     if (mIsDisabled) {
