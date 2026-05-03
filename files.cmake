@@ -1469,6 +1469,8 @@ set(DUSK_FILES
         src/dusk/ui/button.hpp
         src/dusk/ui/component.cpp
         src/dusk/ui/component.hpp
+        src/dusk/ui/controller_config.cpp
+        src/dusk/ui/controller_config.hpp
         src/dusk/ui/document.cpp
         src/dusk/ui/document.hpp
         src/dusk/ui/editor.cpp

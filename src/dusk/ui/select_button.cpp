@@ -51,6 +51,18 @@ void SelectButton::set_value_label(const Rml::String& value) {
     }
 }
 
+SelectButton& SelectButton::on_pressed(SelectButtonCallback callback) {
+    if (!callback) {
+        return *this;
+    }
+    listen(Rml::EventId::Submit, [this, callback = std::move(callback)](Rml::Event& event) {
+        if (!disabled() && event.GetTargetElement() == mRoot) {
+            callback();
+        }
+    });
+    return *this;
+}
+
 void SelectButton::update_props(Props props) {
     if (mProps.key != props.key) {
         mKeyElem->SetInnerRML(escape(props.key));

@@ -64,6 +64,40 @@ bool should_block_pad_for_menu_chord() noexcept {
     return false;
 }
 
+const char* controller_change_type(Uint32 eventType) noexcept {
+    switch (eventType) {
+    case SDL_EVENT_GAMEPAD_ADDED:
+        return "added";
+    case SDL_EVENT_GAMEPAD_REMOVED:
+        return "removed";
+    case SDL_EVENT_GAMEPAD_REMAPPED:
+        return "remapped";
+    default:
+        return nullptr;
+    }
+}
+
+void dispatch_controller_change_event(const SDL_Event& event) noexcept {
+    const char* type = controller_change_type(event.type);
+    if (type == nullptr) {
+        return;
+    }
+
+    auto* context = aurora::rmlui::get_context();
+    if (context == nullptr) {
+        return;
+    }
+    auto* root = context->GetRootElement();
+    if (root == nullptr) {
+        return;
+    }
+
+    Rml::Dictionary parameters;
+    parameters["type"] = Rml::String(type);
+    parameters["which"] = static_cast<int>(event.gdevice.which);
+    root->DispatchEvent("controllerchange", parameters);
+}
+
 PADButton pad_button_from_axis(PADAxis axis) noexcept {
     switch (axis) {
     case PAD_AXIS_TRIGGER_R:
@@ -502,8 +536,11 @@ void handle_event(const SDL_Event& event) noexcept {
     if (event.type == SDL_EVENT_GAMEPAD_REMOVED || event.type == SDL_EVENT_WINDOW_FOCUS_LOST) {
         reset_input_state();
         sync_input_block();
-        return;
+        if (event.type != SDL_EVENT_GAMEPAD_REMOVED) {
+            return;
+        }
     }
+    dispatch_controller_change_event(event);
     if (event.type != SDL_EVENT_GAMEPAD_BUTTON_DOWN && event.type != SDL_EVENT_GAMEPAD_BUTTON_UP &&
         event.type != SDL_EVENT_GAMEPAD_AXIS_MOTION)
     {

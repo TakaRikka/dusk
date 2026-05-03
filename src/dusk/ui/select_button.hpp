@@ -3,7 +3,12 @@
 #include "component.hpp"
 #include "ui.hpp"
 
+#include <functional>
+#include <utility>
+
 namespace dusk::ui {
+
+using SelectButtonCallback = std::function<void()>;
 
 class SelectButton : public FluentComponent<SelectButton> {
 public:
@@ -18,6 +23,7 @@ public:
     virtual bool modified() const;
     void set_modified(bool value);
     void set_value_label(const Rml::String& value);
+    SelectButton& on_pressed(SelectButtonCallback callback);
 
 protected:
     void update_props(Props props);
