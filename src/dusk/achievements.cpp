@@ -60,7 +60,9 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                     a.progress = 1;
                 }
             },
-            {}
+            {
+
+            }
         },
         {
             {
@@ -487,6 +489,68 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 }
             },
             {}
+        },
+        {
+            {
+                "great_spin",
+                "Great Spin!",
+                "Perform 5 spin attacks in under 4 seconds.",
+                AchievementCategory::Challenge,
+                true, 5, 0, false
+            },
+            [](Achievement& a, json& extra) {
+                if(AchievementSystem::get().hasSignal("spin") && a.progress == 0){
+                    extra["start_time"] = OSTicksToSeconds(static_cast<int64_t>(OSGetTime()));
+                }
+
+                const int64_t tick_seconds = OSTicksToSeconds(static_cast<int64_t>(OSGetTime())) - extra["start_time"];
+                if (tick_seconds >= 4) {
+                    a.progress = 0;
+                }
+
+                if(AchievementSystem::get().hasSignal("spin")){
+                    a.progress++;
+                }
+                
+            },
+            {
+                json::parse(R"(
+                    {
+                    "start_time": 0
+                    }
+                )")
+            }
+        },
+        {
+            {
+                "infinite_spin",
+                "Infinite Spin",
+                "Perform 10 spin attacks in under 9 seconds.",
+                AchievementCategory::Challenge,
+                true, 10, 0, false
+            },
+            [](Achievement& a, json& extra) {
+                if(AchievementSystem::get().hasSignal("spin") && a.progress == 0){
+                    extra["start_time"] = OSTicksToSeconds(static_cast<int64_t>(OSGetTime()));
+                }
+
+                const int64_t tick_seconds = OSTicksToSeconds(static_cast<int64_t>(OSGetTime())) - extra["start_time"];
+                if (tick_seconds >= 9) {
+                    a.progress = 0;
+                }
+
+                if(AchievementSystem::get().hasSignal("spin")){
+                    a.progress++;
+                }
+                
+            },
+            {
+                json::parse(R"(
+                    {
+                    "start_time": 0
+                    }
+                )")
+            }
         },
         // Minigame
         {

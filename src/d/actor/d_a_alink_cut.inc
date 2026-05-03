@@ -9,6 +9,10 @@
 
 #include "dusk/settings.h"
 
+#ifdef TARGET_PC
+#include "dusk/achievements.h"
+#endif
+
 enum daAlink_CutNmParamType {
     CUT_NM_PARAM_VERTICAL,
     CUT_NM_PARAM_LEFT,
@@ -1750,6 +1754,11 @@ int daAlink_c::procCutTurnInit(int param_0, int param_1) {
     setSingleAnime(anmID, anm_data->mSpeed, start_frame, anm_data->mEndFrame, morf);
 
     int atp;
+
+    #ifdef TARGET_PC
+        dusk::AchievementSystem::get().signal("spin");
+    #endif
+
     if (checkCutLargeTurnState()) {
         atp = 4;
         field_0x32cc = Z2SE_AL_KAITEN_L_SLASH;
