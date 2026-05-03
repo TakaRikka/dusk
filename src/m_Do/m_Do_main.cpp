@@ -617,6 +617,7 @@ int game_main(int argc, char* argv[]) {
 #ifdef DUSK_DISCORD_RPC
             dusk::discord::Shutdown();
 #endif
+            dusk::ui::shutdown();
             aurora_shutdown();
             return 0;
         }
