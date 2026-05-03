@@ -166,6 +166,7 @@ disc-info {
     flex-direction: column;
     gap: 12dp;
     font-size: 24dp;
+    font-effect: glow(0dp 4dp 0dp 4dp black);
     text-align: left;
 }
 
@@ -185,6 +186,8 @@ version-info {
     gap: 12dp;
     text-align: right;
     font-size: 24dp;
+    font-effect: glow(0dp 4dp 0dp 4dp black);
+    text-align: right;
 }
 
 body.mirrored version-info {
