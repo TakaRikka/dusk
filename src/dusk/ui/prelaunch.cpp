@@ -240,7 +240,9 @@ bool Prelaunch::handle_nav_command(Rml::Event& event, NavCommand cmd) {
             break;
         }
     }
-    int i = (focusedButton + direction) % static_cast<int>(mMenuButtons.size());
+    const auto buttonCount = static_cast<int>(mMenuButtons.size());
+    int i = (focusedButton + direction) % buttonCount;
+    if (i < 0) i += buttonCount;
     while (i >= 0 && i < mMenuButtons.size()) {
         if (mMenuButtons[i]->focus()) {
             event.StopPropagation();
