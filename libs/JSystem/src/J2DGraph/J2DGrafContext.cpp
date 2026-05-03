@@ -25,7 +25,13 @@ void J2DGrafContext::setPort() {
     if (bounds.i.y < 0.0f) {
         bounds.i.y = 0.0f;
     }
+#ifdef TARGET_PC
+    // HACK: compensate for viewport being slightly smaller than scissor region in some cases
+    GXSetViewport(bounds.i.x - 0.5f, bounds.i.y - 0.5f, bounds.getWidth() + 1.0f,
+        bounds.getHeight() + 1.0f, 0.0f, 1.0f);
+#else
     GXSetViewport(bounds.i.x, bounds.i.y, bounds.getWidth(), bounds.getHeight(), 0.0f, 1.0f);
+#endif
 }
 
 void J2DGrafContext::setup2D() {
