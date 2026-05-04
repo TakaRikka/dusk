@@ -84,7 +84,7 @@ void SelectButton::update_props(Props props) {
 }
 
 bool SelectButton::handle_nav_command(NavCommand cmd) {
-    if (cmd == NavCommand::Confirm) {
+    if (cmd == NavCommand::Confirm && mProps.submit) {
         mRoot->DispatchEvent(Rml::EventId::Submit, {});
         return true;
     }

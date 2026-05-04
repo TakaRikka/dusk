@@ -19,6 +19,8 @@ public:
     void update() override;
 
     void set_selected_item(int index);
+    Component& register_control(
+        Component& component, Pane& nextPane, std::function<void(Pane&)> callback);
 
     Rml::Element* add_section(const Rml::String& text);
     ControlledButton& add_button(ControlledButton::Props props) {

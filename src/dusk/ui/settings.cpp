@@ -60,11 +60,6 @@ const Rml::String kUnlockFramerateHelpText =
     "Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
     "visual artifacts or animation glitches.";
 
-int bloom_multiplier_percent() {
-    return std::clamp(
-        static_cast<int>(getSettings().game.bloomMultiplier.getValue() * 100.0f + 0.5f), 0, 100);
-}
-
 int float_setting_percent(ConfigVar<float>& var) {
     return static_cast<int>(var.getValue() * 100.0f + 0.5f);
 }
@@ -83,53 +78,88 @@ struct ConfigBoolProps {
 
 SelectButton& config_bool_select(
     Pane& leftPane, Pane& rightPane, ConfigVar<bool>& var, ConfigBoolProps props) {
-    return leftPane
-        .add_child<BoolButton>(BoolButton::Props{
-            .key = std::move(props.key),
-            .icon = std::move(props.icon),
-            .getValue = [&var] { return var.getValue(); },
-            .setValue =
-                [&var, callback = std::move(props.onChange)](bool value) {
-                    if (value == var.getValue()) {
-                        return;
-                    }
-                    var.setValue(value);
-                    config::Save();
-                    if (callback) {
-                        callback(value);
-                    }
-                },
-            .isDisabled = std::move(props.isDisabled),
-            .isModified = [&var] { return var.getValue() != var.getDefaultValue(); },
-        })
-        .on_focus([&rightPane, helpText = std::move(props.helpText)](Rml::Event&) {
-            rightPane.clear();
-            rightPane.add_rml(helpText);
+    auto& button = leftPane.add_child<BoolButton>(BoolButton::Props{
+        .key = std::move(props.key),
+        .icon = std::move(props.icon),
+        .getValue = [&var] { return var.getValue(); },
+        .setValue =
+            [&var, callback = std::move(props.onChange)](bool value) {
+                if (value == var.getValue()) {
+                    return;
+                }
+                var.setValue(value);
+                config::Save();
+                if (callback) {
+                    callback(value);
+                }
+            },
+        .isDisabled = std::move(props.isDisabled),
+        .isModified = [&var] { return var.getValue() != var.getDefaultValue(); },
+    });
+    leftPane.register_control(
+        button, rightPane, [helpText = std::move(props.helpText)](Pane& pane) {
+            pane.clear();
+            pane.add_rml(helpText);
         });
+    return button;
 }
 
 SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<float>& var,
     Rml::String key, Rml::String helpText, int min, int max, int step = 5,
     std::function<bool()> isDisabled = {}) {
-    return leftPane
-        .add_child<NumberButton>(NumberButton::Props{
-            .key = std::move(key),
-            .getValue = [&var] { return float_setting_percent(var); },
-            .setValue =
-                [&var, min, max](int value) {
-                    var.setValue(std::clamp(value, min, max) / 100.0f);
-                    config::Save();
-                },
-            .isDisabled = std::move(isDisabled),
-            .isModified = [&var] { return var.getValue() != var.getDefaultValue(); },
-            .min = min,
-            .max = max,
-            .step = step,
-            .suffix = "%",
-        })
-        .on_focus([&rightPane, helpText = std::move(helpText)](Rml::Event&) {
-            rightPane.clear();
-            rightPane.add_text(helpText);
+    auto& button = leftPane.add_child<NumberButton>(NumberButton::Props{
+        .key = std::move(key),
+        .getValue = [&var] { return float_setting_percent(var); },
+        .setValue =
+            [&var, min, max](int value) {
+                var.setValue(std::clamp(value, min, max) / 100.0f);
+                config::Save();
+            },
+        .isDisabled = std::move(isDisabled),
+        .isModified = [&var] { return var.getValue() != var.getDefaultValue(); },
+        .min = min,
+        .max = max,
+        .step = step,
+        .suffix = "%",
+    });
+    leftPane.register_control(button, rightPane, [helpText = std::move(helpText)](Pane& pane) {
+        pane.clear();
+        pane.add_text(helpText);
+    });
+    return button;
+}
+
+template <typename T>
+void overlay_control(
+    Window& window, Pane& leftPane, Pane& rightPane, ConfigVar<T>& var, const OverlayProps& props) {
+    leftPane.register_control(
+        leftPane
+            .add_select_button({
+                .key = props.title,
+                .getValue =
+                    [&var, option = props.option] {
+                        if constexpr (std::is_same_v<T, float>) {
+                            return format_graphics_setting_value(
+                                option, float_setting_percent(var));
+                        } else {
+                            return format_graphics_setting_value(
+                                option, static_cast<int>(var.getValue()));
+                        }
+                    },
+                .isModified = [&var] { return var.getValue() != var.getDefaultValue(); },
+                .submit = false,
+            })
+            .on_nav_command([&window, props](Rml::Event&, NavCommand cmd) {
+                if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
+                    cmd == NavCommand::Right) {
+                    window.push(std::make_unique<Overlay>(props));
+                    return true;
+                }
+                return false;
+            }),
+        rightPane, [helpText = props.helpText](Pane& pane) {
+            pane.clear();
+            pane.add_text(helpText);
         });
 }
 
@@ -176,141 +206,43 @@ SettingsWindow::SettingsWindow() {
             });
 
         leftPane.add_section("Resolution");
-        leftPane
-            .add_select_button({
-                .key = "Internal Resolution",
-                .getValue =
-                    [] {
-                        return format_graphics_setting_value(GraphicsOption::InternalResolution,
-                            getSettings().game.internalResolutionScale.getValue());
-                    },
-                .isModified =
-                    [] {
-                        return getSettings().game.internalResolutionScale.getValue() !=
-                               getSettings().game.internalResolutionScale.getDefaultValue();
-                    },
-            })
-            .on_nav_command([this](Rml::Event&, NavCommand cmd) {
-                if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
-                    cmd == NavCommand::Right) {
-                    push(std::make_unique<Overlay>(OverlayProps{
-                        .option = GraphicsOption::InternalResolution,
-                        .title = "Internal Resolution",
-                        .helpText = kInternalResolutionHelpText,
-                        .valueMin = 0,
-                        .valueMax = 12,
-                        .defaultValue = 0,
-                    }));
-                    return true;
-                }
-                return false;
-            })
-            .on_focus([&rightPane](Rml::Event&) {
-                rightPane.clear();
-                rightPane.add_text(kInternalResolutionHelpText);
+        overlay_control(*this, leftPane, rightPane, getSettings().game.internalResolutionScale,
+            OverlayProps{
+                .option = GraphicsOption::InternalResolution,
+                .title = "Internal Resolution",
+                .helpText = kInternalResolutionHelpText,
+                .valueMin = 0,
+                .valueMax = 12,
+                .defaultValue = 0,
             });
-        leftPane
-            .add_select_button({
-                .key = "Shadow Resolution",
-                .getValue =
-                    [] {
-                        return format_graphics_setting_value(GraphicsOption::ShadowResolution,
-                            getSettings().game.shadowResolutionMultiplier.getValue());
-                    },
-                .isModified =
-                    [] {
-                        return getSettings().game.shadowResolutionMultiplier.getValue() !=
-                               getSettings().game.shadowResolutionMultiplier.getDefaultValue();
-                    },
-            })
-            .on_nav_command([this](Rml::Event&, NavCommand cmd) {
-                if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
-                    cmd == NavCommand::Right) {
-                    push(std::make_unique<Overlay>(OverlayProps{
-                        .option = GraphicsOption::ShadowResolution,
-                        .title = "Shadow Resolution",
-                        .helpText = kShadowResolutionHelpText,
-                        .valueMin = 1,
-                        .valueMax = 8,
-                        .defaultValue = 1,
-                    }));
-                    return true;
-                }
-                return false;
-            })
-            .on_focus([&rightPane](Rml::Event&) {
-                rightPane.clear();
-                rightPane.add_text(kShadowResolutionHelpText);
+        overlay_control(*this, leftPane, rightPane, getSettings().game.shadowResolutionMultiplier,
+            OverlayProps{
+                .option = GraphicsOption::ShadowResolution,
+                .title = "Shadow Resolution",
+                .helpText = kShadowResolutionHelpText,
+                .valueMin = 1,
+                .valueMax = 8,
+                .defaultValue = 1,
             });
 
         leftPane.add_section("Post-Processing");
-        leftPane
-            .add_select_button({
-                .key = "Bloom",
-                .getValue =
-                    [] {
-                        return format_graphics_setting_value(GraphicsOption::BloomMode,
-                            static_cast<int>(getSettings().game.bloomMode.getValue()));
-                    },
-                .isModified =
-                    [] {
-                        return getSettings().game.bloomMode.getValue() !=
-                               getSettings().game.bloomMode.getDefaultValue();
-                    },
-            })
-            .on_nav_command([this](Rml::Event&, NavCommand cmd) {
-                if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
-                    cmd == NavCommand::Right) {
-                    push(std::make_unique<Overlay>(OverlayProps{
-                        .option = GraphicsOption::BloomMode,
-                        .title = "Bloom",
-                        .helpText = kBloomHelpText,
-                        .valueMin = static_cast<int>(BloomMode::Off),
-                        .valueMax = static_cast<int>(BloomMode::Dusk),
-                        .defaultValue = static_cast<int>(BloomMode::Classic),
-                    }));
-                    return true;
-                }
-                return false;
-            })
-            .on_focus([&rightPane](Rml::Event&) {
-                rightPane.clear();
-                rightPane.add_text(kBloomHelpText);
+        overlay_control(*this, leftPane, rightPane, getSettings().game.bloomMode,
+            OverlayProps{
+                .option = GraphicsOption::BloomMode,
+                .title = "Bloom",
+                .helpText = kBloomHelpText,
+                .valueMin = static_cast<int>(BloomMode::Off),
+                .valueMax = static_cast<int>(BloomMode::Dusk),
+                .defaultValue = static_cast<int>(BloomMode::Classic),
             });
-        leftPane
-            .add_select_button({
-                .key = "Bloom Brightness",
-                .getValue =
-                    [] {
-                        return format_graphics_setting_value(
-                            GraphicsOption::BloomMultiplier, bloom_multiplier_percent());
-                    },
-                .isDisabled =
-                    [] { return getSettings().game.bloomMode.getValue() == BloomMode::Off; },
-                .isModified =
-                    [] {
-                        return getSettings().game.bloomMultiplier.getValue() !=
-                               getSettings().game.bloomMultiplier.getDefaultValue();
-                    },
-            })
-            .on_nav_command([this](Rml::Event&, NavCommand cmd) {
-                if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
-                    cmd == NavCommand::Right) {
-                    push(std::make_unique<Overlay>(OverlayProps{
-                        .option = GraphicsOption::BloomMultiplier,
-                        .title = "Bloom Brightness",
-                        .helpText = kBloomBrightnessHelpText,
-                        .valueMin = 0,
-                        .valueMax = 100,
-                        .defaultValue = 100,
-                    }));
-                    return true;
-                }
-                return false;
-            })
-            .on_focus([&rightPane](Rml::Event&) {
-                rightPane.clear();
-                rightPane.add_text(kBloomBrightnessHelpText);
+        overlay_control(*this, leftPane, rightPane, getSettings().game.bloomMultiplier,
+            OverlayProps{
+                .option = GraphicsOption::BloomMultiplier,
+                .title = "Bloom Brightness",
+                .helpText = kBloomBrightnessHelpText,
+                .valueMin = 0,
+                .valueMax = 100,
+                .defaultValue = 100,
             });
 
         leftPane.add_section("Rendering");
@@ -344,11 +276,12 @@ SettingsWindow::SettingsWindow() {
         };
 
         leftPane.add_section("Controller");
-        leftPane.add_button("Configure Controller")
-            .on_pressed([this] { push(std::make_unique<ControllerConfigWindow>()); })
-            .on_focus([&rightPane](Rml::Event&) {
-                rightPane.clear();
-                rightPane.add_text("Open controller binding configuration.");
+        leftPane.register_control(leftPane.add_button("Configure Controller").on_pressed([this] {
+            push(std::make_unique<ControllerConfigWindow>());
+        }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                pane.add_text("Open controller binding configuration.");
             });
 
         leftPane.add_section("Camera");
@@ -403,8 +336,8 @@ SettingsWindow::SettingsWindow() {
 
         // TODO: Individual sliders for Main Music, Sub Music, Sound Effects, and Fanfare.
         leftPane.add_section("Volume");
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Master Volume",
                 .getValue = [] { return getSettings().audio.masterVolume.getValue(); },
                 .setValue =
@@ -420,10 +353,10 @@ SettingsWindow::SettingsWindow() {
                     },
                 .max = 100,
                 .suffix = "%",
-            })
-            .on_focus([&rightPane](Rml::Event&) {
-                rightPane.clear();
-                rightPane.add_text("Adjusts the volume of all sounds in the game.");
+            }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                pane.add_text("Adjusts the volume of all sounds in the game.");
             });
 
         leftPane.add_section("Effects");
@@ -493,8 +426,8 @@ SettingsWindow::SettingsWindow() {
             "Enables rotating Link in the collection menu with the C-Stick.");
 
         leftPane.add_section("Difficulty");
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Damage Multiplier",
                 .getValue = [] { return getSettings().game.damageMultiplier.getValue(); },
                 .setValue =
@@ -511,10 +444,10 @@ SettingsWindow::SettingsWindow() {
                 .min = 1,
                 .max = 8,
                 .suffix = "×",
-            })
-            .on_focus([&rightPane](Rml::Event&) {
-                rightPane.clear();
-                rightPane.add_text("Multiplies incoming damage.");
+            }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                pane.add_text("Multiplies incoming damage.");
             });
         addSpeedrunDisabledOption(
             "Instant Death", getSettings().game.instantDeath, "Any hit will instantly kill you.");
