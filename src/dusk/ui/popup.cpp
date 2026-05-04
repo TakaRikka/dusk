@@ -31,18 +31,21 @@ const Rml::String kDocumentSource = R"RML(
 }
 
 Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("popup")) {
-    mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{.autoSelect = false});
+    mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
+                                                  .onClose = [this] { hide(false); },
+                                                  .autoSelect = false,
+                                              });
     mTabBar->add_tab("Settings", [] { push_document(std::make_unique<SettingsWindow>()); });
-    mTabBar->add_tab("Warp", [] {
-        // TODO
-    });
+    // mTabBar->add_tab("Warp", [] {
+    //     // TODO
+    // });
     mTabBar->add_tab("Editor", [] { push_document(std::make_unique<EditorWindow>()); });
     mTabBar->add_tab("Reset", [this] {
         JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
         mTabBar->set_active_tab(-1);
         hide(false);
     });
-    mTabBar->add_tab("Exit", [] { IsRunning = false; });
+    mTabBar->add_tab("Quit", [] { IsRunning = false; });
 
     // Hide document after transition completion
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
@@ -106,6 +109,11 @@ void Popup::update_safe_area() noexcept {
         Rml::PropertyId::PaddingRight, Rml::Property(safeInsets.right, Rml::Unit::PX));
     tabBar->SetProperty(
         Rml::PropertyId::PaddingLeft, Rml::Property(safeInsets.left, Rml::Unit::PX));
+    if (auto* close = tabBar->QuerySelector("close")) {
+        close->SetProperty(Rml::PropertyId::Right,
+            Rml::Property(safeInsets.right + 8.0f * context->GetDensityIndependentPixelRatio(),
+                Rml::Unit::PX));
+    }
 }
 
 bool Popup::visible() const {

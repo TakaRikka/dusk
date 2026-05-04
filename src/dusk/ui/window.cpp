@@ -40,6 +40,7 @@ const Rml::String kDocumentSource = R"RML(
 
 Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("window")) {
     mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
+                                                  .onClose = [this] { pop(); },
                                                   .selectedTabIndex = 0,
                                                   .autoSelect = true,
                                               });
