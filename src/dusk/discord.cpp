@@ -1,5 +1,9 @@
 #ifdef DUSK_DISCORD
 
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
 #include "discord.hpp"
 
 #include "dusk/logging.h"
