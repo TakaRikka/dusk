@@ -486,7 +486,7 @@ u8 OSGetLanguage() {
 }
 
 static void LanguageInit() {
-    // Keep language at 0 (English) if not on a PAL disk.
+    // Keep language at 0 (English) if not on a PAL disc.
     // Doubt this matters, but avoid funky shit.
     if (!dusk::version::isRegionPal()) {
         return;

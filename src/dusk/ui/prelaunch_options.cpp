@@ -114,10 +114,10 @@ std::vector<AuroraBackend> available_backends() {
     return backends;
 }
 
-class DiskImageSelect final : public SelectButton {
+class DiscSelect final : public SelectButton {
 public:
-    explicit DiskImageSelect(Rml::Element* parent)
-        : SelectButton(parent, Props{.key = "Change Disk Image"}) {}
+    explicit DiscSelect(Rml::Element* parent)
+        : SelectButton(parent, Props{.key = "Change Disc Image"}) {}
 
     void update() override {
         ensure_initialized();
@@ -132,7 +132,8 @@ public:
                 display = path;
             }
         }
-        if (path != prelaunch_state().initialDiscPath) {
+        const auto& initial = prelaunch_state().initialDiscPath;
+        if (!initial.empty() && path != initial) {
             display += " (restart required)";
         }
         set_value_label(Rml::String(display));
@@ -285,7 +286,7 @@ protected:
 PrelaunchOptions::PrelaunchOptions() {
     add_tab("Options", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
-        leftPane.add_child<DiskImageSelect>();
+        leftPane.add_child<DiscSelect>();
         leftPane.add_child<LanguageSelect>();
         leftPane.add_child<BackendSelect>();
         leftPane.add_child<SaveTypeSelect>();

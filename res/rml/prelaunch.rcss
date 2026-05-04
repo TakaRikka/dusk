@@ -170,7 +170,7 @@ disc-info {
     text-align: left;
 }
 
-body.mirrored disk-status {
+body.mirrored disc-info {
     left: auto;
     right: 96dp;
     text-align: right;
