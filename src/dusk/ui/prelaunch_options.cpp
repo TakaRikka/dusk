@@ -121,9 +121,8 @@ public:
 
     void update() override {
         ensure_initialized();
-        refresh_path_state();
 
-        const auto& path = prelaunch_state().selectedIsoPath;
+        const auto& path = prelaunch_state().selectedDiscPath;
         std::string display;
         if (path.empty()) {
             display = "(none)";
@@ -133,7 +132,7 @@ public:
                 display = path;
             }
         }
-        if (path != prelaunch_state().initialIsoPath) {
+        if (path != prelaunch_state().initialDiscPath) {
             display += " (restart required)";
         }
         set_value_label(Rml::String(display));
@@ -156,12 +155,8 @@ public:
 
     void update() override {
         ensure_initialized();
-        refresh_path_state();
 
-        const bool validPath = is_selected_path_valid();
-        const bool ntscDiscLocked = validPath && !prelaunch_state().isPal;
-
-        if (ntscDiscLocked) {
+        if (prelaunch_state().selectedDiscIsValid && !prelaunch_state().selectedDiscIsPal) {
             if (getSettings().game.language.getValue() != GameLanguage::English) {
                 getSettings().game.language.setValue(GameLanguage::English);
                 config::Save();

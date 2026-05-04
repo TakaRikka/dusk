@@ -14,7 +14,6 @@
 #include <aurora/lib/window.hpp>
 
 namespace dusk::ui {
-namespace {
 
 const Rml::String kDocumentSource = R"RML(
 <rml>
@@ -62,14 +61,17 @@ void file_dialog_callback(void*, const char* path, const char* error) {
         return;
     }
 
-    state.selectedIsoPath = path;
-    state.errorString.clear();
-    refresh_path_state();
-    getSettings().backend.isoPath.setValue(state.selectedIsoPath);
-    config::Save();
-}
+    if (iso::validate(path) != iso::ValidationError::Success) {
+        // TODO: User facing reason for why the disc wasn't loaded
+        return;
+    }
 
-}  // namespace
+    state.selectedDiscPath = path;
+    state.errorString.clear();
+    getSettings().backend.isoPath.setValue(state.selectedDiscPath);
+    config::Save();
+    refresh_state();
+}
 
 PrelaunchState sPrelaunchState;
 
@@ -77,9 +79,15 @@ PrelaunchState& prelaunch_state() noexcept {
     return sPrelaunchState;
 }
 
-void refresh_path_state() noexcept {
+void refresh_state() noexcept {
     auto& state = prelaunch_state();
-    state.isPal = !state.initialIsoPath.empty() && iso::isPal(state.initialIsoPath.c_str());
+    const auto validation = iso::validate(state.selectedDiscPath.c_str());
+    if (state.selectedDiscPath.empty() || validation != iso::ValidationError::Success) {
+        state.selectedDiscIsValid = false;
+        return;
+    }
+    state.selectedDiscIsValid = true;
+    state.selectedDiscIsPal = iso::isPal(state.selectedDiscPath.c_str());
 }
 
 void ensure_initialized() noexcept {
@@ -88,21 +96,15 @@ void ensure_initialized() noexcept {
         return;
     }
 
-    state.selectedIsoPath = getSettings().backend.isoPath;
-    state.initialIsoPath = state.selectedIsoPath;
+    state.selectedDiscPath = getSettings().backend.isoPath;
+    state.initialDiscPath = state.selectedDiscPath;
+    if (iso::validate(state.initialDiscPath.c_str()) == iso::ValidationError::Success) {
+        state.initialDiscIsPal = iso::isPal(state.initialDiscPath.c_str());
+    }
     state.initialGraphicsBackend = getSettings().backend.graphicsBackend;
     state.errorString.clear();
     state.initialized = true;
-    refresh_path_state();
-}
-
-bool is_selected_path_valid() noexcept {
-    // TODO: Android support
-#if TARGET_ANDROID
-    return !prelaunch_state().selectedIsoPath.empty();
-#else
-    return !prelaunch_state().selectedIsoPath.empty() && SDL_GetPathInfo(prelaunch_state().selectedIsoPath.c_str(), nullptr);
-#endif
+    refresh_state();
 }
 
 void open_iso_picker() noexcept {
@@ -130,11 +132,11 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
     ensure_initialized();
 
     if (auto* menuList = mDocument->GetElementById("menu-list")) {
-        const bool hasValidPath = is_selected_path_valid();
+        auto& state = prelaunch_state();
         mMenuButtons.push_back(
-            std::make_unique<Button>(menuList, hasValidPath ? "Play" : "Select Disc Image"));
+            std::make_unique<Button>(menuList, state.selectedDiscIsValid ? "Play" : "Select Disc Image"));
         mMenuButtons.back()->on_pressed([this] {
-            if (!is_selected_path_valid()) {
+            if (!state.selectedDiscIsValid) {
                 open_iso_picker();
                 return;
             }
@@ -190,11 +192,9 @@ void Prelaunch::hide(bool close) {
 
 void Prelaunch::update() {
     ensure_initialized();
-    refresh_path_state();
     try_apply_mirrored_layout(mDocument);
 
-    auto& state = prelaunch_state();
-    const bool hasValidPath = is_selected_path_valid();
+    const bool hasValidPath = prelaunch_state().selectedDiscIsValid;
     mDocument->SetClass("disc-ready", hasValidPath);
     if (hasValidPath) {
         if (getSettings().backend.skipPreLaunchUI) {
@@ -202,13 +202,6 @@ void Prelaunch::update() {
         }
         IsGameLaunched = true;
     }
-
-    // TODO: Android support
-#if TARGET_ANDROID
-    const bool discPathValid = !state.initialIsoPath.empty();
-#else
-    const bool discPathValid = !state.initialIsoPath.empty() && SDL_GetPathInfo(state.initialIsoPath.c_str(), nullptr);
-#endif
 
     if (!mEntranceAnimationStarted && mDocument != nullptr) {
         mDocument->SetClass("animate-in", true);
@@ -222,7 +215,7 @@ void Prelaunch::update() {
     const auto discStatusLabel = mDiscStatus->GetElementById("disc-status-label");
 
     if (mDiscStatus != nullptr && discStatusLabel != nullptr) {
-        if (discPathValid) {
+        if (hasValidPath) {
             mDiscStatus->SetAttribute("status", "good");
             discStatusLabel->SetInnerRML("Disc ready.");
         } else {
@@ -231,11 +224,9 @@ void Prelaunch::update() {
         }
     }
     if (mDiscDetail != nullptr) {
-        if (discPathValid) {
-            const bool loadedPal =
-                !state.initialIsoPath.empty() && iso::isPal(state.initialIsoPath.c_str());
+        if (hasValidPath) {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::Block);
-            mDiscDetail->SetInnerRML(loadedPal ? "GameCube • EUR" : "GameCube • USA");
+            mDiscDetail->SetInnerRML(state.initialDiscIsPal ? "GameCube • EUR" : "GameCube • USA");
         } else {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::None);
         }

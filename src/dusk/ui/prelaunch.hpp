@@ -34,18 +34,19 @@ private:
 class PrelaunchOptions;
 
 struct PrelaunchState {
-    std::string selectedIsoPath;
-    std::string initialIsoPath;
-    std::string errorString;
-    std::string initialGraphicsBackend;
-    bool isPal = false;
     bool initialized = false;
+    std::string selectedDiscPath;
+    std::string initialDiscPath;
+    std::string initialGraphicsBackend;
+    std::string errorString;
+    bool selectedDiscIsValid = false;
+    bool selectedDiscIsPal = false;
+    bool initialDiscIsPal = false;
 };
 
 PrelaunchState& prelaunch_state() noexcept;
 void ensure_initialized() noexcept;
-void refresh_path_state() noexcept;
-bool is_selected_path_valid() noexcept;
+void refresh_state() noexcept;
 void open_iso_picker() noexcept;
 
 }  // namespace dusk::ui
