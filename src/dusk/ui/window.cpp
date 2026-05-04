@@ -6,6 +6,9 @@
 #include "pane.hpp"
 #include "ui.hpp"
 
+#include "Z2AudioLib/Z2SeMgr.h"
+#include "m_Do/m_Do_audio.h"
+
 #include <algorithm>
 #include <cmath>
 
@@ -168,11 +171,13 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
         }
     }
     if (cmd == NavCommand::Confirm || cmd == NavCommand::Down) {
-        if (!mContentComponents.empty()) {
-            return mContentComponents.front()->focus();
+        if (!mContentComponents.empty() && mContentComponents.front()->focus()) {
+            mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
+            return true;
         }
     }
     if (cmd == NavCommand::Cancel) {
+        mDoAud_seStartMenu(Z2SE_SY_CURSOR_CANCEL);
         pop();
         return true;
     }
@@ -184,7 +189,11 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
 
 bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
     if (cmd == NavCommand::Up) {
-        return focus();
+        if (focus()) {
+            mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
+            return true;
+        }
+        return false;
     } else if (cmd == NavCommand::Cancel) {
         int currentComponent = -1;
         for (int i = 0; i < mContentComponents.size(); ++i) {

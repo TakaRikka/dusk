@@ -1,5 +1,8 @@
 #include "overlay.hpp"
 
+#include "Z2AudioLib/Z2SeMgr.h"
+#include "m_Do/m_Do_audio.h"
+
 #include <dolphin/gx/GXAurora.h>
 #include <dolphin/vi.h>
 #include <fmt/format.h>
@@ -146,6 +149,7 @@ void SteppedCarousel::apply(int value) {
     if (nextValue == currentValue) {
         return;
     }
+    mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
     if (mProps.onChange) {
         mProps.onChange(nextValue);
     }
@@ -229,6 +233,7 @@ Overlay::Overlay(OverlayProps props)
 }
 
 void Overlay::show() {
+    mDoAud_seStartMenu(Z2SE_SY_CURSOR_OK);
     Document::show();
     mRoot->SetAttribute("open", "");
 }
