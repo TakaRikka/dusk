@@ -169,7 +169,10 @@ bool TabBar::handle_nav_command(Rml::Event& event, NavCommand cmd) {
         cmd == NavCommand::Previous)
     {
         bool isNext = cmd == NavCommand::Right || cmd == NavCommand::Next;
-        int currentComponent = tab_containing(event.GetTargetElement());
+        int currentComponent = mProps.selectedTabIndex;
+        if (cmd == NavCommand::Left || cmd == NavCommand::Right) {
+            currentComponent = tab_containing(event.GetTargetElement());
+        }
         int direction = isNext ? 1 : -1;
         int i = currentComponent + direction;
         if (currentComponent == -1) {
