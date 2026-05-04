@@ -13,6 +13,7 @@ body {
     decorator: image(../prelaunch-bg.png cover left center);
     filter: opacity(0);
     transition: filter 1s 0.2s linear-in-out;
+    z-index: -1;
 }
 
 body[open] {
