@@ -12,6 +12,8 @@ public:
 
     ScopedEventListener(
         Rml::Element* element, Rml::EventId event, Callback callback, bool capture = false);
+    ScopedEventListener(
+        Rml::Element* element, Rml::String event, Callback callback, bool capture = false);
     ~ScopedEventListener() override;
 
     ScopedEventListener(const ScopedEventListener&) = delete;
@@ -25,6 +27,7 @@ public:
 private:
     Rml::Element* mElement = nullptr;
     Rml::EventId mEvent = Rml::EventId::Invalid;
+    Rml::String mEventName;
     bool mCapture = false;
     Callback mCallback;
 };

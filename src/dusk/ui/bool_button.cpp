@@ -5,7 +5,14 @@ namespace dusk::ui {
 BoolButton::BoolButton(Rml::Element* parent, Props props)
     : BaseControlledSelectButton(parent, {std::move(props.key)}),
       mGetValue(std::move(props.getValue)), mSetValue(std::move(props.setValue)),
-      mIsDisabled(std::move(props.isDisabled)) {}
+      mIsDisabled(std::move(props.isDisabled)), mIsModified(std::move(props.isModified)) {}
+
+bool BoolButton::modified() const {
+    if (mIsModified) {
+        return mIsModified();
+    }
+    return BaseControlledSelectButton::modified();
+}
 
 bool BoolButton::disabled() const {
     if (mIsDisabled) {

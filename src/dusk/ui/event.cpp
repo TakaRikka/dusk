@@ -10,9 +10,20 @@ ScopedEventListener::ScopedEventListener(
     mElement->AddEventListener(mEvent, this, mCapture);
 }
 
+ScopedEventListener::ScopedEventListener(
+    Rml::Element* element, Rml::String event, Callback callback, bool capture)
+    : mElement(element), mEventName(std::move(event)), mCapture(capture),
+      mCallback(std::move(callback)) {
+    mElement->AddEventListener(mEventName, this, mCapture);
+}
+
 ScopedEventListener::~ScopedEventListener() {
     if (mElement != nullptr) {
-        mElement->RemoveEventListener(mEvent, this, mCapture);
+        if (!mEventName.empty()) {
+            mElement->RemoveEventListener(mEventName, this, mCapture);
+        } else {
+            mElement->RemoveEventListener(mEvent, this, mCapture);
+        }
         mElement = nullptr;
     }
 }

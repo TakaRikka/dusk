@@ -33,10 +33,12 @@ bool initialize() noexcept {
     }
 
     load_font("FiraSans-Regular.ttf", true);
+    load_font("FiraSans-Bold.ttf");
     load_font("FiraSansCondensed-Regular.ttf");
     load_font("FiraSansCondensed-Bold.ttf");
     load_font("AlegreyaSC-Regular.ttf");
     load_font("AlegreyaSC-Bold.ttf");
+    load_font("MaterialSymbolsRounded-Regular.ttf");
 
     sInitialized = true;
     return true;

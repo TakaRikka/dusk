@@ -14,6 +14,7 @@
 #include "d/actor/d_a_obj_automata.h"
 #include "d/d_msg_object.h"
 #include "d/actor/d_a_obj_scannon.h"
+#include "dusk/frame_interpolation.h"
 #include <cstring>
 
 const daNpc_Toby_HIOParam daNpc_Toby_Param_c::m = {
@@ -1398,6 +1399,7 @@ int daNpc_Toby_c::cutRepairSCannon(int arg0) {
                 old.pos = current.pos;
                 setAngle(cM_deg2s(5.0f * f32(mPath.getArg0())));
                 mEventTimer = mPath.getArg2();
+                dusk::frame_interp::request_presentation_sync();
             }
         } else if (!mHide) {
             mHide = 1;

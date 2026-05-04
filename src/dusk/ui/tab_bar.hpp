@@ -36,6 +36,8 @@ private:
 
     Props mProps;
     std::vector<Tab> mTabs;
+    Rml::Element* mEndSpacer = nullptr;
+    bool mRedirectingScroll = false;
 };
 
 }  // namespace dusk::ui

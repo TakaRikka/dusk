@@ -2,6 +2,7 @@
 
 #include "ui.hpp"
 
+#include <fmt/format.h>
 #include <utility>
 
 namespace dusk::ui {
@@ -23,11 +24,43 @@ SelectButton::SelectButton(Rml::Element* parent, Props props)
     on_nav_command([this](Rml::Event&, NavCommand cmd) { return handle_nav_command(cmd); });
 }
 
+bool SelectButton::modified() const {
+    return mProps.modified;
+}
+
+void SelectButton::set_modified(bool value) {
+    if (mProps.modified != value) {
+        mValueElem->SetClass("modified", value);
+        if (value) {
+            mValueElem->SetInnerRML(fmt::format("• {}", escape(mProps.value)));
+        } else {
+            mValueElem->SetInnerRML(escape(mProps.value));
+        }
+        mProps.modified = value;
+    }
+}
+
 void SelectButton::set_value_label(const Rml::String& value) {
     if (mProps.value != value) {
-        mValueElem->SetInnerRML(escape(value));
+        if (mProps.modified) {
+            mValueElem->SetInnerRML(fmt::format("• {}", escape(value)));
+        } else {
+            mValueElem->SetInnerRML(escape(value));
+        }
         mProps.value = value;
     }
+}
+
+SelectButton& SelectButton::on_pressed(SelectButtonCallback callback) {
+    if (!callback) {
+        return *this;
+    }
+    listen(Rml::EventId::Submit, [this, callback = std::move(callback)](Rml::Event& event) {
+        if (!disabled() && event.GetTargetElement() == mRoot) {
+            callback();
+        }
+    });
+    return *this;
 }
 
 void SelectButton::update_props(Props props) {
@@ -35,6 +68,7 @@ void SelectButton::update_props(Props props) {
         mKeyElem->SetInnerRML(escape(props.key));
     }
     set_value_label(props.value);
+    set_modified(props.modified);
     mProps = std::move(props);
 }
 
@@ -49,7 +83,15 @@ bool SelectButton::handle_nav_command(NavCommand cmd) {
 void BaseControlledSelectButton::update() {
     set_disabled(disabled());
     set_value_label(format_value());
+    set_modified(modified());
     SelectButton::update();
+}
+
+bool ControlledSelectButton::modified() const {
+    if (mIsModified) {
+        return mIsModified();
+    }
+    return BaseControlledSelectButton::modified();
 }
 
 bool ControlledSelectButton::disabled() const {
