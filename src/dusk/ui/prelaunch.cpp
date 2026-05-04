@@ -135,7 +135,7 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         auto& state = prelaunch_state();
         mMenuButtons.push_back(
             std::make_unique<Button>(menuList, state.selectedDiscIsValid ? "Play" : "Select Disc Image"));
-        mMenuButtons.back()->on_pressed([this] {
+        mMenuButtons.back()->on_pressed([this, state] {
             if (!state.selectedDiscIsValid) {
                 open_iso_picker();
                 return;
@@ -226,7 +226,7 @@ void Prelaunch::update() {
     if (mDiscDetail != nullptr) {
         if (hasValidPath) {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::Block);
-            mDiscDetail->SetInnerRML(state.initialDiscIsPal ? "GameCube • EUR" : "GameCube • USA");
+            mDiscDetail->SetInnerRML(prelaunch_state().initialDiscIsPal ? "GameCube • EUR" : "GameCube • USA");
         } else {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::None);
         }
