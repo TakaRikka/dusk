@@ -139,6 +139,10 @@ bool Window::set_active_tab(int index) {
     return mTabBar->set_active_tab(index);
 }
 
+void Window::refresh_active_tab() {
+    mTabBar->refresh_active_tab();
+}
+
 void Window::add_tab(const Rml::String& title, TabBuilder builder) {
     mTabBar->add_tab(title, [this, builder = std::move(builder)] {
         clear_content();

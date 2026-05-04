@@ -345,7 +345,7 @@ namespace dusk {
             m_menuTools.ShowSaveEditor();
             m_menuTools.ShowStateShare();
         }
-        m_menuTools.ShowAchievements();
+        m_menuTools.showAchievementNotification();
         DuskDebugPad(); // temporary, remove later
 
         // Hide mouse cursor if the F1 menu is not open and the cursor is idle for 3 seconds.

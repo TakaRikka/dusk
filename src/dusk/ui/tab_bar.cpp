@@ -166,6 +166,17 @@ bool TabBar::set_active_tab(int index) {
     return false;
 }
 
+void TabBar::refresh_active_tab() {
+    if (mProps.selectedTabIndex >= 0 &&
+        mProps.selectedTabIndex < static_cast<int>(mTabs.size()))
+    {
+        const auto& tab = mTabs[mProps.selectedTabIndex];
+        if (tab.callback) {
+            tab.callback();
+        }
+    }
+}
+
 int TabBar::focused_tab_index() const {
     return mLastFocusedTabIndex;
 }

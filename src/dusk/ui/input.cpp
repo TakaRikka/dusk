@@ -635,7 +635,8 @@ void process_axis_direction(
     }
 
     set_pad_button_held(port, heldPadButton, true);
-    const bool chorded = heldPadButton == PAD_TRIGGER_R && is_menu_chord(port);
+    const bool chorded = heldPadButton == PAD_TRIGGER_R && is_menu_chord(port) &&
+                         (port >= sMenuChordConsumed.size() || !sMenuChordConsumed[port]);
     if (chorded) {
         consume_menu_chord(port, context);
     }

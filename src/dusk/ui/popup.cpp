@@ -9,6 +9,7 @@
 #include "dusk/main.h"
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_name.h"
+#include "achievements.hpp"
 #include "editor.hpp"
 #include "imgui.h"
 #include "settings.hpp"
@@ -45,6 +46,7 @@ Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("pop
     //     // TODO
     // });
     mTabBar->add_tab("Editor", [this] { push(std::make_unique<EditorWindow>()); });
+    mTabBar->add_tab("Achievements", [this] { push(std::make_unique<AchievementsWindow>()); });
     mTabBar->add_tab("Reset", [this] {
         mTabBar->set_active_tab(-1);
         if (fpcM_SearchByName(fpcNm_LOGO_SCENE_e)) {
