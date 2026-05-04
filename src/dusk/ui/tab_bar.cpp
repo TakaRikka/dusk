@@ -41,9 +41,7 @@ TabBar::TabBar(Rml::Element* parent, Props props)
     : FluentComponent(createRoot(parent)), mProps(std::move(props)) {
     if (mProps.onClose) {
         mRoot->SetAttribute("closable", "");
-        auto& closeButton =
-            add_child<Button>(Button::Props{}, "close").on_pressed([this] { mProps.onClose(); });
-        closeButton.root()->SetInnerRML("&#xe5cd;");
+        add_child<Button>(Button::Props{}, "close").on_pressed([this] { mProps.onClose(); });
         mEndSpacer = append(mRoot, "tab-end-spacer");
     }
 
