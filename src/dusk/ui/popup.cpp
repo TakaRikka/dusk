@@ -7,6 +7,7 @@
 
 #include "aurora/rmlui.hpp"
 #include "dusk/main.h"
+#include "dusk/settings.h"
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_name.h"
 #include "achievements.hpp"
@@ -135,6 +136,9 @@ bool Popup::visible() const {
 }
 
 bool Popup::handle_nav_command(Rml::Event& event, NavCommand cmd) {
+    if (!getSettings().backend.wasPresetChosen) {
+        return true;
+    }
     if (cmd == NavCommand::Cancel) {
         mDoAud_seStartMenu(Z2SE_SY_MENU_OUT);
         hide(false);

@@ -10,6 +10,8 @@
 
 #include "fmt/format.h"
 #include "ImGuiConsole.hpp"
+#include "dusk/ui/preset.hpp"
+#include "dusk/ui/ui.hpp"
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "SDL3/SDL_mouse.h"
 #include "dusk/achievements.h"
@@ -303,7 +305,10 @@ namespace dusk {
         ImGui::PopStyleColor();
 
         if (!getSettings().backend.wasPresetChosen) {
-            m_firstRunPreset.draw();
+            if (!m_presetShown) {
+                m_presetShown = true;
+                dusk::ui::push_document(std::make_unique<dusk::ui::PresetWindow>());
+            }
             return;
         }
 

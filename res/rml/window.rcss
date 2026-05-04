@@ -256,3 +256,136 @@ icon.warning {
     decorator: text("&#xe002;" center center);
     color: #ffcc00;
 }
+
+.achievement-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10dp;
+    padding: 12dp 0;
+    border-bottom: 1dp rgba(146, 135, 91, 30%);
+}
+
+.achievement-info {
+    display: block;
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.achievement-header {
+    display: flex;
+    align-items: center;
+}
+
+.achievement-name {
+    flex: 1;
+    font-weight: bold;
+}
+
+.achievement-name.unlocked {
+    color: #ffa826;
+}
+
+.achievement-badge {
+    font-size: 14dp;
+    opacity: 0.7;
+}
+
+.achievement-badge.unlocked {
+    color: #44cc55;
+    opacity: 1;
+}
+
+.achievement-badge.locked {
+    color: #cc4444;
+    opacity: 1;
+}
+
+.achievement-desc {
+    display: block;
+    color: rgba(224, 219, 200, 55%);
+    font-size: 16dp;
+    margin: 4dp 0 0 0;
+}
+
+.achievement-progress {
+    display: block;
+    font-size: 13dp;
+    color: rgba(224, 219, 200, 45%);
+}
+
+progressbar {
+    display: block;
+    width: 100%;
+    height: 6dp;
+    border-radius: 3dp;
+    background-color: rgba(255, 255, 255, 10%);
+    margin: 6dp 0 2dp 0;
+}
+
+progressbar.progress-done fill {
+    background-color: #44aa22;
+    border-radius: 3dp;
+}
+
+progressbar.progress-ongoing fill {
+    background-color: #2255bb;
+    border-radius: 3dp;
+}
+
+button.achievement-clear {
+    flex: 0 0 auto;
+    align-self: center;
+    font-size: 14dp;
+    padding: 2dp 8dp;
+    opacity: 0.45;
+}
+
+.preset-dialog {
+    display: flex;
+    flex-flow: column;
+    padding: 32dp;
+    gap: 20dp;
+    flex: 1 1 0;
+}
+
+.preset-title {
+    display: block;
+    font-family: "Fira Sans Condensed";
+    font-weight: bold;
+    font-size: 30dp;
+    text-align: center;
+}
+
+.preset-intro {
+    display: block;
+    font-size: 16dp;
+    text-align: center;
+    color: rgba(224, 219, 200, 65%);
+}
+
+.preset-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 20dp;
+    flex: 1 1 0;
+    align-items: flex-start;
+}
+
+.preset-col {
+    display: flex;
+    flex-flow: column;
+    gap: 12dp;
+    flex: 1 1 0;
+}
+
+button.preset-btn {
+    font-size: 22dp;
+    padding: 20dp 16dp;
+}
+
+.preset-desc {
+    display: block;
+    font-size: 15dp;
+    color: rgba(224, 219, 200, 55%);
+    text-align: center;
+}
