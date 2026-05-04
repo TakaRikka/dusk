@@ -5,13 +5,13 @@
 #include "Z2AudioLib/Z2SeMgr.h"
 #include "m_Do/m_Do_audio.h"
 
+#include "achievements.hpp"
 #include "aurora/rmlui.hpp"
 #include "dusk/main.h"
 #include "dusk/settings.h"
+#include "editor.hpp"
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_name.h"
-#include "achievements.hpp"
-#include "editor.hpp"
 #include "imgui.h"
 #include "settings.hpp"
 #include "ui.hpp"
@@ -58,12 +58,12 @@ Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("pop
     });
     mTabBar->add_tab("Quit", [] { IsRunning = false; });
 
-
+    // Hide document after transition completion
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
         if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") &&
-            Document::visible() && mPendingClose)
+            Document::visible())
         {
-            Document::hide(true);
+            Document::hide(mPendingClose);
         }
     });
 

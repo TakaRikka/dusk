@@ -75,15 +75,6 @@ bool has_menu_chord_part_held(u32 port) noexcept {
     return (held & (PAD_TRIGGER_R | PAD_BUTTON_START)) != 0;
 }
 
-bool should_block_pad_for_menu_chord() noexcept {
-    for (u32 port = 0; port < sPadHoldMasks.size(); ++port) {
-        if (sMenuChordConsumed[port] && has_menu_chord_part_held(port)) {
-            return true;
-        }
-    }
-    return false;
-}
-
 const char* controller_change_type(Uint32 eventType) noexcept {
     switch (eventType) {
     case SDL_EVENT_GAMEPAD_ADDED:
