@@ -72,9 +72,13 @@ void Popup::show() {
     Document::show();
     mRoot->SetAttribute("open", "");
     mTabBar->set_active_tab(-1);
+    if (!mTabBar->focus_tab(mFocusedTabIndex)) {
+        mTabBar->focus();
+    }
 }
 
 void Popup::hide(bool close) {
+    mFocusedTabIndex = mTabBar->focused_tab_index();
     mRoot->RemoveAttribute("open");
     if (close) {
         mPendingClose = true;

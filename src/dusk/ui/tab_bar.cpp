@@ -95,12 +95,14 @@ bool TabBar::focus() {
     if (mProps.selectedTabIndex >= 0 && mProps.selectedTabIndex < mTabs.size()) {
         // Try to focus the currently selected tab
         if (mTabs[mProps.selectedTabIndex].button.focus()) {
+            mLastFocusedTabIndex = mProps.selectedTabIndex;
             return true;
         }
     }
     // Otherwise, focus the first enabled tab
-    for (const auto& tab : mTabs) {
-        if (tab.button.focus()) {
+    for (int i = 0; i < static_cast<int>(mTabs.size()); ++i) {
+        if (mTabs[i].button.focus()) {
+            mLastFocusedTabIndex = i;
             return true;
         }
     }
@@ -151,6 +153,7 @@ bool TabBar::set_active_tab(int index) {
     }
     const auto& tab = mTabs[index];
     if (tab.button.focus()) {
+        mLastFocusedTabIndex = index;
         for (int i = 0; i < static_cast<int>(mTabs.size()); ++i) {
             mTabs[i].button.set_selected(i == index);
         }
@@ -163,11 +166,19 @@ bool TabBar::set_active_tab(int index) {
     return false;
 }
 
+int TabBar::focused_tab_index() const {
+    return mLastFocusedTabIndex;
+}
+
 bool TabBar::focus_tab(int index) {
     if (index < 0 || index >= mTabs.size() || index == mProps.selectedTabIndex) {
         return false;
     }
-    return mTabs[index].button.focus();
+    if (mTabs[index].button.focus()) {
+        mLastFocusedTabIndex = index;
+        return true;
+    }
+    return false;
 }
 
 int TabBar::tab_containing(Rml::Element* element) const {
