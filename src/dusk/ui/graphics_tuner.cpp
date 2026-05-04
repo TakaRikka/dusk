@@ -1,4 +1,4 @@
-#include "overlay.hpp"
+#include "graphics_tuner.hpp"
 
 #include "Z2AudioLib/Z2SeMgr.h"
 #include "m_Do/m_Do_audio.h"
@@ -184,7 +184,7 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
     return "";
 }
 
-Overlay::Overlay(OverlayProps props)
+GraphicsTuner::GraphicsTuner(GraphicsTunerProps props)
     : Document(kDocumentSource), mOption(props.option), mValueMin(props.valueMin),
       mValueMax(props.valueMax), mDefaultValue(props.defaultValue) {
     if (mDocument == nullptr) {
@@ -232,27 +232,27 @@ Overlay::Overlay(OverlayProps props)
     });
 }
 
-void Overlay::show() {
+void GraphicsTuner::show() {
     mDoAud_seStartMenu(Z2SE_SY_CURSOR_OK);
     Document::show();
     mRoot->SetAttribute("open", "");
 }
 
-void Overlay::hide(bool close) {
+void GraphicsTuner::hide(bool close) {
     mRoot->RemoveAttribute("open");
     if (close) {
         mPendingClose = true;
     }
 }
 
-void Overlay::update() {
+void GraphicsTuner::update() {
     for (const auto& component : mComponents) {
         component->update();
     }
     Document::update();
 }
 
-bool Overlay::focus() {
+bool GraphicsTuner::focus() {
     for (const auto& component : mComponents) {
         if (component->focus()) {
             return true;
@@ -261,11 +261,11 @@ bool Overlay::focus() {
     return false;
 }
 
-bool Overlay::visible() const {
+bool GraphicsTuner::visible() const {
     return mRoot->HasAttribute("open");
 }
 
-bool Overlay::handle_nav_command(Rml::Event& event, NavCommand cmd) {
+bool GraphicsTuner::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (cmd == NavCommand::Cancel) {
         pop();
         return true;
@@ -273,7 +273,7 @@ bool Overlay::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     return Document::handle_nav_command(event, cmd);
 }
 
-void Overlay::reset_default() {
+void GraphicsTuner::reset_default() {
     set_value(mOption, mDefaultValue);
 }
 

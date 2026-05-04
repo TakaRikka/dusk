@@ -46,7 +46,7 @@ enum class GraphicsOption {
 
 Rml::String format_graphics_setting_value(GraphicsOption option, int value);
 
-struct OverlayProps {
+struct GraphicsTunerProps {
     GraphicsOption option;
     Rml::String title;
     Rml::String helpText;
@@ -55,9 +55,9 @@ struct OverlayProps {
     int defaultValue = 0;
 };
 
-class Overlay : public Document {
+class GraphicsTuner : public Document {
 public:
-    explicit Overlay(OverlayProps props);
+    explicit GraphicsTuner(GraphicsTunerProps props);
 
     void show() override;
     void hide(bool close) override;

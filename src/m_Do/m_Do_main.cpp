@@ -56,7 +56,7 @@
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
-#include "dusk/ui/popup.hpp"
+#include "dusk/ui/menu_bar.hpp"
 #include "dusk/ui/prelaunch.hpp"
 #include "dusk/ui/preset.hpp"
 #include "dusk/ui/ui.hpp"
@@ -632,7 +632,7 @@ int game_main(int argc, char* argv[]) {
         }
     }
 
-    dusk::ui::push_document(std::make_unique<dusk::ui::Popup>(), false);
+    dusk::ui::push_document(std::make_unique<dusk::ui::MenuBar>(), false);
     if (!dusk::getSettings().backend.wasPresetChosen) {
         dusk::ui::push_document(std::make_unique<dusk::ui::PresetWindow>());
     }

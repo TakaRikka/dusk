@@ -1482,12 +1482,12 @@ set(DUSK_FILES
         src/dusk/ui/nav_types.hpp
         src/dusk/ui/number_button.cpp
         src/dusk/ui/number_button.hpp
-        src/dusk/ui/overlay.cpp
-        src/dusk/ui/overlay.hpp
+        src/dusk/ui/graphics_tuner.cpp
+        src/dusk/ui/graphics_tuner.hpp
         src/dusk/ui/pane.cpp
         src/dusk/ui/pane.hpp
-        src/dusk/ui/popup.cpp
-        src/dusk/ui/popup.hpp
+        src/dusk/ui/menu_bar.cpp
+        src/dusk/ui/menu_bar.hpp
         src/dusk/ui/prelaunch.cpp
         src/dusk/ui/prelaunch.hpp
         src/dusk/ui/prelaunch_options.cpp

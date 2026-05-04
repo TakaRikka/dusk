@@ -12,7 +12,6 @@
 
 namespace dusk::ui {
 class Document;
-class Popup;
 
 struct Insets {
     float top = 0.0f;
@@ -36,8 +35,6 @@ Document& push_document(std::unique_ptr<Document> doc, bool show = true) noexcep
 void show_top_document() noexcept;
 bool any_document_visible() noexcept;
 Document* top_document() noexcept;
-
-Popup& add_popup(std::unique_ptr<Popup> popup) noexcept;
 
 std::filesystem::path resource_path(const std::filesystem::path& filename) noexcept;
 std::string escape(std::string_view str) noexcept;
