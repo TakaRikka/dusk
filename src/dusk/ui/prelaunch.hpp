@@ -39,6 +39,7 @@ struct PrelaunchState {
     std::string initialDiscPath;
     GameLanguage initialLanguage = GameLanguage::English;
     std::string initialGraphicsBackend;
+    int initialCardFileType = 0;
     std::string errorString;
     bool selectedDiscIsValid = false;
     bool selectedDiscIsPal = false;

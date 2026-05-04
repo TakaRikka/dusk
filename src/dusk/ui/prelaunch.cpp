@@ -103,6 +103,7 @@ void ensure_initialized() noexcept {
     }
     state.initialLanguage = getSettings().game.language;
     state.initialGraphicsBackend = getSettings().backend.graphicsBackend;
+    state.initialCardFileType = getSettings().backend.cardFileType;
     state.errorString.clear();
     state.initialized = true;
     refresh_state();

@@ -262,8 +262,14 @@ public:
     explicit SaveTypeSelect(Rml::Element* parent) : SelectButton(parent, Props{.key = "Save File Type"}) {}
 
     void update() override {
+        ensure_initialized();
+
         const CARDFileType cft = static_cast<CARDFileType>(getSettings().backend.cardFileType.getValue());
-        set_value_label(cft == CARD_GCIFOLDER ? "GCI Folder" : "Card Image");
+        std::string label = cft == CARD_GCIFOLDER ? "GCI Folder" : "Card Image";
+        if (getSettings().backend.cardFileType.getValue() != prelaunch_state().initialCardFileType) {
+            label += " (restart required)";
+        }
+        set_value_label(Rml::String(label));
         SelectButton::update();
     }
 
