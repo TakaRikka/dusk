@@ -66,9 +66,6 @@ Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("pop
             Document::hide(mPendingClose);
         }
     });
-
-    // We start hidden, but want focus for an open nav event
-    mDocument->Focus();
 }
 
 void Popup::show() {
