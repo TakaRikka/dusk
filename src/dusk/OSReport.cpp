@@ -41,8 +41,17 @@ void OSReport(const char* fmt, ...) {
     va_start(args, fmt);
     const auto str = FormatToString(fmt, args);
     va_end(args);
-    
+
     Log.info("{}", str);
+}
+
+void OSPanic(const char* file, int line, const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    const auto str = FormatToString(fmt, args);
+    va_end(args);
+
+    Log.fatal("[{}:{}] {}", file, line, str);
 }
 
 void OSReport_Error(const char* fmt, ...) {
