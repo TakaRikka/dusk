@@ -19,6 +19,7 @@ Rml::Element* createRoot(Rml::Element* parent) {
 SelectButton::SelectButton(Rml::Element* parent, Props props)
     : FluentComponent(createRoot(parent)) {
     mKeyElem = append(mRoot, "key");
+    mIconElem = append(mRoot, "icon");
     mValueElem = append(mRoot, "value");
     update_props(std::move(props));
     on_nav_command([this](Rml::Event&, NavCommand cmd) { return handle_nav_command(cmd); });
@@ -32,7 +33,7 @@ void SelectButton::set_modified(bool value) {
     if (mProps.modified != value) {
         mValueElem->SetClass("modified", value);
         if (value) {
-            mValueElem->SetInnerRML(fmt::format("• {}", escape(mProps.value)));
+            mValueElem->SetInnerRML(fmt::format("•&nbsp;{}", escape(mProps.value)));
         } else {
             mValueElem->SetInnerRML(escape(mProps.value));
         }
@@ -43,7 +44,7 @@ void SelectButton::set_modified(bool value) {
 void SelectButton::set_value_label(const Rml::String& value) {
     if (mProps.value != value) {
         if (mProps.modified) {
-            mValueElem->SetInnerRML(fmt::format("• {}", escape(value)));
+            mValueElem->SetInnerRML(fmt::format("•&nbsp;{}", escape(value)));
         } else {
             mValueElem->SetInnerRML(escape(value));
         }
@@ -66,6 +67,16 @@ SelectButton& SelectButton::on_pressed(SelectButtonCallback callback) {
 void SelectButton::update_props(Props props) {
     if (mProps.key != props.key) {
         mKeyElem->SetInnerRML(escape(props.key));
+    }
+    if (mProps.icon != props.icon) {
+        Rml::StringList iconClasses;
+        Rml::StringUtilities::ExpandString(iconClasses, mIconElem->GetClassNames(), ' ', true);
+        for (const auto& className : iconClasses) {
+            mIconElem->SetClass(className, false);
+        }
+        if (!props.icon.empty()) {
+            mIconElem->SetClass(props.icon, true);
+        }
     }
     set_value_label(props.value);
     set_modified(props.modified);

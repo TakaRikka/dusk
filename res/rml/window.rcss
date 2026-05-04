@@ -225,11 +225,12 @@ select-button key {
     font-weight: bold;
     font-size: 18dp;
     text-transform: uppercase;
-    flex: 1 0 auto;
+    flex: 0 1 auto;
 }
 
 select-button value {
-    margin-left: auto;
+    flex: 1 1 auto;
+    text-align: right;
     font-size: 20dp;
 }
 
@@ -240,4 +241,18 @@ select-button value.modified {
 select-button input {
     text-align: right;
     font-size: 20dp;
+}
+
+icon {
+    font-family: "Material Symbols Rounded";
+    font-weight: normal;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+icon.warning {
+    width: 1em;
+    height: 1em;
+    decorator: text("&#xe002;" center center);
+    color: #ffcc00;
 }

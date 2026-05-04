@@ -15,6 +15,7 @@ public:
     struct Props {
         Rml::String key;
         Rml::String value;
+        Rml::String icon;
         bool modified = false;
     };
 
@@ -31,6 +32,7 @@ protected:
 
     Props mProps;
     Rml::Element* mKeyElem = nullptr;
+    Rml::Element* mIconElem = nullptr;
     Rml::Element* mValueElem = nullptr;
 };
 

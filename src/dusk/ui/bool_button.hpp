@@ -7,6 +7,7 @@ class BoolButton : public BaseControlledSelectButton {
 public:
     struct Props {
         Rml::String key;
+        Rml::String icon;
         std::function<bool()> getValue;
         std::function<void(bool)> setValue;
         std::function<bool()> isDisabled;

@@ -144,4 +144,6 @@ footer-button.reset {
     background-color: transparent;
     opacity: 1;
     cursor: pointer;
+    font-family: "Material Symbols Rounded";
+    font-weight: normal;
 }

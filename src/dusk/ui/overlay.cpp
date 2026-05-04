@@ -84,7 +84,7 @@ Rml::Element* create_stepped_carousel_arrow(
     auto button = doc->CreateElement("button");
     button->SetClass("stepped-carousel-arrow", true);
     button->SetClass(className, true);
-    button->SetInnerRML(escape(label));
+    button->SetInnerRML(label);
     return parent->AppendChild(std::move(button));
 }
 
@@ -92,10 +92,10 @@ Rml::Element* create_stepped_carousel_arrow(
 
 SteppedCarousel::SteppedCarousel(Rml::Element* parent, Props props)
     : Component(create_stepped_carousel_root(parent)), mProps(std::move(props)) {
-    Rml::Element* prevElem = create_stepped_carousel_arrow(mRoot, "prev", "<");
+    Rml::Element* prevElem = create_stepped_carousel_arrow(mRoot, "prev", "&#xe5cb;");
     mValueElem = append(mRoot, "div");
     mValueElem->SetClass("stepped-carousel-value", true);
-    Rml::Element* nextElem = create_stepped_carousel_arrow(mRoot, "next", ">");
+    Rml::Element* nextElem = create_stepped_carousel_arrow(mRoot, "next", "&#xe5cc;");
 
     listen(prevElem, Rml::EventId::Click,
         [this](Rml::Event&) { handle_nav_command(NavCommand::Left); });

@@ -56,6 +56,10 @@ const Rml::String kBloomHelpText =
     "a higher-quality bloom pass.";
 const Rml::String kBloomBrightnessHelpText =
     "Configure bloom intensity. Higher values make bright areas glow more strongly.";
+const Rml::String kUnlockFramerateHelpText =
+    "Uses inter-frame interpolation to enable higher frame rates.<br/><br/><icon "
+    "class=\"warning\"/> Experimental feature: Visual artifacts, animation glitches, or "
+    "instability may occur.";
 
 int bloom_multiplier_percent() {
     return std::clamp(
@@ -72,6 +76,7 @@ bool gyro_enabled() {
 
 struct ConfigBoolProps {
     Rml::String key;
+    Rml::String icon;
     Rml::String helpText;
     std::function<void(bool)> onChange;
     std::function<bool()> isDisabled;
@@ -80,7 +85,9 @@ struct ConfigBoolProps {
 SelectButton& config_bool_select(
     Pane& leftPane, Pane& rightPane, ConfigVar<bool>& var, ConfigBoolProps props) {
     return leftPane
-        .add_child<BoolButton>(BoolButton::Props{.key = std::move(props.key),
+        .add_child<BoolButton>(BoolButton::Props{
+            .key = std::move(props.key),
+            .icon = std::move(props.icon),
             .getValue = [&var] { return var.getValue(); },
             .setValue =
                 [&var, callback = std::move(props.onChange)](bool value) {
@@ -94,7 +101,8 @@ SelectButton& config_bool_select(
                     }
                 },
             .isDisabled = std::move(props.isDisabled),
-            .isModified = [&var] { return var.getValue() != var.getDefaultValue(); }})
+            .isModified = [&var] { return var.getValue() != var.getDefaultValue(); },
+        })
         .on_focus([&rightPane, helpText = std::move(props.helpText)](Rml::Event&) {
             rightPane.clear();
             rightPane.add_rml(helpText);
@@ -303,9 +311,15 @@ SettingsWindow::SettingsWindow() {
             "Quicker climbing on ladders and vines like the HD version.");
         addOption("Faster Tears of Light", getSettings().game.fastTears,
             "Tears of Light dropped by Shadow Insects pop out faster like the HD version.");
-        addOption("Autosave", getSettings().game.autoSave,
-            "Autosaves the game when going to a new area, opening a dungeon door, or getting "
-            "a new item.<br/><br/>This feature is currently experimental, use at your own risk.");
+        config_bool_select(leftPane, rightPane, getSettings().game.autoSave,
+            {
+                .key = "Autosave",
+                .icon = "warning",
+                .helpText =
+                    "Autosaves the game when going to a new area, opening a dungeon door, "
+                    "or getting a new item.<br/><br/><icon class=\"warning\"/> Experimental "
+                    "feature: Use at your own risk.",
+            });
         addOption("Instant Saves", getSettings().game.instantSaves,
             "Skips the delay when writing to the Memory Card.");
         addOption("Hold B for Instant Text", getSettings().game.instantText,
@@ -601,9 +615,8 @@ SettingsWindow::SettingsWindow() {
         config_bool_select(leftPane, rightPane, getSettings().game.enableFrameInterpolation,
             {
                 .key = "Unlock Framerate",
-                .helpText =
-                    "Uses inter-frame interpolation to enable higher frame rates.<br/><br/>Visual "
-                    "artifacts, animation glitches, or instability may occur.",
+                .icon = "warning",
+                .helpText = kUnlockFramerateHelpText,
             });
         config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
             {
