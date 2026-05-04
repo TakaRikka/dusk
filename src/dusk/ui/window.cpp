@@ -198,6 +198,9 @@ bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
             return true;
         }
         return false;
+    } else if (cmd == NavCommand::Down) {
+        // End of content, avoid looping
+        return true;
     } else if (cmd == NavCommand::Cancel) {
         int currentComponent = -1;
         for (int i = 0; i < mContentComponents.size(); ++i) {

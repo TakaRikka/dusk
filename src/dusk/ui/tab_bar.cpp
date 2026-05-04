@@ -44,14 +44,15 @@ TabBar::TabBar(Rml::Element* parent, Props props)
     : FluentComponent(createRoot(parent)), mProps(std::move(props)) {
     if (mProps.onClose) {
         mRoot->SetAttribute("closable", "");
-        add_child<Button>(Button::Props{}, "close").on_nav_command([this](Rml::Event&, NavCommand cmd) {
-            if (cmd == NavCommand::Confirm) {
-                mDoAud_seStartMenu(Z2SE_SY_CURSOR_CANCEL);
-                mProps.onClose();
-                return true;
-            }
-            return false;
-        });
+        add_child<Button>(Button::Props{}, "close")
+            .on_nav_command([this](Rml::Event&, NavCommand cmd) {
+                if (cmd == NavCommand::Confirm) {
+                    mDoAud_seStartMenu(Z2SE_SY_CURSOR_CANCEL);
+                    mProps.onClose();
+                    return true;
+                }
+                return false;
+            });
         mEndSpacer = append(mRoot, "tab-end-spacer");
     }
 
@@ -167,9 +168,7 @@ bool TabBar::set_active_tab(int index) {
 }
 
 void TabBar::refresh_active_tab() {
-    if (mProps.selectedTabIndex >= 0 &&
-        mProps.selectedTabIndex < static_cast<int>(mTabs.size()))
-    {
+    if (mProps.selectedTabIndex >= 0 && mProps.selectedTabIndex < static_cast<int>(mTabs.size())) {
         const auto& tab = mTabs[mProps.selectedTabIndex];
         if (tab.callback) {
             tab.callback();
@@ -208,7 +207,10 @@ bool TabBar::handle_nav_command(Rml::Event& event, NavCommand cmd) {
         bool isNext = cmd == NavCommand::Right || cmd == NavCommand::Next;
         int currentComponent = mProps.selectedTabIndex;
         if (cmd == NavCommand::Left || cmd == NavCommand::Right) {
-            currentComponent = tab_containing(event.GetTargetElement());
+            int activeTab = tab_containing(event.GetTargetElement());
+            if (activeTab != -1) {
+                currentComponent = activeTab;
+            }
         }
         int direction = isNext ? 1 : -1;
         if (currentComponent == -1) {
