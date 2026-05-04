@@ -5,12 +5,15 @@
 #include "dusk/iso_validate.hpp"
 #include "dusk/main.h"
 #include "dusk/settings.h"
+#include "dusk/update_check.hpp"
 #include "modal.hpp"
 #include "preset.hpp"
 #include "settings.hpp"
 #include "version.h"
 
 #include <SDL3/SDL_dialog.h>
+#include <SDL3/SDL_error.h>
+#include <SDL3/SDL_misc.h>
 #include <aurora/lib/logging.hpp>
 #include <aurora/lib/window.hpp>
 #include <fmt/format.h>
@@ -54,7 +57,13 @@ const Rml::String kDocumentSource = R"RML(
         </disc-info>
         <version-info class="intro-item delay-5">
             <div class="version">Version <span id="version-text"></span></div>
-            <div class="update"><span>Update available!</span> Download</div>
+            <div id="update-status" class="update">
+                <span id="update-message"></span>
+                <button id="update-download">
+                    <span id="update-download-label"></span>
+                    &nbsp;<icon />
+                </button>
+            </div>
         </version-info>
     </content>
 </body>
@@ -113,6 +122,44 @@ struct DiscVerificationTask {
 
 std::unique_ptr<DiscVerificationTask> sDiscVerificationTask;
 bool sDiscVerificationModalPushed = false;
+
+struct UpdateCheckTask {
+    UpdateCheckTask() {
+        worker = std::thread([this] {
+            try {
+                result = update_check::check_latest_github_release("TwilitRealm", "dusk");
+            } catch (const std::exception& e) {
+                result = {
+                    .status = update_check::Status::Failed,
+                    .message = fmt::format("Update check failed with exception: {}", e.what()),
+                };
+            } catch (...) {
+                result = {
+                    .status = update_check::Status::Failed,
+                    .message = "Update check failed with an unknown exception",
+                };
+            }
+            done.store(true, std::memory_order_release);
+        });
+    }
+
+    ~UpdateCheckTask() { join(); }
+
+    void join() {
+        if (worker.joinable()) {
+            worker.join();
+        }
+    }
+
+    [[nodiscard]] bool finished() const { return done.load(std::memory_order_acquire); }
+
+    update_check::Result result;
+    std::atomic_bool done = false;
+    std::thread worker;
+};
+
+std::unique_ptr<UpdateCheckTask> sUpdateCheckTask;
+std::optional<update_check::Result> sUpdateCheckResult;
 
 bool verification_state_allows_launch(iso::ValidationError validation) noexcept {
     return validation == iso::ValidationError::Unknown ||
@@ -183,6 +230,52 @@ std::optional<DiscVerificationResult> take_finished_disc_verification() {
     sDiscVerificationTask.reset();
     sDiscVerificationModalPushed = false;
     return result;
+}
+
+void begin_update_check() {
+    if (!getSettings().backend.checkForUpdates.getValue()) {
+        return;
+    }
+    if (sUpdateCheckTask != nullptr || sUpdateCheckResult.has_value()) {
+        return;
+    }
+    sUpdateCheckTask = std::make_unique<UpdateCheckTask>();
+}
+
+std::optional<update_check::Result> take_finished_update_check() {
+    if (sUpdateCheckTask == nullptr || !sUpdateCheckTask->finished()) {
+        return std::nullopt;
+    }
+
+    sUpdateCheckTask->join();
+    auto result = std::move(sUpdateCheckTask->result);
+    sUpdateCheckTask.reset();
+    return result;
+}
+
+std::string update_release_label(const update_check::Release& release) {
+    std::string_view tagName = release.tagName;
+    if (!tagName.empty() && tagName.front() == 'v') {
+        tagName.remove_prefix(1);
+    }
+    return std::string(tagName);
+}
+
+void open_update_release() {
+    if (!sUpdateCheckResult.has_value() ||
+        sUpdateCheckResult->status != update_check::Status::UpdateAvailable)
+    {
+        return;
+    }
+
+    const std::string url = sUpdateCheckResult->latest.htmlUrl;
+    if (url.empty()) {
+        PrelaunchLog.warn("Update is available, but the release did not include a download URL");
+        return;
+    }
+    if (!SDL_OpenURL(url.c_str())) {
+        PrelaunchLog.warn("Failed to open update URL '{}': {}", url, SDL_GetError());
+    }
 }
 
 std::string get_error_msg(iso::ValidationError error) {
@@ -582,6 +675,7 @@ void try_apply_mirrored_layout(Rml::Element* body) {
 
 Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementById("root")) {
     ensure_initialized();
+    begin_update_check();
 
     if (auto* menuList = mDocument->GetElementById("menu-list")) {
         auto& state = prelaunch_state();
@@ -629,6 +723,23 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
     mDiscStatus = mDocument->GetElementById("disc-status");
     mDiscDetail = mDocument->GetElementById("disc-version");
     mVersion = mDocument->GetElementById("version-text");
+    mUpdateStatus = mDocument->GetElementById("update-status");
+    mUpdateMessage = mDocument->GetElementById("update-message");
+    mUpdateDownload = mDocument->GetElementById("update-download");
+    mUpdateDownloadLabel = mDocument->GetElementById("update-download-label");
+
+    if (mUpdateDownload != nullptr) {
+        listen(mUpdateDownload, Rml::EventId::Click, [](Rml::Event& event) {
+            open_update_release();
+            event.StopPropagation();
+        });
+        listen(mUpdateDownload, Rml::EventId::Keydown, [](Rml::Event& event) {
+            if (map_nav_event(event) == NavCommand::Confirm) {
+                open_update_release();
+                event.StopPropagation();
+            }
+        });
+    }
 
     try_apply_mirrored_layout(mDocument);
 
@@ -766,6 +877,34 @@ void Prelaunch::update() {
             versionStr = versionStr.substr(1);
         }
         mVersion->SetInnerRML(escape(versionStr));
+    }
+    if (mUpdateStatus != nullptr && mUpdateMessage != nullptr) {
+        if (auto result = take_finished_update_check()) {
+            if (result->status == update_check::Status::Failed) {
+                PrelaunchLog.error("Failed to check for updates: {}", result->message);
+            }
+            sUpdateCheckResult = std::move(*result);
+        }
+
+        if (sUpdateCheckTask != nullptr) {
+            mUpdateStatus->SetAttribute("state", "checking");
+            mUpdateMessage->SetInnerRML("Checking for updates...");
+        } else if (!sUpdateCheckResult.has_value() ||
+                   sUpdateCheckResult->status == update_check::Status::UpToDate)
+        {
+            mUpdateStatus->RemoveAttribute("state");
+            mUpdateMessage->SetInnerRML("");
+        } else if (sUpdateCheckResult->status == update_check::Status::UpdateAvailable) {
+            mUpdateStatus->SetAttribute("state", "available");
+            mUpdateMessage->SetInnerRML("Update available!");
+            if (mUpdateDownloadLabel != nullptr) {
+                mUpdateDownloadLabel->SetInnerRML(escape(
+                    fmt::format("Download {}", update_release_label(sUpdateCheckResult->latest))));
+            }
+        } else {
+            mUpdateStatus->SetAttribute("state", "failed");
+            mUpdateMessage->SetInnerRML("Failed to check for updates");
+        }
     }
 
     Document::update();

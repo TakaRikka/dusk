@@ -273,18 +273,59 @@ body.mirrored version-info {
     font-size: 20dp;
 }
 
-/* TODO: Hidden until an actual update checker is introduced */
 .update {
     display: none;
     font-size: 16dp;
-    font-weight: bold;
-    cursor: pointer;
-    color: #D8F999;
+    color: #A6A09B;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8dp;
+    font-size: 20dp;
 }
 
-.detail,
-.update span {
+.update[state=checking],
+.update[state=failed] {
+    display: block;
+}
+
+.update[state=available] {
+    display: flex;
+}
+
+#update-download {
+    display: none;
+    margin: 0dp;
+    padding: 0dp;
+    border-width: 0dp;
+    background-color: transparent;
+    color: #D8F999;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    decorator: horizontal-gradient(#00000000 #00000000);
+}
+
+.update[state=available] #update-download {
+    display: flex;
+    align-items: center;
+    gap: 2dp;
+}
+
+#update-download icon {
+    display: block;
+    width: 18dp;
+    height: 18dp;
+    font-family: "Material Symbols Rounded";
+    font-weight: normal;
+    decorator: text("&#xe5c8;" center center);
+}
+
+.detail {
     color: #A6A09B;
+}
+
+body.mirrored .update {
+    justify-content: flex-start;
 }
 
 /* Startup animation */

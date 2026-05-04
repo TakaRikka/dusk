@@ -917,6 +917,12 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "Show Pipeline Compilation",
                 .helpText = "Show an overlay when shaders are being compiled for your hardware.",
             });
+        config_bool_select(leftPane, rightPane, getSettings().backend.checkForUpdates,
+            {
+                .key = "Check for Updates",
+                .helpText = "Checks GitHub releases for a new Dusk version on startup.<br/><br/>"
+                            "No personal information is transmitted or collected.",
+            });
         config_bool_select(leftPane, rightPane, getSettings().backend.enableAdvancedSettings,
             {
                 .key = "Enable Advanced Settings",
