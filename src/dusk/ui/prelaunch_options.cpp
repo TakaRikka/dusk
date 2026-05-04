@@ -114,6 +114,42 @@ std::vector<AuroraBackend> available_backends() {
     return backends;
 }
 
+class DiskImageSelect final : public SelectButton {
+public:
+    explicit DiskImageSelect(Rml::Element* parent)
+        : SelectButton(parent, Props{.key = "Change Disk Image"}) {}
+
+    void update() override {
+        ensure_initialized();
+        refresh_path_state();
+
+        const auto& path = prelaunch_state().selectedIsoPath;
+        std::string display;
+        if (path.empty()) {
+            display = "(none)";
+        } else {
+            display = std::filesystem::path(path).filename().string();
+            if (display.empty()) {
+                display = path;
+            }
+        }
+        if (path != prelaunch_state().initialIsoPath) {
+            display += " (restart required)";
+        }
+        set_value_label(Rml::String(display));
+        SelectButton::update();
+    }
+
+protected:
+    bool handle_nav_command(NavCommand cmd) override {
+        if (cmd != NavCommand::Confirm) {
+            return false;
+        }
+        open_iso_picker();
+        return true;
+    }
+};
+
 class LanguageSelect final : public SelectButton {
 public:
     explicit LanguageSelect(Rml::Element* parent) : SelectButton(parent, Props{.key = "Language"}) {}
@@ -254,6 +290,7 @@ protected:
 PrelaunchOptions::PrelaunchOptions() {
     add_tab("Options", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
+        leftPane.add_child<DiskImageSelect>();
         leftPane.add_child<LanguageSelect>();
         leftPane.add_child<BackendSelect>();
         leftPane.add_child<SaveTypeSelect>();

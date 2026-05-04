@@ -79,7 +79,7 @@ PrelaunchState& prelaunch_state() noexcept {
 
 void refresh_path_state() noexcept {
     auto& state = prelaunch_state();
-    state.isPal = !state.selectedIsoPath.empty() && iso::isPal(state.selectedIsoPath.c_str());
+    state.isPal = !state.initialIsoPath.empty() && iso::isPal(state.initialIsoPath.c_str());
 }
 
 void ensure_initialized() noexcept {
@@ -89,6 +89,7 @@ void ensure_initialized() noexcept {
     }
 
     state.selectedIsoPath = getSettings().backend.isoPath;
+    state.initialIsoPath = state.selectedIsoPath;
     state.initialGraphicsBackend = getSettings().backend.graphicsBackend;
     state.errorString.clear();
     state.initialized = true;
@@ -96,8 +97,12 @@ void ensure_initialized() noexcept {
 }
 
 bool is_selected_path_valid() noexcept {
-    return !prelaunch_state().selectedIsoPath.empty() &&
-           SDL_GetPathInfo(prelaunch_state().selectedIsoPath.c_str(), nullptr);
+    // TODO: Android support
+#if TARGET_ANDROID
+    return !prelaunch_state().selectedIsoPath.empty();
+#else
+    return !prelaunch_state().selectedIsoPath.empty() && SDL_GetPathInfo(prelaunch_state().selectedIsoPath.c_str(), nullptr);
+#endif
 }
 
 void open_iso_picker() noexcept {
@@ -198,6 +203,13 @@ void Prelaunch::update() {
         IsGameLaunched = true;
     }
 
+    // TODO: Android support
+#if TARGET_ANDROID
+    const bool discPathValid = !state.initialIsoPath.empty();
+#else
+    const bool discPathValid = !state.initialIsoPath.empty() && SDL_GetPathInfo(state.initialIsoPath.c_str(), nullptr);
+#endif
+
     if (!mEntranceAnimationStarted && mDocument != nullptr) {
         mDocument->SetClass("animate-in", true);
         mEntranceAnimationStarted = true;
@@ -210,7 +222,7 @@ void Prelaunch::update() {
     const auto discStatusLabel = mDiscStatus->GetElementById("disc-status-label");
 
     if (mDiscStatus != nullptr && discStatusLabel != nullptr) {
-        if (hasValidPath) {
+        if (discPathValid) {
             mDiscStatus->SetAttribute("status", "good");
             discStatusLabel->SetInnerRML("Disc ready.");
         } else {
@@ -219,9 +231,11 @@ void Prelaunch::update() {
         }
     }
     if (mDiscDetail != nullptr) {
-        if (hasValidPath) {
+        if (discPathValid) {
+            const bool loadedPal =
+                !state.initialIsoPath.empty() && iso::isPal(state.initialIsoPath.c_str());
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::Block);
-            mDiscDetail->SetInnerRML(state.isPal ? "GameCube • EUR" : "GameCube • USA");
+            mDiscDetail->SetInnerRML(loadedPal ? "GameCube • EUR" : "GameCube • USA");
         } else {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::None);
         }

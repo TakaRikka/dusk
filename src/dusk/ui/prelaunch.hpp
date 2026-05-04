@@ -35,6 +35,7 @@ class PrelaunchOptions;
 
 struct PrelaunchState {
     std::string selectedIsoPath;
+    std::string initialIsoPath;
     std::string errorString;
     std::string initialGraphicsBackend;
     bool isPal = false;
