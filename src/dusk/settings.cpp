@@ -32,7 +32,7 @@ UserSettings g_userSettings = {
         .disableRupeeCutscenes {"game.disableRupeeCutscenes", false},
         .noSwordRecoil {"game.noSwordRecoil", false},
         .damageMultiplier {"game.damageMultiplier", 1},
-        .noHeartDrops{"game.noHeartDrops", false},
+        .noHeartDrops {"game.noHeartDrops", false},
         .instantDeath {"game.instantDeath", false},
         .fastClimbing {"game.fastClimbing", false},
         .noMissClimbing {"game.noMissClimbing", false},
@@ -41,6 +41,7 @@ UserSettings g_userSettings = {
         .instantSaves {"game.instantSaves", false},
         .instantText {"game.instantText", false},
         .sunsSong {"game.sunsSong", false},
+        .autoSave {"game.autoSave", false},
 
         // Preferences
         .enableMirrorMode {"game.enableMirrorMode", false},
@@ -53,7 +54,7 @@ UserSettings g_userSettings = {
         .bloomMode {"game.bloomMode", BloomMode::Classic},
         .bloomMultiplier {"game.bloomMultiplier", 1.0f},
         .disableWaterRefraction {"game.disableWaterRefraction", false},
-        .enableFrameInterpolation = {"game.enableFrameInterpolation", false},
+        .enableFrameInterpolation {"game.enableFrameInterpolation", false},
         .internalResolutionScale {"game.internalResolutionScale", 0},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
         .enableDepthOfField {"game.enableDepthOfField", true},
@@ -112,7 +113,6 @@ UserSettings g_userSettings = {
         .showPipelineCompilation {"backend.showPipelineCompilation", false},
         .wasPresetChosen {"backend.wasPresetChosen", false},
         .enableCrashReporting {"backend.enableCrashReporting", true},
-        .duskMenuOpen {"backend.duskMenuOpen", false},
         .cardFileType {"backend.cardFileType", static_cast<int>(CARD_GCIFOLDER)}
     }
 };
@@ -154,6 +154,7 @@ void registerSettings() {
     Register(g_userSettings.game.instantSaves);
     Register(g_userSettings.game.instantText);
     Register(g_userSettings.game.sunsSong);
+    Register(g_userSettings.game.autoSave);
     Register(g_userSettings.game.enableMirrorMode);
     Register(g_userSettings.game.invertCameraXAxis);
     Register(g_userSettings.game.invertCameraYAxis);
@@ -208,7 +209,6 @@ void registerSettings() {
     Register(g_userSettings.backend.showPipelineCompilation);
     Register(g_userSettings.backend.wasPresetChosen);
     Register(g_userSettings.backend.enableCrashReporting);
-    Register(g_userSettings.backend.duskMenuOpen);
     Register(g_userSettings.backend.cardFileType);
 }
 

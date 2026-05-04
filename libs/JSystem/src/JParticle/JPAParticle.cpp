@@ -206,6 +206,10 @@ void JPABaseParticle::init_c(JPAEmitterWorkData* work, JPABaseParticle* parent) 
 
 #if TARGET_PC
 void JPABaseParticle::interp(JPAEmitterWorkData* work, void const* drawFunc) {
+    static bool enable = false;
+    if (!enable)
+        return;
+
     // don't interpolate the first frame
     if (mAge == 0)
         return;

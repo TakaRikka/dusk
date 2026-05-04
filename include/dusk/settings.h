@@ -81,6 +81,7 @@ struct UserSettings {
         ConfigVar<bool> instantSaves;
         ConfigVar<bool> instantText;
         ConfigVar<bool> sunsSong;
+        ConfigVar<bool> autoSave;
 
         // Preferences
         ConfigVar<bool> enableMirrorMode;
@@ -153,7 +154,6 @@ struct UserSettings {
         ConfigVar<bool> showPipelineCompilation;
         ConfigVar<bool> wasPresetChosen;
         ConfigVar<bool> enableCrashReporting;
-        ConfigVar<bool> duskMenuOpen;
         ConfigVar<int> cardFileType;
     } backend;
 };

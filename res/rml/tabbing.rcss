@@ -1,0 +1,81 @@
+tab-bar {
+    display: flex;
+    position: relative;
+    min-width: 0;
+    overflow: auto hidden;
+    clip: always;
+    text-transform: uppercase;
+}
+
+tab-bar scrollbarhorizontal,
+tab-bar scrollbarhorizontal sliderarrowdec,
+tab-bar scrollbarhorizontal sliderarrowinc,
+tab-bar scrollbarhorizontal slidertrack,
+tab-bar scrollbarhorizontal sliderbar {
+    width: 0;
+    height: 0;
+}
+
+tab-bar tab {
+    flex: 0 0 auto;
+    padding: 0 24dp;
+    line-height: 64dp;
+    white-space: nowrap;
+    decorator: vertical-gradient(#c2a42d00 #c2a42d00);
+    transition: decorator 0.1s linear-in-out, opacity 0.1s linear-in-out;
+    cursor: pointer;
+}
+
+tab-bar tab:selected {
+    opacity: 1;
+    border-bottom: 4dp #C2A42D;
+    font-effect: glow(0dp 4dp 0dp 4dp black);
+}
+
+tab-bar tab:focus-visible,
+tab-bar tab:hover {
+    opacity: 1;
+    font-effect: glow(0dp 4dp 0dp 4dp black);
+    decorator: vertical-gradient(#c2a42d00 #c2a42d26);
+}
+
+tab-bar tab:active {
+    decorator: vertical-gradient(#c2a42d10 #c2a42d40);
+}
+
+tab-bar[closable] tab-end-spacer {
+    display: block;
+    flex: 0 0 64dp;
+    width: 64dp;
+    pointer-events: none;
+}
+
+tab-bar[closable] close {
+    display: block;
+    position: fixed;
+    top: 8dp;
+    right: 8dp;
+    z-index: 1;
+    width: 48dp;
+    height: 48dp;
+    font-family: "Material Symbols Rounded";
+    font-weight: normal;
+    font-size: 24dp;
+    color: rgba(224, 219, 200, 70%);
+    backdrop-filter: blur(2dp);
+    border-radius: 6dp;
+    decorator: text("&#xe5cd;" center center);
+    transition: color background-color 0.12s linear-in-out;
+    cursor: pointer;
+}
+
+tab-bar[closable] close:hover,
+tab-bar[closable] close:focus-visible {
+    color: #fff;
+    background-color: rgba(194, 164, 45, 24%);
+}
+
+tab-bar[closable] close:active {
+    color: #fff;
+    background-color: rgba(194, 164, 45, 40%);
+}

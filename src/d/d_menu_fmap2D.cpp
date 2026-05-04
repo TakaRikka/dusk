@@ -1420,6 +1420,11 @@ void dMenu_Fmap2DBack_c::stageTextureDraw() {
         mpSpotTexture->setAlpha(mAlphaRate * 255.0f * field_0xfa8 * mSpotTextureFadeAlpha);
     }
 
+#if TARGET_PC
+    JUTPalette* pPalette = mpSpotTexture->getTexture(0)->getPalette();
+    pPalette->dataUploaded();
+#endif
+
     mpSpotTexture->draw(mTransX + getMapScissorAreaLX(), mTransZ + getMapScissorAreaLY(),
                         getMapScissorAreaSizeRealX(), getMapScissorAreaSizeRealY(), false, false,
                         false);
