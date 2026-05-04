@@ -26,8 +26,8 @@ UserSettings g_userSettings = {
 
         // Quality of Life
         .enableQuickTransform {"game.enableQuickTransform", false},
-        .hideTvSettingsScreen {"game.hideTvSettingsScreen", false},
-        .skipWarningScreen {"game.skipWarningScreen", false},
+        .hideTvSettingsScreen {"game.hideTvSettingsScreen", true},
+        .skipWarningScreen {"game.skipWarningScreen", true},
         .biggerWallets {"game.biggerWallets", false},
         .noReturnRupees {"game.noReturnRupees", false},
         .disableRupeeCutscenes {"game.disableRupeeCutscenes", false},
@@ -48,11 +48,11 @@ UserSettings g_userSettings = {
         .enableMirrorMode {"game.enableMirrorMode", false},
         .disableMainHUD {"game.disableMainHUD", false},
         .pauseOnFocusLost {"game.pauseOnFocusLost", false},
-        .enableLinkDollRotation = {"game.enableLinkDollRotation", false },
-        .enableAchievementNotifications {"game.enableAchievementNotifications", false},
+        .enableLinkDollRotation = {"game.enableLinkDollRotation", false},
+        .enableAchievementNotifications {"game.enableAchievementNotifications", true},
 
         // Graphics
-        .bloomMode {"game.bloomMode", BloomMode::Classic},
+        .bloomMode {"game.bloomMode", BloomMode::Dusk},
         .bloomMultiplier {"game.bloomMultiplier", 1.0f},
         .disableWaterRefraction {"game.disableWaterRefraction", false},
         .enableFrameInterpolation {"game.enableFrameInterpolation", false},

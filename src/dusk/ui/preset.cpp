@@ -16,12 +16,16 @@ void applyPresetClassic() {
     auto& s = getSettings();
     s.video.lockAspectRatio.setValue(true);
     s.game.bloomMode.setValue(BloomMode::Classic);
+    s.game.enableAchievementNotifications.setValue(false);
+    s.game.internalResolutionScale.setValue(1);
+    s.game.shadowResolutionMultiplier.setValue(1);
+    s.game.hideTvSettingsScreen.setValue(false);
+    s.game.skipWarningScreen.setValue(false);
     AuroraSetViewportPolicy(AURORA_VIEWPORT_FIT);
 }
 
-void applyPresetHD() {
+void applyPresetDusk() {
     auto& s = getSettings();
-    s.game.bloomMode.setValue(BloomMode::Classic);
     s.game.hideTvSettingsScreen.setValue(true);
     s.game.skipWarningScreen.setValue(true);
     s.game.noReturnRupees.setValue(true);
@@ -32,13 +36,7 @@ void applyPresetHD() {
     s.game.fastTears.setValue(true);
     s.game.biggerWallets.setValue(true);
     s.game.invertCameraXAxis.setValue(true);
-    s.game.freeCamera.setValue(true);
     s.game.no2ndFishForCat.setValue(true);
-}
-
-void applyPresetDusk() {
-    applyPresetHD();
-    auto& s = getSettings();
     s.game.enableAchievementNotifications.setValue(true);
     s.game.enableQuickTransform.setValue(true);
     s.game.instantSaves.setValue(true);
@@ -46,7 +44,9 @@ void applyPresetDusk() {
     s.game.enableFrameInterpolation.setValue(true);
     s.game.sunsSong.setValue(true);
     s.game.bloomMode.setValue(BloomMode::Dusk);
-    s.game.autoSave.setValue(true);
+    s.game.internalResolutionScale.setValue(0);
+    s.game.shadowResolutionMultiplier.setValue(4);
+    s.game.enableGyroAim.setValue(true);
 }
 
 Rml::Element* createElement(Rml::Element* parent, const Rml::String& tag) {
@@ -105,13 +105,9 @@ PresetWindow::PresetWindow()
          "All enhancements disabled to match the GameCube version. "
          "Good for speedrunning or simple nostalgia!",
          applyPresetClassic},
-        {"HD",
-         "Some enhancements enabled to match the HD version. "
-         "A good starting point for most players!",
-         applyPresetHD},
         {"Dusk",
-         "More enhancements enabled than the HD preset. "
-         "Veteran players will appreciate the additional tweaks!",
+         "Graphical enhancements & quality of life tweaks. "
+         "Our recommended way to play!",
          applyPresetDusk},
     };
 

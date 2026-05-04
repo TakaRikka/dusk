@@ -57,9 +57,8 @@ const Rml::String kBloomHelpText =
 const Rml::String kBloomBrightnessHelpText =
     "Configure bloom intensity. Higher values make bright areas glow more strongly.";
 const Rml::String kUnlockFramerateHelpText =
-    "Uses inter-frame interpolation to enable higher frame rates.<br/><br/><icon "
-    "class=\"warning\"/> Experimental feature: Visual artifacts, animation glitches, or "
-    "instability may occur.";
+    "Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
+    "visual artifacts or animation glitches.";
 
 int bloom_multiplier_percent() {
     return std::clamp(
@@ -176,7 +175,8 @@ SettingsWindow::SettingsWindow() {
         config_bool_select(leftPane, rightPane, getSettings().audio.enableHrtf,
             {
                 .key = "Enable Spatial Sound",
-                .helpText = "Emulate surround sound via HRTF. Recommended only for use with headphones!",
+                .helpText =
+                    "Emulate surround sound via HRTF. Recommended only for use with headphones!",
                 .onChange = [](bool value) { audio::EnableHrtf = value; },
             });
         config_bool_select(leftPane, rightPane, getSettings().audio.menuSounds,
@@ -213,24 +213,21 @@ SettingsWindow::SettingsWindow() {
         };
 
         leftPane.add_section("Resources");
-        addCheat("Infinite Hearts", getSettings().game.infiniteHearts,
-            "Keeps your health full.");
-        addCheat("Infinite Arrows", getSettings().game.infiniteArrows,
-            "Keeps your arrow count full.");
-        addCheat("Infinite Bombs", getSettings().game.infiniteBombs,
-            "Keeps all bomb bags full.");
-        addCheat("Infinite Oil", getSettings().game.infiniteOil,
-            "Keeps your lantern oil full.");
+        addCheat("Infinite Hearts", getSettings().game.infiniteHearts, "Keeps your health full.");
+        addCheat(
+            "Infinite Arrows", getSettings().game.infiniteArrows, "Keeps your arrow count full.");
+        addCheat("Infinite Bombs", getSettings().game.infiniteBombs, "Keeps all bomb bags full.");
+        addCheat("Infinite Oil", getSettings().game.infiniteOil, "Keeps your lantern oil full.");
         addCheat("Infinite Oxygen", getSettings().game.infiniteOxygen,
             "Keeps your underwater oxygen meter full.");
-        addCheat("Infinite Rupees", getSettings().game.infiniteRupees,
-            "Keeps your rupee count full.");
+        addCheat(
+            "Infinite Rupees", getSettings().game.infiniteRupees, "Keeps your rupee count full.");
         addCheat("No Item Timer", getSettings().game.enableIndefiniteItemDrops,
             "Item drops such as rupees and hearts will never disappear after they drop.");
 
         leftPane.add_section("Abilities");
-        addCheat("Moon Jump (R+A)", getSettings().game.moonJump,
-            "Hold R and A to rise into the air.");
+        addCheat(
+            "Moon Jump (R+A)", getSettings().game.moonJump, "Hold R and A to rise into the air.");
         addCheat("Super Clawshot", getSettings().game.superClawshot,
             "Extends clawshot behavior beyond the normal game rules.");
         addCheat("Always Greatspin", getSettings().game.alwaysGreatspin,
@@ -302,8 +299,8 @@ SettingsWindow::SettingsWindow() {
                 rightPane.clear();
                 rightPane.add_text("Multiplies incoming damage.");
             });
-        addSpeedrunDisabledOption("Instant Death", getSettings().game.instantDeath,
-            "Any hit will instantly kill you.");
+        addSpeedrunDisabledOption(
+            "Instant Death", getSettings().game.instantDeath, "Any hit will instantly kill you.");
         addSpeedrunDisabledOption("No Heart Drops", getSettings().game.noHeartDrops,
             "Hearts will never drop from enemies, pots, and various other places.");
 
@@ -338,10 +335,6 @@ SettingsWindow::SettingsWindow() {
             "Link will not recoil when his sword hits walls.");
         addOption("No 2nd Fish for Cat", getSettings().game.no2ndFishForCat,
             "Skip needing to catch a second fish for Sera's cat.");
-        addOption("Skip TV Settings Screen", getSettings().game.hideTvSettingsScreen,
-            "Skips the TV calibration screen shown when loading a save.");
-        addOption("Skip Warning Screen", getSettings().game.skipWarningScreen,
-            "Skips the warning screen shown when starting the game.");
         addOption("Sun's Song (R+X)", getSettings().game.sunsSong,
             "Allows Wolf Link to howl and change the time of day.");
         addOption("Quick Transform (R+Y)", getSettings().game.enableQuickTransform,
@@ -620,7 +613,6 @@ SettingsWindow::SettingsWindow() {
         config_bool_select(leftPane, rightPane, getSettings().game.enableFrameInterpolation,
             {
                 .key = "Unlock Framerate",
-                .icon = "warning",
                 .helpText = kUnlockFramerateHelpText,
             });
         config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
@@ -640,28 +632,41 @@ SettingsWindow::SettingsWindow() {
 
         config_bool_select(leftPane, rightPane, getSettings().game.enableAchievementNotifications,
             {
-                .key = "Enable Achievement Notifications",
+                .key = "Achievement Notifications",
                 .helpText = "Display a toast when an achievement is unlocked.",
             });
 #if DUSK_ENABLE_SENTRY_NATIVE
         config_bool_select(leftPane, rightPane, getSettings().backend.enableCrashReporting,
-            {
-                .key = "Enable Crash Reporting",
+            {.key = "Crash Reporting",
                 .helpText = "Enable automatic reporting of crashes to the developers.<br/><br/>"
-                "Submissions include logs which may contain sensitive information. Refrain from "
-                "enabling reporting if you do not agree with the following inclusions:<br/><br/> "
-                "- Operating System<br/>- CPU Architecture<br/>- GPU Model & Driver Version<br/>"
-                "- Account Username"
-            });
+                            "Submissions include logs which may contain sensitive information. "
+                            "Refrain from "
+                            "enabling reporting if you do not agree with the following "
+                            "inclusions:<br/><br/> "
+                            "- Operating System<br/>- CPU Architecture<br/>- GPU Model & Driver "
+                            "Version<br/>"
+                            "- Account Username"});
 #endif
         config_bool_select(leftPane, rightPane, getSettings().backend.skipPreLaunchUI,
             {
-                .key = "Skip Pre-Launch UI",
+                .key = "Skip Dusk Main Menu",
+                .helpText = "When starting Dusk, skips the main menu and boots straight into the "
+                            "game if a disc image is available.",
+            });
+        config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
+            {
+                .key = "Skip TV Settings Screen",
+                .helpText = "Skips the TV calibration screen shown when loading a save.",
+            });
+        config_bool_select(leftPane, rightPane, getSettings().game.skipWarningScreen,
+            {
+                .key = "Skip Warning Screen",
+                .helpText = "Skips the warning screen shown when starting the game.",
             });
         config_bool_select(leftPane, rightPane, getSettings().backend.showPipelineCompilation,
             {
                 .key = "Show Pipeline Compilation",
-                .helpText = "Show an overlay when shaders are being compiled for your hardware."
+                .helpText = "Show an overlay when shaders are being compiled for your hardware.",
             });
     });
 }
