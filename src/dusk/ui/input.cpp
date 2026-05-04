@@ -5,6 +5,7 @@
 #include <RmlUi/Core.h>
 #include <SDL3/SDL_gamepad.h>
 #include <SDL3/SDL_timer.h>
+#include <SDL3/SDL_touch.h>
 #include <aurora/rmlui.hpp>
 #include <dolphin/pad.h>
 
@@ -22,6 +23,10 @@ constexpr double kGamepadMenuChordGraceDuration = 0.12;
 constexpr Sint16 kGamepadAxisPressThreshold = 16384;
 constexpr Sint16 kGamepadAxisReleaseThreshold = 12000;
 constexpr int kGamepadAxisDirectionCount = SDL_GAMEPAD_AXIS_COUNT * 2;
+constexpr int kMenuTapFingerCount = 3;
+constexpr float kMenuTapMoveThreshold = 12.0f;
+constexpr double kMenuTapMaxDownSpan = 0.18;
+constexpr double kMenuTapMaxDuration = 0.55;
 
 struct GamepadRepeatState {
     Rml::Input::KeyIdentifier key = Rml::Input::KI_UNKNOWN;
@@ -32,11 +37,26 @@ struct GamepadRepeatState {
     bool pending = false;
 };
 
+struct TouchTapFinger {
+    SDL_FingerID id = 0;
+    Rml::Vector2f startPosition;
+    bool active = false;
+};
+
+struct TouchTapState {
+    std::array<TouchTapFinger, kMenuTapFingerCount> fingers;
+    int activeCount = 0;
+    double firstDownAt = 0.0;
+    bool candidate = false;
+    bool failed = false;
+};
+
 bool sPadInputBlocked = false;
 std::array<GamepadRepeatState, SDL_GAMEPAD_BUTTON_COUNT> sGamepadButtonRepeats;
 std::array<GamepadRepeatState, kGamepadAxisDirectionCount> sGamepadAxisRepeats;
 std::array<u32, PAD_MAX_CONTROLLERS> sPadHoldMasks;
 std::array<bool, PAD_MAX_CONTROLLERS> sMenuChordConsumed;
+TouchTapState sTouchMenuTap;
 
 double now_seconds() noexcept {
     return static_cast<double>(SDL_GetTicksNS()) / 1000000000.0;
@@ -389,6 +409,133 @@ void clear_gamepad_repeats() noexcept {
     sMenuChordConsumed.fill(false);
 }
 
+void reset_touch_menu_tap() noexcept {
+    sTouchMenuTap = {};
+}
+
+Rml::Vector2f touch_position(const SDL_TouchFingerEvent& event, Rml::Context& context) noexcept {
+    const auto dimensions = context.GetDimensions();
+    return {
+        event.x * static_cast<float>(dimensions.x),
+        event.y * static_cast<float>(dimensions.y),
+    };
+}
+
+TouchTapFinger* find_touch_finger(SDL_FingerID id) noexcept {
+    for (auto& finger : sTouchMenuTap.fingers) {
+        if (finger.active && finger.id == id) {
+            return &finger;
+        }
+    }
+    return nullptr;
+}
+
+TouchTapFinger* find_free_touch_finger() noexcept {
+    for (auto& finger : sTouchMenuTap.fingers) {
+        if (!finger.active) {
+            return &finger;
+        }
+    }
+    return nullptr;
+}
+
+bool touch_moved_too_far(
+    const TouchTapFinger& finger, Rml::Vector2f position, Rml::Context& context) noexcept {
+    const Rml::Vector2f delta = position - finger.startPosition;
+    const float threshold =
+        kMenuTapMoveThreshold * std::max(context.GetDensityIndependentPixelRatio(), 1.0f);
+    return delta.SquaredMagnitude() > threshold * threshold;
+}
+
+void dispatch_menu_key(Rml::Context& context) noexcept {
+    context.ProcessMouseLeave();
+    context.ProcessKeyDown(Rml::Input::KI_F1, 0);
+    context.ProcessKeyUp(Rml::Input::KI_F1, 0);
+}
+
+bool handle_touch_menu_tap(Rml::Context& context, const SDL_Event& event) noexcept {
+    switch (event.type) {
+    case SDL_EVENT_FINGER_DOWN: {
+        const double now = now_seconds();
+        if (sTouchMenuTap.activeCount == 0) {
+            reset_touch_menu_tap();
+            sTouchMenuTap.firstDownAt = now;
+        }
+
+        if (sTouchMenuTap.candidate || sTouchMenuTap.activeCount >= kMenuTapFingerCount ||
+            find_touch_finger(event.tfinger.fingerID) != nullptr)
+        {
+            sTouchMenuTap.failed = true;
+            return false;
+        }
+
+        auto* finger = find_free_touch_finger();
+        if (finger == nullptr) {
+            sTouchMenuTap.failed = true;
+            return false;
+        }
+
+        *finger = TouchTapFinger{
+            .id = event.tfinger.fingerID,
+            .startPosition = touch_position(event.tfinger, context),
+            .active = true,
+        };
+        sTouchMenuTap.activeCount++;
+
+        if (now - sTouchMenuTap.firstDownAt > kMenuTapMaxDownSpan) {
+            sTouchMenuTap.failed = true;
+        }
+        if (sTouchMenuTap.activeCount == kMenuTapFingerCount) {
+            sTouchMenuTap.candidate = true;
+        }
+        return false;
+    }
+    case SDL_EVENT_FINGER_MOTION: {
+        auto* finger = find_touch_finger(event.tfinger.fingerID);
+        if (finger == nullptr) {
+            return false;
+        }
+        if (touch_moved_too_far(*finger, touch_position(event.tfinger, context), context)) {
+            sTouchMenuTap.failed = true;
+        }
+        return false;
+    }
+    case SDL_EVENT_FINGER_UP: {
+        auto* finger = find_touch_finger(event.tfinger.fingerID);
+        if (finger == nullptr) {
+            return false;
+        }
+
+        const double now = now_seconds();
+        if (!sTouchMenuTap.candidate ||
+            touch_moved_too_far(*finger, touch_position(event.tfinger, context), context))
+        {
+            sTouchMenuTap.failed = true;
+        }
+
+        *finger = {};
+        sTouchMenuTap.activeCount--;
+        if (sTouchMenuTap.activeCount > 0) {
+            return false;
+        }
+
+        const bool shouldDispatch = sTouchMenuTap.candidate && !sTouchMenuTap.failed &&
+                                    now - sTouchMenuTap.firstDownAt <= kMenuTapMaxDuration;
+        reset_touch_menu_tap();
+        if (shouldDispatch) {
+            dispatch_menu_key(context);
+            return true;
+        }
+        return false;
+    }
+    case SDL_EVENT_FINGER_CANCELED:
+        reset_touch_menu_tap();
+        return false;
+    default:
+        return false;
+    }
+}
+
 void begin_gamepad_key(GamepadRepeatState& repeat, Rml::Input::KeyIdentifier key) noexcept {
     if (repeat.held) {
         return;
@@ -530,6 +677,7 @@ void release_input_block() noexcept {
 
 void reset_input_state() noexcept {
     clear_gamepad_repeats();
+    reset_touch_menu_tap();
 }
 
 void handle_event(const SDL_Event& event) noexcept {
@@ -541,14 +689,24 @@ void handle_event(const SDL_Event& event) noexcept {
         }
     }
     dispatch_controller_change_event(event);
-    if (event.type != SDL_EVENT_GAMEPAD_BUTTON_DOWN && event.type != SDL_EVENT_GAMEPAD_BUTTON_UP &&
-        event.type != SDL_EVENT_GAMEPAD_AXIS_MOTION)
-    {
-        return;
-    }
 
     auto* context = aurora::rmlui::get_context();
     if (context == nullptr) {
+        return;
+    }
+
+    if (event.type == SDL_EVENT_FINGER_DOWN || event.type == SDL_EVENT_FINGER_MOTION ||
+        event.type == SDL_EVENT_FINGER_UP || event.type == SDL_EVENT_FINGER_CANCELED)
+    {
+        if (handle_touch_menu_tap(*context, event)) {
+            sync_input_block();
+        }
+        return;
+    }
+
+    if (event.type != SDL_EVENT_GAMEPAD_BUTTON_DOWN && event.type != SDL_EVENT_GAMEPAD_BUTTON_UP &&
+        event.type != SDL_EVENT_GAMEPAD_AXIS_MOTION)
+    {
         return;
     }
 

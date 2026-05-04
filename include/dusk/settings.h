@@ -154,7 +154,6 @@ struct UserSettings {
         ConfigVar<bool> showPipelineCompilation;
         ConfigVar<bool> wasPresetChosen;
         ConfigVar<bool> enableCrashReporting;
-        ConfigVar<bool> duskMenuOpen;
         ConfigVar<int> cardFileType;
     } backend;
 };
