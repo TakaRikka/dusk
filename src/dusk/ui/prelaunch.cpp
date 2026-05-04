@@ -28,10 +28,13 @@ const Rml::String kDocumentSource = R"RML(
             </hero>
             <div id="menu-list" />
         </menu>
-        <disk-status class="intro-item delay-4">
-            <span id="status" class="status" />
-            <span id="detail" class="detail" />
-        </disk-status>
+        <disc-info class="intro-item delay-4">
+            <div id="disc-status">
+                <icon />
+                <span id="disc-status-label" />
+            </div>
+            <span id="disc-version" class="detail" />
+        </disc-info>
         <version-info class="intro-item delay-5">
             <div class="version">Version <span id="version-text"></span></div>
             <div class="update"><span>Update available!</span> Download</div>
@@ -113,7 +116,7 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
     if (auto* menuList = mDocument->GetElementById("menu-list")) {
         const bool hasValidPath = is_selected_path_valid();
         mMenuButtons.push_back(
-            std::make_unique<Button>(menuList, hasValidPath ? "Start Game" : "Select Disk Image"));
+            std::make_unique<Button>(menuList, hasValidPath ? "Start Game" : "Select Disc Image"));
         mMenuButtons.back()->on_pressed([this] {
             if (!is_selected_path_valid()) {
                 open_iso_picker();
@@ -133,8 +136,8 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         apply_intro_animation(mMenuButtons.back()->root(), "delay-3");
     }
 
-    mDiscStatus = mDocument->GetElementById("status");
-    mDiscDetail = mDocument->GetElementById("detail");
+    mDiscStatus = mDocument->GetElementById("disc-status");
+    mDiscDetail = mDocument->GetElementById("disc-version");
     mVersion = mDocument->GetElementById("version-text");
 
     listen(mDocument, Rml::EventId::Transitionend, [this](Rml::Event& event) {
@@ -185,27 +188,34 @@ void Prelaunch::update() {
     }
 
     if (!mMenuButtons.empty()) {
-        mMenuButtons[0]->set_text(hasValidPath ? "Start Game" : "Select Disk Image");
+        mMenuButtons[0]->set_text(hasValidPath ? "Start Game" : "Select Disc Image");
     }
-    if (mDiscStatus != nullptr) {
+
+    const auto discStatusLabel = mDiscStatus->GetElementById("disc-status-label");
+
+    if (mDiscStatus != nullptr && discStatusLabel != nullptr) {
         if (hasValidPath) {
-            mDiscStatus->RemoveAttribute("bad");
-            mDiscStatus->SetInnerRML("Disc Ready");
+            mDiscStatus->SetAttribute("status", "good");
+            discStatusLabel->SetInnerRML("Disc ready.");
         } else {
-            mDiscStatus->SetAttribute("bad", "");
-            mDiscStatus->SetInnerRML("Disk Not Found");
+            mDiscStatus->SetAttribute("status", "bad");
+            discStatusLabel->SetInnerRML("Disc not found.");
         }
     }
     if (mDiscDetail != nullptr) {
         if (hasValidPath) {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::Block);
-            mDiscDetail->SetInnerRML(state.isPal ? "GameCube • PAL" : "GameCube • USA");
+            mDiscDetail->SetInnerRML(state.isPal ? "GameCube • EUR" : "GameCube • USA");
         } else {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::None);
         }
     }
     if (mVersion != nullptr) {
-        mVersion->SetInnerRML(escape(DUSK_WC_DESCRIBE));
+        std::string_view versionStr(DUSK_WC_DESCRIBE);
+        if (versionStr[0] == 'v') {
+            versionStr = versionStr.substr(1);
+        }
+        mVersion->SetInnerRML(escape(versionStr));
     }
 
     Document::update();
@@ -239,9 +249,8 @@ bool Prelaunch::handle_nav_command(Rml::Event& event, NavCommand cmd) {
             break;
         }
     }
-    const auto buttonCount = static_cast<int>(mMenuButtons.size());
-    int i = (focusedButton + direction) % buttonCount;
-    if (i < 0) i += buttonCount;
+    const auto n = static_cast<int>(mMenuButtons.size());
+    int i = ((focusedButton + direction) % n + n) % n;
     while (i >= 0 && i < mMenuButtons.size()) {
         if (mMenuButtons[i]->focus()) {
             event.StopPropagation();
