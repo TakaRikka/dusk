@@ -44,7 +44,6 @@ private:
     ImVec2 m_dragScrollLastMousePos = {};
     std::deque<Toast> m_toasts;
 
-    bool m_presetShown = false;
     ImGuiMenuGame m_menuGame;
     ImGuiPreLaunchWindow m_preLaunchWindow;
 

@@ -304,14 +304,6 @@ namespace dusk {
         }
         ImGui::PopStyleColor();
 
-        if (!getSettings().backend.wasPresetChosen) {
-            if (!m_presetShown) {
-                m_presetShown = true;
-                dusk::ui::push_document(std::make_unique<dusk::ui::PresetWindow>());
-            }
-            return;
-        }
-
         if (dusk::IsGameLaunched && !m_isLaunchInitialized) {
             AddToast(ImGui::GetIO().MouseSource == ImGuiMouseSource_TouchScreen ?
                                       "3-finger tap to toggle menu"s :

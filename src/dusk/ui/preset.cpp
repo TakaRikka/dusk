@@ -61,7 +61,7 @@ const Rml::String kDocumentSource = R"RML(
     <link type="text/rcss" href="res/rml/window.rcss" />
 </head>
 <body>
-    <window id="window">
+    <window id="window" class="small preset">
         <div id="preset-dialog" class="preset-dialog"></div>
     </window>
 </body>
@@ -88,8 +88,8 @@ PresetWindow::PresetWindow()
     auto* intro = createElement(dialog, "div");
     intro->SetClass("preset-intro", true);
     intro->SetInnerRML(
-        "Choose a preset to get started. "
-        "You can change any setting later from the Enhancements menu.");
+        "Choose a preset to get started.<br/>"
+        "You can change any setting later from the Settings menu.");
 
     auto* grid = createElement(dialog, "div");
     grid->SetClass("preset-grid", true);
@@ -102,11 +102,11 @@ PresetWindow::PresetWindow()
 
     static constexpr PresetInfo kPresets[] = {
         {"Classic",
-         "All enhancements disabled to match the GameCube version. "
+         "Enhancements disabled to match the GameCube version. "
          "Good for speedrunning or simple nostalgia!",
          applyPresetClassic},
         {"Dusk",
-         "Graphical enhancements & quality of life tweaks. "
+         "Graphics & quality of life tweaks, including some from the Wii U version. "
          "Our recommended way to play!",
          applyPresetDusk},
     };
@@ -131,7 +131,7 @@ PresetWindow::PresetWindow()
 
         auto* desc = createElement(col, "div");
         desc->SetClass("preset-desc", true);
-        desc->SetInnerRML(escape(preset.desc));
+        desc->SetInnerRML(preset.desc);
     }
 }
 
@@ -151,7 +151,7 @@ bool PresetWindow::visible() const {
 
 bool PresetWindow::focus() {
     if (!mButtons.empty()) {
-        return mButtons.front()->focus();
+        return mButtons.back()->focus();
     }
     return false;
 }
