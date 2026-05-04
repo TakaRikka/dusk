@@ -2,8 +2,13 @@
 
 #include <RmlUi/Core.h>
 
+#include "Z2AudioLib/Z2SeMgr.h"
+#include "m_Do/m_Do_audio.h"
+
 #include "aurora/rmlui.hpp"
 #include "dusk/main.h"
+#include "f_pc/f_pc_manager.h"
+#include "f_pc/f_pc_name.h"
 #include "editor.hpp"
 #include "imgui.h"
 #include "settings.hpp"
@@ -41,18 +46,21 @@ Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("pop
     // });
     mTabBar->add_tab("Editor", [this] { push(std::make_unique<EditorWindow>()); });
     mTabBar->add_tab("Reset", [this] {
-        JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
         mTabBar->set_active_tab(-1);
+        if (fpcM_SearchByName(fpcNm_LOGO_SCENE_e)) {
+            return;
+        }
+        JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
         hide(false);
     });
     mTabBar->add_tab("Quit", [] { IsRunning = false; });
 
-    // Hide document after transition completion
+
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
         if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") &&
-            Document::visible())
+            Document::visible() && mPendingClose)
         {
-            Document::hide(mPendingClose);
+            Document::hide(true);
         }
     });
 
@@ -122,6 +130,7 @@ bool Popup::visible() const {
 
 bool Popup::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (cmd == NavCommand::Cancel) {
+        mDoAud_seStartMenu(Z2SE_SY_MENU_OUT);
         hide(false);
         return true;
     }

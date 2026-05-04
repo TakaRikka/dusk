@@ -20,6 +20,8 @@
 #include "dusk/livesplit.h"
 #include "dusk/main.h"
 #include "dusk/settings.h"
+#include "f_pc/f_pc_manager.h"
+#include "f_pc/f_pc_name.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_main.h"
 #include "tracy/Tracy.hpp"
@@ -259,7 +261,8 @@ namespace dusk {
             }
         }
 
-        if ((ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) &&
+        if (!fpcM_SearchByName(fpcNm_LOGO_SCENE_e) &&
+            (ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) &&
             ImGui::IsKeyPressed(ImGuiKey_R))
         {
             JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
