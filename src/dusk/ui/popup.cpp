@@ -139,7 +139,7 @@ bool Popup::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (!getSettings().backend.wasPresetChosen) {
         return true;
     }
-    if (cmd == NavCommand::Cancel) {
+    if (cmd == NavCommand::Cancel && visible()) {
         mDoAud_seStartMenu(Z2SE_SY_MENU_OUT);
         hide(false);
         return true;
