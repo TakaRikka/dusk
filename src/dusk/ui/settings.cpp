@@ -510,7 +510,7 @@ SettingsWindow::SettingsWindow() {
                     },
                 .min = 1,
                 .max = 8,
-                .prefix = "x",
+                .suffix = "×",
             })
             .on_focus([&rightPane](Rml::Event&) {
                 rightPane.clear();

@@ -164,10 +164,10 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
             u32 width = 0;
             u32 height = 0;
             AuroraGetRenderSize(&width, &height);
-            return fmt::format("{}x ({}x{})", value, width, height);
+            return fmt::format("{}× ({}×{})", value, width, height);
         }
     case GraphicsOption::ShadowResolution:
-        return fmt::format("{}x", value);
+        return fmt::format("{}×", value);
     case GraphicsOption::BloomMode:
         switch (static_cast<BloomMode>(value)) {
         case BloomMode::Off:

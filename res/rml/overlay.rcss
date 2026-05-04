@@ -25,7 +25,6 @@ body {
     justify-content: flex-end;
     align-items: stretch;
     decorator: vertical-gradient(#00000000 #151610F2);
-    padding: 48dp 0 40dp 0;
     filter: opacity(0);
     transition: filter 0.2s linear-in-out;
 }
@@ -42,18 +41,17 @@ body {
     display: flex;
     flex-direction: column;
     gap: 24dp;
-    padding: 0 32dp;
+    padding: 48dp 64dp;
 }
 
 @media (max-height: 800dp) {
     .overlay-root {
         min-height: 38%;
-        padding: 32dp 0 28dp 0;
     }
 
     .overlay {
         gap: 16dp;
-        padding: 0 24dp;
+        padding: 32dp 48dp;
     }
 }
 
