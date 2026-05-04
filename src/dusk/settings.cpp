@@ -18,6 +18,7 @@ UserSettings g_userSettings = {
         .fanfareVolume {"audio.fanfareVolume", 100},
         .enableReverb {"audio.enableReverb", true},
         .enableHrtf {"audio.enableHrtf", false},
+        .menuSounds {"audio.menuSounds", true},
     },
 
     .game = {
@@ -135,6 +136,7 @@ void registerSettings() {
     Register(g_userSettings.audio.fanfareVolume);
     Register(g_userSettings.audio.enableReverb);
     Register(g_userSettings.audio.enableHrtf);
+    Register(g_userSettings.audio.menuSounds);
 
     // Game
     Register(g_userSettings.game.language);

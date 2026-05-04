@@ -6,6 +6,9 @@
 #include "pane.hpp"
 #include "ui.hpp"
 
+#include "Z2AudioLib/Z2SeMgr.h"
+#include "m_Do/m_Do_audio.h"
+
 #include <algorithm>
 #include <cmath>
 
@@ -136,6 +139,10 @@ bool Window::set_active_tab(int index) {
     return mTabBar->set_active_tab(index);
 }
 
+void Window::refresh_active_tab() {
+    mTabBar->refresh_active_tab();
+}
+
 void Window::add_tab(const Rml::String& title, TabBuilder builder) {
     mTabBar->add_tab(title, [this, builder = std::move(builder)] {
         clear_content();
@@ -168,11 +175,13 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
         }
     }
     if (cmd == NavCommand::Confirm || cmd == NavCommand::Down) {
-        if (!mContentComponents.empty()) {
-            return mContentComponents.front()->focus();
+        if (!mContentComponents.empty() && mContentComponents.front()->focus()) {
+            mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
+            return true;
         }
     }
     if (cmd == NavCommand::Cancel) {
+        mDoAud_seStartMenu(Z2SE_SY_CURSOR_CANCEL);
         pop();
         return true;
     }
@@ -184,7 +193,11 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
 
 bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
     if (cmd == NavCommand::Up) {
-        return focus();
+        if (focus()) {
+            mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
+            return true;
+        }
+        return false;
     } else if (cmd == NavCommand::Cancel) {
         int currentComponent = -1;
         for (int i = 0; i < mContentComponents.size(); ++i) {

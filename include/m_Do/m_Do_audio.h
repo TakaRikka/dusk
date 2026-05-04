@@ -5,6 +5,7 @@
 #include "Z2AudioLib/Z2EnvSeMgr.h"
 #include "Z2AudioLib/Z2LinkMgr.h"
 #include "dusk/audio.h"
+#include "dusk/settings.h"
 
 class mDoAud_zelAudio_c : public Z2AudioMgr {
 public:
@@ -131,6 +132,18 @@ inline void mDoAud_seStart(u32 i_sfxID, const Vec* i_sePos, u32 param_2, s8 i_re
     Z2AudioMgr::getInterface()->seStart(i_sfxID, i_sePos, param_2, i_reverb, 1.0f, 1.0f,
                                                -1.0f, -1.0f, 0);
 }
+
+#if TARGET_PC
+inline void mDoAud_seStartMenu(u32 i_sfxID) {
+    if (!mDoAud_zelAudio_c::isInitFlag()) {
+        return;
+    }
+    if (!dusk::getSettings().audio.menuSounds.getValue()) {
+        return;
+    }
+    mDoAud_seStart(i_sfxID, nullptr, 0, 0);
+}
+#endif
 
 inline void mDoAud_seStartLevel(u32 i_sfxID, const Vec* i_sePos, u32 param_2, s8 i_reverb) {
     DUSK_AUDIO_SKIP()

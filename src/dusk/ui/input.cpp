@@ -635,7 +635,8 @@ void process_axis_direction(
     }
 
     set_pad_button_held(port, heldPadButton, true);
-    const bool chorded = heldPadButton == PAD_TRIGGER_R && is_menu_chord(port);
+    const bool chorded = heldPadButton == PAD_TRIGGER_R && is_menu_chord(port) &&
+                         (port >= sMenuChordConsumed.size() || !sMenuChordConsumed[port]);
     if (chorded) {
         consume_menu_chord(port, context);
     }
@@ -657,7 +658,7 @@ void process_axis_direction(
 }  // namespace
 
 void sync_input_block() noexcept {
-    const bool shouldBlock = any_document_visible() || should_block_pad_for_menu_chord();
+    const bool shouldBlock = any_document_visible();
     if (sPadInputBlocked == shouldBlock) {
         return;
     }

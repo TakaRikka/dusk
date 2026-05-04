@@ -179,6 +179,11 @@ SettingsWindow::SettingsWindow() {
                 .helpText = "Emulate surround sound via HRTF. Recommended only for use with headphones!",
                 .onChange = [](bool value) { audio::EnableHrtf = value; },
             });
+        config_bool_select(leftPane, rightPane, getSettings().audio.menuSounds,
+            {
+                .key = "Dusk Menu Sounds",
+                .helpText = "Play sound effects when navigating the Dusk menu.",
+            });
 
         leftPane.add_section("Tweaks");
         config_bool_select(leftPane, rightPane, getSettings().game.noLowHpSound,

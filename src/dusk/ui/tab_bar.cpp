@@ -1,5 +1,8 @@
 #include "tab_bar.hpp"
 
+#include "Z2AudioLib/Z2SeMgr.h"
+#include "m_Do/m_Do_audio.h"
+
 namespace dusk::ui {
 namespace {
 
@@ -41,7 +44,14 @@ TabBar::TabBar(Rml::Element* parent, Props props)
     : FluentComponent(createRoot(parent)), mProps(std::move(props)) {
     if (mProps.onClose) {
         mRoot->SetAttribute("closable", "");
-        add_child<Button>(Button::Props{}, "close").on_pressed([this] { mProps.onClose(); });
+        add_child<Button>(Button::Props{}, "close").on_nav_command([this](Rml::Event&, NavCommand cmd) {
+            if (cmd == NavCommand::Confirm) {
+                mDoAud_seStartMenu(Z2SE_SY_CURSOR_CANCEL);
+                mProps.onClose();
+                return true;
+            }
+            return false;
+        });
         mEndSpacer = append(mRoot, "tab-end-spacer");
     }
 
@@ -85,12 +95,14 @@ bool TabBar::focus() {
     if (mProps.selectedTabIndex >= 0 && mProps.selectedTabIndex < mTabs.size()) {
         // Try to focus the currently selected tab
         if (mTabs[mProps.selectedTabIndex].button.focus()) {
+            mLastFocusedTabIndex = mProps.selectedTabIndex;
             return true;
         }
     }
     // Otherwise, focus the first enabled tab
-    for (const auto& tab : mTabs) {
-        if (tab.button.focus()) {
+    for (int i = 0; i < static_cast<int>(mTabs.size()); ++i) {
+        if (mTabs[i].button.focus()) {
+            mLastFocusedTabIndex = i;
             return true;
         }
     }
@@ -104,7 +116,14 @@ void TabBar::add_tab(const Rml::String& title, TabCallback callback) {
         callback();
     }
     auto& button = add_child<Button>(Button::Props{title}, "tab");
-    button.on_pressed([this, index] { set_active_tab(index); });
+    button.on_nav_command([this, index](Rml::Event&, NavCommand cmd) {
+        if (cmd == NavCommand::Confirm) {
+            mDoAud_seStartMenu(mProps.autoSelect ? Z2SE_SY_NAME_CURSOR : Z2SE_SY_CURSOR_OK);
+            set_active_tab(index);
+            return true;
+        }
+        return false;
+    });
     if (selected) {
         button.set_selected(true);
     }
@@ -134,6 +153,7 @@ bool TabBar::set_active_tab(int index) {
     }
     const auto& tab = mTabs[index];
     if (tab.button.focus()) {
+        mLastFocusedTabIndex = index;
         for (int i = 0; i < static_cast<int>(mTabs.size()); ++i) {
             mTabs[i].button.set_selected(i == index);
         }
@@ -146,11 +166,30 @@ bool TabBar::set_active_tab(int index) {
     return false;
 }
 
+void TabBar::refresh_active_tab() {
+    if (mProps.selectedTabIndex >= 0 &&
+        mProps.selectedTabIndex < static_cast<int>(mTabs.size()))
+    {
+        const auto& tab = mTabs[mProps.selectedTabIndex];
+        if (tab.callback) {
+            tab.callback();
+        }
+    }
+}
+
+int TabBar::focused_tab_index() const {
+    return mLastFocusedTabIndex;
+}
+
 bool TabBar::focus_tab(int index) {
     if (index < 0 || index >= mTabs.size() || index == mProps.selectedTabIndex) {
         return false;
     }
-    return mTabs[index].button.focus();
+    if (mTabs[index].button.focus()) {
+        mLastFocusedTabIndex = index;
+        return true;
+    }
+    return false;
 }
 
 int TabBar::tab_containing(Rml::Element* element) const {
@@ -172,18 +211,23 @@ bool TabBar::handle_nav_command(Rml::Event& event, NavCommand cmd) {
             currentComponent = tab_containing(event.GetTargetElement());
         }
         int direction = isNext ? 1 : -1;
-        int i = currentComponent + direction;
         if (currentComponent == -1) {
-            // If the container itself is focused and right is pressed, focus the first element
-            if (isNext) {
-                i = 0;
+            if (cmd == NavCommand::Left || cmd == NavCommand::Right) {
+                // If the container itself is focused and right is pressed, focus the first element
+                if (!isNext) {
+                    return false;
+                }
+                currentComponent = -1;
             } else {
-                // Otherwise, allow event to bubble
+                // Next/Previous require a currently selected tab to navigate from
                 return false;
             }
         }
+        int i = currentComponent + direction;
         while (i >= 0 && i < mTabs.size()) {
-            if (mProps.autoSelect ? set_active_tab(i) : focus_tab(i)) {
+            const bool changed = mProps.autoSelect ? set_active_tab(i) : focus_tab(i);
+            if (changed) {
+                mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
                 return true;
             }
             i += direction;

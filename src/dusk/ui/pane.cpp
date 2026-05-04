@@ -1,5 +1,7 @@
 #include "pane.hpp"
 
+#include "Z2AudioLib/Z2SeMgr.h"
+#include "m_Do/m_Do_audio.h"
 #include "ui.hpp"
 
 namespace dusk::ui {
@@ -56,6 +58,7 @@ Pane::Pane(Rml::Element* parent, Type type) : FluentComponent(createRoot(parent)
         int i = focusedChild + direction;
         while (i >= 0 && i < mChildren.size()) {
             if (mChildren[i]->focus()) {
+                mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
                 event.StopPropagation();
                 break;
             }

@@ -10,6 +10,8 @@
 
 #include "fmt/format.h"
 #include "ImGuiConsole.hpp"
+#include "dusk/ui/preset.hpp"
+#include "dusk/ui/ui.hpp"
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "SDL3/SDL_mouse.h"
 #include "dusk/achievements.h"
@@ -20,6 +22,8 @@
 #include "dusk/livesplit.h"
 #include "dusk/main.h"
 #include "dusk/settings.h"
+#include "f_pc/f_pc_manager.h"
+#include "f_pc/f_pc_name.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_main.h"
 #include "tracy/Tracy.hpp"
@@ -259,7 +263,8 @@ namespace dusk {
             }
         }
 
-        if ((ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) &&
+        if (!fpcM_SearchByName(fpcNm_LOGO_SCENE_e) &&
+            (ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) &&
             ImGui::IsKeyPressed(ImGuiKey_R))
         {
             JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
@@ -300,7 +305,10 @@ namespace dusk {
         ImGui::PopStyleColor();
 
         if (!getSettings().backend.wasPresetChosen) {
-            m_firstRunPreset.draw();
+            if (!m_presetShown) {
+                m_presetShown = true;
+                dusk::ui::push_document(std::make_unique<dusk::ui::PresetWindow>());
+            }
             return;
         }
 
@@ -342,7 +350,7 @@ namespace dusk {
             m_menuTools.ShowSaveEditor();
             m_menuTools.ShowStateShare();
         }
-        m_menuTools.ShowAchievements();
+        m_menuTools.showAchievementNotification();
         DuskDebugPad(); // temporary, remove later
 
         // Hide mouse cursor if the F1 menu is not open and the cursor is idle for 3 seconds.
