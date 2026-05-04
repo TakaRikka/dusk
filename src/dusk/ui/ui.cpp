@@ -52,9 +52,6 @@ void shutdown() noexcept {
 }
 
 Document& push_document(std::unique_ptr<Document> doc, bool show) noexcept {
-    if (auto* top = top_document()) {
-        top->hide(false);
-    }
     Document& ret = *doc;
     sDocuments.push_back({std::move(doc)});
     if (show) {

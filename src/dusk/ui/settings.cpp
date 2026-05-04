@@ -368,7 +368,7 @@ SettingsWindow::SettingsWindow() {
 
         leftPane.add_section("Controller");
         leftPane.add_button("Configure Controller")
-            .on_pressed([] { push_document(std::make_unique<ControllerConfigWindow>()); })
+            .on_pressed([this] { push(std::make_unique<ControllerConfigWindow>()); })
             .on_focus([&rightPane](Rml::Event&) {
                 rightPane.clear();
                 rightPane.add_text("Open controller binding configuration.");
@@ -474,10 +474,10 @@ SettingsWindow::SettingsWindow() {
                                getSettings().game.internalResolutionScale.getDefaultValue();
                     },
             })
-            .on_nav_command([](Rml::Event&, NavCommand cmd) {
+            .on_nav_command([this](Rml::Event&, NavCommand cmd) {
                 if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
                     cmd == NavCommand::Right) {
-                    push_document(std::make_unique<Overlay>(OverlayProps{
+                    push(std::make_unique<Overlay>(OverlayProps{
                         .option = GraphicsOption::InternalResolution,
                         .title = "Internal Resolution",
                         .helpText = kInternalResolutionHelpText,
@@ -507,10 +507,10 @@ SettingsWindow::SettingsWindow() {
                                getSettings().game.shadowResolutionMultiplier.getDefaultValue();
                     },
             })
-            .on_nav_command([](Rml::Event&, NavCommand cmd) {
+            .on_nav_command([this](Rml::Event&, NavCommand cmd) {
                 if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
                     cmd == NavCommand::Right) {
-                    push_document(std::make_unique<Overlay>(OverlayProps{
+                    push(std::make_unique<Overlay>(OverlayProps{
                         .option = GraphicsOption::ShadowResolution,
                         .title = "Shadow Resolution",
                         .helpText = kShadowResolutionHelpText,
@@ -542,10 +542,10 @@ SettingsWindow::SettingsWindow() {
                                getSettings().game.bloomMode.getDefaultValue();
                     },
             })
-            .on_nav_command([](Rml::Event&, NavCommand cmd) {
+            .on_nav_command([this](Rml::Event&, NavCommand cmd) {
                 if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
                     cmd == NavCommand::Right) {
-                    push_document(std::make_unique<Overlay>(OverlayProps{
+                    push(std::make_unique<Overlay>(OverlayProps{
                         .option = GraphicsOption::BloomMode,
                         .title = "Bloom",
                         .helpText = kBloomHelpText,
@@ -577,10 +577,10 @@ SettingsWindow::SettingsWindow() {
                                getSettings().game.bloomMultiplier.getDefaultValue();
                     },
             })
-            .on_nav_command([](Rml::Event&, NavCommand cmd) {
+            .on_nav_command([this](Rml::Event&, NavCommand cmd) {
                 if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
                     cmd == NavCommand::Right) {
-                    push_document(std::make_unique<Overlay>(OverlayProps{
+                    push(std::make_unique<Overlay>(OverlayProps{
                         .option = GraphicsOption::BloomMultiplier,
                         .title = "Bloom Brightness",
                         .helpText = kBloomBrightnessHelpText,

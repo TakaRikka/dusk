@@ -31,6 +31,10 @@ public:
             show();
         }
     }
+    void push(std::unique_ptr<Document> document) {
+        push_document(std::move(document));
+        hide(false);
+    }
     void pop() {
         hide(true);
         show_top_document();

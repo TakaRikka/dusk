@@ -35,11 +35,11 @@ Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("pop
                                                   .onClose = [this] { hide(false); },
                                                   .autoSelect = false,
                                               });
-    mTabBar->add_tab("Settings", [] { push_document(std::make_unique<SettingsWindow>()); });
+    mTabBar->add_tab("Settings", [this] { push(std::make_unique<SettingsWindow>()); });
     // mTabBar->add_tab("Warp", [] {
     //     // TODO
     // });
-    mTabBar->add_tab("Editor", [] { push_document(std::make_unique<EditorWindow>()); });
+    mTabBar->add_tab("Editor", [this] { push(std::make_unique<EditorWindow>()); });
     mTabBar->add_tab("Reset", [this] {
         JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
         mTabBar->set_active_tab(-1);

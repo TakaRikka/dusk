@@ -12,7 +12,7 @@ body {
     background-color: #000000;
     decorator: image(../prelaunch-bg.png cover left center);
     filter: opacity(0);
-    transition: filter 1s 0.1s linear-in-out;
+    transition: filter 1s 0.2s linear-in-out;
 }
 
 body[open] {

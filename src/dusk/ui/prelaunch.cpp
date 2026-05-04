@@ -125,8 +125,7 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         apply_intro_animation(mMenuButtons.back()->root(), "delay-1");
 
         mMenuButtons.push_back(std::make_unique<Button>(menuList, "Options"));
-        mMenuButtons.back()->on_pressed(
-            [] { push_document(std::make_unique<PrelaunchOptions>()); });
+        mMenuButtons.back()->on_pressed([this] { push(std::make_unique<PrelaunchOptions>()); });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-2");
 
         mMenuButtons.push_back(std::make_unique<Button>(menuList, "Quit To Desktop"));
