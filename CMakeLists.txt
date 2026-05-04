@@ -101,6 +101,7 @@ endif ()
 set(AURORA_ENABLE_DVD ON CACHE BOOL "Enable DVD API support" FORCE)
 set(AURORA_ENABLE_CARD ON CACHE BOOL "Enable CARD API support" FORCE)
 add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
+target_compile_definitions(aurora_mtx PRIVATE EMULATE_PS_MATH=1)
 
 add_subdirectory(libs/freeverb)
 
@@ -284,7 +285,7 @@ set(DUSK_COPYRIGHT "Copyright (C) Twilit Realm contributors")
 source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${REL_FILES})
 source_group("dusk" FILES ${DUSK_FILES})
 
-set(GAME_COMPILE_DEFS TARGET_PC WIDESCREEN_SUPPORT=1 AVOID_UB=1 VERSION=0)
+set(GAME_COMPILE_DEFS TARGET_PC WIDESCREEN_SUPPORT=1 AVOID_UB=1 VERSION=0 EMULATE_PS_MATH=1)
 
 set(GAME_INCLUDE_DIRS
     include
