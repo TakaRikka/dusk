@@ -9,15 +9,77 @@ Rml::Element* createRoot(Rml::Element* parent) {
     return parent->AppendChild(std::move(elem));
 }
 
+int key_modifiers_from_event(const Rml::Event& event) {
+    int modifiers = 0;
+    if (event.GetParameter("ctrl_key", 0)) {
+        modifiers |= Rml::Input::KM_CTRL;
+    }
+    if (event.GetParameter("shift_key", 0)) {
+        modifiers |= Rml::Input::KM_SHIFT;
+    }
+    if (event.GetParameter("alt_key", 0)) {
+        modifiers |= Rml::Input::KM_ALT;
+    }
+    if (event.GetParameter("meta_key", 0)) {
+        modifiers |= Rml::Input::KM_META;
+    }
+    if (event.GetParameter("caps_lock_key", 0)) {
+        modifiers |= Rml::Input::KM_CAPSLOCK;
+    }
+    if (event.GetParameter("num_lock_key", 0)) {
+        modifiers |= Rml::Input::KM_NUMLOCK;
+    }
+    if (event.GetParameter("scroll_lock_key", 0)) {
+        modifiers |= Rml::Input::KM_SCROLLLOCK;
+    }
+    return modifiers;
+}
+
 }  // namespace
 
 TabBar::TabBar(Rml::Element* parent, Props props)
     : FluentComponent(createRoot(parent)), mProps(std::move(props)) {
+    if (mProps.onClose) {
+        mRoot->SetAttribute("closable", "");
+        auto& closeButton =
+            add_child<Button>(Button::Props{}, "close").on_pressed([this] { mProps.onClose(); });
+        closeButton.root()->SetInnerRML("&#xe5cd;");
+        mEndSpacer = append(mRoot, "tab-end-spacer");
+    }
+
     listen(Rml::EventId::Keydown, [this](Rml::Event& event) {
         const auto cmd = map_nav_event(event);
         if (cmd != NavCommand::None && handle_nav_command(event, cmd)) {
             event.StopPropagation();
         }
+    });
+
+    // Remap vertical scroll events into horizontal scroll events
+    listen(Rml::EventId::Mousescroll, [this](Rml::Event& event) {
+        if (mRedirectingScroll) {
+            return;
+        }
+        if (mRoot->GetScrollWidth() <= mRoot->GetClientWidth() + 0.5f) {
+            return;
+        }
+
+        const float wheelDeltaX = event.GetParameter("wheel_delta_x", 0.0f);
+        const float wheelDeltaY = event.GetParameter("wheel_delta_y", 0.0f);
+        const float absWheelDeltaX = wheelDeltaX < 0.0f ? -wheelDeltaX : wheelDeltaX;
+        const float absWheelDeltaY = wheelDeltaY < 0.0f ? -wheelDeltaY : wheelDeltaY;
+        if (absWheelDeltaY == 0.0f || absWheelDeltaX >= absWheelDeltaY) {
+            return;
+        }
+
+        auto* context = mRoot->GetContext();
+        if (context == nullptr) {
+            return;
+        }
+
+        mRedirectingScroll = true;
+        context->ProcessMouseWheel({wheelDeltaY, 0.0f}, key_modifiers_from_event(event));
+        mRedirectingScroll = false;
+        event.StopPropagation();
     });
 }
 
@@ -48,6 +110,10 @@ void TabBar::add_tab(const Rml::String& title, TabCallback callback) {
     if (selected) {
         button.set_selected(true);
     }
+    if (mEndSpacer != nullptr) {
+        auto spacer = mRoot->RemoveChild(mEndSpacer);
+        mEndSpacer = mRoot->AppendChild(std::move(spacer));
+    }
     mTabs.emplace_back(Tab{
         .title = title,
         .button = button,
@@ -58,8 +124,8 @@ void TabBar::add_tab(const Rml::String& title, TabCallback callback) {
 bool TabBar::set_active_tab(int index) {
     if (index == -1) {
         // Clear currently selected tab
-        for (int i = 0; i < static_cast<int>(mTabs.size()); ++i) {
-            mTabs[i].button.set_selected(false);
+        for (auto& tab : mTabs) {
+            tab.button.set_selected(false);
         }
         mProps.selectedTabIndex = -1;
         return true;

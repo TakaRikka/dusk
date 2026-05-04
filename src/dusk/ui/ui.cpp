@@ -38,6 +38,7 @@ bool initialize() noexcept {
     load_font("FiraSansCondensed-Bold.ttf");
     load_font("AlegreyaSC-Regular.ttf");
     load_font("AlegreyaSC-Bold.ttf");
+    load_font("MaterialSymbolsRounded-Regular.ttf");
 
     sInitialized = true;
     return true;
