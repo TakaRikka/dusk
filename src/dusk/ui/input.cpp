@@ -657,7 +657,7 @@ void process_axis_direction(
 }  // namespace
 
 void sync_input_block() noexcept {
-    const bool shouldBlock = any_document_visible() || should_block_pad_for_menu_chord();
+    const bool shouldBlock = any_document_visible();
     if (sPadInputBlocked == shouldBlock) {
         return;
     }
