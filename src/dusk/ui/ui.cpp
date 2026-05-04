@@ -32,13 +32,13 @@ bool initialize() noexcept {
         return false;
     }
 
-    load_font("FiraSans-Regular.ttf", true);
-    load_font("FiraSans-Bold.ttf");
-    load_font("FiraSansCondensed-Regular.ttf");
-    load_font("FiraSansCondensed-Bold.ttf");
-    load_font("AlegreyaSC-Regular.ttf");
-    load_font("AlegreyaSC-Bold.ttf");
-    load_font("MaterialSymbolsRounded-Regular.ttf");
+    load_font("FiraSans-Regular.woff2", true);
+    load_font("FiraSans-Bold.woff2");
+    load_font("FiraSansCondensed-Regular.woff2");
+    load_font("FiraSansCondensed-Bold.woff2");
+    load_font("AlegreyaSC-Regular.woff2");
+    load_font("AlegreyaSC-Bold.woff2");
+    load_font("MaterialSymbolsRounded-Regular.woff2");
 
     sInitialized = true;
     return true;
