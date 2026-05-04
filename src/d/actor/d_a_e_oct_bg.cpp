@@ -503,10 +503,6 @@ void daE_OctBg_c::core_fish_attack() {
             cXyz cStack_68(current.pos);
             f32 in_f31;
 
-            #if AVOID_UB
-            in_f31 = cM_rndFX(80.0f) + 100.0f;
-            #endif
-
             cStack_68.y += 200.0f;
             if (fopAcM_gc_c::gndCheck(&cStack_68)) {
                 f32 groundY = fopAcM_gc_c::getGroundY();
@@ -522,6 +518,11 @@ void daE_OctBg_c::core_fish_attack() {
                         field_0xbaf = cM_rndFX(80.0f) + 100.0f;
                     }
                 }
+            #if AVOID_UB
+                else {
+                    in_f31 = cM_rndFX(80.0f) + 100.0f;
+                }
+            #endif
             } else if (current.pos.abs(cStack_5c) < 400.0f) {
                 in_f31 = cM_rndF(50.0f) + 20.0f;
                 field_0xbaf = cM_rndFX(20.0f) + 40.0f;
