@@ -104,13 +104,14 @@ hero img {
     decorator: horizontal-gradient(#FEE685FF #FEE68500);
 }
 
-disk-status {
+disc-info {
     position: absolute;
     left: 96dp;
     bottom: 72dp;
     display: flex;
     flex-direction: column;
-    gap: 8dp;
+    gap: 12dp;
+    font-size: 24dp;
 }
 
 version-info {
@@ -119,22 +120,44 @@ version-info {
     bottom: 72dp;
     display: flex;
     flex-direction: column;
-    gap: 8dp;
+    gap: 12dp;
     text-align: right;
-}
-
-.status,
-.version {
     font-size: 24dp;
 }
 
-.status,
-.update {
+#disc-status {
+    display: flex;
+    align-items: center;
+    gap: 8dp;
+}
+
+#disc-status[status=good] {
     color: #D8F999;
 }
 
-.status[bad] {
+#disc-status[status=bad] {
     color: #FFC9C9;
+}
+
+#disc-status icon {
+    display: block;
+    width: 24dp;
+    height: 24dp;
+    font-family: "Material Symbols Rounded";
+    font-weight: normal;
+    font-size: 24dp;
+}
+
+#disc-status[status=good] icon {
+    decorator: text("&#xe5ca;" center center);
+}
+
+#disc-status[status=bad] icon {
+    decorator: text("&#xe5cd;" center center);
+}
+
+#disc-version {
+    font-size: 20dp;
 }
 
 /* TODO: Hidden until an actual update checker is introduced */
@@ -143,6 +166,7 @@ version-info {
     font-size: 16dp;
     font-weight: bold;
     cursor: pointer;
+    color: #D8F999;
 }
 
 .detail,
