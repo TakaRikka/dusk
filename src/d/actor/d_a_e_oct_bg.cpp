@@ -519,7 +519,7 @@ void daE_OctBg_c::core_fish_attack() {
                 }
             #if AVOID_UB
                 else {
-                    in_f31 = cM_rndFX(80.0f) + 100.0f;
+                    in_f31 = cM_rndF(400.0f) + 80.0f;
                 }
             #endif
             } else if (current.pos.abs(cStack_5c) < 400.0f) {
