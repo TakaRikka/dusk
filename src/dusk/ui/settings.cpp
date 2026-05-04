@@ -136,7 +136,6 @@ SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<f
 }  // namespace
 
 SettingsWindow::SettingsWindow() {
-
     add_tab("Graphics", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);

@@ -97,8 +97,10 @@ void update() noexcept {
     if (auto* context = aurora::rmlui::get_context();
         context != nullptr && context->GetFocusElement() == nullptr)
     {
-        if (auto* top = top_document()) {
-            top->focus();
+        for (auto& doc : std::views::reverse(sDocuments)) {
+            if (!doc->closed() && !doc->pending_close() && doc->focus()) {
+                break;
+            }
         }
     }
 
