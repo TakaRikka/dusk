@@ -157,24 +157,24 @@ public:
     void update() override {
         ensure_initialized();
 
-        if (prelaunch_state().selectedDiscIsValid && !prelaunch_state().selectedDiscIsPal) {
-            if (getSettings().game.language.getValue() != GameLanguage::English) {
-                getSettings().game.language.setValue(GameLanguage::English);
-                config::Save();
-            }
+        // LanguageInit already forces English for USA discs, so we can just change the button's
+        // value instead of actually updating the config. This allows the old language setting to
+        // be remembered when switching back to a PAL disc.
+        const auto& state = prelaunch_state();
+        std::string value;
+        if (state.selectedDiscIsValid && !state.selectedDiscIsPal) {
+            value = kLanguageNames[0];
             set_disabled(true);
         } else {
+            const u8 idx = static_cast<u8>(getSettings().game.language.getValue());
+            value = kLanguageNames[idx];
             set_disabled(false);
         }
-
-        const auto lang = getSettings().game.language.getValue();
-        auto value = static_cast<u8>(lang);
-        if (value >= kLanguageNames.size()) {
-            getSettings().game.language.setValue(GameLanguage::English);
-            config::Save();
-            value = static_cast<u8>(getSettings().game.language.getValue());
+        if (getSettings().game.language.getValue() != state.initialLanguage) {
+            value += " (restart required)";
         }
-        set_value_label(kLanguageNames[value]);
+
+        set_value_label(Rml::String(value));
         SelectButton::update();
     }
 

@@ -101,6 +101,7 @@ void ensure_initialized() noexcept {
     if (iso::validate(state.initialDiscPath.c_str()) == iso::ValidationError::Success) {
         state.initialDiscIsPal = iso::isPal(state.initialDiscPath.c_str());
     }
+    state.initialLanguage = getSettings().game.language;
     state.initialGraphicsBackend = getSettings().backend.graphicsBackend;
     state.errorString.clear();
     state.initialized = true;

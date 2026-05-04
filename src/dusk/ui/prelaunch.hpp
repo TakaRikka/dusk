@@ -37,6 +37,7 @@ struct PrelaunchState {
     bool initialized = false;
     std::string selectedDiscPath;
     std::string initialDiscPath;
+    GameLanguage initialLanguage = GameLanguage::English;
     std::string initialGraphicsBackend;
     std::string errorString;
     bool selectedDiscIsValid = false;
