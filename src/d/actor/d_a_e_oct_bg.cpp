@@ -502,7 +502,6 @@ void daE_OctBg_c::core_fish_attack() {
         } else if (field_0xbaf == 0) {
             cXyz cStack_68(current.pos);
             f32 in_f31;
-
             cStack_68.y += 200.0f;
             if (fopAcM_gc_c::gndCheck(&cStack_68)) {
                 f32 groundY = fopAcM_gc_c::getGroundY();
