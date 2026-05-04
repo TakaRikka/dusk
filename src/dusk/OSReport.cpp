@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "aurora/lib/logging.hpp"
 #include "os_report.h"
 
@@ -21,10 +23,35 @@ static bool checkEnabled() {
 
 static std::string FormatToString(const char* msg, va_list list) {
     int ret = vsnprintf(nullptr, 0, msg, list);
-    std::string buf(ret, '\0');
-    vsnprintf(buf.data(), buf.size(), msg, list);
-    buf.pop_back();
-    return buf;
+    if (ret <= 0) {
+        return {};
+    }
+    ++ret;
+    std::unique_ptr<char[]> buf(new char[ret]);
+    vsnprintf(buf.get(), ret, msg, list);
+    buf[ret - 1] = '\0';
+    return {buf.get()};
+}
+
+void OSReport(const char* fmt, ...) {
+    if (!checkEnabled()) {
+        return;
+    }
+    va_list args;
+    va_start(args, fmt);
+    const auto str = FormatToString(fmt, args);
+    va_end(args);
+
+    Log.info("{}", str);
+}
+
+void OSPanic(const char* file, int line, const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    const auto str = FormatToString(fmt, args);
+    va_end(args);
+
+    Log.fatal("[{}:{}] {}", file, line, str);
 }
 
 void OSReport_Error(const char* fmt, ...) {
