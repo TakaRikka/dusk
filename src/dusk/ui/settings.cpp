@@ -362,6 +362,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                                                 },
                                         })
                             .on_pressed([i] {
+                                mDoAud_seStartMenu(kSoundItemChange);
                                 getSettings().game.language.setValue(static_cast<GameLanguage>(i));
                                 config::Save();
                             });
@@ -387,6 +388,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                                 .isSelected = [backend] { return configured_backend() == backend; },
                             })
                             .on_pressed([backend] {
+                                mDoAud_seStartMenu(kSoundItemChange);
                                 getSettings().backend.graphicsBackend.setValue(
                                     std::string{backend_id(backend)});
                                 config::Save();
@@ -418,6 +420,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                                     },
                             })
                             .on_pressed([i] {
+                                mDoAud_seStartMenu(kSoundItemChange);
                                 getSettings().backend.cardFileType.setValue(i);
                                 config::Save();
                             });
@@ -433,12 +436,14 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         leftPane.add_section("Display");
 
         leftPane.register_control(leftPane.add_button("Toggle Fullscreen").on_pressed([] {
+            mDoAud_seStartMenu(kSoundItemChange);
             getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
             VISetWindowFullscreen(getSettings().video.enableFullscreen);
             config::Save();
         }),
             rightPane, [](Pane& pane) { pane.clear(); });
         leftPane.register_control(leftPane.add_button("Restore Default Window Size").on_pressed([] {
+            mDoAud_seStartMenu(kSoundItemChange);
             getSettings().video.enableFullscreen.setValue(false);
             VISetWindowFullscreen(false);
             VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);

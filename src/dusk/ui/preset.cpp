@@ -127,7 +127,7 @@ bool PresetWindow::handle_nav_command(Rml::Event& event, NavCommand cmd) {
             const int next = i + direction;
             if (next >= 0 && next < static_cast<int>(mButtons.size())) {
                 if (mButtons[next]->focus()) {
-                    mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
+                    mDoAud_seStartMenu(kSoundItemFocus);
                     return true;
                 }
             }

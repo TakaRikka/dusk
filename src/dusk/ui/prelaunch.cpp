@@ -178,6 +178,8 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
                 return;
             }
 
+            mDoAud_seStartMenu(kSoundPlay);
+
             if (getSettings().audio.menuSounds) {
                 JAISoundHandle* handle = g_mEnvSeMgr.field_0x144.getHandle();
                 if (*handle) {
@@ -385,6 +387,7 @@ bool Prelaunch::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     int i = ((focusedButton + direction) % n + n) % n;
     while (i >= 0 && i < mMenuButtons.size()) {
         if (mMenuButtons[i]->focus()) {
+            mDoAud_seStartMenu(kSoundItemFocus);
             event.StopPropagation();
             return true;
         }

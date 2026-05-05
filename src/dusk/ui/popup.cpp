@@ -39,7 +39,11 @@ const Rml::String kDocumentSource = R"RML(
 
 Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("popup")) {
     mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
-                                                  .onClose = [this] { hide(false); },
+                                                  .onClose =
+                                                      [this] {
+                                                          mDoAud_seStartMenu(kSoundMenuClose);
+                                                          hide(false);
+                                                      },
                                                   .autoSelect = false,
                                               });
     mTabBar->add_tab("Settings", [this] { push(std::make_unique<SettingsWindow>()); });
@@ -137,7 +141,7 @@ bool Popup::handle_nav_command(Rml::Event& event, NavCommand cmd) {
         return true;
     }
     if (cmd == NavCommand::Cancel && visible()) {
-        mDoAud_seStartMenu(Z2SE_SY_MENU_OUT);
+        mDoAud_seStartMenu(kSoundMenuClose);
         hide(false);
         return true;
     }
