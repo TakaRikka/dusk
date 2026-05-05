@@ -7498,8 +7498,10 @@ bool dCamera_c::executeDebugFlyCam() {
         return false;
     }
 
-    event->mEventStatus = 1;
-    dComIfGp_getEventManager().setCameraPlay(1);
+    if (!mDebugFlyCam.initialized && (event->mEventStatus != 0 || dComIfGp_isPauseFlag())) {
+        dusk::getSettings().game.debugFlyCam.setValue(false);
+        return false;
+    }
 
     if (!mDebugFlyCam.initialized) {
         mDebugFlyCam.savedCenter = mCenter;
@@ -7516,6 +7518,9 @@ bool dCamera_c::executeDebugFlyCam() {
 
         mDebugFlyCam.initialized = true;
     }
+
+    event->mEventStatus = 1;
+    dComIfGp_getEventManager().setCameraPlay(1);
 
     interface_of_controller_pad& pad = mDoCPd_c::getCpadInfo(0);
     f32 stickY = pad.mMainStickPosY * 72.0f;

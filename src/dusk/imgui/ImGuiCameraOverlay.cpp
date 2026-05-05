@@ -1,5 +1,6 @@
 #include "f_op/f_op_camera_mng.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "d/d_com_inf_game.h"
 
 #include "imgui.h"
 #include "ImGuiConfig.hpp"
@@ -50,11 +51,22 @@ namespace dusk {
 
         ImGui::SeparatorText("Options");
 
+        bool eventRunning = (dComIfGp_event_runCheck() || dComIfGp_isPauseFlag()) && !getSettings().game.debugFlyCam;
+        if (eventRunning) {
+            ImGui::BeginDisabled();
+        }
         config::ImGuiCheckbox("Fly Mode", getSettings().game.debugFlyCam);
-        if (ImGui::IsItemHovered()) {
-            ImGui::SetTooltip("Detach camera and fly freely.\n"
-                              "Left stick: move, C-stick: look\n"
-                              "L/R triggers: up/down, Z: fast");
+        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
+            if (eventRunning) {
+                ImGui::SetTooltip("Cannot enable while paused or during an active event.");
+            } else {
+                ImGui::SetTooltip("Detach camera and fly freely.\n"
+                                  "Left stick: move, C-stick: look\n"
+                                  "L/R triggers: up/down, Z: fast");
+            }
+        }
+        if (eventRunning) {
+            ImGui::EndDisabled();
         }
 
         ShowCornerContextMenu(m_cameraOverlayCorner, 0);
