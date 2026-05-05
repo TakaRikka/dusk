@@ -16,6 +16,8 @@ class Popup;
 
 // Button clicked/pressed
 constexpr u32 kSoundClick = Z2SE_SY_CURSOR_OK;
+// "Play" button clicked/pressed
+constexpr u32 kSoundPlay = Z2SE_NAVI_FLY;
 
 // Menu button pressed (open/close menu bar or hide/show the active window)
 constexpr u32 kSoundMenuOpen = Z2SE_SY_MENU_SUB_IN;

@@ -179,6 +179,8 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
                 return;
             }
 
+            mDoAud_seStartMenu(kSoundPlay);
+
             if (getSettings().audio.menuSounds) {
                 JAISoundHandle* handle = g_mEnvSeMgr.field_0x144.getHandle();
                 if (*handle) {
