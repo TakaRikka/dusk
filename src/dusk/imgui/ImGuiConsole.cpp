@@ -274,10 +274,6 @@ namespace dusk {
             ImGuiMenuGame::ToggleFullscreen();
         }
 
-        // if (!dusk::IsGameLaunched) {
-        //     m_preLaunchWindow.draw();
-        // }
-
         if (ImGui::GetIO().KeyShift && ImGui::IsKeyPressed(ImGuiKey_F1)) {
             m_isHidden = !m_isHidden;
         }

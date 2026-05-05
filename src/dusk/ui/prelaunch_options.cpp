@@ -1,6 +1,7 @@
 #include "prelaunch_options.hpp"
 
 #include "dusk/config.hpp"
+#include "dusk/main.h"
 #include "dusk/settings.h"
 #include "pane.hpp"
 #include "prelaunch.hpp"
@@ -9,7 +10,11 @@ namespace dusk::ui {
 namespace {
 
 static constexpr std::array<const char*, 5> kLanguageNames = {
-    "English", "German", "French", "Spanish", "Italian",
+    "English",
+    "German",
+    "French",
+    "Spanish",
+    "Italian",
 };
 
 // TODO: Copied from ImGui prelaunch. Needs a refactor?
@@ -114,35 +119,68 @@ std::vector<AuroraBackend> available_backends() {
     return backends;
 }
 
-class LanguageSelect final : public SelectButton {
+class DiscSelect final : public SelectButton {
 public:
-    explicit LanguageSelect(Rml::Element* parent) : SelectButton(parent, Props{.key = "Language"}) {}
+    explicit DiscSelect(Rml::Element* parent)
+        : SelectButton(parent, Props{.key = "Change Disc Image"}) {}
 
     void update() override {
         ensure_initialized();
-        refresh_path_state();
 
-        const bool validPath = is_selected_path_valid();
-        const bool ntscDiscLocked = validPath && !prelaunch_state().isPal;
-
-        if (ntscDiscLocked) {
-            if (getSettings().game.language.getValue() != GameLanguage::English) {
-                getSettings().game.language.setValue(GameLanguage::English);
-                config::Save();
+        const auto& path = prelaunch_state().selectedDiscPath;
+        std::string display;
+        if (path.empty()) {
+            display = "(none)";
+        } else {
+            display = std::filesystem::path(path).filename().string();
+            if (display.empty()) {
+                display = path;
             }
+        }
+        const auto& initial = prelaunch_state().initialDiscPath;
+        if (!initial.empty() && path != initial) {
+            display += " (restart required)";
+        }
+        set_value_label(Rml::String(display));
+        SelectButton::update();
+    }
+
+protected:
+    bool handle_nav_command(NavCommand cmd) override {
+        if (cmd != NavCommand::Confirm) {
+            return false;
+        }
+        open_iso_picker();
+        return true;
+    }
+};
+
+class LanguageSelect final : public SelectButton {
+public:
+    explicit LanguageSelect(Rml::Element* parent)
+        : SelectButton(parent, Props{.key = "Language"}) {}
+
+    void update() override {
+        ensure_initialized();
+
+        // LanguageInit already forces English for USA discs, so we can just change the button's
+        // value instead of actually updating the config. This allows the old language setting to
+        // be remembered when switching back to a PAL disc.
+        const auto& state = prelaunch_state();
+        std::string value;
+        if (state.selectedDiscIsValid && !state.selectedDiscIsPal) {
+            value = kLanguageNames[0];
             set_disabled(true);
         } else {
+            const u8 idx = static_cast<u8>(getSettings().game.language.getValue());
+            value = kLanguageNames[idx];
             set_disabled(false);
         }
-
-        const auto lang = getSettings().game.language.getValue();
-        auto value = static_cast<u8>(lang);
-        if (value >= kLanguageNames.size()) {
-            getSettings().game.language.setValue(GameLanguage::English);
-            config::Save();
-            value = static_cast<u8>(getSettings().game.language.getValue());
+        if (getSettings().game.language.getValue() != state.initialLanguage) {
+            value += " (restart required)";
         }
-        set_value_label(kLanguageNames[value]);
+
+        set_value_label(Rml::String(value));
         SelectButton::update();
     }
 
@@ -167,7 +205,8 @@ protected:
 
 class BackendSelect final : public SelectButton {
 public:
-    explicit BackendSelect(Rml::Element* parent) : SelectButton(parent, Props{.key = "Graphics Backend"}) {}
+    explicit BackendSelect(Rml::Element* parent)
+        : SelectButton(parent, Props{.key = "Graphics Backend"}) {}
 
     void update() override {
         AuroraBackend configuredBackend = BACKEND_AUTO;
@@ -219,7 +258,8 @@ protected:
 
         const int dir = (cmd == NavCommand::Left) ? -1 : 1;
         idx = ((idx + dir) % n + n) % n;
-        getSettings().backend.graphicsBackend.setValue(std::string(backend_id(backends[static_cast<size_t>(idx)])));
+        getSettings().backend.graphicsBackend.setValue(
+            std::string(backend_id(backends[static_cast<size_t>(idx)])));
         config::Save();
         return true;
     }
@@ -227,11 +267,20 @@ protected:
 
 class SaveTypeSelect final : public SelectButton {
 public:
-    explicit SaveTypeSelect(Rml::Element* parent) : SelectButton(parent, Props{.key = "Save File Type"}) {}
+    explicit SaveTypeSelect(Rml::Element* parent)
+        : SelectButton(parent, Props{.key = "Save File Type"}) {}
 
     void update() override {
-        const CARDFileType cft = static_cast<CARDFileType>(getSettings().backend.cardFileType.getValue());
-        set_value_label(cft == CARD_GCIFOLDER ? "GCI Folder" : "Card Image");
+        ensure_initialized();
+
+        const CARDFileType cft =
+            static_cast<CARDFileType>(getSettings().backend.cardFileType.getValue());
+        std::string label = cft == CARD_GCIFOLDER ? "GCI Folder" : "Card Image";
+        if (getSettings().backend.cardFileType.getValue() != prelaunch_state().initialCardFileType)
+        {
+            label += " (restart required)";
+        }
+        set_value_label(Rml::String(label));
         SelectButton::update();
     }
 
@@ -252,12 +301,120 @@ protected:
 }  // namespace
 
 PrelaunchOptions::PrelaunchOptions() {
+    mSuppressNavFallback = true;
     add_tab("Options", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
+        leftPane.add_child<DiscSelect>();
         leftPane.add_child<LanguageSelect>();
         leftPane.add_child<BackendSelect>();
         leftPane.add_child<SaveTypeSelect>();
     });
+}
+
+void PrelaunchOptions::push_modal(Modal::Props props) {
+    for (auto& action : props.actions) {
+        auto originalOnPressed = std::move(action.onPressed);
+        action.onPressed = [this, props, callback = std::move(originalOnPressed)](Modal& modal) {
+            if (props.doBlur) {
+                mRoot->SetClass("blurred", false);
+            }
+            if (callback) {
+                callback(modal);
+            }
+        };
+    }
+    auto originalOnDismiss = std::move(props.onDismiss);
+    props.onDismiss = [this, props, callback = std::move(originalOnDismiss)](Modal& modal) {
+        if (props.doBlur) {
+            mRoot->SetClass("blurred", false);
+        }
+        if (callback) {
+            callback(modal);
+        }
+    };
+    if (props.doBlur) {
+        mRoot->SetClass("blurred", true);
+    }
+    push_document(std::make_unique<Modal>(std::move(props)));
+}
+
+void PrelaunchOptions::hide(bool close) {
+    mRoot->SetClass("blurred", false);
+    Window::hide(close);
+}
+
+void PrelaunchOptions::update() {
+    Window::update();
+
+    auto& state = prelaunch_state();
+    if (state.errorString.empty() || top_document() != this) {
+        return;
+    }
+
+    auto dismissInvalidDisc = [](Modal& modal) {
+        prelaunch_state().errorString.clear();
+        modal.pop();
+    };
+    push_modal(Modal::Props{
+        .title = "Invalid disc image",
+        .bodyRml = state.errorString,
+        .actions =
+            {
+                ModalAction{
+                    .label = "OK",
+                    .onPressed = dismissInvalidDisc,
+                },
+            },
+        .onDismiss = dismissInvalidDisc,
+        .doBlur = true,
+    });
+}
+
+bool PrelaunchOptions::consume_close_request() {
+    if (!is_restart_pending()) {
+        return false;
+    }
+    if (top_document() != this) {
+        return true;
+    }
+
+    std::vector<ModalAction> actions;
+    if constexpr (dusk::SupportsProcessRestart) {
+        actions.push_back(ModalAction{
+            .label = "Restart later",
+            .onPressed =
+                [this](Modal& modal) {
+                    modal.pop();
+                    pop();
+                },
+        });
+        actions.push_back(ModalAction{
+            .label = "Restart now",
+            .onPressed = [](Modal&) { dusk::RequestRestart(); },
+        });
+    } else {
+        actions.push_back(ModalAction{
+            .label = "OK",
+            .onPressed =
+                [this](Modal& modal) {
+                    modal.pop();
+                    pop();
+                },
+        });
+    }
+
+    push_modal(Modal::Props{
+        .title = "Apply Options",
+        .bodyRml = dusk::SupportsProcessRestart ?
+                       "A restart is required to apply selected options.<br/><br/>Restart now to "
+                       "apply them immediately?" :
+                       "A restart is required to apply selected options.<br/><br/>Close and reopen "
+                       "Dusk to apply them.",
+        .actions = std::move(actions),
+        .onDismiss = [](Modal& modal) { modal.pop(); },
+        .doBlur = true,
+    });
+    return true;
 }
 
 }  // namespace dusk::ui

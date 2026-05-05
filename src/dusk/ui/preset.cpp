@@ -1,10 +1,8 @@
 #include "preset.hpp"
 
-#include "Z2AudioLib/Z2SeMgr.h"
 #include "button.hpp"
 #include "dusk/config.hpp"
 #include "dusk/settings.h"
-#include "m_Do/m_Do_audio.h"
 #include "ui.hpp"
 
 #include <dolphin/gx/GXAurora.h>
@@ -49,49 +47,20 @@ void applyPresetDusk() {
     s.game.enableGyroAim.setValue(true);
 }
 
-Rml::Element* createElement(Rml::Element* parent, const Rml::String& tag) {
-    auto* doc = parent->GetOwnerDocument();
-    auto elem = doc->CreateElement(tag);
-    return parent->AppendChild(std::move(elem));
-}
-
-const Rml::String kDocumentSource = R"RML(
-<rml>
-<head>
-    <link type="text/rcss" href="res/rml/window.rcss" />
-</head>
-<body>
-    <window id="window" class="small preset">
-        <div id="preset-dialog" class="preset-dialog"></div>
-    </window>
-</body>
-</rml>
-)RML";
-
 }  // namespace
 
-PresetWindow::PresetWindow()
-    : Document(kDocumentSource), mRoot(mDocument->GetElementById("window")) {
-    listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
-        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") &&
-            Document::visible()) {
-            Document::hide(mPendingClose);
-        }
-    });
-
-    auto* dialog = mDocument->GetElementById("preset-dialog");
-
-    auto* title = createElement(dialog, "div");
+PresetWindow::PresetWindow() : WindowSmall("preset", "preset-dialog") {
+    auto* title = append(mDialog, "div");
     title->SetClass("preset-title", true);
     title->SetInnerRML("Welcome to Dusk!");
 
-    auto* intro = createElement(dialog, "div");
+    auto* intro = append(mDialog, "div");
     intro->SetClass("preset-intro", true);
     intro->SetInnerRML(
         "Choose a preset to get started.<br/>"
         "You can change any setting later from the Settings menu.");
 
-    auto* grid = createElement(dialog, "div");
+    auto* grid = append(mDialog, "div");
     grid->SetClass("preset-grid", true);
 
     struct PresetInfo {
@@ -112,7 +81,7 @@ PresetWindow::PresetWindow()
     };
 
     for (const auto& preset : kPresets) {
-        auto* col = createElement(grid, "div");
+        auto* col = append(grid, "div");
         col->SetClass("preset-col", true);
 
         auto btn = std::make_unique<Button>(col, Rml::String(preset.name));
@@ -129,24 +98,10 @@ PresetWindow::PresetWindow()
         });
         mButtons.push_back(std::move(btn));
 
-        auto* desc = createElement(col, "div");
+        auto* desc = append(col, "div");
         desc->SetClass("preset-desc", true);
         desc->SetInnerRML(preset.desc);
     }
-}
-
-void PresetWindow::show() {
-    Document::show();
-    mRoot->SetAttribute("open", "");
-}
-
-void PresetWindow::hide(bool close) {
-    mRoot->RemoveAttribute("open");
-    mPendingClose = close;
-}
-
-bool PresetWindow::visible() const {
-    return mRoot->HasAttribute("open");
 }
 
 bool PresetWindow::focus() {

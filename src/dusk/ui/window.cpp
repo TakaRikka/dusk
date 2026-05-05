@@ -39,11 +39,24 @@ const Rml::String kDocumentSource = R"RML(
 </rml>
 )RML";
 
+const Rml::String kDocumentSourceSmall = R"RML(
+<rml>
+<head>
+    <link type="text/rcss" href="res/rml/window.rcss" />
+</head>
+<body>
+    <window id="window" class="small">
+        <div id="dialog"/>
+    </window>
+</body>
+</rml>
+)RML";
+
 }  // namespace
 
 Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("window")) {
     mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
-                                                  .onClose = [this] { pop(); },
+                                                  .onClose = [this] { request_close(); },
                                                   .selectedTabIndex = 0,
                                                   .autoSelect = true,
                                               });
@@ -68,7 +81,9 @@ Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("w
 
     // Hide document after transition completion
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
-        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") && Document::visible()) {
+        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") &&
+            Document::visible())
+        {
             Document::hide(mPendingClose);
         }
     });
@@ -139,6 +154,16 @@ bool Window::set_active_tab(int index) {
     return mTabBar->set_active_tab(index);
 }
 
+void Window::request_close() {
+    if (!consume_close_request()) {
+        pop();
+    }
+}
+
+bool Window::consume_close_request() {
+    return false;
+}
+
 void Window::refresh_active_tab() {
     mTabBar->refresh_active_tab();
 }
@@ -182,13 +207,13 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     }
     if (cmd == NavCommand::Cancel) {
         mDoAud_seStartMenu(Z2SE_SY_CURSOR_CANCEL);
-        pop();
+        request_close();
         return true;
     }
     if (mTabBar->handle_nav_command(event, cmd)) {
         return true;
     }
-    return Document::handle_nav_command(event, cmd);
+    return mSuppressNavFallback ? false : Document::handle_nav_command(event, cmd);
 }
 
 bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
@@ -248,6 +273,35 @@ bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
         }
     }
     return false;
+}
+
+WindowSmall::WindowSmall(const Rml::String& windowClass, const Rml::String& dialogClass)
+    : Document(kDocumentSourceSmall), mRoot(mDocument->GetElementById("window")),
+      mDialog(mDocument->GetElementById("dialog")) {
+    listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
+        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") &&
+            Document::visible())
+        {
+            Document::hide(mPendingClose);
+        }
+    });
+
+    mRoot->SetClass(windowClass, true);
+    mDialog->SetClass(dialogClass, true);
+}
+
+void WindowSmall::show() {
+    Document::show();
+    mRoot->SetAttribute("open", "");
+}
+
+void WindowSmall::hide(bool close) {
+    mRoot->RemoveAttribute("open");
+    mPendingClose = close;
+}
+
+bool WindowSmall::visible() const {
+    return mRoot->HasAttribute("open");
 }
 
 }  // namespace dusk::ui

@@ -34,8 +34,8 @@ First, make sure your dump of the game is clean and supported by Dusk. You can d
 
 - Extract the .zip file
 - Launch Dusk
-- Press **Select Disc Image**, navigate to your game dump, and select the file
-- Press **Start Game** to play!
+- Press **Select Disc Image** and provide the path to your supported game dump.
+- Press **Play**!
 
 # Building
 

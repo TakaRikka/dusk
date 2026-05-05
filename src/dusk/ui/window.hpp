@@ -31,12 +31,15 @@ public:
     bool set_active_tab(int index);
 
 protected:
+    void request_close();
+    virtual bool consume_close_request();
     void add_tab(const Rml::String& title, TabBuilder builder);
     void refresh_active_tab();
     void update_safe_area() noexcept;
     void clear_content() noexcept;
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;
     bool handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept;
+    bool mSuppressNavFallback = false;
 
     template <typename T, typename... Args>
     requires std::is_base_of_v<Component, T> T& add_child(Args&&... args) {
@@ -51,6 +54,20 @@ protected:
     std::unique_ptr<TabBar> mTabBar;
     std::vector<std::unique_ptr<Component> > mContentComponents;
     Insets mBodyPadding;
+};
+
+// Shared shell for small-style windows such as Modal and PresetWindow
+class WindowSmall : public Document {
+public:
+    WindowSmall(const Rml::String& windowClass, const Rml::String& dialogClass);
+
+    void show() override;
+    void hide(bool close) override;
+    bool visible() const override;
+
+protected:
+    Rml::Element* mRoot = nullptr;
+    Rml::Element* mDialog = nullptr;
 };
 
 }  // namespace dusk::ui

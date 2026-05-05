@@ -43,9 +43,17 @@ window.preset {
     min-width: 650dp;
 }
 
+window.modal {
+    max-width: 816dp;
+}
+
 window[open] {
     filter: opacity(1);
     transform: scale(1);
+}
+
+window[open].blurred {
+    filter: blur(2dp);
 }
 
 @media (max-height: 640dp) {
@@ -106,6 +114,12 @@ window content pane > spacer {
     flex: 0 0 16dp;
     height: 16dp;
     pointer-events: none;
+}
+
+window modal {
+    padding: 32dp;
+    gap: 20dp;
+    flex: 0 1 auto;
 }
 
 scrollbarvertical {
@@ -192,6 +206,12 @@ button:not(:disabled):active {
     opacity: 1;
     background-color: rgba(204, 184, 119, 40%);
     box-shadow: #C2A42D 0 0 0 2dp;
+}
+
+button.modal-btn {
+    font-size: 20dp;
+    padding: 16dp 10dp;
+    flex: 1 1 0;
 }
 
 select-button {
@@ -398,4 +418,23 @@ button.preset-btn {
     font-size: 16dp;
     color: rgba(224, 219, 200, 65%);
     text-align: center;
+}
+
+.modal-dialog {
+    display: flex;
+    flex-flow: column;
+    padding: 16dp;
+    gap: 20dp;
+    flex: 0 1 auto;
+    min-width: 0;
+}
+
+.modal-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 12dp;
+    padding-top: 12dp;
+    width: 100%;
 }
