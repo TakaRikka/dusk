@@ -15,7 +15,9 @@ public:
     struct Props {
         Rml::String key;
         Rml::String value;
+        Rml::String icon;
         bool modified = false;
+        bool submit = true;
     };
 
     SelectButton(Rml::Element* parent, Props props);
@@ -31,6 +33,7 @@ protected:
 
     Props mProps;
     Rml::Element* mKeyElem = nullptr;
+    Rml::Element* mIconElem = nullptr;
     Rml::Element* mValueElem = nullptr;
 };
 
@@ -52,10 +55,15 @@ public:
         std::function<Rml::String()> getValue;
         std::function<bool()> isDisabled;
         std::function<bool()> isModified;
+        bool submit = true;
     };
 
     ControlledSelectButton(Rml::Element* parent, Props props)
-        : BaseControlledSelectButton(parent, {std::move(props.key)}),
+        : BaseControlledSelectButton(parent,
+              {
+                  .key = std::move(props.key),
+                  .submit = props.submit,
+              }),
           mGetValue(std::move(props.getValue)), mIsDisabled(std::move(props.isDisabled)),
           mIsModified(std::move(props.isModified)) {}
 

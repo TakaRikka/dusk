@@ -3519,7 +3519,15 @@ void daKago_c::action() {
     checkSizeBg();
     setFlyEffect();
 
+#if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        mStickX = -mDoCPd_c::getStickX3D(PAD_1);
+    } else {
+        mStickX = mDoCPd_c::getStickX3D(PAD_1);
+    }
+#else
     mStickX = mDoCPd_c::getStickX3D(PAD_1);
+#endif
     mStickY = mDoCPd_c::getStickY(PAD_1);
 
     u8 prevIsWaterfall = mIsWaterfall;

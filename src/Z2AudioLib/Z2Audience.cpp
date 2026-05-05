@@ -2,6 +2,7 @@
 #include "Z2AudioLib/Z2SoundInfo.h"
 #if TARGET_PC
 #include "dusk/audio/DuskDsp.hpp"
+#include "dusk/settings.h"
 #include <cmath>
 #endif
 #include "Z2AudioLib/Z2Calc.h"
@@ -705,6 +706,11 @@ f32 Z2Audience::calcRelPosVolume(const Vec& param_0, f32 param_1, int camID) {
 f32 Z2Audience::calcRelPosPan(const Vec& param_0, int camID) {
     Vec local_54 = param_0;
     local_54.y = 0.0f;
+#if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        local_54.x = -local_54.x;
+    }
+#endif
 
     f32 dVar6 = VECMag(&local_54);
     if (dVar6 < 0.1f) {

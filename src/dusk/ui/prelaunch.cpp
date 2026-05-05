@@ -4,19 +4,22 @@
 #include "dusk/file_select.hpp"
 #include "dusk/iso_validate.hpp"
 #include "dusk/main.h"
-#include "dusk/ui/prelaunch_options.hpp"
+#include "dusk/settings.h"
+#include "modal.hpp"
+#include "popup.hpp"
+#include "preset.hpp"
+#include "settings.hpp"
 #include "version.h"
 
 #include <SDL3/SDL_dialog.h>
-#include <SDL3/SDL_filesystem.h>
 #include <aurora/lib/window.hpp>
 
 #if TARGET_ANDROID
 #include "dusk/android/JavaWrapperFuncs.hpp"
 #endif
+#include "m_Do/m_Do_MemCard.h"
 
 namespace dusk::ui {
-namespace {
 
 const Rml::String kDocumentSource = R"RML(
 <rml>
@@ -24,6 +27,8 @@ const Rml::String kDocumentSource = R"RML(
     <link type="text/rcss" href="res/rml/prelaunch.rcss" />
 </head>
 <body>
+    <div class="gradient" />
+    <div class="background" />
     <content id="root" open>
         <menu>
             <hero class="intro-item delay-0">
@@ -32,10 +37,13 @@ const Rml::String kDocumentSource = R"RML(
             </hero>
             <div id="menu-list" />
         </menu>
-        <disk-status class="intro-item delay-4">
-            <span id="status" class="status" />
-            <span id="detail" class="detail" />
-        </disk-status>
+        <disc-info class="intro-item delay-4">
+            <div id="disc-status">
+                <icon />
+                <span id="disc-status-label" />
+            </div>
+            <span id="disc-version" class="detail" />
+        </disc-info>
         <version-info class="intro-item delay-5">
             <div class="version">Version <span id="version-text"></span></div>
             <div class="update"><span>Update available!</span> Download</div>
@@ -50,6 +58,23 @@ constexpr std::array<SDL_DialogFileFilter, 2> kDiscFileFilters{{
     {"All Files", "*"},
 }};
 
+static std::string get_error_msg(iso::ValidationError error) {
+    switch (error) {
+    case iso::ValidationError::IOError:
+        return "Unable to read the selected file.";
+    case iso::ValidationError::InvalidImage:
+        return "The selected file is not a valid disc image.";
+    case iso::ValidationError::WrongGame:
+        return "The selected game is not supported by Dusk.";
+    case iso::ValidationError::WrongVersion:
+        return "Dusk currently supports GameCube USA and PAL disc images only.";
+    case iso::ValidationError::Success:
+        return "The selected disc image is valid.";
+    default:
+        return "The selected disc image could not be validated.";
+    }
+}
+
 void file_dialog_callback(void*, const char* path, const char* error) {
     auto& state = prelaunch_state();
     if (error != nullptr) {
@@ -59,12 +84,18 @@ void file_dialog_callback(void*, const char* path, const char* error) {
         return;
     }
 
-    state.selectedIsoPath = path;
-    state.errorString.clear();
-    refresh_path_state();
-    getSettings().backend.isoPath.setValue(state.selectedIsoPath);
-    config::Save();
+    const auto validation = iso::validate(path);
+    if (validation != iso::ValidationError::Success) {
+        state.errorString = escape(get_error_msg(validation));
+        return;
+    }
 
+    state.selectedDiscPath = path;
+    state.errorString.clear();
+    getSettings().backend.isoPath.setValue(state.selectedDiscPath);
+    config::Save();
+    refresh_state();
+    
 #if TARGET_ANDROID
     // store path permissions
     android::takeUriPermissions(state.selectedIsoPath);
@@ -72,17 +103,21 @@ void file_dialog_callback(void*, const char* path, const char* error) {
 #endif
 }
 
-}  // namespace
-
 PrelaunchState sPrelaunchState;
 
 PrelaunchState& prelaunch_state() noexcept {
     return sPrelaunchState;
 }
 
-void refresh_path_state() noexcept {
+void refresh_state() noexcept {
     auto& state = prelaunch_state();
-    state.isPal = !state.selectedIsoPath.empty() && iso::isPal(state.selectedIsoPath.c_str());
+    const auto validation = iso::validate(state.selectedDiscPath.c_str());
+    if (state.selectedDiscPath.empty() || validation != iso::ValidationError::Success) {
+        state.selectedDiscIsValid = false;
+        return;
+    }
+    state.selectedDiscIsValid = true;
+    state.selectedDiscIsPal = iso::isPal(state.selectedDiscPath.c_str());
 }
 
 void ensure_initialized() noexcept {
@@ -91,11 +126,17 @@ void ensure_initialized() noexcept {
         return;
     }
 
-    state.selectedIsoPath = getSettings().backend.isoPath;
+    state.selectedDiscPath = getSettings().backend.isoPath;
+    state.initialDiscPath = state.selectedDiscPath;
+    if (iso::validate(state.initialDiscPath.c_str()) == iso::ValidationError::Success) {
+        state.initialDiscIsPal = iso::isPal(state.initialDiscPath.c_str());
+    }
+    state.initialLanguage = getSettings().game.language;
     state.initialGraphicsBackend = getSettings().backend.graphicsBackend;
+    state.initialCardFileType = getSettings().backend.cardFileType;
     state.errorString.clear();
     state.initialized = true;
-    refresh_path_state();
+    refresh_state();
 
 #if TARGET_ANDROID
     state.isIsoPermitted = !state.selectedIsoPath.empty() && android::checkUriPermissions(state.selectedIsoPath.c_str());
@@ -117,6 +158,20 @@ void open_iso_picker() noexcept {
         kDiscFileFilters.data(), kDiscFileFilters.size(), nullptr, false);
 }
 
+bool is_restart_pending() noexcept {
+    const auto& state = prelaunch_state();
+    if (!state.initialDiscPath.empty() && state.selectedDiscPath != state.initialDiscPath) {
+        return true;
+    }
+    if (getSettings().backend.graphicsBackend.getValue() != state.initialGraphicsBackend) {
+        return true;
+    }
+    if (getSettings().game.language.getValue() != state.initialLanguage) {
+        return true;
+    }
+    return false;
+}
+
 void apply_intro_animation(Rml::Element* element, const char* delay_class) {
     if (element == nullptr || delay_class == nullptr) {
         return;
@@ -125,26 +180,51 @@ void apply_intro_animation(Rml::Element* element, const char* delay_class) {
     element->SetClass(delay_class, true);
 }
 
+void try_apply_mirrored_layout(Rml::Element* body) {
+    if (body == nullptr) {
+        return;
+    }
+    body->SetClass("mirrored", getSettings().game.enableMirrorMode.getValue());
+}
+
 Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementById("root")) {
     ensure_initialized();
 
     if (auto* menuList = mDocument->GetElementById("menu-list")) {
-        const bool hasValidPath = is_selected_path_valid();
-        mMenuButtons.push_back(
-            std::make_unique<Button>(menuList, hasValidPath ? "Start Game" : "Select Disk Image"));
+        auto& state = prelaunch_state();
+        mMenuButtons.push_back(std::make_unique<Button>(
+            menuList, state.selectedDiscIsValid ? "Play" : "Select Disc Image"));
         mMenuButtons.back()->on_pressed([this] {
-            if (!is_selected_path_valid()) {
+            if (!prelaunch_state().selectedDiscIsValid) {
                 open_iso_picker();
                 return;
             }
+
+            if (getSettings().audio.menuSounds) {
+                JAISoundHandle* handle = g_mEnvSeMgr.field_0x144.getHandle();
+                if (*handle) {
+                    (*handle)->stop(60);
+                    (*handle)->releaseHandle();
+                }
+            }
+
+            if (g_mDoMemCd_control.mCardCommand == mDoMemCd_Ctrl_c::Command_e::COMM_NONE_e) {
+                mDoMemCd_ThdInit();
+            }
+
             IsGameLaunched = true;
+            if (!getSettings().backend.wasPresetChosen) {
+                push_document(std::make_unique<dusk::ui::PresetWindow>());
+            }
             hide(true);
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-1");
 
         mMenuButtons.push_back(std::make_unique<Button>(menuList, "Options"));
-        mMenuButtons.back()->on_pressed(
-            [] { push_document(std::make_unique<PrelaunchOptions>()); });
+        mMenuButtons.back()->on_pressed([this] {
+            mRestartSuppressed = false;
+            push(std::make_unique<SettingsWindow>(true));
+        });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-2");
 
         mMenuButtons.push_back(std::make_unique<Button>(menuList, "Quit To Desktop"));
@@ -152,9 +232,11 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         apply_intro_animation(mMenuButtons.back()->root(), "delay-3");
     }
 
-    mDiscStatus = mDocument->GetElementById("status");
-    mDiscDetail = mDocument->GetElementById("detail");
+    mDiscStatus = mDocument->GetElementById("disc-status");
+    mDiscDetail = mDocument->GetElementById("disc-version");
     mVersion = mDocument->GetElementById("version-text");
+
+    try_apply_mirrored_layout(mDocument);
 
     listen(mDocument, Rml::EventId::Transitionend, [this](Rml::Event& event) {
         auto* target = event.GetTargetElement();
@@ -173,6 +255,40 @@ void Prelaunch::show() {
     Document::show();
     mDocument->SetAttribute("open", "");
     mRoot->SetAttribute("open", "");
+
+    if (is_restart_pending() && !mRestartSuppressed) {
+        const auto dismiss = [this](Modal& modal) {
+            mRestartSuppressed = true;
+            modal.pop();
+        };
+        std::vector<ModalAction> actions;
+        if constexpr (dusk::SupportsProcessRestart) {
+            actions.push_back(ModalAction{
+                .label = "Restart later",
+                .onPressed = dismiss,
+            });
+            actions.push_back(ModalAction{
+                .label = "Restart now",
+                .onPressed = [](Modal&) { dusk::RequestRestart(); },
+            });
+        } else {
+            actions.push_back(ModalAction{
+                .label = "OK",
+                .onPressed = dismiss,
+            });
+        }
+        push(std::make_unique<Modal>(Modal::Props{
+            .title = "Apply Options",
+            .bodyRml =
+                dusk::SupportsProcessRestart ?
+                    "A restart is required to apply selected options.<br/><br/>Restart now to "
+                    "apply them immediately?" :
+                    "A restart is required to apply selected options.<br/><br/>Close and reopen "
+                    "Dusk to apply them.",
+            .actions = std::move(actions),
+            .onDismiss = dismiss,
+        }));
+    }
 }
 
 void Prelaunch::hide(bool close) {
@@ -180,6 +296,8 @@ void Prelaunch::hide(bool close) {
         if (!mEntranceAnimationStarted) {
             // Close document immediately
             Document::hide(true);
+        } else {
+            mPendingClose = true;
         }
         mDocument->RemoveAttribute("open");
     } else {
@@ -189,12 +307,34 @@ void Prelaunch::hide(bool close) {
 
 void Prelaunch::update() {
     ensure_initialized();
-    refresh_path_state();
+    try_apply_mirrored_layout(mDocument);
 
     auto& state = prelaunch_state();
-    const bool hasValidPath = is_selected_path_valid();
-    if (hasValidPath && getSettings().backend.skipPreLaunchUI) {
-        hide(true);
+    if (!state.errorString.empty() && top_document() == this) {
+        auto dismiss = [](Modal& modal) {
+            prelaunch_state().errorString.clear();
+            modal.pop();
+        };
+        push(std::make_unique<Modal>(Modal::Props{
+            .title = "Invalid disc image",
+            .bodyRml = state.errorString,
+            .actions =
+                {
+                    ModalAction{
+                        .label = "OK",
+                        .onPressed = dismiss,
+                    },
+                },
+            .onDismiss = dismiss,
+        }));
+    }
+
+    const bool hasValidPath = prelaunch_state().selectedDiscIsValid;
+    mDocument->SetClass("disc-ready", hasValidPath);
+    if (hasValidPath) {
+        if (getSettings().backend.skipPreLaunchUI) {
+            hide(true);
+        }
         IsGameLaunched = true;
     }
 
@@ -204,27 +344,32 @@ void Prelaunch::update() {
     }
 
     if (!mMenuButtons.empty()) {
-        mMenuButtons[0]->set_text(hasValidPath ? "Start Game" : "Select Disk Image");
+        mMenuButtons[0]->set_text(hasValidPath ? "Play" : "Select Disc Image");
     }
-    if (mDiscStatus != nullptr) {
+
+    const auto discStatusLabel = mDiscStatus->GetElementById("disc-status-label");
+
+    if (mDiscStatus != nullptr && discStatusLabel != nullptr) {
         if (hasValidPath) {
-            mDiscStatus->RemoveAttribute("bad");
-            mDiscStatus->SetInnerRML("Disc Ready");
-        } else {
-            mDiscStatus->SetAttribute("bad", "");
-            mDiscStatus->SetInnerRML("Disk Not Found");
+            mDiscStatus->SetAttribute("status", "good");
+            discStatusLabel->SetInnerRML("Disc ready.");
         }
     }
     if (mDiscDetail != nullptr) {
         if (hasValidPath) {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::Block);
-            mDiscDetail->SetInnerRML(state.isPal ? "GameCube • PAL" : "GameCube • USA");
+            mDiscDetail->SetInnerRML(
+                prelaunch_state().initialDiscIsPal ? "GameCube • EUR" : "GameCube • USA");
         } else {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::None);
         }
     }
     if (mVersion != nullptr) {
-        mVersion->SetInnerRML(escape(DUSK_WC_DESCRIBE));
+        std::string_view versionStr(DUSK_WC_DESCRIBE);
+        if (versionStr[0] == 'v') {
+            versionStr = versionStr.substr(1);
+        }
+        mVersion->SetInnerRML(escape(versionStr));
     }
 
     Document::update();
@@ -234,7 +379,7 @@ bool Prelaunch::focus() {
     if (mMenuButtons.empty()) {
         return false;
     }
-    return mMenuButtons[0]->focus();
+    return mMenuButtons.front()->focus();
 }
 
 bool Prelaunch::visible() const {
@@ -258,9 +403,8 @@ bool Prelaunch::handle_nav_command(Rml::Event& event, NavCommand cmd) {
             break;
         }
     }
-    const auto buttonCount = static_cast<int>(mMenuButtons.size());
-    int i = (focusedButton + direction) % buttonCount;
-    if (i < 0) i += buttonCount;
+    const auto n = static_cast<int>(mMenuButtons.size());
+    int i = ((focusedButton + direction) % n + n) % n;
     while (i >= 0 && i < mMenuButtons.size()) {
         if (mMenuButtons[i]->focus()) {
             event.StopPropagation();

@@ -18,6 +18,7 @@ UserSettings g_userSettings = {
         .fanfareVolume {"audio.fanfareVolume", 100},
         .enableReverb {"audio.enableReverb", true},
         .enableHrtf {"audio.enableHrtf", false},
+        .menuSounds {"audio.menuSounds", true},
     },
 
     .game = {
@@ -25,8 +26,7 @@ UserSettings g_userSettings = {
 
         // Quality of Life
         .enableQuickTransform {"game.enableQuickTransform", false},
-        .hideTvSettingsScreen {"game.hideTvSettingsScreen", false},
-        .skipWarningScreen {"game.skipWarningScreen", false},
+        .hideTvSettingsScreen {"game.hideTvSettingsScreen", true},
         .biggerWallets {"game.biggerWallets", false},
         .noReturnRupees {"game.noReturnRupees", false},
         .disableRupeeCutscenes {"game.disableRupeeCutscenes", false},
@@ -47,11 +47,11 @@ UserSettings g_userSettings = {
         .enableMirrorMode {"game.enableMirrorMode", false},
         .disableMainHUD {"game.disableMainHUD", false},
         .pauseOnFocusLost {"game.pauseOnFocusLost", false},
-        .enableLinkDollRotation = {"game.enableLinkDollRotation", false },
-        .enableAchievementNotifications {"game.enableAchievementNotifications", false},
+        .enableLinkDollRotation = {"game.enableLinkDollRotation", false},
+        .enableAchievementNotifications {"game.enableAchievementNotifications", true},
 
         // Graphics
-        .bloomMode {"game.bloomMode", BloomMode::Classic},
+        .bloomMode {"game.bloomMode", BloomMode::Dusk},
         .bloomMultiplier {"game.bloomMultiplier", 1.0f},
         .disableWaterRefraction {"game.disableWaterRefraction", false},
         .enableFrameInterpolation {"game.enableFrameInterpolation", false},
@@ -78,6 +78,7 @@ UserSettings g_userSettings = {
         .invertCameraXAxis {"game.invertCameraXAxis", false},
         .invertCameraYAxis {"game.invertCameraYAxis", false},
         .freeCameraSensitivity {"game.freeCameraSensitivity", 1.0f},
+        .debugFlyCam {"game.debugFlyCam", false},
 
         // Cheats
         .infiniteHearts {"game.infiniteHearts", false},
@@ -113,7 +114,6 @@ UserSettings g_userSettings = {
         .showPipelineCompilation {"backend.showPipelineCompilation", false},
         .wasPresetChosen {"backend.wasPresetChosen", false},
         .enableCrashReporting {"backend.enableCrashReporting", true},
-        .duskMenuOpen {"backend.duskMenuOpen", false},
         .cardFileType {"backend.cardFileType", static_cast<int>(CARD_GCIFOLDER)}
     }
 };
@@ -136,12 +136,12 @@ void registerSettings() {
     Register(g_userSettings.audio.fanfareVolume);
     Register(g_userSettings.audio.enableReverb);
     Register(g_userSettings.audio.enableHrtf);
+    Register(g_userSettings.audio.menuSounds);
 
     // Game
     Register(g_userSettings.game.language);
     Register(g_userSettings.game.enableQuickTransform);
     Register(g_userSettings.game.hideTvSettingsScreen);
-    Register(g_userSettings.game.skipWarningScreen);
     Register(g_userSettings.game.biggerWallets);
     Register(g_userSettings.game.noReturnRupees);
     Register(g_userSettings.game.disableRupeeCutscenes);
@@ -203,6 +203,7 @@ void registerSettings() {
     Register(g_userSettings.game.gyroInvertPitch);
     Register(g_userSettings.game.gyroInvertYaw);
     Register(g_userSettings.game.freeCamera);
+    Register(g_userSettings.game.debugFlyCam);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.graphicsBackend);
@@ -210,7 +211,6 @@ void registerSettings() {
     Register(g_userSettings.backend.showPipelineCompilation);
     Register(g_userSettings.backend.wasPresetChosen);
     Register(g_userSettings.backend.enableCrashReporting);
-    Register(g_userSettings.backend.duskMenuOpen);
     Register(g_userSettings.backend.cardFileType);
 }
 

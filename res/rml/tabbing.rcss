@@ -61,12 +61,10 @@ tab-bar[closable] close {
     font-family: "Material Symbols Rounded";
     font-weight: normal;
     font-size: 24dp;
-    line-height: 48dp;
-    text-align: center;
-    text-transform: none;
     color: rgba(224, 219, 200, 70%);
     backdrop-filter: blur(2dp);
     border-radius: 6dp;
+    decorator: text("&#xe5cd;" center center);
     transition: color background-color 0.12s linear-in-out;
     cursor: pointer;
 }

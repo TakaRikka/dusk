@@ -10,6 +10,7 @@
 
 #include "aurora/lib/window.hpp"
 #include "input.hpp"
+#include "prelaunch.hpp"
 #include "window.hpp"
 
 namespace dusk::ui {
@@ -52,9 +53,6 @@ void shutdown() noexcept {
 }
 
 Document& push_document(std::unique_ptr<Document> doc, bool show) noexcept {
-    if (auto* top = top_document()) {
-        top->hide(false);
-    }
     Document& ret = *doc;
     sDocuments.push_back({std::move(doc)});
     if (show) {
@@ -76,6 +74,13 @@ bool any_document_visible() noexcept {
         [](const auto& doc) { return doc && doc->visible(); });
 }
 
+bool is_prelaunch_open() noexcept {
+    return std::any_of(sDocuments.begin(), sDocuments.end(), [](const auto& doc) {
+        const auto* prelaunch = dynamic_cast<const Prelaunch*>(doc.get());
+        return prelaunch != nullptr && !prelaunch->pending_close() && !prelaunch->closed();
+    });
+}
+
 Document* top_document() noexcept {
     for (auto& doc : std::views::reverse(sDocuments)) {
         if (!doc->closed() && !doc->pending_close()) {
@@ -90,9 +95,24 @@ void update() noexcept {
     for (const auto& doc : sDocuments) {
         doc->update();
     }
+
+    // Remove closed documents
     const auto [first, last] =
         std::ranges::remove_if(sDocuments, [](const auto& doc) { return doc->closed(); });
     sDocuments.erase(first, last);
+
+    // If no documents have focus, explicitly focus the top one
+    if (auto* context = aurora::rmlui::get_context();
+        context != nullptr && (context->GetFocusElement() == nullptr ||
+                                  context->GetFocusElement() == context->GetRootElement()))
+    {
+        for (auto& doc : std::views::reverse(sDocuments)) {
+            if (!doc->closed() && !doc->pending_close() && doc->focus()) {
+                break;
+            }
+        }
+    }
+
     sync_input_block();
 }
 
@@ -127,6 +147,17 @@ std::string escape(std::string_view str) noexcept {
         }
     }
     return result;
+}
+
+Rml::Element* append(Rml::Element* parent, const Rml::String& tag) noexcept {
+    if (parent == nullptr) {
+        return nullptr;
+    }
+    auto* doc = parent->GetOwnerDocument();
+    if (doc == nullptr) {
+        return nullptr;
+    }
+    return parent->AppendChild(doc->CreateElement(tag));
 }
 
 NavCommand map_nav_event(const Rml::Event& event) noexcept {

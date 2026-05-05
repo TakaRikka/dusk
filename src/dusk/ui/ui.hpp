@@ -35,12 +35,12 @@ void update() noexcept;
 Document& push_document(std::unique_ptr<Document> doc, bool show = true) noexcept;
 void show_top_document() noexcept;
 bool any_document_visible() noexcept;
+bool is_prelaunch_open() noexcept;
 Document* top_document() noexcept;
-
-Popup& add_popup(std::unique_ptr<Popup> popup) noexcept;
 
 std::filesystem::path resource_path(const std::filesystem::path& filename) noexcept;
 std::string escape(std::string_view str) noexcept;
+Rml::Element* append(Rml::Element* parent, const Rml::String& tag) noexcept;
 
 NavCommand map_nav_event(const Rml::Event& event) noexcept;
 Insets safe_area_insets(Rml::Context* context) noexcept;

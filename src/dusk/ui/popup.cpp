@@ -2,9 +2,16 @@
 
 #include <RmlUi/Core.h>
 
+#include "Z2AudioLib/Z2SeMgr.h"
+#include "m_Do/m_Do_audio.h"
+
+#include "achievements.hpp"
 #include "aurora/rmlui.hpp"
 #include "dusk/main.h"
+#include "dusk/settings.h"
 #include "editor.hpp"
+#include "f_pc/f_pc_manager.h"
+#include "f_pc/f_pc_name.h"
 #include "imgui.h"
 #include "settings.hpp"
 #include "ui.hpp"
@@ -35,14 +42,18 @@ Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("pop
                                                   .onClose = [this] { hide(false); },
                                                   .autoSelect = false,
                                               });
-    mTabBar->add_tab("Settings", [] { push_document(std::make_unique<SettingsWindow>()); });
+    mTabBar->add_tab("Settings", [this] { push(std::make_unique<SettingsWindow>()); });
     // mTabBar->add_tab("Warp", [] {
     //     // TODO
     // });
-    mTabBar->add_tab("Editor", [] { push_document(std::make_unique<EditorWindow>()); });
+    mTabBar->add_tab("Editor", [this] { push(std::make_unique<EditorWindow>()); });
+    mTabBar->add_tab("Achievements", [this] { push(std::make_unique<AchievementsWindow>()); });
     mTabBar->add_tab("Reset", [this] {
-        JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
         mTabBar->set_active_tab(-1);
+        if (fpcM_SearchByName(fpcNm_LOGO_SCENE_e)) {
+            return;
+        }
+        JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
         hide(false);
     });
     mTabBar->add_tab("Quit", [] { IsRunning = false; });
@@ -55,18 +66,19 @@ Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("pop
             Document::hide(mPendingClose);
         }
     });
-
-    // We start hidden, but want focus for an open nav event
-    mDocument->Focus();
 }
 
 void Popup::show() {
     Document::show();
     mRoot->SetAttribute("open", "");
     mTabBar->set_active_tab(-1);
+    if (!mTabBar->focus_tab(mFocusedTabIndex)) {
+        mTabBar->focus();
+    }
 }
 
 void Popup::hide(bool close) {
+    mFocusedTabIndex = mTabBar->focused_tab_index();
     mRoot->RemoveAttribute("open");
     if (close) {
         mPendingClose = true;
@@ -121,7 +133,11 @@ bool Popup::visible() const {
 }
 
 bool Popup::handle_nav_command(Rml::Event& event, NavCommand cmd) {
-    if (cmd == NavCommand::Cancel) {
+    if (!getSettings().backend.wasPresetChosen) {
+        return true;
+    }
+    if (cmd == NavCommand::Cancel && visible()) {
+        mDoAud_seStartMenu(Z2SE_SY_MENU_OUT);
         hide(false);
         return true;
     }

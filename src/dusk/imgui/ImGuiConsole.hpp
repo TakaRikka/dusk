@@ -6,12 +6,9 @@
 #include <string_view>
 
 #include <aurora/aurora.h>
-#include <SDL3/SDL_touch.h>
 
-#include "ImGuiFirstRunPreset.hpp"
 #include "ImGuiMenuGame.hpp"
 #include "ImGuiMenuTools.hpp"
-#include "ImGuiPreLaunchWindow.hpp"
 #include "imgui.h"
 
 union SDL_Event;
@@ -42,17 +39,11 @@ private:
 
     bool m_isHidden = true;
     bool m_isLaunchInitialized = false;
-    bool m_touchTapActive = false;
-    bool m_touchTapMoved = false;
-    SDL_FingerID m_touchTapFingerId = 0;
-    ImVec2 m_touchTapStartPos = {};
     ImGuiWindow* m_dragScrollWindow = nullptr;
     ImVec2 m_dragScrollLastMousePos = {};
     std::deque<Toast> m_toasts;
 
-    ImGuiFirstRunPreset m_firstRunPreset;
     ImGuiMenuGame m_menuGame;
-    ImGuiPreLaunchWindow m_preLaunchWindow;
 
     // Keep always last
     ImGuiMenuTools m_menuTools;
