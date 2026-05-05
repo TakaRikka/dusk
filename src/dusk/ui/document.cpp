@@ -3,6 +3,9 @@
 #include "aurora/rmlui.hpp"
 #include "ui.hpp"
 
+#include "Z2AudioLib/Z2SeMgr.h"
+#include "m_Do/m_Do_audio.h"
+
 namespace dusk::ui {
 namespace {
 
@@ -17,7 +20,7 @@ Rml::ElementDocument* load_document(const Rml::String& source) {
 }  // namespace
 
 Document::Document(const Rml::String& source) : mDocument(load_document(source)) {
-    // Block events while hidden (except for Menu command)
+    // Block events while hidden (except for Menu command); play nav sounds when visible
     listen(
         Rml::EventId::Keydown,
         [this](Rml::Event& event) {
@@ -38,8 +41,18 @@ Document::Document(const Rml::String& source) : mDocument(load_document(source))
 
     listen(Rml::EventId::Keydown, [this](Rml::Event& event) {
         const auto cmd = map_nav_event(event);
-        if (cmd != NavCommand::None && handle_nav_command(event, cmd)) {
+        if (cmd == NavCommand::None) {
+            return;
+        }
+        auto* prevFocused = mDocument->GetFocusLeafNode();
+        if (handle_nav_command(event, cmd)) {
             event.StopPropagation();
+            return;
+        }
+        if ((cmd == NavCommand::Up || cmd == NavCommand::Down) &&
+            mDocument->GetFocusLeafNode() != prevFocused)
+        {
+            mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
         }
     });
 }
@@ -100,6 +113,7 @@ bool Document::visible() const {
 
 bool Document::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (cmd == NavCommand::Menu) {
+        mDoAud_seStartMenu(visible() ? Z2SE_SY_MENU_OUT : Z2SE_SY_MENU_IN);
         toggle();
         return true;
     }

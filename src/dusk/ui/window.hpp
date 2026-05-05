@@ -32,6 +32,7 @@ public:
 
 protected:
     void add_tab(const Rml::String& title, TabBuilder builder);
+    void refresh_active_tab();
     void update_safe_area() noexcept;
     void clear_content() noexcept;
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;

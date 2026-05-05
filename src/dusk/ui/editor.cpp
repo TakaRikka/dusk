@@ -1295,73 +1295,71 @@ EditorWindow::EditorWindow() {
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Player");
-        leftPane
-            .add_child<StringButton>(StringButton::Props{
-                .key = "Player Name",
-                .getValue = get_player_name,
-                .setValue = set_player_name,
-                .maxLength = 16,
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<StringButton>(StringButton::Props{
-                .key = "Horse Name",
-                .getValue = get_horse_name,
-                .setValue = set_horse_name,
-                .maxLength = 16,
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+        leftPane.register_control(leftPane.add_child<StringButton>(StringButton::Props{
+                                      .key = "Player Name",
+                                      .getValue = get_player_name,
+                                      .setValue = set_player_name,
+                                      .maxLength = 16,
+                                  }),
+            rightPane, {});
+        leftPane.register_control(leftPane.add_child<StringButton>(StringButton::Props{
+                                      .key = "Horse Name",
+                                      .getValue = get_horse_name,
+                                      .setValue = set_horse_name,
+                                      .maxLength = 16,
+                                  }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Max Health",
                 .getValue = [] { return get_player_status()->getMaxLife(); },
                 .setValue = [](int value) { return get_player_status()->setMaxLife(value); },
                 .max = UINT16_MAX,  // TODO: actual max
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+            }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Health",
                 .getValue = [] { return get_player_status()->getLife(); },
                 .setValue = [](int value) { return get_player_status()->setLife(value); },
                 .max = UINT16_MAX,  // TODO: actual max
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+            }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Rupees",
                 .getValue = [] { return get_player_status()->getRupee(); },
                 .setValue = [](int value) { return get_player_status()->setRupee(value); },
                 .max = get_player_status()->getRupeeMax(),
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+            }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Max Oil",
                 .getValue = [] { return get_player_status()->getMaxOil(); },
                 .setValue = [](int value) { return get_player_status()->setMaxOil(value); },
                 .max = UINT16_MAX,  // TODO: actual max
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+            }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Oil",
                 .getValue = [] { return get_player_status()->getOil(); },
                 .setValue = [](int value) { return get_player_status()->setOil(value); },
                 .max = UINT16_MAX,  // TODO: actual max
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+            }),
+            rightPane, {});
 
         leftPane.add_section("Equipment");
         const auto genSelectItemComboBox = [&leftPane, &rightPane](
                                                const Rml::String& label, u8& selectItemData) {
-            leftPane
-                .add_select_button({
+            leftPane.register_control(
+                leftPane.add_select_button({
                     .key = label,
                     .getValue = [&selectItemData] { return item_label_for_slot(selectItemData); },
-                })
-                .on_focus([&rightPane, &selectItemData](Rml::Event&) {
-                    populate_select_item_picker(rightPane, selectItemData);
+                }),
+                rightPane, [&selectItemData](Pane& pane) {
+                    populate_select_item_picker(pane, selectItemData);
                 });
         };
         genSelectItemComboBox("Equip X", get_player_status()->mSelectItem[0]);
@@ -1369,80 +1367,80 @@ EditorWindow::EditorWindow() {
         genSelectItemComboBox("Combo Equip X", get_player_status()->mMixItem[0]);
         genSelectItemComboBox("Combo Equip Y", get_player_status()->mMixItem[1]);
 
-        leftPane
-            .add_select_button({
+        leftPane.register_control(
+            leftPane.add_select_button({
                 .key = "Clothes",
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[0]); },
-            })
-            .on_focus([&rightPane](Rml::Event&) { populate_select_clothes_picker(rightPane); });
-        leftPane
-            .add_select_button({
+            }),
+            rightPane, [](Pane& pane) { populate_select_clothes_picker(pane); });
+        leftPane.register_control(
+            leftPane.add_select_button({
                 .key = "Sword",
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[1]); },
-            })
-            .on_focus([&rightPane](Rml::Event&) {
+            }),
+            rightPane, [](Pane& pane) {
                 populate_select_equip_picker(
-                    rightPane, get_player_status()->mSelectEquip[1], swordEntries);
+                    pane, get_player_status()->mSelectEquip[1], swordEntries);
             });
-        leftPane
-            .add_select_button({
+        leftPane.register_control(
+            leftPane.add_select_button({
                 .key = "Shield",
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[2]); },
-            })
-            .on_focus([&rightPane](Rml::Event&) {
+            }),
+            rightPane, [](Pane& pane) {
                 populate_select_equip_picker(
-                    rightPane, get_player_status()->mSelectEquip[2], shieldEntries);
+                    pane, get_player_status()->mSelectEquip[2], shieldEntries);
             });
-        leftPane
-            .add_select_button({
+        leftPane.register_control(
+            leftPane.add_select_button({
                 .key = "Scent",
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[3]); },
-            })
-            .on_focus([&rightPane](Rml::Event&) {
+            }),
+            rightPane, [](Pane& pane) {
                 populate_select_equip_picker(
-                    rightPane, get_player_status()->mSelectEquip[3], smellEntries);
+                    pane, get_player_status()->mSelectEquip[3], smellEntries);
             });
-        leftPane
-            .add_select_button({
+        leftPane.register_control(
+            leftPane.add_select_button({
                 .key = "Wallet Size",
                 .getValue = [] { return walletSizeNames[get_player_status()->getWalletSize()]; },
-            })
-            .on_focus([&rightPane](Rml::Event&) { populate_wallet_picker(rightPane); });
-        leftPane
-            .add_select_button({
+            }),
+            rightPane, [](Pane& pane) { populate_wallet_picker(pane); });
+        leftPane.register_control(
+            leftPane.add_select_button({
                 .key = "Form",
                 .getValue = [] { return formNames[get_player_status()->getTransformStatus()]; },
-            })
-            .on_focus([&rightPane](Rml::Event&) { populate_form_picker(rightPane); });
+            }),
+            rightPane, [](Pane& pane) { populate_form_picker(pane); });
 
         leftPane.add_section("World");
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Day",
                 .getValue = [] { return get_player_status_b()->getDate(); },
                 .setValue =
                     [](int value) { get_player_status_b()->setDate(static_cast<u16>(value)); },
                 .max = UINT16_MAX,
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+            }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Hour",
                 .getValue = [] { return dKy_getdaytime_hour(); },
                 .setValue = [](int value) { set_clock_time(value, dKy_getdaytime_minute()); },
                 .max = 23,
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+            }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Minute",
                 .getValue = [] { return dKy_getdaytime_minute(); },
                 .setValue = [](int value) { set_clock_time(dKy_getdaytime_hour(), value); },
                 .max = 59,
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+            }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Transform Level",
                 .getValue =
                     [] {
@@ -1455,10 +1453,10 @@ EditorWindow::EditorWindow() {
                             static_cast<u8>((1u << value) - 1u);
                     },
                 .max = 3,
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+            }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Twilight Clear Level",
                 .getValue =
                     [] {
@@ -1471,8 +1469,8 @@ EditorWindow::EditorWindow() {
                             static_cast<u8>((1u << value) - 1u);
                     },
                 .max = 3,
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+            }),
+            rightPane, {});
     });
 
     add_tab("Location", [this](Rml::Element* content) {
@@ -1481,33 +1479,36 @@ EditorWindow::EditorWindow() {
 
         leftPane.add_section("Save Location");
         leftPane
-            .add_select_button({
-                .key = "Stage",
-                .getValue =
-                    [] {
-                        return stage_label_for_file(fixed_string(get_player_return_place()->mName));
-                    },
-            })
-            .on_focus([&rightPane](Rml::Event&) {
-                populate_stage_picker(
-                    rightPane, [] { return fixed_string(get_player_return_place()->mName); },
-                    [](const char* stageFile) {
-                        set_fixed_string(get_player_return_place()->mName, Rml::String(stageFile));
-                    });
-            })
+            .register_control(leftPane.add_select_button({
+                                  .key = "Stage",
+                                  .getValue =
+                                      [] {
+                                          return stage_label_for_file(
+                                              fixed_string(get_player_return_place()->mName));
+                                      },
+                              }),
+                rightPane,
+                [](Pane& pane) {
+                    populate_stage_picker(
+                        pane, [] { return fixed_string(get_player_return_place()->mName); },
+                        [](const char* stageFile) {
+                            set_fixed_string(
+                                get_player_return_place()->mName, Rml::String(stageFile));
+                        });
+                })
             .set_disabled(true);
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Room",
                 .getValue = [] { return get_player_return_place()->mRoomNo; },
                 .setValue =
                     [](int value) { get_player_return_place()->mRoomNo = static_cast<s8>(value); },
                 .min = std::numeric_limits<s8>::min(),
                 .max = std::numeric_limits<s8>::max(),
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+            }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Spawn ID",
                 .getValue = [] { return get_player_return_place()->mPlayerStatus; },
                 .setValue =
@@ -1515,74 +1516,76 @@ EditorWindow::EditorWindow() {
                         get_player_return_place()->mPlayerStatus = static_cast<u8>(value);
                     },
                 .max = std::numeric_limits<u8>::max(),
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+            }),
+            rightPane, {});
 
         leftPane.add_section("Horse Location");
-        leftPane
-            .add_child<StringButton>(StringButton::Props{
-                .key = "Horse Position",
-                .getValue =
-                    [] {
-                        const auto* horsePlace = get_horse_place();
-                        return fmt::format("{}, {}, {}", static_cast<float>(horsePlace->mPos.x),
-                            static_cast<float>(horsePlace->mPos.y),
-                            static_cast<float>(horsePlace->mPos.z));
-                    },
-                .setValue =
-                    [](Rml::String value) {
-                        float x = 0.0f;
-                        float y = 0.0f;
-                        float z = 0.0f;
-                        if (parse_vec3(value, x, y, z)) {
-                            auto* horsePlace = get_horse_place();
-                            horsePlace->mPos.x = x;
-                            horsePlace->mPos.y = y;
-                            horsePlace->mPos.z = z;
-                        }
-                    },
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+        leftPane.register_control(leftPane.add_child<StringButton>(StringButton::Props{
+                                      .key = "Horse Position",
+                                      .getValue =
+                                          [] {
+                                              const auto* horsePlace = get_horse_place();
+                                              return fmt::format("{}, {}, {}",
+                                                  static_cast<float>(horsePlace->mPos.x),
+                                                  static_cast<float>(horsePlace->mPos.y),
+                                                  static_cast<float>(horsePlace->mPos.z));
+                                          },
+                                      .setValue =
+                                          [](Rml::String value) {
+                                              float x = 0.0f;
+                                              float y = 0.0f;
+                                              float z = 0.0f;
+                                              if (parse_vec3(value, x, y, z)) {
+                                                  auto* horsePlace = get_horse_place();
+                                                  horsePlace->mPos.x = x;
+                                                  horsePlace->mPos.y = y;
+                                                  horsePlace->mPos.z = z;
+                                              }
+                                          },
+                                  }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Horse Angle",
                 .getValue = [] { return get_horse_place()->mAngleY; },
                 .setValue = [](int value) { get_horse_place()->mAngleY = static_cast<s16>(value); },
                 .min = std::numeric_limits<s16>::min(),
                 .max = std::numeric_limits<s16>::max(),
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+            }),
+            rightPane, {});
         leftPane
-            .add_select_button({
-                .key = "Horse Stage",
-                .getValue =
-                    [] { return stage_label_for_file(fixed_string(get_horse_place()->mName)); },
-            })
-            .on_focus([&rightPane](Rml::Event&) {
-                populate_stage_picker(
-                    rightPane, [] { return fixed_string(get_horse_place()->mName); },
-                    [](const char* stageFile) {
-                        set_fixed_string(get_horse_place()->mName, Rml::String(stageFile));
-                    });
-            })
+            .register_control(
+                leftPane.add_select_button({
+                    .key = "Horse Stage",
+                    .getValue =
+                        [] { return stage_label_for_file(fixed_string(get_horse_place()->mName)); },
+                }),
+                rightPane,
+                [](Pane& pane) {
+                    populate_stage_picker(
+                        pane, [] { return fixed_string(get_horse_place()->mName); },
+                        [](const char* stageFile) {
+                            set_fixed_string(get_horse_place()->mName, Rml::String(stageFile));
+                        });
+                })
             .set_disabled(true);
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Horse Room",
                 .getValue = [] { return get_horse_place()->mRoomNo; },
                 .setValue = [](int value) { get_horse_place()->mRoomNo = static_cast<s8>(value); },
                 .min = std::numeric_limits<s8>::min(),
                 .max = std::numeric_limits<s8>::max(),
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+            }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Horse Spawn ID",
                 .getValue = [] { return get_horse_place()->mSpawnId; },
                 .setValue = [](int value) { get_horse_place()->mSpawnId = static_cast<u8>(value); },
                 .max = std::numeric_limits<u8>::max(),
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+            }),
+            rightPane, {});
     });
 
     add_tab("Inventory", [this](Rml::Element* content) {
@@ -1590,44 +1593,41 @@ EditorWindow::EditorWindow() {
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Item Wheel");
-        leftPane.add_button("Default All")
-            .on_pressed([&rightPane] {
-                for (int slot = 0; slot < 24; ++slot) {
-                    dComIfGs_setItem(slot, get_slot_default(slot));
-                }
-                rightPane.clear();
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane.add_button("Clear All")
-            .on_pressed([&rightPane] {
-                for (int slot = 0; slot < 24; ++slot) {
-                    dComIfGs_setItem(slot, dItemNo_NONE_e);
-                }
-                rightPane.clear();
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+        leftPane.register_control(leftPane.add_button("Default All").on_pressed([&rightPane] {
+            for (int slot = 0; slot < 24; ++slot) {
+                dComIfGs_setItem(slot, get_slot_default(slot));
+            }
+            rightPane.clear();
+        }),
+            rightPane, {});
+        leftPane.register_control(leftPane.add_button("Clear All").on_pressed([&rightPane] {
+            for (int slot = 0; slot < 24; ++slot) {
+                dComIfGs_setItem(slot, dItemNo_NONE_e);
+            }
+            rightPane.clear();
+        }),
+            rightPane, {});
         for (int slot = 0; slot < 24; ++slot) {
-            leftPane
-                .add_select_button({
+            leftPane.register_control(
+                leftPane.add_select_button({
                     .key = fmt::format("Slot {0:02d}", slot),
                     .getValue = [slot] { return get_item_name(get_player_item()->mItems[slot]); },
-                })
-                .on_focus([&rightPane, slot](
-                              Rml::Event&) { populate_item_slot_picker(rightPane, slot); });
+                }),
+                rightPane, [slot](Pane& pane) { populate_item_slot_picker(pane, slot); });
         }
 
         leftPane.add_section("Amounts");
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Arrows Amount",
                 .getValue = [] { return get_player_item_record()->mArrowNum; },
                 .setValue =
                     [](int value) { get_player_item_record()->mArrowNum = static_cast<u8>(value); },
                 .max = std::numeric_limits<u8>::max(),
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+            }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Slingshot Amount",
                 .getValue = [] { return get_player_item_record()->mPachinkoNum; },
                 .setValue =
@@ -1635,11 +1635,11 @@ EditorWindow::EditorWindow() {
                         get_player_item_record()->mPachinkoNum = static_cast<u8>(value);
                     },
                 .max = std::numeric_limits<u8>::max(),
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+            }),
+            rightPane, {});
         for (int bag = 0; bag < 3; ++bag) {
-            leftPane
-                .add_child<NumberButton>(NumberButton::Props{
+            leftPane.register_control(
+                leftPane.add_child<NumberButton>(NumberButton::Props{
                     .key = fmt::format("Bomb Bag {} Amount", bag + 1),
                     .getValue = [bag] { return get_player_item_record()->mBombNum[bag]; },
                     .setValue =
@@ -1647,12 +1647,12 @@ EditorWindow::EditorWindow() {
                             get_player_item_record()->mBombNum[bag] = static_cast<u8>(value);
                         },
                     .max = std::numeric_limits<u8>::max(),
-                })
-                .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+                }),
+                rightPane, {});
         }
         for (int bottle = 0; bottle < 4; ++bottle) {
-            leftPane
-                .add_child<NumberButton>(NumberButton::Props{
+            leftPane.register_control(
+                leftPane.add_child<NumberButton>(NumberButton::Props{
                     .key = fmt::format("Bottle {} Amount", bottle + 1),
                     .getValue = [bottle] { return get_player_item_record()->mBottleNum[bottle]; },
                     .setValue =
@@ -1660,175 +1660,165 @@ EditorWindow::EditorWindow() {
                             get_player_item_record()->mBottleNum[bottle] = static_cast<u8>(value);
                         },
                     .max = std::numeric_limits<u8>::max(),
-                })
-                .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+                }),
+                rightPane, {});
         }
 
         leftPane.add_section("Capacities");
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Arrows Max",
                 .getValue = [] { return get_player_item_max()->mItemMax[0]; },
                 .setValue =
                     [](int value) { get_player_item_max()->mItemMax[0] = static_cast<u8>(value); },
                 .max = std::numeric_limits<u8>::max(),
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+            }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Normal Bombs Max",
                 .getValue = [] { return get_player_item_max()->mItemMax[1]; },
                 .setValue =
                     [](int value) { get_player_item_max()->mItemMax[1] = static_cast<u8>(value); },
                 .max = std::numeric_limits<u8>::max(),
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+            }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Water Bombs Max",
                 .getValue = [] { return get_player_item_max()->mItemMax[2]; },
                 .setValue =
                     [](int value) { get_player_item_max()->mItemMax[2] = static_cast<u8>(value); },
                 .max = std::numeric_limits<u8>::max(),
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+            }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Bomblings Max",
                 .getValue = [] { return get_player_item_max()->mItemMax[3]; },
                 .setValue =
                     [](int value) { get_player_item_max()->mItemMax[3] = static_cast<u8>(value); },
                 .max = std::numeric_limits<u8>::max(),
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+            }),
+            rightPane, {});
 
         leftPane.add_section("Flags");
-        leftPane
-            .add_select_button({
-                .key = "Obtained Items",
-                .getValue = [] { return "Edit"; },
-            })
-            .on_focus([&rightPane](Rml::Event&) { populate_item_flag_picker(rightPane); });
+        leftPane.register_control(leftPane.add_select_button({
+                                      .key = "Obtained Items",
+                                      .getValue = [] { return "Edit"; },
+                                  }),
+            rightPane, [](Pane& pane) { populate_item_flag_picker(pane); });
     });
     add_tab("Collection", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Equipment");
-        leftPane
-            .add_select_button({
+        leftPane.register_control(
+            leftPane.add_select_button({
                 .key = "Swords",
                 .getValue =
                     [] {
                         return count_label(
                             count_item_first_bits(swordEntries), swordEntries.size());
                     },
-            })
-            .on_focus([&rightPane](Rml::Event&) {
-                populate_toggle_group(rightPane, item_toggle_entries(swordEntries));
-            });
-        leftPane
-            .add_select_button({
+            }),
+            rightPane,
+            [](Pane& pane) { populate_toggle_group(pane, item_toggle_entries(swordEntries)); });
+        leftPane.register_control(
+            leftPane.add_select_button({
                 .key = "Shields",
                 .getValue =
                     [] {
                         return count_label(
                             count_item_first_bits(shieldEntries), shieldEntries.size());
                     },
-            })
-            .on_focus([&rightPane](Rml::Event&) {
-                populate_toggle_group(rightPane, item_toggle_entries(shieldEntries));
-            });
-        leftPane
-            .add_select_button({
-                .key = "Clothing",
-                .getValue = [] { return count_label(count_clothing(), 4); },
-            })
-            .on_focus([&rightPane](Rml::Event&) { populate_collect_clothes_picker(rightPane); });
+            }),
+            rightPane,
+            [](Pane& pane) { populate_toggle_group(pane, item_toggle_entries(shieldEntries)); });
+        leftPane.register_control(leftPane.add_select_button({
+                                      .key = "Clothing",
+                                      .getValue = [] { return count_label(count_clothing(), 4); },
+                                  }),
+            rightPane, [](Pane& pane) { populate_collect_clothes_picker(pane); });
 
         leftPane.add_section("Key Items");
-        leftPane
-            .add_select_button({
+        leftPane.register_control(
+            leftPane.add_select_button({
                 .key = "Fused Shadows",
                 .getValue =
                     [] {
                         return count_label(
                             count_collect_crystals(fusedShadowEntries), fusedShadowEntries.size());
                     },
-            })
-            .on_focus([&rightPane](Rml::Event&) {
-                populate_toggle_group(
-                    rightPane, collect_crystal_toggle_entries(fusedShadowEntries));
+            }),
+            rightPane, [](Pane& pane) {
+                populate_toggle_group(pane, collect_crystal_toggle_entries(fusedShadowEntries));
             });
-        leftPane
-            .add_select_button({
+        leftPane.register_control(
+            leftPane.add_select_button({
                 .key = "Mirror Shards",
                 .getValue =
                     [] {
                         return count_label(
                             count_collect_mirrors(mirrorShardEntries), mirrorShardEntries.size());
                     },
-            })
-            .on_focus([&rightPane](Rml::Event&) {
-                populate_toggle_group(rightPane, collect_mirror_toggle_entries(mirrorShardEntries));
+            }),
+            rightPane, [](Pane& pane) {
+                populate_toggle_group(pane, collect_mirror_toggle_entries(mirrorShardEntries));
             });
 
         leftPane.add_section("Health & Souls");
-        leftPane
-            .add_select_button({
+        leftPane.register_control(
+            leftPane.add_select_button({
                 .key = "Poe Souls",
                 .getValue = [] { return fmt::format("{} / 60", dComIfGs_getPohSpiritNum()); },
-            })
-            .on_focus([&rightPane](Rml::Event&) { populate_poe_souls_picker(rightPane); });
-        leftPane
-            .add_select_button({
-                .key = "Max Life",
-                .getValue = [] { return max_life_label(); },
-            })
-            .on_focus([&rightPane](Rml::Event&) { populate_max_life_picker(rightPane); });
+            }),
+            rightPane, [](Pane& pane) { populate_poe_souls_picker(pane); });
+        leftPane.register_control(leftPane.add_select_button({
+                                      .key = "Max Life",
+                                      .getValue = [] { return max_life_label(); },
+                                  }),
+            rightPane, [](Pane& pane) { populate_max_life_picker(pane); });
 
         leftPane.add_section("Golden Bugs");
         for (const auto& bug : bugSpeciesEntries) {
-            leftPane
-                .add_select_button({
-                    .key = bug.name,
-                    .getValue = [bug] { return bug_species_label(bug); },
-                })
-                .on_focus([&rightPane, bug](
-                              Rml::Event&) { populate_bug_species_picker(rightPane, bug); });
+            leftPane.register_control(leftPane.add_select_button({
+                                          .key = bug.name,
+                                          .getValue = [bug] { return bug_species_label(bug); },
+                                      }),
+                rightPane, [bug](Pane& pane) { populate_bug_species_picker(pane, bug); });
         }
 
         leftPane.add_section("Skills");
-        leftPane
-            .add_select_button({
+        leftPane.register_control(
+            leftPane.add_select_button({
                 .key = "Hidden Skills",
                 .getValue =
                     [] {
                         return count_label(
                             count_event_bits(hiddenSkillEntries), hiddenSkillEntries.size());
                     },
-            })
-            .on_focus([&rightPane](Rml::Event&) {
-                populate_toggle_group(rightPane, event_toggle_entries(hiddenSkillEntries));
+            }),
+            rightPane, [](Pane& pane) {
+                populate_toggle_group(pane, event_toggle_entries(hiddenSkillEntries));
             });
 
         leftPane.add_section("Logs");
-        leftPane
-            .add_select_button({
+        leftPane.register_control(
+            leftPane.add_select_button({
                 .key = "Postman Letters",
                 .getValue = [] { return count_label(count_letters(), letterSenders.size()); },
-            })
-            .on_focus([&rightPane](Rml::Event&) { populate_letters_picker(rightPane); });
+            }),
+            rightPane, [](Pane& pane) { populate_letters_picker(pane); });
 
         leftPane.add_section("Fishing Log");
         for (const auto& fish : fishSpeciesEntries) {
-            leftPane
-                .add_select_button({
-                    .key = fish.name,
-                    .getValue = [fish] { return fish_species_label(fish); },
-                })
-                .on_focus([&rightPane, fish](
-                              Rml::Event&) { populate_fish_species_picker(rightPane, fish); });
+            leftPane.register_control(leftPane.add_select_button({
+                                          .key = fish.name,
+                                          .getValue = [fish] { return fish_species_label(fish); },
+                                      }),
+                rightPane, [fish](Pane& pane) { populate_fish_species_picker(pane, fish); });
         }
     });
 
@@ -1841,8 +1831,8 @@ EditorWindow::EditorWindow() {
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Records");
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "STAR Game Time (ms)",
                 .getValue =
                     [] {
@@ -1854,10 +1844,10 @@ EditorWindow::EditorWindow() {
                         get_minigame()->setHookGameTime(static_cast<u32>(std::max(0, value)));
                     },
                 .max = std::numeric_limits<int>::max(),
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+            }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Snowboard Race Time (ms)",
                 .getValue =
                     [] {
@@ -1869,10 +1859,10 @@ EditorWindow::EditorWindow() {
                         get_minigame()->setRaceGameTime(static_cast<u32>(std::max(0, value)));
                     },
                 .max = std::numeric_limits<int>::max(),
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_child<NumberButton>(NumberButton::Props{
+            }),
+            rightPane, {});
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Fruit-Pop-Flight Score",
                 .getValue =
                     [] {
@@ -1884,8 +1874,8 @@ EditorWindow::EditorWindow() {
                         get_minigame()->setBalloonScore(static_cast<u32>(std::max(0, value)));
                     },
                 .max = std::numeric_limits<int>::max(),
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
+            }),
+            rightPane, {});
     });
 
     add_tab("Config", [this](Rml::Element* content) {
@@ -1893,25 +1883,23 @@ EditorWindow::EditorWindow() {
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Options");
-        leftPane
-            .add_child<BoolButton>(BoolButton::Props{
+        leftPane.register_control(
+            leftPane.add_child<BoolButton>(BoolButton::Props{
                 .key = "Enable Vibration",
                 .getValue = [] { return get_player_config()->getVibration() != 0; },
                 .setValue = [](bool value) { get_player_config()->setVibration(value); },
-            })
-            .on_focus([&rightPane](Rml::Event&) { rightPane.clear(); });
-        leftPane
-            .add_select_button({
-                .key = "Target Type",
-                .getValue = [] { return target_type_label(); },
-            })
-            .on_focus([&rightPane](Rml::Event&) { populate_target_type_picker(rightPane); });
-        leftPane
-            .add_select_button({
-                .key = "Sound",
-                .getValue = [] { return sound_mode_label(); },
-            })
-            .on_focus([&rightPane](Rml::Event&) { populate_sound_mode_picker(rightPane); });
+            }),
+            rightPane, {});
+        leftPane.register_control(leftPane.add_select_button({
+                                      .key = "Target Type",
+                                      .getValue = [] { return target_type_label(); },
+                                  }),
+            rightPane, [](Pane& pane) { populate_target_type_picker(pane); });
+        leftPane.register_control(leftPane.add_select_button({
+                                      .key = "Sound",
+                                      .getValue = [] { return sound_mode_label(); },
+                                  }),
+            rightPane, [](Pane& pane) { populate_sound_mode_picker(pane); });
     });
 }
 

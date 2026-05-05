@@ -52,15 +52,14 @@
 #include "dusk/frame_interpolation.h"
 #include "dusk/game_clock.h"
 #include "dusk/gyro.h"
+#include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
-#include "dusk/imgui/ImGuiConsole.hpp"
-#include "dusk/ui/ui.hpp"
-#include "dusk/ui/editor.hpp"
 #include "dusk/ui/popup.hpp"
 #include "dusk/ui/prelaunch.hpp"
-#include "dusk/ui/settings.hpp"
+#include "dusk/ui/preset.hpp"
+#include "dusk/ui/ui.hpp"
 #include "version.h"
 
 #include <aurora/aurora.h>
@@ -634,6 +633,9 @@ int game_main(int argc, char* argv[]) {
     }
 
     dusk::ui::push_document(std::make_unique<dusk::ui::Popup>(), false);
+    if (!dusk::getSettings().backend.wasPresetChosen) {
+        dusk::ui::push_document(std::make_unique<dusk::ui::PresetWindow>());
+    }
 
     dusk::version::init();
     LanguageInit();

@@ -1,5 +1,7 @@
 #include "pane.hpp"
 
+#include "Z2AudioLib/Z2SeMgr.h"
+#include "m_Do/m_Do_audio.h"
 #include "ui.hpp"
 
 namespace dusk::ui {
@@ -56,6 +58,7 @@ Pane::Pane(Rml::Element* parent, Type type) : FluentComponent(createRoot(parent)
         int i = focusedChild + direction;
         while (i >= 0 && i < mChildren.size()) {
             if (mChildren[i]->focus()) {
+                mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
                 event.StopPropagation();
                 break;
             }
@@ -71,6 +74,12 @@ Pane::Pane(Rml::Element* parent, Type type) : FluentComponent(createRoot(parent)
                 if (event.GetTargetElement() == mChildren[i]->root()) {
                     childIndex = i;
                 }
+            }
+            // If item already selected, deselect
+            if (childIndex >= 0 && childIndex < mChildren.size() &&
+                mChildren[childIndex]->selected())
+            {
+                childIndex = -1;
             }
             set_selected_item(childIndex);
             // If the selection was handled locally, don't allow it to bubble up to window
@@ -93,6 +102,40 @@ void Pane::set_selected_item(int index) {
     for (int i = 0; i < mChildren.size(); ++i) {
         mChildren[i]->set_selected(i == index);
     }
+}
+
+Component& Pane::register_control(
+    Component& component, Pane& nextPane, std::function<void(Pane&)> callback) {
+    component.listen(component.root(), Rml::EventId::Mouseover,
+        [this, &component, &nextPane, callback](Rml::Event&) {
+            if (component.disabled()) {
+                return;
+            }
+            bool anySelected = false;
+            for (const auto& child : mChildren) {
+                if (child->selected()) {
+                    anySelected = true;
+                    break;
+                }
+            }
+            if (!anySelected) {
+                nextPane.clear();
+                if (callback) {
+                    callback(nextPane);
+                }
+            }
+        });
+    component.listen(component.root(), Rml::EventId::Focus,
+        [&component, &nextPane, callback = std::move(callback)](Rml::Event&) {
+            if (component.disabled()) {
+                return;
+            }
+            nextPane.clear();
+            if (callback) {
+                callback(nextPane);
+            }
+        });
+    return component;
 }
 
 bool Pane::focus() {

@@ -1,5 +1,8 @@
 #include "overlay.hpp"
 
+#include "Z2AudioLib/Z2SeMgr.h"
+#include "m_Do/m_Do_audio.h"
+
 #include <dolphin/gx/GXAurora.h>
 #include <dolphin/vi.h>
 #include <fmt/format.h>
@@ -84,7 +87,7 @@ Rml::Element* create_stepped_carousel_arrow(
     auto button = doc->CreateElement("button");
     button->SetClass("stepped-carousel-arrow", true);
     button->SetClass(className, true);
-    button->SetInnerRML(escape(label));
+    button->SetInnerRML(label);
     return parent->AppendChild(std::move(button));
 }
 
@@ -92,10 +95,10 @@ Rml::Element* create_stepped_carousel_arrow(
 
 SteppedCarousel::SteppedCarousel(Rml::Element* parent, Props props)
     : Component(create_stepped_carousel_root(parent)), mProps(std::move(props)) {
-    Rml::Element* prevElem = create_stepped_carousel_arrow(mRoot, "prev", "<");
+    Rml::Element* prevElem = create_stepped_carousel_arrow(mRoot, "prev", "&#xe5cb;");
     mValueElem = append(mRoot, "div");
     mValueElem->SetClass("stepped-carousel-value", true);
-    Rml::Element* nextElem = create_stepped_carousel_arrow(mRoot, "next", ">");
+    Rml::Element* nextElem = create_stepped_carousel_arrow(mRoot, "next", "&#xe5cc;");
 
     listen(prevElem, Rml::EventId::Click,
         [this](Rml::Event&) { handle_nav_command(NavCommand::Left); });
@@ -146,6 +149,7 @@ void SteppedCarousel::apply(int value) {
     if (nextValue == currentValue) {
         return;
     }
+    mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
     if (mProps.onChange) {
         mProps.onChange(nextValue);
     }
@@ -160,10 +164,10 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
             u32 width = 0;
             u32 height = 0;
             AuroraGetRenderSize(&width, &height);
-            return fmt::format("{}x ({}x{})", value, width, height);
+            return fmt::format("{}× ({}×{})", value, width, height);
         }
     case GraphicsOption::ShadowResolution:
-        return fmt::format("{}x", value);
+        return fmt::format("{}×", value);
     case GraphicsOption::BloomMode:
         switch (static_cast<BloomMode>(value)) {
         case BloomMode::Off:
@@ -229,6 +233,7 @@ Overlay::Overlay(OverlayProps props)
 }
 
 void Overlay::show() {
+    mDoAud_seStartMenu(Z2SE_SY_CURSOR_OK);
     Document::show();
     mRoot->SetAttribute("open", "");
 }

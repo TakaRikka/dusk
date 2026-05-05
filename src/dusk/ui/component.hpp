@@ -66,15 +66,6 @@ public:
         return static_cast<Derived&>(*this);
     }
 
-    Derived& on_focus(ScopedEventListener::Callback callback) {
-        return listen(
-            Rml::EventId::Focus, [this, callback = std::move(callback)](Rml::Event& event) {
-                if (!disabled()) {
-                    callback(event);
-                }
-            });
-    }
-
     Derived& on_nav_command(std::function<bool(Rml::Event&, NavCommand)> callback) {
         listen(Rml::EventId::Click, [this, callback](Rml::Event& event) {
             if (!disabled() && callback(event, NavCommand::Confirm)) {

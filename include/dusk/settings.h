@@ -56,6 +56,7 @@ struct UserSettings {
         ConfigVar<int> fanfareVolume;
         ConfigVar<bool> enableReverb;
         ConfigVar<bool> enableHrtf;
+        ConfigVar<bool> menuSounds;
     } audio;
 
     // Game settings
@@ -155,7 +156,6 @@ struct UserSettings {
         ConfigVar<bool> showPipelineCompilation;
         ConfigVar<bool> wasPresetChosen;
         ConfigVar<bool> enableCrashReporting;
-        ConfigVar<bool> duskMenuOpen;
         ConfigVar<int> cardFileType;
     } backend;
 };

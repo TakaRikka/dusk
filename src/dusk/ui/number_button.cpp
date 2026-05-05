@@ -1,5 +1,8 @@
 #include "number_button.hpp"
 
+#include "Z2AudioLib/Z2SeMgr.h"
+#include "m_Do/m_Do_audio.h"
+
 #include <charconv>
 #include <fmt/format.h>
 
@@ -8,8 +11,16 @@ namespace dusk::ui {
 NumberButton::NumberButton(Rml::Element* parent, Props props)
     : BaseStringButton(parent, {.key = std::move(props.key), .type = "number"}),
       mGetValue(std::move(props.getValue)), mSetValue(std::move(props.setValue)),
-      mIsDisabled(std::move(props.isDisabled)), mMin(props.min), mMax(props.max), mStep(props.step),
-      mPrefix(std::move(props.prefix)), mSuffix(std::move(props.suffix)) {}
+      mIsDisabled(std::move(props.isDisabled)), mIsModified(std::move(props.isModified)),
+      mMin(props.min), mMax(props.max), mStep(props.step), mPrefix(std::move(props.prefix)),
+      mSuffix(std::move(props.suffix)) {}
+
+bool NumberButton::modified() const {
+    if (mIsModified) {
+        return mIsModified();
+    }
+    return BaseStringButton::modified();
+}
 
 bool NumberButton::disabled() const {
     if (mIsDisabled) {
@@ -43,11 +54,13 @@ void NumberButton::set_value(Rml::String value) {
 }
 
 bool NumberButton::handle_nav_command(NavCommand cmd) {
-    if (cmd == NavCommand::Left) {
-        mSetValue(std::clamp(mGetValue() - mStep, mMin, mMax));
-        return true;
-    } else if (cmd == NavCommand::Right) {
-        mSetValue(std::clamp(mGetValue() + mStep, mMin, mMax));
+    if (cmd == NavCommand::Left || cmd == NavCommand::Right) {
+        const int newValue = std::clamp(
+            mGetValue() + (cmd == NavCommand::Right ? mStep : -mStep), mMin, mMax);
+        if (newValue != mGetValue()) {
+            mSetValue(newValue);
+            mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
+        }
         return true;
     }
     return BaseStringButton::handle_nav_command(cmd);

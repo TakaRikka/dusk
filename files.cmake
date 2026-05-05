@@ -1449,8 +1449,6 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiMenuTools.hpp
         src/dusk/imgui/ImGuiPreLaunchWindow.cpp
         src/dusk/imgui/ImGuiPreLaunchWindow.hpp
-        src/dusk/imgui/ImGuiFirstRunPreset.hpp
-        src/dusk/imgui/ImGuiFirstRunPreset.cpp
         src/dusk/imgui/ImGuiProcessOverlay.cpp
         src/dusk/imgui/ImGuiCameraOverlay.cpp
         src/dusk/imgui/ImGuiHeapOverlay.cpp
@@ -1461,16 +1459,20 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiSaveEditor.cpp
         src/dusk/imgui/ImGuiStateShare.hpp
         src/dusk/imgui/ImGuiStateShare.cpp
-        src/dusk/imgui/ImGuiAchievements.hpp
-        src/dusk/imgui/ImGuiAchievements.cpp
         src/dusk/ui/bool_button.cpp
         src/dusk/ui/bool_button.hpp
         src/dusk/ui/button.cpp
         src/dusk/ui/button.hpp
         src/dusk/ui/component.cpp
         src/dusk/ui/component.hpp
+        src/dusk/ui/controller_config.cpp
+        src/dusk/ui/controller_config.hpp
         src/dusk/ui/document.cpp
         src/dusk/ui/document.hpp
+        src/dusk/ui/achievements.cpp
+        src/dusk/ui/achievements.hpp
+        src/dusk/ui/preset.cpp
+        src/dusk/ui/preset.hpp
         src/dusk/ui/editor.cpp
         src/dusk/ui/editor.hpp
         src/dusk/ui/event.cpp

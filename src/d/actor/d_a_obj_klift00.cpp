@@ -11,6 +11,8 @@
 #include "d/d_bg_w.h"
 #include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
+#include "dusk/frame_interpolation.h"
+#include "dusk/settings.h"
 
 struct daObjKLift00_HIO_c : public mDoHIO_entry_c {
     daObjKLift00_HIO_c();
@@ -295,6 +297,11 @@ int daObjKLift00_c::Create() {
     if(getLock())
         mStopSwingingFrames = 5;
 
+#if TARGET_PC
+    mChainInterpPrevValid = false;
+    mChainInterpCurrValid = false;
+#endif
+
     return 1;
 }
 
@@ -436,6 +443,34 @@ int daObjKLift00_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
+#if TARGET_PC
+static void klift00_interp_callback(bool isSimFrame, void* pUserWork) {
+    static_cast<daObjKLift00_c*>(pUserWork)->onInterpCallback();
+}
+
+void daObjKLift00_c::onInterpCallback() {
+    if (!mChainInterpPrevValid || !mChainInterpCurrValid) {
+        return;
+    }
+
+    const f32 alpha = dusk::frame_interp::get_interpolation_step();
+    cXyz savedPositions[64];
+
+    for (int i = 0; i < mNumChains; i++) {
+        savedPositions[i] = mChainPositions[i].mCurrentPos;
+        const cXyz& p0 = mChainInterpPrev[i];
+        const cXyz& p1 = mChainInterpCurr[i];
+        mChainPositions[i].mCurrentPos = p0 + (p1 - p0) * alpha;
+    }
+
+    setMtx();
+
+    for (int i = 0; i < mNumChains; i++) {
+        mChainPositions[i].mCurrentPos = savedPositions[i];
+    }
+}
+#endif
+
 int daObjKLift00_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpLiftPlatform, &tevStr);
@@ -456,6 +491,22 @@ int daObjKLift00_c::Draw() {
     }
 
     dComIfGd_setList();
+
+#if TARGET_PC
+    if (dusk::getSettings().game.enableFrameInterpolation) {
+        if (mChainInterpCurrValid) {
+            memcpy(mChainInterpPrev, mChainInterpCurr, mNumChains * sizeof(cXyz));
+            mChainInterpPrevValid = true;
+        }
+
+        for (int i = 0; i < mNumChains; i++) {
+            mChainInterpCurr[i] = mChainPositions[i].mCurrentPos;
+        }
+        
+        mChainInterpCurrValid = true;
+        dusk::frame_interp::add_interpolation_callback(&klift00_interp_callback, this);
+    }
+#endif
 
     return 1;
 }

@@ -28,7 +28,9 @@ public:
 
     void add_tab(const Rml::String& title, TabCallback callback);
     bool set_active_tab(int index);
+    void refresh_active_tab();
     bool focus_tab(int index);
+    int focused_tab_index() const;
     bool handle_nav_command(Rml::Event& event, NavCommand cmd);
 
 private:
@@ -36,6 +38,9 @@ private:
 
     Props mProps;
     std::vector<Tab> mTabs;
+    Rml::Element* mEndSpacer = nullptr;
+    bool mRedirectingScroll = false;
+    int mLastFocusedTabIndex = -1;
 };
 
 }  // namespace dusk::ui
