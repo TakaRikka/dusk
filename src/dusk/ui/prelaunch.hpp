@@ -24,6 +24,7 @@ protected:
 
 private:
     bool mEntranceAnimationStarted = false;
+    bool mRestartSuppressed = false;
     std::vector<std::unique_ptr<Button>> mMenuButtons;
     Rml::Element* mRoot = nullptr;
     Rml::Element* mDiscStatus = nullptr;

@@ -52,10 +52,6 @@ window[open] {
     transform: scale(1);
 }
 
-window[open].blurred {
-    filter: blur(2dp);
-}
-
 @media (max-height: 640dp) {
     body {
         padding: 16dp;

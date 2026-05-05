@@ -1488,8 +1488,6 @@ set(DUSK_FILES
         src/dusk/ui/popup.hpp
         src/dusk/ui/prelaunch.cpp
         src/dusk/ui/prelaunch.hpp
-        src/dusk/ui/prelaunch_options.cpp
-        src/dusk/ui/prelaunch_options.hpp
         src/dusk/ui/preset.cpp
         src/dusk/ui/preset.hpp
         src/dusk/ui/select_button.cpp

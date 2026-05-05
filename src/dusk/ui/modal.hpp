@@ -18,7 +18,6 @@ public:
         Rml::String bodyRml;
         std::vector<ModalAction> actions;
         std::function<void(Modal&)> onDismiss;
-        bool doBlur = false;
     };
 
     explicit Modal(Props props);

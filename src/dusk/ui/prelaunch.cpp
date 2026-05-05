@@ -1,17 +1,17 @@
 #include "prelaunch.hpp"
 
-#include "popup.hpp"
 #include "dusk/config.hpp"
 #include "dusk/file_select.hpp"
 #include "dusk/iso_validate.hpp"
 #include "dusk/main.h"
 #include "dusk/settings.h"
-#include "dusk/ui/prelaunch_options.hpp"
-#include "dusk/ui/preset.hpp"
+#include "modal.hpp"
+#include "popup.hpp"
+#include "preset.hpp"
+#include "settings.hpp"
 #include "version.h"
 
 #include <SDL3/SDL_dialog.h>
-#include <SDL3/SDL_filesystem.h>
 #include <aurora/lib/window.hpp>
 
 namespace dusk::ui {
@@ -171,8 +171,8 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
 
     if (auto* menuList = mDocument->GetElementById("menu-list")) {
         auto& state = prelaunch_state();
-        mMenuButtons.push_back(
-            std::make_unique<Button>(menuList, state.selectedDiscIsValid ? "Play" : "Select Disc Image"));
+        mMenuButtons.push_back(std::make_unique<Button>(
+            menuList, state.selectedDiscIsValid ? "Play" : "Select Disc Image"));
         mMenuButtons.back()->on_pressed([this] {
             if (!prelaunch_state().selectedDiscIsValid) {
                 open_iso_picker();
@@ -196,7 +196,10 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         apply_intro_animation(mMenuButtons.back()->root(), "delay-1");
 
         mMenuButtons.push_back(std::make_unique<Button>(menuList, "Options"));
-        mMenuButtons.back()->on_pressed([this] { push(std::make_unique<PrelaunchOptions>()); });
+        mMenuButtons.back()->on_pressed([this] {
+            mRestartSuppressed = false;
+            push(std::make_unique<SettingsWindow>(true));
+        });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-2");
 
         mMenuButtons.push_back(std::make_unique<Button>(menuList, "Quit To Desktop"));
@@ -227,6 +230,40 @@ void Prelaunch::show() {
     Document::show();
     mDocument->SetAttribute("open", "");
     mRoot->SetAttribute("open", "");
+
+    if (is_restart_pending() && !mRestartSuppressed) {
+        const auto dismiss = [this](Modal& modal) {
+            mRestartSuppressed = true;
+            modal.pop();
+        };
+        std::vector<ModalAction> actions;
+        if constexpr (dusk::SupportsProcessRestart) {
+            actions.push_back(ModalAction{
+                .label = "Restart later",
+                .onPressed = dismiss,
+            });
+            actions.push_back(ModalAction{
+                .label = "Restart now",
+                .onPressed = [](Modal&) { dusk::RequestRestart(); },
+            });
+        } else {
+            actions.push_back(ModalAction{
+                .label = "OK",
+                .onPressed = dismiss,
+            });
+        }
+        push(std::make_unique<Modal>(Modal::Props{
+            .title = "Apply Options",
+            .bodyRml =
+                dusk::SupportsProcessRestart ?
+                    "A restart is required to apply selected options.<br/><br/>Restart now to "
+                    "apply them immediately?" :
+                    "A restart is required to apply selected options.<br/><br/>Close and reopen "
+                    "Dusk to apply them.",
+            .actions = std::move(actions),
+            .onDismiss = dismiss,
+        }));
+    }
 }
 
 void Prelaunch::hide(bool close) {
@@ -249,20 +286,21 @@ void Prelaunch::update() {
 
     auto& state = prelaunch_state();
     if (!state.errorString.empty() && top_document() == this) {
-        auto dismissInvalidDisc = [](Modal& modal) {
+        auto dismiss = [](Modal& modal) {
             prelaunch_state().errorString.clear();
             modal.pop();
         };
-        push_document(std::make_unique<Modal>(Modal::Props{
+        push(std::make_unique<Modal>(Modal::Props{
             .title = "Invalid disc image",
             .bodyRml = state.errorString,
-            .actions = {
-                ModalAction{
-                    .label = "OK",
-                    .onPressed = dismissInvalidDisc,
+            .actions =
+                {
+                    ModalAction{
+                        .label = "OK",
+                        .onPressed = dismiss,
+                    },
                 },
-            },
-            .onDismiss = dismissInvalidDisc,
+            .onDismiss = dismiss,
         }));
     }
 
@@ -295,7 +333,8 @@ void Prelaunch::update() {
     if (mDiscDetail != nullptr) {
         if (hasValidPath) {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::Block);
-            mDiscDetail->SetInnerRML(prelaunch_state().initialDiscIsPal ? "GameCube • EUR" : "GameCube • USA");
+            mDiscDetail->SetInnerRML(
+                prelaunch_state().initialDiscIsPal ? "GameCube • EUR" : "GameCube • USA");
         } else {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::None);
         }
