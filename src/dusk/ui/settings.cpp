@@ -363,6 +363,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                                         })
                             .on_pressed([i] {
                                 getSettings().game.language.setValue(static_cast<GameLanguage>(i));
+                                config::Save();
                             });
                     }
                     pane.add_rml("<br/>Changes require a restart.");
@@ -388,6 +389,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                             .on_pressed([backend] {
                                 getSettings().backend.graphicsBackend.setValue(
                                     std::string{backend_id(backend)});
+                                config::Save();
                             });
                     }
                     pane.add_rml("<br/>Changes require a restart.");
@@ -415,7 +417,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                                         return getSettings().backend.cardFileType.getValue() == i;
                                     },
                             })
-                            .on_pressed([i] { getSettings().backend.cardFileType.setValue(i); });
+                            .on_pressed([i] {
+                                getSettings().backend.cardFileType.setValue(i);
+                                config::Save();
+                            });
                     }
                     pane.add_rml("<br/>Changes require a restart.");
                 });
