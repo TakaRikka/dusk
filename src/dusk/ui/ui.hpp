@@ -17,7 +17,7 @@ class Popup;
 // Button clicked/pressed
 constexpr u32 kSoundClick = Z2SE_SY_CURSOR_OK;
 // "Play" button clicked/pressed
-constexpr u32 kSoundPlay = Z2SE_NAVI_FLY;
+constexpr u32 kSoundPlay = Z2SE_SY_ITEM_COMBINE_ON;
 
 // Menu button pressed (open/close menu bar or hide/show the active window)
 constexpr u32 kSoundMenuOpen = Z2SE_SY_MENU_SUB_IN;
@@ -35,9 +35,9 @@ constexpr u32 kSoundItemFocus = Z2SE_SY_CURSOR_ITEM;
 // Item changed (e.g. number input left/right)
 constexpr u32 kSoundItemChange = Z2SE_SY_NAME_CURSOR;
 // Item enabled ("On")
-constexpr u32 kSoundItemEnable = Z2SE_SY_CURSOR_OK;
+constexpr u32 kSoundItemEnable = Z2SE_SUBJ_VIEW_IN;
 // Item disabled ("Off")
-constexpr u32 kSoundItemDisable = Z2SE_SY_CURSOR_CANCEL;
+constexpr u32 kSoundItemDisable = Z2SE_SUBJ_VIEW_OUT;
 
 struct Insets {
     float top = 0.0f;
