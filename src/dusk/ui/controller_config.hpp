@@ -32,6 +32,8 @@ private:
     Rml::String pending_button_label() const;
     Rml::String pending_axis_label() const;
     void cancel_pending_binding();
+    void finish_pending_key_binding();
+    Rml::String pending_key_label() const;
 
     Page mPage = Page::Controller;
     Pane* mRightPane = nullptr;
@@ -42,6 +44,8 @@ private:
     int mSuppressNavigationPort = -1;
     PADButtonMapping* mPendingButtonMapping = nullptr;
     PADAxisMapping* mPendingAxisMapping = nullptr;
+    int mPendingKeyButton = -1;
+    int mPendingKeyAxis = -1;
 };
 
 }  // namespace dusk::ui

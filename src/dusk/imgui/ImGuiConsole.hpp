@@ -72,6 +72,4 @@ bool ImGuiButtonCenter(std::string_view text);
 float ImGuiScale();
 }  // namespace dusk
 
-void DuskDebugPad();
-
 #endif  // DUSK_IMGUI_HPP
