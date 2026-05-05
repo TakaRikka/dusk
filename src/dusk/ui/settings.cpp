@@ -422,7 +422,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                                 config::Save();
                             });
                     }
-                    pane.add_rml("<br/>Changes require a restart.");
                 });
         });
     }
