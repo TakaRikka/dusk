@@ -39,6 +39,7 @@ protected:
     void clear_content() noexcept;
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;
     bool handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept;
+    bool mSuppressNavFallback = false;
 
     template <typename T, typename... Args>
     requires std::is_base_of_v<Component, T> T& add_child(Args&&... args) {

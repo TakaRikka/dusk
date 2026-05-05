@@ -211,7 +211,7 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (mTabBar->handle_nav_command(event, cmd)) {
         return true;
     }
-    return Document::handle_nav_command(event, cmd);
+    return mSuppressNavFallback ? false : Document::handle_nav_command(event, cmd);
 }
 
 bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
