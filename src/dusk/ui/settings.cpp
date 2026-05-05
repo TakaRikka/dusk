@@ -849,11 +849,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "Skip TV Settings Screen",
                 .helpText = "Skips the TV calibration screen shown when loading a save.",
             });
-        config_bool_select(leftPane, rightPane, getSettings().game.skipWarningScreen,
-            {
-                .key = "Skip Warning Screen",
-                .helpText = "Skips the warning screen shown when starting the game.",
-            });
         config_bool_select(leftPane, rightPane, getSettings().backend.showPipelineCompilation,
             {
                 .key = "Show Pipeline Compilation",
