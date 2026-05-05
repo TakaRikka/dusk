@@ -172,17 +172,23 @@ SettingsWindow::SettingsWindow() {
 
         leftPane.add_section("Display");
 
-        leftPane.add_button("Toggle Fullscreen").on_pressed([] {
-            getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
-            VISetWindowFullscreen(getSettings().video.enableFullscreen);
-            config::Save();
-        });
-        leftPane.add_button("Restore Default Window Size").on_pressed([] {
-            getSettings().video.enableFullscreen.setValue(false);
-            VISetWindowFullscreen(false);
-            VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
-            VICenterWindow();
-        });
+        leftPane.register_control(
+            leftPane.add_button("Toggle Fullscreen").on_pressed([] {
+                getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
+                VISetWindowFullscreen(getSettings().video.enableFullscreen);
+                config::Save();
+            }),
+            rightPane, [](Pane& pane) { pane.clear(); }
+        );
+        leftPane.register_control(
+            leftPane.add_button("Restore Default Window Size").on_pressed([] {
+                getSettings().video.enableFullscreen.setValue(false);
+                VISetWindowFullscreen(false);
+                VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
+                VICenterWindow();
+            }),
+            rightPane, [](Pane& pane) { pane.clear(); }
+        );
         config_bool_select(leftPane, rightPane, getSettings().video.enableVsync,
             {
                 .key = "Enable VSync",
