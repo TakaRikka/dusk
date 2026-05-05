@@ -46,3 +46,9 @@ Pull requests are welcomed! Note that we do not accept contributions that are pr
 # Credits
 
 Special thanks to the [TP decompilation](https://github.com/zeldaret/tp) team, the GC/Wii decompilation community, the [Aurora](https://github.com/encounter/aurora) developers, the [TP speedrunning community](https://zsrtp.link), and all [contributors](https://github.com/TwilitRealm/dusk/graphs/contributors).
+
+<div align="center">
+    <a href="https://github.com/encounter/aurora">
+        <img src="assets/aurora-powered.png" alt="Powered by Aurora" width="800">
+    </a>
+</div>
