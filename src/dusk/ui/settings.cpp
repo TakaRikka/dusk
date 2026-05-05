@@ -423,9 +423,6 @@ SettingsWindow::SettingsWindow() {
         leftPane.add_section("General");
         addOption("Mirror Mode", getSettings().game.enableMirrorMode,
             "Mirrors the world horizontally, matching the Wii version of the game.");
-        addOption("Disable Main HUD", getSettings().game.disableMainHUD,
-            "Disables the main HUD of the game.<br/>Useful for recording or a more immersive "
-            "experience.");
         addOption("Restore Wii 1.0 Glitches", getSettings().game.restoreWiiGlitches,
             "Restores patched glitches from Wii USA 1.0, the first released version.");
         addOption("Enable Rotating Link Doll", getSettings().game.enableLinkDollRotation,
@@ -518,6 +515,12 @@ SettingsWindow::SettingsWindow() {
                     },
                 .isDisabled = [] { return !getSettings().game.speedrunMode; },
             });
+
+        leftPane.add_section("Recording");
+
+        addOption("Recording Mode", getSettings().game.recordingMode,
+            "Disables the HUD of the game.<br/>Useful for recording or a more immersive "
+            "experience.");
     });
 
     add_tab("Cheats", [this](Rml::Element* content) {

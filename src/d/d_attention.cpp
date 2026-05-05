@@ -1427,7 +1427,7 @@ int dAttention_c::Run() {
 
 void dAttention_c::Draw() {
 #if TARGET_PC
-if (dusk::getSettings().game.disableMainHUD) {
+if (dusk::getSettings().game.recordingMode) {
     return;
 }
 #endif

@@ -70,7 +70,7 @@ dMsgScrnArrow_c::~dMsgScrnArrow_c() {
 
 void dMsgScrnArrow_c::draw() {
 #if TARGET_PC
-    if (dusk::getSettings().game.disableMainHUD) {
+    if (dusk::getSettings().game.recordingMode) {
         return;
     }
 #endif

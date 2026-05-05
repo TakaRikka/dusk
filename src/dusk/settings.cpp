@@ -46,9 +46,8 @@ UserSettings g_userSettings = {
 
         // Preferences
         .enableMirrorMode {"game.enableMirrorMode", false},
-        .disableMainHUD {"game.disableMainHUD", false},
         .pauseOnFocusLost {"game.pauseOnFocusLost", false},
-        .enableLinkDollRotation = {"game.enableLinkDollRotation", false},
+        .enableLinkDollRotation {"game.enableLinkDollRotation", false},
         .enableAchievementNotifications {"game.enableAchievementNotifications", true},
 
         // Graphics
@@ -83,15 +82,15 @@ UserSettings g_userSettings = {
 
         // Cheats
         .infiniteHearts {"game.infiniteHearts", false},
-        .infiniteArrows{"game.infiniteArrows", false},
-        .infiniteBombs{"game.infiniteBombs", false},
-        .infiniteOil{"game.infiniteOil", false},
-        .infiniteOxygen{"game.infiniteOxygen", false},
-        .infiniteRupees{"game.infiniteRupees", false},
+        .infiniteArrows {"game.infiniteArrows", false},
+        .infiniteBombs {"game.infiniteBombs", false},
+        .infiniteOil {"game.infiniteOil", false},
+        .infiniteOxygen {"game.infiniteOxygen", false},
+        .infiniteRupees {"game.infiniteRupees", false},
         .enableIndefiniteItemDrops {"game.enableIndefiniteItemDrops", false},
-        .moonJump{"game.moonJump", false},
-        .superClawshot{"game.superClawshot", false},
-        .alwaysGreatspin{"game.alwaysGreatspin", false},
+        .moonJump {"game.moonJump", false},
+        .superClawshot {"game.superClawshot", false},
+        .alwaysGreatspin {"game.alwaysGreatspin", false},
         .enableFastIronBoots {"game.enableFastIronBoots", false},
         .canTransformAnywhere {"game.canTransformAnywhere", false},
         .fastSpinner {"game.fastSpinner", false},
@@ -105,7 +104,8 @@ UserSettings g_userSettings = {
 
         // Tools
         .speedrunMode {"game.speedrunMode", false},
-        .liveSplitEnabled {"game.liveSplitEnabled", false}
+        .liveSplitEnabled {"game.liveSplitEnabled", false},
+        .recordingMode {"game.recordingMode", false}
     },
 
     .backend = {
@@ -162,7 +162,6 @@ void registerSettings() {
     Register(g_userSettings.game.invertCameraXAxis);
     Register(g_userSettings.game.invertCameraYAxis);
     Register(g_userSettings.game.freeCameraSensitivity);
-    Register(g_userSettings.game.disableMainHUD);
     Register(g_userSettings.game.pauseOnFocusLost);
     Register(g_userSettings.game.bloomMode);
     Register(g_userSettings.game.bloomMultiplier);
@@ -183,6 +182,7 @@ void registerSettings() {
     Register(g_userSettings.game.enableTurboKeybind);
     Register(g_userSettings.game.speedrunMode);
     Register(g_userSettings.game.liveSplitEnabled);
+    Register(g_userSettings.game.recordingMode);
     Register(g_userSettings.game.fastSpinner);
     Register(g_userSettings.game.infiniteHearts);
     Register(g_userSettings.game.infiniteArrows);

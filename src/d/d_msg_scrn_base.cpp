@@ -62,7 +62,7 @@ void dMsgScrnBase_c::init() {
 
 void dMsgScrnBase_c::multiDraw() {
 #if TARGET_PC
-    if (dusk::getSettings().game.disableMainHUD) {
+    if (dusk::getSettings().game.recordingMode) {
         return;
     }
 #endif
@@ -73,7 +73,7 @@ void dMsgScrnBase_c::multiDraw() {
 
 void dMsgScrnBase_c::draw() {
 #if TARGET_PC
-    if (dusk::getSettings().game.disableMainHUD) {
+    if (dusk::getSettings().game.recordingMode) {
         return;
     }
 #endif
@@ -87,7 +87,7 @@ void dMsgScrnBase_c::draw() {
 
 void dMsgScrnBase_c::drawSelf() {
 #if TARGET_PC
-    if (dusk::getSettings().game.disableMainHUD) {
+    if (dusk::getSettings().game.recordingMode) {
         return;
     }
 #endif
@@ -96,7 +96,7 @@ void dMsgScrnBase_c::drawSelf() {
 
 void dMsgScrnBase_c::drawOutFont(f32 param_0, f32 param_1, f32 param_2) {
 #if TARGET_PC
-    if (dusk::getSettings().game.disableMainHUD) {
+    if (dusk::getSettings().game.recordingMode) {
         return;
     }
 #endif

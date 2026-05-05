@@ -282,10 +282,6 @@ namespace dusk {
             m_isHidden = !m_isHidden;
         }
         
-        if (ImGui::IsKeyPressed(ImGuiKey_Backslash)) {
-            getSettings().game.disableMainHUD.setValue(!getSettings().game.disableMainHUD);
-        }
-
         bool showMenu = !m_isHidden;
 
         // The menu bar renders with ImGuiCol_WindowBg behind it. We just want ImGuiCol_MenuBarBg,

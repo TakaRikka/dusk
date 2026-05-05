@@ -181,7 +181,7 @@ void dMsgScrnKanban_c::exec() {
 
 void dMsgScrnKanban_c::draw() {
 #if TARGET_PC
-    if (dusk::getSettings().game.disableMainHUD) {
+    if (dusk::getSettings().game.recordingMode) {
         return;
     }
 #endif

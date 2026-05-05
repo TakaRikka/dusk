@@ -318,7 +318,7 @@ int dMeter2_c::_execute() {
 
 int dMeter2_c::_draw() {
     #if TARGET_PC
-    if (dusk::getSettings().game.disableMainHUD) {
+    if (dusk::getSettings().game.recordingMode) {
         return 1;
     }
     #endif

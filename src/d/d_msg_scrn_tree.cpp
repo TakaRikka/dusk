@@ -192,7 +192,7 @@ void dMsgScrnTree_c::exec() {
 
 void dMsgScrnTree_c::draw() {
 #if TARGET_PC
-    if (dusk::getSettings().game.disableMainHUD) {
+    if (dusk::getSettings().game.recordingMode) {
         return;
     }
 #endif

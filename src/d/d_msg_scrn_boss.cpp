@@ -96,7 +96,7 @@ void dMsgScrnBoss_c::exec() {
 
 void dMsgScrnBoss_c::drawSelf() {
 #if TARGET_PC
-    if (dusk::getSettings().game.disableMainHUD) {
+    if (dusk::getSettings().game.recordingMode) {
         return;
     }
 #endif

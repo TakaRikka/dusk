@@ -132,7 +132,7 @@ void dMsgScrnPlace_c::exec() {
 
 void dMsgScrnPlace_c::drawSelf() {
 #if TARGET_PC
-    if (dusk::getSettings().game.disableMainHUD) {
+    if (dusk::getSettings().game.recordingMode) {
         return;
     }
 #endif

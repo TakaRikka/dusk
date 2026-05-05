@@ -308,7 +308,7 @@ void dMsgScrnTalk_c::exec() {
 
 void dMsgScrnTalk_c::drawSelf() {
 #if TARGET_PC
-    if (dusk::getSettings().game.disableMainHUD) {
+    if (dusk::getSettings().game.recordingMode) {
         return;
     }
 #endif
