@@ -119,7 +119,7 @@ void TabBar::add_tab(const Rml::String& title, TabCallback callback) {
     auto& button = add_child<Button>(Button::Props{title}, "tab");
     button.on_nav_command([this, index](Rml::Event&, NavCommand cmd) {
         if (cmd == NavCommand::Confirm) {
-            mDoAud_seStartMenu(mProps.autoSelect ? Z2SE_SY_CURSOR_ITEM : Z2SE_SY_MENU_CURSOR_COMMON);
+            mDoAud_seStartMenu(mProps.autoSelect ? Z2SE_SY_CURSOR_ITEM : Z2SE_SY_CURSOR_OK);
             set_active_tab(index);
             return true;
         }
