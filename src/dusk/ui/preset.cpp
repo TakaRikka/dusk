@@ -50,17 +50,17 @@ void applyPresetDusk() {
 }  // namespace
 
 PresetWindow::PresetWindow() : WindowSmall("preset", "preset-dialog") {
-    auto* title = create_element(mDialog, "div");
+    auto* title = append(mDialog, "div");
     title->SetClass("preset-title", true);
     title->SetInnerRML("Welcome to Dusk!");
 
-    auto* intro = create_element(mDialog, "div");
+    auto* intro = append(mDialog, "div");
     intro->SetClass("preset-intro", true);
     intro->SetInnerRML(
         "Choose a preset to get started.<br/>"
         "You can change any setting later from the Settings menu.");
 
-    auto* grid = create_element(mDialog, "div");
+    auto* grid = append(mDialog, "div");
     grid->SetClass("preset-grid", true);
 
     struct PresetInfo {
@@ -81,7 +81,7 @@ PresetWindow::PresetWindow() : WindowSmall("preset", "preset-dialog") {
     };
 
     for (const auto& preset : kPresets) {
-        auto* col = create_element(grid, "div");
+        auto* col = append(grid, "div");
         col->SetClass("preset-col", true);
 
         auto btn = std::make_unique<Button>(col, Rml::String(preset.name));
@@ -98,7 +98,7 @@ PresetWindow::PresetWindow() : WindowSmall("preset", "preset-dialog") {
         });
         mButtons.push_back(std::move(btn));
 
-        auto* desc = create_element(col, "div");
+        auto* desc = append(col, "div");
         desc->SetClass("preset-desc", true);
         desc->SetInnerRML(preset.desc);
     }

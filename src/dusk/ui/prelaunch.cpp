@@ -292,9 +292,6 @@ void Prelaunch::update() {
         if (hasValidPath) {
             mDiscStatus->SetAttribute("status", "good");
             discStatusLabel->SetInnerRML("Disc ready.");
-        } else {
-            mDiscStatus->SetAttribute("status", "bad");
-            discStatusLabel->SetInnerRML("Disc not found.");
         }
     }
     if (mDiscDetail != nullptr) {

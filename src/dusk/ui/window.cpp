@@ -81,7 +81,9 @@ Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("w
 
     // Hide document after transition completion
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
-        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") && Document::visible()) {
+        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") &&
+            Document::visible())
+        {
             Document::hide(mPendingClose);
         }
     });
@@ -273,23 +275,19 @@ bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
     return false;
 }
 
-WindowSmall::WindowSmall(const Rml::String& window_class, const Rml::String& dialog_class)
-    : Document(kDocumentSourceSmall), mRoot(mDocument->GetElementById("window")), mDialog(mDocument->GetElementById("dialog")) {
+WindowSmall::WindowSmall(const Rml::String& windowClass, const Rml::String& dialogClass)
+    : Document(kDocumentSourceSmall), mRoot(mDocument->GetElementById("window")),
+      mDialog(mDocument->GetElementById("dialog")) {
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
         if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") &&
-            Document::visible()) {
+            Document::visible())
+        {
             Document::hide(mPendingClose);
         }
     });
 
-    mRoot->SetClass(window_class, true);
-    mDialog->SetClass(dialog_class, true);
-}
-
-Rml::Element* WindowSmall::create_element(Rml::Element* parent, const Rml::String& tag) {
-    auto* doc = parent->GetOwnerDocument();
-    auto elem = doc->CreateElement(tag);
-    return parent->AppendChild(std::move(elem));
+    mRoot->SetClass(windowClass, true);
+    mDialog->SetClass(dialogClass, true);
 }
 
 void WindowSmall::show() {

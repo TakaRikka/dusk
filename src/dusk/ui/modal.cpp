@@ -4,15 +4,15 @@ namespace dusk::ui {
 
 Modal::Modal(Props props)
     : WindowSmall("modal", "modal-dialog"), mProps(std::move(props)) {
-    auto* title = create_element(mDialog, "div");
+    auto* title = append(mDialog, "div");
     title->SetClass("preset-title", true);
     title->SetInnerRML(mProps.title);
 
-    auto* body = create_element(mDialog, "div");
+    auto* body = append(mDialog, "div");
     body->SetClass("preset-intro", true);
     body->SetInnerRML(mProps.bodyRml);
 
-    auto* actions = create_element(mDialog, "div");
+    auto* actions = append(mDialog, "div");
     actions->SetClass("modal-actions", true);
 
     for (auto& action : mProps.actions) {

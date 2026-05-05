@@ -148,6 +148,17 @@ std::string escape(std::string_view str) noexcept {
     return result;
 }
 
+Rml::Element* append(Rml::Element* parent, const Rml::String& tag) noexcept {
+    if (parent == nullptr) {
+        return nullptr;
+    }
+    auto* doc = parent->GetOwnerDocument();
+    if (doc == nullptr) {
+        return nullptr;
+    }
+    return parent->AppendChild(doc->CreateElement(tag));
+}
+
 NavCommand map_nav_event(const Rml::Event& event) noexcept {
     const auto key = static_cast<Rml::Input::KeyIdentifier>(
         event.GetParameter<int>("key_identifier", Rml::Input::KI_UNKNOWN));
