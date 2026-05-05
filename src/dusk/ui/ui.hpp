@@ -18,12 +18,12 @@ class Popup;
 constexpr u32 kSoundClick = Z2SE_SY_CURSOR_OK;
 
 // Menu button pressed (open/close menu bar or hide/show the active window)
-constexpr u32 kSoundMenuClose = Z2SE_SY_MENU_OUT;
-constexpr u32 kSoundMenuOpen = Z2SE_SY_MENU_IN;
+constexpr u32 kSoundMenuOpen = Z2SE_SY_MENU_SUB_IN;
+constexpr u32 kSoundMenuClose = Z2SE_SY_MENU_SUB_OUT;
 
 // Window opened/closed
-constexpr u32 kSoundWindowOpen = Z2SE_SY_CURSOR_OK;
-constexpr u32 kSoundWindowClose = Z2SE_SY_CURSOR_CANCEL;
+constexpr u32 kSoundWindowOpen = Z2SE_SY_MENU_NEXT;
+constexpr u32 kSoundWindowClose = Z2SE_SY_MENU_BACK;
 
 // Window tab changed
 constexpr u32 kSoundTabChanged = Z2SE_SY_MENU_CURSOR_COMMON;
@@ -31,7 +31,7 @@ constexpr u32 kSoundTabChanged = Z2SE_SY_MENU_CURSOR_COMMON;
 // Item within menu focused
 constexpr u32 kSoundItemFocus = Z2SE_SY_CURSOR_ITEM;
 // Item changed (e.g. number input left/right)
-constexpr u32 kSoundItemChange = Z2SE_SY_CURSOR_ITEM;
+constexpr u32 kSoundItemChange = Z2SE_SY_NAME_CURSOR;
 // Item enabled ("On")
 constexpr u32 kSoundItemEnable = Z2SE_SY_CURSOR_OK;
 // Item disabled ("Off")

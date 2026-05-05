@@ -106,6 +106,10 @@ Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("w
 void Window::show() {
     Document::show();
     mRoot->SetAttribute("open", "");
+    if (mInitialOpen) {
+        mDoAud_seStartMenu(kSoundWindowOpen);
+        mInitialOpen = false;
+    }
 }
 
 void Window::hide(bool close) {

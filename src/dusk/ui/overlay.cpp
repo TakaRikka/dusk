@@ -216,6 +216,7 @@ Overlay::Overlay(OverlayProps props)
         returnButton.root()->SetClass("return", true);
         auto& resetButton =
             add_component<Button>(footer, "Reset to default", "footer-button").on_pressed([this] {
+                mDoAud_seStartMenu(kSoundItemChange);
                 reset_default();
             });
         resetButton.root()->SetClass("reset", true);
@@ -233,15 +234,16 @@ Overlay::Overlay(OverlayProps props)
 }
 
 void Overlay::show() {
-    mDoAud_seStartMenu(kSoundWindowOpen);
     Document::show();
     mRoot->SetAttribute("open", "");
+    mDoAud_seStartMenu(kSoundWindowOpen);
 }
 
 void Overlay::hide(bool close) {
     mRoot->RemoveAttribute("open");
     if (close) {
         mPendingClose = true;
+        mDoAud_seStartMenu(kSoundWindowClose);
     }
 }
 

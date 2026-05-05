@@ -118,7 +118,9 @@ void TabBar::add_tab(const Rml::String& title, TabCallback callback) {
     auto& button = add_child<Button>(Button::Props{title}, "tab");
     button.on_nav_command([this, index](Rml::Event&, NavCommand cmd) {
         if (cmd == NavCommand::Confirm) {
-            mDoAud_seStartMenu(mProps.autoSelect ? kSoundTabChanged : kSoundWindowOpen);
+            if (mProps.autoSelect) {
+                mDoAud_seStartMenu(kSoundTabChanged);
+            }
             set_active_tab(index);
             return true;
         }

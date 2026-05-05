@@ -39,10 +39,11 @@ const Rml::String kDocumentSource = R"RML(
 
 Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("popup")) {
     mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
-                                                  .onClose = [this] {
-                                                      mDoAud_seStartMenu(kSoundMenuClose);
-                                                      hide(false);
-                                                  },
+                                                  .onClose =
+                                                      [this] {
+                                                          mDoAud_seStartMenu(kSoundMenuClose);
+                                                          hide(false);
+                                                      },
                                                   .autoSelect = false,
                                               });
     mTabBar->add_tab("Settings", [this] { push(std::make_unique<SettingsWindow>()); });
