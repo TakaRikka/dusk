@@ -36,19 +36,20 @@ class PrelaunchOptions;
 struct PrelaunchState {
     bool initialized = false;
     std::string selectedDiscPath;
+    bool selectedDiscIsValid = false;
+    bool selectedDiscIsPal = false;
+    std::string errorString;
+    bool initialDiscIsPal = false;
     std::string initialDiscPath;
     GameLanguage initialLanguage = GameLanguage::English;
     std::string initialGraphicsBackend;
     int initialCardFileType = 0;
-    std::string errorString;
-    bool selectedDiscIsValid = false;
-    bool selectedDiscIsPal = false;
-    bool initialDiscIsPal = false;
 };
 
 PrelaunchState& prelaunch_state() noexcept;
 void ensure_initialized() noexcept;
 void refresh_state() noexcept;
 void open_iso_picker() noexcept;
+bool is_restart_pending() noexcept;
 
 }  // namespace dusk::ui

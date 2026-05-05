@@ -52,6 +52,23 @@ constexpr std::array<SDL_DialogFileFilter, 2> kDiscFileFilters{{
     {"All Files", "*"},
 }};
 
+static std::string get_error_msg(iso::ValidationError error) {
+    switch (error) {
+    case iso::ValidationError::IOError:
+        return "Unable to read the selected file.";
+    case iso::ValidationError::InvalidImage:
+        return "The selected file is not a valid disc image.";
+    case iso::ValidationError::WrongGame:
+        return "The selected disc image is not supported by Dusk.";
+    case iso::ValidationError::WrongVersion:
+        return "Dusk currently supports USA and PAL disc images only.";
+    case iso::ValidationError::Success:
+        return "The selected disc image is valid.";
+    default:
+        return "The selected disc image could not be validated.";
+    }
+}
+
 void file_dialog_callback(void*, const char* path, const char* error) {
     auto& state = prelaunch_state();
     if (error != nullptr) {
@@ -61,8 +78,9 @@ void file_dialog_callback(void*, const char* path, const char* error) {
         return;
     }
 
-    if (iso::validate(path) != iso::ValidationError::Success) {
-        // TODO: User facing reason for why the disc wasn't loaded
+    const auto validation = iso::validate(path);
+    if (validation != iso::ValidationError::Success) {
+        state.errorString = escape(get_error_msg(validation));
         return;
     }
 
@@ -113,6 +131,23 @@ void open_iso_picker() noexcept {
     ensure_initialized();
     ShowFileSelect(&file_dialog_callback, nullptr, aurora::window::get_sdl_window(),
         kDiscFileFilters.data(), kDiscFileFilters.size(), nullptr, false);
+}
+
+bool is_restart_pending() noexcept {
+    const auto& state = prelaunch_state();
+    if (!state.initialDiscPath.empty() && state.selectedDiscPath != state.initialDiscPath) {
+        return true;
+    }
+    if (getSettings().backend.graphicsBackend.getValue() != state.initialGraphicsBackend) {
+        return true;
+    }
+    if (getSettings().game.language.getValue() != state.initialLanguage) {
+        return true;
+    }
+    if (getSettings().backend.cardFileType.getValue() != state.initialCardFileType) {
+        return true;
+    }
+    return false;
 }
 
 void apply_intro_animation(Rml::Element* element, const char* delay_class) {
@@ -204,6 +239,27 @@ void Prelaunch::hide(bool close) {
 void Prelaunch::update() {
     ensure_initialized();
     try_apply_mirrored_layout(mDocument);
+
+    auto& state = prelaunch_state();
+    if (!state.errorString.empty() && top_document() == this) {
+        auto dismissInvalidDisc = [] {
+            prelaunch_state().errorString.clear();
+            if (auto* top = dynamic_cast<Modal*>(top_document())) {
+                top->pop();
+            }
+        };
+        push_document(std::make_unique<Modal>(Modal::Props{
+            .title = "Invalid disc image",
+            .bodyRml = state.errorString,
+            .actions = {
+                ModalAction{
+                    .label = "OK",
+                    .onPressed = dismissInvalidDisc,
+                },
+            },
+            .onDismiss = dismissInvalidDisc,
+        }));
+    }
 
     const bool hasValidPath = prelaunch_state().selectedDiscIsValid;
     mDocument->SetClass("disc-ready", hasValidPath);

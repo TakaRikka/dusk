@@ -43,7 +43,7 @@ const Rml::String kDocumentSource = R"RML(
 
 Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("window")) {
     mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
-                                                  .onClose = [this] { pop(); },
+                                                  .onClose = [this] { request_close(); },
                                                   .selectedTabIndex = 0,
                                                   .autoSelect = true,
                                               });
@@ -139,6 +139,16 @@ bool Window::set_active_tab(int index) {
     return mTabBar->set_active_tab(index);
 }
 
+void Window::request_close() {
+    if (!consume_close_request()) {
+        pop();
+    }
+}
+
+bool Window::consume_close_request() {
+    return false;
+}
+
 void Window::refresh_active_tab() {
     mTabBar->refresh_active_tab();
 }
@@ -182,7 +192,7 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     }
     if (cmd == NavCommand::Cancel) {
         mDoAud_seStartMenu(Z2SE_SY_CURSOR_CANCEL);
-        pop();
+        request_close();
         return true;
     }
     if (mTabBar->handle_nav_command(event, cmd)) {

@@ -31,6 +31,8 @@ public:
     bool set_active_tab(int index);
 
 protected:
+    void request_close();
+    virtual bool consume_close_request();
     void add_tab(const Rml::String& title, TabBuilder builder);
     void refresh_active_tab();
     void update_safe_area() noexcept;
