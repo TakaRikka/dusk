@@ -17,7 +17,7 @@ body {
     align-items: stretch;
 }
 
-.overlay-root {
+.tuner-root {
     width: 100%;
     min-height: 45%;
     display: flex;
@@ -29,11 +29,11 @@ body {
     transition: filter 0.2s linear-in-out;
 }
 
-.overlay-root[open] {
+.tuner-root[open] {
     filter: opacity(1);
 }
 
-.overlay {
+.tuner {
     width: 100%;
     max-width: 1216dp;
     margin-left: auto;
@@ -45,11 +45,11 @@ body {
 }
 
 @media (max-height: 800dp) {
-    .overlay-root {
+    .tuner-root {
         min-height: 38%;
     }
 
-    .overlay {
+    .tuner {
         gap: 16dp;
         padding: 32dp 48dp;
     }

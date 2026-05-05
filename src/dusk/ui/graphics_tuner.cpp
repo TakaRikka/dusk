@@ -19,11 +19,11 @@ namespace {
 const Rml::String kDocumentSource = R"RML(
 <rml>
 <head>
-    <link type="text/rcss" href="res/rml/overlay.rcss" />
+    <link type="text/rcss" href="res/rml/tuner.rcss" />
 </head>
 <body>
-    <div id="root" class="overlay-root">
-        <div class="overlay">
+    <div id="root" class="tuner-root">
+        <div class="tuner">
             <div class="header">
                 <div id="title"></div>
                 <div id="carousel-container" class="carousel-container"></div>
