@@ -1,18 +1,14 @@
 #pragma once
 
-#ifdef DUSK_DISCORD_RPC
+#ifdef DUSK_DISCORD
 
-namespace dusk {
-namespace discord {
+namespace dusk::discord {
 
-void Initialize();
+void initialize();
+void run_callbacks();
+void update_presence();
+void shutdown();
 
-void RunCallbacks();
+}  // namespace dusk::discord
 
-void UpdatePresence();
-
-void Shutdown();
-}
-}
-
-#endif // DUSK_DISCORD_RPC
+#endif  // DUSK_DISCORD
