@@ -201,7 +201,7 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     }
     if (cmd == NavCommand::Confirm || cmd == NavCommand::Down) {
         if (!mContentComponents.empty() && mContentComponents.front()->focus()) {
-            mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
+            mDoAud_seStartMenu(Z2SE_SY_CURSOR_ITEM);
             return true;
         }
     }
@@ -219,7 +219,7 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
 bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
     if (cmd == NavCommand::Up) {
         if (focus()) {
-            mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
+            mDoAud_seStartMenu(Z2SE_SY_CURSOR_ITEM);
             return true;
         }
         return false;

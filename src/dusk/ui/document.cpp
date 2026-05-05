@@ -52,7 +52,7 @@ Document::Document(const Rml::String& source) : mDocument(load_document(source))
         if ((cmd == NavCommand::Up || cmd == NavCommand::Down) &&
             mDocument->GetFocusLeafNode() != prevFocused)
         {
-            mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
+            mDoAud_seStartMenu(Z2SE_SY_CURSOR_ITEM);
         }
     });
 }

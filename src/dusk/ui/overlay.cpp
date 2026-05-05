@@ -149,7 +149,7 @@ void SteppedCarousel::apply(int value) {
     if (nextValue == currentValue) {
         return;
     }
-    mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
+    mDoAud_seStartMenu(Z2SE_SY_CURSOR_ITEM);
     if (mProps.onChange) {
         mProps.onChange(nextValue);
     }
