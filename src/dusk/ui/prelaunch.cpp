@@ -366,10 +366,8 @@ bool Prelaunch::visible() const {
 bool Prelaunch::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     int direction = 0;
     if (cmd == NavCommand::Down) {
-        mDoAud_seStartMenu(Z2SE_SY_CURSOR_ITEM);
         direction = 1;
     } else if (cmd == NavCommand::Up) {
-        mDoAud_seStartMenu(Z2SE_SY_CURSOR_ITEM);
         direction = -1;
     } else {
         return false;
@@ -386,6 +384,7 @@ bool Prelaunch::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     int i = ((focusedButton + direction) % n + n) % n;
     while (i >= 0 && i < mMenuButtons.size()) {
         if (mMenuButtons[i]->focus()) {
+            mDoAud_seStartMenu(kSoundItemFocus);
             event.StopPropagation();
             return true;
         }

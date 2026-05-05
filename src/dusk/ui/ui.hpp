@@ -31,7 +31,7 @@ constexpr u32 kSoundWindowClose = Z2SE_SY_MENU_BACK;
 constexpr u32 kSoundTabChanged = Z2SE_SY_MENU_CURSOR_COMMON;
 
 // Item within menu focused
-constexpr u32 kSoundItemFocus = Z2SE_SY_CURSOR_ITEM;
+constexpr u32 kSoundItemFocus = Z2SE_NAVI_BLINK;
 // Item changed (e.g. number input left/right)
 constexpr u32 kSoundItemChange = Z2SE_SY_NAME_CURSOR;
 // Item enabled ("On")
