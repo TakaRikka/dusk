@@ -18,14 +18,12 @@ void applyPresetClassic() {
     s.game.internalResolutionScale.setValue(1);
     s.game.shadowResolutionMultiplier.setValue(1);
     s.game.hideTvSettingsScreen.setValue(false);
-    s.game.skipWarningScreen.setValue(false);
     AuroraSetViewportPolicy(AURORA_VIEWPORT_FIT);
 }
 
 void applyPresetDusk() {
     auto& s = getSettings();
     s.game.hideTvSettingsScreen.setValue(true);
-    s.game.skipWarningScreen.setValue(true);
     s.game.noReturnRupees.setValue(true);
     s.game.disableRupeeCutscenes.setValue(true);
     s.game.noSwordRecoil.setValue(true);

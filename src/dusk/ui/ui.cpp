@@ -103,7 +103,8 @@ void update() noexcept {
 
     // If no documents have focus, explicitly focus the top one
     if (auto* context = aurora::rmlui::get_context();
-        context != nullptr && context->GetFocusElement() == nullptr)
+        context != nullptr && (context->GetFocusElement() == nullptr ||
+                                  context->GetFocusElement() == context->GetRootElement()))
     {
         for (auto& doc : std::views::reverse(sDocuments)) {
             if (!doc->closed() && !doc->pending_close() && doc->focus()) {
