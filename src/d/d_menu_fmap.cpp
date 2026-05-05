@@ -919,9 +919,20 @@ void dMenu_Fmap_c::region_map_proc() {
         }
         mpDraw2DBack->regionMapMove(mpStick);
         int stage_no, room_no;
+
+#if TARGET_PC
+        f32 arrow_pos_x = mpDraw2DBack->getArrowPos2DX();
+        if (dusk::getSettings().game.enableMirrorMode) {
+            arrow_pos_x = mpDraw2DBack->getMirrorPosX(arrow_pos_x, 0.0f);
+        }
+
+        f32 pos_x = arrow_pos_x - mDoGph_gInf_c::getMinXF() - mDoGph_gInf_c::getWidthF() * 0.5f;
+#else
         f32 pos_x = mpDraw2DBack->getArrowPos2DX() - mDoGph_gInf_c::getMinXF()
                                                     - mDoGph_gInf_c::getWidthF() * 0.5f;
+#endif
         f32 pos_y = mpDraw2DBack->getArrowPos2DY() - mDoGph_gInf_c::getHeightF() * 0.5f;
+
         mpMenuFmapMap->getPointStagePathInnerNo(getNowFmapRegionData(), pos_x, pos_y,
                                                 mStayStageNo, &stage_no, &room_no);
         if (mStageCursor != stage_no || mRoomCursor != room_no || mResetAreaName) {

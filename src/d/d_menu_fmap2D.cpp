@@ -1043,6 +1043,12 @@ void dMenu_Fmap2DBack_c::allmap_move2(STControl* param_0) {
     calcAllMapPos2D((mArrowPos3DX + control_xpos) - mStageTransX,
                     (mArrowPos3DZ + control_ypos) - mStageTransZ, &sp14, &sp10);
 
+#if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        sp14 = getMirrorPosX(sp14, 0.0f);
+    }
+#endif
+
     mSelectRegion = 0xff;
     for (int i = 7; i >= 0; i--) {
         int val = field_0x1230[i];
