@@ -7,6 +7,7 @@
 #include "dusk/main.h"
 #include "dusk/settings.h"
 #include "dusk/ui/prelaunch_options.hpp"
+#include "dusk/ui/preset.hpp"
 #include "version.h"
 
 #include <SDL3/SDL_dialog.h>
@@ -172,8 +173,8 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         auto& state = prelaunch_state();
         mMenuButtons.push_back(
             std::make_unique<Button>(menuList, state.selectedDiscIsValid ? "Play" : "Select Disc Image"));
-        mMenuButtons.back()->on_pressed([this, state] {
-            if (!state.selectedDiscIsValid) {
+        mMenuButtons.back()->on_pressed([this] {
+            if (!prelaunch_state().selectedDiscIsValid) {
                 open_iso_picker();
                 return;
             }
@@ -187,7 +188,9 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
             }
 
             IsGameLaunched = true;
-            push_document(std::make_unique<Popup>(), false);
+            if (!getSettings().backend.wasPresetChosen) {
+                push_document(std::make_unique<dusk::ui::PresetWindow>());
+            }
             hide(true);
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-1");

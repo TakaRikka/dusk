@@ -12,6 +12,7 @@ public:
     void hide(bool close) override;
 
 protected:
+    bool handle_nav_command(Rml::Event& event, NavCommand cmd);
     bool consume_close_request() override;
 
 private:

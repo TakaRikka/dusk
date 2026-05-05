@@ -57,10 +57,8 @@
 #include "dusk/iso_validate.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
-#include "dusk/ui/editor.hpp"
 #include "dusk/ui/popup.hpp"
 #include "dusk/ui/prelaunch.hpp"
-#include "dusk/ui/preset.hpp"
 #include "dusk/ui/ui.hpp"
 #include "version.h"
 
@@ -593,6 +591,7 @@ int game_main(int argc, char* argv[]) {
     dusk::audio::EnableHrtf = dusk::getSettings().audio.enableHrtf;
 
     dusk::ui::initialize();
+    dusk::ui::push_document(std::make_unique<dusk::ui::Popup>(), false);
 
     // Invalidate a bad saved isoPath so that Dusk can't get blocked from starting up
     const std::string p = dusk::getSettings().backend.isoPath;
@@ -632,11 +631,6 @@ int game_main(int argc, char* argv[]) {
                 dusk::ui::shutdown();
                 aurora_shutdown();
                 return 0;
-            }
-        } else {
-            dusk::ui::push_document(std::make_unique<dusk::ui::Popup>(), false);
-            if (!dusk::getSettings().backend.wasPresetChosen) {
-                dusk::ui::push_document(std::make_unique<dusk::ui::PresetWindow>());
             }
         }
 

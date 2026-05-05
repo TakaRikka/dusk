@@ -363,6 +363,30 @@ void PrelaunchOptions::update() {
     });
 }
 
+bool PrelaunchOptions::handle_nav_command(Rml::Event& event, NavCommand cmd) {
+    auto* target = event.GetTargetElement();
+    if (cmd != NavCommand::Next && cmd != NavCommand::Previous && target->Closest("content")) {
+        if (handle_content_nav(event, cmd)) {
+            return true;
+        }
+    }
+    if (cmd == NavCommand::Confirm || cmd == NavCommand::Down) {
+        if (!mContentComponents.empty() && mContentComponents.front()->focus()) {
+            mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
+            return true;
+        }
+    }
+    if (cmd == NavCommand::Cancel) {
+        mDoAud_seStartMenu(Z2SE_SY_CURSOR_CANCEL);
+        request_close();
+        return true;
+    }
+    if (mTabBar->handle_nav_command(event, cmd)) {
+        return true;
+    }
+    return false;
+}
+
 bool PrelaunchOptions::consume_close_request() {
     if (!is_restart_pending()) {
         return false;
