@@ -1,7 +1,7 @@
 #pragma once
 
 #include "button.hpp"
-#include "document.hpp"
+#include "window.hpp"
 
 namespace dusk::ui {
 
@@ -10,7 +10,7 @@ struct ModalAction {
     std::function<void()> onPressed;
 };
 
-class Modal : public Document {
+class Modal : public WindowSmall {
 public:
     struct Props {
         Rml::String title;
@@ -22,9 +22,6 @@ public:
 
     explicit Modal(Props props);
 
-    void show() override;
-    void hide(bool close) override;
-    bool visible() const override;
     bool focus() override;
 
 protected:
@@ -34,7 +31,6 @@ private:
     void dismiss();
 
     Props mProps;
-    Rml::Element* mRoot = nullptr;
     std::vector<std::unique_ptr<Button> > mButtons;
 };
 

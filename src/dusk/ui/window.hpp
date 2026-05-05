@@ -55,4 +55,20 @@ protected:
     Insets mBodyPadding;
 };
 
+// Shared shell for small-style windows such as Modal and PresetWindow
+class WindowSmall : public Document {
+public:
+    WindowSmall(const Rml::String& window_class, const Rml::String& dialog_class);
+
+    static Rml::Element* create_element(Rml::Element* parent, const Rml::String& tag);
+
+    void show() override;
+    void hide(bool close) override;
+    bool visible() const override;
+
+protected:
+    Rml::Element* mRoot = nullptr;
+    Rml::Element* mDialog = nullptr;
+};
+
 }  // namespace dusk::ui

@@ -39,6 +39,19 @@ const Rml::String kDocumentSource = R"RML(
 </rml>
 )RML";
 
+const Rml::String kDocumentSourceSmall = R"RML(
+<rml>
+<head>
+    <link type="text/rcss" href="res/rml/window.rcss" />
+</head>
+<body>
+    <window id="window" class="small">
+        <div id="dialog"/>
+    </window>
+</body>
+</rml>
+)RML";
+
 }  // namespace
 
 Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("window")) {
@@ -258,6 +271,39 @@ bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
         }
     }
     return false;
+}
+
+WindowSmall::WindowSmall(const Rml::String& window_class, const Rml::String& dialog_class)
+    : Document(kDocumentSourceSmall), mRoot(mDocument->GetElementById("window")), mDialog(mDocument->GetElementById("dialog")) {
+    listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
+        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") &&
+            Document::visible()) {
+            Document::hide(mPendingClose);
+        }
+    });
+
+    mRoot->SetClass(window_class, true);
+    mDialog->SetClass(dialog_class, true);
+}
+
+Rml::Element* WindowSmall::create_element(Rml::Element* parent, const Rml::String& tag) {
+    auto* doc = parent->GetOwnerDocument();
+    auto elem = doc->CreateElement(tag);
+    return parent->AppendChild(std::move(elem));
+}
+
+void WindowSmall::show() {
+    Document::show();
+    mRoot->SetAttribute("open", "");
+}
+
+void WindowSmall::hide(bool close) {
+    mRoot->RemoveAttribute("open");
+    mPendingClose = close;
+}
+
+bool WindowSmall::visible() const {
+    return mRoot->HasAttribute("open");
 }
 
 }  // namespace dusk::ui

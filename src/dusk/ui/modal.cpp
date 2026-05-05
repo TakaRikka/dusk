@@ -2,44 +2,17 @@
 
 namespace dusk::ui {
 
-const Rml::String kDocumentSource = R"RML(
-<rml>
-<head>
-    <link type="text/rcss" href="res/rml/window.rcss" />
-</head>
-<body>
-    <window id="window" class="small modal">
-        <div id="modal" class="modal-dialog" />
-    </window>
-</body>
-</rml>
-)RML";
-
-Rml::Element* createElement(Rml::Element* parent, const Rml::String& tag) {
-    auto* doc = parent->GetOwnerDocument();
-    auto elem = doc->CreateElement(tag);
-    return parent->AppendChild(std::move(elem));
-}
-
 Modal::Modal(Props props)
-    : Document(kDocumentSource), mProps(std::move(props)), mRoot(mDocument->GetElementById("window")) {
-    listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
-        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") && Document::visible()) {
-            Document::hide(mPendingClose);
-        }
-    });
-
-    auto* dialog = mDocument->GetElementById("modal");
-
-    auto* title = createElement(dialog, "div");
+    : WindowSmall("modal", "modal-dialog"), mProps(std::move(props)) {
+    auto* title = create_element(mDialog, "div");
     title->SetClass("preset-title", true);
     title->SetInnerRML(mProps.title);
 
-    auto* body = createElement(dialog, "div");
+    auto* body = create_element(mDialog, "div");
     body->SetClass("preset-intro", true);
     body->SetInnerRML(mProps.bodyRml);
 
-    auto* actions = createElement(dialog, "div");
+    auto* actions = create_element(mDialog, "div");
     actions->SetClass("modal-actions", true);
 
     for (auto& action : mProps.actions) {
@@ -52,20 +25,6 @@ Modal::Modal(Props props)
         });
         mButtons.push_back(std::move(btn));
     }
-}
-
-void Modal::show() {
-    Document::show();
-    mRoot->SetAttribute("open", "");
-}
-
-void Modal::hide(bool close) {
-    mRoot->RemoveAttribute("open");
-    mPendingClose = close;
-}
-
-bool Modal::visible() const {
-    return mRoot->HasAttribute("open");
 }
 
 bool Modal::focus() {
