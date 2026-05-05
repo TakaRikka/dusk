@@ -66,6 +66,16 @@ public:
         _c90 = param_2;
     }
 
+#if PLATFORM_WII || TARGET_PC
+    f32 getMirrorCenterPosX(f32 param_0, f32 param_1) {
+        if (_c90) {
+            return (mCenterPosX * 2.0f - (param_0 + param_1)) - param_1;
+        }
+
+        return param_0;
+    }
+#endif
+
     struct Stage_c {
         // Incomplete class
 
