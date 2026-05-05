@@ -14,6 +14,8 @@
 #include <SDL3/SDL_dialog.h>
 #include <aurora/lib/window.hpp>
 
+#include "m_Do/m_Do_MemCard.h"
+
 namespace dusk::ui {
 
 const Rml::String kDocumentSource = R"RML(
@@ -145,9 +147,6 @@ bool is_restart_pending() noexcept {
     if (getSettings().game.language.getValue() != state.initialLanguage) {
         return true;
     }
-    if (getSettings().backend.cardFileType.getValue() != state.initialCardFileType) {
-        return true;
-    }
     return false;
 }
 
@@ -185,6 +184,10 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
                     (*handle)->stop(60);
                     (*handle)->releaseHandle();
                 }
+            }
+
+            if (g_mDoMemCd_control.mCardCommand == mDoMemCd_Ctrl_c::Command_e::COMM_NONE_e) {
+                mDoMemCd_ThdInit();
             }
 
             IsGameLaunched = true;
