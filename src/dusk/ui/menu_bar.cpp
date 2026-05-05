@@ -30,7 +30,7 @@ const Rml::String kDocumentSource = R"RML(
     <link type="text/rcss" href="res/rml/popup.rcss" />
 </head>
 <body>
-    <popup id="popup"></popup>
+    <popup id="popup" />
 </body>
 </rml>
 )RML";

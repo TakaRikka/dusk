@@ -82,6 +82,8 @@
 #include "tracy/Tracy.hpp"
 #include <RmlUi/Core.h>
 
+#include "dusk/ui/overlay.hpp"
+
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
 OSTime mDoMain::sPowerOnTime;
@@ -591,6 +593,8 @@ int game_main(int argc, char* argv[]) {
     dusk::audio::EnableHrtf = dusk::getSettings().audio.enableHrtf;
 
     dusk::ui::initialize();
+    dusk::ui::push_document(std::make_unique<dusk::ui::Overlay>(), true, true);
+    dusk::ui::push_document(std::make_unique<dusk::ui::MenuBar>(), false);
 
     std::string dvd_path;
     bool dvd_opened = false;
@@ -632,7 +636,6 @@ int game_main(int argc, char* argv[]) {
         }
     }
 
-    dusk::ui::push_document(std::make_unique<dusk::ui::MenuBar>(), false);
     if (!dusk::getSettings().backend.wasPresetChosen) {
         dusk::ui::push_document(std::make_unique<dusk::ui::PresetWindow>());
     }

@@ -20,7 +20,10 @@ void load_font(const char* filename, bool fallback = false) {
 }
 
 bool sInitialized = false;
-std::vector<std::unique_ptr<Document> > sDocuments;
+std::vector<std::unique_ptr<Document> > sDocumentStack;
+// Documents that don't participate in the focus stack
+std::vector<std::unique_ptr<Document> > sPassiveDocuments;
+std::vector<Toast> sToasts;
 
 }  // namespace
 
@@ -45,15 +48,20 @@ bool initialize() noexcept {
 }
 
 void shutdown() noexcept {
-    sDocuments.clear();
+    sDocumentStack.clear();
+    sPassiveDocuments.clear();
     reset_input_state();
     release_input_block();
     sInitialized = false;
 }
 
-Document& push_document(std::unique_ptr<Document> doc, bool show) noexcept {
+Document& push_document(std::unique_ptr<Document> doc, bool show, bool passive) noexcept {
     Document& ret = *doc;
-    sDocuments.push_back({std::move(doc)});
+    if (passive) {
+        sPassiveDocuments.push_back(std::move(doc));
+    } else {
+        sDocumentStack.push_back({std::move(doc)});
+    }
     if (show) {
         ret.show();
     }
@@ -69,12 +77,12 @@ void show_top_document() noexcept {
 }
 
 bool any_document_visible() noexcept {
-    return std::any_of(sDocuments.begin(), sDocuments.end(),
+    return std::any_of(sDocumentStack.begin(), sDocumentStack.end(),
         [](const auto& doc) { return doc && doc->visible(); });
 }
 
 Document* top_document() noexcept {
-    for (auto& doc : std::views::reverse(sDocuments)) {
+    for (auto& doc : std::views::reverse(sDocumentStack)) {
         if (!doc->closed() && !doc->pending_close()) {
             return doc.get();
         }
@@ -84,20 +92,30 @@ Document* top_document() noexcept {
 
 void update() noexcept {
     update_input();
-    for (const auto& doc : sDocuments) {
+    for (const auto& doc : sDocumentStack) {
+        doc->update();
+    }
+    for (const auto& doc : sPassiveDocuments) {
         doc->update();
     }
 
     // Remove closed documents
-    const auto [first, last] =
-        std::ranges::remove_if(sDocuments, [](const auto& doc) { return doc->closed(); });
-    sDocuments.erase(first, last);
+    {
+        const auto [first, last] =
+            std::ranges::remove_if(sDocumentStack, [](const auto& doc) { return doc->closed(); });
+        sDocumentStack.erase(first, last);
+    }
+    {
+        const auto [first, last] = std::ranges::remove_if(
+            sPassiveDocuments, [](const auto& doc) { return doc->closed(); });
+        sPassiveDocuments.erase(first, last);
+    }
 
     // If no documents have focus, explicitly focus the top one
     if (auto* context = aurora::rmlui::get_context();
         context != nullptr && context->GetFocusElement() == nullptr)
     {
-        for (auto& doc : std::views::reverse(sDocuments)) {
+        for (auto& doc : std::views::reverse(sDocumentStack)) {
             if (!doc->closed() && !doc->pending_close() && doc->focus()) {
                 break;
             }
@@ -199,6 +217,14 @@ Insets safe_area_insets(Rml::Context* context) noexcept {
         .bottom = std::max(0.0f, static_cast<float>(windowSize.height) - safeBottom) * scaleY,
         .left = std::max(0.0f, static_cast<float>(safeRect.x)) * scaleX,
     };
+}
+
+void push_toast(Toast toast) noexcept {
+    sToasts.push_back(std::move(toast));
+}
+
+std::vector<Toast>& get_toasts() noexcept {
+    return sToasts;
 }
 
 }  // namespace dusk::ui
