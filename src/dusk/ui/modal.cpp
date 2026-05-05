@@ -18,9 +18,9 @@ Modal::Modal(Props props)
     for (auto& action : mProps.actions) {
         auto btn = std::make_unique<Button>(actions, action.label);
         btn->root()->SetClass("modal-btn", true);
-        btn->on_pressed([callback = std::move(action.onPressed)] {
+        btn->on_pressed([this, callback = std::move(action.onPressed)] {
             if (callback) {
-                callback();
+                callback(*this);
             }
         });
         mButtons.push_back(std::move(btn));
@@ -36,7 +36,7 @@ bool Modal::focus() {
 
 void Modal::dismiss() {
     if (mProps.onDismiss) {
-        mProps.onDismiss();
+        mProps.onDismiss(*this);
         return;
     }
     pop();

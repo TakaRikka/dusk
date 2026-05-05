@@ -313,23 +313,23 @@ PrelaunchOptions::PrelaunchOptions() {
 
 void PrelaunchOptions::push_modal(Modal::Props props) {
     for (auto& action : props.actions) {
-        const auto originalOnPressed = std::move(action.onPressed);
-        action.onPressed = [this, props, callback = std::move(originalOnPressed)] {
+        auto originalOnPressed = std::move(action.onPressed);
+        action.onPressed = [this, props, callback = std::move(originalOnPressed)](Modal& modal) {
             if (props.doBlur) {
                 mRoot->SetClass("blurred", false);
             }
             if (callback) {
-                callback();
+                callback(modal);
             }
         };
     }
-    const auto originalOnDismiss = std::move(props.onDismiss);
-    props.onDismiss = [this, props, callback = std::move(originalOnDismiss)] {
+    auto originalOnDismiss = std::move(props.onDismiss);
+    props.onDismiss = [this, props, callback = std::move(originalOnDismiss)](Modal& modal) {
         if (props.doBlur) {
             mRoot->SetClass("blurred", false);
         }
         if (callback) {
-            callback();
+            callback(modal);
         }
     };
     if (props.doBlur) {
@@ -347,20 +347,14 @@ void PrelaunchOptions::update() {
     Window::update();
 
     auto& state = prelaunch_state();
-    if (state.errorString.empty()) {
-        return;
-    }
-    if (dynamic_cast<Modal*>(top_document()) != nullptr) {
+    if (state.errorString.empty() || top_document() != this) {
         return;
     }
 
-    auto dismissInvalidDisc = [] {
+    auto dismissInvalidDisc = [](Modal& modal) {
         prelaunch_state().errorString.clear();
-        if (auto* top = dynamic_cast<Modal*>(top_document())) {
-            top->pop();
-        }
+        modal.pop();
     };
-
     push_modal(Modal::Props{
         .title = "Invalid disc image",
         .bodyRml = state.errorString,
@@ -380,40 +374,30 @@ bool PrelaunchOptions::consume_close_request() {
     if (!is_restart_pending()) {
         return false;
     }
-    if (dynamic_cast<Modal*>(top_document()) != nullptr) {
+    if (top_document() != this) {
         return true;
     }
-
-    auto dismissModal = [] {
-        if (auto* top = dynamic_cast<Modal*>(top_document())) {
-            top->pop();
-        }
-    };
 
     std::vector<ModalAction> actions;
     if constexpr (dusk::SupportsProcessRestart) {
         actions.push_back(ModalAction{
             .label = "Restart later",
             .onPressed =
-                [this] {
-                    if (auto* top = dynamic_cast<Modal*>(top_document())) {
-                        top->pop();
-                    }
+                [this](Modal& modal) {
+                    modal.pop();
                     pop();
                 },
         });
         actions.push_back(ModalAction{
             .label = "Restart now",
-            .onPressed = [] { dusk::RequestRestart(); },
+            .onPressed = [](Modal&) { dusk::RequestRestart(); },
         });
     } else {
         actions.push_back(ModalAction{
             .label = "OK",
             .onPressed =
-                [this] {
-                    if (auto* top = dynamic_cast<Modal*>(top_document())) {
-                        top->pop();
-                    }
+                [this](Modal& modal) {
+                    modal.pop();
                     pop();
                 },
         });
@@ -427,7 +411,7 @@ bool PrelaunchOptions::consume_close_request() {
                        "A restart is required to apply selected options.<br/><br/>Close and reopen "
                        "Dusk to apply them.",
         .actions = std::move(actions),
-        .onDismiss = dismissModal,
+        .onDismiss = [](Modal& modal) { modal.pop(); },
         .doBlur = true,
     });
     return true;

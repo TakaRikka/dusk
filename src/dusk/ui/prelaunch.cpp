@@ -249,11 +249,9 @@ void Prelaunch::update() {
 
     auto& state = prelaunch_state();
     if (!state.errorString.empty() && top_document() == this) {
-        auto dismissInvalidDisc = [] {
+        auto dismissInvalidDisc = [](Modal& modal) {
             prelaunch_state().errorString.clear();
-            if (auto* top = dynamic_cast<Modal*>(top_document())) {
-                top->pop();
-            }
+            modal.pop();
         };
         push_document(std::make_unique<Modal>(Modal::Props{
             .title = "Invalid disc image",

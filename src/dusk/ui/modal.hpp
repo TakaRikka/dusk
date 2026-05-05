@@ -4,10 +4,11 @@
 #include "window.hpp"
 
 namespace dusk::ui {
+class Modal;
 
 struct ModalAction {
     Rml::String label;
-    std::function<void()> onPressed;
+    std::function<void(Modal&)> onPressed;
 };
 
 class Modal : public WindowSmall {
@@ -16,7 +17,7 @@ public:
         Rml::String title;
         Rml::String bodyRml;
         std::vector<ModalAction> actions;
-        std::function<void()> onDismiss;
+        std::function<void(Modal&)> onDismiss;
         bool doBlur = false;
     };
 
