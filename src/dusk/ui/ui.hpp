@@ -14,6 +14,29 @@ namespace dusk::ui {
 class Document;
 class Popup;
 
+// Button clicked/pressed
+constexpr u32 kSoundClick = Z2SE_SY_CURSOR_OK;
+
+// Menu button pressed (open/close menu bar or hide/show the active window)
+constexpr u32 kSoundMenuClose = Z2SE_SY_MENU_OUT;
+constexpr u32 kSoundMenuOpen = Z2SE_SY_MENU_IN;
+
+// Window opened/closed
+constexpr u32 kSoundWindowOpen = Z2SE_SY_CURSOR_OK;
+constexpr u32 kSoundWindowClose = Z2SE_SY_CURSOR_CANCEL;
+
+// Window tab changed
+constexpr u32 kSoundTabChanged = Z2SE_SY_MENU_CURSOR_COMMON;
+
+// Item within menu focused
+constexpr u32 kSoundItemFocus = Z2SE_SY_CURSOR_ITEM;
+// Item changed (e.g. number input left/right)
+constexpr u32 kSoundItemChange = Z2SE_SY_CURSOR_ITEM;
+// Item enabled ("On")
+constexpr u32 kSoundItemEnable = Z2SE_SY_CURSOR_OK;
+// Item disabled ("Off")
+constexpr u32 kSoundItemDisable = Z2SE_SY_CURSOR_CANCEL;
+
 struct Insets {
     float top = 0.0f;
     float right = 0.0f;

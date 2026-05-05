@@ -149,7 +149,7 @@ void SteppedCarousel::apply(int value) {
     if (nextValue == currentValue) {
         return;
     }
-    mDoAud_seStartMenu(Z2SE_SY_CURSOR_ITEM);
+    mDoAud_seStartMenu(kSoundItemChange);
     if (mProps.onChange) {
         mProps.onChange(nextValue);
     }
@@ -233,7 +233,7 @@ Overlay::Overlay(OverlayProps props)
 }
 
 void Overlay::show() {
-    mDoAud_seStartMenu(Z2SE_SY_CURSOR_OK);
+    mDoAud_seStartMenu(kSoundWindowOpen);
     Document::show();
     mRoot->SetAttribute("open", "");
 }

@@ -58,7 +58,7 @@ Pane::Pane(Rml::Element* parent, Type type) : FluentComponent(createRoot(parent)
         int i = focusedChild + direction;
         while (i >= 0 && i < mChildren.size()) {
             if (mChildren[i]->focus()) {
-                mDoAud_seStartMenu(Z2SE_SY_CURSOR_ITEM);
+                mDoAud_seStartMenu(kSoundItemFocus);
                 event.StopPropagation();
                 break;
             }
