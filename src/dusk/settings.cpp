@@ -17,6 +17,8 @@ UserSettings g_userSettings = {
         .soundEffectsVolume {"audio.soundEffectsVolume", 100},
         .fanfareVolume {"audio.fanfareVolume", 100},
         .enableReverb {"audio.enableReverb", true},
+        .enableHrtf {"audio.enableHrtf", false},
+        .menuSounds {"audio.menuSounds", true},
     },
 
     .game = {
@@ -24,34 +26,36 @@ UserSettings g_userSettings = {
 
         // Quality of Life
         .enableQuickTransform {"game.enableQuickTransform", false},
-        .hideTvSettingsScreen {"game.hideTvSettingsScreen", false},
-        .skipWarningScreen {"game.skipWarningScreen", false},
+        .hideTvSettingsScreen {"game.hideTvSettingsScreen", true},
+        .skipWarningScreen {"game.skipWarningScreen", true},
         .biggerWallets {"game.biggerWallets", false},
         .noReturnRupees {"game.noReturnRupees", false},
         .disableRupeeCutscenes {"game.disableRupeeCutscenes", false},
         .noSwordRecoil {"game.noSwordRecoil", false},
         .damageMultiplier {"game.damageMultiplier", 1},
-        .noHeartDrops{"game.noHeartDrops", false},
+        .noHeartDrops {"game.noHeartDrops", false},
         .instantDeath {"game.instantDeath", false},
         .fastClimbing {"game.fastClimbing", false},
         .noMissClimbing {"game.noMissClimbing", false},
         .fastTears {"game.fastTears", false},
+        .no2ndFishForCat {"game.no2ndFishForCat", false},
         .instantSaves {"game.instantSaves", false},
         .instantText {"game.instantText", false},
         .sunsSong {"game.sunsSong", false},
+        .autoSave {"game.autoSave", false},
 
         // Preferences
         .enableMirrorMode {"game.enableMirrorMode", false},
         .disableMainHUD {"game.disableMainHUD", false},
         .pauseOnFocusLost {"game.pauseOnFocusLost", false},
-        .enableLinkDollRotation = {"game.enableLinkDollRotation", false },
-        .enableAchievementNotifications {"game.enableAchievementNotifications", false},
+        .enableLinkDollRotation = {"game.enableLinkDollRotation", false},
+        .enableAchievementNotifications {"game.enableAchievementNotifications", true},
 
         // Graphics
-        .bloomMode {"game.bloomMode", BloomMode::Classic},
+        .bloomMode {"game.bloomMode", BloomMode::Dusk},
         .bloomMultiplier {"game.bloomMultiplier", 1.0f},
         .disableWaterRefraction {"game.disableWaterRefraction", false},
-        .enableFrameInterpolation = {"game.enableFrameInterpolation", false},
+        .enableFrameInterpolation {"game.enableFrameInterpolation", false},
         .internalResolutionScale {"game.internalResolutionScale", 0},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
         .enableDepthOfField {"game.enableDepthOfField", true},
@@ -75,6 +79,7 @@ UserSettings g_userSettings = {
         .invertCameraXAxis {"game.invertCameraXAxis", false},
         .invertCameraYAxis {"game.invertCameraYAxis", false},
         .freeCameraSensitivity {"game.freeCameraSensitivity", 1.0f},
+        .debugFlyCam {"game.debugFlyCam", false},
 
         // Cheats
         .infiniteHearts {"game.infiniteHearts", false},
@@ -110,7 +115,6 @@ UserSettings g_userSettings = {
         .showPipelineCompilation {"backend.showPipelineCompilation", false},
         .wasPresetChosen {"backend.wasPresetChosen", false},
         .enableCrashReporting {"backend.enableCrashReporting", true},
-        .duskMenuOpen {"backend.duskMenuOpen", false},
         .cardFileType {"backend.cardFileType", static_cast<int>(CARD_GCIFOLDER)}
     }
 };
@@ -132,6 +136,8 @@ void registerSettings() {
     Register(g_userSettings.audio.soundEffectsVolume);
     Register(g_userSettings.audio.fanfareVolume);
     Register(g_userSettings.audio.enableReverb);
+    Register(g_userSettings.audio.enableHrtf);
+    Register(g_userSettings.audio.menuSounds);
 
     // Game
     Register(g_userSettings.game.language);
@@ -147,9 +153,11 @@ void registerSettings() {
     Register(g_userSettings.game.instantDeath);
     Register(g_userSettings.game.fastClimbing);
     Register(g_userSettings.game.fastTears);
+    Register(g_userSettings.game.no2ndFishForCat);
     Register(g_userSettings.game.instantSaves);
     Register(g_userSettings.game.instantText);
     Register(g_userSettings.game.sunsSong);
+    Register(g_userSettings.game.autoSave);
     Register(g_userSettings.game.enableMirrorMode);
     Register(g_userSettings.game.invertCameraXAxis);
     Register(g_userSettings.game.invertCameraYAxis);
@@ -197,6 +205,7 @@ void registerSettings() {
     Register(g_userSettings.game.gyroInvertPitch);
     Register(g_userSettings.game.gyroInvertYaw);
     Register(g_userSettings.game.freeCamera);
+    Register(g_userSettings.game.debugFlyCam);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.graphicsBackend);
@@ -204,7 +213,6 @@ void registerSettings() {
     Register(g_userSettings.backend.showPipelineCompilation);
     Register(g_userSettings.backend.wasPresetChosen);
     Register(g_userSettings.backend.enableCrashReporting);
-    Register(g_userSettings.backend.duskMenuOpen);
     Register(g_userSettings.backend.cardFileType);
 }
 

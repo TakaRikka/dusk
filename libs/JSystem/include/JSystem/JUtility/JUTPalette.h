@@ -40,6 +40,9 @@ public:
     JUTTransparency getTransparency() const { return JUTTransparency(mTransparency); }
     u16 getNumColors() const { return mNumColors; }
     ResTLUT* getColorTable() const { return mColorTable; }
+#if TARGET_PC
+    void dataUploaded();
+#endif
 
 private:
     /* 0x00 */ GXTlutObj mTlutObj;

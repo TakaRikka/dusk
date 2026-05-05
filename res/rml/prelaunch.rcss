@@ -1,0 +1,212 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    font-family: "Fira Sans";
+    font-weight: normal;
+    font-size: 20dp;
+    color: #FFFFFF;
+    background-color: #000000;
+    decorator: image(../prelaunch-bg.png cover left center);
+    filter: opacity(0);
+    transition: filter 1s 0.2s linear-in-out;
+    z-index: -1;
+}
+
+body[open] {
+    filter: opacity(1);
+}
+
+content {
+    display: block;
+    width: 100%;
+    height: 100%;
+    filter: opacity(0);
+    transition: filter 0.2s linear-in-out;
+}
+
+content[open] {
+    filter: opacity(1);
+}
+
+menu {
+    position: absolute;
+    left: 96dp;
+    top: 50%;
+    transform: translateY(-50%);
+    /* Scale based on a reference screen width, 428/1216 */
+    width: 35.230264vw;
+    min-width: 428dp;
+    max-width: 856dp;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 48dp;
+}
+
+hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 8dp;
+}
+
+hero img {
+    width: 100%;
+}
+
+.eyebrow {
+    font-family: "Alegreya SC";
+    font-size: 32dp;
+}
+
+@media (min-width: 1216dp) {
+    .eyebrow {
+        /* Same logic as .menu, 32/1216 */
+        font-size: 2.631579vw;
+    }
+}
+
+.eyebrow span {
+    font-weight: bold;
+}
+
+#menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12dp;
+}
+
+#menu-list button {
+    width: 428dp;
+    height: 54dp;
+    padding: 8dp 16dp;
+    border-radius: 8dp;
+    text-transform: uppercase;
+    font-family: "Fira Sans Condensed";
+    font-size: 32dp;
+    font-weight: normal;
+    cursor: pointer;
+    /* Define a fully transparent gradient as the default state, otherwise a white flash occurs */
+    decorator: horizontal-gradient(#00000000 #00000000);
+}
+
+#menu-list button.anim-done {
+    transition: decorator color 0.1s linear-in-out;
+}
+
+#menu-list button:hover,
+#menu-list button:focus-visible {
+    color: black;
+    decorator: horizontal-gradient(#FEE685FF #FEE68500);
+}
+
+disc-info {
+    position: absolute;
+    left: 96dp;
+    bottom: 72dp;
+    display: flex;
+    flex-direction: column;
+    gap: 12dp;
+    font-size: 24dp;
+}
+
+version-info {
+    position: absolute;
+    right: 96dp;
+    bottom: 72dp;
+    display: flex;
+    flex-direction: column;
+    gap: 12dp;
+    text-align: right;
+    font-size: 24dp;
+}
+
+#disc-status {
+    display: flex;
+    align-items: center;
+    gap: 8dp;
+}
+
+#disc-status[status=good] {
+    color: #D8F999;
+}
+
+#disc-status[status=bad] {
+    color: #FFC9C9;
+}
+
+#disc-status icon {
+    display: block;
+    width: 24dp;
+    height: 24dp;
+    font-family: "Material Symbols Rounded";
+    font-weight: normal;
+    font-size: 24dp;
+}
+
+#disc-status[status=good] icon {
+    decorator: text("&#xe5ca;" center center);
+}
+
+#disc-status[status=bad] icon {
+    decorator: text("&#xe5cd;" center center);
+}
+
+#disc-version {
+    font-size: 20dp;
+}
+
+/* TODO: Hidden until an actual update checker is introduced */
+.update {
+    display: none;
+    font-size: 16dp;
+    font-weight: bold;
+    cursor: pointer;
+    color: #D8F999;
+}
+
+.detail,
+.update span {
+    color: #A6A09B;
+}
+
+/* Startup animation */
+.intro-item {
+    opacity: 0;
+    transform: translateY(10dp);
+    transition: opacity transform 0.3s 0.1s cubic-in-out;
+}
+
+body.animate-in .intro-item {
+    opacity: 1;
+    transform: translateY(0dp);
+}
+
+.delay-0 {
+    transition: opacity transform 0.3s 0.1s cubic-in-out;
+}
+
+.delay-1 {
+    transition: opacity transform 0.3s 0.2s cubic-in-out;
+}
+
+.delay-2 {
+    transition: opacity transform 0.3s 0.3s cubic-in-out;
+}
+
+.delay-3 {
+    transition: opacity transform 0.3s 0.4s cubic-in-out;
+}
+
+.delay-4 {
+    transition: opacity transform 0.3s 0.5s cubic-in-out;
+}
+
+.delay-5 {
+    transition: opacity transform 0.3s 0.6s cubic-in-out;
+}

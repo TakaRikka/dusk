@@ -67,6 +67,9 @@ public:
     bool isStaffMessage();
     bool isSaveMessage();
     bool isTalkMessage();
+#if TARGET_PC
+    bool isShopItemMessage();
+#endif
     const char* getSmellName();
     const char* getPortalName();
     const char* getBombName();

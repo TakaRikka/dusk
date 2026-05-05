@@ -17,6 +17,10 @@
 #include "d/d_msg_scrn_arrow.h"
 #include "d/d_lib.h"
 
+#ifdef TARGET_PC
+#include "dusk/achievements.h"
+#endif
+
 #if VERSION == VERSION_GCN_JPN
 #define D_MENU_LETTER_LINE_MAX 9
 #else
@@ -514,6 +518,10 @@ void dMenu_Letter_c::read_open_init() {
     setAButtonString(0);
     setBButtonString(0);
     mpBlackTex->setAlpha(0);
+
+    #ifdef TARGET_PC
+        dusk::AchievementSystem::get().signal("open_letter");
+    #endif
 }
 
 void dMenu_Letter_c::read_open_move() {

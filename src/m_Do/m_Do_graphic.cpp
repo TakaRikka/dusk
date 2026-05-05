@@ -2041,11 +2041,12 @@ static void drawItem3D() {
 
 int mDoGph_Painter() {
     ZoneScoped;
+
     // Diagnostic: log windowNum to track game state machine progress
     static bool sDiagLoggedWindow = false;
     if (!sDiagLoggedWindow) {
         int wn = dComIfGp_getWindowNum();
-        DuskLog.debug("mDoGph_Painter: windowNum={}", wn);
+        // DuskLog.debug("mDoGph_Painter: windowNum={}", wn);
         if (wn != 0) sDiagLoggedWindow = true;
     }
 
@@ -2146,6 +2147,7 @@ int mDoGph_Painter() {
             // FRAME INTERP NOTE: Call setViewMtx earlier so that it's interpolated in time for draw_info to use it
             j3dSys.setViewMtx(camera_p->view.viewMtx);
             JPADrawInfo draw_info(j3dSys.getViewMtx(), camera_p->view.fovy, camera_p->view.aspect);
+            mDoGph_gInf_c::setWideZoomLightProjection(draw_info.mPrjMtx);
 #else
             JPADrawInfo draw_info(camera_p->view.viewMtx, camera_p->view.fovy, camera_p->view.aspect);
 #endif

@@ -282,6 +282,11 @@ static void e_th_spin_B(e_th_class* i_this) {
     i_this->current.pos += spC;
 
     f32 speed_target;
+
+    #if AVOID_UB
+    speed_target = 0;
+    #endif
+
     f32 anm_frame = i_this->mpModelMorf->getFrame();
 
     switch (i_this->mMode) {

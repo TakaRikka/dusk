@@ -1,9 +1,12 @@
 #include "f_op/f_op_camera_mng.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "d/d_com_inf_game.h"
 
 #include "imgui.h"
+#include "ImGuiConfig.hpp"
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuTools.hpp"
+#include "dusk/settings.h"
 
 namespace dusk {
     void ImGuiMenuTools::ShowCameraOverlay() {
@@ -46,70 +49,25 @@ namespace dusk {
 
         ImGui::InputFloat("Camera FOV", &dCam->mFovy);
 
-        ImGui::SeparatorText("Free-look Data");
+        ImGui::SeparatorText("Options");
 
-        static float eyeYawDeg = 0.0f;
-        static float moveSpeed = 5000.0f;
-        static float rotSpeed = 5.0f;
-        static cXyz freeLookPos = cXyz::Zero;
-        static bool freeLookActive = false;
-
-        bool changed = false;
-
-        if (ImGui::IsKeyDown(ImGuiKey_LeftArrow)) {
-            eyeYawDeg += rotSpeed;
-            if (eyeYawDeg >= 360.0f)
-                eyeYawDeg -= 360.0f;
-
-            changed = true;
+        bool eventRunning = (dComIfGp_event_runCheck() || dComIfGp_isPauseFlag()) && !getSettings().game.debugFlyCam;
+        if (eventRunning) {
+            ImGui::BeginDisabled();
         }
-        else if (ImGui::IsKeyDown(ImGuiKey_RightArrow)) {
-            eyeYawDeg -= rotSpeed;
-            if (eyeYawDeg < 0.0f)
-                eyeYawDeg += 360.0f;
-
-            changed = true;
+        config::ImGuiCheckbox("Fly Mode", getSettings().game.debugFlyCam);
+        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
+            if (eventRunning) {
+                ImGui::SetTooltip("Cannot enable while paused or during an active event.");
+            } else {
+                ImGui::SetTooltip("Detach camera and fly freely.\n"
+                                  "Left stick: move, C-stick: look\n"
+                                  "L/R triggers: up/down, Z: fast");
+            }
         }
-        cSAngle yawAngle = cSAngle(eyeYawDeg);
-        cXyz frontDir = cXyz(yawAngle.Sin(), 0.0f, yawAngle.Cos());
-
-        if (ImGui::IsKeyDown(ImGuiKey_UpArrow)) {
-            freeLookPos -= frontDir * moveSpeed * ImGui::GetIO().DeltaTime;
-            changed = true;
+        if (eventRunning) {
+            ImGui::EndDisabled();
         }
-        else if (ImGui::IsKeyDown(ImGuiKey_DownArrow)) {
-            freeLookPos += frontDir * moveSpeed * ImGui::GetIO().DeltaTime;
-            changed = true;
-        }
-
-        if (ImGui::IsKeyDown(ImGuiKey_LeftShift)) {
-            freeLookPos += cXyz::BaseY * moveSpeed * ImGui::GetIO().DeltaTime;
-            changed = true;
-        }
-
-        if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl)) {
-            freeLookPos -= cXyz::BaseY * moveSpeed * ImGui::GetIO().DeltaTime;
-            changed = true;
-        }
-
-        if (!freeLookActive && changed) {
-            freeLookPos += dCam->Center();
-            freeLookActive = true;
-        }
-
-        if (ImGui::IsKeyDown(ImGuiKey_R)) {
-            freeLookPos = cXyz::Zero;
-            freeLookActive = false;
-        }
-
-        if (freeLookActive) {
-            dCam->Reset(freeLookPos, freeLookPos + (frontDir * 100.0f));
-        }
-
-        ImGui::InputFloat("Free-look Yaw", &eyeYawDeg);
-        ImGui::InputFloat3("Free-look Position", &freeLookPos.x);
-        ImGui::InputFloat("Free-look Move Speed", &moveSpeed);
-        ImGui::InputFloat("Free-look Rotation Speed", &rotSpeed);
 
         ShowCornerContextMenu(m_cameraOverlayCorner, 0);
 

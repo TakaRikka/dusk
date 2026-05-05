@@ -8,6 +8,10 @@
 #include "d/actor/d_a_horse.h"
 #include "d/actor/d_a_crod.h"
 #include "d/d_msg_object.h"
+#ifdef TARGET_PC
+#include "d/actor/d_a_obj_carry.h"
+#include "dusk/achievements.h"
+#endif
 
 #if DEBUG
 #include "d/d_s_menu.h"
@@ -677,6 +681,15 @@ BOOL daAlink_c::checkDamageAction() {
             }
 
             setDamagePoint(dmg, at_mtrl == dCcD_MTRL_FIRE || at_mtrl == dCcD_MTRL_ICE, TRUE, 0);
+            
+#ifdef TARGET_PC
+            if (tghit_ac_name == fpcNm_Obj_Carry_e) {
+                auto* carry = static_cast<daObjCarry_c*>(tghit_ac);
+                if (carry->prm_chk_type_ironball() && carry->checkCannon()) {
+                    dusk::AchievementSystem::get().signal("iron_ball_hit_player");
+                }
+            }
+#endif
 
             if (armor_no_dmg && at_mtrl != dCcD_MTRL_ELECTRIC && at_mtrl != dCcD_MTRL_ICE) {
                 setGuardSe(var_r29);

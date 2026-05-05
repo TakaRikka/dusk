@@ -75,6 +75,7 @@ public:
     s32 getTransparency() const { return mTexInfo->alphaEnabled; }
     s32 getWidth() const { return mTexInfo->width; }
     s32 getHeight() const { return mTexInfo->height; }
+    JUTPalette* getPalette() const { return mPalette; }
     void setCaptureFlag(bool flag) { mFlags &= 2 | flag; }
     bool getCaptureFlag() const { return mFlags & 1; }
     bool getEmbPaletteDelFlag() const { return mFlags & 2; }
@@ -82,7 +83,7 @@ public:
     int getTlutName() const { return mTlutName; }
     bool operator==(const JUTTexture& other) {
         return mTexInfo == other.mTexInfo
-            && field_0x2c == other.field_0x2c
+            && mPalette == other.mPalette
             && mWrapS == other.mWrapS
             && mWrapT == other.mWrapT
             && mMinFilter == other.mMinFilter
@@ -100,7 +101,7 @@ private:
     /* 0x20 */ const ResTIMG* mTexInfo;
     /* 0x24 */ void* mTexData;
     /* 0x28 */ JUTPalette* mEmbPalette;
-    /* 0x2C */ JUTPalette* field_0x2c;
+    /* 0x2C */ JUTPalette* mPalette;
     /* 0x30 */ u8 mWrapS;
     /* 0x31 */ u8 mWrapT;
     /* 0x32 */ u8 mMinFilter;

@@ -2721,7 +2721,7 @@ int daAlink_c::procHorseRun() {
             }
 
             if (mProcVar2.field_0x300c == 0) {
-                set3DStatus(BUTTON_STATUS_HOLD_ON, 4);
+                set3DStatus(BUTTON_STATUS_HOLD_ON, IF_DUSK(dusk::getSettings().game.enableMirrorMode ? 1 :) 4);
             }
         } else {
             if (mProcVar3.field_0x300e != 0) {
@@ -2731,7 +2731,7 @@ int daAlink_c::procHorseRun() {
             }
 
             if (mProcVar2.field_0x300c == 0) {
-                set3DStatus(BUTTON_STATUS_HOLD_ON, 1);
+                set3DStatus(BUTTON_STATUS_HOLD_ON, IF_DUSK(dusk::getSettings().game.enableMirrorMode ? 4 :) 1);
             }
         }
 
