@@ -1,6 +1,7 @@
 #include "prelaunch_options.hpp"
 
 #include "dusk/config.hpp"
+#include "dusk/main.h"
 #include "dusk/settings.h"
 #include "pane.hpp"
 #include "prelaunch.hpp"
@@ -9,7 +10,11 @@ namespace dusk::ui {
 namespace {
 
 static constexpr std::array<const char*, 5> kLanguageNames = {
-    "English", "German", "French", "Spanish", "Italian",
+    "English",
+    "German",
+    "French",
+    "Spanish",
+    "Italian",
 };
 
 // TODO: Copied from ImGui prelaunch. Needs a refactor?
@@ -152,7 +157,8 @@ protected:
 
 class LanguageSelect final : public SelectButton {
 public:
-    explicit LanguageSelect(Rml::Element* parent) : SelectButton(parent, Props{.key = "Language"}) {}
+    explicit LanguageSelect(Rml::Element* parent)
+        : SelectButton(parent, Props{.key = "Language"}) {}
 
     void update() override {
         ensure_initialized();
@@ -199,7 +205,8 @@ protected:
 
 class BackendSelect final : public SelectButton {
 public:
-    explicit BackendSelect(Rml::Element* parent) : SelectButton(parent, Props{.key = "Graphics Backend"}) {}
+    explicit BackendSelect(Rml::Element* parent)
+        : SelectButton(parent, Props{.key = "Graphics Backend"}) {}
 
     void update() override {
         AuroraBackend configuredBackend = BACKEND_AUTO;
@@ -251,7 +258,8 @@ protected:
 
         const int dir = (cmd == NavCommand::Left) ? -1 : 1;
         idx = ((idx + dir) % n + n) % n;
-        getSettings().backend.graphicsBackend.setValue(std::string(backend_id(backends[static_cast<size_t>(idx)])));
+        getSettings().backend.graphicsBackend.setValue(
+            std::string(backend_id(backends[static_cast<size_t>(idx)])));
         config::Save();
         return true;
     }
@@ -259,14 +267,17 @@ protected:
 
 class SaveTypeSelect final : public SelectButton {
 public:
-    explicit SaveTypeSelect(Rml::Element* parent) : SelectButton(parent, Props{.key = "Save File Type"}) {}
+    explicit SaveTypeSelect(Rml::Element* parent)
+        : SelectButton(parent, Props{.key = "Save File Type"}) {}
 
     void update() override {
         ensure_initialized();
 
-        const CARDFileType cft = static_cast<CARDFileType>(getSettings().backend.cardFileType.getValue());
+        const CARDFileType cft =
+            static_cast<CARDFileType>(getSettings().backend.cardFileType.getValue());
         std::string label = cft == CARD_GCIFOLDER ? "GCI Folder" : "Card Image";
-        if (getSettings().backend.cardFileType.getValue() != prelaunch_state().initialCardFileType) {
+        if (getSettings().backend.cardFileType.getValue() != prelaunch_state().initialCardFileType)
+        {
             label += " (restart required)";
         }
         set_value_label(Rml::String(label));
@@ -353,12 +364,13 @@ void PrelaunchOptions::update() {
     push_modal(Modal::Props{
         .title = "Invalid disc image",
         .bodyRml = state.errorString,
-        .actions = {
-            ModalAction{
-                .label = "OK",
-                .onPressed = dismissInvalidDisc,
+        .actions =
+            {
+                ModalAction{
+                    .label = "OK",
+                    .onPressed = dismissInvalidDisc,
+                },
             },
-        },
         .onDismiss = dismissInvalidDisc,
         .doBlur = true,
     });
@@ -378,25 +390,43 @@ bool PrelaunchOptions::consume_close_request() {
         }
     };
 
+    std::vector<ModalAction> actions;
+    if constexpr (dusk::SupportsProcessRestart) {
+        actions.push_back(ModalAction{
+            .label = "Restart later",
+            .onPressed =
+                [this] {
+                    if (auto* top = dynamic_cast<Modal*>(top_document())) {
+                        top->pop();
+                    }
+                    pop();
+                },
+        });
+        actions.push_back(ModalAction{
+            .label = "Restart now",
+            .onPressed = [] { dusk::RequestRestart(); },
+        });
+    } else {
+        actions.push_back(ModalAction{
+            .label = "OK",
+            .onPressed =
+                [this] {
+                    if (auto* top = dynamic_cast<Modal*>(top_document())) {
+                        top->pop();
+                    }
+                    pop();
+                },
+        });
+    }
+
     push_modal(Modal::Props{
         .title = "Apply Options",
-        .bodyRml = "A restart is required to apply certain selected options.<br/><br/>Restart now to apply them immediately?",
-        .actions = {
-            ModalAction{
-                .label = "Restart later",
-                .onPressed =
-                    [this] {
-                        if (auto* top = dynamic_cast<Modal*>(top_document())) {
-                            top->pop();
-                        }
-                        pop();
-                    },
-            },
-            ModalAction{
-                .label = "Restart now",
-                .onPressed = dismissModal,
-            },
-        },
+        .bodyRml = dusk::SupportsProcessRestart ?
+                       "A restart is required to apply selected options.<br/><br/>Restart now to "
+                       "apply them immediately?" :
+                       "A restart is required to apply selected options.<br/><br/>Close and reopen "
+                       "Dusk to apply them.",
+        .actions = std::move(actions),
         .onDismiss = dismissModal,
         .doBlur = true,
     });

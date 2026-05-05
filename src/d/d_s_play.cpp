@@ -796,7 +796,7 @@ static int dScnPly_Execute(dScnPly_c* i_this) {
         #endif
 
 #if TARGET_PC
-        if (!dusk::ui::prelaunch_document_visible()) {
+        if (!dusk::ui::is_prelaunch_open()) {
             dDemo_c::update();
         } else if (dusk::getSettings().audio.menuSounds) {
             s8 reverb = dComIfGp_getReverb(dComIfGp_roomControl_getStayNo());

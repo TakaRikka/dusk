@@ -104,8 +104,14 @@ bool dusk::IsRunning = true;
 bool dusk::IsShuttingDown = false;
 bool dusk::IsGameLaunched = false;
 bool dusk::IsFocusPaused = false;
+bool dusk::RestartRequested = false;
 std::filesystem::path dusk::ConfigPath;
 #endif
+
+void dusk::RequestRestart() noexcept {
+    RestartRequested = SupportsProcessRestart;
+    IsRunning = false;
+}
 
 s32 LOAD_COPYDATE(void*) {
     char buffer[32];
@@ -625,6 +631,9 @@ int game_main(int argc, char* argv[]) {
             // pre game launch ui main loop
             if (!launchUILoop()) {
                 dusk::ShutdownCrashReporting();
+                dusk::ShutdownFileLogging();
+                fflush(stdout);
+                fflush(stderr);
 #ifdef DUSK_DISCORD_RPC
                 dusk::discord::Shutdown();
 #endif

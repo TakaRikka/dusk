@@ -74,11 +74,10 @@ bool any_document_visible() noexcept {
         [](const auto& doc) { return doc && doc->visible(); });
 }
 
-bool prelaunch_document_visible() noexcept {
+bool is_prelaunch_open() noexcept {
     return std::any_of(sDocuments.begin(), sDocuments.end(), [](const auto& doc) {
-        if (!doc) { return false; }
         const auto* prelaunch = dynamic_cast<const Prelaunch*>(doc.get());
-        return prelaunch != nullptr && prelaunch->visible();
+        return prelaunch != nullptr && !prelaunch->pending_close() && !prelaunch->closed();
     });
 }
 

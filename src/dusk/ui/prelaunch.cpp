@@ -60,9 +60,9 @@ static std::string get_error_msg(iso::ValidationError error) {
     case iso::ValidationError::InvalidImage:
         return "The selected file is not a valid disc image.";
     case iso::ValidationError::WrongGame:
-        return "The selected disc image is not supported by Dusk.";
+        return "The selected game is not supported by Dusk.";
     case iso::ValidationError::WrongVersion:
-        return "Dusk currently supports USA and PAL disc images only.";
+        return "Dusk currently supports GameCube USA and PAL disc images only.";
     case iso::ValidationError::Success:
         return "The selected disc image is valid.";
     default:
@@ -234,8 +234,12 @@ void Prelaunch::hide(bool close) {
         if (!mEntranceAnimationStarted) {
             // Close document immediately
             Document::hide(true);
+        } else {
+            mPendingClose = true;
         }
         mDocument->RemoveAttribute("open");
+    } else {
+        mRoot->RemoveAttribute("open");
     }
 }
 

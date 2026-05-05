@@ -43,7 +43,7 @@ static void pause_stream(int skip_first, bool paused) {
 }
 
 static void pause_streams(int skip_first) {
-    if (!dusk::ui::prelaunch_document_visible()) {
+    if (!dusk::ui::is_prelaunch_open()) {
         return;
     }
     JSUList<JAIStream>* list = get_stream_list();
@@ -58,7 +58,7 @@ static void unpause_streams(bool require_prelaunch_hidden) {
     if (sJaiSkip < 0) {
         return;
     }
-    if (require_prelaunch_hidden && dusk::ui::prelaunch_document_visible()) {
+    if (require_prelaunch_hidden && dusk::ui::is_prelaunch_open()) {
         return;
     }
     pause_stream(sJaiSkip, false);
