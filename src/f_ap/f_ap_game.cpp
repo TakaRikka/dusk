@@ -749,10 +749,8 @@ static void duskExecute() {
         }
     }
 
-    if (Z2GetSeqMgr()->mMainBgmHandle != NULL) {
-        Z2GetSeqMgr()->bgmStop(0, 0);
-        Z2GetSeqMgr()->bgmStreamStop(0);
-    }
+    Z2GetSeqMgr()->bgmStop(0, 0);
+    Z2GetSeqMgr()->bgmStreamStop(0);
 
     if ((mDoCPd_c::getHold(PAD_1) & (PAD_TRIGGER_R | PAD_TRIGGER_L)) == PAD_TRIGGER_R && mDoCPd_c::getTrigY(PAD_1)) {
         if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
