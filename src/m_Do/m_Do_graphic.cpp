@@ -1237,8 +1237,10 @@ static void trimming(view_class* param_0, view_port_class* param_1) {
 
         GXEnd();
     }
+#ifndef TARGET_PC
     GXSetScissor(param_1->scissor.x_orig, param_1->scissor.y_orig, param_1->scissor.width,
                  param_1->scissor.height);
+#endif
 }
 
 #if !PLATFORM_WII && !TARGET_PC
