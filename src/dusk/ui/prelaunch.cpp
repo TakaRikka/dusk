@@ -142,6 +142,15 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
                 open_iso_picker();
                 return;
             }
+
+            if (getSettings().audio.menuSounds) {
+                JAISoundHandle* handle = g_mEnvSeMgr.field_0x144.getHandle();
+                if (*handle) {
+                    (*handle)->stop(60);
+                    (*handle)->releaseHandle();
+                }
+            }
+
             IsGameLaunched = true;
             push_document(std::make_unique<Popup>(), false);
             hide(true);

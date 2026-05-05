@@ -798,6 +798,10 @@ static int dScnPly_Execute(dScnPly_c* i_this) {
 #if TARGET_PC
         if (!dusk::ui::prelaunch_document_visible()) {
             dDemo_c::update();
+        } else if (dusk::getSettings().audio.menuSounds) {
+            s8 reverb = dComIfGp_getReverb(dComIfGp_roomControl_getStayNo());
+            f32 fxMix = reverb / 127.0f;
+            g_mEnvSeMgr.field_0x144.startEnvSeDirLevel(JA_SE_ATM_WIND_1, fxMix, 1.0f);
         }
 #else
         dDemo_c::update();
