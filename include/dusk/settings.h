@@ -55,6 +55,8 @@ struct UserSettings {
         ConfigVar<int> soundEffectsVolume;
         ConfigVar<int> fanfareVolume;
         ConfigVar<bool> enableReverb;
+        ConfigVar<bool> enableHrtf;
+        ConfigVar<bool> menuSounds;
     } audio;
 
     // Game settings
@@ -80,6 +82,7 @@ struct UserSettings {
         ConfigVar<bool> instantSaves;
         ConfigVar<bool> instantText;
         ConfigVar<bool> sunsSong;
+        ConfigVar<bool> autoSave;
 
         // Preferences
         ConfigVar<bool> enableMirrorMode;
@@ -117,6 +120,7 @@ struct UserSettings {
         ConfigVar<bool> invertCameraXAxis;
         ConfigVar<bool> invertCameraYAxis;
         ConfigVar<float> freeCameraSensitivity;
+        ConfigVar<bool> debugFlyCam;
 
         // Cheats
         ConfigVar<bool> infiniteHearts;
@@ -152,7 +156,6 @@ struct UserSettings {
         ConfigVar<bool> showPipelineCompilation;
         ConfigVar<bool> wasPresetChosen;
         ConfigVar<bool> enableCrashReporting;
-        ConfigVar<bool> duskMenuOpen;
         ConfigVar<int> cardFileType;
     } backend;
 };

@@ -100,6 +100,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL Linux)
 endif ()
 set(AURORA_ENABLE_DVD ON CACHE BOOL "Enable DVD API support" FORCE)
 set(AURORA_ENABLE_CARD ON CACHE BOOL "Enable CARD API support" FORCE)
+set(AURORA_ENABLE_RMLUI ON CACHE BOOL "Enable RmlUi UI support" FORCE)
 add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
 
 add_subdirectory(libs/freeverb)
@@ -296,8 +297,10 @@ set(GAME_INCLUDE_DIRS
     extern
     ${CMAKE_BINARY_DIR})
 
+find_package(Threads REQUIRED)
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
-    aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt)
+    aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt
+    Threads::Threads)
 
 list(APPEND GAME_LIBS libzstd_static)
 
@@ -319,46 +322,13 @@ if (DUSK_MOVIE_SUPPORT)
     list(APPEND GAME_COMPILE_DEFS MOVIE_SUPPORT=1)
 endif ()
 
-option(DUSK_ENABLE_DISCORD_RPC "Enable Discord Rich Presence support" ON)
-if (DUSK_ENABLE_DISCORD_RPC AND NOT ANDROID AND NOT IOS AND NOT TVOS)
-
-    FetchContent_Populate(discord_rpc
-        URL https://github.com/discord/discord-rpc/archive/refs/tags/v3.4.0.tar.gz
-        URL_HASH SHA256=e13427019027acd187352dacba6c65953af66fdf3c35fcf38fc40b454a9d7855
-        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-    )
-    # RapidJSON is a git submodule absent from the discord-rpc tarball; fetch separately.
-    FetchContent_Populate(rapidjson
-        URL https://github.com/Tencent/rapidjson/archive/refs/tags/v1.1.0.tar.gz
-        URL_HASH SHA256=bf7ced29704a1e696fbccf2a2b4ea068e7774fa37f6d7dd4039d0787f8bed98e
-        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-    )
-
-    if (NOT TARGET discord-rpc)
-        set(_drpc ${discord_rpc_SOURCE_DIR}/src)
-        set(_drpc_src
-            ${_drpc}/discord_rpc.cpp
-            ${_drpc}/rpc_connection.cpp
-            ${_drpc}/serialization.cpp
-        )
-        if (WIN32)
-            list(APPEND _drpc_src ${_drpc}/connection_win.cpp ${_drpc}/discord_register_win.cpp)
-        elseif (APPLE)
-            list(APPEND _drpc_src ${_drpc}/connection_unix.cpp ${_drpc}/discord_register_osx.m)
-        else ()
-            list(APPEND _drpc_src ${_drpc}/connection_unix.cpp ${_drpc}/discord_register_linux.cpp)
-        endif ()
-        add_library(discord-rpc STATIC ${_drpc_src})
-        target_include_directories(discord-rpc PUBLIC
-            ${discord_rpc_SOURCE_DIR}/include
-            ${rapidjson_SOURCE_DIR}/include
-        )
-        if (UNIX)
-            target_link_libraries(discord-rpc PUBLIC pthread)
-        endif ()
-    endif ()
-    list(APPEND GAME_LIBS discord-rpc)
-    list(APPEND GAME_COMPILE_DEFS DUSK_DISCORD_RPC=1)
+set(DUSK_ENABLE_DISCORD_DEFAULT ON)
+if (DEFINED DUSK_ENABLE_DISCORD_RPC AND NOT DEFINED DUSK_ENABLE_DISCORD)
+    set(DUSK_ENABLE_DISCORD_DEFAULT ${DUSK_ENABLE_DISCORD_RPC})
+endif ()
+option(DUSK_ENABLE_DISCORD "Enable Discord Rich Presence support" ${DUSK_ENABLE_DISCORD_DEFAULT})
+if (DUSK_ENABLE_DISCORD AND NOT ANDROID AND NOT IOS AND NOT TVOS)
+    list(APPEND GAME_COMPILE_DEFS DUSK_DISCORD=1)
 endif ()
 
 # Edit & Continue

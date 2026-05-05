@@ -1987,6 +1987,13 @@ bool jmessage_tSequenceProcessor::do_isReady() {
     }
     #endif
 
+#if TARGET_PC
+    if (dusk::getSettings().game.instantText && mDoCPd_c::getHoldB(0)) {
+        field_0xb2 = 1;
+        pReference->setSendTimer(0);
+    }
+#endif
+
     if (dComIfGp_checkMesgBgm()) {
         bool isItemMusicPlaying = true;
         if (mDoAud_checkPlayingSubBgmFlag() != Z2BGM_ITEM_GET &&

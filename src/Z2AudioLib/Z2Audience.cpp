@@ -1,5 +1,10 @@
 #include "Z2AudioLib/Z2Audience.h"
 #include "Z2AudioLib/Z2SoundInfo.h"
+#if TARGET_PC
+#include "dusk/audio/DuskDsp.hpp"
+#include "dusk/settings.h"
+#include <cmath>
+#endif
 #include "Z2AudioLib/Z2Calc.h"
 #include "Z2AudioLib/Z2Param.h"
 #include "JSystem/JAudio2/JAISound.h"
@@ -701,6 +706,11 @@ f32 Z2Audience::calcRelPosVolume(const Vec& param_0, f32 param_1, int camID) {
 f32 Z2Audience::calcRelPosPan(const Vec& param_0, int camID) {
     Vec local_54 = param_0;
     local_54.y = 0.0f;
+#if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        local_54.x = -local_54.x;
+    }
+#endif
 
     f32 dVar6 = VECMag(&local_54);
     if (dVar6 < 0.1f) {
@@ -734,9 +744,22 @@ f32 Z2Audience::calcRelPosPan(const Vec& param_0, int camID) {
 
 f32 Z2Audience::calcRelPosDolby(const Vec& param_0, int camID) {
     f32 fVar1 = param_0.z + mAudioCamera[camID].getDolbyCenterZ();
+#if TARGET_PC
+    if (dusk::audio::EnableHrtf) {
+        // Normalize the direction so result is purely front/back orientation,
+        // independent of how far away the sound is
+        f32 lenSq = param_0.x * param_0.x + param_0.y * param_0.y + param_0.z * param_0.z;
+        if (lenSq < 0.0001f) {
+            return 0.5f;
+        }
+        f32 zNorm = param_0.z / sqrtf(lenSq);
+        f32 t = (zNorm + 1.0f) * 0.5f;
+        return 0.5f - 0.5f * cosf(t * static_cast<f32>(M_PI));
+    }
+#endif
     if (fVar1 > mSetting.field_0x48) {
         return 1.0f;
-    } 
+    }
 
     if (fVar1 < mSetting.field_0x44) {
         return 0.0f;

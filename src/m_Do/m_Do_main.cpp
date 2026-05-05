@@ -52,10 +52,14 @@
 #include "dusk/frame_interpolation.h"
 #include "dusk/game_clock.h"
 #include "dusk/gyro.h"
+#include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
-#include "dusk/imgui/ImGuiConsole.hpp"
+#include "dusk/ui/popup.hpp"
+#include "dusk/ui/prelaunch.hpp"
+#include "dusk/ui/preset.hpp"
+#include "dusk/ui/ui.hpp"
 #include "version.h"
 
 #include <aurora/aurora.h>
@@ -68,14 +72,15 @@
 #include "cxxopts.hpp"
 #include "d/actor/d_a_movie_player.h"
 #include "dusk/audio/DuskAudioSystem.h"
+#include "dusk/audio/DuskDsp.hpp"
 #include "dusk/config.hpp"
-#include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/settings.h"
 #include "dusk/version.hpp"
 #include "dusk/discord_presence.hpp"
 #include "tracy/Tracy.hpp"
 #include "f_pc/f_pc_draw.h"
 #include "tracy/Tracy.hpp"
+#include <RmlUi/Core.h>
 
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
@@ -139,6 +144,7 @@ bool launchUILoop() {
         while (event != nullptr && event->type != AURORA_NONE) {
             switch (event->type) {
             case AURORA_SDL_EVENT:
+                dusk::ui::handle_event(event->sdl);
                 dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
                 break;
             case AURORA_DISPLAY_SCALE_CHANGED:
@@ -156,8 +162,9 @@ bool launchUILoop() {
             continue;
         }
 
-        dusk::g_imguiConsole.PreDraw();
+        dusk::ui::update();
 
+        dusk::g_imguiConsole.PreDraw();
         dusk::g_imguiConsole.PostDraw();
 
         aurora_end_frame();
@@ -214,6 +221,7 @@ void main01(void) {
             case AURORA_NONE:
                 goto eventsDone;
             case AURORA_SDL_EVENT:
+                dusk::ui::handle_event(event->sdl);
                 dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
                 if (event->sdl.type == SDL_EVENT_WINDOW_FOCUS_LOST &&
                     dusk::getSettings().game.pauseOnFocusLost) {
@@ -252,6 +260,8 @@ void main01(void) {
         }
 
         mDoGph_gInf_c::updateRenderSize();
+
+        dusk::ui::update();
 
         const auto pacing = dusk::game_clock::advance_main_loop();
         if (pacing.is_interpolating) {
@@ -297,13 +307,14 @@ void main01(void) {
 
         FrameMark;
 
-#ifdef DUSK_DISCORD_RPC
-        dusk::discord::RunCallbacks();
-        dusk::discord::UpdatePresence();
+#ifdef DUSK_DISCORD
+        dusk::discord::run_callbacks();
+        dusk::discord::update_presence();
 #endif
     } while (dusk::IsRunning);
 
     exit:;
+    dusk::ui::shutdown();
 }
 
 static bool IsBackendAvailable(AuroraBackend backend) {
@@ -560,8 +571,8 @@ int game_main(int argc, char* argv[]) {
         auroraInfo = aurora_initialize(argc, argv, &config);
     }
 
-#ifdef DUSK_DISCORD_RPC
-    dusk::discord::Initialize();
+#ifdef DUSK_DISCORD
+    dusk::discord::initialize();
 #endif
 
     VISetWindowTitle(
@@ -577,6 +588,9 @@ int game_main(int argc, char* argv[]) {
 
     dusk::audio::SetMasterVolume(dusk::getSettings().audio.masterVolume / 100.0f);
     dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);
+    dusk::audio::EnableHrtf = dusk::getSettings().audio.enableHrtf;
+
+    dusk::ui::initialize();
 
     std::string dvd_path;
     bool dvd_opened = false;
@@ -594,12 +608,15 @@ int game_main(int argc, char* argv[]) {
     }
 
     if (!dvd_opened) {
+        dusk::ui::push_document(std::make_unique<dusk::ui::Prelaunch>(), true);
+
         // pre game launch ui main loop
         if (!launchUILoop()) {
             dusk::ShutdownCrashReporting();
-#ifdef DUSK_DISCORD_RPC
-            dusk::discord::Shutdown();
+#ifdef DUSK_DISCORD
+            dusk::discord::shutdown();
 #endif
+            dusk::ui::shutdown();
             aurora_shutdown();
             return 0;
         }
@@ -613,6 +630,11 @@ int game_main(int argc, char* argv[]) {
         if (!aurora_dvd_open(dvd_path.c_str())) {
             DuskLog.fatal("Failed to open DVD image: {}", dvd_path);
         }
+    }
+
+    dusk::ui::push_document(std::make_unique<dusk::ui::Popup>(), false);
+    if (!dusk::getSettings().backend.wasPresetChosen) {
+        dusk::ui::push_document(std::make_unique<dusk::ui::PresetWindow>());
     }
 
     dusk::version::init();
@@ -652,9 +674,10 @@ int game_main(int argc, char* argv[]) {
     // Notifies all CVs and causes threads to exit
     OSResetSystem(OS_RESET_SHUTDOWN, 0, 0);
 
-#ifdef DUSK_DISCORD_RPC
-    dusk::discord::Shutdown();
+#ifdef DUSK_DISCORD
+    dusk::discord::shutdown();
 #endif
+    dusk::ui::shutdown();
     aurora_shutdown();
 
     return 0;

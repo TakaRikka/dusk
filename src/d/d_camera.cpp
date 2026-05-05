@@ -1040,6 +1040,11 @@ void dCamera_c::debugDrawInit() {
 bool dCamera_c::Run() {
 #if TARGET_PC
     ResetView();
+    if (executeDebugFlyCam()) {
+        mFrameCounter++;
+        mTicks++;
+        return true;
+    }
 #endif
 
     daAlink_c* link = daAlink_getAlinkActorClass();
@@ -1487,7 +1492,7 @@ void dCamera_c::CalcTrimSize() {
             mTrimHeight += -mTrimHeight * 0.25f;
             break;
         case 2:
-#if WIDESCREEN_SUPPORT
+#if !TARGET_PC && WIDESCREEN_SUPPORT
             if (mDoGph_gInf_c::isWide() && mDoGph_gInf_c::isWideZoom()) {
                 mTrimHeight += (16.0f - mTrimHeight) * 0.25f;
                 break;
@@ -7093,10 +7098,12 @@ bool dCamera_c::subjectCamera(s32 param_0) {
     cXyz sp1E0(val0, val2, val1);
 
 #if TARGET_PC
-    f32 aspect = mDoGph_gInf_c::getAspect();
-    f32 baseAspect = FB_WIDTH / FB_HEIGHT;
-    if (aspect > baseAspect) {
-        sp1E0.z += (aspect - baseAspect) * 4;
+    if (sp13) {
+        f32 aspect = mDoGph_gInf_c::getAspect();
+        f32 baseAspect = FB_WIDTH / FB_HEIGHT;
+        if (aspect > baseAspect) {
+            sp1E0.z += (aspect - baseAspect) * 4;
+        }
     }
 #endif
 
@@ -7472,8 +7479,109 @@ bool dCamera_c::test2Camera(s32 param_0) {
     return false;
 }
 
+static constexpr f32 FLYCAM_SPEED = 0.5f;
+static constexpr f32 FLYCAM_FAST_SPEED = 4.0f;
+static constexpr f32 FLYCAM_ROTATION_SPEED = 0.002f;
+static constexpr f32 FLYCAM_TRIGGER_DEADZONE = 20.0f;
+
 #if TARGET_PC
+bool dCamera_c::executeDebugFlyCam() {
+    if (!dusk::getSettings().game.debugFlyCam) {
+        if (mDebugFlyCam.initialized) {
+            deactivateDebugFlyCam();
+        }
+        return false;
+    }
+
+    dEvt_control_c* event = dComIfGp_getEvent();
+    if (event == nullptr) {
+        return false;
+    }
+
+    if (!mDebugFlyCam.initialized && (event->mEventStatus != 0 || dComIfGp_isPauseFlag())) {
+        dusk::getSettings().game.debugFlyCam.setValue(false);
+        return false;
+    }
+
+    if (!mDebugFlyCam.initialized) {
+        mDebugFlyCam.savedCenter = mCenter;
+        mDebugFlyCam.savedEye = mEye;
+        mDebugFlyCam.savedFovy = mFovy;
+        mDebugFlyCam.savedBank = mBank;
+
+        f32 dx = mCenter.x - mEye.x;
+        f32 dy = mCenter.y - mEye.y;
+        f32 dz = mCenter.z - mEye.z;
+        mDebugFlyCam.yaw = atan2f(dz, dx);
+        f32 horizontal = sqrtf(dx * dx + dz * dz);
+        mDebugFlyCam.pitch = atan2f(dy, horizontal);
+
+        mDebugFlyCam.initialized = true;
+    }
+
+    event->mEventStatus = 1;
+    dComIfGp_getEventManager().setCameraPlay(1);
+
+    interface_of_controller_pad& pad = mDoCPd_c::getCpadInfo(0);
+    f32 stickY = pad.mMainStickPosY * 72.0f;
+    f32 stickX = pad.mMainStickPosX * 72.0f;
+    f32 cStickY = pad.mCStickPosY * 59.0f;
+    f32 cStickX = pad.mCStickPosX * 59.0f;
+    f32 trigL = pad.mTriggerLeft * 150.0f;
+    f32 trigR = pad.mTriggerRight * 150.0f;
+
+    f32 verticalDisp = 0.0f;
+    if (trigR >= FLYCAM_TRIGGER_DEADZONE) {
+        verticalDisp += trigR;
+    }
+    if (trigL >= FLYCAM_TRIGGER_DEADZONE) {
+        verticalDisp -= trigL;
+    }
+
+    f32 moveDy = stickY * sinf(mDebugFlyCam.pitch) + verticalDisp;
+    f32 moveDx = stickY * cosf(mDebugFlyCam.yaw) * cosf(mDebugFlyCam.pitch) - stickX * sinf(mDebugFlyCam.yaw);
+    f32 moveDz = stickY * sinf(mDebugFlyCam.yaw) * cosf(mDebugFlyCam.pitch) + stickX * cosf(mDebugFlyCam.yaw);
+
+    f32 speed = mDoCPd_c::getHoldZ(PAD_1) ? FLYCAM_FAST_SPEED : FLYCAM_SPEED;
+
+    mEye.x += speed * moveDx;
+    mEye.y += speed * moveDy;
+    mEye.z += speed * moveDz;
+
+    static constexpr f32 FLYCAM_TARGET_DIST = 100.0f;
+    mCenter.x = mEye.x + cosf(mDebugFlyCam.yaw) * cosf(mDebugFlyCam.pitch) * FLYCAM_TARGET_DIST;
+    mCenter.z = mEye.z + sinf(mDebugFlyCam.yaw) * cosf(mDebugFlyCam.pitch) * FLYCAM_TARGET_DIST;
+    mCenter.y = mEye.y + sinf(mDebugFlyCam.pitch) * FLYCAM_TARGET_DIST;
+
+    Reset(mCenter, mEye);
+
+    f32 yawInput = dusk::getSettings().game.invertCameraXAxis ? cStickX : -cStickX;
+    mDebugFlyCam.yaw += yawInput * FLYCAM_ROTATION_SPEED;
+    mDebugFlyCam.yaw = fmodf(mDebugFlyCam.yaw + 2.0f * (f32)M_PI, 2.0f * (f32)M_PI);
+
+    f32 maxPitch = (f32)M_PI / 2.0f - 0.1f;
+    f32 minPitch = -(f32)M_PI / 2.0f + 0.1f;
+    mDebugFlyCam.pitch = std::clamp(mDebugFlyCam.pitch + cStickY * FLYCAM_ROTATION_SPEED, minPitch, maxPitch);
+
+    return true;
+}
+
+void dCamera_c::deactivateDebugFlyCam() {
+    Reset(mDebugFlyCam.savedCenter, mDebugFlyCam.savedEye, mDebugFlyCam.savedFovy, mDebugFlyCam.savedBank.Val());
+
+    dEvt_control_c* event = dComIfGp_getEvent();
+    if (event != nullptr) {
+        event->mEventStatus = 0;
+    }
+    dComIfGp_getEventManager().setCameraPlay(0);
+    mDebugFlyCam.initialized = false;
+}
+
 bool dCamera_c::freeCamera() {
+    if (dusk::getSettings().game.freeCamera && mGear == 1) {
+        mGear = 0;
+    }
+
     if (!dusk::getSettings().game.freeCamera || mCamStyle == 70)
     {
         mCamParam.mManualMode = 0;
@@ -11154,12 +11262,25 @@ static int camera_draw(camera_process_class* i_this) {
     }
 #endif
 
-    int trim_height = body->TrimHeight();
-
 #if TARGET_PC
+    auto trim_height = body->TrimHeight();
+
+    if (mDoGph_gInf_c::isWideZoom()) {
+        const auto target_ar = FB_WIDTH / (FB_HEIGHT - trim_height * 2.0f);
+        const auto current_ar = mDoGph_gInf_c::m_safeWidthF / mDoGph_gInf_c::m_safeHeightF;
+
+        if (current_ar < target_ar) {
+            trim_height = FB_HEIGHT / 2.0f * (1.0f - current_ar / target_ar);
+        } else {
+            trim_height = 0.0f;
+        }
+    }
+
     trim_height *= viewport->height / FB_HEIGHT;
     window->setScissor(0.0f, trim_height, viewport->width, viewport->height - trim_height * 2.0f);
 #else
+    int trim_height = body->TrimHeight();
+
     window->setScissor(0.0f, trim_height, FB_WIDTH, FB_HEIGHT - trim_height * 2.0f);
 #endif
 

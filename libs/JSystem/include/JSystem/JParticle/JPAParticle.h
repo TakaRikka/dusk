@@ -24,6 +24,9 @@ public:
     void init_c(JPAEmitterWorkData*, JPABaseParticle*);
     bool calc_p(JPAEmitterWorkData*);
     bool calc_c(JPAEmitterWorkData*);
+#if TARGET_PC
+    void interp(JPAEmitterWorkData*, void const* drawFunc);
+#endif
     bool canCreateChild(JPAEmitterWorkData*);
     f32 getWidth(JPABaseEmitter const*) const;
     f32 getHeight(JPABaseEmitter const*) const;
