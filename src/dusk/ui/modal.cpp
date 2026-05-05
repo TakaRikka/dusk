@@ -29,7 +29,7 @@ Modal::Modal(Props props)
 
 bool Modal::focus() {
     if (!mButtons.empty()) {
-        return mButtons.back()->focus();
+        return mButtons.front()->focus();
     }
     return false;
 }

@@ -316,7 +316,7 @@ bool Prelaunch::focus() {
     if (mMenuButtons.empty()) {
         return false;
     }
-    return mMenuButtons[0]->focus();
+    return mMenuButtons.front()->focus();
 }
 
 bool Prelaunch::visible() const {
