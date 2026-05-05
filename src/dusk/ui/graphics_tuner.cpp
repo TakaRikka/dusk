@@ -149,7 +149,7 @@ void SteppedCarousel::apply(int value) {
     if (nextValue == currentValue) {
         return;
     }
-    mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
+    mDoAud_seStartMenu(kSoundItemChange);
     if (mProps.onChange) {
         mProps.onChange(nextValue);
     }
@@ -216,6 +216,7 @@ GraphicsTuner::GraphicsTuner(GraphicsTunerProps props)
         returnButton.root()->SetClass("return", true);
         auto& resetButton =
             add_component<Button>(footer, "Reset to default", "footer-button").on_pressed([this] {
+                mDoAud_seStartMenu(kSoundItemChange);
                 reset_default();
             });
         resetButton.root()->SetClass("reset", true);
@@ -233,15 +234,16 @@ GraphicsTuner::GraphicsTuner(GraphicsTunerProps props)
 }
 
 void GraphicsTuner::show() {
-    mDoAud_seStartMenu(Z2SE_SY_CURSOR_OK);
     Document::show();
     mRoot->SetAttribute("open", "");
+    mDoAud_seStartMenu(kSoundWindowOpen);
 }
 
 void GraphicsTuner::hide(bool close) {
     mRoot->RemoveAttribute("open");
     if (close) {
         mPendingClose = true;
+        mDoAud_seStartMenu(kSoundWindowClose);
     }
 }
 

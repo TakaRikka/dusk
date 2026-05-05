@@ -10,6 +10,7 @@
 
 #include "aurora/lib/window.hpp"
 #include "input.hpp"
+#include "prelaunch.hpp"
 #include "window.hpp"
 
 namespace dusk::ui {
@@ -81,6 +82,13 @@ bool any_document_visible() noexcept {
         [](const auto& doc) { return doc && doc->visible(); });
 }
 
+bool is_prelaunch_open() noexcept {
+    return std::any_of(sDocumentStack.begin(), sDocumentStack.end(), [](const auto& doc) {
+        const auto* prelaunch = dynamic_cast<const Prelaunch*>(doc.get());
+        return prelaunch != nullptr && !prelaunch->pending_close() && !prelaunch->closed();
+    });
+}
+
 Document* top_document() noexcept {
     for (auto& doc : std::views::reverse(sDocumentStack)) {
         if (!doc->closed() && !doc->pending_close()) {
@@ -113,7 +121,8 @@ void update() noexcept {
 
     // If no documents have focus, explicitly focus the top one
     if (auto* context = aurora::rmlui::get_context();
-        context != nullptr && context->GetFocusElement() == nullptr)
+        context != nullptr && (context->GetFocusElement() == nullptr ||
+                                  context->GetFocusElement() == context->GetRootElement()))
     {
         for (auto& doc : std::views::reverse(sDocumentStack)) {
             if (!doc->closed() && !doc->pending_close() && doc->focus()) {
@@ -156,6 +165,17 @@ std::string escape(std::string_view str) noexcept {
         }
     }
     return result;
+}
+
+Rml::Element* append(Rml::Element* parent, const Rml::String& tag) noexcept {
+    if (parent == nullptr) {
+        return nullptr;
+    }
+    auto* doc = parent->GetOwnerDocument();
+    if (doc == nullptr) {
+        return nullptr;
+    }
+    return parent->AppendChild(doc->CreateElement(tag));
 }
 
 NavCommand map_nav_event(const Rml::Event& event) noexcept {

@@ -9,7 +9,6 @@
 
 #include "ImGuiMenuGame.hpp"
 #include "ImGuiMenuTools.hpp"
-#include "ImGuiPreLaunchWindow.hpp"
 #include "imgui.h"
 
 union SDL_Event;
@@ -45,7 +44,6 @@ private:
     std::deque<Toast> m_toasts;
 
     ImGuiMenuGame m_menuGame;
-    ImGuiPreLaunchWindow m_preLaunchWindow;
 
     // Keep always last
     ImGuiMenuTools m_menuTools;

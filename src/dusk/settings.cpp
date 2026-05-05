@@ -27,7 +27,6 @@ UserSettings g_userSettings = {
         // Quality of Life
         .enableQuickTransform {"game.enableQuickTransform", false},
         .hideTvSettingsScreen {"game.hideTvSettingsScreen", true},
-        .skipWarningScreen {"game.skipWarningScreen", true},
         .biggerWallets {"game.biggerWallets", false},
         .noReturnRupees {"game.noReturnRupees", false},
         .disableRupeeCutscenes {"game.disableRupeeCutscenes", false},
@@ -79,6 +78,7 @@ UserSettings g_userSettings = {
         .invertCameraXAxis {"game.invertCameraXAxis", false},
         .invertCameraYAxis {"game.invertCameraYAxis", false},
         .freeCameraSensitivity {"game.freeCameraSensitivity", 1.0f},
+        .debugFlyCam {"game.debugFlyCam", false},
 
         // Cheats
         .infiniteHearts {"game.infiniteHearts", false},
@@ -142,7 +142,6 @@ void registerSettings() {
     Register(g_userSettings.game.language);
     Register(g_userSettings.game.enableQuickTransform);
     Register(g_userSettings.game.hideTvSettingsScreen);
-    Register(g_userSettings.game.skipWarningScreen);
     Register(g_userSettings.game.biggerWallets);
     Register(g_userSettings.game.noReturnRupees);
     Register(g_userSettings.game.disableRupeeCutscenes);
@@ -204,6 +203,7 @@ void registerSettings() {
     Register(g_userSettings.game.gyroInvertPitch);
     Register(g_userSettings.game.gyroInvertYaw);
     Register(g_userSettings.game.freeCamera);
+    Register(g_userSettings.game.debugFlyCam);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.graphicsBackend);

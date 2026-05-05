@@ -1447,8 +1447,6 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiBloomWindow.hpp
         src/dusk/imgui/ImGuiMenuTools.cpp
         src/dusk/imgui/ImGuiMenuTools.hpp
-        src/dusk/imgui/ImGuiPreLaunchWindow.cpp
-        src/dusk/imgui/ImGuiPreLaunchWindow.hpp
         src/dusk/imgui/ImGuiProcessOverlay.cpp
         src/dusk/imgui/ImGuiCameraOverlay.cpp
         src/dusk/imgui/ImGuiHeapOverlay.cpp
@@ -1459,6 +1457,8 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiSaveEditor.cpp
         src/dusk/imgui/ImGuiStateShare.hpp
         src/dusk/imgui/ImGuiStateShare.cpp
+        src/dusk/ui/achievements.cpp
+        src/dusk/ui/achievements.hpp
         src/dusk/ui/bool_button.cpp
         src/dusk/ui/bool_button.hpp
         src/dusk/ui/button.cpp
@@ -1469,10 +1469,6 @@ set(DUSK_FILES
         src/dusk/ui/controller_config.hpp
         src/dusk/ui/document.cpp
         src/dusk/ui/document.hpp
-        src/dusk/ui/achievements.cpp
-        src/dusk/ui/achievements.hpp
-        src/dusk/ui/preset.cpp
-        src/dusk/ui/preset.hpp
         src/dusk/ui/editor.cpp
         src/dusk/ui/editor.hpp
         src/dusk/ui/event.cpp
@@ -1481,6 +1477,8 @@ set(DUSK_FILES
         src/dusk/ui/graphics_tuner.hpp
         src/dusk/ui/input.cpp
         src/dusk/ui/input.hpp
+        src/dusk/ui/modal.cpp
+        src/dusk/ui/modal.hpp
         src/dusk/ui/nav_types.hpp
         src/dusk/ui/number_button.cpp
         src/dusk/ui/number_button.hpp
@@ -1492,8 +1490,8 @@ set(DUSK_FILES
         src/dusk/ui/menu_bar.hpp
         src/dusk/ui/prelaunch.cpp
         src/dusk/ui/prelaunch.hpp
-        src/dusk/ui/prelaunch_options.cpp
-        src/dusk/ui/prelaunch_options.hpp
+        src/dusk/ui/preset.cpp
+        src/dusk/ui/preset.hpp
         src/dusk/ui/select_button.cpp
         src/dusk/ui/select_button.hpp
         src/dusk/ui/settings.cpp
@@ -1514,6 +1512,8 @@ set(DUSK_FILES
         src/dusk/OSReport.cpp
         src/dusk/OSThread.cpp
         src/dusk/OSMutex.cpp
+        src/dusk/discord.cpp
+        src/dusk/discord.hpp
         src/dusk/discord_presence.cpp
         src/dusk/version.cpp
 )

@@ -47,7 +47,6 @@ TabBar::TabBar(Rml::Element* parent, Props props)
         add_child<Button>(Button::Props{}, "close")
             .on_nav_command([this](Rml::Event&, NavCommand cmd) {
                 if (cmd == NavCommand::Confirm) {
-                    mDoAud_seStartMenu(Z2SE_SY_CURSOR_CANCEL);
                     mProps.onClose();
                     return true;
                 }
@@ -119,7 +118,9 @@ void TabBar::add_tab(const Rml::String& title, TabCallback callback) {
     auto& button = add_child<Button>(Button::Props{title}, "tab");
     button.on_nav_command([this, index](Rml::Event&, NavCommand cmd) {
         if (cmd == NavCommand::Confirm) {
-            mDoAud_seStartMenu(mProps.autoSelect ? Z2SE_SY_NAME_CURSOR : Z2SE_SY_CURSOR_OK);
+            if (mProps.autoSelect) {
+                mDoAud_seStartMenu(kSoundTabChanged);
+            }
             set_active_tab(index);
             return true;
         }
@@ -229,7 +230,7 @@ bool TabBar::handle_nav_command(Rml::Event& event, NavCommand cmd) {
         while (i >= 0 && i < mTabs.size()) {
             const bool changed = mProps.autoSelect ? set_active_tab(i) : focus_tab(i);
             if (changed) {
-                mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
+                mDoAud_seStartMenu(kSoundTabChanged);
                 return true;
             }
             i += direction;

@@ -31,6 +31,7 @@
 
 #if TARGET_PC
 #include <assert.h>
+#include "dusk/ui/ui.hpp"
 #endif
 
 #if !PLATFORM_GCN
@@ -1009,7 +1010,14 @@ int mDoMch_Create() {
     JKRAram::setSZSBufferSize(0x2000);
     mDoDvdThd::create(OSGetThreadPriority(OSGetCurrentThread()) - 2);
     mDoDvdErr_ThdInit();
+
+#if TARGET_PC
+    if (!dusk::ui::is_prelaunch_open()) {
+        mDoMemCd_ThdInit();
+    }
+#else
     mDoMemCd_ThdInit();
+#endif
 
     return 1;
 }

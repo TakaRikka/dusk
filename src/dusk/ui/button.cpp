@@ -37,7 +37,6 @@ Button& Button::on_pressed(ButtonCallback callback) {
     // TODO: convert this to a FluentComponent method?
     on_nav_command([callback = std::move(callback)](Rml::Event&, NavCommand cmd) {
         if (cmd == NavCommand::Confirm) {
-            mDoAud_seStartMenu(Z2SE_SY_CURSOR_OK);
             callback();
             return true;
         }

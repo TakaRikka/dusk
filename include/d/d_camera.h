@@ -118,6 +118,18 @@ class camera_class;
 class dCamera_c;
 typedef bool (dCamera_c::*engine_fn)(s32);
 
+#if TARGET_PC
+struct DebugFlyCam {
+    bool initialized;
+    f32 pitch;
+    f32 yaw;
+    cXyz savedCenter;
+    cXyz savedEye;
+    f32 savedFovy;
+    cSAngle savedBank;
+};
+#endif
+
 class dCamera_c {
 public:
     class dCamInfo_c {
@@ -1028,6 +1040,8 @@ public:
     bool test2Camera(s32);
     #if TARGET_PC
     bool freeCamera();
+    bool executeDebugFlyCam();
+    void deactivateDebugFlyCam();
     #endif
     bool towerCamera(s32);
     bool hookshotCamera(s32);
@@ -1376,6 +1390,10 @@ public:
     /* 0x970 */ dCamSetup_c mCamSetup;
     /* 0xAEC */ dCamParam_c mCamParam;
     /* 0xB0C */ u8 field_0xb0c;
+
+#if TARGET_PC
+    DebugFlyCam mDebugFlyCam;
+#endif
 };  // Size: 0xB10
 
 dCamera_c* dCam_getBody();

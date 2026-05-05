@@ -47,7 +47,6 @@ public:
     Rml::Element* root() const { return mRoot; }
 
 protected:
-    static Rml::Element* append(Rml::Element* parent, const Rml::String& tag);
     void clear_children();
 
     Rml::Element* mRoot = nullptr;
