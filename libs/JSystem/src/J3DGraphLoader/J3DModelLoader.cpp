@@ -515,7 +515,9 @@ auto StrideForData(GXAttr attr, GXCompType type, GXCompCnt cnt) -> std::pair<u32
         } else if (attr >= GX_VA_TEX0 && attr <= GX_VA_TEX7) {
             return cnt == GX_TEX_S ? 1 : 2;
         } else {
+            #if !TARGET_PC
             JUT_ASSERT(1234, false);
+            #endif
         }
     };
 
@@ -555,9 +557,11 @@ void J3DModelLoader::readVertexData(const J3DVertexBlock& block, J3DVertexData& 
         FixArrayEndian(startAddr, endAddr, compStride);
 
         if (attr == GX_VA_POS) {
+            #if !TARGET_PC
             // can be a little off due to 0x20 alignment, account for that
             u32 expect = ((data.mVtxNum * vertStride) + 0x1F) & ~0x1F;
             JUT_ASSERT(1234, expect == addrDiff);
+            #endif
         } else if (attr == GX_VA_NRM) {
             data.mNrmNum = num;
         } else if (attr == GX_VA_CLR0) {
