@@ -517,6 +517,12 @@ void daE_OctBg_c::core_fish_attack() {
                         field_0xbaf = cM_rndFX(80.0f) + 100.0f;
                     }
                 }
+            #if AVOID_UB
+                else {
+                    in_f31 = cM_rndF(400.0f) + 80.0f;
+                    field_0xbaf = cM_rndFX(80.0f) + 100.0f;
+                }
+            #endif
             } else if (current.pos.abs(cStack_5c) < 400.0f) {
                 in_f31 = cM_rndF(50.0f) + 20.0f;
                 field_0xbaf = cM_rndFX(20.0f) + 40.0f;
