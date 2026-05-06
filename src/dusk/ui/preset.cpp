@@ -47,16 +47,23 @@ void applyPresetDusk() {
 
 }  // namespace
 
-PresetWindow::PresetWindow() : WindowSmall("preset", "preset-dialog") {
-    auto* title = append(mDialog, "div");
-    title->SetClass("preset-title", true);
-    title->SetInnerRML("Welcome to Dusk!");
+PresetWindow::PresetWindow() : WindowSmall("modal", "modal-dialog") {
+    mDialog->SetClass("modal-dialog", true);
+
+    auto* header = append(mDialog, "div");
+    header->SetClass("modal-header", true);
+
+    auto* title = append(header, "div");
+    title->SetClass("modal-title", true);
+    title->SetInnerRML("Welcome to Dusk");
+
+    auto* headIcon = append(header, "icon");
+    headIcon->SetClass("celebration", true);
 
     auto* intro = append(mDialog, "div");
-    intro->SetClass("preset-intro", true);
+    intro->SetClass("modal-body", true);
     intro->SetInnerRML(
-        "Choose a preset to get started.<br/>"
-        "You can change any setting later from the Settings menu.");
+        "Choose a preset to get started. You can change any setting later from the Settings menu.");
 
     auto* grid = append(mDialog, "div");
     grid->SetClass("preset-grid", true);
@@ -83,7 +90,6 @@ PresetWindow::PresetWindow() : WindowSmall("preset", "preset-dialog") {
         col->SetClass("preset-col", true);
 
         auto btn = std::make_unique<Button>(col, Rml::String(preset.name));
-        btn->root()->SetClass("preset-btn", true);
         btn->on_nav_command([this, apply = preset.apply](Rml::Event&, NavCommand cmd) {
             if (cmd == NavCommand::Confirm) {
                 apply();

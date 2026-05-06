@@ -39,10 +39,6 @@ window.small {
     width: auto;
 }
 
-window.preset {
-    min-width: 650dp;
-}
-
 window.modal {
     max-width: 640dp;
 }
@@ -283,6 +279,10 @@ icon.error {
     decorator: text("&#xe000;" center center);
 }
 
+icon.celebration {
+    decorator: text("&#xea65;" center center);
+}
+
 .achievement-row {
     display: flex;
     align-items: flex-start;
@@ -366,35 +366,13 @@ button.achievement-clear {
     opacity: 0.45;
 }
 
-.preset-dialog {
-    display: flex;
-    flex-flow: column;
-    padding: 32dp;
-    gap: 20dp;
-    flex: 0 1 auto;
-}
-
-.preset-title {
-    display: block;
-    font-family: "Fira Sans Condensed";
-    font-weight: bold;
-    font-size: 30dp;
-    text-align: center;
-}
-
-.preset-intro {
-    display: block;
-    font-size: 18dp;
-    text-align: center;
-    color: rgba(224, 219, 200, 65%);
-}
-
 .preset-grid {
     display: flex;
     flex-direction: row;
     gap: 20dp;
     flex: 0 1 auto;
     align-items: flex-start;
+    width: 100%;
 }
 
 .preset-col {
@@ -404,15 +382,9 @@ button.achievement-clear {
     flex: 1 1 0;
 }
 
-button.preset-btn {
-    font-size: 22dp;
-    padding: 20dp 16dp;
-}
-
 .preset-desc {
     display: block;
     font-size: 16dp;
-    color: rgba(224, 219, 200, 65%);
     text-align: center;
 }
 
