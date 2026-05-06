@@ -1,4 +1,4 @@
-#include "popup.hpp"
+#include "menu_bar.hpp"
 
 #include <RmlUi/Core.h>
 
@@ -30,14 +30,14 @@ const Rml::String kDocumentSource = R"RML(
     <link type="text/rcss" href="res/rml/popup.rcss" />
 </head>
 <body>
-    <popup id="popup"></popup>
+    <popup id="popup" />
 </body>
 </rml>
 )RML";
 
 }
 
-Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("popup")) {
+MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById("popup")) {
     mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
                                                   .onClose =
                                                       [this] {
@@ -72,7 +72,7 @@ Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("pop
     });
 }
 
-void Popup::show() {
+void MenuBar::show() {
     Document::show();
     mRoot->SetAttribute("open", "");
     mTabBar->set_active_tab(-1);
@@ -81,7 +81,7 @@ void Popup::show() {
     }
 }
 
-void Popup::hide(bool close) {
+void MenuBar::hide(bool close) {
     mFocusedTabIndex = mTabBar->focused_tab_index();
     mRoot->RemoveAttribute("open");
     if (close) {
@@ -89,12 +89,12 @@ void Popup::hide(bool close) {
     }
 }
 
-void Popup::update() {
+void MenuBar::update() {
     update_safe_area();
     Document::update();
 }
 
-void Popup::update_safe_area() noexcept {
+void MenuBar::update_safe_area() noexcept {
     if (mDocument == nullptr || mTabBar == nullptr) {
         return;
     }
@@ -132,11 +132,11 @@ void Popup::update_safe_area() noexcept {
     }
 }
 
-bool Popup::visible() const {
+bool MenuBar::visible() const {
     return mRoot->HasAttribute("open");
 }
 
-bool Popup::handle_nav_command(Rml::Event& event, NavCommand cmd) {
+bool MenuBar::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (!getSettings().backend.wasPresetChosen) {
         return true;
     }
@@ -148,7 +148,7 @@ bool Popup::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     return Document::handle_nav_command(event, cmd);
 }
 
-bool Popup::focus() {
+bool MenuBar::focus() {
     return mTabBar->focus();
 }
 

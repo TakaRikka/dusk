@@ -1473,6 +1473,8 @@ set(DUSK_FILES
         src/dusk/ui/editor.hpp
         src/dusk/ui/event.cpp
         src/dusk/ui/event.hpp
+        src/dusk/ui/graphics_tuner.cpp
+        src/dusk/ui/graphics_tuner.hpp
         src/dusk/ui/input.cpp
         src/dusk/ui/input.hpp
         src/dusk/ui/modal.cpp
@@ -1484,8 +1486,8 @@ set(DUSK_FILES
         src/dusk/ui/overlay.hpp
         src/dusk/ui/pane.cpp
         src/dusk/ui/pane.hpp
-        src/dusk/ui/popup.cpp
-        src/dusk/ui/popup.hpp
+        src/dusk/ui/menu_bar.cpp
+        src/dusk/ui/menu_bar.hpp
         src/dusk/ui/prelaunch.cpp
         src/dusk/ui/prelaunch.hpp
         src/dusk/ui/preset.cpp

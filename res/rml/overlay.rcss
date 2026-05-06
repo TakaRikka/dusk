@@ -8,140 +8,107 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: "Fira Sans Condensed";
-    font-size: 24dp;
-    color: #FFFFFF;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: stretch;
-}
-
-.overlay-root {
-    width: 100%;
-    min-height: 45%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: stretch;
-    decorator: vertical-gradient(#00000000 #151610F2);
-    filter: opacity(0);
-    transition: filter 0.2s linear-in-out;
-}
-
-.overlay-root[open] {
-    filter: opacity(1);
-}
-
-.overlay {
-    width: 100%;
-    max-width: 1216dp;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 24dp;
-    padding: 48dp 64dp;
-}
-
-@media (max-height: 800dp) {
-    .overlay-root {
-        min-height: 38%;
-    }
-
-    .overlay {
-        gap: 16dp;
-        padding: 32dp 48dp;
-    }
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 24dp;
-}
-
-.carousel-container {
-    flex: 1 1 auto;
-    display: flex;
-    justify-content: flex-end;
-    min-width: 0;
-}
-
-.description {
-    font-size: 18dp;
-    line-height: 22dp;
-    color: rgba(255, 255, 255, 50%);
-}
-
-.divider {
-    margin: 1dp 0;
-    border-top: 1dp rgba(217, 217, 217, 50%);
-}
-
-.footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 24dp;
-}
-
-footer-button {
-    display: block;
-    width: 100%;
-    max-width: 220dp;
-    border: 0;
-    padding: 0;
-    background-color: transparent;
-    font-family: "Fira Sans Condensed";
-    font-weight: bold;
+    font-family: "Fira Sans";
+    font-weight: normal;
     font-size: 20dp;
-    line-height: 24dp;
-    text-transform: uppercase;
-    color: #FFFFFF;
-    opacity: 1;
+    color: #E0DBC8;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+    z-index: 1;
+    pointer-events: none;
+}
+
+toast {
+    position: absolute;
+    top: 40dp;
+    right: 40dp;
+    display: flex;
+    flex-flow: column;
+    border-radius: 14dp;
+    overflow: hidden;
+    border: 1dp #92875B;
+    backdrop-filter: blur(5dp);
+    box-shadow: 0 0 15dp 3dp;
+    background-color: rgba(21, 22, 16, 80%);
+    filter: opacity(0);
+    transform: scale(0.9);
+    transform-origin: center;
+    transition: filter transform 0.2s cubic-in-out;
+    padding: 18dp 24dp;
+    gap: 8dp;
+}
+
+toast[open] {
+    filter: opacity(1);
+    transform: scale(1);
+}
+
+/*toast:hover {
     cursor: pointer;
+    background-color: rgba(61, 59, 36, 80%);
 }
 
-footer-button.return {
-    text-align: left;
+toast:active {
+    background-color: rgba(45, 43, 26, 80%);
+}*/
+
+toast heading {
+    display: flex;
+    gap: 18dp;
+    align-items: center;
+    font-family: "Fira Sans Condensed";
+    font-size: 18dp;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #92875B;
 }
 
-footer-button.reset {
-    text-align: right;
-}
-
-.stepped-carousel {
+toast message {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 16dp;
-    width: auto;
-    min-width: 246dp;
-    padding: 0;
-    background-color: transparent;
-    font-family: "Fira Sans Condensed";
-    font-weight: bold;
+    justify-content: start;
+    gap: 8dp;
 }
 
-.stepped-carousel-value {
-    line-height: 29dp;
-    min-width: 166dp;
-    text-align: center;
-    white-space: nowrap;
-    opacity: 0.9;
+toast progress {
+    height: 4dp;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
 }
 
-.stepped-carousel-arrow {
-    width: 24dp;
-    height: 24dp;
-    min-width: 24dp;
-    padding: 0;
-    border: 0;
-    background-color: transparent;
-    opacity: 1;
-    cursor: pointer;
+toast progress fill {
+    background-color: rgba(194, 164, 45, 80%);
+}
+
+toast.achievement {
+    border: 1dp #C2A42D;
+}
+
+toast.achievement heading {
+    color: #C2A42D;
+}
+
+icon {
     font-family: "Material Symbols Rounded";
     font-weight: normal;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+icon.arrow-forward {
+    width: 24dp;
+    height: 24dp;
+    font-size: 24dp;
+    decorator: text("&#xe5c8;" center center);
+}
+
+icon.trophy {
+    width: 24dp;
+    height: 24dp;
+    font-size: 24dp;
+    decorator: text("&#xe71a;" center center);
 }

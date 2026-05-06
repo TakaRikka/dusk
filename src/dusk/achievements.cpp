@@ -1,14 +1,15 @@
 #include "dusk/achievements.h"
-#include "dusk/io.hpp"
-#include "dusk/main.h"
-#include "d/d_com_inf_game.h"
-#include "d/d_meter2_info.h"
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_npc4.h"
 #include "d/actor/d_a_player.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_demo.h"
-#include "f_pc/f_pc_name.h"
+#include "d/d_meter2_info.h"
+#include "dusk/io.hpp"
+#include "dusk/main.h"
+#include "dusk/ui/ui.hpp"
 #include "f_op/f_op_actor_mng.h"
+#include "f_pc/f_pc_name.h"
 
 #include <filesystem>
 #include <algorithm>
@@ -454,12 +455,6 @@ AchievementSystem& AchievementSystem::get() {
     return instance;
 }
 
-std::string AchievementSystem::consumePendingUnlock() {
-    std::string msg = std::move(m_pendingUnlocks.front());
-    m_pendingUnlocks.pop();
-    return msg;
-}
-
 std::vector<Achievement> AchievementSystem::getAchievements() const {
     std::vector<Achievement> result;
     result.reserve(m_entries.size());
@@ -559,7 +554,14 @@ void AchievementSystem::processEntry(Entry& e) {
     if (nowUnlocked) {
         e.achievement.progress = e.achievement.isCounter ? e.achievement.goal : 1;
         e.achievement.unlocked = true;
-        m_pendingUnlocks.push(e.achievement.name);
+        if (getSettings().game.enableAchievementNotifications) {
+            ui::push_toast({
+                .type = "achievement",
+                .title = "Achievement Unlocked!",
+                .content = e.achievement.name,
+                .duration = std::chrono::seconds(5),
+            });
+        }
         m_dirty = true;
     } else if (progressChanged) {
         m_dirty = true;

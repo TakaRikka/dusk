@@ -46,6 +46,7 @@
 #include <system_error>
 #include <thread>
 #include "SSystem/SComponent/c_API.h"
+#include "dusk/achievements.h"
 #include "dusk/app_info.hpp"
 #include "dusk/crash_reporting.h"
 #include "dusk/dusk.h"
@@ -57,8 +58,10 @@
 #include "dusk/iso_validate.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
-#include "dusk/ui/popup.hpp"
+#include "dusk/ui/menu_bar.hpp"
+#include "dusk/ui/overlay.hpp"
 #include "dusk/ui/prelaunch.hpp"
+#include "dusk/ui/preset.hpp"
 #include "dusk/ui/ui.hpp"
 #include "version.h"
 
@@ -281,6 +284,7 @@ void main01(void) {
                     dusk::gyro::read(pacing.sim_pace);
                     fapGm_Execute();
                     mDoAud_Execute();
+                    dusk::AchievementSystem::get().tick();
                     dusk::game_clock::commit_sim_tick();
                 }
             }
@@ -597,7 +601,8 @@ int game_main(int argc, char* argv[]) {
     dusk::audio::EnableHrtf = dusk::getSettings().audio.enableHrtf;
 
     dusk::ui::initialize();
-    dusk::ui::push_document(std::make_unique<dusk::ui::Popup>(), false);
+    dusk::ui::push_document(std::make_unique<dusk::ui::Overlay>(), true, true);
+    dusk::ui::push_document(std::make_unique<dusk::ui::MenuBar>(), false);
 
     // Invalidate a bad saved isoPath so that Dusk can't get blocked from starting up
     const std::string p = dusk::getSettings().backend.isoPath;
@@ -657,6 +662,10 @@ int game_main(int argc, char* argv[]) {
         }
 
         dusk::IsGameLaunched = true;
+    }
+
+    if (!dusk::getSettings().backend.wasPresetChosen) {
+        dusk::ui::push_document(std::make_unique<dusk::ui::PresetWindow>());
     }
 
     dusk::version::init();

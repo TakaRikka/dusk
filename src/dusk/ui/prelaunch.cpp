@@ -6,7 +6,6 @@
 #include "dusk/main.h"
 #include "dusk/settings.h"
 #include "modal.hpp"
-#include "popup.hpp"
 #include "preset.hpp"
 #include "settings.hpp"
 #include "version.h"

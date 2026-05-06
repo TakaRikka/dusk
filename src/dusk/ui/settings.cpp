@@ -8,9 +8,9 @@
 #include "dusk/config.hpp"
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/livesplit.h"
+#include "graphics_tuner.hpp"
 #include "m_Do/m_Do_main.h"
 #include "number_button.hpp"
-#include "overlay.hpp"
 #include "pane.hpp"
 #include "prelaunch.hpp"
 #include "ui.hpp"
@@ -256,8 +256,8 @@ SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<f
 }
 
 template <typename T>
-void overlay_control(
-    Window& window, Pane& leftPane, Pane& rightPane, ConfigVar<T>& var, const OverlayProps& props) {
+void graphics_tuner_control(Window& window, Pane& leftPane, Pane& rightPane, ConfigVar<T>& var,
+    const GraphicsTunerProps& props) {
     leftPane.register_control(
         leftPane
             .add_select_button({
@@ -278,7 +278,7 @@ void overlay_control(
             .on_nav_command([&window, props](Rml::Event&, NavCommand cmd) {
                 if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
                     cmd == NavCommand::Right) {
-                    window.push(std::make_unique<Overlay>(props));
+                    window.push(std::make_unique<GraphicsTuner>(props));
                     return true;
                 }
                 return false;
@@ -473,8 +473,9 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             });
 
         leftPane.add_section("Resolution");
-        overlay_control(*this, leftPane, rightPane, getSettings().game.internalResolutionScale,
-            OverlayProps{
+        graphics_tuner_control(*this, leftPane, rightPane,
+            getSettings().game.internalResolutionScale,
+            GraphicsTunerProps{
                 .option = GraphicsOption::InternalResolution,
                 .title = "Internal Resolution",
                 .helpText = kInternalResolutionHelpText,
@@ -482,8 +483,9 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMax = 12,
                 .defaultValue = 0,
             });
-        overlay_control(*this, leftPane, rightPane, getSettings().game.shadowResolutionMultiplier,
-            OverlayProps{
+        graphics_tuner_control(*this, leftPane, rightPane,
+            getSettings().game.shadowResolutionMultiplier,
+            GraphicsTunerProps{
                 .option = GraphicsOption::ShadowResolution,
                 .title = "Shadow Resolution",
                 .helpText = kShadowResolutionHelpText,
@@ -493,8 +495,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             });
 
         leftPane.add_section("Post-Processing");
-        overlay_control(*this, leftPane, rightPane, getSettings().game.bloomMode,
-            OverlayProps{
+        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMode,
+            GraphicsTunerProps{
                 .option = GraphicsOption::BloomMode,
                 .title = "Bloom",
                 .helpText = kBloomHelpText,
@@ -502,8 +504,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMax = static_cast<int>(BloomMode::Dusk),
                 .defaultValue = static_cast<int>(BloomMode::Classic),
             });
-        overlay_control(*this, leftPane, rightPane, getSettings().game.bloomMultiplier,
-            OverlayProps{
+        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMultiplier,
+            GraphicsTunerProps{
                 .option = GraphicsOption::BloomMultiplier,
                 .title = "Bloom Brightness",
                 .helpText = kBloomBrightnessHelpText,
