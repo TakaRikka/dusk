@@ -10,11 +10,9 @@
 
 #include "fmt/format.h"
 #include "ImGuiConsole.hpp"
-#include "dusk/ui/preset.hpp"
 #include "dusk/ui/ui.hpp"
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "SDL3/SDL_mouse.h"
-#include "dusk/achievements.h"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/config.hpp"
 #include "dusk/dusk.h"
@@ -254,15 +252,6 @@ namespace dusk {
 
         UpdateSettings();
 
-        AchievementSystem::get().tick();
-        while (AchievementSystem::get().hasPendingUnlock()) {
-            if (getSettings().game.enableAchievementNotifications) {
-                m_menuTools.notifyAchievement(AchievementSystem::get().consumePendingUnlock());
-            } else {
-                AchievementSystem::get().consumePendingUnlock();
-            }
-        }
-
         if (!fpcM_SearchByName(fpcNm_LOGO_SCENE_e) &&
             (ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) &&
             ImGui::IsKeyPressed(ImGuiKey_R))
@@ -338,7 +327,6 @@ namespace dusk {
             m_menuTools.ShowSaveEditor();
             m_menuTools.ShowStateShare();
         }
-        m_menuTools.showAchievementNotification();
         DuskDebugPad(); // temporary, remove later
 
         // Hide mouse cursor if the F1 menu is not open and the cursor is idle for 3 seconds.

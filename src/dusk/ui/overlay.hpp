@@ -6,8 +6,6 @@
 
 namespace dusk::ui {
 
-using clock = std::chrono::steady_clock;
-
 class Overlay : public Document {
 public:
     Overlay();
@@ -18,6 +16,8 @@ public:
 protected:
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;
 
+    Rml::Element* mCurrentToast = nullptr;
+    clock::time_point mCurrentToastStartTime;
 };
 
 }  // namespace dusk::ui

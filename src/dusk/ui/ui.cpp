@@ -24,7 +24,7 @@ bool sInitialized = false;
 std::vector<std::unique_ptr<Document> > sDocumentStack;
 // Documents that don't participate in the focus stack
 std::vector<std::unique_ptr<Document> > sPassiveDocuments;
-std::vector<Toast> sToasts;
+std::deque<Toast> sToasts;
 
 }  // namespace
 
@@ -243,7 +243,7 @@ void push_toast(Toast toast) noexcept {
     sToasts.push_back(std::move(toast));
 }
 
-std::vector<Toast>& get_toasts() noexcept {
+std::deque<Toast>& get_toasts() noexcept {
     return sToasts;
 }
 

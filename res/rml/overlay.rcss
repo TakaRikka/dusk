@@ -29,7 +29,7 @@ toast {
     border-radius: 14dp;
     overflow: hidden;
     border: 1dp #92875B;
-    /*backdrop-filter: blur(5dp);*/
+    backdrop-filter: blur(5dp);
     box-shadow: 0 0 15dp 3dp;
     background-color: rgba(21, 22, 16, 80%);
     filter: opacity(0);
@@ -54,7 +54,10 @@ toast:active {
     background-color: rgba(45, 43, 26, 80%);
 }*/
 
-toast title {
+toast heading {
+    display: flex;
+    gap: 18dp;
+    align-items: center;
     font-family: "Fira Sans Condensed";
     font-size: 18dp;
     font-weight: bold;
@@ -85,7 +88,7 @@ toast.achievement {
     border: 1dp #C2A42D;
 }
 
-toast.achievement title {
+toast.achievement heading {
     color: #C2A42D;
 }
 

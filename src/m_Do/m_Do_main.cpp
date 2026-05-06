@@ -46,6 +46,7 @@
 #include <system_error>
 #include <thread>
 #include "SSystem/SComponent/c_API.h"
+#include "dusk/achievements.h"
 #include "dusk/app_info.hpp"
 #include "dusk/crash_reporting.h"
 #include "dusk/dusk.h"
@@ -283,6 +284,7 @@ void main01(void) {
                     dusk::gyro::read(pacing.sim_pace);
                     fapGm_Execute();
                     mDoAud_Execute();
+                    dusk::AchievementSystem::get().tick();
                     dusk::game_clock::commit_sim_tick();
                 }
             }

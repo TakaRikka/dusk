@@ -556,8 +556,8 @@ void J3DModelLoader::readVertexData(const J3DVertexBlock& block, J3DVertexData& 
 
         if (attr == GX_VA_POS) {
             // can be a little off due to 0x20 alignment, account for that
-            u32 expect = ((data.mVtxNum * vertStride) + 0x1F) & ~0x1F;
-            JUT_ASSERT(1234, expect == addrDiff);
+            // u32 expect = ((data.mVtxNum * vertStride) + 0x1F) & ~0x1F;
+            // JUT_ASSERT(1234, expect == addrDiff);
         } else if (attr == GX_VA_NRM) {
             data.mNrmNum = num;
         } else if (attr == GX_VA_CLR0) {

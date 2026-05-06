@@ -20,7 +20,6 @@ struct Toast {
     Rml::String title;
     Rml::String content;
     clock::duration duration;
-    clock::time_point startTime = clock::now();
 };
 
 // Button clicked/pressed
@@ -47,6 +46,9 @@ constexpr u32 kSoundItemChange = Z2SE_SY_NAME_CURSOR;
 constexpr u32 kSoundItemEnable = Z2SE_SUBJ_VIEW_IN;
 // Item disabled ("Off")
 constexpr u32 kSoundItemDisable = Z2SE_SUBJ_VIEW_OUT;
+
+// Achievement unlocked
+constexpr u32 kSoundAchievementUnlock = Z2SE_NAVI_FLY;
 
 struct Insets {
     float top = 0.0f;
@@ -81,6 +83,6 @@ NavCommand map_nav_event(const Rml::Event& event) noexcept;
 Insets safe_area_insets(Rml::Context* context) noexcept;
 
 void push_toast(Toast toast) noexcept;
-std::vector<Toast>& get_toasts() noexcept;
+std::deque<Toast>& get_toasts() noexcept;
 
 }  // namespace dusk::ui
