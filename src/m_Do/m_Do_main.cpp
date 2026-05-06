@@ -621,7 +621,7 @@ int game_main(int argc, char* argv[]) {
 
     // Invalidate a bad saved isoPath so that Dusk can't get blocked from starting up
     const std::string p = dusk::getSettings().backend.isoPath;
-    if (!p.empty() && dusk::iso::validate(p.c_str()) != dusk::iso::ValidationError::Success) {
+    if (!p.empty() && dusk::iso::validate(p.c_str()) < dusk::iso::ValidationError::HashMismatch) {
         dusk::getSettings().backend.isoPath.setValue("");
     }
 
@@ -629,7 +629,7 @@ int game_main(int argc, char* argv[]) {
     bool dvd_opened = false;
     if (parsed_arg_options.count("dvd")) {
         dvd_path = parsed_arg_options["dvd"].as<std::string>();
-        if (dusk::iso::validate(dvd_path.c_str()) == dusk::iso::ValidationError::Success) {
+        if (dusk::iso::validate(dvd_path.c_str()) >= dusk::iso::ValidationError::HashMismatch) {
             DuskLog.info("Loading DVD image from command line: {}", dvd_path);
             dvd_opened = aurora_dvd_open(dvd_path.c_str());
             if (!dvd_opened) {
@@ -668,7 +668,8 @@ int game_main(int argc, char* argv[]) {
         if (dvd_path.empty()) {
             DuskLog.fatal("No DVD image specified, unable to boot!");
         }
-        if (dusk::iso::validate(dvd_path.c_str()) != dusk::iso::ValidationError::Success) {
+        if (!dusk::IsGameLaunched &&
+            dusk::iso::validate(dvd_path.c_str()) < dusk::iso::ValidationError::HashMismatch) {
             DuskLog.fatal("DVD image failed verification: {}", dvd_path);
         }
         DuskLog.info("Loading DVD image: {}", dvd_path);

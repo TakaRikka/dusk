@@ -80,16 +80,22 @@ void file_dialog_callback(void*, const char* path, const char* error) {
 
     auto& state = prelaunch_state();
     const auto validation = iso::validate(path);
-    if (validation != iso::ValidationError::Success) {
-        state.errorString = escape(get_error_msg(validation));
+    if (validation == iso::ValidationError::Success) {
+        state.selectedDiscPath = path;
+        state.errorString.clear();
+        state.pendingDiscPath.clear();
+        state.userAcceptedDiscPath.clear();
+        getSettings().backend.isoPath.setValue(state.selectedDiscPath);
+        config::Save();
+        refresh_state();
         return;
     }
-
-    state.selectedDiscPath = path;
-    state.errorString.clear();
-    getSettings().backend.isoPath.setValue(state.selectedDiscPath);
-    config::Save();
-    refresh_state();
+    if (validation == iso::ValidationError::HashMismatch) {
+        state.pendingDiscPath = path;
+    } else {
+        state.pendingDiscPath.clear();
+    }
+    state.errorString = escape(get_error_msg(validation));
 }
 
 PrelaunchState sPrelaunchState;
@@ -100,13 +106,86 @@ PrelaunchState& prelaunch_state() noexcept {
 
 void refresh_state() noexcept {
     auto& state = prelaunch_state();
-    const auto validation = iso::validate(state.selectedDiscPath.c_str());
-    if (state.selectedDiscPath.empty() || validation != iso::ValidationError::Success) {
+    if (state.selectedDiscPath.empty()) {
         state.selectedDiscIsValid = false;
         return;
     }
-    state.selectedDiscIsValid = true;
-    state.selectedDiscIsPal = iso::isPal(state.selectedDiscPath.c_str());
+    if (!state.userAcceptedDiscPath.empty() &&
+        state.selectedDiscPath == state.userAcceptedDiscPath) {
+        state.selectedDiscIsValid = true;
+        state.selectedDiscIsPal = iso::isPal(state.selectedDiscPath.c_str());
+        return;
+    }
+
+    const auto validation = iso::validate(state.selectedDiscPath.c_str());
+    // Allow HashMismatch, so that the user is not prompted to accept the warning on every boot.
+    if (validation >= iso::ValidationError::HashMismatch) {
+        state.selectedDiscIsValid = true;
+        state.selectedDiscIsPal = iso::isPal(state.selectedDiscPath.c_str());
+        state.userAcceptedDiscPath.clear();
+        return;
+    }
+    state.selectedDiscIsValid = false;
+}
+
+void try_push_verification_modal(Document& host) {
+    auto& state = prelaunch_state();
+    if (state.errorString.empty()) {
+        return;
+    }
+
+    auto dismiss = [](Modal& modal) {
+        auto& state = prelaunch_state();
+        state.errorString.clear();
+        state.pendingDiscPath.clear();
+        modal.pop();
+    };
+
+    if (!state.pendingDiscPath.empty()) {
+        const Rml::String bodyRml = state.errorString + "<br/><br/>You may proceed at your own risk.";
+        auto acceptHashMismatch = [](Modal& modal) {
+            auto& st = prelaunch_state();
+            std::string path = std::move(st.pendingDiscPath);
+            st.pendingDiscPath.clear();
+            st.errorString.clear();
+            st.selectedDiscPath = path;
+            st.userAcceptedDiscPath = path;
+            getSettings().backend.isoPath.setValue(path);
+            config::Save();
+            refresh_state();
+            modal.pop();
+        };
+        host.push(std::make_unique<Modal>(Modal::Props{
+            .title = "Disc verification",
+            .bodyRml = bodyRml,
+            .actions =
+                {
+                    ModalAction{
+                        .label = "Cancel",
+                        .onPressed = dismiss,
+                    },
+                    ModalAction{
+                        .label = "Continue anyway",
+                        .onPressed = acceptHashMismatch,
+                    },
+                },
+            .onDismiss = dismiss,
+        }));
+        return;
+    }
+
+    host.push(std::make_unique<Modal>(Modal::Props{
+        .title = "Disc verification",
+        .bodyRml = state.errorString,
+        .actions =
+            {
+                ModalAction{
+                    .label = "OK",
+                    .onPressed = dismiss,
+                },
+            },
+        .onDismiss = dismiss,
+    }));
 }
 
 void ensure_initialized() noexcept {
@@ -117,7 +196,9 @@ void ensure_initialized() noexcept {
 
     state.selectedDiscPath = getSettings().backend.isoPath;
     state.initialDiscPath = state.selectedDiscPath;
-    if (iso::validate(state.initialDiscPath.c_str()) == iso::ValidationError::Success) {
+    const auto& res = iso::validate(state.initialDiscPath.c_str());
+    if (res >= iso::ValidationError::HashMismatch) {
+        state.initialDiscValidationRes = res;
         state.initialDiscIsPal = iso::isPal(state.initialDiscPath.c_str());
     }
     state.initialLanguage = getSettings().game.language;
@@ -287,28 +368,14 @@ void Prelaunch::update() {
     ensure_initialized();
     try_apply_mirrored_layout(mDocument);
 
-    auto& state = prelaunch_state();
-    if (!state.errorString.empty() && top_document() == this) {
-        auto dismiss = [](Modal& modal) {
-            prelaunch_state().errorString.clear();
-            modal.pop();
-        };
-        push(std::make_unique<Modal>(Modal::Props{
-            .title = "Invalid disc image",
-            .bodyRml = state.errorString,
-            .actions =
-                {
-                    ModalAction{
-                        .label = "OK",
-                        .onPressed = dismiss,
-                    },
-                },
-            .onDismiss = dismiss,
-        }));
+    if (top_document() == this) {
+        try_push_verification_modal(*this);
     }
 
-    const bool hasValidPath = prelaunch_state().selectedDiscIsValid;
-    mDocument->SetClass("disc-ready", hasValidPath);
+    const auto& state = prelaunch_state();
+
+    const bool hasValidPath = state.selectedDiscIsValid;
+    mDocument->SetClass("disc-ready", IsGameLaunched);
     if (hasValidPath) {
         if (getSettings().backend.skipPreLaunchUI) {
             hide(true);
@@ -327,17 +394,28 @@ void Prelaunch::update() {
 
     const auto discStatusLabel = mDiscStatus->GetElementById("disc-status-label");
 
+    const bool discHashMismatchAccepted =
+        hasValidPath && !state.userAcceptedDiscPath.empty() &&
+        state.selectedDiscPath == state.userAcceptedDiscPath;
+
     if (mDiscStatus != nullptr && discStatusLabel != nullptr) {
-        if (hasValidPath) {
+        if (state.initialDiscValidationRes == iso::ValidationError::Success) {
             mDiscStatus->SetAttribute("status", "good");
             discStatusLabel->SetInnerRML("Disc ready.");
+        } else if (state.initialDiscValidationRes == iso::ValidationError::HashMismatch) {
+            mDiscStatus->SetAttribute("status", "mismatch");
+            discStatusLabel->SetInnerRML("Disc hash mismatch.");
+        } else {
+            mDiscStatus->RemoveAttribute("status");
+            discStatusLabel->SetInnerRML("No disc image found.");
         }
     }
     if (mDiscDetail != nullptr) {
         if (hasValidPath) {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::Block);
-            mDiscDetail->SetInnerRML(
-                prelaunch_state().initialDiscIsPal ? "GameCube • EUR" : "GameCube • USA");
+            Rml::String innerRML = "GameCube • ";
+            innerRML += state.initialDiscIsPal ? "EUR" : "USA";
+            mDiscDetail->SetInnerRML(innerRML);
         } else {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::None);
         }

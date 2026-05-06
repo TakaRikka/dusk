@@ -17,8 +17,6 @@
 
 #include <algorithm>
 
-#include "modal.hpp"
-
 namespace dusk::ui {
 namespace {
 
@@ -869,27 +867,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 }
 
 void SettingsWindow::update() {
-    // Show disc validation error message if present
     if (mPrelaunch && top_document() == this) {
-        auto& state = prelaunch_state();
-        if (!state.errorString.empty()) {
-            auto dismissInvalidDisc = [](Modal& modal) {
-                prelaunch_state().errorString.clear();
-                modal.pop();
-            };
-            push_document(std::make_unique<Modal>(Modal::Props{
-                .title = "Invalid disc image",
-                .bodyRml = state.errorString,
-                .actions =
-                    {
-                        ModalAction{
-                            .label = "OK",
-                            .onPressed = dismissInvalidDisc,
-                        },
-                    },
-                .onDismiss = dismissInvalidDisc,
-            }));
-        }
+        try_push_verification_modal(*this);
     }
 
     Window::update();
