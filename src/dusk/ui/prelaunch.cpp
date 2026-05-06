@@ -156,7 +156,7 @@ void try_push_verification_modal(Document& host) {
             modal.pop();
         };
         host.push(std::make_unique<Modal>(Modal::Props{
-            .title = "Disc verification",
+            .title = "Disc verification warning",
             .bodyRml = bodyRml,
             .actions =
                 {
@@ -170,12 +170,13 @@ void try_push_verification_modal(Document& host) {
                     },
                 },
             .onDismiss = dismiss,
+            .isWarning = true,
         }));
         return;
     }
 
     host.push(std::make_unique<Modal>(Modal::Props{
-        .title = "Disc verification",
+        .title = "Disc verification error",
         .bodyRml = state.errorString,
         .actions =
             {
@@ -185,6 +186,7 @@ void try_push_verification_modal(Document& host) {
                 },
             },
         .onDismiss = dismiss,
+        .isError = true,
     }));
 }
 

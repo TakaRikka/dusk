@@ -4,12 +4,23 @@ namespace dusk::ui {
 
 Modal::Modal(Props props)
     : WindowSmall("modal", "modal-dialog"), mProps(std::move(props)) {
-    auto* title = append(mDialog, "div");
-    title->SetClass("preset-title", true);
+    auto* header = append(mDialog, "div");
+    header->SetClass("modal-header", true);
+
+    auto* title = append(header, "div");
+    title->SetClass("modal-title", true);
     title->SetInnerRML(mProps.title);
 
+    if (mProps.isWarning) {
+        auto* icon = append(header, "icon");
+        icon->SetClass("warning", true);
+    } else if ( mProps.isError ) {
+        auto* icon = append(header, "icon");
+        icon->SetClass("error", true);
+    }
+
     auto* body = append(mDialog, "div");
-    body->SetClass("preset-intro", true);
+    body->SetClass("modal-body", true);
     body->SetInnerRML(mProps.bodyRml);
 
     auto* actions = append(mDialog, "div");

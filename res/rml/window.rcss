@@ -44,7 +44,7 @@ window.preset {
 }
 
 window.modal {
-    max-width: 816dp;
+    max-width: 640dp;
 }
 
 window[open] {
@@ -114,12 +114,6 @@ window content pane > spacer {
     flex: 0 0 16dp;
     height: 16dp;
     pointer-events: none;
-}
-
-window modal {
-    padding: 32dp;
-    gap: 20dp;
-    flex: 0 1 auto;
 }
 
 scrollbarvertical {
@@ -209,9 +203,8 @@ button:not(:disabled):active {
 }
 
 button.modal-btn {
-    font-size: 20dp;
-    padding: 16dp 10dp;
     flex: 1 1 0;
+    text-align: center;
 }
 
 select-button {
@@ -274,6 +267,8 @@ select-button input {
 }
 
 icon {
+    width: 1em;
+    height: 1em;
     font-family: "Material Symbols Rounded";
     font-weight: normal;
     display: inline-block;
@@ -281,10 +276,11 @@ icon {
 }
 
 icon.warning {
-    width: 1em;
-    height: 1em;
     decorator: text("&#xe002;" center center);
-    color: #ffcc00;
+}
+
+icon.error {
+    decorator: text("&#xe000;" center center);
 }
 
 .achievement-row {
@@ -422,19 +418,58 @@ button.preset-btn {
 
 .modal-dialog {
     display: flex;
-    flex-flow: column;
-    padding: 16dp;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24dp;
     gap: 20dp;
     flex: 0 1 auto;
+    width: 100%;
+    text-align: left;
+}
+
+.modal-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    flex: 0 0 auto;
+    gap: 16dp;
+}
+
+.modal-header icon {
+    font-size: 24dp;
+    color: #92875B;
+}
+
+.modal-title {
+    display: block;
+    font-family: "Fira Sans Condensed";
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 18dp;
+    color: #92875B;
+    flex: 1 1 auto;
+}
+
+.modal-body {
+    display: block;
+    width: 100%;
+    flex: 0 1 auto;
     min-width: 0;
+    font-size: 20dp;
+    color: #FFFFFF;
+    font-weight: normal;
 }
 
 .modal-actions {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    justify-content: stretch;
     align-items: stretch;
     gap: 12dp;
-    padding-top: 12dp;
     width: 100%;
+    flex: 0 0 auto;
+    padding-top: 4dp;
 }
