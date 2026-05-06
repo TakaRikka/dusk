@@ -21,53 +21,58 @@ const Rml::String kDocumentSource = R"RML(
 </rml>
 )RML";
 
+constexpr std::array<std::pair<const char*, const char*>, 3> kAutoSaveLayers{{
+    {"inner", "res/org-icon-inner.png"},
+    {"outer", "res/org-icon-outer.png"},
+    {"center", "res/org-icon-center.png"},
+}};
+
 Rml::Element* create_toast(Rml::Element* parent, const Toast& toast) {
     if (toast.type == "autosave") {
-        Rml::Factory::InstanceElementText(parent, R"RML(
-    <logo>
-        <img class="inner" src="res/org-icon-inner.png" />
-        <img class="outer" src="res/org-icon-outer.png" />
-        <img class="center" src="res/org-icon-center.png" />
-    </logo>
-)RML");
-        return parent->GetFirstChild();
-    } else {
-        auto* elem = append(parent, "toast");
-        if (!toast.type.empty()) {
-            elem->SetClass(toast.type, true);
+        auto* logo = append(parent, "logo");
+        for (const auto [cls, src] : kAutoSaveLayers) {
+            auto* img = append(logo, "img");
+            img->SetClass(cls, true);
+            img->SetAttribute("src", src);
         }
-        {
-            auto* heading = append(elem, "heading");
-            if (toast.title.starts_with("<")) {
-                heading->SetInnerRML(toast.title);
-            } else {
-                auto* span = append(heading, "span");
-                span->SetInnerRML(toast.title);
-            }
-            if (toast.type == "achievement") {
-                auto* icon = append(heading, "icon");
-                icon->SetClass("trophy", true);
-                mDoAud_seStartMenu(kSoundAchievementUnlock);
-            } else if (toast.type == "controller") {
-                auto* icon = append(heading, "icon");
-                icon->SetClass("controller", true);
-            }
-        }
-        {
-            auto* message = append(elem, "message");
-            if (toast.content.starts_with("<")) {
-                message->SetInnerRML(toast.content);
-            } else {
-                auto* span = append(message, "span");
-                span->SetInnerRML(toast.content);
-            }
-        }
-        {
-            auto* progress = append(elem, "progress");
-            progress->SetAttribute("value", 1.f);
-        }
-        return elem;
+        return logo;
     }
+
+    auto* elem = append(parent, "toast");
+    if (!toast.type.empty()) {
+        elem->SetClass(toast.type, true);
+    }
+    {
+        auto* heading = append(elem, "heading");
+        if (toast.title.starts_with("<")) {
+            heading->SetInnerRML(toast.title);
+        } else {
+            auto* span = append(heading, "span");
+            span->SetInnerRML(toast.title);
+        }
+        if (toast.type == "achievement") {
+            auto* icon = append(heading, "icon");
+            icon->SetClass("trophy", true);
+            mDoAud_seStartMenu(kSoundAchievementUnlock);
+        } else if (toast.type == "controller") {
+            auto* icon = append(heading, "icon");
+            icon->SetClass("controller", true);
+        }
+    }
+    {
+        auto* message = append(elem, "message");
+        if (toast.content.starts_with("<")) {
+            message->SetInnerRML(toast.content);
+        } else {
+            auto* span = append(message, "span");
+            span->SetInnerRML(toast.content);
+        }
+    }
+    {
+        auto* progress = append(elem, "progress");
+        progress->SetAttribute("value", 1.f);
+    }
+    return elem;
 }
 
 }  // namespace

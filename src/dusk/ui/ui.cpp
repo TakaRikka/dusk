@@ -117,6 +117,10 @@ const char* connection_state_icon(SDL_JoystickConnectionState state) noexcept {
 }
 
 void handle_event(const SDL_Event& event) noexcept {
+    if (!aurora::rmlui::is_initialized()) {
+        return;
+    }
+
     if (event.type == SDL_EVENT_GAMEPAD_ADDED) {
         auto* gamepad = SDL_GetGamepadFromID(event.gdevice.which);
         if (SDL_GamepadConnected(gamepad)) {
@@ -205,6 +209,10 @@ Document* top_document() noexcept {
 }
 
 void update() noexcept {
+    if (!aurora::rmlui::is_initialized()) {
+        return;
+    }
+
     input::update_input();
     for (const auto& doc : sDocumentStack) {
         doc->update();

@@ -600,6 +600,21 @@ int game_main(int argc, char* argv[]) {
     dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);
     dusk::audio::EnableHrtf = dusk::getSettings().audio.enableHrtf;
 
+    // Run ImGui UI loop if Aurora couldn't initialize a backend
+    if (auroraInfo.backend == BACKEND_NULL) {
+        launchUILoop();
+        dusk::ShutdownCrashReporting();
+        dusk::ShutdownFileLogging();
+        fflush(stdout);
+        fflush(stderr);
+#ifdef DUSK_DISCORD
+        dusk::discord::shutdown();
+#endif
+        dusk::ui::shutdown();
+        aurora_shutdown();
+        return 0;
+    }
+
     dusk::ui::initialize();
     dusk::ui::push_document(std::make_unique<dusk::ui::Overlay>(), true, true);
     dusk::ui::push_document(std::make_unique<dusk::ui::MenuBar>(), false);

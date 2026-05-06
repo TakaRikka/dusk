@@ -79,15 +79,11 @@ toast heading > row {
 toast message {
     display: flex;
     flex-flow: column;
-    align-items: start;
-    justify-content: start;
     gap: 8dp;
 }
 
 toast message row {
     display: flex;
-    align-items: start;
-    justify-content: start;
 }
 
 toast message row.muted {

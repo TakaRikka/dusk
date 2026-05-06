@@ -10,7 +10,7 @@
 
 #include "fmt/format.h"
 #include "ImGuiConsole.hpp"
-#include "dusk/ui/ui.hpp"
+#include "ImGuiEngine.hpp"
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "SDL3/SDL_mouse.h"
 #include "dusk/audio/DuskAudioSystem.h"
@@ -20,6 +20,7 @@
 #include "dusk/livesplit.h"
 #include "dusk/main.h"
 #include "dusk/settings.h"
+#include "dusk/ui/ui.hpp"
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_name.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -301,6 +302,67 @@ namespace dusk {
         }
 
         UpdateDragScroll();
+
+        // Show message when Aurora backend is Null
+        if (aurora_get_backend() == BACKEND_NULL) {
+            auto& io = ImGui::GetIO();
+            ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x, io.DisplaySize.y));
+            ImGui::SetNextWindowPos(ImVec2(0, 0));
+            ImGui::SetNextWindowBgAlpha(0.65f);
+            ImGui::Begin("Pre Launch Window", nullptr,
+                ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize |
+                    ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
+                    ImGuiWindowFlags_NoBringToFrontOnFocus);
+            ImGui::NewLine();
+            if (ImGuiEngine::duskLogo) {
+                const auto& windowSize = ImGui::GetWindowSize();
+                ImGui::NewLine();
+                float iconSize = 150.f;
+                float width = iconSize * 2.5f;
+                ImGui::SameLine(windowSize.x / 2 - width + (width / 2));
+                ImGui::Image(ImGuiEngine::duskLogo, ImVec2{width, iconSize});
+            } else {
+                ImGui::PushFont(ImGuiEngine::fontExtraLarge);
+                ImGuiTextCenter("Dusk");
+                ImGui::PopFont();
+            }
+            ImGui::PushFont(ImGuiEngine::fontLarge);
+            ImGuiTextCenter("Failed to initialize any graphics backend");
+            const auto& style = ImGui::GetStyle();
+            const auto retrySize = ImGui::CalcTextSize("Retry (Auto backend)");
+            const auto quitSize = ImGui::CalcTextSize("Quit");
+            float buttonsWidth = quitSize.x + style.FramePadding.x * 2.0f;
+            if constexpr (SupportsProcessRestart) {
+                buttonsWidth += retrySize.x + style.FramePadding.x * 2.0f + style.ItemSpacing.x;
+            }
+#if DUSK_CAN_OPEN_DATA_FOLDER
+            const auto openSize = ImGui::CalcTextSize("Open Data Folder");
+            buttonsWidth += openSize.x + style.FramePadding.x * 2.0f + style.ItemSpacing.x;
+#endif
+            ImGui::NewLine();
+            ImGui::SetCursorPosX(
+                ImMax(style.WindowPadding.x, (ImGui::GetWindowSize().x - buttonsWidth) * 0.5f));
+            if constexpr (SupportsProcessRestart) {
+                if (ImGui::Button("Retry (Auto backend)")) {
+                    getSettings().backend.graphicsBackend.setValue("auto");
+                    config::Save();
+                    RestartRequested = true;
+                    IsRunning = false;
+                }
+                ImGui::SameLine();
+            }
+#if DUSK_CAN_OPEN_DATA_FOLDER
+            if (ImGui::Button("Open Data Folder")) {
+                OpenDataFolder();
+            }
+            ImGui::SameLine();
+#endif
+            if (ImGui::Button("Quit")) {
+                IsRunning = false;
+            }
+            ImGui::PopFont();
+            ImGui::End();
+        }
 
         m_menuGame.windowControllerConfig();
         m_menuGame.windowInputViewer();

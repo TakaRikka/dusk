@@ -2,13 +2,16 @@
 #define DUSK_IMGUI_HPP
 
 #include <deque>
+#include <filesystem>
 #include <string>
 #include <string_view>
 
+#include <SDL3/SDL_misc.h>
 #include <aurora/aurora.h>
 
 #include "ImGuiMenuGame.hpp"
 #include "ImGuiMenuTools.hpp"
+#include "dusk/main.h"
 #include "imgui.h"
 
 union SDL_Event;
@@ -23,7 +26,7 @@ public:
     void PreDraw();
     void PostDraw();
 
-	static bool CheckMenuViewToggle(ImGuiKey key, bool& active);
+    static bool CheckMenuViewToggle(ImGuiKey key, bool& active);
     void AddToast(std::string_view message, float duration = 3.f);
 
 private:
@@ -71,5 +74,25 @@ float ImGuiScale();
 }  // namespace dusk
 
 void DuskDebugPad();
+
+#if defined(_WIN32) ||                                                                             \
+    (defined(__APPLE__) && !TARGET_OS_IOS && !TARGET_OS_TV && !TARGET_OS_MACCATALYST) ||           \
+    (defined(__linux__) && !defined(__ANDROID__))
+#define DUSK_CAN_OPEN_DATA_FOLDER 1
+
+namespace fs = std::filesystem;
+
+static void OpenDataFolder() {
+    const std::string path = fs::absolute(dusk::ConfigPath).generic_string();
+#if defined(_WIN32)
+    const std::string url = std::string("file:///") + path;
+#else
+    const std::string url = std::string("file://") + path;
+#endif
+    (void)SDL_OpenURL(url.c_str());
+}
+#else
+#define DUSK_CAN_OPEN_DATA_FOLDER 0
+#endif
 
 #endif  // DUSK_IMGUI_HPP
