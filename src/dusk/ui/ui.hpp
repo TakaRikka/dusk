@@ -85,4 +85,7 @@ Insets safe_area_insets(Rml::Context* context) noexcept;
 void push_toast(Toast toast) noexcept;
 std::deque<Toast>& get_toasts() noexcept;
 
+const char* battery_icon(SDL_PowerState state, int level) noexcept;
+const char* connection_state_icon(SDL_JoystickConnectionState state) noexcept;
+
 }  // namespace dusk::ui

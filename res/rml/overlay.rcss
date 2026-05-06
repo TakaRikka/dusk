@@ -65,11 +65,33 @@ toast heading {
     color: #92875B;
 }
 
-toast message {
+toast heading > span {
+    flex: 1 0 auto;
+}
+
+toast heading > row {
+    flex: 1 0 auto;
     display: flex;
     align-items: center;
+    gap: 4dp;
+}
+
+toast message {
+    display: flex;
+    flex-flow: column;
+    align-items: start;
     justify-content: start;
     gap: 8dp;
+}
+
+toast message row {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+}
+
+toast message row.muted {
+    opacity: 0.5;
 }
 
 toast progress {
@@ -111,6 +133,13 @@ icon.trophy {
     height: 24dp;
     font-size: 24dp;
     decorator: text("&#xe71a;" center center);
+}
+
+icon.controller {
+    width: 24dp;
+    height: 24dp;
+    font-size: 24dp;
+    decorator: text("&#xf135;" center center);
 }
 
 logo {

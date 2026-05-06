@@ -38,18 +38,29 @@ Rml::Element* create_toast(Rml::Element* parent, const Toast& toast) {
         }
         {
             auto* heading = append(elem, "heading");
-            auto* span = append(heading, "span");
-            span->SetInnerRML(toast.title);
+            if (toast.title.starts_with("<")) {
+                heading->SetInnerRML(toast.title);
+            } else {
+                auto* span = append(heading, "span");
+                span->SetInnerRML(toast.title);
+            }
             if (toast.type == "achievement") {
                 auto* icon = append(heading, "icon");
                 icon->SetClass("trophy", true);
                 mDoAud_seStartMenu(kSoundAchievementUnlock);
+            } else if (toast.type == "controller") {
+                auto* icon = append(heading, "icon");
+                icon->SetClass("controller", true);
             }
         }
         {
             auto* message = append(elem, "message");
-            auto* span = append(message, "span");
-            span->SetInnerRML(toast.content);
+            if (toast.content.starts_with("<")) {
+                message->SetInnerRML(toast.content);
+            } else {
+                auto* span = append(message, "span");
+                span->SetInnerRML(toast.content);
+            }
         }
         {
             auto* progress = append(elem, "progress");
