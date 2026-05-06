@@ -90,17 +90,17 @@ const char* battery_icon(SDL_PowerState state, int level) noexcept {
             return "f0a2";  // Battery Charging 20
         return "e1a3";      // Battery Charging Full (we use it as empty)
     }
-    if (level >= 85)
+    if (level >= 90)
         return "ebd2";  // Battery 6 Bar
-    if (level >= 70)
+    if (level >= 80)
         return "ebd4";  // Battery 5 Bar
-    if (level >= 55)
+    if (level >= 60)
         return "ebe2";  // Battery 4 Bar
-    if (level >= 40)
+    if (level >= 50)
         return "ebdd";  // Battery 3 Bar
-    if (level >= 25)
+    if (level >= 30)
         return "ebe0";  // Battery 2 Bar
-    if (level >= 10)
+    if (level >= 20)
         return "ebd9";  // Battery 1 Bar
     return "e19c";      // Battery Alert
 }
