@@ -27,6 +27,7 @@ Rml::Element* create_toast(Rml::Element* parent, const Toast& toast) {
     <logo>
         <img class="inner" src="res/org-icon-inner.png" />
         <img class="outer" src="res/org-icon-outer.png" />
+        <img class="center" src="res/org-icon-center.png" />
     </logo>
 )RML");
         return parent->GetFirstChild();

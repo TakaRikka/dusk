@@ -134,11 +134,24 @@ logo img {
     width: 100%;
     height: 100%;
     filter: drop-shadow(#0008 0 0 14dp);
+    transform-origin: center;
+}
+
+logo img.inner {
+    animation: 24s linear-in-out infinite logo-inner-spin;
 }
 
 logo img.outer {
-    transform-origin: center;
     animation: 8s linear-in-out infinite logo-outer-spin;
+}
+
+@keyframes logo-inner-spin {
+    from {
+        transform: rotate(360deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
 }
 
 @keyframes logo-outer-spin {
