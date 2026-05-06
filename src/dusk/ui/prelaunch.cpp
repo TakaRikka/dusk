@@ -56,6 +56,8 @@ constexpr std::array<SDL_DialogFileFilter, 2> kDiscFileFilters{{
 
 static std::string get_error_msg(iso::ValidationError error) {
     switch (error) {
+    default:
+        return "The selected disc image could not be validated.";
     case iso::ValidationError::IOError:
         return "Unable to read the selected file.";
     case iso::ValidationError::InvalidImage:
@@ -64,22 +66,19 @@ static std::string get_error_msg(iso::ValidationError error) {
         return "The selected game is not supported by Dusk.";
     case iso::ValidationError::WrongVersion:
         return "Dusk currently supports GameCube USA and PAL disc images only.";
+    case iso::ValidationError::HashMismatch:
+        return "The selected disc image did not pass hash verification, it may be corrupt or modified.";
     case iso::ValidationError::Success:
         return "The selected disc image is valid.";
-    default:
-        return "The selected disc image could not be validated.";
     }
 }
 
 void file_dialog_callback(void*, const char* path, const char* error) {
-    auto& state = prelaunch_state();
-    if (error != nullptr) {
-        return;
-    }
-    if (path == nullptr) {
+    if (path == nullptr || error != nullptr) {
         return;
     }
 
+    auto& state = prelaunch_state();
     const auto validation = iso::validate(path);
     if (validation != iso::ValidationError::Success) {
         state.errorString = escape(get_error_msg(validation));

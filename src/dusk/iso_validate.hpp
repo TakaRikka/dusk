@@ -7,14 +7,13 @@ namespace dusk::iso {
     struct KnownDisc;
 
     enum class ValidationError : u8 {
-        Success = 0,
+        Unknown = 0,
         IOError,
         InvalidImage,
         WrongGame,
         WrongVersion,
-        Cancelled,
-        DiscHashMismatch,
-        Unknown
+        HashMismatch,
+        Success
     };
 
     struct VerificationStatus {
@@ -25,6 +24,7 @@ namespace dusk::iso {
     };
 
     ValidationError validate(const char* path, VerificationStatus& status);
+    ValidationError validate(const char* path);
     bool isPal(const char* path);
 }
 

@@ -1,8 +1,8 @@
 #include "iso_validate.hpp"
 
 #include <nod.h>
-
-#include "SDL3/SDL_iostream.h"
+#include <SDL3/SDL_iostream.h>
+#include <stdexcept>
 
 namespace {
 
@@ -147,7 +147,7 @@ ValidationError verify_disc(NodHandle* disc, VerificationStatus& status) {
     const auto hashState = XXH3_createState();
     XXH3_128bits_reset(hashState);
 
-    while (!status.shouldCancel) {
+    while (true) {
         size_t bytesAvail;
         const auto buf = nod_buf_read(disc, &bytesAvail);
         if (!bytesAvail)
@@ -159,13 +159,9 @@ ValidationError verify_disc(NodHandle* disc, VerificationStatus& status) {
         nod_buf_consume(disc, bytesAvail);
     }
 
-    if (status.shouldCancel) {
-        return ValidationError::Cancelled;
-    }
-
     const auto hash = XXH3_128bits_digest(hashState);
     if (!XXH128_isEqual(hash, status.knownDisc->hash)) {
-        return ValidationError::DiscHashMismatch;
+        return ValidationError::HashMismatch;
     }
 
     return ValidationError::Success;
@@ -212,6 +208,11 @@ ValidationError validate(const char* path, VerificationStatus& status) {
     }
 
     return verify_disc(disc.handle, status);
+}
+
+ValidationError validate(const char* path) {
+    VerificationStatus status{};
+    return validate(path, status);
 }
 
 bool isPal(const char* path) {
