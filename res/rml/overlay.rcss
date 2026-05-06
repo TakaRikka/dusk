@@ -112,3 +112,40 @@ icon.trophy {
     font-size: 24dp;
     decorator: text("&#xe71a;" center center);
 }
+
+logo {
+    position: absolute;
+    width: 100dp;
+    height: 100dp;
+    bottom: 40dp;
+    left: 40dp;
+    opacity: 0;
+    transition: opacity 0.5s linear-in-out;
+}
+
+logo[open] {
+    opacity: 1;
+}
+
+logo img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(#0008 0 0 14dp);
+}
+
+logo img.outer {
+    transform-origin: center;
+    animation: 8s linear-in-out infinite logo-outer-spin;
+}
+
+@keyframes logo-outer-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

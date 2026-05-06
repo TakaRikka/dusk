@@ -157,15 +157,16 @@ void SteppedCarousel::apply(int value) {
 
 Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
     switch (option) {
-    case GraphicsOption::InternalResolution:
+    case GraphicsOption::InternalResolution: {
+        u32 width = 0;
+        u32 height = 0;
+        AuroraGetRenderSize(&width, &height);
         if (value <= 0) {
-            return "Auto";
+            return fmt::format("Auto ({}×{})", width, height);
         } else {
-            u32 width = 0;
-            u32 height = 0;
-            AuroraGetRenderSize(&width, &height);
             return fmt::format("{}× ({}×{})", value, width, height);
         }
+    }
     case GraphicsOption::ShadowResolution:
         return fmt::format("{}×", value);
     case GraphicsOption::BloomMode:

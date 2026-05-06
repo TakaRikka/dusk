@@ -22,30 +22,40 @@ const Rml::String kDocumentSource = R"RML(
 )RML";
 
 Rml::Element* create_toast(Rml::Element* parent, const Toast& toast) {
-    auto* elem = append(parent, "toast");
-    if (!toast.type.empty()) {
-        elem->SetClass(toast.type, true);
-    }
-    {
-        auto* heading = append(elem, "heading");
-        auto* span = append(heading, "span");
-        span->SetInnerRML(toast.title);
-        if (toast.type == "achievement") {
-            auto* icon = append(heading, "icon");
-            icon->SetClass("trophy", true);
-            mDoAud_seStartMenu(kSoundAchievementUnlock);
+    if (toast.type == "autosave") {
+        Rml::Factory::InstanceElementText(parent, R"RML(
+    <logo>
+        <img class="inner" src="res/org-icon-inner.png" />
+        <img class="outer" src="res/org-icon-outer.png" />
+    </logo>
+)RML");
+        return parent->GetFirstChild();
+    } else {
+        auto* elem = append(parent, "toast");
+        if (!toast.type.empty()) {
+            elem->SetClass(toast.type, true);
         }
+        {
+            auto* heading = append(elem, "heading");
+            auto* span = append(heading, "span");
+            span->SetInnerRML(toast.title);
+            if (toast.type == "achievement") {
+                auto* icon = append(heading, "icon");
+                icon->SetClass("trophy", true);
+                mDoAud_seStartMenu(kSoundAchievementUnlock);
+            }
+        }
+        {
+            auto* message = append(elem, "message");
+            auto* span = append(message, "span");
+            span->SetInnerRML(toast.content);
+        }
+        {
+            auto* progress = append(elem, "progress");
+            progress->SetAttribute("value", 1.f);
+        }
+        return elem;
     }
-    {
-        auto* message = append(elem, "message");
-        auto* span = append(message, "span");
-        span->SetInnerRML(toast.content);
-    }
-    {
-        auto* progress = append(elem, "progress");
-        progress->SetAttribute("value", 1.f);
-    }
-    return elem;
 }
 
 }  // namespace
