@@ -30,12 +30,10 @@ Rml::Element* create_toast(Rml::Element* parent, const Toast& toast) {
         auto* heading = append(elem, "heading");
         auto* span = append(heading, "span");
         span->SetInnerRML(toast.title);
-        if (!toast.type.empty()) {
+        if (toast.type == "achievement") {
             auto* icon = append(heading, "icon");
-            if (toast.type == "achievement") {
-                icon->SetClass("trophy", true);
-                mDoAud_seStartMenu(kSoundAchievementUnlock);
-            }
+            icon->SetClass("trophy", true);
+            mDoAud_seStartMenu(kSoundAchievementUnlock);
         }
     }
     {
