@@ -155,6 +155,7 @@ void dMpath_n::dTexObjAggregate_c::create() {
     });
 
     for (const auto& [idx, data] : replacements) {
+        JKR_DELETE(mp_texObj[idx]);
         const auto texobj = JKR_NEW TGXTexObj();
         GXInitTexObj(
             texobj, data, kMapImageSide, kMapImageSide, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
