@@ -104,6 +104,10 @@ window content pane > * {
     flex: 0 0 auto;
 }
 
+window content pane:last-of-type > div {
+    line-height: 1.625;
+}
+
 window content pane > spacer {
     display: block;
     /* Completes the 24dp bottom inset after the pane's 8dp gap. */
