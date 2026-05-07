@@ -942,7 +942,10 @@ void dMenu_DmapBg_c::draw() {
         f32 local_28c = mpBackTexture->getBounds().i.x;
         mpBackTexture->setBlackWhite(color_black, color_white);
         mpBackTexture->draw(local_28c, field_0xd94 + mpBackTexture->getBounds().i.y, mpBackTexture->getWidth(),
-                            mpBackTexture->getHeight(), false, false, false);
+                            mpBackTexture->getHeight(),
+                            IF_DUSK(dusk::getSettings().game.enableMirrorMode ? true :) false,
+                            false,
+                            false);
 
         grafContext->scissor(field_0xd94 + mDoGph_gInf_c::getMinXF(),
                              scissor_top, mDoGph_gInf_c::getWidthF(),
