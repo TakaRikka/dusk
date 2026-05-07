@@ -47,10 +47,7 @@ namespace dusk {
         void draw();
 
         void windowInputViewer();
-        void windowControllerConfig();
         void drawSpeedrunTimerOverlay();
-
-        static void ToggleFullscreen();
 
         static void resetForSpeedrunMode();
 
